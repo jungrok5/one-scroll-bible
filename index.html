@@ -1627,12 +1627,13 @@ document.querySelectorAll('[data-ga]').forEach(function(el){ gaObs.observe(el); 
 /* FAQ 열람(어떤 반론이 마음에 걸리는지) — FAQ는 main 밖이라 document 캡처로 잡는다 */
 document.addEventListener('toggle',function(e){ var d=e.target; if(d.tagName==='DETAILS'&&d.open&&d.classList.contains('faq-item')){ var sm=d.querySelector('summary'); var q=sm&&sm.getAttribute('data-i18n'); gevent('faq_open',{q:q?q.replace('faq.',''):'?'}); } },true);
 
-/* 기도 완독(영접 퍼널의 최종 신호) — 기도문 끝(아멘)까지 보였는가 */
-(function(){ var end=document.querySelector('.prayer .amen')||document.querySelector('.prayer'); if(!end)return; var done=0; var po=new IntersectionObserver(function(es){ es.forEach(function(en){ if(en.isIntersecting&&!done){ done=1; gevent('prayer_complete'); po.disconnect(); } }); },{threshold:.6}); po.observe(end); })();
-
-/* 스크롤 깊이(복음·기도 도달 전 이탈 지점 파악) */
-(function(){ var marks=[25,50,75,90], hit={}, raf=0;
-  function chk(){ raf=0; var se=document.documentElement, h=se.scrollHeight-se.clientHeight; if(h<=0)return; var p=(se.scrollTop||document.body.scrollTop)/h*100; for(var i=0;i<marks.length;i++){ var m=marks[i]; if(p>=m&&!hit[m]){ hit[m]=1; gevent('scroll_depth',{percent:m}); } } }
+/* 스크롤 지표(복음·기도 도달 전 이탈 지점 + 기도 완독). 언어 전환 시 .prayer innerHTML이
+   통째로 교체돼 .amen 노드가 새로 만들어지므로, 고정 노드를 관찰하지 않고 매 스크롤마다 새로 질의한다. */
+(function(){ var marks=[25,50,75,90], hit={}, prayed=0, raf=0;
+  function chk(){ raf=0; var se=document.documentElement, vh=innerHeight||se.clientHeight, h=se.scrollHeight-se.clientHeight;
+    if(h>0){ var p=(se.scrollTop||document.body.scrollTop)/h*100; for(var i=0;i<marks.length;i++){ var m=marks[i]; if(p>=m&&!hit[m]){ hit[m]=1; gevent('scroll_depth',{percent:m}); } } }
+    if(!prayed){ var a=document.querySelector('.prayer .amen'); if(a){ var r=a.getBoundingClientRect(); if(r.top<vh*0.9&&r.bottom>0){ prayed=1; gevent('prayer_complete'); } } }
+  }
   window.addEventListener('scroll',function(){ if(!raf)raf=requestAnimationFrame(chk); },{passive:true});
 })();
 

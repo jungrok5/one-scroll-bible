@@ -1,0 +1,636 @@
+{
+ "menuName": "Dawuro",
+ "htmlLang": "dwr",
+ "dir": "ltr",
+ "locale": "dwr",
+ "brand": "Geeshsha Mas'aafaa Itti Xaaruwaan",
+ "docTitle": "Kaartaan Geeshsha Mas'aafaa · Geeshsha Mas'aafaa Itti Xaaruwaan",
+ "metaDesc": "Beni Caak'k'uwaa wode ogiyaa, Yesuusa de'uwaanne P'awuloosa buussaa tumu kaartaa bollan kaalla — Geeshsha Mas'aafay tumu sohotuwaan haneedda.",
+ "s": {
+  "kicker": "Geeshsha Mas'aafaa Itti Xaaruwaan · Kaartaa",
+  "title": "Kaartaan Geeshsha Mas'aafaa",
+  "verse": "“Nuuni Aa wolk'k'aama bonchchuwaa nu ayfiyaan be'iide odettooppe attin, med'd'i akkeedda tossaan nu Godaa Kiristtoosa wolk'k'aanne yuussaa hinttenttoo odibeykko.” (2 P'eexiroosa 1:16)",
+  "purpose": "Geeshsha Mas'aafay haysa gidenna. Hawe tumu sohotuwaa, wodetuwaanne sunthatuwaa bollan hemettida asaa taariki. He ogetuwaa kaartaa bollan, wodiyaa ogiyan kaalla — itti sohuwaa bochcha, woy ▶ giyaawaa un\"ada itti itti aa giddo aad'd'a.",
+  "ot_kick": "① Beni Caak'k'uwaa — wodiyaa baggana",
+  "ot_h": "Med'etsaappe Yerusaalame simuwaa gakkanaw",
+  "ot_lead": "Itti buussaa gidennan; shin med'etsaappe doommida atotsaa taarikiyaa gogaa: med'etsaanne kunddetsaa → bashshaa haattaanne Baabeele → xeesaa (Abraahaame) → ufaysetteedda sa'aa → Kessaa → bazzuwaa → xoonuwaa → kawutetsaa → shaaketetsaa → omoodetethaa → simuwaa.",
+  "je_kick": "② Ooratsa Caak'k'uwaa — Yesuusa de'uwaa",
+  "je_h": "Beeteliheemeppe Yerusaalame gakkanaw",
+  "je_lead": "Wonggalaa mas'aafatuu odiyaawaadan, Yesuusa de'uwaa ogiyan kaalla — Beeteliheemen yelettowaappe doommiide, xammak'ettowaanne Galiilaa oosuwaa baggana, Sammaariyaa pinniide, Yerusaalamen mask'k'aliyaa, denduwaanne pude kesuwaa gakkanaw.",
+  "pa_kick": "③ Ooratsa Caak'k'uwaa — P'awuloosa buussaa",
+  "pa_h": "Anxookiyaappe sa'aa gas'aa gakkanaw — Roome",
+  "pa_lead": "Yerusaalamen P'enxxak'osxxeppe doommiide, Wonggalay Yihudaappe kareera waati aakkeeddaakko — Guutta Isiyaanne Awurooppaa baggana kawutetsaa waanna sohuwaa gakkanaw. Ichchashu buussatuwaappe ittuwaa doora (koyro·nam\"antsa·heezzantsa + Roome buussaanne + birshshettowaappe guyyiyaa) k'ay ogiyan xaafettida kiitatuwaara Kiitteeddawanttu Oosuwaa hanotatuwaa kaalla.",
+  "foot": "Pulttoti · Sohotuu Geeshsha Mas'aafaa k'aalaanne Geeshsha Mas'aafaa erettida sa'aa eratethaa kaalloosona (maaddiyaa sohuwaan ha\"i sunthaara). Abbaa doonaa, shaafatuunne abbatuu dooya sa'aa eratethaappe (Natural Earth) ekettidi, guuxettoosona.",
+  "contact": "Oyshatuwaa · k'oppaa — <a id=\"contact\" class=\"mail\">Nuukko xaafa</a>",
+  "play": "Doommaa",
+  "pause": "Takka",
+  "today": "Ha\"i:",
+  "verseCite": "2 P'eexiroosa 1:16"
+ },
+ "ot": {
+  "places": {
+   "eden": {
+    "name": "Geenii (Med'etsaa · Kunddetsaa)",
+    "book": "Doometsaa 1–3",
+    "today": "ha\"i Xigreesa–Efiraaxeese heeraa",
+    "note": "Daro lo\"o gidiide med'etteedda sa'aakko nagaray geliide, S'oossaanne asaa giddo gaytotetsaa menttee.",
+    "events": [
+     "Usuppun gallassaan med'etsaa — “daro lo\"o gidee”",
+     "Asay S'oossaa malaatan med'etteedda",
+     "Kunddetsaa, k'ay Geeneppe kessiyaawaa",
+     "Koyro Wonggalaa ufaysaa — “mishiraa zeretsay shooshshaa huup'iyaa k'os's'ana”"
+    ]
+   },
+   "noah": {
+    "name": "Aaraaraaxe (Bashshaa Haattaa)",
+    "book": "Doometsaa 6–9",
+    "today": "ha\"i Turkiyee arshsho baggaa Aaraaraaxe Deriyaa",
+    "note": "S'oossay nagaray kumeedda sa'aa pirddee, gidoppe attin itti so'aa baggana de'uwaa ashshee.",
+    "events": [
+     "Iitatetsay kumeedda sa'aa",
+     "Bashshaa haattaanne Nohe markkabiyaa",
+     "Zuula caak'k'uwaa — “naa\"antsaa bashshaa haattaa mulekka yeddikke”"
+    ]
+   },
+   "babel": {
+    "name": "Baabeele Gimbbiyaa",
+    "book": "Doometsaa 11",
+    "today": "ha\"i Ik'raak'e (Shinaare denbbaa)",
+    "note": "Saluwaa gakkanaw koyiyaa ottoruwaa bolli, S'oossay unttunttu doonaanne asaa sa'aa ubbaa bollan laalee.",
+    "events": [
+     "“Katamaanne gimbbiyaa keexxoos… k'ay nu huup'ew sunthaa demmoos”",
+     "S'oossay unttunttu doonaa walak'ee",
+     "Asay sa'aa ubbaa bollan laalettee (Shinaare — guyyeppe Baabiloone)"
+    ]
+   },
+   "ur": {
+    "name": "Uura",
+    "book": "Doometsaa 12",
+    "today": "ha\"i tohossa Ik'raak'e",
+    "note": "Geeshsha Mas'aafaa atotsaa taarikii itti asaa xeesuwaan doommee.",
+    "events": [
+     "S'oossay Abraama Kaladaawatuwaa Uuraappe xeesee",
+     "“Taani neena gita zaree ootsana… asay ubbay ne baggana anjjettana”",
+     "Ammanuwaan bare biittaa aggidi kesee"
+    ]
+   },
+   "haran": {
+    "name": "Kaaraane",
+    "book": "Doometsaa 12",
+    "today": "ha\"i tohossa Turkiyee",
+    "note": "Ogiyaan, ufaysetteedda sa'aakko xeesuwaa zaariide.",
+    "events": [
+     "Taara so'aa asay Kaaraanen uttee",
+     "Taari hayk'k'ee",
+     "Abraami 75 laytsan Kanaane baanaw kesee"
+    ]
+   },
+   "shechem": {
+    "name": "Sekeeme · Kanaane",
+    "book": "Doometsaa 12–50",
+    "today": "ha\"i Naabuluusa",
+    "note": "Ufaysetteedda sa'aan itti so'aa eessettee k'ay caak'k'uu zaretethaa baggana aad'd'ee.",
+    "events": [
+     "Kanaane geliide, koyro yarshsho sohuwaa — “ha sa'aa ne zeretsaw immana”",
+     "Caak'k'uwaa (Doometsaa 15) · Yisaak'a · Yayk'oobe",
+     "Yayk'oobe tammanne nam\"u naati — tammanne nam\"u zaretuwaa xap'uwaa"
+    ]
+   },
+   "egypt": {
+    "name": "Gibs'e (Gooshene)",
+    "book": "Doometsaa 37–50 · Kessaa 1",
+    "today": "ha\"i Gibs'e Nayle Deltaa",
+    "note": "Itti so'aa gita zaree gidee — guyyeppe ayletetteedda zaree.",
+    "events": [
+     "Bayzettowaa Yooseefi Gibs'e haariyaa gakkanaw pude keseedda",
+     "Yayk'oobe so'aa ubbay koshaappe attanaw duge woddee",
+     "Diccishe biyaa Israa'eeli zaree ayletettee"
+    ]
+   },
+   "sinai": {
+    "name": "Siinaa Deriyaa",
+    "book": "Kessaa · Wogaa",
+    "today": "ha\"i Siinaa Peniinsulaa",
+    "note": "Beni Caak'k'uwaa waanna atotsaa — aylii S'oossaa asa gidee.",
+    "events": [
+     "Tammu boochaanne Paasikaa dorssaa",
+     "Zo'o Abbay shaakettina pinnoosona",
+     "Tammu Azazuwaa, Higgiyaa, dunkkaaniyaanne yarshshuwaa"
+    ]
+   },
+   "kadesh": {
+    "name": "K'aadeesa (bazzuwaa)",
+    "book": "Payduwaa · Zaaretsuwaa",
+    "today": "ha\"i Siinaa–Negeeba bazzuwaa",
+    "note": "Ammanennatetsay itti yeletsaa sa'aa dhayssee — gidoppe attin S'oossay unttunttunna de'ee.",
+    "events": [
+     "Tammanne nam\"u wochanchchatuwaa — shin asay ammananaw ixxee",
+     "Bazzuwaan 38 laytsaa — mannaa, shaaraanne tamaa",
+     "Mo'aabe denbbaan, Muse wurssetsa tamaarssuwaa (Zaaretsuwaa)"
+    ]
+   },
+   "jericho": {
+    "name": "Yarkkoo",
+    "book": "Iyyaasa",
+    "today": "ha\"i Yarkkoo",
+    "note": "Wurssettan ufaysetteedda sa'aa geliide akkoosona.",
+    "events": [
+     "Yorddaanoosi shaakettina asay pinnee",
+     "Yarkkoo dirssay kundee",
+     "Kanaane xoonuwaanne sa'aa shaakuwaa"
+    ]
+   },
+   "shiloh": {
+    "name": "Silo (Daannatuwaa)",
+    "book": "Daannatuwaa · Uruuto",
+    "today": "ha\"i Kirbeete Seyluune",
+    "note": "Kaatii baynnan, itti itti asay barew likke malateeddawaa c'oo ootsee — tumu kaatii koshshee.",
+    "events": [
+     "Dunkkaaniyaa Silon essettee",
+     "Nagara–un\"etsaa–atotsaa giraa (Daboora, Gediyoona, Samsoona)",
+     "Uruuto — d'umaa wodiyan ammanetethaa, Daawita zariyan"
+    ]
+   },
+   "jerusalem": {
+    "name": "Yerusaalame · Ittippetteedda Kawutetsaa",
+    "book": "1–2 Sammeela · 1 Kaatatuwaa",
+    "today": "ha\"i Yerusaalame",
+    "note": "Israa'eeliyaa work'k'aa wodiyaa — k'ay med'inaa kaatiyaa ufaysaa.",
+    "events": [
+     "Koyro kaatii Saa'oola, guyyeppe Daawitanne Goliyaada",
+     "Daawita caak'k'uwaa — “ne araatay med'inaw” (2 Sammeela 7)",
+     "Solomoni Yerusaalamen Geeshsha Golliyaa keexxee"
+    ]
+   },
+   "samaria": {
+    "name": "Sammaariyaa · Shaakettowaa Kawutetsaa",
+    "book": "Kaatatuwaa · Nabatuu",
+    "today": "ha\"i Sebaasxiyaa",
+    "note": "Nabatuu waassishshin, kawutetsay shaakettina gunddee.",
+    "events": [
+     "Solomonappe guyyiyaan, Yihudaanne Israa'eeli giide shaakettee",
+     "Zaari zaari eek'aa goynuwaa",
+     "Eelaasi, Isiyaasi, Ermaasi “simmite” giide waassoosona — k'ay Mase kaseetiide odoosona"
+    ]
+   },
+   "nineveh": {
+    "name": "Nanawe (Asoore)",
+    "book": "2 Kaatatuwaa 17 · Yoonaasa",
+    "today": "ha\"i Ik'raak'e Moosule",
+    "note": "Seera ubbaa aggibayidi, huuphphe kawutetsay koyro kundee.",
+    "events": [
+     "Asoore waanna katamaa Nanawe",
+     "Huuphphe kawutetsay Asoore kushiyan kundee (M.K. 722)",
+     "Yoonaasi Nanawe kiitettee"
+    ]
+   },
+   "babylon": {
+    "name": "Baabiloone",
+    "book": "2 Kaatatuwaa 25 · Daaneela · Hizik'k'eela",
+    "today": "ha\"i Ik'raak'e Hilaa",
+    "note": "Ubbaappe d'uma k'ammaa — gidoppe attin zaaretethaa ufaysay de'ee.",
+    "events": [
+     "Yerusaalami kundee, Geeshsha Gollii xuugettee (M.K. 586)",
+     "Yihudaa Baabiloone omoodettee",
+     "Daaneelanne Hizik'k'eela — omoodetethaa giddon ammanuwaanne ajjuutaa"
+    ]
+   },
+   "susa": {
+    "name": "Suusa (Persiyaa)",
+    "book": "Asttiro · Nahimiyaa",
+    "today": "ha\"i Iraane Shuushe",
+    "note": "Eek'a kawutetsaa waanna sohuwankka, S'oossay bare asaa naagee.",
+    "events": [
+     "Persiyaa Baabiloone xoonee",
+     "Asttira Ayhudatuwaa xayuwaappe ashshaaddu",
+     "Nahimii kaatiyaa sintsan woossiide kiitettee"
+    ]
+   },
+   "return": {
+    "name": "Yerusaalame Simuwaa",
+    "book": "Izira · Nahimiyaa · Milkkiyaasa",
+    "today": "ha\"i Yerusaalame",
+    "note": "Simmiide zaarissi keexxoosona — shin kaatii yiibeenna. Mase naagoosona.",
+    "events": [
+     "K'iiroosa azazuwaan heezzu simuwaa (Zarubaabeela 538 · Izira 458 · Nahimii 444)",
+     "Geeshsha Gollii zaaretti keexettee k'ay Yerusaalame dirssay zaarettee",
+     "Milkkiyaasi — Beni Caak'k'uu kuuyee: “taani kiittiyaa asaa yeddana”"
+    ]
+   }
+  },
+  "labels": [
+   "Mediteraane Abbaa",
+   "Mesop'oxaamiyaa",
+   "Arabe Bazzuwaa",
+   "Gibs'e"
+  ],
+  "journeys": {
+   "flow": "Atotsaa taarikiyaa"
+  }
+ },
+ "jesus": {
+  "places": {
+   "bethlehem": {
+    "name": "Beeteliheeme",
+    "book": "Maatoossa Mishiraachchuwaa 1–2 · Luuk'aasa Mishiraachchuwaa 2",
+    "today": "ha\"i Beeteliheeme",
+    "note": "Ufaysetteedda Masii Daawita katamaakko yee — K'aalay asho gidee.",
+    "events": [
+     "Daawita katamaa Beeteliheemen yelettee",
+     "Kiitanchchatuu dorssaa heemmiyaawanttoo mishiraachchuwaa odoosona",
+     "Eranchatuu goynnanaw yoosona"
+    ]
+   },
+   "nazareth": {
+    "name": "Naazireete",
+    "book": "Luuk'aasa Mishiraachchuwaa 2 · 4",
+    "today": "ha\"i Naazireete",
+    "note": "S'oossay coo katamaan asho gidiide diccee.",
+    "events": [
+     "Anaaxiyaa keettan diccee",
+     "Tammanne nam\"u laytsan, Geeshsha Gollien oychchiidinne zaariide",
+     "Guyyeppe bare katamaa mukuraaben ixettee"
+    ]
+   },
+   "jordan": {
+    "name": "Yorddaanoosa Shaafaa",
+    "book": "Maatoossa Mishiraachchuwaa 3–4",
+    "today": "ha\"i garssa Yorddaanoosa",
+    "note": "Aa k'oncce oosuu doommee — saluu a Na'aa gidiyaawaa markkattee.",
+    "events": [
+     "Yohaannisan xammak'ettee",
+     "Ayyaanay holled'd'iyaadan wod'd'ee — “Hawe ta siik'iyaa Na'aa”",
+     "Bazzuwaan Seexaanaa heezzu paaciyaa xoonee"
+    ]
+   },
+   "cana": {
+    "name": "K'aana",
+    "book": "Yohaannisa Mishiraachchuwaa 2",
+    "today": "ha\"i Kafre Kaannaa",
+    "note": "Bare koyro malaatan bare bonchchuwaa k'onccissee.",
+    "events": [
+     "Bullachchaa imataa gidee",
+     "Haattay woyniyaa eessaa gidee — bare koyro malaataa",
+     "Aa kaalliyaawantti aan ammanoosona"
+    ]
+   },
+   "sychar": {
+    "name": "Sikaare (Sammaariyaa)",
+    "book": "Yohaannisa Mishiraachchuwaa 2–4",
+    "today": "ha\"i Naabuluusa matan",
+    "note": "Koyro oosuwaa ogiyaa — Yerusaalame baggana k'ay karettowaa Sammaariyaakko.",
+    "events": [
+     "Yerusaalamen Geeshsha Golliyaa geeshshee",
+     "K'ammaan, Nik'k'oodimoosa — “Neeni naa\"antsaa yelettanaw bessee”",
+     "Sammaariyaa mishirew de'o haattaa"
+    ]
+   },
+   "capernaum": {
+    "name": "K'ifirinaahoome",
+    "book": "Maatoossa Mishiraachchuwaa 4–13 · Mark'k'oossa Mishiraachchuwaa 1–4",
+    "today": "ha\"i Galiilaa Abbaa doonaa",
+    "note": "Galiilaa oosuwaa waanna sohuwaa — xeesuu, tamaarssuunne ixuu ubbay hawaan gaytee.",
+    "events": [
+     "Moliyaa oyk'k'iyaawantta xeesiide hawaa bare waanna sohuwaa ootsee",
+     "Deriyaa bollan tamaarssuwaa — “Ayyaanan hiyyeesati anjjettowantta”",
+     "Kawutetsaa leemisuwaa — k'ay dendishe biyaa ixuwaa"
+    ]
+   },
+   "galilee": {
+    "name": "Galiilaa Abbaa",
+    "book": "Mark'k'oossa Mishiraachchuwaa 4 · 6 · Yohaannisa Mishiraachchuwaa 6",
+    "today": "ha\"i Kinerete Abbaa",
+    "note": "Med'etsaa bollan wolk'k'aa de'iyaawaa I oonakkonne besee.",
+    "events": [
+     "“Woppu ga, co'u ga” — gotiyaa co'ussee",
+     "Ichchashu ukeethaaninne nam\"u moliyaan 5,000 mizee",
+     "Haattaa bollan hemettee"
+    ]
+   },
+   "caesarea_p": {
+    "name": "Pilip'p'oosa K'iisaariyaa",
+    "book": "Maatoossa Mishiraachchuwaa 16–17",
+    "today": "ha\"i Baaniyaasa",
+    "note": "Kaalliyaawantti I Kiristtoosa gidiyaawaa akeekoosona, k'ay mask'k'aliyaa ogii dooyettee.",
+    "events": [
+     "P'eexiroosa markkatetsaa — “Neeni Kiristtoosa, de'o S'oossaa Na'aa”",
+     "Bare hayk'uwaanne denduwaa koyro odee",
+     "Deriyaa bollan bonchchuwan laamettee"
+    ]
+   },
+   "jericho": {
+    "name": "Yarkkoo",
+    "book": "Luuk'aasa Mishiraachchuwaa 18–19",
+    "today": "ha\"i Yarkkoo",
+    "note": "Yerusaalame kesiyaa ogiyaan, baynnowaa koyee.",
+    "events": [
+     "K'ook'e Barxximoosa xeelissee",
+     "Giiraa shiishshiyaa Zakiyoosa xeesee",
+     "“Asaa Na'ay baynnowaa koyanawunne ashshanaw yeedda”"
+    ]
+   },
+   "bethany": {
+    "name": "Biitaaniyaa",
+    "book": "Yohaannisa Mishiraachchuwaa 11–12",
+    "today": "ha\"i al-Eyzaariyaa",
+    "note": "Bare wurssetsa saaminttaa sintsan hayk'uwaa bollan wolk'k'aa besee.",
+    "events": [
+     "Al\"aazaara duufuwaappe dentsee — “Taani denduwaanne de'uwaa”",
+     "Mayraama a moogettanaw tiyaaddu",
+     "Ha malaatay a wod'iyaa mak'etsaa mintsee"
+    ]
+   },
+   "jerusalem": {
+    "name": "Yerusaalame",
+    "book": "Maatoossa Mishiraachchuwaa 21–28 · Luuk'aasa Mishiraachchuwaa 24 · Kiitteeddawanttu Oosuwaa 1",
+    "today": "ha\"i Yerusaalame",
+    "note": "Geeshsha Mas'aafa ubbay bessiyaa xap'uwaa — mask'k'aliyaa, denduwaa, pude keso.",
+    "events": [
+     "Xoonuwaa geluwaa; Geeshsha Gollii xaraphphezaa gujje aatti yeggee",
+     "Wurssetsa Kahuwaan kaalliyaawantta tohuwaa meeccee",
+     "Mask'k'aliyan hayk'k'ee",
+     "Heezzantsa gallassan denddiide, guyyeppe pude keseedda"
+    ]
+   }
+  },
+  "labels": [
+   "Mediteraane Abbaa",
+   "Galiilaa",
+   "Sammaariyaa",
+   "Yihudaa",
+   "Dekaap'oolisa",
+   "P'eeriyaa",
+   "Hayk'k'eedda Abbaa"
+  ],
+  "journeys": {
+   "life": "Yesuusa ogiyaa"
+  }
+ },
+ "paul": {
+  "places": {
+   "antioch": {
+    "name": "Anxookiyaa",
+    "book": "Kiitteeddawanttu Oosuwaa 13 · 15",
+    "today": "ha\"i Turkiyee Antaakiyaa",
+    "note": "Allaga asaa kiitay doommiyaanne simmiyaa kiittiyaa woosa gollii.",
+    "events": [
+     "Woosan Ayyaanay Barnnaabaasanne Saa'oola dumissee",
+     "Ammaniyaawantti koyro “Kiristtaane” geetettida woosa gollii",
+     "Koyro, nam\"antsanne heezzantsa buussaa doomiya sohuwaa"
+    ]
+   },
+   "seleucia": {
+    "name": "Selewk'iyaa",
+    "book": "Kiitteeddawanttu Oosuwaa 13:4",
+    "today": "ha\"i Turkiyee",
+    "note": "Anxookiyaa markkabe wonggaariyaa — K'oproosa baanaw markkabiyan denddoosona.",
+    "events": []
+   },
+   "salamis": {
+    "name": "Salaamiisa (K'oproosa)",
+    "book": "Kiitteeddawanttu Oosuwaa 13:5",
+    "today": "ha\"i K'oproosa",
+    "note": "K'oproosan koyro ek'k'iyaa sohuwaa — mukuraaben sabbakoosona.",
+    "events": []
+   },
+   "paphos": {
+    "name": "Paafo",
+    "book": "Kiitteeddawanttu Oosuwaa 13:6-12",
+    "today": "ha\"i K'oproosa",
+    "note": "Wonggalaa ixxiyaawantta bolli wolk'k'ay besettee.",
+    "events": [
+     "Bitiyaa Elimaasi k'ook'ee",
+     "Deriyaa haariyaa Sergiyoosa P'awuloosi ammanee",
+     "Hawaappe doommiide “P'awuloosi” kaaletsee"
+    ]
+   },
+   "perga": {
+    "name": "Pergge",
+    "book": "Kiitteeddawanttu Oosuwaa 13:13",
+    "today": "ha\"i Turkiyee Anxaaliyaa",
+    "note": "Pampiliyaa markkabe wonggaariyaa — hawaan Yohaannisa Mark'k'oosi guyye simmee.",
+    "events": []
+   },
+   "pantioch": {
+    "name": "Pisiidiyaa Anxookiyaa",
+    "book": "Kiitteeddawanttu Oosuwaa 13:14-50",
+    "today": "ha\"i Turkiyee Yalvaache",
+    "note": "Wonggalay Allaga asaakko dooyettee.",
+    "events": [
+     "Mukuraaben atotsaa taarikiyaa adussa tamaarssuwaa",
+     "Daro Allaga asay ufayttiide k'aalaa akkee",
+     "Ixuwaan goodettoosona"
+    ]
+   },
+   "iconium": {
+    "name": "Ik'oniyoone",
+    "book": "Kiitteeddawanttu Oosuwaa 14:1-7",
+    "today": "ha\"i Turkiyee Konya",
+    "note": "Daroti ammanoosona, shin goodetsay unttuntta sintsaakko yeddee.",
+    "events": []
+   },
+   "lystra": {
+    "name": "Lisxiraa",
+    "book": "Kiitteeddawanttu Oosuwaa 14:8-20",
+    "today": "ha\"i Turkiyee",
+    "note": "S'oossadan bonchchettidi, guyyeppe shuc'aan c'ac'ettee.",
+    "events": [
+     "Yeletan wobbe gidowaa pas'ssee",
+     "Asay unttunttoo s'oossaadan yarshshanaw koyee",
+     "Shuc'aan c'ac'ettidi hayk'k'eedda giide aggin, dendee"
+    ]
+   },
+   "derbe": {
+    "name": "Darbbe",
+    "book": "Kiitteeddawanttu Oosuwaa 14:20-21",
+    "today": "ha\"i Turkiyee",
+    "note": "Daro kaalliyaawantta ootsoosona; woosa golletuwaa mintsanaw guyye simmoosona.",
+    "events": []
+   },
+   "troas": {
+    "name": "Xiro'aada",
+    "book": "Kiitteeddawanttu Oosuwaa 16:8-10",
+    "today": "ha\"i Turkiyee",
+    "note": "Wonggalay koyro Awurooppaakko simmiyaa laameta sohuwaa.",
+    "events": [
+     "Mek'edooniyaa asaa ajjuutaa",
+     "“Haa pinnada nuuna maadda”",
+     "Ellekka Awurooppaa pinnoosona"
+    ]
+   },
+   "philippi": {
+    "name": "Pilip'p'isiyoosa",
+    "book": "Kiitteeddawanttu Oosuwaa 16 · Pilip'p'isiyoosa",
+    "today": "ha\"i huuphphe Giriike",
+    "note": "Awurooppaa koyro woosa gollii — Wonggalay k'asho keettankka xoonee.",
+    "events": [
+     "Zo'o afalaa bayziyaa Lidiya ammanaaddu",
+     "Kaayiyaa aylle na'atta birshshettee",
+     "Giddo k'ammaa mazimuriyaa, biittaa k'aaxxaa, k'asho naagiyaa so'aa atee"
+    ]
+   },
+   "thess": {
+    "name": "Tasalonk'e",
+    "book": "Kiitteeddawanttu Oosuwaa 17 · 1–2 Tasalonk'e",
+    "today": "ha\"i Giriike Tasalonike",
+    "note": "K'aalay katamaa k'aataxxissee k'ay ixuu daree.",
+    "events": [
+     "Heezzu Sambbataa mukuraaben palamee",
+     "“Sa'aa muleera gonddorssida asati”",
+     "K'ammaan geemmi kesoosona"
+    ]
+   },
+   "berea": {
+    "name": "Berooya",
+    "book": "Kiitteeddawanttu Oosuwaa 17:10-15",
+    "today": "ha\"i Giriike Veeriyaa",
+    "note": "K'aalaa banttaw pilggida “bonchchettidaageeta”.",
+    "events": [
+     "K'aalaa amottiide akkoosona",
+     "Tumakkonne eranaw galla galla Maxaafaa pilggoosona",
+     "Daroti ammanoosona"
+    ]
+   },
+   "athens": {
+    "name": "Ateena",
+    "book": "Kiitteeddawanttu Oosuwaa 17:16-34",
+    "today": "ha\"i Giriike Ateena",
+    "note": "Piloosoofatuwaa katamaan “erettenna s'oossaa” sabbakee.",
+    "events": [
+     "Eek'ay kumeedda katamay a yiillotissee",
+     "Ariyoosippaagoosan Med'd'iyaawaanne denduwaa sabbakee",
+     "K'ilkkettee, gidoppe attin guuttati ammanoosona"
+    ]
+   },
+   "corinth": {
+    "name": "K'oronttoosa",
+    "book": "Kiitteeddawanttu Oosuwaa 18 · 1–2 K'oronttoosa",
+    "today": "ha\"i Giriike",
+    "note": "Itti laytsaanne baggaa uttiide, iita katamaan woosa golliyaa tokkee.",
+    "events": [
+     "Ak'iilaaranne Phirisqqilaara dunkkaaniyaa ootsee",
+     "“Yayyoppa… ayaw gooppe taani neenanna de'ays”",
+     "Daro K'oronttoosa asay ammaniide xammak'ettee"
+    ]
+   },
+   "ephesus": {
+    "name": "Efesoona",
+    "book": "Kiitteeddawanttu Oosuwaa 19 · Efesoona",
+    "today": "ha\"i Turkiyee Selchuuke",
+    "note": "Heezzantsa buussaa waanna sohuwaa — k'aalay Isiyaa ubban aakkee.",
+    "events": [
+     "Xiraanoosa golliyan nam\"u laytsaa galla galla tamaarssee",
+     "Bitaa mas'aafatuu xuugettoosona; wolk'k'aama oosuwaa",
+     "Birataa ootsiyaa Dimexiroosi ooshshaa denttee"
+    ]
+   },
+   "miletus": {
+    "name": "Miliixoosa",
+    "book": "Kiitteeddawanttu Oosuwaa 20:17-38",
+    "today": "ha\"i Turkiyee",
+    "note": "Efesoona cimatuwaara afuwan sarotee.",
+    "events": [
+     "“I bare suuthan shammeedda woosa golliyaa naagite”",
+     "Cimatuu a gujje be'ennawaa eriide yeekkoosona"
+    ]
+   },
+   "caesarea": {
+    "name": "K'iisaariyaa",
+    "book": "Kiitteeddawanttu Oosuwaa 23–26",
+    "today": "ha\"i Israa'eele abbaa doonaa",
+    "note": "Nam\"u laytsaa deriyaa haariyaawanttunne kaatiyaa sintsan Wonggalaa naagee.",
+    "events": [
+     "Deriyaa haariyaa Pilikssanne Piisxxoosa sintsan pirddaa",
+     "Kaatii Agriphaa sintsan bare gaasuwaa yootee",
+     "“K'eesaarekko s'aygettays” — Roome baanaw"
+    ]
+   },
+   "jerusalem": {
+    "name": "Yerusaalame",
+    "book": "Kiitteeddawanttu Oosuwaa 21–23",
+    "today": "ha\"i Yerusaalame",
+    "note": "Geeshsha Gollien oyk'ettidi, k'asho asadan aa ogii doommee.",
+    "events": [
+     "Geeshsha Gollien asay a oyk'k'ee",
+     "Yaa'aa sintsan bare gaasuwaa yootee",
+     "Roome katamaa asa gidiyaa diraw, naagettidi K'iisaariyaa kiitettee"
+    ]
+   },
+   "myra": {
+    "name": "Miira",
+    "book": "Kiitteeddawanttu Oosuwaa 27:5-6",
+    "today": "ha\"i Turkiyee Demire",
+    "note": "Roome biya Iskkinddiriyaa markkabiyaakko laamettoosona.",
+    "events": []
+   },
+   "fairhaven": {
+    "name": "Lo\"o Wottiyaa Sohuwaa (K'arxeese)",
+    "book": "Kiitteeddawanttu Oosuwaa 27:8-12",
+    "today": "ha\"i K'arxeese",
+    "note": "P'awuloosi markkabiyaa essanaadan seereeddawaa siyettibeenna.",
+    "events": []
+   },
+   "crete": {
+    "name": "K'arxeese",
+    "book": "Tiito",
+    "today": "ha\"i K'arxeese",
+    "note": "Birshshettowaappe guyyiyaan, woosa golletuwaa giigissanaw Tiito aggi biyaa haruruwaa.",
+    "events": [
+     "Katama ubban cimata sunthanaadan Tiito aggee",
+     "Boree baynna, ammanettida kaalethiyaawantta koyee",
+     "Tiitokko kiitaa xaafee"
+    ]
+   },
+   "malta": {
+    "name": "Malta",
+    "book": "Kiitteeddawanttu Oosuwaa 27–28",
+    "today": "ha\"i Malta",
+    "note": "Gotiyaanne markkabe menuwaa giddon, S'oossaa ufaysay ek'ettidi de'ee.",
+    "events": [
+     "“Huuphphe arshsho gotii” markkabiyaa menttee, gidoppe attin 276 ubbay attoosona",
+     "Shooshshi a dukkin, aynne k'ohettibeenna",
+     "Haruruwaa hargganchchatuwaa pas'ssee"
+    ]
+   },
+   "syracuse": {
+    "name": "Sirakkose",
+    "book": "Kiitteeddawanttu Oosuwaa 28:12",
+    "today": "ha\"i Ixaaliyaa Sisiile",
+    "note": "Sisiilen heezzu gallassaa uttoosona.",
+    "events": []
+   },
+   "puteoli": {
+    "name": "Putiyola",
+    "book": "Kiitteeddawanttu Oosuwaa 28:13-14",
+    "today": "ha\"i Ixaaliyaa Pozzu'oole",
+    "note": "Ixaaliyaa gakkiide ishatuwaara gaytoosona.",
+    "events": []
+   },
+   "rome": {
+    "name": "Roome",
+    "book": "Kiitteeddawanttu Oosuwaa 28 · K'asho Kiitatuwaa · 2 S'imootoosa",
+    "today": "ha\"i Ixaaliyaa Roome",
+    "note": "Wurssettan Wonggalay kawutetsaa waanna sohuwaa gakkee — wurssetsa gidennan, doometsaa.",
+    "events": [
+     "Nam\"u laytsaa keettan naagettidi, kawutetsaa xala odiide sabbakee",
+     "Hawaappe K'asho Kiitatuwaa xaafee (Efesoona·Pilip'p'isiyoosa·K'olaasiyaasa·Filimoona)",
+     "Guyyeppe gujje k'ashettidi, 2 S'imootoosa xaafee k'ay markka gidiide hayk'k'ee — “Lo\"o baaxiyaa baaxetaaddis, gaadiyaa polaaddis”"
+    ]
+   }
+  },
+  "labels": [
+   "Mediteraane Abbaa",
+   "Eegee Abbaa",
+   "Guutta Isiyaa",
+   "Mek'edooniyaa",
+   "Ixaaliyaa"
+  ],
+  "journeys": {
+   "j1": "Koyro buussaa",
+   "j2": "Nam\"antsa buussaa",
+   "j3": "Heezzantsa buussaa",
+   "rome": "Oyddantsa buussaa · Roome",
+   "j5": "Ichchashantsa buussaa · birshshettowaappe guyyiyaan"
+  }
+ }
+}

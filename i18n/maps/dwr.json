@@ -30,14 +30,14 @@
  "ot": {
   "places": {
    "eden": {
-    "name": "Geenii (Med'etsaa · Kunddetsaa)",
+    "name": "Edene (Med'etsaa · Kunddetsaa)",
     "book": "Doometsaa 1–3",
     "today": "ha\"i Xigreesa–Efiraaxeese heeraa",
     "note": "Daro lo\"o gidiide med'etteedda sa'aakko nagaray geliide, S'oossaanne asaa giddo gaytotetsaa menttee.",
     "events": [
      "Usuppun gallassaan med'etsaa — “daro lo\"o gidee”",
      "Asay S'oossaa malaatan med'etteedda",
-     "Kunddetsaa, k'ay Geeneppe kessiyaawaa",
+     "Kunddetsaa, k'ay Edeneppe kessiyaawaa",
      "Koyro Wonggalaa ufaysaa — “mishiraa zeretsay shooshshaa huup'iyaa k'os's'ana”"
     ]
    },
@@ -453,7 +453,7 @@
     "today": "ha\"i Turkiyee",
     "note": "Wonggalay koyro Awurooppaakko simmiyaa laameta sohuwaa.",
     "events": [
-     "Mek'edooniyaa asaa ajjuutaa",
+     "Mak'idooniyaa asaa ajjuutaa",
      "“Haa pinnada nuuna maadda”",
      "Ellekka Awurooppaa pinnoosona"
     ]
@@ -622,7 +622,7 @@
    "Mediteraane Abbaa",
    "Eegee Abbaa",
    "Guutta Isiyaa",
-   "Mek'edooniyaa",
+   "Mak'idooniyaa",
    "Ixaaliyaa"
   ],
   "journeys": {

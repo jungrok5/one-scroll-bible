@@ -1,0 +1,636 @@
+{
+ "menuName": "Naijá",
+ "htmlLang": "pcm",
+ "dir": "ltr",
+ "locale": "pcm-NG",
+ "brand": "Di Bible for One Look",
+ "docTitle": "Di Bible thru Map · Di Bible for One Look",
+ "metaDesc": "Follow di Old Testament timeline, di life of Jesus, and Paul journeys for one real map — di Bible happen for real places.",
+ "s": {
+  "kicker": "Di Bible for One Look · Maps",
+  "title": "Di Bible thru Map",
+  "verse": "“Bikos, wi nor use awa brain take tell una lie-lie story about Christ pawa and how E go kom back.” (2 Peter 1:16)",
+  "purpose": "Di Bible nor bi myth. Na record of pipol wey waka for real places, real dates, and real names. Follow doz paths for map, for di way dem take happen — tosh one point, or press ▶ make yu waka thru am step by step.",
+  "ot_kick": "① Old Testament — thru di time",
+  "ot_h": "From creation rish di return go Jerusalem",
+  "ot_lead": "Nor bi just one trip, but na di flow of di redemptive history from creation kon go front: creation and di fall → flood and Babel → one koll (Abraham) → di promise land → Exodus → wildaness → konkwest → kingdom → division → exile → return.",
+  "je_kick": "② New Testament — di life of Jesus",
+  "je_h": "From Betlehem rish Jerusalem",
+  "je_lead": "Follow di life of Jesus as di Good News buks take tell am, for order — from en birt for Betlehem, thru en baptism and en work for Galilee, across Samaria, rish di cross, resurreshon and to go up for Jerusalem.",
+  "pa_kick": "③ New Testament — Paul journeys",
+  "pa_h": "From Antiok rish di end of di eart — Rome",
+  "pa_lead": "From Pentecost for Jerusalem, how di Good News spread pass Judea — thru Asia Minor and Europe rish di heart of di empire. Pik one of di five journeys (1st·2nd·3rd + di voyage go Rome + afta dem release am) and follow di tins wey happen for Acts with di letas wey dem rite for di road.",
+  "foot": "Sources · Di places follow di Bible text and di standard Bible geografi (with modern names where e go helep). Di koastlines, rivas and lakes komot from open geografik data (Natural Earth), wey dem make simple.",
+  "contact": "Kwestion · feedback — <a id=\"contact\" class=\"mail\">Send email</a>",
+  "play": "Play",
+  "pause": "Pause",
+  "today": "Today:",
+  "verseCite": "2 Peter 1:16"
+ },
+ "ot": {
+  "places": {
+   "eden": {
+    "name": "Eden (Creation · Di Fall)",
+    "book": "Jenesis 1–3",
+    "today": "di Tigris–Euphrates area today",
+    "note": "Into one world wey God make «good well-well», sin enter kon break di bond between God and man.",
+    "events": [
+     "Creation for six days — «e good well-well»",
+     "Man dem make for di image of God",
+     "Di fall, and dem drive dem komot Eden",
+     "Di first promise of di Good News — «di pikin wey woman born go mash di snake head»"
+    ]
+   },
+   "noah": {
+    "name": "Ararat (Di Flood)",
+    "book": "Jenesis 6–9",
+    "today": "Mount Ararat, east Turkey today",
+    "note": "God judge one world wey full of sin, but E keep life alive thru one family.",
+    "events": [
+     "One world wey full of korrupshon",
+     "Di flood, and Noah ark",
+     "Di rainbow kovenant — «flood nor go ever distroy di eart again»"
+    ]
+   },
+   "babel": {
+    "name": "Di Tower of Babel",
+    "book": "Jenesis 11",
+    "today": "Iraq today (di plain of Shinar)",
+    "note": "Against di pride wey wan rish heaven, God skata dia langwej and skata di pipol for di whole eart.",
+    "events": [
+     "«Make wi build one city and one tower… make wi make name for awasef»",
+     "God konfuse dia langwej",
+     "Di pipol skata for di whole eart (Shinar — wey turn Babilon afta)"
+    ]
+   },
+   "ur": {
+    "name": "Ur",
+    "book": "Jenesis 12",
+    "today": "sout Iraq today",
+    "note": "Di Bible story of redemption start with di koll of one man.",
+    "events": [
+     "God koll Abram komot from Ur of di Kaldeans",
+     "«I go turn yu to one strong kountry… all di pipol go get blessing thru yu»",
+     "By faith e komot from en own land"
+    ]
+   },
+   "haran": {
+    "name": "Haran",
+    "book": "Jenesis 12",
+    "today": "sout Turkey today",
+    "note": "For di road, dey answa di koll wey point go di promise land.",
+    "events": [
+     "Terah family settle for Haran",
+     "Terah die",
+     "Abram komot go Kanaan wen e bi 75 years old"
+    ]
+   },
+   "shechem": {
+    "name": "Shekem · Kanaan",
+    "book": "Jenesis 12–50",
+    "today": "Nablus today",
+    "note": "For di promise land dem start one family and di kovenant pass down thru di generashons.",
+    "events": [
+     "Enter Kanaan, di first altar — «I go give dis land to yor pikin dem»",
+     "Di kovenant (Jen 15) · Isaac · Jacob",
+     "Jacob twelve sons — di root of di twelve tribes"
+    ]
+   },
+   "egypt": {
+    "name": "Egypt (Goshen)",
+    "book": "Jenesis 37–50 · Exodus 1",
+    "today": "di Nile Delta, Egypt today",
+    "note": "One family turn to one big kountry — den turn to kountry of slave.",
+    "events": [
+     "Joseph, wey dem sell, rise go rule Egypt",
+     "Jacob whole family kom down to run from hunger",
+     "Di Israel wey dey grow turn to slave"
+    ]
+   },
+   "sinai": {
+    "name": "Mount Sinai",
+    "book": "Exodus · Levitikus",
+    "today": "di Sinai Peninsula today",
+    "note": "Di senter rescue of di OT — slave dem turn to God own pipol.",
+    "events": [
+     "Di ten plagues and di Passover lamb",
+     "Di Red Sea open and dem kross",
+     "Di Ten Komandments, di Law, di tent of God and di sakrifice"
+    ]
+   },
+   "kadesh": {
+    "name": "Kadesh (wildaness)",
+    "book": "Nombas · Deutronomi",
+    "today": "di Sinai–Negev wildaness today",
+    "note": "Bikos dem nor bilive, one generashon lose di land — but God still dey with dem.",
+    "events": [
+     "Twelve spies — but di pipol refuse to trust God",
+     "38 years for di wildaness — manna, cloud and fire",
+     "For di plains of Moab, Moses last sermon (Deutronomi)"
+    ]
+   },
+   "jericho": {
+    "name": "Jericho",
+    "book": "Joshua",
+    "today": "Jericho today",
+    "note": "For di end dem enter kon take di promise land.",
+    "events": [
+     "Di Jordan open and di pipol kross",
+     "Di walls of Jericho fall",
+     "Konkwest of Kanaan and division of di land"
+    ]
+   },
+   "shiloh": {
+    "name": "Shailo (Judges)",
+    "book": "Judges · Rut",
+    "today": "Khirbet Seilun today",
+    "note": "With no king, evribody dey do wetin good for en eye — dem need one true king.",
+    "events": [
+     "Dem set up di tent of God for Shailo",
+     "Di round-and-round of sin–presing–rescue (Debora, Gideon, Samson)",
+     "Rut — faithfulness for dark days, for David line"
+    ]
+   },
+   "jerusalem": {
+    "name": "Jerusalem · Di United Kingdom",
+    "book": "1–2 Samuel · 1 Kings",
+    "today": "Jerusalem today",
+    "note": "Israel golden time — and di promise of one king wey go last forever.",
+    "events": [
+     "Saul di first king, den David and Goliat",
+     "Di kovenant with David — «yor throne go stand forever» (2 Sam 7)",
+     "Solomon build di temple for Jerusalem"
+    ]
+   },
+   "samaria": {
+    "name": "Samaria · Di Divided Kingdom",
+    "book": "Kings · di Profets",
+    "today": "Sebastia today",
+    "note": "Di kingdom split kon dey go down as di profets dey kry out.",
+    "events": [
+     "Afta Solomon, e split into Judah and Israel",
+     "Idol worship wey dey repeat",
+     "Elijah, Isaya, Jeremaya dey kry «kom back» — and dey tok about di Messiah wey go kom"
+    ]
+   },
+   "nineveh": {
+    "name": "Nineveh (Assiria)",
+    "book": "2 Kings 17 · Jona",
+    "today": "Mosul, Iraq today",
+    "note": "As dem ignore evri warning, na di nort fall first.",
+    "events": [
+     "Nineveh, di kapital of Assiria",
+     "Di nort kingdom fall to Assiria (722 BC)",
+     "Dem send Jona go Nineveh"
+    ]
+   },
+   "babylon": {
+    "name": "Babilon",
+    "book": "2 Kings 25 · Daniel · Ezekiel",
+    "today": "Hillah, Iraq today",
+    "note": "Di darkest night — but di promise of restoration still dey.",
+    "events": [
+     "Jerusalem fall, dem burn di temple (586 BC)",
+     "Dem karry Judah go Babilon",
+     "Daniel and Ezekiel — faith and vision for di exile"
+    ]
+   },
+   "susa": {
+    "name": "Susa (Persia)",
+    "book": "Esther · Nehemaya",
+    "today": "Shush, Iran today",
+    "note": "Even for di heart of one pagan empire, God dey keep en pipol.",
+    "events": [
+     "Persia overtrow Babilon",
+     "Esther save di Jews from being wipe komot",
+     "Nehemaya pray before di king kon dem send am"
+    ]
+   },
+   "return": {
+    "name": "Return go Jerusalem",
+    "book": "Ezra · Nehemaya · Malakai",
+    "today": "Jerusalem today",
+    "note": "Dem kom back kon rebuild — but no king don kom. Dem dey wait for di Messiah.",
+    "events": [
+     "Three waves of return thru Cyrus order (Zerubbabel 538 · Ezra 458 · Nehemaya 444)",
+     "Dem rebuild di temple and repair di Jerusalem walls",
+     "Malakai — di OT klose: «I dey send my messenja»"
+    ]
+   }
+  },
+  "labels": [
+   "Mediterranean Sea",
+   "Mesopotamia",
+   "Arabian Desert",
+   "Egypt"
+  ],
+  "journeys": {
+   "flow": "Di redemptive story"
+  }
+ },
+ "jesus": {
+  "places": {
+   "bethlehem": {
+    "name": "Betlehem",
+    "book": "Matiu 1–2 · Luke 2",
+    "today": "Betlehem today",
+    "note": "Di promise Messiah kom to di town of David — di Word wey turn to pesin.",
+    "events": [
+     "Dem born am for Betlehem, di town of David",
+     "Angels announce di news to shepherds",
+     "Di wise men kom to worship am"
+    ]
+   },
+   "nazareth": {
+    "name": "Nazaret",
+    "book": "Luke 2 · 4",
+    "today": "Nazaret today",
+    "note": "God grow up as man for one ordinary town.",
+    "events": [
+     "Dem raise am for karpenta house",
+     "For twelve years, e dey ask and answa for di temple",
+     "Afta, dem rejet am for en own town sinagog"
+    ]
+   },
+   "jordan": {
+    "name": "Jordan River",
+    "book": "Matiu 3–4",
+    "today": "di lowa Jordan today",
+    "note": "En publik work start — heaven mark am as di Son.",
+    "events": [
+     "John baptize am",
+     "Di Spirit kom down like dove — «Dis na my Pikin wey I love»",
+     "E win Satan three temptashons for di wildaness"
+    ]
+   },
+   "cana": {
+    "name": "Kana",
+    "book": "John 2",
+    "today": "Kafr Kanna today",
+    "note": "For en first sign, E show en glory.",
+    "events": [
+     "One guest for one wedding",
+     "Water turn to wine — en first sign",
+     "En disciples bilive for am"
+    ]
+   },
+   "sychar": {
+    "name": "Sychar (Samaria)",
+    "book": "John 2–4",
+    "today": "near Nablus today",
+    "note": "Di early work road — thru Jerusalem kon go di Samaria wey dem despise.",
+    "events": [
+     "E klean di temple for Jerusalem",
+     "For night, Nicodemus — «yu must to born again»",
+     "Living water for one Samaria woman"
+    ]
+   },
+   "capernaum": {
+    "name": "Kapernaum",
+    "book": "Matiu 4–13 · Mark 1–4",
+    "today": "di Galilee lakeside today",
+    "note": "Home base of di Galilee work — koll, teachin and opposition all meet here.",
+    "events": [
+     "E koll di fishermen kon base ensef here",
+     "Di Sermon on di Mount — «Blessing dey for doz wey poor for spirit»",
+     "Parables of di kingdom — and opposition wey dey grow"
+    ]
+   },
+   "galilee": {
+    "name": "Sea of Galilee",
+    "book": "Mark 4 · 6 · John 6",
+    "today": "Lake Kinneret today",
+    "note": "With pawa ova nechure, E show who E bi.",
+    "events": [
+     "«Peace, be kwaiet» — E kalm di storm",
+     "E feed 5,000 with five bread and two fish",
+     "E waka on top di water"
+    ]
+   },
+   "caesarea_p": {
+    "name": "Kaisaria Filipai",
+    "book": "Matiu 16–17",
+    "today": "Banias today",
+    "note": "Di disciples undastand sey E na di Christ, and di road of di cross open.",
+    "events": [
+     "Peter konfesshon — «Yu na di Christ, di Pikin of di living God»",
+     "E first tok about en deat and resurreshon",
+     "E shange for glory on top di mountin"
+    ]
+   },
+   "jericho": {
+    "name": "Jericho",
+    "book": "Luke 18–19",
+    "today": "Jericho today",
+    "note": "For di road wey dey go up Jerusalem, E dey find doz wey lost.",
+    "events": [
+     "E give blind Bartimaeus en eye back",
+     "E koll Zacchaeus di tax kollekta",
+     "«Di Son of Man kom find and save doz wey don lost»"
+    ]
+   },
+   "bethany": {
+    "name": "Betani",
+    "book": "John 11–12",
+    "today": "al-Eizariya today",
+    "note": "E show pawa ova deat for di eve of en last week.",
+    "events": [
+     "E raise Lazarus from di grave — «Na mi bi di resurreshon and di life»",
+     "Mary rub oil on am for en burial",
+     "Dis sign make di plan to kill am hard pass"
+    ]
+   },
+   "jerusalem": {
+    "name": "Jerusalem",
+    "book": "Matiu 21–28 · Luke 24 · Acts 1",
+    "today": "Jerusalem today",
+    "note": "Di top-point wey di whole Bible dey point go — cross, resurreshon, to go up.",
+    "events": [
+     "E enter with triumph; E ton di temple tables again",
+     "For di Last Supper E wash di disciples feet",
+     "E die for di cross",
+     "E rise for di third day, den E go up"
+    ]
+   }
+  },
+  "labels": [
+   "Mediterranean Sea",
+   "Galilee",
+   "Samaria",
+   "Judea",
+   "Decapolis",
+   "Perea",
+   "Dead Sea"
+  ],
+  "journeys": {
+   "life": "Di path of Jesus"
+  }
+ },
+ "paul": {
+  "places": {
+   "antioch": {
+    "name": "Antiok",
+    "book": "Acts 13 · 15",
+    "today": "Antakya, Turkey today",
+    "note": "Di sending church where di gentile mission start and dey return.",
+    "events": [
+     "For prayer, di Spirit set apart Barnabas and Saul",
+     "Di church where dem first koll di bilivas «Christians»",
+     "Di start-point of di 1st, 2nd and 3rd journeys"
+    ]
+   },
+   "seleucia": {
+    "name": "Seleucia",
+    "book": "Acts 13:4",
+    "today": "Turkey today",
+    "note": "Antiok port — dem set sail go Cyprus.",
+    "events": []
+   },
+   "salamis": {
+    "name": "Salamis (Cyprus)",
+    "book": "Acts 13:5",
+    "today": "Cyprus today",
+    "note": "Di first stop for Cyprus — dem preach for di sinagogs.",
+    "events": []
+   },
+   "paphos": {
+    "name": "Paphos",
+    "book": "Acts 13:6-12",
+    "today": "Cyprus today",
+    "note": "Dem show pawa against doz wey stand against di Good News.",
+    "events": [
+     "Elymas di magishan turn blind",
+     "Sergius Paulus di gova bilive",
+     "From here, na «Paul» dey lead"
+    ]
+   },
+   "perga": {
+    "name": "Perga",
+    "book": "Acts 13:13",
+    "today": "Antalya, Turkey today",
+    "note": "One port for Pamphylia — na here John Mark turn back.",
+    "events": []
+   },
+   "pantioch": {
+    "name": "Pisidia Antiok",
+    "book": "Acts 13:14-50",
+    "today": "Yalvaç, Turkey today",
+    "note": "Di Good News break open go di gentiles.",
+    "events": [
+     "One long sermon of salvation history for di sinagog",
+     "Plenty gentiles rejoice kon receive di word",
+     "Opposition drive dem komot"
+    ]
+   },
+   "iconium": {
+    "name": "Iconium",
+    "book": "Acts 14:1-7",
+    "today": "Konya, Turkey today",
+    "note": "Plenty bilive, but persecution push dem go front.",
+    "events": []
+   },
+   "lystra": {
+    "name": "Lystra",
+    "book": "Acts 14:8-20",
+    "today": "Turkey today",
+    "note": "Dem hail am as god, den dem stone am.",
+    "events": [
+     "E heal one man wey bi lame from birt",
+     "Di crowd try to sakrifice to dem as gods",
+     "Dem stone am kon lef am as dead, but e stand up"
+    ]
+   },
+   "derbe": {
+    "name": "Derbe",
+    "book": "Acts 14:20-21",
+    "today": "Turkey today",
+    "note": "Dem make plenty disciples; dem waka back to make di churches strong.",
+    "events": []
+   },
+   "troas": {
+    "name": "Troas",
+    "book": "Acts 16:8-10",
+    "today": "Turkey today",
+    "note": "Di turnin-point where di Good News first head go Europe.",
+    "events": [
+     "One vision of one man of Macedonia",
+     "«Kom ova, kom helep us»",
+     "Dem kross go Europe wantwant"
+    ]
+   },
+   "philippi": {
+    "name": "Filipai",
+    "book": "Acts 16 · Filipians",
+    "today": "nort Greece today",
+    "note": "Europe first church — di Good News win even for prison.",
+    "events": [
+     "Lydia, one woman wey dey sell purple klot, bilive",
+     "Dem free one slave girl wey dey tell fortune",
+     "Midnight songs, one eart-shake, di prison-keeper family save"
+    ]
+   },
+   "thess": {
+    "name": "Tesalonika",
+    "book": "Acts 17 · 1–2 Tesalonians",
+    "today": "Thessaloniki, Greece today",
+    "note": "Di word shake di city kon di opposition boil ova.",
+    "events": [
+     "E reason for di sinagog three Sabbaths",
+     "«Dis pipol wey don ton di world upside down»",
+     "Dem komot for night"
+    ]
+   },
+   "berea": {
+    "name": "Berea",
+    "book": "Acts 17:10-15",
+    "today": "Veria, Greece today",
+    "note": "Di «noble» ones wey check di word for demsef.",
+    "events": [
+     "Dem receive di word with eagerness",
+     "Evriday dem check di Skriptures to konfirm am",
+     "Plenty kom bilive"
+    ]
+   },
+   "athens": {
+    "name": "Atens",
+    "book": "Acts 17:16-34",
+    "today": "Athens, Greece today",
+    "note": "For di city of filosofas, E announce di «unknown god».",
+    "events": [
+     "Di city full of idols vex am",
+     "For di Areopagus E preach di Creator and di resurreshon",
+     "Dem laf am, but small pipol bilive"
+    ]
+   },
+   "corinth": {
+    "name": "Korint",
+    "book": "Acts 18 · 1–2 Korintians",
+    "today": "Greece today",
+    "note": "E stay one year and half, dey plant church for one city wey full of bad tin.",
+    "events": [
+     "E make tents with Aquila and Priscilla",
+     "«Nor fear… bikos I dey with yu»",
+     "Plenty Korint pipol bilive kon dem baptize dem"
+    ]
+   },
+   "ephesus": {
+    "name": "Efesus",
+    "book": "Acts 19 · Efesians",
+    "today": "Selçuk, Turkey today",
+    "note": "Heart of di third journey — di word spread across Asia.",
+    "events": [
+     "E teach evriday for two years for di hall of Tyrannus",
+     "Dem burn magik buks; pawaful works",
+     "Demetrius di silversmith start one riot"
+    ]
+   },
+   "miletus": {
+    "name": "Miletus",
+    "book": "Acts 20:17-38",
+    "today": "Turkey today",
+    "note": "One farewell with tears to di Efesus elders.",
+    "events": [
+     "«Take kare of di church wey E buy with en own blood»",
+     "Di elders kry, sabi sey dem nor go si am again"
+    ]
+   },
+   "caesarea": {
+    "name": "Kaisaria",
+    "book": "Acts 23–26",
+    "today": "Israel koast today",
+    "note": "For two years E defend di Good News before govas and one king.",
+    "events": [
+     "Trials before di govas Felix and Festus",
+     "En defens before King Agrippa",
+     "«I appeal to Caesar» — go Rome"
+    ]
+   },
+   "jerusalem": {
+    "name": "Jerusalem",
+    "book": "Acts 21–23",
+    "today": "Jerusalem today",
+    "note": "Dem grab am for di temple, and en road as prisoner start.",
+    "events": [
+     "Di crowd grab am for di temple",
+     "E defend ensef before di kounsil",
+     "As Roman sitizen, dem send am unda guard go Kaisaria"
+    ]
+   },
+   "myra": {
+    "name": "Myra",
+    "book": "Acts 27:5-6",
+    "today": "Demre, Turkey today",
+    "note": "Dem shange go one Alexandria ship wey dey go Rome.",
+    "events": []
+   },
+   "fairhaven": {
+    "name": "Fair Havens (Crete)",
+    "book": "Acts 27:8-12",
+    "today": "Crete today",
+    "note": "Dem nor gri Paul warning to stop di sailing.",
+    "events": []
+   },
+   "crete": {
+    "name": "Crete",
+    "book": "Taitus",
+    "today": "Crete today",
+    "note": "Afta dem release am, di island where E lef Titus to set di churches in order.",
+    "events": [
+     "E lef Titus to appoint elders for evri town",
+     "E ask for leaders wey nor get blame, wey faithful",
+     "E rite di leta to Titus"
+    ]
+   },
+   "malta": {
+    "name": "Malta",
+    "book": "Acts 27–28",
+    "today": "Malta today",
+    "note": "Thru storm and shipwreck, God promise stand.",
+    "events": [
+     "Di «northeaster» wreck di ship, but all 276 survive",
+     "One snake bite am, but notin happen to am",
+     "E heal di sik pipol of di island"
+    ]
+   },
+   "syracuse": {
+    "name": "Syracuse",
+    "book": "Acts 28:12",
+    "today": "Sicily, Italy today",
+    "note": "Dem stay three days for Sicily.",
+    "events": []
+   },
+   "puteoli": {
+    "name": "Puteoli",
+    "book": "Acts 28:13-14",
+    "today": "Pozzuoli, Italy today",
+    "note": "Dem land for Italy kon di fellow bilivas meet dem.",
+    "events": []
+   },
+   "rome": {
+    "name": "Rome",
+    "book": "Acts 28 · Prison Letas · 2 Timoti",
+    "today": "Rome, Italy today",
+    "note": "Di Good News rish di heart of di empire for di end — nor bi one end but na one beginning.",
+    "events": [
+     "Two years unda house arrest, dey boldly announce di kingdom",
+     "From here E rite di Prison Letas (Efe·Fil·Kol·Fmn)",
+     "Afta, dem lock am again, E rite 2 Timoti kon dem kill am — «I don fight di good fight, I don finish di race»"
+    ]
+   }
+  },
+  "labels": [
+   "Mediterranean Sea",
+   "Aegean Sea",
+   "Asia Minor",
+   "Macedonia",
+   "Italy"
+  ],
+  "journeys": {
+   "j1": "First journey",
+   "j2": "Sekond journey",
+   "j3": "Third journey",
+   "rome": "Fort journey · go Rome",
+   "j5": "Fift journey · afta dem release am"
+  }
+ }
+}

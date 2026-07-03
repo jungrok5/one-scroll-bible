@@ -1,0 +1,636 @@
+{
+ "menuName": "Kikongo",
+ "htmlLang": "kg",
+ "dir": "ltr",
+ "locale": "kg",
+ "brand": "Biblia mu nkanda mosi",
+ "docTitle": "Biblia va karte · Biblia mu nkanda mosi",
+ "metaDesc": "Landa ndandani ya Luwawanu Luankulu, zingu kia Yesu, ye nzietolo za Polo va karte ya kieleka — Biblia yabwa mu bisika bia kieleka.",
+ "s": {
+  "kicker": "Biblia mu nkanda mosi · Karte",
+  "title": "Biblia va karte",
+  "verse": "“Solo, tango toyebisaki bino makambo oyo etali koya ya Yesu-Klisto, Nkolo na biso, kati na nguya na yango nyonso, tolandaki te basambole oyo bato basalaka na mayele na bango, kasi na miso na biso moko, tomonaki Ye kati na kongenga nyonso ya nkembo na Ye.” (2 Petelo 1:16)",
+  "purpose": "Biblia ka i lukinu ko. I nsoneka wa bantu badiata va bisika, bilumbu, ye mazina makieleka. Landa nzila zina va karte, mu ndandani ya ntangu — bonda va fulu kimosi, vo bonda ▶ mu vioka mwawu litambi va litambi.",
+  "ot_kick": "① Luwawanu Luankulu — mu nsungi ya ntangu",
+  "ot_h": "Tuka mu lusemono nate ye kuvutuka ku Yelusalemi",
+  "ot_lead": "Ka i nzietolo yimosi kaka ko kansi ndandani ya disolo dia luvuluku tuka mu lusemono: lusemono ye mbuka → nkuka ye Babele → mboka (Abalayama) → ntoto wa nsilu → Kuvaika → mfinda → kubaka ntoto → kintinu → kuvambana → kimbundu → kuvutuka.",
+  "je_kick": "② Luwawanu Luampa — zingu kia Yesu",
+  "je_h": "Tuka ku Beteleme nate ye Yelusalemi",
+  "je_lead": "Landa zingu kia Yesu bonso Nsangu Zambote zisamuna kio, mu ndandani — tuka mu mbutukulu andi ku Beteleme, mu nzila ya mvubudulu andi ye salu kia Ngalili, mu kusabuka Samaria, nate ye kulunsi, mfulukulu ye kutombuka ku ezulu mu Yelusalemi.",
+  "pa_kick": "③ Luwawanu Luampa — nzietolo za Polo",
+  "pa_h": "Tuka ku Antioka nate ye nsuka za nza — Loma",
+  "pa_lead": "Tuka mu Pantekoti ku Yelusalemi, buevi Nsangu Zambote yamwangana kuna kwa Yudeya — mu nzila ya Azia Yafioti ye Erópa nate ye ntima wa kintinu kianene. Sola kimosi kia nzietolo zitanu (kia 1·kia 2·kia 3 + nzietolo ya kwenda ku Loma + kuna kwa kimpwanza) ye landa mambu ma Misala va kimosi ye minkanda miasonama mu nzila.",
+  "foot": "Bisika biatukidi · Bisika bilandanga masono ma Biblia ye jeografi ya kifu kia Biblia (ye mazina ma unu vana biasadisa). Ndilu za mbu, minzadi ye masanga biatungwa mu mambu ma jeografi ma kimoni (Natural Earth), biakulwa fioti.",
+  "contact": "Biuvu · mvutu — <a id=\"contact\" class=\"mail\">Tufila beto e-mail</a>",
+  "play": "Bandika",
+  "pause": "Telamisa",
+  "today": "Unu:",
+  "verseCite": "2 Petelo 1:16"
+ },
+ "ot": {
+  "places": {
+   "eden": {
+    "name": "Edeni (Lusemono · Mbuka)",
+    "book": "Ebandeli 1–3",
+    "today": "zunga kia Tigile–Efalate unu",
+    "note": "Mu nza yasemo bwambote kibeni, disumu diakota ye dizenga kingana va kati kwa Nzambi ye bantu.",
+    "events": [
+     "Lusemono mu bilumbu bisambanu — «ezalaki malamu mingi»",
+     "Muntu wasemo mu kifwani kia Nzambi",
+     "Mbuka, ye kuvaikiswa mu Edeni",
+     "Nsilu wantete wa Nsangu Zambote — «bakitani ya mwasi bakonyata moto na yo»"
+    ]
+   },
+   "noah": {
+    "name": "Ararati (Nkuka)",
+    "book": "Ebandeli 6–9",
+    "today": "Mongo Ararati, ku ndambu ya esti ya Turkiya unu",
+    "note": "Nzambi ufundisa nza yayidila mu disumu, kansi ulunda moyo mu nzila ya kanda dimosi.",
+    "events": [
+     "Nza yayidila mu mbivusu",
+     "Nkuka, ye masuwa ma Noa",
+     "Kingana kia nkongolo — «mpela ekobebisa mokili lisusu te»"
+    ]
+   },
+   "babel": {
+    "name": "Linongi lia Babele",
+    "book": "Ebandeli 11",
+    "today": "Iraki unu (nseke ya Shineari)",
+    "note": "Va ntandu wa lulendo lukana lwaka ku ezulu, Nzambi wamwanga ndinga zau ye bantu mu nza.",
+    "events": [
+     "«Totonga engumba mpe linongi… mpe tópesa nkombo na biso lokumu»",
+     "Nzambi wavukumuna ndinga zau",
+     "Bantu bamwangana mu nza (Shineari — kuna kwa nima Babiloni)"
+    ]
+   },
+   "ur": {
+    "name": "Uri",
+    "book": "Ebandeli 12",
+    "today": "sidi ya Iraki unu",
+    "note": "Disolo dia luvuluku dia Biblia dibantikanga mu mboka ya muntu mosi.",
+    "events": [
+     "Nzambi wabokila Abalayama mu Uri ya Bakaledeo",
+     "«Nakokomisa yo ekolo monene… bato nyonso bakopambolama mpo na yo»",
+     "Mu lukwikilu wakatuka mu nsi andi"
+    ]
+   },
+   "haran": {
+    "name": "Harana",
+    "book": "Ebandeli 12",
+    "today": "sidi ya Turkiya unu",
+    "note": "Va nzila, mu kulanda mboka kuna kwa ntoto wa nsilu.",
+    "events": [
+     "Kanda dia Tela diavwanda mu Harana",
+     "Tela wafwa",
+     "Abalayama, bu kakala ye mvu 75, wakatuka mu kwenda ku Kanana"
+    ]
+   },
+   "shechem": {
+    "name": "Sikemi · Kanana",
+    "book": "Ebandeli 12–50",
+    "today": "Nablus unu",
+    "note": "Mu ntoto wa nsilu kanda diatungwa ye kingana kiviokila mu mbandu ye mbandu.",
+    "events": [
+     "Kukota mu Kanana, ntala yantete — «nakopesa bakitani na yo mokili oyo»",
+     "Kingana (Ebandeli 15) · Izaki · Yakobo",
+     "Bana kumi ye mole ba Yakobo — muanzi wa makanda kumi ye mole"
+    ]
+   },
+   "egypt": {
+    "name": "Engipto (Gosheni)",
+    "book": "Ebandeli 37–50 · Kobima 1",
+    "today": "Delta ya Nili, Engipto unu",
+    "note": "Kanda dikituka kanda dinene — buna kanda dia bavika.",
+    "events": [
+     "Yozefe, bu bamteka yandi, wayika mfumu mu Engipto",
+     "Kanda diawonso dia Yakobo diakulumuka mu tina nzala",
+     "Kanda dia Isaele diayela diakitulwa mu kimbundu"
+    ]
+   },
+   "sinai": {
+    "name": "Mongo Sinai",
+    "book": "Kobima · Levitike",
+    "today": "Zunga kia Sinai unu",
+    "note": "Luvuluku lunene lwa Luwawanu Luankulu — bavika bakituka bantu ba Nzambi.",
+    "events": [
+     "Bitumbu kumi ye mwana-meme wa Pasaka",
+     "Mbu wa Mbwaki wavambana ye basabuka",
+     "Minsiku kumi, Nsiku, Nzo a tenta ye makaba"
+    ]
+   },
+   "kadesh": {
+    "name": "Kadesi (mfinda)",
+    "book": "Mitango · Deteronome",
+    "today": "mfinda ya Sinai–Negebe unu",
+    "note": "Kukonda lukwikilu kuvidisa mbandu ntoto — kansi Nzambi wasiala yau.",
+    "events": [
+     "Minkengi kumi ye mole — kansi bantu bamanga kutula ntima",
+     "Mvu 38 mu mfinda — mana, kunda kia tuti ye kunda kia tiya",
+     "Va nseke za Moabe, malongi ma nsuka ma Moize (Deteronome)"
+    ]
+   },
+   "jericho": {
+    "name": "Yeliko",
+    "book": "Yozue",
+    "today": "Yeliko unu",
+    "note": "Ku nsuka bakoti ye babaka ntoto wa nsilu.",
+    "events": [
+     "Nzadi Yodani yavambana ye bantu basabuka",
+     "Nkaka za Yeliko zabwa",
+     "Kubaka Kanana ye kukabula ntoto"
+    ]
+   },
+   "shiloh": {
+    "name": "Silo (Basambisi)",
+    "book": "Basambisi · Ruti",
+    "today": "Khirbet Seilun unu",
+    "note": "Bu kakala mfumu ko, konso muntu wavanga kina kazola — mfumu wakieleka una mfunu.",
+    "events": [
+     "Nzo a tenta yatelamiswa ku Silo",
+     "Nzunga ya disumu–kuyamiswa–luvuluku (Debola, Gedeon, Samison)",
+     "Ruti — kwikizi mu bilumbu bia tombe, mu kanda dia Davidi"
+    ]
+   },
+   "jerusalem": {
+    "name": "Yelusalemi · Kintinu kia kintwadi",
+    "book": "1–2 Samuele · 1 Bakonzi",
+    "today": "Yelusalemi unu",
+    "note": "Ntangu ya nkembo ya Isaele — ye nsilu wa mfumu wa mvu ya mvu.",
+    "events": [
+     "Saulo mfumu wantete, buna Davidi ye Goliyati",
+     "Kingana ye Davidi — «kiti na yo ya bokonzi mpo na libela» (2 Samuele 7)",
+     "Salomo watunga Tempelo ku Yelusalemi"
+    ]
+   },
+   "samaria": {
+    "name": "Samaria · Kintinu kiavambana",
+    "book": "Bakonzi · Mbikudi",
+    "today": "Sebastia unu",
+    "note": "Kintinu kiavambana ye kiakulumuka bu mbikudi babokanga.",
+    "events": [
+     "Kuna kwa Salomo, kuvambana va kati kwa Yuda ye Isaele",
+     "Lusambulu lwa biteki lwavutukila mbala ye mbala",
+     "Eliya, Ezaya, Yelemiya baboka «luvutuka» — ye babikula Masiya"
+    ]
+   },
+   "nineveh": {
+    "name": "Ninive (Asili)",
+    "book": "2 Bakonzi 17 · Yona",
+    "today": "Mosul, Iraki unu",
+    "note": "Mu kuvila malukisu mawonso, kintinu kia nodi kiabwa ntete.",
+    "events": [
+     "Ninive, mbanza a kintinu kia Asili",
+     "Kintinu kia nodi kiabwa va meso ma Asili (722 L.K.)",
+     "Yona watumwa ku Ninive"
+    ]
+   },
+   "babylon": {
+    "name": "Babiloni",
+    "book": "2 Bakonzi 25 · Daniele · Ezekiele",
+    "today": "Hillah, Iraki unu",
+    "note": "Butu kia tombe kuluta — kansi nsilu wa kuvutulwa usiala.",
+    "events": [
+     "Yelusalemi diabwa, Tempelo diayoka (586 L.K.)",
+     "Yuda kianatwa ku Babiloni",
+     "Daniele ye Ezekiele — lukwikilu ye zimbonokono mu kimbundu"
+    ]
+   },
+   "susa": {
+    "name": "Suza (Pelesi)",
+    "book": "Esitere · Neyemi",
+    "today": "Shush, Iran unu",
+    "note": "Ata va ntima wa kintinu kia banzenza, Nzambi ukengila bantu bandi.",
+    "events": [
+     "Pelesi wanunga Babiloni",
+     "Esitere wavuluza Bayuda mu mbivusu",
+     "Neyemi wasambila va meso ma mfumu ye watumwa"
+    ]
+   },
+   "return": {
+    "name": "Kuvutuka ku Yelusalemi",
+    "book": "Esidrasi · Neyemi · Malaki",
+    "today": "Yelusalemi unu",
+    "note": "Bavutuka ye batunga diaka — kansi mfumu kayizidi ko. Bevingila Masiya.",
+    "events": [
+     "Mbala tatu ya kuvutuka mu nsiku wa Sirisi (Zorobabele 538 · Esidrasi 458 · Neyemi 444)",
+     "Tempelo diatungwa diaka ye nkaka za Yelusalemi zayidikwa",
+     "Malaki — Luwawanu Luankulu lusuka: «Nakotinda ntoma na Ngai»"
+    ]
+   }
+  },
+  "labels": [
+   "Mbu Wanene",
+   "Mezopotami",
+   "Mfinda ya Alabiya",
+   "Engipto"
+  ],
+  "journeys": {
+   "flow": "Disolo dia luvuluku"
+  }
+ },
+ "jesus": {
+  "places": {
+   "bethlehem": {
+    "name": "Beteleme",
+    "book": "Matayo 1–2 · Luka 2",
+    "today": "Beteleme unu",
+    "note": "Masiya wasilwa nsilu weyiza ku buka kia Davidi — Diambu diakituka nsuni.",
+    "events": [
+     "Wabutukila ku Beteleme, buka kia Davidi",
+     "Zimbasi zasamuna nsangu kwa mingungudi mia mameme",
+     "Bantu ba ngangu beyiza mu kunsambila yandi"
+    ]
+   },
+   "nazareth": {
+    "name": "Nazaleti",
+    "book": "Luka 2 · 4",
+    "today": "Nazaleti unu",
+    "note": "Nzambi wayela bonso muntu mu buka kia mpamba.",
+    "events": [
+     "Wayela mu nzo a nsadi wa mabaya",
+     "Ye mvu kumi ye mole, wayuvula ye wavana mvutu mu Tempelo",
+     "Kuna kwa nima bamanga yandi mu nzo a lukutukunu ya buka kiandi"
+    ]
+   },
+   "jordan": {
+    "name": "Nzadi Yodani",
+    "book": "Matayo 3–4",
+    "today": "ndambu ya nsi ya Yodani unu",
+    "note": "Salu kiandi kia meso kiabantika — ezulu dintula dimbu vo yandi i Mwana.",
+    "events": [
+     "Wavubudulwa kwa Yoane",
+     "Mpeve wakulumuka bonso yembe — «Oyo azali Mwana na Ngai ya bolingo»",
+     "Wanunga mameka matatu ma Satana mu mfinda"
+    ]
+   },
+   "cana": {
+    "name": "Kana",
+    "book": "Yoane 2",
+    "today": "Kafr Kanna unu",
+    "note": "Mu dimbu diandi diantete wasonga nkembo andi.",
+    "events": [
+     "Nzenza va nkinzi wa makwela",
+     "Maza mabaluka vinyo — dimbu diandi diantete",
+     "Minlonguki miandi mikwikila mu yandi"
+    ]
+   },
+   "sychar": {
+    "name": "Sikari (Samaria)",
+    "book": "Yoane 2–4",
+    "today": "pene ye Nablus unu",
+    "note": "Nzila ya salu kia lubantiku — mu nzila ya Yelusalemi nate ye Samaria yatiolwa.",
+    "events": [
+     "Wavedisa Tempelo ku Yelusalemi",
+     "Va builu, Nikodemo — «osengeli kobotama lisusu»",
+     "Maza ma zingu kwa nkento wa Samaria"
+    ]
+   },
+   "capernaum": {
+    "name": "Kapernaumi",
+    "book": "Matayo 4–13 · Marko 1–4",
+    "today": "ku simu kia mbu wa Ngalili unu",
+    "note": "Fulu kia salu kia Ngalili — kubokila, kulonga ye kunwana biakutakana vava.",
+    "events": [
+     "Wabokila minlobi mia mbisi ye watula fulu kiandi vava",
+     "Malongi va Mongo — «Esengo na babola na molimo»",
+     "Bingana bia Kintinu — ye kunwana kutombuka"
+    ]
+   },
+   "galilee": {
+    "name": "Mbu wa Ngalili",
+    "book": "Marko 4 · 6 · Yoane 6",
+    "today": "Mbu Kinereti unu",
+    "note": "Mu ngolo va ntandu wa bivangwa wasonga nani kena yandi.",
+    "events": [
+     "«Vanda kimia» — wakitisa kimbwela",
+     "Wadikila bantu 5.000 mu mampa matanu ye mbisi zole",
+     "Wadiata va ntandu wa maza"
+    ]
+   },
+   "caesarea_p": {
+    "name": "Sezarea Filipi",
+    "book": "Matayo 16–17",
+    "today": "Banias unu",
+    "note": "Minlonguki mibakisa vo yandi i Klisto, ye nzila ya kulunsi yaziuka.",
+    "events": [
+     "Kimbangi kia Petelo — «Yo ozali Klisto, Mwana ya Nzambe ya bomoi»",
+     "Wabikula lufwa ye mfulukulu andi mu mbala yantete",
+     "Wabaluka mu nkembo va mongo"
+    ]
+   },
+   "jericho": {
+    "name": "Yeliko",
+    "book": "Luka 18–19",
+    "today": "Yeliko unu",
+    "note": "Va nzila ya kutombuka ku Yelusalemi, ovava bantu bavila.",
+    "events": [
+     "Wavana meso kwa Balatimayo wa mpofo",
+     "Wabokila Zake nkongoki wa mpaku",
+     "«Mwana ya moto ayei koluka mpe kobikisa baoyo babunga»"
+    ]
+   },
+   "bethany": {
+    "name": "Betania",
+    "book": "Yoane 11–12",
+    "today": "al-Eizariya unu",
+    "note": "Wasonga lulendo va ntandu wa lufwa va ntwala wa mposo andi wa nsuka.",
+    "events": [
+     "Wafulula Lazalo mu ziami — «Ngai nazali lisekwa mpe bomoi»",
+     "Malia wankusa mafuta mu diambu dia kunzika",
+     "Dimbu diadi dialendisa lukanu lwa kumvonda"
+    ]
+   },
+   "jerusalem": {
+    "name": "Yelusalemi",
+    "book": "Matayo 21–28 · Luka 24 · Misala 1",
+    "today": "Yelusalemi unu",
+    "note": "Nsongi ina Biblia yawonso yasonganga — kulunsi, mfulukulu, kutombuka ku ezulu.",
+    "events": [
+     "Kukota mu nkembo; wabalula diaka mesa ma Tempelo",
+     "Va Madia ma Nsuka wasukula malu ma minlonguki",
+     "Wafwila va kulunsi",
+     "Wafuluka mu lumbu kia ntatu, buna watombuka ku ezulu"
+    ]
+   }
+  },
+  "labels": [
+   "Mbu Wanene",
+   "Ngalili",
+   "Samaria",
+   "Yudeya",
+   "Dekapole",
+   "Perea",
+   "Mbu wa Lufwa"
+  ],
+  "journeys": {
+   "life": "Nzila ya Yesu"
+  }
+ },
+ "paul": {
+  "places": {
+   "antioch": {
+    "name": "Antioka",
+    "book": "Misala 13 · 15",
+    "today": "Antakya, Turkiya unu",
+    "note": "Dibundu ditumanga, fulu salu kia Banzenza kibantikanga ye kivutukanga.",
+    "events": [
+     "Mu lusambulu Mpeve wavaula Barnabasi ye Saulo",
+     "Dibundu kina bakwikidi babokolwa «Baklisto» mu mbala yantete",
+     "Fulu kia lubantiku lwa nzietolo yantete, yanzole ye yantatu"
+    ]
+   },
+   "seleucia": {
+    "name": "Seleukia",
+    "book": "Misala 13:4",
+    "today": "Turkiya unu",
+    "note": "Simu kia Antioka — bakota mu masuwa mu kwenda ku Sipele.",
+    "events": []
+   },
+   "salamis": {
+    "name": "Salami (Sipele)",
+    "book": "Misala 13:5",
+    "today": "Sipele unu",
+    "note": "Fulu kiantete ku Sipele — kusamuna mu nzo za lukutukunu.",
+    "events": []
+   },
+   "paphos": {
+    "name": "Pafo",
+    "book": "Misala 13:6-12",
+    "today": "Sipele unu",
+    "note": "Ngolo yisongwa va meso ma bobo bekakidila Nsangu Zambote.",
+    "events": [
+     "Elima nganga wakituka mpofo",
+     "Selegio Paulo ngovaneli wakwikila",
+     "Tuka vava «Polo» ubaka ntu"
+    ]
+   },
+   "perga": {
+    "name": "Perga",
+    "book": "Misala 13:13",
+    "today": "Antalya, Turkiya unu",
+    "note": "Simu ku Pamfilia — vava Yoane Marko wavutuka.",
+    "events": []
+   },
+   "pantioch": {
+    "name": "Antioka ya Pisidia",
+    "book": "Misala 13:14-50",
+    "today": "Yalvaç, Turkiya unu",
+    "note": "Nsangu Zambote yaziuka kwa Banzenza.",
+    "events": [
+     "Malongi malanda ma disolo dia luvuluku mu nzo a lukutukunu",
+     "Banzenza bayingi bayangalala ye batambula Diambu",
+     "Bavaikiswa mu diambu dia kunwaniswa"
+    ]
+   },
+   "iconium": {
+    "name": "Ikoniumi",
+    "book": "Misala 14:1-7",
+    "today": "Konya, Turkiya unu",
+    "note": "Bantu bayingi bakwikila, kansi kuyamiswa kubafila mu kukwenda.",
+    "events": []
+   },
+   "lystra": {
+    "name": "Listra",
+    "book": "Misala 14:8-20",
+    "today": "Turkiya unu",
+    "note": "Bambokila nzambi, buna balozila yandi matadi.",
+    "events": [
+     "Wabuka kilema tuka mu mbutukulu",
+     "Nkangu utomba kubatambikila makaba bonso banzambi",
+     "Bantuba matadi ye basisa yandi bonso wafwa, kansi watelama"
+    ]
+   },
+   "derbe": {
+    "name": "Derbe",
+    "book": "Misala 14:20-21",
+    "today": "Turkiya unu",
+    "note": "Minlonguki miayingi mikitulwa; bavutuka mu nzila mu kulendisa mabundu.",
+    "events": []
+   },
+   "troas": {
+    "name": "Troasi",
+    "book": "Misala 16:8-10",
+    "today": "Turkiya unu",
+    "note": "Fulu kia mbaluku kina Nsangu Zambote yikwenda mu mbala yantete ku Erópa.",
+    "events": [
+     "Mbonokono wa muntu wa Masedwane",
+     "«Yaka kosalisa biso»",
+     "Basabuka muna-muna ku Erópa"
+    ]
+   },
+   "philippi": {
+    "name": "Filipi",
+    "book": "Misala 16 · Bafilipi",
+    "today": "nodi ya Grèce unu",
+    "note": "Dibundu diantete dia Erópa — Nsangu Zambote yanunga ata mu boloko.",
+    "events": [
+     "Lidia, muteki wa minledi mia mbwaki, wakwikila",
+     "Mwana-nkento wa mvika wa kutontola wakangolwa",
+     "Minkunga va kati ka builu, kunikuka kwa ntoto, kanda dia nkengi wa boloko diavuluzwa"
+    ]
+   },
+   "thess": {
+    "name": "Tesalonika",
+    "book": "Misala 17 · 1–2 Batesalonika",
+    "today": "Thessaloniki, Grèce unu",
+    "note": "Diambu dinikuna mbanza ye kunwana kwabuka ngolo.",
+    "events": [
+     "Wasolula mu nzo a lukutukunu mu masabala matatu",
+     "«Baoyo babaluli mokili likolo na nse»",
+     "Bakatuka va builu mu kinsweki"
+    ]
+   },
+   "berea": {
+    "name": "Berea",
+    "book": "Misala 17:10-15",
+    "today": "Veria, Grèce unu",
+    "note": "Bantu «ba lukumu» bafimpa Diambu bau kibeni.",
+    "events": [
+     "Batambula Diambu mu luzolo lunene",
+     "Konso lumbu bafimpa Masono mu tala vo i bwabu",
+     "Bantu bayingi bakwikila"
+    ]
+   },
+   "athens": {
+    "name": "Atene",
+    "book": "Misala 17:16-34",
+    "today": "Atene, Grèce unu",
+    "note": "Mu mbanza a bantu ba nduenga wasamuna «nzambi wakazayakana ko».",
+    "events": [
+     "Ntima wafunzuka mu mona mbanza yayidila mu biteki",
+     "Va Aleopago wasamuna Nsemi ye mfulukulu",
+     "Basevila yandi, kansi bantu ba fioti bakwikila"
+    ]
+   },
+   "corinth": {
+    "name": "Kolinto",
+    "book": "Misala 18 · 1–2 Bakorinti",
+    "today": "Grèce unu",
+    "note": "Wavwanda mvu mosi ye ndambu, mu kuna dibundu mu mbanza a masumu.",
+    "events": [
+     "Wavanga matenta va kimosi ye Akila ye Pilisila",
+     "«Kobanga te… mpo nazali elongo na yo»",
+     "Bantu bayingi ba Kolinto bakwikila ye bavubudulwa"
+    ]
+   },
+   "ephesus": {
+    "name": "Efeso",
+    "book": "Misala 19 · Baefeso",
+    "today": "Selçuk, Turkiya unu",
+    "note": "Ntima wa nzietolo yantatu — Diambu dimwangana mu Azia yawonso.",
+    "events": [
+     "Kulonga konso lumbu mu mvu miole mu nzo a Tilano",
+     "Minkanda mia kindoki miayoka; mavanga ma ngolo",
+     "Demetelio ntudi wa palata wabantika khindu"
+    ]
+   },
+   "miletus": {
+    "name": "Mileti",
+    "book": "Misala 20:17-38",
+    "today": "Turkiya unu",
+    "note": "Kukayana kwa mansanga kwa bambuta ba Efeso.",
+    "events": [
+     "«Bóbatela lingomba oyo asombaki na makila na Ye moko»",
+     "Bambuta badila, mu zaya vo ka bakummona diaka ko"
+    ]
+   },
+   "caesarea": {
+    "name": "Sezarea",
+    "book": "Misala 23–26",
+    "today": "simu kia Isaele unu",
+    "note": "Mu mvu miole otanina Nsangu Zambote va meso ma bangovaneli ye mfumu.",
+    "events": [
+     "Nsambusu va meso ma bangovaneli Felikisi ye Festusi",
+     "Kukitanina kwandi va meso ma mfumu Agilipa",
+     "«Nasengi kosamba liboso ya Sezare» — bakwenda ku Loma"
+    ]
+   },
+   "jerusalem": {
+    "name": "Yelusalemi",
+    "book": "Misala 21–23",
+    "today": "Yelusalemi unu",
+    "note": "Bankanga mu Tempelo, nzila andi bonso nkangami yabantika.",
+    "events": [
+     "Nkangu wankanga mu Tempelo",
+     "Wakitanina va meso ma lukutukunu",
+     "Bonso mwisi-nsi wa Loma, batuma yandi ye minkengi ku Sezarea"
+    ]
+   },
+   "myra": {
+    "name": "Mira",
+    "book": "Misala 27:5-6",
+    "today": "Demre, Turkiya unu",
+    "note": "Basobana mu masuwa ma Alesandiliya makwenda ku Loma.",
+    "events": []
+   },
+   "fairhaven": {
+    "name": "Masimu Mambote (Krete)",
+    "book": "Misala 27:8-12",
+    "today": "Krete unu",
+    "note": "Lukebuku lwa Polo lwa kubika kwenda mu masuwa ka lwawakana ko.",
+    "events": []
+   },
+   "crete": {
+    "name": "Krete",
+    "book": "Tito",
+    "today": "Krete unu",
+    "note": "Kuna kwa kimpwanza, esanga kina kasisa Tito mu yidika mabundu.",
+    "events": [
+     "Osisa Tito mu tula bambuta mu konso buka",
+     "Olomba bafidisi bakonda mbi, ba kwikizi",
+     "Osonika nkanda kwa Tito"
+    ]
+   },
+   "malta": {
+    "name": "Malta",
+    "book": "Misala 27–28",
+    "today": "Malta unu",
+    "note": "Mu kimbwela ye kubuka kwa masuwa, nsilu wa Nzambi usiala ngwi.",
+    "events": [
+     "Tembo kia «nodi-esti» kiabuka masuwa, kansi bawonso 276 baguluka",
+     "Nioka yanluma, kansi kabakidi mpasi ko",
+     "Obuka bambevo ba esanga"
+    ]
+   },
+   "syracuse": {
+    "name": "Sirakuse",
+    "book": "Misala 28:12",
+    "today": "Sisile, Itali unu",
+    "note": "Bavwanda bilumbu bitatu ku Sisile.",
+    "events": []
+   },
+   "puteoli": {
+    "name": "Puteoli",
+    "book": "Misala 28:13-14",
+    "today": "Pozzuoli, Itali unu",
+    "note": "Bakota ku Itali ye mpangi za lukwikilu zibayakula.",
+    "events": []
+   },
+   "rome": {
+    "name": "Loma",
+    "book": "Misala 28 · Minkanda mia Boloko · 2 Timote",
+    "today": "Loma, Itali unu",
+    "note": "Nsangu Zambote ilwaka va ntima wa kintinu kianene ku nsuka — ka i nsuka ko kansi i lubantiku.",
+    "events": [
+     "Mvu miole mu kukangama va nzo, mu kusamuna Kintinu ye kibakala",
+     "Tuka vava osonika Minkanda mia Boloko (Baefeso·Bafilipi·Bakolose·Filemo)",
+     "Kuna kwa nima bankanga diaka, osonika 2 Timote ye ofwa mu diambu dia lukwikilu — «Nabundi etumba malamu, nasilisi mbangu»"
+    ]
+   }
+  },
+  "labels": [
+   "Mbu Wanene",
+   "Mbu Egée",
+   "Azia Yafioti",
+   "Masedwane",
+   "Itali"
+  ],
+  "journeys": {
+   "j1": "Nzietolo yantete",
+   "j2": "Nzietolo yanzole",
+   "j3": "Nzietolo yantatu",
+   "rome": "Nzietolo yanya · kwenda ku Loma",
+   "j5": "Nzietolo yantanu · kuna kwa kimpwanza"
+  }
+ }
+}

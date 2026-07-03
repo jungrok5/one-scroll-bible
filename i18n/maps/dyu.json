@@ -1,0 +1,636 @@
+{
+ "menuName": "Julakan",
+ "htmlLang": "dyu",
+ "dir": "ltr",
+ "locale": "dyu-CI",
+ "brand": "Bibulu kuma bɛɛ ɲasɔrɔ siɲɛ kelen",
+ "docTitle": "Bibulu ja kan · Bibulu kuma bɛɛ ɲasɔrɔ siɲɛ kelen",
+ "metaDesc": "Layidu Kɔrɔ waatiw, Yezu ka ɲɛnamaya, ani Pɔli ka taamaw ɲini ja yɛrɛyɛrɛ kan — Bibulu koow kɛra yɔrɔ yɛrɛyɛrɛw le la.",
+ "s": {
+  "kicker": "Bibulu kuma bɛɛ ɲasɔrɔ siɲɛ kelen · Jaw",
+  "title": "Bibulu ja kan",
+  "verse": "“An ye Yezu Krista, an Matigi ka setigiya n'a ka nako min fɔ aw ye, o te siirin koo ye dɛ! Nga anw yɛrɛ ɲaa lara a ka nɔɔrɔ kan.” (Piyɛri 2nan 1:16)",
+  "purpose": "Bibulu tɛ nsiirin ye. A ye mɔgɔw ka sɛbɛnni ye minw taamana yɔrɔ, don ani tɔgɔ yɛrɛyɛrɛw kan. O siraw ɲini ja kan, waati sira fɛ — yɔrɔ dɔ digi, walima ▶ digi ka taama a kan senɲɛ kelen kelen.",
+  "ot_kick": "① Layidu Kɔrɔ — waatiw kɔnɔ",
+  "ot_h": "Ka bɔ danni na ka se Zeruzalɛmu kɔseginni ma",
+  "ot_lead": "Taama kelen tɛ, nga kisili tariku woyoli ka bɔ danni na: danni ni binni → sanjiba ni Babɛli → weleli (Ibrayima) → jamana layidulen → Ezipitibɔ → kongokolon → jamana sɔrɔli → masaya → farali → jɔnya → kɔseginni.",
+  "je_kick": "② Layidu Kura — Yezu ka ɲɛnamaya",
+  "je_h": "Ka bɔ Bɛtileyɛmu na ka se Zeruzalɛmu ma",
+  "je_lead": "Yezu ka ɲɛnamaya ɲini Kibaru diman ka fɔcogo la, a sira fɛ — ka bɔ a mɔgɔyali la Bɛtileyɛmu, ka tɛmɛ a ka batisimu ni a ka baara la Galile, ka Samari cɛtigɛ, ka se kuruwa, kununni ani yɛlɛnni ma Zeruzalɛmu.",
+  "pa_kick": "③ Layidu Kura — Pɔli ka taamaw",
+  "pa_h": "Ka bɔ Antiyɔsi ka se diɲɛ daan ma — Ɔrɔmu",
+  "pa_lead": "Ka bɔ Pantekɔti la Zeruzalɛmu, Kibaru diman jɛnsɛnna cogo min na ka tɛmɛ Zude kan — ka Azi Fitini ni Erɔpu cɛtigɛ ka se masaya jusukun ma. Taama duuru la kelen sugandi (fɔlɔ·2nan·3nan + taama ka taa Ɔrɔmu + bilali kɔ) ka Kɛwaliw ka koow ɲini ni bataaki minw sɛbɛnna sira kan.",
+  "foot": "Sɔrɔyɔrɔw · Yɔrɔw be tugu Bibulu kuma ni Bibulu dugukoloko lɔnnen na (ni bi tɔgɔw ye yɔrɔ minw be dɛmɛ di). Kɔgɔ daaw, baw ani kɔw bɔra dugukoloko kunnafoni dayɛlɛlen (Natural Earth) na, a nɔgɔyalen.",
+  "contact": "Ɲininkaliw · hakililaw — <a id=\"contact\" class=\"mail\">Email ci an ma</a>",
+  "play": "Daminɛ",
+  "pause": "Jɔ",
+  "today": "Bii:",
+  "verseCite": "Piyɛri 2nan 1:16"
+ },
+ "ot": {
+  "places": {
+   "eden": {
+    "name": "Edɛn (Danni · Binni)",
+    "book": "Kod 1–3",
+    "today": "bii Tigɛri ni Efɛrati baw cɛmancɛ",
+    "note": "Diɲɛ min dara ka ɲi kosɔbɛ, hakɛ donna a la ka jɛɲɔgɔnya tiɲɛ min tun be Ala ni mɔgɔw cɛ.",
+    "events": [
+     "Danni tile wɔɔrɔ kɔnɔ — “a ka ɲi kosɔbɛ”",
+     "Mɔgɔ dara Ala ja la",
+     "Binni, ani gwɛnni ka bɔ Edɛn na",
+     "Kibaru diman ka layidu fɔlɔ — “muso ka deen bena saa kungolo ɲɔɲɔ”"
+    ]
+   },
+   "noah": {
+    "name": "Ararati (Sanjiba)",
+    "book": "Kod 6–9",
+    "today": "bii Ararati kulu, Turki kɔrɔn fɛ",
+    "note": "Ala be diɲɛ min falen hakɛ la kiti, nga a be ɲɛnamaya mara denbaya kelen barika la.",
+    "events": [
+     "Diɲɛ falen tiɲɛni na",
+     "Sanjiba, ani Nowe ka kurun",
+     "Sankaba ka layidu — “sanjiba tɛ na tugu ka diɲɛ halaki”"
+    ]
+   },
+   "babel": {
+    "name": "Babɛli sanbaraso",
+    "book": "Kod 11",
+    "today": "bii Iraki (Sineari kɛnɛ)",
+    "note": "Ka ɲɛsin yɛrɛboɲa ma min be a bolo se sankolo ma, Ala ye u kanw ni siyaw jɛnsɛn dugukolo kan.",
+    "events": [
+     "“An ka dugu ni sanbaraso jɔ… an ka tɔgɔ sɔrɔ”",
+     "Ala ye u kanw ɲagami",
+     "Siyaw jɛnsɛnna dugukolo kan (Sineari — kɔfɛ Babilɔni)"
+    ]
+   },
+   "ur": {
+    "name": "Uri",
+    "book": "Kod 12",
+    "today": "bii Iraki worodugu fɛ",
+    "note": "Bibulu ka kisili maana be daminɛ ni cɛ kelen weleli ye.",
+    "events": [
+     "Ala ye Ibrama wele ka bɔ Kalde ka Uri la",
+     "“Ne bena i kɛ siya belebele ye… siyaw bɛɛ bena hɛrɛ sɔrɔ i barika la”",
+     "Lanaya barika la a bɔra a faso la"
+    ]
+   },
+   "haran": {
+    "name": "Harani",
+    "book": "Kod 12",
+    "today": "bii Turki worodugu fɛ",
+    "note": "Sira kan, weleli jaabili la ka taa jamana layidulen fan fɛ.",
+    "events": [
+     "Tera ka denbaya sigira Harani",
+     "Tera sara",
+     "Ibrama wulila ka taa Kanaan a si san 75 la"
+    ]
+   },
+   "shechem": {
+    "name": "Sikɛmu · Kanaan",
+    "book": "Kod 12–50",
+    "today": "bii Nabulusi",
+    "note": "Jamana layidulen na, denbaya dara ani layidu be tɛmɛ bɔnsɔnw na.",
+    "events": [
+     "Donni Kanaan na, saraka bɔyɔrɔ fɔlɔ — “ne bena nin jamana di i kɔmɔgɔw ma”",
+     "Layidu (Kod 15) · Izaka · Zakɔbu",
+     "Zakɔbu deen tan ni fila — siya tan ni fila jusun"
+    ]
+   },
+   "egypt": {
+    "name": "Ezipiti (Goseni)",
+    "book": "Kod 37–50 · Bɔk 1",
+    "today": "bii Nili baji daa, Ezipiti",
+    "note": "Denbaya be kɛ siya belebele ye — o kɔ jɔn jama ye.",
+    "events": [
+     "Zozɛfu, feerelen, yɛlɛnna ka Ezipiti mara",
+     "Zakɔbu ka denbaya bɛɛ jiginna kɔngɔ kosɔn",
+     "Isirayɛli siya jiritɔ kɛra jɔɔnw ye"
+    ]
+   },
+   "sinai": {
+    "name": "Sinayi kulu",
+    "book": "Bɔk · Sar",
+    "today": "bii Sinayi jamana",
+    "note": "Layidu Kɔrɔ ka kisili belebele — jɔɔnw be kɛ Ala yɛrɛ ka mɔgɔw ye.",
+    "events": [
+     "Bana tan ani Tɛmɛnnaloon saraga",
+     "Kɔgɔji Bilenman farala u tɛmɛna",
+     "Sariya Tan, Sariya, batoso ni sarakaw"
+    ]
+   },
+   "kadesh": {
+    "name": "Kadɛsi (kongokolon)",
+    "book": "Kok · Sad",
+    "today": "bii Sinayi–Negɛvu kongokolon",
+    "note": "Dannabaliya y'a to bɔnsɔn kelen ye jamana bɔnɛ — nga Ala tora u fɛ.",
+    "events": [
+     "Sɛgɛsɛgɛla tan ni fila — nga jama banna ka la",
+     "San 38 kongokolon na — mana, sankaba ni tasuma",
+     "Mowabu kɛnɛ kan, Musa ka waaju laban (Sad)"
+    ]
+   },
+   "jericho": {
+    "name": "Zeriko",
+    "book": "Zoz",
+    "today": "bii Zeriko",
+    "note": "A laban na u donna jamana layidulen na k'a sɔrɔ.",
+    "events": [
+     "Zurudɛn farala jama tɛmɛna",
+     "Zeriko kogow binna",
+     "Kanaan sɔrɔli ani jamana tilali"
+    ]
+   },
+   "shiloh": {
+    "name": "Silo (Cɛfariw)",
+    "book": "Cɛf · Uru",
+    "today": "bii Kirbɛti Seyiluni",
+    "note": "Masacɛ tɛ yen, bɛɛ b'a sago kɛ — masacɛ yɛrɛyɛrɛ mago be yen.",
+    "events": [
+     "Batoso sigira Silo",
+     "Hakɛ–ɲangili–kisili kuruba (Debora, Zedeyɔn, Sansɔn)",
+     "Uru — kantigiya waati dibilen na, Dawuda bɔnsɔn na"
+    ]
+   },
+   "jerusalem": {
+    "name": "Zeruzalɛmu · Masaya kelennin",
+    "book": "Sam fɔlɔ ni 2nan · Mas fɔlɔ",
+    "today": "bii Zeruzalɛmu",
+    "note": "Isirayɛli ka waati ɲuman — ani masacɛ banbali ka layidu.",
+    "events": [
+     "Masacɛ fɔlɔ Sayuli, o kɔ Dawuda ni Goliyati",
+     "Dawuda ka layidu — “i ka masasigilan bena to tuma bɛɛ” (Sam 2nan 7)",
+     "Solomani ye batoso jɔ Zeruzalɛmu"
+    ]
+   },
+   "samaria": {
+    "name": "Samari · Masaya farannen",
+    "book": "Masaw · Kiraw",
+    "today": "bii Sebasti",
+    "note": "Masaya farala ka jigin k'a sɔrɔ kiraw be kule.",
+    "events": [
+     "Solomani kɔ, farali Zuda ni Isirayɛli ye",
+     "Bolifɛnbato senɲɛ caaman",
+     "Eli, Eza, Zeremi be kule “aw ye segi” — ani u be Masaya koo fɔ"
+    ]
+   },
+   "nineveh": {
+    "name": "Ninivi (Asiri)",
+    "book": "Mas 2nan 17 · Yɔnasi",
+    "today": "bii Mosulu, Iraki",
+    "note": "Lasɔmini si ma minɛ, kɔgɔdugu binna fɔlɔ.",
+    "events": [
+     "Ninivi, Asiri faaba",
+     "Kɔgɔdugu masaya binna Asiri bolo (I.ɲ. 722)",
+     "Yɔnasi cira Ninivi"
+    ]
+   },
+   "babylon": {
+    "name": "Babilɔni",
+    "book": "Mas 2nan 25 · Daniyɛli · Ezekiyɛli",
+    "today": "bii Hila, Iraki",
+    "note": "Su ko dibinba — nga jɔkura layidu be to yen.",
+    "events": [
+     "Zeruzalɛmu binna, batoso jenina (I.ɲ. 586)",
+     "Zuda tara ka taa jɔnya la Babilɔni",
+     "Daniyɛli ni Ezekiyɛli — lanaya ni yeliw jɔnya la"
+    ]
+   },
+   "susa": {
+    "name": "Suzi (Pɛrɛsi)",
+    "book": "Ɛstɛri · Neyemi",
+    "today": "bii Susi, Iran",
+    "note": "Hali bolifɛnbato masaya jusukun na, Ala be a ka mɔgɔw mara.",
+    "events": [
+     "Pɛrɛsi ye Babilɔni gosi",
+     "Ɛstɛri ye Zuwifuw kisi halakili ma",
+     "Neyemi ye deli kɛ masacɛ ɲakɔrɔ, a cira"
+    ]
+   },
+   "return": {
+    "name": "Zeruzalɛmu kɔseginni",
+    "book": "Ɛsidirasi · Neyemi · Mal",
+    "today": "bii Zeruzalɛmu",
+    "note": "U seginna ka jɔkura kɛ — nga masacɛ ma na fɔlɔ. U be Masaya makɔnɔ.",
+    "events": [
+     "Kɔsegi siɲɛ saba Sirisi ka cidaa fɛ (Zorobabɛli 538 · Ɛsidirasi 458 · Neyemi 444)",
+     "Batoso jɔkura ani Zeruzalɛmu kogow dilankura",
+     "Mal — Layidu Kɔrɔ be ban: “N bena n ka ciden ci”"
+    ]
+   }
+  },
+  "labels": [
+   "Mediterane Kɔgɔji",
+   "Mezopotami",
+   "Arabi kongokolon",
+   "Ezipiti"
+  ],
+  "journeys": {
+   "flow": "Kisili maana"
+  }
+ },
+ "jesus": {
+  "places": {
+   "bethlehem": {
+    "name": "Bɛtileyɛmu",
+    "book": "Mat 1–2 · Luka 2",
+    "today": "bii Bɛtileyɛmu",
+    "note": "Masaya layidulen be na Dawuda ka dugu la — Kuma kɛra mɔgɔ ye.",
+    "events": [
+     "Wolola Bɛtileyɛmu, Dawuda ka dugu la",
+     "Mɛlɛkɛw ye kibaru fɔ sagagɛnnaw ye",
+     "Dɔnnikɛlaw nana ka batoli kɛ"
+    ]
+   },
+   "nazareth": {
+    "name": "Nazarɛti",
+    "book": "Luka 2 · 4",
+    "today": "bii Nazarɛti",
+    "note": "Ala mɔna i n'a fɔ mɔgɔ dugu gwansan dɔ la.",
+    "events": [
+     "Mɔna jiridɛsɛla ka soo la",
+     "A si san tan ni fila la, a be ɲininkali ni jaabili kɛ batoso kɔnɔ",
+     "Kɔfɛ a banna a faso ka sinagɔgi la"
+    ]
+   },
+   "jordan": {
+    "name": "Zurudɛn baji",
+    "book": "Mat 3–4",
+    "today": "bii Zurudɛn baji jukɔrɔla",
+    "note": "A ka baara foroba be daminɛ — sankolo b'a sɛmɛntiya ko Dencɛ.",
+    "events": [
+     "Zan y'a batize",
+     "Nii jigira i n'a fɔ ntubannin — “Nin ye ne Dencɛ kanulen ye”",
+     "A ye Sutana ka kɔrɔbɔli saba dama kongokolon na"
+    ]
+   },
+   "cana": {
+    "name": "Kana",
+    "book": "Zan 2",
+    "today": "bii Kafr Kanna",
+    "note": "A ka taamasiɲɛ fɔlɔ la a y'a ka nɔɔrɔ yira.",
+    "events": [
+     "Dunan kɔɲɔ dɔ la",
+     "Ji yɛlɛmana ka kɛ diwɛn ye — a ka taamasiɲɛ fɔlɔ",
+     "A ka kalandenw dara a la"
+    ]
+   },
+   "sychar": {
+    "name": "Sikari (Samari)",
+    "book": "Zan 2–4",
+    "today": "bii Nabulusi gɛrɛfɛ",
+    "note": "Baara daminɛ sira — ka tɛmɛ Zeruzalɛmu ka taa Samari mafiɲɛyalen na.",
+    "events": [
+     "A ye batoso saniya Zeruzalɛmu",
+     "Su fɛ, Nikodɛmu — “Wajibi don i ka wolo kokura”",
+     "Ji ɲɛnama Samari muso dɔ ye"
+    ]
+   },
+   "capernaum": {
+    "name": "Kapɛrnaumu",
+    "book": "Mat 4–13 · Mar 1–4",
+    "today": "bii Galile kɔgɔ daa la",
+    "note": "Galile baara faaba — weleli, kalan ani sɔsɔli bɛɛ be ɲɔgɔn sɔrɔ yan.",
+    "events": [
+     "A ye jɛgɛminɛnaw wele k'a sigi yan",
+     "Kulu kan waaju — “Dubaden lo minw ye faantan ye u nii la”",
+     "Masaya ntalenw — ani sɔsɔli be wuli"
+    ]
+   },
+   "galilee": {
+    "name": "Galile kɔgɔ",
+    "book": "Mar 4 · 6 · Zan 6",
+    "today": "bii Kinerɛti kɔgɔ",
+    "note": "Ni sebagaya ye danfɛnw kan a b'a yira mɔgɔ min a ye.",
+    "events": [
+     "“Sumaya, i ka je” — a ye fɔɔnɔba sumaya",
+     "A ye mɔgɔ waa duuru balo ni buru duuru ni jɛgɛ fila ye",
+     "A taamana ji kan"
+    ]
+   },
+   "caesarea_p": {
+    "name": "Sezare Filipi",
+    "book": "Mat 16–17",
+    "today": "bii Baniyasi",
+    "note": "Kalandenw y'a faamu ko Krista lo, ani kuruwa sira dayɛlɛla.",
+    "events": [
+     "Piyɛri ka seereya — “I ye Krista ye, Ala ɲɛnama Dencɛ”",
+     "A ye a ka saya ni kununni koo fɔ siɲɛ fɔlɔ",
+     "A yɛlɛmana ni nɔɔrɔ ye kulu kan"
+    ]
+   },
+   "jericho": {
+    "name": "Zeriko",
+    "book": "Luka 18–19",
+    "today": "bii Zeriko",
+    "note": "Sira kan ka yɛlɛn Zeruzalɛmu, a be tununnenw ɲini.",
+    "events": [
+     "A ye ɲɛ di fiyentɔ Baritime ma",
+     "A ye nisɔngɔ minɛna Zake wele",
+     "“Mɔgɔ Dencɛ nana tununnenw ɲini ka u kisi”"
+    ]
+   },
+   "bethany": {
+    "name": "Betani",
+    "book": "Zan 11–12",
+    "today": "bii al-Eizariya",
+    "note": "A ka dɔgɔkun laban ɲa, a b'a yira ko a ye saya matigi ye.",
+    "events": [
+     "A ye Lazari lawuli ka bɔ kaburu la — “Ne le ye kununni ni ɲɛnamaya ye”",
+     "Mariyamu ye tulu kɛ a la a suko kama",
+     "Nin taamasiɲɛ y'a fagali feere sabati"
+    ]
+   },
+   "jerusalem": {
+    "name": "Zeruzalɛmu",
+    "book": "Mat 21–28 · Luka 24 · Kɛw 1",
+    "today": "bii Zeruzalɛmu",
+    "note": "Bibulu bɛɛ be ɲɛsin yɔrɔ min ma — kuruwa, kununni, yɛlɛnni.",
+    "events": [
+     "Donni ni nisɔndiya; a ye batoso tabaliw yɛlɛma tugu",
+     "Surɔfana laban na a ye kalandenw seenw ko",
+     "A sara kuruwa kan",
+     "A kununna tile sabanan loon, o kɔ a yɛlɛnna sankolo la"
+    ]
+   }
+  },
+  "labels": [
+   "Mediterane Kɔgɔji",
+   "Galile",
+   "Samari",
+   "Zude",
+   "Dekapɔli",
+   "Pere",
+   "Kɔgɔji Saalen"
+  ],
+  "journeys": {
+   "life": "Yezu ka sira"
+  }
+ },
+ "paul": {
+  "places": {
+   "antioch": {
+    "name": "Antiyɔsi",
+    "book": "Kɛw 13 · 15",
+    "today": "bii Antakya, Turki",
+    "note": "Cidenya eglisi min be siyaw ka cidenya daminɛ ani a be segi yɔrɔ min na.",
+    "events": [
+     "Deli la, Nii ye Barinabasi ni Sawuli woloma",
+     "Eglisi min na dannatigiw welela “kerecɛnw” fɔlɔ",
+     "Taama fɔlɔ, 2nan ni 3nan wuliyɔrɔ"
+    ]
+   },
+   "seleucia": {
+    "name": "Selesi",
+    "book": "Kɛw 13:4",
+    "today": "bii Turki",
+    "note": "Antiyɔsi ka kurundon — u ye kurun ta ka taa Sipri.",
+    "events": []
+   },
+   "salamis": {
+    "name": "Salamin (Sipri)",
+    "book": "Kɛw 13:5",
+    "today": "bii Sipri",
+    "note": "Sipri jɔyɔrɔ fɔlɔ — waajuli sinagɔgiw kɔnɔ.",
+    "events": []
+   },
+   "paphos": {
+    "name": "Pafɔsi",
+    "book": "Kɛw 13:6-12",
+    "today": "bii Sipri",
+    "note": "Sebagaya b'a yira minw be Kibaru diman kɛlɛ.",
+    "events": [
+     "Subaga Elimasi kɛra fiyentɔ ye",
+     "Gɔfɔrɔnɛri Sɛrɛziyusi Pɔlusi dara a la",
+     "Ka bɔ yan “Pɔli” be ɲaminɛ"
+    ]
+   },
+   "perga": {
+    "name": "Pɛrigi",
+    "book": "Kɛw 13:13",
+    "today": "bii Antalya, Turki",
+    "note": "Panfili kurundon — yan Zan Mariki seginna kɔ.",
+    "events": []
+   },
+   "pantioch": {
+    "name": "Pisidi Antiyɔsi",
+    "book": "Kɛw 13:14-50",
+    "today": "bii Yalvaç, Turki",
+    "note": "Kibaru diman be daayɛlɛ ka ɲɛsin siyaw ma.",
+    "events": [
+     "Kisili tariku waaju janw sinagɔgi kɔnɔ",
+     "Siya caaman nisɔndiyara ka Kuma minɛ",
+     "Gwɛnna kɛlɛ kosɔn"
+    ]
+   },
+   "iconium": {
+    "name": "Ikoniyɔmu",
+    "book": "Kɛw 14:1-7",
+    "today": "bii Konya, Turki",
+    "note": "Mɔgɔ caaman dara a la, nga ɲangili y'a to u taara ɲa.",
+    "events": []
+   },
+   "lystra": {
+    "name": "Lisitɛri",
+    "book": "Kɛw 14:8-20",
+    "today": "bii Turki",
+    "note": "U y'a wele batofɛn, o kɔ u y'a bon kabakuruw la.",
+    "events": [
+     "A ye namatɔ dɔ kɛnɛya min wolola ten",
+     "Jama y'a ɲini ka saraka bɔ u ye i n'a fɔ alaw",
+     "U y'a bon kabakuruw la k'a to i n'a fɔ mɔgɔ salen, a wulila"
+    ]
+   },
+   "derbe": {
+    "name": "Dɛrɛbi",
+    "book": "Kɛw 14:20-21",
+    "today": "bii Turki",
+    "note": "Kalanden caaman sɔrɔla; u seginna u kɔ ka eglisiw barikaya.",
+    "events": []
+   },
+   "troas": {
+    "name": "Tirowasi",
+    "book": "Kɛw 16:8-10",
+    "today": "bii Turki",
+    "note": "Yɛlɛmayɔrɔ min na Kibaru diman ye a ɲɛsin Erɔpu ma fɔlɔ.",
+    "events": [
+     "Maseduwan cɛ dɔ ka yeli",
+     "“Na Maseduwan ka an dɛmɛ”",
+     "U tɛmɛna joona ka don Erɔpu"
+    ]
+   },
+   "philippi": {
+    "name": "Filipi",
+    "book": "Kɛw 16 · Filipikaw",
+    "today": "bii Gɛrɛsi kɔgɔdugu fɛ",
+    "note": "Erɔpu eglisi fɔlɔ — Kibaru diman be see sɔrɔ hali kaso la.",
+    "events": [
+     "Lidi, forobɔ feerekɛla, dara a la",
+     "Filɛlikɛ jɔnmuso dɔ hɔrɔnyara",
+     "Sufɛ dɔnkiliw, dugukolo yɛrɛyɛrɛ, kaso kɔlɔsibaga ka denbaya kisira"
+    ]
+   },
+   "thess": {
+    "name": "Tesaloniki",
+    "book": "Kɛw 17 · Tesalonikikaw fɔlɔ ni 2nan",
+    "today": "bii Tesaloniki, Gɛrɛsi",
+    "note": "Kuma be dugu lamaga ani kɛlɛ be wuli.",
+    "events": [
+     "A ye kuma fɔ sinagɔgi kɔnɔ Lafiɲɛbɔn saba",
+     "“Mɔgɔ ninnu minw ye diɲɛ bɛɛ ɲagami”",
+     "U bɔra su fɛ"
+    ]
+   },
+   "berea": {
+    "name": "Bere",
+    "book": "Kɛw 17:10-15",
+    "today": "bii Veria, Gɛrɛsi",
+    "note": "“Mɔgɔ ɲumanw” minw ye Kuma sɛgɛsɛgɛ u yɛrɛ ma.",
+    "events": [
+     "U ye Kuma minɛ ni nisɔndiya ye",
+     "Don o don u be Kuma Senuw sɛgɛsɛgɛ k'a lajɛ",
+     "Caaman nana dara a la"
+    ]
+   },
+   "athens": {
+    "name": "Atɛni",
+    "book": "Kɛw 17:16-34",
+    "today": "bii Atɛni, Gɛrɛsi",
+    "note": "Hakilitigiw ka dugu la a ye “ala lɔnbali” koo fɔ.",
+    "events": [
+     "Dugu falen bolifɛnw na y'a dusukun kunun",
+     "Areyopazi kan a ye Dannikɛla ni kununni koo fɔ",
+     "U y'a mafiɲɛya, nga dama dara a la"
+    ]
+   },
+   "corinth": {
+    "name": "Korɛnti",
+    "book": "Kɛw 18 · Korɛntikaw fɔlɔ ni 2nan",
+    "today": "bii Gɛrɛsi",
+    "note": "A ye san kelen ni tila kɛ yen, ka eglisi sigi kojugu dugu la.",
+    "events": [
+     "A be fanibugu dilan ni Akilasi ni Prisiyɛli ye",
+     "“Kana siran… bari ne be i fɛ”",
+     "Korɛntika caaman dara a la ka batize"
+    ]
+   },
+   "ephesus": {
+    "name": "Efɛzi",
+    "book": "Kɛw 19 · Efɛzikaw",
+    "today": "bii Selçuk, Turki",
+    "note": "Taama 3nan jusukun — Kuma be jɛnsɛn Azi kɔnɔ.",
+    "events": [
+     "Kalan don o don san fila Tiranusi ka kalanso la",
+     "Subaga gafew jenina; baara barikamaw",
+     "Warijɛ numu Demetriyusi ye murutili wuli"
+    ]
+   },
+   "miletus": {
+    "name": "Mile",
+    "book": "Kɛw 20:17-38",
+    "today": "bii Turki",
+    "note": "Efɛzi eglisi cɛkɔrɔbaw ni ɲɛjiko foli.",
+    "events": [
+     "“Aw ka eglisi kɔlɔsi a ye min san n'a joli yɛrɛ ye”",
+     "Cɛkɔrɔbaw kasira, k'a lɔn ko u tɛ a ye tugu"
+    ]
+   },
+   "caesarea": {
+    "name": "Sezare",
+    "book": "Kɛw 23–26",
+    "today": "bii Isirayɛli kɔgɔ daa la",
+    "note": "San fila kɔnɔ a ye Kibaru diman kunmabɔ gɔfɔrɔnɛriw ni masacɛ dɔ ɲakɔrɔ.",
+    "events": [
+     "Kiti gɔfɔrɔnɛri Felikisi ni Fɛsitusi ɲakɔrɔ",
+     "A ka kunmabɔli Masacɛ Agiripa ɲakɔrɔ",
+     "“Ne be Sezari kiti daali” — ka taa Ɔrɔmu"
+    ]
+   },
+   "jerusalem": {
+    "name": "Zeruzalɛmu",
+    "book": "Kɛw 21–23",
+    "today": "bii Zeruzalɛmu",
+    "note": "A minɛna batoso kɔnɔ, a ka kaso sira be daminɛ.",
+    "events": [
+     "Jama y'a minɛ batoso kɔnɔ",
+     "A y'a yɛrɛ kunmabɔ jɛmukan ɲakɔrɔ",
+     "I n'a fɔ Ɔrɔmu jamanaden, a cira ni kɔlɔsi ye ka taa Sezare"
+    ]
+   },
+   "myra": {
+    "name": "Mira",
+    "book": "Kɛw 27:5-6",
+    "today": "bii Demre, Turki",
+    "note": "U yɛlɛmana Alɛkizandiri kurun dɔ kan min be taa Ɔrɔmu.",
+    "events": []
+   },
+   "fairhaven": {
+    "name": "Kurundon Ɲumanw (Krɛti)",
+    "book": "Kɛw 27:8-12",
+    "today": "bii Krɛti",
+    "note": "Pɔli ka lasɔmini ko u ka kurun jɔ, o ma minɛ.",
+    "events": []
+   },
+   "crete": {
+    "name": "Krɛti",
+    "book": "Titi",
+    "today": "bii Krɛti",
+    "note": "A bilali kɔ, gun min kan a ye Titi to yen ka eglisiw labɛn.",
+    "events": [
+     "A ye Titi to yen ka cɛkɔrɔbaw sigi dugu bɛɛ la",
+     "A ye ɲinini kɛ jalakintan, dannaya ɲɛmɔgɔw koo la",
+     "A ye bataaki sɛbɛn Titi ma"
+    ]
+   },
+   "malta": {
+    "name": "Malti",
+    "book": "Kɛw 27–28",
+    "today": "bii Malti",
+    "note": "Fɔɔnɔ ni kurun cɛnni cɛma, Ala ka layidu be sabati.",
+    "events": [
+     "“Kɔrɔn-kɔgɔdugu-fɔɔnɔ” ye kurun cɛn, nga mɔgɔ 276 bɛɛ kisira",
+     "Sa y'a cin, nga foyi m'a kɛ",
+     "A ye gun banabagatɔw kɛnɛya"
+    ]
+   },
+   "syracuse": {
+    "name": "Sirakuzi",
+    "book": "Kɛw 28:12",
+    "today": "bii Sisili, Itali",
+    "note": "U ye tile saba kɛ Sisili.",
+    "events": []
+   },
+   "puteoli": {
+    "name": "Puteoli",
+    "book": "Kɛw 28:13-14",
+    "today": "bii Pozzuoli, Itali",
+    "note": "U jiginna Itali, balima dannatigiw y'u kunbɛn.",
+    "events": []
+   },
+   "rome": {
+    "name": "Ɔrɔmu",
+    "book": "Kɛw 28 · Kaso bataakiw · Timɔte 2nan",
+    "today": "bii Ɔrɔmu, Itali",
+    "note": "Kibaru diman be se masaya jusukun ma laban — laban tɛ, nga daminɛ lo.",
+    "events": [
+     "San fila soo kaso la, a be Ala ka masaya waaju ni ja ye",
+     "Ka bɔ yan a ye Kaso Bataakiw sɛbɛn (Efɛ·Fil·Kɔl·Filemɔ)",
+     "Kɔfɛ a donna kaso la tugu, a ye Timɔte 2nan sɛbɛn ka faga — “Ne ye kɛlɛ ɲuman kɛlɛ, ne ye boli dafa”"
+    ]
+   }
+  },
+  "labels": [
+   "Mediterane Kɔgɔji",
+   "Eje Kɔgɔji",
+   "Azi Fitini",
+   "Maseduwan",
+   "Itali"
+  ],
+  "journeys": {
+   "j1": "Taama fɔlɔ",
+   "j2": "Taama 2nan",
+   "j3": "Taama 3nan",
+   "rome": "Taama 4nan · Ka taa Ɔrɔmu",
+   "j5": "Taama 5nan · Bilali kɔ"
+  }
+ }
+}

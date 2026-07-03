@@ -1,0 +1,636 @@
+{
+ "menuName": "Chuuk",
+ "htmlLang": "chk",
+ "dir": "ltr",
+ "locale": "chk",
+ "brand": "Ewe Paipel lon Eu Chök Tapwö",
+ "docTitle": "Ewe Paipel Ren Ekewe Map · Ewe Paipel lon Eu Chök Tapwö",
+ "metaDesc": "Käeöffichi ewe fansoun Testament mi Läl, manawen Jesus, me ekewe feffetälin Paulus won eu map mi enlet — ewe Paipel a fis lon leni mi enlet.",
+ "s": {
+  "kicker": "Ewe Paipel lon Eu Chök Tapwö · Ekewe Map",
+  "title": "Ewe Paipel Ren Ekewe Map",
+  "verse": "“Äm aisap longolong won ekewe pworaus aramas ra afisätä, lupwen aia aronga ngenikemi usun manamanen ach Samol Jesus Kraist lon ewe fansoun epwe liwinsefäl. Äm aia küna ren püsin mesem an we ling mi lapalap.” (2 Peter 1:16)",
+  "purpose": "Ewe Paipel esap ekiek mi mwääl. Ina eu makketiwen aramas ra fetäl won leni, ränin fis, me it mi enlet. Käeöffichi ekkena al won eu map, lon ar fansoun — tapweri eu leni, are tapwe ▶ pwe kopwe fetäl fengen me i sopwun le sopwun.",
+  "ot_kick": "① Testament mi Läl — won unusen fansoun",
+  "ot_h": "Seni ewe föritä tori ewe liwin ngeni Jerusalem",
+  "ot_lead": "Esap chök eu säi, nge ewe feffeitään uruwon amanau seni ewe föritä feito: föritä me tä → nöör me Papel → eu köri (Apraham) → ewe fanü mi pwon → Towuwu → fönüpwön → turunufas → mwü → aimwüfeseni → nikina → liwin.",
+  "je_kick": "② Testament mi Fö — manawen Jesus",
+  "je_h": "Seni Petlehem tori Jerusalem",
+  "je_lead": "Käeöffichi manawen Jesus usun ekewe Kapas Allim ra apasa, lon fansoun — seni an uputiu lon Petlehem, fän an papatais me an angang lon Kalili, tori Sameria, ngeni ewe iräpenges, manawsefäl, me feitään ngeni läng lon Jerusalem.",
+  "pa_kick": "③ Testament mi Fö — ekewe feffetälin Paulus",
+  "pa_h": "Seni Antiok tori sopwolóón fanüfan — Rom",
+  "pa_lead": "Seni Pentekost lon Jerusalem, ifa usun ewe Kapas Allim a torofesen lükün Jutea — fän Asia Kükünü me Europe tori letipen ewe mwü mi lapalap. Fili eu me lein ekewe nimu feffetäl (äeü·oruwo·ülüngat + ewe säi ngeni Rom + mürin an ngaseló) o käeöffichi ekewe mettoch lon Föför fiti ekewe toropwe ra makketä lon ewe al.",
+  "foot": "Popun · Ekewe leni ra tapweri ewe makketiwen Paipel me ewe geography mi pwüng ren Paipel (ren it mi fö ika a alilis). Ekewe orun sät, chanpupu, me nö ra makketiw seni geography data mi suuk (Natural Earth), mi amecheresila.",
+  "contact": "Kapas eis · ekiek — <a id=\"contact\" class=\"mail\">Tinatoei email</a>",
+  "play": "Poputä",
+  "pause": "Asöso",
+  "today": "Ikenai:",
+  "verseCite": "2 Peter 1:16"
+ },
+ "ot": {
+  "places": {
+   "eden": {
+    "name": "Eten (Föritä · Tä)",
+    "book": "Keneses 1–3",
+    "today": "ewe leni Taikris–Iupretis ikenai",
+    "note": "Ngeni eu fanüfan mi föritä pwe “a fokun mürina,” tipis a tolong o a atai ewe ririifengen lefilen Kot me aramas.",
+    "events": [
+     "Föritä lon rän wonu — “a fokun mürina”",
+     "Aramas ra föritä usun lapalapen Kot",
+     "Ewe tä, me atowu seni Eten",
+     "Ewe pwon allim mi äeü — “mwirimwirin ewe fefin epwe puri mökürün ewe serepenit”"
+    ]
+   },
+   "noah": {
+    "name": "Ararat (ewe Nöör)",
+    "book": "Keneses 6–9",
+    "today": "Chuuken Ararat, lón notoun Turki ikenai",
+    "note": "Kot a kapwüngü eu fanüfan mi üren tipis, nge a tümünü manau fän eu chök famili.",
+    "events": [
+     "Eu fanüfan mi üren föföringau",
+     "Ewe nöör, me warupwen Noa",
+     "Ewe pwonen isossot — “esap chüen wor nöör epwe atailo”"
+    ]
+   },
+   "babel": {
+    "name": "Ewe Toren Papel",
+    "book": "Keneses 11",
+    "today": "Irak ikenai (leni päsäpäsen Sinar)",
+    "note": "Ren ewe lamalam tekia mi tori läng, Kot a ataipesi ar kapas me ekewe aramas won unusen fanüfan.",
+    "events": [
+     "“Sipwe aueta eu telinimw me eu tor… o föri itach”",
+     "Kot a atipetipaili ar kapas",
+     "Ekewe aramas ra toropwaselo won fanüfan (Sinar — mürin Papilon)"
+    ]
+   },
+   "ur": {
+    "name": "Ur",
+    "book": "Keneses 12",
+    "today": "eoron Irak ikenai",
+    "note": "Ewe pworausen amanau lon Paipel a poputä ren ewe köri ngeni eman chök aramas.",
+    "events": [
+     "Kot a köri Apram seni Ur mi nöün chon Kaltea",
+     "“Üpwe föriuk pwe eu mwü mi watte… chon ekewe mwü meinisin repwe küna feiöch reöm”",
+     "Ren lükülük a likitalo fönüwan"
+    ]
+   },
+   "haran": {
+    "name": "Haran",
+    "book": "Keneses 12",
+    "today": "eoron Turki ikenai",
+    "note": "Lon ewe al, le pölüeni ewe köri ngeni ewe fanü mi pwon.",
+    "events": [
+     "Famili Tera ra nonnomotä lon Haran",
+     "Tera a mäla",
+     "Apram a poputä feila Kanaan lon ierin 75"
+    ]
+   },
+   "shechem": {
+    "name": "Sekem · Kanaan",
+    "book": "Keneses 12–50",
+    "today": "Napulus ikenai",
+    "note": "Lon ewe fanü mi pwon eu famili a föritä o ewe pwon a feitä seni tapwong ngeni tapwong.",
+    "events": [
+     "Tolong ngeni Kanaan, ewe akkomwen rongen asor — “üpwe ngeni mwirimwirum ei fanü”",
+     "Ewe pwon (Keneses 15) · Aisak · Jakop",
+     "Ekewe nöün Jakop 12 — popun ekewe einang 12"
+    ]
+   },
+   "egypt": {
+    "name": "Isip (Kosen)",
+    "book": "Keneses 37–50 · Towuwu 1",
+    "today": "ewe Nail Delta, Isip ikenai",
+    "note": "Eu famili a wiliti eu mwü mi watte — iwe a wiliti eu mwü mi chon angang.",
+    "events": [
+     "Josef, mi amömöölo, a tekia le nemeni Isip",
+     "Unusen famili Jakop ra feitiu pwe repwe su seni lengita",
+     "Ewe mwün Israel mi mämärä a wiliti chon angang"
+    ]
+   },
+   "sinai": {
+    "name": "Chuuken Sainai",
+    "book": "Towuwu · Lifitikus",
+    "today": "ewe Sainai Peninsula ikenai",
+    "note": "Ewe omusano mi lapalap seni meinisin lon Testament mi Läl — chon angang ra wiliti nöün Kot aramas.",
+    "events": [
+     "Ekewe engön riäfföü me ewe lamun Towuwu",
+     "Ewe Sät mi Par a ekis o ra tou",
+     "Ekewe Allük 10, ewe Allük, ewe imwen fel me ekewe asor"
+    ]
+   },
+   "kadesh": {
+    "name": "Kates (fönüpwön)",
+    "book": "Numbers · Tuteronomi",
+    "today": "ewe fönüpwönün Sainai–Nekef ikenai",
+    "note": "Lükümang a atai eu tapwong ewe fanü — nge Kot a chüen nonom rer.",
+    "events": [
+     "Ekewe chon kükünä 12 — nge aramas ra pöütä le lükü",
+     "Ier 38 lon ewe fönüpwön — manna, kuchu me ekkeu",
+     "Won ewe päsäpäsen Moap, ewe sopwolóón afalafalen Moses (Tuteronomi)"
+    ]
+   },
+   "jericho": {
+    "name": "Jeriko",
+    "book": "Josua",
+    "today": "Jeriko ikenai",
+    "note": "Lon sopwoloon ra tolong o angei ewe fanü mi pwon.",
+    "events": [
+     "Ewe Jortan a ekis o aramas ra tou",
+     "Ewe ttiitin Jeriko a turunufas",
+     "Turunufasen Kanaan me kinikinin ewe fanü"
+    ]
+   },
+   "shiloh": {
+    "name": "Sailo (Ekewe Soukapwüng)",
+    "book": "Ekewe Soukapwüng · Rut",
+    "today": "Kirpet Seilun ikenai",
+    "note": "Ren ese wor king, emön me emön a föri minne a pwüng me ren — a lamot eman enletin king.",
+    "events": [
+     "Ewe imwen fel a auetä lon Sailo",
+     "Ewe sönüsönün tipis–wisawis weires–omusano (Tepora, Kiteon, Samson)",
+     "Rut — tüppwöl lon fansoun mi rochopwak, lon mwirimwirin Tafit"
+    ]
+   },
+   "jerusalem": {
+    "name": "Jerusalem · Mwü mi Tipeeüfengen",
+    "book": "1–2 Samuel · 1 Kings",
+    "today": "Jerusalem ikenai",
+    "note": "Ewe fansoun mi ling seni meinisin an Israel — me ewe pwon ren eman king mi nonom feilfeilachök.",
+    "events": [
+     "Saul ewe akkomwen king, iwe Tafit me Koliat",
+     "Ewe pwonen Tafit — “mwum epwe nonom feilfeilachök” (2 Samuel 7)",
+     "Solomon a aueta ewe imwenfel lon Jerusalem"
+    ]
+   },
+   "samaria": {
+    "name": "Sameria · Mwü mi Aimwüfeseni",
+    "book": "Kings · ekewe Soufos",
+    "today": "Sepastia ikenai",
+    "note": "Ewe mwü a aimwüfeseni o a kkuk lupwen ekewe soufos ra öü.",
+    "events": [
+     "Mürin Solomon, ewe aimwüfeseni ngeni Juta me Israel",
+     "Angang ngeni uut mi sömwüsömw",
+     "Elaisa, Aisea, Jeremaia ra öü ‘liwin’ — o ra esinai ewe Messaia"
+    ]
+   },
+   "nineveh": {
+    "name": "Ninewe (Assüria)",
+    "book": "2 Kings 17 · Jonah",
+    "today": "Mosul, Irak ikenai",
+    "note": "Le tunalo emmwen meinisin, ennefen a akkomw turunufas.",
+    "events": [
+     "Ninewe, ewe telinimw lapalapen Assüria",
+     "Ewe mwü lon ennefen a turunufas ngeni Assüria (722 BC)",
+     "Jona a tinilo ngeni Ninewe"
+    ]
+   },
+   "babylon": {
+    "name": "Papilon",
+    "book": "2 Kings 25 · Taniel · Esekiel",
+    "today": "Hillah, Irak ikenai",
+    "note": "Ewe pwinin mi kirikiringaü seni meinisin — nge ewe pwon ren awillisefäl a chüen nonom.",
+    "events": [
+     "Jerusalem a turunufas, ewe imwenfel a kkä (586 BC)",
+     "Juta a uwei ngeni Papilon",
+     "Taniel me Esekiel — lükülük me langepuk lon ewe nikina"
+    ]
+   },
+   "susa": {
+    "name": "Susa (Persia)",
+    "book": "Esta · Nehemia",
+    "today": "Shush, Iran ikenai",
+    "note": "Inaamwo lon letipen eu mwü mi tüngeni uut, Kot a tümünü nöün aramas.",
+    "events": [
+     "Persia a turunufasi Papilon",
+     "Esta a amanaua ekewe chon Jew seni nninnino",
+     "Nehemia a iotek mwen ewe king o a tinila"
+    ]
+   },
+   "return": {
+    "name": "Liwiniti Jerusalem",
+    "book": "Esra · Nehemia · Malakai",
+    "today": "Jerusalem ikenai",
+    "note": "Ra liwin o awillisefäli — nge esap wor eman king mi feito. Ra witi ewe Messaia.",
+    "events": [
+     "Ülüngat liwin ren an Sairus we annük (Serupapel 538 · Esra 458 · Nehemia 444)",
+     "Ewe imwenfel a awillisefäl o ttiitin Jerusalem a awillisefäl",
+     "Malakai — ewe Testament mi Läl a söpölo: “Üpwe tinala nei chon künö”"
+    ]
+   }
+  },
+  "labels": [
+   "Säten Mediterranean",
+   "Mesopotamia",
+   "Fönüpwönün Arapia",
+   "Isip"
+  ],
+  "journeys": {
+   "flow": "Ewe pworausen amanau"
+  }
+ },
+ "jesus": {
+  "places": {
+   "bethlehem": {
+    "name": "Petlehem",
+    "book": "Mattu 1–2 · Luk 2",
+    "today": "Petlehem ikenai",
+    "note": "Ewe Messaia mi pwon a feito ngeni telinimwen Tafit — ewe Kapas a wiliti aramas.",
+    "events": [
+     "A uputiu lon Petlehem, ewe telinimwen Tafit",
+     "Ekewe chonläng ra esile ewe pworaus ngeni ekewe chon masen siip",
+     "Ekewe sou-tipatchem ra feito le fel ngeni i"
+    ]
+   },
+   "nazareth": {
+    "name": "Nasaret",
+    "book": "Luk 2 · 4",
+    "today": "Nasaret ikenai",
+    "note": "Kot a mämärätä usun eman aramas lon eu telinimw mi nikinök.",
+    "events": [
+     "A mämärätä lon imwen eman chon fötä imw",
+     "Lon ierin 12, a eis o pölüeni lon ewe imwenfel",
+     "Mürin, a apwütätä lon ewe sinakok lon fönüwan"
+    ]
+   },
+   "jordan": {
+    "name": "Chanpupun Jortan",
+    "book": "Mattu 3–4",
+    "today": "ewe eoron Jortan ikenai",
+    "note": "An angang mi pwóra a poputä — läng a apwäri i pwe ewe Nau.",
+    "events": [
+     "A papatais me ren Jon",
+     "Ewe Ngün a feitiu usun eu mwütuku — “Iei Nei mi achengicheng”",
+     "A akküla ekewe ülüngat sossoten Satan lon ewe fönüpwön"
+    ]
+   },
+   "cana": {
+    "name": "Kana",
+    "book": "Jon 2",
+    "today": "Kafr Kanna ikenai",
+    "note": "Lon an akkomwen esisin a pwäri lingan.",
+    "events": [
+     "Eman chon etiwetiw lon eu apwüpwülü",
+     "Konik a wiliti wain — an akkomwen esisin",
+     "Nöün chon käeö ra lükü i"
+    ]
+   },
+   "sychar": {
+    "name": "Sikar (Sameria)",
+    "book": "Jon 2–4",
+    "today": "arap Napulus ikenai",
+    "note": "Ewe alen an angang lepopun — fän Jerusalem o feila ngeni Sameria mi ätekiangaü.",
+    "events": [
+     "A alimeti ewe imwenfel lon Jerusalem",
+     "Lepwin, Nikotemus — “A lamot om kopwe uputiusefäl”",
+     "Konik mi manaw ngeni eman fefinen Sameria"
+    ]
+   },
+   "capernaum": {
+    "name": "Kapernaum",
+    "book": "Mattu 4–13 · Mark 1–4",
+    "today": "orun Säten Kalili ikenai",
+    "note": "Ewe leni lapalap ren an angang lon Kalili — köri, äiti me ü ra churi fengen ikei.",
+    "events": [
+     "A köri ekewe chon sukuni iik o a nonnomotä ikei",
+     "Ewe Afalafal won ewe Chuuk — “Feiöch ngeni ekewe woungawen ngün”",
+     "Ekewe kapas äwewe usun ewe mwü — me ü mi mämärätä"
+    ]
+   },
+   "galilee": {
+    "name": "Säten Kalili",
+    "book": "Mark 4 · 6 · Jon 6",
+    "today": "Leen Kinneret ikenai",
+    "note": "Ren an manaman won natur a pwäri ió i.",
+    "events": [
+     "“Kinamwe, kopwe pöchöün” — a apöchöünü ewe möltü",
+     "A amwöngö 5,000 ren limu pilawa me rüu iik",
+     "A fetäl won ewe konik"
+    ]
+   },
+   "caesarea_p": {
+    "name": "Sesaria Pilippi",
+    "book": "Mattu 16–17",
+    "today": "Panias ikenai",
+    "note": "Ekewe chon käeö ra weweiti pwe i ewe Kraist, iwe ewe alen ewe iräpenges a suk.",
+    "events": [
+     "An Petrus pwärätä — “En ewe Kraist, ewe Nöün Kot mi manaw”",
+     "A akkomw esile an mäla me manawsefäl",
+     "A siwil lon ling won ewe chuuk"
+    ]
+   },
+   "jericho": {
+    "name": "Jeriko",
+    "book": "Luk 18–19",
+    "today": "Jeriko ikenai",
+    "note": "Won ewe al mi feita ngeni Jerusalem, a kütta ekewe mi pöütä.",
+    "events": [
+     "A angei nengengin Partimeus mi chun",
+     "A köri Sakius ewe chon angei takis",
+     "“Ewe Nöün Aramas a feito le kütta o amanaua ekewe mi pöütä”"
+    ]
+   },
+   "bethany": {
+    "name": "Petani",
+    "book": "Jon 11–12",
+    "today": "al-Eizariya ikenai",
+    "note": "A pwäri an nemeni mäla mwen ewe sopwolóón wik an manaw.",
+    "events": [
+     "A amanausefäli Lasarus seni ewe pwäng — “Ngang ewe manawsefäl me ewe manau”",
+     "Maria a epiti i fän iten an peiaselo",
+     "Ei esisin a apöchökülä ewe kokkoten nnielo i"
+    ]
+   },
+   "jerusalem": {
+    "name": "Jerusalem",
+    "book": "Mattu 21–28 · Luk 24 · Föför 1",
+    "today": "Jerusalem ikenai",
+    "note": "Ewe lukalap ewe Paipel meinisin a tapwö ngeni — iräpenges, manawsefäl, feitään ngeni läng.",
+    "events": [
+     "Ewe tolong mi pwapwa; a alëkätä ekewe tepwelin ewe imwenfel sefäl",
+     "Lon ewe Sopwolóón Mwöngö a telüni pechen ekewe chon käeö",
+     "A mäla won ewe iräpenges",
+     "A manausefäl lon ewe ülüngat rän, iwe a feitä ngeni läng"
+    ]
+   }
+  },
+  "labels": [
+   "Säten Mediterranean",
+   "Kalili",
+   "Sameria",
+   "Jutea",
+   "Tekapolis",
+   "Perea",
+   "Sät mi Mäla"
+  ],
+  "journeys": {
+   "life": "Alen Jesus"
+  }
+ },
+ "paul": {
+  "places": {
+   "antioch": {
+    "name": "Antiok",
+    "book": "Föför 13 · 15",
+    "today": "Antakya, Turki ikenai",
+    "note": "Ewe mwichefel mi tinatin, ia ewe angangen tinatin ngeni chon lükün a poputä o liwiniti ie.",
+    "events": [
+     "Lon iotek ewe Ngün a filätä Parnapas me Saul",
+     "Ewe mwichefel ia chon lükü ra akkomw iteni ‘chon Kraist’",
+     "Ewe poputään ewe akkomw, oruwo me ülüngat feffetäl"
+    ]
+   },
+   "seleucia": {
+    "name": "Seleusia",
+    "book": "Föför 13:4",
+    "today": "Turki ikenai",
+    "note": "Ewe wenimwen Antiok — ra sätä ngeni Saiprus.",
+    "events": []
+   },
+   "salamis": {
+    "name": "Salamis (Saiprus)",
+    "book": "Föför 13:5",
+    "today": "Saiprus ikenai",
+    "note": "Ewe akkomwen leni lon Saiprus — afalafal lon ekewe sinakok.",
+    "events": []
+   },
+   "paphos": {
+    "name": "Papos",
+    "book": "Föför 13:6-12",
+    "today": "Saiprus ikenai",
+    "note": "Manaman a pwäritä ngeni ekewe ra ü ngeni ewe Kapas Allim.",
+    "events": [
+     "Elimas ewe sou-roi a wiliti chun",
+     "Sergius Paulus ewe kepina a lükü",
+     "Seni ikei ‘Paulus’ a emmwen"
+    ]
+   },
+   "perga": {
+    "name": "Perka",
+    "book": "Föför 13:13",
+    "today": "Antalya, Turki ikenai",
+    "note": "Eu wenimw lon Pampilia — ikei Jon Mark a liwinsefäl.",
+    "events": []
+   },
+   "pantioch": {
+    "name": "Antiok lon Pisitia",
+    "book": "Föför 13:14-50",
+    "today": "Yalvaç, Turki ikenai",
+    "note": "Ewe Kapas Allim a suk ngeni chon lükün.",
+    "events": [
+     "Eu afalafal mi lecha usun uruwon amanau lon ewe sinakok",
+     "Chommong chon lükün ra pwapwa o etiwa ewe kapas",
+     "Ra asula ren ü"
+    ]
+   },
+   "iconium": {
+    "name": "Ikoniom",
+    "book": "Föför 14:1-7",
+    "today": "Konya, Turki ikenai",
+    "note": "Chommong ra lükü, nge eriäfföü a amwökütüir.",
+    "events": []
+   },
+   "lystra": {
+    "name": "Listra",
+    "book": "Föför 14:8-20",
+    "today": "Turki ikenai",
+    "note": "Ra iteni pwe kot, iwe ra fatü.",
+    "events": [
+     "A apöchökülä eman mwän mi mwököt seni uputiwan",
+     "Ewe mwichen aramas ra achocho le asoraani ngeniir usun kot",
+     "Ra fatü o likitalo pwe a mäla, nge a ütä"
+    ]
+   },
+   "derbe": {
+    "name": "Terpe",
+    "book": "Föför 14:20-21",
+    "today": "Turki ikenai",
+    "note": "Chommong chon käeö ra föritä; ra liwinsefäl le apöchökülä ekewe mwichefel.",
+    "events": []
+   },
+   "troas": {
+    "name": "Troas",
+    "book": "Föför 16:8-10",
+    "today": "Turki ikenai",
+    "note": "Ewe leni mi siwil ia ewe Kapas Allim a akkomw feila ngeni Europe.",
+    "events": [
+     "Eu langepuk usun eman mwänen Masetonia",
+     "“Feito o älisikem”",
+     "Ra mwitir tou ngeni Europe"
+    ]
+   },
+   "philippi": {
+    "name": "Pilippi",
+    "book": "Föför 16 · Philippians",
+    "today": "ennefen Kris ikenai",
+    "note": "Ewe akkomwen mwichefel lon Europe — ewe Kapas Allim a win inaamwo lon kalapus.",
+    "events": [
+     "Litia, eman chon amömö mangaku mi pwöl, a lükü",
+     "Eman föpwül chon angang mi sile-mwachkkan a ngaseló",
+     "Köl lelukapwin, eu chechchü, ewe famili an ewe sou-mas kalapus ra amanau"
+    ]
+   },
+   "thess": {
+    "name": "Tesalonika",
+    "book": "Föför 17 · 1–2 Thessalonians",
+    "today": "Tesaloniki, Kris ikenai",
+    "note": "Ewe kapas a amwökütü ewe telinimw iwe ü a pwätä.",
+    "events": [
+     "A poraufengen lon ewe sinakok ülüngat Sapat",
+     "“Ekei ra alëkätä ewe fanüfan”",
+     "Ra su fän lepwin"
+    ]
+   },
+   "berea": {
+    "name": "Peria",
+    "book": "Föför 17:10-15",
+    "today": "Veria, Kris ikenai",
+    "note": "Ekewe ‘aramas mi öch’ ra pwisin äppirü ewe kapas.",
+    "events": [
+     "Ra etiwa ewe kapas ren mochen mi lapalap",
+     "Iteiten rän ra äppirü ekewe Toropwe mi Pin pwe repwe pwäri",
+     "Chommong ra lükü"
+    ]
+   },
+   "athens": {
+    "name": "Atens",
+    "book": "Föför 17:16-34",
+    "today": "Atens, Kris ikenai",
+    "note": "Lon ewe telinimwen sou-tipatchem a esile ewe ‘kot esap sinei’.",
+    "events": [
+     "A song ren eu telinimw mi üren uut",
+     "Won Areopakus a afalafata ewe Sou-föri me ewe manawsefäl",
+     "Ra türinni, nge ekis ra lükü"
+    ]
+   },
+   "corinth": {
+    "name": "Korint",
+    "book": "Föför 18 · 1–2 Korint",
+    "today": "Kris ikenai",
+    "note": "A nonom eu ier me lus, le fötüki eu mwichefel lon eu telinimw mi föföringau.",
+    "events": [
+     "A föri imw mangaku ren Akwila me Priskila",
+     "“Kosap niuokkus… pun ngang üa nonom rom”",
+     "Chommong chon Korint ra lükü o papatais"
+    ]
+   },
+   "ephesus": {
+    "name": "Efisus",
+    "book": "Föför 19 · Efisus",
+    "today": "Selçuk, Turki ikenai",
+    "note": "Letipen ewe ülüngat feffetäl — ewe kapas a torofesen won Asia.",
+    "events": [
+     "Äiti iteiten rän ren rüu ier lon ewe imwen Tirannus",
+     "Ekewe puken roi ra kkä; angang mi pöchökül",
+     "Temetrius ewe sou-fötä silipa a poputä eu ötürütür"
+    ]
+   },
+   "miletus": {
+    "name": "Miletus",
+    "book": "Föför 20:17-38",
+    "today": "Turki ikenai",
+    "note": "Eu leüwö mi chchün ngeni ekewe mwään Efisus.",
+    "events": [
+     "“Tümünü ewe mwichefel a kamö ren pwisin chchaan”",
+     "Ekewe mwään ra kechü, ra silei resap chüen küna i"
+    ]
+   },
+   "caesarea": {
+    "name": "Sesaria",
+    "book": "Föför 23–26",
+    "today": "orun säten Israel ikenai",
+    "note": "Ren rüu ier a pwäri ewe Kapas Allim mwen ekewe kepina me eman king.",
+    "events": [
+     "Kapwüng mwen ekewe kepina Feliks me Festus",
+     "An apwüng mwen King Akrippa",
+     "“Üa tüngor ngeni Sisar” — feila ngeni Rom"
+    ]
+   },
+   "jerusalem": {
+    "name": "Jerusalem",
+    "book": "Föför 21–23",
+    "today": "Jerusalem ikenai",
+    "note": "A turufi lon ewe imwenfel, ewe alan usun eman chon kalapus a poputä.",
+    "events": [
+     "Ewe mwichen aramas ra turufi i lon ewe imwenfel",
+     "A apwüng pwisin mwen ewe mwichen soukapwüng",
+     "Usun eman chon Rom, ra tinala fän mas ngeni Sesaria"
+    ]
+   },
+   "myra": {
+    "name": "Mira",
+    "book": "Föför 27:5-6",
+    "today": "Demre, Turki ikenai",
+    "note": "Ra siwil ngeni eu warupwen Aleksantria mi feila Rom.",
+    "events": []
+   },
+   "fairhaven": {
+    "name": "Wenimw Öch (Krit)",
+    "book": "Föför 27:8-12",
+    "today": "Krit ikenai",
+    "note": "An Paulus emmwen pwe repwe ükütä le sätä esap etiwa.",
+    "events": []
+   },
+   "crete": {
+    "name": "Krit",
+    "book": "Titus",
+    "today": "Krit ikenai",
+    "note": "Mürin an ngaseló, ewe fönü ia a likiti Titus le akkötättä ekewe mwichefel.",
+    "events": [
+     "A likiti Titus le filätä mwään lon telinimw meinisin",
+     "A tüngor ren emwen mi limöch, mi tüppwöl",
+     "A makketä ewe toropwe ngeni Titus"
+    ]
+   },
+   "malta": {
+    "name": "Malta",
+    "book": "Föför 27–28",
+    "today": "Malta ikenai",
+    "note": "Fän möltü me talapen warup, an Kot pwon a pöchökül.",
+    "events": [
+     "Ewe ‘asepwäl mi pöchökül’ a atai ewe warup, nge meinisin 276 ra manaw",
+     "Eu serepenit a achülüni i, nge esap feiengaü",
+     "A apöchökülä ekewe semwen lon ewe fönü"
+    ]
+   },
+   "syracuse": {
+    "name": "Sirakus",
+    "book": "Föför 28:12",
+    "today": "Sisili, Itali ikenai",
+    "note": "Ra nonom ülüngat rän lon Sisili.",
+    "events": []
+   },
+   "puteoli": {
+    "name": "Puteoli",
+    "book": "Föför 28:13-14",
+    "today": "Pozzuoli, Itali ikenai",
+    "note": "Ra tori Itali o ekewe pwiier chon lükü ra churiir.",
+    "events": []
+   },
+   "rome": {
+    "name": "Rom",
+    "book": "Föför 28 · Ekewe Toropwe seni Kalapus · 2 Timoti",
+    "today": "Rom, Itali ikenai",
+    "note": "Ewe Kapas Allim a tori letipen ewe mwü mi lapalap lon sopwoloon — esap eu sopwolo nge eu poputä.",
+    "events": [
+     "Rüu ier fän kalapusen imw, le esile ewe mwü ren pwora",
+     "Seni ikei a makketä ekewe Toropwe seni Kalapus (Efisus·Philippians·Kolose·Philemon)",
+     "Mürin a kalapuselo sefäl, a makketä 2 Timoti o a mäla fän ewe lükü — “Üa maün ewe maün mi öch, üa awesi ewe wäü”"
+    ]
+   }
+  },
+  "labels": [
+   "Säten Mediterranean",
+   "Säten Aegean",
+   "Asia Kükünü",
+   "Masetonia",
+   "Itali"
+  ],
+  "journeys": {
+   "j1": "Ewe akkomwen feffetäl",
+   "j2": "Ewe oruwen feffetäl",
+   "j3": "Ewe ülüngatün feffetäl",
+   "rome": "Ewe ränüwen feffetäl · ngeni Rom",
+   "j5": "Ewe nimüwen feffetäl · mürin an ngaseló"
+  }
+ }
+}

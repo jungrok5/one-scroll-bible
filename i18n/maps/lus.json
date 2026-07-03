@@ -1,0 +1,636 @@
+{
+ "menuName": "Mizo ṭawng",
+ "htmlLang": "lus",
+ "dir": "ltr",
+ "locale": "lus",
+ "brand": "Bible Chanchin Thlûk Khat",
+ "docTitle": "Mappui-a Bible · Bible Chanchin Thlûk Khat",
+ "metaDesc": "Thuthlung Hlui hun kal, Isua nun, leh Paula khualzinte chu mappui dik takah zui rawh — Bible hi hmun dik takah a thleng a ni.",
+ "s": {
+  "kicker": "Bible Chanchin Thlûk Khat · Mappui",
+  "title": "Mappui-a Bible",
+  "verse": "“Kan Lalpa Isua Krista chu thiltihtheihna nên a lo kal leh tûr thu kan hrilh lai che u khân, thawnthu phuahchawp mai mai hrilh che u kan ni lo ve, a ropuina chu mit ngeia hmutute kan ni.” (2 Petera 1:16)",
+  "purpose": "Bible hi hriatsualna a ni lo. Hmun dik, hun dik leh hming dik chunga lêng mite chanchin ziak a ni. Chûng kawngte chu mappui-ah, hun kalzêl dânin zui ang che — hmun pakhat khawih la, a nih loh leh ▶ hip la, pên khatin zui ang che.",
+  "ot_kick": "① Thuthlung Hlui — hun kal zêlin",
+  "ot_h": "Siamtirna aṭanga Jerusalem-a haw leh thlengin",
+  "ot_lead": "Zin khat chauh ni lovin, siamtirna aṭanga chhandamna chanchin luan zêl a ni: siamtirna leh tlûkna → tuilêt leh Babel → koh (Abrahama) → ram tiam → Aigupta chhuahsan → thlalêr → hneh → lalram → inthen → sâlna → haw leh.",
+  "je_kick": "② Thuthlung Thar — Isua nun",
+  "je_h": "Bethlehem aṭanga Jerusalem thlengin",
+  "je_lead": "Chanchin Ṭha-in a sawi dân angin, Isua nun chu inzêlin zui ang che — Bethlehem-a a piannna aṭangin, a baptisma leh Galili rawngbâwlna kâlin, Samari kân chungin, Jerusalem-a krawsa, thawhlehna leh chunglam kalna thlengin.",
+  "pa_kick": "③ Thuthlung Thar — Paula khualzinna",
+  "pa_h": "Antiok aṭanga lei tâwp thlengin — Rom",
+  "pa_lead": "Jerusalem-a Pentikost aṭangin, Chanchin Ṭha chu Judai kâlkhawvêl a darh dân — Asia Minor leh Europe kâlin ram lianpui laipui thlengin. Khualzin panga (1-na·2-na·3-na + Rom pana zin + chhuah hnu) zînga pakhat thlang la, kawngkarah ziak lehkhate nên Tirhkohte thilthlengte zui ang che.",
+  "foot": "Thu bul · Hmunte hi Bible thu leh Bible ram hriatna pângngai a zui a ni (a ṭangkai apiangin tûnlai hmingte nên). Tuipui kam, lui leh dîlte hi ram hriatna thu hawng (Natural Earth) aṭanga lâk, tihawlsam a ni.",
+  "contact": "Zawhna · ngaihdan — <a id=\"contact\" class=\"mail\">Email min thawn rawh</a>",
+  "play": "Kai rawh",
+  "pause": "Nghâk rawh",
+  "today": "Tûnlai:",
+  "verseCite": "2 Petera 1:16"
+ },
+ "ot": {
+  "places": {
+   "eden": {
+    "name": "Eden (Siamtirna · Tlûkna)",
+    "book": "Genesis 1–3",
+    "today": "tûnlai Tigris–Euphrates lui kam ram",
+    "note": "Khawvêl ‘ṭha êm êm’-a siam chungah sual a lût a, Pathian leh mihring inkârna a chat ta.",
+    "events": [
+     "Ni ruka siamtirna — ‘a ṭha êm êm’",
+     "Mihring Pathian lim anga siam",
+     "Tlûkna, leh Eden aṭanga hnawt chhuah",
+     "Chanchin Ṭha thutiam hmasa ber — ‘hmeichhia thlah chuan rûl lu a vaw keh ang’"
+    ]
+   },
+   "noah": {
+    "name": "Ararat (Tuilêt)",
+    "book": "Genesis 6–9",
+    "today": "tûnlai Ararat Tlâng, Turkey chhak lam",
+    "note": "Sualnaa khat khawvêl chu Pathianin a rorêl a, mahse chhûngkua pakhat zârin nunna a humhim.",
+    "events": [
+     "Sualnain a khat khawvêl",
+     "Tuilêt, leh Nova lawng",
+     "Chhâwnghniang thuthlung — ‘tuilêtin tihboral a awm leh tawh lo vang’"
+    ]
+   },
+   "babel": {
+    "name": "Babel Insâng",
+    "book": "Genesis 11",
+    "today": "tûnlai Iraq (Shinar phaizâwl)",
+    "note": "Vâna thleng tuma chapona chungah Pathianin an ṭawng leh mite chu khawvêl pumah a darhdar.",
+    "events": [
+     "‘Khawpui leh insâng… i sak ang u, kan hming kan lâr theih nân’",
+     "Pathianin an ṭawng a rêlbo",
+     "Mite chu khawvêl pumah an darh (Shinar — hnua Babulon)"
+    ]
+   },
+   "ur": {
+    "name": "Ur",
+    "book": "Genesis 12",
+    "today": "tûnlai Iraq sim lam",
+    "note": "Bible chhandamna chanchin chu mi pakhat koh aṭangin a ṭan.",
+    "events": [
+     "Pathianin Abrama Kaldai Ur aṭangin a ko chhuak",
+     "‘Hnam ropui takah ka siam ang che… hnam tinrêng i zârah malsâwm an ni ang’",
+     "Rinna zârin a ram a chhuahsan"
+    ]
+   },
+   "haran": {
+    "name": "Haran",
+    "book": "Genesis 12",
+    "today": "tûnlai Turkey sim lam",
+    "note": "Kawngkarah, ram tiam panga koh chu a chhâng.",
+    "events": [
+     "Tera chhûngkua chu Haranah an lo chêng",
+     "Tera a thi",
+     "Abrama chu kum 75-in Kanaan panin a chhuak"
+    ]
+   },
+   "shechem": {
+    "name": "Sekem · Kanaan",
+    "book": "Genesis 12–50",
+    "today": "tûnlai Nablus",
+    "note": "Ram tiamah chhûngkua a din a, thuthlung chu thlah tluangin a kal zêl.",
+    "events": [
+     "Kanaan a luh, maichâm hmasa ber — ‘i thlahte hnênah he ram hi ka pe ang’",
+     "Thuthlung (Gen 15) · Isaaka · Jakoba",
+     "Jakoba fapa sâwm leh pahnih — hnam sâwm leh pahnih bul"
+    ]
+   },
+   "egypt": {
+    "name": "Aigupta (Gosen)",
+    "book": "Genesis 37–50 · Exodus 1",
+    "today": "tûnlai Nile Delta, Aigupta",
+    "note": "Chhûngkua chu hnam ropui a lo ni ta — chumi hnuah bawih hnam.",
+    "events": [
+     "Josefa, hralh a nih hnuah Aigupta rorêltuah a chang",
+     "Jakoba chhûngkua zawng zawng tâm avângin an lo chhuk",
+     "Israel hnam pungtâm chu bawih an chang ta"
+    ]
+   },
+   "sinai": {
+    "name": "Sinai Tlâng",
+    "book": "Exodus · Leviticus",
+    "today": "tûnlai Sinai Ramkuk",
+    "note": "Thuthlung Hlui chhandamna laipui — bawihte chu Pathian mi ngei an lo ni ta.",
+    "events": [
+     "Hripui sâwm leh Kalhpalh berâm no",
+     "Tuipui Sen a kâr a, an kân",
+     "Thupêk Sâwm, Dân, biak puan leh inthawinate"
+    ]
+   },
+   "kadesh": {
+    "name": "Kadesh (thlalêr)",
+    "book": "Numbers · Deuteronomy",
+    "today": "tûnlai Sinai–Negev thlalêr",
+    "note": "Rinlohnain chhuanlam pakhat chu ram a hloh tîr — mahse Pathian chu an bulah a la awm reng.",
+    "events": [
+     "Enthla sâwm leh pahnih — mahse mipuiin rin an duh lo",
+     "Thlalêrah kum 38 — manna, chhûm leh mei",
+     "Moab phaizâwlah Mosia thusawi hnuhnung (Deuteronomy)"
+    ]
+   },
+   "jericho": {
+    "name": "Jeriko",
+    "book": "Josua",
+    "today": "tûnlai Jeriko",
+    "note": "A tâwpah ram tiam chu an lût a, an luah ta.",
+    "events": [
+     "Jordan a kâr a, mipui an kân",
+     "Jeriko kulh a tlu",
+     "Kanaan hneh leh ram sem"
+    ]
+   },
+   "shiloh": {
+    "name": "Silo (Roreltute)",
+    "book": "Roreltute · Ruthi",
+    "today": "tûnlai Khirbet Seilun",
+    "note": "Lal an neih loh avângin, mi tinin ṭha an tih angin an ti — lal dik a ngai.",
+    "events": [
+     "Silo-ah biak puan a din",
+     "Sual–hnehchhiahna–chhandamna zinghlim (Debora, Gideona, Samsona)",
+     "Ruthi — hun thima rinawmna, Davida thlahah"
+    ]
+   },
+   "jerusalem": {
+    "name": "Jerusalem · Ram Pumkhat",
+    "book": "1–2 Samuela · 1 Lalte",
+    "today": "tûnlai Jerusalem",
+    "note": "Israel hun rangkachak — leh lal chatuan thutiam.",
+    "events": [
+     "Lal hmasa ber Saula, tichuan Davida leh Goliatha",
+     "Davida thuthlung — ‘i lalṭhutthlêng chatuanin’ (2 Sam 7)",
+     "Solomonan Jerusalem-ah Tempul a sa"
+    ]
+   },
+   "samaria": {
+    "name": "Samari · Ram Inthen",
+    "book": "Lalte · Zâwlneite",
+    "today": "tûnlai Sebastia",
+    "note": "Ram chu a inthen a, zâwlneiten an au laiin a tlâkhniam zêl.",
+    "events": [
+     "Solomona hnuah Juda leh Israelah a inthen",
+     "Milem biakna a kâng vêl",
+     "Elija, Isaia, Jeremia’n ‘lo kîr leh rawh’ an au — Messia an hrilh lâwk"
+    ]
+   },
+   "nineveh": {
+    "name": "Nineve (Assuria)",
+    "book": "2 Lalte 17 · Jona",
+    "today": "tûnlai Mosul, Iraq",
+    "note": "Vaukhânna zawng zawng ngaihthahin, hmâr lam a tlu hmasa.",
+    "events": [
+     "Nineve, Assuria khawpui",
+     "Hmâr lam ram chu Assuria hnênah a tlûk (B.C. 722)",
+     "Jona chu Nineve-ah a tîr a ni"
+    ]
+   },
+   "babylon": {
+    "name": "Babulon",
+    "book": "2 Lalte 25 · Daniela · Ezekiela",
+    "today": "tûnlai Hillah, Iraq",
+    "note": "Zân thim ber — mahse tharsiamna thutiam chu a la awm reng.",
+    "events": [
+     "Jerusalem a tlu a, Tempul a kâng (B.C. 586)",
+     "Juda chu Babulonah hruai an ni",
+     "Daniela leh Ezekiela — sâlnaah rinna leh inlârna"
+    ]
+   },
+   "susa": {
+    "name": "Susan (Persia)",
+    "book": "Esther · Nehemia",
+    "today": "tûnlai Shush, Iran",
+    "note": "Pathian biak lo ram laipui ngeiah pawh, Pathianin a mite a vawng.",
+    "events": [
+     "Persiain Babulon a hneh",
+     "Estheran Judate chu tihboral aṭangin a chhanchhuak",
+     "Nehemia chu lal hmaah a ṭawngṭai a, a tîr a ni"
+    ]
+   },
+   "return": {
+    "name": "Jerusalem-a Haw leh",
+    "book": "Ezra · Nehemia · Malakia",
+    "today": "tûnlai Jerusalem",
+    "note": "An haw a, an sa that leh — mahse lal a la lo kal lo. Messia an nghah.",
+    "events": [
+     "Sairusa thupêkin haw vawi thum (Zerubbabela 538 · Ezra 458 · Nehemia 444)",
+     "Tempul sa that a, Jerusalem kulhmang siam that",
+     "Malakia — Thuthlung Hlui a khâr: ‘ka tirhkoh ka rawn tîr dâwn’"
+    ]
+   }
+  },
+  "labels": [
+   "Mediterranean Tuipui",
+   "Mesopotamia",
+   "Arabia Thlalêr",
+   "Aigupta"
+  ],
+  "journeys": {
+   "flow": "Chhandamna chanchin"
+  }
+ },
+ "jesus": {
+  "places": {
+   "bethlehem": {
+    "name": "Bethlehem",
+    "book": "Mathaia 1–2 · Luka 2",
+    "today": "tûnlai Bethlehem",
+    "note": "Messia tiam tâk chu Davida khua-ah a lo kal — Thu chu tisaah a chang.",
+    "events": [
+     "Davida khua Bethlehem-ah a piang",
+     "Vântirhkohten berâm vêngtute hnênah chanchin an puang",
+     "Mifingte chibai buk tûrin an lo kal"
+    ]
+   },
+   "nazareth": {
+    "name": "Nazareth",
+    "book": "Luka 2 · 4",
+    "today": "tûnlai Nazareth",
+    "note": "Pathian chu khaw pângngaiah mihringah a lo seilian.",
+    "events": [
+     "Thing chhertu ina seilian",
+     "Kum 12-a Tempulah zawhna a zâwt a, a chhâng",
+     "A hnuah a khaw synagog-ah hnâwl a ni"
+    ]
+   },
+   "jordan": {
+    "name": "Jordan Lui",
+    "book": "Mathaia 3–4",
+    "today": "tûnlai Jordan hnuai lam",
+    "note": "A rawngbâwlna a ṭan — vânin Fapa-ah a hnaih.",
+    "events": [
+     "Johana’n baptisma a chantîr",
+     "Thlarau chu vahluu angin a chungah a chhuk — ‘Hei hi ka Fapa duh tak’",
+     "Thlalêrah Setana thlêmna pathum a hneh"
+    ]
+   },
+   "cana": {
+    "name": "Kana",
+    "book": "Johana 2",
+    "today": "tûnlai Kafr Kanna",
+    "note": "A chêttheihna hmasa berah a ropuina a târ lang.",
+    "events": [
+     "Inneihna khuahah mikhual",
+     "Tui chu uain-ah a chantîr — a chêttheihna hmasa ber",
+     "A zirtîrten amah an ring"
+    ]
+   },
+   "sychar": {
+    "name": "Sikar (Samari)",
+    "book": "Johana 2–4",
+    "today": "tûnlai Nablus bul",
+    "note": "Rawngbâwlna hmasa kawng — Jerusalem kâlin, hmusit Samari lamah.",
+    "events": [
+     "Jerusalem-a Tempul a tihthianghlim",
+     "Zânah, Nikodema — ‘pian thar i ni a ngai’",
+     "Samari hmeichhia hnênah nunna tui"
+    ]
+   },
+   "capernaum": {
+    "name": "Kapernaum",
+    "book": "Mathaia 4–13 · Marka 1–4",
+    "today": "tûnlai Galili dîl kam",
+    "note": "Galili rawngbâwlna bul — koh, zirtîrna leh dodâlna hetah an inhmu.",
+    "events": [
+     "Sangha mantute a ko a, hetah a awm",
+     "Tlâng chunga Thusawi — ‘thlarau kâra retheite an eng a thâwl’",
+     "Ram thu tehkhinte — leh dodâlna a lo chho"
+    ]
+   },
+   "galilee": {
+    "name": "Galili Dîl",
+    "book": "Marka 4 · 6 · Johana 6",
+    "today": "tûnlai Kinneret Dîl",
+    "note": "Thil siam chunga thiltihtheihna hmangin amah a nihzia a târ lang.",
+    "events": [
+     "‘Reh rawh, dâwt rawh’ — thlipui a tidaih",
+     "Chhang panga leh sangha pahnihin mi sang 5 a chawm",
+     "Tui chungah a kal"
+    ]
+   },
+   "caesarea_p": {
+    "name": "Kaisaria Filipi",
+    "book": "Mathaia 16–17",
+    "today": "tûnlai Banias",
+    "note": "Zirtîrten ani chu Krista a nih an hria a, krawsa kawng a hawng.",
+    "events": [
+     "Petera puanchhuahna — ‘Nang chu Krista, Pathian nunga Fapa i ni’",
+     "A thihna leh thawhlehna a hrilh lâwk hmasa",
+     "Tlâng chungah ropuinain a inthlâk"
+    ]
+   },
+   "jericho": {
+    "name": "Jeriko",
+    "book": "Luka 18–19",
+    "today": "tûnlai Jeriko",
+    "note": "Jerusalem panga kawngah, a boral chu a zawng.",
+    "events": [
+     "Mitdel Bartimaia mit a tihvârtîr",
+     "Chhiahkhâwntu Zakaia a ko",
+     "‘Mihring Fapa chu a boral zawng leh chhandam tûrin a lo kal’"
+    ]
+   },
+   "bethany": {
+    "name": "Bethani",
+    "book": "Johana 11–12",
+    "today": "tûnlai al-Eizariya",
+    "note": "A kar hnuhnung ber hma zân khân thihna chunga thuneihna a târ lang.",
+    "events": [
+     "Lazara chu thlân aṭangin a kaitho — ‘Kei hi thawhlehna leh nunna ka ni’",
+     "Mari-in vui atân thâwl a nawih",
+     "He chêttheihnain amah thah tumna a tisang"
+    ]
+   },
+   "jerusalem": {
+    "name": "Jerusalem",
+    "book": "Mathaia 21–28 · Luka 24 · Tirhkohte 1",
+    "today": "tûnlai Jerusalem",
+    "note": "Bible pumpuiin a kâwk laipui — krawsa, thawhlehna, chunglam kalna.",
+    "events": [
+     "Ropui taka lût; Tempul dawhkânte a let leh",
+     "Ei Tâwp Berah zirtîrte ke a sil",
+     "Krawsah a thi",
+     "Ni thumnaah a tho leh a, chungah a kal"
+    ]
+   }
+  },
+  "labels": [
+   "Mediterranean Tuipui",
+   "Galili",
+   "Samari",
+   "Judai",
+   "Dekapoli",
+   "Perea",
+   "Tuipui Thi"
+  ],
+  "journeys": {
+   "life": "Isua kalna"
+  }
+ },
+ "paul": {
+  "places": {
+   "antioch": {
+    "name": "Antiok",
+    "book": "Tirhkohte 13 · 15",
+    "today": "tûnlai Antakya, Turkey",
+    "note": "Jentail rawngbâwlna a ṭan a, a haw lehna kohhran tîrtu.",
+    "events": [
+     "Ṭawngṭainaah Thlarauin Barnaba leh Saula a thlang",
+     "Ringtute ‘Kristian’ tia koh hmasakna kohhran",
+     "Khualzin 1-na, 2-na leh 3-na ṭanna hmun"
+    ]
+   },
+   "seleucia": {
+    "name": "Selukia",
+    "book": "Tirhkohte 13:4",
+    "today": "tûnlai Turkey",
+    "note": "Antiok tuikamhmun — Kupra panin an chuang.",
+    "events": []
+   },
+   "salamis": {
+    "name": "Salami (Kupra)",
+    "book": "Tirhkohte 13:5",
+    "today": "tûnlai Kupra",
+    "note": "Kupra-a ṭanna hmasa — synagog-ah thu hrilhin.",
+    "events": []
+   },
+   "paphos": {
+    "name": "Pafo",
+    "book": "Tirhkohte 13:6-12",
+    "today": "tûnlai Kupra",
+    "note": "Chanchin Ṭha dodâltute chungah thiltihtheihna a lang.",
+    "events": [
+     "Dawithiam Elima chu mitdelin a chang",
+     "Rambumpui hotu Sergia Paula a ring",
+     "Hêng aṭang hian ‘Paula’ chuan hmalam a kâwk"
+    ]
+   },
+   "perga": {
+    "name": "Perga",
+    "book": "Tirhkohte 13:13",
+    "today": "tûnlai Antalya, Turkey",
+    "note": "Pamfilia tuikamhmun — hetah Johana Marka a kîr leh.",
+    "events": []
+   },
+   "pantioch": {
+    "name": "Pisidia Antiok",
+    "book": "Tirhkohte 13:14-50",
+    "today": "tûnlai Yalvaç, Turkey",
+    "note": "Chanchin Ṭha chu Jentailte lamah a pang chho.",
+    "events": [
+     "Synagog-ah chhandamna chanchin thusawi sei",
+     "Jentail tam takin thu chu lâwm takin an pawm",
+     "Dodâlnain an hnawt chhuak"
+    ]
+   },
+   "iconium": {
+    "name": "Ikonia",
+    "book": "Tirhkohte 14:1-7",
+    "today": "tûnlai Konya, Turkey",
+    "note": "Mi tamin an ring, mahse tihduhdahnain hmalam panga an kal tîr.",
+    "events": []
+   },
+   "lystra": {
+    "name": "Listra",
+    "book": "Tirhkohte 14:8-20",
+    "today": "tûnlai Turkey",
+    "note": "Pathianah an ngai a, chumi hnuah lungin an deng.",
+    "events": [
+     "Piang aṭanga ke bai a tidam",
+     "Mipuiin pathianah ngaiin inthawina an hlan tum",
+     "Lungin dengin, thi anga paih a ni a, a tho leh"
+    ]
+   },
+   "derbe": {
+    "name": "Derba",
+    "book": "Tirhkohte 14:20-21",
+    "today": "tûnlai Turkey",
+    "note": "Zirtîr tam tak an siam a; kohhrante tichak nân an kal kîr leh.",
+    "events": []
+   },
+   "troas": {
+    "name": "Troa",
+    "book": "Tirhkohte 16:8-10",
+    "today": "tûnlai Turkey",
+    "note": "Chanchin Ṭha Europe lam pan hmasakna hmun.",
+    "events": [
+     "Makedonia mi inlârna",
+     "‘Kan kâr rawn kal la, min ṭanpui rawh’",
+     "Europe lamah an kân nghâl"
+    ]
+   },
+   "philippi": {
+    "name": "Filipi",
+    "book": "Tirhkohte 16 · Filipi",
+    "today": "tûnlai Grik ram hmâr lam",
+    "note": "Europe-a kohhran hmasa ber — tâng inah pawh Chanchin Ṭha a hneh.",
+    "events": [
+     "Puan sen hralhtu Lidia a ring",
+     "Aisan thei bawihnu a chhuah",
+     "Zân lâiah hla, lîrnghîn, tâng vêngtu chhûngkua chhandam"
+    ]
+   },
+   "thess": {
+    "name": "Thessalonika",
+    "book": "Tirhkohte 17 · 1–2 Thessalonika",
+    "today": "tûnlai Thessaloniki, Grik ram",
+    "note": "Thu chuan khawpui a tihnghîng a, dodâlna a lo lian.",
+    "events": [
+     "Chawlhni thum synagog-ah a sawiho",
+     "‘Khawvêl tibûaitute’",
+     "Zânah an pumpel"
+    ]
+   },
+   "berea": {
+    "name": "Berea",
+    "book": "Tirhkohte 17:10-15",
+    "today": "tûnlai Veria, Grik ram",
+    "note": "Thu chu mahni ngeiin enfiahtu ‘mi ṭha’-te.",
+    "events": [
+     "Thu chu duh takin an pawm",
+     "A dik leh dik loh nî tin Pathian Lehkha Thu an chhût",
+     "Mi tamin an ring"
+    ]
+   },
+   "athens": {
+    "name": "Athens",
+    "book": "Tirhkohte 17:16-34",
+    "today": "tûnlai Athens, Grik ram",
+    "note": "Finna zirtute khawpuiah ‘pathian hriat loh’ chu a puang.",
+    "events": [
+     "Milemin a khat khawpui avângin a lungngai",
+     "Areopago-ah Siamtu leh thawhlehna a hril",
+     "An nuihzatin, mahse ṭhenkhatin an ring"
+    ]
+   },
+   "corinth": {
+    "name": "Korinth",
+    "book": "Tirhkohte 18 · 1–2 Korinth",
+    "today": "tûnlai Grik ram",
+    "note": "Kum khat leh a chanve a awm a, sual khawpuiah kohhran a phun.",
+    "events": [
+     "Akuila leh Prisilla nên puanin a siam",
+     "‘Hlau suh… kei ka i awmpui’",
+     "Korinth mi tamin an ring a, baptisma an chang"
+    ]
+   },
+   "ephesus": {
+    "name": "Efesa",
+    "book": "Tirhkohte 19 · Efesi",
+    "today": "tûnlai Selçuk, Turkey",
+    "note": "Khualzin 3-na laipui — thu chu Asia rama a darh.",
+    "events": [
+     "Turana thusawi inah kum hnih chhung nî tin zirtîrna",
+     "Dawi lehkhabute hâlin; thiltih thahnem tak",
+     "Tangkarûng chhemtu Demetria buaina a thawh"
+    ]
+   },
+   "miletus": {
+    "name": "Mileta",
+    "book": "Tirhkohte 20:17-38",
+    "today": "tûnlai Turkey",
+    "note": "Efesa upate mittui nen inthenna.",
+    "events": [
+     "‘A thisen ngeia a lei kohhran chu vêng rawh u’",
+     "Upaten amah an hmu leh tawh lo vang tih hrein an ṭap"
+    ]
+   },
+   "caesarea": {
+    "name": "Kaisaria",
+    "book": "Tirhkohte 23–26",
+    "today": "tûnlai Israel tuikam",
+    "note": "Kum hnih chhung rambumpui hotute leh lal hmaah Chanchin Ṭha a humhalh.",
+    "events": [
+     "Rambumpui hotu Felika leh Festa hmaah rorêlna",
+     "Lal Agrippa hmaah a inhumhalh",
+     "‘Kaisara hnênah ka rawn dîl’ — Rom lamah"
+    ]
+   },
+   "jerusalem": {
+    "name": "Jerusalem",
+    "book": "Tirhkohte 21–23",
+    "today": "tûnlai Jerusalem",
+    "note": "Tempulah man a ni a, tâng tlangvala a kawng a ṭan.",
+    "events": [
+     "Tempulah mipuiin an man",
+     "Rorêltute hmaah a inhumhalh",
+     "Rom mi a nih angin, vênhimin Kaisaria lamah a tîr"
+    ]
+   },
+   "myra": {
+    "name": "Mira",
+    "book": "Tirhkohte 27:5-6",
+    "today": "tûnlai Demre, Turkey",
+    "note": "Rom pan Aleksandria lawngah an inthlâk.",
+    "events": []
+   },
+   "fairhaven": {
+    "name": "Longtun Ṭha (Krete)",
+    "book": "Tirhkohte 27:8-12",
+    "today": "tûnlai Krete",
+    "note": "Long kal reh tûra Paula vaukhânna chu an ngaihthah.",
+    "events": []
+   },
+   "crete": {
+    "name": "Krete",
+    "book": "Tita",
+    "today": "tûnlai Krete",
+    "note": "A chhuahna hnuah, kohhran remhrat tûra Tita a hnutchhiahna thliarkâr.",
+    "events": [
+     "Khaw tinah upa ruat tûrin Tita a hnutchhia",
+     "Demtu awm lo, rinawm hruaitute a phût",
+     "Tita lehkha a ziak"
+    ]
+   },
+   "malta": {
+    "name": "Melita",
+    "book": "Tirhkohte 27–28",
+    "today": "tûnlai Malta",
+    "note": "Thlipui leh lawng chîm karah, Pathian thutiam a nghet.",
+    "events": [
+     "‘Chhak-hmâr thli’ chuan lawng a tihchhiat, mahse mi 276 an dam kim",
+     "Rûlin a se, mahse a châk lo",
+     "Thliarkâra damlote a tihdam"
+    ]
+   },
+   "syracuse": {
+    "name": "Sirakus",
+    "book": "Tirhkohte 28:12",
+    "today": "tûnlai Sicily, Italy",
+    "note": "Sicily-ah ni thum an awm.",
+    "events": []
+   },
+   "puteoli": {
+    "name": "Putioli",
+    "book": "Tirhkohte 28:13-14",
+    "today": "tûnlai Pozzuoli, Italy",
+    "note": "Italy-ah an thleng a, unau ringtuten an lo hmuak.",
+    "events": []
+   },
+   "rome": {
+    "name": "Rom",
+    "book": "Tirhkohte 28 · Intâwpna Lehkhate · 2 Timothea",
+    "today": "tûnlai Rome, Italy",
+    "note": "Chanchin Ṭha chu ram lianpui laipuiah a thleng ta — tâwpna ni lovin, ṭanna a ni.",
+    "events": [
+     "Kum hnih in innghahtâwin, huaisen takin ram thu a hril",
+     "Hêng aṭangin Intâwpna Lehkhate a ziak (Efesi·Filipi·Kolosa·Filemona)",
+     "A hnuah tâng a lût leh a, 2 Timothea a ziak a, thih a tuar — ‘indona ṭha ka do ta, tlanna ka zo ta’"
+    ]
+   }
+  },
+  "labels": [
+   "Mediterranean Tuipui",
+   "Aegea Tuipui",
+   "Asia Minor",
+   "Makedonia",
+   "Italy"
+  ],
+  "journeys": {
+   "j1": "Khualzin hmasa",
+   "j2": "Khualzin pahnihna",
+   "j3": "Khualzin pathumna",
+   "rome": "Khualzin palina · Rom lam",
+   "j5": "Khualzin pangana · chhuah hnu"
+  }
+ }
+}

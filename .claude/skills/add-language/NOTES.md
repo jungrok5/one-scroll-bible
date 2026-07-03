@@ -32,7 +32,8 @@ auto-derived from `LANGS`; only these **non-derivable decisions** need a home:
   arz (YV #2429 is **Genesis-only** → added as **bridge** from ar/Van Dyck); syl (#1917 = richer-partial, Isaiah etc. absent).
 - **Partial-mode**: done = ff, **ky** (NT+Genesis+Judges richer-partial), **et** (Estonian — ECV/YV 3257, NT 27 books; no OT
   edition exists on YV or eBible). Remaining candidates = tet (NT-only on YV).
-- **OBS-mode** (no Bible + OBS): done = **bal** (Balochi, `fa_gl/Balochi_OBS`). Other no-Bible OBS langs in catalog: haz, shu, qxq, kaa, glk, lrc, mzn, tly, etc.
+- **OBS-mode** (no Bible + OBS): done = **bal** (Balochi, `fa_gl/Balochi_OBS`). Other no-Bible OBS langs in catalog: shu, qxq, kaa, glk, lrc, mzn, tly, etc.
+  - **MAPS permanently excluded for OBS-only langs** (no epistles → no verbatim 2 Peter 1:16 hero verse): `fetch-verse <obs-id> 2PE.1.16` = MISSING. **bal is skipped in every maps batch** — its main-site OBS page stays, but it never gets an `i18n/maps/` pack. (haz, listed here as an OBS *candidate*, actually resolved to a real Persian/Dari-register NT edition on YV and shipped a verbatim maps pack in batch 8 — so "OBS candidate" ≠ auto-exclude; probe 2PE.1.16 first.)
 - **YV language_tag resolution (macrolanguage mismatch)**: YV catalogs some languages under an *individual* tag, not the
   639-1 macro, AND leaves `iso_639_1` null in the config — so `detect-mode <2-letter>` finds nothing even though it exists.
   Real hit: **Estonian `et` → YV tag `ekk`** ("Estonian, Standard"). Fix is built in now: detect-mode has a `YV_TAG` alias

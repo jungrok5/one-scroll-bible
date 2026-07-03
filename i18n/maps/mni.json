@@ -1,0 +1,636 @@
+{
+ "menuName": "Meiteilon",
+ "htmlLang": "mni",
+ "dir": "ltr",
+ "locale": "mni",
+ "brand": "Bāibalbu Scroll Amada",
+ "docTitle": "Map amada Bāibal · Bāibalbu Scroll Amada",
+ "metaDesc": "Ariba Wārepnabagi matam-lambi, Jisugi punsi, amasung Paul-gi khongchatsing achumba map amada inthou — Bāibaldi achumba maphamsingda thokkhibani.",
+ "s": {
+  "kicker": "Bāibalbu Scroll Amada · Map-sing",
+  "title": "Map amada Bāibal",
+  "verse": "“Maramdi eikhoina nakhoida eikhoigi Ibungo Jisu Khristagi pānggalgi amasung mahākna lengbirakpagi maramda hāiba matamda, mioibagi lousingna semjin sājinba wārigi matung inna hāikhide, adubu eikhoidi mahākki matik chāoba adugi sākhisingni.” (2 Peter 1:16)",
+  "purpose": "Bāibaldi lallaba wākhal natte. Masi achumba mapham, tārikh amasung mingsingda khongliba misinggi khonthāngni. Lambising adu map amagi mathakta, matamgi lambida inthou — mapham amada thintou, nattraga ▶ namduna chāng-chāngna khongthou.",
+  "ot_kick": "① Ariba Wārepnaba — matamgi lambida",
+  "ot_h": "Semtibadagi Jerusalemda halakpa faoba",
+  "ot_lead": "Khongchat amakhak natte adubu semtibadagi houba kanbibagi itihāsgi chenba adu: semtiba amasung tāba → ising ichāo amasung Babel → kouba (Abraham) → wāsaktaba lam → Ijip thadoktuna lamhāngda → lamhāng → maithokpa → ningthou leibāk → khaidokpa → mināi oina puthokpa → halakpa.",
+  "je_kick": "② Anouba Wārepnaba — Jisugi punsi",
+  "je_h": "Bethlehemdagi Jerusalem faoba",
+  "je_lead": "Aphaba Pāo mari-na haiba maongda, matamgi lambida Jisugi punsi adu inthou — Bethlehem-da pokpadagi houraga baptize amasung Galilee thougal, Samaria phāraga, Jerusalem-gi kros, hingatpa amasung kāthokpa faoba.",
+  "pa_kick": "③ Anouba Wārepnaba — Paul-gi khongchatsing",
+  "pa_h": "Antioch-tagi mālemgi aroiba faoba — Rome",
+  "pa_lead": "Jerusalem-gi Pentecost-tagi, Aphaba Pāona Judea-gi wangmada karamna sandokkhibage — Asia Minor amasung Europe phāraga leibāk achoubagi thamoi faoba. Khongchat mangāgi maraktagi ama khandou (1·2·3 + Rome-da hi-na chatpa + thadokkhraba tungda) aduga lambida iriba chitthisingga loinana Pāothokpagi thoudoksing inthou.",
+  "foot": "Houphamsing · Maphamsingdi Bāibalgi wārol amasung Bāibalgi khang-nairaba bhugolgi matung inna (kānnaba maphamda houjikki mingga loinana) oi. Torban, turel amasung pātsingdi hāngdokpa bhugolgi data (Natural Earth)-dagi lou-i, laibana onthok-i.",
+  "contact": "Hangba · wākhallon — <a id=\"contact\" class=\"mail\">Email thābiyu</a>",
+  "play": "Chatthok'u",
+  "pause": "Leppu",
+  "today": "Houjik:",
+  "verseCite": "2 Peter 1:16"
+ },
+ "ot": {
+  "places": {
+   "eden": {
+    "name": "Eden (Semtiba · Tāba)",
+    "book": "Genesis 1–3",
+    "today": "houjikki Tigris–Euphrates lamdam",
+    "note": "Yāmna phaba oina semkhraba taibangpan amada, pāp changlaktuna Isor amasung mioibagi marak thugai-i.",
+    "events": [
+     "Numit taruktagi semtiba — “yāmna phaba”",
+     "Mioibabu Isorgi mitamda sembiba",
+     "Tāba, aduga Edendagi tanthokpa",
+     "Ahānba Aphaba Pāogi wāsak — “nupigi dhārā aduna lilgi nakok pop'han'gani”"
+    ]
+   },
+   "noah": {
+    "name": "Ararat (Ising Ichāo)",
+    "book": "Genesis 6–9",
+    "today": "houjikki nongpok thangba Türkiye-gi Ararat ching",
+    "note": "Isorna pāpna thanba taibangpan amabu wāyel-i, adubu imung amagi mapānna hingba adu ngāk-senbi.",
+    "events": [
+     "Amotpana thanba taibangpan ama",
+     "Ising ichāo, aduga Noah-gi hi",
+     "Nongjum-gi warepnaba — “amuk hanna ising ichāona manghanbiroi”"
+    ]
+   },
+   "babel": {
+    "name": "Babel-gi Tower",
+    "book": "Genesis 11",
+    "today": "houjikki Iraq (Shinar-gi tampak)",
+    "note": "Swargada youningba napalgi mai-onda, Isorna makhoigi lon amasung misingbu malemgi mathakta chaithok-i.",
+    "events": [
+     "“Eikhoina sahar ama amasung tower ama sāsi… aduga eikhoigidamak maming ama loujasi”",
+     "Isorna makhoigi lon adu changnahalli",
+     "Misingna malemgi mathakta chaithokle (Shinar — tungda Babylon)"
+    ]
+   },
+   "ur": {
+    "name": "Ur",
+    "book": "Genesis 12",
+    "today": "houjikki khā thangba Iraq",
+    "note": "Bāibalgi kanbibagi wāri asi mi amabu koubadagi houi.",
+    "events": [
+     "Isorna Kaldia-gi Ur-dagi Abram-bu kou-i",
+     "“eina nahākpu achouba jāti ama oihan'gani… nahākki mapānna imung manung pumnamakna bor phangjagani”",
+     "Thājabagi mapānna mahākna mahākki lam thadok-i"
+    ]
+   },
+   "haran": {
+    "name": "Haran",
+    "book": "Genesis 12",
+    "today": "houjikki khā thangba Türkiye",
+    "note": "Lambida, wāsaktaba lam adugi maikeida koubada paokhum piduna.",
+    "events": [
+     "Terah-gi imung Haran-da leire",
+     "Terah sī-i",
+     "Chahi 75 surabada Abram Kanāan-da chatnaba thok-i"
+    ]
+   },
+   "shechem": {
+    "name": "Shechem · Kanāan",
+    "book": "Genesis 12–50",
+    "today": "houjikki Nablus",
+    "note": "Wāsaktaba lamda imung ama lep-i aduga warepnaba adu dhārā mathang mathang chatthari.",
+    "events": [
+     "Kanāan-da changduna, ahānba lātnapham — “nahākki dhārāda eina lam asi pibigani”",
+     "Warepnaba (Genesis 15) · Aishāk · Jākob",
+     "Jākobki machā taranithoi — salai taranithoigi maru"
+    ]
+   },
+   "egypt": {
+    "name": "Ijip (Goshen)",
+    "book": "Genesis 37–50 · Exodus 1",
+    "today": "houjikki Ijipki Nile Delta",
+    "note": "Imung ama achouba jāti ama oirakle — adudagi mināigi jāti ama.",
+    "events": [
+     "Yonkhraba Joseph, Ijip pānba faoba thanggatlak-i",
+     "Chāk tāngba nāmdaba nanaba Jākobki imung apumba kumtharak-i",
+     "Chāokhatlakpa Isrāyelgi jāti adu mināi oihalli"
+    ]
+   },
+   "sinai": {
+    "name": "Sinai Ching",
+    "book": "Exodus · Leviticus",
+    "today": "houjikki Sinai Peninsula",
+    "note": "Ariba Wārepnabagi maru oiba kanbiba — mināising Isorgi masāgi mi oirakle.",
+    "events": [
+     "Awāba potlum tara amasung Lanthengbagi yāo machā",
+     "Angangba Ipāk khāidoktuna makhoina lanthok-i",
+     "Wāyel Yāthang Tara, Wāyel, Isorgi yumsang amasung katchabasing"
+    ]
+   },
+   "kadesh": {
+    "name": "Kadesh (lamhāng)",
+    "book": "Numbers · Deuteronomy",
+    "today": "houjikki Sinai–Negev-gi lamhāng",
+    "note": "Thājadabana dhārā amagi lam adu manghalli — adubu Isor makhoiga leiminni.",
+    "events": [
+     "Lānmi taranithoi — adubu misingna thājaba yāde",
+     "Turphānda chahi 38 — manna, leichil amasung mei",
+     "Moab-gi tampakta, Mousi-gi aroiba pāo (Deuteronomy)"
+    ]
+   },
+   "jericho": {
+    "name": "Jericho",
+    "book": "Joshua",
+    "today": "houjikki Jericho",
+    "note": "Aroibada makhoina wāsaktaba lam adu changduna lou-i.",
+    "events": [
+     "Jordan khāidoktuna misingna lanthok-i",
+     "Jericho-gi kheng-pāl tā-i",
+     "Kanāan maithokpa amasung lam yenthokpa"
+    ]
+   },
+   "shiloh": {
+    "name": "Shiloh (Wāyel Mapusing)",
+    "book": "Wāyel Mapusing · Ruth",
+    "today": "houjikki Khirbet Seilun",
+    "note": "Ningthou leitaba, mi khudingna māgi mityengda chumba tou-i — achumba ningthou ama mathou tā-i.",
+    "events": [
+     "Isorgi yumsang adu Shiloh-da lep-i",
+     "pāp–namphuba–kanbiba haibagi chak-haba (Deborah, Gideon, Samson)",
+     "Ruth — amamba matamda thājaba yāba, David-gi dhārāda"
+    ]
+   },
+   "jerusalem": {
+    "name": "Jerusalem · Punsinba Leibāk",
+    "book": "1–2 Samuel · 1 Ningthousing",
+    "today": "houjikki Jerusalem",
+    "note": "Isrāyelgi maming chāoba matam — aduga lomba nāidaba ningthou amagi wāsak.",
+    "events": [
+     "Ahānba ningthou Saul, adudagi David amasung Goliath",
+     "David-gi warepnaba — “nahākki phambān matam pumnamakki oina” (2 Samuel 7)",
+     "Solomon-na Jerusalemda Sanglen sā-i"
+    ]
+   },
+   "samaria": {
+    "name": "Samaria · Khaidoklaba Leibāk",
+    "book": "Ningthousing · Wā tākthokpasing",
+    "today": "houjikki Sebastia",
+    "note": "Wā tākthokpasingna lāoringeida, leibāk adu khaiduna hanthari.",
+    "events": [
+     "Solomon-gi tungda, Judah amasung Isrāyel oina khaiba",
+     "Amuk amuk lāi murti latpa",
+     "Elijah, Isaiah, Jeremiah-na ‘hallak'u’ haina lao-i — aduga Messiah adu laothok-i"
+    ]
+   },
+   "nineveh": {
+    "name": "Nineveh (Assyria)",
+    "book": "2 Ningthousing 17 · Jonah",
+    "today": "houjikki Iraq-ki Mosul",
+    "note": "Cheksin khuding indaduna, awāng thangba adu hanna tā-i.",
+    "events": [
+     "Assyria-gi ningthamlen Nineveh",
+     "Awāng-thangba leibāk adu Assyria-da tā-i (B.C. 722)",
+     "Jonah-bu Nineveh-da thā-i"
+    ]
+   },
+   "babylon": {
+    "name": "Babylon",
+    "book": "2 Ningthousing 25 · Daniel · Ezekiel",
+    "today": "houjikki Iraq-ki Hillah",
+    "note": "Khwāidagi amamba ahing — adubu amuk semgatpagi wāsak adu leihouri.",
+    "events": [
+     "Jerusalem tā-i, Sanglen mei chāk-i (B.C. 586)",
+     "Judah-bu Babylon-da puthok-i",
+     "Daniel amasung Ezekiel — mināi oiribada thājaba amasung uhanbisings"
+    ]
+   },
+   "susa": {
+    "name": "Susa (Persia)",
+    "book": "Esther · Nehemiah",
+    "today": "houjikki Iran-gi Shush",
+    "note": "Lāi ningdaba leibāk achouba amagi thamoidasu, Isorna mahākki misingbu ngāk-senbi.",
+    "events": [
+     "Persia-na Babylon-bu maithi-i",
+     "Esther-na Jihudising adu mangtaktagi kanbi",
+     "Nehemiah-na ningthou-gi māngda haijaraga thā-i"
+    ]
+   },
+   "return": {
+    "name": "Jerusalemda Halakpa",
+    "book": "Ezra · Nehemiah · Malachi",
+    "today": "houjikki Jerusalem",
+    "note": "Makhoi halaklaga amuk sā-i — adubu ningthou amata lāktri. Makhoina Messiah adu ngaii.",
+    "events": [
+     "Cyrus-gi yāthangna halakpa tāram ahum (Zerubbabel 538 · Ezra 458 · Nehemiah 444)",
+     "Sanglen amuk sā-i aduga Jerusalemgi kheng-pāl amuk semgat-i",
+     "Malachi — Ariba Wārepnaba loi-i: “eina eigi pāo puba mi thāri”"
+    ]
+   }
+  },
+  "labels": [
+   "Mediterranean Ipāk",
+   "Mesopotamia",
+   "Arabia-gi Turphān",
+   "Ijip"
+  ],
+  "journeys": {
+   "flow": "Kanbibagi wāri"
+  }
+ },
+ "jesus": {
+  "places": {
+   "bethlehem": {
+    "name": "Bethlehem",
+    "book": "Mathai 1–2 · Luka 2",
+    "today": "houjikki Bethlehem",
+    "note": "Wāsaktaba Messiah adu David-gi sahar-da lāk-i — Wāhei adu hakchang oirakle.",
+    "events": [
+     "David-gi sahar Bethlehem-da pok-i",
+     "Swargadutsingna yāosenbasingda pāo adu laothok-i",
+     "Lousing heiba misingna khurumnaba lāk-i"
+    ]
+   },
+   "nazareth": {
+    "name": "Nazareth",
+    "book": "Luka 2 · 4",
+    "today": "houjikki Nazareth",
+    "note": "Isorna nemba sahar amada mi ama oina chāokhat-i.",
+    "events": [
+     "U-shu-gi yumda chāokhat-i",
+     "Chahi taranithoida, Sanglenda hangba amasung paokhum piba",
+     "Tungda mahākki sahar-gi synagogue-da yātte"
+    ]
+   },
+   "jordan": {
+    "name": "Jordan Turel",
+    "book": "Mathai 3–4",
+    "today": "houjikki makha thangba Jordan",
+    "note": "Mahākki miyāmgi thougal houi — swargana mahākpu Machānipā oina utpi.",
+    "events": [
+     "John-na baptize tou-i",
+     "Thawāi adu khunu amagumna kumtharak-i — “Masi eigi nungsiraba Machānipāni”",
+     "Lamhāngda Sātan-gi themdokpa ahum adu maithi-i"
+    ]
+   },
+   "cana": {
+    "name": "Cana",
+    "book": "Johon 2",
+    "today": "houjikki Kafr Kanna",
+    "note": "Mahākki ahānba khudam aduda mahākki matik mangāl adu utpi.",
+    "events": [
+     "Luhongba amada leiba miphamnaba ama",
+     "Ising adu anggur mahi oihalli — mahākki ahānba khudam",
+     "Mahākki tung-inbasingna mahākpu thāje"
+    ]
+   },
+   "sychar": {
+    "name": "Sychar (Samaria)",
+    "book": "Johon 2–4",
+    "today": "houjikki Nablus-ki nakalda",
+    "note": "Ahouba thougalgi lambi — Jerusalem phāraga yānthiba Samaria faoba.",
+    "events": [
+     "Mahākna Jerusalem-gi Sanglen adu sengdok-i",
+     "Ahingda, Nicodemus — “Nahāk amuk hanna pokpa tāi”",
+     "Samaria-gi nupi amagidamak hingba ising"
+    ]
+   },
+   "capernaum": {
+    "name": "Capernaum",
+    "book": "Mathai 4–13 · Mark 1–4",
+    "today": "houjikki Galilee pāt torbanda",
+    "note": "Galilee thougalgi yumpham — kouba, tāmbiba amasung yekpa pumnamak mapham asida unare.",
+    "events": [
+     "Nga phāba misingbu kouraga mapham asida leire",
+     "Ching-gi mathakki pāo — “Thawāida lāiraba makhoidi yāiphabani”",
+     "Ningthou leibākki pāndam wāri — aduga hengatlakpa yekpa"
+    ]
+   },
+   "galilee": {
+    "name": "Galilee Pāt",
+    "book": "Mark 4 · 6 · Johon 6",
+    "today": "houjikki Kinneret pāt",
+    "note": "Prakritigi mathakta pānggalna mahākna kanā oiribage haibadu utpi.",
+    "events": [
+     "“Ingthaba oiyu, tappu” — mahākna nungsit-nong adu tappi",
+     "Tal mangā amasung nga ani-na mi lising mangā chāhalli",
+     "Ising mathakta khong-i"
+    ]
+   },
+   "caesarea_p": {
+    "name": "Caesarea Philippi",
+    "book": "Mathai 16–17",
+    "today": "houjikki Banias",
+    "note": "Mahāk Khristani haibadu tung-inbasingna khang-i, aduga krosgi lambi hāng-i.",
+    "events": [
+     "Peter-gi haidokpa — “Nahāk Khrista, ahingba Isorgi Machānipāni”",
+     "Mahākna mahākki siba amasung hingatpa adu hanna laothok-i",
+     "Ching-gi mathakta matik mangālga loinana onthok-i"
+    ]
+   },
+   "jericho": {
+    "name": "Jericho",
+    "book": "Luka 18–19",
+    "today": "houjikki Jericho",
+    "note": "Jerusalem-da kāba lambida, mahākna mangkhrabasingbu thi.",
+    "events": [
+     "Mit tāngba Bartimaeus-bu uhanbi",
+     "Kanggat khomba Zacchaeus-bu kou-i",
+     "“Mioibagi Machānipā adu mangkhrabasingbu thiba amasung kanbinaba lākpani”"
+    ]
+   },
+   "bethany": {
+    "name": "Bethany",
+    "book": "Johon 11–12",
+    "today": "houjikki al-Eizariya",
+    "note": "Mahākki aroiba chayolgi mamāngda mahākna sibagi mathakta mapānggal utpi.",
+    "events": [
+     "Mongphamdagi Lazarus-bu hinggat-hanbi — “Ei hingatpa amasung punsini”",
+     "Mary-na phumnabagidamak mahākta thao teibi",
+     "Khudam asina mahākpu hatnabagi wārol adu henna kanhalli"
+    ]
+   },
+   "jerusalem": {
+    "name": "Jerusalem",
+    "book": "Mathai 21–28 · Luka 24 · Pāothokpa 1",
+    "today": "houjikki Jerusalem",
+    "note": "Bāibal apumbana takliba aroiba mapham — kros, hingatpa, kāthokpa.",
+    "events": [
+     "Māyokna changba; mahākna Sanglengi table adu amuk onthok-i",
+     "Aroiba Chākkhāramda mahākna tung-inbasinggi khong hamdok-i",
+     "Mahāk krosta sī-i",
+     "Numit ahumsuba numitta hingatlaga, adudagi kāthok-i"
+    ]
+   }
+  },
+  "labels": [
+   "Mediterranean Ipāk",
+   "Galilee",
+   "Samaria",
+   "Judea",
+   "Decapolis",
+   "Perea",
+   "Asiba Ipāk"
+  ],
+  "journeys": {
+   "life": "Jisugi lambi"
+  }
+ },
+ "paul": {
+  "places": {
+   "antioch": {
+    "name": "Antioch",
+    "book": "Pāothokpa 13 · 15",
+    "today": "houjikki Türkiye-gi Antakya",
+    "note": "Jentilgi thougal houba amasung halakpa thāba sang-lup.",
+    "events": [
+     "Haijaringeida Thawāi-na Barnabas amasung Saul-bu khaidok-i",
+     "thājabasingbu ahānba oina ‘Christian’ haina koukhiba sang-lup",
+     "Ahānba, anisuba amasung ahumsuba khongchatki houpham"
+    ]
+   },
+   "seleucia": {
+    "name": "Seleucia",
+    "book": "Pāothokpa 13:4",
+    "today": "houjikki Türkiye",
+    "note": "Antioch-gi port — makhoina Cyprus-ta hi-na chatnaba thok-i.",
+    "events": []
+   },
+   "salamis": {
+    "name": "Salamis (Cyprus)",
+    "book": "Pāothokpa 13:5",
+    "today": "houjikki Cyprus",
+    "note": "Cyprus-ki ahānba lep-pham — synagogue-sing-da pāo sandokpa.",
+    "events": []
+   },
+   "paphos": {
+    "name": "Paphos",
+    "book": "Pāothokpa 13:6-12",
+    "today": "houjikki Cyprus",
+    "note": "Aphaba Pāobu yeknabasinggi māyokta pānggal utpi.",
+    "events": [
+     "Yaibirokpa Elymas-bu mit tānghalli",
+     "Leingākpa Sergius Paulus-na thāje",
+     "Mapham asidagi ‘Paul’-na luchingba houi"
+    ]
+   },
+   "perga": {
+    "name": "Perga",
+    "book": "Pāothokpa 13:13",
+    "today": "houjikki Türkiye-gi Antalya",
+    "note": "Pamphylia-gi port ama — mapham asida John Mark hanjare.",
+    "events": []
+   },
+   "pantioch": {
+    "name": "Pisidia-gi Antioch",
+    "book": "Pāothokpa 13:14-50",
+    "today": "houjikki Türkiye-gi Yalvaç",
+    "note": "Aphaba Pāo Jentilsinggi maikeida hāngdok-i.",
+    "events": [
+     "Synagogue-da kanbibagi itihāsgi sāngba pāo ama",
+     "Jentil kayāna harāoduna wāhei adu lou-i",
+     "Yeknabana tanthok-i"
+    ]
+   },
+   "iconium": {
+    "name": "Iconium",
+    "book": "Pāothokpa 14:1-7",
+    "today": "houjikki Türkiye-gi Konya",
+    "note": "Mi kayāna thāje, adubu otpi neibana makhoibu mamāngda chatthahalli.",
+    "events": []
+   },
+   "lystra": {
+    "name": "Lystra",
+    "book": "Pāothokpa 14:8-20",
+    "today": "houjikki Türkiye",
+    "note": "Lāi ama oina thāgatlaga, adudagi nungna thā-i.",
+    "events": [
+     "Pokpadagi khong nāba mi amabu phahanbi",
+     "Miyāmna makhoibu lāi oina thāduna katchaba hotnei",
+     "Nungna thāraga sī-i haina thanamlabada, mahāk hougatlak-i"
+    ]
+   },
+   "derbe": {
+    "name": "Derbe",
+    "book": "Pāothokpa 14:20-21",
+    "today": "houjikki Türkiye",
+    "note": "Tung-inba kayā sem-i; sang-lupsingbu pānggal hāp-hannaba makhoina amuk hanjare.",
+    "events": []
+   },
+   "troas": {
+    "name": "Troas",
+    "book": "Pāothokpa 16:8-10",
+    "today": "houjikki Türkiye",
+    "note": "Aphaba Pāo ahānba oina Europe-ki maikeida chatpa onthokpa mapham.",
+    "events": [
+     "Macedonia-gi mi amagi uhanbi",
+     "“Lāktuna eikhoibu mateng pāngbiyu”",
+     "Makhoina khudakta Europe-ta lanthok-i"
+    ]
+   },
+   "philippi": {
+    "name": "Philippi",
+    "book": "Pāothokpa 16 · Philippi",
+    "today": "houjikki awāng thangba Greece",
+    "note": "Europe-gi ahānba sang-lup — keisumsangdasu Aphaba Pāo māyokna maithi-i.",
+    "events": [
+     "Angouba phi yonba nupi Lydia-na thāje",
+     "Maithoi yengba mināi nupimacha amabu ningtamhalli",
+     "Ahing nongyaida isei, yuhār haba, keisumsang ngākpagi imung kanbi"
+    ]
+   },
+   "thess": {
+    "name": "Thessalonica",
+    "book": "Pāothokpa 17 · 1–2 Thessalonika",
+    "today": "houjikki Greece-ki Thessaloniki",
+    "note": "Wāhei-na sahar adu nikhalli aduga yekpa adu wangkhatlak-i.",
+    "events": [
+     "Sabbath ahum synagogue-da wārol tou-i",
+     "“taibangpan onthok-onsin toukhrabasing”",
+     "Makhoina ahingda thoklammi"
+    ]
+   },
+   "berea": {
+    "name": "Berea",
+    "book": "Pāothokpa 17:10-15",
+    "today": "houjikki Greece-ki Veria",
+    "note": "wāhei adu makhoi masāna cheksinkhiba ‘maminglaba’ misingsing.",
+    "events": [
+     "Makhoina wāhei adu pukning changna lou-i",
+     "Madu chānglabra haina numit khuding sāstra adu cheksin-i",
+     "Mi kayāna thājarak-i"
+    ]
+   },
+   "athens": {
+    "name": "Athens",
+    "book": "Pāothokpa 17:16-34",
+    "today": "houjikki Greece-ki Athens",
+    "note": "Lousing heibasinggi sahar-da mahākna ‘khang-houdaba lāi’ adu laothok-i.",
+    "events": [
+     "Lāi murtina thanba sahar amana thamoi wāhalli",
+     "Areopagus-ta Semtaba Mapu amasung hingatpagi maramda pāo sandok-i",
+     "Nokthok-i, adubu mi kharāna thāje"
+    ]
+   },
+   "corinth": {
+    "name": "Corinth",
+    "book": "Pāothokpa 18 · 1–2 Korinth",
+    "today": "houjikki Greece",
+    "note": "Mahāk chahi ama makai leiduna, phattaba thanba sahar amada sang-lup ama lin-i.",
+    "events": [
+     "Aquila amasung Priscilla-ga loinana tent sā-i",
+     "“Kiganu… maramdi ei nahākka loinari”",
+     "Korinth-ki mi kayāna thājaraga baptize lou-i"
+    ]
+   },
+   "ephesus": {
+    "name": "Ephesus",
+    "book": "Pāothokpa 19 · Ephesus",
+    "today": "houjikki Türkiye-gi Selçuk",
+    "note": "Ahumsuba khongchatki thamoi — wāhei-na Asia sinba thungna sandok-i.",
+    "events": [
+     "Tyrannus-gi hall-da chahi ani numit khuding tāmbi",
+     "Yaibirokpagi lairiksing mei chāk-i; pānggalgi thabaksing",
+     "Lupā-shu Demetrius-na irāng ama houdok-i"
+    ]
+   },
+   "miletus": {
+    "name": "Miletus",
+    "book": "Pāothokpa 20:17-38",
+    "today": "houjikki Türkiye",
+    "note": "Ephesus-ki ahal-lamansingda pina thāduna khainaba.",
+    "events": [
+     "“mahāk masāgi ee-na leiraba sang-lup adu senbiyu”",
+     "Ahal-lamansingna mahākpu amuk uraroi haiba khangduna kap-i"
+    ]
+   },
+   "caesarea": {
+    "name": "Caesarea",
+    "book": "Pāothokpa 23–26",
+    "today": "houjikki Israel-gi torban",
+    "note": "Chahi ani leingākpasing amasung ningthou ama-gi māngda mahākna Aphaba Pāo ngākchei.",
+    "events": [
+     "Leingākpa Felix amasung Festus-ki māngda wāyenba",
+     "Ningthou Agrippa-gi māngda mahākki ngākchaba",
+     "“Ei Kaisarda wākatchari” — Rome-da"
+    ]
+   },
+   "jerusalem": {
+    "name": "Jerusalem",
+    "book": "Pāothokpa 21–23",
+    "today": "houjikki Jerusalem",
+    "note": "Sanglenda pham-i, mahākki phātpa oibagi lambi houi.",
+    "events": [
+     "Sanglenda miyāmna phā-i",
+     "Sanglup-ki māngda masāna ngākchei",
+     "Rome-gi mi ama oina, ngāk-senduna Caesarea-da thā-i"
+    ]
+   },
+   "myra": {
+    "name": "Myra",
+    "book": "Pāothokpa 27:5-6",
+    "today": "houjikki Türkiye-gi Demre",
+    "note": "Makhoina Rome-da chatkadaba Alexandria-gi hi amada onsille.",
+    "events": []
+   },
+   "fairhaven": {
+    "name": "Fair Havens (Crete)",
+    "book": "Pāothokpa 27:8-12",
+    "today": "houjikki Crete",
+    "note": "Hi lāndaba haina Paul-gi cheksin adu induna leire.",
+    "events": []
+   },
+   "crete": {
+    "name": "Crete",
+    "book": "Titus",
+    "today": "houjikki Crete",
+    "note": "Mahāk thadokkhraba tungda, sang-lupsing sem-nanaba Titus-bu thanamkhiba ithat-lam.",
+    "events": [
+     "Sahar khudingda ahal-laman happinaba Titus-bu thanamli",
+     "maral leitaba, thājaba yāba luchingbasingbu kou-i",
+     "Titus-ta chitthi i-i"
+    ]
+   },
+   "malta": {
+    "name": "Malta",
+    "book": "Pāothokpa 27–28",
+    "today": "houjikki Malta",
+    "note": "Nungsit-nong amasung hi thugaibagi mapānna, Isorgi wāsak adu chetli.",
+    "events": [
+     "‘nongpok-awāng nungsit’-na hi adu thugai-i, adubu mi 276 pumnamak hingle",
+     "Lil amana chik-i, adubu mahākta amāng-ataba leite",
+     "Ithat-lamgi anābasingbu phahanbi"
+    ]
+   },
+   "syracuse": {
+    "name": "Syracuse",
+    "book": "Pāothokpa 28:12",
+    "today": "houjikki Italy-gi Sicily",
+    "note": "Makhoina Sicily-da numit ahum leire.",
+    "events": []
+   },
+   "puteoli": {
+    "name": "Puteoli",
+    "book": "Pāothokpa 28:13-14",
+    "today": "houjikki Italy-gi Pozzuoli",
+    "note": "Makhoina Italy-da thungduna thājaba michangsingga unare.",
+    "events": []
+   },
+   "rome": {
+    "name": "Rome",
+    "book": "Pāothokpa 28 · Keisumsanggi Chitthising · 2 Timothy",
+    "today": "houjikki Italy-gi Rome",
+    "note": "Aroibada Aphaba Pāona leibāk achouba adugi thamoi youre — aroiba natte adubu houba amani.",
+    "events": [
+     "Chahi ani yumda phātladuna, thouna phana ningthou leibāk adu laothok-i",
+     "Mapham asidagi mahākna Keisumsanggi Chitthising i-i (Ephesus·Philippi·Kolosa·Philemon)",
+     "Tungda amuk phātladuna, 2 Timothy i-i aduga thawāi katchei — “Ei aphaba lānda sokle, chenba lambi adu loisinkhre”"
+    ]
+   }
+  },
+  "labels": [
+   "Mediterranean Ipāk",
+   "Aegean Ipāk",
+   "Asia Minor",
+   "Macedonia",
+   "Italy"
+  ],
+  "journeys": {
+   "j1": "Ahānba khongchat",
+   "j2": "Anisuba khongchat",
+   "j3": "Ahumsuba khongchat",
+   "rome": "Marisuba khongchat · Rome faoba",
+   "j5": "Mangāsuba khongchat · thadokkhraba matungda"
+  }
+ }
+}

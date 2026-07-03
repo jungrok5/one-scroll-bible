@@ -1,0 +1,636 @@
+{
+ "menuName": "Kɪsukuma",
+ "htmlLang": "suk",
+ "dir": "ltr",
+ "locale": "suk-TZ",
+ "brand": "Bibilia mu Kuzunguja Kumo",
+ "docTitle": "Bibilia ku Ramani · Bibilia mu Kuzunguja Kumo",
+ "metaDesc": "Tongelaga ikanza lya Ilagane lya Kale, bupanga bo ng'wa Yesu, na maduluko ga ng'wa Paulo ha ramani ya lyoli — Bibilia yaboneka mu mahantu ga lyoli.",
+ "s": {
+  "kicker": "Bibilia mu Kuzunguja Kumo · Ramani",
+  "title": "Bibilia ku Ramani",
+  "verse": "“Nguno aho twamulangaga ī mihayo ya būdūla bo ng'wa Seeba wise Yesu Kilisito nī ya kūshoka kwakwe, twalī tūtalondeelaga ngano ja nyasala sala, bise benekīlī gete tūlī bambona bago a magaka gakwe genayo.” (2 Petelo 1:16)",
+  "purpose": "Bibilia iti buhabi. Ili ng'wandiko gwa banhu abo bagenda ha mahantu ga lyoli, shiku ja lyoli, na mina ga lyoli. Tongelaga nzila jenijo ha ramani, mu nzila ya ikanza — dindaga hantu, au dindaga ▶ kugenda mo mhayo na mhayo.",
+  "ot_kick": "① Ilagane lya Kale — mu ikanza",
+  "ot_h": "Kufuma kuseema kushisha kushoka Yelusalemu",
+  "ot_lead": "Iti luduluko lumo dūhū aliyo guli kushikiliija kwa buchaaji bo bupiji kufuma kuseema: kuseema na kugwa → mafuliko na Babeli → kwitanwa (Abulahamu) → si ilagene → Kufuma Misili → buchondi → kuhema → butemi → kwabanyiwa → buchaaji → kushoka.",
+  "je_kick": "② Ilagane Lipya — bupanga bo ng'wa Yesu",
+  "je_h": "Kufuma Betelehemu kushisha Yelusalemu",
+  "je_lead": "Tongelaga bupanga bo ng'wa Yesu giti umo Ng'hulu Jawiza jikulomeela, mu nzila — kufuma kubyalwa kwakwe Betelehemu, kubita mu kubatijiwa na butumami bo Galilaya, kubita Samalia, kushisha nsalaba, kuzuuka na kuja igulu Yelusalemu.",
+  "pa_kick": "③ Ilagane Lipya — maduluko ga ng'wa Paulo",
+  "pa_h": "Kufuma Antiokia kushisha ngelelo ya si — Loma",
+  "pa_lead": "Kufuma Pentekoste ya Yelusalemu, ginehe u Ng'hulu Jawiza jikuduluka kubita Buyudaya — kubita Asia Ndoo na Ulaya kushisha moyo gwa butemi butaale. Solaga luduluko lumo mu ntano (lwa kwandya · lwa kabili · lwa katatu + luduluko lwa kuja Loma + hanyuma ya kulekwa) na utongele mihayo ya Shītwa sha Batūng'wa hamo na malete ganandikwa mu nzila.",
+  "foot": "Nzwilo · A mahantu gakutongela mihayo ya Bibilia na jiografia ya Bibilia iyo imanikile (hamo na mina ga buno aha gakukombelija). A mpelo ja nyanza, jiji, na nyanza jandolwa kufuma ku data ya jiografia ilekejilwe (Natural Earth), yipeejiwe.",
+  "contact": "Mawuzo · maganiko — <a id=\"contact\" class=\"mail\">Tutumile baluwa</a>",
+  "play": "Genda",
+  "pause": "Humula",
+  "today": "Lelo:",
+  "verseCite": "2 Petelo 1:16"
+ },
+ "ot": {
+  "places": {
+   "eden": {
+    "name": "Edeni (Kuseema · Kugwa)",
+    "book": "wandījo 1–3",
+    "today": "kihamo kya Tigirisi–Frati lelo",
+    "note": "Mu si iyo yaseemwa yawiza no, u shibi gwingila na gukudumula u buliyani bo gati ya Mulungu na banhu.",
+    "events": [
+     "Kuseema mu shiku sita — “yawiza no”",
+     "Munhu kuseemwa giti shikolelo sha ng'wa Mulungu",
+     "Kugwa, na kwingiijiwa kufuma Edeni",
+     "Ilagane lya kwandya lya Ng'hulu Jawiza — “u myalwa wa nkima akutobagula ntwe gwa nzoka”"
+    ]
+   },
+   "noah": {
+    "name": "Ararati (Mafuliko)",
+    "book": "wandījo 6–9",
+    "today": "Lugulu lwa Ararati, Buturuki bo ng'walilo lelo",
+    "note": "U Mulungu akulamula si iyijwie shibi, aliyo akulanhija bupanga ku kaya yimo.",
+    "events": [
+     "Si iyijwie bubipi",
+     "Mafuliko, na safina ya ng'wa Nuhu",
+     "Ilagane lya nkondo gwa mbula — “gutalabiza hangi mafuliko ga kubiipya si”"
+    ]
+   },
+   "babel": {
+    "name": "Nzenga gwa Babeli",
+    "book": "wandījo 11",
+    "today": "Iraki lelo (luwanda lwa Shinari)",
+    "note": "Kubukilija u kwibona kutaale uko kukoba kushika kwigulu, u Mulungu akulundubya lulimi lwabo na kubasambaza banhu mu si yose.",
+    "events": [
+     "“Tuzenge ng'waniki na nzenga ntaale… twitogele lina lise”",
+     "U Mulungu akulundubya lulimi lwabo",
+     "Banhu bakusambala mu si yose (Shinari — hanyuma Babuloni)"
+    ]
+   },
+   "ur": {
+    "name": "Uri",
+    "book": "wandījo 12",
+    "today": "Iraki bo kushiku lelo",
+    "note": "U ng'hulu ya bupiji ya Bibilia yikwandya na kwitanwa kwa munhu ūmò.",
+    "events": [
+     "U Mulungu akuntana Abulamu kufuma Uri wa Bakaladayo",
+     "“Nakukwita ubize ihanga itaale… a banhu bose bakwilukilwa mbango kulwa nguno yako”",
+     "Ku kuzunya akuleka isi yakwe"
+    ]
+   },
+   "haran": {
+    "name": "Halani",
+    "book": "wandījo 12",
+    "today": "Buturuki bo kushiku lelo",
+    "note": "Mu nzila, akwitawula u kwitanwa kuja si ilagene.",
+    "events": [
+     "Kaya ya ng'wa Tela yikwikala Halani",
+     "Tela akucha",
+     "Abulamu akwandya lugendo kuja Kanani ali na myaka 75"
+    ]
+   },
+   "shechem": {
+    "name": "Shekemu · Kanani",
+    "book": "wandījo 12–50",
+    "today": "Nabulus lelo",
+    "note": "Mu si ilagene kaya yikwimijiwa na u ilagane likushokela ku ng'haya na ng'haya.",
+    "events": [
+     "Kwingila Kanani, shitambililo sha kwandya — “myalwa wako nakuninha isi yiyi”",
+     "Ilagane (wandījo 15) · Isaka · Yakobo",
+     "Baana 12 ba ng'wa Yakobo — nzizo gwa shikolo 12"
+    ]
+   },
+   "egypt": {
+    "name": "Misili (Gosheni)",
+    "book": "wandījo 37–50 · Kūfuma 1",
+    "today": "Delta ya Nile, Misili lelo",
+    "note": "Kaya yikubiza ihanga itaale — hama ihanga lya basese.",
+    "events": [
+     "Yusufu, wagulijiwa, akubiza ntemi Misili",
+     "Kaya yose ya ng'wa Yakobo yikwiza Misili kupela nzala",
+     "Ihanga lya Isilaeli likukula na likubiza busese"
+    ]
+   },
+   "sinai": {
+    "name": "Lugulu lwa Sinai",
+    "book": "Kūfuma · Bagabīji",
+    "today": "isi ya Sinai lelo",
+    "note": "U bupiji butaale bo Ilagane lya Kale — basese bakubiza banhu ba ng'wa Mulungu.",
+    "events": [
+     "Mapigo 10 na ng'holo ya Pasaka",
+     "Nyanza Ntūnduuli gukwabanyiwa na bakukila",
+     "Shilagilo 10, i Shilagilo, ihema na shitambo"
+    ]
+   },
+   "kadesh": {
+    "name": "Kadeshi (buchondi)",
+    "book": "Kūbala · Kūshokeela",
+    "today": "buchondi bo Sinai–Negebu lelo",
+    "note": "U kutazunya kukutwala ng'haya kubela isi — aliyo u Mulungu akikala habipi nabo.",
+    "events": [
+     "Bapelezi 12 — aliyo a banhu bakulema kuzunya",
+     "Myaka 38 mu buchondi — mana, liwingu na moto",
+     "Ha luwanda lwa Moabu, nhungwa ya bukalikijo ya ng'wa Musa (Kūshokeela)"
+    ]
+   },
+   "jericho": {
+    "name": "Yeliko",
+    "book": "Yoshwa",
+    "today": "Yeliko lelo",
+    "note": "Ku bukalikijo bakwingila na bakusola si ilagene.",
+    "events": [
+     "Yolodani gukwabanyiwa na banhu bakukila",
+     "Shibumbililo sha Yeliko shikugwa",
+     "Kuhema Kanani na kwabanya isi"
+    ]
+   },
+   "shiloh": {
+    "name": "Shilo (Balamuji)",
+    "book": "Balamuji · Luuzi",
+    "today": "Khirbet Seilun lelo",
+    "note": "Atina ntemi, buli ng'wene akiitaga giti walitogelilwe — ntemi wa ng'hana akutaagwa.",
+    "events": [
+     "Ihema likwimijiwa Shilo",
+     "Muzunguko gwa shibi–makoye–bupiji (Debola, Gideoni, Samsoni)",
+     "Luuzi — bukini mu shiku ja giiti, mu ng'haya ya Daudi"
+    ]
+   },
+   "jerusalem": {
+    "name": "Yelusalemu · Butemi bumo",
+    "book": "1–2 Sang'weli · 1 Batemi",
+    "today": "Yelusalemu lelo",
+    "note": "Ikanza itaale lya Isilaeli — na ilagane lya ntemi wa welelo bose.",
+    "events": [
+     "Sauli ntemi wa kwandya, hama Daudi na Goliati",
+     "Ilagane lya ng'wa Daudi — “lisumbi lyako welelo bose” (2 Sang'weli 7)",
+     "Solomoni akuzenga hekalu mu Yelusalemu"
+    ]
+   },
+   "samaria": {
+    "name": "Samalia · Butemi bwabanyiwa",
+    "book": "Batemi · Bahangi",
+    "today": "Sebastia lelo",
+    "note": "U butemi bukwabanyiwa na bukunyiha aho bahangi bakulila.",
+    "events": [
+     "Hanyuma ya ng'wa Solomoni, kwabanyiwa kubiza Yuda na Isilaeli",
+     "Kukumilija shihango kuyaga",
+     "Eliya, Isaya, Yelemia bakulila ‘galukagi’ — na bakuhanga Masiya"
+    ]
+   },
+   "nineveh": {
+    "name": "Ninawi (Ashuli)",
+    "book": "2 Batemi 17 · Yona",
+    "today": "Mosul, Iraki lelo",
+    "note": "Kuleka buli buhugulo, u butemi bo kunfunha bukugwa hakwandya.",
+    "events": [
+     "Ninawi, ng'waniki ntaale gwa Ashuli",
+     "Butemi bo kunfunha bukugwa kuli Ashuli (B.C. 722)",
+     "Yona akutumwa Ninawi"
+    ]
+   },
+   "babylon": {
+    "name": "Babuloni",
+    "book": "2 Batemi 25 · Danyeli · Ezekia",
+    "today": "Hila, Iraki lelo",
+    "note": "U bwilo bo giiti no — aliyo u ilagane lya kushokeela likushinga.",
+    "events": [
+     "Yelusalemu gukugwa, hekalu likulimba (B.C. 586)",
+     "Yuda bukutwalwa Babuloni",
+     "Danyeli na Ezekia — kuzunya na shibonelo mu buchaaji"
+    ]
+   },
+   "susa": {
+    "name": "Susa (Pelusia)",
+    "book": "Esita · Nehemia",
+    "today": "Shush, Irani lelo",
+    "note": "Nūūlū ha moyo gwa butemi bo bapagani, u Mulungu akubalanhija banhu bakwe.",
+    "events": [
+     "Pelusia bukuhema Babuloni",
+     "Esita akubapija a Bayudaya kufuma kubulagwa",
+     "Nehemia akulomba ha butongi bo ntemi na akutumwa"
+    ]
+   },
+   "return": {
+    "name": "Kushoka Yelusalemu",
+    "book": "Ezila · Nehemia · Malaki",
+    "today": "Yelusalemu lelo",
+    "note": "Bakushoka na kuzenga hangi — aliyo atiho ntemi uyo wiza. Bakwisagilwa Masiya.",
+    "events": [
+     "Maduluko gatatu ga kushoka ku luhugu lwa ng'wa Kolesi (Zelubabeli 538 · Ezila 458 · Nehemia 444)",
+     "Hekalu likuzengwa hangi na shibumbililo sha Yelusalemu shikubeejiwa",
+     "Malaki — Ilagane lya Kale likumala: “nakwitūma inhungwa yane”"
+    ]
+   }
+  },
+  "labels": [
+   "Nyanza Ntaale",
+   "Mesopotamia",
+   "Buchondi bo Buarabu",
+   "Misili"
+  ],
+  "journeys": {
+   "flow": "Ng'hulu ya bupiji"
+  }
+ },
+ "jesus": {
+  "places": {
+   "bethlehem": {
+    "name": "Betelehemu",
+    "book": "Matayo 1–2 · Luka 2",
+    "today": "Betelehemu lelo",
+    "note": "U Masiya uyo walaganijiwa akiza mu ng'waniki gwa ng'wa Daudi — u Mhayo wabiza munhu.",
+    "events": [
+     "Kubyalwa Betelehemu, ng'waniki gwa ng'wa Daudi",
+     "Bamalaika bakukaaniija ng'hulu kuli badimi",
+     "Banyabusala bakwiza kunkumya"
+    ]
+   },
+   "nazareth": {
+    "name": "Nazaleti",
+    "book": "Luka 2 · 4",
+    "today": "Nazaleti lelo",
+    "note": "U Mulungu akukula giti munhu mu ng'waniki gudoo.",
+    "events": [
+     "Kukulila mu numba ya nsongaji wa mbao",
+     "Ali na myaka 12, akuuja na kushosha mu hekalu",
+     "Hanyuma akulemwa mu sinagogi ya ng'waniki gwakwe"
+    ]
+   },
+   "jordan": {
+    "name": "Lwiji lwa Yolodani",
+    "book": "Matayo 3–4",
+    "today": "Yolodani bo hasi lelo",
+    "note": "U butumami bwakwe bo hape bukwandya — igulu likunkomelija giti Ng'wana.",
+    "events": [
+     "Kubatijiwa na Yohana",
+     "U Moyo akwika giti njiwa — “Uyu Ng'wana wane ntogwa”",
+     "Akuhema magelo gatatu ga ng'wa Shetani mu buchondi"
+    ]
+   },
+   "cana": {
+    "name": "Kana",
+    "book": "Yohana 2",
+    "today": "Kafr Kanna lelo",
+    "note": "Mu shikolwa shakwe sha kwandya akubonelaja ikujo lyakwe.",
+    "events": [
+     "Ntumilwa ha ng'wenzo",
+     "Minzi gakugaluka kubiza divai — shikolwa shakwe sha kwandya",
+     "Bafundwa bakwe bakunzunya"
+    ]
+   },
+   "sychar": {
+    "name": "Sikari (Samalia)",
+    "book": "Yohana 2–4",
+    "today": "habipi na Nabulus lelo",
+    "note": "Nzila ya butumami bo kwandya — kubita Yelusalemu kushisha Samalia iyo banhu bakayibela.",
+    "events": [
+     "Akoja hekalu mu Yelusalemu",
+     "Bujiku, Nikodemo — “Wigeleelilwe kubyalwa bupya”",
+     "Minzi ga bupanga kuli nkima Nsamalia"
+    ]
+   },
+   "capernaum": {
+    "name": "Kapernaumu",
+    "book": "Matayo 4–13 · Maliko 1–4",
+    "today": "ha lubali lwa nyanza ya Galilaya lelo",
+    "note": "Hantu ha kwikala ha butumami bo Galilaya — kwitana, kutulanga na bulwisho pyi jikutana haha.",
+    "events": [
+     "Akubatana balobi ba nswi na akwikala haha",
+     "Nhungwa ya ha Lugulu — “Bali na mbango abo bali balala mu moyo”",
+     "Nfano ja butemi — na bulwisho bukukula"
+    ]
+   },
+   "galilee": {
+    "name": "Nyanza ya Galilaya",
+    "book": "Maliko 4 · 6 · Yohana 6",
+    "today": "Nyanza ya Kineleti lelo",
+    "note": "Ku nguzu igulya lya shiseeng'wa akubonelaja uyo ali wei.",
+    "events": [
+     "“Humula, imilaga” — akuhumuja nkubuko gwa nyanza",
+     "Akulisha banhu 5,000 ku mikate itano na nswi ibili",
+     "Akugenda igulya lya minzi"
+    ]
+   },
+   "caesarea_p": {
+    "name": "Kaisalia Filipi",
+    "book": "Matayo 16–17",
+    "today": "Baniasi lelo",
+    "note": "Bafundwa bakwelewa giki wei ali Kilisito, na nzila ya nsalaba yikwiguka.",
+    "events": [
+     "Kuzunilija kwa ng'wa Petelo — “Wiwi uli Kilisito, Ng'wana wa ng'wa Mulungu ng'wa bupanga”",
+     "Akwandya kuhanga kucha na kuzuuka kwakwe",
+     "Akugalulwa mu ikujo ha lugulu"
+    ]
+   },
+   "jericho": {
+    "name": "Yeliko",
+    "book": "Luka 18–19",
+    "today": "Yeliko lelo",
+    "note": "Mu nzila ya kudula kuja Yelusalemu, akukoba abo balimiile.",
+    "events": [
+     "Akumpa meso Balitimayo mboku",
+     "Akuntana Zakayo ntoji wa kodi",
+     "“Ng'wana wa Munhu wiza kukoba na kupija abo balimiile”"
+    ]
+   },
+   "bethany": {
+    "name": "Betania",
+    "book": "Yohana 11–12",
+    "today": "al-Eizariya lelo",
+    "note": "Akubonelaja butaale igulya lya kucha ha nyangwa ya juma yakwe ya bukalikijo.",
+    "events": [
+     "Akunzuuja Lazalo kufuma mu kaburi — “Nene nali kuzuuka na bupanga”",
+     "Malia akunsinga mono kulwa kuzikwa",
+     "Shikolwa shenishi shikukomeja mpango gwa kumbulaga"
+    ]
+   },
+   "jerusalem": {
+    "name": "Yelusalemu",
+    "book": "Matayo 21–28 · Luka 24 · Shītwa sha Batūng'wa 1",
+    "today": "Yelusalemu lelo",
+    "note": "U nyangwa iyo Bibilia yose yikujilaga — nsalaba, kuzuuka, kuja igulu.",
+    "events": [
+     "Kwingila kwa ikujo; akugalula meza ga hekalu hangi",
+     "Ha Shalya sha Bukalikijo akoja magulu ga bafundwa",
+     "Akucha ha nsalaba",
+     "Akuzuuka ha lushiku lwa katatu, hama akuja igulu"
+    ]
+   }
+  },
+  "labels": [
+   "Nyanza Ntaale",
+   "Galilaya",
+   "Samalia",
+   "Buyudaya",
+   "Dekapoli",
+   "Perea",
+   "Nyanza ya Lufu"
+  ],
+  "journeys": {
+   "life": "Nzila ya ng'wa Yesu"
+  }
+ },
+ "paul": {
+  "places": {
+   "antioch": {
+    "name": "Antiokia",
+    "book": "Shītwa sha Batūng'wa 13 · 15",
+    "today": "Antakya, Buturuki lelo",
+    "note": "Kanisa lya kutuma aha butumiwa bo mahanga bukwandya na bukushokela.",
+    "events": [
+     "Mu kulomba u Moyo akubasagula Balinaba na Sauli",
+     "Kanisa aha bazunya bakatanwa ‘Bakilisto’ hakwandya",
+     "Hantu ha kwandiila maduluko ga kwandya, ga kabili na ga katatu"
+    ]
+   },
+   "seleucia": {
+    "name": "Seleukia",
+    "book": "Shītwa sha Batūng'wa 13:4",
+    "today": "Buturuki lelo",
+    "note": "Bandari ya Antiokia — bakwandya lugendo lwa mu nyanza kuja Kipro.",
+    "events": []
+   },
+   "salamis": {
+    "name": "Salami (Kipro)",
+    "book": "Shītwa sha Batūng'wa 13:5",
+    "today": "Kipro lelo",
+    "note": "Hantu ha kwandya ha Kipro — kulomeela mu masinagogi.",
+    "events": []
+   },
+   "paphos": {
+    "name": "Pafo",
+    "book": "Shītwa sha Batūng'wa 13:6-12",
+    "today": "Kipro lelo",
+    "note": "Nguzu jikubonekana kubukilija abo bakulwisha Ng'hulu Jawiza.",
+    "events": [
+     "Elima ndagi akubulwa kubiza mboku",
+     "Selegio Paulo ng'waliwa akuzunya",
+     "Kufuma haha ‘Paulo’ akutongela"
+    ]
+   },
+   "perga": {
+    "name": "Perga",
+    "book": "Shītwa sha Batūng'wa 13:13",
+    "today": "Antalya, Buturuki lelo",
+    "note": "Bandari mu Pamfilia — haha Yohana Maliko akushoka nyuma.",
+    "events": []
+   },
+   "pantioch": {
+    "name": "Antiokia ya Pisidia",
+    "book": "Shītwa sha Batūng'wa 13:14-50",
+    "today": "Yalvaç, Buturuki lelo",
+    "note": "U Ng'hulu Jawiza jikwiguka kuja ku mahanga.",
+    "events": [
+     "Nhungwa ntali ya buchaaji bo bupiji mu sinagogi",
+     "Mahanga mingi gakuyega na gakwanukula u Mhayo",
+     "Bakubingiijiwa ku bulwisho"
+    ]
+   },
+   "iconium": {
+    "name": "Ikonio",
+    "book": "Shītwa sha Batūng'wa 14:1-7",
+    "today": "Konya, Buturuki lelo",
+    "note": "Bingi bakuzunya, aliyo kuluhijiwa kukubatwala ha butongi.",
+    "events": []
+   },
+   "lystra": {
+    "name": "Listra",
+    "book": "Shītwa sha Batūng'wa 14:8-20",
+    "today": "Buturuki lelo",
+    "note": "Bakuntana giti mulungu, hama akuponwa mawe.",
+    "events": [
+     "Akudamya munhu ntibu kufuma kubyalwa",
+     "Ilundo lya banhu likugema kubafunyila shitambo giti milungu",
+     "Akuponwa mawe na kulekwa giti wamala kucha, aliyo akwima"
+    ]
+   },
+   "derbe": {
+    "name": "Derbe",
+    "book": "Shītwa sha Batūng'wa 14:20-21",
+    "today": "Buturuki lelo",
+    "note": "Bafundwa bingi bakwitwa; bakushoka nzila yabo kukomeja makanisa.",
+    "events": []
+   },
+   "troas": {
+    "name": "Troa",
+    "book": "Shītwa sha Batūng'wa 16:8-10",
+    "today": "Buturuki lelo",
+    "note": "Hantu ha kugaluka aha Ng'hulu Jawiza jikwandya kuja Ulaya.",
+    "events": [
+     "Shibonelo sha munhu wa Makedonia",
+     "“Izaga uku utukombelije”",
+     "Bakukila bwangu kuja Ulaya"
+    ]
+   },
+   "philippi": {
+    "name": "Filipi",
+    "book": "Shītwa sha Batūng'wa 16 · Bafilipi",
+    "today": "Bugiliki bo kunfunha lelo",
+    "note": "Kanisa lya kwandya lya Ulaya — Ng'hulu Jawiza jikuhema nūūlū mu kudindilwa.",
+    "events": [
+     "Lidia, nsuluji wa nguo ntunduuli, akuzunya",
+     "Ng'wana nkima nsese wa kulagula akulekwa huru",
+     "Njimbo ja bujiku bwa gati, kutinginika kwa si, kaya ya ndindaji akupijiwa"
+    ]
+   },
+   "thess": {
+    "name": "Thesalonike",
+    "book": "Shītwa sha Batūng'wa 17 · 1–2 Bathesalonike",
+    "today": "Thesaloniki, Bugiliki lelo",
+    "note": "U Mhayo gukutinginya ng'waniki na bulwisho bukwiluula.",
+    "events": [
+     "Akuyombola mu sinagogi mu maSabato gatatu",
+     "“Aba bagalula si yose”",
+     "Bakushimila bujiku"
+    ]
+   },
+   "berea": {
+    "name": "Beroya",
+    "book": "Shītwa sha Batūng'wa 17:10-15",
+    "today": "Veria, Bugiliki lelo",
+    "note": "Abo ‘ba ng'holo njiza’ abo bakuupeleleja u Mhayo bichene.",
+    "events": [
+     "Bakwanukula u Mhayo ku buyegi butaale",
+     "Buli lushiku bakupeleleja Mayandiko kulola ulu ni ng'hana",
+     "Bingi bakuzunya"
+    ]
+   },
+   "athens": {
+    "name": "Atene",
+    "book": "Shītwa sha Batūng'wa 17:16-34",
+    "today": "Atene, Bugiliki lelo",
+    "note": "Mu ng'waniki gwa banyabusala akukaaniija u ‘mulungu uyo atamanikile’.",
+    "events": [
+     "Akununhilwa ku ng'waniki gwijwie shihango",
+     "Ha Aleopago akulomeela Nseemi na kuzuuka",
+     "Bakunseka, aliyo badoo bakuzunya"
+    ]
+   },
+   "corinth": {
+    "name": "Kolinto",
+    "book": "Shītwa sha Batūng'wa 18 · 1–2 Bakolinto",
+    "today": "Bugiliki lelo",
+    "note": "Akwikala mwaka na nusu, akuzenga kanisa mu ng'waniki gwa shibi.",
+    "events": [
+     "Akwita mahema hamo na Akila na Pilisila",
+     "“Utogohaga… nguno nali hamo nawe”",
+     "Bakolinto bingi bakuzunya na bakubatijiwa"
+    ]
+   },
+   "ephesus": {
+    "name": "Efeso",
+    "book": "Shītwa sha Batūng'wa 19 · Baefeso",
+    "today": "Selçuk, Buturuki lelo",
+    "note": "Moyo gwa luduluko lwa katatu — u Mhayo gukuduluka mu Asia yose.",
+    "events": [
+     "Kutulanga buli lushiku kulwa myaka ibili mu numba ya ng'wa Tilano",
+     "Shitabo sha budagi shikulimba; shikolwa sha nguzu",
+     "Demetilio nsongi wa hela akwandya nyonzo"
+    ]
+   },
+   "miletus": {
+    "name": "Mileto",
+    "book": "Shītwa sha Batūng'wa 20:17-38",
+    "today": "Buturuki lelo",
+    "note": "Kulaga kwa shisoji na banamhala ba Efeso.",
+    "events": [
+     "“Dimaji kanisa ilo waligula ku sakami yakwe ng'wenekili”",
+     "Banamhala bakulila, bumanile giki bataamona hangi"
+    ]
+   },
+   "caesarea": {
+    "name": "Kaisalia",
+    "book": "Shītwa sha Batūng'wa 23–26",
+    "today": "ha mpelo ya nyanza ya Isilaeli lelo",
+    "note": "Kulwa myaka ibili akwilanga kulwa Ng'hulu Jawiza ha butongi bo balwali na ntemi.",
+    "events": [
+     "Malamula ha butongi bo balwali Felikisi na Festo",
+     "Kwilanga kwakwe ha butongi bo Ntemi Agilipa",
+     "“Nakulomba nlamulwe na Kaisali” — kuja Loma"
+    ]
+   },
+   "jerusalem": {
+    "name": "Yelusalemu",
+    "book": "Shītwa sha Batūng'wa 21–23",
+    "today": "Yelusalemu lelo",
+    "note": "Kudimwa mu hekalu, nzila yakwe giti munhu wakomelwa yikwandya.",
+    "events": [
+     "Akudimwa na ilundo lya banhu mu hekalu",
+     "Akwilanga ha butongi bo libalaza",
+     "Giti nkaya wa Loma, akutumwa hasi ya balindaji kuja Kaisalia"
+    ]
+   },
+   "myra": {
+    "name": "Mira",
+    "book": "Shītwa sha Batūng'wa 27:5-6",
+    "today": "Demre, Buturuki lelo",
+    "note": "Bakuluta mu ngalawa ya Alekizandiliya iyo yaja Loma.",
+    "events": []
+   },
+   "fairhaven": {
+    "name": "Bandari Jawiza (Krete)",
+    "book": "Shītwa sha Batūng'wa 27:8-12",
+    "today": "Krete lelo",
+    "note": "Buhugulo bo ng'wa Paulo bo kuleka lugendo lwa mu nyanza butazunilijiwa.",
+    "events": []
+   },
+   "crete": {
+    "name": "Krete",
+    "book": "Tito",
+    "today": "Krete lelo",
+    "note": "Hanyuma ya kulekwa, kisiwa aha akunleka Tito kubeeja makanisa mu nzila.",
+    "events": [
+     "Akunleka Tito kubatula banamhala mu buli ng'waniki",
+     "Akulomba batongeeli batina nzobo, bakini",
+     "Akwandika lilete kuli Tito"
+    ]
+   },
+   "malta": {
+    "name": "Malta",
+    "book": "Shītwa sha Batūng'wa 27–28",
+    "today": "Malta lelo",
+    "note": "Kubita luhaga na kubipa kwa ngalawa, u ilagane lya ng'wa Mulungu likushinga.",
+    "events": [
+     "U ‘nyaga gwa kunfunha-ng'walilo’ gukudumula ngalawa, aliyo bose 276 bakupona",
+     "Akulumwa na nzoka, aliyo atabipa",
+     "Akubadamya balwáji ba kisiwa"
+    ]
+   },
+   "syracuse": {
+    "name": "Sirakusa",
+    "book": "Shītwa sha Batūng'wa 28:12",
+    "today": "Sisilia, Italia lelo",
+    "note": "Bakwikala shiku ndatu mu Sisilia.",
+    "events": []
+   },
+   "puteoli": {
+    "name": "Puteoli",
+    "book": "Shītwa sha Batūng'wa 28:13-14",
+    "today": "Pozzuoli, Italia lelo",
+    "note": "Bakushika Italia na bakwitwa na bazunya biyabo.",
+    "events": []
+   },
+   "rome": {
+    "name": "Loma",
+    "book": "Shītwa sha Batūng'wa 28 · Malete ga Kudindilwa · 2 Timoteo",
+    "today": "Loma, Italia lelo",
+    "note": "U Ng'hulu Jawiza jikushika moyo gwa butemi butaale ku bukalikijo — iti ngelelo aliyo wandijo.",
+    "events": [
+     "Myaka ibili hasi ya kudindilwa mu numba, akukaaniija butemi kutina woba",
+     "Kufuma haha akwandika Malete ga Kudindilwa (Baefeso·Bafilipi·Bakolose·Filemoni)",
+     "Hanyuma akudindilwa hangi, akwandika 2 Timoteo na akubulagwa kulwa kuzunya — “Nalwiile bulwi bwiza, namala mbilo”"
+    ]
+   }
+  },
+  "labels": [
+   "Nyanza Ntaale",
+   "Nyanza ya Egeo",
+   "Asia Ndoo",
+   "Makedonia",
+   "Italia"
+  ],
+  "journeys": {
+   "j1": "Luduluko lwa kwandya",
+   "j2": "Luduluko lwa kabili",
+   "j3": "Luduluko lwa katatu",
+   "rome": "Luduluko lwa kane · kuja Loma",
+   "j5": "Luduluko lwa katano · hanyuma ya kulekwa"
+  }
+ }
+}

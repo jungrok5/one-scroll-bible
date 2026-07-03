@@ -1,0 +1,636 @@
+{
+ "menuName": "Konknni",
+ "htmlLang": "gom",
+ "dir": "ltr",
+ "locale": "gom-IN",
+ "brand": "Povitr Pustok eka nodrent",
+ "docTitle": "Nokxer Povitr Pustok · Povitr Pustok eka nodrent",
+ "metaDesc": "Pornnea Korarachi kall-vôll, Jezuchem jivit, ani Paulucheô bhõvddeô eka khôrea nokxer sôd — Povitr Pustok khôrê zageancher ghoddlem.",
+ "s": {
+  "kicker": "Povitr Pustok eka nodrent · Nokxe",
+  "title": "Nokxer Povitr Pustok",
+  "verse": "“Amcho Somi Jezu Krist podven ietolo mhonn ami tumkam xikoilem tedna, dusreamnim hikmotin ghôddlolim gop’pam-talam ami tumkam sangunk nant. Na; ami Tachi thôr mhoima amcheam khaxa dolleamnim dekhlea.” (2 Pedru 1:16)",
+  "purpose": "Povitr Pustok ek dhont-kotha nhoi. Hem khôrê zage, tarkam ani nãvamcher chôllolea mon'xanchem ek lekhonn. Tê vatteô eka nokxer, kallachea kraman sôdun kadd — eka binduk ttôch kôr, vô ▶ dabun pavlan-pavlim chôl.",
+  "ot_kick": "① Pornno Korar — kallachea vatten",
+  "ot_h": "Rochnnê thaun Jeruzalemak portun-ievpa meren",
+  "ot_lead": "Ek-uch bhõvddi nhoi punn rochnnê thaun soddvonnê-itihasacho vôgllo: rochnnê ani pôddnni → loddi ani Babel → ek ulo (Abraham) → bhasayil'lo dês → Bhair-vôchem → ronn → zoit → raj → vantnni → bondkhonn → portun-ievop.",
+  "je_kick": "② Novo Korar — Jezuchem jivit",
+  "je_h": "Betleam thaun Jeruzalem meren",
+  "je_lead": "Bôrê-Khobream Jezuchem jivit koxem sangtat, tea kraman tem sôdun kadd — Betleamantlea tacha zolma thaun, tacho bautizm ani Galileiacho misanv, Samaria pôlltoddi, Jeruzalemantlea khurs, punorjivontponn ani sôrgar-vôcha meren.",
+  "pa_kick": "③ Novo Korar — Paulucheô bhõvddeô",
+  "pa_h": "Antiokia thaun prithumechea koddxam meren — Rom",
+  "pa_lead": "Jeruzalemantlea Pentekosta thaun, bôri khobor Judeia bhair koxi possôrli — Lhan Asia ani Europ pôlltoddi razvôddkechea kallzak. Panch bhõvddeamnitli ek vinch (pôili·dusri·tisri + Roma vôchpachi bhõvddi + suttka uprantli) ani vatter boroil'leam potramnim-sangata Niz-kãmachim ghoddnnê sôd.",
+  "foot": "Mull · Zage Povitr Pustokachea utrank ani sodanchea Povitr Pustokachea bhugola-pormonnem asat (adhunik nãvam adar zata thõi). Doria-kodde, nõieo ani sarovôr ugddea bhugol-mahitê (Natural Earth) thaun kaddlolim, sompim kel'lim.",
+  "contact": "Prôxn · protikriya — <a id=\"contact\" class=\"mail\">Amkam email dhadd</a>",
+  "play": "Chôlôi",
+  "pause": "Rav",
+  "today": "Aiz:",
+  "verseCite": "2 Pedru 1:16"
+ },
+ "ot": {
+  "places": {
+   "eden": {
+    "name": "Eden (Rochnnê · Pôddnni)",
+    "book": "Utpoti 1–3",
+    "today": "aiz Tigris–Efrat vibhag",
+    "note": "Bhov borem rochlolea sonvsarant, patok bhitôr sôrta ani Dev ani mon'xa modlem bondh moddta.",
+    "events": [
+     "Sô disamnim rochnnê — “bhov borem”",
+     "Monis Devachea rupan rochlo",
+     "Pôddnni, ani Eden thaun bhair kaddunchem",
+     "Pôili bôrê khobrechi bhasavnni — “bailechi xivddi sôrpachem mathem mostounchi”"
+    ]
+   },
+   "noah": {
+    "name": "Ararat (Loddi)",
+    "book": "Utpoti 6–9",
+    "today": "aiz udentti Turkintlo Ararat dongor",
+    "note": "Dev patkan bhôrlolea sonvsarak nyai kôrta, tôriy eka ghorabea vorvim jivit rakhta.",
+    "events": [
+     "Vaittponnan bhôrlolo sonvsar",
+     "Loddi, ani Noecho tarum",
+     "Dhonucho korar — “portun kednanch sonvsar naxtt korunk loddi ieuchi na”"
+    ]
+   },
+   "babel": {
+    "name": "Babelacho Buruz",
+    "book": "Utpoti 11",
+    "today": "aiz Irak (Xinaracho meidan)",
+    "note": "Sôrgak pavpachea gôrvak vodhun, Dev tancheô bhaso ani mon'xank prithumecher vixkôlaita.",
+    "events": [
+     "“Ami ek xar ani ek buruz bandhuiam… ani amkam nãv kôruiam”",
+     "Dev tancheô bhaso ghuspoddaita",
+     "Mon'xam prithumecher vixkôlltat (Xinar — magir Babilon)"
+    ]
+   },
+   "ur": {
+    "name": "Ur",
+    "book": "Utpoti 12",
+    "today": "aiz dôkxinn Irak",
+    "note": "Povitr Pustokachi soddvonnechi kotha eka mon'xachea ulean suru zata.",
+    "events": [
+     "Dev Abramak Kaldeanchea Ur thaun apoita",
+     "“Hanv tuka ek vhôddli zaat kôrtolom… sogllim kullam tujê vorvim besãv mellteleô”",
+     "Bhavartan to apli bhõuim soddta"
+    ]
+   },
+   "haran": {
+    "name": "Haran",
+    "book": "Utpoti 12",
+    "today": "aiz dôkxinn Turki",
+    "note": "Vatter, bhasayil'lea desa vatten ulo ghevn.",
+    "events": [
+     "Terachea ghorabo Haranant vosti kôrta",
+     "Tera moddta",
+     "Abram 75 vôrsancho astana Kanaanak vôta"
+    ]
+   },
+   "shechem": {
+    "name": "Xekem · Kanaan",
+    "book": "Utpoti 12–50",
+    "today": "aiz Nablus",
+    "note": "Bhasayil'lea desant ek ghorabo bandta ani korar pillgek pillgi vôta.",
+    "events": [
+     "Kanaanant bhitôr sôrun, pôilo vedi — “ho dês tujê xivddek ditolom”",
+     "Korar (Utpoti 15) · Izaak · Jakob",
+     "Jakobache bara put — bara kullancho mull"
+    ]
+   },
+   "egypt": {
+    "name": "Egipt (Gôxen)",
+    "book": "Utpoti 37–50 · Bhair-vôchem 1",
+    "today": "aiz Nil Delta, Egipt",
+    "note": "Ek ghorabo ek vhôddli zaat zata — magir gulamanchi zaat.",
+    "events": [
+     "Juze, vikun, Egiptacho odhikari zata",
+     "Duxkall thaun sutunk Jakobacho saglo ghorabo sokoil ieta",
+     "Vaddttolo Israel-zaat gulam zata"
+    ]
+   },
+   "sinai": {
+    "name": "Sinai Dongor",
+    "book": "Bhair-vôchem · Levitik",
+    "today": "aiz Sinai upôdvip",
+    "note": "Pornnea Korarachem mukhel suttavnnem — gulam Devachi khaxa porza zatat.",
+    "events": [
+     "Dha vipotti ani Paskacho menddro",
+     "Tambddo Doria futta ani tim uttrat",
+     "Dha adnia, Somurt, Mellnnem-tombu ani bolidanam"
+    ]
+   },
+   "kadesh": {
+    "name": "Kades (ronn)",
+    "book": "Ankdde · Deuteronomi",
+    "today": "aiz Sinai–Negev ronn",
+    "note": "Ovixvasan ek pillgi dês hôgddaita — tôriy Dev tanchê-sangata ravta.",
+    "events": [
+     "Bara her — punn lôk bhavart tthevunk inkar kôrta",
+     "Ronnant 38 vôrsam — manna, megh ani uzo",
+     "Moabachea meidanar, Moizesachem nimannem provôchon (Deuteronomi)"
+    ]
+   },
+   "jericho": {
+    "name": "Jericho",
+    "book": "Jôzve",
+    "today": "aiz Jericho",
+    "note": "Nimannem tim bhasayil'lea desant bhitôr sôrtat ani to gheutat.",
+    "events": [
+     "Jordan futta ani lôk uttrat",
+     "Jerichochê vonnti poddtat",
+     "Kanaanachem zoit ani desachi vantnni"
+    ]
+   },
+   "shiloh": {
+    "name": "Xilo (Nyaikartam)",
+    "book": "Nyaikartam · Rut",
+    "today": "aiz Khirbet Seilun",
+    "note": "Koslo-i raza naslo dekhun dôr-eklo apnnak dislolem tem kôrta — ek khoro raza gôrjecho.",
+    "events": [
+     "Mellnnem-tombu Xilont ubo kôrtat",
+     "Patok–zulum–suttavnnecho chôkr (Debora, Gideon, Samson)",
+     "Rut — kalokhi disamnim visvaxikai, Davidachê vonxant"
+    ]
+   },
+   "jerusalem": {
+    "name": "Jeruzalem · Ekttavlolem Raj",
+    "book": "1–2 Samuel · 1 Raza",
+    "today": "aiz Jeruzalem",
+    "note": "Israelacho bhangranno iug — ani eka sasnnachea raja-chi bhasavnni.",
+    "events": [
+     "Pôilo raza Saul, magir David ani Goliat",
+     "Davidacho korar — “tujem xinvason sasnnak” (2 Samuel 7)",
+     "Solomon Jeruzalemant mondir bandhta"
+    ]
+   },
+   "samaria": {
+    "name": "Samaria · Vantlolem Raj",
+    "book": "Raza · Provade",
+    "today": "aiz Sebastia",
+    "note": "Provade bôbaltana raj vantun vôta ani moddon vôta.",
+    "events": [
+     "Solomona uprant, Juda ani Israel oxem vantun vôta",
+     "Porot-porot murti-puzo",
+     "Elias, Izaias, Jeremias ‘portun ieiat’ mhonn ulo kôrtat — ani Mesiavixim bhakit kôrtat"
+    ]
+   },
+   "nineveh": {
+    "name": "Ninve (Aslur)",
+    "book": "2 Raza 17 · Jona",
+    "today": "aiz Mosul, Irak",
+    "note": "Dôr-ek chetavnni durlokxun, Uttôr pôilo poddta.",
+    "events": [
+     "Ninve, Aslurachi razthani",
+     "Uttrechem raj Aslurachea hatak poddta (722 PK)",
+     "Jona Ninvek dhaddtat"
+    ]
+   },
+   "babylon": {
+    "name": "Babilon",
+    "book": "2 Raza 25 · Daniel · Ezekiel",
+    "today": "aiz Hillah, Irak",
+    "note": "Sôglleam kôrdôtti rat — tôriy punorsthapônachi bhasavnni urta.",
+    "events": [
+     "Jeruzalem poddta, mondir lasta (586 PK)",
+     "Judak Babilonak vhortat",
+     "Daniel ani Ezekiel — bondkhonnent bhavart ani dôrxonam"
+    ]
+   },
+   "susa": {
+    "name": "Susa (Persia)",
+    "book": "Ester · Nehemia",
+    "today": "aiz Shush, Iran",
+    "note": "Ek murti-puzok razvôddkechea gôbheant-i, Dev apli porza rakhta.",
+    "events": [
+     "Persia Babilonak hôrvun ghalta",
+     "Ester Juda-lokak naxa thaun vanchoita",
+     "Nehemia raja mukhar magnnem kôrta ani taka dhaddtat"
+    ]
+   },
+   "return": {
+    "name": "Jeruzalemak portun",
+    "book": "Ezra · Nehemia · Malaki",
+    "today": "aiz Jeruzalem",
+    "note": "Tim portun ietat ani portun bandhtat — punn koslo-i raza ailo na. Tim Mesiachi vatt polleitat.",
+    "events": [
+     "Sirusachea hukman tin lharamnim portun (Zerubabel 538 · Ezra 458 · Nehemia 444)",
+     "Mondir portun bandhtat ani Jeruzalemacho gãvkott portun uboita",
+     "Malaki — Pornno Korar sompta: “Hanv Mhozo khôbri dhaddtolom”"
+    ]
+   }
+  },
+  "labels": [
+   "Bhumôddhôi Doria",
+   "Mesopotamia",
+   "Arbi Ronn",
+   "Egipt"
+  ],
+  "journeys": {
+   "flow": "Soddvonnechi kotha"
+  }
+ },
+ "jesus": {
+  "places": {
+   "bethlehem": {
+    "name": "Betleam",
+    "book": "Matev 1–2 · Lukas 2",
+    "today": "aiz Betleam",
+    "note": "Bhasayil'lo Mesia Davidachea gãvant ieta — Sôbd monis zalo.",
+    "events": [
+     "Davidachea gãvant, Betleamant zolm",
+     "Devdut gôvllêank khobor sangtat",
+     "Magi bhôkti korunk ietat"
+    ]
+   },
+   "nazareth": {
+    "name": "Nazaret",
+    "book": "Lukas 2 · 4",
+    "today": "aiz Nazaret",
+    "note": "Dev ek samanya gãvant monis zaun vhôdd zata.",
+    "events": [
+     "Ek suttar-gharant vhôdd zalo",
+     "Bara vôrsancho astana, mondirant prôxn ani zap ditalo",
+     "Magir apnnachea gãvachea sinagogant ônôll zalo"
+    ]
+   },
+   "jordan": {
+    "name": "Jordan Nõi",
+    "book": "Matev 3–4",
+    "today": "aiz sokoilo Jordan",
+    "note": "Tacho lôkani misanv suru zata — sôrg Taka Put mhonn mudra kôrta.",
+    "events": [
+     "Juanva thaun bautizm ghetlo",
+     "Atmo pharvea bhaxen denvta — “Ho Mhozo môgacho Put”",
+     "Ronnant Soitanacheô tin porikxa harvta"
+    ]
+   },
+   "cana": {
+    "name": "Kana",
+    "book": "Juanv 2",
+    "today": "aiz Kafr Kanna",
+    "note": "Apnnachea pôilea nixannen To apli mhoima ugddi kôrta.",
+    "events": [
+     "Eka lôgnnant sôiro",
+     "Udok soro zalem — tacho pôilo nixanni",
+     "Tache xis Tacher bhavart tthevtat"
+    ]
+   },
+   "sychar": {
+    "name": "Sikar (Samaria)",
+    "book": "Juanv 2–4",
+    "today": "aiz Nablusachea lagsar",
+    "note": "Suruvatechea misanvachi vatt — Jeruzalem vatten ani ônôll'lolea Samariak.",
+    "events": [
+     "To Jeruzalemachem mondir nitoll kôrta",
+     "Ratchea, Nikodem — “Tuka portun zolm gheunchoch poddttolo”",
+     "Eka Samari bailek jivem udok"
+    ]
+   },
+   "capernaum": {
+    "name": "Kafarnaum",
+    "book": "Matev 4–13 · Marku 1–4",
+    "today": "aiz Galileiachea sarovracho koddo",
+    "note": "Galileiachea misanvachem mukhel thodd — apovnnem, xikovnn ani virôdh sogllem hangach mell'tat.",
+    "events": [
+     "Masllemarank apoita ani hanga thoddta",
+     "Dôngravoilem Provôchon — “Bhagi te atmean dublle”",
+     "Rajeachim drixttantam — ani vaddttolo virôdh"
+    ]
+   },
+   "galilee": {
+    "name": "Galileiacho Doria",
+    "book": "Marku 4 · 6 · Juanv 6",
+    "today": "aiz Kinneret sarovôr",
+    "note": "Nisorga-voilea bollan To dakhoita To konn.",
+    "events": [
+     "“Xant rav, gôp rav” — To vaddoll xant kôrta",
+     "Panch undde ani don masllen 5,000 mon'xank jevonn dita",
+     "Udka-vôir chôlta"
+    ]
+   },
+   "caesarea_p": {
+    "name": "Sezaria Filipi",
+    "book": "Matev 16–17",
+    "today": "aiz Banias",
+    "note": "Xis somzotat ki To Krist, ani khursachi vatt ugddi zata.",
+    "events": [
+     "Pedruchi kobulai — “Tum Krist, jivea Devacho Put”",
+     "To pôilech pautti apnnachem moronn ani punorjivontponn adim sangta",
+     "Dôngravôir mhoiment rup-bôddol zata"
+    ]
+   },
+   "jericho": {
+    "name": "Jericho",
+    "book": "Lukas 18–19",
+    "today": "aiz Jericho",
+    "note": "Jeruzalemak choddttolea vatter, To hôgddlolean sôdta.",
+    "events": [
+     "Kunddea Bartimeuk dôxtti dita",
+     "Suntt-vasul korpi Zakeuk apoita",
+     "“Monis-Put hôgddlolean sôdunk ani vanchounk ailo”"
+    ]
+   },
+   "bethany": {
+    "name": "Betani",
+    "book": "Juanv 11–12",
+    "today": "aiz al-Eizariya",
+    "note": "Apnnachea nimannea satollea adlea disa To moronna-vôir apli sôtta dakhoita.",
+    "events": [
+     "Lazarak fonddantlo jivo uthoita — “Punorjivontponn ani Jivit Hanvuch”",
+     "Maria puronna khatir Taka tel lavta",
+     "Ho nixanni Taka marunk ravlolo kôts ghôtt kôrta"
+    ]
+   },
+   "jerusalem": {
+    "name": "Jeruzalem",
+    "book": "Matev 21–28 · Lukas 24 · Niz-kãm 1",
+    "today": "aiz Jeruzalem",
+    "note": "Saglem Povitr Pustok zaka-koddem vôta to uchamb — khurs, punorjivontponn, sôrgar-vôchem.",
+    "events": [
+     "Zoiticho praves; To portun mondirachim mez ubaddta",
+     "Nimannea Jevnnant To xisanche paim dhuta",
+     "To khursar moddta",
+     "Tisrea disa jivo zata, magir sôrgar vôta"
+    ]
+   }
+  },
+  "labels": [
+   "Bhumôddhôi Doria",
+   "Galilei",
+   "Samaria",
+   "Judeia",
+   "Dekapolis",
+   "Perea",
+   "Mhôrem Doria"
+  ],
+  "journeys": {
+   "life": "Jezuchi vatt"
+  }
+ },
+ "paul": {
+  "places": {
+   "antioch": {
+    "name": "Antiokia",
+    "book": "Niz-kãm 13 · 15",
+    "today": "aiz Antakya, Turki",
+    "note": "Dhaddpi Igorz jõi poriaki-lôkacho misanv suru zata ani portun ieta.",
+    "events": [
+     "Magnnea-modem Atmo Barnaba ani Saulak vengllo kôrta",
+     "Igorz jõi bhavartaleank pôilech pautti ‘Kristanv’ mhonn'lem",
+     "Pôilê, dusrê ani tisrê bhõvddechem suru-thodd"
+    ]
+   },
+   "seleucia": {
+    "name": "Selusia",
+    "book": "Niz-kãm 13:4",
+    "today": "aiz Turki",
+    "note": "Antiokiacho bondôr — tim Sipra khatir tarvar vôtat.",
+    "events": []
+   },
+   "salamis": {
+    "name": "Salamis (Sipr)",
+    "book": "Niz-kãm 13:5",
+    "today": "aiz Sipr",
+    "note": "Siprar pôilo thambo — sinagogamnim porgottnnem.",
+    "events": []
+   },
+   "paphos": {
+    "name": "Pafos",
+    "book": "Niz-kãm 13:6-12",
+    "today": "aiz Sipr",
+    "note": "Bôrê khobrek virôdh korpeank vodhun boll dakhoitat.",
+    "events": [
+     "Jaddugar Elimas kunddo zata",
+     "Odhikari Sergius Paulus bhavart tthevta",
+     "Hanga thaun ‘Paulu’ mukhelpônn gheta"
+    ]
+   },
+   "perga": {
+    "name": "Perga",
+    "book": "Niz-kãm 13:13",
+    "today": "aiz Antalya, Turki",
+    "note": "Pamfiliantlo ek bondôr — hanga Juanv Marku portun vôta.",
+    "events": []
+   },
+   "pantioch": {
+    "name": "Pisidiachi Antiokia",
+    "book": "Niz-kãm 13:14-50",
+    "today": "aiz Yalvaç, Turki",
+    "note": "Bôri khobor poriaki-lôka vatten ugddi zata.",
+    "events": [
+     "Sinagogant soddvonnê-itihasachem ek lamb provôchon",
+     "Zaite poriaki lôk sôntôxtat ani Sôbd svikartat",
+     "Virôdhan bhair kaddtat"
+    ]
+   },
+   "iconium": {
+    "name": "Ikonium",
+    "book": "Niz-kãm 14:1-7",
+    "today": "aiz Konya, Turki",
+    "note": "Zaitê bhavart tthevtat, punn chhôll-monnen tankam mukhar dômpta.",
+    "events": []
+   },
+   "lystra": {
+    "name": "Listra",
+    "book": "Niz-kãm 14:8-20",
+    "today": "aiz Turki",
+    "note": "Dev mhonn manlo, magir fatramnim marlo.",
+    "events": [
+     "Zolma thaun longddea eka mon'xak borem kôrta",
+     "Lôk tankam dev mhonn bôli diunk polleta",
+     "Fatramnim marun mel'lo mhonn soddlo, to utthon uttta"
+    ]
+   },
+   "derbe": {
+    "name": "Derbe",
+    "book": "Niz-kãm 14:20-21",
+    "today": "aiz Turki",
+    "note": "Zaite xis kôrtat; Igorzo ghôtt korunk tim porto vatt kôrtat.",
+    "events": []
+   },
+   "troas": {
+    "name": "Troas",
+    "book": "Niz-kãm 16:8-10",
+    "today": "aiz Turki",
+    "note": "Zago jõi bôri khobor pôilech pautti Europ vatten vôta.",
+    "events": [
+     "Makedoniachea eka mon'xacho dôrxôn",
+     "“Palltoddi ievn amkam adar kôr”",
+     "Tim lôguch Europant uttrat"
+    ]
+   },
+   "philippi": {
+    "name": "Filipi",
+    "book": "Niz-kãm 16 · Filip",
+    "today": "aiz uttôr Grees",
+    "note": "Europachi pôili Igorz — bondxallent-i bôri khobor zoit vhorta.",
+    "events": [
+     "Jãbllea kôpddancho vepar korpi Lidia bhavart tthevta",
+     "Ek bhavixya-sangpi gulam-chôlli mukôtt zata",
+     "Modhiratichim bhôjnnam, ek dhôrnnikamp, bondxall-rakhonnaracho ghorabo vanchlo"
+    ]
+   },
+   "thess": {
+    "name": "Tesalonika",
+    "book": "Niz-kãm 17 · 1–2 Tesalonik",
+    "today": "aiz Tesaloniki, Grees",
+    "note": "Sôbd xarak halloita ani virôdh uchambta.",
+    "events": [
+     "Tin Xibbot disamnim sinagogant ohvat kôrta",
+     "“Sonvsar ulttô-pallttô kel'le he”",
+     "Tim ratchea nikllon vôtat"
+    ]
+   },
+   "berea": {
+    "name": "Berea",
+    "book": "Niz-kãm 17:10-15",
+    "today": "aiz Veria, Grees",
+    "note": "‘Bore-monacho’ te jim Sôbd apnneanim topaslim.",
+    "events": [
+     "Tim ottapan Sôbd svikartat",
+     "Dôr-dis tim topasunk Povitr Xastr vachtat",
+     "Zaite bhavart tthevunk ietat"
+    ]
+   },
+   "athens": {
+    "name": "Atens",
+    "book": "Niz-kãm 17:16-34",
+    "today": "aiz Atens, Grees",
+    "note": "Tôtvo-gyanieanchea xarant To ‘vollkhi-naslolo dev’ porgottta.",
+    "events": [
+     "Murtiamnim bhôrlolea xaran To khonttavlo",
+     "Areopagusar To Rochnnar ani punorjivontponn porgottta",
+     "Hansteat, tôriy thodde bhavart tthevtat"
+    ]
+   },
+   "corinth": {
+    "name": "Korint",
+    "book": "Niz-kãm 18 · 1–2 Korint",
+    "today": "aiz Grees",
+    "note": "To dedh vôrsam ravta, ek durgunni xaran ek Igorz lavta.",
+    "events": [
+     "Akvila ani Priskila-sangata tombu kôrta",
+     "“Bhien naka… kiteak Hanv tujê-sangata asam”",
+     "Zaite Korintkar bhavart tthevtat ani bautizm gheutat"
+    ]
+   },
+   "ephesus": {
+    "name": "Efez",
+    "book": "Niz-kãm 19 · Efez",
+    "today": "aiz Selçuk, Turki",
+    "note": "Tisrê bhõvddechem kalliz — Sôbd Asia-bhôr possôrta.",
+    "events": [
+     "Tirannachea xallent don vôrsam dôr-dis xikovnn",
+     "Jadduchim pustokam lastat; bôllixtt kôrtubam",
+     "Ruperkar Demetrius ek gôddbôdd suru kôrta"
+    ]
+   },
+   "miletus": {
+    "name": "Miletus",
+    "book": "Niz-kãm 20:17-38",
+    "today": "aiz Turki",
+    "note": "Efezachea vhôddilamk dukamnim ubhoxi.",
+    "events": [
+     "“Aplea rogtan Tannem viktem ghetlolê Igorzechi zôgôt gheiat”",
+     "Vhôddil roddtat, jannon ki tim Taka portun polleuchim nant"
+    ]
+   },
+   "caesarea": {
+    "name": "Sezaria",
+    "book": "Niz-kãm 23–26",
+    "today": "aiz Israelacho koddo",
+    "note": "Don vôrsam To razpalt ani eka raja mukhar bôrê khobrechi rakhonn kôrta.",
+    "events": [
+     "Razpalt Feliks ani Festusa mukhar chôukoxeo",
+     "Raza Agripa mukhar tachi rakhonn",
+     "“Hanv Sezara-koddem apil kôrtam” — Roma vatten"
+    ]
+   },
+   "jerusalem": {
+    "name": "Jeruzalem",
+    "book": "Niz-kãm 21–23",
+    "today": "aiz Jeruzalem",
+    "note": "Mondirant dhôrlo, tacho bondi mhonn vatt suru zata.",
+    "events": [
+     "Mondirant lôkan dhôrlo",
+     "Sabhê mukhar apli rakhonn kôrta",
+     "Ek Roman nagrik mhonn, rakhonnen Sezariak dhaddtat"
+    ]
+   },
+   "myra": {
+    "name": "Mira",
+    "book": "Niz-kãm 27:5-6",
+    "today": "aiz Demre, Turki",
+    "note": "Tim Roma vôchpachea eka Aleksandriachea tarvar bôdôltat.",
+    "events": []
+   },
+   "fairhaven": {
+    "name": "Bore Bandôr (Kret)",
+    "book": "Niz-kãm 27:8-12",
+    "today": "aiz Kret",
+    "note": "Tarvan vôchem ravounchi Pauluchi chetavnni aikonant.",
+    "events": []
+   },
+   "crete": {
+    "name": "Kret",
+    "book": "Titu",
+    "today": "aiz Kret",
+    "note": "Tacho suttka uprant, to dvip jõi to Igorzo nitt korunk Tituk soddta.",
+    "events": [
+     "Dôr-eka gãvant vhôddil nemunk Tituk soddta",
+     "Nirdôxi, visvaxi fuddaream magta",
+     "Tituk potr boroita"
+    ]
+   },
+   "malta": {
+    "name": "Malta",
+    "book": "Niz-kãm 27–28",
+    "today": "aiz Malta",
+    "note": "Vaddoll ani tarum-foddnnê modem-i, Devachi bhasavnni ghôtt ravta.",
+    "events": [
+     "‘Uttôr-udentti varo’ tarum fodta, tôriy sogllim 276 vanchtat",
+     "Eka sôrpan chablo, tôriy taka kãich zaina",
+     "To dvipacheam piddestank borim kôrta"
+    ]
+   },
+   "syracuse": {
+    "name": "Sirakus",
+    "book": "Niz-kãm 28:12",
+    "today": "aiz Sisili, Itali",
+    "note": "Tim Sisilint tin dis ravtat.",
+    "events": []
+   },
+   "puteoli": {
+    "name": "Puteoli",
+    "book": "Niz-kãm 28:13-14",
+    "today": "aiz Pozzuoli, Itali",
+    "note": "Tim Italint pavtat ani bhavartan-bhav tankam mell'tat.",
+    "events": []
+   },
+   "rome": {
+    "name": "Rom",
+    "book": "Niz-kãm 28 · Bondxallentlim Potram · 2 Timotei",
+    "today": "aiz Rom, Itali",
+    "note": "Bôri khobor nimannem razvôddkechea kallzak pavta — ek xevôtt nhoi, punn ek suru.",
+    "events": [
+     "Don vôrsam ghôr-bondient, dhiradponnan Rajea porgottun",
+     "Hanga thaun to Bondxallentlim Potram boroita (Efez·Filip·Kolosai·Filemon)",
+     "Magir portun bondi zaun, 2 Timotei boroita ani hutatmo zata — “Hanvem borem zhuz zhuzlam, Hanvem dhanv sompoili”"
+    ]
+   }
+  },
+  "labels": [
+   "Bhumôddhôi Doria",
+   "Egean Doria",
+   "Lhan Asia",
+   "Makedonia",
+   "Itali"
+  ],
+  "journeys": {
+   "j1": "Pôili bhõvddi",
+   "j2": "Dusri bhõvddi",
+   "j3": "Tisri bhõvddi",
+   "rome": "Chôuti bhõvddi · Roma vatten",
+   "j5": "Panchvi bhõvddi · suttka uprant"
+  }
+ }
+}

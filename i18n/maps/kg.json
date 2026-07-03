@@ -35,10 +35,10 @@
     "today": "zunga kia Tigile–Efalate unu",
     "note": "Mu nza yasemo bwambote kibeni, disumu diakota ye dizenga kingana va kati kwa Nzambi ye bantu.",
     "events": [
-     "Lusemono mu bilumbu bisambanu — «ezalaki malamu mingi»",
+     "Lusemono mu bilumbu bisambanu — «ezali malamu koleka»",
      "Muntu wasemo mu kifwani kia Nzambi",
      "Mbuka, ye kuvaikiswa mu Edeni",
-     "Nsilu wantete wa Nsangu Zambote — «bakitani ya mwasi bakonyata moto na yo»"
+     "Nsilu wantete wa Nsangu Zambote — «Bakitani ya mwasi bakonyata moto na yo»"
     ]
    },
    "noah": {
@@ -49,7 +49,7 @@
     "events": [
      "Nza yayidila mu mbivusu",
      "Nkuka, ye masuwa ma Noa",
-     "Kingana kia nkongolo — «mpela ekobebisa mokili lisusu te»"
+     "Kingana kia nkongolo — «mpela ekozala lisusu te mpo na kobebisa mokili»"
     ]
    },
    "babel": {
@@ -58,7 +58,7 @@
     "today": "Iraki unu (nseke ya Shineari)",
     "note": "Va ntandu wa lulendo lukana lwaka ku ezulu, Nzambi wamwanga ndinga zau ye bantu mu nza.",
     "events": [
-     "«Totonga engumba mpe linongi… mpe tópesa nkombo na biso lokumu»",
+     "«totonga engumba mpo na biso mpe ndako molayi… mpo ete kombo na biso ekende sango»",
      "Nzambi wavukumuna ndinga zau",
      "Bantu bamwangana mu nza (Shineari — kuna kwa nima Babiloni)"
     ]
@@ -70,7 +70,7 @@
     "note": "Disolo dia luvuluku dia Biblia dibantikanga mu mboka ya muntu mosi.",
     "events": [
      "Nzambi wabokila Abalayama mu Uri ya Bakaledeo",
-     "«Nakokomisa yo ekolo monene… bato nyonso bakopambolama mpo na yo»",
+     "«Nakokomisa yo ekolo monene… bato ya bituka nyonso ya mabele bakomipambola mpo na yo»",
      "Mu lukwikilu wakatuka mu nsi andi"
     ]
    },
@@ -91,7 +91,7 @@
     "today": "Nablus unu",
     "note": "Mu ntoto wa nsilu kanda diatungwa ye kingana kiviokila mu mbandu ye mbandu.",
     "events": [
-     "Kukota mu Kanana, ntala yantete — «nakopesa bakitani na yo mokili oyo»",
+     "Kukota mu Kanana, ntala yantete — «Nakopesa mokili oyo epai ya bakitani na yo»",
      "Kingana (Ebandeli 15) · Izaki · Yakobo",
      "Bana kumi ye mole ba Yakobo — muanzi wa makanda kumi ye mole"
     ]
@@ -158,7 +158,7 @@
     "note": "Ntangu ya nkembo ya Isaele — ye nsilu wa mfumu wa mvu ya mvu.",
     "events": [
      "Saulo mfumu wantete, buna Davidi ye Goliyati",
-     "Kingana ye Davidi — «kiti na yo ya bokonzi mpo na libela» (2 Samuele 7)",
+     "Kingana ye Davidi — «kiti na yo ya bokonzi ekolendisama mpo na libela» (2 Samuele 7)",
      "Salomo watunga Tempelo ku Yelusalemi"
     ]
    },
@@ -281,7 +281,7 @@
     "note": "Nzila ya salu kia lubantiku — mu nzila ya Yelusalemi nate ye Samaria yatiolwa.",
     "events": [
      "Wavedisa Tempelo ku Yelusalemi",
-     "Va builu, Nikodemo — «osengeli kobotama lisusu»",
+     "Va builu, Nikodemo — «Osengeli kobotama mbotama ya sika»",
      "Maza ma zingu kwa nkento wa Samaria"
     ]
    },
@@ -302,7 +302,7 @@
     "today": "Mbu Kinereti unu",
     "note": "Mu ngolo va ntandu wa bivangwa wasonga nani kena yandi.",
     "events": [
-     "«Vanda kimia» — wakitisa kimbwela",
+     "«Tika makelele ! Vanda nye !» — wakitisa kimbwela",
      "Wadikila bantu 5.000 mu mampa matanu ye mbisi zole",
      "Wadiata va ntandu wa maza"
     ]
@@ -313,7 +313,7 @@
     "today": "Banias unu",
     "note": "Minlonguki mibakisa vo yandi i Klisto, ye nzila ya kulunsi yaziuka.",
     "events": [
-     "Kimbangi kia Petelo — «Yo ozali Klisto, Mwana ya Nzambe ya bomoi»",
+     "Kimbangi kia Petelo — «Ozali Masiya, Mwana na Nzambe na bomoi»",
      "Wabikula lufwa ye mfulukulu andi mu mbala yantete",
      "Wabaluka mu nkembo va mongo"
     ]
@@ -326,7 +326,7 @@
     "events": [
      "Wavana meso kwa Balatimayo wa mpofo",
      "Wabokila Zake nkongoki wa mpaku",
-     "«Mwana ya moto ayei koluka mpe kobikisa baoyo babunga»"
+     "«Mwana na Moto ayaki mpo na koluka mpe kobikisa bato oyo babunga»"
     ]
    },
    "bethany": {
@@ -454,7 +454,7 @@
     "note": "Fulu kia mbaluku kina Nsangu Zambote yikwenda mu mbala yantete ku Erópa.",
     "events": [
      "Mbonokono wa muntu wa Masedwane",
-     "«Yaka kosalisa biso»",
+     "«yaka kosunga biso»",
      "Basabuka muna-muna ku Erópa"
     ]
    },
@@ -476,7 +476,7 @@
     "note": "Diambu dinikuna mbanza ye kunwana kwabuka ngolo.",
     "events": [
      "Wasolula mu nzo a lukutukunu mu masabala matatu",
-     "«Baoyo babaluli mokili likolo na nse»",
+     "«Bato oyo bazali koningisa mokili mobimba»",
      "Bakatuka va builu mu kinsweki"
     ]
    },
@@ -509,7 +509,7 @@
     "note": "Wavwanda mvu mosi ye ndambu, mu kuna dibundu mu mbanza a masumu.",
     "events": [
      "Wavanga matenta va kimosi ye Akila ye Pilisila",
-     "«Kobanga te… mpo nazali elongo na yo»",
+     "«Kobanga te… Nazali na yo elongo»",
      "Bantu bayingi ba Kolinto bakwikila ye bavubudulwa"
     ]
    },
@@ -530,7 +530,7 @@
     "today": "Turkiya unu",
     "note": "Kukayana kwa mansanga kwa bambuta ba Efeso.",
     "events": [
-     "«Bóbatela lingomba oyo asombaki na makila na Ye moko»",
+     "«bobatela Lingomba ya Nzambe… asombaki yango na makila na Ye moko»",
      "Bambuta badila, mu zaya vo ka bakummona diaka ko"
     ]
    },
@@ -542,7 +542,7 @@
     "events": [
      "Nsambusu va meso ma bangovaneli Felikisi ye Festusi",
      "Kukitanina kwandi va meso ma mfumu Agilipa",
-     "«Nasengi kosamba liboso ya Sezare» — bakwenda ku Loma"
+     "«Tika ete Sezare akata likambo na ngai» — bakwenda ku Loma"
     ]
    },
    "jerusalem": {
@@ -614,7 +614,7 @@
     "events": [
      "Mvu miole mu kukangama va nzo, mu kusamuna Kintinu ye kibakala",
      "Tuka vava osonika Minkanda mia Boloko (Baefeso·Bafilipi·Bakolose·Filemo)",
-     "Kuna kwa nima bankanga diaka, osonika 2 Timote ye ofwa mu diambu dia lukwikilu — «Nabundi etumba malamu, nasilisi mbangu»"
+     "Kuna kwa nima bankanga diaka, osonika 2 Timote ye ofwa mu diambu dia lukwikilu — «Nabundi etumba na ngai malamu, nakomi na suka ya lisano na ngai ya kokima mbangu»"
     ]
    }
   },

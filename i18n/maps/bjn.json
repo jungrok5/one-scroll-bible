@@ -1,0 +1,636 @@
+{
+ "menuName": "Banjar",
+ "htmlLang": "bjn",
+ "dir": "ltr",
+ "locale": "bjn",
+ "brand": "Alkitab Sakilas",
+ "docTitle": "Alkitab di Atas Peta · Alkitab Sakilas",
+ "metaDesc": "Iringi alur Parjanjian Lawas, hidup Isa Almasih, wan palajalanan Paulus di atas peta nang nyata — Alkitab tajadi di tampat-tampat nang nyata.",
+ "s": {
+  "kicker": "Alkitab Sakilas · Peta",
+  "title": "Alkitab di Atas Peta",
+  "verse": "“Sebab kami tidak mengikuti dongeng-dongeng isapan jempol manusia, ketika kami memberitahukan kepadamu kuasa dan kedatangan Tuhan kita, Yesus Kristus sebagai raja, tetapi kami adalah saksi mata dari kebesaran-Nya.” (2 Petrus 1:16)",
+  "purpose": "Alkitab lain mitos. Ngini catatan tantang urang nang bajalan di atas tampat, tanggal, wan ngaran nang nyata. Iringi jalannya di atas peta, saruntutan waktu — tikin saikung titik, atawa tikin ▶ gasan manapaki salangkah dami salangkah.",
+  "ot_kick": "① Parjanjian Lawas — sapanjang waktu",
+  "ot_h": "Matan panciptaan sampai bulik ka Yerusalem",
+  "ot_lead": "Lain saikung palajalanan haja, tagal alur sajarah panebusan matan panciptaan tarus: panciptaan wan kajatuhan → banjir wan Babel → saruan (Abraham) → tanah parjanjian → Keluaran → padang pasir → panaklukan → karajaan → papacahan → pambuangan → bulik.",
+  "je_kick": "② Parjanjian Hanyar — hidup Isa Almasih",
+  "je_h": "Matan Betlehem ka Yerusalem",
+  "je_lead": "Iringi hidup Isa Almasih manurut catatan Injil, saruntutan — matan kalahiran Sidin di Betlehem, malalui pambaptisan wan palayanan di Galilea, manyubarang Samaria, sampai salib, kabangkitan, wan naik ka surga di Yerusalem.",
+  "pa_kick": "③ Parjanjian Hanyar — palajalanan Paulus",
+  "pa_h": "Matan Antiokhia ka ujung bumi — Roma",
+  "pa_lead": "Matan Pentakosta di Yerusalem, kaya apa Injil tasebar malintasi Yudea — malalui Asia Kecil wan Eropa sampai ka pusat karajaan. Pilih salah satu matan lima palajalanan (ka-1·ka-2·ka-3 + palayaran ka Roma + imbah dibibasakan) wan iringi kajadian dalam Kisah Para Rasul sarta surat-surat nang ditulis sapanjang jalan.",
+  "foot": "Sumber · Tampat-tampat maumpati teks Alkitab wan geografi Alkitab baku (wan ngaran wayah ini di mana paguna). Garis pantai, sungai, wan danau diambil matan data geografi tabuka (Natural Earth), disadarhanaakan.",
+  "contact": "Patakunan · masukan — <a id=\"contact\" class=\"mail\">Kirim email</a>",
+  "play": "Puter",
+  "pause": "Jeda",
+  "today": "Wayah ini:",
+  "verseCite": "2 Petrus 1:16"
+ },
+ "ot": {
+  "places": {
+   "eden": {
+    "name": "Eden (Panciptaan · Kajatuhan)",
+    "book": "Kejadian 1–3",
+    "today": "kawasan Tigris–Efrat wayah ini",
+    "note": "Ka dalam dunia nang diulah sabujurnya baik banar, dosa masuk wan mamutus ikatan antara Allah wan manusia.",
+    "events": [
+     "Panciptaan dalam anam hari — «sungguh amat baik»",
+     "Manusia diulah manurut gambar Allah",
+     "Kajatuhan, wan diusir matan Eden",
+     "Janji Injil nang patama — «keturunan perempuan akan meremukkan kepala ular»"
+    ]
+   },
+   "noah": {
+    "name": "Ararat (Banjir)",
+    "book": "Kejadian 6–9",
+    "today": "Gunung Ararat, Turki bagian timur wayah ini",
+    "note": "Allah mangadili dunia nang panuh dosa, tagal maluputakan kahidupan malalui saikung kaluarga.",
+    "events": [
+     "Dunia panuh wan kabusukan",
+     "Banjir, wan bahtera Nuh",
+     "Parjanjian palangi — «tidak akan ada lagi air bah untuk memusnahkan bumi»"
+    ]
+   },
+   "babel": {
+    "name": "Menara Babel",
+    "book": "Kejadian 11",
+    "today": "Irak wayah ini (dataran Sinear)",
+    "note": "Malawan kaangkuhan nang manggapai langit, Allah mancarai-baraiakan basa wan bangsa-bangsa ka saluruh bumi.",
+    "events": [
+     "«Marilah kita dirikan sebuah kota dengan sebuah menara… dan marilah kita cari nama»",
+     "Allah mangacaukan basa buhannya",
+     "Bangsa-bangsa tasebar ka saluruh bumi (Sinear — kaina Babel)"
+    ]
+   },
+   "ur": {
+    "name": "Ur",
+    "book": "Kejadian 12",
+    "today": "Irak salatan wayah ini",
+    "note": "Kisah panebusan dalam Alkitab dimulai wan saruan saikung urang.",
+    "events": [
+     "Allah mamanggil Abram kaluar matan Ur-Kasdim",
+     "«Aku akan membuat engkau menjadi bangsa yang besar… olehmu semua kaum akan diberkati»",
+     "Wan iman inya maninggalakan kampung halamannya"
+    ]
+   },
+   "haran": {
+    "name": "Haran",
+    "book": "Kejadian 12",
+    "today": "Turki salatan wayah ini",
+    "note": "Di tangah jalan, manyahut saruan manuju tanah parjanjian.",
+    "events": [
+     "Kaluarga Terah manatap di Haran",
+     "Terah maninggal",
+     "Abram baangkat ka Kanaan pada umur 75 tahun"
+    ]
+   },
+   "shechem": {
+    "name": "Sikhem · Kanaan",
+    "book": "Kejadian 12–50",
+    "today": "Nablus wayah ini",
+    "note": "Di tanah parjanjian saikung kaluarga didiriakan wan parjanjian dilanjutakan turun-tamurun.",
+    "events": [
+     "Masuk Kanaan, mazbah patama — «kepada keturunanmu Kuberikan negeri ini»",
+     "Parjanjian (Kejadian 15) · Ishak · Yakub",
+     "Dua balas anak Yakub — akar dua balas suku"
+    ]
+   },
+   "egypt": {
+    "name": "Mesir (Gosyen)",
+    "book": "Kejadian 37–50 · Keluaran 1",
+    "today": "Delta Sungai Nil, Mesir wayah ini",
+    "note": "Saikung kaluarga jadi bangsa nang ganal — lalu jadi bangsa budak.",
+    "events": [
+     "Yusuf, nang dijual, naik jadi panguasa Mesir",
+     "Saluruh kaluarga Yakub turun gasan luput matan bala kalaparan",
+     "Bangsa Israel nang batambah ganal diperbudak"
+    ]
+   },
+   "sinai": {
+    "name": "Gunung Sinai",
+    "book": "Keluaran · Imamat",
+    "today": "Semenanjung Sinai wayah ini",
+    "note": "Kasalamatan pusat dalam PL — budak jadi umat kapunyaan Allah.",
+    "events": [
+     "Sapuluh tulah wan anak domba Paskah",
+     "Laut Teberau tabalah wan buhannya manyubarang",
+     "Sapuluh Hukum, Taurat, Kemah Suci wan kurban"
+    ]
+   },
+   "kadesh": {
+    "name": "Kadesh (padang pasir)",
+    "book": "Bilangan · Ulangan",
+    "today": "padang pasir Sinai–Negeb wayah ini",
+    "note": "Katidakpicayaan mambuat saikung katurunan kahilangan tanah — tagal Allah tatap maumpati buhannya.",
+    "events": [
+     "Dua balas pangintai — tagal umat manulak picaya",
+     "38 tahun di padang pasir — manna, awan, wan api",
+     "Di dataran Moab, khotbah tarakhir Musa (Ulangan)"
+    ]
+   },
+   "jericho": {
+    "name": "Yerikho",
+    "book": "Yosua",
+    "today": "Yerikho wayah ini",
+    "note": "Ujungnya buhannya masuk wan maampih tanah parjanjian.",
+    "events": [
+     "Sungai Yordan tabalah wan umat manyubarang",
+     "Dinding Yerikho runtuh",
+     "Panaklukan Kanaan wan pambagian tanah"
+    ]
+   },
+   "shiloh": {
+    "name": "Silo (Hakim-hakim)",
+    "book": "Hakim-hakim · Rut",
+    "today": "Khirbet Seilun wayah ini",
+    "note": "Kadada raja, tiap urang bagawi sasuka hatinya — parlu saikung raja sajati.",
+    "events": [
+     "Kemah Suci didiriakan di Silo",
+     "Lingkaran dosa–panindasan–kasalamatan (Debora, Gideon, Simson)",
+     "Rut — kasatiaan di masa kalam, dalam garis Daud"
+    ]
+   },
+   "jerusalem": {
+    "name": "Yerusalem · Karajaan Basatu",
+    "book": "1–2 Samuel · 1 Raja-raja",
+    "today": "Yerusalem wayah ini",
+    "note": "Zaman kaamasan Israel — wan janji saikung raja nang kekal.",
+    "events": [
+     "Saul raja patama, lalu Daud wan Goliat",
+     "Parjanjian lawan Daud — «takhtamu untuk selama-lamanya» (2 Samuel 7)",
+     "Salomo maulah Rumah Suci di Yerusalem"
+    ]
+   },
+   "samaria": {
+    "name": "Samaria · Karajaan Tabalah",
+    "book": "Raja-raja · para nabi",
+    "today": "Sebastia wayah ini",
+    "note": "Karajaan tabalah wan marosot samantara para nabi basaru.",
+    "events": [
+     "Imbah Salomo, tabalah jadi Yehuda wan Israel",
+     "Panyambahan barhala nang baulang",
+     "Elia, Yesaya, Yeremia basaru ‘buliklah’ — wan manubuatakan Mesias"
+    ]
+   },
+   "nineveh": {
+    "name": "Niniwe (Asyur)",
+    "book": "2 Raja-raja 17 · Yunus",
+    "today": "Mosul, Irak wayah ini",
+    "note": "Kada mahiraukan tiap paringatan, utara gugur paling awal.",
+    "events": [
+     "Niniwe, ibu kota Asyur",
+     "Karajaan utara gugur ka tangan Asyur (722 SM)",
+     "Yunus disuruh ka Niniwe"
+    ]
+   },
+   "babylon": {
+    "name": "Babel",
+    "book": "2 Raja-raja 25 · Daniel · Yehezkiel",
+    "today": "Hillah, Irak wayah ini",
+    "note": "Malam nang paling kalam — tagal janji pamulihan tatap ada.",
+    "events": [
+     "Yerusalem gugur, Rumah Suci tabakar (586 SM)",
+     "Yehuda dibuang ka Babel",
+     "Daniel wan Yehezkiel — iman wan panglihatan di pambuangan"
+    ]
+   },
+   "susa": {
+    "name": "Susan (Persia)",
+    "book": "Ester · Nehemia",
+    "today": "Shush, Iran wayah ini",
+    "note": "Sampai di pusat karajaan kafir, Allah maumpati umat Sidin.",
+    "events": [
+     "Persia mangalahakan Babel",
+     "Ester manyalamatakan urang Yahudi matan pamusnahan",
+     "Nehemia badoa di hadapan raja lalu diutus"
+    ]
+   },
+   "return": {
+    "name": "Bulik ka Yerusalem",
+    "book": "Ezra · Nehemia · Maleakhi",
+    "today": "Yerusalem wayah ini",
+    "note": "Buhannya bulik wan maulah ulang — tagal kadada raja nang datang. Buhannya manunggu Mesias.",
+    "events": [
+     "Talu galombang kabulikan wan titah Koresh (Zerubabel 538 · Ezra 458 · Nehemia 444)",
+     "Rumah Suci diulah ulang wan dinding Yerusalem dipulihakan",
+     "Maleakhi — PL ditutup: «Aku menyuruh utusan-Ku»"
+    ]
+   }
+  },
+  "labels": [
+   "Laut Tangah",
+   "Mesopotamia",
+   "Padang Pasir Arab",
+   "Mesir"
+  ],
+  "journeys": {
+   "flow": "Kisah panebusan"
+  }
+ },
+ "jesus": {
+  "places": {
+   "bethlehem": {
+    "name": "Betlehem",
+    "book": "Matius 1–2 · Lukas 2",
+    "today": "Betlehem wayah ini",
+    "note": "Mesias nang dijanjiakan datang ka kota Daud — Firman jadi manusia.",
+    "events": [
+     "Lahir di Betlehem, kota Daud",
+     "Malaikat mambaritaakan ka gambala",
+     "Urang majus datang manyambah"
+    ]
+   },
+   "nazareth": {
+    "name": "Nazaret",
+    "book": "Lukas 2 · 4",
+    "today": "Nazaret wayah ini",
+    "note": "Allah ganal jadi manusia di kota nang biasa.",
+    "events": [
+     "Dipalihara di rumah tukang kayu",
+     "Umur dua balas, batakun-jawab di Bait Allah",
+     "Kaina ditulak di sinagoge kampung halamannya"
+    ]
+   },
+   "jordan": {
+    "name": "Sungai Yordan",
+    "book": "Matius 3–4",
+    "today": "Yordan hilir wayah ini",
+    "note": "Palayanan umum Sidin dimulai — surga mangkokohakan Sidin jadi Anak.",
+    "events": [
+     "Dibaptis ulih Yohanes",
+     "Roh turun kaya burung dara — «Inilah Anak-Ku yang Kukasihi»",
+     "Mangalahakan talu cobaan Iblis di padang pasir"
+    ]
+   },
+   "cana": {
+    "name": "Kana",
+    "book": "Yohanes 2",
+    "today": "Kafr Kanna wayah ini",
+    "note": "Dalam mukjizat patama Sidin manyatakan kamuliaan-Nya.",
+    "events": [
+     "Jadi tamu di sabuah pesta nikah",
+     "Banyu jadi anggur — mukjizat patama Sidin",
+     "Para murid Sidin picaya lawan Sidin"
+    ]
+   },
+   "sychar": {
+    "name": "Sikhar (Samaria)",
+    "book": "Yohanes 2–4",
+    "today": "parak Nablus wayah ini",
+    "note": "Jalan palayanan awal — malalui Yerusalem tarus ka Samaria nang dihina.",
+    "events": [
+     "Sidin manyuciakan Bait Allah di Yerusalem",
+     "Pada malam hari, Nikodemus — «kamu harus dilahirkan kembali»",
+     "Banyu hidup gasan saikung bibinian Samaria"
+    ]
+   },
+   "capernaum": {
+    "name": "Kapernaum",
+    "book": "Matius 4–13 · Markus 1–4",
+    "today": "tapian Danau Galilea wayah ini",
+    "note": "Pusat palayanan Galilea — saruan, pangajaran, wan panantangan batamu di sini.",
+    "events": [
+     "Mamanggil para panangkap iwak wan bapusat di sini",
+     "Khotbah di Bukit — «Berbahagialah orang yang miskin di hadapan Allah»",
+     "Parumpamaan Karajaan — wan panantangan nang batambah"
+    ]
+   },
+   "galilee": {
+    "name": "Danau Galilea",
+    "book": "Markus 4 · 6 · Yohanes 6",
+    "today": "Danau Kineret wayah ini",
+    "note": "Wan kuasa atas alam Sidin manyatakan siapa Sidin.",
+    "events": [
+     "«Diam! Tenanglah!» — Sidin mananangakan badai",
+     "Mambari makan 5.000 urang wan lima roti wan dua iwak",
+     "Bajalan di atas banyu"
+    ]
+   },
+   "caesarea_p": {
+    "name": "Kaisarea Filipi",
+    "book": "Matius 16–17",
+    "today": "Banias wayah ini",
+    "note": "Para murid mamahami bahwa Sidin tu Almasih, wan jalan salib tabuka.",
+    "events": [
+     "Pangakuan Petrus — «Engkau adalah Mesias, Anak Allah yang hidup»",
+     "Sidin patama kali manubuatakan kamatian wan kabangkitan-Nya",
+     "Baubah rupa dalam kamuliaan di atas gunung"
+    ]
+   },
+   "jericho": {
+    "name": "Yerikho",
+    "book": "Lukas 18–19",
+    "today": "Yerikho wayah ini",
+    "note": "Di jalan naik ka Yerusalem, Sidin mancari nang hilang.",
+    "events": [
+     "Sidin mancilikakan Bartimeus nang buta",
+     "Sidin mamanggil Zakheus si pamungut cukai",
+     "«Anak Manusia datang untuk mencari dan menyelamatkan yang hilang»"
+    ]
+   },
+   "bethany": {
+    "name": "Betania",
+    "book": "Yohanes 11–12",
+    "today": "al-Eizariya wayah ini",
+    "note": "Sidin manyatakan kuasa atas maut di ambang minggu tarakhir-Nya.",
+    "events": [
+     "Sidin mambangkitakan Lazarus matan kubur — «Akulah kebangkitan dan hidup»",
+     "Maria maurapi Sidin gasan panguburan",
+     "Mukjizat ngini maulah rancana mambunuh Sidin makin kuat"
+    ]
+   },
+   "jerusalem": {
+    "name": "Yerusalem",
+    "book": "Matius 21–28 · Lukas 24 · Kisah Para Rasul 1",
+    "today": "Yerusalem wayah ini",
+    "note": "Puncak nang dituju saluruh Alkitab — salib, kabangkitan, kanaikan.",
+    "events": [
+     "Masuk wan jaya; Sidin mambalikakan pulang meja-meja di Bait Allah",
+     "Pada Parjamuan Tarakhir Sidin mambasuh batis para murid",
+     "Sidin mati di salib",
+     "Babangkit pada hari katalu, lalu naik ka surga"
+    ]
+   }
+  },
+  "labels": [
+   "Laut Tangah",
+   "Galilea",
+   "Samaria",
+   "Yudea",
+   "Dekapolis",
+   "Perea",
+   "Laut Mati"
+  ],
+  "journeys": {
+   "life": "Jalan Isa Almasih"
+  }
+ },
+ "paul": {
+  "places": {
+   "antioch": {
+    "name": "Antiokhia",
+    "book": "Kisah Para Rasul 13 · 15",
+    "today": "Antakya, Turki wayah ini",
+    "note": "Gareja pangutus tampat misi bangsa kafir dimulai wan bulik.",
+    "events": [
+     "Dalam doa Roh mamisahakan Barnabas wan Saulus",
+     "Gareja tampat urang picaya patama kali disabut ‘Kristen’",
+     "Titik awal palajalanan ka-1, ka-2, wan ka-3"
+    ]
+   },
+   "seleucia": {
+    "name": "Seleukia",
+    "book": "Kisah Para Rasul 13:4",
+    "today": "Turki wayah ini",
+    "note": "Palabuhan Antiokhia — buhannya balayar ka Siprus.",
+    "events": []
+   },
+   "salamis": {
+    "name": "Salamis (Siprus)",
+    "book": "Kisah Para Rasul 13:5",
+    "today": "Siprus wayah ini",
+    "note": "Parhantian patama di Siprus — mambaritaakan Injil di sinagoge.",
+    "events": []
+   },
+   "paphos": {
+    "name": "Pafos",
+    "book": "Kisah Para Rasul 13:6-12",
+    "today": "Siprus wayah ini",
+    "note": "Kuasa dinyataakan malawan nang manantang Injil.",
+    "events": [
+     "Elimas si tukang sihir dijadiakan buta",
+     "Sergius Paulus si gubernur picaya",
+     "Matan sini ‘Paulus’ mamimpin di hadapan"
+    ]
+   },
+   "perga": {
+    "name": "Perga",
+    "book": "Kisah Para Rasul 13:13",
+    "today": "Antalya, Turki wayah ini",
+    "note": "Palabuhan di Pamfilia — di sini Yohanes Markus bulik.",
+    "events": []
+   },
+   "pantioch": {
+    "name": "Antiokhia di Pisidia",
+    "book": "Kisah Para Rasul 13:14-50",
+    "today": "Yalvaç, Turki wayah ini",
+    "note": "Injil mambuka lebar manuju bangsa kafir.",
+    "events": [
+     "Khotbah panjang sajarah kasalamatan di sinagoge",
+     "Banyak urang kafir bagembira wan manarima firman",
+     "Diusir ulih panantangan"
+    ]
+   },
+   "iconium": {
+    "name": "Ikonium",
+    "book": "Kisah Para Rasul 14:1-7",
+    "today": "Konya, Turki wayah ini",
+    "note": "Banyak nang picaya, tagal panganiayaan mamaksa buhannya tarus.",
+    "events": []
+   },
+   "lystra": {
+    "name": "Listra",
+    "book": "Kisah Para Rasul 14:8-20",
+    "today": "Turki wayah ini",
+    "note": "Dielu-elukan jadi dewa, lalu dilontari batu.",
+    "events": [
+     "Mawarasakan saikung urang nang lumpuh matan lahir",
+     "Urang banyak handak bakurban ka buhannya kaya ka dewa",
+     "Dilontari batu wan ditinggal saolah mati, tagal inya bangun"
+    ]
+   },
+   "derbe": {
+    "name": "Derbe",
+    "book": "Kisah Para Rasul 14:20-21",
+    "today": "Turki wayah ini",
+    "note": "Banyak murid didapat; buhannya mangulang jalan gasan manguatakan gareja.",
+    "events": []
+   },
+   "troas": {
+    "name": "Troas",
+    "book": "Kisah Para Rasul 16:8-10",
+    "today": "Turki wayah ini",
+    "note": "Titik balik tampat Injil patama kali manuju Eropa.",
+    "events": [
+     "Panglihatan saikung urang Makedonia",
+     "«Menyeberanglah ke mari dan tolonglah kami»",
+     "Buhannya langsung manyubarang ka Eropa"
+    ]
+   },
+   "philippi": {
+    "name": "Filipi",
+    "book": "Kisah Para Rasul 16 · Filipi",
+    "today": "Yunani utara wayah ini",
+    "note": "Gareja patama di Eropa — Injil manang sampai dalam panjara.",
+    "events": [
+     "Lidia, panjual kain ungu, picaya",
+     "Saikung budak bibinian tukang tanung dibibasakan",
+     "Nyanyian tangah malam, gampa bumi, saisi rumah kapala panjara disalamatakan"
+    ]
+   },
+   "thess": {
+    "name": "Tesalonika",
+    "book": "Kisah Para Rasul 17 · 1–2 Tesalonika",
+    "today": "Tesaloniki, Yunani wayah ini",
+    "note": "Firman manggoncang kota wan panantangan maluap.",
+    "events": [
+     "Baurun di sinagoge talu hari Sabat",
+     "«Orang-orang yang mengacaukan seluruh dunia»",
+     "Buhannya bakah pada malam hari"
+    ]
+   },
+   "berea": {
+    "name": "Berea",
+    "book": "Kisah Para Rasul 17:10-15",
+    "today": "Veria, Yunani wayah ini",
+    "note": "Urang ‘mulia’ nang manyalidiki firman saurang.",
+    "events": [
+     "Buhannya manarima firman wan sungguh-sungguh",
+     "Tiap hari buhannya manyalidiki Kitab Suci gasan mamariksanya",
+     "Banyak nang jadi picaya"
+    ]
+   },
+   "athens": {
+    "name": "Atena",
+    "book": "Kisah Para Rasul 17:16-34",
+    "today": "Atena, Yunani wayah ini",
+    "note": "Di kota para filsuf Paulus mambaritaakan ‘allah yang tidak dikenal’.",
+    "events": [
+     "Hatinya sadih maliat kota panuh barhala",
+     "Di Areopagus inya mambaritaakan Pancipta wan kabangkitan",
+     "Diolok-olok, tagal sababaraha urang picaya"
+    ]
+   },
+   "corinth": {
+    "name": "Korintus",
+    "book": "Kisah Para Rasul 18 · 1–2 Korintus",
+    "today": "Yunani wayah ini",
+    "note": "Inya batahan satahun satangah, managakan gareja di kota nang panuh kajahatan.",
+    "events": [
+     "Maulah kemah wan Akwila wan Priskila",
+     "«Jangan takut… sebab Aku menyertai engkau»",
+     "Banyak urang Korintus picaya wan dibaptis"
+    ]
+   },
+   "ephesus": {
+    "name": "Efesus",
+    "book": "Kisah Para Rasul 19 · Efesus",
+    "today": "Selçuk, Turki wayah ini",
+    "note": "Jantung palajalanan ka-3 — firman tasebar ka saluruh Asia.",
+    "events": [
+     "Tiap hari maajar dua tahun di ruang kuliah Tiranus",
+     "Kitab-kitab sihir dibakar; parbuatan nang dahsyat",
+     "Demetrius si tukang parak mambangkitakan karusuhan"
+    ]
+   },
+   "miletus": {
+    "name": "Miletus",
+    "book": "Kisah Para Rasul 20:17-38",
+    "today": "Turki wayah ini",
+    "note": "Pamisahan nang panuh banyu mata lawan para panatua Efesus.",
+    "events": [
+     "«Gembalakanlah jemaat yang diperoleh-Nya dengan darah-Nya sendiri»",
+     "Para panatua manangis, tahu buhannya kada kahandak baliat pulang lawan inya"
+    ]
+   },
+   "caesarea": {
+    "name": "Kaisarea",
+    "book": "Kisah Para Rasul 23–26",
+    "today": "pasisir Israel wayah ini",
+    "note": "Salawas dua tahun inya mambela Injil di hadapan para gubernur wan saikung raja.",
+    "events": [
+     "Sidang di hadapan gubernur Feliks wan Festus",
+     "Pambelaan di hadapan Raja Agripa",
+     "«Aku naik banding kepada Kaisar» — tarus ka Roma"
+    ]
+   },
+   "jerusalem": {
+    "name": "Yerusalem",
+    "book": "Kisah Para Rasul 21–23",
+    "today": "Yerusalem wayah ini",
+    "note": "Ditangkap di Bait Allah, jalannya jadi urang tahanan dimulai.",
+    "events": [
+     "Ditangkap ulih urang banyak di Bait Allah",
+     "Mambela diri di hadapan Majelis",
+     "Jadi warga Roma, dikawal ka Kaisarea"
+    ]
+   },
+   "myra": {
+    "name": "Mira",
+    "book": "Kisah Para Rasul 27:5-6",
+    "today": "Demre, Turki wayah ini",
+    "note": "Buhannya pindah ka kapal Aleksandria nang manuju Roma.",
+    "events": []
+   },
+   "fairhaven": {
+    "name": "Pelabuhan Baik (Kreta)",
+    "book": "Kisah Para Rasul 27:8-12",
+    "today": "Kreta wayah ini",
+    "note": "Paringatan Paulus gasan bahanti balayar kada dihiraukan.",
+    "events": []
+   },
+   "crete": {
+    "name": "Kreta",
+    "book": "Titus",
+    "today": "Kreta wayah ini",
+    "note": "Imbah dibibasakan, pulau tampat inya maninggalakan Titus gasan manata gareja.",
+    "events": [
+     "Maninggalakan Titus gasan maangkat panatua di tiap kota",
+     "Manuntut pamimpin nang kada bacela wan satia",
+     "Manulis surat ka Titus"
+    ]
+   },
+   "malta": {
+    "name": "Malta",
+    "book": "Kisah Para Rasul 27–28",
+    "today": "Malta wayah ini",
+    "note": "Malalui badai wan karam, janji Allah tatap tagak.",
+    "events": [
+     "Angin ‘timur laut’ maramukakan kapal, tagal sabarataan 276 urang salamat",
+     "Dipatuk ular baracun, tagal inya kada papa",
+     "Inya mawarasakan urang sakit di pulau itu"
+    ]
+   },
+   "syracuse": {
+    "name": "Sirakusa",
+    "book": "Kisah Para Rasul 28:12",
+    "today": "Sisilia, Italia wayah ini",
+    "note": "Buhannya batahan talu hari di Sisilia.",
+    "events": []
+   },
+   "puteoli": {
+    "name": "Putioli",
+    "book": "Kisah Para Rasul 28:13-14",
+    "today": "Pozzuoli, Italia wayah ini",
+    "note": "Buhannya mandarat di Italia wan disambut sasama urang picaya.",
+    "events": []
+   },
+   "rome": {
+    "name": "Roma",
+    "book": "Kisah Para Rasul 28 · Surat-surat Panjara · 2 Timotius",
+    "today": "Roma, Italia wayah ini",
+    "note": "Injil ujungnya sampai ka jantung karajaan — lain saikung ujung tagal saikung awal.",
+    "events": [
+     "Dua tahun dalam tahanan rumah, wan barani mambaritaakan Karajaan",
+     "Matan sini inya manulis Surat-surat Panjara (Efesus·Filipi·Kolose·Filemon)",
+     "Kaina dipanjara pulang, manulis 2 Timotius wan mati sahid — «aku telah mengakhiri pertandingan yang baik, aku telah mencapai garis akhir»"
+    ]
+   }
+  },
+  "labels": [
+   "Laut Tangah",
+   "Laut Aegea",
+   "Asia Kecil",
+   "Makedonia",
+   "Italia"
+  ],
+  "journeys": {
+   "j1": "Palajalanan patama",
+   "j2": "Palajalanan kadua",
+   "j3": "Palajalanan katalu",
+   "rome": "Palajalanan kaampat · ka Roma",
+   "j5": "Palajalanan kalima · imbah dibibasakan"
+  }
+ }
+}

@@ -1,0 +1,636 @@
+{
+ "menuName": "Basa Ugi",
+ "htmlLang": "bug",
+ "dir": "ltr",
+ "locale": "bug-ID",
+ "brand": "Bible ri Séddi Gulungeng",
+ "docTitle": "Bible ri Péta · Bible ri Séddi Gulungeng",
+ "metaDesc": "Tinrosiwi urutan wettu Assijancing Lama, atuwonna Yésus, sibawa allalengenna Paulus ri séddié péta tongeng — Bible-é kajajiyang ri onrong tongeng.",
+ "s": {
+  "kicker": "Bible ri Séddi Gulungeng · Péta",
+  "title": "Bible ri Péta",
+  "verse": "“Wettutta paissengiko pékkugi arajanna apolénna Puwatta Yésus Kristus, dé' tataggattung ri pau-pau rikadong dé'é natongeng. Arajanna Kristus purani riita sibawa mata ulutta.” (2 Pétrus 1:16)",
+  "purpose": "Bible-é tenniya curita belléng. Iyanaritu séddi catatang passalenna tau iya joppaé ri onrong tongeng, wettu tongeng, sibawa aseng tongeng. Tinrosiwi iyaro sining lalengngé ri séddié péta, situru' urutan wettu — pénré'i séddi onrong, iyaré'ga pénré'i ▶ untu' joppaiwi séddi-séddi.",
+  "ot_kick": "① Assijancing Lama — lalo ri wettu",
+  "ot_h": "Polé ri pancajingngé lettu' lisu ri Yérusalém",
+  "ot_lead": "Tenniya séddi allalengeng bawang iyakiya lalona curita passalama'é mappammulai polé ri pancajingngé: pancajing sibawa sempé' → lémpe' sibawa Babél → obbiyang (Abraham) → tana jancié → Assu polé Maséré → padang kessi' → acaukeng → akkarungeng → mappuwé → appalliyang → lisu.",
+  "je_kick": "② Assijancing Baru — atuwonna Yésus",
+  "je_h": "Polé ri Bétléhém lao ri Yérusalém",
+  "je_lead": "Tinrosiwi atuwonna Yésus situru' pannessana Karéba Madécéngngé, situru' urutan — polé ri ajajinna ri Bétléhém, naolai acceppu'na sibawa jama-jamana ri Galiléa, lalo ri Samaria, lettu' ri salli'é, tuwo paimenna sibawa énré'na ri Yérusalém.",
+  "pa_kick": "③ Assijancing Baru — allalengenna Paulus",
+  "pa_h": "Polé ri Antiokhia lao ri cappa'na linoé — Roma",
+  "pa_lead": "Polé ri Péntakosta ri Yérusalém, pékkugi Karéba Madécéngngé mallebbang lalo ri Yudéa — naolai Asia Baiccu sibawa Éropa lettu' ri ati akkarungeng Romaé. Piléi séddi polé ri lima allalengengngé (1·2·3 + allalengeng lao ri Roma + rimunrinna ripaléppe') sibawa tinrosiwi kajajiyanna Pappakédona Sininna Surié silaong sure'-sure' iya riokié ri lalengngé.",
+  "foot": "Assaleng · Sining onrongngé situru' teks Bible-é sibawa géografi Bible baku (sibawa aseng makkekkuwangngé rékko mappaké). Wiri tasi', salo, sibawa tappareng ripancaji polé ri data géografi terbuka (Natural Earth), ripagampang.",
+  "contact": "Pakkutana · pappébali — <a id=\"contact\" class=\"mail\">Kiringngi email lao ri idi</a>",
+  "play": "Joppa",
+  "pause": "Appésau",
+  "today": "Makkekkuwangngé:",
+  "verseCite": "2 Pétrus 1:16"
+ },
+ "ot": {
+  "places": {
+   "eden": {
+    "name": "Eden (Pancajing · Sempé')",
+    "book": "Kajajiyang 1–3",
+    "today": "daéra Tigris–Éfrat makkekkuwangngé",
+    "note": "Ri laleng linoé iya riébbu “madécéng senna',” muttama'i dosaé na napettui assisumpungenna Allataala sibawa rupa tauwé.",
+    "events": [
+     "Pancajing ri laleng enneng esso — “madécéng senna'”",
+     "Rupa tauwé riébbu selaku gambara'na Allataala",
+     "Sempé'na, sibawa ripassu polé ri Eden",
+     "Janci Karéba Madécéng pammulanna — “wija-wijanna makkunraié naancuru'i matu ulunna ulaé”"
+    ]
+   },
+   "noah": {
+    "name": "Ararat (Lémpe'é)",
+    "book": "Kajajiyang 6–9",
+    "today": "Bulu Ararat, Turki alau makkekkuwangngé",
+    "note": "Nahukkung Allataala linoé iya pennoé dosa, iyakiya najagai atuwongngé naolai séddi kaluwarga.",
+    "events": [
+     "Linoé iya pennoé ja",
+     "Lémpe'é, sibawa lopinna Nuh",
+     "Assijancing pelangié — “dé'na matu gaga lémpe' untu' paccappu'i linoé”"
+    ]
+   },
+   "babel": {
+    "name": "Menara Babél",
+    "book": "Kajajiyang 11",
+    "today": "Irak makkekkuwangngé (padang Sinéar)",
+    "note": "Lao ri atempo iya maélo'é lettu' ri langié, napasala-salai Allataala basana na napattassiala sining bangsaé ri yasé'na linoé.",
+    "events": [
+     "“Taébbui séddi kota sibawa séddi menara… na tapaompo aseng untu' idi”",
+     "Napasala-salai Allataala basana mennang",
+     "Tassiala sining bangsaé ri yasé'na linoé (Sinéar — rimunri Babél)"
+    ]
+   },
+   "ur": {
+    "name": "Ur",
+    "book": "Kajajiyang 12",
+    "today": "Irak yattang makkekkuwangngé",
+    "note": "Curita passalama'na Bible-é mappammula sibawa obbiyang lao ri séddié tau.",
+    "events": [
+     "Naobbiwi Allataala Abram massu polé ri Ur-na to Kasdim",
+     "“Maélo-Ka mancajiko bangsa iya battowaé… sininna bangsaé ribarakkaki naolai iko”",
+     "Naolai ateppereng nasalaiwi tana assalenna"
+    ]
+   },
+   "haran": {
+    "name": "Haran",
+    "book": "Kajajiyang 12",
+    "today": "Turki yattang makkekkuwangngé",
+    "note": "Ri lalengngé, nabalié obbiyangngé lao ri tana jancié.",
+    "events": [
+     "Kaluwargana Térah monro ri Haran",
+     "Maté Térah",
+     "Joppa Abram lao ri Kanaan ri umuru' 75 taung"
+    ]
+   },
+   "shechem": {
+    "name": "Sikhém · Kanaan",
+    "book": "Kajajiyang 12–50",
+    "today": "Nablus makkekkuwangngé",
+    "note": "Ri tana jancié ripatettong séddi kaluwarga na assijancingngé lélé lao ri wija-wija ri munri.",
+    "events": [
+     "Muttama' ri Kanaan, mézbah pammulanna — “lao ri wija-wijammu Uwéréngngi iyaé tanaé”",
+     "Assijancingngé (Kajajiyang 15) · Ishak · Yakub",
+     "Seppulo duwa ana' worowanéna Yakub — ure'na seppulo duwa sukué"
+    ]
+   },
+   "egypt": {
+    "name": "Maséré (Gosén)",
+    "book": "Kajajiyang 37–50 · Assu 1",
+    "today": "Délta Nil, Maséré makkekkuwangngé",
+    "note": "Séddi kaluwarga mancaji bangsa battowa — nainappa mancaji bangsa ata.",
+    "events": [
+     "Yusuf, iya ribalu'é, ménré' mancaji panguwasa ri Maséré",
+     "Sininna kaluwargana Yakub nonno untu' leppe' polé ri araténg",
+     "Bangsa Israél iya tuli maégaé riposata"
+    ]
+   },
+   "sinai": {
+    "name": "Bulu Sinai",
+    "book": "Assu · Léwi",
+    "today": "Semenanjung Sinai makkekkuwangngé",
+    "note": "Passalama' kaminang battowana Assijancing Lama — ata mancaji bangsana Allataala.",
+    "events": [
+     "Seppulo lasa sibawa bémbé' Paskahé",
+     "Tasi' Cellaé mabbagé na malléttoi mennang",
+     "Seppulo Parénta, Hukkungngé, kémah suci sibawa akkarobangeng"
+    ]
+   },
+   "kadesh": {
+    "name": "Kadés (padang kessi')",
+    "book": "Bilangang · Ulangan",
+    "today": "padang kessi' Sinai–Négev makkekkuwangngé",
+    "note": "Nasaba temmateppe', séddi turunang teddéngngi tanaé — iyakiya Allataala tuli monro silaong mennang.",
+    "events": [
+     "Seppulo duwa mata-mata — iyakiya dé' namaélo mateppe' ra'ya'é",
+     "38 taung ri padang kessi'é — manna, ellung sibawa api",
+     "Ri padang Moab, khotbah cappa'na Musa (Ulangan)"
+    ]
+   },
+   "jericho": {
+    "name": "Yériko",
+    "book": "Yosua",
+    "today": "Yériko makkekkuwangngé",
+    "note": "Ri cappa'na muttama'i mennang na naala tana jancié.",
+    "events": [
+     "Salo Yordan mabbagé na malléttoi ra'ya'é",
+     "Maruttung bénténna Yériko",
+     "Acaukenna Kanaan sibawa abbagéng tanaé"
+    ]
+   },
+   "shiloh": {
+    "name": "Silo (Arung-ngarung)",
+    "book": "Arung-ngarung · Rut",
+    "today": "Khirbet Seilun makkekkuwangngé",
+    "note": "Dé' arung, tungke tau napogau'i aga iya naéloriyé — paréllui séddi arung tongeng.",
+    "events": [
+     "Ripatettong kémah sucié ri Silo",
+     "Lélénna dosa–anrasa-rasang–passalama' (Débora, Gideon, Simson)",
+     "Rut — atinulureng ri esso mapettangngé, ri wijanna Daud"
+    ]
+   },
+   "jerusalem": {
+    "name": "Yérusalém · Akkarungeng Masséddié",
+    "book": "1–2 Samuel · 1 Arung",
+    "today": "Yérusalém makkekkuwangngé",
+    "note": "Wettu marampéna Israél — sibawa janci arung mannennungeng.",
+    "events": [
+     "Saul arung pammulanna, nainappa Daud sibawa Goliat",
+     "Assijancing Daud — “akkarungemmu mattahang mannennungeng” (2 Samuel 7)",
+     "Naébbui Salomo bola sémpajangngé ri Yérusalém"
+    ]
+   },
+   "samaria": {
+    "name": "Samaria · Akkarungeng Mappuwé",
+    "book": "Arung · Sining Nabié",
+    "today": "Sebastia makkekkuwangngé",
+    "note": "Mappuwéi akkarungengngé na maccaja' ri wettunna mangobbi sining nabié.",
+    "events": [
+     "Rimunrinna Salomo, mappuwé lao ri Yéhuda sibawa Israél",
+     "Assompang barahala iya tuli ripakulingngé",
+     "Elia, Yésaya, Yérémia mangobbi “lisuno” — sibawa napowadai Mésias"
+    ]
+   },
+   "nineveh": {
+    "name": "Niniwé (Asyur)",
+    "book": "2 Arung 17 · Yunus",
+    "today": "Mosul, Irak makkekkuwangngé",
+    "note": "Nabau-bauwangngi tungke' pappakaingek, sempé' riolo bagiyang manorangngé.",
+    "events": [
+     "Niniwé, kota rajana Asyur",
+     "Sempé' akkarungeng manorangngé lao ri Asyur (722 SM)",
+     "Risuroi Yunus lao ri Niniwé"
+    ]
+   },
+   "babylon": {
+    "name": "Babél",
+    "book": "2 Arung 25 · Daniél · Yéheskiél",
+    "today": "Hillah, Irak makkekkuwangngé",
+    "note": "Wenni kaminang mapettanna — iyakiya janci appédécéngengngé monro mupa.",
+    "events": [
+     "Sempé' Yérusalém, ritunu bola sémpajangngé (586 SM)",
+     "Ripaccéo' Yéhuda lao ri Babél",
+     "Daniél sibawa Yéheskiél — ateppereng sibawa pakkita ri laleng appalliyangngé"
+    ]
+   },
+   "susa": {
+    "name": "Susan (Persia)",
+    "book": "Éster · Néhémia",
+    "today": "Shush, Iran makkekkuwangngé",
+    "note": "Muwi ri ati akkarungeng iya massompa barahalaé, najagai Allataala bangsa-Na.",
+    "events": [
+     "Nacaui Persia Babél",
+     "Napassalama'i Éster to Yahudié polé ri abinasang",
+     "Massempajang Néhémia ri yolona arungngé na risuro"
+    ]
+   },
+   "return": {
+    "name": "Lisu lao ri Yérusalém",
+    "book": "Ezra · Néhémia · Maléakhi",
+    "today": "Yérusalém makkekkuwangngé",
+    "note": "Lisu'i mennang na pébbu' paimeng — iyakiya dé'pa arung polé. Natajengngi mennang Mésias.",
+    "events": [
+     "Tellu sé'lo lisu naolai parénta Korés (Zerubabél 538 · Ezra 458 · Néhémia 444)",
+     "Ripébbu' paimeng bola sémpajangngé sibawa ripédécéngi bénténna Yérusalém",
+     "Maléakhi — napaccappureng Assijancing Lama: “Ukiringngi matu suro-Ku”"
+    ]
+   }
+  },
+  "labels": [
+   "Tasi' Tengnga",
+   "Mésopotamia",
+   "Padang Kessi' Arab",
+   "Maséré"
+  ],
+  "journeys": {
+   "flow": "Curita passalama'é"
+  }
+ },
+ "jesus": {
+  "places": {
+   "bethlehem": {
+    "name": "Bétléhém",
+    "book": "Matius 1–2 · Lukas 2",
+    "today": "Bétléhém makkekkuwangngé",
+    "note": "Mésias iya rijanciyangngé polé ri kota Daud — Saddaé iya mancajié rupa tau.",
+    "events": [
+     "Rijajiyang ri Bétléhém, kota Daud",
+     "Napabbirittangngi malaéka'é karébaé lao ri pakkampi bimbala'é",
+     "Polé sining tau Majusé untu' massompa"
+    ]
+   },
+   "nazareth": {
+    "name": "Nasarét",
+    "book": "Lukas 2 · 4",
+    "today": "Nasarét makkekkuwangngé",
+    "note": "Allataala battowa selaku rupa tau ri séddi kota biyasa.",
+    "events": [
+     "Ripiara ri bolana séddi panré aju",
+     "Ri umuru' seppulo duwa, makkutana sibawa mappébali ri bola sémpajangngé",
+     "Rimunri ritampikeng ri sinagogé kota assalenna"
+    ]
+   },
+   "jordan": {
+    "name": "Salo Yordan",
+    "book": "Matius 3–4",
+    "today": "bagiyang riawana Yordan makkekkuwangngé",
+    "note": "Mappammula jama-jamana ri yolona tauwé — napattongengngi langié Aléna selaku Ana'é.",
+    "events": [
+     "Riacceppu' ri Yohanés",
+     "Nonno Roh-é pada-pada marépati — “Iyanaé Ana'-Ku iya Uwamaséiyé”",
+     "Nacaui tellu paccoba-cobana Sétang ri padang kessi'é"
+    ]
+   },
+   "cana": {
+    "name": "Kana",
+    "book": "Yohanés 2",
+    "today": "Kafr Kanna makkekkuwangngé",
+    "note": "Ri tanra pammulanna napannessai arajan-Na.",
+    "events": [
+     "Séddi topolé ri séddi pésta abbottingeng",
+     "Uwai ripancaji anggoro — tanra pammulanna",
+     "Mateppe'i ana' gurunna lao ri Aléna"
+    ]
+   },
+   "sychar": {
+    "name": "Sikhar (Samaria)",
+    "book": "Yohanés 2–4",
+    "today": "seddéna Nablus makkekkuwangngé",
+    "note": "Lalenna jama-jama pammulanna — naolai Yérusalém sibawa lao ri Samaria iya nacéllaé tauwé.",
+    "events": [
+     "Napaccingngi bola sémpajangngé ri Yérusalém",
+     "Ri wennié, Nikodémus — “Harusu'ko rijajiyang paimeng”",
+     "Uwai tuwo lao ri séddi makkunrai Samaria"
+    ]
+   },
+   "capernaum": {
+    "name": "Kapernaum",
+    "book": "Matius 4–13 · Markus 1–4",
+    "today": "wiring tapparenna Galiléa makkekkuwangngé",
+    "note": "Onrong pusa'na jama-jama ri Galiléa — obbiyang, appagguruang, sibawa alawangeng sirampé maneng kuwaé.",
+    "events": [
+     "Naobbiwi sining pakkampi baléé na napancaji kuwaé onrong pokona",
+     "Khotbah ri Bulué — “Masennang tau iya kasi-asié ri roh”",
+     "Sining pakkiya-kiya passalenna Apparéntangngé — sibawa alawangeng iya tuli maompoé"
+    ]
+   },
+   "galilee": {
+    "name": "Tasi' Galiléa",
+    "book": "Markus 4 · 6 · Yohanés 6",
+    "today": "Tappareng Kineret makkekkuwangngé",
+    "note": "Sibawa akuwasa ri yasé'na alangngé, napaitangngi niga tongeng Aléna.",
+    "events": [
+     "“Amang, appésauno” — napasau'i anginé sibawa bombangngé",
+     "Napanré 5.000 tau sibawa lima roti sibawa duwa balé",
+     "Joppa ri yasé'na uwai"
+    ]
+   },
+   "caesarea_p": {
+    "name": "Kaisaréa Filipi",
+    "book": "Matius 16–17",
+    "today": "Banias makkekkuwangngé",
+    "note": "Napahangngi ana' gurunna makkedaé Aléna Kristus, na tabbuka lalenna salli'é.",
+    "events": [
+     "Angakuinna Pétrus — “Ikona Kristus, Ana'na Allataala iya tuwoé”",
+     "Napowada riolo amaténna sibawa tuwo paimenna",
+     "Ripinra rupanna ri laleng arajang ri bulué"
+    ]
+   },
+   "jericho": {
+    "name": "Yériko",
+    "book": "Lukas 18–19",
+    "today": "Yériko makkekkuwangngé",
+    "note": "Ri lalenna ménré' lao ri Yérusalém, nasappa'i iya teddéngngé.",
+    "events": [
+     "Napaita'i Bartiméus iya butaé",
+     "Naobbiwi Zakhéus paddoja' simaé",
+     "“Ana'na Rupa Tauwé polé untu' sappa'i sibawa passalama'i iya teddéngngé”"
+    ]
+   },
+   "bethany": {
+    "name": "Bétania",
+    "book": "Yohanés 11–12",
+    "today": "al-Eizariya makkekkuwangngé",
+    "note": "Napaitangngi akuwasan-Na ri yasé'na amaténgngé ri yolona minggu cappa'na.",
+    "events": [
+     "Napatuwoi paimeng Lazarus polé ri kuburu'é — “Iyya'na atuwo paimengngé sibawa atuwongngé”",
+     "Nasapu'i Maria Aléna sibawa minynya' untu' rilemme'",
+     "Iyaé tanraé pakatane'i rancana untu' mpunoi Aléna"
+    ]
+   },
+   "jerusalem": {
+    "name": "Yérusalém",
+    "book": "Matius 21–28 · Lukas 24 · Pappakédona Sininna Surié 1",
+    "today": "Yérusalém makkekkuwangngé",
+    "note": "Puncak iya nattujuiyé sininna Bible-é — salli', tuwo paimeng, énré' ri langié.",
+    "events": [
+     "Muttama' sibawa arajang; nabaliksu'i paimeng méjana bola sémpajangngé",
+     "Ri Anré Cappa'é nabissai aje'na ana' gurunna",
+     "Maté ri salli'é",
+     "Tuwo paimeng ri esso matellunna, nainappa ménré' ri langié"
+    ]
+   }
+  },
+  "labels": [
+   "Tasi' Tengnga",
+   "Galiléa",
+   "Samaria",
+   "Yudéa",
+   "Dékapolis",
+   "Peréa",
+   "Tasi' Maté"
+  ],
+  "journeys": {
+   "life": "Lalenna Yésus"
+  }
+ },
+ "paul": {
+  "places": {
+   "antioch": {
+    "name": "Antiokhia",
+    "book": "Pappakédona Sininna Surié 13 · 15",
+    "today": "Antakya, Turki makkekkuwangngé",
+    "note": "Jamaa' iya passuroé, kéga mappammula sibawa lisu missié lao ri to laingngé.",
+    "events": [
+     "Ri laleng assempajang napassarangngi Roh-é Barnabas sibawa Saulus",
+     "Jamaa' kéga tau mateppe'é pammulanna riaseng “Kristen”",
+     "Onrong appammulanna allalengeng pammula, maduwa, sibawa matellué"
+    ]
+   },
+   "seleucia": {
+    "name": "Seléukia",
+    "book": "Pappakédona Sininna Surié 13:4",
+    "today": "Turki makkekkuwangngé",
+    "note": "Pelabuhanna Antiokhia — massompe' mennang lao ri Siprus.",
+    "events": []
+   },
+   "salamis": {
+    "name": "Salamis (Siprus)",
+    "book": "Pappakédona Sininna Surié 13:5",
+    "today": "Siprus makkekkuwangngé",
+    "note": "Onrong pammula ri Siprus — mabbirittangngi Karéba ri sining sinagogé.",
+    "events": []
+   },
+   "paphos": {
+    "name": "Pafos",
+    "book": "Pappakédona Sininna Surié 13:6-12",
+    "today": "Siprus makkekkuwangngé",
+    "note": "Ripaita akuwasaé lao ri tau iya nalawangngé Karéba Madécéngngé.",
+    "events": [
+     "Elimas paggau'-gau'é mancaji buta",
+     "Sergius Paulus gubernuru'é mateppe'",
+     "Polé kuwaé, “Paulus” mabbém ri yolo"
+    ]
+   },
+   "perga": {
+    "name": "Perga",
+    "book": "Pappakédona Sininna Surié 13:13",
+    "today": "Antalya, Turki makkekkuwangngé",
+    "note": "Séddi pelabuhan ri Pamfilia — kuwaé lisu Yohanés Markus.",
+    "events": []
+   },
+   "pantioch": {
+    "name": "Antiokhia Pisidia",
+    "book": "Pappakédona Sininna Surié 13:14-50",
+    "today": "Yalvaç, Turki makkekkuwangngé",
+    "note": "Tabbuka Karéba Madécéngngé lao ri to laingngé.",
+    "events": [
+     "Khotbah malampé passalenna curita passalama' ri sinagogé",
+     "Maéga to laing marennu na natarima ada-adaé",
+     "Ripassu nasaba alawangeng"
+    ]
+   },
+   "iconium": {
+    "name": "Ikonium",
+    "book": "Pappakédona Sininna Surié 14:1-7",
+    "today": "Konya, Turki makkekkuwangngé",
+    "note": "Maéga mateppe', iyakiya anrasa-rasangngé napassui joppa mennang.",
+    "events": []
+   },
+   "lystra": {
+    "name": "Listra",
+    "book": "Pappakédona Sininna Surié 14:8-20",
+    "today": "Turki makkekkuwangngé",
+    "note": "Ripakalebbi selaku déwata, nainappa rigenrong batu.",
+    "events": [
+     "Napédécéngngi séddi tau képpang polé jaji",
+     "Maélo'i tau maégaé makkarobang lao ri mennang selaku déwata",
+     "Rigenrong batu na risalai pada-pada tau maté, iyakiya tettong paimeng"
+    ]
+   },
+   "derbe": {
+    "name": "Dérbé",
+    "book": "Pappakédona Sininna Surié 14:20-21",
+    "today": "Turki makkekkuwangngé",
+    "note": "Maéga riébbu ana' guru; lisu mennang untu' pakkasse'i sining jamaa'é.",
+    "events": []
+   },
+   "troas": {
+    "name": "Troas",
+    "book": "Pappakédona Sininna Surié 16:8-10",
+    "today": "Turki makkekkuwangngé",
+    "note": "Onrong appinrang kéga Karéba Madécéngngé pammulanna mattuju lao ri Éropa.",
+    "events": [
+     "Séddi pakkita passalenna séddi tau Makédonia",
+     "“Laloko mai, tulukki”",
+     "Malléttoi mennang matteru lao ri Éropa"
+    ]
+   },
+   "philippi": {
+    "name": "Filipi",
+    "book": "Pappakédona Sininna Surié 16 · Filipi",
+    "today": "Yunani manorang makkekkuwangngé",
+    "note": "Jamaa' pammulana Éropa — pakalai Karéba Madécéngngé muwi ri laleng tarungku.",
+    "events": [
+     "Lidia, padagang kaéng cella' ungué, mateppe'",
+     "Séddi ata makkunrai pakkita-itaé ripaléppe'",
+     "Élong ri tangnga bennié, linu, sibawa ripassalama' kaluwargana pajjaga tarungkué"
+    ]
+   },
+   "thess": {
+    "name": "Tésalonika",
+    "book": "Pappakédona Sininna Surié 17 · 1–2 Tésalonika",
+    "today": "Tésaloniki, Yunani makkekkuwangngé",
+    "note": "Napakédo ada-adaé kotaé na maompo alawangengngé.",
+    "events": [
+     "Mabbicara ri sinagogé tellu Saba'",
+     "“Iya sining tau iya pura mpaliksu'i linoé”",
+     "Napalari aléna ri wennié"
+    ]
+   },
+   "berea": {
+    "name": "Béréa",
+    "book": "Pappakédona Sininna Surié 17:10-15",
+    "today": "Véria, Yunani makkekkuwangngé",
+    "note": "Sining tau “malebbi'é” iya paréssai aléna ada-adaé.",
+    "events": [
+     "Natarima ada-adaé sibawa cinna maraja",
+     "Tungke' esso naparéssa Kitta'é untu' pakatajangngi",
+     "Maéga mancaji mateppe'"
+    ]
+   },
+   "athens": {
+    "name": "Aténa",
+    "book": "Pappakédona Sininna Surié 17:16-34",
+    "today": "Aténa, Yunani makkekkuwangngé",
+    "note": "Ri kotana sining filsuf-é napabbirittangngi “déwata iya dé'é riissengngi.”",
+    "events": [
+     "Napédi atinna nasaba kotaé iya pennoé barahala",
+     "Ri Aréopagus napabbirittangngi Pappancaji sibawa atuwo paimeng",
+     "Ricawa-cawai, iyakiya siaga tau mateppe'"
+    ]
+   },
+   "corinth": {
+    "name": "Korintus",
+    "book": "Pappakédona Sininna Surié 18 · 1–2 Korintus",
+    "today": "Yunani makkekkuwangngé",
+    "note": "Monro'i sitaung sitengnga, mappatettong jamaa' ri séddi kota iya maja ampéna.",
+    "events": [
+     "Mébbu kéma silaong Akwila sibawa Priskila",
+     "“Aja' mumétau… nasaba Iyya engka silaong iko”",
+     "Maéga to Korintus mateppe' na riacceppu'"
+    ]
+   },
+   "ephesus": {
+    "name": "Éfésus",
+    "book": "Pappakédona Sininna Surié 19 · Éfésus",
+    "today": "Selçuk, Turki makkekkuwangngé",
+    "note": "Ati allalengeng matellué — mallebbang ada-adaé ri sininna Asia.",
+    "events": [
+     "Tungke' esso mappagguru duwa taung ri aula Tiranus",
+     "Ritunu sining buku sihir; jama-jama makuwasa",
+     "Napammulai Démétrius panré péra'é karicu'"
+    ]
+   },
+   "miletus": {
+    "name": "Milétus",
+    "book": "Pappakédona Sininna Surié 20:17-38",
+    "today": "Turki makkekkuwangngé",
+    "note": "Passiléssoreng sibawa uwai mata lao ri sining tomatoana jamaa' Éfésus.",
+    "events": [
+     "“Jagaiwi jamaa' iya naelli sibawa dara-Na muto”",
+     "Teri sining tomatoaé, naisseng dé'na matu naita paimeng Aléna"
+    ]
+   },
+   "caesarea": {
+    "name": "Kaisaréa",
+    "book": "Pappakédona Sininna Surié 23–26",
+    "today": "wiring tasi'na Israél makkekkuwangngé",
+    "note": "Duwa taung najagai Karéba Madécéngngé ri yolona sining gubernur sibawa séddi arung.",
+    "events": [
+     "Ripangadéli ri yolona gubernur Féliks sibawa Féstus",
+     "Pabbélana ri yolona Arung Agrippa",
+     "“Maélo-Ka riadéli ri yolona Kaisar” — matteru lao ri Roma"
+    ]
+   },
+   "jerusalem": {
+    "name": "Yérusalém",
+    "book": "Pappakédona Sininna Surié 21–23",
+    "today": "Yérusalém makkekkuwangngé",
+    "note": "Ritikkeng ri bola sémpajangngé, mappammula lalenna selaku tau tarungku.",
+    "events": [
+     "Ritikkeng ri tau maégaé ri bola sémpajangngé",
+     "Naéwai aléna ri yolona Mahkamah Agamaé",
+     "Selaku warga nagara Roma, risuro ri yawana jaga lao ri Kaisaréa"
+    ]
+   },
+   "myra": {
+    "name": "Mira",
+    "book": "Pappakédona Sininna Surié 27:5-6",
+    "today": "Demre, Turki makkekkuwangngé",
+    "note": "Mappinra mennang lao ri séddi kappala' Aléksandria iya mattujué lao ri Roma.",
+    "events": []
+   },
+   "fairhaven": {
+    "name": "Pelabuhan Madécéng (Kréta)",
+    "book": "Pappakédona Sininna Surié 27:8-12",
+    "today": "Kréta makkekkuwangngé",
+    "note": "Pappakaingekna Paulus untu' pésau massompe' dé' riéngkalinga.",
+    "events": []
+   },
+   "crete": {
+    "name": "Kréta",
+    "book": "Titus",
+    "today": "Kréta makkekkuwangngé",
+    "note": "Rimunrinna ripaléppe', pulo kéga nasalaiwi Titus untu' patoro'i sining jamaa'é.",
+    "events": [
+     "Nasalaiwi Titus untu' mappaddi tomatoa ri tungke' kota",
+     "Naéllau pamimping iya temmasala sibawa matinulu",
+     "Moki sure' lao ri Titus"
+    ]
+   },
+   "malta": {
+    "name": "Malta",
+    "book": "Pappakédona Sininna Surié 27–28",
+    "today": "Malta makkekkuwangngé",
+    "note": "Naolai anging bombang sibawa areppanna kappala'é, tette' mupa jancin-Na Allataala.",
+    "events": [
+     "Anging “Alau-Manorang” nareppa'i kappala'é, iyakiya salama' manengngi 276 tauwé",
+     "Riokko' ula massa, iyakiya dé' namapédi",
+     "Napédécéngngi sining tau malasa ri puloé"
+    ]
+   },
+   "syracuse": {
+    "name": "Sirakusa",
+    "book": "Pappakédona Sininna Surié 28:12",
+    "today": "Sisilia, Italia makkekkuwangngé",
+    "note": "Monro'i mennang tellu esso ri Sisilia.",
+    "events": []
+   },
+   "puteoli": {
+    "name": "Puteoli",
+    "book": "Pappakédona Sininna Surié 28:13-14",
+    "today": "Pozzuoli, Italia makkekkuwangngé",
+    "note": "Lettu' mennang ri Italia na riduppai ri pada-padanna tau mateppe'.",
+    "events": []
+   },
+   "rome": {
+    "name": "Roma",
+    "book": "Pappakédona Sininna Surié 28 · Sure'-sure' Tarungku · 2 Timotius",
+    "today": "Roma, Italia makkekkuwangngé",
+    "note": "Ri cappa'na lettu'ni Karéba Madécéngngé ri ati akkarungengngé — tenniya cappa' iyakiya pammulang.",
+    "events": [
+     "Duwa taung ritahang ri bola, sibawa barani napabbirittangngi Apparéntangngé",
+     "Polé kuwaé naoki Sure'-sure' Tarungku (Éfésus·Filipi·Kolosé·Filémon)",
+     "Rimunri ritarungku paimeng, naoki 2 Timotius na maté selaku sabbi — “Purani uwéwa musu madécéngngé, purani upattepu allalengengngé”"
+    ]
+   }
+  },
+  "labels": [
+   "Tasi' Tengnga",
+   "Tasi' Égéa",
+   "Asia Baiccu",
+   "Makédonia",
+   "Italia"
+  ],
+  "journeys": {
+   "j1": "Allalengeng pammulaé",
+   "j2": "Allalengeng maduwaé",
+   "j3": "Allalengeng matellué",
+   "rome": "Allalengeng maeppaé · lao ri Roma",
+   "j5": "Allalengeng malimaé · rimunrinna ripaléppe'"
+  }
+ }
+}

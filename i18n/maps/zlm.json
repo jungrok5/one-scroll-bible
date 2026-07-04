@@ -1,0 +1,636 @@
+{
+ "menuName": "Bahasa Melayu",
+ "htmlLang": "zlm",
+ "dir": "ltr",
+ "locale": "ms-MY",
+ "brand": "Alkitab Sepintas Lalu",
+ "docTitle": "Alkitab Melalui Peta · Alkitab Sepintas Lalu",
+ "metaDesc": "Jejaki garis masa Perjanjian Lama, kehidupan Yesus, dan perjalanan Paulus di atas peta yang nyata — Alkitab berlaku di tempat-tempat yang nyata.",
+ "s": {
+  "kicker": "Alkitab Sepintas Lalu · Peta",
+  "title": "Alkitab Melalui Peta",
+  "verse": "“Semasa kami memberitahu kamu tentang Tuhan kita Yesus Kristus yang akan datang dengan penuh kuasa, kami tidak bergantung kepada dongeng yang direka-reka manusia. Dengan mata kepala sendiri kami melihat kemuliaan Kristus.” (2 Petrus 1:16)",
+  "purpose": "Alkitab bukan mitos. Ia catatan tentang orang yang benar-benar berjalan di tempat, tarikh, dan nama yang nyata. Jejaki laluan itu di atas peta, mengikut urutan masa — sentuh satu titik, atau tekan ▶ untuk menyusurinya langkah demi langkah.",
+  "ot_kick": "① Perjanjian Lama — merentasi masa",
+  "ot_h": "Daripada penciptaan sehingga kepulangan ke Yerusalem",
+  "ot_lead": "Bukan satu perjalanan tunggal, sebaliknya alur sejarah penebusan sejak penciptaan: penciptaan dan kejatuhan → air bah dan Babel → satu panggilan (Abraham) → tanah perjanjian → Keluaran → padang gurun → penaklukan → kerajaan → perpecahan → pembuangan → kepulangan.",
+  "je_kick": "② Perjanjian Baru — kehidupan Yesus",
+  "je_h": "Daripada Betlehem ke Yerusalem",
+  "je_lead": "Ikuti kehidupan Yesus seperti yang diceritakan oleh kitab-kitab Injil, mengikut urutan — daripada kelahiran-Nya di Betlehem, melalui pembaptisan dan pelayanan-Nya di Galilea, merentasi Samaria, sehingga ke salib, kebangkitan, dan kenaikan-Nya di Yerusalem.",
+  "pa_kick": "③ Perjanjian Baru — perjalanan Paulus",
+  "pa_h": "Daripada Antiokhia ke hujung bumi — Rom",
+  "pa_lead": "Daripada Pentakosta di Yerusalem, bagaimana Berita Baik tersebar melampaui Yudea — melalui Asia Kecil dan Eropah sehingga ke pusat empayar. Pilih salah satu daripada lima perjalanan (ke-1·ke-2·ke-3 + pelayaran ke Rom + selepas dibebaskan) dan ikuti peristiwa dalam Kisah Rasul-rasul bersama surat-surat yang ditulis sepanjang jalan.",
+  "foot": "Sumber · Tempat mengikut teks Alkitab dan geografi Alkitab yang baku (dengan nama moden apabila membantu). Garis pantai, sungai, dan tasik dilukis daripada data geografi terbuka (Natural Earth), dipermudahkan.",
+  "contact": "Pertanyaan · maklum balas — <a id=\"contact\" class=\"mail\">E-mel kami</a>",
+  "play": "Main",
+  "pause": "Jeda",
+  "today": "Hari ini:",
+  "verseCite": "2 Petrus 1:16"
+ },
+ "ot": {
+  "places": {
+   "eden": {
+    "name": "Eden (Penciptaan · Kejatuhan)",
+    "book": "Kejadian 1–3",
+    "today": "kawasan Sungai Tigris–Efrat hari ini",
+    "note": "Ke dalam dunia yang dijadikan sungguh baik, dosa masuk dan memutuskan ikatan antara Allah dengan manusia.",
+    "events": [
+     "Penciptaan dalam enam hari — «sungguh baik»",
+     "Manusia dijadikan menurut gambar Allah",
+     "Kejatuhan, dan pembuangan dari Eden",
+     "Janji Berita Baik yang pertama — «keturunan perempuan akan meremukkan kepala ular»"
+    ]
+   },
+   "noah": {
+    "name": "Ararat (Air Bah)",
+    "book": "Kejadian 6–9",
+    "today": "Gunung Ararat, timur Turkiye hari ini",
+    "note": "Allah menghakimi dunia yang penuh dosa, namun memelihara kehidupan melalui satu keluarga.",
+    "events": [
+     "Dunia yang dipenuhi kejahatan",
+     "Air bah, dan bahtera Nuh",
+     "Perjanjian pelangi — «tidak akan ada lagi air bah untuk membinasakan bumi»"
+    ]
+   },
+   "babel": {
+    "name": "Menara Babel",
+    "book": "Kejadian 11",
+    "today": "Iraq hari ini (dataran Sinear)",
+    "note": "Terhadap keangkuhan yang menjulang ke langit, Allah mengelirukan bahasa mereka dan menyerakkan bangsa-bangsa ke seluruh bumi.",
+    "events": [
+     "«Marilah kita membina sebuah kota dan menara… supaya kita menjadi termasyhur»",
+     "Allah mengelirukan bahasa mereka",
+     "Bangsa-bangsa berselerak ke seluruh bumi (Sinear — kemudian Babilon)"
+    ]
+   },
+   "ur": {
+    "name": "Ur",
+    "book": "Kejadian 12",
+    "today": "selatan Iraq hari ini",
+    "note": "Kisah penebusan dalam Alkitab bermula dengan panggilan seorang lelaki.",
+    "events": [
+     "Allah memanggil Abram keluar dari Ur, negeri orang Kasdim",
+     "«Aku akan menjadikan engkau satu bangsa yang besar… semua bangsa akan diberkati melalui engkau»",
+     "Dengan iman dia meninggalkan tanah airnya"
+    ]
+   },
+   "haran": {
+    "name": "Haran",
+    "book": "Kejadian 12",
+    "today": "selatan Turkiye hari ini",
+    "note": "Dalam perjalanan, menyahut panggilan menuju tanah perjanjian.",
+    "events": [
+     "Keluarga Terah menetap di Haran",
+     "Terah meninggal dunia",
+     "Abram berangkat ke Kanaan pada usia 75 tahun"
+    ]
+   },
+   "shechem": {
+    "name": "Sikhem · Kanaan",
+    "book": "Kejadian 12–50",
+    "today": "Nablus hari ini",
+    "note": "Di tanah perjanjian, sebuah keluarga dibentuk dan perjanjian itu diwariskan turun-temurun.",
+    "events": [
+     "Memasuki Kanaan, mazbah pertama — «Aku akan memberikan tanah ini kepada keturunanmu»",
+     "Perjanjian (Kejadian 15) · Ishak · Yakub",
+     "Dua belas anak Yakub — akar dua belas suku"
+    ]
+   },
+   "egypt": {
+    "name": "Mesir (Gosyen)",
+    "book": "Kejadian 37–50 · Keluaran 1",
+    "today": "Delta Sungai Nil, Mesir hari ini",
+    "note": "Satu keluarga menjadi bangsa yang besar — kemudian bangsa hamba.",
+    "events": [
+     "Yusuf, yang dijual, naik memerintah Mesir",
+     "Seluruh keluarga Yakub turun untuk melarikan diri daripada kebuluran",
+     "Bangsa Israel yang semakin ramai diperhambakan"
+    ]
+   },
+   "sinai": {
+    "name": "Gunung Sinai",
+    "book": "Keluaran · Imamat",
+    "today": "Semenanjung Sinai hari ini",
+    "note": "Penyelamatan terpenting Perjanjian Lama — hamba menjadi umat kepunyaan Allah sendiri.",
+    "events": [
+     "Sepuluh bencana dan anak domba Paska",
+     "Laut Merah terbelah dan mereka menyeberang",
+     "Sepuluh Hukum, Taurat, Khemah Suci dan korban-korban"
+    ]
+   },
+   "kadesh": {
+    "name": "Kadesh (padang gurun)",
+    "book": "Bilangan · Ulangan",
+    "today": "padang gurun Sinai–Negev hari ini",
+    "note": "Ketidakpercayaan menyebabkan satu generasi kehilangan tanah itu — namun Allah tetap menyertai mereka.",
+    "events": [
+     "Dua belas pengintip — tetapi umat enggan percaya",
+     "38 tahun di padang gurun — manna, tiang awan dan api",
+     "Di dataran Moab, khutbah terakhir Musa (Ulangan)"
+    ]
+   },
+   "jericho": {
+    "name": "Yerikho",
+    "book": "Yosua",
+    "today": "Yerikho hari ini",
+    "note": "Akhirnya mereka masuk dan menduduki tanah perjanjian.",
+    "events": [
+     "Sungai Yordan terbelah dan umat menyeberang",
+     "Tembok Yerikho runtuh",
+     "Penaklukan Kanaan dan pembahagian tanah"
+    ]
+   },
+   "shiloh": {
+    "name": "Silo (Hakim-hakim)",
+    "book": "Hakim-hakim · Rut",
+    "today": "Khirbet Seilun hari ini",
+    "note": "Tanpa raja, setiap orang berbuat sesuka hati — seorang raja sejati diperlukan.",
+    "events": [
+     "Khemah Suci didirikan di Silo",
+     "Kitaran dosa–penindasan–penyelamatan (Debora, Gideon, Simson)",
+     "Rut — kesetiaan dalam zaman gelap, dalam keturunan Daud"
+    ]
+   },
+   "jerusalem": {
+    "name": "Yerusalem · Kerajaan Bersatu",
+    "book": "1–2 Samuel · 1 Raja-raja",
+    "today": "Yerusalem hari ini",
+    "note": "Zaman keemasan Israel — dan janji seorang raja yang kekal.",
+    "events": [
+     "Saul raja pertama, kemudian Daud dan Goliat",
+     "Perjanjian dengan Daud — «takhtamu akan kekal selama-lamanya» (2 Samuel 7)",
+     "Salomo membina Rumah TUHAN di Yerusalem"
+    ]
+   },
+   "samaria": {
+    "name": "Samaria · Kerajaan Berpecah",
+    "book": "Raja-raja · Para Nabi",
+    "today": "Sebastia hari ini",
+    "note": "Kerajaan berpecah dan merosot sementara para nabi berseru.",
+    "events": [
+     "Selepas Salomo, perpecahan kepada Yehuda dan Israel",
+     "Penyembahan berhala yang berulang",
+     "Elia, Yesaya, Yeremia berseru «pulanglah» — dan menubuatkan Mesias"
+    ]
+   },
+   "nineveh": {
+    "name": "Niniwe (Asyur)",
+    "book": "2 Raja-raja 17 · Yunus",
+    "today": "Mosul, Iraq hari ini",
+    "note": "Mengabaikan setiap amaran, kerajaan utara jatuh terlebih dahulu.",
+    "events": [
+     "Niniwe, ibu kota Asyur",
+     "Kerajaan utara jatuh kepada Asyur (722 SM)",
+     "Yunus diutus ke Niniwe"
+    ]
+   },
+   "babylon": {
+    "name": "Babilon",
+    "book": "2 Raja-raja 25 · Daniel · Yehezkiel",
+    "today": "Hillah, Iraq hari ini",
+    "note": "Malam yang paling gelap — namun janji pemulihan tetap kekal.",
+    "events": [
+     "Yerusalem jatuh, Rumah TUHAN dibakar (586 SM)",
+     "Yehuda diheret ke Babilon",
+     "Daniel dan Yehezkiel — iman dan penglihatan dalam pembuangan"
+    ]
+   },
+   "susa": {
+    "name": "Susan (Parsi)",
+    "book": "Ester · Nehemia",
+    "today": "Shush, Iran hari ini",
+    "note": "Bahkan di pusat empayar penyembah berhala, Allah memelihara umat-Nya.",
+    "events": [
+     "Parsi menggulingkan Babilon",
+     "Ester menyelamatkan orang Yahudi daripada pemusnahan",
+     "Nehemia berdoa di hadapan raja dan diutus"
+    ]
+   },
+   "return": {
+    "name": "Kepulangan ke Yerusalem",
+    "book": "Ezra · Nehemia · Maleakhi",
+    "today": "Yerusalem hari ini",
+    "note": "Mereka pulang dan membina semula — tetapi tiada raja yang datang. Mereka menanti Mesias.",
+    "events": [
+     "Tiga gelombang kepulangan melalui titah Koresy (Zerubabel 538 · Ezra 458 · Nehemia 444)",
+     "Rumah TUHAN dibina semula dan tembok Yerusalem dipulihkan",
+     "Maleakhi — Perjanjian Lama ditutup: «Aku akan mengirim utusan-Ku»"
+    ]
+   }
+  },
+  "labels": [
+   "Laut Mediterranean",
+   "Mesopotamia",
+   "Padang Gurun Arab",
+   "Mesir"
+  ],
+  "journeys": {
+   "flow": "Kisah penebusan"
+  }
+ },
+ "jesus": {
+  "places": {
+   "bethlehem": {
+    "name": "Betlehem",
+    "book": "Matius 1–2 · Lukas 2",
+    "today": "Betlehem hari ini",
+    "note": "Mesias yang dijanjikan datang ke kota Daud — Firman yang menjadi manusia.",
+    "events": [
+     "Dilahirkan di Betlehem, kota Daud",
+     "Malaikat mengumumkan berita itu kepada para gembala",
+     "Para majusi datang untuk menyembah"
+    ]
+   },
+   "nazareth": {
+    "name": "Nazaret",
+    "book": "Lukas 2 · 4",
+    "today": "Nazaret hari ini",
+    "note": "Allah membesar sebagai manusia di sebuah pekan biasa.",
+    "events": [
+     "Dibesarkan di rumah seorang tukang kayu",
+     "Pada usia dua belas tahun, bertanya dan menjawab di Rumah Tuhan",
+     "Kemudian ditolak di saumaah kampung halaman-Nya"
+    ]
+   },
+   "jordan": {
+    "name": "Sungai Yordan",
+    "book": "Matius 3–4",
+    "today": "hilir Sungai Yordan hari ini",
+    "note": "Pelayanan awam-Nya bermula — syurga memeteraikan Dia sebagai Anak.",
+    "events": [
+     "Dibaptis oleh Yahya",
+     "Roh turun seperti burung merpati — «Inilah Anak-Ku yang Kukasihi»",
+     "Mengalahkan tiga godaan Iblis di padang gurun"
+    ]
+   },
+   "cana": {
+    "name": "Kana",
+    "book": "Yohanes 2",
+    "today": "Kafr Kanna hari ini",
+    "note": "Melalui tanda ajaib-Nya yang pertama, Dia menyatakan kemuliaan-Nya.",
+    "events": [
+     "Menjadi tetamu di suatu majlis perkahwinan",
+     "Air diubah menjadi wain — tanda ajaib-Nya yang pertama",
+     "Murid-murid-Nya percaya kepada-Nya"
+    ]
+   },
+   "sychar": {
+    "name": "Sikhar (Samaria)",
+    "book": "Yohanes 2–4",
+    "today": "berhampiran Nablus hari ini",
+    "note": "Laluan pelayanan awal — melalui Yerusalem dan seterusnya ke Samaria yang dipandang hina.",
+    "events": [
+     "Dia menyucikan Rumah Tuhan di Yerusalem",
+     "Pada waktu malam, Nikodemus — «kamu mesti dilahirkan semula»",
+     "Air hidup bagi seorang wanita Samaria"
+    ]
+   },
+   "capernaum": {
+    "name": "Kapernaum",
+    "book": "Matius 4–13 · Markus 1–4",
+    "today": "pinggir Tasik Galilea hari ini",
+    "note": "Pusat pelayanan di Galilea — panggilan, pengajaran, dan tentangan semuanya bertemu di sini.",
+    "events": [
+     "Memanggil para nelayan dan menjadikan tempat ini pangkalan-Nya",
+     "Khutbah di Bukit — «Berbahagialah orang yang menyedari bahawa mereka miskin di hadapan Allah»",
+     "Perumpamaan tentang kerajaan Allah — dan tentangan yang meningkat"
+    ]
+   },
+   "galilee": {
+    "name": "Tasik Galilea",
+    "book": "Markus 4 · 6 · Yohanes 6",
+    "today": "Tasik Kineret hari ini",
+    "note": "Dengan kuasa atas alam, Dia menunjukkan siapa diri-Nya.",
+    "events": [
+     "«Diam! Tenanglah!» — Dia meredakan ribut",
+     "Memberi makan 5,000 orang dengan lima buku roti dan dua ekor ikan",
+     "Berjalan di atas air"
+    ]
+   },
+   "caesarea_p": {
+    "name": "Kaisarea Filipi",
+    "book": "Matius 16–17",
+    "today": "Banias hari ini",
+    "note": "Murid-murid memahami bahawa Dia ialah Kristus, dan jalan salib pun terbuka.",
+    "events": [
+     "Pengakuan Petrus — «Engkaulah Kristus, Anak Allah yang hidup»",
+     "Dia mula menubuatkan kematian dan kebangkitan-Nya",
+     "Berubah rupa dalam kemuliaan di atas gunung"
+    ]
+   },
+   "jericho": {
+    "name": "Yerikho",
+    "book": "Lukas 18–19",
+    "today": "Yerikho hari ini",
+    "note": "Dalam perjalanan mendaki ke Yerusalem, Dia mencari yang sesat.",
+    "events": [
+     "Dia mencelikkan mata Bartimeus yang buta",
+     "Dia memanggil Zakheus si pemungut cukai",
+     "«Anak Manusia datang untuk mencari dan menyelamatkan orang yang sesat»"
+    ]
+   },
+   "bethany": {
+    "name": "Betania",
+    "book": "Yohanes 11–12",
+    "today": "al-Eizariya hari ini",
+    "note": "Dia menunjukkan kuasa atas kematian menjelang minggu terakhir-Nya.",
+    "events": [
+     "Dia membangkitkan Lazarus dari kubur — «Akulah kebangkitan dan kehidupan»",
+     "Maria mengurapi Dia untuk pengebumian-Nya",
+     "Tanda ajaib ini mengeraskan komplot untuk membunuh-Nya"
+    ]
+   },
+   "jerusalem": {
+    "name": "Yerusalem",
+    "book": "Matius 21–28 · Lukas 24 · Kisah Rasul-rasul 1",
+    "today": "Yerusalem hari ini",
+    "note": "Kemuncak yang ditunjuk oleh seluruh Alkitab — salib, kebangkitan, kenaikan.",
+    "events": [
+     "Kemasukan penuh kemenangan; Dia menterbalikkan meja-meja di Rumah Tuhan sekali lagi",
+     "Pada Perjamuan Terakhir, Dia membasuh kaki murid-murid-Nya",
+     "Dia mati di salib",
+     "Bangkit pada hari ketiga, kemudian naik ke syurga"
+    ]
+   }
+  },
+  "labels": [
+   "Laut Mediterranean",
+   "Galilea",
+   "Samaria",
+   "Yudea",
+   "Dekapolis",
+   "Perea",
+   "Laut Mati"
+  ],
+  "journeys": {
+   "life": "Perjalanan Yesus"
+  }
+ },
+ "paul": {
+  "places": {
+   "antioch": {
+    "name": "Antiokhia",
+    "book": "Kisah Rasul-rasul 13 · 15",
+    "today": "Antakya, Turkiye hari ini",
+    "note": "Gereja pengutus tempat misi kepada bangsa asing bermula dan kembali.",
+    "events": [
+     "Dalam doa, Roh mengasingkan Barnabas dan Saul",
+     "Gereja tempat para pengikut mula-mula disebut «orang Kristian»",
+     "Titik permulaan perjalanan pertama, kedua, dan ketiga"
+    ]
+   },
+   "seleucia": {
+    "name": "Seleukia",
+    "book": "Kisah Rasul-rasul 13:4",
+    "today": "Turkiye hari ini",
+    "note": "Pelabuhan Antiokhia — mereka belayar ke Siprus.",
+    "events": []
+   },
+   "salamis": {
+    "name": "Salamis (Siprus)",
+    "book": "Kisah Rasul-rasul 13:5",
+    "today": "Siprus hari ini",
+    "note": "Perhentian pertama di Siprus — memberitakan firman di saumaah.",
+    "events": []
+   },
+   "paphos": {
+    "name": "Pafos",
+    "book": "Kisah Rasul-rasul 13:6-12",
+    "today": "Siprus hari ini",
+    "note": "Kuasa dinyatakan terhadap mereka yang menentang Berita Baik.",
+    "events": [
+     "Elimas si ahli sihir menjadi buta",
+     "Sergius Paulus, sang gabenor, percaya",
+     "Dari sini «Paulus» mengambil peranan utama"
+    ]
+   },
+   "perga": {
+    "name": "Perga",
+    "book": "Kisah Rasul-rasul 13:13",
+    "today": "Antalya, Turkiye hari ini",
+    "note": "Sebuah pelabuhan di Pamfilia — di sini Yohanes Markus berpatah balik.",
+    "events": []
+   },
+   "pantioch": {
+    "name": "Antiokhia Pisidia",
+    "book": "Kisah Rasul-rasul 13:14-50",
+    "today": "Yalvaç, Turkiye hari ini",
+    "note": "Berita Baik terbuka luas kepada bangsa asing.",
+    "events": [
+     "Khutbah panjang tentang sejarah keselamatan di saumaah",
+     "Ramai orang bangsa asing bersukacita dan menerima firman",
+     "Dihalau keluar oleh tentangan"
+    ]
+   },
+   "iconium": {
+    "name": "Ikonium",
+    "book": "Kisah Rasul-rasul 14:1-7",
+    "today": "Konya, Turkiye hari ini",
+    "note": "Ramai yang percaya, tetapi penganiayaan memaksa mereka meneruskan perjalanan.",
+    "events": []
+   },
+   "lystra": {
+    "name": "Listra",
+    "book": "Kisah Rasul-rasul 14:8-20",
+    "today": "Turkiye hari ini",
+    "note": "Disanjung sebagai tuhan, kemudian direjam.",
+    "events": [
+     "Menyembuhkan seorang lelaki yang lumpuh sejak lahir",
+     "Orang ramai cuba mempersembahkan korban kepada mereka sebagai tuhan",
+     "Direjam dan disangka mati, dia bangun semula"
+    ]
+   },
+   "derbe": {
+    "name": "Derbe",
+    "book": "Kisah Rasul-rasul 14:20-21",
+    "today": "Turkiye hari ini",
+    "note": "Ramai murid dijadikan; mereka mengundur semula langkah untuk menguatkan gereja-gereja.",
+    "events": []
+   },
+   "troas": {
+    "name": "Troas",
+    "book": "Kisah Rasul-rasul 16:8-10",
+    "today": "Turkiye hari ini",
+    "note": "Titik peralihan tempat Berita Baik mula menuju ke Eropah.",
+    "events": [
+     "Suatu penglihatan tentang seorang lelaki dari Makedonia",
+     "«Marilah menyeberang ke Makedonia dan tolonglah kami»",
+     "Mereka segera menyeberang ke Eropah"
+    ]
+   },
+   "philippi": {
+    "name": "Filipi",
+    "book": "Kisah Rasul-rasul 16 · Filipi",
+    "today": "utara Yunani hari ini",
+    "note": "Gereja pertama di Eropah — Berita Baik menang bahkan di dalam penjara.",
+    "events": [
+     "Lidia, seorang peniaga kain ungu, percaya",
+     "Seorang hamba perempuan tukang tilik dibebaskan",
+     "Nyanyian pujian tengah malam, gempa bumi, seisi rumah pengawal penjara diselamatkan"
+    ]
+   },
+   "thess": {
+    "name": "Tesalonika",
+    "book": "Kisah Rasul-rasul 17 · 1–2 Tesalonika",
+    "today": "Thessaloniki, Yunani hari ini",
+    "note": "Firman menggemparkan kota itu dan tentangan meluap-luap.",
+    "events": [
+     "Berbincang di saumaah selama tiga hari Sabat",
+     "«Orang yang mengharu-birukan seluruh dunia»",
+     "Mereka menyelinap pergi pada waktu malam"
+    ]
+   },
+   "berea": {
+    "name": "Berea",
+    "book": "Kisah Rasul-rasul 17:10-15",
+    "today": "Veria, Yunani hari ini",
+    "note": "Orang yang «berhati mulia» yang menyelidiki firman itu sendiri.",
+    "events": [
+     "Mereka menerima firman dengan penuh minat",
+     "Setiap hari mereka menyelidiki Kitab Suci untuk memeriksanya",
+     "Ramai yang menjadi percaya"
+    ]
+   },
+   "athens": {
+    "name": "Atena",
+    "book": "Kisah Rasul-rasul 17:16-34",
+    "today": "Athens, Yunani hari ini",
+    "note": "Di kota para ahli falsafah, dia mengisytiharkan «Tuhan yang tidak dikenal».",
+    "events": [
+     "Tergerak oleh kota yang penuh dengan berhala",
+     "Di Areopagus dia memberitakan Pencipta dan kebangkitan",
+     "Diperolok-olok, namun beberapa orang percaya"
+    ]
+   },
+   "corinth": {
+    "name": "Korintus",
+    "book": "Kisah Rasul-rasul 18 · 1–2 Korintus",
+    "today": "Yunani hari ini",
+    "note": "Dia tinggal setahun setengah, menanam gereja di sebuah kota yang penuh kemaksiatan.",
+    "events": [
+     "Membuat khemah bersama Akwila dan Priskila",
+     "«Jangan takut… kerana Aku menyertai engkau»",
+     "Ramai orang Korintus percaya dan dibaptis"
+    ]
+   },
+   "ephesus": {
+    "name": "Efesus",
+    "book": "Kisah Rasul-rasul 19 · Efesus",
+    "today": "Selçuk, Turkiye hari ini",
+    "note": "Jantung perjalanan ketiga — firman tersebar ke seluruh Asia.",
+    "events": [
+     "Pengajaran setiap hari selama dua tahun di dewan Tiranus",
+     "Buku-buku sihir dibakar; perbuatan-perbuatan yang penuh kuasa",
+     "Demetrius si tukang perak mencetuskan rusuhan"
+    ]
+   },
+   "miletus": {
+    "name": "Miletus",
+    "book": "Kisah Rasul-rasul 20:17-38",
+    "today": "Turkiye hari ini",
+    "note": "Perpisahan penuh air mata dengan para penatua Efesus.",
+    "events": [
+     "«Peliharalah jemaah Allah yang diperoleh-Nya dengan darah-Nya sendiri»",
+     "Para penatua menangis, mengetahui mereka tidak akan melihatnya lagi"
+    ]
+   },
+   "caesarea": {
+    "name": "Kaisarea",
+    "book": "Kisah Rasul-rasul 23–26",
+    "today": "pesisir Israel hari ini",
+    "note": "Selama dua tahun dia membela Berita Baik di hadapan para gabenor dan seorang raja.",
+    "events": [
+     "Perbicaraan di hadapan gabenor Feliks dan Festus",
+     "Pembelaannya di hadapan Raja Agripa",
+     "«Aku naik banding kepada Kaisar» — menuju ke Rom"
+    ]
+   },
+   "jerusalem": {
+    "name": "Yerusalem",
+    "book": "Kisah Rasul-rasul 21–23",
+    "today": "Yerusalem hari ini",
+    "note": "Ditangkap di Rumah Tuhan, jalannya sebagai seorang tahanan bermula.",
+    "events": [
+     "Ditangkap oleh orang ramai di Rumah Tuhan",
+     "Membela diri di hadapan Majlis Agama",
+     "Sebagai warganegara Rom, dihantar dengan pengawalan ke Kaisarea"
+    ]
+   },
+   "myra": {
+    "name": "Mira",
+    "book": "Kisah Rasul-rasul 27:5-6",
+    "today": "Demre, Turkiye hari ini",
+    "note": "Mereka berpindah ke sebuah kapal Aleksandria yang menuju ke Rom.",
+    "events": []
+   },
+   "fairhaven": {
+    "name": "Pelabuhan Indah (Kreta)",
+    "book": "Kisah Rasul-rasul 27:8-12",
+    "today": "Kreta hari ini",
+    "note": "Amaran Paulus supaya berhenti belayar tidak diendahkan.",
+    "events": []
+   },
+   "crete": {
+    "name": "Kreta",
+    "book": "Titus",
+    "today": "Kreta hari ini",
+    "note": "Selepas dibebaskan, pulau tempat dia meninggalkan Titus untuk menyusun gereja-gereja.",
+    "events": [
+     "Meninggalkan Titus untuk melantik penatua di setiap kota",
+     "Menyeru pemimpin yang tidak bercela dan setia",
+     "Menulis surat kepada Titus"
+    ]
+   },
+   "malta": {
+    "name": "Malta",
+    "book": "Kisah Rasul-rasul 27–28",
+    "today": "Malta hari ini",
+    "note": "Melalui ribut dan karam kapal, janji Allah tetap teguh.",
+    "events": [
+     "Angin «timur laut» mengaramkan kapal, namun kesemua 276 orang terselamat",
+     "Dipatuk ular berbisa, dia tidak cedera",
+     "Dia menyembuhkan orang sakit di pulau itu"
+    ]
+   },
+   "syracuse": {
+    "name": "Sirakusa",
+    "book": "Kisah Rasul-rasul 28:12",
+    "today": "Sicily, Itali hari ini",
+    "note": "Mereka tinggal tiga hari di Sicily.",
+    "events": []
+   },
+   "puteoli": {
+    "name": "Putioli",
+    "book": "Kisah Rasul-rasul 28:13-14",
+    "today": "Pozzuoli, Itali hari ini",
+    "note": "Mereka mendarat di Itali dan disambut oleh saudara-saudara seiman.",
+    "events": []
+   },
+   "rome": {
+    "name": "Rom",
+    "book": "Kisah Rasul-rasul 28 · Surat-surat dari Penjara · 2 Timotius",
+    "today": "Rom, Itali hari ini",
+    "note": "Berita Baik akhirnya sampai ke jantung empayar — bukan pengakhiran, sebaliknya permulaan.",
+    "events": [
+     "Dua tahun dalam tahanan rumah, dengan berani mengisytiharkan kerajaan Allah",
+     "Dari sini dia menulis Surat-surat dari Penjara (Efesus·Filipi·Kolose·Filemon)",
+     "Kemudian dipenjara semula, menulis 2 Timotius dan mati syahid — «Aku sudah mengakhiri pertandingan yang baik, aku sudah menamatkan perlumbaan»"
+    ]
+   }
+  },
+  "labels": [
+   "Laut Mediterranean",
+   "Laut Aegea",
+   "Asia Kecil",
+   "Makedonia",
+   "Itali"
+  ],
+  "journeys": {
+   "j1": "Perjalanan pertama",
+   "j2": "Perjalanan kedua",
+   "j3": "Perjalanan ketiga",
+   "rome": "Perjalanan keempat · ke Rom",
+   "j5": "Perjalanan kelima · selepas dibebaskan"
+  }
+ }
+}

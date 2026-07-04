@@ -35,10 +35,10 @@
     "today": "ityar i Tigris–Uferate nyian",
     "note": "Ken tar u i gbe u u lu dedoo kpishi la, isholibo nyôr shi i paa mzough u atô u Aôndo man uumace.",
     "events": [
-     "Mgbe ken ayange ataratar — “lu dedoo kpishi”",
+     "Mgbe ken ayange ataratar — “lu u doon tsung”",
      "I gbe uumace sha ikyav i Aôndo",
      "Mgbough, man mdugh ken Edhen",
-     "Ityendezwa i Loho u Dedoo i hii — “vor u kwase una cagh ityough ki iyô”"
+     "Ityendezwa i Loho u Dedoo i hii — “vor wou … u ua cagh u ityough”"
     ]
    },
    "noah": {
@@ -49,7 +49,7 @@
     "events": [
      "Tar u u iv a aeren a bo",
      "Mngerem ma vesen, man tso u Noa",
-     "Ityendezwa i atsande — “mngerem maa kera va tim uumace ga”"
+     "Ityendezwa i atsande — “á kera tim uuma sha won cii sha mngerem ma deemee ga”"
     ]
    },
    "babel": {
@@ -58,7 +58,7 @@
     "today": "Iraki nyian (tar u Shinar)",
     "note": "Sha ityendeja i i soo u kuma Sha la, Aôndo samber zwa ve man akuraior sha won cii.",
     "events": [
-     "“Se maa gar man iyou … se ver iti yase”",
+     "“Sé maa nen Zegegar man gôgôyou … iti yase i̱ za gwa sha won”",
      "Aôndo gema zwa ve",
      "Akuraior samber sha won cii (Shinar — u hidi hingir Babilon)"
     ]
@@ -70,7 +70,7 @@
     "note": "Kwaghôron u myiman u Bibilo hii sha myilan u or môm.",
     "events": [
      "Aôndo yila Abram ken Ur u Mbakaldia",
-     "“Me er u ú hingir ikurior i vesen … akuraior a sha won cii aa zua a iveren ken a we”",
+     "“Me er u, ú hingir ikurior i vesen … akuraior a sha won cii aa zua a iveren”",
      "Sha jighjigh u nan nan undu tar u ityar na"
     ]
    },
@@ -91,7 +91,7 @@
     "today": "Nablus nyian",
     "note": "Ken tar u ityendezwa i ver tsombor shi ityendezwa za hemen sha akuraior.",
     "events": [
-     "Mnyôr ken Kanaan, atari a hii — “Me na vor wou tar ne”",
+     "Mnyôr ken Kanaan, atari a hii — “Me na tsombor wou tar ne”",
      "Ityendezwa (Gen 15) · Isaka · Yakob",
      "Ônov mba Yakob mba pue kar uhar — ikyor i ikpinaior pue kar uhar"
     ]
@@ -158,7 +158,7 @@
     "note": "Shighe u dedoo u Iserael — man ityendezwa i tor u gbem sha won.",
     "events": [
      "Saul tor u hii, tsô Davidi man Goliat",
-     "Ityendezwa i Davidi — “ikônough kou kia tem gbem sha won” (2 Sam 7)",
+     "Ityendezwa i Davidi — “ikônough you ki torough kia lu her gbem sha won” (2 Sam 7)",
      "Solomon maa tempel ken Yerusalem"
     ]
    },
@@ -259,7 +259,7 @@
     "note": "Tom Na sha igbar hii — Sha pase Un er Wan.",
     "events": [
      "Yohane er Un batisema",
-     "Jijingi hô er kwaghegh nahan — “Ka Wan Wam u ishima Yam i lu a Na ye”",
+     "Jijingi hô er kwaghegh nahan — “ka Wan Wam u ishima ishima, u i doom a na yum”",
      "A hemba imeen i Satan itaar ken deserete"
     ]
    },
@@ -281,7 +281,7 @@
     "note": "Gbenda u tom u hiihii — karen Yerusalem zan zan Samaria u i laha la.",
     "events": [
      "A wanger tempel ken Yerusalem",
-     "Sha tugh, Nikodemu — “Gba u i mar we sha he”",
+     "Sha tugh, Nikodemu — “u á mar ne hegh keng”",
      "Mngerem ma uma sha kwase u Samaria"
     ]
    },
@@ -292,7 +292,7 @@
     "note": "Ijiir i tom u Galilaia — myilan, mtesen man mhendan cii zua heen.",
     "events": [
      "A yila mbakôrunov shi A ver ijiir heen",
-     "Kwaghôron u sha Uwo — “Saan mba i bee ve ken jijingi la iember”",
+     "Kwaghôron u sha Uwo — “Saan mba ve lu mbaibanave ken jijingi la iyol”",
      "Anzaakaa a tartor — man mhendan u u seer la"
     ]
    },
@@ -302,7 +302,7 @@
     "today": "Zegemngerem u Kinneret nyian",
     "note": "Sha agee sha akaa a Aôndo gba la A tese Un er ka an ye.",
     "events": [
-     "“Tema dông, kunde ave” — A kunde ahumbe",
+     "“Huan, lu ving” — A kunde ahumbe",
      "A koson ior 5,000 sha ubredi utaan man ishu ihar",
      "A zende sha mngerem"
     ]
@@ -313,7 +313,7 @@
     "today": "Banias nyian",
     "note": "Mbahenen kav ér Un ka Kristu, shi gbenda u terankon bugh.",
     "events": [
-     "Mpase u Peteru — “We u Kristu, Wan u Aôndo u uma la”",
+     "Mpase u Peteru — “We U ngu Kristu Wan u Aôndo u uma”",
      "A vande pasen ku Na man mnder Na",
      "I gema Un ken icivir sha uwo"
     ]
@@ -326,7 +326,7 @@
     "events": [
      "A bugh ashe a Bartimeu orpirir",
      "A yila Sakeu orkohol u imkombo",
-     "“Wan u Or va sha u keren shi u yiman mba ve saa la”"
+     "“Wan u or va sha u keren man u yiman kwagh u a saa”"
     ]
    },
    "bethany": {
@@ -335,7 +335,7 @@
     "today": "al-Eizariya nyian",
     "note": "A tese agee sha ku sha ikyua i sati u masetyô Na.",
     "events": [
-     "A nder Lasaru ken uar — “Ka Mo mnder man uma je”",
+     "A nder Lasaru ken uar — “Mo M ngu mnder man uma”",
      "Maria shime Un mkurem sha ci u mtemen",
      "Ikyav ne taver mhen u wuan Un"
     ]
@@ -454,7 +454,7 @@
     "note": "Ijiir i mgem ape Loho u Dedoo za sha Yuropa sha hiihii la.",
     "events": [
      "Mpase u or u Makedonia",
-     "“Va sha wono va wase se”",
+     "“per yande Masedonia keen, va wase se”",
      "Ve per za sha Yuropa fefa"
     ]
    },
@@ -476,7 +476,7 @@
     "note": "Kwagh u nyaghyô gar shi mhendan mough taveraa.",
     "events": [
      "A lam ken sinagog Ayange a Memen ataratar",
-     "“Mba ve gbe uça tar cii la”",
+     "“Ior mba ve vihi tar cii ne”",
      "Ve due sha tugh"
     ]
    },
@@ -509,7 +509,7 @@
     "note": "A tema anyom môm man atô, A gbe nyianegh ken gar u aeren a bo.",
     "events": [
      "A gber utenti vea Akwila man Priskila",
-     "“De cier iyol ga … gadia Mo M ngu a we”",
+     "“De cie ga … gadia Mo M ngu a we”",
      "Mbakorinti kpishi na jighjigh shi i er ve batisema"
     ]
    },
@@ -530,7 +530,7 @@
     "today": "Turkiya nyian",
     "note": "Mpav u mliam a mbatamen mba Efesu.",
     "events": [
-     "“Kuran nen nyianegh ki Aôndo A yam sha awambe a Nagh la”",
+     "“Kuran nen … koso nongo u Kristu u Aôndo, u A yem sha awambe a sha iyol Na la”",
      "Mbatamen vaan mliam, ve fa ér vea kera nenge a Na ga"
     ]
    },
@@ -542,7 +542,7 @@
     "events": [
      "Ijir sha ishigh ki gomnaov Feliki man Festu",
      "Mwar u iyol na sha ishigh ki tor Agripa",
-     "“M sombo hen Kaisar” — za sha Roma"
+     "“Me za a ijir ne hen Shisar” — za sha Roma"
     ]
    },
    "jerusalem": {
@@ -614,7 +614,7 @@
     "events": [
      "Anyom ihar ken mkôr u ya, A pase tartor sha agee",
      "Hii heen A nger Uwasike mba ken Gaadi (Efe·Fil·Kol·Flm)",
-     "Ken masetyô i kôr un ken gaadi shi, A nger 2 Timoteu shi i wua un sha ci u jighjigh — “M nôngo ityav mbi dedoo, m kure aza a mnyambegh”"
+     "Ken masetyô i kôr un ken gaadi shi, A nger 2 Timoteu shi i wua un sha ci u jighjigh — “M nôngo ityav mbi dedoo ve. M kure ayem am vough”"
     ]
    }
   },

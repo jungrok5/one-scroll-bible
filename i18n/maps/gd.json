@@ -1,0 +1,636 @@
+{
+ "menuName": "Gàidhlig",
+ "htmlLang": "gd",
+ "dir": "ltr",
+ "locale": "gd-GB",
+ "brand": "Am Bìoball ann an aon scrolla",
+ "docTitle": "Am Bìoball air Mapa · Am Bìoball ann an aon scrolla",
+ "metaDesc": "Lorg loidhne-tìm an t-Seann Tiomnaidh, beatha Iosa, agus turais Phòil air fìor mhapa — thachair am Bìoball ann an àiteachan fìora.",
+ "s": {
+  "kicker": "Am Bìoball ann an aon scrolla · Mapaichean",
+  "title": "Am Bìoball air Mapa",
+  "verse": "“Oir cha do lean sinne faoin-sgeulachdan a dhealbhadh gu h‑innleachdach, nuair a chuir sinn an cèill dhuibh cumhachd agus teachd ar Tighearna Iosa Crìosd, ach rinneadh sinn nar sùil-fhianaisean air a mhòrachd-san.” (2 Peadar 1:16)",
+  "purpose": "Chan e miotas a th' anns a' Bhìoball. Is e clàr a th' ann de dhaoine a choisich air fìor àiteachan, cinn-latha agus ainmean. Lorg na slighean sin thar mapa, ann an òrdugh ama — thoir gnogadh air puing, no brùth ▶ gus coiseachd troimhe ceum air cheum.",
+  "ot_kick": "① An Seann Tiomnadh — thar ùine",
+  "ot_h": "Bhon chruthachadh chun tilleadh gu Ierusalem",
+  "ot_lead": "Chan e aon turas ach sruth na h-eachdraidh-saoraidh bhon chruthachadh air adhart: cruthachadh agus tuiteam → tuil agus Bàbel → gairm (Abrahàm) → am fearann gealltanach → an t-Eisreadh → am fàsach → ceannsachadh → an rìoghachd → an sgaradh → am fògradh → an tilleadh.",
+  "je_kick": "② An Tiomnadh Nuadh — beatha Iosa",
+  "je_h": "Bho Bhetlehem gu Ierusalem",
+  "je_lead": "Lean beatha Iosa mar a dh'innseas na Soisgeulan i, ann an òrdugh — bho a bhreith ann am Betlehem tro a bhaisteadh agus a mhinistrealachd Ghalileach, thar Shamaria, chun a' chroinn, an aiseirigh agus an dìreadh suas ann an Ierusalem.",
+  "pa_kick": "③ An Tiomnadh Nuadh — turais Phòil",
+  "pa_h": "Bho Antioch gu iomall na talmhainn — an Ròimh",
+  "pa_lead": "Bhon Chuingeis ann an Ierusalem, mar a sgaoil an soisgeul thar Iudèa — tro Àisia Bheag agus an Roinn Eòrpa gu cridhe na h-ìmpireachd. Tagh aon de na còig turais (1d·2na·3s + an turas don Ròimh + an dèidh a shaoradh) agus lean tachartasan Ghnìomharan leis na litrichean a chaidh a sgrìobhadh air an t-slighe.",
+  "foot": "Tùsan · Tha na h-àiteachan a' leantainn teacsa a' Bhìobaill agus cruinn-eòlas àbhaisteach a' Bhìobaill (le ainmean an latha an-diugh far a bheil e cuideachail). Tha na h-oirthirean, na h-aibhnichean agus na lochan air an tarraing bho dhàta cruinn-eòlais fhosgailte (Natural Earth), air an sìmpleachadh.",
+  "contact": "Ceistean · beachdan — <a id=\"contact\" class=\"mail\">Cuir post-d thugainn</a>",
+  "play": "Cluich",
+  "pause": "Stad",
+  "today": "An-diugh:",
+  "verseCite": "2 Peadar 1:16"
+ },
+ "ot": {
+  "places": {
+   "eden": {
+    "name": "Eden (Cruthachadh · Tuiteam)",
+    "book": "Genesis 1–3",
+    "today": "sgìre Thigris–Euphrates an-diugh",
+    "note": "A-steach do shaoghal a rinneadh ro-mhath, tha am peacadh a' tighinn a-steach agus a' briseadh a' cheangail eadar Dia agus an cinne-daonna.",
+    "events": [
+     "Cruthachadh ann an sia làithean — “bha e ro-mhath”",
+     "An cinne-daonna air a dhèanamh ann an ìomhaigh Dhè",
+     "An Tuiteam, agus fògradh à Eden",
+     "A' chiad ghealladh den t-soisgeul — “bruthaidh sìol na mnà ceann na nathrach”"
+    ]
+   },
+   "noah": {
+    "name": "Ararat (an Tuil)",
+    "book": "Genesis 6–9",
+    "today": "Beinn Ararat, taobh an ear na Tuirc an-diugh",
+    "note": "Tha Dia a' toirt breitheanas air saoghal làn peacaidh, ach a' gleidheadh beatha tro aon teaghlach.",
+    "events": [
+     "Saoghal air a lìonadh le truaillidheachd",
+     "An tuil, agus àirc Nòah",
+     "Coicheangal a' bhogha-fhrois — “cha bhi tuil ann tuilleadh a sgriosas”"
+    ]
+   },
+   "babel": {
+    "name": "Tùr Bhàbeil",
+    "book": "Genesis 11",
+    "today": "Iorac an-diugh (còmhnard Shinar)",
+    "note": "An aghaidh an àrdain a shìneas gu nèamh, tha Dia a' sgapadh an cainnt agus na sluaghan air feadh na talmhainn.",
+    "events": [
+     "“Togamaid dhuinn fhèin baile agus tùr … agus dèanamaid ainm dhuinn fhèin”",
+     "Tha Dia a' cur troimh-a-chèile an cànan",
+     "Tha na sluaghan a' sgapadh air feadh na talmhainn (Shinar — Bàbilon an dèidh sin)"
+    ]
+   },
+   "ur": {
+    "name": "Ur",
+    "book": "Genesis 12",
+    "today": "ceann a deas Iorac an-diugh",
+    "note": "Tha sgeul saoraidh a' Bhìobaill a' tòiseachadh le gairm aon duine.",
+    "events": [
+     "Tha Dia a' gairm Abram a-mach à Ur nan Caldèach",
+     "“Nì mi thu ad chinneach mòr … beannaichear na h-uile theaghlaichean annad”",
+     "Le creideamh tha e a' fàgail a dhùthaich"
+    ]
+   },
+   "haran": {
+    "name": "Haran",
+    "book": "Genesis 12",
+    "today": "ceann a deas na Tuirc an-diugh",
+    "note": "Air an t-slighe, a' freagairt na gairm a dh'ionnsaigh an fhearainn ghealltanaich.",
+    "events": [
+     "Tha teaghlach Terah a' tuineachadh ann an Haran",
+     "Tha Terah a' bàsachadh",
+     "Tha Abram a' falbh gu Canàan aig aois 75"
+    ]
+   },
+   "shechem": {
+    "name": "Sichem · Canàan",
+    "book": "Genesis 12–50",
+    "today": "Nablus an-diugh",
+    "note": "Anns an fhearann ghealltanach tha teaghlach air a stèidheachadh agus tha an coicheangal a' dol sìos tro na ginealaich.",
+    "events": [
+     "A' tighinn a-steach do Chanàan, a' chiad altair — “do d' shliochd bheir mi am fearann seo”",
+     "An coicheangal (Genesis 15) · Isaac · Iàcob",
+     "Dà mhac dheug Iàcoib — freumh nan dà threubh dheug"
+    ]
+   },
+   "egypt": {
+    "name": "An Èiphit (Gosen)",
+    "book": "Genesis 37–50 · Ecsodus 1",
+    "today": "Delta na Nìle, an Èiphit an-diugh",
+    "note": "Tha teaghlach a' fàs na chinneach mòr — an uair sin na nàisean de thràillean.",
+    "events": [
+     "Iòsaph, air a reic air falbh, ag èirigh gu riaghladh na h-Èiphit",
+     "Tha teaghlach Iàcoib gu lèir a' tighinn a-nuas gus teicheadh on ghort",
+     "Tha nàisean fàsmhor Israeil air a dhèanamh na thràillean"
+    ]
+   },
+   "sinai": {
+    "name": "Beinn Shinai",
+    "book": "Ecsodus · Lebhiticus",
+    "today": "Leth-eilean Shinai an-diugh",
+    "note": "Prìomh shaoradh an t-Seann Tiomnaidh — tha tràillean a' fàs nan sluagh dha Dia fhèin.",
+    "events": [
+     "Na deich plàighean agus uan na Càisge",
+     "Tha a' Mhuir Ruadh a' sgoltadh agus tha iad a' dol thairis",
+     "Na Deich Àithntean, an Lagh, am pàilliun agus na h-ìobairtean"
+    ]
+   },
+   "kadesh": {
+    "name": "Cades (fàsach)",
+    "book": "Àireamh · Deuteronomi",
+    "today": "fàsach Shinai–Negebh an-diugh",
+    "note": "Tha às-creideamh a' cosg fearann do ghinealach — ach tha Dia a' fuireach leotha.",
+    "events": [
+     "Dà fhear-brath dheug — ach tha an sluagh a' diùltadh earbsa a chur ann",
+     "38 bliadhna san fhàsach — mana, neul agus teine",
+     "Air còmhnardan Mhòaib, searmon mu dheireadh Mhaois (Deuteronomi)"
+    ]
+   },
+   "jericho": {
+    "name": "Iericho",
+    "book": "Iosua",
+    "today": "Iericho an-diugh",
+    "note": "Mu dheireadh tha iad a' dol a-steach agus a' gabhail an fhearainn ghealltanaich.",
+    "events": [
+     "Tha Iòrdan a' sgoltadh agus tha an sluagh a' dol thairis",
+     "Tha ballachan Iericho a' tuiteam",
+     "Ceannsachadh Chanàain agus roinn an fhearainn"
+    ]
+   },
+   "shiloh": {
+    "name": "Sìloh (Britheamhan)",
+    "book": "Britheamhan · Rut",
+    "today": "Khirbet Seilun an-diugh",
+    "note": "Gun rìgh, tha gach neach a' dèanamh mar a thogras e — tha feum air fìor rìgh.",
+    "events": [
+     "Tha am pàilliun air a shuidheachadh ann an Sìloh",
+     "A' chuairt de pheacadh–fòirneart–saoradh (Deborah, Gideon, Samson)",
+     "Rut — dìlseachd ann an làithean dorcha, ann an sliochd Dhaibhidh"
+    ]
+   },
+   "jerusalem": {
+    "name": "Ierusalem · An Rìoghachd Aonaichte",
+    "book": "1–2 Samuel · 1 Rìgh",
+    "today": "Ierusalem an-diugh",
+    "note": "Linn òir Israeil — agus gealladh rìgh shìorraidh.",
+    "events": [
+     "Saul a' chiad rìgh, an uair sin Daibhidh agus Goliath",
+     "Coicheangal Dhaibhidh — “do rìgh-chathair gu bràth” (2 Samuel 7)",
+     "Tha Solamh a' togail an teampaill ann an Ierusalem"
+    ]
+   },
+   "samaria": {
+    "name": "Samaria · An Rìoghachd Roinnte",
+    "book": "Rìgh · na Fàidhean",
+    "today": "Sebastia an-diugh",
+    "note": "Tha an rìoghachd a' sgaradh agus a' crìonadh fhad 's a tha na fàidhean ag èigheachd.",
+    "events": [
+     "An dèidh Sholaimh, an sgaradh na Iùdah agus Israel",
+     "Ìodhal-aoradh a-rithist 's a-rithist",
+     "Tha Eliah, Isaiah, Ieremiah ag èigheachd ‘tillibh’ — agus a' ro-innse a' Mhesiah"
+    ]
+   },
+   "nineveh": {
+    "name": "Ninebheh (Asiria)",
+    "book": "2 Rìgh 17 · Ionah",
+    "today": "Mosul, Iorac an-diugh",
+    "note": "A' seachnadh gach rabhaidh, tha an tuath a' tuiteam an toiseach.",
+    "events": [
+     "Ninebheh, prìomh-bhaile Asiria",
+     "Tha an rìoghachd thuathach a' tuiteam ron Asiria (722 RC)",
+     "Tha Ionah air a chur gu Ninebheh"
+    ]
+   },
+   "babylon": {
+    "name": "Bàbilon",
+    "book": "2 Rìgh 25 · Daniel · Eseciel",
+    "today": "Hillah, Iorac an-diugh",
+    "note": "An oidhche as dorcha — ach tha gealladh an ath-nuadhachaidh a' fuireach.",
+    "events": [
+     "Tha Ierusalem a' tuiteam, tha an teampall air a losgadh (586 RC)",
+     "Tha Iùdah air a giùlan gu Bàbilon",
+     "Daniel agus Eseciel — creideamh agus lèirsinnean san fhògradh"
+    ]
+   },
+   "susa": {
+    "name": "Susa (Persia)",
+    "book": "Esteir · Nehemiah",
+    "today": "Shush, Ioràn an-diugh",
+    "note": "Eadhon ann an cridhe ìmpireachd phàganach, tha Dia a' gleidheadh a shluaigh.",
+    "events": [
+     "Tha Persia a' cur às do Bhàbilon",
+     "Tha Esteir a' sàbhaladh nan Iùdhach o sgrios",
+     "Tha Nehemiah ag ùrnaigh fa chomhair an rìgh agus air a chur a-mach"
+    ]
+   },
+   "return": {
+    "name": "An Tilleadh gu Ierusalem",
+    "book": "Esra · Nehemiah · Malachi",
+    "today": "Ierusalem an-diugh",
+    "note": "Tha iad a' tilleadh agus ag ath-thogail — ach cha tàinig rìgh. Tha iad a' feitheamh ris a' Mhesiah.",
+    "events": [
+     "Trì tonnan tillidh le òrdugh Chìruis (Serubabel 538 · Esra 458 · Nehemiah 444)",
+     "An teampall air ath-thogail agus ballachan Ierusaleim air an ath-thogail",
+     "Malachi — tha an Seann Tiomnadh a' dùnadh: “Cuiridh mise a-mach mo theachdaire”"
+    ]
+   }
+  },
+  "labels": [
+   "A' Mhuir Mheadhan-thìreach",
+   "Mesopotamia",
+   "Fàsach Arabia",
+   "An Èiphit"
+  ],
+  "journeys": {
+   "flow": "Sgeul na saoraidh"
+  }
+ },
+ "jesus": {
+  "places": {
+   "bethlehem": {
+    "name": "Betlehem",
+    "book": "Mata 1–2 · Lùcas 2",
+    "today": "Betlehem an-diugh",
+    "note": "Tha am Mesiah gealltanach a' tighinn gu baile Dhaibhidh — am Facal air fhàs na fheòil.",
+    "events": [
+     "Air a bhreith ann am Betlehem, baile Dhaibhidh",
+     "Tha na h-ainglean ag innse an naidheachd do na cìobairean",
+     "Tha na Draoidhean a' tighinn a dh'aoradh"
+    ]
+   },
+   "nazareth": {
+    "name": "Nasaret",
+    "book": "Lùcas 2 · 4",
+    "today": "Nasaret an-diugh",
+    "note": "Tha Dia a' fàs suas na dhuine ann am baile àbhaisteach.",
+    "events": [
+     "Air a thogail ann an dachaigh saoir",
+     "Aig dà bhliadhna dheug, a' faighneachd 's a' freagairt san teampall",
+     "An dèidh sin air a dhiùltadh ann an sionagog a bhaile fhèin"
+    ]
+   },
+   "jordan": {
+    "name": "Abhainn Iòrdain",
+    "book": "Mata 3–4",
+    "today": "Iòrdan ìochdarach an-diugh",
+    "note": "Tha a mhinistrealachd phoblach a' tòiseachadh — tha nèamh ga sheulachadh mar am Mac.",
+    "events": [
+     "Air a bhaisteadh le Eòin",
+     "Tha an Spiorad a' teàrnadh mar chalman — “Is e seo mo Mhac gràdhach”",
+     "A' faighinn buaidh air trì buairidhean Shàtain san fhàsach"
+    ]
+   },
+   "cana": {
+    "name": "Cana",
+    "book": "Eòin 2",
+    "today": "Kafr Kanna an-diugh",
+    "note": "Anns a' chiad chomharra aige tha e a' foillseachadh a ghlòir.",
+    "events": [
+     "Na aoigh aig banais",
+     "Uisge air a thionndadh gu fìon — a' chiad chomharra aige",
+     "Tha a dheisciopail a' creidsinn ann"
+    ]
+   },
+   "sychar": {
+    "name": "Sichar (Samaria)",
+    "book": "Eòin 2–4",
+    "today": "faisg air Nablus an-diugh",
+    "note": "Rathad na ministrealachd thràith — tro Ierusalem agus air adhart gu Samaria dhìmeasach.",
+    "events": [
+     "Tha e a' glanadh an teampaill ann an Ierusalem",
+     "Air an oidhche, Nicodemus — “Feumaidh tu a bhith air do bhreith a-rìs”",
+     "Uisge beò do bhoireannach Samaritanach"
+    ]
+   },
+   "capernaum": {
+    "name": "Capernaum",
+    "book": "Mata 4–13 · Marcus 1–4",
+    "today": "cladach Ghalile an-diugh",
+    "note": "Prìomh-ionad na ministrealachd Ghalileich — gairm, teagasg agus dùbhlan uile a' coinneachadh an seo.",
+    "events": [
+     "A' gairm nan iasgairean agus a' dèanamh a bhunait an seo",
+     "An Searmon air an t-Sliabh — “Is beannaichte na bochdan nan spiorad”",
+     "Cosamhlachdan na rìoghachd — agus dùbhlan ag èirigh"
+    ]
+   },
+   "galilee": {
+    "name": "Muir Ghalile",
+    "book": "Marcus 4 · 6 · Eòin 6",
+    "today": "Loch Kinneret an-diugh",
+    "note": "Le cumhachd os cionn nàdair tha e a' sealltainn cò e.",
+    "events": [
+     "“Sìth, bi sàmhach” — tha e a' ciùineachadh na stoirme",
+     "A' beathachadh 5,000 le còig builg agus dà iasg",
+     "A' coiseachd air an uisge"
+    ]
+   },
+   "caesarea_p": {
+    "name": "Cesarea Philipi",
+    "book": "Mata 16–17",
+    "today": "Banias an-diugh",
+    "note": "Tha na deisciopail a' tuigsinn gur e Crìosd a th' ann, agus tha slighe a' chroinn a' fosgladh.",
+    "events": [
+     "Aideachadh Pheadair — “Is tusa Crìosd, Mac an Dè bheò”",
+     "Tha e a' ro-innse a bhàis 's aiseirigh an toiseach",
+     "Air atharrachadh-cruth ann an glòir air an t-sliabh"
+    ]
+   },
+   "jericho": {
+    "name": "Iericho",
+    "book": "Lùcas 18–19",
+    "today": "Iericho an-diugh",
+    "note": "Air an rathad suas gu Ierusalem, tha e a' sireadh nan caillte.",
+    "events": [
+     "Tha e a' toirt fradharc do Bhartimeus dall",
+     "Tha e a' gairm Sacheus an cìs-mhaor",
+     "“Thàinig Mac an duine a dh'iarraidh agus a thèarnadh an nì a bha caillte”"
+    ]
+   },
+   "bethany": {
+    "name": "Betani",
+    "book": "Eòin 11–12",
+    "today": "al-Eizariya an-diugh",
+    "note": "Tha e a' sealltainn ùghdarras os cionn a' bhàis air oidhche a sheachdain dheireannaich.",
+    "events": [
+     "Tha e ag èirigh Lasaruis on uaigh — “Is mise an aiseirigh agus a' bheatha”",
+     "Tha Muire ga ungadh airson adhlacaidh",
+     "Tha an comharra seo a' cruadhachadh na cuilbheirt gus a mharbhadh"
+    ]
+   },
+   "jerusalem": {
+    "name": "Ierusalem",
+    "book": "Mata 21–28 · Lùcas 24 · Gnìomharan 1",
+    "today": "Ierusalem an-diugh",
+    "note": "An àirde don comharraich am Bìoball gu lèir — crann, aiseirigh, dìreadh suas.",
+    "events": [
+     "Dol a-steach buadhach; tha e a' tilgeadh bùird an teampaill a-rithist",
+     "Aig an t-Suipear Dheireannach tha e a' nighe casan nan deisciopal",
+     "Tha e a' bàsachadh air a' chrann",
+     "Air èirigh air an treas là, an uair sin air dìreadh suas"
+    ]
+   }
+  },
+  "labels": [
+   "A' Mhuir Mheadhan-thìreach",
+   "Galile",
+   "Samaria",
+   "Iùdèa",
+   "Decapolis",
+   "Perea",
+   "A' Mhuir Mharbh"
+  ],
+  "journeys": {
+   "life": "Slighe Iosa"
+  }
+ },
+ "paul": {
+  "places": {
+   "antioch": {
+    "name": "Antioch",
+    "book": "Gnìomharan 13 · 15",
+    "today": "Antakya, an Tuirc an-diugh",
+    "note": "An eaglais-chuir far a bheil misean nan Cinneach a' tòiseachadh 's a' tilleadh.",
+    "events": [
+     "Ann an ùrnaigh tha an Spiorad a' cur air leth Barnabas agus Saul",
+     "An eaglais far an do ghairmeadh ‘Crìosdaidhean’ air na creidmhich an toiseach",
+     "Àite-tòiseachaidh a' chiad, an dàrna 's an treas turais"
+    ]
+   },
+   "seleucia": {
+    "name": "Seleucia",
+    "book": "Gnìomharan 13:4",
+    "today": "an Tuirc an-diugh",
+    "note": "Port Antioch — tha iad a' seòladh gu Ciprus.",
+    "events": []
+   },
+   "salamis": {
+    "name": "Salamis (Ciprus)",
+    "book": "Gnìomharan 13:5",
+    "today": "Ciprus an-diugh",
+    "note": "A' chiad stad ann an Ciprus — a' searmonachadh anns na sionagogan.",
+    "events": []
+   },
+   "paphos": {
+    "name": "Paphos",
+    "book": "Gnìomharan 13:6-12",
+    "today": "Ciprus an-diugh",
+    "note": "Tha cumhachd air a shealltainn an aghaidh na feadhainn a chuireas an aghaidh an t-soisgeil.",
+    "events": [
+     "Tha Elimas an draoidh air a bhualadh dall",
+     "Tha Sergius Pòlus an t-àrd-uachdaran a' creidsinn",
+     "Às an seo tha ‘Pòl’ a' gabhail an stiùiridh"
+    ]
+   },
+   "perga": {
+    "name": "Perga",
+    "book": "Gnìomharan 13:13",
+    "today": "Antalya, an Tuirc an-diugh",
+    "note": "Port ann am Pamphilia — an seo tha Eòin Marcus a' tilleadh air ais.",
+    "events": []
+   },
+   "pantioch": {
+    "name": "Antioch Phisidia",
+    "book": "Gnìomharan 13:14-50",
+    "today": "Yalvaç, an Tuirc an-diugh",
+    "note": "Tha an soisgeul a' briseadh fosgailte a dh'ionnsaigh nan Cinneach.",
+    "events": [
+     "Searmon fada de eachdraidh na saoraidh san t-sionagog",
+     "Tha mòran Chinneach a' dèanamh gàirdeachas 's a' gabhail ris an fhacal",
+     "Air an cur a-mach le dùbhlan"
+    ]
+   },
+   "iconium": {
+    "name": "Iconium",
+    "book": "Gnìomharan 14:1-7",
+    "today": "Konya, an Tuirc an-diugh",
+    "note": "Tha mòran a' creidsinn, ach tha geur-leanmhainn gan iomain air adhart.",
+    "events": []
+   },
+   "lystra": {
+    "name": "Listra",
+    "book": "Gnìomharan 14:8-20",
+    "today": "an Tuirc an-diugh",
+    "note": "Air a mholadh mar dhia, an uair sin air a chlachadh.",
+    "events": [
+     "A' slànachadh fear a bha bacach o bhreith",
+     "Tha an sluagh a' feuchainn ri ìobairt a thoirt dhaibh mar dhiathan",
+     "Air a chlachadh 's air fhàgail airson marbh, tha e ag èirigh"
+    ]
+   },
+   "derbe": {
+    "name": "Derbe",
+    "book": "Gnìomharan 14:20-21",
+    "today": "an Tuirc an-diugh",
+    "note": "Tha mòran dheisciopal air an dèanamh; tha iad a' tilleadh gus na h-eaglaisean a neartachadh.",
+    "events": []
+   },
+   "troas": {
+    "name": "Troas",
+    "book": "Gnìomharan 16:8-10",
+    "today": "an Tuirc an-diugh",
+    "note": "An t-àite tionndaidh far a bheil an soisgeul a' dol a dh'ionnsaigh na Roinn Eòrpa an toiseach.",
+    "events": [
+     "Lèirsinn air fear à Macedonia",
+     "“Thig a-nall agus cuidich leinn”",
+     "Tha iad a' dol thairis sa bhad don Roinn Eòrpa"
+    ]
+   },
+   "philippi": {
+    "name": "Philipi",
+    "book": "Gnìomharan 16 · Philipianach",
+    "today": "ceann a tuath na Grèige an-diugh",
+    "note": "A' chiad eaglais san Roinn Eòrpa — tha an soisgeul a' buannachadh eadhon sa phrìosan.",
+    "events": [
+     "Tha Lidia, marsanta purpaidh, a' creidsinn",
+     "Tha ban-tràill fhàistinneach air a saoradh",
+     "Laoidhean meadhan-oidhche, crith-thalmhainn, teaghlach a' ghlèidheir air a shàbhaladh"
+    ]
+   },
+   "thess": {
+    "name": "Tesalonica",
+    "book": "Gnìomharan 17 · 1–2 Tesalònianaich",
+    "today": "Thessaloniki, a' Ghrèig an-diugh",
+    "note": "Tha am facal a' crathadh a' bhaile agus tha dùbhlan a' goil thairis.",
+    "events": [
+     "A' reusanachadh san t-sionagog trì Sàbaidean",
+     "“Iadsan a thionndaidh an saoghal bun os cionn”",
+     "Tha iad a' teiche air falbh air an oidhche"
+    ]
+   },
+   "berea": {
+    "name": "Berea",
+    "book": "Gnìomharan 17:10-15",
+    "today": "Veria, a' Ghrèig an-diugh",
+    "note": "An fheadhainn ‘uasal’ a rannsaich am facal dhaibh fhèin.",
+    "events": [
+     "Tha iad a' gabhail ris an fhacal gu deònach",
+     "Gach là tha iad a' rannsachadh nan Sgriobtar gus a dhearbhadh",
+     "Tha mòran a' tighinn gu creideamh"
+    ]
+   },
+   "athens": {
+    "name": "Athen",
+    "book": "Gnìomharan 17:16-34",
+    "today": "Athens, a' Ghrèig an-diugh",
+    "note": "Ann am baile nam feallsanach tha e a' searmonachadh an ‘dè neo-aithnichte’.",
+    "events": [
+     "Air a bhrosnachadh le baile làn ìodhalan",
+     "Air an Areopagus tha e a' searmonachadh a' Chruthadair 's na h-aiseirigh",
+     "Air a mhagadh, ach tha beagan a' creidsinn"
+    ]
+   },
+   "corinth": {
+    "name": "Corint",
+    "book": "Gnìomharan 18 · 1–2 Corintianach",
+    "today": "a' Ghrèig an-diugh",
+    "note": "Tha e a' fuireach bliadhna gu leth, a' suidheachadh eaglais ann am baile de dhubhailc.",
+    "events": [
+     "A' dèanamh phàilliunan le Acuila agus Priscila",
+     "“Na biodh eagal ort … oir tha mise maille riut”",
+     "Tha mòran de mhuinntir Chorint a' creidsinn 's air am baisteadh"
+    ]
+   },
+   "ephesus": {
+    "name": "Ephesus",
+    "book": "Gnìomharan 19 · Ephèsianach",
+    "today": "Selçuk, an Tuirc an-diugh",
+    "note": "Cridhe an treas turais — tha am facal a' sgaoileadh air feadh Àisia.",
+    "events": [
+     "Teagasg làitheil airson dà bhliadhna ann an talla Thiranuis",
+     "Leabhraichean draoidheachd air an losgadh; obraichean cumhachdach",
+     "Tha Demetrius an ceàrd-airgid a' tòiseachadh aimhreit"
+    ]
+   },
+   "miletus": {
+    "name": "Miletus",
+    "book": "Gnìomharan 20:17-38",
+    "today": "an Tuirc an-diugh",
+    "note": "Beannachd le deòir do èildearan Ephesuis.",
+    "events": [
+     "“Biathaibh eaglais Dhè, a cheannaich e le 'fhuil fhèin”",
+     "Tha na h-èildearan a' gul, fios aca nach fhaic iad e a-rithist"
+    ]
+   },
+   "caesarea": {
+    "name": "Cesarea",
+    "book": "Gnìomharan 23–26",
+    "today": "cladach Israeil an-diugh",
+    "note": "Airson dà bhliadhna tha e a' dìon an t-soisgeil fa chomhair riaghladairean agus rìgh.",
+    "events": [
+     "Deuchainnean fa chomhair nan riaghladairean Felix agus Festus",
+     "A dhìon fa chomhair an Rìgh Agripa",
+     "“Tha mi a' gairm air Cèasar” — air adhart don Ròimh"
+    ]
+   },
+   "jerusalem": {
+    "name": "Ierusalem",
+    "book": "Gnìomharan 21–23",
+    "today": "Ierusalem an-diugh",
+    "note": "Air a ghlacadh san teampall, tha a shlighe mar phrìosanach a' tòiseachadh.",
+    "events": [
+     "Air a ghlacadh leis an t-sluagh san teampall",
+     "Ga dhìon fhèin fa chomhair na comhairle",
+     "Mar shaoranach Ròmanach, air a chur fo gheàrd gu Cesarea"
+    ]
+   },
+   "myra": {
+    "name": "Mira",
+    "book": "Gnìomharan 27:5-6",
+    "today": "Demre, an Tuirc an-diugh",
+    "note": "Tha iad ag atharrachadh gu long à Alecsandria a' dèanamh air an Ròimh.",
+    "events": []
+   },
+   "fairhaven": {
+    "name": "Na Calaidhean Àlainn (Crete)",
+    "book": "Gnìomharan 27:8-12",
+    "today": "Crete an-diugh",
+    "note": "Cha tèid rabhadh Phòil stad a chur air an t-seòladh a chluinntinn.",
+    "events": []
+   },
+   "crete": {
+    "name": "Crete",
+    "book": "Tìtus",
+    "today": "Crete an-diugh",
+    "note": "An dèidh a shaoradh, an t-eilean far am fàg e Tìtus gus na h-eaglaisean a chur an òrdugh.",
+    "events": [
+     "A' fàgail Tìtus gus èildearan a shuidheachadh anns gach baile",
+     "Ag iarraidh stiùirichean neo-choireach, dìleas",
+     "A' sgrìobhadh na litreach gu Tìtus"
+    ]
+   },
+   "malta": {
+    "name": "Melita",
+    "book": "Gnìomharan 27–28",
+    "today": "Malta an-diugh",
+    "note": "Tro stoirm agus long-bhriseadh, tha gealladh Dhè a' seasamh.",
+    "events": [
+     "Tha an ‘Euroclidon’ a' briseadh na luinge, ach tha na 276 uile beò",
+     "Air a bhìdeadh le nathair-nimhe, tha e gun chron",
+     "Tha e a' slànachadh muinntir thinn an eilein"
+    ]
+   },
+   "syracuse": {
+    "name": "Siracus",
+    "book": "Gnìomharan 28:12",
+    "today": "Sicily, an Eadailt an-diugh",
+    "note": "Tha iad a' fuireach trì làithean ann an Sicily.",
+    "events": []
+   },
+   "puteoli": {
+    "name": "Puteoli",
+    "book": "Gnìomharan 28:13-14",
+    "today": "Pozzuoli, an Eadailt an-diugh",
+    "note": "Tha iad a' tighinn air tìr san Eadailt agus air an coinneachadh le co-chreidmhich.",
+    "events": []
+   },
+   "rome": {
+    "name": "An Ròimh",
+    "book": "Gnìomharan 28 · Litrichean a' Phrìosain · 2 Timòteus",
+    "today": "an Ròimh, an Eadailt an-diugh",
+    "note": "Tha an soisgeul a' ruighinn cridhe na h-ìmpireachd mu dheireadh — chan e crìoch ach toiseach.",
+    "events": [
+     "Dà bhliadhna fo ghrèim-taighe, a' searmonachadh na rìoghachd gu dàna",
+     "Às an seo tha e a' sgrìobhadh Litrichean a' Phrìosain (Eph·Phil·Col·Phm)",
+     "An dèidh sin air a phrìosanachadh a-rithist, a' sgrìobhadh 2 Timòteus 's air a mhartarachadh — “chòmhraig mi an deagh chòmhrag, chrìochnaich mi mo chùrsa”"
+    ]
+   }
+  },
+  "labels": [
+   "A' Mhuir Mheadhan-thìreach",
+   "A' Mhuir Aegean",
+   "Àisia Bheag",
+   "Macedonia",
+   "An Eadailt"
+  ],
+  "journeys": {
+   "j1": "A' chiad turas",
+   "j2": "An dàrna turas",
+   "j3": "An treas turas",
+   "rome": "An ceathramh turas · don Ròimh",
+   "j5": "An còigeamh turas · an dèidh a shaoradh"
+  }
+ }
+}

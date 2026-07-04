@@ -38,7 +38,7 @@
      "Sorreraren sei egunak — «oso ona»",
      "Gizakia Jainkoaren irudira egina",
      "Erorketa, eta Edenetik kanporatzea",
-     "Berri Onaren lehen promesa — «emakumearen ondorengoak sugearen burua zapalduko du»"
+     "Berri Onaren lehen promesa — «honek burua zapalduko dik»"
     ]
    },
    "noah": {
@@ -49,7 +49,7 @@
     "events": [
      "Ustelkeriaz betetako mundua",
      "Uholdea, eta Noeren kutxa",
-     "Ostadarraren ituna — «ez da berriz uholderik izango dena suntsitzeko»"
+     "Ostadarraren ituna — «ez dela aurrerantzean mundua suntsituko duen uholderik izango»"
     ]
    },
    "babel": {
@@ -58,7 +58,7 @@
     "today": "Irak gaur egun (Xinarko lautada)",
     "note": "Zerura iritsi nahi duen harrokeriaren aurka, Jainkoak haien hizkuntza nahasten du eta herriak lur osoan barreiatzen ditu.",
     "events": [
-     "«Eraiki dezagun hiri bat eta dorre bat… eta egin dezagun izen bat geuretzat»",
+     "«eraiki ditzagun hiri bat eta zerurainoko dorre bat… Ospetsu egingo gara»",
      "Jainkoak haien hizkuntza nahasten du",
      "Herriak lur osoan barreiatzen dira (Xinar — geroko Babilonia)"
     ]
@@ -70,7 +70,7 @@
     "note": "Bibliako erredentzioaren istorioa gizon bakar baten deiaz hasten da.",
     "events": [
      "Jainkoak Abram deitzen du Kaldearren Ur hiritik",
-     "«Nazio handi eginen zaitut… zure bitartez bedeinkatuko ditut herri guztiak»",
+     "«Nazio handi eginen zaitut… Zure bitartez bedeinkatuko ditut lurreko herri guztiak»",
      "Sinesmenez bere sorterria uzten du"
     ]
    },
@@ -91,7 +91,7 @@
     "today": "Nablus gaur egun",
     "note": "Agindutako lurraldean familia bat sortzen da eta ituna belaunaldiz belaunaldi pasatzen da.",
     "events": [
-     "Kanaanen sartzea, lehen aldarea — «zure ondorengoei emango diet lurralde hau»",
+     "Kanaanen sartzea, lehen aldarea — «zure ondorengoei emango diedan lurraldea»",
      "Ituna (Has 15) · Isaak · Jakob",
      "Jakoben hamabi semeak — hamabi leinuen erroa"
     ]
@@ -158,7 +158,7 @@
     "note": "Israelen urre-aroa — eta betiko errege baten promesa.",
     "events": [
      "Saul lehen erregea, gero David eta Goliat",
-     "Davidekiko ituna — «zure errege-aulkia betiko» (2 Sam 7)",
+     "Davidekiko ituna — «zeure errege-aulkia sendoa izanen duzu beti» (2 Sam 7)",
      "Salomonek tenplua eraikitzen du Jerusalemen"
     ]
    },
@@ -259,7 +259,7 @@
     "note": "Bere ministerio publikoa hasten da — zeruak Seme bezala zigilatzen du.",
     "events": [
      "Joanek bataiatua",
-     "Espiritua uso baten gisa jaisten da — «Hauxe dut neure Seme maitea»",
+     "Espiritua uso baten gisa jaisten da — «Hau da nire Semea, nire maitea»",
      "Satanen hiru tentaldiak garaitzen ditu basamortuan"
     ]
    },
@@ -281,7 +281,7 @@
     "note": "Hasierako ministerioaren bidea — Jerusalemen barrena eta gutxietsitako Samariaraino.",
     "events": [
      "Tenplua garbitzen du Jerusalemen",
-     "Gauez, Nikodemo — «Berriro jaio behar duzu»",
+     "Gauez, Nikodemo — «berriro jaio behar duzu»",
      "Ur bizia emakume samariar batentzat"
     ]
    },
@@ -292,7 +292,7 @@
     "note": "Galileako ministerioaren egoitza — deia, irakaskuntza eta aurkakotasuna hemen biltzen dira.",
     "events": [
      "Arrantzaleak deitu eta hemen kokatzen da",
-     "Mendiko Hitzaldia — «Zorionekoak espirituz behartsu direnak»",
+     "Mendiko Hitzaldia — «Zorionekoak bihotzez behartsu direnak»",
      "Erreinuaren parabolak — eta gero eta aurkakotasun handiagoa"
     ]
    },
@@ -302,7 +302,7 @@
     "today": "Tiberiades aintzira gaur egun",
     "note": "Naturaren gaineko botereaz nor den erakusten du.",
     "events": [
-     "«Isil zaitez, geldi hadi» — ekaitza baretzen du",
+     "«Hago isilik! Geldi!» — ekaitza baretzen du",
      "5.000 elikatzen ditu bost ogi eta bi arrainekin",
      "Uraren gainean ibiltzen da"
     ]
@@ -313,7 +313,7 @@
     "today": "Banias gaur egun",
     "note": "Ikasleek ohartzen dira bera Kristo dela, eta gurutzearen bidea irekitzen da.",
     "events": [
-     "Pedroren aitorpena — «Zu zara Mesias, Jainko biziaren Semea»",
+     "Pedroren aitorpena — «Zu Mesias zara, Jainko biziaren Semea»",
      "Bere heriotza eta piztuera lehen aldiz iragartzen ditu",
      "Mendian aintzaz antzaldatua"
     ]
@@ -326,7 +326,7 @@
     "events": [
      "Bartimeo itsuari ikusmena ematen dio",
      "Zakeo zergabiltzailea deitzen du",
-     "«Gizonaren Semea galdua zegoena bilatu eta salbatzera etorri da»"
+     "«Gizonaren Semea galdua zegoena bilatzera eta salbatzera etorri da»"
     ]
    },
    "bethany": {
@@ -335,7 +335,7 @@
     "today": "al-Eizariya gaur egun",
     "note": "Heriotzaren gaineko nagusitasuna erakusten du bere azken astearen bezperan.",
     "events": [
-     "Lazaro hilobitik piztarazten du — «Ni naiz piztuera eta bizia»",
+     "Lazaro hilobitik piztarazten du — «Neu naiz piztuera eta bizia»",
      "Mariak lurperatzerako gantzutzen du",
      "Seinale honek hura hiltzeko azpikeria gogortzen du"
     ]
@@ -476,7 +476,7 @@
     "note": "Hitzak hiria astintzen du eta aurkakotasuna gainezka egiten du.",
     "events": [
      "Sinagogan hiru larunbatez arrazoitzen du",
-     "«Mundu guztia nahasi dutenak»",
+     "«Mundu guztia nahastu duten horiek»",
      "Gauez ihes egiten dute"
     ]
    },
@@ -509,7 +509,7 @@
     "note": "Urte eta erdi geratzen da, eliza bat sortuz bizio-hiri batean.",
     "events": [
      "Dendak egiten ditu Akila eta Priszilarekin",
-     "«Ez beldurrik izan… ni zurekin bainago»",
+     "«Ez izan beldurrik… Ni zurekin nago»",
      "Korintoar askok sinetsi eta bataiatzen dira"
     ]
    },
@@ -530,7 +530,7 @@
     "today": "Turkia gaur egun",
     "note": "Efesoko zaharrei negarrezko agurra.",
     "events": [
-     "«Zaindu Jainkoak bere odolaz eskuratu zuen eliza»",
+     "«larra ezazue Jainkoaren Eliza, hark bere Semearen odolaz eskuratu zuena»",
      "Zaharrek negar egiten dute, berriz ez dutela ikusiko jakinda"
     ]
    },
@@ -542,7 +542,7 @@
     "events": [
      "Auziak Felix eta Festo gobernadoreen aurrean",
      "Bere defentsa Agripa erregearen aurrean",
-     "«Zesarrengana jotzen dut» — Erromarantz"
+     "«Enperadoreagana jotzen dut» — Erromarantz"
     ]
    },
    "jerusalem": {
@@ -614,7 +614,7 @@
     "events": [
      "Bi urte etxeko atxiloaldian, erreinua ausardiaz aldarrikatzen",
      "Hemendik Kartzelako Gutunak idazten ditu (Ef·Fil·Kol·Flm)",
-     "Geroago berriz presoturik, 2 Timoteo idazten du eta martiri hiltzen da — «Borroka ederra egin dut, lasterketa bukatu dut»"
+     "Geroago berriz presoturik, 2 Timoteo idazten du eta martiri hiltzen da — «Borroka ona egin dut, bukatu dut lasterketa»"
     ]
    }
   },

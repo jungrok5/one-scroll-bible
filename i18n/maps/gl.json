@@ -1,0 +1,636 @@
+{
+ "menuName": "Galego",
+ "htmlLang": "gl",
+ "dir": "ltr",
+ "locale": "gl-ES",
+ "brand": "A Biblia dunha ollada",
+ "docTitle": "A Biblia no mapa · A Biblia dunha ollada",
+ "metaDesc": "Segue no mapa a liña do tempo do Antigo Testamento, a vida de Xesús e as viaxes de Paulo — a Biblia sucedeu en lugares reais.",
+ "s": {
+  "kicker": "A Biblia dunha ollada · Mapas",
+  "title": "A Biblia no mapa",
+  "verse": "“Se vos demos a coñecer a vinda poderosa do noso Señor Xesús Cristo, non foi guiándonos por contos argallados con habilidade, senón porque fomos testemuñas oculares da súa grandeza.” (2 Pedro 1:16)",
+  "purpose": "A Biblia non é un mito. É o rexistro de persoas que camiñaron por lugares, datas e nomes reais. Segue eses camiños ao longo dun mapa, en orde de tempo — preme un punto, ou preme ▶ para percorrelo paso a paso.",
+  "ot_kick": "① Antigo Testamento — a través do tempo",
+  "ot_h": "Da creación ao regreso a Xerusalén",
+  "ot_lead": "Non unha soa viaxe, senón o fluír da historia da salvación desde a creación: creación e caída → diluvio e Babel → unha chamada (Abraham) → a terra prometida → Éxodo → deserto → conquista → reino → división → exilio → regreso.",
+  "je_kick": "② Novo Testamento — a vida de Xesús",
+  "je_h": "De Belén a Xerusalén",
+  "je_lead": "Segue a vida de Xesús tal como a contan os evanxeos, en orde — desde o seu nacemento en Belén, pasando polo bautismo e o ministerio en Galilea, a través de Samaría, ata a cruz, a resurrección e a ascensión en Xerusalén.",
+  "pa_kick": "③ Novo Testamento — as viaxes de Paulo",
+  "pa_h": "De Antioquía ata os confíns da terra — Roma",
+  "pa_lead": "Desde Pentecoste en Xerusalén, como o evanxeo se estendeu máis alá de Xudea — a través de Asia Menor e Europa ata o corazón do imperio. Escolle unha das cinco viaxes (1ª·2ª·3ª + a travesía a Roma + tras a liberación) e segue os feitos dos Feitos coas cartas escritas polo camiño.",
+  "foot": "Fontes · Os lugares seguen o texto bíblico e a xeografía bíblica estándar (con nomes actuais onde axuda). As costas, os ríos e os lagos están debuxados a partir de datos xeográficos abertos (Natural Earth), simplificados.",
+  "contact": "Preguntas · comentarios — <a id=\"contact\" class=\"mail\">Escríbenos</a>",
+  "play": "Reproducir",
+  "pause": "Pausa",
+  "today": "Hoxe:",
+  "verseCite": "2 Pedro 1:16"
+ },
+ "ot": {
+  "places": {
+   "eden": {
+    "name": "Edén (Creación · Caída)",
+    "book": "Xénese 1–3",
+    "today": "a rexión do Tigris e o Éufrates hoxe",
+    "note": "Nun mundo feito moi bo entra o pecado e rompe o vínculo entre Deus e a humanidade.",
+    "events": [
+     "Creación en seis días — «era moi bo»",
+     "O ser humano feito á imaxe de Deus",
+     "A caída, e a expulsión do Edén",
+     "A primeira promesa do evanxeo — «a liñaxe da muller esmagará a cabeza da serpe»"
+    ]
+   },
+   "noah": {
+    "name": "Ararat (o Diluvio)",
+    "book": "Xénese 6–9",
+    "today": "o monte Ararat, no leste de Turquía hoxe",
+    "note": "Deus xulga un mundo cheo de pecado, mais preserva a vida a través dunha soa familia.",
+    "events": [
+     "Un mundo cheo de corrupción",
+     "O diluvio, e a arca de Noé",
+     "A alianza do arco da vella — «nunca máis un diluvio destruirá a terra»"
+    ]
+   },
+   "babel": {
+    "name": "Torre de Babel",
+    "book": "Xénese 11",
+    "today": "Iraq hoxe (a chaira de Sinar)",
+    "note": "Contra o orgullo que quere chegar ao ceo, Deus confunde a súa fala e espalla os pobos pola terra.",
+    "events": [
+     "«Edifiquemos unha cidade e unha torre… e fagámonos un nome»",
+     "Deus confunde a súa lingua",
+     "Os pobos espállanse pola terra (Sinar — despois Babilonia)"
+    ]
+   },
+   "ur": {
+    "name": "Ur",
+    "book": "Xénese 12",
+    "today": "o sur de Iraq hoxe",
+    "note": "A historia da salvación da Biblia comeza coa chamada dun só home.",
+    "events": [
+     "Deus chama a Abram fóra de Ur dos caldeos",
+     "«Farei de ti un pobo grande… en ti serán benditos todos os pobos»",
+     "Pola fe deixa a súa terra natal"
+    ]
+   },
+   "haran": {
+    "name": "Harán",
+    "book": "Xénese 12",
+    "today": "o sur de Turquía hoxe",
+    "note": "No camiño, respondendo á chamada cara á terra prometida.",
+    "events": [
+     "A familia de Térah asenta en Harán",
+     "Térah morre",
+     "Abram sae cara a Canaán aos 75 anos"
+    ]
+   },
+   "shechem": {
+    "name": "Siquem · Canaán",
+    "book": "Xénese 12–50",
+    "today": "Nablus hoxe",
+    "note": "Na terra prometida fúndase unha familia e a alianza pasa de xeración en xeración.",
+    "events": [
+     "Ao entrar en Canaán, o primeiro altar — «á túa descendencia hei dar esta terra»",
+     "A alianza (Xén 15) · Isaac · Xacob",
+     "Os doce fillos de Xacob — raíz das doce tribos"
+    ]
+   },
+   "egypt": {
+    "name": "Exipto (Gosen)",
+    "book": "Xénese 37–50 · Éxodo 1",
+    "today": "o delta do Nilo, Exipto hoxe",
+    "note": "Unha familia chega a ser un gran pobo — e despois un pobo de escravos.",
+    "events": [
+     "Xosé, vendido, chega a gobernar Exipto",
+     "Toda a familia de Xacob baixa para fuxir da fame",
+     "O pobo de Israel, que medra, é escravizado"
+    ]
+   },
+   "sinai": {
+    "name": "Monte Sinaí",
+    "book": "Éxodo · Levítico",
+    "today": "a península do Sinaí hoxe",
+    "note": "O rescate central do AT — uns escravos chegan a ser o pobo de Deus.",
+    "events": [
+     "As dez pragas e o año da Pascua",
+     "O mar Vermello ábrese e pasan",
+     "Os Dez Mandamentos, a Lei, o tabernáculo e os sacrificios"
+    ]
+   },
+   "kadesh": {
+    "name": "Cadés (deserto)",
+    "book": "Números · Deuteronomio",
+    "today": "o deserto do Sinaí e o Néguev hoxe",
+    "note": "A incredulidade custa á xeración a terra — mais Deus segue con eles.",
+    "events": [
+     "Doce espías — pero o pobo négase a confiar",
+     "38 anos no deserto — maná, nube e lume",
+     "Nas chairas de Moab, o último sermón de Moisés (Deuteronomio)"
+    ]
+   },
+   "jericho": {
+    "name": "Xericó",
+    "book": "Xosué",
+    "today": "Xericó hoxe",
+    "note": "Ao fin entran e toman a terra prometida.",
+    "events": [
+     "O Xordán ábrese e o pobo pasa",
+     "As murallas de Xericó caen",
+     "Conquista de Canaán e reparto da terra"
+    ]
+   },
+   "shiloh": {
+    "name": "Siló (Xuíces)",
+    "book": "Xuíces · Rut",
+    "today": "Khirbet Seilun hoxe",
+    "note": "Sen rei, cadaquén fai o que ben lle parece — cómpre un verdadeiro rei.",
+    "events": [
+     "O tabernáculo instálase en Siló",
+     "O ciclo de pecado–opresión–rescate (Débora, Xedeón, Sansón)",
+     "Rut — fidelidade en días escuros, na liñaxe de David"
+    ]
+   },
+   "jerusalem": {
+    "name": "Xerusalén · Reino unido",
+    "book": "1–2 Samuel · 1 Reis",
+    "today": "Xerusalén hoxe",
+    "note": "A idade de ouro de Israel — e a promesa dun rei eterno.",
+    "events": [
+     "Saúl o primeiro rei, despois David e Goliat",
+     "A alianza con David — «o teu trono será firme para sempre» (2 Sam 7)",
+     "Salomón edifica o templo en Xerusalén"
+    ]
+   },
+   "samaria": {
+    "name": "Samaría · Reino dividido",
+    "book": "Reis · os Profetas",
+    "today": "Sebastia hoxe",
+    "note": "O reino pártese e decae mentres os profetas claman.",
+    "events": [
+     "Tras Salomón, a división en Xudá e Israel",
+     "Idolatría repetida",
+     "Elías, Isaías e Xeremías claman «volvédevos» — e anuncian o Mesías"
+    ]
+   },
+   "nineveh": {
+    "name": "Nínive (Asiria)",
+    "book": "2 Reis 17 · Xonás",
+    "today": "Mosul, Iraq hoxe",
+    "note": "Ignorando toda advertencia, o norte cae primeiro.",
+    "events": [
+     "Nínive, a capital de Asiria",
+     "O reino do norte cae ante Asiria (722 a. C.)",
+     "Xonás é enviado a Nínive"
+    ]
+   },
+   "babylon": {
+    "name": "Babilonia",
+    "book": "2 Reis 25 · Daniel · Ezequiel",
+    "today": "Hillah, Iraq hoxe",
+    "note": "A noite máis escura — mais a promesa de restauración permanece.",
+    "events": [
+     "Xerusalén cae, o templo é queimado (586 a. C.)",
+     "Xudá é levada cativa a Babilonia",
+     "Daniel e Ezequiel — fe e visións no exilio"
+    ]
+   },
+   "susa": {
+    "name": "Susa (Persia)",
+    "book": "Ester · Nehemías",
+    "today": "Shush, Irán hoxe",
+    "note": "Aínda no corazón dun imperio pagán, Deus garda o seu pobo.",
+    "events": [
+     "Persia derruba a Babilonia",
+     "Ester salva os xudeus da destrución",
+     "Nehemías ora ante o rei e é enviado"
+    ]
+   },
+   "return": {
+    "name": "Regreso a Xerusalén",
+    "book": "Esdras · Nehemías · Malaquías",
+    "today": "Xerusalén hoxe",
+    "note": "Regresan e reconstrúen — pero non veu ningún rei. Esperan o Mesías.",
+    "events": [
+     "Tres ondas de regreso polo decreto de Ciro (Zorobabel 538 · Esdras 458 · Nehemías 444)",
+     "O templo reconstruído e as murallas de Xerusalén restauradas",
+     "Malaquías — o AT péchase: «eu envío o meu mensaxeiro»"
+    ]
+   }
+  },
+  "labels": [
+   "Mar Mediterráneo",
+   "Mesopotamia",
+   "Deserto de Arabia",
+   "Exipto"
+  ],
+  "journeys": {
+   "flow": "A historia da salvación"
+  }
+ },
+ "jesus": {
+  "places": {
+   "bethlehem": {
+    "name": "Belén",
+    "book": "Mateo 1–2 · Lucas 2",
+    "today": "Belén hoxe",
+    "note": "O Mesías prometido vén á vila de David — a Palabra feita carne.",
+    "events": [
+     "Nace en Belén, a vila de David",
+     "Os anxos anuncian a nova aos pastores",
+     "Os magos veñen adoralo"
+    ]
+   },
+   "nazareth": {
+    "name": "Nazaret",
+    "book": "Lucas 2 · 4",
+    "today": "Nazaret hoxe",
+    "note": "Deus medra como home nunha vila calquera.",
+    "events": [
+     "Criado no fogar dun carpinteiro",
+     "Aos doce anos, preguntando e respondendo no templo",
+     "Despois rexeitado na sinagoga da súa vila"
+    ]
+   },
+   "jordan": {
+    "name": "Río Xordán",
+    "book": "Mateo 3–4",
+    "today": "o baixo Xordán hoxe",
+    "note": "Comeza o seu ministerio público — o ceo séllao como o Fillo.",
+    "events": [
+     "Bautizado por Xoán",
+     "O Espírito baixa coma unha pomba — «Este é o meu Fillo benquerido»",
+     "Vence as tres tentacións de Satán no deserto"
+    ]
+   },
+   "cana": {
+    "name": "Caná",
+    "book": "Xoán 2",
+    "today": "Kafr Kanna hoxe",
+    "note": "No seu primeiro sinal revela a súa gloria.",
+    "events": [
+     "Convidado a unha voda",
+     "A auga convertida en viño — o seu primeiro sinal",
+     "Os seus discípulos cren nel"
+    ]
+   },
+   "sychar": {
+    "name": "Sicar (Samaría)",
+    "book": "Xoán 2–4",
+    "today": "preto de Nablus hoxe",
+    "note": "O camiño do primeiro ministerio — por Xerusalén e cara á desprezada Samaría.",
+    "events": [
+     "Purifica o templo en Xerusalén",
+     "De noite, Nicodemo — «Tes que nacer de novo»",
+     "Auga viva para unha muller samaritana"
+    ]
+   },
+   "capernaum": {
+    "name": "Cafarnaún",
+    "book": "Mateo 4–13 · Marcos 1–4",
+    "today": "a beira do lago de Galilea hoxe",
+    "note": "Base do ministerio en Galilea — a chamada, o ensino e a oposición xúntanse aquí.",
+    "events": [
+     "Chama os pescadores e establece aquí a súa base",
+     "O Sermón do Monte — «Benaventurados os pobres de espírito»",
+     "As parábolas do Reino — e a oposición que medra"
+    ]
+   },
+   "galilee": {
+    "name": "Mar de Galilea",
+    "book": "Marcos 4 · 6 · Xoán 6",
+    "today": "o lago de Xenesaré hoxe",
+    "note": "Co seu poder sobre a natureza amosa quen é.",
+    "events": [
+     "«Cala, aquétate» — acouga a tormenta",
+     "Alimenta 5.000 con cinco pans e dous peixes",
+     "Camiña sobre as augas"
+    ]
+   },
+   "caesarea_p": {
+    "name": "Cesarea de Filipo",
+    "book": "Mateo 16–17",
+    "today": "Banias hoxe",
+    "note": "Os discípulos comprenden que é o Cristo, e ábrese o camiño da cruz.",
+    "events": [
+     "A confesión de Pedro — «Ti es o Mesías, o Fillo de Deus vivo»",
+     "Anuncia por primeira vez a súa morte e resurrección",
+     "Transfigurado en gloria no monte"
+    ]
+   },
+   "jericho": {
+    "name": "Xericó",
+    "book": "Lucas 18–19",
+    "today": "Xericó hoxe",
+    "note": "No camiño de subida a Xerusalén, busca o perdido.",
+    "events": [
+     "Dá a vista ao cego Bartimeo",
+     "Chama a Zaqueo o recadador de impostos",
+     "«O Fillo do Home veu buscar e salvar o que estaba perdido»"
+    ]
+   },
+   "bethany": {
+    "name": "Betania",
+    "book": "Xoán 11–12",
+    "today": "al-Eizariya hoxe",
+    "note": "Amosa o seu dominio sobre a morte na véspera da súa última semana.",
+    "events": [
+     "Resucita a Lázaro do sepulcro — «Eu son a resurrección e a vida»",
+     "María únxeo para a sepultura",
+     "Este sinal endurece a trama para o matar"
+    ]
+   },
+   "jerusalem": {
+    "name": "Xerusalén",
+    "book": "Mateo 21–28 · Lucas 24 · Feitos 1",
+    "today": "Xerusalén hoxe",
+    "note": "O clímax ao que apunta toda a Biblia — cruz, resurrección, ascensión.",
+    "events": [
+     "Entrada triunfal; volve a botar abaixo as mesas do templo",
+     "Na última cea lávalles os pés aos discípulos",
+     "Morre na cruz",
+     "Resucitado ao terceiro día, despois ascende"
+    ]
+   }
+  },
+  "labels": [
+   "Mar Mediterráneo",
+   "Galilea",
+   "Samaría",
+   "Xudea",
+   "Decápole",
+   "Perea",
+   "Mar Morto"
+  ],
+  "journeys": {
+   "life": "O camiño de Xesús"
+  }
+ },
+ "paul": {
+  "places": {
+   "antioch": {
+    "name": "Antioquía",
+    "book": "Feitos 13 · 15",
+    "today": "Antakya, Turquía hoxe",
+    "note": "A igrexa que envía, onde comeza e á que regresa a misión aos xentís.",
+    "events": [
+     "Na oración o Espírito aparta a Bernabé e a Saulo",
+     "A igrexa onde os crentes foron chamados «cristiáns» por primeira vez",
+     "Punto de partida da 1ª, 2ª e 3ª viaxes"
+    ]
+   },
+   "seleucia": {
+    "name": "Seleucia",
+    "book": "Feitos 13:4",
+    "today": "Turquía hoxe",
+    "note": "O porto de Antioquía — embarcan cara a Chipre.",
+    "events": []
+   },
+   "salamis": {
+    "name": "Salamina (Chipre)",
+    "book": "Feitos 13:5",
+    "today": "Chipre hoxe",
+    "note": "Primeira parada en Chipre — predican nas sinagogas.",
+    "events": []
+   },
+   "paphos": {
+    "name": "Pafos",
+    "book": "Feitos 13:6-12",
+    "today": "Chipre hoxe",
+    "note": "Amósase o poder contra os que se opoñen ao evanxeo.",
+    "events": [
+     "O mago Elimas queda cego",
+     "O procónsul Serxio Paulo cre",
+     "Desde aquí «Paulo» toma a dianteira"
+    ]
+   },
+   "perga": {
+    "name": "Perxe",
+    "book": "Feitos 13:13",
+    "today": "Antalya, Turquía hoxe",
+    "note": "Un porto en Panfilia — aquí Xoán Marcos volta atrás.",
+    "events": []
+   },
+   "pantioch": {
+    "name": "Antioquía de Pisidia",
+    "book": "Feitos 13:14-50",
+    "today": "Yalvaç, Turquía hoxe",
+    "note": "O evanxeo ábrese cara aos xentís.",
+    "events": [
+     "Un longo sermón da historia da salvación na sinagoga",
+     "Moitos xentís alédanse e reciben a palabra",
+     "Expulsados pola oposición"
+    ]
+   },
+   "iconium": {
+    "name": "Iconio",
+    "book": "Feitos 14:1-7",
+    "today": "Konya, Turquía hoxe",
+    "note": "Moitos cren, pero a persecución obrígaos a seguir.",
+    "events": []
+   },
+   "lystra": {
+    "name": "Listra",
+    "book": "Feitos 14:8-20",
+    "today": "Turquía hoxe",
+    "note": "Aclamado como un deus, despois apedrado.",
+    "events": [
+     "Sa a un home coxo de nacemento",
+     "A multitude tenta ofrecerlles sacrificios como a deuses",
+     "Apedrado e dado por morto, erguese"
+    ]
+   },
+   "derbe": {
+    "name": "Derbe",
+    "book": "Feitos 14:20-21",
+    "today": "Turquía hoxe",
+    "note": "Fanse moitos discípulos; desandan o camiño para fortalecer as igrexas.",
+    "events": []
+   },
+   "troas": {
+    "name": "Tróade",
+    "book": "Feitos 16:8-10",
+    "today": "Turquía hoxe",
+    "note": "O punto de inflexión onde o evanxeo se dirixe por primeira vez a Europa.",
+    "events": [
+     "Unha visión dun home de Macedonia",
+     "«Pasa a Macedonia e axúdanos»",
+     "Cruzan de contado a Europa"
+    ]
+   },
+   "philippi": {
+    "name": "Filipos",
+    "book": "Feitos 16 · Filipenses",
+    "today": "o norte de Grecia hoxe",
+    "note": "A primeira igrexa de Europa — o evanxeo triunfa mesmo no cárcere.",
+    "events": [
+     "Lidia, vendedora de púrpura, cre",
+     "Unha escrava adiviña queda libre",
+     "Himnos á medianoite, un terremoto, a casa do carcereiro salvada"
+    ]
+   },
+   "thess": {
+    "name": "Tesalónica",
+    "book": "Feitos 17 · 1–2 Tesalonicenses",
+    "today": "Tesalónica, Grecia hoxe",
+    "note": "A palabra sacode a cidade e a oposición desborda.",
+    "events": [
+     "Razoa na sinagoga tres sábados",
+     "«Estes que revolveron o mundo enteiro»",
+     "Escapan de noite"
+    ]
+   },
+   "berea": {
+    "name": "Berea",
+    "book": "Feitos 17:10-15",
+    "today": "Veria, Grecia hoxe",
+    "note": "Os «nobres» que examinaron a palabra por si mesmos.",
+    "events": [
+     "Reciben a palabra con avidez",
+     "Cada día examinan as Escrituras para comprobala",
+     "Moitos chegan a crer"
+    ]
+   },
+   "athens": {
+    "name": "Atenas",
+    "book": "Feitos 17:16-34",
+    "today": "Atenas, Grecia hoxe",
+    "note": "Na cidade dos filósofos anuncia o «deus descoñecido».",
+    "events": [
+     "Indignado por unha cidade chea de ídolos",
+     "No Areópago predica o Creador e a resurrección",
+     "Burlado, mais uns poucos cren"
+    ]
+   },
+   "corinth": {
+    "name": "Corinto",
+    "book": "Feitos 18 · 1–2 Corintios",
+    "today": "Grecia hoxe",
+    "note": "Fica un ano e medio, plantando unha igrexa nunha cidade de vicio.",
+    "events": [
+     "Fai tendas con Aquila e Priscila",
+     "«Non teñas medo… porque eu estou contigo»",
+     "Moitos corintios cren e son bautizados"
+    ]
+   },
+   "ephesus": {
+    "name": "Éfeso",
+    "book": "Feitos 19 · Efesios",
+    "today": "Selçuk, Turquía hoxe",
+    "note": "Corazón da terceira viaxe — a palabra esténdese por Asia.",
+    "events": [
+     "Ensino diario durante dous anos na sala de Tiranno",
+     "Libros de maxia queimados; obras poderosas",
+     "O prateiro Demetrio provoca un motín"
+    ]
+   },
+   "miletus": {
+    "name": "Mileto",
+    "book": "Feitos 20:17-38",
+    "today": "Turquía hoxe",
+    "note": "Unha despedida entre bágoas dos anciáns de Éfeso.",
+    "events": [
+     "«Coidade da igrexa que el gañou co seu propio sangue»",
+     "Os anciáns choran, sabendo que non o volverán ver"
+    ]
+   },
+   "caesarea": {
+    "name": "Cesarea",
+    "book": "Feitos 23–26",
+    "today": "a costa de Israel hoxe",
+    "note": "Durante dous anos defende o evanxeo ante gobernadores e un rei.",
+    "events": [
+     "Xuízos ante os gobernadores Félix e Festo",
+     "A súa defensa ante o rei Agripa",
+     "«Apelo ao César» — cara a Roma"
+    ]
+   },
+   "jerusalem": {
+    "name": "Xerusalén",
+    "book": "Feitos 21–23",
+    "today": "Xerusalén hoxe",
+    "note": "Apreixado no templo, comeza o seu camiño como prisioneiro.",
+    "events": [
+     "Apreixado pola multitude no templo",
+     "Deféndese ante o consello",
+     "Como cidadán romano, enviado baixo garda a Cesarea"
+    ]
+   },
+   "myra": {
+    "name": "Mira",
+    "book": "Feitos 27:5-6",
+    "today": "Demre, Turquía hoxe",
+    "note": "Trasbordan a un barco de Alexandría rumbo a Roma.",
+    "events": []
+   },
+   "fairhaven": {
+    "name": "Bos Portos (Creta)",
+    "book": "Feitos 27:8-12",
+    "today": "Creta hoxe",
+    "note": "A advertencia de Paulo de deter a travesía non se atende.",
+    "events": []
+   },
+   "crete": {
+    "name": "Creta",
+    "book": "Tito",
+    "today": "Creta hoxe",
+    "note": "Tras a súa liberación, a illa onde deixa a Tito para ordenar as igrexas.",
+    "events": [
+     "Deixa a Tito para nomear anciáns en cada vila",
+     "Pide líderes irreprensibles e fieis",
+     "Escribe a carta a Tito"
+    ]
+   },
+   "malta": {
+    "name": "Malta",
+    "book": "Feitos 27–28",
+    "today": "Malta hoxe",
+    "note": "A través da tormenta e o naufraxio, a promesa de Deus mantense.",
+    "events": [
+     "O «nordés» destroza o barco, mais os 276 sobreviven",
+     "Mordido por unha víbora, queda ileso",
+     "Sa os enfermos da illa"
+    ]
+   },
+   "syracuse": {
+    "name": "Siracusa",
+    "book": "Feitos 28:12",
+    "today": "Sicilia, Italia hoxe",
+    "note": "Fican tres días en Sicilia.",
+    "events": []
+   },
+   "puteoli": {
+    "name": "Putéolos",
+    "book": "Feitos 28:13-14",
+    "today": "Pozzuoli, Italia hoxe",
+    "note": "Desembarcan en Italia e son recibidos por irmáns na fe.",
+    "events": []
+   },
+   "rome": {
+    "name": "Roma",
+    "book": "Feitos 28 · Cartas do cativerio · 2 Timoteo",
+    "today": "Roma, Italia hoxe",
+    "note": "O evanxeo chega ao fin ao corazón do imperio — non un final, senón un comezo.",
+    "events": [
+     "Dous anos en arresto domiciliario, anunciando con valentía o Reino",
+     "Desde aquí escribe as Cartas do cativerio (Ef·Fil·Col·Flm)",
+     "Despois encarcerado de novo, escribe 2 Timoteo e é martirizado — «Combatín o bo combate, rematei a carreira»"
+    ]
+   }
+  },
+  "labels": [
+   "Mar Mediterráneo",
+   "Mar Exeo",
+   "Asia Menor",
+   "Macedonia",
+   "Italia"
+  ],
+  "journeys": {
+   "j1": "Primeira viaxe",
+   "j2": "Segunda viaxe",
+   "j3": "Terceira viaxe",
+   "rome": "Cuarta viaxe · a Roma",
+   "j5": "Quinta viaxe · tras a liberación"
+  }
+ }
+}

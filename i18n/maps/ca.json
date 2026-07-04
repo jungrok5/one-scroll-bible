@@ -1,0 +1,636 @@
+{
+ "menuName": "Català",
+ "htmlLang": "ca",
+ "dir": "ltr",
+ "locale": "ca",
+ "brand": "La Bíblia d'un cop d'ull",
+ "docTitle": "La Bíblia en mapes · La Bíblia d'un cop d'ull",
+ "metaDesc": "Segueix la cronologia de l'Antic Testament, la vida de Jesús i els viatges de Pau sobre un mapa real — la Bíblia va passar en llocs reals.",
+ "s": {
+  "kicker": "La Bíblia d'un cop d'ull · Mapes",
+  "title": "La Bíblia en mapes",
+  "verse": "“Us vam fer conèixer la vinguda poderosa de nostre Senyor Jesucrist, no pas basant-nos en faules hàbilment teixides, sinó després d’haver contemplat la seva grandesa amb els nostres propis ulls.” (2 Pere 1:16)",
+  "purpose": "La Bíblia no és cap mite. És el registre de persones que van caminar per llocs, dates i noms reals. Segueix aquests camins sobre un mapa, en ordre cronològic — toca un punt, o prem ▶ per recórrer-lo pas a pas.",
+  "ot_kick": "① Antic Testament — a través del temps",
+  "ot_h": "De la creació al retorn a Jerusalem",
+  "ot_lead": "No un sol viatge, sinó el fluir de la història de la redempció des de la creació endavant: creació i caiguda → diluvi i Babel → una crida (Abraham) → la terra promesa → l'èxode → el desert → la conquesta → el regne → la divisió → l'exili → el retorn.",
+  "je_kick": "② Nou Testament — la vida de Jesús",
+  "je_h": "De Betlem a Jerusalem",
+  "je_lead": "Segueix la vida de Jesús tal com la conten els evangelis, en ordre — des del seu naixement a Betlem, passant pel seu baptisme i el ministeri a Galilea, travessant Samaria, fins a la creu, la resurrecció i l'ascensió a Jerusalem.",
+  "pa_kick": "③ Nou Testament — els viatges de Pau",
+  "pa_h": "D'Antioquia fins als extrems de la terra — Roma",
+  "pa_lead": "Des de la Pentecosta a Jerusalem, com l'evangeli es va estendre més enllà de Judea — a través de l'Àsia Menor i Europa fins al cor de l'imperi. Tria un dels cinc viatges (1r·2n·3r + la travessia cap a Roma + després de l'alliberament) i segueix els fets dels Fets amb les cartes escrites pel camí.",
+  "foot": "Fonts · Els llocs segueixen el text bíblic i la geografia bíblica estàndard (amb noms moderns quan ajuda). Les costes, els rius i els llacs estan traçats a partir de dades geogràfiques obertes (Natural Earth), simplificades.",
+  "contact": "Consultes · comentaris — <a id=\"contact\" class=\"mail\">Escriu-nos</a>",
+  "play": "Reprodueix",
+  "pause": "Pausa",
+  "today": "Avui:",
+  "verseCite": "2 Pere 1:16"
+ },
+ "ot": {
+  "places": {
+   "eden": {
+    "name": "Edèn (Creació · Caiguda)",
+    "book": "Gènesi 1–3",
+    "today": "la regió del Tigris–Eufrates avui",
+    "note": "En un món creat molt bo, el pecat hi entra i trenca el vincle entre Déu i la humanitat.",
+    "events": [
+     "La creació en sis dies — «molt bo»",
+     "L'ésser humà fet a imatge de Déu",
+     "La caiguda, i l'expulsió de l'Edèn",
+     "La primera promesa de l'evangeli — «la descendència de la dona li atacarà el cap a la serp»"
+    ]
+   },
+   "noah": {
+    "name": "Ararat (el Diluvi)",
+    "book": "Gènesi 6–9",
+    "today": "el mont Ararat, a l'est de Turquia avui",
+    "note": "Déu jutja un món ple de pecat, però preserva la vida per mitjà d'una sola família.",
+    "events": [
+     "Un món ple de corrupció",
+     "El diluvi, i l'arca de Noè",
+     "El pacte de l'arc iris — «mai més cap diluvi destruirà la terra»"
+    ]
+   },
+   "babel": {
+    "name": "Torre de Babel",
+    "book": "Gènesi 11",
+    "today": "l'Iraq avui (plana de Sinar)",
+    "note": "Contra la supèrbia que vol arribar fins al cel, Déu confon la seva llengua i escampa els pobles per la terra.",
+    "events": [
+     "«Edifiquem-nos una ciutat i una torre… i fem-nos un nom»",
+     "Déu confon la seva llengua",
+     "Els pobles s'escampen per la terra (Sinar — la futura Babilònia)"
+    ]
+   },
+   "ur": {
+    "name": "Ur",
+    "book": "Gènesi 12",
+    "today": "el sud de l'Iraq avui",
+    "note": "La història de la redempció de la Bíblia comença amb la crida d'un sol home.",
+    "events": [
+     "Déu crida Abram fora d'Ur dels caldeus",
+     "«Et convertiré en un gran poble… totes les famílies seran beneïdes per tu»",
+     "Per fe deixa la seva terra natal"
+    ]
+   },
+   "haran": {
+    "name": "Haran",
+    "book": "Gènesi 12",
+    "today": "el sud de Turquia avui",
+    "note": "De camí, responent a la crida cap a la terra promesa.",
+    "events": [
+     "La família de Tèrah s'estableix a Haran",
+     "Tèrah mor",
+     "Abram surt cap a Canaan als 75 anys"
+    ]
+   },
+   "shechem": {
+    "name": "Siquem · Canaan",
+    "book": "Gènesi 12–50",
+    "today": "Nablus avui",
+    "note": "A la terra promesa es funda una família i el pacte passa de generació en generació.",
+    "events": [
+     "Entrada a Canaan, primer altar — «a la teva descendència donaré aquest país»",
+     "El pacte (Gn 15) · Isaac · Jacob",
+     "Els dotze fills de Jacob — arrel de les dotze tribus"
+    ]
+   },
+   "egypt": {
+    "name": "Egipte (Gosen)",
+    "book": "Gènesi 37–50 · Èxode 1",
+    "today": "el delta del Nil, Egipte avui",
+    "note": "Una família arriba a ser una gran nació — i després una nació d'esclaus.",
+    "events": [
+     "Josep, venut lluny, arriba a governar Egipte",
+     "Tota la família de Jacob baixa per escapar de la fam",
+     "La creixent nació d'Israel és esclavitzada"
+    ]
+   },
+   "sinai": {
+    "name": "Muntanya del Sinaí",
+    "book": "Èxode · Levític",
+    "today": "la península del Sinaí avui",
+    "note": "El rescat central de l'AT — els esclaus arriben a ser el poble de Déu.",
+    "events": [
+     "Les deu plagues i l'anyell de la Pasqua",
+     "El mar Roig s'obre i el travessen",
+     "Els Deu Manaments, la Llei, el tabernacle i els sacrificis"
+    ]
+   },
+   "kadesh": {
+    "name": "Cadeix (desert)",
+    "book": "Nombres · Deuteronomi",
+    "today": "el desert del Sinaí–Nègueb avui",
+    "note": "La incredulitat costa la terra a una generació — i tot i així Déu roman amb ells.",
+    "events": [
+     "Dotze espies — però el poble es nega a confiar",
+     "38 anys al desert — mannà, núvol i foc",
+     "A les planes de Moab, l'últim sermó de Moisès (Deuteronomi)"
+    ]
+   },
+   "jericho": {
+    "name": "Jericó",
+    "book": "Josuè",
+    "today": "Jericó avui",
+    "note": "Per fi entren i prenen possessió de la terra promesa.",
+    "events": [
+     "El Jordà s'obre i el poble el travessa",
+     "Les muralles de Jericó cauen",
+     "Conquesta de Canaan i repartiment de la terra"
+    ]
+   },
+   "shiloh": {
+    "name": "Siló (Jutges)",
+    "book": "Jutges · Rut",
+    "today": "Khirbet Seilun avui",
+    "note": "Sense rei, cadascú fa el que li sembla — cal un veritable rei.",
+    "events": [
+     "El tabernacle s'aixeca a Siló",
+     "El cicle de pecat–opressió–alliberament (Dèbora, Gedeó, Samsó)",
+     "Rut — fidelitat en dies foscos, en el llinatge de David"
+    ]
+   },
+   "jerusalem": {
+    "name": "Jerusalem · Regne unit",
+    "book": "1–2 Samuel · 1 Reis",
+    "today": "Jerusalem avui",
+    "note": "L'edat d'or d'Israel — i la promesa d'un rei etern.",
+    "events": [
+     "Saül, el primer rei, després David i Goliat",
+     "El pacte amb David — «el teu tron es mantindrà per sempre» (2Sa 7)",
+     "Salomó edifica el temple a Jerusalem"
+    ]
+   },
+   "samaria": {
+    "name": "Samaria · Regne dividit",
+    "book": "Reis · els Profetes",
+    "today": "Sebastia avui",
+    "note": "El regne es divideix i decau mentre els profetes clamen.",
+    "events": [
+     "Després de Salomó, la divisió en Judà i Israel",
+     "Idolatria repetida",
+     "Elies, Isaïes, Jeremies clamen «torneu» — i anuncien el Messies"
+    ]
+   },
+   "nineveh": {
+    "name": "Nínive (Assíria)",
+    "book": "2 Reis 17 · Jonàs",
+    "today": "Mossul, l'Iraq avui",
+    "note": "Ignorant tot avís, el nord cau primer.",
+    "events": [
+     "Nínive, la capital d'Assíria",
+     "El regne del nord cau davant Assíria (722 aC)",
+     "Jonàs és enviat a Nínive"
+    ]
+   },
+   "babylon": {
+    "name": "Babilònia",
+    "book": "2 Reis 25 · Daniel · Ezequiel",
+    "today": "Hilla, l'Iraq avui",
+    "note": "La nit més fosca — i tot i així roman la promesa de la restauració.",
+    "events": [
+     "Jerusalem cau, el temple és incendiat (586 aC)",
+     "Judà és emportada captiva a Babilònia",
+     "Daniel i Ezequiel — fe i visions a l'exili"
+    ]
+   },
+   "susa": {
+    "name": "Susa (Pèrsia)",
+    "book": "Ester · Nehemies",
+    "today": "Xuix, l'Iran avui",
+    "note": "Fins i tot al cor d'un imperi pagà, Déu guarda el seu poble.",
+    "events": [
+     "Pèrsia derrota Babilònia",
+     "Ester salva els jueus de la destrucció",
+     "Nehemies prega davant el rei i és enviat"
+    ]
+   },
+   "return": {
+    "name": "Retorn a Jerusalem",
+    "book": "Esdres · Nehemies · Malaquies",
+    "today": "Jerusalem avui",
+    "note": "Tornen i reconstrueixen — però no ha vingut cap rei. Esperen el Messies.",
+    "events": [
+     "Tres onades de retorn pel decret de Cir (Zorobabel 538 · Esdres 458 · Nehemies 444)",
+     "El temple reconstruït i les muralles de Jerusalem restaurades",
+     "Malaquies — l'AT es tanca: «Jo envio el meu missatger»"
+    ]
+   }
+  },
+  "labels": [
+   "Mar Mediterrani",
+   "Mesopotàmia",
+   "Desert d'Aràbia",
+   "Egipte"
+  ],
+  "journeys": {
+   "flow": "La història de la redempció"
+  }
+ },
+ "jesus": {
+  "places": {
+   "bethlehem": {
+    "name": "Betlem",
+    "book": "Mateu 1–2 · Lluc 2",
+    "today": "Betlem avui",
+    "note": "El Messies promès ve a la ciutat de David — la Paraula feta carn.",
+    "events": [
+     "Nascut a Betlem, la ciutat de David",
+     "Els àngels anuncien la notícia als pastors",
+     "Els mags vénen a adorar-lo"
+    ]
+   },
+   "nazareth": {
+    "name": "Natzaret",
+    "book": "Lluc 2 · 4",
+    "today": "Natzaret avui",
+    "note": "Déu creix com a home en un poble corrent.",
+    "events": [
+     "Criat a la llar d'un fuster",
+     "Als dotze anys, preguntant i responent al temple",
+     "Més tard rebutjat a la sinagoga del seu poble"
+    ]
+   },
+   "jordan": {
+    "name": "Riu Jordà",
+    "book": "Mateu 3–4",
+    "today": "el baix Jordà avui",
+    "note": "Comença el seu ministeri públic — el cel el segella com el Fill.",
+    "events": [
+     "Batejat per Joan",
+     "L'Esperit baixa com un colom — «Aquest és el meu Fill, el meu estimat»",
+     "Venç les tres temptacions de Satanàs al desert"
+    ]
+   },
+   "cana": {
+    "name": "Canà",
+    "book": "Joan 2",
+    "today": "Kafr Kanna avui",
+    "note": "En el seu primer senyal manifesta la seva glòria.",
+    "events": [
+     "Convidat a unes noces",
+     "L'aigua convertida en vi — el seu primer senyal",
+     "Els seus deixebles creuen en ell"
+    ]
+   },
+   "sychar": {
+    "name": "Sicar (Samaria)",
+    "book": "Joan 2–4",
+    "today": "prop de Nablus avui",
+    "note": "El camí del primer ministeri — per Jerusalem i fins a la menyspreada Samaria.",
+    "events": [
+     "Purifica el temple a Jerusalem",
+     "De nit, Nicodem — «Us cal néixer de nou»",
+     "Aigua viva per a una dona samaritana"
+    ]
+   },
+   "capernaum": {
+    "name": "Cafarnaüm",
+    "book": "Mateu 4–13 · Marc 1–4",
+    "today": "la vora del llac de Galilea avui",
+    "note": "Base del ministeri a Galilea — crida, ensenyament i oposició s'hi troben.",
+    "events": [
+     "Crida els pescadors i s'hi estableix",
+     "El Sermó de la Muntanya — «Feliços els pobres en l'esperit»",
+     "Les paràboles del Regne — i la creixent oposició"
+    ]
+   },
+   "galilee": {
+    "name": "Mar de Galilea",
+    "book": "Marc 4 · 6 · Joan 6",
+    "today": "el llac de Tiberíades avui",
+    "note": "Amb poder sobre la natura mostra qui és.",
+    "events": [
+     "«Calla, aquieta't» — calma la tempesta",
+     "Alimenta 5.000 amb cinc pans i dos peixos",
+     "Camina sobre les aigües"
+    ]
+   },
+   "caesarea_p": {
+    "name": "Cesarea de Filip",
+    "book": "Mateu 16–17",
+    "today": "Banias avui",
+    "note": "Els deixebles comprenen que ell és el Messies, i s'obre el camí de la creu.",
+    "events": [
+     "La confessió de Pere — «Tu ets el Messies, el Fill del Déu viu»",
+     "Anuncia per primera vegada la seva mort i resurrecció",
+     "Transfigurat en glòria a la muntanya"
+    ]
+   },
+   "jericho": {
+    "name": "Jericó",
+    "book": "Lluc 18–19",
+    "today": "Jericó avui",
+    "note": "Camí amunt cap a Jerusalem, cerca els perduts.",
+    "events": [
+     "Dóna la vista al cec Bartimeu",
+     "Crida Zaqueu, el recaptador d'impostos",
+     "«El Fill de l'home ha vingut a buscar i salvar allò que s'havia perdut»"
+    ]
+   },
+   "bethany": {
+    "name": "Betània",
+    "book": "Joan 11–12",
+    "today": "al-Eizariya avui",
+    "note": "Mostra el seu domini sobre la mort a la vigília de la seva última setmana.",
+    "events": [
+     "Ressuscita Llàtzer del sepulcre — «Jo sóc la resurrecció i la vida»",
+     "Maria l'ungeix per a la sepultura",
+     "Aquest senyal endureix el complot per matar-lo"
+    ]
+   },
+   "jerusalem": {
+    "name": "Jerusalem",
+    "book": "Mateu 21–28 · Lluc 24 · Fets 1",
+    "today": "Jerusalem avui",
+    "note": "El clímax cap al qual apunta tota la Bíblia — creu, resurrecció, ascensió.",
+    "events": [
+     "Entrada triomfal; torna a bolcar les taules del temple",
+     "En el darrer sopar renta els peus dels deixebles",
+     "Mor a la creu",
+     "Ressuscitat al tercer dia, després ascendit"
+    ]
+   }
+  },
+  "labels": [
+   "Mar Mediterrani",
+   "Galilea",
+   "Samaria",
+   "Judea",
+   "Decàpolis",
+   "Perea",
+   "Mar Mort"
+  ],
+  "journeys": {
+   "life": "El camí de Jesús"
+  }
+ },
+ "paul": {
+  "places": {
+   "antioch": {
+    "name": "Antioquia",
+    "book": "Fets 13 · 15",
+    "today": "Antakya, Turquia avui",
+    "note": "L'església que envia, on comença i on torna la missió als gentils.",
+    "events": [
+     "En oració, l'Esperit aparta Bernabé i Saule",
+     "L'església on els creients van ser anomenats per primera vegada «cristians»",
+     "Punt de partida del 1r, 2n i 3r viatge"
+    ]
+   },
+   "seleucia": {
+    "name": "Selèucia",
+    "book": "Fets 13:4",
+    "today": "Turquia avui",
+    "note": "El port d'Antioquia — salpen cap a Xipre.",
+    "events": []
+   },
+   "salamis": {
+    "name": "Salamina (Xipre)",
+    "book": "Fets 13:5",
+    "today": "Xipre avui",
+    "note": "Primera escala a Xipre — predicant a les sinagogues.",
+    "events": []
+   },
+   "paphos": {
+    "name": "Pafos",
+    "book": "Fets 13:6-12",
+    "today": "Xipre avui",
+    "note": "Es mostra el poder contra els qui s'oposen a l'evangeli.",
+    "events": [
+     "El mag Elimàs queda cec",
+     "El procònsol Sergi Pau creu",
+     "Des d'aquí «Pau» pren la davantera"
+    ]
+   },
+   "perga": {
+    "name": "Perge",
+    "book": "Fets 13:13",
+    "today": "Antalya, Turquia avui",
+    "note": "Un port a Pamfília — aquí Joan Marc se'n torna enrere.",
+    "events": []
+   },
+   "pantioch": {
+    "name": "Antioquia de Pisídia",
+    "book": "Fets 13:14-50",
+    "today": "Yalvaç, Turquia avui",
+    "note": "L'evangeli s'obre pas cap als gentils.",
+    "events": [
+     "Un llarg sermó de la història de la salvació a la sinagoga",
+     "Molts gentils s'alegren i reben la paraula",
+     "Expulsat per l'oposició"
+    ]
+   },
+   "iconium": {
+    "name": "Iconi",
+    "book": "Fets 14:1-7",
+    "today": "Konya, Turquia avui",
+    "note": "Molts creuen, però la persecució els obliga a seguir.",
+    "events": []
+   },
+   "lystra": {
+    "name": "Listra",
+    "book": "Fets 14:8-20",
+    "today": "Turquia avui",
+    "note": "Aclamat com un déu, i després apedregat.",
+    "events": [
+     "Guareix un home coix de naixement",
+     "La multitud intenta oferir-los sacrificis com a déus",
+     "Apedregat i donat per mort, s'aixeca"
+    ]
+   },
+   "derbe": {
+    "name": "Derbe",
+    "book": "Fets 14:20-21",
+    "today": "Turquia avui",
+    "note": "Es fan molts deixebles; refan el camí per enfortir les esglésies.",
+    "events": []
+   },
+   "troas": {
+    "name": "Troada",
+    "book": "Fets 16:8-10",
+    "today": "Turquia avui",
+    "note": "El punt d'inflexió on l'evangeli es dirigeix per primera vegada cap a Europa.",
+    "events": [
+     "Una visió d'un home macedoni",
+     "«Passa a Macedònia i ajuda'ns»",
+     "Travessen tot seguit cap a Europa"
+    ]
+   },
+   "philippi": {
+    "name": "Filips",
+    "book": "Fets 16 · Filipencs",
+    "today": "el nord de Grècia avui",
+    "note": "La primera església d'Europa — l'evangeli triomfa fins i tot a la presó.",
+    "events": [
+     "Lídia, venedora de porpra, creu",
+     "Una noia esclava endevinadora és alliberada",
+     "Himnes a mitjanit, un terratrèmol, la casa del carceller salvada"
+    ]
+   },
+   "thess": {
+    "name": "Tessalònica",
+    "book": "Fets 17 · 1–2 Tessalonicencs",
+    "today": "Tessalònica, Grècia avui",
+    "note": "La paraula sacseja la ciutat i l'oposició es desborda.",
+    "events": [
+     "Raona a la sinagoga tres dissabtes",
+     "«Aquests que han posat el món en rebombori»",
+     "S'escapoleixen de nit"
+    ]
+   },
+   "berea": {
+    "name": "Berea",
+    "book": "Fets 17:10-15",
+    "today": "Vèria, Grècia avui",
+    "note": "Els «nobles» que van examinar la paraula per ells mateixos.",
+    "events": [
+     "Reben la paraula amb tota bona voluntat",
+     "Cada dia escruten les Escriptures per comprovar-ho",
+     "Molts arriben a creure"
+    ]
+   },
+   "athens": {
+    "name": "Atenes",
+    "book": "Fets 17:16-34",
+    "today": "Atenes, Grècia avui",
+    "note": "A la ciutat dels filòsofs proclama el «déu desconegut».",
+    "events": [
+     "Indignat per una ciutat plena d'ídols",
+     "A l'Areòpag predica el Creador i la resurrecció",
+     "Burlat, i tot i així alguns creuen"
+    ]
+   },
+   "corinth": {
+    "name": "Corint",
+    "book": "Fets 18 · 1–2 Corintis",
+    "today": "Grècia avui",
+    "note": "S'hi queda un any i mig, plantant una església en una ciutat de vici.",
+    "events": [
+     "Fa tendes amb Àquila i Priscil·la",
+     "«No tinguis por… perquè jo sóc amb tu»",
+     "Molts corintis creuen i són batejats"
+    ]
+   },
+   "ephesus": {
+    "name": "Efes",
+    "book": "Fets 19 · Efesis",
+    "today": "Selçuk, Turquia avui",
+    "note": "Cor del tercer viatge — la paraula s'estén per l'Àsia.",
+    "events": [
+     "Ensenyament diari durant dos anys a la sala de Tiran",
+     "Llibres de màgia cremats; obres poderoses",
+     "L'argenter Demetri provoca un aldarull"
+    ]
+   },
+   "miletus": {
+    "name": "Milet",
+    "book": "Fets 20:17-38",
+    "today": "Turquia avui",
+    "note": "Un comiat entre llàgrimes als ancians d'Efes.",
+    "events": [
+     "«Vetlleu per l'Església que ell va guanyar amb la seva pròpia sang»",
+     "Els ancians ploren, sabent que no el tornaran a veure"
+    ]
+   },
+   "caesarea": {
+    "name": "Cesarea",
+    "book": "Fets 23–26",
+    "today": "la costa d'Israel avui",
+    "note": "Durant dos anys defensa l'evangeli davant governadors i un rei.",
+    "events": [
+     "Judicis davant els governadors Fèlix i Fest",
+     "La seva defensa davant el rei Agripa",
+     "«Apel·lo al Cèsar» — cap a Roma"
+    ]
+   },
+   "jerusalem": {
+    "name": "Jerusalem",
+    "book": "Fets 21–23",
+    "today": "Jerusalem avui",
+    "note": "Detingut al temple, comença el seu camí com a presoner.",
+    "events": [
+     "Detingut per la multitud al temple",
+     "Es defensa davant el sanedrí",
+     "Com a ciutadà romà, és enviat sota custòdia a Cesarea"
+    ]
+   },
+   "myra": {
+    "name": "Mira",
+    "book": "Fets 27:5-6",
+    "today": "Demre, Turquia avui",
+    "note": "Transborden a una nau alexandrina amb rumb a Roma.",
+    "events": []
+   },
+   "fairhaven": {
+    "name": "Bons Ports (Creta)",
+    "book": "Fets 27:8-12",
+    "today": "Creta avui",
+    "note": "L'advertiment de Pau de no continuar navegant no és escoltat.",
+    "events": []
+   },
+   "crete": {
+    "name": "Creta",
+    "book": "Titus",
+    "today": "Creta avui",
+    "note": "Després del seu alliberament, l'illa on deixa Titus per posar en ordre les esglésies.",
+    "events": [
+     "Deixa Titus perquè estableixi ancians a cada ciutat",
+     "Demana líders irreprensibles i fidels",
+     "Escriu la carta a Titus"
+    ]
+   },
+   "malta": {
+    "name": "Malta",
+    "book": "Fets 27–28",
+    "today": "Malta avui",
+    "note": "A través de la tempesta i el naufragi, la promesa de Déu es manté.",
+    "events": [
+     "El «vent del nord-est» destrossa la nau, i tot i així sobreviuen els 276",
+     "Mossegat per un escurçó, queda il·lès",
+     "Guareix els malalts de l'illa"
+    ]
+   },
+   "syracuse": {
+    "name": "Siracusa",
+    "book": "Fets 28:12",
+    "today": "Sicília, Itàlia avui",
+    "note": "S'estan tres dies a Sicília.",
+    "events": []
+   },
+   "puteoli": {
+    "name": "Putèoli",
+    "book": "Fets 28:13-14",
+    "today": "Pozzuoli, Itàlia avui",
+    "note": "Desembarquen a Itàlia i són rebuts per germans creients.",
+    "events": []
+   },
+   "rome": {
+    "name": "Roma",
+    "book": "Fets 28 · Cartes de la captivitat · 2 Timoteu",
+    "today": "Roma, Itàlia avui",
+    "note": "L'evangeli arriba per fi al cor de l'imperi — no un final, sinó un començament.",
+    "events": [
+     "Dos anys en arrest domiciliari, proclamant el Regne amb valentia",
+     "Des d'aquí escriu les Cartes de la captivitat (Ef·Fl·Col·Flm)",
+     "Més tard empresonat de nou, escriu 2 Timoteu i és martiritzat — «He lliurat el bon combat, he acabat la cursa»"
+    ]
+   }
+  },
+  "labels": [
+   "Mar Mediterrani",
+   "Mar Egeu",
+   "Àsia Menor",
+   "Macedònia",
+   "Itàlia"
+  ],
+  "journeys": {
+   "j1": "Primer viatge",
+   "j2": "Segon viatge",
+   "j3": "Tercer viatge",
+   "rome": "Quart viatge · cap a Roma",
+   "j5": "Cinquè viatge · després de l'alliberament"
+  }
+ }
+}

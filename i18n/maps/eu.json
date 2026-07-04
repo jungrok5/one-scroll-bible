@@ -1,0 +1,636 @@
+{
+ "menuName": "Euskara",
+ "htmlLang": "eu",
+ "dir": "ltr",
+ "locale": "eu",
+ "brand": "Biblia begi-kolpe batez",
+ "docTitle": "Biblia mapetan · Biblia begi-kolpe batez",
+ "metaDesc": "Jarraitu Itun Zaharreko denbora-lerroari, Jesusen bizitzari eta Pauloren bidaiei benetako mapa batean — Biblia toki errealetan gertatu zen.",
+ "s": {
+  "kicker": "Biblia begi-kolpe batez · Mapak",
+  "title": "Biblia mapetan",
+  "verse": "“Jesu Kristo gure Jaunaren ahalmenezko etorrerari buruz hitz egin genizuenean, ez ginen oinarritu irudipenezko ipuinetan, geure esperientzian baizik, geure begiz ikusi baikenuen haren handitasuna.” (2 Pedro 1:16)",
+  "purpose": "Biblia ez da mitoa. Toki, data eta izen errealetan ibili zen jendearen erregistroa da. Jarraitu bide horiei mapan, ordena kronologikoan — sakatu puntu bat, edo sakatu ▶ urratsez urrats zeharkatzeko.",
+  "ot_kick": "① Itun Zaharra — denboran zehar",
+  "ot_h": "Sorreratik Jerusalemera itzuleraino",
+  "ot_lead": "Ez bidaia bakar bat, baizik eta erredentzioaren historiaren joana sorreratik aurrera: sorrera eta erorketa → uholdea eta Babel → dei bat (Abraham) → agindutako lurraldea → irteera → basamortua → konkista → erreinua → zatiketa → erbestea → itzulera.",
+  "je_kick": "② Itun Berria — Jesusen bizitza",
+  "je_h": "Belendik Jerusalemera",
+  "je_lead": "Jarraitu Jesusen bizitzari ebanjelioek kontatzen duten bezala, ordenan — Belengo jaiotzatik, bere bataioa eta Galileako ministerioa igaroz, Samaria zeharkatuz, gurutzeraino, piztueraraino eta Jerusalemgo igokunderaino.",
+  "pa_kick": "③ Itun Berria — Pauloren bidaiak",
+  "pa_h": "Antiokiatik lurraren bazterreraino — Erroma",
+  "pa_lead": "Jerusalemgo Mendekostetik hasita, nola zabaldu zen Berri Ona Judeatik harago — Asia Txikian eta Europan zehar inperioaren bihotzeraino. Aukeratu bost bidaietako bat (1.·2.·3. + Erromarako itsasaldia + askatu ondoren) eta jarraitu Eginen gertaerei bidean idatzitako gutunekin batera.",
+  "foot": "Iturriak · Tokiek Bibliako testuari eta Bibliako geografia estandarrari jarraitzen diete (izen modernoekin lagungarri denean). Kostaldeak, ibaiak eta lakuak datu geografiko irekietatik marraztu dira (Natural Earth), sinplifikatuta.",
+  "contact": "Galderak · iruzkinak — <a id=\"contact\" class=\"mail\">Idatzi mezua</a>",
+  "play": "Erreproduzitu",
+  "pause": "Pausatu",
+  "today": "Gaur egun:",
+  "verseCite": "2 Pedro 1:16"
+ },
+ "ot": {
+  "places": {
+   "eden": {
+    "name": "Eden (Sorrera · Erorketa)",
+    "book": "Hasiera 1–3",
+    "today": "Tigris–Eufrates eskualdea gaur egun",
+    "note": "Oso ona egindako mundu batean bekatua sartzen da eta Jainkoaren eta gizakiaren arteko lokarria hausten du.",
+    "events": [
+     "Sorreraren sei egunak — «oso ona»",
+     "Gizakia Jainkoaren irudira egina",
+     "Erorketa, eta Edenetik kanporatzea",
+     "Berri Onaren lehen promesa — «emakumearen ondorengoak sugearen burua zapalduko du»"
+    ]
+   },
+   "noah": {
+    "name": "Ararat (Uholdea)",
+    "book": "Hasiera 6–9",
+    "today": "Ararat mendia, Turkia ekialdea gaur egun",
+    "note": "Jainkoak bekatuz betetako mundua epaitzen du, baina familia baten bidez bizia gordetzen du.",
+    "events": [
+     "Ustelkeriaz betetako mundua",
+     "Uholdea, eta Noeren kutxa",
+     "Ostadarraren ituna — «ez da berriz uholderik izango dena suntsitzeko»"
+    ]
+   },
+   "babel": {
+    "name": "Babelgo dorrea",
+    "book": "Hasiera 11",
+    "today": "Irak gaur egun (Xinarko lautada)",
+    "note": "Zerura iritsi nahi duen harrokeriaren aurka, Jainkoak haien hizkuntza nahasten du eta herriak lur osoan barreiatzen ditu.",
+    "events": [
+     "«Eraiki dezagun hiri bat eta dorre bat… eta egin dezagun izen bat geuretzat»",
+     "Jainkoak haien hizkuntza nahasten du",
+     "Herriak lur osoan barreiatzen dira (Xinar — geroko Babilonia)"
+    ]
+   },
+   "ur": {
+    "name": "Ur",
+    "book": "Hasiera 12",
+    "today": "hego Irak gaur egun",
+    "note": "Bibliako erredentzioaren istorioa gizon bakar baten deiaz hasten da.",
+    "events": [
+     "Jainkoak Abram deitzen du Kaldearren Ur hiritik",
+     "«Nazio handi eginen zaitut… zure bitartez bedeinkatuko ditut herri guztiak»",
+     "Sinesmenez bere sorterria uzten du"
+    ]
+   },
+   "haran": {
+    "name": "Haran",
+    "book": "Hasiera 12",
+    "today": "hego Turkia gaur egun",
+    "note": "Bidean, agindutako lurralderako deiari erantzunez.",
+    "events": [
+     "Teraren familia Haranen finkatzen da",
+     "Tera hiltzen da",
+     "Abram Kanaanera abiatzen da 75 urterekin"
+    ]
+   },
+   "shechem": {
+    "name": "Sikem · Kanaan",
+    "book": "Hasiera 12–50",
+    "today": "Nablus gaur egun",
+    "note": "Agindutako lurraldean familia bat sortzen da eta ituna belaunaldiz belaunaldi pasatzen da.",
+    "events": [
+     "Kanaanen sartzea, lehen aldarea — «zure ondorengoei emango diet lurralde hau»",
+     "Ituna (Has 15) · Isaak · Jakob",
+     "Jakoben hamabi semeak — hamabi leinuen erroa"
+    ]
+   },
+   "egypt": {
+    "name": "Egipto (Gosen)",
+    "book": "Hasiera 37–50 · Irteera 1",
+    "today": "Niloko delta, Egipto gaur egun",
+    "note": "Familia bat nazio handi bihurtzen da — gero esklaboen nazio bat.",
+    "events": [
+     "Jose, saldua, Egipto gobernatzera igotzen da",
+     "Jakoben familia osoa jaisten da gosetetik ihes egiteko",
+     "Israelen nazio gero eta handiagoa esklabo bihurtzen da"
+    ]
+   },
+   "sinai": {
+    "name": "Sinai mendia",
+    "book": "Irteera · Lebitarrena",
+    "today": "Sinai penintsula gaur egun",
+    "note": "Itun Zaharreko salbamen nagusia — esklaboak Jainkoaren herri bihurtzen dira.",
+    "events": [
+     "Hamar izurriteak eta Pazko bildotsa",
+     "Itsaso Gorria irekitzen da eta zeharkatzen dute",
+     "Hamar Aginduak, Legea, tabernakulua eta sakrifizioak"
+    ]
+   },
+   "kadesh": {
+    "name": "Kades (basamortua)",
+    "book": "Zenbakiak · Deuteronomioa",
+    "today": "Sinai–Negev basamortua gaur egun",
+    "note": "Sinesgabetasunak belaunaldi bati lurraldea kentzen dio — baina Jainkoa haiekin geratzen da.",
+    "events": [
+     "Hamabi espioi — baina herriak ez du fidatu nahi",
+     "38 urte basamortuan — mana, hodeia eta sua",
+     "Moabeko lautadetan, Moisesen azken hitzaldia (Deuteronomioa)"
+    ]
+   },
+   "jericho": {
+    "name": "Jeriko",
+    "book": "Josue",
+    "today": "Jeriko gaur egun",
+    "note": "Azkenean sartu eta agindutako lurraldea hartzen dute.",
+    "events": [
+     "Jordan irekitzen da eta herriak zeharkatzen du",
+     "Jerikoko harresiak erortzen dira",
+     "Kanaanen konkista eta lurraldearen banaketa"
+    ]
+   },
+   "shiloh": {
+    "name": "Silo (Epaileak)",
+    "book": "Epaileak · Rut",
+    "today": "Khirbet Seilun gaur egun",
+    "note": "Erregerik gabe, bakoitzak nahi duena egiten du — egiazko errege bat behar da.",
+    "events": [
+     "Tabernakulua Silon jartzen da",
+     "Bekatu–zapalkuntza–salbamen zikloa (Debora, Gedeon, Sanson)",
+     "Rut — leialtasuna egun ilunetan, Daviden leinuan"
+    ]
+   },
+   "jerusalem": {
+    "name": "Jerusalem · Erreinu batua",
+    "book": "1–2 Samuel · 1 Erregeak",
+    "today": "Jerusalem gaur egun",
+    "note": "Israelen urre-aroa — eta betiko errege baten promesa.",
+    "events": [
+     "Saul lehen erregea, gero David eta Goliat",
+     "Davidekiko ituna — «zure errege-aulkia betiko» (2 Sam 7)",
+     "Salomonek tenplua eraikitzen du Jerusalemen"
+    ]
+   },
+   "samaria": {
+    "name": "Samaria · Erreinu zatitua",
+    "book": "Erregeak · Profetak",
+    "today": "Sebastia gaur egun",
+    "note": "Erreinua zatitu eta gainbehera doa profetek oihu egiten duten bitartean.",
+    "events": [
+     "Salomonen ondoren, Juda eta Israel banantzea",
+     "Idolatria errepikatua",
+     "Elias, Isaias, Jeremiasek «itzul zaitezte» oihukatzen dute — eta Mesias iragartzen dute"
+    ]
+   },
+   "nineveh": {
+    "name": "Ninive (Asiria)",
+    "book": "2 Erregeak 17 · Jonas",
+    "today": "Mosul, Irak gaur egun",
+    "note": "Abisu oro alde batera utzita, iparraldea erortzen da lehenik.",
+    "events": [
+     "Ninive, Asiriaren hiriburua",
+     "Iparraldeko erreinua Asiriaren aurrean erortzen da (K.a. 722)",
+     "Jonas Ninivera bidaltzen dute"
+    ]
+   },
+   "babylon": {
+    "name": "Babilonia",
+    "book": "2 Erregeak 25 · Daniel · Ezekiel",
+    "today": "Hilla, Irak gaur egun",
+    "note": "Gaurik ilunena — baina zaharberritzearen promesa mantentzen da.",
+    "events": [
+     "Jerusalem erortzen da, tenplua erretzen dute (K.a. 586)",
+     "Juda Babiloniara eramaten dute",
+     "Daniel eta Ezekiel — sinesmena eta ikuspenak erbestean"
+    ]
+   },
+   "susa": {
+    "name": "Susa (Pertsia)",
+    "book": "Ester · Nehemias",
+    "today": "Shush, Iran gaur egun",
+    "note": "Inperio paganoaren bihotzean ere, Jainkoak bere herria gordetzen du.",
+    "events": [
+     "Pertsiak Babilonia menperatzen du",
+     "Esterrek juduak suntsipenetik salbatzen ditu",
+     "Nehemiasek erregearen aurrean otoitz egin eta bidaltzen dute"
+    ]
+   },
+   "return": {
+    "name": "Jerusalemera itzulera",
+    "book": "Esdras · Nehemias · Malakias",
+    "today": "Jerusalem gaur egun",
+    "note": "Itzuli eta berreraikitzen dute — baina ez da erregerik etorri. Mesiasen zain daude.",
+    "events": [
+     "Hiru itzulera-olatu Ziroren dekretuz (Zorobabel 538 · Esdras 458 · Nehemias 444)",
+     "Tenplua berreraikia eta Jerusalemgo harresiak konponduak",
+     "Malakias — Itun Zaharra ixten da: «Hor bidaltzen dizuet neure mandataria»"
+    ]
+   }
+  },
+  "labels": [
+   "Mediterraneo itsasoa",
+   "Mesopotamia",
+   "Arabiako basamortua",
+   "Egipto"
+  ],
+  "journeys": {
+   "flow": "Erredentzioaren istorioa"
+  }
+ },
+ "jesus": {
+  "places": {
+   "bethlehem": {
+    "name": "Belen",
+    "book": "Mateo 1–2 · Lukas 2",
+    "today": "Belen gaur egun",
+    "note": "Agindutako Mesiasa Daviden herrira dator — Hitza gizon egina.",
+    "events": [
+     "Belenen jaioa, Daviden herrian",
+     "Aingeruek berria iragartzen diete artzainei",
+     "Magoak gurtzera datoz"
+    ]
+   },
+   "nazareth": {
+    "name": "Nazaret",
+    "book": "Lukas 2 · 4",
+    "today": "Nazaret gaur egun",
+    "note": "Jainkoa gizon bezala hazten da herri arrunt batean.",
+    "events": [
+     "Arotz baten etxean hazia",
+     "Hamabi urterekin, galdezka eta erantzuten tenpluan",
+     "Geroago bere herriko sinagogan baztertua"
+    ]
+   },
+   "jordan": {
+    "name": "Jordan ibaia",
+    "book": "Mateo 3–4",
+    "today": "behe-Jordan gaur egun",
+    "note": "Bere ministerio publikoa hasten da — zeruak Seme bezala zigilatzen du.",
+    "events": [
+     "Joanek bataiatua",
+     "Espiritua uso baten gisa jaisten da — «Hauxe dut neure Seme maitea»",
+     "Satanen hiru tentaldiak garaitzen ditu basamortuan"
+    ]
+   },
+   "cana": {
+    "name": "Kana",
+    "book": "Joan 2",
+    "today": "Kafr Kanna gaur egun",
+    "note": "Bere lehen seinalean bere aintza agertzen du.",
+    "events": [
+     "Ezteietan gonbidatu",
+     "Ura ardo bihurtua — bere lehen seinalea",
+     "Bere ikasleek sinesten dute harengan"
+    ]
+   },
+   "sychar": {
+    "name": "Sikar (Samaria)",
+    "book": "Joan 2–4",
+    "today": "Nablus inguruan gaur egun",
+    "note": "Hasierako ministerioaren bidea — Jerusalemen barrena eta gutxietsitako Samariaraino.",
+    "events": [
+     "Tenplua garbitzen du Jerusalemen",
+     "Gauez, Nikodemo — «Berriro jaio behar duzu»",
+     "Ur bizia emakume samariar batentzat"
+    ]
+   },
+   "capernaum": {
+    "name": "Kafarnaum",
+    "book": "Mateo 4–13 · Markos 1–4",
+    "today": "Galileako aintzira-ertza gaur egun",
+    "note": "Galileako ministerioaren egoitza — deia, irakaskuntza eta aurkakotasuna hemen biltzen dira.",
+    "events": [
+     "Arrantzaleak deitu eta hemen kokatzen da",
+     "Mendiko Hitzaldia — «Zorionekoak espirituz behartsu direnak»",
+     "Erreinuaren parabolak — eta gero eta aurkakotasun handiagoa"
+    ]
+   },
+   "galilee": {
+    "name": "Galileako itsasoa",
+    "book": "Markos 4 · 6 · Joan 6",
+    "today": "Tiberiades aintzira gaur egun",
+    "note": "Naturaren gaineko botereaz nor den erakusten du.",
+    "events": [
+     "«Isil zaitez, geldi hadi» — ekaitza baretzen du",
+     "5.000 elikatzen ditu bost ogi eta bi arrainekin",
+     "Uraren gainean ibiltzen da"
+    ]
+   },
+   "caesarea_p": {
+    "name": "Zesarea Filipokoa",
+    "book": "Mateo 16–17",
+    "today": "Banias gaur egun",
+    "note": "Ikasleek ohartzen dira bera Kristo dela, eta gurutzearen bidea irekitzen da.",
+    "events": [
+     "Pedroren aitorpena — «Zu zara Mesias, Jainko biziaren Semea»",
+     "Bere heriotza eta piztuera lehen aldiz iragartzen ditu",
+     "Mendian aintzaz antzaldatua"
+    ]
+   },
+   "jericho": {
+    "name": "Jeriko",
+    "book": "Lukas 18–19",
+    "today": "Jeriko gaur egun",
+    "note": "Jerusalemera igotzeko bidean, galduak bilatzen ditu.",
+    "events": [
+     "Bartimeo itsuari ikusmena ematen dio",
+     "Zakeo zergabiltzailea deitzen du",
+     "«Gizonaren Semea galdua zegoena bilatu eta salbatzera etorri da»"
+    ]
+   },
+   "bethany": {
+    "name": "Betania",
+    "book": "Joan 11–12",
+    "today": "al-Eizariya gaur egun",
+    "note": "Heriotzaren gaineko nagusitasuna erakusten du bere azken astearen bezperan.",
+    "events": [
+     "Lazaro hilobitik piztarazten du — «Ni naiz piztuera eta bizia»",
+     "Mariak lurperatzerako gantzutzen du",
+     "Seinale honek hura hiltzeko azpikeria gogortzen du"
+    ]
+   },
+   "jerusalem": {
+    "name": "Jerusalem",
+    "book": "Mateo 21–28 · Lukas 24 · Eginak 1",
+    "today": "Jerusalem gaur egun",
+    "note": "Biblia osoak seinalatzen duen gailurra — gurutzea, piztuera, igokundea.",
+    "events": [
+     "Sarrera garaitsua; tenpluko mahaiak berriz iraultzen ditu",
+     "Azken Afarian ikasleen oinak garbitzen ditu",
+     "Gurutzean hiltzen da",
+     "Hirugarren egunean piztua, gero zerura igoa"
+    ]
+   }
+  },
+  "labels": [
+   "Mediterraneo itsasoa",
+   "Galilea",
+   "Samaria",
+   "Judea",
+   "Dekapolis",
+   "Perea",
+   "Itsaso Hila"
+  ],
+  "journeys": {
+   "life": "Jesusen bidea"
+  }
+ },
+ "paul": {
+  "places": {
+   "antioch": {
+    "name": "Antiokia",
+    "book": "Eginak 13 · 15",
+    "today": "Antakya, Turkia gaur egun",
+    "note": "Bidaltzen duen eliza, non jentilentzako misioa hasten den eta itzultzen den.",
+    "events": [
+     "Otoitzean Espirituak Bernabe eta Saulo bereizten ditu",
+     "Sinestunei lehen aldiz «kristau» deitu zieten eliza",
+     "1., 2. eta 3. bidaien abiapuntua"
+    ]
+   },
+   "seleucia": {
+    "name": "Seleuzia",
+    "book": "Eginak 13:4",
+    "today": "Turkia gaur egun",
+    "note": "Antiokiaren portua — Ziprera abiatzen dira.",
+    "events": []
+   },
+   "salamis": {
+    "name": "Salamina (Zipre)",
+    "book": "Eginak 13:5",
+    "today": "Zipre gaur egun",
+    "note": "Zipreko lehen geldialdia — sinagogetan predikatzen.",
+    "events": []
+   },
+   "paphos": {
+    "name": "Pafos",
+    "book": "Eginak 13:6-12",
+    "today": "Zipre gaur egun",
+    "note": "Berri Onaren aurka daudenen kontra boterea agertzen da.",
+    "events": [
+     "Elimas aztia itsu geratzen da",
+     "Sergio Paulo prokontsulak sinesten du",
+     "Hemendik aurrera «Paulo»k hartzen du gidaritza"
+    ]
+   },
+   "perga": {
+    "name": "Perge",
+    "book": "Eginak 13:13",
+    "today": "Antalya, Turkia gaur egun",
+    "note": "Panfiliako portua — hemen Joan Markos atzera itzultzen da.",
+    "events": []
+   },
+   "pantioch": {
+    "name": "Pisidiako Antiokia",
+    "book": "Eginak 13:14-50",
+    "today": "Yalvaç, Turkia gaur egun",
+    "note": "Berri Ona jentilenganantz irekitzen da.",
+    "events": [
+     "Salbamenaren historiaren hitzaldi luze bat sinagogan",
+     "Jentil askok pozten dira eta hitza hartzen dute",
+     "Aurkakotasunak kanporatua"
+    ]
+   },
+   "iconium": {
+    "name": "Ikonio",
+    "book": "Eginak 14:1-7",
+    "today": "Konya, Turkia gaur egun",
+    "note": "Askok sinesten dute, baina jazarpenak aurrera egitera behartzen ditu.",
+    "events": []
+   },
+   "lystra": {
+    "name": "Listra",
+    "book": "Eginak 14:8-20",
+    "today": "Turkia gaur egun",
+    "note": "Jainkotzat goretsia, gero harrikatua.",
+    "events": [
+     "Jaiotzatik herren zen gizon bat sendatzen du",
+     "Jendetzak jainkoei bezala sakrifizioak eskaini nahi dizkie",
+     "Harrikatua eta hiltzat utzia, altxatzen da"
+    ]
+   },
+   "derbe": {
+    "name": "Derbe",
+    "book": "Eginak 14:20-21",
+    "today": "Turkia gaur egun",
+    "note": "Ikasle asko egiten dira; urratsak berreginez elizak sendotzen dituzte.",
+    "events": []
+   },
+   "troas": {
+    "name": "Troas",
+    "book": "Eginak 16:8-10",
+    "today": "Turkia gaur egun",
+    "note": "Berri Ona lehen aldiz Europara doan bihurgunea.",
+    "events": [
+     "Mazedoniar baten ikuspena",
+     "«Zatoz Mazedoniara eta lagun iezaguzu»",
+     "Berehala Europara zeharkatzen dute"
+    ]
+   },
+   "philippi": {
+    "name": "Filipos",
+    "book": "Eginak 16 · Filipoarrei",
+    "today": "iparraldeko Grezia gaur egun",
+    "note": "Europako lehen eliza — Berri Onak kartzelan ere garaitzen du.",
+    "events": [
+     "Lidia, purpura-saltzailea, sinesten du",
+     "Etorkizuna igartzen zuen neskame bat askatua da",
+     "Gauerdiko ereserkiak, lurrikara bat, kartzelazainaren etxea salbatua"
+    ]
+   },
+   "thess": {
+    "name": "Tesalonika",
+    "book": "Eginak 17 · 1–2 Tesalonikarrei",
+    "today": "Tesalonika, Grezia gaur egun",
+    "note": "Hitzak hiria astintzen du eta aurkakotasuna gainezka egiten du.",
+    "events": [
+     "Sinagogan hiru larunbatez arrazoitzen du",
+     "«Mundu guztia nahasi dutenak»",
+     "Gauez ihes egiten dute"
+    ]
+   },
+   "berea": {
+    "name": "Berea",
+    "book": "Eginak 17:10-15",
+    "today": "Veria, Grezia gaur egun",
+    "note": "Hitza beren kabuz aztertu zuten «prestuak».",
+    "events": [
+     "Hitza gogo biziz hartzen dute",
+     "Egunero Liburu Santuak aztertzen dituzte egiaztatzeko",
+     "Askok sinestera iristen dira"
+    ]
+   },
+   "athens": {
+    "name": "Atenas",
+    "book": "Eginak 17:16-34",
+    "today": "Atenas, Grezia gaur egun",
+    "note": "Filosofoen hirian «jainko ezezaguna» aldarrikatzen du.",
+    "events": [
+     "Idoloz betetako hiri batek asaldatua",
+     "Areopagoan Sortzailea eta piztuera predikatzen ditu",
+     "Iseka egin arren, batzuek sinesten dute"
+    ]
+   },
+   "corinth": {
+    "name": "Korinto",
+    "book": "Eginak 18 · 1–2 Korintoarrei",
+    "today": "Grezia gaur egun",
+    "note": "Urte eta erdi geratzen da, eliza bat sortuz bizio-hiri batean.",
+    "events": [
+     "Dendak egiten ditu Akila eta Priszilarekin",
+     "«Ez beldurrik izan… ni zurekin bainago»",
+     "Korintoar askok sinetsi eta bataiatzen dira"
+    ]
+   },
+   "ephesus": {
+    "name": "Efeso",
+    "book": "Eginak 19 · Efesoarrei",
+    "today": "Selçuk, Turkia gaur egun",
+    "note": "Hirugarren bidaiaren bihotza — hitza Asian zehar zabaltzen da.",
+    "events": [
+     "Bi urtez eguneroko irakaskuntza Tiranoren aretoan",
+     "Magia-liburuak erreta; egintza ahaltsuak",
+     "Demetrio zilarginak matxinada bat sortzen du"
+    ]
+   },
+   "miletus": {
+    "name": "Mileto",
+    "book": "Eginak 20:17-38",
+    "today": "Turkia gaur egun",
+    "note": "Efesoko zaharrei negarrezko agurra.",
+    "events": [
+     "«Zaindu Jainkoak bere odolaz eskuratu zuen eliza»",
+     "Zaharrek negar egiten dute, berriz ez dutela ikusiko jakinda"
+    ]
+   },
+   "caesarea": {
+    "name": "Zesarea",
+    "book": "Eginak 23–26",
+    "today": "Israelgo kostaldea gaur egun",
+    "note": "Bi urtez Berri Ona defendatzen du gobernadoreen eta errege baten aurrean.",
+    "events": [
+     "Auziak Felix eta Festo gobernadoreen aurrean",
+     "Bere defentsa Agripa erregearen aurrean",
+     "«Zesarrengana jotzen dut» — Erromarantz"
+    ]
+   },
+   "jerusalem": {
+    "name": "Jerusalem",
+    "book": "Eginak 21–23",
+    "today": "Jerusalem gaur egun",
+    "note": "Tenpluan atxilotua, bere bidea preso bezala hasten da.",
+    "events": [
+     "Jendetzak tenpluan harrapatua",
+     "Batzarraren aurrean bere burua defendatzen du",
+     "Erromatar hiritar gisa, zaindaripean Zesareara bidalia"
+    ]
+   },
+   "myra": {
+    "name": "Mira",
+    "book": "Eginak 27:5-6",
+    "today": "Demre, Turkia gaur egun",
+    "note": "Erromarantz doan Alexandriako ontzi batera aldatzen dira.",
+    "events": []
+   },
+   "fairhaven": {
+    "name": "Portu Onak (Kreta)",
+    "book": "Eginak 27:8-12",
+    "today": "Kreta gaur egun",
+    "note": "Pauloren abisua nabigatzeari uzteko ez dute aintzat hartzen.",
+    "events": []
+   },
+   "crete": {
+    "name": "Kreta",
+    "book": "Titori",
+    "today": "Kreta gaur egun",
+    "note": "Askatu ondoren, Tito uzten duen uhartea elizak antolatzeko.",
+    "events": [
+     "Tito uzten du herri bakoitzean zaharrak izendatzeko",
+     "Buruzagi errugabe eta leialak eskatzen ditu",
+     "Titori gutuna idazten dio"
+    ]
+   },
+   "malta": {
+    "name": "Malta",
+    "book": "Eginak 27–28",
+    "today": "Malta gaur egun",
+    "note": "Ekaitzaren eta hondoratzearen artean, Jainkoaren promesak irauten du.",
+    "events": [
+     "«Ipar-ekaitzak» ontzia hondoratzen du, baina 276ak bizirik irauten dute",
+     "Suge batek ziztatua, kalterik gabe geratzen da",
+     "Uharteko gaixoak sendatzen ditu"
+    ]
+   },
+   "syracuse": {
+    "name": "Sirakusa",
+    "book": "Eginak 28:12",
+    "today": "Sizilia, Italia gaur egun",
+    "note": "Hiru egun geratzen dira Sizilian.",
+    "events": []
+   },
+   "puteoli": {
+    "name": "Puteoli",
+    "book": "Eginak 28:13-14",
+    "today": "Pozzuoli, Italia gaur egun",
+    "note": "Italian lehorreratzen dira eta sinestun senideek hartzen dituzte.",
+    "events": []
+   },
+   "rome": {
+    "name": "Erroma",
+    "book": "Eginak 28 · Kartzelako Gutunak · 2 Timoteori",
+    "today": "Erroma, Italia gaur egun",
+    "note": "Berri Ona azkenean inperioaren bihotzera iristen da — ez amaiera bat, hasiera bat baizik.",
+    "events": [
+     "Bi urte etxeko atxiloaldian, erreinua ausardiaz aldarrikatzen",
+     "Hemendik Kartzelako Gutunak idazten ditu (Ef·Fil·Kol·Flm)",
+     "Geroago berriz presoturik, 2 Timoteo idazten du eta martiri hiltzen da — «Borroka ederra egin dut, lasterketa bukatu dut»"
+    ]
+   }
+  },
+  "labels": [
+   "Mediterraneo itsasoa",
+   "Egeo itsasoa",
+   "Asia Txikia",
+   "Mazedonia",
+   "Italia"
+  ],
+  "journeys": {
+   "j1": "Lehen bidaia",
+   "j2": "Bigarren bidaia",
+   "j3": "Hirugarren bidaia",
+   "rome": "Laugarren bidaia · Erromara",
+   "j5": "Bosgarren bidaia · askatu ondoren"
+  }
+ }
+}

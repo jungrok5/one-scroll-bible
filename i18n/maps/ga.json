@@ -35,10 +35,10 @@
     "today": "réigiún na Tigrise–Eofrait inniu",
     "note": "Isteach i ndomhan a rinneadh go han-mhaith, tagann an peaca agus briseann sé an nasc idir Dia agus an cine daonna.",
     "events": [
-     "An cruthú i sé lá — “bhí sé go han-mhaith”",
+     "An cruthú i sé lá — “bhí sé go sármhaith”",
      "An cine daonna déanta ar íomhá Dé",
      "An titim, agus an díbirt as Éidin",
-     "An chéad gealltanas den soiscéal — “brúfaidh síol na mná ceann na nathrach”"
+     "An chéad gealltanas den soiscéal — “Brúfaidh sé do cheann”"
     ]
    },
    "noah": {
@@ -49,7 +49,7 @@
     "events": [
      "Domhan líonta le truailliú",
      "An díle, agus áirc Naoi",
-     "Cúnant an tuar ceatha — “ní bheidh díle ann arís chun an domhan a scriosadh”"
+     "Cúnant an tuar ceatha — “ní bheidh go deo arís díle ann chun an domhan a scrios”"
     ]
    },
    "babel": {
@@ -58,7 +58,7 @@
     "today": "an Iaráic inniu (machaire Shineár)",
     "note": "In aghaidh an uabhair a shíneann i dtreo na bhflaitheas, scaipeann Dia a n-urlabhra agus na pobail ar fud an domhain.",
     "events": [
-     "“Tógaimis cathair agus túr … agus déanaimis ainm dúinn féin”",
+     "“tógaimis cathair dúinn féin, agus túr … Tuillimis clú dúinn féin”",
      "Cuireann Dia a dteanga trí chéile",
      "Scaipeann na pobail ar fud an domhain (Shineár — an Bhablóin níos déanaí)"
     ]
@@ -70,7 +70,7 @@
     "note": "Tosaíonn scéal fuascailte an Bhíobla le glaoch aon fhir amháin.",
     "events": [
      "Glaonn Dia ar Abrám amach as Úr na gCaldéach",
-     "“Déanfaidh mé cine mór díot … beannófar gach pobal tríot”",
+     "“Déanfaidh mé cine mór díot … is tríotsa a dhéanfaidh ciníocha uile”",
      "Le creideamh fágann sé a thír dhúchais"
     ]
    },
@@ -91,7 +91,7 @@
     "today": "Nablus inniu",
     "note": "Sa talamh tairgthe bunaítear teaghlach agus gabhann an cúnant ó ghlúin go glúin.",
     "events": [
-     "Ag teacht isteach i gCanán, an chéad altóir — “do do shliocht bronnaim an talamh seo”",
+     "Ag teacht isteach i gCanán, an chéad altóir — “do do shíolsa a thabharfaidh mé an tír seo”",
      "An cúnant (Gein 15) · Íosác · Iacób",
      "Dáréag mac Iacóib — fréamh an dá threibh déag"
     ]
@@ -281,7 +281,7 @@
     "note": "Bóthar na luathmhinistreachta — trí Iarúsailéim agus ar aghaidh go dtí an tSamáir tarcaisnithe.",
     "events": [
      "Glanann sé an teampall in Iarúsailéim",
-     "San oíche, Nicodémus — “ní foláir daoibh breith a fháil athuair”",
+     "San oíche, Nicodémus — “Ní foláir sibh a ghiniúint arís ó lastuas”",
      "Uisce beo do bhean Shamáríoch"
     ]
    },
@@ -302,7 +302,7 @@
     "today": "Loch Chinneret inniu",
     "note": "Le cumhacht ar an nádúr taispeánann sé cé hé féin.",
     "events": [
-     "“Bí ciúin, bí socair” — ciúnaíonn sé an stoirm",
+     "“Éist, bí socair” — ciúnaíonn sé an stoirm",
      "Cothaíonn sé 5,000 le cúig bhuilín agus dhá iasc",
      "Siúlann sé ar an uisce"
     ]
@@ -313,7 +313,7 @@
     "today": "Banias inniu",
     "note": "Tuigeann na deisceabail gurb é Críost é, agus osclaíonn bóthar na croise.",
     "events": [
-     "Admháil Pheadair — “Is tú Críost, Mac Dé bheo”",
+     "Admháil Pheadair — “Is tú an Críost, Mac Dé bheo”",
      "Tuarann sé a bhás agus a aiséirí den chéad uair",
      "Claochlaithe i nglóir ar an sliabh"
     ]
@@ -326,7 +326,7 @@
     "events": [
      "Tugann sé radharc do Bhartiméas dall",
      "Glaonn sé ar Zacháias an poibleacánach",
-     "“Tháinig Mac an Duine do lorg agus do shlánú an rud a bhí caillte”"
+     "“tháinig Mac an Duine chun an rud a bhí caillte a lorg agus a shlánú”"
     ]
    },
    "bethany": {
@@ -335,7 +335,7 @@
     "today": "al-Eizariya inniu",
     "note": "Taispeánann sé smacht ar an mbás ar an oíche roimh a sheachtain dheiridh.",
     "events": [
-     "Tógann sé Lazaras ón uaigh — “Is mise an t-aiséirí agus an bheatha”",
+     "Tógann sé Lazaras ón uaigh — “Mise an t‑aiséirí agus an bheatha”",
      "Ungann Máire é le haghaidh a adhlactha",
      "Cruann an comhartha seo an chomhcheilg chun é a mharú"
     ]
@@ -454,7 +454,7 @@
     "note": "An pointe casadh ina dtéann an soiscéal i dtreo na hEorpa den chéad uair.",
     "events": [
      "Físe d'fhear ón Macadóin",
-     "“Tar anall agus cabhraigh linn”",
+     "“Tar anall go dtí an Mhacadóin ag cabhrú linn”",
      "Trasnaíonn siad láithreach isteach san Eoraip"
     ]
    },
@@ -476,7 +476,7 @@
     "note": "Croitheann an briathar an chathair agus scuabann an freasúra thar maoil.",
     "events": [
      "Pléann sé sa tsionagóg trí Shabóid",
-     "“Na daoine seo a chuir an domhan trí chéile”",
+     "“Tá an domhan mór suaite ag na daoine úd”",
      "Éalaíonn siad san oíche"
     ]
    },
@@ -509,7 +509,7 @@
     "note": "Fanann sé bliain go leith, ag plandáil eaglaise i gcathair na drúise.",
     "events": [
      "Déanann sé pubaill le hAcuila agus Priscilla",
-     "“Ná bíodh eagla ort … óir táim leat”",
+     "“Ná bíodh aon eagla ort … mar táimse leat”",
      "Creideann go leor Corantach agus baistear iad"
     ]
    },
@@ -530,7 +530,7 @@
     "today": "an Tuirc inniu",
     "note": "Slán deorach le seanóirí Eifis.",
     "events": [
-     "“Tugaigí aire don eaglais a cheannaigh sé lena fhuil féin”",
+     "“Tugaigí aire … an Eaglais a cheannaigh sé dó féin lena chuid fola”",
      "Goileann na seanóirí, agus a fhios acu nach bhfeicfidh siad arís é"
     ]
    },
@@ -542,7 +542,7 @@
     "events": [
      "Trialacha os comhair na ngobharnóirí Féilics agus Feisteas",
      "A chosaint os comhair an Rí Agraipa",
-     "“Achomharcaím chun Chéasair” — ar aghaidh go dtí an Róimh"
+     "“Gairmim Céasar” — ar aghaidh go dtí an Róimh"
     ]
    },
    "jerusalem": {
@@ -614,7 +614,7 @@
     "events": [
      "Dhá bhliain faoi ghabháil tí, ag fógairt na ríochta go dána",
      "As seo scríobhann sé Litreacha an Phríosúin (Eifisigh·Filipigh·Colosaigh·Filéamón)",
-     "Príosúnaithe arís níos déanaí, scríobhann sé 2 Tiomóid agus déantar mairtíreach de — “Chuir mé an comhrac maith díom, chríochnaigh mé an rás”"
+     "Príosúnaithe arís níos déanaí, scríobhann sé 2 Tiomóid agus déantar mairtíreach de — “Tá an comhrac maith tugtha agam, tá mo rás rite”"
     ]
    }
   },

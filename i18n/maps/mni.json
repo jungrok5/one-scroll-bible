@@ -25,7 +25,7 @@
   "play": "Chatthok'u",
   "pause": "Leppu",
   "today": "Houjik:",
-  "verseCite": "2 Peter 1:16"
+  "verseCite": "2 Pitar 1:16"
  },
  "ot": {
   "places": {
@@ -70,7 +70,7 @@
     "note": "Bāibalgi kanbibagi wāri asi mi amabu koubadagi houi.",
     "events": [
      "Isorna Kaldia-gi Ur-dagi Abram-bu kou-i",
-     "“eina nahākpu achouba jāti ama oihan'gani… nahākki mapānna imung manung pumnamakna bor phangjagani”",
+     "“eina nahākpu achouba jāti ama oihan'gani… na'ngonda mālemgi imung manung pumnamak bor phangjagani”",
      "Thājabagi mapānna mahākna mahākki lam thadok-i"
     ]
    },
@@ -259,7 +259,7 @@
     "note": "Mahākki miyāmgi thougal houi — swargana mahākpu Machānipā oina utpi.",
     "events": [
      "John-na baptize tou-i",
-     "Thawāi adu khunu amagumna kumtharak-i — “Masi eigi nungsiraba Machānipāni”",
+     "Thawāi adu khunu amagumna kumtharak-i — “Mahāk eigi nungsijaraba ichā nipāni”",
      "Lamhāngda Sātan-gi themdokpa ahum adu maithi-i"
     ]
    },
@@ -281,7 +281,7 @@
     "note": "Ahouba thougalgi lambi — Jerusalem phāraga yānthiba Samaria faoba.",
     "events": [
      "Mahākna Jerusalem-gi Sanglen adu sengdok-i",
-     "Ahingda, Nicodemus — “Nahāk amuk hanna pokpa tāi”",
+     "Ahingda, Nicodemus — “Nahākna nouna pokkadabani”",
      "Samaria-gi nupi amagidamak hingba ising"
     ]
    },
@@ -292,7 +292,7 @@
     "note": "Galilee thougalgi yumpham — kouba, tāmbiba amasung yekpa pumnamak mapham asida unare.",
     "events": [
      "Nga phāba misingbu kouraga mapham asida leire",
-     "Ching-gi mathakki pāo — “Thawāida lāiraba makhoidi yāiphabani”",
+     "Ching-gi mathakki pāo — “Thawāida tonbasing adu yāiphabani”",
      "Ningthou leibākki pāndam wāri — aduga hengatlakpa yekpa"
     ]
    },
@@ -302,7 +302,7 @@
     "today": "houjikki Kinneret pāt",
     "note": "Prakritigi mathakta pānggalna mahākna kanā oiribage haibadu utpi.",
     "events": [
-     "“Ingthaba oiyu, tappu” — mahākna nungsit-nong adu tappi",
+     "“Tuminna leiyu, tapthou” — mahākna nungsit-nong adu tappi",
      "Tal mangā amasung nga ani-na mi lising mangā chāhalli",
      "Ising mathakta khong-i"
     ]
@@ -326,7 +326,7 @@
     "events": [
      "Mit tāngba Bartimaeus-bu uhanbi",
      "Kanggat khomba Zacchaeus-bu kou-i",
-     "“Mioibagi Machānipā adu mangkhrabasingbu thiba amasung kanbinaba lākpani”"
+     "“Migi Machānipā aduna māngkhraba adubu thiba amasung kanbiba lākle”"
     ]
    },
    "bethany": {
@@ -335,7 +335,7 @@
     "today": "houjikki al-Eizariya",
     "note": "Mahākki aroiba chayolgi mamāngda mahākna sibagi mathakta mapānggal utpi.",
     "events": [
-     "Mongphamdagi Lazarus-bu hinggat-hanbi — “Ei hingatpa amasung punsini”",
+     "Mongphamdagi Lazarus-bu hinggat-hanbi — “Eidi hinggatpa amasung hingba aduni”",
      "Mary-na phumnabagidamak mahākta thao teibi",
      "Khudam asina mahākpu hatnabagi wārol adu henna kanhalli"
     ]
@@ -454,7 +454,7 @@
     "note": "Aphaba Pāo ahānba oina Europe-ki maikeida chatpa onthokpa mapham.",
     "events": [
      "Macedonia-gi mi amagi uhanbi",
-     "“Lāktuna eikhoibu mateng pāngbiyu”",
+     "“Mesidoniyāda lāktuna eikhoibu pāngbiyu”",
      "Makhoina khudakta Europe-ta lanthok-i"
     ]
    },
@@ -476,7 +476,7 @@
     "note": "Wāhei-na sahar adu nikhalli aduga yekpa adu wangkhatlak-i.",
     "events": [
      "Sabbath ahum synagogue-da wārol tou-i",
-     "“taibangpan onthok-onsin toukhrabasing”",
+     "“Tāibangpānbu mathak makhā onhanba mising adu”",
      "Makhoina ahingda thoklammi"
     ]
    },
@@ -509,7 +509,7 @@
     "note": "Mahāk chahi ama makai leiduna, phattaba thanba sahar amada sang-lup ama lin-i.",
     "events": [
      "Aquila amasung Priscilla-ga loinana tent sā-i",
-     "“Kiganu… maramdi ei nahākka loinari”",
+     "“Kiganu… maramdi eina nahākka loinari”",
      "Korinth-ki mi kayāna thājaraga baptize lou-i"
     ]
    },
@@ -530,7 +530,7 @@
     "today": "houjikki Türkiye",
     "note": "Ephesus-ki ahal-lamansingda pina thāduna khainaba.",
     "events": [
-     "“mahāk masāgi ee-na leiraba sang-lup adu senbiyu”",
+     "“mahāk masāmakki eena leibikhraba sang-lup adu senbiyu”",
      "Ahal-lamansingna mahākpu amuk uraroi haiba khangduna kap-i"
     ]
    },
@@ -542,7 +542,7 @@
     "events": [
      "Leingākpa Felix amasung Festus-ki māngda wāyenba",
      "Ningthou Agrippa-gi māngda mahākki ngākchaba",
-     "“Ei Kaisarda wākatchari” — Rome-da"
+     "“Eina Keisārda wākatchari” — Rome-da"
     ]
    },
    "jerusalem": {
@@ -614,7 +614,7 @@
     "events": [
      "Chahi ani yumda phātladuna, thouna phana ningthou leibāk adu laothok-i",
      "Mapham asidagi mahākna Keisumsanggi Chitthising i-i (Ephesus·Philippi·Kolosa·Philemon)",
-     "Tungda amuk phātladuna, 2 Timothy i-i aduga thawāi katchei — “Ei aphaba lānda sokle, chenba lambi adu loisinkhre”"
+     "Tungda amuk phātladuna, 2 Timothy i-i aduga thawāi katchei — “Eina kanna lān soknakhre, eina chen'gadaba lamjen adu chenkhre”"
     ]
    }
   },

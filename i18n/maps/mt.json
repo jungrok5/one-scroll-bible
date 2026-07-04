@@ -1,0 +1,636 @@
+{
+ "menuName": "Malti",
+ "htmlLang": "mt",
+ "dir": "ltr",
+ "locale": "mt-MT",
+ "brand": "Il-Bibbja f’daqqa t’għajn",
+ "docTitle": "Il-Bibbja fuq il-mappa · Il-Bibbja f’daqqa t’għajn",
+ "metaDesc": "Segwi l-kronoloġija tat-Testment il-Qadim, il-ħajja ta’ Ġesù, u l-vjaġġi ta’ Pawlu fuq mappa reali — il-Bibbja ġrat fi postijiet veri.",
+ "s": {
+  "kicker": "Il-Bibbja f’daqqa t’għajn · Mapep",
+  "title": "Il-Bibbja fuq il-mappa",
+  "verse": "“Aħna ma konniex qegħdin nibnu fuq ħrejjef maħluqa minn moħħna meta għarrafniekom dwar il-qawwa ta’ Sidna Ġesù Kristu u dwar il-miġja tiegħu. Rajna b’għajnejna aħna stess il-kobor tiegħu” (2 Pietru 1:16)",
+  "purpose": "Il-Bibbja mhijiex mit. Hija reġistru ta’ nies li mxew fuq postijiet, dati u ismijiet veri. Segwi dawn it-toroq fuq mappa, fis-sekwenza taż-żmien — messu punt, jew agħfas ▶ biex timxi fih pass pass.",
+  "ot_kick": "① It-Testment il-Qadim — matul iż-żmien",
+  "ot_h": "Mill-ħolqien sar-ritorn lejn Ġerusalemm",
+  "ot_lead": "Mhux vjaġġ wieħed imma l-fluss tal-istorja tal-fidwa mill-ħolqien ’il quddiem: ħolqien u waqgħa → dilluvju u Babel → sejħa (Abraham) → l-art imwiegħda → l-Eżodu → id-deżert → il-konkwista → is-saltna → il-qsim → l-eżilju → ir-ritorn.",
+  "je_kick": "② It-Testment il-Ġdid — il-ħajja ta’ Ġesù",
+  "je_h": "Minn Betlehem sa Ġerusalemm",
+  "je_lead": "Segwi l-ħajja ta’ Ġesù kif jirrakkuntawha l-Evanġelji, fis-sekwenza — mit-twelid tiegħu f’Betlehem, permezz tal-magħmudija u l-ministeru fil-Galilija, minn Samarija, sas-salib, il-qawmien u t-tlugħ fis-sema f’Ġerusalemm.",
+  "pa_kick": "③ It-Testment il-Ġdid — il-vjaġġi ta’ Pawlu",
+  "pa_h": "Minn Antjokja sa truf l-art — Ruma",
+  "pa_lead": "Minn Pentekoste f’Ġerusalemm, kif l-Evanġelju xtered lil hinn mil-Lhudija — mill-Asja Minuri u l-Ewropa sal-qalba tal-imperu. Agħżel wieħed mill-ħames vjaġġi (l-1 · it-2 · it-3 + il-vjaġġ lejn Ruma + wara l-ħelsien) u segwi l-ġrajjiet tal-Atti mal-ittri miktuba fit-triq.",
+  "foot": "Sorsi · Il-postijiet isegwu t-test bibliku u l-ġeografija biblika standard (bl-ismijiet moderni fejn jgħinu). Ix-xtut, ix-xmajjar u l-għadajjar huma miġbuda minn dejta ġeografika miftuħa (Natural Earth), issimplifikati.",
+  "contact": "Mistoqsijiet · kummenti — <a id=\"contact\" class=\"mail\">Ibgħat email</a>",
+  "play": "Ibda",
+  "pause": "Ieqaf",
+  "today": "Illum:",
+  "verseCite": "2 Pietru 1:16"
+ },
+ "ot": {
+  "places": {
+   "eden": {
+    "name": "L-Għeden (Ħolqien · Waqgħa)",
+    "book": "Ġenesi 1–3",
+    "today": "ir-reġjun tat-Tigri u l-Ewfrat illum",
+    "note": "F’dinja maħluqa tajba ħafna, jidħol id-dnub u jkisser ir-rabta bejn Alla u l-bniedem.",
+    "events": [
+     "Ħolqien fi sitt ijiem — “tajba ħafna”",
+     "Il-bniedem maħluq fuq xbieha ta’ Alla",
+     "Il-Waqgħa, u t-tkeċċija mill-Għeden",
+     "L-ewwel wegħda tal-Evanġelju — “in-nisel tal-mara jisħaq ras is-serp”"
+    ]
+   },
+   "noah": {
+    "name": "L-Ararat (id-Dilluvju)",
+    "book": "Ġenesi 6–9",
+    "today": "il-muntanja Ararat, fil-lvant tat-Turkija llum",
+    "note": "Alla jiġġudika dinja mimlija dnub, iżda jħares il-ħajja permezz ta’ familja waħda.",
+    "events": [
+     "Dinja mimlija ħażen",
+     "Id-dilluvju, u l-arka ta’ Noè",
+     "Il-patt tal-qaws tas-sema — “qatt iżjed dilluvju biex jeqred”"
+    ]
+   },
+   "babel": {
+    "name": "It-Torri ta’ Babel",
+    "book": "Ġenesi 11",
+    "today": "l-Iraq illum (il-pjanura ta’ Xingħar)",
+    "note": "Kontra l-kburija li tilħaq lejn is-sema, Alla jħawwad ilsienhom u jxerred il-popli mal-art.",
+    "events": [
+     "“Ejjew nibnu belt u torri … u nagħmlu isem għalina”",
+     "Alla jħawwad ilsienhom",
+     "Il-popli jinxterdu mal-art (Xingħar — iktar tard Babilonja)"
+    ]
+   },
+   "ur": {
+    "name": "Ur",
+    "book": "Ġenesi 12",
+    "today": "in-nofsinhar tal-Iraq illum",
+    "note": "L-istorja tal-fidwa tal-Bibbja tibda bis-sejħa ta’ bniedem wieħed.",
+    "events": [
+     "Alla jsejjaħ lil Abram minn Ur tal-Kaldin",
+     "“Nagħmlek ġens kbir … il-popli kollha jitbierku bik”",
+     "Bil-fidi jħalli art twelidu"
+    ]
+   },
+   "haran": {
+    "name": "Ħaran",
+    "book": "Ġenesi 12",
+    "today": "in-nofsinhar tat-Turkija llum",
+    "note": "Fit-triq, iwieġeb għas-sejħa lejn l-art imwiegħda.",
+    "events": [
+     "Il-familja ta’ Teraħ tistabbilixxi ruħha f’Ħaran",
+     "Teraħ imut",
+     "Abram jitlaq lejn Kangħan fl-età ta’ 75 sena"
+    ]
+   },
+   "shechem": {
+    "name": "Sikem · Kangħan",
+    "book": "Ġenesi 12–50",
+    "today": "Nablus illum",
+    "note": "Fl-art imwiegħda titwaqqaf familja u l-patt jgħaddi minn ġenerazzjoni għal oħra.",
+    "events": [
+     "Deħla f’Kangħan, l-ewwel artal — “lil nislek nagħti din l-art”",
+     "Il-patt (Ġen 15) · Iżakk · Ġakobb",
+     "It-tnax-il iben ta’ Ġakobb — l-għerq tat-tnax-il tribù"
+    ]
+   },
+   "egypt": {
+    "name": "L-Eġittu (Gosen)",
+    "book": "Ġenesi 37–50 · Eżodu 1",
+    "today": "id-Delta tan-Nil, l-Eġittu llum",
+    "note": "Familja ssir ġens kbir — imbagħad ġens ta’ skjavi.",
+    "events": [
+     "Ġużeppi, mibjugħ, jitla’ biex jaħkem l-Eġittu",
+     "Il-familja kollha ta’ Ġakobb tinżel biex taħrab il-ġuħ",
+     "Il-ġens dejjem jikber ta’ Iżrael isir skjav"
+    ]
+   },
+   "sinai": {
+    "name": "Il-muntanja Sinaj",
+    "book": "Eżodu · Levitiku",
+    "today": "il-Peniżola tas-Sinaj illum",
+    "note": "L-akbar fidwa tat-Testment il-Qadim — skjavi jsiru l-poplu ta’ Alla stess.",
+    "events": [
+     "L-għaxar pjagi u l-ħaruf tal-Għid",
+     "Il-Baħar l-Aħmar jinfetaħ u jaqsmu",
+     "L-Għaxar Kmandamenti, il-Liġi, it-tabernaklu u s-sagrifiċċji"
+    ]
+   },
+   "kadesh": {
+    "name": "Kades (id-deżert)",
+    "book": "Numri · Dewteronomju",
+    "today": "id-deżert tas-Sinaj u tan-Negev illum",
+    "note": "In-nuqqas ta’ fidi jiswa lil ġenerazzjoni l-art — iżda Alla jibqa’ magħhom.",
+    "events": [
+     "Tnax-il spija — imma l-poplu jirrifjuta li jafda",
+     "38 sena fid-deżert — manna, sħaba u nar",
+     "Fil-pjanuri ta’ Mowab, l-aħħar priedka ta’ Mosè (Dewteronomju)"
+    ]
+   },
+   "jericho": {
+    "name": "Ġeriko",
+    "book": "Ġożwè",
+    "today": "Ġeriko llum",
+    "note": "Fl-aħħar jidħlu u jaħtfu l-art imwiegħda.",
+    "events": [
+     "Il-Ġordan jinfetaħ u l-poplu jaqsam",
+     "Il-ħitan ta’ Ġeriko jaqgħu",
+     "Il-konkwista ta’ Kangħan u l-qsim tal-art"
+    ]
+   },
+   "shiloh": {
+    "name": "Silo (l-Imħallfin)",
+    "book": "Mħallfin · Rut",
+    "today": "Khirbet Seilun illum",
+    "note": "Bla sultan, kulħadd jagħmel li jogħġbu — jinħtieġ sultan veru.",
+    "events": [
+     "It-tabernaklu jitwaqqaf f’Silo",
+     "Iċ-ċiklu ta’ dnub–moħqrija–ħelsien (Debora, Gidgħon, Sansun)",
+     "Rut — fedeltà fi żmien mudlam, fin-nisel ta’ David"
+    ]
+   },
+   "jerusalem": {
+    "name": "Ġerusalemm · Is-Saltna Magħquda",
+    "book": "1–2 Samwel · 1 Slaten",
+    "today": "Ġerusalemm illum",
+    "note": "L-era tad-deheb ta’ Iżrael — u l-wegħda ta’ sultan etern.",
+    "events": [
+     "Sawl l-ewwel sultan, imbagħad David u Gulija",
+     "Il-patt ma’ David — “it-tron tiegħek għal dejjem” (2 Sam 7)",
+     "Salamun jibni t-tempju f’Ġerusalemm"
+    ]
+   },
+   "samaria": {
+    "name": "Samarija · Is-Saltna Maqsuma",
+    "book": "Slaten · il-Profeti",
+    "today": "Sebastia illum",
+    "note": "Is-saltna tinqasam u tiddeklina waqt li l-profeti jgħajtu.",
+    "events": [
+     "Wara Salamun, il-qsim f’Ġuda u Iżrael",
+     "Idolatrija mtennija",
+     "Elija, Isaija, Ġeremija jgħajtu ‘erġgħu lura’ — u jħabbru l-Messija"
+    ]
+   },
+   "nineveh": {
+    "name": "Ninwe (l-Assirja)",
+    "book": "2 Slaten 17 · Ġona",
+    "today": "Mosul, l-Iraq illum",
+    "note": "Bl-injorar ta’ kull twissija, it-tramuntana taqa’ l-ewwel.",
+    "events": [
+     "Ninwe, il-kapitali tal-Assirja",
+     "Is-saltna tat-tramuntana taqa’ taħt l-Assirja (722 Q.K.)",
+     "Ġona jintbagħat lejn Ninwe"
+    ]
+   },
+   "babylon": {
+    "name": "Babilonja",
+    "book": "2 Slaten 25 · Danjel · Eżekjel",
+    "today": "Hillah, l-Iraq illum",
+    "note": "L-iktar lejl mudlam — iżda l-wegħda tar-restawr tibqa’.",
+    "events": [
+     "Ġerusalemm taqa’, it-tempju jinħaraq (586 Q.K.)",
+     "Ġuda jittieħed fl-eżilju f’Babilonja",
+     "Danjel u Eżekjel — fidi u viżjonijiet fl-eżilju"
+    ]
+   },
+   "susa": {
+    "name": "Susa (il-Persja)",
+    "book": "Ester · Neħemija",
+    "today": "Shush, l-Iran illum",
+    "note": "Anke fil-qalba ta’ imperu pagan, Alla jżomm il-poplu tiegħu.",
+    "events": [
+     "Il-Persja tegħleb lil Babilonja",
+     "Ester issalva l-Lhud mill-qerda",
+     "Neħemija jitlob quddiem is-sultan u jintbagħat"
+    ]
+   },
+   "return": {
+    "name": "Ir-Ritorn lejn Ġerusalemm",
+    "book": "Esdra · Neħemija · Malakija",
+    "today": "Ġerusalemm illum",
+    "note": "Jerġgħu lura u jibnu mill-ġdid — imma l-ebda sultan ma ġie. Jistennew il-Messija.",
+    "events": [
+     "Tliet mewġiet ta’ ritorn bid-digriet ta’ Ċiru (Żorobabel 538 · Esdra 458 · Neħemija 444)",
+     "It-tempju mibni mill-ġdid u l-ħitan ta’ Ġerusalemm irrestawrati",
+     "Malakija — it-TQ jagħlaq: “jiena se nibgħat il-messaġġier tiegħi”"
+    ]
+   }
+  },
+  "labels": [
+   "Il-Baħar Mediterran",
+   "Il-Mesopotamja",
+   "Id-Deżert tal-Għarabja",
+   "L-Eġittu"
+  ],
+  "journeys": {
+   "flow": "L-istorja tal-fidwa"
+  }
+ },
+ "jesus": {
+  "places": {
+   "bethlehem": {
+    "name": "Betlehem",
+    "book": "Mattew 1–2 · Luqa 2",
+    "today": "Betlehem illum",
+    "note": "Il-Messija mwiegħed jiġi fil-belt ta’ David — il-Verb sar bniedem.",
+    "events": [
+     "Imwieled f’Betlehem, il-belt ta’ David",
+     "L-anġli jħabbru l-aħbar lir-rgħajja",
+     "Il-Maġi jiġu biex jadurawh"
+    ]
+   },
+   "nazareth": {
+    "name": "Nazaret",
+    "book": "Luqa 2 · 4",
+    "today": "Nazaret illum",
+    "note": "Alla jikber bħala bniedem f’belt ordinarja.",
+    "events": [
+     "Imrobbi f’dar ta’ mastrudaxxa",
+     "Fl-età ta’ tnax, jistaqsi u jwieġeb fit-tempju",
+     "Iktar tard imwarrab fis-sinagoga ta’ pajjiżu"
+    ]
+   },
+   "jordan": {
+    "name": "Ix-Xmara Ġordan",
+    "book": "Mattew 3–4",
+    "today": "il-Ġordan t’isfel illum",
+    "note": "Il-ministeru pubbliku tiegħu jibda — is-sema jissiġilla li hu l-Iben.",
+    "events": [
+     "Mgħammed minn Ġwanni",
+     "L-Ispirtu jinżel bħal ħamiema — “Dan hu Ibni l-għażiż”",
+     "Jegħleb it-tliet tentazzjonijiet tax-Xitan fid-deżert"
+    ]
+   },
+   "cana": {
+    "name": "Kana",
+    "book": "Ġwanni 2",
+    "today": "Kafr Kanna illum",
+    "note": "Fl-ewwel sinjal tiegħu jistqarr il-glorja tiegħu.",
+    "events": [
+     "Mistieden f’tieġ",
+     "L-ilma jinbidel f’inbid — l-ewwel sinjal tiegħu",
+     "Id-dixxipli tiegħu jemmnu fih"
+    ]
+   },
+   "sychar": {
+    "name": "Sikar (Samarija)",
+    "book": "Ġwanni 2–4",
+    "today": "qrib Nablus illum",
+    "note": "It-triq tal-ewwel ministeru — minn Ġerusalemm sa Samarija mistmerra.",
+    "events": [
+     "Inaddaf it-tempju f’Ġerusalemm",
+     "Billejl, Nikodemu — “Jeħtiġilek titwieled mill-ġdid”",
+     "Ilma ħaj għal mara Samaritana"
+    ]
+   },
+   "capernaum": {
+    "name": "Kafarnahum",
+    "book": "Mattew 4–13 · Mark 1–4",
+    "today": "ix-xatt tal-lag tal-Galilija illum",
+    "note": "Il-bażi tal-ministeru fil-Galilija — sejħa, tagħlim u oppożizzjoni jiltaqgħu hawn.",
+    "events": [
+     "Isejjaħ is-sajjieda u jagħmel il-bażi tiegħu hawn",
+     "Il-Priedka tal-Muntanja — “Henjin il-foqra fl-ispirtu”",
+     "Parabboli tas-Saltna — u oppożizzjoni li tikber"
+    ]
+   },
+   "galilee": {
+    "name": "Il-Baħar tal-Galilija",
+    "book": "Mark 4 · 6 · Ġwanni 6",
+    "today": "l-għadira Kinneret illum",
+    "note": "Bil-qawwa fuq in-natura juri min hu.",
+    "events": [
+     "“Iskot, ikun hemm kwiet” — ihedded il-maltempata",
+     "Jitma’ 5,000 b’ħames ħobżiet u żewġ ħutiet",
+     "Jimxi fuq l-ilma"
+    ]
+   },
+   "caesarea_p": {
+    "name": "Ċesarija ta’ Filippu",
+    "book": "Mattew 16–17",
+    "today": "Banias illum",
+    "note": "Id-dixxipli jifhmu li hu l-Kristu, u tinfetaħ it-triq tas-salib.",
+    "events": [
+     "L-istqarrija ta’ Pietru — “Inti l-Messija, l-Iben ta’ Alla l-ħaj”",
+     "L-ewwel iħabbar il-mewt u l-qawmien tiegħu",
+     "Ittrasfigurat fil-glorja fuq il-muntanja"
+    ]
+   },
+   "jericho": {
+    "name": "Ġeriko",
+    "book": "Luqa 18–19",
+    "today": "Ġeriko llum",
+    "note": "Fit-triq ’il fuq lejn Ġerusalemm, ifittex il-mitluf.",
+    "events": [
+     "Jagħti d-dawl lil Bartimew l-agħma",
+     "Isejjaħ lil Żakkew il-pubblikan",
+     "“Bin il-bniedem ġie jfittex u jsalva l-mitluf”"
+    ]
+   },
+   "bethany": {
+    "name": "Betanja",
+    "book": "Ġwanni 11–12",
+    "today": "al-Eizariya illum",
+    "note": "Juri ħakma fuq il-mewt lejlet l-aħħar ġimgħa tiegħu.",
+    "events": [
+     "Iqajjem lil Lazzru mill-qabar — “Jiena l-qawmien u l-ħajja”",
+     "Marija tidilku għad-difna",
+     "Dan is-sinjal iwebbes il-komplott biex joqtluh"
+    ]
+   },
+   "jerusalem": {
+    "name": "Ġerusalemm",
+    "book": "Mattew 21–28 · Luqa 24 · Atti 1",
+    "today": "Ġerusalemm illum",
+    "note": "Il-quċċata li lejha tindika l-Bibbja kollha — salib, qawmien, tlugħ fis-sema.",
+    "events": [
+     "Id-daħla trijonfali; jerġa’ jaqleb l-imwejjed tat-tempju",
+     "Fl-Aħħar Ċena jaħsel saqajn id-dixxipli",
+     "Imut fuq is-salib",
+     "Imqajjem fit-tielet jum, imbagħad imtella’ fis-sema"
+    ]
+   }
+  },
+  "labels": [
+   "Il-Baħar Mediterran",
+   "Il-Galilija",
+   "Is-Samarija",
+   "Il-Lhudija",
+   "Id-Dekapoli",
+   "Il-Perea",
+   "Il-Baħar il-Mejjet"
+  ],
+  "journeys": {
+   "life": "It-triq ta’ Ġesù"
+  }
+ },
+ "paul": {
+  "places": {
+   "antioch": {
+    "name": "Antjokja",
+    "book": "Atti 13 · 15",
+    "today": "Antakya, it-Turkija illum",
+    "note": "Il-knisja li tibgħat, fejn tibda u tirritorna l-missjoni fost il-pagani.",
+    "events": [
+     "Fit-talb l-Ispirtu jagħżel lil Barnaba u lil Sawl",
+     "Il-knisja fejn id-dixxipli l-ewwel issejħu ‘Kristjani’",
+     "Il-punt tat-tluq tal-1, it-2 u t-3 vjaġġ"
+    ]
+   },
+   "seleucia": {
+    "name": "Selewċja",
+    "book": "Atti 13:4",
+    "today": "it-Turkija illum",
+    "note": "Il-port ta’ Antjokja — isalpaw lejn Ċipru.",
+    "events": []
+   },
+   "salamis": {
+    "name": "Salamina (Ċipru)",
+    "book": "Atti 13:5",
+    "today": "Ċipru llum",
+    "note": "L-ewwel waqfa f’Ċipru — jippriedkaw fis-sinagogi.",
+    "events": []
+   },
+   "paphos": {
+    "name": "Pafos",
+    "book": "Atti 13:6-12",
+    "today": "Ċipru llum",
+    "note": "Il-qawwa tintwera kontra dawk li jopponu l-Evanġelju.",
+    "events": [
+     "Elimas is-saħħar jingħata l-għama",
+     "Serġju Pawlu l-prokonslu jemmen",
+     "Minn hawn ‘Pawlu’ jieħu t-tmexxija"
+    ]
+   },
+   "perga": {
+    "name": "Perġa",
+    "book": "Atti 13:13",
+    "today": "Antalya, it-Turkija illum",
+    "note": "Port fil-Pamfilja — hawn Ġwanni Mark jerġa’ lura.",
+    "events": []
+   },
+   "pantioch": {
+    "name": "Antjokja tal-Pisidja",
+    "book": "Atti 13:14-50",
+    "today": "Yalvaç, it-Turkija illum",
+    "note": "L-Evanġelju jinfetaħ lejn il-pagani.",
+    "events": [
+     "Priedka twila tal-istorja tas-salvazzjoni fis-sinagoga",
+     "Ħafna pagani jifirħu u jilqgħu l-kelma",
+     "Imkeċċija bl-oppożizzjoni"
+    ]
+   },
+   "iconium": {
+    "name": "Ikonju",
+    "book": "Atti 14:1-7",
+    "today": "Konya, it-Turkija illum",
+    "note": "Ħafna jemmnu, imma l-persekuzzjoni ġġegħelhom ikomplu.",
+    "events": []
+   },
+   "lystra": {
+    "name": "Listra",
+    "book": "Atti 14:8-20",
+    "today": "it-Turkija illum",
+    "note": "Milqugħ bħala alla, imbagħad imħaġġar.",
+    "events": [
+     "Ifejjaq raġel zopp minn twelidu",
+     "Il-folla tipprova toffri sagrifiċċju lilhom bħala allat",
+     "Imħaġġar u mħolli għall-mejjet, iqum"
+    ]
+   },
+   "derbe": {
+    "name": "Derbe",
+    "book": "Atti 14:20-21",
+    "today": "it-Turkija illum",
+    "note": "Isiru ħafna dixxipli; jerġgħu lura biex isaħħu l-knejjes.",
+    "events": []
+   },
+   "troas": {
+    "name": "Troas",
+    "book": "Atti 16:8-10",
+    "today": "it-Turkija illum",
+    "note": "Il-punt fejn l-Evanġelju l-ewwel jieħu t-triq lejn l-Ewropa.",
+    "events": [
+     "Viżjoni ta’ raġel Maċedonjan",
+     "“Ejja l-Maċedonja u għinna”",
+     "Minnufih jaqsmu lejn l-Ewropa"
+    ]
+   },
+   "philippi": {
+    "name": "Filippi",
+    "book": "Atti 16 · Filippin",
+    "today": "it-tramuntana tal-Greċja llum",
+    "note": "L-ewwel knisja fl-Ewropa — l-Evanġelju jirbaħ anke fil-ħabs.",
+    "events": [
+     "Lidja, bejjiegħa tal-porpra, temmen",
+     "Xebba skjava li tbassar il-futur tinħeles",
+     "Innijiet f’nofs ta’ lejl, terremot, id-dar tal-għassies issalva"
+    ]
+   },
+   "thess": {
+    "name": "Tessalonika",
+    "book": "Atti 17 · 1–2 Tessalonikin",
+    "today": "Salonki, il-Greċja llum",
+    "note": "Il-kelma tħawwad il-belt u l-oppożizzjoni tegħli.",
+    "events": [
+     "Jitkellem fis-sinagoga tliet Sibtijiet",
+     "“Dawn li qalbu d-dinja ta’ taħt fuq”",
+     "Jitilqu bil-lejl"
+    ]
+   },
+   "berea": {
+    "name": "Berija",
+    "book": "Atti 17:10-15",
+    "today": "Veria, il-Greċja llum",
+    "note": "In-nies ‘nobbli’ li huma stess fittxew il-kelma.",
+    "events": [
+     "Jilqgħu l-kelma bil-ħerqa",
+     "Kuljum jgħarblu l-Iskrittura biex jivverifikaw",
+     "Ħafna jaslu jemmnu"
+    ]
+   },
+   "athens": {
+    "name": "Ateni",
+    "book": "Atti 17:16-34",
+    "today": "Ateni, il-Greċja llum",
+    "note": "Fil-belt tal-filosfi jxandar l-‘alla mhux magħruf’.",
+    "events": [
+     "Imqanqal minn belt mimlija idoli",
+     "Fl-Arjopagu jippriedka l-Ħallieq u l-qawmien",
+     "Imżeblaħ, iżda ftit jemmnu"
+    ]
+   },
+   "corinth": {
+    "name": "Korintu",
+    "book": "Atti 18 · 1–2 Korintin",
+    "today": "il-Greċja llum",
+    "note": "Jibqa’ sena u nofs, iħawwel knisja f’belt tal-vizzju.",
+    "events": [
+     "Jagħmel it-tined ma’ Akwila u Priskilla",
+     "“La tibżax … għax jiena miegħek”",
+     "Ħafna Korintin jemmnu u jitgħammdu"
+    ]
+   },
+   "ephesus": {
+    "name": "Efesu",
+    "book": "Atti 19 · Efesin",
+    "today": "Selçuk, it-Turkija illum",
+    "note": "Il-qalba tat-tielet vjaġġ — il-kelma tinfirex mal-Asja.",
+    "events": [
+     "Tagħlim ta’ kuljum għal sentejn fis-sala ta’ Tirannu",
+     "Kotba tal-maġija maħruqa; għemejjel setgħana",
+     "L-arġentier Demetriju jqajjem irvell"
+    ]
+   },
+   "miletus": {
+    "name": "Mileto",
+    "book": "Atti 20:17-38",
+    "today": "it-Turkija illum",
+    "note": "Firda bid-dmugħ mill-anzjani ta’ Efesu.",
+    "events": [
+     "“Irgħu l-knisja li hu kiseb b’demmu stess”",
+     "L-anzjani jibku, jafu li mhux se jerġgħu jarawh"
+    ]
+   },
+   "caesarea": {
+    "name": "Ċesarija",
+    "book": "Atti 23–26",
+    "today": "il-kosta ta’ Iżrael illum",
+    "note": "Għal sentejn jiddefendi l-Evanġelju quddiem gvernaturi u sultan.",
+    "events": [
+     "Proċessi quddiem il-gvernaturi Feliċ u Festu",
+     "Id-difiża tiegħu quddiem is-sultan Agrippa",
+     "“Nappella lil Ċesari” — lejn Ruma"
+    ]
+   },
+   "jerusalem": {
+    "name": "Ġerusalemm",
+    "book": "Atti 21–23",
+    "today": "Ġerusalemm illum",
+    "note": "Maqbud fit-tempju, tibda t-triq tiegħu bħala priġunier.",
+    "events": [
+     "Maqbud mill-folla fit-tempju",
+     "Jiddefendi ruħu quddiem il-kunsill",
+     "Bħala ċittadin Ruman, mibgħut taħt għassa f’Ċesarija"
+    ]
+   },
+   "myra": {
+    "name": "Mira",
+    "book": "Atti 27:5-6",
+    "today": "Demre, it-Turkija illum",
+    "note": "Jaqilbu għal bastiment ta’ Lixandra lejn Ruma.",
+    "events": []
+   },
+   "fairhaven": {
+    "name": "Il-Portijiet is-Sbieħ (Kreta)",
+    "book": "Atti 27:8-12",
+    "today": "Kreta llum",
+    "note": "It-twissija ta’ Pawlu biex ma jkomplux jitbaħħru ma tinstemax.",
+    "events": []
+   },
+   "crete": {
+    "name": "Kreta",
+    "book": "Titu",
+    "today": "Kreta llum",
+    "note": "Wara l-ħelsien tiegħu, il-gżira fejn iħalli lil Titu biex isewwi l-knejjes.",
+    "events": [
+     "Iħalli lil Titu biex jaħtar anzjani f’kull belt",
+     "Isejjaħ għal mexxejja bla ħtija u fidili",
+     "Jikteb l-ittra lil Titu"
+    ]
+   },
+   "malta": {
+    "name": "Malta",
+    "book": "Atti 27–28",
+    "today": "Malta llum",
+    "note": "Permezz ta’ maltempata u nawfraġju, il-wegħda ta’ Alla żżomm.",
+    "events": [
+     "Ir-riħ Grigal ikisser il-bastiment, iżda t-276 kollha jeħilsu",
+     "Migdum minn lifgħa, jibqa’ bla ħsara",
+     "Ifejjaq il-morda tal-gżira"
+    ]
+   },
+   "syracuse": {
+    "name": "Sirakuża",
+    "book": "Atti 28:12",
+    "today": "Sqallija, l-Italja llum",
+    "note": "Jibqgħu tlett ijiem fi Sqallija.",
+    "events": []
+   },
+   "puteoli": {
+    "name": "Puteoli",
+    "book": "Atti 28:13-14",
+    "today": "Pozzuoli, l-Italja llum",
+    "note": "Jinżlu l-art fl-Italja u jiltaqgħu ma’ ħuthom fil-fidi.",
+    "events": []
+   },
+   "rome": {
+    "name": "Ruma",
+    "book": "Atti 28 · L-Ittri mill-Ħabs · 2 Timotju",
+    "today": "Ruma, l-Italja llum",
+    "note": "L-Evanġelju jasal fil-qalba tal-imperu fl-aħħar — mhux tmiem imma bidu.",
+    "events": [
+     "Sentejn taħt arrest fid-dar, ixandar is-Saltna bil-kuraġġ",
+     "Minn hawn jikteb l-Ittri mill-Ħabs (Efesin·Filippin·Kolossin·Filemon)",
+     "Iktar tard mitfugħ il-ħabs mill-ġdid, jikteb it-2 Timotju u jsir martri — “Tqabadt it-taqbida t-tajba, temmejt il-ġirja”"
+    ]
+   }
+  },
+  "labels": [
+   "Il-Baħar Mediterran",
+   "Il-Baħar Eġew",
+   "L-Asja Minuri",
+   "Il-Maċedonja",
+   "L-Italja"
+  ],
+  "journeys": {
+   "j1": "L-ewwel vjaġġ",
+   "j2": "It-tieni vjaġġ",
+   "j3": "It-tielet vjaġġ",
+   "rome": "Ir-raba’ vjaġġ · lejn Ruma",
+   "j5": "Il-ħames vjaġġ · wara l-ħelsien"
+  }
+ }
+}

@@ -1,0 +1,636 @@
+{
+ "menuName": "Basa Acèh",
+ "htmlLang": "ace",
+ "dir": "ltr",
+ "locale": "ace-ID",
+ "brand": "Alkitab lam Saboh Scroll",
+ "docTitle": "Alkitab bak Peta · Alkitab lam Saboh Scroll",
+ "metaDesc": "Seutot garéh watée Peujanjian Lama, udeb Isa, ngon jak-jak Paulus bak peta nyang bit — Alkitab teujadi di teumpat nyang bit-bit na.",
+ "s": {
+  "kicker": "Alkitab lam Saboh Scroll · Peta",
+  "title": "Alkitab bak Peta",
+  "verse": "“Watée kamoe peugah ubak gata padub na agong jih óh teuka Tuhan geutanyoe Isa Almaseh, kamoe hana meugantung nibak haba-haba dongeng nyang hana beutôi nyang jipeugah lé manusia. Keuagongan Almaseh nyan ka lheueh kamoe ngieng ngon mata ulée kamoe keudroe.” (2 Petrus 1:16)",
+  "purpose": "Alkitab kon caritan khayeue. Nyoe na kheueh catatan ureuëng nyang jijak ateueh teumpat, tanggai, ngon nan nyang bit-bit na. Seutot jalan-jalan nyan bak peta, meunurôt urôtan watée — teukan saboh titék, atawa teukan ▶ keu tajak ngon peurlahan, saboh-saboh.",
+  "ot_kick": "① Peujanjian Lama — sipanjang watée",
+  "ot_h": "Nibak peuneujeuet trok bak woe u Yerusalem",
+  "ot_lead": "Kon saboh perjalanan mantong teuma alu seujarah keuseulamatan nibak peuneujeuet: peuneujeuet ngon reubah lam desya → ié raya ngon Babel → panggong (Abraham) → nanggroe peujanjian → Keuluaran → padang pasi → meunang → keurajeuen → teubagi → teubuang → woe.",
+  "je_kick": "② Peujanjian Barô — udeb Isa",
+  "je_h": "Nibak Betlehem trok bak Yerusalem",
+  "je_lead": "Seutot udeb Isa lagée nyang geucalitra lam Injil, meunurôt urôtan — nibak lahé Gobnyan di Betlehem, rot teupumandi ngon rawngbri di Galilea, meurintah Samaria, trok bak saleb, beudôh lom ngon ék u langét di Yerusalem.",
+  "pa_kick": "③ Peujanjian Barô — jak-jak Paulus",
+  "pa_h": "Nibak Antiokhia trok bak ujong bumoe — Roma",
+  "pa_lead": "Nibak Pentakosta di Yerusalem, pakriban Haba Gét meukembang lhat nibak Yudea — rot Asia Ubit ngon Eropa trok bak até keurajeuen. Piléh saboh nibak limöng jak (keu-1·keu-2·keu-3 + peulayaran u Roma + lheueh teupeuleupah) dan seutot hai-hai lam Kisah Rasui-rasui ngon surat-surat nyang teutuléh bak jalan.",
+  "foot": "Sumbô · Teumpat-teumpat meunurôt teks Alkitab ngon geografi Alkitab standar (ngon nan modéren bak pat guna). Binéh laôt, krueng, ngon dano teulukéh nibak data geografi teubuka (Natural Earth), teupeurinkah.",
+  "contact": "Teumanyong · saran — <a id=\"contact\" class=\"mail\">Kirém email keu kamoe</a>",
+  "play": "Jak",
+  "pause": "Piôh",
+  "today": "Bak jinoe:",
+  "verseCite": "2 Petrus 1:16"
+ },
+ "ot": {
+  "places": {
+   "eden": {
+    "name": "Eden (Peuneujeuet · Reubah lam Desya)",
+    "book": "Keujadian 1–3",
+    "today": "wilayah Tigris–Efrat bak jinoe",
+    "note": "Bak donya nyang teucebta “gét that,” desya jitamong dan jipeuputôh hubongan antara Allah ngon manusia.",
+    "events": [
+     "Peuneujeuet lam nam uroe — “gét that”",
+     "Manusia teucebta lagée gamba Allah",
+     "Reubah lam desya, dan teuusé nibak Eden",
+     "Peujanjian Haba Gét nyang phon — “keuturonan inong nyan teuma jipeurumok ulée uleue”"
+    ]
+   },
+   "noah": {
+    "name": "Ararat (Ié Raya)",
+    "book": "Keujadian 6–9",
+    "today": "Gunong Ararat, Turki timu bak jinoe",
+    "note": "Allah geuhuköm donya nyang peunoh ngon desya, teuma geupeulindông udeb rot saboh keuluarga.",
+    "events": [
+     "Donya peunoh ngon buet nyang rusak",
+     "Ié raya, ngon bahtra Nuh",
+     "Peujanjian ngon tanda pelangi — “hana le ié raya nyang peubinasa”"
+    ]
+   },
+   "babel": {
+    "name": "Meunara Babel",
+    "book": "Keujadian 11",
+    "today": "Irak bak jinoe (dataran Sinear)",
+    "note": "Ateueh angkôh nyang meuiktia trok u langét, Allah geucraih basa awaknyan ngon bansa-bansa u ateueh bumoe.",
+    "events": [
+     "“Jak tapeudong banda ngon meunara… mangat na nan geutanyoe”",
+     "Allah geupeukaru basa awaknyan",
+     "Bansa-bansa teucraih u ateueh bumoe (Sinear — dudoe Babel)"
+    ]
+   },
+   "ur": {
+    "name": "Ur",
+    "book": "Keujadian 12",
+    "today": "Irak seulatan bak jinoe",
+    "note": "Haba keuseulamatan Alkitab jiphon ngon panggong sidroe ureuëng.",
+    "events": [
+     "Allah geuhôi Abram teubiet nibak Ur nanggroe Kasdim",
+     "“Lôn peujeuet gata bansa nyang rayeuk… banmandum bansa teubri beureukat rot gata”",
+     "Rot iman jitinggai nanggroe asai jih"
+    ]
+   },
+   "haran": {
+    "name": "Haran",
+    "book": "Keujadian 12",
+    "today": "Turki seulatan bak jinoe",
+    "note": "Bak jalan, jimeujaweueb keu panggong u nanggroe peujanjian.",
+    "events": [
+     "Keuluarga Terah jimeuneuduek di Haran",
+     "Terah maté",
+     "Abram jimeujak u Kanaan bak umu 75 thôn"
+    ]
+   },
+   "shechem": {
+    "name": "Sikhem · Kanaan",
+    "book": "Keujadian 12–50",
+    "today": "Nablus bak jinoe",
+    "note": "Lam nanggroe peujanjian saboh keuluarga teupeudong dan peujanjian jipinah u keuturonan.",
+    "events": [
+     "Tamong u Kanaan, meujba phon — “keu keuturonan gata Lôn bri nanggroe nyoe”",
+     "Peujanjian (Keujadian 15) · Ishak · Yakub",
+     "Dua blah aneuëk Yakub — akar dua blah suku"
+    ]
+   },
+   "egypt": {
+    "name": "Meusé (Gosyen)",
+    "book": "Keujadian 37–50 · Keuluaran 1",
+    "today": "Delta Nil, Meusé bak jinoe",
+    "note": "Saboh keuluarga jeuet keu bansa nyang rayeuk — teuma jeuet keu bansa namiet.",
+    "events": [
+     "Yusuf, nyang teupubloe, jiek jeuet keu peumimpén di Meusé",
+     "Banmandum keuluarga Yakub jitron u Meusé keu jipeulheueh droe nibak buda rayeuk",
+     "Bansa Israel nyang meukembang teupeujeuet keu namiet"
+    ]
+   },
+   "sinai": {
+    "name": "Gunong Sinai",
+    "book": "Keuluaran · Imeum-imeum",
+    "today": "Semenanjong Sinai bak jinoe",
+    "note": "Keuseulamatan inti Peujanjian Lama — namiet jeuet keu umat Allah keudroe.",
+    "events": [
+     "Siploh balaʼ ngon aneuëk bubiri Paskah",
+     "Laôt Mirah teuplah dan awaknyan meurambah",
+     "Siploh Huköm, Huköm nyan, baét seumbahyang ngon peunsembahan"
+    ]
+   },
+   "kadesh": {
+    "name": "Kadesh (padang pasi)",
+    "book": "Teubileueng · Kitab Teu-ulang",
+    "today": "padang pasi Sinai–Negev bak jinoe",
+    "note": "Hana iman peujeuet saboh keuturonan gadôh nanggroe — teuma Allah teutab ngon awaknyan.",
+    "events": [
+     "Dua blah ureuëng peuninjo — teuma umat hana jitem peucaya",
+     "38 thôn lam padang pasi — mana, awan ngon apui",
+     "Bak dataran Moab, khotbah akhé Musa (Kitab Teu-ulang)"
+    ]
+   },
+   "jericho": {
+    "name": "Yerikho",
+    "book": "Yosua",
+    "today": "Yerikho bak jinoe",
+    "note": "Bak akhé jih awaknyan tamong dan jicok nanggroe peujanjian.",
+    "events": [
+     "Krueng Yordan teuplah dan umat meurambah",
+     "Pageue Yerikho reubah",
+     "Meunang Kanaan dan bagi nanggroe"
+    ]
+   },
+   "shiloh": {
+    "name": "Silo (Hakém-hakém)",
+    "book": "Hakém-hakém · Rut",
+    "today": "Khirbet Seilun bak jinoe",
+    "note": "Ngon hana raja, tieb ureuëng jipeubuet peue nyang jipgalak — saboh raja nyang beuna jipeureulée.",
+    "events": [
+     "Baét seumbahyang teupeudong di Silo",
+     "Pusingan desya–teutindeh–peuseulamat (Debora, Gideon, Simson)",
+     "Rut — keusetiaan lam uroe seupôt, lam salaséelah Daud"
+    ]
+   },
+   "jerusalem": {
+    "name": "Yerusalem · Keurajeuen nyang Saboh",
+    "book": "1–2 Samuel · 1 Raja-raja",
+    "today": "Yerusalem bak jinoe",
+    "note": "Masa keuemah Israel — ngon peujanjian saboh raja nyang siumu masa.",
+    "events": [
+     "Saul raja phon, teuma Daud ngon Goliat",
+     "Peujanjian Daud — “takhta gata siumu masa” (2 Samuel 7)",
+     "Sulaiman geupeudong Baét Allah di Yerusalem"
+    ]
+   },
+   "samaria": {
+    "name": "Samaria · Keurajeuen nyang Teubagi",
+    "book": "Raja-raja · Nabi-nabi",
+    "today": "Sebastia bak jinoe",
+    "note": "Keurajeuen teubagi dan tron watée nabi-nabi jimeu-e.",
+    "events": [
+     "Lheueh Sulaiman, teubagi keu Yehuda ngon Israel",
+     "Seumah beureuhala nyang teuulang-ulang",
+     "Elia, Yesaya, Yeremia jimeu-e “tagisa” — dan jihrilho Almaseh"
+    ]
+   },
+   "nineveh": {
+    "name": "Niniwe (Asyur)",
+    "book": "2 Raja-raja 17 · Yunus",
+    "today": "Mosul, Irak bak jinoe",
+    "note": "Ngon jipubiarkan tieb-tieb peuingat, nanggroe utara reubah phon.",
+    "events": [
+     "Niniwe, ibukota Asyur",
+     "Keurajeuen utara reubah ubak Asyur (722 SM)",
+     "Yunus teu-utus u Niniwe"
+    ]
+   },
+   "babylon": {
+    "name": "Babel",
+    "book": "2 Raja-raja 25 · Daniel · Yehezkiel",
+    "today": "Hillah, Irak bak jinoe",
+    "note": "Malam nyang paleng seupôt — teuma peujanjian peuseulamat barô teutab na.",
+    "events": [
+     "Yerusalem reubah, Baét Allah teutot (586 SM)",
+     "Yehuda teuba u Babel",
+     "Daniel ngon Yehezkiel — iman ngon peunglihatan lam teubuang"
+    ]
+   },
+   "susa": {
+    "name": "Susan (Persia)",
+    "book": "Ester · Nehemia",
+    "today": "Syusy, Iran bak jinoe",
+    "note": "Bahkan bak até keurajeuen kafé, Allah geujaga umat Gobnyan.",
+    "events": [
+     "Persia jimeunang ateueh Babel",
+     "Ester geupeuseulamat ureuëng Yahudi nibak teupeumaté",
+     "Nehemia jimeudoʼa di keue raja dan teu-utus"
+    ]
+   },
+   "return": {
+    "name": "Woe u Yerusalem",
+    "book": "Ezra · Nehemia · Maleakhi",
+    "today": "Yerusalem bak jinoe",
+    "note": "Awaknyan jiwoe dan jipeudong lom — teuma hana raja nyang teuka. Awaknyan jipreh Almaseh.",
+    "events": [
+     "Lhée galombang woe rot titah Kores (Zerubabel 538 · Ezra 458 · Nehemia 444)",
+     "Baét Allah teupeudong lom ngon pageue Yerusalem teupeuseulamat",
+     "Maleakhi — Peujanjian Lama jitôp: “Lôn kirém utosan Lôn”"
+    ]
+   }
+  },
+  "labels": [
+   "Laôt Meditérania",
+   "Mesopotamia",
+   "Padang Pasi Arab",
+   "Meusé"
+  ],
+  "journeys": {
+   "flow": "Haba keuseulamatan"
+  }
+ },
+ "jesus": {
+  "places": {
+   "bethlehem": {
+    "name": "Betlehem",
+    "book": "Matius 1–2 · Lukas 2",
+    "today": "Betlehem bak jinoe",
+    "note": "Almaseh nyang teupeujanji geuteuka u banda Daud — Feureuman nyang jeuet keu manusia.",
+    "events": [
+     "Lahé di Betlehem, banda Daud",
+     "Malaikat jipeugah haba keu ureuëng jaga bubiri",
+     "Ureuëng pandé nibak timu jiteuka keu jiseumah Gobnyan"
+    ]
+   },
+   "nazareth": {
+    "name": "Nazaret",
+    "book": "Lukas 2 · 4",
+    "today": "Nazaret bak jinoe",
+    "note": "Allah rayeuk lagée manusia lam saboh banda biasa.",
+    "events": [
+     "Rayeuk lam rumoh tukang kayée",
+     "Bak umu dua blah thôn, jimeutanyong-jaweueb lam Baét Allah",
+     "Dudoe teutulak lam sinagoge banda asai jih"
+    ]
+   },
+   "jordan": {
+    "name": "Krueng Yordan",
+    "book": "Matius 3–4",
+    "today": "Yordan miyueb bak jinoe",
+    "note": "Buet umum Gobnyan jiphon — langét geupeusaksi Gobnyan sibagoe Aneuëk.",
+    "events": [
+     "Teupumandi lé Yahya",
+     "Roh geutron lagée meureupati — “Nyoe na kheueh Aneuëk Ulôn nyang Ulôn gaséh”",
+     "Geumeunang ateueh lhée gôda Iblih lam padang pasi"
+    ]
+   },
+   "cana": {
+    "name": "Kana",
+    "book": "Yahya 2",
+    "today": "Kafr Kanna bak jinoe",
+    "note": "Lam tanda phon Gobnyan geupeuleumah keuagongan Gobnyan.",
+    "events": [
+     "Jadi jamée bak saboh keunuri kawén",
+     "Ié jeuet keu ié anggô — tanda phon Gobnyan",
+     "Murid-murid Gobnyan jimeuiman bak Gobnyan"
+    ]
+   },
+   "sychar": {
+    "name": "Sikhar (Samaria)",
+    "book": "Yahya 2–4",
+    "today": "toe Nablus bak jinoe",
+    "note": "Jalan rawngbri awai — rot Yerusalem trok u Samaria nyang teuhina.",
+    "events": [
+     "Gobnyan geupeugleh Baét Allah di Yerusalem",
+     "Bak malam, Nikodemus — “gata harôh talahé lom”",
+     "Ié udeb keu sidroe inong Samaria"
+    ]
+   },
+   "capernaum": {
+    "name": "Kapernaum",
+    "book": "Matius 4–13 · Markus 1–4",
+    "today": "binéh dano Galilea bak jinoe",
+    "note": "Pusat rawngbri Galilea — hôi, peurunoe, ngon lawan bandum meurumpok disinoe.",
+    "events": [
+     "Geuhôi ureuëng meugumba eungkôt dan geupeudong pusat disinoe",
+     "Khotbah di Gunong — “Bahgia ureuëng nyang gasien roh”",
+     "Umpama keurajeuen — dan lawan nyang meutamah"
+    ]
+   },
+   "galilee": {
+    "name": "Dano Galilea",
+    "book": "Markus 4 · 6 · Yahya 6",
+    "today": "Dano Kinneret bak jinoe",
+    "note": "Ngon kuasa ateueh alam Gobnyan geupeuleumah soe Gobnyan.",
+    "events": [
+     "“Teumpaih, seungap” — Gobnyan geupeudami badé",
+     "Geubri makheun 5,000 ureuëng ngon limöng boh ruti ngon dua boh eungkôt",
+     "Geujak ateueh ié"
+    ]
+   },
+   "caesarea_p": {
+    "name": "Kaisarea Filipi",
+    "book": "Matius 16–17",
+    "today": "Banias bak jinoe",
+    "note": "Murid-murid jimuphom Gobnyan na kheueh Almaseh, dan jalan saleb teupeuhah.",
+    "events": [
+     "Peungakuan Petrus — “Droeneueh na kheueh Almaseh, Aneuëk Allah nyang udép”",
+     "Gobnyan geuphon geupeugah maté ngon beudôh lom Gobnyan",
+     "Teuubah rupa lam keuagongan di ateueh gunong"
+    ]
+   },
+   "jericho": {
+    "name": "Yerikho",
+    "book": "Lukas 18–19",
+    "today": "Yerikho bak jinoe",
+    "note": "Bak jalan ék u Yerusalem, Gobnyan geumita nyang sisat.",
+    "events": [
+     "Geubri kalon keu Bartimeus nyang buta",
+     "Geuhôi Sakheus si tukang cok cukè",
+     "“Aneuëk Manusia geuteuka keu geumita ngon peuseulamat nyang sisat”"
+    ]
+   },
+   "bethany": {
+    "name": "Betania",
+    "book": "Yahya 11–12",
+    "today": "al-Eizariya bak jinoe",
+    "note": "Gobnyan geupeuleumah kuasa ateueh maté bak malam sigohlom minggu akhé Gobnyan.",
+    "events": [
+     "Geupeu-udep lom Lazarus nibak kubu — “Ulôn na kheueh keubeudôhan ngon udeb”",
+     "Maryam jipreh minyeuk keu peukubu Gobnyan",
+     "Tanda nyoe peukreueh reuncana keu poh maté Gobnyan"
+    ]
+   },
+   "jerusalem": {
+    "name": "Yerusalem",
+    "book": "Matius 21–28 · Lukas 24 · Kisah Rasui-rasui 1",
+    "today": "Yerusalem bak jinoe",
+    "note": "Puncak nyang banmandum Alkitab tunyok — saleb, beudôh lom, ék u langét.",
+    "events": [
+     "Tamong ngon keumuliaan; Gobnyan geubalék lom meuja-meuja lam Baét Allah",
+     "Bak Buka Puasa akhé Gobnyan geurhah gaki murid-murid",
+     "Gobnyan geumaté bak saleb",
+     "Beudôh lom bak uroe keulhée, teuma ék u langét"
+    ]
+   }
+  },
+  "labels": [
+   "Laôt Meditérania",
+   "Galilea",
+   "Samaria",
+   "Yudea",
+   "Dekapolis",
+   "Perea",
+   "Laôt Maté"
+  ],
+  "journeys": {
+   "life": "Jalan Isa"
+  }
+ },
+ "paul": {
+  "places": {
+   "antioch": {
+    "name": "Antiokhia",
+    "book": "Kisah Rasui-rasui 13 · 15",
+    "today": "Antakya, Turki bak jinoe",
+    "note": "Gereja nyang meu-utus, bak pat misi bangsa kafé jiphon dan jiwoe.",
+    "events": [
+     "Lam doʼa Roh geupileh Barnabas ngon Saulus",
+     "Gereja bak pat murid-murid mula-mula geuhoi “Kristen”",
+     "Titék phon jak keu-1, keu-2, ngon keu-3"
+    ]
+   },
+   "seleucia": {
+    "name": "Seleukia",
+    "book": "Kisah Rasui-rasui 13:4",
+    "today": "Turki bak jinoe",
+    "note": "Pelabuhan Antiokhia — awaknyan meulayeue u Siprus.",
+    "events": []
+   },
+   "salamis": {
+    "name": "Salamis (Siprus)",
+    "book": "Kisah Rasui-rasui 13:5",
+    "today": "Siprus bak jinoe",
+    "note": "Peureunti phon di Siprus — jimeukhotbah lam sinagoge.",
+    "events": []
+   },
+   "paphos": {
+    "name": "Pafos",
+    "book": "Kisah Rasui-rasui 13:6-12",
+    "today": "Siprus bak jinoe",
+    "note": "Kuasa teupeuleumah ateueh ureuëng nyang lawan Haba Gét.",
+    "events": [
+     "Elimas si tukang sihé teupeujeuet buta",
+     "Sergius Paulus si gubernur jimeuiman",
+     "Nibak sinoe “Paulus” jimat peumimpén"
+    ]
+   },
+   "perga": {
+    "name": "Perga",
+    "book": "Kisah Rasui-rasui 13:13",
+    "today": "Antalya, Turki bak jinoe",
+    "note": "Pelabuhan di Pamfilia — disinoe Yahya Markus jiwoe.",
+    "events": []
+   },
+   "pantioch": {
+    "name": "Antiokhia Pisidia",
+    "book": "Kisah Rasui-rasui 13:14-50",
+    "today": "Yalvaç, Turki bak jinoe",
+    "note": "Haba Gét teupeuhah luah u bansa kafé.",
+    "events": [
+     "Khotbah panyang seujarah keuseulamatan lam sinagoge",
+     "Le that bansa kafé galak dan jiteurimong Feureuman",
+     "Teuusé lé lawan"
+    ]
+   },
+   "iconium": {
+    "name": "Ikonium",
+    "book": "Kisah Rasui-rasui 14:1-7",
+    "today": "Konya, Turki bak jinoe",
+    "note": "Le ureuëng jimeuiman, teuma teuaniaya peujeuet awaknyan jak laju.",
+    "events": []
+   },
+   "lystra": {
+    "name": "Listra",
+    "book": "Kisah Rasui-rasui 14:8-20",
+    "today": "Turki bak jinoe",
+    "note": "Teupujoe lagée dewa, teuma dudoe teurumbang batèe.",
+    "events": [
+     "Geupeu-puléh ureuëng cacat nibak lahé",
+     "Ureuëng ramé jitem peunsembahan keu awaknyan lagée dewa",
+     "Teurumbang batèe dan teutinggai lagée ka maté, teuma jibeudôh"
+    ]
+   },
+   "derbe": {
+    "name": "Derbe",
+    "book": "Kisah Rasui-rasui 14:20-21",
+    "today": "Turki bak jinoe",
+    "note": "Le murid teupeujeuet; awaknyan jiwoe keu jipeukong gereja.",
+    "events": []
+   },
+   "troas": {
+    "name": "Troas",
+    "book": "Kisah Rasui-rasui 16:8-10",
+    "today": "Turki bak jinoe",
+    "note": "Titék peuubah bak pat Haba Gét phon jak u Eropa.",
+    "events": [
+     "Peunglihatan sidroe ureuëng Makédonia",
+     "“Neujak keunoe neutulông kamoe”",
+     "Awaknyan laju meurambah u Eropa"
+    ]
+   },
+   "philippi": {
+    "name": "Filipi",
+    "book": "Kisah Rasui-rasui 16 · Filipi",
+    "today": "Yunani utara bak jinoe",
+    "note": "Gereja phon di Eropa — Haba Gét meunang bahkan lam glab.",
+    "events": [
+     "Lidia, ureuëng meukat kaén ungu, jimeuiman",
+     "Sidroe aneuëk namiet nyang jeuet meuramai teupeuleupah",
+     "Nyanyian tengoh malam, geumpa, keuluarga si jaga glab teupeuseulamat"
+    ]
+   },
+   "thess": {
+    "name": "Tesalonika",
+    "book": "Kisah Rasui-rasui 17 · 1–2 Tesalonika",
+    "today": "Tesaloniki, Yunani bak jinoe",
+    "note": "Feureuman jipeugronca banda dan lawan meuludak.",
+    "events": [
+     "Jimeududuek lam sinagoge lhée uroe Sabat",
+     "“Ureuëng nyang ka jipeubalék donya”",
+     "Awaknyan jiteubiet bak malam"
+    ]
+   },
+   "berea": {
+    "name": "Berea",
+    "book": "Kisah Rasui-rasui 17:10-15",
+    "today": "Veria, Yunani bak jinoe",
+    "note": "Ureuëng “mulia” nyang jipareksa Feureuman ngon droe jih.",
+    "events": [
+     "Awaknyan jiteurimong Feureuman ngon galak",
+     "Tieb uroe jipareksa Alkitab keu jicok pasti",
+     "Le ureuëng jimeuiman"
+    ]
+   },
+   "athens": {
+    "name": "Atena",
+    "book": "Kisah Rasui-rasui 17:16-34",
+    "today": "Atena, Yunani bak jinoe",
+    "note": "Lam banda ahli filsafat Gobnyan geumaklum “Allah nyang hana teuturi”.",
+    "events": [
+     "Até jih geujeuet sabab banda peunoh beureuhala",
+     "Bak Areopagus jimeukhotbah keuhai Peuncebta ngon beudôh lom",
+     "Teuseumeuruk, teuma na meunyaplek jimeuiman"
+    ]
+   },
+   "corinth": {
+    "name": "Korintus",
+    "book": "Kisah Rasui-rasui 18 · 1–2 Korintus",
+    "today": "Yunani bak jinoe",
+    "note": "Jimeuduek saboh thôn siteungoh, jipeudong gereja lam banda nyang jeuhet.",
+    "events": [
+     "Jipeugöt teuratak ngon Akwila ngon Priskila",
+     "“Bék takot… sabab Ulôn na ngon gata”",
+     "Le ureuëng Korintus jimeuiman dan teupumandi"
+    ]
+   },
+   "ephesus": {
+    "name": "Efesus",
+    "book": "Kisah Rasui-rasui 19 · Efesus",
+    "today": "Selçuk, Turki bak jinoe",
+    "note": "Até jak keu-3 — Feureuman meukembang u seuluruh Asia.",
+    "events": [
+     "Tieb uroe geupeurunoe dua thôn lam balée Tiranus",
+     "Kitab sihé teutot; buet-buet nyang meukuasa",
+     "Demetrius si tukang pirak jipeuphon huru-hara"
+    ]
+   },
+   "miletus": {
+    "name": "Miletus",
+    "book": "Kisah Rasui-rasui 20:17-38",
+    "today": "Turki bak jinoe",
+    "note": "Meususah-hate ngon ié mata keu tuha-tuha gereja Efesus.",
+    "events": [
+     "“Rawat gereja nyang Gobnyan bloe ngon darah Gobnyan keudroe”",
+     "Tuha-tuha jimo, sabab jiteupeue awaknyan hana kalon lom Gobnyan"
+    ]
+   },
+   "caesarea": {
+    "name": "Kaisarea",
+    "book": "Kisah Rasui-rasui 23–26",
+    "today": "binéh laôt Israel bak jinoe",
+    "note": "Dua thôn Gobnyan geubila Haba Gét di keue gubernur ngon raja.",
+    "events": [
+     "Peurkara di keue gubernur Feliks ngon Festus",
+     "Peumbélaan jih di keue Raja Agripa",
+     "“Ulôn banding u Kaisar” — laju u Roma"
+    ]
+   },
+   "jerusalem": {
+    "name": "Yerusalem",
+    "book": "Kisah Rasui-rasui 21–23",
+    "today": "Yerusalem bak jinoe",
+    "note": "Teumat lam Baét Allah, jalan jih sibagoe ureuëng teutawan jiphon.",
+    "events": [
+     "Teumat lé ureuëng ramé lam Baét Allah",
+     "Jimeubila droe di keue majeulis",
+     "Sibagoe wargeu Roma, teu-utus lam jaga u Kaisarea"
+    ]
+   },
+   "myra": {
+    "name": "Mira",
+    "book": "Kisah Rasui-rasui 27:5-6",
+    "today": "Demre, Turki bak jinoe",
+    "note": "Awaknyan piôh u kapai Aleksandria nyang jak u Roma.",
+    "events": []
+   },
+   "fairhaven": {
+    "name": "Pelabuhan Elok (Kreta)",
+    "book": "Kisah Rasui-rasui 27:8-12",
+    "today": "Kreta bak jinoe",
+    "note": "Peuingat Paulus keu piôh meulayeue hana teudeungoe.",
+    "events": []
+   },
+   "crete": {
+    "name": "Kreta",
+    "book": "Titus",
+    "today": "Kreta bak jinoe",
+    "note": "Lheueh teupeuleupah, pulo bak pat Gobnyan geutinggai Titus keu jipeuteupat gereja.",
+    "events": [
+     "Jitinggai Titus keu jipiléh tuha-tuha lam tieb banda",
+     "Jilakée peumimpén nyang hana cacat ngon setia",
+     "Jituléh surat keu Titus"
+    ]
+   },
+   "malta": {
+    "name": "Malta",
+    "book": "Kisah Rasui-rasui 27–28",
+    "today": "Malta bak jinoe",
+    "note": "Rot badé ngon karam kapai, peujanjian Allah teutab kong.",
+    "events": [
+     "Angén “timu laôt” peukaram kapai, teuma bandum 276 ureuëng seulamat",
+     "Teukab lé uleue beusa, teuma hana meuceudra",
+     "Geupeu-puléh ureuëng saket di pulo nyan"
+    ]
+   },
+   "syracuse": {
+    "name": "Sirakusa",
+    "book": "Kisah Rasui-rasui 28:12",
+    "today": "Sisilia, Itali bak jinoe",
+    "note": "Awaknyan piôh lhée uroe di Sisilia.",
+    "events": []
+   },
+   "puteoli": {
+    "name": "Puteoli",
+    "book": "Kisah Rasui-rasui 28:13-14",
+    "today": "Pozzuoli, Itali bak jinoe",
+    "note": "Awaknyan trok u Itali dan teujeumpôt lé syedara-syedara seiman.",
+    "events": []
+   },
+   "rome": {
+    "name": "Roma",
+    "book": "Kisah Rasui-rasui 28 · Surat-surat lam Glab · 2 Timotius",
+    "today": "Roma, Itali bak jinoe",
+    "note": "Haba Gét trok u até keurajeuen bak akhé jih — kon akhé teuma phon.",
+    "events": [
+     "Dua thôn lam tahanan rumoh, ngon brani jimaklum keurajeuen Allah",
+     "Nibak sinoe jituléh Surat-surat lam Glab (Efesus·Filipi·Kolose·Filemon)",
+     "Dudoe teutahan lom, jituléh 2 Timotius dan jeuet keu syahid — “Ulôn ka meuprang lam prang nyang gét, dan ka lôn peuhabéh gisa nyan”"
+    ]
+   }
+  },
+  "labels": [
+   "Laôt Meditérania",
+   "Laôt Aegea",
+   "Asia Ubit",
+   "Makédonia",
+   "Itali"
+  ],
+  "journeys": {
+   "j1": "Jak keu-1",
+   "j2": "Jak keu-2",
+   "j3": "Jak keu-3",
+   "rome": "Jak keu-4 · u Roma",
+   "j5": "Jak keu-5 · lheueh teupeuleupah"
+  }
+ }
+}

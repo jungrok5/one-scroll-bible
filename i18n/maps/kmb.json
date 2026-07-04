@@ -1,0 +1,636 @@
+{
+ "menuName": "Kimbundu",
+ "htmlLang": "kmb",
+ "dir": "ltr",
+ "locale": "kmb",
+ "brand": "Bibidia mu Mukanda Umoxi",
+ "docTitle": "Bibidia mu Mapa · Bibidia mu Mukanda Umoxi",
+ "metaDesc": "Landa o ndondo ia Kikutu kia Kale, o muenhu ua Jezú, ni o njila ja Phaulu mu mapa ia kidi — o Bibidia iabhitile mu jididi ja kidi.",
+ "s": {
+  "kicker": "Bibidia mu Mukanda Umoxi · Mapa",
+  "title": "Bibidia mu Mapa",
+  "verse": "“Kuma etu ki tua kaiela misoso iofunhe ni ndunge ja muthu uoso-uoso, kioso ki tua mi tudila o Njimbu ia unéne ni kuiza kua Ngana ietu, Jezú Kristu. Maji etu tuala tu jimbangi, kuma o unéne uê tua di muena-u ni mesuʼetu!” (II Phetele 1:16)",
+  "purpose": "O Bibidia ki kixinganeku kia phulu kana. Muene o disoneku dia athu a enda mu jididi ja kidi, mu mizuua ni majina ma kidi. Landa o njila jenhá mu mapa, mu ndondo ia thembu — tumbula kididi kimoxi, mba fiula ▶ phala kuenda mu kiô sene ku sene.",
+  "ot_kick": "① Kikutu kia Kale — mu thembu",
+  "ot_h": "Tunde ku dibhangelu katé ku kuvutuka ku Jeluzaleme",
+  "ot_lead": "Ki njila imoxi ngó kana, maji o kuenda kua musoso ua kubhuluka tunde ku dibhangelu: dibhangelu ni kubhua → o menha ma dikota ni Bábhele → o kikanenu (Abalahámi) → o ixi iakanenua → o Kutunda → o dikangu → o kufunga → o utuminu → o kubatuka → o ukuatelu → o kuvutuka.",
+  "je_kick": "② Kikutu Kiabhe — o muenhu ua Jezú",
+  "je_h": "Tunde ku Belene katé ku Jeluzaleme",
+  "je_lead": "Landa o muenhu ua Jezú kala o Jinjimbu Jiambote ji tanga, mu ndondo — tunde ku kuvualua kuê mu Belene, mu kubatizua kuê ni o sidivisu mu Galiléia, mu Samádia, katé ku dikulusu, o kufukunuka ni o kubandela mu Jeluzaleme.",
+  "pa_kick": "③ Kikutu Kiabhe — o njila ja Phaulu",
+  "pa_h": "Tunde ku Antiokia katé ku maẋokololo ma jixi — Loma",
+  "pa_lead": "Tunde ku Phentekostesi mu Jeluzaleme, kiebhi o Njimbu Iambote iasuluka ku kanga dia Judeia — mu Ásia Iofele ni Eulopa katé ku muxima ua utuminu. Sola njila imoxi mu jinjila jitanu (dia dianga·iaiadi·iatatu + o luendu ku Loma + ku rima dia kutunda kaleia) anga landa o ima ia Jipoxolo kumoxi ni o jimukanda jasonekua mu njila.",
+  "foot": "Ididila · O jididi ja landa o disoneku dia Bibidia ni o kuijiia kua jididi ja Bibidia (ni majina ma lelu bhu ki tokala). O jimbandu ja kalunga, o jingiji, ni o majiba ja tundu mu ididila ia jeografia iajikuka (Natural Earth), iabhungululua.",
+  "contact": "Mabhudisu · maxinganeku — <a id=\"contact\" class=\"mail\">Sonekena mukanda</a>",
+  "play": "Matekena",
+  "pause": "Xikama",
+  "today": "Lelu:",
+  "verseCite": "II Phetele 1:16"
+ },
+ "ot": {
+  "places": {
+   "eden": {
+    "name": "Edene (Dibhangelu · Kubhua)",
+    "book": "Dimatekenu 1–3",
+    "today": "o mbandu ua Tigris–Eufrate lelu",
+    "note": "Mu ngongo iabhangelua «iambote kiavulu», o ituxi iiza anga i batula o ukamba bhu kaẋi ka Nzambi ni o muthu.",
+    "events": [
+     "O dibhangelu mu mizuua isamanu — «iaxile iambote kiavulu»",
+     "O muthu uabhangelua mu kifua kia Nzambi",
+     "O kubhua, ni o kukatulua ku Edene",
+     "O kikanenu kia dianga kia Njimbu Iambote — «o mbutu ia muhatu i kà bula o mutue ua nhoka»"
+    ]
+   },
+   "noah": {
+    "name": "Alalate (o Menha ma Dikota)",
+    "book": "Dimatekenu 6–9",
+    "today": "Mulundu Ararate, ku kutunda kua Turkia lelu",
+    "note": "Nzambi u fundisa o ngongo iezala ni ituxi, maji u lamba o muenhu mu muiji umoxi.",
+    "events": [
+     "O ngongo iezala ni undumbu",
+     "O menha ma dikota, ni o ngalaua ia Noé",
+     "O kikutu ni o dikuma dia mu kilu — «ki ku kala dingi menha phala kubhukumuna o ngongo»"
+    ]
+   },
+   "babel": {
+    "name": "O Dibhata dia Bábhele",
+    "book": "Dimatekenu 11",
+    "today": "Iraque lelu (o kianga kia Sineare)",
+    "note": "Ku pholo ia usunga ua kusota o kilu, Nzambi u sanguna o mizui iâ ni o miiji mu ngongo ioso.",
+    "events": [
+     "«Tuzé tutunge mbanza ni dibhata dia kubandalela… tudibhane dijina»",
+     "Nzambi u sanguna o dimi diâ",
+     "O miiji i sanguka mu ngongo (Sineare — kurima Babilónha)"
+    ]
+   },
+   "ur": {
+    "name": "Ur",
+    "book": "Dimatekenu 12",
+    "today": "ku kuzuelu kua Iraque lelu",
+    "note": "O musoso ua kubhuluka ua Bibidia u matekena ni o kikanenu kia muthu umoxi.",
+    "events": [
+     "Nzambi u ixana Abalahámi ku Ur ua akua Kalade",
+     "«Ngi ku bhanga muiji ua dikota… o miiji ioso i kà zediuila mu eie»",
+     "Mu kuxikana u tunda o ixi iê"
+    ]
+   },
+   "haran": {
+    "name": "Halane",
+    "book": "Dimatekenu 12",
+    "today": "ku kuzuelu kua Turkia lelu",
+    "note": "Mu njila, u tambulula o kikanenu ku mbandu ua ixi iakanenua.",
+    "events": [
+     "O muiji ua Tela u xikama mu Halane",
+     "Tela u fua",
+     "Abalahámi u tunda phala Kanaane ku mivu 75"
+    ]
+   },
+   "shechem": {
+    "name": "Sikeme · Kanaane",
+    "book": "Dimatekenu 12–50",
+    "today": "Nablus lelu",
+    "note": "Mu ixi iakanenua o muiji uabhangela anga o kikutu ki bhita ku jindandu.",
+    "events": [
+     "Kubhokela mu Kanaane, o jisata dia dianga — «ku mbutu ié ngi bhana o ixi iii»",
+     "O kikutu (Dimatekenu 15) · Izaki · Jakobe",
+     "O an'a Jakobe akumi-aiadi — o mbutu ia jindandu akumi-aiadi"
+    ]
+   },
+   "egypt": {
+    "name": "Ijitu (Gosene)",
+    "book": "Dimatekenu 37–50 · Makatukilu 1",
+    "today": "Delta ia Nilo, Ijitu lelu",
+    "note": "O muiji ubhua mundu ua dikota — anga kurima mundu ua abhika.",
+    "events": [
+     "Zuze, uasumbisua, ubhua mfumu mu Ijitu",
+     "O muiji uoso ua Jakobe u loloka ku Ijitu mukonda dia nzala",
+     "O mundu ua Izalaiele u kula anga ubhua ubhika"
+    ]
+   },
+   "sinai": {
+    "name": "Mulundu Sinai",
+    "book": "Makatukilu · Ijila",
+    "today": "o mbandu ua Sinai lelu",
+    "note": "O kibhuluku kia dikota kia Kikutu kia Kale — abhika a bhua mundu ua Nzambi.",
+    "events": [
+     "O mahadi akumi ni o mona a panda ua Phaxika",
+     "O Kalunga Kakusuka ka batuka anga a bhitila",
+     "O Itumu Ikumi, o Kitumu, o tembulu ni o jisata"
+    ]
+   },
+   "kadesh": {
+    "name": "Kadesi (o dikangu)",
+    "book": "Dialuilu · Matendelelu",
+    "today": "o dikangu dia Sinai–Negebe lelu",
+    "note": "O kukamba kuxikana ku katula ku muiji o ixi — maji Nzambi u kala kumoxi ni ene.",
+    "events": [
+     "O axidi akumi-aiadi — maji o mundu u bhinga kuxikana",
+     "Mivu 38 mu dikangu — o maná, o jingunga ja dikangu ni dia túbhia",
+     "Bhu kianga kia Moabe, o malongi ma disukilu ma Mozé (Matendelelu)"
+    ]
+   },
+   "jericho": {
+    "name": "Jeliko",
+    "book": "Josuué",
+    "today": "Jeliko lelu",
+    "note": "Ku disukilu a bhokela anga a funga o ixi iakanenua.",
+    "events": [
+     "O Jodáu ua batuka anga o mundu ua bhitila",
+     "O jimbaka ja Jeliko ja bhua",
+     "O kufunga kua Kanaane ni o kubatula o ixi"
+    ]
+   },
+   "shiloh": {
+    "name": "Xilo (Afundixi)",
+    "book": "Afundixi · Lute",
+    "today": "Khirbet Seilun lelu",
+    "note": "Sé sobha, muthu uoso u bhanga ki kiamuiukila — o sobha ua kidi u bhingiua.",
+    "events": [
+     "O tembulu di bhaka mu Xilo",
+     "O ngiluluka ia phulu–kifundisu–kubhuluka (Debola, Jideone, Sanasone)",
+     "Lute — o kidielela mu izuua ia dixima, mu uana ua Davidi"
+    ]
+   },
+   "jerusalem": {
+    "name": "Jeluzaleme · Utuminu Uakutakana",
+    "book": "I–II Samuuele · I Jisobha",
+    "today": "Jeluzaleme lelu",
+    "note": "O thembu iambote ia Izalaiele — ni o kikanenu kia sobha ua muku.",
+    "events": [
+     "Saúle o sobha ua dianga, kurima Davidi ni Goliata",
+     "O kikutu kia Davidi — «o kiandu kié ki kà xala muku» (II Samuuele 7)",
+     "Salomáu u tunga o tembulu mu Jeluzaleme"
+    ]
+   },
+   "samaria": {
+    "name": "Samádia · Utuminu Uabatuka",
+    "book": "Jisobha · o Jipolofeta",
+    "today": "Sebastia lelu",
+    "note": "O utuminu u batuka anga u fefuka kioso o jipolofeta a dikola.",
+    "events": [
+     "Ku rima dia Salomáu, o kubatuka mu Juda ni Izalaiele",
+     "O kulundila iteka kua kuiibhala",
+     "Eliia, Izaía, Jelemiia a dikola «vutukenu» — anga a londekesa o Masiia"
+    ]
+   },
+   "nineveh": {
+    "name": "Nínive (Asília)",
+    "book": "II Jisobha 17 · Jona",
+    "today": "Mosul, Iraque lelu",
+    "note": "Ku kubhingesa o malongomenu moso, o utuminu ua kumayuelu u bhua dianga.",
+    "events": [
+     "Nínive, o kasanji ka Asília",
+     "O utuminu ua kumayuelu u bhua kua Asília (722 K.K.)",
+     "Jona u tumikisua ku Nínive"
+    ]
+   },
+   "babylon": {
+    "name": "Babilónha",
+    "book": "II Jisobha 25 · Daniiele · Izekiiele",
+    "today": "Hillah, Iraque lelu",
+    "note": "O usuku ua dixima kuhiana ioso — maji o kikanenu kia kuvutulula ki xala.",
+    "events": [
+     "Jeluzaleme u bhua, o tembulu di túbhia (586 K.K.)",
+     "Juda uambatua ku Babilónha",
+     "Daniiele ni Izekiiele — kuxikana ni ikimonekenu mu ukuatelu"
+    ]
+   },
+   "susa": {
+    "name": "Susa (Pélesia)",
+    "book": "Estere · Nehemiia",
+    "today": "Shush, Irã lelu",
+    "note": "Né mu muxima ua utuminu ua akua jixi, Nzambi u langa o mundu uê.",
+    "events": [
+     "Pélesia i xina Babilónha",
+     "Estere u bhulula o aJudé ku kufua",
+     "Nehemiia u samba ku pholo ia sobha anga u tumikisua"
+    ]
+   },
+   "return": {
+    "name": "O Kuvutuka ku Jeluzaleme",
+    "book": "Ejidala · Nehemiia · Malakiia",
+    "today": "Jeluzaleme lelu",
+    "note": "A vutuka anga a tunga — maji sobha ki ueza. A kinga o Masiia.",
+    "events": [
+     "Jindenge jitatu ja kuvutuka mu kitumu kia Sílo (Zolobabele 538 · Ejidala 458 · Nehemiia 444)",
+     "O tembulu di tungulula anga o jimbaka ja Jeluzaleme ja tungulula",
+     "Malakiia — o Kikutu kia Kale ki sukila: «ngi tumikisa o mukunji uami»"
+    ]
+   }
+  },
+  "labels": [
+   "Kalunga ka Kaxi",
+   "Mezopotámia",
+   "Dikangu dia Alábhia",
+   "Ijitu"
+  ],
+  "journeys": {
+   "flow": "O musoso ua kubhuluka"
+  }
+ },
+ "jesus": {
+  "places": {
+   "bethlehem": {
+    "name": "Belene",
+    "book": "Matesu 1–2 · Luka 2",
+    "today": "Belene lelu",
+    "note": "O Masiia uakanenua ueza ku mbanza ia Davidi — o Diambu dia bhanga xitu.",
+    "events": [
+     "Uavualua mu Belene, o mbanza ia Davidi",
+     "O jianju a tangela o afunga o njimbu",
+     "O alobhi a jixi eza kubheza"
+    ]
+   },
+   "nazareth": {
+    "name": "Nazaleti",
+    "book": "Luka 2 · 4",
+    "today": "Nazaleti lelu",
+    "note": "Nzambi u kula kala muthu mu mbanza ia kifua.",
+    "events": [
+     "Uatekulua mu nzo ia salabhixi ua mabhaia",
+     "Ku mivu akumi-aiadi, u ibhula ni u tambujila mu tembulu",
+     "Kurima a mu xina mu nzo ia kibhanga ia mbanza iê"
+    ]
+   },
+   "jordan": {
+    "name": "O Ngiji ia Jodáu",
+    "book": "Matesu 3–4",
+    "today": "o mbandu ua bhoxi ua Jodáu lelu",
+    "note": "O sidivisu uê ua bhonga u matekena — o diulu di mu xikina kala Mona.",
+    "events": [
+     "Uabatizua kua Nzuá",
+     "O Nzumbi i loloka kala pumbu — «Iú Mona ami ua kazola»",
+     "U xina o kutuata kutatu kua Satanaji mu dikangu"
+    ]
+   },
+   "cana": {
+    "name": "Kana",
+    "book": "Nzuá 2",
+    "today": "Kafr Kanna lelu",
+    "note": "Mu dikuma diê dia dianga u londekesa o unène uê.",
+    "events": [
+     "Ungenji mu ukulu",
+     "O menha ma bilula vinhu — o dikuma diê dia dianga",
+     "O adisíbulu jê a mu xikina"
+    ]
+   },
+   "sychar": {
+    "name": "Sikale (Samádia)",
+    "book": "Nzuá 2–4",
+    "today": "ku mbandu ua Nablus lelu",
+    "note": "O njila ia sidivisu ia dianga — mu Jeluzaleme katé ku Samádia iaxinwa.",
+    "events": [
+     "U zelesa o tembulu mu Jeluzaleme",
+     "Ku usuku, Nikodemu — «Uatokala kuvualua dingi»",
+     "Menha ma muenhu ku muhatu ua Samádia"
+    ]
+   },
+   "capernaum": {
+    "name": "Kapenaú",
+    "book": "Matesu 4–13 · Marku 1–4",
+    "today": "ku mbandu ua kalunga ka Galiléia lelu",
+    "note": "O nzo ia sidivisu ia Galiléia — o kixanenu, o malongi, ni o kutata i sanga bhabha.",
+    "events": [
+     "U ixana o alobhi a jimbiji anga u xikama bhabha",
+     "O malongi ma ku mulundu — «A di besá o asukami mu nzumbi»",
+     "O jisabhu ja Utuminu — ni o kutata kuakola"
+    ]
+   },
+   "galilee": {
+    "name": "Kalunga ka Galiléia",
+    "book": "Marku 4 · 6 · Nzuá 6",
+    "today": "o Dijiba dia Kinerete lelu",
+    "note": "Ni o nguzu iê ku thandu dia ngongo u londekesa o kála kuê.",
+    "events": [
+     "«Tululuka, kala kie» — u tulula o kitembu",
+     "U disa athu 5.000 ni mbolo jitanu ni jimbiji jiiadi",
+     "U enda ku thandu dia menha"
+    ]
+   },
+   "caesarea_p": {
+    "name": "Kezaléia ia Filipe",
+    "book": "Matesu 16–17",
+    "today": "Banias lelu",
+    "note": "O adisíbulu a kijiia kuma muene o Kristu, anga o njila ia dikulusu i jikuka.",
+    "events": [
+     "O kuxikana kua Phetele — «Eie o Kristu, o Mona a Nzambi ua muenhu»",
+     "U londekesa dianga o kufua ni o kufukunuka kuê",
+     "U balumuka mu unène ku mulundu"
+    ]
+   },
+   "jericho": {
+    "name": "Jeliko",
+    "book": "Luka 18–19",
+    "today": "Jeliko lelu",
+    "note": "Mu njila ia kubandalela ku Jeluzaleme, u sota o iajimbidila.",
+    "events": [
+     "U jikula o mesu ma Bartimeu o mufofo",
+     "U ixana Zakeu o mufutisi",
+     "«O Mona a muthu ueza kusota ni kubhulula o iajimbidila»"
+    ]
+   },
+   "bethany": {
+    "name": "Betánia",
+    "book": "Nzuá 11–12",
+    "today": "al-Eizariya lelu",
+    "note": "U londekesa o kála kuê ku thandu dia kufua ku dizubhilu dia simana iê ia disukilu.",
+    "events": [
+     "U balumuna Lázalu ku mbila — «Eme o kufukunuka ni o muenhu»",
+     "Madiya u mu bhaka maji phala o kuziika",
+     "O dikuma diki di kolesa o kudibhonza phala ku mu jibha"
+    ]
+   },
+   "jerusalem": {
+    "name": "Jeluzaleme",
+    "book": "Matesu 21–28 · Luka 24 · Jipoxolo 1",
+    "today": "Jeluzaleme lelu",
+    "note": "O kifukutilu o Bibidia ioso i londekesa — dikulusu, kufukunuka, kubandela.",
+    "events": [
+     "O kubhokela mu ngenji; u balumuna dingi o jimeza ja tembulu",
+     "Ku Kúdia kua Disukilu u sukula o inama ia adisíbulu",
+     "U fua ku dikulusu",
+     "Ua fukunuka ku kizuua kiatatu, kurima ua bandela"
+    ]
+   }
+  },
+  "labels": [
+   "Kalunga ka Kaxi",
+   "Galiléia",
+   "Samádia",
+   "Judeia",
+   "Dekápoli",
+   "Peréia",
+   "Kalunga ka Kufua"
+  ],
+  "journeys": {
+   "life": "O njila ia Jezú"
+  }
+ },
+ "paul": {
+  "places": {
+   "antioch": {
+    "name": "Antiokia",
+    "book": "Jipoxolo 13 · 15",
+    "today": "Antakya, Turkia lelu",
+    "note": "O dingeleja dia kutumikisa mudi o sidivisu ku aJentiu di matekena anga di vutukila.",
+    "events": [
+     "Mu musambu o Nzumbi i sola Balunabe ni Saulu",
+     "O dingeleja mudi abheululu a a ixana o dianga «aKristau»",
+     "O kididi kia kumatekena o njila ia dianga, iaiadi ni iatatu"
+    ]
+   },
+   "seleucia": {
+    "name": "Seleukia",
+    "book": "Jipoxolo 13:4",
+    "today": "Turkia lelu",
+    "note": "O poltu ua Antiokia — a enda mu ngalaua ku Xipele.",
+    "events": []
+   },
+   "salamis": {
+    "name": "Salami (Xipele)",
+    "book": "Jipoxolo 13:5",
+    "today": "Xipele lelu",
+    "note": "O kididi kia dianga ku Xipele — a banza mu jinzo ja kibhanga.",
+    "events": []
+   },
+   "paphos": {
+    "name": "Pafu",
+    "book": "Jipoxolo 13:6-12",
+    "today": "Xipele lelu",
+    "note": "O nguzu i londekesa ku ana a tata o Njimbu Iambote.",
+    "events": [
+     "Elima o muloji u bhua mufofo",
+     "Selujiu Paulu o mfumu u xikina",
+     "Tunde bhabha «Phaulu» u tuala ku pholo"
+    ]
+   },
+   "perga": {
+    "name": "Perga",
+    "book": "Jipoxolo 13:13",
+    "today": "Antalya, Turkia lelu",
+    "note": "O poltu mu Panfília — bhabha Nzuá Marku u vutuka.",
+    "events": []
+   },
+   "pantioch": {
+    "name": "Antiokia ia Pisídia",
+    "book": "Jipoxolo 13:14-50",
+    "today": "Yalvaç, Turkia lelu",
+    "note": "O Njimbu Iambote i jikuka ku aJentiu.",
+    "events": [
+     "Musunji ua leba ua musoso ua kubhuluka mu nzo ia kibhanga",
+     "AJentiu avulu a sanguluka anga a tambula o Diambu",
+     "A a kaie ku kutata"
+    ]
+   },
+   "iconium": {
+    "name": "Ikónio",
+    "book": "Jipoxolo 14:1-7",
+    "today": "Konya, Turkia lelu",
+    "note": "Avulu a xikina, maji o kufikidisa ku a bhingesa kuenda ku pholo.",
+    "events": []
+   },
+   "lystra": {
+    "name": "Listala",
+    "book": "Jipoxolo 14:8-20",
+    "today": "Turkia lelu",
+    "note": "A mu ixana kala nzambi, kurima a mu takula matadi.",
+    "events": [
+     "U uikisa muthu ua kilema tunde ku kuvualua",
+     "O mundu u sota ku bhana jisata kua ene kala jinzambi",
+     "A mu takula matadi anga a mu xisa kala uafu, maji u balumuka"
+    ]
+   },
+   "derbe": {
+    "name": "Delbe",
+    "book": "Jipoxolo 14:20-21",
+    "today": "Turkia lelu",
+    "note": "A bhanga adisíbulu avulu; a vutuka mu njila phala kukolesa o jingeleja.",
+    "events": []
+   },
+   "troas": {
+    "name": "Toloa",
+    "book": "Jipoxolo 16:8-10",
+    "today": "Turkia lelu",
+    "note": "O kididi kia kubiluka mudi o Njimbu Iambote i ia dianga ku Eulopa.",
+    "events": [
+     "O kimonekenu kia diiala dia Masedónia",
+     "«Zúke kuku, u tu kuatekese»",
+     "A bhitila mu Eulopa lukasu"
+    ]
+   },
+   "philippi": {
+    "name": "Filipe",
+    "book": "Jipoxolo 16 · Filipe",
+    "today": "ku kumayuelu kua Gelésia lelu",
+    "note": "O dingeleja dia dianga dia Eulopa — o Njimbu Iambote i xina né mu kaleia.",
+    "events": [
+     "Lídia, o musumbisi ua jinguu ja púlupula, u xikina",
+     "O mubhika ua muhatu ua kutela makutu u bhululua",
+     "O jinjimbu ku uttu, o kudikina kua ixi, o muiji ua mulangidi ua kaleia ubhuluka"
+    ]
+   },
+   "thess": {
+    "name": "Tesalonika",
+    "book": "Jipoxolo 17 · I–II Tesalonika",
+    "today": "Tesaloniki, Gelésia lelu",
+    "note": "O Diambu di dikina o mbanza anga o kutata ku vokiya.",
+    "events": [
+     "U zuela mu nzo ia kibhanga jisábhalu jitatu",
+     "«Ana a bhalumuna o ngongo»",
+     "A tunda ku usuku"
+    ]
+   },
+   "berea": {
+    "name": "Bereia",
+    "book": "Jipoxolo 17:10-15",
+    "today": "Veria, Gelésia lelu",
+    "note": "O «aiuka» a tonginina o Diambu ene muene.",
+    "events": [
+     "A tambula o Diambu ni muxima uoso",
+     "Izuua ni izuua a tonginina o Madivulu phala ku ki setekesa",
+     "Avulu a bhita mu kuxikana"
+    ]
+   },
+   "athens": {
+    "name": "Atena",
+    "book": "Jipoxolo 17:16-34",
+    "today": "Atena, Gelésia lelu",
+    "note": "Mu mbanza ia jindunge u banza o «Nzambi ka a mu ijiia».",
+    "events": [
+     "U dikexila mukonda dia mbanza iezala ni iteka",
+     "Bhu Aleópago u banza o Mubhangi ni o kufukunuka",
+     "A mu zomba, maji amoxi a xikina"
+    ]
+   },
+   "corinth": {
+    "name": "Kolindo",
+    "book": "Jipoxolo 18 · I–II Kolindo",
+    "today": "Gelésia lelu",
+    "note": "U xikama muku ua mivu umoxi ni kaxi, u tunga dingeleja mu mbanza ia undumbu.",
+    "events": [
+     "U bhanga jitenda ni Akila ni Priskila",
+     "«Ku u kale ni uoma… mukonda ngala ni eie»",
+     "AKolindo avulu a xikina anga a batizua"
+    ]
+   },
+   "ephesus": {
+    "name": "Efezo",
+    "book": "Jipoxolo 19 · Efezo",
+    "today": "Selçuk, Turkia lelu",
+    "note": "O muxima ua njila iatatu — o Diambu di suluka mu Ásia ioso.",
+    "events": [
+     "O malongi ma izuua ni izuua mivu iiadi mu nzo ia Tilanu",
+     "O madivulu a uanga a jó; o ikalakalu ia nguzu",
+     "Demétliu o musongi ua palata u matekena o ngula"
+    ]
+   },
+   "miletus": {
+    "name": "Mileto",
+    "book": "Jipoxolo 20:17-38",
+    "today": "Turkia lelu",
+    "note": "O kusakela kua masoxi ku jindala ja Efezo.",
+    "events": [
+     "«Langenu o dingeleja ki ua sumba ni manhinga mê muene»",
+     "O jindala a dila, a kijiia kuma ki a mu mona dingi"
+    ]
+   },
+   "caesarea": {
+    "name": "Kezaléia",
+    "book": "Jipoxolo 23–26",
+    "today": "ku mbandu ua kalunga ka Izalaiele lelu",
+    "note": "Mu mivu iiadi u dizuelela o Njimbu Iambote ku pholo ia jimfumu ni sobha.",
+    "events": [
+     "O kufundisa ku pholo ia jimfumu Felísi ni Festu",
+     "O kudizuelela kuê ku pholo ia sobha Agilipa",
+     "«Ngi bhinga o kufundisa kua Kézali» — ku Loma"
+    ]
+   },
+   "jerusalem": {
+    "name": "Jeluzaleme",
+    "book": "Jipoxolo 21–23",
+    "today": "Jeluzaleme lelu",
+    "note": "A mu kuata mu tembulu, o njila iê ia ubhika i matekena.",
+    "events": [
+     "A mu kuata kua mundu mu tembulu",
+     "U dizuelela ku pholo ia kibuka kia jindala",
+     "Kala mukua ixi ua Loma, a mu tumikisa ni masoladi ku Kezaléia"
+    ]
+   },
+   "myra": {
+    "name": "Mira",
+    "book": "Jipoxolo 27:5-6",
+    "today": "Demre, Turkia lelu",
+    "note": "A bhituluka ku ngalaua ia Alesandília iaia ku Loma.",
+    "events": []
+   },
+   "fairhaven": {
+    "name": "Jipoltu Jiambote (Kelete)",
+    "book": "Jipoxolo 27:8-12",
+    "today": "Kelete lelu",
+    "note": "O kudimuna kua Phaulu phala kuxikama ku kuenda ka a mu ivua.",
+    "events": []
+   },
+   "crete": {
+    "name": "Kelete",
+    "book": "Tito",
+    "today": "Kelete lelu",
+    "note": "Kurima dia kutunda kaleia, o dixi mudi u xisa Tito phala kuiudika o jingeleja.",
+    "events": [
+     "U xisa Tito phala kubhaka atuameni mu mbanza ioso",
+     "U bhinga atuameni ka a mu zuata, a kidielela",
+     "U soneka o mukanda kua Tito"
+    ]
+   },
+   "malta": {
+    "name": "Malata",
+    "book": "Jipoxolo 27–28",
+    "today": "Malata lelu",
+    "note": "Ku thandu dia kitembu ni kubhukumuka kua ngalaua, o kikanenu kia Nzambi ki kola.",
+    "events": [
+     "O «kitembu kia norte» ki bhukumuna o ngalaua, maji athu 276 oso a bhuluka",
+     "U mu suma o nhoka, maji ka bhuile kima",
+     "U bhulula akua kata a dixi"
+    ]
+   },
+   "syracuse": {
+    "name": "Sirakuza",
+    "book": "Jipoxolo 28:12",
+    "today": "Sisília, Itália lelu",
+    "note": "A xikama izuua itatu mu Sisília.",
+    "events": []
+   },
+   "puteoli": {
+    "name": "Puteoli",
+    "book": "Jipoxolo 28:13-14",
+    "today": "Pozzuoli, Itália lelu",
+    "note": "A bhitila mu Itália anga o jiphange ja a tambula.",
+    "events": []
+   },
+   "rome": {
+    "name": "Loma",
+    "book": "Jipoxolo 28 · Jimukanda ja Kaleia · II Timote",
+    "today": "Loma, Itália lelu",
+    "note": "O Njimbu Iambote i bhixila ku muxima ua utuminu ku disukilu — ki disukilu kana, maji dimatekenu.",
+    "events": [
+     "Mivu iiadi mu kudilanga ku nzo, u banza o Utuminu ua Nzambi sé uoma",
+     "Tunde bhabha u soneka o Jimukanda ja Kaleia (Efezo·Filipe·Kolose·Filemone)",
+     "Kurima a mu kuata dingi, u soneka o II Timote anga a mu jibhila o kuxikana — «Ngalua o kita kiambote, ngazubha o njila»"
+    ]
+   }
+  },
+  "labels": [
+   "Kalunga ka Kaxi",
+   "Kalunga ka Egeu",
+   "Ásia Iofele",
+   "Masedónia",
+   "Itália"
+  ],
+  "journeys": {
+   "j1": "Njila ia dianga",
+   "j2": "Njila iaiadi",
+   "j3": "Njila iatatu",
+   "rome": "Njila ia kuana · ku Loma",
+   "j5": "Njila ia katanu · ku rima dia kutunda kaleia"
+  }
+ }
+}

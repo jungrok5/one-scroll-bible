@@ -35,10 +35,10 @@
     "today": "Tɔ̀ Tigli kpó Efláti kpó sín xá ɔ́ égbé",
     "note": "Ðo gbɛ̀ e è bló bɔ é nyɔ́ ɖésú é mɛ ɔ́, hwɛ byɔ́ bo gbà kàn e ɖo Mawu kpó gbɛtɔ́ kpó tɛ́ntin é.",
     "events": [
-     "Nǔɖiɖó ɖo azǎn ayizɛ́n mɛ — “é nyɔ́ ɖésú”",
+     "Nǔɖiɖó ɖo azǎn ayizɛ́n mɛ — “nǔ ɖagbe wɛ yě nyí tawun”",
      "È bló gbɛtɔ́ dó Mawu sín nɔ̌ ɖɔhun",
      "Gbigbǎ ɔ́, kpó gbigbɛ́ sín Edɛni kpó",
-     "Akpá Wɛn Ɖagbe nukɔntɔn ɔ́ — “kúnkan nyɔ̌nu ɔ́ tɔn ná nyínyɛ́ ta nú dan ɔ́”"
+     "Akpá Wɛn Ɖagbe nukɔntɔn ɔ́ — “Kúnkan tɔn ná nɔ́ nyínyɛ́ ta nú we”"
     ]
    },
    "noah": {
@@ -49,7 +49,7 @@
     "events": [
      "Gbɛ̀ e gɔ́ kpó nǔ nyanya kpó é",
      "Singbe ɔ́, kpó Nɔwée sín tɔjihun ɔ́ kpó",
-     "Akɔ e wuntɔ́n ɖo jǐ mɛ ɔ́ zɛ̌n é — “singbe sɔ́ na sú kún dó nú nǔ ɖěbǔ gbeɖé ǎ”"
+     "Akɔ e wuntɔ́n ɖo jǐ mɛ ɔ́ zɛ̌n é — “tɔ ɖě sɔ́ ná gba gbɛ ɔ́, bó hu nǔ e ɖo gbɛ ɖo ayǐkúngban jí lɛ́ɛ ɖě gbeɖé ǎ”"
     ]
    },
    "babel": {
@@ -58,7 +58,7 @@
     "today": "Iraki égbé (Cináa sín ayǐkúngban ɔ́)",
     "note": "Ðo goyíyí e jló na yi jǐxwé é nukɔn ɔ́, Mawu vún gbe yětɔn kpó togun lɛ́ɛ kpó gba dó ayǐkúngban ɔ́ bǐ jí.",
     "events": [
-     "“Mǐ nú mǐ gbá toxo ɖé kpó xɔ ga ɖé kpó… bo ná ɖó nyǐkɔ nú mǐɖée”",
+     "“mǐ ní gbá toxo ɖaxó ɖokpó, síngbó ɖaxó ɖokpó… nyǐkɔ mǐtɔn ná yi jǐ”",
      "Mawu blí gbe yětɔn",
      "Togun lɛ́ɛ gba dó ayǐkúngban ɔ́ jí (Cináa — ée wá húzú Babilɔ́ni é)"
     ]
@@ -70,7 +70,7 @@
     "note": "Biblu ɔ́ sín hwlɛngán-tan ɔ́ bɛ́ kpó sunnu ɖokpó ylɔ́ylɔ́ kpó.",
     "events": [
      "Mawu ylɔ́ Ablámu tɔ́n sín Uu Kaldée lɛ́ɛ tɔn",
-     "“Un ná zé we dó bló akɔta ɖaxó ɖokpó ná… hɛ̌nnu lɛ́ɛ bǐ na mɔ nyɔ̌ná gbɔn jǐ towe”",
+     "“Un ná zé we dó bló akɔta ɖaxó ɖokpó ná… Hwi jí wɛ un ná gbɔn bó ná xo ɖɛ dó hɛ̌nnu e ɖo gbɛ ɔ́ mɛ lɛ́ɛ bǐ jí”",
      "Gbɔn nǔɖiɖi gblamɛ ɔ́, é jó tò tɔn dó"
     ]
    },
@@ -91,7 +91,7 @@
     "today": "Nablus égbé",
     "note": "Ðo ayǐkúngban e è dó akpá tɔn é mɛ ɔ́, è ɖó xwédo ɖé ayǐ bɔ akɔ ɔ́ gbɔn jǐjɔ̌ ɖokpó jɛ ɖokpó gúdo.",
     "events": [
-     "Byɔ́byɔ́ Kanáan mɛ, vɔ̌sákpe nukɔntɔn ɔ́ — “kúnkan towe wɛ un na ná ayǐkúngban élɔ́”",
+     "Byɔ́byɔ́ Kanáan mɛ, vɔ̌sákpe nukɔntɔn ɔ́ — “Un ná ná to élɔ́ kúnkan towe”",
      "Akɔ ɔ́ (Bǐbɛ́mɛ 15) · Izáki · Jakɔ́bu",
      "Jakɔ́bu sín vǐ wěwe (12) lɛ́ɛ — akɔta wěwe (12) lɛ́ɛ sín ɖǒ"
     ]
@@ -158,7 +158,7 @@
     "note": "Izlayɛ́li sín hwenu ɖagbe hú bǐ ɔ́ — kpódó axɔ́sú mavɔmavɔ ɖé sín akpá kpó.",
     "events": [
      "Sawúli axɔ́sú nukɔntɔn ɔ́, bɔ Davídi kpó Goliyáti kpó bɔ d'ewú",
-     "Akɔ Davídi tɔn ɔ́ — “axɔ́súzinkpo towe na nɔ ayǐ káká sɔ́yi” (2 Samuwɛ́li 7)",
+     "Akɔ Davídi tɔn ɔ́ — “vǐ towe lɛ́ɛ wɛ ná nɔ ɖu axɔ́sú ɖě jɛ ɖě gúdo káká sɔ́yi” (2 Samuwɛ́li 7)",
      "Salomɔ́ɔ gbá sinsɛnxɔ ɔ́ ɖo Jeluzalɛ́mu"
     ]
    },
@@ -214,7 +214,7 @@
     "events": [
      "Lɛlɛ́kɔ kpláwun atɔn gbɔn Silúsi sín sɛ́n gblamɛ (Zolobabɛ́li 538 · Ɛsidlási 458 · Nɛɛmíi 444)",
      "È lɛ́ gbá sinsɛnxɔ ɔ́ bo lɛ́ vɔ́ Jeluzalɛ́mu sín ahohó lɛ́ɛ ɖó te",
-     "Malacíi — Akɔ Xóxó ɔ́ sú kún: “Un na sɛ́ wɛnsagun ce dó”"
+     "Malacíi — Akɔ Xóxó ɔ́ sú kún: “Un sɛ́ wɛnsagun ce dó”"
     ]
    }
   },
@@ -259,7 +259,7 @@
     "note": "Azɔ̌ tɔn ɖo agbawungba bɛ́ — jǐxwé ɖe xlɛ́ ɖɔ Vǐ ɔ́ wɛ é nyí.",
     "events": [
      "Jaan bló baptɛ́mu n'i",
-     "Yɛ ɔ́ jɛte ahwannɛ́ ɖɔhun — “Vǐ ce vívɛ́ná ɔ́ ɖíe”",
+     "Yɛ ɔ́ jɛte ahwannɛ́ ɖɔhun — “Vǐ ce vívɛ́ná wɛ mɛ élɔ́ nyí”",
      "É ɖu ɖo Satáan sín tɛ́nkpɔ́n atɔn lɛ́ɛ jí ɖo gbětótló mɛ"
     ]
    },
@@ -281,7 +281,7 @@
     "note": "Azɔ̌ tɔn sín ali bǐbɛ́mɛ tɔn — gbɔn Jeluzalɛ́mu bo yi Samalíi e è nɔ́ gbɛ́ wǔ é.",
     "events": [
      "É slá wě nú sinsɛnxɔ ɔ́ ɖo Jeluzalɛ́mu",
-     "Ðo zǎn mɛ, Nikodɛ́mu — “È ɖó na lɛ́ jì we”",
+     "Ðo zǎn mɛ, Nikodɛ́mu — “lɛ̌vɔ́jɔ xó énɛ́ e un ɖɔ nú we”",
      "Sìn gbɛ̀ tɔn nú Samalíi-nyɔ̌nu ɖé"
     ]
    },
@@ -292,7 +292,7 @@
     "note": "Galilée azɔ̌ ɔ́ sín tɛ̀ntá — ylɔ́ylɔ́, nǔkplɔ́nmɛ kpó gbɛ̌dídó kpó bǐ kplé ɖ'afí.",
     "events": [
      "É ylɔ́ hwevíwlítɔ́ lɛ́ɛ bo sɔ́ fí dó zun tɛ̀ntá tɔn",
-     "Só-jí Mawuxóɖiɖɔ ɔ́ — “Nǔ nyɔ́ nú mɛ e nyí wamamɔnɔ ɖo yɛ mɛ é”",
+     "Só-jí Mawuxóɖiɖɔ ɔ́ — “Nǔ nyɔ́ nú mɛ e nyí wamamɔnɔ ɖo ayi mɛ lɛ́ɛ”",
      "Axɔ́súɖuto ɔ́ sín lǒ lɛ́ɛ — kpódó gbɛ̌dídó e ɖo súsú d'eji wɛ é kpó"
     ]
    },
@@ -302,7 +302,7 @@
     "today": "Galilée Xu ɔ́ (Kinelɛti) égbé",
     "note": "Gbɔn hlɔ̌nhlɔ́n e é ɖó dó nǔɖiɖó lɛ́ɛ jí é ɔ́, é ɖe mɛ e é nyí é xlɛ́.",
     "events": [
-     "“Nɔ abwɛ̌, cɛ́!” — é ɖɔ nú jɔhɔn ɖaxó ɔ́ bɔ é fá",
+     "“ní hwíhwɛ́” — é ɖɔ nú jɔhɔn ɖaxó ɔ́ bɔ é fá",
      "É ná nǔ ɖu mɛ afatɔ́n atɔ́ɔn (5.000) kpó wɔ̌xúxú atɔ́ɔn kpó hweví wè kpó",
      "É ɖi zɔnlin ɖo sìn jí"
     ]
@@ -313,7 +313,7 @@
     "today": "Baniyási égbé",
     "note": "Ahwanvu lɛ́ɛ mɔ nukúnnú jɛ wú ɖɔ Klísu ɔ́ wɛ é nyí, bɔ aklúzu ɔ́ sín ali hun.",
     "events": [
-     "Piyɛ́ɛ sín xóɖiɖɔ ɔ́ — “Hwi wɛ nyí Klísu ɔ́, Mawu gbɛɖe ɔ́ sín Vǐ ɔ́”",
+     "Piyɛ́ɛ sín xóɖiɖɔ ɔ́ — “Hwi wɛ nyí Klísu Mawu gbɛɖe ɔ́ sín Vǐ”",
      "É ɖɔ kú tɔn kpó fínfɔ́n sín kú tɔn kpó sín xó ɖ'ayǐ azɔn nukɔntɔn ɔ́",
      "È ɖyɔ́ ɛ ɖo susu mɛ ɖo só ɔ́ jí"
     ]
@@ -326,7 +326,7 @@
     "events": [
      "É hun nukún nú nukúntíntɔ́nnɔ Batimée",
      "É ylɔ́ takwɛyitɔ́ Zacée",
-     "“Gbɛtɔ́ ví ɔ́ wá bo na ba mɛ e bú é bo na hwlɛ́n ɛ gán”"
+     "“Mawu sɛ́ nyɛ Gbɛtɔ́ví ɔ́ dó, bónú má wá ba mɛ e bú lɛ́ɛ, bó hwlɛ́n yě gán”"
     ]
    },
    "bethany": {
@@ -335,7 +335,7 @@
     "today": "El-Ezaliya égbé",
     "note": "Ðo hwenu e é ko sɛ́ kpɔ́n aklúnɔzángbla gǔdo tɔn é ɔ́, é ɖe hlɔ̌nhlɔ́n tɔn dó kú jí xlɛ́.",
     "events": [
-     "É fɔ́n Lazáa sín kú — “Nyɛ wɛ nyí fínfɔ́n sín kú ɔ́ kpó gbɛ̀ ɔ́ kpó”",
+     "É fɔ́n Lazáa sín kú — “Nyɛ wɛ nyí fínfɔ́n sín kú, bo lɛ́ nyí gbɛ”",
      "Malíi kɔn ami dó wǔ tɔn dó ɖɔ ɖiɖi tɔn ɔ́",
      "Nǔjiwǔ énɛ́ ɔ́ dó wǔsyɛ́n nú gbětá e è ɖ'ayǐ bo na hu i é"
     ]
@@ -454,7 +454,7 @@
     "note": "Fí e nǔ ɖyɔ́ ɖè é, fí e Wɛn Ɖagbe ɔ́ xwe Ewlɔ́pu azɔn nukɔntɔn ɔ́ ɖè é.",
     "events": [
      "Masedoníi-nu ɖé sín nǔmimɔ ɖé",
-     "“Wǎ Masedoníi bo wá gɔ́ alɔ nú mǐ”",
+     "“Kɛnklɛ́n wǎ Masedwani, bó wá dó alɔ mǐ”",
      "Yě gbɔn yi Ewlɔ́pu tlóló"
     ]
    },
@@ -476,7 +476,7 @@
     "note": "Xó ɔ́ dán toxo ɔ́ bɔ gbɛ̌dídó fɔ́n syɛ́nsyɛ́n.",
     "events": [
      "É ɖɔ xó xá yě ɖo sinagɔ́gu ɔ́ mɛ Gbɔjɛzán atɔn",
-     "“Mɛ e ko blí gbɛ̀ ɔ́ bǐ dó é”",
+     "“Mɛ e dɔn to fúnlɛ̌n gbɔn gbɛ ɔ́ mɛ lɛ́ɛ”",
      "Yě zɔn ɖo zǎn mɛ"
     ]
    },
@@ -530,7 +530,7 @@
     "today": "Tuluki égbé",
     "note": "É dǒ mɔ̌ nú Efɛ́zi sín mɛxó lɛ́ɛ kpó ɖasin kpó.",
     "events": [
-     "“Mi kpé nukún dó agun e é xɔ kpó hun étɔ́n ɖésú kpó é wú”",
+     "“hɛn ayi dó agun Mawu tɔn… e Mawu xɔ gbɔn Vǐ é ɖésúnɔ tɔn sín kú gbla mɛ”",
      "Mɛxó lɛ́ɛ ya avǐ, ɖó yě tunwun ɖɔ émí sɔ́ na mɔ ɛ ǎ"
     ]
    },
@@ -542,7 +542,7 @@
     "events": [
      "Hwɛɖɔ ɖo toxo-gán Felíki kpó Fɛsitusi kpó nukɔn",
      "Xóɖɔ́ e é ɖɔ ɖe éɖée síìn ɖo axɔ́sú Agilipa nukɔn é",
-     "“Un sɔ́ hwɛ ce dó Sezáa” — bo xwe Hlɔ́ma"
+     "“un ylɔ́ hwɛ ɖaxó ɖo Dadá Hlɔ̌ma tɔn gɔ́n” — bo xwe Hlɔ́ma"
     ]
    },
    "jerusalem": {
@@ -614,7 +614,7 @@
     "events": [
      "Xwe wè ɖo gan-ninɔ ɖo xwé gbe, é jla axɔ́súɖuto ɔ́ kpó akɔ́nkpinkɔ́n kpó",
      "Sín fí ɔ́, é wlán Gankpámɛ-wěma lɛ́ɛ (Efɛ́zinu·Filípunu·Kolósinu·Filemɔ́ɔ)",
-     "Ée é wá yì é ɔ́, è lɛ́ sɔ́ ɛ dó gankpa mɛ, é wlán 2 Timɔtée bɔ è hu i ɖó nǔɖiɖi tɔn wú — “Un fun ahwan ɖagbe ɔ́, un kán wezun ɔ́ dó fó”"
+     "Ée é wá yì é ɔ́, è lɛ́ sɔ́ ɛ dó gankpa mɛ, é wlán 2 Timɔtée bɔ è hu i ɖó nǔɖiɖi tɔn wú — “Un fun ahwan ɖagbe ɔ́; un dó wezun ɔ́ káká yi vivɔnu”"
     ]
    }
   },

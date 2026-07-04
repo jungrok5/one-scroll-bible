@@ -1,0 +1,636 @@
+{
+ "menuName": "Íslenska",
+ "htmlLang": "is",
+ "dir": "ltr",
+ "locale": "is-IS",
+ "brand": "Biblían í einni skrun",
+ "docTitle": "Biblían eftir korti · Biblían í einni skrun",
+ "metaDesc": "Rektu tímalínu Gamla testamentisins, líf Jesú og ferðir Páls á raunverulegu korti — Biblían gerðist á raunverulegum stöðum.",
+ "s": {
+  "kicker": "Biblían í einni skrun · Kort",
+  "title": "Biblían eftir korti",
+  "verse": "“Ekki notaði ég uppspunnar skröksögur er ég kunngjörði ykkur mátt og komu Drottins vors Jesú Krists heldur hafði ég verið sjónarvottur að hátign hans.” (Síðara Pétursbréf 1:16)",
+  "purpose": "Biblían er ekki goðsaga. Hún er frásögn af fólki sem gekk um raunverulega staði, dagsetningar og nöfn. Rektu þessar slóðir á korti, í tímaröð — pikkaðu á punkt, eða ýttu á ▶ til að ganga í gegnum hana skref fyrir skref.",
+  "ot_kick": "① Gamla testamentið — gegnum tímann",
+  "ot_h": "Frá sköpun til heimkomunnar til Jerúsalem",
+  "ot_lead": "Ekki ein einstök ferð heldur straumur endurlausnarsögunnar frá sköpun og áfram: sköpun og fall → flóð og Babel → köllun (Abraham) → fyrirheitna landið → brottförin → eyðimörkin → landnám → konungsríki → klofningur → útlegð → heimkoma.",
+  "je_kick": "② Nýja testamentið — líf Jesú",
+  "je_h": "Frá Betlehem til Jerúsalem",
+  "je_lead": "Fylgdu lífi Jesú eins og guðspjöllin segja frá því, í röð — frá fæðingu hans í Betlehem gegnum skírn hans og þjónustuna í Galíleu, yfir Samaríu, til krossins, upprisunnar og uppstigningarinnar í Jerúsalem.",
+  "pa_kick": "③ Nýja testamentið — ferðir Páls",
+  "pa_h": "Frá Antíokkíu til endimarka jarðar — Rómar",
+  "pa_lead": "Frá hvítasunnu í Jerúsalem, hvernig fagnaðarerindið breiddist út fyrir Júdeu — gegnum Litlu-Asíu og Evrópu til hjarta keisaradæmisins. Veldu eina af ferðunum fimm (1. · 2. · 3. + sjóferðin til Rómar + eftir lausn) og fylgdu atburðum Postulasögunnar með bréfunum sem rituð voru á leiðinni.",
+  "foot": "Heimildir · Staðir fylgja biblíutextanum og hefðbundinni biblíulandafræði (með nútímanöfnum þar sem það hjálpar). Strandlínur, ár og vötn eru byggð á opnum landfræðigögnum (Natural Earth), einfölduð.",
+  "contact": "Spurningar · ábendingar — <a id=\"contact\" class=\"mail\">Sendu okkur tölvupóst</a>",
+  "play": "Spila",
+  "pause": "Hlé",
+  "today": "Í dag:",
+  "verseCite": "Síðara Pétursbréf 1:16"
+ },
+ "ot": {
+  "places": {
+   "eden": {
+    "name": "Eden (Sköpun · Fall)",
+    "book": "Fyrsta Mósebók 1–3",
+    "today": "svæði Tígris og Efrat í dag",
+    "note": "Inn í heim sem var gerður harla góður kemur synd og slítur bandið milli Guðs og manns.",
+    "events": [
+     "Sköpun á sex dögum — „það var harla gott“",
+     "Maðurinn skapaður í mynd Guðs",
+     "Fallið, og brottrekstur úr Eden",
+     "Fyrsta fyrirheit fagnaðarerindisins — „niðji konunnar skal merja höfuð höggormsins“"
+    ]
+   },
+   "noah": {
+    "name": "Ararat (Flóðið)",
+    "book": "Fyrsta Mósebók 6–9",
+    "today": "Araratfjall í austurhluta Tyrklands í dag",
+    "note": "Guð dæmir heim fullan af synd, en varðveitir þó líf gegnum eina fjölskyldu.",
+    "events": [
+     "Heimur fullur af spillingu",
+     "Flóðið, og örk Nóa",
+     "Regnbogasáttmálinn — „aldrei framar flóð til að eyða“"
+    ]
+   },
+   "babel": {
+    "name": "Babelsturninn",
+    "book": "Fyrsta Mósebók 11",
+    "today": "Írak í dag (Sínearsléttan)",
+    "note": "Gegn hrokanum sem seilist til himins ruglar Guð tungumál þeirra og dreifir þjóðunum um alla jörðina.",
+    "events": [
+     "„Byggjum okkur borg og turn … og gerum okkur nafn“",
+     "Guð ruglar tungumál þeirra",
+     "Þjóðirnar dreifast um jörðina (Sínear — síðar Babýlon)"
+    ]
+   },
+   "ur": {
+    "name": "Úr",
+    "book": "Fyrsta Mósebók 12",
+    "today": "suðurhluti Íraks í dag",
+    "note": "Endurlausnarsaga Biblíunnar hefst með köllun eins manns.",
+    "events": [
+     "Guð kallar Abram út úr Úr í Kaldeu",
+     "„Ég mun gera þig að mikilli þjóð … allar ættkvíslir munu af þér blessun hljóta“",
+     "Í trú yfirgefur hann heimaland sitt"
+    ]
+   },
+   "haran": {
+    "name": "Haran",
+    "book": "Fyrsta Mósebók 12",
+    "today": "suðurhluti Tyrklands í dag",
+    "note": "Á leiðinni, svarandi kölluninni áleiðis til fyrirheitna landsins.",
+    "events": [
+     "Fjölskylda Tara sest að í Haran",
+     "Tara deyr",
+     "Abram leggur af stað til Kanaan 75 ára að aldri"
+    ]
+   },
+   "shechem": {
+    "name": "Síkem · Kanaan",
+    "book": "Fyrsta Mósebók 12–50",
+    "today": "Nablus í dag",
+    "note": "Í fyrirheitna landinu er fjölskylda stofnuð og sáttmálinn berst milli kynslóða.",
+    "events": [
+     "Innkoma í Kanaan, fyrsta altarið — „niðjum þínum gef ég þetta land“",
+     "Sáttmálinn (Fyrsta Mósebók 15) · Ísak · Jakob",
+     "Tólf synir Jakobs — rót ættkvíslanna tólf"
+    ]
+   },
+   "egypt": {
+    "name": "Egyptaland (Gósen)",
+    "book": "Fyrsta Mósebók 37–50 · Önnur Mósebók 1",
+    "today": "Nílaróshólmar, Egyptalandi í dag",
+    "note": "Fjölskylda verður að mikilli þjóð — og síðan að þjóð þræla.",
+    "events": [
+     "Jósef, seldur burt, hefst til valda yfir Egyptalandi",
+     "Öll fjölskylda Jakobs kemur niður til að flýja hungursneyð",
+     "Vaxandi þjóð Ísraels er hneppt í þrældóm"
+    ]
+   },
+   "sinai": {
+    "name": "Sínaífjall",
+    "book": "Önnur Mósebók · Þriðja Mósebók",
+    "today": "Sínaískaginn í dag",
+    "note": "Meginbjörgun Gamla testamentisins — þrælar verða að eigin þjóð Guðs.",
+    "events": [
+     "Plágurnar tíu og páskalambið",
+     "Rauðahafið opnast og þau fara yfir",
+     "Boðorðin tíu, lögmálið, tjaldbúðin og fórnirnar"
+    ]
+   },
+   "kadesh": {
+    "name": "Kades (eyðimörkin)",
+    "book": "Fjórða Mósebók · Fimmta Mósebók",
+    "today": "eyðimörk Sínaí og Negev í dag",
+    "note": "Vantrú kostar heila kynslóð landið — en Guð er samt með þeim.",
+    "events": [
+     "Njósnararnir tólf — en fólkið neitar að treysta",
+     "38 ár í eyðimörkinni — manna, ský og eldur",
+     "Á Móabsvöllum, síðasta ræða Móse (Fimmta Mósebók)"
+    ]
+   },
+   "jericho": {
+    "name": "Jeríkó",
+    "book": "Jósúabók",
+    "today": "Jeríkó í dag",
+    "note": "Loksins ganga þau inn og eignast fyrirheitna landið.",
+    "events": [
+     "Jórdan opnast og fólkið fer yfir",
+     "Múrar Jeríkó falla",
+     "Landnám Kanaans og skipting landsins"
+    ]
+   },
+   "shiloh": {
+    "name": "Síló (Dómararnir)",
+    "book": "Dómarabókin · Rutarbók",
+    "today": "Khirbet Seilun í dag",
+    "note": "Án konungs gerir hver maður það sem honum vel líkar — sannan konung vantar.",
+    "events": [
+     "Tjaldbúðin er reist í Síló",
+     "Hringrás syndar–kúgunar–björgunar (Debóra, Gídeon, Samson)",
+     "Rut — tryggð á myrkum dögum, í ætt Davíðs"
+    ]
+   },
+   "jerusalem": {
+    "name": "Jerúsalem · Sameinaða konungsríkið",
+    "book": "Fyrri–Síðari Samúelsbók · Fyrri konungabók",
+    "today": "Jerúsalem í dag",
+    "note": "Gullöld Ísraels — og fyrirheitið um eilífan konung.",
+    "events": [
+     "Sál fyrsti konungurinn, síðan Davíð og Golíat",
+     "Sáttmálinn við Davíð — „hásæti þitt að eilífu“ (Síðari Samúelsbók 7)",
+     "Salómon reisir musterið í Jerúsalem"
+    ]
+   },
+   "samaria": {
+    "name": "Samaría · Klofna konungsríkið",
+    "book": "Konungabækurnar · spámennirnir",
+    "today": "Sebastía í dag",
+    "note": "Ríkið klofnar og hnignar meðan spámennirnir hrópa.",
+    "events": [
+     "Eftir Salómon, klofningur í Júda og Ísrael",
+     "Endurtekin skurðgoðadýrkun",
+     "Elía, Jesaja, Jeremía hrópa „snúið við“ — og boða Messías"
+    ]
+   },
+   "nineveh": {
+    "name": "Níníve (Assýría)",
+    "book": "Síðari konungabók 17 · Jónas",
+    "today": "Mósúl í Írak í dag",
+    "note": "Meðan norðrið hunsar allar viðvaranir fellur það fyrst.",
+    "events": [
+     "Níníve, höfuðborg Assýríu",
+     "Norðurríkið fellur fyrir Assýríu (722 f.Kr.)",
+     "Jónas er sendur til Níníve"
+    ]
+   },
+   "babylon": {
+    "name": "Babýlon",
+    "book": "Síðari konungabók 25 · Daníel · Esekíel",
+    "today": "Hilla í Írak í dag",
+    "note": "Myrkasta nóttin — en fyrirheitið um endurreisn stendur samt.",
+    "events": [
+     "Jerúsalem fellur, musterið er brennt (586 f.Kr.)",
+     "Júda er flutt til Babýlonar",
+     "Daníel og Esekíel — trú og sýnir í útlegð"
+    ]
+   },
+   "susa": {
+    "name": "Súsa (Persía)",
+    "book": "Esterarbók · Nehemíabók",
+    "today": "Shush í Íran í dag",
+    "note": "Jafnvel í hjarta heiðins keisaradæmis varðveitir Guð þjóð sína.",
+    "events": [
+     "Persía steypir Babýlon",
+     "Ester bjargar Gyðingum frá tortímingu",
+     "Nehemía biður frammi fyrir konunginum og er sendur"
+    ]
+   },
+   "return": {
+    "name": "Heimkoman til Jerúsalem",
+    "book": "Esrabók · Nehemíabók · Malakí",
+    "today": "Jerúsalem í dag",
+    "note": "Þau snúa aftur og endurreisa — en enginn konungur er kominn. Þau bíða Messíasar.",
+    "events": [
+     "Þrjár heimkomubylgjur með tilskipun Kýrusar (Serúbabel 538 · Esra 458 · Nehemía 444)",
+     "Musterið endurreist og múrar Jerúsalem endurbyggðir",
+     "Malakí — Gamla testamentinu lýkur: „Sjá, ég sendi sendiboða minn“"
+    ]
+   }
+  },
+  "labels": [
+   "Miðjarðarhafið",
+   "Mesópótamía",
+   "Arabíueyðimörkin",
+   "Egyptaland"
+  ],
+  "journeys": {
+   "flow": "Endurlausnarsagan"
+  }
+ },
+ "jesus": {
+  "places": {
+   "bethlehem": {
+    "name": "Betlehem",
+    "book": "Matteusarguðspjall 1–2 · Lúkasarguðspjall 2",
+    "today": "Betlehem í dag",
+    "note": "Hinn fyrirheitni Messías kemur til borgar Davíðs — Orðið sem varð hold.",
+    "events": [
+     "Fæddur í Betlehem, borg Davíðs",
+     "Englar boða hirðum tíðindin",
+     "Vitringarnir koma til að tilbiðja"
+    ]
+   },
+   "nazareth": {
+    "name": "Nasaret",
+    "book": "Lúkasarguðspjall 2 · 4",
+    "today": "Nasaret í dag",
+    "note": "Guð vex upp sem maður í venjulegum bæ.",
+    "events": [
+     "Alinn upp á heimili smiðs",
+     "Tólf ára, spyrjandi og svarandi í musterinu",
+     "Síðar hafnað í samkunduhúsi heimabæjar síns"
+    ]
+   },
+   "jordan": {
+    "name": "Jórdanáin",
+    "book": "Matteusarguðspjall 3–4",
+    "today": "neðri Jórdan í dag",
+    "note": "Opinber þjónusta hans hefst — himinninn innsiglar hann sem soninn.",
+    "events": [
+     "Skírður af Jóhannesi",
+     "Andinn stígur niður sem dúfa — „Þessi er minn elskaði sonur“",
+     "Sigrar þrjár freistingar Satans í eyðimörkinni"
+    ]
+   },
+   "cana": {
+    "name": "Kana",
+    "book": "Jóhannesarguðspjall 2",
+    "today": "Kafr Kanna í dag",
+    "note": "Í fyrsta tákni sínu opinberar hann dýrð sína.",
+    "events": [
+     "Gestur í brúðkaupi",
+     "Vatni breytt í vín — fyrsta tákn hans",
+     "Lærisveinar hans trúa á hann"
+    ]
+   },
+   "sychar": {
+    "name": "Síkar (Samaría)",
+    "book": "Jóhannesarguðspjall 2–4",
+    "today": "nálægt Nablus í dag",
+    "note": "Vegur fyrstu þjónustunnar — gegnum Jerúsalem og áfram til hinnar fyrirlitnu Samaríu.",
+    "events": [
+     "Hann hreinsar musterið í Jerúsalem",
+     "Að nóttu, Nikódemus — „þú verður að fæðast að nýju“",
+     "Lifandi vatn handa samverskri konu"
+    ]
+   },
+   "capernaum": {
+    "name": "Kapernaum",
+    "book": "Matteusarguðspjall 4–13 · Markúsarguðspjall 1–4",
+    "today": "vatnsbakki Galíleu í dag",
+    "note": "Bækistöð þjónustunnar í Galíleu — köllun, kennsla og andstaða mætast öll hér.",
+    "events": [
+     "Kallar fiskimennina og hefur hér bækistöð",
+     "Fjallræðan — „Sælir eru fátækir í anda“",
+     "Dæmisögur um ríkið — og vaxandi andstaða"
+    ]
+   },
+   "galilee": {
+    "name": "Galíleuvatn",
+    "book": "Markúsarguðspjall 4 · 6 · Jóhannesarguðspjall 6",
+    "today": "Kinneretvatn í dag",
+    "note": "Með valdi yfir náttúrunni sýnir hann hver hann er.",
+    "events": [
+     "„Þei, þegi þú“ — hann kyrrir storminn",
+     "Mettar 5.000 með fimm brauðum og tveimur fiskum",
+     "Gengur á vatninu"
+    ]
+   },
+   "caesarea_p": {
+    "name": "Sesarea Filippí",
+    "book": "Matteusarguðspjall 16–17",
+    "today": "Banías í dag",
+    "note": "Lærisveinarnir skilja að hann er Kristur, og vegur krossins opnast.",
+    "events": [
+     "Játning Péturs — „Þú ert Kristur, sonur hins lifanda Guðs“",
+     "Hann boðar í fyrsta sinn dauða sinn og upprisu",
+     "Ummyndaður í dýrð á fjallinu"
+    ]
+   },
+   "jericho": {
+    "name": "Jeríkó",
+    "book": "Lúkasarguðspjall 18–19",
+    "today": "Jeríkó í dag",
+    "note": "Á leiðinni upp til Jerúsalem leitar hann hins týnda.",
+    "events": [
+     "Hann gefur hinum blinda Bartímeusi sýn",
+     "Hann kallar Sakkeus tollheimtumann",
+     "„Mannssonurinn er kominn að leita að hinu týnda og frelsa það“"
+    ]
+   },
+   "bethany": {
+    "name": "Betanía",
+    "book": "Jóhannesarguðspjall 11–12",
+    "today": "al-Eizariya í dag",
+    "note": "Hann sýnir vald yfir dauðanum á þröskuldi síðustu vikunnar.",
+    "events": [
+     "Hann vekur Lasarus upp úr gröfinni — „Ég er upprisan og lífið“",
+     "María smyr hann til greftrunar",
+     "Þetta tákn herðir ráðabruggið um að taka hann af lífi"
+    ]
+   },
+   "jerusalem": {
+    "name": "Jerúsalem",
+    "book": "Matteusarguðspjall 21–28 · Lúkasarguðspjall 24 · Postulasagan 1",
+    "today": "Jerúsalem í dag",
+    "note": "Hápunkturinn sem öll Biblían bendir á — kross, upprisa, uppstigning.",
+    "events": [
+     "Innreiðin í dýrð; hann veltir aftur borðum í musterinu",
+     "Við síðustu kvöldmáltíðina þvær hann fætur lærisveinanna",
+     "Hann deyr á krossinum",
+     "Upprisinn á þriðja degi, síðan uppstiginn"
+    ]
+   }
+  },
+  "labels": [
+   "Miðjarðarhafið",
+   "Galílea",
+   "Samaría",
+   "Júdea",
+   "Dekapólis",
+   "Perea",
+   "Dauðahafið"
+  ],
+  "journeys": {
+   "life": "Leið Jesú"
+  }
+ },
+ "paul": {
+  "places": {
+   "antioch": {
+    "name": "Antíokkía",
+    "book": "Postulasagan 13 · 15",
+    "today": "Antakya í Tyrklandi í dag",
+    "note": "Útsendingarkirkjan þar sem trúboðið meðal heiðingjanna hefst og lýkur.",
+    "events": [
+     "Í bæn tekur andinn Barnabas og Sál frá",
+     "Kirkjan þar sem lærisveinar voru fyrst kallaðir „kristnir“",
+     "Upphafsstaður fyrstu, annarrar og þriðju ferðar"
+    ]
+   },
+   "seleucia": {
+    "name": "Selevkía",
+    "book": "Postulasagan 13:4",
+    "today": "Tyrkland í dag",
+    "note": "Höfn Antíokkíu — þau sigla af stað til Kýpur.",
+    "events": []
+   },
+   "salamis": {
+    "name": "Salamis (Kýpur)",
+    "book": "Postulasagan 13:5",
+    "today": "Kýpur í dag",
+    "note": "Fyrsti viðkomustaður á Kýpur — boðun í samkunduhúsunum.",
+    "events": []
+   },
+   "paphos": {
+    "name": "Pafos",
+    "book": "Postulasagan 13:6-12",
+    "today": "Kýpur í dag",
+    "note": "Kraftur er sýndur gegn þeim sem standa gegn fagnaðarerindinu.",
+    "events": [
+     "Elýmas töframaður er sleginn blindu",
+     "Sergíus Páll landstjóri trúir",
+     "Héðan tekur „Páll“ forystuna"
+    ]
+   },
+   "perga": {
+    "name": "Perge",
+    "book": "Postulasagan 13:13",
+    "today": "Antalya í Tyrklandi í dag",
+    "note": "Höfn í Pamfýlíu — hér snýr Jóhannes Markús við.",
+    "events": []
+   },
+   "pantioch": {
+    "name": "Antíokkía í Pisidíu",
+    "book": "Postulasagan 13:14-50",
+    "today": "Yalvaç í Tyrklandi í dag",
+    "note": "Fagnaðarerindið opnast til heiðingjanna.",
+    "events": [
+     "Löng ræða um frelsunarsöguna í samkunduhúsinu",
+     "Margir heiðingjar fagna og taka við orðinu",
+     "Reknir burt vegna andstöðu"
+    ]
+   },
+   "iconium": {
+    "name": "Íkóníum",
+    "book": "Postulasagan 14:1-7",
+    "today": "Konya í Tyrklandi í dag",
+    "note": "Margir trúa, en ofsóknir knýja þau áfram.",
+    "events": []
+   },
+   "lystra": {
+    "name": "Lýstra",
+    "book": "Postulasagan 14:8-20",
+    "today": "Tyrkland í dag",
+    "note": "Hylltur sem guð, síðan grýttur.",
+    "events": [
+     "Læknar mann sem var lami frá fæðingu",
+     "Mannfjöldinn reynir að færa þeim fórnir sem guðum",
+     "Grýttur og skilinn eftir sem dauður, en hann stendur upp"
+    ]
+   },
+   "derbe": {
+    "name": "Derbe",
+    "book": "Postulasagan 14:20-21",
+    "today": "Tyrkland í dag",
+    "note": "Margir verða lærisveinar; þau fara sömu leið til baka til að styrkja kirkjurnar.",
+    "events": []
+   },
+   "troas": {
+    "name": "Tróas",
+    "book": "Postulasagan 16:8-10",
+    "today": "Tyrkland í dag",
+    "note": "Vendipunkturinn þar sem fagnaðarerindið stefnir fyrst til Evrópu.",
+    "events": [
+     "Sýn af manni frá Makedóníu",
+     "„Kom yfir til Makedóníu og hjálpa okkur“",
+     "Þau fara þegar yfir til Evrópu"
+    ]
+   },
+   "philippi": {
+    "name": "Filippí",
+    "book": "Postulasagan 16 · Filippíbréfið",
+    "today": "norðurhluti Grikklands í dag",
+    "note": "Fyrsta kirkja Evrópu — fagnaðarerindið sigrar jafnvel í fangelsi.",
+    "events": [
+     "Lýdía, purpurasölukona, trúir",
+     "Ambátt með spásagnaranda er leyst",
+     "Miðnæturlofsöngvar, jarðskjálfti, heimili fangavarðarins frelsað"
+    ]
+   },
+   "thess": {
+    "name": "Þessaloníka",
+    "book": "Postulasagan 17 · Fyrra og Síðara Þessaloníkubréf",
+    "today": "Þessaloníki í Grikklandi í dag",
+    "note": "Orðið hristir borgina og andstaðan sýður upp úr.",
+    "events": [
+     "Rökræðir í samkunduhúsinu þrjá hvíldardaga",
+     "„Þessir sem hafa komið öllum heiminum í uppnám“",
+     "Þau læðast burt að nóttu"
+    ]
+   },
+   "berea": {
+    "name": "Berea",
+    "book": "Postulasagan 17:10-15",
+    "today": "Veria í Grikklandi í dag",
+    "note": "Hinir „göfuglyndu“ sem rannsökuðu orðið sjálfir.",
+    "events": [
+     "Þau taka við orðinu með áfergju",
+     "Daglega rannsaka þau ritningarnar til að ganga úr skugga um það",
+     "Margir komast til trúar"
+    ]
+   },
+   "athens": {
+    "name": "Aþena",
+    "book": "Postulasagan 17:16-34",
+    "today": "Aþena í Grikklandi í dag",
+    "note": "Í borg heimspekinganna boðar hann „hinn ókunna guð“.",
+    "events": [
+     "Gramur yfir borg fullri af skurðgoðum",
+     "Á Aresarhæð boðar hann skaparann og upprisuna",
+     "Hæddur, en samt trúa nokkrir"
+    ]
+   },
+   "corinth": {
+    "name": "Korinta",
+    "book": "Postulasagan 18 · Fyrra og Síðara Korintubréf",
+    "today": "Grikkland í dag",
+    "note": "Hann dvelur eitt og hálft ár og plantar kirkju í borg lastanna.",
+    "events": [
+     "Gerir tjöld með Akvílasi og Priskillu",
+     "„Óttast ekki … því ég er með þér“",
+     "Margir Korintumenn trúa og eru skírðir"
+    ]
+   },
+   "ephesus": {
+    "name": "Efesus",
+    "book": "Postulasagan 19 · Efesusbréfið",
+    "today": "Selçuk í Tyrklandi í dag",
+    "note": "Hjarta þriðju ferðarinnar — orðið breiðist út um Asíu.",
+    "events": [
+     "Dagleg kennsla í tvö ár í skóla Týrannusar",
+     "Töfrabækur brenndar; máttarverk",
+     "Silfursmiðurinn Demetríus vekur uppþot"
+    ]
+   },
+   "miletus": {
+    "name": "Míletus",
+    "book": "Postulasagan 20:17-38",
+    "today": "Tyrkland í dag",
+    "note": "Tárvot kveðja við öldunga Efesus.",
+    "events": [
+     "„Gætið kirkjunnar sem hann keypti með eigin blóði“",
+     "Öldungarnir gráta, vitandi að þeir munu ekki sjá hann aftur"
+    ]
+   },
+   "caesarea": {
+    "name": "Sesarea",
+    "book": "Postulasagan 23–26",
+    "today": "strönd Ísraels í dag",
+    "note": "Í tvö ár ver hann fagnaðarerindið frammi fyrir landstjórum og konungi.",
+    "events": [
+     "Réttarhöld frammi fyrir landstjórunum Felix og Festus",
+     "Vörn hans frammi fyrir Agrippa konungi",
+     "„Ég skýt máli mínu til keisarans“ — áfram til Rómar"
+    ]
+   },
+   "jerusalem": {
+    "name": "Jerúsalem",
+    "book": "Postulasagan 21–23",
+    "today": "Jerúsalem í dag",
+    "note": "Gripinn í musterinu, vegur hans sem fanga hefst.",
+    "events": [
+     "Gripinn af mannfjöldanum í musterinu",
+     "Ver sig frammi fyrir ráðinu",
+     "Sem rómverskur borgari sendur undir vörð til Sesareu"
+    ]
+   },
+   "myra": {
+    "name": "Mýra",
+    "book": "Postulasagan 27:5-6",
+    "today": "Demre í Tyrklandi í dag",
+    "note": "Þau fara um borð í alexandrínskt skip á leið til Rómar.",
+    "events": []
+   },
+   "fairhaven": {
+    "name": "Góðhafnir (Krít)",
+    "book": "Postulasagan 27:8-12",
+    "today": "Krít í dag",
+    "note": "Viðvörun Páls um að hætta siglingu er virt að vettugi.",
+    "events": []
+   },
+   "crete": {
+    "name": "Krít",
+    "book": "Títusarbréfið",
+    "today": "Krít í dag",
+    "note": "Eftir lausn hans, eyjan þar sem hann skilur Títus eftir til að koma reglu á kirkjurnar.",
+    "events": [
+     "Skilur Títus eftir til að skipa öldunga í hverri borg",
+     "Kallar eftir óaðfinnanlegum, trúföstum leiðtogum",
+     "Ritar bréfið til Títusar"
+    ]
+   },
+   "malta": {
+    "name": "Malta",
+    "book": "Postulasagan 27–28",
+    "today": "Malta í dag",
+    "note": "Gegnum storm og skipbrot stendur fyrirheit Guðs.",
+    "events": [
+     "„Norðaustanstormurinn“ brýtur skipið, en samt komast allir 276 af",
+     "Bitinn af nöðru, en hann sakar ekki",
+     "Hann læknar sjúka eyjarinnar"
+    ]
+   },
+   "syracuse": {
+    "name": "Sýrakúsa",
+    "book": "Postulasagan 28:12",
+    "today": "Sikiley á Ítalíu í dag",
+    "note": "Þau dvelja í þrjá daga á Sikiley.",
+    "events": []
+   },
+   "puteoli": {
+    "name": "Púteólí",
+    "book": "Postulasagan 28:13-14",
+    "today": "Pozzuoli á Ítalíu í dag",
+    "note": "Þau lenda á Ítalíu og trúsystkin taka á móti þeim.",
+    "events": []
+   },
+   "rome": {
+    "name": "Róm",
+    "book": "Postulasagan 28 · fangelsisbréfin · Síðara Tímóteusarbréf",
+    "today": "Róm á Ítalíu í dag",
+    "note": "Fagnaðarerindið nær loksins hjarta keisaradæmisins — ekki endir heldur upphaf.",
+    "events": [
+     "Tvö ár í stofufangelsi, boðandi ríkið með djörfung",
+     "Héðan ritar hann fangelsisbréfin (Ef·Fil·Kól·Fílem)",
+     "Síðar fangelsaður á ný, ritar Síðara Tímóteusarbréf og deyr sem píslarvottur — „Ég hef barist góðu baráttunni, hef fullnað skeiðið“"
+    ]
+   }
+  },
+  "labels": [
+   "Miðjarðarhafið",
+   "Eyjahaf",
+   "Litla-Asía",
+   "Makedónía",
+   "Ítalía"
+  ],
+  "journeys": {
+   "j1": "Fyrsta ferðin",
+   "j2": "Önnur ferðin",
+   "j3": "Þriðja ferðin",
+   "rome": "Fjórða ferðin · til Rómar",
+   "j5": "Fimmta ferðin · eftir lausn"
+  }
+ }
+}

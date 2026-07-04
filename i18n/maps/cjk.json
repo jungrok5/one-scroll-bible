@@ -1,0 +1,636 @@
+{
+ "menuName": "Chokwe",
+ "htmlLang": "cjk",
+ "dir": "ltr",
+ "locale": "cjk",
+ "brand": "Mukanda wa Zambi mu Chikombakomba Chimwe",
+ "docTitle": "Mukanda wa Zambi ha Mavu · Mukanda wa Zambi mu Chikombakomba Chimwe",
+ "metaDesc": "Landa kanyingikilo ka Mukanda wa Tete, mwono wa Yesu, ni malwendo a Paulu ha mavu amwenemwene — Mukanda wa Zambi walingiwile ha vihela vamwenemwene.",
+ "s": {
+  "kicker": "Mukanda wa Zambi mu Chikombakomba Chimwe · Mavu",
+  "title": "Mukanda wa Zambi ha Mavu",
+  "verse": "“Mumu kutwalongesele yishima yize akutaka atu, muze twanunyingikishine ngwetu, Mwene wetu Yesu Kristu makeza ni ndundo. Yetu yitumona uhenya wenyi ni meso jetu.” (2 Petulu 1:16)",
+  "purpose": "Mukanda wa Zambi keshi kanyingiko ka kuvulumuna ko. Uli lisoneka lia atu waze anendele ha vihela, matangwa, ni majina amwenemwene. Landa jila jino ha mavu, mu kanyingikilo ka tangwa — kwacha ha chihela, hanji ukwache ▶ hanga ulande chikombakomba ni chikombakomba.",
+  "ot_kick": "① Mukanda wa Tete — mu kuhita cha tangwa",
+  "ot_h": "Kufuma ku kutanga ndoo ku kuhiluka ku Yerusaleme",
+  "ot_lead": "Keshi lwendo lumuwika ko alioze kwenda cha sango lia ulamwino kufuma ku kutanga: kutanga ni kuhumbuka → kuvula kunene ni Babele → kusanyika (Avalahama) → hashi hialakanyiwile → Kutuhuka → kasendzi → kuhiana hashi → wanangana → kuhandununuka → undungo → kuhiluka.",
+  "je_kick": "② Mukanda Waha — mwono wa Yesu",
+  "je_h": "Kufuma ku Beteleme ndoo ku Yerusaleme",
+  "je_lead": "Landa mwono wa Yesu ngwe Sango Jibema jinawamba, mu kanyingikilo — kufuma ku kusemuka chenyi ku Beteleme, kuhita ku kupapateswa ni mulimo wa Galilaya, kuhiana Samaria, ndoo ku lusu, kuhinduka ni kukandama mu Yerusaleme.",
+  "pa_kick": "③ Mukanda Waha — malwendo a Paulu",
+  "pa_h": "Kufuma ku Antiokia ndoo ku songo lia hashi — Roma",
+  "pa_lead": "Kufuma ku Pentekoshite mu Yerusaleme, ngwe Sango Jibema jinambukila kuhiana Yudea — kuhita ku Asia Yakehe ni Europa ndoo ku mbunge ya wanangana. Sakula lwendo lumuwika ku malwendo atanu (lia tete·lia muchivali·lia muchitatu + kuya ku Roma + kunyima cha kufuma) mba ulande yuma ya Yilinga hamwe ni mikanda yasonekele ha jila.",
+  "foot": "Vishina · Vihela vinakukaula liji lia Mukanda wa Zambi ni chinyingikiso cha mavu a Mukanda wa Zambi (ni majina a musono kuze anakwasa). Mielo ya kalunga, tronga, ni malungu anafuma ku chinyingikiso cha mavu chakusahuka (Natural Earth), chize chachilehese.",
+  "contact": "Mahula · manyonga — <a id=\"contact\" class=\"mail\">Tutumina email</a>",
+  "play": "Enda",
+  "pause": "Imana",
+  "today": "Musono:",
+  "verseCite": "2 Petulu 1:16"
+ },
+ "ot": {
+  "places": {
+   "eden": {
+    "name": "Edene (Kutanga · Kuhumbuka)",
+    "book": "Ubutukilo 1–3",
+    "today": "chihela cha Tigirisi–Eufurate musono",
+    "note": "Mu hashi hatangiwile hawenehene, shili yinengila mba yinatetola ungunzo kachi ka Zambi ni atu.",
+    "events": [
+     "Kutanga mu matangwa atanu na limwe — “hapwile hawenehene”",
+     "Mutu yatangiwile mu chifwanyiso cha Zambi",
+     "Kuhumbuka, ni kutuhwiwa mu Edene",
+     "Chilakanyino cha tete cha Sango Jibema — “vungu lia pwo mulikabwa akwa kole ku mutwe”"
+    ]
+   },
+   "noah": {
+    "name": "Ararate (Kuvula Kunene)",
+    "book": "Ubutukilo 6–9",
+    "today": "Mundu wa Ararate, ku oriente wa Tukiya musono",
+    "note": "Zambi anahana chiyulo ku hashi hazala shili, alioze analama mwono ku chitatu chimuwika.",
+    "events": [
+     "Hashi hazala ni ububi",
+     "Kuvula kunene, ni watu wa Noa",
+     "Usendo wa kongolo — “kachikeza kuvula kunene cha kufwisa nawa ko”"
+    ]
+   },
+   "babel": {
+    "name": "Ndangu ya Babele",
+    "book": "Ubutukilo 11",
+    "today": "Iraki musono (chana cha Shinare)",
+    "note": "Ku kulitohwesa kwakusaka kuya kwilu, Zambi anapalangisa malimi ao ni atu ha hashi heswe.",
+    "events": [
+     "“Tutunge nganda ni ndangu… mba tulipwise jina”",
+     "Zambi analuwanyisa malimi ao",
+     "Atu anapalanga ha hashi heswe (Shinare — kunyima Babilone)"
+    ]
+   },
+   "ur": {
+    "name": "Uri",
+    "book": "Ubutukilo 12",
+    "today": "ku sude wa Iraki musono",
+    "note": "Sango lia ulamwino lia Mukanda wa Zambi linaputuka ni kusanyika cha mutu umwe.",
+    "events": [
+     "Zambi anasanyika Avalahama kufuma ku Uri wa akwa Kalada",
+     "“Mungukakupwisa vungu lineneni… mavungu eswe makawahisiwa muli yena”",
+     "Ku ufulielo anaseza chifuchi chenyi"
+    ]
+   },
+   "haran": {
+    "name": "Harane",
+    "book": "Ubutukilo 12",
+    "today": "ku sude wa Tukiya musono",
+    "note": "Mu jila, anakumbulula kusanyika kuya ku hashi hialakanyiwile.",
+    "events": [
+     "Chitatu cha Tera anatwama ku Harane",
+     "Tera anafwa",
+     "Avalahama anaya ku Kanana ku miaka 75"
+    ]
+   },
+   "shechem": {
+    "name": "Shekeme · Kanana",
+    "book": "Ubutukilo 12–50",
+    "today": "Nabulusi musono",
+    "note": "Mu hashi hialakanyiwile, chitatu chinaputuka mba usendo unahita ku vusendo.",
+    "events": [
+     "Kwingila mu Kanana, chikutwilo cha tete — “vungu lie mungukalihana hashi hano”",
+     "Usendo (Ubu 15) · Izaki · Yakova",
+     "Ana 12 a Yakova — muji wa mavungu 12"
+    ]
+   },
+   "egypt": {
+    "name": "Egiptu (Gosheni)",
+    "book": "Ubutukilo 37–50 · Kutuhuka 1",
+    "today": "ku Delta ya Nile, Egiptu musono",
+    "note": "Chitatu chinapwa vungu lineneni — kutwala vungu lia andungo.",
+    "events": [
+     "Yosefu, alanjishile, anapwa mwanangana mu Egiptu",
+     "Chitatu cheswe cha Yakova anahiluka hanze ku Egiptu ha kutina nzala",
+     "Vungu lia Israele lianakula linapwa lia andungo"
+    ]
+   },
+   "sinai": {
+    "name": "Mundu wa Sinai",
+    "book": "Kutuhuka · Alevi",
+    "today": "chihela cha Sinai musono",
+    "note": "Ulamwino unene chinji wa Mukanda wa Tete — andungo anapwa atu ja Zambi mwene.",
+    "events": [
+     "Yikola 10 ni mukoko wa Paseka",
+     "Kalunga Kachili kanamanunuka mba anahita",
+     "Shimbi 10, Shimbi, zuwo lia uchindami, ni milambu"
+    ]
+   },
+   "kadesh": {
+    "name": "Kadeshe (kasendzi)",
+    "book": "Kwalula · Shimbi",
+    "today": "kasendzi wa Sinai–Negebe musono",
+    "note": "Kuhona ufulielo kunahonesa chisemwa hashi — alioze Zambi anatwama nao.",
+    "events": [
+     "Atu 12 akutala hashi — alioze atu anakana kufuliela",
+     "Miaka 38 mu kasendzi — mana, livwi ni kahia",
+     "Ku chana cha Mowabe, longeso lia kusongo lia Mose (Shimbi)"
+    ]
+   },
+   "jericho": {
+    "name": "Yeriko",
+    "book": "Yoshua",
+    "today": "Yeriko musono",
+    "note": "Ku songo anengila mba anambata hashi hialakanyiwile.",
+    "events": [
+     "Yordani anamanunuka mba atu anahita",
+     "Mahito a Yeriko anahumbuka",
+     "Kuhiana Kanana ni kuhandununa hashi"
+    ]
+   },
+   "shiloh": {
+    "name": "Shilo (Akwa Kuyula)",
+    "book": "Akwa Kuyula · Rute",
+    "today": "Kiribeti Seilune musono",
+    "note": "Ku kuhona mwanangana, mutu mweswe analinga chize anazange — mwanangana wamwenemwene anakusakiwa.",
+    "events": [
+     "Zuwo lia uchindami linaimikwa ku Shilo",
+     "Chiyululo cha shili–luhongo–ulamwino (Devola, Gideone, Samusone)",
+     "Rute — kukola ku matangwa amilima, mu vungu lia David"
+    ]
+   },
+   "jerusalem": {
+    "name": "Yerusaleme · Wanangana Walikwasa",
+    "book": "1–2 Samuel · 1 Yitanga Ya Mianangana",
+    "today": "Yerusaleme musono",
+    "note": "Tangwa liwaha lia Israele — ni chilakanyino cha mwanangana wa miaka yeswe.",
+    "events": [
+     "Saulu mwanangana wa tete, kutwala David ni Goliate",
+     "Usendo wa David — “chitwamo che muchikatwama miaka yeswe” (2 Sam 7)",
+     "Solomone anatunga zuwo lia Zambi mu Yerusaleme"
+    ]
+   },
+   "samaria": {
+    "name": "Samaria · Wanangana Wahandununuka",
+    "book": "Yitanga Ya Mianangana · Akwa Munanyi",
+    "today": "Sebastia musono",
+    "note": "Wanangana wahandununuka mba wayanduka muze akwa munanyi anatambika.",
+    "events": [
+     "Kunyima cha Solomone, kuhandununuka mu Yuda ni Israele",
+     "Kufukama yitumbo kapindi ni kapindi",
+     "Eliya, Izaya, Jeremia anatambika ‘hilukenu’ — mba anambujola Mesia"
+    ]
+   },
+   "nineveh": {
+    "name": "Ninive (Asiria)",
+    "book": "2 Yitanga Ya Mianangana 17 · Yona",
+    "today": "Mosulu, Iraki musono",
+    "note": "Ku kuhona kwivwa mahuminyino eswe, wanangana wa norde wahumbuka tete.",
+    "events": [
+     "Ninive, nganda inene ya Asiria",
+     "Wanangana wa norde wahumbukine kuli Asiria (722 B.C.)",
+     "Yona anatuminwa ku Ninive"
+    ]
+   },
+   "babylon": {
+    "name": "Babilone",
+    "book": "2 Yitanga Ya Mianangana 25 · Daniel · Ezekiel",
+    "today": "Hila, Iraki musono",
+    "note": "Ufuku wa milima chinji — alioze chilakanyino cha kusanguluka chinatwama.",
+    "events": [
+     "Yerusaleme yahumbuka, zuwo lia Zambi lyahia (586 B.C.)",
+     "Yuda anambachilwa ku Babilone",
+     "Daniel ni Ezekiel — ufulielo ni yimweso mu undungo"
+    ]
+   },
+   "susa": {
+    "name": "Susa (Peresia)",
+    "book": "Estere · Nehemia",
+    "today": "Shushi, Irani musono",
+    "note": "Chibwe mukachi ka wanangana wa akwa kalunga, Zambi analama atu jenyi.",
+    "events": [
+     "Peresia anahumbwisa Babilone",
+     "Estere analamwina Ayuda ku kufwisiwa",
+     "Nehemia analomba ku meso ja mwanangana mba anatuminwa"
+    ]
+   },
+   "return": {
+    "name": "Kuhiluka ku Yerusaleme",
+    "book": "Ezra · Nehemia · Malaki",
+    "today": "Yerusaleme musono",
+    "note": "Anahiluka mba anatunga nawa — alioze mwanangana kanejile ko. Anatalatala Mesia.",
+    "events": [
+     "Yikombakomba yitatu ya kuhiluka ku shimbi ya Sirusu (Zerubabele 538 · Ezra 458 · Nehemia 444)",
+     "Zuwo lia Zambi lianatungwa nawa ni mahito a Yerusaleme analongwa",
+     "Malaki — Mukanda wa Tete unasonga: “Mungukatuma kanganda kami”"
+    ]
+   }
+  },
+  "labels": [
+   "Kalunga ka Mediterania",
+   "Mesopotamia",
+   "Kasendzi wa Arabia",
+   "Egiptu"
+  ],
+  "journeys": {
+   "flow": "Sango lia ulamwino"
+  }
+ },
+ "jesus": {
+  "places": {
+   "bethlehem": {
+    "name": "Beteleme",
+    "book": "Mateu 1–2 · Luka 2",
+    "today": "Beteleme musono",
+    "note": "Mesia yalakanyiwile aneza ku nganda ya David — Liji lialumuka mutu.",
+    "events": [
+     "Asemuka ku Beteleme, nganda ya David",
+     "Tungeloshi anambujola sango kuli alami a mikoko",
+     "Akwa mana aneza kufukama"
+    ]
+   },
+   "nazareth": {
+    "name": "Nazarete",
+    "book": "Luka 2 · 4",
+    "today": "Nazarete musono",
+    "note": "Zambi anakula ngwe mutu mu nganda yize yakuyiyana.",
+    "events": [
+     "Analelwa mu zuwo lia mukwa kusonga mabaya",
+     "Ku miaka 12, anahula ni kukumbulula mu zuwo lia Zambi",
+     "Kunyima, amuhona mu sinagoga ya nganda yenyi"
+    ]
+   },
+   "jordan": {
+    "name": "Ronga lia Yordani",
+    "book": "Mateu 3–4",
+    "today": "ku Yordani wa hashi musono",
+    "note": "Mulimo wenyi wa hehi unaputuka — lilu linamushindakenya ngwe Mwana.",
+    "events": [
+     "Apapateswa kuli Yoano",
+     "Mwiku unahulumuka ngwe chimburi — “Ou hi Mwanami wa zango”",
+     "Anashindakenya yiseko yitatu ya Satana mu kasendzi"
+    ]
+   },
+   "cana": {
+    "name": "Kana",
+    "book": "Yoano 2",
+    "today": "Kafuri Kana musono",
+    "note": "Ku chinjikijilo chenyi cha tete anasolola uhenya wenyi.",
+    "events": [
+     "Muleni ku ulombelo",
+     "Meya analumuka vinyu — chinjikijilo chenyi cha tete",
+     "Ambaji jenyi anamufuliela"
+    ]
+   },
+   "sychar": {
+    "name": "Sikare (Samaria)",
+    "book": "Yoano 2–4",
+    "today": "kwakamwihi ni Nabulusi musono",
+    "note": "Jila ya mulimo wa kuputuka — kuhita mu Yerusaleme ndoo ku Samaria yakusawula.",
+    "events": [
+     "Anatokesa zuwo lia Zambi mu Yerusaleme",
+     "Ku ufuku, Nikodemu — “Chinatela usemuke nawa”",
+     "Meya a mwono kuli pwo wa ku Samaria"
+    ]
+   },
+   "capernaum": {
+    "name": "Kapenaume",
+    "book": "Mateu 4–13 · Marku 1–4",
+    "today": "ku muelo wa kalunga ka Galilaya musono",
+    "note": "Chihela cha mulimo wa Galilaya — kusanyika, kunangula ni kukinda yeswe yinaliwana hano.",
+    "events": [
+     "Anasanyika akwa kufula yishi mba anatwama hano",
+     "Longeso ha Mundu — “Awahilila akwa kuzeya mu mbunge”",
+     "Yishima ya wanangana wa Zambi — ni kukinda kunakula"
+    ]
+   },
+   "galilee": {
+    "name": "Kalunga ka Galilaya",
+    "book": "Marku 4 · 6 · Yoano 6",
+    "today": "Kalunga ka Kinerete musono",
+    "note": "Ni ngolo hali yuma yeswe yatangiwile, anasolola yoze iye ali.",
+    "events": [
+     "“Ehula, imana” — anaehwisa chipupu",
+     "Anadisa atu 5.000 ni mimbolo yitanu ni yishi yivali",
+     "Anenda ha meya"
+    ]
+   },
+   "caesarea_p": {
+    "name": "Kaisareya Filipi",
+    "book": "Mateu 16–17",
+    "today": "Baniasi musono",
+    "note": "Ambaji jenyi anatachikijila ngwo iye hi Kristu, mba jila ya lusu yinasahuka.",
+    "events": [
+     "Kwitava cha Petulu — “Yena hi Kristu, Mwana wa Zambi wa mwono”",
+     "Anambujola tete kufwa ni kuhinduka chenyi",
+     "Analumuka mu uhenya ha mundu"
+    ]
+   },
+   "jericho": {
+    "name": "Yeriko",
+    "book": "Luka 18–19",
+    "today": "Yeriko musono",
+    "note": "Ha jila ya kuya ku Yerusaleme, anasota waze anajimbala.",
+    "events": [
+     "Anahana meso kuli Batimeu mputu",
+     "Anasanyika Zakeu mukwa kutambula mitelo",
+     "“Mwana wa Mutu weziile kusota ni kulamwina waze anajimbala”"
+    ]
+   },
+   "bethany": {
+    "name": "Betania",
+    "book": "Yoano 11–12",
+    "today": "Al-Eizaria musono",
+    "note": "Anasolola ngolo jenyi hali kufwa hakamwihi ni chalumingu chenyi cha kusongo.",
+    "events": [
+     "Anahindwisa Lazaru ku mbila — “Yami hi kuhinduka ni mwono”",
+     "Maria anamuwaisa manji ha kufunda chenyi",
+     "Chinjikijilo chino chinakolesa manyonga a kumushiha"
+    ]
+   },
+   "jerusalem": {
+    "name": "Yerusaleme",
+    "book": "Mateu 21–28 · Luka 24 · Yilinga 1",
+    "today": "Yerusaleme musono",
+    "note": "Chihela chize Mukanda wa Zambi weswe unashindakenya — lusu, kuhinduka, ni kukandama.",
+    "events": [
+     "Kwingila cha uhenya; anaputununa nawa mesa a zuwo lia Zambi",
+     "Ku Chilia cha Kusongo anasana ambaji jenyi ku mahinji",
+     "Anafwila ku lusu",
+     "Anahinduka ha tangwa lia chitatu, kutwala anakandama"
+    ]
+   }
+  },
+  "labels": [
+   "Kalunga ka Mediterania",
+   "Galilaya",
+   "Samaria",
+   "Yudea",
+   "Dekapoli",
+   "Pereya",
+   "Kalunga ka Kufwa"
+  ],
+  "journeys": {
+   "life": "Jila ya Yesu"
+  }
+ },
+ "paul": {
+  "places": {
+   "antioch": {
+    "name": "Antiokia",
+    "book": "Yilinga 13 · 15",
+    "today": "Antakia, Tukiya musono",
+    "note": "Eklezia yakutuma kuze mulimo wa kuli akwa kalunga unaputuka mba unahiluka.",
+    "events": [
+     "Mu kulomba Mwiku anahakula Baranaba ni Saulu",
+     "Eklezia kuze akwa kufuliela avulukilwe tete ngwe ‘akwa Kristu’",
+     "Chihela cha kuputukila malwendo a tete, a muchivali ni a muchitatu"
+    ]
+   },
+   "seleucia": {
+    "name": "Seleukia",
+    "book": "Yilinga 13:4",
+    "today": "Tukiya musono",
+    "note": "Chihunda cha Antiokia — anaya ni watu ku Kipuru.",
+    "events": []
+   },
+   "salamis": {
+    "name": "Salami (Kipuru)",
+    "book": "Yilinga 13:5",
+    "today": "Kipuru musono",
+    "note": "Chihela cha tete ku Kipuru — kwambujola mu masinagoga.",
+    "events": []
+   },
+   "paphos": {
+    "name": "Pafo",
+    "book": "Yilinga 13:6-12",
+    "today": "Kipuru musono",
+    "note": "Ngolo jinasoloka kuli waze akukinda Sango Jibema.",
+    "events": [
+     "Elima mukwa uloji anapwa mputu",
+     "Serejiu Paulu mwanangana anafuliela",
+     "Kufuma hano ‘Paulu’ anatwaminyina"
+    ]
+   },
+   "perga": {
+    "name": "Perega",
+    "book": "Yilinga 13:13",
+    "today": "Antalia, Tukiya musono",
+    "note": "Chihunda mu Pamfilia — hano Yoano Marku anahiluka.",
+    "events": []
+   },
+   "pantioch": {
+    "name": "Antiokia wa Pisidia",
+    "book": "Yilinga 13:14-50",
+    "today": "Yalivachi, Tukiya musono",
+    "note": "Sango Jibema jinasahuka kuli akwa kalunga.",
+    "events": [
+     "Longeso linene lia sango lia ulamwino mu sinagoga",
+     "Akwa kalunga anji anawahilila mba anatambula Liji",
+     "Amutuhula ku kukinda"
+    ]
+   },
+   "iconium": {
+    "name": "Ikonio",
+    "book": "Yilinga 14:1-7",
+    "today": "Konia, Tukiya musono",
+    "note": "Atu anji anafuliela, alioze ulwiso unaayilisa kuya kulutwe.",
+    "events": []
+   },
+   "lystra": {
+    "name": "Lusitara",
+    "book": "Yilinga 14:8-20",
+    "today": "Tukiya musono",
+    "note": "Amuvuluka ngwe zambi, kutwala amuasa malolwe.",
+    "events": [
+     "Anahindwisa mutu wa chilema kufuma ku kusemuka",
+     "Liyongo linasaka kuhana milambu kuli ao ngwe azambi",
+     "Amuasa malolwe mba amuseza ngwe wakufwa, alioze anaimana"
+    ]
+   },
+   "derbe": {
+    "name": "Derube",
+    "book": "Yilinga 14:20-21",
+    "today": "Tukiya musono",
+    "note": "Anapwisa ambaji anji; anahiluka ku jila hanga akolese ya-eklezia.",
+    "events": []
+   },
+   "troas": {
+    "name": "Toroasi",
+    "book": "Yilinga 16:8-10",
+    "today": "Tukiya musono",
+    "note": "Chihela cha kwalumuka kuze Sango Jibema jinaya tete ku Europa.",
+    "events": [
+     "Chimweso cha mutu wa ku Masedonia",
+     "“Izenu hano mutukwase”",
+     "Anahita halinwaha ku Europa"
+    ]
+   },
+   "philippi": {
+    "name": "Filipi",
+    "book": "Yilinga 16 · Filipu",
+    "today": "ku norde wa Gerecha musono",
+    "note": "Eklezia ya tete ya Europa — Sango Jibema jinashindakenya chibwe mu kaleya.",
+    "events": [
+     "Lidia, mukwa kulanjisa vikwata via mbunyu, anafuliela",
+     "Mwana pwo wa ndungo wakutongola anakuluka",
+     "Miaso ha kachi ka ufuku, kanyikanya ka hashi, chitatu cha mulami wa kaleya analamwiwa"
+    ]
+   },
+   "thess": {
+    "name": "Tesalonika",
+    "book": "Yilinga 17 · 1–2 Tesalonika",
+    "today": "Tesaloniki, Gerecha musono",
+    "note": "Liji linanyingisa nganda mba kukinda kunazuka.",
+    "events": [
+     "Anahanjika mu sinagoga masabata atatu",
+     "“Ou akwalumuna hashi heswe”",
+     "Anatuhuka ku ufuku"
+    ]
+   },
+   "berea": {
+    "name": "Bereya",
+    "book": "Yilinga 17:10-15",
+    "today": "Veria, Gerecha musono",
+    "note": "Waze ‘a ululi’ akuhengula Liji avene.",
+    "events": [
+     "Anatambula Liji ni mbunge yeswe",
+     "Tangwa ni tangwa anahengula Mukanda wa Zambi hanga aupime",
+     "Atu anji anafuliela"
+    ]
+   },
+   "athens": {
+    "name": "Atena",
+    "book": "Yilinga 17:16-34",
+    "today": "Atena, Gerecha musono",
+    "note": "Mu nganda ya akwa mana anambujola ‘zambi wakuhona kunyingika’.",
+    "events": [
+     "Anayivwa ku mbunge ha nganda yazala ni yitumbo",
+     "Ha Areopago anambujola Mukwa Kutanga ni kuhinduka",
+     "Amuseka, alioze akwa kakehe anafuliela"
+    ]
+   },
+   "corinth": {
+    "name": "Korintu",
+    "book": "Yilinga 18 · 1–2 Korintu",
+    "today": "Gerecha musono",
+    "note": "Anatwama muvu umwe ni kachi, anatunga eklezia mu nganda ya yibi.",
+    "events": [
+     "Analinga matende ni Akwila ni Priskila",
+     "“Kanda wivwe woma… mumu ngunatwama ni yena”",
+     "Akwa Korintu anji anafuliela mba apapateswa"
+    ]
+   },
+   "ephesus": {
+    "name": "Efesu",
+    "book": "Yilinga 19 · Efesu",
+    "today": "Selechuki, Tukiya musono",
+    "note": "Mbunge ya lwendo lia muchitatu — Liji linambukila mu Asia yeswe.",
+    "events": [
+     "Kunangula tangwa ni tangwa ku miaka yivali mu zuwo lia Tiranu",
+     "Mikanda ya uloji yinaocha; yilinga ya ngolo",
+     "Demeturio mukwa kusonga palata anaimika liyongo"
+    ]
+   },
+   "miletus": {
+    "name": "Mileto",
+    "book": "Yilinga 20:17-38",
+    "today": "Tukiya musono",
+    "note": "Kulisisa ni masoji kuli akulwana a eklezia ya Efesu.",
+    "events": [
+     "“Lamenu eklezia yize alandile ni manyinga enyi mwene”",
+     "Akulwana analila, ni kunyingika ngwo kachakumumona nawa ko"
+    ]
+   },
+   "caesarea": {
+    "name": "Kaisareya",
+    "book": "Yilinga 23–26",
+    "today": "ku muelo wa kalunga wa Israele musono",
+    "note": "Ku miaka yivali analiyula Sango Jibema ku meso ja vangana ni mwanangana.",
+    "events": [
+     "Kuyulwa ku meso ja vangana Felikisi ni Fesitu",
+     "Kulikumbulwila chenyi ku meso ja Mwanangana Agiripa",
+     "“Nguinasanyika Kaisare” — kuya ku Roma"
+    ]
+   },
+   "jerusalem": {
+    "name": "Yerusaleme",
+    "book": "Yilinga 21–23",
+    "today": "Yerusaleme musono",
+    "note": "Amukwata mu zuwo lia Zambi, jila yenyi ngwe funge yinaputuka.",
+    "events": [
+     "Liyongo linamukwata mu zuwo lia Zambi",
+     "Analikumbulwila ku meso ja chizavu",
+     "Ngwe mukwa Roma, amutuma ni alami ku Kaisareya"
+    ]
+   },
+   "myra": {
+    "name": "Mira",
+    "book": "Yilinga 27:5-6",
+    "today": "Demure, Tukiya musono",
+    "note": "Analumuna ku watu wa ku Alesandria wakuya ku Roma.",
+    "events": []
+   },
+   "fairhaven": {
+    "name": "Vihunda Viwape (Kereta)",
+    "book": "Yilinga 27:8-12",
+    "today": "Kereta musono",
+    "note": "Luhuminyino lia Paulu lia kwehula kwenda ni watu kalivwililwe ko.",
+    "events": []
+   },
+   "crete": {
+    "name": "Kereta",
+    "book": "Titu",
+    "today": "Kereta musono",
+    "note": "Kunyima cha kufuma chenyi, chikungu kuze anaseza Titu hanga alongese ya-eklezia.",
+    "events": [
+     "Anaseza Titu hanga ahakule akulwana mu nganda yeswe",
+     "Anasakula atwaminyi a kuhona chihela ni a ululi",
+     "Anasoneka mukanda kuli Titu"
+    ]
+   },
+   "malta": {
+    "name": "Malta",
+    "book": "Yilinga 27–28",
+    "today": "Malta musono",
+    "note": "Kuhita mu chipupu ni kuhumbuka cha watu, chilakanyino cha Zambi chinatwama.",
+    "events": [
+     "‘Peho ya norde-oriente’ yinahumbwisa watu, alioze eswe 276 anahula",
+     "Sulukutu yinamuluma, alioze kalikwachile ko",
+     "Anahindwisa akwa yikola a chikungu"
+    ]
+   },
+   "syracuse": {
+    "name": "Sirakusa",
+    "book": "Yilinga 28:12",
+    "today": "Sishilia, Italia musono",
+    "note": "Anatwama matangwa atatu mu Sishilia.",
+    "events": []
+   },
+   "puteoli": {
+    "name": "Puteoli",
+    "book": "Yilinga 28:13-14",
+    "today": "Pozuoli, Italia musono",
+    "note": "Anahulumuka mu Italia mba akwa kufuliela akwo anaayitavila.",
+    "events": []
+   },
+   "rome": {
+    "name": "Roma",
+    "book": "Yilinga 28 · Mikanda ya Funge · 2 Timoteu",
+    "today": "Roma, Italia musono",
+    "note": "Sango Jibema jinaheta ku mbunge ya wanangana ku songo — hi keshi kusongo ko alioze ubutukilo.",
+    "events": [
+     "Miaka yivali mu ukwatwa wa ku zuwo, anambujola wanangana wa Zambi ni ushindakenyo",
+     "Kufuma hano anasoneka Mikanda ya Funge (Efesu·Filipu·Kolosu·Filemu)",
+     "Kunyima amuhaka mu kaleya nawa, anasoneka 2 Timoteu mba amushiha ha ufulielo wenyi — “Nazuwa kuzuwa chiwape, nakumisa kuya kwami”"
+    ]
+   }
+  },
+  "labels": [
+   "Kalunga ka Mediterania",
+   "Kalunga ka Egeu",
+   "Asia Yakehe",
+   "Masedonia",
+   "Italia"
+  ],
+  "journeys": {
+   "j1": "Lwendo lia tete",
+   "j2": "Lwendo lia muchivali",
+   "j3": "Lwendo lia muchitatu",
+   "rome": "Lwendo lia muchiwana · kuya ku Roma",
+   "j5": "Lwendo lia muchitanu · kunyima cha kufuma"
+  }
+ }
+}

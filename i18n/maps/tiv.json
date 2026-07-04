@@ -1,0 +1,636 @@
+{
+ "menuName": "Tiv",
+ "htmlLang": "tiv",
+ "dir": "ltr",
+ "locale": "tiv",
+ "brand": "Bibilo ken Mpase Môm",
+ "docTitle": "Bibilo sha Mapu · Bibilo ken Mpase Môm",
+ "metaDesc": "Dondo mtôôv u Icighanruamabera u Tse, uma u Yesu, man azende a Paulu sha mapu u mimi — Bibilo er ken ajiir a mimi.",
+ "s": {
+  "kicker": "Bibilo ken Mpase Môm · Mapu",
+  "title": "Bibilo sha Mapu",
+  "verse": "“Gadia zum u se va pase ne agee man m-ande u Ter wase Yesu Kristu la yô, kera lu sha gbenda u ukwaghhir mba i dugh a dugh sha kwaghfan la se lu zan ga, kpa se lu mba se nenge a nenge iengem Na sha ashe je.” (2 Peteru 1:16)",
+  "purpose": "Bibilo ka mtsegh ga. Ka mnger u ior mba ve zende sha ajiir a mimi, sha ayange a mimi, man sha ati a mimi la. Dondo igbenda ne sha mapu, sha gbenda u ashighe — bende sha ijiir, shin te ▶ sha u zenden ken mi sha kar môm môm.",
+  "ot_kick": "① Icighanruamabera u Tse — sha ashighe",
+  "ot_h": "Hii sha mgbe zan zan mhide hen Yerusalem",
+  "ot_lead": "Ka igbenda i môm ga kpa ka mzende u kwaghôron u myiman hii sha mgbe zan zan: mgbe man mgbough → mngerem ma vesen man Babel → myilan (Aberaham) → tar u ityendezwa → Mdugh → deserete → mhembe → tartor → mpav → ime → mhide.",
+  "je_kick": "② Icighanruamabera u He — uma u Yesu",
+  "je_h": "Hii sha Betelehem zan zan Yerusalem",
+  "je_lead": "Dondo uma u Yesu er Avangeli a ôr la, sha gbenda — hii sha mar Na ken Betelehem, mbatisema Na man tom Na ken Galilaia, karen ken Samaria, zan zan terankon, mnder, man mkohom sha Sha ken Yerusalem.",
+  "pa_kick": "③ Icighanruamabera u He — azende a Paulu",
+  "pa_h": "Hii sha Antiokia zan zan ikighir i tar — Roma",
+  "pa_lead": "Hii sha Pentekosti ken Yerusalem, gbenda u Loho u Dedoo samber karen Yudia — karen Asia Minor man Yuropa zan zan ken atô u tartor. Tsua zende môm ken azende ataan (u hii · u sha uhar · u sha utar + mzende u za Roma + u sha mbugh) man dondo akaa a Aerenakaa A Mbaapostoli vea uwasike mba i nger sha gbenda la.",
+  "foot": "Ape i due la · Ajiir a dondo kwaghôron u Bibilo man mfe u ajiir a Bibilo (kua ati a ainge ape a wase la). I gbe kwavaôndo, ifi, man azegemngerem sha mfe u ajiir a bugh (Natural Earth), i hôôn u i.",
+  "contact": "Mbampin · mbamhen — <a id=\"contact\" class=\"mail\">Nger se imeil</a>",
+  "play": "Zende",
+  "pause": "Tila",
+  "today": "Nyian:",
+  "verseCite": "2 Peteru 1:16"
+ },
+ "ot": {
+  "places": {
+   "eden": {
+    "name": "Edhen (Mgbe · Mgbough)",
+    "book": "Genese 1–3",
+    "today": "ityar i Tigris–Uferate nyian",
+    "note": "Ken tar u i gbe u u lu dedoo kpishi la, isholibo nyôr shi i paa mzough u atô u Aôndo man uumace.",
+    "events": [
+     "Mgbe ken ayange ataratar — “lu dedoo kpishi”",
+     "I gbe uumace sha ikyav i Aôndo",
+     "Mgbough, man mdugh ken Edhen",
+     "Ityendezwa i Loho u Dedoo i hii — “vor u kwase una cagh ityough ki iyô”"
+    ]
+   },
+   "noah": {
+    "name": "Ararat (Mngerem ma Vesen)",
+    "book": "Genese 6–9",
+    "today": "Uwo u Ararat, ken ityôhô i Turkiya nyian",
+    "note": "Aôndo ôr tar u u iv a isholibo la ijir, kpa A kura uma sha ikyev i tsombor môm.",
+    "events": [
+     "Tar u u iv a aeren a bo",
+     "Mngerem ma vesen, man tso u Noa",
+     "Ityendezwa i atsande — “mngerem maa kera va tim uumace ga”"
+    ]
+   },
+   "babel": {
+    "name": "Iyou i Babel",
+    "book": "Genese 11",
+    "today": "Iraki nyian (tar u Shinar)",
+    "note": "Sha ityendeja i i soo u kuma Sha la, Aôndo samber zwa ve man akuraior sha won cii.",
+    "events": [
+     "“Se maa gar man iyou … se ver iti yase”",
+     "Aôndo gema zwa ve",
+     "Akuraior samber sha won cii (Shinar — u hidi hingir Babilon)"
+    ]
+   },
+   "ur": {
+    "name": "Ur",
+    "book": "Genese 12",
+    "today": "ken imbusu i Iraki nyian",
+    "note": "Kwaghôron u myiman u Bibilo hii sha myilan u or môm.",
+    "events": [
+     "Aôndo yila Abram ken Ur u Mbakaldia",
+     "“Me er u ú hingir ikurior i vesen … akuraior a sha won cii aa zua a iveren ken a we”",
+     "Sha jighjigh u nan nan undu tar u ityar na"
+    ]
+   },
+   "haran": {
+    "name": "Haran",
+    "book": "Genese 12",
+    "today": "ken imbusu i Turkiya nyian",
+    "note": "Sha gbenda, nan lumun myilan u za sha tar u ityendezwa.",
+    "events": [
+     "Tsombor u Tera tem ken Haran",
+     "Tera kpe",
+     "Abram mough za sha Kanaan sha anyom 75"
+    ]
+   },
+   "shechem": {
+    "name": "Shekem · Kanaan",
+    "book": "Genese 12–50",
+    "today": "Nablus nyian",
+    "note": "Ken tar u ityendezwa i ver tsombor shi ityendezwa za hemen sha akuraior.",
+    "events": [
+     "Mnyôr ken Kanaan, atari a hii — “Me na vor wou tar ne”",
+     "Ityendezwa (Gen 15) · Isaka · Yakob",
+     "Ônov mba Yakob mba pue kar uhar — ikyor i ikpinaior pue kar uhar"
+    ]
+   },
+   "egypt": {
+    "name": "Igipiti (Gosen)",
+    "book": "Genese 37–50 · Ekesodu 1",
+    "today": "Delta u Nile, Igipiti nyian",
+    "note": "Tsombor hingir ikurior i vesen — tsô hingir ikurior i ikpan.",
+    "events": [
+     "I te Yosef, kpa nan mough hingir hemen u Igipiti",
+     "Tsombor u Yakob cii va sha u yevese ijen",
+     "I gema ikurior i Iserael i i lu seer la hingir ikpan"
+    ]
+   },
+   "sinai": {
+    "name": "Uwo u Sinai",
+    "book": "Ekesodu · Levitiku",
+    "today": "Ityar i Sinai nyian",
+    "note": "Myiman u hemban ken Icighanruamabera u Tse — ikpan hingir ior mba Aôndo.",
+    "events": [
+     "Uange pue man waniyôngo u Paseka",
+     "Zegemngerem u Nyian paa shi ve per",
+     "Atindi Pue, Tindi, tempel u shate man unagh"
+    ]
+   },
+   "kadesh": {
+    "name": "Kadesh (deserete)",
+    "book": "Numeri · Duteronomi",
+    "today": "deserete u Sinai–Negev nyian",
+    "note": "Mnenge u jighjigh ga na ikurior môm i saa a tar la — kpa Aôndo lu vea ve.",
+    "events": [
+     "Mbatimen pue kar uhar — kpa ior venda u suur",
+     "Anyom 38 ken deserete — mana, ikyô man usu",
+     "Sha tar u Moab, kwaghôron u masetyô u Mose (Duteronomi)"
+    ]
+   },
+   "jericho": {
+    "name": "Yeriko",
+    "book": "Yosua",
+    "today": "Yeriko nyian",
+    "note": "Masetyô ve nyôr ve tôô tar u ityendezwa.",
+    "events": [
+     "Yordan paa shi ior per",
+     "Azende a Yeriko gbough",
+     "Mhembe u Kanaan man mpav u tar"
+    ]
+   },
+   "shiloh": {
+    "name": "Shilo (Mbaajiriv)",
+    "book": "Mbaajiriv · Rutu",
+    "today": "Khirbet Seilun nyian",
+    "note": "Er tor lu ga yô, hanmô gbaa eren kwagh sha ishima i nan tsô — i soo tor u mimi.",
+    "events": [
+     "I ver tempel u shate ken Shilo",
+     "Gbenda u isholibo–mtev–myiman (Debora, Gideon, Samson)",
+     "Rutu — mimi ken ayange a ime, ken ikurior i Davidi"
+    ]
+   },
+   "jerusalem": {
+    "name": "Yerusalem · Tartor u i Zer la",
+    "book": "1–2 Samuel · 1 Utor",
+    "today": "Yerusalem nyian",
+    "note": "Shighe u dedoo u Iserael — man ityendezwa i tor u gbem sha won.",
+    "events": [
+     "Saul tor u hii, tsô Davidi man Goliat",
+     "Ityendezwa i Davidi — “ikônough kou kia tem gbem sha won” (2 Sam 7)",
+     "Solomon maa tempel ken Yerusalem"
+    ]
+   },
+   "samaria": {
+    "name": "Samaria · Tartor u i Paa la",
+    "book": "Utor · Mbaprofeti",
+    "today": "Sebastia nyian",
+    "note": "Tartor paa shi za shin inya er mbaprofeti gbidye mliam yô.",
+    "events": [
+     "Sha ayange a Solomon kar, mpav ken Yuda man Iserael",
+     "Mciviraeev u a kera ende ga",
+     "Eliya, Yesaia, Yeremia gbidye ér ‘hide nen va’ — shi ve pase Mesia"
+    ]
+   },
+   "nineveh": {
+    "name": "Nineve (Ashiria)",
+    "book": "2 Utor 17 · Yona",
+    "today": "Mosul, Iraki nyian",
+    "note": "I venda mwanger cii, imbusu gbough hiihii.",
+    "events": [
+     "Nineve, ngerenya u Ashiria",
+     "Tartor u imbusu gbough sha ikyev i Ashiria (722 cii Kristu)",
+     "I tindi Yona za sha Nineve"
+    ]
+   },
+   "babylon": {
+    "name": "Babilon",
+    "book": "2 Utor 25 · Daniel · Esekiel",
+    "today": "Hillah, Iraki nyian",
+    "note": "Tugh ku u ime hemban — kpa ityendezwa i msoron ngu her.",
+    "events": [
+     "Yerusalem gbough, i nyie tempel (586 cii Kristu)",
+     "I tee Yuda za ken Babilon",
+     "Daniel man Esekiel — jighjigh man mpase ken ime"
+    ]
+   },
+   "susa": {
+    "name": "Susa (Persia)",
+    "book": "Eseter · Nehemia",
+    "today": "Shush, Iran nyian",
+    "note": "Kua ken atô u tartor u mbakera fa Aôndo ga kpaa, Aôndo kura ior Nav.",
+    "events": [
+     "Persia hemba Babilon",
+     "Eseter yima Mbayuda sha mtim",
+     "Nehemia er msen sha ishigh ki tor shi i tindi un"
+    ]
+   },
+   "return": {
+    "name": "Mhide hen Yerusalem",
+    "book": "Esera · Nehemia · Malaki",
+    "today": "Yerusalem nyian",
+    "note": "Ve hide ve maa shi — kpa tor va ga. Ve kegh Mesia.",
+    "events": [
+     "Mhide sha akôr ataratar sha mtindi u Sairus (Serubabel 538 · Esera 458 · Nehemia 444)",
+     "I maa tempel shi i sôr azende a Yerusalem",
+     "Malaki — Icighanruamabera u Tse kure: “M ngu tindin ortyom Wam”"
+    ]
+   }
+  },
+  "labels": [
+   "Zegemngerem u Mediteraniya",
+   "Mesopotamia",
+   "Deserete u Arabia",
+   "Igipiti"
+  ],
+  "journeys": {
+   "flow": "Kwaghôron u myiman"
+  }
+ },
+ "jesus": {
+  "places": {
+   "bethlehem": {
+    "name": "Betelehem",
+    "book": "Mateu 1–2 · Luka 2",
+    "today": "Betelehem nyian",
+    "note": "Mesia u i tôô ityendezwa la va ken gar u Davidi — Imo i hingir iyol.",
+    "events": [
+     "I mar Un ken Betelehem, gar u Davidi",
+     "Mbatyomov pase mbakuranilev loho",
+     "Mbafankwagh va civir Un"
+    ]
+   },
+   "nazareth": {
+    "name": "Nasareti",
+    "book": "Luka 2 · 4",
+    "today": "Nasareti nyian",
+    "note": "Aôndo vese er or ken gar u ikyol.",
+    "events": [
+     "I vese Un ken ya u orkomkon",
+     "Sha anyom pue kar uhar, pinen shi lumun mbin ken tempel",
+     "Ken masetyô i venda Un ken sinagog u ityar na"
+    ]
+   },
+   "jordan": {
+    "name": "Ifi Yordan",
+    "book": "Mateu 3–4",
+    "today": "Yordan u shin ijime nyian",
+    "note": "Tom Na sha igbar hii — Sha pase Un er Wan.",
+    "events": [
+     "Yohane er Un batisema",
+     "Jijingi hô er kwaghegh nahan — “Ka Wan Wam u ishima Yam i lu a Na ye”",
+     "A hemba imeen i Satan itaar ken deserete"
+    ]
+   },
+   "cana": {
+    "name": "Kana",
+    "book": "Yohane 2",
+    "today": "Kafr Kanna nyian",
+    "note": "Ken ikyav i hii Na A tese icivir Na.",
+    "events": [
+     "Vannya sha kwaghkuhwan",
+     "Mngerem hingir wain — ikyav i hii Na",
+     "Mbahenen Nav na un jighjigh"
+    ]
+   },
+   "sychar": {
+    "name": "Sikar (Samaria)",
+    "book": "Yohane 2–4",
+    "today": "ikyua a Nablus nyian",
+    "note": "Gbenda u tom u hiihii — karen Yerusalem zan zan Samaria u i laha la.",
+    "events": [
+     "A wanger tempel ken Yerusalem",
+     "Sha tugh, Nikodemu — “Gba u i mar we sha he”",
+     "Mngerem ma uma sha kwase u Samaria"
+    ]
+   },
+   "capernaum": {
+    "name": "Kapernaum",
+    "book": "Mateu 4–13 · Marku 1–4",
+    "today": "hen kwavaôndo u zegemngerem u Galilaia nyian",
+    "note": "Ijiir i tom u Galilaia — myilan, mtesen man mhendan cii zua heen.",
+    "events": [
+     "A yila mbakôrunov shi A ver ijiir heen",
+     "Kwaghôron u sha Uwo — “Saan mba i bee ve ken jijingi la iember”",
+     "Anzaakaa a tartor — man mhendan u u seer la"
+    ]
+   },
+   "galilee": {
+    "name": "Zegemngerem u Galilaia",
+    "book": "Marku 4 · 6 · Yohane 6",
+    "today": "Zegemngerem u Kinneret nyian",
+    "note": "Sha agee sha akaa a Aôndo gba la A tese Un er ka an ye.",
+    "events": [
+     "“Tema dông, kunde ave” — A kunde ahumbe",
+     "A koson ior 5,000 sha ubredi utaan man ishu ihar",
+     "A zende sha mngerem"
+    ]
+   },
+   "caesarea_p": {
+    "name": "Kaisaria Filipi",
+    "book": "Mateu 16–17",
+    "today": "Banias nyian",
+    "note": "Mbahenen kav ér Un ka Kristu, shi gbenda u terankon bugh.",
+    "events": [
+     "Mpase u Peteru — “We u Kristu, Wan u Aôndo u uma la”",
+     "A vande pasen ku Na man mnder Na",
+     "I gema Un ken icivir sha uwo"
+    ]
+   },
+   "jericho": {
+    "name": "Yeriko",
+    "book": "Luka 18–19",
+    "today": "Yeriko nyian",
+    "note": "Sha gbenda u za sha Yerusalem, A keren mba ve saa la.",
+    "events": [
+     "A bugh ashe a Bartimeu orpirir",
+     "A yila Sakeu orkohol u imkombo",
+     "“Wan u Or va sha u keren shi u yiman mba ve saa la”"
+    ]
+   },
+   "bethany": {
+    "name": "Betania",
+    "book": "Yohane 11–12",
+    "today": "al-Eizariya nyian",
+    "note": "A tese agee sha ku sha ikyua i sati u masetyô Na.",
+    "events": [
+     "A nder Lasaru ken uar — “Ka Mo mnder man uma je”",
+     "Maria shime Un mkurem sha ci u mtemen",
+     "Ikyav ne taver mhen u wuan Un"
+    ]
+   },
+   "jerusalem": {
+    "name": "Yerusalem",
+    "book": "Mateu 21–28 · Luka 24 · Aerenakaa A Mbaapostoli 1",
+    "today": "Yerusalem nyian",
+    "note": "Ijiir i vesen i Bibilo cii i tese la — terankon, mnder, man mkohom sha Sha.",
+    "events": [
+     "Mnyôr sha icivir; A gbidye utebur mba ken tempel shi",
+     "Sha Kwaghyan u Masetyô A ôô mbahenen Nav angahar",
+     "A kpe sha terankon",
+     "A nder sha iyange i sha itaar, tsô A kohom sha Sha"
+    ]
+   }
+  },
+  "labels": [
+   "Zegemngerem u Mediteraniya",
+   "Galilaia",
+   "Samaria",
+   "Yudia",
+   "Dekapoli",
+   "Perea",
+   "Zegemngerem u Ku"
+  ],
+  "journeys": {
+   "life": "Gbenda u Yesu"
+  }
+ },
+ "paul": {
+  "places": {
+   "antioch": {
+    "name": "Antiokia",
+    "book": "Aerenakaa A Mbaapostoli 13 · 15",
+    "today": "Antakya, Turkiya nyian",
+    "note": "Nyianegh ki mtindi ki tom u mbagenev u hii shi u hide van la.",
+    "events": [
+     "Sha msen Jijingi paav Barnaba man Saul",
+     "Nyianegh ki i vande yilan mbananjighjigh ér ‘Mbakristu’ heen la",
+     "Ijiir i mhii u azende a hii, a sha uhar man a sha utar"
+    ]
+   },
+   "seleucia": {
+    "name": "Seleukia",
+    "book": "Aerenakaa A Mbaapostoli 13:4",
+    "today": "Turkiya nyian",
+    "note": "Ijiir i tso i Antiokia — ve mough sha tso ve za Kipro.",
+    "events": []
+   },
+   "salamis": {
+    "name": "Salami (Kipro)",
+    "book": "Aerenakaa A Mbaapostoli 13:5",
+    "today": "Kipro nyian",
+    "note": "Ijiir i hii ken Kipro — mpase kwagh ken usinagog.",
+    "events": []
+   },
+   "paphos": {
+    "name": "Pafo",
+    "book": "Aerenakaa A Mbaapostoli 13:6-12",
+    "today": "Kipro nyian",
+    "note": "I tese agee sha mba ve hendan a Loho u Dedoo la.",
+    "events": [
+     "Elima ortseren hingir orpirir",
+     "Sergiu Paulu gomna na jighjigh",
+     "Hii heen ‘Paulu’ tôô hemen"
+    ]
+   },
+   "perga": {
+    "name": "Perga",
+    "book": "Aerenakaa A Mbaapostoli 13:13",
+    "today": "Antalya, Turkiya nyian",
+    "note": "Ijiir i tso ken Pamfilia — heen Yohane Marku hide.",
+    "events": []
+   },
+   "pantioch": {
+    "name": "Antiokia u Pisidia",
+    "book": "Aerenakaa A Mbaapostoli 13:14-50",
+    "today": "Yalvaç, Turkiya nyian",
+    "note": "Loho u Dedoo bugh gbenda za sha mbagenev.",
+    "events": [
+     "Kwaghôron u gbee u kwaghôron u myiman ken sinagog",
+     "Mbagenev kpishi eren iember shi ngohol kwagh",
+     "I dugh ve sha mhendan"
+    ]
+   },
+   "iconium": {
+    "name": "Ikonia",
+    "book": "Aerenakaa A Mbaapostoli 14:1-7",
+    "today": "Konya, Turkiya nyian",
+    "note": "Kpishi na jighjigh, kpa mtev na ve yem hemen.",
+    "events": []
+   },
+   "lystra": {
+    "name": "Listra",
+    "book": "Aerenakaa A Mbaapostoli 14:8-20",
+    "today": "Turkiya nyian",
+    "note": "I civir ve er aôndo, tsô i ta ve iwen.",
+    "events": [
+     "A bee or u lu angôsôô hii mar na",
+     "Zegeior nôngo u naan ve nagh er aôndo",
+     "I ta un iwen i undu un er nan kpe, kpa nan mough"
+    ]
+   },
+   "derbe": {
+    "name": "Derbe",
+    "book": "Aerenakaa A Mbaapostoli 14:20-21",
+    "today": "Turkiya nyian",
+    "note": "I gber mbahenen kpishi; ve hide sha gbenda ve sha u taver mbananyianegh asema.",
+    "events": []
+   },
+   "troas": {
+    "name": "Troa",
+    "book": "Aerenakaa A Mbaapostoli 16:8-10",
+    "today": "Turkiya nyian",
+    "note": "Ijiir i mgem ape Loho u Dedoo za sha Yuropa sha hiihii la.",
+    "events": [
+     "Mpase u or u Makedonia",
+     "“Va sha wono va wase se”",
+     "Ve per za sha Yuropa fefa"
+    ]
+   },
+   "philippi": {
+    "name": "Filipi",
+    "book": "Aerenakaa A Mbaapostoli 16 · Mbafilipi",
+    "today": "ken ityôhô i Grika nyian",
+    "note": "Nyianegh ki hii ki Yuropa — Loho u Dedoo hemba kua ken gaadi kpaa.",
+    "events": [
+     "Lidia, orkasua u ikyondo i nyian la, na jighjigh",
+     "I pase wankye u ikpan u eren mtseren la",
+     "Atsam sha tugh, mnyaghayol u tar, tsombor u orkuran gaadi zua a myiman"
+    ]
+   },
+   "thess": {
+    "name": "Tesalonika",
+    "book": "Aerenakaa A Mbaapostoli 17 · 1–2 Mbatesalonika",
+    "today": "Tesaloniki, Grika nyian",
+    "note": "Kwagh u nyaghyô gar shi mhendan mough taveraa.",
+    "events": [
+     "A lam ken sinagog Ayange a Memen ataratar",
+     "“Mba ve gbe uça tar cii la”",
+     "Ve due sha tugh"
+    ]
+   },
+   "berea": {
+    "name": "Beroia",
+    "book": "Aerenakaa A Mbaapostoli 17:10-15",
+    "today": "Veria, Grika nyian",
+    "note": "Mba dedoo mba ve time kwagh sha ayol a ve la.",
+    "events": [
+     "Ve ngohol kwagh a ishima i môm",
+     "Hanma iyange ve time icighanruamabera sha u kaven mi",
+     "Kpishi va na jighjigh"
+    ]
+   },
+   "athens": {
+    "name": "Ateni",
+    "book": "Aerenakaa A Mbaapostoli 17:16-34",
+    "today": "Ateni, Grika nyian",
+    "note": "Ken gar u mbafankwagh A pase ‘aôndo u i fe un ga la’.",
+    "events": [
+     "Gar u u iv a aeev vihi un ishima",
+     "Sha Areopagu A pase Orgba man mnder",
+     "I pfeghe un, kpa mbagenev na jighjigh"
+    ]
+   },
+   "corinth": {
+    "name": "Korinti",
+    "book": "Aerenakaa A Mbaapostoli 18 · 1–2 Mbakorinte",
+    "today": "Grika nyian",
+    "note": "A tema anyom môm man atô, A gbe nyianegh ken gar u aeren a bo.",
+    "events": [
+     "A gber utenti vea Akwila man Priskila",
+     "“De cier iyol ga … gadia Mo M ngu a we”",
+     "Mbakorinti kpishi na jighjigh shi i er ve batisema"
+    ]
+   },
+   "ephesus": {
+    "name": "Efesu",
+    "book": "Aerenakaa A Mbaapostoli 19 · Mbaefese",
+    "today": "Selçuk, Turkiya nyian",
+    "note": "Atô u zende u sha utar — kwagh samber ken Asia cii.",
+    "events": [
+     "Mtesen hanma iyange anyom ihar ken iyou i Tiranu",
+     "I nyie utakerada mba tseren; aeren a agee",
+     "Demetriu ortsurugh na iyua mough"
+    ]
+   },
+   "miletus": {
+    "name": "Mileto",
+    "book": "Aerenakaa A Mbaapostoli 20:17-38",
+    "today": "Turkiya nyian",
+    "note": "Mpav u mliam a mbatamen mba Efesu.",
+    "events": [
+     "“Kuran nen nyianegh ki Aôndo A yam sha awambe a Nagh la”",
+     "Mbatamen vaan mliam, ve fa ér vea kera nenge a Na ga"
+    ]
+   },
+   "caesarea": {
+    "name": "Kaisaria",
+    "book": "Aerenakaa A Mbaapostoli 23–26",
+    "today": "kwavaôndo u Iserael nyian",
+    "note": "Anyom ihar A war Loho u Dedoo sha ishigh ki gomnaov man tor.",
+    "events": [
+     "Ijir sha ishigh ki gomnaov Feliki man Festu",
+     "Mwar u iyol na sha ishigh ki tor Agripa",
+     "“M sombo hen Kaisar” — za sha Roma"
+    ]
+   },
+   "jerusalem": {
+    "name": "Yerusalem",
+    "book": "Aerenakaa A Mbaapostoli 21–23",
+    "today": "Yerusalem nyian",
+    "note": "I kôr un ken tempel, gbenda na er orgba yô hii.",
+    "events": [
+     "Zegeior kôr un ken tempel",
+     "A war iyol na sha ishigh ki mbatamen",
+     "Er ortar u Roma nahan, i tindi un a mbakuran za sha Kaisaria"
+    ]
+   },
+   "myra": {
+    "name": "Mira",
+    "book": "Aerenakaa A Mbaapostoli 27:5-6",
+    "today": "Demre, Turkiya nyian",
+    "note": "Ve gema tso u Aleksandria u u za Roma la.",
+    "events": []
+   },
+   "fairhaven": {
+    "name": "Fair Havens (Kreti)",
+    "book": "Aerenakaa A Mbaapostoli 27:8-12",
+    "today": "Kreti nyian",
+    "note": "I ungwa mwanger u Paulu u kaan ér i de mzende sha tso la ga.",
+    "events": []
+   },
+   "crete": {
+    "name": "Kreti",
+    "book": "Titu",
+    "today": "Kreti nyian",
+    "note": "Sha mbugh na, icighanya i u undu Titu heen sha u wanger mbananyianegh la.",
+    "events": [
+     "A undu Titu sha u veren mbatamen ken hanma gar",
+     "A kaa ér i ver mbahemen mba i taver ve ibo ga, mba mimi",
+     "A nger uwasike hen Titu"
+    ]
+   },
+   "malta": {
+    "name": "Malta",
+    "book": "Aerenakaa A Mbaapostoli 27–28",
+    "today": "Malta nyian",
+    "note": "Karen ahumbe man mgbough u tso, ityendezwa i Aôndo tile dông.",
+    "events": [
+     "Ahumbe gbough tso, kpa ior 276 cii war",
+     "Iyô kôr un kpa nan zua a mtoghom ga",
+     "A bee mbauange mba ken icighanya la"
+    ]
+   },
+   "syracuse": {
+    "name": "Sirakusa",
+    "book": "Aerenakaa A Mbaapostoli 28:12",
+    "today": "Sicily, Italia nyian",
+    "note": "Ve tema ayange ataratar ken Sicily.",
+    "events": []
+   },
+   "puteoli": {
+    "name": "Puteoli",
+    "book": "Aerenakaa A Mbaapostoli 28:13-14",
+    "today": "Pozzuoli, Italia nyian",
+    "note": "Ve nyôr Italia shi mbananjighjigh mba imôngo zua a ve.",
+    "events": []
+   },
+   "rome": {
+    "name": "Roma",
+    "book": "Aerenakaa A Mbaapostoli 28 · Uwasike mba ken Gaadi · 2 Timoteu",
+    "today": "Roma, Italia nyian",
+    "note": "Loho u Dedoo ar ken atô u tartor masetyô — ka mkure ga kpa ka mhii.",
+    "events": [
+     "Anyom ihar ken mkôr u ya, A pase tartor sha agee",
+     "Hii heen A nger Uwasike mba ken Gaadi (Efe·Fil·Kol·Flm)",
+     "Ken masetyô i kôr un ken gaadi shi, A nger 2 Timoteu shi i wua un sha ci u jighjigh — “M nôngo ityav mbi dedoo, m kure aza a mnyambegh”"
+    ]
+   }
+  },
+  "labels": [
+   "Zegemngerem u Mediteraniya",
+   "Zegemngerem u Egea",
+   "Asia Minor",
+   "Makedonia",
+   "Italia"
+  ],
+  "journeys": {
+   "j1": "Zende u hii",
+   "j2": "Zende u sha uhar",
+   "j3": "Zende u sha utar",
+   "rome": "Zende u sha unyiin · za Roma",
+   "j5": "Zende u sha utaan · sha mbugh"
+  }
+ }
+}

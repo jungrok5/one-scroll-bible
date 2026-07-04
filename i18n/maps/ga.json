@@ -1,0 +1,636 @@
+{
+ "menuName": "Gaeilge",
+ "htmlLang": "ga",
+ "dir": "ltr",
+ "locale": "ga-IE",
+ "brand": "An Bíobla in Aon Scrolla",
+ "docTitle": "An Bíobla ar an Léarscáil · An Bíobla in Aon Scrolla",
+ "metaDesc": "Lorg amlíne an tSean-Tiomna, beatha Íosa, agus aistir Phóil ar fhíor-léarscáil — tharla an Bíobla in áiteanna fíora.",
+ "s": {
+  "kicker": "An Bíobla in Aon Scrolla · Léarscáileanna",
+  "title": "An Bíobla ar an Léarscáil",
+  "verse": "“Ní ag aithris aon fhabhalscéalta a ceapadh go cliste a bhíomar nuair a thugamar eolas daoibh ar chumhacht, agus ar theacht ár dTiarna Íosa Críost, mar chonaiceamar a mhórgacht lenár súile cinn.” (2 Peadar 1:16)",
+  "purpose": "Ní miotas é an Bíobla. Is taifead é ar dhaoine a shiúil ar fhíor-áiteanna, fíor-dhátaí agus fíor-ainmneacha. Lorg na cosáin sin trasna léarscáile, in ord ama — tapáil pointe, nó brúigh ▶ chun siúl tríd céim ar chéim.",
+  "ot_kick": "① An Sean-Tiomna — trasna an ama",
+  "ot_h": "Ón gcruthú go dtí an filleadh ar Iarúsailéim",
+  "ot_lead": "Ní aon aistear amháin é ach sruth na staire slánaithe ón gcruthú ar aghaidh: an cruthú agus an titim → an díle agus Bábael → glaoch (Abrahám) → an talamh tairgthe → an tEaxodus → an fásach → an concas → an ríocht → an scoilt → an deoraíocht → an filleadh.",
+  "je_kick": "② An Tiomna Nua — beatha Íosa",
+  "je_h": "Ó Bheithil go Iarúsailéim",
+  "je_lead": "Lean beatha Íosa mar a insíonn na Soiscéil í, in ord — óna bhreith i mBeithil trína bhaisteadh agus a mhinistreacht sa Ghailíl, trasna na Samáire, go dtí an chrois, an aiséirí agus an dul suas in Iarúsailéim.",
+  "pa_kick": "③ An Tiomna Nua — aistir Phóil",
+  "pa_h": "Ó Antíoch go himeall an domhain — an Róimh",
+  "pa_lead": "Ó Chincís in Iarúsailéim, conas a scaip an soiscéal thar Iúdáia — trí Áise Mion agus an Eoraip go croílár na himpireachta. Roghnaigh ceann de na cúig aistear (1ú·2ú·3ú + an turas go dtí an Róimh + tar éis a scaoilte) agus lean eachtraí Ghníomhartha leis na litreacha a scríobhadh ar an mbealach.",
+  "foot": "Foinsí · Leanann na háiteanna téacs an Bhíobla agus gnáth-thíreolaíocht an Bhíobla (le hainmneacha nua-aimseartha mar chabhair). Tarraingítear na cóstaí, na haibhneacha agus na lochanna ó shonraí tíreolaíocha oscailte (Natural Earth), simplithe.",
+  "contact": "Ceisteanna · aiseolas — <a id=\"contact\" class=\"mail\">Seol ríomhphost</a>",
+  "play": "Seinn",
+  "pause": "Sos",
+  "today": "Inniu:",
+  "verseCite": "2 Peadar 1:16"
+ },
+ "ot": {
+  "places": {
+   "eden": {
+    "name": "Éidin (An Cruthú · An Titim)",
+    "book": "Geineasas 1–3",
+    "today": "réigiún na Tigrise–Eofrait inniu",
+    "note": "Isteach i ndomhan a rinneadh go han-mhaith, tagann an peaca agus briseann sé an nasc idir Dia agus an cine daonna.",
+    "events": [
+     "An cruthú i sé lá — “bhí sé go han-mhaith”",
+     "An cine daonna déanta ar íomhá Dé",
+     "An titim, agus an díbirt as Éidin",
+     "An chéad gealltanas den soiscéal — “brúfaidh síol na mná ceann na nathrach”"
+    ]
+   },
+   "noah": {
+    "name": "Árarat (An Díle)",
+    "book": "Geineasas 6–9",
+    "today": "Sliabh Árarat, oirthear na Tuirce inniu",
+    "note": "Tugann Dia breithiúnas ar dhomhan lán de pheaca, ach coinníonn sé an bheatha slán trí aon teaghlach amháin.",
+    "events": [
+     "Domhan líonta le truailliú",
+     "An díle, agus áirc Naoi",
+     "Cúnant an tuar ceatha — “ní bheidh díle ann arís chun an domhan a scriosadh”"
+    ]
+   },
+   "babel": {
+    "name": "Túr Bhábael",
+    "book": "Geineasas 11",
+    "today": "an Iaráic inniu (machaire Shineár)",
+    "note": "In aghaidh an uabhair a shíneann i dtreo na bhflaitheas, scaipeann Dia a n-urlabhra agus na pobail ar fud an domhain.",
+    "events": [
+     "“Tógaimis cathair agus túr … agus déanaimis ainm dúinn féin”",
+     "Cuireann Dia a dteanga trí chéile",
+     "Scaipeann na pobail ar fud an domhain (Shineár — an Bhablóin níos déanaí)"
+    ]
+   },
+   "ur": {
+    "name": "Úr",
+    "book": "Geineasas 12",
+    "today": "deisceart na hIaráice inniu",
+    "note": "Tosaíonn scéal fuascailte an Bhíobla le glaoch aon fhir amháin.",
+    "events": [
+     "Glaonn Dia ar Abrám amach as Úr na gCaldéach",
+     "“Déanfaidh mé cine mór díot … beannófar gach pobal tríot”",
+     "Le creideamh fágann sé a thír dhúchais"
+    ]
+   },
+   "haran": {
+    "name": "Hárán",
+    "book": "Geineasas 12",
+    "today": "deisceart na Tuirce inniu",
+    "note": "Ar an mbealach, ag freagairt an ghlaoigh i dtreo na talún tairgthe.",
+    "events": [
+     "Socraíonn teaghlach Thearah i Hárán",
+     "Faigheann Tearah bás",
+     "Imíonn Abrám go Canán in aois a 75"
+    ]
+   },
+   "shechem": {
+    "name": "Seicem · Canán",
+    "book": "Geineasas 12–50",
+    "today": "Nablus inniu",
+    "note": "Sa talamh tairgthe bunaítear teaghlach agus gabhann an cúnant ó ghlúin go glúin.",
+    "events": [
+     "Ag teacht isteach i gCanán, an chéad altóir — “do do shliocht bronnaim an talamh seo”",
+     "An cúnant (Gein 15) · Íosác · Iacób",
+     "Dáréag mac Iacóib — fréamh an dá threibh déag"
+    ]
+   },
+   "egypt": {
+    "name": "An Éigipt (Goisin)",
+    "book": "Geineasas 37–50 · Eaxodus 1",
+    "today": "Deilt na Níle, an Éigipt inniu",
+    "note": "Éiríonn teaghlach ina chine mór — ansin ina náisiún de dhaoir.",
+    "events": [
+     "Iósaef, díolta i gcéin, ardaithe chun rialaithe na hÉigipte",
+     "Tagann teaghlach iomlán Iacóib anuas chun éalú ón ngorta",
+     "Déantar daoir de náisiún fáis Iosrael"
+    ]
+   },
+   "sinai": {
+    "name": "Sliabh Sínáí",
+    "book": "Eaxodus · Léivític",
+    "today": "Leithinis Shínáí inniu",
+    "note": "Príomhfhuascailt an tSean-Tiomna — déantar pobal Dé féin de dhaoir.",
+    "events": [
+     "Na deich bplá agus uan na Cásca",
+     "Scoilteann an Mhuir Rua agus trasnaíonn siad",
+     "Na Deich nAithne, an Dlí, an taibearnacal agus na híobairtí"
+    ]
+   },
+   "kadesh": {
+    "name": "Cáidéis (an fásach)",
+    "book": "Uimhreacha · Deotranaimí",
+    "today": "fásach Shínáí–an Neigib inniu",
+    "note": "Cailleann glúin an talamh mar gheall ar an easpa creidimh — ach fanann Dia leo.",
+    "events": [
+     "Dáréag spiaire — ach diúltaíonn an pobal muinín a chur",
+     "38 bliain san fhásach — manna, néal agus tine",
+     "Ar mhachairí Mhóáb, seanmóir dheireanach Mhaois (Deotranaimí)"
+    ]
+   },
+   "jericho": {
+    "name": "Iairíceo",
+    "book": "Iósua",
+    "today": "Iairíceo inniu",
+    "note": "Faoi dheireadh téann siad isteach agus gabhann siad an talamh tairgthe.",
+    "events": [
+     "Scoilteann an Iordáin agus trasnaíonn an pobal",
+     "Titeann ballaí Iairíceo",
+     "Concas Chanán agus roinnt na talún"
+    ]
+   },
+   "shiloh": {
+    "name": "Sileo (Na Breithiúna)",
+    "book": "Breithiúna · Rút",
+    "today": "Khirbet Seilun inniu",
+    "note": "Gan rí, déanann gach duine mar ab áil leis — tá fíor-rí de dhíth.",
+    "events": [
+     "Cuirtear an taibearnacal ar bun i Sileo",
+     "Timthriall peaca–cos ar bolg–fuascailt (Deabórá, Gideón, Samsón)",
+     "Rút — dílseacht i laethanta dorcha, i sliocht Dháiví"
+    ]
+   },
+   "jerusalem": {
+    "name": "Iarúsailéim · An Ríocht Aontaithe",
+    "book": "1–2 Samúéil · 1 Ríthe",
+    "today": "Iarúsailéim inniu",
+    "note": "Ré órga Iosrael — agus gealltanas rí shíoraí.",
+    "events": [
+     "Sól an chéad rí, ansin Dáiví agus Goliat",
+     "Cúnant Dháiví — “do ríchathaoir go deo” (2 Sam 7)",
+     "Tógann Solamh an teampall in Iarúsailéim"
+    ]
+   },
+   "samaria": {
+    "name": "Samáir · An Ríocht Roinnte",
+    "book": "Ríthe · na Fáithe",
+    "today": "Sebastia inniu",
+    "note": "Scoilteann an ríocht agus meathann sí agus na fáithe ag glaoch amach.",
+    "events": [
+     "Tar éis Sholaimh, an scoilt idir Iúdá agus Iosrael",
+     "Íoldhiailteacht arís agus arís",
+     "Glaonn Éilias, Íseáia, Irimia ‘fillígí’ — agus tuarann siad an Measaí"
+    ]
+   },
+   "nineveh": {
+    "name": "Níníve (An Asaír)",
+    "book": "2 Ríthe 17 · Ióna",
+    "today": "Mosul, an Iaráic inniu",
+    "note": "Ag déanamh neamhaird de gach rabhadh, titeann an tuaisceart ar dtús.",
+    "events": [
+     "Níníve, príomhchathair na hAsaíre",
+     "Titeann an ríocht thuaisceartach chuig an Asaír (722 RC)",
+     "Cuirtear Ióna go Níníve"
+    ]
+   },
+   "babylon": {
+    "name": "An Bhablóin",
+    "book": "2 Ríthe 25 · Dainéil · Eizicéil",
+    "today": "Hillah, an Iaráic inniu",
+    "note": "An oíche is dorcha — ach fanann gealltanas an athchóirithe.",
+    "events": [
+     "Titeann Iarúsailéim, dóitear an teampall (586 RC)",
+     "Tugtar Iúdá i mbraighdeanas go dtí an Bhablóin",
+     "Dainéil agus Eizicéil — creideamh agus físeanna sa deoraíocht"
+    ]
+   },
+   "susa": {
+    "name": "Súsa (An Pheirs)",
+    "book": "Eistir · Nihimiá",
+    "today": "Shush, an Iaráin inniu",
+    "note": "Fiú i gcroílár impireachta págánaí, coinníonn Dia a phobal.",
+    "events": [
+     "Cloíonn an Pheirs an Bhablóin",
+     "Sábhálann Eistir na Giúdaigh ón scrios",
+     "Guíonn Nihimiá os comhair an rí agus cuirtear amach é"
+    ]
+   },
+   "return": {
+    "name": "An Filleadh ar Iarúsailéim",
+    "book": "Eazrá · Nihimiá · Malaicí",
+    "today": "Iarúsailéim inniu",
+    "note": "Filleann siad agus atógann siad — ach níor tháinig aon rí. Fanann siad leis an Measaí.",
+    "events": [
+     "Trí thonn fillte trí fhoraithne Chíoras (Zarubábel 538 · Eazrá 458 · Nihimiá 444)",
+     "Atógtar an teampall agus deisítear ballaí Iarúsailéim",
+     "Malaicí — dúnann an Sean-Tiomna: “Tá mo theachtaire á chur amach agam”"
+    ]
+   }
+  },
+  "labels": [
+   "An Mheánmhuir",
+   "An Mheaspatáim",
+   "Fásach na hAráibe",
+   "An Éigipt"
+  ],
+  "journeys": {
+   "flow": "Scéal na fuascailte"
+  }
+ },
+ "jesus": {
+  "places": {
+   "bethlehem": {
+    "name": "Beithil",
+    "book": "Matha 1–2 · Lúcás 2",
+    "today": "Beithil inniu",
+    "note": "Tagann an Measaí geallta go baile Dháiví — an Briathar déanta ina fheoil.",
+    "events": [
+     "Rugadh i mBeithil, baile Dháiví",
+     "Fógraíonn aingil an dea-scéal do na haoirí",
+     "Tagann na Draoithe chun adhartha"
+    ]
+   },
+   "nazareth": {
+    "name": "Nazarat",
+    "book": "Lúcás 2 · 4",
+    "today": "Nazarat inniu",
+    "note": "Fásann Dia aníos ina dhuine i mbaile gnáth.",
+    "events": [
+     "Tógtha i dteach siúinéara",
+     "In aois a dó dhéag, ag ceistiú agus ag freagairt sa teampall",
+     "Diúltaithe níos déanaí i sionagóg a bhaile dúchais"
+    ]
+   },
+   "jordan": {
+    "name": "Abhainn na Iordáine",
+    "book": "Matha 3–4",
+    "today": "an Iordáin íochtarach inniu",
+    "note": "Tosaíonn a mhinistreacht phoiblí — séalaíonn na flaithis mar an Mac é.",
+    "events": [
+     "Baiste ag Eoin",
+     "Tuirlingíonn an Spiorad mar cholm — “Is é seo mo Mhac muirneach”",
+     "Cloíonn sé trí chathú Shátain sa bhfásach"
+    ]
+   },
+   "cana": {
+    "name": "Cána",
+    "book": "Eoin 2",
+    "today": "Kafr Kanna inniu",
+    "note": "Ina chéad chomhartha nochtann sé a ghlóir.",
+    "events": [
+     "Ina aoi ag bainis",
+     "Uisce iompaithe ina fhíon — a chéad chomhartha",
+     "Creideann a dheisceabail ann"
+    ]
+   },
+   "sychar": {
+    "name": "Síochár (An tSamáir)",
+    "book": "Eoin 2–4",
+    "today": "in aice le Nablus inniu",
+    "note": "Bóthar na luathmhinistreachta — trí Iarúsailéim agus ar aghaidh go dtí an tSamáir tarcaisnithe.",
+    "events": [
+     "Glanann sé an teampall in Iarúsailéim",
+     "San oíche, Nicodémus — “ní foláir daoibh breith a fháil athuair”",
+     "Uisce beo do bhean Shamáríoch"
+    ]
+   },
+   "capernaum": {
+    "name": "Cafarnácam",
+    "book": "Matha 4–13 · Marcas 1–4",
+    "today": "cladach na Gailíle inniu",
+    "note": "Bunáit na ministreachta sa Ghailíl — buaileann glaoch, teagasc agus freasúra le chéile anseo.",
+    "events": [
+     "Glaonn sé ar na hiascairí agus bunaíonn sé é féin anseo",
+     "An tSeanmóir ar an Sliabh — “Is méanar dóibh seo atá bocht ó spiorad”",
+     "Parabail na ríochta — agus freasúra ag ardú"
+    ]
+   },
+   "galilee": {
+    "name": "Muir Ghailíl",
+    "book": "Marcas 4 · 6 · Eoin 6",
+    "today": "Loch Chinneret inniu",
+    "note": "Le cumhacht ar an nádúr taispeánann sé cé hé féin.",
+    "events": [
+     "“Bí ciúin, bí socair” — ciúnaíonn sé an stoirm",
+     "Cothaíonn sé 5,000 le cúig bhuilín agus dhá iasc",
+     "Siúlann sé ar an uisce"
+    ]
+   },
+   "caesarea_p": {
+    "name": "Céasairé Philib",
+    "book": "Matha 16–17",
+    "today": "Banias inniu",
+    "note": "Tuigeann na deisceabail gurb é Críost é, agus osclaíonn bóthar na croise.",
+    "events": [
+     "Admháil Pheadair — “Is tú Críost, Mac Dé bheo”",
+     "Tuarann sé a bhás agus a aiséirí den chéad uair",
+     "Claochlaithe i nglóir ar an sliabh"
+    ]
+   },
+   "jericho": {
+    "name": "Iairíceo",
+    "book": "Lúcás 18–19",
+    "today": "Iairíceo inniu",
+    "note": "Ar an mbóthar suas go Iarúsailéim, lorgaíonn sé an té atá caillte.",
+    "events": [
+     "Tugann sé radharc do Bhartiméas dall",
+     "Glaonn sé ar Zacháias an poibleacánach",
+     "“Tháinig Mac an Duine do lorg agus do shlánú an rud a bhí caillte”"
+    ]
+   },
+   "bethany": {
+    "name": "Béatáine",
+    "book": "Eoin 11–12",
+    "today": "al-Eizariya inniu",
+    "note": "Taispeánann sé smacht ar an mbás ar an oíche roimh a sheachtain dheiridh.",
+    "events": [
+     "Tógann sé Lazaras ón uaigh — “Is mise an t-aiséirí agus an bheatha”",
+     "Ungann Máire é le haghaidh a adhlactha",
+     "Cruann an comhartha seo an chomhcheilg chun é a mharú"
+    ]
+   },
+   "jerusalem": {
+    "name": "Iarúsailéim",
+    "book": "Matha 21–28 · Lúcás 24 · Gníomhartha 1",
+    "today": "Iarúsailéim inniu",
+    "note": "An buaic a bhfuil an Bíobla go léir ag díriú air — crois, aiséirí, dul suas.",
+    "events": [
+     "Teacht caithréimeach; iompaíonn sé boird an teampaill arís",
+     "Ag an Suipéar Deireanach níonn sé cosa na ndeisceabal",
+     "Faigheann sé bás ar an gcrois",
+     "Aiséirithe ar an tríú lá, ansin dulta suas"
+    ]
+   }
+  },
+  "labels": [
+   "An Mheánmhuir",
+   "An Ghailíl",
+   "An tSamáir",
+   "Iúdáia",
+   "An Deacapolas",
+   "An Phéaráia",
+   "An Mhuir Mharbh"
+  ],
+  "journeys": {
+   "life": "Cosán Íosa"
+  }
+ },
+ "paul": {
+  "places": {
+   "antioch": {
+    "name": "Antíoch",
+    "book": "Gníomhartha 13 · 15",
+    "today": "Antakya, an Tuirc inniu",
+    "note": "An eaglais a sheol amach, áit a dtosaíonn misean na nGintlithe agus a bhfilleann sé.",
+    "events": [
+     "In am urnaí cuireann an Spiorad Barnabas agus Sól ar leataobh",
+     "An eaglais inar tugadh ‘Críostaithe’ ar na creidmhigh den chéad uair",
+     "Pointe seolta an 1ú, 2ú agus 3ú aistear"
+    ]
+   },
+   "seleucia": {
+    "name": "Seiliúicia",
+    "book": "Gníomhartha 13:4",
+    "today": "an Tuirc inniu",
+    "note": "Cuan Antíoch — seolann siad chun na Cipire.",
+    "events": []
+   },
+   "salamis": {
+    "name": "Salaimís (An Chipir)",
+    "book": "Gníomhartha 13:5",
+    "today": "an Chipir inniu",
+    "note": "An chéad stad ar an gCipir — ag seanmóireacht sna sionagóga.",
+    "events": []
+   },
+   "paphos": {
+    "name": "Pafós",
+    "book": "Gníomhartha 13:6-12",
+    "today": "an Chipir inniu",
+    "note": "Taispeántar cumhacht in aghaidh na ndaoine a chuireann in aghaidh an tsoiscéil.",
+    "events": [
+     "Buailtear Éalámas an draíodóir dall",
+     "Creideann Seirgias Pól an prochonsal",
+     "As seo glacann ‘Pól’ an ceannas"
+    ]
+   },
+   "perga": {
+    "name": "Peirge",
+    "book": "Gníomhartha 13:13",
+    "today": "Antalya, an Tuirc inniu",
+    "note": "Cuan i bPamfília — anseo iompaíonn Eoin Marcas ar ais.",
+    "events": []
+   },
+   "pantioch": {
+    "name": "Antíoch na Písíde",
+    "book": "Gníomhartha 13:14-50",
+    "today": "Yalvaç, an Tuirc inniu",
+    "note": "Briseann an soiscéal amach i dtreo na nGintlithe.",
+    "events": [
+     "Seanmóir fhada faoi stair an tslánaithe sa tsionagóg",
+     "Glacann go leor Gintlithe leis an mbriathar go lúcháireach",
+     "Díbrithe amach de bharr freasúra"
+    ]
+   },
+   "iconium": {
+    "name": "Íocóiniam",
+    "book": "Gníomhartha 14:1-7",
+    "today": "Konya, an Tuirc inniu",
+    "note": "Creideann go leor, ach cuireann an ghéarleanúint ar aghaidh iad.",
+    "events": []
+   },
+   "lystra": {
+    "name": "Liostra",
+    "book": "Gníomhartha 14:8-20",
+    "today": "an Tuirc inniu",
+    "note": "Móradh mar dhia, ansin caite le clocha.",
+    "events": [
+     "Leigheasann sé fear a bhí bacach ó bhreith",
+     "Iarrann an slua íobairt a dhéanamh dóibh mar dhéithe",
+     "Caite le clocha agus fágtha mar mharbh, éiríonn sé"
+    ]
+   },
+   "derbe": {
+    "name": "Deirbe",
+    "book": "Gníomhartha 14:20-21",
+    "today": "an Tuirc inniu",
+    "note": "Déantar go leor deisceabal; fillean siad ar a gcosán chun na heaglaisí a neartú.",
+    "events": []
+   },
+   "troas": {
+    "name": "Tróas",
+    "book": "Gníomhartha 16:8-10",
+    "today": "an Tuirc inniu",
+    "note": "An pointe casadh ina dtéann an soiscéal i dtreo na hEorpa den chéad uair.",
+    "events": [
+     "Físe d'fhear ón Macadóin",
+     "“Tar anall agus cabhraigh linn”",
+     "Trasnaíonn siad láithreach isteach san Eoraip"
+    ]
+   },
+   "philippi": {
+    "name": "Filipí",
+    "book": "Gníomhartha 16 · Filipigh",
+    "today": "tuaisceart na Gréige inniu",
+    "note": "Céad eaglais na hEorpa — buann an soiscéal fiú sa phríosún.",
+    "events": [
+     "Creideann Lidia, ceannaí purpair",
+     "Saortar cailín daor a bhí ag déanamh fáistine",
+     "Iomainn i lár na hoíche, crith talún, slánaítear teaghlach choimeádaí an phríosúin"
+    ]
+   },
+   "thess": {
+    "name": "Teasalónaice",
+    "book": "Gníomhartha 17 · 1–2 Teasalónaigh",
+    "today": "Thessaloniki, an Ghréig inniu",
+    "note": "Croitheann an briathar an chathair agus scuabann an freasúra thar maoil.",
+    "events": [
+     "Pléann sé sa tsionagóg trí Shabóid",
+     "“Na daoine seo a chuir an domhan trí chéile”",
+     "Éalaíonn siad san oíche"
+    ]
+   },
+   "berea": {
+    "name": "Beiré",
+    "book": "Gníomhartha 17:10-15",
+    "today": "Veria, an Ghréig inniu",
+    "note": "Na daoine ‘uaisle’ a scrúdaigh an briathar iad féin.",
+    "events": [
+     "Glacann siad an briathar go fonnmhar",
+     "Scrúdaíonn siad na scrioptúir gach lá chun é a sheiceáil",
+     "Tagann go leor chun creidimh"
+    ]
+   },
+   "athens": {
+    "name": "An Aithin",
+    "book": "Gníomhartha 17:16-34",
+    "today": "an Aithin, an Ghréig inniu",
+    "note": "I gcathair na bhfealsúna fógraíonn sé an ‘dia anaithnid’.",
+    "events": [
+     "Corraithe ag cathair lán d'íola",
+     "Ar an Aréapagas seanmóireann sé an Cruthaitheoir agus an t-aiséirí",
+     "Ina ábhar magaidh, ach creideann roinnt"
+    ]
+   },
+   "corinth": {
+    "name": "Corant",
+    "book": "Gníomhartha 18 · 1–2 Corantaigh",
+    "today": "an Ghréig inniu",
+    "note": "Fanann sé bliain go leith, ag plandáil eaglaise i gcathair na drúise.",
+    "events": [
+     "Déanann sé pubaill le hAcuila agus Priscilla",
+     "“Ná bíodh eagla ort … óir táim leat”",
+     "Creideann go leor Corantach agus baistear iad"
+    ]
+   },
+   "ephesus": {
+    "name": "Eifeasas",
+    "book": "Gníomhartha 19 · Eifisigh",
+    "today": "Selçuk, an Tuirc inniu",
+    "note": "Croílár an tríú aistir — scaipeann an briathar ar fud na hÁise.",
+    "events": [
+     "Teagasc laethúil ar feadh dhá bhliain i halla Turannas",
+     "Leabhair dhraíochta dóite; oibreacha cumhachtacha",
+     "Cuireann Déamaetrias an gabha airgid círéib ar bun"
+    ]
+   },
+   "miletus": {
+    "name": "Miléatas",
+    "book": "Gníomhartha 20:17-38",
+    "today": "an Tuirc inniu",
+    "note": "Slán deorach le seanóirí Eifis.",
+    "events": [
+     "“Tugaigí aire don eaglais a cheannaigh sé lena fhuil féin”",
+     "Goileann na seanóirí, agus a fhios acu nach bhfeicfidh siad arís é"
+    ]
+   },
+   "caesarea": {
+    "name": "Céasairé",
+    "book": "Gníomhartha 23–26",
+    "today": "cósta Iosrael inniu",
+    "note": "Ar feadh dhá bhliain cosnaíonn sé an soiscéal os comhair gobharnóirí agus rí.",
+    "events": [
+     "Trialacha os comhair na ngobharnóirí Féilics agus Feisteas",
+     "A chosaint os comhair an Rí Agraipa",
+     "“Achomharcaím chun Chéasair” — ar aghaidh go dtí an Róimh"
+    ]
+   },
+   "jerusalem": {
+    "name": "Iarúsailéim",
+    "book": "Gníomhartha 21–23",
+    "today": "Iarúsailéim inniu",
+    "note": "Gafa sa teampall, tosaíonn a bhóthar mar phríosúnach.",
+    "events": [
+     "Gafa ag an slua sa teampall",
+     "Cosnaíonn sé é féin os comhair na comhairle",
+     "Mar shaoránach Rómhánach, cuirtear faoi gharda go Céasairé é"
+    ]
+   },
+   "myra": {
+    "name": "Míre",
+    "book": "Gníomhartha 27:5-6",
+    "today": "Demre, an Tuirc inniu",
+    "note": "Aistríonn siad go long Alastrach atá ag triall ar an Róimh.",
+    "events": []
+   },
+   "fairhaven": {
+    "name": "Na Cuanta Áille (An Chréit)",
+    "book": "Gníomhartha 27:8-12",
+    "today": "an Chréit inniu",
+    "note": "Ní éistear le rabhadh Phóil an loingseoireacht a stopadh.",
+    "events": []
+   },
+   "crete": {
+    "name": "An Chréit",
+    "book": "Títeas",
+    "today": "an Chréit inniu",
+    "note": "Tar éis a scaoilte, an t-oileán ina bhfágann sé Títeas chun na heaglaisí a chur in ord.",
+    "events": [
+     "Fágann sé Títeas chun seanóirí a cheapadh i ngach baile",
+     "Iarrann sé ceannairí gan locht, dílis",
+     "Scríobhann sé an litir chuig Títeas"
+    ]
+   },
+   "malta": {
+    "name": "Málta",
+    "book": "Gníomhartha 27–28",
+    "today": "Málta inniu",
+    "note": "Trí stoirm agus longbhriseadh, seasann gealltanas Dé.",
+    "events": [
+     "Scriosann an ‘gaoth aduaidh’ an long, ach maireann na 276 uile",
+     "Cé gur bhain nathair greim as, ní dhéantar dochar dó",
+     "Leigheasann sé breoiteacht an oileáin"
+    ]
+   },
+   "syracuse": {
+    "name": "Suragúsa",
+    "book": "Gníomhartha 28:12",
+    "today": "an tSicil, an Iodáil inniu",
+    "note": "Fanann siad trí lá sa tSicil.",
+    "events": []
+   },
+   "puteoli": {
+    "name": "Púiteolaí",
+    "book": "Gníomhartha 28:13-14",
+    "today": "Pozzuoli, an Iodáil inniu",
+    "note": "Tagann siad i dtír san Iodáil agus buaileann creidmhigh chomhchreidmheacha leo.",
+    "events": []
+   },
+   "rome": {
+    "name": "An Róimh",
+    "book": "Gníomhartha 28 · Litreacha an Phríosúin · 2 Tiomóid",
+    "today": "an Róimh, an Iodáil inniu",
+    "note": "Sroicheann an soiscéal croílár na himpireachta faoi dheireadh — ní deireadh é ach tús.",
+    "events": [
+     "Dhá bhliain faoi ghabháil tí, ag fógairt na ríochta go dána",
+     "As seo scríobhann sé Litreacha an Phríosúin (Eifisigh·Filipigh·Colosaigh·Filéamón)",
+     "Príosúnaithe arís níos déanaí, scríobhann sé 2 Tiomóid agus déantar mairtíreach de — “Chuir mé an comhrac maith díom, chríochnaigh mé an rás”"
+    ]
+   }
+  },
+  "labels": [
+   "An Mheánmhuir",
+   "An Mhuir Aeigéach",
+   "Áise Mion",
+   "An Macadóin",
+   "An Iodáil"
+  ],
+  "journeys": {
+   "j1": "An chéad aistear",
+   "j2": "An dara haistear",
+   "j3": "An tríú haistear",
+   "rome": "An ceathrú haistear · go dtí an Róimh",
+   "j5": "An cúigiú haistear · tar éis a scaoilte"
+  }
+ }
+}

@@ -1,0 +1,636 @@
+{
+ "menuName": "Kĩkamba",
+ "htmlLang": "kam",
+ "dir": "ltr",
+ "locale": "kam-KE",
+ "brand": "Mbivlia ĩtonyeku o ĩmwe",
+ "docTitle": "Mbivlia kwĩsĩla Ĩramani · Mbivlia ĩtonyeku o ĩmwe",
+ "metaDesc": "Atĩĩa mũtiĩo wa Ũtiano Ũkũũ, thayũ wa Yesũ, na myendo ya Paulo ĩũlũ wa ĩramani ya w’o — Mbivlia yekĩkĩie kũndũ kwa w’o.",
+ "s": {
+  "kicker": "Mbivlia ĩtonyeku o ĩmwe · Ĩramani",
+  "title": "Mbivlia kwĩsĩla Ĩramani",
+  "verse": "“Nũndũ tũtyaaatĩĩa mbano itilĩtwe na ũĩ, yila twamũmanyĩthisye vinya wake na kũka kwa Mwĩaĩi waitũ Yesũ Klĩsto, ĩndĩ twaĩ ngũsĩ sya ũtheu mũtisu wake sya kwona na metho.” (2 Vetelo 1:16)",
+  "purpose": "Mbivlia ti nganano. Nĩ ũandĩki wa andũ ala maendie kũndũ kwa w’o, mĩthenya ya w’o, na andũ ma w’o. Atĩĩa nzĩa isu ĩũlũ wa ĩramani, kwa ũatĩĩo wa ĩvinda — kũnda vandũ, kana ũkũnde ▶ nĩ kana ũendee vo kĩthimo o kĩthimo.",
+  "ot_kick": "① Ũtiano Ũkũũ — kũvĩtũkĩla ĩvinda",
+  "ot_h": "Kuma ũũmbi nginya kũsyoka Yelusaleme",
+  "ot_lead": "Ti rũendo o rũmwe ĩndĩ nĩ mũtiĩo wa ũtangĩĩo kuma ũũmbi: ũũmbi na ũkũũ → kĩw’ũ kĩnene na Mbabeli → wĩtano (Avalaamu) → nthĩ ĩla yaĩanĩiwe → kũuma Misili → weũ → kũtwaa nthĩ → ũsumbĩ → kũanĩka → ũkombo → kũsyoka.",
+  "je_kick": "② Ũtiano Mweũ — thayũ wa Yesũ",
+  "je_h": "Kuma Bethelehemu nginya Yelusaleme",
+  "je_lead": "Atĩĩa thayũ wa Yesũ o ũndũ Ũvoo Mũseo wonanasya, kwa ũatĩĩo — kuma kũsyawa kwake Bethelehemu, kwĩsĩla ũvatithw’a wake na ũtũmwa wa Ngalili, kũvĩtũkĩla Samalia, nginya mũsalava, ũthayũũku na kũambata Yelusaleme.",
+  "pa_kick": "③ Ũtiano Mweũ — myendo ya Paulo",
+  "pa_h": "Kuma Antiokia nginya itulu sya nthĩ — Loomi",
+  "pa_lead": "Kuma Pentekoste Yelusaleme, ũndũ ũvoo mũseo wathelanie ũvĩtũkĩte Yutia — kwĩsĩla Asia Nini na Ũlaya nginya ngoo ya ũsumbĩ. Sakũa rũendo rũmwe kati wa itano (rwa mbee·rwa keli·rwa katatũ + rũendo rwa kũthi Loomi + ĩtina ya kũekwa) na ũatĩĩe maũndũ ma Meko ma Atũmwa vamwe na valũa syaandĩkiwe nzĩanĩ.",
+  "foot": "Ithembo · Vandũ vaatĩĩaa maandĩko ma Mbivlia na ũĩ wa vandũ wa Mbivlia (na masyĩtwa ma ũmũnthĩ vala vatethya). Ithemba, mĩsĩ na iia syaandĩkĩtwe kuma ĩmanyĩsyo ya nthĩ ĩvingũku (Natural Earth), yaseũvĩtwe nzeo.",
+  "contact": "Makũlyo · ĩsũanĩo — <a id=\"contact\" class=\"mail\">Tũtũmĩe email</a>",
+  "play": "Amba",
+  "pause": "Kũngama",
+  "today": "Ũmũnthĩ:",
+  "verseCite": "2 Vetelo 1:16"
+ },
+ "ot": {
+  "places": {
+   "eden": {
+    "name": "Edeni (Ũũmbi · Ũkũũ)",
+    "book": "Mwambĩlĩlyo 1–3",
+    "today": "mũthemba wa Tigirisi–Euphrate ũmũnthĩ",
+    "note": "Nthĩnĩ wa nthĩ ĩla yombiwe yaĩ nzeo mũno, naĩ nĩyatonya na ĩtĩla ngwatanĩo katĩ wa Ngai na andũ.",
+    "events": [
+     "Ũũmbi wa mĩthenya thanthatũ — “yaĩ nzeo mũno”",
+     "Mũndũ wombiwe mũvw’anĩ wa Ngai",
+     "Ũkũũ, na kũtwawa kuma Edeni",
+     "Wĩanĩo wa mbee wa ũvoo mũseo — “ũsyao wa mũndũ mũka ũkatumba mũtwe wa nzoka”"
+    ]
+   },
+   "noah": {
+    "name": "Ararati (Kĩw’ũ Kĩnene)",
+    "book": "Mwambĩlĩlyo 6–9",
+    "today": "Kĩĩma Ararati, Uturuki wa mũatĩo ũmũnthĩ",
+    "note": "Ngai nĩwasilĩlaa nthĩ ĩla yaĩyũ naĩ, ĩndĩ akĩsũvĩa thayũ kwĩsĩla mũsyĩ o ũmwe.",
+    "events": [
+     "Nthĩ ĩyũe ũthũku",
+     "Kĩw’ũ kĩnene, na safina ya Noa",
+     "Ũtiano wa ũta wa mbua — “ndĩkeete kĩw’ũ kĩnene kũananga ĩngĩ”"
+    ]
+   },
+   "babel": {
+    "name": "Mũnara wa Mbabeli",
+    "book": "Mwambĩlĩlyo 11",
+    "today": "Iraki ũmũnthĩ (mũnyanya wa Sinali)",
+    "note": "Kũelekana na wĩnyĩĩo wa kwenda kũvika ĩtunĩ, Ngai nĩwavũany’a ndeto yoo na aandũ makĩithanĩa nthĩ yonthe.",
+    "events": [
+     "“Twĩakei mũsyĩ na mũnara… twĩtw’ĩkĩe ĩsyĩtwa”",
+     "Ngai nĩwavũany’a kĩthyomo kyoo",
+     "Andũ maithanĩa nthĩ yonthe (Sinali — mũthya Mbaviloni)"
+    ]
+   },
+   "ur": {
+    "name": "Uli",
+    "book": "Mwambĩlĩlyo 12",
+    "today": "Iraki wa mũlĩmĩ ũmũnthĩ",
+    "note": "Ũvoo wa ũtangĩĩo wa Mbivlia wambĩaa na wĩtano wa mũndũ o ũmwe.",
+    "events": [
+     "Ngai nĩwĩtie Avalaamu kuma Uli wa Akalindi",
+     "“Ngakũtw’ĩkĩthya mbaĩ nene… mĩvĩa yonthe ĩkaathimwa nthĩnĩ waku”",
+     "Kwa mũĩkĩĩo nĩwaumie nthĩ yake"
+    ]
+   },
+   "haran": {
+    "name": "Halani",
+    "book": "Mwambĩlĩlyo 12",
+    "today": "Uturuki wa mũlĩmĩ ũmũnthĩ",
+    "note": "Nzĩanĩ, akĩĩtĩkĩla wĩto welekeete nthĩ ĩla yaĩanĩiwe.",
+    "events": [
+     "Mũsyĩ wa Tela waikala Halani",
+     "Tela nĩwakwie",
+     "Avalaamu aumĩte kũthi Kanaani e na myaka 75"
+    ]
+   },
+   "shechem": {
+    "name": "Sekemu · Kanaani",
+    "book": "Mwambĩlĩlyo 12–50",
+    "today": "Nablus ũmũnthĩ",
+    "note": "Nthĩnĩ wa nthĩ ĩla yaĩanĩiwe mũsyĩ wambĩĩa na ũtiano wĩtĩiwe mbaĩ kwa mbaĩ.",
+    "events": [
+     "Kũtonya Kanaani, kĩthembelo kya mbee — “nĩ ngũnenga ũsyao waku nthĩ ĩno”",
+     "Ũtiano (Mwambĩlĩlyo 15) · Isaaka · Yakovo",
+     "Syana ikũmi na ili sya Yakovo — mũthĩnzĩo wa mbaĩ ikũmi na ili"
+    ]
+   },
+   "egypt": {
+    "name": "Misili (Ngosheni)",
+    "book": "Mwambĩlĩlyo 37–50 · Kuma 1",
+    "today": "Delta ya Nili, Misili ũmũnthĩ",
+    "note": "Mũsyĩ watw’ĩka mbaĩ nene — mũthya watw’ĩka mbaĩ ya ũkombo.",
+    "events": [
+     "Yosevu, ũla wa ndĩe, watw’ĩka mũsumbĩ wa Misili",
+     "Mũsyĩ wonthe wa Yakovo waatha Misili kwĩvinya nzaanĩ",
+     "Mbaĩ ya Isilaeli ĩla yameaa yatw’ĩkw’a a ũkombo"
+    ]
+   },
+   "sinai": {
+    "name": "Kĩĩma Sinai",
+    "book": "Kuma · Alivai",
+    "today": "Kĩsembo kya Sinai ũmũnthĩ",
+    "note": "Ũtangĩĩo mũnene wa Ũtiano Ũkũũ — a ũkombo matw’ĩkw’a andũ ma Ngai mwene.",
+    "events": [
+     "Mawanga ikũmi na kondoo wa Vasaka",
+     "Ũkanga Mũtune waatũka na makĩvũlũka",
+     "Mĩao Ikũmi, Mwĩao, ĩsyokoo na mathembo"
+    ]
+   },
+   "kadesh": {
+    "name": "Kandesi (weũ)",
+    "book": "Motalo · Kũtũngĩlĩlwa kwa Mĩao",
+    "today": "weũ wa Sinai–Negevu ũmũnthĩ",
+    "note": "Ũtĩw’o wavetya mbaĩ ĩmwe nthĩ — ĩndĩ Ngai aikala vamwe namo.",
+    "events": [
+     "Atambĩĩi ikũmi na eli — ĩndĩ andũ malea kwĩkĩĩa",
+     "Myaka 38 weũnĩ — mana, ĩtu na wakĩ",
+     "Mũnyanyanĩ wa Moavu, ũvoo wa mũthya wa Mose (Kũtũngĩlĩlwa kwa Mĩao)"
+    ]
+   },
+   "jericho": {
+    "name": "Yeliko",
+    "book": "Yosua",
+    "today": "Yeliko ũmũnthĩ",
+    "note": "Mũthya matonya na moosa nthĩ ĩla yaĩanĩiwe.",
+    "events": [
+     "Yolindani waatũka na andũ makĩvũlũka",
+     "Nthĩnga sya Yeliko syagwa",
+     "Kũtwaa Kanaani na kũaan’ya nthĩ"
+    ]
+   },
+   "shiloh": {
+    "name": "Silo (Asili)",
+    "book": "Asili · Luthi",
+    "today": "Khirbet Seilun ũmũnthĩ",
+    "note": "Vate mũsumbĩ, kĩla mũndũ eekaa ũndũ wonaa wĩ ũseo — mũsumbĩ wa w’o nĩwendekaa.",
+    "events": [
+     "Ĩsyokoo yaakwa Silo",
+     "Ũsyokeo wa naĩ–woo–ũtangĩĩo (Ndevola, Ndeoni, Samusoni)",
+     "Luthi — ũĩkĩĩku ĩvindanĩ ya kĩvindu, mũsyĩnĩ wa Ndaviti"
+    ]
+   },
+   "jerusalem": {
+    "name": "Yelusaleme · Ũsumbĩ Mũnganĩ",
+    "book": "1–2 Samueli · 1 Asumbĩ",
+    "today": "Yelusaleme ũmũnthĩ",
+    "note": "Ĩvinda nzeo ya Isilaeli — na wĩanĩo wa mũsumbĩ wa tene na tene.",
+    "events": [
+     "Sauli mũsumbĩ wa mbee, na mũthya Ndaviti na Goliathi",
+     "Ũtiano wa Ndaviti — “kĩvĩla kyaku kya ũsumbĩ tene na tene” (2 Samueli 7)",
+     "Solomoni waaka ĩsyokoo Yelusaleme"
+    ]
+   },
+   "samaria": {
+    "name": "Samalia · Ũsumbĩ Mũanĩe",
+    "book": "Asumbĩ · Athani",
+    "today": "Sebastia ũmũnthĩ",
+    "note": "Ũsumbĩ waanĩka na wĩthũka o ĩvinda athani makaya.",
+    "events": [
+     "Ĩtina ya Solomoni, waanĩka Yuta na Isilaeli",
+     "Ũthaithi wa mĩvw’anano wĩngĩ na wĩngĩ",
+     "Eliya, Isaia, Yelemai makaya ‘syokeei’ — na maũmbĩa Mesia"
+    ]
+   },
+   "nineveh": {
+    "name": "Ninave (Asuli)",
+    "book": "2 Asumbĩ 17 · Yona",
+    "today": "Mosul, Iraki ũmũnthĩ",
+    "note": "Kũlea kwĩw’a ũkany’o o wonthe, mwena wa ĩũlũ wagwa mbee.",
+    "events": [
+     "Ninave, ĩsumbĩ ya Asuli",
+     "Ũsumbĩ wa ĩũlũ wagwa kwa Asuli (B.C. 722)",
+     "Yona watũmwa Ninave"
+    ]
+   },
+   "babylon": {
+    "name": "Mbaviloni",
+    "book": "2 Asumbĩ 25 · Ndanieli · Esekieli",
+    "today": "Hillah, Iraki ũmũnthĩ",
+    "note": "Ũtukũ ũla mũtumanu mũno — ĩndĩ wĩanĩo wa kũseũvw’a ĩngĩ ũilyĩ vo.",
+    "events": [
+     "Yelusaleme yagwa, ĩsyokoo yavivw’a (B.C. 586)",
+     "Yuta watwawa ũkombo Mbaviloni",
+     "Ndanieli na Esekieli — mũĩkĩĩo na kĩoneki ũkombonĩ"
+    ]
+   },
+   "susa": {
+    "name": "Susa (Velesia)",
+    "book": "Esita · Neemia",
+    "today": "Shush, Irani ũmũnthĩ",
+    "note": "O na katĩ wa ũsumbĩ wa mĩvw’anano, Ngai nĩwasũvĩa andũ make.",
+    "events": [
+     "Velesia yavunanga Mbaviloni",
+     "Esita atangĩĩa Ayuti kuma kũanangwa",
+     "Neemia avoya mbee wa mũsumbĩ na atũmwa"
+    ]
+   },
+   "return": {
+    "name": "Kũsyoka Yelusaleme",
+    "book": "Esala · Neemia · Malaki",
+    "today": "Yelusaleme ũmũnthĩ",
+    "note": "Masyoka na maaka ĩngĩ — ĩndĩ vate mũsumbĩ. Meteela Mesia.",
+    "events": [
+     "Nzĩa itatũ sya kũsyoka kwĩsĩla mwĩao wa Kuluso (Selubabeli 538 · Esala 458 · Neemia 444)",
+     "Ĩsyokoo yaakwa ĩngĩ na nthĩnga sya Yelusaleme syaseũvw’a",
+     "Malaki — Ũtiano Ũkũũ waminũka: “nĩngũtũma mũtũmwa wakwa”"
+    ]
+   }
+  },
+  "labels": [
+   "Ũkanga wa Meditelania",
+   "Mesopotamia",
+   "Weũ wa Alabia",
+   "Misili"
+  ],
+  "journeys": {
+   "flow": "Ũvoo wa ũtangĩĩo"
+  }
+ },
+ "jesus": {
+  "places": {
+   "bethlehem": {
+    "name": "Bethelehemu",
+    "book": "Mathayo 1–2 · Luka 2",
+    "today": "Bethelehemu ũmũnthĩ",
+    "note": "Mesia ũla waĩanĩiwe ũka mũsyĩnĩ wa Ndaviti — Ndeto yatw’ĩka mwĩĩ.",
+    "events": [
+     "Wasyawa Bethelehemu, mũsyĩ wa Ndaviti",
+     "Alaĩka maĩasya ũvoo kwa aĩthi ma ng’ondu",
+     "Aĩ ma ũĩ mooka kũmũthaitha"
+    ]
+   },
+   "nazareth": {
+    "name": "Nasaleti",
+    "book": "Luka 2 · 4",
+    "today": "Nasaleti ũmũnthĩ",
+    "note": "Ngai akũaa ta mũndũ mũsyĩnĩ wa kawaida.",
+    "events": [
+     "Wakũĩe nyũmbanĩ ya mũtũi wa mĩtĩ",
+     "E na myaka ikũmi na ili, akũlya na kũsũngĩa ĩsyokoonĩ",
+     "Mũthya alewa mũsyĩnĩ wake sinagogonĩ"
+    ]
+   },
+   "jordan": {
+    "name": "Ũsĩ wa Yolindani",
+    "book": "Mathayo 3–4",
+    "today": "Yolindani wa nthĩ ũmũnthĩ",
+    "note": "Ũtũmwa wake wa vandũ va w’o wambĩĩa — ĩtunĩ yamũsĩngĩĩa ta Mwana.",
+    "events": [
+     "Wavatithw’a nĩ Yoana",
+     "Veva waikũlũka ta ndĩĩa — “Ũyũ nĩ Mwana wakwa mwendwa”",
+     "Avunanga mageto matatũ ma Satani weũnĩ"
+    ]
+   },
+   "cana": {
+    "name": "Kana",
+    "book": "Yoana 2",
+    "today": "Kafr Kanna ũmũnthĩ",
+    "note": "Kĩonany’onĩ kyake kya mbee wonanasya ũnene wake.",
+    "events": [
+     "Mũeni ũtwaanĩnĩ",
+     "Kĩw’ũ kyalyũlwa ũki — kĩonany’o kyake kya mbee",
+     "Amanyĩwa make makĩmwĩtĩkĩlya"
+    ]
+   },
+   "sychar": {
+    "name": "Sikali (Samalia)",
+    "book": "Yoana 2–4",
+    "today": "vakuvĩ na Nablus ũmũnthĩ",
+    "note": "Nzĩa ya ũtũmwa wa mbee — kwĩsĩla Yelusaleme nginya Samalia ĩla yamenawa.",
+    "events": [
+     "Watheasya ĩsyokoo Yelusaleme",
+     "Ũtukũ, Nikodemo — “No nginya ũsyawe ĩngĩ”",
+     "Kĩw’ũ kya thayũ kwa mũndũ mũka wa Samalia"
+    ]
+   },
+   "capernaum": {
+    "name": "Kaperinaumu",
+    "book": "Mathayo 4–13 · Maliko 1–4",
+    "today": "mũthemba wa iia ya Ngalili ũmũnthĩ",
+    "note": "Kĩthĩo kya ũtũmwa wa Ngalili — kwĩta, kũmanyĩsya na ũsiniĩsyo syonthe syumanĩaa vaa.",
+    "events": [
+     "Eta atavi ma makũyũ na eyĩthĩa vaa",
+     "Ũmanyĩsyo wa Kĩĩmanĩ — “Athimĩ nĩ ala athĩĩni kĩ-veva”",
+     "Ngelekany’o sya ũsumbĩ — na ũsiniĩsyo wĩaĩma"
+    ]
+   },
+   "galilee": {
+    "name": "Iia ya Ngalili",
+    "book": "Maliko 4 · 6 · Yoana 6",
+    "today": "Iia ya Kinneret ũmũnthĩ",
+    "note": "Na vinya ĩũlũ wa ũũmbi wonanasya nũũ we.",
+    "events": [
+     "“Kĩlaa, wumĩe” — anyamasya kĩvuvo",
+     "Aĩisya andũ 5,000 na mĩgate ĩtaano na makũyũ eli",
+     "Aendaa ĩũlũ wa kĩw’ũ"
+    ]
+   },
+   "caesarea_p": {
+    "name": "Kaisalia Filipi",
+    "book": "Mathayo 16–17",
+    "today": "Banias ũmũnthĩ",
+    "note": "Amanyĩwa maelewa kana we nĩ Klĩsto, na nzĩa ya mũsalava yavingũka.",
+    "events": [
+     "Ũsũngĩo wa Vetelo — “We nĩwe Klĩsto, Mwana wa Ngai ũtũaa”",
+     "Aũmbĩa kĩkw’ũ kyake na ũthayũũku wake kwa mbee",
+     "Aalyũkĩte ũnenenĩ kĩĩmanĩ"
+    ]
+   },
+   "jericho": {
+    "name": "Yeliko",
+    "book": "Luka 18–19",
+    "today": "Yeliko ũmũnthĩ",
+    "note": "Nzĩanĩ ya kwambata Yelusaleme, amanthaa ũla wathelile.",
+    "events": [
+     "Anenga Baritimayo ũtonyi wa metho",
+     "Eta Sakayo mũtũngĩthya wa mbesa",
+     "“Mwana wa mũndũ ndookie kũmantha na kũthayũũkya ũla wathelile”"
+    ]
+   },
+   "bethany": {
+    "name": "Bethania",
+    "book": "Yoana 11–12",
+    "today": "al-Eizariya ũmũnthĩ",
+    "note": "Wonanasya vinya ĩũlũ wa kĩkw’ũ mbee wa kyumwa kyake kya mũthya.",
+    "events": [
+     "Athayũũkya Lasalo kuma mbũanĩ — “Nyie nĩ nyie ũthayũũku na thayũ”",
+     "Malia amwĩthĩa mauta kwondũ wa ũthĩkĩo",
+     "Kĩonany’o kĩĩ kyaũmĩsya mũvango wa kũmũaa"
+    ]
+   },
+   "jerusalem": {
+    "name": "Yelusaleme",
+    "book": "Mathayo 21–28 · Luka 24 · Meko ma Atũmwa 1",
+    "today": "Yelusaleme ũmũnthĩ",
+    "note": "Ĩvinda ĩla Mbivlia yonthe yonanasya — mũsalava, ũthayũũku, kũambata.",
+    "events": [
+     "Kũtonya kwa ũnene; aalũla metisa ma ĩsyokoo ĩngĩ",
+     "Kĩanĩnĩ kya mũthya avũaa amanyĩwa maũũ",
+     "Akw’a ĩũlũ wa mũsalava",
+     "Wathayũũka mũthenya wa katatũ, na mũthya waambata"
+    ]
+   }
+  },
+  "labels": [
+   "Ũkanga wa Meditelania",
+   "Ngalili",
+   "Samalia",
+   "Yutia",
+   "Dekapoli",
+   "Perea",
+   "Ũkanga wa Kĩkw’ũ"
+  ],
+  "journeys": {
+   "life": "Nzĩa ya Yesũ"
+  }
+ },
+ "paul": {
+  "places": {
+   "antioch": {
+    "name": "Antiokia",
+    "book": "Meko ma Atũmwa 13 · 15",
+    "today": "Antakya, Uturuki ũmũnthĩ",
+    "note": "Kanisa ĩla yatũmaa vala ũtũmwa wa Andũ-ma-Kĩeni wambĩaa na wasyokaa.",
+    "events": [
+     "Kĩvoyanĩ Veva atembanĩsya Mbanaba na Saulo",
+     "Kanisa vala aĩtĩkĩli metĩiwe ‘Aklĩsto’ kwa mbee",
+     "Vandũ va kwambĩĩa rũendo rwa mbee, rwa keli na rwa katatũ"
+    ]
+   },
+   "seleucia": {
+    "name": "Seleukia",
+    "book": "Meko ma Atũmwa 13:4",
+    "today": "Uturuki ũmũnthĩ",
+    "note": "Ivuve ya Antiokia — maasavya kũthi Kupro.",
+    "events": []
+   },
+   "salamis": {
+    "name": "Salami (Kupro)",
+    "book": "Meko ma Atũmwa 13:5",
+    "today": "Kupro ũmũnthĩ",
+    "note": "Kĩthĩo kya mbee Kupro — kũtavany’a masinagogonĩ.",
+    "events": []
+   },
+   "paphos": {
+    "name": "Pafo",
+    "book": "Meko ma Atũmwa 13:6-12",
+    "today": "Kupro ũmũnthĩ",
+    "note": "Vinya wonanaw’a kwa ala mareganaa na ũvoo mũseo.",
+    "events": [
+     "Elima mũoi atw’ĩkw’a mũtumumu",
+     "Segio Paulo mũnene wa mũthemba etĩkĩla",
+     "Kuma vaa ‘Paulo’ atongoasya"
+    ]
+   },
+   "perga": {
+    "name": "Pega",
+    "book": "Meko ma Atũmwa 13:13",
+    "today": "Antalya, Uturuki ũmũnthĩ",
+    "note": "Ivuve ya Pamfilia — vaa Yoana Malako asyoka na thĩna.",
+    "events": []
+   },
+   "pantioch": {
+    "name": "Antiokia wa Pisidia",
+    "book": "Meko ma Atũmwa 13:14-50",
+    "today": "Yalvaç, Uturuki ũmũnthĩ",
+    "note": "Ũvoo mũseo wavingũka kwelekela Andũ-ma-Kĩeni.",
+    "events": [
+     "Ũvoo mũasa wa ũtangĩĩo sinagogonĩ",
+     "Andũ-ma-Kĩeni aingĩ matana na maĩtĩkĩla ndeto",
+     "Aumw’a nĩ ũsiniĩsyo"
+    ]
+   },
+   "iconium": {
+    "name": "Ikonio",
+    "book": "Meko ma Atũmwa 14:1-7",
+    "today": "Konya, Uturuki ũmũnthĩ",
+    "note": "Aingĩ metĩkĩla, ĩndĩ ũsiniĩsyo wamatwaa na mbee.",
+    "events": []
+   },
+   "lystra": {
+    "name": "Lisita",
+    "book": "Meko ma Atũmwa 14:8-20",
+    "today": "Uturuki ũmũnthĩ",
+    "note": "Metawa ngai, na mũthya matambwa na mavia.",
+    "events": [
+     "Avosya mũndũ wasyaiwe e kĩlema",
+     "Ĩkundi yeenda kũmathembea ta ngai",
+     "Atambwa na mavia aitiwa ta mũkw’ũ, akĩũkĩla"
+    ]
+   },
+   "derbe": {
+    "name": "Nderbe",
+    "book": "Meko ma Atũmwa 14:20-21",
+    "today": "Uturuki ũmũnthĩ",
+    "note": "Amanyĩwa aingĩ maseũvw’a; masyoka na nzĩa ĩla ĩmwe kwĩkĩĩya makanisa vinya.",
+    "events": []
+   },
+   "troas": {
+    "name": "Troa",
+    "book": "Meko ma Atũmwa 16:8-10",
+    "today": "Uturuki ũmũnthĩ",
+    "note": "Vandũ va ũalyũko vala ũvoo mũseo welekea Ũlaya kwa mbee.",
+    "events": [
+     "Kĩoneki kya mũndũ wa Makedonia",
+     "“Ũka Makedonia ũtũtethye”",
+     "Mavũlũkĩte o vau kũthi Ũlaya"
+    ]
+   },
+   "philippi": {
+    "name": "Filipi",
+    "book": "Meko ma Atũmwa 16 · Avilipi",
+    "today": "Ngiliki ya ĩũlũ ũmũnthĩ",
+    "note": "Kanisa ya mbee ya Ũlaya — ũvoo mũseo wavunanga o na kĩfũngonĩ.",
+    "events": [
+     "Lidia, mũtei wa nguo ndune, etĩkĩla",
+     "Mwĩĩtũ wa ũkombo wa ũragũli aveewa",
+     "Nyĩmbo sya ũtukũ, mũtetemo wa nthĩ, mũsyĩ wa mũsũvĩi wathayũũka"
+    ]
+   },
+   "thess": {
+    "name": "Thesalonike",
+    "book": "Meko ma Atũmwa 17 · 1–2 Athesalonike",
+    "today": "Thessaloniki, Ngiliki ũmũnthĩ",
+    "note": "Ndeto ĩyũnga mũsyĩ na ũsiniĩsyo wĩaĩma.",
+    "events": [
+     "Aneenanĩa sinagogonĩ Sabato itatũ",
+     "“Ala mavĩngĩie nthĩ ĩngĩ igũlũ na nthĩ”",
+     "Maumĩte ũtukũ"
+    ]
+   },
+   "berea": {
+    "name": "Beroya",
+    "book": "Meko ma Atũmwa 17:10-15",
+    "today": "Veria, Ngiliki ũmũnthĩ",
+    "note": "Ala ‘maĩ na ndaĩa nzeo’ mavũĩie ndeto ene.",
+    "events": [
+     "Maĩtĩkĩla ndeto na wendo mũingĩ",
+     "O mũthenya mavũĩaa Maandĩko kũsisya kana nĩ w’o",
+     "Aingĩ metĩkĩla"
+    ]
+   },
+   "athens": {
+    "name": "Atene",
+    "book": "Meko ma Atũmwa 17:16-34",
+    "today": "Atene, Ngiliki ũmũnthĩ",
+    "note": "Mũsyĩnĩ wa asomi atavany’a ‘ngai ũla ũtaĩsĩkĩe’.",
+    "events": [
+     "Aemewa nĩ mũsyĩ wĩyũe mĩvw’anano",
+     "Aleopago atavany’a Mũũmbi na ũthayũũku",
+     "Athekwa, ĩndĩ anini metĩkĩla"
+    ]
+   },
+   "corinth": {
+    "name": "Kolintho",
+    "book": "Meko ma Atũmwa 18 · 1–2 Akolintho",
+    "today": "Ngiliki ũmũnthĩ",
+    "note": "Aikala mwaka na nusu, aaka kanisa mũsyĩnĩ wa naĩ.",
+    "events": [
+     "Aseũvasya hema vamwe na Akula na Pilisila",
+     "“Ndũkake… nĩ nyie ndĩ vamwe naku”",
+     "Akolintho aingĩ metĩkĩla na mavatithw’a"
+    ]
+   },
+   "ephesus": {
+    "name": "Eveso",
+    "book": "Meko ma Atũmwa 19 · Aeveso",
+    "today": "Selçuk, Uturuki ũmũnthĩ",
+    "note": "Ngoo ya rũendo rwa katatũ — ndeto ĩtheany’a Asia yonthe.",
+    "events": [
+     "Ũmanyĩsyo wa o mũthenya myaka ĩlĩ nyũmbanĩ ya Tirano",
+     "Mavuku ma ũoi mavivw’a; wĩa wa vinya",
+     "Demetilio mũtũi wa betha aambĩĩa kĩimako"
+    ]
+   },
+   "miletus": {
+    "name": "Mileto",
+    "book": "Meko ma Atũmwa 20:17-38",
+    "today": "Uturuki ũmũnthĩ",
+    "note": "Kũaanana na methoi kwa atumĩa ma Eveso.",
+    "events": [
+     "“Sũvĩai kanisa ĩla wagũie na nthakame yake mwene”",
+     "Atumĩa maĩa, maĩsĩ matimwona ĩngĩ"
+    ]
+   },
+   "caesarea": {
+    "name": "Kaisalia",
+    "book": "Meko ma Atũmwa 23–26",
+    "today": "mũthemba wa iia wa Isilaeli ũmũnthĩ",
+    "note": "Kwa myaka ĩlĩ akĩĩngamĩa ũvoo mũseo mbee wa asumbĩ na mũnene.",
+    "events": [
+     "Ũsili mbee wa asumbĩ Feliki na Fesito",
+     "Ũĩngami wake mbee wa Mũsumbĩ Agilipa",
+     "“Nĩngũthaitha Kaisali” — kũthi Loomi"
+    ]
+   },
+   "jerusalem": {
+    "name": "Yelusaleme",
+    "book": "Meko ma Atũmwa 21–23",
+    "today": "Yelusaleme ũmũnthĩ",
+    "note": "Akwatwa ĩsyokoonĩ, nzĩa yake ta mũohw’a yambĩĩa.",
+    "events": [
+     "Akwatwa nĩ ĩkundi ĩsyokoonĩ",
+     "Eĩngamĩa mbee wa kĩama",
+     "Ta mũndũ wa Loomi, atũmwa na ũsũvĩo Kaisalia"
+    ]
+   },
+   "myra": {
+    "name": "Mira",
+    "book": "Meko ma Atũmwa 27:5-6",
+    "today": "Demre, Uturuki ũmũnthĩ",
+    "note": "Malyũka ngalawa ya Alekisandia ĩla yathi Loomi.",
+    "events": []
+   },
+   "fairhaven": {
+    "name": "Ivuve Iseo (Kilete)",
+    "book": "Meko ma Atũmwa 27:8-12",
+    "today": "Kilete ũmũnthĩ",
+    "note": "Ũkany’o wa Paulo wa kũlũngama kũsavya watiwa.",
+    "events": []
+   },
+   "crete": {
+    "name": "Kilete",
+    "book": "Tito",
+    "today": "Kilete ũmũnthĩ",
+    "note": "Ĩtina ya kũekwa, kĩsũa vala aatie Tito atambĩĩsye makanisa.",
+    "events": [
+     "Aatie Tito atembe atumĩa o mũsyĩnĩ",
+     "Aetĩte atongoi matena ũthũku, aĩkĩĩku",
+     "Aandĩka valũa kwa Tito"
+    ]
+   },
+   "malta": {
+    "name": "Melita",
+    "book": "Meko ma Atũmwa 27–28",
+    "today": "Malta ũmũnthĩ",
+    "note": "Kwĩsĩla kĩvuvo na kũasyũka kwa ngalawa, wĩanĩo wa Ngai wailyĩ vinya.",
+    "events": [
+     "‘Kĩvuvo kya mũatĩo’ kyaananga ngalawa, ĩndĩ onthe 276 mathayũũka",
+     "Alũmwa nĩ nzoka, ĩndĩ ndaũmĩe",
+     "Avosya awau ma kĩsũa"
+    ]
+   },
+   "syracuse": {
+    "name": "Sirakusa",
+    "book": "Meko ma Atũmwa 28:12",
+    "today": "Sicily, Italia ũmũnthĩ",
+    "note": "Maikala mĩthenya ĩtatũ Sicily.",
+    "events": []
+   },
+   "puteoli": {
+    "name": "Puteoli",
+    "book": "Meko ma Atũmwa 28:13-14",
+    "today": "Pozzuoli, Italia ũmũnthĩ",
+    "note": "Mavika Italia na maũmĩlw’a nĩ aĩtĩkĩli ma kwĩ.",
+    "events": []
+   },
+   "rome": {
+    "name": "Loomi",
+    "book": "Meko ma Atũmwa 28 · Valũa sya Kĩfũngo · 2 Timotheo",
+    "today": "Loomi, Italia ũmũnthĩ",
+    "note": "Ũvoo mũseo wavika ngoo ya ũsumbĩ mũthya — ti mũthya ĩndĩ nĩ kwambĩĩa.",
+    "events": [
+     "Myaka ĩlĩ e kĩfũngonĩ kya nyũmba, atavany’a ũsumbĩ na ũkamba",
+     "Kuma vaa aandĩka Valũa sya Kĩfũngo (Aeveso·Avilipi·Akolosai·Filemoni)",
+     "Mũthya aohw’a ĩngĩ, aandĩka 2 Timotheo na aũawa — “Nĩngũĩte kũĩa kũseo, nĩnĩminĩĩsya mbĩo”"
+    ]
+   }
+  },
+  "labels": [
+   "Ũkanga wa Meditelania",
+   "Ũkanga wa Aegea",
+   "Asia Nini",
+   "Makedonia",
+   "Italia"
+  ],
+  "journeys": {
+   "j1": "Rũendo rwa mbee",
+   "j2": "Rũendo rwa keli",
+   "j3": "Rũendo rwa katatũ",
+   "rome": "Rũendo rwa kana · kũthi Loomi",
+   "j5": "Rũendo rwa katano · ĩtina ya kũekwa"
+  }
+ }
+}

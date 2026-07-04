@@ -1,0 +1,636 @@
+{
+ "menuName": "siSwati",
+ "htmlLang": "ssw",
+ "dir": "ltr",
+ "locale": "ss-SZ",
+ "brand": "IBhayibheli ngekubuka kanye",
+ "docTitle": "IBhayibheli ngeMephu · IBhayibheli ngekubuka kanye",
+ "metaDesc": "Landzela sikhatsi seTestamente Lendzala, imphilo yaJesu, netinkhambo taPawula emephini yangempela — iBhayibheli yenteka etindzaweni tangempela.",
+ "s": {
+  "kicker": "IBhayibheli ngekubuka kanye · Imephu",
+  "title": "IBhayibheli ngeMephu",
+  "verse": "“Empeleni sasingalandzeli tinganekwane tebucili, ngesikhatsi sinatisa emandla nekufika kweNkhosi yetfu Jesu Khristu, kodvwa sasingulabo labawabona emandla ebukhosi bakhe.” (2 yaPhetro 1:16)",
+  "purpose": "IBhayibheli akusiyo inganekwane. Kubhalwa kwebantfu labahamba etindzaweni, emalangeni, nasemabitweni angempela. Landzela leto tindlela emephini, ngekulandzelana kwesikhatsi — tsintsa liphuzu, nome ucindzetele u-▶ kuze uhambe kuko sigaba ngesigaba.",
+  "ot_kick": "① Testamente Lendzala — ngekuhamba kwesikhatsi",
+  "ot_h": "Kusukela ekudalweni kuya ekubuyeleni eJerusalema",
+  "ot_lead": "Akusilo luhambo lolulodvwa kodvwa kugeleta kwemlandvo wensindziso kusukela ekudalweni: kudala nekuwa → sikhukhula neBabeli → kubita (Abrahama) → live lesetsembiso → kuPhuma → ihlane → kunqoba → umbuso → kwehlukana → kutfunjwa → kubuya.",
+  "je_kick": "② Testamente Lensha — imphilo yaJesu",
+  "je_h": "Kusukela eBetlehema kuya eJerusalema",
+  "je_lead": "Landzela imphilo yaJesu njengobe emaVangeli ayilandza, ngekulandzelana — kusukela ekutalweni kwakhe eBetlehema, ngekubhabhatiswa kwakhe nenkonzo yakhe eGalile, adzabula eSamariya, kuya esiphambanweni, ekuvukeni, nasekwenyukeleni ezulwini eJerusalema.",
+  "pa_kick": "③ Testamente Lensha — tinkhambo taPawula",
+  "pa_h": "Kusukela e-Antiyokhi kuya emikhawulweni yemhlaba — eRoma",
+  "pa_lead": "Kusukela ePhentekoste eJerusalema, kutsi livangeli lasakateka kanjani ngaphandle kweJudiya — ngekwedlula e-Asiya Lencane naseYurophu kuya enhlitiyweni yembuso. Khetsa lenye yaletinkhambo letisihlanu (1·2·3 + luhambo loluya eRoma + ngemuva kwekukhululwa) ulandzele tehlakalo teMisebenti yebaPhostoli kanye netincwadzi letabhalwa endleleni.",
+  "foot": "Imitfombo · Tindzawo tilandzela umbhalo weBhayibheli nejografi lejwayelekile yeBhayibheli (ngemabito emanje lapho asita khona). Migcele yelwandle, imifula, netichibi kudvwetjwe kusukela kudatha yejografi levulekile (Natural Earth), yentiwa lula.",
+  "contact": "Imibuto · imibono — <a id=\"contact\" class=\"mail\">Sitfumelele i-imeyili</a>",
+  "play": "Dlala",
+  "pause": "Yima",
+  "today": "Namuhla:",
+  "verseCite": "2 yaPhetro 1:16"
+ },
+ "ot": {
+  "places": {
+   "eden": {
+    "name": "Edeni (Kudala · Kuwa)",
+    "book": "Genesisi 1–3",
+    "today": "sifundza saseTigris–Yufrathe namuhla",
+    "note": "Emhlabeni lobekumuhle kakhulu, sono siyangena sephule budlelwane emkhatsini waNkulunkulu nebantfu.",
+    "events": [
+     "Kudala emalangeni lasitfupha — “bekumuhle kakhulu”",
+     "Umuntfu wentiwa ngemfanekiso waNkulunkulu",
+     "Kuwa, nekukhishwa e-Edeni",
+     "Setsembiso sekucala selivangeli — “intalo yemfati iyawufihlita inhloko yenyoka”"
+    ]
+   },
+   "noah": {
+    "name": "Ararathi (Sikhukhula)",
+    "book": "Genesisi 6–9",
+    "today": "iNtsaba i-Ararathi, empumalanga yeThekhi namuhla",
+    "note": "Nkulunkulu wehlulela umhlaba logcwele sono, kepha wagcina imphilo ngemndeni munye.",
+    "events": [
+     "Umhlaba logcwele bubi",
+     "Sikhukhula, nomkhumbi waNowa",
+     "Sivumelwane selutsingo — “ngeke aphindze abhubise umhlaba ngesikhukhula”"
+    ]
+   },
+   "babel": {
+    "name": "Umbhoshongo waseBabeli",
+    "book": "Genesisi 11",
+    "today": "i-Iraki namuhla (litsafa laseShinari)",
+    "note": "Ekutigcabheni lokufinyelela ezulwini, Nkulunkulu wasakata lulwimi lwabo nebantfu emhlabeni wonkhe.",
+    "events": [
+     "“Asakheni umuti nembhoshongo … sitentele libito”",
+     "Nkulunkulu wasanganisa lulwimi lwabo",
+     "Bantfu bahlakateka emhlabeni wonkhe (Shinari — ngemuva kwaloko iBhabhulona)"
+    ]
+   },
+   "ur": {
+    "name": "Uri",
+    "book": "Genesisi 12",
+    "today": "eningizimu ye-Iraki namuhla",
+    "note": "Indzaba yensindziso yeBhayibheli icala ngekubitwa kwendvodza yinye.",
+    "events": [
+     "Nkulunkulu ubita Abramu aphume e-Uri lemaKhalediya",
+     "“Ngitakwenta ube sive lesikhulu … tive tonkhe tiyawubusiswa ngawe”",
+     "Ngekukholwa ushiya live lakubo"
+    ]
+   },
+   "haran": {
+    "name": "Harani",
+    "book": "Genesisi 12",
+    "today": "eningizimu yeThekhi namuhla",
+    "note": "Endleleni, aphendvula kubita ngaseliveni lesetsembiso.",
+    "events": [
+     "Umndeni waThera uhlala eHarani",
+     "Thera uyafa",
+     "Abramu usuka aya eKhanani aneminyaka lengema-75"
+    ]
+   },
+   "shechem": {
+    "name": "Shekemu · Khanani",
+    "book": "Genesisi 12–50",
+    "today": "eNablus namuhla",
+    "note": "Eliveni lesetsembiso kwakhiwa umndeni futsi sivumelwane siyendluliselwa etitukulwaneni.",
+    "events": [
+     "Kungena eKhanani, lilati lekucala — “lelive ngitawulinika intalo yakho”",
+     "Sivumelwane (Gen 15) · Isaka · Jakobe",
+     "Emadvodzana laJakobe lalishumi nakubili — imphandze yetitfwala letilishumi nakubili"
+    ]
+   },
+   "egypt": {
+    "name": "Gibhithe (Gosheni)",
+    "book": "Genesisi 37–50 · Eksodusi 1",
+    "today": "iDelta yeNayili, eGibhithe namuhla",
+    "note": "Umndeni uba sive lesikhulu — bese uba sive setigcili.",
+    "events": [
+     "Josefa, lowatsengiswa, uphakama abuse iGibhithe",
+     "Umndeni wonkhe waJakobe wehlela phansi ubalekela indlala",
+     "Sive sema-Israyeli lesikhulako siyagcilatiwa"
+    ]
+   },
+   "sinai": {
+    "name": "iNtsaba iSinayi",
+    "book": "Eksodusi · Levithikusi",
+    "today": "sifundza saseSinayi namuhla",
+    "note": "Insindziso lesemkhatsini yeTestamente Lendzala — tigcili tiba sive saNkulunkulu ngekwaso.",
+    "events": [
+     "Tinhlupho letilishumi nelizinyane lePhasika",
+     "Lwandle Lolubovu luyehlukana bawele",
+     "IMitsetfo Lelishumi, uMtsetfo, lithabanikeli, nemihlatjelo"
+    ]
+   },
+   "kadesh": {
+    "name": "Khadeshi (ihlane)",
+    "book": "Numeri · Dutheronomi",
+    "today": "ihlane laseSinayi–Negevi namuhla",
+    "note": "Kungakholwa kulahlekelwa situkulwane live — kepha Nkulunkulu uhlala nabo.",
+    "events": [
+     "Tinhloli letilishumi nakubili — kodvwa sive siyala kwetsemba",
+     "Iminyaka lengema-38 ehlane — imana, lifu, nemlilo",
+     "Ematsafeni aseMowabi, intshumayelo yekugcina yaMosi (Dutheronomi)"
+    ]
+   },
+   "jericho": {
+    "name": "Jeriko",
+    "book": "Joshuwa",
+    "today": "eJeriko namuhla",
+    "note": "Ekugcineni bayangena batfole live lesetsembiso.",
+    "events": [
+     "IJordani iyehlukana sive siwele",
+     "Tibondza taseJeriko tiyawa",
+     "Kunqoba iKhanani nekwehlukaniswa kwelive"
+    ]
+   },
+   "shiloh": {
+    "name": "Shilo (Tikhulu)",
+    "book": "Tikhulu · Ruthe",
+    "today": "eKhirbet Seilun namuhla",
+    "note": "Ngaphandle kwenkhosi, ngulowo nalowo wenta lakutsandzako — kudzingeka inkhosi yangempela.",
+    "events": [
+     "Lithabanikeli limiswa eShilo",
+     "Umjikelezo wesono–kuncindzetelwa–kusindziswa (Debora, Gideoni, Samsoni)",
+     "Ruthe — kwetsembeka emalangeni lamnyama, elusendvweni lwakaDavide"
+    ]
+   },
+   "jerusalem": {
+    "name": "Jerusalema · Umbuso Lohlangene",
+    "book": "1–2 Samuweli · 1 Emakhosi",
+    "today": "eJerusalema namuhla",
+    "note": "Sikhatsi segolide sema-Israyeli — netsembiso senkhosi yaphakadze.",
+    "events": [
+     "Sawula inkhosi yekucala, bese kuba David naGoliyathi",
+     "Sivumelwane naDavide — “sihlalo sakho siyawuma phakadze” (2 Sam 7)",
+     "Solomoni wakha lithempeli eJerusalema"
+    ]
+   },
+   "samaria": {
+    "name": "Samariya · Umbuso Lowehlukene",
+    "book": "Emakhosi · Baphrofethi",
+    "today": "eSebastia namuhla",
+    "note": "Umbuso uyahlukana wehla njengobe baphrofethi bakhala.",
+    "events": [
+     "Ngemuva kwaSolomoni, kwehlukana kwaba Juda na-Israyeli",
+     "Kukhonta tithico lokuphindzaphindzako",
+     "Elija, Isaya, Jeremiya bakhala batsi “buyani” — futsi baphrofetha ngeMesiya"
+    ]
+   },
+   "nineveh": {
+    "name": "Ninive (Asiriya)",
+    "book": "2 Emakhosi 17 · Jona",
+    "today": "eMosul, e-Iraki namuhla",
+    "note": "Ngekungananaki tonkhe tecwayiso, inyakatfo iwa kucala.",
+    "events": [
+     "Ninive, inhlokodolobha yase-Asiriya",
+     "Umbuso wasenyakatfo uwa ku-Asiriya (722 BC)",
+     "Jona utfunyelwa eNinive"
+    ]
+   },
+   "babylon": {
+    "name": "iBhabhulona",
+    "book": "2 Emakhosi 25 · Danyela · Hezekeli",
+    "today": "eHillah, e-Iraki namuhla",
+    "note": "Busuku lobumnyama kakhulu — kepha setsembiso sekubuyiselwa sisele.",
+    "events": [
+     "Jerusalema iyawa, lithempeli liyashiswa (586 BC)",
+     "Juda idvonselwa eBhabhulona",
+     "Danyela naHezekeli — kukholwa nemibono ekutfunjweni"
+    ]
+   },
+   "susa": {
+    "name": "Susa (Pheresiya)",
+    "book": "Esta · Nehemiya",
+    "today": "eShush, e-Iran namuhla",
+    "note": "Ngisho enhlitiyweni yembuso webahedeni, Nkulunkulu ugcina sive sakhe.",
+    "events": [
+     "Pheresiya iwisa iBhabhulona",
+     "Esta usindzisa emaJuda ekubhujisweni",
+     "Nehemiya uthandaza embikwenkhosi bese uyatfunyelwa"
+    ]
+   },
+   "return": {
+    "name": "Kubuyela eJerusalema",
+    "book": "Ezra · Nehemiya · Malakhi",
+    "today": "eJerusalema namuhla",
+    "note": "Bayabuya bakhe kabusha — kodvwa akukho nkhosi lefikile. Balindze iMesiya.",
+    "events": [
+     "Emagagasi lamatsatfu ekubuya ngesimemetelo saKhoresi (Zerubhabheli 538 · Ezra 458 · Nehemiya 444)",
+     "Lithempeli lakhiwa kabusha netibondza taseJerusalema tabuyiselwa",
+     "Malakhi — iTestamente Lendzala iyaphetsa: “ngiyawutfumela sitfunywa sami”"
+    ]
+   }
+  },
+  "labels": [
+   "Lwandle iMedithera",
+   "iMesophothamiya",
+   "Lihlane lase-Arabiya",
+   "iGibhithe"
+  ],
+  "journeys": {
+   "flow": "Indzaba yensindziso"
+  }
+ },
+ "jesus": {
+  "places": {
+   "bethlehem": {
+    "name": "Betlehema",
+    "book": "Matewu 1–2 · Lukha 2",
+    "today": "eBetlehema namuhla",
+    "note": "IMesiya leyetsenjisiwe ifika edolobheni laDavide — liVi laba yinyama.",
+    "events": [
+     "Watalwa eBetlehema, idolobha laDavide",
+     "Tingilosi timemetela tindzaba kubelusi",
+     "Tati tita kutewukhonta"
+    ]
+   },
+   "nazareth": {
+    "name": "Nazaretha",
+    "book": "Lukha 2 · 4",
+    "today": "eNazaretha namuhla",
+    "note": "Nkulunkulu ukhula njengemuntfu edolobheni lelivamile.",
+    "events": [
+     "Wakhuliswa ekhaya lembati wetingodvo",
+     "Aneminyaka lelishumi nakubili, abuta futsi aphendvula ethempelini",
+     "Ngemuva kwaloko walahlwa esinagogeni yakubo"
+    ]
+   },
+   "jordan": {
+    "name": "uMfula iJordani",
+    "book": "Matewu 3–4",
+    "today": "eningizimu yeJordani namuhla",
+    "note": "Inkonzo yakhe yembikwebantfu iyacala — izulu limbeka njengeNdvodzana.",
+    "events": [
+     "Ubhabhatiswa nguJohane",
+     "Moya wehlela njengelijuba — “Lo yiNdvodzana yami leyitsandzekako”",
+     "Wehlula tilingo letintsatfu taSathane ehlane"
+    ]
+   },
+   "cana": {
+    "name": "Khana",
+    "book": "Johane 2",
+    "today": "eKafr Kanna namuhla",
+    "note": "Esibonakalisweni sakhe sekucala wembula inkhatimulo yakhe.",
+    "events": [
+     "Simenywa emshadweni",
+     "Emanti aphendvuka aba liwayini — sibonakaliso sakhe sekucala",
+     "Bafundzi bakhe bayakholwa kuye"
+    ]
+   },
+   "sychar": {
+    "name": "Sikhari (Samariya)",
+    "book": "Johane 2–4",
+    "today": "eduze kweNablus namuhla",
+    "note": "Umgwaco wenkonzo yekucala — ngeJerusalema kuya eSamariya leyayideleliwe.",
+    "events": [
+     "Uhlambulula lithempeli eJerusalema",
+     "Ebusuku, Nikhodemu — “Kufanele utalwe kabusha”",
+     "Emanti laphilako kumfati waseSamariya"
+    ]
+   },
+   "capernaum": {
+    "name": "Khaphenawume",
+    "book": "Matewu 4–13 · Makho 1–4",
+    "today": "ogwini lwelichibi laseGalile namuhla",
+    "note": "Sisekelo senkonzo yaseGalile — kubita, kufundzisa, nekuphikiswa konkhe kuhlangana lapha.",
+    "events": [
+     "Ubita batsephuli betinhlanti asisekele lapha",
+     "Intshumayelo yaSentsabeni — “Babusisiwe labamphofu emoyeni”",
+     "Imifanekiso yembuso — nekuphikiswa lokukhulako"
+    ]
+   },
+   "galilee": {
+    "name": "Lwandle lwaseGalile",
+    "book": "Makho 4 · 6 · Johane 6",
+    "today": "iLichibi iKhinnereti namuhla",
+    "note": "Ngemandla etulu kwemvelo ukhombisa kutsi ungubani.",
+    "events": [
+     "“Thula, uthule!” — uthulisa sivunguvungu",
+     "Usutsisa bantfu labati-5 000 ngetinkhwa letisihlanu netinhlanti letimbili",
+     "Uhamba etulu kwemanti"
+    ]
+   },
+   "caesarea_p": {
+    "name": "Khesariya Filiphi",
+    "book": "Matewu 16–17",
+    "today": "eBaniyas namuhla",
+    "note": "Bafundzi bayabona kutsi unguKhristu, indlela yesiphambano ivuleka.",
+    "events": [
+     "Kuvuma kwaPhetro — “Wena unguKhristu, iNdvodzana yaNkulunkulu lophilako”",
+     "Uphrofetha kwekucala ngekufa nekuvuka kwakhe",
+     "Waguculwa simo ngenkhatimulo entsabeni"
+    ]
+   },
+   "jericho": {
+    "name": "Jeriko",
+    "book": "Lukha 18–19",
+    "today": "eJeriko namuhla",
+    "note": "Endleleni leya eJerusalema, ufuna lokulahlekile.",
+    "events": [
+     "Uvula emehlo aBhathimewu loyimphumphutse",
+     "Ubita Zakheyu umtselisi wentsela",
+     "“INdvodzana yeMuntfu ifike kutewufuna nekusindzisa lokwakulahlekile”"
+    ]
+   },
+   "bethany": {
+    "name": "Bethaniya",
+    "book": "Johane 11–12",
+    "today": "e-al-Eizariya namuhla",
+    "note": "Ukhombisa emandla etulu kwekufa ngobusuku ngembi kweliviki lakhe lekugcina.",
+    "events": [
+     "Uvusa Lazaro ethuneni — “Mine ngikuvuka nekuphila”",
+     "Mariya umgcoba emafutsa kulungiselela kungcwatjwa",
+     "Lesibonakaliso senta licebo lekumbulala liqine"
+    ]
+   },
+   "jerusalem": {
+    "name": "Jerusalema",
+    "book": "Matewu 21–28 · Lukha 24 · Imisebenti yebaPhostoli 1",
+    "today": "eJerusalema namuhla",
+    "note": "Sicongo yonkhe iBhayibheli lesikhomba kuso — siphambano, kuvuka, kwenyukela ezulwini.",
+    "events": [
+     "Kungena kwekunqoba; ubuye agenculule ematafula ethempelini",
+     "ESidlweni Sekugcina ugeza tinyawo tebafundzi",
+     "Ufela esiphambanweni",
+     "Uvuka ngelilanga lesitsatfu, bese wenyukela ezulwini"
+    ]
+   }
+  },
+  "labels": [
+   "Lwandle iMedithera",
+   "iGalile",
+   "iSamariya",
+   "iJudiya",
+   "iDekhapholisi",
+   "iPheriya",
+   "Lwandle Lolufile"
+  ],
+  "journeys": {
+   "life": "Indlela yaJesu"
+  }
+ },
+ "paul": {
+  "places": {
+   "antioch": {
+    "name": "Antiyokhi",
+    "book": "Imisebenti yebaPhostoli 13 · 15",
+    "today": "e-Antakya, eThekhi namuhla",
+    "note": "Libandla lelitfumelako lapho inkonzo yebetive icala ibuyele khona.",
+    "events": [
+     "Emthandazweni Moya wehlukanisela Bhanabha naSawula",
+     "Libandla lapho bakholwa baqala kubitwa khona ngekutsi “emaKhristu”",
+     "Liphuzu lekusuka lwekuhamba kwekucala, kwesibili, nekwesitsatfu"
+    ]
+   },
+   "seleucia": {
+    "name": "Selusiya",
+    "book": "Imisebenti yebaPhostoli 13:4",
+    "today": "eThekhi namuhla",
+    "note": "Litheku la-Antiyokhi — bagibela umkhumbi baya eSiphrosi.",
+    "events": []
+   },
+   "salamis": {
+    "name": "Salamisi (Siphrosi)",
+    "book": "Imisebenti yebaPhostoli 13:5",
+    "today": "eSiphrosi namuhla",
+    "note": "Sikhundla sekucala eSiphrosi — kushumayela emasinagogeni.",
+    "events": []
+   },
+   "paphos": {
+    "name": "Phafosi",
+    "book": "Imisebenti yebaPhostoli 13:6-12",
+    "today": "eSiphrosi namuhla",
+    "note": "Emandla akhonjiswa kulabaphikisa livangeli.",
+    "events": [
+     "Elima umlumbi ushaywa aba yimphumphutse",
+     "Segiyu Pawula umbusi uyakholwa",
+     "Kusukela lapha “Pawula” utsatsa buholi"
+    ]
+   },
+   "perga": {
+    "name": "Phega",
+    "book": "Imisebenti yebaPhostoli 13:13",
+    "today": "e-Antalya, eThekhi namuhla",
+    "note": "Litheku lasePhamfiliya — lapha Johane Makho ubuyela emuva.",
+    "events": []
+   },
+   "pantioch": {
+    "name": "Antiyokhi wasePhisidiya",
+    "book": "Imisebenti yebaPhostoli 13:14-50",
+    "today": "eYalvaç, eThekhi namuhla",
+    "note": "Livangeli livuleka liye kubetive.",
+    "events": [
+     "Intshumayelo lendze yemlandvo wensindziso esinagogeni",
+     "Betive labanyenti bayajabula bemukele liVi",
+     "Baxoshwa ngekuphikiswa"
+    ]
+   },
+   "iconium": {
+    "name": "Ikhoniyu",
+    "book": "Imisebenti yebaPhostoli 14:1-7",
+    "today": "eKonya, eThekhi namuhla",
+    "note": "Labanyenti bayakholwa, kodvwa kushushiswa kubaphocelela kutsi bachubeke.",
+    "events": []
+   },
+   "lystra": {
+    "name": "Lisitra",
+    "book": "Imisebenti yebaPhostoli 14:8-20",
+    "today": "eThekhi namuhla",
+    "note": "Babitwa njengankulunkulu, bese uyakhandvwa ngematje.",
+    "events": [
+     "Welapha indvodza leyayirholophele kusukela ekutalweni",
+     "Sicumbi setama kubahlabela njengabonkulunkulu",
+     "Wakhandvwa ngematje washiywa afile, kodvwa uyavuka"
+    ]
+   },
+   "derbe": {
+    "name": "Dhebe",
+    "book": "Imisebenti yebaPhostoli 14:20-21",
+    "today": "eThekhi namuhla",
+    "note": "Kwentiwa bafundzi labanyenti; babuyela ngendlela leyodvwa baciniso emabandla.",
+    "events": []
+   },
+   "troas": {
+    "name": "Throwasi",
+    "book": "Imisebenti yebaPhostoli 16:8-10",
+    "today": "eThekhi namuhla",
+    "note": "Liphuzu lekuguculuka lapho livangeli licala khona kubheka eYurophu.",
+    "events": [
+     "Umbono wendvodza yaseMakedoniya",
+     "“Welela lapha usisite”",
+     "Bawela masinyane baye eYurophu"
+    ]
+   },
+   "philippi": {
+    "name": "Filiphi",
+    "book": "Imisebenti yebaPhostoli 16 · KubaseFiliphi",
+    "today": "enyakatfo yeGrisi namuhla",
+    "note": "Libandla lekucala laseYurophu — livangeli linqoba ngisho ejele.",
+    "events": [
+     "Lidiya, umtsengisi welibubende, uyakholwa",
+     "Intfombatana lesigcili lebibhula iyakhululwa",
+     "Tingoma phakatsi kwebusuku, kutamatama komhlaba, umndeni wemgcinijele uyasindziswa"
+    ]
+   },
+   "thess": {
+    "name": "Thesalonika",
+    "book": "Imisebenti yebaPhostoli 17 · 1–2 kubaseThesalonika",
+    "today": "eThessaloniki, eGrisi namuhla",
+    "note": "LiVi liyawunyakatisa lidolobha, kuphikiswa kuyavutfumela.",
+    "events": [
+     "Ubonisana esinagogeni ngemaSabatha lamatsatfu",
+     "“Laba labaphendvule umhlaba wonkhe”",
+     "Bayanyelela ebusuku"
+    ]
+   },
+   "berea": {
+    "name": "Bheriya",
+    "book": "Imisebenti yebaPhostoli 17:10-15",
+    "today": "eVeria, eGrisi namuhla",
+    "note": "Bantfu “labahloniphekile” labahlola liVi bona ngekwabo.",
+    "events": [
+     "Bemukela liVi ngenshisekelo",
+     "Onkhe emalanga bahlola imiBhalo kucinisekisa loko",
+     "Labanyenti bayakholwa"
+    ]
+   },
+   "athens": {
+    "name": "Atheni",
+    "book": "Imisebenti yebaPhostoli 17:16-34",
+    "today": "e-Atheni, eGrisi namuhla",
+    "note": "Edolobheni lebafilosofi umemetela “unkulunkulu longatiwa”.",
+    "events": [
+     "Ucansuka lidolobha ligcwele tithico",
+     "E-Areyophhagu ushumayela ngoMdali nekuvuka",
+     "Bayamphukuta, kodvwa labambalwa bayakholwa"
+    ]
+   },
+   "corinth": {
+    "name": "Korinthe",
+    "book": "Imisebenti yebaPhostoli 18 · 1–2 kubaseKorinthe",
+    "today": "eGrisi namuhla",
+    "note": "Uhlala umnyaka nesigamu, atjala libandla edolobheni lebubi.",
+    "events": [
+     "Wenta ematende na-Akhwila naPhrisila",
+     "“Ungesabi … ngobe nginawe”",
+     "EmaKorinthe lamanyenti ayakholwa abhabhatiswa"
+    ]
+   },
+   "ephesus": {
+    "name": "Efesu",
+    "book": "Imisebenti yebaPhostoli 19 · Kubase-Efesu",
+    "today": "eSelçuk, eThekhi namuhla",
+    "note": "Inhlitiyo yekuhamba kwesitsatfu — liVi lisakateka kulo lonkhe live lase-Asiya.",
+    "events": [
+     "Kufundzisa nsuku tonkhe iminyaka lemibili endlini yekufundzela yaThiranu",
+     "Tincwadzi temilingo tiyashiswa; imisebenti lenemandla",
+     "Demethriyu umkhandzi wesiliva ucala sidvubulo"
+    ]
+   },
+   "miletus": {
+    "name": "Miletu",
+    "book": "Imisebenti yebaPhostoli 20:17-38",
+    "today": "eThekhi namuhla",
+    "note": "Kuvalelisa lokunetinyembeti kubaholi belibandla lase-Efesu.",
+    "events": [
+     "“Nakekelani libandla lakhe lalitsenga ngengati yakhe matfupha”",
+     "Labadzala bayakhala, bati kutsi ngeke baphindze bambone"
+    ]
+   },
+   "caesarea": {
+    "name": "Khesariya",
+    "book": "Imisebenti yebaPhostoli 23–26",
+    "today": "ogwini lwaka-Israyeli namuhla",
+    "note": "Iminyaka lemibili uvikela livangeli embikwebabusi nenkhosi.",
+    "events": [
+     "Kwehlulelwa embikwebabusi Felikisi naFestusi",
+     "Kuvikela kwakhe embikwenkhosi Agripha",
+     "“Ngidzinsela kuKhesari” — kuchubekela eRoma"
+    ]
+   },
+   "jerusalem": {
+    "name": "Jerusalema",
+    "book": "Imisebenti yebaPhostoli 21–23",
+    "today": "eJerusalema namuhla",
+    "note": "Ubanjwa ethempelini, indlela yakhe njengesibotjwa iyacala.",
+    "events": [
+     "Ubanjwa sicumbi ethempelini",
+     "Utivikela embikwemkhandlu",
+     "Njengesakhamuti saseRoma, utfunyelwa ngaphansi kwebalindzi eKhesariya"
+    ]
+   },
+   "myra": {
+    "name": "Mira",
+    "book": "Imisebenti yebaPhostoli 27:5-6",
+    "today": "eDemre, eThekhi namuhla",
+    "note": "Bagibela umkhumbi wase-Aleksandriya loya eRoma.",
+    "events": []
+   },
+   "fairhaven": {
+    "name": "Emachwebeni Lamahle (Kreta)",
+    "book": "Imisebenti yebaPhostoli 27:8-12",
+    "today": "eKreta namuhla",
+    "note": "Secwayiso saPawula sekutsi bayekele kuhamba asinakwa.",
+    "events": []
+   },
+   "crete": {
+    "name": "Kreta",
+    "book": "kuThithusi",
+    "today": "eKreta namuhla",
+    "note": "Ngemuva kwekukhululwa kwakhe, sichingi lapho ashiya khona Thithusi kutsi ahlele emabandla.",
+    "events": [
+     "Ushiya Thithusi kutsi abeke labadzala kuwo onkhe emadolobha",
+     "Ucela baholi labangenasici, labetsembekile",
+     "Ubhala incwadzi leya kuThithusi"
+    ]
+   },
+   "malta": {
+    "name": "Melitha",
+    "book": "Imisebenti yebaPhostoli 27–28",
+    "today": "eMalta namuhla",
+    "note": "Ngesivunguvungu nekubhidlika komkhumbi, setsembiso saNkulunkulu siyema.",
+    "events": [
+     "“Umoya wasenyakatfo-mphumalanga” ubhidlita umkhumbi, kodvwa bonkhe laba-276 bayasindza",
+     "Ulunywa yinyoka leneshevu, kodvwa akalimali",
+     "Welapha labagulako besichingi"
+    ]
+   },
+   "syracuse": {
+    "name": "Sirakhuse",
+    "book": "Imisebenti yebaPhostoli 28:12",
+    "today": "eSicily, e-Ithali namuhla",
+    "note": "Bahlala emalanga lamatsatfu eSicily.",
+    "events": []
+   },
+   "puteoli": {
+    "name": "Phutheyoli",
+    "book": "Imisebenti yebaPhostoli 28:13-14",
+    "today": "ePozzuoli, e-Ithali namuhla",
+    "note": "Bafika e-Ithali bahlangatjetwa bakholwa labangabafowabo.",
+    "events": []
+   },
+   "rome": {
+    "name": "Roma",
+    "book": "Imisebenti yebaPhostoli 28 · Tincwadzi Tasejele · 2 kuThimothi",
+    "today": "eRoma, e-Ithali namuhla",
+    "note": "Livangeli lifika enhlitiyweni yembuso ekugcineni — akusiko kuphela kodvwa kucala.",
+    "events": [
+     "Iminyaka lemibili aboshelwe endlini, amemetela umbuso ngesibindzi",
+     "Kusukela lapha ubhala Tincwadzi Tasejele (Efe·Fil·Khol·Filem)",
+     "Ngemuva kwaloko uphindze aboshwe, ubhala 2 kuThimothi bese uyabulawelwa kukholwa — “Ngiyilwile inkhundla lenhle, ngiwucedzile umjaho”"
+    ]
+   }
+  },
+  "labels": [
+   "Lwandle iMedithera",
+   "Lwandle i-Egiye",
+   "i-Asiya Lencane",
+   "iMakedoniya",
+   "i-Ithali"
+  ],
+  "journeys": {
+   "j1": "Luhambo lwekucala",
+   "j2": "Luhambo lwesibili",
+   "j3": "Luhambo lwesitsatfu",
+   "rome": "Luhambo lwesine · loluya eRoma",
+   "j5": "Luhambo lwesihlanu · ngemuva kwekukhululwa"
+  }
+ }
+}

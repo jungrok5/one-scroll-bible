@@ -1,0 +1,636 @@
+{
+ "menuName": "Twi",
+ "htmlLang": "twi",
+ "dir": "ltr",
+ "locale": "twi",
+ "brand": "Bible no nyinaa wɔ krataa baako so",
+ "docTitle": "Bible no wɔ Asase Mfoni so · Bible no nyinaa wɔ krataa baako so",
+ "metaDesc": "Di Apam Dedaw bere nhyehyɛe, Yesu nkwa, ne Paulo akwantu no akyi wɔ asase mfoni ankasa so — Bible no sii wɔ mmeae ankasa.",
+ "s": {
+  "kicker": "Bible no nyinaa wɔ krataa baako so · Asase Mfoni",
+  "title": "Bible no wɔ Asase Mfoni so",
+  "verse": "“Ɛnyɛ anansesɛm na yɛte bɛka kyerɛɛ mo wɔ yɛn Awurade Yesu Kristo tumi ne ba a ɔrebɛba no ho, na mmom yɛahu na yedi ne kɛseyɛ no ho adanse.” (2 Petro 1:16)",
+  "purpose": "Bible no nyɛ anansesɛm. Ɛyɛ nnipa ankasa a wɔnantew mmeae, mmere, ne din ankasa so no ho kyerɛwtohɔ. Di saa akwan no akyi wɔ asase mfoni so, wɔ bere nhyehyɛe mu — mia baabi, anaa mia ▶ na fa anammɔn baako baako fa mu.",
+  "ot_kick": "① Apam Dedaw — bere no mu",
+  "ot_h": "Efi abɔde kosi Yerusalem nsanba",
+  "ot_lead": "Ɛnyɛ akwantu baako pɛ na mmom ogyefosɛm-abakɔsɛm no a ɛsen fi abɔde bere so: abɔde ne asehwe → nsuyiri ne Babel → ɔfrɛ (Abraham) → bɔhyɛ asase → Misraimfi tu → sare so → asasegye → ahenni → mu paee → nnommumfa → nsanba.",
+  "je_kick": "② Apam Foforo — Yesu nkwa",
+  "je_h": "Efi Betlehem kosi Yerusalem",
+  "je_lead": "Di Yesu nkwa akyi sɛnea Asɛmpa nhoma no ka no, wɔ nhyehyɛe mu — efi nʼawo wɔ Betlehem, fa nʼasubɔ ne Galilea som so, twa mu wɔ Samaria, kosi asɛndua, owusɔre ne ɔsorokɔ wɔ Yerusalem.",
+  "pa_kick": "③ Apam Foforo — Paulo akwantu",
+  "pa_h": "Efi Antiokia kosi asase ano — Roma",
+  "pa_lead": "Efi Pentekoste wɔ Yerusalem, sɛnea asɛmpa no trɛw fii Yudea akyi — fa Asia Ketewa ne Europa so kosi ahemman no koma mu. Yi akwantu enum no mu baako (1·2·3 + akwantu a ɛkɔ Roma + wɔgyaa no akyi) na di Asomafo nsɛm no akyi ne nkrataa a wɔkyerɛwee wɔ ɛkwan so no.",
+  "foot": "Nnyinaso · Mmeae no di Bible asɛm ne Bible asase nimdeɛ a wɔde di dwuma no akyi (ɛne nnɛ din a ɛboa). Mpoano, nsubɔntene ne atare no, wɔtwe fii asase ho data a wɔabue (Natural Earth) mu, a wɔayɛ no mmerɛw.",
+  "contact": "Nsɛmmisa · adwene — <a id=\"contact\" class=\"mail\">Fa email brɛ yɛn</a>",
+  "play": "Mia",
+  "pause": "Gyae",
+  "today": "Nnɛ:",
+  "verseCite": "2 Petro 1:16"
+ },
+ "ot": {
+  "places": {
+   "eden": {
+    "name": "Eden (Abɔde · Asehwe)",
+    "book": "1 Mose 1–3",
+    "today": "Tigris–Eufrate mpɔtam no nnɛ",
+    "note": "Wɔ wiase a wɔbɔɔ no papa yiye mu, bɔne ba mu na ɛsɛe abusuabɔ a ɛda Onyankopɔn ne nnipa ntam no.",
+    "events": [
+     "Abɔde wɔ nna nsia mu — “na ɛyɛ papa yiye”",
+     "Wɔbɔɔ nnipa Onyankopɔn suban so",
+     "Asehwe no, ne tu a wotuu wɔn fii Eden",
+     "Asɛmpa bɔhyɛ a edi kan — “ɔbea no aseni bɛbɔ ɔwɔ no ti”"
+    ]
+   },
+   "noah": {
+    "name": "Ararat (Nsuyiri no)",
+    "book": "1 Mose 6–9",
+    "today": "Ararat Bepɔ, apuei fam Türkiye nnɛ",
+    "note": "Onyankopɔn bu wiase a bɔne ahyɛ no ma no atɛn, nanso ɔnam abusua baako so kora nkwa so.",
+    "events": [
+     "Wiase a porɔwee ahyɛ no ma",
+     "Nsuyiri no, ne Noa adaka no",
+     "Nyankontɔn apam no — “nsuyiri remmɛsɛe wiase bio da”"
+    ]
+   },
+   "babel": {
+    "name": "Babel Abantenten",
+    "book": "1 Mose 11",
+    "today": "Irak nnɛ (Sinar tata so)",
+    "note": "Ahantan a ɛpɛ sɛ edu ɔsoro no, Onyankopɔn maa wɔn kasa yɛɛ basabasa na ɔhwetee nnipa no wɔ asase so.",
+    "events": [
+     "“Momma yɛnkyekyere kuro ne abantenten… na yɛnnye din”",
+     "Onyankopɔn maa wɔn kasa yɛɛ basabasa",
+     "Nnipa no hwetee wɔ asase so (Sinar — akyiri yi Babilonia)"
+    ]
+   },
+   "ur": {
+    "name": "Ur",
+    "book": "1 Mose 12",
+    "today": "anafo fam Irak nnɛ",
+    "note": "Bible no ogye asɛm no fi ase wɔ ɔbarima baako frɛ mu.",
+    "events": [
+     "Onyankopɔn frɛɛ Abram fii Kaldeafo Ur mu",
+     "“Mɛma wo ayɛ ɔman kɛse… ɛnam wo so na wobehyira nnipa nyinaa”",
+     "Ɛnam gyidi so ogyaa nʼasase"
+    ]
+   },
+   "haran": {
+    "name": "Haran",
+    "book": "1 Mose 12",
+    "today": "anafo fam Türkiye nnɛ",
+    "note": "Wɔ ɛkwan so, ɔregye ɔfrɛ no so kɔ bɔhyɛ asase no so.",
+    "events": [
+     "Tera abusua tenaa Haran",
+     "Tera wui",
+     "Abram sii mu kɔɔ Kanaan bere a wadi mfe 75"
+    ]
+   },
+   "shechem": {
+    "name": "Sekem · Kanaan",
+    "book": "1 Mose 12–50",
+    "today": "Nablus nnɛ",
+    "note": "Wɔ bɔhyɛ asase no so wɔhyɛ abusua ase na apam no kɔ awo ntoatoaso so.",
+    "events": [
+     "Wɔwura Kanaan, afɔrebukyia a edi kan — “wʼasefo na mede saa asase yi bɛma”",
+     "Apam no (1 Mose 15) · Isak · Yakob",
+     "Yakob mmabarima dumien — mmusuakuw dumien no nhini"
+    ]
+   },
+   "egypt": {
+    "name": "Misraim (Gosen)",
+    "book": "1 Mose 37–50 · 2 Mose 1",
+    "today": "Nil Delta, Misraim nnɛ",
+    "note": "Abusua bɛyɛ ɔman kɛse — afei ɔman a wɔyɛ nkoa.",
+    "events": [
+     "Yosef, a wɔtɔn no, sɔre dii tumi wɔ Misraim",
+     "Yakob abusua nyinaa siane baa fam sɛ wɔredwane ɔkɔm",
+     "Israel ɔman a ɛrenyin no, wɔyɛɛ no nkoa"
+    ]
+   },
+   "sinai": {
+    "name": "Sinai Bepɔ",
+    "book": "2 Mose · 3 Mose",
+    "today": "Sinai Asaseworɔ nnɛ",
+    "note": "Apam Dedaw mu ogye a ɛso sen biara — nkoa bɛyɛ Onyankopɔn ankasa nkurɔfo.",
+    "events": [
+     "Ɔhaw du no ne Twam Afahyɛ oguamma no",
+     "Po Kɔkɔɔ no twae na wɔtwaa mu",
+     "Mmaransɛm Du, Mmara no, Ahyiae Ntamadan ne afɔrebɔ"
+    ]
+   },
+   "kadesh": {
+    "name": "Kades (sare so)",
+    "book": "4 Mose · 5 Mose",
+    "today": "Sinai–Negeb sare so nnɛ",
+    "note": "Gyidi a wonni ma awo ntoatoaso baako hwere asase no — nanso Onyankopɔn ne wɔn tena hɔ.",
+    "events": [
+     "Akwansrafo dumien — nanso nnipa no ampene sɛ wɔde wɔn ho bɛto Onyankopɔn so",
+     "Mfe 38 wɔ sare so — mana, omununkum ne ogya",
+     "Wɔ Moab tata so, Mose asɛnka a etwa to (5 Mose)"
+    ]
+   },
+   "jericho": {
+    "name": "Yeriko",
+    "book": "Yosua",
+    "today": "Yeriko nnɛ",
+    "note": "Awiei koraa no wɔwura na wɔfa bɔhyɛ asase no.",
+    "events": [
+     "Yordan twae na nnipa no twaa mu",
+     "Yeriko afasu no bubui",
+     "Kanaan asasegye ne asase no a wɔkyekyɛe"
+    ]
+   },
+   "shiloh": {
+    "name": "Silo (Atemmufo)",
+    "book": "Atemmufo · Rut",
+    "today": "Khirbet Seilun nnɛ",
+    "note": "Ɔhene nni hɔ nti, obiara yɛ nea ɔpɛ — ɔhene ankasa ho hia.",
+    "events": [
+     "Wosii Ahyiae Ntamadan no wɔ Silo",
+     "Bɔne–nhyɛso–ogye mmeae a ɛsan ba no (Debora, Gideon, Samson)",
+     "Rut — nokwaredi wɔ esum nna mu, wɔ Dawid aseni mu"
+    ]
+   },
+   "jerusalem": {
+    "name": "Yerusalem · Ahenni a Ɛyɛ Baako",
+    "book": "1–2 Samuel · 1 Ahemfo",
+    "today": "Yerusalem nnɛ",
+    "note": "Israel bere a ɛsɔ ani sen biara — ne ɔhene a ɔtim daa ho bɔhyɛ.",
+    "events": [
+     "Saul ɔhene a odi kan, afei Dawid ne Goliat",
+     "Dawid apam — “wʼahengua betim daa” (2 Samuel 7)",
+     "Salomo si asɔredan no wɔ Yerusalem"
+    ]
+   },
+   "samaria": {
+    "name": "Samaria · Ahenni a Emu Paee",
+    "book": "Ahemfo · Adiyifo",
+    "today": "Sebastia nnɛ",
+    "note": "Ahenni no mu paee na ɛsɛe bere a adiyifo no resu.",
+    "events": [
+     "Salomo akyi, mu paee kɔ Yuda ne Israel",
+     "Abosonsom a ɛsan ba",
+     "Elia, Yesaia, Yeremia su ‘monsan mmra’ — na wɔhyɛ Mesia ho nkɔm"
+    ]
+   },
+   "nineveh": {
+    "name": "Ninewe (Asiria)",
+    "book": "2 Ahemfo 17 · Yona",
+    "today": "Mosul, Irak nnɛ",
+    "note": "Wobuu kɔkɔbɔ biara animtia nti, atifi fam na edii kan hwee ase.",
+    "events": [
+     "Ninewe, Asiria ahenkurow",
+     "Atifi fam ahenni no hwee ase Asiria anim (AKB 722)",
+     "Wɔsomaa Yona kɔɔ Ninewe"
+    ]
+   },
+   "babylon": {
+    "name": "Babilonia",
+    "book": "2 Ahemfo 25 · Daniel · Hesekiel",
+    "today": "Hillah, Irak nnɛ",
+    "note": "Anadwo a esum duru sen biara — nanso nsiesie ho bɔhyɛ no da so wɔ hɔ.",
+    "events": [
+     "Yerusalem hwee ase, wɔhyew asɔredan no (AKB 586)",
+     "Wɔde Yuda kɔɔ Babilonia",
+     "Daniel ne Hesekiel — gyidi ne anisoadehu wɔ nnommumfa mu"
+    ]
+   },
+   "susa": {
+    "name": "Susa (Persia)",
+    "book": "Ɛster · Nehemia",
+    "today": "Shush, Iran nnɛ",
+    "note": "Abosonsom ahemman koma mu mpo, Onyankopɔn kora ne nkurɔfo so.",
+    "events": [
+     "Persia di Babilonia so",
+     "Ɛster gye Yudafo fi ɔsɛe mu",
+     "Nehemia bɔ mpae wɔ ɔhene anim na wɔsoma no"
+    ]
+   },
+   "return": {
+    "name": "Yerusalem Nsanba",
+    "book": "Ɛsra · Nehemia · Malaki",
+    "today": "Yerusalem nnɛ",
+    "note": "Wɔsan ba na wosiesie — nanso ɔhene biara mmae. Wɔtwɛn Mesia.",
+    "events": [
+     "Nsanba abiɛsa denam Kores mmara so (Serubabel 538 · Ɛsra 458 · Nehemia 444)",
+     "Wɔsan si asɔredan no na wosiesie Yerusalem afasu no",
+     "Malaki — Apam Dedaw to twa: “Mɛsoma me bɔfo”"
+    ]
+   }
+  },
+  "labels": [
+   "Mediterania Po",
+   "Mesopotamia",
+   "Arabia Anweatam",
+   "Misraim"
+  ],
+  "journeys": {
+   "flow": "Ogye asɛm no"
+  }
+ },
+ "jesus": {
+  "places": {
+   "bethlehem": {
+    "name": "Betlehem",
+    "book": "Mateo 1–2 · Luka 2",
+    "today": "Betlehem nnɛ",
+    "note": "Mesia a wɔhyɛɛ ne bɔ no ba Dawid kurow no mu — Asɛm no a ɛbɛyɛɛ onipa.",
+    "events": [
+     "Wɔwoo no wɔ Betlehem, Dawid kurow mu",
+     "Abɔfo bɔ nnwanhwɛfo amanneɛ no",
+     "Anyansafo no ba bɛsom no"
+    ]
+   },
+   "nazareth": {
+    "name": "Nasaret",
+    "book": "Luka 2 · 4",
+    "today": "Nasaret nnɛ",
+    "note": "Onyankopɔn nyin sɛ onipa wɔ kurow teta bi mu.",
+    "events": [
+     "Wɔtetee no wɔ duadwumfo fie",
+     "Wɔ mfe dumien mu, ɔrebisa na ɔrebua nsɛm wɔ asɔredan no mu",
+     "Akyiri yi wɔpoo no wɔ ne kurow hyiadan mu"
+    ]
+   },
+   "jordan": {
+    "name": "Yordan Asubɔnten",
+    "book": "Mateo 3–4",
+    "today": "Yordan a ɛwɔ fam no nnɛ",
+    "note": "Ne badwa mu som fi ase — ɔsoro sɔ ano sɛ ɔyɛ Ɔba no.",
+    "events": [
+     "Yohane bɔɔ no asu",
+     "Honhom no sian sɛ aborɔnoma — “Woyɛ me Dɔ Ba”",
+     "Odii Satan sɔhwɛ abiɛsa so wɔ sare so"
+    ]
+   },
+   "cana": {
+    "name": "Kana",
+    "book": "Yohane 2",
+    "today": "Kafr Kanna nnɛ",
+    "note": "Ne nsɛnkyerɛnne a edi kan mu na ɔdaa nʼanuonyam adi.",
+    "events": [
+     "Ɔhɔho wɔ ayeforohyia ase",
+     "Nsu a ɛdanee nsa — ne nsɛnkyerɛnne a edi kan",
+     "Nʼasuafo gye no di"
+    ]
+   },
+   "sychar": {
+    "name": "Sikar (Samaria)",
+    "book": "Yohane 2–4",
+    "today": "Nablus ho nnɛ",
+    "note": "Som a edi kan no kwan — fa Yerusalem so kosi Samaria a wobu no animtia no.",
+    "events": [
+     "Ɔdwira asɔredan no wɔ Yerusalem",
+     "Anadwo, Nikodemo — “Ɛsɛ sɛ wɔsan wo wo”",
+     "Nkwa nsu ma Samaria ɔbea bi"
+    ]
+   },
+   "capernaum": {
+    "name": "Kapernaum",
+    "book": "Mateo 4–13 · Marko 1–4",
+    "today": "Galilea po mpoano nnɛ",
+    "note": "Galilea som no dwumadibea — ɔfrɛ, ɔkyerɛkyerɛ ne ɔsɔretia nyinaa hyia wɔ ha.",
+    "events": [
+     "Ɔfrɛ apopofo no na ɔde ne dwumadibea si ha",
+     "Bepɔ so Asɛnka no — “Nhyira ne wɔn a wɔhia honhom mu”",
+     "Ahenni no ho mmɛbu — ne ɔsɔretia a ɛresɔre"
+    ]
+   },
+   "galilee": {
+    "name": "Galilea Po",
+    "book": "Marko 4 · 6 · Yohane 6",
+    "today": "Kinneret Po nnɛ",
+    "note": "Ɛnam tumi a ɔwɔ wɔ abɔde so so, ɔda no a ɔyɛ adi.",
+    "events": [
+     "“Yɛ komm” — ɔbrɛ ahum no ase",
+     "Ɔde burodo enum ne mpataa mmienu maa nnipa 5,000 aduan",
+     "Ɔnantew nsu ani"
+    ]
+   },
+   "caesarea_p": {
+    "name": "Kaesarea Filipi",
+    "book": "Mateo 16–17",
+    "today": "Banias nnɛ",
+    "note": "Asuafo no te ase sɛ ɔyɛ Kristo no, na asɛndua kwan no bue.",
+    "events": [
+     "Petro gyidi no — “Wone Kristo no, Onyankopɔn a ɔte ase no Ba”",
+     "Ɔhyɛ ne wu ne owusɔre ho nkɔm kane",
+     "Wɔsesa no anuonyam mu wɔ bepɔ no so"
+    ]
+   },
+   "jericho": {
+    "name": "Yeriko",
+    "book": "Luka 18–19",
+    "today": "Yeriko nnɛ",
+    "note": "Wɔ kwan a ɛforo kɔ Yerusalem no so, ɔhwehwɛ wɔn a wɔayera.",
+    "events": [
+     "Ɔma onifuraefo Bartimeo hu ade",
+     "Ɔfrɛ ɔtogyefo Sakeo",
+     "“Onipa Ba no bae sɛ ɔrebɛhwehwɛ na wagye wɔn a wɔayera nkwa”"
+    ]
+   },
+   "bethany": {
+    "name": "Betania",
+    "book": "Yohane 11–12",
+    "today": "al-Eizariya nnɛ",
+    "note": "Ɔda ne tumi a ɛwɔ owu so adi wɔ ne dapɛn a etwa to no anim.",
+    "events": [
+     "Ɔnyan Lasaro fii ɔda mu — “Mene owusɔre ne nkwa”",
+     "Maria sra no ngo ma ne sie",
+     "Saa nsɛnkyerɛnne yi ma pɔ a wɔbɔ sɛ wɔbɛku no no mu yɛ den"
+    ]
+   },
+   "jerusalem": {
+    "name": "Yerusalem",
+    "book": "Mateo 21–28 · Luka 24 · Asomafo 1",
+    "today": "Yerusalem nnɛ",
+    "note": "Nea Bible no nyinaa kyerɛ no awiei — asɛndua, owusɔre, ɔsorokɔ.",
+    "events": [
+     "Ɔde anuonyam hyɛn mu; ɔsan tu asɔredan no apon gu",
+     "Wɔ Anwummeduan a Etwa To no, ɔhohoro asuafo no anan ho",
+     "Ɔwu wɔ asɛndua no so",
+     "Ɔsɔre da a ɛto so abiɛsa, afei ɔforo kɔ soro"
+    ]
+   }
+  },
+  "labels": [
+   "Mediterania Po",
+   "Galilea",
+   "Samaria",
+   "Yudea",
+   "Dekapoli",
+   "Perea",
+   "Po Funu"
+  ],
+  "journeys": {
+   "life": "Yesu kwan no"
+  }
+ },
+ "paul": {
+  "places": {
+   "antioch": {
+    "name": "Antiokia",
+    "book": "Asomafo 13 · 15",
+    "today": "Antakya, Türkiye nnɛ",
+    "note": "Asɔre a wɔsoma a ɛhɔ na amanaman asɛmpa no fi ase na ɛsan ba.",
+    "events": [
+     "Wɔ mpaebɔ mu, Honhom no yi Barnaba ne Saul si nkyɛn",
+     "Asɔre a wodii kan frɛɛ agyidifo ‘Kristofo’ no",
+     "Akwantu 1, 2 ne 3 no mfiase"
+    ]
+   },
+   "seleucia": {
+    "name": "Seleukia",
+    "book": "Asomafo 13:4",
+    "today": "Türkiye nnɛ",
+    "note": "Antiokia hyɛngyinabea — wɔtenaa hyɛn kɔɔ Kipro.",
+    "events": []
+   },
+   "salamis": {
+    "name": "Salami (Kipro)",
+    "book": "Asomafo 13:5",
+    "today": "Kipro nnɛ",
+    "note": "Gyinabea a edi kan wɔ Kipro — ɔka asɛm no wɔ hyiadan mu.",
+    "events": []
+   },
+   "paphos": {
+    "name": "Pafo",
+    "book": "Asomafo 13:6-12",
+    "today": "Kipro nnɛ",
+    "note": "Wɔda tumi adi tia wɔn a wɔsɔre tia asɛmpa no.",
+    "events": [
+     "Wɔbɔ nkonyaayifo Elima anifurae",
+     "Amrado Sergio Paulo gye di",
+     "Ɛfi ha ‘Paulo’ di anim"
+    ]
+   },
+   "perga": {
+    "name": "Perge",
+    "book": "Asomafo 13:13",
+    "today": "Antalya, Türkiye nnɛ",
+    "note": "Hyɛngyinabea wɔ Pamfilia — ɛha na Yohane Marko san kɔe.",
+    "events": []
+   },
+   "pantioch": {
+    "name": "Pisidia Antiokia",
+    "book": "Asomafo 13:14-50",
+    "today": "Yalvaç, Türkiye nnɛ",
+    "note": "Asɛmpa no bue kɔ amanaman fam.",
+    "events": [
+     "Nkwagye abakɔsɛm asɛnka tenten wɔ hyiadan mu",
+     "Amanaman pii ani gye na wogye asɛm no",
+     "Ɔsɔretia pam wɔn"
+    ]
+   },
+   "iconium": {
+    "name": "Ikonion",
+    "book": "Asomafo 14:1-7",
+    "today": "Konya, Türkiye nnɛ",
+    "note": "Nnipa pii gye di, nanso ɔtaa hyɛ wɔn ma wɔkɔ wɔn anim.",
+    "events": []
+   },
+   "lystra": {
+    "name": "Listra",
+    "book": "Asomafo 14:8-20",
+    "today": "Türkiye nnɛ",
+    "note": "Wobu wɔn sɛ onyame, afei wosiw wɔn abo.",
+    "events": [
+     "Ɔsa ɔbarima a na ɔyɛ obubuafo fi awo mu yare",
+     "Nnipadɔm no pɛ sɛ wɔbɔ wɔn afɔre sɛ anyame",
+     "Wosiw no abo gyaa no sɛ wawu, nanso ɔsɔree"
+    ]
+   },
+   "derbe": {
+    "name": "Derbe",
+    "book": "Asomafo 14:20-21",
+    "today": "Türkiye nnɛ",
+    "note": "Wɔnya asuafo pii; wɔsan wɔn akyi kɔ bɛhyɛ asɔre no den.",
+    "events": []
+   },
+   "troas": {
+    "name": "Troa",
+    "book": "Asomafo 16:8-10",
+    "today": "Türkiye nnɛ",
+    "note": "Baabi a asɛmpa no de nʼani kyerɛ Europa kane no.",
+    "events": [
+     "Makedonia ɔbarima bi ho anisoadehu",
+     "“Twa bra ha bɛboa yɛn”",
+     "Wɔtwaa mu kɔɔ Europa ntɛm ara"
+    ]
+   },
+   "philippi": {
+    "name": "Filipi",
+    "book": "Asomafo 16 · Filipifo",
+    "today": "atifi fam Greece nnɛ",
+    "note": "Europa asɔre a edi kan — asɛmpa no di nkonim wɔ afiase mpo.",
+    "events": [
+     "Lidia, ntama kɔkɔɔ tɔnfo, gye di",
+     "Wɔgyaa abaawa nkɔmhyɛ akoa bi",
+     "Anadwo nnwom, asasewosow, afiasohwɛfo fie nkwagye"
+    ]
+   },
+   "thess": {
+    "name": "Tesalonika",
+    "book": "Asomafo 17 · 1–2 Tesalonikafo",
+    "today": "Thessaloniki, Greece nnɛ",
+    "note": "Asɛm no woso kurow no na ɔsɔretia bu so.",
+    "events": [
+     "Ɔkyerɛkyerɛ wɔ hyiadan mu Homeda abiɛsa",
+     "“Wɔn a wɔadan wiase ani abutuw no”",
+     "Wɔnam anadwo so wiaa wɔn ho fii"
+    ]
+   },
+   "berea": {
+    "name": "Berea",
+    "book": "Asomafo 17:10-15",
+    "today": "Veria, Greece nnɛ",
+    "note": "Wɔn a ‘wodi mu’ a wɔn ankasa hwehwɛɛ asɛm no mu no.",
+    "events": [
+     "Wɔde anigye gyee asɛm no",
+     "Da biara wɔhwehwɛ Kyerɛwsɛm no mu sɛ wɔbɛhwɛ",
+     "Pii bɛgye dii"
+    ]
+   },
+   "athens": {
+    "name": "Atene",
+    "book": "Asomafo 17:16-34",
+    "today": "Athens, Greece nnɛ",
+    "note": "Wɔ anyansafo kurow no mu, ɔka ‘onyame a wonnim no’ no ho asɛm.",
+    "events": [
+     "Kurow a ahoni ahyɛ no ma no hyɛɛ no abufuw",
+     "Wɔ Areopago, ɔka Ɔbɔade ne owusɔre ho asɛm",
+     "Wodii ne ho fɛw, nanso kakraa bi gye dii"
+    ]
+   },
+   "corinth": {
+    "name": "Korinto",
+    "book": "Asomafo 18 · 1–2 Korintofo",
+    "today": "Greece nnɛ",
+    "note": "Ɔtena hɔ afe ne fa, na ɔbɔ asɔre wɔ kurow a porɔwee ahyɛ no ma mu.",
+    "events": [
+     "Ɔne Akwila ne Priskila yɛ ntamadan",
+     "“Nsuro… efisɛ me ne wo na ɛwɔ hɔ”",
+     "Korintofo pii gye di na wɔbɔ wɔn asu"
+    ]
+   },
+   "ephesus": {
+    "name": "Efeso",
+    "book": "Asomafo 19 · Efesofo",
+    "today": "Selçuk, Türkiye nnɛ",
+    "note": "Akwantu a ɛto so abiɛsa no koma — asɛm no trɛw Asia nyinaa mu.",
+    "events": [
+     "Da biara ɔkyerɛkyerɛ mfe mmienu wɔ Tirano asa so",
+     "Wɔhyew nkonyaa nhoma; tumi nnwuma",
+     "Dwetɛdwumfo Demetrio hyɛ basabasayɛ ase"
+    ]
+   },
+   "miletus": {
+    "name": "Mileto",
+    "book": "Asomafo 20:17-38",
+    "today": "Türkiye nnɛ",
+    "note": "Nkradi a nusu wɔ mu kyerɛ Efeso mpanyimfo no.",
+    "events": [
+     "“Monhwɛ asɔre a ɔde nʼankasa mogya tɔe no”",
+     "Mpanyimfo no su, efisɛ wɔrenhu no bio"
+    ]
+   },
+   "caesarea": {
+    "name": "Kaesarea",
+    "book": "Asomafo 23–26",
+    "today": "Israel mpoano nnɛ",
+    "note": "Mfe mmienu ɔka asɛmpa no ho asɛm wɔ amradofo ne ɔhene anim.",
+    "events": [
+     "Asɛnnie wɔ amradofo Felike ne Festo anim",
+     "Ne kasa a ɔyii wɔ Ɔhene Agripa anim",
+     "“Mede mʼasɛm to Kaesar anim” — wɔ kɔ Roma"
+    ]
+   },
+   "jerusalem": {
+    "name": "Yerusalem",
+    "book": "Asomafo 21–23",
+    "today": "Yerusalem nnɛ",
+    "note": "Wɔkyeree no wɔ asɔredan no mu, na ne kwan sɛ odeduani fi ase.",
+    "events": [
+     "Nnipadɔm no kyeree no wɔ asɔredan no mu",
+     "Ɔyii ne ho ano wɔ badwa no anim",
+     "Sɛ Roma kurɔmni no, wɔde no kɔɔ Kaesarea ɔwɛn ase"
+    ]
+   },
+   "myra": {
+    "name": "Mira",
+    "book": "Asomafo 27:5-6",
+    "today": "Demre, Türkiye nnɛ",
+    "note": "Wɔforo Aleksandria hyɛn a ɛrekɔ Roma.",
+    "events": []
+   },
+   "fairhaven": {
+    "name": "Hyɛn Gyinabea Pa (Kreta)",
+    "book": "Asomafo 27:8-12",
+    "today": "Kreta nnɛ",
+    "note": "Paulo kɔkɔbɔ sɛ wɔnnyae hyɛnkɔ no, wɔantie.",
+    "events": []
+   },
+   "crete": {
+    "name": "Kreta",
+    "book": "Tito",
+    "today": "Kreta nnɛ",
+    "note": "Ne gyae akyi, supɔ a ɔgyaa Tito wɔ hɔ sɛ ɔnsiesie asɔre no.",
+    "events": [
+     "Ɔgyaa Tito hɔ sɛ ɔnsi mpanyimfo wɔ kurow biara mu",
+     "Ɔfrɛ akannifo a wɔn ho nni asɛm na wodi nokware",
+     "Ɔkyerɛw krataa no kɔmaa Tito"
+    ]
+   },
+   "malta": {
+    "name": "Malta",
+    "book": "Asomafo 27–28",
+    "today": "Malta nnɛ",
+    "note": "Ɛnam ahum ne hyɛn a ɛbɔe mu, Onyankopɔn bɔhyɛ no tim.",
+    "events": [
+     "‘Apuei atifi mframa’ no bɔ hyɛn no, nanso nnipa 276 nyinaa nyaa nkwa",
+     "Ɔwɔ bi kaa no, nanso biribiara anyɛ no",
+     "Ɔsaa supɔ no so ayarefo yare"
+    ]
+   },
+   "syracuse": {
+    "name": "Sirakus",
+    "book": "Asomafo 28:12",
+    "today": "Sisilia, Italia nnɛ",
+    "note": "Wɔtena Sisilia nna abiɛsa.",
+    "events": []
+   },
+   "puteoli": {
+    "name": "Puteoli",
+    "book": "Asomafo 28:13-14",
+    "today": "Pozzuoli, Italia nnɛ",
+    "note": "Wɔsi Italia na anuanom hyiaa wɔn.",
+    "events": []
+   },
+   "rome": {
+    "name": "Roma",
+    "book": "Asomafo 28 · Afiase Nkrataa · 2 Timoteo",
+    "today": "Roma, Italia nnɛ",
+    "note": "Asɛmpa no du ahemman no koma mu awiei koraa — ɛnyɛ awiei na mmom mfiase.",
+    "events": [
+     "Mfe mmienu ɔwɔ fie ɔwɛn ase, ɔde akokoduru ka Ahenni no ho asɛm",
+     "Ɛfi ha ɔkyerɛw Afiase Nkrataa no (Efe·Fil·Kol·Flm)",
+     "Akyiri yi wɔde no too afiase bio, ɔkyerɛw 2 Timoteo na wokum no — “Mako ako pa no, mawie mmirikakan no”"
+    ]
+   }
+  },
+  "labels": [
+   "Mediterania Po",
+   "Egea Po",
+   "Asia Ketewa",
+   "Makedonia",
+   "Italia"
+  ],
+  "journeys": {
+   "j1": "Akwantu a edi kan",
+   "j2": "Akwantu a ɛto so mmienu",
+   "j3": "Akwantu a ɛto so abiɛsa",
+   "rome": "Akwantu a ɛto so anan · kɔ Roma",
+   "j5": "Akwantu a ɛto so enum · wɔgyaa no akyi"
+  }
+ }
+}

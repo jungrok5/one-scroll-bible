@@ -1,0 +1,636 @@
+{
+ "menuName": "Dagbanli",
+ "htmlLang": "dag",
+ "dir": "ltr",
+ "locale": "dag",
+ "brand": "Baibol yim zuɣu",
+ "docTitle": "Baibol mɛpu zuɣu · Baibol yim zuɣu",
+ "metaDesc": "Dolim’ Alikauli Kura saha soli, Yisa biɛhigu, mini Pool chandi mɛpu yɛlimaŋli zuɣu — Baibol daa niŋ luɣ’ yɛlimaŋli ni.",
+ "s": {
+  "kicker": "Baibol yim zuɣu · Mɛpu",
+  "title": "Baibol mɛpu zuɣu",
+  "verse": "“Pa kurimbuni lahibaya din pa yɛlimaŋli ka ti daa zaŋ wuhi ya ti Duuma Yisa Masia yiko min’ o kandina yɛla, amaa ti nyɛla shɛhiranim’ bɛn nini daa nya o jilima.” (2 Pita 1:16)",
+  "purpose": "Baibol pala silimin. Di nyɛla niriba ban’ daa chana tiŋgban’ yɛlimaŋli, dabsa mini yuya maŋmaŋ’ zuɣu lahabali sabbu. Ŋma soya maa mɛpu zuɣu, saha soli ni — ŋma luɣ’ shɛli, bee ŋmɛ ▶ ka a doli li nabili nabili.",
+  "ot_kick": "① Alikauli Kura — saha soli ni",
+  "ot_h": "Namda hal ti paai labbu na Jɛrusalɛm",
+  "ot_lead": "Pala chandi yini koya, amaa nyɛla tiligibu lahabali soli din yina namda ni: namda mini lubu → kom titali mini Babɛl → boligu (Ibrahima) → alikauli tiŋgbɔŋ → Yibu → mɔɣili → tiŋgbɔŋ deebu → nam → pɔrigibu → zuliagu → labbu na.",
+  "je_kick": "② Alikauli Palli — Yisa biɛhigu",
+  "je_h": "Bɛtlɛhɛm hal ti paai Jɛrusalɛm",
+  "je_lead": "Dolim’ Yisa biɛhigu kaman Lahibali Suŋ litaafinim’ ni tɔɣisi li shɛm, soli ni — o dɔɣibu Bɛtlɛhɛm ni, o baptisibu mini o tuma Galili, gari Samaria, hal ti paai daɣiʒirili, yiɣisibu, mini duibu saazuɣu Jɛrusalɛm ni.",
+  "pa_kick": "③ Alikauli Palli — Pool chandi",
+  "pa_h": "Antiɔk hal ti paai dunia tarisi — Rom",
+  "pa_lead": "Piligi Pɛntikɔst Jɛrusalɛm ni, wula ka Lahibali Suŋ yɛɣi gari Judia — gari Ɛsia Bila mini Yurɔp hal ti paai naam titali sunsuuni. Pii chandi anu maa puuni yini (pilli · ayi · ata + chandi din chaŋ Rom + sarika yibu nyaaŋa) ka doli Tuumba Tuma yɛltɔɣa mini gbana din bɔ ni bɛ sabi soli zuɣu.",
+  "foot": "Din bɔ na · Luɣnima doli Baibol sabbu mini Baibol tiŋgban’ baŋsim (ni pumpɔŋɔ yuya luɣ’ shɛli di ni sɔŋ). Teeku noya, kulinima, mini mɔɣnima, bɛ zaŋ li tiŋgban’ baŋsim din yɔɔ (Natural Earth) ni na, ka balgi li.",
+  "contact": "Bɔhigu · yɛltɔɣa — <a id=\"contact\" class=\"mail\">Sabim email</a>",
+  "play": "Piligi",
+  "pause": "Ʒini",
+  "today": "Zuŋɔ:",
+  "verseCite": "2 Pita 1:16"
+ },
+ "ot": {
+  "places": {
+   "eden": {
+    "name": "Edɛn (Namda · Lubu)",
+    "book": "Piligu 1–3",
+    "today": "Taigris–Yufretis polo zuŋɔ",
+    "note": "Dunia bɛ ni nam ka di viɛla pam ŋɔ ni, alahichi kpe na ka ŋmaai Naawuni mini ninsala sunsuuni.",
+    "events": [
+     "Namda dabsa ayobu ni — “di daa viɛla pam”",
+     "Ninsala bɛ ni nam Naawuni nahingbaŋ ni",
+     "Lubu, mini Edɛn ni yibu",
+     "Lahibali Suŋ pilli — “paɣ’ zuliya ni ŋme bɔri waɣili maa zuɣu”"
+    ]
+   },
+   "noah": {
+    "name": "Ararat (Kom Titali)",
+    "book": "Piligu 6–9",
+    "today": "Ararat Zoli, Turkiya wulinluhili polo zuŋɔ",
+    "note": "Naawuni kari dunia din pali ni alahichi saria, amaa o guli nyɛvili doɣim yini zuɣu.",
+    "events": [
+     "Dunia din pali ni biɛri",
+     "Kom titali maa, mini Nɔhu ŋariŋ",
+     "Saŋmariga alikauli — “kom titali ku lan kana n-saɣim binnamda”"
+    ]
+   },
+   "babel": {
+    "name": "Babɛl Duu",
+    "book": "Piligu 11",
+    "today": "Iraki zuŋɔ (Shinar tiŋgbɔŋ)",
+    "note": "Karimbaani din bɔri saazuɣu paabu zuɣu, Naawuni gari bɛ yɛtɔɣa ka wolgi niriba dunia ni.",
+    "events": [
+     "“Chɛ ka ti mɛ tiŋ’ mini duu … ka ti bo ti maŋ’ yuli”",
+     "Naawuni gari bɛ balli",
+     "Niriba wolgi dunia ni (Shinar — din daa ti leei Babilɔn)"
+    ]
+   },
+   "ur": {
+    "name": "Ur",
+    "book": "Piligu 12",
+    "today": "Iraki tuli polo zuŋɔ",
+    "note": "Baibol tiligibu lahabali pili ni nir’ yino boligu.",
+    "events": [
+     "Naawuni boli Ibrahima ka o yi Kaldiyanim’ Ur ni",
+     "“N ni chɛ ka a zuliya galisi pam … ka dunia zuliya kam nya alibarika a zuɣu”",
+     "Yɛda ni ka o yi o tiŋgbɔŋ"
+    ]
+   },
+   "haran": {
+    "name": "Haran",
+    "book": "Piligu 12",
+    "today": "Turkiya tuli polo zuŋɔ",
+    "note": "Soli ni, o saɣindi boligu maa n-chana alikauli tiŋgbɔŋ polo.",
+    "events": [
+     "Tera doɣim ʒini Haran",
+     "Tera kpi",
+     "Ibrahima yiɣisi n-chaŋ Kanana o yuun’ pihiyopɔin ni anu (75) ni"
+    ]
+   },
+   "shechem": {
+    "name": "Shɛkɛm · Kanana",
+    "book": "Piligu 12–50",
+    "today": "Nablus zuŋɔ",
+    "note": "Alikauli tiŋgbɔŋ ni ka bɛ pili doɣim, ka alikauli maa gari zuliya kam sani.",
+    "events": [
+     "Kanana kpɛbu, sara bimbini pilli — “N ni ti a zuliya tiŋgbɔŋ ŋɔ”",
+     "Alikauli (Piligu 15) · Aisaku · Yaakubu",
+     "Yaakubu bidibisi pinaayi — zuliya pinaayi gbinni"
+    ]
+   },
+   "egypt": {
+    "name": "Ijipti (Gɔshɛn)",
+    "book": "Piligu 37–50 · Yibu 1",
+    "today": "Nail Kulikpaŋ’ zuŋɔ, Ijipti",
+    "note": "Doɣim yini leei zuliya titali — din nyaaŋa ka bɛ leei dabsa.",
+    "events": [
+     "Yisifu, bɛ ni kɔhi o, du n-leei Ijipti fukumsilana",
+     "Yaakubu doɣim zaa sheei na ni bɛ zɔ kɔm",
+     "Izraɛl zuliya din galsira bɛ zaŋ leei dabsa"
+    ]
+   },
+   "sinai": {
+    "name": "Sinai Zoli",
+    "book": "Yibu · Lɛvinima",
+    "today": "Sinai Tiŋgbɔŋpɔ zuŋɔ",
+    "note": "Alikauli Kura tiligibu titali — dabsa leei Naawuni niriba maŋmaŋa.",
+    "events": [
+     "Daɣiri pia mini Gariba piɛɣu",
+     "Mɔɣ’ Ʒee ŋmaai ka bɛ gari",
+     "Zaligu pia, Zaligu, jɛmbu duu mini saradibu"
+    ]
+   },
+   "kadesh": {
+    "name": "Kadɛsh (mɔɣili)",
+    "book": "Kalinlinima · Zaligu Teebu",
+    "today": "Sinai–Nɛgɛv mɔɣili zuŋɔ",
+    "note": "Yɛda kɔŋbu chɛ ka zuliya yini kɔŋ tiŋgbɔŋ maa — amaa Naawuni kul be bɛ sani.",
+    "events": [
+     "Nininyaɣ’ pinaayi — amaa niriba zaɣisi niŋbu yɛda",
+     "Yuun’ pihitɔ (38) mɔɣili ni — manna, sakuɣu mini buɣum",
+     "Moab tiŋpiɔŋ ni, Musa waazu bahindili (Zaligu Teebu)"
+    ]
+   },
+   "jericho": {
+    "name": "Jɛriko",
+    "book": "Jɔshua",
+    "today": "Jɛriko zuŋɔ",
+    "note": "Bahigu ni bɛ kpe n-deei alikauli tiŋgbɔŋ maa.",
+    "events": [
+     "Jɔɔdan Kuliga ŋmaai ka niriba gari",
+     "Jɛriko gooni lu",
+     "Kanana deebu mini tiŋgbɔŋ pirigibu"
+    ]
+   },
+   "shiloh": {
+    "name": "Shilo (Zuɣulaannima)",
+    "book": "Zuɣulaannima · Rut",
+    "today": "Khirbet Seilun zuŋɔ",
+    "note": "Naa ni kani, sokam tumdila o suhu ni yu shɛm — naa maŋmaŋa n-tu ni o beni.",
+    "events": [
+     "Bɛ zaani jɛmbu duu Shilo ni",
+     "Alahichi–namisibu–tiligibu soli din labisira (Dɛbora, Gidiɔn, Samson)",
+     "Rut — yɛlimaŋli saha biɛɣu ni, Dauda zuliya ni"
+    ]
+   },
+   "jerusalem": {
+    "name": "Jɛrusalɛm · Nam Laɣiŋgu",
+    "book": "1–2 Samuɛl · 1 Nanima",
+    "today": "Jɛrusalɛm zuŋɔ",
+    "note": "Izraɛl saha suŋ maŋmaŋa — mini naa ŋun’ ni ʒiɛ sahakam alikauli.",
+    "events": [
+     "Sool naa pilli, din nyaaŋa Dauda mini Goliat",
+     "Dauda alikauli — “a nam kul ni ʒiɛya sahakam” (2 Samuɛl 7)",
+     "Sulemaana mɛ jɛmbu duu Jɛrusalɛm ni"
+    ]
+   },
+   "samaria": {
+    "name": "Samaria · Nam Pɔrigibu",
+    "book": "Nanima · Anabinima",
+    "today": "Sɛbastia zuŋɔ",
+    "note": "Nam maa pɔrigi ka saɣim saha shɛli anabinima kuhira.",
+    "events": [
+     "Sulemaana nyaaŋa, di pɔrigi Juda mini Izraɛl",
+     "Buɣa jɛmbu din labisira",
+     "Ilaija, Aizaia, Jɛrimia kuhi “labmiya na” — n-moɣisi Masia"
+    ]
+   },
+   "nineveh": {
+    "name": "Ninɛve (Ashiria)",
+    "book": "2 Nanima 17 · Jona",
+    "today": "Mosul, Iraki zuŋɔ",
+    "note": "Bɛ zɔbi saɣisigu kam, ka guli polo daŋ lubu.",
+    "events": [
+     "Ninɛve, Ashiria tiŋ’ kpɛŋ",
+     "Guli nam lu Ashiria nuu ni (722 ALK)",
+     "Bɛ tim Jona Ninɛve ni"
+    ]
+   },
+   "babylon": {
+    "name": "Babilɔn",
+    "book": "2 Nanima 25 · Dan · Ɛzɛkiɛl",
+    "today": "Hilla, Iraki zuŋɔ",
+    "note": "Yuŋ din biɛɣ’ pam — amaa yiɣisibu alikauli na kul be.",
+    "events": [
+     "Jɛrusalɛm lu, ka bɛ di jɛmbu duu buɣum (586 ALK)",
+     "Bɛ zaŋ Juda chaŋ Babilɔn",
+     "Daniɛl mini Ɛzɛkiɛl — yɛda mini ʒiʔima zuliagu ni"
+    ]
+   },
+   "susa": {
+    "name": "Susa (Pɛrshia)",
+    "book": "Ɛsta · Nɛhimia",
+    "today": "Shush, Iran zuŋɔ",
+    "note": "Hal naam titali din jɛmdi buɣa sunsuuni, Naawuni guli o niriba.",
+    "events": [
+     "Pɛrshia nyaŋ Babilɔn",
+     "Ɛsta tiligi Yahuudunima ka bɛ ku saɣim ba",
+     "Nɛhimia suhi Naawuni naa tɔni ka bɛ tim o"
+    ]
+   },
+   "return": {
+    "name": "Labbu na Jɛrusalɛm",
+    "book": "Ɛzra · Nɛhimia · Malaki",
+    "today": "Jɛrusalɛm zuŋɔ",
+    "note": "Bɛ labi na n-mɛ — amaa naa na bi kana. Bɛ gulindila Masia.",
+    "events": [
+     "Labbu na siɣisili ata Sirus zaligu ni (Zɛrubabɛl 538 · Ɛzra 458 · Nɛhimia 444)",
+     "Jɛmbu duu mini Jɛrusalɛm gooni mɛbu yaha",
+     "Malaki — Alikauli Kura naara: “N timla n tumo”"
+    ]
+   }
+  },
+  "labels": [
+   "Mediteraniɛn Teeku",
+   "Mɛsɔpɔtemia",
+   "Arabia Mɔɣili",
+   "Ijipti"
+  ],
+  "journeys": {
+   "flow": "Tiligibu lahabali"
+  }
+ },
+ "jesus": {
+  "places": {
+   "bethlehem": {
+    "name": "Bɛtlɛhɛm",
+    "book": "Matiu 1–2 · Luk 2",
+    "today": "Bɛtlɛhɛm zuŋɔ",
+    "note": "Masia bɛ ni niŋ alikauli kana Dauda tiŋ’ ni — Yɛligu din leei ninsala.",
+    "events": [
+     "Bɛ dɔɣ’ o Bɛtlɛhɛm, Dauda tiŋ’ ni",
+     "Malaaika-nima moɣisi lahabali maa piɛhigulaannima sani",
+     "Yɛm baŋdiba kana ni bɛ ti jɛm o"
+    ]
+   },
+   "nazareth": {
+    "name": "Nazarɛt",
+    "book": "Luk 2 · 4",
+    "today": "Nazarɛt zuŋɔ",
+    "note": "Naawuni bili kaman ninsala tiŋ’ bɛla ni.",
+    "events": [
+     "Bɛ bilisi o kapinta yiŋ’ ni",
+     "O yuun’ pinaayi ni, o bɔhira ka lahi labsiri jɛmbu duu ni",
+     "Din nyaaŋa bɛ zaɣisi o o tiŋ’ jama duu ni"
+    ]
+   },
+   "jordan": {
+    "name": "Jɔɔdan Kuliga",
+    "book": "Matiu 3–4",
+    "today": "Jɔɔdan tuli polo zuŋɔ",
+    "note": "O tuma pili — saazuɣu kɔhindi o kaman Bia.",
+    "events": [
+     "Jɔn su o kɔm",
+     "Naawuni Shia sheei kaman ŋmɔ — “Ŋɔ n-nyɛ m Bidib’ yurilim”",
+     "O nyaŋ Sintani zaɣisibu buta mɔɣili ni"
+    ]
+   },
+   "cana": {
+    "name": "Kana",
+    "book": "Jɔn 2",
+    "today": "Kafr Kanna zuŋɔ",
+    "note": "O alaama pilli ni, o wuhi o jilima.",
+    "events": [
+     "Sana amiliya pɔri ni",
+     "Kɔm leei wain — o alaama pilli",
+     "O nyaandoliba niŋ o yɛda"
+    ]
+   },
+   "sychar": {
+    "name": "Saikar (Samaria)",
+    "book": "Jɔn 2–4",
+    "today": "Nablus polo zuŋɔ",
+    "note": "Tuma piligu soli — gari Jɛrusalɛm hal ti paai Samaria bɛ ni je.",
+    "events": [
+     "O sɔŋ jɛmbu duu Jɛrusalɛm ni",
+     "Yuŋ, Nikodimus — “Di simdi ni bɛ lan dɔɣ’ a”",
+     "Nyɛvili kɔm ti Samaria paɣa"
+    ]
+   },
+   "capernaum": {
+    "name": "Kapɛnaum",
+    "book": "Matiu 4–13 · Maak 1–4",
+    "today": "Galili mɔɣ’ noli zuŋɔ",
+    "note": "Galili tuma yiŋ’ — boligu, wuhibu mini tuhibu zaa laɣim kpe.",
+    "events": [
+     "O boli zahimkpɛriba ka zaŋ kpe leei o yiŋ’",
+     "Zoli Zuɣu Waazu — “Suhupiɛlli be ban’ nyɛ faranima bɛ Shia ni”",
+     "Nam ŋaha — mini tuhibu din duhira"
+    ]
+   },
+   "galilee": {
+    "name": "Galili Teeku",
+    "book": "Maak 4 · 6 · Jɔn 6",
+    "today": "Kinnɛrɛt Mɔɣili zuŋɔ",
+    "note": "Ni yaa binnamda zuɣu, o wuhi ŋun’ o nyɛ.",
+    "events": [
+     "“Fom, ka fo baalim” — o chɛ ka pɔhim maa fo",
+     "O zaŋ paanɔɔ anu mini zahim ayi dihi niriba tusa anu (5,000)",
+     "O chana kɔm zuɣu"
+    ]
+   },
+   "caesarea_p": {
+    "name": "Sizaria Filipi",
+    "book": "Matiu 16–17",
+    "today": "Banias zuŋɔ",
+    "note": "Nyaandoliba baŋ ni o nyɛ Masia, ka daɣiʒirili soli yɔɔ.",
+    "events": [
+     "Pita yɛlimaŋli — “A nyɛla Masia, Naawuni ŋun’ be nyɛvili maa Bia”",
+     "O daŋ moɣisi o kubu mini o yiɣisibu",
+     "O nyɔɔ taɣi jilima ni zoli zuɣu"
+    ]
+   },
+   "jericho": {
+    "name": "Jɛriko",
+    "book": "Luk 18–19",
+    "today": "Jɛriko zuŋɔ",
+    "note": "Soli zuɣu din du chaŋ Jɛrusalɛm, o bɔri din bɔrgi.",
+    "events": [
+     "O chɛ ka zom’ Bartimeus nya",
+     "O boli lampo deera Zakiyus",
+     "“Ninsala Bia kana ni o ti bo ka tiligi din bɔrgi”"
+    ]
+   },
+   "bethany": {
+    "name": "Bɛtani",
+    "book": "Jɔn 11–12",
+    "today": "al-Eizariya zuŋɔ",
+    "note": "O wuhi o yaa kum zuɣu o yɔɔŋɔ bahindili tɔni.",
+    "events": [
+     "O yiɣisi Lazarus siɣa ni — “Mani n-nyɛ yiɣisibu mini nyɛvili”",
+     "Mariama yɔ o kpam o pambu zuɣu",
+     "Alaama ŋɔ chɛ ka bɛ ku o niabu kpaŋsi"
+    ]
+   },
+   "jerusalem": {
+    "name": "Jɛrusalɛm",
+    "book": "Matiu 21–28 · Luk 24 · Tuumba Tuma 1",
+    "today": "Jɛrusalɛm zuŋɔ",
+    "note": "Din Baibol zaa wuhira bahindili — daɣiʒirili, yiɣisibu, mini duibu saazuɣu.",
+    "events": [
+     "Kpɛbu ni jilima; o lan birigi jɛmbu duu teebulinima",
+     "Zaawuni Dibu Bahindili ni o paɣi o nyaandoliba naba",
+     "O kpi daɣiʒirili zuɣu",
+     "O yiɣisi dabsili ata zuɣu, din nyaaŋa o du saazuɣu"
+    ]
+   }
+  },
+  "labels": [
+   "Mediteraniɛn Teeku",
+   "Galili",
+   "Samaria",
+   "Judia",
+   "Dɛkapolis",
+   "Pɛria",
+   "Teeku Kpiŋ"
+  ],
+  "journeys": {
+   "life": "Yisa chandi soli"
+  }
+ },
+ "paul": {
+  "places": {
+   "antioch": {
+    "name": "Antiɔk",
+    "book": "Tuumba Tuma 13 · 15",
+    "today": "Antakya, Turkiya zuŋɔ",
+    "note": "Timbu chɛchi din puuni ka bɔɔbɔɔ nim’ tuma pili ka lan labri na.",
+    "events": [
+     "Suhirigu ni, Naawuni Shia gaɣi Barnabas mini Sool",
+     "Chɛchi din puuni ka bɛ daŋ boli niŋ yɛda niriba “Kristabihi”",
+     "Chandi pilli, ayi mini ata piligu luɣili"
+    ]
+   },
+   "seleucia": {
+    "name": "Sɛlukia",
+    "book": "Tuumba Tuma 13:4",
+    "today": "Turkiya zuŋɔ",
+    "note": "Antiɔk ŋarim’ zɔŋ’ — bɛ kul chaŋ Saiprus.",
+    "events": []
+   },
+   "salamis": {
+    "name": "Salamis (Saiprus)",
+    "book": "Tuumba Tuma 13:5",
+    "today": "Saiprus zuŋɔ",
+    "note": "Saiprus zɔŋ pilli — moɣisibu jama duunima ni.",
+    "events": []
+   },
+   "paphos": {
+    "name": "Pafos",
+    "book": "Tuumba Tuma 13:6-12",
+    "today": "Saiprus zuŋɔ",
+    "note": "Bɛ wuhi yaa ban’ zaɣisi Lahibali Suŋ zuɣu.",
+    "events": [
+     "Bɛ chɛ ka baɣa Ɛlimas leei zom",
+     "Gɔmnanti Sɛjiɔs Pool niŋ yɛda",
+     "Kpe na ka “Pool” gbaai tɔni"
+    ]
+   },
+   "perga": {
+    "name": "Pɛga",
+    "book": "Tuumba Tuma 13:13",
+    "today": "Antalya, Turkiya zuŋɔ",
+    "note": "Pamfilia ŋarim’ zɔŋ’ — kpe na ka Jɔn Maak labi.",
+    "events": []
+   },
+   "pantioch": {
+    "name": "Pisidia Antiɔk",
+    "book": "Tuumba Tuma 13:14-50",
+    "today": "Yalvaç, Turkiya zuŋɔ",
+    "note": "Lahibali Suŋ yɔɔ chaŋ bɔɔbɔɔ nim’ polo.",
+    "events": [
+     "Tiligibu lahabali waazu waɣinli jama duu ni",
+     "Bɔɔbɔɔ nim’ pam niŋ suhupiɛlli n-deei Yɛligu maa",
+     "Tuhibu chɛ ka bɛ kari ba yiŋa"
+    ]
+   },
+   "iconium": {
+    "name": "Ikoniɔm",
+    "book": "Tuumba Tuma 14:1-7",
+    "today": "Konya, Turkiya zuŋɔ",
+    "note": "Niriba pam niŋ yɛda, amaa namisibu chɛ ka bɛ chɛ.",
+    "events": []
+   },
+   "lystra": {
+    "name": "Listra",
+    "book": "Tuumba Tuma 14:8-20",
+    "today": "Turkiya zuŋɔ",
+    "note": "Bɛ boli o wuni, din nyaaŋa bɛ labi o kuɣa.",
+    "events": [
+     "O tibgi doo ŋun’ daa dɔɣi ka o naba kɔŋ yaa",
+     "Zamaatu bɔ ni bɛ maani sara ti ba kaman wuninima",
+     "Bɛ labi o kuɣa n-chɛ o ka o nyɛla kaman kpiŋ, ka o yiɣisi"
+    ]
+   },
+   "derbe": {
+    "name": "Dɛbe",
+    "book": "Tuumba Tuma 14:20-21",
+    "today": "Turkiya zuŋɔ",
+    "note": "Bɛ mali nyaandoliba pam; bɛ lan labri n-kpaŋsiri chɛchinima.",
+    "events": []
+   },
+   "troas": {
+    "name": "Troas",
+    "book": "Tuumba Tuma 16:8-10",
+    "today": "Turkiya zuŋɔ",
+    "note": "Taɣibu luɣili polo Lahibali Suŋ daŋ chaŋ Yurɔp.",
+    "events": [
+     "Makɛdonia doo ʒiʔili",
+     "“Duɣim’ na Makɛdonia ka ti sɔŋ ti”",
+     "Bɛ gari yɔm chaŋ Yurɔp"
+    ]
+   },
+   "philippi": {
+    "name": "Filipai",
+    "book": "Tuumba Tuma 16 · Filipainima",
+    "today": "Griis guli polo zuŋɔ",
+    "note": "Yurɔp chɛchi pilli — Lahibali Suŋ nyaŋ hal sarika ni.",
+    "events": [
+     "Lidia, chinchin’ ʒiɔɔ kɔhira, niŋ yɛda",
+     "Bɛ yɔɔ paɣ’ dabli ŋun’ baɣisira",
+     "Yuŋsunsuuni yila, tiŋgbɔŋ damli, sarika gulana doɣim tiligi"
+    ]
+   },
+   "thess": {
+    "name": "Tɛsalɔnaika",
+    "book": "Tuumba Tuma 17 · 1–2 Tɛsalɔnaikanima",
+    "today": "Tɛsalɔniki, Griis zuŋɔ",
+    "note": "Yɛligu maa dam tiŋ’ maa ka tuhibu duhi.",
+    "events": [
+     "O yɛn yɛltɔɣa jama duu ni Vuhim daba ata",
+     "“Ninvuɣ’ shɛb’ ban’ damdi dunia zaa ŋɔ”",
+     "Bɛ yɔɔ yuŋ"
+    ]
+   },
+   "berea": {
+    "name": "Bɛria",
+    "book": "Tuumba Tuma 17:10-15",
+    "today": "Vɛria, Griis zuŋɔ",
+    "note": "Bɛn’ daa “viɛla” ban’ vihi Yɛligu maa bɛ maŋmaŋa.",
+    "events": [
+     "Bɛ deei Yɛligu maa ni suhupiɛlli",
+     "Dabsili kam bɛ vihiri Baibol sabbu ni bɛ nya di yɛlimaŋli",
+     "Bɛ pam ti niŋ yɛda"
+    ]
+   },
+   "athens": {
+    "name": "Atɛns",
+    "book": "Tuumba Tuma 17:16-34",
+    "today": "Atɛns, Griis zuŋɔ",
+    "note": "Yɔɔm baŋdiba tiŋ’ ni, o moɣisi “wuni bɛ ni ʒi”.",
+    "events": [
+     "Tiŋ’ din pali ni buɣa chɛ ka o suhu saɣim",
+     "Areopagus zuɣu o moɣisi Nam’ lana mini yiɣisibu",
+     "Bɛ maŋsi o, amaa bɛ shɛb’ niŋ yɛda"
+    ]
+   },
+   "corinth": {
+    "name": "Kɔrint",
+    "book": "Tuumba Tuma 18 · 1–2 Kɔrintinima",
+    "today": "Griis zuŋɔ",
+    "note": "O ʒini yuuni mini di pirigili, n-mɔ chɛchi tiŋ’ din pali ni biɛri ni.",
+    "events": [
+     "O mali buɔɔ tuma mini Akwila ni Prisila",
+     "“Miri ka a zo dabiɛm … dama m be a sani”",
+     "Kɔrint niriba pam niŋ yɛda ka bɛ su ba kɔm"
+    ]
+   },
+   "ephesus": {
+    "name": "Ɛfɛsus",
+    "book": "Tuumba Tuma 19 · Ɛfɛsusnima",
+    "today": "Selçuk, Turkiya zuŋɔ",
+    "note": "Chandi ata suhu — Yɛligu maa yɔɔ Ɛsia zaa ni.",
+    "events": [
+     "Wuhibu dabsili kam yuun’ ayi Tiranus karim duu ni",
+     "Bɛ di baɣisim gbana buɣum; tuun’ kpiɔŋ",
+     "Anzinfa maali Dɛmɛtɔɔs yiɣisi zɔbu"
+    ]
+   },
+   "miletus": {
+    "name": "Miletus",
+    "book": "Tuumba Tuma 20:17-38",
+    "today": "Turkiya zuŋɔ",
+    "note": "Kɔnsɔɔ ni o gɔri Ɛfɛsus chɛchi kpamba.",
+    "events": [
+     "“Gulimi chɛchi maa o ni zaŋ o maŋmaŋ’ ʒim da”",
+     "Kpamba kɔni, dama bɛ mi ni bɛ ku lan nya o"
+    ]
+   },
+   "caesarea": {
+    "name": "Sizaria",
+    "book": "Tuumba Tuma 23–26",
+    "today": "Izraɛl teeku noli zuŋɔ",
+    "note": "Yuun’ ayi ni o gɔhi Lahibali Suŋ gɔmnantinima mini naa tɔni.",
+    "events": [
+     "Saria karibu gɔmnanti Fɛliks mini Fɛstus tɔni",
+     "O gɔhi o maŋa Naa Agripa tɔni",
+     "“N zaŋ n yɛla ti Siza” — n-chaŋ Rom"
+    ]
+   },
+   "jerusalem": {
+    "name": "Jɛrusalɛm",
+    "book": "Tuumba Tuma 21–23",
+    "today": "Jɛrusalɛm zuŋɔ",
+    "note": "Bɛ gbaai o jɛmbu duu ni, ka o sarika soli pili.",
+    "events": [
+     "Zamaatu gbaai o jɛmbu duu ni",
+     "O gɔhi o maŋa saria karimba tɔni",
+     "Kaman Rom nira, bɛ zaŋ o chaŋ Sizaria ni guuriba"
+    ]
+   },
+   "myra": {
+    "name": "Maira",
+    "book": "Tuumba Tuma 27:5-6",
+    "today": "Demre, Turkiya zuŋɔ",
+    "note": "Bɛ taɣi Alɛkzandria ŋariŋ’ din chana Rom.",
+    "events": []
+   },
+   "fairhaven": {
+    "name": "Zɔŋ’ Suŋ (Krit)",
+    "book": "Tuumba Tuma 27:8-12",
+    "today": "Krit zuŋɔ",
+    "note": "Bɛ zaɣisi Pool saɣisigu ni bɛ chɛ ŋarim’ chandi.",
+    "events": []
+   },
+   "crete": {
+    "name": "Krit",
+    "book": "Taitus",
+    "today": "Krit zuŋɔ",
+    "note": "O yibu sarika ni nyaaŋa, tiŋgbɔŋpɔ din o chɛ Taitus ni o mali chɛchinim’ sɔŋ.",
+    "events": [
+     "O chɛ Taitus ni o gaɣi kpamba tiŋ’ kam ni",
+     "O bɔri kpamba ban’ ka galimsi, ban’ mali yɛda",
+     "O sabi gbaŋ’ zaŋ ti Taitus"
+    ]
+   },
+   "malta": {
+    "name": "Malta",
+    "book": "Tuumba Tuma 27–28",
+    "today": "Malta zuŋɔ",
+    "note": "Gari pɔhikpaŋa mini ŋarim’ saɣimbu, Naawuni alikauli kul zani.",
+    "events": [
+     "“Wulinluhili pɔhim” saɣim ŋariŋ’ maa, amaa niriba kɔbisiyi ni pihiyopɔin (276) zaa tilgi",
+     "Waɣ’ dɔm’ o, ka o bi tɔ shɔŋɔ",
+     "O tibgi tiŋgbɔŋ maa baranima"
+    ]
+   },
+   "syracuse": {
+    "name": "Sairakus",
+    "book": "Tuumba Tuma 28:12",
+    "today": "Sisili, Itali zuŋɔ",
+    "note": "Bɛ ʒini dabsa ata Sisili ni.",
+    "events": []
+   },
+   "puteoli": {
+    "name": "Putiɔli",
+    "book": "Tuumba Tuma 28:13-14",
+    "today": "Pozzuoli, Itali zuŋɔ",
+    "note": "Bɛ sheei Itali ka mabihi niŋ yɛda taɣi ba.",
+    "events": []
+   },
+   "rome": {
+    "name": "Rom",
+    "book": "Tuumba Tuma 28 · Sarika Gbana · 2 Timoti",
+    "today": "Rom, Itali zuŋɔ",
+    "note": "Lahibali Suŋ paai naam titali suhu bahigu ni — pa naabu, amaa piligu.",
+    "events": [
+     "Yuun’ ayi o be sarika ni yiŋ’ ka moɣisiri nam maa ni suhukpaŋsim",
+     "Kpe na ka o sabi Sarika Gbana (Ɛfɛsus·Filipai·Kɔlɔsai·Failimɔn)",
+     "Din nyaaŋa bɛ lan niŋ o sarika, ka o sabi 2 Timoti ka bɛ ku o — “N tuhi tɔb’ suŋ maa, ka zɔ zɔbu maa n-naai”"
+    ]
+   }
+  },
+  "labels": [
+   "Mediteraniɛn Teeku",
+   "Ejiin Teeku",
+   "Ɛsia Bila",
+   "Makɛdonia",
+   "Itali"
+  ],
+  "journeys": {
+   "j1": "Chandi pilli",
+   "j2": "Chandi ayi",
+   "j3": "Chandi ata",
+   "rome": "Chandi anahi · chaŋ Rom",
+   "j5": "Chandi anu · sarika yibu nyaaŋa"
+  }
+ }
+}

@@ -35,10 +35,10 @@
     "today": "Taigris–Yufretis polo zuŋɔ",
     "note": "Dunia bɛ ni nam ka di viɛla pam ŋɔ ni, alahichi kpe na ka ŋmaai Naawuni mini ninsala sunsuuni.",
     "events": [
-     "Namda dabsa ayobu ni — “di daa viɛla pam”",
+     "Namda dabsa ayobu ni — “di viɛl’ pam”",
      "Ninsala bɛ ni nam Naawuni nahingbaŋ ni",
      "Lubu, mini Edɛn ni yibu",
-     "Lahibali Suŋ pilli — “paɣ’ zuliya ni ŋme bɔri waɣili maa zuɣu”"
+     "Lahibali Suŋ pilli — “paɣ’ zuliya maa ni ti ŋme m-bɔr’ a zuɣu”"
     ]
    },
    "noah": {
@@ -49,7 +49,7 @@
     "events": [
      "Dunia din pali ni biɛri",
      "Kom titali maa, mini Nɔhu ŋariŋ",
-     "Saŋmariga alikauli — “kom titali ku lan kana n-saɣim binnamda”"
+     "Saŋmariga alikauli — “n ku lan chɛ ka kom di binnɛma zaa”"
     ]
    },
    "babel": {
@@ -58,7 +58,7 @@
     "today": "Iraki zuŋɔ (Shinar tiŋgbɔŋ)",
     "note": "Karimbaani din bɔri saazuɣu paabu zuɣu, Naawuni gari bɛ yɛtɔɣa ka wolgi niriba dunia ni.",
     "events": [
-     "“Chɛ ka ti mɛ tiŋ’ mini duu … ka ti bo ti maŋ’ yuli”",
+     "“ti me timaŋmaŋ’ tiŋa, ka me pii tam … n-zali yuli”",
      "Naawuni gari bɛ balli",
      "Niriba wolgi dunia ni (Shinar — din daa ti leei Babilɔn)"
     ]
@@ -70,7 +70,7 @@
     "note": "Baibol tiligibu lahabali pili ni nir’ yino boligu.",
     "events": [
      "Naawuni boli Ibrahima ka o yi Kaldiyanim’ Ur ni",
-     "“N ni chɛ ka a zuliya galisi pam … ka dunia zuliya kam nya alibarika a zuɣu”",
+     "“N ni chɛ ka a zuliya galisi pam … dunia ŋɔ zuliya kam zaani ti nya alibarika a zuɣu”",
      "Yɛda ni ka o yi o tiŋgbɔŋ"
     ]
    },
@@ -91,7 +91,7 @@
     "today": "Nablus zuŋɔ",
     "note": "Alikauli tiŋgbɔŋ ni ka bɛ pili doɣim, ka alikauli maa gari zuliya kam sani.",
     "events": [
-     "Kanana kpɛbu, sara bimbini pilli — “N ni ti a zuliya tiŋgbɔŋ ŋɔ”",
+     "Kanana kpɛbu, sara bimbini pilli — “N ni zaŋ tiŋgbɔŋ ŋɔ ti a zuliya”",
      "Alikauli (Piligu 15) · Aisaku · Yaakubu",
      "Yaakubu bidibisi pinaayi — zuliya pinaayi gbinni"
     ]
@@ -259,7 +259,7 @@
     "note": "O tuma pili — saazuɣu kɔhindi o kaman Bia.",
     "events": [
      "Jɔn su o kɔm",
-     "Naawuni Shia sheei kaman ŋmɔ — “Ŋɔ n-nyɛ m Bidib’ yurilim”",
+     "Naawuni Shia sheei kaman ŋmɔ — “M Biyurigu m-bɔŋɔ”",
      "O nyaŋ Sintani zaɣisibu buta mɔɣili ni"
     ]
    },
@@ -281,7 +281,7 @@
     "note": "Tuma piligu soli — gari Jɛrusalɛm hal ti paai Samaria bɛ ni je.",
     "events": [
      "O sɔŋ jɛmbu duu Jɛrusalɛm ni",
-     "Yuŋ, Nikodimus — “Di simdi ni bɛ lan dɔɣ’ a”",
+     "Yuŋ, Nikodimus — “faashee bɛ maan labi dɔɣ’ a”",
      "Nyɛvili kɔm ti Samaria paɣa"
     ]
    },
@@ -292,7 +292,7 @@
     "note": "Galili tuma yiŋ’ — boligu, wuhibu mini tuhibu zaa laɣim kpe.",
     "events": [
      "O boli zahimkpɛriba ka zaŋ kpe leei o yiŋ’",
-     "Zoli Zuɣu Waazu — “Suhupiɛlli be ban’ nyɛ faranima bɛ Shia ni”",
+     "Zoli Zuɣu Waazu — “Ninvuɣ’ shɛb’ bɛn ʒe yim ni bɛ pɔri Naawuni sani mal’ alibarika”",
      "Nam ŋaha — mini tuhibu din duhira"
     ]
    },
@@ -302,7 +302,7 @@
     "today": "Kinnɛrɛt Mɔɣili zuŋɔ",
     "note": "Ni yaa binnamda zuɣu, o wuhi ŋun’ o nyɛ.",
     "events": [
-     "“Fom, ka fo baalim” — o chɛ ka pɔhim maa fo",
+     "“Fom’ baalim” — o chɛ ka pɔhim maa fo",
      "O zaŋ paanɔɔ anu mini zahim ayi dihi niriba tusa anu (5,000)",
      "O chana kɔm zuɣu"
     ]
@@ -313,7 +313,7 @@
     "today": "Banias zuŋɔ",
     "note": "Nyaandoliba baŋ ni o nyɛ Masia, ka daɣiʒirili soli yɔɔ.",
     "events": [
-     "Pita yɛlimaŋli — “A nyɛla Masia, Naawuni ŋun’ be nyɛvili maa Bia”",
+     "Pita yɛlimaŋli — “A nyɛla Masia, Naawuni ŋun be ŋɔ Bia”",
      "O daŋ moɣisi o kubu mini o yiɣisibu",
      "O nyɔɔ taɣi jilima ni zoli zuɣu"
     ]
@@ -326,7 +326,7 @@
     "events": [
      "O chɛ ka zom’ Bartimeus nya",
      "O boli lampo deera Zakiyus",
-     "“Ninsala Bia kana ni o ti bo ka tiligi din bɔrgi”"
+     "“Daadam Bia mi kamina ni o ti bo n-nya bɛn bɔrigi la n-tiligi ba”"
     ]
    },
    "bethany": {
@@ -335,7 +335,7 @@
     "today": "al-Eizariya zuŋɔ",
     "note": "O wuhi o yaa kum zuɣu o yɔɔŋɔ bahindili tɔni.",
     "events": [
-     "O yiɣisi Lazarus siɣa ni — “Mani n-nyɛ yiɣisibu mini nyɛvili”",
+     "O yiɣisi Lazarus siɣa ni — “Mani n-nyɛ nyɛvili, mani n-lan su kum ni neebu yiko”",
      "Mariama yɔ o kpam o pambu zuɣu",
      "Alaama ŋɔ chɛ ka bɛ ku o niabu kpaŋsi"
     ]
@@ -454,7 +454,7 @@
     "note": "Taɣibu luɣili polo Lahibali Suŋ daŋ chaŋ Yurɔp.",
     "events": [
      "Makɛdonia doo ʒiʔili",
-     "“Duɣim’ na Makɛdonia ka ti sɔŋ ti”",
+     "“Kam’ Masidɔnia na ti sɔŋ ti”",
      "Bɛ gari yɔm chaŋ Yurɔp"
     ]
    },
@@ -476,7 +476,7 @@
     "note": "Yɛligu maa dam tiŋ’ maa ka tuhibu duhi.",
     "events": [
      "O yɛn yɛltɔɣa jama duu ni Vuhim daba ata",
-     "“Ninvuɣ’ shɛb’ ban’ damdi dunia zaa ŋɔ”",
+     "“Ninvuɣ’ shɛb’ bɛn lɛbigiri dunia pindi tiŋ’ la”",
      "Bɛ yɔɔ yuŋ"
     ]
    },
@@ -509,7 +509,7 @@
     "note": "O ʒini yuuni mini di pirigili, n-mɔ chɛchi tiŋ’ din pali ni biɛri ni.",
     "events": [
      "O mali buɔɔ tuma mini Akwila ni Prisila",
-     "“Miri ka a zo dabiɛm … dama m be a sani”",
+     "“Di zɔri dabiɛm … M be a sani”",
      "Kɔrint niriba pam niŋ yɛda ka bɛ su ba kɔm"
     ]
    },
@@ -530,7 +530,7 @@
     "today": "Turkiya zuŋɔ",
     "note": "Kɔnsɔɔ ni o gɔri Ɛfɛsus chɛchi kpamba.",
     "events": [
-     "“Gulimi chɛchi maa o ni zaŋ o maŋmaŋ’ ʒim da”",
+     "“Naawuni Cheechi shɛli o ni daa zaŋ omaŋmaŋ’ Bia ʒim fa m-bahi la”",
      "Kpamba kɔni, dama bɛ mi ni bɛ ku lan nya o"
     ]
    },
@@ -542,7 +542,7 @@
     "events": [
      "Saria karibu gɔmnanti Fɛliks mini Fɛstus tɔni",
      "O gɔhi o maŋa Naa Agripa tɔni",
-     "“N zaŋ n yɛla ti Siza” — n-chaŋ Rom"
+     "“N ni zaŋ yɛtɔɣa maa chaŋ Naa Siiza sani” — n-chaŋ Rom"
     ]
    },
    "jerusalem": {
@@ -614,7 +614,7 @@
     "events": [
      "Yuun’ ayi o be sarika ni yiŋ’ ka moɣisiri nam maa ni suhukpaŋsim",
      "Kpe na ka o sabi Sarika Gbana (Ɛfɛsus·Filipai·Kɔlɔsai·Failimɔn)",
-     "Din nyaaŋa bɛ lan niŋ o sarika, ka o sabi 2 Timoti ka bɛ ku o — “N tuhi tɔb’ suŋ maa, ka zɔ zɔbu maa n-naai”"
+     "Din nyaaŋa bɛ lan niŋ o sarika, ka o sabi 2 Timoti ka bɛ ku o — “N tuhi tuhiri suŋ; n zo tizɔbo la naai”"
     ]
    }
   },

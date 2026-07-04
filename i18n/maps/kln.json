@@ -1,0 +1,636 @@
+{
+ "menuName": "Kalenjin",
+ "htmlLang": "kln",
+ "dir": "ltr",
+ "locale": "kln",
+ "brand": "Bukuit eng’ Sirutiet Agenge",
+ "docTitle": "Bukuit eng’ Ramani · Bukuit eng’ Sirutiet Agenge",
+ "metaDesc": "Sib sirutietab betusiek nebo Sirutietab Tai, sobetab Jesu, ak bendosiekab Paulo eng’ ramani ne iman — kobwa tuguk che bo Bukuit eng’ olosiek che bo iman.",
+ "s": {
+  "kicker": "Bukuit eng’ Sirutiet Agenge · Ramani",
+  "title": "Bukuit eng’ Ramani",
+  "verse": "“Amu kima kisub atindonik che kigichobei eng’ ng’omnatet, ye kingemwawok kimnatet ak nyonunetab Kiptaiyandennyo Jesu Kristo, kigi baorinik che kigigeer etunatennyi,” (Petero 2 1:16)",
+  "purpose": "Bukuit ko ma bukutab netetet. Ko sirutiet nebo bik che kikwaite olosiek, betusiek, ak kainaisiek che bo iman. Sib oretinwechoto eng’ ramani, eng’ sirutiet nebo betusiek — nam olondo age, anan iyat ▶ si isib eng’ ng’wan age tugul.",
+  "ot_kick": "① Sirutietab Tai — eng’ betusiek",
+  "ot_h": "Kobunu taunet agoi weutet koba Jerusalem",
+  "ot_lead": "Ma bendo agenge kityo, ago ko logoiywetab sorunet kobunu taunet: taunet ak butet → butetab beek ak Babel → kuret (Abraham) → emet ne kiyamgei → Komong’u → tilianik → lutet → bororiet → sulutiet → otwognatet → weutet.",
+  "je_kick": "② Sirutietab Lel — sobetab Jesu",
+  "je_h": "Kobunu Betlehem agoi Jerusalem",
+  "je_lead": "Sib sobetab Jesu u ye mwae Logoiywetab Kararan, eng’ sirutiet — kobunu siegutennyi eng’ Betlehem, koba baptisiet ak boisiennyi eng’ Galilaya, korumon Samaria, agoi kimurtoiyot, ng’etunet, ak kanyonet barak eng’ Jerusalem.",
+  "pa_kick": "③ Sirutietab Lel — bendosiekab Paulo",
+  "pa_h": "Kobunu Antiokia agoi tabandab ng’ony — Roma",
+  "pa_lead": "Kobunu Pentekost eng’ Jerusalem, u ye kibchunei logoiywetab kararan kosir Judea — korumon Asia ne Mining’ ak Ulaya agoi muguleldab bororiet ne o. Lewen bendo agenge eng’ bendosiek mut (ne bo tai · aeng’ · somok + bendo ne koba Roma + eng’ let nebo bolunet) ak isib tuguk che kandoi eng’ Boisionikab Che Kiyoktoi ak barwaisiek che kisirchin eng’ oret.",
+  "foot": "Ole kibunu · Olosiek kosib sirutietab Bukuit ak geografiab Bukuit ne kiyanate (ak kainaisiek che bo ra ye toreti). Kurgetab baret, ainosiek, ak baretenik ko kibunu data ne kayoen nebo ng’ony (Natural Earth), ne kingichobchin komanachot.",
+  "contact": "Tebutik · ng’alek — <a id=\"contact\" class=\"mail\">Sirchige baruet</a>",
+  "play": "Sib",
+  "pause": "Tonon",
+  "today": "Ra:",
+  "verseCite": "Petero 2 1:16"
+ },
+ "ot": {
+  "places": {
+   "eden": {
+    "name": "Eden (Taunet · Butet)",
+    "book": "Taunet 1–3",
+    "today": "emetab ainosiekab Tigris–Euphrates ne bo ra",
+    "note": "Eng’ ng’ony ne kichob ‘mie missing,’ ko chut tengek ak kobut kaorutiet ne bo Kamuktaindet ak bik.",
+    "events": [
+     "Taunet eng’ betusiek 6 — ‘mie missing’",
+     "Kichob bik u boruandetab Kamuktaindet",
+     "Butet, ak ng’etunet eng’ Eden",
+     "Logoiywetab kararan netai — ‘kwetab kwondo kotui metitab erendet’"
+    ]
+   },
+   "noah": {
+    "name": "Ararat (Butetab Beek)",
+    "book": "Taunet 6–9",
+    "today": "Tulwetab Ararat, Turkiye ne bo ra",
+    "note": "Kandoi Kamuktaindet ng’ony ne nyiitat tengek, ago korib sobet eng’ kaptich agenge.",
+    "events": [
+     "Ng’ony ne nyiitat ng’oroniandet",
+     "Butetab beek, ak melindetab Noa",
+     "Ng’atunotab lelyondet — ‘mangowech ng’ony kogeny eng’ beek’"
+    ]
+   },
+   "babel": {
+    "name": "Kot ne Goi nebo Babel",
+    "book": "Taunet 11",
+    "today": "Irak ne bo ra (Shinar)",
+    "note": "Kobunu tononetgei nebo bik ne cheng’ kipsengwet, ko baraakta Kamuktaindet ng’alekwak ak bik eng’ ng’ony komugul.",
+    "events": [
+     "‘Kechob taun ak kot ne goi… si kekonech kainet’",
+     "Kobirbiraakta Kamuktaindet ng’alekwak",
+     "Kobaraakta bik eng’ ng’ony (Shinar — koik Babulon eng’ let)"
+    ]
+   },
+   "ur": {
+    "name": "Ur",
+    "book": "Taunet 12",
+    "today": "murotab Irak ne bo ra",
+    "note": "Konam logoiywetab sorunet nebo Bukuit eng’ kuretab chi agenge.",
+    "events": [
+     "Kokuur Kamuktaindet Abram kobunu Ur nebo bikab Kaldaia",
+     "‘Ayain iegu bororiet ne o… ak kiberuri ortinwek tugul eng’ inye’",
+     "Eng’ iyanet, kobagakta emennyi"
+    ]
+   },
+   "haran": {
+    "name": "Haran",
+    "book": "Taunet 12",
+    "today": "murotab Turkiye ne bo ra",
+    "note": "Eng’ oret, kowalu kuret koba emet ne kiyamgei.",
+    "events": [
+     "Komenye kaptichtab Tera eng’ Haran",
+     "Kome Tera",
+     "Kotononchi Abram Kanaan eng’ kenyisiek 75"
+    ]
+   },
+   "shechem": {
+    "name": "Shekem · Kanaan",
+    "book": "Taunet 12–50",
+    "today": "Nablus ne bo ra",
+    "note": "Eng’ emet ne kiyamgei ko kisiegei kaptich ak konyit ng’atunot koba ne sub.",
+    "events": [
+     "Kichutet Kanaan, kaonet netai — ‘ang’etu emeni kweng’ung’’",
+     "Ng’atunot (Taunet 15) · Isaka · Jakobo",
+     "Lagokab Jakobo che taman ak aeng’ — tigitiekab ortinwek taman ak aeng’"
+    ]
+   },
+   "egypt": {
+    "name": "Misri (Goshen)",
+    "book": "Taunet 37–50 · Komong’u 1",
+    "today": "Deltaisietab Nile, Misri ne bo ra",
+    "note": "Koik kaptich bororiet ne o — ak koik anyun oretab otwogik.",
+    "events": [
+     "Josepu, ne kialdo, koik kandoindetab Misri",
+     "Kochoiywe kaptichtab Jakobo komugul kobunu kemeut",
+     "Koik otwogik bororietab Israel ne ei"
+    ]
+   },
+   "sinai": {
+    "name": "Tulwetab Sinai",
+    "book": "Komong’u · Atebetab Lawik",
+    "today": "Emetab Sinai ne bo ra",
+    "note": "Sorunet ne o nebo Sirutietab Tai — koik otwogik bikab Kamuktaindet.",
+    "events": [
+     "Sandosiek taman ak kechirietab Pasaka",
+     "Kotililakta Baret ne Birirwen ak kokorumon",
+     "Ng’atutik taman, Ng’atutiet, hekalu ne ibendi, ak chotosiek"
+    ]
+   },
+   "kadesh": {
+    "name": "Kadesh (tilianik)",
+    "book": "Koitosiek · Ng’atutik",
+    "today": "tilianikab Sinai–Negev ne bo ra",
+    "note": "Kabesyachi mayanet iyewut agenge emet — ago komenye Kamuktaindet ak ichek.",
+    "events": [
+     "Bik che kingol emet taman ak aeng’ — ago kotamgei bik koyan",
+     "Kenyisiek 38 eng’ tilianik — mana, polut, ak mat",
+     "Eng’ osonetab Moab, netetetab let nebo Musa (Ng’atutik)"
+    ]
+   },
+   "jericho": {
+    "name": "Jeriko",
+    "book": "Josua",
+    "today": "Jeriko ne bo ra",
+    "note": "Eng’ let, kochut ak koyai emet ne kiyamgei.",
+    "events": [
+     "Kotililakta Jordan ak kokorumon bik",
+     "Kobut korosekab Jeriko",
+     "Lutetab Kanaan ak sulutietab emet"
+    ]
+   },
+   "shiloh": {
+    "name": "Shilo (Kiruogik)",
+    "book": "Kiruogik · Ruth",
+    "today": "Khirbet Seilun ne bo ra",
+    "note": "Ye mami laitoriat, ko kiyaei chi tugul u ye chamei — mageet laitoriat ne iman.",
+    "events": [
+     "Kitononchin hekalu ne ibendi eng’ Shilo",
+     "Kuretab tengek–sandet–sorunet (Debora, Gideon, Samson)",
+     "Ruth — imanit eng’ betusiek che ya, eng’ kuretab Daudi"
+    ]
+   },
+   "jerusalem": {
+    "name": "Jerusalem · Bororiet ne Kibchinategei",
+    "book": "Samuel 1–2 · Laitorinik 1",
+    "today": "Jerusalem ne bo ra",
+    "note": "Kasartab Israel ne kararan missing — ak logoiywetab laitoriat ne bo koigeny.",
+    "events": [
+     "Saul laitoriatab tai, ak koik Daudi ak Goliat",
+     "Ng’atunotab Daudi — ‘kobogoriong’ung’ kobwa koigeny’ (Samuel 2 7)",
+     "Kochob Solomon hekalu eng’ Jerusalem"
+    ]
+   },
+   "samaria": {
+    "name": "Samaria · Bororiet ne Kibsulda",
+    "book": "Laitorinik · Maotik",
+    "today": "Sebastia ne bo ra",
+    "note": "Kibsulda bororiet ak koitetisechin ng’oroniandet eng’ ye rirei maotik.",
+    "events": [
+     "Eng’ let nebo Solomon, sulutiet koba Juda ak Israel",
+     "Ng’oroniandetab tuguk ne koitetisechin",
+     "Elija, Isaia, Jeremia kole ‘oweege’ — ak komwae agobo Mesia"
+    ]
+   },
+   "nineveh": {
+    "name": "Ninewe (Asuria)",
+    "book": "Laitorinik 2 17 · Jona",
+    "today": "Mosul, Irak ne bo ra",
+    "note": "Kingemwauta riretisiek tugul, ko kobut tai netai.",
+    "events": [
+     "Ninewe, kapchitab Asuria",
+     "Kobut bororiet ne bo tai eng’ Asuria (722 BC)",
+     "Kiyoktoi Jona koba Ninewe"
+    ]
+   },
+   "babylon": {
+    "name": "Babulon",
+    "book": "Laitorinik 2 25 · Daniel · Esekiel",
+    "today": "Hillah, Irak ne bo ra",
+    "note": "Betut ne ya missing — ago konyit logoiywetab kamang’unet.",
+    "events": [
+     "Kobut Jerusalem, kibel hekalu (586 BC)",
+     "Kialdo bikab Juda koba Babulon",
+     "Daniel ak Esekiel — iyanet ak geretisiek eng’ otwognatet"
+    ]
+   },
+   "susa": {
+    "name": "Susa (Persia)",
+    "book": "Esta · Neemia",
+    "today": "Shush, Iran ne bo ra",
+    "note": "Agot eng’ muguleldab bororiet ne ma iyani, ko rib Kamuktaindet bikyik.",
+    "events": [
+     "Kobut Babulon eng’ Persia",
+     "Kosoru Esta Heberei kobunu bisiet",
+     "Kosaaei Neemia eng’ tainetab laitoriat ak kiyoktoi"
+    ]
+   },
+   "return": {
+    "name": "Weutet koba Jerusalem",
+    "book": "Esra · Neemia · Malaki",
+    "today": "Jerusalem ne bo ra",
+    "note": "Koweek ak kochob kogeny — ago mami laitoriat ne kabwa. Kayetie Mesia.",
+    "events": [
+     "Weeksosiek somok eng’ ng’atutietab Kiro (Serubabel 538 · Esra 458 · Neemia 444)",
+     "Kochobgei hekalu ak kochobgei korosek nebo Jerusalem",
+     "Malaki — koleny Sirutietab Tai: ‘ayogu chito nenyu’"
+    ]
+   }
+  },
+  "labels": [
+   "Baretab Mediteranio",
+   "Mesopotamia",
+   "Araba nebo Arabia",
+   "Misri"
+  ],
+  "journeys": {
+   "flow": "Logoiywetab sorunet"
+  }
+ },
+ "jesus": {
+  "places": {
+   "bethlehem": {
+    "name": "Betlehem",
+    "book": "Matayo 1–2 · Luka 2",
+    "today": "Betlehem ne bo ra",
+    "note": "Kobwa Mesia ne kiyamgei koba taun nebo Daudi — Ng’olyot ne kiek borto.",
+    "events": [
+     "Kisiegei eng’ Betlehem, taun nebo Daudi",
+     "Komwaachi malaikaisiek logoiywet ribotik",
+     "Kobwa bikab ng’om si koongoiywe"
+    ]
+   },
+   "nazareth": {
+    "name": "Nasareti",
+    "book": "Luka 2 · 4",
+    "today": "Nasareti ne bo ra",
+    "note": "Koret Kamuktaindet u chi eng’ taun ne kityo.",
+    "events": [
+     "Kigeret eng’ gaatab boisiendetab ketik",
+     "Eng’ kenyisiek taman ak aeng’, kotebee ak kowalu eng’ hekalu",
+     "Eng’ let, kingewende eng’ sinagogitab gaannyi"
+    ]
+   },
+   "jordan": {
+    "name": "Ainetab Jordan",
+    "book": "Matayo 3–4",
+    "today": "murotab ainetab Jordan ne bo ra",
+    "note": "Konam boisiennyi eng’ tainetab bik tugul — koborun kipsengwet inendet kole Werit.",
+    "events": [
+     "Kibaptaisyei eng’ Johana Kibapteisindet",
+     "Kochoiywe Tamirmiriet u tabguriet — ‘Ni Werinnyu ne achamei’",
+     "Kobut yometisiek somok nebo Setani eng’ tilianik"
+    ]
+   },
+   "cana": {
+    "name": "Kana",
+    "book": "Johana 2",
+    "today": "Kafr Kanna ne bo ra",
+    "note": "Eng’ ng’oitetab tai koborun torornatennyi.",
+    "events": [
+     "Toeny eng’ katunisiet",
+     "Kowalakta beek koik maiywek — ng’oitetab tai",
+     "Koyan tondennyik inendet"
+    ]
+   },
+   "sychar": {
+    "name": "Sikar (Samaria)",
+    "book": "Johana 2–4",
+    "today": "negitab Nablus ne bo ra",
+    "note": "Oretab boisiet ne bo taunet — korumon Jerusalem agoi Samaria ne kingewende.",
+    "events": [
+     "Kotilil hekalu eng’ Jerusalem",
+     "Eng’ keeny, Nikodemo — ‘Konyolu isiegei koigeny’",
+     "Beek che sobe kobua kwondab Samaria"
+    ]
+   },
+   "capernaum": {
+    "name": "Kapernaum",
+    "book": "Matayo 4–13 · Mariko 1–4",
+    "today": "kurgetab baretab Galilaya ne bo ra",
+    "note": "Kapchitab boisiet nebo Galilaya — kuret, netetet, ak sandet kotuigei tugul yeni.",
+    "events": [
+     "Kokuur bik che name gogolik ak kotononchi yeni",
+     "Netetetab Tulwet — ‘Kaberurchin bik che nyalilotin eng’ muguleldo’",
+     "Kalyaisiekab bounatet — ak sandet ne koitetisechin"
+    ]
+   },
+   "galilee": {
+    "name": "Baretab Galilaya",
+    "book": "Mariko 4 · 6 · Johana 6",
+    "today": "Baretab Kinereti ne bo ra",
+    "note": "Eng’ kimnatennyi kosir ng’ony, koboru ng’o inendet.",
+    "events": [
+     "‘Momon, tebi’ — kotebisia yomet ne o",
+     "Koam bik 5,000 eng’ murek mut ak gogolik aeng’",
+     "Kokwaite barakab beek"
+    ]
+   },
+   "caesarea_p": {
+    "name": "Kaisaria Filipi",
+    "book": "Matayo 16–17",
+    "today": "Banias ne bo ra",
+    "note": "Kong’en tondennyik kole inendet Kristo, ak koyatgei oretab kimurtoiyot.",
+    "events": [
+     "Mwauetab Petero — ‘Inye Kristo, Werit ne bo Kamuktaindet ne sobe’",
+     "Komwae netai agobo meennyi ak ng’etunennyi",
+     "Kiwalakta borto eng’ torornatet eng’ tulwet"
+    ]
+   },
+   "jericho": {
+    "name": "Jeriko",
+    "book": "Luka 18–19",
+    "today": "Jeriko ne bo ra",
+    "note": "Eng’ oret ne koba Jerusalem barak, kocheng’ che kabetet.",
+    "events": [
+     "Kokonu geretet Bartimayo ne kingoretin",
+     "Kokuur Sakayo chi ne name kodisiek",
+     "‘Kibwa Weritab Chi si kocheng’ ak kosoru che kabetet’"
+    ]
+   },
+   "bethany": {
+    "name": "Betania",
+    "book": "Johana 11–12",
+    "today": "al-Eizariya ne bo ra",
+    "note": "Koboru kimnatennyi kosir meet eng’ tainetab wigitnyi ne bo let.",
+    "events": [
+     "Kong’etunchi Lasaro kobunu keeuet — ‘Anee ng’etunet ak sobet’",
+     "Koili Maria inendet agobo bilonet",
+     "Ng’oitetni kogimit ng’atutietab kobar inendet"
+    ]
+   },
+   "jerusalem": {
+    "name": "Jerusalem",
+    "book": "Matayo 21–28 · Luka 24 · Boisionikab Che Kiyoktoi 1",
+    "today": "Jerusalem ne bo ra",
+    "note": "Muguleldo ne boruni Bukuit komugul — kimurtoiyot, ng’etunet, ak kanyonet barak.",
+    "events": [
+     "Chututet ne bo boiboiyet; kowirwir mesaisiekab hekalu kogeny",
+     "Eng’ Amisietab Let, koun kelyekab tondennyik",
+     "Kome eng’ kimurtoiyot",
+     "Kong’etu eng’ betut ne bo somok, ak kokanyon barak"
+    ]
+   }
+  },
+  "labels": [
+   "Baretab Mediteranio",
+   "Galilaya",
+   "Samaria",
+   "Judea",
+   "Dekapoli",
+   "Perea",
+   "Baret ne Kameet"
+  ],
+  "journeys": {
+   "life": "Oretab Jesu"
+  }
+ },
+ "paul": {
+  "places": {
+   "antioch": {
+    "name": "Antiokia",
+    "book": "Boisionikab Che Kiyoktoi 13 · 15",
+    "today": "Antakya, Turkiye ne bo ra",
+    "note": "Kanisa ne yokte, ole nam ak koweek boisietab bik che ma Heberei.",
+    "events": [
+     "Eng’ saaet, kotil Tamirmiriet Barnaba ak Saul",
+     "Kanisa ole kikuurgei iyanik netai kole ‘Kristian’",
+     "Olondab taunet nebo bendosiek ne bo tai, aeng’, ak somok"
+    ]
+   },
+   "seleucia": {
+    "name": "Seleukia",
+    "book": "Boisionikab Che Kiyoktoi 13:4",
+    "today": "Turkiye ne bo ra",
+    "note": "Kurgetab beek nebo Antiokia — kobendi eng’ meli koba Kipro.",
+    "events": []
+   },
+   "salamis": {
+    "name": "Salami (Kipro)",
+    "book": "Boisionikab Che Kiyoktoi 13:5",
+    "today": "Kipro ne bo ra",
+    "note": "Tebet netai eng’ Kipro — kobchunei eng’ sinagogisiek.",
+    "events": []
+   },
+   "paphos": {
+    "name": "Pafo",
+    "book": "Boisionikab Che Kiyoktoi 13:6-12",
+    "today": "Kipro ne bo ra",
+    "note": "Koborunei kimnatet kobunu che sande logoiywetab kararan.",
+    "events": [
+     "Koik Elima ponindet ne kingoret",
+     "Koyan Sergio Paulo kandoindetab emet",
+     "Kobunu yeni ko nam ‘Paulo’ kandoet"
+    ]
+   },
+   "perga": {
+    "name": "Perga",
+    "book": "Boisionikab Che Kiyoktoi 13:13",
+    "today": "Antalya, Turkiye ne bo ra",
+    "note": "Kurgetab beek eng’ Pamfilia — yeni ko week Johana Mariko.",
+    "events": []
+   },
+   "pantioch": {
+    "name": "Antiokia nebo Pisidia",
+    "book": "Boisionikab Che Kiyoktoi 13:14-50",
+    "today": "Yalvaç, Turkiye ne bo ra",
+    "note": "Koyatgei logoiywetab kararan koba bik che ma Heberei.",
+    "events": [
+     "Netetet ne koi nebo logoiywetab sorunet eng’ sinagogi",
+     "Koboiboi bik che chang’ che ma Heberei ak konam ng’olyot",
+     "Kingewende amu sandet"
+    ]
+   },
+   "iconium": {
+    "name": "Ikonio",
+    "book": "Boisionikab Che Kiyoktoi 14:1-7",
+    "today": "Konya, Turkiye ne bo ra",
+    "note": "Koyan bik che chang’, ago sandet kogochin koba tai.",
+    "events": []
+   },
+   "lystra": {
+    "name": "Listra",
+    "book": "Boisionikab Che Kiyoktoi 14:8-20",
+    "today": "Turkiye ne bo ra",
+    "note": "Kingekuur u kamuktaindet, ak eng’ let kingekonon koik.",
+    "events": [
+     "Kosaib chi ne kingol kobunu siegutet",
+     "Kocheng’ bik che chang’ kochotchi ichek u kamuktaisiek",
+     "Kingekonon koik ak kingebagakta u ne kame, ago kong’eet"
+    ]
+   },
+   "derbe": {
+    "name": "Derbe",
+    "book": "Boisionikab Che Kiyoktoi 14:20-21",
+    "today": "Turkiye ne bo ra",
+    "note": "Kisiegei tondennyik che chang’; koweek eng’ oret si kogimit kanisaisiek.",
+    "events": []
+   },
+   "troas": {
+    "name": "Troa",
+    "book": "Boisionikab Che Kiyoktoi 16:8-10",
+    "today": "Turkiye ne bo ra",
+    "note": "Olondab walutiet ole koba logoiywetab kararan Ulaya netai.",
+    "events": [
+     "Geretet nebo chitab Makedonia",
+     "‘Nyoun okwek ak otoretech’",
+     "Kokorumon kanyeny koba Ulaya"
+    ]
+   },
+   "philippi": {
+    "name": "Filipi",
+    "book": "Boisionikab Che Kiyoktoi 16 · Pilipik",
+    "today": "Greece ne bo tai ne bo ra",
+    "note": "Kanisa netai nebo Ulaya — kobut logoiywetab kararan agot eng’ kaptunget.",
+    "events": [
+     "Koyan Ludia, ne aldae nguryek che birirwen",
+     "Kibolunei tiplaiyatab otwoget ne ponot",
+     "Tienwek eng’ kwenutab keeny, ng’etetab ng’ony, ak kisoru kaptichtab ribindetab kaptunget"
+    ]
+   },
+   "thess": {
+    "name": "Tesalonika",
+    "book": "Boisionikab Che Kiyoktoi 17 · Tesalonikek 1–2",
+    "today": "Tesaloniki, Greece ne bo ra",
+    "note": "Kong’etisia ng’olyot taunet ak koitetisechin sandet.",
+    "events": [
+     "Kong’alaal eng’ sinagogi Sabatoisiek somok",
+     "‘Chuni che kabalakta ng’ony komugul’",
+     "Kobendi eng’ keeny"
+    ]
+   },
+   "berea": {
+    "name": "Berea",
+    "book": "Boisionikab Che Kiyoktoi 17:10-15",
+    "today": "Veria, Greece ne bo ra",
+    "note": "Bik ‘che kararan’ che kingol ng’olyot achegei.",
+    "events": [
+     "Konam ng’olyot eng’ boiboiyet",
+     "Betut age tugul kocheng’ Sirutik si koibwat",
+     "Koyan bik che chang’"
+    ]
+   },
+   "athens": {
+    "name": "Atene",
+    "book": "Boisionikab Che Kiyoktoi 17:16-34",
+    "today": "Atene, Greece ne bo ra",
+    "note": "Eng’ taunetab bik che ng’om, kobchunei agobo ‘kamuktaindet ne ma ng’enotgei’.",
+    "events": [
+     "Kongololchi taunet ne nyiitat tuguk che kong’oiywe",
+     "Eng’ Areopago kobchunei agobo Chobindet ak ng’etunet",
+     "Kingeere, ago koyan bik che tutik"
+    ]
+   },
+   "corinth": {
+    "name": "Korinto",
+    "book": "Boisionikab Che Kiyoktoi 18 · Korintoek 1–2",
+    "today": "Greece ne bo ra",
+    "note": "Komenye kenyit ak nusu, kosiegu kanisa eng’ taunet ne nyiitat tengek.",
+    "events": [
+     "Kochobe hemaisiek ak Akwila ak Priskila",
+     "‘Amiywe… amu amii anee ak inye’",
+     "Koyan Korintoisiek che chang’ ak kibaptaisyei"
+    ]
+   },
+   "ephesus": {
+    "name": "Efeso",
+    "book": "Boisionikab Che Kiyoktoi 19 · Epesoek",
+    "today": "Selçuk, Turkiye ne bo ra",
+    "note": "Muguleldab bendo ne bo somok — kibchunei ng’olyot eng’ Asia komugul.",
+    "events": [
+     "Netetet betut age tugul kenyisiek aeng’ eng’ kotab Turano",
+     "Kibel bukuekab ponet; boisiosiek che tinye kimnatet",
+     "Kochob Demetrio chobindetab silber ng’oiywet"
+    ]
+   },
+   "miletus": {
+    "name": "Mileto",
+    "book": "Boisionikab Che Kiyoktoi 20:17-38",
+    "today": "Turkiye ne bo ra",
+    "note": "Sait ne bo rirenatet ak poisiekab Efeso.",
+    "events": [
+     "‘Orib kanisa ne kigoalda eng’ korotikyik’",
+     "Korir poisiek, amu ng’en kole magere inendet kogeny"
+    ]
+   },
+   "caesarea": {
+    "name": "Kaisaria",
+    "book": "Boisionikab Che Kiyoktoi 23–26",
+    "today": "kurgetab baret nebo Israel ne bo ra",
+    "note": "Eng’ kenyisiek aeng’ kotestai logoiywetab kararan eng’ tainetab kandoik ak laitoriat.",
+    "events": [
+     "Kiruoget eng’ tainetab kandoik Felix ak Festo",
+     "Testaennyi eng’ tainetab Laitoriat Agripa",
+     "‘Asome koba Kaisari’ — koba Roma"
+    ]
+   },
+   "jerusalem": {
+    "name": "Jerusalem",
+    "book": "Boisionikab Che Kiyoktoi 21–23",
+    "today": "Jerusalem ne bo ra",
+    "note": "Kingonam eng’ hekalu, konam orennyi u chi ne mi kaptunget.",
+    "events": [
+     "Kingonam eng’ bik che chang’ eng’ hekalu",
+     "Kotestaigei eng’ tainetab kokwet",
+     "U chitab Roma, kiyoktoi ak ribindet koba Kaisaria"
+    ]
+   },
+   "myra": {
+    "name": "Mira",
+    "book": "Boisionikab Che Kiyoktoi 27:5-6",
+    "today": "Demre, Turkiye ne bo ra",
+    "note": "Kowalakta koba meli nebo Aleksandria ne koba Roma.",
+    "events": []
+   },
+   "fairhaven": {
+    "name": "Kurgeutik che Kororon (Kreta)",
+    "book": "Boisionikab Che Kiyoktoi 27:8-12",
+    "today": "Kreta ne bo ra",
+    "note": "Kingemwauta riretetab Paulo kele kotebisto bendo eng’ meli.",
+    "events": []
+   },
+   "crete": {
+    "name": "Kreta",
+    "book": "Tito",
+    "today": "Kreta ne bo ra",
+    "note": "Eng’ let nebo bolunennyi, kordit ole kobagakta Tito si kochob kanisaisiek komie.",
+    "events": [
+     "Kobagakta Tito si kotil poisiek eng’ taunisiek tugul",
+     "Kosoom kandoik che mami koik ak che iman",
+     "Kosir baruetab Tito"
+    ]
+   },
+   "malta": {
+    "name": "Malta",
+    "book": "Boisionikab Che Kiyoktoi 27–28",
+    "today": "Malta ne bo ra",
+    "note": "Korumon yomet ne o ak buutetab meli, ko tebei logoiywetab Kamuktaindet.",
+    "events": [
+     "Kobut yomet ne o meli, ago kosob bik 276 tugul",
+     "Kingoat erendet, ago mama koik ne ya",
+     "Kosaib bik che miach nebo kordit"
+    ]
+   },
+   "syracuse": {
+    "name": "Sirakusa",
+    "book": "Boisionikab Che Kiyoktoi 28:12",
+    "today": "Sisilia, Italia ne bo ra",
+    "note": "Komenye betusiek somok eng’ Sisilia.",
+    "events": []
+   },
+   "puteoli": {
+    "name": "Puteoli",
+    "book": "Boisionikab Che Kiyoktoi 28:13-14",
+    "today": "Pozzuoli, Italia ne bo ra",
+    "note": "Koitchi Italia ak kingoyor tupchonikab iyanet.",
+    "events": []
+   },
+   "rome": {
+    "name": "Roma",
+    "book": "Boisionikab Che Kiyoktoi 28 · Baruaisiek che bo Kaptunget · Timoteo 2",
+    "today": "Roma, Italia ne bo ra",
+    "note": "Koit logoiywetab kararan muguleldab bororiet ne o eng’ let — ma letiywet, ago taunet.",
+    "events": [
+     "Kenyisiek aeng’ eng’ tunget nebo gaa, kobchunei bounatet eng’ kimnatet",
+     "Kobunu yeni kosir Baruaisiek che bo Kaptunget (Epesoek·Pilipik·Kolosaik·Pilemon)",
+     "Eng’ let kingotun kogeny, kosir Timoteo 2 ak kome amu iyanet — ‘Kaba lut ne kararan, kagoluwan boret’"
+    ]
+   }
+  },
+  "labels": [
+   "Baretab Mediteranio",
+   "Baretab Aegea",
+   "Asia ne Mining’",
+   "Makedonia",
+   "Italia"
+  ],
+  "journeys": {
+   "j1": "Bendo ne bo tai",
+   "j2": "Bendo ne bo aeng’",
+   "j3": "Bendo ne bo somok",
+   "rome": "Bendo ne bo angwan · koba Roma",
+   "j5": "Bendo ne bo mut · eng’ let nebo bolunet"
+  }
+ }
+}

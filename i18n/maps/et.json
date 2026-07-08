@@ -1,0 +1,636 @@
+{
+ "menuName": "Eesti",
+ "htmlLang": "et",
+ "dir": "ltr",
+ "locale": "et-EE",
+ "brand": "Piibel ühe keriga",
+ "docTitle": "Piibel kaardil · Piibel ühe keriga",
+ "metaDesc": "Jälgi Vana Testamendi ajajoont, Jeesuse elu ja Pauluse reise tõelisel kaardil — Piibel sündis tõelistes paikades.",
+ "s": {
+  "kicker": "Piibel ühe keriga · Kaardid",
+  "title": "Piibel kaardil",
+  "verse": "“For we did not follow cleverly devised myths …” (2 Peter 1:16)",
+  "purpose": "Piibel ei ole müüt. See on ülestähendus inimestest, kes käisid tõelistes paikades, tõeliste kuupäevade ja nimede keskel. Jälgi neid teid kaardil, ajalises järjekorras — puuduta punkti või vajuta ▶, et samm-sammult läbi käia.",
+  "ot_kick": "① Vana Testament — läbi aja",
+  "ot_h": "Loomisest tagasitulekuni Jeruusalemma",
+  "ot_lead": "Mitte üksik teekond, vaid lunastusloo vool loomisest peale: loomine ja pattulangemine → veeuputus ja Paabel → kutse (Aabraham) → tõotatud maa → väljaränne → kõrb → vallutus → kuningriik → jagunemine → pagulus → tagasitulek.",
+  "je_kick": "② Uus Testament — Jeesuse elu",
+  "je_h": "Petlemmast Jeruusalemma",
+  "je_lead": "Järgi Jeesuse elu nõnda, nagu evangeeliumid seda jutustavad, järjekorras — tema sünnist Petlemmas läbi ristimise ja Galilea teenistuse, üle Samaaria, kuni risti, ülestõusmise ja taevasseminekuni Jeruusalemmas.",
+  "pa_kick": "③ Uus Testament — Pauluse reisid",
+  "pa_h": "Antiookiast maailma otsani — Rooma",
+  "pa_lead": "Nelipühast Jeruusalemmas — kuidas evangeelium levis väljapoole Juudamaad — läbi Väike-Aasia ja Euroopa riigi südamesse. Vali üks viiest reisist (1.·2.·3. + merereis Rooma + pärast vabanemist) ja järgi Apostlite tegude sündmusi koos teel kirjutatud kirjadega.",
+  "foot": "Allikad · Paigad järgivad Piibli teksti ja üldtuntud Piibli geograafiat (kus abiks, on lisatud tänapäevased nimed). Rannajooned, jõed ja järved on joonistatud avaandmete (Natural Earth) põhjal, lihtsustatult.",
+  "contact": "Küsimused · tagasiside — <a id=\"contact\" class=\"mail\">Kirjuta meile</a>",
+  "play": "Esita",
+  "pause": "Peata",
+  "today": "Täna:",
+  "verseCite": "2. Peetruse 1:16"
+ },
+ "ot": {
+  "places": {
+   "eden": {
+    "name": "Eeden (loomine · pattulangemine)",
+    "book": "1. Moosese 1–3",
+    "today": "Tigrise ja Eufrati piirkond täna",
+    "note": "Väga heaks loodud maailma tuleb patt ja katkestab side Jumala ning inimese vahel.",
+    "events": [
+     "Loomine kuue päevaga — ja see oli väga hea",
+     "Inimene loodud Jumala näo järgi",
+     "Pattulangemine ja väljaajamine Eedenist",
+     "Esimene evangeeliumi tõotus — naise sugu purustab mao pea"
+    ]
+   },
+   "noah": {
+    "name": "Ararat (veeuputus)",
+    "book": "1. Moosese 6–9",
+    "today": "Ararati mägi, Ida-Türgi täna",
+    "note": "Jumal mõistab kohut patust tulvil maailma üle, ometi hoiab elu alal ühe pere kaudu.",
+    "events": [
+     "Maailm, mis on täis rikutust",
+     "Veeuputus ja Noa laev",
+     "Vikerkaare leping — enam ei tule veeuputust hävitama"
+    ]
+   },
+   "babel": {
+    "name": "Paabeli torn",
+    "book": "1. Moosese 11",
+    "today": "Iraak täna (Sineari tasandik)",
+    "note": "Uhkusele, mis küünib taeva poole, vastab Jumal, pillutades laiali nende keele ja rahvad üle maa.",
+    "events": [
+     "Ehitame linna ja torni ning teeme endale nime",
+     "Jumal segab ära nende keele",
+     "Rahvad pillutatakse üle maa (Sinear — hilisem Paabel)"
+    ]
+   },
+   "ur": {
+    "name": "Uur",
+    "book": "1. Moosese 12",
+    "today": "Lõuna-Iraak täna",
+    "note": "Piibli lunastuslugu algab ühe mehe kutsumisega.",
+    "events": [
+     "Jumal kutsub Aabrami välja Kaldea Uurist",
+     "Ma teen sinust suure rahva … ja sinus õnnistatakse kõiki rahvaid",
+     "Usus lahkub ta oma kodumaalt"
+    ]
+   },
+   "haran": {
+    "name": "Haaran",
+    "book": "1. Moosese 12",
+    "today": "Lõuna-Türgi täna",
+    "note": "Teel, vastates kutsele tõotatud maa poole.",
+    "events": [
+     "Terahi pere asub elama Haaranisse",
+     "Terah sureb",
+     "Aabram asub 75-aastaselt teele Kaananisse"
+    ]
+   },
+   "shechem": {
+    "name": "Sekem · Kaanan",
+    "book": "1. Moosese 12–50",
+    "today": "Nablus täna",
+    "note": "Tõotatud maal saab alguse suguvõsa ja leping kandub edasi põlvest põlve.",
+    "events": [
+     "Kaananisse jõudmine, esimene altar — sinu soole annan selle maa",
+     "Leping (1Ms 15) · Iisak · Jaakob",
+     "Jaakobi kaksteist poega — kaheteistkümne suguharu juur"
+    ]
+   },
+   "egypt": {
+    "name": "Egiptus (Goosen)",
+    "book": "1. Moosese 37–50 · 2. Moosese 1",
+    "today": "Niiluse delta, Egiptus täna",
+    "note": "Perest saab suur rahvas — ja siis orjade rahvas.",
+    "events": [
+     "Maha müüdud Joosep tõuseb Egiptust valitsema",
+     "Jaakobi kogu pere tuleb näljahäda eest alla Egiptusesse",
+     "Kasvav Iisraeli rahvas orjastatakse"
+    ]
+   },
+   "sinai": {
+    "name": "Siinai mägi",
+    "book": "2. Moosese · 3. Moosese",
+    "today": "Siinai poolsaar täna",
+    "note": "Vana Testamendi keskne pääste — orjadest saab Jumala oma rahvas.",
+    "events": [
+     "Kümme nuhtlust ja paasatall",
+     "Punane meri läheb lahku ja nad lähevad läbi",
+     "Kümme käsku, Seadus, kogudusetelk ja ohvrid"
+    ]
+   },
+   "kadesh": {
+    "name": "Kaades (kõrb)",
+    "book": "4. Moosese · 5. Moosese",
+    "today": "Siinai ja Negevi kõrb täna",
+    "note": "Uskmatus maksab ühele põlvkonnale maa — ometi jääb Jumal nende juurde.",
+    "events": [
+     "Kaksteist maakuulajat — kuid rahvas keeldub usaldamast",
+     "38 aastat kõrbes — manna, pilv ja tuli",
+     "Moabi lagendikel Moosese viimane kõne (5. Moosese)"
+    ]
+   },
+   "jericho": {
+    "name": "Jeeriko",
+    "book": "Joosua",
+    "today": "Jeeriko täna",
+    "note": "Lõpuks sisenevad nad tõotatud maale ja võtavad selle.",
+    "events": [
+     "Jordan läheb lahku ja rahvas läheb läbi",
+     "Jeeriko müürid langevad",
+     "Kaanani vallutamine ja maa jagamine"
+    ]
+   },
+   "shiloh": {
+    "name": "Silo (kohtumõistjad)",
+    "book": "Kohtumõistjate · Rutt",
+    "today": "Khirbet Seilun täna",
+    "note": "Kuningata teeb igaüks, mis tahab — vajatakse tõelist kuningat.",
+    "events": [
+     "Kogudusetelk püstitatakse Silosse",
+     "Patu–rõhumise–pääste ring (Deboora, Giideon, Simson)",
+     "Rutt — ustavus pimedail päevil, Taaveti sugupuus"
+    ]
+   },
+   "jerusalem": {
+    "name": "Jeruusalemm · Ühendkuningriik",
+    "book": "1.–2. Saamueli · 1. Kuningate",
+    "today": "Jeruusalemm täna",
+    "note": "Iisraeli kuldaeg — ja igavese kuninga tõotus.",
+    "events": [
+     "Esimene kuningas Saul, siis Taavet ja Koljat",
+     "Taaveti leping — sinu troon püsib igavesti (2Sm 7)",
+     "Saalomon ehitab Jeruusalemma templi"
+    ]
+   },
+   "samaria": {
+    "name": "Samaaria · Jagunenud kuningriik",
+    "book": "Kuningate · prohvetid",
+    "today": "Sebastia täna",
+    "note": "Kuningriik jaguneb ja taandub, samal ajal kui prohvetid hüüavad.",
+    "events": [
+     "Pärast Saalomoni jagunemine Juudaks ja Iisraeliks",
+     "Korduv ebajumalateenistus",
+     "Eelija, Jesaja, Jeremija hüüavad «pöörduge tagasi» — ja kuulutavad ette Messiat"
+    ]
+   },
+   "nineveh": {
+    "name": "Niinive (Assüüria)",
+    "book": "2. Kuningate 17 · Joona",
+    "today": "Mosul, Iraak täna",
+    "note": "Eirates iga hoiatust, langeb põhi esimesena.",
+    "events": [
+     "Niinive, Assüüria pealinn",
+     "Põhjakuningriik langeb Assüüria kätte (722 eKr)",
+     "Joona läkitatakse Niinivesse"
+    ]
+   },
+   "babylon": {
+    "name": "Paabel",
+    "book": "2. Kuningate 25 · Taaniel · Hesekiel",
+    "today": "Hilla, Iraak täna",
+    "note": "Kõige pimedam öö — ometi jääb taastamise tõotus püsima.",
+    "events": [
+     "Jeruusalemm langeb, tempel põletatakse (586 eKr)",
+     "Juuda viiakse Paabelisse",
+     "Taaniel ja Hesekiel — usk ja nägemused paguluses"
+    ]
+   },
+   "susa": {
+    "name": "Suusa (Pärsia)",
+    "book": "Ester · Nehemja",
+    "today": "Šuš, Iraan täna",
+    "note": "Isegi paganliku riigi südames hoiab Jumal oma rahvast.",
+    "events": [
+     "Pärsia kukutab Paabeli",
+     "Ester päästab juudid hävingust",
+     "Nehemja palvetab kuninga ees ja läkitatakse"
+    ]
+   },
+   "return": {
+    "name": "Tagasitulek Jeruusalemma",
+    "book": "Esra · Nehemja · Malaki",
+    "today": "Jeruusalemm täna",
+    "note": "Nad tulevad tagasi ja ehitavad üles — kuid kuningat ei ole tulnud. Nad ootavad Messiat.",
+    "events": [
+     "Kolm tagasituleku lainet Kyrose käsul (Serubbaabel 538 · Esra 458 · Nehemja 444)",
+     "Tempel taastatakse ja Jeruusalemma müürid ehitatakse üles",
+     "Malaki — Vana Testament lõpeb: ma läkitan oma käskjala"
+    ]
+   }
+  },
+  "labels": [
+   "Vahemeri",
+   "Mesopotaamia",
+   "Araabia kõrb",
+   "Egiptus"
+  ],
+  "journeys": {
+   "flow": "Lunastuslugu"
+  }
+ },
+ "jesus": {
+  "places": {
+   "bethlehem": {
+    "name": "Petlemm",
+    "book": "Matteuse 1–2 · Luuka 2",
+    "today": "Petlemm täna",
+    "note": "Tõotatud Messias tuleb Taaveti linna — Sõna sai lihaks.",
+    "events": [
+     "Sündinud Petlemmas, Taaveti linnas",
+     "Inglid kuulutavad sõnumit karjastele",
+     "Tähetargad tulevad teda kummardama"
+    ]
+   },
+   "nazareth": {
+    "name": "Naatsaret",
+    "book": "Luuka 2 · 4",
+    "today": "Naatsaret täna",
+    "note": "Jumal kasvab inimesena üles tavalises linnas.",
+    "events": [
+     "Kasvab üles puusepa kodus",
+     "Kaheteistaastaselt küsib ja vastab templis",
+     "Hiljem hüljatakse ta oma kodulinna sünagoogis"
+    ]
+   },
+   "jordan": {
+    "name": "Jordani jõgi",
+    "book": "Matteuse 3–4",
+    "today": "Alam-Jordan täna",
+    "note": "Algab tema avalik teenistus — taevas kinnitab ta Pojaks.",
+    "events": [
+     "Ristitud Johannese poolt",
+     "Vaim laskub tuvina — see on minu armas Poeg",
+     "Võidab kõrbes Saatana kolm kiusatust"
+    ]
+   },
+   "cana": {
+    "name": "Kaana",
+    "book": "Johannese 2",
+    "today": "Kafr Kanna täna",
+    "note": "Oma esimeses tunnustähes ilmutab ta oma au.",
+    "events": [
+     "Külaline pulmas",
+     "Vesi muudetakse veiniks — tema esimene tunnustäht",
+     "Ta jüngrid usuvad temasse"
+    ]
+   },
+   "sychar": {
+    "name": "Sühhar (Samaaria)",
+    "book": "Johannese 2–4",
+    "today": "Nablusi lähedal täna",
+    "note": "Varase teenistuse tee — läbi Jeruusalemma ja edasi põlatud Samaariasse.",
+    "events": [
+     "Ta puhastab templi Jeruusalemmas",
+     "Öösel Nikodeemos — te peate uuesti sündima",
+     "Elav vesi Samaaria naisele"
+    ]
+   },
+   "capernaum": {
+    "name": "Kapernaum",
+    "book": "Matteuse 4–13 · Markuse 1–4",
+    "today": "Galilea järve kallas täna",
+    "note": "Galilea teenistuse tugipunkt — kutsumine, õpetus ja vastuseis kohtuvad siin.",
+    "events": [
+     "Kutsub kalurid ja teeb sellest oma tugipunkti",
+     "Mäejutlus — õndsad on vaimus vaesed",
+     "Kuningriigi tähendamissõnad — ja kasvav vastuseis"
+    ]
+   },
+   "galilee": {
+    "name": "Galilea meri",
+    "book": "Markuse 4 · 6 · Johannese 6",
+    "today": "Kinnereti järv täna",
+    "note": "Väega looduse üle näitab ta, kes ta on.",
+    "events": [
+     "Ole vait, jää vakka — ta vaigistab tormi",
+     "Toidab viie leiva ja kahe kalaga 5000 inimest",
+     "Kõnnib vee peal"
+    ]
+   },
+   "caesarea_p": {
+    "name": "Filippi Kaisarea",
+    "book": "Matteuse 16–17",
+    "today": "Banias täna",
+    "note": "Jüngrid mõistavad, et ta on Kristus, ja avaneb risti tee.",
+    "events": [
+     "Peetruse tunnistus — sina oled Kristus, elava Jumala Poeg",
+     "Ta kuulutab esimest korda ette oma surma ja ülestõusmist",
+     "Muutub mäel aus"
+    ]
+   },
+   "jericho": {
+    "name": "Jeeriko",
+    "book": "Luuka 18–19",
+    "today": "Jeeriko täna",
+    "note": "Teel üles Jeruusalemma otsib ta kadunuid.",
+    "events": [
+     "Ta annab pimedale Bartimeusele nägemise",
+     "Ta kutsub tölner Sakkeuse",
+     "Inimese Poeg tuli otsima ja päästma kadunut"
+    ]
+   },
+   "bethany": {
+    "name": "Betaania",
+    "book": "Johannese 11–12",
+    "today": "al-Eizariya täna",
+    "note": "Ta näitab võimu surma üle oma viimase nädala eelõhtul.",
+    "events": [
+     "Ta äratab Laatsaruse hauast — mina olen ülestõusmine ja elu",
+     "Maarja võiab ta matmiseks",
+     "See tunnustäht kinnistab plaani ta tappa"
+    ]
+   },
+   "jerusalem": {
+    "name": "Jeruusalemm",
+    "book": "Matteuse 21–28 · Luuka 24 · Apostlite teod 1",
+    "today": "Jeruusalemm täna",
+    "note": "Haripunkt, millele kogu Piibel osutab — rist, ülestõusmine, taevasseminek.",
+    "events": [
+     "Võidukas sissesõit; ta lükkab taas ümber templi lauad",
+     "Viimsel õhtusöömaajal peseb ta jüngrite jalgu",
+     "Ta sureb ristil",
+     "Tõuseb kolmandal päeval üles, siis läheb taevasse"
+    ]
+   }
+  },
+  "labels": [
+   "Vahemeri",
+   "Galilea",
+   "Samaaria",
+   "Juudamaa",
+   "Dekapolis",
+   "Perea",
+   "Surnumeri"
+  ],
+  "journeys": {
+   "life": "Jeesuse tee"
+  }
+ },
+ "paul": {
+  "places": {
+   "antioch": {
+    "name": "Antiookia",
+    "book": "Apostlite teod 13 · 15",
+    "today": "Antakya, Türgi täna",
+    "note": "Läkitav kogudus, kust paganamisjon algab ja kuhu see naaseb.",
+    "events": [
+     "Palves eraldab Vaim Barnabase ja Sauluse",
+     "Kogudus, kus usklikke esimest korda kristlasteks hüüti",
+     "Esimese, teise ja kolmanda reisi lähtepunkt"
+    ]
+   },
+   "seleucia": {
+    "name": "Seleukia",
+    "book": "Apostlite teod 13:4",
+    "today": "Türgi täna",
+    "note": "Antiookia sadam — nad purjetavad Küprosele.",
+    "events": []
+   },
+   "salamis": {
+    "name": "Salamis (Küpros)",
+    "book": "Apostlite teod 13:5",
+    "today": "Küpros täna",
+    "note": "Esimene peatus Küprosel — kuulutamine sünagoogides.",
+    "events": []
+   },
+   "paphos": {
+    "name": "Pafos",
+    "book": "Apostlite teod 13:6-12",
+    "today": "Küpros täna",
+    "note": "Vägi ilmneb nende vastu, kes evangeeliumile vastu seisavad.",
+    "events": [
+     "Nõid Elümas lööakse pimedaks",
+     "Prokonsul Sergius Paulus hakkab uskuma",
+     "Siitpeale võtab juhtimise «Paulus»"
+    ]
+   },
+   "perga": {
+    "name": "Perge",
+    "book": "Apostlite teod 13:13",
+    "today": "Antalya, Türgi täna",
+    "note": "Sadam Pamfüülias — siin pöördub Johannes Markus tagasi.",
+    "events": []
+   },
+   "pantioch": {
+    "name": "Pisiidia Antiookia",
+    "book": "Apostlite teod 13:14-50",
+    "today": "Yalvaç, Türgi täna",
+    "note": "Evangeelium avaneb paganate poole.",
+    "events": [
+     "Pikk päästeloo jutlus sünagoogis",
+     "Paljud paganad rõõmustavad ja võtavad sõna vastu",
+     "Vastuseis ajab nad välja"
+    ]
+   },
+   "iconium": {
+    "name": "Ikoonion",
+    "book": "Apostlite teod 14:1-7",
+    "today": "Konya, Türgi täna",
+    "note": "Paljud hakkavad uskuma, kuid tagakiusamine sunnib neid edasi minema.",
+    "events": []
+   },
+   "lystra": {
+    "name": "Lüstra",
+    "book": "Apostlite teod 14:8-20",
+    "today": "Türgi täna",
+    "note": "Teda tervitatakse jumalana, siis visatakse kividega.",
+    "events": [
+     "Tervendab sünnist saati jalutu mehe",
+     "Rahvahulk tahab neile kui jumalatele ohverdada",
+     "Kividega visatud ja surnuks peetud, tõuseb ta üles"
+    ]
+   },
+   "derbe": {
+    "name": "Derbe",
+    "book": "Apostlite teod 14:20-21",
+    "today": "Türgi täna",
+    "note": "Tehakse palju jüngreid; nad tulevad sama teed tagasi, et kogudusi kinnitada.",
+    "events": []
+   },
+   "troas": {
+    "name": "Troas",
+    "book": "Apostlite teod 16:8-10",
+    "today": "Türgi täna",
+    "note": "Pöördepunkt, kus evangeelium suundub esimest korda Euroopasse.",
+    "events": [
+     "Nägemus Makedoonia mehest",
+     "Tule meid aitama",
+     "Nad lähevad kohe üle Euroopasse"
+    ]
+   },
+   "philippi": {
+    "name": "Filippi",
+    "book": "Apostlite teod 16 · Filiplastele",
+    "today": "Põhja-Kreeka täna",
+    "note": "Euroopa esimene kogudus — evangeelium võidutseb isegi vangis.",
+    "events": [
+     "Purpurikaupmees Lüüdia hakkab uskuma",
+     "Ennustaja ori tüdruk vabastatakse",
+     "Kesköised kiituslaulud, maavärin, vangivalvuri pere pääseb"
+    ]
+   },
+   "thess": {
+    "name": "Tessaloonika",
+    "book": "Apostlite teod 17 · 1.–2. Tessalooniklastele",
+    "today": "Thessaloniki, Kreeka täna",
+    "note": "Sõna raputab linna ja vastuseis kihab üle.",
+    "events": [
+     "Arutleb sünagoogis kolmel hingamispäeval",
+     "Need, kes on maailma pea peale pööranud",
+     "Nad lahkuvad öösel salaja"
+    ]
+   },
+   "berea": {
+    "name": "Beroia",
+    "book": "Apostlite teod 17:10-15",
+    "today": "Veria, Kreeka täna",
+    "note": "«Õilsad», kes ise sõna uurisid.",
+    "events": [
+     "Nad võtavad sõna innukalt vastu",
+     "Iga päev uurivad nad Pühakirja, et seda kontrollida",
+     "Paljud hakkavad uskuma"
+    ]
+   },
+   "athens": {
+    "name": "Ateena",
+    "book": "Apostlite teod 17:16-34",
+    "today": "Ateena, Kreeka täna",
+    "note": "Filosoofide linnas kuulutab ta «tundmatut Jumalat».",
+    "events": [
+     "Ebajumalaid täis linn ärgitab teda",
+     "Areopaagil kuulutab ta Loojat ja ülestõusmist",
+     "Teda pilgatakse, ometi mõned hakkavad uskuma"
+    ]
+   },
+   "corinth": {
+    "name": "Korintos",
+    "book": "Apostlite teod 18 · 1.–2. Korintlastele",
+    "today": "Kreeka täna",
+    "note": "Ta jääb pooleteiseks aastaks, rajades koguduse pahede linna.",
+    "events": [
+     "Teeb telke koos Akvila ja Priskillaga",
+     "Ära karda … sest mina olen sinuga",
+     "Paljud korintlased hakkavad uskuma ja ristitakse"
+    ]
+   },
+   "ephesus": {
+    "name": "Efesos",
+    "book": "Apostlite teod 19 · Efeslastele",
+    "today": "Selçuk, Türgi täna",
+    "note": "Kolmanda reisi süda — sõna levib üle Aasia.",
+    "events": [
+     "Kaks aastat igapäevast õpetust Türannose saalis",
+     "Nõiaraamatud põletatakse; vägevad teod",
+     "Hõbesepp Demeetrios õhutab rahutuse"
+    ]
+   },
+   "miletus": {
+    "name": "Mileetos",
+    "book": "Apostlite teod 20:17-38",
+    "today": "Türgi täna",
+    "note": "Pisarais hüvastijätt Efesose vanematega.",
+    "events": [
+     "Hoolitsege koguduse eest, mille ta on omandanud oma verega",
+     "Vanemad nutavad, teades, et ei näe teda enam"
+    ]
+   },
+   "caesarea": {
+    "name": "Kaisarea",
+    "book": "Apostlite teod 23–26",
+    "today": "Iisraeli rannik täna",
+    "note": "Kaks aastat kaitseb ta evangeeliumi maavalitsejate ja kuninga ees.",
+    "events": [
+     "Kohtuprotsessid maavalitsejate Feeliksi ja Festuse ees",
+     "Tema kaitsekõne kuningas Agrippa ees",
+     "Ma nõuan keisri kohut — edasi Rooma"
+    ]
+   },
+   "jerusalem": {
+    "name": "Jeruusalemm",
+    "book": "Apostlite teod 21–23",
+    "today": "Jeruusalemm täna",
+    "note": "Templis kinni võetud, algab tema tee vangina.",
+    "events": [
+     "Rahvahulk võtab ta templis kinni",
+     "Ta kaitseb end suurkohtu ees",
+     "Rooma kodanikuna saadetakse ta valve all Kaisareasse"
+    ]
+   },
+   "myra": {
+    "name": "Müüra",
+    "book": "Apostlite teod 27:5-6",
+    "today": "Demre, Türgi täna",
+    "note": "Nad lähevad üle Rooma poole suunduvale Aleksandria laevale.",
+    "events": []
+   },
+   "fairhaven": {
+    "name": "Head Sadamad (Kreeta)",
+    "book": "Apostlite teod 27:8-12",
+    "today": "Kreeta täna",
+    "note": "Pauluse hoiatust purjetamist katkestada ei võeta kuulda.",
+    "events": []
+   },
+   "crete": {
+    "name": "Kreeta",
+    "book": "Tiitusele",
+    "today": "Kreeta täna",
+    "note": "Pärast vabanemist saar, kuhu ta jätab Tiituse kogudusi korda seadma.",
+    "events": [
+     "Jätab Tiituse igasse linna vanemaid seadma",
+     "Nõuab laitmatuid, ustavaid juhte",
+     "Kirjutab kirja Tiitusele"
+    ]
+   },
+   "malta": {
+    "name": "Malta",
+    "book": "Apostlite teod 27–28",
+    "today": "Malta täna",
+    "note": "Läbi tormi ja laevahuku peab Jumala tõotus vastu.",
+    "events": [
+     "«Kirdetorm» hävitab laeva, ometi jäävad kõik 276 ellu",
+     "Rästiku hammustatud, jääb ta vigastamata",
+     "Ta tervendab saare haiged"
+    ]
+   },
+   "syracuse": {
+    "name": "Sürakuusa",
+    "book": "Apostlite teod 28:12",
+    "today": "Sitsiilia, Itaalia täna",
+    "note": "Nad jäävad Sitsiiliasse kolmeks päevaks.",
+    "events": []
+   },
+   "puteoli": {
+    "name": "Puteoli",
+    "book": "Apostlite teod 28:13-14",
+    "today": "Pozzuoli, Itaalia täna",
+    "note": "Nad maabuvad Itaalias ja usukaaslased tulevad neile vastu.",
+    "events": []
+   },
+   "rome": {
+    "name": "Rooma",
+    "book": "Apostlite teod 28 · vanglakirjad · 2. Timoteosele",
+    "today": "Rooma, Itaalia täna",
+    "note": "Evangeelium jõuab lõpuks riigi südamesse — mitte lõpp, vaid algus.",
+    "events": [
+     "Kaks aastat koduarestis, kuulutades julgelt Jumala riiki",
+     "Siit kirjutab ta vanglakirjad (Ef·Fl·Kl·Fm)",
+     "Hiljem taas vangistatud, kirjutab 2. Timoteose kirja ja saab märtriks — olen võidelnud head võitlemist, olen lõpetanud jooksmise"
+    ]
+   }
+  },
+  "labels": [
+   "Vahemeri",
+   "Egeuse meri",
+   "Väike-Aasia",
+   "Makedoonia",
+   "Itaalia"
+  ],
+  "journeys": {
+   "j1": "Esimene reis",
+   "j2": "Teine reis",
+   "j3": "Kolmas reis",
+   "rome": "Neljas reis · Rooma",
+   "j5": "Viies reis · pärast vabanemist"
+  }
+ }
+}

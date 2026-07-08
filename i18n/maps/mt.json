@@ -35,7 +35,7 @@
     "today": "ir-reġjun tat-Tigri u l-Ewfrat illum",
     "note": "F’dinja maħluqa tajba ħafna, jidħol id-dnub u jkisser ir-rabta bejn Alla u l-bniedem.",
     "events": [
-     "Ħolqien fi sitt ijiem — “tajba ħafna”",
+     "Ħolqien fi sitt ijiem — “tajjeb ħafna”",
      "Il-bniedem maħluq fuq xbieha ta’ Alla",
      "Il-Waqgħa, u t-tkeċċija mill-Għeden",
      "L-ewwel wegħda tal-Evanġelju — “in-nisel tal-mara jisħaq ras is-serp”"
@@ -49,7 +49,7 @@
     "events": [
      "Dinja mimlija ħażen",
      "Id-dilluvju, u l-arka ta’ Noè",
-     "Il-patt tal-qaws tas-sema — “qatt iżjed dilluvju biex jeqred”"
+     "Il-patt tal-qaws tas-sema — “qatt iżjed … dilluvju biex iħarbat l-art”"
     ]
    },
    "babel": {
@@ -58,7 +58,7 @@
     "today": "l-Iraq illum (il-pjanura ta’ Xingħar)",
     "note": "Kontra l-kburija li tilħaq lejn is-sema, Alla jħawwad ilsienhom u jxerred il-popli mal-art.",
     "events": [
-     "“Ejjew nibnu belt u torri … u nagħmlu isem għalina”",
+     "“Ejjew nibnu belt għalina, u torri … u nagħmlu isem għalina”",
      "Alla jħawwad ilsienhom",
      "Il-popli jinxterdu mal-art (Xingħar — iktar tard Babilonja)"
     ]
@@ -70,7 +70,7 @@
     "note": "L-istorja tal-fidwa tal-Bibbja tibda bis-sejħa ta’ bniedem wieħed.",
     "events": [
      "Alla jsejjaħ lil Abram minn Ur tal-Kaldin",
-     "“Nagħmlek ġens kbir … il-popli kollha jitbierku bik”",
+     "“nagħmlek ġens kbir … u int tkun barka”",
      "Bil-fidi jħalli art twelidu"
     ]
    },
@@ -91,7 +91,7 @@
     "today": "Nablus illum",
     "note": "Fl-art imwiegħda titwaqqaf familja u l-patt jgħaddi minn ġenerazzjoni għal oħra.",
     "events": [
-     "Deħla f’Kangħan, l-ewwel artal — “lil nislek nagħti din l-art”",
+     "Deħla f’Kangħan, l-ewwel artal — “Lil nislek għad nagħti din l-art”",
      "Il-patt (Ġen 15) · Iżakk · Ġakobb",
      "It-tnax-il iben ta’ Ġakobb — l-għerq tat-tnax-il tribù"
     ]
@@ -158,7 +158,7 @@
     "note": "L-era tad-deheb ta’ Iżrael — u l-wegħda ta’ sultan etern.",
     "events": [
      "Sawl l-ewwel sultan, imbagħad David u Gulija",
-     "Il-patt ma’ David — “it-tron tiegħek għal dejjem” (2 Sam 7)",
+     "Il-patt ma’ David — “It-tron tiegħek jibqa’ sħiħ għal dejjem” (2 Sam 7)",
      "Salamun jibni t-tempju f’Ġerusalemm"
     ]
    },
@@ -281,7 +281,7 @@
     "note": "It-triq tal-ewwel ministeru — minn Ġerusalemm sa Samarija mistmerra.",
     "events": [
      "Inaddaf it-tempju f’Ġerusalemm",
-     "Billejl, Nikodemu — “Jeħtiġilek titwieled mill-ġdid”",
+     "Billejl, Nikodemu — “jeħtiġilkom titwieldu mill-ġdid”",
      "Ilma ħaj għal mara Samaritana"
     ]
    },
@@ -302,7 +302,7 @@
     "today": "l-għadira Kinneret illum",
     "note": "Bil-qawwa fuq in-natura juri min hu.",
     "events": [
-     "“Iskot, ikun hemm kwiet” — ihedded il-maltempata",
+     "“Iskot! Biżżejjed!” — ihedded il-maltempata",
      "Jitma’ 5,000 b’ħames ħobżiet u żewġ ħutiet",
      "Jimxi fuq l-ilma"
     ]
@@ -313,7 +313,7 @@
     "today": "Banias illum",
     "note": "Id-dixxipli jifhmu li hu l-Kristu, u tinfetaħ it-triq tas-salib.",
     "events": [
-     "L-istqarrija ta’ Pietru — “Inti l-Messija, l-Iben ta’ Alla l-ħaj”",
+     "L-istqarrija ta’ Pietru — “Inti l-Messija, Bin Alla l-ħaj”",
      "L-ewwel iħabbar il-mewt u l-qawmien tiegħu",
      "Ittrasfigurat fil-glorja fuq il-muntanja"
     ]
@@ -335,7 +335,7 @@
     "today": "al-Eizariya illum",
     "note": "Juri ħakma fuq il-mewt lejlet l-aħħar ġimgħa tiegħu.",
     "events": [
-     "Iqajjem lil Lazzru mill-qabar — “Jiena l-qawmien u l-ħajja”",
+     "Iqajjem lil Lazzru mill-qabar — “Jien hu l-qawmien u l-ħajja”",
      "Marija tidilku għad-difna",
      "Dan is-sinjal iwebbes il-komplott biex joqtluh"
     ]
@@ -476,7 +476,7 @@
     "note": "Il-kelma tħawwad il-belt u l-oppożizzjoni tegħli.",
     "events": [
      "Jitkellem fis-sinagoga tliet Sibtijiet",
-     "“Dawn li qalbu d-dinja ta’ taħt fuq”",
+     "“Dawn l-irġiel, li qallbu d-dinja ta’ taħt fuq”",
      "Jitilqu bil-lejl"
     ]
    },
@@ -530,7 +530,7 @@
     "today": "it-Turkija illum",
     "note": "Firda bid-dmugħ mill-anzjani ta’ Efesu.",
     "events": [
-     "“Irgħu l-knisja li hu kiseb b’demmu stess”",
+     "“tirgħu l-Knisja ta’ Alla li hu kiseb b’demmu stess”",
      "L-anzjani jibku, jafu li mhux se jerġgħu jarawh"
     ]
    },
@@ -542,7 +542,7 @@
     "events": [
      "Proċessi quddiem il-gvernaturi Feliċ u Festu",
      "Id-difiża tiegħu quddiem is-sultan Agrippa",
-     "“Nappella lil Ċesari” — lejn Ruma"
+     "“Nappella għal quddiem Ċesari” — lejn Ruma"
     ]
    },
    "jerusalem": {

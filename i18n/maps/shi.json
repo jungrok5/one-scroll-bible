@@ -1,0 +1,636 @@
+{
+ "menuName": "Tašlḥiyt",
+ "htmlLang": "shi",
+ "dir": "ltr",
+ "locale": "shi",
+ "brand": "Lkitab amzlu ġ‑yan‑warra",
+ "docTitle": "Lkitab s‑ukard · Lkitab amzlu ġ‑yan‑warra",
+ "metaDesc": "Ḍfuṛ azmz n‑Lɛahd Aqdim, tudrt n‑yasuɛ, d‑isafarn n‑Bulus f‑yan‑ukard n‑tidt — Lkitab ijra ġ‑imukan n‑tidt.",
+ "s": {
+  "kicker": "Lkitab amzlu ġ‑yan‑warra · Ikardn",
+  "title": "Lkitab s‑ukard",
+  "verse": "“ur‑a‑nbnnu f‑kra n‑tḥajiyin tyawskarnin s‑lɛaql n‑bnadm ġakud lliġ‑awn‑nsawl f‑mamnk a‑d‑yuška siditnnġ yasuɛ lmasiḥ s‑tḥkimt itjhhdn. ašku nkkʷni nẓra timuġra‑ns,” (2 Buṭrus 1:16)",
+  "purpose": "Lkitab urd tah̬kayt n‑tkrkas. Iga tira f‑mddn lli‑ftan ġ‑imukan, izmaz, d‑ismawn n‑tidt. Ḍfuṛ iɣarasn‑an ġ‑ukard, s‑umizwar n‑uzmz — ut ġ‑yat‑tnqqiḍt, nġd ut ▶ baš a‑tzrit srs asurif s‑usurif.",
+  "ot_kick": "① Lɛahd Aqdim — s‑uzmz",
+  "ot_h": "Zġ‑lh̬lq ar‑tuɣalin s‑Urušalim",
+  "ot_lead": "Urd yan‑usafar ɣir yan, walaynni azray n‑umzruy n‑unjjam zġ‑lh̬lq s‑dat: lh̬lq d‑uṭṭiy → ṭṭufan d‑Babil → tiɣri (Ibrahim) → tamazirt n‑lwaɛd → Affuɣ → lh̬la → akšam → tagldit → abḍu → ah̬bas → tuɣalin.",
+  "je_kick": "② Lɛahd Amaynu — tudrt n‑yasuɛ",
+  "je_h": "Zġ‑Bayt Laḥm ar‑Urušalim",
+  "je_lead": "Ḍfuṛ tudrt n‑yasuɛ zund ma‑tt‑ttinin linjilat, s‑umizwar — zġ‑talalit‑ns ġ‑Bayt Laḥm, s‑usddam‑ns d‑lh̬dmt‑ns ġ‑Jalil, s‑Samira, ar‑uggjdi, ankar, d‑uɣulli s‑ujnna ġ‑Urušalim.",
+  "pa_kick": "③ Lɛahd Amaynu — isafarn n‑Bulus",
+  "pa_h": "Zġ‑Anṭakiya ar‑timizar aggugnin n‑ddunit — Ruma",
+  "pa_lead": "Zġ‑lɛnṣart ġ‑Urušalim, mamnk a‑izduy lh̬bar ifulkin berra n‑Yahuda — s‑Asya Tamẓyant d‑Uruppa ar‑wul n‑tgldit tameqqrant. Sti yan zġ‑smmus n‑isafarn (amzwaru·wis sin·wis kraḍ + asafar s‑Ruma + awddi n‑tlelli), tḍfuṛt tigawin n‑Lh̬rakat n‑imazann d‑tbratin lli‑ityaran ġ‑uɣaras.",
+  "foot": "Iɣbula · Imukan ar‑ḍfuṛn awal n‑Lkitab d‑ljuɣrafiya ittwassann n‑Lkitab (s‑ismawn n‑ġilad mani a‑ġ‑infaɛ). Tama n‑lbḥr, isaffn, d‑iglman ttwasunɣn zġ‑isfka n‑ljuɣrafiya iyrzimn (Natural Earth), ttwashaln.",
+  "contact": "Isqsitn · taɛrubin — <a id=\"contact\" class=\"mail\">Azn‑aɣ‑d brid</a>",
+  "play": "Bdu",
+  "pause": "Ḥbs",
+  "today": "Ġilad:",
+  "verseCite": "2 Buṭrus 1:16"
+ },
+ "ot": {
+  "places": {
+   "eden": {
+    "name": "ɛdn (Lh̬lq · Aṭṭiy)",
+    "book": "Attakwin 1–3",
+    "today": "tamnaḍt n‑Dijla–Lfurat ġilad",
+    "note": "S‑ddunit lli‑igan «tafulkit bahra», ikšm‑d ddnub, ibbi umya gr Rbbi d‑bnadm.",
+    "events": [
+     "Lh̬lq ġ‑sḍiss n‑wussan — «tafulkit bahra»",
+     "Bnadm ittwah̬llaq s‑ssura n‑Rbbi",
+     "Aṭṭiy, d‑ugluy zġ‑ɛdn",
+     "Lwaɛd amzwaru n‑lh̬bar ifulkin — «amud n‑tmġart ra‑irẓ aɣf n‑ulh̬nnaš»"
+    ]
+   },
+   "noah": {
+    "name": "Ararat (Ṭṭufan)",
+    "book": "Attakwin 6–9",
+    "today": "Adrar Ararat, ššrq n‑Turkiya ġilad",
+    "note": "Rbbi ih̬kam f‑ddunit lli‑iččurn s‑ddnub, walaynni iḥḍu tudrt s‑yat‑tawja.",
+    "events": [
+     "Ddunit tččur s‑lhh̬sant",
+     "Ṭṭufan, d‑uɣrrabu n‑Nuḥ",
+     "Lɛahd n‑tslit n‑unẓar — «ur‑sar‑ra‑d‑yaška uṭṭufan a‑ihlkn ddunit»"
+    ]
+   },
+   "babel": {
+    "name": "Lbrj n‑Babil",
+    "book": "Attakwin 11",
+    "today": "Lɛiraq ġilad (azaɣar n‑Šinɛar)",
+    "note": "Mgal lh̬ir lli‑iran a‑iawḍ ajnna, Rbbi isshh̬laḍ tutlayin‑nsn, ifraq imddan ġ‑wakal.",
+    "events": [
+     "«A‑nbnu tamdint d‑lbrj… a‑nskr ism i‑ihh̬f‑nnɣ»",
+     "Rbbi isshh̬laḍ tutlayt‑nsn",
+     "Firqn imddan ġ‑wakal (Šinɛar — awrin Babil)"
+    ]
+   },
+   "ur": {
+    "name": "Ur",
+    "book": "Attakwin 12",
+    "today": "anzul n‑Lɛiraq ġilad",
+    "note": "Tah̬kayt n‑unjjam n‑Lkitab tsnti s‑tiɣri n‑yan‑urgaz.",
+    "events": [
+     "Rbbi isawal i‑Ibram a‑iffuɣ zġ‑Ur n‑Ikaldiyn",
+     "«Ra‑k‑gġ tamazirt tameqqrant… kullu tawjiwin n‑ddunit ra‑ttwabarakn s‑gik»",
+     "S‑liman iffuɣ zġ‑tmazirt‑ns"
+    ]
+   },
+   "haran": {
+    "name": "Ḥaran",
+    "book": "Attakwin 12",
+    "today": "anzul n‑Turkiya ġilad",
+    "note": "Ġ‑uɣaras, ar‑ittarra awal n‑tiɣri s‑tmazirt n‑lwaɛd.",
+    "events": [
+     "Tawja n‑Tariḥ tzdɣ ġ‑Ḥaran",
+     "Immut Tariḥ",
+     "Ibram iftu s‑Kanɛan ġ‑75 n‑usggʷas"
+    ]
+   },
+   "shechem": {
+    "name": "Šakim · Kanɛan",
+    "book": "Attakwin 12–50",
+    "today": "Nablus ġilad",
+    "note": "Ġ‑tmazirt n‑lwaɛd tettwabnu yat‑tawja, lɛahd ar‑itzray i‑tsutin.",
+    "events": [
+     "Akšam s‑Kanɛan, almadbaḥ amzwaru — «i‑amud‑nnk ra‑fkġ tamazirt‑ad»",
+     "Lɛahd (Attakwin 15) · Isḥaq · Yaɛqub",
+     "Mraw‑sin n‑warraw n‑Yaɛqub — aẓur n‑mraw‑sin n‑lqbayl"
+    ]
+   },
+   "egypt": {
+    "name": "Miṣr (Gušan)",
+    "book": "Attakwin 37–50 · Affuɣ 1",
+    "today": "Adilta n‑Nnil, Miṣr ġilad",
+    "note": "Yat‑tawja tettuɣal tamazirt tameqqrant — syn tettuɣal tamazirt n‑ismgan.",
+    "events": [
+     "Yusf, lli‑ittwasnzan, yattuy s‑ssulṭa n‑Miṣr",
+     "Tawja n‑Yaɛqub kullutt tgguz s‑Miṣr baš a‑trwl zġ‑laẓ",
+     "Israyil ittmɣurn ittwag d‑ismgan"
+    ]
+   },
+   "sinai": {
+    "name": "Adrar n‑Sina",
+    "book": "Affuɣ · Allawiyin",
+    "today": "tigzirt n‑Sina ġilad",
+    "note": "Anjjam ameqqran n‑Lɛahd Aqdim — ismgan ttuɣaln d‑tamazirt n‑Rbbi.",
+    "events": [
+     "Mraw n‑lmaṣayb d‑izimr n‑lfiṣḥ",
+     "Illbḥr azggʷaɣ ibbi, zrin mddn",
+     "Mraw n‑luṣayat, ššrɛ, ah̬yam n‑ulqa d‑iseflawn"
+    ]
+   },
+   "kadesh": {
+    "name": "Qadiš (lh̬la)",
+    "book": "Imḍann · Attatniya",
+    "today": "lh̬la n‑Sina–Naqab ġilad",
+    "note": "Ur‑n‑liman iṭṭaf yan‑ujil tamazirt — walaynni Rbbi iqama didsn.",
+    "events": [
+     "Mraw‑sin n‑irgazn lli‑ittwaznun a‑ẓrn tamazirt — walaynni mddn ugin a‑amnn",
+     "38 n‑usggʷas ġ‑lh̬la — lmann, asignu d‑tafat",
+     "Ġ‑luḍa n‑Muab, aslmd amggaru n‑Musa (Attatniya)"
+    ]
+   },
+   "jericho": {
+    "name": "Ariḥa",
+    "book": "Yušaɛ",
+    "today": "Ariḥa ġilad",
+    "note": "Ġ‑umggaru kšmn, amẓn tamazirt n‑lwaɛd.",
+    "events": [
+     "Asif n‑Urdun ibbi, zrin mddn",
+     "Iɣrman n‑Ariḥa ḍrn",
+     "Akšam n‑Kanɛan d‑ubḍu n‑wakal"
+    ]
+   },
+   "shiloh": {
+    "name": "Šilu (Lh̬ukkam)",
+    "book": "Lh̬ukkam · Raɛut",
+    "today": "Hh̬irbat Silun ġilad",
+    "note": "Ur‑illi ugllid, kraygatt yan ar‑iskar maylli iran wul‑ns — iqqan yan‑ugllid n‑tidt.",
+    "events": [
+     "Ah̬yam n‑ulqa ittwabdad ġ‑Šilu",
+     "Tawala n‑ddnub–aḍlam–anjjam (Dabura, Jidɛun, Šimšun)",
+     "Raɛut — lamana ġ‑wussan n‑tillas, ġ‑izri n‑Dawud"
+    ]
+   },
+   "jerusalem": {
+    "name": "Urušalim · Tagldit ittmunn",
+    "book": "1–2 Ṣamwil · 1 Igldan",
+    "today": "Urušalim ġilad",
+    "note": "Uẓmẓ n‑urɣ n‑Israyil — d‑lwaɛd n‑ugllid ibddun ar‑lebda.",
+    "events": [
+     "Šawl agllid amzwaru, syn Dawud d‑Jaluṭ",
+     "Lɛahd n‑Dawud — «lɛrš‑nnk ra‑ibddu ar‑lebda» (2 Ṣamwil 7)",
+     "Sulayman ibnu tamzgida ġ‑Urušalim"
+    ]
+   },
+   "samaria": {
+    "name": "Samira · Tagldit ittwabḍan",
+    "book": "Igldan · Lanbiya",
+    "today": "Sabasṭiya ġilad",
+    "note": "Tagldit tbḍa, tgguz s‑lh̬rab skud lanbiya ar‑ttinin «uɣalat‑d».",
+    "events": [
+     "Awddi n‑Sulayman, tbḍa s‑Yahuda d‑Israyil",
+     "Aɛbad n‑lmɛbudat ar‑ittɛawad",
+     "Iliyas, Išaɛya, Irmiya ar‑ttinin «uɣalat‑d» — ttbrraḥn f‑lmasiḥ"
+    ]
+   },
+   "nineveh": {
+    "name": "Ninwa (Ašur)",
+    "book": "2 Igldan 17 · Yunus",
+    "today": "Musul, Lɛiraq ġilad",
+    "note": "Ur‑ismḥssa i‑kraygatt anbbah, agafa iḍr d‑amzwaru.",
+    "events": [
+     "Ninwa, tamanaɣt n‑Ašur",
+     "Tagldit n‑ugafa taṭṭiy s‑Ašur (722 dat‑lmasiḥ)",
+     "Yunus ittwazn s‑Ninwa"
+    ]
+   },
+   "babylon": {
+    "name": "Babil",
+    "book": "2 Igldan 25 · Daniyal · Ḥizqiyal",
+    "today": "Ḥilla, Lɛiraq ġilad",
+    "note": "Iḍ lli‑iugarn ġ‑tillas — walaynni lwaɛd n‑tuɣalin isul.",
+    "events": [
+     "Urušalim tḍr, terɣ tmzgida (586 dat‑lmasiḥ)",
+     "Yahuda ittwawi s‑Babil",
+     "Daniyal d‑Ḥizqiyal — liman d‑tirja ġ‑lh̬abs"
+    ]
+   },
+   "susa": {
+    "name": "Šušan (Faris)",
+    "book": "Astir · Naḥamya",
+    "today": "Šuš, Iran ġilad",
+    "note": "Ula ġ‑wul n‑tgldit taberraniyt, Rbbi ar‑iḥḍu mddn‑ns.",
+    "events": [
+     "Faris tnra Babil",
+     "Astir tjjnjm udayn zġ‑lhlak",
+     "Naḥamya iẓẓall dat‑ugllid, ittwazn"
+    ]
+   },
+   "return": {
+    "name": "Tuɣalin s‑Urušalim",
+    "book": "ɛizra · Naḥamya · Malaki",
+    "today": "Urušalim ġilad",
+    "note": "Uɣaln‑d, bnun daɣ — walaynni ur‑d‑yuški ugllid. Ar‑ṣbarn i‑lmasiḥ.",
+    "events": [
+     "Kraḍ n‑twalatin n‑tuɣalin s‑lamr n‑Kuruš (Zurubabil 538 · ɛizra 458 · Naḥamya 444)",
+     "Tamzgida tettwabnu daɣ, iɣrman n‑Urušalim ttwasmsasan",
+     "Malaki — Lɛahd Aqdim ar‑ikmml: «ra‑d‑zn‑ġ amazan‑inu»"
+    ]
+   }
+  },
+  "labels": [
+   "Lbḥr Agrakal",
+   "Mizubutamya",
+   "Lh̬la Taɛrabt",
+   "Miṣr"
+  ],
+  "journeys": {
+   "flow": "Tah̬kayt n‑unjjam"
+  }
+ },
+ "jesus": {
+  "places": {
+   "bethlehem": {
+    "name": "Bayt Laḥm",
+    "book": "Matta 1–2 · Luqa 2",
+    "today": "Bayt Laḥm ġilad",
+    "note": "Lmasiḥ ittwawaɛdn yuška‑d s‑tmdint n‑Dawud — awal iwrri iga bnadm.",
+    "events": [
+     "Ilul‑d ġ‑Bayt Laḥm, tamdint n‑Dawud",
+     "Lmalayka ar‑ttbrraḥn lh̬bar i‑imksawn",
+     "Imusnawn n‑itran uškan‑d a‑t‑sjjdn"
+    ]
+   },
+   "nazareth": {
+    "name": "Naṣart",
+    "book": "Luqa 2 · 4",
+    "today": "Naṣart ġilad",
+    "note": "Rbbi imɣur zund bnadm ġ‑yat‑tmdint imẓyann.",
+    "events": [
+     "Imɣur ġ‑tgmmi n‑unjjar",
+     "Ġ‑mraw‑sin n‑usggʷas, ar‑isqsa ar‑ittarra ġ‑tmzgida",
+     "Ġ‑umggaru ittwankr ġ‑tmzgida n‑tmazirt‑ns"
+    ]
+   },
+   "jordan": {
+    "name": "Asif n‑Urdun",
+    "book": "Matta 3–4",
+    "today": "Urdun n‑izddar ġilad",
+    "note": "Lh̬dmt‑ns tbda dat‑mddn — ajnna ittchhad is‑iga Yus‑ns.",
+    "events": [
+     "Ittsddam s‑Yuḥanna",
+     "Rruḥ igguz zund tadbirt — «Wad iga yus‑inu iɛzzan»",
+     "Inra kraḍ n‑tjrribin n‑ibliss ġ‑lh̬la"
+    ]
+   },
+   "cana": {
+    "name": "Qana",
+    "book": "Yuḥanna 2",
+    "today": "Kafr Kanna ġilad",
+    "note": "Ġ‑tmatart‑ns tamzwarut, iml lmjd‑ns.",
+    "events": [
+     "Anbgi ġ‑tmɣra",
+     "Aman uɣaln d‑ccrab — tamatart‑ns tamzwarut",
+     "Umnn srs imḥḍarn‑ns"
+    ]
+   },
+   "sychar": {
+    "name": "Sikar (Samira)",
+    "book": "Yuḥanna 2–4",
+    "today": "tama n‑Nablus ġilad",
+    "note": "Aɣaras n‑lh̬dmt tamzwarut — s‑Urušalim ar‑Samira lli‑ittwaḥqarn.",
+    "events": [
+     "Issizdig tamzgida ġ‑Urušalim",
+     "S‑iḍ, Nikudimus — «iqqan‑k a‑d‑tlalt daɣ»",
+     "Aman iddrn i‑yat‑tmġart n‑Samira"
+    ]
+   },
+   "capernaum": {
+    "name": "Kafarnaḥum",
+    "book": "Matta 4–13 · Markus 1–4",
+    "today": "tama n‑lbḥirt n‑Jalil ġilad",
+    "note": "Llsas n‑lh̬dmt n‑Jalil — tiɣri, aslmd, d‑umnaɣ, kullu ar‑tmlaqan ġid.",
+    "events": [
+     "Isawal i‑iṣiyyadn n‑islman, ig ġid llsas‑ns",
+     "Aslmd f‑udrar — «Imbarkin willi igan imskinn ġ‑rruḥ»",
+     "Lamtal n‑tgldit — d‑umnaɣ ar‑izayd"
+    ]
+   },
+   "galilee": {
+    "name": "Lbḥirt n‑Jalil",
+    "book": "Markus 4 · 6 · Yuḥanna 6",
+    "today": "Lbḥirt Kinnirit ġilad",
+    "note": "S‑ssulṭa‑ns f‑ddunit, iml matta a‑iga.",
+    "events": [
+     "«Ssusm, zga» — issgn aḍu d‑waman",
+     "Iššč 5,000 n‑mddn s‑smmus n‑iɣrumn d‑sin n‑islman",
+     "Iftu f‑waman"
+    ]
+   },
+   "caesarea_p": {
+    "name": "Qayṣariya n‑Filibus",
+    "book": "Matta 16–17",
+    "today": "Baniyas ġilad",
+    "note": "Imḥḍarn fahmn is‑iga lmasiḥ, irẓm uɣaras n‑uggjdi.",
+    "events": [
+     "Tinawt n‑Buṭrus — «Kiyi a‑igan lmasiḥ, Yus n‑Rbbi iddrn»",
+     "Ibrraḥ i‑twala tamzwarut s‑lmut‑ns d‑unkar‑ns",
+     "Ibddl udm‑ns s‑lmjd f‑udrar"
+    ]
+   },
+   "jericho": {
+    "name": "Ariḥa",
+    "book": "Luqa 18–19",
+    "today": "Ariḥa ġilad",
+    "note": "Ġ‑uɣaras n‑uɣulli s‑Urušalim, ar‑isiggil willi jlan.",
+    "events": [
+     "Ifka taẓri i‑Bartimawus adrɣal",
+     "Isawal i‑Zakka amkkas n‑lġaramt",
+     "«Yus n‑bnadm yuška‑d baš a‑isiggil a‑ijjnjm willi jlan»"
+    ]
+   },
+   "bethany": {
+    "name": "Bayt ɛanya",
+    "book": "Yuḥanna 11–12",
+    "today": "Al‑ɛizariya ġilad",
+    "note": "Iml ssulṭa‑ns f‑lmut dat‑dduṛt‑ns tamggarut.",
+    "events": [
+     "Issnkr‑d Laɛzar zġ‑uzkka — «Nkki a‑igan ankar d‑tudrt»",
+     "Maryam tdhn‑t i‑tmḍlt",
+     "Tamatart‑ad tsduqqr lmakr baš a‑t‑nɣn"
+    ]
+   },
+   "jerusalem": {
+    "name": "Urušalim",
+    "book": "Matta 21–28 · Luqa 24 · Lh̬rakat n‑imazann 1",
+    "today": "Urušalim ġilad",
+    "note": "Amkan lli‑s‑itmala kullu Lkitab — aggjdi, ankar, d‑uɣulli s‑ujnna.",
+    "events": [
+     "Akšam n‑lmjd; issnqlab daɣ ṭṭwabl n‑tmzgida",
+     "Ġ‑umkli amggaru, issird iḍarn n‑imḥḍarn‑ns",
+     "Immut f‑uggjdi",
+     "Idr ġ‑wass wis kraḍ, syn iɣulli s‑ujnna"
+    ]
+   }
+  },
+  "labels": [
+   "Lbḥr Agrakal",
+   "Jalil",
+   "Samira",
+   "Yahuda",
+   "Dikabulis",
+   "Pirya",
+   "Lbḥr n‑lmut"
+  ],
+  "journeys": {
+   "life": "Aɣaras n‑yasuɛ"
+  }
+ },
+ "paul": {
+  "places": {
+   "antioch": {
+    "name": "Anṭakiya",
+    "book": "Lh̬rakat n‑imazann 13 · 15",
+    "today": "Anṭakya, Turkiya ġilad",
+    "note": "Tamzgida lli‑d‑isaknin, mani a‑ġ‑tsnti lh̬dmt i‑iberraniyn s‑daɣ ar‑ttuɣal.",
+    "events": [
+     "Ġ‑tẓallit, Rruḥ ifrz Barnaba d‑Šawl",
+     "Tamzgida mani a‑ġ‑ttusman willi umnn «imasiḥiyn» i‑twala tamzwarut",
+     "Amkan n‑uffuɣ n‑isafarn amzwaru, wis sin, d‑wis kraḍ"
+    ]
+   },
+   "seleucia": {
+    "name": "Silukiya",
+    "book": "Lh̬rakat n‑imazann 13:4",
+    "today": "Turkiya ġilad",
+    "note": "Lmrsa n‑Anṭakiya — ftan s‑uɣrrabu s‑Qubrus.",
+    "events": []
+   },
+   "salamis": {
+    "name": "Salamis (Qubrus)",
+    "book": "Lh̬rakat n‑imazann 13:5",
+    "today": "Qubrus ġilad",
+    "note": "Tabḍt tamzwarut ġ‑Qubrus — ttbrraḥn ġ‑tmzgidiwin.",
+    "events": []
+   },
+   "paphos": {
+    "name": "Bafus",
+    "book": "Lh̬rakat n‑imazann 13:6-12",
+    "today": "Qubrus ġilad",
+    "note": "Iban ssulṭa n‑Rbbi mgal willi ibddn i‑lh̬bar ifulkin.",
+    "events": [
+     "Ilimas assḥḥar ittwag d‑adrɣal",
+     "Sarjiyus Bulus lḥakim yumn",
+     "Zġ‑ġid, «Bulus» a‑izwarn"
+    ]
+   },
+   "perga": {
+    "name": "Perga",
+    "book": "Lh̬rakat n‑imazann 13:13",
+    "today": "Anṭalya, Turkiya ġilad",
+    "note": "Lmrsa ġ‑Bamfiliya — ġid Yuḥanna Markus iwrri s‑daffir.",
+    "events": []
+   },
+   "pantioch": {
+    "name": "Anṭakiya n‑Bisidiya",
+    "book": "Lh̬rakat n‑imazann 13:14-50",
+    "today": "Yalvaç, Turkiya ġilad",
+    "note": "Lh̬bar ifulkin irẓm s‑iberraniyn.",
+    "events": [
+     "Aslmd iɣzzifn f‑umzruy n‑unjjam ġ‑tmzgida",
+     "Aṭṭas n‑iberraniyn frḥn, qbln awal",
+     "Ttwassufɣn s‑umnaɣ"
+    ]
+   },
+   "iconium": {
+    "name": "Ikuniya",
+    "book": "Lh̬rakat n‑imazann 14:1-7",
+    "today": "Konya, Turkiya ġilad",
+    "note": "Aṭṭas a‑yumnn, walaynni aḍlam issufɣ‑tn a‑ftun.",
+    "events": []
+   },
+   "lystra": {
+    "name": "Listra",
+    "book": "Lh̬rakat n‑imazann 14:8-20",
+    "today": "Turkiya ġilad",
+    "note": "Ġaln‑t mddn d‑yan‑zġ‑lmɛbudat, syn ṛjmn‑t.",
+    "events": [
+     "Ijjuja yan‑urgaz lli‑ur‑iftin zġ‑talalit‑ns",
+     "Lɣaci ran a‑asn‑fkn iseflawn zund i‑lmɛbudat",
+     "Ṛjmn‑t s‑iẓran, jjan‑t zund immut, walaynni inkr‑d"
+    ]
+   },
+   "derbe": {
+    "name": "Darba",
+    "book": "Lh̬rakat n‑imazann 14:20-21",
+    "today": "Turkiya ġilad",
+    "note": "Ttwag aṭṭas n‑imḥḍarn; uɣaln s‑daffir baš a‑sduqqrn timzgidiwin.",
+    "events": []
+   },
+   "troas": {
+    "name": "Truwas",
+    "book": "Lh̬rakat n‑imazann 16:8-10",
+    "today": "Turkiya ġilad",
+    "note": "Amkan n‑ubddl mani a‑ġ‑iddu lh̬bar ifulkin s‑Uruppa i‑twala tamzwarut.",
+    "events": [
+     "Tirit n‑yan‑urgaz n‑Maqiduniya",
+     "«Ašk‑d s‑ɣur‑nnɣ, tɛiwnt‑aɣ»",
+     "Zrin ġ‑lḥin s‑Uruppa"
+    ]
+   },
+   "philippi": {
+    "name": "Filibbi",
+    "book": "Lh̬rakat n‑imazann 16 · Filibbi",
+    "today": "agafa n‑Lyunan ġilad",
+    "note": "Tamzgida tamzwarut n‑Uruppa — lh̬bar ifulkin irbḥ ula ġ‑lh̬abs.",
+    "events": [
+     "Lidiya, tanzzatt n‑lqmaš aguggam, tumn",
+     "Yat‑taklt lli‑ittinin lġib tettwajjnjm",
+     "Izlan ġ‑tuzzumt n‑iḍ, zzalzla, tawja n‑uɛssas n‑lh̬abs tettwajjnjm"
+    ]
+   },
+   "thess": {
+    "name": "Tisalunika",
+    "book": "Lh̬rakat n‑imazann 17 · 1–2 Tisalunika",
+    "today": "Tisaluniki, Lyunan ġilad",
+    "note": "Awal issnhzz tamdint, inkr‑d umnaɣ.",
+    "events": [
+     "Isawal ġ‑tmzgida kraḍ n‑wussan n‑ssbt",
+     "«Ġwid a‑isqlbn ddunit»",
+     "Ffuɣn s‑iḍ s‑tuffra"
+    ]
+   },
+   "berea": {
+    "name": "Biriya",
+    "book": "Lh̬rakat n‑imazann 17:10-15",
+    "today": "Viriya, Lyunan ġilad",
+    "note": "Willi «ifulkin» lli‑siggiln ġ‑wawal s‑ihh̬f‑nsn.",
+    "events": [
+     "Qbln awal s‑lfrḥ ameqqran",
+     "Kraygatt ass ar‑siggiln ġ‑warratn n‑Rbbi baš a‑ẓrn is‑tṣḥḥa",
+     "Aṭṭas a‑yumnn"
+    ]
+   },
+   "athens": {
+    "name": "Atina",
+    "book": "Lh̬rakat n‑imazann 17:16-34",
+    "today": "Atina, Lyunan ġilad",
+    "note": "Ġ‑tmdint n‑ifilusufn, ibrraḥ s‑«Rbbi lli‑ur‑ittwassann».",
+    "events": [
+     "Iɣaḍ‑t wul lliġ iẓra tamdint tččur s‑lmɛbudat",
+     "F‑Ariyufaj ibrraḥ s‑Umh̬llaq d‑unkar",
+     "Stihzan srs, walaynni kra a‑yumnn"
+    ]
+   },
+   "corinth": {
+    "name": "Korintus",
+    "book": "Lh̬rakat n‑imazann 18 · 1–2 Korintus",
+    "today": "Lyunan ġilad",
+    "note": "Iqama yan‑usggʷas d‑uzgn, isbdd tamzgida ġ‑yat‑tmdint n‑lhh̬sant.",
+    "events": [
+     "Iskar ihh̬yamn d‑Akila d‑Briskila",
+     "«Ur‑ttiksaḍ… acku giġ didk»",
+     "Aṭṭas n‑ayt‑Korintus umnn, ttwasddamn"
+    ]
+   },
+   "ephesus": {
+    "name": "Afsus",
+    "book": "Lh̬rakat n‑imazann 19 · Afsus",
+    "today": "Selçuk, Turkiya ġilad",
+    "note": "Wul n‑usafar wis kraḍ — awal izduy ġ‑Asya.",
+    "events": [
+     "Aslmd kraygatt ass sin n‑isggʷasn ġ‑tzqqa n‑Ṭiranus",
+     "Idlisn n‑ssḥur rɣn; lh̬dmat n‑ssulṭa",
+     "Dimitriyus amh̬ddam n‑lfḍḍt isnkr‑d lfitna"
+    ]
+   },
+   "miletus": {
+    "name": "Militus",
+    "book": "Lh̬rakat n‑imazann 20:17-38",
+    "today": "Turkiya ġilad",
+    "note": "Sslam amggaru s‑imṭṭawn i‑imɣarn n‑Afsus.",
+    "events": [
+     "«Ḥḍat tamzgida lli‑isɣa s‑idammn‑ns»",
+     "Imɣarn ar‑ttrun, ssnn is‑ur‑sar‑t‑ẓrn daɣ"
+    ]
+   },
+   "caesarea": {
+    "name": "Qayṣariya",
+    "book": "Lh̬rakat n‑imazann 23–26",
+    "today": "tama n‑lbḥr n‑Israyil ġilad",
+    "note": "Sin n‑isggʷasn ar‑iḥami f‑lh̬bar ifulkin dat‑lḥukkam d‑ugllid.",
+    "events": [
+     "Ccrɛ dat‑lḥukkam Filiks d‑Fistus",
+     "Aḥami‑ns dat‑ugllid Agriba",
+     "«Rẓġ ccrɛ s‑Qayṣar» — s‑Ruma"
+    ]
+   },
+   "jerusalem": {
+    "name": "Urušalim",
+    "book": "Lh̬rakat n‑imazann 21–23",
+    "today": "Urušalim ġilad",
+    "note": "Ittwaṭṭf ġ‑tmzgida, ibda uɣaras‑ns zund amh̬bus.",
+    "events": [
+     "Iṭṭf‑t lɣaci ġ‑tmzgida",
+     "Iḥami ihh̬f‑ns dat‑lmjlis",
+     "Acku iga arrumi, ittwazn s‑tɛssast s‑Qayṣariya"
+    ]
+   },
+   "myra": {
+    "name": "Mira",
+    "book": "Lh̬rakat n‑imazann 27:5-6",
+    "today": "Demre, Turkiya ġilad",
+    "note": "Bddln s‑uɣrrabu n‑Skndriya lli‑iddan s‑Ruma.",
+    "events": []
+   },
+   "fairhaven": {
+    "name": "Lmrsa Ifulkin (Krit)",
+    "book": "Lh̬rakat n‑imazann 27:8-12",
+    "today": "Krit ġilad",
+    "note": "Anbbah n‑Bulus baš a‑ḥbsn asafar ur‑ittwasfld.",
+    "events": []
+   },
+   "crete": {
+    "name": "Krit",
+    "book": "Titus",
+    "today": "Krit ġilad",
+    "note": "Awddi n‑tlelli‑ns, tigzirt mani a‑ġ‑ijja Titus baš a‑iṣlaḥ timzgidiwin.",
+    "events": [
+     "Ijja Titus baš a‑isbdd imɣarn ġ‑kraygatt tamdint",
+     "Isutur imdbbrn bla lɛib, iṣḥḥan ġ‑liman",
+     "Iyara tabrat i‑Titus"
+    ]
+   },
+   "malta": {
+    "name": "Malṭa",
+    "book": "Lh̬rakat n‑imazann 27–28",
+    "today": "Malṭa ġilad",
+    "note": "Gr‑tbuciḍant d‑urẓẓi n‑uɣrrabu, lwaɛd n‑Rbbi iṭṭf.",
+    "events": [
+     "Aḍu ijhdn irẓa aɣrrabu, walaynni kullu 276 n‑mddn jjnjmn",
+     "Iqqs‑t ufiɣr, walaynni ur‑t‑yuɣ walu",
+     "Ijjuja imuḍan n‑tgzirt"
+    ]
+   },
+   "syracuse": {
+    "name": "Sirakusa",
+    "book": "Lh̬rakat n‑imazann 28:12",
+    "today": "Ṣiqiliya, Iṭalya ġilad",
+    "note": "Qaman kraḍ n‑wussan ġ‑Ṣiqiliya.",
+    "events": []
+   },
+   "puteoli": {
+    "name": "Puteoli",
+    "book": "Lh̬rakat n‑imazann 28:13-14",
+    "today": "Pozzuoli, Iṭalya ġilad",
+    "note": "Gguzn s‑Iṭalya, mmugrn‑tn‑id aytmatn.",
+    "events": []
+   },
+   "rome": {
+    "name": "Ruma",
+    "book": "Lh̬rakat n‑imazann 28 · Tibratin n‑lh̬abs · 2 Timutaus",
+    "today": "Ruma, Iṭalya ġilad",
+    "note": "Lh̬bar ifulkin iwḍ wul n‑tgldit tameqqrant ġ‑umggaru — urd tamggarut walaynni tazwara.",
+    "events": [
+     "Sin n‑isggʷasn iḥbs ġ‑tgmmi, ar‑ibrraḥ tagldit n‑Rbbi bla tiksaḍ",
+     "Zġ‑ġid iyara Tibratin n‑lh̬abs (Afsus · Filibbi · Kulusi · Filimun)",
+     "Ġ‑umggaru ittwaḥbs daɣ, iyara 2 Timutaus, immut f‑ssibt n‑liman‑ns — «umnaɣġ amnaɣ ifulkin, kmmlġ azzal»"
+    ]
+   }
+  },
+  "labels": [
+   "Lbḥr Agrakal",
+   "Lbḥr n‑Ijah",
+   "Asya Tamẓyant",
+   "Maqiduniya",
+   "Iṭalya"
+  ],
+  "journeys": {
+   "j1": "Asafar amzwaru",
+   "j2": "Asafar wis sin",
+   "j3": "Asafar wis kraḍ",
+   "rome": "Asafar wis kkuẓ · s‑Ruma",
+   "j5": "Asafar wis smmus · awddi n‑tlelli"
+  }
+ }
+}

@@ -33,12 +33,12 @@
     "name": "I-dɛn (Cak · Buäŋ)",
     "book": "Tuk 1–3",
     "today": "gua̱th kiɛɛr Tigri kɛnɛ Yufrati walɛ",
-    "note": "Rɛy muɔ̱ɔ̱n mi ca cak a “gɔaa ɛlɔ̱ŋ,” cu dui̱r ben kä cuɛ matä kam Kuoth kɛnɛ naath pä̱ä̱t.",
+    "note": "Rɛy muɔ̱ɔ̱n mi ca cak a “gɔwkɛ ɛpuc,” cu dui̱r ben kä cuɛ matä kam Kuoth kɛnɛ naath pä̱ä̱t.",
     "events": [
-     "Cak kɛ ni̱ni baakɛl — «gɔaa ɛlɔ̱ŋ»",
+     "Cak kɛ ni̱ni baakɛl — «gɔwkɛ ɛpuc»",
      "Ca raan cak a ce̱tkɛ caab Kuɔth",
      "Buäŋ, kɛnɛ jiɛɛn kä I-dɛn",
-     "Lëŋ ruacä mi gɔaa in tuk — «bɛ gaat ciekä wi̱c thɔ̱l kuem»"
+     "Lëŋ ruacä mi gɔaa in tuk — «Ba wi̱cdu kuɛm ɛ kɛn»"
     ]
    },
    "noah": {
@@ -49,7 +49,7 @@
     "events": [
      "Muɔ̱ɔ̱n mi ci thia̱ŋ kɛ jiek",
      "Pi̱ in di̱i̱t, kɛnɛ ri̱w Noa",
-     "Ŋuɔ̱t kiɛɛrjɔaŋä — «/cu pi̱ bɛ̈ɛ̈ ben mi bi ŋɔaani riɛ̈k»"
+     "Ŋuɔ̱t kiɛɛrjɔaŋä — «thilɛ nyɔc dɔ̱diɛn mi bi wi̱c muɔ̱ɔ̱n nyɔk kɛ däk»"
     ]
    },
    "babel": {
@@ -58,7 +58,7 @@
     "today": "I-rak walɛ (pä̱ny Ci-nar)",
     "note": "Kä ŋäŋ mi ba̱r wä nhial, cu Kuoth thukdiɛn pä̱ä̱t kä cuɛ nɛy pek wii muɔ̱ɔ̱n.",
     "events": [
-     "«Ba dep kɛnɛ duel mi bär caw … kä ba ciötdan jak a di̱i̱t»",
+     "«wec kɛnɛ luak mi bäär … Banɛ rɔ̱ moc kɛ kɛ̈k»",
      "Cu Kuoth thukdiɛn pä̱ä̱t",
      "Cu nɛy pek wii muɔ̱ɔ̱n (Ci-nar — Bɛ̈-bi-lɔn nhiam)"
     ]
@@ -70,7 +70,7 @@
     "note": "Cu wec luäkä Ruac Kuɔth tuok kɛ cɔl raan kɛl.",
     "events": [
      "Cu Kuoth Abram cɔl raar kä Ur Kal-di-a",
-     "«Bä do̱r mi di̱i̱t cak kɛ ji̱ … kä döör diaal baakɛ poth kɛ ji̱»",
+     "«Bä do̱r mi di̱i̱t cak kɛ ji̱ … Kä döör diaal wi̱i̱ muɔ̱ɔ̱n baakɛ poth kɛ ciötdu»",
      "Kɛ ŋa̱th cuɛ muɔ̱ndɛ nyin jiɛɛn"
     ]
    },
@@ -91,7 +91,7 @@
     "today": "Nablu walɛ",
     "note": "Rɛy muɔ̱ɔ̱n in ca lëŋ ca duel tuok kä cu ŋuɔ̱t wä kä dhil ti bɛn.",
     "events": [
-     "Ben Ka-nan, yiëk in tuk — «Bä muɔ̱ɔ̱n ɛmɛ käm dhɔrdu»",
+     "Ben Ka-nan, yiëk in tuk — «Bä wec ɛmɛ ka̱m kuayku»",
      "Ŋuɔ̱t (Tuk 15) · I-thak · Ja-kob",
      "Gaat Ja-kob ti wäl-täu — mär döörni ti wäl-täu"
     ]
@@ -158,7 +158,7 @@
     "note": "Run ti gɔaa I-thɛ-rɛl — kɛnɛ lëŋ kuäär in te thi̱n mäni cäŋ kɛl.",
     "events": [
      "Ca-ul kuäär in tuk, kä Dee-bid kɛnɛ Go-li-at",
-     "Lëŋ Dee-bid — «kɔm kuäärädu bi te thi̱n mäni cäŋ kɛl» (2 Tham 7)",
+     "Lëŋ Dee-bid — «bi kɔm kuäärädu te thi̱n mäni cäŋ kɛl» (2 Tham 7)",
      "Cu Tho-lo-mɔn luaak caw Jɛ-ru-tha-lɛm"
     ]
    },
@@ -214,7 +214,7 @@
     "events": [
      "Loc mut ti diɔ̱k kɛ riet Cai-rɔ (Dho-ro-ba-bel 538 · Ɛdh 458 · Nɛm 444)",
      "Ca luaak caw bɛ̈ɛ̈ kä ca göör Jɛ-ru-tha-lɛm loc caw",
-     "Mɛ̈l — thuɔ̱k Mut in Tuk: «Bä jääkdä ja̱k»"
+     "Mɛ̈l — thuɔ̱k Mut in Tuk: «cä jääkdä ja̱k»"
     ]
    }
   },
@@ -259,7 +259,7 @@
     "note": "Tuok lätdɛ ŋecä — cu nhial jɛ moc cuɔ̱ɔ̱ŋ a Gat.",
     "events": [
      "Ca mut kɛ Jɔ̱ɔ̱n",
-     "Cu Yiëë piny a ce̱tkɛ guk — «Ɛ jɛn Gatdä in nhɔakä»",
+     "Cu Yiëë piny a ce̱tkɛ guk — «ɛ jɛn Gatdä min nhɔakä»",
      "Cuɛ tääm ti diɔ̱k Catan jɔk rɛy wuɔ̱th"
     ]
    },
@@ -281,7 +281,7 @@
     "note": "Käth lätä in tuk — rɛy Jɛ-ru-tha-lɛm kä wä Tha-mɛ-ria in ca ŋɔ̱ɔ̱n.",
     "events": [
      "Cuɛ luaak Jɛ-ru-tha-lɛm lɔ̱c",
-     "Kɛ wär, Ni-ko-dɛ-mo — «Bi ji̱ ɣɔaŋ loc»",
+     "Kɛ wär, Ni-ko-dɛ-mo — «Ba yɛ dhil nyɔk kɛ di̱eth»",
      "Pi̱ tëkä kä ciek Tha-mɛ-ria"
     ]
    },
@@ -292,7 +292,7 @@
     "note": "Kɔaŋ lätä Ga-li-li — cɔl, ŋic kɛnɛ jiök matkɛ rɔ̱ thi̱n.",
     "events": [
      "Cuɛ nɛy dɔpä cɔl kä cuɛ kɔaŋdɛ caw thi̱n",
-     "Ric wi̱i̱ Pɔm — «Mal kɛ nɛy ti duɔ̱ny lɔacdiɛn»",
+     "Ric wi̱i̱ Pɔm — «Puɔ̱th akɛ nɛy tin ŋa̱ckɛ rɔ̱ ɛn ɣöö kɛ can rɛydiɛn»",
      "Käny rui̱c Kuɔthä — kä jiök in di̱t"
     ]
    },
@@ -302,7 +302,7 @@
     "today": "Wär Kinɛrɛt walɛ",
     "note": "Kɛ buɔ̱m wii cak cuɛ nyuɔth ɛŋa jɛn.",
     "events": [
-     "«Lɔ̱ny, bä lony» — cuɛ yiëth lɔ̱ny",
+     "«Käpni rɔ cuɔ̱ŋ» — cuɛ yiëth lɔ̱ny",
      "Cuɛ nɛy 5,000 kɔm kɛ mith dhi̱ɛ̈c kɛnɛ rɛc rɛw",
      "Cuɛ käth wi̱i̱ pi̱"
     ]
@@ -313,7 +313,7 @@
     "today": "Banias walɛ",
     "note": "Cu nɛy puɔ̱ny ŋa̱c i̱ ɛ Kritho, kä cu käth timä lɔny.",
     "events": [
-     "Laar Pi-tɛr — «Ɛ ji̱ Kritho, Gat Kuɔth in tëk»",
+     "Laar Pi-tɛr — «Ɛ ji̱n Mɛ-thia, Gat Kuɔth in tëk»",
      "Cuɛ lia̱a̱dɛ kɛnɛ jɛk-rɔdɛ laar nhiam",
      "Ca locdɛ nyuɔth kɛ dwaŋ wi̱i̱ pɔm"
     ]
@@ -326,7 +326,7 @@
     "events": [
      "Cuɛ Bar-ti-mɛ in cɔɔŋ jak a nɛn",
      "Cuɛ Dha-ki in gua̱n yio̱wä cɔl",
-     "«Cu Gat Naath ben kɛ ɣöö bɛ nɛy ti määny gɔ̱r kä luäk»"
+     "«bä Gat Ran kɛ ɣöö bɛ nɛy ti ci bath ben go̱r, kä bɛ kɛ kän»"
     ]
    },
    "bethany": {
@@ -335,7 +335,7 @@
     "today": "al-Eizariya walɛ",
     "note": "Cuɛ buɔ̱mdɛ wi̱i̱ lia̱a̱ nyuɔth nhiam wik in thukä.",
     "events": [
-     "Cuɛ La-tha-ro jɛk kä ronä — «Ɛ ɣän jɛk-rɔ̱ kɛnɛ tëk»",
+     "Cuɛ La-tha-ro jɛk kä ronä — «Ɛ ɣän jieec nath li̱th, kä ɛ ɣän tëk»",
      "Cu Mari mɛ̈th läc kɛ kui̱ ronädɛ",
      "Cu nyuɔth ɛmɛ car nɛ̈kädɛ jak a buɔ̱m"
     ]
@@ -454,7 +454,7 @@
     "note": "Guäth locä kä cu ruac mi gɔaa tuok wä Yurup.",
     "events": [
      "Nɛn raan Ma-kɛ-do-nia",
-     "«Bäri kä luäki kɔn»",
+     "«Bër kui̱c kä kɔ … bikɔ ben luäk»",
      "Cikɛ kac guɔ̱ wä Yurup"
     ]
    },
@@ -476,7 +476,7 @@
     "note": "Cu ruac dep ruc kä cu jiök tuɔ̱ɔ̱th.",
     "events": [
      "Latɛ ruac rɛy duel-lɔ̱ŋä wäthni ti diɔ̱k",
-     "«Nɛy ti ci muɔ̱ɔ̱n bal ti̱ti̱»",
+     "«Kɛn wutni ti̱ti̱ tin ca ɣɔw bup kɛ nyuɔɔn»",
      "Cikɛ jiɛ̈n kɛ wär"
     ]
    },
@@ -509,7 +509,7 @@
     "note": "Cuɛ tä̱ä̱ run kɛl kɛnɛ pä̱ä̱t, kä cuɛ kanith caw rɛy dep dui̱rä.",
     "events": [
      "Cuɛ duɛɛl cak kɛ A-ki-la kɛnɛ Pri-thi-la",
-     "«/Ci dhil … kɛ ɣöö tɛ̈ɛ̈ kɛ ji̱»",
+     "«/Cu dual … kɛ ɣöö ta̱a̱ kɛɛl kɛ ji̱»",
      "Cu nɛy Ko-rin ti ŋuan ŋäth kä ca kɛ mut"
     ]
    },
@@ -530,7 +530,7 @@
     "today": "Tuki walɛ",
     "note": "Wieni waathä kɛ kua̱r kanith Ɛ-pɛ-thɔ.",
     "events": [
-     "«Titi kanith in ci kɔ̱k kɛ ri̱ɛmdɛ rodɛ»",
+     "«yiëën duëël Kuɔth, min cɛ jek kɛ riɛm Gatdɛ pa̱ny»",
      "Cu kua̱r wee, ŋäckɛ i̱ /cikɛ jɛ bɛ̈ɛ̈ nɛn"
     ]
    },
@@ -542,7 +542,7 @@
     "events": [
      "Guic nhiam kua̱r Pɛ-lik kɛnɛ Pɛ-tho",
      "Gäädɛ nhiam Kuäär A-gri-pa",
-     "«Cɔ̱lä Kai-thar» — wä Rom"
+     "«Bä diwdä nöŋ Thii-thɛr» — wä Rom"
     ]
    },
    "jerusalem": {
@@ -614,7 +614,7 @@
     "events": [
      "Run rɛw rɛy dueel titä, cuɛ rui̱c Kuɔth laar kɛ buɔ̱m",
      "Kä guäth ɛmɔ cuɛ Gɔ̱r Dueel-Macä gɔ̱r (Ɛpɛ·Pil·Kol·Pay)",
-     "Kä thukdɛ ca jak a raan mac bɛ̈ɛ̈, cuɛ 2 Tim gɔ̱r kä ca nak — «Cä tɔ̱ɔ̱r in gɔaa tɔ̱ɔ̱r, cä ŋɔ̱p thuk»"
+     "Kä thukdɛ ca jak a raan mac bɛ̈ɛ̈, cuɛ 2 Tim gɔ̱r kä ca nak — «Cä ko̱r mi gɔaa tɛr, cä kööŋ thuk, cä ŋa̱th käp»"
     ]
    }
   },

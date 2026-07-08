@@ -35,10 +35,10 @@
     "today": "Tigris–Eufrate mpɔtam no nnɛ",
     "note": "Wɔ wiase a wɔbɔɔ no papa yiye mu, bɔne ba mu na ɛsɛe abusuabɔ a ɛda Onyankopɔn ne nnipa ntam no.",
     "events": [
-     "Abɔde wɔ nna nsia mu — “na ɛyɛ papa yiye”",
+     "Abɔde wɔ nna nsia mu — “ɛyɛ papa”",
      "Wɔbɔɔ nnipa Onyankopɔn suban so",
      "Asehwe no, ne tu a wotuu wɔn fii Eden",
-     "Asɛmpa bɔhyɛ a edi kan — “ɔbea no aseni bɛbɔ ɔwɔ no ti”"
+     "Asɛmpa bɔhyɛ a edi kan — “Ɔno na ɔbɛbɔ wo ti”"
     ]
    },
    "noah": {
@@ -49,7 +49,7 @@
     "events": [
      "Wiase a porɔwee ahyɛ no ma",
      "Nsuyiri no, ne Noa adaka no",
-     "Nyankontɔn apam no — “nsuyiri remmɛsɛe wiase bio da”"
+     "Nyankontɔn apam no — “meremfa nsuyiri nsɛe asase bio da”"
     ]
    },
    "babel": {
@@ -58,7 +58,7 @@
     "today": "Irak nnɛ (Sinar tata so)",
     "note": "Ahantan a ɛpɛ sɛ edu ɔsoro no, Onyankopɔn maa wɔn kasa yɛɛ basabasa na ɔhwetee nnipa no wɔ asase so.",
     "events": [
-     "“Momma yɛnkyekyere kuro ne abantenten… na yɛnnye din”",
+     "“Momma yɛnkyekye kurow kɛse… na yennye din”",
      "Onyankopɔn maa wɔn kasa yɛɛ basabasa",
      "Nnipa no hwetee wɔ asase so (Sinar — akyiri yi Babilonia)"
     ]
@@ -70,7 +70,7 @@
     "note": "Bible no ogye asɛm no fi ase wɔ ɔbarima baako frɛ mu.",
     "events": [
      "Onyankopɔn frɛɛ Abram fii Kaldeafo Ur mu",
-     "“Mɛma wo ayɛ ɔman kɛse… ɛnam wo so na wobehyira nnipa nyinaa”",
+     "“Mɛma wo ayɛ ɔman kɛse… Ɛnam wo so na wobehyira nnipa a wɔwɔ asase so nyinaa”",
      "Ɛnam gyidi so ogyaa nʼasase"
     ]
    },
@@ -91,7 +91,7 @@
     "today": "Nablus nnɛ",
     "note": "Wɔ bɔhyɛ asase no so wɔhyɛ abusua ase na apam no kɔ awo ntoatoaso so.",
     "events": [
-     "Wɔwura Kanaan, afɔrebukyia a edi kan — “wʼasefo na mede saa asase yi bɛma”",
+     "Wɔwura Kanaan, afɔrebukyia a edi kan — “Mede saa asase yi bɛma wʼaseni”",
      "Apam no (1 Mose 15) · Isak · Yakob",
      "Yakob mmabarima dumien — mmusuakuw dumien no nhini"
     ]
@@ -259,7 +259,7 @@
     "note": "Ne badwa mu som fi ase — ɔsoro sɔ ano sɛ ɔyɛ Ɔba no.",
     "events": [
      "Yohane bɔɔ no asu",
-     "Honhom no sian sɛ aborɔnoma — “Woyɛ me Dɔ Ba”",
+     "Honhom no sian sɛ aborɔnoma — “Oyi ne me Dɔba a ɔsɔ mʼani”",
      "Odii Satan sɔhwɛ abiɛsa so wɔ sare so"
     ]
    },
@@ -281,7 +281,7 @@
     "note": "Som a edi kan no kwan — fa Yerusalem so kosi Samaria a wobu no animtia no.",
     "events": [
      "Ɔdwira asɔredan no wɔ Yerusalem",
-     "Anadwo, Nikodemo — “Ɛsɛ sɛ wɔsan wo wo”",
+     "Anadwo, Nikodemo — “ɛsɛ sɛ wɔwo wo foforo”",
      "Nkwa nsu ma Samaria ɔbea bi"
     ]
    },
@@ -292,7 +292,7 @@
     "note": "Galilea som no dwumadibea — ɔfrɛ, ɔkyerɛkyerɛ ne ɔsɔretia nyinaa hyia wɔ ha.",
     "events": [
      "Ɔfrɛ apopofo no na ɔde ne dwumadibea si ha",
-     "Bepɔ so Asɛnka no — “Nhyira ne wɔn a wɔhia honhom mu”",
+     "Bepɔ so Asɛnka no — “Nhyira ne wɔn a wonim sɛ wɔyɛ ahiafo wɔ honhom mu”",
      "Ahenni no ho mmɛbu — ne ɔsɔretia a ɛresɔre"
     ]
    },
@@ -313,7 +313,7 @@
     "today": "Banias nnɛ",
     "note": "Asuafo no te ase sɛ ɔyɛ Kristo no, na asɛndua kwan no bue.",
     "events": [
-     "Petro gyidi no — “Wone Kristo no, Onyankopɔn a ɔte ase no Ba”",
+     "Petro gyidi no — “Wone Kristo no, Onyankopɔn Teasefo no Ba no”",
      "Ɔhyɛ ne wu ne owusɔre ho nkɔm kane",
      "Wɔsesa no anuonyam mu wɔ bepɔ no so"
     ]
@@ -326,7 +326,7 @@
     "events": [
      "Ɔma onifuraefo Bartimeo hu ade",
      "Ɔfrɛ ɔtogyefo Sakeo",
-     "“Onipa Ba no bae sɛ ɔrebɛhwehwɛ na wagye wɔn a wɔayera nkwa”"
+     "“Na mebae sɛ merebɛhwehwɛ wɔn a wɔayera na magye wɔn nkwa”"
     ]
    },
    "bethany": {
@@ -335,7 +335,7 @@
     "today": "al-Eizariya nnɛ",
     "note": "Ɔda ne tumi a ɛwɔ owu so adi wɔ ne dapɛn a etwa to no anim.",
     "events": [
-     "Ɔnyan Lasaro fii ɔda mu — “Mene owusɔre ne nkwa”",
+     "Ɔnyan Lasaro fii ɔda mu — “Me na minyan awufo ma wɔn nkwa”",
      "Maria sra no ngo ma ne sie",
      "Saa nsɛnkyerɛnne yi ma pɔ a wɔbɔ sɛ wɔbɛku no no mu yɛ den"
     ]
@@ -454,7 +454,7 @@
     "note": "Baabi a asɛmpa no de nʼani kyerɛ Europa kane no.",
     "events": [
      "Makedonia ɔbarima bi ho anisoadehu",
-     "“Twa bra ha bɛboa yɛn”",
+     "“Twa bra Makedonia bɛboa yɛn”",
      "Wɔtwaa mu kɔɔ Europa ntɛm ara"
     ]
    },
@@ -476,7 +476,7 @@
     "note": "Asɛm no woso kurow no na ɔsɔretia bu so.",
     "events": [
      "Ɔkyerɛkyerɛ wɔ hyiadan mu Homeda abiɛsa",
-     "“Wɔn a wɔadan wiase ani abutuw no”",
+     "“Saa nnipa a wɔma basabasa ba baabiara a wɔkɔ no”",
      "Wɔnam anadwo so wiaa wɔn ho fii"
     ]
    },
@@ -509,7 +509,7 @@
     "note": "Ɔtena hɔ afe ne fa, na ɔbɔ asɔre wɔ kurow a porɔwee ahyɛ no ma mu.",
     "events": [
      "Ɔne Akwila ne Priskila yɛ ntamadan",
-     "“Nsuro… efisɛ me ne wo na ɛwɔ hɔ”",
+     "“Nsuro… efisɛ meka wo ho”",
      "Korintofo pii gye di na wɔbɔ wɔn asu"
     ]
    },
@@ -530,7 +530,7 @@
     "today": "Türkiye nnɛ",
     "note": "Nkradi a nusu wɔ mu kyerɛ Efeso mpanyimfo no.",
     "events": [
-     "“Monhwɛ asɔre a ɔde nʼankasa mogya tɔe no”",
+     "“Monhwɛ mo ho so ne nguankuw… Onyankopɔn de ne Ba no mogya na agye wɔn”",
      "Mpanyimfo no su, efisɛ wɔrenhu no bio"
     ]
    },
@@ -542,7 +542,7 @@
     "events": [
      "Asɛnnie wɔ amradofo Felike ne Festo anim",
      "Ne kasa a ɔyii wɔ Ɔhene Agripa anim",
-     "“Mede mʼasɛm to Kaesar anim” — wɔ kɔ Roma"
+     "“Miguan toa Ɔhempɔn Kaesare” — wɔ kɔ Roma"
     ]
    },
    "jerusalem": {
@@ -614,7 +614,7 @@
     "events": [
      "Mfe mmienu ɔwɔ fie ɔwɛn ase, ɔde akokoduru ka Ahenni no ho asɛm",
      "Ɛfi ha ɔkyerɛw Afiase Nkrataa no (Efe·Fil·Kol·Flm)",
-     "Akyiri yi wɔde no too afiase bio, ɔkyerɛw 2 Timoteo na wokum no — “Mako ako pa no, mawie mmirikakan no”"
+     "Akyiri yi wɔde no too afiase bio, ɔkyerɛw 2 Timoteo na wokum no — “Ɔko pa no, mako, mmirika no, mawie tu”"
     ]
    }
   },

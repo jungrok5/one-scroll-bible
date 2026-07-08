@@ -35,10 +35,10 @@
     "today": "dai ni na Tigri–Euhprate ginra",
     "note": "Grai kaja ai hku hpan da ai mungkan de, yubak shang wa nna Karai Kasang hte shinggyim masha lapran a sumtsaw hpe daw kau ai.",
     "events": [
-     "Shani matsat hta hpan da ai — “grai kaja ai”",
+     "Shani matsat hta hpan da ai — “grai myit sharawng awng nga wu ai”",
      "Masha hpe Karai Kasang a sumla hku hpan da ai",
      "Di hkrat ai, Eden kaw na shapraw kau ai",
-     "Shawng nnan na Kabu Gara Shiga ga sadi — “numsha a amyu gaw lapu a baw hpe abrep na”"
+     "Shawng nnan na Kabu Gara Shiga ga sadi — “Shi a amyu matu gaw na a baw hpe abrep”"
     ]
    },
    "noah": {
@@ -49,7 +49,7 @@
     "events": [
      "Yubak hte hpring ai mungkan",
      "Hka lim, hte Nawa a hka li",
-     "Sumpi ga shaka — “kalang mi bai hka lim hte jahten na n re”"
+     "Sumpi ga shaka — “sha-u hte ginding aga hpe galoi mung bai n jahten kau na”"
     ]
    },
    "babel": {
@@ -58,7 +58,7 @@
     "today": "dai ni na Irak (Shinara layang)",
     "note": "Sumsing lamu de du hkra gumrawng ai hpe, Karai Kasang gaw shanhte a ga hte amyu ni hpe mungkan ga ntsa e shara shara de gayet kau ai.",
     "events": [
-     "“Anhte gaw myo langai hte lakhtawng langai gap ga… anhte a mying hpe shatsam ga”",
+     "“Lamu dep langchyi hte mare langai mi hpe anhte jawm galaw ga… anhte a matu amying gumhkawng shangun lu”",
      "Karai Kasang gaw shanhte a ga hpe gayau kau ai",
      "Amyu ni mungkan ga ntsa e bra mat wa ai (Shinara — hpang e Babelon)"
     ]
@@ -70,7 +70,7 @@
     "note": "Chyum Laika a hkye hkrang la ai maumwi gaw masha langai hpe shaga ai kaw na hpang ai.",
     "events": [
      "Karai Kasang gaw Abram hpe Kaldia amyu a Ur kaw na shaga la ai",
-     "“Nang hpe amyu kaba shatai na nngai… amyu baw yawng gaw na a marang e shaman hkrum na”",
+     "“amyu kaba shatai na nngai… Na a marang e, amyu baw yawng hte hpe ngai shaman ya na nngai”",
      "Makam masham hku shi gaw tinang a ga hpe kabai kau ai"
     ]
    },
@@ -91,7 +91,7 @@
     "today": "dai ni na Nablu",
     "note": "Ga sadi jaw ai ga shara hta dinghku langai hpang da nna ga shaka gaw kashu kasha de lai mat wa ai.",
     "events": [
-     "Kanan de shang ai, shawng nnan jaw jau shara — “na a kashu kasha ni hpe ndai ga jaw na nngai”",
+     "Kanan de shang ai, shawng nnan jaw jau shara — “Na a amyu matu mara ni hpe ngai jaw na ngu ai mungdan gaw ndai rai nga ai”",
      "Ga shaka (Ningpawt Ninghpang 15) · Isak · Yakob",
      "Yakob a kasha 12 — amyu 12 a ru rai nga ai"
     ]
@@ -158,7 +158,7 @@
     "note": "Israela a ahtoi htum aten — hte galoi n htum ai hkawhkam langai a ga sadi.",
     "events": [
      "Shawng nnan hkawhkam Saula, dai hpang Dawi hte Goliat",
-     "Dawi hte ga shaka — “na a magam tingnyang galoi mung” (2 Samuela 7)",
+     "Dawi hte ga shaka — “Na a magam tingnyang gaw galoi mung htum mat na ra ai n rai” (2 Samuela 7)",
      "Shawlumon gaw Yerusalem hta Nawku Htingnu gap ai"
     ]
    },
@@ -259,7 +259,7 @@
     "note": "Shi a shawa magam bungli hpang ai — sumsing lamu gaw shi hpe Kasha hku masat dan ai.",
     "events": [
      "Yawhan gaw shi hpe hkalup ya ai",
-     "Wenyi gaw u hkru zawn yu wa ai — “Ndai gaw ngai tsaw ra ai ngai a Kasha rai nga ai”",
+     "Wenyi gaw u hkru zawn yu wa ai — “Ndai wa gaw ngai sharawng awng nga ai, ngai tsaw ra ai Kasha rai nga li ai”",
      "Hkraw kawng hta Satan a masum lang chyam yu ai hpe dang kau ai"
     ]
    },
@@ -281,7 +281,7 @@
     "note": "Magam bungli a shawng nnan lam — Yerusalem hku lai nna, yu kaji hkrum ai Samari du hkra.",
     "events": [
      "Yerusalem hta Nawku Htingnu hpe san seng shatai ai",
-     "Shana e, Nikodemu — “nang bai shangai ra ai”",
+     "Shana e, Nikodemu — “Nanhte yawng ntsa de nna shangai lu na”",
      "Samari num langai a matu asak hkrung ai hka"
     ]
    },
@@ -292,7 +292,7 @@
     "note": "Galile magam bungli a giwang shara — shaga ai, sharin ya ai hte ninghkap ai yawng ndai hta hkrum ai.",
     "events": [
      "Nga hkwi sha ai ni hpe shaga nna ndai hta giwang shatai ai",
-     "Bum ntsa tara hkaw ai — “Wenyi lam matsan ai ni gaw chyeju hkrum ai ni rai nga ai”",
+     "Bum ntsa tara hkaw ai — “Wenyi hta matsan mayan rai nga ai hpe dum chye ai masha ni gaw a lu ma ai”",
      "Mungdan a sumla ga ni — hte law wa ai ninghkap ai"
     ]
    },
@@ -302,7 +302,7 @@
     "today": "dai ni na Kinneret nawng",
     "note": "Ninggawn tawa ntsa n-gun atsam hku shi gaw kadai rai ai hpe madun ai.",
     "events": [
-     "“Zim u, ngwi pyaw nga u” — shi gaw nbung laru hpe zim shangun ai",
+     "“Atsin sim rai nga u” — shi gaw nbung laru hpe zim shangun ai",
      "Muk manga hte nga lahkawng hku masha 5,000 hpe jaw sha ai",
      "Hka ntsa e hkawm ai"
     ]
@@ -313,7 +313,7 @@
     "today": "dai ni na Bania",
     "note": "Sape ni gaw shi Hkristu rai ai hpe chye la ai, wudang a lam mung hpaw wa ai.",
     "events": [
-     "Petru a hkam la ai ga — “Nang gaw Hkristu, asak hkrung ai Karai Kasang a Kasha rai nga ai”",
+     "Petru a hkam la ai ga — “Nang gaw Meshia ngu ai ahkrung nga ai Karai Kasang a Kasha rai nga ndai”",
      "Shi a si na hte bai hkrung wa na lam hpe shawng nnan tsun shawng ai",
      "Bum ntsa e hpung shingkang hte shinggyim hkrang galai ai"
     ]
@@ -326,7 +326,7 @@
     "events": [
      "Myi n mu ai Bartimai hpe myi mu shangun ai",
      "Kang gun la ai Zakke hpe shaga ai",
-     "“Shinggyim Kasha gaw mat mat ai ni hpe tam nna hkye la na matu sa wa ai”"
+     "“Masha Kasha gaw mat mat ai ni hpe hkan tam nna hkye hkrang la na du sa ai rai nga ai”"
     ]
    },
    "bethany": {
@@ -335,7 +335,7 @@
     "today": "dai ni na al-Eizariya",
     "note": "Shi a hpang jahtum bat a shawng shani e, si hkrung si htan ntsa e ahkang aya lu ai hpe madun ai.",
     "events": [
-     "Lasaru hpe lup kaw na bai hkrung shangun ai — “Ngai gaw si nna bai hkrung wa ai lam hte asak rai nga ai”",
+     "Lasaru hpe lup kaw na bai hkrung shangun ai — “Ngai gaw bai hkrung rawt ai lam hte asak hkrung ai lam rai nga nngai”",
      "Mari gaw shi hpe lup makoi na matu sau chya ya ai",
      "Ndai kanawn masat gaw shi hpe sat na lam hpe grau ja shatai ai"
     ]
@@ -454,7 +454,7 @@
     "note": "Kabu Gara Shiga shawng nnan Europa de sa wa ai galai ai shara.",
     "events": [
      "Makedonia la langai a myihtoi mu mada ai",
-     "“Makedonia de rap nna anhte hpe karum la rit”",
+     "“Makedoni mung de rap sa nna anhte hpe karum la mi”",
      "Shanhte kalang ta Europa de rap mat wa ai"
     ]
    },
@@ -476,7 +476,7 @@
     "note": "Mungga gaw myo hpe shamagoi kau ai hte ninghkap ai gaw grai kap wa ai.",
     "events": [
      "Sabba masum lang nawku jawng hta tara jahkrum ai",
-     "“Mungkan ga hpe galau gasat kau ai ni”",
+     "“mungkan ting hpe gale galau di hkawm ai ni”",
      "Shanhte shana e lagu hprawng mat ai"
     ]
    },
@@ -509,7 +509,7 @@
     "note": "Yubak hte hpring ai myo hta nawku hpung langai hpang nna, ning mi hte shata kru nga ai.",
     "events": [
      "Akula hte Prisila hte rau ginsum galaw ai",
-     "“Hkum hkrit… ngai nang hte rau nga ai”",
+     "“Hkum hkrit… ngai nang hte rau rai nga nngai”",
      "Korinhtu masha law law kam sham nna hkalup hkrum ai"
     ]
    },
@@ -530,7 +530,7 @@
     "today": "dai ni na Turki",
     "note": "Ehpesu salang ni hpe myi prwi hte lam hka ai.",
     "events": [
-     "“Shi a sai hte mari la ai nawku hpung hpe sin mu”",
+     "“shi a Kasha a si hkam ai hte mari la ai hpung hpe sagu rem ni zawn bau rem nga mu”",
      "Salang ni gaw shi hpe bai n mu sana ngu chye nna hkrap ai"
     ]
    },
@@ -542,7 +542,7 @@
     "events": [
      "Up hkang ai Peliku hte Pestu a man e tara jep hkrum ai",
      "Hkawhkam Agripa a man e tinang hpe makawp la ai",
-     "“Ngai Kaisa a man e tara jep na nngai” — Roma de matut sa wa ai"
+     "“Ngai hpe Hkawhkam Kehta hkum nan jeyang daw dan ya na matu hpyi lajin nngai” — Roma de matut sa wa ai"
     ]
    },
    "jerusalem": {
@@ -614,7 +614,7 @@
     "events": [
      "Ning lahkawng nta hta rim da hkrum let, mungdan a lam hpe gawngban ai hku hkaw dan ai",
      "Ndai kaw na Htawng Laika ni (Ehpesu·Hpilipi·Kolose·Hpilemon) hpe ka ai",
-     "Hpang e bai htawng rawng nna, 2 Timohti ka ai hte makam masham a majaw sat hkrum ai — “Ngai gaw kaja ai gasat poi hpe gasat sai, hprawng shingjawng ai lam hpe ngut sai”"
+     "Hpang e bai htawng rawng nna, 2 Timohti ka ai hte makam masham a majaw sat hkrum ai — “Ngai gaw gat shingjawng ai lam hta atsam htum hkra gat shakut se ai; gat na matu tawn da ai shadawn shadang hpe htum hkra gat shadu se ai”"
     ]
    }
   },

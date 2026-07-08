@@ -1,0 +1,636 @@
+{
+ "menuName": "Esperanto",
+ "htmlLang": "eo",
+ "dir": "ltr",
+ "locale": "eo",
+ "brand": "La Biblio en unu rulaĵo",
+ "docTitle": "La Biblio laŭ mapo · La Biblio en unu rulaĵo",
+ "metaDesc": "Sekvu la templinion de la Malnova Testamento, la vivon de Jesuo, kaj la vojaĝojn de Paŭlo sur reala mapo — la Biblio okazis en realaj lokoj.",
+ "s": {
+  "kicker": "La Biblio en unu rulaĵo · Mapoj",
+  "title": "La Biblio laŭ mapo",
+  "verse": "“For we did not follow cleverly devised myths …” (2 Peter 1:16)",
+  "purpose": "La Biblio ne estas mito. Ĝi estas registro de homoj, kiuj marŝis sur realaj lokoj, datoj kaj nomoj. Sekvu tiujn vojojn sur mapo, laŭ tempa ordo — tuŝu punkton, aŭ premu ▶ por trairi ĝin paŝon post paŝo.",
+  "ot_kick": "① Malnova Testamento — tra la tempo",
+  "ot_h": "De la kreado ĝis la reveno al Jerusalem",
+  "ot_lead": "Ne unu sola vojaĝo, sed la fluo de la elaĉeta historio ekde la kreado: kreado kaj falo → diluvo kaj Babel → voko (Abraham) → la promesita lando → Eliro → dezerto → konkero → regno → disiĝo → ekzilo → reveno.",
+  "je_kick": "② Nova Testamento — la vivo de Jesuo",
+  "je_h": "De Bet-Leĥem ĝis Jerusalem",
+  "je_lead": "Sekvu la vivon de Jesuo kiel la evangelioj rakontas ĝin, laŭvice — de lia naskiĝo en Bet-Leĥem tra lia bapto kaj Galilea servado, trans Samario, ĝis la kruco, releviĝo kaj ĉieliro en Jerusalem.",
+  "pa_kick": "③ Nova Testamento — la vojaĝoj de Paŭlo",
+  "pa_h": "De Antioĥia ĝis la finoj de la tero — Romo",
+  "pa_lead": "De Pentekosto en Jerusalem, kiel la evangelio disvastiĝis preter Judujo — tra Malgranda Azio kaj Eŭropo ĝis la koro de la imperio. Elektu unu el la kvin vojaĝoj (1-a·2-a·3-a + la vojaĝo al Romo + post la liberigo) kaj sekvu la eventojn de la Agoj kun la leteroj skribitaj survoje.",
+  "foot": "Fontoj · La lokoj sekvas la biblian tekston kaj la norman biblian geografion (kun modernaj nomoj kie utile). Marbordoj, riveroj kaj lagoj estas desegnitaj el malfermaj geografiaj datumoj (Natural Earth), simpligitaj.",
+  "contact": "Demandoj · komentoj — <a id=\"contact\" class=\"mail\">Skribu al ni</a>",
+  "play": "Ludi",
+  "pause": "Paŭzi",
+  "today": "Hodiaŭ:",
+  "verseCite": "2 Petro 1:16"
+ },
+ "ot": {
+  "places": {
+   "eden": {
+    "name": "Edeno (Kreado · Falo)",
+    "book": "Genezo 1–3",
+    "today": "la regiono de Tigriso–Eŭfrato hodiaŭ",
+    "note": "En mondon faritan tre bona, peko envenas kaj rompas la ligon inter Dio kaj la homaro.",
+    "events": [
+     "Kreado en ses tagoj — “tre bona”",
+     "La homo farita laŭ la bildo de Dio",
+     "La falo, kaj ekzilo el Edeno",
+     "La unua promeso de la evangelio — “la idaro de la virino frapos la kapon de la serpento”"
+    ]
+   },
+   "noah": {
+    "name": "Ararat (la Diluvo)",
+    "book": "Genezo 6–9",
+    "today": "Monto Ararat, orienta Turkio hodiaŭ",
+    "note": "Dio juĝas mondon plenan de peko, tamen konservas la vivon per unu familio.",
+    "events": [
+     "Mondo plenigita de malvirto",
+     "La diluvo, kaj la arkeo de Noa",
+     "La interligo de la ĉielarko — “ne plu estos diluvo, por pereigi la teron”"
+    ]
+   },
+   "babel": {
+    "name": "La turo de Babel",
+    "book": "Genezo 11",
+    "today": "Irako hodiaŭ (la ebenaĵo Ŝinar)",
+    "note": "Kontraŭ la fiero, kiu atingas al la ĉielo, Dio disĵetas ilian lingvon kaj la popolojn sur la tero.",
+    "events": [
+     "“Ni konstruu al ni urbon kaj turon… kaj ni akiru al ni gloron”",
+     "Dio konfuzas ilian lingvon",
+     "La popoloj disiĝas sur la tero (Ŝinar — poste Babel)"
+    ]
+   },
+   "ur": {
+    "name": "Ur",
+    "book": "Genezo 12",
+    "today": "suda Irako hodiaŭ",
+    "note": "La rakonto de la elaĉeto en la Biblio komenciĝas per la voko de unu homo.",
+    "events": [
+     "Dio vokas Abramon el Ur de la Ĥaldeoj",
+     "“Mi faros vin granda popolo… kaj beniĝos per vi ĉiuj gentoj de la tero”",
+     "Per fido li forlasas sian patrujon"
+    ]
+   },
+   "haran": {
+    "name": "Ĥaran",
+    "book": "Genezo 12",
+    "today": "suda Turkio hodiaŭ",
+    "note": "Survoje, respondante al la voko al la promesita lando.",
+    "events": [
+     "La familio de Teraĥ ekloĝas en Ĥaran",
+     "Teraĥ mortas",
+     "Abram ekiras al Kanaan en la aĝo de 75 jaroj"
+    ]
+   },
+   "shechem": {
+    "name": "Ŝeĥem · Kanaan",
+    "book": "Genezo 12–50",
+    "today": "Nablus hodiaŭ",
+    "note": "En la promesita lando fondiĝas familio kaj la interligo transdoniĝas tra la generacioj.",
+    "events": [
+     "Enirante Kanaan, la unua altaro — “al via idaro Mi donos ĉi tiun teron”",
+     "La interligo (Gen 15) · Isaak · Jakob",
+     "La dek du filoj de Jakob — radiko de la dek du triboj"
+    ]
+   },
+   "egypt": {
+    "name": "Egiptujo (Goŝen)",
+    "book": "Genezo 37–50 · Eliro 1",
+    "today": "la delto de Nilo, Egiptujo hodiaŭ",
+    "note": "Familio fariĝas granda popolo — poste popolo de sklavoj.",
+    "events": [
+     "Jozef, vendita for, leviĝas al regado de Egiptujo",
+     "La tuta familio de Jakob malsupreniras por eskapi la malsaton",
+     "La kreskanta popolo de Izrael estas sklavigita"
+    ]
+   },
+   "sinai": {
+    "name": "Monto Sinaj",
+    "book": "Eliro · Levidoj",
+    "today": "la duoninsulo Sinaj hodiaŭ",
+    "note": "La centra savo de la Malnova Testamento — sklavoj fariĝas la propra popolo de Dio.",
+    "events": [
+     "La dek plagoj kaj la paska ŝafido",
+     "La Ruĝa Maro disiĝas kaj ili transiras",
+     "La Dek Ordonoj, la Leĝo, la tabernaklo kaj la oferoj"
+    ]
+   },
+   "kadesh": {
+    "name": "Kadeŝ (dezerto)",
+    "book": "Nombroj · Readmono",
+    "today": "la dezerto Sinaj–Negev hodiaŭ",
+    "note": "Nekredo kostas al generacio la landon — tamen Dio restas kun ili.",
+    "events": [
+     "Dek du esploristoj — sed la popolo rifuzas fidi",
+     "38 jaroj en la dezerto — manao, nubo kaj fajro",
+     "Sur la ebenaĵoj de Moab, la lasta prediko de Moseo (Readmono)"
+    ]
+   },
+   "jericho": {
+    "name": "Jeriĥo",
+    "book": "Josuo",
+    "today": "Jeriĥo hodiaŭ",
+    "note": "Fine ili eniras kaj ekposedas la promesitan landon.",
+    "events": [
+     "La Jordan disiĝas kaj la popolo transiras",
+     "La muroj de Jeriĥo falas",
+     "La konkero de Kanaan kaj la dividado de la lando"
+    ]
+   },
+   "shiloh": {
+    "name": "Ŝilo (Juĝistoj)",
+    "book": "Juĝistoj · Rut",
+    "today": "Ĥirbet Seilun hodiaŭ",
+    "note": "Sen reĝo, ĉiu faras kion plaĉas al li — vera reĝo estas bezonata.",
+    "events": [
+     "La tabernaklo estas starigita en Ŝilo",
+     "La ciklo de peko–premado–savo (Debora, Gideon, Ŝimŝon)",
+     "Rut — fideleco en malluma epoko, en la genealogio de David"
+    ]
+   },
+   "jerusalem": {
+    "name": "Jerusalem · La unuiĝinta regno",
+    "book": "1–2 Samuel · 1 Reĝoj",
+    "today": "Jerusalem hodiaŭ",
+    "note": "La ora epoko de Izrael — kaj la promeso de eterna reĝo.",
+    "events": [
+     "Saul la unua reĝo, poste David kaj Goljat",
+     "La interligo kun David — “via trono eterne” (2 Sam 7)",
+     "Salomono konstruas la templon en Jerusalem"
+    ]
+   },
+   "samaria": {
+    "name": "Samario · La disiĝinta regno",
+    "book": "Reĝoj · la Profetoj",
+    "today": "Sebastia hodiaŭ",
+    "note": "La regno disiĝas kaj deklinas dum la profetoj ekkrias.",
+    "events": [
+     "Post Salomono, la disiĝo en Judujon kaj Izraelon",
+     "Ripetiĝanta idolkulto",
+     "Elija, Jesaja, Jeremia ekkrias ‘revenu’ — kaj antaŭdiras la Mesion"
+    ]
+   },
+   "nineveh": {
+    "name": "Nineve (Asirio)",
+    "book": "2 Reĝoj 17 · Jona",
+    "today": "Mosul, Irako hodiaŭ",
+    "note": "Ignorante ĉiun averton, la nordo falas unue.",
+    "events": [
+     "Nineve, la ĉefurbo de Asirio",
+     "La norda regno falas al Asirio (722 a.K.)",
+     "Jona estas sendita al Nineve"
+    ]
+   },
+   "babylon": {
+    "name": "Babel",
+    "book": "2 Reĝoj 25 · Daniel · Jeĥezkel",
+    "today": "Hilla, Irako hodiaŭ",
+    "note": "La plej malluma nokto — tamen la promeso de restarigo restas.",
+    "events": [
+     "Jerusalem falas, la templo estas bruligita (586 a.K.)",
+     "Judujo estas forportata al Babel",
+     "Daniel kaj Jeĥezkel — fido kaj vizioj en la ekzilo"
+    ]
+   },
+   "susa": {
+    "name": "Ŝuŝan (Persujo)",
+    "book": "Ester · Neĥemja",
+    "today": "Ŝuŝ, Irano hodiaŭ",
+    "note": "Eĉ en la koro de pagana imperio, Dio gardas Sian popolon.",
+    "events": [
+     "Persujo faligas Babelon",
+     "Ester savas la judojn de ekstermo",
+     "Neĥemja preĝas antaŭ la reĝo kaj estas sendita"
+    ]
+   },
+   "return": {
+    "name": "La reveno al Jerusalem",
+    "book": "Ezra · Neĥemja · Malaĥi",
+    "today": "Jerusalem hodiaŭ",
+    "note": "Ili revenas kaj rekonstruas — sed neniu reĝo venis. Ili atendas la Mesion.",
+    "events": [
+     "Tri ondoj de reveno per la dekreto de Ciro (Zerubabel 538 · Ezra 458 · Neĥemja 444)",
+     "La templo rekonstruita kaj la muroj de Jerusalem restarigitaj",
+     "Malaĥi — la Malnova Testamento fermiĝas: “Mi sendos Mian anĝelon”"
+    ]
+   }
+  },
+  "labels": [
+   "Mediteranea Maro",
+   "Mezopotamio",
+   "Araba Dezerto",
+   "Egiptujo"
+  ],
+  "journeys": {
+   "flow": "La rakonto de la elaĉeto"
+  }
+ },
+ "jesus": {
+  "places": {
+   "bethlehem": {
+    "name": "Bet-Leĥem",
+    "book": "Mateo 1–2 · Luko 2",
+    "today": "Bet-Leĥem hodiaŭ",
+    "note": "La promesita Mesio venas al la urbo de David — la Vorto fariĝinta karno.",
+    "events": [
+     "Naskita en Bet-Leĥem, la urbo de David",
+     "Anĝeloj anoncas la novaĵon al paŝtistoj",
+     "La saĝuloj venas por adorkliniĝi"
+    ]
+   },
+   "nazareth": {
+    "name": "Nazaret",
+    "book": "Luko 2 · 4",
+    "today": "Nazaret hodiaŭ",
+    "note": "Dio kreskas kiel homo en ordinara urbo.",
+    "events": [
+     "Edukita en hejmo de ĉarpentisto",
+     "En la aĝo de dek du, demandante kaj respondante en la templo",
+     "Poste malakceptita en la sinagogo de sia hejmurbo"
+    ]
+   },
+   "jordan": {
+    "name": "Rivero Jordan",
+    "book": "Mateo 3–4",
+    "today": "la malsupra Jordan hodiaŭ",
+    "note": "Lia publika servado komenciĝas — la ĉielo sigelas lin kiel la Filon.",
+    "events": [
+     "Baptita de Johano",
+     "La Spirito malsupreniras kiel kolombo — “Ĉi tiu estas Mia Filo, la amata”",
+     "Venkas la tri tentojn de Satano en la dezerto"
+    ]
+   },
+   "cana": {
+    "name": "Kana",
+    "book": "Johano 2",
+    "today": "Kafr Kanna hodiaŭ",
+    "note": "En sia unua signo li malkaŝas sian gloron.",
+    "events": [
+     "Gasto ĉe geedziĝo",
+     "Akvo ŝanĝita en vinon — lia unua signo",
+     "Liaj disĉiploj kredas al li"
+    ]
+   },
+   "sychar": {
+    "name": "Siĥar (Samario)",
+    "book": "Johano 2–4",
+    "today": "proksime de Nablus hodiaŭ",
+    "note": "La vojo de la frua servado — tra Jerusalem kaj plu al la malestimata Samario.",
+    "events": [
+     "Li purigas la templon en Jerusalem",
+     "Nokte, Nikodemo — “Vi devas esti denove naskitaj”",
+     "Viva akvo por Samaria virino"
+    ]
+   },
+   "capernaum": {
+    "name": "Kapernaum",
+    "book": "Mateo 4–13 · Marko 1–4",
+    "today": "la bordo de la Galilea lago hodiaŭ",
+    "note": "La bazo de la Galilea servado — voko, instruado kaj kontraŭstaro ĉiuj kunvenas ĉi tie.",
+    "events": [
+     "Vokas la fiŝkaptistojn kaj bazas sin ĉi tie",
+     "La Surmonta Prediko — “Feliĉaj estas la malriĉaj en spirito”",
+     "Paraboloj de la regno — kaj kreskanta kontraŭstaro"
+    ]
+   },
+   "galilee": {
+    "name": "La Galilea Maro",
+    "book": "Marko 4 · 6 · Johano 6",
+    "today": "Lago Kineret hodiaŭ",
+    "note": "Per potenco super la naturo li montras, kiu li estas.",
+    "events": [
+     "“Silentu, kvietiĝu” — li kvietigas la ŝtormon",
+     "Nutras 5000 per kvin panoj kaj du fiŝoj",
+     "Marŝas sur la akvo"
+    ]
+   },
+   "caesarea_p": {
+    "name": "Cezarea Filipa",
+    "book": "Mateo 16–17",
+    "today": "Banias hodiaŭ",
+    "note": "La disĉiploj ekkomprenas, ke li estas la Kristo, kaj la vojo de la kruco malfermiĝas.",
+    "events": [
+     "La konfeso de Petro — “Vi estas la Kristo, la Filo de la vivanta Dio”",
+     "Li unue antaŭdiras sian morton kaj releviĝon",
+     "Transfigurita en gloro sur la monto"
+    ]
+   },
+   "jericho": {
+    "name": "Jeriĥo",
+    "book": "Luko 18–19",
+    "today": "Jeriĥo hodiaŭ",
+    "note": "Sur la vojo supren al Jerusalem, li serĉas la perditojn.",
+    "events": [
+     "Li donas vidon al la blinda Bartimeo",
+     "Li vokas Zakĥeon la impostiston",
+     "“La Filo de homo venis, por serĉi kaj savi la perditaĵon”"
+    ]
+   },
+   "bethany": {
+    "name": "Betania",
+    "book": "Johano 11–12",
+    "today": "al-Eizariya hodiaŭ",
+    "note": "Li montras regadon super la morto en la antaŭtago de sia lasta semajno.",
+    "events": [
+     "Li relevas Lazaron el la tombo — “Mi estas la releviĝo kaj la vivo”",
+     "Maria sanktoleas lin por la entombigo",
+     "Ĉi tiu signo firmigas la komploton mortigi lin"
+    ]
+   },
+   "jerusalem": {
+    "name": "Jerusalem",
+    "book": "Mateo 21–28 · Luko 24 · Agoj 1",
+    "today": "Jerusalem hodiaŭ",
+    "note": "La kulmino, al kiu la tuta Biblio montras — kruco, releviĝo, ĉieliro.",
+    "events": [
+     "Triumfa eniro; li renversas denove la tablojn en la templo",
+     "Ĉe la Lasta Vespermanĝo li lavas la piedojn de la disĉiploj",
+     "Li mortas sur la kruco",
+     "Relevita en la tria tago, poste supreniris al la ĉielo"
+    ]
+   }
+  },
+  "labels": [
+   "Mediteranea Maro",
+   "Galileo",
+   "Samario",
+   "Judujo",
+   "Dekapolo",
+   "Perea",
+   "Morta Maro"
+  ],
+  "journeys": {
+   "life": "La vojo de Jesuo"
+  }
+ },
+ "paul": {
+  "places": {
+   "antioch": {
+    "name": "Antioĥia",
+    "book": "Agoj 13 · 15",
+    "today": "Antakya, Turkio hodiaŭ",
+    "note": "La senda eklezio, kie la misio al la nacianoj komenciĝas kaj revenas.",
+    "events": [
+     "En preĝo la Spirito apartigas Barnabason kaj Saŭlon",
+     "La eklezio, kie la kredantoj estis unue nomataj ‘Kristanoj’",
+     "Ekpunkto de la 1-a, 2-a kaj 3-a vojaĝoj"
+    ]
+   },
+   "seleucia": {
+    "name": "Seleŭkia",
+    "book": "Agoj 13:4",
+    "today": "Turkio hodiaŭ",
+    "note": "La haveno de Antioĥia — ili ŝipiras al Kipro.",
+    "events": []
+   },
+   "salamis": {
+    "name": "Salamis (Kipro)",
+    "book": "Agoj 13:5",
+    "today": "Kipro hodiaŭ",
+    "note": "La unua halto sur Kipro — predikado en la sinagogoj.",
+    "events": []
+   },
+   "paphos": {
+    "name": "Pafos",
+    "book": "Agoj 13:6-12",
+    "today": "Kipro hodiaŭ",
+    "note": "Potenco estas montrata kontraŭ tiuj, kiuj kontraŭstaras la evangelion.",
+    "events": [
+     "Elimas la magiisto estas frapita per blindeco",
+     "Sergio Paŭlo la prokonsulo ekkredas",
+     "De ĉi tie ‘Paŭlo’ prenas la gvidadon"
+    ]
+   },
+   "perga": {
+    "name": "Perga",
+    "book": "Agoj 13:13",
+    "today": "Antalya, Turkio hodiaŭ",
+    "note": "Haveno en Pamfilio — ĉi tie Johano Marko returnas sin.",
+    "events": []
+   },
+   "pantioch": {
+    "name": "Antioĥia Pisidia",
+    "book": "Agoj 13:14-50",
+    "today": "Yalvaç, Turkio hodiaŭ",
+    "note": "La evangelio malfermiĝas al la nacianoj.",
+    "events": [
+     "Longa prediko de la savo-historio en la sinagogo",
+     "Multaj nacianoj ĝojas kaj akceptas la vorton",
+     "Elpelita de kontraŭstaro"
+    ]
+   },
+   "iconium": {
+    "name": "Ikonio",
+    "book": "Agoj 14:1-7",
+    "today": "Konya, Turkio hodiaŭ",
+    "note": "Multaj ekkredas, sed persekutado devigas ilin plu iri.",
+    "events": []
+   },
+   "lystra": {
+    "name": "Listra",
+    "book": "Agoj 14:8-20",
+    "today": "Turkio hodiaŭ",
+    "note": "Aklamita kiel dio, poste priĵetita per ŝtonoj.",
+    "events": [
+     "Sanigas viron lama de la naskiĝo",
+     "La homamaso provas oferi al ili kiel al dioj",
+     "Priĵetita per ŝtonoj kaj lasita kvazaŭ morta, li leviĝas"
+    ]
+   },
+   "derbe": {
+    "name": "Derbe",
+    "book": "Agoj 14:20-21",
+    "today": "Turkio hodiaŭ",
+    "note": "Multaj disĉiploj estas faritaj; ili reiras la saman vojon por fortigi la ekleziojn.",
+    "events": []
+   },
+   "troas": {
+    "name": "Troas",
+    "book": "Agoj 16:8-10",
+    "today": "Turkio hodiaŭ",
+    "note": "La turnopunkto, kie la evangelio unue direktiĝas al Eŭropo.",
+    "events": [
+     "Vizio de viro el Makedonujo",
+     "“Transiru al Makedonujo, kaj nin helpu”",
+     "Ili tuj transiras en Eŭropon"
+    ]
+   },
+   "philippi": {
+    "name": "Filipi",
+    "book": "Agoj 16 · Filipianoj",
+    "today": "norda Grekujo hodiaŭ",
+    "note": "La unua eklezio de Eŭropo — la evangelio triumfas eĉ en malliberejo.",
+    "events": [
+     "Lidia, vendistino de purpuro, ekkredas",
+     "Sklavino, kiu antaŭdiris la estontecon, estas liberigita",
+     "Noktomezaj himnoj, tertremo, la domanaro de la malliberejestro savita"
+    ]
+   },
+   "thess": {
+    "name": "Tesaloniko",
+    "book": "Agoj 17 · 1–2 Tesalonikanoj",
+    "today": "Tesaloniko, Grekujo hodiaŭ",
+    "note": "La vorto skuas la urbon kaj la kontraŭstaro ekbolas.",
+    "events": [
+     "Rezonadas en la sinagogo dum tri sabatoj",
+     "“Tiuj, kiuj renversis la tutan mondon”",
+     "Ili foriras nokte"
+    ]
+   },
+   "berea": {
+    "name": "Berea",
+    "book": "Agoj 17:10-15",
+    "today": "Veria, Grekujo hodiaŭ",
+    "note": "La ‘noblaj’ homoj, kiuj mem esploris la vorton.",
+    "events": [
+     "Ili akceptas la vorton fervore",
+     "Ĉiutage ili esploras la Skribojn por kontroli ĝin",
+     "Multaj ekkredas"
+    ]
+   },
+   "athens": {
+    "name": "Ateno",
+    "book": "Agoj 17:16-34",
+    "today": "Ateno, Grekujo hodiaŭ",
+    "note": "En la urbo de filozofoj li proklamas la ‘nekonatan dion’.",
+    "events": [
+     "Incitita de urbo plena de idoloj",
+     "Sur la Areopago li predikas la Kreinton kaj la releviĝon",
+     "Mokita, tamen kelkaj ekkredas"
+    ]
+   },
+   "corinth": {
+    "name": "Korinto",
+    "book": "Agoj 18 · 1–2 Korintanoj",
+    "today": "Grekujo hodiaŭ",
+    "note": "Li restas jaron kaj duonon, fondante eklezion en urbo de malvirto.",
+    "events": [
+     "Faras tendojn kun Akvila kaj Priskila",
+     "“Ne timu… ĉar mi estas kun vi”",
+     "Multaj Korintanoj ekkredas kaj estas baptitaj"
+    ]
+   },
+   "ephesus": {
+    "name": "Efeso",
+    "book": "Agoj 19 · Efesanoj",
+    "today": "Selçuk, Turkio hodiaŭ",
+    "note": "La koro de la tria vojaĝo — la vorto disvastiĝas tra Azio.",
+    "events": [
+     "Ĉiutaga instruado dum du jaroj en la lernejo de Tirano",
+     "Magiaj libroj bruligitaj; potencaj faroj",
+     "La arĝentaĵisto Demetrio komencas tumulton"
+    ]
+   },
+   "miletus": {
+    "name": "Mileto",
+    "book": "Agoj 20:17-38",
+    "today": "Turkio hodiaŭ",
+    "note": "Larma adiaŭo al la presbiteroj de Efeso.",
+    "events": [
+     "“Zorgu pri la eklezio, kiun li aĉetis per sia propra sango”",
+     "La presbiteroj ploras, sciante, ke ili ne revidos lin"
+    ]
+   },
+   "caesarea": {
+    "name": "Cezarea",
+    "book": "Agoj 23–26",
+    "today": "la marbordo de Israelo hodiaŭ",
+    "note": "Dum du jaroj li defendas la evangelion antaŭ provincestroj kaj reĝo.",
+    "events": [
+     "Proceso antaŭ la provincestroj Felikso kaj Festo",
+     "Lia defendo antaŭ la reĝo Agripo",
+     "“Mi apelacias al Cezaro” — plu al Romo"
+    ]
+   },
+   "jerusalem": {
+    "name": "Jerusalem",
+    "book": "Agoj 21–23",
+    "today": "Jerusalem hodiaŭ",
+    "note": "Kaptita en la templo, lia vojo kiel malliberulo komenciĝas.",
+    "events": [
+     "Kaptita de la homamaso en la templo",
+     "Defendas sin antaŭ la sinedrio",
+     "Kiel romia civitano, sendita sub gardo al Cezarea"
+    ]
+   },
+   "myra": {
+    "name": "Mira",
+    "book": "Agoj 27:5-6",
+    "today": "Demre, Turkio hodiaŭ",
+    "note": "Ili transiras al Aleksandria ŝipo, iranta al Romo.",
+    "events": []
+   },
+   "fairhaven": {
+    "name": "Belaj Havenoj (Kreto)",
+    "book": "Agoj 27:8-12",
+    "today": "Kreto hodiaŭ",
+    "note": "La averto de Paŭlo ĉesi la navigadon estas ignorata.",
+    "events": []
+   },
+   "crete": {
+    "name": "Kreto",
+    "book": "Tito",
+    "today": "Kreto hodiaŭ",
+    "note": "Post lia liberigo, la insulo, kie li lasas Titon por ordigi la ekleziojn.",
+    "events": [
+     "Lasas Titon por starigi presbiterojn en ĉiu urbo",
+     "Postulas senriproĉajn, fidelajn gvidantojn",
+     "Skribas la leteron al Tito"
+    ]
+   },
+   "malta": {
+    "name": "Melita",
+    "book": "Agoj 27–28",
+    "today": "Malto hodiaŭ",
+    "note": "Tra ŝtormo kaj ŝippereo, la promeso de Dio tenas.",
+    "events": [
+     "La ‘nordorienta vento’ frakasas la ŝipon, tamen ĉiuj 276 postvivas",
+     "Mordita de vipuro, li restas sendifekta",
+     "Li sanigas la malsanulojn de la insulo"
+    ]
+   },
+   "syracuse": {
+    "name": "Sirakuso",
+    "book": "Agoj 28:12",
+    "today": "Sicilio, Italujo hodiaŭ",
+    "note": "Ili restas tri tagojn en Sicilio.",
+    "events": []
+   },
+   "puteoli": {
+    "name": "Puteoli",
+    "book": "Agoj 28:13-14",
+    "today": "Pozzuoli, Italujo hodiaŭ",
+    "note": "Ili albordiĝas en Italujo kaj estas renkontataj de kunkredantoj.",
+    "events": []
+   },
+   "rome": {
+    "name": "Romo",
+    "book": "Agoj 28 · La malliberejaj leteroj · 2 Timoteo",
+    "today": "Romo, Italujo hodiaŭ",
+    "note": "La evangelio fine atingas la koron de la imperio — ne fino sed komenco.",
+    "events": [
+     "Du jaroj sub domesta aresto, aŭdace proklamante la regnon",
+     "De ĉi tie li skribas la malliberejajn leterojn (Ef·Flp·Kol·Flm)",
+     "Poste denove malliberigita, li skribas 2 Timoteon kaj estas martirigita — “Mi batalis la bonan batalon, mi finis la kuradon”"
+    ]
+   }
+  },
+  "labels": [
+   "Mediteranea Maro",
+   "Egea Maro",
+   "Malgranda Azio",
+   "Makedonujo",
+   "Italujo"
+  ],
+  "journeys": {
+   "j1": "Unua vojaĝo",
+   "j2": "Dua vojaĝo",
+   "j3": "Tria vojaĝo",
+   "rome": "Kvara vojaĝo · al Romo",
+   "j5": "Kvina vojaĝo · post la liberigo"
+  }
+ }
+}

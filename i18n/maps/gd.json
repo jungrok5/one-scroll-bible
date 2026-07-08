@@ -35,10 +35,10 @@
     "today": "sgìre Thigris–Euphrates an-diugh",
     "note": "A-steach do shaoghal a rinneadh ro-mhath, tha am peacadh a' tighinn a-steach agus a' briseadh a' cheangail eadar Dia agus an cinne-daonna.",
     "events": [
-     "Cruthachadh ann an sia làithean — “bha e ro-mhath”",
+     "Cruthachadh ann an sia làithean — “bha e ro‑mhath”",
      "An cinne-daonna air a dhèanamh ann an ìomhaigh Dhè",
      "An Tuiteam, agus fògradh à Eden",
-     "A' chiad ghealladh den t-soisgeul — “bruthaidh sìol na mnà ceann na nathrach”"
+     "A' chiad ghealladh den t-soisgeul — “bruthaidh esan do cheann”"
     ]
    },
    "noah": {
@@ -49,7 +49,7 @@
     "events": [
      "Saoghal air a lìonadh le truaillidheachd",
      "An tuil, agus àirc Nòah",
-     "Coicheangal a' bhogha-fhrois — “cha bhi tuil ann tuilleadh a sgriosas”"
+     "Coicheangal a' bhogha-fhrois — “cha bhi dìle ann nas mò a sgrios na talmhainn”"
     ]
    },
    "babel": {
@@ -58,7 +58,7 @@
     "today": "Iorac an-diugh (còmhnard Shinar)",
     "note": "An aghaidh an àrdain a shìneas gu nèamh, tha Dia a' sgapadh an cainnt agus na sluaghan air feadh na talmhainn.",
     "events": [
-     "“Togamaid dhuinn fhèin baile agus tùr … agus dèanamaid ainm dhuinn fhèin”",
+     "“togamaid dhuinn fhèin baile, agus tùr … agus dèanamaid dhuinn fhèin ainm”",
      "Tha Dia a' cur troimh-a-chèile an cànan",
      "Tha na sluaghan a' sgapadh air feadh na talmhainn (Shinar — Bàbilon an dèidh sin)"
     ]
@@ -70,7 +70,7 @@
     "note": "Tha sgeul saoraidh a' Bhìobaill a' tòiseachadh le gairm aon duine.",
     "events": [
      "Tha Dia a' gairm Abram a-mach à Ur nan Caldèach",
-     "“Nì mi thu ad chinneach mòr … beannaichear na h-uile theaghlaichean annad”",
+     "“nì mi thu ad chinneach mòr … annadsa beannaichear uile theaghlaichean na talmhainn”",
      "Le creideamh tha e a' fàgail a dhùthaich"
     ]
    },
@@ -91,7 +91,7 @@
     "today": "Nablus an-diugh",
     "note": "Anns an fhearann ghealltanach tha teaghlach air a stèidheachadh agus tha an coicheangal a' dol sìos tro na ginealaich.",
     "events": [
-     "A' tighinn a-steach do Chanàan, a' chiad altair — “do d' shliochd bheir mi am fearann seo”",
+     "A' tighinn a-steach do Chanàan, a' chiad altair — “Dod shliochd-sa bheir mise am fearann seo”",
      "An coicheangal (Genesis 15) · Isaac · Iàcob",
      "Dà mhac dheug Iàcoib — freumh nan dà threubh dheug"
     ]
@@ -158,7 +158,7 @@
     "note": "Linn òir Israeil — agus gealladh rìgh shìorraidh.",
     "events": [
      "Saul a' chiad rìgh, an uair sin Daibhidh agus Goliath",
-     "Coicheangal Dhaibhidh — “do rìgh-chathair gu bràth” (2 Samuel 7)",
+     "Coicheangal Dhaibhidh — “bidh do rìgh-chathair daingeann gu bràth” (2 Samuel 7)",
      "Tha Solamh a' togail an teampaill ann an Ierusalem"
     ]
    },
@@ -214,7 +214,7 @@
     "events": [
      "Trì tonnan tillidh le òrdugh Chìruis (Serubabel 538 · Esra 458 · Nehemiah 444)",
      "An teampall air ath-thogail agus ballachan Ierusaleim air an ath-thogail",
-     "Malachi — tha an Seann Tiomnadh a' dùnadh: “Cuiridh mise a-mach mo theachdaire”"
+     "Malachi — tha an Seann Tiomnadh a' dùnadh: “cuiridh mise a‑mach mo theachdaire”"
     ]
    }
   },
@@ -281,7 +281,7 @@
     "note": "Rathad na ministrealachd thràith — tro Ierusalem agus air adhart gu Samaria dhìmeasach.",
     "events": [
      "Tha e a' glanadh an teampaill ann an Ierusalem",
-     "Air an oidhche, Nicodemus — “Feumaidh tu a bhith air do bhreith a-rìs”",
+     "Air an oidhche, Nicodemus — “Is èiginn dhuibh a bhith air ur breith a‑rìs”",
      "Uisge beò do bhoireannach Samaritanach"
     ]
    },
@@ -292,7 +292,7 @@
     "note": "Prìomh-ionad na ministrealachd Ghalileich — gairm, teagasg agus dùbhlan uile a' coinneachadh an seo.",
     "events": [
      "A' gairm nan iasgairean agus a' dèanamh a bhunait an seo",
-     "An Searmon air an t-Sliabh — “Is beannaichte na bochdan nan spiorad”",
+     "An Searmon air an t-Sliabh — “Is beannaichte iadsan a tha bochd nan spiorad”",
      "Cosamhlachdan na rìoghachd — agus dùbhlan ag èirigh"
     ]
    },
@@ -302,7 +302,7 @@
     "today": "Loch Kinneret an-diugh",
     "note": "Le cumhachd os cionn nàdair tha e a' sealltainn cò e.",
     "events": [
-     "“Sìth, bi sàmhach” — tha e a' ciùineachadh na stoirme",
+     "“Tosd, bi sàmhach” — tha e a' ciùineachadh na stoirme",
      "A' beathachadh 5,000 le còig builg agus dà iasg",
      "A' coiseachd air an uisge"
     ]
@@ -326,7 +326,7 @@
     "events": [
      "Tha e a' toirt fradharc do Bhartimeus dall",
      "Tha e a' gairm Sacheus an cìs-mhaor",
-     "“Thàinig Mac an duine a dh'iarraidh agus a thèarnadh an nì a bha caillte”"
+     "“thàinig Mac an Duine a shireadh agus a thèarnadh an nì sin a bha caillte”"
     ]
    },
    "bethany": {
@@ -335,7 +335,7 @@
     "today": "al-Eizariya an-diugh",
     "note": "Tha e a' sealltainn ùghdarras os cionn a' bhàis air oidhche a sheachdain dheireannaich.",
     "events": [
-     "Tha e ag èirigh Lasaruis on uaigh — “Is mise an aiseirigh agus a' bheatha”",
+     "Tha e ag èirigh Lasaruis on uaigh — “Is mise an aiseirigh, agus a’ bheatha”",
      "Tha Muire ga ungadh airson adhlacaidh",
      "Tha an comharra seo a' cruadhachadh na cuilbheirt gus a mharbhadh"
     ]
@@ -454,7 +454,7 @@
     "note": "An t-àite tionndaidh far a bheil an soisgeul a' dol a dh'ionnsaigh na Roinn Eòrpa an toiseach.",
     "events": [
      "Lèirsinn air fear à Macedonia",
-     "“Thig a-nall agus cuidich leinn”",
+     "“Thig thairis gu Macedònia, agus cuidich leinn”",
      "Tha iad a' dol thairis sa bhad don Roinn Eòrpa"
     ]
    },
@@ -476,7 +476,7 @@
     "note": "Tha am facal a' crathadh a' bhaile agus tha dùbhlan a' goil thairis.",
     "events": [
      "A' reusanachadh san t-sionagog trì Sàbaidean",
-     "“Iadsan a thionndaidh an saoghal bun os cionn”",
+     "“na daoine seo, a chuir an saoghal bun-os‑cionn”",
      "Tha iad a' teiche air falbh air an oidhche"
     ]
    },
@@ -509,7 +509,7 @@
     "note": "Tha e a' fuireach bliadhna gu leth, a' suidheachadh eaglais ann am baile de dhubhailc.",
     "events": [
      "A' dèanamh phàilliunan le Acuila agus Priscila",
-     "“Na biodh eagal ort … oir tha mise maille riut”",
+     "“Na biodh eagal ort … tha mise maille riut”",
      "Tha mòran de mhuinntir Chorint a' creidsinn 's air am baisteadh"
     ]
    },
@@ -530,7 +530,7 @@
     "today": "an Tuirc an-diugh",
     "note": "Beannachd le deòir do èildearan Ephesuis.",
     "events": [
-     "“Biathaibh eaglais Dhè, a cheannaich e le 'fhuil fhèin”",
+     "“a bheathachadh eaglais Dhè, a cheannaich e le a fhuil fhèin”",
      "Tha na h-èildearan a' gul, fios aca nach fhaic iad e a-rithist"
     ]
    },
@@ -542,7 +542,7 @@
     "events": [
      "Deuchainnean fa chomhair nan riaghladairean Felix agus Festus",
      "A dhìon fa chomhair an Rìgh Agripa",
-     "“Tha mi a' gairm air Cèasar” — air adhart don Ròimh"
+     "“Tha mi a’ togail mo chùis gu Cèasar” — air adhart don Ròimh"
     ]
    },
    "jerusalem": {
@@ -614,7 +614,7 @@
     "events": [
      "Dà bhliadhna fo ghrèim-taighe, a' searmonachadh na rìoghachd gu dàna",
      "Às an seo tha e a' sgrìobhadh Litrichean a' Phrìosain (Eph·Phil·Col·Phm)",
-     "An dèidh sin air a phrìosanachadh a-rithist, a' sgrìobhadh 2 Timòteus 's air a mhartarachadh — “chòmhraig mi an deagh chòmhrag, chrìochnaich mi mo chùrsa”"
+     "An dèidh sin air a phrìosanachadh a-rithist, a' sgrìobhadh 2 Timòteus 's air a mhartarachadh — “Chòmhraig mi an deagh chòmhrag, chrìochnaich mi mo thuras”"
     ]
    }
   },

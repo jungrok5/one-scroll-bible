@@ -1,0 +1,636 @@
+{
+ "menuName": "Thok Nath",
+ "htmlLang": "nus",
+ "dir": "ltr",
+ "locale": "nus",
+ "brand": "Wec Kuoth kɛ Nyin Kɛl",
+ "docTitle": "Ruac Kuɔth kɛ Map · Wec Kuoth kɛ Nyin Kɛl",
+ "metaDesc": "Buɔth mut Mut in Tuk, tëk Yecu, kɛnɛ bär Pɔl wi̱i̱ map mi thuɔ̱k — cu ŋɔaani Ruac Kuɔth rɔ̱ läät wi̱i̱ gua̱a̱th ti thuɔ̱k.",
+ "s": {
+  "kicker": "Wec Kuoth kɛ Nyin Kɛl · Map",
+  "title": "Ruac Kuɔth kɛ Map",
+  "verse": "“For we did not follow cleverly devised myths …” (2 Peter 1:16)",
+  "purpose": "Ruac Kuɔth /ciɛ carä mi jiäk. Ɛ gɔ̱r nɛy tin ci käth wi̱i̱ gua̱a̱th, ni̱ni, kɛnɛ ciöt ti thuɔ̱k. Buɔth käthni ti̱ti̱ wi̱i̱ map, kɛ mut gua̱a̱thä — bi̱t guäth, kiɛ pi̱n ▶ kɛ ɣöö bi käth thi̱n mut kä mut.",
+  "ot_kick": "① Mut in Tuk — kɛ gua̱a̱th",
+  "ot_h": "Kä cak amäni loc kä Jɛ-ru-tha-lɛm",
+  "ot_lead": "/Ciɛ bär mi kɛl a ɛ mut wecä luäkä kä cak wä nhiam: cak kɛnɛ buäŋ → pi̱ kɛnɛ Babel → lëŋ (Abraɣam) → muɔ̱ɔ̱n in ca lëŋ → Bä̱r kä I-jëp → wuɔ̱th → nyuur → kuäär → pä̱ä̱t → naŋ liai̱ → loc.",
+  "je_kick": "② Mut in Pay — tëk Yecu",
+  "je_h": "Kä Bɛth-li-ɣɛm amäni Jɛ-ru-tha-lɛm",
+  "je_lead": "Buɔth tëk Yecu a ce̱tkɛ min laar Ruac Mi Gɔaa jɛ, kɛ mut — kä dapdɛ Bɛth-li-ɣɛm, kä mutdɛ kɛnɛ lätdɛ Ga-li-li, kä Tha-mɛ-ria, wä tim, jɛk-rɔ̱ kɛnɛ wä nhial Jɛ-ru-tha-lɛm.",
+  "pa_kick": "③ Mut in Pay — bär Pɔl",
+  "pa_h": "Kä An-ti-ɔk amäni pek ɣɔaa — Rom",
+  "pa_lead": "Kä Pɛn-ti-kɔth Jɛ-ru-tha-lɛm, ce̱tni cu ruac mi gɔaa wä a tɛp jiɛɛn Ju-dia — rɛy A-thia in Tot kɛnɛ Yurup amäni kɔaŋ döör göökä. Kuɛny bär mi kɛl kä bärni ti dhi̱ɛ̈c (in tuk·in rɛw·in diɔ̱k + kac wä Rom + kä thuɔ̱k jɛkä) kä buɔth ŋɔaani Lät kɛnɛ gɔ̱r tin ca gɔ̱r kä käth.",
+  "foot": "Gua̱a̱th Ruacä · Gua̱a̱th buɔthkɛ Ruac Kuɔth kɛnɛ ŋic muɔ̱nä Ruac Kuɔthä (kɛ ciöt walɛ mi luäkkɛ). Thok wär, kiɛɛr kɛnɛ wär ca gɔ̱r kɛ gɔ̱r muɔ̱nä mi lony (Natural Earth), mi ca jak a tot.",
+  "contact": "Thiec · ruac — <a id=\"contact\" class=\"mail\">Gɔ̱r ɛn imeel</a>",
+  "play": "Käth",
+  "pause": "Lɔ̱ny",
+  "today": "Walɛ:",
+  "verseCite": "2 Pit 1:16"
+ },
+ "ot": {
+  "places": {
+   "eden": {
+    "name": "I-dɛn (Cak · Buäŋ)",
+    "book": "Tuk 1–3",
+    "today": "gua̱th kiɛɛr Tigri kɛnɛ Yufrati walɛ",
+    "note": "Rɛy muɔ̱ɔ̱n mi ca cak a “gɔaa ɛlɔ̱ŋ,” cu dui̱r ben kä cuɛ matä kam Kuoth kɛnɛ naath pä̱ä̱t.",
+    "events": [
+     "Cak kɛ ni̱ni baakɛl — «gɔaa ɛlɔ̱ŋ»",
+     "Ca raan cak a ce̱tkɛ caab Kuɔth",
+     "Buäŋ, kɛnɛ jiɛɛn kä I-dɛn",
+     "Lëŋ ruacä mi gɔaa in tuk — «bɛ gaat ciekä wi̱c thɔ̱l kuem»"
+    ]
+   },
+   "noah": {
+    "name": "A-ra-rat (Pi̱ in Di̱i̱t)",
+    "book": "Tuk 6–9",
+    "today": "Pɔm A-ra-rat, Tuki walɛ",
+    "note": "Cu Kuoth muɔ̱ɔ̱n mi thia̱ŋ kɛ dui̱r wii, kä ŋot tëk tit rɛy duel kɛl.",
+    "events": [
+     "Muɔ̱ɔ̱n mi ci thia̱ŋ kɛ jiek",
+     "Pi̱ in di̱i̱t, kɛnɛ ri̱w Noa",
+     "Ŋuɔ̱t kiɛɛrjɔaŋä — «/cu pi̱ bɛ̈ɛ̈ ben mi bi ŋɔaani riɛ̈k»"
+    ]
+   },
+   "babel": {
+    "name": "Duel Babel",
+    "book": "Tuk 11",
+    "today": "I-rak walɛ (pä̱ny Ci-nar)",
+    "note": "Kä ŋäŋ mi ba̱r wä nhial, cu Kuoth thukdiɛn pä̱ä̱t kä cuɛ nɛy pek wii muɔ̱ɔ̱n.",
+    "events": [
+     "«Ba dep kɛnɛ duel mi bär caw … kä ba ciötdan jak a di̱i̱t»",
+     "Cu Kuoth thukdiɛn pä̱ä̱t",
+     "Cu nɛy pek wii muɔ̱ɔ̱n (Ci-nar — Bɛ̈-bi-lɔn nhiam)"
+    ]
+   },
+   "ur": {
+    "name": "Ur",
+    "book": "Tuk 12",
+    "today": "I-rak walɛ",
+    "note": "Cu wec luäkä Ruac Kuɔth tuok kɛ cɔl raan kɛl.",
+    "events": [
+     "Cu Kuoth Abram cɔl raar kä Ur Kal-di-a",
+     "«Bä do̱r mi di̱i̱t cak kɛ ji̱ … kä döör diaal baakɛ poth kɛ ji̱»",
+     "Kɛ ŋa̱th cuɛ muɔ̱ndɛ nyin jiɛɛn"
+    ]
+   },
+   "haran": {
+    "name": "Ha-ran",
+    "book": "Tuk 12",
+    "today": "Tuki walɛ",
+    "note": "Kä bär, cuɛ lëŋ luɔ̱ny wä muɔ̱ɔ̱n in ca lëŋ.",
+    "events": [
+     "Cu duel Tera nyuur Ha-ran",
+     "Cu Tera li̱w",
+     "Cu Abram käth wä Ka-nan kɛ run 75"
+    ]
+   },
+   "shechem": {
+    "name": "Ci-kem · Ka-nan",
+    "book": "Tuk 12–50",
+    "today": "Nablu walɛ",
+    "note": "Rɛy muɔ̱ɔ̱n in ca lëŋ ca duel tuok kä cu ŋuɔ̱t wä kä dhil ti bɛn.",
+    "events": [
+     "Ben Ka-nan, yiëk in tuk — «Bä muɔ̱ɔ̱n ɛmɛ käm dhɔrdu»",
+     "Ŋuɔ̱t (Tuk 15) · I-thak · Ja-kob",
+     "Gaat Ja-kob ti wäl-täu — mär döörni ti wäl-täu"
+    ]
+   },
+   "egypt": {
+    "name": "I-jëp (Go-cen)",
+    "book": "Tuk 37–50 · Ɣöth 1",
+    "today": "gua̱th kiɛr Nail I-jëp walɛ",
+    "note": "Cu duel kɛl a do̱r mi di̱i̱t — kä thukdɛ döör lui̱cä.",
+    "events": [
+     "Jo-thep, in ca ŋɔ̱ɔ̱c, cuɛ a kuäär I-jëp",
+     "Cu duel Ja-kob diaal ben piny kɛ kui̱ ke̱p",
+     "Ca do̱r I-thɛ-rɛl in di̱t jak a lui̱c"
+    ]
+   },
+   "sinai": {
+    "name": "Pɔm Thi-nai",
+    "book": "Ɣöth · Liib",
+    "today": "muɔ̱ɔ̱n Thi-nai walɛ",
+    "note": "Luäk in di̱i̱t Mut in Tuk — cu nɛy lui̱c a nɛy Kuɔth.",
+    "events": [
+     "Kä̱th ti wäl-täu kɛnɛ thak cieŋ Bä̱rä",
+     "Cu wär in li̱th gak kä cikɛ bä̱r",
+     "Ŋuɔ̱t ti wäl-täu, Ŋut, luaak kɛnɛ ka̱mni"
+    ]
+   },
+   "kadesh": {
+    "name": "Ka-dec (wuɔ̱th)",
+    "book": "Kuen · Ŋuɔ̱t",
+    "today": "wuɔ̱th Thi-nai–Nɛgɛp walɛ",
+    "note": "Cu ŋäth mi thil dhɔr in kɛl muɔ̱ɔ̱n bec — kä ŋot Kuoth tä̱ä̱ kɛ kɛn.",
+    "events": [
+     "Nɛy guicä ti wäl-täu — kä /cu nɛy ŋäth",
+     "Run 38 rɛy wuɔ̱th — mana, luil kɛnɛ mac",
+     "Kä pä̱ny Mo-ab, riet in thukä Mo-thith (Ŋuɔ̱t)"
+    ]
+   },
+   "jericho": {
+    "name": "Jɛ-ri-kɔ",
+    "book": "Jɔc",
+    "today": "Jɛ-ri-kɔ walɛ",
+    "note": "Kä thukdɛ cikɛ nyuur kä cikɛ muɔ̱ɔ̱n in ca lëŋ ka̱n.",
+    "events": [
+     "Cu kiɛr Jɔr-dan gak kä cikɛ kac",
+     "Cu göör Jɛ-ri-kɔ tuɔ̱k piny",
+     "Nyuur Ka-nan kɛnɛ pek muɔ̱nä"
+    ]
+   },
+   "shiloh": {
+    "name": "Ci-lo (Ruëëc)",
+    "book": "Ruëëc · Ruth",
+    "today": "Kirbet Cai-lun walɛ",
+    "note": "Thil kuäär, kä cu raan ram läät min gɔaa waaŋdɛ — go̱rɛ kuäär mi thuɔ̱k.",
+    "events": [
+     "Ca luaak caw Ci-lo",
+     "Ciaŋ dui̱rä–bɛ̈cä–luäkä (De-bɔ-ra, Gi-de-ɔn, Tham-thɔn)",
+     "Ruth — ŋä̱th rɛy ni̱ni ti mu̱u̱th, rɛy dhɔr Dee-bid"
+    ]
+   },
+   "jerusalem": {
+    "name": "Jɛ-ru-tha-lɛm · Kuäär in Mat",
+    "book": "1–2 Tham · 1 Kua̱r",
+    "today": "Jɛ-ru-tha-lɛm walɛ",
+    "note": "Run ti gɔaa I-thɛ-rɛl — kɛnɛ lëŋ kuäär in te thi̱n mäni cäŋ kɛl.",
+    "events": [
+     "Ca-ul kuäär in tuk, kä Dee-bid kɛnɛ Go-li-at",
+     "Lëŋ Dee-bid — «kɔm kuäärädu bi te thi̱n mäni cäŋ kɛl» (2 Tham 7)",
+     "Cu Tho-lo-mɔn luaak caw Jɛ-ru-tha-lɛm"
+    ]
+   },
+   "samaria": {
+    "name": "Tha-ma-ria · Kuäär in Pä̱ä̱t",
+    "book": "Kua̱r · Gua̱n Göökni",
+    "today": "Sebastia walɛ",
+    "note": "Cu kuäär rɔ̱ pä̱ä̱t kä cuɛ wä piny mëë ŋot gua̱n göökni a wee.",
+    "events": [
+     "Kä thuɔ̱k Tho-lo-mɔn, pä̱ä̱t wä Juda kɛnɛ I-thɛ-rɛl",
+     "Kui̱th mi tot bɛ̈ɛ̈",
+     "Cu I-li-ja, I-ca-yaa, Yir wee i̱ ‘loci’ — kä latkɛ Mɛ-thaya nhiam"
+    ]
+   },
+   "nineveh": {
+    "name": "Ni-ne-we (Ä-thi-ria)",
+    "book": "2 Kua̱r 17 · Jona",
+    "today": "Mosul, I-rak walɛ",
+    "note": "Kä /cu läŋ diaal liŋ, cu pa̱m wä piny nhiam.",
+    "events": [
+     "Ni-ne-we, kɔaŋ Ä-thi-ria",
+     "Cu döör pa̱m kuec kä Ä-thi-ria (722 nhiam Kritho)",
+     "Ca Jona ja̱k wä Ni-ne-we"
+    ]
+   },
+   "babylon": {
+    "name": "Bɛ̈-bi-lɔn",
+    "book": "2 Kua̱r 25 · Dan · Yɛdh",
+    "today": "Hillah, I-rak walɛ",
+    "note": "Wär in mu̱u̱th ɛlɔ̱ŋ — kä ŋot lëŋ locä tɔ̱.",
+    "events": [
+     "Cu Jɛ-ru-tha-lɛm kuec, ca luaak nyop (586 nhiam Kritho)",
+     "Ca Juda naŋ a lia̱ wä Bɛ̈-bi-lɔn",
+     "Dan kɛnɛ Yɛdh — ŋä̱th kɛnɛ nɛn rɛy naŋ liai̱"
+    ]
+   },
+   "susa": {
+    "name": "Thu-tha (Pɛr-thia)",
+    "book": "Ɛth · Nɛm",
+    "today": "Shush, I-ran walɛ",
+    "note": "Amäni rɛy kɔaŋ döör göökä, cu Kuoth nɛɛdɛ tit.",
+    "events": [
+     "Cu Pɛr-thia Bɛ̈-bi-lɔn jɔk",
+     "Cu Ɛth nɛy Ju luäk kä li̱w",
+     "Cu Nɛm lɔ̱ŋ nhiam kuäär kä ca jɛ ja̱k"
+    ]
+   },
+   "return": {
+    "name": "Loc kä Jɛ-ru-tha-lɛm",
+    "book": "Ɛdh · Nɛm · Mɛ̈l",
+    "today": "Jɛ-ru-tha-lɛm walɛ",
+    "note": "Cikɛ loc kä cikɛ caw bɛ̈ɛ̈ — kä thil kuäär mi ci ben. Titkɛ Mɛ-thaya.",
+    "events": [
+     "Loc mut ti diɔ̱k kɛ riet Cai-rɔ (Dho-ro-ba-bel 538 · Ɛdh 458 · Nɛm 444)",
+     "Ca luaak caw bɛ̈ɛ̈ kä ca göör Jɛ-ru-tha-lɛm loc caw",
+     "Mɛ̈l — thuɔ̱k Mut in Tuk: «Bä jääkdä ja̱k»"
+    ]
+   }
+  },
+  "labels": [
+   "Wär in Di̱i̱t",
+   "Mɛ-tho-po-ta-mia",
+   "Wuɔ̱th A-rab",
+   "I-jëp"
+  ],
+  "journeys": {
+   "flow": "Wec luäkä"
+  }
+ },
+ "jesus": {
+  "places": {
+   "bethlehem": {
+    "name": "Bɛth-li-ɣɛm",
+    "book": "Mɛ̈t 1–2 · Luk 2",
+    "today": "Bɛth-li-ɣɛm walɛ",
+    "note": "Cu Mɛ-thaya in ca lëŋ ben kä dep Dee-bid — Ruac in ci a raan.",
+    "events": [
+     "Ca dap Bɛth-li-ɣɛm, dep Dee-bid",
+     "Cu tuucni ruac laar nɛy titä thɔ̱k",
+     "Cu nɛy pɛlä ben kä lamkɛ"
+    ]
+   },
+   "nazareth": {
+    "name": "Na-tha-ret",
+    "book": "Luk 2 · 4",
+    "today": "Na-tha-ret walɛ",
+    "note": "Cu Kuoth di̱t a raan rɛy dep mi kɔaŋ.",
+    "events": [
+     "Ca di̱t rɛy duel gua̱n tim tiɛtä",
+     "Kɛ run wäl-täu, thiec kɛnɛ loc rɛy luaak",
+     "Kä thukdɛ ca kuec rɛy duel-lɔ̱ŋä dëpdɛ"
+    ]
+   },
+   "jordan": {
+    "name": "Kiɛr Jɔr-dan",
+    "book": "Mɛ̈t 3–4",
+    "today": "Jɔr-dan piny walɛ",
+    "note": "Tuok lätdɛ ŋecä — cu nhial jɛ moc cuɔ̱ɔ̱ŋ a Gat.",
+    "events": [
+     "Ca mut kɛ Jɔ̱ɔ̱n",
+     "Cu Yiëë piny a ce̱tkɛ guk — «Ɛ jɛn Gatdä in nhɔakä»",
+     "Cuɛ tääm ti diɔ̱k Catan jɔk rɛy wuɔ̱th"
+    ]
+   },
+   "cana": {
+    "name": "Ka-na",
+    "book": "Jɔ̱ɔ̱n 2",
+    "today": "Kafr Kanna walɛ",
+    "note": "Kɛ nyuɔth in tuk cuɛ dwaŋdɛ nyuɔth.",
+    "events": [
+     "Ɛ wä rɛy kɛn thiek",
+     "Ca pi̱ locdɛ a mɛ̈th — nyuɔthdɛ in tuk",
+     "Cu nɛy puɔ̱nydɛ ŋäth jɛ"
+    ]
+   },
+   "sychar": {
+    "name": "Cu-kar (Tha-mɛ-ria)",
+    "book": "Jɔ̱ɔ̱n 2–4",
+    "today": "thiak Nablu walɛ",
+    "note": "Käth lätä in tuk — rɛy Jɛ-ru-tha-lɛm kä wä Tha-mɛ-ria in ca ŋɔ̱ɔ̱n.",
+    "events": [
+     "Cuɛ luaak Jɛ-ru-tha-lɛm lɔ̱c",
+     "Kɛ wär, Ni-ko-dɛ-mo — «Bi ji̱ ɣɔaŋ loc»",
+     "Pi̱ tëkä kä ciek Tha-mɛ-ria"
+    ]
+   },
+   "capernaum": {
+    "name": "Ka-pɛr-na-um",
+    "book": "Mɛ̈t 4–13 · Mak 1–4",
+    "today": "thok wär Ga-li-li walɛ",
+    "note": "Kɔaŋ lätä Ga-li-li — cɔl, ŋic kɛnɛ jiök matkɛ rɔ̱ thi̱n.",
+    "events": [
+     "Cuɛ nɛy dɔpä cɔl kä cuɛ kɔaŋdɛ caw thi̱n",
+     "Ric wi̱i̱ Pɔm — «Mal kɛ nɛy ti duɔ̱ny lɔacdiɛn»",
+     "Käny rui̱c Kuɔthä — kä jiök in di̱t"
+    ]
+   },
+   "galilee": {
+    "name": "Wär Ga-li-li",
+    "book": "Mak 4 · 6 · Jɔ̱ɔ̱n 6",
+    "today": "Wär Kinɛrɛt walɛ",
+    "note": "Kɛ buɔ̱m wii cak cuɛ nyuɔth ɛŋa jɛn.",
+    "events": [
+     "«Lɔ̱ny, bä lony» — cuɛ yiëth lɔ̱ny",
+     "Cuɛ nɛy 5,000 kɔm kɛ mith dhi̱ɛ̈c kɛnɛ rɛc rɛw",
+     "Cuɛ käth wi̱i̱ pi̱"
+    ]
+   },
+   "caesarea_p": {
+    "name": "Kai-tha-ria Pi-lip",
+    "book": "Mɛ̈t 16–17",
+    "today": "Banias walɛ",
+    "note": "Cu nɛy puɔ̱ny ŋa̱c i̱ ɛ Kritho, kä cu käth timä lɔny.",
+    "events": [
+     "Laar Pi-tɛr — «Ɛ ji̱ Kritho, Gat Kuɔth in tëk»",
+     "Cuɛ lia̱a̱dɛ kɛnɛ jɛk-rɔdɛ laar nhiam",
+     "Ca locdɛ nyuɔth kɛ dwaŋ wi̱i̱ pɔm"
+    ]
+   },
+   "jericho": {
+    "name": "Jɛ-ri-kɔ",
+    "book": "Luk 18–19",
+    "today": "Jɛ-ri-kɔ walɛ",
+    "note": "Kä käth in wä nhial wä Jɛ-ru-tha-lɛm, cuɛ nɛy ti määny gɔ̱r.",
+    "events": [
+     "Cuɛ Bar-ti-mɛ in cɔɔŋ jak a nɛn",
+     "Cuɛ Dha-ki in gua̱n yio̱wä cɔl",
+     "«Cu Gat Naath ben kɛ ɣöö bɛ nɛy ti määny gɔ̱r kä luäk»"
+    ]
+   },
+   "bethany": {
+    "name": "Bɛth-a-ni",
+    "book": "Jɔ̱ɔ̱n 11–12",
+    "today": "al-Eizariya walɛ",
+    "note": "Cuɛ buɔ̱mdɛ wi̱i̱ lia̱a̱ nyuɔth nhiam wik in thukä.",
+    "events": [
+     "Cuɛ La-tha-ro jɛk kä ronä — «Ɛ ɣän jɛk-rɔ̱ kɛnɛ tëk»",
+     "Cu Mari mɛ̈th läc kɛ kui̱ ronädɛ",
+     "Cu nyuɔth ɛmɛ car nɛ̈kädɛ jak a buɔ̱m"
+    ]
+   },
+   "jerusalem": {
+    "name": "Jɛ-ru-tha-lɛm",
+    "book": "Mɛ̈t 21–28 · Luk 24 · Lät 1",
+    "today": "Jɛ-ru-tha-lɛm walɛ",
+    "note": "Thuɔ̱k in cɔt Ruac Kuɔth diaal — tim, jɛk-rɔ̱, wä nhial.",
+    "events": [
+     "Ben mi te kɛ dwaŋ; cuɛ ŋɔaani ka̱ndä luaak pɛ̈l bɛ̈ɛ̈",
+     "Kä Cam in Thukä cuɛ nɛy puɔ̱ny cɔ̱kdiɛn wa̱a̱ŋ",
+     "Cu li̱w wi̱i̱ tim",
+     "Cuɛ rɔ̱ jɛk kɛ cäŋ in däŋrɔw, kä cuɛ wä nhial"
+    ]
+   }
+  },
+  "labels": [
+   "Wär in Di̱i̱t",
+   "Ga-li-li",
+   "Tha-mɛ-ria",
+   "Ju-dia",
+   "Dɛ-ka-po-li",
+   "Pɛ-rɛ-a",
+   "Wäär Lia̱a̱"
+  ],
+  "journeys": {
+   "life": "Käth Yecu"
+  }
+ },
+ "paul": {
+  "places": {
+   "antioch": {
+    "name": "An-ti-ɔk",
+    "book": "Lät 13 · 15",
+    "today": "Antakya, Tuki walɛ",
+    "note": "Kanith in ja̱k mëë tuok bär nɛy döör göökä kä locdɛ thi̱n.",
+    "events": [
+     "Kɛ lɔ̱ŋ cu Yiëë Bar-na-ba kɛnɛ Caul pek",
+     "Kanith mëë ca nɛy ŋäthni cɔl kɛ i̱ ‘Kritho-ni’ nhiam",
+     "Guäth tukä bär in tuk, in rɛw kɛnɛ in diɔ̱k"
+    ]
+   },
+   "seleucia": {
+    "name": "Thɛ-lɛ-thia",
+    "book": "Lät 13:4",
+    "today": "Tuki walɛ",
+    "note": "Thok wärä An-ti-ɔk — cikɛ kac wä Kupro.",
+    "events": []
+   },
+   "salamis": {
+    "name": "Tha-la-mith (Kupro)",
+    "book": "Lät 13:5",
+    "today": "Kupro walɛ",
+    "note": "Guäth in tuk Kupro — latkɛ ruac rɛy dueli-lɔ̱ŋä.",
+    "events": []
+   },
+   "paphos": {
+    "name": "Pa-po",
+    "book": "Lät 13:6-12",
+    "today": "Kupro walɛ",
+    "note": "Ca buɔ̱m nyuɔth kä nɛy ti jiök ruac mi gɔaa.",
+    "events": [
+     "Ca Ɛ-li-ma in gua̱n bunyä riɔ̱p a cɔɔŋ",
+     "Cu Ther-gio Pɔl-o in kuäär ŋäth",
+     "Kä guäth ɛmɔ cu ‘Pɔl’ a nhiam"
+    ]
+   },
+   "perga": {
+    "name": "Pɛr-ga",
+    "book": "Lät 13:13",
+    "today": "Antalya, Tuki walɛ",
+    "note": "Thok wärä Pam-pi-lia — kä guäth ɛmɔ cu Jɔ̱ɔ̱n Mak loc.",
+    "events": []
+   },
+   "pantioch": {
+    "name": "An-ti-ɔk Pi-thi-dia",
+    "book": "Lät 13:14-50",
+    "today": "Yalvaç, Tuki walɛ",
+    "note": "Cu ruac mi gɔaa rɔ̱ lony wä nɛy döör göökä.",
+    "events": [
+     "Riet mi bär wecä luäkä rɛy duel-lɔ̱ŋä",
+     "Cu nɛy döör göök ti ŋuan tɛth kä lɔny ruac",
+     "Ca kɛ ka̱p raar kɛ jiök"
+    ]
+   },
+   "iconium": {
+    "name": "I-ko-ni-um",
+    "book": "Lät 14:1-7",
+    "today": "Konya, Tuki walɛ",
+    "note": "Cu nɛy ti ŋuan ŋäth, kä cu jiök kɛ jak a käth nhiam.",
+    "events": []
+   },
+   "lystra": {
+    "name": "Li-thra",
+    "book": "Lät 14:8-20",
+    "today": "Tuki walɛ",
+    "note": "Ca kɛ jak a kuth, kä thukdɛ ca kɛ biel kɛ pä̱i̱.",
+    "events": [
+     "Cuɛ raan mi dap a coŋ jak a gɔaa",
+     "Cu bumä go̱r ka̱m kä ce̱tkɛ kuth",
+     "Ca biel kɛ pä̱i̱ kä ca pal a ce̱tkɛ raan mi liw, cuɛ pay"
+    ]
+   },
+   "derbe": {
+    "name": "Dɛr-bi",
+    "book": "Lät 14:20-21",
+    "today": "Tuki walɛ",
+    "note": "Ca nɛy puɔ̱ny ti ŋuan jak, kä lockɛ kä buɔ̱thdiɛn kɛ ɣöö bikɛ kanith jak a buɔ̱m.",
+    "events": []
+   },
+   "troas": {
+    "name": "Tro-a",
+    "book": "Lät 16:8-10",
+    "today": "Tuki walɛ",
+    "note": "Guäth locä kä cu ruac mi gɔaa tuok wä Yurup.",
+    "events": [
+     "Nɛn raan Ma-kɛ-do-nia",
+     "«Bäri kä luäki kɔn»",
+     "Cikɛ kac guɔ̱ wä Yurup"
+    ]
+   },
+   "philippi": {
+    "name": "Pi-lip-pi",
+    "book": "Lät 16 · Pil",
+    "today": "muɔ̱ɔ̱n Gri̱k walɛ",
+    "note": "Kanith in tuk Yurup — cu ruac mi gɔaa jɔk amäni rɛy dueel mac.",
+    "events": [
+     "Cu Li-dia in gua̱n ŋɔ̱ɔ̱cä lɔ̱w ŋäth",
+     "Ca nyal luɔ̱cä in gua̱n cärä loc",
+     "Diit wär, muɔ̱ɔ̱n ru̱u̱c, kä ca duel gua̱n titä dueel-macä luäk"
+    ]
+   },
+   "thess": {
+    "name": "Thɛ-tha-lo-ni-ka",
+    "book": "Lät 17 · 1–2 Thɛ",
+    "today": "Thɛ-tha-lo-ni-ki, Gri̱k walɛ",
+    "note": "Cu ruac dep ruc kä cu jiök tuɔ̱ɔ̱th.",
+    "events": [
+     "Latɛ ruac rɛy duel-lɔ̱ŋä wäthni ti diɔ̱k",
+     "«Nɛy ti ci muɔ̱ɔ̱n bal ti̱ti̱»",
+     "Cikɛ jiɛ̈n kɛ wär"
+    ]
+   },
+   "berea": {
+    "name": "Bɛ-rɛ-a",
+    "book": "Lät 17:10-15",
+    "today": "Veria, Gri̱k walɛ",
+    "note": "Nɛy ti ‘gɔaa’ tin ci ruac guic kɛ rɔdiɛn.",
+    "events": [
+     "Cikɛ ruac lɔny kɛ lɔac mi di̱i̱t",
+     "Cikɛ Ruac Kuɔth guic ni cäŋ kɛ cäŋ kɛ ɣöö bikɛ jɛ ŋa̱c i̱ ɛ thuɔ̱k",
+     "Cu nɛy ti ŋuan ben a ŋäthni"
+    ]
+   },
+   "athens": {
+    "name": "A-tɛn",
+    "book": "Lät 17:16-34",
+    "today": "A-tɛn, Gri̱k walɛ",
+    "note": "Rɛy dep nɛy pɛlä cuɛ ‘kuoth in /ci ŋäc’ laar.",
+    "events": [
+     "Ca lɔacdɛ jiäk kɛ dep mi thia̱ŋ kɛ kuth",
+     "Wi̱i̱ A-rɛ-o-pago cuɛ Gua̱n Cakä kɛnɛ jɛk-rɔ̱ laar",
+     "Ca ŋɔ̱ny, kä ŋot nɛy tot ŋäthni"
+    ]
+   },
+   "corinth": {
+    "name": "Ko-rin",
+    "book": "Lät 18 · 1–2 Kor",
+    "today": "Gri̱k walɛ",
+    "note": "Cuɛ tä̱ä̱ run kɛl kɛnɛ pä̱ä̱t, kä cuɛ kanith caw rɛy dep dui̱rä.",
+    "events": [
+     "Cuɛ duɛɛl cak kɛ A-ki-la kɛnɛ Pri-thi-la",
+     "«/Ci dhil … kɛ ɣöö tɛ̈ɛ̈ kɛ ji̱»",
+     "Cu nɛy Ko-rin ti ŋuan ŋäth kä ca kɛ mut"
+    ]
+   },
+   "ephesus": {
+    "name": "Ɛ-pɛ-thɔ",
+    "book": "Lät 19 · Ɛpɛ",
+    "today": "Selçuk, Tuki walɛ",
+    "note": "Lɔac bär in diɔ̱k — cu ruac wä a tɛp wii A-thia.",
+    "events": [
+     "Ŋic ni cäŋ kɛ cäŋ run rɛw rɛy duel Ti-ra-no",
+     "Ca gɔ̱r bunyä nyop; lät ti buɔ̱m",
+     "Cu Dɛ-mɛ-tri in gua̱n tim yio̱wä ric tuok"
+    ]
+   },
+   "miletus": {
+    "name": "Mi-lɛ-to",
+    "book": "Lät 20:17-38",
+    "today": "Tuki walɛ",
+    "note": "Wieni waathä kɛ kua̱r kanith Ɛ-pɛ-thɔ.",
+    "events": [
+     "«Titi kanith in ci kɔ̱k kɛ ri̱ɛmdɛ rodɛ»",
+     "Cu kua̱r wee, ŋäckɛ i̱ /cikɛ jɛ bɛ̈ɛ̈ nɛn"
+    ]
+   },
+   "caesarea": {
+    "name": "Kai-tha-ria",
+    "book": "Lät 23–26",
+    "today": "thok wär I-thɛ-rɛl walɛ",
+    "note": "Kɛ run rɛw cuɛ ruac mi gɔaa gää nhiam kua̱r kɛnɛ kuäär.",
+    "events": [
+     "Guic nhiam kua̱r Pɛ-lik kɛnɛ Pɛ-tho",
+     "Gäädɛ nhiam Kuäär A-gri-pa",
+     "«Cɔ̱lä Kai-thar» — wä Rom"
+    ]
+   },
+   "jerusalem": {
+    "name": "Jɛ-ru-tha-lɛm",
+    "book": "Lät 21–23",
+    "today": "Jɛ-ru-tha-lɛm walɛ",
+    "note": "Ca ka̱p rɛy luaak, kä cu käthdɛ a raan mac tuok.",
+    "events": [
+     "Ca ka̱p kɛ bum rɛy luaak",
+     "Gäädɛ nhiam kɔɔr",
+     "Ca ja̱k a raan Rom, ca naŋ kɛ titä wä Kai-tha-ria"
+    ]
+   },
+   "myra": {
+    "name": "Mi-ra",
+    "book": "Lät 27:5-6",
+    "today": "Demre, Tuki walɛ",
+    "note": "Cikɛ locdiɛn wä ri̱w A-lɛk-than-dria in wä Rom.",
+    "events": []
+   },
+   "fairhaven": {
+    "name": "Thok Mal (Krit)",
+    "book": "Lät 27:8-12",
+    "today": "Krit walɛ",
+    "note": "Cu läŋ Pɔl in wee i̱ palkɛ kac /ci liŋ.",
+    "events": []
+   },
+   "crete": {
+    "name": "Krit",
+    "book": "Tay",
+    "today": "Krit walɛ",
+    "note": "Kä thuɔ̱k jɛk rodɛ, ɛn tuur mëë pal Tay thi̱n kɛ ɣöö bɛ kanith car.",
+    "events": [
+     "Pal Tay kɛ ɣöö bɛ kua̱r ka̱p rɛy dep ti diaal",
+     "Go̱rɛ nɛy nhiamä ti thil dueer, ti ŋäth",
+     "Cuɛ gɔ̱r Tay gɔ̱r"
+    ]
+   },
+   "malta": {
+    "name": "Mal-ta",
+    "book": "Lät 27–28",
+    "today": "Mal-ta walɛ",
+    "note": "Rɛy yiëth kɛnɛ riak ri̱wä, cu lëŋ Kuɔth cuŋ.",
+    "events": [
+     "Cu yamaŋ ‘in wä nyin cäŋ’ ri̱w riak, kä ŋot nɛy 276 diaal luäk",
+     "Ca kɛ cap kɛ thɔl, kä /cuɛ ŋɔaani jek",
+     "Cuɛ ji̱-jua̱i̱ tuur jak a gɔaa"
+    ]
+   },
+   "syracuse": {
+    "name": "Thi-ra-kut",
+    "book": "Lät 28:12",
+    "today": "Thi-thi-li, I-ta-li walɛ",
+    "note": "Cikɛ tä̱ä̱ ni̱ni ti diɔ̱k Thi-thi-li.",
+    "events": []
+   },
+   "puteoli": {
+    "name": "Pu-tɛ-o-li",
+    "book": "Lät 28:13-14",
+    "today": "Pozzuoli, I-ta-li walɛ",
+    "note": "Cikɛ cop I-ta-li kä cu ji̱-mäthni kɛ lony.",
+    "events": []
+   },
+   "rome": {
+    "name": "Rom",
+    "book": "Lät 28 · Gɔ̱r Dueel-Macä · 2 Tim",
+    "today": "Rom, I-ta-li walɛ",
+    "note": "Cu ruac mi gɔaa cop kɔaŋ döör göökä kä thukdɛ — /ciɛ thuɔ̱k a ɛ tukä.",
+    "events": [
+     "Run rɛw rɛy dueel titä, cuɛ rui̱c Kuɔth laar kɛ buɔ̱m",
+     "Kä guäth ɛmɔ cuɛ Gɔ̱r Dueel-Macä gɔ̱r (Ɛpɛ·Pil·Kol·Pay)",
+     "Kä thukdɛ ca jak a raan mac bɛ̈ɛ̈, cuɛ 2 Tim gɔ̱r kä ca nak — «Cä tɔ̱ɔ̱r in gɔaa tɔ̱ɔ̱r, cä ŋɔ̱p thuk»"
+    ]
+   }
+  },
+  "labels": [
+   "Wär in Di̱i̱t",
+   "Wär I-jɛn",
+   "A-thia in Tot",
+   "Ma-kɛ-do-nia",
+   "I-ta-li"
+  ],
+  "journeys": {
+   "j1": "Bär in tuk",
+   "j2": "Bär in rɛw",
+   "j3": "Bär in diɔ̱k",
+   "rome": "Bär in ŋuan · wä Rom",
+   "j5": "Bär in dhi̱ɛ̈c · kä thuɔ̱k jɛkä"
+  }
+ }
+}

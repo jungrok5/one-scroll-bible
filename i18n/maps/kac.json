@@ -1,0 +1,636 @@
+{
+ "menuName": "Jinghpaw",
+ "htmlLang": "kac",
+ "dir": "ltr",
+ "locale": "kac",
+ "brand": "Chyum Laika langai sha hta",
+ "docTitle": "Sumla Ga Shadu hku Chyum Laika · Chyum Laika langai sha hta",
+ "metaDesc": "Ga Sadi Makam a aten lam, Yesu a asak, hte Pawlu a bu hkawm ni hpe teng man ai sumla ga shadu ntsa e hkan yu u — Chyum Laika gaw teng man ai shara ni hkan byin wa ai.",
+ "s": {
+  "kicker": "Chyum Laika langai sha hta · Sumla Ga Shadu",
+  "title": "Sumla Ga Shadu hku Chyum Laika",
+  "verse": "“For we did not follow cleverly devised myths …” (2 Peter 1:16)",
+  "purpose": "Chyum Laika gaw maumwi adaw ahko n re. Teng man ai shara, aten hte mying ni ntsa e hkawm lai wa ai masha ni a labau rai nga ai. Dai lam ni hpe sumla ga shadu ntsa e, aten hku hkan yu u — shara langai hpe masawp u, n rai jang ▶ hpe dip nna lakang hte lakang hkan nang yu u.",
+  "ot_kick": "① Ga Sadi Makam — aten hku lai wa ai",
+  "ot_h": "Hpan da ai kaw na Yerusalem de bai nhtang wa ai du hkra",
+  "ot_lead": "Bu hkawm langai sha n re, hpan da ai kaw na hpang de hkye hkrang la ai labau a lwi ai lam rai nga ai: hpan da ai hte di hkrat ai → hka lim hte Babela → shaga ai lam (Abraham) → ga sadi jaw ai ga shara → Pru Mat Wa Ai → hkraw kawng → ga dang la ai → mungdan → garan mat ai → maigan mayam → bai nhtang wa ai.",
+  "je_kick": "② Ga Sadi Nnan — Yesu a asak",
+  "je_h": "Behtelehem kaw na Yerusalem du hkra",
+  "je_lead": "Kabu Gara Shiga mali tsun ai hte maren, Yesu a asak hpe aten hku hkan nang yu u — Behtelehem hta shangai ai kaw na hkalup hkrum ai hte Galile magam bungli, Samari hku lai nna, Yerusalem hta wudang, bai hkrung wa ai hte lung mat ai du hkra.",
+  "pa_kick": "③ Ga Sadi Nnan — Pawlu a bu hkawm ni",
+  "pa_h": "Antiok kaw na mungkan ga shingjut du hkra — Roma",
+  "pa_lead": "Yerusalem hta Pentekosta kaw na, Kabu Gara Shiga gaw Yuda mung shinggan de gara hku shabra wa ai — Asia Kaji hte Europa hku mungdan kaba a salum du hkra. Bu hkawm manga (1·2·3 + Roma de sa ai bu hkawm + lawt hkrum ai hpang) kaw na langai hpe lata nna, lam kaw ka da ai laika ni hte rau Kasa laika a lam ni hpe hkan nang yu u.",
+  "foot": "Nhpang ni · Shara ni gaw Chyum Laika mungga hte Chyum Laika ga shara hpaji hpe hkan nang ai (akyu rawng ai shara hta ya na mying hte). Panglai kau, hka hte nawng ni gaw ahpaw ga shara matsing (Natural Earth) kaw na la nna, loi kadun galaw da ai.",
+  "contact": "San ai lam · mahkrum madup — <a id=\"contact\" class=\"mail\">Email ka u</a>",
+  "play": "Hkawm",
+  "pause": "Hkring sa",
+  "today": "Dai ni:",
+  "verseCite": "2 Petru 1:16"
+ },
+ "ot": {
+  "places": {
+   "eden": {
+    "name": "Eden (Hpan da ai · Di hkrat ai)",
+    "book": "Ningpawt Ninghpang 1–3",
+    "today": "dai ni na Tigri–Euhprate ginra",
+    "note": "Grai kaja ai hku hpan da ai mungkan de, yubak shang wa nna Karai Kasang hte shinggyim masha lapran a sumtsaw hpe daw kau ai.",
+    "events": [
+     "Shani matsat hta hpan da ai — “grai kaja ai”",
+     "Masha hpe Karai Kasang a sumla hku hpan da ai",
+     "Di hkrat ai, Eden kaw na shapraw kau ai",
+     "Shawng nnan na Kabu Gara Shiga ga sadi — “numsha a amyu gaw lapu a baw hpe abrep na”"
+    ]
+   },
+   "noah": {
+    "name": "Ararat (Hka lim kaba)",
+    "book": "Ningpawt Ninghpang 6–9",
+    "today": "dai ni na Turki sinpraw maga, Ararat bum",
+    "note": "Karai Kasang gaw yubak hpring ai mungkan hpe tara dara ai, raitim dinghku langai hku asak hpe makawp maga ai.",
+    "events": [
+     "Yubak hte hpring ai mungkan",
+     "Hka lim, hte Nawa a hka li",
+     "Sumpi ga shaka — “kalang mi bai hka lim hte jahten na n re”"
+    ]
+   },
+   "babel": {
+    "name": "Babela Lakhtawng",
+    "book": "Ningpawt Ninghpang 11",
+    "today": "dai ni na Irak (Shinara layang)",
+    "note": "Sumsing lamu de du hkra gumrawng ai hpe, Karai Kasang gaw shanhte a ga hte amyu ni hpe mungkan ga ntsa e shara shara de gayet kau ai.",
+    "events": [
+     "“Anhte gaw myo langai hte lakhtawng langai gap ga… anhte a mying hpe shatsam ga”",
+     "Karai Kasang gaw shanhte a ga hpe gayau kau ai",
+     "Amyu ni mungkan ga ntsa e bra mat wa ai (Shinara — hpang e Babelon)"
+    ]
+   },
+   "ur": {
+    "name": "Ur",
+    "book": "Ningpawt Ninghpang 12",
+    "today": "dai ni na Irak dingda maga",
+    "note": "Chyum Laika a hkye hkrang la ai maumwi gaw masha langai hpe shaga ai kaw na hpang ai.",
+    "events": [
+     "Karai Kasang gaw Abram hpe Kaldia amyu a Ur kaw na shaga la ai",
+     "“Nang hpe amyu kaba shatai na nngai… amyu baw yawng gaw na a marang e shaman hkrum na”",
+     "Makam masham hku shi gaw tinang a ga hpe kabai kau ai"
+    ]
+   },
+   "haran": {
+    "name": "Haran",
+    "book": "Ningpawt Ninghpang 12",
+    "today": "dai ni na Turki dingda maga",
+    "note": "Lam kaw, ga sadi jaw ai ga shara de shaga ai hpe htan ai.",
+    "events": [
+     "Tera a dinghku gaw Haran hta shanu nga ai",
+     "Tera si mat ai",
+     "Abram gaw asak 75 ning e Kanan de rawt sa wa ai"
+    ]
+   },
+   "shechem": {
+    "name": "Shekem · Kanan",
+    "book": "Ningpawt Ninghpang 12–50",
+    "today": "dai ni na Nablu",
+    "note": "Ga sadi jaw ai ga shara hta dinghku langai hpang da nna ga shaka gaw kashu kasha de lai mat wa ai.",
+    "events": [
+     "Kanan de shang ai, shawng nnan jaw jau shara — “na a kashu kasha ni hpe ndai ga jaw na nngai”",
+     "Ga shaka (Ningpawt Ninghpang 15) · Isak · Yakob",
+     "Yakob a kasha 12 — amyu 12 a ru rai nga ai"
+    ]
+   },
+   "egypt": {
+    "name": "Egutu (Gawshen)",
+    "book": "Ningpawt Ninghpang 37–50 · Pru Mat Wa Ai 1",
+    "today": "dai ni na Egutu, Nail Hka delta ginra",
+    "note": "Dinghku langai amyu kaba tai wa ai — dai hpang mayam amyu tai mat ai.",
+    "events": [
+     "Yawsehpu gaw dut kau hkrum ai raitim Egutu hpe up hkang ai daraja de lung wa ai",
+     "Yakob a dinghku ting mu wan kawsi kaw na hprawng na matu yu wa ai",
+     "Mayat maya wa ai Israela amyu gaw mayam tai mat ai"
+    ]
+   },
+   "sinai": {
+    "name": "Sinai Bum",
+    "book": "Pru Mat Wa Ai · Jaw Jau",
+    "today": "dai ni na Sinai peninsula",
+    "note": "Ga Sadi Makam a ka-ang na hkye la ai lam — mayam ni Karai Kasang a amyu majing tai wa ai.",
+    "events": [
+     "Mara jahkrat ai shi lam hte La Lai Poi sagu",
+     "Hkahkyeng Panglai hpaw nna shanhte rap mat ai",
+     "Tara Shi, Tara, Nawku Htingnu hte jaw jau ni"
+    ]
+   },
+   "kadesh": {
+    "name": "Kadesh (hkraw kawng)",
+    "book": "Bu Hkawm · Tara Jahprang",
+    "today": "dai ni na Sinai–Negeb hkraw kawng",
+    "note": "N kam ai a majaw amyu prat langai gaw ga shara sum kau ai — raitim Karai Kasang gaw shanhte hte rau naw nga ai.",
+    "events": [
+     "Lagyim yu ai masha 12 — raitim amyu masha gaw kam ai hpe n hkap la ai",
+     "Hkraw kawng hta ning 38 — manna, sumwum sumut hte wan",
+     "Moab layang hta, Mawshe a hpang jahtum tara hkaw ai (Tara Jahprang)"
+    ]
+   },
+   "jericho": {
+    "name": "Yeriko",
+    "book": "Yawshu",
+    "today": "dai ni na Yeriko",
+    "note": "Hpang jahtum e shanhte gaw ga sadi jaw ai ga shara de shang nna la la ai.",
+    "events": [
+     "Yordan Hka hpaw nna amyu masha rap mat ai",
+     "Yeriko a sha-um ni hkrat ai",
+     "Kanan ga dang la ai hte ga garan la ai"
+    ]
+   },
+   "shiloh": {
+    "name": "Shilo (Tara Agyi ni)",
+    "book": "Tara Agyi · Ruhta",
+    "today": "dai ni na Khirbet Seilun",
+    "note": "Hkawhkam n nga ai majaw, masha shagu tinang ra ai hku galaw ai — teng sha rai ai hkawhkam langai ra nga ai.",
+    "events": [
+     "Nawku Htingnu hpe Shilo hta jasan da ai",
+     "Yubak–roi rip ai–hkye la ai garung gara (Debora, Gideon, Samson)",
+     "Ruhta — nsin prat hta sadi dung ai, Dawi a amyu lakung hta"
+    ]
+   },
+   "jerusalem": {
+    "name": "Yerusalem · Hkrum Sha Ai Mungdan",
+    "book": "1–2 Samuela · 1 Hkawhkam",
+    "today": "dai ni na Yerusalem",
+    "note": "Israela a ahtoi htum aten — hte galoi n htum ai hkawhkam langai a ga sadi.",
+    "events": [
+     "Shawng nnan hkawhkam Saula, dai hpang Dawi hte Goliat",
+     "Dawi hte ga shaka — “na a magam tingnyang galoi mung” (2 Samuela 7)",
+     "Shawlumon gaw Yerusalem hta Nawku Htingnu gap ai"
+    ]
+   },
+   "samaria": {
+    "name": "Samari · Garan Mat Ai Mungdan",
+    "book": "Hkawhkam · Myihtoi ni",
+    "today": "dai ni na Sebastia",
+    "note": "Myihtoi ni marawn nga ten, mungdan gaw garan mat nna npu de yu wa ai.",
+    "events": [
+     "Shawlumon a hpang, Yuda hte Israela hku garan mat ai",
+     "Bai bai galaw ai sutrai nawku ai",
+     "Elia, Esaia, Yeremia gaw ‘bai wa marit’ ngu marawn ai — hte Hkristu a lam tsun shawng ai"
+    ]
+   },
+   "nineveh": {
+    "name": "Ninewe (Asuria)",
+    "book": "2 Hkawhkam 17 · Yona",
+    "today": "dai ni na Irak, Mosul",
+    "note": "Sadi jaw ai shagu hpe n madat ai majaw, dingdung mungdan shawng nnan hkrat sum ai.",
+    "events": [
+     "Ninewe, Asuria mungdan a up shara",
+     "Dingdung mungdan gaw Asuria hku hkrat sum ai (BC 722)",
+     "Yona hpe Ninewe de dat dat ai"
+    ]
+   },
+   "babylon": {
+    "name": "Babelon",
+    "book": "2 Hkawhkam 25 · Daniela · Ezekela",
+    "today": "dai ni na Irak, Hillah",
+    "note": "Nsin htum ai na — raitim bai shanu la na ga sadi gaw naw nga ai.",
+    "events": [
+     "Yerusalem hkrat sum ai, Nawku Htingnu hkru mat ai (BC 586)",
+     "Yuda hpe Babelon de woi sa kau ai",
+     "Daniela hte Ezekela — maigan mayam hta makam masham hte myihtoi mu mada ai"
+    ]
+   },
+   "susa": {
+    "name": "Susa (Peresia)",
+    "book": "Eshta · Nehemia",
+    "today": "dai ni na Iran, Shush",
+    "note": "Karai Kasang n chye ai mungdan kaba a salum hta pyi, Karai Kasang gaw shi a amyu hpe makawp maga ai.",
+    "events": [
+     "Peresia gaw Babelon hpe dang kau ai",
+     "Eshta gaw Yuda ni hpe amyu jahten kau na kaw na hkye la ai",
+     "Nehemia gaw hkawhkam a man e akyu hpyi nna dat dat hkrum ai"
+    ]
+   },
+   "return": {
+    "name": "Yerusalem de bai nhtang wa ai",
+    "book": "Ezra · Nehemia · Malahki Laika",
+    "today": "dai ni na Yerusalem",
+    "note": "Shanhte nhtang wa nna bai gap ai — raitim hkawhkam n du wa ai. Shanhte gaw Hkristu hpe la nga ai.",
+    "events": [
+     "Kuru a ga shaka hku lang masum hku nhtang wa ai (Zerubabela 538 · Ezra 458 · Nehemia 444)",
+     "Nawku Htingnu bai gap ai hte Yerusalem sha-um ni bai gap ai",
+     "Malahki — Ga Sadi Makam htum ai: “Nye a matu lam lajang ya na kasa hpe ngai shangun dat na nngai”"
+    ]
+   }
+  },
+  "labels": [
+   "Mediterranian Panglai",
+   "Mesopotamia",
+   "Arabia Hkraw Kawng",
+   "Egutu"
+  ],
+  "journeys": {
+   "flow": "Hkye hkrang la ai maumwi"
+  }
+ },
+ "jesus": {
+  "places": {
+   "bethlehem": {
+    "name": "Behtelehem",
+    "book": "Mahte 1–2 · Luka 2",
+    "today": "dai ni na Behtelehem",
+    "note": "Ga sadi jaw da ai Hkristu gaw Dawi a mare de sa wa ai — Mungga shinggyim hkrang la ai.",
+    "events": [
+     "Dawi a mare Behtelehem hta shangai ai",
+     "Lamu kasa ni gaw sagu rem ai ni hpe shiga tsun dan ai",
+     "Sinpraw ga na hpaji sara ni nawku na matu sa wa ai"
+    ]
+   },
+   "nazareth": {
+    "name": "Nazaret",
+    "book": "Luka 2 · 4",
+    "today": "dai ni na Nazaret",
+    "note": "Karai Kasang gaw hprang hpra ai mare langai hta masha hku kaba wa ai.",
+    "events": [
+     "Hpun lakang galaw sara a nta hta kaba wa ai",
+     "Asak 12 ning e, Nawku Htingnu hta ga san san nna htai ai",
+     "Hpang e tinang a mare a nawku jawng hta nra hkrum ai"
+    ]
+   },
+   "jordan": {
+    "name": "Yordan Hka",
+    "book": "Mahte 3–4",
+    "today": "dai ni na Yordan hka npu maga",
+    "note": "Shi a shawa magam bungli hpang ai — sumsing lamu gaw shi hpe Kasha hku masat dan ai.",
+    "events": [
+     "Yawhan gaw shi hpe hkalup ya ai",
+     "Wenyi gaw u hkru zawn yu wa ai — “Ndai gaw ngai tsaw ra ai ngai a Kasha rai nga ai”",
+     "Hkraw kawng hta Satan a masum lang chyam yu ai hpe dang kau ai"
+    ]
+   },
+   "cana": {
+    "name": "Kana",
+    "book": "Yawhan 2",
+    "today": "dai ni na Kafr Kanna",
+    "note": "Shi a shawng nnan kanawn masat hku tinang a hpung shingkang hpe shapraw dan ai.",
+    "events": [
+     "Num la poi hta manam langai hku",
+     "Hka hpe tsa shai kau ai — shi a shawng nnan kanawn masat",
+     "Shi a sape ni gaw shi hpe kam sham ai"
+    ]
+   },
+   "sychar": {
+    "name": "Sukhar (Samari)",
+    "book": "Yawhan 2–4",
+    "today": "dai ni na Nablu makau",
+    "note": "Magam bungli a shawng nnan lam — Yerusalem hku lai nna, yu kaji hkrum ai Samari du hkra.",
+    "events": [
+     "Yerusalem hta Nawku Htingnu hpe san seng shatai ai",
+     "Shana e, Nikodemu — “nang bai shangai ra ai”",
+     "Samari num langai a matu asak hkrung ai hka"
+    ]
+   },
+   "capernaum": {
+    "name": "Kapernaum",
+    "book": "Mahte 4–13 · Marku 1–4",
+    "today": "dai ni na Galile nawng kau",
+    "note": "Galile magam bungli a giwang shara — shaga ai, sharin ya ai hte ninghkap ai yawng ndai hta hkrum ai.",
+    "events": [
+     "Nga hkwi sha ai ni hpe shaga nna ndai hta giwang shatai ai",
+     "Bum ntsa tara hkaw ai — “Wenyi lam matsan ai ni gaw chyeju hkrum ai ni rai nga ai”",
+     "Mungdan a sumla ga ni — hte law wa ai ninghkap ai"
+    ]
+   },
+   "galilee": {
+    "name": "Galile Nawng",
+    "book": "Marku 4 · 6 · Yawhan 6",
+    "today": "dai ni na Kinneret nawng",
+    "note": "Ninggawn tawa ntsa n-gun atsam hku shi gaw kadai rai ai hpe madun ai.",
+    "events": [
+     "“Zim u, ngwi pyaw nga u” — shi gaw nbung laru hpe zim shangun ai",
+     "Muk manga hte nga lahkawng hku masha 5,000 hpe jaw sha ai",
+     "Hka ntsa e hkawm ai"
+    ]
+   },
+   "caesarea_p": {
+    "name": "Kaisaria Hpilipi",
+    "book": "Mahte 16–17",
+    "today": "dai ni na Bania",
+    "note": "Sape ni gaw shi Hkristu rai ai hpe chye la ai, wudang a lam mung hpaw wa ai.",
+    "events": [
+     "Petru a hkam la ai ga — “Nang gaw Hkristu, asak hkrung ai Karai Kasang a Kasha rai nga ai”",
+     "Shi a si na hte bai hkrung wa na lam hpe shawng nnan tsun shawng ai",
+     "Bum ntsa e hpung shingkang hte shinggyim hkrang galai ai"
+    ]
+   },
+   "jericho": {
+    "name": "Yeriko",
+    "book": "Luka 18–19",
+    "today": "dai ni na Yeriko",
+    "note": "Yerusalem de lung wa ai lam kaw, shi gaw mat mat ai ni hpe tam ai.",
+    "events": [
+     "Myi n mu ai Bartimai hpe myi mu shangun ai",
+     "Kang gun la ai Zakke hpe shaga ai",
+     "“Shinggyim Kasha gaw mat mat ai ni hpe tam nna hkye la na matu sa wa ai”"
+    ]
+   },
+   "bethany": {
+    "name": "Behtani",
+    "book": "Yawhan 11–12",
+    "today": "dai ni na al-Eizariya",
+    "note": "Shi a hpang jahtum bat a shawng shani e, si hkrung si htan ntsa e ahkang aya lu ai hpe madun ai.",
+    "events": [
+     "Lasaru hpe lup kaw na bai hkrung shangun ai — “Ngai gaw si nna bai hkrung wa ai lam hte asak rai nga ai”",
+     "Mari gaw shi hpe lup makoi na matu sau chya ya ai",
+     "Ndai kanawn masat gaw shi hpe sat na lam hpe grau ja shatai ai"
+    ]
+   },
+   "jerusalem": {
+    "name": "Yerusalem",
+    "book": "Mahte 21–28 · Luka 24 · Kasa 1",
+    "today": "dai ni na Yerusalem",
+    "note": "Chyum Laika ting madun ai ahtoi htum shara — wudang, bai hkrung wa ai, lung mat ai.",
+    "events": [
+     "Awng dang ai hku shang wa ai; Nawku Htingnu na dut sha ai ni a sarin ni hpe kalang bai galau kau ai",
+     "Hpang jahtum shat sha ai poi hta sape ni a lagaw hpe kashin ya ai",
+     "Wudang ntsa e si ai",
+     "Shani masum ya hku bai hkrung wa nna, dai hpang lung mat ai"
+    ]
+   }
+  },
+  "labels": [
+   "Mediterranian Panglai",
+   "Galile",
+   "Samari",
+   "Yuda",
+   "Dekapoli",
+   "Perea",
+   "Si Ai Panglai"
+  ],
+  "journeys": {
+   "life": "Yesu a lam"
+  }
+ },
+ "paul": {
+  "places": {
+   "antioch": {
+    "name": "Antiok",
+    "book": "Kasa 13 · 15",
+    "today": "dai ni na Turki, Antakya",
+    "note": "Maigan amyu magam bungli hpang nna bai nhtang du ai dat shabra ai nawku hpung.",
+    "events": [
+     "Akyu hpyi nga ten Wenyi gaw Barnaba hte Saulu hpe garan shapraw ai",
+     "Kam sham ai ni hpe shawng nnan ‘Hkristan’ ngu shamying ai nawku hpung",
+     "Bu hkawm 1, 2, 3 lang a rawt sa wa ai shara"
+    ]
+   },
+   "seleucia": {
+    "name": "Seleukia",
+    "book": "Kasa 13:4",
+    "today": "dai ni na Turki",
+    "note": "Antiok a sanghpaw wang — shanhte Kupru de sanghpaw hte rawt sa wa ai.",
+    "events": []
+   },
+   "salamis": {
+    "name": "Salami (Kupru)",
+    "book": "Kasa 13:5",
+    "today": "dai ni na Kupru",
+    "note": "Kupru hta shawng nnan hkring ai shara — nawku jawng ni hta Mungga hkaw dan ai.",
+    "events": []
+   },
+   "paphos": {
+    "name": "Papho",
+    "book": "Kasa 13:6-12",
+    "today": "dai ni na Kupru",
+    "note": "Kabu Gara Shiga hpe ninghkap ai ni hpe n-gun atsam madun dan ai.",
+    "events": [
+     "Myimang sara Eluma gaw myi n mu mat ai",
+     "Up hkang wa Sergiu Paulu gaw kam sham ai",
+     "Ndai kaw na ‘Pawlu’ ngu mying hte shawng lam woi ai"
+    ]
+   },
+   "perga": {
+    "name": "Perga",
+    "book": "Kasa 13:13",
+    "today": "dai ni na Turki, Antalya",
+    "note": "Pamhpulia a sanghpaw wang — ndai hta Yawhan Marku nhtang mat wa ai.",
+    "events": []
+   },
+   "pantioch": {
+    "name": "Pisidia Antiok",
+    "book": "Kasa 13:14-50",
+    "today": "dai ni na Turki, Yalvaç",
+    "note": "Kabu Gara Shiga gaw maigan amyu de hpaw wa ai.",
+    "events": [
+     "Nawku jawng hta hkye hkrang la ai labau a tara galu hkaw dan ai",
+     "Maigan amyu law law kabu nna Mungga hpe hkap la ai",
+     "Ninghkap ai a majaw gau shapraw hkrum ai"
+    ]
+   },
+   "iconium": {
+    "name": "Ikonium",
+    "book": "Kasa 14:1-7",
+    "today": "dai ni na Turki, Konya",
+    "note": "Law law kam sham ai, raitim roi rip ai a majaw matut hkawm ra ai.",
+    "events": []
+   },
+   "lystra": {
+    "name": "Lustra",
+    "book": "Kasa 14:8-20",
+    "today": "dai ni na Turki",
+    "note": "Karai zawn shakawn hkrum, dai hpang nlung hte abyen hkrum ai.",
+    "events": [
+     "Shangai ai kaw na lagaw kong ai la langai hpe shamai ya ai",
+     "Masha law law gaw shan hpe karai zawn jaw jau na hkyen ai",
+     "Nlung hte abyen nna si sai ngu kabai da hkrum ai raitim shi rawt wa ai"
+    ]
+   },
+   "derbe": {
+    "name": "Derbe",
+    "book": "Kasa 14:20-21",
+    "today": "dai ni na Turki",
+    "note": "Sape law law shatai ai; nawku hpung ni hpe gawngban shangun na matu shanhte a lam hku bai nhtang hkawm ai.",
+    "events": []
+   },
+   "troas": {
+    "name": "Troa",
+    "book": "Kasa 16:8-10",
+    "today": "dai ni na Turki",
+    "note": "Kabu Gara Shiga shawng nnan Europa de sa wa ai galai ai shara.",
+    "events": [
+     "Makedonia la langai a myihtoi mu mada ai",
+     "“Makedonia de rap nna anhte hpe karum la rit”",
+     "Shanhte kalang ta Europa de rap mat wa ai"
+    ]
+   },
+   "philippi": {
+    "name": "Hpilipi",
+    "book": "Kasa 16 · Hpilipi",
+    "today": "dai ni na Grik dingdung maga",
+    "note": "Europa a shawng nnan nawku hpung — htawng kata hta pyi Kabu Gara Shiga awng dang ai.",
+    "events": [
+     "Chyahkraw palawng dut ai num Ludia gaw kam sham ai",
+     "Myihtoi masu ai mayam num langai hpe lawt shangun ai",
+     "Yup tung e mahkawn, ga a-nan, htawng sin wa a dinghku hkye hkrum ai"
+    ]
+   },
+   "thess": {
+    "name": "Htesaloni",
+    "book": "Kasa 17 · 1–2 Htesaloni",
+    "today": "dai ni na Grik, Thessaloniki",
+    "note": "Mungga gaw myo hpe shamagoi kau ai hte ninghkap ai gaw grai kap wa ai.",
+    "events": [
+     "Sabba masum lang nawku jawng hta tara jahkrum ai",
+     "“Mungkan ga hpe galau gasat kau ai ni”",
+     "Shanhte shana e lagu hprawng mat ai"
+    ]
+   },
+   "berea": {
+    "name": "Berea",
+    "book": "Kasa 17:10-15",
+    "today": "dai ni na Grik, Veria",
+    "note": "Mungga hpe tinang nan jep yu ai ‘myit su’ ai ni.",
+    "events": [
+     "Shanhte gaw Mungga hpe myit dik hkra hkap la ai",
+     "Teng ai kun ngu shani shagu Chyum Laika hpe jep yu ai",
+     "Law law kam sham wa ai"
+    ]
+   },
+   "athens": {
+    "name": "Athen",
+    "book": "Kasa 17:16-34",
+    "today": "dai ni na Grik, Athen",
+    "note": "Hpaji sara ni a myo hta shi gaw ‘n chye ai karai’ a lam hkaw dan ai.",
+    "events": [
+     "Sutrai hte hpring ai myo a majaw myit machyi ai",
+     "Areopagu hta hpan da ai Wa hte bai hkrung wa ai lam hpe hkaw dan ai",
+     "Roi hkrum ai raitim nkau mi kam sham ai"
+    ]
+   },
+   "corinth": {
+    "name": "Korinhtu",
+    "book": "Kasa 18 · 1–2 Korinhtu",
+    "today": "dai ni na Grik",
+    "note": "Yubak hte hpring ai myo hta nawku hpung langai hpang nna, ning mi hte shata kru nga ai.",
+    "events": [
+     "Akula hte Prisila hte rau ginsum galaw ai",
+     "“Hkum hkrit… ngai nang hte rau nga ai”",
+     "Korinhtu masha law law kam sham nna hkalup hkrum ai"
+    ]
+   },
+   "ephesus": {
+    "name": "Ehpesu",
+    "book": "Kasa 19 · Ehpesu",
+    "today": "dai ni na Turki, Selçuk",
+    "note": "Bu hkawm masum lang a salum — Mungga gaw Asia ting de shabra ai.",
+    "events": [
+     "Turannu a sharin ai jawng hta ning lahkawng shani shagu sharin ya ai",
+     "Myimang laika ni hpe nat kau ai; n-gun ja ai magam ni",
+     "Gumhpraw kahtam sara Demetriu gaw ganawng gasat ai lam hpang shangun ai"
+    ]
+   },
+   "miletus": {
+    "name": "Miletu",
+    "book": "Kasa 20:17-38",
+    "today": "dai ni na Turki",
+    "note": "Ehpesu salang ni hpe myi prwi hte lam hka ai.",
+    "events": [
+     "“Shi a sai hte mari la ai nawku hpung hpe sin mu”",
+     "Salang ni gaw shi hpe bai n mu sana ngu chye nna hkrap ai"
+    ]
+   },
+   "caesarea": {
+    "name": "Kaisaria",
+    "book": "Kasa 23–26",
+    "today": "dai ni na Israela panglai kau",
+    "note": "Ning lahkawng, up hkang ai ni hte hkawhkam langai a man e Kabu Gara Shiga hpe makawp ai.",
+    "events": [
+     "Up hkang ai Peliku hte Pestu a man e tara jep hkrum ai",
+     "Hkawhkam Agripa a man e tinang hpe makawp la ai",
+     "“Ngai Kaisa a man e tara jep na nngai” — Roma de matut sa wa ai"
+    ]
+   },
+   "jerusalem": {
+    "name": "Yerusalem",
+    "book": "Kasa 21–23",
+    "today": "dai ni na Yerusalem",
+    "note": "Nawku Htingnu hta rim hkrum nna, shi a htawng masha lam hpang ai.",
+    "events": [
+     "Nawku Htingnu hta masha law law gaw shi hpe rim la ai",
+     "Amyu salang zuphpawng a man e tinang hpe makawp la ai",
+     "Roma mungdan masha rai ai majaw, sin hkrum let Kaisaria de dat dat ai"
+    ]
+   },
+   "myra": {
+    "name": "Mura",
+    "book": "Kasa 27:5-6",
+    "today": "dai ni na Turki, Demre",
+    "note": "Roma de sa na Aleksandria sanghpaw langai de galai jawn ai.",
+    "events": []
+   },
+   "fairhaven": {
+    "name": "Fair Havens (Kreta)",
+    "book": "Kasa 27:8-12",
+    "today": "dai ni na Kreta",
+    "note": "Sanghpaw hkring na matu Pawlu a sadi jaw ai hpe n madat ai.",
+    "events": []
+   },
+   "crete": {
+    "name": "Kreta",
+    "book": "Titu",
+    "today": "dai ni na Kreta",
+    "note": "Shi lawt hkrum ai hpang, nawku hpung ni hpe jasan da na matu Titu hpe tawn kau ai zinlawng.",
+    "events": [
+     "Mare shagu hta salang ni hpe shatai na matu Titu hpe tawn da ai",
+     "Mara n nga ai, sadi dung ai woi awn ni hpe ra ai",
+     "Titu de laika ka ai"
+    ]
+   },
+   "malta": {
+    "name": "Malta",
+    "book": "Kasa 27–28",
+    "today": "dai ni na Malta",
+    "note": "Nbung laru hte sanghpaw ga ai hku lai timung, Karai Kasang a ga sadi gaw shadaw nga ai.",
+    "events": [
+     "‘Sinpraw dingdung nbung’ gaw sanghpaw hpe ga kau ai, raitim masha 276 yawng lawt ai",
+     "Lapu gawa hkrum ai raitim shi hpa n byin ai",
+     "Zinlawng na machyi makaw ni hpe shamai ya ai"
+    ]
+   },
+   "syracuse": {
+    "name": "Surakus",
+    "book": "Kasa 28:12",
+    "today": "dai ni na Itali, Sisili",
+    "note": "Sisili hta shani masum nga ai.",
+    "events": []
+   },
+   "puteoli": {
+    "name": "Puteoli",
+    "book": "Kasa 28:13-14",
+    "today": "dai ni na Itali, Pozzuoli",
+    "note": "Itali de du nna kam sham manang ni hte hkrum ai.",
+    "events": []
+   },
+   "rome": {
+    "name": "Roma",
+    "book": "Kasa 28 · Htawng Laika ni · 2 Timohti",
+    "today": "dai ni na Itali, Roma",
+    "note": "Kabu Gara Shiga gaw hpang jahtum e mungdan kaba a salum du hkra du wa ai — htum ai n re, hpang ai rai nga ai.",
+    "events": [
+     "Ning lahkawng nta hta rim da hkrum let, mungdan a lam hpe gawngban ai hku hkaw dan ai",
+     "Ndai kaw na Htawng Laika ni (Ehpesu·Hpilipi·Kolose·Hpilemon) hpe ka ai",
+     "Hpang e bai htawng rawng nna, 2 Timohti ka ai hte makam masham a majaw sat hkrum ai — “Ngai gaw kaja ai gasat poi hpe gasat sai, hprawng shingjawng ai lam hpe ngut sai”"
+    ]
+   }
+  },
+  "labels": [
+   "Mediterranian Panglai",
+   "Aigian Panglai",
+   "Asia Kaji",
+   "Makedonia",
+   "Itali"
+  ],
+  "journeys": {
+   "j1": "Shawng nnan bu hkawm",
+   "j2": "Lahkawng lang na bu hkawm",
+   "j3": "Masum lang na bu hkawm",
+   "rome": "Mali lang na bu hkawm · Roma de",
+   "j5": "Manga lang na bu hkawm · lawt hkrum ai hpang"
+  }
+ }
+}

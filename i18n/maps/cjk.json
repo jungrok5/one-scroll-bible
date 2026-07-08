@@ -35,10 +35,10 @@
     "today": "chihela cha Tigirisi–Eufurate musono",
     "note": "Mu hashi hatangiwile hawenehene, shili yinengila mba yinatetola ungunzo kachi ka Zambi ni atu.",
     "events": [
-     "Kutanga mu matangwa atanu na limwe — “hapwile hawenehene”",
+     "Kutanga mu matangwa atanu na limwe — “yinabeme kuhiana”",
      "Mutu yatangiwile mu chifwanyiso cha Zambi",
      "Kuhumbuka, ni kutuhwiwa mu Edene",
-     "Chilakanyino cha tete cha Sango Jibema — “vungu lia pwo mulikabwa akwa kole ku mutwe”"
+     "Chilakanyino cha tete cha Sango Jibema — “vungu lia pwo mulikabwa akwa kole…akukushihila ku mutwe”"
     ]
    },
    "noah": {
@@ -49,7 +49,7 @@
     "events": [
      "Hashi hazala ni ububi",
      "Kuvula kunene, ni watu wa Noa",
-     "Usendo wa kongolo — “kachikeza kuvula kunene cha kufwisa nawa ko”"
+     "Usendo wa kongolo — “sanga lia meya kulichi kwonona nawa akwa hashi”"
     ]
    },
    "babel": {
@@ -58,7 +58,7 @@
     "today": "Iraki musono (chana cha Shinare)",
     "note": "Ku kulitohwesa kwakusaka kuya kwilu, Zambi anapalangisa malimi ao ni atu ha hashi heswe.",
     "events": [
-     "“Tutunge nganda ni ndangu… mba tulipwise jina”",
+     "“Tutungenu limbo ni yimwe ndalo yisuku…Tukabwc ni lufuma ha ndalo yize”",
      "Zambi analuwanyisa malimi ao",
      "Atu anapalanga ha hashi heswe (Shinare — kunyima Babilone)"
     ]
@@ -70,7 +70,7 @@
     "note": "Sango lia ulamwino lia Mukanda wa Zambi linaputuka ni kusanyika cha mutu umwe.",
     "events": [
      "Zambi anasanyika Avalahama kufuma ku Uri wa akwa Kalada",
-     "“Mungukakupwisa vungu lineneni… mavungu eswe makawahisiwa muli yena”",
+     "“Mungukakupwisa vungu lineneni… mavungu eswe a hashi mumu hali yena”",
      "Ku ufulielo anaseza chifuchi chenyi"
     ]
    },
@@ -91,7 +91,7 @@
     "today": "Nabulusi musono",
     "note": "Mu hashi hialakanyiwile, chitatu chinaputuka mba usendo unahita ku vusendo.",
     "events": [
-     "Kwingila mu Kanana, chikutwilo cha tete — “vungu lie mungukalihana hashi hano”",
+     "Kwingila mu Kanana, chikutwilo cha tete — “Chino che chifuchi mungukahana kuli vungu lie”",
      "Usendo (Ubu 15) · Izaki · Yakova",
      "Ana 12 a Yakova — muji wa mavungu 12"
     ]
@@ -158,7 +158,7 @@
     "note": "Tangwa liwaha lia Israele — ni chilakanyino cha mwanangana wa miaka yeswe.",
     "events": [
      "Saulu mwanangana wa tete, kutwala David ni Goliate",
-     "Usendo wa David — “chitwamo che muchikatwama miaka yeswe” (2 Sam 7)",
+     "Usendo wa David — “wanangana we mungukaulindulula ku miaka yeswe” (2 Sam 7)",
      "Solomone anatunga zuwo lia Zambi mu Yerusaleme"
     ]
    },
@@ -259,7 +259,7 @@
     "note": "Mulimo wenyi wa hehi unaputuka — lilu linamushindakenya ngwe Mwana.",
     "events": [
      "Apapateswa kuli Yoano",
-     "Mwiku unahulumuka ngwe chimburi — “Ou hi Mwanami wa zango”",
+     "Mwiku unahulumuka ngwe chimburi — “Yono mwe Mwanami yoze nakuzanga kuhiana”",
      "Anashindakenya yiseko yitatu ya Satana mu kasendzi"
     ]
    },
@@ -281,7 +281,7 @@
     "note": "Jila ya mulimo wa kuputuka — kuhita mu Yerusaleme ndoo ku Samaria yakusawula.",
     "events": [
      "Anatokesa zuwo lia Zambi mu Yerusaleme",
-     "Ku ufuku, Nikodemu — “Chinatela usemuke nawa”",
+     "Ku ufuku, Nikodemu — “chanutamba kusemuka kwilu”",
      "Meya a mwono kuli pwo wa ku Samaria"
     ]
    },
@@ -292,7 +292,7 @@
     "note": "Chihela cha mulimo wa Galilaya — kusanyika, kunangula ni kukinda yeswe yinaliwana hano.",
     "events": [
      "Anasanyika akwa kufula yishi mba anatwama hano",
-     "Longeso ha Mundu — “Awahilila akwa kuzeya mu mbunge”",
+     "Longeso ha Mundu — “Kaawaha waze akunyingika ngwo…tuli yiswale mu mbunge”",
      "Yishima ya wanangana wa Zambi — ni kukinda kunakula"
     ]
    },
@@ -302,7 +302,7 @@
     "today": "Kalunga ka Kinerete musono",
     "note": "Ni ngolo hali yuma yeswe yatangiwile, anasolola yoze iye ali.",
     "events": [
-     "“Ehula, imana” — anaehwisa chipupu",
+     "“Hola zungo! Bwako kuluu!” — anaehwisa chipupu",
      "Anadisa atu 5.000 ni mimbolo yitanu ni yishi yivali",
      "Anenda ha meya"
     ]
@@ -313,7 +313,7 @@
     "today": "Baniasi musono",
     "note": "Ambaji jenyi anatachikijila ngwo iye hi Kristu, mba jila ya lusu yinasahuka.",
     "events": [
-     "Kwitava cha Petulu — “Yena hi Kristu, Mwana wa Zambi wa mwono”",
+     "Kwitava cha Petulu — “Yena mwe Chilamwina yoze Zambi alakenyene, yena mwe Mwana wa Zambi ya mwono”",
      "Anambujola tete kufwa ni kuhinduka chenyi",
      "Analumuka mu uhenya ha mundu"
     ]
@@ -326,7 +326,7 @@
     "events": [
      "Anahana meso kuli Batimeu mputu",
      "Anasanyika Zakeu mukwa kutambula mitelo",
-     "“Mwana wa Mutu weziile kusota ni kulamwina waze anajimbala”"
+     "“Mwana Mutu haneza mu kufupa ni kulamwina akwa kutoka”"
     ]
    },
    "bethany": {
@@ -335,7 +335,7 @@
     "today": "Al-Eizaria musono",
     "note": "Anasolola ngolo jenyi hali kufwa hakamwihi ni chalumingu chenyi cha kusongo.",
     "events": [
-     "Anahindwisa Lazaru ku mbila — “Yami hi kuhinduka ni mwono”",
+     "Anahindwisa Lazaru ku mbila — “Yami nguli we uhindukilo ni we mwono”",
      "Maria anamuwaisa manji ha kufunda chenyi",
      "Chinjikijilo chino chinakolesa manyonga a kumushiha"
     ]
@@ -454,7 +454,7 @@
     "note": "Chihela cha kwalumuka kuze Sango Jibema jinaya tete ku Europa.",
     "events": [
      "Chimweso cha mutu wa ku Masedonia",
-     "“Izenu hano mutukwase”",
+     "“Wize kama kuno ku Masedonia utukwase”",
      "Anahita halinwaha ku Europa"
     ]
    },
@@ -476,7 +476,7 @@
     "note": "Liji linanyingisa nganda mba kukinda kunazuka.",
     "events": [
      "Anahanjika mu sinagoga masabata atatu",
-     "“Ou akwalumuna hashi heswe”",
+     "“Atu wano haavundula yifuchi yeswe ya hashi”",
      "Anatuhuka ku ufuku"
     ]
    },
@@ -509,7 +509,7 @@
     "note": "Anatwama muvu umwe ni kachi, anatunga eklezia mu nganda ya yibi.",
     "events": [
      "Analinga matende ni Akwila ni Priskila",
-     "“Kanda wivwe woma… mumu ngunatwama ni yena”",
+     "“Kanda wivwa woma… mumu yami nguli hamwe ni yena”",
      "Akwa Korintu anji anafuliela mba apapateswa"
     ]
    },
@@ -530,7 +530,7 @@
     "today": "Tukiya musono",
     "note": "Kulisisa ni masoji kuli akulwana a eklezia ya Efesu.",
     "events": [
-     "“Lamenu eklezia yize alandile ni manyinga enyi mwene”",
+     "“Fungenu kanawa Chikungulwila cha Zambi chize azukile ku kufwa cha Mwanenyi”",
      "Akulwana analila, ni kunyingika ngwo kachakumumona nawa ko"
     ]
    },
@@ -542,7 +542,7 @@
     "events": [
      "Kuyulwa ku meso ja vangana Felikisi ni Fesitu",
      "Kulikumbulwila chenyi ku meso ja Mwanangana Agiripa",
-     "“Nguinasanyika Kaisare” — kuya ku Roma"
+     "“ngunaliumbu ngwami, mwanangana wa Aroma abatule mulonga wami” — kuya ku Roma"
     ]
    },
    "jerusalem": {
@@ -614,7 +614,7 @@
     "events": [
      "Miaka yivali mu ukwatwa wa ku zuwo, anambujola wanangana wa Zambi ni ushindakenyo",
      "Kufuma hano anasoneka Mikanda ya Funge (Efesu·Filipu·Kolosu·Filemu)",
-     "Kunyima amuhaka mu kaleya nawa, anasoneka 2 Timoteu mba amushiha ha ufulielo wenyi — “Nazuwa kuzuwa chiwape, nakumisa kuya kwami”"
+     "Kunyima amuhaka mu kaleya nawa, anasoneka 2 Timoteu mba amushiha ha ufulielo wenyi — “Hingunalitachika kanawa, hingunazomboka ndoo Ku songo”"
     ]
    }
   },

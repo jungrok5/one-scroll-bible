@@ -33,12 +33,12 @@
     "name": "Edene (Dibhangelu · Kubhua)",
     "book": "Dimatekenu 1–3",
     "today": "o mbandu ua Tigris–Eufrate lelu",
-    "note": "Mu ngongo iabhangelua «iambote kiavulu», o ituxi iiza anga i batula o ukamba bhu kaẋi ka Nzambi ni o muthu.",
+    "note": "Mu ngongo iabhangelua «ia uabha muene kiavulu», o ituxi iiza anga i batula o ukamba bhu kaẋi ka Nzambi ni o muthu.",
     "events": [
-     "O dibhangelu mu mizuua isamanu — «iaxile iambote kiavulu»",
+     "O dibhangelu mu mizuua isamanu — «ia uabha muene kiavulu»",
      "O muthu uabhangelua mu kifua kia Nzambi",
      "O kubhua, ni o kukatulua ku Edene",
-     "O kikanenu kia dianga kia Njimbu Iambote — «o mbutu ia muhatu i kà bula o mutue ua nhoka»"
+     "O kikanenu kia dianga kia Njimbu Iambote — «mbutu ié…muene ua kà ku bula o mutue»"
     ]
    },
    "noah": {
@@ -49,7 +49,7 @@
     "events": [
      "O ngongo iezala ni undumbu",
      "O menha ma dikota, ni o ngalaua ia Noé",
-     "O kikutu ni o dikuma dia mu kilu — «ki ku kala dingi menha phala kubhukumuna o ngongo»"
+     "O kikutu ni o dikuma dia mu kilu — «nuka kuà kala dingi sulumbembe ia menha i buikisa ixi»"
     ]
    },
    "babel": {
@@ -58,7 +58,7 @@
     "today": "Iraque lelu (o kianga kia Sineare)",
     "note": "Ku pholo ia usunga ua kusota o kilu, Nzambi u sanguna o mizui iâ ni o miiji mu ngongo ioso.",
     "events": [
-     "«Tuzé tutunge mbanza ni dibhata dia kubandalela… tudibhane dijina»",
+     "«Ndokuenu, tu bhange mbonge, tu iudike ni kathôndo…tu fumane dijina»",
      "Nzambi u sanguna o dimi diâ",
      "O miiji i sanguka mu ngongo (Sineare — kurima Babilónha)"
     ]
@@ -70,7 +70,7 @@
     "note": "O musoso ua kubhuluka ua Bibidia u matekena ni o kikanenu kia muthu umoxi.",
     "events": [
      "Nzambi u ixana Abalahámi ku Ur ua akua Kalade",
-     "«Ngi ku bhanga muiji ua dikota… o miiji ioso i kà zediuila mu eie»",
+     "«nʼukala u muiji ua dikota…mua kà zediuila o miiji ioso mu ngongo»",
      "Mu kuxikana u tunda o ixi iê"
     ]
    },
@@ -91,7 +91,7 @@
     "today": "Nablus lelu",
     "note": "Mu ixi iakanenua o muiji uabhangela anga o kikutu ki bhita ku jindandu.",
     "events": [
-     "Kubhokela mu Kanaane, o jisata dia dianga — «ku mbutu ié ngi bhana o ixi iii»",
+     "Kubhokela mu Kanaane, o jisata dia dianga — «O mbutu ié-eie hinu nga kà a bhana o ixi ienhiʼii»",
      "O kikutu (Dimatekenu 15) · Izaki · Jakobe",
      "O an'a Jakobe akumi-aiadi — o mbutu ia jindandu akumi-aiadi"
     ]
@@ -158,7 +158,7 @@
     "note": "O thembu iambote ia Izalaiele — ni o kikanenu kia sobha ua muku.",
     "events": [
      "Saúle o sobha ua dianga, kurima Davidi ni Goliata",
-     "O kikutu kia Davidi — «o kiandu kié ki kà xala muku» (II Samuuele 7)",
+     "O kikutu kia Davidi — «kiandu kié kià xala sé dizubhilu» (II Samuuele 7)",
      "Salomáu u tunga o tembulu mu Jeluzaleme"
     ]
    },
@@ -259,7 +259,7 @@
     "note": "O sidivisu uê ua bhonga u matekena — o diulu di mu xikina kala Mona.",
     "events": [
      "Uabatizua kua Nzuá",
-     "O Nzumbi i loloka kala pumbu — «Iú Mona ami ua kazola»",
+     "O Nzumbi i loloka kala pumbu — «Muenhú Monʼ ami a kazola»",
      "U xina o kutuata kutatu kua Satanaji mu dikangu"
     ]
    },
@@ -281,7 +281,7 @@
     "note": "O njila ia sidivisu ia dianga — mu Jeluzaleme katé ku Samádia iaxinwa.",
     "events": [
      "U zelesa o tembulu mu Jeluzaleme",
-     "Ku usuku, Nikodemu — «Uatokala kuvualua dingi»",
+     "Ku usuku, Nikodemu — «Enuʼoso mua bhingi ku mi vuala dingi»",
      "Menha ma muenhu ku muhatu ua Samádia"
     ]
    },
@@ -292,7 +292,7 @@
     "note": "O nzo ia sidivisu ia Galiléia — o kixanenu, o malongi, ni o kutata i sanga bhabha.",
     "events": [
      "U ixana o alobhi a jimbiji anga u xikama bhabha",
-     "O malongi ma ku mulundu — «A di besá o asukami mu nzumbi»",
+     "O malongi ma ku mulundu — «A zediua jingadiama ja muẋima»",
      "O jisabhu ja Utuminu — ni o kutata kuakola"
     ]
    },
@@ -302,7 +302,7 @@
     "today": "o Dijiba dia Kinerete lelu",
     "note": "Ni o nguzu iê ku thandu dia ngongo u londekesa o kála kuê.",
     "events": [
-     "«Tululuka, kala kie» — u tulula o kitembu",
+     "«Batamenu mu dixibhe» — u tulula o kitembu",
      "U disa athu 5.000 ni mbolo jitanu ni jimbiji jiiadi",
      "U enda ku thandu dia menha"
     ]
@@ -313,7 +313,7 @@
     "today": "Banias lelu",
     "note": "O adisíbulu a kijiia kuma muene o Kristu, anga o njila ia dikulusu i jikuka.",
     "events": [
-     "O kuxikana kua Phetele — «Eie o Kristu, o Mona a Nzambi ua muenhu»",
+     "O kuxikana kua Phetele — «Eie u Kristu, Monʼa Nzambi ia muenhu»",
      "U londekesa dianga o kufua ni o kufukunuka kuê",
      "U balumuka mu unène ku mulundu"
     ]
@@ -326,7 +326,7 @@
     "events": [
      "U jikula o mesu ma Bartimeu o mufofo",
      "U ixana Zakeu o mufutisi",
-     "«O Mona a muthu ueza kusota ni kubhulula o iajimbidila»"
+     "«Monʼ a Muthu ueza mu kusota ni kubhulula kioso kia jimbidila»"
     ]
    },
    "bethany": {
@@ -335,7 +335,7 @@
     "today": "al-Eizariya lelu",
     "note": "U londekesa o kála kuê ku thandu dia kufua ku dizubhilu dia simana iê ia disukilu.",
     "events": [
-     "U balumuna Lázalu ku mbila — «Eme o kufukunuka ni o muenhu»",
+     "U balumuna Lázalu ku mbila — «Eme ngi difukunukinu ni muenhu»",
      "Madiya u mu bhaka maji phala o kuziika",
      "O dikuma diki di kolesa o kudibhonza phala ku mu jibha"
     ]
@@ -454,7 +454,7 @@
     "note": "O kididi kia kubiluka mudi o Njimbu Iambote i ia dianga ku Eulopa.",
     "events": [
      "O kimonekenu kia diiala dia Masedónia",
-     "«Zúke kuku, u tu kuatekese»",
+     "«Zauka kunu…u tu kuatekese etu»",
      "A bhitila mu Eulopa lukasu"
     ]
    },
@@ -476,7 +476,7 @@
     "note": "O Diambu di dikina o mbanza anga o kutata ku vokiya.",
     "events": [
      "U zuela mu nzo ia kibhanga jisábhalu jitatu",
-     "«Ana a bhalumuna o ngongo»",
+     "«Mala a bonguesa oxi ioso»",
      "A tunda ku usuku"
     ]
    },
@@ -509,7 +509,7 @@
     "note": "U xikama muku ua mivu umoxi ni kaxi, u tunga dingeleja mu mbanza ia undumbu.",
     "events": [
      "U bhanga jitenda ni Akila ni Priskila",
-     "«Ku u kale ni uoma… mukonda ngala ni eie»",
+     "«Ku kale ni uôma…Eme ngala ni eie»",
      "AKolindo avulu a xikina anga a batizua"
     ]
    },
@@ -530,7 +530,7 @@
     "today": "Turkia lelu",
     "note": "O kusakela kua masoxi ku jindala ja Efezo.",
     "events": [
-     "«Langenu o dingeleja ki ua sumba ni manhinga mê muene»",
+     "«Di langienu-phe…ngeleja ia Ngana Nzambi, kuma Muène ua i sumbu ni manhinga ma Monʼ êlele muene»",
      "O jindala a dila, a kijiia kuma ki a mu mona dingi"
     ]
    },
@@ -542,7 +542,7 @@
     "events": [
      "O kufundisa ku pholo ia jimfumu Felísi ni Festu",
      "O kudizuelela kuê ku pholo ia sobha Agilipa",
-     "«Ngi bhinga o kufundisa kua Kézali» — ku Loma"
+     "«nga fundila kubhiẋila kua Sézalu» — ku Loma"
     ]
    },
    "jerusalem": {
@@ -614,7 +614,7 @@
     "events": [
      "Mivu iiadi mu kudilanga ku nzo, u banza o Utuminu ua Nzambi sé uoma",
      "Tunde bhabha u soneka o Jimukanda ja Kaleia (Efezo·Filipe·Kolose·Filemone)",
-     "Kurima a mu kuata dingi, u soneka o II Timote anga a mu jibhila o kuxikana — «Ngalua o kita kiambote, ngazubha o njila»"
+     "Kurima a mu kuata dingi, u soneka o II Timote anga a mu jibhila o kuxikana — «Ngalu ita iambote, dikanga dia ngi xindile nga di zubha»"
     ]
    }
   },

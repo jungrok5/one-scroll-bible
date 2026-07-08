@@ -259,7 +259,7 @@
     "note": "Algab tema avalik teenistus — taevas kinnitab ta Pojaks.",
     "events": [
      "Ristitud Johannese poolt",
-     "Vaim laskub tuvina — see on minu armas Poeg",
+     "Vaim laskub tuvina — See on minu armas Poeg",
      "Võidab kõrbes Saatana kolm kiusatust"
     ]
    },
@@ -281,7 +281,7 @@
     "note": "Varase teenistuse tee — läbi Jeruusalemma ja edasi põlatud Samaariasse.",
     "events": [
      "Ta puhastab templi Jeruusalemmas",
-     "Öösel Nikodeemos — te peate uuesti sündima",
+     "Öösel Nikodeemos — Te peate uuesti sündima",
      "Elav vesi Samaaria naisele"
     ]
    },
@@ -292,7 +292,7 @@
     "note": "Galilea teenistuse tugipunkt — kutsumine, õpetus ja vastuseis kohtuvad siin.",
     "events": [
      "Kutsub kalurid ja teeb sellest oma tugipunkti",
-     "Mäejutlus — õndsad on vaimus vaesed",
+     "Mäejutlus — Õnnistatud on vaimust vaesed",
      "Kuningriigi tähendamissõnad — ja kasvav vastuseis"
     ]
    },
@@ -302,7 +302,7 @@
     "today": "Kinnereti järv täna",
     "note": "Väega looduse üle näitab ta, kes ta on.",
     "events": [
-     "Ole vait, jää vakka — ta vaigistab tormi",
+     "Vait! Olge tasa! — ta vaigistab tormi",
      "Toidab viie leiva ja kahe kalaga 5000 inimest",
      "Kõnnib vee peal"
     ]
@@ -313,7 +313,7 @@
     "today": "Banias täna",
     "note": "Jüngrid mõistavad, et ta on Kristus, ja avaneb risti tee.",
     "events": [
-     "Peetruse tunnistus — sina oled Kristus, elava Jumala Poeg",
+     "Peetruse tunnistus — Sina oled Messias, elava Jumala Poeg",
      "Ta kuulutab esimest korda ette oma surma ja ülestõusmist",
      "Muutub mäel aus"
     ]
@@ -326,7 +326,7 @@
     "events": [
      "Ta annab pimedale Bartimeusele nägemise",
      "Ta kutsub tölner Sakkeuse",
-     "Inimese Poeg tuli otsima ja päästma kadunut"
+     "Inimese Poeg on tulnud otsima ja päästma kadunut"
     ]
    },
    "bethany": {
@@ -335,7 +335,7 @@
     "today": "al-Eizariya täna",
     "note": "Ta näitab võimu surma üle oma viimase nädala eelõhtul.",
     "events": [
-     "Ta äratab Laatsaruse hauast — mina olen ülestõusmine ja elu",
+     "Ta äratab Laatsaruse hauast — Mina olen ülestõusmine ja elu",
      "Maarja võiab ta matmiseks",
      "See tunnustäht kinnistab plaani ta tappa"
     ]
@@ -454,7 +454,7 @@
     "note": "Pöördepunkt, kus evangeelium suundub esimest korda Euroopasse.",
     "events": [
      "Nägemus Makedoonia mehest",
-     "Tule meid aitama",
+     "Tule … aita meid!",
      "Nad lähevad kohe üle Euroopasse"
     ]
    },
@@ -476,7 +476,7 @@
     "note": "Sõna raputab linna ja vastuseis kihab üle.",
     "events": [
      "Arutleb sünagoogis kolmel hingamispäeval",
-     "Need, kes on maailma pea peale pööranud",
+     "Need mehed, kes kogu ilma on pea peale pööranud",
      "Nad lahkuvad öösel salaja"
     ]
    },
@@ -509,7 +509,7 @@
     "note": "Ta jääb pooleteiseks aastaks, rajades koguduse pahede linna.",
     "events": [
      "Teeb telke koos Akvila ja Priskillaga",
-     "Ära karda … sest mina olen sinuga",
+     "Ära karda … Sest mina olen sinuga",
      "Paljud korintlased hakkavad uskuma ja ristitakse"
     ]
    },
@@ -530,7 +530,7 @@
     "today": "Türgi täna",
     "note": "Pisarais hüvastijätt Efesose vanematega.",
     "events": [
-     "Hoolitsege koguduse eest, mille ta on omandanud oma verega",
+     "Olge karjased Jumala kogudusele, mille ta on saanud iseenese vere läbi",
      "Vanemad nutavad, teades, et ei näe teda enam"
     ]
    },
@@ -542,7 +542,7 @@
     "events": [
      "Kohtuprotsessid maavalitsejate Feeliksi ja Festuse ees",
      "Tema kaitsekõne kuningas Agrippa ees",
-     "Ma nõuan keisri kohut — edasi Rooma"
+     "Mina nõuan keisri kohut — edasi Rooma"
     ]
    },
    "jerusalem": {
@@ -614,7 +614,7 @@
     "events": [
      "Kaks aastat koduarestis, kuulutades julgelt Jumala riiki",
      "Siit kirjutab ta vanglakirjad (Ef·Fl·Kl·Fm)",
-     "Hiljem taas vangistatud, kirjutab 2. Timoteose kirja ja saab märtriks — olen võidelnud head võitlemist, olen lõpetanud jooksmise"
+     "Hiljem taas vangistatud, kirjutab 2. Timoteose kirja ja saab märtriks — olen võidelnud head võitlust, ma olen oma võidujooksu lõpetanud"
     ]
    }
   },

@@ -259,7 +259,7 @@
     "note": "Lh̬dmt‑ns tbda dat‑mddn — ajnna ittchhad is‑iga Yus‑ns.",
     "events": [
      "Ittsddam s‑Yuḥanna",
-     "Rruḥ igguz zund tadbirt — «Wad iga yus‑inu iɛzzan»",
+     "Rruḥ igguz zund tadbirt — «ġwad iga iwi iɛzzan»",
      "Inra kraḍ n‑tjrribin n‑ibliss ġ‑lh̬la"
     ]
    },
@@ -281,7 +281,7 @@
     "note": "Aɣaras n‑lh̬dmt tamzwarut — s‑Urušalim ar‑Samira lli‑ittwaḥqarn.",
     "events": [
      "Issizdig tamzgida ġ‑Urušalim",
-     "S‑iḍ, Nikudimus — «iqqan‑k a‑d‑tlalt daɣ»",
+     "S‑iḍ, Nikudimus — «iqqan‑kʷn‑d a‑tlalm zġ‑ljdid»",
      "Aman iddrn i‑yat‑tmġart n‑Samira"
     ]
    },
@@ -292,7 +292,7 @@
     "note": "Llsas n‑lh̬dmt n‑Jalil — tiɣri, aslmd, d‑umnaɣ, kullu ar‑tmlaqan ġid.",
     "events": [
      "Isawal i‑iṣiyyadn n‑islman, ig ġid llsas‑ns",
-     "Aslmd f‑udrar — «Imbarkin willi igan imskinn ġ‑rruḥ»",
+     "Aslmd f‑udrar — «imbarkin ad‑gan ġwilli ssḥssanin is‑ur‑gin yat»",
      "Lamtal n‑tgldit — d‑umnaɣ ar‑izayd"
     ]
    },
@@ -302,7 +302,7 @@
     "today": "Lbḥirt Kinnirit ġilad",
     "note": "S‑ssulṭa‑ns f‑ddunit, iml matta a‑iga.",
     "events": [
-     "«Ssusm, zga» — issgn aḍu d‑waman",
+     "«zga, thnnat» — issgn aḍu d‑waman",
      "Iššč 5,000 n‑mddn s‑smmus n‑iɣrumn d‑sin n‑islman",
      "Iftu f‑waman"
     ]
@@ -313,7 +313,7 @@
     "today": "Baniyas ġilad",
     "note": "Imḥḍarn fahmn is‑iga lmasiḥ, irẓm uɣaras n‑uggjdi.",
     "events": [
-     "Tinawt n‑Buṭrus — «Kiyi a‑igan lmasiḥ, Yus n‑Rbbi iddrn»",
+     "Tinawt n‑Buṭrus — «tgit lmasiḥ yus n‑rbbi lli‑iddrn»",
      "Ibrraḥ i‑twala tamzwarut s‑lmut‑ns d‑unkar‑ns",
      "Ibddl udm‑ns s‑lmjd f‑udrar"
     ]
@@ -326,7 +326,7 @@
     "events": [
      "Ifka taẓri i‑Bartimawus adrɣal",
      "Isawal i‑Zakka amkkas n‑lġaramt",
-     "«Yus n‑bnadm yuška‑d baš a‑isiggil a‑ijjnjm willi jlan»"
+     "«uškiġ‑d nkki lli‑igan yus n‑bnadm ad‑sigglġ s‑willi jlanin jjnjmġ‑tn»"
     ]
    },
    "bethany": {
@@ -335,7 +335,7 @@
     "today": "Al‑ɛizariya ġilad",
     "note": "Iml ssulṭa‑ns f‑lmut dat‑dduṛt‑ns tamggarut.",
     "events": [
-     "Issnkr‑d Laɛzar zġ‑uzkka — «Nkki a‑igan ankar d‑tudrt»",
+     "Issnkr‑d Laɛzar zġ‑uzkka — «nkki a‑igan tankra ula tudrt»",
      "Maryam tdhn‑t i‑tmḍlt",
      "Tamatart‑ad tsduqqr lmakr baš a‑t‑nɣn"
     ]
@@ -454,7 +454,7 @@
     "note": "Amkan n‑ubddl mani a‑ġ‑iddu lh̬bar ifulkin s‑Uruppa i‑twala tamzwarut.",
     "events": [
      "Tirit n‑yan‑urgaz n‑Maqiduniya",
-     "«Ašk‑d s‑ɣur‑nnɣ, tɛiwnt‑aɣ»",
+     "«ašk‑id s‑makiduniyya tɛawnt‑aġ»",
      "Zrin ġ‑lḥin s‑Uruppa"
     ]
    },
@@ -476,7 +476,7 @@
     "note": "Awal issnhzz tamdint, inkr‑d umnaɣ.",
     "events": [
      "Isawal ġ‑tmzgida kraḍ n‑wussan n‑ssbt",
-     "«Ġwid a‑isqlbn ddunit»",
+     "«ġwilli ssgrawlnin ddunit kullutt»",
      "Ffuɣn s‑iḍ s‑tuffra"
     ]
    },
@@ -509,7 +509,7 @@
     "note": "Iqama yan‑usggʷas d‑uzgn, isbdd tamzgida ġ‑yat‑tmdint n‑lhh̬sant.",
     "events": [
      "Iskar ihh̬yamn d‑Akila d‑Briskila",
-     "«Ur‑ttiksaḍ… acku giġ didk»",
+     "«ad‑ur‑tiksaṭṭ… hati lliġ didk»",
      "Aṭṭas n‑ayt‑Korintus umnn, ttwasddamn"
     ]
    },
@@ -530,7 +530,7 @@
     "today": "Turkiya ġilad",
     "note": "Sslam amggaru s‑imṭṭawn i‑imɣarn n‑Afsus.",
     "events": [
-     "«Ḥḍat tamzgida lli‑isɣa s‑idammn‑ns»",
+     "«amnaggar n‑rbbi lli‑isġa s‑idammn‑ns»",
      "Imɣarn ar‑ttrun, ssnn is‑ur‑sar‑t‑ẓrn daɣ"
     ]
    },
@@ -542,7 +542,7 @@
     "events": [
      "Ccrɛ dat‑lḥukkam Filiks d‑Fistus",
      "Aḥami‑ns dat‑ugllid Agriba",
-     "«Rẓġ ccrɛ s‑Qayṣar» — s‑Ruma"
+     "«usiġ aṣraḍ‑inu s‑gr ifassn n‑qayṣr» — s‑Ruma"
     ]
    },
    "jerusalem": {
@@ -614,7 +614,7 @@
     "events": [
      "Sin n‑isggʷasn iḥbs ġ‑tgmmi, ar‑ibrraḥ tagldit n‑Rbbi bla tiksaḍ",
      "Zġ‑ġid iyara Tibratin n‑lh̬abs (Afsus · Filibbi · Kulusi · Filimun)",
-     "Ġ‑umggaru ittwaḥbs daɣ, iyara 2 Timutaus, immut f‑ssibt n‑liman‑ns — «umnaɣġ amnaɣ ifulkin, kmmlġ azzal»"
+     "Ġ‑umggaru ittwaḥbs daɣ, iyara 2 Timutaus, immut f‑ssibt n‑liman‑ns — «nriġ tikrrayin lli‑kkatġ, kmmlġ aġaras lli‑ġ‑a‑tazzalġ»"
     ]
    }
   },

@@ -1,0 +1,636 @@
+{
+ "menuName": "Papiamentu",
+ "htmlLang": "pap",
+ "dir": "ltr",
+ "locale": "pap",
+ "brand": "Beibel den un solo skrol",
+ "docTitle": "Beibel riba mapa · Beibel den un solo skrol",
+ "metaDesc": "Sigui e liña di tempu di e Antiguo Testamento, e bida di Jesus i e biahenan di Pablo riba un mapa real — Beibel a sosodé na lugánan real.",
+ "s": {
+  "kicker": "Beibel den un solo skrol · Mapanan",
+  "title": "Beibel riba mapa",
+  "verse": "“For we did not follow cleverly devised myths …” (2 Peter 1:16)",
+  "purpose": "Beibel no ta un mito. E ta un registro di hendenan ku a kana riba lugánan, fechanan i nòmbernan real. Sigui e kamindanan ei riba un mapa, den òrdu di tempu — primi riba un punto, òf primi ▶ pa kana dor dje pasu pa pasu.",
+  "ot_kick": "① Antiguo Testamento — atraves di tempu",
+  "ot_h": "For di kreashon te na e regreso na Jerusalèm",
+  "ot_lead": "No un solo biahe sino e flujo di e historia di redenshon for di kreashon padilanti: kreashon i kaida → diluvio i Babel → un yamada (Abraham) → e tera primintí → Eksodo → desierto → konkista → reino → divishon → exilio → regreso.",
+  "je_kick": "② Tèstamènt Nobo — e bida di Jesus",
+  "je_h": "For di Belén te Jerusalèm",
+  "je_lead": "Sigui e bida di Jesus manera e Evangelionan ta kont'é, den òrdu — for di su nasementu na Belén, pasando pa su boutismo i su ministerio na Galilea, atraves di Samaria, te na e krus, resurekshon i asenshon na Jerusalèm.",
+  "pa_kick": "③ Tèstamènt Nobo — e biahenan di Pablo",
+  "pa_h": "For di Antiokia te na e konfinnan di mundu — Roma",
+  "pa_lead": "For di Pentekòste na Jerusalèm, kon e evangelio a plama mas ayá di Judea — dor di Asia Menor i Europa te na e kurason di e imperio. Skohe un di e sinku biahenan (promé·di dos·di tres + e biahe pa Roma + despues di libramentu) i sigui e echonan di Echonan huntu ku e kartanan skirbí na kaminda.",
+  "foot": "Fuentenan · E lugánan ta sigui e teksto bíbliko i e geografia bíbliko estándar (ku nòmbernan moderno unda esei ta yuda). E kostanan, rionan i lagunan ta trahá for di datos geográfiko abrí (Natural Earth), simplifiká.",
+  "contact": "Pregunta · komentario — <a id=\"contact\" class=\"mail\">Manda nos un email</a>",
+  "play": "Toka",
+  "pause": "Pausa",
+  "today": "Awe:",
+  "verseCite": "2 Pedro 1:16"
+ },
+ "ot": {
+  "places": {
+   "eden": {
+    "name": "Edèn (Kreashon · Kaida)",
+    "book": "Génesis 1–3",
+    "today": "e region di Tigris–Éufrates awe",
+    "note": "Den un mundu ku tabata masha bon, piká ta drenta i ta kibra e laso entre Dios i humanidat.",
+    "events": [
+     "Kreashon den seis dia — «masha bon»",
+     "Humanidat trahá na imágen di Dios",
+     "E kaida, i e saká for di Edèn",
+     "E promé promesa di e evangelio — «e simia di e muhé lo heridá e kabes di e kolebra»"
+    ]
+   },
+   "noah": {
+    "name": "Ararat (e Diluvio)",
+    "book": "Génesis 6–9",
+    "today": "Seru Ararat, ost di Turkia awe",
+    "note": "Dios ta huzga un mundu yen di piká, sinembargo ta preservá bida pa medio di un solo famia.",
+    "events": [
+     "Un mundu yen di korupshon",
+     "E diluvio, i e arka di Noe",
+     "E aliansa di e regenbog — «nunka mas un diluvio pa destruí»"
+    ]
+   },
+   "babel": {
+    "name": "Toren di Babel",
+    "book": "Génesis 11",
+    "today": "Irak awe (yanura di Sinar)",
+    "note": "Kontra e orguyo ku ta purba yega shelu, Dios ta konfundí nan lenga i ta plama e pueblonan riba tera.",
+    "events": [
+     "«Laga nos traha un stat i un toren… i hasi un nòmber pa nos mes»",
+     "Dios ta konfundí nan lenga",
+     "E pueblonan ta plama riba tera (Sinar — e futuro Babilonia)"
+    ]
+   },
+   "ur": {
+    "name": "Ur",
+    "book": "Génesis 12",
+    "today": "sùit di Irak awe",
+    "note": "E historia di redenshon di Beibel ta kuminsá ku e yamada di un solo hòmber.",
+    "events": [
+     "Dios ta yama Abram for di Ur di e kaldeonan",
+     "«Lo Mi hasibo un nashon grandi… tur e pueblonan bendishoná pa medio di bo»",
+     "Pa fe e ta laga su tera natal"
+    ]
+   },
+   "haran": {
+    "name": "Haran",
+    "book": "Génesis 12",
+    "today": "sùit di Turkia awe",
+    "note": "Na kaminda, respondiendo e yamada pa e tera primintí.",
+    "events": [
+     "E famia di Tara ta establesé na Haran",
+     "Tara ta muri",
+     "Abram ta sali pa Kanaan na edat di 75 aña"
+    ]
+   },
+   "shechem": {
+    "name": "Sikem · Kanaan",
+    "book": "Génesis 12–50",
+    "today": "Nablus awe",
+    "note": "Den e tera primintí un famia ta wòrdu fundá i e aliansa ta pasa di generashon pa generashon.",
+    "events": [
+     "Drentando Kanaan, e promé altar — «na bo simia lo Mi duna e tera aki»",
+     "E aliansa (Gén 15) · Isaak · Jakòb",
+     "E diesdos yu di Jakòb — rais di e diesdos tribu"
+    ]
+   },
+   "egypt": {
+    "name": "Egipto (Gosen)",
+    "book": "Génesis 37–50 · Eksodo 1",
+    "today": "e delta di Nilo, Egipto awe",
+    "note": "Un famia ta bira un nashon grandi — despues un nashon di sklabu.",
+    "events": [
+     "Jose, bendí leu, ta yega di goberná Egipto",
+     "Henter e famia di Jakòb ta baha pa skapa di hamber",
+     "E nashon krisiente di Israel ta wòrdu hasí sklabu"
+    ]
+   },
+   "sinai": {
+    "name": "Seru Sinaí",
+    "book": "Eksodo · Levítiko",
+    "today": "e península di Sinaí awe",
+    "note": "E reskate sentral di AT — sklabunan ta bira e pueblo di Dios.",
+    "events": [
+     "E dies plaganan i e lamchi di Pasku",
+     "E Laman Kòrá ta parti i nan ta krusa",
+     "E Dies Mandamentunan, e Lei, e tabernakel i e sakrifisionan"
+    ]
+   },
+   "kadesh": {
+    "name": "Kades (desierto)",
+    "book": "Numbernan · Deuteronomio",
+    "today": "e desierto di Sinaí–Négev awe",
+    "note": "Inkredulidat ta kosta un generashon e tera — sinembargo Dios ta keda ku nan.",
+    "events": [
+     "Diesdos spion — ma e pueblo ta nenga di konfia",
+     "38 aña den desierto — maná, nubia i kandela",
+     "Riba e yanuranan di Moab, e ultimo sermon di Moisés (Deuteronomio)"
+    ]
+   },
+   "jericho": {
+    "name": "Jeriko",
+    "book": "Josué",
+    "today": "Jeriko awe",
+    "note": "Por fin nan ta drenta i ta tuma e tera primintí.",
+    "events": [
+     "E Jordan ta parti i e pueblo ta krusa",
+     "E murayanan di Jeriko ta kai",
+     "Konkista di Kanaan i repartishon di e tera"
+    ]
+   },
+   "shiloh": {
+    "name": "Silo (Huesnan)",
+    "book": "Huesnan · Ruth",
+    "today": "Khirbet Seilun awe",
+    "note": "Sin rei, kada ken ta hasi loke e ke — tin mester di un berdadero rei.",
+    "events": [
+     "E tabernakel ta wòrdu lantá na Silo",
+     "E siklo di piká–opreshon–reskate (Débora, Gedeon, Sanson)",
+     "Ruth — fieldat den dianan skur, den e liña di David"
+    ]
+   },
+   "jerusalem": {
+    "name": "Jerusalèm · Reino Uní",
+    "book": "1–2 Samuel · 1 Reinan",
+    "today": "Jerusalèm awe",
+    "note": "E época di oro di Israel — i e promesa di un rei etèrno.",
+    "events": [
+     "Saul e promé rei, despues David i Goliat",
+     "E aliansa ku David — «bo trono pa semper» (2 Sam 7)",
+     "Salomon ta traha e tèmpel na Jerusalèm"
+    ]
+   },
+   "samaria": {
+    "name": "Samaria · Reino Partí",
+    "book": "Reinan · e Profetanan",
+    "today": "Sebastia awe",
+    "note": "E reino ta parti i ta dekliná miéntras e profetanan ta sklama.",
+    "events": [
+     "Despues di Salomon, e divishon den Juda i Israel",
+     "Idolatria ripití",
+     "Elias, Isaias, Jeremias ta sklama 'bira bèk' — i ta profetisá e Mesías"
+    ]
+   },
+   "nineveh": {
+    "name": "Ninive (Asiria)",
+    "book": "2 Reinan 17 · Jonas",
+    "today": "Mosul, Irak awe",
+    "note": "Ignorando tur spièrtamentu, e nòrt ta kai promé.",
+    "events": [
+     "Ninive, e kapital di Asiria",
+     "E reino nortenan ta kai dilanti Asiria (722 a.K.)",
+     "Jonas ta wòrdu mandá na Ninive"
+    ]
+   },
+   "babylon": {
+    "name": "Babilonia",
+    "book": "2 Reinan 25 · Daniel · Ezekiel",
+    "today": "Hilla, Irak awe",
+    "note": "E anochi mas skur — sinembargo e promesa di restourashon ta keda.",
+    "events": [
+     "Jerusalèm ta kai, e tèmpel ta wòrdu kimá (586 a.K.)",
+     "Juda ta wòrdu hibá na Babilonia",
+     "Daniel i Ezekiel — fe i vishonnan den exilio"
+    ]
+   },
+   "susa": {
+    "name": "Susa (Persia)",
+    "book": "Ester · Nehemias",
+    "today": "Shush, Iran awe",
+    "note": "Asta na e kurason di un imperio pagano, Dios ta warda Su pueblo.",
+    "events": [
+     "Persia ta vense Babilonia",
+     "Ester ta salba e hudiunan for di destrukshon",
+     "Nehemias ta resa dilanti e rei i ta wòrdu mandá"
+    ]
+   },
+   "return": {
+    "name": "Regreso na Jerusalèm",
+    "book": "Esdras · Nehemias · Malakias",
+    "today": "Jerusalèm awe",
+    "note": "Nan ta bin bèk i ta rekonstruí — ma ningun rei no a bin. Nan ta warda riba e Mesías.",
+    "events": [
+     "Tres ola di regreso pa e dekreto di Siro (Zerubabel 538 · Esdras 458 · Nehemias 444)",
+     "E tèmpel rekonstruí i e murayanan di Jerusalèm restourá",
+     "Malakias — e AT ta sera: «Mi ta bai manda Mi mensahero»"
+    ]
+   }
+  },
+  "labels": [
+   "Laman Mediteráneo",
+   "Mesopotamia",
+   "Desierto di Arabia",
+   "Egipto"
+  ],
+  "journeys": {
+   "flow": "E historia di redenshon"
+  }
+ },
+ "jesus": {
+  "places": {
+   "bethlehem": {
+    "name": "Belén",
+    "book": "Mateo 1–2 · Lukas 2",
+    "today": "Belén awe",
+    "note": "E Mesías primintí ta bin na e stat di David — e Palabra bira karni.",
+    "events": [
+     "Nasí na Belén, e stat di David",
+     "Angelnan ta anunsiá e notisia na e wardadónan",
+     "E magonan ta bin pa adorá"
+    ]
+   },
+   "nazareth": {
+    "name": "Nazarèt",
+    "book": "Lukas 2 · 4",
+    "today": "Nazarèt awe",
+    "note": "Dios ta krese komo hòmber den un stat komun.",
+    "events": [
+     "Kriá den e kas di un karpinté",
+     "Na edat di diesdos aña, puntrando i kontestando den e tèmpel",
+     "Despues rechazá den e sinagoga di su mes pueblo"
+    ]
+   },
+   "jordan": {
+    "name": "Riu Jordan",
+    "book": "Mateo 3–4",
+    "today": "e Jordan abou awe",
+    "note": "Su ministerio públiko ta kuminsá — shelu ta seyá E komo e Yu.",
+    "events": [
+     "Boutisá pa Juan",
+     "E Spiritu ta baha manera un palomba — «Esaki ta Mi Yu stimá»",
+     "Ta vense e tres tentashonnan di Satanás den desierto"
+    ]
+   },
+   "cana": {
+    "name": "Kana",
+    "book": "Juan 2",
+    "today": "Kafr Kanna awe",
+    "note": "Den su promé señal e ta revelá su gloria.",
+    "events": [
+     "Un huéspet na un boda",
+     "Awa bira biña — su promé señal",
+     "Su disipelnan ta kere den djE"
+    ]
+   },
+   "sychar": {
+    "name": "Sikar (Samaria)",
+    "book": "Juan 2–4",
+    "today": "banda di Nablus awe",
+    "note": "E kaminda di e ministerio tempran — dor di Jerusalèm i te na e despresiá Samaria.",
+    "events": [
+     "E ta purifiká e tèmpel na Jerusalèm",
+     "Anochi, Nikodemo — «boso mester nase di nobo»",
+     "Awa bibu pa un muhé samaritano"
+    ]
+   },
+   "capernaum": {
+    "name": "Kapernaum",
+    "book": "Mateo 4–13 · Marko 1–4",
+    "today": "e kosta di laman di Galilea awe",
+    "note": "Base di e ministerio na Galilea — yamada, siñansa i oposishon tur ta topa akinan.",
+    "events": [
+     "Ta yama e piskadónan i ta establesé su base akinan",
+     "E Sermon di Seru — «Bendishoná ta esnan ku ta pober di spiritu»",
+     "E parábolanan di e reino — i oposishon ta krese"
+    ]
+   },
+   "galilee": {
+    "name": "Laman di Galilea",
+    "book": "Marko 4 · 6 · Juan 6",
+    "today": "e lago di Tiberias awe",
+    "note": "Ku poder riba naturalesa e ta mustra ken e ta.",
+    "events": [
+     "«Pas, keda ketu» — e ta kalma e tormenta",
+     "Ta alimentá 5.000 ku sinku pan i dos piská",
+     "Ta kana riba awa"
+    ]
+   },
+   "caesarea_p": {
+    "name": "Sesarea di Filipo",
+    "book": "Mateo 16–17",
+    "today": "Banias awe",
+    "note": "E disipelnan ta komprondé ku E ta e Cristo, i e kaminda di e krus ta habri.",
+    "events": [
+     "E konfeshon di Pedro — «Abo ta e Cristo, e Yu di e Dios bibu»",
+     "E ta anunsiá pa promé bes su morto i resurekshon",
+     "Transfigurá den gloria riba e seru"
+    ]
+   },
+   "jericho": {
+    "name": "Jeriko",
+    "book": "Lukas 18–19",
+    "today": "Jeriko awe",
+    "note": "Na e kaminda ariba pa Jerusalèm, e ta buska esun pèrdí.",
+    "events": [
+     "Ta duna bista na Bartimeo siegu",
+     "Ta yama Zakeo e kobradó di belasting",
+     "«E Yu di hende a bin pa buska i salba loke a pèrdè»"
+    ]
+   },
+   "bethany": {
+    "name": "Betania",
+    "book": "Juan 11–12",
+    "today": "al-Eizariya awe",
+    "note": "E ta mustra su dominio riba morto na víspera di su ultimo siman.",
+    "events": [
+     "E ta resusitá Lázaro for di e graf — «Ami ta e resurekshon i e bida»",
+     "Maria ta ungí E pa su entiero",
+     "E señal aki ta reforsá e komplòt pa mat'E"
+    ]
+   },
+   "jerusalem": {
+    "name": "Jerusalèm",
+    "book": "Mateo 21–28 · Lukas 24 · Echonan 1",
+    "today": "Jerusalèm awe",
+    "note": "E klímaks ku henter Beibel ta apuntá na dje — krus, resurekshon, asenshon.",
+    "events": [
+     "Entrada triunfal; e ta bòltu e mesanan di e tèmpel atrobe",
+     "Na e Ultimo Sena e ta laba e pia di e disipelnan",
+     "E ta muri na e krus",
+     "Resusitá riba e di tres dia, despues a subi shelu"
+    ]
+   }
+  },
+  "labels": [
+   "Laman Mediteráneo",
+   "Galilea",
+   "Samaria",
+   "Judea",
+   "Dekápolis",
+   "Perea",
+   "Laman Morto"
+  ],
+  "journeys": {
+   "life": "E kaminda di Jesus"
+  }
+ },
+ "paul": {
+  "places": {
+   "antioch": {
+    "name": "Antiokia",
+    "book": "Echonan 13 · 15",
+    "today": "Antakya, Turkia awe",
+    "note": "E iglesia ku ta manda, unda e mishon na e nashonnan ta kuminsá i ta regresá.",
+    "events": [
+     "Den orashon e Spiritu ta separá Barnabas i Saulo",
+     "E iglesia unda kreyèntenan a wòrdu yamá 'kristian' pa promé bes",
+     "Punto di salida di e promé, di dos i di tres biahe"
+    ]
+   },
+   "seleucia": {
+    "name": "Seleusia",
+    "book": "Echonan 13:4",
+    "today": "Turkia awe",
+    "note": "E haf di Antiokia — nan ta nabegá pa Chipre.",
+    "events": []
+   },
+   "salamis": {
+    "name": "Salamis (Chipre)",
+    "book": "Echonan 13:5",
+    "today": "Chipre awe",
+    "note": "Promé parada na Chipre — predikando den e sinagoganan.",
+    "events": []
+   },
+   "paphos": {
+    "name": "Pafos",
+    "book": "Echonan 13:6-12",
+    "today": "Chipre awe",
+    "note": "Ta mustra poder kontra esnan ku ta oponé e evangelio.",
+    "events": [
+     "Elimas e mágiko ta keda siegu",
+     "Sergio Paulo e prokonsul ta kere",
+     "For di akinan 'Pablo' ta tuma e delantera"
+    ]
+   },
+   "perga": {
+    "name": "Perge",
+    "book": "Echonan 13:13",
+    "today": "Antalya, Turkia awe",
+    "note": "Un haf na Panfilia — akinan Juan Marko ta bira bèk.",
+    "events": []
+   },
+   "pantioch": {
+    "name": "Antiokia di Pisidia",
+    "book": "Echonan 13:14-50",
+    "today": "Yalvaç, Turkia awe",
+    "note": "E evangelio ta habri pa e nashonnan.",
+    "events": [
+     "Un sermon largu di historia di salbashon den e sinagoga",
+     "Hopi di e nashonnan ta gosa i ta risibí e palabra",
+     "Saká afó pa e oposishon"
+    ]
+   },
+   "iconium": {
+    "name": "Ikonio",
+    "book": "Echonan 14:1-7",
+    "today": "Konya, Turkia awe",
+    "note": "Hopi ta kere, ma persekushon ta obligá nan sigui.",
+    "events": []
+   },
+   "lystra": {
+    "name": "Listra",
+    "book": "Echonan 14:8-20",
+    "today": "Turkia awe",
+    "note": "Aklamá komo un dios, despues tirá ku piedra.",
+    "events": [
+     "Ta kura un hòmber kojo for di nasementu",
+     "E multitut ta purba ofresé sakrifisio na nan komo dios",
+     "Tirá ku piedra i lagá pa morto, e ta lanta"
+    ]
+   },
+   "derbe": {
+    "name": "Derbe",
+    "book": "Echonan 14:20-21",
+    "today": "Turkia awe",
+    "note": "Hopi disipel ta wòrdu hasí; nan ta bai bèk pa fortalesé e iglesianan.",
+    "events": []
+   },
+   "troas": {
+    "name": "Troas",
+    "book": "Echonan 16:8-10",
+    "today": "Turkia awe",
+    "note": "E punto desisivo unda e evangelio ta bai pa promé bes pa Europa.",
+    "events": [
+     "Un vishon di un hòmber di Masedonia",
+     "«Pasa pa Masedonia i yuda nos»",
+     "Mesora nan ta krusa pa Europa"
+    ]
+   },
+   "philippi": {
+    "name": "Filipos",
+    "book": "Echonan 16 · Filipensenan",
+    "today": "e nòrt di Gresia awe",
+    "note": "E promé iglesia di Europa — e evangelio ta triunfá asta den prizòn.",
+    "events": [
+     "Lidia, un bendedó di purpura, ta kere",
+     "Un mucha muhé sklabu ku ta pronostiká ta wòrdu librá",
+     "Kantikanan na meianochi, un temblor, e kas di e wardadó di prizòn ta wòrdu salbá"
+    ]
+   },
+   "thess": {
+    "name": "Tesalónika",
+    "book": "Echonan 17 · 1–2 Tesalonisensenan",
+    "today": "Tesalónika, Gresia awe",
+    "note": "E palabra ta sagudí e stat i oposishon ta rebosá.",
+    "events": [
+     "Ta rasoná den e sinagoga tres sabat",
+     "«Esnan ku a pone mundu kabes abou»",
+     "Nan ta skapa den anochi"
+    ]
+   },
+   "berea": {
+    "name": "Berea",
+    "book": "Echonan 17:10-15",
+    "today": "Veria, Gresia awe",
+    "note": "E 'noblenan' ku a ekzaminá e palabra nan mes.",
+    "events": [
+     "Nan ta risibí e palabra ku gran deseo",
+     "Tur dia nan ta ekzaminá e Skrituranan pa chèk esei",
+     "Hopi ta yega di kere"
+    ]
+   },
+   "athens": {
+    "name": "Atenas",
+    "book": "Echonan 17:16-34",
+    "today": "Atenas, Gresia awe",
+    "note": "Den e stat di filósofonan e ta proklamá e 'dios deskonosí'.",
+    "events": [
+     "Indigná dor di un stat yen di ídolonan",
+     "Riba e Areópago e ta prediká e Kreador i e resurekshon",
+     "Wòrdu burlá, ma algun ta kere"
+    ]
+   },
+   "corinth": {
+    "name": "Korinto",
+    "book": "Echonan 18 · 1–2 Korintionan",
+    "today": "Gresia awe",
+    "note": "E ta keda un aña i mei, plantando un iglesia den un stat di visio.",
+    "events": [
+     "Ta traha tènt ku Akila i Priscila",
+     "«No tene miedu… pasobra Mi ta ku bo»",
+     "Hopi korintio ta kere i ta wòrdu boutisá"
+    ]
+   },
+   "ephesus": {
+    "name": "Efeso",
+    "book": "Echonan 19 · Efesionan",
+    "today": "Selçuk, Turkia awe",
+    "note": "Kurason di e di tres biahe — e palabra ta plama dor di Asia.",
+    "events": [
+     "Siñansa diario pa dos aña den e sala di Tirano",
+     "Bukinan di magia kimá; obranan poderoso",
+     "E platé Demetrio ta kuminsá un tumulto"
+    ]
+   },
+   "miletus": {
+    "name": "Mileto",
+    "book": "Echonan 20:17-38",
+    "today": "Turkia awe",
+    "note": "Un despedida yen di lágrima na e ansianonan di Efeso.",
+    "events": [
+     "«Kuida e iglesia ku El a kumpra ku Su mes sanger»",
+     "E ansianonan ta yora, sabiendo ku nan lo no mir'E mas"
+    ]
+   },
+   "caesarea": {
+    "name": "Sesarea",
+    "book": "Echonan 23–26",
+    "today": "e kosta di Israel awe",
+    "note": "Pa dos aña e ta defendé e evangelio dilanti gobernadónan i un rei.",
+    "events": [
+     "Huisionan dilanti e gobernadónan Felix i Festo",
+     "Su defensa dilanti Rei Agripa",
+     "«Mi ta apelá na Sésar» — riba kaminda pa Roma"
+    ]
+   },
+   "jerusalem": {
+    "name": "Jerusalèm",
+    "book": "Echonan 21–23",
+    "today": "Jerusalèm awe",
+    "note": "Gará den e tèmpel, su kaminda komo prezo ta kuminsá.",
+    "events": [
+     "Gará pa e multitut den e tèmpel",
+     "Ta defendé su mes dilanti e konsilio",
+     "Komo siudadano romano, mandá bou di warda pa Sesarea"
+    ]
+   },
+   "myra": {
+    "name": "Mira",
+    "book": "Echonan 27:5-6",
+    "today": "Demre, Turkia awe",
+    "note": "Nan ta pasa riba un barku alehandrino ku ta bai Roma.",
+    "events": []
+   },
+   "fairhaven": {
+    "name": "Bon Portonan (Kreta)",
+    "book": "Echonan 27:8-12",
+    "today": "Kreta awe",
+    "note": "E spièrtamentu di Pablo pa stòp di nabegá no ta wòrdu skuchá.",
+    "events": []
+   },
+   "crete": {
+    "name": "Kreta",
+    "book": "Tito",
+    "today": "Kreta awe",
+    "note": "Despues di su libramentu, e isla unda e ta laga Tito pa pone e iglesianan na òrdu.",
+    "events": [
+     "Ta laga Tito pa nombra ansianonan den kada stat",
+     "Ta pidi lidernan sin kulpa i fiel",
+     "Ta skirbi e karta na Tito"
+    ]
+   },
+   "malta": {
+    "name": "Malta",
+    "book": "Echonan 27–28",
+    "today": "Malta awe",
+    "note": "Dor di tormenta i naufragio, e promesa di Dios ta keda firme.",
+    "events": [
+     "E bientu 'nordeste' ta kibra e barku, ma tur e 276 ta sobrebibí",
+     "Mòrdé pa un kolebra venenoso, e ta keda sin daño",
+     "E ta kura e malunan di e isla"
+    ]
+   },
+   "syracuse": {
+    "name": "Sirakusa",
+    "book": "Echonan 28:12",
+    "today": "Sisilia, Italia awe",
+    "note": "Nan ta keda tres dia na Sisilia.",
+    "events": []
+   },
+   "puteoli": {
+    "name": "Puteoli",
+    "book": "Echonan 28:13-14",
+    "today": "Pozzuoli, Italia awe",
+    "note": "Nan ta yega na Italia i ta wòrdu risibí pa rumannan kreyente.",
+    "events": []
+   },
+   "rome": {
+    "name": "Roma",
+    "book": "Echonan 28 · Kartanan di Prizòn · 2 Timoteo",
+    "today": "Roma, Italia awe",
+    "note": "E evangelio ta yega na fin na e kurason di e imperio — no un fin sino un kuminsamentu.",
+    "events": [
+     "Dos aña bou di aresto domisiliario, proklamando e reino ku kurashi",
+     "For di akinan e ta skirbi e Kartanan di Prizòn (Ef·Fil·Kol·Flm)",
+     "Despues prezo atrobe, e ta skirbi 2 Timoteo i ta wòrdu martirisá — «Mi a bringa e bon bringa, mi a kaba e kareda»"
+    ]
+   }
+  },
+  "labels": [
+   "Laman Mediteráneo",
+   "Laman Egeo",
+   "Asia Menor",
+   "Masedonia",
+   "Italia"
+  ],
+  "journeys": {
+   "j1": "Promé biahe",
+   "j2": "Di dos biahe",
+   "j3": "Di tres biahe",
+   "rome": "Di kuater biahe · pa Roma",
+   "j5": "Di sinku biahe · despues di libramentu"
+  }
+ }
+}

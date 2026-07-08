@@ -35,10 +35,10 @@
     "today": "mũthemba wa Tigirisi–Euphrate ũmũnthĩ",
     "note": "Nthĩnĩ wa nthĩ ĩla yombiwe yaĩ nzeo mũno, naĩ nĩyatonya na ĩtĩla ngwatanĩo katĩ wa Ngai na andũ.",
     "events": [
-     "Ũũmbi wa mĩthenya thanthatũ — “yaĩ nzeo mũno”",
+     "Ũũmbi wa mĩthenya thanthatũ — “kyaĩ kĩseo mũno”",
      "Mũndũ wombiwe mũvw’anĩ wa Ngai",
      "Ũkũũ, na kũtwawa kuma Edeni",
-     "Wĩanĩo wa mbee wa ũvoo mũseo — “ũsyao wa mũndũ mũka ũkatumba mũtwe wa nzoka”"
+     "Wĩanĩo wa mbee wa ũvoo mũseo — “ũsyao wake: akatumba mũtwe waku”"
     ]
    },
    "noah": {
@@ -49,7 +49,7 @@
     "events": [
      "Nthĩ ĩyũe ũthũku",
      "Kĩw’ũ kĩnene, na safina ya Noa",
-     "Ũtiano wa ũta wa mbua — “ndĩkeete kĩw’ũ kĩnene kũananga ĩngĩ”"
+     "Ũtiano wa ũta wa mbua — “kũikethĩwa kĩw’ũ kingĩ ĩngĩ, kya kwananga nthĩ”"
     ]
    },
    "babel": {
@@ -58,7 +58,7 @@
     "today": "Iraki ũmũnthĩ (mũnyanya wa Sinali)",
     "note": "Kũelekana na wĩnyĩĩo wa kwenda kũvika ĩtunĩ, Ngai nĩwavũany’a ndeto yoo na aandũ makĩithanĩa nthĩ yonthe.",
     "events": [
-     "“Twĩakei mũsyĩ na mũnara… twĩtw’ĩkĩe ĩsyĩtwa”",
+     "“twĩyakĩe, ndũa, na mwako mũtũlu… twĩmanthĩe syĩtwa”",
      "Ngai nĩwavũany’a kĩthyomo kyoo",
      "Andũ maithanĩa nthĩ yonthe (Sinali — mũthya Mbaviloni)"
     ]
@@ -70,7 +70,7 @@
     "note": "Ũvoo wa ũtangĩĩo wa Mbivlia wambĩaa na wĩtano wa mũndũ o ũmwe.",
     "events": [
      "Ngai nĩwĩtie Avalaamu kuma Uli wa Akalindi",
-     "“Ngakũtw’ĩkĩthya mbaĩ nene… mĩvĩa yonthe ĩkaathimwa nthĩnĩ waku”",
+     "“ngakũtw’ĩkĩthya mbaĩ nene… mĩvĩa yonthe ya nthĩ ĩkaathimwa”",
      "Kwa mũĩkĩĩo nĩwaumie nthĩ yake"
     ]
    },
@@ -91,7 +91,7 @@
     "today": "Nablus ũmũnthĩ",
     "note": "Nthĩnĩ wa nthĩ ĩla yaĩanĩiwe mũsyĩ wambĩĩa na ũtiano wĩtĩiwe mbaĩ kwa mbaĩ.",
     "events": [
-     "Kũtonya Kanaani, kĩthembelo kya mbee — “nĩ ngũnenga ũsyao waku nthĩ ĩno”",
+     "Kũtonya Kanaani, kĩthembelo kya mbee — “Nganenga ũsyao waku nthĩ ĩno”",
      "Ũtiano (Mwambĩlĩlyo 15) · Isaaka · Yakovo",
      "Syana ikũmi na ili sya Yakovo — mũthĩnzĩo wa mbaĩ ikũmi na ili"
     ]
@@ -158,7 +158,7 @@
     "note": "Ĩvinda nzeo ya Isilaeli — na wĩanĩo wa mũsumbĩ wa tene na tene.",
     "events": [
      "Sauli mũsumbĩ wa mbee, na mũthya Ndaviti na Goliathi",
-     "Ũtiano wa Ndaviti — “kĩvĩla kyaku kya ũsumbĩ tene na tene” (2 Samueli 7)",
+     "Ũtiano wa Ndaviti — “kĩvĩla kyaku kya ũsumbĩ kĩkalũlũmĩlw’a tene na tene” (2 Samueli 7)",
      "Solomoni waaka ĩsyokoo Yelusaleme"
     ]
    },
@@ -259,7 +259,7 @@
     "note": "Ũtũmwa wake wa vandũ va w’o wambĩĩa — ĩtunĩ yamũsĩngĩĩa ta Mwana.",
     "events": [
      "Wavatithw’a nĩ Yoana",
-     "Veva waikũlũka ta ndĩĩa — “Ũyũ nĩ Mwana wakwa mwendwa”",
+     "Veva waikũlũka ta ndĩĩa — “Ũũ nĩwe Mwana wakwa mwendwa”",
      "Avunanga mageto matatũ ma Satani weũnĩ"
     ]
    },
@@ -281,7 +281,7 @@
     "note": "Nzĩa ya ũtũmwa wa mbee — kwĩsĩla Yelusaleme nginya Samalia ĩla yamenawa.",
     "events": [
      "Watheasya ĩsyokoo Yelusaleme",
-     "Ũtukũ, Nikodemo — “No nginya ũsyawe ĩngĩ”",
+     "Ũtukũ, Nikodemo — “Mũvaka mũsyawe kuma ĩũlũ”",
      "Kĩw’ũ kya thayũ kwa mũndũ mũka wa Samalia"
     ]
    },
@@ -292,7 +292,7 @@
     "note": "Kĩthĩo kya ũtũmwa wa Ngalili — kwĩta, kũmanyĩsya na ũsiniĩsyo syonthe syumanĩaa vaa.",
     "events": [
      "Eta atavi ma makũyũ na eyĩthĩa vaa",
-     "Ũmanyĩsyo wa Kĩĩmanĩ — “Athimĩ nĩ ala athĩĩni kĩ-veva”",
+     "Ũmanyĩsyo wa Kĩĩmanĩ — “Nĩ aathime ala me na ũkya wa ngoo”",
      "Ngelekany’o sya ũsumbĩ — na ũsiniĩsyo wĩaĩma"
     ]
    },
@@ -302,7 +302,7 @@
     "today": "Iia ya Kinneret ũmũnthĩ",
     "note": "Na vinya ĩũlũ wa ũũmbi wonanasya nũũ we.",
     "events": [
-     "“Kĩlaa, wumĩe” — anyamasya kĩvuvo",
+     "“Usya, kilya” — anyamasya kĩvuvo",
      "Aĩisya andũ 5,000 na mĩgate ĩtaano na makũyũ eli",
      "Aendaa ĩũlũ wa kĩw’ũ"
     ]
@@ -313,7 +313,7 @@
     "today": "Banias ũmũnthĩ",
     "note": "Amanyĩwa maelewa kana we nĩ Klĩsto, na nzĩa ya mũsalava yavingũka.",
     "events": [
-     "Ũsũngĩo wa Vetelo — “We nĩwe Klĩsto, Mwana wa Ngai ũtũaa”",
+     "Ũsũngĩo wa Vetelo — “We nue Klĩsto, Mwana wa Ngai ũla wĩ thayũ”",
      "Aũmbĩa kĩkw’ũ kyake na ũthayũũku wake kwa mbee",
      "Aalyũkĩte ũnenenĩ kĩĩmanĩ"
     ]
@@ -326,7 +326,7 @@
     "events": [
      "Anenga Baritimayo ũtonyi wa metho",
      "Eta Sakayo mũtũngĩthya wa mbesa",
-     "“Mwana wa mũndũ ndookie kũmantha na kũthayũũkya ũla wathelile”"
+     "“Mwana mũndũ nĩwokie kũmantha na kũtangĩĩa kĩla kyaaie”"
     ]
    },
    "bethany": {
@@ -335,7 +335,7 @@
     "today": "al-Eizariya ũmũnthĩ",
     "note": "Wonanasya vinya ĩũlũ wa kĩkw’ũ mbee wa kyumwa kyake kya mũthya.",
     "events": [
-     "Athayũũkya Lasalo kuma mbũanĩ — “Nyie nĩ nyie ũthayũũku na thayũ”",
+     "Athayũũkya Lasalo kuma mbũanĩ — “Ninyie ũthayũũkyo, na ninyie thayũ”",
      "Malia amwĩthĩa mauta kwondũ wa ũthĩkĩo",
      "Kĩonany’o kĩĩ kyaũmĩsya mũvango wa kũmũaa"
     ]
@@ -454,7 +454,7 @@
     "note": "Vandũ va ũalyũko vala ũvoo mũseo welekea Ũlaya kwa mbee.",
     "events": [
      "Kĩoneki kya mũndũ wa Makedonia",
-     "“Ũka Makedonia ũtũtethye”",
+     "“Inga wũke Masetonia, ũtũtethye ithyĩ”",
      "Mavũlũkĩte o vau kũthi Ũlaya"
     ]
    },
@@ -476,7 +476,7 @@
     "note": "Ndeto ĩyũnga mũsyĩ na ũsiniĩsyo wĩaĩma.",
     "events": [
      "Aneenanĩa sinagogonĩ Sabato itatũ",
-     "“Ala mavĩngĩie nthĩ ĩngĩ igũlũ na nthĩ”",
+     "“Aa makulumanĩtye nthĩ nĩmokĩte vaa navo”",
      "Maumĩte ũtukũ"
     ]
    },
@@ -509,7 +509,7 @@
     "note": "Aikala mwaka na nusu, aaka kanisa mũsyĩnĩ wa naĩ.",
     "events": [
      "Aseũvasya hema vamwe na Akula na Pilisila",
-     "“Ndũkake… nĩ nyie ndĩ vamwe naku”",
+     "“Ndũkakĩe… nĩ vamwe naku”",
      "Akolintho aingĩ metĩkĩla na mavatithw’a"
     ]
    },
@@ -530,7 +530,7 @@
     "today": "Uturuki ũmũnthĩ",
     "note": "Kũaanana na methoi kwa atumĩa ma Eveso.",
     "events": [
-     "“Sũvĩai kanisa ĩla wagũie na nthakame yake mwene”",
+     "“mũĩthye ĩkanisa ya Mwĩaĩi yĩla ũthooete na nthakame yake mwene”",
      "Atumĩa maĩa, maĩsĩ matimwona ĩngĩ"
     ]
    },
@@ -542,7 +542,7 @@
     "events": [
      "Ũsili mbee wa asumbĩ Feliki na Fesito",
      "Ũĩngami wake mbee wa Mũsumbĩ Agilipa",
-     "“Nĩngũthaitha Kaisali” — kũthi Loomi"
+     "“Nĩmwĩkaĩla Kaisali” — kũthi Loomi"
     ]
    },
    "jerusalem": {
@@ -614,7 +614,7 @@
     "events": [
      "Myaka ĩlĩ e kĩfũngonĩ kya nyũmba, atavany’a ũsumbĩ na ũkamba",
      "Kuma vaa aandĩka Valũa sya Kĩfũngo (Aeveso·Avilipi·Akolosai·Filemoni)",
-     "Mũthya aohw’a ĩngĩ, aandĩka 2 Timotheo na aũawa — “Nĩngũĩte kũĩa kũseo, nĩnĩminĩĩsya mbĩo”"
+     "Mũthya aohw’a ĩngĩ, aandĩka 2 Timotheo na aũawa — “Nĩnũkitĩte kaũ ũla mũseo, nĩnĩminĩte mũendo”"
     ]
    }
   },

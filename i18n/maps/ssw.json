@@ -35,10 +35,10 @@
     "today": "sifundza saseTigris–Yufrathe namuhla",
     "note": "Emhlabeni lobekumuhle kakhulu, sono siyangena sephule budlelwane emkhatsini waNkulunkulu nebantfu.",
     "events": [
-     "Kudala emalangeni lasitfupha — “bekumuhle kakhulu”",
+     "Kudala emalangeni lasitfupha — “kuhle kakhulu”",
      "Umuntfu wentiwa ngemfanekiso waNkulunkulu",
      "Kuwa, nekukhishwa e-Edeni",
-     "Setsembiso sekucala selivangeli — “intalo yemfati iyawufihlita inhloko yenyoka”"
+     "Setsembiso sekucala selivangeli — “iyawufihlita inhloko yakho”"
     ]
    },
    "noah": {
@@ -49,7 +49,7 @@
     "events": [
      "Umhlaba logcwele bubi",
      "Sikhukhula, nomkhumbi waNowa",
-     "Sivumelwane selutsingo — “ngeke aphindze abhubise umhlaba ngesikhukhula”"
+     "Sivumelwane selutsingo — “ngeke kuphindze kubhujiswe lutfo ngemanti azamcolo”"
     ]
    },
    "babel": {
@@ -58,7 +58,7 @@
     "today": "i-Iraki namuhla (litsafa laseShinari)",
     "note": "Ekutigcabheni lokufinyelela ezulwini, Nkulunkulu wasakata lulwimi lwabo nebantfu emhlabeni wonkhe.",
     "events": [
-     "“Asakheni umuti nembhoshongo … sitentele libito”",
+     "“sitakhele lidolobha, nembhoshongo … sitentele ligama”",
      "Nkulunkulu wasanganisa lulwimi lwabo",
      "Bantfu bahlakateka emhlabeni wonkhe (Shinari — ngemuva kwaloko iBhabhulona)"
     ]
@@ -70,7 +70,7 @@
     "note": "Indzaba yensindziso yeBhayibheli icala ngekubitwa kwendvodza yinye.",
     "events": [
      "Nkulunkulu ubita Abramu aphume e-Uri lemaKhalediya",
-     "“Ngitakwenta ube sive lesikhulu … tive tonkhe tiyawubusiswa ngawe”",
+     "“Ngitakwenta ube sive lesikhulu … Tive tonkhe temhlaba tiyawubusiswa ngawe”",
      "Ngekukholwa ushiya live lakubo"
     ]
    },
@@ -91,7 +91,7 @@
     "today": "eNablus namuhla",
     "note": "Eliveni lesetsembiso kwakhiwa umndeni futsi sivumelwane siyendluliselwa etitukulwaneni.",
     "events": [
-     "Kungena eKhanani, lilati lekucala — “lelive ngitawulinika intalo yakho”",
+     "Kungena eKhanani, lilati lekucala — “Lelive ngiyawulinika titukulwane takho”",
      "Sivumelwane (Gen 15) · Isaka · Jakobe",
      "Emadvodzana laJakobe lalishumi nakubili — imphandze yetitfwala letilishumi nakubili"
     ]
@@ -158,7 +158,7 @@
     "note": "Sikhatsi segolide sema-Israyeli — netsembiso senkhosi yaphakadze.",
     "events": [
      "Sawula inkhosi yekucala, bese kuba David naGoliyathi",
-     "Sivumelwane naDavide — “sihlalo sakho siyawuma phakadze” (2 Sam 7)",
+     "Sivumelwane naDavide — “Sihlalo sakho sebukhosi siyakuhlala sisimile phakadze” (2 Sam 7)",
      "Solomoni wakha lithempeli eJerusalema"
     ]
    },
@@ -259,7 +259,7 @@
     "note": "Inkonzo yakhe yembikwebantfu iyacala — izulu limbeka njengeNdvodzana.",
     "events": [
      "Ubhabhatiswa nguJohane",
-     "Moya wehlela njengelijuba — “Lo yiNdvodzana yami leyitsandzekako”",
+     "Moya wehlela njengelijuba — “Lena yiNdvodzana yami, letsandzekako”",
      "Wehlula tilingo letintsatfu taSathane ehlane"
     ]
    },
@@ -281,7 +281,7 @@
     "note": "Umgwaco wenkonzo yekucala — ngeJerusalema kuya eSamariya leyayideleliwe.",
     "events": [
      "Uhlambulula lithempeli eJerusalema",
-     "Ebusuku, Nikhodemu — “Kufanele utalwe kabusha”",
+     "Ebusuku, Nikhodemu — “Nifanele kutsi nitalwe kabusha”",
      "Emanti laphilako kumfati waseSamariya"
     ]
    },
@@ -302,7 +302,7 @@
     "today": "iLichibi iKhinnereti namuhla",
     "note": "Ngemandla etulu kwemvelo ukhombisa kutsi ungubani.",
     "events": [
-     "“Thula, uthule!” — uthulisa sivunguvungu",
+     "“Thula, utsi nya!” — uthulisa sivunguvungu",
      "Usutsisa bantfu labati-5 000 ngetinkhwa letisihlanu netinhlanti letimbili",
      "Uhamba etulu kwemanti"
     ]
@@ -313,7 +313,7 @@
     "today": "eBaniyas namuhla",
     "note": "Bafundzi bayabona kutsi unguKhristu, indlela yesiphambano ivuleka.",
     "events": [
-     "Kuvuma kwaPhetro — “Wena unguKhristu, iNdvodzana yaNkulunkulu lophilako”",
+     "Kuvuma kwaPhetro — “UnguKhristu, iNdvodzana yaNkulunkulu lophilako”",
      "Uphrofetha kwekucala ngekufa nekuvuka kwakhe",
      "Waguculwa simo ngenkhatimulo entsabeni"
     ]
@@ -326,7 +326,7 @@
     "events": [
      "Uvula emehlo aBhathimewu loyimphumphutse",
      "Ubita Zakheyu umtselisi wentsela",
-     "“INdvodzana yeMuntfu ifike kutewufuna nekusindzisa lokwakulahlekile”"
+     "“iNdvodzana yeMuntfu itewufuna nekusindzisa lokulahlekile”"
     ]
    },
    "bethany": {
@@ -454,7 +454,7 @@
     "note": "Liphuzu lekuguculuka lapho livangeli licala khona kubheka eYurophu.",
     "events": [
      "Umbono wendvodza yaseMakedoniya",
-     "“Welela lapha usisite”",
+     "“Yewelela eMasedoniya utesisita!”",
      "Bawela masinyane baye eYurophu"
     ]
    },
@@ -476,7 +476,7 @@
     "note": "LiVi liyawunyakatisa lidolobha, kuphikiswa kuyavutfumela.",
     "events": [
      "Ubonisana esinagogeni ngemaSabatha lamatsatfu",
-     "“Laba labaphendvule umhlaba wonkhe”",
+     "“Labantfu labadvungutelise umhlaba bawubhekisa phansi”",
      "Bayanyelela ebusuku"
     ]
    },
@@ -530,7 +530,7 @@
     "today": "eThekhi namuhla",
     "note": "Kuvalelisa lokunetinyembeti kubaholi belibandla lase-Efesu.",
     "events": [
-     "“Nakekelani libandla lakhe lalitsenga ngengati yakhe matfupha”",
+     "“neluse libandla laNkulunkulu latitsengela lona ngengati yeNdvodzana yakhe”",
      "Labadzala bayakhala, bati kutsi ngeke baphindze bambone"
     ]
    },
@@ -542,7 +542,7 @@
     "events": [
      "Kwehlulelwa embikwebabusi Felikisi naFestusi",
      "Kuvikela kwakhe embikwenkhosi Agripha",
-     "“Ngidzinsela kuKhesari” — kuchubekela eRoma"
+     "“Ngicela kuyakwembula ingubo kuKhesari” — kuchubekela eRoma"
     ]
    },
    "jerusalem": {
@@ -614,7 +614,7 @@
     "events": [
      "Iminyaka lemibili aboshelwe endlini, amemetela umbuso ngesibindzi",
      "Kusukela lapha ubhala Tincwadzi Tasejele (Efe·Fil·Khol·Filem)",
-     "Ngemuva kwaloko uphindze aboshwe, ubhala 2 kuThimothi bese uyabulawelwa kukholwa — “Ngiyilwile inkhundla lenhle, ngiwucedzile umjaho”"
+     "Ngemuva kwaloko uphindze aboshwe, ubhala 2 kuThimothi bese uyabulawelwa kukholwa — “Ngikulwile kulwa lokuhle, sengiyicedzile indzima yami”"
     ]
    }
   },

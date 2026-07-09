@@ -259,7 +259,7 @@
     "note": "Kuugal makko ka yimɓe fuɗɗii — kammu seedii mo wa Ɓiɗɗo on.",
     "events": [
      "Lootaa e junngo Yuhanna",
-     "Ruuhu on jippii wa foondu — «Ko oo woni Ɓiɗɗo an jiɗaaɗo»",
+     "Ruuhu on jippii wa foondu — «Ko oo woni Ɓiɗɗo an Yiɗaaɗo»",
      "O fooli jarrabuuji tati Seyɗaan e ladde"
     ]
    },
@@ -281,7 +281,7 @@
     "note": "Laawol kuugal aranol — rewa Urusaliima haa Samariiya jaasnaandi.",
     "events": [
      "O laɓɓini hekkalu ka Urusaliima",
-     "Jemma, Nikodemu — «Sey a jibinee hesii»",
+     "Jemma, Nikodemu — «bee jibintineɗon kesun»",
      "Ndiyam nguurɗam wonande debbo Samariyanke"
     ]
    },
@@ -292,7 +292,7 @@
     "note": "Ñiiɓirde kuugal Galili — noddugol, janngingol e luutndagol fow tawtoroo ɗoo.",
     "events": [
      "O noddi awooɓe liƴƴi o ñiiɓi ɗoo",
-     "Waaju ka fello — «Barkinaaɓe ko waasɓe e ruuhu»",
+     "Waaju ka fello — «Yondiniiɓe ka ɓernde ɓen ko malaaɓe»",
      "Misalaaji laamu ngun — e luutndagol ɓeydotoongol"
     ]
    },
@@ -302,7 +302,7 @@
     "today": "Weendu Kinneret hannde",
     "note": "E bawgal makko dow tageefe, o hollii ko o woni.",
     "events": [
-     "«Deƴƴu, tamño» — o deeƴni henndu ndun",
+     "«Deeƴu, fankaa» — o deeƴni henndu ndun",
      "O ñamminii 5.000 e mburu jowi e liƴƴi ɗiɗi",
      "O yaha dow ndiyam"
     ]
@@ -313,7 +313,7 @@
     "today": "Baniyaas hannde",
     "note": "Taalibaaɓe ɓen faami ko o Almasiihu on, e laawol leggal altindiraangal udditii.",
     "events": [
-     "Qirritaango Piyer — «An woni Almasiihu on, Ɓiɗɗo Alla wuuɗo on»",
+     "Qirritaango Piyer — «Ko onon woni Almasiihu on, on Ɓiɗɗo Alla Wuuruɗo on»",
      "O habri arannde mayde makko e ummital makko",
      "O waylii mbaadi e teddungal ka fello"
     ]
@@ -326,7 +326,7 @@
     "events": [
      "O udditi gite bumɗo Bartimeyus",
      "O noddi Sakkeyu mooɓtoowo lampo",
-     "«Ɓiɗɗo neɗɗo on ari ɗaɓɓude e dandude majjuɓe ɓen»"
+     "«Ɓii-Aaden on ko ɗaɓɓitugol majjuɓe ɓen, danda ɓe»"
     ]
    },
    "bethany": {
@@ -335,7 +335,7 @@
     "today": "al-Eizariya hannde",
     "note": "O hollii bawgal makko dow mayde ka jonte makko sakkitiinde ɓadii.",
     "events": [
-     "O ummini Laasar daga yanaande — «Ko min woni ummital ngal e ngurndan ɗan»",
+     "O ummini Laasar daga yanaande — «Ko min woni Ummutal ngal e Ngurndan ɗan»",
      "Maryama wujii mo nebbam ngam ubbugol",
      "Ndee maandeere ɓeydi feere warugol mo"
     ]
@@ -454,7 +454,7 @@
     "note": "Nokkuure baylol ka Kibaaru Moƴƴo huccitii Eropa ko adii.",
     "events": [
      "Wahayu gorko Makeduuniya",
-     "«Ar Makeduuniya ballaa min»",
+     "«Rewu Masedonii gaa, faaboɗaa men»",
      "E jaka ɓe lummbi njaadi Eropa"
     ]
    },
@@ -476,7 +476,7 @@
     "note": "Kongol on dimbini saare nden e luutndagol fasii.",
     "events": [
      "O yeewti ka sinagog Sabbatuuji tati",
-     "«Ɓee waylooɓe aduna on»",
+     "«Ɓee jiiɓuɓe aduna on»",
      "Ɓe njalti jemma"
     ]
    },
@@ -509,7 +509,7 @@
     "note": "O ñiiɓi hitaande e feccere, o aawi fedde diina e saare bone.",
     "events": [
      "O waɗi tiilaaji wondude e Akila e Prisilla",
-     "«Wata a hulu… ko fii miɗo wondi e maaɗa»",
+     "«Wata a hulu… Ko fii min miɗo wondi e maa»",
      "Korintinaaɓe heewɓe ngomɗini ɓe lootaa"
     ]
    },
@@ -530,7 +530,7 @@
     "today": "Turkiya hannde",
     "note": "Sallminaango gonɗi wondude e mawɓe Efesu.",
     "events": [
-     "«Reenee fedde diina nde o soodiri ƴiiƴan makko»",
+     "«ayniron moftal Alla ngal o heɓiri ƴiiƴan ɓiɗɗo makko on tigi»",
      "Mawɓe ɓen ngulli, ɓe nganndi ɓe ngi'ataa mo fahin"
     ]
    },
@@ -542,7 +542,7 @@
     "events": [
      "Ñaawooje yeeso gomnaaji Feliks e Festus",
      "Daɗndagol makko yeeso laamɗo Agriipa",
-     "«Mi ɗaɓɓii ñaawoore Kaysar» — faade Roma"
+     "«yo mi feƴƴu ka Seezar lanɗo mawɗo Roomu on» — faade Roma"
     ]
    },
    "jerusalem": {
@@ -614,7 +614,7 @@
     "events": [
      "Duuɓi ɗiɗi dahaaɗo ka galle, o habra laamu ngun e cuusal",
      "Gila ɗoo o winda Ɓataakuuji Kaso (Efesinaaɓe·Filipinaaɓe·Kolosinaaɓe·Filemon)",
-     "Ɓaawo o dahaa fahin, o winda Timote 2 o waraa sabu gomɗinal — «Mi haɓii haɓannde moƴƴere nden, mi timminii doggu ngun»"
+     "Ɓaawo o dahaa fahin, o winda Timote 2 o waraa sabu gomɗinal — «Mi tippirii tippiro moƴƴo ngon, mi timminii dogudu an ndun»"
     ]
    }
   },

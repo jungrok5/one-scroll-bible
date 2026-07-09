@@ -35,10 +35,10 @@
     "today": "naannoo Xayigrisii–Efiraaxiis har'a",
     "note": "Gara addunyaa “guddo dansa” god'ame sanaati, dabni seenee hid'aa Waaqafi ilma namaa giddu jiru cabsa.",
     "events": [
-     "Uumama guyyaa jaha — “guddo dansa ture”",
+     "Uumama guyyaa jaha — “guddo dansa arge”",
      "Namni fakkii Waaqaatiini god'ame",
      "Kufaatii, fi Edeni keesaa bahuu",
-     "Waadaa Odu Dansa jalqaba — “d'aloota niitii mata bofaa ch'arasa”"
+     "Waadaa Odu Dansa jalqaba — “D'alooti isii mata si ch'arase”"
     ]
    },
    "noah": {
@@ -49,7 +49,7 @@
     "events": [
      "Addunyaa hamenyaani guuttame",
      "Bishaan badiisaa, fi doonii Nohi",
-     "Wold'aqisa sabbataa — “lammata bishaan badiisaa addunyaa balleesu hin'jiru”"
+     "Wold'aqisa sabbataa — “ammalle lolaani deebie fach'ae lafa imballeesu”"
     ]
    },
    "babel": {
@@ -58,7 +58,7 @@
     "today": "Iraaq har'a (dirree Shinaar)",
     "note": "Of-tuulummaa samiiti gahu barbaadu suni gubba, Waaqi afaan isaaniifi sabootas lafa gubba ni faffacaasa.",
     "events": [
-     "“Kottaa magaalaafi gamoo… ijaarranne maqaa ufii haa god'annu”",
+     "“Koota me, dira jaaranne, mana d'eera… aka gurra baafanne”",
      "Waaqi afaan isaani walitti ni maka",
      "Saboonni lafa gubba faffaca'u (Shinaar — eegi Baabilooni)"
     ]
@@ -70,7 +70,7 @@
     "note": "Sheekkoon baafama Kitaaba Qulqulluu waamicha nama tokkotiini jalqaba.",
     "events": [
      "Waaqi Abraamiin Uuri Kaldootaa keesaa ni waama",
-     "“Anini gosa guddo si god'a… sabni ch'ufti karaa keetiini eebifama”",
+     "“ta gosa guddo taatu… Si gula anini gosa ch'ufaa eeba kennaa”",
      "D'ugefachaani biyya isaa d'isee baha"
     ]
    },
@@ -91,7 +91,7 @@
     "today": "Naabilus har'a",
     "note": "Lafa waadaa keesatti maatiin hundeefama; wold'aqisnileeni d'aloota keesa dabra.",
     "events": [
-     "Kanaani seenuu, iddo aarsaa jalqaba — “lafa tana d'aloota keetifi kenna”",
+     "Kanaani seenuu, iddo aarsaa jalqaba — “Lafti anini ilmaani teeti kennu kuno tana”",
      "Wold'aqisa (Uumama 15) · Yisihaaq · Yaaqoob",
      "Ilmaani Yaaqoob kud'a-lamaan — hundee gosa kud'a-lamaa"
     ]
@@ -158,7 +158,7 @@
     "note": "Bara guddinna Israeli — fi waadaa mooti haga jiru.",
     "events": [
      "Saa'ol mooti jalqaba, eegasi Daudifi Gooliyaad",
-     "Wold'aqisa Daudi — “teessoo keeti haga jiru jira” (2 Saamu'eli 7)",
+     "Wold'aqisa Daudi — “Hayyumti teetileeni muumme inqabdu ta haga jiru jireenna” (2 Saamu'eli 7)",
      "Solomoon Yerusaalem keesatti mana qulqullummaa ijaara"
     ]
    },
@@ -259,7 +259,7 @@
     "note": "Tajaajilli isaa ifaa ni jalqaba — samiin akka Ilmaati chaappesa.",
     "events": [
      "Yohaannisiini ni cuuphama",
-     "Lubbuun akka gugeeti gad d'ufa — “Kun Ilma kiyya jaalatamaa”",
+     "Lubbuun akka gugeeti gad d'ufa — “Kunini Ilma kiyya ka anini jaalad'u”",
      "Gammoojii keesatti qorumsa Seexanaa sad'an moha"
     ]
    },
@@ -281,7 +281,7 @@
     "note": "Karaa tajaajila jalqabaa — Yerusaalem keesa hamma Samaariyaa tuffatamtuuti.",
     "events": [
      "Yerusaalem keesatti mana qulqullummaa qulqulleesa",
-     "Halkaniini, Niqodemoos — “lammata d'alachuu qabda”",
+     "Halkaniini, Niqodemoos — “Maro lameeso d'alachu maltani”",
      "Niiti Samaariyaatiifi bishaan jireennaa"
     ]
    },
@@ -292,7 +292,7 @@
     "note": "Buufata tajaajila Galiilaa — waamicha, barsiisaafi mormiin ch'ufti asitti wal gahu.",
     "events": [
      "Qurxummii qabdoota waamee asitti qubata",
-     "Lallaba Tulluu — “Warri hafuuraan hiyyeeyyii tahan eebifamoo”",
+     "Lallaba Tulluu — “Ayyaana worra aka garaa keesa hiyyeeyi ufi beekhu”",
      "Fakkeenya mootummaa — fi mormii guddachaa jiru"
     ]
    },
@@ -302,7 +302,7 @@
     "today": "Haroo Kinneret har'a",
     "note": "Humna uumama gubba qabuuni eenyu akka tahe ni argisiisa.",
     "events": [
-     "“Ch'alisi, qabanaa'i” — bubbee ni tasgabbeesa",
+     "“Ch'allisi” — bubbee ni tasgabbeesa",
      "Daabboo shanifi qurxummii lamaan nama 5,000 nyaachisa",
      "Bishaan gubba d'eema"
     ]
@@ -313,7 +313,7 @@
     "today": "Baaniyaas har'a",
     "note": "Barattooti inni Kristo tahuu isaa ni hubatu, karaan maskali ni banama.",
     "events": [
-     "Beeksisa Phexroos — “Ati Kristo, Ilma Waaqa jiraataa”",
+     "Beeksisa Phexroos — “Atini Kristo, Ilma Waaqa jiruuti”",
      "Du'aafi du'aa-ka'umsa isaa yero jalqaba ni dubbata",
      "Tulluu gubba ulfinaani ni jijjiirama"
     ]
@@ -326,7 +326,7 @@
     "events": [
      "Bartimewos jaamaaf agartuu kenna",
      "Zakewoos walitti qabaa gibiraa waama",
-     "“Ilmi Namaa nama bade barbaaduufi fayyisuuf d'ufe”"
+     "“Ilmi Nama ka bade barbaade baasu d'ufe”"
     ]
    },
    "bethany": {
@@ -335,7 +335,7 @@
     "today": "al-Eizariya har'a",
     "note": "Torban isaa d'umaa dura aangoo du'a gubba qabu ni argisiisa.",
     "events": [
-     "Al'aazaarin awwaala keesaa kaasa — “Ani du'aa-ka'umsaafi jireenna”",
+     "Al'aazaarin awwaala keesaa kaasa — “Ka kaasufi ka jiraachisu ana”",
      "Maariyaam awwaalchaaf dibata isa dibdi",
      "Mallattoon kun isa ajjeesuuf mari'achuu jabeesa"
     ]
@@ -454,7 +454,7 @@
     "note": "Tuqaa jijjiiramaa kan Odu Dansaani dura gara Awurooppaati itti d'eemu.",
     "events": [
      "Mul'ata nama Maqedooniyaa",
-     "“Kottu nu gargaari”",
+     "“kooti, nu qarqaari”",
      "Battaluma gara Awurooppaati ce'u"
     ]
    },
@@ -476,7 +476,7 @@
     "note": "Dubbiin magaala ni raasa; mormiinis ni d'oha.",
     "events": [
      "Sanbata sad'ii mana sagadaa keesatti mari'ata",
-     "“Worri addunyaa dabsanii gargalchan”",
+     "“Worri lafa ch'ufa garagalche”",
      "Halkaniini suuta bahani d'eemu"
     ]
    },
@@ -509,7 +509,7 @@
     "note": "Waggaa tokkoofi walakkaa turee, magaala hamenyaa keesatti waldaa d'aaba.",
     "events": [
      "Aqiilaafi Phiriskilaa woliin dunkaana hojjeta",
-     "“Hin'sodaatin… ani si woliin jira”",
+     "“Insodaatini… wolumaani jirra”",
      "Worri Qorontos heddu amananii cuuphamu"
     ]
    },
@@ -530,7 +530,7 @@
     "today": "Turkiyaa har'a",
     "note": "Jaarsolii Efesoon imimmaaniini nagaa gaafachuu.",
     "events": [
-     "“Waldaa inni d'iiga ufiitiini bite eegaa”",
+     "“gumi Aabbo ta inni d'iiga ufitiini bitate”",
      "Jaarsoliin lammata isa akka hin'argine beekanii boo'u"
     ]
    },
@@ -542,7 +542,7 @@
     "events": [
      "Bulchitoota Feeliksiifi Feexixoos duratti d'addacha",
      "Mooti Agriphaa duratti falmii isaa",
-     "“Gara Qeesaariti ol iyyad'a” — gara Roomaati"
+     "“Anini Kaisari kad'ad'a” — gara Roomaati"
     ]
    },
    "jerusalem": {
@@ -614,7 +614,7 @@
     "events": [
      "Waggaa lama mana keesatti hid'amee, mootummaa ija jabinaani labsa",
      "Asii Xalayaa Mana Hid'aa barreesa (Efesoosi·Filiphisiyus·Qolosaayisi·Filimoon)",
-     "Booda ammas hid'amee, 2 Ximootewos barreesee ni ajjeefama — “Lola dansa loleera; dorgommii xumureera”"
+     "Booda ammas hid'amee, 2 Ximootewos barreesee ni ajjeefama — “Anini ya haga dandau utaale, dogoomsu tiyya la hobaafad'e”"
     ]
    }
   },

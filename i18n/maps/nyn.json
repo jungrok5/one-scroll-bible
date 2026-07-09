@@ -35,10 +35,10 @@
     "today": "ekicweka kya Tigirisi–Efurate eri izooba",
     "note": "Omu nsi eyaahangirwe erungi munonga, ekibi nikitaaha kandi kicwamu okukwatangana ahagati ya Ruhanga n'abantu.",
     "events": [
-     "Okuhanga omu nnaku mukaaga — “byaba birungi munonga”",
+     "Okuhanga omu nnaku mukaaga — “biri birungi munonga”",
      "Omuntu yaahangwa omu kishushani kya Ruhanga",
      "Okugwa, n'okubingwa omuri Edeni",
-     "Endagaano y'amakuru marungi ey'okubanza — “oruzaaro rw'omukazi rukuhondahonde omutwe gw'enjoka”"
+     "Endagaano y'amakuru marungi ey'okubanza — “Orwo ruzaaro rukuhondahonde omutwe”"
     ]
    },
    "noah": {
@@ -49,7 +49,7 @@
     "events": [
      "Ensi eijwiire obubi",
      "Omwegyemu, n'obwato bwa Nuuhu",
-     "Endagaano y'omukoora — “tindigaruka kuzikiriza ensi n'omwegyemu”"
+     "Endagaano y'omukoora — “mwegyemure kugaruka kucwekyereza ensi”"
     ]
    },
    "babel": {
@@ -58,7 +58,7 @@
     "today": "Iraaka eri izooba (orushaanga rwa Shinaari)",
     "note": "Ahabw'okwehimba okwenda kuhika omu iguru, Ruhanga naashaashaanya orurimi rwabo n'amahanga omu nsi yoona.",
     "events": [
-     "“Ka twombeke orurembo n'omunaara… twekolere eiziina”",
+     "“tweyombekyere orurembo ruriho omunaara… twetungire eiziina”",
      "Ruhanga naahuriganisa orurimi rwabo",
      "Amahanga nigashaashaana omu nsi yoona (Shinaari — enyima Babulooni)"
     ]
@@ -70,7 +70,7 @@
     "note": "Ekitebyo ky'okujunwa ekya Baibuli nikitandika n'okwetwa kw'omuntu omwe.",
     "events": [
      "Ruhanga naayeta Aburamu kuruga Uri wa Abakaludaaya",
-     "“Ndyakwihamu eihanga rihango… enganda zoona ziriheerwa omugisha omuriiwe”",
+     "“Ndyakwihamu eihanga rihango… enganda zoona ez'omu nsi nimwo ziriheerwa emigisha”",
      "Ahabw'okwikiriza naaruga omu ihanga rye"
     ]
    },
@@ -91,7 +91,7 @@
     "today": "Nabulusi eri izooba",
     "note": "Omu nsi y'endagaano omuryango niguhangwa kandi endagaano neegyenda omu mazaaro.",
     "events": [
-     "Okutaaha Kanaani, ekyoto ky'okubanza — “ensi egi ndaagiha oruzaaro rwawe”",
+     "Okutaaha Kanaani, ekyoto ky'okubanza — “Egi nsi niyo ndiha baijukuru baawe”",
      "Endagaano (Okutandika 15) · Isaaka · Yakobo",
      "Abaana ba Yakobo ikumi na babiri — omuzi gw'emiryango ikumi na ibiri"
     ]
@@ -259,7 +259,7 @@
     "note": "Omurimo gwe gwa bonene nigutandika — eiguru nirimuhamya nk'Omwana.",
     "events": [
      "Naabatizibwa Yohaana",
-     "Mutima naaserengyeta nk'enjiibwa — “Ogu niwe Mwana wangye omukundwa”",
+     "Mutima naaserengyeta nk'enjiibwa — “Ogu n'Omwana wangye ou nkunda”",
      "Naasingura okwohibwa kwa Sitaani okushatu omu ihamba"
     ]
    },
@@ -281,7 +281,7 @@
     "note": "Enzira y'omurimo ogw'okubanza — okurabira Yerusalemu kuza omuri Samariya enyansirwe.",
     "events": [
      "Naayeza ekereziya omuri Yerusalemu",
-     "Nyekiro, Nikodemo — “Oshemereire kuzaarwa busya”",
+     "Nyekiro, Nikodemo — “Mushemereire kuzaarwa obwa kabiri”",
      "Amaizi g'obwomi ahari omukazi Omusamariya"
     ]
    },
@@ -292,7 +292,7 @@
     "note": "Ekitebe ky'omurimo gwa Galilaaya — okweta, okwegyesa n'okuhakanisibwa byona nibisangaanira hanu.",
     "events": [
      "Naayeta abajubi yaayeta ekitebe kye hanu",
-     "Orushonborooza rw'aha rushozi — “Bahiirwe abakyene b'omutima”",
+     "Orushonborooza rw'aha rushozi — “Baine omugisha abakyene omu mutima”",
      "Emigani y'obukama — n'okuhakanisibwa okurikweyongyera"
     ]
    },
@@ -302,7 +302,7 @@
     "today": "Eiyaga Kinereti eri izooba",
     "note": "N'obushoboorozi aha butonde naayoreka ou ari.",
     "events": [
-     "“Sirika, hora” — naahoza omuyaga",
+     "“Cureera” — naahoza omuyaga",
      "Naariisa abantu 5,000 n'emigaati etaano n'enfi ibiri",
      "Naatambura aha maizi"
     ]
@@ -313,7 +313,7 @@
     "today": "Baniyasi eri izooba",
     "note": "Abeegi nibetegyereza ku ari Kristo, kandi enzira y'omusharaba neekingurwa.",
     "events": [
-     "Okwatula kwa Petero — “Iwe oli Kristo, Omwana wa Ruhanga ohuriire”",
+     "Okwatula kwa Petero — “Ori Kristo, Omwana wa Ruhanga ohuriire”",
      "Naaranga okubanza okufa n'okuzooka kwe",
      "Naahindurwa omu kitiinwa aha rushozi"
     ]
@@ -326,7 +326,7 @@
     "events": [
      "Naaha amaisho Barutimaayo omuhnumi",
      "Naayeta Zakaayo omusorozi",
-     "“Omwana w'Omuntu yaijire kusherura n'okujuna ekyabuzire”"
+     "“Omwana w'omuntu akaija kusherura ekyabuzire n'okukijuna”"
     ]
    },
    "bethany": {
@@ -335,7 +335,7 @@
     "today": "al-Eizariya eri izooba",
     "note": "Naayoreka obushoboorozi bwe aha rufu, esande ye ey'omuheru etakatandikire.",
     "events": [
-     "Naazoora Lazaaro omu ituuro — “Niinye okuzooka n'amagara”",
+     "Naazoora Lazaaro omu ituuro — “Niinye kuzooka, niinye magara”",
      "Mariamu naamushiiga amajuta ahabw'okuziikwa",
      "Akamanyiso aka nikahamya olukwe rw'okumwita"
     ]
@@ -454,7 +454,7 @@
     "note": "Ahahindukiro ahu amakuru marungi gaatandikira okuza Bulaaya.",
     "events": [
      "Okworekwa kw'omushaija w'omuri Makedoonia",
-     "“Ija hanu otuhwere”",
+     "“Yambuka, oije Makedoniya, otuhwere”",
      "Baarabamu ahonaaho baataaha Bulaaya"
     ]
    },
@@ -476,7 +476,7 @@
     "note": "Ekigambo nikisiisa orurembo kandi okuhakana nikwiira.",
     "events": [
      "Naahakanira omu sinagoogi Sabato ishatu",
-     "“Aba nibo baahindwire ensi yoona”",
+     "“Abantu ababaire nibajuumika ensi yoona”",
      "Baaruga nyekiro"
     ]
    },
@@ -509,7 +509,7 @@
     "note": "Naaguma omwaka n'ekicweka, naatandika kanisa omu rurembo rw'obubi.",
     "events": [
      "Naakora ehema na Akwila na Purisila",
-     "“Otatiina… ahakuba ndi naiwe”",
+     "“Otatiina… Nkwine kandi tihariho muntu weena oraakukore kubi”",
      "Abakorinto baingi nibeikiriza baabatizibwa"
     ]
    },
@@ -530,7 +530,7 @@
     "today": "Turukiya eri izooba",
     "note": "Okusiibura okw'amarira n'abakuru ba Efeso.",
     "events": [
-     "“Murinde kanisa eyi yaaguzire n'eshagama ye”",
+     "“murinde obusyo bwona… eki yaayecunguriire n'eshagama ye wenka”",
      "Abakuru nibarira, nibamanya ku batakamureeba bunya"
     ]
    },
@@ -542,7 +542,7 @@
     "events": [
      "Emanja omu maisho g'abategyeki Felike na Festo",
      "Okwekingira kwe omu maisho g'omugabe Agiripa",
-     "“Ninyanukira ahari Kaisari” — okuza Rooma"
+     "“Nyowe naajurira ahari Kaisaari” — okuza Rooma"
     ]
    },
    "jerusalem": {
@@ -614,7 +614,7 @@
     "events": [
      "Emyaka ebiri asibirwe omu nju, naarangirira obukama atatiina",
      "Kuruga hanu naahandiika Ebbaruha z'omu Nkomo (Abeefeso·Abafilipi·Abakolosai·Filemooni)",
-     "Enyima yaasibwa bunya, naahandiika 2 Timoteeho yaayitwa ahabw'okwikiriza — “Narwaniire orugamba orurungi, mazire okwiruka”"
+     "Enyima yaasibwa bunya, naahandiika 2 Timoteeho yaayitwa ahabw'okwikiriza — “Ndwaine orugamba rurungi… empaka z'okwiruka nziherize”"
     ]
    }
   },

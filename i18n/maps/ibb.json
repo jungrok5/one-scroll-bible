@@ -33,12 +33,12 @@
     "name": "Iden (Edibot · Eduọñọ)",
     "book": "Edibọtñkpọ 1–3",
     "today": "itie Akpa Taigris–Yufretis mfịn",
-    "note": "Ke ererimbod a-Abasi akabotde “eti etieti,” ndise adʌk anyʌñ abụ ebuana a-adude ke ufọd Abasi ye owo.",
+    "note": "Ke ererimbod a-Abasi akabotde “amaanekke afọn,” ndise adʌk anyʌñ abụ ebuana a-adude ke ufọd Abasi ye owo.",
     "events": [
-     "Edibot ke usen itiokiet — “eti etieti”",
+     "Edibot ke usen itiokiet — “amaanekke afọn”",
      "Ebot owo ke ndise Abasi",
      "Eduọñọ, ye edibịn asio ke Iden",
-     "Akpa un̄wọñọ eti mbụk — “ufọd awonwaan ayaakọñ idịb añwañ”"
+     "Akpa un̄wọñọ eti mbụk — “anye ayaunuak fiin iwuod”"
     ]
    },
    "noah": {
@@ -49,7 +49,7 @@
     "events": [
      "Ererimbod a-ọyọhọde ye mbiam",
      "Inyañ, ye ubom Noa",
-     "Edioomo eñwuñeñe — “inyañ idiifiakke idi ndiwụri ererimbod aba”"
+     "Edioomo eñwuñeñe — “ukwọ idiisoboke ederimbod aba”"
     ]
    },
    "babel": {
@@ -58,7 +58,7 @@
     "today": "Irak mfịn (isọñ Shinar)",
     "note": "Ke ntak nsọñiwuod a-akeyemde ndisịm enyọñ, Abasi asuañ usem mmọ ye mbon ke ofụri isọñ.",
     "events": [
-     "“Yak ibọñ obio ye ọñ … yak inam enyịñ ñnyịn akpon”",
+     "“Idi yak ñnyịn ibọp abio … nọ ñnyịn inịm anyịñ inọ idem ñnyịn”",
      "Abasi asuañ usem mmọ",
      "Mbon esuañ ke ofụri isọñ (Shinar — ke iso Babilọn)"
     ]
@@ -70,7 +70,7 @@
     "note": "Mbụk edinyaaña ke Baibol atọñọ ke edikot owo keed.",
     "events": [
      "Abasi akot Ebram asio ke Ur eke mbon Kaldia",
-     "“Ami ñyaanam afo ado akamba idịd … afịd mbon eyaebọ udiọñ ke afo”",
+     "“ami ñyaanam afo ado ekamba idịd … afịd awo ke iso isọñeyaebọ adidiọñ uto fiin”",
      "Ke mbuọtidem anye ọwọrọ ke isọñ amọ"
     ]
    },
@@ -91,7 +91,7 @@
     "today": "Nablus mfịn",
     "note": "Ke isọñ un̄wọñọ ebọñ ufọk anyʌñ edioomo abe aka ke emana ke emana.",
     "events": [
-     "Edidụk Kenan, akpa itie-uwa — “ami nnọ ufọd fo isọñ emi”",
+     "Edidụk Kenan, akpa itie-uwa — “Ubon mfo ke ami ndiinọ isọñ ami”",
      "Edioomo (Edibọtñkpọ 15) · Aisak · Jekob",
      "Nditọ Jekob duop-iba — ntọñọ esọp duop-iba"
     ]
@@ -158,7 +158,7 @@
     "note": "Eti ini Isrel — ye un̄wọñọ abọñ a-adude ke nsi-nsi.",
     "events": [
      "Sọl akpa abọñ, ke iso Defid ye Goliat",
-     "Edioomo Defid — “ebekpo fo ayaada ke nsi-nsi” (2 Samuel 7)",
+     "Edioomo Defid — “ebekpo mfo ayaada ke nsi-nsi” (2 Samuel 7)",
      "Solomon abọñ ufọk Abasi ke Jerusalem"
     ]
    },
@@ -259,7 +259,7 @@
     "note": "Utom amọ an̄wan̄wa atọñọ — enyọñ awụd anye nte Ayịn.",
     "events": [
      "Jọn anịm anye mmọọñ",
-     "Adisana Sịbidịd asụhọde nte ibiom — “Emi edi edima Ayịn mmi”",
+     "Adisana Sịbidịd asụhọde nte ibiom — “Anyem ado Ayịn mmi, a-ami mmaaha”",
      "Akan mme udọmọ Setan ita ke idak-idịk"
     ]
    },
@@ -281,7 +281,7 @@
     "note": "Usụñ ntọñọ utom — ebe ke Jerusalem tutu esịm Sameria a-ẹsehede.",
     "events": [
      "Anam ufọk Abasi asana ke Jerusalem",
-     "Ke okoneyo, Nikodimọs — “Ana ẹmana fi aba”",
+     "Ke okoneyo, Nikodimọs — “Ana afo amaana amana ufa”",
      "Mmọọñ uwem anọ an̄wan Sameria"
     ]
    },
@@ -292,7 +292,7 @@
     "note": "Itie utom Galili — edikot, ukpep ye edisọñ-ibuot afịd esobo mi.",
     "events": [
      "Akot mbon u-uyịp iyak anyʌñ adʌñ mi",
-     "Ukwọrọ-ikọ ke Obot — “Ọfọn odu ye mbon ubuene ke esịt”",
+     "Ukwọrọ-ikọ ke Obot — “Afọfọn anọ mbon e-eweeneke ke sịbidịd”",
      "Mme n̄ke obio-ukara — ye edisọñ-ibuot a-akọride"
     ]
    },
@@ -302,7 +302,7 @@
     "today": "Inyañ Kineret mfịn",
     "note": "Ke odudu ke iso edibot anye awụd se anye edide.",
     "events": [
-     "“Emem, tie sụñ” — anam akamba ọfịñ atre",
+     "“Dop! Naa sʌñ!” — anam akamba ọfịñ atre",
      "Ọbọk mbon 5,000 ke bred ition ye iyak iba",
      "Asañ ke enyọñ mmọọñ"
     ]
@@ -313,7 +313,7 @@
     "today": "Banias mfịn",
     "note": "Mbet ẹfiọk ite anye edi Krais, anyʌñ usụñ krọs aberede.",
     "events": [
-     "Editịñ Pita — “Afo edi Krais, Ayịn Abasi odu-uwem”",
+     "Editịñ Pita — “Afo ado Krais, Ayịn ndu-ndu Abasi”",
      "Anye abem iso atịñ aban̄a ñkpa ye eseti amọ",
      "Ekpụhọde anye ke ubọñ ke enyọñ obot"
     ]
@@ -326,7 +326,7 @@
     "events": [
      "Anam Bartimiọs a-akan̄ande akụt usụñ",
      "Akot Sakiọs andibọ-okuk",
-     "“Ayịn Owo akadi ndiyom ye ndinyaaña se akataba”"
+     "“Ayịn Awo akedi adiyem ñnyʌñ ñnyaaña mbon se isop”"
     ]
    },
    "bethany": {
@@ -335,7 +335,7 @@
     "today": "al-Eizariya mfịn",
     "note": "Ke ekpere akpatre urua amọ, anye awụd odudu ke iso ñkpa.",
     "events": [
-     "Anam Lazarọs aseti asio ke udi — “Ami edi eseti ye uwem”",
+     "Anam Lazarọs aseti asio ke udi — “Ami ndo adised ke ñkpa ye uwem”",
      "Meri ayịñ anye aran anọ ubụk",
      "Idiọñọ emi anam esịd ndiwot anye asọñ akan"
     ]
@@ -454,7 +454,7 @@
     "note": "Itie ukpụhọde a-eti mbụk akpa ini akade Yurop.",
     "events": [
      "N̄kụkịm owo Masedonia",
-     "“Baña di an̄wam ñnyịn”",
+     "“Kanna di Masidonia di inwam ñnyịn”",
      "Ammọ ebe idahaenyọñ eka Yurop"
     ]
    },
@@ -476,7 +476,7 @@
     "note": "Ikọ anyeke obio anyʌñ edibiọñọ akọri.",
     "events": [
      "Anemme ikọ ke synagog Sabat ita",
-     "“Mbon emi ẹkpụhọde ererimbod”",
+     "“Ibon ami e-esịnne ntịme ekanna afịd ederimbod”",
      "Ammọ ẹbe ke okoneyo ẹka"
     ]
    },
@@ -509,7 +509,7 @@
     "note": "Anye adʌñ isua keed ye ufọt, ọbọñ ufọk Abasi ke obio idiọk-edu.",
     "events": [
      "Anam mme ufọk-ọfọñ ye Akwila ye Prisila",
-     "“Kûbọ ndịk … sia ami ndu ye afo”",
+     "“Kuukop ndịk … Sia ami mmọdo mba ye afo”",
      "Ediwak mbon Korint enịm ke akpanikọ anyʌñ ẹnịm mmọ mmọọñ"
     ]
    },
@@ -530,7 +530,7 @@
     "today": "Turki mfịn",
     "note": "Edikọñ a-ọyọhọde ye mmọọñayịd ye mbiọwọ Efesọs.",
     "events": [
-     "“Se ẹkpeme ufọk Abasi a-Anye akadepde ke iyịp Amọ”",
+     "“mme akpemeedọñ ufọk Abasi a-anye akedeppe ke iyiib amọ”",
      "Mbiọwọ etua eyet, ẹfiọkde ite iyiikụtke anye aba"
     ]
    },
@@ -542,7 +542,7 @@
     "events": [
      "Mme ikpe ke iso mme gọvna Filiks ye Festọs",
      "Edikan̄a amọ ke iso Abọñ Agripa",
-     "“Ami mbọ ikpe mmi asọk Siza” — aka Rom"
+     "“Ami mmeben ikpe mmi ñketʌmọ Sisa” — aka Rom"
     ]
    },
    "jerusalem": {
@@ -614,7 +614,7 @@
     "events": [
      "Isua iba ke ufọk-n̄kpọkọbọ, akwọrọ obio-ukara ye uko",
      "Toto mi anye awet Mme Nwed Ufọk-n̄kpọkọbọ (Efesọs·Filipi·Kọlọsi·Filimọn)",
-     "Ke iso ẹdọñ anye ke ufọk-n̄kpọkọbọ aba, anye awet 2 Timoti anyʌñ ẹwot anye ke ntak mbuọtidem — “Mmen̄wana eti en̄wana, mma nsịm utịn̄wọñọ”"
+     "Ke iso ẹdọñ anye ke ufọk-n̄kpọkọbọ aba, anye awet 2 Timoti anyʌñ ẹwot anye ke ntak mbuọtidem — “Mmenwana eti anwan, mmekweñe nduba mmi”"
     ]
    }
   },

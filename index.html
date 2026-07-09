@@ -788,7 +788,7 @@
     <div class="respond reveal" data-ga="respond">
       <h3 data-i18n="respond.h3">그래서, 나는 어떻게?</h3>
       <p class="r-sub" data-i18n="respond.sub">이 사랑은 정보가 아니라 <b>초대</b>입니다. 나를 대신해 못 박히신 그 사랑이 마음에 닿았다면, 지금 이 기도를 한 문장씩 천천히 따라 드려 보세요.</p>
-      <div class="prayer" data-i18n="respond.prayer">
+      <div class="prayer" data-i18n="respond.prayer" data-clarity-mask="true">
         <p>하나님,</p>
         <p>저는 스스로를 구원할 수 없는 죄인임을 인정합니다.</p>
         <p>예수님이 저를 위해 십자가에서 죽으시고 다시 살아나신 것을 믿습니다.</p>
@@ -1520,7 +1520,6 @@ function doApply(pack,code){
   // closing.map 의 maps 링크(번역 문자열 안의 <a>)에 data-rel 표시 후, 모든 크로스링크를 현재 언어로
   (function(){var m=document.getElementById('closingMap');var a=m&&m.querySelector('a');if(a)a.setAttribute('data-rel','maps');})();
   relink(code);
-  gevent('language_select',{language:code});
   gotoHash();
 }
 /* 크로스링크(About·Maps·Home)를 현재 언어 페이지로 — 해당 면에 그 언어가 없으면 중립(ko)로 폴백.
@@ -1545,6 +1544,9 @@ function buildLangList(filter){
   items.forEach(l=>{const li=document.createElement('li');li.dataset.code=l.code;li.setAttribute('aria-selected',l.code===curCode?'true':'false');li.innerHTML='<span>'+l.native+'</span><span class="en">'+l.en+'</span>';li.addEventListener('click',()=>{
     if(l.code===curCode){ closeLang(); return; }
     try{localStorage.setItem('lang',l.code);}catch(e){}
+    // 사용자가 실제로 고른 언어만 집계(부팅 발화 제외). 전환은 URL 이동이라 doApply 밖 여기서 발화.
+    // gtag 기본 transport=beacon 이라 location.href 이동 중에도 전송됨.
+    gevent('language_select',{language:l.code});
     // 프리렌더된 해당 언어 URL로 이동(about/maps 스위처와 동일) — in-place 전환 시 ko 폴백(ORIG) 깨짐 + URL/내용 불일치를 방지하고 공유 URL을 정확히 함. #해시(섹션) 유지.
     location.href=(l.code==='ko'?'/':'/'+l.code+'/')+location.hash;
   });langList.appendChild(li);});

@@ -1,0 +1,636 @@
+{
+ "menuName": "Runyankore",
+ "htmlLang": "nyn",
+ "dir": "ltr",
+ "locale": "nyn-UG",
+ "brand": "Baibuli omu Kuraza Kumwe",
+ "docTitle": "Baibuli aha Mukoroogyo · Baibuli omu Kuraza Kumwe",
+ "metaDesc": "Kuratira obwiire bw'Endagaano ya Ira, amagara ga Yesu, n'orugyendo rwa Paulo aha mukoroogyo gw'amazima — Baibuli ekabaho omu myanya y'amazima.",
+ "s": {
+  "kicker": "Baibuli omu Kuraza Kumwe · Emikoroogyo",
+  "title": "Baibuli aha Mukoroogyo",
+  "verse": "“Obu twabamanyisa eby'obushoboorozi bwa Mukama waitu Yesu Kristo n'okureebeka kwe, bikaba bitari bigano ebigunzirwe obwengye bw'abantu, kureka tukeereebera n'agaitu ekitiinwa kye ky'obukama.” (2 Petero 1:16)",
+  "purpose": "Baibuli tikiri migani. N'ebyahandiikirwe by'abantu abaatambwire omu myanya y'amazima, obwiire n'amaziina by'amazima. Kuratira enzira ezo aha mukoroogyo, omu muringo gw'obwiire — kuta aha kanuuti, nari ohweze ▶ orabemu kimwe-kimwe.",
+  "ot_kick": "① Endagaano ya Ira — omu bwiire",
+  "ot_h": "Kuruga aha kuhanga kuhitsya aha kugaruka Yerusalemu",
+  "ot_lead": "Tikiri rugyendo rumwe kureka n'enzira y'ekitebyo ky'okujunwa kuruga aha kuhanga: okuhanga n'okugwa → omwegyemu na Babeli → okwetwa (Iburahimu) → ensi y'endagaano → Okuruga → ihamba → okusingura → obukama → okuheebwamu → okunyagwa → okugaruka.",
+  "je_kick": "② Endagaano Ensya — amagara ga Yesu",
+  "je_h": "Kuruga Beteleemu kuhitsya Yerusalemu",
+  "je_lead": "Kuratira amagara ga Yesu nk'oku Engiri zirikugamba, omu muringo — kuruga aha kuzaarwa kwe omuri Beteleemu, okurabira aha kubatizibwa n'omurimo gwe omuri Galilaaya, okuraba omuri Samariya, kuhitsya aha musharaba, okuzooka n'okwambuka omuri Yerusalemu.",
+  "pa_kick": "③ Endagaano Ensya — orugyendo rwa Paulo",
+  "pa_h": "Kuruga Antiokiya kuhitsya ahu ensi egarukira — Rooma",
+  "pa_lead": "Kuruga aha Pentekoseti omuri Yerusalemu, oku amakuru marungi gaatimbire aheeru ya Buyudaaya — okurabira omuri Asia Ntoya na Bulaaya kuhitsya aha mutima gw'obukama bwa Rooma. Toora rumwe aha rugyendo rutaano (orwa 1·2·3 + orugyendo rw'okuza Rooma + enyima y'okurekurwa) okuratira ebyabaireho omu Byakozirwe Entumwa n'ebbaruha ezaahandiikirwe omu nzira.",
+  "foot": "Enshuro · Emyanya nekuratira ebyahandiikirwe bya Baibuli n'okumanya emyanya ya Baibuli okumanyirwe (n'amaziina g'obunaku obu ahu garikuhwera). Enkiiko z'enyanja, emigyera n'ebiyaga bishushaniziibwe kuruga aha byahandiikirwe by'ensi ebihamu (Natural Earth), byorobiziibwe.",
+  "contact": "Ebibuuzo · ebiteekateeko — <a id=\"contact\" class=\"mail\">Tuhandiikire emeeri</a>",
+  "play": "Genda",
+  "pause": "Emerera",
+  "today": "Hati:",
+  "verseCite": "2 Petero 1:16"
+ },
+ "ot": {
+  "places": {
+   "eden": {
+    "name": "Edeni (Okuhanga · Okugwa)",
+    "book": "Okutandika 1–3",
+    "today": "ekicweka kya Tigirisi–Efurate eri izooba",
+    "note": "Omu nsi eyaahangirwe erungi munonga, ekibi nikitaaha kandi kicwamu okukwatangana ahagati ya Ruhanga n'abantu.",
+    "events": [
+     "Okuhanga omu nnaku mukaaga — “byaba birungi munonga”",
+     "Omuntu yaahangwa omu kishushani kya Ruhanga",
+     "Okugwa, n'okubingwa omuri Edeni",
+     "Endagaano y'amakuru marungi ey'okubanza — “oruzaaro rw'omukazi rukuhondahonde omutwe gw'enjoka”"
+    ]
+   },
+   "noah": {
+    "name": "Ararati (Omwegyemu)",
+    "book": "Okutandika 6–9",
+    "today": "Orushozi Ararati, Bugwejuba bwa Turukiya eri izooba",
+    "note": "Ruhanga naacwera orubanja ensi eijwiire ekibi, kwonka naarinda amagara ahabw'omuryango gumwe.",
+    "events": [
+     "Ensi eijwiire obubi",
+     "Omwegyemu, n'obwato bwa Nuuhu",
+     "Endagaano y'omukoora — “tindigaruka kuzikiriza ensi n'omwegyemu”"
+    ]
+   },
+   "babel": {
+    "name": "Omunaara gwa Babeli",
+    "book": "Okutandika 11",
+    "today": "Iraaka eri izooba (orushaanga rwa Shinaari)",
+    "note": "Ahabw'okwehimba okwenda kuhika omu iguru, Ruhanga naashaashaanya orurimi rwabo n'amahanga omu nsi yoona.",
+    "events": [
+     "“Ka twombeke orurembo n'omunaara… twekolere eiziina”",
+     "Ruhanga naahuriganisa orurimi rwabo",
+     "Amahanga nigashaashaana omu nsi yoona (Shinaari — enyima Babulooni)"
+    ]
+   },
+   "ur": {
+    "name": "Uri",
+    "book": "Okutandika 12",
+    "today": "amashwa ga Iraaka eri izooba",
+    "note": "Ekitebyo ky'okujunwa ekya Baibuli nikitandika n'okwetwa kw'omuntu omwe.",
+    "events": [
+     "Ruhanga naayeta Aburamu kuruga Uri wa Abakaludaaya",
+     "“Ndyakwihamu eihanga rihango… enganda zoona ziriheerwa omugisha omuriiwe”",
+     "Ahabw'okwikiriza naaruga omu ihanga rye"
+    ]
+   },
+   "haran": {
+    "name": "Harani",
+    "book": "Okutandika 12",
+    "today": "amashwa ga Turukiya eri izooba",
+    "note": "Omu nzira, naahikiriza okwetwa okuza omu nsi y'endagaano.",
+    "events": [
+     "Omuryango gwa Teera nigutuura Harani",
+     "Teera naafa",
+     "Aburamu naaza Kanaani aine emyaka 75"
+    ]
+   },
+   "shechem": {
+    "name": "Sekemu · Kanaani",
+    "book": "Okutandika 12–50",
+    "today": "Nabulusi eri izooba",
+    "note": "Omu nsi y'endagaano omuryango niguhangwa kandi endagaano neegyenda omu mazaaro.",
+    "events": [
+     "Okutaaha Kanaani, ekyoto ky'okubanza — “ensi egi ndaagiha oruzaaro rwawe”",
+     "Endagaano (Okutandika 15) · Isaaka · Yakobo",
+     "Abaana ba Yakobo ikumi na babiri — omuzi gw'emiryango ikumi na ibiri"
+    ]
+   },
+   "egypt": {
+    "name": "Misiri (Gosheni)",
+    "book": "Okutandika 37–50 · Okuruga 1",
+    "today": "Delta ya Nairu, Misiri eri izooba",
+    "note": "Omuryango niguhinduka eihanga rihango — haza eihanga ry'abahuuku.",
+    "events": [
+     "Yusufu, owaaguzibwa, naahingurwa kutegyeka Misiri",
+     "Omuryango gwa Yakobo gwona niguserengyeta kwiruka enjara",
+     "Eihanga rya Isiraeli erikukura nirihinduka bahuuku"
+    ]
+   },
+   "sinai": {
+    "name": "Orushozi Sinai",
+    "book": "Okuruga · Abaleevi",
+    "today": "Ekicweka kya Sinai eri izooba",
+    "note": "Okujuna okukuru okw'Endagaano ya Ira — abahuuku nibahinduka abantu ba Ruhanga.",
+    "events": [
+     "Ebibonyo ikumi n'omwana gw'entaama gwa Pasika",
+     "Engyanja Etukuura neeyaata baarabamu",
+     "Ebiragiro Ikumi, Eiteeka, eihema n'ebitambo"
+    ]
+   },
+   "kadesh": {
+    "name": "Kadeshi (ihamba)",
+    "book": "Okubara · Ebiragiro",
+    "today": "ihamba rya Sinai–Negevu eri izooba",
+    "note": "Okutaikiriza kukafeza oruzaaro rumwe ensi — kwonka Ruhanga naaguma nabo.",
+    "events": [
+     "Abakengyezi ikumi na babiri — kwonka abantu nibagaana kwesiga",
+     "Emyaka 38 omu ihamba — maana, ekicu n'omuriro",
+     "Aha rushaanga rwa Mowaabu, orushonborooza rwa Musa orw'omuheru (Ebiragiro)"
+    ]
+   },
+   "jericho": {
+    "name": "Yeriko",
+    "book": "Yoshwa",
+    "today": "Yeriko eri izooba",
+    "note": "Aha muheru nibataaha baatunga ensi y'endagaano.",
+    "events": [
+     "Yorodaani neeyaata abantu baarabamu",
+     "Ebicwezo bya Yeriko nibigwa",
+     "Okusingura Kanaani n'okugabana ensi"
+    ]
+   },
+   "shiloh": {
+    "name": "Shilo (Abaramuzi)",
+    "book": "Abaramuzi · Ruuti",
+    "today": "Khirbet Seilun eri izooba",
+    "note": "Bataine mugabe, buri muntu naayekorera eki arikwenda — omugabe w'amazima naayetengwa.",
+    "events": [
+     "Eihema nirisibwa aha Shilo",
+     "Enzira erikugaruka ey'ekibi–okuhibwa–okujunwa (Debora, Gideoni, Samusoni)",
+     "Ruuti — okwesigwa omu biro by'omwirima, omu ruzaaro rwa Daudi"
+    ]
+   },
+   "jerusalem": {
+    "name": "Yerusalemu · Obukama Bwemwe",
+    "book": "1–2 Samueli · 1 Bagabe",
+    "today": "Yerusalemu eri izooba",
+    "note": "Obwiire burungi bwa Isiraeli — n'endagaano y'omugabe otahwaho.",
+    "events": [
+     "Saulo omugabe w'okubanza, haza Daudi na Goliyaati",
+     "Endagaano na Daudi — “ekitebe kyawe ebiro byona” (2 Samueli 7)",
+     "Solomooni naayombeka ekereziya omuri Yerusalemu"
+    ]
+   },
+   "samaria": {
+    "name": "Samariya · Obukama Obwaheebwemu",
+    "book": "Bagabe · Abarangi",
+    "today": "Sebastia eri izooba",
+    "note": "Obukama nibuheebwamu bwaasiisikara, obwo abarangi nibateera enduuru.",
+    "events": [
+     "Ahanyima ya Solomooni, okuheebwamu omuri Yuda na Isiraeli",
+     "Okuramya ebishushani okurikugaruka",
+     "Eliya, Isaaya, Yeremiya nibateera enduuru bati ‘mugaruke’ — kandi nibaranga Masiya"
+    ]
+   },
+   "nineveh": {
+    "name": "Nineve (Ashuru)",
+    "book": "2 Bagabe 17 · Yona",
+    "today": "Mosulu, Iraaka eri izooba",
+    "note": "Baagaya buri kuhanangirizibwa, amwena nigagwa okubanza.",
+    "events": [
+     "Nineve, ekitebe kya Ashuru",
+     "Obukama bw'amwena nibugwa ahari Ashuru (722 EBC)",
+     "Yona naatumwa Nineve"
+    ]
+   },
+   "babylon": {
+    "name": "Babulooni",
+    "book": "2 Bagabe 25 · Daniyeli · Ezekieli",
+    "today": "Hilla, Iraaka eri izooba",
+    "note": "Ekiro ky'omwirima munonga — kwonka endagaano y'okugarurwa neeguma.",
+    "events": [
+     "Yerusalemu nigugwa, ekereziya kyaayotsibwa (586 EBC)",
+     "Yuda nitwarwa Babulooni",
+     "Daniyeli na Ezekieli — okwikiriza n'okworekwa omu kunyagwa"
+    ]
+   },
+   "susa": {
+    "name": "Shushani (Perusiya)",
+    "book": "Esiteeri · Nehemiya",
+    "today": "Shushi, Iraani eri izooba",
+    "note": "N'aha mutima gw'obukama bw'abapagani, Ruhanga naarinda abantu be.",
+    "events": [
+     "Perusiya neesingura Babulooni",
+     "Esiteeri naajuna Abayudaaya kuruga omu kuzikirizibwa",
+     "Nehemiya naashaba omu maisho g'omugabe kandi naatumwa"
+    ]
+   },
+   "return": {
+    "name": "Okugaruka Yerusalemu",
+    "book": "Ezera · Nehemiya · Malaki",
+    "today": "Yerusalemu eri izooba",
+    "note": "Nibagaruka baayombeka bunya — kwonka tihariho mugabe owaaijire. Nibategyereza Masiya.",
+    "events": [
+     "Emibatsyo eshatu y'okugaruka ahabw'eiteeka rya Koresi (Zerubabeli 538 · Ezera 458 · Nehemiya 444)",
+     "Ekereziya kyaayombekwa buhya n'ebicwezo bya Yerusalemu byaagarurwa",
+     "Malaki — Endagaano ya Ira neecwa: “Reeba, nintuma entumwa yangye”"
+    ]
+   }
+  },
+  "labels": [
+   "Enyanja ya Mediteraniya",
+   "Mesopotamiya",
+   "Eihamba rya Buarabu",
+   "Misiri"
+  ],
+  "journeys": {
+   "flow": "Ekitebyo ky'okujunwa"
+  }
+ },
+ "jesus": {
+  "places": {
+   "bethlehem": {
+    "name": "Beteleemu",
+    "book": "Matayo 1–2 · Luka 2",
+    "today": "Beteleemu eri izooba",
+    "note": "Masiya owaaragaaniisibwe naaija omu rurembo rwa Daudi — Kigambo owaaba omuntu.",
+    "events": [
+     "Naazaarwa omuri Beteleemu, orurembo rwa Daudi",
+     "Baamaraika nibamanyisa amakuru abariisa",
+     "Abanyabwengye nibaija kuramya"
+    ]
+   },
+   "nazareth": {
+    "name": "Nazareti",
+    "book": "Luka 2 · 4",
+    "today": "Nazareti eri izooba",
+    "note": "Ruhanga naakura nk'omuntu omu rurembo rwa buriijo.",
+    "events": [
+     "Naakuzibwa omu ka w'omubaizi",
+     "Aine emyaka ikumi n'ebiri, naabuuza n'okugarukamu omu ekereziya",
+     "Enyima yaagaanwa omu sinagoogi y'omu rurembo rwe"
+    ]
+   },
+   "jordan": {
+    "name": "Omugyera Yorodaani",
+    "book": "Matayo 3–4",
+    "today": "Yorodaani ya ahansi eri izooba",
+    "note": "Omurimo gwe gwa bonene nigutandika — eiguru nirimuhamya nk'Omwana.",
+    "events": [
+     "Naabatizibwa Yohaana",
+     "Mutima naaserengyeta nk'enjiibwa — “Ogu niwe Mwana wangye omukundwa”",
+     "Naasingura okwohibwa kwa Sitaani okushatu omu ihamba"
+    ]
+   },
+   "cana": {
+    "name": "Kaana",
+    "book": "Yohaana 2",
+    "today": "Kafr Kanna eri izooba",
+    "note": "Omu kamanyiso ke ak'okubanza naayoreka ekitiinwa kye.",
+    "events": [
+     "Omugyenyi aha bugyenyi bw'obushwere",
+     "Amaizi gaahinduka viinyo — akamanyiso ke ak'okubanza",
+     "Abeegi be nibamwikiriza"
+    ]
+   },
+   "sychar": {
+    "name": "Sukaari (Samariya)",
+    "book": "Yohaana 2–4",
+    "today": "haihi na Nabulusi eri izooba",
+    "note": "Enzira y'omurimo ogw'okubanza — okurabira Yerusalemu kuza omuri Samariya enyansirwe.",
+    "events": [
+     "Naayeza ekereziya omuri Yerusalemu",
+     "Nyekiro, Nikodemo — “Oshemereire kuzaarwa busya”",
+     "Amaizi g'obwomi ahari omukazi Omusamariya"
+    ]
+   },
+   "capernaum": {
+    "name": "Kaperinaumu",
+    "book": "Matayo 4–13 · Mariko 1–4",
+    "today": "aha rubaju rw'eiyaga rya Galilaaya eri izooba",
+    "note": "Ekitebe ky'omurimo gwa Galilaaya — okweta, okwegyesa n'okuhakanisibwa byona nibisangaanira hanu.",
+    "events": [
+     "Naayeta abajubi yaayeta ekitebe kye hanu",
+     "Orushonborooza rw'aha rushozi — “Bahiirwe abakyene b'omutima”",
+     "Emigani y'obukama — n'okuhakanisibwa okurikweyongyera"
+    ]
+   },
+   "galilee": {
+    "name": "Eiyaga rya Galilaaya",
+    "book": "Mariko 4 · 6 · Yohaana 6",
+    "today": "Eiyaga Kinereti eri izooba",
+    "note": "N'obushoboorozi aha butonde naayoreka ou ari.",
+    "events": [
+     "“Sirika, hora” — naahoza omuyaga",
+     "Naariisa abantu 5,000 n'emigaati etaano n'enfi ibiri",
+     "Naatambura aha maizi"
+    ]
+   },
+   "caesarea_p": {
+    "name": "Kaisariya Filipi",
+    "book": "Matayo 16–17",
+    "today": "Baniyasi eri izooba",
+    "note": "Abeegi nibetegyereza ku ari Kristo, kandi enzira y'omusharaba neekingurwa.",
+    "events": [
+     "Okwatula kwa Petero — “Iwe oli Kristo, Omwana wa Ruhanga ohuriire”",
+     "Naaranga okubanza okufa n'okuzooka kwe",
+     "Naahindurwa omu kitiinwa aha rushozi"
+    ]
+   },
+   "jericho": {
+    "name": "Yeriko",
+    "book": "Luka 18–19",
+    "today": "Yeriko eri izooba",
+    "note": "Aha nzira erikwambuka Yerusalemu, naasherura ekyabuzire.",
+    "events": [
+     "Naaha amaisho Barutimaayo omuhnumi",
+     "Naayeta Zakaayo omusorozi",
+     "“Omwana w'Omuntu yaijire kusherura n'okujuna ekyabuzire”"
+    ]
+   },
+   "bethany": {
+    "name": "Betaniya",
+    "book": "Yohaana 11–12",
+    "today": "al-Eizariya eri izooba",
+    "note": "Naayoreka obushoboorozi bwe aha rufu, esande ye ey'omuheru etakatandikire.",
+    "events": [
+     "Naazoora Lazaaro omu ituuro — “Niinye okuzooka n'amagara”",
+     "Mariamu naamushiiga amajuta ahabw'okuziikwa",
+     "Akamanyiso aka nikahamya olukwe rw'okumwita"
+    ]
+   },
+   "jerusalem": {
+    "name": "Yerusalemu",
+    "book": "Matayo 21–28 · Luka 24 · Ebyakozirwe Entumwa 1",
+    "today": "Yerusalemu eri izooba",
+    "note": "Aha muheru ah'amazima Baibuli yoona erikuziza — omusharaba, okuzooka, okwambuka.",
+    "events": [
+     "Okutaaha okw'ekitiinwa; naahindura emeeza z'omu ekereziya bunya",
+     "Aha Kyokurya ky'Omuheru naanaaba abeegi ebigyere",
+     "Naafeera aha musharaba",
+     "Naazooka aha izooba rya kashatu, haza yaayambuka omu iguru"
+    ]
+   }
+  },
+  "labels": [
+   "Enyanja ya Mediteraniya",
+   "Galilaaya",
+   "Samariya",
+   "Buyudaaya",
+   "Dekapoli",
+   "Pereya",
+   "Enyanja Efiire"
+  ],
+  "journeys": {
+   "life": "Enzira ya Yesu"
+  }
+ },
+ "paul": {
+  "places": {
+   "antioch": {
+    "name": "Antiokiya",
+    "book": "Ebyakozirwe Entumwa 13 · 15",
+    "today": "Antakya, Turukiya eri izooba",
+    "note": "Kanisa erikutuma, ahu omurimo gw'abanyamahanga gurikutandikira kandi gurikugarukira.",
+    "events": [
+     "Omu kushaba Mutima naayawuramu Baranaba na Saulo",
+     "Kanisa ahu abaikiriza baayetsirwe okubanza ‘Abakristaayo’",
+     "Ahatandikiro h'orugyendo orw'okubanza, orwa kabiri n'orwa kashatu"
+    ]
+   },
+   "seleucia": {
+    "name": "Seleukiya",
+    "book": "Ebyakozirwe Entumwa 13:4",
+    "today": "Turukiya eri izooba",
+    "note": "Oruhamba rwa Antiokiya — baaza omu maato Kupuro.",
+    "events": []
+   },
+   "salamis": {
+    "name": "Salami (Kupuro)",
+    "book": "Ebyakozirwe Entumwa 13:5",
+    "today": "Kupuro eri izooba",
+    "note": "Ahemereero h'okubanza omuri Kupuro — okurangirira omu masinagoogi.",
+    "events": []
+   },
+   "paphos": {
+    "name": "Pafo",
+    "book": "Ebyakozirwe Entumwa 13:6-12",
+    "today": "Kupuro eri izooba",
+    "note": "Amaani nigoorekwa aha abarikuhakana amakuru marungi.",
+    "events": [
+     "Elimasi omurogo naahumizibwa",
+     "Serugio Paulo omutegyeki naaikiriza",
+     "Kuruga hanu ‘Paulo’ naatwara omu maisho"
+    ]
+   },
+   "perga": {
+    "name": "Perga",
+    "book": "Ebyakozirwe Entumwa 13:13",
+    "today": "Antalya, Turukiya eri izooba",
+    "note": "Oruhamba omuri Pamufiliya — hanu Yohaana Mariko naagaruka enyima.",
+    "events": []
+   },
+   "pantioch": {
+    "name": "Antiokiya ya Pisidiya",
+    "book": "Ebyakozirwe Entumwa 13:14-50",
+    "today": "Yalvaç, Turukiya eri izooba",
+    "note": "Amakuru marungi nigakingurira abanyamahanga.",
+    "events": [
+     "Orushonborooza ruraingwa rw'ekitebyo ky'okujunwa omu sinagoogi",
+     "Abanyamahanga baingi nibashemererwa baayakira ekigambo",
+     "Baabingwa ahabw'okuhakanisibwa"
+    ]
+   },
+   "iconium": {
+    "name": "Ikonia",
+    "book": "Ebyakozirwe Entumwa 14:1-7",
+    "today": "Konya, Turukiya eri izooba",
+    "note": "Baingi nibeikiriza, kwonka okuhiganisibwa nikubahiga okugyendaho.",
+    "events": []
+   },
+   "lystra": {
+    "name": "Lisitura",
+    "book": "Ebyakozirwe Entumwa 14:8-20",
+    "today": "Turukiya eri izooba",
+    "note": "Baamweta ruhanga, haza baamubanda amabaare.",
+    "events": [
+     "Naakiza omulema kuruga okuzaarwa",
+     "Ekiraro nikigyezaho kubatambira nk'baruhanga",
+     "Baamubanda amabaare baamureka nk'ofiire, kwonka naimuka"
+    ]
+   },
+   "derbe": {
+    "name": "Deribe",
+    "book": "Ebyakozirwe Entumwa 14:20-21",
+    "today": "Turukiya eri izooba",
+    "note": "Abeegi baingi nibakorwa; nibagaruka omu nzira yaabo kugumya amakanisa.",
+    "events": []
+   },
+   "troas": {
+    "name": "Trowa",
+    "book": "Ebyakozirwe Entumwa 16:8-10",
+    "today": "Turukiya eri izooba",
+    "note": "Ahahindukiro ahu amakuru marungi gaatandikira okuza Bulaaya.",
+    "events": [
+     "Okworekwa kw'omushaija w'omuri Makedoonia",
+     "“Ija hanu otuhwere”",
+     "Baarabamu ahonaaho baataaha Bulaaya"
+    ]
+   },
+   "philippi": {
+    "name": "Filipi",
+    "book": "Ebyakozirwe Entumwa 16 · Abafilipi",
+    "today": "amwena ga Buyunaani eri izooba",
+    "note": "Kanisa y'okubanza omuri Bulaaya — amakuru marungi nigasingura n'omu nkomo.",
+    "events": [
+     "Lidiya, omuguzi w'emyenda ey'oluyu, naaikiriza",
+     "Omuhuuku omwishiki orikuragura naahangurwa",
+     "Ennyimbo z'ekiro, omusisi gw'ensi, omuryango gw'omurinzi w'enkomo gwaajunwa"
+    ]
+   },
+   "thess": {
+    "name": "Tesalonika",
+    "book": "Ebyakozirwe Entumwa 17 · 1–2 Abatesalonika",
+    "today": "Tesaloniki, Buyunaani eri izooba",
+    "note": "Ekigambo nikisiisa orurembo kandi okuhakana nikwiira.",
+    "events": [
+     "Naahakanira omu sinagoogi Sabato ishatu",
+     "“Aba nibo baahindwire ensi yoona”",
+     "Baaruga nyekiro"
+    ]
+   },
+   "berea": {
+    "name": "Beroya",
+    "book": "Ebyakozirwe Entumwa 17:10-15",
+    "today": "Veria, Buyunaani eri izooba",
+    "note": "‘Ab'ekitiinwa’ abaacondooza ekigambo bo bonka.",
+    "events": [
+     "Baayakira ekigambo n'omutima gwona",
+     "Buri izooba baacondooza Ebyahandiikirwe kureeba oku biri",
+     "Baingi nibeikiriza"
+    ]
+   },
+   "athens": {
+    "name": "Ateene",
+    "book": "Ebyakozirwe Entumwa 17:16-34",
+    "today": "Ateene, Buyunaani eri izooba",
+    "note": "Omu rurembo rw'ab'obwengye naarangirira ‘ruhanga otamanyirwe’.",
+    "events": [
+     "Naasaasirwa orurembo orwijwiire ebishushani",
+     "Aha Areopago naarangirira Omuhangi n'okuzooka",
+     "Baamujoma, kwonka bake nibeikiriza"
+    ]
+   },
+   "corinth": {
+    "name": "Korinto",
+    "book": "Ebyakozirwe Entumwa 18 · 1–2 Abakorinto",
+    "today": "Buyunaani eri izooba",
+    "note": "Naaguma omwaka n'ekicweka, naatandika kanisa omu rurembo rw'obubi.",
+    "events": [
+     "Naakora ehema na Akwila na Purisila",
+     "“Otatiina… ahakuba ndi naiwe”",
+     "Abakorinto baingi nibeikiriza baabatizibwa"
+    ]
+   },
+   "ephesus": {
+    "name": "Efeso",
+    "book": "Ebyakozirwe Entumwa 19 · Abeefeso",
+    "today": "Selçuk, Turukiya eri izooba",
+    "note": "Omutima gw'orugyendo orwa kashatu — ekigambo nikitimba omuri Asia.",
+    "events": [
+     "Okwegyesa buri izooba emyaka ebiri omu ishomero rya Turano",
+     "Ebitabo by'oburogo byaayotsibwa; emirimo y'amaani",
+     "Demetrio omuhesi wa feeza naatandika oruyongo"
+    ]
+   },
+   "miletus": {
+    "name": "Mileeto",
+    "book": "Ebyakozirwe Entumwa 20:17-38",
+    "today": "Turukiya eri izooba",
+    "note": "Okusiibura okw'amarira n'abakuru ba Efeso.",
+    "events": [
+     "“Murinde kanisa eyi yaaguzire n'eshagama ye”",
+     "Abakuru nibarira, nibamanya ku batakamureeba bunya"
+    ]
+   },
+   "caesarea": {
+    "name": "Kaisariya",
+    "book": "Ebyakozirwe Entumwa 23–26",
+    "today": "aha rubaju rw'enyanja rwa Isiraeli eri izooba",
+    "note": "Emyaka ebiri naayekingira amakuru marungi omu maisho g'abategyeki n'omugabe.",
+    "events": [
+     "Emanja omu maisho g'abategyeki Felike na Festo",
+     "Okwekingira kwe omu maisho g'omugabe Agiripa",
+     "“Ninyanukira ahari Kaisari” — okuza Rooma"
+    ]
+   },
+   "jerusalem": {
+    "name": "Yerusalemu",
+    "book": "Ebyakozirwe Entumwa 21–23",
+    "today": "Yerusalemu eri izooba",
+    "note": "Baamukwatira omu ekereziya, enzira ye nk'omusibe neetandika.",
+    "events": [
+     "Naakwatwa ekiraro omu ekereziya",
+     "Naayekingira omu maisho g'orukiiko",
+     "Nk'omunya-Rooma, naatumwa n'abarinzi Kaisariya"
+    ]
+   },
+   "myra": {
+    "name": "Mura",
+    "book": "Ebyakozirwe Entumwa 27:5-6",
+    "today": "Demre, Turukiya eri izooba",
+    "note": "Baahinduka baataaha eryaato ry'Alegizanderiya eririkuza Rooma.",
+    "events": []
+   },
+   "fairhaven": {
+    "name": "Amaziba Marungi (Krete)",
+    "book": "Ebyakozirwe Entumwa 27:8-12",
+    "today": "Krete eri izooba",
+    "note": "Okuhanangiriza kwa Paulo okwo bareke okugyenda omu maato tikwahurirwa.",
+    "events": []
+   },
+   "crete": {
+    "name": "Krete",
+    "book": "Tito",
+    "today": "Krete eri izooba",
+    "note": "Enyima y'okurekurwa, ekizinga ahu yaasiga Tito kutebeekanisa amakanisa.",
+    "events": [
+     "Naasiga Tito kutoora abakuru omu buri rurembo",
+     "Naayetenga abakuru abataine kamogo, abeesigwa",
+     "Naahandiika ebbaruha ahari Tito"
+    ]
+   },
+   "malta": {
+    "name": "Melita",
+    "book": "Ebyakozirwe Entumwa 27–28",
+    "today": "Malita eri izooba",
+    "note": "Okurabira omu muyaga n'okusheenya kw'eryaato, endagaano ya Ruhanga neeguma.",
+    "events": [
+     "Omuyaga mukambwe gwaasheenya eryaato, kwonka boona 276 baajunwa",
+     "Naarumwa enjoka, kwonka tiyaagirweho kabi",
+     "Naakiza abarwaire b'ekizinga"
+    ]
+   },
+   "syracuse": {
+    "name": "Sirakusa",
+    "book": "Ebyakozirwe Entumwa 28:12",
+    "today": "Sisili, Itaari eri izooba",
+    "note": "Baamara ennaku ishatu omuri Sisili.",
+    "events": []
+   },
+   "puteoli": {
+    "name": "Puteoli",
+    "book": "Ebyakozirwe Entumwa 28:13-14",
+    "today": "Pozzuoli, Itaari eri izooba",
+    "note": "Baahika Itaari baasangaanwa abaikiriza bagenzi baabo.",
+    "events": []
+   },
+   "rome": {
+    "name": "Rooma",
+    "book": "Ebyakozirwe Entumwa 28 · Ebbaruha z'omu Nkomo · 2 Timoteeho",
+    "today": "Rooma, Itaari eri izooba",
+    "note": "Amakuru marungi aha muheru nigahika aha mutima gw'obukama — tikuri kuhwaho kureka n'okutandika.",
+    "events": [
+     "Emyaka ebiri asibirwe omu nju, naarangirira obukama atatiina",
+     "Kuruga hanu naahandiika Ebbaruha z'omu Nkomo (Abeefeso·Abafilipi·Abakolosai·Filemooni)",
+     "Enyima yaasibwa bunya, naahandiika 2 Timoteeho yaayitwa ahabw'okwikiriza — “Narwaniire orugamba orurungi, mazire okwiruka”"
+    ]
+   }
+  },
+  "labels": [
+   "Enyanja ya Mediteraniya",
+   "Enyanja ya Egeya",
+   "Asia Ntoya",
+   "Makedoonia",
+   "Itaari"
+  ],
+  "journeys": {
+   "j1": "Orugyendo orw'okubanza",
+   "j2": "Orugyendo orwa kabiri",
+   "j3": "Orugyendo orwa kashatu",
+   "rome": "Orugyendo orwa kana · okuza Rooma",
+   "j5": "Orugyendo orwa kataano · enyima y'okurekurwa"
+  }
+ }
+}

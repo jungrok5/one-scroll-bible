@@ -22,7 +22,7 @@ import { fileURLToPath } from 'url';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ORIGIN = 'https://one-scroll-bible.com';
 // short hash of og.png → ?v= cache-bust so social platforms re-fetch when the image changes
-function ogVer() { try { return crypto.createHash('sha256').update(fs.readFileSync(path.join(root, 'og.png'))).digest('hex').slice(0, 8); } catch { return ''; } }
+function ogVer() { try { return crypto.createHash('sha1').update(fs.readFileSync(path.join(root, 'og.png'))).digest('hex').slice(0, 8); } catch { return ''; } }
 function bustOg(html) { const v = ogVer(); return v ? html.replace(/(og:image" content="[^"]*\/og\.png)(\?v=[^"]*)?"/g, `$1?v=${v}"`).replace(/(twitter:image" content="[^"]*\/og\.png)(\?v=[^"]*)?"/g, `$1?v=${v}"`) : html; }
 const BRAND = { ko: '한눈에 보는 성경 이야기', en: 'Bible in One Scroll' };
 

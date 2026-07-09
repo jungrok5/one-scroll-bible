@@ -4,7 +4,7 @@
    - 정적 자원(이미지/CSS/폰트/매니페스트): cache-first + 런타임 캐시
    - 동일 출처만 캐시(GA 등 외부는 통과)
    - CACHE 이름은 build-pages 가 index.html 해시로 스탬프 → 셸 변경 시 자동 무효화 */
-const CACHE = 'osb-8c22de38';
+const CACHE = 'osb-44b981d6';
 const PRECACHE = ['/', '/manifest.webmanifest', '/og.png', '/icon-192.png', '/icon-512.png'];
 
 self.addEventListener('install', (e) => {
@@ -27,7 +27,7 @@ self.addEventListener('fetch', (e) => {
   const isContent = req.mode === 'navigate' || url.pathname.startsWith('/i18n/') || url.pathname.startsWith('/about/') || url.pathname.startsWith('/maps/');
   if (isContent) {
     e.respondWith(
-      fetch(req).then((res) => { const cp = res.clone(); caches.open(CACHE).then((c) => c.put(req, cp)); return res; })
+      fetch(req).then((res) => { if (res && res.ok) { const cp = res.clone(); caches.open(CACHE).then((c) => c.put(req, cp)); } return res; })
         .catch(() => caches.match(req).then((hit) => hit || caches.match('/')))
     );
     return;

@@ -453,10 +453,12 @@ let rootHtml = src;
 // __XLANGS__ (relink 헬퍼용 about/maps 언어 보유표) — charset 뒤에 idempotent 주입
 rootHtml = rootHtml.replace(/\n?<script>window\.__XLANGS__[\s\S]*?<\/script>/g, '')
   .replace('<meta charset="UTF-8" />', `<meta charset="UTF-8" />\n${XLANGS_SCRIPT}`);
-if (!rootHtml.includes('hreflang=')) {
-  rootHtml = rootHtml.replace('<link rel="canonical" href="https://one-scroll-bible.com/" />',
-    `<link rel="canonical" href="${ORIGIN}/" />\n${HREF}`);
-}
+// hreflang: 템플릿의 기존 블록(index.html 에 커밋된 정적 목록)을 통째로 제거 후 LANGS 전량 재주입.
+// (예전엔 `if(!includes('hreflang='))` 가드였으나, 정적 블록이 항상 존재해 가드가 늘 false →
+//  루트 hreflang 이 신규 언어를 반영 못 하고 정체됐다. makePage 와 동일하게 strip→reinject 로 자가치유.)
+rootHtml = rootHtml.replace(/[ \t]*<link rel="alternate" hreflang="[^"]*" href="[^"]*" \/>\n?/g, '');
+rootHtml = rootHtml.replace('<link rel="canonical" href="https://one-scroll-bible.com/" />',
+  `<link rel="canonical" href="${ORIGIN}/" />\n${HREF}`);
 const koS = {}; for (const k of ['faq.q1','faq.a1','faq.q2','faq.a2','faq.q3','faq.a3','faq.q4','faq.a4']) koS[k] = getInner(src, k);
 rootHtml = rootHtml.replace(/<script type="application\/ld\+json">[\s\S]*?<\/script>/,
   ldBlock({ name: KO.brand, desc: KO.desc, url: `${ORIGIN}/`, code: 'ko', s: koS }));

@@ -172,3 +172,69 @@ non-derivable gotchas live here:
   Bu+tuluki fits the pattern), while **preserving** the genuinely-Europe uses (pa_lead / troas / philippi "first church
   of Europe"). Lesson: when a `today` field names a country, cross-check it against the EN source per-place (EN
   `paul.*.today` = "…Türkiye today"); a blanket find/replace would have corrupted the correct Europe mentions.
+
+## Maps sub-page batches 8–11 (72 langs) — the dominant pipeline lessons
+> Reading this before a maps batch saves the biggest time sink. The turnkey flow (`tools/next-langs.mjs maps N` →
+> draft → `make-maps-verse` → `check-i18n` → **review+align** → build → ff-deploy) is proven; the traps are all in review.
+
+- **THE #1 defect class: inline `events`/`note` allusions are drafter-hallucinated by default.** The hero verse
+  `s.verse` is always safe (injected verbatim by `make-maps-verse`), but EVERY pack in batches 8–11 had **10–22**
+  short quoted allusions in `«…»`/`「…」` inside `events`/`note` that the drafter wrote *from memory* and that diverge
+  from the edition. This is not occasional — it is **universal**. Budget the whole review pass for it. The fix is
+  always the same: for each quoted allusion, `fetch-verse <yv> <USFM>` and replace ONLY the quoted fragment with a
+  **contiguous substring** of the fetched verse (use `…` for gaps). Never invent; the fetched text is the only source.
+- **Use a combined review+fix agent (huge token win).** Instead of report-only review + manual main-session fixes
+  (fine for 1–2 packs like batch-8 kg/ks), give ONE agent: the pack, `yv`, the ref list, and STRICT rules — it
+  fetch-verifies every allusion, edits in place (contiguous substrings only), touches nothing else
+  (`s.verse`/place `name`/`book`/`today`/prose all off-limits), runs `check-i18n`, and reports `old → new · USFM`.
+  Main session **spot-checks the diff**: `git diff i18n/maps/<c>.json | grep -E '^[-+]' | grep -vE '^[-+]{3}' |
+  grep -iE '"(name|book|today|verse|verseCite|menuName|brand)"'` must be **empty** (proves only quoted allusions
+  changed), then the gate must pass. Safe because every edit is fetch-verse-sourced, not model-authored.
+- **NT-only vs full-Bible — probe first, handle OT differently.** Probe `fetch-verse <yv> GEN.1.31`: MISSING ⇒ NT-only.
+  NT-only editions this session: gom shi et sa yi aeb apd arq nod kru hrx fuf sdh. For NT-only, **OT allusions have no
+  verbatim source → leave them as faithful summaries** (the `ff` precedent); only fetch-verify the NT allusions.
+  Full-Bible (prs gax ibb sid nyn lmn bs …): every ref returns text, align all.
+- **Preserve the EDITION's register — do NOT "correct" it.** Islamic-idiom editions are correct per "quote the
+  representative translation": ace/fuf **Iisaa/Alla**, apd/arq/aeb Arabic, crh/bak **Иса/Алла**, prs **عیسی/خدا**,
+  sdh **عیسا/خودا**, syl. Never switch to a "Christian" register. Likewise **bjn/min keep "Isa Almasih"** because
+  their *deployed main packs* use it 47×/44× — matching maps to the main page preserves within-site consistency;
+  flipping maps-only would clash with the site's own main page. Any register change is a **project-wide maintainer
+  decision**, never a per-batch edit.
+- **The edition often renders names/concepts differently from the EN source — take the edition's word, always.**
+  Recurring: **Caesar** → "Emperor / 皇帝 / امپراطور / Somraz / mwanangana wa Aroma / Hkawhkam Kehta / قیسر", not
+  قیصر/Kaisar. **Acts 20:28 "his own blood"** → many editions read "**his own Son's blood / through the death of his
+  Son**" (a real textual variant: TB, ABB, nan TTVH, hak, kmb, etc.) — follow the edition. **Peter's confession
+  "the Christ"** → some editions use "**Messiah / Masiya / Мессия / Arung Pappassalama'é / Penyelamat / Мәсих**".
+- **Dynamic-equivalent editions (Good-News style, e.g. ABB Malay/zlm) phrase famous verses loosely** — still align
+  to the edition (it's the reader's Bible), with **one justified exception per pack**: where the edition drops content
+  the panel depends on. Concrete: ABB GEN.1.31 reads "he was very satisfied" (no "good") — kept the classic
+  «sungguh baik» there because "very good" is the eden panel's whole theological point.
+- **`make-maps-verse` also stamps `s.verseCite`, but sometimes leaves the English book name.** For romanized/other
+  packs it left "2 Peter" (mni, nn). If the pack localizes its other book names, localize the cite too (mni → "2 Pitar"
+  from the edition's own "Simon Pitar…"). Display-only; safe.
+- **Script false-positives to NOT flag:** danda `।` (U+0964) is legitimate shared Bengali/Assamese punctuation (kru,
+  syl) — never a Devanagari leak. Romanized packs are correct as romanized (mni = romanized Meiteilon, not Meitei
+  Mayek; kln). Cyrillic packs carry extra letters (cv Ӑ Ĕ Ç Ӳ; bak Ғ Ҙ Ҡ Ң Ө Ҫ Ү Һ Ә; crh) — the drafter sometimes
+  slips a Latin look-alike in; the `check-i18n` homoglyph gate + a per-`name` script scan catch these.
+
+## OBS-only editions can NEVER be a maps language (permanent defer)
+- **bal** (Balochi) proved this: its only edition is OBS (`obs:fa_gl/Balochi_OBS`), which has no epistles, so
+  `fetch-verse <obs-id> 2PE.1.16` = **MISSING** → no verbatim hero verse is possible. The main-site OBS page stays,
+  but bal never gets an `i18n/maps/` pack. **Probe `fetch-verse <yv> 2PE.1.16` before drafting any maps pack**; if
+  MISSING, permanently skip maps for that language (main page unaffected). This is the maps analog of the quality gate.
+
+## Infrastructure resilience (session/weekly limits, network, content filter)
+- **Agents killed by session/weekly limits usually already wrote their file.** On a `failed` notification, check
+  `test -f i18n/maps/<c>.json` + structural validity (places 17/11/26, labels 4/7/5, `s.verse` still English). If
+  present, **recover locally** (verse-inject + gate + commit — all no-API); only redraft if missing. Saw this ~6× this
+  session (azb, sdh, and others recovered; hrx/fuf/lmn redrafted).
+- **bible.com `fetch-verse` can go fully down / rate-limit after heavy use** (~400 calls in one review batch). Symptom:
+  ALL editions (not just one) return MISSING, including known-good ones like yv 306. The proxy is fine
+  (`recentRelayFailures: []`). **Back off — do not hammer** (retries worsen the limit); probe one known verse
+  occasionally and resume when it recovers. Drafting doesn't need fetch-verse, so keep drafting meanwhile; only
+  verse-injection + review are blocked. Never deploy a pack whose `s.verse` is still English (gate catches it).
+- **Content-filter false-positives on some CJK review agents** (Hakka/hak twice: "Output blocked by content filtering
+  policy" on 4-byte Han glyphs). Fallback: **review that pack in the main session** (fetch-verse + hand-written fix
+  script) instead of via a sub-agent.
+- **Deploy is standing-authorized per-batch under "auto mode"** but each batch must pass the gate + review first.
+  ff-only: `git checkout main → git pull --ff-only → git merge --ff-only <work> → git push → checkout <work>`.

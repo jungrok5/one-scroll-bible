@@ -1,0 +1,636 @@
+{
+ "menuName": "Hunsrik",
+ "htmlLang": "hrx",
+ "dir": "ltr",
+ "locale": "hrx",
+ "brand": "Ti Piipel in eene Rol",
+ "docTitle": "Ti Piipel uf te Kaart · Ti Piipel in eene Rol",
+ "metaDesc": "Foljer ti tsayt-linye fon es Alt Tëstamënt, Yeesus sayn leewe, un Paulus sayne rayse uf en wërkliche kaart — ti Piipel is in wërkliche pletser pasiird.",
+ "s": {
+  "kicker": "Ti Piipel in eene Rol · Kaarte",
+  "title": "Ti Piipel uf te Kaart",
+  "verse": "“Meyer waare net falx tings am fertseele wii meyer fer aych te mechtiche aan khom fon unser Hër Yeesus Kristus aan kesaat hon, wayl mit unsere aychne aue hon meyer tëm sayn kroosheet kesiin.” (2Pheeter 1:16)",
+  "purpose": "Ti Piipel is khee myte. Es is en pericht fon layt woo iwer wërkliche pletser, tsayte un naame kelaaf sin. Foljer tii weche uf en kaart, in ti tsayt-orninung — khlick uf en punkt, ore trick ▶ fer xrit fer xrit torich tsu kehn.",
+  "ot_kick": "① Es Alt Tëstamënt — torich ti tsayt",
+  "ot_h": "Fon te Xëpfung pis an ti Tsurik-khunft noo Yeruusalëm",
+  "ot_lead": "Net eene eensiche rays, awer te flus fon ti erleesungs-keschicht fon te Xëpfung aan: Xëpfung un Sintefal → Flut un Papel → en ruf (Aapraham) → es ferxproche lant → Aus-tsuch → Wiiste → Eerowerung → Raych → Teelung → Ferxlepung → Tsurik-khunft.",
+  "je_kick": "② Es Nay Tëstamënt — Yeesus sayn leewe",
+  "je_h": "Fon Pëtleëm pis an Yeruusalëm",
+  "je_lead": "Foljer Yeesus sayn leewe wii ti Ewankeelye es fertsële, in te orninung — fon sayn keport in Pëtleëm torich sayn tayfe un sayn tiinst in Kalilëa, torich Samaria, pis an es krayts, ti uf-erxtëhung un ti himel-faart in Yeruusalëm.",
+  "pa_kick": "③ Es Nay Tëstamënt — Paulus sayne rayse",
+  "pa_h": "Fon Antiokia pis an ti enter fon ti welt — Roma",
+  "pa_lead": "Fon Pingxte in Yeruusalëm aan, wii es Ewankeelium sich iwer Yutëya enaus kexpreet hot — torich Khlee-Asie un Europa pis an es hërts fon es imperium. Pick eene fon te finf rayse (1. · 2. · 3. + ti see-faart noo Roma + nooch ti fray-lasung) un foljer ti kexëhnise fon ti Akte tsame mit ti priife woo unerweechs kexrip kep sin.",
+  "foot": "Kwële · Ti pletser folje te piiplixe thekst un ti iiwliche piipel-keografii (mit motërne naame woo es hëlft). Kiste-linye, flise un seene sin fon oofene keografixe taate (Natural Earth) ketsaycht, feraynfacht.",
+  "contact": "Frooche · feetpëk — <a id=\"contact\" class=\"mail\">Xrayp uns</a>",
+  "play": "Xpiile",
+  "pause": "Paus",
+  "today": "Hayt:",
+  "verseCite": "2Pheeter 1:16"
+ },
+ "ot": {
+  "places": {
+   "eden": {
+    "name": "Eete (Xëpfung · Sintefal)",
+    "book": "1 Mooses 1–3",
+    "today": "ti keechend fon te Tiigris un te Effraat, hayt",
+    "note": "In en welt woo «seer kut» kemach kep waar, khomt ti sinte rin un precht ti ferpintung tswixich Hërkot un te mënx.",
+    "events": [
+     "Xëpfung in sëks taae — «seer kut»",
+     "Te mënx kemach noo Hërkot sayn pilt",
+     "Te Sintefal, un ti ferxtoosung aus Eete",
+     "Ti eerste ferxprechung fon es Ewankeelium — «te soome fon te fraa precht te xlang sayn khop»"
+    ]
+   },
+   "noah": {
+    "name": "Ararat (ti Flut)",
+    "book": "1 Mooses 6–9",
+    "today": "Perch Ararat, oost-Terkay, hayt",
+    "note": "Hërkot richt en welt fol sinte, un toch pewaart eyer es leewe torich eene famiilye.",
+    "events": [
+     "En welt fol ferterp",
+     "Ti Flut, un Noah sayn arke",
+     "Es pund mit em reeche-poove — «nii mee en flut fer ti welt tsu tsextere»"
+    ]
+   },
+   "babel": {
+    "name": "Te Torm fon Papel",
+    "book": "1 Mooses 11",
+    "today": "Iraak hayt (ti eewe fon Xineaar)",
+    "note": "Keeche te xtolts woo pis an te himel raycht, ferwirt Hërkot eyer xprooch un ferxtrayt ti fëlker iwer ti ëert.",
+    "events": [
+     "«Los uns en xtat un en torm paue… un uns en naame mache»",
+     "Hërkot ferwirt eyer xprooch",
+     "Ti fëlker ferxtraye sich iwer ti ëert (Xineaar — xpëter Papilon)"
+    ]
+   },
+   "ur": {
+    "name": "Ur",
+    "book": "1 Mooses 12",
+    "today": "siit-Iraak hayt",
+    "note": "Ti Piipel sayn keschicht fon ti erleesung fangt aan mit te ruf fon eene man.",
+    "events": [
+     "Hërkot ruft Aapram aus Ur fon ti Khaldëer",
+     "«Ich mache aus tuu en kroose folk… ale fëlker keseecht torich tuu»",
+     "Torich klaawe ferlëst eyer sayn heemat"
+    ]
+   },
+   "haran": {
+    "name": "Haran",
+    "book": "1 Mooses 12",
+    "today": "siit-Terkay hayt",
+    "note": "Unerweechs, am ruf antworte, hin noo es ferxproche lant.",
+    "events": [
+     "Tera sayn famiilye setst sich in Haran aan",
+     "Tera xtërept",
+     "Aapram macht sich uf noo Khanaan mit 75 yoer"
+    ]
+   },
+   "shechem": {
+    "name": "Xekem · Khanaan",
+    "book": "1 Mooses 12–50",
+    "today": "Nablus hayt",
+    "note": "In es ferxproche lant wërt en famiilye kekrint un es Pund keet torich ti kenerasioone wayter.",
+    "events": [
+     "Rin-khome in Khanaan, te eerste altaar — «tayne nooch-khome kewe ich tas lant»",
+     "Es Pund (1 Mooses 15) · Iisaak · Yaakop",
+     "Yaakop sayne tswëlf seen — ti wurtsel fon ti tswëlf xtëme"
+    ]
+   },
+   "egypt": {
+    "name": "Eyipte (Kosen)",
+    "book": "1 Mooses 37–50 · 2 Mooses 1",
+    "today": "Niil-Delta, Eyipte hayt",
+    "note": "En famiilye wërt en kroose folk — un tan en folk fon sklaawe.",
+    "events": [
+     "Yoosef, ferkaaft, xtaycht uf pis an te herxer fon Eyipte",
+     "Yaakop sayn kanse famiilye khomt runer fer te hunger tsu entkome",
+     "Es waksende folk Israel wërt fersklaaft"
+    ]
+   },
+   "sinai": {
+    "name": "Perch Sinai",
+    "book": "2 Mooses · 3 Mooses",
+    "today": "ti Sinai-halp-insel hayt",
+    "note": "Ti tsentraale retung fon es Alt Tëstamënt — sklaawe wëre Hërkot sayn aychne folk.",
+    "events": [
+     "Ti tsehn ploose un es Pësach-lam",
+     "Es Root Meer teelt sich, un se keehn torich",
+     "Ti tsehn kepoote, es Kesets, es tsëlt un ti opfer"
+    ]
+   },
+   "kadesh": {
+    "name": "Kaades (Wiiste)",
+    "book": "4 Mooses · 5 Mooses",
+    "today": "ti Wiiste fon Sinai un Negew hayt",
+    "note": "Te un-klaawe khost en kenerasioon es lant — un toch playpt Hërkot mit se.",
+    "events": [
+     "Tswëlf xpioone — awer es folk wil net fertraue",
+     "38 yoer in ti Wiiste — mana, wolke un fayer",
+     "In ti eewe fon Moab, Mooses sayn letste preticht (5 Mooses)"
+    ]
+   },
+   "jericho": {
+    "name": "Yericho",
+    "book": "Yosua",
+    "today": "Yericho hayt",
+    "note": "Am End keehn se rin un neme es ferxproche lant in pesits.",
+    "events": [
+     "Te Yortaan teelt sich un es folk keet torich",
+     "Ti maure fon Yericho fale",
+     "Ti Eerowerung fon Khanaan un ti Teelung fon es lant"
+    ]
+   },
+   "shiloh": {
+    "name": "Xiilo (Richter)",
+    "book": "Richter · Ruut",
+    "today": "Khirbet Seilun hayt",
+    "note": "One kheenich macht yeter was eyer wil — en woere kheenich wërt kepraucht.",
+    "events": [
+     "Es tsëlt wërt in Xiilo uf kextelt",
+     "Te ring fon sinte–unertrickung–retung (Tepoora, Kition, Simson)",
+     "Ruut — traye in tunkle taae, in Tafit sayn linye"
+    ]
+   },
+   "jerusalem": {
+    "name": "Yeruusalëm · Fereenichte Raych",
+    "book": "1–2 Samuel · 1 Kheenich",
+    "today": "Yeruusalëm hayt",
+    "note": "Israel sayn koltne tsayt — un ti ferxprechung fon en eewiche kheenich.",
+    "events": [
+     "Saul te eerxte kheenich, tan Tafit un Koliat",
+     "Es Tafit-Pund — «tayn troon fer imer» (2 Samuel 7)",
+     "Saalomo paut te tëmpel in Yeruusalëm"
+    ]
+   },
+   "samaria": {
+    "name": "Samaria · Keteelte Raych",
+    "book": "Kheenich · ti Profëte",
+    "today": "Sebastia hayt",
+    "note": "Es Raych teelt sich un rutxt in ti ruiine, weyer ti Profëte rufe.",
+    "events": [
+     "Nooch Saalomo ti Teelung in Yuuta un Israel",
+     "Wirer-holte apkëtterye",
+     "Eelia, Yexaaya, Yeremia rufe «khomt tsurik» — un ferkinniche te Messias"
+    ]
+   },
+   "nineveh": {
+    "name": "Niniwe (Asiirien)",
+    "book": "2 Kheenich 17 · Yoona",
+    "today": "Mossul, Iraak hayt",
+    "note": "Yete warnung ferachtend, fait te noort tsu eerxt.",
+    "events": [
+     "Niniwe, ti haupt-xtat fon Asiirien",
+     "Es noort-raych fait an ti Asiirer (722 f.Chr.)",
+     "Yoona wërt noo Niniwe kexikt"
+    ]
+   },
+   "babylon": {
+    "name": "Papilon",
+    "book": "2 Kheenich 25 · Taniel · Heesekiel",
+    "today": "Hilla, Iraak hayt",
+    "note": "Ti tunkelste nacht — un toch playpt ti ferxprechung fon ti wirer-her-xtelung.",
+    "events": [
+     "Yeruusalëm fait, te tëmpel prent (586 f.Chr.)",
+     "Yuuta wërt noo Papilon kefiert",
+     "Taniel un Heesekiel — klaawe un fisioone in ti Ferxlepung"
+    ]
+   },
+   "susa": {
+    "name": "Susa (Persia)",
+    "book": "Eester · Nehemia",
+    "today": "Xux, Iraan hayt",
+    "note": "Sokaar im hërts fon en haytnixe imperium pewaart Hërkot sayn folk.",
+    "events": [
+     "Persia xtërtst Papilon",
+     "Eester ret ti Yuute fon te unerkang",
+     "Nehemia peet foer te kheenich un wërt kexikt"
+    ]
+   },
+   "return": {
+    "name": "Tsurik-khunft noo Yeruusalëm",
+    "book": "Estra · Nehemia · Malachii",
+    "today": "Yeruusalëm hayt",
+    "note": "Se khome tsurik un paue wirer uf — awer khee kheenich is khom. Se waarte uf te Messias.",
+    "events": [
+     "Tray welle fon ti tsurik-khunft uf Siires sayn pefeel (Serupaapel 538 · Estra 458 · Nehemia 444)",
+     "Te tëmpel wirer uf kepaut un Yeruusalëm sayn maure wirer her-kextelt",
+     "Malachii — es Alt Tëstamënt hërt uf: «Ich xikke mayn pootxafter»"
+    ]
+   }
+  },
+  "labels": [
+   "Mitelmeer",
+   "Mesopotamie",
+   "Arapixe Wiiste",
+   "Eyipte"
+  ],
+  "journeys": {
+   "flow": "Ti erleesungs-keschicht"
+  }
+ },
+ "jesus": {
+  "places": {
+   "bethlehem": {
+    "name": "Pëtleëm",
+    "book": "Mateus 1–2 · Lukas 2",
+    "today": "Pëtleëm hayt",
+    "note": "Te ferxproche Messias khomt in ti xtat fon Tafit — es Wort wërt flayx.",
+    "events": [
+     "Keport in Pëtleëm, ti xtat fon Tafit",
+     "Engel ferkinniche te hërte ti mensaaj",
+     "Ti Waise khome fer aan tsu peete"
+    ]
+   },
+   "nazareth": {
+    "name": "Naasaret",
+    "book": "Lukas 2 · 4",
+    "today": "Naasaret hayt",
+    "note": "Hërkot waakst uf als en mënx in en kewëenliche xtat.",
+    "events": [
+     "Uf kewaakse in en tsimermans-hauss",
+     "Mit tswëlf yoer, frocht un antwort eyer im tëmpel",
+     "Xpëter ferxtoose in sayn heemat-sinagooge"
+    ]
+   },
+   "jordan": {
+    "name": "Te Yortaan-flus",
+    "book": "Mateus 3–4",
+    "today": "te uner Yortaan hayt",
+    "note": "Sayn eefentliche tiinst fangt aan — te himel siikelt iim als te Soon.",
+    "events": [
+     "Ketauft fon Yohan",
+     "Te Kayst khomt runer wii en taube — «Tas is mayn peliipte Soon»",
+     "Eyer kewint Satan sayne tray fersuchunge in ti Wiiste"
+    ]
+   },
+   "cana": {
+    "name": "Kaana",
+    "book": "Yohan 2",
+    "today": "Kafr Kanna hayt",
+    "note": "In sayn eerxte tsayche tsaycht eyer sayn herlichkheet.",
+    "events": [
+     "En kast uf en hochtsayt",
+     "Wasser in wayn ferwandelt — sayn eerxte tsayche",
+     "Sayne yinger klaape an iim"
+    ]
+   },
+   "sychar": {
+    "name": "Sixar (Samaria)",
+    "book": "Yohan 2–4",
+    "today": "pay Nablus hayt",
+    "note": "Te weech fon te friie tiinst — torich Yeruusalëm un wayter noo es ferachte Samaria.",
+    "events": [
+     "Eyer raynicht te tëmpel in Yeruusalëm",
+     "Pay nacht, Nikotemus — «Tuu must fon nayem keport wëre»",
+     "Leewendiches wasser fer en Samaritaanerin"
+    ]
+   },
+   "capernaum": {
+    "name": "Khapernaum",
+    "book": "Mateus 4–13 · Markus 1–4",
+    "today": "es uufer fon te Kalilëa-see hayt",
+    "note": "Ti haym-pasis fon te tiinst in Kalilëa — ruf, lëre un wirer-xtant treffe sich al tuu.",
+    "events": [
+     "Eyer ruft ti fixer un macht tuu sayn pasis",
+     "Ti Perch-preticht — «Seelich sin tii woo erm im kayst sin»",
+     "Ti Klaychniss fon es Raych — un waksender wirer-xtant"
+    ]
+   },
+   "galilee": {
+    "name": "Te Kalilëa-see",
+    "book": "Markus 4 · 6 · Yohan 6",
+    "today": "te Kinneret-see hayt",
+    "note": "Mit macht iwer ti natuur tsaycht eyer weer eyer is.",
+    "events": [
+     "«Say xtil, sway rue» — eyer xtilt te xtorm",
+     "Fittert 5.000 mit finf proot un tswee fix",
+     "Keet uf em wasser"
+    ]
+   },
+   "caesarea_p": {
+    "name": "Tsesarea Filipi",
+    "book": "Mateus 16–17",
+    "today": "Banias hayt",
+    "note": "Ti yinger fer-xtehn tas eyer te Kristus is, un te weech fon es krayts mayt sich uf.",
+    "events": [
+     "Pheeter sayn peikentnis — «Tuu pist te Kristus, te Soon fon te leewendiche Hërkot»",
+     "Eyer saat tsu eerxt sayn toot un sayn uf-erxtëhung foraus",
+     "Ferwandelt in herlichkheet uf te perch"
+    ]
+   },
+   "jericho": {
+    "name": "Yericho",
+    "book": "Lukas 18–19",
+    "today": "Yericho hayt",
+    "note": "Uf te weech eruf noo Yeruusalëm suucht eyer es ferloore.",
+    "events": [
+     "Eyer kept em pline Bartimeus es aue-licht",
+     "Eyer ruft te xtayer-aynemer Tsakeus",
+     "«Te Soon fon te Mënx is khom fer tas ferloore tsu suuche un tsu rete»"
+    ]
+   },
+   "bethany": {
+    "name": "Betaanie",
+    "book": "Yohan 11–12",
+    "today": "al-Eizariya hayt",
+    "note": "Am foraawent fon sayn letste woch tsaycht eyer sayn macht iwer te toot.",
+    "events": [
+     "Eyer weckt Laasarus aus em kraap uf — «Ich sin ti uf-erxtëhung un es leewe»",
+     "Maria salpt iim fer sayn pekrëpnis",
+     "Tas tsayche mayt te plaan iim tsu tééte hërter"
+    ]
+   },
+   "jerusalem": {
+    "name": "Yeruusalëm",
+    "book": "Mateus 21–28 · Lukas 24 · Akte 1",
+    "today": "Yeruusalëm hayt",
+    "note": "Te heepunkt woo ti kanse Piipel uf tsaycht — krayts, uf-erxtëhung, himel-faart.",
+    "events": [
+     "Te fayerliche rin-tsuch; eyer xtërtst wirer ti tëmpel-tixe um",
+     "Am letste aap-esse wëxt eyer ti yinger eyer fiis",
+     "Eyer xtërept uf em krayts",
+     "Uf erxtane am tritte taach, tan uf kefaare"
+    ]
+   }
+  },
+  "labels": [
+   "Mitelmeer",
+   "Kalilëa",
+   "Samaria",
+   "Yutëya",
+   "Dekapolis",
+   "Perëa",
+   "Toote Meer"
+  ],
+  "journeys": {
+   "life": "Yeesus sayn weech"
+  }
+ },
+ "paul": {
+  "places": {
+   "antioch": {
+    "name": "Antiokia",
+    "book": "Akte 13 · 15",
+    "today": "Antakya, Terkay hayt",
+    "note": "Ti aus-xikende kemeen woo ti misioon fer ti haytnix aan fangt un tsurik khomt.",
+    "events": [
+     "Im kepeet senert te Kayst Barnabas un Saulus aus",
+     "Ti kemeen woo ti klaywiche tsu eerxt «Kriste» kenant kep sin",
+     "Aus-kangs-punkt fon te 1., 2. un 3. rays"
+    ]
+   },
+   "seleucia": {
+    "name": "Seleukia",
+    "book": "Akte 13:4",
+    "today": "Terkay hayt",
+    "note": "Antiokia sayn haafe — se seechle noo Tsipern.",
+    "events": []
+   },
+   "salamis": {
+    "name": "Salamis (Tsipern)",
+    "book": "Akte 13:5",
+    "today": "Tsipern hayt",
+    "note": "Eerxte xtop uf Tsipern — se preche in ti sinagooge.",
+    "events": []
+   },
+   "paphos": {
+    "name": "Paafos",
+    "book": "Akte 13:6-12",
+    "today": "Tsipern hayt",
+    "note": "Macht wërt ketsaycht keeche tii woo sich em Ewankeelium wirer-setse.",
+    "events": [
+     "Te tsauerer Elimas wërt mit plintheet kexlaan",
+     "Te prokonsul Serjius Paulus klaapt",
+     "Fon tuu aan nemt «Paulus» ti fiirung"
+    ]
+   },
+   "perga": {
+    "name": "Perga",
+    "book": "Akte 13:13",
+    "today": "Antalya, Terkay hayt",
+    "note": "En haafe in Pamfilien — tuu kheert Yohan Markus um.",
+    "events": []
+   },
+   "pantioch": {
+    "name": "Antiokia in Pisidien",
+    "book": "Akte 13:14-50",
+    "today": "Yalvaç, Terkay hayt",
+    "note": "Es Ewankeelium precht sich uf noo ti haytnix.",
+    "events": [
+     "En lange preticht fon ti erleesungs-keschicht in ti sinagooge",
+     "Fiil haytnix froye sich un neme es Wort aan",
+     "Torich wirer-xtant fer-yaacht"
+    ]
+   },
+   "iconium": {
+    "name": "Ikonium",
+    "book": "Akte 14:1-7",
+    "today": "Konya, Terkay hayt",
+    "note": "Fiile klaape, awer ti ferfolchung tswingt se wayter.",
+    "events": []
+   },
+   "lystra": {
+    "name": "Listra",
+    "book": "Akte 14:8-20",
+    "today": "Terkay hayt",
+    "note": "Als en Kot kefayert, tan kexteenicht.",
+    "events": [
+     "Heelt en man woo fon keport aan laam waar",
+     "Ti menge wil se als këter opfere",
+     "Kexteenicht un fer toot kehal, xteet eyer uf"
+    ]
+   },
+   "derbe": {
+    "name": "Terbe",
+    "book": "Akte 14:20-21",
+    "today": "Terkay hayt",
+    "note": "Fiil yinger wëre kemach; se keehn te weech tsurik fer ti kemeene tsu xtërke.",
+    "events": []
+   },
+   "troas": {
+    "name": "Troas",
+    "book": "Akte 16:8-10",
+    "today": "Terkay hayt",
+    "note": "Te wend-punkt woo es Ewankeelium tsu eerxt noo Europa keet.",
+    "events": [
+     "En fisioon fon en man aus Matsedonien",
+     "«Khom eriwer un hëlf uns»",
+     "Se keehn sofort eriwer noo Europa"
+    ]
+   },
+   "philippi": {
+    "name": "Filipi",
+    "book": "Akte 16 · Filipenser",
+    "today": "noort-Kriechelant hayt",
+    "note": "Europa sayn eerxte kemeen — es Ewankeelium sikt sokaar in te kefengnis.",
+    "events": [
+     "Lidia, en purper-hëntlerin, klaapt",
+     "En waar-saacher sklaawe-mëtche wërt pefrayt",
+     "Mitel-nachts lite, en ëert-pëwung, es hauss fon te kefengnis-wëchter keret"
+    ]
+   },
+   "thess": {
+    "name": "Tesalonich",
+    "book": "Akte 17 · 1–2 Tesalooniker",
+    "today": "Tesaloniki, Kriechelant hayt",
+    "note": "Es Wort xittelt ti xtat un te wirer-xtant khoot iwer.",
+    "events": [
+     "Reetet in ti sinagooge tray sabate",
+     "«Tii woo ti welt uf te khop kextelt hon»",
+     "Se mache sich pay nacht wek"
+    ]
+   },
+   "berea": {
+    "name": "Berëa",
+    "book": "Akte 17:10-15",
+    "today": "Veria, Kriechelant hayt",
+    "note": "Ti «eetle» woo es Wort seler unersucht hon.",
+    "events": [
+     "Se neme es Wort mit frayt aan",
+     "Yeete taach unersuuche se ti Xrifte fer es tsu prufe",
+     "Fiile khome tsum klaawe"
+    ]
+   },
+   "athens": {
+    "name": "Aten",
+    "book": "Akte 17:16-34",
+    "today": "Aten, Kriechelant hayt",
+    "note": "In ti xtat fon ti filosoofe ferkinnicht eyer te «unpekannte Kot».",
+    "events": [
+     "Uf-kereecht torich en xtat fol apkëter",
+     "Uf te Areopag precht eyer Xëpfer un uf-erxtëhung",
+     "Fer-xpot, un toch klaape en phaar"
+    ]
+   },
+   "corinth": {
+    "name": "Korint",
+    "book": "Akte 18 · 1–2 Korintios",
+    "today": "Kriechelant hayt",
+    "note": "Eyer playpt en yoer un en halep, un plantst en kemeen in en xtat fol laster.",
+    "events": [
+     "Macht tselte mit Akwila un Priskila",
+     "«Hap khee angst… wayl ich sin mit tich»",
+     "Fiile Korinter klaape un wëre ketauft"
+    ]
+   },
+   "ephesus": {
+    "name": "Efesus",
+    "book": "Akte 19 · Efësius",
+    "today": "Selçuk, Terkay hayt",
+    "note": "Es hërts fon te tritte rays — es Wort xpreet sich iwer Asie.",
+    "events": [
+     "Tëcliche lëre iwer tswee yoer in te saal fon Tiranus",
+     "Tsauer-piicher fer-prent; mëchtiche werke",
+     "Te silwer-xmit Temetrius fangt en uf-ruur aan"
+    ]
+   },
+   "miletus": {
+    "name": "Milet",
+    "book": "Akte 20:17-38",
+    "today": "Terkay hayt",
+    "note": "En treene-fole apxiit fon ti eltxte fon Efesus.",
+    "events": [
+     "«Sorcht fer ti kemeen woo eyer mit sayn aychne pluut kekaaft hot»",
+     "Ti eltxte wene, wayl se wise tas se iim net wirer sëhn wëre"
+    ]
+   },
+   "caesarea": {
+    "name": "Tsesarea",
+    "book": "Akte 23–26",
+    "today": "ti Israel-kiste hayt",
+    "note": "Tswee yoer lang fer-tayticht eyer es Ewankeelium foer ti kufernëre un en kheenich.",
+    "events": [
+     "Ferhëre foer ti kufernëre Feliks un Festus",
+     "Sayn fer-taytichung foer te kheenich Akripa",
+     "«Ich appeliire an te Khayser» — wayter noo Roma"
+    ]
+   },
+   "jerusalem": {
+    "name": "Yeruusalëm",
+    "book": "Akte 21–23",
+    "today": "Yeruusalëm hayt",
+    "note": "Im tëmpel kepackt, fangt sayn weech als kefangne aan.",
+    "events": [
+     "Fon ti menge im tëmpel kepackt",
+     "Fer-tayticht sich foer te Hooche Root",
+     "Als en reemixe pirjer, unich wach noo Tsesarea kexikt"
+    ]
+   },
+   "myra": {
+    "name": "Miira",
+    "book": "Akte 27:5-6",
+    "today": "Demre, Terkay hayt",
+    "note": "Se xtayche um uf en alexandrinixe xif noo Roma.",
+    "events": []
+   },
+   "fairhaven": {
+    "name": "Kute Hëfe (Kreeta)",
+    "book": "Akte 27:8-12",
+    "today": "Kreeta hayt",
+    "note": "Paulus sayn warnung, es seechle tsu xtope, wërt net keheert.",
+    "events": []
+   },
+   "crete": {
+    "name": "Kreeta",
+    "book": "Titus",
+    "today": "Kreeta hayt",
+    "note": "Nooch sayn fray-lasung, ti insel woo eyer Titus lëst fer ti kemeene in orninung tsu prenge.",
+    "events": [
+     "Lëst Titus fer in yete xtat eltxte aan tsu setse",
+     "Ferlangt taatel-loose, traye leyter",
+     "Xrayft te priif an Titus"
+    ]
+   },
+   "malta": {
+    "name": "Malta",
+    "book": "Akte 27–28",
+    "today": "Malta hayt",
+    "note": "Torich xtorm un xif-pruch hin, hëlt Hërkot sayn ferxprechung xtant.",
+    "events": [
+     "Te «noort-oost» tsextert es xif, un toch iwerleewe ale 276",
+     "Fon en xlang kepis, is eyer un-fer-letst",
+     "Eyer heelt ti khranke fon ti insel"
+    ]
+   },
+   "syracuse": {
+    "name": "Sirakus",
+    "book": "Akte 28:12",
+    "today": "Sitsilie, Italie hayt",
+    "note": "Se playwe tray taach in Sitsilie.",
+    "events": []
+   },
+   "puteoli": {
+    "name": "Puteoli",
+    "book": "Akte 28:13-14",
+    "today": "Pozzuoli, Italie hayt",
+    "note": "Se lande in Italie un wëre fon klaawes-priiter empfange.",
+    "events": []
+   },
+   "rome": {
+    "name": "Roma",
+    "book": "Akte 28 · Kefengnis-priife · 2 Timoteus",
+    "today": "Roma, Italie hayt",
+    "note": "Es Ewankeelium erraycht am End es hërts fon es imperium — net en End, awer en aanfang.",
+    "events": [
+     "Tswee yoer unich hauss-arest, ferkinnicht eyer muutich es Raych fon Hërkot",
+     "Fon tuu xrayft eyer ti Kefengnis-priife (Efësius · Filipenser · Kolosenser · Filemon)",
+     "Xpëter wirer im kefengnis, xrayft eyer 2 Timoteus un wërt kemartert — «Ich hon te kute khampf kekhëmpft, ich hon te lauf fertich kemach»"
+    ]
+   }
+  },
+  "labels": [
+   "Mitelmeer",
+   "Egëix Meer",
+   "Khlee-Asie",
+   "Matsedonien",
+   "Italie"
+  ],
+  "journeys": {
+   "j1": "Eerxte rays",
+   "j2": "Tswaayte rays",
+   "j3": "Tritte rays",
+   "rome": "Fiirte rays · noo Roma",
+   "j5": "Finfte rays · nooch ti fray-lasung"
+  }
+ }
+}

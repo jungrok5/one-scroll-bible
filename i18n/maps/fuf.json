@@ -1,0 +1,636 @@
+{
+ "menuName": "Pular",
+ "htmlLang": "fuf",
+ "dir": "ltr",
+ "locale": "fuf-GN",
+ "brand": "Deftere Seniinde e gite goo",
+ "docTitle": "Deftere Seniinde e karta · Deftere Seniinde e gite goo",
+ "metaDesc": "Tokku jamaanuuji Aliyani Hindi, ngurndan Iisaa, e laabi Pool e karta goonga — Deftere Seniinde kewi e nokkuuje goonga.",
+ "s": {
+  "kicker": "Deftere Seniinde e gite goo · Kartaaji",
+  "title": "Deftere Seniinde e karta",
+  "verse": "“Awa, hinaa men ɓaarorɓe taariikaaji sinciraaɗi ƴoyre, fewndo ko men ɓanginani on ardu Iisaa Almasiihu Joomi men on e bawgal makko ngal. Kono men yi'irii gite amen ɗen tigi mangu makko ngun.” (2 Piyer 1:16)",
+  "purpose": "Deftere Seniinde wanaa taalol fiymti. Ko daari yimɓe yaawii e nokkuuje, balɗe, e inɗe goonga. Tokku ɗii laabi e karta, e laawol jamaanu — ɗotta e nokkuure, maa ɗotta ▶ ngam yahde ɗum tabital e tabital.",
+  "ot_kick": "① Aliyani Hindi — e jamaanuuji",
+  "ot_h": "Daga tagugol haa artugol Urusaliima",
+  "ot_lead": "Wanaa laawol gootol kono ko ɓuli daari dandeede gila tagugol: tagugol e yanugol → waame e Baabel → noddaango (Ibraahiima) → leydi aadaandi → Yaltugol → ladde → foolugol → laamu → seergol → horeede → artugol.",
+  "je_kick": "② Aliyani Kesa — ngurndan Iisaa",
+  "je_h": "Daga Baytalami haa Urusaliima",
+  "je_lead": "Tokku ngurndan Iisaa wano Linjiilaaji habrata, e laawol — daga jibineede makko Baytalami rewa lootagol makko e kuugal Galili, rewa Samariiya, haa leggal altindiraangal, ummital, e ƴiwugol Urusaliima.",
+  "pa_kick": "③ Aliyani Kesa — laabi Pool",
+  "pa_h": "Daga Antiyaakiya haa kattuɗe leyɗe — Roma",
+  "pa_lead": "Daga Pentekot Urusaliima, no Kibaaru Moƴƴo saakornoo yaha caggal Yahuudiya — rewa Asiya Tokoora e Eropa haa ɓernde laamu ngun. Suɓo gootol e laabi jowi (aranol·ɗiɗaɓol·tataɓol + laawol faade Roma + ɓaawo rimɗineede) tokkaa kuuɗe Kuuɗe Nelaaɓe wondude e ɓataakuuji winndaaɗi e laawol.",
+  "foot": "Iwdiiji · Nokkuuje ɗen njokkii binndol Deftere Seniinde e karta Deftere Seniinde jaɓaaɗo (e inɗe hannde ka nafata). Daanɗe maaje, maaje e weendaaji ndiwtaa e keɓe leydi udditiiɗe (Natural Earth), newnaaɗe.",
+  "contact": "Naamne · miijooji — <a id=\"contact\" class=\"mail\">Windan min imeel</a>",
+  "play": "Fija",
+  "pause": "Dartin",
+  "today": "Hannde:",
+  "verseCite": "2 Piyer 1:16"
+ },
+ "ot": {
+  "places": {
+   "eden": {
+    "name": "Eden (Tagugol · Yanugol)",
+    "book": "Laawol Fuɗɗoode 1–3",
+    "today": "nokkuure Tigris–Fraat hannde",
+    "note": "E aduna tagaandu «moƴƴungu no feewi», junuubu naati o taƴi jokkere hakkunde Alla e yimɓe.",
+    "events": [
+     "Tagugol e balɗe jeegoo — «ɗun moƴƴi»",
+     "Neɗɗo tagaa e mbaadi Alla",
+     "Yanugol e junuubu, e riiweede daga Eden",
+     "Aadi Kibaaru Moƴƴo aranol — «ɓiɗɗo debbo on helay hoore mboddi»"
+    ]
+   },
+   "noah": {
+    "name": "Araraat (Waame on)",
+    "book": "Laawol Fuɗɗoode 6–9",
+    "today": "Fello Araraat, fuɗnaange Turkiya hannde",
+    "note": "Alla ñaawi aduna heewndu junuubu, kono o reeni ngurndan e ɓeynguure wootere.",
+    "events": [
+     "Aduna heewndu bone",
+     "Waame on, e laana Nuuhu",
+     "Aadi seedee weyngo — «waame wartataa bonnude aduna fahin»"
+    ]
+   },
+   "babel": {
+    "name": "Sinannde Baabel",
+    "book": "Laawol Fuɗɗoode 11",
+    "today": "Iraak hannde (seeno Sineyaar)",
+    "note": "E mawningol ngol ɗaɓɓi dow kammu, Alla saaki ɗemngal maɓɓe e leƴƴi ɗin e hoore leydi.",
+    "events": [
+     "«Ngaɗen wuro e sinannde… waɗen innde men»",
+     "Alla jiibi ɗemngal maɓɓe",
+     "Leƴƴi ɗin saakii e hoore leydi (Sineyaar — ɓaawo Baabila)"
+    ]
+   },
+   "ur": {
+    "name": "Ur",
+    "book": "Laawol Fuɗɗoode 12",
+    "today": "worgo Iraak hannde",
+    "note": "Daari dandeede Deftere Seniinde fuɗɗoroo noddugol gorko gooto.",
+    "events": [
+     "Alla noddi Ibraahiima daga Ur Kaldankooɓe",
+     "«Mi waɗay ma leñol mawngol… leƴƴi fow keɓay barki e maaɗa»",
+     "Sabu gomɗinal o yalti leydi mun"
+    ]
+   },
+   "haran": {
+    "name": "Haaraan",
+    "book": "Laawol Fuɗɗoode 12",
+    "today": "worgo Turkiya hannde",
+    "note": "E laawol, jaabotoo noddaango ngam leydi aadaandi.",
+    "events": [
+     "Ɓeynguure Teraa hoɗi Haaraan",
+     "Teraa maayi",
+     "Ibraahiima yalti faade Kanaana e duuɓi 75"
+    ]
+   },
+   "shechem": {
+    "name": "Sekem · Kanaana",
+    "book": "Laawol Fuɗɗoode 12–50",
+    "today": "Naabulus hannde",
+    "note": "E leydi aadaandi ɓeynguure sinkaa e aadi on jokkondiri jamaanuuji.",
+    "events": [
+     "Naatugol Kanaana, sadakirde arande — «mi hokkay ɓiɓɓe maaɗa ndii leydi»",
+     "Aadi on (Laawol Fuɗɗoode 15) · Isiyaaka · Yaaquuba",
+     "Ɓiɓɓe Yaaquuba sappo e ɗiɗo — ɗaɗol leƴƴi sappo e ɗiɗi"
+    ]
+   },
+   "egypt": {
+    "name": "Misira (Gosen)",
+    "book": "Laawol Fuɗɗoode 37–50 · Laawol Yaltugol 1",
+    "today": "Delta Niil, Misira hannde",
+    "note": "Ɓeynguure wontii leñol mawngol — refti leñol maccuɓe.",
+    "events": [
+     "Yuusufu, jeeyaaɗo, ƴawi haa laamu Misira",
+     "Ɓeynguure Yaaquuba fow jippii ngam dogde heege",
+     "Leñol Isra'iila ɓeydotoongol waɗaa maccuɓe"
+    ]
+   },
+   "sinai": {
+    "name": "Fello Sinaa'i",
+    "book": "Laawol Yaltugol · Laawol Lewiyankooɓe",
+    "today": "nokkuure Sinaa'i hannde",
+    "note": "Dandugol ɓurngol mawnude e Aliyani Hindi — maccuɓe wontii leñol Alla tigi.",
+    "events": [
+     "Bone sappo e baalii Juldeere Yawtaneede",
+     "Maayo Boɗeewo seeri ɓe lummbi",
+     "Yamirooje sappo, Sariya, suudu tukuru e sadakaaji"
+    ]
+   },
+   "kadesh": {
+    "name": "Kadees (ladde)",
+    "book": "Laawol Limoore · Laawol Sariya",
+    "today": "ladde Sinaa'i–Negeb hannde",
+    "note": "Ɗoftaaki majjini jamaanu leydi ndin — kono Alla heddii wondude e maɓɓe.",
+    "events": [
+     "Yuurnitooɓe sappo e ɗiɗo — kono yimɓe ɓen njeddi gomɗingol",
+     "Duuɓi 38 e ladde — manna, duule e yiite",
+     "E seeno Mowaab, waaju sakkitiiɗo Muusaa (Laawol Sariya)"
+    ]
+   },
+   "jericho": {
+    "name": "Yeriko",
+    "book": "Yuusha'u",
+    "today": "Yeriko hannde",
+    "note": "Ka lannoode ɓe naati ɓe keɓi leydi aadaandi.",
+    "events": [
+     "Maayo Yurdun seeri yimɓe ɓen lummbi",
+     "Galɗe Yeriko yani",
+     "Foolugol Kanaana e senndugol leydi ndin"
+    ]
+   },
+   "shiloh": {
+    "name": "Silo (Ɲaawooɓe)",
+    "book": "Ɲaawooɓe · Ruutu",
+    "today": "Kirbet Seylun hannde",
+    "note": "Walaa laamɗo, kala neɗɗo waɗay ko yiɗi — laamɗo goonga no ɗaɓɓaa.",
+    "events": [
+     "Suudu tukuru darnaa Silo",
+     "Yiilannde junuubu–torra–dandeede (Debora, Gideyuuna, Samsuuna)",
+     "Ruutu — hoolaare e balɗe niɓɓe, e jamaanu Daawuuda"
+    ]
+   },
+   "jerusalem": {
+    "name": "Urusaliima · Laamu woortungu",
+    "book": "Samuweela 1–2 · Laamɓe 1",
+    "today": "Urusaliima hannde",
+    "note": "Jamaanu ɓurngu Isra'iila — e aadi laamɗo poomayankeejo.",
+    "events": [
+     "Sawuula laamɗo aranɗo, refti Daawuuda e Goliyaata",
+     "Aadi Daawuuda — «jullere laamu maaɗa heddoto poomaa» (Samuweela 2: 7)",
+     "Sulaymaana mahi hekkalu Urusaliima"
+    ]
+   },
+   "samaria": {
+    "name": "Samariiya · Laamu seerngu",
+    "book": "Laamɓe · Annabaaɓe",
+    "today": "Sebastiya hannde",
+    "note": "Laamu seeri ngu yahi bonude tuma Annabaaɓe rentini.",
+    "events": [
+     "Ɓaawo Sulaymaana, seergol e Yahuuda e Isra'iila",
+     "Rewugol sanamuuji jokkindirngol",
+     "Iliyaasu, Isaaya, Irimiyaa noddi «ngartee» — ɓe habri Almasiihu"
+    ]
+   },
+   "nineveh": {
+    "name": "Ninawa (Asuuriya)",
+    "book": "Laamɓe 2: 17 · Yuunus",
+    "today": "Mosul, Iraak hannde",
+    "note": "E ɓe ndeenaaki kala rentinaango, rewo on yani ko adii.",
+    "events": [
+     "Ninawa, hekkalu Asuuriya",
+     "Laamu rewo ngun yani e Asuuriya (722 H.A.)",
+     "Yuunus nelaa Ninawa"
+    ]
+   },
+   "babylon": {
+    "name": "Baabila",
+    "book": "Laamɓe 2: 25 · Daani'eela · Hazaqiyeela",
+    "today": "Hilla, Iraak hannde",
+    "note": "Jemma ɓurɗo niɓɓude — kono aadi artugol heddii.",
+    "events": [
+     "Urusaliima yani, hekkalu sumaa (586 H.A.)",
+     "Yahuuda njaɓɓinaa Baabila",
+     "Daani'eela e Hazaqiyeela — gomɗinal e wahayuuji e horeede"
+    ]
+   },
+   "susa": {
+    "name": "Suusa (Persiya)",
+    "book": "Esteer · Nehemiya",
+    "today": "Suus, Iraan hannde",
+    "note": "Hay e ɓernde laamu heefereeɓe, Alla no reena leñol mun.",
+    "events": [
+     "Persiya fooli Baabila",
+     "Esteer dandi Yahuudinaaɓe e bonugol",
+     "Nehemiya du'ii yeeso laamɗo o nelaa"
+    ]
+   },
+   "return": {
+    "name": "Artugol Urusaliima",
+    "book": "Ezra · Nehemiya · Malaaki",
+    "today": "Urusaliima hannde",
+    "note": "Ɓe ngarti ɓe mahti — kono laamɗo waraali. Ɓe habbii Almasiihu.",
+    "events": [
+     "Lummbe tati artugol e kongol Sirus (Zerubabel 538 · Ezra 458 · Nehemiya 444)",
+     "Hekkalu mahtaa e galɗe Urusaliima mahtaa",
+     "Malaaki — Aliyani Hindi joofi: «Mi lilay nelaaɗo an»"
+    ]
+   }
+  },
+  "labels": [
+   "Maayo Mediteraane",
+   "Mesopotamiya",
+   "Ladde Arabiya",
+   "Misira"
+  ],
+  "journeys": {
+   "flow": "Daari dandeede on"
+  }
+ },
+ "jesus": {
+  "places": {
+   "bethlehem": {
+    "name": "Baytalami",
+    "book": "Matta 1–2 · Luuka 2",
+    "today": "Baytalami hannde",
+    "note": "Almasiihu aadaaɗo on ari e saare Daawuuda — Daaluyee on wonti neɗɗo.",
+    "events": [
+     "Jibinaaɗo Baytalami, saare Daawuuda",
+     "Malaa'ikaaɓe njeeyani aynaaɓe kabaaru on",
+     "Annduɓe koode ari ngam sujjude"
+    ]
+   },
+   "nazareth": {
+    "name": "Nasareti",
+    "book": "Luuka 2 · 4",
+    "today": "Nasareti hannde",
+    "note": "Alla mawni wa neɗɗo e saare hoyfere.",
+    "events": [
+     "Ne'aa e galle gollotooɗo leɗɗe",
+     "E duuɓi sappo e ɗiɗi, o naamnii o jaabii ka hekkalu",
+     "Ɓaawo o riiwaa ka sinagog saare mun"
+    ]
+   },
+   "jordan": {
+    "name": "Maayo Yurdun",
+    "book": "Matta 3–4",
+    "today": "les Yurdun hannde",
+    "note": "Kuugal makko ka yimɓe fuɗɗii — kammu seedii mo wa Ɓiɗɗo on.",
+    "events": [
+     "Lootaa e junngo Yuhanna",
+     "Ruuhu on jippii wa foondu — «Ko oo woni Ɓiɗɗo an jiɗaaɗo»",
+     "O fooli jarrabuuji tati Seyɗaan e ladde"
+    ]
+   },
+   "cana": {
+    "name": "Kaana",
+    "book": "Yuhanna 2",
+    "today": "Kafr Kanna hannde",
+    "note": "E maandeere makko arande o hollii teddungal makko.",
+    "events": [
+     "Koɗo e dewgal",
+     "Ndiyam wontii sanngara — maandeere makko arande",
+     "Taalibaaɓe makko ngomɗini mo"
+    ]
+   },
+   "sychar": {
+    "name": "Sikaar (Samariiya)",
+    "book": "Yuhanna 2–4",
+    "today": "ɓadii Naabulus hannde",
+    "note": "Laawol kuugal aranol — rewa Urusaliima haa Samariiya jaasnaandi.",
+    "events": [
+     "O laɓɓini hekkalu ka Urusaliima",
+     "Jemma, Nikodemu — «Sey a jibinee hesii»",
+     "Ndiyam nguurɗam wonande debbo Samariyanke"
+    ]
+   },
+   "capernaum": {
+    "name": "Kafarnahum",
+    "book": "Matta 4–13 · Markus 1–4",
+    "today": "daande weendu Galili hannde",
+    "note": "Ñiiɓirde kuugal Galili — noddugol, janngingol e luutndagol fow tawtoroo ɗoo.",
+    "events": [
+     "O noddi awooɓe liƴƴi o ñiiɓi ɗoo",
+     "Waaju ka fello — «Barkinaaɓe ko waasɓe e ruuhu»",
+     "Misalaaji laamu ngun — e luutndagol ɓeydotoongol"
+    ]
+   },
+   "galilee": {
+    "name": "Weendu Galili",
+    "book": "Markus 4 · 6 · Yuhanna 6",
+    "today": "Weendu Kinneret hannde",
+    "note": "E bawgal makko dow tageefe, o hollii ko o woni.",
+    "events": [
+     "«Deƴƴu, tamño» — o deeƴni henndu ndun",
+     "O ñamminii 5.000 e mburu jowi e liƴƴi ɗiɗi",
+     "O yaha dow ndiyam"
+    ]
+   },
+   "caesarea_p": {
+    "name": "Kaysariya Filipi",
+    "book": "Matta 16–17",
+    "today": "Baniyaas hannde",
+    "note": "Taalibaaɓe ɓen faami ko o Almasiihu on, e laawol leggal altindiraangal udditii.",
+    "events": [
+     "Qirritaango Piyer — «An woni Almasiihu on, Ɓiɗɗo Alla wuuɗo on»",
+     "O habri arannde mayde makko e ummital makko",
+     "O waylii mbaadi e teddungal ka fello"
+    ]
+   },
+   "jericho": {
+    "name": "Yeriko",
+    "book": "Luuka 18–19",
+    "today": "Yeriko hannde",
+    "note": "E laawol ƴawugol Urusaliima, o ɗaɓɓi majjuɓe ɓen.",
+    "events": [
+     "O udditi gite bumɗo Bartimeyus",
+     "O noddi Sakkeyu mooɓtoowo lampo",
+     "«Ɓiɗɗo neɗɗo on ari ɗaɓɓude e dandude majjuɓe ɓen»"
+    ]
+   },
+   "bethany": {
+    "name": "Baytaaniya",
+    "book": "Yuhanna 11–12",
+    "today": "al-Eizariya hannde",
+    "note": "O hollii bawgal makko dow mayde ka jonte makko sakkitiinde ɓadii.",
+    "events": [
+     "O ummini Laasar daga yanaande — «Ko min woni ummital ngal e ngurndan ɗan»",
+     "Maryama wujii mo nebbam ngam ubbugol",
+     "Ndee maandeere ɓeydi feere warugol mo"
+    ]
+   },
+   "jerusalem": {
+    "name": "Urusaliima",
+    "book": "Matta 21–28 · Luuka 24 · Kuuɗe Nelaaɓe 1",
+    "today": "Urusaliima hannde",
+    "note": "Ɓatte ɗe Deftere Seniinde fow joopii — leggal altindiraangal, ummital, ƴiwugol.",
+    "events": [
+     "Naatugol teddungal; o wayliti taabaljaaji hekkalu fahin",
+     "Ka Hiraande Sakkitiinde o lootii koyɗe taalibaaɓe",
+     "O maayi ka leggal altindiraangal",
+     "Ummitii ñalaande tataɓere, refti ƴiwi"
+    ]
+   }
+  },
+  "labels": [
+   "Maayo Mediteraane",
+   "Galili",
+   "Samariiya",
+   "Yahuudiya",
+   "Dekapolis",
+   "Pereya",
+   "Maayo Lamɗam"
+  ],
+  "journeys": {
+   "life": "Laawol Iisaa"
+  }
+ },
+ "paul": {
+  "places": {
+   "antioch": {
+    "name": "Antiyaakiya",
+    "book": "Kuuɗe Nelaaɓe 13 · 15",
+    "today": "Antakya, Turkiya hannde",
+    "note": "Fedde diina nelooru nde misiyon leƴƴi goɗɗi fuɗɗii e artata.",
+    "events": [
+     "E du'aaji Ruuhu on senndi Barnaba e Sawuula",
+     "Fedde diina nde gomɗinɓe njeydaa «Almasiihankooɓe» ko adii",
+     "Fuɗɗorde laabi aranɗi, ɗiɗaɓi e tataɓi"
+    ]
+   },
+   "seleucia": {
+    "name": "Selesiya",
+    "book": "Kuuɗe Nelaaɓe 13:4",
+    "today": "Turkiya hannde",
+    "note": "Marsa Antiyaakiya — ɓe ngummii faade Kupurus.",
+    "events": []
+   },
+   "salamis": {
+    "name": "Salaamis (Kupurus)",
+    "book": "Kuuɗe Nelaaɓe 13:5",
+    "today": "Kupurus hannde",
+    "note": "Darnde arande Kupurus — waajagol ka sinagogaaji.",
+    "events": []
+   },
+   "paphos": {
+    "name": "Paafos",
+    "book": "Kuuɗe Nelaaɓe 13:6-12",
+    "today": "Kupurus hannde",
+    "note": "Bawgal hollaa e ɓen luutndotooɓe Kibaaru Moƴƴo.",
+    "events": [
+     "Elimas mbileejo waɗaa bumɗo",
+     "Serjiyus Pool gomna on gomɗinii",
+     "Gila ɗoo «Pool» ardii"
+    ]
+   },
+   "perga": {
+    "name": "Perga",
+    "book": "Kuuɗe Nelaaɓe 13:13",
+    "today": "Antalya, Turkiya hannde",
+    "note": "Marsa e Pamfiliya — ɗoo Yuhanna Markus rutti caggal.",
+    "events": []
+   },
+   "pantioch": {
+    "name": "Antiyaakiya Pisidiya",
+    "book": "Kuuɗe Nelaaɓe 13:14-50",
+    "today": "Yalvaç, Turkiya hannde",
+    "note": "Kibaaru Moƴƴo udditii faade leƴƴi goɗɗi.",
+    "events": [
+     "Waaju juutɗo dow daari dandeede ka sinagog",
+     "Leƴƴi goɗɗi keewɗi mbeltii ɓe njaɓi Kongol on",
+     "Riiwaa sabu luutndagol"
+    ]
+   },
+   "iconium": {
+    "name": "Ikoniyum",
+    "book": "Kuuɗe Nelaaɓe 14:1-7",
+    "today": "Konya, Turkiya hannde",
+    "note": "Heewɓe ngomɗini, kono torra waɗi ɓe njokka.",
+    "events": []
+   },
+   "lystra": {
+    "name": "Listara",
+    "book": "Kuuɗe Nelaaɓe 14:8-20",
+    "today": "Turkiya hannde",
+    "note": "Teddinaa wa reweteeɗo, refti fiyaa kaaƴe.",
+    "events": [
+     "O sellini gorko mo waawaano yahde gila jibineede",
+     "Jamaa on ɗaɓɓi hirsande ɓe wa reweteeɓe",
+     "Fiyaa kaaƴe accaa wa maayɗo, o ummii"
+    ]
+   },
+   "derbe": {
+    "name": "Derbe",
+    "book": "Kuuɗe Nelaaɓe 14:20-21",
+    "today": "Turkiya hannde",
+    "note": "Taalibaaɓe heewɓe ngaɗaa; ɓe ngarti ka ɓe ngummornoo ngam semmbinde feddeeji diina.",
+    "events": []
+   },
+   "troas": {
+    "name": "Torowaas",
+    "book": "Kuuɗe Nelaaɓe 16:8-10",
+    "today": "Turkiya hannde",
+    "note": "Nokkuure baylol ka Kibaaru Moƴƴo huccitii Eropa ko adii.",
+    "events": [
+     "Wahayu gorko Makeduuniya",
+     "«Ar Makeduuniya ballaa min»",
+     "E jaka ɓe lummbi njaadi Eropa"
+    ]
+   },
+   "philippi": {
+    "name": "Filipi",
+    "book": "Kuuɗe Nelaaɓe 16 · Filipinaaɓe",
+    "today": "rewo Gerees hannde",
+    "note": "Fedde diina arande Eropa — Kibaaru Moƴƴo fooli hay ka kaso.",
+    "events": [
+     "Lidiya, jeeyoowo bagiiji purpur, gomɗinii",
+     "Suka debbo maccuɗo tefoowo rimɗinaa",
+     "Gimɗi ka feccere jemma, dilol leydi, ɓeynguure deenoowo kaso dandaa"
+    ]
+   },
+   "thess": {
+    "name": "Tesalonika",
+    "book": "Kuuɗe Nelaaɓe 17 · Tesalonikankooɓe 1–2",
+    "today": "Tesaloniki, Gerees hannde",
+    "note": "Kongol on dimbini saare nden e luutndagol fasii.",
+    "events": [
+     "O yeewti ka sinagog Sabbatuuji tati",
+     "«Ɓee waylooɓe aduna on»",
+     "Ɓe njalti jemma"
+    ]
+   },
+   "berea": {
+    "name": "Bere",
+    "book": "Kuuɗe Nelaaɓe 17:10-15",
+    "today": "Veriya, Gerees hannde",
+    "note": "«Tedduɓe» ɓen ɓe ndaari Kongol on hoore maɓɓe.",
+    "events": [
+     "Ɓe njaɓiri Kongol on e yiɗɗe",
+     "Ñalnde kala ɓe ndaari Bindi ɗin ngam ƴeewde ɗum",
+     "Heewɓe ngomɗini"
+    ]
+   },
+   "athens": {
+    "name": "Ateen",
+    "book": "Kuuɗe Nelaaɓe 17:16-34",
+    "today": "Ateen, Gerees hannde",
+    "note": "E saare falsafaaɓe o habri «reweteeɗo mo anndaaka».",
+    "events": [
+     "Ɓernde makko dimbaa e saare heewndu sanamuuji",
+     "Ka Areyopagus o waaji Tagɗo on e ummital",
+     "O jalkitaa, kono seeɗaaɓe ngomɗini"
+    ]
+   },
+   "corinth": {
+    "name": "Korinti",
+    "book": "Kuuɗe Nelaaɓe 18 · Korintinaaɓe 1–2",
+    "today": "Gerees hannde",
+    "note": "O ñiiɓi hitaande e feccere, o aawi fedde diina e saare bone.",
+    "events": [
+     "O waɗi tiilaaji wondude e Akila e Prisilla",
+     "«Wata a hulu… ko fii miɗo wondi e maaɗa»",
+     "Korintinaaɓe heewɓe ngomɗini ɓe lootaa"
+    ]
+   },
+   "ephesus": {
+    "name": "Efesu",
+    "book": "Kuuɗe Nelaaɓe 19 · Efesinaaɓe",
+    "today": "Selçuk, Turkiya hannde",
+    "note": "Ɓernde laawol tataɓol — Kongol on saakii e Asiya.",
+    "events": [
+     "Janngingol ñalnde kala duuɓi ɗiɗi ka suudu Tirannus",
+     "Defte mbilewu cumaa; golle bawɗe",
+     "Demetiriyus tammoowo kaalis fuɗɗini fitina"
+    ]
+   },
+   "miletus": {
+    "name": "Mile",
+    "book": "Kuuɗe Nelaaɓe 20:17-38",
+    "today": "Turkiya hannde",
+    "note": "Sallminaango gonɗi wondude e mawɓe Efesu.",
+    "events": [
+     "«Reenee fedde diina nde o soodiri ƴiiƴan makko»",
+     "Mawɓe ɓen ngulli, ɓe nganndi ɓe ngi'ataa mo fahin"
+    ]
+   },
+   "caesarea": {
+    "name": "Kaysariya",
+    "book": "Kuuɗe Nelaaɓe 23–26",
+    "today": "daande maayo Isra'iila hannde",
+    "note": "Duuɓi ɗiɗi o wallitii Kibaaru Moƴƴo yeeso gomnaaji e laamɗo.",
+    "events": [
+     "Ñaawooje yeeso gomnaaji Feliks e Festus",
+     "Daɗndagol makko yeeso laamɗo Agriipa",
+     "«Mi ɗaɓɓii ñaawoore Kaysar» — faade Roma"
+    ]
+   },
+   "jerusalem": {
+    "name": "Urusaliima",
+    "book": "Kuuɗe Nelaaɓe 21–23",
+    "today": "Urusaliima hannde",
+    "note": "Nanngaa ka hekkalu, laawol makko wa dahaaɗo fuɗɗii.",
+    "events": [
+     "Nanngaa e jamaa ka hekkalu",
+     "O daɗndii hoore mun yeeso batu on",
+     "Wa ɓiɗɗo leydi Roma, nelaa e deenanooɓe faade Kaysariya"
+    ]
+   },
+   "myra": {
+    "name": "Mira",
+    "book": "Kuuɗe Nelaaɓe 27:5-6",
+    "today": "Demre, Turkiya hannde",
+    "note": "Ɓe eggii e laana Alesanderiya faaɗe Roma.",
+    "events": []
+   },
+   "fairhaven": {
+    "name": "Marsaaji Moƴƴi (Kereeti)",
+    "book": "Kuuɗe Nelaaɓe 27:8-12",
+    "today": "Kereeti hannde",
+    "note": "Rentinaango Pool ngam dartaade doggu maayo ndeenaaka.",
+    "events": []
+   },
+   "crete": {
+    "name": "Kereeti",
+    "book": "Titu",
+    "today": "Kereeti hannde",
+    "note": "Ɓaawo o rimɗinaa, duungal ngal o acci Titu ngam feewnude feddeeji diina.",
+    "events": [
+     "O acci Titu ngam toɗɗaade mawɓe e kala saare",
+     "O ɗaɓɓi ardiiɓe ɓe walaa ella, hoolniiɓe",
+     "O winda ɓataake Titu on"
+    ]
+   },
+   "malta": {
+    "name": "Malta",
+    "book": "Kuuɗe Nelaaɓe 27–28",
+    "today": "Malta hannde",
+    "note": "Rewa henndu e yolɓugol laana, aadi Alla tabbiti.",
+    "events": [
+     "Henndu «funnaange-rewo» yolɓini laana, kono 276 fow ndaɗi",
+     "Ñaɓɓaa mboddi, o gaañaaki",
+     "O sellini nawnaaɓe duungal ngal"
+    ]
+   },
+   "syracuse": {
+    "name": "Sirakusa",
+    "book": "Kuuɗe Nelaaɓe 28:12",
+    "today": "Sisiliya, Itali hannde",
+    "note": "Ɓe njooɗii balɗe tati Sisiliya.",
+    "events": []
+   },
+   "puteoli": {
+    "name": "Puteyoli",
+    "book": "Kuuɗe Nelaaɓe 28:13-14",
+    "today": "Pozzuoli, Itali hannde",
+    "note": "Ɓe njippii Itali ɓe njaɓɓaa e siɗɗiraaɓe gomɗinɓe.",
+    "events": []
+   },
+   "rome": {
+    "name": "Roma",
+    "book": "Kuuɗe Nelaaɓe 28 · Ɓataakuuji Kaso · Timote 2",
+    "today": "Roma, Itali hannde",
+    "note": "Kibaaru Moƴƴo yottii ɓernde laamu ngun ka lannoode — wanaa joofnde kono ko fuɗɗoode.",
+    "events": [
+     "Duuɓi ɗiɗi dahaaɗo ka galle, o habra laamu ngun e cuusal",
+     "Gila ɗoo o winda Ɓataakuuji Kaso (Efesinaaɓe·Filipinaaɓe·Kolosinaaɓe·Filemon)",
+     "Ɓaawo o dahaa fahin, o winda Timote 2 o waraa sabu gomɗinal — «Mi haɓii haɓannde moƴƴere nden, mi timminii doggu ngun»"
+    ]
+   }
+  },
+  "labels": [
+   "Maayo Mediteraane",
+   "Maayo Egee",
+   "Asiya Tokoora",
+   "Makeduuniya",
+   "Itali"
+  ],
+  "journeys": {
+   "j1": "Laawol aranol",
+   "j2": "Laawol ɗiɗaɓol",
+   "j3": "Laawol tataɓol",
+   "rome": "Laawol nayaɓol · faade Roma",
+   "j5": "Laawol jowaɓol · ɓaawo rimɗineede"
+  }
+ }
+}

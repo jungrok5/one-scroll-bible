@@ -1,0 +1,636 @@
+{
+ "menuName": "Sidaamu Afoo",
+ "htmlLang": "sid",
+ "dir": "ltr",
+ "locale": "sid-ET",
+ "brand": "Qullaawa Maxaafa mitto laˀˀate",
+ "docTitle": "Kaartete aana Qullaawu Maxaafi · Qullaawa Maxaafa mitto laˀˀate",
+ "metaDesc": "Gede Gondoorote yanna, Yesuusi heeshshonna Phaawuloosi haˀˀo halaalaame kaartete aana harunsi — Qullaawu Maxaafi halaalaame darguwa aana ikkino.",
+ "s": {
+  "kicker": "Qullaawa Maxaafa mitto laˀˀate · Kaarte",
+  "title": "Kaartete aana Qullaawu Maxaafi",
+  "verse": "“Mootichinke Yesuusi Kiristoosi wolqanna layinkimeeshshi daasire kullummo'ne yannara, ayirrinyesi illenkenni la'neeti ikkinnina, mannu hayyonni kalanqoonni maatto hoode ha'ratenni di\"ikkino.” (Layinki Pheexiroosi 1:16)",
+  "purpose": "Qullaawu Maxaafi moohaminyo diˀˀino. Halaalaame darguwa, barruwanna manna aana haˀˀino manni borro. Konne doogubba kaartete aana, yannate garinni harunsi — mitto darga xamme, woy ▶ xamme lekka lekkanni saˀˀe laˀˀi.",
+  "ot_kick": "① Gede Gondooro — yannate giddo",
+  "ot_h": "Kalaqamiunni Yerusaalame higate geeshsha",
+  "ot_lead": "Mitte haˀˀo diˀˀino, kalaqamiunni kayise gatote xage juuwaati: kalaqamanna burco → duˀonna Baabeeli → woshsho (Abirihaami) → qaale afiˀrino baatto → Fulo → baˀˀu gobba → adha → gashshooti → baˀˀa → worohaˀˀu → higa.",
+  "je_kick": "② Haaro Gondooro — Yesuusi heeshsho",
+  "je_h": "Beeteliheemetenni Yerusaalame geeshsha",
+  "je_lead": "Dancha Duduwi kulanno garinni, Yesuusi heeshsho harunsi — Beeteliheemete ilamasinni kayise, cuˀˀamasinna Galiila soqqanshosi widoonni, Samaariya saˀˀe, Yerusaalamete masqalu, kaˀˀanna alira haˀˀa geeshsha.",
+  "pa_kick": "③ Haaro Gondooro — Phaawuloosi haˀˀo",
+  "pa_h": "Anxookiyanni baattote qacce geeshsha — Roome",
+  "pa_lead": "Yerusaalamete Phenxeqoosxetenni kayise, Dancha Duduwi Yihudanni saˀˀe hiittoonni faffino — Shiima Asiyanna Awuroopa widoonni Aamilu wodana geeshsha. Onte haˀˀowiinni mitto doori (umi·layinki·sayikki + Roome haˀˀanno markaabu haˀˀo + fulinohunni gedensaanni) doogo aana borreessamino sokkuwa ledo Soqqamaasinete Looso coyibba harunsi.",
+  "foot": "Bue · Darga sˀuwa Qullaawu Maxaafi borronna nabbahaanchu Qullaawu Maxaafi baattote egenno harunsitino (kaaˀˀanno base xaˀmmu suˀma ledo). Baaru qacce, lagoyyenna baaruwa faˀino baattote daata (Natural Earth)nni loosantino, shoshshontino.",
+  "contact": "Xaˀmuwa · hedo — <a id=\"contact\" class=\"mail\">Imeeyle borreesse</a>",
+  "play": "Hanafi",
+  "pause": "Uurri",
+  "today": "Techo:",
+  "verseCite": "Layinki Pheexiroosi 1:16"
+ },
+ "ot": {
+  "places": {
+   "eden": {
+    "name": "Edene (Kalaqama · Burco)",
+    "book": "Kalaqama 1–3",
+    "today": "techo Xiigirisinna Efraaxe lagoyye qooxeessa",
+    "note": "Lowo geeshsha dancha ikke kalaqamino alamera, cubbo eˀˀe Maganunna mannu ooso mereero noo xaˀmma diigino.",
+    "events": [
+     "Lamala barri kalaqo — “lowo geeshsha dancha ikkitino”",
+     "Mannu Maganu misile asse kalaqami",
+     "Burco, Edenetenni fushshama",
+     "Umi Dancha Duduwi qaale — “meyate sirchcho sirchchote umo cancananno”"
+    ]
+   },
+   "noah": {
+    "name": "Araaraati (Duˀo)",
+    "book": "Kalaqama 6–9",
+    "today": "techo gibbaˀ Turkiye, Araaraati ilaˀlo",
+    "note": "Cubbunni woˀmino alame Maganu yoˀrino, ikkollana mitte maatenni heeshsho gatisino.",
+    "events": [
+     "Busha ikkasinni woˀmino alame",
+     "Duˀonna Nohi markaabu",
+     "Wojju gondooro — “qoleesse duˀonni baattote geeshsha didiigamanno”"
+    ]
+   },
+   "babel": {
+    "name": "Baabeeli Adhaba",
+    "book": "Kalaqama 11",
+    "today": "techo Iraaqe (Shineeaari baatto)",
+    "note": "Iima geeshsha iˀˀanno naaxxinynyara, Maganu afoonsanna dagana baattote aana faffisino.",
+    "events": [
+     "“Katamanna adhaba assinammo … suˀmanke ayirradonke assinammo”",
+     "Maganu afoonsa soorrino",
+     "Dagu baattote aana faffino (Shineeaari — gedensaanni Baabiloone)"
+    ]
+   },
+   "ur": {
+    "name": "Uuri",
+    "book": "Kalaqama 12",
+    "today": "techo woraˀ Iraaqe",
+    "note": "Qullaawu Maxaafi gatote xage mittu manchi woshsho aana hanafanno.",
+    "events": [
+     "Maganu Abirihaama Kaldootu Uurinni woshshino",
+     "“Wolqaataame gosa asseemmohe … daga baalanti ate widoonni maassantanno”",
+     "Ammananni gobbasi agure fulino"
+    ]
+   },
+   "haran": {
+    "name": "Haaraani",
+    "book": "Kalaqama 12",
+    "today": "techo woraˀ Turkiye",
+    "note": "Doogo aana, qaale afiˀrino baattowa woshsho macciishshe haˀˀanni.",
+    "events": [
+     "Taara maati Haaraani ofollino",
+     "Taara reyino",
+     "Abirihaami 75 diri ikke Kanaani haˀˀanno"
+    ]
+   },
+   "shechem": {
+    "name": "Sheekeemi · Kanaani",
+    "book": "Kalaqama 12–50",
+    "today": "techo Naabulusi",
+    "note": "Qaale afiˀrino baattora maati xintantino, gondoorono ilamatenni ilamate saˀˀanno.",
+    "events": [
+     "Kanaani eˀˀe, umi kakkalote darga — “tenne baatto sirchokkira uyeemmo”",
+     "Gondooro (Kalaqama 15) · Yisihaaqi · Yaiqoobi",
+     "Yaiqoobi tonne lamela beetto — tonne lamela dagate xinta"
+    ]
+   },
+   "egypt": {
+    "name": "Gibitse (Goosheeni)",
+    "book": "Kalaqama 37–50 · Fulo 1",
+    "today": "techo Naayle Deelxa, Gibitse",
+    "note": "Maati wolqaataame gosa ikkitanno — hakkiinni borojjichcho gosa.",
+    "events": [
+     "Hirtino Yooseefi, Gibitse gashsha geeshsha kaˀˀino",
+     "Yaiqoobi maati baala hoolara Gibitse dirtino",
+     "Lophanni haˀˀino Israeele gosa borojjeeˀˀantino"
+    ]
+   },
+   "sinai": {
+    "name": "Siinaayi Ilaˀlo",
+    "book": "Fulo · Leewaawoota",
+    "today": "techo Siinaayi doobbe",
+    "note": "Gede Gondoorote ledishshu gatto — borojjichcho Maganu umisi daga ikkanno.",
+    "events": [
+     "Tonne qoˀˀonna Faasikate geˀrecho",
+     "Duume Baˀˀu faˀˀe saˀˀino",
+     "Tonne Hajajo, Seeru, dunkaanenna sarxa"
+    ]
+   },
+   "kadesh": {
+    "name": "Qaadeesi (baˀˀu gobba)",
+    "book": "Kiiro · Marro",
+    "today": "techo Siinaayi–Negeebe baˀˀu gobba",
+    "note": "Ammanikkinni mitte ilama baatto hooggino — ikkollana Maganu ledonsa gattino.",
+    "events": [
+     "Tonne lamela laˀisiisaano — ikkollana mannu ammana giwino",
+     "38 dirra baˀˀu gobbara — manna, maannenna giira",
+     "Moˀaabe dirtora, Muse goofimarchu rosiisa (Marro)"
+    ]
+   },
+   "jericho": {
+    "name": "Yarikoo",
+    "book": "Iyyaasu",
+    "today": "techo Yarikoo",
+    "note": "Goofimarchira qaale afiˀrino baatto eˀˀe adhino.",
+    "events": [
+     "Yordaanoosi faˀˀe mannu saˀˀino",
+     "Yarikoo katamu daawaro deiˀˀino",
+     "Kanaani adhanna baattote beeha"
+    ]
+   },
+   "shiloh": {
+    "name": "Siiloo (Ejjeetto)",
+    "book": "Ejjeetto · Ruuti",
+    "today": "techo Kirbeeti Seiluuni",
+    "note": "Moote nookkihunni, mannu baalu lawisi gede assino — addu moote hasiissino.",
+    "events": [
+     "Dunkaane Siiloora uurrino",
+     "Cubbo–qarrisa–gatto hoyimma (Diboora, Gediyooni, Saamsooni)",
+     "Ruuti — goˀˀakkii barra halaalimma, Daawiti sirchchora"
+    ]
+   },
+   "jerusalem": {
+    "name": "Yerusaalame · Gambooshshe Gashshooti",
+    "book": "Umi–Layinki Saamueeli · Umi Mootoolla",
+    "today": "techo Yerusaalame",
+    "note": "Israeele aleenya yanna — hegere moote qaalenono ledo.",
+    "events": [
+     "Umi moote Saaooli, hakkiinni Daawitinna Gooliyaadi",
+     "Daawiti gondooro — “gashshootikki hegerera uurranno” (Layinki Saamueeli 7)",
+     "Selemooni Yerusaalame Qullaawu Mine assino"
+    ]
+   },
+   "samaria": {
+    "name": "Samaariya · Baˀˀino Gashshooti",
+    "book": "Mootoolla · Himanaano",
+    "today": "techo Sebaasxiya",
+    "note": "Gashshooti baˀˀe woriidi haˀˀanno, himanaano caamme.",
+    "events": [
+     "Selemooni gedensaanni, Yihudanna Israeele ikke baˀˀa",
+     "Marro kaˀikalaqo soqqansho",
+     "Eliyaasi, Isayaasi, Ermiyaasi “higge” yee caamme — Iˀˀeuno kulino"
+    ]
+   },
+   "nineveh": {
+    "name": "Nineve (Asoore)",
+    "book": "Layinki Mootoolla 17 · Yoonaasi",
+    "today": "techo Moosuli, Iraaqe",
+    "note": "Baala amaale agurte, awurai balaxe baˀˀino.",
+    "events": [
+     "Nineve, Asoore katamu bayrichcho",
+     "Awurai gashshooti Asoore angara baˀˀino (K.A.J. 722)",
+     "Yoonaasi Ninewa soyamino"
+    ]
+   },
+   "babylon": {
+    "name": "Baabiloone",
+    "book": "Layinki Mootoolla 25 · Daanieeli · Hiziqeeli",
+    "today": "techo Hiilla, Iraaqe",
+    "note": "Roore diikko hashsha — ikkollana qolote qaale gattino.",
+    "events": [
+     "Yerusaalame baˀˀe, Qullaawu Mine giirantino (K.A.J. 586)",
+     "Yihuda Baabiloone massaˀˀamino",
+     "Daanieelinna Hiziqeeli — worohaˀˀu giddo ammananna ajuuja"
+    ]
+   },
+   "susa": {
+    "name": "Suusa (Faarso)",
+    "book": "Asteeri · Nehimiya",
+    "today": "techo Shuushi, Iraane",
+    "note": "Kaˀikalaqo bayru gashshooti wodana aananna, Maganu dagasi agarino.",
+    "events": [
+     "Faarso Baabiloone qeeltino",
+     "Asteeri Yihude baˀˀinannunni gatissino",
+     "Nehimiya moote albaanni huucciˀˀe soyamino"
+    ]
+   },
+   "return": {
+    "name": "Yerusaalame higa",
+    "book": "Izira · Nehimiya · Milkiyaasi",
+    "today": "techo Yerusaalame",
+    "note": "Higge wodantino — ikkollana moote diˀˀino daino. Iˀˀeu agartanni no.",
+    "events": [
+     "Qiiroosi hajajonni sasu higa (Zerubaabeeli 538 · Izira 458 · Nehimiya 444)",
+     "Qullaawu Mine wodarantino, Yerusaalame daawaro qolamino",
+     "Milkiyaasi — Gede Gondooro cufamanno: “soqqamaanchoˀya … soyemmo”"
+    ]
+   }
+  },
+  "labels": [
+   "Meediteraaniyaani Baaro",
+   "Mesophootaamiya",
+   "Arabiya Baˀˀu Gobba",
+   "Gibitse"
+  ],
+  "journeys": {
+   "flow": "Gatote xage"
+  }
+ },
+ "jesus": {
+  "places": {
+   "bethlehem": {
+    "name": "Beeteliheeme",
+    "book": "Maatewoosi 1–2 · Luqaasi 2",
+    "today": "techo Beeteliheeme",
+    "note": "Qaale uyinoonni Iˀˀeu Daawiti katama daˀˀino — Qaali maala ikkino.",
+    "events": [
+     "Daawiti katama Beeteliheemete ilamino",
+     "Sokkaano geˀreemma allaalaanorira duduwino",
+     "Egennaano juuwate daˀˀino"
+    ]
+   },
+   "nazareth": {
+    "name": "Naazireeti",
+    "book": "Luqaasi 2 · 4",
+    "today": "techo Naazireeti",
+    "note": "Maganu rosaman katamira manchimmatenni lophino.",
+    "events": [
+     "Miinjaanchu minera lophino",
+     "Tonne lamela diri ikke, Qullaawu Mine giddo xaˀminanna qolanni",
+     "Gedensaanni ilama katamasi gambooshshe minera giwamino"
+    ]
+   },
+   "jordan": {
+    "name": "Yordaanoosi Lagi",
+    "book": "Maatewoosi 3–4",
+    "today": "techo woraˀ Yordaanoosi",
+    "note": "Cinaanchu soqqanshosi hanafanno — iima Beetto ikkasi cinaˀˀanno.",
+    "events": [
+     "Yohaannisi cuˀˀino",
+     "Qullaawu Ayyaani worqeemma gede woroidi dirino — “Kuni baxaanchu Beettoˀyaati”",
+     "Baˀˀu gobbara Sheexaane sasu fanxe qeelino"
+    ]
+   },
+   "cana": {
+    "name": "Qaana",
+    "book": "Yohaannisi 2",
+    "today": "techo Kafri Qaanaa",
+    "note": "Umi malaatasinni ayirrinyesi leellishino.",
+    "events": [
+     "Adhu bocce aana doobicho ikkino",
+     "Waa woyinera soorrino — umi malaatasi",
+     "Rosaanosi iso ammanino"
+    ]
+   },
+   "sychar": {
+    "name": "Sikaari (Samaariya)",
+    "book": "Yohaannisi 2–4",
+    "today": "techo Naabulusi mule",
+    "note": "Hanafote soqqansho doogo — Yerusaalame saˀˀe, heseynoonni Samaariya geeshsha.",
+    "events": [
+     "Yerusaalame Qullaawu Minera daaqamaano fushshino",
+     "Hashsha Niqodimoosi — “qoleessite ilama hasiissihe”",
+     "Samaariyu meyatera lubbote waa"
+    ]
+   },
+   "capernaum": {
+    "name": "Qifirnaahoomi",
+    "book": "Maatewoosi 4–13 · Maarqoosi 1–4",
+    "today": "techo Galiila baaro qacce",
+    "note": "Galiila soqqanshote xinti darga — woshsho, rosiisanna gibba baalanti kawa gamba yaanno.",
+    "events": [
+     "Qulxuˀmisaano woshshe konne darga assiˀrino",
+     "Ilaˀlo aana rosiisi — “ayyaani widoonni buˀˀo ikkitinori maassamootoho”",
+     "Gashshootete lawishsha — gibbano lophanni haˀˀino"
+    ]
+   },
+   "galilee": {
+    "name": "Galiila Baaro",
+    "book": "Maarqoosi 4 · 6 · Yohaannisi 6",
+    "today": "techo Kinereeti Baaro",
+    "note": "Kalaqama aana noo wolqanni ayeeta ikkasi leellishanno.",
+    "events": [
+     "“Deini, keere ikki” — bubbe deiˀˀino",
+     "Onte daabbonna lame qulxuˀminni 5,000 manna sagalino",
+     "Waa aana haˀˀino"
+    ]
+   },
+   "caesarea_p": {
+    "name": "Qeesaariya Filiphi",
+    "book": "Maatewoosi 16–17",
+    "today": "techo Baaniyaasi",
+    "note": "Rosaano isi Kiristoosi ikkasi huwatino, masqalete doogono fanantino.",
+    "events": [
+     "Pheexiroosi xaadooshsho — “Ati Kiristoosihoˀne, heeˀraanchu Maganu Beettoho”",
+     "Reyosinna kaˀˀasi umo kulino",
+     "Ilaˀlo aana ayirrinyunni soorrami leellino"
+    ]
+   },
+   "jericho": {
+    "name": "Yarikoo",
+    "book": "Luqaasi 18–19",
+    "today": "techo Yarikoo",
+    "note": "Yerusaalame aliidi haˀˀino doogo aana, baˀino hasanno.",
+    "events": [
+     "Ballichcho Barximewoosi illesi faˀrino",
+     "Qaraxa haˀˀaancho Zakiyoosi woshshino",
+     "“Manchu Beetti baˀino hasanno gatisannono daˀˀino”"
+    ]
+   },
+   "bethany": {
+    "name": "Biixaaniya",
+    "book": "Yohaannisi 11–12",
+    "today": "techo al-Eizariya",
+    "note": "Goofimarchu lamalasi albaanni reyo aana wolqasi leellishino.",
+    "events": [
+     "Alaazaari reyinohunni kayisino — “Kaˀˀanna heeshsho aneeti”",
+     "Mariyaami reyosi qaˀmisate shitto tirtinosi",
+     "Kuni malaati shate maraabbo jawaachishino"
+    ]
+   },
+   "jerusalem": {
+    "name": "Yerusaalame",
+    "book": "Maatewoosi 21–28 · Luqaasi 24 · Soqqamaasinete Looso 1",
+    "today": "techo Yerusaalame",
+    "note": "Qullaawu Maxaafi baala farciˀrinohu goofa — masqalu, kaˀˀanna alira haˀˀa.",
+    "events": [
+     "Ayirrinyunni eˀˀe; qoleesse Qullaawu Mine giddonni daaqamaano fushshino",
+     "Goofimari hurbaatera rosaanosi lekka haaccino",
+     "Masqalete aana reyino",
+     "Sasimi barra kaˀˀe, hakkiinni alira haˀˀino"
+    ]
+   }
+  },
+  "labels": [
+   "Meediteraaniyaani Baaro",
+   "Galiila",
+   "Samaariya",
+   "Yihuda",
+   "Deekaapoolisi",
+   "Pereya",
+   "Reyino Baaro"
+  ],
+  "journeys": {
+   "life": "Yesuusi doogo"
+  }
+ },
+ "paul": {
+  "places": {
+   "antioch": {
+    "name": "Anxookiya",
+    "book": "Soqqamaasinete Looso 13 · 15",
+    "today": "techo Anxaakiya, Turkiye",
+    "note": "Aammu soqqanshora soyanno songo — konniwa hanafannono higannono.",
+    "events": [
+     "Huuccatto giddo Ayyaani Barnaabaasanna Saaoolo doorino",
+     "Ammanaano umo “Kiristaanoota” yine woshshamino songo",
+     "Umi, layinkinna sayikki haˀˀo hanafamanno darga"
+    ]
+   },
+   "seleucia": {
+    "name": "Selewuqiya",
+    "book": "Soqqamaasinete Looso 13:4",
+    "today": "techo Turkiye",
+    "note": "Anxookiya doonyo — Qifiroosira markaabbe haˀˀino.",
+    "events": []
+   },
+   "salamis": {
+    "name": "Salaamisi (Qifiroosi)",
+    "book": "Soqqamaasinete Looso 13:5",
+    "today": "techo Qifiroosi",
+    "note": "Qifiroosira umi uurro — gambooshshe minuwara duduwino.",
+    "events": []
+   },
+   "paphos": {
+    "name": "Faafoosi",
+    "book": "Soqqamaasinete Looso 13:6-12",
+    "today": "techo Qifiroosi",
+    "note": "Dancha Duduwo giwannorira wolqa leellini.",
+    "events": [
+     "Kaˀisaancho Elimaasi ballo ikkino",
+     "Aleeu gashshaancho Sergiyoosi Phaawuloosi ammanino",
+     "Konniwiinni “Phaawuloosi” aliidi haˀˀino"
+    ]
+   },
+   "perga": {
+    "name": "Perge",
+    "book": "Soqqamaasinete Looso 13:13",
+    "today": "techo Anxaaliya, Turkiye",
+    "note": "Pamfiliya doonyo — konni Yohaannisi Maarqoosi higino.",
+    "events": []
+   },
+   "pantioch": {
+    "name": "Fisiidiya Anxookiya",
+    "book": "Soqqamaasinete Looso 13:14-50",
+    "today": "techo Yalvaachi, Turkiye",
+    "note": "Dancha Duduwo Aammuwa widira fanamanno.",
+    "events": [
+     "Gambooshshe minera gatote xage seeda rosiisa",
+     "Lowo Aammu hagiidhe qaale adhino",
+     "Gibbunni fushshamino"
+    ]
+   },
+   "iconium": {
+    "name": "Iqooniyoni",
+    "book": "Soqqamaasinete Looso 14:1-7",
+    "today": "techo Qoonya, Turkiye",
+    "note": "Lowohu ammanino, ikkollana qarrisa haˀˀa assino.",
+    "events": []
+   },
+   "lystra": {
+    "name": "Lisxira",
+    "book": "Soqqamaasinete Looso 14:8-20",
+    "today": "techo Turkiye",
+    "note": "Magano yine woshshamino, hakkiinni kinniˀraminohu daino.",
+    "events": [
+     "Ilamiadi lekkasi buurtino manchi hursino",
+     "Mannu magaanoota yine sarxa uyate woˀnaˀˀino",
+     "Kinniˀrame reyino gede agurirono, kaˀˀino"
+    ]
+   },
+   "derbe": {
+    "name": "Darbe",
+    "book": "Soqqamaasinete Looso 14:20-21",
+    "today": "techo Turkiye",
+    "note": "Lowo rosaano assino; songuwa jawaachisha doogonsa higantino.",
+    "events": []
+   },
+   "troas": {
+    "name": "Xiroohaadi",
+    "book": "Soqqamaasinete Looso 16:8-10",
+    "today": "techo Turkiye",
+    "note": "Dancha Duduwo umo Awuroopa widira haˀˀanno soorramate darga.",
+    "events": [
+     "Maqedooniyu manchi ajuuja",
+     "“Maqedooniyara gaˀˀe kaaˀˀe”",
+     "Rahe Awuroopa saˀˀino"
+    ]
+   },
+   "philippi": {
+    "name": "Filiphi",
+    "book": "Soqqamaasinete Looso 16 · Filiphisiyusi Sokka",
+    "today": "techo gordu Giriike",
+    "note": "Awuroopu umi songo — gordo giddono Dancha Duduwo qeelino.",
+    "events": [
+     "Duuma uduunni daagaancho Lidiya ammanino",
+     "Cootimma ayyaani amaddinose borojjo meyate feyino",
+     "Hashsha faarso, baattu qaacco, gordo agaraanchu maati gatino"
+    ]
+   },
+   "thess": {
+    "name": "Teselonqe",
+    "book": "Soqqamaasinete Looso 17 · Umi–Layinki Teselonqe",
+    "today": "techo Teselonqe, Giriike",
+    "note": "Qaali katama xisso, gibbano lophanno.",
+    "events": [
+     "Gambooshshe minera sasu Sambata coyiˀˀino",
+     "“Alame buurtidhino manni”",
+     "Hashsha maaxantino"
+    ]
+   },
+   "berea": {
+    "name": "Beeriya",
+    "book": "Soqqamaasinete Looso 17:10-15",
+    "today": "techo Veriya, Giriike",
+    "note": "Qaale umonsanni buuxidhino “ayirraadu” manni.",
+    "events": [
+     "Qaale lowo hasattonni adhino",
+     "Halaalenna ikkinota barru barrunku Qullaawa Borro buuxidhino",
+     "Lowohu ammanino"
+    ]
+   },
+   "athens": {
+    "name": "Ateena",
+    "book": "Soqqamaasinete Looso 17:16-34",
+    "today": "techo Ateena, Giriike",
+    "note": "Falaasfote katama giddo “egennaminokki magano” duduwino.",
+    "events": [
+     "Kaˀikalaqonni woˀmino katamanni jawaachami",
+     "Areeyopaagoosi aana Kalaqaanchonna kaˀˀa duduwino",
+     "Hoˀlaminorono, muˀˀa ammanino"
+    ]
+   },
+   "corinth": {
+    "name": "Qoronxoosi",
+    "book": "Soqqamaasinete Looso 18 · Umi–Layinki Qorontoosi",
+    "today": "techo Giriike",
+    "note": "Mitte diri baqqo heeˀre, busha katamira songo xintino.",
+    "events": [
+     "Aqiilanna Firisqilla ledo dunkaane loosino",
+     "“Diwaajjatto … ledokki noommo daafira”",
+     "Lowo Qoronxoosi manni ammane cuˀˀamino"
+    ]
+   },
+   "ephesus": {
+    "name": "Efesoona",
+    "book": "Soqqamaasinete Looso 19 · Efesooni Sokka",
+    "today": "techo Selchuuki, Turkiye",
+    "note": "Sayikki haˀˀo wodana — Qaali Asiya woˀmate faffino.",
+    "events": [
+     "Xiraanoosi addaraashshera lame diri barru barrunku rosiisino",
+     "Moˀote maxaaffa giirantino; wolqaataame looso",
+     "Birrote loosaancho Deemexiroosi gagabbo kaˀˀisino"
+    ]
+   },
+   "miletus": {
+    "name": "Miliixoosi",
+    "book": "Soqqamaasinete Looso 20:17-38",
+    "today": "techo Turkiye",
+    "note": "Efesoona cimeeyye ledo hindiiddu badooshshe.",
+    "events": [
+     "“Umisi mundeenni hidino songo agarre”",
+     "Cimeeyye qoleessite dilaˀˀanno yaano afe wiˀlino"
+    ]
+   },
+   "caesarea": {
+    "name": "Qeesaariya",
+    "book": "Soqqamaasinete Looso 23–26",
+    "today": "techo Isiraeele baaru qacce",
+    "note": "Lame diri gashshaanonna moote albaanni Dancha Duduwo farciˀˀino.",
+    "events": [
+     "Gashshaano Feeliksinna Fisxoosi albaanni yoo",
+     "Moote Agriiphaa albaanni farciˀrino",
+     "“Qeesaariwa xaˀmeemmo” — Roome haˀˀa"
+    ]
+   },
+   "jerusalem": {
+    "name": "Yerusaalame",
+    "book": "Soqqamaasinete Looso 21–23",
+    "today": "techo Yerusaalame",
+    "note": "Qullaawu Mine giddo amadamino, borojjichcho ikke haˀˀasi hanafino.",
+    "events": [
+     "Qullaawu Mine giddo mannu amadino",
+     "Songote cimeeyye yaaˀˀo albaanni farciˀrino",
+     "Roomu manchi ikkasinni, agarraˀˀe Qeesaariya soyamino"
+    ]
+   },
+   "myra": {
+    "name": "Miira",
+    "book": "Soqqamaasinete Looso 27:5-6",
+    "today": "techo Demre, Turkiye",
+    "note": "Roome haˀˀanno Iskindiriya markaabira soorramino.",
+    "events": []
+   },
+   "fairhaven": {
+    "name": "Dancha Doonyo (Qareexe)",
+    "book": "Soqqamaasinete Looso 27:8-12",
+    "today": "techo Qareexe",
+    "note": "Phaawuloosi “markaabbe uurri” amaale disiˀˀamino.",
+    "events": []
+   },
+   "crete": {
+    "name": "Qareexe",
+    "book": "Tiito",
+    "today": "techo Qareexe",
+    "note": "Fulinohunni gedensaanni, songuwa qixxeessate Tiito agurino doobbe.",
+    "events": [
+     "Katama katamunku cimeeyye badate Tiito agurino",
+     "Cubbi nookki, ammanamino gashshaano woshshino",
+     "Tiito sokka borreessino"
+    ]
+   },
+   "malta": {
+    "name": "Meliixe",
+    "book": "Soqqamaasinete Looso 27–28",
+    "today": "techo Meliixe",
+    "note": "Bubbenna markaabu diigaminni, Maganu qaale uurrino.",
+    "events": [
+     "“Awuraatu bubbe” markaabu diigino, ikkollana baalu 276 gatino",
+     "Hañu cananninosirono, coyi diˀˀino",
+     "Doobbete xibbaataamma hursino"
+    ]
+   },
+   "syracuse": {
+    "name": "Sirakuuse",
+    "book": "Soqqamaasinete Looso 28:12",
+    "today": "techo Siichiliya, Xaaliyaane",
+    "note": "Siichiliyara sasu barra keeshshino.",
+    "events": []
+   },
+   "puteoli": {
+    "name": "Puuxiyoli",
+    "book": "Soqqamaasinete Looso 28:13-14",
+    "today": "techo Pootsuoli, Xaaliyaane",
+    "note": "Xaaliyaane dirte, roduuwi adhino.",
+    "events": []
+   },
+   "rome": {
+    "name": "Roome",
+    "book": "Soqqamaasinete Looso 28 · Gordo Sokkuwa · Layinki Ximootewoosi",
+    "today": "techo Roome, Xaaliyaane",
+    "note": "Dancha Duduwo goofimarchira Aamilu wodana iillino — goofa diˀˀino, hanafooti.",
+    "events": [
+     "Lame diri minisira agarante, waajjikkinni Maganu gashshooti duduwino",
+     "Konniwiinni Gordo Sokkuwa borreessino (Efesooni·Filiphisiyusi·Qolasiyaasi·Filimoona)",
+     "Gedensaanni qoleesse gordo eˀˀe, Layinki Ximootewoosi borreessino, shooshamino — “dancha olo oloommo, doorsho goofoommo”"
+    ]
+   }
+  },
+  "labels": [
+   "Meediteraaniyaani Baaro",
+   "Eegiyaan Baaro",
+   "Shiima Asiya",
+   "Maqedooniya",
+   "Xaaliyaane"
+  ],
+  "journeys": {
+   "j1": "Umi haˀˀo",
+   "j2": "Layinki haˀˀo",
+   "j3": "Sayikki haˀˀo",
+   "rome": "Shoolki haˀˀo · Roome",
+   "j5": "Onti haˀˀo · fulinohunni gedensaanni"
+  }
+ }
+}

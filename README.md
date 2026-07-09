@@ -15,7 +15,7 @@ If a paper tract summarizes the gospel in four pages, this site holds **the whol
 
 - Scripture is quoted **verbatim from each language's official translation** — never paraphrased; every reference is tappable and opens that language's Bible.
 - Two audiences: **people who know the Bible but have never read it through, and people hearing it for the first time.**
-- The site auto-detects your browser/OS language and lets you switch via the 🌐 search — live in **160+ languages** (the menu shows the exact, current list).
+- The site auto-detects your browser/OS language and lets you switch via the 🌐 search — live in **210+ languages** (the menu shows the exact, current list).
 
 ## What's inside
 - **13 scenes** — Creation → Fall → Patriarchs → Exodus → Conquest/Judges → United Kingdom → Divided Kingdom → Exile → Return → Silent Years → Jesus → The Church → Restoration (Second Coming).

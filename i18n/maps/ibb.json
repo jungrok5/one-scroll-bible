@@ -1,0 +1,636 @@
+{
+ "menuName": "Ibibio",
+ "htmlLang": "ibb",
+ "dir": "ltr",
+ "locale": "ibb",
+ "brand": "Mbụk Abasi ke Akpa Itie",
+ "docTitle": "Baibol ke Map · Mbụk Abasi ke Akpa Itie",
+ "metaDesc": "Tịene edu-ini Akani Edioomo, uwem Yisọs, ye mme usʌñ Pọl ke ata map — Baibol akatịbe ke ata mme ebiet.",
+ "s": {
+  "kicker": "Mbụk Abasi ke Akpa Itie · Map",
+  "title": "Baibol ke Map",
+  "verse": "“Sia ñnyịn ikikeeneke ñkaña mbʌk a-awo adatta mbufiọk atịppe, ke ini ñnyịn ikinamma ndufo ediọọñọ adudu ye adidi Abọọñ ñnyịn Yisọs Krais, ado ñnyịn ke idem ñnyịn ikidat anyen ñnyịn ikịt ubọọñ amọ.” (2 Pita 1:16)",
+  "purpose": "Baibol idighe edidiọñ mbụk. Ado nwed aban̄a mbon a-ekesañade ke ata mme ebiet, ata mme ini, ye ata mme enyịñ. Tịene mme usụñ emi ke map, ke edu ini — tịñ ke itie, m'obọñ ▶ man asaña ebe ke etok ke etok.",
+  "ot_kick": "① Akani Edioomo — ke ofụri ini",
+  "ot_h": "Toto ke edibot tutu esịm edifiak ke Jerusalem",
+  "ot_lead": "Idoho akpa usʌñ keed ado mbụk edinyaaña a-atọde ke edibot: edibot ye eduọñọ → inyañ ye Babel → edikot (Ebraham) → isọñ un̄wọñọ → Edibịn-asio → idak-idịk → edikan → obio-ukara → edibụ → ifịn → edifiak.",
+  "je_kick": "② Obufa Edioomo — uwem Yisọs",
+  "je_h": "Toto ke Betlehem tutu esịm Jerusalem",
+  "je_lead": "Tịene uwem Yisọs nte mme Eti Mbụk etịñde, ke edu — toto ke emana amọ ke Betlehem, ebe ke edinịm-mmọọñ ye utom Galili, ebe ke Sameria, tutu esịm krọs, eseti ye edidọk enyọñ ke Jerusalem.",
+  "pa_kick": "③ Obufa Edioomo — mme usʌñ Pọl",
+  "pa_h": "Toto ke Antiọk tutu esịm mben ererimbod — Rom",
+  "pa_lead": "Toto ke Pentikọs ke Jerusalem, nte eti mbụk akasuanade ọwọrọ ke Yudia — ebe ke Ekpri Asia ye Yurop tutu esịm esịd akamba obio-ukara. Mek keed ke mme usʌñ ition (akpa·iba·ita + usʌñ ubom aka Rom + ke iso edimasia) anyʌñ tịene akpan mme ñkpọ ke Mme Utom ye mme nwed a-ewetde ke usụñ.",
+  "foot": "Mme itie ato · Mme ebiet etịene ikọ Baibol ye ata edinam-map Baibol (ye mme enyịñ mfịn ke ebiet a-an̄wamde). Mme mben inyañ, mme akpa ye mme inyañ eto ke edinam-map an̄wan̄wa (Natural Earth), a-ekenamde asana.",
+  "contact": "Mbụme · etob — <a id=\"contact\" class=\"mail\">Wet ñnyịn nwed</a>",
+  "play": "Tọñọ",
+  "pause": "Bọk",
+  "today": "Mfịn:",
+  "verseCite": "2 Pita 1:16"
+ },
+ "ot": {
+  "places": {
+   "eden": {
+    "name": "Iden (Edibot · Eduọñọ)",
+    "book": "Edibọtñkpọ 1–3",
+    "today": "itie Akpa Taigris–Yufretis mfịn",
+    "note": "Ke ererimbod a-Abasi akabotde “eti etieti,” ndise adʌk anyʌñ abụ ebuana a-adude ke ufọd Abasi ye owo.",
+    "events": [
+     "Edibot ke usen itiokiet — “eti etieti”",
+     "Ebot owo ke ndise Abasi",
+     "Eduọñọ, ye edibịn asio ke Iden",
+     "Akpa un̄wọñọ eti mbụk — “ufọd awonwaan ayaakọñ idịb añwañ”"
+    ]
+   },
+   "noah": {
+    "name": "Ararat (Akamba Inyañ)",
+    "book": "Edibọtñkpọ 6–9",
+    "today": "Obot Ararat, edem usiahautịn Turki mfịn",
+    "note": "Abasi abiere ikpe anọ ererimbod a-ọyọhọde ye ndise, ado akpeme uwem ke ufọd ufọk keed.",
+    "events": [
+     "Ererimbod a-ọyọhọde ye mbiam",
+     "Inyañ, ye ubom Noa",
+     "Edioomo eñwuñeñe — “inyañ idiifiakke idi ndiwụri ererimbod aba”"
+    ]
+   },
+   "babel": {
+    "name": "Ọñ Babel",
+    "book": "Edibọtñkpọ 11",
+    "today": "Irak mfịn (isọñ Shinar)",
+    "note": "Ke ntak nsọñiwuod a-akeyemde ndisịm enyọñ, Abasi asuañ usem mmọ ye mbon ke ofụri isọñ.",
+    "events": [
+     "“Yak ibọñ obio ye ọñ … yak inam enyịñ ñnyịn akpon”",
+     "Abasi asuañ usem mmọ",
+     "Mbon esuañ ke ofụri isọñ (Shinar — ke iso Babilọn)"
+    ]
+   },
+   "ur": {
+    "name": "Ur",
+    "book": "Edibọtñkpọ 12",
+    "today": "usuk Irak mfịn",
+    "note": "Mbụk edinyaaña ke Baibol atọñọ ke edikot owo keed.",
+    "events": [
+     "Abasi akot Ebram asio ke Ur eke mbon Kaldia",
+     "“Ami ñyaanam afo ado akamba idịd … afịd mbon eyaebọ udiọñ ke afo”",
+     "Ke mbuọtidem anye ọwọrọ ke isọñ amọ"
+    ]
+   },
+   "haran": {
+    "name": "Haran",
+    "book": "Edibọtñkpọ 12",
+    "today": "usuk Turki mfịn",
+    "note": "Ke usụñ, ọbọrọde edikot asọk isọñ un̄wọñọ.",
+    "events": [
+     "Ufọk Tera adʌñ ke Haran",
+     "Tera akpa",
+     "Ke isua 75 Ebram ọwọrọ aka Kenan"
+    ]
+   },
+   "shechem": {
+    "name": "Shekem · Kenan",
+    "book": "Edibọtñkpọ 12–50",
+    "today": "Nablus mfịn",
+    "note": "Ke isọñ un̄wọñọ ebọñ ufọk anyʌñ edioomo abe aka ke emana ke emana.",
+    "events": [
+     "Edidụk Kenan, akpa itie-uwa — “ami nnọ ufọd fo isọñ emi”",
+     "Edioomo (Edibọtñkpọ 15) · Aisak · Jekob",
+     "Nditọ Jekob duop-iba — ntọñọ esọp duop-iba"
+    ]
+   },
+   "egypt": {
+    "name": "Iyib (Goshen)",
+    "book": "Edibọtñkpọ 37–50 · Edibịnasio 1",
+    "today": "Akpa Nail Delta, Iyib mfịn",
+    "note": "Ufọk keed akabade akamba idịd — ke iso, idịd ifịn.",
+    "events": [
+     "Ekenyam Josef, ado akadọk akara Iyib",
+     "Ofụri ufọk Jekob asụhọde adi ndibọhọ akan̄",
+     "Isrel a-akakọride akabade ifịn"
+    ]
+   },
+   "sinai": {
+    "name": "Obot Sainai",
+    "book": "Edibịnasio · Levitikọs",
+    "today": "Isọñ Sainai mfịn",
+    "note": "Akpan edinyaaña Akani Edioomo — ifịn ekabade mbon Abasi ke idem amọ.",
+    "events": [
+     "Mme ufen duop ye eyenerọñ Pasọfa",
+     "Inyañ Adatda abahade anyʌñ ammọ ebe",
+     "Ibet Duop, Ibet, ufọk-uñwọñọ ye mme uwa"
+    ]
+   },
+   "kadesh": {
+    "name": "Kadesh (idak-idịk)",
+    "book": "Mme Ibat · Deuteronomi",
+    "today": "idak-idịk Sainai–Negev mfịn",
+    "note": "Unana mbuọtidem anam emana keed atre isọñ — ado Abasi asụk adu ye ammọ.",
+    "events": [
+     "Mbon andise-isọñ duop-iba — ado mbon ẹsịn ndinịm ke akpanikọ",
+     "Isua 38 ke idak-idịk — mana, ekori-obubịt ye ikañ",
+     "Ke isọñ Moab, akpatre ukwọrọ-ikọ Moses (Deuteronomi)"
+    ]
+   },
+   "jericho": {
+    "name": "Jeriko",
+    "book": "Joshua",
+    "today": "Jeriko mfịn",
+    "note": "Ke akpatre ammọ edụk anyʌñ ebọ isọñ un̄wọñọ.",
+    "events": [
+     "Akpa Jọdan abahade anyʌñ mbon ebe",
+     "Ibibene Jeriko aduọ",
+     "Edikan Kenan ye edibaha isọñ"
+    ]
+   },
+   "shiloh": {
+    "name": "Shailo (Mme Ñkpe-ikpe)",
+    "book": "Mme Ñkpe-ikpe · Ruth",
+    "today": "Khirbet Seilun mfịn",
+    "note": "Ke unana abọñ, owo ndomokeed anam se anye ayemde — eyom ata abọñ.",
+    "events": [
+     "Ewụk ufọk-uñwọñọ ke Shailo",
+     "Edikana ndise–ufen–edinyaaña (Debora, Gidiọn, Samson)",
+     "Ruth — edinam akpanikọ ke mme usen amịm, ke ikpọñ Defid"
+    ]
+   },
+   "jerusalem": {
+    "name": "Jerusalem · Adiana Obio-ukara",
+    "book": "1–2 Samuel · 1 Mme Abọñ",
+    "today": "Jerusalem mfịn",
+    "note": "Eti ini Isrel — ye un̄wọñọ abọñ a-adude ke nsi-nsi.",
+    "events": [
+     "Sọl akpa abọñ, ke iso Defid ye Goliat",
+     "Edioomo Defid — “ebekpo fo ayaada ke nsi-nsi” (2 Samuel 7)",
+     "Solomon abọñ ufọk Abasi ke Jerusalem"
+    ]
+   },
+   "samaria": {
+    "name": "Sameria · Obio-ukara a-Akabụde",
+    "book": "Mme Abọñ · Mme Mbedini",
+    "today": "Sebastia mfịn",
+    "note": "Obio-ukara abụ anyʌñ asụhọde nte mme mbedini efiori.",
+    "events": [
+     "Ke etịene Solomon, edibụ aka Yuda ye Isrel",
+     "Ukpọñọ eto-abasi a-mîtreghe",
+     "Ilaija, Aisaiya, Jeremaiya efiori “fiakka” — anyʌñ etịñ iso aban̄a Mesaiya"
+    ]
+   },
+   "nineveh": {
+    "name": "Ninewe (Assiria)",
+    "book": "2 Mme Abọñ 17 · Jona",
+    "today": "Mosul, Irak mfịn",
+    "note": "Ndifre afịd ntụñọ, edere aduọ akpa.",
+    "events": [
+     "Ninewe, obio-akamba Assiria",
+     "Obio-ukara edere aduọ ke ubọk Assiria (722 BC)",
+     "Edọñ Jona aka Ninewe"
+    ]
+   },
+   "babylon": {
+    "name": "Babilọn",
+    "book": "2 Mme Abọñ 25 · Daniel · Izikiel",
+    "today": "Hillah, Irak mfịn",
+    "note": "Okoneyo a-amịm akan — ado un̄wọñọ edifiak asụk adu.",
+    "events": [
+     "Jerusalem aduọ, ewụri ufọk Abasi (586 BC)",
+     "Emen Yuda aka Babilọn",
+     "Daniel ye Izikiel — mbuọtidem ye n̄kụkịm ke ifịn"
+    ]
+   },
+   "susa": {
+    "name": "Susa (Persia)",
+    "book": "Esta · Nehemaiya",
+    "today": "Shush, Iran mfịn",
+    "note": "Idapke ke esịd akamba obio-ukara a-mîfiọkke Abasi, Abasi akpeme mbon amọ.",
+    "events": [
+     "Persia akan Babilọn",
+     "Esta anyaaña mbon Jew asio ke edisọbọ",
+     "Nehemaiya ọbọñ akam ke iso abọñ anyʌñ edọñ anye"
+    ]
+   },
+   "return": {
+    "name": "Edifiak ke Jerusalem",
+    "book": "Ezra · Nehemaiya · Malakai",
+    "today": "Jerusalem mfịn",
+    "note": "Ammọ efiakka anyʌñ ebọñ efịt — ado abọñ ikadighe. Mbon edọkkọ Mesaiya.",
+    "events": [
+     "Utoño ita ke edifiak ke ibet Sairọs (Zerubabel 538 · Ezra 458 · Nehemaiya 444)",
+     "Ebọñ efịt ufọk Abasi anyʌñ enam efịt ibibene Jerusalem",
+     "Malakai — Akani Edioomo atre: “Ami ñyaadọñ isʌñutom mmi”"
+    ]
+   }
+  },
+  "labels": [
+   "Inyañ Mediterenian",
+   "Mesopotamia",
+   "Idak-idịk Arabia",
+   "Iyib"
+  ],
+  "journeys": {
+   "flow": "Mbụk edinyaaña"
+  }
+ },
+ "jesus": {
+  "places": {
+   "bethlehem": {
+    "name": "Betlehem",
+    "book": "Matiu 1–2 · Luk 2",
+    "today": "Betlehem mfịn",
+    "note": "Mesaiya a-eken̄wọñọde adi ke obio Defid — Ikọ a-akabade obukpọ.",
+    "events": [
+     "Emana ke Betlehem, obio Defid",
+     "Mme añgel etan̄ eti mbụk anọ mbon ukpem-erọñ",
+     "Mme andifiọk edi ndituak ibuot"
+    ]
+   },
+   "nazareth": {
+    "name": "Nazaret",
+    "book": "Luk 2 · 4",
+    "today": "Nazaret mfịn",
+    "note": "Abasi akọri nte owo ke obio ndan̄a-ndan̄a.",
+    "events": [
+     "Ekekọri ke ufọk anamutom-eto",
+     "Ke isua duop-iba, abụp ye abọrọ ke ufọk Abasi",
+     "Ke iso, ẹsịn anye ke synagog obio amọ"
+    ]
+   },
+   "jordan": {
+    "name": "Akpa Jọdan",
+    "book": "Matiu 3–4",
+    "today": "usuk Jọdan mfịn",
+    "note": "Utom amọ an̄wan̄wa atọñọ — enyọñ awụd anye nte Ayịn.",
+    "events": [
+     "Jọn anịm anye mmọọñ",
+     "Adisana Sịbidịd asụhọde nte ibiom — “Emi edi edima Ayịn mmi”",
+     "Akan mme udọmọ Setan ita ke idak-idịk"
+    ]
+   },
+   "cana": {
+    "name": "Kena",
+    "book": "Jọn 2",
+    "today": "Kafr Kanna mfịn",
+    "note": "Ke akpa idiọñọ amọ anye ayarade ubọñ amọ.",
+    "events": [
+     "Isen ke ini ndọ",
+     "Mmọọñ akabade wain — akpa idiọñọ amọ",
+     "Mbet amọ enịm anye ke akpanikọ"
+    ]
+   },
+   "sychar": {
+    "name": "Sikar (Sameria)",
+    "book": "Jọn 2–4",
+    "today": "ekpere Nablus mfịn",
+    "note": "Usụñ ntọñọ utom — ebe ke Jerusalem tutu esịm Sameria a-ẹsehede.",
+    "events": [
+     "Anam ufọk Abasi asana ke Jerusalem",
+     "Ke okoneyo, Nikodimọs — “Ana ẹmana fi aba”",
+     "Mmọọñ uwem anọ an̄wan Sameria"
+    ]
+   },
+   "capernaum": {
+    "name": "Kapenaum",
+    "book": "Matiu 4–13 · Mark 1–4",
+    "today": "mben inyañ Galili mfịn",
+    "note": "Itie utom Galili — edikot, ukpep ye edisọñ-ibuot afịd esobo mi.",
+    "events": [
+     "Akot mbon u-uyịp iyak anyʌñ adʌñ mi",
+     "Ukwọrọ-ikọ ke Obot — “Ọfọn odu ye mbon ubuene ke esịt”",
+     "Mme n̄ke obio-ukara — ye edisọñ-ibuot a-akọride"
+    ]
+   },
+   "galilee": {
+    "name": "Inyañ Galili",
+    "book": "Mark 4 · 6 · Jọn 6",
+    "today": "Inyañ Kineret mfịn",
+    "note": "Ke odudu ke iso edibot anye awụd se anye edide.",
+    "events": [
+     "“Emem, tie sụñ” — anam akamba ọfịñ atre",
+     "Ọbọk mbon 5,000 ke bred ition ye iyak iba",
+     "Asañ ke enyọñ mmọọñ"
+    ]
+   },
+   "caesarea_p": {
+    "name": "Sesaria Filipi",
+    "book": "Matiu 16–17",
+    "today": "Banias mfịn",
+    "note": "Mbet ẹfiọk ite anye edi Krais, anyʌñ usụñ krọs aberede.",
+    "events": [
+     "Editịñ Pita — “Afo edi Krais, Ayịn Abasi odu-uwem”",
+     "Anye abem iso atịñ aban̄a ñkpa ye eseti amọ",
+     "Ekpụhọde anye ke ubọñ ke enyọñ obot"
+    ]
+   },
+   "jericho": {
+    "name": "Jeriko",
+    "book": "Luk 18–19",
+    "today": "Jeriko mfịn",
+    "note": "Ke usụñ a-adọkde aka Jerusalem, anye ayom se akataba.",
+    "events": [
+     "Anam Bartimiọs a-akan̄ande akụt usụñ",
+     "Akot Sakiọs andibọ-okuk",
+     "“Ayịn Owo akadi ndiyom ye ndinyaaña se akataba”"
+    ]
+   },
+   "bethany": {
+    "name": "Betani",
+    "book": "Jọn 11–12",
+    "today": "al-Eizariya mfịn",
+    "note": "Ke ekpere akpatre urua amọ, anye awụd odudu ke iso ñkpa.",
+    "events": [
+     "Anam Lazarọs aseti asio ke udi — “Ami edi eseti ye uwem”",
+     "Meri ayịñ anye aran anọ ubụk",
+     "Idiọñọ emi anam esịd ndiwot anye asọñ akan"
+    ]
+   },
+   "jerusalem": {
+    "name": "Jerusalem",
+    "book": "Matiu 21–28 · Luk 24 · Mme Utom 1",
+    "today": "Jerusalem mfịn",
+    "note": "Akpan ñkpọ a-ofụri Baibol awụdde — krọs, eseti, ye edidọk enyọñ.",
+    "events": [
+     "Edidụk uko; anye afiak abiere mme okpokoro ufọk Abasi",
+     "Ke Akpatre Udia anye ayet mbet ukot",
+     "Anye akpa ke krọs",
+     "Aseti ke usen ita, ke iso adọk enyọñ"
+    ]
+   }
+  },
+  "labels": [
+   "Inyañ Mediterenian",
+   "Galili",
+   "Sameria",
+   "Yudia",
+   "Dekapọlis",
+   "Perea",
+   "Inyañ Ñkpa"
+  ],
+  "journeys": {
+   "life": "Usụñ Yisọs"
+  }
+ },
+ "paul": {
+  "places": {
+   "antioch": {
+    "name": "Antiọk",
+    "book": "Mme Utom 13 · 15",
+    "today": "Antakya, Turki mfịn",
+    "note": "Ufọk Abasi a-adọñde a-utom mbon esen atọñọde anyʌñ afiakde.",
+    "events": [
+     "Ke akam Adisana Sịbidịd asio Barnabas ye Sọl abạ",
+     "Ufọk Abasi a-ekekotde mbon-nịm akpa ini ete “mbon Krais”",
+     "Itie ntọñọ usʌñ akpa, iba ye ita"
+    ]
+   },
+   "seleucia": {
+    "name": "Seleusia",
+    "book": "Mme Utom 13:4",
+    "today": "Turki mfịn",
+    "note": "Ọkọ Antiọk — ammọ edọk ubom eka Saiprọs.",
+    "events": []
+   },
+   "salamis": {
+    "name": "Salamis (Saiprọs)",
+    "book": "Mme Utom 13:5",
+    "today": "Saiprọs mfịn",
+    "note": "Akpa itie ke Saiprọs — ndikwọrọ ikọ ke mme synagog.",
+    "events": []
+   },
+   "paphos": {
+    "name": "Pafọs",
+    "book": "Mme Utom 13:6-12",
+    "today": "Saiprọs mfịn",
+    "note": "Ewụd odudu asịn mbon a-ebiọñọde eti mbụk.",
+    "events": [
+     "Ẹkịm Elimas anam-ibọk akan̄an",
+     "Sasiọs Paulọs andikara anịm ke akpanikọ",
+     "Toto mi “Pọl” ada ke iso"
+    ]
+   },
+   "perga": {
+    "name": "Perga",
+    "book": "Mme Utom 13:13",
+    "today": "Antalya, Turki mfịn",
+    "note": "Ọkọ ke Pamfilia — mi Jọn Mark afiak edem.",
+    "events": []
+   },
+   "pantioch": {
+    "name": "Antiọk Pisidia",
+    "book": "Mme Utom 13:14-50",
+    "today": "Yalvaç, Turki mfịn",
+    "note": "Eti mbụk aberede asọk mbon esen.",
+    "events": [
+     "Anyan ukwọrọ-ikọ mbụk edinyaaña ke synagog",
+     "Ediwak mbon esen edat esịd anyʌñ ebọ ikọ",
+     "Edibiọñọ abịn mmọ asio"
+    ]
+   },
+   "iconium": {
+    "name": "Ikoniọm",
+    "book": "Mme Utom 14:1-7",
+    "today": "Konya, Turki mfịn",
+    "note": "Ediwak enịm ke akpanikọ, ado ukọbọ anam mmọ eka iso.",
+    "events": []
+   },
+   "lystra": {
+    "name": "Listra",
+    "book": "Mme Utom 14:8-20",
+    "today": "Turki mfịn",
+    "note": "Ẹbọk mmọ nte abasi, ke iso ẹtọñ mmọ ke itiat.",
+    "events": [
+     "Anam owo a-akemanade mbụ akụre",
+     "Otu-owo eyom ndiwa mmọ uwa nte abasi",
+     "Ẹtọñ anye ke itiat ẹkpọñ nte akpa-owo, ado adaha ada"
+    ]
+   },
+   "derbe": {
+    "name": "Derbe",
+    "book": "Mme Utom 14:20-21",
+    "today": "Turki mfịn",
+    "note": "Ẹnam ediwak mbet; ammọ efiak ke usụñ ammọ man ẹsọñọ mme ufọk Abasi.",
+    "events": []
+   },
+   "troas": {
+    "name": "Troas",
+    "book": "Mme Utom 16:8-10",
+    "today": "Turki mfịn",
+    "note": "Itie ukpụhọde a-eti mbụk akpa ini akade Yurop.",
+    "events": [
+     "N̄kụkịm owo Masedonia",
+     "“Baña di an̄wam ñnyịn”",
+     "Ammọ ebe idahaenyọñ eka Yurop"
+    ]
+   },
+   "philippi": {
+    "name": "Filipi",
+    "book": "Mme Utom 16 · Filipi",
+    "today": "edere Gris mfịn",
+    "note": "Akpa ufọk Abasi ke Yurop — eti mbụk akan idapke ke ufọk-n̄kpọkọbọ.",
+    "events": [
+     "Lidia, andinyam ọfọñ eyịb, anịm ke akpanikọ",
+     "Ẹnyaña eyen-an̄wan ifịn a-akadiọñde-iso",
+     "Mme ikwọ ke ufọt-okoneyo, unyeke isọñ, edinyaaña ufọk andikpeme-ufọk-n̄kpọkọbọ"
+    ]
+   },
+   "thess": {
+    "name": "Tesalonika",
+    "book": "Mme Utom 17 · 1–2 Tesalonika",
+    "today": "Tesaloniki, Gris mfịn",
+    "note": "Ikọ anyeke obio anyʌñ edibiọñọ akọri.",
+    "events": [
+     "Anemme ikọ ke synagog Sabat ita",
+     "“Mbon emi ẹkpụhọde ererimbod”",
+     "Ammọ ẹbe ke okoneyo ẹka"
+    ]
+   },
+   "berea": {
+    "name": "Berea",
+    "book": "Mme Utom 17:10-15",
+    "today": "Veria, Gris mfịn",
+    "note": "Mbon “eti-ido” a-ekedomode ikọ ke idem mmọ.",
+    "events": [
+     "Ammọ ebọ ikọ ye ofụri esịd",
+     "Ke usen ke usen ammọ edomo mme ikọ Abasi ndise m'edi akpanikọ",
+     "Ediwak edi ndinịm ke akpanikọ"
+    ]
+   },
+   "athens": {
+    "name": "Atens",
+    "book": "Mme Utom 17:16-34",
+    "today": "Atens, Gris mfịn",
+    "note": "Ke obio mbon-ifiọk anye atan̄ aban̄a “abasi a-mîfiọkke.”",
+    "events": [
+     "Obio a-ọyọhọde ye eto-abasi anam esịd amọ ọfịñ",
+     "Ke Areopagọs anye akwọrọ aban̄a Andibot ye eseti",
+     "Ẹsak anye, ado ndusụk enịm ke akpanikọ"
+    ]
+   },
+   "corinth": {
+    "name": "Korint",
+    "book": "Mme Utom 18 · 1–2 Korint",
+    "today": "Gris mfịn",
+    "note": "Anye adʌñ isua keed ye ufọt, ọbọñ ufọk Abasi ke obio idiọk-edu.",
+    "events": [
+     "Anam mme ufọk-ọfọñ ye Akwila ye Prisila",
+     "“Kûbọ ndịk … sia ami ndu ye afo”",
+     "Ediwak mbon Korint enịm ke akpanikọ anyʌñ ẹnịm mmọ mmọọñ"
+    ]
+   },
+   "ephesus": {
+    "name": "Efesọs",
+    "book": "Mme Utom 19 · Efesọs",
+    "today": "Selçuk, Turki mfịn",
+    "note": "Esịd usʌñ a-ọyọhọ ita — ikọ asuana ke ofụri Asia.",
+    "events": [
+     "Ukpep ke usen ke usen isua iba ke ufọk Tiranọs",
+     "Ẹfọp mme nwed ibọk; mme akamba utom",
+     "Demitriọs andiọñ-okpoho atọñọ ọsọñ"
+    ]
+   },
+   "miletus": {
+    "name": "Miletọs",
+    "book": "Mme Utom 20:17-38",
+    "today": "Turki mfịn",
+    "note": "Edikọñ a-ọyọhọde ye mmọọñayịd ye mbiọwọ Efesọs.",
+    "events": [
+     "“Se ẹkpeme ufọk Abasi a-Anye akadepde ke iyịp Amọ”",
+     "Mbiọwọ etua eyet, ẹfiọkde ite iyiikụtke anye aba"
+    ]
+   },
+   "caesarea": {
+    "name": "Sesaria",
+    "book": "Mme Utom 23–26",
+    "today": "mben inyañ Isrel mfịn",
+    "note": "Ke isua iba anye akan̄a aban̄a eti mbụk ke iso mme gọvna ye abọñ.",
+    "events": [
+     "Mme ikpe ke iso mme gọvna Filiks ye Festọs",
+     "Edikan̄a amọ ke iso Abọñ Agripa",
+     "“Ami mbọ ikpe mmi asọk Siza” — aka Rom"
+    ]
+   },
+   "jerusalem": {
+    "name": "Jerusalem",
+    "book": "Mme Utom 21–23",
+    "today": "Jerusalem mfịn",
+    "note": "Ẹmụm anye ke ufọk Abasi, usụñ amọ nte owo-n̄kpọkọbọ atọñọ.",
+    "events": [
+     "Otu-owo emụm anye ke ufọk Abasi",
+     "Akan̄a idem ke iso otu-esọp",
+     "Nte owo-obio Rom, ẹdọñ anye ke ukpeme aka Sesaria"
+    ]
+   },
+   "myra": {
+    "name": "Maira",
+    "book": "Mme Utom 27:5-6",
+    "today": "Demre, Turki mfịn",
+    "note": "Ammọ ẹkabade ubom Alexandria a-akade Rom.",
+    "events": []
+   },
+   "fairhaven": {
+    "name": "Eti Ọkọ (Krit)",
+    "book": "Mme Utom 27:8-12",
+    "today": "Krit mfịn",
+    "note": "Ntụñọ Pọl a-ete ẹtre edọk ubom ẹkopke.",
+    "events": []
+   },
+   "crete": {
+    "name": "Krit",
+    "book": "Titọs",
+    "today": "Krit mfịn",
+    "note": "Ke ẹmasiade anye, isuo-inyañ a-anye akakpọñde Titọs man anam mme ufọk Abasi ẹnen.",
+    "events": [
+     "Akpọñ Titọs man anịm mbiọwọ ke obio ke obio",
+     "Oyom mme andikara a-inanaha ntai, a-enyenede akpanikọ",
+     "Awet nwed asọk Titọs"
+    ]
+   },
+   "malta": {
+    "name": "Malta",
+    "book": "Mme Utom 27–28",
+    "today": "Malta mfịn",
+    "note": "Ebe ke ọfịñ ye edibiat ubom, un̄wọñọ Abasi asụk ada.",
+    "events": [
+     "“Akamba ọfịñ” abiat ubom, ado afịd mbon 276 ẹbọhọ",
+     "Urụkikọt adọmọ anye, ado anye ikụtke ubiak",
+     "Anam mbon-udọñọ isuo-inyañ ẹsọ"
+    ]
+   },
+   "syracuse": {
+    "name": "Sirakius",
+    "book": "Mme Utom 28:12",
+    "today": "Sisili, Italy mfịn",
+    "note": "Ammọ ẹdʌñ usen ita ke Sisili.",
+    "events": []
+   },
+   "puteoli": {
+    "name": "Puteoli",
+    "book": "Mme Utom 28:13-14",
+    "today": "Pozzuoli, Italy mfịn",
+    "note": "Ammọ ẹsịm Italy anyʌñ mbon-nịm ẹsobo mmọ.",
+    "events": []
+   },
+   "rome": {
+    "name": "Rom",
+    "book": "Mme Utom 28 · Mme Nwed Ufọk-n̄kpọkọbọ · 2 Timoti",
+    "today": "Rom, Italy mfịn",
+    "note": "Eti mbụk asịm esịd akamba obio-ukara ke akpatre — idighe utịt ado ntọñọ.",
+    "events": [
+     "Isua iba ke ufọk-n̄kpọkọbọ, akwọrọ obio-ukara ye uko",
+     "Toto mi anye awet Mme Nwed Ufọk-n̄kpọkọbọ (Efesọs·Filipi·Kọlọsi·Filimọn)",
+     "Ke iso ẹdọñ anye ke ufọk-n̄kpọkọbọ aba, anye awet 2 Timoti anyʌñ ẹwot anye ke ntak mbuọtidem — “Mmen̄wana eti en̄wana, mma nsịm utịn̄wọñọ”"
+    ]
+   }
+  },
+  "labels": [
+   "Inyañ Mediterenian",
+   "Inyañ Egean",
+   "Ekpri Asia",
+   "Masedonia",
+   "Italy"
+  ],
+  "journeys": {
+   "j1": "Akpa usʌñ",
+   "j2": "Usʌñ a-iba",
+   "j3": "Usʌñ a-ita",
+   "rome": "Usʌñ a-inan̄ · aka Rom",
+   "j5": "Usʌñ a-ition · ke iso edimasia"
+  }
+ }
+}

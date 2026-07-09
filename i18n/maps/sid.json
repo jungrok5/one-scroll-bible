@@ -35,10 +35,10 @@
     "today": "techo Xiigirisinna Efraaxe lagoyye qooxeessa",
     "note": "Lowo geeshsha dancha ikke kalaqamino alamera, cubbo eˀˀe Maganunna mannu ooso mereero noo xaˀmma diigino.",
     "events": [
-     "Lamala barri kalaqo — “lowo geeshsha dancha ikkitino”",
+     "Lamala barri kalaqo — “lowo geeshsha dancha ikkinota”",
      "Mannu Maganu misile asse kalaqami",
      "Burco, Edenetenni fushshama",
-     "Umi Dancha Duduwi qaale — “meyate sirchcho sirchchote umo cancananno”"
+     "Umi Dancha Duduwi qaale — “sirchikkinna sirchise mereero … isi umokki cancananno”"
     ]
    },
    "noah": {
@@ -49,7 +49,7 @@
     "events": [
      "Busha ikkasinni woˀmino alame",
      "Duˀonna Nohi markaabu",
-     "Wojju gondooro — “qoleesse duˀonni baattote geeshsha didiigamanno”"
+     "Wojju gondooro — “baattono layinkimeeshsho baote wayinni dihuneemmo”"
     ]
    },
    "babel": {
@@ -58,7 +58,7 @@
     "today": "techo Iraaqe (Shineeaari baatto)",
     "note": "Iima geeshsha iˀˀanno naaxxinynyara, Maganu afoonsanna dagana baattote aana faffisino.",
     "events": [
-     "“Katamanna adhaba assinammo … suˀmanke ayirradonke assinammo”",
+     "“mitto katama minnona; hakkiicho birxesi gordo iillanno mine minnona … su'minke woshshamanno gede assinona”",
      "Maganu afoonsa soorrino",
      "Dagu baattote aana faffino (Shineeaari — gedensaanni Baabiloone)"
     ]
@@ -70,7 +70,7 @@
     "note": "Qullaawu Maxaafi gatote xage mittu manchi woshsho aana hanafanno.",
     "events": [
      "Maganu Abirihaama Kaldootu Uurinni woshshino",
-     "“Wolqaataame gosa asseemmohe … daga baalanti ate widoonni maassantanno”",
+     "“Wolqaataame gosa asseemmohe … daga baalanti ate widoonni higge maassantanno”",
      "Ammananni gobbasi agure fulino"
     ]
    },
@@ -91,7 +91,7 @@
     "today": "techo Naabulusi",
     "note": "Qaale afiˀrino baattora maati xintantino, gondoorono ilamatenni ilamate saˀˀanno.",
     "events": [
-     "Kanaani eˀˀe, umi kakkalote darga — “tenne baatto sirchokkira uyeemmo”",
+     "Kanaani eˀˀe, umi kakkalote darga — “Tenne baatto sirchikkira eemmohe”",
      "Gondooro (Kalaqama 15) · Yisihaaqi · Yaiqoobi",
      "Yaiqoobi tonne lamela beetto — tonne lamela dagate xinta"
     ]
@@ -158,7 +158,7 @@
     "note": "Israeele aleenya yanna — hegere moote qaalenono ledo.",
     "events": [
      "Umi moote Saaooli, hakkiinni Daawitinna Gooliyaadi",
-     "Daawiti gondooro — “gashshootikki hegerera uurranno” (Layinki Saamueeli 7)",
+     "Daawiti gondooro — “gashshootekki geedonniha asseemmo” (Layinki Saamueeli 7)",
      "Selemooni Yerusaalame Qullaawu Mine assino"
     ]
    },
@@ -214,7 +214,7 @@
     "events": [
      "Qiiroosi hajajonni sasu higa (Zerubaabeeli 538 · Izira 458 · Nehimiya 444)",
      "Qullaawu Mine wodarantino, Yerusaalame daawaro qolamino",
-     "Milkiyaasi — Gede Gondooro cufamanno: “soqqamaanchoˀya … soyemmo”"
+     "Milkiyaasi — Gede Gondooro cufamanno: “soqqamaancho'ya balaxe soyemmo”"
     ]
    }
   },
@@ -259,7 +259,7 @@
     "note": "Cinaanchu soqqanshosi hanafanno — iima Beetto ikkasi cinaˀˀanno.",
     "events": [
      "Yohaannisi cuˀˀino",
-     "Qullaawu Ayyaani worqeemma gede woroidi dirino — “Kuni baxaanchu Beettoˀyaati”",
+     "Qullaawu Ayyaani worqeemma gede woroidi dirino — “Hagiirsiisannoehu baxeemmo Beetti'ya isooti”",
      "Baˀˀu gobbara Sheexaane sasu fanxe qeelino"
     ]
    },
@@ -281,7 +281,7 @@
     "note": "Hanafote soqqansho doogo — Yerusaalame saˀˀe, heseynoonni Samaariya geeshsha.",
     "events": [
      "Yerusaalame Qullaawu Minera daaqamaano fushshino",
-     "Hashsha Niqodimoosi — “qoleessite ilama hasiissihe”",
+     "Hashsha Niqodimoosi — “Layinkimeeshsho ilama hasiissanno'ne”",
      "Samaariyu meyatera lubbote waa"
     ]
    },
@@ -292,7 +292,7 @@
     "note": "Galiila soqqanshote xinti darga — woshsho, rosiisanna gibba baalanti kawa gamba yaanno.",
     "events": [
      "Qulxuˀmisaano woshshe konne darga assiˀrino",
-     "Ilaˀlo aana rosiisi — “ayyaani widoonni buˀˀo ikkitinori maassamootoho”",
+     "Ilaˀlo aana rosiisi — “Ayyaanunni buxxinori ba'raadhinoreeti”",
      "Gashshootete lawishsha — gibbano lophanni haˀˀino"
     ]
    },
@@ -302,7 +302,7 @@
     "today": "techo Kinereeti Baaro",
     "note": "Kalaqama aana noo wolqanni ayeeta ikkasi leellishanno.",
     "events": [
-     "“Deini, keere ikki” — bubbe deiˀˀino",
+     "“Uurri! Gabbi yii” — bubbe deiˀˀino",
      "Onte daabbonna lame qulxuˀminni 5,000 manna sagalino",
      "Waa aana haˀˀino"
     ]
@@ -313,7 +313,7 @@
     "today": "techo Baaniyaasi",
     "note": "Rosaano isi Kiristoosi ikkasi huwatino, masqalete doogono fanantino.",
     "events": [
-     "Pheexiroosi xaadooshsho — “Ati Kiristoosihoˀne, heeˀraanchu Maganu Beettoho”",
+     "Pheexiroosi xaadooshsho — “Ati Heeshshote Magani Beetto Kiristoosaati”",
      "Reyosinna kaˀˀasi umo kulino",
      "Ilaˀlo aana ayirrinyunni soorrami leellino"
     ]
@@ -326,7 +326,7 @@
     "events": [
      "Ballichcho Barximewoosi illesi faˀrino",
      "Qaraxa haˀˀaancho Zakiyoosi woshshino",
-     "“Manchu Beetti baˀino hasanno gatisannono daˀˀino”"
+     "“Manchi Beetti bainoha hasaranna gatisara dayino”"
     ]
    },
    "bethany": {
@@ -335,7 +335,7 @@
     "today": "techo al-Eizariya",
     "note": "Goofimarchu lamalasi albaanni reyo aana wolqasi leellishino.",
     "events": [
-     "Alaazaari reyinohunni kayisino — “Kaˀˀanna heeshsho aneeti”",
+     "Alaazaari reyinohunni kayisino — “Kaonna heeshsho aneeti”",
      "Mariyaami reyosi qaˀmisate shitto tirtinosi",
      "Kuni malaati shate maraabbo jawaachishino"
     ]
@@ -454,7 +454,7 @@
     "note": "Dancha Duduwo umo Awuroopa widira haˀˀanno soorramate darga.",
     "events": [
      "Maqedooniyu manchi ajuuja",
-     "“Maqedooniyara gaˀˀe kaaˀˀe”",
+     "“Meqedooniya dagge kaa'linke”",
      "Rahe Awuroopa saˀˀino"
     ]
    },
@@ -476,7 +476,7 @@
     "note": "Qaali katama xisso, gibbano lophanno.",
     "events": [
      "Gambooshshe minera sasu Sambata coyiˀˀino",
-     "“Alame buurtidhino manni”",
+     "“Gobba baala huntinori xa kuneeti kawa daggino”",
      "Hashsha maaxantino"
     ]
    },
@@ -509,7 +509,7 @@
     "note": "Mitte diri baqqo heeˀre, busha katamira songo xintino.",
     "events": [
      "Aqiilanna Firisqilla ledo dunkaane loosino",
-     "“Diwaajjatto … ledokki noommo daafira”",
+     "“Waajjitooti … ledokki noommo daafira”",
      "Lowo Qoronxoosi manni ammane cuˀˀamino"
     ]
    },
@@ -530,7 +530,7 @@
     "today": "techo Turkiye",
     "note": "Efesoona cimeeyye ledo hindiiddu badooshshe.",
     "events": [
-     "“Umisi mundeenni hidino songo agarre”",
+     "“Isi mundeesinni woxxinota Maganu Beetekiristaane allaalle”",
      "Cimeeyye qoleessite dilaˀˀanno yaano afe wiˀlino"
     ]
    },
@@ -542,7 +542,7 @@
     "events": [
      "Gashshaano Feeliksinna Fisxoosi albaanni yoo",
      "Moote Agriiphaa albaanni farciˀrino",
-     "“Qeesaariwa xaˀmeemmo” — Roome haˀˀa"
+     "“coyi'ya jawu mootewa saoe” — Roome haˀˀa"
     ]
    },
    "jerusalem": {
@@ -614,7 +614,7 @@
     "events": [
      "Lame diri minisira agarante, waajjikkinni Maganu gashshooti duduwino",
      "Konniwiinni Gordo Sokkuwa borreessino (Efesooni·Filiphisiyusi·Qolasiyaasi·Filimoona)",
-     "Gedensaanni qoleesse gordo eˀˀe, Layinki Ximootewoosi borreessino, shooshamino — “dancha olo oloommo, doorsho goofoommo”"
+     "Gedensaanni qoleesse gordo eˀˀe, Layinki Ximootewoosi borreessino, shooshamino — “Ola danchu garinni olamoommo; qolchansho'yara goofimarchu geeshsha dodoommo; ammana'yano agadhoommo”"
     ]
    }
   },

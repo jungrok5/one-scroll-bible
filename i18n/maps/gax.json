@@ -1,0 +1,636 @@
+{
+ "menuName": "Afaan Oromoo (Booranaa)",
+ "htmlLang": "gax",
+ "dir": "ltr",
+ "locale": "gax-ET",
+ "brand": "Kitaaba Qulqulluu Marsaa Tokkoon",
+ "docTitle": "Kitaaba Qulqulluu Kaartaani · Kitaaba Qulqulluu Marsaa Tokkoon",
+ "metaDesc": "Toora yeroo Kakuu Moofaa, jireenna Yeso, fi imala Phaawulos kaartaa d'ugaa gubba hordofi — Kitaabni Qulqulluu iddo d'ugaa gubba raawwatame.",
+ "s": {
+  "kicker": "Kitaaba Qulqulluu Marsaa Tokkoon · Kaartaa",
+  "title": "Kitaaba Qulqulluu Kaartaani",
+  "verse": "“Wonti akanatiifi nu odu duri ta woma keesa injirre gula, aka Aabbo Yeso Kristoni jabeennaani d'ufu, isaniti inhimne. Iluma teennaani guddinna isaa agarre!” (2 Phexroos 1:16)",
+  "purpose": "Kitaabni Qulqulluu wollaala miti. Inni galmee namoota iddo, guyyaa, fi maqaa d'ugaa gubba d'eemani. Karaa suni kaartaa gubba, tartiiba yerootiini hordofi — tuqaa tokko tuqi, ykn ▶ tuqi tarkaanfii tarkaanfiini keesa d'eemi.",
+  "ot_kick": "① Kakuu Moofaa — yero keesa",
+  "ot_h": "Uumamaa hamma Yerusaalemiti deebi'uuti",
+  "ot_lead": "Imala tokko qofa miti ammo adeemsa seenaa baafamaa uumama irraa jalqabu: uumamaafi kufaatii → bishaan badiisaafi Baabel → waamicha (Abrahaam) → lafa waadaa → Bahuu → gammoojii → mohaacha → mootummaa → citu → boojii → deebii.",
+  "je_kick": "② Kakuu Haaraa — jireenna Yeso",
+  "je_h": "Beetlihem irraa hamma Yerusaalemiti",
+  "je_lead": "Jireenna Yeso akkuma Wangeeloti himan, tartiibaani hordofi — d'alacha isaa Beetlihem keesaa kaasee cuupha isaafi tajaajila Galiilaa, Samaariyaa keesa, hamma maskali, du'aa-ka'umsaafi ol bahu Yerusaalemiti.",
+  "pa_kick": "③ Kakuu Haaraa — imala Phaawulos",
+  "pa_h": "Anxookiyaa irraa hamma muumme lafaati — Roomaa",
+  "pa_lead": "Phenxeqoosxe Yerusaalem keesaa kaasee, Odu Dansaani akkamiti Yudeyaa gama alaati babal'ate — Eeshiyaa Xiqqoofi Awurooppaa keesa hamma onnee mootummaa guddaati. Imala shanan keesaa tokko fili (1ffaa·2ffaa·3ffaa + imala gara Roomaa + eegi gad lakkifame) taheewwan Hojii Ergamootaa xalayaawwan karaa gubba barreefaman woliin hordofi.",
+  "foot": "Maddoota · Iddowwan barreefama Kitaaba Qulqulluufi joografii Kitaaba Qulqulluu baratame hordofu (maqaa ammayyaa iddo barbaachisuti). Qarqara galaanaa, lageenifi haroowwan ragaa joografii banaa (Natural Earth) irraa, salphifamani kaa'aman.",
+  "contact": "Gaaffii · yaada — <a id=\"contact\" class=\"mail\">Imeelii nuu ergi</a>",
+  "play": "Taphachiisi",
+  "pause": "D'aabi",
+  "today": "Har'a:",
+  "verseCite": "2 Phexroos 1:16"
+ },
+ "ot": {
+  "places": {
+   "eden": {
+    "name": "Edeni (Uumama · Kufaatii)",
+    "book": "Uumama 1–3",
+    "today": "naannoo Xayigrisii–Efiraaxiis har'a",
+    "note": "Gara addunyaa “guddo dansa” god'ame sanaati, dabni seenee hid'aa Waaqafi ilma namaa giddu jiru cabsa.",
+    "events": [
+     "Uumama guyyaa jaha — “guddo dansa ture”",
+     "Namni fakkii Waaqaatiini god'ame",
+     "Kufaatii, fi Edeni keesaa bahuu",
+     "Waadaa Odu Dansa jalqaba — “d'aloota niitii mata bofaa ch'arasa”"
+    ]
+   },
+   "noah": {
+    "name": "Araraat (Bishaan Badiisaa)",
+    "book": "Uumama 6–9",
+    "today": "Tulluu Araraat, baha Turkiyaa har'a",
+    "note": "Waaqi addunyaa dabaan guuttame ni adaba, ammo karaa maatii tokkoon jireenna ni eega.",
+    "events": [
+     "Addunyaa hamenyaani guuttame",
+     "Bishaan badiisaa, fi doonii Nohi",
+     "Wold'aqisa sabbataa — “lammata bishaan badiisaa addunyaa balleesu hin'jiru”"
+    ]
+   },
+   "babel": {
+    "name": "Gamoo Baabel",
+    "book": "Uumama 11",
+    "today": "Iraaq har'a (dirree Shinaar)",
+    "note": "Of-tuulummaa samiiti gahu barbaadu suni gubba, Waaqi afaan isaaniifi sabootas lafa gubba ni faffacaasa.",
+    "events": [
+     "“Kottaa magaalaafi gamoo… ijaarranne maqaa ufii haa god'annu”",
+     "Waaqi afaan isaani walitti ni maka",
+     "Saboonni lafa gubba faffaca'u (Shinaar — eegi Baabilooni)"
+    ]
+   },
+   "ur": {
+    "name": "Uuri",
+    "book": "Uumama 12",
+    "today": "kibba Iraaq har'a",
+    "note": "Sheekkoon baafama Kitaaba Qulqulluu waamicha nama tokkotiini jalqaba.",
+    "events": [
+     "Waaqi Abraamiin Uuri Kaldootaa keesaa ni waama",
+     "“Anini gosa guddo si god'a… sabni ch'ufti karaa keetiini eebifama”",
+     "D'ugefachaani biyya isaa d'isee baha"
+    ]
+   },
+   "haran": {
+    "name": "Kaaraan",
+    "book": "Uumama 12",
+    "today": "kibba Turkiyaa har'a",
+    "note": "Karaa gubba, waamicha gara lafa waadaati deebii kennaa.",
+    "events": [
+     "Maatiin Taaraa Kaaraan keesa qubata",
+     "Taaraan ni du'a",
+     "Abraam waggaa 75ti gara Kanaani ni kaha"
+    ]
+   },
+   "shechem": {
+    "name": "Sheekem · Kanaani",
+    "book": "Uumama 12–50",
+    "today": "Naabilus har'a",
+    "note": "Lafa waadaa keesatti maatiin hundeefama; wold'aqisnileeni d'aloota keesa dabra.",
+    "events": [
+     "Kanaani seenuu, iddo aarsaa jalqaba — “lafa tana d'aloota keetifi kenna”",
+     "Wold'aqisa (Uumama 15) · Yisihaaq · Yaaqoob",
+     "Ilmaani Yaaqoob kud'a-lamaan — hundee gosa kud'a-lamaa"
+    ]
+   },
+   "egypt": {
+    "name": "Misiri (Gooshen)",
+    "book": "Uumama 37–50 · Bahuu 1",
+    "today": "Deltaa Naayil, Misiri har'a",
+    "note": "Maatiin gosa guddo taha — eegasi gosa gabraa.",
+    "events": [
+     "Yoseef, gurgurame, Misiri bulchuuti ol kaha",
+     "Maatiin Yaaqoob guutuun beela jalaa bahuuf gad bu'a",
+     "Sabni Israeli guddachaa jiru gabra god'ama"
+    ]
+   },
+   "sinai": {
+    "name": "Tulluu Siinaa",
+    "book": "Bahuu · Lewwota",
+    "today": "Cinaacha Siinaa har'a",
+    "note": "Baafama guddaa Kakuu Moofaa — gabroonni saba Waaqaa ufi tahan.",
+    "events": [
+     "D'ibee kud'anifi xobbolaa Faasiika",
+     "Galaana Diimaani hire; isaanis ni ce'u",
+     "Seera Kud'an, Seera, dunkaana qulqulluufi aarsaa"
+    ]
+   },
+   "kadesh": {
+    "name": "Qaadesh (gammoojii)",
+    "book": "Lakkoofsa · Keessa Deebii",
+    "today": "gammoojii Siinaa–Negev har'a",
+    "note": "Amantii d'abuun d'aloota tokko lafa d'absiisa — ammo Waaqi isaani woliin jira.",
+    "events": [
+     "Basaastota kud'a-lama — ammo sabni amanuu dida",
+     "Gammoojii keesa waggaa 38 — mannaa, duumessaafi ibidda",
+     "Dirree Mo'aab gubba, lallaba Muusa isa d'umaa (Keessa Deebii)"
+    ]
+   },
+   "jericho": {
+    "name": "Yerikoo",
+    "book": "Iyyaasu",
+    "today": "Yerikoo har'a",
+    "note": "D'umarra lafa waadaa ni seenu, ni qabatus.",
+    "events": [
+     "Yordaanosi hire; sabnis ni ce'a",
+     "Dallaawwan Yerikoo ni kufu",
+     "Kanaani mohaachaafi lafa hiruu"
+    ]
+   },
+   "shiloh": {
+    "name": "Shiiloo (Hayyuu)",
+    "book": "Hayyuu · Ruti",
+    "today": "Kirbet Seiluun har'a",
+    "note": "Mooti maleeni, nami ch'ufti waan ufi fed'i tolche — mooti d'ugaa barbaachisa.",
+    "events": [
+     "Dunkaanni qulqulluu Shiiloo keesa d'aabama",
+     "Marsaa daba–cunqursaa–baafama (Debooraa, Ged'oon, Saamsoon)",
+     "Ruti — bara dukanaa keesa amanamummaa, muka Daudi keesa"
+    ]
+   },
+   "jerusalem": {
+    "name": "Yerusaalem · Mootummaa Tokkoome",
+    "book": "1–2 Saamu'eli · 1 Mootota",
+    "today": "Yerusaalem har'a",
+    "note": "Bara guddinna Israeli — fi waadaa mooti haga jiru.",
+    "events": [
+     "Saa'ol mooti jalqaba, eegasi Daudifi Gooliyaad",
+     "Wold'aqisa Daudi — “teessoo keeti haga jiru jira” (2 Saamu'eli 7)",
+     "Solomoon Yerusaalem keesatti mana qulqullummaa ijaara"
+    ]
+   },
+   "samaria": {
+    "name": "Samaariyaa · Mootummaa Cite",
+    "book": "Mootota · Raagoti",
+    "today": "Sebaastiyaa har'a",
+    "note": "Mootummaani cita; raagoti iyyaa jiraninuu suuta gad bu'a.",
+    "events": [
+     "Solomoon booda, gara Yudaafi Israeliti citu",
+     "Wolii-galtee tajaajiluu irra deddeebi'amu",
+     "Eliyaas, Isaayaasi, Ermiyaas “deebia” jed'anii iyyu — Masiihaas raagu"
+    ]
+   },
+   "nineveh": {
+    "name": "Nanawe (Asoor)",
+    "book": "2 Mootota 17 · Yoonaas",
+    "today": "Mosul, Iraaq har'a",
+    "note": "Akeekkachiisa ch'ufa d'isee, kaabni dura kufa.",
+    "events": [
+     "Nanawe, magaala guddo Asoor",
+     "Mootummaani kaabaa Asoorti kufe (722 D.D.)",
+     "Yoonaas gara Nanaweti ergama"
+    ]
+   },
+   "babylon": {
+    "name": "Baabilooni",
+    "book": "2 Mootota 25 · Daani'eel · Hisqi'eel",
+    "today": "Hiilaa, Iraaq har'a",
+    "note": "Halkan ch'ufa caalaa dukanaa — ammo waadaani haaromsaa ni hafa.",
+    "events": [
+     "Yerusaalem kufa, mani qulqullummaa ni gubata (586 D.D.)",
+     "Yudaan gara Baabilooniti boojia'amee fud'atama",
+     "Daani'eelifi Hisqi'eel — boojii keesa amantiifi mul'ata"
+    ]
+   },
+   "susa": {
+    "name": "Suusaa (Pheersi)",
+    "book": "Asteer · Nahimiyaa",
+    "today": "Shuush, Iiraan har'a",
+    "note": "Onnee mootummaa waaqefataa keesalleeni, Waaqi saba isaa ni eega.",
+    "events": [
+     "Pheersi Baabilooni ni moha",
+     "Asteer Yahuda balleefamu irraa baasti",
+     "Nahimiyaa fula mooti duratti kad'atee ni ergama"
+    ]
+   },
+   "return": {
+    "name": "Yerusaalemiti Deebi'uu",
+    "book": "Izraa · Nahimiyaa · Milkiyaas",
+    "today": "Yerusaalem har'a",
+    "note": "Deebi'ani deebisanii ijaaru — ammo mooti hin'd'ufne. Masiihaa eegu.",
+    "events": [
+     "Labsii Qiiroositiini d'aanno sad'aniini deebi'uu (Zarubaabel 538 · Izraa 458 · Nahimiyaa 444)",
+     "Mani qulqullummaa deebisanii ijaaramee dallaani Yerusaalem suphame",
+     "Milkiyaas — Kakuun Moofaa ni xumurama: “Anini ergattu tiyya erga”"
+    ]
+   }
+  },
+  "labels": [
+   "Galaana Mediteraaniyaa",
+   "Mesophootaamiyaa",
+   "Gammoojii Arabaa",
+   "Misiri"
+  ],
+  "journeys": {
+   "flow": "Sheekko baafamaa"
+  }
+ },
+ "jesus": {
+  "places": {
+   "bethlehem": {
+    "name": "Beetlihem",
+    "book": "Maatoosi 1–2 · Luqaasi 2",
+    "today": "Beetlihem har'a",
+    "note": "Masiihaani waadaa galame gara magaala Daudi ni d'ufa — Dubbiin foon taate.",
+    "events": [
+     "Beetlihem, magaala Daudi keesatti d'alate",
+     "Ergamooti tisootataaf odu labsu",
+     "Hayyooti sagaduuf d'ufu"
+    ]
+   },
+   "nazareth": {
+    "name": "Naazreeti",
+    "book": "Luqaasi 2 · 4",
+    "today": "Naazreeti har'a",
+    "note": "Waaqi magaala idilee keesatti akka namati guddata.",
+    "events": [
+     "Mana hojjetaa mukaa keesatti guddate",
+     "Waggaa kud'a-lamati, mana qulqullummaa keesatti gaafachaafi deebisaa",
+     "Booda magaala isaa keesatti mana sagadaa keesatti gatama"
+    ]
+   },
+   "jordan": {
+    "name": "Laga Yordaanos",
+    "book": "Maatoosi 3–4",
+    "today": "Yordaanos gadii har'a",
+    "note": "Tajaajilli isaa ifaa ni jalqaba — samiin akka Ilmaati chaappesa.",
+    "events": [
+     "Yohaannisiini ni cuuphama",
+     "Lubbuun akka gugeeti gad d'ufa — “Kun Ilma kiyya jaalatamaa”",
+     "Gammoojii keesatti qorumsa Seexanaa sad'an moha"
+    ]
+   },
+   "cana": {
+    "name": "Qaanaa",
+    "book": "Yohaannisi 2",
+    "today": "Kafr Kanna har'a",
+    "note": "Mallattoo isaa jalqabaatiini ulfina isaa ni mul'isa.",
+    "events": [
+     "Cid'a gubba keesumaa",
+     "Bishaan gara wayiniiti jijjiirame — mallattoo isaa jalqaba",
+     "Barattooti isaa isati amanu"
+    ]
+   },
+   "sychar": {
+    "name": "Sikaar (Samaariyaa)",
+    "book": "Yohaannisi 2–4",
+    "today": "naannoo Naabilus har'a",
+    "note": "Karaa tajaajila jalqabaa — Yerusaalem keesa hamma Samaariyaa tuffatamtuuti.",
+    "events": [
+     "Yerusaalem keesatti mana qulqullummaa qulqulleesa",
+     "Halkaniini, Niqodemoos — “lammata d'alachuu qabda”",
+     "Niiti Samaariyaatiifi bishaan jireennaa"
+    ]
+   },
+   "capernaum": {
+    "name": "Qifirnahoom",
+    "book": "Maatoosi 4–13 · Maarqos 1–4",
+    "today": "qarqara haroo Galiilaa har'a",
+    "note": "Buufata tajaajila Galiilaa — waamicha, barsiisaafi mormiin ch'ufti asitti wal gahu.",
+    "events": [
+     "Qurxummii qabdoota waamee asitti qubata",
+     "Lallaba Tulluu — “Warri hafuuraan hiyyeeyyii tahan eebifamoo”",
+     "Fakkeenya mootummaa — fi mormii guddachaa jiru"
+    ]
+   },
+   "galilee": {
+    "name": "Haroo Galiilaa",
+    "book": "Maarqos 4 · 6 · Yohaannisi 6",
+    "today": "Haroo Kinneret har'a",
+    "note": "Humna uumama gubba qabuuni eenyu akka tahe ni argisiisa.",
+    "events": [
+     "“Ch'alisi, qabanaa'i” — bubbee ni tasgabbeesa",
+     "Daabboo shanifi qurxummii lamaan nama 5,000 nyaachisa",
+     "Bishaan gubba d'eema"
+    ]
+   },
+   "caesarea_p": {
+    "name": "Qiisaariyaa Filiphii",
+    "book": "Maatoosi 16–17",
+    "today": "Baaniyaas har'a",
+    "note": "Barattooti inni Kristo tahuu isaa ni hubatu, karaan maskali ni banama.",
+    "events": [
+     "Beeksisa Phexroos — “Ati Kristo, Ilma Waaqa jiraataa”",
+     "Du'aafi du'aa-ka'umsa isaa yero jalqaba ni dubbata",
+     "Tulluu gubba ulfinaani ni jijjiirama"
+    ]
+   },
+   "jericho": {
+    "name": "Yerikoo",
+    "book": "Luqaasi 18–19",
+    "today": "Yerikoo har'a",
+    "note": "Karaa gara Yerusaalem ol bahu gubba, nama bade ni barbaada.",
+    "events": [
+     "Bartimewos jaamaaf agartuu kenna",
+     "Zakewoos walitti qabaa gibiraa waama",
+     "“Ilmi Namaa nama bade barbaaduufi fayyisuuf d'ufe”"
+    ]
+   },
+   "bethany": {
+    "name": "Biitaaniyaa",
+    "book": "Yohaannisi 11–12",
+    "today": "al-Eizariya har'a",
+    "note": "Torban isaa d'umaa dura aangoo du'a gubba qabu ni argisiisa.",
+    "events": [
+     "Al'aazaarin awwaala keesaa kaasa — “Ani du'aa-ka'umsaafi jireenna”",
+     "Maariyaam awwaalchaaf dibata isa dibdi",
+     "Mallattoon kun isa ajjeesuuf mari'achuu jabeesa"
+    ]
+   },
+   "jerusalem": {
+    "name": "Yerusaalem",
+    "book": "Maatoosi 21–28 · Luqaasi 24 · Hojii Ergamootaa 1",
+    "today": "Yerusaalem har'a",
+    "note": "Galma Kitaabni Qulqulluu guutuun gara isaa akeeku — maskali, du'aa-ka'umsa, ol bahu.",
+    "events": [
+     "Galma ulfinaa; minjaala mana qulqullummaa ammas ni gargalcha",
+     "Irbaata D'umaa gubba miilla barattootaa ni d'iqa",
+     "Maskali gubba ni du'a",
+     "Guyyaa sad'affaa ka'e, eegasi ol bahe"
+    ]
+   }
+  },
+  "labels": [
+   "Galaana Mediteraaniyaa",
+   "Galiilaa",
+   "Samaariyaa",
+   "Yudeyaa",
+   "Deekaaphoolis",
+   "Periyaa",
+   "Galaana Du'aa"
+  ],
+  "journeys": {
+   "life": "Karaa Yeso"
+  }
+ },
+ "paul": {
+  "places": {
+   "antioch": {
+    "name": "Anxookiyaa",
+    "book": "Hojii Ergamootaa 13 · 15",
+    "today": "Antakya, Turkiyaa har'a",
+    "note": "Waldaa ergitu kan tajaajilli Sabootaa itti jalqabuufi itti deebi'u.",
+    "events": [
+     "Kad'annaa keesatti Lubbuun Barnaabaasifi Saa'olin addaan baasa",
+     "Waldaa amantooti dura ‘Kiristaana’ jed'aman keesatti",
+     "Iddo imala 1ffaa, 2ffaa fi 3ffaa itti jalqabu"
+    ]
+   },
+   "seleucia": {
+    "name": "Seleewookiyaa",
+    "book": "Hojii Ergamootaa 13:4",
+    "today": "Turkiyaa har'a",
+    "note": "Buufata doonii Anxookiyaa — gara Qoophiroositi kahu.",
+    "events": []
+   },
+   "salamis": {
+    "name": "Salamiis (Qoophiroos)",
+    "book": "Hojii Ergamootaa 13:5",
+    "today": "Qoophiroos har'a",
+    "note": "D'aabbii jalqabaa Qoophiroos irraa — mana sagadaa keesatti lallabu.",
+    "events": []
+   },
+   "paphos": {
+    "name": "Phaafoos",
+    "book": "Hojii Ergamootaa 13:6-12",
+    "today": "Qoophiroos har'a",
+    "note": "Worra Odu Dansa mormaniif aangoon ni argisiifama.",
+    "events": [
+     "Eliimaas falfalaan ni jaamfama",
+     "Sergiyoos Phaawulos bulchaan ni amana",
+     "Asii kaasee ‘Phaawulos’ dura taha"
+    ]
+   },
+   "perga": {
+    "name": "Pergee",
+    "book": "Hojii Ergamootaa 13:13",
+    "today": "Antalya, Turkiyaa har'a",
+    "note": "Buufata Phamfiiliyaa — asitti Yohaannisi Maarqos duubatti deebi'a.",
+    "events": []
+   },
+   "pantioch": {
+    "name": "Anxookiyaa Phisiidiyaa",
+    "book": "Hojii Ergamootaa 13:14-50",
+    "today": "Yalvaç, Turkiyaa har'a",
+    "note": "Odu Dansaani gara Sabootaati ni banama.",
+    "events": [
+     "Mana sagadaa keesatti lallaba seenaa baafamaa d'eera",
+     "Saboonni heddu gammadanii dubbii fud'atu",
+     "Mormiini gad baafamu"
+    ]
+   },
+   "iconium": {
+    "name": "Iqooniyoon",
+    "book": "Hojii Ergamootaa 14:1-7",
+    "today": "Konya, Turkiyaa har'a",
+    "note": "Heddu amanu, ammo ari'atamni akka isaan d'eeman dirqa.",
+    "events": []
+   },
+   "lystra": {
+    "name": "Lisxiraa",
+    "book": "Hojii Ergamootaa 14:8-20",
+    "today": "Turkiyaa har'a",
+    "note": "Akka waaqaati kabajame, eegasi d'agaani reebame.",
+    "events": [
+     "Nama d'aloota irraa naafa tahe fayyisa",
+     "Tuunni akka waaqaati aarsaa isaanii d'i'eesuu yaala",
+     "D'agaani reebamee akka du'eeti gatame, ni kaha"
+    ]
+   },
+   "derbe": {
+    "name": "Darbee",
+    "book": "Hojii Ergamootaa 14:20-21",
+    "today": "Turkiyaa har'a",
+    "note": "Barattooti heddu tahu; waldaa jabeesuuf tarkaanfii isaani deebi'ani hordofu.",
+    "events": []
+   },
+   "troas": {
+    "name": "Xiroo'aas",
+    "book": "Hojii Ergamootaa 16:8-10",
+    "today": "Turkiyaa har'a",
+    "note": "Tuqaa jijjiiramaa kan Odu Dansaani dura gara Awurooppaati itti d'eemu.",
+    "events": [
+     "Mul'ata nama Maqedooniyaa",
+     "“Kottu nu gargaari”",
+     "Battaluma gara Awurooppaati ce'u"
+    ]
+   },
+   "philippi": {
+    "name": "Filiphisiyus",
+    "book": "Hojii Ergamootaa 16 · Filiphisiyus",
+    "today": "kaaba Giriik har'a",
+    "note": "Waldaa jalqabaa Awurooppaa — Odu Dansaani mana hid'aa keesalleeni ni moha.",
+    "events": [
+     "Liidiyaan, daldaltuu wayyaa diimaa, ni amanti",
+     "Garbittiin raajii himtu ni bilisoomti",
+     "Faarfannaa halkan walakkaa, sochii lafaa, maatiin eegduu hid'aa fayya"
+    ]
+   },
+   "thess": {
+    "name": "Tasaloniiqee",
+    "book": "Hojii Ergamootaa 17 · 1–2 Tasaloniiqee",
+    "today": "Tesalooniki, Giriik har'a",
+    "note": "Dubbiin magaala ni raasa; mormiinis ni d'oha.",
+    "events": [
+     "Sanbata sad'ii mana sagadaa keesatti mari'ata",
+     "“Worri addunyaa dabsanii gargalchan”",
+     "Halkaniini suuta bahani d'eemu"
+    ]
+   },
+   "berea": {
+    "name": "Beeriyaa",
+    "book": "Hojii Ergamootaa 17:10-15",
+    "today": "Veriyaa, Giriik har'a",
+    "note": "Worri ‘kabajamoo’ kan dubbii ufii isaaniitiifi qoratan.",
+    "events": [
+     "Dubbii fed'iini fud'atu",
+     "Mirkaneefachuuf guyyuma guyyaan Kitaaba Qulqulluu qoratu",
+     "Heddu amantiiti d'ufu"
+    ]
+   },
+   "athens": {
+    "name": "Ateenaa",
+    "book": "Hojii Ergamootaa 17:16-34",
+    "today": "Ateenaa, Giriik har'a",
+    "note": "Magaala falaasamtootaa keesatti ‘waaqa hin'beekamne’ labsa.",
+    "events": [
+     "Magaala waaqa tolfamootiini guuttameeni ni d'eekkama",
+     "Areyoophaagos gubba Uumaafi du'aa-ka'umsa lallaba",
+     "Ni qoosama, ammo muraasni amanu"
+    ]
+   },
+   "corinth": {
+    "name": "Qorontos",
+    "book": "Hojii Ergamootaa 18 · 1–2 Qorontoosi",
+    "today": "Giriik har'a",
+    "note": "Waggaa tokkoofi walakkaa turee, magaala hamenyaa keesatti waldaa d'aaba.",
+    "events": [
+     "Aqiilaafi Phiriskilaa woliin dunkaana hojjeta",
+     "“Hin'sodaatin… ani si woliin jira”",
+     "Worri Qorontos heddu amananii cuuphamu"
+    ]
+   },
+   "ephesus": {
+    "name": "Efesoon",
+    "book": "Hojii Ergamootaa 19 · Efesoosi",
+    "today": "Selçuk, Turkiyaa har'a",
+    "note": "Onnee imala sad'affaa — dubbiin Eeshiyaa keesa babal'ata.",
+    "events": [
+     "Galma Xiraanos keesatti waggaa lama guyyuma guyyaan barsiisa",
+     "Kitaaboti falfalaa gubatu; hojiiwwan humnaa",
+     "Demeexiriyoos tumtuu meetii goolii kaasa"
+    ]
+   },
+   "miletus": {
+    "name": "Miilexoos",
+    "book": "Hojii Ergamootaa 20:17-38",
+    "today": "Turkiyaa har'a",
+    "note": "Jaarsolii Efesoon imimmaaniini nagaa gaafachuu.",
+    "events": [
+     "“Waldaa inni d'iiga ufiitiini bite eegaa”",
+     "Jaarsoliin lammata isa akka hin'argine beekanii boo'u"
+    ]
+   },
+   "caesarea": {
+    "name": "Qiisaariyaa",
+    "book": "Hojii Ergamootaa 23–26",
+    "today": "qarqara Israeli har'a",
+    "note": "Waggaa lamaaf fula bulchitootaafi mooti duratti Odu Dansa ni itisa.",
+    "events": [
+     "Bulchitoota Feeliksiifi Feexixoos duratti d'addacha",
+     "Mooti Agriphaa duratti falmii isaa",
+     "“Gara Qeesaariti ol iyyad'a” — gara Roomaati"
+    ]
+   },
+   "jerusalem": {
+    "name": "Yerusaalem",
+    "book": "Hojii Ergamootaa 21–23",
+    "today": "Yerusaalem har'a",
+    "note": "Mana qulqullummaa keesatti qabamee, karaan isaa akka hid'amaati jalqaba.",
+    "events": [
+     "Mana qulqullummaa keesatti tuunni isa qaba",
+     "Fula yaa'ii duratti of itisa",
+     "Akka lammii Roomaati, eegumsa jala gara Qiisaariyaati ergama"
+    ]
+   },
+   "myra": {
+    "name": "Miiraa",
+    "book": "Hojii Ergamootaa 27:5-6",
+    "today": "Demre, Turkiyaa har'a",
+    "note": "Gara doonii Iskindiriyaa kan Roomaa d'aqxuti jijjiiramu.",
+    "events": []
+   },
+   "fairhaven": {
+    "name": "Buufata Bareedaa (Qareexii)",
+    "book": "Hojii Ergamootaa 27:8-12",
+    "today": "Qareexii har'a",
+    "note": "Akeekkachiisni Phaawulos akka doonii d'aaban hin'd'agahamne.",
+    "events": []
+   },
+   "crete": {
+    "name": "Qareexii",
+    "book": "Tiitoo",
+    "today": "Qareexii har'a",
+    "note": "Eegi gad lakkifamee, biyyoo inni waldaa toora qabsiisuuf Tiitoon itti d'ise.",
+    "events": [
+     "Magaala ch'ufa keesatti jaarsolii muuduuf Tiitoon d'isa",
+     "Hooggantoota mudaa hin'qabnefi amanamoo barbaada",
+     "Xalayaa Tiitootiifi barreesa"
+    ]
+   },
+   "malta": {
+    "name": "Maltaa",
+    "book": "Hojii Ergamootaa 27–28",
+    "today": "Maltaa har'a",
+    "note": "Bubbeefi doonii cabuu keesa, waadaani Waaqaa ni jabaata.",
+    "events": [
+     "Bubbeen ‘kaaba-baha’ doonii cabsa, ammo ch'ufti 276 ni oolu",
+     "Bofni isa idatus, hin'miid'amu",
+     "D'ukubsattoota biyyichaa fayyisa"
+    ]
+   },
+   "syracuse": {
+    "name": "Sirakuusaa",
+    "book": "Hojii Ergamootaa 28:12",
+    "today": "Sisiilii, Xaaliyaan har'a",
+    "note": "Sisiilii keesa guyyaa sad'ii turu.",
+    "events": []
+   },
+   "puteoli": {
+    "name": "Phuxiyoolii",
+    "book": "Hojii Ergamootaa 28:13-14",
+    "today": "Pozzuoli, Xaaliyaan har'a",
+    "note": "Xaaliyaaniti bu'ani obboleeyani amantootaani simatamu.",
+    "events": []
+   },
+   "rome": {
+    "name": "Roomaa",
+    "book": "Hojii Ergamootaa 28 · Xalayaa Mana Hid'aa · 2 Ximootewos",
+    "today": "Roomaa, Xaaliyaan har'a",
+    "note": "Odu Dansaani d'umarra onnee mootummaa guddaa ni gaha — d'uma osoo hin'taane jalqaba.",
+    "events": [
+     "Waggaa lama mana keesatti hid'amee, mootummaa ija jabinaani labsa",
+     "Asii Xalayaa Mana Hid'aa barreesa (Efesoosi·Filiphisiyus·Qolosaayisi·Filimoon)",
+     "Booda ammas hid'amee, 2 Ximootewos barreesee ni ajjeefama — “Lola dansa loleera; dorgommii xumureera”"
+    ]
+   }
+  },
+  "labels": [
+   "Galaana Mediteraaniyaa",
+   "Galaana Egee",
+   "Eeshiyaa Xiqqoo",
+   "Maqedooniyaa",
+   "Xaaliyaan"
+  ],
+  "journeys": {
+   "j1": "Imala jalqabaa",
+   "j2": "Imala lammaffaa",
+   "j3": "Imala sad'affaa",
+   "rome": "Imala afraffaa · gara Roomaati",
+   "j5": "Imala shanaffaa · eegi gad lakkifame"
+  }
+ }
+}

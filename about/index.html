@@ -158,7 +158,7 @@
   .vse{break-inside:avoid;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:15px 17px;margin:0 0 16px}
   .vse .lab{display:block;font-size:.74rem;letter-spacing:.05em;color:var(--accent);font-weight:700;margin-bottom:.45em;text-decoration:none}
   .vse a.lab:hover{text-decoration:underline;text-underline-offset:2px}
-  .vse .tx{font-size:1.05rem;line-height:1.7;font-family:var(--serif)}
+  .vse .tx{font-size:1.05rem;line-height:1.7;font-family:var(--serif);overflow-wrap:anywhere;word-break:break-word}
   /* treemap */
   #treemap{position:relative;width:100%;height:460px;border:1px solid var(--line);border-radius:14px;background:var(--card);overflow:hidden}
   #treemap .cell{position:absolute;overflow:hidden;border:1px solid rgba(0,0,0,.25);color:#fff;
@@ -665,7 +665,7 @@ function renderVerses(){
     const u=bibleUrl(s.usfm,s.code,s.yv);
     const lab=u?`<a class="lab" href="${u}" target="_blank" rel="noopener">${esc(s.label)} ↗</a>`:`<div class="lab">${esc(s.label)}</div>`;
     return `<div class="vse">${lab}
-      <div class="tx" dir="${rtl?'rtl':'ltr'}" lang="${s.code}">${esc(s.text)}</div></div>`;
+      <div class="tx" translate="no" dir="${rtl?'rtl':'ltr'}" lang="${s.code}">${esc(s.text)}</div></div>`;
   }).join('');
   $('[data-t="v_note"]').innerHTML=fmt(lx('v_note'),{n:D.showcase.length});
 }

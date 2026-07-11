@@ -98,4 +98,4 @@ console.log(`OK: ${code} 통합 완료`);
 console.log(`  i18n/${code}.json: books(${Object.keys(dict).length})/yv/bookopt 동봉 | 콘텐츠 토큰 해결 ${used.size - unresolved.length}/${used.size}`);
 console.log(`  index.html: hreflang/LANGS(+locale${dir === 'rtl' ? '+dir' : ''}) ✓ — 단일 출처`);
 console.log(`  build-pages: ${font ? 'FONT ✓ (LANGS는 index.html에서 파싱)' : 'LANGS는 index.html에서 파싱 — 패치 불필요'}`);
-console.log(`  다음: make-qr → build-pages 실행 → validate → audit-links`);
+console.log(`  다음: build-pages 실행 → validate → audit-links`);

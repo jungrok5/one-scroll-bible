@@ -619,7 +619,8 @@
   #qrModal{position:fixed;inset:0;z-index:310;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.6);backdrop-filter:blur(2px)}
   #qrModal[hidden]{display:none}
   .qr-card{background:#fff;border-radius:18px;padding:24px 22px 18px;text-align:center;position:relative;max-width:300px;box-shadow:0 16px 40px -12px rgba(0,0,0,.6)}
-  .qr-card img{display:block;width:240px;height:240px;border-radius:8px;margin:6px auto 0}
+  .qr-card .qr-box{display:block;width:240px;height:240px;border-radius:8px;margin:6px auto 0;background:#fff;overflow:hidden}
+  .qr-card .qr-box svg{display:block;width:100%;height:100%}
   .qr-url{color:#444;font-size:0.75rem;margin:12px 0 8px;word-break:break-all}
   .qr-dl{display:inline-block;color:#0e1118;font-size:0.8125rem;font-weight:600;text-decoration:underline;cursor:pointer}
   .qr-card .ss-close{color:#999}
@@ -683,7 +684,7 @@
 <button id="toTop" title="맨 위로">↑</button>
 <div id="toast" data-i18n="ui.toast">링크가 복사되었어요 📋</div>
 <div id="shareSheet" hidden><div class="ss-card"><button class="ss-close" id="ssClose" aria-label="Close">✕</button><div class="ss-title" id="ssTitle">Share</div><div class="ss-grid" id="ssGrid"></div></div></div>
-<div id="qrModal" hidden><div class="qr-card"><button class="ss-close" id="qrClose" aria-label="Close">✕</button><img id="qrImg" alt="QR code" width="240" height="240" /><div class="qr-url" id="qrUrl"></div><a class="qr-dl" id="qrDl" download>⤓ Save QR</a></div></div>
+<div id="qrModal" hidden><div class="qr-card"><button class="ss-close" id="qrClose" aria-label="Close">✕</button><div id="qrImg" class="qr-box" role="img" aria-label="QR code"></div><div class="qr-url" id="qrUrl"></div><a class="qr-dl" id="qrDl" download>⤓ Save QR</a></div></div>
 
 <div class="partial-note" id="partialNote" hidden></div>
 <header class="hero" data-sec="start" data-title="시작" data-label="시작" data-ga="hero">
@@ -1655,7 +1656,9 @@ main.addEventListener('click',function(e){ var b=e.target.closest('.ep-share'); 
 main.addEventListener('toggle',function(e){ var d=e.target; if(d.tagName==='DETAILS'&&d.open&&d.classList.contains('more')){ var sec=d.closest('.epoch'); gevent('read_more',{scene:sec?+sec.dataset.sc:0}); } },true);
 
 /* QR 코드 (현재 언어 페이지 URL — 인쇄·주보·포스터용) */
-function openQR(){ var code=curCode||'ko'; var img=document.getElementById('qrImg'); if(!img)return; img.src='qr-'+code+'.png'; document.getElementById('qrUrl').textContent=shareUrl(); var dl=document.getElementById('qrDl'); dl.href='qr-'+code+'.png'; dl.setAttribute('download','qr-one-scroll-bible-'+code+'.png'); document.getElementById('qrModal').hidden=false; gevent('share',{method:'qr'}); }
+/* QR: 모달 열 때 /qr.js(인코더) 1회 지연 로드 → URL로 SVG 즉석 생성(화면), 다운로드는 고해상도 PNG. 커밋 PNG 214개 대체. */
+var _qrLoading; function loadQR(cb){ if(window.__QR__)return cb(); if(_qrLoading){_qrLoading.push(cb);return;} _qrLoading=[cb]; var sc=document.createElement('script'); sc.src='/qr.js'; sc.onload=function(){ var q=_qrLoading; _qrLoading=null; q.forEach(function(f){f();}); }; sc.onerror=function(){ _qrLoading=null; }; document.head.appendChild(sc); }
+function openQR(){ var code=curCode||'ko'; var box=document.getElementById('qrImg'); if(!box)return; var url=shareUrl(); document.getElementById('qrUrl').textContent=url; document.getElementById('qrModal').hidden=false; gevent('share',{method:'qr'}); loadQR(function(){ if(!window.__QR__)return; box.innerHTML=window.__QR__.svg(url); var dl=document.getElementById('qrDl'); if(dl){ dl.href=window.__QR__.pngDataUrl(url); dl.setAttribute('download','qr-one-scroll-bible-'+code+'.png'); } }); }
 (function(){ var qm=document.getElementById('qrModal'); if(!qm)return; var cl=document.getElementById('qrClose'); if(cl)cl.addEventListener('click',function(){qm.hidden=true;}); qm.addEventListener('click',function(e){ if(e.target===qm)qm.hidden=true; }); })();
 
 /* 섹션 노출 분석(언어별 이탈 지점 파악) */

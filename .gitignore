@@ -27,6 +27,10 @@
 # Per-language OG images are no longer used — a single shared /og.png serves all languages.
 /og-*.png
 
+# Per-language QR PNGs are no longer committed — the client renders QR at runtime via /qr.js
+# (SVG on screen, high-res PNG on download). Kept ignored so a stray make-qr run can't re-add them.
+/qr-*.png
+
 # Local cruft
 .DS_Store
 Thumbs.db

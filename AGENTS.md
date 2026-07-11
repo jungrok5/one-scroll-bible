@@ -50,19 +50,20 @@ Protestant church; Korean Revised Version (개역개정) as the Korean baseline.
 - **Generated output is NOT committed** (Vercel regenerates it every deploy via the buildCommand):
   `/<code>/index.html`, `sitemap.xml`, `llms.txt`. See `.gitignore`.
 - **Committed binaries**: `og.png` (a **single shared OG image** for all languages) + `icon-192/512.png`
-  need `rsvg-convert`+fonts (Vercel can't make them → committed); `qr-<code>.png` is pure-JS (`qrcode`
-  devDep) so **build-pages auto-backfills any missing one** on every build (still committed as source of truth).
+  need `rsvg-convert`+fonts (Vercel can't make them → committed).
   Every page's `og:image` points to the shared `/og.png`; `og:title`/`og:description` stay per-language.
+  (**No committed QR PNGs** — QR is rendered client-side at runtime; see below.)
 - PWA: `manifest.webmanifest` + `sw.js` (navigate = network-first, assets = cache-first, same-origin only).
 - Share: global + per-scene adaptive UI (mobile native + copy/QR; desktop social + copy/QR),
-  QR modal (loads `qr-<code>.png` **lazily**, only when opened), deep links `#s1`–`#s13`.
+  QR modal — **`/qr.js` is lazy-loaded on first open** (kazuhikoarase encoder, EC-M) and renders the current
+  URL as **SVG on screen + high-res PNG on download**; no per-language image, no `qrcode` build dep. Deep links `#s1`–`#s13`.
   (The canvas verse-image option was removed — canvas fonts can't render most non-Latin scripts.)
 - GA4 events: language_select · share{method} · scene_view · section_view · prayer_view · read_more.
 - `vercel.json` (`buildCommand = node tools/build-pages.mjs` + security/cache headers), `robots.txt`.
   **`.vercelignore` keeps `AGENTS.md`, `CLAUDE.md` and `.claude` out of the deploy.**
 - `.claude/skills/add-language/` — the **/add-language skill**. Follow its `SKILL.md` when adding a
   language. Helpers in `lib/`: detect-mode (probe sources → recommend mode) · validate · audit-links ·
-  integrate · make-qr · convert-digits · fetch-verse · verify-verbatim · verify-inline · verify-prose · native-review-prompt.
+  integrate · convert-digits · fetch-verse · verify-verbatim · verify-inline · verify-prose · native-review-prompt.
 
 ## Single source of truth — do NOT track per-language state in this file
 The language list/codes live in **`index.html`** (`LANGS`) — the **single source**. Each entry carries

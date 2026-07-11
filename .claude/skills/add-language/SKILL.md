@@ -6,9 +6,9 @@ description: "Add a new language to the site (Bible in One Scroll) with nothing 
 # Add-language skill
 
 Procedure to add one language **with nothing missed**. Helpers live in
-`.claude/skills/add-language/lib/` (pick-candidates · detect-mode · validate · audit-links · integrate · make-qr · convert-digits ·
+`.claude/skills/add-language/lib/` (pick-candidates · detect-mode · validate · audit-links · integrate · convert-digits ·
 fetch-verse · fetch-booknames · verify-verbatim · verify-inline · verify-prose · native-review-prompt · config.example.json).
-**Run every command from the repo root.** **Setup (once):** `npm install` (installs `qrcode` for make-qr). The repo is LF-normalized via `.gitattributes`, so these Node tools run identically on Windows and Linux.
+**Run every command from the repo root.** (QR needs no setup — the client renders it at runtime via `/qr.js`; no `qrcode` dep, no committed PNGs.) The repo is LF-normalized via `.gitattributes`, so these Node tools run identically on Windows and Linux.
 
 > Core principle (AGENTS.md): evangelical · Reformed redemptive-historical view. Scripture is quoted
 > **verbatim from each language's official translation**. For every language except ko, FAQ q3/a3 must
@@ -158,14 +158,13 @@ node .claude/skills/add-language/lib/integrate.mjs /tmp/lang-<code>.json
 - "Unresolved token" warnings are usually a false positive on a preceding number ("3 Ром" etc.) — ignore.
   If a real book is missing, fix the config and re-run.
 
-## 4. QR + build
+## 4. build
 ```
-node tools/build-pages.mjs                                # regenerates pages + AUTO-BACKFILLS any missing qr-<code>.png (qrcode devDep); refreshes i18n/en.json + sw.js stamp
-node .claude/skills/add-language/lib/make-qr.mjs <code>   # (optional) explicit single-language QR; build-pages already backfills missing ones
+node tools/build-pages.mjs                                # regenerates pages; refreshes i18n/en.json + sw.js stamp
 ```
-- `qr-<code>.png` is **committed** (source of truth). **build-pages now auto-generates any missing QR** when
-  `qrcode` is loadable (repo `npm install`, or `/tmp/qrgen`); if qrcode isn't installed it prints a `⚠ 누락` (missing) warning
-  and never fails the build — so install qrcode (`npm install` at repo root) before building, then commit the new PNG.
+- **QR needs no per-language step anymore.** There are no committed `qr-<code>.png` files: the client renders the QR
+  at runtime from the current URL via `/qr.js` (lazy-loaded on modal open — SVG on screen, high-res PNG on download).
+  A new language's QR just works; `make-qr.mjs`/`qrcode` are obsolete (`/qr-*.png` is gitignored so a stray run can't re-add them).
 - build-pages' page output (`<code>/index.html`, sitemap.xml, llms.txt) is **gitignored** — Vercel
   regenerates it on every deploy. Run it here to **verify it succeeds** and to inspect the generated
   `<code>/index.html` locally; its committed side-effects are `i18n/en.json` and the `sw.js` cache stamp.

@@ -105,7 +105,16 @@ Many ministries share this heart; **we are the on-ramp in front of them**, and w
 
 ## License / contact
 - **Code** (HTML/CSS/JS + build tooling): [MIT](LICENSE).
-- **Content** (the redemptive-history / gospel text & its translations): [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — reuse, translate and share freely, with attribution.
-- **Scripture** quotations: copyright their respective publishers; used here by quotation and linking only.
+- **Content** (the redemptive-history / gospel text & its translations — i.e. **our own writing**): [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — reuse, translate and share freely, with attribution.
+- **Scripture quotations are NOT covered by that CC BY 4.0 licence.** They are quoted from each language's
+  representative translation, remain the property of their respective publishers, and are used here by quotation
+  and linking only. Every page states this in its footer, next to the notice for the translation it quotes.
+  - English quotes the **ESV**: *Scripture quotations are from the ESV® Bible (The Holy Bible, English Standard Version®),
+    © 2001 by Crossway, a publishing ministry of Good News Publishers. ESV Text Edition: 2025. The ESV text may not be
+    quoted in any publication made available to the public by a Creative Commons license. The ESV may not be translated
+    in whole or in part into any other language. Used by permission. All rights reserved.*
+  - Spanish quotes the **RVR1960**: *El texto bíblico ha sido tomado de la versión Reina-Valera © 1960 Sociedades Bíblicas
+    en América Latina; © renovado 1988 Sociedades Bíblicas Unidas. Utilizado con permiso.*
+  - Korean quotes the **개역개정**: 「성경전서 개역개정판」 © 대한성서공회.
 
 For content questions or feedback, use the contact at the bottom of the site, or open an [issue](../../issues).

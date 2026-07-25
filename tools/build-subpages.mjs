@@ -145,6 +145,31 @@ function setLangAttrs(html, lang, pack) {
 }
 
 // code → {native, en} from index.html LANGS (for the switcher's English-name search).
+// Scripture-copyright + licence-scope line, shared with the main page so there is ONE source of
+// truth per language: main pack s['ui.legal'] (en comes straight from index.html's EN_PACK, since
+// i18n/en.json is refreshed *after* generate() runs). ko stays as the template's inline default.
+let _LEGAL = null;
+function legalFor(lang) {
+  if (lang === 'ko') return null;
+  if (!_LEGAL) {
+    _LEGAL = {};
+    try {                                   // en: EN_PACK 'ui.legal':`…` inside index.html
+      const html = fs.readFileSync(p('index.html'), 'utf8');
+      const m = html.match(/'ui\.legal':`([^`]*)`/);
+      if (m) _LEGAL.en = m[1];
+    } catch {}
+  }
+  if (_LEGAL[lang] !== undefined) return _LEGAL[lang];
+  let v = null;
+  try { v = (JSON.parse(fs.readFileSync(p('i18n', lang + '.json'), 'utf8')).s || {})['ui.legal'] || null; } catch {}
+  _LEGAL[lang] = v || _LEGAL.en || null;    // fall back to the English notice rather than leaving ko
+  return _LEGAL[lang];
+}
+function setLegal(html, lang) {
+  const t = legalFor(lang);
+  return t ? html.replace(/<!--LEGAL-->[\s\S]*?<!--\/LEGAL-->/g, `<!--LEGAL-->${t}<!--/LEGAL-->`) : html;
+}
+
 let _LANGMETA = null;
 function langMeta() {
   if (_LANGMETA) return _LANGMETA;
@@ -236,6 +261,7 @@ export function generate() {
       const get = makeGet(lang, T, pack);
       let h = prerenderBody(tpl, get);
       h = replaceTokens(h, totals);
+      h = setLegal(h, lang);
       h = setLangAttrs(h, lang, pack);
       h = bakeHead(h, page, lang, langs, get, pack);
       h = injectGlobals(h, [

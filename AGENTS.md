@@ -24,6 +24,15 @@ Protestant church; Korean Revised Version (개역개정) as the Korean baseline.
   on that page — do NOT introduce a different religious register (e.g. Islamic-idiom আল্লা/ইসা when the quoted Bible
   reads ঈশ্বর/যীশু). **Bridge mode**: match the **bridge language's** Bible. This keeps each page internally consistent
   and defers the contextualization choice to the official Bible translators, not to us per page. (See SKILL.md.)
+- **Scripture copyright / licence scope (never regress this).** Quoted Scripture is **not** under the site's
+  CC BY 4.0 — that licence covers only our own writing. Every page shows `s['ui.legal']` in the footer: the
+  quoted translation's copyright notice **+** the CC-scope sentence. `en` carries Crossway's ESV notice
+  **verbatim** (it includes "may not be quoted in any publication made available to the public by a Creative
+  Commons license" — hence the explicit scoping), `es` the UBS RVR1960 notice, `ko` 「개역개정」 © 대한성서공회.
+  Other languages use an accurate generic line naming their version. New packs inherit the key via the i18n
+  completeness gate — **fill in a publisher-verified notice when one is known; never invent one**, and never
+  claim "used by permission" without a real allowance. (about/maps reuse the main pack's line, injected by
+  `build-subpages`, so there is one source per language.)
 - Keep sensitive topics gently worded (murderer / "cheap grace" / "just be a good person";
   for non-ko, FAQ q3/a3 must reference **no specific films or events**). Rom 12:19 = "vengeance
   belongs to God," not a justification of revenge.

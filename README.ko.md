@@ -105,7 +105,16 @@
 
 ## 라이선스 / 문의
 - **코드**(HTML/CSS/JS + 빌드 도구): [MIT](LICENSE).
-- **콘텐츠**(구속사·복음 본문과 그 번역): [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — 출처 표시 시 자유롭게 재사용·번역·배포.
-- **성경 인용문**: 각 번역본 발행처 저작권이며, 인용·링크 형태로만 사용합니다.
+- **콘텐츠**(구속사·복음 본문과 그 번역 — 즉 **우리가 직접 쓴 글**): [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — 출처 표시 시 자유롭게 재사용·번역·배포.
+- **인용된 성경 본문은 위 CC BY 4.0에 포함되지 않습니다.** 각 언어의 대표 번역본에서 인용한 것으로 저작권은
+  각 발행처에 있으며, 인용·링크 형태로만 사용합니다. 모든 페이지 하단에 해당 언어가 인용한 번역본의 고지문과
+  함께 이 사실을 명시합니다.
+  - 영어는 **ESV** 인용: *Scripture quotations are from the ESV® Bible (The Holy Bible, English Standard Version®),
+    © 2001 by Crossway, a publishing ministry of Good News Publishers. ESV Text Edition: 2025. The ESV text may not be
+    quoted in any publication made available to the public by a Creative Commons license. The ESV may not be translated
+    in whole or in part into any other language. Used by permission. All rights reserved.*
+  - 스페인어는 **RVR1960** 인용: *El texto bíblico ha sido tomado de la versión Reina-Valera © 1960 Sociedades Bíblicas
+    en América Latina; © renovado 1988 Sociedades Bíblicas Unidas. Utilizado con permiso.*
+  - 한국어는 **개역개정** 인용: 「성경전서 개역개정판」 © 대한성서공회.
 
 콘텐츠 문의/피드백은 사이트 하단 연락처 또는 [이슈](../../issues)로 주세요.

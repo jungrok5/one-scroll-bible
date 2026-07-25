@@ -106,6 +106,10 @@ Many ministries share this heart; **we are the on-ramp in front of them**, and w
 ## License / contact
 - **Code** (HTML/CSS/JS + build tooling): [MIT](LICENSE).
 - **Content** (the redemptive-history / gospel text & its translations — i.e. **our own writing**): [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — reuse, translate and share freely, with attribution.
+  **Exception — English is excluded.** The English pages (and the English strings in `index.html`'s `EN_PACK`
+  and `i18n/en.json`) are **not** offered under any Creative Commons licence, because they quote the **ESV**,
+  whose terms state the text "may not be quoted in any publication made available to the public by a Creative
+  Commons license." Every other language's own writing remains CC BY 4.0.
 - **Scripture quotations are NOT covered by that CC BY 4.0 licence.** They are quoted from each language's
   representative translation, remain the property of their respective publishers, and are used here by quotation
   and linking only. Every page states this in its footer, next to the notice for the translation it quotes.

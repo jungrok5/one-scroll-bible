@@ -262,6 +262,8 @@ export function generate() {
       let h = prerenderBody(tpl, get);
       h = replaceTokens(h, totals);
       h = setLegal(h, lang);
+      // 영어만 CC BY 제외(ESV 약관) — 메인 페이지와 동일 규칙, 무JS 크롤러용 정적 숨김
+      if (lang === 'en') h = h.replace('<span id="ccLink">', '<span id="ccLink" hidden>');
       h = setLangAttrs(h, lang, pack);
       h = bakeHead(h, page, lang, langs, get, pack);
       h = injectGlobals(h, [

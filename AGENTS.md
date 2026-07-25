@@ -31,7 +31,10 @@ Protestant church; Korean Revised Version (개역개정) as the Korean baseline.
   Commons license" — hence the explicit scoping), `es` the UBS RVR1960 notice, `ko` 「개역개정」 © 대한성서공회.
   Other languages use an accurate generic line naming their version. New packs inherit the key via the i18n
   completeness gate — **fill in a publisher-verified notice when one is known; never invent one**, and never
-  claim "used by permission" without a real allowance. (about/maps reuse the main pack's line, injected by
+  claim "used by permission" without a real allowance.
+  **English is carved out of CC BY entirely** (ESV forbids CC-licensed publications): the footer `#ccLink`
+  is hidden for `en` at runtime (`doApply`/`applyText`) **and** statically at build (build-pages/build-subpages),
+  and README/README.ko state the exception. Don't re-add a CC badge to English pages. (about/maps reuse the main pack's line, injected by
   `build-subpages`, so there is one source per language.)
 - Keep sensitive topics gently worded (murderer / "cheap grace" / "just be a good person";
   for non-ko, FAQ q3/a3 must reference **no specific films or events**). Rom 12:19 = "vengeance

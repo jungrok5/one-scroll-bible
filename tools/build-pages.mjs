@@ -369,7 +369,7 @@ function makePage(m){
   }
   // base + hreflang + boot 언어를 charset 뒤에 삽입
   h = h.replace('<meta charset="UTF-8" />',
-    `<meta charset="UTF-8" />\n<base href="${ORIGIN}/" />\n<script>window.__BOOTLANG__=${JSON.stringify(m.code)}</script>\n${XLANGS_SCRIPT}\n${HREF}`);
+    `<meta charset="UTF-8" />\n<base href="${m.code==='en'?'/':ORIGIN+'/'}" />\n<script>window.__BOOTLANG__=${JSON.stringify(m.code)}</script>\n${XLANGS_SCRIPT}\n${HREF}`);
   h = h.replace(/<title>[\s\S]*?<\/title>/, `<title>${xml(m.docTitle)}</title>`);
   h = h.replace(/(<meta name="description" content=")[^"]*(")/, `$1${xml(m.desc)}$2`);
   h = h.replace('<link rel="canonical" href="https://one-scroll-bible.com/" />', `<link rel="canonical" href="${url}" />`);
@@ -502,7 +502,7 @@ try {
 try {
   const swPath = `${root}/sw.js`;
   const sw = fs.readFileSync(swPath, 'utf8');
-  const hash = crypto.createHash('sha1').update(src).digest('hex').slice(0, 8);
+  const hash = crypto.createHash('sha1').update(src).update(fs.readFileSync(`${root}/v2/cinema.js`)).update(fs.readFileSync(`${root}/v2/cinema.css`)).digest('hex').slice(0, 8);
   const stamped = sw.replace(/const CACHE = '[^']*';/, `const CACHE = 'osb-${hash}';`);
   if (stamped !== sw) { fs.writeFileSync(swPath, stamped); console.log('sw.js CACHE =', 'osb-' + hash); }
 } catch (e) { console.log('sw.js 스탬프 건너뜀:', e.message); }

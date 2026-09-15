@@ -4,8 +4,8 @@
    - 정적 자원(이미지/CSS/폰트/매니페스트): cache-first + 런타임 캐시
    - 동일 출처만 캐시(GA 등 외부는 통과)
    - CACHE 이름은 build-pages 가 index.html 해시로 스탬프 → 셸 변경 시 자동 무효화 */
-const CACHE = 'osb-a8f39fbf';
-const PRECACHE = ['/', '/v2-worlds.js', '/manifest.webmanifest', '/og.png', '/icon-192.png', '/icon-512.png'];
+const CACHE = 'osb-56d38bb6';
+const PRECACHE = ['/', '/v2/cinema.js', '/v2/cinema.css', '/v2/art/creation-640.webp', '/manifest.webmanifest', '/og.png', '/icon-192.png', '/icon-512.png'];
 
 self.addEventListener('install', (e) => {
   e.waitUntil(caches.open(CACHE).then((c) => c.addAll(PRECACHE)).then(() => self.skipWaiting()));

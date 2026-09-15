@@ -857,7 +857,7 @@
   html.v2 .thread .flow .arw{width:1px;height:44px;background:linear-gradient(transparent,var(--accent),transparent);font-size:0;color:transparent;transform:none}
   html.v2 .thread .note{font-size:.78rem;line-height:1.9;color:rgba(243,236,221,.58)}
 
-  html.v2 .epoch{--scene-index-shift:0px;--scene-sigil-shift:0px;--scene-art-shift:0px;min-height:112svh;padding:15svh 0;border:0;align-items:center;background:#050506!important}
+  html.v2 .epoch{--scene-index-shift:0px;--scene-sigil-shift:0px;--scene-art-shift:0px;min-height:112svh;padding:15svh 0;border:0;align-items:center;flex-direction:column;justify-content:center;background:#050506!important}
   html.v2 .era-creation{--c2:#78b9e8!important;--c1:rgba(76,151,205,.34)!important}
   html.v2 .era-fall{--c2:#b65343!important;--c1:rgba(182,83,67,.34)!important}
   html.v2 .era-patriarch{--c2:#d8a63f!important;--c1:rgba(216,166,63,.3)!important}
@@ -940,11 +940,32 @@
   html.v2 .silence-stage strong{font-size:clamp(5.5rem,22vw,14rem);line-height:.72;color:#e8e3da;letter-spacing:-.085em}
   html.v2 .silence-stage span{font-size:.6rem;letter-spacing:.38em;color:rgba(243,236,221,.36)}
   html.v2 .silence-return{min-height:68svh;font-size:clamp(1.4rem,4vw,2.4rem);letter-spacing:.04em}
-  html.v2 .arrival-stage{min-height:152svh;margin:-10svh 0 8svh}
-  html.v2 .arrival-birth{min-height:80svh}
-  html.v2 .arrival-birth span{font-size:.58rem;letter-spacing:.52em}
-  html.v2 .arrival-birth strong{font-size:clamp(5rem,19vw,12rem);line-height:.74;letter-spacing:-.07em;text-shadow:0 0 70px rgba(216,166,63,.28)}
-  html.v2 .jesus-arc{min-height:72svh;border-color:rgba(243,236,221,.13);background:linear-gradient(90deg,#010101 0 47%,rgba(104,36,28,.18) 49%,rgba(216,166,63,.13) 52%,transparent 100%)}
+  html.v2 .era-jesus{padding:0!important;min-height:auto}
+  html.v2 .era-jesus .scene-index,html.v2 .era-jesus .scene-sigil{display:none}
+  html.v2 .era-jesus>.wrap{padding-top:14svh;padding-bottom:14svh}
+  html.v2 .arrival-stage{position:relative;z-index:3;width:100%;min-height:100svh;margin:0;text-align:center}
+  html.v2 .arrival-birth{min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden}
+  html.v2 .arrival-birth::before{content:"";position:absolute;left:50%;top:0;width:1px;height:31%;background:linear-gradient(transparent,rgba(228,195,109,.48));box-shadow:0 0 20px rgba(228,195,109,.28)}
+  html.v2 .arrival-birth::after{content:"";position:absolute;left:50%;bottom:0;width:1px;height:27%;background:linear-gradient(rgba(228,195,109,.48),transparent);box-shadow:0 0 20px rgba(228,195,109,.2)}
+  html.v2 .arrival-birth span{color:rgba(243,236,221,.58);font-size:.61rem;letter-spacing:.24em;margin-bottom:26px}
+  html.v2 .arrival-birth strong{color:var(--accent);font:700 clamp(5rem,19vw,12rem)/.74 var(--serif);letter-spacing:-.07em;text-shadow:0 0 70px rgba(216,166,63,.28)}
+  html.v2 .arrival-star{width:9px;height:9px;margin-bottom:30px;position:relative;transform:rotate(45deg);border:1px solid #f7e7b1;box-shadow:0 0 24px 9px rgba(228,195,109,.36)}
+  html.v2 .ministry-kicker{margin:0 0 28px;color:rgba(228,195,109,.76);font:600 .62rem/1.7 var(--sans);letter-spacing:.19em;text-transform:uppercase}
+
+  html.v2 .jesus-climax{--cross-opacity:1;--cross-scale:1;--rise-opacity:0;--dawn-scale:.55;position:relative;z-index:4;width:100%;height:300svh;background:#010101}
+  html.v2 .climax-sticky{position:sticky;top:0;width:100%;height:100svh;overflow:hidden;background:#010101}
+  html.v2 .climax-cross,html.v2 .climax-resurrection{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;overflow:hidden}
+  html.v2 .climax-cross{opacity:var(--cross-opacity);transform:scale(var(--cross-scale));background:radial-gradient(circle at 50% 49%,rgba(100,32,27,.09),transparent 28%),#010101}
+  html.v2 .cross-form{position:relative;width:1px;height:min(44svh,390px);background:linear-gradient(transparent,rgba(231,226,215,.78) 18% 86%,transparent);box-shadow:0 0 18px rgba(255,255,255,.08)}
+  html.v2 .cross-form::before{content:"";position:absolute;left:50%;top:28%;width:min(28vw,190px);height:1px;background:linear-gradient(90deg,transparent,rgba(231,226,215,.78) 18% 82%,transparent);transform:translateX(-50%)}
+  html.v2 .climax-cross .climax-label{position:absolute;left:50%;bottom:12svh;transform:translateX(-50%);color:rgba(243,236,221,.48);font:600 .62rem/1 var(--sans);letter-spacing:.42em;text-transform:uppercase}
+  html.v2 .climax-cross::after{content:"";position:absolute;inset:auto 0 0;height:35%;background:linear-gradient(transparent,#000)}
+  html.v2 .climax-resurrection{opacity:var(--rise-opacity);background:radial-gradient(circle at 50% 68%,rgba(255,248,217,.98) 0 1px,rgba(229,181,74,.52) 2px,rgba(73,134,177,.2) 13%,transparent 42%),linear-gradient(180deg,#010101 0 42%,#0a1720 72%,#1f4055 100%)}
+  html.v2 .resurrection-horizon{position:absolute;left:7vw;right:7vw;top:68%;height:1px;background:linear-gradient(90deg,transparent,rgba(243,236,221,.56) 25% 75%,transparent);transform:scaleX(var(--dawn-scale));transform-origin:center;box-shadow:0 0 38px rgba(228,195,109,.45)}
+  html.v2 .resurrection-orbit{position:absolute;left:50%;top:68%;width:min(56vw,600px);aspect-ratio:1;border:1px solid rgba(228,195,109,.2);border-radius:50%;transform:translate(-50%,-50%) scale(var(--dawn-scale));box-shadow:0 0 0 9vw rgba(228,195,109,.018)}
+  html.v2 .climax-resurrection .climax-label{position:absolute;left:50%;top:18svh;transform:translateX(-50%);color:#ead28e;font:700 clamp(2.2rem,8vw,6rem)/.9 var(--serif);letter-spacing:.04em;text-transform:uppercase;text-shadow:0 0 40px rgba(228,195,109,.25)}
+  html.v2 .post-climax-next{position:relative;z-index:4;padding-top:8svh;padding-bottom:14svh;background:linear-gradient(180deg,#1f4055,#061017 72%,#030807);max-width:none}
+  html.v2 .post-climax-next .next{max-width:610px;margin:0 auto;color:rgba(243,236,221,.7)}
 
   html.v2 .story-complete{min-height:118svh;display:flex;flex-direction:column;justify-content:center;border:0;background:radial-gradient(circle at 50% 35%,rgba(255,246,207,.3) 0 1px,rgba(74,143,191,.18) 2%,transparent 35%),linear-gradient(180deg,#030507,#132637 70%,#080b0d);position:relative;overflow:hidden}
   html.v2 .story-complete::before{content:"";position:absolute;left:50%;top:38%;width:min(70vw,720px);aspect-ratio:1;border:1px solid rgba(216,166,63,.16);border-radius:50%;transform:translate(-50%,-50%);box-shadow:0 0 0 12vw rgba(216,166,63,.012)}
@@ -993,11 +1014,22 @@
     html.v2 .story-complete{padding-inline:20px}
     html.v2 .story-quote{font-size:clamp(3.6rem,18vw,6rem)}
     html.v2 .mission-share{padding:38px 18px}
+    html.v2 .arrival-birth span{max-width:24ch;letter-spacing:.16em;line-height:1.8}
+    html.v2 .arrival-birth strong{font-size:clamp(5rem,23vw,8rem)}
+    html.v2 .ministry-kicker{font-size:.58rem;letter-spacing:.14em;line-height:1.9}
+    html.v2 .climax-cross .climax-label{letter-spacing:.3em}
+    html.v2 .climax-resurrection .climax-label{font-size:clamp(2.5rem,13vw,4.5rem)}
+    html.v2 .post-climax-next{padding-inline:22px}
   }
 
   @media(prefers-reduced-motion:reduce){
     html.v2 .scene-sigil,html.v2 .scene-index,html.v2 .scene-art{transform:none!important;transition:none!important}
     html.v2 .scene-sigil svg *{stroke-dashoffset:0!important;transition:none!important}
+    html.v2 .jesus-climax{height:auto!important}
+    html.v2 .climax-sticky{position:relative;height:auto;overflow:visible}
+    html.v2 .climax-cross,html.v2 .climax-resurrection{position:relative;min-height:92svh;opacity:1!important;transform:none!important}
+    html.v2 .resurrection-horizon{transform:none!important}
+    html.v2 .resurrection-orbit{transform:translate(-50%,-50%) scale(1)!important}
   }
 
   /* ===== 인쇄/PDF 전용 (화면엔 영향 없음 — @media print 스코프) ===== */
@@ -1561,6 +1593,8 @@ const V2_COPY={
 
 Object.assign(V2_COPY.ko,{beforeBible:'BEFORE THE BIBLE.',beforeSlogan:'1,200쪽을 읽기 전에, 한 번 스크롤하세요.',languages:'성경. 하나의 이야기. 210개 이상의 언어.',reachedEnd:'이야기의 끝에 도착했습니다.<br><b>그러나 당신의 이야기는 여기서 시작됩니다.</b>',someone:'당신이 아는 누군가는 아직 성경의 큰 이야기를 이해하지 못했습니다.',giveFive:'그 사람에게 5분을 선물하세요.',scanLanguage:'QR을 스캔하면 각자의 언어로 성경 전체 이야기를 읽을 수 있습니다.',shareStory:'이 이야기 공유',printPoster:'포스터 인쇄',posterKicker:'성경 전체',posterTitle:'하나의 이야기.',posterPath:'창조 → 타락 → 약속 → 예수님 → 새 창조',qrPitch:'성경 전체를 5분 만에.',qrCaption:'스캔하여 이 이야기를 현재 언어로 읽어보세요.',arrivalKicker:'한 아기가 태어났습니다.',arrivalName:'예수님',cross:'십자가',resurrection:'부활',scene:'장면',milestoneSeed:'여자의 후손',milestoneNations:'모든 민족',milestoneKing:'영원한 왕',milestoneCovenant:'새 언약',milestoneMessiah:'메시아',milestoneNew:'새 창조'});
 Object.assign(V2_COPY.en,{beforeBible:'BEFORE THE BIBLE.',beforeSlogan:'Before you read 1,200 pages, scroll one.',languages:'The Bible. One story. 210+ languages.',reachedEnd:'You reached the end.<br><b>But this is where your story begins.</b>',someone:'Someone you know has never understood the Bible.',giveFive:'Give them five minutes.',scanLanguage:'Scan to read the whole Bible story in your language.',shareStory:'Share this story',printPoster:'Print poster',posterKicker:'THE WHOLE BIBLE',posterTitle:'ONE STORY.',posterPath:'Creation → Fall → Promise → Jesus → New Creation',qrPitch:'The whole Bible in five minutes.',qrCaption:'Scan to read this story in your language.',arrivalKicker:'A CHILD IS BORN.',arrivalName:'JESUS',cross:'CROSS',resurrection:'RESURRECTION',scene:'Scene',milestoneSeed:'Offspring',milestoneNations:'All nations',milestoneKing:'Forever King',milestoneCovenant:'New Covenant',milestoneMessiah:'Messiah',milestoneNew:'New Creation',allNew:'BEHOLD,<br>I AM MAKING ALL THINGS<br>NEW.',allNewRef:'Revelation 21:5 (ESV)'});
+Object.assign(V2_COPY.ko,{ministryKicker:'말씀이 우리 가운데 거하셨습니다.'});
+Object.assign(V2_COPY.en,{ministryKicker:'THE WORD DWELT AMONG US.'});
 
 const KO_OVERRIDES={
  'faq.a4':`<p>좋은 질문입니다. 성경은 신앙 문서이면서 동시에 역사·시·지혜문학·예언·복음서·편지 등 여러 장르를 담은 고대 문헌 모음입니다. 따라서 모든 부분을 같은 방식의 현대 역사책처럼 읽을 수는 없습니다.</p><p><b>① 역사적 배경은 상당 부분 확인됩니다.</b> 고고학과 고대 문헌은 성경 세계의 많은 인물·지명·왕국·관습을 확인해 왔습니다. 텔단 비석의 “다윗의 집”, 빌라도 비문, 히스기야 터널 등이 대표적입니다. 다만 고고학이 성경의 모든 사건이나 신학적 의미를 증명한 것은 아니며, 일부 사건의 연대와 해석은 학계에서 계속 논의됩니다.</p><p><b>② 사본은 비교하고 검토할 수 있을 만큼 풍부합니다.</b> 사해문서를 포함한 많은 사본 덕분에 본문이 전해진 과정을 세밀하게 비교할 수 있습니다. 사본들 사이에는 변이가 있지만, 본문비평을 통해 그 차이를 공개적으로 검토하며 원문에 가까운 읽기를 재구성합니다.</p><p><b>③ 예수님의 존재와 십자가 처형은 널리 인정되는 역사적 핵심입니다.</b> 기독교 문헌뿐 아니라 타키투스와 요세푸스 같은 외부 자료도 관련 맥락을 전합니다. 부활은 기독교 신앙의 중심 주장으로, 초기 제자들의 증언과 신앙 공동체의 탄생을 역사적 자료로 검토할 수 있지만 그 의미를 받아들이는 일은 역사 연구만으로 강제되지 않습니다.</p><p>이런 근거들은 성경을 믿는 것이 비합리적이지 않다는 것을 보여주지만 수학 공식 같은 증명은 아닙니다. 성경 자체는 믿음이 말씀을 들음에서 난다고 말합니다. 그래서 가장 정직한 출발은 질문을 숨기지 않은 채 <b>본문을 직접 읽어보는 것</b>입니다.</p><p class="faq-v">왕하 20:20 · 롬 10:17 (개역개정)</p>`
@@ -1890,7 +1924,8 @@ function renderEpochs(pack){
       const activeMilestones=milestones.filter(m=>m.at<=i).length;
       const promiseProgress=Math.max(0,(activeMilestones-1)/5*83.4)+'%';
       const promiseNodes=milestones.map((m,j)=>`<span class="promise-node ${m.at<=i?'on':''} ${i>=10&&j===4?'fulfilled':''} ${i===12&&j===5?'fulfilled':''}"><i></i><small>${m.label}</small></span>`).join('');
-      const stage=i===9?`<div class="silence-stage"><div class="silence-first"><strong>${v2.silent}</strong><span>${v2.silentSub}</span></div><p class="silence-return">${v2.notForgotten}</p></div>`:(i===10?`<div class="arrival-stage"><div class="arrival-birth"><span>${v2.arrivalKicker}</span><strong>${v2.arrivalName}</strong></div><div class="jesus-arc"><b>${v2.cross}</b><i class="cross-symbol"></i><b>${v2.resurrection}</b><i class="dawn-symbol"></i></div></div>`:'');
+      const openingStage=i===9?`<div class="silence-stage"><div class="silence-first"><strong>${v2.silent}</strong><span>${v2.silentSub}</span></div><p class="silence-return">${v2.notForgotten}</p></div>`:(i===10?`<div class="arrival-stage"><div class="arrival-birth"><i class="arrival-star" aria-hidden="true"></i><span>${v2.arrivalKicker}</span><strong>${v2.arrivalName}</strong></div></div>`:'');
+      const climax=i===10?`<div class="jesus-climax" role="img" aria-label="${v2.cross} → ${v2.resurrection}"><div class="climax-sticky" aria-hidden="true"><div class="climax-cross"><i class="cross-form"></i><b class="climax-label">${v2.cross}</b></div><div class="climax-resurrection"><i class="resurrection-orbit"></i><i class="resurrection-horizon"></i><b class="climax-label">${v2.resurrection}</b></div></div></div>`:'';
       const mapSection=i===10?'jesus':i===11?'paul':(i>=3&&i<=9?'ot':'');
       const mapLink=mapSection?`<p><a class="vlink" href="/maps/" data-rel="maps" data-map-section="${mapSection}">${v2.map}</a></p>`:'';
       s.innerHTML=linkifyRefs(`
@@ -1898,8 +1933,9 @@ function renderEpochs(pack){
       <div class="scene-index" aria-hidden="true">${String(i+1).padStart(2,'0')}</div>
       <div class="scene-sigil" aria-hidden="true">${sceneGlyph(v.svg||'restoration')}</div>
       <div class="glow"></div>
+      ${openingStage}
       <div class="wrap"><div class="ep-inner"><div class="txt">
-        ${stage}
+        ${i===10?`<p class="ministry-kicker">${v2.ministryKicker}</p>`:''}
         <div class="ep-icon">${v.emoji}</div>
         <div class="badge"><span class="num">${i+1}</span><span class="tag">${e.tag}</span><span class="date">${e.date}</span><span class="scene-count">${v2.scene} ${i+1} / 13</span><button class="ep-share" data-sc="${i+1}" aria-label="Share" title="Share">${SVG.share}</button></div>
         <h2>${e.title}</h2>
@@ -1909,8 +1945,10 @@ function renderEpochs(pack){
         <div class="thread-line"><p class="note-h"><span class="note-i">🧵</span><b>${u.christLabel}</b></p><p class="note-b">${e.christ}</p></div>
         <div class="promise-track" role="img" aria-label="${v2.journey}: ${i>=10?v2.fulfilled:v2.waiting}"><div class="promise-head"><b>${v2.journey}</b><span>${i>=10?v2.fulfilled:v2.waiting}</span></div><div class="promise-nodes" style="--promise-progress:${promiseProgress}">${promiseNodes}</div></div>
         <details class="more"><summary><span class="arr">▸</span> ${v2.explore}</summary><div class="body">${mapLink?`<div class="v2-detail-block">${mapLink}</div>`:''}${e.detail}<div class="love-note"><p class="note-h"><span class="note-i">💛</span><b>${u.loveLabel}</b></p><p class="note-b">${pack.love[i]}</p></div>${mis?`<div class="myth"><div class="m-row"><span class="m-tag wrong">${u.mythWrong}</span><p>${mis.w}</p></div><div class="m-row"><span class="m-tag right">${u.mythRight}</span><p>${mis.t}</p></div></div>`:''}</div></details>
-        <div class="next">${e.next}</div>
-      </div></div></div>`,curCode);
+        ${i===10?'':`<div class="next">${e.next}</div>`}
+      </div></div></div>
+      ${climax}
+      ${i===10?`<div class="post-climax-next wrap"><div class="next">${e.next}</div></div>`:''}`,curCode);
       main.appendChild(s);
       return;
     }
@@ -1954,6 +1992,17 @@ function paintScenes(){
     el.style.setProperty('--scene-sigil-shift',(p*58).toFixed(1)+'px');
     el.style.setProperty('--scene-art-shift',(p*-24).toFixed(1)+'px');
   });
+  const climax=document.querySelector('.jesus-climax');
+  if(climax){
+    const r=climax.getBoundingClientRect(),travel=Math.max(1,r.height-vh);
+    const p=Math.max(0,Math.min(1,-r.top/travel));
+    const cross=Math.max(0,Math.min(1,1-Math.max(0,p-.2)/.32));
+    const rise=Math.max(0,Math.min(1,(p-.5)/.28));
+    climax.style.setProperty('--cross-opacity',cross.toFixed(3));
+    climax.style.setProperty('--cross-scale',(1-p*.12).toFixed(3));
+    climax.style.setProperty('--rise-opacity',rise.toFixed(3));
+    climax.style.setProperty('--dawn-scale',(.55+rise*.45).toFixed(3));
+  }
 }
 function onScroll(){
   const h=document.documentElement,max=h.scrollHeight-h.clientHeight;
@@ -1982,7 +2031,7 @@ function buildNav(){
   navSections.forEach(s=>{const b=document.createElement('button');b.dataset.l=s.dataset.label||'·';b.addEventListener('click',()=>s.scrollIntoView({behavior:'smooth'}));map.appendChild(b);});
   dots=[...map.children];
   if(labelObs) labelObs.disconnect();
-  labelObs=new IntersectionObserver((es)=>{es.forEach(en=>{if(en.isIntersecting){const i=navSections.indexOf(en.target);dots.forEach((d,j)=>d.classList.toggle('active',j===i));topText.innerHTML = i===0 ? '<b>'+curPack.brand+'</b>' : '<b>'+en.target.dataset.title+'</b>';}});},{threshold:.5});
+  labelObs=new IntersectionObserver((es)=>{es.forEach(en=>{if(en.isIntersecting){const i=navSections.indexOf(en.target);dots.forEach((d,j)=>d.classList.toggle('active',j===i));topText.innerHTML = i===0 ? '<b>'+curPack.brand+'</b>' : '<b>'+en.target.dataset.title+'</b>';}});},{threshold:0,rootMargin:'-46% 0px -46% 0px'});
   navSections.forEach(s=>labelObs.observe(s));
 }
 

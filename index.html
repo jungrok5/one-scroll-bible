@@ -953,14 +953,14 @@
   html.v2 .ministry-kicker{margin:0 0 28px;color:rgba(228,195,109,.76);font:600 .62rem/1.7 var(--sans);letter-spacing:.19em;text-transform:uppercase}
 
   html.v2 .jesus-climax{--cross-opacity:1;--cross-scale:1;--rise-opacity:0;--dawn-scale:.55;position:relative;z-index:4;width:100%;height:300svh;background:#010101}
-  html.v2 .climax-sticky{position:sticky;top:0;width:100%;height:100svh;overflow:hidden;background:#010101;isolation:isolate}
+  html.v2 .climax-sticky{position:sticky;top:0;width:100%;height:100svh;overflow:hidden;isolation:isolate;background:radial-gradient(ellipse at 50% 68%,rgba(255,252,226,1) 0 1px,rgba(229,181,74,.82) 2px,rgba(73,134,177,.38) 16%,transparent 48%),linear-gradient(180deg,#010101 0 36%,#0a1c29 68%,#2d607d 100%)}
   html.v2 .climax-cross,html.v2 .climax-resurrection{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;overflow:hidden}
-  html.v2 .climax-cross{z-index:2;pointer-events:none;opacity:var(--cross-opacity);transform:scale(var(--cross-scale));background:radial-gradient(circle at 50% 49%,rgba(100,32,27,.12),transparent 30%),#010101}
+  html.v2 .climax-cross{z-index:4;pointer-events:none;opacity:var(--cross-opacity);transform:scale(var(--cross-scale));background:radial-gradient(circle at 50% 49%,rgba(100,32,27,.12),transparent 30%),#010101}
   html.v2 .cross-form{position:relative;width:1px;height:min(44svh,390px);background:linear-gradient(transparent,rgba(231,226,215,.78) 18% 86%,transparent);box-shadow:0 0 18px rgba(255,255,255,.08)}
   html.v2 .cross-form::before{content:"";position:absolute;left:50%;top:28%;width:min(28vw,190px);height:1px;background:linear-gradient(90deg,transparent,rgba(231,226,215,.78) 18% 82%,transparent);transform:translateX(-50%)}
   html.v2 .climax-cross .climax-label{position:absolute;z-index:2;left:50%;bottom:11svh;transform:translateX(-50%);color:rgba(243,236,221,.74);font:600 .66rem/1 var(--sans);letter-spacing:.42em;text-transform:uppercase;text-shadow:0 0 22px rgba(255,255,255,.14)}
   html.v2 .climax-cross::after{content:"";position:absolute;inset:auto 0 0;height:35%;background:linear-gradient(transparent,#000)}
-  html.v2 .climax-resurrection{z-index:1;opacity:1;background:radial-gradient(ellipse at 50% 68%,rgba(255,252,226,1) 0 1px,rgba(229,181,74,.82) 2px,rgba(73,134,177,.38) 16%,transparent 48%),linear-gradient(180deg,#010101 0 36%,#0a1c29 68%,#2d607d 100%)}
+  html.v2 .climax-resurrection{z-index:3;opacity:var(--rise-opacity);background:transparent}
   html.v2 .resurrection-horizon{position:absolute;left:7vw;right:7vw;top:68%;height:1px;background:linear-gradient(90deg,transparent,rgba(243,236,221,.56) 25% 75%,transparent);transform:scaleX(var(--dawn-scale));transform-origin:center;box-shadow:0 0 38px rgba(228,195,109,.45)}
   html.v2 .resurrection-orbit{position:absolute;left:50%;top:68%;width:min(56vw,600px);aspect-ratio:1;border:1px solid rgba(228,195,109,.2);border-radius:50%;transform:translate(-50%,-50%) scale(var(--dawn-scale));box-shadow:0 0 0 9vw rgba(228,195,109,.018)}
   html.v2 .climax-resurrection .climax-label{position:absolute;z-index:2;left:50%;top:18svh;transform:translateX(-50%);color:#f0d991;font:700 clamp(2.2rem,8vw,6rem)/.9 var(--serif);letter-spacing:.04em;text-transform:uppercase;text-shadow:0 0 48px rgba(228,195,109,.38)}

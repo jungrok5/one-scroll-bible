@@ -87,6 +87,7 @@ html.cinema.film-reading .film-art img{transform:none!important}
 html.cinema.film-reading .film-brand{margin-bottom:35px!important}
 html.cinema.film-reading .hero{min-height:0}
 @media(min-width:761px){html.cinema .film-hero-copy{padding:120px 60px 70px}html.cinema .film-brand{margin-bottom:26vh!important}html.cinema .hero>.film-art img{object-position:center 42%}html.cinema .hero .film-atmosphere{background:linear-gradient(90deg,#080f13d9,transparent 85%),linear-gradient(0deg,#080f13,transparent 65%)}html.cinema .film-stage{min-height:100svh}html.cinema .film-copy{max-width:1100px;padding:55vh 60px 40px}html.cinema .film-narrative{max-width:580px}html.cinema .film-stage>.film-art img{object-position:center 48%}html.cinema .film-stage>.film-atmosphere{background:linear-gradient(0deg,#080f13,#080f13bd 30%,transparent 75%),linear-gradient(90deg,#080f1370,transparent 80%)}html.cinema .film-details,html.cinema .film-scene-footer{max-width:980px}}
+@media(min-width:761px){html.cinema .film-cross>.film-art img{object-position:center 25%}}
 @media(max-width:360px){html.cinema .film-hero-copy,html.cinema .film-copy{padding-left:20px;padding-right:20px}html.cinema .film-narrative{font-size:15px}html.cinema .film-acts{gap:12px}}
 @media(prefers-reduced-motion:reduce){html.cinema{scroll-behavior:auto}html.cinema .film-art img{transform:none!important;transition:none}html.cinema .film-atmosphere::before{animation:none!important}}
 @media print{html.cinema .film-memory,html.cinema .hero,html.cinema #epochs{display:none!important}}

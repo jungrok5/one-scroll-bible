@@ -991,8 +991,10 @@
   @keyframes riverShine{to{opacity:.72}}
 
   @media(max-width:760px){
-    html.v2 .scene-world svg{width:172%;margin-left:-36%;transform:scale(1.03)}
-    html.v2 .scene-world::after{background:linear-gradient(180deg,rgba(3,4,6,.25),rgba(3,4,6,.32) 42%,rgba(3,4,6,.86) 100%)}
+    /* Portrait phones: show the complete 16:9 diorama instead of cover-cropping
+       a small centre slice from the landscape SVG. */
+    html.v2 .scene-world svg{position:absolute;left:0;top:max(68px,8svh);width:100%;height:auto;margin:0;transform:none}
+    html.v2 .scene-world::after{background:linear-gradient(180deg,rgba(3,4,6,.16),rgba(3,4,6,.2) 34%,rgba(3,4,6,.78) 58%,rgba(3,4,6,.9) 100%)}
     html.v2 .scene-index{font-size:25vw;top:12%;color:rgba(243,236,221,.045)}
     html.v2 .silence-stage{min-height:184svh;margin:-8svh 0 8svh}
     html.v2 .silence-first{min-height:108svh}
@@ -2123,6 +2125,7 @@ function paintScenes(){
   scrollPaintQueued=false;
   if(!document.documentElement.classList.contains('v2')||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
   const vh=innerHeight||1;
+  const mobileMotion=innerWidth<=760 ? .42 : 1;
   document.querySelectorAll('.epoch').forEach(function(el){
     const r=el.getBoundingClientRect();
     if(r.bottom<0||r.top>vh)return;
@@ -2131,22 +2134,22 @@ function paintScenes(){
     el.style.setProperty('--scene-index-shift',(p*-34).toFixed(1)+'px');
     el.style.setProperty('--scene-sigil-shift',(p*58).toFixed(1)+'px');
     el.style.setProperty('--scene-art-shift',(p*-24).toFixed(1)+'px');
-    el.style.setProperty('--world-sky-shift',(p*-8).toFixed(1)+'px');
-    el.style.setProperty('--world-far-shift',(p*-18).toFixed(1)+'px');
-    el.style.setProperty('--world-mid-shift',(p*-30).toFixed(1)+'px');
-    el.style.setProperty('--world-near-shift',(p*-48).toFixed(1)+'px');
+    el.style.setProperty('--world-sky-shift',(p*-8*mobileMotion).toFixed(1)+'px');
+    el.style.setProperty('--world-far-shift',(p*-18*mobileMotion).toFixed(1)+'px');
+    el.style.setProperty('--world-mid-shift',(p*-30*mobileMotion).toFixed(1)+'px');
+    el.style.setProperty('--world-near-shift',(p*-48*mobileMotion).toFixed(1)+'px');
     if(el.classList.contains('era-creation')){
       el.style.setProperty('--creation-light',(.42+q*.58).toFixed(3));
       el.style.setProperty('--creation-scale',(.74+q*.3).toFixed(3));
     }
-    if(el.classList.contains('era-fall'))el.style.setProperty('--fall-close',((q-.5)*34).toFixed(1)+'px');
+    if(el.classList.contains('era-fall'))el.style.setProperty('--fall-close',((q-.5)*34*mobileMotion).toFixed(1)+'px');
     if(el.classList.contains('era-exodus')){
-      el.style.setProperty('--sea-left',(q*-74).toFixed(1)+'px');
-      el.style.setProperty('--sea-right',(q*74).toFixed(1)+'px');
+      el.style.setProperty('--sea-left',(q*-74*mobileMotion).toFixed(1)+'px');
+      el.style.setProperty('--sea-right',(q*74*mobileMotion).toFixed(1)+'px');
     }
     if(el.classList.contains('era-divided')){
-      el.style.setProperty('--kingdom-left',(q*-42).toFixed(1)+'px');
-      el.style.setProperty('--kingdom-right',(q*42).toFixed(1)+'px');
+      el.style.setProperty('--kingdom-left',(q*-42*mobileMotion).toFixed(1)+'px');
+      el.style.setProperty('--kingdom-right',(q*42*mobileMotion).toFixed(1)+'px');
     }
     if(el.classList.contains('era-silence'))el.style.setProperty('--empire-opacity',Math.max(.08,.55-q*.5).toFixed(3));
   });

@@ -804,6 +804,202 @@
     .story-actions button,.story-actions a{width:100%;justify-content:center}
   }
 
+  /* ===== v2 cinematic art direction: illuminated scroll × film titles ===== */
+  html.v2,html.v2.sepia{
+    --bg:#050506;--bg2:#090b0e;--ink:#f3ecdd;--muted:#918b82;
+    --line:rgba(243,236,221,.16);--card:rgba(243,236,221,.035);--accent:#d8a63f;
+    --maxw:1180px;color-scheme:dark;
+  }
+  html.v2 body{background:#050506;color:var(--ink)}
+  html.v2 body::before{content:"";position:fixed;inset:0;z-index:90;pointer-events:none;
+    background:linear-gradient(90deg,rgba(0,0,0,.22),transparent 12%,transparent 88%,rgba(0,0,0,.22));mix-blend-mode:multiply}
+  html.v2 #progress{height:2px;background:linear-gradient(90deg,#8e3829,#d8a63f,#f3ecdd);box-shadow:0 0 18px rgba(216,166,63,.55)}
+  html.v2 #topbar{padding:17px 22px;background:linear-gradient(180deg,rgba(5,5,6,.9),transparent);font-size:.68rem;letter-spacing:.08em;text-transform:uppercase}
+  html.v2 #topbar .dot{width:8px;height:8px;border-radius:0;transform:rotate(45deg);background:transparent;border:1px solid var(--accent);box-shadow:0 0 14px rgba(216,166,63,.45)}
+  html.v2 .iconbtn{min-height:34px;border-radius:0;border-color:rgba(243,236,221,.18);background:rgba(5,5,6,.58);padding:7px 10px;backdrop-filter:blur(12px);letter-spacing:.02em}
+  html.v2 .iconbtn:hover{border-color:var(--accent);color:var(--accent)}
+  html.v2 .ui-icon{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.35;stroke-linecap:round;stroke-linejoin:round;display:block}
+  html.v2 #themeBtn{display:none}
+  html.v2 #langPanel{border-radius:0;background:rgba(9,11,14,.98)}
+
+  html.v2 .hero{min-height:108svh;overflow:hidden;background:#050506;padding-top:120px}
+  html.v2 .hero::before{content:"";position:absolute;z-index:1;left:50%;top:48%;width:min(74vw,760px);aspect-ratio:1;border:1px solid rgba(216,166,63,.16);border-radius:50%;transform:translate(-50%,-50%);box-shadow:0 0 0 8vw rgba(216,166,63,.012),0 0 0 18vw rgba(216,166,63,.009)}
+  html.v2 .hero::after{content:"";position:absolute;z-index:1;left:50%;top:48%;width:1px;height:120svh;background:linear-gradient(transparent,rgba(216,166,63,.5) 35%,rgba(216,166,63,.12) 70%,transparent);transform:translate(-50%,-50%) rotate(36deg);transform-origin:center}
+  html.v2 .hero .bgsky{background:
+    radial-gradient(circle at 50% 34%,rgba(255,244,204,.25) 0 1px,rgba(216,166,63,.12) 2px,transparent 18%),
+    conic-gradient(from 210deg at 50% 34%,transparent 0 12%,rgba(216,166,63,.055) 12.2% 13%,transparent 13.2% 25%,rgba(95,146,201,.055) 25.2% 26%,transparent 26.2% 100%),
+    radial-gradient(75% 62% at 50% 42%,#142033 0%,#080a0f 64%,#050506 100%)}
+  html.v2 .positioning{margin-bottom:48px;color:rgba(243,236,221,.5);font-size:.61rem;letter-spacing:.46em}
+  html.v2 .hero .kicker{font-size:.72rem;letter-spacing:.48em;color:var(--accent);margin-bottom:17px}
+  html.v2 .hero h1{font-size:clamp(4rem,15vw,9rem);line-height:.82;letter-spacing:-.075em;max-width:9ch;text-shadow:0 18px 60px rgba(0,0,0,.72)}
+  html.v2 .hero h1 .em{color:#e0ad44;text-shadow:0 0 40px rgba(216,166,63,.16)}
+  html.v2 .hero>p:not(.hero-global):not(.hero-language-list):not(.hero-slogan){font-size:clamp(.88rem,2vw,1.05rem);line-height:1.9}
+  html.v2 .hero-path{gap:11px;margin-top:36px;font-size:.7rem;letter-spacing:.08em;text-transform:uppercase}
+  html.v2 .hero-path span{width:18px;height:1px;overflow:hidden;background:rgba(216,166,63,.45);color:transparent}
+  html.v2 .hero-time{margin-top:22px!important;font-size:.75rem!important;color:rgba(243,236,221,.68)!important}
+  html.v2 .hero-global{font-size:.64rem!important;letter-spacing:.17em;text-transform:uppercase}
+  html.v2 .hero-slogan{font-size:.78rem;letter-spacing:.03em}
+  html.v2 .hero-actions{margin-top:31px;gap:0}
+  html.v2 .hero-cta{min-width:170px;border-radius:0;padding:14px 22px;background:var(--accent);border-color:var(--accent);letter-spacing:.04em;text-transform:uppercase;font-size:.7rem;clip-path:polygon(8px 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%,0 8px)}
+  html.v2 .hero-cta.secondary{background:rgba(5,5,6,.45);border-color:rgba(243,236,221,.22)}
+  html.v2 .scrollcue{margin-top:58px;font-size:.61rem;letter-spacing:.2em;text-transform:uppercase}
+
+  html.v2 .thread{min-height:104svh;border:0;background:
+    linear-gradient(90deg,transparent 49.96%,rgba(216,166,63,.18) 50%,transparent 50.04%),
+    radial-gradient(circle at 50% 50%,rgba(216,166,63,.07),transparent 44%),#050506}
+  html.v2 .thread .wrap{max-width:820px}
+  html.v2 .thread .eyebrow{font-size:.62rem;letter-spacing:.38em;color:var(--muted)}
+  html.v2 .thread h2{font-size:clamp(2.7rem,10vw,6rem);line-height:.94;letter-spacing:-.06em;max-width:8ch;margin-inline:auto}
+  html.v2 .thread .flow{gap:0;margin:58px auto 42px}
+  html.v2 .thread .flow b{position:relative;min-width:0;width:100%;padding:5px 0;border:0;border-radius:0;background:transparent;font-size:clamp(2rem,8vw,4.8rem);line-height:1.02;letter-spacing:-.04em;color:rgba(243,236,221,.22)}
+  html.v2 .thread .flow b:first-child{color:#c57938}
+  html.v2 .thread .flow b:last-child{color:#e1bd69;text-shadow:0 0 35px rgba(216,166,63,.22)}
+  html.v2 .thread .flow .arw{width:1px;height:44px;background:linear-gradient(transparent,var(--accent),transparent);font-size:0;color:transparent;transform:none}
+  html.v2 .thread .note{font-size:.78rem;line-height:1.9;color:rgba(243,236,221,.58)}
+
+  html.v2 .epoch{--scene-index-shift:0px;--scene-sigil-shift:0px;--scene-art-shift:0px;min-height:112svh;padding:15svh 0;border:0;align-items:center;background:#050506!important}
+  html.v2 .era-creation{--c2:#78b9e8!important;--c1:rgba(76,151,205,.34)!important}
+  html.v2 .era-fall{--c2:#b65343!important;--c1:rgba(182,83,67,.34)!important}
+  html.v2 .era-patriarch{--c2:#d8a63f!important;--c1:rgba(216,166,63,.3)!important}
+  html.v2 .era-exodus{--c2:#df8437!important;--c1:rgba(223,132,55,.34)!important}
+  html.v2 .era-judges{--c2:#9ca56c!important;--c1:rgba(156,165,108,.27)!important}
+  html.v2 .era-united{--c2:#d8a63f!important;--c1:rgba(216,166,63,.32)!important}
+  html.v2 .era-divided{--c2:#bb6548!important;--c1:rgba(187,101,72,.3)!important}
+  html.v2 .era-exile{--c2:#818996!important;--c1:rgba(129,137,150,.25)!important}
+  html.v2 .era-ret{--c2:#79a68f!important;--c1:rgba(121,166,143,.26)!important}
+  html.v2 .era-silence{--c2:#aaa69f!important;--c1:rgba(170,166,159,.18)!important}
+  html.v2 .era-jesus{--c2:#e4c36d!important;--c1:rgba(228,195,109,.36)!important}
+  html.v2 .era-church{--c2:#6eaf9c!important;--c1:rgba(110,175,156,.29)!important}
+  html.v2 .era-restoration{--c2:#e3d092!important;--c1:rgba(227,208,146,.34)!important}
+  html.v2 .epoch::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(180deg,rgba(5,5,6,.88),transparent 17%,transparent 80%,#050506 100%)}
+  html.v2 .epoch::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;box-shadow:inset 0 0 14vw rgba(0,0,0,.6)}
+  html.v2 .epoch .wrap{padding-inline:clamp(22px,7vw,96px)}
+  html.v2 .ep-inner{max-width:1120px}
+  html.v2 .epoch .txt{width:min(610px,64%);position:relative;z-index:4}
+  html.v2 .epoch:nth-child(even) .txt{margin-left:auto}
+  html.v2 .scene-index{position:absolute;z-index:2;top:50%;right:-.03em;transform:translateY(calc(-50% + var(--scene-index-shift)));font:700 clamp(11rem,34vw,31rem)/.7 var(--serif);letter-spacing:-.09em;color:rgba(243,236,221,.025);pointer-events:none;transition:color .9s ease}
+  html.v2 .epoch:nth-child(even) .scene-index{right:auto;left:-.04em}
+  html.v2 .epoch.in .scene-index{color:rgba(243,236,221,.055)}
+  html.v2 .scene-sigil{position:absolute;z-index:2;right:clamp(4vw,9vw,12vw);top:50%;width:min(35vw,470px);color:var(--c2);opacity:.08;transform:translateY(calc(-50% + var(--scene-sigil-shift))) scale(.86);filter:drop-shadow(0 0 35px var(--c1));transition:opacity 1.1s ease,transform 1.3s cubic-bezier(.2,.8,.2,1)}
+  html.v2 .epoch:nth-child(even) .scene-sigil{right:auto;left:clamp(4vw,8vw,11vw)}
+  html.v2 .epoch.in .scene-sigil{opacity:.36;transform:translateY(calc(-50% + var(--scene-sigil-shift))) scale(1)}
+  html.v2 .scene-sigil svg{display:block;width:100%;height:auto;overflow:visible;fill:none;stroke:currentColor;stroke-width:1.35;stroke-linecap:round;stroke-linejoin:round}
+  html.v2 .scene-sigil svg *{vector-effect:non-scaling-stroke;stroke-dasharray:540;stroke-dashoffset:540;transition:stroke-dashoffset 2s .16s cubic-bezier(.22,.75,.18,1)}
+  html.v2 .epoch.in .scene-sigil svg *{stroke-dashoffset:0}
+  html.v2 .ep-icon{display:none}
+  html.v2 .badge{display:grid;grid-template-columns:auto 1fr auto;gap:12px;width:100%;margin-bottom:30px;padding:0 0 12px;border-bottom:1px solid rgba(243,236,221,.21)}
+  html.v2 .badge .num{display:none}
+  html.v2 .badge .tag{padding:0;border:0;border-radius:0;font-size:.58rem;letter-spacing:.24em;color:var(--c2)}
+  html.v2 .badge .date{font-size:.61rem;letter-spacing:.08em;color:rgba(243,236,221,.55)}
+  html.v2 .badge .scene-count{order:-1;margin:0;font:600 .58rem/1 var(--sans);letter-spacing:.16em;color:var(--ink)}
+  html.v2 .ep-share{width:32px;height:32px;border-radius:0;background:transparent;grid-column:4;grid-row:1;border-color:rgba(243,236,221,.2)}
+  html.v2 .txt h2{font-size:clamp(3.4rem,8.5vw,7rem);line-height:.86;letter-spacing:-.07em;margin:0 0 28px;text-wrap:balance}
+  html.v2 .oneline{max-width:25ch;margin:0 0 34px;padding:0 0 0 19px;border-left:1px solid var(--c2);font-size:clamp(1.15rem,2.7vw,1.65rem);line-height:1.55;color:rgba(243,236,221,.94)}
+  html.v2 .meta{display:grid;grid-template-columns:1fr 1.55fr;gap:0;margin:28px 0;border:solid rgba(243,236,221,.14);border-width:1px 0;border-radius:0;background:transparent}
+  html.v2 .meta-row{padding:16px 14px 16px 0}
+  html.v2 .meta-row+.meta-row{margin:0;padding-left:20px;border-left:1px solid rgba(243,236,221,.14)}
+  html.v2 .meta-row .k{font-size:.56rem;letter-spacing:.18em;color:var(--c2)}
+  html.v2 .meta-row .vv{font-size:.79rem;line-height:1.65;color:rgba(243,236,221,.76)}
+  html.v2 .verse{margin:34px 0;padding:24px 0 22px 42px;border:0;border-radius:0;background:transparent}
+  html.v2 .verse::before{top:-10px;left:0;font-size:4.7rem;color:var(--c2);opacity:.55}
+  html.v2 .verse .q{font-size:clamp(1rem,2vw,1.2rem);line-height:1.8}
+  html.v2 .verse .cite{font-size:.65rem;letter-spacing:.08em}
+  html.v2 .thread-line{margin-top:28px;padding:18px 0 18px 21px;border:0;border-left:1px solid rgba(216,166,63,.56);border-radius:0;background:linear-gradient(90deg,rgba(216,166,63,.07),transparent 75%)}
+  html.v2 .note-h{font-size:.66rem;letter-spacing:.16em;text-transform:uppercase}
+  html.v2 .note-h .note-i{display:none}
+  html.v2 .note-h::before{content:"";width:7px;height:7px;border:1px solid currentColor;transform:rotate(45deg);flex:none}
+  html.v2 .note-b{font-size:.8rem;line-height:1.8;color:rgba(243,236,221,.76)}
+  html.v2 .promise-track{margin:32px 0 12px;padding:19px 0 15px;border:solid rgba(243,236,221,.15);border-width:1px 0;border-radius:0;background:transparent;backdrop-filter:none}
+  html.v2 .promise-head{font-size:.55rem;letter-spacing:.18em}
+  html.v2 .promise-node i{width:9px;height:9px;border-radius:0;transform:rotate(45deg);background:#050506}
+  html.v2 .promise-node.fulfilled i{transform:rotate(45deg) scale(1.3)}
+  html.v2 .promise-node small{font-size:clamp(.46rem,1.25vw,.58rem);letter-spacing:.02em}
+  html.v2 details.more{margin-top:19px;border:solid rgba(243,236,221,.18);border-width:1px 0;border-radius:0;background:transparent}
+  html.v2 details.more summary{padding:14px 0;font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--c2)}
+  html.v2 details.more .body{padding:12px 0 24px;font-size:.82rem;line-height:1.85}
+  html.v2 .love-note,html.v2 .myth{border-radius:0;background:transparent}
+  html.v2 .next{margin-top:31px;font-size:.72rem;letter-spacing:.03em}
+
+  html.v2 .scene-art{opacity:1;transform:translateY(var(--scene-art-shift));will-change:transform}
+  html.v2 .era-creation .scene-art{background:radial-gradient(circle at 73% 42%,#fffde8 0 1px,rgba(101,183,255,.62) 2px,rgba(29,89,147,.24) 15%,transparent 34%),linear-gradient(145deg,#020305 18%,#071727 62%,#020305)}
+  html.v2 .era-fall .scene-art{background:linear-gradient(124deg,#030303 0 51%,rgba(128,31,29,.42) 51.2%,#160606 52%,#030303 81%)}
+  html.v2 .era-patriarch .scene-art{background-color:#040711;background-image:radial-gradient(circle,rgba(255,244,204,.86) 0 1px,transparent 1.5px),radial-gradient(circle at 75% 22%,rgba(216,166,63,.34),transparent 25%);background-size:67px 67px,auto}
+  html.v2 .era-exodus .scene-art{background:radial-gradient(ellipse at 78% 42%,rgba(244,152,54,.38),transparent 14%),linear-gradient(158deg,#120703,#3b1708 38%,#0b1720 67%,#020405)}
+  html.v2 .era-judges .scene-art{background:linear-gradient(145deg,#090b07,#25270f 54%,#060705)}
+  html.v2 .era-united .scene-art{background:radial-gradient(circle at 74% 35%,rgba(228,176,67,.35),transparent 27%),linear-gradient(145deg,#120d05,#31220b 58%,#070603)}
+  html.v2 .era-divided .scene-art{background:linear-gradient(107deg,#130b10 0 49.7%,rgba(196,69,48,.55) 49.9% 50.2%,#170b08 50.4%)}
+  html.v2 .era-exile .scene-art{background:linear-gradient(135deg,#08090b,#15191f 62%,#030304)}
+  html.v2 .era-ret .scene-art{background:radial-gradient(circle at 72% 27%,rgba(211,157,68,.2),transparent 28%),linear-gradient(145deg,#07100f,#12251e 58%,#050706)}
+  html.v2 .era-silence .scene-art{background:#010101}
+  html.v2 .era-jesus .scene-art{background:radial-gradient(circle at 50% 17%,#fffde9 0 1px,rgba(236,194,107,.42) 2px,transparent 17%),linear-gradient(180deg,#020203,#130e07 54%,#030303)}
+  html.v2 .era-church .scene-art{background:radial-gradient(circle at 70% 40%,rgba(73,176,154,.22),transparent 36%),repeating-radial-gradient(circle at 70% 40%,transparent 0 72px,rgba(82,190,165,.07) 73px 74px),#030807}
+  html.v2 .era-restoration .scene-art{background:radial-gradient(circle at 72% 27%,rgba(255,246,207,.72) 0 1px,rgba(76,151,205,.25) 2px,transparent 34%),linear-gradient(145deg,#07101a,#193247 56%,#0a1014)}
+
+  html.v2 .silence-stage{min-height:170svh;margin:-10svh 0 10svh}
+  html.v2 .silence-first{min-height:96svh}
+  html.v2 .silence-stage strong{font-size:clamp(5.5rem,22vw,14rem);line-height:.72;color:#e8e3da;letter-spacing:-.085em}
+  html.v2 .silence-stage span{font-size:.6rem;letter-spacing:.38em;color:rgba(243,236,221,.36)}
+  html.v2 .silence-return{min-height:68svh;font-size:clamp(1.4rem,4vw,2.4rem);letter-spacing:.04em}
+  html.v2 .arrival-stage{min-height:152svh;margin:-10svh 0 8svh}
+  html.v2 .arrival-birth{min-height:80svh}
+  html.v2 .arrival-birth span{font-size:.58rem;letter-spacing:.52em}
+  html.v2 .arrival-birth strong{font-size:clamp(5rem,19vw,12rem);line-height:.74;letter-spacing:-.07em;text-shadow:0 0 70px rgba(216,166,63,.28)}
+  html.v2 .jesus-arc{min-height:72svh;border-color:rgba(243,236,221,.13);background:linear-gradient(90deg,#010101 0 47%,rgba(104,36,28,.18) 49%,rgba(216,166,63,.13) 52%,transparent 100%)}
+
+  html.v2 .story-complete{min-height:118svh;display:flex;flex-direction:column;justify-content:center;border:0;background:radial-gradient(circle at 50% 35%,rgba(255,246,207,.3) 0 1px,rgba(74,143,191,.18) 2%,transparent 35%),linear-gradient(180deg,#030507,#132637 70%,#080b0d);position:relative;overflow:hidden}
+  html.v2 .story-complete::before{content:"";position:absolute;left:50%;top:38%;width:min(70vw,720px);aspect-ratio:1;border:1px solid rgba(216,166,63,.16);border-radius:50%;transform:translate(-50%,-50%);box-shadow:0 0 0 12vw rgba(216,166,63,.012)}
+  html.v2 .story-complete>*{position:relative;z-index:1}
+  html.v2 .story-quote{font-size:clamp(4rem,14vw,9rem);line-height:.84;letter-spacing:-.075em;text-shadow:0 14px 70px rgba(0,0,0,.62)}
+  html.v2 .mission-share{border-radius:0;padding:48px 30px;border-color:rgba(216,166,63,.34);background:rgba(5,7,9,.56);clip-path:polygon(14px 0,100% 0,100% calc(100% - 14px),calc(100% - 14px) 100%,0 100%,0 14px)}
+  html.v2 .share-modes span{border-radius:0}
+  html.v2 .story-actions button,html.v2 .story-actions a{border-radius:0}
+
+  html.v2 .gospel{background:linear-gradient(180deg,#080b0d,#090806 48%,#050506);padding-top:120px}
+  html.v2 .core{border-radius:0;background:transparent;border-width:1px 0 0 1px;padding:24px 22px}
+  html.v2 .core .ic{font:600 .62rem/1 var(--sans);letter-spacing:.2em;color:var(--accent);margin-bottom:18px}
+  html.v2 .mirror,html.v2 .crux,html.v2 .respond,html.v2 .prayer,html.v2 .questions-layer,html.v2 .faq-item{border-radius:0}
+  html.v2 .mirror,html.v2 .crux,html.v2 .respond{background:transparent;border-color:rgba(243,236,221,.18);padding-block:42px}
+  html.v2 .mirror .cycle b{border-radius:0;background:transparent}
+  html.v2 .questions-layer{background:rgba(0,0,0,.2);border-color:rgba(243,236,221,.14)}
+  html.v2 .faq-item{background:transparent}
+  html.v2 #map{right:18px;gap:12px}
+  html.v2 #map button{width:5px;height:5px;border-radius:0;transform:rotate(45deg);background:rgba(243,236,221,.22)}
+  html.v2 #map button.active{background:var(--accent);transform:rotate(45deg) scale(1.8)}
+  html.v2 #map button::after{border-radius:0;background:#070708}
+  html.v2 #toTop{border-radius:0;background:rgba(5,5,6,.8)}
+
+  @media(max-width:760px){
+    html.v2 #topbar{padding:13px 14px}
+    html.v2 #topbar-text{max-width:36vw;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+    html.v2 .hero{min-height:102svh;padding-inline:20px;padding-top:96px}
+    html.v2 .hero::before{width:118vw}
+    html.v2 .positioning{margin-bottom:35px}
+    html.v2 .hero h1{font-size:clamp(4.6rem,22vw,7rem)}
+    html.v2 .hero-language-list{display:none!important}
+    html.v2 .hero-cta{min-width:0;width:50%;padding-inline:10px}
+    html.v2 .epoch{min-height:108svh;padding:13svh 0}
+    html.v2 .epoch .txt{width:100%;margin:0!important}
+    html.v2 .scene-index{top:18%;right:-.04em!important;left:auto!important;font-size:44vw;transform:translateY(calc(-50% + var(--scene-index-shift)))}
+    html.v2 .scene-sigil,html.v2 .epoch:nth-child(even) .scene-sigil{width:76vw;right:-19vw;left:auto;top:23%;opacity:.06;transform:translateY(calc(-50% + var(--scene-sigil-shift))) scale(.88)}
+    html.v2 .epoch.in .scene-sigil{opacity:.2;transform:translateY(calc(-50% + var(--scene-sigil-shift))) scale(1)}
+    html.v2 .badge{grid-template-columns:auto 1fr auto;margin-top:16svh}
+    html.v2 .ep-share{grid-column:3}
+    html.v2 .txt h2{font-size:clamp(3.1rem,15vw,5.2rem)}
+    html.v2 .oneline{font-size:1.08rem}
+    html.v2 .meta{grid-template-columns:1fr}
+    html.v2 .meta-row+.meta-row{padding-left:0;border-left:0;border-top:1px solid rgba(243,236,221,.12)}
+    html.v2 .verse{padding-left:34px}
+    html.v2 .promise-node small{font-size:.45rem}
+    html.v2 .story-complete{padding-inline:20px}
+    html.v2 .story-quote{font-size:clamp(3.6rem,18vw,6rem)}
+    html.v2 .mission-share{padding:38px 18px}
+  }
+
+  @media(prefers-reduced-motion:reduce){
+    html.v2 .scene-sigil,html.v2 .scene-index,html.v2 .scene-art{transform:none!important;transition:none!important}
+    html.v2 .scene-sigil svg *{stroke-dashoffset:0!important;transition:none!important}
+  }
+
   /* ===== 인쇄/PDF 전용 (화면엔 영향 없음 — @media print 스코프) ===== */
   @media print{
     /* 색·배경·그림자 제거 → 흰 바탕에 검은 글자 (잉크 절약·가독성) */
@@ -862,9 +1058,9 @@
 <div id="topbar">
   <span class="dot"></span><span id="topbar-text"><b>한눈에 보는 성경 이야기</b></span>
   <span class="spacer"></span>
-  <button class="iconbtn" id="langBtn" title="Language / 언어">🌐 <span id="langCur">한국어</span></button>
+  <button class="iconbtn" id="langBtn" title="Language / 언어"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.2 4.4 6.2 4.4 9S15 17.8 12 21M12 3C9 6.2 7.6 9.2 7.6 12S9 17.8 12 21"/></svg><span id="langCur">한국어</span></button>
   <button class="iconbtn" id="shareBtn" aria-label="Share" title="Share / 공유">↗</button>
-  <button class="iconbtn" id="themeBtn" title="테마 전환">🌗</button>
+  <button class="iconbtn" id="themeBtn" title="테마 전환" aria-label="테마 전환"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 15.2A8.5 8.5 0 0 1 8.8 4 8.5 8.5 0 1 0 20 15.2Z"/></svg></button>
 </div>
 <div id="langPanel" hidden>
   <input id="langSearch" type="text" autocomplete="off" placeholder="언어 검색 / Search language…" />
@@ -872,7 +1068,7 @@
 </div>
 <nav id="map"></nav>
 <button id="toTop" title="맨 위로">↑</button>
-<div id="toast" data-i18n="ui.toast">링크가 복사되었어요 📋</div>
+<div id="toast" data-i18n="ui.toast">링크가 복사되었어요</div>
 <div id="shareSheet" hidden><div class="ss-card"><button class="ss-close" id="ssClose" aria-label="Close">✕</button><div class="ss-title" id="ssTitle">Share</div><div class="ss-grid" id="ssGrid"></div></div></div>
 <div id="qrModal" hidden><div class="qr-card"><button class="ss-close" id="qrClose" aria-label="Close">✕</button><p class="qr-pitch" id="qrPitch"></p><div id="qrImg" class="qr-box" role="img" aria-label="QR code"></div><p class="qr-caption" id="qrCaption"></p><div class="qr-url" id="qrUrl"></div><a class="qr-dl" id="qrDl" download>⤓ Save QR</a></div></div>
 
@@ -888,7 +1084,7 @@
   <p class="hero-global v2-only" data-v2="languages">성경. 하나의 이야기. 210개 이상의 언어.</p>
   <p class="hero-language-list v2-only"><a href="/">한국어</a> · <a href="/en/">English</a> · <a href="/es/">Español</a> · <a href="/hi/">हिन्दी</a> · <a href="/ar/">العربية</a> · <a href="/zh-Hans/">中文</a> · <a href="/ja/">日本語</a> · <a href="/sw/">Kiswahili</a></p>
   <p class="hero-slogan v2-only" data-v2="beforeSlogan">1,200쪽을 읽기 전에, 한 번 스크롤하세요.</p>
-  <div class="hero-actions v2-only"><a class="hero-cta" href="#s1" data-v2="startStory">이야기 시작 ↓</a><button class="hero-cta secondary" id="heroLangBtn" type="button" data-v2="myLanguage">내 언어로 읽기 🌐</button></div>
+  <div class="hero-actions v2-only"><a class="hero-cta" href="#s1" data-v2="startStory">이야기 시작 ↓</a><button class="hero-cta secondary" id="heroLangBtn" type="button" data-v2="myLanguage">내 언어로 읽기</button></div>
   <div class="scrollcue" data-i18n="hero.cue">아래로 스크롤<span>↓</span></div>
 </header>
 
@@ -1314,7 +1510,7 @@ const EN_PACK={menuName:`English`,htmlLang:`en`,dir:`ltr`,brand:`Bible in One Sc
   epochs:EN_EPOCHS, core:EN_CORE, mis:EN_MIS, love:EN_LOVE,
   s:{
    'ui.share':`↗ Share`,
-   'ui.toast':`Link copied 📋`,
+   'ui.toast':`Link copied`,
    'ui.footer':`Bible in One Scroll · Scripture quotations from the ESV®`,
    'ui.legal':`Scripture quotations are from the ESV® Bible (The Holy Bible, English Standard Version®), © 2001 by Crossway, a publishing ministry of Good News Publishers. ESV Text Edition: 2025. The ESV text may not be quoted in any publication made available to the public by a Creative Commons license. The ESV may not be translated in whole or in part into any other language. Used by permission. All rights reserved. Accordingly, <b>these English pages are not offered under any Creative Commons licence</b> — neither the ESV quotations nor our own English text. (Our own writing in the site’s other languages remains CC BY 4.0; Scripture quotations there are likewise excluded.)`,
    'hero.kicker':`THE WHOLE BIBLE`,
@@ -1359,8 +1555,8 @@ const EN_PACK={menuName:`English`,htmlLang:`en`,dir:`ltr`,brand:`Bible in One Sc
 
 /* ko/en v2 copy is intentionally isolated so the remaining language packs keep the current experience. */
 const V2_COPY={
- ko:{creation:'창조',fall:'타락',promise:'약속',jesus:'예수님',newCreation:'새 창조',fiveMinutes:'약 5분이면 성경 전체의 큰 흐름을 이해할 수 있습니다.',languages:'한 이야기 · 214개 언어',startStory:'이야기 시작 ↓',myLanguage:'내 언어로 읽기 🌐',layerStory:'01 · 이야기',layerMeaning:'02 · 나에게 주는 의미',layerQuestions:'03 · 질문',layerDeeper:'04 · 더 깊이',allNew:'보라,<br>내가 만물을<br>새롭게 하노라.',allNewRef:'요한계시록 21:5',storySummary:'성경은 하나님과 사람이 함께한 동산에서 시작해, 하나님이 자기 백성과 영원히 함께하시는 새 창조로 끝납니다.',whereAreYou:'이 이야기는 끝나지 않았습니다.<br>당신은 지금 어디에 있나요?',continueMeaning:'이제 이 이야기가 나에게 무엇을 의미하는지 이어서 살펴보세요.',continueButton:'나에게 주는 의미 ↓',shareFive:'누군가에게 5분을 선물하기',openQr:'QR 열기',goTitle:'이제 진짜 성경을 읽어보세요.',goLead:'One Scroll Bible은 성경을 대신하지 않습니다. 성경으로 들어가는 첫 번째 문입니다.',goBibleTitle:'성경 읽기',goBibleBody:'요한복음부터 직접 읽어보세요 →',goMapTitle:'지도로 보기',goMapBody:'출애굽, 예수님의 생애, 바울의 여정을 따라가세요 →',goProjectBody:'영상과 자료로 성경을 더 깊이 알아보세요 →',goChurchTitle:'가까운 교회 찾기',goChurchBody:'혼자가 아니라 공동체와 함께 걸어가세요 →',people:'주요 인물',events:'주요 사건',explore:'이 장면 더 알아보기',map:'어디에서 일어났을까요? 지도에서 보기 →',silent:'400년',silentSub:'하늘은 침묵했습니다.',notForgotten:'그러나 약속은 잊히지 않았습니다.',arrival:'한 아기가 태어났습니다.',journey:'약속의 흐름',waiting:'기다림',fulfilled:'성취'},
- en:{creation:'Creation',fall:'Fall',promise:'Promise',jesus:'Jesus',newCreation:'New Creation',fiveMinutes:'Understand the Bible’s entire story in about five minutes.',languages:'The Bible. One story. 210+ languages.',startStory:'Start the story ↓',myLanguage:'Read in my language 🌐',layerStory:'01 · The Story',layerMeaning:'02 · What It Means',layerQuestions:'03 · Questions',layerDeeper:'04 · Go Deeper',allNew:'BEHOLD,<br>I AM MAKING ALL THINGS<br>NEW.',allNewRef:'Revelation 21:5 (ESV)',storySummary:'The Bible begins in a garden where God lives with humanity. It ends in a renewed creation where God dwells with his people forever.',whereAreYou:'The story is not over.<br>Where are you in it?',continueMeaning:'Now discover what this story means for you.',continueButton:'What this means for me ↓',shareFive:'Give someone five minutes',openQr:'Open QR',goTitle:'Now read the real thing.',goLead:'One Scroll Bible does not replace the Bible. It is a first door into it.',goBibleTitle:'Read the Bible',goBibleBody:'Start with the Gospel of John →',goMapTitle:'Bible by Map',goMapBody:'Trace the Exodus, Jesus’ life, and Paul’s journeys →',goProjectBody:'Go deeper with videos and study resources →',goChurchTitle:'Find a church',goChurchBody:'Walk with a local Christian community →',people:'Key people',events:'Key events',explore:'Explore this chapter',map:'Where did this happen? See it on the map →',silent:'400 YEARS',silentSub:'HEAVEN WAS SILENT.',notForgotten:'But the promise was not forgotten.',arrival:'A CHILD IS BORN.',journey:'The promise',waiting:'Waiting',fulfilled:'Fulfilled'}
+ ko:{creation:'창조',fall:'타락',promise:'약속',jesus:'예수님',newCreation:'새 창조',fiveMinutes:'약 5분이면 성경 전체의 큰 흐름을 이해할 수 있습니다.',languages:'한 이야기 · 214개 언어',startStory:'이야기 시작 ↓',myLanguage:'내 언어로 읽기',layerStory:'01 · 이야기',layerMeaning:'02 · 나에게 주는 의미',layerQuestions:'03 · 질문',layerDeeper:'04 · 더 깊이',allNew:'보라,<br>내가 만물을<br>새롭게 하노라.',allNewRef:'요한계시록 21:5',storySummary:'성경은 하나님과 사람이 함께한 동산에서 시작해, 하나님이 자기 백성과 영원히 함께하시는 새 창조로 끝납니다.',whereAreYou:'이 이야기는 끝나지 않았습니다.<br>당신은 지금 어디에 있나요?',continueMeaning:'이제 이 이야기가 나에게 무엇을 의미하는지 이어서 살펴보세요.',continueButton:'나에게 주는 의미 ↓',shareFive:'누군가에게 5분을 선물하기',openQr:'QR 열기',goTitle:'이제 진짜 성경을 읽어보세요.',goLead:'One Scroll Bible은 성경을 대신하지 않습니다. 성경으로 들어가는 첫 번째 문입니다.',goBibleTitle:'성경 읽기',goBibleBody:'요한복음부터 직접 읽어보세요 →',goMapTitle:'지도로 보기',goMapBody:'출애굽, 예수님의 생애, 바울의 여정을 따라가세요 →',goProjectBody:'영상과 자료로 성경을 더 깊이 알아보세요 →',goChurchTitle:'가까운 교회 찾기',goChurchBody:'혼자가 아니라 공동체와 함께 걸어가세요 →',people:'주요 인물',events:'주요 사건',explore:'이 장면 더 알아보기',map:'어디에서 일어났을까요? 지도에서 보기 →',silent:'400년',silentSub:'하늘은 침묵했습니다.',notForgotten:'그러나 약속은 잊히지 않았습니다.',arrival:'한 아기가 태어났습니다.',journey:'약속의 흐름',waiting:'기다림',fulfilled:'성취'},
+ en:{creation:'Creation',fall:'Fall',promise:'Promise',jesus:'Jesus',newCreation:'New Creation',fiveMinutes:'Understand the Bible’s entire story in about five minutes.',languages:'The Bible. One story. 210+ languages.',startStory:'Start the story ↓',myLanguage:'Read in my language',layerStory:'01 · The Story',layerMeaning:'02 · What It Means',layerQuestions:'03 · Questions',layerDeeper:'04 · Go Deeper',allNew:'BEHOLD,<br>I AM MAKING ALL THINGS<br>NEW.',allNewRef:'Revelation 21:5 (ESV)',storySummary:'The Bible begins in a garden where God lives with humanity. It ends in a renewed creation where God dwells with his people forever.',whereAreYou:'The story is not over.<br>Where are you in it?',continueMeaning:'Now discover what this story means for you.',continueButton:'What this means for me ↓',shareFive:'Give someone five minutes',openQr:'Open QR',goTitle:'Now read the real thing.',goLead:'One Scroll Bible does not replace the Bible. It is a first door into it.',goBibleTitle:'Read the Bible',goBibleBody:'Start with the Gospel of John →',goMapTitle:'Bible by Map',goMapBody:'Trace the Exodus, Jesus’ life, and Paul’s journeys →',goProjectBody:'Go deeper with videos and study resources →',goChurchTitle:'Find a church',goChurchBody:'Walk with a local Christian community →',people:'Key people',events:'Key events',explore:'Explore this chapter',map:'Where did this happen? See it on the map →',silent:'400 YEARS',silentSub:'HEAVEN WAS SILENT.',notForgotten:'But the promise was not forgotten.',arrival:'A CHILD IS BORN.',journey:'The promise',waiting:'Waiting',fulfilled:'Fulfilled'}
 };
 
 Object.assign(V2_COPY.ko,{beforeBible:'BEFORE THE BIBLE.',beforeSlogan:'1,200쪽을 읽기 전에, 한 번 스크롤하세요.',languages:'성경. 하나의 이야기. 210개 이상의 언어.',reachedEnd:'이야기의 끝에 도착했습니다.<br><b>그러나 당신의 이야기는 여기서 시작됩니다.</b>',someone:'당신이 아는 누군가는 아직 성경의 큰 이야기를 이해하지 못했습니다.',giveFive:'그 사람에게 5분을 선물하세요.',scanLanguage:'QR을 스캔하면 각자의 언어로 성경 전체 이야기를 읽을 수 있습니다.',shareStory:'이 이야기 공유',printPoster:'포스터 인쇄',posterKicker:'성경 전체',posterTitle:'하나의 이야기.',posterPath:'창조 → 타락 → 약속 → 예수님 → 새 창조',qrPitch:'성경 전체를 5분 만에.',qrCaption:'스캔하여 이 이야기를 현재 언어로 읽어보세요.',arrivalKicker:'한 아기가 태어났습니다.',arrivalName:'예수님',cross:'십자가',resurrection:'부활',scene:'장면',milestoneSeed:'여자의 후손',milestoneNations:'모든 민족',milestoneKing:'영원한 왕',milestoneCovenant:'새 언약',milestoneMessiah:'메시아',milestoneNew:'새 창조'});
@@ -1648,10 +1844,31 @@ function renderCore(pack){
   coreWrap.innerHTML='';
   pack.core.forEach((c,idx)=>{
     const d=document.createElement('div'); d.className='core reveal';
-    d.innerHTML=linkifyRefs(`<div class="ic">${CORE[idx].ic}</div><h3>${c.title}</h3><p>${c.body}</p>`
+    const coreMark=(curCode==='ko'||curCode==='en')?String(idx+1).padStart(2,'0'):CORE[idx].ic;
+    d.innerHTML=linkifyRefs(`<div class="ic">${coreMark}</div><h3>${c.title}</h3><p>${c.body}</p>`
       +(c.vtext?`<div class="v">“<em>${c.vtext}</em>” — ${BOOKS[curCode]?c.vref:vlink(CORE_REF[idx],c.vref,curCode)}${ver}</div>`:''),curCode);
     coreWrap.appendChild(d);
   });
+}
+
+function sceneGlyph(name){
+  const common='viewBox="0 0 240 240" aria-hidden="true" focusable="false"';
+  const glyphs={
+    creation:`<circle cx="120" cy="120" r="68"/><circle cx="120" cy="120" r="22"/><path d="M120 20v32M120 188v32M20 120h32M188 120h32M49 49l23 23M168 168l23 23M191 49l-23 23M72 168l-23 23"/>`,
+    fall:`<path d="M120 25a95 95 0 0 0-30 185M120 25a95 95 0 0 1 37 183M120 25l-19 48 25 28-31 34 28 25-17 51"/><path d="M63 62l28 12M151 178l27 10"/>`,
+    patriarch:`<path d="M120 18l13 70 69 32-69 16-13 86-14-86-68-16 68-32z"/><circle cx="49" cy="55" r="4"/><circle cx="188" cy="67" r="3"/><circle cx="178" cy="184" r="4"/><path d="M43 203h154"/>`,
+    exodus:`<path d="M120 20c31 42-2 58 18 83 15 18 34 31 34 61 0 31-23 56-52 56s-52-25-52-56c0-39 34-54 29-93 20 9 29 27 23 48 25-28 7-61 0-99z"/><path d="M20 186c28-18 51-18 79 0s51 18 79 0 35-14 42-10"/>`,
+    judges:`<path d="M63 42l115 151M176 41L61 194M55 34l25 2-17 18zM185 33l-5 25-18-17z"/><circle cx="120" cy="120" r="31"/><path d="M120 89v62M89 120h62"/>`,
+    united:`<path d="M42 82l38 29 40-62 40 62 38-29-17 105H59z"/><path d="M59 187h122M72 157h96M120 49v-24"/><circle cx="120" cy="125" r="13"/>`,
+    divided:`<path d="M35 82l38 29 35-55v132H52zM205 82l-38 29-35-55v132h56z"/><path d="M52 188h56M132 188h56M120 27v186"/>`,
+    exile:`<path d="M45 27v186M82 27v186M158 27v186M195 27v186M28 58h184M28 182h184"/><path d="M106 104h28v32h-28z"/>`,
+    ret:`<path d="M43 211V92c0-37 34-67 77-67s77 30 77 67v119M82 211V99c0-21 17-38 38-38s38 17 38 38v112"/><path d="M26 211h188M104 135h32"/>`,
+    silence:`<circle cx="120" cy="120" r="88"/><path d="M120 32v31M120 177v31M32 120h31M177 120h31"/><circle cx="120" cy="120" r="4"/>`,
+    jesus:`<path d="M120 26v188M68 88h104"/><path d="M120 15l7 20 21 7-21 7-7 20-7-20-21-7 21-7z"/><path d="M78 214h84"/>`,
+    church:`<circle cx="120" cy="120" r="25"/><circle cx="120" cy="120" r="65"/><circle cx="120" cy="120" r="101"/><path d="M120 19v202M19 120h202M49 49l142 142M191 49L49 191"/>`,
+    restoration:`<path d="M37 205V102h38V70h35V36h20v34h35v32h38v103z"/><path d="M20 205h200M75 102h90M110 70h20M120 205v-67M103 166h34"/><path d="M65 220c36-18 74-18 110 0"/>`
+  };
+  return `<svg ${common}>${glyphs[name]||glyphs.restoration}</svg>`;
 }
 function renderEpochs(pack){
   const u=pack.ui, ver=u.version?(' '+u.version):'';
@@ -1678,6 +1895,8 @@ function renderEpochs(pack){
       const mapLink=mapSection?`<p><a class="vlink" href="/maps/" data-rel="maps" data-map-section="${mapSection}">${v2.map}</a></p>`:'';
       s.innerHTML=linkifyRefs(`
       <div class="scene-art" aria-hidden="true"><i></i><i></i><i></i></div>
+      <div class="scene-index" aria-hidden="true">${String(i+1).padStart(2,'0')}</div>
+      <div class="scene-sigil" aria-hidden="true">${sceneGlyph(v.svg||'restoration')}</div>
       <div class="glow"></div>
       <div class="wrap"><div class="ep-inner"><div class="txt">
         ${stage}
@@ -1722,7 +1941,26 @@ function renderEpochs(pack){
 /* 스크롤/관찰자 */
 const prog=document.getElementById('progress');
 const toTop=document.getElementById('toTop');
-function onScroll(){const h=document.documentElement,max=h.scrollHeight-h.clientHeight;prog.style.width=(max>0?h.scrollTop/max*100:0)+'%';toTop.classList.toggle('show',h.scrollTop>600);}
+let scrollPaintQueued=false;
+function paintScenes(){
+  scrollPaintQueued=false;
+  if(!document.documentElement.classList.contains('v2')||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  const vh=innerHeight||1;
+  document.querySelectorAll('.epoch').forEach(function(el){
+    const r=el.getBoundingClientRect();
+    if(r.bottom<0||r.top>vh)return;
+    const p=Math.max(-1,Math.min(1,(r.top+r.height/2-vh/2)/(vh+r.height)*2));
+    el.style.setProperty('--scene-index-shift',(p*-34).toFixed(1)+'px');
+    el.style.setProperty('--scene-sigil-shift',(p*58).toFixed(1)+'px');
+    el.style.setProperty('--scene-art-shift',(p*-24).toFixed(1)+'px');
+  });
+}
+function onScroll(){
+  const h=document.documentElement,max=h.scrollHeight-h.clientHeight;
+  prog.style.width=(max>0?h.scrollTop/max*100:0)+'%';
+  toTop.classList.toggle('show',h.scrollTop>600);
+  if(!scrollPaintQueued){scrollPaintQueued=true;requestAnimationFrame(paintScenes);}
+}
 window.addEventListener('scroll',onScroll,{passive:true});
 toTop.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
 const _seenSc={};

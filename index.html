@@ -935,6 +935,74 @@
   html.v2 .era-church .scene-art{background:radial-gradient(circle at 70% 40%,rgba(73,176,154,.22),transparent 36%),repeating-radial-gradient(circle at 70% 40%,transparent 0 72px,rgba(82,190,165,.07) 73px 74px),#030807}
   html.v2 .era-restoration .scene-art{background:radial-gradient(circle at 72% 27%,rgba(255,246,207,.72) 0 1px,rgba(76,151,205,.25) 2px,transparent 34%),linear-gradient(145deg,#07101a,#193247 56%,#0a1014)}
 
+  /* Concrete biblical worlds: lightweight SVG dioramas instead of abstract sigils. */
+  html.v2 .scene-art,html.v2 .scene-sigil{display:none}
+  html.v2 .scene-world{--world-sky:#0b1119;--world-far:#182333;--world-mid:#202f40;--world-near:#071019;--world-accent:#d8a63f;position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none;background:var(--world-sky)}
+  html.v2 .scene-world::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(3,4,6,.13),rgba(3,4,6,.05) 44%,rgba(3,4,6,.72) 100%)}
+  html.v2 .scene-world svg{display:block;width:100%;height:100%;overflow:visible;transform:scale(1.025);transform-origin:center}
+  html.v2 .scene-world .world-sky{transform:translate3d(0,var(--world-sky-shift,0),0)}
+  html.v2 .scene-world .world-far{transform:translate3d(0,var(--world-far-shift,0),0)}
+  html.v2 .scene-world .world-mid{transform:translate3d(0,var(--world-mid-shift,0),0)}
+  html.v2 .scene-world .world-near{transform:translate3d(0,var(--world-near-shift,0),0)}
+  html.v2 .scene-world .world-sky,html.v2 .scene-world .world-far,html.v2 .scene-world .world-mid,html.v2 .scene-world .world-near{will-change:transform}
+  html.v2 .scene-world .sky-fill{fill:var(--world-sky)}
+  html.v2 .scene-world .far-fill{fill:var(--world-far)}
+  html.v2 .scene-world .mid-fill{fill:var(--world-mid)}
+  html.v2 .scene-world .near-fill{fill:var(--world-near)}
+  html.v2 .scene-world .accent-fill{fill:var(--world-accent)}
+  html.v2 .scene-world .mist-fill{fill:rgba(235,226,205,.09)}
+  html.v2 .scene-world .line-stroke{fill:none;stroke:rgba(237,228,207,.26);stroke-width:2;vector-effect:non-scaling-stroke}
+  html.v2 .scene-world .accent-stroke{fill:none;stroke:var(--world-accent);stroke-width:2;vector-effect:non-scaling-stroke}
+  html.v2 .scene-world .route{fill:none;stroke:var(--world-accent);stroke-width:3;stroke-linecap:round;stroke-dasharray:9 15;vector-effect:non-scaling-stroke;animation:routeWalk 8s linear infinite}
+  html.v2 .scene-world .star{fill:#f7e7b1;filter:drop-shadow(0 0 7px rgba(247,231,177,.72))}
+  html.v2 .scene-world .flame{filter:drop-shadow(0 0 18px rgba(224,132,48,.7));animation:flameBreathe 2.4s ease-in-out infinite}
+  html.v2 .scene-world .water-line{animation:waterDrift 8s ease-in-out infinite alternate}
+  html.v2 .scene-world .pilgrim{animation:pilgrimWalk 10s ease-in-out infinite alternate}
+  html.v2 .scene-world .build-stone{opacity:.45;transform:translateY(18px);transition:opacity 1.3s ease,transform 1.3s cubic-bezier(.2,.8,.2,1)}
+  html.v2 .epoch.in .scene-world .build-stone{opacity:1;transform:none}
+  @keyframes routeWalk{to{stroke-dashoffset:-96}}
+  @keyframes flameBreathe{50%{opacity:.72;transform:scaleY(.94)}}
+  @keyframes waterDrift{to{transform:translateX(22px)}}
+  @keyframes pilgrimWalk{to{transform:translateX(34px)}}
+
+  html.v2 .era-creation .scene-world{--world-sky:#071321;--world-far:#17354d;--world-mid:#24516a;--world-near:#071820;--world-accent:#f2d37e;background:linear-gradient(180deg,#020408 0%,#112d46 54%,#386d83 100%)}
+  html.v2 .era-fall .scene-world{--world-sky:#151419;--world-far:#2b2830;--world-mid:#34322c;--world-near:#090a0b;--world-accent:#b85443;background:linear-gradient(180deg,#211d25,#4a3228 60%,#120d0c)}
+  html.v2 .era-patriarch .scene-world{--world-sky:#080d1b;--world-far:#26283a;--world-mid:#5a442d;--world-near:#17100c;--world-accent:#d8a63f;background:linear-gradient(180deg,#060a17,#171b31 58%,#6a4c2d)}
+  html.v2 .era-exodus .scene-world{--world-sky:#1b2835;--world-far:#3e7188;--world-mid:#174a62;--world-near:#0a202c;--world-accent:#ed9d3e;background:linear-gradient(180deg,#142331,#73512d 52%,#19120d)}
+  html.v2 .era-judges .scene-world{--world-sky:#20251c;--world-far:#5a5b37;--world-mid:#777047;--world-near:#16170f;--world-accent:#bd9e4e;background:linear-gradient(180deg,#1c241d,#62613c 60%,#252013)}
+  html.v2 .era-united .scene-world{--world-sky:#2c2418;--world-far:#6e5734;--world-mid:#9b7945;--world-near:#22170d;--world-accent:#e1b34f;background:linear-gradient(180deg,#1a1720,#715530 64%,#2b1b0d)}
+  html.v2 .era-divided .scene-world{--world-sky:#1c171d;--world-far:#49313a;--world-mid:#644035;--world-near:#160d0d;--world-accent:#b95f47;background:linear-gradient(180deg,#19151c,#56332f 63%,#170c0d)}
+  html.v2 .era-exile .scene-world{--world-sky:#090b13;--world-far:#252a38;--world-mid:#3b3e4a;--world-near:#090a0d;--world-accent:#8c91a2;background:linear-gradient(180deg,#070911,#202534 60%,#0c0d12)}
+  html.v2 .era-ret .scene-world{--world-sky:#17211f;--world-far:#40564a;--world-mid:#6b7355;--world-near:#111811;--world-accent:#c8a75e;background:linear-gradient(180deg,#111a1a,#4d6252 62%,#1a1b12)}
+  html.v2 .era-silence .scene-world{--world-sky:#050608;--world-far:#111318;--world-mid:#191a1d;--world-near:#020203;--world-accent:#a7a29a;background:linear-gradient(180deg,#020203,#0c0e12 68%,#050506)}
+  html.v2 .era-jesus .scene-world{--world-sky:#12100f;--world-far:#3c3429;--world-mid:#6b5636;--world-near:#100b07;--world-accent:#e4c36d;background:linear-gradient(180deg,#030407,#2b251c 62%,#120c07)}
+  html.v2 .era-church .scene-world{--world-sky:#071317;--world-far:#18313a;--world-mid:#29534f;--world-near:#06100f;--world-accent:#70c1a7;background:linear-gradient(180deg,#061015,#193640 58%,#071515)}
+  html.v2 .era-restoration .scene-world{--world-sky:#152c40;--world-far:#3f6c82;--world-mid:#6f917e;--world-near:#10221d;--world-accent:#efd58a;background:linear-gradient(180deg,#112637,#3d718e 56%,#346950 100%)}
+
+  html.v2 .era-creation .creation-light{opacity:var(--creation-light,.72);transform-origin:center;transform:scale(var(--creation-scale,.88));filter:drop-shadow(0 0 52px rgba(247,231,177,.68))}
+  html.v2 .era-fall .closed-gate{transform:translateX(var(--fall-close,0))}
+  html.v2 .era-exodus .sea-left{transform:translateX(var(--sea-left,0))}
+  html.v2 .era-exodus .sea-right{transform:translateX(var(--sea-right,0))}
+  html.v2 .era-divided .kingdom-left{transform:translateX(var(--kingdom-left,0))}
+  html.v2 .era-divided .kingdom-right{transform:translateX(var(--kingdom-right,0))}
+  html.v2 .era-silence .empire-mark{opacity:var(--empire-opacity,.28)}
+  html.v2 .era-silence .empty-road{filter:drop-shadow(0 0 20px rgba(167,162,154,.08))}
+  html.v2 .era-restoration .river{filter:drop-shadow(0 0 12px rgba(166,223,225,.45));animation:riverShine 4s ease-in-out infinite alternate}
+  @keyframes riverShine{to{opacity:.72}}
+
+  @media(max-width:760px){
+    html.v2 .scene-world svg{width:172%;margin-left:-36%;transform:scale(1.03)}
+    html.v2 .scene-world::after{background:linear-gradient(180deg,rgba(3,4,6,.25),rgba(3,4,6,.32) 42%,rgba(3,4,6,.86) 100%)}
+    html.v2 .scene-index{font-size:25vw;top:12%;color:rgba(243,236,221,.045)}
+    html.v2 .silence-stage{min-height:184svh;margin:-8svh 0 8svh}
+    html.v2 .silence-first{min-height:108svh}
+    html.v2 .silence-return{min-height:72svh;padding-inline:24px}
+  }
+
+  @media(prefers-reduced-motion:reduce){
+    html.v2 .scene-world *,html.v2 .scene-world svg{animation:none!important;transition:none!important;transform:none!important}
+  }
+
   html.v2 .silence-stage{position:relative;z-index:3;width:100%;min-height:170svh;margin:-10svh 0 10svh}
   html.v2 .silence-first{min-height:96svh}
   html.v2 .silence-stage strong{font-size:clamp(5.5rem,22vw,14rem);line-height:.72;color:#e8e3da;letter-spacing:-.085em}
@@ -1905,6 +1973,77 @@ function sceneGlyph(name){
   };
   return `<svg ${common}>${glyphs[name]||glyphs.restoration}</svg>`;
 }
+function sceneWorld(name){
+  const common='viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false"';
+  const worlds={
+    creation:`
+      <g class="world-sky"><circle class="star" cx="1320" cy="155" r="3"/><circle class="star" cx="1010" cy="105" r="2"/><circle class="star" cx="1450" cy="320" r="2"/><circle class="creation-light accent-fill" cx="1190" cy="230" r="82"/><circle class="mist-fill" cx="1190" cy="230" r="150"/></g>
+      <g class="world-far"><path class="far-fill" d="M0 570L210 430l150 86 190-180 230 230 210-220 210 170 190-120 210 178v326H0z"/></g>
+      <g class="world-mid"><path class="mid-fill" d="M0 640c230-48 390-16 570 31 226 58 412 62 620-8 160-54 272-43 410-2v239H0z"/><path class="line-stroke water-line" d="M40 692c290-52 510 78 790 12s510-22 730 18M90 746c250-38 480 54 708 7s482-32 688 13"/></g>
+      <g class="world-near"><path class="near-fill" d="M0 770c210-62 435-35 620 30 190 67 351 52 506 12 201-52 326-31 474 16v72H0z"/><path class="near-fill" d="M1280 770v-238h22v238zM1291 566l-96-86 105 55 89-105-71 127 112-22-118 58 80 92-101-72-98 78 75-105-112-18z"/></g>`,
+    fall:`
+      <g class="world-sky"><circle class="accent-fill" cx="270" cy="210" r="54" opacity=".42"/><path class="line-stroke" d="M0 380c230-90 450-88 680 0s450 90 920-20"/></g>
+      <g class="world-far"><path class="far-fill" d="M0 545l250-130 238 82 212-141 220 160 276-118 404 168v334H0z"/></g>
+      <g class="world-mid"><path class="mid-fill" d="M0 675c220-75 430-36 656 20 274 68 551 22 944-38v243H0z"/><path class="near-fill" d="M360 742V300h30v442zM375 336l-164-91 147 126-184 31 188 8-123 148 143-119 86 164-58-181 170 72-151-111 156-82-178 46 51-177z"/></g>
+      <g class="world-near closed-gate"><path class="near-fill" d="M0 770h610v130H0zM0 458h115v312H0zM145 520h82v250h-82zM255 570h66v200h-66z"/><path class="accent-stroke" d="M545 420l90 178-65 174M665 389l-32 210 79 156"/></g>`,
+    patriarch:`
+      <g class="world-sky"><circle class="star" cx="180" cy="142" r="2"/><circle class="star" cx="340" cy="245" r="2"/><circle class="star" cx="680" cy="112" r="3"/><circle class="star" cx="970" cy="192" r="2"/><circle class="star" cx="1210" cy="112" r="4"/><circle class="star" cx="1440" cy="270" r="2"/><path class="accent-stroke" opacity=".38" d="M1210 60v104M1158 112h104"/></g>
+      <g class="world-far"><path class="far-fill" d="M0 570c260-120 460-115 680-28 244 97 492 102 920-37v395H0z"/></g>
+      <g class="world-mid"><path class="mid-fill" d="M0 686c290-95 510-23 737 30 270 63 540 37 863-46v230H0z"/><path class="near-fill" d="M1085 702l145-174 150 174zm40 0V607h210v95z"/><path class="accent-stroke" d="M1230 528v174"/></g>
+      <g class="world-near pilgrim"><circle class="near-fill" cx="945" cy="724" r="17"/><path class="near-fill" d="M927 742h36l18 84h-72zM996 742h94v34h-94zM1020 716h48v28h-48z"/></g>`,
+    exodus:`
+      <g class="world-sky"><path class="mist-fill" d="M0 0h1600v430c-225-42-438-61-650-21-312 59-571 24-950-64z"/></g>
+      <g class="world-far"><path class="far-fill" d="M0 500l240-146 280 160 260-119 220 128 280-181 320 158v400H0z"/></g>
+      <g class="world-mid"><path class="mid-fill sea-left" d="M0 390c168 45 309 130 455 245 97 77 182 104 325 112L698 900H0z"/><path class="mid-fill sea-right" d="M1600 360c-172 60-308 157-450 271-103 83-197 112-342 121l92 148h700z"/><path class="line-stroke water-line sea-left" d="M10 470c240 52 420 170 670 347M1590 455c-240 64-410 183-660 360"/></g>
+      <g class="world-near"><path class="near-fill" d="M610 900l132-330h116l132 330z"/><path class="accent-fill flame" d="M790 566c-42-89 45-102 17-207 87 83 8 130 55 207z"/><circle class="near-fill" cx="778" cy="716" r="10"/><path class="near-fill" d="M770 727h16l9 45h-34z"/></g>`,
+    judges:`
+      <g class="world-sky"><circle class="accent-fill" cx="1280" cy="190" r="56" opacity=".32"/></g>
+      <g class="world-far"><path class="far-fill" d="M0 555l230-96 204 73 184-118 242 128 226-86 194 70 320-112v486H0z"/></g>
+      <g class="world-mid"><path class="mid-fill" d="M0 685c280-42 478-18 728 41 264 63 532 43 872-43v217H0z"/><path class="line-stroke" d="M860 900V654M930 900V630M1000 900V670M1070 900V638M1140 900V681M1210 900V645M1280 900V672M1350 900V640"/></g>
+      <g class="world-near"><path class="near-fill" d="M1120 760h250v140h-250zM1155 490h34v270h-34zM1300 525h32v235h-32z"/><path class="accent-stroke" d="M1171 493l-58 88M1316 528l74-68M1075 760h345"/></g>`,
+    united:`
+      <g class="world-sky"><circle class="accent-fill" cx="330" cy="182" r="72" opacity=".48"/></g>
+      <g class="world-far"><path class="far-fill" d="M0 545l240-110 196 71 190-104 245 132 251-104 205 94 273-86v462H0z"/></g>
+      <g class="world-mid"><path class="mid-fill" d="M0 674h920v226H0zM90 532h190v142H90zM315 475h270v199H315zM620 548h220v126H620z"/><path class="accent-fill" d="M375 407h150v68H375zM411 350h78v57h-78z"/><path class="line-stroke" d="M450 350V267M399 674V490M500 674V490"/></g>
+      <g class="world-near"><path class="near-fill" d="M0 770c370-76 665-45 928 42 228 76 428 48 672-8v96H0z"/><path class="accent-stroke" d="M80 717h810M120 690h710"/></g>`,
+    divided:`
+      <g class="world-sky"><path class="accent-stroke" opacity=".35" d="M932 90l-30 154 41 112-52 147 47 130-64 157"/></g>
+      <g class="world-far"><path class="far-fill kingdom-left" d="M0 560l240-130 260 102 294-165 83 533H0z"/><path class="far-fill kingdom-right" d="M960 407l246 122 219-99 175 105v365H925z"/></g>
+      <g class="world-mid"><path class="mid-fill kingdom-left" d="M290 505h330v260H290zM354 420h202v85H354z"/><path class="mid-fill kingdom-right" d="M1050 526h340v239h-340zM1115 450h210v76h-210z"/></g>
+      <g class="world-near"><path class="near-fill" d="M0 750h670l122 150H0zM930 750h670v150H808z"/><path class="accent-stroke" d="M803 215l-28 190 43 116-48 145 42 154"/></g>`,
+    exile:`
+      <g class="world-sky"><circle class="mist-fill" cx="280" cy="192" r="74"/></g>
+      <g class="world-far"><path class="far-fill" d="M0 570l258-83 194 58 268-113 250 122 202-81 428 96v331H0z"/></g>
+      <g class="world-mid"><path class="mid-fill" d="M90 365h540v420H90zM155 268h125v97H155zM438 268h125v97H438zM286 490h148v295H286z"/><path class="line-stroke" d="M90 445h540M155 268l62-78 63 78M438 268l62-78 63 78"/></g>
+      <g class="world-near pilgrim"><circle class="near-fill" cx="690" cy="720" r="14"/><path class="near-fill" d="M676 734h28l13 66h-54z"/><circle class="near-fill" cx="750" cy="734" r="12"/><path class="near-fill" d="M738 746h24l12 58h-48z"/><circle class="near-fill" cx="810" cy="746" r="11"/><path class="near-fill" d="M800 757h22l10 51h-42z"/><path class="near-fill" d="M0 805c320-72 576-53 840 11 278 67 508 55 760-10v94H0z"/></g>`,
+    ret:`
+      <g class="world-sky"><circle class="accent-fill" cx="1260" cy="190" r="62" opacity=".38"/></g>
+      <g class="world-far"><path class="far-fill" d="M0 560l250-95 216 75 205-113 254 117 247-93 428 122v327H0z"/></g>
+      <g class="world-mid"><path class="mid-fill build-stone" d="M930 470h520v330H930zM990 392h180v78H990zM1260 420h130v50h-130z"/><path class="near-fill" d="M930 530h520v45H930zM930 642h520v42H930z"/><path class="accent-stroke" d="M895 800V376M1482 800V405M850 428h680M900 520h590"/></g>
+      <g class="world-near"><path class="near-fill" d="M0 790c330-80 620-56 900 26 253 74 470 52 700-5v89H0z"/><path class="accent-stroke route" d="M230 770c232-123 431-126 648-21 84 41 155 40 245 3"/></g>`,
+    silence:`
+      <g class="world-sky"><circle class="mist-fill" cx="800" cy="225" r="48"/><circle class="star" cx="1370" cy="128" r="2" opacity=".3"/></g>
+      <g class="world-far"><path class="far-fill" d="M0 585l244-90 214 61 216-104 232 103 257-86 437 130v301H0z"/></g>
+      <g class="world-mid empire-mark"><path class="mid-fill" d="M210 610h72v148h-72zM440 574h82v184h-82zM1080 588h78v170h-78zM1320 548h90v210h-90z"/><path class="line-stroke" d="M190 610h112M424 574h114M1062 588h114M1301 548h128M246 610v-75M481 574v-92M1119 588v-84M1365 548v-104"/></g>
+      <g class="world-near"><path class="near-fill" d="M0 782c328-52 566-38 770 18 257 71 508 72 830-15v115H0z"/><path class="mid-fill empty-road" d="M681 900l93-335h53l96 335z"/><path class="line-stroke" d="M800 565v335"/></g>`,
+    jesus:`
+      <g class="world-sky"><circle class="star" cx="1210" cy="155" r="8"/><path class="accent-stroke" d="M1210 85v140M1140 155h140"/></g>
+      <g class="world-far"><path class="far-fill" d="M0 575l280-112 205 70 220-116 224 117 244-102 427 145v333H0z"/></g>
+      <g class="world-mid"><path class="mid-fill" d="M920 548h460v235H920zM980 490h126v58H980zM1140 455h160v93h-160zM1320 520h106v263h-106z"/><path class="line-stroke" d="M1184 455v-66M920 650h506"/></g>
+      <g class="world-near"><path class="near-fill" d="M0 790c280-65 575-57 826 15 253 73 497 69 774-10v105H0z"/><path class="accent-stroke route" d="M820 786c145-75 273-100 433-64 70 16 125 10 198-20"/></g>`,
+    church:`
+      <g class="world-sky"><circle class="accent-fill" cx="352" cy="220" r="36" opacity=".42"/></g>
+      <g class="world-far"><path class="far-fill" d="M0 580l205-95 202 67 226-110 246 126 232-90 489 101v321H0z"/></g>
+      <g class="world-mid"><path class="mid-fill" d="M0 655c214 45 344 21 514-54 179-79 342-75 527 20 168 86 314 91 559 31v248H0z"/><path class="line-stroke" d="M20 650c204 42 338 16 492-52 183-81 350-78 532 16 168 87 308 93 536 35"/></g>
+      <g class="world-near"><circle class="accent-fill" cx="355" cy="650" r="9"/><circle class="accent-fill" cx="690" cy="610" r="7"/><circle class="accent-fill" cx="980" cy="675" r="7"/><circle class="accent-fill" cx="1280" cy="624" r="8"/><path class="route" d="M355 650C470 528 578 548 690 610S852 720 980 675s174-92 300-51M690 610c40-111 122-168 238-183M980 675c44-91 119-135 239-143"/><path class="near-fill" d="M0 805c290-61 553-47 782 14 277 74 518 66 818-18v99H0z"/></g>`,
+    restoration:`
+      <g class="world-sky"><circle class="star" cx="1180" cy="168" r="5"/><circle class="mist-fill" cx="1180" cy="168" r="96"/></g>
+      <g class="world-far"><path class="far-fill" d="M0 548l218-86 190 67 208-105 244 121 217-94 523 116v333H0z"/></g>
+      <g class="world-mid"><path class="mid-fill" d="M930 365h450v420H930zM1010 300h110v65h-110zM1188 270h92v95h-92zM1370 470h110v315h-110z"/><path class="accent-stroke" d="M1234 270v-96M930 540h550M1040 785V610M1280 785V560"/><path class="accent-fill" d="M1197 177h74v16h-74z"/></g>
+      <g class="world-near"><path class="near-fill" d="M0 770c308-58 555-39 793 32 277 83 516 66 807-24v122H0z"/><path class="mid-fill river" d="M710 900c57-100 109-187 143-286 42-122 96-179 168-241-22 97-46 168-16 253 29 83 70 168 109 274z"/><path class="near-fill" d="M430 780V515h26v265zM443 540l-112-76 103 112-139 2 137 35-94 113 110-83 89 106-66-131 134 45-121-78 118-74z"/></g>`
+  };
+  return `<div class="scene-world scene-world-${name}" aria-hidden="true"><svg ${common}>${worlds[name]||worlds.restoration}</svg></div>`;
+}
 function renderEpochs(pack){
   const u=pack.ui, ver=u.version?(' '+u.version):'';
   const repo=obsRepo(curCode);
@@ -1930,9 +2069,8 @@ function renderEpochs(pack){
       const mapSection=i===10?'jesus':i===11?'paul':(i>=3&&i<=9?'ot':'');
       const mapLink=mapSection?`<p><a class="vlink" href="/maps/" data-rel="maps" data-map-section="${mapSection}">${v2.map}</a></p>`:'';
       s.innerHTML=linkifyRefs(`
-      <div class="scene-art" aria-hidden="true"><i></i><i></i><i></i></div>
+      ${sceneWorld(v.svg||'restoration')}
       <div class="scene-index" aria-hidden="true">${String(i+1).padStart(2,'0')}</div>
-      <div class="scene-sigil" aria-hidden="true">${sceneGlyph(v.svg||'restoration')}</div>
       <div class="glow"></div>
       ${openingStage}
       <div class="wrap"><div class="ep-inner"><div class="txt">
@@ -1989,9 +2127,28 @@ function paintScenes(){
     const r=el.getBoundingClientRect();
     if(r.bottom<0||r.top>vh)return;
     const p=Math.max(-1,Math.min(1,(r.top+r.height/2-vh/2)/(vh+r.height)*2));
+    const q=Math.max(0,Math.min(1,(vh-r.top)/(vh+r.height)));
     el.style.setProperty('--scene-index-shift',(p*-34).toFixed(1)+'px');
     el.style.setProperty('--scene-sigil-shift',(p*58).toFixed(1)+'px');
     el.style.setProperty('--scene-art-shift',(p*-24).toFixed(1)+'px');
+    el.style.setProperty('--world-sky-shift',(p*-8).toFixed(1)+'px');
+    el.style.setProperty('--world-far-shift',(p*-18).toFixed(1)+'px');
+    el.style.setProperty('--world-mid-shift',(p*-30).toFixed(1)+'px');
+    el.style.setProperty('--world-near-shift',(p*-48).toFixed(1)+'px');
+    if(el.classList.contains('era-creation')){
+      el.style.setProperty('--creation-light',(.42+q*.58).toFixed(3));
+      el.style.setProperty('--creation-scale',(.74+q*.3).toFixed(3));
+    }
+    if(el.classList.contains('era-fall'))el.style.setProperty('--fall-close',((q-.5)*34).toFixed(1)+'px');
+    if(el.classList.contains('era-exodus')){
+      el.style.setProperty('--sea-left',(q*-74).toFixed(1)+'px');
+      el.style.setProperty('--sea-right',(q*74).toFixed(1)+'px');
+    }
+    if(el.classList.contains('era-divided')){
+      el.style.setProperty('--kingdom-left',(q*-42).toFixed(1)+'px');
+      el.style.setProperty('--kingdom-right',(q*42).toFixed(1)+'px');
+    }
+    if(el.classList.contains('era-silence'))el.style.setProperty('--empire-opacity',Math.max(.08,.55-q*.5).toFixed(3));
   });
   const climax=document.querySelector('.jesus-climax');
   if(climax){

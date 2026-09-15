@@ -1092,7 +1092,62 @@
     html.v2 .post-climax-next{padding-inline:22px}
   }
 
+  /* ===== v2.1 continuous journey × illuminated manuscript ===== */
+  html.v2 main{position:relative;overflow:clip;background:#050506}
+  html.v2 .journey-segment{position:absolute;inset:0;z-index:2;pointer-events:none;opacity:.56;mix-blend-mode:screen}
+  html.v2 .journey-segment svg{position:absolute;inset:0;margin:auto;width:min(560px,72vw);height:100%;overflow:visible}
+  html.v2 .journey-shadow,html.v2 .journey-path{fill:none;vector-effect:non-scaling-stroke}
+  html.v2 .journey-shadow{stroke:rgba(0,0,0,.72);stroke-width:9}
+  html.v2 .journey-path{stroke:var(--c2);stroke-width:1.5;stroke-dasharray:3 9;stroke-linecap:round;filter:drop-shadow(0 0 8px var(--c1));animation:journeyFlow 5s linear infinite}
+  html.v2 .journey-node{fill:#050506;stroke:var(--c2);stroke-width:1.4;vector-effect:non-scaling-stroke;filter:drop-shadow(0 0 7px var(--c1))}
+  html.v2 .journey-core{fill:var(--c2);filter:drop-shadow(0 0 9px var(--c2))}
+  @keyframes journeyFlow{to{stroke-dashoffset:-48}}
+  html.v2 .era-silence .journey-segment{opacity:.1}
+  html.v2 .era-jesus .journey-segment{opacity:.92}
+  html.v2 .era-restoration .journey-segment{opacity:.78}
+
+  html.v2 .epoch .txt{padding:clamp(28px,4vw,52px);background:linear-gradient(145deg,rgba(9,9,10,.86),rgba(9,9,10,.56));border:1px solid rgba(243,236,221,.13);border-left-color:var(--c2);clip-path:polygon(15px 0,100% 0,100% calc(100% - 15px),calc(100% - 15px) 100%,0 100%,0 15px);backdrop-filter:blur(12px);box-shadow:0 28px 90px rgba(0,0,0,.34)}
+  html.v2 .epoch:nth-child(3n+1) .txt{background:linear-gradient(145deg,rgba(29,24,15,.9),rgba(8,8,9,.62))}
+  html.v2 .epoch:nth-child(3n+2) .txt{background:linear-gradient(145deg,rgba(25,12,13,.9),rgba(8,8,9,.64))}
+  html.v2 .epoch:nth-child(3n) .txt{background:linear-gradient(145deg,rgba(7,14,25,.9),rgba(8,8,9,.62))}
+  html.v2 .scene-drawer{margin-top:28px!important;border-top-color:var(--c2)!important}
+  html.v2 .scene-drawer summary{display:flex;align-items:center;justify-content:space-between;padding:17px 2px!important}
+  html.v2 .scene-drawer summary::after{content:"+";font:400 1.1rem/1 var(--sans);color:var(--ink);transition:transform .35s ease}
+  html.v2 .scene-drawer[open] summary::after{transform:rotate(45deg)}
+  html.v2 .scene-drawer>.body{padding-top:8px!important}
+  html.v2 .scene-drawer .meta{margin-top:4px}
+
+  @media(max-width:760px){
+    html.v2 .epoch{min-height:112svh;padding:0 0 12svh;justify-content:flex-start}
+    html.v2 .epoch::before{background:linear-gradient(180deg,rgba(4,4,5,.18),rgba(4,4,5,.08) 28%,rgba(4,4,5,.78) 58%,#050506 100%)}
+    html.v2 .epoch::after{box-shadow:inset 0 0 22vw rgba(0,0,0,.48)}
+    html.v2 .epoch .wrap{width:100%;padding:0 16px;margin:0}
+    html.v2 .ep-inner{width:100%}
+    html.v2 .epoch .txt{width:100%;margin:44svh 0 0!important;padding:27px 22px 24px;background:linear-gradient(150deg,rgba(8,8,9,.93),rgba(8,8,9,.7));clip-path:polygon(12px 0,100% 0,100% calc(100% - 12px),calc(100% - 12px) 100%,0 100%,0 12px);backdrop-filter:blur(9px)}
+    html.v2 .epoch:nth-child(3n+1) .txt{background:linear-gradient(150deg,rgba(33,25,13,.94),rgba(8,8,9,.72))}
+    html.v2 .epoch:nth-child(3n+2) .txt{background:linear-gradient(150deg,rgba(34,13,14,.94),rgba(8,8,9,.72))}
+    html.v2 .epoch:nth-child(3n) .txt{background:linear-gradient(150deg,rgba(7,15,29,.94),rgba(8,8,9,.72))}
+    html.v2 .scene-world svg{top:max(62px,7svh);left:-11%;width:122%}
+    html.v2 .journey-segment{opacity:.74}
+    html.v2 .journey-segment svg{width:100%;height:100%}
+    html.v2 .badge{margin:0 0 22px}
+    html.v2 .txt h2{font-size:clamp(3.2rem,16vw,5.3rem);margin-bottom:23px}
+    html.v2 .oneline{margin-bottom:22px;font-size:1.08rem}
+    html.v2 .promise-track{margin:24px 0 4px}
+    html.v2 .scene-drawer{margin-top:22px!important}
+    html.v2 .scene-drawer .meta{display:grid}
+    html.v2 .era-fall h2{transform:skewY(-1.6deg);text-shadow:4px 0 rgba(182,83,67,.34)}
+    html.v2 .era-exodus h2,html.v2 .era-divided h2{position:relative;color:transparent;text-shadow:none;min-height:.9em}
+    html.v2 .era-exodus h2::before,html.v2 .era-exodus h2::after,html.v2 .era-divided h2::before,html.v2 .era-divided h2::after{content:attr(data-title);position:absolute;inset:0;color:var(--ink);white-space:nowrap;transition:transform .12s linear}
+    html.v2 .era-exodus h2::before,html.v2 .era-divided h2::before{clip-path:inset(0 50% 0 0);transform:translateX(var(--sea-left,var(--kingdom-left,0)))}
+    html.v2 .era-exodus h2::after,html.v2 .era-divided h2::after{clip-path:inset(0 0 0 50%);transform:translateX(var(--sea-right,var(--kingdom-right,0)))}
+    html.v2 .era-silence .txt{margin-top:0!important}
+    html.v2 .era-jesus>.wrap{padding:0 16px 12svh}
+    html.v2 .era-jesus>.wrap .txt{margin-top:0!important}
+  }
+
   @media(prefers-reduced-motion:reduce){
+    html.v2 .journey-path{animation:none}
     html.v2 .scene-sigil,html.v2 .scene-index,html.v2 .scene-art{transform:none!important;transition:none!important}
     html.v2 .scene-sigil svg *{stroke-dashoffset:0!important;transition:none!important}
     html.v2 .jesus-climax{height:auto!important}
@@ -2046,6 +2101,11 @@ function sceneWorld(name){
   };
   return `<div class="scene-world scene-world-${name}" aria-hidden="true"><svg ${common}>${worlds[name]||worlds.restoration}</svg></div>`;
 }
+function journeySegment(index){
+  const bend=index%2===0?'M50 0C50 18 20 24 22 50S50 82 50 100':'M50 0C50 18 80 24 78 50S50 82 50 100';
+  const nodeX=index%2===0?22:78;
+  return `<div class="journey-segment" aria-hidden="true"><svg viewBox="0 0 100 100" preserveAspectRatio="none" focusable="false"><path class="journey-shadow" d="${bend}"/><path class="journey-path" d="${bend}"/><circle class="journey-node" cx="${nodeX}" cy="51" r="2.1"/><circle class="journey-core" cx="${nodeX}" cy="51" r=".55"/></svg></div>`;
+}
 function renderEpochs(pack){
   const u=pack.ui, ver=u.version?(' '+u.version):'';
   const repo=obsRepo(curCode);
@@ -2072,6 +2132,7 @@ function renderEpochs(pack){
       const mapLink=mapSection?`<p><a class="vlink" href="/maps/" data-rel="maps" data-map-section="${mapSection}">${v2.map}</a></p>`:'';
       s.innerHTML=linkifyRefs(`
       ${sceneWorld(v.svg||'restoration')}
+      ${journeySegment(i)}
       <div class="scene-index" aria-hidden="true">${String(i+1).padStart(2,'0')}</div>
       <div class="glow"></div>
       ${openingStage}
@@ -2079,13 +2140,10 @@ function renderEpochs(pack){
         ${i===10?`<p class="ministry-kicker">${v2.ministryKicker}</p>`:''}
         <div class="ep-icon">${v.emoji}</div>
         <div class="badge"><span class="num">${i+1}</span><span class="tag">${e.tag}</span><span class="date">${e.date}</span><span class="scene-count">${v2.scene} ${i+1} / 13</span><button class="ep-share" data-sc="${i+1}" aria-label="Share" title="Share">${SVG.share}</button></div>
-        <h2>${e.title}</h2>
+        <h2 data-title="${e.title}">${e.title}</h2>
         <div class="oneline">${e.one}</div>
-        <div class="meta"><div class="meta-row"><span class="k">${v2.people}</span><p class="vv">${e.people}</p></div><div class="meta-row"><span class="k">${v2.events}</span><p class="vv">${e.events}</p></div></div>
-        <div class="verse"><div class="q">${e.q}</div><div class="cite">${e.cite?(repo?'<a class="vlink" href="'+obsUrl(repo,EP_OBS[i])+'" target="_blank" rel="noopener">'+e.cite+'</a>':(BOOKS[curCode]?e.cite:vlink(EP_REF[i],e.cite,curCode))+ver):''}</div></div>
-        <div class="thread-line"><p class="note-h"><span class="note-i">🧵</span><b>${u.christLabel}</b></p><p class="note-b">${e.christ}</p></div>
         <div class="promise-track" role="img" aria-label="${v2.journey}: ${i>=10?v2.fulfilled:v2.waiting}"><div class="promise-head"><b>${v2.journey}</b><span>${i>=10?v2.fulfilled:v2.waiting}</span></div><div class="promise-nodes" style="--promise-progress:${promiseProgress}">${promiseNodes}</div></div>
-        <details class="more"><summary><span class="arr">▸</span> ${v2.explore}</summary><div class="body">${mapLink?`<div class="v2-detail-block">${mapLink}</div>`:''}${e.detail}<div class="love-note"><p class="note-h"><span class="note-i">💛</span><b>${u.loveLabel}</b></p><p class="note-b">${pack.love[i]}</p></div>${mis?`<div class="myth"><div class="m-row"><span class="m-tag wrong">${u.mythWrong}</span><p>${mis.w}</p></div><div class="m-row"><span class="m-tag right">${u.mythRight}</span><p>${mis.t}</p></div></div>`:''}</div></details>
+        <details class="more scene-drawer"><summary><span><span class="arr">▸</span> ${v2.explore}</span></summary><div class="body"><div class="meta"><div class="meta-row"><span class="k">${v2.people}</span><p class="vv">${e.people}</p></div><div class="meta-row"><span class="k">${v2.events}</span><p class="vv">${e.events}</p></div></div><div class="verse"><div class="q">${e.q}</div><div class="cite">${e.cite?(repo?'<a class="vlink" href="'+obsUrl(repo,EP_OBS[i])+'" target="_blank" rel="noopener">'+e.cite+'</a>':(BOOKS[curCode]?e.cite:vlink(EP_REF[i],e.cite,curCode))+ver):''}</div></div><div class="thread-line"><p class="note-h"><span class="note-i">🧵</span><b>${u.christLabel}</b></p><p class="note-b">${e.christ}</p></div>${mapLink?`<div class="v2-detail-block">${mapLink}</div>`:''}${e.detail}<div class="love-note"><p class="note-h"><span class="note-i">💛</span><b>${u.loveLabel}</b></p><p class="note-b">${pack.love[i]}</p></div>${mis?`<div class="myth"><div class="m-row"><span class="m-tag wrong">${u.mythWrong}</span><p>${mis.w}</p></div><div class="m-row"><span class="m-tag right">${u.mythRight}</span><p>${mis.t}</p></div></div>`:''}</div></details>
         ${i===10?'':`<div class="next">${e.next}</div>`}
       </div></div></div>
       ${climax}

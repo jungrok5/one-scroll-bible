@@ -2591,7 +2591,7 @@ document.addEventListener('keydown',function(e){ if(e.key==='Escape'){ if(!share
 function shareSite(){ var sh=(curPack&&curPack.share)||{}; openShare({title:sh.title||(curPack&&curPack.brand)||document.title, text:sh.text||'', url:shareUrl(), img:(sh.title||(curPack&&curPack.brand)||'')+'\n'+(sh.text||'')}); }
 var _sb=document.getElementById('shareBtn'); if(_sb) _sb.addEventListener('click',shareSite);
 document.querySelectorAll('[data-share]').forEach(function(b){ b.addEventListener('click',shareSite); });
-var heroLangBtn=document.getElementById('heroLangBtn');if(heroLangBtn)heroLangBtn.addEventListener('click',function(){var b=document.getElementById('langBtn');if(b)b.click();});
+var heroLangBtn=document.getElementById('heroLangBtn');if(heroLangBtn)heroLangBtn.addEventListener('click',function(e){e.stopPropagation();var b=document.getElementById('langBtn');if(b)b.click();});
 /* 장면별 공유 (이벤트 위임) */
 main.addEventListener('click',function(e){ var b=e.target.closest('.ep-share'); if(!b)return; var i=+b.dataset.sc-1; var e2=curPack&&curPack.epochs&&curPack.epochs[i]; if(!e2)return; openShare({title:e2.title, text:e2.one+'\n“'+e2.q+'”'+(e2.cite?' '+e2.cite:''), url:shareUrl()+'#s'+(i+1), img:'“'+e2.q+'”'+(e2.cite?'\n— '+e2.cite:'')}); });
 /* 더보기 열람 이벤트 */

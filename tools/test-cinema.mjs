@@ -10,6 +10,7 @@ for(const lang of ['ko','en']){assert.equal(ctx.OSBCinema.extra[lang].length,2);
 assert.match(ctx.OSBCinema.rows[9][1],/400/);assert.match(ctx.OSBCinema.rows[9][4],/400/);
 const css=read('v2/cinema.css');assert.match(css,/prefers-reduced-motion/);assert.match(css,/min-height:44px/);assert.doesNotMatch(css,/scroll-snap|height:100vh;|opacity:0[;}]/);
 const html=read('index.html');assert.match(html,/OSBCinema.mount\(pack,curCode\)/);assert.match(html,/cc.hidden=\(code==='en'\)/);
+assert.match(html,/heroLangBtn.addEventListener\('click',function\(e\)\{e.stopPropagation\(\)/);
 const scripts=[...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g)].filter(m=>!m[0].includes('application/ld+json'));
 for(const [,script] of scripts)new vm.Script(script);
 console.log('PASS: 13 bilingual scenes, cross → resurrection, 400 years, assets, motion/reading safeguards, script syntax, ESV exclusion.');

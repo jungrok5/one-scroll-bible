@@ -936,7 +936,7 @@
   html.v2 .era-restoration .scene-art{background:radial-gradient(circle at 72% 27%,rgba(255,246,207,.72) 0 1px,rgba(76,151,205,.25) 2px,transparent 34%),linear-gradient(145deg,#07101a,#193247 56%,#0a1014)}
 
   /* Concrete biblical worlds: lightweight SVG dioramas instead of abstract sigils. */
-  html.v2 .scene-art,html.v2 .scene-sigil{display:none}
+  html.v2 .scene-art,html.v2 .scene-sigil,html.v2 .scene-index{display:none}
   html.v2 .scene-world{--world-sky:#0b1119;--world-far:#182333;--world-mid:#202f40;--world-near:#071019;--world-accent:#d8a63f;position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none;background:var(--world-sky)}
   html.v2 .scene-world::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(3,4,6,.13),rgba(3,4,6,.05) 44%,rgba(3,4,6,.72) 100%)}
   html.v2 .scene-world svg{display:block;width:100%;height:100%;overflow:visible;transform:scale(1.025);transform-origin:center}
@@ -2345,7 +2345,7 @@ function showToast(){
 function gevent(n,p){ if(window.gtag){ try{ gtag('event',n,Object.assign({language:curCode||'ko'},p||{})); }catch(e){} } }
 /* 현재 언어 URL + 해시 이동 */
 function shareUrl(){ var lp=(curCode&&curCode!=='ko')?(curCode+'/'):''; return 'https://one-scroll-bible.com/'+lp; }
-function gotoHash(){ try{ if(location.hash&&location.hash.length>1){ var el=document.querySelector(location.hash); if(el) setTimeout(function(){ var t=el.classList.contains('epoch')?(el.querySelector('.badge')||el):el,root=document.documentElement,prev=root.style.scrollBehavior;root.style.scrollBehavior='auto';t.scrollIntoView({block:'start'});window.scrollBy(0,-84);root.style.scrollBehavior=prev; },70); } }catch(e){} }
+function gotoHash(){ try{ if(location.hash&&location.hash.length>1){ var el=document.querySelector(location.hash); if(el) setTimeout(function(){ var hasOpening=el.querySelector('.silence-stage,.arrival-stage'),t=hasOpening?el:(el.classList.contains('epoch')?(el.querySelector('.badge')||el):el),root=document.documentElement,prev=root.style.scrollBehavior;root.style.scrollBehavior='auto';t.scrollIntoView({block:'start'});if(!hasOpening)window.scrollBy(0,-84);root.style.scrollBehavior=prev; },70); } }catch(e){} }
 window.addEventListener('hashchange',gotoHash);
 
 /* 공유 시트 (전역 + 장면별 + 다채널) */

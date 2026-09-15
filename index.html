@@ -965,7 +965,7 @@
   html.v2 #map{right:18px;gap:12px}
   html.v2 #map button{width:5px;height:5px;border-radius:0;transform:rotate(45deg);background:rgba(243,236,221,.22)}
   html.v2 #map button.active{background:var(--accent);transform:rotate(45deg) scale(1.8)}
-  html.v2 #map button::after{border-radius:0;background:#070708}
+  html.v2 #map button::after{border-radius:0;background:#070708;transform:translateY(-50%) rotate(-45deg)}
   html.v2 #toTop{border-radius:0;background:rgba(5,5,6,.8)}
 
   @media(max-width:760px){
@@ -2138,7 +2138,7 @@ function showToast(){
 function gevent(n,p){ if(window.gtag){ try{ gtag('event',n,Object.assign({language:curCode||'ko'},p||{})); }catch(e){} } }
 /* 현재 언어 URL + 해시 이동 */
 function shareUrl(){ var lp=(curCode&&curCode!=='ko')?(curCode+'/'):''; return 'https://one-scroll-bible.com/'+lp; }
-function gotoHash(){ try{ if(location.hash&&location.hash.length>1){ var el=document.querySelector(location.hash); if(el) setTimeout(function(){ el.scrollIntoView(); },70); } }catch(e){} }
+function gotoHash(){ try{ if(location.hash&&location.hash.length>1){ var el=document.querySelector(location.hash); if(el) setTimeout(function(){ var t=el.classList.contains('epoch')?(el.querySelector('.badge')||el):el;t.scrollIntoView({block:'start'});scrollBy(0,-84); },70); } }catch(e){} }
 window.addEventListener('hashchange',gotoHash);
 
 /* 공유 시트 (전역 + 장면별 + 다채널) */

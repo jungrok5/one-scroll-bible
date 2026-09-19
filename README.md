@@ -122,3 +122,10 @@ Many ministries share this heart; **we are the on-ramp in front of them**, and w
   - Korean quotes the **개역개정**: 「성경전서 개역개정판」 © 대한성서공회.
 
 For content questions or feedback, use the contact at the bottom of the site, or open an [issue](../../issues).
+
+---
+
+## Author
+
+**Jeongrok Oh** (오정록) — Technical Director · MMO Server Architect
+[Résumé](https://jungrok5.github.io/resume/en/) · [GitHub](https://github.com/jungrok5) · [LinkedIn](https://www.linkedin.com/in/jungrok5)

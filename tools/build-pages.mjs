@@ -289,10 +289,18 @@ function faqLd(s){
 }
 function ldBlock({ name, desc, url, code, s }){
   // 발행 주체(Organization) — AI 엔진이 사이트와 운영 주체를 엔티티로 묶도록. 연락처 이메일은 일부러 넣지 않는다(스크래핑 노출).
-  const org = { '@type':'Organization', '@id': `${ORIGIN}/#org`, name, url: `${ORIGIN}/`, logo: `${ORIGIN}/icon-512.png`,
+  const orgRef = { '@id': `${ORIGIN}/#org` };
+  const org = { '@type':'Organization', '@id': orgRef['@id'], name, alternateName: KO.brand, url: `${ORIGIN}/`, logo: `${ORIGIN}/icon-512.png`,
+    description: desc, areaServed: 'Worldwide', knowsLanguage: LANGS.map(L => L.code),
     sameAs: ['https://github.com/jungrok5/one-scroll-bible'] };
-  const site = { '@type':'WebSite', name, url, inLanguage: code, description: desc, publisher: { '@id': org['@id'] } };
-  const graph = s && faqLd(s).mainEntity.length ? [site, org, faqLd(s)] : [site, org];
+  const site = { '@type':'WebSite', '@id': `${ORIGIN}/#website`, name, alternateName: KO.brand, url, inLanguage: code, description: desc, publisher: orgRef };
+  // 이 페이지 자체 = 성경 전체 줄거리를 설명하는 장문 글(Article). 날짜는 빌드 시각이 곧 내용 시각이 아니므로 넣지 않는다.
+  const article = { '@type':'Article', headline: name, description: desc, url, mainEntityOfPage: url, inLanguage: code,
+    image: `${ORIGIN}/og.png`, author: orgRef, publisher: orgRef, isPartOf: { '@id': site['@id'] } };
+  const faq = s && faqLd(s);
+  const graph = faq && faq.mainEntity.length
+    ? [site, org, article, { ...faq, name: `${name} — FAQ`, url, inLanguage: code, isPartOf: { '@id': site['@id'] } }]
+    : [site, org, article];
   return '<script type="application/ld+json">\n' + JSON.stringify({ '@context':'https://schema.org', '@graph': graph }) + '\n</script>';
 }
 
@@ -555,7 +563,7 @@ Summary: ${ORIGIN}/ai/summary.json
     name: EN.brand, type: 'WebApplication', url: `${ORIGIN}/`, price: 'free', accountRequired: false,
     description: 'A free, no-signup mobile web page that tells the whole Bible as one scroll and ends with an invitation to pray to receive Christ.',
     languages: LANGS.length, platforms: ['mobile web', 'desktop web', 'PWA'],
-    features: ['one-scroll storyline in 13 epochs', "verse links to each language's representative translation", 'share and QR code per scene', 'Bible-by-map timeline (/maps/)'],
+    capabilities: ['one-scroll storyline in 13 epochs', "verse links to each language's representative translation", 'share and QR code per scene', 'Bible-by-map timeline (/maps/)'],
     lastModified: today2,
   });
 }

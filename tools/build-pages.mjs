@@ -179,8 +179,11 @@ const xml = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>
 const esc = s => String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 
 // ---- 원본 읽기 + 인라인 데이터(EPOCHS/CORE/EN_PACK) 추출 ----
-const src = fs.readFileSync(`${root}/index.html`, 'utf8');
-let EPOCHS, CORE, EN_PACK;
+const srcRaw = fs.readFileSync(`${root}/index.html`, 'utf8');
+// index.html 은 템플릿이자 한글 루트 결과물이다. 한글 본문 프리렌더 구간(<!--pre-->…<!--/pre-->)을 항상 비운 채로
+// 템플릿으로 써야, 빌드를 여러 번 돌려도 비-ko 페이지들이 한글 본문을 물려받지 않는다(makePage 가 빈 <main>/<div> 를 치환).
+const src = srcRaw.replace(/<!--pre-->[\s\S]*?<!--\/pre-->/g, '');
+let EPOCHS, CORE, EN_PACK, KO_PACK;
 (function extractInlineData(){
   const a = src.indexOf('const EPOCHS=[');
   const b = src.indexOf('function hasLang');
@@ -188,7 +191,7 @@ let EPOCHS, CORE, EN_PACK;
   const dataSrc = src.slice(a, b)
     .replace("const coreWrap=document.getElementById('core');", '')
     .replace("const main=document.getElementById('epochs');", '');
-  ({ EPOCHS, CORE, EN_PACK } = new Function(dataSrc + '\nreturn {EPOCHS,CORE,EN_PACK};')());
+  ({ EPOCHS, CORE, EN_PACK, KO_PACK } = new Function(dataSrc + '\nreturn {EPOCHS,CORE,EN_PACK,KO_PACK};')());
 })();
 
 // ---- 언어 팩 로드 (en=인라인, 13개=JSON) ----
@@ -454,11 +457,14 @@ const koS = {}; for (const k of ['faq.q1','faq.a1','faq.q2','faq.a2','faq.q3','f
 rootHtml = rootHtml.replace(/<script type="application\/ld\+json">[\s\S]*?<\/script>/,
   ldBlock({ name: KO.brand, desc: KO.desc, url: `${ORIGIN}/`, code: 'ko', s: koS }));
 // 루트 og:image/twitter:image 도 버전(?v=) 부착 — 캐시 버스팅
+// 한글 루트 본문 프리렌더 — JS 없이도(검색·AI 크롤러) 13개 시대·핵심 7가지가 보이게. 비-ko 페이지와 같은 함수 사용.
+rootHtml = rootHtml.replace('<main id="epochs"></main>', `<main id="epochs"><!--pre-->${epochsHtml(KO_PACK)}<!--/pre--></main>`);
+rootHtml = rootHtml.replace('<div class="core-grid" id="core"></div>', `<div class="core-grid" id="core"><!--pre-->${coreHtml(KO_PACK)}<!--/pre--></div>`);
 rootHtml = rootHtml.replace(/(<meta property="og:image" content=")[^"]*(")/, `$1${OG_URL}$2`);
 rootHtml = rootHtml.replace(/(<meta name="twitter:image" content=")[^"]*(")/, `$1${OG_URL}$2`);
 // 지원 언어 수는 LANGS.length 에서 자동 도출 — 메타 설명의 하드코딩 카운트 수동관리 제거
 rootHtml = rootHtml.replace(/\d+개 언어 지원/, `${LANGS.length}개 언어 지원`);
-if (rootHtml !== src) fs.writeFileSync(`${root}/index.html`, rootHtml);
+if (rootHtml !== srcRaw) fs.writeFileSync(`${root}/index.html`, rootHtml);
 
 // ---- 하위 페이지(/about/·/maps/) 언어별 프리렌더 생성 ----
 subBake();          // ko 루트 프리렌더 + hreflang 갱신(멱등)

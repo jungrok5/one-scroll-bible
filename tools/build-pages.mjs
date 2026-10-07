@@ -470,15 +470,124 @@ if (rootHtml !== srcRaw) fs.writeFileSync(`${root}/index.html`, rootHtml);
 subBake();          // ko 루트 프리렌더 + hreflang 갱신(멱등)
 subGenerate();      // 비-ko 언어 페이지 생성 → /about/<code>/·/maps/<code>/
 
-// ---- sitemap.xml ----
+// ---- lastmod: 콘텐츠가 실제로 바뀐 날짜(git) — 빌드 날짜가 아니다 ----
+// 모든 URL 에 빌드 날짜를 찍으면 검색엔진은 lastmod 를 신뢰하지 않고 무시한다(Google sitemaps 문서).
+// 각 페이지의 소스 파일(ko/en = index.html, 그 외 = i18n/<code>.json, about/maps 도 같은 규칙)의
+// 마지막 커밋 날짜를 쓴다. Vercel 클론은 shallow 라 git 이력이 없으므로: 전체 이력이 있는 로컬 빌드가
+// tools/lastmod.json 을 갱신(커밋 대상, en.json·sw.js 스탬프와 같은 부수 산출물)하고, 이력이 없는
+// 빌드는 그 표를 읽는다. 표에도 없는 파일은 <lastmod> 를 생략한다 — 틀린 날짜보다 낫다.
+// 커밋되지 않은 수정이 있는 파일은 오늘(곧 커밋될 변경이므로 표가 한 커밋 뒤처지지 않게).
+const LASTMOD_FILE = `${root}/tools/lastmod.json`;
 const today = new Date().toISOString().slice(0,10);
+function gitOut(cmd){ try { return execSync(cmd, { cwd: root, stdio: ['ignore','pipe','ignore'] }).toString().trim(); } catch { return null; } }
+const gitFull = gitOut('git rev-parse --is-shallow-repository') === 'false';
+const srcOfMain = code => (code==='ko'||code==='en') ? 'index.html' : `i18n/${code}.json`;
+const srcOfSub = (slug, code) => (code==='ko'||code==='en') ? `${slug}/index.html` : `i18n/${slug}/${code}.json`;
+let LASTMOD = {};
+if (gitFull) {
+  const files = new Set(LANGS.map(L => srcOfMain(L.code)));
+  for (const slug of ['about','maps']) for (const c of subLangsFor(slug)) files.add(srcOfSub(slug, c));
+  for (const file of [...files].sort()) {
+    if (!fs.existsSync(`${root}/${file}`)) continue;
+    const d = gitOut(`git status --porcelain -- "${file}"`) ? today : gitOut(`git log -1 --format=%cs -- "${file}"`);
+    if (d) LASTMOD[file] = d;
+  }
+  const json = JSON.stringify(LASTMOD, null, 1) + '\n';
+  if (!fs.existsSync(LASTMOD_FILE) || fs.readFileSync(LASTMOD_FILE, 'utf8') !== json) { fs.writeFileSync(LASTMOD_FILE, json); console.log('tools/lastmod.json 갱신 (커밋 대상)'); }
+} else {
+  try { LASTMOD = JSON.parse(fs.readFileSync(LASTMOD_FILE, 'utf8')); console.log('lastmod: git 이력 없음 → tools/lastmod.json 사용'); }
+  catch { console.log('lastmod: git 이력도 tools/lastmod.json 도 없음 → <lastmod> 생략'); }
+}
+const lastmodTag = file => LASTMOD[file] ? `<lastmod>${LASTMOD[file]}</lastmod>` : '';
+const siteLastmod = Object.values(LASTMOD).sort().pop() || today;
+
+// ---- /languages/: 모든 언어로 가는 정적 링크 한 장 ----
+// 언어 전환 UI 는 JS(🌐 검색)라서 HTML 에는 about·maps 두 링크뿐이었다 → 크롤러·무JS 방문자에게
+// 214개 언어 페이지로 가는 정적 <a> 경로를 한 페이지에 모아 두고, 모든 페이지 푸터에서 여기로 링크한다.
+// (hreflang·sitemap 으로도 발견은 되지만, 본문 링크는 사람도 쓸 수 있는 길이다.)
+{
+  const iconLinks = (src.match(/<link rel="(?:manifest|apple-touch-icon|icon)[^>]*>/g) || []).join('\n');
+  const li = LANGS.map(L => {
+    const href = L.code==='ko' ? '/' : `/${L.code}/`;
+    const en = L.en && L.en!==L.native ? `<small lang="en" dir="ltr">${xml(L.en)}</small>` : '';
+    return `<li><a href="${href}" hreflang="${L.code}" lang="${L.code}"${L.dir==='rtl' ? ' dir="rtl"' : ''}>${xml(L.native)}${en}</a></li>`;
+  }).join('\n');
+  const title = `Languages · ${EN.brand} (${LANGS.length})`;
+  const desc = `${EN.brand} is available in ${LANGS.length} languages. Pick yours — the same scroll from Creation to the Church, with Scripture quoted from each language's representative translation.`;
+  const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>${xml(title)}</title>
+<meta name="description" content="${xml(desc)}" />
+<link rel="canonical" href="${ORIGIN}/languages/" />
+<meta name="robots" content="index, follow" />
+<meta name="theme-color" content="#0e1118" />
+${iconLinks}
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="${xml(EN.brand)}" />
+<meta property="og:title" content="${xml(title)}" />
+<meta property="og:description" content="${xml(desc)}" />
+<meta property="og:url" content="${ORIGIN}/languages/" />
+<meta property="og:image" content="${OG_URL}" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="${xml(title)}" />
+<meta name="twitter:description" content="${xml(desc)}" />
+<meta name="twitter:image" content="${OG_URL}" />
+<script type="application/ld+json">${JSON.stringify({ '@context':'https://schema.org', '@type':'CollectionPage', name: title, url: `${ORIGIN}/languages/`, description: desc, inLanguage: 'en', isPartOf: { '@type':'WebSite', name: EN.brand, url: `${ORIGIN}/` }, numberOfItems: LANGS.length })}</script>
+<style>
+  :root{--bg:#0e1118;--ink:#f4efe6;--muted:#9aa3b2;--line:rgba(255,255,255,.12);--card:rgba(255,255,255,.045);--accent:#e9b949;color-scheme:dark}
+  :root.sepia{--bg:#efe6d3;--ink:#2b2519;--muted:#7a6f5a;--line:rgba(0,0,0,.14);--card:rgba(0,0,0,.035);--accent:#b07d23;color-scheme:light}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans","Noto Sans KR",sans-serif}
+  .wrap{max-width:920px;margin:0 auto;padding:22px 16px 48px}
+  header a{color:var(--muted);text-decoration:none;font-size:.9rem}
+  header a:hover{color:var(--ink)}
+  h1{font-size:clamp(1.5rem,5vw,2.1rem);margin:18px 0 6px;letter-spacing:-.01em}
+  h1 span{color:var(--muted);font-weight:400}
+  p.lead{margin:0 0 22px;color:var(--muted);max-width:60ch}
+  ul.langs{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px}
+  ul.langs a{display:flex;flex-direction:column;gap:2px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);text-decoration:none;min-height:56px}
+  ul.langs a:hover{border-color:var(--accent)}
+  ul.langs small{color:var(--muted);font-size:.78rem}
+  footer{margin-top:36px;padding-top:16px;border-top:1px solid var(--line);color:var(--muted);font-size:.8rem;display:flex;flex-wrap:wrap;gap:4px 10px;justify-content:center}
+  footer a{color:var(--muted);text-decoration:none}
+  footer a:hover{color:var(--ink)}
+</style>
+</head>
+<body>
+<script>try{if(localStorage.getItem('bibleTheme')==='sepia')document.documentElement.classList.add('sepia')}catch(e){}</script>
+<div class="wrap">
+<header><a href="/">← ${xml(EN.brand)} <span lang="ko">· ${xml(KO.brand)}</span></a></header>
+<main>
+<h1>Languages <span lang="ko">· 언어</span></h1>
+<p class="lead">${LANGS.length} languages — the same story from Creation to the Church, with Scripture quoted from each language's representative translation. <span lang="ko">${LANGS.length}개 언어 — 창조에서 교회까지 같은 이야기를, 각 언어의 대표 성경 번역으로 인용했습니다.</span></p>
+<ul class="langs">
+${li}
+</ul>
+</main>
+<footer><a href="/">Home</a><span>·</span><a href="/about/">About</a><span>·</span><a href="/maps/">Maps</a><span>·</span><a href="https://github.com/jungrok5/one-scroll-bible" target="_blank" rel="noopener">GitHub</a></footer>
+</div>
+</body>
+</html>
+`;
+  fs.mkdirSync(`${root}/languages`, { recursive: true });
+  fs.writeFileSync(`${root}/languages/index.html`, html);
+}
+
+// ---- sitemap.xml ----
 const urls = LANGS.map(L => {
   const loc = L.code==='ko' ? `${ORIGIN}/` : `${ORIGIN}/${L.code}/`;
-  return `  <url><loc>${loc}</loc><lastmod>${today}</lastmod><changefreq>monthly</changefreq><priority>${L.code==='ko'?'1.0':'0.8'}</priority></url>`;
+  return `  <url><loc>${loc}</loc>${lastmodTag(srcOfMain(L.code))}<changefreq>monthly</changefreq><priority>${L.code==='ko'?'1.0':'0.8'}</priority></url>`;
 }).join('\n');
-// 부가 페이지(언어 페이지가 아닌 정적 하위 페이지) — about·maps 의 모든 언어 URL
-const extra = subUrls().map(loc => `  <url><loc>${loc}</loc><lastmod>${today}</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>`).join('\n');
-fs.writeFileSync(`${root}/sitemap.xml`, `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n${extra}\n</urlset>\n`);
+// 부가 페이지(언어 페이지가 아닌 정적 하위 페이지) — about·maps 의 모든 언어 URL. lastmod 소스는 URL 에서 역산.
+const extra = subUrls().map(loc => {
+  const m = loc.match(/\/(about|maps)\/(?:([^/]+)\/)?$/);
+  return `  <url><loc>${loc}</loc>${m ? lastmodTag(srcOfSub(m[1], m[2] || 'ko')) : ''}<changefreq>monthly</changefreq><priority>0.6</priority></url>`;
+}).join('\n');
+const langsIndex = `  <url><loc>${ORIGIN}/languages/</loc>${lastmodTag('index.html')}<changefreq>monthly</changefreq><priority>0.5</priority></url>`;
+fs.writeFileSync(`${root}/sitemap.xml`, `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n${extra}\n${langsIndex}\n</urlset>\n`);
 
 // ---- llms.txt (LLM/AI 엔진용 사이트 요약) ----
 // 링크는 llmstxt.org 규격의 마크다운 링크 `[이름](URL): 설명`. (예전엔 `- ko: URL` 평문이라 AI 도구가 링크로 인식하지 못했다)
@@ -497,6 +606,7 @@ Home: ${ORIGIN}/
 ${LANGS.map(langLine).join('\n')}
 
 ## Other pages
+- [Languages / 언어](${ORIGIN}/languages/): every language on one page — pick yours.
 - [About / 소개](${ORIGIN}/about/): rare facts from translating one gospel story into ${LANGS.length} languages; translation reach, speaker statistics, languages still waiting.
 - [Bible by Map / 지도로 보는 성경](${ORIGIN}/maps/): the Old Testament timeline, the life of Jesus, and Paul's journeys traced on a real map, in time order.
 
@@ -555,7 +665,7 @@ Allow: /
 Sitemap: ${ORIGIN}/sitemap.xml
 Summary: ${ORIGIN}/ai/summary.json
 `);
-  const today2 = new Date().toISOString().slice(0,10);
+  const today2 = siteLastmod;   // 콘텐츠 기준 최신 변경일(빌드 날짜 아님)
   const j = (f, o) => fs.writeFileSync(`${root}/ai/${f}`, JSON.stringify(o, null, 2) + '\n');
   j('summary.json', {
     name: EN.brand, alternateName: KO.brand, url: `${ORIGIN}/`,

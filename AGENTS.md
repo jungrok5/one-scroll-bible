@@ -98,7 +98,8 @@ language PR (now removed: build-pages no longer has its own LANGS array).
 ## Build & deploy pipeline
 1. After editing content (index.html / i18n), run `node tools/build-pages.mjs`. Its page output is
    gitignored, so locally the run is to **confirm it succeeds** and to refresh the **committed**
-   side-effects: `i18n/en.json` and the `sw.js` cache stamp. (OG/icon image steps need
+   side-effects: `i18n/en.json`, the `sw.js` cache stamp, and `tools/lastmod.json` (per-source
+   content dates from git for sitemap `<lastmod>`; Vercel's shallow clone reads this table instead of git). (OG/icon image steps need
    `rsvg-convert` + Noto/Nanum fonts; without them they are skipped and the committed PNGs are used.)
    - The generator uses index.html as the template, so editing index.html (en inline) re-derives all
      language pages — expected.

@@ -288,8 +288,11 @@ function faqLd(s){
   return { '@type':'FAQPage', mainEntity: main };
 }
 function ldBlock({ name, desc, url, code, s }){
-  const site = { '@type':'WebSite', name, url, inLanguage: code, description: desc };
-  const graph = s && faqLd(s).mainEntity.length ? [site, faqLd(s)] : [site];
+  // 발행 주체(Organization) — AI 엔진이 사이트와 운영 주체를 엔티티로 묶도록. 연락처 이메일은 일부러 넣지 않는다(스크래핑 노출).
+  const org = { '@type':'Organization', '@id': `${ORIGIN}/#org`, name, url: `${ORIGIN}/`, logo: `${ORIGIN}/icon-512.png`,
+    sameAs: ['https://github.com/jungrok5/one-scroll-bible'] };
+  const site = { '@type':'WebSite', name, url, inLanguage: code, description: desc, publisher: { '@id': org['@id'] } };
+  const graph = s && faqLd(s).mainEntity.length ? [site, org, faqLd(s)] : [site, org];
   return '<script type="application/ld+json">\n' + JSON.stringify({ '@context':'https://schema.org', '@graph': graph }) + '\n</script>';
 }
 
@@ -464,6 +467,9 @@ const extra = subUrls().map(loc => `  <url><loc>${loc}</loc><lastmod>${today}</l
 fs.writeFileSync(`${root}/sitemap.xml`, `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n${extra}\n</urlset>\n`);
 
 // ---- llms.txt (LLM/AI 엔진용 사이트 요약) ----
+// 링크는 llmstxt.org 규격의 마크다운 링크 `[이름](URL): 설명`. (예전엔 `- ko: URL` 평문이라 AI 도구가 링크로 인식하지 못했다)
+const langUrl = L => L.code==='ko' ? `${ORIGIN}/` : `${ORIGIN}/${L.code}/`;
+const langLine = L => `- [${L.native}${L.en && L.en!==L.native ? ` (${L.en})` : ''}](${langUrl(L)}): ${L.code==='ko' ? 'Bible in One Scroll in Korean — the original' : `the same scroll in ${L.en || L.native} (${L.code})`}`;
 const llms = `# Bible in One Scroll — 한눈에 보는 성경 이야기
 
 > ${EN.desc}
@@ -474,19 +480,85 @@ The whole Bible told as one scrollable, mobile-friendly page: Creation → Fall 
 Home: ${ORIGIN}/
 
 ## Language pages
-${LANGS.map(L=>`- ${L.code}: ${L.code==='ko'?ORIGIN+'/':ORIGIN+'/'+L.code+'/'}`).join('\n')}
+${LANGS.map(langLine).join('\n')}
 
 ## Other pages
-- About / 소개: ${ORIGIN}/about/ — rare facts from translating one gospel story into ${LANGS.length} languages; translation reach, speaker statistics, languages still waiting.
-- Bible by Map / 지도로 보는 성경: ${ORIGIN}/maps/ — the Old Testament timeline, the life of Jesus, and Paul's journeys traced on a real map, in time order.
+- [About / 소개](${ORIGIN}/about/): rare facts from translating one gospel story into ${LANGS.length} languages; translation reach, speaker statistics, languages still waiting.
+- [Bible by Map / 지도로 보는 성경](${ORIGIN}/maps/): the Old Testament timeline, the life of Jesus, and Paul's journeys traced on a real map, in time order.
 
 ## Resources
-- Sitemap: ${ORIGIN}/sitemap.xml
+- [Full text outline (llms-full.txt)](${ORIGIN}/llms-full.txt): the 13-epoch storyline, FAQ and language list in one file, without Scripture quotations.
+- [Sitemap](${ORIGIN}/sitemap.xml): every page in every language.
+- [AI summary (JSON)](${ORIGIN}/ai/summary.json) · [AI FAQ (JSON)](${ORIGIN}/ai/faq.json) · [AI service description (JSON)](${ORIGIN}/ai/service.json)
 
 ## Contact
 - num2323studio@gmail.com
 `;
 fs.writeFileSync(`${root}/llms.txt`, llms);
+
+// ---- llms-full.txt: 성경 본문(q/cite/detail)은 제외하고 우리가 쓴 문장만 ----
+// 영어 ESV 등 본문은 사이트의 CC BY 4.0 범위 밖이므로(AGENTS.md "Scripture copyright") 이 파일에 싣지 않는다.
+{
+  const ep = (EN_PACK.epochs || []).map((e, i) => `### ${i+1}. ${cleanText(e.title)} — ${cleanText(e.date)}\n${cleanText(e.one)}\n- People: ${cleanText(e.people)}\n- Events: ${cleanText(e.events)}`).join('\n\n');
+  const faqs = (lbl, S) => [1,2,3,4].filter(n => S && S[`faq.q${n}`] && S[`faq.a${n}`]).map(n => `**Q. ${cleanText(S[`faq.q${n}`])}**\n${cleanText(S[`faq.a${n}`])}`).join('\n\n');
+  const full = `# Bible in One Scroll — full text outline
+
+> ${EN.desc}
+> ${KO.desc}
+
+This file lists the site's own explanatory text. It deliberately contains **no Scripture quotations** (those are © their translation publishers; see each page's footer). Original writing here is CC BY 4.0. Perspective: evangelical · Reformed redemptive-historical (구속사).
+
+Home: ${ORIGIN}/ · Languages: ${LANGS.length} · Sitemap: ${ORIGIN}/sitemap.xml
+
+## The storyline in 13 epochs (English)
+${ep}
+
+## FAQ (English)
+${faqs('en', EN_PACK.s)}
+
+## 자주 묻는 질문 (한국어)
+${faqs('ko', koS)}
+
+## Languages
+${LANGS.map(L => `- ${L.native}${L.en && L.en!==L.native ? ` (${L.en})` : ''}: ${langUrl(L)}`).join('\n')}
+`;
+  fs.writeFileSync(`${root}/llms-full.txt`, full);
+}
+
+// ---- AI 디스커버리 엔드포인트: /.well-known/ai.txt · /ai/summary.json · /ai/faq.json · /ai/service.json ----
+// 전부 생성물(.gitignore 의 /*/ 가 .well-known·ai 를 이미 제외). 언어 수·FAQ 는 소스에서 도출해 수동 관리하지 않는다.
+{
+  fs.mkdirSync(`${root}/.well-known`, { recursive: true });
+  fs.mkdirSync(`${root}/ai`, { recursive: true });
+  fs.writeFileSync(`${root}/.well-known/ai.txt`,
+`# AI crawler permissions for ${ORIGIN}
+# Everything public on this site may be crawled, indexed and cited by AI search and answer engines.
+User-Agent: *
+Allow: /
+
+# Attribution: please cite "Bible in One Scroll" (${ORIGIN}/) when quoting our explanatory text.
+# Scripture quotations remain © their translation publishers — see each page's footer.
+Sitemap: ${ORIGIN}/sitemap.xml
+Summary: ${ORIGIN}/ai/summary.json
+`);
+  const today2 = new Date().toISOString().slice(0,10);
+  const j = (f, o) => fs.writeFileSync(`${root}/ai/${f}`, JSON.stringify(o, null, 2) + '\n');
+  j('summary.json', {
+    name: EN.brand, alternateName: KO.brand, url: `${ORIGIN}/`,
+    description: `${EN.desc} The whole Bible's redemptive history told as one mobile scroll, from Creation to the Second Coming, in ${LANGS.length} languages.`,
+    languages: LANGS.length, defaultLanguage: 'ko', perspective: 'evangelical · Reformed redemptive-historical',
+    sitemap: `${ORIGIN}/sitemap.xml`, llms: `${ORIGIN}/llms.txt`, lastModified: today2,
+  });
+  const toFaq = S => [1,2,3,4].filter(n => S && S[`faq.q${n}`] && S[`faq.a${n}`]).map(n => ({ question: cleanText(S[`faq.q${n}`]), answer: cleanText(S[`faq.a${n}`]) }));
+  j('faq.json', { faqs: toFaq(EN_PACK.s), faqsKo: toFaq(koS), lastModified: today2 });
+  j('service.json', {
+    name: EN.brand, type: 'WebApplication', url: `${ORIGIN}/`, price: 'free', accountRequired: false,
+    description: 'A free, no-signup mobile web page that tells the whole Bible as one scroll and ends with an invitation to pray to receive Christ.',
+    languages: LANGS.length, platforms: ['mobile web', 'desktop web', 'PWA'],
+    features: ['one-scroll storyline in 13 epochs', "verse links to each language's representative translation", 'share and QR code per scene', 'Bible-by-map timeline (/maps/)'],
+    lastModified: today2,
+  });
+}
 
 // ---- i18n/en.json (기여자용 영어 템플릿/레퍼런스 — en 페이지는 인라인 EN_PACK 사용, 이 파일은 번역 출발점) ----
 try {

@@ -23,6 +23,7 @@
 # Generated site files (root-level)
 /sitemap.xml
 /llms.txt
+/llms-full.txt
 
 # Per-language OG images are no longer used — a single shared /og.png serves all languages.
 /og-*.png

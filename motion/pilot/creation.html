@@ -22,7 +22,7 @@ const HC = H * .6;                             // horizon on screen (lens shift)
 const T_IGN = 4.9, T_FL = 6.8;                 // the point of light appears; the flash
 const BX = 0, BY = -4.6, BZ = 46, WY = 1.4;    // the light's centre; the water plane
 const S = { A: [0, T_FL], B: [T_FL, 14], C: [14, 21], D: [21, 26.4], E: [26.4, DUR] };
-let GAL, B, bx, R, rx, Hal, hx, grains = [], sprites = [], dark, P, NP, stars, NS, streaks, NWS, earthMap, cloudTex, eden, edenFg, motes;
+let RAYS, GAL, B, bx, R, rx, Hal, hx, grains = [], sprites = [], dark, P, NP, stars, NS, streaks, NWS, earthMap, cloudTex, eden, edenFg, motes;
 
 // ---------- camera: push in, then rise toward the heavens ----------
 function cam(t) {
@@ -99,6 +99,8 @@ function drawLight(ctx, t, c) {
       const hs = p.g >= 0 ? (p.core ? .95 : .62 + .3 * p.h0) : .85; heat = lerp(heat, hs, m); a = lerp(a, p.g >= 0 ? (p.core ? .5 : .32) * Math.min(1, Math.pow(p.gp.R / 40, 1.5)) : .55, m); sz = lerp(sz, p.g >= 0 ? .55 + p.h0 * .5 : .5, m);
       if (p.kind !== 0) a *= ss(0, .3, m) + (1 - m) * 0;
     } else if (p.kind !== 0 && t > 14.2) a *= 1 - ss(14.2, 15, t);
+    if (p.kind === 0) { a *= lerp(.16, 1, ss(0, .6, m)); heat = Math.min(heat, lerp(.74, 1, m)); }   // until they turn into galaxies: a soft dusty corona, not a lumpy fireball
+    else if (p.kind === 2) a *= .45;
     if (p.kind === 0 && Y > WY && m < .2) continue;                   // hidden under the water
     const q = proj(c, X, Y, Z); if (!q) continue;
     if (q[0] < -60 || q[0] > W + 60 || q[1] < -60 || q[1] > H + 60) continue;
@@ -117,6 +119,50 @@ function drawLight(ctx, t, c) {
   return 1;
 }
 
+// ---------- the core of the light: a star being born, not an explosion ----------
+// I = intensity (peaks at the word, settles, fades as the light becomes the heavens). Drawn into the half-res buffer B.
+function coreI(t) { const u = t - T_FL; if (u < -.05) return 0;
+  return (ss(-.05, .12, u) * (1 + 1.1 * Math.exp(-u / .55)) + .06 * Math.sin(t * 1.7)) * (1 - ss(14, 16.2, t)); }
+function drawCore(x, t, c) {
+  const q = proj(c, BX, BY, BZ), I = coreI(t); if (!q || I <= 0) return; const cx = q[0] / 2, cy = q[1] / 2, k = q[2] / 23.5, u = t - T_FL;
+  x.globalCompositeOperation = 'lighter';
+  // the glory: two layers of fine rays, turning slowly against each other, growing as the light settles
+  const rr = (300 + 120 * ss(0, 3, u)) * k * Math.min(1.25, .55 + .45 * I);
+  const hq = proj(c, 0, 0, 1e5), hy = hq ? hq[1] / 2 : H;
+  for (let l = 0; l < 2; l++) for (const [y0, y1, f] of [[0, hy, 1], [hy, H / 2, .25]]) { if (y1 <= y0) continue;
+    x.save(); x.beginPath(); x.rect(0, y0, W / 2, y1 - y0); x.clip(); x.translate(cx, cy); x.rotate((l ? -.011 : .016) * t + l * .7); x.globalAlpha = Math.min(1, (l ? .3 : .42) * I * f);
+    x.drawImage(RAYS[l], -rr, -rr, rr * 2, rr * 2); x.restore(); }
+  // layered falloff: a small white-hot heart, a warm corona, a wide amber air
+  for (const [r, cA, cB, a] of [[16, '255,255,252', '255,246,226', 1], [60, '255,244,214', '255,214,150', .7], [190, '255,214,160', '255,170,96', .32], [520, '255,190,130', '255,150,80', .14]]) {
+    const R0 = r * k * (.8 + .2 * I), g = x.createRadialGradient(cx, cy, 0, cx, cy, R0);
+    g.addColorStop(0, `rgba(${cA},${Math.min(1, a * I)})`); g.addColorStop(.3, `rgba(${cB},${Math.min(1, a * I * .45)})`); g.addColorStop(1, `rgba(${cB},0)`);
+    x.globalAlpha = 1; x.fillStyle = g; x.fillRect(cx - R0, cy - R0, R0 * 2, R0 * 2); }
+  x.globalAlpha = 1; x.globalCompositeOperation = 'source-over';
+}
+function streak(x, t, c) {               // anamorphic streak: a warm line with cool ends, as a real lens draws a point that bright (full res, not reflected)
+  const q = proj(c, BX, BY, BZ), I = coreI(t); if (!q || I <= 0) return; x.globalCompositeOperation = 'lighter';
+  for (const [sy, col, a, wr] of [[.012, '255,236,206', .42, .55], [.005, '170,200,255', .26, .95]]) {
+    x.save(); x.translate(q[0], q[1]); x.scale(1, sy); const R0 = W * wr, g = x.createRadialGradient(0, 0, 0, 0, 0, R0);
+    g.addColorStop(0, `rgba(${col},${Math.min(1, a * I)})`); g.addColorStop(.25, `rgba(${col},${a * I * .35})`); g.addColorStop(1, `rgba(${col},0)`);
+    x.fillStyle = g; x.fillRect(-R0, -R0, R0 * 2, R0 * 2); x.restore(); }
+  x.globalAlpha = 1; x.globalCompositeOperation = 'source-over';
+}
+function lensEvent(ctx, t, c) {          // the word spoken: an exposure bloom from the point + lens ghosts, never a flat white card
+  const q = proj(c, BX, BY, BZ); if (!q) return; const u = t - T_FL, f = ss(-.06, 0, u) * Math.exp(-Math.max(0, u) / .42); if (f < .005) return;
+  const R0 = W * (.25 + 1.5 * ss(-.06, .35, u));
+  ctx.globalCompositeOperation = 'screen';
+  const g = ctx.createRadialGradient(q[0], q[1], 0, q[0], q[1], R0);
+  g.addColorStop(0, `rgba(255,253,246,${Math.min(1, f * 1.05)})`); g.addColorStop(.18, `rgba(255,242,218,${.8 * f})`); g.addColorStop(.5, `rgba(255,214,168,${.34 * f})`); g.addColorStop(1, `rgba(255,190,140,${.04 * f})`);
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+  // ghosts on the line from the light through the centre of the frame
+  const dx = W / 2 - q[0], dy = H / 2 - q[1];
+  for (const [k, r, col, a] of [[.55, 46, '150,190,255', .16], [1.15, 110, '255,190,130', .1], [1.6, 36, '190,255,220', .14], [2.05, 170, '140,170,255', .07]]) {
+    const gx = q[0] + dx * k * 2, gy = q[1] + dy * k * 2 + (V ? 0 : 60 * k), gr = r * (V ? 1.2 : 1), gg = ctx.createRadialGradient(gx, gy, gr * .55, gx, gy, gr);
+    gg.addColorStop(0, `rgba(${col},${a * f * .4})`); gg.addColorStop(.85, `rgba(${col},${a * f})`); gg.addColorStop(1, `rgba(${col},0)`);
+    ctx.fillStyle = gg; ctx.beginPath(); ctx.arc(gx, gy, gr, 0, 6.283); ctx.fill(); }
+  ctx.globalCompositeOperation = 'source-over';
+}
+
 // ---------- the deep ----------
 function drawDeep(ctx, t, c, lit) {
   const q0 = proj(c, 0, 0, 1e5); if (!q0) return; const hz = q0[1]; if (hz > H + 10) return;
@@ -130,9 +176,9 @@ function drawDeep(ctx, t, c, lit) {
   for (let pass = 0; pass < 2; pass++) {
     ctx.fillStyle = pass ? '#ffd8a0' : '#6c7ea8';
     for (let i = 0; i < NWS; i++) { const s = streaks[i], q = proj(c, s.x, WY, s.z); if (!q || q[1] < hz) continue;
-      const len = s.l * q[2] * .55, th = Math.max(.8, q[2] * .022);
+      const len = s.l * q[2] * (pass ? .4 : .55), th = Math.min(pass ? 1.6 : 2.2, Math.max(.7, q[2] * .016));
       let a; if (!pass) a = (.035 + .04 * Math.sin(t * s.sp + s.ph)) * breath(s.x) * (1 - lit * .7);
-      else { const col = Math.exp(-(((q[0] - lx0) / (90 + q[2] * 4)) ** 2)); a = lit * (.06 + .9 * col * (.5 + .5 * Math.sin(t * s.sp * 1.7 + s.ph))); }
+      else { const col = Math.exp(-(((q[0] - lx0) / (90 + q[2] * 4)) ** 2)); a = lit * (.04 + .6 * col * Math.pow(.5 + .5 * Math.sin(t * s.sp * 1.7 + s.ph), 3)); }
       if (a < .01) continue; ctx.globalAlpha = Math.min(1, a); ctx.fillRect(q[0] - len / 2, q[1], len, th); }
   }
   ctx.globalAlpha = 1;
@@ -316,7 +362,8 @@ function draw(ctx, t) {
     const lq = proj(c, BX, BY, BZ);
     if (t > T_IGN && t < T_FL + .6 && lq) { const k = ss(T_IGN, T_IGN + .8, t) * (1 + 2.2 * ss(T_FL - .9, T_FL, t)), pul = 1 + .08 * Math.sin(t * 9);
       ctx.globalCompositeOperation = 'lighter';
-      const g = ctx.createRadialGradient(lq[0], lq[1], 0, lq[0], lq[1], 160 * k * pul); g.addColorStop(0, `rgba(255,250,235,${.95 * clamp(k)})`); g.addColorStop(.06, `rgba(255,226,160,${.6 * clamp(k)})`); g.addColorStop(1, 'rgba(255,190,110,0)');
+      const g = ctx.createRadialGradient(lq[0], lq[1], 0, lq[0], lq[1], 160 * k * pul), ka = clamp(k);
+      for (const [o, a] of [[0, .95], [.04, .6], [.12, .26], [.25, .11], [.45, .04], [.7, .012], [1, 0]]) g.addColorStop(o, `rgba(255,${Math.round(250 - o * 70)},${Math.round(235 - o * 130)},${a * ka})`);
       ctx.fillStyle = g; const gr = 160 * k * pul; ctx.fillRect(lq[0] - gr, lq[1] - gr, 2 * gr, 2 * gr);
       const sg = ctx.createLinearGradient(lq[0] - 520 * k, 0, lq[0] + 520 * k, 0); sg.addColorStop(0, 'rgba(255,220,170,0)'); sg.addColorStop(.5, `rgba(255,236,200,${.55 * clamp(k)})`); sg.addColorStop(1, 'rgba(255,220,170,0)');
       ctx.save(); ctx.translate(lq[0], lq[1]); ctx.scale(1, .025); const sg2 = ctx.createRadialGradient(0, 0, 0, 0, 0, 520 * k); sg2.addColorStop(0, `rgba(255,236,200,${.5 * clamp(k)})`); sg2.addColorStop(1, 'rgba(255,220,170,0)');
@@ -327,12 +374,12 @@ function draw(ctx, t) {
       ctx.globalAlpha = .5 * clamp(k); drawDeep(ctx, t, c, 0); ctx.globalAlpha = 1;
     }
     if (t >= T_FL - .05 && t < 26.4) {
-      drawLight(ctx, t, c);
+      drawLight(ctx, t, c); drawCore(bx, t, c);
       if (t < 17.5) reflect(ctx, t, c, lit);
-      ctx.globalCompositeOperation = 'lighter'; ctx.drawImage(B, 0, 0, W, H);
+      ctx.globalCompositeOperation = 'lighter'; ctx.drawImage(B, 0, 0, W, H); streak(ctx, t, c);
       // glow: the light fills everything
       const gq = proj(c, BX, BY, BZ), ga = (1 - ss(14.2, 16.5, t)) * ss(T_FL, T_FL + .6, t);
-      if (gq && ga > 0) { const rr = 900 + 120 * (t - T_FL); const g = ctx.createRadialGradient(gq[0], gq[1], 0, gq[0], gq[1], rr); g.addColorStop(0, `rgba(255,216,160,${.5 * ga})`); g.addColorStop(.35, `rgba(255,170,90,${.16 * ga})`); g.addColorStop(1, 'rgba(255,160,80,0)');
+      if (gq && ga > 0) { const rr = 900 + 120 * (t - T_FL); const g = ctx.createRadialGradient(gq[0], gq[1], 0, gq[0], gq[1], rr); g.addColorStop(0, `rgba(255,216,160,${.26 * ga})`); g.addColorStop(.35, `rgba(255,170,90,${.1 * ga})`); g.addColorStop(1, 'rgba(255,160,80,0)');
         ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
         ctx.save(); ctx.translate(gq[0], gq[1]); ctx.scale(1, .03); const sg = ctx.createRadialGradient(0, 0, 0, 0, 0, W * .8); sg.addColorStop(0, `rgba(255,232,196,${.3 * ga})`); sg.addColorStop(.4, `rgba(255,214,170,${.08 * ga})`); sg.addColorStop(1, 'rgba(255,200,150,0)');
         ctx.fillStyle = sg; ctx.fillRect(-W * .8, -W * .8, W * 1.6, W * 1.6); ctx.restore(); }
@@ -344,7 +391,7 @@ function draw(ctx, t) {
   if (t > S.E[0]) { ctx.globalAlpha = ss(S.E[0], S.E[0] + .2, t); drawGarden(ctx, t); ctx.globalAlpha = 1; drawClouds(ctx, t); }
   ctx.restore();
   // the flash
-  const fl = ss(T_FL - .04, T_FL, t) * (1 - ss(T_FL + .05, T_FL + .75, t)); if (fl > 0) { ctx.fillStyle = `rgba(255,252,244,${fl})`; ctx.fillRect(0, 0, W, H); }
+  if (t > T_FL - .1 && t < T_FL + 3) lensEvent(ctx, t, cam(t));
   grade(ctx, t, t > T_FL);
 
   // words
@@ -402,6 +449,11 @@ Pilot.run({ W, H, dur: DUR, audio: 'creation.m4a', fonts: ["600 40px 'Noto Serif
     { const s = canvas(64, 64), x = s.getContext('2d'), g = x.createRadialGradient(32, 32, 0, 32, 32, 32); g.addColorStop(0, 'rgba(214,226,255,1)'); g.addColorStop(.35, 'rgba(150,180,255,.45)'); g.addColorStop(1, 'rgba(120,150,255,0)'); x.fillStyle = g; x.fillRect(0, 0, 64, 64); sprites.push(s); }
     dark = canvas(64, 64); { const x = dark.getContext('2d'), g = x.createRadialGradient(32, 32, 0, 32, 32, 32); g.addColorStop(0, 'rgba(30,12,6,1)'); g.addColorStop(1, 'rgba(30,12,6,0)'); x.fillStyle = g; x.fillRect(0, 0, 64, 64); }
     P = buildLight(); NP = P.length;
+    RAYS = [0, 1].map(l => { const N = 1024, s = canvas(N, N), x = s.getContext('2d'), r = rng(70 + l); x.globalCompositeOperation = 'lighter';
+      for (let i = 0; i < (l ? 150 : 260); i++) { const a = r() * 6.283, L = N / 2 * (.25 + .75 * Math.pow(r(), 1.6)), w = .002 + r() * (l ? .02 : .008), g = x.createRadialGradient(N / 2, N / 2, 0, N / 2, N / 2, L);
+        g.addColorStop(0, `rgba(255,236,200,${.25 + r() * .35})`); g.addColorStop(.35, `rgba(255,214,160,${.08 + r() * .1})`); g.addColorStop(1, 'rgba(255,190,120,0)');
+        x.fillStyle = g; x.beginPath(); x.moveTo(N / 2, N / 2); x.arc(N / 2, N / 2, L, a - w, a + w); x.closePath(); x.fill(); }
+      const s2 = canvas(N, N), x2 = s2.getContext('2d'); x2.filter = 'blur(2.5px)'; x2.drawImage(s, 0, 0); return s2; });
     const r = rng(21); stars = []; for (let i = 0; i < 5200; i++) stars.push({ x: (r() - .5) * 900, y: -40 - r() * 700, z: 80 + r() * 600, r: .002 + Math.pow(r(), 6) * .06, b: .25 + r() * .75, sp: 1 + r() * 3, ph: r() * 6.28, warm: r() < .2, blue: r() < .2 });
     NS = stars.length;
     streaks = []; for (let i = 0; i < 5200; i++) { const z = 2 + Math.pow(r(), 1.8) * 300; streaks.push({ x: (r() - .5) * (40 + z * 2.2), z, l: .4 + r() * 1.6, sp: 1 + r() * 2, ph: r() * 6.28 }); } NWS = streaks.length;

@@ -9,29 +9,26 @@
 <body>
 <script src="lib.js"></script>
 <script>
-/* 17 복음의 핵심 7가지 — Swiss typography on a strict grid (International Typographic Style in motion).
-   Paper, black, two greys and ONE signal red. Our words are set in one grotesk (Noto Sans KR); Scripture is set in
-   serif, so the two voices never blur. Each statement is a spread: the programme on the left (numeral + title),
-   the artifact on the right, where the words and blocks act it out — snapping on the beat, nothing bounces:
-     01 every bar falls short of the line of glory · 02 a ladder is built, cut, and becomes a mirror
-     03 a stack of works is cut away; a gift is set down · 04 my grey 의 is covered by His
-     05 66 pointers turn, one by one, toward the one red square · 06 the cells fill: 때가 찼고
-     07 “행하라” is cut, “이루어졌다” stands — then the red square leaves the grid, linear and unsnapped,
-        becomes a cross, and the grid breaks around it: “다 이루었다”. */
-const { clamp, lerp, ss, rng, text } = Pilot;
+/* 17 복음의 핵심 7가지 — one unbroken tracking shot along the gold line (the film's motif), in the dark.
+   The line runs left to right; at each of the seven truths it stops and draws the truth in light, the words appear
+   below it like a title and a subtitle, and the camera moves on with the line — no numbers, no grid, no slides:
+     1 every life reaches up and falls short of the line of glory · 2 a ladder crumbles; a mirror shows 죄
+     3 a tower of works crumbles; a gift comes down in light · 4 a grey figure is clothed in a robe of light
+     5 66 points of light turn toward the One · 6 a dial fills with light: 때가 찼고
+     7 “행하라” is struck through and falls away, “이루어졌다” stands — then the line itself becomes the cross: “다 이루었다”.
+   Same beat grid as the score (101 BPM: B = one beat), so cues land on the music. */
+const { clamp, lerp, ss, eo, eio, win, rng, noise, canvas, speckle } = Pilot;
 const W = Pilot.W, H = Pilot.H, V = Pilot.ori === 'v';
 const B = 4.75 / 8, T0 = 4 * B, ITEM = 8 * B, T7 = T0 + 6 * ITEM, DUR = 40;
-const PAGE = '#ECEAE4', INK = '#121212', G1 = '#D9D6CE', G2 = '#B9B6AE', G3 = '#8E8B84', RED = '#E1251B';
 const SANS = "'Noto Sans KR',sans-serif", SERIF = "'Noto Serif KR',serif";
-
-// ---------- the grid ----------
-const L = V ? (() => { const M = 72, cw = 136, cx = c => M + c * 160;
-  return { M, cols: 6, cw, cx, label: 170, rule: 196, cap: 228, capCols: [0, 2, 4], num: [500, 240], title: [592, 54, 64], Z: [72, 750, 1008, 1290], brule: 1360, verse: [1432, 40, 60], vw: 936,
-    cross: { X: 880, Y: 470, w: 72, arm: 160 }, fin: { x: 72, y: 1300, size: 124, cite: 1356, r: [1470, 38, 58], rc: 1588 } }; })()
-  : (() => { const M = 96, cw = 122, cx = c => M + c * 146;
-  return { M, cols: 12, cw, cx, label: 100, rule: 128, cap: 160, capCols: [0, 4, 8], num: [470, 300], title: [566, 56, 68], Z: [972, 210, 1824, 690], brule: 752, verse: [822, 40, 60], vw: 1728,
-    cross: { X: 498, Y: 350, w: 72, arm: 250 }, fin: { x: 972, y: 520, size: 150, cite: 588, r: [736, 38, 58], rc: 852 } }; })();
-const Z = { x0: L.Z[0], y0: L.Z[1], x1: L.Z[2], y1: L.Z[3] }; Z.w = Z.x1 - Z.x0; Z.h = Z.y1 - Z.y0;
+const GOLD = '255,212,138', WARM = '255,244,222', ASH = '150,144,136';
+// hl: the line's height · eh/ew: the room above it for each drawing · tt/ts/tl: title y/size/leading · vs/vl/vw: verse size/leading/width
+const LY = V ? { hl: 960, eh: 560, ew: 860, tt: 1104, ts: 58, tl: 78, vs: 34, vl: 56, vw: 900, lab: 360 }
+             : { hl: 600, eh: 430, ew: 760, tt: 704, ts: 54, tl: 72, vs: 33, vl: 50, vw: 1480, lab: 132 };
+const SP = W * 1.05;                                   // distance between two truths along the line
+const FIN = V ? { X: 880, Y: 470, arm: 150, x: 72, y: 1300, size: 124, cite: 1356, r: [1470, 38, 58], rc: 1588 }
+              : { X: 520, Y: 350, arm: 230, x: 972, y: 520, size: 150, cite: 588, r: [736, 38, 58], rc: 852 };
+const RTL = () => Pilot.dir === 'rtl';
 
 // ---------- the statements (index.html CORE: title + vref + vtext; vtext checked against 개역개정 with gae.py) ----------
 const CORE = [
@@ -44,172 +41,210 @@ const CORE = [
   { t: ['복음 —', '그분이 다 이루셨다'], ref: '', cap: '요 19:30 · 롬 5:8', v: '' },
 ];
 
-// ---------- motion: one precise ease, linear for the exception ----------
-const bez = (() => { const x1 = .7, y1 = 0, x2 = .2, y2 = 1, cx = 3 * x1, bx = 3 * (x2 - x1) - cx, ax = 1 - cx - bx, cy = 3 * y1, by = 3 * (y2 - y1) - cy, ay = 1 - cy - by;
-  const X = u => ((ax * u + bx) * u + cx) * u, Y = u => ((ay * u + by) * u + cy) * u, dX = u => (3 * ax * u + 2 * bx) * u + cx;
-  return x => { x = clamp(x); let u = x; for (let i = 0; i < 6; i++) { const d = dX(u); if (Math.abs(d) < 1e-6) break; u -= (X(u) - x) / d; u = clamp(u); } return Y(u); }; })();
-const snap = (t, t0, d = B * .5) => bez((t - t0) / d);
-const font = (w, s, f = SANS) => `${w} ${s}px ${f}`;
-const RTL = () => Pilot.dir === 'rtl';   // right-to-left scripts (known once the language file has loaded)
+// ---------- camera and line ----------
+const PAN = i => T0 + i * ITEM + 6.8 * B;              // the camera leaves truth i …
+function camX(t) { let p = 0; for (let i = 0; i < 6; i++) p += eio(clamp((t - PAN(i)) / (1.5 * B))); return p * SP + 4 * Math.sin(t * .4); }
+function headX(t) {                                    // how far the line has drawn (world x)
+  const i0 = T0 + .5 * B; if (t < i0) return lerp(-W * .62, LY.ew * .55, eio(clamp((t - .3) / (i0 - .3))));
+  return camX(t) + LY.ew * .55 + (t > T7 ? W : 0) * 0; }
+const lineY = x => LY.hl + 5 * Math.sin(x * .0045) + 3 * Math.sin(x * .011 + 1.3);
 
-// words rise out of a clip rect from below their baseline, and leave upward
-function rise(ctx, t, tin, tout, x, y, size, fn, clipW = W) {
-  const e = snap(t, tin), q = tout == null ? 0 : snap(t, tout); if (e <= 0 || q >= 1) return;
-  ctx.save(); ctx.beginPath(); ctx.rect(x - 40, y - size * 1.08, clipW, size * 1.42); ctx.clip();
-  ctx.translate(0, (1 - e) * size * 1.4 - q * size * 1.4); fn(); ctx.restore();
+// ---------- drawing in light ----------
+function glow(ctx, path, a, w = 2.2, col = GOLD, core = WARM) {   // a stroke of light: wide soft bloom, glow, white-hot core
+  if (a <= .004) return; ctx.save(); ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.globalCompositeOperation = 'lighter';
+  for (const [lw, al, c] of [[w * 8, .045, col], [w * 3.2, .17, col], [w, .95, core]]) { ctx.lineWidth = lw; ctx.strokeStyle = `rgba(${c},${Math.min(1, al * a)})`; ctx.beginPath(); path(ctx); ctx.stroke(); }
+  ctx.restore();
 }
-// every word goes through Pilot.tr (o.raw: already translated). Other languages only: a translation is shrunk into its room
-// (o.maxW, or o.box = [w, h] for a block of \n-broken lines; o.up stacks the lines upward so the last baseline sits at y)
-function word(ctx, s, x, y, o) { if (!o.raw) s = Pilot.tr(s); ctx.font = o.font; ctx.fillStyle = o.color || INK; ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic'; ctx.letterSpacing = (o.ls || 0) + 'px';
-  const lines = String(s).split('\n'), fm = /^(\d+) ([\d.]+)px (.*)$/.exec(o.font), lh = o.lh || .92; let size = +fm[2];
-  if (Pilot.lang !== 'ko' && (o.maxW || o.box)) { const wd = Math.max(...lines.map(l => ctx.measureText(l).width));
-    let k = Math.min(1, (o.box ? o.box[0] : o.maxW) / wd); if (o.box) k = Math.min(k, o.box[1] / (size * (.74 + (lines.length - 1) * lh)));
-    if (k < 1) { size *= k; ctx.font = `${fm[1]} ${size}px ${fm[3]}`; ctx.letterSpacing = (o.ls || 0) * k + 'px'; } }
-  if (RTL()) {   // the page is mirrored (see draw): un-mirror each line at its anchor and set it flush right
-    ctx.direction = 'rtl'; ctx.textAlign = 'right';
-    lines.forEach((l, i) => { let dx = 0; if (o.optical) dx = ctx.measureText(l).actualBoundingBoxRight;   // optically flush right
-      ctx.save(); ctx.translate(x, 0); ctx.scale(-1, 1); ctx.fillText(l, -dx, y + (i - (o.up ? lines.length - 1 : 0)) * size * lh); ctx.restore(); });
-    ctx.direction = 'inherit'; ctx.letterSpacing = '0px'; return; }
-  lines.forEach((l, i) => { let dx = 0; if (o.optical) { const m = ctx.measureText(l); dx = -m.actualBoundingBoxLeft; }   // optically flush left
-    ctx.fillText(l, x - dx, y + (i - (o.up ? lines.length - 1 : 0)) * size * lh); });
-  ctx.letterSpacing = '0px'; }
+function plen(p) { let L = 0; for (let i = 1; i < p.length; i++) L += Math.hypot(p[i][0] - p[i - 1][0], p[i][1] - p[i - 1][1]); return L; }
+function part(p, k) { return x => { k = clamp(k); if (k <= 0) return; let rem = plen(p) * k; x.moveTo(p[0][0], p[0][1]);   // the first k of a polyline
+  for (let i = 1; i < p.length; i++) { const d = Math.hypot(p[i][0] - p[i - 1][0], p[i][1] - p[i - 1][1]);
+    if (d >= rem) { const f = d ? rem / d : 0; x.lineTo(lerp(p[i - 1][0], p[i][0], f), lerp(p[i - 1][1], p[i][1], f)); return; } rem -= d; x.lineTo(p[i][0], p[i][1]); } }; }
+const seg = (x0, y0, x1, y1) => [[x0, y0], [x1, y1]];
+const ell = (cx, cy, rx, ry, a0 = -Math.PI / 2, n = 72) => Array.from({ length: n + 1 }, (_, i) => { const a = a0 + i / n * 6.2832; return [cx + rx * Math.cos(a), cy + ry * Math.sin(a)]; });
+const rect = (x, y, w, h) => [[x, y + h], [x, y], [x + w, y], [x + w, y + h], [x, y + h]];
+function dust(ctx, polys, u, seed, a = 1) {            // light crumbling: points along the shapes drift down and go out
+  if (u <= 0 || u >= 1) return; const r = rng(seed); ctx.save(); ctx.globalCompositeOperation = 'lighter';
+  for (const p of polys) { const L = plen(p), n = Math.max(6, Math.round(L / 7));
+    for (let j = 0; j < n; j++) { let rem = r() * L, q = p[0]; for (let i = 1; i < p.length; i++) { const d = Math.hypot(p[i][0] - p[i - 1][0], p[i][1] - p[i - 1][1]); if (d >= rem) { const f = d ? rem / d : 0; q = [lerp(p[i - 1][0], p[i][0], f), lerp(p[i - 1][1], p[i][1], f)]; break; } rem -= d; }
+      const vx = (r() - .5) * 70, vy = -10 - r() * 30, de = r() * .35, uu = clamp((u - de) / (1 - de)), al = (1 - uu) * (uu > 0 ? 1 : 0) * a; if (al <= .01) continue;
+      const x = q[0] + vx * uu, y = q[1] + vy * uu + 140 * uu * uu, s = 1.2 + r() * 2.2;
+      ctx.fillStyle = `rgba(${r() < .3 ? WARM : GOLD},${.9 * al})`; ctx.fillRect(x - s / 2, y - s / 2, s, s); } }
+  ctx.restore();
+}
+
+// ---------- words ----------
+function say(ctx, s, x, y, o) {                        // o: size, weight, font, color, alpha, align, maxW, ls, glow, raw
+  if (!o.raw) s = Pilot.tr(s); if (!s) return; const a = o.alpha == null ? 1 : o.alpha; if (a <= .003) return;
+  let size = o.size; const f = o.font || SERIF, wt = o.weight || 400, set = () => { ctx.font = `${wt} ${size}px ${f}`; ctx.letterSpacing = (o.ls || 0) * size / o.size + 'px'; };
+  ctx.save(); set(); if (RTL()) ctx.direction = 'rtl';
+  if (o.maxW && Pilot.lang !== 'ko') { const wd = ctx.measureText(s).width; if (wd > o.maxW) { size *= o.maxW / wd; set(); } }
+  ctx.textAlign = o.align || 'center'; ctx.textBaseline = 'alphabetic'; ctx.globalAlpha *= a;   // multiplies: a drawing's fade-out carries to its words
+  ctx.shadowColor = o.glow ? `rgba(${GOLD},.75)` : 'rgba(0,0,0,.85)'; ctx.shadowBlur = o.glow || 14;
+  if (o.blur) ctx.filter = `blur(${o.blur}px)`;
+  ctx.fillStyle = o.color || `rgb(${WARM})`; ctx.fillText(s, x, y); ctx.restore();
+}
 function wrap(ctx, s, maxW, f) { ctx.font = f; const out = []; let cur = '';
   for (const w of s.split(' ')) { const n = cur ? cur + ' ' + w : w; if (ctx.measureText(n).width > maxW && cur) { out.push(cur); cur = w; } else cur = n; } if (cur) out.push(cur); return out; }
-// an artifact layer: clipped to the zone, rises in / leaves upward like the words
-function stage(ctx, t, tin, tout, fn) { const e = tin == null ? 1 : snap(t, tin), q = tout == null ? 0 : snap(t, tout, B * .6); if (e <= 0 || q >= 1) return;
-  ctx.save(); ctx.beginPath(); ctx.rect(Z.x0 - 4, Z.y0 - 44, Z.w + 8, Z.h + 104); ctx.clip(); ctx.translate(0, -q * (Z.h + 140)); fn(); ctx.restore(); }
-// knife cut: a thin line crosses, then the element collapses to its midline
-function knife(ctx, t, t0, x0, y0, x1, y1) { const k = clamp((t - t0) / (B * .4)), f = 1 - clamp((t - t0 - B * .9) / (B * .3)); if (k <= 0 || f <= 0) return;
-  ctx.strokeStyle = INK; ctx.lineWidth = 2; ctx.globalAlpha = f; ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(lerp(x0, x1, k), lerp(y0, y1, k)); ctx.stroke(); ctx.globalAlpha = 1; }
-const collapse = (t, t0) => 1 - snap(t, t0, B * .5);            // scaleY of the cut element
-function scaleY(ctx, k, my, fn) { if (k <= 0) return; ctx.save(); ctx.translate(0, my); ctx.scale(1, k); ctx.translate(0, -my); fn(); ctx.restore(); }
 
-// ---------- the seven artifacts (lt = beats since the statement began) ----------
-const R = rng(17), heights = Array.from({ length: 12 }, () => .28 + R() * .56);
+// ---------- the seven drawings (ox: the truth's place on screen; oy: the line; b: beats since it began) ----------
+const R0 = rng(17), HTS = Array.from({ length: 12 }, () => .34 + R0() * .4);
+const EH = LY.eh, EW = LY.ew, LAB = (ctx, s, b, b0, ox, o = {}) => say(ctx, s, ox, LY.lab + (o.dy || 0), { size: V ? 30 : 26, color: o.color || `rgb(${WARM})`, alpha: ss(b0, b0 + 1.2, b) * (o.a == null ? .92 : o.a), maxW: W - 120, glow: o.glow });
 const ART = [
-  // 01 — every bar falls short of the line of glory
-  (ctx, b) => { const top = Z.y0 + 46, base = Z.y1, n = V ? 9 : 12, g = 14, bw = (Z.w - (n - 1) * g) / n, k = clamp((b - .5) / 1);
-    ctx.fillStyle = INK; ctx.fillRect(Z.x0, top - 1, Z.w * k, 2);
-    rise(ctx, b * B, 1 * B, null, Z.x0, top - 16, 20, () => word(ctx, '하나님의 영광', Z.x0, top - 16, { font: font(400, 20) }));
-    ctx.fillRect(Z.x0, base - 2, Z.w, 2);
-    for (let i = 0; i < n; i++) { const e = snap(b * B, (1.5 + i * .3) * B), h = heights[i] * (base - top - 20), x = Z.x0 + i * (bw + g);
-      const gh = snap(b * B, (2.1 + i * .3) * B); if (gh > 0) { ctx.fillStyle = G1; ctx.fillRect(x, top + 2, bw, (base - h - top - 2) * gh); }
-      ctx.fillStyle = INK; ctx.fillRect(x, base - h * e, bw, h * e + 1); } },
-  // 02 — a ladder is built, cut away; in its place a mirror shows 죄
-  (ctx, b) => { const lw = V ? 300 : 280, x = Z.x0 + 20, top = Z.y0 + 10, base = Z.y1, mid = (top + base) / 2, k = collapse(b * B, 3.8 * B);
-    scaleY(ctx, k, mid, () => { const rk = clamp((b - .4) / 1.1); ctx.fillStyle = INK; ctx.fillRect(x, base - (base - top) * rk, 20, (base - top) * rk); ctx.fillRect(x + lw - 20, base - (base - top) * rk, 20, (base - top) * rk);
-      for (let i = 0; i < 7; i++) { const e = snap(b * B, (1.2 + i * .3) * B), y = base - 40 - i * (base - top - 70) / 6; if (e > 0) ctx.fillRect(x + 20, y - 8, (lw - 40) * e, 16); } });
-    knife(ctx, b * B, 3.3 * B, x - 60, base + 20, x + lw + 60, top - 20);
-    const m = snap(b * B, 4.1 * B); if (m > 0) { ctx.fillStyle = G1; ctx.fillRect(x - 10, top, lw + 120, (base - top) * m);
-      rise(ctx, b * B, 4.5 * B, null, x + 40, base - 60, 280, () => word(ctx, '죄', x + 40, base - 60, { font: font(700, 280), optical: true, maxW: lw + 50 })); }
-    rise(ctx, b * B, 4.8 * B, null, x + lw + 160, base - 6, 22, () => word(ctx, '사다리가 아니라 거울', x + lw + 160, base - 6, { font: font(400, 22) })); },
-  // 03 — a stack of works, cut away; a gift is set down
-  (ctx, b) => { const bw = V ? 420 : 380, bh = 62, g = 8, x = Z.x0, base = Z.y1, n = 6, k = collapse(b * B, 3.3 * B), mid = base - n * (bh + g) / 2;
-    scaleY(ctx, k, mid, () => { for (let i = 0; i < n; i++) { const e = snap(b * B, (.7 + i * .35) * B), y = base - (i + 1) * (bh + g) + g; if (e <= 0) continue;
-      ctx.save(); ctx.beginPath(); ctx.rect(x, y, bw * e, bh); ctx.clip(); ctx.fillStyle = INK; ctx.fillRect(x, y, bw, bh); word(ctx, '행위', x + 22, y + bh * .68, { font: font(700, 28), color: PAGE }); ctx.restore(); } });
-    knife(ctx, b * B, 2.8 * B, x + bw * .62, base - n * (bh + g) - 30, x + bw * .38, base + 24);
-    const s = V ? 300 : 280, e = snap(b * B, 3.9 * B, B * .6), y = lerp(Z.y0 - s - 80, base - s, e), gx = x;
-    if (e > 0) { ctx.fillStyle = INK; ctx.fillRect(gx, y, s, s); ctx.fillStyle = G2; ctx.fillRect(gx + s / 2 - 14, y, 28, s); ctx.fillRect(gx, y + s * .32 - 14, s, 28);
-      word(ctx, '선물', gx + 30, y + s - 34, { font: font(700, 56), color: PAGE }); }
-    rise(ctx, b * B, 4.5 * B, null, x + s + 40, base - 6, 22, () => word(ctx, '거저 주시는 하나님의 선물', x + s + 40, base - 6, { font: font(400, 22) }), 420); },
-  // 04 — my grey 의, covered by His
-  (ctx, b) => { const s = V ? 400 : 420, x = Z.x0, base = Z.y1 - 30, gw = s * 1.02, top = base - s * .98;
-    rise(ctx, b * B, .5 * B, null, x, base, s, () => word(ctx, '의', x, base, { font: font(700, s), color: G2, optical: true, box: [gw, s * .9], up: true }));
-    const c = snap(b * B, 2.8 * B, B * .7); if (c > 0) { ctx.fillStyle = INK; ctx.fillRect(x - 10, top - 20, gw + 40, (s + 50) * c);
-      ctx.save(); ctx.beginPath(); ctx.rect(x - 10, top - 20, gw + 40, (s + 50) * c); ctx.clip(); word(ctx, '의', x, base, { font: font(700, s), color: PAGE, optical: true, box: [gw, s * .9], up: true }); ctx.restore(); }
-    const cx2 = x + gw + 70;
-    rise(ctx, b * B, 1.2 * B, null, cx2, top + 40, 30, () => word(ctx, '내 의가 아니라', cx2, top + 40, { font: font(400, 30), color: G3, maxW: Z.x1 - cx2 }));
-    rise(ctx, b * B, 3.5 * B, null, cx2, top + 96, 30, () => word(ctx, '그분의 의를 입는 것', cx2, top + 96, { font: font(700, 30), maxW: Z.x1 - cx2 })); },
-  // 05 — 66 pointers turn toward the one red square
-  (ctx, b) => { const cols = 8, rows = 9, cw = Z.w / cols, ch = Z.h / rows, cx = Z.x0 + Z.w / 2, cy = Z.y0 + Z.h / 2; let n = 0;
-    const cells = []; for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) { if ((c === 3 || c === 4) && r >= 3 && r <= 5) continue; cells.push([Z.x0 + (c + .5) * cw, Z.y0 + (r + .5) * ch, r]); }
-    const dmax = Math.max(...cells.map(q => Math.hypot(q[0] - cx, q[1] - cy)));
-    for (const [x, y, r] of cells) { const e = snap(b * B, (.5 + r * .16) * B); if (e <= 0) { n++; continue; }
-      const d = Math.hypot(x - cx, y - cy), a = Math.atan2(cy - y, cx - x), turn = snap(b * B, (2.7 + 1.8 * (d / dmax)) * B, B * .75), len = Math.min(cw, ch) * .62;
-      let a0 = 0, aa = a; if (aa - a0 > Math.PI) aa -= 2 * Math.PI; if (aa - a0 < -Math.PI) aa += 2 * Math.PI;
-      ctx.save(); ctx.translate(x, y); ctx.rotate(lerp(a0, aa, turn)); ctx.scale(e, 1); ctx.fillStyle = n < 39 ? G3 : INK;
-      ctx.fillRect(-len / 2, -3, len, 6); ctx.fillRect(len / 2 - 4, -7, 10, 14); ctx.restore(); n++; }
-    const rs = Math.min(2 * cw, 3 * ch) * .62, re = snap(b * B, 2.1 * B); if (re > 0) { ctx.fillStyle = RED; ctx.fillRect(cx - rs / 2, cy - rs / 2, rs, rs * re); }
-    rise(ctx, b * B, 1.2 * B, null, Z.x0, Z.y1 + 34, 20, () => word(ctx, '구약 39  ·  신약 27  =  66', Z.x0, Z.y1 + 34, { font: font(400, 20), color: G3 })); },
-  // 06 — the cells fill: 때가 찼고
-  (ctx, b) => { const cols = V ? 8 : 12, rows = 4, g = 6, cw = (Z.w - (cols - 1) * g) / cols, rh = Math.min(cw, (Z.h - 90) / rows), gh = rows * rh + (rows - 1) * g, y0 = Z.y1 - gh, n = cols * rows;
-    let filled = 0;
-    for (let i = 0; i < n; i++) { const c = i % cols, r = Math.floor(i / cols), x = Z.x0 + c * (cw + g), y = y0 + r * (rh + g), tf = (.7 + 3.4 * Math.pow(i / n, .75)) * B, e = snap(b * B, tf, B * .2);
-      ctx.fillStyle = G1; ctx.fillRect(x, y, cw, rh); if (e > 0) { ctx.fillStyle = INK; ctx.fillRect(x, y, cw * e + .5, rh); if (e > .5) filled++; } }
-    const full = snap(b * B, 4.3 * B, B * .3); if (full > 0) { ctx.fillStyle = INK; ctx.fillRect(Z.x0, y0, Z.w, gh * full);
-      rise(ctx, b * B, 4.5 * B, null, Z.x0 + 40, y0 + gh / 2 + (V ? 54 : 50), V ? 150 : 140, () => word(ctx, '때가 찼고', Z.x0 + 40, y0 + gh / 2 + (V ? 54 : 50), { font: font(900, V ? 150 : 140, SERIF), color: PAGE, optical: true, maxW: Z.w - 80 }), Z.w - 40); }
-    word(ctx, String(filled).padStart(2, '0') + ' / ' + n, Z.x1 - 120, y0 - 22, { font: font(400, 20), color: G3 }); },
-  // 07 — “행하라” is cut; “이루어졌다” stands
-  (ctx, b) => { const s = 160, x = Z.x0, y = Z.y0 + (Z.h + s * .8) / 2, k = collapse(b * B, 2.3 * B);
-    scaleY(ctx, k, y - s * .38, () => rise(ctx, b * B, .4 * B, null, x, y, s, () => word(ctx, '행하라', x, y, { font: font(700, s), optical: true, maxW: Z.w })));
-    let ke = 560; if (Pilot.lang !== 'ko') { ctx.font = font(700, s); ke = Math.min(Z.w, ctx.measureText(Pilot.tr('행하라')).width) + 80; }   // the knife crosses the whole word
-    knife(ctx, b * B, 1.7 * B, x - 40, y - s * .38, x + ke, y - s * .38);
-    rise(ctx, b * B, 2.9 * B, null, x, y, s, () => word(ctx, '이루어졌다', x, y, { font: font(700, s), optical: true, maxW: Z.w }));
-    rise(ctx, b * B, 3.3 * B, null, x, Z.y1 - 4, 22, () => word(ctx, '“행하라”가 아니라 “이루어졌다”', x, Z.y1 - 4, { font: font(400, 22), color: G3 })); },
+  // 1 — every life reaches up and falls short of the line of glory
+  (ctx, b, ox, oy) => { const gy = oy - EH * .9, gw = EW * .92, gk = eio(clamp((b - .5) / 1.1));
+    if (gk > 0) { const hg = ctx.createRadialGradient(ox, gy, 0, ox, gy, gw * .6); hg.addColorStop(0, `rgba(${GOLD},${.3 * gk})`); hg.addColorStop(1, `rgba(${GOLD},0)`);
+      ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.translate(ox, gy); ctx.scale(1, .28); ctx.translate(-ox, -gy); ctx.fillStyle = hg; ctx.fillRect(ox - gw, gy - gw, gw * 2, gw * 2); ctx.restore(); }
+    glow(ctx, part(seg(ox - gw / 2, gy, ox + gw / 2, gy), gk), 1, 2.8);
+    say(ctx, '하나님의 영광', ox, gy - 30, { size: V ? 30 : 26, alpha: ss(1, 2.2, b) * .9 });
+    const n = V ? 9 : 11, dim = 1 - .6 * ss(4.4, 5.6, b);
+    for (let i = 0; i < n; i++) { const x = ox - gw * .42 + i * gw * .84 / (n - 1), e = eo(clamp((b - (1.5 + i * .26)) / 1.3)), top = oy - HTS[i] * (oy - gy) * e - 14; if (e <= 0) continue;
+      glow(ctx, part(seg(x, oy, x, top + 14), 1), .8 * dim, 2); glow(ctx, x2 => x2.arc(x, top, 7, 0, 6.2832), .8 * dim * ss(0, .3, e), 1.8); } },
+  // 2 — a ladder up to glory crumbles; in its place a mirror shows 죄
+  (ctx, b, ox, oy) => { const lw = V ? 170 : 150, top = oy - EH * .86, rk = eio(clamp((b - .4) / 1.1)), u = clamp((b - 3.3) / 1.6), fa = 1 - ss(0, .25, u);
+    const rails = [seg(ox - lw / 2, oy, ox - lw / 2, top), seg(ox + lw / 2, oy, ox + lw / 2, top)], rungs = Array.from({ length: 7 }, (_, i) => { const y = oy - 30 - i * (oy - top - 50) / 6; return seg(ox - lw / 2, y, ox + lw / 2, y); });
+    rails.forEach(p => glow(ctx, part(p, rk), .85 * fa, 2.2)); rungs.forEach((p, i) => glow(ctx, part(p, clamp((b - (1.2 + i * .3)) / .45)), .85 * fa, 2));
+    dust(ctx, [...rails, ...rungs], u, 21);
+    const m = eio(clamp((b - 4.1) / 1.1)), my = oy - EH * .5, rx = EH * .27, ry = EH * .4;
+    if (m > 0) { const g = ctx.createRadialGradient(ox - rx * .3, my - ry * .3, 0, ox, my, ry); g.addColorStop(0, `rgba(210,220,235,${.16 * m})`); g.addColorStop(1, `rgba(120,130,150,${.04 * m})`);
+      ctx.save(); ctx.beginPath(); ctx.ellipse(ox, my, rx, ry, 0, 0, 6.2832); ctx.fillStyle = g; ctx.fill(); ctx.restore();
+      glow(ctx, part(ell(ox, my, rx, ry), m), 1, 2.4); glow(ctx, part(seg(ox, my + ry, ox, oy), m), .7, 2);
+      say(ctx, '죄', ox, my + EH * .11, { size: EH * .3, weight: 900, color: 'rgb(214,206,196)', alpha: ss(4.5, 5.6, b) * .9, maxW: rx * 1.7, blur: (1 - ss(4.5, 5.6, b)) * 6 }); }
+    LAB(ctx, '사다리가 아니라 거울', b, 4.8, ox); },
+  // 3 — a tower of works crumbles; a gift comes down in light
+  (ctx, b, ox, oy) => { const bw = V ? 300 : 260, n = 6, bh = (EH * .82) / n - 8, u = clamp((b - 2.8) / 1.6), fa = 1 - ss(0, .25, u), boxes = [];
+    for (let i = 0; i < n; i++) { const e = clamp((b - (.7 + i * .35)) / .5), x = ox - bw / 2 + (i % 2 ? 16 : -12) + (i === n - 1 ? 10 : 0), y = oy - (i + 1) * (bh + 8) + 8, p = rect(x, y, bw, bh); boxes.push(p);
+      glow(ctx, part(p, e), .8 * fa, 1.8); say(ctx, '행위', x + bw / 2, y + bh * .64, { size: Math.min(24, bh * .42), font: SANS, color: `rgb(${GOLD})`, alpha: ss(.4, 1, e) * fa * .8, maxW: bw - 30 }); }
+    dust(ctx, boxes, u, 33);
+    const s = EH * .5, e = eio(clamp((b - 3.9) / .9)), y = lerp(oy - EH * 1.25 - s, oy - s, e), ga = ss(3.9, 4.25, b);
+    if (ga > 0) { const land = Math.exp(-Math.max(0, b - 4.8) * 1.2) * ss(4.75, 4.85, b);
+      if (land > 0) { const lg = ctx.createRadialGradient(ox, oy, 0, ox, oy, s * 1.6); lg.addColorStop(0, `rgba(${GOLD},${.4 * land})`); lg.addColorStop(1, `rgba(${GOLD},0)`); ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.fillStyle = lg; ctx.fillRect(ox - s * 1.6, oy - s * 1.6, s * 3.2, s * 3.2); ctx.restore(); }
+      const x0 = ox - s / 2, by = y + s * .3;
+      glow(ctx, x => { x.rect(x0, y, s, s); }, ga, 2.2);
+      glow(ctx, x => { x.moveTo(ox, y); x.lineTo(ox, y + s); x.moveTo(x0, by); x.lineTo(x0 + s, by);
+        x.moveTo(ox, y); x.bezierCurveTo(ox - s * .3, y - s * .28, ox - s * .42, y + s * .02, ox, y); x.moveTo(ox, y); x.bezierCurveTo(ox + s * .3, y - s * .28, ox + s * .42, y + s * .02, ox, y); }, ga * .9, 1.8);
+      say(ctx, '선물', ox, y + s * .74, { size: s * .17, color: `rgb(${WARM})`, alpha: ga * ss(4.4, 5, b), maxW: s * .9, glow: 18 }); }
+    LAB(ctx, '거저 주시는 하나님의 선물', b, 4.6, ox); },
+  // 4 — a grey figure, clothed in a robe of light
+  (ctx, b, ox, oy) => { const fh = EH * .82, hr = fh * .075, hy = oy - fh + hr, sy = hy + hr + fh * .06, k = clamp((b - .5) / 1.5), c = eio(clamp((b - 2.8) / 1.1));
+    const fig = [ell(ox, hy, hr, hr, -Math.PI / 2, 40), [[ox, hy + hr], [ox, oy - fh * .42]], [[ox - fh * .16, sy + fh * .3], [ox - fh * .13, sy], [ox + fh * .13, sy], [ox + fh * .16, sy + fh * .3]], [[ox - fh * .08, oy], [ox, oy - fh * .42], [ox + fh * .08, oy]]];
+    ctx.save(); ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.strokeStyle = `rgba(${ASH},${.8 * (1 - c * .7)})`; ctx.lineWidth = 2.2; for (const p of fig) { ctx.beginPath(); part(p, k)(ctx); ctx.stroke(); } ctx.restore();
+    if (c > 0) { const beam = ctx.createLinearGradient(0, oy - EH * 1.1, 0, oy); beam.addColorStop(0, `rgba(${GOLD},0)`); beam.addColorStop(1, `rgba(${GOLD},${.16 * c})`);
+      ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.beginPath(); ctx.moveTo(ox - fh * .12, oy - EH * 1.1); ctx.lineTo(ox + fh * .12, oy - EH * 1.1); ctx.lineTo(ox + fh * .45, oy); ctx.lineTo(ox - fh * .45, oy); ctx.fillStyle = beam; ctx.fill(); ctx.restore();
+      const robe = [[ox - fh * .3, oy - 2], [ox - fh * .2, sy + fh * .2], [ox - fh * .14, sy - 2], [ox, sy - fh * .03], [ox + fh * .14, sy - 2], [ox + fh * .2, sy + fh * .2], [ox + fh * .3, oy - 2]];
+      const reveal = sy - 10 + (oy - sy + 20) * c;
+      ctx.save(); ctx.beginPath(); ctx.rect(ox - fh, 0, fh * 2, reveal); ctx.clip();
+      const rg = ctx.createLinearGradient(0, sy, 0, oy); rg.addColorStop(0, `rgba(${GOLD},.32)`); rg.addColorStop(1, `rgba(${GOLD},.1)`);
+      ctx.beginPath(); robe.forEach((q, i) => i ? ctx.lineTo(q[0], q[1]) : ctx.moveTo(q[0], q[1])); ctx.closePath(); ctx.fillStyle = rg; ctx.globalCompositeOperation = 'lighter'; ctx.fill();
+      glow(ctx, x => robe.forEach((q, i) => i ? x.lineTo(q[0], q[1]) : x.moveTo(q[0], q[1])), 1, 2.2); ctx.restore();
+      glow(ctx, x => x.arc(ox, hy, hr, 0, 6.2832), c, 2); }
+    LAB(ctx, '내 의가 아니라', b, 1.2, ox, { dy: -(V ? 44 : 38), color: `rgb(${ASH})`, a: .95 - .35 * ss(3.5, 4.5, b) });
+    LAB(ctx, '그분의 의를 입는 것', b, 3.5, ox, { glow: 16 }); },
+  // 5 — 66 points of light turn, one by one, toward the One
+  (ctx, b, ox, oy) => { const cy = oy - EH * .5, rx = V ? EW * .46 : EW * .5, ry = EH * .43, st = eo(clamp((b - 2.1) / .9));
+    if (st > 0) { const sg = ctx.createRadialGradient(ox, cy, 0, ox, cy, 140); sg.addColorStop(0, `rgba(${WARM},${.85 * st})`); sg.addColorStop(.15, `rgba(${GOLD},${.35 * st})`); sg.addColorStop(1, `rgba(${GOLD},0)`);
+      ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.fillStyle = sg; ctx.fillRect(ox - 140, cy - 140, 280, 280); ctx.restore();
+      const L1 = 46 * st * (1 + .05 * Math.sin(b * 3)); glow(ctx, x => { x.moveTo(ox, cy - L1); x.lineTo(ox, cy + L1 * 1.5); x.moveTo(ox - L1 * .8, cy - L1 * .2); x.lineTo(ox + L1 * .8, cy - L1 * .2); }, st, 2.2); }
+    for (let i = 0; i < 66; i++) { const a = -Math.PI / 2 + (i + .5) / 66 * 6.2832, x = ox + rx * Math.cos(a), y = cy + ry * Math.sin(a), e = clamp((b - (.5 + i * .022)) / .4); if (e <= 0) continue;
+      const tw = eio(clamp((b - (2.7 + 1.8 * i / 66)) / 1.1)), din = Math.atan2(cy - y, ox - x), ang = lerp(a + Math.PI / 2, din, tw), len = 16 * e, ot = i < 39;
+      if (tw > 0) { ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.strokeStyle = `rgba(${GOLD},${.07 * tw})`; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(lerp(x, ox, tw * .82), lerp(y, cy, tw * .82)); ctx.stroke(); ctx.restore(); }
+      glow(ctx, q => { q.moveTo(x - Math.cos(ang) * len, y - Math.sin(ang) * len); q.lineTo(x + Math.cos(ang) * len, y + Math.sin(ang) * len); }, e * (ot ? .55 : .9), 1.6, ot ? '230,196,150' : GOLD); }
+    LAB(ctx, '구약 39  ·  신약 27  =  66', b, 1.2, ox, { a: .8 }); },
+  // 6 — a dial fills with light: 때가 찼고
+  (ctx, b, ox, oy) => { const cy = oy - EH * .5, R = EH * .43, n = 48, full = ss(4.3, 4.9, b); let fill = 0;
+    for (let i = 0; i < n; i++) { const a = -Math.PI / 2 + i / n * 6.2832, tf = .7 + 3.4 * Math.pow(i / n, .75), e = clamp((b - tf) / .25), ap = ss(.2, .9, b);
+      const p = seg(ox + Math.cos(a) * R * .84, cy + Math.sin(a) * R * .84, ox + Math.cos(a) * R, cy + Math.sin(a) * R);
+      ctx.save(); ctx.strokeStyle = `rgba(${ASH},${.45 * ap * (1 - e)})`; ctx.lineWidth = 2; ctx.beginPath(); part(p, 1)(ctx); ctx.stroke(); ctx.restore();
+      if (e > 0) { glow(ctx, part(p, 1), e * (.8 + .2 * full), 2); fill = Math.max(fill, (i + e) / n); } }
+    if (fill > 0) glow(ctx, x => x.arc(ox, cy, R * .76, -Math.PI / 2, -Math.PI / 2 + fill * 6.2832), .55 + .45 * full, 1.4);
+    if (full > 0) { const g = ctx.createRadialGradient(ox, cy, 0, ox, cy, R * 1.5); g.addColorStop(0, `rgba(${GOLD},${.3 * full})`); g.addColorStop(1, `rgba(${GOLD},0)`);
+      ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.fillStyle = g; ctx.fillRect(ox - R * 1.5, cy - R * 1.5, R * 3, R * 3); ctx.restore();
+      say(ctx, '때가 찼고', ox, cy + (V ? 26 : 24), { size: V ? 76 : 66, weight: 900, color: '#fff6e2', alpha: ss(4.5, 5.3, b), maxW: R * 1.35, glow: 30 }); } },
+  // 7 — “행하라” is struck through and falls away; “이루어졌다” stands
+  (ctx, b, ox, oy) => { const y = oy - EH * .36, s = V ? 140 : 132, mw = V ? W - 140 : EW * 1.3, u = ss(2.3, 3.2, b);
+    say(ctx, '행하라', ox, y + 40 * u * u, { size: s, weight: 900, color: `rgb(${ASH})`, alpha: ss(.4, 1, b) * (1 - u), maxW: mw, blur: u * 8 });
+    const k = eio(clamp((b - 1.7) / .45)); ctx.font = `900 ${s}px ${SERIF}`; const hw = Math.min(mw, ctx.measureText(Pilot.tr('행하라')).width) / 2 + 50;
+    glow(ctx, part(seg(ox - hw, y - s * .32, ox + hw, y - s * .32), k), 1 - u, 2.4);
+    say(ctx, '이루어졌다', ox, y + EH * .02, { size: s, weight: 900, color: '#fff6e2', alpha: ss(2.9, 3.7, b), maxW: mw, glow: 34 });
+    LAB(ctx, '“행하라”가 아니라 “이루어졌다”', b, 3.3, ox, { a: .85 }); },
 ];
 
-// ---------- frame ----------
-const COLX = []; for (let c = 0; c < L.cols; c++) { COLX.push(L.cx(c)); COLX.push(L.cx(c) + L.cw); }
-const verseLines = [];
-function grid(ctx, t) {   // column guides grow down in the intro; in the finale they are cut by the red and fall away
-  const brk = t - T7, cr = L.cross;
-  ctx.lineWidth = 1;
-  COLX.forEach((x, i) => { const g = clamp((t - .25 - i * .025) / .7); if (g <= 0) return;
-    let dy = 0, a = 1, rot = 0; if (brk > 4.2) { const d = Math.abs(x - cr.X) / W, p = clamp((brk - 4.2 - d * 1.1) / 1.0); dy = p * p * H * .9; a = 1 - p; rot = p * .05 * (x < cr.X ? -1 : 1); }
-    if (a <= 0) return; ctx.save(); ctx.globalAlpha = a; ctx.translate(x, dy); ctx.rotate(rot); ctx.strokeStyle = G1; ctx.beginPath(); ctx.moveTo(.5, 0); ctx.lineTo(.5, H * g); ctx.stroke(); ctx.restore(); });
-  [L.rule, L.brule].forEach((y, i) => { const g = clamp((t - .5 - i * .2) / .8); if (g <= 0) return; let dy = 0, a = 1; if (brk > 4.2) { const p = clamp((brk - 4.4 - i * .2) / 1.0); dy = p * p * H * .7; a = 1 - p; }
-    if (a <= 0) return; ctx.globalAlpha = a; ctx.fillStyle = INK; ctx.fillRect(L.M, y + dy, (W - 2 * L.M) * g, 1.5); ctx.globalAlpha = 1; });
+// ---------- the room: dark, warm, a little dust in the air; grain ----------
+let grains = [], motes, bokeh;
+function room(ctx, t, cx) {
+  const g = ctx.createLinearGradient(0, 0, 0, H); g.addColorStop(0, '#07070b'); g.addColorStop(.62, '#0e0c10'); g.addColorStop(1, '#09080a'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+  const pool = ctx.createRadialGradient(W / 2, LY.hl - LY.eh * .4, 0, W / 2, LY.hl - LY.eh * .4, Math.max(W, H) * .6); pool.addColorStop(0, 'rgba(70,52,34,.32)'); pool.addColorStop(1, 'rgba(0,0,0,0)'); ctx.fillStyle = pool; ctx.fillRect(0, 0, W, H);
+  ctx.save(); ctx.globalCompositeOperation = 'lighter';
+  for (const q of bokeh) { const x = ((q.x - cx * q.p) % (W * 1.6) + W * 1.6) % (W * 1.6) - W * .3, y = q.y + 20 * Math.sin(t * .2 + q.ph), gg = ctx.createRadialGradient(x, y, 0, x, y, q.r);
+    gg.addColorStop(0, `rgba(${GOLD},${q.a})`); gg.addColorStop(1, `rgba(${GOLD},0)`); ctx.fillStyle = gg; ctx.fillRect(x - q.r, y - q.r, q.r * 2, q.r * 2); }
+  for (const q of motes) { const x = ((q.x - cx * q.p + t * q.vx) % (W + 40) + W + 40) % (W + 40) - 20, y = ((q.y - t * q.vy) % H + H) % H, a = q.a * (.6 + .4 * Math.sin(t * q.sp + q.ph));
+    ctx.fillStyle = `rgba(${WARM},${a})`; ctx.fillRect(x, y, q.s, q.s); }
+  ctx.restore();
 }
+function grade(ctx, t) {
+  ctx.save(); ctx.globalCompositeOperation = 'overlay'; ctx.globalAlpha = .14; ctx.drawImage(grains[Math.floor(t * 24) % grains.length], 0, 0, W, H); ctx.restore();
+  const vg = ctx.createRadialGradient(W / 2, H / 2, Math.min(W, H) * .4, W / 2, H / 2, Math.max(W, H) * .75); vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(0,0,0,.7)'); ctx.fillStyle = vg; ctx.fillRect(0, 0, W, H);
+}
+
+// ---------- frame ----------
+const verseLines = [];
 function draw(ctx, t) {
-  ctx.fillStyle = PAGE; ctx.fillRect(0, 0, W, H);
-  if (RTL()) { ctx.save(); ctx.translate(W, 0); ctx.scale(-1, 1); }   // right-to-left scripts: the whole grid is mirrored (words un-mirrored in word())
-  grid(ctx, t);
-  // chapter label + caption row
-  rise(ctx, t, .4, 5.0, L.M, L.label, 26, () => word(ctx, '17  ·  복음의 핵심', L.M, L.label, { font: font(700, 26), ls: 2 }));
-  const capOut = T7 + 2.8, cx = L.capCols.map(c => L.cx(c));
-  rise(ctx, t, .9, capOut, cx[0], L.cap, 20, () => word(ctx, '복음의 핵심 7가지', cx[0], L.cap, { font: font(400, 20), maxW: cx[1] - cx[0] - 30 }));
-  // intro: the system announces itself — a giant 7 beside a small line
-  rise(ctx, t, .7, T0 - .45, L.M, L.num[0] + (V ? 0 : 60), V ? 96 : 104, () => word(ctx, '복음의 핵심', L.M, L.num[0] + (V ? 0 : 60), { font: font(700, V ? 96 : 104), optical: true, maxW: V ? W - 2 * L.M : 1120 }));
-  rise(ctx, t, .95, T0 - .4, L.M, L.num[0] + (V ? 110 : 170), V ? 96 : 104, () => word(ctx, '7가지', L.M, L.num[0] + (V ? 110 : 170), { font: font(700, V ? 96 : 104), color: G3, optical: true, maxW: V ? W - 2 * L.M : 1120 }));
-  const big = V ? 560 : 640, by = V ? Z.y1 : Z.y1 + 40;
-  rise(ctx, t, .55, T0 - .5, Z.x0 + (V ? 300 : 300), by, big, () => word(ctx, '7', Z.x0 + (V ? 300 : 300), by, { font: font(700, big), optical: true }));
+  const cx = camX(t), f = t - T7;
+  room(ctx, t, cx);
+  // the line: from off-screen left to its head; in the finale it gives itself up to the cross
+  const hx = headX(t), lo = cx - W * .6, la = 1 - ss(2.6, 3.8, f);
+  if (hx > lo && la > 0) { const pts = []; for (let x = lo; x <= hx; x += 10) pts.push([x - cx + W / 2, lineY(x)]); pts.push([hx - cx + W / 2, lineY(hx)]);
+    glow(ctx, q => pts.forEach((p, i) => i ? q.lineTo(p[0], p[1]) : q.moveTo(p[0], p[1])), .9 * la, 2.2);
+    const tip = [hx - cx + W / 2, lineY(hx)], tg = ctx.createRadialGradient(tip[0], tip[1], 0, tip[0], tip[1], 60); tg.addColorStop(0, `rgba(${WARM},${.6 * la})`); tg.addColorStop(1, `rgba(${GOLD},0)`);
+    ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.fillStyle = tg; ctx.fillRect(tip[0] - 60, tip[1] - 60, 120, 120); ctx.restore(); }
+  // chapter label
+  say(ctx, '17  ·  복음의 핵심', RTL() ? W - (V ? 80 : 110) : (V ? 80 : 110), V ? 190 : 120, { size: 30, weight: 600, align: RTL() ? 'right' : 'left', color: '#e8e2d6', alpha: win(t, .6, 5.6, 1, 1), ls: 4, maxW: W * .6 });
+  // intro: the title over the dark, the line arriving beneath it
+  say(ctx, '복음의 핵심 7가지', W / 2, LY.hl - LY.eh * .45, { size: V ? 70 : 66, weight: 600, alpha: win(t, .5, T0 + .3, .8, .5), maxW: W - 160, glow: 20 });
 
-  // the statements
   for (let i = 0; i < 7; i++) {
-    const s = T0 + i * ITEM, e = i < 6 ? s + 7.25 * B : T7 + 2.8; if (t < s - .1 || t > e + 1) continue;
-    const c = CORE[i], lt = t - s, b = lt / B;
-    rise(ctx, t, s + .05 * B, e, cx[1], L.cap, 20, () => word(ctx, `${String(i + 1).padStart(2, '0')} / 07`, cx[1], L.cap, { font: font(700, 20) }));
-    rise(ctx, t, s + .1 * B, e, cx[2], L.cap, 20, () => word(ctx, c.cap, cx[2], L.cap, { font: font(400, 20), maxW: W - L.M - cx[2] }));
-    rise(ctx, t, s, e, L.M, L.num[0], L.num[1], () => word(ctx, String(i + 1).padStart(2, '0'), L.M, L.num[0], { font: font(700, L.num[1]), optical: true, ls: -L.num[1] * .03 }), V ? 520 : 820);
-    c.t.forEach((ln, j) => rise(ctx, t, s + (.15 + j * .12) * B, e + j * .05, L.M, L.title[0] + j * L.title[2], L.title[1], () => word(ctx, ln, L.M, L.title[0] + j * L.title[2], { font: font(700, L.title[1]), maxW: V ? W - 2 * L.M : 800 }), V ? W : 860));
-    if (c.v) { const vl = verseLines[i]; vl.forEach((ln, j) => rise(ctx, t, s + (.5 + j * .15) * B, e + .05 + j * .04, L.M, L.verse[0] + j * L.verse[2], L.verse[1], () => word(ctx, ln, L.M, L.verse[0] + j * L.verse[2], { font: font(600, L.verse[1], SERIF), raw: true })));
-      const cy = L.verse[0] + vl.length * L.verse[2] - 8; rise(ctx, t, s + .9 * B, e + .12, L.M, cy, 22, () => word(ctx, c.ref, L.M, cy, { font: font(400, 22), color: '#55534e', ls: 1 })); }
-    stage(ctx, t, s, e, () => ART[i](ctx, b));
+    const s = T0 + i * ITEM, e = i < 6 ? s + 6.9 * B : T7 + 2.8; if (t < s - .1 || t > e + 1.2) continue;
+    const c = CORE[i], b = (t - s) / B, ox = i * SP - cx + W / 2, oy = LY.hl, out = 1 - ss(e - .45, e, t);
+    if (ox > -W * .7 && ox < W * 1.7) { ctx.save(); ctx.globalAlpha = i === 6 ? out : 1; ART[i](ctx, b, ox, oy); ctx.restore(); }
+    // title and Scripture: like a title card and its subtitle, they come and go with the truth
+    const tl = c.t.map(x => Pilot.tr(x)).filter(Boolean);
+    tl.forEach((ln, j) => { const a = ss(s + (.2 + j * .15) * B, s + (.2 + j * .15) * B + .7, t) * out;
+      say(ctx, ln, W / 2, LY.tt + j * LY.tl + 10 * (1 - a), { raw: true, size: LY.ts, weight: 600, alpha: a, maxW: W - (V ? 120 : 200) }); });
+    if (c.v) { const vl = verseLines[i], y0 = LY.tt + (tl.length - 1) * LY.tl + (V ? 96 : 84);
+      vl.forEach((ln, j) => { const a = ss(s + (.6 + j * .15) * B, s + (.6 + j * .15) * B + .8, t) * out * .9;
+        say(ctx, ln, W / 2, y0 + j * LY.vl, { raw: true, size: LY.vs, color: '#dccfb6', alpha: a }); });
+      say(ctx, c.ref, W / 2, y0 + vl.length * LY.vl + (V ? 6 : 4), { size: V ? 24 : 21, font: SANS, color: '#a89a82', ls: 1, alpha: ss(s + 1 * B, s + 1 * B + .8, t) * out * .9, maxW: W - 160 }); }
   }
 
-  // ---------- finale: the exception ----------
-  const f = t - T7, cr = L.cross;
+  // ---------- finale: the line becomes the cross ----------
   if (f > 2.9) {
-    // the red square leaves the grid: linear, unsnapped — falls from above to the place of the cross
-    const sq = cr.w, fall = clamp((f - 2.9) / .6), y = lerp(-sq, cr.Y - sq / 2, fall), vk = clamp((f - 3.55) / .55), hk = clamp((f - 3.95) / .5);
-    ctx.fillStyle = RED; ctx.fillRect(cr.X - sq / 2, y, sq, sq);
-    if (vk > 0) { const up = (cr.Y + 10) * vk, dn = (H - cr.Y + 10) * vk; ctx.fillRect(cr.X - sq / 2, cr.Y - up, sq, up + dn); }
-    if (hk > 0) { const a = cr.arm * hk; ctx.fillRect(cr.X - sq / 2 - a, cr.Y - sq / 2, sq + 2 * a, sq); }
-    // “다 이루었다” — Scripture, in serif, the only words left on the page
-    const F = L.fin, outA = 1, fw = V ? cr.X - cr.w / 2 - F.x - 30 : W - F.x - L.M;   // other languages: room left of the cross (portrait) / to the margin
-    rise(ctx, t, T7 + 4.5, null, F.x, F.y, F.size, () => word(ctx, '다 이루었다', F.x, F.y, { font: font(900, F.size, SERIF), optical: true, ls: -F.size * .01, maxW: fw }), W);
-    rise(ctx, t, T7 + 4.9, null, F.x, F.cite, 22, () => word(ctx, '요한복음 19:30 (개역개정)', F.x, F.cite, { font: font(400, 22), color: '#55534e', ls: 1 }));
+    const X = RTL() ? W - FIN.X : FIN.X, Y = FIN.Y, fall = clamp((f - 2.9) / .6), py = lerp(-40, Y, fall), vk = eo(clamp((f - 3.55) / .55)), hk = eo(clamp((f - 3.95) / .5));
+    const bl = ss(3.5, 4.6, f), bg = ctx.createRadialGradient(X, Y, 0, X, Y, Math.max(W, H) * .7);
+    bg.addColorStop(0, `rgba(${GOLD},${.24 * bl})`); bg.addColorStop(.3, `rgba(120,80,40,${.12 * bl})`); bg.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H); ctx.restore();
+    if (vk <= 0) glow(ctx, q => { q.moveTo(X, py - 90); q.lineTo(X, py); }, 1, 2.6);
+    else glow(ctx, q => { q.moveTo(X, Y - (Y + 40) * vk); q.lineTo(X, Y + (H - Y + 40) * vk); }, 1, 3.2 + 1.2 * bl);
+    if (hk > 0) glow(ctx, q => { q.moveTo(X - FIN.arm * hk, Y); q.lineTo(X + FIN.arm * hk, Y); }, 1, 3.2 + 1.2 * bl);
+    const hg = ctx.createRadialGradient(X, Y, 0, X, Y, 120); hg.addColorStop(0, `rgba(${WARM},${.7 * ss(3.4, 3.6, f)})`); hg.addColorStop(1, `rgba(${GOLD},0)`);
+    ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.fillStyle = hg; ctx.fillRect(X - 120, Y - 120, 240, 240); ctx.restore();
+    // “다 이루었다” — the only words left
+    const fx = RTL() ? W - FIN.x : FIN.x, al = RTL() ? 'right' : 'left', fw = V ? FIN.X - 36 - FIN.x - 30 : W - FIN.x - 96, a1 = ss(T7 + 4.5, T7 + 5.4, t);
+    say(ctx, '다 이루었다', fx, FIN.y + 12 * (1 - a1), { size: FIN.size, weight: 900, align: al, color: '#fff6e2', alpha: a1, maxW: fw, glow: 30 });
+    say(ctx, '요한복음 19:30 (개역개정)', fx, FIN.cite, { size: 22, font: SANS, align: al, color: '#a89a82', ls: 1, alpha: ss(T7 + 4.9, T7 + 5.6, t) * .9, maxW: fw });
     ['우리가 아직 죄인 되었을 때에', '그리스도께서 우리를 위하여 죽으심으로'].forEach((ln, j) =>
-      rise(ctx, t, T7 + 5.2 + j * .12, null, F.x, F.r[0] + j * F.r[2], F.r[1], () => word(ctx, ln, F.x, F.r[0] + j * F.r[2], { font: font(600, F.r[1], SERIF), maxW: fw }), W));
-    rise(ctx, t, T7 + 5.6, null, F.x, F.rc, 22, () => word(ctx, '로마서 5:8 (개역개정)', F.x, F.rc, { font: font(400, 22), color: '#55534e', ls: 1 }));
+      say(ctx, ln, fx, FIN.r[0] + j * FIN.r[2], { size: FIN.r[1], weight: 600, align: al, color: '#efe4cf', alpha: ss(T7 + 5.2 + j * .15, T7 + 6 + j * .15, t), maxW: fw }));
+    say(ctx, '로마서 5:8 (개역개정)', fx, FIN.rc, { size: 22, font: SANS, align: al, color: '#a89a82', ls: 1, alpha: ss(T7 + 5.6, T7 + 6.3, t) * .9, maxW: fw });
   }
-  if (RTL()) ctx.restore();
-  // in from black, out to black
+  grade(ctx, t);
   const k = 1 - ss(0, .9, t) + ss(DUR - .8, DUR, t); if (k > 0) { ctx.fillStyle = `rgba(0,0,0,${clamp(k)})`; ctx.fillRect(0, 0, W, H); }
 }
 
-Pilot.run({ W, H, dur: DUR, fonts: ["700 40px 'Noto Sans KR'", "400 20px 'Noto Sans KR'", "600 40px 'Noto Serif KR'", "900 40px 'Noto Serif KR'"],
-  init: async () => { const c = Pilot.canvas(4, 4).getContext('2d'); CORE.forEach((q, i) => { verseLines[i] = q.v ? wrap(c, Pilot.tr(q.v), L.vw, font(600, L.verse[1], SERIF)) : []; }); },
+Pilot.run({ W, H, dur: DUR, fonts: ["600 40px 'Noto Serif KR'", "900 40px 'Noto Serif KR'", "400 40px 'Noto Serif KR'", "400 20px 'Noto Sans KR'"],
+  init: async () => {
+    const c = canvas(4, 4).getContext('2d'); CORE.forEach((q, i) => { verseLines[i] = q.v ? wrap(c, Pilot.tr(q.v), LY.vw, `400 ${LY.vs}px ${SERIF}`) : []; });
+    for (let i = 0; i < 6; i++) grains.push(speckle(W / 2, H / 2, 46, 500 + i, .6));
+    const r = rng(9); motes = Array.from({ length: 140 }, () => ({ x: r() * W, y: r() * H, p: .15 + r() * .5, vx: (r() - .5) * 6, vy: 3 + r() * 8, s: .8 + r() * 1.8, a: .08 + r() * .22, sp: .5 + r() * 2, ph: r() * 6.3 }));
+    bokeh = Array.from({ length: 12 }, () => ({ x: r() * W * 1.6, y: r() * H, r: 60 + r() * 160, a: .015 + r() * .03, p: .08 + r() * .15, ph: r() * 6.3 }));
+  },
   draw });
 </script>
 </body>

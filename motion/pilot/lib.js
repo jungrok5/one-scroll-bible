@@ -26,6 +26,13 @@
   P.drawn = new Set();
   if (P.collect) for (const k of ['fillText', 'strokeText']) { const f = CanvasRenderingContext2D.prototype[k];
     CanvasRenderingContext2D.prototype[k] = function (t, ...r) { if (HANGUL.test(String(t))) P.drawn.add(String(t)); return f.call(this, t, ...r); }; }
+  // a counted phrase: Pilot.trn('{n}년', n) — the language file may add plural forms by CLDR category,
+  // e.g. "{n}년#one": "{n} año", "{n}년#two": "سنتان", "{n}년#few": "{n} سنوات"; otherwise the plain key is used.
+  P.trn = (key, n) => {
+    let cat = 'other'; try { cat = new Intl.PluralRules(P.lang).select(n); } catch (e) {}
+    const f = P.lang !== 'ko' && P.L[key + '#' + cat];
+    return String(f != null && f !== false ? f : P.tr(key)).replace('{n}', n);
+  };
   // user-perceived characters (keeps combining marks and syllable clusters together for typewriter effects)
   const SEG = typeof Intl !== 'undefined' && Intl.Segmenter ? new Intl.Segmenter(undefined, { granularity: 'grapheme' }) : null;
   P.chars = s => SEG ? Array.from(SEG.segment(String(s)), x => x.segment) : Array.from(String(s));

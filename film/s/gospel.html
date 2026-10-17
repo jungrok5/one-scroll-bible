@@ -50,6 +50,7 @@ const bez = (() => { const x1 = .7, y1 = 0, x2 = .2, y2 = 1, cx = 3 * x1, bx = 3
   return x => { x = clamp(x); let u = x; for (let i = 0; i < 6; i++) { const d = dX(u); if (Math.abs(d) < 1e-6) break; u -= (X(u) - x) / d; u = clamp(u); } return Y(u); }; })();
 const snap = (t, t0, d = B * .5) => bez((t - t0) / d);
 const font = (w, s, f = SANS) => `${w} ${s}px ${f}`;
+const RTL = () => Pilot.dir === 'rtl';   // right-to-left scripts (known once the language file has loaded)
 
 // words rise out of a clip rect from below their baseline, and leave upward
 function rise(ctx, t, tin, tout, x, y, size, fn, clipW = W) {
@@ -64,6 +65,11 @@ function word(ctx, s, x, y, o) { if (!o.raw) s = Pilot.tr(s); ctx.font = o.font;
   if (Pilot.lang !== 'ko' && (o.maxW || o.box)) { const wd = Math.max(...lines.map(l => ctx.measureText(l).width));
     let k = Math.min(1, (o.box ? o.box[0] : o.maxW) / wd); if (o.box) k = Math.min(k, o.box[1] / (size * (.74 + (lines.length - 1) * lh)));
     if (k < 1) { size *= k; ctx.font = `${fm[1]} ${size}px ${fm[3]}`; ctx.letterSpacing = (o.ls || 0) * k + 'px'; } }
+  if (RTL()) {   // the page is mirrored (see draw): un-mirror each line at its anchor and set it flush right
+    ctx.direction = 'rtl'; ctx.textAlign = 'right';
+    lines.forEach((l, i) => { let dx = 0; if (o.optical) dx = ctx.measureText(l).actualBoundingBoxRight;   // optically flush right
+      ctx.save(); ctx.translate(x, 0); ctx.scale(-1, 1); ctx.fillText(l, -dx, y + (i - (o.up ? lines.length - 1 : 0)) * size * lh); ctx.restore(); });
+    ctx.direction = 'inherit'; ctx.letterSpacing = '0px'; return; }
   lines.forEach((l, i) => { let dx = 0; if (o.optical) { const m = ctx.measureText(l); dx = -m.actualBoundingBoxLeft; }   // optically flush left
     ctx.fillText(l, x - dx, y + (i - (o.up ? lines.length - 1 : 0)) * size * lh); });
   ctx.letterSpacing = '0px'; }
@@ -156,6 +162,7 @@ function grid(ctx, t) {   // column guides grow down in the intro; in the finale
 }
 function draw(ctx, t) {
   ctx.fillStyle = PAGE; ctx.fillRect(0, 0, W, H);
+  if (RTL()) { ctx.save(); ctx.translate(W, 0); ctx.scale(-1, 1); }   // right-to-left scripts: the whole grid is mirrored (words un-mirrored in word())
   grid(ctx, t);
   // chapter label + caption row
   rise(ctx, t, .4, 5.0, L.M, L.label, 26, () => word(ctx, '17  ·  복음의 핵심', L.M, L.label, { font: font(700, 26), ls: 2 }));
@@ -196,6 +203,7 @@ function draw(ctx, t) {
       rise(ctx, t, T7 + 5.2 + j * .12, null, F.x, F.r[0] + j * F.r[2], F.r[1], () => word(ctx, ln, F.x, F.r[0] + j * F.r[2], { font: font(600, F.r[1], SERIF), maxW: fw }), W));
     rise(ctx, t, T7 + 5.6, null, F.x, F.rc, 22, () => word(ctx, '로마서 5:8 (개역개정)', F.x, F.rc, { font: font(400, 22), color: '#55534e', ls: 1 }));
   }
+  if (RTL()) ctx.restore();
   // in from black, out to black
   const k = 1 - ss(0, .9, t) + ss(DUR - .8, DUR, t); if (k > 0) { ctx.fillStyle = `rgba(0,0,0,${clamp(k)})`; ctx.fillRect(0, 0, W, H); }
 }

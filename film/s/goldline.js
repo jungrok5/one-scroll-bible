@@ -172,12 +172,15 @@
     const left = o.align === 'left' ? x : o.align === 'right' ? x - w : x - w / 2;
     const pad = size * 1.2, rx = left - pad, ry = y - size * 1.5, rw = w + pad * 2, rh = size * 2.3;
     sx_.clearRect(rx, ry, rw, rh); sx_.textAlign = 'left'; sx_.textBaseline = 'alphabetic';
+    const RTL = Pilot.dir === 'rtl'; if (RTL) sx_.direction = 'rtl';   // right-to-left scripts: parts run from the right, the ink follows the nib leftward
     if (o.glow) { sx_.shadowColor = o.glow; sx_.shadowBlur = o.glowBlur || 22; }
-    let cx = left; parts.forEach((q, i) => { sx_.fillStyle = q[1]; sx_.fillText(q[0], cx, y); cx += ws[i]; });
+    if (RTL) { let cx = left + w; parts.forEach((q, i) => { cx -= ws[i]; sx_.fillStyle = q[1]; sx_.fillText(q[0], cx, y); }); }
+    else { let cx = left; parts.forEach((q, i) => { sx_.fillStyle = q[1]; sx_.fillText(q[0], cx, y); cx += ws[i]; }); }
     sx_.shadowBlur = 0; sx_.shadowColor = 'transparent';
-    if (prog < 1) { const fe = o.feather || size * 1.1, e = lerp(left - fe, left + w, prog), g = sx_.createLinearGradient(e, 0, e + fe, 0);
-      g.addColorStop(0, 'rgba(0,0,0,1)'); g.addColorStop(1, 'rgba(0,0,0,0)'); sx_.globalCompositeOperation = 'destination-in'; sx_.fillStyle = g; sx_.fillRect(rx, ry, rw, rh); sx_.globalCompositeOperation = 'source-over';
-      if (o.spark) { const ex = e + fe * .5, ey = y - size * .38, r = size * 1.1, gg = ctx.createRadialGradient(ex, ey, 0, ex, ey, r);
+    if (prog < 1) { const fe = o.feather || size * 1.1, e = RTL ? lerp(left + w + fe, left, prog) : lerp(left - fe, left + w, prog), g = RTL ? sx_.createLinearGradient(e - fe, 0, e, 0) : sx_.createLinearGradient(e, 0, e + fe, 0);
+      if (RTL) { g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, 'rgba(0,0,0,1)'); } else { g.addColorStop(0, 'rgba(0,0,0,1)'); g.addColorStop(1, 'rgba(0,0,0,0)'); }
+      sx_.globalCompositeOperation = 'destination-in'; sx_.fillStyle = g; sx_.fillRect(rx, ry, rw, rh); sx_.globalCompositeOperation = 'source-over';
+      if (o.spark) { const ex = RTL ? e - fe * .5 : e + fe * .5, ey = y - size * .38, r = size * 1.1, gg = ctx.createRadialGradient(ex, ey, 0, ex, ey, r);
         gg.addColorStop(0, `rgba(255,236,190,${.35 * o.spark * (o.alpha == null ? 1 : o.alpha)})`); gg.addColorStop(1, 'rgba(255,220,160,0)');
         ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalCompositeOperation = 'lighter'; ctx.fillStyle = gg; ctx.fillRect(ex - r, ey - r, r * 2, r * 2); ctx.restore(); } }
     ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = o.alpha == null ? 1 : o.alpha; ctx.drawImage(S, rx, ry, rw, rh, rx, ry, rw, rh); ctx.restore();

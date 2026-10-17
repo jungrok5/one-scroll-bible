@@ -110,6 +110,12 @@ function doorLight(ctx, cam, t) {
   ctx.globalCompositeOperation = 'source-over'; ctx.setTransform(1, 0, 0, 1, 0, 0);
 }
 
+// right-to-left scripts: the picture is flipped so the light runs right to left and writes each sentence from its start
+// (GL.write reveals right-to-left text from the right); the words themselves are drawn unflipped on top
+const RTL = () => Pilot.dir === 'rtl';
+let MB; function mirror(ctx) { if (!MB) MB = Pilot.canvas(W, H); const m = MB.getContext('2d'); m.setTransform(1, 0, 0, 1, 0, 0); m.clearRect(0, 0, W, H); m.drawImage(ctx.canvas, 0, 0);
+  ctx.save(); ctx.setTransform(-1, 0, 0, 1, W, 0); ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over'; ctx.drawImage(MB, 0, 0); ctx.restore(); }
+
 // ---------- the prayer, written by the light ----------
 function prayer(ctx, cam, t, nib) {
   const pb = ss(PB + .2, PB + 1.8, t) * (1 - ss(C0 - .6, C0 + .4, t));
@@ -118,7 +124,7 @@ function prayer(ctx, cam, t, nib) {
     const p = clamp((nib.x - q.L) / (q.R - q.L)), tot = q.ws.reduce((s, v) => s + v, 0), n = q.rows.length;
     q.rows.forEach((r, j) => {
       const before = q.ws.slice(0, j).reduce((s, v) => s + v, 0), pr = clamp((p * tot - before) / q.ws[j]);
-      const wy = -44 - (n - 1 - j) * TS * 1.62, [sx, sy] = GL.toScreen(cam, W, H, q.C, wy), size = TS * cam.z;
+      const wy = -44 - (n - 1 - j) * TS * 1.62, [sx0, sy] = GL.toScreen(cam, W, H, q.C, wy), sx = RTL() ? W - sx0 : sx0, size = TS * cam.z;
       if (size < 6) return;
       GL.write(ctx, r, sx, sy, pr, { size, weight: 600, color: k === S.length - 1 && j === 1 ? '#f4c76e' : '#f8eedb', alpha: a, glow: 'rgba(255,170,70,.5)', glowBlur: 24 * cam.z, spark: pb > 0 ? 0 : 1, feather: size * 1.3 });
     });
@@ -132,6 +138,7 @@ function draw(ctx, t) {
   GL.drawLine(ctx, line, t, cam, W, H, { base: 4.6, zmin: .9 });
   GL.nib(ctx, line, t, cam, W, H);
   GL.vignette(ctx, W, H, .74);
+  if (RTL()) mirror(ctx);
   prayer(ctx, cam, t, nib);
 
   // through the doorway: a breath of warm light hides the cut

@@ -374,10 +374,12 @@ function verseBlock(x, t, b) {
   const { x: cx, w } = L.col, size = b.size, lh = size * 1.42, isz = lh * 1.72, y1 = b.y + size, a = b.alpha;
   if (a <= 0) return; x.save(); x.globalAlpha = a;
   const head = s => { const c = Pilot.chars(s), r = c.slice(1); while (r.length && /^\s$/.test(r[0])) r.shift(); return [c[0], r]; };   // initial + the rest (no space after it)
-  const [init, l1] = head(Pilot.tr(b.v[0])), l2 = Pilot.chars(Pilot.tr(b.v[1]));
+  // a line that opens with kana (Japanese) gets no gilded initial — an illuminated あ reads oddly; write it whole
+  const noInit = /^[\u3040-\u30ff]/.test(Pilot.tr(b.v[0]));
+  const [init, l1] = noInit ? ['', Pilot.chars(Pilot.tr(b.v[0]))] : head(Pilot.tr(b.v[0])), l2 = Pilot.chars(Pilot.tr(b.v[1]));
   const kn = head(b.v[0])[1].length + Pilot.chars(b.v[1]).length, rate = b.rate * Math.max(1, (l1.length + l2.length) / kn);   // same writing time as the Korean
-  initial(x, init, cx, b.y - size * .1, isz, clamp((t - b.t0) / .5));
-  const tx = cx + isz + size * .45;
+  if (!noInit) initial(x, init, cx, b.y - size * .1, isz, clamp((t - b.t0) / .5));
+  const tx = noInit ? cx : cx + isz + size * .45;
   let fs = size; if (Pilot.lang !== 'ko') { const mw = Math.max(lineWidth(x, l1, size), lineWidth(x, l2, size)), av = cx + w - tx - 12; if (mw > av) fs = size * av / mw; }   // a longer translation: write smaller
   const e1 = writeLine(x, l1, tx, y1, fs, b.t0 + .4, t, rate), e2 = writeLine(x, l2, tx, y1 + lh, fs, b.t0 + .4 + l1.length / rate + .2, t, rate);
   const done = clamp((t - b.t0 - .6 - (l1.length + l2.length) / rate) / .6);

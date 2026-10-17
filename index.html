@@ -342,6 +342,10 @@
   .hero h1{font-family:var(--serif);font-weight:700;line-height:1.28;font-size:clamp(2rem,8.5vw,3.75rem);margin:0 0 18px}
   .hero h1 .em{color:var(--accent)}
   .hero p{color:var(--muted);font-size:clamp(0.9375rem,4.2vw,1.125rem);max-width:30ch;margin:0 auto}
+  .film-cta{display:inline-flex;align-items:center;gap:9px;margin-top:26px;padding:11px 20px 11px 16px;border:1px solid var(--accent);border-radius:999px;color:var(--ink);text-decoration:none;font-size:0.9375rem;background:var(--card)}
+  .film-cta:hover{background:rgba(233,185,73,.14)}
+  .film-cta .pl{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--accent);color:#14110b;font-size:0.6875rem;padding-left:2px}
+  .film-cta[hidden]{display:none}
   .scrollcue{margin-top:44px;color:var(--muted);font-size:0.8125rem;animation:bob 1.8s ease-in-out infinite}
   .scrollcue span{display:block;font-size:1.375rem;margin-top:4px}
   @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(8px)}}
@@ -644,7 +648,7 @@
 
     /* 화면 전용 UI·장식 숨김 */
     #progress,#topbar,#langPanel,#map,#toTop,#toast,#shareSheet,#qrModal,
-    .scrollcue,.ep-share,.share-cta,.r-read,#readBtn,.bgsky,.glow,.ep-icon{ display:none !important; }
+    .scrollcue,.film-cta,.ep-share,.share-cta,.r-read,#readBtn,.bgsky,.glow,.ep-icon{ display:none !important; }
 
     /* 스크롤 전 숨겨지는 리빌/애니메이션 콘텐츠 강제 노출 */
     .reveal,.txt,[class*="reveal"]{ opacity:1 !important; transform:none !important; visibility:visible !important; }
@@ -699,6 +703,7 @@
   <div class="kicker" data-i18n="hero.kicker">창조에서 교회까지</div>
   <h1 data-i18n="hero.title">한눈에 보는<br><span class="em">성경 이야기</span></h1>
   <p data-i18n="hero.sub">스크롤 한 번으로, 성경의 큰 줄거리와 예수님이 오신 이유를 만나보세요.</p>
+  <a class="film-cta" id="filmCta" href="/film/"><span class="pl" aria-hidden="true">▶</span>13분 영상으로 보기</a>
   <div class="scrollcue" data-i18n="hero.cue">아래로 스크롤<span>↓</span></div>
 </header>
 
@@ -1498,6 +1503,8 @@ function doApply(pack,code){
   /* 영어 페이지는 CC BY 제외: ESV 약관이 "CC 라이선스로 공개되는 출판물에 인용 불가"를 명시하므로,
      ESV를 인용하는 영어 콘텐츠만 CC 제공 대상에서 뺀다(다른 언어의 자체 작성 글은 CC BY 4.0 유지). */
   (function(){var cc=document.getElementById('ccLink'); if(cc) cc.hidden=(code==='en');})();
+  /* 영상(/film/)은 아직 한국어판만 있음 — 다른 언어에서는 버튼을 숨긴다 */
+  (function(){var f=document.getElementById('filmCta'); if(f) f.hidden=(code!=='ko');})();
   // 구절-링크 데이터는 각 팩에 동봉(index.html 에는 ko/en 만 인라인). 언어 전환 시 등록.
   if(pack.yv!=null) YV[code]=pack.yv;   /* OBS 모드 등 books 없는 팩도 yv 등록 */
   if(pack.books){ BOOKS[code]=pack.books; if(pack.bookopt)BOOKOPT[code]=pack.bookopt; delete _reCache[code]; }

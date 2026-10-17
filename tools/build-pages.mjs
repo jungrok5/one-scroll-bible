@@ -400,6 +400,8 @@ function makePage(m){
   // 영어만 CC BY 제외 — ESV 약관이 "CC 라이선스로 공개되는 출판물에 인용 불가"를 명시하므로,
   // ESV를 인용하는 영어 페이지는 CC 제공 대상에서 뺀다(런타임 토글과 별개로 무JS 크롤러용으로도 숨김).
   if (m.code === 'en') h = h.replace('<span id="ccLink">', '<span id="ccLink" hidden>');
+  // 영상(/film/)은 한국어판만 — 다른 언어 페이지에서는 버튼을 정적으로도 숨김.
+  h = h.replace('<a class="film-cta" id="filmCta"', '<a class="film-cta" id="filmCta" hidden');
 
   // ---- 본문 프리렌더 (JS 없이도 현지어 본문 노출 → 검색/AI 크롤러 대응) ----
   const pack = packFor(m.code);

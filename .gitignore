@@ -15,6 +15,7 @@
 !/about/
 !/maps/
 !/motion/
+!/film/
 
 # /about/ and /maps/ are committed SOURCE (ko root + assets), but their
 # per-language sub-pages (/about/<code>/, /maps/<code>/) are generated → ignore.

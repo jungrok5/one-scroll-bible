@@ -1,0 +1,28 @@
+{ "duration": 36,
+  "music": [
+    { "id": "m1", "at": 0.9, "len": 13.1, "db": -3, "fin": 0.3, "fout": 0.4,
+      "prompt": "Solo cello alone, one unbroken melodic line in D major, intimate close-miked, no other instruments: begins with a single soft sustained note, then a slow lyrical phrase that rises and turns gently like a line being drawn, three arching phrases, warm and hopeful, tempo around 66 BPM, ends hanging on an unresolved note" },
+    { "id": "m2", "at": 15.6, "len": 15.0, "db": -3, "fin": 0.2, "fout": 1.5,
+      "prompt": "Solo cello continuing a single lyrical melodic line in D major, picking up after a pause, slowly climbing in register with growing warmth and quiet resolve, the highest and longest note about 8 seconds in, then descending calmly; a few soft harp harmonics as the only second colour; no drums, no pads" },
+    { "id": "m3", "at": 30.4, "len": 5.6, "db": -4, "fin": 0.3, "fout": 2.0,
+      "prompt": "Solo cello holding one long warm low D note with a soft harp harmonic chord above it, gentle, resolving, fading to silence" }
+  ],
+  "sfx": [
+    { "id": "s1", "at": 0.85, "len": 1.0, "db": -8, "loop": false,
+      "prompt": "Single soft tap of a pen nib touching thick paper, close and quiet" },
+    { "id": "s2", "at": 1.2, "len": 8.6, "db": -14, "loop": false,
+      "prompt": "Fine pen gliding smoothly on thick textured paper, continuous soft scratch that speeds up and slows down, very close and quiet" },
+    { "id": "s3", "at": 9.5, "len": 2.5, "db": -12, "loop": false,
+      "prompt": "Soft warm glassy shimmer swelling gently, like light filling a shape" },
+    { "id": "s4", "at": 14.0, "len": 1.6, "db": -12, "loop": false,
+      "prompt": "Tiny drop of ink swelling at a pen tip, faint soft wet sound, almost silent" },
+    { "id": "s5", "at": 18.2, "len": 6.0, "db": -16, "loop": false,
+      "prompt": "Fine sand trickling softly through an hourglass, close and delicate" },
+    { "id": "s6", "at": 19.6, "len": 4.6, "db": -14, "loop": false,
+      "prompt": "Pen drawing slow deliberate straight lines on thick paper, soft scratches with small pauses at the corners" },
+    { "id": "s7", "at": 24.0, "len": 4.0, "db": -8, "loop": false,
+      "prompt": "One clear high bell-like chime with a long gentle luminous reverb tail" },
+    { "id": "s8", "at": 30.4, "len": 4.2, "db": -16, "loop": false,
+      "prompt": "Pen gliding fast in one long straight stroke across paper, light airy scratch fading away" }
+  ],
+  "ducks": [ { "from": 14.0, "to": 15.6, "db": -30 } ] }

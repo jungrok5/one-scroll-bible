@@ -1,0 +1,28 @@
+{ "duration": 57,
+  "music": [
+    { "id": "m1", "at": 0, "len": 8.6, "db": -5, "fin": 1.2, "fout": 0.6,
+      "prompt": "Solo cello alone, very soft and intimate, a slow tender melody in D major returning like a remembered theme, unhurried, rising gently toward one warm long note at the end, close-miked, no other instruments" },
+    { "id": "m2", "at": 8.8, "len": 39.2, "db": -7, "fin": 1.0, "fout": 1.2,
+      "prompt": "Very quiet prayerful solo piano in D major with a few soft sustained cello notes underneath, slow rubato around 56 BPM, six short gentle phrases each followed by a long calm pause, tender, hopeful, humble, lots of space and silence, a gentle warm swell in the last six seconds, no drums, no pads, no choir" },
+    { "id": "m3", "at": 48.0, "len": 9.0, "db": -4, "fin": 0.6, "fout": 2.2,
+      "prompt": "Solo cello and soft piano together resolving a simple tender melody in D major, warm and peaceful, slow, the cello rising to one long high note then settling on a held major chord that fades to silence" }
+  ],
+  "sfx": [
+    { "id": "s1", "at": 0.6, "len": 6.0, "db": -16, "loop": false,
+      "prompt": "Fine pen gliding slowly on thick paper, soft continuous scratch, close and quiet, slowing at the end" },
+    { "id": "s2", "at": 6.3, "len": 2.6, "db": -12, "loop": false,
+      "prompt": "Soft warm low swell of air and light, like a door opening onto a bright warm room" },
+    { "id": "s3", "at": 7.6, "len": 2.0, "db": -12, "loop": false,
+      "prompt": "Gentle airy whoosh into brightness, soft and warm, fading out" },
+    { "id": "s4", "src": "pen", "at": 14.33, "len": 2.0, "db": -20, "loop": false,
+      "prompt": "Fine pen writing one slow line on paper, soft continuous scratch, very quiet and close" },
+    { "id": "s5", "src": "pen", "at": 20.94, "len": 2.4, "db": -20, "loop": false,
+      "prompt": "Fine pen writing one slow line on paper, soft continuous scratch, very quiet and close" },
+    { "id": "s6", "src": "pen", "at": 28.0, "len": 2.3, "db": -20, "loop": false,
+      "prompt": "Fine pen writing one slow line on paper, soft continuous scratch, very quiet and close" },
+    { "id": "s7", "src": "pen", "at": 34.97, "len": 2.3, "db": -20, "loop": false,
+      "prompt": "Fine pen writing one slow line on paper, soft continuous scratch, very quiet and close" },
+    { "id": "s8", "src": "pen", "at": 41.94, "len": 1.6, "db": -20, "loop": false,
+      "prompt": "Fine pen writing one short slow line on paper, soft scratch, very quiet and close" }
+  ],
+  "ducks": [] }

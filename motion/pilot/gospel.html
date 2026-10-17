@@ -64,7 +64,7 @@ function wrap(ctx, s, maxW, f) { ctx.font = f; const out = []; let cur = '';
   for (const w of s.split(' ')) { const n = cur ? cur + ' ' + w : w; if (ctx.measureText(n).width > maxW && cur) { out.push(cur); cur = w; } else cur = n; } if (cur) out.push(cur); return out; }
 // an artifact layer: clipped to the zone, rises in / leaves upward like the words
 function stage(ctx, t, tin, tout, fn) { const e = tin == null ? 1 : snap(t, tin), q = tout == null ? 0 : snap(t, tout, B * .6); if (e <= 0 || q >= 1) return;
-  ctx.save(); ctx.beginPath(); ctx.rect(Z.x0 - 4, Z.y0 - 60, Z.w + 8, Z.h + 120); ctx.clip(); ctx.translate(0, -q * (Z.h + 140)); fn(); ctx.restore(); }
+  ctx.save(); ctx.beginPath(); ctx.rect(Z.x0 - 4, Z.y0 - 44, Z.w + 8, Z.h + 104); ctx.clip(); ctx.translate(0, -q * (Z.h + 140)); fn(); ctx.restore(); }
 // knife cut: a thin line crosses, then the element collapses to its midline
 function knife(ctx, t, t0, x0, y0, x1, y1) { const k = clamp((t - t0) / (B * .4)), f = 1 - clamp((t - t0 - B * .9) / (B * .3)); if (k <= 0 || f <= 0) return;
   ctx.strokeStyle = INK; ctx.lineWidth = 2; ctx.globalAlpha = f; ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(lerp(x0, x1, k), lerp(y0, y1, k)); ctx.stroke(); ctx.globalAlpha = 1; }

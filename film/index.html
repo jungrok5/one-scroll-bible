@@ -156,7 +156,7 @@
     var back = 1 - front;
     if (loadedIdx[back] === i && frames[back].dataset.o === ori) front = back; else load(front, i);
     cur = i; frames[front].classList.add('on'); frames[1 - front].classList.remove('on');
-    au.src = '/film/s/' + S[i][0] + '.m4a'; au.currentTime = 0; clk = 0;
+    srcT = performance.now(); au.src = '/film/s/' + S[i][0] + '.m4a'; au.currentTime = 0; clk = 0;
     if (i + 1 < S.length) { load(1 - front, i + 1); pre.src = '/film/s/' + S[i + 1][0] + '.m4a'; }
     $('now').textContent = pad(i) + ' ' + S[i][1];
     ch.querySelectorAll('button').forEach(function (b, k) { b.setAttribute('aria-current', String(k === i)); });
@@ -184,6 +184,9 @@
   var idleT; function poke() { document.body.classList.remove('idle'); clearTimeout(idleT); idleT = setTimeout(function () { if (playing) document.body.classList.add('idle'); }, 2500); }
   addEventListener('pointermove', poke); addEventListener('touchstart', poke, { passive: true });
   au.addEventListener('ended', function () { if (playing) go(cur + 1); });
+  // 소리가 이 재생기 밖에서 멈추거나(잠금화면·알림·이어폰·시스템) 시작되면 재생 상태를 그대로 따른다 — 다시 틀지 않음
+  au.addEventListener('pause', function () { if (selfPause) { selfPause = false; return; } if (performance.now() - srcT < 400) return; if (playing && !au.ended) setPlay(false); });
+  au.addEventListener('play', function () { if (!playing && started) { playing = true; $('pp').textContent = '❚❚'; $('pp').setAttribute('aria-label', '일시정지'); } });
   // 화면을 떠나면(탭 전환·앱 전환·브라우저 닫기) 소리도 멈춘다 — 그림은 숨은 탭에서 멈추므로 소리만 남지 않게
   document.addEventListener('visibilitychange', function () { if (document.hidden && playing) setPlay(false); });
   addEventListener('pagehide', function () { setPlay(false); try { au.removeAttribute('src'); au.load(); } catch (e) {} });
@@ -198,7 +201,7 @@
   } catch (e) {} }
 
   if (fpsOn) { fpsEl = document.createElement('div'); fpsEl.className = 'fps'; stage.appendChild(fpsEl); }
-  var fc = 0, fl = performance.now(), lastSeek = -1, pending = false, clk = 0, lastNow = performance.now();
+  var selfPause = false, srcT = 0, fc = 0, fl = performance.now(), lastSeek = -1, pending = false, clk = 0, lastNow = performance.now();
   (function loop(now) {
     if (cur >= 0) {
       var ok = ready(front), dt = Math.min(.5, (now - lastNow) / 1000);
@@ -211,7 +214,7 @@
         if (!playing && au.paused && au.readyState < 1) t = 0;
         if (t !== lastSeek || !playing) { try { frames[front].contentWindow.seek(t); } catch (e) {} lastSeek = t; fc++; }
         if (playing && au.paused && !au.ended && !pending) { pending = true; au.play().catch(function () {}).then(function () { pending = false; }); }
-      } else if (playing && !au.paused) au.pause();   // keep sound in step with the picture while a scene loads
+      } else if (playing && !au.paused) { selfPause = true; au.pause(); }   // keep sound in step with the picture while a scene loads
       $('prog').style.width = (100 * t / S[cur][2]) + '%';
       $('tm').textContent = fmt(START[cur] + t) + ' / ' + fmt(TOTAL);
     }

@@ -1,0 +1,10 @@
+{ "duration": 27,
+  "music": [ { "id": "m1", "src": "m_rise", "at": 7.5, "len": 19.5, "db": -2, "fout": 1.2 } ],
+  "sfx": [ { "id": "wind", "src": "wind", "at": 0, "len": 8, "db": -26, "fin": 1.5, "fout": 1, "loop": true },
+           { "id": "stone", "src": "stone", "at": 5.3, "len": 3, "db": -1 },
+           { "id": "shimmer", "src": "shimmer", "at": 7.25, "len": 3, "db": -3 },
+           { "id": "knife1", "src": "knife", "at": 8.2, "len": 4, "db": -10, "fout": 0.5 },
+           { "id": "knife2", "src": "knife", "at": 10.6, "len": 4, "db": -13, "fout": 0.5 },
+           { "id": "knife3", "src": "knife", "at": 12.8, "len": 4, "db": -16, "fout": 0.5 },
+           { "id": "birds", "src": "birds", "at": 10, "len": 16, "db": -15, "fin": 2, "fout": 2, "loop": true } ],
+  "ducks": [] }

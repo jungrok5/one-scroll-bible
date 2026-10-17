@@ -161,7 +161,7 @@ function draw(ctx, t) {
   ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H); fx.setTransform(1, 0, 0, 1, 0, 0); fx.clearRect(0, 0, W, H);
   if (t < S.A[1]) {
     shotA(t); film(ctx, t, frame);
-    text(ctx, '11  ·  십자가', 110, 120, { align: 'left', size: 30, weight: 600, color: '#e8e8e8', alpha: win(t, .6, 5, 1, 1), ls: 4 });
+    text(ctx, '12  ·  십자가', 110, 120, { align: 'left', size: 30, weight: 600, color: '#e8e8e8', alpha: win(t, .6, 5, 1, 1), ls: 4 });
     const v = win(t, 4.6, S.A[1] - .1, 1.2, .5);
     text(ctx, '“해가 빛을 잃고 온 땅에 어둠이 임하여”', W / 2, H - 140, { size: 46, weight: 600, color: '#f0f0f0', alpha: v, shadow: 'rgba(0,0,0,.9)', shadowBlur: 20 });
     text(ctx, '누가복음 23:44 (개역개정)', W / 2, H - 86, { size: 22, font: "'Noto Sans KR',sans-serif", color: '#bbb', alpha: v * .9, ls: 2 });
@@ -190,7 +190,26 @@ function draw(ctx, t) {
   }
 }
 
-Pilot.run({ W, H, dur: DUR, audio: 'cross.m4a', fonts: ["600 40px 'Noto Serif KR'", "400 20px 'Noto Sans KR'"],
+// ---------- portrait: same frames, centred on the hill / the cross; words re-laid for 9:16 ----------
+const V = Pilot.ori === 'v';
+const WRAP = { '“해가 빛을 잃고 온 땅에 어둠이 임하여”': '“해가 빛을 잃고\n온 땅에 어둠이 임하여”',
+  '“그가 찔림은 우리의 허물 때문이요”': '“그가 찔림은\n우리의 허물 때문이요”', '“그가 상함은 우리의 죄악 때문이라”': '“그가 상함은\n우리의 죄악 때문이라”',
+  '“그가 채찍에 맞으므로 우리는 나음을 받았도다”': '“그가 채찍에 맞으므로\n우리는 나음을 받았도다”' };
+function mapV(s, x, y, o) {
+  if (o.align === 'left') return { x: 80, y: 210 };
+  if (y === H - 140 || y === H - 150) return { s: WRAP[s] || s, x: 540, y: 1480 };
+  if (y === H - 86 || y === H - 94) return { x: 540, y: 1640 };
+  if (y === 190) return { x: 540, y: 330 };
+  if (y === 290) return { x: 540, y: 460 };
+  if (y === H / 2 + 20) return { x: 540, y: 980, o: { size: 88 } };
+  if (y === H / 2 + 100) return { x: 540, y: 1070 };
+  return { x, y };
+}
+function frameOut(ctx, t) {
+  if (!V) return draw(ctx, t);
+  Pilot.reframe(ctx, t, draw, t < S.A[1] ? lerp(1000, 1260, eio(t / 9)) : 960, mapV, 1);
+}
+Pilot.run({ W: Pilot.W, H: Pilot.H, dur: DUR, audio: 'cross.m4a', fonts: ["600 40px 'Noto Serif KR'", "400 20px 'Noto Sans KR'"],
   init: async () => {
     frame = canvas(W, H); fx = frame.getContext('2d');
     for (let i = 0; i < 8; i++) grains.push(speckle(960, 540, 70, 100 + i, .5));
@@ -209,7 +228,7 @@ Pilot.run({ W, H, dur: DUR, audio: 'cross.m4a', fonts: ["600 40px 'Noto Serif KR
         x.strokeStyle = `rgb(${v},${v},${v})`; x.globalAlpha = .5; x.lineWidth = 2 + rr() * 5; x.lineCap = 'round'; x.beginPath(); x.moveTo(px, py); x.lineTo(px + Math.cos(a) * l, py + Math.sin(a) * l); x.stroke(); }
       x.globalAlpha = 1; x.globalCompositeOperation = 'overlay'; x.drawImage(speckle(W, H, 20, 3), 0, 0); }
   },
-  draw });
+  draw: frameOut });
 </script>
 </body>
 </html>

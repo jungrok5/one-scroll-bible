@@ -189,7 +189,7 @@ function draw(ctx, t) {
   // words
   text(ctx, '03  ·  족장 시대', 110, 120, { align: 'left', size: 30, weight: 600, color: '#f6e6c4', alpha: win(t, .8, 6.5, 1.2, 1.2), ls: 4, shadow: 'rgba(40,20,60,.6)' });
   text(ctx, '약 BC 2000  ·  창세기 12–50', 110, 166, { align: 'left', size: 22, font: "'Noto Sans KR',sans-serif", color: '#e8d6c0', alpha: win(t, 1.3, 6.5, 1.2, 1.2) * .85, ls: 2 });
-  const v1 = win(t, 17.4, 22.2, 1.4, 1), v2 = win(t, 21.6, DUR + 1, 1.4, 1);
+  const v1 = win(t, 17.4, 21.8, 1.4, .7), v2 = win(t, 21.8, DUR + 1, 1.2, 1);
   text(ctx, '“하늘을 우러러 뭇별을 셀 수 있나 보라”', W / 2, 300, { size: 50, weight: 600, color: '#fbf1dc', alpha: v1, shadow: 'rgba(10,10,30,.8)', shadowBlur: 24 });
   text(ctx, '“네 자손이 이와 같으리라”', W / 2, 300, { size: 54, weight: 600, color: '#fbf1dc', alpha: v2, shadow: 'rgba(10,10,30,.8)', shadowBlur: 24 });
   text(ctx, '창세기 15:5 (개역개정)', W / 2, 360, { size: 22, font: "'Noto Sans KR',sans-serif", color: '#d9cbe6', alpha: Math.max(v1, v2) * .85, ls: 2 });
@@ -199,9 +199,23 @@ function draw(ctx, t) {
   if (fade > 0) { ctx.fillStyle = `rgba(12,10,22,${clamp(fade)})`; ctx.fillRect(0, 0, W, H); }
 }
 
-Pilot.run({ W, H, dur: DUR, audio: 'patriarch.m4a', fonts: ["600 40px 'Noto Serif KR'", "400 20px 'Noto Sans KR'"],
+// ---------- portrait: same world, framed around Abraham; words re-laid for 9:16 ----------
+const V = Pilot.ori === 'v';
+const WRAP = { '“하늘을 우러러 뭇별을 셀 수 있나 보라”': '“하늘을 우러러\n뭇별을 셀 수 있나 보라”' };
+function mapV(s, x, y, o) {
+  if (o.align === 'left') return { x: 80, y: y < 140 ? 210 : 256 };
+  if (y === 300) return { s: WRAP[s] || s, x: 540, y: s in WRAP ? 330 : 370 };
+  if (y === 360) return { x: 540, y: 490 };
+  return { x, y };
+}
+function frame(ctx, t) {
+  if (!V) return draw(ctx, t);
+  const walk = clamp(t / 12.2), ax = lerp(820, 1606, eio(walk) * .15 + walk * .85), camX = lerp(40, 760, eio(clamp((t - .5) / 13)));
+  Pilot.reframe(ctx, t, draw, lerp(ax - camX + 80, 1010, ss(9, 14, t)), mapV, 1 - ss(DUR - 1.2, DUR, t));
+}
+Pilot.run({ W: Pilot.W, H: Pilot.H, dur: DUR, audio: 'patriarch.m4a', fonts: ["600 40px 'Noto Serif KR'", "400 20px 'Noto Sans KR'"],
   init: async () => { paper = speckle(W, H, 60, 9, .7); plain = buildPlain(); buttes = buildButtes(); clouds = buildClouds(); buildStars(); },
-  draw });
+  draw: frame });
 </script>
 </body>
 </html>

@@ -1,0 +1,5 @@
+{ "duration": 26,
+  "music": [ { "id": "m1", "src": "m_patriarch", "at": 0, "len": 26, "db": -2, "fin": 0.5, "fout": 1.5 } ],
+  "sfx": [ { "id": "wind", "src": "wind", "at": 0, "len": 26, "db": -13, "fin": 1.5, "fout": 2, "loop": true },
+           { "id": "crickets", "src": "crickets", "at": 11, "len": 15, "db": -21, "fin": 3, "fout": 2, "loop": true } ],
+  "ducks": [] }

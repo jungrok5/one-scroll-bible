@@ -158,7 +158,7 @@ function draw(ctx, t) {
   const vg = ctx.createRadialGradient(W / 2, H / 2, H * .5, W / 2, H / 2, H * 1.05); vg.addColorStop(0, 'rgba(20,16,12,0)'); vg.addColorStop(1, 'rgba(20,16,12,.45)'); ctx.fillStyle = vg; ctx.fillRect(0, 0, W, H);
 
   // words: plain serif in a calm plane (the sky)
-  text(ctx, '12  ·  부활', 110, 120, { align: 'left', size: 30, weight: 600, color: '#f4efe6', alpha: win(t, 1, 5.2, 1, 1), ls: 4, shadow: 'rgba(0,0,0,.6)' });
+  text(ctx, '13  ·  부활', 110, 120, { align: 'left', size: 30, weight: 600, color: '#f4efe6', alpha: win(t, 1, 5.2, 1, 1), ls: 4, shadow: 'rgba(0,0,0,.6)' });
   const a1 = win(t, 11.2, 16.4, 1.2, .8), a2 = win(t, 16, DUR - .3, 1.2, 1.2), st = { size: 54, weight: 600, color: '#fffaf0', shadow: 'rgba(60,40,30,.75)', shadowBlur: 22 };
   text(ctx, '“그가 여기 계시지 않고”', W / 2, 190, { ...st, alpha: a1 });
   text(ctx, '“그가 말씀 하시던 대로 살아나셨느니라”', W / 2, 190, { ...st, alpha: a2 });
@@ -166,7 +166,20 @@ function draw(ctx, t) {
   const f = 1 - ss(0, 1.6, t) + ss(DUR - 1, DUR, t); if (f > 0) { ctx.fillStyle = `rgba(10,8,6,${clamp(f)})`; ctx.fillRect(0, 0, W, H); }
 }
 
-Pilot.run({ W, H, dur: DUR, audio: 'rise.m4a', fonts: ["600 40px 'Noto Serif KR'", "400 20px 'Noto Sans KR'"],
+// ---------- portrait: framed on the tomb and the stone; words re-laid for 9:16 ----------
+const V = Pilot.ori === 'v';
+const WRAP = { '“그가 말씀 하시던 대로 살아나셨느니라”': '“그가 말씀 하시던 대로\n살아나셨느니라”' };
+function mapV(s, x, y, o) {
+  if (o.align === 'left') return { x: 80, y: 210 };
+  if (y === 190) return { s: WRAP[s] || s, x: 540, y: s in WRAP ? 320 : 360 };
+  if (y === 248) return { x: 540, y: 470 };
+  return { x, y };
+}
+function frame(ctx, t) {
+  if (!V) return draw(ctx, t);
+  Pilot.reframe(ctx, t, draw, lerp(780, 930, ss(5, 9, t)), mapV, 1 - ss(DUR - 1, DUR, t));
+}
+Pilot.run({ W: Pilot.W, H: Pilot.H, dur: DUR, audio: 'rise.m4a', fonts: ["600 40px 'Noto Serif KR'", "400 20px 'Noto Sans KR'"],
   init: async () => {
     const ref = buildRef(); buildGroups(); buildStrokes(ref); buildStone();
     greyImg = canvas(W, H); colImg = canvas(W, H); const gx = greyImg.getContext('2d'), cx = colImg.getContext('2d');
@@ -177,7 +190,7 @@ Pilot.run({ W, H, dur: DUR, audio: 'rise.m4a', fonts: ["600 40px 'Noto Serif KR'
     strokes = strokes.concat(fl); strokes.forEach(s => s.path || (s.path = knifePath(s))); strokes.sort((a, b) => a.rt - b.rt);
     mask = canvas(W, H); mx = mask.getContext('2d'); tmp = canvas(W, H); tx = tmp.getContext('2d');
   },
-  draw });
+  draw: frame });
 </script>
 </body>
 </html>

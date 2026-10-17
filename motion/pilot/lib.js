@@ -3,6 +3,9 @@
    (with controls + synced audio) and is recorded frame by frame by motion/render.mjs (?render=1). */
 (function () {
   const P = {};
+  // orientation: ?o=v → portrait 1080×1920, otherwise landscape 1920×1080. Scenes read P.ori / P.W / P.H.
+  P.ori = /[?&]o=v/.test(location.search) ? 'v' : 'h';
+  P.W = P.ori === 'v' ? 1080 : 1920; P.H = P.ori === 'v' ? 1920 : 1080;
   P.clamp = (x, a = 0, b = 1) => (x < a ? a : x > b ? b : x);
   P.lerp = (a, b, k) => a + (b - a) * k;
   P.ss = (a, b, x) => { const k = P.clamp((x - a) / (b - a)); return k * k * (3 - 2 * k); };
@@ -31,8 +34,10 @@
     for (let i = 0; i < w * h; i++) { const v = 128 + (r() - .5) * 2 * amp; d.data[i * 4] = d.data[i * 4 + 1] = d.data[i * 4 + 2] = v; d.data[i * 4 + 3] = 255; }
     x.putImageData(d, 0, 0); if (blur) { const c2 = P.canvas(w, h), x2 = c2.getContext('2d'); x2.filter = `blur(${blur}px)`; x2.drawImage(c, 0, 0); return c2; } return c; };
 
-  // multi-line text; lines split on \n
+  // multi-line text; lines split on \n.  While P.reframe renders a landscape world, text calls are queued and re-laid for portrait.
+  let Q = null;
   P.text = (ctx, s, x, y, o = {}) => {
+    if (Q) { Q.push([s, x, y, o]); return; }
     const size = o.size || 44, lh = size * (o.lh || 1.55), lines = String(s).split('\n');
     ctx.save(); ctx.globalAlpha = o.alpha == null ? 1 : o.alpha; ctx.font = `${o.weight || 400} ${size}px ${o.font || "'Noto Serif KR',serif"}`;
     ctx.textAlign = o.align || 'center'; ctx.textBaseline = 'alphabetic';
@@ -41,6 +46,19 @@
     ctx.fillStyle = o.color || '#f3ece0';
     lines.forEach((l, i) => ctx.fillText(l, x, y + i * lh));
     ctx.restore();
+  };
+
+  // Portrait from a scene authored at 1920×1080: re-render the world 1.78× larger (crisp vectors) and crop a 1080-wide
+  // window centred on world-x `cx`; queued text is re-laid by mapText(s,x,y,o) → {s?,x,y,o?} (return null to drop).
+  P.reframe = (ctx, t, drawWorld, cx, mapText, textFade = 1) => {
+    const k = 1920 / 1080;
+    if (!P._rf) { P._rf = P.canvas(Math.ceil(1920 * k), 1920); P._rx = P._rf.getContext('2d'); }
+    const x = P._rx; x.setTransform(k, 0, 0, k, 0, 0); x.globalAlpha = 1; x.globalCompositeOperation = 'source-over'; x.filter = 'none'; x.clearRect(0, 0, 1920, 1080);
+    Q = []; let q; try { x.save(); drawWorld(x, t); x.restore(); } finally { q = Q; Q = null; }
+    cx = P.clamp(cx, 540 / k, 1920 - 540 / k);
+    ctx.fillStyle = '#000'; ctx.fillRect(0, 0, 1080, 1920); ctx.drawImage(P._rf, Math.round(540 - cx * k), 0);
+    for (const [str, tx, ty, o] of q) { const m = mapText(str, tx, ty, o); if (!m) continue;
+      P.text(ctx, m.s == null ? str : m.s, m.x, m.y, { ...o, ...(m.o || {}), alpha: (o.alpha == null ? 1 : o.alpha) * textFade }); }
   };
 
   // ---------------- harness ----------------

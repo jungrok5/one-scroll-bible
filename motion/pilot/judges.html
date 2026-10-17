@@ -154,7 +154,7 @@ function card(g, lines, cite, kind, a, shake = 0) {
       g.beginPath(); g.moveTo(cx, cy + sy * 50); g.lineTo(cx + sx * 25, cy + sy * 50); g.lineTo(cx + sx * 25, cy + sy * 25); g.lineTo(cx + sx * 50, cy + sy * 25); g.lineTo(cx + sx * 50, cy); g.stroke();
       for (let k = 0; k < 5; k++) { const an = (sx > 0 ? 0 : Math.PI) + (sy > 0 ? 1 : -1) * (k * Math.PI / 10) * (sx > 0 ? 1 : -1); g.beginPath(); g.moveTo(cx + sx * 25, cy + sy * 25); g.lineTo(cx + sx * 25 + Math.cos(an) * 46 * sx * sx, cy + sy * 25 + Math.sin(an) * 46); g.stroke(); } }
     g.beginPath(); g.moveTo(FW / 2 - 120, FH - m - 70); g.lineTo(FW / 2 + 120, FH - m - 70); g.stroke(); g.beginPath(); g.arc(FW / 2, FH - m - 70, 6, 0, 6.283); g.fill(); }
-  g.restore(); lines = lines.map(Pilot.tr);   // measure the translated lines (Korean: unchanged)
+  g.restore(); lines = lines.flatMap(l => Pilot.tr(l).split('\n'));   // measure the translated lines; a translation may break into more lines (Korean: unchanged)
   let vs = V ? 82 : 64; g.font = `600 ${vs}px 'Noto Serif KR'`; g.letterSpacing = '2px'; const mw = Math.max(...lines.map(l => g.measureText(l).width)); g.letterSpacing = '0px'; if (mw > 1180) vs = Math.floor(vs * 1180 / mw);
   const cs = V ? 34 : 27, lh = vs * 1.55, y0 = FH / 2 - (lines.length - 1) * lh / 2 + vs * .32 - (cite ? 30 : 0);
   const dx = shake ? (noise(a * 40, 3) - .5) * shake : 0;

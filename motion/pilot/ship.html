@@ -143,7 +143,7 @@ function signArt(x) {      // 300×230: a wooden sign — 심판의 항구
   shape(x, RR(10, 14, 280, 96, 12), '#8a6240', '#6e4c30');
   x.textAlign = 'center'; x.fillStyle = '#f8ecd4'; const lines = tr('심판의 항구').split('\n'), f = n => `700 ${n}px ${SANS}`;
   if (lines.length === 1) { x.font = f(fitSize(x, f, 40, lines, 248)); x.fillText(lines[0], 150, 77); }
-  else { const fs = fitSize(x, f, 34, lines, 248); x.font = f(fs); lines.forEach((l, i) => x.fillText(l, 150, 62 + (i - (lines.length - 1) / 2) * fs * 1.12 + fs * .36)); }
+  else { const fs = fitSize(x, f, 37, lines, 248); x.font = f(fs); lines.forEach((l, i) => x.fillText(l, 150, 62 + (i - (lines.length - 1) / 2) * fs * 1.12 + fs * .36)); }
 }
 function sunArt(x) {       // 240×320: a sun on a stick (a pull-tab)
   shape(x, RR(110, 170, 20, 150, 4), '#9a7046', '#7a5432', 4);

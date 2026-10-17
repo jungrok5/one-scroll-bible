@@ -38,13 +38,19 @@ const TEND = SLOT[SLOT.length - 1];             // 아멘 starts to fade
 const PB = TEND - .4, V0 = TEND, V1 = V0 + 5.0, C0 = V1 - .2, DUR = Math.round((C0 + 4.0) * 10) / 10;   // pull-back · 요 1:12 · end card
 const TS = V ? 48 : 54, TSTYLE = { size: TS, weight: 600 };
 let line, S = [], crossP;
+// site text (respond.sub), the key word in gold: translate the sentence and the word, then find the word in it
+let INVITE;
+const invite = () => { const s = Pilot.tr('이 사랑은 정보가 아니라 초대입니다.'), w = Pilot.tr('초대'), i = s.indexOf(w), c = '#f3e7cf';
+  return i < 0 ? [[s, c]] : [[s.slice(0, i), c], [w, '#f4c76e'], [s.slice(i + w.length), c]]; };
 
 function build() {
   // lay out the sentences along the horizon
   const maxW = (V ? .86 : .78) * W; let x = 3400;
   PRAYER.forEach((rows, k) => {
-    const whole = rows.join(' '), ww = GL.measure(whole, TSTYLE), r = ww <= maxW ? [whole] : rows, ws = r.map(q => GL.measure(q, TSTYLE)), wm = Math.max(...ws);
-    S.push({ rows: r, ws, w: wm, L: x, R: x + wm, C: x + wm / 2, chars: whole.length, s: SLOT[k], e: SLOT[k + 1] });
+    // translated as a whole sentence, and as its two-row break (key = the Korean rows joined by \n); timing stays the Korean's
+    const ko = rows.join(' '), whole = Pilot.tr(ko), split = Pilot.tr(rows.join('\n')).split('\n');
+    const ww = GL.measure(whole, TSTYLE), r = ww <= maxW ? [whole] : split, ws = r.map(q => GL.measure(q, TSTYLE)), wm = Math.max(...ws);
+    S.push({ rows: r, ws, w: wm, L: x, R: x + wm, C: x + wm / 2, chars: ko.length, s: SLOT[k], e: SLOT[k + 1] });
     x += wm + (V ? 520 : 460);
   });
   const p = new GL.Path();
@@ -134,8 +140,7 @@ function draw(ctx, t) {
   text(ctx, '20  ·  초대', V ? 72 : 110, V ? 170 : 120, { align: 'left', size: 30, weight: 600, color: '#efe2c8', alpha: win(t, .6, 5.2, 1, 1), ls: 4 });
   // site text (respond.sub): the invitation
   const ia = 1 - ss(7.0, 7.8, t), iy = V ? H - 340 : H - 120;
-  GL.write(ctx, '', W / 2, iy, clamp((t - 2.4) / 1.6), { size: V ? 46 : 46, weight: 600, alpha: ia, glow: 'rgba(0,0,0,.9)', glowBlur: 18,
-    parts: [['이 사랑은 정보가 아니라 ', '#f3e7cf'], ['초대', '#f4c76e'], ['입니다.', '#f3e7cf']] });
+  GL.write(ctx, '', W / 2, iy, clamp((t - 2.4) / 1.6), { size: V ? 46 : 46, weight: 600, alpha: ia, glow: 'rgba(0,0,0,.9)', glowBlur: 18, parts: INVITE });
 
   // 요 1:12, over the whole line
   const va = win(t, V0, V1, 1.0, .9), vy = V ? 520 : 250, vs = V ? 46 : 48;
@@ -156,7 +161,7 @@ function draw(ctx, t) {
 
 Pilot.run({ W, H, dur: DUR, fonts: ["600 40px 'Noto Serif KR'", "900 40px 'Noto Serif KR'", "400 20px 'Noto Sans KR'", "300 20px 'Noto Sans KR'"],
   init: async () => {
-    build(); GL.init(W, H, [-2400, -4800, S[S.length - 1].R + 4200, 3400]);
+    INVITE = invite(); build(); GL.init(W, H, [-2400, -4800, S[S.length - 1].R + 4200, 3400]);
     crossP = new Path2D(); [[-18, -120], [-18, -370], [-118, -370], [-118, -404], [-18, -404], [-18, -480], [18, -480], [18, -404], [118, -404], [118, -370], [18, -370], [18, -120]]
       .forEach((q, i) => i ? crossP.lineTo(q[0], q[1]) : crossP.moveTo(q[0], q[1])); crossP.closePath();
   },

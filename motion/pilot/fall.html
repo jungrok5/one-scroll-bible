@@ -139,7 +139,7 @@ function buildSeal() {
   const word = Pilot.tr('언약'), ch = Pilot.chars(word), lines = word.includes('\n') ? word.split('\n') : ch.length <= 4 ? ch : [word];
   let fs = 46; const wd = Math.max(...lines.map(l => x.measureText(l).width)); if (wd > s - 26) fs *= (s - 26) / wd; fs = Math.min(fs, (s - 14) / (lines.length * 1.1));
   if (fs !== 46) x.font = `900 ${fs}px 'Noto Serif KR'`;
-  const step = s * .42 * fs / 46; lines.forEach((l, i) => x.fillText(l, s / 2, s * .51 + (i - (lines.length - 1) / 2) * step));
+  const step = fs === 46 ? s * .42 : fs * 1.2; lines.forEach((l, i) => x.fillText(l, s / 2, s * .51 + (i - (lines.length - 1) / 2) * step));
   for (let i = 0; i < 260; i++) { x.globalAlpha = .2 + r() * .6; x.fillRect(r() * s, r() * s, 1 + r() * 2.2, 1 + r() * 2.2); }   // ink-paste speckle
   x.globalAlpha = 1; return c;
 }

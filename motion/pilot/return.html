@@ -254,7 +254,9 @@ function draw(ctx, t) {
 // ---------- UI: chapter label, narration subtitles, a framed dialogue box ----------
 function subtitle(ctx, lines, cite, a) {
   if (a <= 0) return; lines = String(Pilot.tr(lines.join('\n'))).split('\n');   // translate the whole line, then lay out its lines
-  const size = V ? 46 : 44, lh = size * 1.5, n = lines.length, y0 = V ? H - 330 - (n - 1) * lh : H - 150 - (n - 1) * lh;
+  let size = V ? 46 : 44;
+  if (Pilot.lang !== 'ko') { ctx.save(); ctx.font = `600 ${size}px 'Noto Serif KR'`; const wd = Math.max(...lines.map(l => ctx.measureText(l).width)); ctx.restore(); if (wd > W - 120) size *= (W - 120) / wd; }   // one size for every line
+  const lh = size * 1.5, n = lines.length, y0 = V ? H - 330 - (n - 1) * lh : H - 150 - (n - 1) * lh;
   const bg = ctx.createLinearGradient(0, y0 - size * 1.6, 0, y0 + (n - 1) * lh + 90); bg.addColorStop(0, 'rgba(6,6,14,0)'); bg.addColorStop(.4, `rgba(6,6,14,${.55 * a})`); bg.addColorStop(1, 'rgba(6,6,14,0)');
   ctx.fillStyle = bg; ctx.fillRect(0, y0 - size * 1.6, W, (n - 1) * lh + size * 1.6 + 100);
   lines.forEach((s, i) => text(ctx, s, W / 2, y0 + i * lh, { size, weight: 600, color: '#f6efe0', alpha: a, shadow: 'rgba(0,0,0,.8)', shadowBlur: 14 }));

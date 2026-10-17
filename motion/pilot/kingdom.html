@@ -505,8 +505,8 @@ function shotKing(x, t) {
     const pa = win(t, 34.5, DUR - .2, .9, 1.2);
     if (pa > 0) {
       const sz = V ? 44 : 40;
-      text(c, '“영원한 왕위”는 다윗의 자손으로 오신', L.col.x, L.col.top + kSize * .9, { align: 'left', size: sz, weight: 600, color: INK, alpha: pa });
-      text(c, '예수님 안에서 성취됩니다', L.col.x, L.col.top + kSize * .9 + sz * 1.6, { align: 'left', size: sz, weight: 600, color: INK, alpha: pa });
+      text(c, '“영원한 왕위”는 다윗의 자손으로 오신', L.col.x, L.col.top + kSize * .9, { align: 'left', size: sz, weight: 600, color: INK, alpha: pa, maxW: L.col.w + 40 });
+      text(c, '예수님 안에서 성취됩니다', L.col.x, L.col.top + kSize * .9 + sz * 1.6, { align: 'left', size: sz, weight: 600, color: INK, alpha: pa, maxW: L.col.w + 40 });
       const th = eio(clamp((t - 35.2) / 2.6)), ty = L.col.top + kSize * .9 + sz * 2.6;
       if (th > 0) { c.save(); c.globalAlpha = pa; gold(c, rectP(L.col.x, ty, (W + 40 - L.col.x) * th, 5), { lw: 0 });
         const hx = L.col.x + (W + 40 - L.col.x) * th, hg = c.createRadialGradient(hx, ty + 2, 0, hx, ty + 2, 40); hg.addColorStop(0, 'rgba(255,246,200,.9)'); hg.addColorStop(1, 'rgba(255,230,160,0)');

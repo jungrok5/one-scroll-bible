@@ -241,6 +241,7 @@ function tableOn(t) {
 }
 function reTag(x, o, c) {   // a quiet tag: these are drawn reconstructions, not photographs
   x.save(); x.translate(o.x, o.y); x.rotate(o.r); x.translate(o === O.pilate ? o.w / 2 - 58 : -o.w / 2 + (o === O.scroll ? 84 : 66), o.h / 2 - (o === O.pilate ? 98 : o === O.scroll ? 40 : 30));
+  if (!KO && o === O.pilate) x.translate(-18, -48);   // a longer tag would cover the mount's label strip: lift it into the slide's dark lower margin
   x.font = `400 15px ${SANS}`; x.textAlign = 'center'; x.fillStyle = c; x.strokeStyle = c; x.lineWidth = 1; const s = tr('재현');
   const bw = KO ? 42 : Math.max(42, x.measureText(s).width + 16), dx = (o === O.pilate ? -1 : 1) * (bw - 42) / 2;   // a longer tag grows inward from its anchored edge
   x.fillText(s, dx, 5); x.strokeRect(dx - bw / 2, -12, bw, 23); x.restore();
@@ -332,10 +333,11 @@ function compare(ctx, t, cam) {
   const tag = (o, lx, ly, up, l1, l2, t0) => { const k = ss(t0, t0 + .5, t); if (k <= 0) return; l1 = tr(l1); l2 = tr(l2); const [px, py] = W2S(o, lx, ly), ey = py + (up ? -1 : 1) * 46 * eo(k);
     ctx.globalAlpha = a * k; ctx.strokeStyle = SIG; ctx.fillStyle = SIG; ctx.lineWidth = 2.5; ctx.beginPath(); ctx.arc(px, py, 8, 0, 6.3); ctx.stroke(); ctx.beginPath(); ctx.arc(px, py, 3, 0, 6.3); ctx.fill();
     ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(px, ey); ctx.stroke();
-    const ty = up ? ey - 12 : ey + 36; ctx.textAlign = 'left'; ctx.fillStyle = INK; ctx.font = `400 ${V ? 25 : 26}px ${MONO}`; ctx.fillText(l1, px + 14, ty - (up ? 34 : 0)); ctx.font = `500 ${V ? 28 : 28}px ${SANS}`; ctx.fillText(l2, px + 14, ty + (up ? 0 : 36)); };
+    const ty = up ? ey - 12 : ey + 36; ctx.textAlign = 'left'; ctx.fillStyle = INK; ctx.font = `400 ${V ? 25 : 26}px ${MONO}`; const w1 = ctx.measureText(l1).width; ctx.fillText(l1, px + 14, ty - (up ? 34 : 0)); ctx.font = `500 ${V ? 28 : 28}px ${SANS}`; ctx.fillText(l2, px + 14, ty + (up ? 0 : 36));
+    return px + 14 + Math.max(w1, ctx.measureText(l2).width); };
   const ox = V ? -260 : -560;
   tag(O.scroll, ox, -O.scroll.h / 2 + 18, true, '1947 · 사해문서', '기원전 이사야서 사본', 20.0);
-  tag(O.codex, ox, -O.codex.h / 2 + 16, true, '약 1,000년 뒤', '표준 사본', 20.4);
+  const tagR = tag(O.codex, ox, -O.codex.h / 2 + 16, true, '약 1,000년 뒤', '표준 사본', 20.4);
   // the sweep: right to left, a hairline joins each word of Isa 53:5 to the same word below
   const R1 = tex.scroll.rows[1].words, R2 = tex.codex.rows[1].words, sw = clamp((t - 20.8) / 2.8);
   const xr = lerp(O.scroll.w / 2 - 40, -O.scroll.w / 2 + 40, sw);
@@ -348,7 +350,8 @@ function compare(ctx, t, cam) {
   // verdict
   const vk = clamp((t - 23.5) / .5);
   const [, gy] = [0, H / 2 + ((O.scroll.y + O.scroll.h / 2 + O.codex.y - O.codex.h / 2) / 2 - cam.y) * cam.z];
-  plateText(ctx, V ? W / 2 : W / 2 + 190, V ? H / 2 + (O.codex.y + O.codex.h / 2 - cam.y) * cam.z + 36 : gy - 89, { label: '이사야 53:5', big: '거의 글자 그대로 일치', src: '사해문서 이사야 사본  ↔  표준 사본', a: win(t, 23.5, 25.4, .3, .5), align: 'center', grow: vk, w: V ? 700 : 760, bs: 50 });
+  let pcx = V ? W / 2 : W / 2 + 190; if (!KO && !V && tagR) pcx = Math.min(W - 400, Math.max(pcx, tagR + 30 + 380));   // keep a longer tag clear of the plate
+  plateText(ctx, pcx, V ? H / 2 + (O.codex.y + O.codex.h / 2 - cam.y) * cam.z + 36 : gy - 89, { label: '이사야 53:5', big: '거의 글자 그대로 일치', src: '사해문서 이사야 사본  ↔  표준 사본', a: win(t, 23.5, 25.4, .3, .5), align: 'center', grow: vk, w: V ? 700 : 760, bs: 50 });
 }
 
 // ---------- frame ----------

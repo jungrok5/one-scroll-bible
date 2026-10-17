@@ -422,14 +422,14 @@ function sea(g, t) {
 
 // ---------------- text ----------------
 function placard(ctx, lines, cite, a, cy) {
-  if (a <= .01) return; lines = lines.map(Pilot.tr);   // measure the translated lines (Korean: unchanged)
+  if (a <= .01) return; lines = lines.flatMap(l => Pilot.tr(l).split('\n'));   // measure the translated lines; a translation may break into more lines (Korean: unchanged)
   const vs = V ? 48 : 46, cs = V ? 24 : 22; ctx.save(); ctx.font = `600 ${vs}px 'Noto Serif KR'`;
   const tw = Math.max(...lines.map(l => ctx.measureText(l).width)), w = Math.min(W - 40, tw + 150), h = lines.length * vs * 1.5 + (cite ? 64 : 34), y = cy - h / 2 + (1 - eo(a)) * 18;
   ctx.globalAlpha = a; ctx.fillStyle = 'rgba(22,12,6,.9)'; ctx.shadowColor = 'rgba(0,0,0,.6)'; ctx.shadowBlur = 24; ctx.fillRect(W / 2 - w / 2, y, w, h); ctx.shadowBlur = 0;
   ctx.strokeStyle = 'rgba(206,162,90,.85)'; ctx.lineWidth = 1.4; ctx.strokeRect(W / 2 - w / 2 + 8, y + 8, w - 16, h - 16);
   ctx.fillStyle = 'rgba(206,162,90,.9)'; for (const sx of [W / 2 - w / 2 + 30, W / 2 + w / 2 - 30]) { ctx.save(); ctx.translate(sx, y + h / 2); ctx.rotate(Math.PI / 4); ctx.fillRect(-6, -6, 12, 12); ctx.restore(); }
   ctx.restore();
-  lines.forEach((l, i) => text(ctx, l, W / 2, y + 30 + vs + i * vs * 1.5 - (cite ? 0 : 6), { size: vs, weight: 600, color: '#f6e7c6', alpha: a, shadow: 'rgba(0,0,0,.8)', shadowBlur: 10, maxW: w - 100 }));
+  lines.forEach((l, i) => text(ctx, l, W / 2, y + 30 + vs + i * vs * 1.5 - (cite ? 0 : 6), { size: vs, weight: 600, color: '#f6e7c6', alpha: a, shadow: 'rgba(0,0,0,.8)', shadowBlur: 10, maxW: w - 130 }));
   if (cite) text(ctx, cite, W / 2, y + h - 26, { size: cs, font: "'Noto Sans KR',sans-serif", color: '#d6bd8e', alpha: a * .95, ls: 2 });
 }
 

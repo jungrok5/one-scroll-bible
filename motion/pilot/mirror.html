@@ -49,7 +49,7 @@ const SHAPES = [
     x.beginPath(); x.moveTo(214, 318); x.quadraticCurveTo(168, 252, 204, 240); x.quadraticCurveTo(226, 272, 240, 234); x.quadraticCurveTo(256, 270, 276, 236);
     x.quadraticCurveTo(302, 266, 318, 246); x.quadraticCurveTo(332, 282, 296, 318); x.closePath(); x.fill();
     rr(x, 372, 540, 84, 110, 8); rr(x, 452, 470, 86, 180, 8); el(x, 496, 462, 46, 13); el(x, 414, 532, 44, 12);
-    carve(x, () => { x.font = `700 170px ${SANS}`; x.textAlign = 'center'; x.fillText('₩', 252, 596);
+    carve(x, () => { x.font = `700 170px ${SANS}`; x.textAlign = 'center'; x.fillText(Pilot.L['₩'] || '₩', 252, 596);   // the currency sign is the language's ("₩" key in the language file)
       for (let y = 556; y < 648; y += 17) x.fillRect(372, y, 84, 3.5); for (let y = 486; y < 648; y += 17) x.fillRect(452, y, 86, 3.5); });
     slab(x);
   },
@@ -211,7 +211,8 @@ function plate(ctx, t, st) {  // brass plate on the plinth, its word changing wi
   const pw = 250 * K, ph = 56 * K, px = W / 2 - pw / 2, py = BASEY + 62 * K, L = light(t);
   const g = ctx.createLinearGradient(0, py, 0, py + ph); g.addColorStop(0, '#6b4d22'); g.addColorStop(.45, '#a7803f'); g.addColorStop(1, '#4e3716');
   ctx.save(); ctx.globalAlpha = .55 + .45 * L.I; ctx.fillStyle = g; ctx.fillRect(px, py, pw, ph); ctx.strokeStyle = 'rgba(255,230,170,.35)'; ctx.lineWidth = 1.5; ctx.strokeRect(px + 4, py + 4, pw - 8, ph - 8);
-  const lab = (s, a) => { if (a <= 0 || !s) return; ctx.globalAlpha = a; ctx.font = `600 ${30 * K}px ${SERIF}`; ctx.textAlign = 'center'; ctx.letterSpacing = 6 * K + 'px';
+  const lab = (s, a) => { if (a <= 0 || !s) return; s = Pilot.tr(s); ctx.globalAlpha = a; ctx.font = `600 ${30 * K}px ${SERIF}`; ctx.textAlign = 'center'; ctx.letterSpacing = 6 * K + 'px';
+    if (Pilot.lang !== 'ko') { const w = ctx.measureText(s).width, mw = pw - 28 * K; if (w > mw) { ctx.font = `600 ${30 * K * mw / w}px ${SERIF}`; ctx.letterSpacing = 6 * K * mw / w + 'px'; } }   // fit the plate
     ctx.fillStyle = 'rgba(255,240,200,.35)'; ctx.fillText(s, W / 2, py + ph * .69 + 1.5); ctx.fillStyle = '#2a1a08'; ctx.fillText(s, W / 2, py + ph * .69); };
   if (st.A === st.B) lab(LABEL[st.A], 1); else { const u = st.k; lab(LABEL[st.A], 1 - ss(.2, .5, u)); lab(LABEL[st.B], ss(.5, .8, u)); }
   ctx.restore();
@@ -253,12 +254,15 @@ const CYC = ['우상을 섬김', '→', '고난', '→', '부르짖음', '→', 
 function cycle(ctx, t) {
   const a = win(t, 1.6, 9.2, .8, 1); if (a <= 0) return;
   const size = V ? 42 : 40, rows = V ? [[0, 5], [5, 9]] : [[0, 9]], y0 = V ? H - 262 : H - 96, lh = size * 1.8;
+  const CY = CYC.map(Pilot.tr);   // each step translated (the site's own cycle words)
   ctx.save(); ctx.font = `600 ${size}px ${SERIF}`; ctx.textBaseline = 'alphabetic'; ctx.textAlign = 'left'; ctx.shadowColor = 'rgba(0,0,0,.9)'; ctx.shadowBlur = 16;
-  rows.forEach(([i0, i1], ri) => { const gap = size * .45, ws = []; for (let i = i0; i < i1; i++) ws.push(ctx.measureText(CYC[i]).width);
+  rows.forEach(([i0, i1], ri) => { let gap = size * .45, ws = []; for (let i = i0; i < i1; i++) ws.push(ctx.measureText(CY[i]).width);
+    if (Pilot.lang !== 'ko') { const tot = ws.reduce((p, q) => p + q, 0) + gap * (ws.length - 1), mw = W - 120; if (tot > mw) { const k = mw / tot;   // fit the row
+      ctx.font = `600 ${size * k}px ${SERIF}`; gap *= k; ws = ws.map(w => w * k); } }
     let x = W / 2 - (ws.reduce((p, q) => p + q, 0) + gap * (ws.length - 1)) / 2;
     for (let i = i0; i < i1; i++) { const on = ss(CT[i], CT[i] + .45, t), cur = i + 2 < CT.length ? 1 - ss(CT[i + 2], CT[i + 2] + .5, t) : 1, arrow = CYC[i] === '→';
       const c = arrow ? [190, 150, 90] : mix([150, 128, 98], i === 6 ? [250, 248, 240] : [255, 214, 140], cur);
-      ctx.globalAlpha = a * on; ctx.fillStyle = rgb(c); ctx.fillText(CYC[i], x, y0 + ri * lh); x += ws[i - i0] + gap; } });
+      ctx.globalAlpha = a * on; ctx.fillStyle = rgb(c); ctx.fillText(CY[i], x, y0 + ri * lh); x += ws[i - i0] + gap; } ctx.font = `600 ${size}px ${SERIF}`; });
   ctx.restore();
 }
 function draw(ctx, t) {

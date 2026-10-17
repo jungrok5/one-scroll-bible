@@ -115,8 +115,12 @@ function plate1(lt) {
   // carved labels under the halves
   const la = clamp((lt - 5.0) / .4);
   if (la > 0) { const d = sp * (V ? 70 : 120), y = C1.cy + (V ? 210 : 230) * C1.s + 70;
-    panel(C1.cx - d - 70 * C1.s, y, V ? 46 : 44, '북이스라엘'); panel(C1.cx + d * 1.1 + 245 * C1.s, y + 20, V ? 46 : 44, '남유다');
-    carveText('북이스라엘', C1.cx - d - 70 * C1.s, y, V ? 46 : 44, la); carveText('남유다', C1.cx + d * 1.1 + 245 * C1.s, y + 20, V ? 46 : 44, la); }
+    let xl = C1.cx - d - 70 * C1.s, xr = C1.cx + d * 1.1 + 245 * C1.s, z = V ? 46 : 44;
+    if (Pilot.lang !== 'ko') {   // longer names: the two panels meet at the midpoint and grow outward, shrinking only if the plate edge needs it
+      mx.save(); mx.font = `900 ${z}px 'Noto Serif KR'`; mx.letterSpacing = (z * .08) + 'px'; const wa = mx.measureText(Pilot.tr('북이스라엘')).width, wb = mx.measureText(Pilot.tr('남유다')).width; mx.restore();
+      const m = (xl + xr) / 2, k = Math.min(1, (m - 82) / wa, (PW - m - 82) / wb); z *= k; xl = m - 6 - (wa * k + 60) / 2; xr = m + 6 + (wb * k + 60) / 2; }
+    panel(xl, y, z, '북이스라엘'); panel(xr, y + 20, z, '남유다');
+    carveText('북이스라엘', xl, y, z, la); carveText('남유다', xr, y + 20, z, la); }
   // carved chapter label (first ~5 s)
   const ca = 1 - clamp((lt - 5.6) / .2);
   if (lt > .5 && ca > 0) { const lx = V ? 60 : 50, ly = V ? 90 : 70, lk = clamp((lt - .5) / .6);

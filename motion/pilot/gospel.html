@@ -57,9 +57,16 @@ function rise(ctx, t, tin, tout, x, y, size, fn, clipW = W) {
   ctx.save(); ctx.beginPath(); ctx.rect(x - 40, y - size * 1.08, clipW, size * 1.42); ctx.clip();
   ctx.translate(0, (1 - e) * size * 1.4 - q * size * 1.4); fn(); ctx.restore();
 }
-function word(ctx, s, x, y, o) { ctx.font = o.font; ctx.fillStyle = o.color || INK; ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic'; ctx.letterSpacing = (o.ls || 0) + 'px';
-  let dx = 0; if (o.optical) { const m = ctx.measureText(s); dx = -m.actualBoundingBoxLeft; }   // optically flush left
-  ctx.fillText(s, x - dx, y); ctx.letterSpacing = '0px'; }
+// every word goes through Pilot.tr (o.raw: already translated). Other languages only: a translation is shrunk into its room
+// (o.maxW, or o.box = [w, h] for a block of \n-broken lines; o.up stacks the lines upward so the last baseline sits at y)
+function word(ctx, s, x, y, o) { if (!o.raw) s = Pilot.tr(s); ctx.font = o.font; ctx.fillStyle = o.color || INK; ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic'; ctx.letterSpacing = (o.ls || 0) + 'px';
+  const lines = String(s).split('\n'), fm = /^(\d+) ([\d.]+)px (.*)$/.exec(o.font), lh = o.lh || .92; let size = +fm[2];
+  if (Pilot.lang !== 'ko' && (o.maxW || o.box)) { const wd = Math.max(...lines.map(l => ctx.measureText(l).width));
+    let k = Math.min(1, (o.box ? o.box[0] : o.maxW) / wd); if (o.box) k = Math.min(k, o.box[1] / (size * (.74 + (lines.length - 1) * lh)));
+    if (k < 1) { size *= k; ctx.font = `${fm[1]} ${size}px ${fm[3]}`; ctx.letterSpacing = (o.ls || 0) * k + 'px'; } }
+  lines.forEach((l, i) => { let dx = 0; if (o.optical) { const m = ctx.measureText(l); dx = -m.actualBoundingBoxLeft; }   // optically flush left
+    ctx.fillText(l, x - dx, y + (i - (o.up ? lines.length - 1 : 0)) * size * lh); });
+  ctx.letterSpacing = '0px'; }
 function wrap(ctx, s, maxW, f) { ctx.font = f; const out = []; let cur = '';
   for (const w of s.split(' ')) { const n = cur ? cur + ' ' + w : w; if (ctx.measureText(n).width > maxW && cur) { out.push(cur); cur = w; } else cur = n; } if (cur) out.push(cur); return out; }
 // an artifact layer: clipped to the zone, rises in / leaves upward like the words
@@ -88,7 +95,7 @@ const ART = [
       for (let i = 0; i < 7; i++) { const e = snap(b * B, (1.2 + i * .3) * B), y = base - 40 - i * (base - top - 70) / 6; if (e > 0) ctx.fillRect(x + 20, y - 8, (lw - 40) * e, 16); } });
     knife(ctx, b * B, 3.3 * B, x - 60, base + 20, x + lw + 60, top - 20);
     const m = snap(b * B, 4.1 * B); if (m > 0) { ctx.fillStyle = G1; ctx.fillRect(x - 10, top, lw + 120, (base - top) * m);
-      rise(ctx, b * B, 4.5 * B, null, x + 40, base - 60, 280, () => word(ctx, '죄', x + 40, base - 60, { font: font(700, 280), optical: true })); }
+      rise(ctx, b * B, 4.5 * B, null, x + 40, base - 60, 280, () => word(ctx, '죄', x + 40, base - 60, { font: font(700, 280), optical: true, maxW: lw + 50 })); }
     rise(ctx, b * B, 4.8 * B, null, x + lw + 160, base - 6, 22, () => word(ctx, '사다리가 아니라 거울', x + lw + 160, base - 6, { font: font(400, 22) })); },
   // 03 — a stack of works, cut away; a gift is set down
   (ctx, b) => { const bw = V ? 420 : 380, bh = 62, g = 8, x = Z.x0, base = Z.y1, n = 6, k = collapse(b * B, 3.3 * B), mid = base - n * (bh + g) / 2;
@@ -101,12 +108,12 @@ const ART = [
     rise(ctx, b * B, 4.5 * B, null, x + s + 40, base - 6, 22, () => word(ctx, '거저 주시는 하나님의 선물', x + s + 40, base - 6, { font: font(400, 22) }), 420); },
   // 04 — my grey 의, covered by His
   (ctx, b) => { const s = V ? 400 : 420, x = Z.x0, base = Z.y1 - 30, gw = s * 1.02, top = base - s * .98;
-    rise(ctx, b * B, .5 * B, null, x, base, s, () => word(ctx, '의', x, base, { font: font(700, s), color: G2, optical: true }));
+    rise(ctx, b * B, .5 * B, null, x, base, s, () => word(ctx, '의', x, base, { font: font(700, s), color: G2, optical: true, box: [gw, s * .9], up: true }));
     const c = snap(b * B, 2.8 * B, B * .7); if (c > 0) { ctx.fillStyle = INK; ctx.fillRect(x - 10, top - 20, gw + 40, (s + 50) * c);
-      ctx.save(); ctx.beginPath(); ctx.rect(x - 10, top - 20, gw + 40, (s + 50) * c); ctx.clip(); word(ctx, '의', x, base, { font: font(700, s), color: PAGE, optical: true }); ctx.restore(); }
+      ctx.save(); ctx.beginPath(); ctx.rect(x - 10, top - 20, gw + 40, (s + 50) * c); ctx.clip(); word(ctx, '의', x, base, { font: font(700, s), color: PAGE, optical: true, box: [gw, s * .9], up: true }); ctx.restore(); }
     const cx2 = x + gw + 70;
-    rise(ctx, b * B, 1.2 * B, null, cx2, top + 40, 30, () => word(ctx, '내 의가 아니라', cx2, top + 40, { font: font(400, 30), color: G3 }));
-    rise(ctx, b * B, 3.5 * B, null, cx2, top + 96, 30, () => word(ctx, '그분의 의를 입는 것', cx2, top + 96, { font: font(700, 30) })); },
+    rise(ctx, b * B, 1.2 * B, null, cx2, top + 40, 30, () => word(ctx, '내 의가 아니라', cx2, top + 40, { font: font(400, 30), color: G3, maxW: W - 40 - cx2 }));
+    rise(ctx, b * B, 3.5 * B, null, cx2, top + 96, 30, () => word(ctx, '그분의 의를 입는 것', cx2, top + 96, { font: font(700, 30), maxW: W - 40 - cx2 })); },
   // 05 — 66 pointers turn toward the one red square
   (ctx, b) => { const cols = 8, rows = 9, cw = Z.w / cols, ch = Z.h / rows, cx = Z.x0 + Z.w / 2, cy = Z.y0 + Z.h / 2; let n = 0;
     const cells = []; for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) { if ((c === 3 || c === 4) && r >= 3 && r <= 5) continue; cells.push([Z.x0 + (c + .5) * cw, Z.y0 + (r + .5) * ch, r]); }
@@ -124,13 +131,14 @@ const ART = [
     for (let i = 0; i < n; i++) { const c = i % cols, r = Math.floor(i / cols), x = Z.x0 + c * (cw + g), y = y0 + r * (rh + g), tf = (.7 + 3.4 * Math.pow(i / n, .75)) * B, e = snap(b * B, tf, B * .2);
       ctx.fillStyle = G1; ctx.fillRect(x, y, cw, rh); if (e > 0) { ctx.fillStyle = INK; ctx.fillRect(x, y, cw * e + .5, rh); if (e > .5) filled++; } }
     const full = snap(b * B, 4.3 * B, B * .3); if (full > 0) { ctx.fillStyle = INK; ctx.fillRect(Z.x0, y0, Z.w, gh * full);
-      rise(ctx, b * B, 4.5 * B, null, Z.x0 + 40, y0 + gh / 2 + (V ? 54 : 50), V ? 150 : 140, () => word(ctx, '때가 찼고', Z.x0 + 40, y0 + gh / 2 + (V ? 54 : 50), { font: font(900, V ? 150 : 140, SERIF), color: PAGE, optical: true }), Z.w - 40); }
+      rise(ctx, b * B, 4.5 * B, null, Z.x0 + 40, y0 + gh / 2 + (V ? 54 : 50), V ? 150 : 140, () => word(ctx, '때가 찼고', Z.x0 + 40, y0 + gh / 2 + (V ? 54 : 50), { font: font(900, V ? 150 : 140, SERIF), color: PAGE, optical: true, maxW: Z.w - 80 }), Z.w - 40); }
     word(ctx, String(filled).padStart(2, '0') + ' / ' + n, Z.x1 - 120, y0 - 22, { font: font(400, 20), color: G3 }); },
   // 07 — “행하라” is cut; “이루어졌다” stands
   (ctx, b) => { const s = 160, x = Z.x0, y = Z.y0 + (Z.h + s * .8) / 2, k = collapse(b * B, 2.3 * B);
-    scaleY(ctx, k, y - s * .38, () => rise(ctx, b * B, .4 * B, null, x, y, s, () => word(ctx, '행하라', x, y, { font: font(700, s), optical: true })));
-    knife(ctx, b * B, 1.7 * B, x - 40, y - s * .38, x + 560, y - s * .38);
-    rise(ctx, b * B, 2.9 * B, null, x, y, s, () => word(ctx, '이루어졌다', x, y, { font: font(700, s), optical: true }));
+    scaleY(ctx, k, y - s * .38, () => rise(ctx, b * B, .4 * B, null, x, y, s, () => word(ctx, '행하라', x, y, { font: font(700, s), optical: true, maxW: Z.w })));
+    let ke = 560; if (Pilot.lang !== 'ko') { ctx.font = font(700, s); ke = Math.min(Z.w, ctx.measureText(Pilot.tr('행하라')).width) + 80; }   // the knife crosses the whole word
+    knife(ctx, b * B, 1.7 * B, x - 40, y - s * .38, x + ke, y - s * .38);
+    rise(ctx, b * B, 2.9 * B, null, x, y, s, () => word(ctx, '이루어졌다', x, y, { font: font(700, s), optical: true, maxW: Z.w }));
     rise(ctx, b * B, 3.3 * B, null, x, Z.y1 - 4, 22, () => word(ctx, '“행하라”가 아니라 “이루어졌다”', x, Z.y1 - 4, { font: font(400, 22), color: G3 })); },
 ];
 
@@ -152,10 +160,10 @@ function draw(ctx, t) {
   // chapter label + caption row
   rise(ctx, t, .4, 5.0, L.M, L.label, 26, () => word(ctx, '17  ·  복음의 핵심', L.M, L.label, { font: font(700, 26), ls: 2 }));
   const capOut = T7 + 2.8, cx = L.capCols.map(c => L.cx(c));
-  rise(ctx, t, .9, capOut, cx[0], L.cap, 20, () => word(ctx, '복음의 핵심 7가지', cx[0], L.cap, { font: font(400, 20) }));
+  rise(ctx, t, .9, capOut, cx[0], L.cap, 20, () => word(ctx, '복음의 핵심 7가지', cx[0], L.cap, { font: font(400, 20), maxW: cx[1] - cx[0] - 30 }));
   // intro: the system announces itself — a giant 7 beside a small line
-  rise(ctx, t, .7, T0 - .45, L.M, L.num[0] + (V ? 0 : 60), V ? 96 : 104, () => word(ctx, '복음의 핵심', L.M, L.num[0] + (V ? 0 : 60), { font: font(700, V ? 96 : 104), optical: true }));
-  rise(ctx, t, .95, T0 - .4, L.M, L.num[0] + (V ? 110 : 170), V ? 96 : 104, () => word(ctx, '7가지', L.M, L.num[0] + (V ? 110 : 170), { font: font(700, V ? 96 : 104), color: G3, optical: true }));
+  rise(ctx, t, .7, T0 - .45, L.M, L.num[0] + (V ? 0 : 60), V ? 96 : 104, () => word(ctx, '복음의 핵심', L.M, L.num[0] + (V ? 0 : 60), { font: font(700, V ? 96 : 104), optical: true, maxW: V ? W - 2 * L.M : 1120 }));
+  rise(ctx, t, .95, T0 - .4, L.M, L.num[0] + (V ? 110 : 170), V ? 96 : 104, () => word(ctx, '7가지', L.M, L.num[0] + (V ? 110 : 170), { font: font(700, V ? 96 : 104), color: G3, optical: true, maxW: V ? W - 2 * L.M : 1120 }));
   const big = V ? 560 : 640, by = V ? Z.y1 : Z.y1 + 40;
   rise(ctx, t, .55, T0 - .5, Z.x0 + (V ? 300 : 300), by, big, () => word(ctx, '7', Z.x0 + (V ? 300 : 300), by, { font: font(700, big), optical: true }));
 
@@ -164,10 +172,10 @@ function draw(ctx, t) {
     const s = T0 + i * ITEM, e = i < 6 ? s + 7.25 * B : T7 + 2.8; if (t < s - .1 || t > e + 1) continue;
     const c = CORE[i], lt = t - s, b = lt / B;
     rise(ctx, t, s + .05 * B, e, cx[1], L.cap, 20, () => word(ctx, `${String(i + 1).padStart(2, '0')} / 07`, cx[1], L.cap, { font: font(700, 20) }));
-    rise(ctx, t, s + .1 * B, e, cx[2], L.cap, 20, () => word(ctx, c.cap, cx[2], L.cap, { font: font(400, 20) }));
+    rise(ctx, t, s + .1 * B, e, cx[2], L.cap, 20, () => word(ctx, c.cap, cx[2], L.cap, { font: font(400, 20), maxW: W - L.M - cx[2] }));
     rise(ctx, t, s, e, L.M, L.num[0], L.num[1], () => word(ctx, String(i + 1).padStart(2, '0'), L.M, L.num[0], { font: font(700, L.num[1]), optical: true, ls: -L.num[1] * .03 }), V ? 520 : 820);
-    c.t.forEach((ln, j) => rise(ctx, t, s + (.15 + j * .12) * B, e + j * .05, L.M, L.title[0] + j * L.title[2], L.title[1], () => word(ctx, ln, L.M, L.title[0] + j * L.title[2], { font: font(700, L.title[1]) }), V ? W : 860));
-    if (c.v) { const vl = verseLines[i]; vl.forEach((ln, j) => rise(ctx, t, s + (.5 + j * .15) * B, e + .05 + j * .04, L.M, L.verse[0] + j * L.verse[2], L.verse[1], () => word(ctx, ln, L.M, L.verse[0] + j * L.verse[2], { font: font(600, L.verse[1], SERIF) })));
+    c.t.forEach((ln, j) => rise(ctx, t, s + (.15 + j * .12) * B, e + j * .05, L.M, L.title[0] + j * L.title[2], L.title[1], () => word(ctx, ln, L.M, L.title[0] + j * L.title[2], { font: font(700, L.title[1]), maxW: V ? W - 2 * L.M : 800 }), V ? W : 860));
+    if (c.v) { const vl = verseLines[i]; vl.forEach((ln, j) => rise(ctx, t, s + (.5 + j * .15) * B, e + .05 + j * .04, L.M, L.verse[0] + j * L.verse[2], L.verse[1], () => word(ctx, ln, L.M, L.verse[0] + j * L.verse[2], { font: font(600, L.verse[1], SERIF), raw: true })));
       const cy = L.verse[0] + vl.length * L.verse[2] - 8; rise(ctx, t, s + .9 * B, e + .12, L.M, cy, 22, () => word(ctx, c.ref, L.M, cy, { font: font(400, 22), color: '#55534e', ls: 1 })); }
     stage(ctx, t, s, e, () => ART[i](ctx, b));
   }
@@ -181,11 +189,11 @@ function draw(ctx, t) {
     if (vk > 0) { const up = (cr.Y + 10) * vk, dn = (H - cr.Y + 10) * vk; ctx.fillRect(cr.X - sq / 2, cr.Y - up, sq, up + dn); }
     if (hk > 0) { const a = cr.arm * hk; ctx.fillRect(cr.X - sq / 2 - a, cr.Y - sq / 2, sq + 2 * a, sq); }
     // “다 이루었다” — Scripture, in serif, the only words left on the page
-    const F = L.fin, outA = 1;
-    rise(ctx, t, T7 + 4.5, null, F.x, F.y, F.size, () => word(ctx, '다 이루었다', F.x, F.y, { font: font(900, F.size, SERIF), optical: true, ls: -F.size * .01 }), W);
+    const F = L.fin, outA = 1, fw = V ? cr.X - cr.w / 2 - F.x - 30 : W - F.x - L.M;   // other languages: room left of the cross (portrait) / to the margin
+    rise(ctx, t, T7 + 4.5, null, F.x, F.y, F.size, () => word(ctx, '다 이루었다', F.x, F.y, { font: font(900, F.size, SERIF), optical: true, ls: -F.size * .01, maxW: fw }), W);
     rise(ctx, t, T7 + 4.9, null, F.x, F.cite, 22, () => word(ctx, '요한복음 19:30 (개역개정)', F.x, F.cite, { font: font(400, 22), color: '#55534e', ls: 1 }));
     ['우리가 아직 죄인 되었을 때에', '그리스도께서 우리를 위하여 죽으심으로'].forEach((ln, j) =>
-      rise(ctx, t, T7 + 5.2 + j * .12, null, F.x, F.r[0] + j * F.r[2], F.r[1], () => word(ctx, ln, F.x, F.r[0] + j * F.r[2], { font: font(600, F.r[1], SERIF) }), W));
+      rise(ctx, t, T7 + 5.2 + j * .12, null, F.x, F.r[0] + j * F.r[2], F.r[1], () => word(ctx, ln, F.x, F.r[0] + j * F.r[2], { font: font(600, F.r[1], SERIF), maxW: fw }), W));
     rise(ctx, t, T7 + 5.6, null, F.x, F.rc, 22, () => word(ctx, '로마서 5:8 (개역개정)', F.x, F.rc, { font: font(400, 22), color: '#55534e', ls: 1 }));
   }
   // in from black, out to black
@@ -193,7 +201,7 @@ function draw(ctx, t) {
 }
 
 Pilot.run({ W, H, dur: DUR, fonts: ["700 40px 'Noto Sans KR'", "400 20px 'Noto Sans KR'", "600 40px 'Noto Serif KR'", "900 40px 'Noto Serif KR'"],
-  init: async () => { const c = Pilot.canvas(4, 4).getContext('2d'); CORE.forEach((q, i) => { verseLines[i] = q.v ? wrap(c, q.v, L.vw, font(600, L.verse[1], SERIF)) : []; }); },
+  init: async () => { const c = Pilot.canvas(4, 4).getContext('2d'); CORE.forEach((q, i) => { verseLines[i] = q.v ? wrap(c, Pilot.tr(q.v), L.vw, font(600, L.verse[1], SERIF)) : []; }); },
   draw });
 </script>
 </body>

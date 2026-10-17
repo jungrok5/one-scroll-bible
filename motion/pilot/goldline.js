@@ -162,9 +162,14 @@
   G.write = (ctx, str, x, y, prog, o = {}) => {
     if (prog <= 0 || (o.alpha != null && o.alpha <= 0)) return;
     const W = ctx.canvas.width, H = ctx.canvas.height; if (!S || S.width !== W || S.height !== H) { S = canvas(W, H); sx_ = S.getContext('2d'); }
-    const size = o.size || 44, font = `${o.weight || 600} ${size}px ${o.font || "'Noto Serif KR',serif"}`, parts = o.parts || [[str, o.color || '#f6ead2']];
+    str = Pilot.tr(str);   // other languages: the translation (o.parts are the caller's, already translated)
+    let size = o.size || 44, font = `${o.weight || 600} ${size}px ${o.font || "'Noto Serif KR',serif"}`; const parts = o.parts || [[str, o.color || '#f6ead2']];
     sx_.setTransform(1, 0, 0, 1, 0, 0); sx_.font = font; sx_.letterSpacing = (o.ls || 0) + 'px';
-    const ws = parts.map(q => sx_.measureText(q[0]).width), w = ws.reduce((a, b) => a + b, 0), left = o.align === 'left' ? x : o.align === 'right' ? x - w : x - w / 2;
+    let ws = parts.map(q => sx_.measureText(q[0]).width), w = ws.reduce((a, b) => a + b, 0);
+    if (Pilot.lang !== 'ko') {   // a translation may run longer than the Korean: shrink to fit the frame (or o.maxW)
+      const maxW = o.maxW || W - 120; if (w > maxW) { size *= maxW / w; font = `${o.weight || 600} ${size}px ${o.font || "'Noto Serif KR',serif"}`; sx_.font = font;
+        ws = parts.map(q => sx_.measureText(q[0]).width); w = ws.reduce((a, b) => a + b, 0); } }
+    const left = o.align === 'left' ? x : o.align === 'right' ? x - w : x - w / 2;
     const pad = size * 1.2, rx = left - pad, ry = y - size * 1.5, rw = w + pad * 2, rh = size * 2.3;
     sx_.clearRect(rx, ry, rw, rh); sx_.textAlign = 'left'; sx_.textBaseline = 'alphabetic';
     if (o.glow) { sx_.shadowColor = o.glow; sx_.shadowBlur = o.glowBlur || 22; }
@@ -178,7 +183,7 @@
     ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = o.alpha == null ? 1 : o.alpha; ctx.drawImage(S, rx, ry, rw, rh, rx, ry, rw, rh); ctx.restore();
     return w;
   };
-  G.measure = (str, o = {}) => { const c = canvas(4, 4).getContext('2d'); c.font = `${o.weight || 600} ${o.size || 44}px ${o.font || "'Noto Serif KR',serif"}`; c.letterSpacing = (o.ls || 0) + 'px'; return c.measureText(str).width; };
+  G.measure = (str, o = {}) => { str = Pilot.tr(str); const c = canvas(4, 4).getContext('2d'); c.font = `${o.weight || 600} ${o.size || 44}px ${o.font || "'Noto Serif KR',serif"}`; c.letterSpacing = (o.ls || 0) + 'px'; return c.measureText(str).width; };
 
   window.GoldLine = G;
 })();

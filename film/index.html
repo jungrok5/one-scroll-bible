@@ -196,10 +196,11 @@
       function legacy() { var ta = document.createElement('textarea'); ta.value = url; ta.setAttribute('readonly', ''); ta.style.cssText = 'position:fixed;left:-9999px';
         document.body.appendChild(ta); ta.select(); var ok = false; try { ok = document.execCommand('copy'); } catch (e) {} ta.remove(); if (ok) done(); else prompt('', url); }
     }
-    // phones: the share sheet (KakaoTalk, messages…); PCs: copy the link — desktop share dialogs are unreliable
-    if (navigator.share && matchMedia('(pointer: coarse)').matches)
-      navigator.share({ title: title, text: text, url: url }).then(function () { if (window.gtag) gtag('event', 'share', { method: 'native', content_type: 'film', item_id: S[i][0] }); })
-        .catch(function (e) { if (!e || e.name !== 'AbortError') copy(); });
+    // the system share sheet wherever the browser has one (phones and Windows/macOS PCs alike); if it can't open, copy the link
+    var data = { title: title, text: text, url: url };
+    if (navigator.share && (!navigator.canShare || navigator.canShare(data)))
+      navigator.share(data).then(function () { if (window.gtag) gtag('event', 'share', { method: 'native', content_type: 'film', item_id: S[i][0] }); })
+        .catch(function (e) { if (!e || e.name !== 'AbortError') { console.warn('share failed:', e); copy(); } });
     else copy();
   };
   $('prev').onclick = function () { go(Math.max(0, cur - 1), playing || cur < 0); };

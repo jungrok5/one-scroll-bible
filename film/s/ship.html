@@ -23,6 +23,9 @@ const INK = '#3b2618', SANS = "'Noto Sans KR',sans-serif", SERIF = "'Noto Serif 
 const GY = 640, FY = 930;                          // gutter and front edge of the lower page (stage y)
 const PX0 = [260, 1660], PX1 = [120, 1800];        // page x-extent at the gutter / at the front edge
 let SP = {}, grain, room, wood, seaPage, cache = {};
+const tr = Pilot.tr, KO = Pilot.lang === 'ko';
+// outside Korean: the largest font size ≤ fs at which every line fits maxW
+const fitSize = (x, f, fs, lines, maxW) => { if (KO) return fs; x.font = f(fs); const wd = Math.max(...lines.map(l => x.measureText(l).width)); return wd > maxW ? fs * maxW / wd : fs; };
 
 // ---------- easing ----------
 const back = u => { u = clamp(u); const c1 = 1.9, c3 = c1 + 1; return 1 + c3 * Math.pow(u - 1, 3) + c1 * Math.pow(u - 1, 2); };
@@ -138,7 +141,9 @@ function cliffArt(x) {     // 620×320: dark rocks and an unlit tower
 function signArt(x) {      // 300×230: a wooden sign — 심판의 항구
   shape(x, RR(138, 90, 24, 140, 4), '#6b4a2e', '#52381f');
   shape(x, RR(10, 14, 280, 96, 12), '#8a6240', '#6e4c30');
-  x.font = `700 40px ${SANS}`; x.textAlign = 'center'; x.fillStyle = '#f8ecd4'; x.fillText('심판의 항구', 150, 77);
+  x.textAlign = 'center'; x.fillStyle = '#f8ecd4'; const lines = tr('심판의 항구').split('\n'), f = n => `700 ${n}px ${SANS}`;
+  if (lines.length === 1) { x.font = f(fitSize(x, f, 40, lines, 248)); x.fillText(lines[0], 150, 77); }
+  else { const fs = fitSize(x, f, 37, lines, 248); x.font = f(fs); lines.forEach((l, i) => x.fillText(l, 150, 62 + (i - (lines.length - 1) / 2) * fs * 1.12 + fs * .36)); }
 }
 function sunArt(x) {       // 240×320: a sun on a stick (a pull-tab)
   shape(x, RR(110, 170, 20, 150, 4), '#9a7046', '#7a5432', 4);
@@ -151,10 +156,11 @@ function bannerArt(x) {    // 480×130: 하나님의 자녀
   shape(x, P(p => { p.moveTo(0, 40); p.lineTo(60, 40); p.lineTo(60, 116); p.lineTo(0, 116); p.lineTo(22, 78); p.closePath(); }), '#e4c27a', '#c9a35a', 4);
   shape(x, P(p => { p.moveTo(480, 40); p.lineTo(420, 40); p.lineTo(420, 116); p.lineTo(480, 116); p.lineTo(458, 78); p.closePath(); }), '#e4c27a', '#c9a35a', 4);
   shape(x, RR(40, 14, 400, 92, 10), '#fff4da', '#f0dcb0');
-  x.font = `600 50px ${SERIF}`; x.textAlign = 'center'; x.fillStyle = '#7a4a10'; x.fillText('하나님의 자녀', 240, 78);
+  const s = tr('하나님의 자녀'), f = n => `600 ${n}px ${SERIF}`; x.font = f(fitSize(x, f, 50, [s], 360)); x.textAlign = 'center'; x.fillStyle = '#7a4a10'; x.fillText(s, 240, 78);
 }
-function qSignArt(x, w, h, lines, fs) {
+function qSignArt(x, w, h, s, fs) {     // s: the whole question, lines split on \n (translated as one string)
   shape(x, RR(0, 0, w, h, 16), '#f6ead0', '#e2d0a8');
+  const lines = tr(s).split('\n'); fs = fitSize(x, n => `700 ${n}px ${SANS}`, fs, lines, w - 70); if (!KO) fs = Math.min(fs, (h - 40) / (lines.length * 1.45 - .45));
   x.font = `700 ${fs}px ${SANS}`; x.textAlign = 'center'; x.fillStyle = '#4a2c14'; lines.forEach((l, i) => x.fillText(l, w / 2, h / 2 + (i - (lines.length - 1) / 2) * fs * 1.45 + fs * .36));
 }
 function heartArt(x) { shape(x, P(p => { p.roundRect(0, 0, 90, 70, 18); p.moveTo(30, 66); p.lineTo(22, 92); p.lineTo(48, 66); }), '#ffffff', '#eae4da', 4);
@@ -293,7 +299,8 @@ const CAM = V ? [[0, 960, 560, 1.3], [5.0, 960, 560, 1.3], [6.4, 860, 640, 1.5],
 function cam(t) { let i = 0; while (i < CAM.length - 2 && t > CAM[i + 1][0]) i++; const a = CAM[i], b = CAM[i + 1], u = eio(clamp((t - a[0]) / (b[0] - a[0])));
   return [lerp(a[1], b[1], u), lerp(a[2], b[2], u), lerp(a[3], b[3], u)]; }
 function say(ctx, s, a) {     // narration: cream with a thick dark-brown outline
-  if (a <= 0) return; const lines = s.split('\n'), fs = V ? 40 : 42, lh = fs * 1.5, y0 = V ? H - 150 - (lines.length - 1) * lh : H - 66 - (lines.length - 1) * lh;
+  if (a <= 0) return; s = tr(s); const lines = s.split('\n'), lh = (V ? 40 : 42) * 1.5, y0 = V ? H - 150 - (lines.length - 1) * lh : H - 66 - (lines.length - 1) * lh;
+  const fs = fitSize(ctx, n => `700 ${n}px ${SANS}`, V ? 40 : 42, lines, W - 100);
   ctx.save(); ctx.globalAlpha = a; ctx.font = `700 ${fs}px ${SANS}`; ctx.textAlign = 'center'; ctx.lineJoin = 'round';
   lines.forEach((l, i) => { ctx.shadowColor = 'rgba(30,15,5,.6)'; ctx.shadowBlur = 12; ctx.lineWidth = 9; ctx.strokeStyle = '#3b2210'; ctx.strokeText(l, W / 2, y0 + i * lh); ctx.shadowBlur = 0; ctx.fillStyle = '#fff4dc'; ctx.fillText(l, W / 2, y0 + i * lh); });
   ctx.restore();
@@ -333,7 +340,7 @@ Pilot.run({ W, H, dur: DUR, audio: 'ship.m4a', fonts: ["600 40px 'Noto Serif KR'
     SP.sky = cut(300, 120, x => cloudArt(x, 300, 120, ['#fbf7ee', '#e6ddcc'], 8), 6);
     SP.wave1 = cut(2060, 110, x => waveArt(x, 2060, ['#62b9c8', '#4aa1b2'])); SP.wave2 = cut(1840, 110, x => waveArt(x, 1840, ['#3f9fb5', '#2f8199'])); SP.wave3 = cut(1720, 110, x => waveArt(x, 1720, ['#2f8aa3', '#21718a']));
     SP.sun = cut(240, 320, sunArt); SP.banner = cut(480, 130, bannerArt); SP.heart = cut(90, 94, heartArt, 6); SP.star = cut(88, 88, starArt, 6);
-    SP.q = V ? cut(720, 260, x => qSignArt(x, 720, 260, ['예수님 안 믿어도,', '그냥 착하게 살면', '되는 것 아닌가요?'], 50)) : cut(900, 230, x => qSignArt(x, 900, 230, ['예수님 안 믿어도,', '그냥 착하게 살면 되는 것 아닌가요?'], 52));
+    SP.q = V ? cut(720, 260, x => qSignArt(x, 720, 260, '예수님 안 믿어도,\n그냥 착하게 살면\n되는 것 아닌가요?', 50)) : cut(900, 230, x => qSignArt(x, 900, 230, '예수님 안 믿어도,\n그냥 착하게 살면 되는 것 아닌가요?', 52));
     // warm the pose cache so the first frames don't stall
     for (const p of ['stand', 'reach', 'jump', 'joy']) { kidSprite(p, 0, false); kidSprite(p, 0, true); }
   },

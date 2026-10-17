@@ -193,7 +193,7 @@ function draw(ctx, t) {
   text(ctx, '그러나 무대는 조용히 준비되었다.', W / 2, LY.txt, { ...st, alpha: a2, weight: 400 });
   // the years, cut in paper and lit from behind
   const ac = win(t, T_YEARS[0] - .4, T_STAR + 1.2, .8, 1.2), n = years(t), cxn = V ? W * .4 : W / 2;
-  if (ac > 0) { const y = LY.cnt * H + 40 + (V ? 120 : 0); text(ctx, `${n}년`, cxn, y, { size: V ? 64 : 58, weight: 600, color: '#ffe2ae', alpha: ac, ls: 4, shadow: 'rgba(255,170,80,.7)', shadowBlur: 24 });
+  if (ac > 0) { const y = LY.cnt * H + 40 + (V ? 120 : 0); text(ctx, Pilot.tr('{n}년').replace('{n}', n), cxn, y, { size: V ? 64 : 58, weight: 600, color: '#ffe2ae', alpha: ac, ls: 4, shadow: 'rgba(255,170,80,.7)', shadowBlur: 24 });
     text(ctx, '말라기 이후', cxn, y - (V ? 70 : 64), { size: 22, font: "'Noto Sans KR',sans-serif", color: '#cdd6ee', alpha: ac * .8, ls: 6 }); }
   const lh = V ? 76 : 72, a3 = win(t, 26.0, DUR - .9, 1.4, 1.1), y3 = V ? LY.txt : H - 180;
   text(ctx, '“때가 차매 하나님이 그 아들을 보내사\n여자에게서 나게 하시고”', W / 2, y3, { ...st, alpha: a3, lh: lh / st.size });

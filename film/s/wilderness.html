@@ -89,21 +89,28 @@ function buildMap() {
   { const [px, py] = mp(33.97, 28.54); peak(px, py + 6, 64); }
   // desert stipple
   x.fillStyle = 'rgba(58,36,24,.42)'; for (let i = 0; i < 2600; i++) { const px = r() * MW, py = r() * MH; if (!land(px, py)) continue; const [la] = [33.6 - py / KY]; if (la > 31.8 && px > mp(34.9, 0)[0] && px < mp(36.2, 0)[0]) continue; x.beginPath(); x.arc(px, py, .9 + r() * 1.2, 0, 6.283); x.fill(); }
-  // labels
-  const lab = (s, lon, lat, size, ls = 0, o = {}) => { const [px, py] = mp(lon, lat); x.save(); x.font = `${o.w || 600} ${size}px 'Noto Serif KR'`; x.letterSpacing = ls + 'px'; x.textAlign = o.al || 'center'; x.textBaseline = 'middle';
-    x.lineWidth = size * .22; x.strokeStyle = 'rgba(236,224,198,.85)'; x.lineJoin = 'round'; x.strokeText(s, px + (o.dx || 0), py + (o.dy || 0)); x.fillStyle = o.c || INK; x.fillText(s, px + (o.dx || 0), py + (o.dy || 0));
+  // labels (a translation may break into lines with \n, and is narrowed to o.mw — the room the map has there — by tightening, then shrinking)
+  const lab = (s, lon, lat, size, ls = 0, o = {}) => { s = Pilot.tr(s); const [px, py] = mp(lon, lat); x.save(); x.font = `${o.w || 600} ${size}px 'Noto Serif KR'`; x.letterSpacing = ls + 'px'; x.textAlign = o.al || 'center'; x.textBaseline = 'middle';
+    const ls_ = s.split('\n'); if (Pilot.lang !== 'ko' && o.mw) { const tw = () => Math.max(...ls_.map(l => x.measureText(l).width)); let w0 = tw();
+      if (w0 > o.mw && ls) { ls = Math.max(ls * .35, ls - (w0 - o.mw) / Math.max(1, Math.max(...ls_.map(l => l.length)))); x.letterSpacing = ls + 'px'; w0 = tw(); }
+      if (w0 > o.mw) { size *= o.mw / w0; x.font = `${o.w || 600} ${size}px 'Noto Serif KR'`; } }
+    x.lineWidth = size * .22; x.strokeStyle = 'rgba(236,224,198,.85)'; x.lineJoin = 'round';
+    ls_.forEach((l, i) => { const ly = py + (o.dy || 0) + (i - (ls_.length - 1) / 2) * size * 1.1; x.strokeText(l, px + (o.dx || 0), ly); });
+    x.fillStyle = o.c || INK; ls_.forEach((l, i) => x.fillText(l, px + (o.dx || 0), py + (o.dy || 0) + (i - (ls_.length - 1) / 2) * size * 1.1));
     if (o.dot) { x.beginPath(); x.arc(px, py, 7, 0, 6.283); x.fillStyle = INK; x.fill(); x.beginPath(); x.arc(px, py, 3, 0, 6.283); x.fillStyle = '#e9dcc0'; x.fill(); } x.restore(); };
   lab('애 굽', 30.2, 29.4, 96, 30); lab('지 중 해', 31.6, 32.35, 72, 34, { c: '#4a3a30' }); lab('홍 해', 34.85, 27.15, 58, 22, { c: '#4a3a30' });
-  lab('가 나 안', 34.75, 32.25, 70, 26); lab('바란 광야', 34.05, 29.75, 44, 12, { w: 400 }); lab('에돔', 35.92, 30.2, 50, 16); lab('모압', 36.2, 31.35, 50, 16);
+  lab('가 나 안', 34.75, 32.25, 70, 26, { mw: 360 }); lab('바란 광야', 34.05, 29.75, 44, 12, { w: 400 }); lab('에돔', 35.92, 30.2, 50, 16, { mw: 170 }); lab('모압', 36.2, 31.35, 50, 16, { mw: 130 });
   lab('라암셋', 31.83, 30.8, 36, 4, { dot: true, dx: -10, dy: -40 }); lab('시내산', 33.97, 28.54, 44, 6, { dx: 120, dy: 30, al: 'left' });
   lab('가데스 바네아', 34.4, 30.62, 32, 2, { dot: true, dx: -190, dy: -6 }); lab('에시온 게벨', 34.95, 29.56, 30, 2, { dot: true, dx: 12, dy: 34, al: 'left' });
   lab('여리고', 35.44, 31.87, 34, 4, { dot: true, dx: -26, dy: -38, al: 'right' }); lab('요단강', 35.74, 32.4, 32, 4, { al: 'left' }); lab('염해', 35.66, 31.36, 28, 2, { al: 'left', c: '#4a3a30' });
   // cartouche and compass
   { const [cx, cy] = mp(29.0, 27.75); x.save(); x.fillStyle = 'rgba(236,224,198,.8)'; x.fillRect(cx - 330, cy - 120, 660, 240); x.strokeStyle = INK; x.lineWidth = 3; x.strokeRect(cx - 330, cy - 120, 660, 240); x.lineWidth = 1.4; x.strokeRect(cx - 316, cy - 106, 632, 212);
-    x.font = "600 64px 'Noto Serif KR'"; x.textAlign = 'center'; x.fillStyle = INK; x.letterSpacing = '10px'; x.fillText('광야의 길', cx, cy + 6); x.font = "400 30px 'Noto Serif KR'"; x.letterSpacing = '6px'; x.fillText('애굽에서 가나안까지', cx, cy + 70); x.restore(); }
+    const fit = (str, wt, sz, ls) => { x.font = `${wt} ${sz}px 'Noto Serif KR'`; x.letterSpacing = ls + 'px'; const tw = x.measureText(str).width;   // a translation may be wider than the cartouche
+      if (Pilot.lang !== 'ko' && tw > 590) { x.font = `${wt} ${sz * 590 / tw}px 'Noto Serif KR'`; x.letterSpacing = (ls * 590 / tw) + 'px'; } return str; };
+    x.textAlign = 'center'; x.fillStyle = INK; x.fillText(fit(Pilot.tr('광야의 길'), 600, 64, 10), cx, cy + 6); x.fillText(fit(Pilot.tr('애굽에서 가나안까지'), 400, 30, 6), cx, cy + 70); x.restore(); }
   { const [cx, cy] = mp(37.9, 27.7); x.save(); x.translate(cx, cy); x.strokeStyle = INK; x.fillStyle = INK; x.lineWidth = 2; x.beginPath(); x.arc(0, 0, 90, 0, 6.283); x.stroke(); x.beginPath(); x.arc(0, 0, 70, 0, 6.283); x.stroke();
     for (let k = 0; k < 8; k++) { const a = k * Math.PI / 4, l = k % 2 ? 70 : 140; x.beginPath(); x.moveTo(Math.cos(a) * l, Math.sin(a) * l); x.lineTo(Math.cos(a + .5) * 18, Math.sin(a + .5) * 18); x.lineTo(Math.cos(a - .5) * 18, Math.sin(a - .5) * 18); x.closePath(); k % 4 ? x.stroke() : x.fill(); }
-    x.font = "600 40px 'Noto Serif KR'"; x.textAlign = 'center'; x.fillText('북', 0, -150); x.restore(); }
+    x.font = "600 40px 'Noto Serif KR'"; x.textAlign = 'center'; x.fillText(Pilot.tr('북'), 0, -150); x.restore(); }
   return c;
 }
 function buildRoute() {
@@ -316,7 +323,7 @@ function bloomMask(k) {         // watercolour bloom: the painting opens from we
   const d = maskD.data; for (let i = 0; i < NZ.length; i++) d[i * 4 + 3] = clamp((k * 1.5 - .25 - NZ[i]) * 7) * 255; maskX.putImageData(maskD, 0, 0);
 }
 function note(ctx, s, x, y, a, o = {}) {   // a hand note: written in from left to right over a paper halo, with a leader
-  if (a <= 0) return; const size = (o.size || 34) * (V ? 1.05 : 1); ctx.save(); ctx.font = `600 ${size}px 'Noto Serif KR'`; ctx.letterSpacing = '3px'; const tw = ctx.measureText(s).width, x0 = o.align === 'center' ? x - tw / 2 : x;
+  if (a <= 0) return; s = Pilot.tr(s); const size = (o.size || 34) * (V ? 1.05 : 1); ctx.save(); ctx.font = `600 ${size}px 'Noto Serif KR'`; ctx.letterSpacing = '3px'; const tw = ctx.measureText(s).width; let x0 = o.align === 'center' ? x - tw / 2 : x; if (Pilot.lang !== 'ko') x0 = Math.max(40, Math.min(x0, W - 40 - tw));   // keep a longer translation in frame
   ctx.beginPath(); ctx.rect(x0 - 30, y - size * 1.4, (tw + 60) * clamp(o.reveal == null ? 1 : o.reveal), size * 2.2); ctx.clip(); ctx.globalAlpha = a;
   ctx.textAlign = 'left'; ctx.lineJoin = 'round'; ctx.lineWidth = size * .3; ctx.strokeStyle = o.halo || 'rgba(240,230,208,.85)'; ctx.strokeText(s, x0, y); ctx.fillStyle = o.color || INK; ctx.fillText(s, x0, y); ctx.restore();
   if (o.to) { const k = clamp(((o.reveal == null ? 1 : o.reveal) - .4) / .6); ctx.save(); ctx.globalAlpha = a * .8; ctx.strokeStyle = o.color || INK; ctx.lineWidth = 2; ctx.setLineDash([]); ctx.beginPath(); const sx = o.from ? o.from[0] : x0 + tw / 2, sy = o.from ? o.from[1] : y + 14;

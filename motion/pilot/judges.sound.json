@@ -1,0 +1,18 @@
+{ "duration": 40,
+  "music": [
+    { "id": "m1", "at": 0, "len": 22.4, "db": -2, "fin": 0.6, "fout": 0.0,
+      "prompt": "Solo upright cinema piano accompanying a 1920s silent film, original photoplay style: a short misterioso opening, then a four-part cycle that repeats — a sly sinking chromatic figure, a heavy minor agitato with low tremolo, a pleading rising phrase, a bright rolled major chord of rescue — the same cycle played again faster and faster each time, the tempo and intensity accelerating wildly until it becomes a frantic tumble that stops abruptly." },
+    { "id": "m2", "at": 23.6, "len": 8.8, "db": -6, "fin": 1.0, "fout": 0.8,
+      "prompt": "Solo cinema piano, slow and grave: sparse low chords in a minor key, a lonely questioning melody, long silences between phrases, reflective and sorrowful." },
+    { "id": "m3", "at": 32.4, "len": 7.6, "db": -3, "fin": 0.8, "fout": 1.6,
+      "prompt": "Solo cinema piano turns tender: a warm, simple hymn-like melody in a major key, played gently with soft rolled chords, hopeful and consoling, ending on a long held chord." }
+  ],
+  "sfx": [
+    { "id": "s1", "at": 0.0, "len": 22.4, "db": -16, "loop": true, "prompt": "Old 1920s film projector running: steady claw-and-motor purr and soft film flutter" },
+    { "id": "s2", "at": 22.4, "len": 1.2, "db": -6, "loop": false, "prompt": "Film jamming in an old projector: a stuttering clatter, then the film flapping loose on the reel" },
+    { "id": "s3", "at": 23.3, "len": 0.6, "db": -10, "loop": false, "prompt": "A projector lamp clicking off, short mechanical click" },
+    { "id": "s4", "at": 23.5, "len": 16.5, "db": -20, "loop": true, "prompt": "Old film projector running quietly: soft steady motor purr" }
+  ],
+  "ducks": [
+    { "from": 22.6, "to": 23.6, "db": -24 }
+  ] }

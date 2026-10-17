@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>시안 · 사사 시대</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600&family=Noto+Sans+KR:wght@400&display=swap">
+</head>
+<body>
+<script src="lib.js"></script>
+<script>
+/* 06 사사 시대 — a 1920s silent film, projected: an ink-and-wash drawing on a scratched silver print in a 4:3 gate between
+   velvet curtains; intertitles instead of voices. One locked-off wide shot of a village, and the same four shots loop:
+   범죄 (bowing to the idol) → 압제 (the raiders' shadow, the field stripped) → 부르짖음 (kneeling, arms raised) →
+   사사를 통한 구원 (a judge stands, light falls, the raiders withdraw, the idol falls) → again the idol stands…
+   Each turn is faster, more worn, more scratched, until the film jams and burns through. Then the verse (삿 21:25) on cards,
+   and a tender last reel: one kneeling figure, a thread of gold light — the only colour in the print. Nobody is hurt. */
+const { clamp, lerp, ss, eo, eio, win, rng, noise, fbm, canvas, mix, rgb, speckle, text } = Pilot;
+const W = Pilot.W, H = Pilot.H, V = Pilot.ori === 'v', DUR = 40;
+const FW = 1440, FH = 1080;                                    // the print, in film pixels
+const G = V ? { x: 20, y: 560, w: 1040, h: 780 } : { x: 240, y: 0, w: 1440, h: 1080 };   // the gate on screen
+const GOLD = [236, 184, 84];
+let film, fx, scene, sx, bg, bgBare, grains = [], hatchP, curtains, seats;
+const LOOPS = [[4.4, 2.2, 0], [13.2, 1.2, .35], [18.0, .7, .65], [20.8, .4, 1]], LOOP_END = 22.4, BURN = [22.4, 23.4];
+const CAP = [['범죄', '압제', '부르짖음', '사사를 통한 구원'], ['다시 범죄', '압제', '부르짖음', '구원']];
+const TENDER = [32.4, 36.0];
+
+// ---------------- the drawing: tonal greys, ink line, hatching ----------------
+const tone = v => `rgb(${v * 255 | 0},${v * 255 | 0},${v * 255 | 0})`;
+const INK = 'rgb(18,16,14)';
+const pth = (pts, close = true) => { const p = new Path2D(); pts.forEach((q, i) => i ? p.lineTo(q[0], q[1]) : p.moveTo(q[0], q[1])); if (close) p.closePath(); return p; };
+function shape(g, p, v, lw = 3) { g.fillStyle = tone(v); g.fill(p); if (lw) { g.lineWidth = lw; g.strokeStyle = INK; g.lineJoin = 'round'; g.stroke(p); } }
+function hatch(g, p, a = .5, sp = 7, cross = false) { g.save(); g.clip(p); g.setTransform(1, 0, 0, 1, 0, 0); g.globalAlpha = a; g.fillStyle = hatchP; g.fillRect(0, 0, FW, FH); if (cross) { g.rotate(Math.PI / 2); g.translate(0, -FW); g.fillRect(0, 0, FH, FW); } g.restore(); }
+function buildHatch() { const c = canvas(14, 14), x = c.getContext('2d'); x.strokeStyle = INK; x.lineWidth = 1.6; for (const o of [-14, 0, 14]) { x.beginPath(); x.moveTo(o, 14); x.lineTo(o + 14, 0); x.stroke(); } return fx.createPattern(c, 'repeat'); }
+
+function buildBG(bare) {
+  const c = canvas(FW, FH), g = c.getContext('2d'), r = rng(5);
+  const sk = g.createLinearGradient(0, 0, 0, 640); sk.addColorStop(0, tone(.78)); sk.addColorStop(1, tone(.9)); g.fillStyle = sk; g.fillRect(0, 0, FW, FH);
+  for (let i = 0; i < 6; i++) { const cx = r() * FW, cy = 80 + r() * 260, w = 160 + r() * 220; g.lineWidth = 2; g.strokeStyle = 'rgba(18,16,14,.35)';   // a few engraved clouds
+    g.beginPath(); for (let k = 0; k < 5; k++) g.arc(cx + k * w / 5, cy - Math.sin(k * 1.3) * 10, w / 7, Math.PI, 0); g.stroke(); }
+  // far hills, hatched
+  const hz = 620, hill = [[0, hz + 20]]; for (let xx = 0; xx <= FW; xx += 20) hill.push([xx, hz - 60 - 70 * fbm(xx * .003, 1, 3)]); hill.push([FW, hz + 20]);
+  const hp = pth(hill); shape(g, hp, .62, 2.6); hatch(g, hp, .28);
+  // the high place on the left: a mound for the idol
+  const mound = pth([[60, 760], [150, 640], [260, 600], [380, 610], [470, 680], [520, 760]]); shape(g, mound, .6, 3); hatch(g, mound, .35);
+  // the village on the right: flat-roofed houses, dark doors, shadow sides hatched
+  const houses = [[930, 600, 140, 110], [1070, 580, 120, 130], [1180, 610, 150, 100], [1010, 650, 130, 90], [1150, 660, 110, 80], [1270, 640, 120, 100], [880, 670, 110, 70]];
+  houses.sort((a, b) => a[1] - b[1]).forEach(([x0, y0, w, h]) => { const front = pth([[x0, y0], [x0 + w, y0], [x0 + w, y0 + h], [x0, y0 + h]]); shape(g, front, .88, 2.6);
+    const side = pth([[x0 + w, y0], [x0 + w + 26, y0 - 12], [x0 + w + 26, y0 + h - 12], [x0 + w, y0 + h]]); shape(g, side, .6, 2.4); hatch(g, side, .5);
+    const roof = pth([[x0, y0], [x0 + 26, y0 - 12], [x0 + w + 26, y0 - 12], [x0 + w, y0]]); shape(g, roof, .74, 2.4);
+    shape(g, pth([[x0 + w * .3, y0 + h], [x0 + w * .3, y0 + h * .45], [x0 + w * .48, y0 + h * .45], [x0 + w * .48, y0 + h]]), .12, 2);
+    shape(g, pth([[x0 + w * .66, y0 + h * .3], [x0 + w * .8, y0 + h * .3], [x0 + w * .8, y0 + h * .48], [x0 + w * .66, y0 + h * .48]]), .15, 2); });
+  // the field: standing wheat, or stubble when it has been taken
+  const field = pth([[0, 700], [FW, 690], [FW, 800], [0, 812]]); shape(g, field, bare ? .7 : .8, 2.4);
+  g.strokeStyle = INK; for (let i = 0; i < (bare ? 260 : 900); i++) { const px = r() * FW, py = 700 + r() * 105, l = bare ? 4 + r() * 4 : 12 + r() * 16; g.lineWidth = bare ? 1.2 : 1.5; g.globalAlpha = .7;
+    g.beginPath(); g.moveTo(px, py); g.lineTo(px + (r() - .5) * 4, py - l); g.stroke(); if (!bare && r() < .5) { g.beginPath(); g.ellipse(px, py - l, 2, 5, .2, 0, 6.283); g.fill(); } }
+  g.globalAlpha = 1;
+  if (!bare) for (let i = 0; i < 7; i++) { const px = 560 + i * 90, py = 760; shape(g, pth([[px - 14, py], [px - 6, py - 46], [px + 6, py - 46], [px + 14, py]]), .78, 2.2); }   // sheaves
+  // foreground: the threshing ground and a path
+  const fg = pth([[0, 800], [FW, 792], [FW, FH], [0, FH]]); shape(g, fg, .76, 0); g.save(); g.clip(fg); g.globalAlpha = .18; g.fillStyle = hatchP; g.fillRect(0, 960, FW, 200); g.restore();
+  for (let i = 0; i < 120; i++) { g.strokeStyle = 'rgba(18,16,14,.45)'; g.lineWidth = 1.4; const px = r() * FW, py = 820 + r() * 250; g.beginPath(); g.moveTo(px, py); g.lineTo(px + 10 + r() * 30, py + (r() - .5) * 3); g.stroke(); }
+  g.lineWidth = 3; g.strokeStyle = INK; g.beginPath(); g.moveTo(0, 800); g.bezierCurveTo(500, 796, 1000, 790, FW, 792); g.stroke();
+  return c;
+}
+
+// ---------------- figures ----------------
+// pose: bow 0..1, kneel 0..1, up (arms raised) 0..1, huddle 0..1, face ±1, v (robe tone), cap (headcloth tone)
+function person(g, x, y, s, P) {
+  const f = P.face || 1, kn = P.kneel || 0, bw = P.bow || 0, up = P.up || 0, hd = P.huddle || 0;
+  g.save(); g.translate(x, y); g.scale(s * f, s);
+  const hipY = lerp(-92, -44, kn), a = -Math.PI / 2 + bw * 1.15 + hd * .55 - up * .08, nk = [Math.cos(a) * 72, hipY + Math.sin(a) * 72], hd2 = [nk[0] + Math.cos(a) * 18 + hd * 6, nk[1] + Math.sin(a) * 18 + hd * 4];
+  const limb = (pts, w, v) => { g.lineCap = g.lineJoin = 'round'; g.strokeStyle = INK; g.lineWidth = w + 5; g.stroke(pth(pts, false)); g.strokeStyle = tone(v); g.lineWidth = w; g.stroke(pth(pts, false)); };
+  const arm = (side) => { const sh = [nk[0] - Math.cos(a) * 8 + side * 2, nk[1] - Math.sin(a) * 8];
+    const hang = Math.PI / 2 + .15 + side * .1, fwd = a + 1.9 - bw * .3, raise = -Math.PI / 2 + side * .42 + .15;
+    const ang = lerp(lerp(hang, fwd, clamp(bw * 1.4) * (1 - up)), raise, up) + hd * .9;
+    const el = [sh[0] + Math.cos(ang) * 34, sh[1] + Math.sin(ang) * 34], a2 = ang + lerp(.25, -.12, up) - hd * 1.4, hn = [el[0] + Math.cos(a2) * 32, el[1] + Math.sin(a2) * 32];
+    limb([sh, el, hn], 11, (P.v || .4) + .08); g.fillStyle = tone(.82); g.beginPath(); g.arc(hn[0], hn[1], 5.5, 0, 6.283); g.fill(); g.lineWidth = 2; g.strokeStyle = INK; g.stroke(); };
+  arm(-1);
+  // legs / skirt
+  const knee = [lerp(4, 30, kn), lerp(-46, -10, kn)], foot = [lerp(8, -26, kn), lerp(-2, -2, kn)];
+  limb([[0, hipY], knee, foot], 13, (P.v || .4) - .05);
+  const skirt = pth([[-16 + Math.cos(a) * 10, hipY - 14], [16 + Math.cos(a) * 10, hipY - 14], [lerp(24, 36, kn), lerp(-6, -4, kn)], [lerp(-24, -30, kn), lerp(-6, -2, kn)]]);
+  shape(g, skirt, P.v || .4, 3); if ((P.v || .4) < .45) hatch(g, skirt, .45);
+  limb([[0, hipY - 6], nk], 30, P.v || .4);
+  // head: pale face, dark headcloth, a dot of an eye
+  g.fillStyle = tone(.86); g.beginPath(); g.arc(hd2[0], hd2[1], 13, 0, 6.283); g.fill(); g.lineWidth = 2.6; g.strokeStyle = INK; g.stroke();
+  g.fillStyle = tone(P.cap == null ? .22 : P.cap); g.beginPath(); g.arc(hd2[0] - 2, hd2[1] - 3, 14, Math.PI * .95 + a + Math.PI / 2 - Math.PI / 2, Math.PI * 1.95 + a + Math.PI / 2 - Math.PI / 2); g.lineTo(hd2[0] - 12, hd2[1] + 16); g.closePath(); g.fill(); g.stroke();
+  g.fillStyle = INK; g.beginPath(); g.arc(hd2[0] + 6, hd2[1] - 1, 1.8, 0, 6.283); g.fill();
+  arm(1);
+  g.restore();
+}
+function idol(g, x, y, fall) {     // a horned figure on a stone block; it topples about the block's corner
+  shape(g, pth([[x - 50, y], [x + 50, y], [x + 46, y - 60], [x - 46, y - 60]]), .66, 3); hatch(g, pth([[x + 10, y], [x + 50, y], [x + 46, y - 60], [x + 10, y - 60]]), .5);
+  g.save(); g.translate(x + 40 + 40 * fall, y - 60 + 52 * fall); g.rotate(fall * 1.5); g.translate(-(x + 40), -(y - 60));
+  const b = pth([[x - 26, y - 60], [x + 26, y - 60], [x + 20, y - 150], [x + 34, y - 168], [x + 18, y - 176], [x + 10, y - 196], [x - 10, y - 196], [x - 18, y - 176], [x - 34, y - 168], [x - 20, y - 150]]);
+  shape(g, b, .16, 3); g.strokeStyle = 'rgba(230,226,216,.55)'; g.lineWidth = 2; g.beginPath(); g.moveTo(x + 14, y - 70); g.lineTo(x + 16, y - 150); g.stroke();
+  const horns = new Path2D(); horns.moveTo(x - 10, y - 196); horns.quadraticCurveTo(x - 40, y - 210, x - 36, y - 238); horns.quadraticCurveTo(x - 28, y - 214, x - 4, y - 204); horns.moveTo(x + 10, y - 196); horns.quadraticCurveTo(x + 40, y - 210, x + 36, y - 238); horns.quadraticCurveTo(x + 28, y - 214, x + 4, y - 204);
+  shape(g, horns, .16, 2.4); g.restore();
+}
+function raiders(g, k, dx) {       // a line of camel riders on the far ridge, as silhouettes
+  if (k <= 0) return; g.save(); g.globalAlpha = k; g.fillStyle = 'rgb(28,26,24)';
+  for (let i = 0; i < 14; i++) { const x = 140 + i * 92 + dx, y = 560 - 40 * fbm(x * .003, 1, 3) - 4, s = .9 + (i % 3) * .08; g.save(); g.translate(x, y); g.scale(s, s);
+    g.beginPath(); g.ellipse(0, -26, 26, 11, 0, 0, 6.283); g.ellipse(-4, -36, 12, 10, 0, 0, 6.283); g.fill(); g.lineWidth = 4; g.strokeStyle = 'rgb(28,26,24)';
+    g.beginPath(); g.moveTo(22, -30); g.quadraticCurveTo(34, -40, 32, -54); g.stroke(); g.beginPath(); g.ellipse(36, -55, 7, 4, .3, 0, 6.283); g.fill();
+    for (const lx of [-16, -8, 10, 18]) { g.beginPath(); g.moveTo(lx, -20); g.lineTo(lx + (lx % 2) * 2, 0); g.stroke(); }
+    g.beginPath(); g.moveTo(-10, -44); g.lineTo(-6, -66); g.lineTo(4, -66); g.lineTo(6, -44); g.fill(); g.beginPath(); g.arc(-1, -72, 6, 0, 6.283); g.fill(); g.restore(); }
+  g.restore();
+}
+function judge(g, x, y, k, t) {    // the deliverer: stands on a rock, lifts a ram's horn; a clay-jar torch in the other hand
+  if (k <= 0) return; shape(g, pth([[x - 70, y + 4], [x - 50, y - 30], [x + 40, y - 36], [x + 74, y + 4]]), .55, 3); hatch(g, pth([[x + 10, y + 4], [x + 40, y - 36], [x + 74, y + 4]]), .5);
+  g.save(); g.globalAlpha = k; person(g, x, y - 30, 1.35, { up: .55, v: .3, cap: .9, face: 1 });
+  g.restore(); g.save(); g.globalAlpha = k; g.translate(x, y - 30); g.scale(1.35, 1.35);
+  const hn = new Path2D(); hn.moveTo(20, -150); hn.quadraticCurveTo(44, -170, 40, -196); hn.lineTo(48, -198); hn.quadraticCurveTo(54, -166, 24, -144); hn.closePath(); shape(g, hn, .82, 2.2);
+  g.fillStyle = tone(.97); g.beginPath(); g.moveTo(-34, -168); g.quadraticCurveTo(-30 + Math.sin(t * 20) * 3, -190, -26, -200); g.quadraticCurveTo(-20, -184, -20, -168); g.fill(); g.lineWidth = 1.6; g.strokeStyle = INK; g.stroke();
+  g.restore();
+}
+
+// ---------------- the shots ----------------
+function shot(g, i, u, L, t) {
+  const bare = i === 1 || i === 2;
+  g.drawImage(bare ? bgBare : bg, 0, 0);
+  // the raiders' shadow lies over the land in 압제 and 부르짖음
+  const dark = i === 1 ? ss(0, .45, u) : i === 2 ? 1 : i === 3 ? 1 - ss(.15, .6, u) : 0;
+  raiders(g, i === 1 ? ss(.05, .35, u) : i === 2 ? 1 : i === 3 ? 1 - ss(.25, .75, u) : 0, i === 1 ? lerp(260, 0, eo(u * 2)) : i === 3 ? lerp(0, 420, ss(.25, .9, u)) : 0);
+  if (dark > 0) { g.save(); g.globalAlpha = .38 * dark; g.fillStyle = 'rgb(20,18,16)'; g.fillRect(0, 0, FW, FH); g.restore(); }
+  idol(g, 280, 612, i === 3 ? eio(ss(.35, .75, u)) : 0);
+  // the villagers: in 범죄 they bow toward the idol on the left
+  const P = [[520, 940, .38, .2], [640, 960, .3, .9], [760, 935, .45, .25], [880, 965, .34, .85], [1000, 945, .42, .3]];
+  P.forEach(([x, y, v, cap], k) => { const d = k * .03; let pose;
+    if (i === 0) pose = { face: -1, bow: ss(.15 + d, .6 + d, u), kneel: ss(.3 + d, .7 + d, u) * .8 };
+    else if (i === 1) pose = { face: k % 2 ? 1 : -1, huddle: ss(.2 + d, .7, u), kneel: ss(.25 + d, .75, u) };
+    else if (i === 2) pose = { face: k % 2 ? -1 : 1, kneel: 1, up: ss(.1 + d, .45 + d, u) * (.9 + .1 * Math.sin(t * 9 + k)) };
+    else pose = { face: 1, kneel: 1 - ss(.45 + d, .85, u), up: lerp(1, .6, ss(.45, .9, u)) };
+    person(g, x, y, 1.12, { ...pose, v, cap }); });
+  if (i === 3) judge(g, 1180, 900, ss(.0, .08, u), t);       // a substitution cut: there, all at once
+  // the caption plate burned into the bottom of the frame
+}
+function goldBeam(g, k, cx, top, bot, w0, w1) {   // the one colour: drawn as a mask over the toned print
+  if (k <= 0) return; g.save(); g.globalCompositeOperation = 'screen';
+  const gr = g.createLinearGradient(0, top, 0, bot); gr.addColorStop(0, rgb(GOLD, .0)); gr.addColorStop(.25, rgb(GOLD, .55 * k)); gr.addColorStop(1, rgb(GOLD, .3 * k));
+  g.fillStyle = gr; g.beginPath(); g.moveTo(cx - w0, top); g.lineTo(cx + w0, top); g.lineTo(cx + w1, bot); g.lineTo(cx - w1, bot); g.fill();
+  const rg = g.createRadialGradient(cx, bot - 60, 0, cx, bot - 60, w1 * 1.6); rg.addColorStop(0, rgb(GOLD, .5 * k)); rg.addColorStop(1, rgb(GOLD, 0)); g.fillStyle = rg; g.fillRect(cx - w1 * 2, bot - 60 - w1 * 2, w1 * 4, w1 * 4); g.restore();
+}
+
+// ---------------- cards ----------------
+function card(g, lines, cite, kind, a, shake = 0) {
+  g.fillStyle = '#0b0a09'; g.fillRect(0, 0, FW, FH);
+  const m = 70, r = 'rgba(232,226,212,.9)'; g.save(); g.strokeStyle = r; g.fillStyle = r;
+  if (kind === 'tender') { g.lineWidth = 2; g.strokeRect(m, m, FW - 2 * m, FH - 2 * m);       // vines and small flowers
+    for (let i = 0; i < 4; i++) { const cx = i % 2 ? FW - m : m, cy = i < 2 ? m : FH - m, sx = i % 2 ? -1 : 1, sy = i < 2 ? 1 : -1; g.beginPath(); g.moveTo(cx, cy + sy * 160); g.bezierCurveTo(cx + sx * 40, cy + sy * 110, cx + sx * 20, cy + sy * 40, cx + sx * 160, cy + sy * 30); g.stroke();
+      for (let k = 0; k < 4; k++) { const px = cx + sx * (30 + k * 34), py = cy + sy * (110 - k * 26); g.beginPath(); for (let p = 0; p < 5; p++) { const an = p * 1.2566; g.moveTo(px, py); g.arc(px + Math.cos(an) * 6, py + Math.sin(an) * 6, 5, 0, 6.283); } g.fill(); } } }
+  else { g.lineWidth = 2.4; g.strokeRect(m, m, FW - 2 * m, FH - 2 * m); g.lineWidth = 1.2; g.strokeRect(m + 14, m + 14, FW - 2 * m - 28, FH - 2 * m - 28);   // double rule, stepped corners, fans
+    for (let i = 0; i < 4; i++) { const cx = i % 2 ? FW - m - 14 : m + 14, cy = i < 2 ? m + 14 : FH - m - 14, sx = i % 2 ? -1 : 1, sy = i < 2 ? 1 : -1;
+      g.beginPath(); g.moveTo(cx, cy + sy * 50); g.lineTo(cx + sx * 25, cy + sy * 50); g.lineTo(cx + sx * 25, cy + sy * 25); g.lineTo(cx + sx * 50, cy + sy * 25); g.lineTo(cx + sx * 50, cy); g.stroke();
+      for (let k = 0; k < 5; k++) { const an = (sx > 0 ? 0 : Math.PI) + (sy > 0 ? 1 : -1) * (k * Math.PI / 10) * (sx > 0 ? 1 : -1); g.beginPath(); g.moveTo(cx + sx * 25, cy + sy * 25); g.lineTo(cx + sx * 25 + Math.cos(an) * 46 * sx * sx, cy + sy * 25 + Math.sin(an) * 46); g.stroke(); } }
+    g.beginPath(); g.moveTo(FW / 2 - 120, FH - m - 70); g.lineTo(FW / 2 + 120, FH - m - 70); g.stroke(); g.beginPath(); g.arc(FW / 2, FH - m - 70, 6, 0, 6.283); g.fill(); }
+  g.restore();
+  let vs = V ? 82 : 64; g.font = `600 ${vs}px 'Noto Serif KR'`; g.letterSpacing = '2px'; const mw = Math.max(...lines.map(l => g.measureText(l).width)); g.letterSpacing = '0px'; if (mw > 1180) vs = Math.floor(vs * 1180 / mw);
+  const cs = V ? 34 : 27, lh = vs * 1.55, y0 = FH / 2 - (lines.length - 1) * lh / 2 + vs * .32 - (cite ? 30 : 0);
+  const dx = shake ? (noise(a * 40, 3) - .5) * shake : 0;
+  lines.forEach((l, i) => text(g, l, FW / 2 + dx, y0 + i * lh, { size: vs, weight: 600, color: '#efe9dc', alpha: a, ls: 2 }));
+  if (cite) text(g, cite, FW / 2, y0 + (lines.length - 1) * lh + vs * .5 + 70, { size: cs, font: "'Noto Sans KR',sans-serif", color: '#cfc6b4', alpha: a * .9, ls: 3 });
+}
+function caption(g, s, a) {
+  if (a <= 0) return; const sz = V ? 72 : 54; g.save(); g.font = `600 ${sz}px 'Noto Serif KR'`; const w = g.measureText(s).width + 120;
+  g.globalAlpha = a * .88; g.fillStyle = '#0b0a09'; g.fillRect(FW / 2 - w / 2, FH - sz * 2.3, w, sz * 1.7); g.strokeStyle = 'rgba(232,226,212,.8)'; g.lineWidth = 1.6; g.strokeRect(FW / 2 - w / 2 + 8, FH - sz * 2.3 + 8, w - 16, sz * 1.7 - 16); g.restore();
+  text(g, s, FW / 2, FH - sz * 1.08, { size: sz, weight: 600, color: '#efe9dc', alpha: a, ls: 4 });
+}
+
+// ---------------- print pass: tone, flicker, weave, scratches, dust, grain, burn ----------------
+function print(t, L, o = {}) {
+  const fl = 1 + (noise(t * 24, 2) - .5) * (.07 + .2 * L) + (L > .6 && noise(t * 7, 9) > .8 ? -.15 : 0);
+  const sep = o.sepia == null ? lerp(.34, .1, L) : o.sepia;
+  fx.setTransform(1, 0, 0, 1, 0, 0); fx.globalCompositeOperation = 'source-over'; fx.globalAlpha = 1;
+  const wx = (noise(t * 3, 5) - .5) * (2 + 8 * L) + (L > .5 && noise(Math.floor(t * 24) * .37, 1) > .86 ? 18 * L : 0), wy = (noise(t * 2.6, 6) - .5) * (2 + 6 * L) + (L > .5 && noise(Math.floor(t * 24) * .29, 4) > .88 ? -30 * L : 0);
+  fx.fillStyle = '#000'; fx.fillRect(0, 0, FW, FH);
+  fx.filter = `grayscale(1) sepia(${sep.toFixed(2)}) contrast(${(1.12 + .25 * L).toFixed(2)}) brightness(${fl.toFixed(3)})`; fx.drawImage(scene, wx, wy); fx.filter = 'none';
+  fx.globalCompositeOperation = 'screen'; fx.globalAlpha = .16; fx.filter = 'blur(10px)'; fx.drawImage(scene, wx, wy); fx.filter = 'none'; fx.globalAlpha = 1;
+  if (o.colour) { fx.globalCompositeOperation = 'source-over'; o.colour(fx, wx, wy); }
+  fx.globalCompositeOperation = 'source-over';
+  // scratches: white where the emulsion is scraped, dark where dirt sat on the negative; they persist for a few frames
+  const fr = Math.floor(t * 24), seg = Math.floor(fr / 3), r = rng(seg * 31 + 7), n = 1 + Math.floor(5 * L) + (r() < .3 ? 1 : 0);
+  for (let i = 0; i < n; i++) { const x = r() * FW, white = r() < .6, y0 = r() * FH * .5, y1 = y0 + FH * (.3 + r() * .7); fx.strokeStyle = white ? `rgba(245,240,230,${.35 + r() * .35})` : `rgba(10,8,6,${.35 + r() * .3})`; fx.lineWidth = .8 + r() * 1.6;
+    fx.beginPath(); fx.moveTo(x, y0); fx.lineTo(x + (r() - .5) * 6, y1); fx.stroke(); }
+  const d = rng(fr * 13 + 1), nd = 3 + Math.floor(14 * L); for (let i = 0; i < nd; i++) { fx.fillStyle = d() < .5 ? 'rgba(12,10,8,.75)' : 'rgba(240,236,226,.6)'; fx.beginPath(); fx.ellipse(d() * FW, d() * FH, .8 + d() * 3, .6 + d() * 2.2, d() * 3, 0, 6.283); fx.fill(); }
+  if (d() < .12 + .3 * L) { fx.strokeStyle = 'rgba(12,10,8,.6)'; fx.lineWidth = 1.4; const hx = d() * FW, hy = d() * FH; fx.beginPath(); fx.moveTo(hx, hy); fx.bezierCurveTo(hx + 40, hy - 30, hx + 10, hy + 60, hx + 70, hy + 50); fx.stroke(); }   // a hair in the gate
+  fx.globalCompositeOperation = 'overlay'; fx.globalAlpha = .45 + .25 * L; fx.drawImage(grains[fr % grains.length], 0, 0, FW, FH); fx.globalAlpha = 1;
+  fx.globalCompositeOperation = 'source-over';
+  const vg = fx.createRadialGradient(FW / 2, FH / 2, FH * .36, FW / 2, FH / 2, FH * .86); vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, `rgba(${L > .5 ? '40,24,10' : '0,0,0'},${.55 + .3 * L})`); fx.fillStyle = vg; fx.fillRect(0, 0, FW, FH);
+  if (L > .4) { const bl = fx.createLinearGradient(0, 0, FW * .12, 0); bl.addColorStop(0, `rgba(70,40,14,${.5 * L})`); bl.addColorStop(1, 'rgba(70,40,14,0)'); fx.fillStyle = bl; fx.fillRect(0, 0, FW * .12, FH); }
+}
+function burn(k, t) {         // the print jams and burns through: a hole opens, edged in scorched brown, the lamp white behind
+  const cx = FW * .52, cy = FH * .46, R = k * k * FW * .95, pts = [];
+  for (let a = 0; a < 6.283; a += .12) { const q = R * (.75 + .5 * fbm(Math.cos(a) * 2 + 3, Math.sin(a) * 2 + t, 3)); pts.push([cx + Math.cos(a) * q, cy + Math.sin(a) * q]); }
+  fx.save(); fx.filter = 'blur(10px)'; fx.fillStyle = 'rgba(30,14,4,.95)'; fx.fill(pth(pts.map(([x, y]) => [cx + (x - cx) * 1.16, cy + (y - cy) * 1.16]))); fx.fillStyle = 'rgba(160,80,20,.95)'; fx.fill(pth(pts.map(([x, y]) => [cx + (x - cx) * 1.05, cy + (y - cy) * 1.05])));
+  fx.filter = 'blur(4px)'; fx.fillStyle = '#fbf6ea'; fx.fill(pth(pts)); fx.restore();
+}
+
+// ---------------- theatre ----------------
+function buildCurtains() {
+  const c = canvas(W, H), g = c.getContext('2d'), r = rng(3);
+  const drape = (x0, w, y0, h, dir) => { for (let i = 0; i < w; i += 2) { const f = .5 + .5 * Math.sin(i * .09 + 1) * Math.sin(i * .021), sp = dir ? clamp(1 - Math.abs((dir > 0 ? x0 + w - (x0 + i) : i) / w) * 1.6) : 0;
+      g.fillStyle = rgb(mix([22, 4, 6], [96, 18, 24], f * .7 + sp * .3)); g.fillRect(x0 + i, y0, 2, h); } };
+  if (V) { drape(0, W, 0, G.y - 10, 0); g.fillStyle = 'rgba(0,0,0,.35)'; for (let i = 0; i < 9; i++) { g.beginPath(); g.ellipse(W / 2, G.y - 20 - i * 4, W * .7, 30, 0, 0, Math.PI); g.fill(); }
+    const vg = g.createLinearGradient(0, 0, 0, G.y); vg.addColorStop(0, 'rgba(0,0,0,.75)'); vg.addColorStop(1, 'rgba(0,0,0,.05)'); g.fillStyle = vg; g.fillRect(0, 0, W, G.y);
+    // valance scallops
+    for (let i = 0; i < 8; i++) { const x = i * W / 7.5; g.fillStyle = 'rgb(70,12,18)'; g.beginPath(); g.ellipse(x, G.y - 36, W / 15, 46, 0, 0, Math.PI); g.fill(); g.strokeStyle = 'rgba(200,160,90,.5)'; g.lineWidth = 2; g.beginPath(); g.ellipse(x, G.y - 36, W / 15, 46, 0, 0, Math.PI); g.stroke(); } }
+  else { drape(0, G.x, 0, H, 1); drape(G.x + G.w, W - G.x - G.w, 0, H, -1); const gl = g.createLinearGradient(0, 0, 0, H); gl.addColorStop(0, 'rgba(0,0,0,.6)'); gl.addColorStop(.3, 'rgba(0,0,0,0)'); gl.addColorStop(1, 'rgba(0,0,0,.5)'); g.fillStyle = gl; g.fillRect(0, 0, W, H); }
+  return c;
+}
+function buildSeats() { const c = canvas(W, H - G.y - G.h), g = c.getContext('2d'), h = c.height;
+  for (let row = 0; row < 5; row++) { const y = 60 + row * 110, s = 1 + row * .25; for (let i = -1; i < 9; i++) { const x = i * 140 * s + (row % 2) * 70 + 40;
+      g.fillStyle = 'rgb(14,8,8)'; g.beginPath(); g.ellipse(x, y + 60 * s, 60 * s, 70 * s, 0, Math.PI, 0); g.lineTo(x + 60 * s, y + 200 * s); g.lineTo(x - 60 * s, y + 200 * s); g.fill();
+      g.strokeStyle = 'rgba(150,120,90,.28)'; g.lineWidth = 2; g.beginPath(); g.ellipse(x, y + 60 * s, 60 * s, 70 * s, 0, Math.PI * 1.15, Math.PI * 1.85); g.stroke(); } }
+  return c; }
+
+// ---------------- timeline ----------------
+function segAt(t) {
+  if (t < LOOPS[0][0]) return { kind: 'card', id: 'A' };
+  for (let k = LOOPS.length - 1; k >= 0; k--) { const [t0, d, L] = LOOPS[k]; if (t >= t0 && t < (k < 3 ? LOOPS[k + 1][0] : LOOP_END)) { const lt = t - t0, i = Math.min(3, Math.floor(lt / d)); return { kind: 'shot', loop: k, i, u: (lt - i * d) / d, L, d, ls: lt - i * d }; } }
+  if (t < BURN[1]) return { kind: 'burn' };
+  if (t < 27.9) return { kind: 'card', id: 'B' };
+  if (t < TENDER[0]) return { kind: 'card', id: 'C' };
+  if (t < TENDER[1]) return { kind: 'tender' };
+  return { kind: 'card', id: 'D' };
+}
+function cardLines(id) {
+  if (id === 'A') return [['땅은 얻었지만,', '왕이 없어 제멋대로 행하다.'], '', 'narr', 0.2, 4.4];
+  if (id === 'B') return [V ? ['“그 때에 이스라엘에', '왕이 없으므로'] : ['“그 때에 이스라엘에 왕이 없으므로'], '사사기 21:25 (개역개정)', 'narr', BURN[1] + .5, 27.9];
+  if (id === 'C') return [['사람이 각기 자기의 소견에', '옳은 대로 행하였더라”'], '사사기 21:25 (개역개정)', 'narr', 27.9, TENDER[0]];
+  return [['배신하고 또 배신해도, 부르짖을 때마다', '구원자를 보내 다시 일으키셨습니다.'], '', 'tender', TENDER[1], DUR];
+}
+
+function draw(ctx, t) {
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalCompositeOperation = 'source-over'; ctx.globalAlpha = 1; ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H);
+  const S = segAt(t); let L = .15, colour = null, sepia = null;
+  sx.setTransform(1, 0, 0, 1, 0, 0); sx.globalAlpha = 1; sx.globalCompositeOperation = 'source-over';
+  if (S.kind === 'shot') {
+    L = S.L; const fps = S.loop === 0 ? 16 : 12, uq = Math.floor(S.ls * fps) / fps / S.d;             // hand-cranked: motion sampled at 16 (then 12) fps
+    shot(sx, S.i, uq, L, t);
+    const caps = CAP[S.loop === 0 ? 0 : 1]; caption(sx, caps[S.i], S.loop >= 2 ? 1 : ss(0, .12, S.u) * (1 - ss(.92, 1, S.u) * (S.loop === 0 ? 0 : 1)));
+    if (S.i === 3) colour = (g, wx, wy) => goldBeam(g, ss(.04, .3, uq) * (1 - ss(.85, 1, uq) * .5), 760 + wx, wy - 40, 1000 + wy, 60, 300);
+  } else if (S.kind === 'burn') {
+    L = 1; const k = clamp((t - BURN[0]) / .85); shot(sx, 0, .72, 1, BURN[0]); caption(sx, CAP[1][0], 1);    // the frame sticks
+  } else if (S.kind === 'tender') {
+    L = 0; sepia = .42; const lt = t - TENDER[0], uq = Math.floor(lt * 16) / 16;
+    sx.drawImage(bg, 0, 0); sx.fillStyle = 'rgba(20,18,16,.42)'; sx.fillRect(0, 0, FW, FH); idol(sx, 280, 612, 1);
+    person(sx, 720, 930, 1.5, { face: 1, kneel: 1, up: ss(.4, 1.6, uq) * .9, v: .32, cap: .85 });
+    colour = (g, wx, wy) => goldBeam(g, ss(.6, 2.0, lt), 720 + wx, -40 + wy, 940 + wy, 18, 120 + 40 * ss(1, 3, lt));
+  } else {
+    const [lines, cite, kind, a0, a1] = cardLines(S.id), a = win(t, a0, a1, .6, .5);
+    card(sx, lines, cite, kind, a);
+    if (S.id === 'D') { L = 0; sepia = .4; } else L = S.id === 'A' ? .05 : .25;
+  }
+  print(t, L, { colour, sepia });
+  if (S.kind === 'burn') { const k = clamp((t - BURN[0]) / .85); burn(k, t); if (t > BURN[0] + .82) { fx.fillStyle = `rgba(252,248,238,${clamp((t - BURN[0] - .82) / .12)})`; fx.fillRect(0, 0, FW, FH); } }
+  // iris in the tender reel: opens on the kneeling figure, closes at the end
+  if (S.kind === 'tender') { const lt = t - TENDER[0], R = lerp(60, 900, eio(clamp(lt / 1.4))) * (1 - eio(clamp((lt - 2.6) / 1.0))) + 1;
+    fx.save(); fx.fillStyle = '#000'; fx.beginPath(); fx.rect(0, 0, FW, FH); fx.arc(720, 760, R, 0, Math.PI * 2, true); fx.fill('evenodd'); fx.restore(); }
+
+  // the gate: the print in a rounded aperture, a soft dark rim, spill on the curtains
+  ctx.drawImage(curtains, 0, 0);
+  const lit = S.kind === 'card' ? .25 : S.kind === 'burn' ? 1 : .6;
+  if (!V) { for (const [x0, d] of [[G.x, -1], [G.x + G.w, 1]]) { const sp = ctx.createLinearGradient(x0, 0, x0 + d * 220, 0); sp.addColorStop(0, `rgba(230,200,160,${.16 * lit})`); sp.addColorStop(1, 'rgba(230,200,160,0)'); ctx.fillStyle = sp; ctx.fillRect(Math.min(x0, x0 + d * 220), 0, 220, H); } }
+  else { ctx.drawImage(seats, 0, G.y + G.h); const sp = ctx.createLinearGradient(0, G.y + G.h, 0, G.y + G.h + 300); sp.addColorStop(0, `rgba(230,200,160,${.12 * lit})`); sp.addColorStop(1, 'rgba(230,200,160,0)'); ctx.fillStyle = sp; ctx.fillRect(0, G.y + G.h, W, 300); }
+  ctx.save(); const rr = 34 * G.w / FW; ctx.beginPath(); ctx.roundRect(G.x, G.y, G.w, G.h, rr); ctx.clip(); ctx.drawImage(film, G.x, G.y, G.w, G.h);
+  ctx.lineWidth = 16 * G.w / FW; ctx.strokeStyle = 'rgba(0,0,0,.6)'; ctx.filter = 'blur(6px)'; ctx.beginPath(); ctx.roundRect(G.x, G.y, G.w, G.h, rr); ctx.stroke(); ctx.filter = 'none'; ctx.restore();
+
+  const lx = V ? 80 : 60, ly = V ? 250 : 112;
+  text(ctx, '06  ·  사사 시대', lx, ly, { align: 'left', size: V ? 32 : 30, weight: 600, color: '#efe6d4', alpha: win(t, .6, 5.2, 1, 1), ls: 4, shadow: 'rgba(0,0,0,.8)' });
+  text(ctx, '약 BC 1400–1050  ·  사사기', lx, ly + 44, { align: 'left', size: V ? 23 : 22, font: "'Noto Sans KR',sans-serif", color: '#d8ccb6', alpha: win(t, 1.1, 5.2, 1, 1) * .85, ls: 2, shadow: 'rgba(0,0,0,.8)' });
+  const f = 1 - ss(0, 1.0, t) + ss(DUR - 1.0, DUR, t); if (f > 0) { ctx.fillStyle = `rgba(0,0,0,${clamp(f)})`; ctx.fillRect(0, 0, W, H); }
+}
+
+Pilot.run({ W, H, dur: DUR, audio: 'judges.m4a', fonts: ["600 40px 'Noto Serif KR'", "400 20px 'Noto Sans KR'"],
+  init: async () => {
+    film = canvas(FW, FH); fx = film.getContext('2d'); scene = canvas(FW, FH); sx = scene.getContext('2d');
+    hatchP = buildHatch(); bg = buildBG(false); bgBare = buildBG(true);
+    for (let i = 0; i < 8; i++) grains.push(speckle(FW / 2, FH / 2, 80, 300 + i, .5));
+    curtains = buildCurtains(); if (V) seats = buildSeats();
+  },
+  draw });
+</script>
+</body>
+</html>

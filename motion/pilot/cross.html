@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>시안 · 십자가</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600&family=Noto+Sans+KR:wght@400&display=swap">
+</head>
+<body>
+<script src="lib.js"></script>
+<script>
+/* 11 십자가 — black-and-white film with one colour (Kamiński), then a Rembrandt top-light oil painting.
+   A  long-lens wide: the crowd walks toward the hill; darkness falls at noon (Luke 23:44)
+   B  three hammer blows: hard cuts to black
+   C  the cross from below; Isaiah 53:5; one red drop is the only colour
+   D  top-lit oil: a man kneels in the cross's shadow — "the one who should have hung there was me"
+   E  black: "다 이루었다" (John 19:30) */
+const { clamp, lerp, ss, eo, eio, win, rng, fbm, noise, canvas, hex, mix, rgb, ramp, speckle, text } = Pilot;
+const W = 1920, H = 1080, DUR = 39;
+const S = { A: [0, 9], B: [9, 13], C: [13, 27.4], D: [27.4, 34], E: [34, 39] };
+let grains = [], clouds, crowd = [], frame, fx, oilTex, branch;
+const RED = '#b3261e';
+
+// ---------- shared film treatment ----------
+function film(ctx, t, src, o = {}) {    // grade the composed frame to B&W, halation, grain, flicker, dust, vignette
+  const fl = 1 + (noise(t * 9, 3) - .5) * .06;
+  ctx.filter = `grayscale(1) contrast(${o.contrast || 1.28}) brightness(${(o.bright || 1) * fl})`;
+  ctx.drawImage(src, 0, 0); ctx.filter = 'none';
+  ctx.globalCompositeOperation = 'screen'; ctx.globalAlpha = o.halo == null ? .22 : o.halo; ctx.filter = 'grayscale(1) blur(14px) brightness(1.1)'; ctx.drawImage(src, 0, 0); ctx.filter = 'none';
+  ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'overlay'; ctx.globalAlpha = .42;
+  const gi = Math.floor(t * 30) % grains.length; ctx.drawImage(grains[gi], 0, 0, W, H); ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
+  const r = rng(Math.floor(t * 30) + 77); ctx.fillStyle = 'rgba(230,230,230,.5)';
+  for (let i = 0; i < 3; i++) if (r() < .35) { ctx.globalAlpha = .3 + r() * .4; ctx.beginPath(); ctx.ellipse(r() * W, r() * H, 1 + r() * 2.5, .6 + r() * 1.4, r() * 3, 0, 6.28); ctx.fill(); }
+  ctx.globalAlpha = 1; vignette(ctx, .62, '#000');
+}
+function vignette(ctx, a, c) { const g = ctx.createRadialGradient(W / 2, H / 2, H * .38, W / 2, H / 2, H * 1.02); g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, c === '#000' ? `rgba(0,0,0,${a})` : c); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H); }
+
+// ---------- A: long-lens wide ----------
+function shotA(t) {
+  const x = fx, lt = t - S.A[0], dark = eio(clamp((lt - 3.6) / 4.2)), z = lerp(1, 1.09, eo(lt / 9));
+  x.save(); x.translate(W * .62, H * .45); x.scale(z, z); x.translate(-W * .62, -H * .45);
+  const sk = x.createLinearGradient(0, 0, 0, 640); sk.addColorStop(0, rgb(mix([168, 168, 166], [14, 14, 16], dark))); sk.addColorStop(1, rgb(mix([206, 204, 200], [40, 40, 42], dark * .9)));
+  x.fillStyle = sk; x.fillRect(-200, -200, W + 400, 900);
+  x.globalAlpha = .55 * (1 - dark * .5); x.drawImage(clouds, (lt * 6) % 400 - 400, -60, W + 800, 520); x.globalAlpha = 1;
+  // far city wall, left
+  x.fillStyle = rgb(mix([150, 150, 148], [30, 30, 32], dark)); x.beginPath(); x.moveTo(-100, 640);
+  for (let i = 0; i <= 26; i++) { const px = -100 + i * 34; x.lineTo(px, 560 - (i % 3 === 0 ? 38 : 22) - (i > 10 && i < 14 ? 40 : 0)); x.lineTo(px + 22, 560 - (i % 3 === 0 ? 38 : 22) - (i > 10 && i < 14 ? 40 : 0)); }
+  x.lineTo(820, 640); x.fill();
+  // the hill and three crosses
+  x.fillStyle = rgb(mix([120, 120, 118], [18, 18, 20], dark)); x.beginPath(); x.moveTo(700, 680);
+  x.bezierCurveTo(980, 480, 1240, 430, 1340, 436); x.bezierCurveTo(1460, 440, 1720, 520, 2100, 680); x.fill();
+  [[1268, 450, 54], [1342, 432, 72], [1416, 450, 54]].forEach(([cx, cy, h]) => { x.fillStyle = rgb(mix([60, 60, 60], [6, 6, 6], dark));
+    x.fillRect(cx - 3, cy - h, 6, h); x.fillRect(cx - h * .3, cy - h * .78, h * .6, 5); });
+  // valley floor and the road
+  const fg = x.createLinearGradient(0, 640, 0, H); fg.addColorStop(0, rgb(mix([140, 138, 134], [22, 22, 24], dark))); fg.addColorStop(1, rgb(mix([98, 96, 92], [10, 10, 12], dark)));
+  x.fillStyle = fg; x.fillRect(-200, 640, W + 400, 600);
+  x.fillStyle = rgb(mix([168, 164, 156], [30, 30, 32], dark)); x.beginPath(); x.moveTo(-200, 860); x.bezierCurveTo(500, 820, 900, 760, 1300, 690); x.lineTo(1360, 696); x.bezierCurveTo(1000, 800, 600, 900, -200, 960); x.fill();
+  // the crowd: long-lens compression, no two alike
+  for (const p of crowd) { const k = clamp((lt * p.v + p.x0) / 1), u = (p.x0 + lt * p.v) % 1.15;
+    const px = lerp(-80, 1330, u), py = lerp(p.y0, 700, Math.pow(u, 1.6)) , sc = lerp(1, .55, u) * p.h;
+    const tone = rgb(mix([p.tone, p.tone, p.tone], [8, 8, 8], dark * .85)), sw = Math.sin(lt * p.g + p.ph);
+    x.fillStyle = tone; x.save(); x.translate(px, py); x.scale(sc, sc);
+    x.beginPath(); x.ellipse(0, -46, 5, 6, 0, 0, 6.28); x.fill();
+    x.beginPath(); x.moveTo(-6 * p.w, -40); x.lineTo(6 * p.w, -40); x.lineTo(8 * p.w, -12); x.lineTo(-8 * p.w, -12); x.fill();
+    x.fillRect(-4 + sw * 3, -12, 3, 12); x.fillRect(1 - sw * 3, -12, 3, 12); x.restore(); }
+  x.restore();
+  // soft foreground branch, out of focus
+  x.globalAlpha = .85; x.drawImage(branch, -40, -30); x.globalAlpha = 1;
+}
+
+// ---------- B: the beam against the sky (between the blows) ----------
+function shotB(t, close) {
+  const x = fx; x.fillStyle = '#4a4a50'; x.fillRect(0, 0, W, H);
+  x.globalAlpha = .8; x.drawImage(clouds, -200, -100, W + 400, 800); x.globalAlpha = 1;
+  x.save(); x.translate(W / 2, H * (close ? .62 : .7)); x.rotate(close ? -.06 : .04); const s = close ? 1.7 : 1;
+  x.fillStyle = '#050505'; x.fillRect(-640 * s, -46 * s, 1280 * s, 92 * s);
+  x.fillStyle = 'rgba(255,255,255,.06)'; for (let i = 0; i < 12; i++) x.fillRect(-640 * s, (-40 + i * 7) * s, 1280 * s, 1.5);   // wood grain
+  x.restore();
+}
+
+// ---------- C: the cross from below ----------
+function shotC(t) {
+  const x = fx, lt = t - S.C[0], z = lerp(1.04, 1.12, lt / 11);
+  x.save(); x.translate(W / 2, H * .55); x.scale(z, z); x.translate(-W / 2, -H * .55);
+  const sk = x.createLinearGradient(0, 0, 0, H); sk.addColorStop(0, '#0c0c0e'); sk.addColorStop(.6, '#2a2a2e'); sk.addColorStop(1, '#4a4a4c'); x.fillStyle = sk; x.fillRect(-100, -100, W + 200, H + 200);
+  x.globalAlpha = .75; x.drawImage(clouds, -300 - lt * 10, -140, W + 700, 900); x.globalAlpha = 1;
+  // a thin break of light behind the beam
+  const br = x.createRadialGradient(W / 2, 250, 0, W / 2, 250, 700); br.addColorStop(0, `rgba(235,235,235,${.32 + .1 * Math.sin(lt * .6)})`); br.addColorStop(1, 'rgba(235,235,235,0)'); x.fillStyle = br; x.fillRect(0, 0, W, H);
+  // the cross, low angle: the upright tapers upward
+  x.fillStyle = '#060606';
+  x.beginPath(); x.moveTo(W / 2 - 58, H + 40); x.lineTo(W / 2 + 58, H + 40); x.lineTo(W / 2 + 34, 40); x.lineTo(W / 2 - 34, 40); x.fill();
+  x.beginPath(); x.moveTo(W / 2 - 560, 236); x.lineTo(W / 2 + 560, 236); x.lineTo(W / 2 + 540, 300); x.lineTo(W / 2 - 540, 300); x.fill();
+  // the figure, in silhouette: head bowed, arms outstretched
+  const cx0 = W / 2;
+  x.beginPath(); x.ellipse(cx0 + 40, 338, 30, 38, .55, 0, 6.28); x.fill();                                       // head, bowed to the side
+  x.beginPath(); x.moveTo(cx0 + 12, 352); x.lineTo(cx0 + 30, 372); x.lineTo(cx0 + 4, 388); x.fill();              // neck
+  x.beginPath();                                                                                                    // arms along the beam, sagging a little
+  x.moveTo(cx0 - 500, 250); x.quadraticCurveTo(cx0 - 260, 284, cx0 - 70, 372); x.lineTo(cx0 - 64, 398); x.quadraticCurveTo(cx0 - 270, 316, cx0 - 500, 280); x.closePath();
+  x.moveTo(cx0 + 500, 250); x.quadraticCurveTo(cx0 + 260, 284, cx0 + 70, 372); x.lineTo(cx0 + 64, 398); x.quadraticCurveTo(cx0 + 270, 316, cx0 + 500, 280); x.closePath(); x.fill();
+  x.beginPath(); x.ellipse(cx0 - 512, 262, 16, 22, 0, 0, 6.28); x.ellipse(cx0 + 512, 262, 16, 22, 0, 0, 6.28); x.fill();
+  x.beginPath();                                                                                                    // torso, cloth at the waist
+  x.moveTo(cx0 - 72, 380); x.quadraticCurveTo(cx0 - 84, 470, cx0 - 60, 560); x.lineTo(cx0 - 76, 610); x.lineTo(cx0 + 74, 616); x.lineTo(cx0 + 60, 560);
+  x.quadraticCurveTo(cx0 + 86, 470, cx0 + 74, 380); x.closePath(); x.fill();
+  x.beginPath(); x.moveTo(cx0 - 52, 600); x.quadraticCurveTo(cx0 - 40, 760, cx0 - 20, 880); x.lineTo(cx0 + 22, 880); x.quadraticCurveTo(cx0 + 44, 760, cx0 + 54, 600); x.fill();
+  // ground at the foot
+  x.fillStyle = '#0a0a0a'; x.beginPath(); x.moveTo(-100, H - 40); x.bezierCurveTo(600, H - 90, 1300, H - 80, W + 100, H - 30); x.lineTo(W + 100, H + 100); x.lineTo(-100, H + 100); x.fill();
+  // rain haze
+  const r = rng(Math.floor(lt * 24) + 3); x.strokeStyle = 'rgba(220,220,220,.10)'; x.lineWidth = 1.2;
+  for (let i = 0; i < 140; i++) { const px = r() * W, py = r() * H; x.beginPath(); x.moveTo(px, py); x.lineTo(px - 6, py + 34); x.stroke(); }
+  x.restore();
+}
+function redDrop(ctx, t) {         // the only colour in the black-and-white world
+  const lt = t - S.C[0], a = 11.6, b = 12.9; if (lt < a - .6) return;
+  const z = lerp(1.04, 1.12, lt / 11), tr = (px, py) => [W / 2 + (px - W / 2) * z, H * .55 + (py - H * .55) * z];
+  const form = ss(a - .6, a, lt), fall = clamp((lt - a) / (b - a)), y = lerp(870, H - 60, fall * fall);
+  ctx.fillStyle = RED;
+  if (lt < b) { const [px, py] = tr(W / 2 + 22, y); ctx.globalAlpha = form; ctx.beginPath(); ctx.ellipse(px, py, 7 * z, (9 + fall * 8) * z, 0, 0, 6.28); ctx.fill(); }
+  else { const k = clamp((lt - b) / 1.6), [px, py] = tr(W / 2 + 22, H - 60); ctx.globalAlpha = 1 - k * .3; ctx.beginPath(); ctx.ellipse(px, py, (8 + 40 * eo(k)) * z, (3 + 7 * eo(k)) * z, 0, 0, 6.28); ctx.fill(); }
+  ctx.globalAlpha = 1;
+}
+
+// ---------- D: Rembrandt top light ----------
+function shotD(ctx, t) {
+  const lt = t - S.D[0], z = lerp(1.0, 1.08, eo(lt / 6.6)), x = ctx;
+  x.save(); x.translate(W / 2, H * .5); x.scale(z, z); x.translate(-W / 2, -H * .5);
+  x.fillStyle = '#24150B'; x.fillRect(-100, -100, W + 200, H + 200);
+  // the pool of light on the floor, from above
+  const pl = x.createRadialGradient(W * .5, H * .78, 0, W * .5, H * .78, 620); pl.addColorStop(0, 'rgba(226,182,115,.85)'); pl.addColorStop(.45, 'rgba(143,93,42,.55)'); pl.addColorStop(1, 'rgba(36,21,11,0)');
+  x.save(); x.scale(1, .42); x.translate(0, H * .78 / .42 - H * .78); x.fillStyle = pl; x.fillRect(-100, 0, W + 200, H * 3); x.restore();
+  // the kneeling man, seen from behind: broad shoulders, back bent forward, head bowed low
+  const cx0 = W * .5, hd = x.createLinearGradient(0, H * .5, 0, H * .92);
+  hd.addColorStop(0, '#E2B673'); hd.addColorStop(.12, '#b07a3a'); hd.addColorStop(.38, '#5a3418'); hd.addColorStop(1, '#140b05');
+  const man = new Path2D();
+  man.moveTo(cx0 - 156, H * .94); man.quadraticCurveTo(cx0 - 184, H * .79, cx0 - 160, H * .69);          // left side (elbow out)
+  man.quadraticCurveTo(cx0 - 152, H * .625, cx0 - 104, H * .607); man.quadraticCurveTo(cx0 - 58, H * .596, cx0 - 30, H * .612);   // sloping shoulder into the neck
+  man.lineTo(cx0 + 30, H * .612); man.quadraticCurveTo(cx0 + 60, H * .596, cx0 + 108, H * .607);
+  man.quadraticCurveTo(cx0 + 156, H * .625, cx0 + 164, H * .69); man.quadraticCurveTo(cx0 + 188, H * .79, cx0 + 160, H * .94); man.closePath();
+  const head = new Path2D(); head.ellipse(cx0 + 2, H * .552, 40, 47, 0, 0, 6.28);
+  x.fillStyle = hd; x.fill(man); x.fill(head);
+  // brushwork: thick light strokes on the lit planes, thin dark glazes below
+  const rr = rng(19), both = new Path2D(); both.addPath(man); both.addPath(head); x.save(); x.clip(both);
+  for (let i = 0; i < 520; i++) { const px = cx0 + (rr() - .5) * 340, py = H * (.5 + rr() * .42), up = 1 - clamp((py - H * .52) / (H * .3));
+    x.strokeStyle = up > .55 ? (rr() < .5 ? '#f0c98a' : '#d29a52') : (rr() < .5 ? '#3a2212' : '#5a3418'); x.globalAlpha = up > .55 ? .55 * up : .35;
+    x.lineWidth = up > .55 ? 5 + rr() * 6 : 3 + rr() * 4; x.lineCap = 'round'; const a = (rr() - .5) * 1.2 + (px < cx0 ? .5 : -.5);
+    x.beginPath(); x.moveTo(px, py); x.lineTo(px + Math.cos(a) * (14 + rr() * 22), py + Math.sin(a) * (6 + rr() * 10)); x.stroke(); }
+  x.restore(); x.globalAlpha = 1;
+  // the shadow of the cross: the cross stands behind the camera, so its shadow runs from us to him and lies across his back
+  x.save(); x.filter = 'blur(10px)'; x.fillStyle = 'rgba(7,4,3,.62)';
+  x.beginPath(); x.moveTo(cx0 - 120, H + 60); x.lineTo(cx0 + 120, H + 60); x.lineTo(cx0 + 34, H * .42); x.lineTo(cx0 - 34, H * .42); x.fill();
+  x.beginPath(); x.moveTo(cx0 - 430, H * .75); x.lineTo(cx0 + 430, H * .75); x.lineTo(cx0 + 370, H * .685); x.lineTo(cx0 - 370, H * .685); x.fill();
+  x.restore(); x.restore();
+  // oil: glazes in the dark, impasto on the lights, amber varnish, canvas grain
+  x.globalCompositeOperation = 'overlay'; x.globalAlpha = .8; x.drawImage(oilTex, 0, 0); x.globalAlpha = 1;
+  x.globalCompositeOperation = 'multiply'; x.fillStyle = 'rgba(230,180,110,.35)'; x.fillRect(0, 0, W, H); x.globalCompositeOperation = 'source-over';
+  const lb = x.createRadialGradient(W / 2, -200, 0, W / 2, -200, 900); lb.addColorStop(0, 'rgba(255,220,160,.18)'); lb.addColorStop(1, 'rgba(255,220,160,0)'); x.fillStyle = lb; x.fillRect(0, 0, W, H);
+  const g = x.createRadialGradient(W / 2, H * .6, H * .3, W / 2, H * .6, H * 1.0); g.addColorStop(0, 'rgba(7,4,3,0)'); g.addColorStop(1, 'rgba(7,4,3,.85)'); x.fillStyle = g; x.fillRect(0, 0, W, H);
+}
+
+// ---------- frame ----------
+function draw(ctx, t) {
+  ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H); fx.setTransform(1, 0, 0, 1, 0, 0); fx.clearRect(0, 0, W, H);
+  if (t < S.A[1]) {
+    shotA(t); film(ctx, t, frame);
+    text(ctx, '11  ·  십자가', 110, 120, { align: 'left', size: 30, weight: 600, color: '#e8e8e8', alpha: win(t, .6, 5, 1, 1), ls: 4 });
+    const v = win(t, 4.6, S.A[1] - .1, 1.2, .5);
+    text(ctx, '“해가 빛을 잃고 온 땅에 어둠이 임하여”', W / 2, H - 140, { size: 46, weight: 600, color: '#f0f0f0', alpha: v, shadow: 'rgba(0,0,0,.9)', shadowBlur: 20 });
+    text(ctx, '누가복음 23:44 (개역개정)', W / 2, H - 86, { size: 22, font: "'Noto Sans KR',sans-serif", color: '#bbb', alpha: v * .9, ls: 2 });
+  } else if (t < S.B[1]) {
+    const lt = t - S.B[0];                    // blows at 0, 1.3, 2.6 — each one cuts to black
+    const shot = (lt > .45 && lt < 1.25) ? 1 : (lt > 1.75 && lt < 2.55) ? 2 : 0;
+    if (shot) { shotB(t, shot === 2); film(ctx, t, frame, { bright: .8 }); }
+  } else if (t < S.C[1]) {
+    shotC(t); film(ctx, t, frame, { contrast: 1.35, halo: .3 }); redDrop(ctx, t);
+    const lt = t - S.C[0], st = { size: 50, weight: 600, color: '#f2f2f2', shadow: 'rgba(0,0,0,.95)', shadowBlur: 22 };
+    const a1 = win(lt, .9, 4.2, 1, .6), a2 = win(lt, 4.0, 7.3, 1, .6), a3 = win(lt, 7.1, 11.2, 1, .8);
+    text(ctx, '“그가 찔림은 우리의 허물 때문이요”', W / 2, H - 150, { ...st, alpha: a1 });
+    text(ctx, '“그가 상함은 우리의 죄악 때문이라”', W / 2, H - 150, { ...st, alpha: a2 });
+    text(ctx, '“그가 채찍에 맞으므로 우리는 나음을 받았도다”', W / 2, H - 150, { ...st, alpha: a3 });
+    text(ctx, '이사야 53:5 (개역개정)', W / 2, H - 94, { size: 22, font: "'Noto Sans KR',sans-serif", color: '#aaa', alpha: Math.max(a1, a2, a3) * .9, ls: 2 });
+    const f = 1 - ss(0, .5, lt); if (f > 0) { ctx.fillStyle = `rgba(0,0,0,${f})`; ctx.fillRect(0, 0, W, H); }
+  } else if (t < S.D[1]) {
+    shotD(ctx, t); const lt = t - S.D[0];
+    text(ctx, '그 십자가에 달려야 했던 사람은', W / 2, 190, { size: 52, weight: 600, color: '#f4dfb8', alpha: win(lt, .9, 6.4, 1.2, .7), shadow: 'rgba(0,0,0,.9)' });
+    text(ctx, '바로 나였습니다.', W / 2, 290, { size: 76, weight: 600, color: '#ffe9c4', alpha: win(lt, 2.7, 6.4, 1.2, .7), shadow: 'rgba(0,0,0,.9)', shadowBlur: 26 });
+    const f = 1 - ss(0, 1, lt) + ss(5.9, 6.6, lt); if (f > 0) { ctx.fillStyle = `rgba(0,0,0,${clamp(f)})`; ctx.fillRect(0, 0, W, H); }
+  } else {
+    const lt = t - S.E[0];
+    text(ctx, '“다 이루었다”', W / 2, H / 2 + 20, { size: 96, weight: 600, color: '#f2efe8', alpha: win(lt, 1.0, 5.0, 1.4, 1), ls: 12 });
+    text(ctx, '요한복음 19:30 (개역개정)', W / 2, H / 2 + 100, { size: 24, font: "'Noto Sans KR',sans-serif", color: '#999', alpha: win(lt, 1.8, 5.0, 1, 1), ls: 2 });
+  }
+}
+
+Pilot.run({ W, H, dur: DUR, audio: 'cross.m4a', fonts: ["600 40px 'Noto Serif KR'", "400 20px 'Noto Sans KR'"],
+  init: async () => {
+    frame = canvas(W, H); fx = frame.getContext('2d');
+    for (let i = 0; i < 8; i++) grains.push(speckle(960, 540, 70, 100 + i, .5));
+    // overcast clouds: soft fbm in greys
+    clouds = canvas(800, 300); { const x = clouds.getContext('2d'), d = x.createImageData(800, 300);
+      for (let j = 0; j < 300; j++) for (let i = 0; i < 800; i++) { const v = fbm(i * .008, j * .016, 5), a = clamp((v - .38) * 2.2); const k = (j * 800 + i) * 4; d.data[k] = d.data[k + 1] = d.data[k + 2] = 120 + v * 110; d.data[k + 3] = a * 255; }
+      x.putImageData(d, 0, 0); }
+    const r = rng(42); crowd = [];
+    for (let i = 0; i < 230; i++) crowd.push({ x0: r() * 1.15, v: .028 + r() * .02, y0: 880 + r() * 150, h: .9 + r() * .55, w: .8 + r() * .5, tone: 50 + r() * 110, g: 5 + r() * 3, ph: r() * 6.28 });
+    crowd.sort((a, b) => a.y0 - b.y0);
+    branch = canvas(900, 420); { const x = branch.getContext('2d'); x.filter = 'blur(16px)'; x.strokeStyle = '#111'; x.lineCap = 'round';
+      x.lineWidth = 34; x.beginPath(); x.moveTo(-40, 120); x.quadraticCurveTo(300, 60, 760, 20); x.stroke(); x.lineWidth = 16;
+      for (let i = 0; i < 26; i++) { const px = 60 + i * 26, py = 100 - i * 3; x.fillStyle = '#151515'; x.beginPath(); x.ellipse(px, py + (i % 2 ? 26 : -22), 30, 12, (i % 2 ? .5 : -.5), 0, 6.28); x.fill(); } }
+    oilTex = canvas(W, H); { const x = oilTex.getContext('2d'), rr = rng(8); x.fillStyle = '#808080'; x.fillRect(0, 0, W, H);
+      for (let i = 0; i < 9000; i++) { const px = rr() * W, py = rr() * H, a = rr() * 3.14, l = 10 + rr() * 30, v = 100 + rr() * 56;
+        x.strokeStyle = `rgb(${v},${v},${v})`; x.globalAlpha = .5; x.lineWidth = 2 + rr() * 5; x.lineCap = 'round'; x.beginPath(); x.moveTo(px, py); x.lineTo(px + Math.cos(a) * l, py + Math.sin(a) * l); x.stroke(); }
+      x.globalAlpha = 1; x.globalCompositeOperation = 'overlay'; x.drawImage(speckle(W, H, 20, 3), 0, 0); }
+  },
+  draw });
+</script>
+</body>
+</html>

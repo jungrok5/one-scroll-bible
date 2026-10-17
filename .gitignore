@@ -42,3 +42,5 @@ node_modules/
 
 # Motion-graphic recordings (node motion/render.mjs) — large binaries, not committed
 /motion/out/
+/motion/pilot/*.wav
+/motion/pilot/*.m4a

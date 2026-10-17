@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>시안 · 부활</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600&family=Noto+Sans+KR:wght@400&display=swap">
+</head>
+<body>
+<script src="lib.js"></script>
+<script>
+/* 12 부활 — impasto, palette knife. The garden tomb is painted in grey knife strokes; the stone rolls away,
+   light bursts from the tomb, and every stroke is re-laid in colour in a wave that starts at the empty tomb.
+   No film grain (it eats the knife edges). Static paint never moves; only the stone and the light do. */
+const { clamp, lerp, ss, eo, eio, win, rng, fbm, noise, canvas, mix, rgb, text } = Pilot;
+const W = 1920, H = 1080, DUR = 27;
+const TOMB = [760, 650], ROLL = [5.4, 8.0], BURST = 7.7, WAVE0 = 8.1, WAVE_V = 300;
+let greyImg, colImg, mask, mx, tmp, tx, strokes = [], stone = [], lastT = -1, idx = 0;
+
+// ---------- the painting, as a value-planned reference ----------
+const rockTop = x => 340 + 80 * fbm(x * .005, 2) + Math.max(0, 380 - x) * .55 + Math.max(0, x - 1080) * 1.25 + 30 * Math.sin(x * .011);
+const inRock = (x, y) => y > rockTop(x) && y < 830 + 24 * fbm(x * .01, 4) && x < 1420;
+const inCave = (x, y) => { const n = (fbm(x * .03, y * .03) - .5) * .35, dx = (x - 760) / (118 + 26 * (y - 560) / 240), dy = (y - 640) / 112; return y < 800 && (y > 640 ? Math.abs(dx) < 1 + n : dx * dx + dy * dy < 1 + n); };
+const treeBlobs = [[1530, 520, 150], [1660, 470, 170], [1800, 540, 140], [1440, 600, 110], [1720, 610, 120], [1600, 600, 120]];
+const inTree = (x, y) => treeBlobs.some(([cx, cy, r]) => ((x - cx) / r) ** 2 + ((y - cy) / (r * .72)) ** 2 < 1 + (fbm(x * .02, y * .02) - .5) * .5);
+function buildRef() {
+  const c = canvas(W, H), x = c.getContext('2d');
+  const sk = x.createLinearGradient(0, 0, 0, 700); sk.addColorStop(0, '#2c4c9c'); sk.addColorStop(.35, '#6f86c4'); sk.addColorStop(.72, '#f2ae8a'); sk.addColorStop(1, '#ffd892');
+  x.fillStyle = sk; x.fillRect(0, 0, W, H);
+  const sun = x.createRadialGradient(1500, 640, 0, 1500, 640, 520); sun.addColorStop(0, 'rgba(255,240,190,.95)'); sun.addColorStop(1, 'rgba(255,220,150,0)'); x.fillStyle = sun; x.fillRect(0, 0, W, H);
+  x.fillStyle = '#8a7fae'; x.beginPath(); x.moveTo(0, 700); for (let px = 0; px <= W; px += 40) x.lineTo(px, 610 - 60 * fbm(px * .003, 5)); x.lineTo(W, 760); x.lineTo(0, 760); x.fill();
+  x.fillStyle = '#9c9a6a'; x.beginPath(); x.moveTo(0, 760); for (let px = 0; px <= W; px += 40) x.lineTo(px, 690 - 40 * fbm(px * .004, 9)); x.lineTo(W, 860); x.lineTo(0, 860); x.fill();
+  // ground: grass planes and the path to the tomb
+  const gg = x.createLinearGradient(0, 780, 0, H); gg.addColorStop(0, '#8aa04a'); gg.addColorStop(.5, '#6f8a3a'); gg.addColorStop(1, '#3f5a26'); x.fillStyle = gg; x.fillRect(0, 790, W, 300);
+  x.fillStyle = '#cfa66a'; x.beginPath(); x.moveTo(690, 800); x.bezierCurveTo(700, 880, 560, 960, 420, H); x.lineTo(820, H); x.bezierCurveTo(860, 950, 840, 860, 830, 800); x.fill();
+  // the rock: lit planes to the right (dawn in the east), shadow planes to the left
+  const d = x.getImageData(0, 0, W, H), D = d.data;
+  for (let y = 250; y < 870; y++) for (let px = 0; px < 1420; px++) { if (!inRock(px, y)) continue; const k = (y * W + px) * 4;
+    const f = fbm(px * .01, y * .01, 3), lit = clamp((px - 300) / 950), strata = .5 + .5 * Math.sin(px * .018 + f * 5), crev = Math.max(0, Math.sin(px * .05 + f * 9) - .93) * 6;
+    const c = mix([128, 92, 62], [236, 204, 146], clamp(.18 + .62 * lit + .12 * (strata - .5) + (f - .5) * .3 - crev * .3)); for (let i = 0; i < 3; i++) D[k + i] = c[i]; }
+  for (let y = 460; y < 805; y++) for (let px = 620; px < 900; px++) if (inCave(px, y)) { const k = (y * W + px) * 4; D[k] = 42; D[k + 1] = 28; D[k + 2] = 20; }
+  // olive trees
+  for (let y = 300; y < 840; y++) for (let px = 1260; px < W; px++) if (inTree(px, y)) { const k = (y * W + px) * 4, f = fbm(px * .03, y * .03, 3), lit = clamp((px - 1300) / 600) * .5 + (1 - (y - 330) / 400) * .4;
+    const c = f > .58 ? [184, 200, 160] : f > .44 ? [143, 164, 120] : [104, 128, 90]; for (let i = 0; i < 3; i++) D[k + i] = c[i] * (.8 + lit * .4); }
+  x.putImageData(d, 0, 0);
+  x.fillStyle = '#4a3626'; [[1540, 610, 30], [1680, 590, 34], [1800, 640, 26]].forEach(([tx0, ty, w]) => { x.beginPath(); x.moveTo(tx0 - w, 860); x.quadraticCurveTo(tx0 - 10, 760, tx0 - w * .3, ty); x.lineTo(tx0 + w * .3, ty); x.quadraticCurveTo(tx0 + 14, 760, tx0 + w, 860); x.fill(); });
+  // the grave cloth lying inside (“와서 그가 누우셨던 곳을 보라”)
+  x.fillStyle = '#e8e0d0'; x.beginPath(); x.ellipse(770, 772, 82, 14, -.04, 0, 6.28); x.fill(); x.fillStyle = '#cfc6b4'; x.beginPath(); x.ellipse(712, 764, 26, 10, 0, 0, 6.28); x.fill();
+  return c;
+}
+
+const farHill = x => 610 - 60 * fbm(x * .003, 5), midHill = x => 690 - 40 * fbm(x * .004, 9);
+const TRUNKS = [[1540, 610, 30], [1680, 590, 34], [1800, 640, 26]];
+let G, groupMasks = [];   // 0 sky · 1 far hills · 2 near hills · 3 ground · 4 rock · 5 tomb mouth · 6 olive leaves · 7 trunks
+function buildGroups() {
+  const tc = canvas(W, H).getContext('2d'); const tp = new Path2D();
+  TRUNKS.forEach(([x0, ty, w]) => { tp.moveTo(x0 - w, 860); tp.quadraticCurveTo(x0 - 10, 760, x0 - w * .3, ty); tp.lineTo(x0 + w * .3, ty); tp.quadraticCurveTo(x0 + 14, 760, x0 + w, 860); tp.closePath(); });
+  G = new Uint8Array(W * H);
+  for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
+    let g = y >= 790 ? 3 : y > midHill(x) ? 2 : y > farHill(x) ? 1 : 0;
+    if (x < 1420 && y > 250 && y < 870 && inRock(x, y)) g = 4;
+    if (x > 620 && x < 900 && y > 460 && y < 805 && inCave(x, y)) g = 5;
+    if (x > 1260 && y > 300 && y < 840 && inTree(x, y)) g = 6;
+    if (x > 1480 && y > 580 && y < 862 && tc.isPointInPath(tp, x, y)) g = 7;
+    G[y * W + x] = g; }
+  for (let g = 0; g < 8; g++) { const c = canvas(W, H), x = c.getContext('2d'), d = x.createImageData(W, H);
+    for (let i = 0; i < W * H; i++) if (G[i] === g) { d.data[i * 4 + 3] = 255; } x.putImageData(d, 0, 0);
+    const c2 = canvas(W, H), x2 = c2.getContext('2d'); x2.filter = 'blur(.8px)'; x2.drawImage(c, 0, 0); groupMasks.push(c2); }
+}
+function layered(target, list, colour) {      // paint each shape group on its own layer, trimmed to its silhouette
+  const L = canvas(W, H), lx = L.getContext('2d'), tg = target.getContext('2d');
+  for (let g = 0; g < 8; g++) { lx.globalCompositeOperation = 'source-over'; lx.clearRect(0, 0, W, H);
+    for (const s of list) if (s.grp === g) paint(lx, s, colour ? s.c : s.g, colour ? s.c2 : s.g2);
+    lx.globalCompositeOperation = 'destination-in'; lx.drawImage(groupMasks[g], 0, 0); tg.drawImage(L, 0, 0); }
+}
+
+// ---------- knife strokes ----------
+function grey(c) { const L = (c[0] * .3 + c[1] * .59 + c[2] * .11) * .78 + 8; return [L * .95 + c[0] * .03, L * .98 + c[1] * .02, L * 1.06 + c[2] * .02]; }
+function shade(c, k) { return [c[0] * k, c[1] * k, c[2] * k]; }
+function knifePath(s) {               // slanted ends, longer than wide
+  const p = new Path2D(), L = s.len / 2, w = s.wid / 2, a = s.sl1 * w, b = s.sl2 * w;
+  p.moveTo(-L + a, -w); p.lineTo(L + b, -w * .92); p.lineTo(L - b, w); p.lineTo(-L - a, w * .95); p.closePath(); return p;
+}
+function paint(x, s, c, c2) {
+  x.save(); x.translate(s.x, s.y); x.rotate(s.ang); const p = s.path || (s.path = knifePath(s));
+  x.fillStyle = rgb(c); x.fill(p);
+  x.save(); x.clip(p);
+  x.fillStyle = rgb(c2, .55); x.fillRect(-s.len / 2, s.wid * (s.dr - .5), s.len, s.wid * .35);              // a second colour dragged in
+  const up = Math.cos(s.ang) >= 0 ? -1 : 1;                                                              // the edge that faces the light
+  x.fillStyle = rgb(shade(c, 1.22), .8); x.fillRect(-s.len / 2, up * s.wid / 2 - (up > 0 ? 2.4 : 0), s.len * (.7 + s.run * .3), 2.4);   // ridge catching the light
+  x.fillStyle = rgb(shade(c, .68), .55); x.fillRect(-s.len / 2, -up * s.wid / 2 - (up > 0 ? 0 : 2.6), s.len, 2.6);                     // lip in shadow
+  x.strokeStyle = rgb(shade(c, s.st), .35); x.lineWidth = 1; x.beginPath(); x.moveTo(-s.len / 2, s.wid * (s.dr * .6 - .3)); x.lineTo(s.len * (s.run - .5), s.wid * (s.dr * .6 - .3)); x.stroke();   // streak where the paint ran out
+  x.restore(); x.restore();
+}
+function buildStrokes(ref) {
+  const R = ref.getContext('2d').getImageData(0, 0, W, H).data, r = rng(3);
+  const at = (px, py) => { px = clamp(px | 0, 0, W - 1); py = clamp(py | 0, 0, H - 1); const k = (py * W + px) * 4; return [R[k], R[k + 1], R[k + 2]]; };
+  const edge = (px, py) => { const a = at(px - 4, py), b = at(px + 4, py), c = at(px, py - 4), d = at(px, py + 4); return Math.abs(a[0] - b[0]) + Math.abs(a[1] - b[1]) + Math.abs(c[0] - d[0]) + Math.abs(c[2] - d[2]); };
+  const grp = (px, py) => G[clamp(py | 0, 0, H - 1) * W + clamp(px | 0, 0, W - 1)];
+  const dir = g => g === 5 ? 1.57 + (r() - .5) * .6 : g === 4 ? 1.3 + (r() - .5) * .7 : g === 6 ? r() * 3.14 : g === 7 ? 1.5 + (r() - .5) * .3 : g === 3 ? (r() - .5) * .3 : g >= 1 ? (r() - .5) * .35 : (r() - .5) * .45;
+  const add = (px, py, rad) => { const c = at(px, py), v = .94 + r() * .12, cc = [c[0] * v, c[1] * v, c[2] * v], g = grp(px, py);
+    strokes.push({ x: px, y: py, grp: g, ang: dir(g), len: rad * (1.7 + r() * 1.4), wid: rad * (.95 + r() * .5), c: cc, c2: at(px + (r() - .5) * 30, py + (r() - .5) * 30),
+      sl1: (r() - .5) * .9, sl2: (r() - .5) * .9, dr: r(), run: .4 + r() * .6, st: .85 + r() * .3 }); };
+  for (let py = -10; py < H + 20; py += 24) for (let px = -10; px < W + 20; px += 30) add(px + r() * 30, py + r() * 24, 14 + r() * 6);       // big calm planes
+  for (let i = 0; i < 30000; i++) { const px = r() * W, py = r() * H, e = edge(px, py); if (e > 50 && r() < .5) add(px, py, 7 + r() * 3); else if (r() < .07) add(px, py, 10 + r() * 4); }   // detail at edges
+  for (let i = 0; i < 1400; i++) { const px = 1500 + r() * 330, py = 580 + r() * 280; if (grp(px, py) === 7) add(px, py, 4 + r() * 2); }   // trunks
+  for (let i = 0; i < 2600; i++) { const px = 600 + r() * 320, py = 440 + r() * 380; if (edge(px, py) > 30) add(px, py, 5 + r() * 2.5); }     // the tomb mouth gets the finest knife
+  strokes.forEach(s => { s.g = grey(s.c); s.g2 = grey(s.c2); const d = Math.hypot(s.x - TOMB[0], s.y - TOMB[1]); s.rt = WAVE0 + d / WAVE_V + (noise(s.x * .01, s.y * .01) - .5) * 1.4; });
+}
+function buildFlowers() {          // anemones and yellow blooms: exist only in the colour painting, so they appear with the wave
+  const r = rng(77), fl = [];
+  const clusters = Array.from({ length: 26 }, () => [r() * W, 840 + Math.pow(r(), .6) * 230]);
+  for (let i = 0; i < 300; i++) { const cl = clusters[(r() * clusters.length) | 0], px = cl[0] + (r() - .5) * 140, py = clamp(cl[1] + (r() - .5) * 50, 812, H); if (px > 420 && px < 840 && py > 820) continue;
+    const red = r() < .6, rad = 4 + (py - 820) / 240 * 9 * (.6 + r() * .6);
+    fl.push({ x: px, y: py, ang: (r() - .5) * 3, len: rad * 2.2, wid: rad * 1.4, c: red ? [208, 51, 42] : [242, 194, 48], c2: red ? [240, 120, 110] : [255, 230, 140], sl1: .3, sl2: -.3, dr: r(), run: 1, st: 1,
+      rt: 0, grp: 3 }); }
+  fl.forEach(s => { s.rt = WAVE0 + Math.hypot(s.x - TOMB[0], s.y - TOMB[1]) / WAVE_V + .4; }); return fl;
+}
+function buildStone() {            // knife strokes laid around the stone, in its own frame
+  const r = rng(91); stone = [];
+  for (let i = 0; i < 420; i++) { const rr = Math.sqrt(r()) * 146, a = r() * 6.283; stone.push({ lx: Math.cos(a) * rr, ly: Math.sin(a) * rr, la: a + 1.57 + (r() - .5) * .5,
+    len: 22 + r() * 18, wid: 12 + r() * 7, v: .85 + r() * .25, sl1: (r() - .5) * .9, sl2: (r() - .5) * .9, dr: r(), run: .5 + r() * .5, st: .9 + r() * .2 }); }
+}
+
+// ---------- frame ----------
+function draw(ctx, t) {
+  const z = lerp(1, 1.06, eio(t / DUR)), cam = (fn) => { ctx.save(); ctx.translate(TOMB[0], TOMB[1]); ctx.scale(z, z); ctx.translate(-TOMB[0], -TOMB[1]); fn(); ctx.restore(); };
+  // colour re-laid by the knife: accumulate the revealed strokes into a mask (deterministic for any seek order)
+  if (t < lastT) { mx.clearRect(0, 0, W, H); idx = 0; }
+  while (idx < strokes.length && strokes[idx].rt <= t) { const s = strokes[idx++]; mx.save(); mx.translate(s.x, s.y); mx.rotate(s.ang); mx.fillStyle = '#fff'; mx.fill(s.path); mx.restore(); }
+  lastT = t;
+  tx.globalCompositeOperation = 'source-over'; tx.clearRect(0, 0, W, H); tx.drawImage(colImg, 0, 0); tx.globalCompositeOperation = 'destination-in'; tx.drawImage(mask, 0, 0);
+  cam(() => {
+    ctx.drawImage(greyImg, 0, 0); ctx.drawImage(tmp, 0, 0);
+    // the light from the empty tomb
+    const burst = ss(BURST - .3, BURST + .5, t), glow = burst * (1 - .35 * ss(BURST + 1, BURST + 4, t));
+    if (glow > 0) {
+      ctx.globalCompositeOperation = 'screen';
+      const g = ctx.createRadialGradient(TOMB[0], TOMB[1] + 60, 0, TOMB[0], TOMB[1] + 60, 900); g.addColorStop(0, `rgba(255,246,214,${.95 * glow})`); g.addColorStop(.18, `rgba(255,226,160,${.5 * glow})`); g.addColorStop(1, 'rgba(255,210,140,0)');
+      ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+      for (let i = 0; i < 16; i++) { const a = -Math.PI + i * (Math.PI / 15) + Math.sin(t * .3 + i) * .03, l = 1500;
+        ctx.fillStyle = `rgba(255,236,190,${(.07 + .05 * Math.sin(t * 1.3 + i * 2)) * glow})`; ctx.beginPath(); ctx.moveTo(TOMB[0], TOMB[1] + 70);
+        ctx.lineTo(TOMB[0] + Math.cos(a - .035) * l, TOMB[1] + 70 + Math.sin(a - .035) * l); ctx.lineTo(TOMB[0] + Math.cos(a + .035) * l, TOMB[1] + 70 + Math.sin(a + .035) * l); ctx.fill(); }
+      ctx.globalCompositeOperation = 'source-over';
+    }
+    // the stone rolls away (moving strokes, fixed seeds so the paint doesn't boil)
+    const k = eio(clamp((t - ROLL[0]) / (ROLL[1] - ROLL[0]))), sx = lerp(760, 1090, k), sy = lerp(676, 690, k), rot = (sx - 760) / 150 - k * .2;
+    const col = ss(WAVE0 + .2, WAVE0 + 1.4, t), shake = t > ROLL[0] && t < ROLL[1] ? Math.sin(t * 60) * 1.2 : 0;
+    for (const s of stone) { const ca = Math.cos(rot), sa = Math.sin(rot), wx = sx + s.lx * ca - s.ly * sa, wy = sy + shake + s.lx * sa + s.ly * ca;
+      const nx = (wx - sx) / 150, ny = (wy - sy) / 150, lit = clamp(.62 + .45 * (nx * .6 - ny * .8));
+      const base = mix([168, 154, 134], [196, 176, 146], col), c = shade(base, (.6 + .55 * lit) * s.v), gc = grey(c), cc = mix(gc, c, col);
+      paint(ctx, { x: wx, y: wy, ang: s.la + rot, len: s.len, wid: s.wid, sl1: s.sl1, sl2: s.sl2, dr: s.dr, run: s.run, st: s.st, path: s.path || (s.path = knifePath(s)) }, cc, shade(cc, .85)); }
+  });
+  // raking light at the peak: a warm sweep that lets every ridge catch it, then settles
+  const rake = ss(BURST, BURST + .8, t) * (1 - ss(BURST + 2, BURST + 6, t));
+  if (rake > 0) { ctx.globalCompositeOperation = 'soft-light'; ctx.fillStyle = `rgba(255,220,160,${.5 * rake})`; ctx.fillRect(0, 0, W, H); ctx.globalCompositeOperation = 'source-over'; }
+  ctx.fillStyle = `rgba(255,250,235,${.35 * ss(BURST - .1, BURST, t) * (1 - ss(BURST, BURST + .9, t))})`; ctx.fillRect(0, 0, W, H);   // the flash
+  const vg = ctx.createRadialGradient(W / 2, H / 2, H * .5, W / 2, H / 2, H * 1.05); vg.addColorStop(0, 'rgba(20,16,12,0)'); vg.addColorStop(1, 'rgba(20,16,12,.45)'); ctx.fillStyle = vg; ctx.fillRect(0, 0, W, H);
+
+  // words: plain serif in a calm plane (the sky)
+  text(ctx, '12  ·  부활', 110, 120, { align: 'left', size: 30, weight: 600, color: '#f4efe6', alpha: win(t, 1, 5.2, 1, 1), ls: 4, shadow: 'rgba(0,0,0,.6)' });
+  const a1 = win(t, 11.2, 16.4, 1.2, .8), a2 = win(t, 16, DUR - .3, 1.2, 1.2), st = { size: 54, weight: 600, color: '#fffaf0', shadow: 'rgba(60,40,30,.75)', shadowBlur: 22 };
+  text(ctx, '“그가 여기 계시지 않고”', W / 2, 190, { ...st, alpha: a1 });
+  text(ctx, '“그가 말씀 하시던 대로 살아나셨느니라”', W / 2, 190, { ...st, alpha: a2 });
+  text(ctx, '마태복음 28:6 (개역개정)', W / 2, 248, { size: 24, font: "'Noto Sans KR',sans-serif", color: '#fff2dc', alpha: Math.max(a1, a2) * .9, ls: 2, shadow: 'rgba(60,40,30,.7)' });
+  const f = 1 - ss(0, 1.6, t) + ss(DUR - 1, DUR, t); if (f > 0) { ctx.fillStyle = `rgba(10,8,6,${clamp(f)})`; ctx.fillRect(0, 0, W, H); }
+}
+
+Pilot.run({ W, H, dur: DUR, audio: 'rise.m4a', fonts: ["600 40px 'Noto Serif KR'", "400 20px 'Noto Sans KR'"],
+  init: async () => {
+    const ref = buildRef(); buildGroups(); buildStrokes(ref); buildStone();
+    greyImg = canvas(W, H); colImg = canvas(W, H); const gx = greyImg.getContext('2d'), cx = colImg.getContext('2d');
+    gx.filter = 'blur(1.5px)'; gx.drawImage(ref, 0, 0); gx.filter = 'grayscale(.92)'; gx.drawImage(greyImg, 0, 0); gx.filter = 'none';   // thin underpainting
+    cx.filter = 'blur(1.5px)'; cx.drawImage(ref, 0, 0); cx.filter = 'none';
+    layered(greyImg, strokes, false); layered(colImg, strokes, true);
+    const fl = buildFlowers(); for (const s of fl) paint(cx, s, s.c, s.c2);
+    strokes = strokes.concat(fl); strokes.forEach(s => s.path || (s.path = knifePath(s))); strokes.sort((a, b) => a.rt - b.rt);
+    mask = canvas(W, H); mx = mask.getContext('2d'); tmp = canvas(W, H); tx = tmp.getContext('2d');
+  },
+  draw });
+</script>
+</body>
+</html>

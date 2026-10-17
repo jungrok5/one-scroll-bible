@@ -1,0 +1,20 @@
+{ "duration": 40,
+  "music": [
+    { "id": "m1", "at": 0, "len": 14, "db": -6, "fin": 0.8, "fout": 1.0,
+      "prompt": "Whimsical children's storybook music: pizzicato strings, music box and clarinet, a jaunty sea-shanty lilt in 6/8 at a gentle tempo, playful and warm, light hand percussion, no vocals" },
+    { "id": "m2", "at": 14, "len": 7.2, "db": -7, "fin": 1.0, "fout": 1.2,
+      "prompt": "The same storybook sea-shanty turns uneasy: low clarinet and cello in a minor key, slow, a soft rumbling drum far away, a little ominous but still gentle enough for a child" },
+    { "id": "m3", "at": 21, "len": 19, "db": -4, "fin": 1.5, "fout": 2.0,
+      "prompt": "Warm, hopeful children's storybook theme: glockenspiel and soft strings rise into a tender major-key melody with ukulele and gentle woodwinds, swelling with joy and wonder, then settling into a peaceful, glowing final chord" }
+  ],
+  "sfx": [
+    { "id": "s1", "at": 0.4, "len": 1.6, "db": -8, "loop": false, "prompt": "Hardcover book page swinging open, cardboard creak and a soft paper thump" },
+    { "id": "s2", "at": 4.6, "len": 1.2, "db": -8, "loop": false, "prompt": "Pop-up book paper piece springing up with a crisp paper snap" },
+    { "id": "s3", "at": 6.0, "len": 4.0, "db": -16, "loop": false, "prompt": "Small mop scrubbing a wooden deck, light rhythmic swishes" },
+    { "id": "s4", "at": 14.4, "len": 2.0, "db": -12, "loop": false, "prompt": "Distant soft thunder rumble, low and gentle" },
+    { "id": "s5", "at": 21.0, "len": 1.2, "db": -8, "loop": false, "prompt": "Pop-up book paper ship springing up with a bright paper snap and a soft chime" },
+    { "id": "s6", "at": 26.2, "len": 1.2, "db": -10, "loop": false, "prompt": "Cartoon paper jump: quick upward whoosh and a soft cardboard tap on landing" },
+    { "id": "s7", "at": 27.3, "len": 2.0, "db": -10, "loop": false, "prompt": "Gentle magical sparkle chime, warm and bright, like a music box flourish" },
+    { "id": "s8", "at": 29.4, "len": 2.5, "db": -14, "loop": false, "prompt": "Paper pull-tab sliding slowly, soft cardboard friction" }
+  ],
+  "ducks": [ { "from": 25.8, "to": 26.3, "db": -12 } ] }

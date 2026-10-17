@@ -20,7 +20,7 @@ const W = Pilot.W, H = Pilot.H, V = Pilot.ori === 'v', DUR = 39.5;
 const S1 = Math.min(W, H) / 1080;                         // type & mark scale
 const INK = '#3A2418', RED = '#B23A1E';
 // ---------------- the map ----------------
-const LON0 = 27.6, LAT1 = 33.6, KX = 350, KY = 400, MW = Math.round((38.8 - LON0) * KX), MH = Math.round((LAT1 - 26.9) * KY);
+const LON0 = 26.0, LAT1 = 33.6, KX = 350, KY = 400, MW = Math.round((38.8 - LON0) * KX), MH = Math.round((LAT1 - 26.9) * KY);
 const mp = (lon, lat) => [(lon - LON0) * KX, (LAT1 - lat) * KY];
 let MAP, PAINT = [], route = [], cum = [], mS, mL, maskC, maskX, maskD, NZ, NW, NH, layer, lx, grain;
 
@@ -30,7 +30,7 @@ const REDSEA = [[32.55, 29.97], [32.58, 29.7], [32.68, 29.3], [32.85, 28.95], [3
   [36.4, 26.8], [36.0, 26.95], [35.6, 27.35], [35.25, 27.8], [35.0, 28.2], [34.86, 28.6], [34.83, 29.0], [34.95, 29.35], [35.0, 29.54],
   [34.92, 29.5], [34.76, 29.1], [34.63, 28.6], [34.46, 28.15], [34.32, 27.86], [34.25, 27.73], [34.0, 27.86], [33.75, 28.12], [33.45, 28.46], [33.2, 28.8], [32.95, 29.25], [32.76, 29.65], [32.63, 29.96]];
 const DEAD = [[35.45, 31.78], [35.56, 31.76], [35.59, 31.4], [35.53, 31.05], [35.42, 31.1], [35.39, 31.5]];
-const ROUTE = [[31.83, 30.8], [32.1, 30.56], [32.35, 30.4], [32.48, 30.12], [32.55, 29.99], [32.7, 29.88], [32.86, 29.6], [33.08, 29.16], [33.22, 28.86], [33.48, 28.74], [33.72, 28.64], [33.97, 28.54],
+const ROUTE = [[31.83, 30.8], [32.1, 30.56], [32.32, 30.36], [32.4, 30.0], [32.5, 29.84], [32.84, 29.72], [32.9, 29.55], [33.08, 29.16], [33.22, 28.86], [33.48, 28.74], [33.72, 28.64], [33.97, 28.54],
   [34.15, 28.9], [34.3, 29.4], [34.33, 30.0], [34.4, 30.62], [34.68, 30.42], [34.6, 30.12], [34.28, 30.06], [34.12, 30.38], [34.42, 30.74], [34.78, 30.52], [34.62, 30.2], [34.36, 30.28],
   [34.7, 29.95], [34.95, 29.6], [35.35, 29.86], [35.72, 30.25], [35.86, 30.85], [35.78, 31.45], [35.64, 31.82], [35.44, 31.87]];
 const I_SINAI = 11, I_LOOPS = 23;
@@ -49,12 +49,12 @@ function buildMap() {
   // parchment: warm base, low-frequency stains, darker burnt edges, fold creases
   const lw = MW >> 3, lh = MH >> 3, lo = canvas(lw, lh), lox = lo.getContext('2d'), d = lox.createImageData(lw, lh);
   for (let j = 0; j < lh; j++) for (let i = 0; i < lw; i++) { const n = fbm(i * .012, j * .012, 5), n2 = fbm(i * .05 + 7, j * .05, 3), e = Math.min(i, j, lw - 1 - i, lh - 1 - j) / 40;
-    const burn = 1 - clamp(e), k = (j * lw + i) * 4, base = mix([233, 220, 192], [196, 168, 122], clamp((n - .42) * 1.6 + burn * .9)), st = n2 > .66 ? .93 : 1;
+    const burn = 1 - clamp(e), k = (j * lw + i) * 4, base = mix([233, 220, 192], [196, 168, 122], clamp((n - .42) * 1.4 + burn * .9)), st = 1 - .06 * ss(.58, .78, n2);
     d.data[k] = base[0] * st; d.data[k + 1] = base[1] * st; d.data[k + 2] = base[2] * st * .98; d.data[k + 3] = 255; }
   lox.putImageData(d, 0, 0); x.imageSmoothingQuality = 'high'; x.drawImage(lo, 0, 0, MW, MH);
   x.globalCompositeOperation = 'multiply';
-  for (let i = 0; i < 9; i++) { const sx = r() * MW, sy = r() * MH, rr = 80 + r() * 260, g = x.createRadialGradient(sx, sy, rr * .7, sx, sy, rr);   // tea stains with dark rims
-    g.addColorStop(0, 'rgba(210,180,130,.18)'); g.addColorStop(.9, 'rgba(150,110,60,.32)'); g.addColorStop(1, 'rgba(150,110,60,0)'); x.fillStyle = g; x.beginPath(); x.arc(sx, sy, rr, 0, 6.283); x.fill(); }
+  for (let i = 0; i < 6; i++) { const sx = r() * MW, sy = r() * MH, rr = 80 + r() * 200, g = x.createRadialGradient(sx, sy, rr * .5, sx, sy, rr);   // tea stains with soft dark rims
+    g.addColorStop(0, 'rgba(210,180,130,.06)'); g.addColorStop(.88, 'rgba(150,110,60,.13)'); g.addColorStop(1, 'rgba(150,110,60,0)'); x.fillStyle = g; x.beginPath(); x.arc(sx, sy, rr, 0, 6.283); x.fill(); }
   x.globalCompositeOperation = 'source-over';
   x.strokeStyle = 'rgba(255,248,230,.35)'; x.lineWidth = 3; for (const f of [.33, .66]) { x.beginPath(); x.moveTo(MW * f, 0); x.lineTo(MW * f + 6, MH); x.stroke(); }
   x.strokeStyle = 'rgba(120,90,50,.18)'; x.lineWidth = 2; for (const f of [.33, .66]) { x.beginPath(); x.moveTo(MW * f + 4, 0); x.lineTo(MW * f + 10, MH); x.stroke(); }
@@ -75,7 +75,7 @@ function buildMap() {
   river([[31.15, 26.8], [31.0, 27.6], [30.9, 28.4], [31.2, 29.2], [31.25, 30.05]], 3.4, 21); river([[31.25, 30.05], [31.0, 30.5], [30.7, 31.0], [30.4, 31.46]], 2.6, 22);
   river([[31.25, 30.05], [31.4, 30.6], [31.6, 31.1], [31.8, 31.47]], 2.6, 23); river([[31.2, 30.4], [31.1, 30.9], [31.15, 31.5]], 1.6, 24);
   river([[35.57, 32.68], [35.6, 32.4], [35.54, 32.12], [35.58, 31.95], [35.53, 31.78]], 2.6, 25);
-  x.fillStyle = 'rgba(110,140,70,.16)'; x.beginPath(); x.moveTo(...mp(31.25, 30.0)); x.lineTo(...mp(30.3, 31.45)); x.lineTo(...mp(31.9, 31.47)); x.closePath(); x.fill();
+  x.save(); x.filter = 'blur(40px)'; x.fillStyle = 'rgba(110,140,70,.2)'; x.beginPath(); x.moveTo(...mp(31.25, 30.0)); x.lineTo(...mp(30.4, 31.4)); x.lineTo(...mp(31.8, 31.42)); x.closePath(); x.fill(); x.restore();
   for (let i = 0; i < 260; i++) { const t = r(), lon = lerp(31.2, 31.1, t) + (r() - .5) * .9 * t, lat = lerp(30.0, 31.4, t); const [px, py] = mp(lon, lat); x.strokeStyle = 'rgba(58,36,24,.5)'; x.lineWidth = 1.2; x.beginPath(); x.moveTo(px, py); x.lineTo(px + (r() - .5) * 4, py - 7 - r() * 6); x.stroke(); }
   // hills in the manner of the old maps: outlined peaks hatched on the shadow side
   const peak = (px, py, s) => { x.fillStyle = 'rgba(236,224,198,.9)'; x.beginPath(); x.moveTo(px - s, py); x.lineTo(px - s * .12, py - s * 1.05); x.lineTo(px + s, py); x.closePath(); x.fill();
@@ -129,9 +129,23 @@ function glow(x, px, py, rad, stops, op = 'screen') { x.save(); x.globalComposit
 function vgrad(x, y0, y1, stops, b = [0, 0, x.canvas.width, x.canvas.height]) { x.save(); x.globalCompositeOperation = 'multiply'; const g = x.createLinearGradient(0, y0, 0, y1); stops.forEach(([k, c]) => g.addColorStop(k, c)); x.fillStyle = g; x.fillRect(...b); x.restore(); }
 function paperBase(x, w, h, seed) { x.fillStyle = rgb(PAPER); x.fillRect(0, 0, w, h); const r = rng(seed); x.strokeStyle = 'rgba(150,120,80,.07)'; x.lineWidth = 1;
   for (let i = 0; i < 2500; i++) { const px = r() * w, py = r() * h, a = r() * 6.28, l = 4 + r() * 10; x.beginPath(); x.moveTo(px, py); x.quadraticCurveTo(px + Math.cos(a) * l / 2 + 2, py + Math.sin(a) * l / 2, px + Math.cos(a) * l, py + Math.sin(a) * l); x.stroke(); } }
-function granulate(x, w, h, seed) { x.save(); x.globalCompositeOperation = 'overlay'; x.globalAlpha = .55; x.drawImage(speckle(w >> 1, h >> 1, 34, seed), 0, 0, w, h); x.restore();
-  const r = rng(seed + 1); x.save(); x.globalCompositeOperation = 'multiply'; for (let i = 0; i < 9; i++) { const px = r() * w, py = r() * h, rr = 40 + r() * 140;   // blooms: soft blotch, darker rim
-    const g = x.createRadialGradient(px, py, rr * .6, px, py, rr); g.addColorStop(0, 'rgba(255,250,240,0)'); g.addColorStop(.85, 'rgba(120,90,70,.12)'); g.addColorStop(1, 'rgba(120,90,70,0)'); x.fillStyle = g; x.fillRect(px - rr, py - rr, rr * 2, rr * 2); } x.restore(); }
+function granulate(x, w, h, seed) {             // pigment settling in the paper's tooth: specks clustered by a slow field, a few soft blooms
+  const r = rng(seed); x.save(); x.globalCompositeOperation = 'multiply';
+  for (let i = 0; i < w * h / 70; i++) { const px = r() * w, py = r() * h; if (fbm(px * .006, py * .006, 3) < .47 + r() * .1) continue; x.fillStyle = `rgba(70,45,35,${.08 + r() * .14})`; x.fillRect(px, py, 1 + r() * 1.6, 1 + r() * 1.6); }
+  for (let i = 0; i < 6; i++) { const px = r() * w, py = r() * h, rr = 60 + r() * 160, g = x.createRadialGradient(px, py, rr * .55, px, py, rr);
+    g.addColorStop(0, 'rgba(255,250,240,0)'); g.addColorStop(.9, 'rgba(120,90,70,.07)'); g.addColorStop(1, 'rgba(120,90,70,0)'); x.fillStyle = g; x.fillRect(px - rr, py - rr, rr * 2, rr * 2); }
+  x.globalCompositeOperation = 'overlay'; x.globalAlpha = .22; x.drawImage(speckle(w >> 1, h >> 1, 26, seed, .6), 0, 0, w, h); x.restore();
+}
+function blob(x, cx, cy, rr, col, a, blur, seed, sq = .75) { const pts = []; for (let k = 0; k < 6.283; k += .3) { const q = rr * (.78 + .4 * fbm(Math.cos(k) * 1.6 + seed, Math.sin(k) * 1.6, 2)); pts.push([cx + Math.cos(k) * q, cy + Math.sin(k) * q * sq]); }
+  x.save(); x.globalCompositeOperation = 'multiply'; x.filter = `blur(${blur}px)`; x.fillStyle = typeof col === 'string' ? col : rgb(col, a); if (typeof col === 'string') x.globalAlpha = a; x.fill(pth(pts, true)); x.restore(); }
+function tent(x, cx, by, s, body, lit, r) {      // a low goat-hair tent: sloping roof, dark front, poles
+  const roof = [[cx - s, by - s * .14], [cx - s * .62, by - s * .52], [cx + s * .55, by - s * .58], [cx + s * 1.04, by - s * .12]];
+  x.save(); x.globalCompositeOperation = 'multiply'; x.fillStyle = rgb(body, .9); x.fill(pth(roof, true));
+  x.fillStyle = rgb(body.map(v => v * .55), .9); x.fillRect(cx - s * .86, by - s * .16, s * 1.84, s * .16);
+  if (lit > .02) { x.globalCompositeOperation = 'screen'; x.fillStyle = `rgba(255,170,90,${lit * .7})`; x.fill(pth([[cx - s * .62, by - s * .52], [cx + s * .55, by - s * .58], [cx + s * .2, by - s * .3], [cx - s * .4, by - s * .28]], true)); x.fillRect(cx - s * .2, by - s * .14, s * .3, s * .14); }
+  x.restore();
+  if (s > 6) { x.strokeStyle = `rgba(58,36,24,${clamp(.3 + s / 50)})`; x.lineWidth = Math.max(.8, s / 14); x.stroke(pth(roof, false)); x.beginPath(); x.moveTo(cx - s * .62, by - s * .52); x.lineTo(cx - s * .62, by); x.moveTo(cx + s * .55, by - s * .58); x.lineTo(cx + s * .55, by); x.stroke(); }
+}
 function tent(x, cx, by, s, body, lit, r) { const p = [[cx - s, by], [cx - s * .7, by - s * .62], [cx - s * .1, by - s * .78], [cx + s * .55, by - s * .66], [cx + s, by]];
   x.save(); x.globalCompositeOperation = 'multiply'; x.fillStyle = rgb(body, .85); x.fill(pth(p, true)); x.fillStyle = rgb(mix(body, [255, 200, 140], lit), .5); x.fill(pth([[cx - s * .1, by - s * .78], [cx + s * .55, by - s * .66], [cx + s, by], [cx - s * .05, by]], true)); x.restore();
   if (s > 5) { x.strokeStyle = `rgba(58,36,24,${clamp(.25 + s / 40)})`; x.lineWidth = Math.max(.8, s / 12); x.stroke(pth(p, false)); } }
@@ -227,7 +241,7 @@ function P3(w, h) {       // the Jordan in morning light: the far hills of Canaa
 // ---------------- timeline ----------------
 const PW = Math.round(W * 1.14), PH = Math.round(H * 1.14);
 const WIN = [[5.4, 6.2, 10.8, 11.6], [14.6, 15.4, 21.8, 22.6], [25.0, 25.8, 30.2, 31.0]];   // painting in-start, in-end, out-start, out-end
-const zAll = V ? .72 : .5, zMid = V ? 1.05 : .95, zIn = 2.7, cAll = V ? 33.85 : 33.6;
+const zAll = V ? .72 : .46, zMid = V ? 1.05 : .95, zIn = 2.7, cAll = V ? 33.85 : 32.45;
 const CAM = [[0, cAll, 30.0, zAll * 1.03], [1.0, cAll, 30.0, zAll * 1.03], [4.6, 33.4, 29.1, zMid], [6.2, 33.97, 28.54, zIn], [11.4, 33.97, 28.54, zIn], [12.6, 34.2, 29.6, zMid], [14.0, 34.42, 30.2, zMid],
   [15.4, 34.45, 30.45, zIn], [22.4, 34.45, 30.45, zIn], [23.6, 35.2, 30.5, zMid * .95], [24.6, 35.45, 31.3, zMid], [25.8, 35.52, 31.85, zIn], [30.8, 35.52, 31.85, zIn], [33.4, cAll, 30.05, zAll], [DUR, cAll, 30.05, zAll * 1.04]];
 function camAt(t) { let i = 0; while (i < CAM.length - 2 && t > CAM[i + 1][0]) i++; const a = CAM[i], b = CAM[i + 1], k = eio(clamp((t - a[0]) / (b[0] - a[0])));

@@ -361,11 +361,11 @@ function draw(ctx, t) {
   caption(ctx, '땅속에서 계속 확인됩니다(고고학).', win(t, 9.3, 18.3, .6, .5));
   caption(ctx, '가장 잘 보존된 고대 문서입니다(사본).', win(t, 19.4, 25.3, .6, .5));
   const ty = V ? 640 : 300, st = { weight: 600, color: '#f3ead9', shadow: 'rgba(0,0,0,.9)', shadowBlur: 18 };
-  text(ctx, V ? '이 근거들은 성경을 믿는 것이\n비합리적이지 않고\n오히려 합리적임을 보여줄 뿐,' : '이 근거들은 성경을 믿는 것이\n비합리적이지 않고 오히려 합리적임을 보여줄 뿐,', W / 2, ty, { ...st, size: V ? 46 : 46, alpha: win(t, 29.2, 32.8, 1, .6) });
-  text(ctx, V ? '수학 공식처럼 강제하는\n“증명”은 아닙니다.' : '수학 공식처럼 강제하는 “증명”은 아닙니다.', W / 2, ty, { ...st, size: V ? 50 : 48, alpha: win(t, 32.8, 35.8, .8, .6) });
+  text(ctx, V ? '이 근거들은 성경을 믿는 것이 비합리적이지 않고\n오히려 합리적임을 보여줄 뿐,' : '이 근거들은 성경을 믿는 것이\n비합리적이지 않고 오히려 합리적임을 보여줄 뿐,', W / 2, ty, { ...st, size: V ? 40 : 46, alpha: win(t, 29.2, 32.8, 1, .6) });
+  text(ctx, V ? '수학 공식처럼 강제하는 “증명”은 아닙니다.' : '수학 공식처럼 강제하는 “증명”은 아닙니다.', W / 2, ty, { ...st, size: V ? 44 : 48, alpha: win(t, 32.8, 35.8, .8, .6) });
   const va = win(t, 35.9, DUR - .2, 1, 1.2);
-  text(ctx, V ? '“믿음은 들음에서 나며\n들음은 그리스도의 말씀으로\n말미암았느니라”' : '“믿음은 들음에서 나며\n들음은 그리스도의 말씀으로 말미암았느니라”', W / 2, ty, { ...st, size: V ? 52 : 52, color: '#fff3dc', alpha: va, shadowBlur: 24 });
-  text(ctx, '로마서 10:17 (개역개정)', W / 2, ty + (V ? 3 * 52 * 1.55 + 10 : 2 * 52 * 1.55 + 10), { size: 24, font: SANS, color: '#c9b89a', alpha: va * .9, ls: 2 });
+  text(ctx,  '“믿음은 들음에서 나며\n들음은 그리스도의 말씀으로 말미암았느니라”', W / 2, ty, { ...st, size: V ? 44 : 52, color: '#fff3dc', alpha: va, shadowBlur: 24 });
+  text(ctx, '로마서 10:17 (개역개정)', W / 2, ty + (V ? 2 * 44 * 1.55 + 10 : 2 * 52 * 1.55 + 10), { size: 24, font: SANS, color: '#c9b89a', alpha: va * .9, ls: 2 });
   const f = 1 - ss(0, 1.1, t) + ss(DUR - 1.2, DUR, t); if (f > 0) { ctx.fillStyle = `rgba(0,0,0,${clamp(f)})`; ctx.fillRect(0, 0, W, H); }
 }
 

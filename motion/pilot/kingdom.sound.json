@@ -1,16 +1,96 @@
-{ "duration": 36,
-  "music": [
-    { "id": "m1", "at": 0, "len": 18, "db": -4, "fin": 1.0, "fout": 1.2,
-      "prompt": "Intimate medieval chamber music: a solo lyre-harp plucking a simple modal melody in D dorian, slow and tender, with a soft bowed vielle drone underneath and a quiet recorder answering the harp after a while; pastoral, peaceful, like a shepherd singing at night; around 66 BPM, gentle and sparse" },
-    { "id": "m2", "at": 18, "len": 18, "db": -2, "fin": 0.3, "fout": 1.5,
-      "prompt": "Majestic but reverent medieval-style anthem: the same harp melody now carried by a small choir of low male voices singing an open-fifth chant, with harp arpeggios, a soft frame drum and warm brass swelling gradually; noble and hopeful, building to a radiant sustained chord and resolving gently; about 66 BPM" } ],
-  "sfx": [
-    { "id": "s1", "at": 0.4, "len": 4, "db": -18, "loop": false, "prompt": "Quiet candle flame flicker and a soft page of thick parchment settling on a wooden desk, intimate room tone" },
-    { "id": "s2", "at": 1.6, "len": 3, "db": -16, "loop": false, "prompt": "A delicate high shimmer, like light gliding across gold leaf, soft and airy" },
-    { "id": "s3", "at": 3.4, "len": 4, "db": -20, "loop": false, "prompt": "Quill pen writing on parchment, soft scratching strokes, close and gentle" },
-    { "id": "s4", "at": 5.0, "len": 3, "db": -22, "loop": false, "prompt": "Distant soft sheep bleat in an open night field, crickets faintly" },
-    { "id": "s5", "at": 11.8, "len": 3, "db": -14, "loop": false, "prompt": "Slow drops of thick oil falling and dripping softly, followed by a warm gentle chime" },
-    { "id": "s6", "at": 13.2, "len": 2, "db": -14, "loop": false, "prompt": "Old parchment scroll unrolling, dry paper rustle" },
-    { "id": "s7", "at": 18.0, "len": 3, "db": -12, "loop": false, "prompt": "A single bright harp glissando upward ending in a soft bell tone" },
-    { "id": "s8", "at": 32.6, "len": 3, "db": -14, "loop": false, "prompt": "A thin sustained golden shimmer that slowly rises and fades, like a line of light drawn across a page" } ],
-  "ducks": [ { "from": 9.7, "to": 10.3, "db": -10 } ] }
+{
+ "duration": 39,
+ "music": [
+  {
+   "id": "m1",
+   "at": 0,
+   "len": 18,
+   "db": -4,
+   "fin": 1.0,
+   "fout": 1.2,
+   "prompt": "Intimate medieval chamber music: a solo lyre-harp plucking a simple modal melody in D dorian, slow and tender, with a soft bowed vielle drone underneath and a quiet recorder answering the harp after a while; pastoral, peaceful, like a shepherd singing at night; around 66 BPM, gentle and sparse"
+  },
+  {
+   "id": "m2",
+   "at": 18,
+   "len": 21,
+   "db": -2,
+   "fin": 0.3,
+   "fout": 1.5,
+   "prompt": "Majestic but reverent medieval-style anthem: the same harp melody now carried by a small choir of low male voices singing an open-fifth chant, with harp arpeggios, a soft frame drum and warm brass swelling gradually; noble and hopeful, building to a radiant sustained chord and resolving gently; about 66 BPM"
+  }
+ ],
+ "sfx": [
+  {
+   "id": "s1",
+   "at": 0.4,
+   "len": 4,
+   "db": -18,
+   "loop": false,
+   "prompt": "Quiet candle flame flicker and a soft page of thick parchment settling on a wooden desk, intimate room tone"
+  },
+  {
+   "id": "s2",
+   "at": 1.6,
+   "len": 3,
+   "db": -16,
+   "loop": false,
+   "prompt": "A delicate high shimmer, like light gliding across gold leaf, soft and airy"
+  },
+  {
+   "id": "s3",
+   "at": 3.4,
+   "len": 4,
+   "db": -20,
+   "loop": false,
+   "prompt": "Quill pen writing on parchment, soft scratching strokes, close and gentle"
+  },
+  {
+   "id": "s4",
+   "at": 5.0,
+   "len": 3,
+   "db": -22,
+   "loop": false,
+   "prompt": "Distant soft sheep bleat in an open night field, crickets faintly"
+  },
+  {
+   "id": "s5",
+   "at": 11.8,
+   "len": 3,
+   "db": -14,
+   "loop": false,
+   "prompt": "Slow drops of thick oil falling and dripping softly, followed by a warm gentle chime"
+  },
+  {
+   "id": "s6",
+   "at": 13.2,
+   "len": 2,
+   "db": -14,
+   "loop": false,
+   "prompt": "Old parchment scroll unrolling, dry paper rustle"
+  },
+  {
+   "id": "s7",
+   "at": 18.0,
+   "len": 3,
+   "db": -12,
+   "loop": false,
+   "prompt": "A single bright harp glissando upward ending in a soft bell tone"
+  },
+  {
+   "id": "s8",
+   "at": 35.2,
+   "len": 3,
+   "db": -14,
+   "loop": false,
+   "prompt": "A thin sustained golden shimmer that slowly rises and fades, like a line of light drawn across a page"
+  }
+ ],
+ "ducks": [
+  {
+   "from": 9.7,
+   "to": 10.3,
+   "db": -10
+  }
+ ]
+}

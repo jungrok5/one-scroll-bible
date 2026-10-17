@@ -108,8 +108,8 @@ function buildLayers() {
   // the river: from the far hills toward us, widening
   const rv = []; for (let y = 10; y < Y1; y += 8) { const w = 18 + y * .55, cx = RIVER + Math.sin(y * .012) * 40 - y * .12; rv.push([cx, y, w]); }
   gnd.push(wash([...rv.map(([x, y, w]) => [x - w / 2, y]), ...rv.slice().reverse().map(([x, y, w]) => [x + w / 2, y])], '#7fa7c4', .7, { j: 5 }));
-  for (let i = 0; i < 40; i++) { const k = (i * 37 % 100) / 100, y = 20 + k * (Y1 - 30), r2 = rv[Math.min(rv.length - 1, (y - 10) / 8 | 0)];
-    gnd.push(mk([[r2[0] - r2[2] * .3, y], [r2[0] + r2[2] * .3, y + 4]], 3 + y * .02, '#5d86a8', { a: .35, bristles: 2 })); }
+  for (let i = 0; i < 46; i++) { const y = 20 + R() * (Y1 - 30), r2 = rv[Math.min(rv.length - 1, (y - 10) / 8 | 0)], ox = (R() - .5) * r2[2] * .5, ln = r2[2] * (.1 + R() * .3);
+    gnd.push(mk([[r2[0] + ox - ln, y], [r2[0] + ox, y + 2], [r2[0] + ox + ln, y - 1]], 2 + y * .015, R() < .5 ? '#5d86a8' : '#9cc0d6', { a: .35, bristles: 2 })); }
   // a stream from the city's gate
   const st = []; for (let y = -4; y < Y1; y += 8) { const w = 8 + (y + 4) * .42, cx = CITY + Math.sin(y * .015) * 26 + y * .05; st.push([cx, y, w]); }
   gnd.push(wash([...st.map(([x, y, w]) => [x - w / 2, y]), ...st.slice().reverse().map(([x, y, w]) => [x + w / 2, y])], '#8bb6cf', .6, { j: 4 }));
@@ -153,14 +153,17 @@ function reeds(s) { const out = []; for (let i = 0; i < 8; i++) { const x = (R()
 function cityList() {                      // the city of light: pale gold like clear glass, gates of pearl, light from within
   R = rng(55); const out = [], gold = ['#f4dd9a', '#f0d48a', '#f7e6b4'], shade = '#c9b9d6';
   out.push(wash(smooth([[-700, 40], [-520, -20], [-260, -66], [0, -78], [260, -66], [520, -20], [700, 40], [0, 60]], true, 5), '#d9cf8e', .42, { j: 10 }));
-  // skyline behind the wall: towers and domes, lit from the centre (shadow side away from it)
-  for (let i = 0; i < 15; i++) { const x = -300 + i * 43 + (R() - .5) * 16, w = 26 + R() * 22, h = 150 + R() * 150 * (1 - Math.abs(x) / 420), top = -200 - h * .6;
-    out.push(wash([[x - w / 2, -150], [x - w / 2, top], [x + w / 2, top], [x + w / 2, -150]], gold[i % 3], .5, { j: 3 }));
-    out.push(wash([[x + (x < 0 ? -w / 2 : w / 2 - 8), -150], [x + (x < 0 ? -w / 2 : w / 2 - 8), top], [x + (x < 0 ? -w / 2 + 8 : w / 2), top], [x + (x < 0 ? -w / 2 + 8 : w / 2), -150]], shade, .28, { j: 2 }));
-    if (R() < .6) out.push(wash(smooth(Array.from({ length: 6 }, (_, k) => [x + Math.cos(Math.PI + k / 5 * Math.PI) * w * .55, top + Math.sin(Math.PI + k / 5 * Math.PI) * w * .6]), false, 3).concat([[x + w * .55, top]]), '#f8ecc6', .7, { j: 2 })); }
+  // skyline behind the wall: towers, domes and spires of pale gold glass, lit from the centre
+  for (let i = 0; i < 12; i++) { const x = -300 + i * 54 + (R() - .5) * 18, w = 30 + R() * 30, h = 70 + R() * 190 * (1 - Math.abs(x) / 360), top = -190 - h * .7, kind = i % 3;
+    out.push(wash([[x - w / 2, -150], [x - w / 2, top], [x + w / 2, top], [x + w / 2, -150]], gold[i % 3], .3, { j: 3 }));
+    out.push(mk([[x + (x < 0 ? -w / 2 + 4 : w / 2 - 4), -152], [x + (x < 0 ? -w / 2 + 4 : w / 2 - 4), top + 4]], 6, shade, { a: .25, bristles: 2, prof: 'even' }));
+    out.push(mk([[x - w * .15, top + 10], [x - w * .15, -160]], 3, '#fffaf0', { a: .5, bristles: 2, prof: 'even' }));
+    for (let k = 0; k < 3; k++) { const wy = top + 26 + k * 34; if (wy > -165) break; out.push(mk([[x, wy + 12], [x, wy - 4]], 5, '#d7b660', { a: .45, bristles: 0, prof: 'leaf' })); }
+    if (kind === 0) out.push(wash(smooth(Array.from({ length: 7 }, (_, k) => [x + Math.cos(Math.PI + k / 6 * Math.PI) * w * .55, top + Math.sin(Math.PI + k / 6 * Math.PI) * w * .7]), false, 3).concat([[x + w * .55, top]]), '#f9eccb', .65, { j: 2 }));
+    else if (kind === 1) out.push(wash([[x - w * .5, top], [x, top - w * 1.3], [x + w * .5, top]], '#f2dc9c', .55, { j: 2 })); }
   // the wall: long, low, translucent gold, a few glazes
   const wallT = -190, wallB = -64, x0 = -380, x1 = 380;
-  out.push(wash([[x0, wallB], [x0, wallT], [x1, wallT], [x1, wallB]], '#f2da92', .55, { j: 4 }));
+  out.push(wash([[x0, wallB], [x0, wallT], [x1, wallT], [x1, wallB]], '#f2da92', .42, { j: 4 }));
   for (let i = 0; i < 5; i++) out.push(mk([[x0 + 10, wallT + 18 + i * 24], [x1 - 10, wallT + 20 + i * 24]], 10, '#f8e8b4', { a: .3, bristles: 4 }));
   for (const tx of [x0, x1]) out.push(wash([[tx - 30, wallB], [tx - 30, wallT - 50], [tx + 30, wallT - 50], [tx + 30, wallB]], '#efd283', .55, { j: 3 }));
   for (let i = 0; i < 19; i++) out.push(mk([[x0 + i * 42, wallT + 1], [x0 + i * 42 + 16, wallT + 1]], 5, '#d8b866', { a: .45, bristles: 1, prof: 'even' }));
@@ -214,17 +217,20 @@ function buildFace() {
   f.push(wash(smooth([[-620, -420], [520, -460], [700, 380], [-560, 420]], true, 4), '#e6dcc8', .28, { j: 30 }));
   f.push(wash(smooth([[260, -420], [700, -440], [720, 300], [380, 120], [300, -100]], true, 4), '#cfdbe0', .22, { j: 30 }));
   // the head in profile: skin, a shadow glaze, then hair laid in strokes
-  const skin = smooth([[-20, -262], [40, -254], [108, -218], [144, -164], [148, -134], [166, -98], [188, -62], [200, -47], [188, -35], [176, -24], [184, -12], [175, -2], [181, 10], [168, 24], [174, 48], [158, 76], [122, 96], [112, 140], [110, 250], [-74, 250], [-84, 120], [-112, 40], [-140, -60], [-122, -190]], true, 5);
-  f.push(wash(skin, '#ecc09c', .72, { j: 3 }));
-  f.push(wash(smooth([[-70, -40], [30, -30], [80, 40], [110, 130], [110, 248], [-70, 248], [-90, 90]], true, 4), '#cf9474', .34, { j: 10 }));
-  f.push(wash(smooth([[120, -210], [146, -160], [150, -130], [120, -150], [96, -196]], true, 3), '#d89b7a', .22, { j: 4 }));
-  f.push(wash(smooth([[-150, -40], [-162, -150], [-122, -242], [-30, -288], [62, -278], [124, -242], [142, -206], [90, -218], [40, -206], [-8, -190], [-42, -150], [-58, -90], [-70, -20], [-82, 60], [-104, 112], [-142, 92]], true, 4), '#5b4130', .78, { j: 4 }));
-  for (let i = 0; i < 16; i++) { const t0 = i / 15, sx = lerp(130, -20, t0), sy = lerp(-222, -186, t0) - 4 * Math.sin(t0 * 3);
-    f.push(mk(smooth([[sx, sy], [sx - 60 - R() * 40, sy - 40 + R() * 30], [sx - 130 - R() * 50, sy + 30 + R() * 60], [sx - 170 - R() * 30, sy + 120 + R() * 80]], false, 4), 5 + R() * 6, R() < .5 ? '#4a3426' : '#6a4c36', { a: .55, prof: 'tip', bristles: 3 })); }
-  f.push(mk(smooth([[-10, -66], [-24, -78], [-38, -60], [-34, -26], [-16, -10]], false, 4), 6, '#c88a6a', { a: .55, bristles: 1 }));
-  f.push(mk(smooth([[-20, -54], [-28, -40], [-22, -26]], false, 4), 3, '#a86a52', { a: .5, bristles: 0 }));
+  const skin = smooth([[-10, -262], [60, -250], [118, -214], [148, -160], [152, -128], [170, -92], [192, -58], [202, -46], [190, -34], [178, -24], [186, -12], [177, -2], [183, 10], [170, 24], [176, 46], [164, 72], [132, 92], [100, 104], [84, 150], [76, 262], [-56, 262], [-48, 130], [-80, 70], [-150, 0], [-170, -100], [-140, -200], [-80, -248]], true, 5);
+  f.push(wash(skin, '#efc5a2', .7, { j: 3 }));
+  f.push(wash(smooth([[-50, -10], [40, -6], [92, 60], [86, 140], [74, 258], [-54, 258], [-56, 110]], true, 4), '#cf9474', .3, { j: 10 }));
+  f.push(wash(smooth([[120, -210], [146, -160], [150, -130], [120, -150], [96, -196]], true, 3), '#d89b7a', .2, { j: 4 }));
+  f.push(wash(smooth([[-110, 40], [-160, 0], [-182, -100], [-150, -215], [-80, -268], [0, -286], [70, -276], [124, -238], [134, -212], [96, -206], [58, -180], [30, -140], [8, -96], [-30, -50], [-60, 10], [-80, 40]], true, 4), '#5b4130', .8, { j: 4 }));
+  for (let i = 0; i < 7; i++) { const t0 = i / 6, p0 = [lerp(124, 10, t0), lerp(-232, -110, t0)], q = [p0[0] - 90 - R() * 50, p0[1] - 30 + R() * 30], e = [-120 - R() * 50, lerp(-180, 20, t0) + R() * 30];
+    f.push(mk(smooth([p0, q, e], false, 5), 6 + R() * 6, R() < .5 ? '#4a3426' : '#6a4c36', { a: .32, prof: 'tip', bristles: 3 })); }
+  f.push(wash(smooth([[-260, 280], [-150, 214], [-70, 228], [40, 236], [110, 214], [250, 280], [0, 300]], true, 4), '#9a96a6', .62, { j: 4 }));
+  f.push(mk(smooth([[-80, 222], [0, 240], [96, 216]], false, 4), 5, '#7c7888', { a: .5, bristles: 2 }));
+  f.push(wash(smooth([[-6, -82], [-30, -92], [-44, -66], [-36, -30], [-12, -24], [-4, -50]], true, 4), '#e2a888', .7, { j: 2 }));
+  f.push(mk(smooth([[-10, -78], [-32, -84], [-40, -60], [-32, -34], [-14, -28]], false, 4), 4, '#b9785c', { a: .55, bristles: 1 }));
+  f.push(mk(smooth([[-20, -64], [-28, -50], [-20, -40]], false, 4), 2.6, '#a86a52', { a: .5, bristles: 0 }));
   // ink along the profile, broken by the bristles
-  f.push(mk(skin.slice(4, 76).map(([x, y]) => [x + 1.5, y]), 2.6, '#6a4634', { a: .55, prof: 'even', bristles: 2 }));
+  f.push(mk(skin.slice(4, 92).map(([x, y]) => [x + 1.5, y]), 2.6, '#6a4634', { a: .55, prof: 'even', bristles: 2 }));
   f.push(mk(smooth([[96, -152], [122, -160], [148, -150]], false, 4), 4.2, '#4f3a2c', { a: .75, prof: 'brush', bristles: 2 }));    // brow
   f.push(mk([[174, -50], [180, -44]], 2.2, '#9a5a4a', { a: .55, prof: 'even', bristles: 0 }));                                       // nostril
   f.push(wash([[170, -14], [185, -10], [177, -3], [167, -5]], '#c97a6c', .55, { j: 1 }));
@@ -233,7 +239,7 @@ function buildFace() {
 }
 const EYE = [126, -118];
 function faceShot(ctx, t, a) {
-  const lt = t - 11.6, z = lerp(1.0, 1.06, clamp(lt / 6)), fx = V ? W * .52 : W * .54, fy = V ? H * .43 : H * .5, sc = (V ? .9 : 1) * z;
+  const lt = t - 11.6, z = lerp(1.0, 1.06, clamp(lt / 6)), fx = V ? W * .5 : W * .5, fy = V ? H * .42 : H * .43, sc = (V ? 1.1 : 1.22) * z;
   ctx.save(); ctx.globalAlpha = a; ctx.translate(fx, fy); ctx.scale(sc, sc);
   drawW(ctx, faceStrokes[0]); drawW(ctx, faceStrokes[1]);
   const lift = eio(clamp((t - 14.9) / 1.4)), rot = lerp(.12, -.09, lift); ctx.translate(20, 200); ctx.rotate(rot); ctx.translate(-20, -200);
@@ -255,6 +261,8 @@ function faceShot(ctx, t, a) {
     ctx.fillStyle = 'rgba(96,150,205,.85)'; ctx.beginPath(); ctx.ellipse(tx, ty, 6 * form, 9 * form, 0, 0, 6.28); ctx.fill();
     ctx.fillStyle = 'rgba(255,255,255,.8)'; ctx.beginPath(); ctx.arc(tx - 2, ty - 3, 1.8 * form, 0, 6.28); ctx.fill(); ctx.globalAlpha = a; }
   ctx.restore();
+  // the light that wipes it: a gold glaze slides in over the cheek (a watercolour wash, multiplied), then the room brightens
+  const gl = eio(clamp((t - 13.9) / 1.2)); if (gl > 0) { ctx.save(); ctx.globalAlpha = a * (1 - .5 * ss(15.8, 17.2, t)); ctx.translate(fx + lerp(W * .7, 0, gl) * sc, fy); ctx.scale(sc, sc); ctx.globalCompositeOperation = 'multiply'; for (let i = 8; i < 12; i++) drawW(ctx, faceFix[i]); ctx.restore(); }
   // the light that wipes it: a broad gold wash sweeping in from the right
   const lw = ss(13.9, 15.0, t) * (1 - .45 * ss(15.6, 17, t)); if (lw > 0) { ctx.save(); ctx.globalAlpha = a; ctx.globalCompositeOperation = 'multiply';
     const g = ctx.createRadialGradient(W * 1.05, H * .1, 0, W * 1.05, H * .1, W * .9); g.addColorStop(0, `rgba(255,214,120,${.55 * lw})`); g.addColorStop(1, 'rgba(255,214,120,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
@@ -273,7 +281,8 @@ function walkScene(ctx, t, zoom) {
   // the river and the city stream move: highlights drift toward us
   x.save(); x.translate(-cam * K, HZ); x.scale(K, K);
   for (const [lst, n] of [[layers.river, 18], [layers.stream, 10]]) { for (let i = 0; i < n; i++) { const k = ((t * .08 + i / n) % 1), y = 10 + k * k * (Y1 - 20), r2 = lst[Math.min(lst.length - 1, Math.max(0, (y - lst[0][1]) / 8 | 0))];
-    x.strokeStyle = `rgba(250,252,255,${.5 * Math.sin(k * Math.PI)})`; x.lineWidth = 1.5 + k * 3; x.beginPath(); x.moveTo(r2[0] - r2[2] * .25, y); x.lineTo(r2[0] + r2[2] * .15, y + 2); x.stroke(); } }
+    const ox = (noise(i * 3.1, 1) - .5) * r2[2] * .6, ln = r2[2] * (.12 + .25 * noise(i * 1.7, 4));
+    x.strokeStyle = `rgba(250,252,255,${.32 * Math.sin(k * Math.PI)})`; x.lineWidth = 1.2 + k * 2.4; x.beginPath(); x.moveTo(r2[0] + ox - ln, y); x.quadraticCurveTo(r2[0] + ox, y - 2 - k * 3, r2[0] + ox + ln, y + 1); x.stroke(); } }
   x.restore();
   // objects
   for (const o of objs) { const sx = (o.x - cam * o.p) * K; if (sx + o.bb[2] * K < -50 || sx + o.bb[0] * K > W + 50) continue;
@@ -281,7 +290,7 @@ function walkScene(ctx, t, zoom) {
     const prog = o.o.city ? clamp((front - (o.x - 260)) / 900) : clamp((front - ox) / 260);
     if (prog <= 0) continue;
     x.save(); x.translate(sx, HZ + o.y * K); x.scale(K, K);
-    if (o.o.city) cityGlow(x, t, prog);
+    if (o.o.city) cityLight(x, t, prog);
     if (prog >= 1) { if (!o.spr) { const w = o.bb[2] - o.bb[0], h = o.bb[3] - o.bb[1], c = canvas(Math.ceil(w), Math.ceil(h)), cx2 = c.getContext('2d'); cx2.translate(-o.bb[0], -o.bb[1]); drawList(cx2, o.list); o.spr = c; } x.drawImage(o.spr, o.bb[0], o.bb[1]); }
     else drawList(x, o.list, prog);
     x.restore(); }
@@ -298,6 +307,15 @@ function walkScene(ctx, t, zoom) {
     for (let y = -10; y <= H + 10; y += 12) x.lineTo(fsx + 26 * Math.sin(y * .021 + t * .6) + 30 * (noise(y * .01, t * .3) - .5), y);
     x.lineTo(W + 10, H + 10); x.closePath(); const g = x.createLinearGradient(fsx - 40, 0, fsx + 60, 0); g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(.5, 'rgba(0,0,0,.85)'); g.addColorStop(1, 'rgba(0,0,0,1)'); x.fillStyle = g; x.fill(); x.restore(); }
   ctx.save(); if (zoom) { ctx.translate(zoom[0], zoom[1]); ctx.scale(zoom[2], zoom[2]); ctx.translate(-zoom[0], -zoom[1]); } ctx.drawImage(sc, 0, 0); ctx.restore();
+}
+function cityLight(x, t, prog) {        // lift the paint around the city back to bare paper: the paper is the light
+  const k = ss(.05, .8, prog); if (k <= 0) return;
+  x.save(); x.globalCompositeOperation = 'destination-out';
+  const g = x.createRadialGradient(0, -170, 30, 0, -170, 820); g.addColorStop(0, `rgba(0,0,0,${.92 * k})`); g.addColorStop(.45, `rgba(0,0,0,${.5 * k})`); g.addColorStop(1, 'rgba(0,0,0,0)'); x.fillStyle = g; x.fillRect(-1000, -1100, 2000, 1500);
+  for (let i = 0; i < 11; i++) { const a = -Math.PI / 2 + (i - 5) * .24 + Math.sin(t * .15 + i) * .02, l = 1100; x.fillStyle = `rgba(0,0,0,${.22 * k})`; x.beginPath(); x.moveTo(0, -170); x.lineTo(Math.cos(a - .05) * l, -170 + Math.sin(a - .05) * l); x.lineTo(Math.cos(a + .05) * l, -170 + Math.sin(a + .05) * l); x.fill(); }
+  x.globalCompositeOperation = 'source-over';
+  const r = x.createRadialGradient(0, -170, 380, 0, -170, 760); r.addColorStop(0, 'rgba(240,196,96,0)'); r.addColorStop(.5, `rgba(240,196,96,${.26 * k})`); r.addColorStop(1, 'rgba(240,196,96,0)'); x.fillStyle = r; x.fillRect(-1000, -1100, 2000, 1500);
+  x.restore();
 }
 function cityGlow(x, t, prog) {          // the light of the city: no sun, no night
   const k = ss(.1, .9, prog) * (.9 + .1 * Math.sin(t * .8)); if (k <= 0) return;
@@ -358,9 +376,10 @@ Pilot.run({ W, H, dur: DUR, audio: 'renewal.m4a', fonts: ["600 40px 'Noto Serif 
       wash([[EYE[0] - 18, EYE[1] + 2], [EYE[0] - 2, EYE[1] - 10], [EYE[0] + 16, EYE[1] - 4], [EYE[0] + 4, EYE[1] + 6]], '#fbf6ee', .9, { j: 1 }),                // eye white
       wash(Array.from({ length: 8 }, (_, i) => [EYE[0] + 3 + Math.cos(i / 8 * 6.28) * 6, EYE[1] - 3 + Math.sin(i / 8 * 6.28) * 6]), '#4a3428', .9, { j: .6 }),  // iris, lifted
       mk([[EYE[0] - 20, EYE[1] - 2], [EYE[0] - 2, EYE[1] - 13], [EYE[0] + 18, EYE[1] - 5]], 4, '#4a3428', { a: .85, prof: 'brush', bristles: 1 }),              // upper lid
-      wash(smooth([[70, -60], [140, -70], [168, -20], [140, 30], [86, 26]], true, 4), '#e98f7c', .3, { j: 8 }),                                       // a warm flush on the cheek
+      wash(smooth([[56, -70], [146, -80], [172, -20], [146, 40], [70, 36]], true, 4), '#e98f7c', .17, { j: 14 }),                                       // a warm flush on the cheek
       mk([[160, 2], [168, 4], [177, 6]], 2.4, '#8a4a40', { a: .6, prof: 'even', bristles: 0 }),                                                       // mouth, sad
-      mk(smooth([[159, -2], [167, 4], [178, 1]], false, 4), 2.4, '#8a4a40', { a: .6, prof: 'even', bristles: 0 })];                                    // mouth, a small smile                                                              // a warm flush on the cheek
+      mk(smooth([[159, -2], [167, 4], [178, 1]], false, 4), 2.4, '#8a4a40', { a: .6, prof: 'even', bristles: 0 }),
+      ...[1, .8, .62, .46].map(k => wash(smooth([[60, -330], [520, -420], [760, -120], [700, 260], [330, 200], [130, 40], [70, -120]].map(([x, y]) => [380 + (x - 380) * k, -60 + (y + 60) * k]), true, 5), '#f3c766', .13, { j: 18 }))];                     // the light, as a glaze                                    // mouth, a small smile                                                              // a warm flush on the cheek
     layersCanvas = canvas(W, H);
   },
   draw });

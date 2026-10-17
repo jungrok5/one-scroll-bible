@@ -14,7 +14,7 @@
    the shepherd boy under the stars (Ps 23:1 on the page) → the anointing (1 Sam 16:7 on a banderole) →
    the crowned king with his harp, and the page now carries the promise 2 Sam 7:16 under a gilded initial. */
 const { clamp, lerp, ss, eo, eio, win, rng, fbm, noise, canvas, hex, mix, rgb, speckle, text } = Pilot;
-const W = Pilot.W, H = Pilot.H, V = Pilot.ori === 'v', DUR = 36;
+const W = Pilot.W, H = Pilot.H, V = Pilot.ori === 'v', DUR = 39;
 const S1 = 10, S2 = 18;                   // shot cuts: page/shepherd → anointing → king/page
 const INK = '#2A1A10', VEL = '#ECDCB4', LAP = '#27469A', LAPD = '#1a3072', VERM = '#C43A20', GRN = '#4e7a3c', GRND = '#33562b',
   FLESH = '#f0d6ba', WOOL = '#f3ecd8', ROSE = '#c4776c', HAIR = '#8e4020', WHT = '#fbf6e6';
@@ -48,7 +48,7 @@ function archP(x0, y0, w, h, ins = 0) {
 
 // ---------- gold leaf ----------
 // glint: a bright band (screen space) that sweeps the gold only, from the candle at the upper left
-const GL = [[1.6, 5.2], [14.6, 17.2], [S2 + .4, S2 + 3.4], [30.6, 34.6]];
+const GL = [[1.6, 5.2], [14.6, 17.2], [S2 + .4, S2 + 3.4], [33.6, 37.6]];
 function glint(t) { for (const [a, b] of GL) if (t > a - .1 && t < b + .1) return { k: (t - a) / (b - a), a: Math.sin(Math.PI * clamp((t - a) / (b - a))) }; return null; }
 function gold(x, p, o = {}) {
   x.save(); x.clip(p);
@@ -466,7 +466,7 @@ function banderole(m, b, lt, k) {
   m.restore(); m.restore();
 }
 function shotKing(x, t) {
-  const lt = t - S2, { mb } = L, pull = eio(clamp((lt - 1.2) / 5.2)), k = mb.w / 620, kx = mb.x + mb.w * .5, ky = mb.y + mb.h * .82 - 470 * .92 * k;
+  const lt = t - S2, { mb } = L, pull = eio(clamp((lt - 1.2) / 4.4)), k = mb.w / 620, kx = mb.x + mb.w * .5, ky = mb.y + mb.h * .82 - 470 * .92 * k;
   const z = lerp(V ? 2.2 : 2.6, 1.0, pull) * lerp(1, 1.025, ss(8, 18, lt));
   x.save(); camPage(x, lerp(kx, W / 2, pull), lerp(ky, H / 2, pull), z);
   page(x, t, m => {
@@ -483,18 +483,18 @@ function shotKing(x, t) {
   }, c => {
     const { size } = L.col, kSize = size * (V ? .9 : .92);
     text(c, '사무엘하 7장', L.col.x, L.col.rub, { align: 'left', size: 34, weight: 900, color: VERM, alpha: ss(S2 + 5.2, S2 + 5.8, t) * (1 - ss(DUR - 1.4, DUR - .6, t)), ls: 6 });
-    const a1 = 1 - ss(27.2, 27.9, t), a2 = 1 - ss(31.4, 32.1, t);
-    verseBlock(c, t, { init: '네', l1: '집과 네 나라가', l2: '내 앞에서 영원히 보전되고', y: L.col.top, size: kSize, t0: S2 + 5.6, rate: 10, alpha: a1, cite: null });
-    if (t > 27.6) verseBlock(c, t, { init: '네', l1: '왕위가', l2: '영원히 견고하리라', y: L.col.top, size: kSize, t0: 27.8, rate: 8, alpha: a2, cite: null });
-    const ca = ss(S2 + 7.4, S2 + 8.2, t) * (1 - ss(31.4, 32.1, t)), lh = kSize * 1.42;
+    const a1 = 1 - ss(28.6, 29.2, t), a2 = 1 - ss(33.8, 34.4, t);
+    verseBlock(c, t, { init: '네', l1: '집과 네 나라가', l2: '내 앞에서 영원히 보전되고', y: L.col.top, size: kSize, t0: S2 + 5.2, rate: 14, alpha: a1, cite: null });
+    if (t > 28.9) verseBlock(c, t, { init: '네', l1: '왕위가', l2: '영원히 견고하리라', y: L.col.top, size: kSize, t0: 29.0, rate: 10, alpha: a2, cite: null });
+    const ca = ss(S2 + 6.6, S2 + 7.2, t) * (1 - ss(33.8, 34.4, t)), lh = kSize * 1.42;
     text(c, '사무엘하 7:16 (개역개정)', L.col.x, L.col.top + kSize + lh + kSize * 1.05, { align: 'left', size: L.col.cite + 2, font: "'Noto Sans KR',sans-serif", color: '#7a2a16', alpha: ca * .95, ls: 2 });
     // the promise, as the site reads it
-    const pa = win(t, 31.9, DUR - .2, .9, 1.2);
+    const pa = win(t, 34.5, DUR - .2, .9, 1.2);
     if (pa > 0) {
       const sz = V ? 44 : 40;
       text(c, '“영원한 왕위”는 다윗의 자손으로 오신', L.col.x, L.col.top + kSize * .9, { align: 'left', size: sz, weight: 600, color: INK, alpha: pa });
       text(c, '예수님 안에서 성취됩니다', L.col.x, L.col.top + kSize * .9 + sz * 1.6, { align: 'left', size: sz, weight: 600, color: INK, alpha: pa });
-      const th = eio(clamp((t - 32.6) / 2.6)), ty = L.col.top + kSize * .9 + sz * 2.6;
+      const th = eio(clamp((t - 35.2) / 2.6)), ty = L.col.top + kSize * .9 + sz * 2.6;
       if (th > 0) { c.save(); c.globalAlpha = pa; gold(c, rectP(L.col.x, ty, (W + 40 - L.col.x) * th, 5), { lw: 0 });
         const hx = L.col.x + (W + 40 - L.col.x) * th, hg = c.createRadialGradient(hx, ty + 2, 0, hx, ty + 2, 40); hg.addColorStop(0, 'rgba(255,246,200,.9)'); hg.addColorStop(1, 'rgba(255,230,160,0)');
         c.globalCompositeOperation = 'screen'; c.fillStyle = hg; c.fillRect(hx - 40, ty - 38, 80, 80); c.restore(); }

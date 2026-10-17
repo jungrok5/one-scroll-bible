@@ -184,6 +184,18 @@
   var idleT; function poke() { document.body.classList.remove('idle'); clearTimeout(idleT); idleT = setTimeout(function () { if (playing) document.body.classList.add('idle'); }, 2500); }
   addEventListener('pointermove', poke); addEventListener('touchstart', poke, { passive: true });
   au.addEventListener('ended', function () { if (playing) go(cur + 1); });
+  // 화면을 떠나면(탭 전환·앱 전환·브라우저 닫기) 소리도 멈춘다 — 그림은 숨은 탭에서 멈추므로 소리만 남지 않게
+  document.addEventListener('visibilitychange', function () { if (document.hidden && playing) setPlay(false); });
+  addEventListener('pagehide', function () { setPlay(false); try { au.removeAttribute('src'); au.load(); } catch (e) {} });
+  // 잠금 화면·알림의 재생 컨트롤이 이 재생기를 따르도록
+  if ('mediaSession' in navigator) { try {
+    navigator.mediaSession.metadata = new MediaMetadata({ title: '영상으로 보는 성경 이야기', artist: '한눈에 보는 성경 이야기', artwork: [{ src: '/icon-512.png', sizes: '512x512', type: 'image/png' }] });
+    navigator.mediaSession.setActionHandler('play', function () { if (cur < 0) go(0, true); else setPlay(true); });
+    navigator.mediaSession.setActionHandler('pause', function () { setPlay(false); });
+    navigator.mediaSession.setActionHandler('stop', function () { setPlay(false); });
+    navigator.mediaSession.setActionHandler('previoustrack', function () { go(Math.max(0, cur - 1)); });
+    navigator.mediaSession.setActionHandler('nexttrack', function () { go(Math.min(S.length - 1, cur + 1)); });
+  } catch (e) {} }
 
   if (fpsOn) { fpsEl = document.createElement('div'); fpsEl.className = 'fps'; stage.appendChild(fpsEl); }
   var fc = 0, fl = performance.now(), lastSeek = -1, pending = false, clk = 0, lastNow = performance.now();

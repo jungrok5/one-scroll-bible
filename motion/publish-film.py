@@ -30,6 +30,18 @@ for fam, w, f in FACES:
     subprocess.run(['pyftsubset', os.path.join(FONTS, f), f'--text-file={os.path.join(OUT, ".chars.txt")}', '--flavor=woff2',
                     '--layout-features=*', f'--output-file={os.path.join(OUT, name)}'], check=True)
     css.append(f"@font-face{{font-family:'{fam}';font-weight:{w};font-style:normal;font-display:block;src:url({name}) format('woff2')}}")
+# Latin-script languages draw in Noto Serif / Noto Sans (their _fonts name them): the Korean faces' Latin is fine, but
+# their CJK-style punctuation (a centred "⋯" for "…") is not. Variable fonts, subset to the glyphs those languages use.
+lat = [p for p in glob.glob(os.path.join(PILOT, 'i18n', '*.json')) if "'Noto Serif'" in open(p, encoding='utf-8').read()]
+if lat:
+    lt = set(''.join(open(p, encoding='utf-8').read() for p in lat)) | {chr(c) for c in range(0x20, 0x7f)} | set('…—–“”‘’«»·•')
+    open(os.path.join(OUT, '.lat.txt'), 'w', encoding='utf-8').write(''.join(sorted(c for c in lt if c >= ' ' and ord(c) < 0x3000)))
+    for fam, f in (('Noto Serif', 'NotoSerif.ttf'), ('Noto Sans', 'NotoSans.ttf')):
+        name = fam.replace(' ', '') + '.woff2'
+        subprocess.run(['pyftsubset', os.path.join(FONTS, f), f'--text-file={os.path.join(OUT, ".lat.txt")}', '--flavor=woff2',
+                        '--layout-features=*', f'--output-file={os.path.join(OUT, name)}'], check=True)
+        css.append(f"@font-face{{font-family:'{fam}';font-weight:100 900;font-style:normal;font-display:block;src:url({name}) format('woff2')}}")
+    os.remove(os.path.join(OUT, '.lat.txt'))
 open(os.path.join(OUT, 'fonts.css'), 'w').write('\n'.join(css) + '\n')
 os.remove(os.path.join(OUT, '.chars.txt'))
 

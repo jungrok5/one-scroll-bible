@@ -1,5 +1,9 @@
 {
  "_dir": "ltr",
+ "_fonts": {
+  "serif": "'Noto Serif',Georgia,serif",
+  "sans": "'Noto Sans','Helvetica Neue',Arial,sans-serif"
+ },
  "_ui": {
   "title": "La Biblia de un vistazo — la película",
   "brand": "La Biblia de un vistazo",

@@ -172,9 +172,9 @@ function harp(x, px, py, s, t, a0 = 0) {   // a small gold harp: soundbox, neck,
   fr.moveTo(-14, -30); fr.lineTo(-24, -134); fr.quadraticCurveTo(10, -132, 46, -136); fr.quadraticCurveTo(28, -80, 2, -26); fr.closePath();
   x.save(); x.fillStyle = 'rgba(42,26,16,.0)'; x.restore();
   gold(x, fr, { lw: 2 });
-  for (let i = 0; i < 7; i++) { const k = i / 6, xa = lerp(-20, 38, k), ya = lerp(-134, -134, k), xb = lerp(-12, 6, k), yb = lerp(-34, -30, k) - k * 60 * (k > .5 ? 1 : 0);
+  for (let i = 0; i < 7; i++) { const k = i / 6, xa = lerp(-20, 38, k), ya = lerp(-134, -134, k), xb = lerp(-12, 6, k), yb = lerp(-34, -30, k);   // every string runs the full span, top bar → soundbox
     const vib = Math.sin(t * 40 + i * 2) * 1.6 * (.5 + .5 * Math.sin(t * 3 + i));
-    x.strokeStyle = 'rgba(252,246,226,.95)'; x.lineWidth = 1.4; x.beginPath(); x.moveTo(xa, ya); x.quadraticCurveTo((xa + xb) / 2 + vib, (ya + yb) / 2, xb, yb + (k > .5 ? -((k - .5) * 80) : 0)); x.stroke(); }
+    x.strokeStyle = 'rgba(252,246,226,.95)'; x.lineWidth = 1.4; x.beginPath(); x.moveTo(xa, ya); x.quadraticCurveTo((xa + xb) / 2 + vib, (ya + yb) / 2, xb, yb); x.stroke(); }
   x.restore();
 }
 

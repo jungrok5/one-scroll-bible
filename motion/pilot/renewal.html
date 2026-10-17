@@ -198,9 +198,10 @@ function buildObjs() {
 // ---------- the traveller ----------
 function figure(ctx, x, y, s, ph, kneel, robe, bow) {
   R = rng(4242); const sw = Math.sin(ph), hb = Math.abs(Math.cos(ph)) * 2 * (1 - kneel), H0 = 122 * s * (1 - .32 * kneel), L = [], dk = robe.map(v => v * .72);
-  const sh = y - H0 + 22 * s + hb, head = [x + (3 + bow * 7) * s, y - H0 + (2 + bow * 6) * s + hb];
+  const sh = y - H0 + 22 * s + hb, head = [x + (3 + bow * 7) * s, sh - 3 * s + bow * 6 * s];   // head sits on the shoulders (a short neck), not floating above them
   L.push(wash(Array.from({ length: 10 }, (_, i) => [x + 4 * s + Math.cos(i / 10 * 6.28) * 26 * s, y + 2 + Math.sin(i / 10 * 6.28) * 5 * s]), '#8a7a62', .25, { j: 2 }));   // shadow
   if (kneel < .5) for (const d of [-1, 1]) L.push(mk([[x + d * 4 * s, y - 36 * s], [x + d * 4 * s + d * sw * 11 * s, y - 2]], 6 * s, '#6b5545', { a: .8, bristles: 1 }));
+  L.push(mk([[head[0] - 1 * s, head[1] - 4 * s], [x + 1 * s, sh + 5 * s]], 8 * s, '#c9946c', { a: .95, bristles: 1 }));   // neck, under the robe
   const hem = kneel > .5 ? [[x - 22 * s, y - 2], [x + 30 * s, y - 2]] : [[x - 17 * s + sw * 2, y - 24 * s], [x + 19 * s - sw * 2, y - 24 * s]];
   L.push(wash(smooth([hem[0], [x - 15 * s, sh + 18 * s], [x - 9 * s, sh], [x + 9 * s, sh - 1 * s], [x + 15 * s, sh + 16 * s], hem[1], [x + 2 * s, hem[1][1] + 3 * s]], true, 4), robe, .9, { j: 1.2 }));
   L.push(mk([[x - 5 * s, sh + 8 * s], [x - 9 * s, (sh + hem[0][1]) / 2], [x - 11 * s, hem[0][1] - 4 * s]], 2.6 * s, dk, { a: .45, bristles: 1 }));

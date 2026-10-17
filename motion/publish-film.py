@@ -39,7 +39,9 @@ for s in ORDER:
     if not n: h = h.replace('</head>', '<link rel="stylesheet" href="fonts.css">\n</head>', 1)
     open(os.path.join(OUT, s + '.html'), 'w', encoding='utf-8').write(h)
     wav = os.path.join(PILOT, s + '.wav')
-    if os.path.exists(wav):
+    m4a = os.path.join(OUT, s + '.m4a')
+    if os.path.exists(m4a) and os.path.exists(wav) and os.path.getmtime(m4a) >= os.path.getmtime(wav): pass   # sound unchanged
+    elif os.path.exists(wav):
         subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-i', wav, '-af', 'loudnorm=I=-16:TP=-1.5:LRA=11', '-ar', '48000',
                         '-c:a', 'aac', '-b:a', '96k', '-movflags', '+faststart', os.path.join(OUT, s + '.m4a')], check=True)
     else: print('no sound yet:', s)

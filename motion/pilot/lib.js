@@ -6,6 +6,29 @@
   // orientation: ?o=v → portrait 1080×1920, otherwise landscape 1920×1080. Scenes read P.ori / P.W / P.H.
   P.ori = /[?&]o=v/.test(location.search) ? 'v' : 'h';
   P.W = P.ori === 'v' ? 1080 : 1920; P.H = P.ori === 'v' ? 1920 : 1080;
+
+  // ---------------- languages ----------------
+  // Korean is the source: every on-screen string is written in Korean in the scene, and a language file maps it
+  // (exact Korean string → translation), per scene: i18n/<lang>.json = { "_dir": "ltr|rtl", "<scene>": { "한국어": "…" } }.
+  // ?lang=<code> picks the language (default ko = no lookup at all, so Korean renders exactly as authored).
+  P.lang = (location.search.match(/[?&]lang=([\w-]+)/) || [])[1] || 'ko';
+  P.scene = decodeURIComponent(location.pathname.split('/').pop().replace(/\.html$/, ''));
+  P.L = {}; P.dir = 'ltr';
+  P.collect = /[?&]collect=1/.test(location.search); P.seen = new Set(); P.miss = new Set();
+  const HANGUL = /[\uac00-\ud7a3]/;
+  P.tr = s => {   // translate one on-screen string (pass the WHOLE Korean string, then slice/animate the result)
+    if (s == null) return s; s = String(s);
+    if (P.collect && HANGUL.test(s)) P.seen.add(s);
+    if (P.lang === 'ko' || !HANGUL.test(s)) return s;
+    const m = P.L[s]; if (m == null) { P.miss.add(s); return s; } return m;
+  };
+  // collect mode: also record every Hangul string that reaches the canvas, so untranslated text (a leak) shows up
+  P.drawn = new Set();
+  if (P.collect) for (const k of ['fillText', 'strokeText']) { const f = CanvasRenderingContext2D.prototype[k];
+    CanvasRenderingContext2D.prototype[k] = function (t, ...r) { if (HANGUL.test(String(t))) P.drawn.add(String(t)); return f.call(this, t, ...r); }; }
+  // user-perceived characters (keeps combining marks and syllable clusters together for typewriter effects)
+  const SEG = typeof Intl !== 'undefined' && Intl.Segmenter ? new Intl.Segmenter(undefined, { granularity: 'grapheme' }) : null;
+  P.chars = s => SEG ? Array.from(SEG.segment(String(s)), x => x.segment) : Array.from(String(s));
   P.clamp = (x, a = 0, b = 1) => (x < a ? a : x > b ? b : x);
   P.lerp = (a, b, k) => a + (b - a) * k;
   P.ss = (a, b, x) => { const k = P.clamp((x - a) / (b - a)); return k * k * (3 - 2 * k); };
@@ -38,8 +61,16 @@
   let Q = null;
   P.text = (ctx, s, x, y, o = {}) => {
     if (Q) { Q.push([s, x, y, o]); return; }
-    const size = o.size || 44, lh = size * (o.lh || 1.55), lines = String(s).split('\n');
+    s = P.tr(s);
+    let size = o.size || 44; const lines = String(s).split('\n');
     ctx.save(); ctx.globalAlpha = o.alpha == null ? 1 : o.alpha; ctx.font = `${o.weight || 400} ${size}px ${o.font || "'Noto Serif KR',serif"}`;
+    if (P.lang !== 'ko') {   // a translation may run longer than the Korean: shrink to fit the frame (or o.maxW)
+      if (P.dir === 'rtl') ctx.direction = 'rtl';
+      if (o.ls) ctx.letterSpacing = o.ls + 'px';
+      const maxW = o.maxW || (P.W - 120), wd = Math.max(...lines.map(l => ctx.measureText(l).width));
+      if (wd > maxW) { size = Math.max(10, size * maxW / wd); ctx.font = `${o.weight || 400} ${size}px ${o.font || "'Noto Serif KR',serif"}`; }
+    }
+    const lh = size * (o.lh || 1.55);
     ctx.textAlign = o.align || 'center'; ctx.textBaseline = 'alphabetic';
     if (o.ls) ctx.letterSpacing = o.ls + 'px';
     if (o.shadow) { ctx.shadowColor = o.shadow; ctx.shadowBlur = o.shadowBlur || 18; }
@@ -71,10 +102,17 @@
     document.body.appendChild(cv); const ctx = cv.getContext('2d');
     const fit = () => { if (RENDER) return; const s = Math.min(innerWidth / W, innerHeight / H); cv.style.transform = `translate(${(innerWidth - W * s) / 2}px,${(innerHeight - H * s) / 2}px) scale(${s})`; };
     fit(); addEventListener('resize', fit);
+    if (P.lang !== 'ko') try {
+      const j = await new Promise((ok, no) => { const x = new XMLHttpRequest();   // XHR, not fetch: also works from file:// when rendering
+        x.open('GET', 'i18n/' + P.lang + '.json'); x.onload = () => { try { ok(JSON.parse(x.responseText)); } catch (e) { no(e); } }; x.onerror = no; x.send(); });
+      P.L = Object.assign({}, j._common || {}, j[P.scene] || {}); P.dir = j._dir || 'ltr';
+      document.documentElement.lang = P.lang; document.documentElement.dir = P.dir;
+    } catch (e) { console.warn('no language file for', P.lang); }
     try { for (const f of (cfg.fonts || [])) await document.fonts.load(f); await document.fonts.ready; } catch (e) {}
     if (cfg.init) await cfg.init();
     const draw = t => { ctx.save(); cfg.draw(ctx, Math.max(0, Math.min(cfg.dur - 1e-3, t))); ctx.restore(); };
     window.seek = draw; window.DURATION = cfg.dur; draw(0); window.__ready = true;
+    window.__i18n = () => ({ seen: [...P.seen], miss: [...P.miss], drawn: [...P.drawn] });
     if (RENDER) return;
 
     // viewer: play/pause, scrub, synced audio (if the scene ships one)

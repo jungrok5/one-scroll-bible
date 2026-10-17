@@ -26,8 +26,9 @@ const fps = +opt('fps', 30), workers = +opt('workers', 4);
 const [W, H] = ori === 'h' ? [1920, 1080] : [1080, 1920];
 const out = join(here, 'out'); mkdirSync(out, { recursive: true });
 const pageRel = opt('page', 'index.html');
-const name = pageRel === 'index.html' ? 'one-scroll-bible' : pageRel.replace(/^.*\//, '').replace(/\.html$/, '');
-const url = pathToFileURL(join(here, pageRel)).href + `?render=1&o=${ori}`;
+const lang = opt('lang', 'ko');
+const name = (pageRel === 'index.html' ? 'one-scroll-bible' : pageRel.replace(/^.*\//, '').replace(/\.html$/, '')) + (lang === 'ko' ? '' : '-' + lang);
+const url = pathToFileURL(join(here, pageRel)).href + `?render=1&o=${ori}` + (lang === 'ko' ? '' : `&lang=${lang}`);
 const wav = join(here, pageRel.replace(/\.html$/, '.wav'));
 
 async function openPage(browser) {
@@ -38,7 +39,7 @@ async function openPage(browser) {
   return page;
 }
 
-const browser = await chromium.launch({ args: ['--font-render-hinting=none', '--disable-lcd-text'] });
+const browser = await chromium.launch({ args: ['--font-render-hinting=none', '--disable-lcd-text', '--allow-file-access-from-files'] });
 const probe = await openPage(browser);
 const DUR = await probe.evaluate(() => window.DURATION);
 await probe.close();

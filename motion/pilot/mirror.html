@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>시안 · 거울</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600&family=Noto+Sans+KR:wght@400;700&display=swap">
+</head>
+<body>
+<script src="lib.js"></script>
+<script>
+/* 16 거울 — 이스라엘의 악순환은 나의 모습. A luxury-product film turned inside out: one piece of polished gold
+   on a black plinth under a single studio light. It is a golden calf; it melts and re-forms as money, a trophy,
+   a thumbs-up, a person — and finally an oval mirror that faces the viewer, with "me" inside the glass.
+   The gold is a signed-distance field shaded per pixel as metal (key light, a sweeping strip light, fresnel rim);
+   between shapes the fields are blended with a liquid wobble and a molten glow. Pure function of t. */
+const { clamp, lerp, ss, eo, eio, win, rng, fbm, canvas, mix, rgb, text } = Pilot;
+const W = Pilot.W, H = Pilot.H, V = Pilot.ori === 'v', DUR = 40;
+const FW = 640, FH = 720, R = 30, NP = 200, NW = FW + NP;                       // field size (shape space), bevel radius
+const K = V ? 1.2 : .80, BASEY = V ? 1236 : 742;       // field → screen scale; screen y of the plinth top
+const OX = W / 2 - 320 * K, OY = BASEY - 680 * K;
+const MORPH = [[9.6, 11.0], [13.4, 14.8], [16.8, 18.2], [20.2, 21.8], [23.6, 25.4]];
+const LABEL = ['금송아지', '돈', '성공', '인정', '나 자신', ''];
+const SERIF = "'Noto Serif KR',serif", SANS = "'Noto Sans KR',sans-serif";
+let SDF = [], NF, D, HT, TMP, fimg, fcv, fcx, motes = [], plinth, LUT;
+
+// ---------- the six shapes (white on black, field space; all stand on the same base slab) ----------
+function slab(x) { x.beginPath(); x.roundRect(110, 650, 420, 30, 6); x.fill(); }
+function rr(x, a, b, w, h, r) { x.beginPath(); x.roundRect(a, b, w, h, r); x.fill(); }
+function el(x, a, b, rx, ry, rot = 0) { x.beginPath(); x.ellipse(a, b, rx, ry, rot, 0, 6.2832); x.fill(); }
+function strokeQ(x, w, a, b, c, d, e, f) { x.lineWidth = w; x.lineCap = 'round'; x.beginPath(); x.moveTo(a, b); x.quadraticCurveTo(c, d, e, f); x.stroke(); }
+function carve(x, fn) { x.globalCompositeOperation = 'destination-out'; fn(); x.globalCompositeOperation = 'source-over'; }
+const SHAPES = [
+  x => {   // the golden calf, side view, facing left
+    el(x, 350, 452, 150, 82); el(x, 240, 445, 68, 82); el(x, 448, 448, 72, 80);
+    x.beginPath(); x.moveTo(262, 330); x.quadraticCurveTo(232, 292, 204, 282); x.lineTo(180, 286); x.quadraticCurveTo(142, 320, 118, 366);
+    x.quadraticCurveTo(110, 394, 136, 400); x.quadraticCurveTo(172, 404, 200, 390); x.quadraticCurveTo(226, 420, 232, 474); x.lineTo(300, 474); x.lineTo(300, 360); x.closePath(); x.fill();
+    strokeQ(x, 17, 198, 290, 174, 266, 170, 240); strokeQ(x, 15, 218, 290, 220, 262, 240, 244);
+    el(x, 240, 302, 30, 11, .45);
+    carve(x, () => { el(x, 168, 320, 7, 5, .3); el(x, 126, 380, 5, 4); });
+    const leg = (xt, yt, xb) => { x.beginPath(); x.moveTo(xt - 22, yt); x.lineTo(xt + 22, yt); x.quadraticCurveTo(xb + 16, 560, xb + 11, 632); x.lineTo(xb - 11, 632); x.quadraticCurveTo(xb - 16, 560, xt - 22, yt); x.fill(); rr(x, xb - 15, 624, 30, 28, 5); };
+    leg(205, 478, 198); leg(258, 488, 262); leg(412, 482, 420); leg(462, 470, 474);
+    x.strokeStyle = '#fff'; strokeQ(x, 9, 494, 420, 528, 470, 510, 560); el(x, 510, 578, 12, 22);
+    slab(x);
+  },
+  x => {   // money: a sack marked ₩ and two stacks of coins
+    x.beginPath(); x.moveTo(212, 330); x.bezierCurveTo(88, 400, 76, 650, 240, 650); x.lineTo(290, 650); x.bezierCurveTo(440, 650, 418, 400, 300, 330); x.closePath(); x.fill();
+    rr(x, 198, 314, 112, 26, 10);
+    x.beginPath(); x.moveTo(214, 318); x.quadraticCurveTo(168, 252, 204, 240); x.quadraticCurveTo(226, 272, 240, 234); x.quadraticCurveTo(256, 270, 276, 236);
+    x.quadraticCurveTo(302, 266, 318, 246); x.quadraticCurveTo(332, 282, 296, 318); x.closePath(); x.fill();
+    rr(x, 372, 540, 84, 110, 8); rr(x, 452, 470, 86, 180, 8); el(x, 496, 462, 46, 13); el(x, 414, 532, 44, 12);
+    carve(x, () => { x.font = `700 170px ${SANS}`; x.textAlign = 'center'; x.fillText('₩', 252, 596);
+      for (let y = 556; y < 648; y += 17) x.fillRect(372, y, 84, 3.5); for (let y = 486; y < 648; y += 17) x.fillRect(452, y, 86, 3.5); });
+    slab(x);
+  },
+  x => {   // success: a trophy cup with handles and a star
+    x.beginPath(); x.moveTo(184, 150); x.lineTo(456, 150); x.bezierCurveTo(458, 330, 400, 402, 320, 412); x.bezierCurveTo(240, 402, 182, 330, 184, 150); x.fill();
+    rr(x, 166, 134, 308, 28, 9);
+    x.strokeStyle = '#fff'; x.lineWidth = 22; x.beginPath(); x.ellipse(190, 238, 62, 72, 0, Math.PI * .5, Math.PI * 1.5); x.stroke();
+    x.beginPath(); x.ellipse(450, 238, 62, 72, 0, -Math.PI * .5, Math.PI * .5); x.stroke();
+    x.beginPath(); x.moveTo(298, 405); x.lineTo(342, 405); x.lineTo(334, 500); x.lineTo(306, 500); x.fill(); el(x, 320, 504, 40, 14);
+    x.beginPath(); x.moveTo(288, 514); x.lineTo(352, 514); x.lineTo(398, 562); x.lineTo(242, 562); x.fill(); rr(x, 222, 560, 196, 92, 6);
+    carve(x, () => { x.beginPath(); for (let i = 0; i < 10; i++) { const a = -Math.PI / 2 + i * Math.PI / 5, r = i % 2 ? 20 : 48; x.lineTo(320 + Math.cos(a) * r, 262 + Math.sin(a) * r); } x.fill();
+      x.fillRect(250, 584, 140, 4); x.fillRect(250, 628, 140, 4); });
+    slab(x);
+  },
+  x => {   // approval: a thumbs-up on a post, with sparkles
+    x.save(); x.translate(300, 340); x.rotate(-.1); rr(x, -44, -214, 88, 250, 44); x.restore();
+    rr(x, 246, 322, 214, 236, 46);
+    for (let i = 0; i < 4; i++) rr(x, 378, 334 + i * 55, 122 - i * 8, 52, 26);
+    rr(x, 168, 372, 100, 200, 18); rr(x, 146, 360, 40, 224, 8);
+    rr(x, 330, 552, 34, 100, 6);
+    const star = (cx, cy, r) => { x.beginPath(); for (let i = 0; i < 8; i++) { const a = i * Math.PI / 4, q = i % 2 ? r * .28 : r; x.lineTo(cx + Math.cos(a) * q, cy + Math.sin(a) * q); } x.fill(); };
+    star(160, 190, 34); star(530, 200, 26); star(548, 420, 20); star(110, 300, 16);
+    slab(x);
+  },
+  x => {   // a person, standing like a statue, facing us
+    el(x, 320, 150, 50, 58); rr(x, 298, 192, 44, 46, 10);
+    x.beginPath(); x.moveTo(232, 240); x.quadraticCurveTo(320, 222, 408, 240); x.quadraticCurveTo(440, 250, 434, 292); x.lineTo(392, 432); x.lineTo(248, 432);
+    x.lineTo(206, 292); x.quadraticCurveTo(200, 250, 232, 240); x.fill();
+    x.strokeStyle = '#fff'; strokeQ(x, 42, 224, 268, 206, 360, 204, 452); strokeQ(x, 42, 416, 268, 434, 360, 436, 452); el(x, 204, 470, 24, 30); el(x, 436, 470, 24, 30);
+    x.beginPath(); x.moveTo(250, 420); x.lineTo(318, 420); x.lineTo(310, 640); x.lineTo(264, 640); x.fill();
+    x.beginPath(); x.moveTo(322, 420); x.lineTo(390, 420); x.lineTo(376, 640); x.lineTo(330, 640); x.fill();
+    el(x, 284, 645, 32, 10); el(x, 356, 645, 32, 10);
+    slab(x);
+  },
+  x => {   // the mirror: an oval frame with a crest, on its foot
+    el(x, 320, 360, 215, 285);
+    el(x, 320, 70, 26, 22); el(x, 284, 84, 22, 14, -.4); el(x, 356, 84, 22, 14, .4);
+    rr(x, 286, 618, 68, 40, 8);
+    carve(x, () => el(x, 320, 360, 172, 242));
+    slab(x);
+  },
+];
+
+// ---------- signed distance fields (Felzenszwalb EDT) ----------
+function edt1(f, n, d, v, z) {
+  let k = 0; v[0] = 0; z[0] = -1e30; z[1] = 1e30;
+  for (let q = 1; q < n; q++) {
+    let s = ((f[q] + q * q) - (f[v[k]] + v[k] * v[k])) / (2 * q - 2 * v[k]);
+    while (s <= z[k]) { k--; s = ((f[q] + q * q) - (f[v[k]] + v[k] * v[k])) / (2 * q - 2 * v[k]); }
+    k++; v[k] = q; z[k] = s; z[k + 1] = 1e30;
+  }
+  k = 0; for (let q = 0; q < n; q++) { while (z[k + 1] < q) k++; d[q] = (q - v[k]) * (q - v[k]) + f[v[k]]; }
+}
+function edt(feat) {      // feat[i] true → distance 0; returns squared distances
+  const n = Math.max(FW, FH), f = new Float64Array(n), d = new Float64Array(n), v = new Int32Array(n), z = new Float64Array(n + 1), out = new Float64Array(FW * FH);
+  for (let i = 0; i < FW * FH; i++) out[i] = feat[i] ? 0 : 1e20;
+  for (let x = 0; x < FW; x++) { for (let y = 0; y < FH; y++) f[y] = out[y * FW + x]; edt1(f, FH, d, v, z); for (let y = 0; y < FH; y++) out[y * FW + x] = d[y]; }
+  for (let y = 0; y < FH; y++) { for (let x = 0; x < FW; x++) f[x] = out[y * FW + x]; edt1(f, FW, d, v, z); for (let x = 0; x < FW; x++) out[y * FW + x] = d[x]; }
+  return out;
+}
+function buildSDF(fn) {
+  const c = canvas(FW, FH), x = c.getContext('2d'); x.fillStyle = '#fff'; x.strokeStyle = '#fff'; fn(x);
+  const a = x.getImageData(0, 0, FW, FH).data, m = new Uint8Array(FW * FH); for (let i = 0; i < FW * FH; i++) m[i] = a[i * 4 + 3] > 127 ? 1 : 0;
+  const din = edt(m.map(v => 1 - v)), dout = edt(m), s = new Float32Array(FW * FH);
+  for (let i = 0; i < FW * FH; i++) s[i] = m[i] ? -(Math.sqrt(din[i]) - .5) : Math.sqrt(dout[i]) - .5;
+  return s;
+}
+
+// ---------- gold ----------
+function buildLUT() {     // brightness → gold, 0..1.6
+  const keys = [[0, [16, 9, 3]], [.18, [70, 40, 10]], [.38, [140, 92, 30]], [.6, [206, 150, 58]], [.85, [244, 204, 120]], [1.15, [255, 240, 200]], [1.6, [255, 252, 240]]], L = new Uint8ClampedArray(256 * 3);
+  for (let i = 0; i < 256; i++) { const v = i / 255 * 1.6; let j = 0; while (j < keys.length - 2 && v > keys[j + 1][0]) j++;
+    const a = keys[j], b = keys[j + 1], k = clamp((v - a[0]) / (b[0] - a[0])); for (let c = 0; c < 3; c++) L[i * 3 + c] = a[1][c] + (b[1][c] - a[1][c]) * k; }
+  return L;
+}
+function stage(t) {        // which shapes, blend, and the morph energy
+  for (let i = 0; i < MORPH.length; i++) { const [a, b] = MORPH[i]; if (t < a) return { A: i, B: i, k: 0, e: 0 }; if (t < b) { const u = (t - a) / (b - a); return { A: i, B: i + 1, k: eio(u), e: Math.sin(Math.PI * u) }; } }
+  return { A: 5, B: 5, k: 0, e: 0 };
+}
+function light(t) {        // the cycle, told by the one light: idol (gold) → suffering (dim, cold) → crying out (dark) → rescue (white from above) → idol again
+  const dim = ss(3.0, 3.6, t) - ss(5.4, 6.0, t), dark = ss(4.2, 4.8, t) - ss(5.4, 5.9, t), save = ss(5.4, 6.0, t) - ss(6.6, 7.3, t);
+  const end = ss(36.4, 38.4, t);
+  return { I: (1 - .5 * dim - .3 * dark + .35 * save) * (1 - .55 * end), cool: dim * .8, white: save, end };
+}
+function boxBlur(a, tmp, r) {       // separable box blur, in place
+  const n = 2 * r + 1;
+  for (let y = 0; y < FH; y++) { const o = y * FW; let s = 0; for (let x = -r; x <= r; x++) s += a[o + clamp(x, 0, FW - 1)];
+    for (let x = 0; x < FW; x++) { tmp[o + x] = s / n; s += a[o + Math.min(FW - 1, x + r + 1)] - a[o + Math.max(0, x - r)]; } }
+  for (let x = 0; x < FW; x++) { let s = 0; for (let y = -r; y <= r; y++) s += tmp[clamp(y, 0, FH - 1) * FW + x];
+    for (let y = 0; y < FH; y++) { a[y * FW + x] = s / n; s += tmp[Math.min(FH - 1, y + r + 1) * FW + x] - tmp[Math.max(0, y - r) * FW + x]; } }
+}
+function shadeField(t) {
+  const st = stage(t), A = SDF[st.A], B = SDF[st.B], k = st.k, e = st.e, L = light(t);
+  const tri = (v, n) => { v = v % (2 * n); return v < n ? v : 2 * n - v; }, ox = Math.floor(tri(t * 23, NP)), oy = Math.floor(tri(t * 31, NP)), wob = 30 * e, bulge = 14 * e;
+  for (let y = 0; y < FH; y++) { const ny = (y + oy) * NW + ox; for (let x = 0; x < FW; x++) { const i = y * FW + x;
+    let d = A[i] + (B[i] - A[i]) * k; if (e > 0) d += (NF[ny + x] - .5) * wob - bulge; D[i] = d; HT[i] = d < 0 ? Math.min(R, -d) : 0; } }
+  boxBlur(HT, TMP, 9); boxBlur(HT, TMP, 9); boxBlur(HT, TMP, 8);
+  const P = fimg.data, sweep = -1.1 + ((t * .16) % 1.6) * 1.4 + .25 * Math.sin(t * .4);   // the strip light slides across the reflections
+  const kx = -.42, ky = -.62, kz = .66, sx2 = 0, sy2 = -.86, sz2 = .5;
+  for (let y = 1; y < FH - 1; y++) for (let x = 1; x < FW - 1; x++) { const i = y * FW + x, d = D[i], o = i * 4;
+    if (d > 1.5) { P[o + 3] = 0; continue; }
+    let nx = (HT[i - 1] - HT[i + 1]) * 1.1, ny = (HT[i - FW] - HT[i + FW]) * 1.1, nz = 1; const nl = 1 / Math.sqrt(nx * nx + ny * ny + 1); nx *= nl; ny *= nl; nz *= nl;
+    const rx = 2 * nz * nx, ry = 2 * nz * ny, rz = 2 * nz * nz - 1;
+    const dif = Math.max(0, nx * kx + ny * ky + nz * kz);
+    const top = Math.pow(Math.max(0, rx * sx2 + ry * sy2 + rz * sz2), 28) * (1.3 + .9 * L.white);
+    const strip = Math.exp(-((rx - sweep) * (rx - sweep)) / .045) * ss(-.9, -.3, ry) * (1 - ss(.3, .7, ry)) * .55;
+    const key = Math.pow(Math.max(0, rx * kx + ry * ky + rz * kz), 60) * 1.2, rim = Math.pow(1 - nz, 2.2) * .55, floor = Math.max(0, ry) * .12;
+    let v = (.07 + .32 * dif + top + strip + key + rim + floor) * L.I * (.86 + .28 * NF[y * NW + x]); v = clamp(v, 0, 1.6);
+    const li = Math.round(v / 1.6 * 255) * 3; let r = LUT[li], g = LUT[li + 1], b = LUT[li + 2];
+    if (L.white > 0) { const wv = Math.min(255, v * 210); r = lerp(r, wv, L.white * .75); g = lerp(g, wv, L.white * .75); b = lerp(b, wv * 1.02, L.white * .75); }
+    if (L.cool > 0) { const gr = (r + g + b) / 3; r = lerp(r, gr * .8, L.cool); g = lerp(g, gr * .9, L.cool); b = lerp(b, gr * 1.15, L.cool); }
+    if (e > 0) { const hot = e * Math.exp(Math.min(0, d) / 14) * .9; r = lerp(r, 255, hot); g = lerp(g, 170, hot * .8); b = lerp(b, 70, hot * .6); }
+    P[o] = r; P[o + 1] = g; P[o + 2] = b; P[o + 3] = 255 * clamp(.5 - d);
+  }
+  fcx.putImageData(fimg, 0, 0); return st;
+}
+
+// ---------- the room ----------
+const F2S = (fx, fy) => [OX + fx * K, OY + fy * K];
+function room(ctx, t) {
+  const L = light(t), cx = W / 2;
+  ctx.fillStyle = '#050403'; ctx.fillRect(0, 0, W, H);
+  const bg = ctx.createRadialGradient(cx, BASEY - 300 * K, 0, cx, BASEY - 300 * K, H * .9); bg.addColorStop(0, `rgba(48,36,22,${.55 * L.I})`); bg.addColorStop(1, 'rgba(0,0,0,0)'); ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
+  // the single light: a cone from above, warm (or cold, or white, as the cycle turns)
+  const col = L.white > .01 ? mix([255, 214, 150], [235, 242, 255], L.white) : mix([255, 214, 150], [150, 170, 200], L.cool);
+  ctx.save(); ctx.globalCompositeOperation = 'screen';
+  const topW = 70 * K, botW = 520 * K, y0 = -40, y1 = BASEY + 30;
+  const cg = ctx.createLinearGradient(0, y0, 0, y1); cg.addColorStop(0, rgb(col, .30 * L.I)); cg.addColorStop(.7, rgb(col, .10 * L.I)); cg.addColorStop(1, rgb(col, .04 * L.I));
+  ctx.filter = `blur(${28 * K}px)`; ctx.fillStyle = cg; ctx.beginPath(); ctx.moveTo(cx - topW, y0); ctx.lineTo(cx + topW, y0); ctx.lineTo(cx + botW, y1); ctx.lineTo(cx - botW, y1); ctx.fill(); ctx.filter = 'none';
+  // dust in the beam
+  for (const m of motes) { const yy = ((m.y + t * m.v) % 1), py = lerp(y0, y1, yy), half = lerp(topW, botW, yy), px = cx + (m.x - .5) * 1.7 * half + Math.sin(t * m.f + m.p) * 6;
+    const a = (.25 + .35 * Math.sin(t * m.f * 2 + m.p) ** 2) * L.I * (1 - Math.abs(m.x - .5) * 1.6); if (a <= 0) continue;
+    ctx.fillStyle = rgb(col, a); ctx.beginPath(); ctx.arc(px, py, m.r * K, 0, 6.283); ctx.fill(); }
+  ctx.restore();
+  // floor: polished black, a warm pool where the light lands
+  const fy = BASEY + 210 * K;
+  const fl = ctx.createLinearGradient(0, fy, 0, H); fl.addColorStop(0, '#0d0a07'); fl.addColorStop(1, '#030202'); ctx.fillStyle = fl; ctx.fillRect(0, fy, W, H - fy);
+  ctx.save(); ctx.translate(cx, fy + 40 * K); ctx.scale(1, .16); const pg = ctx.createRadialGradient(0, 0, 0, 0, 0, 700 * K); pg.addColorStop(0, rgb(col, .22 * L.I)); pg.addColorStop(1, rgb(col, 0));
+  ctx.fillStyle = pg; ctx.beginPath(); ctx.arc(0, 0, 700 * K, 0, 6.283); ctx.fill(); ctx.restore();
+  // the plinth, and its reflection in the floor
+  ctx.save(); ctx.translate(0, fy * 2); ctx.scale(1, -1); ctx.globalAlpha = .22; ctx.drawImage(plinth, cx - plinth.width / 2, BASEY - 14 * K); ctx.restore();
+  const rf = ctx.createLinearGradient(0, fy, 0, fy + 200 * K); rf.addColorStop(0, 'rgba(5,4,3,0)'); rf.addColorStop(1, 'rgba(5,4,3,1)'); ctx.fillStyle = rf; ctx.fillRect(0, fy, W, 220 * K);
+  ctx.drawImage(plinth, cx - plinth.width / 2, BASEY - 14 * K);
+  // light on the plinth top
+  ctx.save(); ctx.globalCompositeOperation = 'screen'; ctx.translate(cx, BASEY); ctx.scale(1, .09); const tg = ctx.createRadialGradient(0, 0, 0, 0, 0, 280 * K); tg.addColorStop(0, rgb(col, .5 * L.I)); tg.addColorStop(1, rgb(col, 0));
+  ctx.fillStyle = tg; ctx.beginPath(); ctx.arc(0, 0, 280 * K, 0, 6.283); ctx.fill(); ctx.restore();
+}
+function buildPlinth() {     // black stone block with a brass plate (label engraved per frame)
+  const w = Math.round(560 * K), h = Math.round(226 * K), c = canvas(w, h), x = c.getContext('2d');
+  x.fillStyle = '#16120d'; x.fillRect(0, 0, w, 16 * K);                                     // top face, seen just from above
+  const g = x.createLinearGradient(0, 0, w, 0); g.addColorStop(0, '#060504'); g.addColorStop(.18, '#1d1812'); g.addColorStop(.5, '#0e0b08'); g.addColorStop(.86, '#1a1510'); g.addColorStop(1, '#050403');
+  x.fillStyle = g; x.fillRect(0, 14 * K, w, h - 14 * K);
+  x.fillStyle = 'rgba(255,220,160,.10)'; x.fillRect(0, 14 * K, w, 2);
+  const r = rng(5); x.globalAlpha = .07; for (let i = 0; i < 26; i++) { x.strokeStyle = r() < .5 ? '#d8c7a8' : '#000'; x.lineWidth = .6 + r() * 1.4; x.beginPath(); let px = r() * w, py = 14 * K + r() * h;
+    x.moveTo(px, py); for (let j = 0; j < 6; j++) { px += (r() - .3) * 60; py += (r() - .5) * 30; x.lineTo(px, py); } x.stroke(); } x.globalAlpha = 1;   // marble veins
+  return c;
+}
+function plate(ctx, t, st) {  // brass plate on the plinth, its word changing with the shape
+  const pw = 250 * K, ph = 56 * K, px = W / 2 - pw / 2, py = BASEY + 62 * K, L = light(t);
+  const g = ctx.createLinearGradient(0, py, 0, py + ph); g.addColorStop(0, '#6b4d22'); g.addColorStop(.45, '#a7803f'); g.addColorStop(1, '#4e3716');
+  ctx.save(); ctx.globalAlpha = .55 + .45 * L.I; ctx.fillStyle = g; ctx.fillRect(px, py, pw, ph); ctx.strokeStyle = 'rgba(255,230,170,.35)'; ctx.lineWidth = 1.5; ctx.strokeRect(px + 4, py + 4, pw - 8, ph - 8);
+  const lab = (s, a) => { if (a <= 0 || !s) return; ctx.globalAlpha = a; ctx.font = `600 ${30 * K}px ${SERIF}`; ctx.textAlign = 'center'; ctx.letterSpacing = 6 * K + 'px';
+    ctx.fillStyle = 'rgba(255,240,200,.35)'; ctx.fillText(s, W / 2, py + ph * .69 + 1.5); ctx.fillStyle = '#2a1a08'; ctx.fillText(s, W / 2, py + ph * .69); };
+  if (st.A === st.B) lab(LABEL[st.A], 1); else { const u = st.k; lab(LABEL[st.A], 1 - ss(.2, .5, u)); lab(LABEL[st.B], ss(.5, .8, u)); }
+  ctx.restore();
+}
+function glass(ctx, t) {      // the mirror's glass: dark silver, the light above, and a silhouette facing us — the viewer
+  const g = ss(24.6, 26.2, t); if (g <= 0) return;
+  const [cx, cy] = F2S(320, 360), rx = 176 * K, ry = 246 * K, L = light(t);
+  ctx.save(); ctx.beginPath(); ctx.ellipse(cx, cy, rx, ry, 0, 0, 6.283); ctx.clip(); ctx.globalAlpha = g;
+  const bg = ctx.createLinearGradient(cx - rx, cy - ry, cx + rx, cy + ry); bg.addColorStop(0, '#2a2620'); bg.addColorStop(.5, '#121110'); bg.addColorStop(1, '#070706'); ctx.fillStyle = bg; ctx.fillRect(cx - rx, cy - ry, rx * 2, ry * 2);
+  const up = ctx.createRadialGradient(cx, cy - ry * 1.05, 0, cx, cy - ry * 1.05, ry * 1.3); up.addColorStop(0, `rgba(255,222,170,${.5 * L.I})`); up.addColorStop(1, 'rgba(255,222,170,0)'); ctx.fillStyle = up; ctx.fillRect(cx - rx, cy - ry, rx * 2, ry * 2);
+  // the reflection: a person, head and shoulders, facing out of the glass
+  const bz = 1 + .006 * Math.sin(t * 1.3), s = K * bz, hx = cx, hy = cy + 20 * K, emerge = ss(25.6, 28.4, t);
+  const person = () => { ctx.beginPath(); ctx.ellipse(hx, hy - 60 * s, 58 * s, 68 * s, 0, 0, 6.283);
+    ctx.moveTo(hx - 34 * s, hy); ctx.lineTo(hx + 34 * s, hy); ctx.quadraticCurveTo(hx + 40 * s, hy + 20 * s, hx + 60 * s, hy + 30 * s); ctx.quadraticCurveTo(hx + 170 * s, hy + 46 * s, hx + 190 * s, hy + 140 * s);
+    ctx.lineTo(hx + 210 * s, hy + 260 * s); ctx.lineTo(hx - 210 * s, hy + 260 * s); ctx.lineTo(hx - 190 * s, hy + 140 * s); ctx.quadraticCurveTo(hx - 170 * s, hy + 46 * s, hx - 60 * s, hy + 30 * s);
+    ctx.quadraticCurveTo(hx - 40 * s, hy + 20 * s, hx - 34 * s, hy); ctx.closePath(); };
+  ctx.globalAlpha = g * emerge; ctx.filter = `blur(${3 * K}px)`; ctx.fillStyle = `rgba(232,180,100,${.55 * L.I})`; ctx.save(); ctx.translate(0, -3 * K); person(); ctx.fill(); ctx.restore(); ctx.filter = 'none';
+  ctx.fillStyle = '#0b0907'; ctx.save(); ctx.translate(0, 3 * K); person(); ctx.fill(); ctx.restore();
+  // a sheen sweeps across as the glass is laid
+  const sw = clamp((t - 24.9) / 1.6); if (sw > 0 && sw < 1) { ctx.globalAlpha = g * Math.sin(Math.PI * sw) * .55; ctx.globalCompositeOperation = 'screen';
+    const sx = lerp(cx - rx * 1.6, cx + rx * 1.6, sw), sg = ctx.createLinearGradient(sx - 90 * K, 0, sx + 90 * K, 0); sg.addColorStop(0, 'rgba(255,250,235,0)'); sg.addColorStop(.5, 'rgba(255,250,235,.9)'); sg.addColorStop(1, 'rgba(255,250,235,0)');
+    ctx.save(); ctx.translate(sx, cy); ctx.rotate(.35); ctx.translate(-sx, -cy); ctx.fillStyle = sg; ctx.fillRect(sx - 90 * K, cy - ry * 1.5, 180 * K, ry * 3); ctx.restore(); }
+  // a faint permanent highlight on the glass
+  ctx.globalCompositeOperation = 'screen'; ctx.globalAlpha = g * .16; const hl = ctx.createLinearGradient(cx - rx, cy - ry, cx, cy); hl.addColorStop(0, 'rgba(255,255,255,.8)'); hl.addColorStop(1, 'rgba(255,255,255,0)');
+  ctx.fillStyle = hl; ctx.fillRect(cx - rx, cy - ry, rx * 2, ry * 2);
+  ctx.restore();
+}
+function thread(ctx, t) {      // the end: the one golden thread of light comes down to the mirror
+  const k = ss(36.6, 38.6, t); if (k <= 0) return; const [cx, cy] = F2S(320, 48), y = lerp(-20, cy, eo(k));
+  ctx.save(); ctx.globalCompositeOperation = 'screen';
+  const g = ctx.createLinearGradient(0, -20, 0, y); g.addColorStop(0, 'rgba(255,214,140,0)'); g.addColorStop(.4, 'rgba(255,214,140,.5)'); g.addColorStop(1, 'rgba(255,236,190,1)');
+  ctx.strokeStyle = g; ctx.lineWidth = 2.2 * Math.max(1, K); ctx.shadowColor = 'rgba(255,200,120,.9)'; ctx.shadowBlur = 16; ctx.beginPath(); ctx.moveTo(cx, -20); ctx.lineTo(cx, y); ctx.stroke();
+  const p = ctx.createRadialGradient(cx, y, 0, cx, y, 40 * K); p.addColorStop(0, `rgba(255,240,200,${.8 * k})`); p.addColorStop(1, 'rgba(255,220,150,0)'); ctx.fillStyle = p; ctx.fillRect(cx - 40 * K, y - 40 * K, 80 * K, 80 * K);
+  ctx.restore();
+}
+
+// ---------- words ----------
+const CYC = ['우상을 섬김', '→', '고난', '→', '부르짖음', '→', '하나님의 구원', '→', '다시 우상…'], CT = [1.9, 2.6, 3.1, 3.8, 4.3, 5.0, 5.6, 6.4, 6.9];
+function cycle(ctx, t) {
+  const a = win(t, 1.6, 9.2, .8, 1); if (a <= 0) return;
+  const size = V ? 42 : 40, rows = V ? [[0, 5], [5, 9]] : [[0, 9]], y0 = V ? H - 262 : H - 96, lh = size * 1.8;
+  ctx.save(); ctx.font = `600 ${size}px ${SERIF}`; ctx.textBaseline = 'alphabetic'; ctx.textAlign = 'left'; ctx.shadowColor = 'rgba(0,0,0,.9)'; ctx.shadowBlur = 16;
+  rows.forEach(([i0, i1], ri) => { const gap = size * .45, ws = []; for (let i = i0; i < i1; i++) ws.push(ctx.measureText(CYC[i]).width);
+    let x = W / 2 - (ws.reduce((p, q) => p + q, 0) + gap * (ws.length - 1)) / 2;
+    for (let i = i0; i < i1; i++) { const on = ss(CT[i], CT[i] + .45, t), cur = i + 2 < CT.length ? 1 - ss(CT[i + 2], CT[i + 2] + .5, t) : 1, arrow = CYC[i] === '→';
+      const c = arrow ? [190, 150, 90] : mix([150, 128, 98], i === 6 ? [250, 248, 240] : [255, 214, 140], cur);
+      ctx.globalAlpha = a * on; ctx.fillStyle = rgb(c); ctx.fillText(CYC[i], x, y0 + ri * lh); x += ws[i - i0] + gap; } });
+  ctx.restore();
+}
+function draw(ctx, t) {
+  const z = lerp(1, 1.07, eio(t / DUR)), pz = [W / 2, BASEY - 320 * K];
+  ctx.save(); ctx.translate(pz[0], pz[1]); ctx.scale(z, z); ctx.translate(-pz[0], -pz[1]);
+  room(ctx, t); const st = shadeField(t); plate(ctx, t, st);
+  glass(ctx, t);
+  // soft contact glow under the gold, then the gold itself
+  ctx.imageSmoothingQuality = 'high'; ctx.drawImage(fcv, OX, OY, FW * K, FH * K);
+  thread(ctx, t);
+  ctx.restore();
+  // grade: vignette and a faint warm grain-free bloom
+  const vg = ctx.createRadialGradient(W / 2, H / 2, Math.min(W, H) * .35, W / 2, H / 2, Math.max(W, H) * .75); vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(0,0,0,.7)'); ctx.fillStyle = vg; ctx.fillRect(0, 0, W, H);
+
+  const tw = { weight: 600, color: '#f6ead2', shadow: 'rgba(0,0,0,.95)', shadowBlur: 20 }, TS = V ? 50 : 50, TY = V ? 330 : 128;
+  text(ctx, '16  ·  거울', V ? 80 : 110, V ? 200 : 120, { align: 'left', size: 30, weight: 600, color: '#e8dcc4', alpha: win(t, .6, 5, 1, 1), ls: 4 });
+  cycle(ctx, t);
+  text(ctx, '우상이란 나무 조각상만이 아닙니다.', W / 2, TY, { ...tw, size: TS, alpha: win(t, 9.6, 13.4, 1, .7) });
+  text(ctx, V ? '하나님보다 더 사랑하고\n의지하는 모든 것' : '하나님보다 더 사랑하고 의지하는 모든 것', W / 2, V ? TY - 40 : TY, { ...tw, size: TS, alpha: win(t, 13.7, 23.4, 1, .9) });
+  text(ctx, '이것은 거울입니다.', W / 2, TY, { ...tw, size: V ? 62 : 58, alpha: win(t, 26.0, 29.6, 1.1, .7) });
+  text(ctx, V ? '이스라엘의 악순환은\n사실 ‘나’의 모습' : '이스라엘의 악순환은 사실 ‘나’의 모습', W / 2, V ? TY - 40 : TY, { ...tw, size: TS, alpha: win(t, 29.6, 33.4, 1, .8) });
+  const pa = win(t, 33.6, 39.3, 1.2, 1), py = V ? H - 290 : H - 176;
+  if (pa > 0) { const sc = ctx.createLinearGradient(0, py - 120, 0, H); sc.addColorStop(0, 'rgba(0,0,0,0)'); sc.addColorStop(.3, `rgba(0,0,0,${.72 * pa})`); sc.addColorStop(1, `rgba(0,0,0,${.85 * pa})`); ctx.fillStyle = sc; ctx.fillRect(0, py - 120, W, H - py + 120); }
+  text(ctx, '결국 가장 깊은 우상은', W / 2, py, { ...tw, size: V ? 48 : 44, color: '#e9dcc2', alpha: pa });
+  text(ctx, '“하나님 자리에 앉은 나 자신”입니다.', W / 2, py + (V ? 92 : 84), { ...tw, size: V ? 58 : 58, color: '#ffe6b8', alpha: win(t, 34.6, 39.3, 1.2, 1), shadowBlur: 26 });
+  const f = 1 - ss(0, 1.3, t) + ss(DUR - 1.3, DUR, t); if (f > 0) { ctx.fillStyle = `rgba(0,0,0,${clamp(f)})`; ctx.fillRect(0, 0, W, H); }
+}
+
+Pilot.run({ W, H, dur: DUR, audio: 'mirror.m4a', fonts: ["600 40px 'Noto Serif KR'", "400 20px 'Noto Sans KR'", "700 40px 'Noto Sans KR'"],
+  init: async () => {
+    SDF = SHAPES.map(buildSDF);
+    NF = new Float32Array(NW * (FH + NP)); for (let y = 0; y < FH + NP; y++) for (let x = 0; x < NW; x++) NF[y * NW + x] = fbm(x * .018, y * .018, 3);
+    D = new Float32Array(FW * FH); HT = new Float32Array(FW * FH); TMP = new Float32Array(FW * FH);
+    fcv = canvas(FW, FH); fcx = fcv.getContext('2d'); fimg = fcx.createImageData(FW, FH);
+    LUT = buildLUT(); plinth = buildPlinth();
+    const r = rng(16); for (let i = 0; i < 110; i++) motes.push({ x: r(), y: r(), v: .006 + r() * .012, r: .8 + r() * 1.8, f: .3 + r() * .8, p: r() * 6.28 });
+  },
+  draw });
+</script>
+</body>
+</html>

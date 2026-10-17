@@ -1,0 +1,535 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>시안 · 통일 왕국</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;900&family=Noto+Sans+KR:wght@400&display=swap">
+</head>
+<body>
+<script src="lib.js"></script>
+<script>
+/* 07 통일 왕국 — an illuminated manuscript page: vellum, lapis, vermilion, burnished gold leaf on raised gesso,
+   punched rosettes; a candle glint sweeps the gold only. The miniature comes alive in three windows:
+   the shepherd boy under the stars (Ps 23:1 on the page) → the anointing (1 Sam 16:7 on a banderole) →
+   the crowned king with his harp, and the page now carries the promise 2 Sam 7:16 under a gilded initial. */
+const { clamp, lerp, ss, eo, eio, win, rng, fbm, noise, canvas, hex, mix, rgb, speckle, text } = Pilot;
+const W = Pilot.W, H = Pilot.H, V = Pilot.ori === 'v', DUR = 36;
+const S1 = 10, S2 = 18;                   // shot cuts: page/shepherd → anointing → king/page
+const INK = '#2A1A10', VEL = '#ECDCB4', LAP = '#27469A', LAPD = '#1a3072', VERM = '#C43A20', GRN = '#4e7a3c', GRND = '#33562b',
+  FLESH = '#f0d6ba', WOOL = '#f3ecd8', ROSE = '#c4776c', HAIR = '#8e4020', WHT = '#fbf6e6';
+let vellum, grain, goldPat, goldPatC, goldTex, glintT = 0;
+
+// ---------- layout per orientation ----------
+const L = V ? {
+  bar: { x: 44, y: 150, w: 38 }, mb: { x: 150, y: 250, w: 800, h: 960 },
+  col: { x: 150, w: 820, rub: 1330, top: 1380, size: 64, cite: 22 },
+  big: { x: 50, y: 170, w: 980, h: 1600 }
+} : {
+  bar: { x: 64, y: 58, w: 40 }, mb: { x: 230, y: 150, w: 620, h: 800 },
+  col: { x: 980, w: 800, rub: 400, top: 452, size: 52, cite: 22 },
+  big: { x: 110, y: 80, w: 1700, h: 920 }
+};
+
+// ---------- small helpers ----------
+const P2 = d => new Path2D(d);
+function fillInk(x, p, c, lw = 3, ink = INK) { x.fillStyle = c; x.fill(p); if (lw) { x.lineWidth = lw; x.strokeStyle = ink; x.lineJoin = 'round'; x.lineCap = 'round'; x.stroke(p); } }
+function line(x, d, lw = 2, c = INK, a = 1) { x.save(); x.globalAlpha *= a; x.strokeStyle = c; x.lineWidth = lw; x.lineCap = 'round'; x.lineJoin = 'round'; x.stroke(P2(d)); x.restore(); }
+function ell(cx, cy, rx, ry, r = 0) { const p = new Path2D(); p.ellipse(cx, cy, rx, ry, r, 0, 6.2832); return p; }
+function rectP(x0, y0, w, h) { const p = new Path2D(); p.rect(x0, y0, w, h); return p; }
+// pointed (gothic) arch window: rectangle with a two-centred arch on top
+function archP(x0, y0, w, h, ins = 0) {
+  const p = new Path2D(), a = x0 + ins, b = x0 + w - ins, half = (b - a) / 2, r = (b - a) * .9, al = Math.acos((r - half) / r), base = y0 + ins + r * Math.sin(al);
+  p.moveTo(a, y0 + h - ins); p.lineTo(a, base);
+  p.arc(a + r, base, r, Math.PI, Math.PI + al, false);
+  p.arc(b - r, base, r, -al, 0, false);
+  p.lineTo(b, y0 + h - ins); p.closePath(); return p;
+}
+
+// ---------- gold leaf ----------
+// glint: a bright band (screen space) that sweeps the gold only, from the candle at the upper left
+const GL = [[1.6, 5.2], [14.6, 17.2], [S2 + .4, S2 + 3.4], [30.6, 34.6]];
+function glint(t) { for (const [a, b] of GL) if (t > a - .1 && t < b + .1) return { k: (t - a) / (b - a), a: Math.sin(Math.PI * clamp((t - a) / (b - a))) }; return null; }
+function gold(x, p, o = {}) {
+  x.save(); x.clip(p);
+  x.fillStyle = goldPat; x.fill(p);
+  const m = x.getTransform(); x.setTransform(1, 0, 0, 1, 0, 0);
+  // candle sheen: warmer, lighter toward the upper left, browner away from it
+  const cg = x.createRadialGradient(W * .05, -H * .1, 0, W * .05, -H * .1, Math.hypot(W, H) * 1.05);
+  cg.addColorStop(0, 'rgba(255,236,170,.30)'); cg.addColorStop(.55, 'rgba(255,220,140,0)'); cg.addColorStop(1, 'rgba(60,30,8,.28)');
+  x.fillStyle = cg; x.fillRect(0, 0, W, H);
+  const g = glint(glintT);
+  if (g && g.a > 0) {
+    const ux = .78, uy = .62, D = (W + H) * 1.25, pos = -D * .25 + g.k * D * 1.0, cx = pos * ux, cy = pos * uy, w = 260;
+    const lg = x.createLinearGradient(cx - ux * w, cy - uy * w, cx + ux * w, cy + uy * w);
+    lg.addColorStop(0, 'rgba(255,230,150,0)'); lg.addColorStop(.38, `rgba(255,226,140,${.35 * g.a})`); lg.addColorStop(.5, `rgba(255,252,226,${.95 * g.a})`);
+    lg.addColorStop(.62, `rgba(255,226,140,${.35 * g.a})`); lg.addColorStop(1, 'rgba(255,230,150,0)');
+    x.globalCompositeOperation = 'screen'; x.fillStyle = lg; x.fillRect(0, 0, W, H);
+  }
+  x.setTransform(m);
+  if (o.punch) punch(x, o.punch);
+  x.restore();
+  // raised gesso: a dark lip below-right, a light lip above-left, then the ink keep-line
+  if (o.lw !== 0) { x.save(); x.lineJoin = 'round'; x.strokeStyle = INK; x.lineWidth = o.lw || 2.2; x.stroke(p); x.restore(); }
+}
+function punch(x, b) {            // punched dot rosettes on a gold ground (bounds b = [x0,y0,x1,y1], spacing)
+  const [x0, y0, x1, y1, sp = 46] = b;
+  for (let y = y0 + sp / 2, j = 0; y < y1; y += sp * .87, j++) for (let px = x0 + sp / 2 + (j % 2) * sp / 2; px < x1; px += sp) {
+    x.fillStyle = 'rgba(90,58,14,.55)'; x.beginPath(); x.arc(px, y, 2.4, 0, 6.28); x.fill();
+    for (let k = 0; k < 6; k++) { const a = k * 1.047; x.beginPath(); x.arc(px + Math.cos(a) * 7, y + Math.sin(a) * 7, 1.5, 0, 6.28); x.fill(); }
+    x.fillStyle = 'rgba(255,240,190,.35)'; x.beginPath(); x.arc(px - .8, y - .8, 1, 0, 6.28); x.fill();
+  }
+}
+
+// ---------- the page ----------
+function ivy(x, r, x0, y0, x1, y1, n, side) {   // an ink stem with trefoil ivy leaves in lapis / vermilion / gold
+  const pts = []; for (let i = 0; i <= 60; i++) { const k = i / 60; pts.push([lerp(x0, x1, k) + Math.sin(k * 9 + side) * 16 * side, lerp(y0, y1, k) + Math.cos(k * 7) * 6]); }
+  x.strokeStyle = INK; x.lineWidth = 2; x.beginPath(); pts.forEach((p, i) => i ? x.lineTo(p[0], p[1]) : x.moveTo(p[0], p[1])); x.stroke();
+  for (let i = 0; i < n; i++) {
+    const k = (i + .5) / n, p = pts[Math.round(k * 60)], s = i % 2 ? 1 : -1, a = Math.atan2(y1 - y0, x1 - x0) + s * 1.1;
+    const lx = p[0] + Math.cos(a) * 26, ly = p[1] + Math.sin(a) * 26;
+    x.strokeStyle = INK; x.lineWidth = 1.5; x.beginPath(); x.moveTo(p[0], p[1]); x.quadraticCurveTo(p[0] + Math.cos(a) * 14 + 6, p[1] + Math.sin(a) * 14, lx, ly); x.stroke();
+    const leaf = new Path2D(), sz = 13 + r() * 4; x.save(); x.translate(lx, ly); x.rotate(a + 1.57);
+    leaf.moveTo(0, sz * .9); leaf.bezierCurveTo(-sz * 1.2, sz * .2, -sz * 1.1, -sz * .7, -sz * .3, -sz * .5); leaf.quadraticCurveTo(0, -sz * 1.4, sz * .3, -sz * .5);
+    leaf.bezierCurveTo(sz * 1.1, -sz * .7, sz * 1.2, sz * .2, 0, sz * .9); leaf.closePath();
+    const c = i % 3; if (c === 2) gold(x, leaf, { lw: 1.4 }); else fillInk(x, leaf, c ? VERM : LAP, 1.4);
+    if (c !== 2) { x.strokeStyle = 'rgba(255,250,235,.7)'; x.lineWidth = 1; x.beginPath(); x.moveTo(0, sz * .5); x.lineTo(0, -sz * .6); x.stroke(); }
+    x.restore();
+  }
+  for (let i = 0; i < n * 1.4; i++) { const p = pts[(r() * 60) | 0]; x.fillStyle = r() < .5 ? VERM : LAP; x.beginPath(); x.arc(p[0] + (r() - .5) * 60, p[1] + (r() - .5) * 60, 2.2, 0, 6.28); x.fill(); }
+}
+function barBorder(x) {            // the bar border: lapis | gold | vermilion with white tracery, along the left and the top
+  const { x: bx, y: by, w } = L.bar, r = rng(4);
+  const segs = [[bx, by, w, H - by + 40], [bx, by, W - bx + 40, w]];
+  for (const [x0, y0, ww, hh] of segs) {
+    fillInk(x, rectP(x0, y0, ww, hh), LAP, 2);
+    const vert = hh > ww, g = vert ? rectP(x0 + w * .32, y0 + w * .32, w * .36, hh) : rectP(x0 + w * .32, y0 + w * .32, ww, w * .36);
+    gold(x, g, { lw: 1.6 });
+    x.fillStyle = 'rgba(250,246,232,.85)';
+    for (let s = 0; s < (vert ? hh : ww); s += 22) { const px = vert ? x0 + w * .16 : x0 + s, py = vert ? y0 + s : y0 + w * .16; x.beginPath(); x.arc(px, py, 2, 0, 6.28); x.fill();
+      const qx = vert ? x0 + w * .84 : x0 + s + 11, qy = vert ? y0 + s + 11 : y0 + w * .84; x.beginPath(); x.arc(qx, qy, 2, 0, 6.28); x.fill(); }
+  }
+  // corner boss
+  const cb = new Path2D(); cb.arc(bx + w / 2, by + w / 2, w * .95, 0, 6.28); fillInk(x, cb, VERM, 2);
+  const cg = new Path2D(); cg.arc(bx + w / 2, by + w / 2, w * .55, 0, 6.28); gold(x, cg, { lw: 1.5 });
+  // ivy sprays out of the bar
+  if (V) { ivy(x, r, bx + w, 560, bx + 70, 900, 5, 1); ivy(x, r, bx + w, 1360, bx + 80, 1720, 6, -1); ivy(x, r, 520, by + w, 900, by + w + 50, 6, 1); ivy(x, r, 560, 1740, 1040, 1700, 7, -1); }
+  else { ivy(x, r, bx + w, 360, bx + 120, 700, 6, 1); ivy(x, r, bx + w, 760, bx + 110, 1060, 5, -1); ivy(x, r, 980, by + w, 1500, by + w + 60, 8, 1); ivy(x, r, 1560, by + w, 1900, by + w + 40, 5, -1);
+    // the initial's bar extension down the inner margin, sprouting ivy under the text
+    const ex = L.col.x - 46; fillInk(x, rectP(ex - 7, 380, 14, 600), LAP, 1.6); gold(x, rectP(ex - 3, 380, 6, 600), { lw: 1 });
+    ivy(x, r, ex + 7, 900, 1720, 950, 10, 1); ivy(x, r, ex + 7, 380, ex + 140, 300, 3, -1); }
+}
+function frame(x, b, inner, rect) {      // the miniature window: gold band, vermilion fillet, lapis spandrels; content drawn by inner()
+  const { x: x0, y: y0, w, h } = b, f = 20;
+  // spandrels (between the arch and the box) in lapis with little gold stars
+  fillInk(x, rectP(x0 - f, y0 - f, w + 2 * f, h + 2 * f), LAP, 2.5);
+  gold(x, (() => { const p = rectP(x0 - f, y0 - f, w + 2 * f, h + 2 * f); p.rect(x0 - f + 10, y0 - f + 10, w + 2 * f - 20, h + 2 * f - 20); return p; })(), { lw: 2 });
+  const ap = rect ? rectP(x0, y0, w, h) : archP(x0, y0, w, h);
+  x.save(); x.fillStyle = 'rgba(255,240,200,.85)'; for (let i = 0; i < 18; i++) { const px = x0 + (i % 2 ? 26 : w - 26) + (i % 2 ? 1 : -1) * ((i / 2 | 0) % 3) * 22, py = y0 + 22 + ((i / 2 | 0) % 3) * 24 + (i > 9 ? 40 : 0); x.beginPath(); x.arc(px, py, 2.4, 0, 6.28); x.fill(); } x.restore();
+  x.save(); x.clip(ap); inner(x); x.restore();
+  x.save(); x.lineWidth = 10; x.strokeStyle = VERM; x.stroke(ap); x.lineWidth = 2; x.strokeStyle = INK; x.stroke(ap);
+  x.setLineDash([1, 9]); x.lineCap = 'round'; x.lineWidth = 3; x.strokeStyle = WHT; x.stroke(ap); x.restore();
+}
+
+// ---------- figures (local coordinates; scaled by the caller) ----------
+function face(x, cx, cy, s, dir = 1, up = 0) {    // a gothic face: pale oval, few ink lines, rosy cheek; no glints on faces
+  x.save(); x.translate(cx, cy); x.rotate(up * dir); x.scale(dir, 1);
+  fillInk(x, ell(0, 0, 21 * s, 27 * s), FLESH, 1.8 * s);
+  line(x, `M${4 * s} ${-6 * s} q${5 * s} ${-3 * s} ${10 * s} 0`, 1.6 * s);                 // brow
+  line(x, `M${5 * s} ${-1 * s} q${4 * s} ${2 * s} ${8 * s} 0`, 1.8 * s);                   // eye
+  x.fillStyle = INK; x.beginPath(); x.arc(10 * s, 0, 1.6 * s, 0, 6.28); x.fill();
+  line(x, `M${16 * s} ${-2 * s} q${4 * s} ${8 * s} ${1 * s} ${10 * s}`, 1.5 * s);           // nose
+  line(x, `M${8 * s} ${15 * s} q${4 * s} ${2 * s} ${8 * s} ${-1 * s}`, 1.5 * s, '#8a2a18');   // mouth
+  x.fillStyle = 'rgba(205,90,70,.35)'; x.beginPath(); x.arc(6 * s, 8 * s, 5 * s, 0, 6.28); x.fill();
+  x.restore();
+}
+function curls(x, cx, cy, s, dir, beard) {          // ruddy curly hair (and a short beard)
+  const hp = new Path2D(); hp.moveTo(cx - 24 * s * dir, cy + 14 * s);
+  for (let i = 0; i <= 8; i++) { const a = Math.PI * (1.05 + i * .11), r0 = 27 * s; hp.quadraticCurveTo(cx + Math.cos(a - .06) * (r0 + 9 * s) * dir, cy + Math.sin(a - .06) * (r0 + 9 * s) - 2 * s, cx + Math.cos(a) * r0 * dir, cy + Math.sin(a) * r0 - 2 * s); }
+  hp.lineTo(cx + 6 * s * dir, cy - 18 * s); hp.quadraticCurveTo(cx - 8 * s * dir, cy - 8 * s, cx - 10 * s * dir, cy + 4 * s); hp.lineTo(cx - 14 * s * dir, cy + 20 * s); hp.closePath();
+  fillInk(x, hp, HAIR, 1.6 * s);
+  for (let i = 0; i < 6; i++) { const a = Math.PI * (1.1 + i * .16); line(x, `M${cx + Math.cos(a) * 20 * s * dir} ${cy + Math.sin(a) * 20 * s} a${4 * s} ${4 * s} 0 1 1 ${4 * s * dir} ${3 * s}`, 1.3 * s, '#4a1e0c'); }
+  if (beard) { const bp = new Path2D(); bp.moveTo(cx - 8 * s * dir, cy + 4 * s); bp.quadraticCurveTo(cx - 6 * s * dir, cy + 30 * s, cx + 10 * s * dir, cy + 32 * s); bp.quadraticCurveTo(cx + 20 * s * dir, cy + 26 * s, cx + 18 * s * dir, cy + 16 * s); bp.quadraticCurveTo(cx + 8 * s * dir, cy + 20 * s, cx + 2 * s * dir, cy + 8 * s); bp.closePath(); fillInk(x, bp, HAIR, 1.4 * s); }
+}
+function sheep(x, px, py, s, dir, graze, t, seed) {
+  x.save(); x.translate(px, py); x.scale(s * dir, s);
+  const r = rng(seed), body = new Path2D(), N = 14;
+  for (let i = 0; i <= N; i++) { const a = i / N * 6.2832, rx = 62, ry = 36, x1 = Math.cos(a) * rx, y1 = Math.sin(a) * ry, a2 = (i + .5) / N * 6.2832, x2 = Math.cos(a2) * (rx + 9), y2 = Math.sin(a2) * (ry + 9), a3 = (i + 1) / N * 6.2832;
+    if (!i) body.moveTo(x1, y1); body.quadraticCurveTo(x2, y2, Math.cos(a3) * rx, Math.sin(a3) * ry); }
+  x.fillStyle = INK; [[-38, 0], [-22, 4], [24, 2], [40, -2]].forEach(([lx, k]) => x.fillRect(lx - 3.5, 26, 7, 36 + k));
+  fillInk(x, body, WOOL, 2.2);
+  for (let i = 0; i < 12; i++) { const cx = (r() - .5) * 90, cy = (r() - .5) * 46; line(x, `M${cx} ${cy} a5 5 0 1 1 6 4`, 1.3, INK, .55); }
+  const hb = graze * (1 + .15 * Math.sin(t * 2.2 + seed)), hx = lerp(70, 62, hb), hy = lerp(-14, 34, hb), ha = lerp(-.25, 1.0, hb);
+  x.save(); x.translate(hx, hy); x.rotate(ha);
+  fillInk(x, ell(6, 0, 22, 14), '#4a3a30', 2); fillInk(x, ell(-6, -11, 10, 5, -.6), '#5a483a', 1.6);
+  x.fillStyle = WHT; x.beginPath(); x.arc(10, -3, 2.2, 0, 6.28); x.fill();
+  x.restore(); x.restore();
+}
+function harp(x, px, py, s, t, a0 = 0) {   // a small gold harp: soundbox, neck, pillar, with strings that shimmer when plucked
+  x.save(); x.translate(px, py); x.rotate(a0); x.scale(s, s);
+  const fr = new Path2D(); fr.moveTo(-6, 0); fr.lineTo(-30, -150); fr.quadraticCurveTo(-26, -176, -4, -168); fr.quadraticCurveTo(30, -150, 52, -150); fr.quadraticCurveTo(64, -150, 62, -138);
+  fr.quadraticCurveTo(42, -70, 12, 4); fr.closePath();
+  fr.moveTo(-14, -30); fr.lineTo(-24, -134); fr.quadraticCurveTo(10, -132, 46, -136); fr.quadraticCurveTo(28, -80, 2, -26); fr.closePath();
+  x.save(); x.fillStyle = 'rgba(42,26,16,.0)'; x.restore();
+  gold(x, fr, { lw: 2 });
+  for (let i = 0; i < 7; i++) { const k = i / 6, xa = lerp(-20, 38, k), ya = lerp(-134, -134, k), xb = lerp(-12, 6, k), yb = lerp(-34, -30, k) - k * 60 * (k > .5 ? 1 : 0);
+    const vib = Math.sin(t * 40 + i * 2) * 1.6 * (.5 + .5 * Math.sin(t * 3 + i));
+    x.strokeStyle = 'rgba(252,246,226,.95)'; x.lineWidth = 1.4; x.beginPath(); x.moveTo(xa, ya); x.quadraticCurveTo((xa + xb) / 2 + vib, (ya + yb) / 2, xb, yb + (k > .5 ? -((k - .5) * 80) : 0)); x.stroke(); }
+  x.restore();
+}
+
+// shepherd David, seated on a rock, playing the harp, face lifted to the stars
+function shepherd(x, px, py, s, t) {
+  x.save(); x.translate(px, py); x.scale(s, s);
+  line(x, 'M-150 92 L -118 -170 q 4 -26 -16 -30 q -18 -2 -20 16', 5, '#5a3a20');
+  fillInk(x, P2('M-120 0 C-130 -40 -90 -66 -40 -60 C 10 -76 70 -60 96 -30 C 120 -10 120 70 100 96 L-130 96 C-150 70 -140 30 -120 0 Z'), '#9a8f78', 2.4);
+  line(x, 'M-90 -30 q30 10 50 50 M30 -50 q20 30 10 70 M-120 50 q40 -10 70 10 M60 30 q30 -6 40 20', 1.6, INK, .6);
+  // legs
+  fillInk(x, P2('M58 -24 C72 10 84 50 92 92 L114 92 C 106 50 96 4 84 -26 Z'), '#7a5a3a', 2);
+  fillInk(x, P2('M86 88 L128 90 Q138 98 126 102 L84 100 Z'), '#4a3424', 2);
+  // tunic (vermilion), belted
+  const tun = P2('M-40 -214 C-58 -160 -66 -80 -70 -34 C-74 -10 -60 2 -40 0 L 88 -6 C 100 -20 98 -44 80 -54 C 40 -62 10 -74 -6 -96 C 8 -140 30 -176 40 -210 Q 0 -232 -40 -214 Z');
+  fillInk(x, tun, VERM, 2.6);
+  line(x, 'M-30 -150 q-14 50 -20 120 M10 -40 q30 8 60 -6 M-10 -70 q30 0 50 8', 2, '#7a1c0c', .8);
+  fillInk(x, P2('M-50 -112 L 18 -104 L 16 -92 L-54 -98 Z'), '#5a3216', 1.6);
+  // far arm reaching to the harp's top, harp on the knee, near arm plucking
+  fillInk(x, P2('M 30 -200 C 46 -196 50 -180 48 -160 L 38 -158 C 38 -174 34 -184 22 -188 Z'), '#a32e18', 1.8);
+  harp(x, 64, -40, 1.08, t, -.12);
+  const pl = Math.sin(t * 5.2) * 6;
+  fillInk(x, P2(`M -6 -196 C -20 -150 -16 -110 6 -92 C 30 -86 ${54 + pl} -96 ${74 + pl} -98 L ${76 + pl} -86 C 50 -80 20 -72 -2 -80 C -30 -96 -36 -150 -24 -196 Z`), VERM, 2.2);
+  fillInk(x, ell(80 + pl, -92, 10, 8), FLESH, 1.6);
+  fillInk(x, ell(42, -158, 9, 8), FLESH, 1.6);
+  // neck, head lifted
+  fillInk(x, P2('M -8 -232 L 12 -232 L 14 -210 L -10 -210 Z'), FLESH, 1.6);
+  const up = -.28 - .04 * Math.sin(t * .8);
+  x.save(); x.translate(2, -262); x.rotate(up); face(x, 0, 0, 1.15, 1, 0); curls(x, 0, 0, 1.15, 1, false); x.restore();
+  // shepherd's crook lying across the rock
+  x.restore();
+}
+
+// Samuel pouring the horn of oil; David kneeling with joined hands
+function samuel(x, px, py, s, t, pour) {
+  x.save(); x.translate(px, py); x.scale(s, s);
+  // robe (lapis) and mantle (rose) — long, swaying gothic folds
+  fillInk(x, P2('M -70 -560 C -110 -400 -130 -180 -150 0 L 130 0 C 110 -160 100 -360 60 -560 Q 0 -590 -70 -560 Z'), LAP, 3);
+  line(x, 'M -40 -400 Q -70 -200 -90 -6 M 10 -380 Q 0 -200 10 -4 M 50 -360 Q 70 -180 90 -6', 2.4, '#10224f', .9);
+  fillInk(x, P2('M -76 -566 C -120 -420 -100 -260 -60 -170 C -20 -120 40 -150 70 -200 C 90 -260 80 -330 70 -380 C 40 -330 0 -330 -30 -380 C -40 -440 -30 -520 -10 -580 Z'), ROSE, 3);
+  line(x, 'M -60 -470 q 20 120 40 170 M -20 -240 q 30 30 70 0 M -84 -400 q 0 100 30 180', 2.2, '#7a3a34', .9);
+  // feet
+  fillInk(x, P2('M -60 0 l 0 -14 l 50 0 q 20 6 20 14 Z'), '#3a2a20', 2); fillInk(x, P2('M 30 0 l 0 -14 l 54 0 q 20 6 18 14 Z'), '#3a2a20', 2);
+  // arms raised forward holding the horn
+  const lift = -pour * 18;
+  fillInk(x, P2(`M 30 -540 C 90 -560 150 ${-610 + lift} 210 ${-630 + lift} L 216 ${-604 + lift} C 160 ${-580 + lift} 100 -520 50 -500 Z`), ROSE, 2.4);
+  fillInk(x, P2(`M -20 -520 C 40 -520 110 ${-580 + lift} 170 ${-600 + lift} L 176 ${-576 + lift} C 120 ${-556 + lift} 60 -486 0 -486 Z`), '#b0665d', 2.2);
+  fillInk(x, ell(220, -618 + lift, 13, 11), FLESH, 1.8); fillInk(x, ell(180, -590 + lift, 12, 10), FLESH, 1.8);
+  // the horn of oil, tipping
+  x.save(); x.translate(212, -628 + lift); x.rotate(-.35 + pour * .95);
+  const horn = P2('M -40 -18 C 0 -30 50 -26 92 -6 C 100 -2 104 6 98 10 C 60 -2 10 -2 -36 10 Q -52 -4 -40 -18 Z');
+  fillInk(x, horn, '#efe2c2', 2.2); line(x, 'M -10 -20 l 4 26 M 20 -22 l 2 26 M 50 -18 l 0 22', 1.4, '#8a7a5a');
+  gold(x, P2('M 88 -10 l 16 2 l -2 16 l -14 -4 Z'), { lw: 1.4 });
+  x.restore();
+  // head: white hair and a long white beard, looking down at David
+  fillInk(x, P2('M -18 -604 L 16 -604 L 20 -560 L -20 -560 Z'), FLESH, 1.8);
+  x.save(); x.translate(6, -650); x.rotate(.3);
+  fillInk(x, P2('M -40 -20 C -52 20 -44 60 -26 76 L -6 30 Z'), WHT, 1.8);
+  face(x, 0, 0, 1.75, 1, 0);
+  fillInk(x, P2('M -38 -14 C -44 -46 -22 -56 0 -52 C -20 -46 -26 -30 -24 -6 Z'), WHT, 1.6);
+  fillInk(x, P2('M -14 22 C -16 60 0 104 18 124 C 34 96 38 56 34 20 Q 26 34 10 32 Q -2 30 -14 22 Z'), WHT, 1.8);
+  line(x, 'M 4 46 q 4 30 10 60 M 18 44 q 4 30 6 60 M 28 40 q 0 30 -2 50', 1.3, '#9a9078');
+  x.restore();
+  x.restore();
+}
+function kneeling(x, px, py, s, t, bow) {
+  x.save(); x.translate(px, py); x.scale(s, s);
+  // kneeling upright on both knees, facing left: shins and soles behind on the ground, hands joined, head bowed
+  fillInk(x, P2('M -40 -6 C -40 -40 -10 -50 30 -46 L 112 -34 C 128 -32 136 -18 134 0 L -40 0 Z'), '#7a5a3a', 2);
+  fillInk(x, P2('M 110 -40 C 132 -42 150 -30 150 -6 L 150 0 L 116 0 Z'), '#3a2a20', 2);
+  const tun = P2('M -14 -396 C 30 -404 56 -380 60 -330 C 64 -270 60 -220 62 -170 C 64 -110 80 -60 96 -30 C 104 -14 92 -2 70 -2 L -84 -2 C -100 -2 -102 -24 -96 -46 C -86 -90 -64 -130 -56 -180 C -48 -240 -52 -300 -52 -340 C -50 -376 -36 -392 -14 -396 Z');
+  fillInk(x, tun, VERM, 2.6);
+  line(x, 'M 30 -300 q -10 120 -30 290 M 50 -180 q 10 80 30 160 M -50 -160 q -20 60 -40 150 M -40 -200 q 50 6 96 -4', 2.2, '#7a1c0c', .85);
+  fillInk(x, P2('M -54 -214 L 62 -206 L 62 -190 L -56 -198 Z'), '#5a3216', 1.6);
+  // neck and head, bowed
+  fillInk(x, P2('M -14 -420 L 12 -420 L 14 -388 L -16 -388 Z'), FLESH, 1.6);
+  x.save(); x.translate(-4, -446); x.rotate(-.12 - bow * .32); face(x, 0, 0, 1.45, -1, 0); curls(x, 0, 0, 1.45, -1, false); x.restore();
+  // near arm: shoulder → elbow → joined hands raised before the face
+  fillInk(x, P2('M 30 -380 C 44 -330 40 -290 20 -270 C 0 -256 -40 -270 -62 -290 L -54 -306 C -36 -292 -10 -284 4 -294 C 16 -310 14 -350 4 -384 Z'), '#a32e18', 2);
+  fillInk(x, P2('M -60 -284 C -80 -300 -94 -330 -98 -352 C -86 -350 -70 -326 -48 -298 Z'), FLESH, 1.6);
+  line(x, 'M -64 -300 q -14 -20 -26 -44', 1.2, INK, .7);
+  x.restore();
+}
+
+// King David enthroned: crown, lapis mantle with a gold hem over a vermilion robe, harp on his knee
+function king(x, px, py, s, t) {
+  x.save(); x.translate(px, py); x.scale(s, s);
+  // throne: stone posts with gold finials, a bench, a vermilion cushion
+  fillInk(x, P2('M -196 -330 L -156 -330 L -156 0 L -196 0 Z'), '#c2b290', 2.4); fillInk(x, P2('M 156 -330 L 196 -330 L 196 0 L 156 0 Z'), '#c2b290', 2.4);
+  line(x, 'M -186 -300 l 0 280 M 186 -300 l 0 280', 1.4, INK, .5);
+  gold(x, ell(-176, -350, 22, 22), { lw: 2 }); gold(x, ell(176, -350, 22, 22), { lw: 2 });
+  fillInk(x, P2('M -176 -150 L 176 -150 L 182 -110 L -182 -110 Z'), '#b09c7a', 2.4);
+  fillInk(x, P2('M -176 -110 L 176 -110 L 176 0 L -176 0 Z'), '#d8caa6', 2.4);
+  for (let i = -150; i < 150; i += 50) { const arc = P2(`M ${i + 6} -10 L ${i + 6} -70 Q ${i + 25} -100 ${i + 44} -70 L ${i + 44} -10 Z`); fillInk(x, arc, '#8a7a5a', 1.6); }
+  fillInk(x, P2('M -168 -160 Q 0 -178 168 -160 L 168 -140 Q 0 -128 -168 -140 Z'), VERM, 2);
+  // robe: torso, lap, the fall to the feet (vermilion), folds in a darker red
+  fillInk(x, P2('M -116 -176 L 116 -176 C 122 -110 126 -50 130 16 L -130 16 C -126 -50 -122 -110 -116 -176 Z'), VERM, 2.6);
+  line(x, 'M -70 -160 q -6 90 -10 170 M -20 -160 q 0 90 -4 170 M 30 -160 q 2 90 4 170 M 80 -160 q 6 90 10 170', 2, '#7a1c0c', .85);
+  fillInk(x, P2('M -82 -412 C -92 -340 -96 -260 -100 -190 L 100 -190 C 96 -260 92 -340 82 -412 Q 0 -428 -82 -412 Z'), VERM, 2.6);
+  fillInk(x, P2('M -126 -206 Q 0 -222 126 -206 L 122 -170 Q 0 -160 -122 -170 Z'), '#b5341c', 2.2);
+  // lapis mantle: two panels from the shoulders, falling over the knees; gold hem along the opening
+  const mL = P2('M -30 -420 C -84 -420 -110 -396 -114 -350 C -120 -280 -140 -210 -150 -130 C -156 -70 -150 -20 -140 16 L -76 16 C -84 -50 -76 -130 -60 -190 C -54 -260 -50 -340 -30 -420 Z');
+  const mR = P2('M 30 -420 C 84 -420 110 -396 114 -350 C 120 -280 140 -210 150 -130 C 156 -70 150 -20 140 16 L 76 16 C 84 -50 76 -130 60 -190 C 54 -260 50 -340 30 -420 Z');
+  for (const m of [mL, mR]) { fillInk(x, m, LAP, 2.6); x.save(); x.clip(m); x.fillStyle = 'rgba(255,240,190,.7)'; const rr = rng(5);
+    for (let i = 0; i < 30; i++) { const qx = (rr() - .5) * 300, qy = -400 + rr() * 410; for (let k = 0; k < 4; k++) { x.beginPath(); x.arc(qx + Math.cos(k * 1.57) * 4, qy + Math.sin(k * 1.57) * 4, 2.6, 0, 6.28); x.fill(); } } x.restore(); }
+  line(x, 'M -104 -330 q -16 150 -30 330 M 104 -330 q 16 150 30 330 M -120 -120 q 10 60 4 130 M 120 -120 q -10 60 -4 130', 2.2, '#10224f', .9);
+  const hemL = P2('M -30 -420 C -50 -340 -54 -260 -60 -190 C -76 -130 -84 -50 -76 16 L -66 16 C -74 -50 -66 -130 -50 -190 C -44 -260 -40 -340 -20 -420 Z');
+  const hemR = P2('M 30 -420 C 50 -340 54 -260 60 -190 C 76 -130 84 -50 76 16 L 66 16 C 74 -50 66 -130 50 -190 C 44 -260 40 -340 20 -420 Z');
+  gold(x, hemL, { lw: 1.4 }); gold(x, hemR, { lw: 1.4 });
+  // feet on a footstool
+  fillInk(x, P2('M -90 16 L 90 16 L 100 52 L -100 52 Z'), '#8a6a4a', 2);
+  fillInk(x, P2('M -40 16 q -10 -14 -50 -10 l -4 12 Z M 40 16 q 10 -14 50 -10 l 4 12 Z'), '#3a2a20', 1.8);
+  // left hand on the harp's pillar; harp resting on the left knee; right arm crossing to pluck
+  harp(x, -64, -176, 1.32, t, -.08);
+  fillInk(x, ell(-110, -360, 11, 13), FLESH, 1.6);
+  const pl = Math.sin(t * 4.6) * 5;
+  fillInk(x, P2(`M 64 -400 C 96 -360 104 -300 92 -262 C 70 -236 ${10 + pl} -250 ${-28 + pl} -262 L ${-30 + pl} -244 C 20 -224 80 -214 108 -246 C 130 -290 120 -360 86 -410 Z`), VERM, 2.2);
+  x.save(); x.lineWidth = 6; x.strokeStyle = goldPatC; x.beginPath(); x.moveTo(-26 + pl, -264); x.lineTo(-28 + pl, -244); x.stroke(); x.restore();
+  fillInk(x, ell(-38 + pl, -254, 12, 9), FLESH, 1.6);
+  // neck, head, crown
+  fillInk(x, P2('M -14 -440 L 14 -440 L 16 -408 L -16 -408 Z'), FLESH, 1.6);
+  x.save(); x.translate(0, -478);
+  fillInk(x, P2('M -32 -14 C -42 20 -32 46 0 54 C 32 46 42 20 32 -14 Z'), HAIR, 1.6);
+  fillInk(x, ell(0, 0, 26, 32), FLESH, 1.8);
+  fillInk(x, P2('M -25 10 C -23 34 -10 47 0 49 C 10 47 23 34 25 10 C 14 22 6 24 0 22 C -6 24 -14 22 -25 10 Z'), HAIR, 1.4);
+  line(x, 'M -16 -9 q 6 -4 12 0 M 4 -9 q 6 -4 12 0', 1.6); line(x, 'M -15 -2 q 5 3 10 0 M 5 -2 q 5 3 10 0', 1.8);
+  x.fillStyle = INK; [-10, 10].forEach(ex => { x.beginPath(); x.arc(ex, -1, 1.7, 0, 6.28); x.fill(); });
+  line(x, 'M 0 0 q 3 8 -2 12', 1.4); line(x, 'M -6 20 q 6 3 12 0', 1.5, '#8a2a18');
+  x.fillStyle = 'rgba(205,90,70,.3)'; [-13, 13].forEach(ex => { x.beginPath(); x.arc(ex, 10, 5, 0, 6.28); x.fill(); });
+  fillInk(x, P2('M -29 -8 C -35 -30 -20 -40 0 -40 C 20 -40 35 -30 29 -8 C 20 -24 -20 -24 -29 -8 Z'), HAIR, 1.4);
+  const crown = P2('M -33 -24 L -38 -72 L -22 -50 L -12 -84 L 0 -58 L 12 -84 L 22 -50 L 38 -72 L 33 -24 Q 0 -32 -33 -24 Z');
+  gold(x, crown, { lw: 2 });
+  [[-24, -34, VERM], [0, -36, LAP], [24, -34, VERM]].forEach(([gx, gy, c]) => fillInk(x, ell(gx, gy, 4.5, 5), c, 1.2));
+  [[-38, -74], [-12, -86], [12, -86], [38, -74]].forEach(([gx, gy]) => fillInk(x, ell(gx, gy, 4, 4), WHT, 1.2));
+  x.restore();
+  x.restore();
+}
+function goldStroke(x, p, w) {    // a gold leaf hem: a thick stroke turned into a clip region by the stroke itself
+  x.save(); x.lineWidth = w; x.strokeStyle = goldPatC; x.stroke(p); x.restore();
+}
+
+// ---------- miniature backgrounds ----------
+function nightField(x, w, h, t) {     // lapis night with gold stars and a gold crescent; green hills, a tree
+  const g = x.createLinearGradient(0, 0, 0, h); g.addColorStop(0, '#16285e'); g.addColorStop(.7, LAP); x.fillStyle = g; x.fillRect(0, 0, w, h);
+  const r = rng(12);
+  for (let i = 0; i < 34; i++) { const sx = 30 + r() * (w - 60), sy = 40 + r() * h * .5, sz = 5 + r() * 6, tw = .75 + .25 * Math.sin(t * (1 + r() * 2) + i);
+    const st = new Path2D(); for (let k = 0; k < 12; k++) { const a = k * Math.PI / 6 - Math.PI / 2, rr = k % 2 ? sz * .38 : sz; k ? st.lineTo(sx + Math.cos(a) * rr, sy + Math.sin(a) * rr) : st.moveTo(sx + Math.cos(a) * rr, sy + Math.sin(a) * rr); } st.closePath();
+    x.save(); x.globalAlpha = tw; gold(x, st, { lw: .8 }); x.restore(); }
+  const moon = new Path2D(), mx0 = w * .2, my0 = h * .16; moon.arc(mx0, my0, 34, -2.2, 1.6, true); moon.quadraticCurveTo(mx0 + 2, my0 - 2, mx0 + Math.cos(-2.2) * 34, my0 + Math.sin(-2.2) * 34); moon.closePath(); gold(x, moon, { lw: 1.6 });
+  const hill = (y0, amp, f, ph, c) => { const p = new Path2D(); p.moveTo(-10, h + 10); for (let px = -10; px <= w + 10; px += 10) p.lineTo(px, y0 - amp * Math.sin(px * f + ph) - amp * .4 * Math.sin(px * f * 2.3 + ph)); p.lineTo(w + 10, h + 10); p.closePath(); fillInk(x, p, c, 2.4); return p; };
+  hill(h * .62, 40, .008, 1.2, '#3c6a3e');
+  // tree on the back hill: trunk and a round lobed crown with gold fruit
+  fillInk(x, P2(`M ${w * .8 - 10} ${h * .58} L ${w * .8 - 8} ${h * .44} L ${w * .8 + 8} ${h * .44} L ${w * .8 + 12} ${h * .58} Z`), '#6a4428', 2);
+  const tc = new Path2D(); for (let k = 0; k <= 9; k++) { const a = k / 9 * 6.283, rx = 74, ry = 62, cx = w * .8, cy = h * .38; const p0 = [cx + Math.cos(a) * rx, cy + Math.sin(a) * ry], a2 = (k + .5) / 9 * 6.283;
+    k ? tc.quadraticCurveTo(cx + Math.cos(a2 - .35) * (rx + 26), cy + Math.sin(a2 - .35) * (ry + 26), p0[0], p0[1]) : tc.moveTo(p0[0], p0[1]); }
+  fillInk(x, tc, GRND, 2.4); for (let k = 0; k < 7; k++) gold(x, ell(w * .8 + Math.cos(k * 2.3) * 44, h * .38 + Math.sin(k * 2.3) * 34, 6, 6), { lw: 1 });
+  const front = hill(h * .78, 26, .012, 3.3, GRN);
+  x.save(); x.clip(front); const r2 = rng(8);
+  for (let i = 0; i < 70; i++) { const fx = r2() * w, fy = h * .74 + r2() * h * .3; line(x, `M${fx} ${fy} l -4 -9 M${fx} ${fy} l 0 -11 M${fx} ${fy} l 4 -9`, 1.4, GRND, .9);
+    if (i % 4 === 0) { x.fillStyle = i % 8 ? WHT : VERM; x.beginPath(); x.arc(fx + 6, fy - 12, 3, 0, 6.28); x.fill(); } }
+  x.restore();
+}
+function goldGround(x, w, h, sp) { const p = rectP(0, 0, w, h); gold(x, p, { lw: 0, punch: [0, 0, w, h, sp] }); }
+
+// ---------- the text column ----------
+function writeLine(x, s, px, py, size, t0, t, rate = 12, color = INK) {    // a scribe writes: character by character
+  x.save(); x.font = `900 ${size}px 'Noto Serif KR'`; x.textAlign = 'left'; x.textBaseline = 'alphabetic'; x.fillStyle = color; x.letterSpacing = (size * .04) + 'px';
+  let cx = px; const chars = [...s];
+  chars.forEach((ch, i) => { const a = clamp((t - t0 - i / rate) / .22); if (a > 0) { x.globalAlpha = a; x.fillText(ch, cx, py); } cx += x.measureText(ch).width + size * .04; });
+  x.restore(); return cx;
+}
+function lineFiller(x, x0, x1, y, size, a) {    // red-and-blue line filler after a short line
+  if (x1 - x0 < 30 || a <= 0) return; x.save(); x.globalAlpha = a; const hh = size * .26, yy = y - size * .36;
+  for (let px = x0, i = 0; px < x1 - 8; px += 44, i++) { const ww = Math.min(40, x1 - px); fillInk(x, rectP(px, yy - hh / 2, ww, hh), i % 2 ? VERM : LAP, 1.2); x.fillStyle = WHT; x.beginPath(); x.arc(px + ww / 2, yy, 2, 0, 6.28); x.fill(); }
+  x.restore();
+}
+function initial(x, ch, px, py, sz, a) {        // the gilded initial: a lapis letter on a burnished gold square, vermilion frame, white filigree
+  if (a <= 0) return; x.save(); x.globalAlpha = a;
+  fillInk(x, rectP(px - 8, py - 8, sz + 16, sz + 16), VERM, 2);
+  x.fillStyle = 'rgba(251,246,230,.9)'; for (let i = 0; i < 4 * 9; i++) { const s = i % 9, side = i / 9 | 0, d = (s + .5) / 9 * (sz + 16);
+    const qx = side === 0 ? px - 8 + d : side === 1 ? px + sz + 4 : side === 2 ? px - 8 + d : px - 4, qy = side === 0 ? py - 4 : side === 1 ? py - 8 + d : side === 2 ? py + sz + 4 : py - 8 + d; x.beginPath(); x.arc(qx, qy, 1.8, 0, 6.28); x.fill(); }
+  gold(x, rectP(px, py, sz, sz), { lw: 2, punch: [px, py, px + sz, py + sz, 34] });
+  x.font = `900 ${sz * .8}px 'Noto Serif KR'`; x.textAlign = 'center'; x.textBaseline = 'middle';
+  x.lineWidth = sz * .07; x.strokeStyle = INK; x.lineJoin = 'round'; x.strokeText(ch, px + sz / 2, py + sz * .53);
+  x.fillStyle = LAP; x.fillText(ch, px + sz / 2, py + sz * .53);
+  x.lineWidth = 1.4; x.strokeStyle = 'rgba(255,255,255,.55)'; x.strokeText(ch, px + sz / 2 - 1.5, py + sz * .53 - 1.5);
+  x.restore();
+}
+// a block of verse: gilded initial spanning two lines + the rest of the two lines, written in; cite under
+function verseBlock(x, t, b) {
+  const { x: cx, w } = L.col, size = b.size, lh = size * 1.42, isz = lh * 1.72, y1 = b.y + size, a = b.alpha;
+  if (a <= 0) return; x.save(); x.globalAlpha = a;
+  initial(x, b.init, cx, b.y - size * .1, isz, clamp((t - b.t0) / .5));
+  const tx = cx + isz + size * .45;
+  const e1 = writeLine(x, b.l1, tx, y1, size, b.t0 + .4, t, b.rate), e2 = writeLine(x, b.l2, tx, y1 + lh, size, b.t0 + .4 + [...b.l1].length / b.rate + .2, t, b.rate);
+  const done = clamp((t - b.t0 - .6 - ([...b.l1].length + [...b.l2].length) / b.rate) / .6);
+  lineFiller(x, e1 + 18, cx + w, y1, size, done); lineFiller(x, e2 + 18, cx + w, y1 + lh, size, done);
+  if (b.cite) text(x, b.cite, cx, y1 + lh + size * 1.05, { align: 'left', size: L.col.cite + 2, font: "'Noto Sans KR',sans-serif", color: '#7a2a16', alpha: done * .95, ls: 2 });
+  x.restore();
+}
+
+// ---------- shots ----------
+function page(x, t, mini, col) {    // the whole page: vellum, bar border, miniature window, text column
+  x.drawImage(vellum, 0, 0);
+  barBorder(x);
+  frame(x, L.mb, mini);
+  col(x);
+}
+function camPage(x, cx, cy, z) { x.translate(W / 2, H / 2); x.scale(z, z); x.translate(-cx, -cy); }
+
+function shotShepherd(x, t) {
+  const { mb } = L, z = lerp(1.0, 1.07, eio(t / S1)), fx = mb.x + mb.w * .5, fy = mb.y + mb.h * .55;
+  x.save(); camPage(x, W / 2, H / 2, z);
+  page(x, t, m => {
+    m.translate(mb.x, mb.y); const k = mb.w / 620;
+    nightField(m, mb.w, mb.h, t);
+    sheep(m, mb.w * .58, mb.h * .74, .78 * k, -1, 1, t, 3);
+    sheep(m, mb.w * .82, mb.h * .70, .62 * k, 1, 1, t, 4);
+    sheep(m, mb.w * .70, mb.h * .86, .9 * k, 1, .2 + .8 * ss(3, 6, t) * (1 - ss(7, 9, t)), t, 5);
+    sheep(m, mb.w * .90, mb.h * .90, .8 * k, -1, 1, t, 6);
+    shepherd(m, mb.w * .30, mb.h * .80, .98 * k, t);
+  }, c => {
+    const { x: cx, rub, size } = L.col;
+    text(c, '다윗의 시', cx, rub, { align: 'left', size: 34, weight: 900, color: VERM, alpha: ss(2.2, 2.8, t), ls: 6 });
+    verseBlock(c, t, { init: '여', l1: '호와는 나의 목자시니', l2: '내게 부족함이 없으리로다', y: L.col.top, size, t0: 3.0, rate: 9, alpha: 1, cite: '시편 23:1 (개역개정)' });
+  });
+  x.restore();
+}
+function shotAnoint(x, t) {
+  const lt = t - S1, b = L.big, z = lerp(1.04, 1.0, eo(lt / 8));
+  x.drawImage(vellum, 0, 0);
+  x.save(); x.translate(W / 2, H / 2); x.scale(z, z); x.translate(-W / 2, -H / 2);
+  const pour = eio(clamp((lt - .8) / 1.6)), drip = lt - 1.8;
+  frame(x, b, m => {
+    m.translate(b.x, b.y); goldGround(m, b.w, b.h, 52);
+    // a band of heaven (lapis cloud) with rays falling on David
+    const k = V ? b.w / 1000 : b.h / 1000, gx = b.w / 2, gy = V ? b.h * .80 : b.h * .82;
+    const dx = gx + 150 * k, hr = 150 * k, cl = new Path2D(); cl.moveTo(dx - hr * 1.3, -10);
+    for (let i = 0; i <= 7; i++) { const a0 = Math.PI - i / 7 * Math.PI, px = dx + Math.cos(a0) * hr * 1.3, py = Math.sin(a0) * hr * .7 + 6 * k; i ? cl.quadraticCurveTo(dx + Math.cos(a0 + Math.PI / 14) * hr * 1.5, Math.sin(a0 + Math.PI / 14) * hr * .9 + 6 * k, px, py) : cl.lineTo(px, py); }
+    cl.lineTo(dx + hr * 1.3, -10); cl.closePath(); fillInk(m, cl, LAP, 2.4);
+    m.save(); m.clip(cl); for (let i = 0; i < 9; i++) { const st = new Path2D(), sx = dx + (i - 4) * 30 * k, sy = 20 * k + (i % 2) * 22 * k; for (let q = 0; q < 10; q++) { const a = q * Math.PI / 5 - Math.PI / 2, rr = q % 2 ? 3 * k : 7 * k; q ? st.lineTo(sx + Math.cos(a) * rr, sy + Math.sin(a) * rr) : st.moveTo(sx + Math.cos(a) * rr, sy + Math.sin(a) * rr); } st.closePath(); gold(m, st, { lw: .6 }); } m.restore();
+    const ray = ss(2.6, 4.2, lt);
+    if (ray > 0) { m.save(); m.globalAlpha = ray; const ox = dx, oy = hr * .7, hy = gy - 8 * k - 520 * 1.12 * k;
+      for (let i = -3; i <= 3; i++) { const p = new Path2D(), ex = ox + i * 44 * k * ray, ey = lerp(oy, hy, ray), wd = (13 - Math.abs(i) * 2) * k; p.moveTo(ox + i * 26 * k - wd, oy); p.lineTo(ox + i * 26 * k + wd, oy); p.lineTo(ex + 1.2, ey); p.lineTo(ex - 1.2, ey); p.closePath(); gold(m, p, { lw: 1 }); }
+      m.restore(); }
+    // the ground
+    const gr = new Path2D(); gr.moveTo(-10, gy - 20 * k); gr.quadraticCurveTo(b.w / 2, gy - 60 * k, b.w + 10, gy - 20 * k); gr.lineTo(b.w + 10, b.h + 10); gr.lineTo(-10, b.h + 10); gr.closePath(); fillInk(m, gr, GRN, 2.4);
+    m.save(); m.clip(gr); const r2 = rng(9); for (let i = 0; i < 90; i++) { const fx = r2() * b.w, fy = gy - 30 * k + r2() * (b.h - gy + 40 * k); line(m, `M${fx} ${fy} l -5 -10 M${fx} ${fy} l 0 -12 M${fx} ${fy} l 5 -10`, 1.6, GRND, .9);
+      if (i % 3 === 0) { m.fillStyle = i % 2 ? WHT : VERM; m.beginPath(); m.arc(fx + 7, fy - 14, 3.6, 0, 6.28); m.fill(); } } m.restore();
+    samuel(m, gx - 170 * k, gy - 6 * k, 1.12 * k, lt, pour);
+    kneeling(m, dx, gy - 8 * k, 1.12 * k, lt, ss(1.6, 3, lt));
+    // the oil: gold drops from the horn onto his head
+    if (drip > 0 && drip < 5) for (let i = 0; i < 9; i++) { const ph = (drip * .9 + i / 9) % 1, sx = gx - 170 * k + (212 + Math.cos(-.35 + pour * .95) * 100) * 1.12 * k, sy = gy - 6 * k + (-628 - 18 + Math.sin(-.35 + pour * .95) * 100) * 1.12 * k;
+      const tx = dx - 8 * k, ty = gy - 8 * k - 500 * 1.12 * k, py = lerp(sy, ty, ph * ph), px = lerp(sx, tx, ph); if (i % 2) continue;
+      const d = new Path2D(), r0 = 9 * k; d.moveTo(px, py - r0 * 2.6); d.quadraticCurveTo(px + r0 * 1.2, py - r0 * .4, px, py + r0); d.quadraticCurveTo(px - r0 * 1.2, py - r0 * .4, px, py - r0 * 2.6); gold(m, d, { lw: 1 }); }
+    // the banderole
+    banderole(m, b, lt, k);
+  }, true);
+  x.restore();
+}
+function banderole(m, b, lt, k) {
+  const un = eio(clamp((lt - 3.2) / 1.4)); if (un <= 0) return;
+  const two = V, size = V ? 50 : 46, txt = two ? ['사람은 외모를 보거니와', '나 여호와는 중심을 보느니라'] : ['사람은 외모를 보거니와 나 여호와는 중심을 보느니라'];
+  m.save(); m.font = `600 ${size}px 'Noto Serif KR'`; const tw = Math.max(...txt.map(s => m.measureText(s).width)) + 90;
+  const hh = (two ? 2.5 : 1.55) * size, cx = b.w / 2, cy = V ? b.h * .885 : b.h * .86, x0 = cx - tw / 2, x1 = x0 + tw * un;
+  const rib = new Path2D(); rib.moveTo(x0, cy - hh / 2); for (let px = x0; px <= x1; px += 20) rib.lineTo(px, cy - hh / 2 + Math.sin((px - x0) * .012) * 8);
+  for (let px = x1; px >= x0; px -= 20) rib.lineTo(px, cy + hh / 2 + Math.sin((px - x0) * .012) * 8); rib.closePath();
+  m.shadowColor = 'rgba(40,20,8,.35)'; m.shadowBlur = 10; m.shadowOffsetY = 4; fillInk(m, rib, '#f6ecd2', 2.4); m.shadowColor = 'transparent';
+  // curled ends
+  const curl = (px, d) => { const p = new Path2D(); p.ellipse(px, cy + 6, 16, hh / 2 + 4, 0, 0, 6.28); fillInk(m, p, '#e2d3b0', 2.2); line(m, `M${px} ${cy - hh / 2} q ${d * 12} ${hh / 2} 0 ${hh}`, 1.6, INK, .6); };
+  curl(x0, -1); curl(x1, 1);
+  m.save(); m.clip(rib); m.fillStyle = INK; m.textAlign = 'center'; m.textBaseline = 'middle';
+  const ta = clamp((lt - 4.2) / .6); m.globalAlpha = ta;
+  txt.forEach((s, i) => m.fillText(s, cx, cy + (i - (txt.length - 1) / 2) * size * 1.18 + 4));
+  m.restore(); m.restore();
+}
+function shotKing(x, t) {
+  const lt = t - S2, { mb } = L, pull = eio(clamp((lt - 1.2) / 5.2)), k = mb.w / 620, kx = mb.x + mb.w * .5, ky = mb.y + mb.h * .82 - 470 * .92 * k;
+  const z = lerp(V ? 2.2 : 2.6, 1.0, pull) * lerp(1, 1.025, ss(8, 18, lt));
+  x.save(); camPage(x, lerp(kx, W / 2, pull), lerp(ky, H / 2, pull), z);
+  page(x, t, m => {
+    m.translate(mb.x, mb.y); goldGround(m, mb.w, mb.h, 46);
+    // cloth of honour: lapis with gold quatrefoils
+    const ch = rectP(mb.w * .14, mb.h * .2, mb.w * .72, mb.h * .58); fillInk(m, ch, LAP, 2.4);
+    m.save(); m.clip(ch); for (let yy = mb.h * .22; yy < mb.h * .8; yy += 44) for (let xx = mb.w * .16 + ((yy / 44 | 0) % 2) * 22; xx < mb.w * .86; xx += 44) { const q = new Path2D(); for (let i = 0; i < 4; i++) q.addPath(ell(xx + Math.cos(i * 1.57) * 5, yy + Math.sin(i * 1.57) * 5, 4.5, 4.5)); gold(m, q, { lw: .8 }); } m.restore();
+    // floor: chequer tiles in perspective
+    const fy = mb.h * .82; const fl = rectP(0, fy, mb.w, mb.h - fy); m.save(); m.clip(fl);
+    for (let j = 0; j < 6; j++) for (let i = -8; i < 9; i++) { const y0 = fy + j * 28 + j * j * 2, y1 = fy + (j + 1) * 28 + (j + 1) * (j + 1) * 2, s0 = 1 + j * .2, s1 = 1 + (j + 1) * .2, cx0 = mb.w / 2;
+      const p = new Path2D(); p.moveTo(cx0 + i * 56 * s0, y0); p.lineTo(cx0 + (i + 1) * 56 * s0, y0); p.lineTo(cx0 + (i + 1) * 56 * s1, y1); p.lineTo(cx0 + i * 56 * s1, y1); p.closePath(); fillInk(m, p, (i + j) % 2 ? VERM : '#e9dcbc', 1.4); }
+    m.restore();
+    king(m, mb.w * .5, fy - 4 * k, .92 * k, t);
+  }, c => {
+    const { size } = L.col, kSize = size * (V ? .9 : .92);
+    text(c, '사무엘하 7장', L.col.x, L.col.rub, { align: 'left', size: 34, weight: 900, color: VERM, alpha: ss(S2 + 5.2, S2 + 5.8, t) * (1 - ss(DUR - 1.4, DUR - .6, t)), ls: 6 });
+    const a1 = 1 - ss(27.2, 27.9, t), a2 = 1 - ss(31.4, 32.1, t);
+    verseBlock(c, t, { init: '네', l1: '집과 네 나라가', l2: '내 앞에서 영원히 보전되고', y: L.col.top, size: kSize, t0: S2 + 5.6, rate: 10, alpha: a1, cite: null });
+    if (t > 27.6) verseBlock(c, t, { init: '네', l1: '왕위가', l2: '영원히 견고하리라', y: L.col.top, size: kSize, t0: 27.8, rate: 8, alpha: a2, cite: null });
+    const ca = ss(S2 + 7.4, S2 + 8.2, t) * (1 - ss(31.4, 32.1, t)), lh = kSize * 1.42;
+    text(c, '사무엘하 7:16 (개역개정)', L.col.x, L.col.top + kSize + lh + kSize * 1.05, { align: 'left', size: L.col.cite + 2, font: "'Noto Sans KR',sans-serif", color: '#7a2a16', alpha: ca * .95, ls: 2 });
+    // the promise, as the site reads it
+    const pa = win(t, 31.9, DUR - .2, .9, 1.2);
+    if (pa > 0) {
+      const sz = V ? 44 : 40;
+      text(c, '“영원한 왕위”는 다윗의 자손으로 오신', L.col.x, L.col.top + kSize * .9, { align: 'left', size: sz, weight: 600, color: INK, alpha: pa });
+      text(c, '예수님 안에서 성취됩니다', L.col.x, L.col.top + kSize * .9 + sz * 1.6, { align: 'left', size: sz, weight: 600, color: INK, alpha: pa });
+    }
+  });
+  x.restore();
+}
+
+// ---------- frame ----------
+function draw(ctx, t) {
+  glintT = t; if (!goldPat) goldPat = goldPatC = ctx.createPattern(goldTex, 'repeat');
+  ctx.fillStyle = '#1a120a'; ctx.fillRect(0, 0, W, H);
+  if (t < S1) shotShepherd(ctx, t); else if (t < S2) shotAnoint(ctx, t); else shotKing(ctx, t);
+  // candlelight: warm from the upper left, brown vignette, pigment grain (screen space)
+  const cl = ctx.createRadialGradient(W * .12, H * .05, 0, W * .2, H * .2, Math.hypot(W, H));
+  cl.addColorStop(0, 'rgba(255,214,150,.10)'); cl.addColorStop(.5, 'rgba(120,70,20,0)'); cl.addColorStop(1, 'rgba(60,30,10,.30)');
+  ctx.globalCompositeOperation = 'multiply'; ctx.fillStyle = 'rgba(255,236,206,1)'; ctx.fillRect(0, 0, W, H); ctx.globalCompositeOperation = 'source-over';
+  ctx.fillStyle = cl; ctx.fillRect(0, 0, W, H);
+  const vg = ctx.createRadialGradient(W / 2, H / 2, Math.min(W, H) * .42, W / 2, H / 2, Math.hypot(W, H) * .62);
+  vg.addColorStop(0, 'rgba(50,26,10,0)'); vg.addColorStop(1, 'rgba(40,20,6,.62)'); ctx.fillStyle = vg; ctx.fillRect(0, 0, W, H);
+  ctx.globalCompositeOperation = 'overlay'; ctx.globalAlpha = .22; ctx.drawImage(grain, 0, 0); ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
+  // chapter label
+  const la = win(t, .8, 6.2, 1.2, 1.2), lx = V ? 110 : 150, ly = V ? 205 : 150;
+  if (la > 0) {
+    ctx.save(); ctx.globalAlpha = la * .78; ctx.fillStyle = 'rgba(30,16,6,1)'; ctx.filter = 'blur(18px)'; ctx.fillRect(lx - 30, ly - 50, V ? 520 : 560, 110); ctx.restore();
+    text(ctx, '07  ·  통일 왕국', lx, ly, { align: 'left', size: 30, weight: 600, color: '#f8e8c4', alpha: la, ls: 4, shadow: 'rgba(20,10,0,.8)' });
+    text(ctx, '약 BC 1050–930  ·  사무엘상 – 열왕기상 11장', lx, ly + 44, { align: 'left', size: 22, font: "'Noto Sans KR',sans-serif", color: '#f0dcc0', alpha: la * .9, ls: 2, shadow: 'rgba(20,10,0,.8)' });
+  }
+  // cuts are hard; the scene opens from and closes to black
+  const f = 1 - ss(0, 1.4, t) + ss(DUR - 1.3, DUR, t); if (f > 0) { ctx.fillStyle = `rgba(8,5,2,${clamp(f)})`; ctx.fillRect(0, 0, W, H); }
+}
+
+Pilot.run({ W, H, dur: DUR, audio: 'kingdom.m4a', fonts: ["600 40px 'Noto Serif KR'", "900 40px 'Noto Serif KR'", "400 20px 'Noto Sans KR'"],
+  init: async () => {
+    grain = speckle(W, H, 70, 17, .6);
+    // vellum: warm cream, mottled, follicle specks, darker toward the edges
+    vellum = canvas(W, H); { const x = vellum.getContext('2d'), d = x.createImageData(W, H), r = rng(21), base = hex(VEL);
+      for (let y = 0; y < H; y++) for (let px = 0; px < W; px++) { const n = fbm(px * .004, y * .004, 4), m2 = fbm(px * .03 + 7, y * .03, 2), k = (y * W + px) * 4, v = (n - .5) * 34 + (m2 - .5) * 10;
+        d.data[k] = base[0] + v; d.data[k + 1] = base[1] + v * .95 - 2; d.data[k + 2] = base[2] + v * .8 - 6; d.data[k + 3] = 255; }
+      x.putImageData(d, 0, 0); x.fillStyle = 'rgba(120,90,50,.35)'; for (let i = 0; i < 2600; i++) { x.globalAlpha = .15 + r() * .3; x.beginPath(); x.arc(r() * W, r() * H, .6 + r() * 1.1, 0, 6.28); x.fill(); } x.globalAlpha = 1;
+      // faint ruled lines and pricking in the text area
+      x.strokeStyle = 'rgba(150,110,80,.18)'; x.lineWidth = 1; for (let y = L.col.top - 20; y < H - 120; y += L.col.size * 1.42) { x.beginPath(); x.moveTo(L.col.x - 10, y); x.lineTo(L.col.x + L.col.w, y); x.stroke(); } }
+    // gold leaf texture: mottled ochre with fine crackle (a pattern that moves with the page)
+    // gold leaf texture: a smooth burnished ochre with fine tooling and crackle; periodic so the pattern tiles without seams
+    goldTex = canvas(512, 512); { const x = goldTex.getContext('2d'), d = x.createImageData(512, 512), N = 512;
+      const hsh = (i, j, p) => { i = ((i % p) + p) % p; j = ((j % p) + p) % p; let h = Math.imul(i, 374761393) + Math.imul(j, 668265263) + p * 7 | 0; h = Math.imul(h ^ h >>> 13, 1274126177); return ((h ^ h >>> 16) >>> 0) / 4294967296; };
+      const pn = (x0, y0, p) => { const xi = Math.floor(x0), yi = Math.floor(y0), xf = x0 - xi, yf = y0 - yi, u = xf * xf * (3 - 2 * xf), v = yf * yf * (3 - 2 * yf);
+        const a = hsh(xi, yi, p), b = hsh(xi + 1, yi, p), c = hsh(xi, yi + 1, p), e = hsh(xi + 1, yi + 1, p); return a + (b - a) * u + (c - a) * v + (a - b - c + e) * u * v; };
+      for (let y = 0; y < N; y++) for (let px = 0; px < N; px++) { let n = 0, amp = .5, tot = 0; for (const p of [4, 8, 16, 32, 64]) { n += amp * pn(px / N * p, y / N * p, p); tot += amp; amp *= .55; } n /= tot;
+        const c = mix([170, 128, 46], [214, 174, 84], clamp((n - .25) * 1.6)), k = (y * N + px) * 4; d.data[k] = c[0]; d.data[k + 1] = c[1]; d.data[k + 2] = c[2]; d.data[k + 3] = 255; }
+      x.putImageData(d, 0, 0); const r = rng(33); x.strokeStyle = 'rgba(96,64,16,.28)'; x.lineWidth = .7;
+      for (let i = 0; i < 60; i++) { let px = r() * N, py = r() * N; x.beginPath(); x.moveTo(px, py); for (let k = 0; k < 6; k++) { px += (r() - .5) * 30; py += (r() - .5) * 30; x.lineTo(px, py); } x.stroke(); } }
+  },
+  draw });
+</script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+{ "duration": 40,
+  "music": [
+    { "id": "m1", "at": 0, "len": 23.6, "db": -4, "fin": 1.0, "fout": 1.5,
+      "prompt": "Dark, elegant minimal score: a slow pulse of low cello and soft synth bass at 60 bpm, a glassy celesta motif that circles the same four notes again and again like a loop you cannot leave, faint shimmering metallic textures; restrained, hypnotic, a little seductive, gradually tighter and more insistent, no drums, no vocals" },
+    { "id": "m2", "at": 23.6, "len": 16.4, "db": -3, "fin": 0.3, "fout": 2.0,
+      "prompt": "The loop stops; a single sustained low string note and a quiet bowed-vibraphone tone ring out, then a slow, tender solo piano plays a few searching chords in a minor key, intimate and honest, lots of space, ending on one unresolved but hopeful warm chord that hangs in the air" }
+  ],
+  "sfx": [
+    { "id": "s1", "at": 0.3, "len": 2.5, "db": -10, "loop": false, "prompt": "Large studio spotlight switching on, heavy electrical clunk followed by a low hum" },
+    { "id": "s2", "at": 9.6, "len": 1.6, "db": -8, "loop": false, "prompt": "Molten metal shifting and bubbling, short liquid gold slosh with a soft hiss" },
+    { "id": "s3", "at": 10.6, "len": 1.5, "db": -12, "loop": false, "prompt": "A handful of gold coins clinking and settling on a stack" },
+    { "id": "s4", "at": 13.4, "len": 1.6, "db": -9, "loop": false, "prompt": "Molten metal reforming, deep liquid swirl ending in a bright metallic ring" },
+    { "id": "s5", "at": 17.4, "len": 3.0, "db": -14, "loop": false, "prompt": "Distant crowd applause in a large hall, swelling then fading out" },
+    { "id": "s6", "at": 23.6, "len": 2.2, "db": -9, "loop": false, "prompt": "Liquid metal settling into a solid shape, then a soft crystalline shimmer like glass being polished" },
+    { "id": "s7", "at": 36.6, "len": 3.0, "db": -14, "loop": false, "prompt": "A single soft high glass harmonic tone, pure and warm, slowly fading" }
+  ],
+  "ducks": [ { "from": 23.4, "to": 24.4, "db": -20 } ] }

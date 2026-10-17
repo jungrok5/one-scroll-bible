@@ -1,0 +1,510 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>성경 이야기 모션</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700&family=Noto+Serif+KR:wght@400;600;900&display=swap">
+<style>
+/* Layout: one fixed-size stage (1920×1080 landscape or 1080×1920 portrait) scaled to fit; every scene is a timed layer. */
+:root{
+  --night:#0b0f19; --ink:#f4efe6; --muted:#a3abb9; --gold:#f2c46d; --gold-hi:#ffe2a1; --ember:#e87a5d;
+  --serif:'Noto Serif KR','Nanum Myeongjo','AppleMyungjo',serif;
+  --sans:'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+  color-scheme:dark;
+}
+html,body{margin:0;height:100%;background:#04060b;overflow:hidden;-webkit-tap-highlight-color:transparent}
+#stage{position:absolute;left:0;top:0;transform-origin:0 0;overflow:hidden;background:var(--night);color:var(--ink);
+  font-family:var(--sans);-webkit-font-smoothing:antialiased;word-break:keep-all;line-break:strict}
+#stage.h{width:1920px;height:1080px}
+#stage.v{width:1080px;height:1920px}
+#sky{position:absolute;inset:0;width:100%;height:100%}
+#glows,.glow{position:absolute;inset:0;pointer-events:none}
+.glow{opacity:0}
+.scene{position:absolute;inset:0;visibility:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.a{opacity:0;will-change:transform,opacity}
+.w{display:inline-block}
+.stack{display:grid;place-items:center}
+.stack>*{grid-area:1/1}
+b,.g{color:var(--gold);font-weight:inherit}
+
+/* type scale (landscape / portrait) */
+.eyebrow{font-size:26px;letter-spacing:.32em;color:var(--gold);font-weight:400;text-transform:uppercase}
+.h1{font-family:var(--serif);font-weight:900;font-size:136px;line-height:1.12;letter-spacing:-.01em}
+.h2{font-family:var(--serif);font-weight:900;font-size:84px;line-height:1.22;text-wrap:balance}
+.h3{font-family:var(--serif);font-weight:600;font-size:64px;line-height:1.3;text-wrap:balance}
+.lead{font-size:40px;line-height:1.6;font-weight:300;color:#e3dccf;text-wrap:balance}
+.sub{font-size:32px;line-height:1.6;font-weight:300;color:var(--muted);text-wrap:balance}
+.vq{font-family:var(--serif);font-weight:400;font-size:38px;line-height:1.65;color:#efe6d4;text-wrap:balance}
+.cite{font-size:24px;letter-spacing:.08em;color:var(--muted);margin-top:14px}
+.v .eyebrow{font-size:30px}
+.v .h1{font-size:150px}
+.v .h2{font-size:88px}
+.v .h3{font-size:70px}
+.v .lead{font-size:46px}
+.v .sub{font-size:38px}
+.v .vq{font-size:44px}
+.v .cite{font-size:28px}
+
+/* hero */
+.hero .h1 .g{display:block}
+.hero .kick{margin-bottom:40px}
+.hero .sub{margin-top:44px;max-width:1100px}
+.v .hero .sub{max-width:860px}
+.flow{display:flex;gap:28px;align-items:center;font-family:var(--serif);font-weight:900;font-size:96px;margin:56px 0 44px}
+.flow .arw{color:var(--muted);font-weight:300;font-family:var(--sans);font-size:60px}
+.v .flow{flex-direction:column;gap:6px;font-size:104px}
+.v .flow .arw{transform:rotate(90deg)}
+.thread .sub{max-width:1180px}
+.v .thread .sub{max-width:900px}
+
+/* epochs */
+.ep{flex-direction:row;gap:90px;padding:0 150px 120px;text-align:left;justify-content:flex-start}
+.ep .art{width:600px;height:600px;flex:0 0 600px;display:grid;place-items:center}
+.ep .art svg{width:520px;height:520px;overflow:visible}
+.ep .txt{display:flex;flex-direction:column;align-items:flex-start;max-width:930px}
+.badge{display:flex;gap:18px;align-items:center;font-size:26px;letter-spacing:.14em;color:var(--c)}
+.badge .num{font-variant-numeric:tabular-nums;border:2px solid var(--c);border-radius:999px;padding:4px 16px;font-weight:700;letter-spacing:.04em}
+.badge .date{color:var(--muted);letter-spacing:.06em}
+.ep .h1{margin:18px 0 22px;font-size:128px;text-wrap:balance}
+.ep .one{font-size:44px;line-height:1.5;font-weight:400;text-wrap:balance}
+.ep .verse{margin-top:44px;padding-left:30px;border-left:4px solid var(--c)}
+.ep .verse .vq{font-size:34px}
+.v .ep{flex-direction:column;gap:30px;padding:0 90px 330px;text-align:center;justify-content:center}
+.v .ep .art{width:560px;height:560px;flex:0 0 560px}
+.v .ep .art svg{width:480px;height:480px}
+.v .ep .txt{align-items:center;max-width:920px}
+.v .ep .h1{font-size:132px;margin:14px 0 18px}
+.v .ep .one{font-size:48px}
+.v .ep .verse{border-left:0;padding-left:0;margin-top:40px;padding-top:30px;border-top:3px solid var(--c)}
+.v .ep .verse .vq{font-size:40px}
+svg .d{fill:none;stroke:var(--c);stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
+svg .d.thick{stroke-width:9}
+svg .d.thin{stroke-width:2.5}
+svg .f{fill:var(--c);stroke:none}
+
+/* timeline */
+#tl{position:absolute;left:150px;right:150px;bottom:74px;height:90px;opacity:0;pointer-events:none}
+.v #tl{left:80px;right:80px;bottom:170px}
+#tl .rail,#tl .fill{position:absolute;left:0;top:20px;height:3px;border-radius:3px;background:rgba(244,239,230,.16)}
+#tl .rail{right:0}
+#tl .fill{background:linear-gradient(90deg,rgba(242,196,109,.25),var(--gold));width:0}
+#tl .dot{position:absolute;top:21.5px;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;background:#3a4252;transition:none}
+#tl .dot.cross{border-radius:2px}
+#tl .lab{position:absolute;top:44px;transform:translateX(-50%);font-size:19px;white-space:nowrap;color:var(--muted);opacity:.55}
+.v #tl .lab{font-size:30px;top:50px}
+
+/* fulfilment chips */
+.chips{display:flex;flex-wrap:wrap;justify-content:center;gap:22px;max-width:1500px;margin:46px 0 54px}
+.chip{font-family:var(--serif);font-weight:600;font-size:44px;padding:14px 34px;border-radius:999px;border:2px solid var(--c);color:var(--ink);background:rgba(11,15,25,.55)}
+.v .chips{flex-direction:column;align-items:center;gap:20px;max-width:900px}
+.v .chip{font-size:50px}
+
+/* mirror */
+.ringwrap{position:relative;width:860px;height:860px}
+.v .ringwrap{width:940px;height:940px}
+.ringwrap svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.ringlab{position:absolute;transform:translate(-50%,-50%);font-family:var(--serif);font-weight:600;font-size:38px;white-space:nowrap;color:#d8d0c2}
+.v .ringlab{font-size:42px}
+.ringc{position:absolute;inset:0;display:grid;place-items:center}
+.ringc .h2{font-size:110px}
+.mirror{flex-direction:row;gap:60px;padding:0 140px}
+.mirror .side{display:flex;flex-direction:column;align-items:flex-start;text-align:left;max-width:760px;gap:34px}
+.v .mirror{flex-direction:column;gap:10px;padding:0 70px}
+.v .mirror .side{align-items:center;text-align:center;max-width:920px;gap:28px}
+
+/* crux */
+.crux{justify-content:flex-start;padding-top:96px}
+.crux .cross{width:420px;height:420px;overflow:visible}
+.v .crux{padding-top:240px}
+.v .crux .cross{width:520px;height:520px}
+.crux .stack{margin-top:70px;width:1500px;min-height:360px}
+.v .crux .stack{width:940px;min-height:640px;margin-top:90px}
+.v .crux .h2{font-size:70px}
+.crux .h2 .me{font-size:1.35em;color:var(--gold-hi)}
+.crux .vq{margin-top:34px;max-width:1300px}
+
+/* finished */
+.done .h1{font-size:200px;letter-spacing:.06em;color:var(--gold-hi)}
+.v .done .h1{font-size:128px;letter-spacing:.02em}
+.done .lead{margin-top:56px;max-width:1300px}
+.v .done .lead{max-width:900px}
+
+/* prayer */
+.respond .stack{width:1500px}
+.v .respond .stack{width:940px}
+.prayer{display:flex;flex-direction:column;gap:22px;align-items:center}
+.prayer .pl{font-family:var(--serif);font-size:46px;line-height:1.5;font-weight:400;text-wrap:balance}
+.prayer .amen{color:var(--gold-hi);font-weight:600}
+.v .prayer{gap:26px}
+.v .prayer .pl{font-size:47px}
+.prayhead{margin-bottom:46px}
+
+/* end */
+.end .brand{font-family:var(--serif);font-weight:900;font-size:76px;margin-top:80px}
+.end .url{font-size:40px;letter-spacing:.06em;color:var(--gold);margin-top:18px;font-weight:700}
+.end .legal{position:absolute;left:0;right:0;bottom:44px;font-size:18px;color:#6f7787;letter-spacing:.02em}
+.v .end .brand{font-size:70px}
+.v .end .url{font-size:46px}
+.v .end .legal{font-size:22px;bottom:120px;padding:0 80px}
+.end .vq{max-width:1300px}
+.v .end .vq{max-width:920px}
+
+/* viewer controls (hidden while recording) */
+#ui{position:fixed;left:0;right:0;bottom:0;display:flex;gap:10px;align-items:center;
+  padding:12px max(16px,env(safe-area-inset-right,0px)) calc(12px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));
+  background:linear-gradient(0deg,rgba(4,6,11,.92),rgba(4,6,11,0));color:var(--ink);font:14px/1 var(--sans);transition:opacity .4s}
+#ui.hide{opacity:0}
+#ui button{background:rgba(244,239,230,.1);color:var(--ink);border:1px solid rgba(244,239,230,.22);border-radius:10px;padding:9px 12px;font:inherit;cursor:pointer;min-width:44px}
+#ui button:focus-visible,#ui input:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+#ui input[type=range]{flex:1;min-width:0;accent-color:var(--gold)}
+#ui .time{font-variant-numeric:tabular-nums;color:var(--muted);min-width:84px;text-align:right}
+.render #ui{display:none}
+</style>
+</head>
+<body>
+<div id="stage" class="h">
+  <canvas id="sky"></canvas>
+  <div id="glows"></div>
+  <div id="scenes"></div>
+  <div id="tl"><div class="rail"></div><div class="fill"></div></div>
+</div>
+<div id="ui">
+  <button id="bPlay" type="button" aria-label="일시정지">❚❚</button>
+  <input id="seek" type="range" min="0" max="1000" value="0" aria-label="재생 위치">
+  <span class="time" id="tm">0:00</span>
+  <button id="bOri" type="button">세로</button>
+</div>
+<script>
+/* ===== content (Korean; Scripture quoted verbatim from 개역개정 as on one-scroll-bible.com) ===== */
+const EP=[
+ {k:'creation', c:'#60a5fa',tag:'구약 · 시작',date:'태초',title:'창조',one:'하나님이 보시기에 “심히 좋은” 세상을 지으셨다.',q:'태초에 하나님이 천지를 창조하시니라',cite:'창세기 1:1',dur:8},
+ {k:'fall',     c:'#e87a5d',tag:'구약 · 문제의 시작',date:'태초',title:'타락',one:'죄가 들어와 사람과 하나님 사이가 끊어졌다.',q:'내가 너로 여자와 원수가 되게 하고 … 여자의 후손은 네 머리를 상하게 할 것이요',cite:'창세기 3:15',dur:8.5},
+ {k:'patriarch',c:'#e9b949',tag:'구약 · 약속',date:'약 BC 2000',title:'족장 시대',one:'아브라함에게 “복의 통로가 되리라” 약속하시다.',q:'내가 너로 큰 민족을 이루고 … 땅의 모든 족속이 너로 말미암아 복을 얻을 것이라',cite:'창세기 12:2-3',dur:8},
+ {k:'exodus',   c:'#ef6363',tag:'구약 · 구원',date:'약 BC 1446',title:'출애굽 · 광야',one:'하나님이 노예 된 백성을 건져 내 자기 백성으로 삼으셨다.',q:'너희를 내 백성으로 삼고 나는 너희의 하나님이 되리니',cite:'출애굽기 6:7',dur:7.5},
+ {k:'judges',   c:'#34d399',tag:'구약 · 정착',date:'약 BC 1400–1050',title:'정복과 사사 시대',one:'땅은 얻었지만, 왕이 없어 제멋대로 행하다.',q:'그 때에 이스라엘에 왕이 없으므로 사람이 각기 자기의 소견에 옳은 대로 행하였더라',cite:'사사기 21:25',dur:7.5},
+ {k:'kingdom',  c:'#a78bfa',tag:'구약 · 전성기',date:'약 BC 1050–930',title:'통일 왕국',one:'다윗에게 “네 왕위가 영원하리라” 약속하시다.',q:'네 집과 네 나라가 내 앞에서 영원히 보전되고 네 왕위가 영원히 견고하리라',cite:'사무엘하 7:16',dur:7.5},
+ {k:'divided',  c:'#fb923c',tag:'구약 · 쇠퇴',date:'BC 930–586',title:'분열 왕국',one:'남(유다)과 북(이스라엘)으로 갈라져 점점 타락하다.',q:'이스라엘이 다윗의 집을 배반하여 오늘까지 이르렀더라',cite:'열왕기상 12:19',dur:7},
+ {k:'exile',    c:'#94a3b8',tag:'구약 · 심판',date:'BC 722 / 586',title:'포로 시대',one:'나라가 무너지고 백성이 이방 땅으로 끌려가다.',q:'우리가 바벨론의 여러 강변 거기 앉아서 시온을 기억하며 울었도다',cite:'시편 137:1',dur:7},
+ {k:'return',   c:'#2dd4bf',tag:'구약 · 회복',date:'BC 538–430',title:'포로 귀환',one:'돌아와 성전과 성벽을 다시 세우다.',q:'여호와로 인하여 기뻐하는 것이 너희의 힘이니라',cite:'느헤미야 8:10',dur:7},
+ {k:'silence',  c:'#cbd5e1',tag:'중간기 · 무대 준비',date:'약 BC 430–4',title:'침묵기',one:'선지자의 음성이 멈춘 400년, 그러나 무대는 조용히 준비되었다.',q:'때가 차매 하나님이 그 아들을 보내사 여자에게서 나게 하시고',cite:'갈라디아서 4:4',dur:8},
+ {k:'jesus',    c:'#facc15',tag:'신약 · 성취',date:'약 BC 4–AD 30',title:'예수님의 오심',one:'약속하신 메시아가 오셔서, 죽고, 다시 살아나셨다.',q:'말씀이 육신이 되어 우리 가운데 거하시매 … 은혜와 진리가 충만하더라',cite:'요한복음 1:14',dur:9},
+ {k:'church',   c:'#9b5de5',tag:'신약 · 확장',date:'약 AD 30–',title:'교회의 시작',one:'성령이 임하시고, 복음이 땅끝을 향해 퍼져 나가다.',q:'오직 성령이 너희에게 임하시면 … 땅 끝까지 이르러 내 증인이 되리라',cite:'사도행전 1:8',dur:8},
+ {k:'restore',  c:'#fbbf24',tag:'신약 · 완성',date:'장차',title:'회복',one:'예수님이 다시 오셔서 모든 것을 새롭게 하신다.',q:'모든 눈물을 그 눈에서 닦아 주시니 다시는 사망이 없고 애통하는 것이나 곡하는 것이나 아픈 것이 다시 있지 아니하리니',cite:'요한계시록 21:4',dur:10}
+];
+const TL_SHORT=['창조','타락','족장','출애굽','사사','왕국','분열','포로','귀환','침묵','예수님','교회','회복'];
+
+/* ===== line-art icons (viewBox 0 0 200 200; .d paths are stroke-drawn) ===== */
+const P=(d,c='d')=>`<path class="${c}" pathLength="1" d="${d}"/>`;
+const pol=(cx,cy,r,a)=>[cx+r*Math.cos(a),cy+r*Math.sin(a)];
+function arc(cx,cy,r,a0,a1){const[x0,y0]=pol(cx,cy,r,a0),[x1,y1]=pol(cx,cy,r,a1);return `M${x0.toFixed(1)} ${y0.toFixed(1)} A${r} ${r} 0 ${Math.abs(a1-a0)>Math.PI?1:0} 1 ${x1.toFixed(1)} ${y1.toFixed(1)}`}
+function star(cx,cy,r){let s='';for(let i=0;i<10;i++){const rr=i%2?r*.42:r,a=-Math.PI/2+i*Math.PI/5;const[x,y]=pol(cx,cy,rr,a);s+=(i?'L':'M')+x.toFixed(1)+' '+y.toFixed(1)}return s+'Z'}
+function rays(cx,cy,r0,r1,n,a0=0,span=Math.PI*2,cls='d'){let s='';for(let i=0;i<n;i++){const a=a0+span*(span>=6.28?i/n:i/(n-1));const[x0,y0]=pol(cx,cy,r0,a),[x1,y1]=pol(cx,cy,r1,a);s+=`<path class="${cls}" pathLength="1" d="M${x0.toFixed(1)} ${y0.toFixed(1)} L${x1.toFixed(1)} ${y1.toFixed(1)}"/>`}return s}
+const ICON={
+ creation:()=>`<g class="spin">${rays(100,100,66,80,12)}</g>`+P('M146 100 A46 46 0 1 1 54 100 A46 46 0 1 1 146 100')+P('M54 100 H146')+P('M62 78 Q100 90 138 78')+P('M62 122 Q100 110 138 122')+P('M100 54 C76 70 76 130 100 146')+P('M100 54 C124 70 124 130 100 146'),
+ fall:()=>`<g class="lft">${P('M96 42 A58 58 0 0 0 96 158')}</g><g class="rgt">${P('M104 42 A58 58 0 0 1 104 158')}</g>`+P('M100 30 L92 64 L108 90 L90 116 L104 142 L98 170','d thin'),
+ patriarch:()=>`<g class="tw">`+P(star(100,84,30))+P(star(44,52,11))+P(star(156,46,13))+P(star(164,112,9))+P(star(36,118,9))+P(star(76,26,6))+P(star(134,140,6))+`</g>`+P('M64 186 L100 156 L136 186')+P('M100 156 V186'),
+ exodus:()=>`<g class="flick">`+P('M100 168 C62 168 52 130 72 102 C82 88 78 70 88 48 C98 74 122 80 122 110 C130 102 130 92 127 84 C152 112 150 168 100 168 Z')+P('M100 168 C84 168 80 150 90 136 C96 128 96 120 100 110 C106 124 116 132 114 148 C112 160 108 168 100 168 Z','d thin')+`</g>`+P('M10 186 q14 -10 28 0 t28 0')+P('M134 186 q14 -10 28 0 t28 0'),
+ judges:()=>`<g class="spin2">`+P(arc(100,100,56,-1.05,4.6))+P('M84 34 L95 44 L84 55')+`</g>`+P('M100 100 m-5 0 a5 5 0 1 0 10 0 a5 5 0 1 0 -10 0'),
+ kingdom:()=>P('M48 140 L40 72 L74 102 L100 56 L126 102 L160 72 L152 140 Z')+P('M50 158 H150')+P('M100 122 m-7 0 a7 7 0 1 0 14 0 a7 7 0 1 0 -14 0')+P('M40 72 m-5 0 a5 5 0 1 0 10 0 a5 5 0 1 0 -10 0')+P('M100 56 m-5 0 a5 5 0 1 0 10 0 a5 5 0 1 0 -10 0')+P('M160 72 m-5 0 a5 5 0 1 0 10 0 a5 5 0 1 0 -10 0'),
+ divided:()=>`<g class="lft">${P('M40 50 H100 L92 84 L106 112 L96 150 H40 Z')}</g><g class="rgt">${P('M160 50 H100 L92 84 L106 112 L96 150 H160 Z')}</g>`,
+ exile:()=>`<rect class="d" pathLength="1" x="18" y="74" width="66" height="40" rx="20"/><rect class="d" pathLength="1" x="68" y="88" width="64" height="12" rx="6"/><rect class="d" pathLength="1" x="116" y="74" width="66" height="40" rx="20"/>`+P('M14 156 q18 -10 36 0 t36 0 t36 0 t36 0 t36 0')+P('M30 178 q18 -10 36 0 t36 0 t36 0 t36 0','d thin'),
+ return:()=>{let s='';const rows=[[0,4],[18,4],[0,4],[18,4]];rows.forEach((r,ri)=>{const y=150-ri*24;for(let i=0;i<r[1];i++){const x=22+r[0]+i*36;if(x+32>180)continue;s+=`<rect class="d" pathLength="1" x="${x}" y="${y}" width="32" height="20" rx="2"/>`}});return s+P('M14 172 H186')},
+ silence:()=>P('M122 46 A58 58 0 1 0 160 140 A46 46 0 1 1 122 46 Z')+`<g class="tw">`+P(star(52,48,5),'d thin')+P(star(168,62,4),'d thin')+P(star(40,150,4),'d thin')+P(star(150,176,5),'d thin')+`</g>`,
+ jesus:()=>`<g class="rays">${rays(100,78,74,96,16)}</g>`+P('M100 22 V182','d thick')+P('M58 70 H142','d thick'),
+ church:()=>`<g class="rip">${P('M100 130 m-24 0 a24 24 0 1 0 48 0 a24 24 0 1 0 -48 0')}${P('M100 130 m-48 0 a48 48 0 1 0 96 0 a48 48 0 1 0 -96 0','d thin')}${P('M100 130 m-72 0 a72 72 0 1 0 144 0 a72 72 0 1 0 -144 0','d thin')}</g>`+`<g class="flick">`+P('M100 92 C84 86 84 66 96 48 C100 62 114 66 110 80 C108 88 104 92 100 92 Z')+`</g>`,
+ restore:()=>`<g class="rise">${rays(100,146,62,80,9,Math.PI,Math.PI)}`+P('M54 146 A46 46 0 0 1 146 146')+`</g>`+P('M14 146 H186')+P('M68 164 H132','d thin')+P('M84 180 H116','d thin')
+};
+
+/* ===== helpers ===== */
+const Q=s=>document.querySelector(s);
+const clamp=x=>x<0?0:x>1?1:x;
+const eo=x=>{x=clamp(x);return 1-Math.pow(1-x,3)};
+const eio=x=>{x=clamp(x);return x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2};
+const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;');
+const hex=(h,a)=>{const n=parseInt(h.slice(1),16);return `rgba(${n>>16&255},${n>>8&255},${n&255},${a})`};
+// a timed element: in/out are seconds from scene start
+const A=(cls,inn,out,html,fx='up',tag='div',extra='')=>`<${tag} class="a ${cls}" data-in="${inn}"${out!=null?` data-out="${out}"`:''} data-fx="${fx}" ${extra}>${html}</${tag}>`;
+
+/* ===== scene plan ===== */
+const PLAN=[];
+let ori='h';
+
+PLAN.push({id:'hero',dur:7.5,glow:'#f2c46d',html:()=>`<div class="scene hero">
+ ${A('eyebrow kick',.3,null,'창조에서 교회까지','fade')}
+ ${A('h1',.7,null,'한눈에 보는 <span class="g">성경 이야기</span>','words')}
+ ${A('sub',2.4,null,'스크롤 한 번으로, 성경의 큰 줄거리와<br>예수님이 오신 이유를 만나보세요.','blur')}
+</div>`});
+
+PLAN.push({id:'thread',dur:8.5,glow:'#f2c46d',html:()=>`<div class="scene thread">
+ ${A('eyebrow',.2,null,'성경 전체를 꿰는 한 문장','fade')}
+ ${A('h2',.5,null,'성경은 결국<br>한 편의 이야기입니다','words')}
+ <div class="flow">${A('',2,null,'약속','scale','span')}${A('arw',2.5,null,'→','fade','span')}${A('',2.8,null,'기다림','scale','span')}${A('arw',3.3,null,'→','fade','span')}${A('g',3.6,null,'성취','scale','span')}</div>
+ ${A('sub',4.6,null,'하나님이 <b>약속</b>하시고, 사람들이 오랫동안 <b>기다리며</b>,<br>마침내 예수님 안에서 <b>성취</b>되고 완성됩니다.','blur')}
+</div>`});
+
+EP.forEach((e,i)=>{
+  const d=e.dur, vIn=Math.min(2.6,d*.33);
+  PLAN.push({id:'ep'+i,dur:d,glow:e.c,ep:i,html:()=>`<div class="scene ep" style="--c:${e.c}">
+   <div class="art">${A('',0,null,`<svg viewBox="0 0 200 200">${ICON[e.k]()}</svg>`,'fade','div','data-art="1"')}</div>
+   <div class="txt">
+    ${A('badge',.15,null,`<span class="num">${String(i+1).padStart(2,'0')} / 13</span><span>${e.tag}</span><span class="date">${e.date}</span>`,'fade')}
+    ${A('h1',.35,null,esc(e.title),'words')}
+    ${A('one',1.0,null,esc(e.one),'blur')}
+    ${A('verse',vIn,null,`<div class="vq">“${esc(e.q)}”</div><div class="cite">${e.cite} (개역개정)</div>`,'up')}
+   </div></div>`,
+   update:(lt,el)=>drawIcon(el,e.k,lt)});
+});
+
+PLAN.push({id:'fulfil',dur:8,glow:'#facc15',fulfil:true,html:()=>`<div class="scene fulfil" style="padding-bottom:140px">
+ ${A('eyebrow',.2,null,'예수님을 가리켜요','fade')}
+ <div class="chips">${[['여자의 후손',1],['아브라함의 복',2],['유월절 어린 양',3],['다윗의 영원한 왕',5],['새 언약',7]].map((c,i)=>A('chip',.5+i*.4,null,c[0],'scale','div',`style="--c:${EP[c[1]].c}"`)).join('')}</div>
+ ${A('h2',3.1,null,'한 사람 <b>예수님</b> 안에서<br>모두 이루어집니다','words')}
+</div>`});
+
+PLAN.push({id:'lead',dur:10,glow:'#e87a5d',html:()=>`<div class="scene lead-s" style="padding:0 120px">
+ ${A('eyebrow',.2,null,'이 이야기가 ‘나’에게 주는 의미','fade')}
+ <div style="height:40px"></div>
+ ${A('h2',.6,null,'성경은 “착하게 살라”는<br>도덕 교과서가 아닙니다.','words')}
+ <div style="height:50px"></div>
+ ${A('lead',3.4,null,'스스로를 구원할 수 없는 죄인을,<br>하나님이 <b>오직 은혜로</b> 건지신 이야기입니다.','blur')}
+ ${A('lead',5.8,null,'그 중심에 <b>예수 그리스도</b>가 계십니다.','blur')}
+</div>`});
+
+const CYC=['우상을 섬김','고난','부르짖음','하나님의 구원','다시 우상…'];
+PLAN.push({id:'mirror',dur:12.5,glow:'#94a3b8',html:()=>`<div class="scene mirror">
+ <div class="ringwrap">${A('',.2,null,`<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="34" fill="none" stroke="rgba(244,239,230,.18)" stroke-width=".35"/><circle class="orb" cx="50" cy="16" r="1.6" fill="var(--gold)"/></svg>`,'fade','div','style="position:absolute;inset:0"')}
+  ${CYC.map((c,i)=>{const a=-Math.PI/2+i*2*Math.PI/5,R=ori==='v'?39:43,x=50+R*Math.cos(a),y=50+R*Math.sin(a);return A('ringlab',.6+i*.35,null,c,'fade','div',`style="left:${x}%;top:${y}%" data-cyc="${i}"`)}).join('')}
+  <div class="ringc stack">${A('h2',1.2,6.2,'이스라엘','scale')}${A('h2 g',6.6,null,'나','scale')}</div>
+ </div>
+ <div class="side">
+  ${A('h3',.4,null,'이스라엘의 악순환은<br>사실 ‘나’의 모습','up')}
+  ${A('lead',4.2,null,'이것은 <b>거울</b>입니다.','blur')}
+  ${A('lead',6.8,null,'“이스라엘이 그랬다”가 아니라<br><b>“나 역시 그렇다”</b>','blur')}
+  ${A('sub',9,null,'결국 가장 깊은 우상은<br>“하나님 자리에 앉은 나 자신”입니다.','blur')}
+ </div>
+</div>`,update:(lt,el)=>{
+  const a=-Math.PI/2+lt*1.15, o=el.querySelector('.orb');o.setAttribute('cx',50+34*Math.cos(a));o.setAttribute('cy',50+34*Math.sin(a));
+  const k=((a+Math.PI/2)/(2*Math.PI/5)%5+5)%5;
+  el.querySelectorAll('[data-cyc]').forEach(n=>{const i=+n.dataset.cyc;let dd=Math.abs(k-i);dd=Math.min(dd,5-dd);n.style.color=dd<.5?'var(--gold-hi)':'#d8d0c2'});
+}});
+
+const CORE=[
+ {eb:'복음의 핵심 ①',t:'누구도 의롭지 않다',q:'의인은 없나니 하나도 없으며 … 모든 사람이 죄를 범하였으매 하나님의 영광에 이르지 못하더니',c:'로마서 3:10, 23',g:'#e87a5d'},
+ {eb:'복음의 핵심 ②',t:'은혜로, 노력이 아니라 선물로',q:'너희는 그 은혜에 의하여 믿음으로 말미암아 구원을 받았으니 … 행위에서 난 것이 아니니',c:'에베소서 2:8-9',g:'#f2c46d'}
+];
+CORE.forEach((c,i)=>PLAN.push({id:'core'+i,dur:7.5,glow:c.g,html:()=>`<div class="scene" style="padding:0 120px">
+ ${A('eyebrow',.2,null,c.eb,'fade')}<div style="height:34px"></div>
+ ${A('h2',.5,null,c.t,'words')}<div style="height:50px"></div>
+ ${A('vq',2,null,'“'+c.q+'”','blur')}${A('cite',2.6,null,c.c+' (개역개정)','fade')}
+</div>`}));
+
+PLAN.push({id:'crux',dur:22,glow:'#f2c46d',html:()=>`<div class="scene crux">
+ <svg class="cross" viewBox="0 0 200 200">
+  <g class="cdots">${EP.map((e,i)=>`<circle r="3.4" fill="${e.c}" data-i="${i}"/>`).join('')}</g>
+  <path class="cv" d="M100 10 V196" pathLength="1" fill="none" stroke="var(--gold)" stroke-width="7" stroke-linecap="round"/>
+  <path class="ch" d="M48 62 H152" pathLength="1" fill="none" stroke="var(--gold)" stroke-width="7" stroke-linecap="round"/>
+ </svg>
+ <div class="stack">
+  ${A('h2',.4,4.6,'성경 전체가<br>한 곳을 가리킵니다.','words')}
+  <div>${A('lead',5.1,10.2,'사람은 스스로 죄의 악순환을 끊지 못했고,<br>누구도 의롭지 못했습니다.','blur')}<div style="height:30px"></div>${A('h2',6.6,10.2,'그래서 누군가<br><b>대신 그 값을 치러야</b> 했습니다.','blur')}</div>
+  ${A('h2',10.8,15.4,'그 십자가에 달려야 했던 사람은<br>바로 <span class="me">나</span>였습니다.','words')}
+  <div>${A('h2',16,null,'예수님은 <b>나의 죄</b>를 대신 지고<br>그 자리에 못 박히셨습니다.','blur')}${A('vq',17.6,null,'“그가 찔림은 우리의 허물 때문이요 그가 상함은 우리의 죄악 때문이라 … 그가 채찍에 맞으므로 우리는 나음을 받았도다”<div class="cite">이사야 53:5 (개역개정)</div>','up')}</div>
+ </div>
+</div>`,update:(lt,el)=>{
+  // the 13 scene colours gather from a line into one point, then the cross is drawn from there
+  const g=eio((lt-.3)/3.2), cs=el.querySelectorAll('.cdots circle');
+  cs.forEach((c,i)=>{const x0=10+i*15,y0=62,x=x0+(100-x0)*g,y=y0;c.setAttribute('cx',x);c.setAttribute('cy',y);c.setAttribute('opacity',(1-eio((lt-3.2)/.8)).toFixed(3))});
+  const p=eo((lt-3.2)/1.6),q=eo((lt-3.8)/1.4);
+  const cv=el.querySelector('.cv'),ch=el.querySelector('.ch');
+  cv.style.strokeDasharray='1';cv.style.strokeDashoffset=1-p;ch.style.strokeDasharray='1';ch.style.strokeDashoffset=1-q;
+  const glow=4+10*eo((lt-3.5)/2)+6*Math.max(0,Math.sin((lt-10.8)*1.4))*eo((lt-10.8));
+  el.querySelector('.cross').style.filter=`drop-shadow(0 0 ${glow.toFixed(1)}px rgba(242,196,109,.75))`;
+}});
+
+PLAN.push({id:'done',dur:11,glow:'#ffe2a1',bright:true,html:()=>`<div class="scene done" style="padding:0 120px">
+ ${A('h1',.5,null,'“다 이루었다”','scale')}
+ ${A('cite',1.6,null,'요한복음 19:30 (개역개정)','fade')}
+ ${A('lead',3.2,null,'내가 치를 수 없는 죄의 값을<br>예수님이 십자가에서 대신 치르시고,<br><b>부활로 죽음을 이기셨습니다.</b>','blur')}
+ ${A('sub',7,null,'“우리가 아직 죄인 되었을 때에 그리스도께서 우리를 위하여 죽으심으로” — 로마서 5:8','fade','div','style="margin-top:40px"')}
+</div>`});
+
+const PRAY=['하나님,','저는 스스로를 구원할 수 없는 죄인임을 인정합니다.','예수님이 저를 위해 십자가에서 죽으시고 다시 살아나신 것을 믿습니다.','제 모든 죄를 용서해 주시고, 이제 제 삶의 주인이 되어 주세요.','저를 하나님의 자녀로 받아 주시고, 새로운 삶을 살게 해 주세요.','예수님의 이름으로 기도합니다. 아멘.'];
+const P0=8.6, PSTEP=[2.2,4.4,5.2,5,5,3.6];
+const PT=PSTEP.reduce((a,s,i)=>(a.push(i?a[i-1]+PSTEP[i-1]:P0),a),[]);
+const PEND=PT[5]+PSTEP[5];
+PLAN.push({id:'respond',dur:PEND+7.5,glow:'#f2c46d',html:()=>`<div class="scene respond" style="padding:0 90px">
+ <div class="stack">
+  <div>${A('h2',.4,7.6,'그래서, 나는 어떻게?','words')}<div style="height:50px"></div>${A('lead',2.2,7.6,'이 사랑은 정보가 아니라 <b>초대</b>입니다.','blur')}<div style="height:20px"></div>${A('sub',4,7.6,'나를 대신해 못 박히신 그 사랑이 마음에 닿았다면,<br>지금 이 기도를 한 문장씩 천천히 따라 드려 보세요.','blur')}</div>
+  <div>${A('eyebrow prayhead',P0-.4,PEND+.3,'영접 기도','fade')}
+   <div class="prayer">${PRAY.map((l,i)=>A('pl'+(i==5?' amen':''),PT[i],PEND+.3,esc(l),'blur','div',`data-pl="${i}"`)).join('')}</div></div>
+  <div>${A('h3',PEND+1,null,'이 기도를 진심으로 드렸다면,<br>성경은 당신이 <b>하나님의 자녀가 되었다</b>고 말합니다.','blur')}<div style="height:40px"></div>${A('sub',PEND+3.4,null,'이제 혼자가 아닙니다 — 가까운 교회를 찾아<br>함께 신앙의 길을 걸어가세요.','blur')}</div>
+ </div>
+</div>`,update:(lt,el)=>{
+  // the line being prayed stays bright; earlier lines settle back
+  el.querySelectorAll('[data-pl]').forEach(n=>{const i=+n.dataset.pl;if(i<5&&lt>PT[i+1]){const k=eo((lt-PT[i+1])/.8);n.style.opacity=(parseFloat(n.style.opacity)*(1-.62*k)).toFixed(3)}});
+}});
+
+PLAN.push({id:'end',dur:12,glow:'#f2c46d',bright:true,html:()=>`<div class="scene end" style="padding:0 120px">
+ ${A('vq',.4,null,'“영접하는 자 곧 그 이름을 믿는 자들에게는<br>하나님의 자녀가 되는 권세를 주셨으니”','blur')}
+ ${A('cite',1.6,null,'요한복음 1:12 (개역개정)','fade')}
+ ${A('brand',4,null,'한눈에 보는 성경 이야기','up')}
+ ${A('url',4.8,null,'one-scroll-bible.com','up')}
+ ${A('legal',5.6,null,'성경 인용: 「성경전서 개역개정판」 © 대한성서공회. 저작권은 대한성서공회에 있으며, 출처를 밝혀 인용했습니다.','fade')}
+</div>`});
+
+/* ===== build ===== */
+let SC=[], DUR=0, TL_RANGE=[0,0];
+function build(){
+  const st=Q('#stage'); st.className=ori;
+  let t=0; SC=[]; const box=Q('#scenes'), gl=Q('#glows'); box.innerHTML=''; gl.innerHTML='';
+  for(const p of PLAN){
+    const w=document.createElement('div'); w.innerHTML=p.html().trim(); const el=w.firstElementChild; box.appendChild(el);
+    if(ori==='v'&&el.classList.contains('ep'))el.style.justifyContent='center';
+    const anims=[...el.querySelectorAll('.a')].map(n=>{
+      const o={el:n,in:+n.dataset.in,out:n.dataset.out!=null?+n.dataset.out:p.dur-.75,fx:n.dataset.fx};
+      if(o.fx==='words'){splitWords(n);o.words=[...n.querySelectorAll('.w')]}
+      return o;
+    });
+    const g=document.createElement('div'); g.className='glow';
+    const pos=p.ep!=null?(ori==='h'?'26% 46%':'50% 30%'):(p.id==='crux'?(ori==='h'?'50% 28%':'50% 25%'):'50% 46%');
+    g.style.background=`radial-gradient(${ori==='h'?'900px 760px':'900px 900px'} at ${pos},${hex(p.glow,p.bright?.38:.26)},transparent 70%)`;
+    gl.appendChild(g);
+    SC.push({...p,start:t,el,anims,g}); t+=p.dur;
+  }
+  DUR=t;
+  const e0=SC.find(s=>s.id==='ep0'), f=SC.find(s=>s.id==='fulfil'); TL_RANGE=[e0.start,f.start+f.dur];
+  // timeline
+  const tl=Q('#tl'); tl.querySelectorAll('.dot,.lab').forEach(n=>n.remove());
+  EP.forEach((e,i)=>{const x=(i/12*100)+'%';
+    const d=document.createElement('div');d.className='dot'+(e.k==='jesus'?' cross':'');d.style.left=x;tl.appendChild(d);
+    const l=document.createElement('div');l.className='lab';l.style.left=x;l.textContent=TL_SHORT[i];tl.appendChild(l)});
+  sizeSky(); fit(); render(cur);
+}
+
+// wrap each word of every text node in a span, leaving inline tags (<b>, <br>, spans) intact
+function splitWords(node){
+  [...node.childNodes].forEach(c=>{
+    if(c.nodeType===3){const f=document.createDocumentFragment();
+      c.textContent.split(/(\s+)/).forEach(t=>{if(!t)return;if(/^\s+$/.test(t)){f.appendChild(document.createTextNode(t));return}
+        const sp=document.createElement('span');sp.className='w';sp.textContent=t;f.appendChild(sp)});
+      c.replaceWith(f)}
+    else if(c.nodeType===1&&c.tagName!=='BR')splitWords(c);
+  });
+}
+
+/* ===== icon animation ===== */
+function drawIcon(el,k,lt){
+  const svg=el.querySelector('[data-art] svg'); if(!svg)return;
+  const ds=svg.querySelectorAll('.d'); const n=ds.length, span=Math.min(1.4,.06*n+.6);
+  ds.forEach((d,i)=>{const p=eo((lt-.1-span*i/Math.max(1,n))/1.1);d.style.strokeDasharray='1';d.style.strokeDashoffset=(1-p).toFixed(4)});
+  const set=(sel,tr)=>svg.querySelectorAll(sel).forEach(g=>g.setAttribute('transform',tr));
+  const after=eo((lt-1.4)/1.6);
+  set('.spin',`rotate(${lt*6} 100 100)`); set('.spin2',`rotate(${lt*40} 100 100)`);
+  set('.lft',`translate(${-after*10} 0) rotate(${-after*4} 100 100)`); set('.rgt',`translate(${after*10} 0) rotate(${after*4} 100 100)`);
+  set('.flick',`translate(0 ${Math.sin(lt*7)*1.2}) scale(1 ${1+Math.sin(lt*5.3)*.02})`);
+  set('.rise',`translate(0 ${(1-eo((lt-.2)/3))*34})`);
+  set('.rip',`translate(100 130) scale(${1+.08*Math.sin(lt*2)}) translate(-100 -130)`);
+  set('.rays',`rotate(${lt*4} 100 78)`);
+  svg.querySelectorAll('.tw').forEach(g=>g.style.opacity=(.75+.25*Math.sin(lt*3)).toFixed(3));
+  svg.style.filter=`drop-shadow(0 0 ${(6+8*after).toFixed(1)}px var(--c))`;
+}
+
+/* ===== element motion ===== */
+function fx(el,pin,pout,f){
+  const o=pin*(1-pout); el.style.opacity=o.toFixed(3);
+  let tr='',fl='';
+  if(f==='up'){tr=`translateY(${((1-pin)*34-pout*16).toFixed(1)}px)`}
+  else if(f==='blur'){tr=`translateY(${((1-pin)*16-pout*10).toFixed(1)}px)`;const b=(1-pin)*9+pout*7;if(b>.05)fl=`blur(${b.toFixed(2)}px)`}
+  else if(f==='scale'){tr=`scale(${(.9+.1*pin+.05*pout).toFixed(4)})`;const b=(1-pin)*7+pout*9;if(b>.05)fl=`blur(${b.toFixed(2)}px)`}
+  el.style.transform=tr; el.style.filter=fl;
+}
+function render(t){
+  drawSky(t);
+  for(const s of SC){
+    const lt=t-s.start;
+    // background glow crossfades with ~1s overlap
+    s.g.style.opacity=(eio((lt+.6)/1.2)*(1-eio((lt-s.dur+.4)/1.2))).toFixed(3);
+    const on=lt>-.05&&lt<s.dur+.05; s.el.style.visibility=on?'visible':'hidden'; if(!on)continue;
+    for(const a of s.anims){
+      const pin=eo((lt-a.in)/.9), pout=eio((lt-a.out)/.65);
+      if(a.words){a.words.forEach((w,i)=>fx(w,eo((lt-a.in-i*.09)/.85),0,'blur'));a.el.style.opacity=(1-pout).toFixed(3);a.el.style.transform=`translateY(${(-pout*14).toFixed(1)}px)`;const b=pout*8;a.el.style.filter=b>.05?`blur(${b.toFixed(2)}px)`:''}
+      else fx(a.el,pin,pout,a.fx);
+    }
+    if(s.update)s.update(lt,s.el);
+  }
+  // timeline
+  const tl=Q('#tl'); const [t0,t1]=TL_RANGE;
+  tl.style.opacity=(eio((t-t0+.4)/1)*(1-eio((t-t1+.6)/.9))).toFixed(3);
+  let pos=0;
+  for(const s of SC){if(s.ep==null)continue;const lt=t-s.start;if(lt>=0)pos=s.ep+(lt>s.dur-.9?eio((lt-s.dur+.9)/.9):0)}
+  if(t>=SC.find(s=>s.id==='fulfil').start)pos=10;
+  pos=Math.min(12,Math.max(0,pos));
+  const inF=t>=SC.find(s=>s.id==='fulfil').start;
+  tl.querySelector('.fill').style.width=(pos/12*100)+'%';
+  tl.querySelectorAll('.dot').forEach((d,i)=>{const near=Math.max(0,1-Math.abs(pos-i));const done=i<=pos+.02;
+    const prom=inF&&[1,2,3,5,7,10].includes(i);
+    d.style.background=prom||done?EP[i].c:'#3a4252';d.style.transform=`scale(${(1+near*.9+(prom?.5:0)).toFixed(3)})`;
+    d.style.boxShadow=near>.1||prom?`0 0 ${(18*Math.max(near,prom?.8:0)).toFixed(1)}px ${EP[i].c}`:'none'});
+  tl.querySelectorAll('.lab').forEach((l,i)=>{const near=Math.max(0,1-Math.abs(pos-i));
+    l.style.opacity=(ori==='v'?near:.45+.55*near).toFixed(3);l.style.color=near>.5?EP[i].c:'var(--muted)'});
+}
+
+/* ===== sky: deterministic starfield + slow colour drift (dark → dawn) ===== */
+let cv,cx,stars=[];
+function rng(seed){return()=>{seed=(seed*16807)%2147483647;return(seed-1)/2147483646}}
+function sizeSky(){cv=Q('#sky');const W=ori==='h'?1920:1080,H=ori==='h'?1080:1920;cv.width=W;cv.height=H;cx=cv.getContext('2d');
+  const r=rng(7);stars=[];for(let i=0;i<300;i++)stars.push({x:r()*W,y:r()*H,s:r()*1.6+.35,p:r()*6.28,v:.6+r()*1.8,dr:4+r()*10})}
+const MOOD=[[0,'#0d1424','#090c14'],[30,'#101528','#080a12'],[60,'#0c0f1a','#07080e'],[110,'#0d1222','#0a0c15'],[140,'#160f12','#0a0b12'],[190,'#1d1710','#0b0b12'],[230,'#20180c','#0d0c12'],[300,'#1c160d','#0b0b12']];
+function mix(a,b,k){const p=s=>[1,3,5].map(i=>parseInt(s.slice(i,i+2),16));const x=p(a),y=p(b);return `rgb(${x.map((v,i)=>Math.round(v+(y[i]-v)*k)).join(',')})`}
+function drawSky(t){
+  const W=cv.width,H=cv.height; let i=0; while(i<MOOD.length-2&&t>MOOD[i+1][0])i++;
+  const a=MOOD[i],b=MOOD[i+1],k=clamp((t-a[0])/(b[0]-a[0]));
+  const gr=cx.createLinearGradient(0,0,0,H);gr.addColorStop(0,mix(a[1],b[1],k));gr.addColorStop(1,mix(a[2],b[2],k));
+  cx.fillStyle=gr;cx.fillRect(0,0,W,H);
+  for(const s of stars){const y=(s.y-t*s.dr+H*10)%H;const al=.25+.55*(.5+.5*Math.sin(t*s.v+s.p));
+    cx.globalAlpha=al;cx.fillStyle='#fff7e6';cx.beginPath();cx.arc(s.x,y,s.s,0,6.283);cx.fill()}
+  cx.globalAlpha=1;
+}
+
+/* ===== playback ===== */
+let cur=0,playing=true,last=0;
+const RENDER=/[?&]render=1/.test(location.search);
+const OQ=(location.search.match(/[?&]o=(h|v)/)||[])[1];
+function fit(){
+  if(RENDER){Q('#stage').style.transform='none';return}
+  const W=ori==='h'?1920:1080,H=ori==='h'?1080:1920,vw=innerWidth,vh=innerHeight,s=Math.min(vw/W,vh/H);
+  const st=Q('#stage');st.style.transform=`translate(${(vw-W*s)/2}px,${(vh-H*s)/2}px) scale(${s})`;
+}
+function fmt(s){s=Math.max(0,Math.floor(s));return Math.floor(s/60)+':'+String(s%60).padStart(2,'0')}
+function loop(now){
+  if(playing){cur+=Math.min(.1,(now-last)/1000);if(cur>=DUR)cur=0}
+  last=now; render(cur);
+  Q('#seek').value=Math.round(cur/DUR*1000); Q('#tm').textContent=fmt(cur)+' / '+fmt(DUR);
+  requestAnimationFrame(loop);
+}
+let hideT;function poke(){Q('#ui').classList.remove('hide');clearTimeout(hideT);hideT=setTimeout(()=>playing&&Q('#ui').classList.add('hide'),2600)}
+function setPlay(p){playing=p;Q('#bPlay').textContent=p?'❚❚':'▶';Q('#bPlay').setAttribute('aria-label',p?'일시정지':'재생');poke()}
+window.seek=t=>{cur=t;render(t)};
+window.addEventListener('resize',()=>{if(!RENDER&&!OQ){const want=innerWidth>=innerHeight?'h':'v';if(want!==ori&&!manualOri){ori=want;build()}}fit()});
+let manualOri=false;
+(async function init(){
+  if(RENDER)document.documentElement.classList.add('render');
+  ori=OQ||(innerWidth>=innerHeight?'h':'v');
+  try{await document.fonts.load('900 40px "Noto Serif KR"');await document.fonts.load('400 40px "Noto Sans KR"');await document.fonts.ready}catch(e){}
+  build();
+  Q('#bOri').textContent=ori==='h'?'세로로':'가로로';
+  window.DURATION=DUR; window.__ready=true;
+  if(RENDER)return;
+  Q('#bPlay').onclick=()=>setPlay(!playing);
+  Q('#seek').oninput=e=>{cur=e.target.value/1000*DUR;poke()};
+  Q('#bOri').onclick=()=>{manualOri=true;ori=ori==='h'?'v':'h';Q('#bOri').textContent=ori==='h'?'세로로':'가로로';build();poke()};
+  Q('#stage').addEventListener('click',()=>setPlay(!playing));
+  addEventListener('pointermove',poke);addEventListener('keydown',e=>{if(e.code==='Space'){e.preventDefault();setPlay(!playing)}});
+  poke(); last=performance.now(); requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>

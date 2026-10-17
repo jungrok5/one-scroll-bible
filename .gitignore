@@ -14,6 +14,7 @@
 !/.claude/
 !/about/
 !/maps/
+!/motion/
 
 # /about/ and /maps/ are committed SOURCE (ko root + assets), but their
 # per-language sub-pages (/about/<code>/, /maps/<code>/) are generated → ignore.
@@ -38,3 +39,6 @@ Thumbs.db
 node_modules/
 /package-lock.json
 /tmp/
+
+# Motion-graphic recordings (node motion/render.mjs) — large binaries, not committed
+/motion/out/

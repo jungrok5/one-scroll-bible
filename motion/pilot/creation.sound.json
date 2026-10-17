@@ -1,0 +1,22 @@
+{ "duration": 35,
+  "music": [
+    { "id": "m1", "at": 0, "len": 6.8, "db": -8, "fin": 1.0, "fout": 0.3,
+      "prompt": "Near-silent dark ambient: a very deep sub-bass drone and slow breathing low strings at the edge of hearing, vast and still, no rhythm; in the last two seconds a single high glassy sustained tone fades in and rises slightly in pitch" },
+    { "id": "m2", "at": 6.8, "len": 19.6, "db": -2, "fin": 0.05, "fout": 2.0,
+      "prompt": "Cinematic orchestral score that begins instantly at full force on a radiant major chord: full strings, warm horns and wordless choir 'ah' with a timpani swell, overwhelming but glorious and joyful, not violent; after five seconds it opens into wonder: shimmering high strings, harp and celesta arpeggios, slow tempo around 60 BPM, a sense of endless space, a second gentle crest around 8 seconds in, then thinning into airy floating pads with soft choir as it ends" },
+    { "id": "m3", "at": 26.4, "len": 8.6, "db": -4, "fin": 1.2, "fout": 1.5,
+      "prompt": "Tender pastoral resolution in a major key: solo piano and warm string ensemble, a simple soft flute melody, peaceful morning, slow, ending on a long soft sustained chord" }
+  ],
+  "sfx": [
+    { "id": "s1", "at": 0.2, "len": 6.5, "db": -16, "loop": false,
+      "prompt": "Very low, dark, calm open sea at night: slow deep water swells, almost no waves, vast and quiet" },
+    { "id": "s2", "at": 4.9, "len": 2.0, "db": -8, "loop": false,
+      "prompt": "A single delicate crystalline shimmer, like one glass bell tone swelling softly into light" },
+    { "id": "s3", "at": 6.8, "len": 4.0, "db": -4, "loop": false,
+      "prompt": "Enormous soft whoosh of warm light with a deep sub-bass bloom, smooth and glowing, no crack, no explosion, no debris" },
+    { "id": "s4", "at": 24.2, "len": 2.6, "db": -8, "loop": false,
+      "prompt": "Rushing high-altitude wind as a camera falls through clouds, airy whoosh that rises and opens up" },
+    { "id": "s5", "at": 26.6, "len": 8.0, "db": -14, "loop": false,
+      "prompt": "Gentle morning birdsong in a peaceful meadow, soft breeze through leaves, distant stream" }
+  ],
+  "ducks": [ { "from": 6.2, "to": 6.8, "db": -22 } ] }

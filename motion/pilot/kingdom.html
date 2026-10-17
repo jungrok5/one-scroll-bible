@@ -23,7 +23,7 @@ let vellum, grain, goldPat, goldPatC, goldTex, glintT = 0;
 // ---------- layout per orientation ----------
 const L = V ? {
   bar: { x: 44, y: 150, w: 38 }, mb: { x: 150, y: 250, w: 800, h: 960 },
-  col: { x: 150, w: 820, rub: 1330, top: 1380, size: 64, cite: 22 },
+  col: { x: 150, w: 820, rub: 1330, top: 1380, size: 56, cite: 22 },
   big: { x: 50, y: 170, w: 980, h: 1600 }
 } : {
   bar: { x: 64, y: 58, w: 40 }, mb: { x: 230, y: 150, w: 620, h: 800 },
@@ -213,8 +213,8 @@ function samuel(x, px, py, s, t, pour) {
   // robe (lapis) and mantle (rose) — long, swaying gothic folds
   fillInk(x, P2('M -70 -560 C -110 -400 -130 -180 -150 0 L 130 0 C 110 -160 100 -360 60 -560 Q 0 -590 -70 -560 Z'), LAP, 3);
   line(x, 'M -40 -400 Q -70 -200 -90 -6 M 10 -380 Q 0 -200 10 -4 M 50 -360 Q 70 -180 90 -6', 2.4, '#10224f', .9);
-  fillInk(x, P2('M -76 -566 C -120 -420 -100 -260 -60 -170 C -20 -120 40 -150 70 -200 C 90 -260 80 -330 70 -380 C 40 -330 0 -330 -30 -380 C -40 -440 -30 -520 -10 -580 Z'), ROSE, 3);
-  line(x, 'M -60 -470 q 20 120 40 170 M -20 -240 q 30 30 70 0 M -84 -400 q 0 100 30 180', 2.2, '#7a3a34', .9);
+  fillInk(x, P2('M -76 -566 C -110 -460 -122 -320 -134 -150 C -100 -128 -50 -140 -16 -176 C 14 -220 34 -300 42 -380 C 50 -440 46 -520 30 -566 Q -20 -590 -76 -566 Z'), ROSE, 3);
+  line(x, 'M -60 -480 q -20 160 -40 316 M -20 -470 q -6 150 -10 280 M 20 -440 q 0 120 -14 230', 2.2, '#7a3a34', .9);
   // feet
   fillInk(x, P2('M -60 0 l 0 -14 l 50 0 q 20 6 20 14 Z'), '#3a2a20', 2); fillInk(x, P2('M 30 0 l 0 -14 l 54 0 q 20 6 18 14 Z'), '#3a2a20', 2);
   // arms raised forward holding the horn
@@ -241,12 +241,13 @@ function samuel(x, px, py, s, t, pour) {
 }
 function kneeling(x, px, py, s, t, bow) {
   x.save(); x.translate(px, py); x.scale(s, s);
-  // kneeling upright on both knees, facing left: shins and soles behind on the ground, hands joined, head bowed
-  fillInk(x, P2('M -40 -6 C -40 -40 -10 -50 30 -46 L 112 -34 C 128 -32 136 -18 134 0 L -40 0 Z'), '#7a5a3a', 2);
-  fillInk(x, P2('M 110 -40 C 132 -42 150 -30 150 -6 L 150 0 L 116 0 Z'), '#3a2a20', 2);
-  const tun = P2('M -14 -396 C 30 -404 56 -380 60 -330 C 64 -270 60 -220 62 -170 C 64 -110 80 -60 96 -30 C 104 -14 92 -2 70 -2 L -84 -2 C -100 -2 -102 -24 -96 -46 C -86 -90 -64 -130 -56 -180 C -48 -240 -52 -300 -52 -340 C -50 -376 -36 -392 -14 -396 Z');
+  // kneeling upright on both knees, facing left: knee-length tunic, thighs down to the knees, shins and soles behind on the ground
+  fillInk(x, P2('M -56 -110 L 46 -110 L 34 -16 Q -10 0 -58 -8 Z'), '#7a5a3a', 2);
+  fillInk(x, P2('M -60 -34 C -46 -48 0 -48 40 -42 L 120 -30 L 124 0 L -60 0 Z'), '#6e5034', 2);
+  fillInk(x, P2('M 112 -38 C 142 -40 158 -26 156 0 L 116 0 Z'), '#3a2a20', 2);
+  const tun = P2('M -14 -396 C 30 -404 56 -380 60 -330 C 64 -270 60 -220 64 -170 C 70 -136 80 -104 74 -76 Q 10 -64 -64 -76 C -70 -106 -62 -146 -56 -180 C -48 -240 -52 -300 -52 -340 C -50 -376 -36 -392 -14 -396 Z');
   fillInk(x, tun, VERM, 2.6);
-  line(x, 'M 30 -300 q -10 120 -30 290 M 50 -180 q 10 80 30 160 M -50 -160 q -20 60 -40 150 M -40 -200 q 50 6 96 -4', 2.2, '#7a1c0c', .85);
+  line(x, 'M 30 -300 q -10 100 -26 226 M 50 -170 q 10 50 16 96 M -48 -160 q -6 40 -12 86', 2.2, '#7a1c0c', .85);
   fillInk(x, P2('M -54 -214 L 62 -206 L 62 -190 L -56 -198 Z'), '#5a3216', 1.6);
   // neck and head, bowed
   fillInk(x, P2('M -14 -420 L 12 -420 L 14 -388 L -16 -388 Z'), FLESH, 1.6);
@@ -402,6 +403,16 @@ function shotShepherd(x, t) {
   });
   x.restore();
 }
+function house(x, px, py, s) {      // Jesse's house in Bethlehem: a small gothic house and tower, vermilion roofs
+  x.save(); x.translate(px, py); x.scale(s, s);
+  fillInk(x, P2('M -110 0 L -110 -150 L 10 -150 L 10 0 Z'), '#e6d8b8', 2.4); fillInk(x, P2('M -126 -146 L -50 -230 L 26 -146 Z'), VERM, 2.4);
+  fillInk(x, P2('M 10 0 L 10 -260 L 90 -260 L 90 0 Z'), '#d6c6a2', 2.4); fillInk(x, P2('M 0 -256 L 50 -340 L 100 -256 Z'), VERM, 2.4);
+  gold(x, ell(50, -346, 9, 9), { lw: 1.4 });
+  [[-80, -110], [-30, -110], [36, -210], [64, -210]].forEach(([wx, wy]) => fillInk(x, P2(`M ${wx - 11} ${wy + 40} L ${wx - 11} ${wy} Q ${wx} ${wy - 16} ${wx + 11} ${wy} L ${wx + 11} ${wy + 40} Z`), LAPD, 1.6));
+  fillInk(x, P2('M 34 0 L 34 -70 Q 50 -92 66 -70 L 66 0 Z'), '#6a4428', 1.8);
+  line(x, 'M -110 -60 L 10 -60 M -110 -100 L 10 -100 M 10 -120 L 90 -120 M 10 -180 L 90 -180', 1.2, INK, .4);
+  x.restore();
+}
 function shotAnoint(x, t) {
   const lt = t - S1, b = L.big, z = lerp(1.04, 1.0, eo(lt / 8));
   x.drawImage(vellum, 0, 0);
@@ -410,19 +421,23 @@ function shotAnoint(x, t) {
   frame(x, b, m => {
     m.translate(b.x, b.y); goldGround(m, b.w, b.h, 52);
     // a band of heaven (lapis cloud) with rays falling on David
-    const k = V ? b.w / 1000 : b.h / 1000, gx = b.w / 2, gy = V ? b.h * .80 : b.h * .82;
-    const dx = gx + 150 * k, hr = 150 * k, cl = new Path2D(); cl.moveTo(dx - hr * 1.3, -10);
-    for (let i = 0; i <= 7; i++) { const a0 = Math.PI - i / 7 * Math.PI, px = dx + Math.cos(a0) * hr * 1.3, py = Math.sin(a0) * hr * .7 + 6 * k; i ? cl.quadraticCurveTo(dx + Math.cos(a0 + Math.PI / 14) * hr * 1.5, Math.sin(a0 + Math.PI / 14) * hr * .9 + 6 * k, px, py) : cl.lineTo(px, py); }
-    cl.lineTo(dx + hr * 1.3, -10); cl.closePath(); fillInk(m, cl, LAP, 2.4);
-    m.save(); m.clip(cl); for (let i = 0; i < 9; i++) { const st = new Path2D(), sx = dx + (i - 4) * 30 * k, sy = 20 * k + (i % 2) * 22 * k; for (let q = 0; q < 10; q++) { const a = q * Math.PI / 5 - Math.PI / 2, rr = q % 2 ? 3 * k : 7 * k; q ? st.lineTo(sx + Math.cos(a) * rr, sy + Math.sin(a) * rr) : st.moveTo(sx + Math.cos(a) * rr, sy + Math.sin(a) * rr); } st.closePath(); gold(m, st, { lw: .6 }); } m.restore();
+    const k = V ? b.w / 820 : b.h / 1000, gx = V ? b.w * .44 : b.w / 2, gy = V ? b.h * .76 : b.h * .82;
+    const dx = gx + 150 * k, hr = 130 * k, hcx = dx + (V ? 150 : 260) * k, cl = new Path2D(); cl.moveTo(hcx - hr * 1.3, -10);
+    for (let i = 0; i <= 7; i++) { const a0 = Math.PI - i / 7 * Math.PI, px = hcx + Math.cos(a0) * hr * 1.3, py = Math.sin(a0) * hr * .7 + 6 * k; i ? cl.quadraticCurveTo(hcx + Math.cos(a0 + Math.PI / 14) * hr * 1.5, Math.sin(a0 + Math.PI / 14) * hr * .9 + 6 * k, px, py) : cl.lineTo(px, py); }
+    cl.lineTo(hcx + hr * 1.3, -10); cl.closePath(); fillInk(m, cl, LAP, 2.4);
+    m.save(); m.clip(cl); for (let i = 0; i < 9; i++) { const st = new Path2D(), sx = hcx + (i - 4) * 26 * k, sy = 20 * k + (i % 2) * 22 * k; for (let q = 0; q < 10; q++) { const a = q * Math.PI / 5 - Math.PI / 2, rr = q % 2 ? 3 * k : 7 * k; q ? st.lineTo(sx + Math.cos(a) * rr, sy + Math.sin(a) * rr) : st.moveTo(sx + Math.cos(a) * rr, sy + Math.sin(a) * rr); } st.closePath(); gold(m, st, { lw: .6 }); } m.restore();
     const ray = ss(2.6, 4.2, lt);
-    if (ray > 0) { m.save(); m.globalAlpha = ray; const ox = dx, oy = hr * .7, hy = gy - 8 * k - 520 * 1.12 * k;
-      for (let i = -3; i <= 3; i++) { const p = new Path2D(), ex = ox + i * 44 * k * ray, ey = lerp(oy, hy, ray), wd = (13 - Math.abs(i) * 2) * k; p.moveTo(ox + i * 26 * k - wd, oy); p.lineTo(ox + i * 26 * k + wd, oy); p.lineTo(ex + 1.2, ey); p.lineTo(ex - 1.2, ey); p.closePath(); gold(m, p, { lw: 1 }); }
+    if (ray > 0) { m.save(); m.globalAlpha = ray; const ox = hcx, oy = hr * .7, hy = gy - 8 * k - 520 * 1.12 * k;
+      m.globalCompositeOperation = 'screen'; const gw = m.createRadialGradient(ox, oy, 0, ox, oy, (hy - oy) * 1.1); gw.addColorStop(0, `rgba(255,246,200,${.5 * ray})`); gw.addColorStop(1, 'rgba(255,240,190,0)'); m.fillStyle = gw; m.fillRect(ox - 600 * k, oy, 1200 * k, hy - oy + 200 * k); m.globalCompositeOperation = 'source-over';
+      for (let i = -3; i <= 3; i++) { const p = new Path2D(), ex = lerp(ox + i * 26 * k, dx - 6 * k + i * 30 * k, ray), ey = lerp(oy, hy, ray), wd = (13 - Math.abs(i) * 2) * k; p.moveTo(ox + i * 26 * k - wd, oy); p.lineTo(ox + i * 26 * k + wd, oy); p.lineTo(ex + 2, ey); p.lineTo(ex - 2, ey); p.closePath(); gold(m, p, { lw: 0 }); }
       m.restore(); }
     // the ground
     const gr = new Path2D(); gr.moveTo(-10, gy - 20 * k); gr.quadraticCurveTo(b.w / 2, gy - 60 * k, b.w + 10, gy - 20 * k); gr.lineTo(b.w + 10, b.h + 10); gr.lineTo(-10, b.h + 10); gr.closePath(); fillInk(m, gr, GRN, 2.4);
     m.save(); m.clip(gr); const r2 = rng(9); for (let i = 0; i < 90; i++) { const fx = r2() * b.w, fy = gy - 30 * k + r2() * (b.h - gy + 40 * k); line(m, `M${fx} ${fy} l -5 -10 M${fx} ${fy} l 0 -12 M${fx} ${fy} l 5 -10`, 1.6, GRND, .9);
       if (i % 3 === 0) { m.fillStyle = i % 2 ? WHT : VERM; m.beginPath(); m.arc(fx + 7, fy - 14, 3.6, 0, 6.28); m.fill(); } } m.restore();
+    house(m, V ? b.w * .86 : b.w * .84, gy - 30 * k, (V ? .8 : 1) * k);
+    if (!V) { sheep(m, b.w * .12, gy + 40 * k, .9 * k, 1, 1, lt, 7); sheep(m, b.w * .22, gy + 110 * k, 1.0 * k, -1, .4, lt, 8); sheep(m, b.w * .9, gy + 120 * k, .9 * k, -1, 1, lt, 9); }
+    else { sheep(m, b.w * .84, gy + 70 * k, .8 * k, -1, 1, lt, 7); }
     samuel(m, gx - 170 * k, gy - 6 * k, 1.12 * k, lt, pour);
     kneeling(m, dx, gy - 8 * k, 1.12 * k, lt, ss(1.6, 3, lt));
     // the oil: gold drops from the horn onto his head
@@ -479,6 +494,10 @@ function shotKing(x, t) {
       const sz = V ? 44 : 40;
       text(c, '“영원한 왕위”는 다윗의 자손으로 오신', L.col.x, L.col.top + kSize * .9, { align: 'left', size: sz, weight: 600, color: INK, alpha: pa });
       text(c, '예수님 안에서 성취됩니다', L.col.x, L.col.top + kSize * .9 + sz * 1.6, { align: 'left', size: sz, weight: 600, color: INK, alpha: pa });
+      const th = eio(clamp((t - 32.6) / 2.6)), ty = L.col.top + kSize * .9 + sz * 2.6;
+      if (th > 0) { c.save(); c.globalAlpha = pa; gold(c, rectP(L.col.x, ty, (W + 40 - L.col.x) * th, 5), { lw: 0 });
+        const hx = L.col.x + (W + 40 - L.col.x) * th, hg = c.createRadialGradient(hx, ty + 2, 0, hx, ty + 2, 40); hg.addColorStop(0, 'rgba(255,246,200,.9)'); hg.addColorStop(1, 'rgba(255,230,160,0)');
+        c.globalCompositeOperation = 'screen'; c.fillStyle = hg; c.fillRect(hx - 40, ty - 38, 80, 80); c.restore(); }
     }
   });
   x.restore();
@@ -500,9 +519,9 @@ function draw(ctx, t) {
   // chapter label
   const la = win(t, .8, 6.2, 1.2, 1.2), lx = V ? 110 : 150, ly = V ? 205 : 150;
   if (la > 0) {
-    ctx.save(); ctx.globalAlpha = la * .78; ctx.fillStyle = 'rgba(30,16,6,1)'; ctx.filter = 'blur(18px)'; ctx.fillRect(lx - 30, ly - 50, V ? 520 : 560, 110); ctx.restore();
-    text(ctx, '07  ·  통일 왕국', lx, ly, { align: 'left', size: 30, weight: 600, color: '#f8e8c4', alpha: la, ls: 4, shadow: 'rgba(20,10,0,.8)' });
-    text(ctx, '약 BC 1050–930  ·  사무엘상 – 열왕기상 11장', lx, ly + 44, { align: 'left', size: 22, font: "'Noto Sans KR',sans-serif", color: '#f0dcc0', alpha: la * .9, ls: 2, shadow: 'rgba(20,10,0,.8)' });
+    ctx.save(); ctx.globalAlpha = la * .9; ctx.fillStyle = '#efe0bc'; ctx.filter = 'blur(16px)'; ctx.fillRect(lx - 24, ly - 46, V ? 520 : 560, 104); ctx.restore();
+    text(ctx, '07  ·  통일 왕국', lx, ly, { align: 'left', size: 30, weight: 600, color: '#3a1e0c', alpha: la, ls: 4 });
+    text(ctx, '약 BC 1050–930  ·  사무엘상 – 열왕기상 11장', lx, ly + 44, { align: 'left', size: 22, font: "'Noto Sans KR',sans-serif", color: '#6a3a1c', alpha: la * .95, ls: 2 });
   }
   // cuts are hard; the scene opens from and closes to black
   const f = 1 - ss(0, 1.4, t) + ss(DUR - 1.3, DUR, t); if (f > 0) { ctx.fillStyle = `rgba(8,5,2,${clamp(f)})`; ctx.fillRect(0, 0, W, H); }

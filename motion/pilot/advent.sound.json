@@ -1,0 +1,26 @@
+{ "duration": 36,
+  "music": [
+    { "id": "m1", "at": 0, "len": 14.3, "db": -4, "fin": 1.5, "fout": 0.8,
+      "prompt": "Hushed sacred prelude in D Dorian: a very soft low organ pedal drone and an open-fifth hum, a lone wordless chant-like female voice singing a slow, unmetred line with long cathedral reverb, sparse harp notes; patient and expectant, almost still, slowly brightening, no drums, no piano" },
+    { "id": "m2", "at": 14.3, "len": 21.7, "db": -2, "fin": 0.2, "fout": 2.0,
+      "prompt": "Reverent, luminous nativity hymn: begins with one bright tubular bell and a shimmer of hand chimes, then a warm full organ swells gently under a soft wordless choir and rolling harp arpeggios in D major (Lydian colour), slow and tender, the swell peaks about 6 seconds in and settles into a calm glowing chord that holds and fades; awe and joy, no drums, no piano" }
+  ],
+  "sfx": [
+    { "id": "s1", "at": 0.5, "len": 14, "db": -14, "loop": false,
+      "prompt": "Large empty stone church at dawn, deep quiet room tone with long reverb, very faint distant birdsong outside the windows" },
+    { "id": "s2", "at": 3.2, "len": 3, "db": -10, "loop": false,
+      "prompt": "Single soft struck glass chime, low pitch, pure bell-like ring with long cathedral reverb" },
+    { "id": "s3", "at": 5.3, "len": 3, "db": -10, "loop": false,
+      "prompt": "Single soft struck glass chime, a step higher, pure bell-like ring with long cathedral reverb" },
+    { "id": "s4", "at": 7.4, "len": 3, "db": -10, "loop": false,
+      "prompt": "Single soft struck glass chime, mid pitch, pure bell-like ring with long cathedral reverb" },
+    { "id": "s5", "at": 9.5, "len": 3, "db": -10, "loop": false,
+      "prompt": "Single soft struck glass chime, higher pitch, pure bell-like ring with long cathedral reverb" },
+    { "id": "s6", "at": 11.6, "len": 3, "db": -10, "loop": false,
+      "prompt": "Single soft struck glass chime, high clear pitch, pure bell-like ring with long cathedral reverb" },
+    { "id": "s7", "at": 14.2, "len": 5, "db": -5, "loop": false,
+      "prompt": "One deep resonant church bell stroke with a bright crystalline shimmer of tiny glass chimes rising after it, long reverb tail" },
+    { "id": "s8", "at": 21.6, "len": 4, "db": -12, "loop": false,
+      "prompt": "Soft warm low air swell in a stone hall, like light filling a room, gentle and airy" }
+  ],
+  "ducks": [ { "from": 13.5, "to": 14.3, "db": -18 } ] }

@@ -241,11 +241,22 @@ function islandShot(ctx, t) {
       for (let s = 0; s <= 20; s++) { const a = a0 - s * .09, rr = 1.05 + .15 * Math.sin(i + s * .2), p = P(Math.cos(a) * rr, yy + .1 * Math.sin(a * 2), Math.sin(a) * rr * .9); s ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1]); }
       ctx.strokeStyle = `rgba(255,255,255,${.5 * wk})`; ctx.lineWidth = Math.max(1.5, C.S * .03); ctx.stroke(); } }
   // labels: the places named in the verse, anchored to the world
-  const lab = (s, x, z, a0, a1, up = 1.6) => { const a = win(t, a0, a1, .6, .6); if (a <= 0) return; const p = P(x, up, z);
-    text(ctx, s, p[0], p[1], { size: V ? 34 : 32, weight: 600, color: '#fff6e2', alpha: a, shadow: 'rgba(30,20,60,.85)', shadowBlur: 14, ls: 2 }); };
-  lab('예루살렘', 0, 0, 8.6, 12.4, 2.1); lab('온 유대', 2.6, 3.6, 10.6, 13.6, 1.0); lab('사마리아', ISL.S.x, ISL.S.z, 13.2, 16.4, 1.4);
+  // place names: beside the glow (a dot on the place, a short leader, the name in a clear sans with a soft dark halo)
+  const lab = (s, x, z, a0, a1, up, side) => { const a = win(t, a0, a1, .5, .5); if (a <= 0) return; const p = P(x, up, z), fs = V ? 38 : 34;
+    ctx.save(); ctx.font = `700 ${fs}px 'Noto Sans KR',sans-serif`; const tw = ctx.measureText(s).width; ctx.restore();
+    let lx = p[0] + side * (V ? 120 : 150), ly = p[1] - (V ? 90 : 80); const ex = side > 0 ? lx + tw : lx - tw;
+    lx += Math.max(0, 70 - Math.min(ex, lx)) - Math.max(0, Math.max(ex, lx) - (W - 70)); ly = clamp(ly, V ? 260 : 150, H - (V ? 260 : 150));
+    const tx = side > 0 ? lx : lx - tw, ax = side > 0 ? lx - 10 : lx + 10;
+    ctx.save(); ctx.globalAlpha = a;
+    { const r = tw * .8; ctx.save(); ctx.translate(tx + tw / 2, ly - fs * .35); ctx.scale(1, .5); const bg = ctx.createRadialGradient(0, 0, 0, 0, 0, r); bg.addColorStop(0, 'rgba(14,12,40,.6)'); bg.addColorStop(.6, 'rgba(14,12,40,.3)'); bg.addColorStop(1, 'rgba(14,12,40,0)'); ctx.fillStyle = bg; ctx.fillRect(-r, -r, 2 * r, 2 * r); ctx.restore(); }
+    ctx.strokeStyle = 'rgba(255,240,210,.85)'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(p[0], p[1]); ctx.lineTo(ax, ly - fs * .35); ctx.stroke();
+    ctx.fillStyle = '#fff3d6'; ctx.beginPath(); ctx.arc(p[0], p[1], 5, 0, 6.28); ctx.fill();
+    ctx.restore();
+    const o = { size: fs, weight: 700, font: "'Noto Sans KR',sans-serif", align: side > 0 ? 'left' : 'right', color: '#fffaf0', ls: 1, shadow: 'rgba(10,8,30,.95)', shadowBlur: 10 };
+    text(ctx, s, lx, ly, { ...o, alpha: a }); text(ctx, s, lx, ly, { ...o, alpha: a, shadowBlur: 3 }); };
+  lab('예루살렘', 0, 0, 8.4, 11.2, 1.1, -1); lab('온 유대', 2.6, 3.6, 10.9, 13.4, .4, 1); lab('사마리아', ISL.S.x, ISL.S.z, 13.4, 16.4, .5, -1);
   let far = ISL.F4, fd = 0; for (const k of ['F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'F8']) { const p = P(ISL[k].x, 0, ISL[k].z), d = Math.hypot(p[0] - W / 2, (p[1] - H / 2) * 1.6); if (d > fd && p[1] > H * .45) { fd = d; far = ISL[k]; } }
-  lab('땅 끝까지', far.x, far.z, 17.4, CUT - .1, 2.2);
+  lab('땅 끝까지', far.x, far.z, 17.2, CUT - .1, .5, P(far.x, 0, far.z)[0] > W / 2 ? 1 : -1);
 }
 function upperRoomFire(ctx, T, p, t) {
   const top = p.top; if (top == null) return; const ux = T.x + p.dx - Math.cos(p.rot) * p.w * .14, uz = T.z + p.dz - Math.sin(p.rot) * p.w * .14;

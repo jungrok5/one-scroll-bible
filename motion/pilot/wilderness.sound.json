@@ -1,0 +1,17 @@
+{ "duration": 39.5,
+  "music": [
+    { "id": "m1", "at": 0, "len": 22.6, "db": -3, "fin": 1.2, "fout": 1.0,
+      "prompt": "Epic yet intimate fantasy-journey score: solo French horn and low strings state a noble, searching theme over a gentle walking pulse of soft timpani and harp; a wordless choir enters with awe at the mountain, then the music becomes warm and devotional, strings and a solo cello singing a tender hymn-like line; slow tempo around 66 bpm, rich and spacious." },
+    { "id": "m2", "at": 22.6, "len": 16.9, "db": -2, "fin": 0.8, "fout": 2.0,
+      "prompt": "The journey theme returns brighter and fuller: horns and strings rise in a long hopeful crescendo with harp arpeggios and soft choir, arriving at a radiant, peaceful major-key resolution, then a quiet tender coda on solo strings and piano that holds a final warm chord." }
+  ],
+  "sfx": [
+    { "id": "s1", "at": 0.9, "len": 4.5, "db": -14, "loop": false, "prompt": "Quill pen scratching on old parchment, slow continuous drawing strokes" },
+    { "id": "s2", "at": 5.6, "len": 5.2, "db": -10, "loop": false, "prompt": "Distant deep rolling thunder and a low rumble of a mountain, with a soft roar of fire far away" },
+    { "id": "s3", "at": 14.6, "len": 7.0, "db": -16, "loop": false, "prompt": "A vast desert camp at dusk: soft distant voices, a crackling campfire, sheep bleating far off, gentle evening wind" },
+    { "id": "s4", "at": 25.0, "len": 5.2, "db": -14, "loop": false, "prompt": "Morning by a river valley: birdsong, reeds rustling in a light breeze, many footsteps on dry pebbles" },
+    { "id": "s5", "at": 31.0, "len": 2.0, "db": -14, "loop": false, "prompt": "Old map paper unrolling and settling flat, a soft rustle" }
+  ],
+  "ducks": [
+    { "from": 15.8, "to": 21.8, "db": -3 }
+  ] }

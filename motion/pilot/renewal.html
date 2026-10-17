@@ -259,9 +259,13 @@ function faceShot(ctx, t, a) {
   const form = ss(12.6, 13.2, t), run = eio(clamp((t - 13.2) / 1.0)), gone = wipe;
   if (form > 0 && gone < 1) { ctx.globalAlpha = a * (1 - gone);
     const ty = lerp(EYE[1] + 14, EYE[1] + 92, run), tx = EYE[0] + 4 - run * 10;
-    if (run > 0) { ctx.strokeStyle = 'rgba(110,160,205,.45)'; ctx.lineWidth = 5; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(EYE[0] + 4, EYE[1] + 14); ctx.quadraticCurveTo(EYE[0] + 2, (EYE[1] + ty) / 2, tx, ty); ctx.stroke(); }
-    ctx.fillStyle = 'rgba(96,150,205,.85)'; ctx.beginPath(); ctx.ellipse(tx, ty, 6 * form, 9 * form, 0, 0, 6.28); ctx.fill();
-    ctx.fillStyle = 'rgba(255,255,255,.8)'; ctx.beginPath(); ctx.arc(tx - 2, ty - 3, 1.8 * form, 0, 6.28); ctx.fill(); ctx.globalAlpha = a; }
+    if (run > 0) { ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(EYE[0] + 4, EYE[1] + 14); ctx.quadraticCurveTo(EYE[0] + 2, (EYE[1] + ty) / 2, tx, ty - 8);
+      ctx.strokeStyle = 'rgba(80,130,190,.35)'; ctx.lineWidth = 9; ctx.stroke(); ctx.strokeStyle = 'rgba(235,245,255,.75)'; ctx.lineWidth = 2.2; ctx.stroke(); }   // the wet track, catching the light
+    const r = 10 * form, drop = new Path2D(); drop.moveTo(tx, ty - r * 2.1); drop.bezierCurveTo(tx + r * .35, ty - r * 1.2, tx + r, ty - r * .5, tx + r, ty); drop.arc(tx, ty, r, 0, Math.PI); drop.bezierCurveTo(tx - r, ty - r * .5, tx - r * .35, ty - r * 1.2, tx, ty - r * 2.1);
+    const g = ctx.createRadialGradient(tx - r * .3, ty - r * .4, 0, tx, ty, r * 1.6); g.addColorStop(0, 'rgba(190,225,250,.95)'); g.addColorStop(.55, 'rgba(90,150,215,.92)'); g.addColorStop(1, 'rgba(50,100,170,.95)');
+    ctx.fillStyle = g; ctx.fill(drop); ctx.strokeStyle = 'rgba(40,80,140,.8)'; ctx.lineWidth = 1.6; ctx.stroke(drop);
+    ctx.fillStyle = 'rgba(255,255,255,.95)'; ctx.beginPath(); ctx.ellipse(tx - r * .35, ty - r * .35, r * .22, r * .38, -.4, 0, 6.28); ctx.fill();   // highlight
+    ctx.fillStyle = 'rgba(255,255,255,.6)'; ctx.beginPath(); ctx.arc(tx + r * .4, ty + r * .45, r * .12, 0, 6.28); ctx.fill(); ctx.globalAlpha = a; }
   ctx.restore();
   // the light that wipes it: a gold glaze slides in over the cheek (a watercolour wash, multiplied), then the room brightens
   const gl = eio(clamp((t - 13.9) / 1.2)); if (gl > 0) { ctx.save(); ctx.globalAlpha = a * (1 - .5 * ss(15.8, 17.2, t)); ctx.translate(fx + lerp(W * .7, 0, gl) * sc, fy); ctx.scale(sc, sc); ctx.globalCompositeOperation = 'multiply'; for (let i = 8; i < 12; i++) drawW(ctx, faceFix[i]); ctx.restore(); }
@@ -274,7 +278,7 @@ function faceShot(ctx, t, a) {
 // ---------- the walk ----------
 const fxAt = t => t < 9 ? lerp(380, 1800, t / 9) : t < 10.6 ? lerp(1800, 1930, eo((t - 9) / 1.6)) : t < 18 ? 1930 : t < 28 ? lerp(BANK + 20, 3720, (t - 18) / 10) : lerp(3720, V ? 4260 : 3980, eo((t - 28) / 6));
 const camAt = t => { const fx = fxAt(t), base = fx - W / K * .38; if (t < 18) return base; if (t < 27) return base; const k = eio(clamp((t - 27) / 5)); return lerp(base, CITY - W / K * (V ? .62 : .56), k); };
-const frontAt = t => t < 18.2 ? lerp(-200, BANK + 40, eio(clamp((t - .4) / 3.4))) : t < 27.6 ? lerp(BANK + 40, 4250, eio(clamp((t - 18.2) / 4.2))) : lerp(4250, 5600, eio(clamp((t - 27.6) / 3.6)));
+const frontAt = t => t < 18.2 ? lerp(-200, BANK + 40, eio(clamp((t - .4) / 3.4))) : lerp(BANK + 40, camAt(t) + W / K + 160, eio(clamp((t - 18.2) / 1.1)));   // after the mist: one sweep paints the whole far bank to the frame edge, then stays ahead of the camera
 function walkScene(ctx, t, zoom) {
   const cam = camAt(t), front = frontAt(t), fsx = (front - cam) * K;
   // paper, then the painted layers (masked beyond the paint front), then props
@@ -289,7 +293,7 @@ function walkScene(ctx, t, zoom) {
   // objects
   for (const o of objs) { const sx = (o.x - cam * o.p) * K; if (sx + o.bb[2] * K < -50 || sx + o.bb[0] * K > W + 50) continue;
     const ox = o.p === 1 ? o.x : o.x - cam * o.p + cam;        // world x at ground parallax for the paint test
-    const prog = o.o.city ? clamp((front - (o.x - 260)) / 900) : clamp((front - ox) / 260);
+    const prog = o.o.city ? clamp((t - 27.4) / 2.0) : clamp((front - ox) / 260);   // the city paints itself in on its own beat
     if (prog <= 0) continue;
     x.save(); x.translate(sx, HZ + o.y * K); x.scale(K, K);
     if (o.o.city) cityLight(x, t, prog);

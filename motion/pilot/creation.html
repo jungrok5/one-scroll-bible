@@ -120,7 +120,9 @@ function drawLight(ctx, t, c) {
 // ---------- the deep ----------
 function drawDeep(ctx, t, c, lit) {
   const q0 = proj(c, 0, 0, 1e5); if (!q0) return; const hz = q0[1]; if (hz > H + 10) return;
-  const g = ctx.createLinearGradient(0, hz, 0, H); g.addColorStop(0, rgb(mix([6, 8, 14], [60, 40, 26], lit), 1)); g.addColorStop(1, rgb(mix([2, 2, 4], [14, 10, 10], lit)));
+  // the deep: black at the horizon (continuous with the darkness above), a faint body, darker again toward the camera
+  const g = ctx.createLinearGradient(0, hz, 0, H); g.addColorStop(0, rgb(mix([0, 0, 0], [58, 40, 30], lit))); g.addColorStop(.12, rgb(mix([4, 5, 9], [44, 30, 22], lit)));
+  g.addColorStop(.45, rgb(mix([3, 4, 7], [22, 15, 12], lit))); g.addColorStop(1, rgb(mix([0, 0, 1], [5, 3, 3], lit)));
   ctx.fillStyle = g; ctx.fillRect(0, hz, W, H - hz);
   const lq = proj(c, BX, BY, BZ), lx0 = lq ? lq[0] : W / 2;
   // ripples on the deep: cold and faint before the light, gold after; a breath moves across ("하나님의 영은 수면 위에 운행하시니라")
@@ -134,6 +136,13 @@ function drawDeep(ctx, t, c, lit) {
       if (a < .01) continue; ctx.globalAlpha = Math.min(1, a); ctx.fillRect(q[0] - len / 2, q[1], len, th); }
   }
   ctx.globalAlpha = 1;
+  // haze along the horizon: no ruler-straight edge between the deep and the sky
+  const hzH = H * .09, hg = ctx.createLinearGradient(0, hz - hzH, 0, hz + hzH * .8);
+  hg.addColorStop(0, 'rgba(0,0,0,0)'); hg.addColorStop(.55, lit > 0 ? `rgba(255,196,150,${.2 * lit})` : 'rgba(14,18,30,.35)'); hg.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.globalCompositeOperation = 'screen'; ctx.fillStyle = hg; ctx.fillRect(0, hz - hzH, W, hzH * 1.8);
+  if (lit > 0) { const gx = ctx.createRadialGradient(lx0, hz, 0, lx0, hz, W * .5); gx.addColorStop(0, `rgba(255,200,150,${.22 * lit})`); gx.addColorStop(1, 'rgba(255,200,150,0)');
+    ctx.save(); ctx.translate(lx0, hz); ctx.scale(1, .16); ctx.translate(-lx0, -hz); ctx.fillStyle = gx; ctx.fillRect(lx0 - W * .5, hz - W * .5, W, W); ctx.restore(); }
+  ctx.globalCompositeOperation = 'source-over';
 }
 function reflect(ctx, t, c, lit) {     // the light mirrored in the water, broken by ripples
   const q0 = proj(c, 0, 0, 1e5), qm = proj(c, BX, WY, BZ); if (!q0 || !qm || lit <= 0) return; const ym = q0[1] + (qm[1] - q0[1]) * .6;
@@ -301,7 +310,8 @@ function draw(ctx, t) {
       const g = ctx.createRadialGradient(lq[0], lq[1], 0, lq[0], lq[1], 160 * k * pul); g.addColorStop(0, `rgba(255,250,235,${.95 * clamp(k)})`); g.addColorStop(.06, `rgba(255,226,160,${.6 * clamp(k)})`); g.addColorStop(1, 'rgba(255,190,110,0)');
       ctx.fillStyle = g; const gr = 160 * k * pul; ctx.fillRect(lq[0] - gr, lq[1] - gr, 2 * gr, 2 * gr);
       const sg = ctx.createLinearGradient(lq[0] - 520 * k, 0, lq[0] + 520 * k, 0); sg.addColorStop(0, 'rgba(255,220,170,0)'); sg.addColorStop(.5, `rgba(255,236,200,${.55 * clamp(k)})`); sg.addColorStop(1, 'rgba(255,220,170,0)');
-      ctx.fillStyle = sg; ctx.fillRect(lq[0] - 520 * k, lq[1] - 1.5, 1040 * k, 3);
+      ctx.save(); ctx.translate(lq[0], lq[1]); ctx.scale(1, .025); const sg2 = ctx.createRadialGradient(0, 0, 0, 0, 0, 520 * k); sg2.addColorStop(0, `rgba(255,236,200,${.5 * clamp(k)})`); sg2.addColorStop(1, 'rgba(255,220,170,0)');
+      ctx.fillStyle = sg2; ctx.fillRect(-520 * k, -520 * k, 1040 * k, 1040 * k); ctx.restore();
       ctx.fillStyle = `rgba(255,255,250,${clamp(k)})`; ctx.beginPath(); ctx.arc(lq[0], lq[1], 2.2 + 2 * k, 0, 6.283); ctx.fill();
       ctx.globalCompositeOperation = 'source-over';
       // its first glints on the deep
@@ -315,7 +325,8 @@ function draw(ctx, t) {
       const gq = proj(c, BX, BY, BZ), ga = (1 - ss(14.2, 16.5, t)) * ss(T_FL, T_FL + .6, t);
       if (gq && ga > 0) { const rr = 900 + 120 * (t - T_FL); const g = ctx.createRadialGradient(gq[0], gq[1], 0, gq[0], gq[1], rr); g.addColorStop(0, `rgba(255,216,160,${.5 * ga})`); g.addColorStop(.35, `rgba(255,170,90,${.16 * ga})`); g.addColorStop(1, 'rgba(255,160,80,0)');
         ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
-        const sg = ctx.createLinearGradient(gq[0] - W, 0, gq[0] + W, 0); sg.addColorStop(0, 'rgba(255,200,150,0)'); sg.addColorStop(.5, `rgba(255,230,190,${.35 * ga})`); sg.addColorStop(1, 'rgba(255,200,150,0)'); ctx.fillStyle = sg; ctx.fillRect(0, gq[1] - 2, W, 4); }
+        ctx.save(); ctx.translate(gq[0], gq[1]); ctx.scale(1, .03); const sg = ctx.createRadialGradient(0, 0, 0, 0, 0, W * .8); sg.addColorStop(0, `rgba(255,232,196,${.3 * ga})`); sg.addColorStop(.4, `rgba(255,214,170,${.08 * ga})`); sg.addColorStop(1, 'rgba(255,200,150,0)');
+        ctx.fillStyle = sg; ctx.fillRect(-W * .8, -W * .8, W * 1.6, W * 1.6); ctx.restore(); }
       ctx.globalCompositeOperation = 'source-over';
     }
     drawEarth(ctx, t); drawClouds(ctx, t);
@@ -337,7 +348,7 @@ function draw(ctx, t) {
   text(ctx, '창세기 1:3 (개역개정)', W / 2, y1 + 58, { ...cs, alpha: a1 * .85, shadow: 'rgba(60,20,0,.9)' });
   const a2 = win(t, 28.4, DUR - 1.1, 1.3, 1.1), y2 = V ? 330 : 150, l2 = V ? 78 : 76;
   text(ctx, '“하나님이 지으신 그 모든 것을 보시니\n보시기에 심히 좋았더라”', W / 2, y2, { ...st, alpha: a2, lh: l2 / st.size, shadow: 'rgba(40,24,10,.75)' });
-  text(ctx, '창세기 1:31 (개역개정)', W / 2, y2 + l2 + 58, { ...cs, alpha: a2 * .9, shadow: 'rgba(40,24,10,.75)' });
+  text(ctx, '창세기 1:31 (개역개정)', W / 2, y2 + l2 + 58, { ...cs, color: '#fff8ec', alpha: a2 * .95, shadow: 'rgba(30,18,8,.95)', shadowBlur: 12 });
   const f = 1 - ss(0, 1.2, t) + ss(DUR - 1.2, DUR, t); if (f > 0) { ctx.fillStyle = `rgba(0,0,0,${clamp(f)})`; ctx.fillRect(0, 0, W, H); }
 }
 

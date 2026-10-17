@@ -355,12 +355,12 @@ function drawRegion(ctx, rg, t, p) {
   ctx.globalAlpha = .24 * k; ctx.drawImage(sp.wide, sxp, syp, sw, sh, bx0, by0, bx1 - bx0, by1 - by0);
   ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
 }
-function shaft(ctx, rg, a) {    // additive shaft from the panel down to its patch, dust inside
-  const [x0, y0, x1, y1] = rg.rb, [ax, ay] = PROJ(x0, y1), [bx, by] = PROJ(x1, y1), [cx, cy] = PROJ(x1, y0), [dx, dy] = PROJ(x0, y0);
-  const p = P2([[x0, y0], [x1, y0], [cx, cy], [dx, dy]]), q = P2([[x0, y1], [x1, y1], [bx, by], [ax, ay]]);
-  const g = ctx.createLinearGradient(0, y0, 0, dy); const c = rg.sp.avg;
-  g.addColorStop(0, rgb(c, 0)); g.addColorStop(.45, rgb(mix(c, [255, 240, 210], .4), .07 * a)); g.addColorStop(1, rgb(c, .02 * a));
-  ctx.globalCompositeOperation = 'lighter'; ctx.fillStyle = g; ctx.fill(p); ctx.fill(q); ctx.globalCompositeOperation = 'source-over';
+function shaft(ctx, rg, a) {    // additive shaft from the sill down to the panel's patch on the floor; nothing below the sill but light
+  const [x0, y0, x1, y1] = rg.rb, [ax, ay] = PROJ(x0, Math.min(y1, 0)), [bx, by] = PROJ(x1, Math.min(y1, 0)), [cx, cy] = PROJ(x1, y0), [dx, dy] = PROJ(x0, y0), top = 32;
+  const p = P2([[Math.min(x0, ax), top], [Math.max(x1, bx), top], [Math.max(cx, bx), cy], [Math.min(dx, ax), dy]]);
+  const g = ctx.createLinearGradient(0, top, 0, dy); const c = rg.sp.avg;
+  g.addColorStop(0, rgb(c, 0)); g.addColorStop(.5, rgb(mix(c, [255, 240, 210], .4), .06 * a)); g.addColorStop(1, rgb(c, .015 * a));
+  ctx.globalCompositeOperation = 'lighter'; ctx.fillStyle = g; ctx.fill(p); ctx.globalCompositeOperation = 'source-over';
   return p;
 }
 
@@ -380,7 +380,8 @@ function draw(ctx, t) {
   regions.forEach((rg, i) => { const a = ls[i] * sun(t); if (a <= 0) return; ctx.globalAlpha = a * (i === 5 ? 1.6 : 1); ctx.drawImage(rg.patch.c, rg.patch.ox, rg.patch.oy); });
   ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
   // glass
-  ctx.globalAlpha = .6 + .4 * dawn; regions.forEach((rg, i) => drawRegion(ctx, rg, t, ls[i])); ctx.globalAlpha = 1;
+  ctx.save(); ctx.beginPath(); ctx.rect(-2000, -2000, 4000, 2000); ctx.clip();              // glass and its bloom stay above the sill
+  ctx.globalAlpha = .6 + .4 * dawn; regions.forEach((rg, i) => drawRegion(ctx, rg, t, ls[i])); ctx.globalAlpha = 1; ctx.restore();
   // the star ignites before its lancet wakes
   const sb = ss(STAR - .2, STAR + .25, t) * (1 - .55 * ss(STAR + .6, STAR + 2.2, t));
   if (sb > 0) { ctx.globalCompositeOperation = 'lighter'; const g = ctx.createRadialGradient(0, -640, 0, 0, -640, 260); g.addColorStop(0, `rgba(255,240,190,${.95 * sb})`); g.addColorStop(.25, `rgba(255,205,90,${.4 * sb})`); g.addColorStop(1, 'rgba(255,200,90,0)'); ctx.fillStyle = g; ctx.fillRect(-300, -900, 600, 520);
@@ -396,7 +397,7 @@ function draw(ctx, t) {
       ctx.fillStyle = `rgba(255,236,200,${a * d.a})`; ctx.beginPath(); ctx.arc(px, py, d.r, 0, 6.28); ctx.fill(); }
     ctx.restore(); }
   // labels cut in the stone beside each promise, gilded as its pane wakes (landscape)
-  if (!V) LABELS.forEach((s, i) => { const a = ss(.3, 1, ls[i]) * (1 - ss(17.5, 19.5, t)); if (a <= 0) return; const rg = regions[i], L = i < 2, my = (rg.rb[1] + rg.rb[3]) / 2;
+  if (!V) LABELS.forEach((s, i) => { const a = ss(.3, 1, ls[i]) * (1 - ss(16.4, 17.6, t)); if (a <= 0) return; const rg = regions[i], L = i < 2, my = (rg.rb[1] + rg.rb[3]) / 2;
     const lx = i === 4 ? 560 : L ? -560 : 560, ly = i === 4 ? -860 : my + 12;
     if (i === 4) { ctx.strokeStyle = `rgba(227,165,38,${.45 * a})`; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(96, -862); ctx.lineTo(540, -862); ctx.stroke(); }
     text(ctx, s, lx, ly + 1.5, { size: 34, weight: 600, align: L ? 'right' : 'left', color: 'rgba(255,235,200,.25)', alpha: a });

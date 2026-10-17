@@ -120,12 +120,16 @@ function plate1(lt) {
   // carved chapter label (first ~5 s)
   const ca = 1 - clamp((lt - 5.6) / .2);
   if (lt > .5 && ca > 0) { const lx = V ? 60 : 50, ly = V ? 90 : 70, lk = clamp((lt - .5) / .6);
-    mx.fillStyle = '#000'; mx.fillRect(lx - 20, ly - 50, V ? 640 : 700, 110);
-    carveText('08  ·  분열 왕국 · 포로', lx, ly, 34, lk * ca, 'left', 900); carveText('BC 930 – 586  ·  열왕기상 12장 – 열왕기하 25장', lx, ly + 44, 22, lk * ca, 'left', 600); }
+    const mw = PW - lx - 40; let bw = V ? 640 : 700;
+    if (Pilot.lang !== 'ko') { mx.save(); bw = 0; [['08  ·  분열 왕국 · 포로', 34, 900], ['BC 930 – 586  ·  열왕기상 12장 – 열왕기하 25장', 22, 600]].forEach(([s, z, wt]) => {   // the black block grows to hold the translation
+      mx.font = `${wt} ${z}px 'Noto Serif KR'`; mx.letterSpacing = (z * .08) + 'px'; bw = Math.max(bw, Math.min(mw, mx.measureText(Pilot.tr(s)).width) + 40); }); mx.restore(); bw = Math.max(bw, V ? 640 : 700); }
+    mx.fillStyle = '#000'; mx.fillRect(lx - 20, ly - 50, bw, 110);
+    carveText('08  ·  분열 왕국 · 포로', lx, ly, 34, lk * ca, 'left', 900, mw); carveText('BC 930 – 586  ·  열왕기상 12장 – 열왕기하 25장', lx, ly + 44, 22, lk * ca, 'left', 600, mw); }
 }
-function panel(x, y, size, s) { mx.save(); mx.font = `900 ${size}px 'Noto Serif KR'`; mx.letterSpacing = (size * .08) + 'px'; const w = mx.measureText(s).width; mx.fillStyle = '#000'; mx.fillRect(x - w / 2 - 30, y - size * 1.25, w + 60, size * 1.75); mx.restore(); }
-function carveText(s, x, y, size, a, align = 'center', weight = 900) {
-  if (a <= 0) return; mx.save(); mx.font = `${weight} ${size}px 'Noto Serif KR'`; mx.textAlign = align; mx.letterSpacing = (size * .08) + 'px';
+function panel(x, y, size, s) { s = Pilot.tr(s); mx.save(); mx.font = `900 ${size}px 'Noto Serif KR'`; mx.letterSpacing = (size * .08) + 'px'; const w = mx.measureText(s).width; mx.fillStyle = '#000'; mx.fillRect(x - w / 2 - 30, y - size * 1.25, w + 60, size * 1.75); mx.restore(); }
+function carveText(s, x, y, size, a, align = 'center', weight = 900, maxW = 0) {
+  if (a <= 0) return; s = Pilot.tr(s); mx.save(); mx.font = `${weight} ${size}px 'Noto Serif KR'`; mx.textAlign = align; mx.letterSpacing = (size * .08) + 'px';
+  if (maxW && Pilot.lang !== 'ko') { const w0 = mx.measureText(s).width; if (w0 > maxW) { size *= maxW / w0; mx.font = `${weight} ${size}px 'Noto Serif KR'`; mx.letterSpacing = (size * .08) + 'px'; } }   // a longer translation shrinks to fit the plate
   const w = mx.measureText(s).width, x0 = align === 'left' ? x : x - w / 2; const c = new Path2D(); c.rect(x0 - 10, y - size * 1.2, (w + 20) * a, size * 1.6); mx.clip(c);
   mx.fillStyle = '#fff'; mx.fillText(s, x, y); mx.restore();
 }
@@ -353,8 +357,11 @@ function starCut(lt) {   // the star cut into the block before the gold is print
 
 // ---------- printing ----------
 function caption(ctx, lines, cite, a) {
-  if (a <= 0) return; const size = V ? 46 : 42, lh = size * 1.5, y0 = V ? PL.y + PL.h + 110 : PL.y + PL.h + 72;
+  if (a <= 0) return; lines = String(Pilot.tr(lines.join('\n'))).split('\n'); cite = Pilot.tr(cite);   // translate the whole caption, then lay out its lines
+  let size = V ? 46 : 42; const y0 = V ? PL.y + PL.h + 110 : PL.y + PL.h + 72;
   ctx.save(); ctx.globalAlpha = a; ctx.fillStyle = INK; ctx.textAlign = 'center'; ctx.font = `600 ${size}px 'Noto Serif KR'`; ctx.letterSpacing = '1px';
+  if (Pilot.lang !== 'ko') { const wd = Math.max(...lines.map(l => ctx.measureText(l).width)); if (wd > W - 120) { size *= (W - 120) / wd; ctx.font = `600 ${size}px 'Noto Serif KR'`; } }
+  const lh = size * 1.5;
   lines.forEach((s, i) => ctx.fillText(s, W / 2, y0 + i * lh));
   if (cite) { ctx.font = `400 ${V ? 24 : 22}px 'Noto Sans KR'`; ctx.letterSpacing = '2px'; ctx.fillStyle = '#4a4036'; ctx.fillText(cite, W / 2, y0 + (lines.length - 1) * lh + (V ? 62 : 52)); }
   ctx.restore();

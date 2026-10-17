@@ -30,24 +30,29 @@ const O = {
 const HEB_SCROLL = ['אכן חלינו הוא נשא ומכאבינו סבלם ואנחנו חשבנהו נגוע מכה אלהים ומענה', 'והוא מחלל מפשענו מדכא מעונתינו מוסר שלומנו עליו ובחברתו נרפא לנו', 'כלנו כצאן תעינו איש לדרכו פנינו ויהוה הפגיע בו את עון כלנו'];
 const HEB_CODEX = ['אָכֵן חֳלָיֵנוּ הוּא נָשָׂא וּמַכְאֹבֵינוּ סְבָלָם וַאֲנַחְנוּ חֲשַׁבְנֻהוּ נָגוּעַ מֻכֵּה אֱלֹהִים וּמְעֻנֶּה', 'וְהוּא מְחֹלָל מִפְּשָׁעֵנוּ מְדֻכָּא מֵעֲוֺנֹתֵינוּ מוּסַר שְׁלוֹמֵנוּ עָלָיו וּבַחֲבֻרָתוֹ נִרְפָּא־לָנוּ', 'כֻּלָּנוּ כַּצֹּאן תָּעִינוּ אִישׁ לְדַרְכּוֹ פָּנִינוּ וַיהֹוָה הִפְגִּיעַ בּוֹ אֵת עֲוֺן כֻּלָּנוּ'];
 let tex = {}, grains = [], tablePat, cardTex;
+const tr = Pilot.tr, KO = Pilot.lang === 'ko';
+// translations can run longer than the Korean: outside Korean, shrink a font (its "NNpx") so `s` fits maxW
+const fitFont = (x, font, s, maxW) => { x.font = font; if (KO || !maxW) return font; const wd = x.measureText(s).width; if (wd <= maxW) return font;
+  font = font.replace(/([\d.]+)px/, (m, n) => (n * maxW / wd) + 'px'); x.font = font; return font; };
 
 // ---------- small helpers ----------
 const local2world = (o, lx, ly) => { const c = Math.cos(o.r), s = Math.sin(o.r); return [o.x + lx * c - ly * s, o.y + lx * s + ly * c]; };
 function plateText(ctx, x, y, o) {       // dark caption plate: small label, big reading, source line
-  const { label, big, src, a = 1, align = 'left', w: fw } = o; if (a <= 0) return;
+  const { a = 1, align = 'left', w: fw } = o; if (a <= 0) return; const label = tr(o.label), big = tr(o.big), src = o.src && tr(o.src);
   ctx.save(); ctx.globalAlpha = a; const bs = o.bs || (V ? 60 : 58);
   ctx.font = `600 ${bs}px ${SERIF}`; const bw = ctx.measureText(big).width; ctx.font = `400 ${V ? 23 : 22}px ${MONO}`; const sw = src ? ctx.measureText(src).width : 0;
   const w = fw || Math.max(bw, sw) + 72, h = bs + (src ? 128 : 92), x0 = align === 'center' ? x - w / 2 : x;
   ctx.fillStyle = 'rgba(14,15,17,.80)'; ctx.fillRect(x0, y, w * eo(o.grow == null ? 1 : o.grow), h);
   ctx.fillStyle = SIG; ctx.fillRect(x0, y, 3, h);
-  ctx.textAlign = 'left'; ctx.fillStyle = '#c9ccd1'; ctx.font = `400 ${V ? 26 : 24}px ${SANS}`; ctx.fillText(label, x0 + 36, y + 46);
-  ctx.fillStyle = '#ffffff'; ctx.font = `600 ${bs}px ${SERIF}`; ctx.fillText(big, x0 + 36, y + 52 + bs);
-  if (src) { ctx.fillStyle = '#9aa0a8'; ctx.font = `400 ${V ? 23 : 22}px ${MONO}`; ctx.fillText(src, x0 + 36, y + h - 28); }
+  ctx.textAlign = 'left'; ctx.fillStyle = '#c9ccd1'; fitFont(ctx, `400 ${V ? 26 : 24}px ${SANS}`, label, w - 72); ctx.fillText(label, x0 + 36, y + 46);
+  ctx.fillStyle = '#ffffff'; fitFont(ctx, `600 ${bs}px ${SERIF}`, big, w - 72); ctx.fillText(big, x0 + 36, y + 52 + bs);
+  if (src) { ctx.fillStyle = '#9aa0a8'; fitFont(ctx, `400 ${V ? 23 : 22}px ${MONO}`, src, w - 72); ctx.fillText(src, x0 + 36, y + h - 28); }
   ctx.restore();
 }
 function caption(ctx, s, a) {            // the subtitle strip: dark plate, 3 px signal edge on top
-  if (a <= 0) return; const lines = s.split('\n'), size = V ? 36 : 34, lh = size * 1.5;
-  ctx.save(); ctx.font = `500 ${size}px ${SANS}`; const w = Math.max(...lines.map(l => ctx.measureText(l).width)) + 80, h = lines.length * lh + 40;
+  if (a <= 0) return; s = tr(s); const lines = s.split('\n'), lh = (V ? 36 : 34) * 1.5; let size = V ? 36 : 34;
+  ctx.save(); ctx.font = `500 ${size}px ${SANS}`;
+  if (!KO) { const wd = Math.max(...lines.map(l => ctx.measureText(l).width)); if (wd > W - 200) { size *= (W - 200) / wd; ctx.font = `500 ${size}px ${SANS}`; } } const w = Math.max(...lines.map(l => ctx.measureText(l).width)) + 80, h = lines.length * lh + 40;
   const y = (V ? H - 250 : H - 70) - h, x = W / 2 - w / 2;
   ctx.globalAlpha = a; ctx.fillStyle = 'rgba(14,15,17,.80)'; ctx.fillRect(x, y, w, h); ctx.fillStyle = SIG; ctx.fillRect(x, y, w, 3);
   ctx.fillStyle = '#f4f5f6'; ctx.textAlign = 'center'; lines.forEach((l, i) => ctx.fillText(l, W / 2, y + 20 + size + i * lh));
@@ -150,7 +155,7 @@ function buildPilate() {
     if (i === 1) { const pre = x.measureText('NTIVS ').width, wd = x.measureText('PILATVS').width; key = { x0: (lx + pre) / S - o.w / 2 - 6, x1: (lx + pre + wd) / S - o.w / 2 + 2, y0: (y - fs * .82) / S - o.h / 2, y1: (y + 10 * S) / S - o.h / 2 }; } });
   x.restore();
   // label strip on the mount
-  x.fillStyle = '#e9e4d6'; x.fillRect(60 * S, h - 104 * S, w - 120 * S, 54 * S); x.fillStyle = '#2a2a2a'; x.font = `400 ${24 * S}px ${SANS}`; x.fillText('빌라도 비문', 84 * S, h - 68 * S);
+  x.fillStyle = '#e9e4d6'; x.fillRect(60 * S, h - 104 * S, w - 120 * S, 54 * S); x.fillStyle = '#2a2a2a'; x.font = `400 ${24 * S}px ${SANS}`; x.fillText(tr('빌라도 비문'), 84 * S, h - 68 * S);
   x.font = `400 ${20 * S}px ${MONO}`; x.textAlign = 'right'; x.fillText('PILATVS', w - 84 * S, h - 68 * S); x.textAlign = 'left';
   tex.pilate = { pos: c, key };
 }
@@ -179,10 +184,11 @@ function hebrewStrip(o, words, opt) {
   return { pos: c, rows: pos };
 }
 function indexCard(o, l1, l2, l3) {
+  l1 = tr(l1); l2 = tr(l2); l3 = tr(l3);
   const S = o.S, w = o.w * S, h = o.h * S, c = canvas(w, h), x = c.getContext('2d');
   roughFill(x, w, h, '#f1ede2', 10, 31); x.strokeStyle = 'rgba(200,80,60,.5)'; x.lineWidth = 2 * S; x.beginPath(); x.moveTo(20 * S, 74 * S); x.lineTo(w - 20 * S, 74 * S); x.stroke();
   x.strokeStyle = 'rgba(90,120,170,.3)'; x.lineWidth = 1 * S; for (let y = 110; y < o.h; y += 36) { x.beginPath(); x.moveTo(20 * S, y * S); x.lineTo(w - 20 * S, y * S); x.stroke(); }
-  x.fillStyle = '#23262a'; x.font = `400 ${30 * S}px ${MONO}`; x.fillText(l1, 30 * S, 56 * S); x.font = `400 ${30 * S}px ${SANS}`; x.fillText(l2, 30 * S, 140 * S); x.fillStyle = '#555a60'; x.font = `400 ${24 * S}px ${SANS}`; x.fillText(l3, 30 * S, 186 * S);
+  x.fillStyle = '#23262a'; fitFont(x, `400 ${30 * S}px ${MONO}`, l1, w - 60 * S); x.fillText(l1, 30 * S, 56 * S); fitFont(x, `400 ${30 * S}px ${SANS}`, l2, w - 60 * S); x.fillText(l2, 30 * S, 140 * S); x.fillStyle = '#555a60'; fitFont(x, `400 ${24 * S}px ${SANS}`, l3, w - 60 * S); x.fillText(l3, 30 * S, 186 * S);
   return { pos: c };
 }
 function buildCard() {   // chart paper: cream fibres, faint dot grid
@@ -198,23 +204,25 @@ let SPINES = [];
 const CL = V ? { x0: 70, x1: 830, title: [70, 122], count: [826, 250], base: 560, sw: 8, step: 11.55, br: 600, brl: 652, ay: [730, 774], aper: 20, astep: 39, alab: [[ '40여 명의 저자', 856], ['왕·목자·어부·세리·의사', 902]], ly: 950, lstep: 230, llab: [70, 1050], conv: [856, 360], lab: [826, 334] }
                 : { x0: 80, x1: 1212, title: [80, 112], count: [1220, 118], base: 340, sw: 12, step: 17.15, br: 372, brl: 420, ay: [478], aper: 40, astep: 28.5, alab: [['40여 명의 저자 — 왕·목자·어부·세리·의사', 548]], ly: 600, lstep: 210, llab: [730, 624], conv: [1240, 210], lab: [1200, 192] };
 function chart(x, t) {
-  const C = CL, L = (s, px, py, o = {}) => { x.font = o.font; x.fillStyle = o.color || INK; x.textAlign = o.align || 'left'; x.globalAlpha = o.a == null ? 1 : o.a; x.fillText(s, px, py); x.globalAlpha = 1; };
-  L('한 권이 아니라 ‘도서관’', C.title[0], C.title[1], { font: `600 54px ${SERIF}`, a: ss(1.0, 1.6, t) });
-  const n = Math.round(66 * clamp((t - 1.6) / 1.75)); if (n > 0) { L(String(n), C.count[0], C.count[1], { font: `400 86px ${MONO}`, align: 'right' }); L('권', C.count[0] + 6, C.count[1], { font: `400 38px ${SANS}`, a: ss(1.6, 2, t) }); }
+  const C = CL, L = (s, px, py, o = {}) => { s = tr(s); fitFont(x, o.font, s, o.maxW); x.fillStyle = o.color || INK; x.textAlign = o.align || 'left'; x.globalAlpha = o.a == null ? 1 : o.a; x.fillText(s, px, py); x.globalAlpha = 1; };
+  L('한 권이 아니라 ‘도서관’', C.title[0], C.title[1], { font: `600 54px ${SERIF}`, a: ss(1.0, 1.6, t), maxW: V ? 760 : 960 });
+  const n = Math.round(66 * clamp((t - 1.6) / 1.75)); if (n > 0) { let ux = C.count[0] + 6;   // the unit after the count; a longer one pushes the count left to stay on the card
+    if (!KO) { x.font = `400 38px ${SANS}`; ux = Math.min(ux, O.chart.w - 40 - x.measureText(tr('권')).width); }
+    L(String(n), ux - 6, C.count[1], { font: `400 86px ${MONO}`, align: 'right' }); L('권', ux, C.count[1], { font: `400 38px ${SANS}`, a: ss(1.6, 2, t) }); }
   SPINES.forEach((s, i) => { const k = ss(1.6 + i * .026, 1.7 + i * .026, t); if (k <= 0) return; const hh = s.h * eo(k);
     x.fillStyle = s.c; x.fillRect(s.x, C.base - hh, C.sw, hh); x.fillStyle = 'rgba(255,255,255,.25)'; x.fillRect(s.x + 2, C.base - hh + 8, C.sw - 4, 2); });
   // the span
   const bk = ss(3.3, 4.0, t); if (bk > 0) { x.strokeStyle = INK; x.lineWidth = 2; x.beginPath(); x.moveTo(C.x0, C.br); x.lineTo(C.x0 + (C.x1 - C.x0) * bk, C.br); x.stroke();
     x.beginPath(); x.moveTo(C.x0, C.br - 10); x.lineTo(C.x0, C.br + 10); x.stroke(); if (bk > .98) { x.beginPath(); x.moveTo(C.x1, C.br - 10); x.lineTo(C.x1, C.br + 10); x.stroke(); }
-    L('약 1,500년', (C.x0 + C.x1) / 2, C.brl, { font: `400 34px ${MONO}`, align: 'center', a: ss(3.7, 4.1, t) }); }
+    L('약 1,500년', (C.x0 + C.x1) / 2, C.brl, { font: `400 34px ${MONO}`, align: 'center', a: ss(3.7, 4.1, t), maxW: C.x1 - C.x0 }); }
   // forty authors
   for (let i = 0; i < 40; i++) { const k = ss(4.0 + i * .018, 4.15 + i * .018, t); if (k <= 0) continue; const px = C.x0 + 6 + (i % C.aper) * C.astep, py = C.ay[(i / C.aper) | 0];
     x.fillStyle = '#fff'; x.strokeStyle = INK; x.lineWidth = 2; x.beginPath(); x.arc(px, py, 8 * eo(k) + .01, 0, 6.3); x.fill(); x.stroke(); }
-  C.alab.forEach(([s, y]) => L(s, C.x0, y, { font: `400 34px ${SANS}`, a: ss(4.3, 4.9, t) }));
+  C.alab.forEach(([s, y]) => L(s, C.x0, y, { font: `400 34px ${SANS}`, a: ss(4.3, 4.9, t), maxW: C.x1 - C.x0 }));
   // three languages
   const lk = ss(4.9, 5.5, t); if (lk > 0) { ['히브리어', '아람어', '헬라어'].forEach((s, i) => { const px = C.x0 + i * C.lstep; x.globalAlpha = lk; x.strokeStyle = INK; x.lineWidth = 2; x.strokeRect(px, C.ly, 26, 26);
-      x.fillStyle = ['#3a3d42', '#8a8e95', '#c9ccd1'][i]; x.fillRect(px + 3, C.ly + 3, 20, 20); x.globalAlpha = 1; L(s, px + 40, C.ly + 24, { font: `400 32px ${SANS}`, a: lk }); });
-    L('세 가지 언어', C.llab[0], C.llab[1], { font: `400 32px ${SANS}`, color: '#6a6e74', a: lk }); }
+      x.fillStyle = ['#3a3d42', '#8a8e95', '#c9ccd1'][i]; x.fillRect(px + 3, C.ly + 3, 20, 20); x.globalAlpha = 1; L(s, px + 40, C.ly + 24, { font: `400 32px ${SANS}`, a: lk, maxW: C.lstep - 50 }); });
+    L('세 가지 언어', C.llab[0], C.llab[1], { font: `400 32px ${SANS}`, color: '#6a6e74', a: lk, maxW: O.chart.w - 60 - C.llab[0] }); }
   // all of them flow into one line
   const fk = clamp((t - 5.6) / 1.6), [ex, ey] = C.conv; if (fk > 0) {
     x.lineWidth = 1.4; SPINES.forEach((s, i) => { const k = eio(clamp(fk * 1.4 - i * .006)); if (k <= 0) return; const sx = s.x + C.sw / 2, sy = C.base - s.h;
@@ -222,7 +230,7 @@ function chart(x, t) {
         const px = a * a * a * sx + 3 * a * a * u * sx + 3 * a * u * u * (sx + (ex - sx) * .7) + u * u * u * ex, py = a * a * a * sy + 3 * a * a * u * (sy - 60) + 3 * a * u * u * ey + u * u * u * ey; j ? x.lineTo(px, py) : x.moveTo(px, py); } x.stroke(); });
     const gk = ss(6.6, 7.4, t); if (gk > 0) { x.save(); x.strokeStyle = '#d99a2b'; x.lineWidth = 6; x.shadowColor = 'rgba(240,170,60,.8)'; x.shadowBlur = 14; x.beginPath(); x.moveTo(ex, ey); x.lineTo(ex + 400 * gk, ey); x.stroke(); x.restore();
       x.fillStyle = SIG; x.beginPath(); x.arc(ex, ey, 7, 0, 6.3); x.fill();
-      L('그리스도를 통한 구원', C.lab[0], C.lab[1], { font: `600 40px ${SERIF}`, align: 'right', color: '#8a5a12', a: ss(6.9, 7.5, t) }); } }
+      L('그리스도를 통한 구원', C.lab[0], C.lab[1], { font: `600 40px ${SERIF}`, align: 'right', color: '#8a5a12', a: ss(6.9, 7.5, t), maxW: C.lab[0] - C.x0 }); } }
 }
 
 // ---------- the world ----------
@@ -233,7 +241,9 @@ function tableOn(t) {
 }
 function reTag(x, o, c) {   // a quiet tag: these are drawn reconstructions, not photographs
   x.save(); x.translate(o.x, o.y); x.rotate(o.r); x.translate(o === O.pilate ? o.w / 2 - 58 : -o.w / 2 + (o === O.scroll ? 84 : 66), o.h / 2 - (o === O.pilate ? 98 : o === O.scroll ? 40 : 30));
-  x.font = `400 15px ${SANS}`; x.textAlign = 'center'; x.fillStyle = c; x.strokeStyle = c; x.lineWidth = 1; x.fillText('재현', 0, 5); x.strokeRect(-21, -12, 42, 23); x.restore();
+  x.font = `400 15px ${SANS}`; x.textAlign = 'center'; x.fillStyle = c; x.strokeStyle = c; x.lineWidth = 1; const s = tr('재현');
+  const bw = KO ? 42 : Math.max(42, x.measureText(s).width + 16), dx = (o === O.pilate ? -1 : 1) * (bw - 42) / 2;   // a longer tag grows inward from its anchored edge
+  x.fillText(s, dx, 5); x.strokeRect(dx - bw / 2, -12, bw, 23); x.restore();
 }
 function drawObj(x, o, img) { x.save(); x.translate(o.x, o.y); x.rotate(o.r); x.drawImage(img, -o.w / 2, -o.h / 2, o.w, o.h); x.restore(); }
 function world(x, t, cam, sx, sy, lens) {
@@ -319,7 +329,7 @@ function compare(ctx, t, cam) {
   const W2S = (o, lx, ly) => { const [wx, wy] = local2world(o, lx, ly); return [W / 2 + (wx - cam.x) * cam.z, H / 2 + (wy - cam.y) * cam.z]; };
   ctx.save(); ctx.globalAlpha = a;
   // tags
-  const tag = (o, lx, ly, up, l1, l2, t0) => { const k = ss(t0, t0 + .5, t); if (k <= 0) return; const [px, py] = W2S(o, lx, ly), ey = py + (up ? -1 : 1) * 46 * eo(k);
+  const tag = (o, lx, ly, up, l1, l2, t0) => { const k = ss(t0, t0 + .5, t); if (k <= 0) return; l1 = tr(l1); l2 = tr(l2); const [px, py] = W2S(o, lx, ly), ey = py + (up ? -1 : 1) * 46 * eo(k);
     ctx.globalAlpha = a * k; ctx.strokeStyle = SIG; ctx.fillStyle = SIG; ctx.lineWidth = 2.5; ctx.beginPath(); ctx.arc(px, py, 8, 0, 6.3); ctx.stroke(); ctx.beginPath(); ctx.arc(px, py, 3, 0, 6.3); ctx.fill();
     ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(px, ey); ctx.stroke();
     const ty = up ? ey - 12 : ey + 36; ctx.textAlign = 'left'; ctx.fillStyle = INK; ctx.font = `400 ${V ? 25 : 26}px ${MONO}`; ctx.fillText(l1, px + 14, ty - (up ? 34 : 0)); ctx.font = `500 ${V ? 28 : 28}px ${SANS}`; ctx.fillText(l2, px + 14, ty + (up ? 0 : 36)); };

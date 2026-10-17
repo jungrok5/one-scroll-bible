@@ -253,7 +253,8 @@ function draw(ctx, t) {
 
 // ---------- UI: chapter label, narration subtitles, a framed dialogue box ----------
 function subtitle(ctx, lines, cite, a) {
-  if (a <= 0) return; const size = V ? 46 : 44, lh = size * 1.5, n = lines.length, y0 = V ? H - 330 - (n - 1) * lh : H - 150 - (n - 1) * lh;
+  if (a <= 0) return; lines = String(Pilot.tr(lines.join('\n'))).split('\n');   // translate the whole line, then lay out its lines
+  const size = V ? 46 : 44, lh = size * 1.5, n = lines.length, y0 = V ? H - 330 - (n - 1) * lh : H - 150 - (n - 1) * lh;
   const bg = ctx.createLinearGradient(0, y0 - size * 1.6, 0, y0 + (n - 1) * lh + 90); bg.addColorStop(0, 'rgba(6,6,14,0)'); bg.addColorStop(.4, `rgba(6,6,14,${.55 * a})`); bg.addColorStop(1, 'rgba(6,6,14,0)');
   ctx.fillStyle = bg; ctx.fillRect(0, y0 - size * 1.6, W, (n - 1) * lh + size * 1.6 + 100);
   lines.forEach((s, i) => text(ctx, s, W / 2, y0 + i * lh, { size, weight: 600, color: '#f6efe0', alpha: a, shadow: 'rgba(0,0,0,.8)', shadowBlur: 14 }));
@@ -261,20 +262,23 @@ function subtitle(ctx, lines, cite, a) {
 }
 function dialog(ctx, t, t0, t1, name, lines, cite) {
   const a = win(t, t0, t1, .35, .8); if (a <= 0) return;
-  const size = V ? 46 : 46, bw = V ? 960 : 1240, bh = V ? 250 : 190, bx = (W - bw) / 2, by = V ? H - 520 : H - 290;
+  let size = V ? 46 : 46; const bw = V ? 960 : 1240, bh = V ? 250 : 190, bx = (W - bw) / 2, by = V ? H - 520 : H - 290;
   ctx.save(); ctx.globalAlpha = a;
   ctx.fillStyle = 'rgba(10,12,26,.84)'; ctx.fillRect(bx, by, bw, bh);
   ctx.strokeStyle = '#d4af6a'; ctx.lineWidth = 2; ctx.strokeRect(bx + 6, by + 6, bw - 12, bh - 12); ctx.strokeStyle = 'rgba(212,175,106,.45)'; ctx.lineWidth = 1; ctx.strokeRect(bx + 12, by + 12, bw - 24, bh - 24);
   [[bx + 6, by + 6], [bx + bw - 6, by + 6], [bx + 6, by + bh - 6], [bx + bw - 6, by + bh - 6]].forEach(([x, y]) => { ctx.fillStyle = '#e8c884'; ctx.beginPath(); ctx.moveTo(x, y - 8); ctx.lineTo(x + 8, y); ctx.lineTo(x, y + 8); ctx.lineTo(x - 8, y); ctx.fill(); });
   // name plate on the top edge
+  name = Pilot.tr(name); lines = String(Pilot.tr(lines.join('\n'))).split('\n');   // translate the whole line first; the typewriter then runs over its graphemes
   ctx.font = `600 30px 'Noto Serif KR'`; ctx.letterSpacing = '6px'; const nw = ctx.measureText(name).width + 56;
   ctx.fillStyle = 'rgba(14,16,34,.96)'; ctx.fillRect(bx + 40, by - 26, nw, 52); ctx.strokeStyle = '#d4af6a'; ctx.lineWidth = 2; ctx.strokeRect(bx + 40, by - 26, nw, 52);
   ctx.fillStyle = '#efd28e'; ctx.textAlign = 'left'; ctx.textBaseline = 'middle'; ctx.fillText(name, bx + 68, by + 1); ctx.letterSpacing = '0px';
   // the line, typed in
-  const all = lines.join(''), n = [...all].length, shown = Math.floor(clamp((t - t0 - .3) / 1.7) * n); let used = 0;
-  ctx.font = `600 ${size}px 'Noto Serif KR'`; ctx.textBaseline = 'alphabetic'; ctx.fillStyle = '#f8f1e2'; ctx.shadowColor = 'rgba(0,0,0,.6)'; ctx.shadowBlur = 8;
+  const all = lines.join(''), n = Pilot.chars(all).length, shown = Math.floor(clamp((t - t0 - .3) / 1.7) * n); let used = 0;
+  ctx.font = `600 ${size}px 'Noto Serif KR'`;
+  if (Pilot.lang !== 'ko') { const wd = Math.max(...lines.map(l => ctx.measureText(l).width)); if (wd > bw - 100) { size *= (bw - 100) / wd; ctx.font = `600 ${size}px 'Noto Serif KR'`; } }
+  ctx.textBaseline = 'alphabetic'; ctx.fillStyle = '#f8f1e2'; ctx.shadowColor = 'rgba(0,0,0,.6)'; ctx.shadowBlur = 8;
   const ty0 = by + (bh - (lines.length - 1) * size * 1.45) / 2 + size * .36; let endX = bx, endY = ty0;
-  lines.forEach((s, i) => { const ch = [...s], k = clamp(shown - used, 0, ch.length), part = ch.slice(0, k).join(''); used += ch.length; ctx.textAlign = 'center';
+  lines.forEach((s, i) => { const ch = Pilot.chars(s), k = clamp(shown - used, 0, ch.length), part = ch.slice(0, k).join(''); used += ch.length; ctx.textAlign = 'center';
     const full = ctx.measureText(s).width, x0 = W / 2 - full / 2; ctx.textAlign = 'left'; ctx.fillText(part, x0, ty0 + i * size * 1.45); if (k > 0) { endX = x0 + ctx.measureText(part).width; endY = ty0 + i * size * 1.45; } });
   ctx.shadowBlur = 0;
   if (Math.floor(t * 2.4) % 2 === 0) { ctx.fillStyle = '#efd28e'; ctx.beginPath(); const cx = shown >= n ? bx + bw - 44 : endX + 10, cy = shown >= n ? by + bh - 30 : endY - size * .3; ctx.moveTo(cx - 9, cy - 6); ctx.lineTo(cx + 9, cy - 6); ctx.lineTo(cx, cy + 6); ctx.fill(); }

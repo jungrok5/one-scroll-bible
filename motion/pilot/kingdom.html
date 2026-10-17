@@ -342,9 +342,12 @@ function goldGround(x, w, h, sp) { const p = rectP(0, 0, w, h); gold(x, p, { lw:
 // ---------- the text column ----------
 function writeLine(x, s, px, py, size, t0, t, rate = 12, color = INK) {    // a scribe writes: character by character
   x.save(); x.font = `900 ${size}px 'Noto Serif KR'`; x.textAlign = 'left'; x.textBaseline = 'alphabetic'; x.fillStyle = color; x.letterSpacing = (size * .04) + 'px';
-  let cx = px; const chars = [...s];
+  let cx = px; const chars = Array.isArray(s) ? s : Pilot.chars(s);
   chars.forEach((ch, i) => { const a = clamp((t - t0 - i / rate) / .22); if (a > 0) { x.globalAlpha = a; x.fillText(ch, cx, py); } cx += x.measureText(ch).width + size * .04; });
   x.restore(); return cx;
+}
+function lineWidth(x, chars, size) {    // the width writeLine will cover
+  x.save(); x.font = `900 ${size}px 'Noto Serif KR'`; x.letterSpacing = (size * .04) + 'px'; let w = 0; for (const ch of chars) w += x.measureText(ch).width + size * .04; x.restore(); return w;
 }
 function lineFiller(x, x0, x1, y, size, a) {    // red-and-blue line filler after a short line
   if (x1 - x0 < 30 || a <= 0) return; x.save(); x.globalAlpha = a; const hh = size * .26, yy = y - size * .36;
@@ -363,15 +366,20 @@ function initial(x, ch, px, py, sz, a) {        // the gilded initial: a lapis l
   x.lineWidth = 1.4; x.strokeStyle = 'rgba(255,255,255,.55)'; x.strokeText(ch, px + sz / 2 - 1.5, py + sz * .53 - 1.5);
   x.restore();
 }
-// a block of verse: gilded initial spanning two lines + the rest of the two lines, written in; cite under
+// a block of verse: gilded initial spanning two lines + the rest of the two lines, written in; cite under.
+// b.v = the two Korean lines; each is translated whole, and the initial is the first grapheme of the translated first line.
 function verseBlock(x, t, b) {
   const { x: cx, w } = L.col, size = b.size, lh = size * 1.42, isz = lh * 1.72, y1 = b.y + size, a = b.alpha;
   if (a <= 0) return; x.save(); x.globalAlpha = a;
-  initial(x, b.init, cx, b.y - size * .1, isz, clamp((t - b.t0) / .5));
+  const head = s => { const c = Pilot.chars(s), r = c.slice(1); while (r.length && /^\s$/.test(r[0])) r.shift(); return [c[0], r]; };   // initial + the rest (no space after it)
+  const [init, l1] = head(Pilot.tr(b.v[0])), l2 = Pilot.chars(Pilot.tr(b.v[1]));
+  const kn = head(b.v[0])[1].length + Pilot.chars(b.v[1]).length, rate = b.rate * Math.max(1, (l1.length + l2.length) / kn);   // same writing time as the Korean
+  initial(x, init, cx, b.y - size * .1, isz, clamp((t - b.t0) / .5));
   const tx = cx + isz + size * .45;
-  const e1 = writeLine(x, b.l1, tx, y1, size, b.t0 + .4, t, b.rate), e2 = writeLine(x, b.l2, tx, y1 + lh, size, b.t0 + .4 + [...b.l1].length / b.rate + .2, t, b.rate);
-  const done = clamp((t - b.t0 - .6 - ([...b.l1].length + [...b.l2].length) / b.rate) / .6);
-  lineFiller(x, e1 + 18, cx + w, y1, size, done); lineFiller(x, e2 + 18, cx + w, y1 + lh, size, done);
+  let fs = size; if (Pilot.lang !== 'ko') { const mw = Math.max(lineWidth(x, l1, size), lineWidth(x, l2, size)), av = cx + w - tx - 12; if (mw > av) fs = size * av / mw; }   // a longer translation: write smaller
+  const e1 = writeLine(x, l1, tx, y1, fs, b.t0 + .4, t, rate), e2 = writeLine(x, l2, tx, y1 + lh, fs, b.t0 + .4 + l1.length / rate + .2, t, rate);
+  const done = clamp((t - b.t0 - .6 - (l1.length + l2.length) / rate) / .6);
+  lineFiller(x, e1 + 18, cx + w, y1, fs, done); lineFiller(x, e2 + 18, cx + w, y1 + lh, fs, done);
   if (b.cite) text(x, b.cite, cx, y1 + lh + size * 1.05, { align: 'left', size: L.col.cite + 2, font: "'Noto Sans KR',sans-serif", color: '#7a2a16', alpha: done * .95, ls: 2 });
   x.restore();
 }
@@ -399,7 +407,7 @@ function shotShepherd(x, t) {
   }, c => {
     const { x: cx, rub, size } = L.col;
     text(c, '다윗의 시', cx, rub, { align: 'left', size: 34, weight: 900, color: VERM, alpha: ss(2.2, 2.8, t), ls: 6 });
-    verseBlock(c, t, { init: '여', l1: '호와는 나의 목자시니', l2: '내게 부족함이 없으리로다', y: L.col.top, size, t0: 3.0, rate: 9, alpha: 1, cite: '시편 23:1 (개역개정)' });
+    verseBlock(c, t, { v: ['여호와는 나의 목자시니', '내게 부족함이 없으리로다'], y: L.col.top, size, t0: 3.0, rate: 9, alpha: 1, cite: '시편 23:1 (개역개정)' });
   });
   x.restore();
 }
@@ -451,8 +459,9 @@ function shotAnoint(x, t) {
 }
 function banderole(m, b, lt, k) {
   const un = eio(clamp((lt - 3.2) / 1.4)); if (un <= 0) return;
-  const two = V, size = V ? 50 : 46, txt = two ? ['사람은 외모를 보거니와', '나 여호와는 중심을 보느니라'] : ['사람은 외모를 보거니와 나 여호와는 중심을 보느니라'];
-  m.save(); m.font = `600 ${size}px 'Noto Serif KR'`; const tw = Math.max(...txt.map(s => m.measureText(s).width)) + 90;
+  const two = V, txt = (two ? ['사람은 외모를 보거니와', '나 여호와는 중심을 보느니라'] : ['사람은 외모를 보거니와 나 여호와는 중심을 보느니라']).map(Pilot.tr);
+  let size = V ? 50 : 46; m.save(); m.font = `600 ${size}px 'Noto Serif KR'`; let tw = Math.max(...txt.map(s => m.measureText(s).width)) + 90;
+  if (Pilot.lang !== 'ko' && tw > b.w - 120) { size *= (b.w - 210) / (tw - 90); m.font = `600 ${size}px 'Noto Serif KR'`; tw = Math.max(...txt.map(s => m.measureText(s).width)) + 90; }   // a longer translation
   const hh = (two ? 2.5 : 1.55) * size, cx = b.w / 2, cy = V ? b.h * .885 : b.h * .86, x0 = cx - tw / 2, x1 = x0 + tw * un;
   const rib = new Path2D(); rib.moveTo(x0, cy - hh / 2); for (let px = x0; px <= x1; px += 20) rib.lineTo(px, cy - hh / 2 + Math.sin((px - x0) * .012) * 8);
   for (let px = x1; px >= x0; px -= 20) rib.lineTo(px, cy + hh / 2 + Math.sin((px - x0) * .012) * 8); rib.closePath();
@@ -488,8 +497,8 @@ function shotKing(x, t) {
     const { size } = L.col, kSize = size * (V ? .9 : .92);
     text(c, '사무엘하 7장', L.col.x, L.col.rub, { align: 'left', size: 34, weight: 900, color: VERM, alpha: ss(S2 + 5.2, S2 + 5.8, t) * (1 - ss(DUR - 1.4, DUR - .6, t)), ls: 6 });
     const a1 = 1 - ss(28.6, 29.2, t), a2 = 1 - ss(33.8, 34.4, t);
-    verseBlock(c, t, { init: '네', l1: '집과 네 나라가', l2: '내 앞에서 영원히 보전되고', y: L.col.top, size: kSize, t0: S2 + 5.2, rate: 14, alpha: a1, cite: null });
-    if (t > 28.9) verseBlock(c, t, { init: '네', l1: '왕위가', l2: '영원히 견고하리라', y: L.col.top, size: kSize, t0: 29.0, rate: 10, alpha: a2, cite: null });
+    verseBlock(c, t, { v: ['네 집과 네 나라가', '내 앞에서 영원히 보전되고'], y: L.col.top, size: kSize, t0: S2 + 5.2, rate: 14, alpha: a1, cite: null });
+    if (t > 28.9) verseBlock(c, t, { v: ['네 왕위가', '영원히 견고하리라'], y: L.col.top, size: kSize, t0: 29.0, rate: 10, alpha: a2, cite: null });
     const ca = ss(S2 + 6.6, S2 + 7.2, t) * (1 - ss(33.8, 34.4, t)), lh = kSize * 1.42;
     text(c, '사무엘하 7:16 (개역개정)', L.col.x, L.col.top + kSize + lh + kSize * 1.05, { align: 'left', size: L.col.cite + 2, font: "'Noto Sans KR',sans-serif", color: '#7a2a16', alpha: ca * .95, ls: 2 });
     // the promise, as the site reads it

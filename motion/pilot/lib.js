@@ -106,6 +106,12 @@
       const j = await new Promise((ok, no) => { const x = new XMLHttpRequest();   // XHR, not fetch: also works from file:// when rendering
         x.open('GET', 'i18n/' + P.lang + '.json'); x.onload = () => { try { ok(JSON.parse(x.responseText)); } catch (e) { no(e); } }; x.onerror = no; x.send(); });
       P.L = Object.assign({}, j._common || {}, j[P.scene] || {}); P.dir = j._dir || 'ltr';
+      // a language file may swap the scenes' Korean typefaces for ones that suit its script:
+      // "_fonts": { "serif": "'Noto Serif SC','Songti SC',serif", "sans": "'Noto Sans SC','PingFang SC',sans-serif" }
+      if (j._fonts) { const F = j._fonts, d = Object.getOwnPropertyDescriptor(CanvasRenderingContext2D.prototype, 'font');
+        Object.defineProperty(CanvasRenderingContext2D.prototype, 'font', { configurable: true, get: d.get, set(v) {
+          d.set.call(this, String(v).replace(/'Noto Serif KR',\s*serif|'Noto Serif KR'/g, F.serif || "serif").replace(/'Noto Sans KR',\s*sans-serif|'Noto Sans KR'/g, F.sans || 'sans-serif')); } });
+        P.fontsToLoad = [F.serif, F.sans].filter(Boolean); }
       document.documentElement.lang = P.lang; document.documentElement.dir = P.dir;
     } catch (e) { console.warn('no language file for', P.lang); }
     try { for (const f of (cfg.fonts || [])) await document.fonts.load(f); await document.fonts.ready; } catch (e) {}

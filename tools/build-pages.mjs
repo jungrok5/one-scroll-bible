@@ -27,6 +27,9 @@ function parseLangs(){
   return out;
 }
 const LANGS = parseLangs();
+// 영상(/film/) 버튼이 있는 언어와 글자 — 단일 출처는 index.html 의 FILM_CTA ({code:'버튼 글자'}).
+const FILM_CTA = (() => { const h = fs.readFileSync(`${root}/index.html`, 'utf8'), m = h.match(/const FILM_CTA=(\{[^;]*\});/);
+  if (!m) throw new Error('build-pages: index.html 에 FILM_CTA 가 없음'); return Function('return ' + m[1])(); })();
 
 // 한국어(루트) 메타는 직접 지정, 나머지는 i18n 팩에서 로드
 const KO = {
@@ -400,8 +403,11 @@ function makePage(m){
   // 영어만 CC BY 제외 — ESV 약관이 "CC 라이선스로 공개되는 출판물에 인용 불가"를 명시하므로,
   // ESV를 인용하는 영어 페이지는 CC 제공 대상에서 뺀다(런타임 토글과 별개로 무JS 크롤러용으로도 숨김).
   if (m.code === 'en') h = h.replace('<span id="ccLink">', '<span id="ccLink" hidden>');
-  // 영상(/film/)은 한국어판만 — 다른 언어 페이지에서는 버튼을 정적으로도 숨김.
-  h = h.replace('<a class="film-cta" id="filmCta"', '<a class="film-cta" id="filmCta" hidden');
+  // 영상(/film/) 버튼: index.html 의 FILM_CTA 에 있는 언어만 그 언어 글자·링크로, 나머지는 정적으로도 숨김.
+  { const t = FILM_CTA[m.code];
+    h = t ? h.replace('<a class="film-cta" id="filmCta" href="/film/"><span class="pl" aria-hidden="true">▶</span>13분 영상으로 보기</a>',
+                      `<a class="film-cta" id="filmCta" href="/film/?lang=${m.code}"><span class="pl" aria-hidden="true">▶</span>${xml(t)}</a>`)
+          : h.replace('<a class="film-cta" id="filmCta"', '<a class="film-cta" id="filmCta" hidden'); }
 
   // ---- 본문 프리렌더 (JS 없이도 현지어 본문 노출 → 검색/AI 크롤러 대응) ----
   const pack = packFor(m.code);

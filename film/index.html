@@ -87,7 +87,7 @@
   <div class="stage" id="stage">
     <iframe id="fa" title="장면" tabindex="-1" aria-hidden="true"></iframe>
     <iframe id="fb" title="장면" tabindex="-1" aria-hidden="true"></iframe>
-    <img class="poster" id="poster" src="/film/poster-h.jpg" alt="한눈에 보는 성경 이야기 — 영상">
+    <img class="poster" id="poster" alt="한눈에 보는 성경 이야기 — 영상">
     <button class="big" id="big" type="button" aria-label="재생" data-ui-aria="play"><span>▶</span></button>
     <div class="wait" id="wait" hidden data-ui="loading">불러오는 중…</div>
   </div>
@@ -158,7 +158,7 @@
     if (!full) { stage.style.width = w + 'px'; stage.style.height = h + 'px'; }
     var ox = full ? (innerWidth - w) / 2 : 0, oy = full ? (innerHeight - h) / 2 : 0;
     frames.forEach(function (f) { f.width = W; f.height = H; f.style.transform = 'translate(' + ox + 'px,' + oy + 'px) scale(' + s + ')'; });
-    poster.src = '/film/poster-' + ori + '.jpg';
+    poster.src = '/film/poster-' + ori + (LANG !== 'ko' ? '-' + LANG : '') + '.jpg';   // the title card in the page's language
     document.querySelectorAll('.bar [data-o]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.o === ori)); });
   }
   addEventListener('resize', size);
@@ -250,7 +250,7 @@
   $('tm').textContent = '0:00 / ' + fmt(TOTAL);
   size();
   load(0, START_AT); loadedIdx[0] = START_AT; frames[0].dataset.o = ori;  // warm up the first scene behind the poster
-  if (START_AT > 0) { $('now').textContent = pad(START_AT) + ' ' + S[START_AT][1]; $('tm').textContent = fmt(START[START_AT]) + ' / ' + fmt(TOTAL); }
+  $('now').textContent = pad(START_AT) + ' ' + S[START_AT][1]; if (START_AT > 0) $('tm').textContent = fmt(START[START_AT]) + ' / ' + fmt(TOTAL);
 })();
 </script>
 </body>

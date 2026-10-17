@@ -34,7 +34,7 @@ for fam, w, f in FACES:
 # Chinese, Japanese, Arabic …): publish each named Noto face we have locally, subset to the glyphs those languages use,
 # so the live film looks like the renders instead of falling back to whatever the viewer's device has.
 LOCAL = {'Noto Serif': 'NotoSerif.ttf', 'Noto Sans': 'NotoSans.ttf', 'Noto Serif SC': 'NotoSerifSC.ttf', 'Noto Sans SC': 'NotoSansSC.ttf',
-         'Noto Serif JP': 'NotoSerifJP.ttf', 'Noto Sans JP': 'NotoSansJP.ttf', 'Noto Naskh Arabic': 'NotoNaskhArabic.ttf', 'Noto Sans Arabic': 'NotoSansArabic.ttf'}
+         'Noto Serif JP': 'NotoSerifJP.ttf', 'Noto Serif TC': 'NotoSerifTC.ttf', 'Noto Sans TC': 'NotoSansTC.ttf', 'Noto Sans JP': 'NotoSansJP.ttf', 'Noto Naskh Arabic': 'NotoNaskhArabic.ttf', 'Noto Sans Arabic': 'NotoSansArabic.ttf'}
 need = {}   # family → glyphs
 for p in glob.glob(os.path.join(PILOT, 'i18n', '*.json')):
     j = json.load(open(p, encoding='utf-8')); f = j.get('_fonts')

@@ -1,7 +1,11 @@
 {
  "_dir": "ltr",
+ "_fonts": {
+  "serif": "'Noto Serif',Georgia,serif",
+  "sans": "'Noto Sans','Helvetica Neue',Arial,sans-serif"
+ },
  "_ui": {
-  "title": "The Bible in One Scroll — the film",
+  "title": "Bible in One Scroll — the film",
   "brand": "Bible in One Scroll",
   "home": "← Bible in One Scroll",
   "len": "About 13 minutes · with sound",
@@ -35,8 +39,8 @@
    "Restoration",
    "The Mirror",
    "The Heart of the Gospel",
-   "Is the Bible True?",
-   "Isn’t Being Good Enough?",
+   "Is the Bible a True Story?",
+   "Just Live a Good Life?",
    "The Invitation"
   ],
   "share": "Share",
@@ -191,11 +195,11 @@
   "창세기 3:8 (개역개정)": "Genesis 3:8 (ESV)",
   "“네가 어디 있느냐”": "“Where are you?”",
   "창세기 3:9 (개역개정)": "Genesis 3:9 (ESV)",
-  "“여자의 후손은 네 머리를 상하게 할 것이요”": "“her offspring; he shall bruise your head”",
-  "“여자의 후손은\n네 머리를 상하게 할 것이요”": "“her offspring;\nhe shall bruise your head”",
+  "“여자의 후손은 네 머리를 상하게 할 것이요”": "“… between your offspring and her offspring;\nhe shall bruise your head”",
+  "“여자의 후손은\n네 머리를 상하게 할 것이요”": "“… between your offspring and her offspring;\nhe shall bruise your head”",
   "창세기 3:15 (개역개정)": "Genesis 3:15 (ESV)",
   "타락 직후 주신 첫 복음의 약속": "The first promise of the gospel, given right after the Fall",
-  "언약": "COVE\nNANT"
+  "언약": "COVE-\nNANT"
  },
  "gospel": {
   "17  ·  복음의 핵심": "17  ·  The Heart of the Gospel",

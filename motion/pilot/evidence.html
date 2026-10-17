@@ -387,8 +387,21 @@ function draw(ctx, t) {
   const f = 1 - ss(0, 1.1, t) + ss(DUR - 1.2, DUR, t); if (f > 0) { ctx.fillStyle = `rgba(0,0,0,${clamp(f)})`; ctx.fillRect(0, 0, W, H); }
 }
 
+// right-to-left scripts: every string in Arabic script is laid out right-to-left at the same anchor (the scene's own left /
+// centre / right alignment is kept, so the layout does not move), and a monospaced label falls back to the sans face
+// (a mono face that happens to carry Arabic glyphs sets it badly). Only installed for a right-to-left language.
+function rtlCanvas() {
+  const P = CanvasRenderingContext2D.prototype, AR = /[\u0600-\u06ff\u0750-\u077f\ufb50-\ufdff\ufe70-\ufeff]/, ft = P.fillText, mt = P.measureText;
+  const wrap = (c, s, fn) => { if (!AR.test(s)) return fn(); const d = c.direction, a = c.textAlign, f = c.font;
+    c.direction = 'rtl'; c.textAlign = a === 'start' ? 'left' : a === 'end' ? 'right' : a; if (/Mono/.test(f)) c.font = f.replace(/["']?DejaVu Sans Mono.*$/, SANS);
+    try { return fn(); } finally { c.direction = d; c.textAlign = a; if (c.font !== f) c.font = f; } };
+  P.fillText = function (s, ...r) { return wrap(this, String(s), () => ft.call(this, s, ...r)); };
+  P.measureText = function (s) { return wrap(this, String(s), () => mt.call(this, s)); };
+}
+
 Pilot.run({ W, H, dur: DUR, audio: 'evidence.m4a', fonts: ["600 40px 'Noto Serif KR'", "400 20px 'Noto Sans KR'", "500 20px 'Noto Sans KR'", "400 20px 'DejaVu Sans Mono'", "400 30px FreeSerif"],
   init: async () => {
+    if (Pilot.dir === 'rtl') rtlCanvas();
     for (let i = 0; i < 6; i++) grains.push(speckle(W / 2, H / 2, 46, 300 + i, .4));
     const tp = speckle(256, 256, 90, 2, 1.2), pc = canvas(1, 1).getContext('2d'); tablePat = pc.createPattern(tp, 'repeat');
     cardTex = buildCard(); buildTelDan(); buildPilate();

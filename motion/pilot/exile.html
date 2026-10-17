@@ -134,7 +134,9 @@ function panel(x, y, size, s) { s = Pilot.tr(s); mx.save(); mx.font = `900 ${siz
 function carveText(s, x, y, size, a, align = 'center', weight = 900, maxW = 0) {
   if (a <= 0) return; s = Pilot.tr(s); mx.save(); mx.font = `${weight} ${size}px 'Noto Serif KR'`; mx.textAlign = align; mx.letterSpacing = (size * .08) + 'px';
   if (maxW && Pilot.lang !== 'ko') { const w0 = mx.measureText(s).width; if (w0 > maxW) { size *= maxW / w0; mx.font = `${weight} ${size}px 'Noto Serif KR'`; mx.letterSpacing = (size * .08) + 'px'; } }   // a longer translation shrinks to fit the plate
-  const w = mx.measureText(s).width, x0 = align === 'left' ? x : x - w / 2; const c = new Path2D(); c.rect(x0 - 10, y - size * 1.2, (w + 20) * a, size * 1.6); mx.clip(c);
+  const w = mx.measureText(s).width, x0 = align === 'left' ? x : x - w / 2; const c = new Path2D();
+  if (Pilot.dir === 'rtl') { mx.direction = 'rtl'; c.rect(x0 + w + 10 - (w + 20) * a, y - size * 1.2, (w + 20) * a, size * 1.6); }   // right-to-left: carved from the right
+  else c.rect(x0 - 10, y - size * 1.2, (w + 20) * a, size * 1.6); mx.clip(c);
   mx.fillStyle = '#fff'; mx.fillText(s, x, y); mx.restore();
 }
 
@@ -363,7 +365,7 @@ function starCut(lt) {   // the star cut into the block before the gold is print
 function caption(ctx, lines, cite, a) {
   if (a <= 0) return; lines = String(Pilot.tr(lines.join('\n'))).split('\n'); cite = Pilot.tr(cite);   // translate the whole caption, then lay out its lines
   let size = V ? 46 : 42; const y0 = V ? PL.y + PL.h + 110 : PL.y + PL.h + 72;
-  ctx.save(); ctx.globalAlpha = a; ctx.fillStyle = INK; ctx.textAlign = 'center'; ctx.font = `600 ${size}px 'Noto Serif KR'`; ctx.letterSpacing = '1px';
+  ctx.save(); ctx.globalAlpha = a; ctx.fillStyle = INK; ctx.textAlign = 'center'; ctx.font = `600 ${size}px 'Noto Serif KR'`; ctx.letterSpacing = '1px'; if (Pilot.dir === 'rtl') ctx.direction = 'rtl';
   if (Pilot.lang !== 'ko') { const wd = Math.max(...lines.map(l => ctx.measureText(l).width)); if (wd > W - 120) { size *= (W - 120) / wd; ctx.font = `600 ${size}px 'Noto Serif KR'`; } }
   const lh = size * 1.5;
   lines.forEach((s, i) => ctx.fillText(s, W / 2, y0 + i * lh));

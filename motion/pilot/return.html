@@ -272,18 +272,23 @@ function dialog(ctx, t, t0, t1, name, lines, cite) {
   // name plate on the top edge
   name = Pilot.tr(name); lines = String(Pilot.tr(lines.join('\n'))).split('\n');   // translate the whole line first; the typewriter then runs over its graphemes
   ctx.font = `600 30px 'Noto Serif KR'`; ctx.letterSpacing = '6px'; const nw = ctx.measureText(name).width + 56;
-  ctx.fillStyle = 'rgba(14,16,34,.96)'; ctx.fillRect(bx + 40, by - 26, nw, 52); ctx.strokeStyle = '#d4af6a'; ctx.lineWidth = 2; ctx.strokeRect(bx + 40, by - 26, nw, 52);
-  ctx.fillStyle = '#efd28e'; ctx.textAlign = 'left'; ctx.textBaseline = 'middle'; ctx.fillText(name, bx + 68, by + 1); ctx.letterSpacing = '0px';
+  const RTL = Pilot.dir === 'rtl', npx = RTL ? bx + bw - 40 - nw : bx + 40;   // right-to-left: the name plate sits on the right
+  ctx.fillStyle = 'rgba(14,16,34,.96)'; ctx.fillRect(npx, by - 26, nw, 52); ctx.strokeStyle = '#d4af6a'; ctx.lineWidth = 2; ctx.strokeRect(npx, by - 26, nw, 52);
+  ctx.fillStyle = '#efd28e'; ctx.textAlign = 'left'; ctx.textBaseline = 'middle'; if (RTL) ctx.direction = 'rtl'; ctx.fillText(name, npx + 28, by + 1); ctx.letterSpacing = '0px';
   // the line, typed in
   const all = lines.join(''), n = Pilot.chars(all).length, shown = Math.floor(clamp((t - t0 - .3) / 1.7) * n); let used = 0;
   ctx.font = `600 ${size}px 'Noto Serif KR'`;
   if (Pilot.lang !== 'ko') { const wd = Math.max(...lines.map(l => ctx.measureText(l).width)); if (wd > bw - 100) { size *= (bw - 100) / wd; ctx.font = `600 ${size}px 'Noto Serif KR'`; } }
   ctx.textBaseline = 'alphabetic'; ctx.fillStyle = '#f8f1e2'; ctx.shadowColor = 'rgba(0,0,0,.6)'; ctx.shadowBlur = 8;
   const ty0 = by + (bh - (lines.length - 1) * size * 1.45) / 2 + size * .36; let endX = bx, endY = ty0;
-  lines.forEach((s, i) => { const ch = Pilot.chars(s), k = clamp(shown - used, 0, ch.length), part = ch.slice(0, k).join(''); used += ch.length; ctx.textAlign = 'center';
+  if (RTL) lines.forEach((s, i) => {   // right-to-left (joined letters): typed a whole word at a time, from the right edge of the centred line
+    const ws = s.split(' '); let k = 0, part = ''; for (const w of ws) { const n1 = Pilot.chars(part ? part + ' ' + w : w).length; if (shown - used >= n1) { part = part ? part + ' ' + w : w; k = n1; } else break; }
+    used += Pilot.chars(s).length; const full = ctx.measureText(s).width, x1 = W / 2 + full / 2; ctx.textAlign = 'right';
+    if (part) { ctx.fillText(part, x1, ty0 + i * size * 1.45); endX = x1 - ctx.measureText(part).width - 20; endY = ty0 + i * size * 1.45; } else if (i === 0) endX = x1 - 20; });
+  else lines.forEach((s, i) => { const ch = Pilot.chars(s), k = clamp(shown - used, 0, ch.length), part = ch.slice(0, k).join(''); used += ch.length; ctx.textAlign = 'center';
     const full = ctx.measureText(s).width, x0 = W / 2 - full / 2; ctx.textAlign = 'left'; ctx.fillText(part, x0, ty0 + i * size * 1.45); if (k > 0) { endX = x0 + ctx.measureText(part).width; endY = ty0 + i * size * 1.45; } });
   ctx.shadowBlur = 0;
-  if (Math.floor(t * 2.4) % 2 === 0) { ctx.fillStyle = '#efd28e'; ctx.beginPath(); const cx = shown >= n ? bx + bw - 44 : endX + 10, cy = shown >= n ? by + bh - 30 : endY - size * .3; ctx.moveTo(cx - 9, cy - 6); ctx.lineTo(cx + 9, cy - 6); ctx.lineTo(cx, cy + 6); ctx.fill(); }
+  if (Math.floor(t * 2.4) % 2 === 0) { ctx.fillStyle = '#efd28e'; ctx.beginPath(); const cx = shown >= n ? (RTL ? bx + 44 : bx + bw - 44) : endX + 10, cy = shown >= n ? by + bh - 30 : endY - size * .3; ctx.moveTo(cx - 9, cy - 6); ctx.lineTo(cx + 9, cy - 6); ctx.lineTo(cx, cy + 6); ctx.fill(); }
   ctx.restore();
   if (cite) text(ctx, cite, W / 2, by + bh + 52, { size: V ? 24 : 22, font: "'Noto Sans KR',sans-serif", color: '#f2e2c2', alpha: a * clamp((t - t0 - 1.8) / .5) * .95, ls: 2, shadow: 'rgba(0,0,0,.9)', shadowBlur: 10 });
 }

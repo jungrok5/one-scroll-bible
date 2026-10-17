@@ -31,6 +31,7 @@ const L = V ? {
   big: { x: 110, y: 80, w: 1700, h: 920 }
 };
 
+const RTL = () => Pilot.dir === 'rtl';   // right-to-left scripts (known once the language file has loaded)
 // ---------- small helpers ----------
 const P2 = d => new Path2D(d);
 function fillInk(x, p, c, lw = 3, ink = INK) { x.fillStyle = c; x.fill(p); if (lw) { x.lineWidth = lw; x.strokeStyle = ink; x.lineJoin = 'round'; x.lineCap = 'round'; x.stroke(p); } }
@@ -369,6 +370,7 @@ function initial(x, ch, px, py, sz, a) {        // the gilded initial: a lapis l
 // a block of verse: gilded initial spanning two lines + the rest of the two lines, written in; cite under.
 // b.v = the two Korean lines; each is translated whole, and the initial is the first grapheme of the translated first line.
 function verseBlock(x, t, b) {
+  if (RTL()) return verseBlockRTL(x, t, b);
   const { x: cx, w } = L.col, size = b.size, lh = size * 1.42, isz = lh * 1.72, y1 = b.y + size, a = b.alpha;
   if (a <= 0) return; x.save(); x.globalAlpha = a;
   const head = s => { const c = Pilot.chars(s), r = c.slice(1); while (r.length && /^\s$/.test(r[0])) r.shift(); return [c[0], r]; };   // initial + the rest (no space after it)
@@ -381,6 +383,26 @@ function verseBlock(x, t, b) {
   const done = clamp((t - b.t0 - .6 - (l1.length + l2.length) / rate) / .6);
   lineFiller(x, e1 + 18, cx + w, y1, fs, done); lineFiller(x, e2 + 18, cx + w, y1 + lh, fs, done);
   if (b.cite) text(x, b.cite, cx, y1 + lh + size * 1.05, { align: 'left', size: L.col.cite + 2, font: "'Noto Sans KR',sans-serif", color: '#7a2a16', alpha: done * .95, ls: 2 });
+  x.restore();
+}
+
+// right-to-left scripts: no gilded initial (joined letters can't be split off) — the two translated lines are written
+// whole from the right edge of the column, word by word (each word fades in, so the joins stay intact), in the Korean's writing time
+function verseBlockRTL(x, t, b) {
+  const { x: cx, w } = L.col, size = b.size, lh = size * 1.42, y1 = b.y + size, a = b.alpha, xr = cx + w;
+  if (a <= 0) return; x.save(); x.globalAlpha = a;
+  const ls = [Pilot.tr(b.v[0]), Pilot.tr(b.v[1])], kn = Pilot.chars(b.v[0]).length + Pilot.chars(b.v[1]).length;
+  x.font = `900 ${size}px 'Noto Serif KR'`; x.direction = 'rtl'; x.textAlign = 'right'; x.textBaseline = 'alphabetic';
+  let fs = size; const mw = Math.max(...ls.map(l => x.measureText(l).width)); if (mw > w - 12) { fs = size * (w - 12) / mw; x.font = `900 ${fs}px 'Noto Serif KR'`; }
+  const words = ls.map(l => l.split(' ')), n = words[0].length + words[1].length, dt = kn / b.rate / n; let k = 0; const ends = [];
+  words.forEach((ws, j) => { const y = y1 + j * lh; let pre = '';
+    ws.forEach(wd => { const st = b.t0 + .4 + k * dt + (j ? .2 : 0), al = clamp((t - st) / Math.max(.22, dt * 1.2)); k++;
+      if (al > 0) { x.globalAlpha = a * al; x.fillStyle = INK; x.fillText(wd, xr - x.measureText(pre).width, y); }
+      pre += wd + ' '; });
+    ends.push(xr - x.measureText(ls[j]).width); });
+  x.globalAlpha = a; const done = clamp((t - b.t0 - .6 - kn / b.rate) / .6);
+  ends.forEach((e, j) => lineFiller(x, cx, e - 18, y1 + j * lh, fs, done));   // the filler sits before the line, on its left
+  if (b.cite) text(x, b.cite, xr, y1 + lh + size * 1.05, { align: 'right', size: L.col.cite + 2, font: "'Noto Sans KR',sans-serif", color: '#7a2a16', alpha: done * .95, ls: 2 });
   x.restore();
 }
 
@@ -406,7 +428,7 @@ function shotShepherd(x, t) {
     shepherd(m, mb.w * .30, mb.h * .80, .98 * k, t);
   }, c => {
     const { x: cx, rub, size } = L.col;
-    text(c, '다윗의 시', cx, rub, { align: 'left', size: 34, weight: 900, color: VERM, alpha: ss(2.2, 2.8, t), ls: 6 });
+    text(c, '다윗의 시', RTL() ? cx + L.col.w : cx, rub, { align: RTL() ? 'right' : 'left', size: 34, weight: 900, color: VERM, alpha: ss(2.2, 2.8, t), ls: 6 });
     verseBlock(c, t, { v: ['여호와는 나의 목자시니', '내게 부족함이 없으리로다'], y: L.col.top, size, t0: 3.0, rate: 9, alpha: 1, cite: '시편 23:1 (개역개정)' });
   });
   x.restore();
@@ -469,7 +491,7 @@ function banderole(m, b, lt, k) {
   // curled ends
   const curl = (px, d) => { const p = new Path2D(); p.ellipse(px, cy + 6, 16, hh / 2 + 4, 0, 0, 6.28); fillInk(m, p, '#e2d3b0', 2.2); line(m, `M${px} ${cy - hh / 2} q ${d * 12} ${hh / 2} 0 ${hh}`, 1.6, INK, .6); };
   curl(x0, -1); curl(x1, 1);
-  m.save(); m.clip(rib); m.fillStyle = INK; m.textAlign = 'center'; m.textBaseline = 'middle';
+  m.save(); m.clip(rib); m.fillStyle = INK; m.textAlign = 'center'; m.textBaseline = 'middle'; if (RTL()) m.direction = 'rtl';
   const ta = clamp((lt - 4.2) / .6); m.globalAlpha = ta;
   txt.forEach((s, i) => m.fillText(s, cx, cy + (i - (txt.length - 1) / 2) * size * 1.18 + 4));
   m.restore(); m.restore();
@@ -495,18 +517,18 @@ function shotKing(x, t) {
     king(m, mb.w * .5, fy - 4 * k, .92 * k, t);
   }, c => {
     const { size } = L.col, kSize = size * (V ? .9 : .92);
-    text(c, '사무엘하 7장', L.col.x, L.col.rub, { align: 'left', size: 34, weight: 900, color: VERM, alpha: ss(S2 + 5.2, S2 + 5.8, t) * (1 - ss(DUR - 1.4, DUR - .6, t)), ls: 6 });
+    text(c, '사무엘하 7장', RTL() ? L.col.x + L.col.w : L.col.x, L.col.rub, { align: RTL() ? 'right' : 'left', size: 34, weight: 900, color: VERM, alpha: ss(S2 + 5.2, S2 + 5.8, t) * (1 - ss(DUR - 1.4, DUR - .6, t)), ls: 6 });
     const a1 = 1 - ss(28.6, 29.2, t), a2 = 1 - ss(33.8, 34.4, t);
     verseBlock(c, t, { v: ['네 집과 네 나라가', '내 앞에서 영원히 보전되고'], y: L.col.top, size: kSize, t0: S2 + 5.2, rate: 14, alpha: a1, cite: null });
     if (t > 28.9) verseBlock(c, t, { v: ['네 왕위가', '영원히 견고하리라'], y: L.col.top, size: kSize, t0: 29.0, rate: 10, alpha: a2, cite: null });
     const ca = ss(S2 + 6.6, S2 + 7.2, t) * (1 - ss(33.8, 34.4, t)), lh = kSize * 1.42;
-    text(c, '사무엘하 7:16 (개역개정)', L.col.x, L.col.top + kSize + lh + kSize * 1.05, { align: 'left', size: L.col.cite + 2, font: "'Noto Sans KR',sans-serif", color: '#7a2a16', alpha: ca * .95, ls: 2 });
+    text(c, '사무엘하 7:16 (개역개정)', RTL() ? L.col.x + L.col.w : L.col.x, L.col.top + kSize + lh + kSize * 1.05, { align: RTL() ? 'right' : 'left', size: L.col.cite + 2, font: "'Noto Sans KR',sans-serif", color: '#7a2a16', alpha: ca * .95, ls: 2 });
     // the promise, as the site reads it
     const pa = win(t, 34.5, DUR - .2, .9, 1.2);
     if (pa > 0) {
       const sz = V ? 44 : 40;
-      text(c, '“영원한 왕위”는 다윗의 자손으로 오신', L.col.x, L.col.top + kSize * .9, { align: 'left', size: sz, weight: 600, color: INK, alpha: pa, maxW: L.col.w + 40 });
-      text(c, '예수님 안에서 성취됩니다', L.col.x, L.col.top + kSize * .9 + sz * 1.6, { align: 'left', size: sz, weight: 600, color: INK, alpha: pa, maxW: L.col.w + 40 });
+      text(c, '“영원한 왕위”는 다윗의 자손으로 오신', RTL() ? L.col.x + L.col.w : L.col.x, L.col.top + kSize * .9, { align: RTL() ? 'right' : 'left', size: sz, weight: 600, color: INK, alpha: pa, maxW: L.col.w + 40 });
+      text(c, '예수님 안에서 성취됩니다', RTL() ? L.col.x + L.col.w : L.col.x, L.col.top + kSize * .9 + sz * 1.6, { align: RTL() ? 'right' : 'left', size: sz, weight: 600, color: INK, alpha: pa, maxW: L.col.w + 40 });
       const th = eio(clamp((t - 35.2) / 2.6)), ty = L.col.top + kSize * .9 + sz * 2.6;
       if (th > 0) { c.save(); c.globalAlpha = pa; gold(c, rectP(L.col.x, ty, (W + 40 - L.col.x) * th, 5), { lw: 0 });
         const hx = L.col.x + (W + 40 - L.col.x) * th, hg = c.createRadialGradient(hx, ty + 2, 0, hx, ty + 2, 40); hg.addColorStop(0, 'rgba(255,246,200,.9)'); hg.addColorStop(1, 'rgba(255,230,160,0)');

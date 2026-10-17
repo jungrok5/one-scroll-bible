@@ -259,8 +259,13 @@ function cycle(ctx, t) {
   rows.forEach(([i0, i1], ri) => { let gap = size * .45, ws = []; for (let i = i0; i < i1; i++) ws.push(ctx.measureText(CY[i]).width);
     if (Pilot.lang !== 'ko') { const tot = ws.reduce((p, q) => p + q, 0) + gap * (ws.length - 1), mw = W - 120; if (tot > mw) { const k = mw / tot;   // fit the row
       ctx.font = `600 ${size * k}px ${SERIF}`; gap *= k; ws = ws.map(w => w * k); } }
-    let x = W / 2 - (ws.reduce((p, q) => p + q, 0) + gap * (ws.length - 1)) / 2;
-    for (let i = i0; i < i1; i++) { const on = ss(CT[i], CT[i] + .45, t), cur = i + 2 < CT.length ? 1 - ss(CT[i + 2], CT[i + 2] + .5, t) : 1, arrow = CYC[i] === '→';
+    const RTL = Pilot.dir === 'rtl';   // right-to-left: the cycle runs from the right, with ← arrows
+    if (RTL) ctx.direction = 'rtl';
+    let x = W / 2 + (RTL ? 1 : -1) * (ws.reduce((p, q) => p + q, 0) + gap * (ws.length - 1)) / 2;
+    if (RTL) for (let i = i0; i < i1; i++) { const on = ss(CT[i], CT[i] + .45, t), cur = i + 2 < CT.length ? 1 - ss(CT[i + 2], CT[i + 2] + .5, t) : 1, arrow = CYC[i] === '→';
+      const c = arrow ? [190, 150, 90] : mix([150, 128, 98], i === 6 ? [250, 248, 240] : [255, 214, 140], cur);
+      x -= ws[i - i0]; ctx.globalAlpha = a * on; ctx.fillStyle = rgb(c); ctx.fillText(arrow ? '←' : CY[i], x, y0 + ri * lh); x -= gap; }
+    else for (let i = i0; i < i1; i++) { const on = ss(CT[i], CT[i] + .45, t), cur = i + 2 < CT.length ? 1 - ss(CT[i + 2], CT[i + 2] + .5, t) : 1, arrow = CYC[i] === '→';
       const c = arrow ? [190, 150, 90] : mix([150, 128, 98], i === 6 ? [250, 248, 240] : [255, 214, 140], cur);
       ctx.globalAlpha = a * on; ctx.fillStyle = rgb(c); ctx.fillText(CY[i], x, y0 + ri * lh); x += ws[i - i0] + gap; } ctx.font = `600 ${size}px ${SERIF}`; });
   ctx.restore();

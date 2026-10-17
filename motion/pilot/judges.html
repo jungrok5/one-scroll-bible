@@ -272,8 +272,19 @@ function draw(ctx, t) {
   const f = 1 - ss(0, 1.0, t) + ss(DUR - 1.0, DUR, t); if (f > 0) { ctx.fillStyle = `rgba(0,0,0,${clamp(f)})`; ctx.fillRect(0, 0, W, H); }
 }
 
+// right-to-left scripts: every string in Arabic script is laid out right-to-left at the same anchor (the scene's own
+// left / centre / right alignment is kept, so the layout does not move). Only installed for a right-to-left language.
+function rtlCanvas() {
+  const P = CanvasRenderingContext2D.prototype, AR = /[\u0600-\u06ff\u0750-\u077f\ufb50-\ufdff\ufe70-\ufeff]/, ft = P.fillText, st = P.strokeText;
+  const wrap = (c, s, fn) => { if (!AR.test(s)) return fn(); const d = c.direction, a = c.textAlign;
+    c.direction = 'rtl'; c.textAlign = a === 'start' ? 'left' : a === 'end' ? 'right' : a; try { return fn(); } finally { c.direction = d; c.textAlign = a; } };
+  P.fillText = function (s, ...r) { return wrap(this, String(s), () => ft.call(this, s, ...r)); };
+  P.strokeText = function (s, ...r) { return wrap(this, String(s), () => st.call(this, s, ...r)); };
+}
+
 Pilot.run({ W, H, dur: DUR, audio: 'judges.m4a', fonts: ["600 40px 'Noto Serif KR'", "400 20px 'Noto Sans KR'"],
   init: async () => {
+    if (Pilot.dir === 'rtl') rtlCanvas();
     film = canvas(FW, FH); fx = film.getContext('2d'); scene = canvas(FW, FH); sx = scene.getContext('2d');
     hatchP = buildHatch(); bg = buildBG(false); bgBare = buildBG(true);
     for (let i = 0; i < 8; i++) grains.push(speckle(FW / 2, FH / 2, 80, 300 + i, .5));

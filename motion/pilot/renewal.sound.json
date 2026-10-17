@@ -1,0 +1,28 @@
+{ "duration": 36,
+  "music": [
+    { "id": "m1", "at": 0, "len": 10.6, "db": -5, "fin": 1.2, "fout": 1.0,
+      "prompt": "Lonely, tender and sparse: a soft felt piano plays a slow minor melody with long pauses over a faint warm low drone, dry and dusty, aching but gentle, about 60 bpm, no drums" },
+    { "id": "m2", "at": 11.6, "len": 6.8, "db": -4, "fin": 0.6, "fout": 1.2,
+      "prompt": "Intimate and hushed: a solo felt piano and one warm clarinet play a hesitant minor phrase that turns to major as a soft string pad swells underneath; comfort, a tear wiped away; fragile, tender, slow" },
+    { "id": "m3", "at": 18.2, "len": 17.8, "db": -2, "fin": 0.5, "fout": 2.0,
+      "prompt": "Hopeful pastoral blossoming: fingerpicked acoustic guitar, glockenspiel and flute over light warm strings, gently building, sunlit and joyful; at about 11 seconds a radiant full warm major chord swells with soft wordless choir and shimmering bells, then glows and sustains to the end; no drums" }
+  ],
+  "sfx": [
+    { "id": "s1", "at": 0.4, "len": 10, "db": -14, "loop": false,
+      "prompt": "Dry desert wind blowing softly over cracked earth, thin and lonely, faint sand hiss" },
+    { "id": "s2", "at": 0.6, "len": 3.5, "db": -16, "loop": false,
+      "prompt": "Soft watercolour brush strokes on rough paper, gentle rustles one after another" },
+    { "id": "s3", "at": 9.4, "len": 2.5, "db": -14, "loop": false,
+      "prompt": "Gentle clear stream of water flowing over stones, close and calm" },
+    { "id": "s4", "at": 13.2, "len": 1.5, "db": -10, "loop": false,
+      "prompt": "A single small water drop falling, soft delicate plink with a short airy tail" },
+    { "id": "s5", "at": 14.0, "len": 3, "db": -10, "loop": false,
+      "prompt": "Warm soft shimmer of light, gentle rising airy chime glow" },
+    { "id": "s6", "at": 18.3, "len": 4, "db": -14, "loop": false,
+      "prompt": "Quick lively watercolour brush strokes sweeping across paper, many soft rustles in a row" },
+    { "id": "s7", "at": 20.5, "len": 9, "db": -16, "loop": false,
+      "prompt": "Peaceful garden in the morning: songbirds chirping, leaves in a light breeze, a small brook trickling" },
+    { "id": "s8", "at": 27.6, "len": 5, "db": -12, "loop": false,
+      "prompt": "Soft rising airy shimmer with distant gentle bells, radiant and calm" }
+  ],
+  "ducks": [ { "from": 10.6, "to": 11.6, "db": -20 } ] }

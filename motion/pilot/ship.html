@@ -15,7 +15,10 @@
    reaches across; the boy takes the hand, jumps, and lands in a new identity: 하나님의 자녀. A sun on a stick rises. Col 1:13.
    All words are the site's own (index.html FAQ a2). Pure function of t. */
 const { clamp, lerp, ss, eo, eio, win, rng, fbm, canvas, mix, rgb, speckle, text } = Pilot;
-const W = Pilot.W, H = Pilot.H, V = Pilot.ori === 'v', DUR = 40;
+const W = Pilot.W, H = Pilot.H, V = Pilot.ori === 'v', DUR = 46.5;
+// film time T → story time t: the action is authored on a 40 s clock and stretched so every two-line caption holds ≥ 4.5 s
+const TK = [[0, 0], [5.6, 5.6], [9.3, 9.25], [14.8, 13.65], [18.5, 16.85], [24.0, 20.65], [29.5, 24.45], [35.0, 28.55], [40.5, 32.6], [46.5, 40]];
+const warp = T => { let i = 0; while (i < TK.length - 2 && T > TK[i + 1][0]) i++; const [a0, b0] = TK[i], [a1, b1] = TK[i + 1]; return b0 + (b1 - b0) * clamp((T - a0) / (a1 - a0)); };
 const INK = '#3b2618', SANS = "'Noto Sans KR',sans-serif", SERIF = "'Noto Serif KR',serif";
 const GY = 640, FY = 930;                          // gutter and front edge of the lower page (stage y)
 const PX0 = [260, 1660], PX1 = [120, 1800];        // page x-extent at the gutter / at the front edge
@@ -231,9 +234,9 @@ function stage(ctx, t) {
   // far pieces, back to front
   card(ctx, SP.sun, 430, .02, pop(t, 29.4, 99, 1.2), { dy: lerp(240, 0, eo(clamp((t - 29.4) / 2.6))), noShadow: true });
   const pirateFold = t > 35.6 ? 1 - eio((t - 35.6) / .7) : 1;
-  card(ctx, SP.cloud, 1450, .03, pop(t, 14.4), { s: 1.2 }); card(ctx, SP.cliff, 1440, .1, pop(t, 14.8), { s: .95 });
+  const hx = V ? -120 : 0; card(ctx, SP.cloud, 1450 + hx, .03, pop(t, 14.4), { s: 1.2 }); card(ctx, SP.cliff, 1440 + hx, .1, pop(t, 14.8), { s: .95 });
   card(ctx, SP.wave1, 960, .24, pop(t, 3.8), { dy: Math.sin(t * 1.3) * 2 });
-  card(ctx, SP.sign, 1370, .3, pop(t, 15.3), { s: .9 });
+  card(ctx, SP.sign, 1370 + hx, .3, pop(t, 15.3), { s: .9 });
   // the two ships: sails, people, then hulls
   const bob = (ph, a = 1) => [Math.sin(t * 1.6 + ph) * 3 * a, Math.sin(t * 1.1 + ph) * .012 * a];
   const [pb, pr] = bob(0), [bb, br] = bob(2), px = pirX(t), bx = briX(t), bf = briF(t), sS = zS(SZ);
@@ -285,7 +288,7 @@ function badges(ctx, t, px, deckP, sS) {
 }
 
 // ---------- camera, light, words ----------
-const CAM = V ? [[0, 960, 560, 1.3], [5.4, 860, 640, 1.5], [13.6, 900, 640, 1.45], [21, 1060, 620, 1.3], [24, 900, 620, 1.12], [26.4, 900, 640, 1.2], [29, 860, 620, 1.12], [33, 720, 600, 1.15], [40, 690, 600, 1.18]]
+const CAM = V ? [[0, 960, 560, 1.3], [5.0, 960, 560, 1.3], [6.4, 860, 640, 1.5], [13.6, 900, 640, 1.45], [15.6, 1080, 630, 1.2], [20.3, 1080, 630, 1.2], [23.2, 880, 620, 1.1], [24.2, 900, 620, 1.12], [26.4, 900, 640, 1.2], [29, 860, 620, 1.12], [33, 720, 600, 1.15], [40, 690, 600, 1.18]]
               : [[0, 960, 540, 1.0], [5.4, 960, 540, 1.0], [13.6, 960, 560, 1.03], [21, 1020, 560, 1.03], [24, 960, 560, 1.02], [26.4, 920, 600, 1.16], [29, 940, 560, 1.04], [40, 900, 540, 1.06]];
 function cam(t) { let i = 0; while (i < CAM.length - 2 && t > CAM[i + 1][0]) i++; const a = CAM[i], b = CAM[i + 1], u = eio(clamp((t - a[0]) / (b[0] - a[0])));
   return [lerp(a[1], b[1], u), lerp(a[2], b[2], u), lerp(a[3], b[3], u)]; }
@@ -295,8 +298,8 @@ function say(ctx, s, a) {     // narration: cream with a thick dark-brown outlin
   lines.forEach((l, i) => { ctx.shadowColor = 'rgba(30,15,5,.6)'; ctx.shadowBlur = 12; ctx.lineWidth = 9; ctx.strokeStyle = '#3b2210'; ctx.strokeText(l, W / 2, y0 + i * lh); ctx.shadowBlur = 0; ctx.fillStyle = '#fff4dc'; ctx.fillText(l, W / 2, y0 + i * lh); });
   ctx.restore();
 }
-function draw(ctx, t) {
-  const [cx, cy, k] = cam(t);
+function draw(ctx, T) {
+  const t = warp(T), [cx, cy, k] = cam(t);
   ctx.fillStyle = '#2a1d14'; ctx.fillRect(0, 0, W, H);
   ctx.save(); ctx.translate(W / 2, H / 2); ctx.scale(k, k); ctx.translate(-cx, -cy); stage(ctx, t); ctx.restore();
   // lamp light from the upper left, warm; the storm cools the right; vignette
@@ -304,19 +307,20 @@ function draw(ctx, t) {
   const st = ss(14.4, 16.5, t) * (1 - ss(31, 36, t)); if (st > 0) { const sg = ctx.createLinearGradient(W, 0, W * .45, 0); sg.addColorStop(0, `rgba(30,34,52,${.32 * st})`); sg.addColorStop(1, 'rgba(30,34,52,0)'); ctx.fillStyle = sg; ctx.fillRect(0, 0, W, H); }
   const vg = ctx.createRadialGradient(W / 2, H / 2, Math.min(W, H) * .4, W / 2, H / 2, Math.max(W, H) * .8); vg.addColorStop(0, 'rgba(20,10,4,0)'); vg.addColorStop(1, 'rgba(20,10,4,.5)'); ctx.fillStyle = vg; ctx.fillRect(0, 0, W, H);
 
-  text(ctx, '19  ·  착하게 살면?', V ? 80 : 110, V ? 200 : 120, { align: 'left', size: 30, weight: 600, color: '#f6e8cf', alpha: win(t, .6, 5, 1, 1), ls: 4, shadow: 'rgba(0,0,0,.6)' });
-  say(ctx, '해적선에 타고 있다고 해봅시다.', win(t, 5.7, 9.2, .5, .4));
-  say(ctx, V ? '그 배 위에서 아무리 갑판을 깨끗이 닦고,\n동료에게 친절하고, 누구보다 모범적으로 산다 해도 —' : '그 배 위에서 아무리 갑판을 깨끗이 닦고, 동료에게 친절하고,\n누구보다 모범적으로 산다 해도 —', win(t, 9.3, 13.6, .5, .4));
-  say(ctx, '당신은 여전히 ‘해적’입니다.', win(t, 13.7, 16.8, .5, .4));
-  say(ctx, '그 배가 향하는 곳(심판의 항구)으로\n배와 함께 실려 가기 때문입니다.', win(t, 16.9, 20.6, .5, .4));
-  say(ctx, '문제는 ‘행동의 점수’가 아니라\n‘어느 배에 속했는가’(신분)입니다.', win(t, 20.7, 24.4, .5, .4));
-  say(ctx, '그래서 복음은 “더 착해져라”가 아니라\n“배를 옮겨 타라”고 말합니다.', win(t, 24.5, 28.5, .5, .4));
-  say(ctx, '죄의 배에서 내려, 예수님께로 —\n하나님의 자녀라는 새 신분으로 건너가는 것입니다.', win(t, 28.6, 32.5, .5, .4));
-  const va = win(t, 32.8, DUR - .3, 1, 1.2), vy = V ? 250 : 140, vs = V ? 44 : 50, vst = { weight: 600, color: '#fff6e2', shadow: 'rgba(40,20,5,.95)', shadowBlur: 16, alpha: va };
+  text(ctx, '19  ·  착하게 살면?', V ? 80 : 110, V ? 200 : 120, { align: 'left', size: 30, weight: 600, color: '#f6e8cf', alpha: win(T, .6, 5, 1, 1), ls: 4, shadow: 'rgba(0,0,0,.6)' });
+  const sb = ss(5.3, 5.9, T) * (1 - ss(40.3, 41.0, T)); if (sb > 0) { const y0 = V ? H - 330 : H - 210, g = ctx.createLinearGradient(0, y0, 0, H); g.addColorStop(0, 'rgba(26,13,5,0)'); g.addColorStop(.35, `rgba(26,13,5,${.62 * sb})`); g.addColorStop(1, `rgba(20,10,4,${.78 * sb})`); ctx.fillStyle = g; ctx.fillRect(0, y0, W, H - y0); }
+  say(ctx, '해적선에 타고 있다고 해봅시다.', win(T, 5.65, 9.25, .5, .4));
+  say(ctx, V ? '그 배 위에서 아무리 갑판을 깨끗이 닦고,\n동료에게 친절하고, 누구보다 모범적으로 산다 해도 —' : '그 배 위에서 아무리 갑판을 깨끗이 닦고, 동료에게 친절하고,\n누구보다 모범적으로 산다 해도 —', win(T, 9.35, 14.75, .5, .4));
+  say(ctx, '당신은 여전히 ‘해적’입니다.', win(T, 14.85, 18.45, .5, .4));
+  say(ctx, '그 배가 향하는 곳(심판의 항구)으로\n배와 함께 실려 가기 때문입니다.', win(T, 18.55, 23.95, .5, .4));
+  say(ctx, '문제는 ‘행동의 점수’가 아니라\n‘어느 배에 속했는가’(신분)입니다.', win(T, 24.05, 29.45, .5, .4));
+  say(ctx, '그래서 복음은 “더 착해져라”가 아니라\n“배를 옮겨 타라”고 말합니다.', win(T, 29.55, 34.95, .5, .4));
+  say(ctx, '죄의 배에서 내려, 예수님께로 —\n하나님의 자녀라는 새 신분으로 건너가는 것입니다.', win(T, 35.05, 40.45, .5, .4));
+  const va = win(T, 40.6, DUR - .2, .7, .5), vy = V ? 250 : 140, vs = V ? 44 : 50, vst = { weight: 600, color: '#fff6e2', shadow: 'rgba(40,20,5,.95)', shadowBlur: 16, alpha: va };
   if (va > 0) { const sg = ctx.createLinearGradient(0, 0, 0, vy + 220); sg.addColorStop(0, `rgba(30,16,6,${.7 * va})`); sg.addColorStop(1, 'rgba(30,16,6,0)'); ctx.fillStyle = sg; ctx.fillRect(0, 0, W, vy + 220); }
   text(ctx, '“그가 우리를 흑암의 권세에서 건져내사\n그의 사랑의 아들의 나라로 옮기셨으니”', W / 2, vy, { ...vst, size: vs });
   text(ctx, '골로새서 1:13 (개역개정)', W / 2, vy + 2 * vs * 1.55 + 4, { size: 24, font: SANS, color: '#f3dcb4', alpha: va * .95, ls: 2, shadow: 'rgba(40,20,5,.9)' });
-  const f = 1 - ss(0, 1.2, t) + ss(DUR - 1.2, DUR, t); if (f > 0) { ctx.fillStyle = `rgba(0,0,0,${clamp(f)})`; ctx.fillRect(0, 0, W, H); }
+  const f = 1 - ss(0, 1.2, T) + ss(DUR - .9, DUR, T); if (f > 0) { ctx.fillStyle = `rgba(0,0,0,${clamp(f)})`; ctx.fillRect(0, 0, W, H); }
 }
 
 Pilot.run({ W, H, dur: DUR, audio: 'ship.m4a', fonts: ["600 40px 'Noto Serif KR'", "400 20px 'Noto Sans KR'", "700 40px 'Noto Sans KR'"],

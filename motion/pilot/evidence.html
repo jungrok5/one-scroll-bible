@@ -231,6 +231,10 @@ function tableOn(t) {
   if (t > 28.2) k *= t < 28.3 ? .35 : t < 28.4 ? .85 : 1 - ss(28.4, 29.0, t);
   return .03 + .97 * k;
 }
+function reTag(x, o, c) {   // a quiet tag: these are drawn reconstructions, not photographs
+  x.save(); x.translate(o.x, o.y); x.rotate(o.r); x.translate(o === O.pilate ? o.w / 2 - 58 : -o.w / 2 + (o === O.scroll ? 84 : 66), o.h / 2 - (o === O.pilate ? 98 : o === O.scroll ? 40 : 30));
+  x.font = `400 15px ${SANS}`; x.textAlign = 'center'; x.fillStyle = c; x.strokeStyle = c; x.lineWidth = 1; x.fillText('재현', 0, 5); x.strokeRect(-21, -12, 42, 23); x.restore();
+}
 function drawObj(x, o, img) { x.save(); x.translate(o.x, o.y); x.rotate(o.r); x.drawImage(img, -o.w / 2, -o.h / 2, o.w, o.h); x.restore(); }
 function world(x, t, cam, sx, sy, lens) {
   x.save(); x.translate(sx, sy); x.scale(cam.z, cam.z); x.translate(-cam.x, -cam.y);
@@ -242,6 +246,7 @@ function world(x, t, cam, sx, sy, lens) {
   x.save(); x.translate(O.chart.x, O.chart.y); x.rotate(O.chart.r); x.translate(-O.chart.w / 2, -O.chart.h / 2); x.drawImage(cardTex, 0, 0, O.chart.w, O.chart.h); chart(x, t); x.restore();
   drawObj(x, O.teldan, tex.teldan.neg); drawObj(x, O.pilate, tex.pilate.pos);
   drawObj(x, O.scroll, tex.scroll.pos); drawObj(x, O.codex, tex.codex.pos);
+  for (const [o, c] of [[O.teldan, 'rgba(255,255,255,.5)'], [O.pilate, 'rgba(255,255,255,.42)'], [O.scroll, 'rgba(70,45,20,.5)'], [O.codex, 'rgba(70,50,30,.45)']]) reTag(x, o, c);
   drawObj(x, O.tac, tex.tac.pos); drawObj(x, O.jos, tex.jos.pos); drawObj(x, O.pro, tex.pro.pos);
   if (lens) lens(x);
   x.restore();
@@ -357,7 +362,7 @@ function draw(ctx, t) {
   // words
   text(ctx, '18  ·  성경은 실화인가', V ? 80 : 110, V ? 200 : 120, { align: 'left', size: 30, weight: 600, color: V ? '#e9ecef' : INK, alpha: win(t, .8, 5.4, 1, 1), ls: 4 });
   caption(ctx, '성경이 진짜 실화인가요?', win(t, 1.0, 4.7, .6, .5));
-  caption(ctx, V ? '그런데도 ‘그리스도를 통한 구원’이라는\n하나의 주제로 흐트러짐 없이 모입니다.' : '그런데도 ‘그리스도를 통한 구원’이라는 하나의 주제로\n흐트러짐 없이 모입니다.', win(t, 5.0, 8.9, .6, .5));
+  caption(ctx, V ? '그런데도 ‘그리스도를 통한 구원’이라는\n하나의 주제로 흐트러짐 없이 모입니다.' : '그런데도 ‘그리스도를 통한 구원’이라는 하나의 주제로 흐트러짐 없이 모입니다.', win(t, 5.0, 8.9, .6, .5));
   caption(ctx, '땅속에서 계속 확인됩니다(고고학).', win(t, 9.3, 18.3, .6, .5));
   caption(ctx, '가장 잘 보존된 고대 문서입니다(사본).', win(t, 19.4, 25.3, .6, .5));
   const ty = V ? 640 : 300, st = { weight: 600, color: '#f3ead9', shadow: 'rgba(0,0,0,.9)', shadowBlur: 18 };

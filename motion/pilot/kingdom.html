@@ -464,6 +464,10 @@ function banderole(m, b, lt, k) {
   const ta = clamp((lt - 4.2) / .6); m.globalAlpha = ta;
   txt.forEach((s, i) => m.fillText(s, cx, cy + (i - (txt.length - 1) / 2) * size * 1.18 + 4));
   m.restore(); m.restore();
+  // the citation under the banderole: cream on a soft dark wash so it reads over the green ground
+  if (ta > 0) { const cyy = cy + hh / 2 + (V ? 50 : 44), cs = V ? 26 : 24;
+    m.save(); m.globalAlpha = ta * .55; m.fillStyle = '#1e2a14'; m.filter = 'blur(10px)'; m.fillRect(cx - 190, cyy - cs * 1.2, 380, cs * 1.8); m.restore();
+    text(m, '사무엘상 16:7 (개역개정)', cx, cyy, { size: cs, font: "'Noto Sans KR',sans-serif", color: '#fbf3dc', alpha: ta, ls: 2, shadow: 'rgba(10,16,6,.9)', shadowBlur: 8 }); }
 }
 function shotKing(x, t) {
   const lt = t - S2, { mb } = L, pull = eio(clamp((lt - 1.2) / 4.4)), k = mb.w / 620, kx = mb.x + mb.w * .5, ky = mb.y + mb.h * .82 - 470 * .92 * k;

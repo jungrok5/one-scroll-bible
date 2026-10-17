@@ -53,7 +53,7 @@ function buildMap() {
     d.data[k] = base[0] * st; d.data[k + 1] = base[1] * st; d.data[k + 2] = base[2] * st * .98; d.data[k + 3] = 255; }
   lox.putImageData(d, 0, 0); x.imageSmoothingQuality = 'high'; x.drawImage(lo, 0, 0, MW, MH);
   x.globalCompositeOperation = 'multiply';
-  for (let i = 0; i < 6; i++) { const sx = r() * MW, sy = r() * MH, rr = 80 + r() * 200, g = x.createRadialGradient(sx, sy, rr * .5, sx, sy, rr);   // tea stains with soft dark rims
+  for (let i = 0; i < 0; i++) { const sx = r() * MW, sy = r() * MH, rr = 80 + r() * 200, g = x.createRadialGradient(sx, sy, rr * .5, sx, sy, rr);   // tea stains with soft dark rims
     g.addColorStop(0, 'rgba(210,180,130,.06)'); g.addColorStop(.88, 'rgba(150,110,60,.13)'); g.addColorStop(1, 'rgba(150,110,60,0)'); x.fillStyle = g; x.beginPath(); x.arc(sx, sy, rr, 0, 6.283); x.fill(); }
   x.globalCompositeOperation = 'source-over';
   x.strokeStyle = 'rgba(255,248,230,.35)'; x.lineWidth = 3; for (const f of [.33, .66]) { x.beginPath(); x.moveTo(MW * f, 0); x.lineTo(MW * f + 6, MH); x.stroke(); }
@@ -136,8 +136,11 @@ function granulate(x, w, h, seed) {             // pigment settling in the paper
     g.addColorStop(0, 'rgba(255,250,240,0)'); g.addColorStop(.9, 'rgba(120,90,70,.07)'); g.addColorStop(1, 'rgba(120,90,70,0)'); x.fillStyle = g; x.fillRect(px - rr, py - rr, rr * 2, rr * 2); }
   x.globalCompositeOperation = 'overlay'; x.globalAlpha = .22; x.drawImage(speckle(w >> 1, h >> 1, 26, seed, .6), 0, 0, w, h); x.restore();
 }
-function blob(x, cx, cy, rr, col, a, blur, seed, sq = .75) { const pts = []; for (let k = 0; k < 6.283; k += .3) { const q = rr * (.78 + .4 * fbm(Math.cos(k) * 1.6 + seed, Math.sin(k) * 1.6, 2)); pts.push([cx + Math.cos(k) * q, cy + Math.sin(k) * q * sq]); }
-  x.save(); x.globalCompositeOperation = 'multiply'; x.filter = `blur(${blur}px)`; x.fillStyle = typeof col === 'string' ? col : rgb(col, a); if (typeof col === 'string') x.globalAlpha = a; x.fill(pth(pts, true)); x.restore(); }
+function blob(x, cx, cy, rr, col, a, blur, seed, sq = .75, op = 'multiply') {   // a wet-in-wet blot, blurred on a small scratch canvas, then glazed on
+  const m = Math.ceil(rr * 1.3 + blur * 3), c = canvas(m * 2, m * 2), b = c.getContext('2d'), pts = [];
+  for (let k = 0; k < 6.283; k += .3) { const q = rr * (.78 + .4 * fbm(Math.cos(k) * 1.6 + seed, Math.sin(k) * 1.6, 2)); pts.push([m + Math.cos(k) * q, m + Math.sin(k) * q * sq]); }
+  b.filter = `blur(${blur}px)`; b.fillStyle = rgb(col, 1); b.fill(pth(pts, true));
+  x.save(); x.globalCompositeOperation = op; x.globalAlpha = a; x.drawImage(c, cx - m, cy - m); x.restore(); }
 function tent(x, cx, by, s, body, lit, r) {      // a low goat-hair tent: sloping roof, dark front, poles
   const roof = [[cx - s, by - s * .14], [cx - s * .62, by - s * .52], [cx + s * .55, by - s * .58], [cx + s * 1.04, by - s * .12]];
   x.save(); x.globalCompositeOperation = 'multiply'; x.fillStyle = rgb(body, .9); x.fill(pth(roof, true));
@@ -151,90 +154,115 @@ function tent(x, cx, by, s, body, lit, r) { const p = [[cx - s, by], [cx - s * .
   if (s > 5) { x.strokeStyle = `rgba(58,36,24,${clamp(.25 + s / 40)})`; x.lineWidth = Math.max(.8, s / 12); x.stroke(pth(p, false)); } }
 
 // ---------------- the three paintings (static, built once) ----------------
-function P1(w, h) {       // Sinai at dawn: the mountain wrapped in smoke, fire within; the camp below
-  const c = canvas(w, h), x = c.getContext('2d'), r = rng(101), s = S1, hz = h * (V ? .6 : .62), sx = w * (V ? .56 : .6), sy = h * (V ? .3 : .27);
+function P1(w, h) {       // Sinai at dawn: a jagged granite massif wrapped in smoke, fire within; the camp on the plain below
+  const c = canvas(w, h), x = c.getContext('2d'), r = rng(101), s = S1, hz = h * (V ? .6 : .63), sx = w * (V ? .56 : .6), sy = h * (V ? .3 : .27);
   paperBase(x, w, h, 7);
-  vgrad(x, 0, hz, [[0, '#4b3d6e'], [.45, '#8c78a4'], [.85, '#d9a88c'], [1, '#ecc092']]);
-  for (const [k, col, a] of [[.07, '#b8a8c8', .55], [.035, '#9a8cb2', .6]]) wash(x, ridge(-20, w + 20, xx => hz - h * k - h * .03 * fbm(xx * .004, k * 9, 3), hz + 20, 14), col, a, r, 4);
-  // the mountain: granite planes, upper slopes lit by the fire above
-  const top = xx => { const u = (xx - sx) / (w * (V ? .3 : .21)); return hz - (hz - sy) * Math.exp(-u * u * (u < 0 ? 1.4 : 1)) - h * .06 * Math.exp(-Math.pow((xx - sx + w * .2) / (w * .1), 2)) + h * .02 * (fbm(xx * .01, 3, 4) - .5) * 2; };
-  const M = ridge(w * -.05, w * 1.05, top, hz + h * .06, 6), Mp = pth(M, true);
-  wash(x, M, '#8a6a58', .8, r, 3, .6); wash(x, M, '#6a5a7a', .45, r, 6, 0);
-  x.save(); x.clip(Mp); glow(x, sx, sy + h * .05, w * .28, [[0, 'rgba(224,122,46,.55)'], [1, 'rgba(224,122,46,0)']]);
-  for (let i = 0; i < 26; i++) { const x0 = sx + (r() - .5) * w * .5, y0 = top(x0) + 4, l = h * (.05 + r() * .14), a = 1.57 + (x0 < sx ? .5 : -.5) * (.4 + r() * .6);   // gullies
-    const g = [[x0, y0]]; for (let k = 1; k < 6; k++) g.push([x0 + Math.cos(a) * l * k / 5 + (r() - .5) * 8, y0 + Math.sin(a) * l * k / 5]); pencil(x, g, 1.6 * s, .45, r); }
-  hatch(x, pth([[w * -.05, hz + 60], [w * -.05, hz - 40], [sx - w * .05, sy + 40], [sx - w * .02, hz + 60]], true), [0, sy, sx, hz + 60], 2.3, 10 * s, 16 * s, .35, r); x.restore();
-  pencil(x, M.slice(1, -1), 2.4 * s, .75, r);
-  // smoke and fire: thick cloud on the summit, a towering plume, the core burning
-  const blobs = []; for (let i = 0; i < 22; i++) { const k = i / 22, bx = sx + (r() - .5) * w * (.12 + .14 * (1 - k)) + Math.sin(k * 7) * w * .03, by = sy + h * .04 - k * (sy + h * .1), br = w * (.07 + r() * .05) * (1 - k * .35); blobs.push([bx, by, br]); }
-  for (const [bx, by, br] of blobs) { const pts = []; for (let a = 0; a < 6.283; a += .35) { const rr = br * (.8 + .35 * fbm(Math.cos(a) * 2 + bx * .01, Math.sin(a) * 2, 2)); pts.push([bx + Math.cos(a) * rr, by + Math.sin(a) * rr * .72]); } wash(x, pts, '#8e84a2', .32, r, 6, .45); }
-  glow(x, sx, sy + h * .02, w * .3, [[0, 'rgba(255,214,150,.95)'], [.12, 'rgba(240,150,70,.7)'], [.4, 'rgba(224,122,46,.25)'], [1, 'rgba(224,122,46,0)']]);
-  glow(x, sx, sy + h * .02, w * .045, [[0, 'rgba(255,245,215,1)'], [.5, 'rgba(178,58,30,.6)'], [1, 'rgba(178,58,30,0)']]);
+  vgrad(x, 0, hz, [[0, '#55467a'], [.45, '#9a86ae'], [.85, '#dcae90'], [1, '#efc79a']]);
+  for (const [k, col, a] of [[.08, '#c4b6d0', .5], [.045, '#a898bc', .55]]) { const R = ridge(-20, w + 20, xx => hz - h * k - h * .035 * fbm(xx * .004, k * 9, 4), hz + 20, 10); wash(x, R, col, a, r, 3, .35); pencil(x, R.slice(1, -2), 1.1 * s, .3, r); }
+  // the massif: jagged crest, cut into lit and shadowed planes by gullies
+  const top = xx => { const u = (xx - sx) / (w * (V ? .32 : .22)); return hz - (hz - sy) * Math.exp(-u * u * (u < 0 ? 1.3 : 1)) - h * .07 * Math.exp(-Math.pow((xx - sx + w * .19) / (w * .07), 2)) - h * .05 * Math.exp(-Math.pow((xx - sx - w * .14) / (w * .05), 2))
+    + h * .028 * (fbm(xx * .012, 3, 4) - .5) * 2 + h * .012 * Math.abs(Math.sin(xx * .045)); };
+  const base = hz + h * .05, M = ridge(w * -.05, w * 1.05, top, base, 5), Mp = pth(M, true);
+  wash(x, M, '#9a7a62', .75, r, 2, .55);
+  x.save(); x.clip(Mp);
+  for (let xx = -w * .05, i = 0; xx < w * 1.05; i++) { const dw = w * (.014 + r() * .026), lean = (xx - sx) * (.25 + r() * .3) + (r() - .5) * w * .02, lit = (xx > sx - w * .02) ? .5 : .1;
+    const q = [[xx, top(xx) - 4], [xx + dw, top(xx + dw) - 4], [xx + dw + lean, base + 10], [xx + lean, base + 10]];
+    wash(x, q, i % 2 ? (lit > .3 ? '#c89a74' : '#7a6a88') : (lit > .3 ? '#a8805e' : '#5e5070'), .3 + r() * .25, r, 2, 0);
+    if (r() < .75) { const g = []; const L = (base - top(xx)) * (.3 + r() * .6); for (let k = 0; k <= 6; k++) g.push([xx + lean * k / 6 * L / (base - top(xx)) + (r() - .5) * 4, top(xx) + L * k / 6]); pencil(x, g, 1.4 * s, .5, r); }
+    xx += dw; }
+  hatch(x, Mp, [0, sy, sx - w * .06, base], 2.25, 9 * s, 15 * s, .28, r, 1.2 * s);
+  glow(x, sx, sy + h * .04, w * .3, [[0, 'rgba(240,150,70,.6)'], [.5, 'rgba(224,122,46,.22)'], [1, 'rgba(224,122,46,0)']]);
+  x.restore();
+  pencil(x, M.slice(1, -2), 2.4 * s, .8, r);
   // the plain and the camp
-  const plain = [[0, hz + h * .02], [w, hz + h * .015], [w, h], [0, h]]; wash(x, plain, '#cfa877', .55, r, 3, 0);
-  vgrad(x, hz, h, [[0, 'rgba(255,255,255,1)'], [.55, 'rgba(170,140,120,1)'], [1, 'rgba(70,50,50,1)']], [0, hz, w, h - hz]);
-  const tents = []; for (let i = 0; i < 360; i++) { const yy = hz + h * .035 + Math.pow(r(), 1.4) * h * (V ? .2 : .24), xx = r() * w; if (Math.abs(xx - sx) < w * .06 && yy < hz + h * .06) continue; tents.push([xx, yy]); }
-  tents.sort((a, b) => a[1] - b[1]).forEach(([xx, yy]) => { const d = (yy - hz) / (h * .26), sz = (3 + d * 15) * s, lit = clamp(1 - Math.hypot(xx - sx, yy - sy) / (w * .7)) * .8;
-    tent(x, xx, yy, sz, mix([120, 90, 70], [70, 55, 60], r()), lit, r); if (r() < .05) glow(x, xx + sz * 1.4, yy - 2, 10 * s, [[0, 'rgba(255,190,110,.9)'], [1, 'rgba(255,170,90,0)']]); });
-  const rock = [[-20, h], [-20, h * .78], [w * .08, h * .8], [w * .16, h * .86], [w * .24, h * .93], [w * .3, h]]; wash(x, rock, '#3A2418', .7, r, 4, .5); pencil(x, rock.slice(1, -1), 2.2 * s, .7, r);
+  wash(x, [[0, base - 6], [w, base - 6], [w, h], [0, h]], '#d2ae7c', .5, r, 2, 0);
+  vgrad(x, base, h, [[0, 'rgba(255,255,255,1)'], [.5, 'rgba(190,160,140,1)'], [1, 'rgba(80,58,56,1)']], [0, base - 6, w, h - base + 6]);
+  for (let i = 0; i < 26; i++) { const yy = base + Math.pow(r(), 1.8) * (h - base); pencil(x, [[r() * w, yy], [r() * w, yy + (r() - .5) * 6]], 1 * s, .18, r); }
+  const tents = []; for (let i = 0; i < 300; i++) { const yy = base + h * .012 + Math.pow(r(), 1.5) * h * (V ? .2 : .23), xx = r() * w; if (Math.abs(xx - sx) < w * .05 && yy < base + h * .03) continue; tents.push([xx, yy]); }
+  tents.sort((a, b) => a[1] - b[1]).forEach(([xx, yy]) => { const d = (yy - base) / (h * .25), sz = (4 + d * 20) * s, lit = clamp(1 - Math.hypot(xx - sx, (yy - sy) * .8) / (w * .75)) * .6;
+    tent(x, xx, yy, sz, mix([88, 66, 58], [120, 96, 74], r()), lit, r);
+    if (r() < .06) glow(x, xx + sz * 1.5, yy - 2, 12 * s, [[0, 'rgba(255,190,110,.9)'], [1, 'rgba(255,170,90,0)']]);
+    if (r() < .25 && sz > 9) { x.fillStyle = 'rgba(58,36,24,.7)'; const fx = xx + sz * (1.2 + r()), f2 = sz * .32; x.fillRect(fx - f2 * .12, yy - f2, f2 * .24, f2); x.beginPath(); x.arc(fx, yy - f2 * 1.12, f2 * .14, 0, 6.283); x.fill(); } });
+  // smoke and fire: soft billows (wet in wet), lit from beneath, a towering plume; the core burns
+  for (let i = 0; i < 30; i++) { const k = i / 30, bx = sx + (r() - .5) * w * (.1 + .16 * (1 - k)) + Math.sin(k * 6) * w * .04, by = sy + h * .05 - k * (sy + h * .12), br = w * (.06 + r() * .05) * (1 - k * .3);
+    blob(x, bx, by, br, [140, 128, 160], .38, 7 * s, i * 1.7); blob(x, bx, by + br * .3, br * .7, [230, 150, 100], .22 * (1 - k), 10 * s, i * 2.3); }
+  glow(x, sx, sy + h * .02, w * .32, [[0, 'rgba(255,214,150,.95)'], [.1, 'rgba(244,160,80,.7)'], [.4, 'rgba(224,122,46,.25)'], [1, 'rgba(224,122,46,0)']]);
+  glow(x, sx, sy + h * .02, w * .05, [[0, 'rgba(255,245,215,1)'], [.5, 'rgba(178,58,30,.55)'], [1, 'rgba(178,58,30,0)']]);
+  const rock = [[-20, h], [-20, h * .8], [w * .07, h * .81], [w * .13, h * .86], [w * .2, h * .92], [w * .26, h]]; wash(x, rock, '#4a3024', .75, r, 3, .5); pencil(x, rock.slice(1, -1), 2.4 * s, .75, r);
+  hatch(x, pth(rock, true), [0, h * .78, w * .26, h], 2.3, 8 * s, 14 * s, .3, r, 1.2 * s);
   granulate(x, w, h, 31); return c;
 }
-function P2(w, h) {       // the camp at dusk: the tabernacle in the middle, the pillar of fire over it
+function P2(w, h) {       // the camp at dusk: the tabernacle in the middle, the pillar over it — cloud above, fire at its root
   const c = canvas(w, h), x = c.getContext('2d'), r = rng(202), s = S1, hz = h * (V ? .5 : .52), tx0 = w * .5, ty0 = hz + h * (V ? .14 : .17);
   paperBase(x, w, h, 8);
-  vgrad(x, 0, hz, [[0, '#3a3058'], [.4, '#6d5a88'], [.8, '#c08a7a'], [1, '#e6a066']]);
-  for (const [k, col, a] of [[.06, '#b8a8c8', .5], [.03, '#8f80a8', .55]]) wash(x, ridge(-20, w + 20, xx => hz - h * k - h * .04 * fbm(xx * .003, k * 7, 3), hz + 20, 14), col, a, r, 4);
-  wash(x, [[0, hz], [w, hz], [w, h], [0, h]], '#c49a6a', .55, r, 2, 0);
-  vgrad(x, hz, h, [[0, 'rgba(255,255,255,1)'], [.6, 'rgba(150,120,110,1)'], [1, 'rgba(60,42,40,1)']], [0, hz, w, h - hz]);
-  // the pillar: a column of cloud rising from the tent, fire at its root
-  for (let i = 0; i < 26; i++) { const k = i / 26, by = ty0 - h * .06 - k * (ty0 + h * .05), bx = tx0 + Math.sin(k * 5 + 1) * w * .02, br = w * (.045 + .03 * k) * (.8 + r() * .4), pts = [];
-    for (let a = 0; a < 6.283; a += .35) { const rr = br * (.8 + .3 * fbm(Math.cos(a) * 2 + i, Math.sin(a) * 2, 2)); pts.push([bx + Math.cos(a) * rr, by + Math.sin(a) * rr * .8]); } wash(x, pts, '#a898b8', .26, r, 5, .4); }
-  // tents of the twelve tribes, in a wide ring around an open court
-  const T = []; for (let i = 0; i < 520; i++) { const yy = hz + h * .012 + Math.pow(r(), 1.15) * (h - hz), xx = r() * w * 1.1 - w * .05, ex = (xx - tx0) / (w * .2), ey = (yy - ty0) / (h * .075 + (yy - hz) * .22); if (ex * ex + ey * ey < 1) continue; T.push([xx, yy]); }
-  T.sort((a, b) => a[1] - b[1]).forEach(([xx, yy]) => { const d = (yy - hz) / (h - hz), sz = (3 + d * 26) * s, lit = clamp(1 - Math.hypot(xx - tx0, (yy - ty0) * 1.6) / (w * .45));
-    tent(x, xx, yy, sz, mix([92, 70, 62], [60, 46, 52], r()), lit * .95, r); });
-  // the court: white linen hangings (left as paper), the tent of meeting inside
-  const cw = w * (V ? .26 : .17), cd = h * (V ? .035 : .045), court = [[tx0 - cw / 2, ty0], [tx0 + cw / 2 - cw * .08, ty0], [tx0 + cw / 2, ty0 + cd], [tx0 - cw / 2 + cw * .08, ty0 + cd]];
-  x.save(); x.fillStyle = 'rgba(244,234,210,.95)'; x.fill(pth([[tx0 - cw / 2, ty0 - cd * .55], [tx0 + cw / 2 - cw * .08, ty0 - cd * .55], [tx0 + cw / 2, ty0 + cd * .45], [tx0 + cw / 2, ty0 + cd], [tx0 - cw / 2 + cw * .08, ty0 + cd], [tx0 - cw / 2, ty0]], true)); x.restore();
-  pencil(x, court, 1.6 * s, .7, r, true); for (let i = 0; i <= 14; i++) { const f = i / 14, px = lerp(tx0 - cw / 2 + cw * .08, tx0 + cw / 2, f), py = ty0 + cd; pencil(x, [[px, py], [px, py - cd * .55]], 1.2 * s, .6, r); }
-  const tw = cw * .3, tb = ty0 + cd * .45, tent2 = [[tx0 - tw * .2, tb], [tx0 - tw * .2, tb - h * .05], [tx0 + tw * .8, tb - h * .05], [tx0 + tw * .8, tb]];
-  wash(x, tent2, '#4a3a52', .85, r, 1.5, .6); wash(x, [[tx0 - tw * .2, tb - h * .05], [tx0 + tw * .8, tb - h * .05], [tx0 + tw * .7, tb - h * .062], [tx0 - tw * .1, tb - h * .062]], '#c88a3a', .7, r, 1, .5); pencil(x, tent2, 1.6 * s, .8, r, true);
-  { const ax = tx0 - cw * .25, ay = ty0 + cd * .5; x.fillStyle = 'rgba(150,110,60,.8)'; x.fillRect(ax - 8 * s, ay - 10 * s, 16 * s, 10 * s); glow(x, ax, ay - 12 * s, 26 * s, [[0, 'rgba(255,190,110,.9)'], [1, 'rgba(255,170,90,0)']]); }
-  // the fire: one strong light, an ember glow over a quarter of the frame
-  const fy = ty0 - h * .1; glow(x, tx0, fy, w * .42, [[0, 'rgba(255,220,160,.9)'], [.1, 'rgba(240,150,70,.7)'], [.45, 'rgba(224,122,46,.28)'], [1, 'rgba(224,122,46,0)']]);
-  const flame = []; for (let a = 0; a < 6.283; a += .2) { const rr = w * .028 * (1 + .5 * Math.max(0, -Math.sin(a)) * (1 + Math.sin(a * 5))); flame.push([tx0 + Math.cos(a) * rr, fy + Math.sin(a) * rr * 2.2]); }
-  wash(x, flame, '#E07A2E', .6, r, 3, .3); glow(x, tx0, fy, w * .05, [[0, 'rgba(255,248,225,1)'], [.45, 'rgba(178,58,30,.55)'], [1, 'rgba(178,58,30,0)']]);
+  vgrad(x, 0, hz, [[0, '#3e3460'], [.4, '#74608e'], [.8, '#c48c7c'], [1, '#e8a468']]);
+  for (const [k, col, a] of [[.07, '#bcaccc', .45], [.035, '#9484ac', .55]]) { const R = ridge(-20, w + 20, xx => hz - h * k - h * .045 * fbm(xx * .003, k * 7, 4), hz + 20, 10); wash(x, R, col, a, r, 3, .35); pencil(x, R.slice(1, -2), 1.1 * s, .3, r); }
+  wash(x, [[0, hz], [w, hz], [w, h], [0, h]], '#c89e6c', .55, r, 2, 0);
+  vgrad(x, hz, h, [[0, 'rgba(255,255,255,1)'], [.6, 'rgba(160,128,116,1)'], [1, 'rgba(66,46,46,1)']], [0, hz, w, h - hz]);
+  // the pillar of cloud: a column rising high, then spreading; warm beneath
+  for (let i = 0; i < 34; i++) { const k = i / 34, by = ty0 - h * .1 - k * (ty0 - h * .02), bx = tx0 + Math.sin(k * 4 + 1) * w * .015 + (r() - .5) * w * .02 * (1 + 3 * k * k), br = w * (.035 + .05 * k * k) * (.8 + r() * .4);
+    blob(x, bx + br * .15, by + br * .1, br, [120, 100, 140], .18, 8 * s, i * 1.1, .85); blob(x, bx, by, br * .92, [244, 232, 220], .45, 6 * s, i * 1.3, .85, 'source-over'); blob(x, bx, by + br * .3, br * .7, [255, 190, 130], .35 * (1 - k * .7), 8 * s, i * 2.1, .85, 'screen'); }
+  // tents of the tribes in a ring around the open court
+  const T = []; for (let i = 0; i < 480; i++) { const yy = hz + h * .012 + Math.pow(r(), 1.2) * (h - hz), xx = r() * w * 1.1 - w * .05, ex = (xx - tx0) / (w * (V ? .26 : .19)), ey = (yy - ty0) / (h * .07 + (yy - hz) * .2); if (ex * ex + ey * ey < 1) continue; T.push([xx, yy]); }
+  T.sort((a, b) => a[1] - b[1]).forEach(([xx, yy]) => { const d = (yy - hz) / (h - hz), sz = (4 + d * 30) * s, lit = clamp(1 - Math.hypot(xx - tx0, (yy - ty0) * 1.4) / (w * .5));
+    tent(x, xx, yy, sz, mix([96, 72, 64], [70, 54, 60], r()), lit * .9, r); });
+  // the court: linen hangings left as paper, the tent of meeting inside, the altar's small fire
+  const cw = w * (V ? .3 : .19), cd = h * (V ? .04 : .05), ch = cd * .7, L = tx0 - cw / 2, R0 = tx0 + cw / 2, sk = cw * .1;
+  wash(x, [[L - 6, ty0 + cd + 6], [R0 + sk, ty0 + cd + 8], [R0 + sk + 30 * s, ty0 + cd + 22 * s], [L + 20 * s, ty0 + cd + 22 * s]], '#4a3030', .35, r, 2, 0);
+  x.save(); x.fillStyle = 'rgba(246,236,214,.97)'; x.fill(pth([[L, ty0 - ch], [R0 - sk, ty0 - ch], [R0, ty0 + cd - ch], [R0, ty0 + cd], [L + sk, ty0 + cd], [L, ty0]], true)); x.restore();
+  wash(x, [[R0 - sk, ty0 - ch], [R0, ty0 + cd - ch], [R0, ty0 + cd], [R0 - sk, ty0]], '#b49a8a', .45, r, 1, 0);
+  const tw = cw * .32, tb = ty0 + cd * .35, th = h * .06, tm = [[tx0 - tw * .1, tb], [tx0 - tw * .1, tb - th], [tx0 + tw * .9, tb - th], [tx0 + tw * .9, tb]];
+  wash(x, tm, '#4e3a56', .85, r, 1.2, .6); wash(x, [[tx0 - tw * .1, tb - th], [tx0 + tw * .9, tb - th], [tx0 + tw * .82, tb - th * 1.22], [tx0 - tw * .02, tb - th * 1.22]], '#d09a4a', .7, r, 1, .5);
+  x.save(); x.globalCompositeOperation = 'screen'; x.fillStyle = 'rgba(255,180,100,.12)'; x.fill(pth(tm, true)); x.restore(); pencil(x, tm, 1.6 * s, .8, r, true);
+  pencil(x, [[L, ty0 - ch], [R0 - sk, ty0 - ch], [R0, ty0 + cd - ch], [R0, ty0 + cd], [L + sk, ty0 + cd], [L, ty0], [L, ty0 - ch]], 1.5 * s, .7, r);
+  for (let i = 0; i <= 18; i++) { const f = i / 18, px = lerp(L + sk, R0, f), py = ty0 + cd; pencil(x, [[px, py], [px, py - ch]], 1.1 * s, .55, r); }
+  for (let i = 0; i <= 6; i++) { const f = i / 6, px = lerp(L, L + sk, f), py = lerp(ty0, ty0 + cd, f); pencil(x, [[px, py], [px, py - ch]], 1.1 * s, .5, r); }
+  { const ax = tx0 - cw * .22, ay = ty0 + cd * .55; x.fillStyle = 'rgba(140,100,60,.9)'; x.fillRect(ax - 9 * s, ay - 9 * s, 18 * s, 9 * s); glow(x, ax, ay - 12 * s, 30 * s, [[0, 'rgba(255,200,120,.95)'], [1, 'rgba(255,170,90,0)']]); }
+  // the fire at the root of the pillar: one strong light, an ember glow over a quarter of the frame
+  const fy = ty0 - h * .12;
+  glow(x, tx0, fy, w * .45, [[0, 'rgba(255,220,160,.85)'], [.12, 'rgba(240,150,70,.6)'], [.5, 'rgba(224,122,46,.22)'], [1, 'rgba(224,122,46,0)']]);
+  x.save(); x.globalCompositeOperation = 'screen'; x.filter = `blur(${10 * s}px)`; x.fillStyle = 'rgba(255,190,110,.9)'; x.beginPath(); x.ellipse(tx0, fy, w * .02, h * .07, 0, 0, 6.283); x.fill(); x.restore();
+  glow(x, tx0, fy, w * .05, [[0, 'rgba(255,250,230,1)'], [.5, 'rgba(178,58,30,.45)'], [1, 'rgba(178,58,30,0)']]);
   granulate(x, w, h, 41); return c;
 }
-function P3(w, h) {       // the Jordan in morning light: the far hills of Canaan, Jericho on its hill, the dry riverbed
-  const c = canvas(w, h), x = c.getContext('2d'), r = rng(303), s = S1, hz = h * (V ? .44 : .46), sunX = w * (V ? .66 : .7), sunY = hz - h * .05;
+const CROSS = (w, h) => { const hz = h * (V ? .44 : .46), f = .42, y = lerp(hz + h * .05, h + 20, f); return { f, y, x: w * (.42 - .3 * f + .06 * Math.sin(f * 5)), ww: w * (.012 + .07 * f), hz }; };
+function P3(w, h) {       // the Jordan in morning light: Canaan's hills, Jericho on its hill, the riverbed dry where the ark stands
+  const c = canvas(w, h), x = c.getContext('2d'), r = rng(303), s = S1, X = CROSS(w, h), hz = X.hz, sunX = w * (V ? .66 : .7), sunY = hz - h * .07;
   paperBase(x, w, h, 9);
-  vgrad(x, 0, hz + 20, [[0, '#98a6c6'], [.5, '#d8cbbc'], [1, '#f2d9a6']]);
-  glow(x, sunX, sunY, w * .5, [[0, 'rgba(255,236,180,.95)'], [.2, 'rgba(255,214,140,.55)'], [1, 'rgba(255,200,120,0)']]);
-  wash(x, ridge(-20, w + 20, xx => hz - h * .07 - h * .05 * fbm(xx * .003, 2, 3), hz + 30, 12), '#b8a8c8', .45, r, 4, .4);
-  const mid = xx => hz - h * .03 - h * .06 * fbm(xx * .004 + 5, 4, 3) - h * .045 * Math.exp(-Math.pow((xx - w * .68) / (w * .08), 2));
-  const Mm = ridge(-20, w + 20, mid, hz + h * .1, 10); wash(x, Mm, '#a0a070', .55, r, 4, .5); pencil(x, Mm.slice(1, -1), 1.8 * s, .55, r);
-  // Jericho on its hill
-  { const jx = w * .68, jy = mid(w * .68) + 6 * s, jw = w * .07; const wall = [[jx - jw / 2, jy], [jx - jw / 2, jy - 22 * s], [jx + jw / 2, jy - 22 * s], [jx + jw / 2, jy]]; wash(x, wall, '#c8a070', .7, r, 1, .6); pencil(x, wall, 1.4 * s, .7, r, true);
-    for (let i = 0; i < 7; i++) { const px = jx - jw / 2 + i * jw / 6; pencil(x, [[px - 4 * s, jy - 22 * s], [px - 4 * s, jy - 30 * s], [px + 4 * s, jy - 30 * s], [px + 4 * s, jy - 22 * s]], 1.2 * s, .7, r); }
-    glow(x, jx, jy - 14 * s, jw, [[0, 'rgba(255,220,150,.5)'], [1, 'rgba(255,220,150,0)']]); }
-  // valley floor; the river winds toward us; at the crossing its bed lies dry
-  wash(x, [[0, hz + h * .03], [w, hz + h * .02], [w, h], [0, h]], '#c2b07a', .5, r, 3, 0);
-  const rv = []; for (let k = 0; k <= 30; k++) { const f = k / 30, yy = lerp(hz + h * .05, h + 20, f), xx = w * (.42 - .3 * f + .06 * Math.sin(f * 5)); rv.push([xx, yy, w * (.012 + .07 * f)]); }
-  const bank = [...rv.map(([xx, yy, ww]) => [xx - ww, yy]), ...rv.slice().reverse().map(([xx, yy, ww]) => [xx + ww, yy])];
-  wash(x, bank, '#7f9ab0', .7, r, 2, .6);
-  const cy = h * (V ? .7 : .72), cr = h * .03; x.save(); x.clip(pth(bank, true)); x.fillStyle = 'rgba(222,204,160,.95)'; x.fillRect(0, cy - cr, w, cr * 2);
-  for (let i = 0; i < 160; i++) { x.fillStyle = `rgba(120,96,70,${.3 + r() * .4})`; x.beginPath(); x.ellipse(r() * w, cy - cr + r() * cr * 2, (2 + r() * 4) * s, (1.2 + r() * 2) * s, 0, 0, 6.283); x.fill(); } x.restore();
-  vgrad(x, hz, h, [[0, 'rgba(255,255,255,1)'], [.65, 'rgba(190,170,140,1)'], [1, 'rgba(80,60,50,1)']], [0, hz, w, h - hz]);
-  // thickets along the banks, reeds in front
-  for (let i = 0; i < 900; i++) { const k = r(), [xx, yy, ww] = rv[Math.floor(k * 30)], side = r() < .5 ? -1 : 1, px = xx + side * (ww + r() * w * .08 * (.3 + k)), py = yy + (r() - .5) * 20; if (Math.abs(py - cy) < cr * 1.2) continue;
-    const l = (6 + k * 34) * s; x.strokeStyle = r() < .5 ? 'rgba(80,110,60,.45)' : 'rgba(110,130,70,.45)'; x.lineWidth = (1 + k * 3) * s; x.beginPath(); x.moveTo(px, py); x.lineTo(px + (r() - .5) * l * .4, py - l); x.stroke(); }
-  for (let i = 0; i < 220; i++) { const px = r() * w, py = h - r() * h * .08, l = (30 + r() * 70) * s; x.strokeStyle = r() < .6 ? 'rgba(58,70,40,.5)' : 'rgba(58,36,24,.45)'; x.lineWidth = (2 + r() * 3) * s; x.beginPath(); x.moveTo(px, py); x.quadraticCurveTo(px + 6 * s, py - l * .5, px + (r() - .3) * 20 * s, py - l); x.stroke(); }
-  // the ark: a small gold chest on poles, the priests standing still in the middle of the bed
-  { const ax = lerp(rv[23][0], rv[24][0], .5), ay = cy + 2 * s; x.fillStyle = 'rgba(200,150,60,.95)'; x.fillRect(ax - 10 * s, ay - 16 * s, 20 * s, 9 * s); x.fillStyle = 'rgba(58,36,24,.8)'; x.fillRect(ax - 24 * s, ay - 9 * s, 48 * s, 2 * s);
-    for (const dx of [-18, -8, 8, 18]) { x.fillStyle = 'rgba(240,232,214,.95)'; x.fillRect(ax + dx * s - 2 * s, ay - 9 * s, 4 * s, 11 * s); x.fillStyle = 'rgba(58,36,24,.8)'; x.beginPath(); x.arc(ax + dx * s, ay - 11 * s, 2 * s, 0, 6.283); x.fill(); }
-    glow(x, ax, ay - 12 * s, 40 * s, [[0, 'rgba(255,220,150,.8)'], [1, 'rgba(255,220,150,0)']]); }
-  glow(x, sunX, sunY, w * .12, [[0, 'rgba(255,250,230,.9)'], [1, 'rgba(255,240,200,0)']]);
+  vgrad(x, 0, hz + 20, [[0, '#9eaacb'], [.55, '#dccdb8'], [1, '#f2d9a6']]);
+  glow(x, sunX, sunY, w * .55, [[0, 'rgba(255,238,186,.95)'], [.2, 'rgba(255,214,140,.5)'], [1, 'rgba(255,200,120,0)']]);
+  const far = ridge(-20, w + 20, xx => hz - h * .08 - h * .05 * fbm(xx * .003, 2, 4), hz + 30, 10); wash(x, far, '#c0b0cc', .42, r, 3, .3); pencil(x, far.slice(1, -2), 1 * s, .25, r);
+  const mid = xx => hz - h * .035 - h * .06 * fbm(xx * .004 + 5, 4, 4) - h * .05 * Math.exp(-Math.pow((xx - w * .68) / (w * .09), 2));
+  const Mm = ridge(-20, w + 20, mid, hz + h * .1, 8); wash(x, Mm, '#a2a674', .55, r, 3, .45); pencil(x, Mm.slice(1, -2), 1.8 * s, .55, r);
+  hatch(x, pth(Mm, true), [0, hz - h * .15, w, hz + h * .05], 2.2, 10 * s, 14 * s, .18, r, 1.1 * s);
+  for (let i = 0; i < 70; i++) { const px = r() * w, py = mid(px) + 6 + r() * h * .05; blob(x, px, py, (6 + r() * 10) * s, [110, 130, 80], .5, 1.5 * s, i); }
+  // Jericho on its hill: walls and towers catching the sun
+  { const jx = w * .68, jy = mid(w * .68) + 8 * s, jw = w * .1, jh = 34 * s; const wall = [[jx - jw / 2, jy], [jx - jw / 2, jy - jh], [jx + jw / 2, jy - jh], [jx + jw / 2, jy]];
+    wash(x, wall, '#d0a878', .75, r, 1, .6); wash(x, [[jx + jw * .1, jy - jh], [jx + jw / 2, jy - jh], [jx + jw / 2, jy], [jx + jw * .1, jy]], '#8a6a5a', .35, r, 1, 0); pencil(x, wall, 1.5 * s, .75, r, true);
+    for (let i = 0; i < 8; i++) { const px = jx - jw / 2 + i * jw / 7, th = jh * (i % 3 ? .3 : .55); pencil(x, [[px - 5 * s, jy - jh], [px - 5 * s, jy - jh - th], [px + 5 * s, jy - jh - th], [px + 5 * s, jy - jh]], 1.2 * s, .75, r); }
+    for (let i = 0; i < 12; i++) { x.fillStyle = 'rgba(58,36,24,.6)'; x.fillRect(jx - jw / 2 + 6 * s + r() * (jw - 12 * s), jy - jh * (.3 + r() * .5), 2.5 * s, 4 * s); } }
+  // the valley floor and the river winding toward us
+  wash(x, [[0, hz + h * .03], [w, hz + h * .02], [w, h], [0, h]], '#c6b47e', .5, r, 3, 0);
+  const rv = []; for (let k = 0; k <= 40; k++) { const f = k / 40, yy = lerp(hz + h * .05, h + 20, f), xx = w * (.42 - .3 * f + .06 * Math.sin(f * 5)); rv.push([xx, yy, w * (.012 + .07 * f)]); }
+  const bank = [...rv.map(([xx, yy, ww]) => [xx - ww, yy]), ...rv.slice().reverse().map(([xx, yy, ww]) => [xx + ww, yy])], bp = pth(bank, true);
+  wash(x, bank, '#9cbcd0', .5, r, 1.5, .6); x.save(); x.clip(pth(bank, true)); vgrad(x, hz, h, [[0, 'rgba(255,255,255,1)'], [1, 'rgba(150,170,190,1)']]); x.globalCompositeOperation = 'screen';
+  for (let i = 0; i < 90; i++) { const k = r(), [xx, yy, ww] = rv[Math.floor(k * 40)]; x.fillStyle = `rgba(255,240,210,${.2 + r() * .3})`; x.fillRect(xx - ww * .7 + r() * ww * 1.2, yy, ww * (.15 + r() * .4), (1 + k * 2) * s); } x.restore();
+  x.save(); x.clip(bp); for (let i = 0; i < 60; i++) { const k = r(), [xx, yy, ww] = rv[Math.floor(k * 40)]; pencil(x, [[xx - ww * .6 + r() * ww, yy], [xx - ww * .3 + r() * ww, yy + (r() - .5) * 3]], 1 * s, .25, r); }
+  const cr = h * .028; x.fillStyle = 'rgba(226,208,166,.96)'; x.beginPath(); x.moveTo(0, X.y - cr); x.bezierCurveTo(w * .3, X.y - cr * 1.3, w * .6, X.y - cr * .7, w, X.y - cr); x.lineTo(w, X.y + cr); x.bezierCurveTo(w * .6, X.y + cr * 1.2, w * .3, X.y + cr * .8, 0, X.y + cr); x.fill();
+  for (let i = 0; i < 120; i++) { x.fillStyle = `rgba(120,96,70,${.3 + r() * .4})`; x.beginPath(); x.ellipse(X.x - X.ww * 1.2 + r() * X.ww * 2.4, X.y - cr + r() * cr * 2, (2 + r() * 4) * s, (1.2 + r() * 2) * s, 0, 0, 6.283); x.fill(); }
+  x.restore(); pencil(x, rv.map(([xx, yy, ww]) => [xx - ww, yy]), 1.4 * s, .55, r); pencil(x, rv.map(([xx, yy, ww]) => [xx + ww, yy]), 1.4 * s, .55, r);
+  vgrad(x, hz, h, [[0, 'rgba(255,255,255,1)'], [.65, 'rgba(196,178,146,1)'], [1, 'rgba(86,64,52,1)']], [0, hz, w, h - hz]);
+  // thickets of the banks and reeds in front
+  for (let i = 0; i < 140; i++) { const k = .05 + r() * .95, [xx, yy, ww] = rv[Math.floor(k * 40)], side = r() < .5 ? -1 : 1, px = xx + side * (ww + (10 + r() * 60) * s * (.4 + k * 2)), py = yy + (r() - .5) * 10; if (Math.abs(py - X.y) < cr * 2.2) continue;
+    blob(x, px, py - (8 + 20 * k) * s, (8 + 30 * k) * s, r() < .5 ? [70, 100, 60] : [100, 120, 70], .55, 1.2 * s, i * .7, .9); }
+  for (let i = 0; i < 260; i++) { const px = r() * w, py = h - r() * h * .09, l = (30 + r() * 80) * s; x.strokeStyle = r() < .6 ? 'rgba(58,74,40,.55)' : 'rgba(58,36,24,.45)'; x.lineWidth = (2 + r() * 3) * s; x.beginPath(); x.moveTo(px, py); x.quadraticCurveTo(px + 6 * s, py - l * .5, px + (r() - .3) * 22 * s, py - l); x.stroke(); }
+  const camp = []; for (let i = 0; i < 70; i++) { const yy = X.y + h * .06 + Math.pow(r(), 1.3) * (h * .9 - X.y - h * .06), xx = w * (.55 + r() * .5); camp.push([xx, yy]); }
+  camp.sort((a, b) => a[1] - b[1]).forEach(([xx, yy]) => tent(x, xx, yy, (8 + (yy - X.y) / h * 70) * s, mix([96, 76, 64], [130, 104, 80], r()), 0, r));
+  // the ark: a small gold chest on poles, priests standing in the middle of the dry bed
+  { const ax = X.x, ay = X.y + 4 * s; for (const dx of [-20, -9, 9, 20]) { x.fillStyle = 'rgba(246,238,222,.97)'; x.fillRect(ax + dx * s - 2.5 * s, ay - 12 * s, 5 * s, 13 * s); x.fillStyle = 'rgba(58,36,24,.85)'; x.beginPath(); x.arc(ax + dx * s, ay - 14.5 * s, 2.6 * s, 0, 6.283); x.fill(); }
+    x.fillStyle = 'rgba(58,36,24,.85)'; x.fillRect(ax - 27 * s, ay - 12 * s, 54 * s, 2.4 * s); x.fillStyle = 'rgba(214,164,64,1)'; x.fillRect(ax - 11 * s, ay - 22 * s, 22 * s, 11 * s); x.strokeStyle = 'rgba(58,36,24,.8)'; x.lineWidth = 1.2 * s; x.strokeRect(ax - 11 * s, ay - 22 * s, 22 * s, 11 * s);
+    glow(x, ax, ay - 16 * s, 50 * s, [[0, 'rgba(255,224,150,.85)'], [1, 'rgba(255,220,150,0)']]); }
+  glow(x, sunX, sunY, w * .1, [[0, 'rgba(255,252,236,.95)'], [1, 'rgba(255,240,200,0)']]);
   granulate(x, w, h, 51); return c;
 }
 
@@ -271,11 +299,13 @@ function drawPainting(ctx, t, i) {
   const fl = .5 + .5 * noise(t * 6, i * 3);
   if (i === 0) { const px = W / 2 + dx + (PW * (V ? .56 : .6) - PW / 2) * z, py = H / 2 + (PH * (V ? .3 : .27) - PH / 2) * z; lx.globalCompositeOperation = 'screen'; const g = lx.createRadialGradient(px, py, 0, px, py, W * .14); g.addColorStop(0, `rgba(255,170,90,${.25 + .2 * fl})`); g.addColorStop(1, 'rgba(255,150,80,0)'); lx.fillStyle = g; lx.fillRect(0, 0, W, H); }
   if (i === 1) { const px = W / 2 + dx, py = H / 2 + (PH * (V ? .5 : .52) + PH * (V ? .04 : .07) - PH / 2) * z; lx.globalCompositeOperation = 'screen'; const g = lx.createRadialGradient(px, py, 0, px, py, W * .2); g.addColorStop(0, `rgba(255,180,100,${.18 + .2 * fl})`); g.addColorStop(1, 'rgba(255,150,80,0)'); lx.fillStyle = g; lx.fillRect(0, 0, W, H); }
-  if (i === 2) { lx.globalCompositeOperation = 'source-over'; const cyv = PH * (V ? .7 : .72), r = rng(7);
-    for (let k = 0; k < 34; k++) { const u = ((t - a0) * .06 + k * .031 + r() * .01) % 1.2; if (u > 1) continue; const f = .55 + .45 * u * .0, rvx = (fv => PW * (.42 - .3 * fv + .06 * Math.sin(fv * 5)))(.77), ww = PW * (.012 + .07 * .77);
-      const wx = lerp(rvx - ww * 1.6, rvx + ww * 1.6, u), wy = cyv - PH * .006 + (r() - .5) * PH * .02, sx = W / 2 + dx + (wx - PW / 2) * z, sy = H / 2 + (wy - PH / 2) * z, sc = S1 * z * (V ? 1.1 : 1);
-      const bob = Math.abs(Math.sin(t * 6 + k)) * 1.5 * sc; lx.fillStyle = 'rgba(58,36,24,.85)'; lx.fillRect(sx - 2 * sc, sy - 13 * sc - bob, 4 * sc, 11 * sc); lx.beginPath(); lx.arc(sx, sy - 15 * sc - bob, 2.6 * sc, 0, 6.283); lx.fill();
-      if (k % 3 === 0) { lx.fillStyle = 'rgba(150,110,80,.8)'; lx.fillRect(sx - 6 * sc, sy - 12 * sc - bob, 4 * sc, 6 * sc); } } }
+  if (i === 2) { lx.globalCompositeOperation = 'source-over'; const X = CROSS(PW, PH), r = rng(7), sc = S1 * z * (V ? 1.15 : 1.1), span = X.ww * 3.4 + PW * .08;
+    for (let k = 0; k < 40; k++) { const u = ((t - a0) * .045 + k / 40 + r() * .012) % 1, wx = X.x - span / 2 + u * span, wy = X.y + (r() - .5) * PH * .02;
+      if (Math.abs(wx - X.x) < 30 * S1) continue; const sx = W / 2 + dx + (wx - PW / 2) * z, sy = H / 2 + (wy - PH / 2) * z, bob = Math.abs(Math.sin(t * 6 + k)) * 1.4 * sc;
+      lx.fillStyle = 'rgba(58,36,24,.88)'; lx.beginPath(); lx.moveTo(sx - 3 * sc, sy); lx.lineTo(sx - 2 * sc, sy - 12 * sc - bob); lx.lineTo(sx + 2 * sc, sy - 12 * sc - bob); lx.lineTo(sx + 3.4 * sc, sy); lx.fill();
+      lx.beginPath(); lx.arc(sx, sy - 14.5 * sc - bob, 2.5 * sc, 0, 6.283); lx.fill();
+      if (k % 3 === 0) { lx.fillStyle = 'rgba(150,110,80,.85)'; lx.fillRect(sx - 6 * sc, sy - 12 * sc - bob, 4 * sc, 6 * sc); }
+      if (k % 5 === 1) { lx.fillStyle = 'rgba(230,220,200,.9)'; lx.beginPath(); lx.ellipse(sx + 6 * sc, sy - 2.5 * sc, 3.6 * sc, 2.4 * sc, 0, 0, 6.283); lx.fill(); } } }
   lx.globalCompositeOperation = 'source-over';
 }
 function bloomMask(k) {         // watercolour bloom: the painting opens from wet spots outward, along a noise field
@@ -296,7 +326,7 @@ function draw(ctx, t) {
     drawPainting(ctx, t, i); if (k < 1) { bloomMask(eio(k)); lx.globalCompositeOperation = 'destination-in'; lx.imageSmoothingEnabled = true; lx.drawImage(maskC, 0, 0, W, H); lx.globalCompositeOperation = 'source-over'; }
     ctx.drawImage(layer, 0, 0); }
   // paper grain over everything, a soft vignette toward umber
-  ctx.globalCompositeOperation = 'overlay'; ctx.globalAlpha = .18; ctx.drawImage(grain, 0, 0, W, H); ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
+  ctx.globalCompositeOperation = 'overlay'; ctx.globalAlpha = .07; ctx.drawImage(grain, 0, 0, W, H); ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
   const vg = ctx.createRadialGradient(W / 2, H / 2, Math.min(W, H) * .45, W / 2, H / 2, Math.max(W, H) * .75); vg.addColorStop(0, 'rgba(58,36,24,0)'); vg.addColorStop(1, 'rgba(58,36,24,.45)'); ctx.fillStyle = vg; ctx.fillRect(0, 0, W, H);
 
   // words
@@ -318,10 +348,10 @@ function draw(ctx, t) {
   const p3 = win(t, 26.3, 30.2, 1, .7), ink = { weight: 600, color: '#3A2418', shadow: 'rgba(250,240,215,.95)', shadowBlur: 20 };
   text(ctx, V ? '약속의 땅 문 앞에 선 백성,\n이제 들어갑니다…' : '약속의 땅 문 앞에 선 백성, 이제 들어갑니다…', W / 2, vy, { ...ink, size: V ? 50 : 48, alpha: p3 });
   // the whole road: Deuteronomy 1:31 in two cards
-  const c1 = win(t, 33.0, 36.4, 1, .6), c2 = win(t, 36.3, DUR - .4, .7, 1), sz = V ? 46 : 44;
-  text(ctx, '“사람이 자기의 아들을 안는 것 같이\n너희의 하나님 여호와께서', W / 2, vy, { ...ink, size: sz, alpha: c1, lh: 1.5 });
-  text(ctx, '너희가 걸어온 길에서 너희를 안으사\n이 곳까지 이르게 하셨느니라”', W / 2, vy, { ...ink, size: sz, alpha: c2, lh: 1.5 });
-  text(ctx, '신명기 1:31 (개역개정)', W / 2, vy + sz * 1.5 + (V ? 58 : 54), { size: V ? 24 : 22, font: "'Noto Sans KR',sans-serif", color: '#5a4030', alpha: Math.max(c1, c2) * .9, ls: 2, shadow: 'rgba(250,240,215,.95)', shadowBlur: 12 });
+  const c1 = win(t, 33.0, 36.4, 1, .6), c2 = win(t, 36.3, DUR - .4, .7, 1), sz = V ? 46 : 44, fx = V ? W / 2 : 110, fy = V ? 1520 : H * .4, al = V ? 'center' : 'left';
+  text(ctx, '“사람이 자기의 아들을 안는 것 같이\n너희의 하나님 여호와께서', fx, fy, { ...ink, size: sz, alpha: c1, lh: 1.5, align: al });
+  text(ctx, '너희가 걸어온 길에서 너희를 안으사\n이 곳까지 이르게 하셨느니라”', fx, fy, { ...ink, size: sz, alpha: c2, lh: 1.5, align: al });
+  text(ctx, '신명기 1:31 (개역개정)', fx, fy + sz * 1.5 + (V ? 58 : 54), { size: V ? 24 : 22, font: "'Noto Sans KR',sans-serif", color: '#5a4030', alpha: Math.max(c1, c2) * .9, ls: 2, shadow: 'rgba(250,240,215,.95)', shadowBlur: 12, align: al });
   const f = 1 - ss(0, 1.3, t) + ss(DUR - 1.1, DUR, t); if (f > 0) { ctx.fillStyle = `rgba(14,9,6,${clamp(f)})`; ctx.fillRect(0, 0, W, H); }
 }
 

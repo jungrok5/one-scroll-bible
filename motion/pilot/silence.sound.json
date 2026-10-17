@@ -1,0 +1,18 @@
+{ "duration": 34,
+  "music": [
+    { "id": "m1", "at": 0.6, "len": 23.6, "db": -4, "fin": 1.5, "fout": 1.2,
+      "prompt": "Quiet patient lullaby for felt piano and music box with soft harp, slow tempo around 66 BPM, a gentle steady pulse like a ticking clock, a simple repeating melody that returns again and again as seasons pass, warm but wistful, waiting and longing, very sparse, no drums" },
+    { "id": "m2", "at": 24.8, "len": 9.2, "db": -2, "fin": 0.3, "fout": 1.5,
+      "prompt": "Hopeful arrival: warm string ensemble swelling slowly from silence, celesta and harp glittering on top, a soft wordless choir, major key, tender and full of quiet joy, ending on a long open sustained chord" }
+  ],
+  "sfx": [
+    { "id": "s1", "at": 0.6, "len": 2.0, "db": -10, "loop": false,
+      "prompt": "Small lamp switch click followed by a soft rising warm shimmer of light" },
+    { "id": "s2", "at": 1.0, "len": 22.5, "db": -24, "loop": false,
+      "prompt": "Calm night ambience in a quiet village: distant crickets, a faint breeze, very soft and still" },
+    { "id": "s3", "at": 8.0, "len": 1.0, "db": -18, "loop": false,
+      "prompt": "Single soft wooden block tap, like a paper card sliding into place" },
+    { "id": "s4", "at": 24.8, "len": 3.0, "db": -8, "loop": false,
+      "prompt": "A clear bright bell chime with a long shimmering tail, like a new star appearing" }
+  ],
+  "ducks": [ { "from": 23.6, "to": 24.8, "db": -24 } ] }

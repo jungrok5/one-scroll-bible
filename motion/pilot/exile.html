@@ -138,7 +138,7 @@ function plate2(lt) {
   if (!cache[key]) {
     const list = [], sky = [], r = rng(5);
     // sky: wide sweeps near the horizon, thin up high
-    hatch(sky, (x, y) => y < hillTop(x) - 4, { box: [0, 0, PW, J.top + 200], ang: -.03, sp: 12, len: [60, 200], w: (x, y) => 1 + 13 * Math.pow(y / J.top, 2.2), key: (x, y) => .05 + (J.top - y) / J.top * .5 + Math.random() * 0, seed: 6, dur: .1 });
+    hatch(sky, (x, y) => y < hillTop(x) - 4, { box: [0, 0, PW, J.top + 200], ang: -.03, sp: 12, len: [60, 200], w: (x, y) => 1 + 13 * Math.pow(y / J.top, 2.2), key: (x, y) => .05 + (J.top - y) / J.top * .5, seed: 6, dur: .1 });
     sky.forEach(s => s.sky = true);
     // hill: fall-line cuts, lit from the upper left
     const hill = new Path2D(); hill.moveTo(0, PH); for (let x = 0; x <= PW; x += 10) hill.lineTo(x, hillTop(x)); hill.lineTo(PW, PH); hill.closePath();

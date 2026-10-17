@@ -157,13 +157,13 @@ function floodP(t) { return 1.08 * eo(clamp((t - T_FLOOD) / 6.2)); }
 function drawFlood(ctx, t) {
   const p = floodP(t); if (p <= 0) return;
   const d = fmx.createImageData(FW, FH), D = d.data, ed = emx.createImageData(FW, FH), E = ed.data;
-  for (let i = 0; i < FW * FH; i++) { const f = floodF[i], a = clamp((p - f) / .05); D[i * 4 + 3] = 255 * a; const e = p - f; E[i * 4 + 3] = e > 0 ? 255 * Math.exp(-(((e - .012) / .018) ** 2)) : 0; }
+  for (let i = 0; i < FW * FH; i++) { const f = floodF[i], a = clamp((p - f) / .07); D[i * 4 + 3] = 255 * a; const e = p - f; E[i * 4 + 3] = e > 0 ? 255 * Math.exp(-(((e - .012) / .018) ** 2)) : 0; }
   fmx.putImageData(d, 0, 0); emx.putImageData(ed, 0, 0);
   tmx.globalCompositeOperation = 'source-over'; tmx.clearRect(0, 0, W, H); tmx.drawImage(flood, 0, 0);
-  tmx.globalCompositeOperation = 'destination-in'; tmx.drawImage(fm, 0, 0, W, H);
+  tmx.globalCompositeOperation = 'destination-in'; tmx.filter = 'blur(4px)'; tmx.drawImage(fm, 0, 0, W, H); tmx.filter = 'none';
   ctx.globalCompositeOperation = 'multiply'; ctx.drawImage(tmp, 0, 0);
   // the dark tide-line at the advancing edge (edge pigment)
-  if (p < 1.06) { tmx.globalCompositeOperation = 'source-over'; tmx.clearRect(0, 0, W, H); tmx.fillStyle = rgb(INK, .55); tmx.fillRect(0, 0, W, H);
+  { tmx.globalCompositeOperation = 'source-over'; tmx.clearRect(0, 0, W, H); tmx.fillStyle = rgb(INK, .55 * (1 - .55 * ss(1, 1.08, p))); tmx.fillRect(0, 0, W, H);
     tmx.globalCompositeOperation = 'destination-in'; tmx.drawImage(em, 0, 0, W, H); ctx.drawImage(tmp, 0, 0); }
   ctx.globalCompositeOperation = 'source-over';
 }
@@ -193,13 +193,17 @@ function draw(ctx, t) {
   if (ghost > 0) for (const p of ps) { ctx.save(); ctx.globalAlpha = ghost * .8; ctx.filter = 'blur(.8px)'; figure(ctx, p.x, p.y, L.fh, 1, p.lean, p.fem, 1.5, PAPER); ctx.restore(); }
   // the voice in the wind: a dry, light stroke lifts the ink as it passes through the garden
   const wk = clamp((t - T_WIND[0]) / (T_WIND[1] - T_WIND[0]));
-  if (wk > 0 && wk < 1) { const r = rng(5), wy = H * (V ? .6 : .66), front = lerp(-W * .3, W * 1.3, eio(wk)), amp = Math.sin(wk * Math.PI);
+  if (wk > 0 && wk < 1) { const r = rng(5), wy = H * (V ? .6 : .66), amp = ss(0, .15, wk) * (1 - ss(.8, 1, wk));
+    // soft dry-brush streaks with feathered ends sweep across; each lifts a little ink as it passes
     ctx.save(); ctx.globalCompositeOperation = 'screen'; ctx.lineCap = 'round';
-    const sw = ctx.createLinearGradient(front - W * .7, 0, front, 0); sw.addColorStop(0, 'rgba(110,104,92,0)'); sw.addColorStop(.8, `rgba(110,104,92,${.32 * amp})`); sw.addColorStop(1, 'rgba(110,104,92,0)');
-    ctx.fillStyle = sw; ctx.beginPath(); ctx.ellipse(front - W * .3, wy, W * .45, H * .13, -.04, 0, 6.283); ctx.fill();
-    for (let i = 0; i < 70; i++) { const y = wy + (r() - .5) * H * .24, l = 300 + r() * 700, x1 = front - r() * 300, x0 = x1 - l; ctx.strokeStyle = rgb([120, 114, 100], (.2 + r() * .35) * amp); ctx.lineWidth = .8 + r() * 2.6;
-      ctx.beginPath(); ctx.moveTo(x0, y); ctx.bezierCurveTo(x0 + l * .3, y - 10 * Math.sin(i), x0 + l * .7, y + 12 * Math.cos(i), x1, y + (r() - .5) * 8); ctx.stroke(); }
-    ctx.restore(); }
+    for (let i = 0; i < 46; i++) { const g1 = r() - .5 + (r() - .5), dy = g1 * H * .15, d = r() * .3, l = W * (.28 + .4 * r()), k = eio(clamp((wk - d) / .7)), hx = lerp(-W * .2, W * 1.2 + l, k);
+      const band = Math.exp(-((dy / (H * .12)) ** 2)), a = (.3 + .35 * r()) * band * amp * Math.sin(Math.PI * clamp(k * 1.15)); if (a < .01) { r(); r(); r(); continue; }
+      const y = wy + dy, x0 = hx - l, wav = 6 + r() * 10, ph = r() * 6, nb = 3 + (r() * 3 | 0);
+      for (let bI = 0; bI < nb; bI++) { const oy = (bI - nb / 2) * (1.6 + r() * 1.4);
+        const gr = ctx.createLinearGradient(x0, 0, hx, 0); gr.addColorStop(0, 'rgba(126,120,106,0)'); gr.addColorStop(.55 + .2 * r(), `rgba(126,120,106,${a * (.5 + .5 * r())})`); gr.addColorStop(1, 'rgba(126,120,106,0)');
+        ctx.strokeStyle = gr; ctx.lineWidth = .7 + r() * 1.8; ctx.setLineDash([40 + r() * 160, 4 + r() * 14]); ctx.lineDashOffset = r() * 100;
+        ctx.beginPath(); for (let q = 0; q <= 24; q++) { const px = x0 + l * q / 24, py = y + oy + Math.sin(q / 24 * 3 + ph) * wav * (q / 24); q ? ctx.lineTo(px, py) : ctx.moveTo(px, py); } ctx.stroke(); } }
+    ctx.setLineDash([]); ctx.restore(); }
   // the gold point: one tiny light that the ink could not cover
   const ga = ss(T_GOLD, T_GOLD + 2.2, t);
   if (ga > 0) { const pul = 1 + .12 * Math.sin(t * 2.2) * ss(T_GOLD + 2, T_GOLD + 4, t), R0 = (5 + 8 * ss(T_GOLD + 1, T_GOLD + 8, t)) * pul;
@@ -253,10 +257,14 @@ Pilot.run({ W, H, dur: DUR, audio: 'fall.m4a', fonts: ["600 40px 'Noto Serif KR'
       for (let y = 0; y < H; y++) for (let i = 0; i < W; i++) { const n = fbm(i * .006, y * .006, 4), g = noise(i * .4, y * .4), bl = fbm(i * .012 + 40, y * .012, 3);
         const dc = clamp(1 - Math.hypot(i - L.flood[0] * W, y - L.flood[1] * H) / (H * 1.1)), a = clamp(.62 + .2 * n + .05 * g + .14 * dc - .12 * Math.max(0, bl - .6) * 3), k = (y * W + i) * 4; D[k] = INK[0]; D[k + 1] = INK[1]; D[k + 2] = INK[2]; D[k + 3] = a * 255; }
       x.putImageData(d, 0, 0); }
-    floodF = new Float32Array(FW * FH); const fx = L.flood[0] * W, fy = L.flood[1] * H, top = L.top * H;
+    floodF = new Float32Array(FW * FH); const tr = rng(61), tend = Array.from({ length: 12 }, (_, k) => [W * (.03 + .08 * k + tr() * .05), 90 + tr() * 130, 10 + tr() * 18]); const fx = L.flood[0] * W, fy = L.flood[1] * H, top = L.top * H;
     for (let j = 0; j < FH; j++) for (let i = 0; i < FW; i++) { const px = i * 4, py = j * 4;
       let f = Math.hypot((px - fx) * .85, py - fy) / Math.max(W, H) * 1.25 + (fbm(px * .005, py * .005, 4) - .5) * .32;
-      if (py < top + 220) f += Math.pow((top + 220 - py) / 220, 1.2) * 1.3;
+      // the top edge soaks in unevenly, with a few tendrils wicking up along the fibres
+      const ey = top + 250 + 100 * (fbm(px * .0025, 5.3, 3) - .5) * 2 + 55 * (fbm(px * .008, 2.1, 3) - .5) * 2 + 18 * (fbm(px * .025, py * .01, 3) - .5) * 2;
+      if (py < ey) { let pen = Math.pow((ey - py) / 200, 1.1) * 1.3;
+        for (const [tx0, tl, tw] of tend) { const up = ey - py; if (up > tl) continue; const dd = Math.abs(px - (tx0 + 14 * Math.sin(py * .03 + tx0))); pen *= 1 - .97 * Math.exp(-((dd / (tw * (1 - .6 * up / tl))) ** 2)) * (1 - (up / tl) ** 2); }
+        f += pen; }
       floodF[j * FW + i] = f; }
     seal = buildSeal();
   },

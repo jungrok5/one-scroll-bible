@@ -121,8 +121,8 @@ function drawLight(ctx, t, c) {
 function drawDeep(ctx, t, c, lit) {
   const q0 = proj(c, 0, 0, 1e5); if (!q0) return; const hz = q0[1]; if (hz > H + 10) return;
   // the deep: black at the horizon (continuous with the darkness above), a faint body, darker again toward the camera
-  const g = ctx.createLinearGradient(0, hz, 0, H); g.addColorStop(0, rgb(mix([0, 0, 0], [58, 40, 30], lit))); g.addColorStop(.12, rgb(mix([4, 5, 9], [44, 30, 22], lit)));
-  g.addColorStop(.45, rgb(mix([3, 4, 7], [22, 15, 12], lit))); g.addColorStop(1, rgb(mix([0, 0, 1], [5, 3, 3], lit)));
+  const g = ctx.createLinearGradient(0, hz, 0, H); g.addColorStop(0, rgb(mix([0, 0, 0], [104, 92, 100], lit))); g.addColorStop(.05, rgb(mix([2, 3, 5], [76, 58, 50], lit))); g.addColorStop(.18, rgb(mix([4, 5, 9], [46, 32, 24], lit)));
+  g.addColorStop(.5, rgb(mix([3, 4, 7], [20, 14, 11], lit))); g.addColorStop(1, rgb(mix([0, 0, 1], [5, 3, 3], lit)));
   ctx.fillStyle = g; ctx.fillRect(0, hz, W, H - hz);
   const lq = proj(c, BX, BY, BZ), lx0 = lq ? lq[0] : W / 2;
   // ripples on the deep: cold and faint before the light, gold after; a breath moves across ("하나님의 영은 수면 위에 운행하시니라")
@@ -137,8 +137,8 @@ function drawDeep(ctx, t, c, lit) {
   }
   ctx.globalAlpha = 1;
   // haze along the horizon: no ruler-straight edge between the deep and the sky
-  const hzH = H * .09, hg = ctx.createLinearGradient(0, hz - hzH, 0, hz + hzH * .8);
-  hg.addColorStop(0, 'rgba(0,0,0,0)'); hg.addColorStop(.55, lit > 0 ? `rgba(255,196,150,${.2 * lit})` : 'rgba(14,18,30,.35)'); hg.addColorStop(1, 'rgba(0,0,0,0)');
+  const hzH = H * .12, hg = ctx.createLinearGradient(0, hz - hzH, 0, hz + hzH * .8);
+  hg.addColorStop(0, 'rgba(0,0,0,0)'); hg.addColorStop(.55, lit > 0 ? `rgba(255,200,160,${.28 * lit})` : 'rgba(14,18,30,.35)'); hg.addColorStop(1, 'rgba(0,0,0,0)');
   ctx.globalCompositeOperation = 'screen'; ctx.fillStyle = hg; ctx.fillRect(0, hz - hzH, W, hzH * 1.8);
   if (lit > 0) { const gx = ctx.createRadialGradient(lx0, hz, 0, lx0, hz, W * .5); gx.addColorStop(0, `rgba(255,200,150,${.22 * lit})`); gx.addColorStop(1, 'rgba(255,200,150,0)');
     ctx.save(); ctx.translate(lx0, hz); ctx.scale(1, .16); ctx.translate(-lx0, -hz); ctx.fillStyle = gx; ctx.fillRect(lx0 - W * .5, hz - W * .5, W, W); ctx.restore(); }
@@ -154,6 +154,15 @@ function reflect(ctx, t, c, lit) {     // the light mirrored in the water, broke
   ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
 }
 
+let hs1, hs2;
+function softHorizon(ctx, y) {          // re-lay a feathered, blurred band over the horizon so it reads as haze, not a ruled line
+  const bh = 90; if (!hs1) { hs1 = canvas(W, bh * 2); hs2 = canvas(W, bh * 2); }
+  const a = hs1.getContext('2d'), b = hs2.getContext('2d'); a.clearRect(0, 0, W, bh * 2); a.drawImage(ctx.canvas, 0, y - bh, W, bh * 2, 0, 0, W, bh * 2);
+  b.globalCompositeOperation = 'source-over'; b.clearRect(0, 0, W, bh * 2); b.filter = 'blur(7px)'; b.drawImage(hs1, 0, 0); b.filter = 'none';
+  const g = b.createLinearGradient(0, 0, 0, bh * 2); g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(.5, 'rgba(0,0,0,1)'); g.addColorStop(1, 'rgba(0,0,0,0)');
+  b.globalCompositeOperation = 'destination-in'; b.fillStyle = g; b.fillRect(0, 0, W, bh * 2); b.globalCompositeOperation = 'source-over';
+  ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.drawImage(hs2, 0, y - bh); ctx.restore();
+}
 // ---------- the heavens ----------
 function drawStars(ctx, t, c, a) {
   if (a <= 0) return; ctx.fillStyle = '#fff6e6';
@@ -329,6 +338,7 @@ function draw(ctx, t) {
         ctx.fillStyle = sg; ctx.fillRect(-W * .8, -W * .8, W * 1.6, W * 1.6); ctx.restore(); }
       ctx.globalCompositeOperation = 'source-over';
     }
+    if (t < 17.5 && hzy > 0 && hzy < H) softHorizon(ctx, hzy);
     drawEarth(ctx, t); drawClouds(ctx, t);
   }
   if (t > S.E[0]) { ctx.globalAlpha = ss(S.E[0], S.E[0] + .2, t); drawGarden(ctx, t); ctx.globalAlpha = 1; drawClouds(ctx, t); }

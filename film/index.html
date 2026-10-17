@@ -57,6 +57,8 @@
   body.full .stage{position:fixed;inset:0;margin:0;border-radius:0;z-index:10;width:100vw!important;height:100svh!important}
   body.full .bar{position:fixed;left:0;right:0;bottom:0;z-index:11;margin:0;padding:10px max(12px,env(safe-area-inset-right)) calc(10px + env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left));background:linear-gradient(0deg,rgba(0,0,0,.8),rgba(0,0,0,0));transition:opacity .4s}
   body.full.idle .bar{opacity:0}
+  .toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom));transform:translateX(-50%);background:#f4efe6;color:#14110b;padding:10px 16px;border-radius:999px;font-size:.875rem;z-index:20;box-shadow:0 6px 20px rgba(0,0,0,.4);transition:opacity .3s}
+  .toast[hidden]{display:none}
   .fps{position:absolute;right:8px;top:6px;font:12px/1 ui-monospace,monospace;color:#7f7;background:rgba(0,0,0,.6);padding:3px 6px;border-radius:4px;z-index:12}
 </style>
 <!-- Google Analytics (GA4) -->
@@ -100,9 +102,11 @@
     <button type="button" data-o="h" aria-pressed="true" data-ui="landscape">가로</button>
     <button type="button" data-o="v" aria-pressed="false" data-ui="portrait">세로</button>
     <button type="button" id="fs" aria-label="전체 화면" data-ui-aria="full">⛶</button>
+    <button type="button" id="share" data-ui="share">공유</button>
   </div>
 
   <ol class="chapters" id="chapters"></ol>
+  <div class="toast" id="toast" role="status" hidden></div>
 
   <a class="back" href="/" id="back" data-ui="back">글로 천천히 읽어 보기 →</a>
 
@@ -128,6 +132,8 @@
   document.querySelectorAll('[data-ui-aria]').forEach(function (e) { if (UI[e.dataset.uiAria]) e.setAttribute('aria-label', UI[e.dataset.uiAria]); });
   if (UI.title) document.title = UI.title;
   if (LANG !== 'ko') { document.getElementById('home').href = '/' + LANG + '/'; document.getElementById('back').href = '/' + LANG + '/'; }
+  // a shared link can point at one scene: /film/#cross
+  var START_AT = Math.max(0, S.findIndex(function (s) { return '#' + s[0] === location.hash; }));
   var TOTAL = S.reduce(function (a, s) { return a + s[2]; }, 0), START = [], acc = 0;
   S.forEach(function (s) { START.push(acc); acc += s[2]; });
   var $ = function (id) { return document.getElementById(id); };
@@ -177,8 +183,17 @@
     playing = p; $('pp').textContent = p ? '❚❚' : '▶'; $('pp').setAttribute('aria-label', p ? '일시정지' : '재생');
     big.hidden = p || started; if (p) { started = true; poster.hidden = true; big.hidden = true; au.play().catch(function () {}); } else au.pause();
   }
-  big.onclick = function () { if (window.gtag) gtag('event', 'film_play', { orientation: ori }); if (cur < 0) go(0, true); else setPlay(true); };
-  $('pp').onclick = function () { if (cur < 0) go(0, true); else setPlay(!playing); };
+  big.onclick = function () { if (window.gtag) gtag('event', 'film_play', { orientation: ori }); if (cur < 0) go(START_AT, true); else setPlay(true); };
+  $('pp').onclick = function () { if (cur < 0) go(START_AT, true); else setPlay(!playing); };
+  // share: the film link (with the scene now showing, e.g. /film/#cross) — the phone's share sheet, else copy the link
+  function toast(msg) { var t = $('toast'); t.textContent = msg; t.hidden = false; clearTimeout(toast.h); toast.h = setTimeout(function () { t.hidden = true; }, 2200); }
+  $('share').onclick = function () {
+    var i = cur >= 0 ? cur : START_AT, url = location.origin + '/film/' + (LANG !== 'ko' ? '?lang=' + LANG : '') + (i > 0 ? '#' + S[i][0] : '');
+    var title = UI.title || '영상으로 보는 성경 이야기', text = (UI.shareText || '창조에서 새 하늘과 새 땅까지, 성경 이야기를 13분 영상으로') + (i > 0 ? ' — ' + S[i][1] : '');
+    if (navigator.share) navigator.share({ title: title, text: text, url: url }).then(function () { if (window.gtag) gtag('event', 'share', { method: 'native', content_type: 'film', item_id: S[i][0] }); }).catch(function () {});
+    else if (navigator.clipboard) navigator.clipboard.writeText(url).then(function () { toast(UI.copied || '링크를 복사했어요'); if (window.gtag) gtag('event', 'share', { method: 'copy', content_type: 'film', item_id: S[i][0] }); }, function () { prompt('', url); });
+    else prompt('', url);
+  };
   $('prev').onclick = function () { go(Math.max(0, cur - 1), playing || cur < 0); };
   $('next').onclick = function () { go(Math.min(S.length - 1, cur + 1), playing || cur < 0); };
   stage.onclick = function (e) { if (e.target === big || big.contains(e.target)) return; if (started) setPlay(!playing); };
@@ -234,7 +249,8 @@
 
   $('tm').textContent = '0:00 / ' + fmt(TOTAL);
   size();
-  load(0, 0); loadedIdx[0] = 0; frames[0].dataset.o = ori;  // warm up the first scene behind the poster
+  load(0, START_AT); loadedIdx[0] = START_AT; frames[0].dataset.o = ori;  // warm up the first scene behind the poster
+  if (START_AT > 0) { $('now').textContent = pad(START_AT) + ' ' + S[START_AT][1]; $('tm').textContent = fmt(START[START_AT]) + ' / ' + fmt(TOTAL); }
 })();
 </script>
 </body>

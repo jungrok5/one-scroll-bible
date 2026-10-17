@@ -19,7 +19,7 @@ FACES = [('Noto Serif KR', 400, 'Noto-400.ttf'), ('Noto Serif KR', 600, 'Noto-60
 GF = re.compile(r'<link rel="stylesheet" href="https://fonts\.googleapis\.com/[^"]*">')
 
 os.makedirs(OUT, exist_ok=True)
-srcs = [os.path.join(PILOT, s + '.html') for s in ORDER] + glob.glob(os.path.join(PILOT, '*.js'))
+srcs = [os.path.join(PILOT, s + '.html') for s in ORDER] + glob.glob(os.path.join(PILOT, '*.js')) + glob.glob(os.path.join(PILOT, 'i18n', '*.json'))   # translations: their glyphs too, where the Noto KR fonts have them
 text = ''.join(open(p, encoding='utf-8').read() for p in srcs)
 chars = set(text) | {chr(c) for c in range(0x20, 0x7f)} | set('·—–…“”‘’「」『』()·•→←↑↓')
 open(os.path.join(OUT, '.chars.txt'), 'w', encoding='utf-8').write(''.join(sorted(c for c in chars if c >= ' ')))
@@ -46,5 +46,7 @@ for s in ORDER:
                         '-c:a', 'aac', '-b:a', '96k', '-movflags', '+faststart', os.path.join(OUT, s + '.m4a')], check=True)
     else: print('no sound yet:', s)
 for p in glob.glob(os.path.join(PILOT, '*.js')): shutil.copy(p, OUT)
+os.makedirs(os.path.join(OUT, 'i18n'), exist_ok=True)   # language files (scene text + player page text); Korean needs none
+for p in glob.glob(os.path.join(PILOT, 'i18n', '*.json')): shutil.copy(p, os.path.join(OUT, 'i18n'))
 tot = sum(os.path.getsize(p) for p in glob.glob(os.path.join(OUT, '*')))
 print(f'→ film/s/ · {len(ORDER)} scenes · {tot / 1e6:.1f} MB')

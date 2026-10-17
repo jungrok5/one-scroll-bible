@@ -78,46 +78,56 @@
 </head>
 <body>
 <main>
-  <div class="top"><a href="/">← 한눈에 보는 성경 이야기</a><span style="color:var(--muted)">약 13분 · 소리와 함께</span></div>
-  <h1>영상으로 보는 <span class="em">성경 이야기</span></h1>
-  <p class="sub">창조에서 새 하늘과 새 땅까지 — 장면마다 다른 화풍으로 그린 21개 장면이 하나의 줄거리로 이어집니다. 그림은 브라우저에서 실시간으로 그려집니다.</p>
+  <div class="top"><a href="/" id="home" data-ui="home">← 한눈에 보는 성경 이야기</a><span style="color:var(--muted)" data-ui="len">약 13분 · 소리와 함께</span></div>
+  <h1 data-ui-html="h1">영상으로 보는 <span class="em">성경 이야기</span></h1>
+  <p class="sub" data-ui="sub">창조에서 새 하늘과 새 땅까지 — 장면마다 다른 화풍으로 그린 21개 장면이 하나의 줄거리로 이어집니다. 그림은 브라우저에서 실시간으로 그려집니다.</p>
 
   <div class="stage" id="stage">
     <iframe id="fa" title="장면" tabindex="-1" aria-hidden="true"></iframe>
     <iframe id="fb" title="장면" tabindex="-1" aria-hidden="true"></iframe>
     <img class="poster" id="poster" src="/film/poster-h.jpg" alt="한눈에 보는 성경 이야기 — 영상">
-    <button class="big" id="big" type="button" aria-label="재생"><span>▶</span></button>
-    <div class="wait" id="wait" hidden>불러오는 중…</div>
+    <button class="big" id="big" type="button" aria-label="재생" data-ui-aria="play"><span>▶</span></button>
+    <div class="wait" id="wait" hidden data-ui="loading">불러오는 중…</div>
   </div>
 
   <div class="bar" id="bar">
     <button type="button" id="pp" aria-label="재생">▶</button>
-    <button type="button" id="prev" aria-label="이전 장면">⏮</button>
-    <button type="button" id="next" aria-label="다음 장면">⏭</button>
+    <button type="button" id="prev" aria-label="이전 장면" data-ui-aria="prev">⏮</button>
+    <button type="button" id="next" aria-label="다음 장면" data-ui-aria="next">⏭</button>
     <span class="now" id="now">00 하나의 줄거리</span>
     <span class="grow" aria-hidden="true"><i id="prog"></i></span>
     <span id="tm" style="font-variant-numeric:tabular-nums">0:00 / 13:09</span>
-    <button type="button" data-o="h" aria-pressed="true">가로</button>
-    <button type="button" data-o="v" aria-pressed="false">세로</button>
-    <button type="button" id="fs" aria-label="전체 화면">⛶</button>
+    <button type="button" data-o="h" aria-pressed="true" data-ui="landscape">가로</button>
+    <button type="button" data-o="v" aria-pressed="false" data-ui="portrait">세로</button>
+    <button type="button" id="fs" aria-label="전체 화면" data-ui-aria="full">⛶</button>
   </div>
 
   <ol class="chapters" id="chapters"></ol>
 
-  <a class="back" href="/">글로 천천히 읽어 보기 →</a>
+  <a class="back" href="/" id="back" data-ui="back">글로 천천히 읽어 보기 →</a>
 
-  <footer>
+  <footer data-ui-html="legal">
     성경 인용: 「성경전서 개역개정판」 © 대한성서공회. 저작권은 대한성서공회에 있으며, 출처를 밝혀 인용했습니다.
     장면의 그림은 모두 코드로 그렸고, 음악·효과음은 ElevenLabs로 만들었습니다.
   </footer>
 </main>
 <script>
 (function () {
+  var LANG = (location.search.match(/[?&]lang=([\w-]+)/) || [])[1] || 'ko', UI = {};
   // [file, label, seconds]
   var S = [['opening','하나의 줄거리',36],['creation','창조',35],['fall','타락',34],['patriarch','족장',26],['exodus','출애굽',38],
     ['wilderness','광야 여정',39.5],['judges','사사 시대',40],['kingdom','통일 왕국',39],['exile','분열 · 포로',36],['return','포로 귀환',35],
     ['silence','400년 침묵',34],['advent','예수님의 오심',36],['cross','십자가',39],['rise','부활',27],['church','교회',35],['renewal','회복',36],
     ['mirror','거울',40],['gospel','복음의 핵심',40],['evidence','성경은 실화인가',40],['ship','착하게 살면?',46.5],['invite','초대',57]];
+  // other languages: page text from film/s/i18n/<lang>.json "_ui" (the scenes read the same file)
+  if (LANG !== 'ko') { try { var x = new XMLHttpRequest(); x.open('GET', '/film/s/i18n/' + LANG + '.json', false); x.send();
+    var J = JSON.parse(x.responseText); UI = J._ui || {}; document.documentElement.lang = LANG; document.documentElement.dir = J._dir || 'ltr'; } catch (e) { LANG = 'ko'; } }
+  if (UI.ch) S.forEach(function (s, i) { if (UI.ch[i]) s[1] = UI.ch[i]; });
+  document.querySelectorAll('[data-ui]').forEach(function (e) { if (UI[e.dataset.ui]) e.textContent = UI[e.dataset.ui]; });
+  document.querySelectorAll('[data-ui-html]').forEach(function (e) { if (UI[e.dataset.uiHtml]) e.innerHTML = UI[e.dataset.uiHtml]; });
+  document.querySelectorAll('[data-ui-aria]').forEach(function (e) { if (UI[e.dataset.uiAria]) e.setAttribute('aria-label', UI[e.dataset.uiAria]); });
+  if (UI.title) document.title = UI.title;
+  if (LANG !== 'ko') { document.getElementById('home').href = '/' + LANG + '/'; document.getElementById('back').href = '/' + LANG + '/'; }
   var TOTAL = S.reduce(function (a, s) { return a + s[2]; }, 0), START = [], acc = 0;
   S.forEach(function (s) { START.push(acc); acc += s[2]; });
   var $ = function (id) { return document.getElementById(id); };
@@ -147,7 +157,7 @@
   }
   addEventListener('resize', size);
 
-  function src(i) { return '/film/s/' + S[i][0] + '.html?render=1' + (ori === 'v' ? '&o=v' : ''); }
+  function src(i) { return '/film/s/' + S[i][0] + '.html?render=1' + (ori === 'v' ? '&o=v' : '') + (LANG !== 'ko' ? '&lang=' + LANG : ''); }
   function load(slot, i) { if (loadedIdx[slot] === i && frames[slot].dataset.o === ori) return; loadedIdx[slot] = i; frames[slot].dataset.o = ori; frames[slot].src = src(i); }
   function ready(slot) { try { var w = frames[slot].contentWindow; return !!(w && w.__ready && w.seek) && loadedIdx[slot] === cur; } catch (e) { return false; } }
 
@@ -192,7 +202,7 @@
   addEventListener('pagehide', function () { setPlay(false); try { au.removeAttribute('src'); au.load(); } catch (e) {} });
   // 잠금 화면·알림의 재생 컨트롤이 이 재생기를 따르도록
   if ('mediaSession' in navigator) { try {
-    navigator.mediaSession.metadata = new MediaMetadata({ title: '영상으로 보는 성경 이야기', artist: '한눈에 보는 성경 이야기', artwork: [{ src: '/icon-512.png', sizes: '512x512', type: 'image/png' }] });
+    navigator.mediaSession.metadata = new MediaMetadata({ title: UI.title || '영상으로 보는 성경 이야기', artist: UI.brand || '한눈에 보는 성경 이야기', artwork: [{ src: '/icon-512.png', sizes: '512x512', type: 'image/png' }] });
     navigator.mediaSession.setActionHandler('play', function () { if (cur < 0) go(0, true); else setPlay(true); });
     navigator.mediaSession.setActionHandler('pause', function () { setPlay(false); });
     navigator.mediaSession.setActionHandler('stop', function () { setPlay(false); });

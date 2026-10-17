@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>시안 · 하나의 줄거리</title>
+<link rel="stylesheet" href="fonts.css">
+</head>
+<body>
+<script src="lib.js"></script>
+<script src="goldline.js"></script>
+<script>
+/* 00 하나의 줄거리 — one-line drawing, drawn with light (Gjon Mili's light-pen photographs, La Linea's grammar).
+   A single golden line touches the dark paper and never lifts. It draws the site's thread in three pictures on one
+   horizon — a rainbow (약속), an hourglass where the pen stops and waits (기다림), a cross on a hill (성취) —
+   each picture fills with light as it closes. Pull back: it was one line all along. The line runs on into the
+   title 「한눈에 보는 성경 이야기」 and off the edge of the paper, into the story. */
+const { clamp, lerp, ss, eo, eio, win, rng, noise, text } = Pilot;
+const W = Pilot.W, H = Pilot.H, V = Pilot.ori === 'v', DUR = 36;
+const GL = GoldLine;
+let line, M = {};          // motif placements (world origin + mirror)
+
+function build() {
+  const p = new GL.Path();
+  // placements: landscape = one horizon left → right; portrait = the same story written boustrophedon, three rows
+  M = V ? { rb: [0, 0, 1], hg: [0, 800, -1], cr: [0, 1600, 1] } : { rb: [0, 0, 1], hg: [1000, 0, 1], cr: [2000, 0, 1] };
+  // first touch and the lead-in
+  if (V) { p.moveTo(-430, -250, .9).hold(1.25).cubicTo(-540, -110, -440, 0, -300, 0).time(5.0, { easeIn: .5 }); }
+  else { p.moveTo(-1150, -30, .9).hold(1.25).cubicTo(-900, -110, -620, 50, -300, 0).time(5.0, { easeIn: .5 }); }
+  // 약속 — a rainbow of three arcs on the ground, drawn as one switch-back
+  p.tf(...M.rb);
+  p.lineTo(-200, 0).arc(0, 0, 200, Math.PI, 2 * Math.PI).lineTo(160, 0).arc(0, 0, 160, 0, -Math.PI).lineTo(-120, 0).arc(0, 0, 120, Math.PI, 2 * Math.PI).lineTo(300, 0).time(9.8, { K: 30 });
+  // → to the hourglass
+  p.tf(0, 0);
+  if (V) p.cubicTo(640, 0, 640, 800, 300, 800); else p.cubicTo(430, -40, 570, 40, 700, 0);
+  p.time(12.3);
+  // 기다림 — the hourglass; the pen stops at the narrow waist and waits
+  p.tf(...M.hg);
+  p.lineTo(-140, 0).lineTo(140, 0).lineTo(140, -14).lineTo(110, -14).cubicTo(110, -90, 10, -110, 10, -170).time(14.0, { K: 34, easeOut: .8 }).hold(15.6);
+  p.cubicTo(10, -230, 110, -250, 110, -326).lineTo(140, -326).lineTo(140, -340).lineTo(-140, -340).lineTo(-140, -326).lineTo(-110, -326)
+    .cubicTo(-110, -250, -10, -230, -10, -170).cubicTo(-10, -110, -110, -90, -110, -14).lineTo(-140, -14).lineTo(-140, 0).lineTo(300, 0).time(18.0, { K: 34, easeIn: .5 });
+  // → up the hill
+  p.tf(0, 0);
+  if (V) p.cubicTo(-640, 800, -640, 1600, -320, 1600); else p.cubicTo(1430, -30, 1560, 30, 1680, 0);
+  p.time(19.6);
+  // 성취 — the hill and the cross; the most important stroke is the slowest
+  p.tf(...M.cr);
+  p.cubicTo(-220, 0, -120, -120, -18, -120).time(21.0);
+  p.lineTo(-18, -370).lineTo(-118, -370).lineTo(-118, -404).lineTo(-18, -404).lineTo(-18, -480).lineTo(18, -480).lineTo(18, -404).lineTo(118, -404).lineTo(118, -370).lineTo(18, -370).lineTo(18, -120).time(24.2, { K: 60 });
+  p.cubicTo(120, -120, 220, 0, 320, 0).time(25.2);
+  // the line runs on: a horizon under the title, then off the edge of the paper
+  p.tf(0, 0);
+  if (V) p.cubicTo(700, 1612, 1100, 1590, 1500, 1600).time(30.6).lineTo(2700, 1600).time(34.6);
+  else p.cubicTo(2800, 12, 3300, -10, 3700, 0).time(30.6).lineTo(4900, 0).time(34.6);
+  line = p.done();
+}
+
+// camera keys: [t, cx, cy, zoom, follow]
+const CAM = V ? [[0, -430, -250, 1.5, 1], [1.2, -430, -250, 1.5, 1], [5.0, -300, -60, 1.38, .9], [7.4, 0, -110, 1.42, .25], [10.2, 0, -110, 1.46, .25],
+  [12.6, 0, 630, 1.3, .7], [13.6, 0, 630, 1.32, .3], [17.6, 0, 630, 1.38, .3], [19.8, -200, 1500, 1.25, .8], [21.3, 0, 1370, 1.26, .12], [24.6, 0, 1370, 1.32, .08],
+  [27.2, 0, 720, .66, 0], [29.6, 0, 720, .64, 0], [31.8, 1500, 1560, 1.0, 0], [36, 1500, 1560, 1.03, 0]]
+  : [[0, -1150, -30, 1.55, 1], [1.2, -1150, -30, 1.55, 1], [5.0, -300, -60, 1.35, .9], [7.4, 0, -95, 1.4, .25], [10.2, 0, -95, 1.44, .25],
+  [12.6, 1000, -170, 1.3, .7], [13.6, 1000, -150, 1.3, .25], [17.6, 1000, -150, 1.36, .25], [19.8, 1700, -150, 1.25, .8], [21.3, 2000, -230, 1.24, .12], [24.6, 2000, -230, 1.3, .08],
+  [27.2, 960, -170, .64, 0], [29.6, 960, -170, .62, 0], [31.8, 3550, -60, 1.0, 0], [36, 3550, -60, 1.03, 0]];
+
+// ---------- fills: each picture fills with light once it closes ----------
+function place(ctx, cam, m) { GL.apply(ctx, cam, W, H); ctx.translate(m[0], m[1]); ctx.scale(m[2], 1); }
+function rainbowFill(ctx, cam, t) {
+  const k = eo(clamp((t - 9.3) / 1.6)); if (k <= 0) return;
+  place(ctx, cam, M.rb); ctx.globalCompositeOperation = 'lighter';
+  const a1 = Math.PI + Math.PI * k, band = (r0, r1, c) => { ctx.fillStyle = c; ctx.beginPath(); ctx.arc(0, 0, r1, Math.PI, a1); ctx.arc(0, 0, r0, a1, Math.PI, true); ctx.closePath(); ctx.fill(); };
+  band(164, 196, 'rgba(255,196,104,.46)'); band(124, 156, 'rgba(255,226,160,.36)');
+  const g = ctx.createRadialGradient(0, 0, 0, 0, 0, 118); g.addColorStop(0, 'rgba(255,236,190,.20)'); g.addColorStop(1, 'rgba(255,220,160,.07)');
+  ctx.fillStyle = g; ctx.beginPath(); ctx.arc(0, 0, 116, Math.PI, a1); ctx.lineTo(0, 0); ctx.closePath(); ctx.fill();
+  ctx.globalCompositeOperation = 'source-over'; ctx.setTransform(1, 0, 0, 1, 0, 0);
+}
+let glass;
+function hourglassFill(ctx, cam, t) {
+  const k = ss(17.4, 18.6, t); if (k <= 0) return;
+  place(ctx, cam, M.hg); ctx.save(); ctx.clip(glass); ctx.globalCompositeOperation = 'lighter';
+  ctx.fillStyle = `rgba(255,225,170,${.05 * k})`; ctx.fillRect(-120, -330, 240, 320);                 // the glass, faintly lit
+  const s = clamp((t - 18.2) / 13), top = lerp(-276, -182, s), bot = lerp(-18, -112, Math.sqrt(s));
+  ctx.fillStyle = `rgba(255,196,96,${.55 * k})`;
+  ctx.beginPath(); ctx.moveTo(-120, top); ctx.quadraticCurveTo(0, top + 14 * (1 - s), 120, top); ctx.lineTo(120, -160); ctx.lineTo(-120, -160); ctx.fill();     // sand above, sinking
+  ctx.beginPath(); ctx.moveTo(-120, -10); ctx.lineTo(-120, bot + 30); ctx.quadraticCurveTo(0, bot - 22, 120, bot + 30); ctx.lineTo(120, -10); ctx.fill();     // the pile below, rising
+  if (s > 0 && s < 1) { const r = rng(Math.floor(t * 24)); ctx.fillStyle = `rgba(255,230,170,${.8 * k})`; ctx.fillRect(-1.6, -172, 3.2, bot + 172 - 14);     // the falling thread
+    for (let i = 0; i < 10; i++) { ctx.globalAlpha = r(); ctx.fillRect(-2 + r() * 4, -170 + r() * (bot + 150), 2, 2); } ctx.globalAlpha = 1; }
+  ctx.restore(); ctx.globalCompositeOperation = 'source-over'; ctx.setTransform(1, 0, 0, 1, 0, 0);
+}
+let crossP;
+function crossFill(ctx, cam, t) {
+  const k = ss(23.9, 25.0, t), kr = k * (1 - .8 * ss(29.4, 31.2, t)); if (k <= 0) return;
+  place(ctx, cam, M.cr); ctx.globalCompositeOperation = 'lighter';
+  // radiance behind the cross: a soft sun and slow rays
+  const g = ctx.createRadialGradient(0, -380, 0, 0, -380, 760); g.addColorStop(0, `rgba(255,214,140,${.34 * kr})`); g.addColorStop(.35, `rgba(255,170,80,${.10 * kr})`); g.addColorStop(1, 'rgba(255,150,60,0)');
+  ctx.fillStyle = g; ctx.fillRect(-780, -1160, 1560, 1560);
+  for (let i = 0; i < 18; i++) { const a = -Math.PI / 2 + (i - 8.5) * .19 + Math.sin(t * .2 + i) * .02, l = 900, wd = .022 + .01 * Math.sin(i * 3.1);
+    ctx.fillStyle = `rgba(255,220,160,${(.05 + .03 * Math.sin(t * 1.1 + i * 2)) * kr})`; ctx.beginPath(); ctx.moveTo(0, -380);
+    ctx.lineTo(Math.cos(a - wd) * l, -380 + Math.sin(a - wd) * l); ctx.lineTo(Math.cos(a + wd) * l, -380 + Math.sin(a + wd) * l); ctx.fill(); }
+  const cg = ctx.createLinearGradient(0, -480, 0, -120); cg.addColorStop(0, `rgba(255,246,220,${.85 * k})`); cg.addColorStop(1, `rgba(255,200,120,${.55 * k})`);
+  ctx.fillStyle = cg; ctx.fill(crossP);
+  ctx.globalCompositeOperation = 'source-over'; ctx.setTransform(1, 0, 0, 1, 0, 0);
+}
+
+// ---------- words ----------
+const LAB = [['약속', 0, 7.8], ['기다림', 1, 14.6], ['성취', 2, 23.2]];
+function labels(ctx, cam, t) {
+  const fade = 1 - ss(29.6, 30.6, t), keys = ['rb', 'hg', 'cr'];
+  for (const [s, i, t0] of LAB) { const m = M[keys[i]], [sx, sy] = GL.toScreen(cam, W, H, m[0], m[1] + 78), size = clamp(56 * cam.z, 38, 72);
+    const edge = 1 - ss(H * .36, H * .46, Math.abs(sy - H / 2));        // a label drifting to the frame edge (the previous row in portrait) bows out
+    GL.write(ctx, s, sx, sy + size * .35, clamp((t - t0) / 1.0), { size, weight: 600, color: '#f3d08e', glow: 'rgba(255,170,70,.55)', alpha: fade * edge, ls: size * .12 }); }
+}
+function sub(ctx, t, lines, t0, t1) {
+  const a = 1 - ss(t1 - .5, t1, t); if (t < t0 || a <= 0) return; const size = V ? 44 : 40, y0 = V ? H - 330 : H - 96, n = lines.length;
+  lines.forEach((s, i) => { const d = .25 + s.length * .045, st = t0 + lines.slice(0, i).reduce((q, l) => q + .25 + l.length * .045, 0);
+    GL.write(ctx, s, W / 2, y0 + (i - (n - 1)) * size * 1.55, clamp((t - st) / d), { size, weight: 400, color: '#efe2c8', alpha: a * .95, glow: 'rgba(0,0,0,.9)', glowBlur: 16 }); });
+}
+
+function draw(ctx, t) {
+  const cam = GL.camAt(CAM, t, line, W, H);
+  GL.paper(ctx, cam, W, H);
+  rainbowFill(ctx, cam, t); hourglassFill(ctx, cam, t); crossFill(ctx, cam, t);
+  GL.drawLine(ctx, line, t, cam, W, H, { base: 4.4, zmin: .95 });
+  GL.nib(ctx, line, t, cam, W, H);
+  GL.vignette(ctx, W, H, .72);
+  labels(ctx, cam, t);
+
+  // furniture + the site's words (index.html thread.*)
+  text(ctx, '00  ·  하나의 줄거리', V ? 72 : 110, V ? 170 : 120, { align: 'left', size: 30, weight: 600, color: '#efe2c8', alpha: win(t, .6, 5.2, 1, 1), ls: 4 });
+  const h2 = { size: V ? 62 : 58, weight: 600, color: '#f6ead2', glow: 'rgba(255,170,80,.35)', glowBlur: 26, alpha: 1 - ss(6.0, 6.8, t) };
+  if (V) { GL.write(ctx, '성경은 결국', W / 2, 380, clamp((t - 1.6) / .8), h2); GL.write(ctx, '한 편의 이야기입니다', W / 2, 480, clamp((t - 2.3) / 1.2), h2); }
+  else GL.write(ctx, '성경은 결국 한 편의 이야기입니다', W / 2, 250, clamp((t - 1.6) / 1.8), h2);
+  sub(ctx, t, ['하나님이 약속하시고(언약),'], 8.4, 12.6);
+  sub(ctx, t, ['사람들이 오랫동안 기다리며,'], 14.6, 19.0);
+  sub(ctx, t, V ? ['마침내 예수님 안에서', '성취되고 완성됩니다.'] : ['마침내 예수님 안에서 성취되고 완성됩니다.'], 22.4, 28.0);
+  // the title, written on above the running line
+  const ty = V ? H / 2 - 20 : H / 2 + 20, ta = 1 - ss(34.4, 35.4, t);
+  GL.write(ctx, '한눈에 보는', W / 2, ty - (V ? 150 : 140), clamp((t - 30.4) / 1.0), { size: V ? 56 : 52, weight: 600, color: '#f1e3c6', alpha: ta, ls: 6, glow: 'rgba(0,0,0,.8)' });
+  GL.write(ctx, '성경 이야기', W / 2, ty, clamp((t - 31.0) / 1.4), { size: V ? 128 : 124, weight: 900, color: '#f4c76e', alpha: ta, ls: 8, glow: 'rgba(255,160,60,.55)', glowBlur: 34, spark: 1 });
+  // fade from / to black
+  const f = 1 - ss(0, 1.2, t) + ss(DUR - 1.3, DUR, t); if (f > 0) { ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.fillStyle = `rgba(0,0,0,${clamp(f)})`; ctx.fillRect(0, 0, W, H); }
+}
+
+Pilot.run({ W, H, dur: DUR, fonts: ["600 40px 'Noto Serif KR'", "900 40px 'Noto Serif KR'", "400 40px 'Noto Serif KR'", "400 20px 'Noto Sans KR'"],
+  init: async () => {
+    GL.init(W, H, V ? [-1500, -1500, 3200, 2600] : [-2200, -1500, 5600, 1100]); build();
+    glass = new Path2D(); glass.moveTo(110, -14); glass.bezierCurveTo(110, -90, 10, -110, 10, -170); glass.bezierCurveTo(10, -230, 110, -250, 110, -326); glass.lineTo(-110, -326);
+    glass.bezierCurveTo(-110, -250, -10, -230, -10, -170); glass.bezierCurveTo(-10, -110, -110, -90, -110, -14); glass.closePath();
+    crossP = new Path2D(); [[-18, -120], [-18, -370], [-118, -370], [-118, -404], [-18, -404], [-18, -480], [18, -480], [18, -404], [118, -404], [118, -370], [18, -370], [18, -120]]
+      .forEach((q, i) => i ? crossP.lineTo(q[0], q[1]) : crossP.moveTo(q[0], q[1])); crossP.closePath();
+  },
+  draw });
+</script>
+</body>
+</html>

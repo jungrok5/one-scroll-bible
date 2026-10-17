@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>시안 · 족장 시대</title>
+<link rel="stylesheet" href="fonts.css">
+</head>
+<body>
+<script src="lib.js"></script>
+<script>
+/* 03 족장 시대 — soft pastel on grey-violet toned paper, magic hour → night, one continuous shot.
+   Abraham walks to his tent, sits by the lantern, looks up; the camera tilts up and the stars multiply (Gen 15:5). */
+const { clamp, lerp, ss, eo, eio, win, rng, fbm, canvas, hex, mix, rgb, ramp, speckle, text } = Pilot;
+const W = 1920, H = 1080, DUR = 26;
+const HZ = 640;                 // horizon (screen y, before tilt)
+const WW = 3400;                // world width
+let paper, plain, buttes, clouds, stars = [];
+
+// ---------- pastel helpers ----------
+function hatch(x, path, c, r, n, ang, len, wd, alpha) {           // diagonal pastel hatching clipped to a path
+  x.save(); x.clip(path); x.strokeStyle = c; x.lineCap = 'round';
+  const b = path.__b; for (let i = 0; i < n; i++) {
+    const px = b[0] + r() * (b[2] - b[0]), py = b[1] + r() * (b[3] - b[1]), a = ang + (r() - .5) * .3, l = len * (.6 + r() * .8);
+    x.globalAlpha = alpha * (.4 + r() * .6); x.lineWidth = wd * (.6 + r() * .8);
+    x.beginPath(); x.moveTo(px, py); x.lineTo(px + Math.cos(a) * l, py + Math.sin(a) * l); x.stroke();
+  } x.restore();
+}
+function poly(pts) { const p = new Path2D(); pts.forEach((q, i) => i ? p.lineTo(q[0], q[1]) : p.moveTo(q[0], q[1])); p.closePath();
+  const xs = pts.map(q => q[0]), ys = pts.map(q => q[1]); p.__b = [Math.min(...xs), Math.min(...ys), Math.max(...xs), Math.max(...ys)]; return p; }
+
+function buildButtes() {        // far mesas and low ridges, violet; drawn once, world-space at 0.35 parallax
+  const c = canvas(2600, 260), x = c.getContext('2d'), r = rng(11);
+  const ridge = [[0, 260]]; for (let i = 0; i <= 52; i++) { const px = i * 50; ridge.push([px, 205 - fbm(px * .004, 1.3) * 70]); } ridge.push([2600, 260]);
+  const p0 = poly(ridge); x.fillStyle = '#5a4c84'; x.fill(p0); hatch(x, p0, '#7a6a9e', r, 1400, -.45, 20, 3, .3); hatch(x, p0, '#46396e', r, 700, 2.6, 16, 3, .25);
+  [[300, 120, 380], [1180, 80, 260], [1700, 140, 420], [2250, 100, 220]].forEach(([mx, top, w]) => {   // mesas: flat tops, sloped skirts
+    const p = poly([[mx - w / 2 - 60, 260], [mx - w / 2, top + 30], [mx - w / 2 + 25, top], [mx + w / 2 - 20, top + 4], [mx + w / 2, top + 28], [mx + w / 2 + 70, 260]]);
+    x.fillStyle = '#4b3f78'; x.fill(p); hatch(x, p, '#6e5f9a', r, 900, -.5, 18, 3, .35); hatch(x, p, '#352c5e', r, 500, 2.5, 14, 3, .3); hatch(x, p, '#c9738a', r, 160, -.5, 12, 2, .18);
+  });
+  return c;
+}
+
+function buildPlain() {         // the land carries the texture: dry-grass ochre with fine upright strokes, dense in front
+  const h = H - HZ + 420, c = canvas(WW, h), x = c.getContext('2d'), r = rng(7);
+  const g = x.createLinearGradient(0, 0, 0, h); g.addColorStop(0, '#a88a68'); g.addColorStop(.15, '#b8955e'); g.addColorStop(1, '#8a6a42');
+  x.fillStyle = g; x.fillRect(0, 0, WW, h);
+  const cols = ['#c9a56a', '#b8955e', '#9c7a4c', '#d8b97c', '#c08a6e', '#7d6448', '#e3c48a', '#efd29a', '#6e5440', '#c9738a', '#4a4470'];
+  const wts = [14, 14, 12, 10, 8, 8, 8, 5, 6, 3, 4], tot = wts.reduce((a, b) => a + b);
+  const pick = () => { let v = r() * tot; for (let i = 0; i < wts.length; i++) { v -= wts[i]; if (v < 0) return cols[i]; } return cols[0]; };
+  for (let i = 0; i < 90000; i++) {
+    const y = Math.pow(r(), .5) * h, d = y / h;                  // depth 0 (horizon) → 1 (front)
+    const px = r() * WW, len = 3 + d * 74 * (.6 + r() * .8), wd = .8 + d * 6 * (.6 + r() * .6);
+    x.globalAlpha = .45 + r() * .5; x.strokeStyle = pick(); x.lineWidth = wd; x.lineCap = 'round';
+    const lean = (r() - .5) * .5; x.beginPath(); x.moveTo(px, y); x.lineTo(px + lean * len, y - len); x.stroke();
+  }
+  // a dusk-blue shadow band and rose glints to break the plain into planes
+  x.globalAlpha = 1; x.globalCompositeOperation = 'multiply';
+  for (let i = 0; i < 9; i++) { const px = r() * WW, py = 30 + r() * (h * .6); const gg = x.createRadialGradient(px, py, 0, px, py, 260 + r() * 300);
+    gg.addColorStop(0, 'rgba(110,100,150,.45)'); gg.addColorStop(1, 'rgba(110,100,150,0)'); x.fillStyle = gg; x.fillRect(0, 0, WW, h); }
+  x.globalCompositeOperation = 'source-over';
+  drawCamp(x);
+  return c;
+}
+
+function drawCamp(x) {          // the tent (black goat hair), striped rug, a few sheep — painted into the plain layer
+  const r = rng(23), TX = 1880, TY = 210;
+  const tent = poly([[TX - 230, TY + 6], [TX - 210, TY - 70], [TX - 120, TY - 96], [TX - 40, TY - 80], [TX + 40, TY - 104], [TX + 140, TY - 82], [TX + 230, TY - 66], [TX + 250, TY + 6]]);
+  x.fillStyle = '#2a2436'; x.fill(tent); hatch(x, tent, '#4a3f5e', r, 700, -1.0, 16, 2.5, .5); hatch(x, tent, '#1a1626', r, 300, .6, 14, 2.5, .4);
+  const door = poly([[TX - 70, TY + 4], [TX - 62, TY - 66], [TX + 12, TY - 70], [TX + 18, TY + 4]]); x.fillStyle = '#5a3a2a'; x.fill(door);
+  x.strokeStyle = '#1a1626'; x.lineWidth = 4; [[TX - 210, TY - 70], [TX + 40, TY - 104], [TX + 230, TY - 66]].forEach(([px, py]) => { x.beginPath(); x.moveTo(px, py); x.lineTo(px + (px < TX ? -60 : 70), TY + 8); x.stroke(); });
+  for (let i = 0; i < 7; i++) {   // rug stripes
+    x.fillStyle = ['#8a3a3a', '#c98a4a', '#5a2a3a', '#d9b06a', '#8a3a3a', '#3a3050', '#c98a4a'][i];
+    x.beginPath(); x.moveTo(1590 + i * 22, 262); x.lineTo(1612 + i * 22, 262); x.lineTo(1630 + i * 24, 300); x.lineTo(1606 + i * 24, 300); x.closePath(); x.fill();
+  }
+  [[2260, 236, 1], [2330, 250, -1], [2410, 228, 1], [2480, 262, 1], [2190, 268, -1]].forEach(([sx, sy, d]) => {   // sheep
+    x.fillStyle = '#d9cbb2'; x.beginPath(); x.ellipse(sx, sy, 26, 15, 0, 0, Math.PI * 2); x.fill();
+    x.fillStyle = '#3a3248'; x.beginPath(); x.ellipse(sx + d * 26, sy - 4, 8, 7, 0, 0, Math.PI * 2); x.fill();
+    x.fillRect(sx - 14, sy + 10, 3, 12); x.fillRect(sx + 10, sy + 10, 3, 12);
+    const p = poly([[sx - 26, sy - 15], [sx + 26, sy - 15], [sx + 26, sy + 15], [sx - 26, sy + 15]]); hatch(x, p, '#f3e6c8', r, 40, -1, 8, 2, .5);
+  });
+}
+
+function buildClouds() {        // long thin chalk bands (white mask, tinted per frame)
+  const c = canvas(W, HZ), x = c.getContext('2d'), r = rng(31);
+  for (let b = 0; b < 7; b++) { const y0 = 120 + r() * (HZ - 260), x0 = r() * W * .7, len = 500 + r() * 900;
+    for (let i = 0; i < 260; i++) { const px = x0 + r() * len, py = y0 + (r() - .5) * 14 + Math.sin(px * .004) * 8;
+      x.globalAlpha = .05 + r() * .12; x.strokeStyle = '#fff'; x.lineWidth = 2 + r() * 5; x.lineCap = 'round';
+      x.beginPath(); x.moveTo(px, py); x.lineTo(px + 40 + r() * 110, py + (r() - .5) * 3); x.stroke(); } }
+  return c;
+}
+
+function buildStars() {         // countless: they arrive in waves as the sky darkens (Gen 15:5)
+  const r = rng(5); stars = [];
+  for (let i = 0; i < 5200; i++) { const y = -560 + r() * (HZ + 500), big = r() < .02;
+    stars.push({ x: r() * W, y, s: big ? 2.2 + r() * 1.6 : .5 + Math.pow(r(), 2.2) * 1.8, big, at: 11 + 11.5 * Math.pow(r(), .55), tw: r() * 6.28, sp: .8 + r() * 2.4, warm: r() < .25 }); }
+  stars.sort((a, b) => a.at - b.at);
+}
+
+// ---------- Abraham ----------
+function abraham(x, sx, sy, k) {   // k: {walk phase, sit 0..1, look 0..1}
+  const sit = eio(k.sit), bob = (1 - sit) * Math.abs(Math.sin(k.ph)) * 5, s = 1.75;
+  x.save(); x.translate(sx, sy - bob); x.scale(s, s);
+  const body = '#2b2840', hi = 'rgba(240,190,140,.5)';
+  // staff: planted ahead while walking, leaning on the shoulder when seated
+  const stA = lerp(.18 + Math.sin(k.ph) * .1, -.55, sit), stLen = 150;
+  x.strokeStyle = '#3a2e30'; x.lineWidth = 4.5; x.lineCap = 'round'; x.beginPath();
+  const hx = lerp(20, 18, sit), hy = lerp(-78, -46, sit);
+  x.moveTo(hx - Math.sin(stA) * 40, hy - Math.cos(stA) * 40); x.lineTo(hx + Math.sin(stA) * (stLen - 40), hy + Math.cos(stA) * (stLen - 40)); x.stroke();
+  // feet (walking)
+  if (sit < .6) { x.fillStyle = body; const f = Math.sin(k.ph) * 14 * (1 - sit); x.fillRect(-10 + f, -6, 16, 6); x.fillRect(-4 - f, -6, 16, 6); }
+  // robe: one polygon morphing from standing to seated
+  const st = [[-14, -112], [14, -112], [24, -60], [30, -8], [-28, -8], [-22, -60]];
+  const sd = [[-12, -78], [14, -78], [30, -40], [58, -4], [-40, -4], [-26, -40]];
+  const pts = st.map((p, i) => [lerp(p[0], sd[i][0], sit), lerp(p[1], sd[i][1], sit)]);
+  const robe = poly(pts); x.fillStyle = body; x.fill(robe); hatch(x, robe, '#4a4466', rng(3), 120, -1.1, 14, 2, .55);
+  x.save(); x.clip(robe); x.fillStyle = hi; x.globalAlpha = .35 + .3 * k.glow; x.fillRect(pts[1][0] - 8, pts[1][1], 40, 140); x.restore();   // lantern/sun rim on the right
+  // head + head cloth; tilts back to look up
+  const hy0 = lerp(-124, -90, sit); x.save(); x.translate(lerp(2, 2, sit), hy0); x.rotate(-.55 * eo(k.look));
+  x.fillStyle = '#5a4038'; x.beginPath(); x.ellipse(4, 0, 9, 11, 0, 0, Math.PI * 2); x.fill();                       // face
+  x.fillStyle = '#d8d0c4'; x.beginPath(); x.moveTo(6, 4); x.quadraticCurveTo(14, 18, 4, 26); x.quadraticCurveTo(0, 16, 2, 6); x.fill();   // white beard
+  x.fillStyle = '#3e3a58'; x.beginPath(); x.moveTo(-12, -6); x.quadraticCurveTo(0, -20, 12, -6); x.lineTo(10, 2); x.lineTo(-14, 24); x.lineTo(-16, 0); x.closePath(); x.fill();   // head cloth
+  x.restore(); x.restore();
+}
+
+// ---------- frame ----------
+function draw(ctx, t) {
+  // timeline
+  const walkEnd = 12.2, sitT = clamp((t - 12.2) / 1.6), lookT = clamp((t - 14.6) / 1.8);
+  const ax = lerp(820, 1606, eio(clamp(t / walkEnd)) * .15 + clamp(t / walkEnd) * .85);   // world x of Abraham
+  const camX = lerp(40, 760, eio(clamp((t - .5) / 13))), zoom = lerp(1, 1.07, eio(clamp(t / 16)));
+  const tilt = 118 * eio(clamp((t - 15.4) / 6.5));                                              // camera tilts up → land slides down
+  const night = ss(9, 20, t);
+
+  // sky
+  const top = ramp([[0, '#4b3f78'], [9, '#3d3474'], [15, '#2b2d5c'], [21, '#121429']], t);
+  const mid = ramp([[0, '#c9738a'], [8, '#b26a8a'], [13, '#7a5888'], [18, '#3a3468'], [22, '#1e1d42']], t);
+  const hor = ramp([[0, '#f6cf7a'], [6, '#f4b77a'], [11, '#e08a80'], [15, '#9a6a8a'], [19, '#4b3f78'], [23, '#2a2650']], t);
+  const skyBottom = HZ + tilt;
+  const g = ctx.createLinearGradient(0, skyBottom - 1500, 0, skyBottom);
+  g.addColorStop(0, rgb(mix(top, [8, 9, 24], night * .6))); g.addColorStop(.62, rgb(top)); g.addColorStop(.85, rgb(mid)); g.addColorStop(1, rgb(hor));
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+
+  // stars (screen space, move a third of the tilt)
+  const sy0 = tilt * .62;
+  for (const s of stars) { if (s.at > t) break; const a = ss(s.at, s.at + 1.2, t) * night * (.55 + .45 * Math.sin(t * s.sp + s.tw)); if (a < .02) continue;
+    const y = s.y + sy0; if (y > skyBottom - 8) continue; ctx.globalAlpha = a; ctx.fillStyle = s.warm ? '#ffe2b0' : '#f4f0ff';
+    ctx.beginPath(); ctx.arc(s.x, y, s.s, 0, 6.283); ctx.fill();
+    if (s.big) { ctx.globalAlpha = a * .5; ctx.fillRect(s.x - s.s * 3, y - .6, s.s * 6, 1.2); ctx.fillRect(s.x - .6, y - s.s * 3, 1.2, s.s * 6); } }
+  ctx.globalAlpha = 1;
+
+  // sun: sinks behind the far land
+  const sunY = lerp(HZ - 170, HZ + 60, eio(clamp(t / 10))) + tilt, sunX = 1340 - camX * .08;
+  if (t < 11) { const sg = ctx.createRadialGradient(sunX, sunY, 0, sunX, sunY, 420); sg.addColorStop(0, 'rgba(255,236,180,.55)'); sg.addColorStop(1, 'rgba(255,200,140,0)');
+    ctx.fillStyle = sg; ctx.fillRect(0, 0, W, H); ctx.fillStyle = '#fff0c4'; ctx.globalAlpha = 1 - ss(8, 11, t); ctx.beginPath(); ctx.arc(sunX, sunY, 62, 0, 6.283); ctx.fill(); ctx.globalAlpha = 1; }
+
+  // cloud bands, tinted by the light
+  const cl = canvas(W, HZ), cx = cl.getContext('2d'); cx.drawImage(clouds, 0, 0); cx.globalCompositeOperation = 'source-in';
+  cx.fillStyle = rgb(mix(mix(hor, [255, 220, 200], .35), mid, night)); cx.fillRect(0, 0, W, HZ);
+  ctx.globalAlpha = .9 - night * .5; ctx.drawImage(cl, -camX * .04, tilt * .9); ctx.globalAlpha = 1;
+
+  // land, in world space with push-in
+  ctx.save(); ctx.translate(W / 2, H * .6); ctx.scale(zoom, zoom); ctx.translate(-W / 2, -H * .6);
+  ctx.drawImage(buttes, -camX * .35 - 200, HZ - 255 + tilt);
+  ctx.drawImage(plain, -camX, HZ + tilt);
+  // lantern (world 1640, plain y 268)
+  const lx = 1640 - camX, ly = HZ + 262 + tilt;
+  abraham(ctx, ax - camX, HZ + 286 + tilt, { ph: t * 4.6, sit: sitT, look: lookT, glow: ss(6, 14, t) });
+  ctx.fillStyle = '#2a2026'; ctx.fillRect(lx - 7, ly - 22, 14, 22); ctx.fillStyle = '#ffd890'; ctx.fillRect(lx - 4, ly - 18, 8, 12);
+  ctx.restore();
+
+  // the light falls: multiply the land toward dusk blue, then let the lamps answer
+  const land = ramp([[0, '#fff3dc'], [8, '#f6d8c4'], [13, '#c8aac4'], [18, '#6a66a0'], [23, '#36366a']], t);
+  const top0 = HZ - 260 + tilt; ctx.globalCompositeOperation = 'multiply';
+  const lg = ctx.createLinearGradient(0, top0, 0, top0 + 120); lg.addColorStop(0, 'rgba(255,255,255,1)'); lg.addColorStop(1, rgb(land));
+  ctx.fillStyle = lg; ctx.fillRect(0, top0, W, H - top0); ctx.globalCompositeOperation = 'source-over';
+  const lamp = ss(7, 16, t) * (.92 + .08 * Math.sin(t * 9) * Math.sin(t * 5.3));
+  const zl = (W / 2) + (lx - W / 2) * zoom, zy = H * .6 + (ly - 12 - H * .6) * zoom;
+  ctx.globalCompositeOperation = 'screen';
+  const gl = ctx.createRadialGradient(zl, zy, 0, zl, zy, 330); gl.addColorStop(0, `rgba(246,207,122,${.75 * lamp})`); gl.addColorStop(.25, `rgba(240,170,100,${.32 * lamp})`); gl.addColorStop(1, 'rgba(240,160,100,0)');
+  ctx.fillStyle = gl; ctx.fillRect(0, 0, W, H);
+  const dx = (W / 2) + (1890 - camX - W / 2) * zoom, dy = H * .6 + (HZ + 180 + tilt - H * .6) * zoom;
+  const gd = ctx.createRadialGradient(dx, dy, 0, dx, dy, 140); gd.addColorStop(0, `rgba(240,170,100,${.45 * lamp})`); gd.addColorStop(1, 'rgba(240,160,100,0)'); ctx.fillStyle = gd; ctx.fillRect(0, 0, W, H);
+  ctx.globalCompositeOperation = 'source-over';
+
+  // paper tooth over everything, then vignette
+  ctx.globalCompositeOperation = 'overlay'; ctx.globalAlpha = .55; ctx.drawImage(paper, 0, 0); ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
+  const vg = ctx.createRadialGradient(W / 2, H / 2, H * .45, W / 2, H / 2, H * 1.05); vg.addColorStop(0, 'rgba(20,16,40,0)'); vg.addColorStop(1, 'rgba(20,16,40,.55)'); ctx.fillStyle = vg; ctx.fillRect(0, 0, W, H);
+
+  // words
+  text(ctx, '03  ·  족장 시대', 110, 120, { align: 'left', size: 30, weight: 600, color: '#f6e6c4', alpha: win(t, .8, 6.5, 1.2, 1.2), ls: 4, shadow: 'rgba(40,20,60,.6)' });
+  text(ctx, '약 BC 2000  ·  창세기 12–50', 110, 166, { align: 'left', size: 22, font: "'Noto Sans KR',sans-serif", color: '#e8d6c0', alpha: win(t, 1.3, 6.5, 1.2, 1.2) * .85, ls: 2 });
+  const v1 = win(t, 17.4, 21.8, 1.4, .7), v2 = win(t, 21.8, DUR + 1, 1.2, 1);
+  text(ctx, '“하늘을 우러러 뭇별을 셀 수 있나 보라”', W / 2, 300, { size: 50, weight: 600, color: '#fbf1dc', alpha: v1, shadow: 'rgba(10,10,30,.8)', shadowBlur: 24 });
+  text(ctx, '“네 자손이 이와 같으리라”', W / 2, 300, { size: 54, weight: 600, color: '#fbf1dc', alpha: v2, shadow: 'rgba(10,10,30,.8)', shadowBlur: 24 });
+  text(ctx, '창세기 15:5 (개역개정)', W / 2, 360, { size: 22, font: "'Noto Sans KR',sans-serif", color: '#d9cbe6', alpha: Math.max(v1, v2) * .85, ls: 2 });
+
+  // open from paper, close to night
+  const fade = 1 - ss(0, 1.4, t) + ss(DUR - 1.2, DUR, t);
+  if (fade > 0) { ctx.fillStyle = `rgba(12,10,22,${clamp(fade)})`; ctx.fillRect(0, 0, W, H); }
+}
+
+// ---------- portrait: same world, framed around Abraham; words re-laid for 9:16 ----------
+const V = Pilot.ori === 'v';
+const WRAP = { '“하늘을 우러러 뭇별을 셀 수 있나 보라”': '“하늘을 우러러\n뭇별을 셀 수 있나 보라”' };
+function mapV(s, x, y, o) {
+  if (o.align === 'left') return { x: 80, y: y < 140 ? 210 : 256 };
+  if (y === 300) return { s: WRAP[s] || s, x: 540, y: s in WRAP ? 330 : 370 };
+  if (y === 360) return { x: 540, y: 490 };
+  return { x, y };
+}
+function frame(ctx, t) {
+  if (!V) return draw(ctx, t);
+  const walk = clamp(t / 12.2), ax = lerp(820, 1606, eio(walk) * .15 + walk * .85), camX = lerp(40, 760, eio(clamp((t - .5) / 13)));
+  Pilot.reframe(ctx, t, draw, lerp(ax - camX + 80, 1010, ss(9, 14, t)), mapV, 1 - ss(DUR - 1.2, DUR, t));
+}
+Pilot.run({ W: Pilot.W, H: Pilot.H, dur: DUR, audio: 'patriarch.m4a', fonts: ["600 40px 'Noto Serif KR'", "400 20px 'Noto Sans KR'"],
+  init: async () => { paper = speckle(W, H, 60, 9, .7); plain = buildPlain(); buttes = buildButtes(); clouds = buildClouds(); buildStars(); },
+  draw: frame });
+</script>
+</body>
+</html>

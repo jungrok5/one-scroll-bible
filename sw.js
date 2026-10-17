@@ -21,10 +21,12 @@ self.addEventListener('fetch', (e) => {
   if (req.method !== 'GET') return;
   const url = new URL(req.url);
   if (url.origin !== self.location.origin) return; // 외부(GA 등)는 그대로 통과
+  // 영상 장면 소리(.m4a)는 Range 요청이 필요해 SW를 거치지 않는다(사파리에서 캐시 응답이 재생을 깨뜨림)
+  if (/\.(m4a|mp3|mp4)$/.test(url.pathname)) return;
 
   // 콘텐츠(HTML 네비게이션 + i18n JSON + about·maps 데이터): network-first (온라인이면 항상 최신)
   // /about/·/maps/ 의 data.json 은 배포마다 갱신되므로 cache-first 면 재방문자에게 옛 데이터(좌표 누락 등)가 남는다 → network-first 필수
-  const isContent = req.mode === 'navigate' || url.pathname.startsWith('/i18n/') || url.pathname.startsWith('/about/') || url.pathname.startsWith('/maps/');
+  const isContent = req.mode === 'navigate' || url.pathname.startsWith('/i18n/') || url.pathname.startsWith('/about/') || url.pathname.startsWith('/maps/') || url.pathname.startsWith('/film/');
   if (isContent) {
     e.respondWith(
       fetch(req).then((res) => { if (res && res.ok) { const cp = res.clone(); caches.open(CACHE).then((c) => c.put(req, cp)); } return res; })

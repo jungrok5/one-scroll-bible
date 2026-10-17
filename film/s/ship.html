@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>시안 · 해적선 비유</title>
+<link rel="stylesheet" href="fonts.css">
+</head>
+<body>
+<script src="lib.js"></script>
+<script>
+/* 19 FAQ · 착하게 살면 되지 않나요? — a paper pop-up book on a desk under a warm lamp. Cut-paper actors with white
+   borders and cardboard edges. A pirate ship pops up; a boy scrubs the deck, is kind to his crewmate, earns a star —
+   and is still a pirate, carried with the ship toward the harbour of judgement. A bright ship pops up beside it; an arm
+   reaches across; the boy takes the hand, jumps, and lands in a new identity: 하나님의 자녀. A sun on a stick rises. Col 1:13.
+   All words are the site's own (index.html FAQ a2). Pure function of t. */
+const { clamp, lerp, ss, eo, eio, win, rng, fbm, canvas, mix, rgb, speckle, text } = Pilot;
+const W = Pilot.W, H = Pilot.H, V = Pilot.ori === 'v', DUR = 46.5;
+// film time T → story time t: the action is authored on a 40 s clock and stretched so every two-line caption holds ≥ 4.5 s
+const TK = [[0, 0], [5.6, 5.6], [9.3, 9.25], [14.8, 13.65], [18.5, 16.85], [24.0, 20.65], [29.5, 24.45], [35.0, 28.55], [40.5, 32.6], [46.5, 40]];
+const warp = T => { let i = 0; while (i < TK.length - 2 && T > TK[i + 1][0]) i++; const [a0, b0] = TK[i], [a1, b1] = TK[i + 1]; return b0 + (b1 - b0) * clamp((T - a0) / (a1 - a0)); };
+const INK = '#3b2618', SANS = "'Noto Sans KR',sans-serif", SERIF = "'Noto Serif KR',serif";
+const GY = 640, FY = 930;                          // gutter and front edge of the lower page (stage y)
+const PX0 = [260, 1660], PX1 = [120, 1800];        // page x-extent at the gutter / at the front edge
+let SP = {}, grain, room, wood, seaPage, cache = {};
+
+// ---------- easing ----------
+const back = u => { u = clamp(u); const c1 = 1.9, c3 = c1 + 1; return 1 + c3 * Math.pow(u - 1, 3) + c1 * Math.pow(u - 1, 2); };
+const pop = (t, t0, t1 = 99, d = .55) => t < t0 ? 0 : t < t1 ? back((t - t0) / d) : 1 - eio((t - t1) / .5);
+const spring = (t, t0) => { if (t < t0) return 0; const u = t - t0; return 1 - Math.exp(-5 * u) * Math.cos(9 * u); };
+
+// ---------- cut paper ----------
+function shape(x, p, base, shade, lw = 5) {     // fill with one hard crescent of shade, then the ink line
+  x.save(); x.fillStyle = shade; x.fill(p); x.clip(p); x.translate(-7, -6); x.fillStyle = base; x.fill(p); x.restore();
+  x.lineWidth = lw; x.strokeStyle = INK; x.lineJoin = 'round'; x.lineCap = 'round'; x.stroke(p);
+}
+const P = f => { const p = new Path2D(); f(p); return p; };
+const RR = (a, b, w, h, r) => P(p => p.roundRect(a, b, w, h, r)), EL = (a, b, rx, ry, rot = 0) => P(p => p.ellipse(a, b, rx, ry, rot, 0, 6.2832));
+function cut(w, h, fn, b = 9) {                  // art + off-white border + grey cardboard edge + grain; anchor = bottom centre of the art box
+  const pad = b + 8, w2 = w + pad * 2, h2 = h + pad * 2, art = canvas(w2, h2), ax = art.getContext('2d'); ax.translate(pad, pad); fn(ax);
+  const sil = (col, r, dy) => { const c = canvas(w2, h2), x = c.getContext('2d');
+    for (const rr of [r, r * .55]) for (let a = 0; a < 20; a++) { const g = a / 20 * 6.2832; x.drawImage(art, Math.cos(g) * rr, Math.sin(g) * rr + dy); }
+    x.drawImage(art, 0, dy); x.globalCompositeOperation = 'source-in'; x.fillStyle = col; x.fillRect(0, 0, w2, h2); return c; };
+  const out = canvas(w2, h2), o = out.getContext('2d');
+  o.drawImage(sil('#9a9284', b, 3.5), 0, 0); o.drawImage(sil('#fbf7ee', b, 0), 0, 0); o.drawImage(art, 0, 0);
+  o.globalCompositeOperation = 'source-atop'; o.globalAlpha = .32; o.fillStyle = o.createPattern(grain, 'repeat'); o.fillRect(0, 0, w2, h2); o.globalAlpha = 1; o.globalCompositeOperation = 'source-over';
+  const sh = sil('#000', b, 0);
+  return { c: out, sh, pad, w: w2, h: h2 };
+}
+
+// ---------- art ----------
+function shipBack(x, bright) {
+  const mast = bright ? '#a8743e' : '#5a3a24', sail = bright ? ['#fffaf0', '#e8dcc6'] : ['#55535c', '#3c3a43'];
+  shape(x, RR(292, 34, 16, 300, 4), mast, mast); shape(x, RR(163, 118, 14, 216, 4), mast, mast);
+  const s1 = P(p => { p.moveTo(196, 78); p.quadraticCurveTo(300, 58, 404, 78); p.lineTo(414, 250); p.quadraticCurveTo(300, 282, 186, 250); p.closePath(); });
+  const s2 = P(p => { p.moveTo(104, 150); p.quadraticCurveTo(170, 138, 236, 150); p.lineTo(240, 282); p.quadraticCurveTo(170, 300, 100, 282); p.closePath(); });
+  shape(x, s2, ...sail); shape(x, s1, ...sail);
+  if (bright) {   // a gold band and a small sun on the main sail
+    x.save(); x.clip(s1); x.fillStyle = '#efc25a'; x.fillRect(180, 232, 240, 14); x.restore();
+    shape(x, EL(300, 160, 30, 30), '#f4c04a', '#dc9e2c', 4);
+    x.strokeStyle = '#e0a640'; x.lineWidth = 4; for (let i = 0; i < 8; i++) { const a = i * Math.PI / 4; x.beginPath(); x.moveTo(300 + Math.cos(a) * 40, 160 + Math.sin(a) * 40); x.lineTo(300 + Math.cos(a) * 52, 160 + Math.sin(a) * 52); x.stroke(); }
+    shape(x, P(p => { p.moveTo(308, 30); p.lineTo(388, 44); p.lineTo(308, 60); p.closePath(); }), '#f0b93a', '#d89a24', 4);
+  } else {        // patches, and the black flag with a skull
+    x.save(); x.clip(s1); [[230, 120, 50, 40], [340, 180, 44, 36]].forEach(([a, b, w, h]) => { x.fillStyle = '#7b7882'; x.fillRect(a, b, w, h); x.setLineDash([6, 5]); x.strokeStyle = '#2a2830'; x.lineWidth = 2.5; x.strokeRect(a + 4, b + 4, w - 8, h - 8); x.setLineDash([]); }); x.restore();
+    shape(x, P(p => { p.moveTo(308, 26); p.quadraticCurveTo(350, 18, 392, 30); p.lineTo(390, 80); p.quadraticCurveTo(350, 70, 308, 78); p.closePath(); }), '#2b292f', '#1c1b20', 4);
+    x.fillStyle = '#f6f1e6'; x.beginPath(); x.arc(349, 46, 12, 0, 6.3); x.fill(); x.fillRect(343, 52, 12, 8);
+    x.fillStyle = '#2b292f'; x.beginPath(); x.arc(344, 46, 3.2, 0, 6.3); x.arc(354, 46, 3.2, 0, 6.3); x.fill();
+    x.strokeStyle = '#f6f1e6'; x.lineWidth = 4; x.lineCap = 'round'; x.beginPath(); x.moveTo(334, 62); x.lineTo(364, 72); x.moveTo(364, 62); x.lineTo(334, 72); x.stroke();
+    shape(x, RR(284, 108, 32, 16, 3), mast, mast, 4);
+  }
+}
+function shipHull(x, bright) {
+  const c = bright ? ['#d69c5e', '#b07a41', '#ecbf80', '#ffd98a'] : ['#6e4529', '#4c2f1c', '#8a5a36', '#2b2320'];
+  const hull = P(p => { p.moveTo(18, 296); p.lineTo(140, 296); p.lineTo(150, 326); p.lineTo(546, 318); p.quadraticCurveTo(524, 420, 440, 452); p.lineTo(118, 452); p.quadraticCurveTo(46, 428, 18, 296); p.closePath(); });
+  shape(x, hull, c[0], c[1]);
+  x.save(); x.clip(hull); x.strokeStyle = INK; x.globalAlpha = .55; x.lineWidth = 2.5; [362, 398, 430].forEach(y => { x.beginPath(); x.moveTo(0, y); x.quadraticCurveTo(300, y + 12, 560, y - 14); x.stroke(); }); x.restore();
+  shape(x, RR(146, 312, 404, 14, 5), c[2], c[2], 4); shape(x, RR(16, 286, 128, 14, 5), c[2], c[2], 4);
+  [200, 270, 340, 410].forEach(px => shape(x, EL(px, 378, 11, 11), c[3], c[3], 3.5));
+  x.strokeStyle = INK; x.lineWidth = 6; x.beginPath(); x.moveTo(530, 322); x.lineTo(574, 292); x.stroke();
+}
+function kid(x, pose, ph, newOut) {     // 110×180, feet at (55,178), facing right
+  const skin = ['#f3c9a3', '#dfa77f'], shirt = newOut ? ['#f6c94e', '#dca634'] : ['#f8f3e9', '#ddd5c6'];
+  const arm = (ax, ay, hx, hy) => { x.strokeStyle = INK; x.lineCap = 'round'; x.lineWidth = 15; x.beginPath(); x.moveTo(ax, ay); x.lineTo(hx, hy); x.stroke();
+    x.strokeStyle = shirt[0]; x.lineWidth = 9; x.beginPath(); x.moveTo(ax, ay); x.lineTo(hx, hy); x.stroke(); shape(x, EL(hx, hy, 8, 8), ...skin, 3.5); };
+  // legs
+  if (pose === 'jump') { shape(x, RR(36, 124, 14, 34, 6), '#3d3a52', '#2c2a3e', 4); shape(x, RR(60, 120, 14, 34, 6), '#3d3a52', '#2c2a3e', 4); shape(x, EL(42, 160, 11, 6), '#5a3a24', '#3e2818', 3.5); shape(x, EL(70, 156, 11, 6), '#5a3a24', '#3e2818', 3.5); }
+  else { shape(x, RR(40, 126, 14, 44, 6), '#3d3a52', '#2c2a3e', 4); shape(x, RR(57, 126, 14, 44, 6), '#3d3a52', '#2c2a3e', 4); shape(x, EL(46, 172, 12, 6), '#5a3a24', '#3e2818', 3.5); shape(x, EL(66, 172, 12, 6), '#5a3a24', '#3e2818', 3.5); }
+  // back arm
+  if (pose === 'scrub') arm(40, 92, 74 + ph * 10, 118); else if (pose === 'joy') arm(38, 90, 18, 44); else if (pose === 'reach') arm(40, 92, 30, 122); else if (pose === 'jump') arm(40, 90, 22, 70); else arm(38, 92, 32, 126);
+  // body
+  const body = RR(30, 78, 50, 58, 15); shape(x, body, ...shirt);
+  if (!newOut) { x.save(); x.clip(body); x.fillStyle = '#c8362e'; for (let y = 86; y < 136; y += 13) x.fillRect(30, y, 50, 5.5); x.restore(); x.lineWidth = 5; x.strokeStyle = INK; x.stroke(body); }
+  else { x.fillStyle = '#fff6d8'; x.beginPath(); x.arc(55, 100, 7, 0, 6.3); x.fill(); }
+  // head
+  shape(x, EL(55, 50, 28, 27), ...skin);
+  if (newOut) shape(x, P(p => { p.moveTo(28, 46); p.quadraticCurveTo(34, 18, 58, 20); p.quadraticCurveTo(82, 20, 84, 44); p.quadraticCurveTo(70, 34, 56, 38); p.quadraticCurveTo(40, 32, 28, 46); p.closePath(); }), '#6a3f22', '#4e2d17', 4);
+  else { shape(x, P(p => { p.moveTo(26, 46); p.quadraticCurveTo(30, 16, 58, 18); p.quadraticCurveTo(86, 20, 84, 42); p.lineTo(26, 46); p.closePath(); }), '#c8362e', '#a52a24', 4);
+    shape(x, P(p => { p.moveTo(28, 38); p.lineTo(8, 30); p.lineTo(12, 48); p.closePath(); }), '#c8362e', '#a52a24', 3.5);
+    x.fillStyle = '#f6efe2'; [[44, 30], [60, 26], [74, 34]].forEach(([a, b]) => { x.beginPath(); x.arc(a, b, 3, 0, 6.3); x.fill(); }); }
+  x.fillStyle = INK; x.beginPath(); x.arc(64, 52, 3.4, 0, 6.3); x.arc(76, 52, 3.4, 0, 6.3); x.fill();
+  x.fillStyle = 'rgba(230,110,100,.45)'; x.beginPath(); x.arc(58, 62, 5, 0, 6.3); x.arc(80, 61, 4, 0, 6.3); x.fill();
+  x.strokeStyle = INK; x.lineWidth = 3; x.beginPath(); if (pose === 'joy' || newOut) x.arc(70, 62, 8, .2, 2.9); else x.arc(70, 64, 6, .4, 2.7); x.stroke();
+  // front arm (+ the mop)
+  if (pose === 'scrub') { const mx = 100 + ph * 16; x.strokeStyle = '#8a6a44'; x.lineWidth = 6; x.beginPath(); x.moveTo(60 + ph * 12, 74); x.lineTo(mx, 172); x.stroke(); x.lineWidth = 3; x.strokeStyle = INK; x.stroke();
+    shape(x, P(p => { p.moveTo(mx - 20, 178); p.quadraticCurveTo(mx, 160, mx + 20, 178); p.closePath(); }), '#b9c7d4', '#93a5b6', 3.5); arm(70, 92, 66 + ph * 12, 108); arm(70, 92, 80 + ph * 14, 130); }
+  else if (pose === 'reach') arm(72, 92, 106, 60); else if (pose === 'joy') arm(72, 90, 94, 42); else if (pose === 'jump') arm(72, 90, 104, 70); else arm(72, 92, 80, 126);
+}
+function crew(x, ph) {      // 140×210, a big friendly pirate, facing left
+  shape(x, RR(46, 150, 20, 56, 7), '#3d3a52', '#2c2a3e', 4); shape(x, RR(74, 150, 20, 56, 7), '#3d3a52', '#2c2a3e', 4);
+  const body = RR(30, 88, 82, 74, 22); shape(x, body, '#f3efe6', '#d9d2c4'); x.save(); x.clip(body); x.fillStyle = '#3b6fa8'; for (let y = 96; y < 162; y += 14) x.fillRect(30, y, 82, 6); x.restore(); x.lineWidth = 5; x.strokeStyle = INK; x.stroke(body);
+  shape(x, EL(70, 60, 32, 31), '#f0c29c', '#dca27a');
+  shape(x, P(p => { p.moveTo(40, 66); p.quadraticCurveTo(52, 104, 70, 102); p.quadraticCurveTo(90, 104, 100, 66); p.quadraticCurveTo(70, 80, 40, 66); p.closePath(); }), '#7a4a26', '#5c3519', 4);
+  shape(x, P(p => { p.moveTo(26, 40); p.quadraticCurveTo(70, 2, 114, 40); p.quadraticCurveTo(70, 28, 26, 40); p.closePath(); }), '#2b292f', '#1c1b20', 4);
+  x.fillStyle = INK; x.beginPath(); x.arc(58, 58, 3.4, 0, 6.3); x.arc(80, 58, 3.4, 0, 6.3); x.fill();
+  x.strokeStyle = INK; x.lineCap = 'round'; x.lineWidth = 15; x.beginPath(); x.moveTo(34, 106); x.lineTo(14, 74 + ph * 8); x.stroke(); x.strokeStyle = '#f3efe6'; x.lineWidth = 9; x.stroke(); shape(x, EL(14, 70 + ph * 8, 9, 9), '#f0c29c', '#dca27a', 3.5);
+}
+function armArt(x) {       // 340×90, shoulder at (0,45): a white sleeve and an open hand reaching right
+  shape(x, P(p => { p.moveTo(0, 22); p.quadraticCurveTo(120, 18, 232, 30); p.lineTo(232, 62); p.quadraticCurveTo(120, 72, 0, 70); p.closePath(); }), '#fdf9f0', '#e6dcc8');
+  shape(x, RR(222, 26, 16, 40, 5), '#efc25a', '#d6a33c', 4);
+  [[296, 28, 40], [300, 40, 44], [298, 52, 42], [292, 63, 34]].forEach(([a, b, l]) => shape(x, RR(a - 20, b - 6, l, 12, 6), '#f3c9a3', '#dfa77f', 3.5));
+  shape(x, EL(266, 46, 34, 24), '#f3c9a3', '#dfa77f', 4);
+  shape(x, P(p => { p.moveTo(250, 32); p.quadraticCurveTo(262, 4, 286, 14); p.quadraticCurveTo(276, 30, 270, 38); p.closePath(); }), '#f3c9a3', '#dfa77f', 3.5);
+}
+function waveArt(x, w, c) {
+  const p = P(p => { p.moveTo(0, 110); p.lineTo(0, 40); for (let i = 0; i * 90 < w; i++) p.quadraticCurveTo(i * 90 + 45, 4 + (i % 2) * 8, i * 90 + 90, 40); p.lineTo(w, 110); p.closePath(); });
+  shape(x, p, c[0], c[1]); x.strokeStyle = 'rgba(240,250,250,.85)'; x.lineWidth = 4; x.lineCap = 'round';
+  for (let i = 0; i * 90 < w; i++) { x.beginPath(); x.arc(i * 90 + 45, 46, 22, 3.6, 5.8); x.stroke(); }
+}
+function cloudArt(x, w, h, c, s) { const r = rng(s), p = P(p => { const n = 6; for (let i = 0; i < n; i++) { const cx = w * (.14 + .72 * i / (n - 1)), cy = h * (.58 - .25 * Math.sin(Math.PI * i / (n - 1))) + (r() - .5) * 10, rr = h * (.26 + .14 * Math.sin(Math.PI * i / (n - 1))); p.moveTo(cx + rr, cy); p.arc(cx, cy, rr, 0, 6.3); } p.rect(w * .12, h * .55, w * .76, h * .3); });
+  x.lineWidth = 10; x.strokeStyle = INK; x.lineJoin = 'round'; x.stroke(p);
+  x.save(); x.fillStyle = c[1]; x.fill(p); x.clip(p); x.translate(-7, -6); x.fillStyle = c[0]; x.fill(p); x.restore(); }
+function cliffArt(x) {     // 620×320: dark rocks and an unlit tower
+  shape(x, P(p => { p.moveTo(0, 320); p.lineTo(20, 210); p.lineTo(70, 150); p.lineTo(120, 190); p.lineTo(170, 120); p.lineTo(230, 200); p.lineTo(250, 320); p.closePath(); }), '#4b4655', '#363240');
+  shape(x, P(p => { p.moveTo(330, 320); p.lineTo(360, 200); p.lineTo(420, 170); p.lineTo(470, 90); p.lineTo(530, 160); p.lineTo(600, 230); p.lineTo(620, 320); p.closePath(); }), '#4b4655', '#363240');
+  shape(x, P(p => { p.moveTo(452, 100); p.lineTo(470, 20); p.lineTo(500, 20); p.lineTo(514, 100); p.closePath(); }), '#5c5664', '#45404e', 4);
+  shape(x, RR(462, 6, 46, 18, 4), '#3c3844', '#2c2933', 4);
+}
+function signArt(x) {      // 300×230: a wooden sign — 심판의 항구
+  shape(x, RR(138, 90, 24, 140, 4), '#6b4a2e', '#52381f');
+  shape(x, RR(10, 14, 280, 96, 12), '#8a6240', '#6e4c30');
+  x.font = `700 40px ${SANS}`; x.textAlign = 'center'; x.fillStyle = '#f8ecd4'; x.fillText('심판의 항구', 150, 77);
+}
+function sunArt(x) {       // 240×320: a sun on a stick (a pull-tab)
+  shape(x, RR(110, 170, 20, 150, 4), '#9a7046', '#7a5432', 4);
+  x.fillStyle = '#f7c24c'; x.strokeStyle = INK; x.lineWidth = 4; x.lineJoin = 'round';
+  for (let i = 0; i < 12; i++) { const a = i * Math.PI / 6; x.beginPath(); x.moveTo(120 + Math.cos(a - .14) * 82, 110 + Math.sin(a - .14) * 82); x.lineTo(120 + Math.cos(a) * 112, 110 + Math.sin(a) * 112); x.lineTo(120 + Math.cos(a + .14) * 82, 110 + Math.sin(a + .14) * 82); x.fill(); x.stroke(); }
+  shape(x, EL(120, 110, 84, 84), '#f9c94f', '#eba83a');
+  x.fillStyle = INK; x.beginPath(); x.arc(98, 104, 5, 0, 6.3); x.arc(142, 104, 5, 0, 6.3); x.fill(); x.lineWidth = 4; x.beginPath(); x.arc(120, 120, 22, .3, 2.84); x.stroke();
+}
+function bannerArt(x) {    // 480×130: 하나님의 자녀
+  shape(x, P(p => { p.moveTo(0, 40); p.lineTo(60, 40); p.lineTo(60, 116); p.lineTo(0, 116); p.lineTo(22, 78); p.closePath(); }), '#e4c27a', '#c9a35a', 4);
+  shape(x, P(p => { p.moveTo(480, 40); p.lineTo(420, 40); p.lineTo(420, 116); p.lineTo(480, 116); p.lineTo(458, 78); p.closePath(); }), '#e4c27a', '#c9a35a', 4);
+  shape(x, RR(40, 14, 400, 92, 10), '#fff4da', '#f0dcb0');
+  x.font = `600 50px ${SERIF}`; x.textAlign = 'center'; x.fillStyle = '#7a4a10'; x.fillText('하나님의 자녀', 240, 78);
+}
+function qSignArt(x, w, h, lines, fs) {
+  shape(x, RR(0, 0, w, h, 16), '#f6ead0', '#e2d0a8');
+  x.font = `700 ${fs}px ${SANS}`; x.textAlign = 'center'; x.fillStyle = '#4a2c14'; lines.forEach((l, i) => x.fillText(l, w / 2, h / 2 + (i - (lines.length - 1) / 2) * fs * 1.45 + fs * .36));
+}
+function heartArt(x) { shape(x, P(p => { p.roundRect(0, 0, 90, 70, 18); p.moveTo(30, 66); p.lineTo(22, 92); p.lineTo(48, 66); }), '#ffffff', '#eae4da', 4);
+  shape(x, P(p => { p.moveTo(45, 54); p.bezierCurveTo(14, 36, 24, 10, 45, 24); p.bezierCurveTo(66, 10, 76, 36, 45, 54); p.closePath(); }), '#e2473c', '#c23128', 3.5); }
+function starArt(x) { shape(x, P(p => { for (let i = 0; i < 10; i++) { const a = -Math.PI / 2 + i * Math.PI / 5, r = i % 2 ? 18 : 40; p.lineTo(44 + Math.cos(a) * r, 44 + Math.sin(a) * r); } p.closePath(); }), '#f7c843', '#e2a52d', 4); }
+
+// ---------- the room, the desk, the book ----------
+function buildRoom() {
+  room = canvas(1200, 900); { const x = room.getContext('2d'), g = x.createLinearGradient(0, 0, 0, 900); g.addColorStop(0, '#3a2a20'); g.addColorStop(1, '#5a4030'); x.fillStyle = g; x.fillRect(0, 0, 1200, 900);
+    const r = rng(9); x.filter = 'blur(14px)'; for (let i = 0; i < 22; i++) { x.globalAlpha = .12 + r() * .2; x.fillStyle = r() < .5 ? '#ffcf8a' : '#f2a65a'; x.beginPath(); x.arc(r() * 1200, r() * 560, 20 + r() * 50, 0, 6.3); x.fill(); }
+    x.globalAlpha = 1; x.filter = 'blur(40px)'; x.fillStyle = 'rgba(255,214,150,.5)'; x.beginPath(); x.arc(160, 120, 220, 0, 6.3); x.fill();
+    x.fillStyle = 'rgba(40,28,20,.8)'; x.fillRect(820, 140, 300, 560); x.fillStyle = 'rgba(120,80,50,.6)'; for (let i = 0; i < 9; i++) x.fillRect(840 + i * 30, 200 + (i % 3) * 8, 22, 140); }   // a blurred shelf of books
+  wood = canvas(2600, 1300); { const x = wood.getContext('2d'), g = x.createLinearGradient(0, 0, 0, 1300); g.addColorStop(0, '#6e4a30'); g.addColorStop(1, '#4a2f1d'); x.fillStyle = g; x.fillRect(0, 0, 2600, 1300);
+    const r = rng(4); for (let i = 0; i < 260; i++) { const y = r() * 1300; x.strokeStyle = r() < .5 ? 'rgba(40,24,14,.25)' : 'rgba(150,104,70,.18)'; x.lineWidth = 1 + r() * 3; x.beginPath(); x.moveTo(0, y); for (let px = 0; px <= 2600; px += 100) x.lineTo(px, y + Math.sin(px * .004 + i) * 8 + (fbm(px * .002, i) - .5) * 20); x.stroke(); }
+    x.globalCompositeOperation = 'overlay'; x.globalAlpha = .4; x.drawImage(speckle(1300, 650, 40, 5, 1), 0, 0, 2600, 1300); }
+  seaPage = canvas(1680, 300); { const x = seaPage.getContext('2d'), g = x.createLinearGradient(0, 0, 0, 300); g.addColorStop(0, '#5fb3c3'); g.addColorStop(1, '#8fd0d6'); x.fillStyle = g; x.fillRect(0, 0, 1680, 300);
+    const r = rng(2); x.strokeStyle = 'rgba(255,255,255,.45)'; x.lineWidth = 3; x.lineCap = 'round'; for (let i = 0; i < 70; i++) { const px = r() * 1680, py = 20 + r() * 270; x.beginPath(); x.arc(px, py, 14 + r() * 10, 3.5, 5.9); x.stroke(); }
+    x.globalCompositeOperation = 'multiply'; x.globalAlpha = .5; x.drawImage(grain, 0, 0, 1680, 300); }
+}
+const pageX = (z, u) => lerp(lerp(PX0[0], PX1[0], z), lerp(PX0[1], PX1[1], z), u);
+const zY = z => lerp(GY, FY, z), zS = z => lerp(.62, 1, z);
+function book(ctx, t) {
+  // desk and room
+  ctx.drawImage(room, -600, -900, 3120, 1700);
+  ctx.drawImage(wood, -340, 600, 2600, 1300);
+  const sh = ctx.createRadialGradient(960, 900, 200, 960, 900, 1100); sh.addColorStop(0, 'rgba(20,12,6,.0)'); sh.addColorStop(1, 'rgba(20,12,6,.5)'); ctx.fillStyle = sh; ctx.fillRect(-600, 600, 3120, 1300);
+  // book: shadow, cover boards, page block
+  ctx.save(); ctx.filter = 'blur(18px)'; ctx.fillStyle = 'rgba(15,8,4,.55)'; ctx.beginPath(); ctx.moveTo(250, 640); ctx.lineTo(1700, 640); ctx.lineTo(1880, 1000); ctx.lineTo(60, 1000); ctx.fill(); ctx.restore();
+  ctx.fillStyle = '#7a2a24'; ctx.beginPath(); ctx.moveTo(236, 634); ctx.lineTo(1684, 634); ctx.lineTo(1836, 982); ctx.lineTo(84, 982); ctx.fill();
+  ctx.fillStyle = '#5c1d18'; ctx.fillRect(84, 970, 1752, 12);
+  ctx.fillStyle = '#efe6d2'; ctx.beginPath(); ctx.moveTo(120, 930); ctx.lineTo(1800, 930); ctx.lineTo(1812, 962); ctx.lineTo(108, 962); ctx.fill();
+  ctx.strokeStyle = 'rgba(120,100,70,.35)'; ctx.lineWidth = 1; for (let y = 936; y < 962; y += 4) { ctx.beginPath(); ctx.moveTo(116, y); ctx.lineTo(1806, y); ctx.stroke(); }
+  // the lower page: sea art mapped onto the trapezoid in strips
+  for (let i = 0; i < 60; i++) { const z0 = i / 60, z1 = (i + 1) / 60, y0 = zY(z0), y1 = zY(z1), x0 = pageX(z0, 0), x1 = pageX(z0, 1);
+    ctx.drawImage(seaPage, 0, z0 * 300, 1680, 300 / 60 + .5, x0, y0, x1 - x0, y1 - y0 + .6); }
+  const gg = ctx.createLinearGradient(0, GY, 0, GY + 60); gg.addColorStop(0, 'rgba(30,20,10,.35)'); gg.addColorStop(1, 'rgba(30,20,10,0)'); ctx.fillStyle = gg; ctx.fillRect(PX0[0], GY, PX0[1] - PX0[0], 60);
+}
+function board(ctx, t) {     // the standing page: sky that turns stormy on the right and to dawn on the left
+  const k = Math.sin(Math.PI / 2 * clamp(pop(t, .4, 99, 1.1), 0, 1.06)), hb = 530 * k, top = GY - hb; if (k <= .01) return;
+  ctx.save(); ctx.beginPath(); ctx.rect(PX0[0], top, PX0[1] - PX0[0], hb); ctx.clip();
+  const g = ctx.createLinearGradient(0, top, 0, GY); g.addColorStop(0, '#8cc4d4'); g.addColorStop(1, '#dff0ee'); ctx.fillStyle = g; ctx.fillRect(PX0[0], top, PX0[1] - PX0[0], hb);
+  const storm = ss(14.4, 16.5, t) * (1 - .3 * ss(33, 38, t)), dawn = ss(29.4, 32.5, t);
+  if (storm > 0) { const sg = ctx.createLinearGradient(PX0[1], 0, 900, 0); sg.addColorStop(0, `rgba(52,56,74,${.8 * storm})`); sg.addColorStop(1, 'rgba(52,56,74,0)'); ctx.fillStyle = sg; ctx.fillRect(PX0[0], top, PX0[1] - PX0[0], hb); }
+  if (dawn > 0) { const dg = ctx.createRadialGradient(420, GY, 0, 420, GY, 900); dg.addColorStop(0, `rgba(255,200,120,${.85 * dawn})`); dg.addColorStop(.5, `rgba(255,170,120,${.4 * dawn})`); dg.addColorStop(1, 'rgba(255,170,120,0)'); ctx.fillStyle = dg; ctx.fillRect(PX0[0], top, PX0[1] - PX0[0], hb); }
+  [[560, 210, .9], [1060, 160, 1.1], [1420, 260, .8]].forEach(([cx, cy, s], i) => { const sp = SP.sky, w = sp.w * s * .8, h = sp.h * s * .8; ctx.globalAlpha = 1 - (i === 2 ? .7 * storm : 0); ctx.drawImage(sp.c, cx - w / 2, GY - (GY - cy) * k - h / 2, w, h * k); });
+  ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'multiply'; ctx.globalAlpha = .35; ctx.drawImage(grain, PX0[0], top, PX0[1] - PX0[0], hb); ctx.restore();
+  ctx.fillStyle = '#d8ccb4'; ctx.fillRect(PX0[0] - 4, top - 6, PX0[1] - PX0[0] + 8, 7);                  // cardboard edge
+  ctx.fillStyle = '#7a2a24'; ctx.fillRect(PX0[0] - 22, top - 10, 18, hb + 10); ctx.fillRect(PX0[1] + 4, top - 10, 18, hb + 10);  // cover board behind
+}
+
+// ---------- pop-up cards ----------
+function card(ctx, sp, x, z, rise, o = {}) {
+  const k = Math.sin(Math.PI / 2 * clamp(rise, 0, 1.08)); if (k <= .01) return;
+  const by = zY(z) + (o.dy || 0), s = zS(z) * (o.s || 1), fx = o.fx == null ? 1 : o.fx, w = sp.w * s, h = sp.h * s, pad = sp.pad * s;
+  if (!o.noShadow) { ctx.save(); ctx.translate(x, by); ctx.transform(1, 0, -.55, .3 * k, 0, 0); ctx.scale(fx, 1); ctx.globalAlpha = .2 * (o.a == null ? 1 : o.a); ctx.filter = 'blur(6px)'; ctx.drawImage(sp.sh, -w / 2, -h + pad, w, h); ctx.restore(); }
+  ctx.save(); ctx.translate(x, by); if (o.rot) ctx.rotate(o.rot); ctx.scale(fx, k); if (o.a != null) ctx.globalAlpha = o.a;
+  if (k < .97) ctx.filter = `brightness(${.72 + .28 * k})`; ctx.drawImage(sp.c, -w / 2, -h + pad, w, h); ctx.restore();
+}
+function hang(ctx, t, sp, x, y, s, t0, t1, swing) {   // a paper sign dropping on two strings, swinging on a spring
+  const d = spring(t, t0), up = t1 ? eio(clamp((t - t1) / .6)) : 0, yy = lerp(-400, y, d) - up * 900, rot = swing * Math.exp(-2 * Math.max(0, t - t0)) * Math.sin((t - t0) * 5);
+  if (t < t0 || yy < -380) return; const w = sp.w * s, h = sp.h * s;
+  ctx.save(); ctx.translate(x, yy); ctx.rotate(rot);
+  ctx.strokeStyle = 'rgba(240,230,210,.8)'; ctx.lineWidth = 2; [-w * .36, w * .36].forEach(a => { ctx.beginPath(); ctx.moveTo(a, -h / 2 + 16); ctx.lineTo(a, -2400); ctx.stroke(); });
+  ctx.save(); ctx.filter = 'blur(10px)'; ctx.globalAlpha = .3; ctx.drawImage(sp.sh, -w / 2 + 16, -h / 2 + 24, w, h); ctx.restore();
+  ctx.drawImage(sp.c, -w / 2, -h / 2, w, h); ctx.restore();
+}
+
+// ---------- the story, in stage space ----------
+const pirX = t => t < 14 ? 820 : t < 24 ? lerp(820, 1150, eio((t - 14) / 10)) : t < 28.6 ? 1150 : lerp(1150, 1470, eio((t - 28.6) / 8));
+const briX = t => t < 21.4 ? 430 : t < 24 ? lerp(430, 650, eio((t - 21.4) / 2.6)) : t < 33.2 ? 650 : lerp(650, 520, eio((t - 33.2) / 5));
+const briF = t => Math.cos(Math.PI * eio(clamp((t - 32.8) / .5)));       // the bright ship turns toward the sunrise (scale.x flip)
+const SZ = .5, DECK = 128;                                                 // ships' depth; deck height above the waterline (stage px at z)
+function sprite(key, w, h, fn) { return cache[key] || (cache[key] = cut(w, h, fn)); }
+function kidSprite(pose, ph, nw) { const q = Math.round(ph * 4) / 4; return sprite(`k${pose}${q}${nw}`, 110, 180, x => kid(x, pose, q, nw)); }
+function stage(ctx, t) {
+  book(ctx, t); board(ctx, t);
+  // far pieces, back to front
+  card(ctx, SP.sun, 430, .02, pop(t, 29.4, 99, 1.2), { dy: lerp(240, 0, eo(clamp((t - 29.4) / 2.6))), noShadow: true });
+  const pirateFold = t > 35.6 ? 1 - eio((t - 35.6) / .7) : 1;
+  const hx = V ? -120 : 0; card(ctx, SP.cloud, 1450 + hx, .03, pop(t, 14.4), { s: 1.2 }); card(ctx, SP.cliff, 1440 + hx, .1, pop(t, 14.8), { s: .95 });
+  card(ctx, SP.wave1, 960, .24, pop(t, 3.8), { dy: Math.sin(t * 1.3) * 2 });
+  card(ctx, SP.sign, 1370 + hx, .3, pop(t, 15.3), { s: .9 });
+  // the two ships: sails, people, then hulls
+  const bob = (ph, a = 1) => [Math.sin(t * 1.6 + ph) * 3 * a, Math.sin(t * 1.1 + ph) * .012 * a];
+  const [pb, pr] = bob(0), [bb, br] = bob(2), px = pirX(t), bx = briX(t), bf = briF(t), sS = zS(SZ);
+  const pRise = pop(t, 4.6) * pirateFold, bRise = pop(t, 21.0);
+  if (bRise > 0) { const gl = ss(21.2, 23, t); ctx.save(); ctx.globalCompositeOperation = 'screen'; const g = ctx.createRadialGradient(bx, zY(SZ) - 160, 0, bx, zY(SZ) - 160, 360); g.addColorStop(0, `rgba(255,220,140,${.45 * gl})`); g.addColorStop(1, 'rgba(255,220,140,0)'); ctx.fillStyle = g; ctx.fillRect(bx - 400, zY(SZ) - 560, 800, 800); ctx.restore(); }
+  card(ctx, SP.pBack, px, SZ, pRise, { dy: pb, rot: pr });
+  card(ctx, SP.bBack, bx, SZ, bRise, { dy: bb, rot: br, fx: bf });
+  // the crewmate and the boy
+  const deckP = -DECK * sS + pb, deckB = -DECK * sS + bb;
+  card(ctx, sprite('crew' + Math.round(Math.sin(t * 3) * 2) / 2, 140, 210, x => crew(x, Math.round(Math.sin(t * 3) * 2) / 2)), px + 130 * sS, SZ, pRise, { dy: deckP, noShadow: true });
+  boy(ctx, t, px, bx, bf, deckP, deckB, sS, pRise);
+  // the arm reaches across
+  if (t > 24.4 && t < 28.6) { const u = clamp((t - 24.5) / 1.0), back2 = clamp((t - 27.5) / .8), ang = lerp(1.25, -.08, back(u)) + lerp(0, 1.4, eio(back2));
+    const ax = bx + 150 * sS, ay = zY(SZ) + deckB - 64 * sS, s = sS * .95, sp = SP.arm;
+    ctx.save(); ctx.translate(ax, ay); ctx.rotate(ang); ctx.globalAlpha = 1 - ss(.6, 1, back2); ctx.drawImage(sp.c, -sp.pad * s, -sp.h / 2 * s, sp.w * s, sp.h * s); ctx.restore();
+    ctx.save(); ctx.globalCompositeOperation = 'screen'; const g = ctx.createRadialGradient(ax, ay, 0, ax, ay, 70); g.addColorStop(0, 'rgba(255,230,170,.7)'); g.addColorStop(1, 'rgba(255,230,170,0)'); ctx.fillStyle = g; ctx.fillRect(ax - 70, ay - 70, 140, 140); ctx.restore(); }
+  card(ctx, SP.pHull, px, SZ, pRise, { dy: pb, rot: pr, noShadow: true });
+  card(ctx, SP.bHull, bx, SZ, bRise, { dy: bb, rot: br, fx: bf, noShadow: true });
+  // little rewards for being good (they mean nothing about which ship he is on)
+  badges(ctx, t, px, deckP, sS);
+  card(ctx, SP.wave2, 960, .62, pop(t, 4.0), { dy: Math.sin(t * 1.5 + 1) * 3 });
+  card(ctx, SP.wave3, 960, .9, pop(t, 4.2), { dy: Math.sin(t * 1.2 + 2) * 3 });
+  // hanging signs
+  hang(ctx, t, SP.q, 960, V ? 300 : 300, 1, 1.0, 5.3, .05);
+  if (t > 27.6) { const bxx = briX(t) + (bf > 0 ? 60 : -60) * sS; hang(ctx, t, SP.banner, bxx, 300, .9, 27.7, 32.2, .08); }
+}
+function boy(ctx, t, px, bx, bf, deckP, deckB, sS, pRise) {
+  const kidP = px - 110 * sS, kidB = bx + (bf >= 0 ? 80 : -80) * sS;
+  let pose = 'stand', ph = 0, x = kidP, dy = deckP, nw = false, fx = 1, sq = 1;
+  if (t > 5.4 && t < 10.3) { pose = 'scrub'; ph = Math.sin(t * 5) * .5 + .5; x = kidP + Math.sin(t * 2.5) * 12; }
+  if (t > 10.3 && t < 11.8) { pose = 'reach'; }
+  if (t > 25.4) pose = 'reach';
+  const j0 = 26.2, j1 = 27.0;
+  if (t > j0) { const u = clamp((t - j0) / (j1 - j0)); x = lerp(kidP, kidB, eio(u)); dy = lerp(deckP, deckB, u) - Math.sin(Math.PI * u) * 150 * sS; pose = u < 1 ? 'jump' : 'stand';
+    if (t > j1) { sq = 1 - .18 * Math.exp(-8 * (t - j1)) * Math.cos((t - j1) * 14); x = kidB; dy = deckB; } }
+  if (t > 27.2) { const u = clamp((t - 27.2) / .4); fx = Math.cos(Math.PI * u); nw = u > .5; if (u >= 1) { fx = 1; pose = 'joy'; } }
+  if (t > 30.5) pose = 'stand';
+  if (t > 32.8) fx = bf;
+  card(ctx, kidSprite(pose, ph, nw), x, SZ, t < j0 ? pRise : 1, { dy, fx, s: sq, noShadow: true });
+}
+function badges(ctx, t, px, deckP, sS) {
+  const y0 = zY(SZ) + deckP - 200 * sS, kx = px - 110 * sS, fold = 1 - eio(clamp((t - 17.4) / .6));
+  // sparkles while he scrubs
+  if (t > 6 && t < 10.6) { const r = rng(Math.floor(t * 6)); for (let i = 0; i < 4; i++) { const sx = kx + 20 + r() * 120, sy = zY(SZ) + deckP - 10 - r() * 40, s = 5 + r() * 7;
+      ctx.fillStyle = 'rgba(255,250,220,.95)'; ctx.beginPath(); for (let k = 0; k < 8; k++) { const a = k * Math.PI / 4, q = k % 2 ? s * .3 : s; ctx.lineTo(sx + Math.cos(a) * q, sy + Math.sin(a) * q); } ctx.fill(); } }
+  const hb = pop(t, 10.6) * fold, sb = pop(t, 12.0) * fold;
+  if (hb > 0) { const sp = SP.heart, s = sS * .9 * Math.min(1, hb); ctx.save(); ctx.translate(kx + 90 * sS, y0 + 10); ctx.scale(s, s); ctx.drawImage(sp.c, -sp.w / 2, -sp.h / 2); ctx.restore(); }
+  if (sb > 0) { const sp = SP.star, s = sS * Math.min(1.1, sb); ctx.save(); ctx.translate(kx, y0 - 30); ctx.rotate(Math.sin(t * 2) * .08); ctx.scale(s, s); ctx.drawImage(sp.c, -sp.w / 2, -sp.h / 2); ctx.restore(); }
+}
+
+// ---------- camera, light, words ----------
+const CAM = V ? [[0, 960, 560, 1.3], [5.0, 960, 560, 1.3], [6.4, 860, 640, 1.5], [13.6, 900, 640, 1.45], [15.6, 1110, 630, 1.14], [20.3, 1110, 630, 1.14], [23.2, 880, 620, 1.1], [24.2, 900, 620, 1.12], [26.4, 900, 640, 1.2], [29, 860, 620, 1.12], [33, 720, 600, 1.15], [40, 690, 600, 1.18]]
+              : [[0, 960, 540, 1.0], [5.4, 960, 540, 1.0], [13.6, 960, 560, 1.03], [21, 1020, 560, 1.03], [24, 960, 560, 1.02], [26.4, 920, 600, 1.16], [29, 940, 560, 1.04], [40, 900, 540, 1.06]];
+function cam(t) { let i = 0; while (i < CAM.length - 2 && t > CAM[i + 1][0]) i++; const a = CAM[i], b = CAM[i + 1], u = eio(clamp((t - a[0]) / (b[0] - a[0])));
+  return [lerp(a[1], b[1], u), lerp(a[2], b[2], u), lerp(a[3], b[3], u)]; }
+function say(ctx, s, a) {     // narration: cream with a thick dark-brown outline
+  if (a <= 0) return; const lines = s.split('\n'), fs = V ? 40 : 42, lh = fs * 1.5, y0 = V ? H - 150 - (lines.length - 1) * lh : H - 66 - (lines.length - 1) * lh;
+  ctx.save(); ctx.globalAlpha = a; ctx.font = `700 ${fs}px ${SANS}`; ctx.textAlign = 'center'; ctx.lineJoin = 'round';
+  lines.forEach((l, i) => { ctx.shadowColor = 'rgba(30,15,5,.6)'; ctx.shadowBlur = 12; ctx.lineWidth = 9; ctx.strokeStyle = '#3b2210'; ctx.strokeText(l, W / 2, y0 + i * lh); ctx.shadowBlur = 0; ctx.fillStyle = '#fff4dc'; ctx.fillText(l, W / 2, y0 + i * lh); });
+  ctx.restore();
+}
+function draw(ctx, T) {
+  const t = warp(T), [cx, cy, k] = cam(t);
+  ctx.fillStyle = '#2a1d14'; ctx.fillRect(0, 0, W, H);
+  ctx.save(); ctx.translate(W / 2, H / 2); ctx.scale(k, k); ctx.translate(-cx, -cy); stage(ctx, t); ctx.restore();
+  // lamp light from the upper left, warm; the storm cools the right; vignette
+  ctx.save(); ctx.globalCompositeOperation = 'soft-light'; const lg = ctx.createRadialGradient(W * .15, -H * .1, 0, W * .15, -H * .1, Math.max(W, H) * 1.1); lg.addColorStop(0, 'rgba(255,214,150,.55)'); lg.addColorStop(1, 'rgba(60,30,10,.35)'); ctx.fillStyle = lg; ctx.fillRect(0, 0, W, H); ctx.restore();
+  const st = ss(14.4, 16.5, t) * (1 - ss(31, 36, t)); if (st > 0) { const sg = ctx.createLinearGradient(W, 0, W * .45, 0); sg.addColorStop(0, `rgba(30,34,52,${.32 * st})`); sg.addColorStop(1, 'rgba(30,34,52,0)'); ctx.fillStyle = sg; ctx.fillRect(0, 0, W, H); }
+  const vg = ctx.createRadialGradient(W / 2, H / 2, Math.min(W, H) * .4, W / 2, H / 2, Math.max(W, H) * .8); vg.addColorStop(0, 'rgba(20,10,4,0)'); vg.addColorStop(1, 'rgba(20,10,4,.5)'); ctx.fillStyle = vg; ctx.fillRect(0, 0, W, H);
+
+  text(ctx, '19  ·  착하게 살면?', V ? 80 : 110, V ? 200 : 120, { align: 'left', size: 30, weight: 600, color: '#f6e8cf', alpha: win(T, .6, 5, 1, 1), ls: 4, shadow: 'rgba(0,0,0,.6)' });
+  const sb = ss(5.3, 5.9, T) * (1 - ss(40.3, 41.0, T)); if (sb > 0) { const y0 = V ? H - 330 : H - 210, g = ctx.createLinearGradient(0, y0, 0, H); g.addColorStop(0, 'rgba(26,13,5,0)'); g.addColorStop(.35, `rgba(26,13,5,${.62 * sb})`); g.addColorStop(1, `rgba(20,10,4,${.78 * sb})`); ctx.fillStyle = g; ctx.fillRect(0, y0, W, H - y0); }
+  say(ctx, '해적선에 타고 있다고 해봅시다.', win(T, 5.65, 9.25, .5, .4));
+  say(ctx, V ? '그 배 위에서 아무리 갑판을 깨끗이 닦고,\n동료에게 친절하고, 누구보다 모범적으로 산다 해도 —' : '그 배 위에서 아무리 갑판을 깨끗이 닦고, 동료에게 친절하고,\n누구보다 모범적으로 산다 해도 —', win(T, 9.35, 14.75, .5, .4));
+  say(ctx, '당신은 여전히 ‘해적’입니다.', win(T, 14.85, 18.45, .5, .4));
+  say(ctx, '그 배가 향하는 곳(심판의 항구)으로\n배와 함께 실려 가기 때문입니다.', win(T, 18.55, 23.95, .5, .4));
+  say(ctx, '문제는 ‘행동의 점수’가 아니라\n‘어느 배에 속했는가’(신분)입니다.', win(T, 24.05, 29.45, .5, .4));
+  say(ctx, '그래서 복음은 “더 착해져라”가 아니라\n“배를 옮겨 타라”고 말합니다.', win(T, 29.55, 34.95, .5, .4));
+  say(ctx, '죄의 배에서 내려, 예수님께로 —\n하나님의 자녀라는 새 신분으로 건너가는 것입니다.', win(T, 35.05, 40.45, .5, .4));
+  const va = win(T, 40.6, DUR - .2, .7, .5), vy = V ? 250 : 140, vs = V ? 44 : 50, vst = { weight: 600, color: '#fff6e2', shadow: 'rgba(40,20,5,.95)', shadowBlur: 16, alpha: va };
+  if (va > 0) { const sg = ctx.createLinearGradient(0, 0, 0, vy + 220); sg.addColorStop(0, `rgba(30,16,6,${.7 * va})`); sg.addColorStop(1, 'rgba(30,16,6,0)'); ctx.fillStyle = sg; ctx.fillRect(0, 0, W, vy + 220); }
+  text(ctx, '“그가 우리를 흑암의 권세에서 건져내사\n그의 사랑의 아들의 나라로 옮기셨으니”', W / 2, vy, { ...vst, size: vs });
+  text(ctx, '골로새서 1:13 (개역개정)', W / 2, vy + 2 * vs * 1.55 + 4, { size: 24, font: SANS, color: '#f3dcb4', alpha: va * .95, ls: 2, shadow: 'rgba(40,20,5,.9)' });
+  const f = 1 - ss(0, 1.2, T) + ss(DUR - .9, DUR, T); if (f > 0) { ctx.fillStyle = `rgba(0,0,0,${clamp(f)})`; ctx.fillRect(0, 0, W, H); }
+}
+
+Pilot.run({ W, H, dur: DUR, audio: 'ship.m4a', fonts: ["600 40px 'Noto Serif KR'", "400 20px 'Noto Sans KR'", "700 40px 'Noto Sans KR'"],
+  init: async () => {
+    grain = speckle(1024, 1024, 46, 19, .6); buildRoom();
+    const pw = 560, ph = 470;
+    SP.pBack = cut(pw, ph, x => shipBack(x, false)); SP.pHull = cut(pw, ph, x => shipHull(x, false));
+    SP.bBack = cut(pw, ph, x => shipBack(x, true)); SP.bHull = cut(pw, ph, x => shipHull(x, true));
+    SP.arm = cut(340, 90, armArt, 7); SP.sign = cut(300, 230, signArt); SP.cliff = cut(620, 320, cliffArt); SP.cloud = cut(560, 260, x => cloudArt(x, 560, 260, ['#5b5f6e', '#454957'], 3));
+    SP.sky = cut(300, 120, x => cloudArt(x, 300, 120, ['#fbf7ee', '#e6ddcc'], 8), 6);
+    SP.wave1 = cut(2060, 110, x => waveArt(x, 2060, ['#62b9c8', '#4aa1b2'])); SP.wave2 = cut(1840, 110, x => waveArt(x, 1840, ['#3f9fb5', '#2f8199'])); SP.wave3 = cut(1720, 110, x => waveArt(x, 1720, ['#2f8aa3', '#21718a']));
+    SP.sun = cut(240, 320, sunArt); SP.banner = cut(480, 130, bannerArt); SP.heart = cut(90, 94, heartArt, 6); SP.star = cut(88, 88, starArt, 6);
+    SP.q = V ? cut(720, 260, x => qSignArt(x, 720, 260, ['예수님 안 믿어도,', '그냥 착하게 살면', '되는 것 아닌가요?'], 50)) : cut(900, 230, x => qSignArt(x, 900, 230, ['예수님 안 믿어도,', '그냥 착하게 살면 되는 것 아닌가요?'], 52));
+    // warm the pose cache so the first frames don't stall
+    for (const p of ['stand', 'reach', 'jump', 'joy']) { kidSprite(p, 0, false); kidSprite(p, 0, true); }
+  },
+  draw });
+</script>
+</body>
+</html>

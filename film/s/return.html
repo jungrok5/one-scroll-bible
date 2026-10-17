@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>시안 · 포로 귀환</title>
+<link rel="stylesheet" href="fonts.css">
+</head>
+<body>
+<script src="lib.js"></script>
+<script>
+/* 09 포로 귀환 — HD-2D lamplight: pixel sprites in a lit, fogged miniature seen from a high three-quarter angle through
+   a tilt-shift lens. A small lamp (the promise) is carried home through the dark; at the broken walls of Jerusalem it is set
+   down, more lamps answer, and by lamplight the wall rises stone by stone through the night until dawn breaks.
+   Sprites and textures are pixels (stepped); camera, light, fog and focus glide every frame. */
+const { clamp, lerp, ss, eo, eio, win, rng, fbm, noise, canvas, hex, mix, rgb, text } = Pilot;
+const W = Pilot.W, H = Pilot.H, V = Pilot.ori === 'v', DUR = 35;
+const SA = 9.4;                                  // cut: the road → the wall
+const BAYER = [0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5].map(v => (v + .5) / 16);
+const HERO = '#c8352a';                          // the lamp-bearer's cloak: the one saturated colour
+let road, wall, WC, wc, LC, lc, TS, tsx, TM, tmx, spriteCache = new Map(), stars = [];
+
+// ---------- pixel helpers ----------
+const px = (g, x, y, w, h, c) => { g.fillStyle = c; g.fillRect(x | 0, y | 0, w, h); };
+function ramp(g, x0, y0, w, h, cols, f, sc = .45) {     // fill a texel rect from a colour ramp by a value field, narrow Bayer dither
+  for (let y = y0; y < y0 + h; y++) for (let x = x0; x < x0 + w; x++) { const v = clamp(f(x, y)) * (cols.length - 1), i = Math.floor(v), fr = v - i, b = BAYER[(y & 3) * 4 + (x & 3)];
+    g.fillStyle = cols[Math.min(cols.length - 1, i + (fr > .5 + (b - .5) * sc ? 1 : 0))]; g.fillRect(x, y, 1, 1); }
+}
+
+// ---------- sprites (pose tables → small pixel canvases, cached) ----------
+function sprite(o) {
+  const key = JSON.stringify(o); if (spriteCache.has(key)) return spriteCache.get(key);
+  const c = canvas(28, 40), g = c.getContext('2d'), X = 14, Y = 38, f = o.f || 0, cl = o.cloak, dk = rgb(mix(hex(cl), [20, 14, 20], .45)), skin = o.skin || '#c98d62', cloth = o.cloth || '#d8cdb0';
+  const lg = [[-3, 1], [-1, -1], [1, -3], [-1, -1]][f % 4];
+  if (o.kneel) { px(g, X - 4, Y - 3, 9, 3, dk); }
+  else { px(g, X - 2 + lg[0], Y - 6, 2, 6, '#3a2a22'); px(g, X + 1 + lg[1], Y - 6, 2, 6, '#2e2019'); px(g, X - 2 + lg[0] + (o.dir < 0 ? -1 : 0), Y - 1, 3, 1, '#1e1612'); px(g, X + 1 + lg[1] + (o.dir < 0 ? -1 : 0), Y - 1, 3, 1, '#1e1612'); }
+  const top = o.kneel ? Y - 22 : Y - 26, hem = o.kneel ? Y - 3 : Y - 6;
+  for (let y = top + 6; y < hem; y++) { const w = 7 + Math.floor((y - top - 6) / 5); px(g, X - Math.floor(w / 2), y, w, 1, cl); }
+  px(g, X - 3, top + 6, 1, hem - top - 6, dk); px(g, X - 3, top + 13, 7, 1, '#4a3420');
+  // head + headcloth
+  const fx = o.dir < 0 ? -1 : 1;
+  px(g, X - 3, top, 6, 6, skin); px(g, X - 3 - fx, top - 1, 6, 3, cloth); px(g, X - 3 + (fx < 0 ? 4 : -1), top - 1, 2, 7, cloth);
+  if (!o.back) px(g, X + fx * 1 + (fx < 0 ? -1 : 0), top + 2, 1, 1, '#2a1a14');
+  if (o.beard) px(g, X - 1 + (fx > 0 ? 1 : -1), top + 4, 3, 3, '#e8e2d8');
+  // arms + carried thing
+  const hx = X + fx * 4 - (fx < 0 ? 1 : 0);
+  if (o.carry === 'lamp') { px(g, X + fx * 2, top + 8, 2, 4, dk); px(g, hx, top + 11, 2, 2, skin); px(g, hx - 1 + fx, top + 10, 3, 2, '#7a4a2a'); }
+  else if (o.carry === 'stone') { px(g, X - 1, top + 7, 2, 3, dk); px(g, X - 4, top - 5, 8, 5, '#a69a86'); px(g, X - 4, top - 5, 8, 1, '#c4b8a2'); px(g, X - 4, top - 1, 8, 1, '#7a705e'); px(g, X - 4, top - 2, 1, 3, skin); px(g, X + 3, top - 2, 1, 3, skin); }
+  else if (o.carry === 'scroll') { px(g, X + fx * 2, top + 6, 2, 4, dk); px(g, X + fx * 3 - 4, top + 5, 9, 4, '#f2ead6'); px(g, X + fx * 3 - 5, top + 4, 1, 6, '#b89a6a'); px(g, X + fx * 3 + 5, top + 4, 1, 6, '#b89a6a'); }
+  else if (o.arms === 'up') { px(g, X - 5, top - 3, 2, 9, cl); px(g, X + 3, top - 3, 2, 9, cl); px(g, X - 5, top - 4, 2, 2, skin); px(g, X + 3, top - 4, 2, 2, skin); }
+  else { px(g, X + fx * 2 + (fx < 0 ? -1 : 0), top + 8, 2, 6, dk); px(g, X + fx * 2 + (fx < 0 ? -1 : 0), top + 14, 2, 2, skin); }
+  // 1-px selout: neighbour colour darkened toward the ink
+  const o2 = canvas(28, 40), g2 = o2.getContext('2d');
+  [[1, 0], [-1, 0], [0, 1], [0, -1]].forEach(([dx, dy]) => g2.drawImage(c, dx, dy)); g2.globalCompositeOperation = 'source-in'; g2.fillStyle = '#1a1220'; g2.fillRect(0, 0, 28, 40);
+  g2.globalCompositeOperation = 'source-over'; g2.drawImage(c, 0, 0);
+  spriteCache.set(key, o2); return o2;
+}
+function drawSprite(g, x, y, o, shadow) {      // feet at texel (x, y); shadow: [dx, dy] away from the light
+  if (shadow) { g.save(); g.globalAlpha = .38; g.fillStyle = '#0a0812'; g.beginPath(); g.ellipse((x | 0) + shadow[0] * .5, (y | 0), 6 + Math.abs(shadow[0]) * .5, 2 + Math.abs(shadow[1]) * .2, 0, 0, 6.28); g.fill(); g.restore(); }
+  g.drawImage(sprite(o), (x | 0) - 14, (y | 0) - 38);
+}
+function lampPx(g, x, y, t, lit) {             // a clay oil lamp; the flame steps at ~10 fps
+  px(g, x - 3, y - 2, 6, 2, '#6a3e22'); px(g, x - 2, y - 3, 4, 1, '#8a5432'); px(g, x + 3, y - 3, 1, 1, '#6a3e22');
+  if (lit > 0) { const fq = Math.floor(t * 10) % 3; px(g, x + 2, y - 5 - (fq === 1 ? 1 : 0), 2, 2 + (fq === 1 ? 1 : 0), '#ffb648'); px(g, x + 2, y - 4, 1, 1, '#fff2c0'); }
+}
+
+// ---------- set A: the road home at night ----------
+const RA = { w: 1400, h: 440, hz: 196 };
+function buildRoad() {
+  const c = canvas(RA.w, RA.h), g = c.getContext('2d'), r = rng(3);
+  // far ridges (cool, silhouetted), billboards at one density
+  for (let x = 0; x < RA.w; x++) { const y1 = RA.hz - 26 - fbm(x * .006, 1) * 40, y2 = RA.hz - 8 - fbm(x * .012, 4) * 20;
+    for (let y = Math.floor(y1); y < RA.hz; y++) { g.fillStyle = y < y2 ? ((x + y) % 7 ? '#1d2140' : '#232850') : ((x * 3 + y) % 5 ? '#151832' : '#1b1f3c'); g.fillRect(x, y, 1, 1); } }
+  // the ground: dry earth, pebbles; the road a paler band
+  ramp(g, 0, RA.hz, RA.w, RA.h - RA.hz, ['#3a3040', '#4c4048', '#605250', '#766658', '#8c7a64'], (x, y) => {
+    const z = (y - RA.hz) / (RA.h - RA.hz), road = Math.exp(-Math.pow((y - (RA.hz + 120)) / 22, 2)) * .5; return .25 + z * .35 + road + (fbm(x * .05, y * .1, 3) - .5) * .5; });
+  for (let i = 0; i < 2600; i++) { const x = r() * RA.w, y = RA.hz + 4 + r() * (RA.h - RA.hz); px(g, x, y, 1, 1, r() < .5 ? '#7e6c58' : '#241c24'); }
+  // rocks and scrub
+  for (let i = 0; i < 60; i++) { const x = r() * RA.w, y = RA.hz + 30 + r() * (RA.h - RA.hz - 40); if (Math.abs(y - (RA.hz + 120)) < 26) continue;
+    if (r() < .5) { const w = 6 + r() * 12, h = 3 + r() * 6; for (let k = 0; k < h; k++) px(g, x - w / 2 + k * .3, y - k, w - k * .6, 1, k < 2 ? '#3a3036' : k > h - 2 ? '#8a7a66' : '#5c4e48'); }
+    else { for (let k = 0; k < 14; k++) px(g, x + (r() - .5) * 10, y - r() * 8, 1, 2, r() < .5 ? '#3c4a2e' : '#566a3a'); } }
+  return c;
+}
+const PARTY = [{ cloak: HERO, carry: 'lamp', cloth: '#e0d4b4' }, { cloak: '#5a5a6e', carry: 'stone' }, { cloak: '#6a5640', beard: 1 }, { cloak: '#4a5a6a', carry: 'stone' }, { cloak: '#6e4e5e' }];
+function shotRoad(ctx, t) {
+  const g = wc, s = V ? 4.6 : 4.2; g.clearRect(0, 0, WC.width, WC.height); g.drawImage(road, 0, 0);
+  const lead = 150 + t * 26, ry = RA.hz + 120;
+  const lampX = lead + 5, lampY = ry - 15;
+  // walkers, back to front; walk cycle 4 frames at 8 fps
+  const f = Math.floor(t * 8);
+  for (let i = PARTY.length - 1; i >= 0; i--) { const x = lead - i * 24 - (i % 2) * 4, y = ry + (i % 2 ? -5 : 4);
+    const dx = x - lampX, sh = [clamp(dx * .5, -14, 14), 3]; drawSprite(g, x, y, { ...PARTY[i], f: (f + i) % 4, dir: 1 }, i ? sh : [-6, 2]); }
+  lampPx(g, lampX - 1, lampY + 1, t, 1);
+  const cam = { cx: V ? lead - 48 : lead - 40, cy: RA.hz + (V ? 96 : 70), s };
+  return { set: RA, cam, lamps: [{ x: lampX, y: lampY - 3, k: 1, r: 74 }], amb: [58, 66, 124], fog: [40, 48, 96] };
+}
+
+// ---------- set B: the walls of Jerusalem, night → dawn ----------
+const WB = { w: 760, h: 470, hz: 150, wz: 238, wh: 60, x0: 20, x1: 740, gate: [352, 404] };
+const COLS = Math.floor((WB.x1 - WB.x0) / 8);
+let hInit = [], stones = [], rubble = [];
+const LAMPS = [{ x: 150, at: 11.0 }, { x: 236, at: 12.0 }, { x: 318, at: 12.6 }, { x: 446, at: 13.2 }, { x: 530, at: 13.8 }, { x: 612, at: 14.4 }, { x: 690, at: 15.0 }, { x: 74, at: 15.6 }];
+function buildWall() {
+  const r = rng(11);
+  for (let c = 0; c < COLS; c++) { const x = WB.x0 + c * 8, n = fbm(c * .2, 3); let h = n < .45 ? 0 : n < .55 ? 6 : n < .65 ? 12 : 18 + Math.floor(r() * 3) * 6; if (x + 8 > WB.gate[0] && x < WB.gate[1]) h = 0; hInit.push(h); }
+  for (let c = 0; c < COLS; c++) { const x = WB.x0 + c * 8; if (x + 8 > WB.gate[0] && x < WB.gate[1]) continue;
+    for (let row = hInit[c] / 6; row < WB.wh / 6; row++) { const near = Math.min(...LAMPS.map(l => Math.abs(l.x - x))) / 300;
+      stones.push({ c, row, x: x + (row % 2 ? 4 : 0), t: 12.6 + (row / (WB.wh / 6)) * 7.6 + near * 1.2 + r() * 1.0, shade: r() }); } }
+  stones.sort((a, b) => a.t - b.t);
+  for (let i = 0; i < 9; i++) rubble.push({ x: 60 + i * 80 + (r() - .5) * 30, z: WB.wz + 30 + r() * 70, n: 18 + (r() * 10 | 0), seed: i });
+  // static set: sky left transparent; far hills, city behind the wall, ground
+  const c = canvas(WB.w, WB.h), g = c.getContext('2d');
+  for (let x = 0; x < WB.w; x++) { const y1 = WB.hz - 34 - fbm(x * .008, 2) * 36; for (let y = Math.floor(y1); y < WB.hz + 4; y++) { const d = (y - y1) / (WB.hz - y1); px(g, x, y, 1, 1, (x + y * 3) % 6 ? (d < .5 ? '#2a3058' : '#262a4c') : '#30386a'); } }
+  ramp(g, 0, WB.hz, WB.w, WB.h - WB.hz, ['#2c2630', '#3e3438', '#524640', '#66584a', '#7a6a56'], (x, y) => .3 + (y - WB.hz) / (WB.h - WB.hz) * .3 + (fbm(x * .06, y * .1, 3) - .5) * .55);
+  for (let i = 0; i < 2200; i++) { const x = r() * WB.w, y = WB.hz + 4 + r() * (WB.h - WB.hz); px(g, x, y, 1, 1, r() < .5 ? '#8a7a64' : '#221c26'); }
+  // houses and the rebuilt temple behind the wall (boxes: front face + top face)
+  const box = (x, z, w, d, h, front, topc, win) => { const sy = WB.hz + (z - WB.hz) * .62 + (WB.hz * .38) * 0, base = z;
+    ramp(g, x, base - h, w, h, front, (xx, yy) => .45 + (fbm(xx * .2, yy * .3) - .5) * .7 - (yy - (base - h)) / h * .25);
+    ramp(g, x, base - h - d, w, d, topc, (xx, yy) => .5 + (fbm(xx * .2, yy * .5) - .5) * .7);
+    px(g, x, base - h - d, w, 1, topc[topc.length - 1]); if (win) win(x, base - h, w, h); };
+  const stoneF = ['#4a4250', '#5c5260', '#6e6470', '#80766e'], stoneT = ['#625a66', '#776e76', '#8a8080'];
+  for (let i = 0; i < 16; i++) { const x = 20 + i * 46 + (r() - .5) * 16, z = WB.wz - 30 - r() * 40, w = 26 + r() * 18, h = 12 + r() * 22; if (x > 470 && x < 600) continue;
+    box(x, z, w, 8, h, stoneF, stoneT, (bx, by, bw, bh) => { if (r() < .6) px(g, bx + 5, by + 5, 3, 4, '#141020'); if (r() < .4) px(g, bx + bw - 9, by + 5, 3, 4, '#141020'); }); }
+  box(478, WB.wz - 44, 112, 12, 56, ['#5a5262', '#6e6676', '#847a84', '#9a8f8c'], ['#7a7280', '#8e8692', '#a29a9e'], (bx, by, bw, bh) => { px(g, bx + bw / 2 - 7, by + bh - 22, 14, 22, '#120e1c'); for (let k = 0; k < 4; k++) px(g, bx + 14 + k * 26, by + 6, 4, bh - 6, '#9c9290'); });
+  // the road coming in from the left, the open ground before the wall
+  ramp(g, 0, WB.wz + 60, WB.w, 30, ['#5a4c44', '#6a5a4c', '#7c6a56'], (x, y) => .5 + (fbm(x * .08, y * .2) - .5) * .6 - Math.abs(y - WB.wz - 75) / 30);
+  return c;
+}
+const stoneCol = s => s.shade < .33 ? ['#8e8270', '#a89a84', '#6e6454'] : s.shade < .66 ? ['#9a8c76', '#b4a68e', '#786c5a'] : ['#847a6a', '#9c9080', '#655c50'];
+function wallDraw(g, t) {
+  const by = WB.wz;
+  // the original ruin
+  for (let c = 0; c < COLS; c++) { const x = WB.x0 + c * 8; for (let row = 0; row < hInit[c] / 6; row++) { const xx = x + (row % 2 ? 4 : 0); const k = ['#6c6258', '#786e62', '#5e554c'][(c * 7 + row * 3) % 3];
+    px(g, xx, by - (row + 1) * 6, 8, 6, k); px(g, xx, by - (row + 1) * 6, 8, 1, '#867c6e'); px(g, xx + 7, by - (row + 1) * 6, 1, 6, '#3c342e'); px(g, xx, by - row * 6 - 1, 8, 1, '#3c342e'); } }
+  // new stones: each drops into place (stepped), fresh-cut and paler than the old ruin
+  for (const s of stones) { if (s.t > t) break; const dropK = clamp((t - s.t) / .3), drop = Math.floor((1 - dropK) * 4) * 3, y = by - (s.row + 1) * 6 - drop, [m, l, d] = stoneCol(s);
+    px(g, s.x, y, 8, 6, m); px(g, s.x, y, 8, 1, l); px(g, s.x + 7, y, 1, 6, d); px(g, s.x, y + 5, 8, 1, d); if ((s.c + s.row) % 3 === 0) px(g, s.x + 2, y + 2, 2, 1, l); }
+  // the top walk of the wall (visible top face) where it is complete
+  const done = ss(20.4, 21.2, t);
+  if (done > 0) for (let c = 0; c < COLS; c++) { const x = WB.x0 + c * 8; if (x + 8 > WB.gate[0] && x < WB.gate[1]) continue; px(g, x, by - WB.wh - 8, 8, 8, '#8e8474'); px(g, x, by - WB.wh - 8, 8, 1, '#a89e8c');
+    if (c % 2 === 0) { px(g, x, by - WB.wh - 14, 5, 6, '#9a8e7a'); px(g, x, by - WB.wh - 14, 5, 1, '#b4a890'); } }
+  // gate towers and, at the end, the doors
+  [WB.gate[0] - 24, WB.gate[1]].forEach(x => { for (let row = 0; row < 14; row++) { const k = row % 2 ? '#8a7e6c' : '#968a76'; px(g, x, by - (row + 1) * 6, 24, 6, k); px(g, x, by - (row + 1) * 6, 24, 1, '#ada08a'); px(g, x + 23, by - (row + 1) * 6, 1, 6, '#5e5444'); }
+    px(g, x - 2, by - 90, 28, 6, '#a69a84'); for (let k = 0; k < 4; k++) px(g, x - 2 + k * 8, by - 96, 5, 6, '#9a8e7a'); px(g, x + 9, by - 70, 4, 8, '#140f1c'); });
+  const dk = ss(19.8, 20.6, t); px(g, WB.gate[0], by - 64, WB.gate[1] - WB.gate[0], 64, '#100c18');
+  if (dk > 0) { const dw = Math.floor((WB.gate[1] - WB.gate[0]) / 2 * dk); px(g, WB.gate[0], by - 60, dw, 60, '#5a3a24'); px(g, WB.gate[1] - dw, by - 60, dw, 60, '#5a3a24'); for (let k = 0; k < 6; k++) { px(g, WB.gate[0] + 3 + k * 8, by - 60, 1, 60, '#3e2818'); } }
+  px(g, WB.gate[0] - 2, by - 70, WB.gate[1] - WB.gate[0] + 4, 6, '#a69a84');
+}
+function rubbleDraw(g, t) {
+  for (const r0 of rubble) { const r = rng(r0.seed + 90), left = Math.round(r0.n * (1 - ss(12.6, 21, t + (r0.x / 760) * .6))), sy = r0.z;
+    for (let i = 0; i < left; i++) { const a = r() * 6.28, d = Math.sqrt(r()) * 14, x = r0.x + Math.cos(a) * d * 1.4, y = sy + Math.sin(a) * d * .5 - (14 - d) * .5; const s = { shade: r() };
+      const [m, l, dd] = stoneCol(s); px(g, x, y, 6, 4, m); px(g, x, y, 6, 1, l); px(g, x, y + 3, 6, 1, dd); } }
+}
+const WORK = [{ x0: 120, z0: 300, x1: 160, z1: 250, ph: 0, cl: '#5a5a6e' }, { x0: 260, z0: 320, x1: 220, z1: 252, ph: 1.7, cl: '#6a5640' }, { x0: 430, z0: 300, x1: 470, z1: 252, ph: .8, cl: '#4a5a6a' },
+  { x0: 560, z0: 330, x1: 520, z1: 254, ph: 2.6, cl: '#6e4e5e' }, { x0: 650, z0: 300, x1: 690, z1: 252, ph: 1.2, cl: '#56604a' }, { x0: 330, z0: 330, x1: 300, z1: 256, ph: 3.1, cl: '#5e4a3e' }];
+function shotWall(ctx, t) {
+  const g = wc; g.clearRect(0, 0, WC.width, WC.height); g.drawImage(wall, 0, 0);
+  const lt = t - SA, f = Math.floor(t * 8);
+  // which lamps burn; the first is the one carried here
+  const lamps = [];
+  LAMPS.forEach((l, i) => { const k = ss(l.at, l.at + .25, t); if (k > 0) lamps.push({ x: l.x, y: WB.wz - Math.max(hInit[Math.floor((l.x - WB.x0) / 8)] || 0, 0) - 6, k, r: 70, i }); });
+  // lamp positions ride the wall as it rises
+  lamps.forEach(l => { const c = Math.floor((l.x - WB.x0) / 8); let h = hInit[c] || 0; for (const s of stones) { if (s.t > t) break; if (s.c === c) h = Math.max(h, (s.row + 1) * 6); } l.y = WB.wz - h - 2; });
+  rubbleDraw(g, t);
+  wallDraw(g, t);
+  // the lamp-bearer: walks in along the road, sets the lamp on the broken wall at 11.0, then works
+  const arrive = clamp((t - SA) / 1.6), bx = lerp(40, 146, eo(arrive)), bz = lerp(WB.wz + 76, WB.wz + 14, eo(arrive));
+  const sprites = [];
+  const holding = t < LAMPS[0].at;
+  sprites.push({ x: bx, y: bz, o: { cloak: HERO, carry: holding ? 'lamp' : null, cloth: '#e0d4b4', f: arrive < 1 ? f % 4 : 1, dir: 1, kneel: t > 10.8 && t < 11.4 } });
+  if (holding) lamps.push({ x: bx + 5, y: bz - 18, k: 1, r: 70, i: -1, hand: true });
+  // workers carrying stones between the rubble and the wall, each appearing as the lamps multiply
+  WORK.forEach((w, i) => { const app = 12.0 + i * .5; if (t < app) return; const cyc = ((t - app) / 4.2 + w.ph / 6.28) % 1, go = cyc < .5, k = go ? eio(cyc * 2) : eio(2 - cyc * 2), x = lerp(w.x0, w.x1, k), z = lerp(w.z0, w.z1, k);
+    sprites.push({ x, y: z, o: { cloak: w.cl, carry: go ? 'stone' : null, f: f % 4 + 0, dir: (go ? 1 : -1) * Math.sign(w.x1 - w.x0) } }); });
+  // dawn: the people gather before the gate; Ezra on a wooden platform with the scroll (Neh 8)
+  const gather = ss(22.0, 24.5, t);
+  if (gather > 0) { px(g, 362, WB.wz + 34, 34, 10, '#6a4a2c'); px(g, 362, WB.wz + 34, 34, 2, '#8a6440'); px(g, 364, WB.wz + 44, 3, 8, '#4a3220'); px(g, 391, WB.wz + 44, 3, 8, '#4a3220');
+    sprites.push({ x: 379, y: WB.wz + 36, o: { cloak: '#e8dcc0', carry: 'scroll', beard: 1, f: 1, dir: 1, cloth: '#f2ead6' } });
+    const crowd = rng(66); for (let i = 0; i < 22; i++) { const a = crowd() * Math.PI, d = 40 + crowd() * 60, x = 379 + Math.cos(a) * d * 1.6, z = WB.wz + 70 + Math.sin(a) * d * .6, arrive2 = clamp((t - 22 - i * .07) / 1.5);
+      if (arrive2 <= 0) continue; const x2 = lerp(x + (x < 379 ? -120 : 120), x, eo(arrive2)); sprites.push({ x: x2, y: z, o: { cloak: ['#5a5a6e', '#6a5640', '#4a5a6a', '#6e4e5e', '#56604a', '#7a6a50'][i % 6], f: arrive2 < 1 ? f % 4 : 1, dir: x < 379 ? 1 : -1, back: true, arms: t > 26.5 && i % 4 === 0 && (Math.floor(t * 2) + i) % 2 ? 'up' : null } }); } }
+  // shadows away from the nearest lamp (or the sun at dawn), then sprites back to front
+  const sun = ss(22.5, 26, t);
+  sprites.sort((a, b) => a.y - b.y).forEach(sp => { let best = null, bd = 1e9; lamps.forEach(l => { const d = Math.hypot(l.x - sp.x, (l.y - sp.y) * 1.6); if (d < bd) { bd = d; best = l; } });
+    let sh = best && bd < 160 ? [clamp((sp.x - best.x) * .35, -16, 16), 3] : [0, 2]; if (sun > .3) sh = [-14 * sun, 3]; drawSprite(g, sp.x, sp.y, sp.o, sh); });
+  lamps.forEach(l => { if (!l.hand) lampPx(g, l.x, l.y, t + l.i, 1); else lampPx(g, l.x, l.y + 3, t, 1); });
+  // camera
+  let cam;
+  const pull = eio(clamp((t - 12) / 9)), endPush = eio(clamp((t - 31.4) / 3.2));
+  if (V) cam = { cx: lerp(lerp(150, 380, pull), 150, endPush), cy: lerp(lerp(WB.wz - 30, WB.wz - 10, pull), WB.wz - 30, endPush), s: lerp(lerp(4.4, 3.3, pull), 5.6, endPush) };
+  else cam = { cx: lerp(lerp(170, 380, pull), 150, endPush), cy: lerp(lerp(WB.wz - 30, WB.wz - 6, pull), WB.wz - 30, endPush), s: lerp(lerp(3.8, 2.6, pull), 5.0, endPush) };
+  if (t > 22 && t < 31.4) cam.cy += -10 * eio(clamp((t - 22) / 6));
+  const dawn = ss(21.5, 27, t), pre = ss(16, 22, t);
+  const amb = mix(mix([56, 64, 122], [86, 96, 156], pre), [255, 218, 178], dawn);
+  return { set: WB, cam, lamps, amb, fog: mix([40, 48, 96], [240, 200, 160], dawn), dawn, pre };
+}
+
+// ---------- frame ----------
+function skyDraw(ctx, t, info, toS) {
+  const hzY = toS(0, info.set.hz)[1], dawn = info.dawn || 0, pre = info.pre || 0;
+  const top = mix(mix([12, 14, 36], [24, 34, 78], pre), [120, 150, 200], dawn), mid = mix(mix([14, 18, 44], [42, 52, 104], pre), [244, 176, 120], dawn), low = mix(mix([22, 26, 60], [86, 80, 130], pre), [255, 214, 150], dawn);
+  const g = ctx.createLinearGradient(0, hzY - H * .9, 0, hzY); g.addColorStop(0, rgb(top)); g.addColorStop(.7, rgb(mid)); g.addColorStop(1, rgb(low)); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+  // pixel stars (3 px squares), fading at dawn
+  const sa = 1 - ss(20, 25, t);
+  if (sa > 0) for (const s of stars) { const y = s.y * hzY; if (y > hzY - 20) continue; ctx.globalAlpha = sa * (.6 + .4 * Math.sin(t * s.sp + s.ph)) * s.b; ctx.fillStyle = s.warm ? '#ffe6b0' : '#e6ecff'; ctx.fillRect(Math.round(s.x * W / 3) * 3, Math.round(y / 3) * 3, 3, 3); }
+  ctx.globalAlpha = 1;
+  // the sun rising behind the far hills to the east (right)
+  if (dawn > 0) { const sx = W * .8, sy = lerp(toS(0, info.set.hz - 40)[1], toS(0, info.set.hz - 120)[1], ss(23, 31, t)); const sg = ctx.createRadialGradient(sx, sy, 0, sx, sy, W * .7); sg.addColorStop(0, `rgba(255,236,180,${.9 * dawn})`); sg.addColorStop(.12, `rgba(255,200,130,${.5 * dawn})`); sg.addColorStop(1, 'rgba(255,180,120,0)');
+    ctx.fillStyle = sg; ctx.fillRect(0, 0, W, H); ctx.fillStyle = `rgba(255,246,220,${dawn})`; ctx.beginPath(); ctx.arc(sx, sy, 34, 0, 6.28); ctx.fill(); }
+}
+function draw(ctx, t) {
+  const info = t < SA ? shotRoad(ctx, t) : shotWall(ctx, t);
+  const { cam } = info; { const hw = W / 2 / cam.s, hh = H / 2 / cam.s; cam.cx = clamp(cam.cx, hw, info.set.w - hw); cam.cy = Math.min(cam.cy, info.set.h - hh); }
+  const toS = (x, y) => [(x - cam.cx) * cam.s + W / 2, (y - cam.cy) * cam.s + H / 2];
+  ctx.imageSmoothingEnabled = true;
+  skyDraw(ctx, t, info, toS);
+  // the diorama: texels scaled with nearest filtering; the camera glides at sub-texel precision
+  ctx.save(); ctx.imageSmoothingEnabled = false; ctx.setTransform(cam.s, 0, 0, cam.s, W / 2 - cam.cx * cam.s, H / 2 - cam.cy * cam.s); ctx.drawImage(WC, 0, 0); ctx.restore();
+  // light: ambient key (multiply) with warm practical pools punched in; level drives pool, glow and scale together
+  lc.setTransform(1, 0, 0, 1, 0, 0); lc.globalCompositeOperation = 'source-over'; lc.fillStyle = rgb(info.amb); lc.fillRect(0, 0, LC.width, LC.height);
+  const q = LC.width / W; lc.globalCompositeOperation = 'lighter';
+  info.lamps.forEach((l, i) => { const fl = (.86 + .08 * Math.sin(t * 13 + i * 3) + .06 * Math.sin(t * 7.3 + i)) * l.k, [sx, sy] = toS(l.x + 2, l.y - 3), rr = l.r * cam.s * (.9 + .1 * fl) * q;
+    const g = lc.createRadialGradient(sx * q, sy * q, 0, sx * q, sy * q, rr); const lv = Math.pow(fl, 1.3) * (1 - (info.dawn || 0) * (l.i === 0 ? .2 : .7));
+    g.addColorStop(0, `rgba(255,190,110,${lv})`); g.addColorStop(.35, `rgba(230,130,60,${.55 * lv})`); g.addColorStop(1, 'rgba(200,90,40,0)'); lc.fillStyle = g; lc.fillRect(0, 0, LC.width, LC.height); });
+  ctx.save(); ctx.globalCompositeOperation = 'multiply'; ctx.drawImage(LC, 0, 0, W, H); ctx.restore();
+  // fog on the far plane
+  const hz = toS(0, info.set.hz)[1], fg = ctx.createLinearGradient(0, hz - 140, 0, hz + 160); fg.addColorStop(0, 'rgba(0,0,0,0)'); fg.addColorStop(.5, rgb(info.fog, .3 - .14 * (info.dawn || 0))); fg.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = fg; ctx.fillRect(0, 0, W, H);
+  // glow sprites on every source (bloom has something to grab)
+  ctx.save(); ctx.globalCompositeOperation = 'screen';
+  info.lamps.forEach((l, i) => { const fl = (.85 + .1 * Math.sin(t * 11 + i * 2)) * l.k, [sx, sy] = toS(l.x + 3, l.y - 4), r0 = 46 * cam.s / 3;
+    const g = ctx.createRadialGradient(sx, sy, 0, sx, sy, r0 * 2.4); g.addColorStop(0, `rgba(255,240,200,${.95 * fl})`); g.addColorStop(.18, `rgba(255,190,100,${.55 * fl})`); g.addColorStop(1, 'rgba(255,150,60,0)'); ctx.fillStyle = g; ctx.fillRect(sx - r0 * 2.4, sy - r0 * 2.4, r0 * 4.8, r0 * 4.8); });
+  const l0 = info.lamps.find(l => l.i === 0), endG = ss(30.8, 33.6, t);
+  if (l0 && endG > 0) { const [sx, sy] = toS(l0.x + 3, l0.y - 4), rr = 60 + 260 * endG; const g = ctx.createRadialGradient(sx, sy, 0, sx, sy, rr); g.addColorStop(0, `rgba(255,236,190,${.8 * endG})`); g.addColorStop(.25, `rgba(255,200,120,${.35 * endG})`); g.addColorStop(1, 'rgba(255,190,110,0)'); ctx.fillStyle = g; ctx.fillRect(sx - rr, sy - rr, rr * 2, rr * 2); }
+  if (info.dawn > 0) { const g = ctx.createLinearGradient(W, 0, 0, H * .6); g.addColorStop(0, `rgba(255,200,140,${.32 * info.dawn})`); g.addColorStop(1, 'rgba(255,200,140,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H); }
+  ctx.restore();
+  // dust motes drifting in the lamplight (smooth, every frame)
+  ctx.save(); ctx.globalCompositeOperation = 'screen'; const r = rng(7); for (let i = 0; i < 60; i++) { const l = info.lamps[i % Math.max(1, info.lamps.length)]; if (!l) break; const [sx, sy] = toS(l.x, l.y);
+    const mx0 = sx + (r() - .5) * 220 + Math.sin(t * .5 + i) * 20, my0 = sy + (r() - .5) * 160 - ((t * 12 + i * 13) % 80); ctx.fillStyle = `rgba(255,220,160,${.25 + .25 * Math.sin(t * 2 + i)})`; ctx.fillRect(mx0, my0, 3, 3); } ctx.restore();
+  // tilt-shift: far (top) and near (bottom) fall out of focus around a band on the subject
+  const eb = ss(31.4, 33.5, t) * .1, band = V ? [.36 - eb, .62 + eb] : [.32 - eb, .66 + eb];
+  tsx.filter = 'blur(4px)'; tsx.drawImage(ctx.canvas, 0, 0, TS.width, TS.height); tsx.filter = 'none';
+  tmx.globalCompositeOperation = 'source-over'; tmx.clearRect(0, 0, W, H); tmx.imageSmoothingEnabled = true; tmx.drawImage(TS, 0, 0, W, H);
+  const mg = tmx.createLinearGradient(0, 0, 0, H); mg.addColorStop(0, 'rgba(0,0,0,1)'); mg.addColorStop(band[0] - .14, 'rgba(0,0,0,.85)'); mg.addColorStop(band[0], 'rgba(0,0,0,0)'); mg.addColorStop(band[1], 'rgba(0,0,0,0)'); mg.addColorStop(band[1] + .16, 'rgba(0,0,0,.9)'); mg.addColorStop(1, 'rgba(0,0,0,1)');
+  tmx.globalCompositeOperation = 'destination-in'; tmx.fillStyle = mg; tmx.fillRect(0, 0, W, H); ctx.drawImage(TM, 0, 0);
+  // bloom: a soft screen of the bright parts (cheap: the blurred frame, screened faintly)
+  ctx.save(); ctx.globalCompositeOperation = 'screen'; ctx.globalAlpha = .16 - .08 * (info.dawn || 0); ctx.filter = 'blur(10px) brightness(1.2)'; ctx.drawImage(TS, 0, 0, W, H); ctx.restore();
+  // vignette + grade
+  const vg = ctx.createRadialGradient(W / 2, H * .5, Math.min(W, H) * .35, W / 2, H * .5, Math.hypot(W, H) * .6); vg.addColorStop(0, 'rgba(10,8,20,0)'); vg.addColorStop(1, 'rgba(10,8,20,.72)'); ctx.fillStyle = vg; ctx.fillRect(0, 0, W, H);
+  ui(ctx, t);
+  const f = 1 - ss(0, 1.3, t) + ss(DUR - 1.2, DUR, t) + (t > SA - .35 && t < SA ? ss(SA - .35, SA - .05, t) : 0) + (t >= SA && t < SA + .4 ? 1 - ss(SA, SA + .4, t) : 0);
+  if (f > 0) { ctx.fillStyle = `rgba(6,5,12,${clamp(f)})`; ctx.fillRect(0, 0, W, H); }
+}
+
+// ---------- UI: chapter label, narration subtitles, a framed dialogue box ----------
+function subtitle(ctx, lines, cite, a) {
+  if (a <= 0) return; const size = V ? 46 : 44, lh = size * 1.5, n = lines.length, y0 = V ? H - 330 - (n - 1) * lh : H - 150 - (n - 1) * lh;
+  const bg = ctx.createLinearGradient(0, y0 - size * 1.6, 0, y0 + (n - 1) * lh + 90); bg.addColorStop(0, 'rgba(6,6,14,0)'); bg.addColorStop(.4, `rgba(6,6,14,${.55 * a})`); bg.addColorStop(1, 'rgba(6,6,14,0)');
+  ctx.fillStyle = bg; ctx.fillRect(0, y0 - size * 1.6, W, (n - 1) * lh + size * 1.6 + 100);
+  lines.forEach((s, i) => text(ctx, s, W / 2, y0 + i * lh, { size, weight: 600, color: '#f6efe0', alpha: a, shadow: 'rgba(0,0,0,.8)', shadowBlur: 14 }));
+  if (cite) text(ctx, cite, W / 2, y0 + (n - 1) * lh + 50, { size: V ? 24 : 22, font: "'Noto Sans KR',sans-serif", color: '#e2d2b4', alpha: a * .9, ls: 2, shadow: 'rgba(0,0,0,.8)' });
+}
+function dialog(ctx, t, t0, t1, name, lines, cite) {
+  const a = win(t, t0, t1, .35, .8); if (a <= 0) return;
+  const size = V ? 46 : 46, bw = V ? 960 : 1240, bh = V ? 250 : 190, bx = (W - bw) / 2, by = V ? H - 520 : H - 290;
+  ctx.save(); ctx.globalAlpha = a;
+  ctx.fillStyle = 'rgba(10,12,26,.84)'; ctx.fillRect(bx, by, bw, bh);
+  ctx.strokeStyle = '#d4af6a'; ctx.lineWidth = 2; ctx.strokeRect(bx + 6, by + 6, bw - 12, bh - 12); ctx.strokeStyle = 'rgba(212,175,106,.45)'; ctx.lineWidth = 1; ctx.strokeRect(bx + 12, by + 12, bw - 24, bh - 24);
+  [[bx + 6, by + 6], [bx + bw - 6, by + 6], [bx + 6, by + bh - 6], [bx + bw - 6, by + bh - 6]].forEach(([x, y]) => { ctx.fillStyle = '#e8c884'; ctx.beginPath(); ctx.moveTo(x, y - 8); ctx.lineTo(x + 8, y); ctx.lineTo(x, y + 8); ctx.lineTo(x - 8, y); ctx.fill(); });
+  // name plate on the top edge
+  ctx.font = `600 30px 'Noto Serif KR'`; ctx.letterSpacing = '6px'; const nw = ctx.measureText(name).width + 56;
+  ctx.fillStyle = 'rgba(14,16,34,.96)'; ctx.fillRect(bx + 40, by - 26, nw, 52); ctx.strokeStyle = '#d4af6a'; ctx.lineWidth = 2; ctx.strokeRect(bx + 40, by - 26, nw, 52);
+  ctx.fillStyle = '#efd28e'; ctx.textAlign = 'left'; ctx.textBaseline = 'middle'; ctx.fillText(name, bx + 68, by + 1); ctx.letterSpacing = '0px';
+  // the line, typed in
+  const all = lines.join(''), n = [...all].length, shown = Math.floor(clamp((t - t0 - .3) / 1.7) * n); let used = 0;
+  ctx.font = `600 ${size}px 'Noto Serif KR'`; ctx.textBaseline = 'alphabetic'; ctx.fillStyle = '#f8f1e2'; ctx.shadowColor = 'rgba(0,0,0,.6)'; ctx.shadowBlur = 8;
+  const ty0 = by + (bh - (lines.length - 1) * size * 1.45) / 2 + size * .36; let endX = bx, endY = ty0;
+  lines.forEach((s, i) => { const ch = [...s], k = clamp(shown - used, 0, ch.length), part = ch.slice(0, k).join(''); used += ch.length; ctx.textAlign = 'center';
+    const full = ctx.measureText(s).width, x0 = W / 2 - full / 2; ctx.textAlign = 'left'; ctx.fillText(part, x0, ty0 + i * size * 1.45); if (k > 0) { endX = x0 + ctx.measureText(part).width; endY = ty0 + i * size * 1.45; } });
+  ctx.shadowBlur = 0;
+  if (Math.floor(t * 2.4) % 2 === 0) { ctx.fillStyle = '#efd28e'; ctx.beginPath(); const cx = shown >= n ? bx + bw - 44 : endX + 10, cy = shown >= n ? by + bh - 30 : endY - size * .3; ctx.moveTo(cx - 9, cy - 6); ctx.lineTo(cx + 9, cy - 6); ctx.lineTo(cx, cy + 6); ctx.fill(); }
+  ctx.restore();
+  if (cite) text(ctx, cite, W / 2, by + bh + 52, { size: V ? 24 : 22, font: "'Noto Sans KR',sans-serif", color: '#f2e2c2', alpha: a * clamp((t - t0 - 1.8) / .5) * .95, ls: 2, shadow: 'rgba(0,0,0,.9)', shadowBlur: 10 });
+}
+function ui(ctx, t) {
+  const la = win(t, .8, 5.6, 1.1, 1.1), lx = V ? 90 : 120, ly = V ? 230 : 130;
+  if (la > 0) { text(ctx, '09  ·  포로 귀환', lx, ly, { align: 'left', size: 32, weight: 600, color: '#efd28e', alpha: la, ls: 8, shadow: 'rgba(0,0,0,.85)' });
+    ctx.save(); ctx.globalAlpha = la; const g = ctx.createLinearGradient(lx, 0, lx + 420, 0); g.addColorStop(0, '#d4af6a'); g.addColorStop(1, 'rgba(212,175,106,0)'); ctx.fillStyle = g; ctx.fillRect(lx, ly + 18, 420, 2); ctx.restore();
+    text(ctx, 'BC 538 – 430  ·  에스라 · 느헤미야 · 에스더', lx, ly + 58, { align: 'left', size: 22, font: "'Noto Sans KR',sans-serif", color: '#e8dcc4', alpha: la * .9, ls: 2, shadow: 'rgba(0,0,0,.85)' }); }
+  subtitle(ctx, V ? ['70년 후, 하나님이 길을 여십니다 —', '고향으로 돌아갑니다…'] : ['70년 후, 하나님이 길을 여십니다 — 고향으로 돌아갑니다…'], null, win(t, 4.4, SA - .3, .4, .5));
+  subtitle(ctx, V ? ['성벽 역사가 오십이 일 만인', '엘룰월 이십오일에 끝나매'] : ['성벽 역사가 오십이 일 만인 엘룰월 이십오일에 끝나매'], '느헤미야 6:15 (개역개정)', win(t, 16.2, 21.6, .4, .6));
+  dialog(ctx, t, 25.0, 31.6, '느헤미야', V ? ['여호와로 인하여 기뻐하는 것이', '너희의 힘이니라'] : ['여호와로 인하여 기뻐하는 것이 너희의 힘이니라'], '느헤미야 8:10 (개역개정)');
+}
+
+Pilot.run({ W, H, dur: DUR, audio: 'return.m4a', fonts: ["600 40px 'Noto Serif KR'", "400 20px 'Noto Sans KR'"],
+  init: async () => {
+    road = buildRoad(); wall = buildWall();
+    WC = canvas(Math.max(RA.w, WB.w), Math.max(RA.h, WB.h)); wc = WC.getContext('2d'); wc.imageSmoothingEnabled = false;
+    LC = canvas(W / 2, H / 2); lc = LC.getContext('2d'); TS = canvas(W / 4, H / 4); tsx = TS.getContext('2d'); TM = canvas(W, H); tmx = TM.getContext('2d');
+    const r = rng(19); for (let i = 0; i < 260; i++) stars.push({ x: r(), y: Math.pow(r(), .8), sp: .5 + r() * 2, ph: r() * 6.28, b: .4 + r() * .6, warm: r() < .2 });
+  },
+  draw });
+</script>
+</body>
+</html>

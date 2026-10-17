@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>시안 · 초대</title>
+<link rel="stylesheet" href="fonts.css">
+</head>
+<body>
+<script src="lib.js"></script>
+<script src="goldline.js"></script>
+<script>
+/* 20 초대 · 영접 기도 · 엔딩 — the golden line of the opening returns.
+   It has been waiting at the foot of the cross (the last picture of 00). It sets off toward us — the camera comes
+   close — and draws an open, lit doorway: 「이 사랑은 정보가 아니라 초대입니다.」 We go through the light.
+   On the other side the line runs along a horizon and writes the site's prayer, one sentence at a time, the
+   letters appearing as the light passes beneath them; it rests after each sentence, so the viewer can pray along.
+   Pull back: the whole prayer is one line of light. 요 1:12. The end card: 「한눈에 보는 성경 이야기」 · one-scroll-bible.com
+   and the Scripture credit; the line runs on, off the edge of the paper. */
+const { clamp, lerp, ss, eo, eio, win, text } = Pilot;
+const W = Pilot.W, H = Pilot.H, V = Pilot.ori === 'v';
+const GL = GoldLine;
+const DOOR = [1500, 0];
+// the site's prayer (index.html respond.prayer), verbatim, one sentence per slot; long ones break at a natural pause
+const PRAYER = [
+  ['하나님,'],
+  ['저는 스스로를 구원할 수 없는', '죄인임을 인정합니다.'],
+  ['예수님이 저를 위해 십자가에서', '죽으시고 다시 살아나신 것을 믿습니다.'],
+  ['제 모든 죄를 용서해 주시고,', '이제 제 삶의 주인이 되어 주세요.'],
+  ['저를 하나님의 자녀로 받아 주시고,', '새로운 삶을 살게 해 주세요.'],
+  ['예수님의 이름으로 기도합니다.', '아멘.'],
+];
+// timing: the prayer must breathe for someone praying along — each sentence is written (wd), then stays fully
+// readable for READ seconds while the pen rests, then fades (FADE) as the pen glides on to the next one
+const READ = 4.5, FADE = .5, wdOf = c => .35 + .045 * c;
+const SLOT = [8.8]; PRAYER.forEach(r => SLOT.push(SLOT[SLOT.length - 1] + wdOf(r.join(' ').length) + READ + FADE));   // sentence k: [SLOT[k], SLOT[k+1]]
+const TEND = SLOT[SLOT.length - 1];             // 아멘 starts to fade
+const PB = TEND - .4, V0 = TEND, V1 = V0 + 5.0, C0 = V1 - .2, DUR = Math.round((C0 + 4.0) * 10) / 10;   // pull-back · 요 1:12 · end card
+const TS = V ? 48 : 54, TSTYLE = { size: TS, weight: 600 };
+let line, S = [], crossP;
+
+function build() {
+  // lay out the sentences along the horizon
+  const maxW = (V ? .86 : .78) * W; let x = 3400;
+  PRAYER.forEach((rows, k) => {
+    const whole = rows.join(' '), ww = GL.measure(whole, TSTYLE), r = ww <= maxW ? [whole] : rows, ws = r.map(q => GL.measure(q, TSTYLE)), wm = Math.max(...ws);
+    S.push({ rows: r, ws, w: wm, L: x, R: x + wm, C: x + wm / 2, chars: whole.length, s: SLOT[k], e: SLOT[k + 1] });
+    x += wm + (V ? 520 : 460);
+  });
+  const p = new GL.Path();
+  // already drawn (before the scene starts): the horizon and the cross on its hill, from the opening
+  p.moveTo(-1700, 0, -9).cubicTo(-1300, 12, -800, -10, -320, 0).time(-6);
+  p.cubicTo(-220, 0, -120, -120, -18, -120).lineTo(-18, -370).lineTo(-118, -370).lineTo(-118, -404).lineTo(-18, -404).lineTo(-18, -480).lineTo(18, -480).lineTo(18, -404)
+    .lineTo(118, -404).lineTo(118, -370).lineTo(18, -370).lineTo(18, -120).cubicTo(120, -120, 220, 0, 320, 0).time(-1);
+  p.hold(.6);                                                     // it has been waiting at the foot of the cross
+  // it comes toward us …
+  p.cubicTo(620, 14, 950, -16, 1250, 0).time(4.0, { easeIn: .6 });
+  // … and draws an open doorway
+  p.tf(...DOOR).lineTo(-120, 0).lineTo(-120, -300).arc(0, -300, 120, Math.PI, 2 * Math.PI).lineTo(120, 0).lineTo(260, 0).time(6.6, { K: 40, easeOut: .3 });
+  p.tf(0, 0).cubicTo(2300, 10, 2900, -10, S[0].L - 30, 0).time(SLOT[0]);
+  // the prayer: the light passes beneath each sentence as it is written, rests, then moves on
+  S.forEach((q, k) => {
+    q.wd = wdOf(q.chars);
+    p.lineTo(q.R + 30, 0).time(q.s + q.wd, { K: 0 });
+    if (k < S.length - 1) { const n = S[k + 1]; p.hold(q.e - 1.15).cubicTo(q.R + 260, 70, n.L - 260, 70, n.L - 30, 0).time(q.e, { easeIn: .4, easeOut: .4 }); }
+    else p.hold(q.e + .2).cubicTo(q.R + 500, 0, q.R + 1400, -8, q.R + 2600, 0).time(DUR - 1.4, { easeIn: .5 });
+  });
+  line = p.done();
+}
+
+// ---------- camera ----------
+const INTRO = [[0, 160, -190, .42, 0], [.6, 160, -190, .42, 0], [4.0, 1250, -120, .95, .7], [5.2, 1500, -190, 1.2, .15], [7.3, 1500, -190, 1.3, .05], [8.45, 1500, -180, 5.2, 0]];
+function camera(t) {
+  if (t < 8.45) return GL.camAt(INTRO, t, line, W, H);
+  const cy0 = V ? -80 : -70;
+  // composed on the sentence being written; between sentences a gentle glide with a small breath out
+  let k = 0; while (k < S.length - 1 && t > S[k].e - .6) k++;
+  const a = S[Math.max(0, k - 1)], b = S[k], u = k === 0 ? 1 : eio(clamp((t - (a.e - .6)) / 1.4));
+  let cx = lerp(a.C, b.C, u), z = (1 - .16 * Math.sin(Math.PI * u)) * lerp(1.0, 1.04, clamp((t - b.s) / 4)), cy = cy0 + (b.rows.length - 1) * TS * .6;
+  if (k === 0) cy = cy0 + (S[0].rows.length - 1) * TS * .6;
+  // after 아멘: pull back — the whole prayer is one line of light
+  const pb = eio(clamp((t - PB) / 3.0)), last = S[S.length - 1], mid = (S[2].L + last.R) / 2 + 300;
+  if (pb > 0) { cx = lerp(cx, mid, pb); z = Math.exp(lerp(Math.log(z), Math.log(V ? .3 : .27), pb)); cy = lerp(cy, -.12 * H / (V ? .3 : .27), pb); }
+  return { cx, cy, z };
+}
+
+// ---------- fills ----------
+function crossGlow(ctx, cam, t) {          // the cross from the opening, still lit, behind us as the line leaves
+  GL.apply(ctx, cam, W, H); ctx.globalCompositeOperation = 'lighter';
+  const g = ctx.createRadialGradient(0, -380, 0, 0, -380, 700); g.addColorStop(0, 'rgba(255,214,140,.26)'); g.addColorStop(.4, 'rgba(255,170,80,.07)'); g.addColorStop(1, 'rgba(255,150,60,0)');
+  ctx.fillStyle = g; ctx.fillRect(-700, -1080, 1400, 1400);
+  const cg = ctx.createLinearGradient(0, -480, 0, -120); cg.addColorStop(0, 'rgba(255,246,220,.8)'); cg.addColorStop(1, 'rgba(255,200,120,.5)'); ctx.fillStyle = cg; ctx.fill(crossP);
+  ctx.globalCompositeOperation = 'source-over'; ctx.setTransform(1, 0, 0, 1, 0, 0);
+}
+function doorLight(ctx, cam, t) {
+  const k = ss(6.2, 7.6, t); if (k <= 0) return;
+  GL.apply(ctx, cam, W, H); ctx.translate(...DOOR); ctx.globalCompositeOperation = 'lighter';
+  const arch = new Path2D(); arch.moveTo(-120, 0); arch.lineTo(-120, -300); arch.arc(0, -300, 120, Math.PI, 2 * Math.PI); arch.lineTo(120, 0); arch.closePath();
+  const g = ctx.createLinearGradient(0, -420, 0, 0); g.addColorStop(0, `rgba(255,226,170,${.55 * k})`); g.addColorStop(1, `rgba(255,248,228,${.95 * k})`); ctx.fillStyle = g; ctx.fill(arch);
+  // light spilling out over the ground toward us
+  const sp = ctx.createLinearGradient(0, 0, 0, 260); sp.addColorStop(0, `rgba(255,224,160,${.42 * k})`); sp.addColorStop(1, 'rgba(255,200,120,0)');
+  ctx.fillStyle = sp; ctx.beginPath(); ctx.moveTo(-120, 0); ctx.lineTo(120, 0); ctx.lineTo(330, 260); ctx.lineTo(-330, 260); ctx.closePath(); ctx.fill();
+  const hal = ctx.createRadialGradient(0, -200, 0, 0, -200, 520); hal.addColorStop(0, `rgba(255,210,140,${.22 * k})`); hal.addColorStop(1, 'rgba(255,190,110,0)'); ctx.fillStyle = hal; ctx.fillRect(-520, -720, 1040, 1040);
+  ctx.globalCompositeOperation = 'source-over'; ctx.setTransform(1, 0, 0, 1, 0, 0);
+}
+
+// ---------- the prayer, written by the light ----------
+function prayer(ctx, cam, t, nib) {
+  const pb = ss(PB + .2, PB + 1.8, t) * (1 - ss(C0 - .6, C0 + .4, t));
+  S.forEach((q, k) => {
+    const live = ss(q.s - .3, q.s, t) * (1 - ss(q.e - FADE, q.e + .25, t)), a = Math.max(live, .5 * pb); if (a <= .002) return;
+    const p = clamp((nib.x - q.L) / (q.R - q.L)), tot = q.ws.reduce((s, v) => s + v, 0), n = q.rows.length;
+    q.rows.forEach((r, j) => {
+      const before = q.ws.slice(0, j).reduce((s, v) => s + v, 0), pr = clamp((p * tot - before) / q.ws[j]);
+      const wy = -44 - (n - 1 - j) * TS * 1.62, [sx, sy] = GL.toScreen(cam, W, H, q.C, wy), size = TS * cam.z;
+      if (size < 6) return;
+      GL.write(ctx, r, sx, sy, pr, { size, weight: 600, color: k === S.length - 1 && j === 1 ? '#f4c76e' : '#f8eedb', alpha: a, glow: 'rgba(255,170,70,.5)', glowBlur: 24 * cam.z, spark: pb > 0 ? 0 : 1, feather: size * 1.3 });
+    });
+  });
+}
+
+function draw(ctx, t) {
+  const cam = camera(t), nib = line.nib(t);
+  GL.paper(ctx, cam, W, H, { mottle: .55 * ss(.18, .6, cam.z) + .12 });
+  if (t < 9) { crossGlow(ctx, cam, t); doorLight(ctx, cam, t); }
+  GL.drawLine(ctx, line, t, cam, W, H, { base: 4.6, zmin: .9 });
+  GL.nib(ctx, line, t, cam, W, H);
+  GL.vignette(ctx, W, H, .74);
+  prayer(ctx, cam, t, nib);
+
+  // through the doorway: a breath of warm light hides the cut
+  const wo = ss(7.5, 8.4, t) * (1 - ss(8.5, 9.4, t)); if (wo > 0) { ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.fillStyle = `rgba(255,241,214,${.96 * wo})`; ctx.fillRect(0, 0, W, H); }
+
+  text(ctx, '20  ·  초대', V ? 72 : 110, V ? 170 : 120, { align: 'left', size: 30, weight: 600, color: '#efe2c8', alpha: win(t, .6, 5.2, 1, 1), ls: 4 });
+  // site text (respond.sub): the invitation
+  const ia = 1 - ss(7.0, 7.8, t), iy = V ? H - 340 : H - 120;
+  GL.write(ctx, '', W / 2, iy, clamp((t - 2.4) / 1.6), { size: V ? 46 : 46, weight: 600, alpha: ia, glow: 'rgba(0,0,0,.9)', glowBlur: 18,
+    parts: [['이 사랑은 정보가 아니라 ', '#f3e7cf'], ['초대', '#f4c76e'], ['입니다.', '#f3e7cf']] });
+
+  // 요 1:12, over the whole line
+  const va = win(t, V0, V1, 1.0, .9), vy = V ? 520 : 250, vs = V ? 46 : 48;
+  GL.write(ctx, '“영접하는 자 곧 그 이름을 믿는 자들에게는', W / 2, vy, clamp((t - V0) / 1.2), { size: vs, weight: 600, color: '#f8eedb', alpha: va, glow: 'rgba(0,0,0,.9)', glowBlur: 18 });
+  GL.write(ctx, '하나님의 자녀가 되는 권세를 주셨으니”', W / 2, vy + vs * 1.6, clamp((t - V0 - .9) / 1.2), { size: vs, weight: 600, color: '#f8eedb', alpha: va, glow: 'rgba(0,0,0,.9)', glowBlur: 18 });
+  text(ctx, '요한복음 1:12 (개역개정)', W / 2, vy + vs * 1.6 + 62, { size: 23, font: "'Noto Sans KR',sans-serif", color: '#d8c8a8', alpha: va * ss(V0 + 1.6, V0 + 2.4, t) * .9, ls: 2 });
+
+  // end card
+  const hy = H / 2 + (cam.cy < 0 ? -cam.cy * cam.z : 0);     // the horizon's screen height
+  GL.write(ctx, '한눈에 보는', W / 2, hy - (V ? 190 : 175), clamp((t - C0) / .9), { size: V ? 52 : 48, weight: 600, color: '#f1e3c6', ls: 6, glow: 'rgba(0,0,0,.8)' });
+  GL.write(ctx, '성경 이야기', W / 2, hy - (V ? 50 : 44), clamp((t - C0 - .4) / 1.2), { size: V ? 118 : 112, weight: 900, color: '#f4c76e', ls: 8, glow: 'rgba(255,160,60,.55)', glowBlur: 34, spark: 1 });
+  text(ctx, 'one-scroll-bible.com', W / 2, hy + (V ? 92 : 84), { size: V ? 34 : 32, font: "'Noto Sans KR',sans-serif", weight: 400, color: '#efe2c8', alpha: ss(C0 + 1.2, C0 + 2.0, t), ls: 3 });
+  const cy1 = V ? H - 230 : H - 78, cs = V ? 21 : 19;
+  text(ctx, '성경 인용: 「성경전서 개역개정판」 © 대한성서공회.', W / 2, cy1, { size: cs, font: "'Noto Sans KR',sans-serif", weight: 300, color: '#bfb19a', alpha: ss(C0 + 1.4, C0 + 2.2, t) * .9, ls: 1 });
+  text(ctx, '저작권은 대한성서공회에 있으며, 출처를 밝혀 인용했습니다.', W / 2, cy1 + cs * 1.7, { size: cs, font: "'Noto Sans KR',sans-serif", weight: 300, color: '#bfb19a', alpha: ss(C0 + 1.4, C0 + 2.2, t) * .9, ls: 1 });
+    const f = 1 - ss(0, 1.4, t) + ss(DUR - 1.2, DUR, t); if (f > 0) { ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.fillStyle = `rgba(0,0,0,${clamp(f)})`; ctx.fillRect(0, 0, W, H); }
+}
+
+Pilot.run({ W, H, dur: DUR, fonts: ["600 40px 'Noto Serif KR'", "900 40px 'Noto Serif KR'", "400 20px 'Noto Sans KR'", "300 20px 'Noto Sans KR'"],
+  init: async () => {
+    build(); GL.init(W, H, [-2400, -4800, S[S.length - 1].R + 4200, 3400]);
+    crossP = new Path2D(); [[-18, -120], [-18, -370], [-118, -370], [-118, -404], [-18, -404], [-18, -480], [18, -480], [18, -404], [118, -404], [118, -370], [18, -370], [18, -120]]
+      .forEach((q, i) => i ? crossP.lineTo(q[0], q[1]) : crossP.moveTo(q[0], q[1])); crossP.closePath();
+  },
+  draw });
+</script>
+</body>
+</html>

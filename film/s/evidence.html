@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>시안 · 성경은 실화인가</title>
+<link rel="stylesheet" href="fonts.css">
+</head>
+<body>
+<script src="lib.js"></script>
+<script>
+/* 18 FAQ · 성경이 진짜 실화인가요? — an archive light table, cool and quiet. One camera glides over objects lying on
+   the backlit glass: a chart card (66권 · 약 1,500년 · 40여 명 · 3개 언어 → one golden line), a glass negative of the
+   Tel Dan stele (the loupe lands, the negative develops, "다윗의 집" lights up), a lantern slide of the Pilate stone,
+   and the Isaiah scroll laid above a later standard text, word matched to word. Then the table switches off and only
+   the scroll glows: the site's honest note, and Rom 10:17. Facts are only those in index.html FAQ q4; every object is
+   a drawn reconstruction (no scans). Hebrew = Isa 53:4–6 (Masoretic text, consonants on the scroll, pointed on the codex). */
+const { clamp, lerp, ss, eo, eio, win, rng, fbm, noise, canvas, mix, rgb, speckle, text } = Pilot;
+const W = Pilot.W, H = Pilot.H, V = Pilot.ori === 'v', DUR = 40;
+const SIG = '#E2552B', INK = '#16181B', MONO = "'DejaVu Sans Mono','Liberation Mono',monospace", SANS = "'Noto Sans KR',sans-serif", SERIF = "'Noto Serif KR',serif", HEB = "'FreeSerif','DejaVu Serif',serif";
+const TW = 3800, TH = 2400;    // the table, world px
+const O = {
+  chart: V ? { x: 1000, y: 720, w: 900, h: 1120, r: -.008 } : { x: 1000, y: 700, w: 1300, h: 760, r: -.008 },
+  teldan: { x: 2500, y: 640, w: 760, h: 600, r: .03, S: 2.5 },
+  pilate: { x: 2520, y: 1500, w: 640, h: 640, r: -.025, S: 2.5 },
+  scroll: { x: 1050, y: 1520, w: 1300, h: 300, r: -.01, S: 1.6 },
+  codex: { x: 1050, y: 1960, w: 1300, h: 290, r: .006, S: 1.6 },
+  tac: { x: 3260, y: 900, w: 400, h: 240, r: .07, S: 1.5 }, jos: { x: 3320, y: 1260, w: 400, h: 240, r: -.05, S: 1.5 }, pro: { x: 3230, y: 1700, w: 400, h: 240, r: .03, S: 1.5 },
+};
+const HEB_SCROLL = ['אכן חלינו הוא נשא ומכאבינו סבלם ואנחנו חשבנהו נגוע מכה אלהים ומענה', 'והוא מחלל מפשענו מדכא מעונתינו מוסר שלומנו עליו ובחברתו נרפא לנו', 'כלנו כצאן תעינו איש לדרכו פנינו ויהוה הפגיע בו את עון כלנו'];
+const HEB_CODEX = ['אָכֵן חֳלָיֵנוּ הוּא נָשָׂא וּמַכְאֹבֵינוּ סְבָלָם וַאֲנַחְנוּ חֲשַׁבְנֻהוּ נָגוּעַ מֻכֵּה אֱלֹהִים וּמְעֻנֶּה', 'וְהוּא מְחֹלָל מִפְּשָׁעֵנוּ מְדֻכָּא מֵעֲוֺנֹתֵינוּ מוּסַר שְׁלוֹמֵנוּ עָלָיו וּבַחֲבֻרָתוֹ נִרְפָּא־לָנוּ', 'כֻּלָּנוּ כַּצֹּאן תָּעִינוּ אִישׁ לְדַרְכּוֹ פָּנִינוּ וַיהֹוָה הִפְגִּיעַ בּוֹ אֵת עֲוֺן כֻּלָּנוּ'];
+let tex = {}, grains = [], tablePat, cardTex;
+
+// ---------- small helpers ----------
+const local2world = (o, lx, ly) => { const c = Math.cos(o.r), s = Math.sin(o.r); return [o.x + lx * c - ly * s, o.y + lx * s + ly * c]; };
+function plateText(ctx, x, y, o) {       // dark caption plate: small label, big reading, source line
+  const { label, big, src, a = 1, align = 'left', w: fw } = o; if (a <= 0) return;
+  ctx.save(); ctx.globalAlpha = a; const bs = o.bs || (V ? 60 : 58);
+  ctx.font = `600 ${bs}px ${SERIF}`; const bw = ctx.measureText(big).width; ctx.font = `400 ${V ? 23 : 22}px ${MONO}`; const sw = src ? ctx.measureText(src).width : 0;
+  const w = fw || Math.max(bw, sw) + 72, h = bs + (src ? 128 : 92), x0 = align === 'center' ? x - w / 2 : x;
+  ctx.fillStyle = 'rgba(14,15,17,.80)'; ctx.fillRect(x0, y, w * eo(o.grow == null ? 1 : o.grow), h);
+  ctx.fillStyle = SIG; ctx.fillRect(x0, y, 3, h);
+  ctx.textAlign = 'left'; ctx.fillStyle = '#c9ccd1'; ctx.font = `400 ${V ? 26 : 24}px ${SANS}`; ctx.fillText(label, x0 + 36, y + 46);
+  ctx.fillStyle = '#ffffff'; ctx.font = `600 ${bs}px ${SERIF}`; ctx.fillText(big, x0 + 36, y + 52 + bs);
+  if (src) { ctx.fillStyle = '#9aa0a8'; ctx.font = `400 ${V ? 23 : 22}px ${MONO}`; ctx.fillText(src, x0 + 36, y + h - 28); }
+  ctx.restore();
+}
+function caption(ctx, s, a) {            // the subtitle strip: dark plate, 3 px signal edge on top
+  if (a <= 0) return; const lines = s.split('\n'), size = V ? 36 : 34, lh = size * 1.5;
+  ctx.save(); ctx.font = `500 ${size}px ${SANS}`; const w = Math.max(...lines.map(l => ctx.measureText(l).width)) + 80, h = lines.length * lh + 40;
+  const y = (V ? H - 250 : H - 70) - h, x = W / 2 - w / 2;
+  ctx.globalAlpha = a; ctx.fillStyle = 'rgba(14,15,17,.80)'; ctx.fillRect(x, y, w, h); ctx.fillStyle = SIG; ctx.fillRect(x, y, w, 3);
+  ctx.fillStyle = '#f4f5f6'; ctx.textAlign = 'center'; lines.forEach((l, i) => ctx.fillText(l, W / 2, y + 20 + size + i * lh));
+  ctx.restore();
+}
+
+// ---------- textures ----------
+const GL = {   // Old-Aramaic/Phoenician-like letter forms, unit box, as polylines
+  b: [[[.75, .05], [.3, .25], [.75, .45]], [[.75, .05], [.75, .85], [.35, .95]]],
+  y: [[[.3, .12], [.78, .08], [.32, .5], [.8, .46]], [[.56, .28], [.56, .95]]],
+  t: [[[.2, .2], [.8, .85]], [[.8, .2], [.2, .85]]],
+  d: [[[.72, .08], [.25, .38], [.72, .5], [.72, .08]], [[.72, .5], [.72, .95]]],
+  w: [[[.22, .08], [.5, .38], [.78, .08]], [[.5, .38], [.5, .95]]],
+  a: [[[.2, .32], [.85, .12]], [[.2, .32], [.85, .58]], [[.55, .08], [.55, .95]]],
+  l: [[[.35, .05], [.35, .78], [.8, .72]]],
+  m: [[[.12, .25], [.3, .1], [.45, .25], [.6, .1], [.78, .25]], [[.78, .25], [.62, .95]]],
+  s: [[[.1, .2], [.3, .75], [.5, .2], [.7, .75], [.9, .2]]],
+  r: [[[.7, .05], [.3, .22], [.7, .42]], [[.7, .05], [.7, .95]]],
+  n: [[[.3, .08], [.62, .35], [.62, .95]]],
+  h: [[[.25, .1], [.75, .1]], [[.25, .1], [.25, .9]], [[.25, .45], [.68, .45]], [[.25, .9], [.75, .9]]],
+  k: [[[.2, .1], [.5, .4], [.8, .1]], [[.5, .1], [.5, .95]]],
+  q: [[[.5, .1], [.5, .95]], [[.5, .3], [.25, .45], [.5, .6]], [[.5, .3], [.75, .45], [.5, .6]]],
+};
+const FILL = 'blamnsrhkqwyt';
+function incise(x, pts, sz, ox, oy, lw) {      // a chiselled stroke: dark groove + its lit lower wall
+  x.lineCap = 'round'; x.lineJoin = 'round';
+  for (const [col, w, dx] of [['#141312', lw, 0], ['rgba(170,166,158,.75)', lw * .32, lw * .28]]) { x.strokeStyle = col; x.lineWidth = w;
+    for (const pl of pts) { x.beginPath(); pl.forEach(([u, v], i) => { const px = ox + u * sz + dx, py = oy + v * sz + dx; i ? x.lineTo(px, py) : x.moveTo(px, py); }); x.stroke(); } }
+}
+function stoneShape(cx, cy, rx, ry, seed, flat) {    // an irregular broken fragment
+  const p = new Path2D(), n = 60;
+  for (let i = 0; i < n; i++) { const a = i / n * 6.2832, f = .78 + .3 * fbm(Math.cos(a) * 1.7 + seed, Math.sin(a) * 1.7 + seed, 3), k = flat && Math.sin(a) > .55 ? .82 : 1;
+    const px = cx + Math.cos(a) * rx * f, py = cy + Math.sin(a) * ry * f * k; i ? p.lineTo(px, py) : p.moveTo(px, py); }
+  p.closePath(); return p;
+}
+function roughFill(x, w, h, base, amp, seed) {   // mottled mineral surface
+  x.fillStyle = base; x.fillRect(0, 0, w, h);
+  const lw = Math.ceil(w / 10), lh = Math.ceil(h / 10), lo = canvas(lw, lh), lx = lo.getContext('2d'), d = lx.createImageData(lw, lh);
+  for (let j = 0; j < lh; j++) for (let i = 0; i < lw; i++) { const v = 128 + (fbm(i * .09 + seed, j * .09, 4) - .5) * amp * 2, k = (j * lw + i) * 4; d.data[k] = d.data[k + 1] = d.data[k + 2] = v; d.data[k + 3] = 255; }
+  lx.putImageData(d, 0, 0); x.globalCompositeOperation = 'overlay'; x.imageSmoothingQuality = 'high'; x.drawImage(lo, 0, 0, w, h);
+  x.globalAlpha = .55; x.drawImage(speckle(w, h, 60, seed + 9), 0, 0); x.globalAlpha = 1; x.globalCompositeOperation = 'source-over';
+}
+function negativeOf(pos, seed) {   // glass negative: T = .035 + .9(1-L)^1.25, warm silver tint; clear margin; one broken corner
+  const w = pos.width, h = pos.height, c = canvas(w, h), x = c.getContext('2d'), P = pos.getContext('2d').getImageData(0, 0, w, h), D = x.createImageData(w, h);
+  for (let i = 0; i < w * h; i++) { const L = (P.data[i * 4] * .3 + P.data[i * 4 + 1] * .59 + P.data[i * 4 + 2] * .11) / 255, T = .035 + .9 * Math.pow(1 - L, 1.25);
+    D.data[i * 4] = 255 * T; D.data[i * 4 + 1] = 246 * T; D.data[i * 4 + 2] = 228 * T; D.data[i * 4 + 3] = P.data[i * 4 + 3]; }
+  x.putImageData(D, 0, 0);
+  const r = rng(seed); x.strokeStyle = 'rgba(255,255,255,.35)'; for (let i = 0; i < 9; i++) { x.lineWidth = .6 + r() * 1.4; x.beginPath(); const px = r() * w, py = r() * h; x.moveTo(px, py); x.lineTo(px + (r() - .5) * 400, py + (r() - .5) * 90); x.stroke(); }
+  x.fillStyle = 'rgba(255,255,255,.5)'; for (let i = 0; i < 70; i++) { x.beginPath(); x.arc(r() * w, r() * h, .6 + r() * 2.2, 0, 6.3); x.fill(); }
+  return c;
+}
+function plateFrame(c, S, cut) {    // clear glass margin + broken corner (transparent → the table shows through)
+  const x = c.getContext('2d'), w = c.width, h = c.height, m = 26 * S;
+  x.globalCompositeOperation = 'destination-out'; x.fillStyle = 'rgba(0,0,0,.06)'; x.fillRect(0, 0, w, m); x.fillRect(0, h - m, w, m); x.fillRect(0, 0, m, h); x.fillRect(w - m, 0, m, h);
+  if (cut) { x.fillStyle = '#000'; x.beginPath(); x.moveTo(w - 210 * S, 0); x.lineTo(w, 0); x.lineTo(w, 150 * S); x.lineTo(w - 60 * S, 90 * S); x.lineTo(w - 120 * S, 70 * S); x.closePath(); x.fill(); }
+  x.globalCompositeOperation = 'source-over'; x.strokeStyle = 'rgba(120,130,140,.5)'; x.lineWidth = 2 * S; x.strokeRect(S, S, w - 2 * S, h - 2 * S);
+}
+function buildTelDan() {
+  const o = O.teldan, S = o.S, w = o.w * S, h = o.h * S, c = canvas(w, h), x = c.getContext('2d');
+  const bg = x.createLinearGradient(0, 0, 0, h); bg.addColorStop(0, '#dcdcda'); bg.addColorStop(1, '#b4b4b0'); x.fillStyle = bg; x.fillRect(0, 0, w, h);
+  const st = stoneShape(w * .5, h * .53, w * .44, h * .47, 3.3, true);
+  x.save(); x.filter = `blur(${16 * S / 2.5}px)`; x.translate(18 * S, 22 * S); x.fillStyle = 'rgba(40,40,40,.55)'; x.fill(st); x.restore();
+  x.save(); x.clip(st); const sc = canvas(w, h); roughFill(sc.getContext('2d'), w, h, '#57534e', 60, 4); x.drawImage(sc, 0, 0);
+  // raking light from the upper left
+  const rk = x.createLinearGradient(0, 0, w, h); rk.addColorStop(0, 'rgba(255,255,255,.22)'); rk.addColorStop(.6, 'rgba(0,0,0,0)'); rk.addColorStop(1, 'rgba(0,0,0,.3)'); x.fillStyle = rk; x.fillRect(0, 0, w, h);
+  // rows of letters, right to left; the key row carries ביתדוד between word dividers
+  const sz = 30 * S, adv = 36 * S, rows = 7, r = rng(77); let key = null;
+  for (let ri = 0; ri < rows; ri++) { const y = h * .16 + ri * 40 * S; let xr = w * .9 + (r() - .5) * 20 * S;
+    const seq = ri === 3 ? 'nlm.bytdwd.wk'.split('') : Array.from({ length: 22 }, (_, k) => (k % 5 === 4 && r() < .6) ? '.' : FILL[(r() * FILL.length) | 0]);
+    let kx0 = 0, kx1 = 0, ki = 0;
+    for (const g of seq) { if (g === '.') { x.fillStyle = '#151413'; x.beginPath(); x.arc(xr - adv * .25, y + sz * .5, 3.4 * S, 0, 6.3); x.fill(); xr -= adv * .55; ki++; continue; }
+      if (ri === 3 && ki === 1 && !kx1) kx1 = xr + 4 * S;
+      incise(x, GL[g], sz, xr - sz, y, 4.2 * S);
+      if (ri === 3 && ki === 1) kx0 = xr - sz - 4 * S;
+      xr -= adv; }
+    if (ri === 3) key = { x0: kx0 / S - o.w / 2, x1: kx1 / S - o.w / 2, y0: (y - 8 * S) / S - o.h / 2, y1: (y + sz + 8 * S) / S - o.h / 2 }; }
+  x.restore();
+  x.save(); x.clip(st); x.strokeStyle = 'rgba(255,255,255,.28)'; x.lineWidth = 7 * S; x.filter = `blur(${3 * S}px)`; x.translate(5 * S, 5 * S); x.stroke(st); x.restore();   // lit broken edge
+  const neg = negativeOf(c, 5); plateFrame(neg, S, true); plateFrame(c, S, true);
+  tex.teldan = { pos: c, neg, key };
+}
+function buildPilate() {
+  const o = O.pilate, S = o.S, w = o.w * S, h = o.h * S, c = canvas(w, h), x = c.getContext('2d');
+  x.fillStyle = '#121212'; x.fillRect(0, 0, w, h);                                                    // slide mount
+  const iw = w - 90 * S, ih = h - 170 * S, ix = 45 * S, iy = 45 * S;
+  const bg = x.createLinearGradient(0, iy, 0, iy + ih); bg.addColorStop(0, '#3c3e40'); bg.addColorStop(1, '#202224'); x.fillStyle = bg; x.fillRect(ix, iy, iw, ih);
+  // the limestone block: broken on the left, worn top
+  const blk = new Path2D(), bx0 = ix + 20 * S, bx1 = ix + iw - 30 * S, by0 = iy + 60 * S, by1 = iy + ih - 50 * S, r = rng(12);
+  blk.moveTo(bx0 + 70 * S, by0 + 10 * S); for (let i = 1; i <= 10; i++) blk.lineTo(lerp(bx0 + 70 * S, bx1, i / 10), by0 + (r() - .5) * 14 * S);
+  blk.lineTo(bx1 + 6 * S, by1); blk.lineTo(bx0 + 30 * S, by1 + 4 * S);
+  for (let i = 1; i <= 9; i++) blk.lineTo(bx0 + (i % 2 ? 30 : 60) * S * r() + 10 * S * r(), lerp(by1, by0 + 10 * S, i / 9));
+  blk.closePath();
+  x.save(); x.filter = `blur(${10 * S / 2.5}px)`; x.translate(12 * S, 14 * S); x.fillStyle = 'rgba(0,0,0,.6)'; x.fill(blk); x.restore();
+  x.save(); x.clip(blk); const sc = canvas(w, h); roughFill(sc.getContext('2d'), w, h, '#bdb5a5', 50, 13); x.drawImage(sc, 0, 0);
+  const rk = x.createLinearGradient(0, by0, 0, by1); rk.addColorStop(0, 'rgba(255,250,240,.25)'); rk.addColorStop(1, 'rgba(0,0,0,.25)'); x.fillStyle = rk; x.fillRect(0, 0, w, h);
+  // carved capitals (the surviving letters)
+  const lines = ['S TIBERIEVM', 'NTIVS PILATVS', 'ECTVS IVDA'], fs = 46 * S, x0 = bx0 + 40 * S; let key = null;
+  lines.forEach((l, i) => { const y = by0 + (100 + i * 82) * S, lx = x0 + [70, 0, 30][i] * S; x.font = `600 ${fs}px ${SERIF}`; x.letterSpacing = 4 * S + 'px';
+    x.fillStyle = 'rgba(255,250,240,.55)'; x.fillText(l, lx + 2.5 * S, y + 2.5 * S); x.fillStyle = '#3a352d'; x.fillText(l, lx, y);
+    if (i === 1) { const pre = x.measureText('NTIVS ').width, wd = x.measureText('PILATVS').width; key = { x0: (lx + pre) / S - o.w / 2 - 6, x1: (lx + pre + wd) / S - o.w / 2 + 2, y0: (y - fs * .82) / S - o.h / 2, y1: (y + 10 * S) / S - o.h / 2 }; } });
+  x.restore();
+  // label strip on the mount
+  x.fillStyle = '#e9e4d6'; x.fillRect(60 * S, h - 104 * S, w - 120 * S, 54 * S); x.fillStyle = '#2a2a2a'; x.font = `400 ${24 * S}px ${SANS}`; x.fillText('빌라도 비문', 84 * S, h - 68 * S);
+  x.font = `400 ${20 * S}px ${MONO}`; x.textAlign = 'right'; x.fillText('PILATVS', w - 84 * S, h - 68 * S); x.textAlign = 'left';
+  tex.pilate = { pos: c, key };
+}
+function hebrewStrip(o, words, opt) {
+  const S = o.S, w = o.w * S, h = o.h * S, c = canvas(w, h), x = c.getContext('2d'), r = rng(opt.seed);
+  // outline: torn parchment or a trimmed leaf
+  const p = new Path2D();
+  if (opt.torn) { p.moveTo(30 * S, 22 * S); for (let i = 1; i <= 40; i++) p.lineTo(lerp(30, o.w - 24, i / 40) * S + (r() - .5) * 8 * S, (14 + r() * 18) * S);
+    for (let i = 0; i <= 10; i++) p.lineTo((o.w - 10 - r() * 30) * S, lerp(30, o.h - 30, i / 10) * S);
+    for (let i = 40; i >= 0; i--) p.lineTo(lerp(30, o.w - 24, i / 40) * S + (r() - .5) * 8 * S, (o.h - 14 - r() * 18) * S);
+    for (let i = 10; i >= 0; i--) p.lineTo((12 + r() * 26) * S, lerp(30, o.h - 30, i / 10) * S); p.closePath(); }
+  else p.rect(14 * S, 14 * S, w - 28 * S, h - 28 * S);
+  x.save(); x.clip(p); roughFill(x, w, h, opt.base, opt.torn ? 46 : 18, opt.seed);
+  const eg = x.createRadialGradient(w / 2, h / 2, h * .3, w / 2, h / 2, w * .6); eg.addColorStop(0, 'rgba(255,240,210,0)'); eg.addColorStop(1, opt.torn ? 'rgba(120,70,30,.35)' : 'rgba(150,120,80,.12)'); x.fillStyle = eg; x.fillRect(0, 0, w, h);
+  // ruling and text, right to left, one verse a line
+  const fs = (opt.torn ? 38 : 36) * S, xr0 = w - 70 * S, rowY = [96, 178, 260].map(v => v * (o.h / 300) * S), pos = [];
+  x.direction = 'rtl'; x.textAlign = 'right'; x.font = `${opt.torn ? 400 : 400} ${fs}px ${HEB}`;
+  rowY.forEach((y, li) => { x.strokeStyle = opt.torn ? 'rgba(90,60,30,.18)' : 'rgba(80,60,40,.25)'; x.lineWidth = 1.2 * S; x.beginPath(); x.moveTo(50 * S, y - fs * .78); x.lineTo(w - 50 * S, y - fs * .78); x.stroke();
+    let xr = xr0; const row = [];
+    for (const wd of words[li].split(' ')) { const ww = x.measureText(wd).width; x.save(); x.translate(xr - ww / 2, y + (opt.torn ? (r() - .5) * 3 * S : 0)); x.rotate(opt.torn ? (r() - .5) * .03 : 0);
+      x.fillStyle = opt.ink; x.globalAlpha = opt.torn ? .82 + r() * .18 : 1; x.fillText(wd, ww / 2, 0); x.restore();
+      row.push({ cx: (xr - ww / 2) / S - o.w / 2, w: ww / S }); xr -= ww + fs * .38; }
+    pos.push({ y: y / S - o.h / 2 - fs * .3 / S, words: row }); });
+  x.restore();
+  if (opt.torn) { x.globalCompositeOperation = 'destination-out'; for (let i = 0; i < 7; i++) { x.beginPath(); x.ellipse((90 + r() * (o.w - 180)) * S, (40 + r() * (o.h - 80)) * S, (6 + r() * 16) * S, (4 + r() * 10) * S, r() * 3, 0, 6.3); x.fill(); } x.globalCompositeOperation = 'source-over'; }
+  return { pos: c, rows: pos };
+}
+function indexCard(o, l1, l2, l3) {
+  const S = o.S, w = o.w * S, h = o.h * S, c = canvas(w, h), x = c.getContext('2d');
+  roughFill(x, w, h, '#f1ede2', 10, 31); x.strokeStyle = 'rgba(200,80,60,.5)'; x.lineWidth = 2 * S; x.beginPath(); x.moveTo(20 * S, 74 * S); x.lineTo(w - 20 * S, 74 * S); x.stroke();
+  x.strokeStyle = 'rgba(90,120,170,.3)'; x.lineWidth = 1 * S; for (let y = 110; y < o.h; y += 36) { x.beginPath(); x.moveTo(20 * S, y * S); x.lineTo(w - 20 * S, y * S); x.stroke(); }
+  x.fillStyle = '#23262a'; x.font = `400 ${30 * S}px ${MONO}`; x.fillText(l1, 30 * S, 56 * S); x.font = `400 ${30 * S}px ${SANS}`; x.fillText(l2, 30 * S, 140 * S); x.fillStyle = '#555a60'; x.font = `400 ${24 * S}px ${SANS}`; x.fillText(l3, 30 * S, 186 * S);
+  return { pos: c };
+}
+function buildCard() {   // chart paper: cream fibres, faint dot grid
+  const o = O.chart, S = 1.5, w = o.w * S, h = o.h * S, c = canvas(w, h), x = c.getContext('2d');
+  roughFill(x, w, h, '#f3eddf', 8, 21);
+  x.fillStyle = 'rgba(120,110,90,.22)'; for (let j = 30; j < o.h; j += 30) for (let i = 30; i < o.w; i += 30) { x.beginPath(); x.arc(i * S, j * S, 1.2 * S, 0, 6.3); x.fill(); }
+  const eg = x.createRadialGradient(w / 2, h / 2, h * .4, w / 2, h / 2, w * .62); eg.addColorStop(0, 'rgba(255,236,200,0)'); eg.addColorStop(1, 'rgba(255,236,200,.35)'); x.fillStyle = eg; x.fillRect(0, 0, w, h);
+  return c;
+}
+
+// ---------- the chart (live, card-local coords: 0..1300 × 0..760) ----------
+let SPINES = [];
+const CL = V ? { x0: 70, x1: 830, title: [70, 122], count: [826, 250], base: 560, sw: 8, step: 11.55, br: 600, brl: 652, ay: [730, 774], aper: 20, astep: 39, alab: [[ '40여 명의 저자', 856], ['왕·목자·어부·세리·의사', 902]], ly: 950, lstep: 230, llab: [70, 1050], conv: [856, 360], lab: [826, 334] }
+                : { x0: 80, x1: 1212, title: [80, 112], count: [1220, 118], base: 340, sw: 12, step: 17.15, br: 372, brl: 420, ay: [478], aper: 40, astep: 28.5, alab: [['40여 명의 저자 — 왕·목자·어부·세리·의사', 548]], ly: 600, lstep: 210, llab: [730, 624], conv: [1240, 210], lab: [1200, 192] };
+function chart(x, t) {
+  const C = CL, L = (s, px, py, o = {}) => { x.font = o.font; x.fillStyle = o.color || INK; x.textAlign = o.align || 'left'; x.globalAlpha = o.a == null ? 1 : o.a; x.fillText(s, px, py); x.globalAlpha = 1; };
+  L('한 권이 아니라 ‘도서관’', C.title[0], C.title[1], { font: `600 54px ${SERIF}`, a: ss(1.0, 1.6, t) });
+  const n = Math.round(66 * clamp((t - 1.6) / 1.75)); if (n > 0) { L(String(n), C.count[0], C.count[1], { font: `400 86px ${MONO}`, align: 'right' }); L('권', C.count[0] + 6, C.count[1], { font: `400 38px ${SANS}`, a: ss(1.6, 2, t) }); }
+  SPINES.forEach((s, i) => { const k = ss(1.6 + i * .026, 1.7 + i * .026, t); if (k <= 0) return; const hh = s.h * eo(k);
+    x.fillStyle = s.c; x.fillRect(s.x, C.base - hh, C.sw, hh); x.fillStyle = 'rgba(255,255,255,.25)'; x.fillRect(s.x + 2, C.base - hh + 8, C.sw - 4, 2); });
+  // the span
+  const bk = ss(3.3, 4.0, t); if (bk > 0) { x.strokeStyle = INK; x.lineWidth = 2; x.beginPath(); x.moveTo(C.x0, C.br); x.lineTo(C.x0 + (C.x1 - C.x0) * bk, C.br); x.stroke();
+    x.beginPath(); x.moveTo(C.x0, C.br - 10); x.lineTo(C.x0, C.br + 10); x.stroke(); if (bk > .98) { x.beginPath(); x.moveTo(C.x1, C.br - 10); x.lineTo(C.x1, C.br + 10); x.stroke(); }
+    L('약 1,500년', (C.x0 + C.x1) / 2, C.brl, { font: `400 34px ${MONO}`, align: 'center', a: ss(3.7, 4.1, t) }); }
+  // forty authors
+  for (let i = 0; i < 40; i++) { const k = ss(4.0 + i * .018, 4.15 + i * .018, t); if (k <= 0) continue; const px = C.x0 + 6 + (i % C.aper) * C.astep, py = C.ay[(i / C.aper) | 0];
+    x.fillStyle = '#fff'; x.strokeStyle = INK; x.lineWidth = 2; x.beginPath(); x.arc(px, py, 8 * eo(k) + .01, 0, 6.3); x.fill(); x.stroke(); }
+  C.alab.forEach(([s, y]) => L(s, C.x0, y, { font: `400 34px ${SANS}`, a: ss(4.3, 4.9, t) }));
+  // three languages
+  const lk = ss(4.9, 5.5, t); if (lk > 0) { ['히브리어', '아람어', '헬라어'].forEach((s, i) => { const px = C.x0 + i * C.lstep; x.globalAlpha = lk; x.strokeStyle = INK; x.lineWidth = 2; x.strokeRect(px, C.ly, 26, 26);
+      x.fillStyle = ['#3a3d42', '#8a8e95', '#c9ccd1'][i]; x.fillRect(px + 3, C.ly + 3, 20, 20); x.globalAlpha = 1; L(s, px + 40, C.ly + 24, { font: `400 32px ${SANS}`, a: lk }); });
+    L('세 가지 언어', C.llab[0], C.llab[1], { font: `400 32px ${SANS}`, color: '#6a6e74', a: lk }); }
+  // all of them flow into one line
+  const fk = clamp((t - 5.6) / 1.6), [ex, ey] = C.conv; if (fk > 0) {
+    x.lineWidth = 1.4; SPINES.forEach((s, i) => { const k = eio(clamp(fk * 1.4 - i * .006)); if (k <= 0) return; const sx = s.x + C.sw / 2, sy = C.base - s.h;
+      x.strokeStyle = 'rgba(22,24,27,.32)'; x.beginPath(); const N = 24; for (let j = 0; j <= N * k; j++) { const u = j / N, a = 1 - u;
+        const px = a * a * a * sx + 3 * a * a * u * sx + 3 * a * u * u * (sx + (ex - sx) * .7) + u * u * u * ex, py = a * a * a * sy + 3 * a * a * u * (sy - 60) + 3 * a * u * u * ey + u * u * u * ey; j ? x.lineTo(px, py) : x.moveTo(px, py); } x.stroke(); });
+    const gk = ss(6.6, 7.4, t); if (gk > 0) { x.save(); x.strokeStyle = '#d99a2b'; x.lineWidth = 6; x.shadowColor = 'rgba(240,170,60,.8)'; x.shadowBlur = 14; x.beginPath(); x.moveTo(ex, ey); x.lineTo(ex + 400 * gk, ey); x.stroke(); x.restore();
+      x.fillStyle = SIG; x.beginPath(); x.arc(ex, ey, 7, 0, 6.3); x.fill();
+      L('그리스도를 통한 구원', C.lab[0], C.lab[1], { font: `600 40px ${SERIF}`, align: 'right', color: '#8a5a12', a: ss(6.9, 7.5, t) }); } }
+}
+
+// ---------- the world ----------
+function tableOn(t) {
+  let k = t < .3 ? 0 : t < .42 ? .55 : t < .52 ? .12 : ss(.52, 1.0, t);
+  if (t > 28.2) k *= t < 28.3 ? .35 : t < 28.4 ? .85 : 1 - ss(28.4, 29.0, t);
+  return .03 + .97 * k;
+}
+function reTag(x, o, c) {   // a quiet tag: these are drawn reconstructions, not photographs
+  x.save(); x.translate(o.x, o.y); x.rotate(o.r); x.translate(o === O.pilate ? o.w / 2 - 58 : -o.w / 2 + (o === O.scroll ? 84 : 66), o.h / 2 - (o === O.pilate ? 98 : o === O.scroll ? 40 : 30));
+  x.font = `400 15px ${SANS}`; x.textAlign = 'center'; x.fillStyle = c; x.strokeStyle = c; x.lineWidth = 1; x.fillText('재현', 0, 5); x.strokeRect(-21, -12, 42, 23); x.restore();
+}
+function drawObj(x, o, img) { x.save(); x.translate(o.x, o.y); x.rotate(o.r); x.drawImage(img, -o.w / 2, -o.h / 2, o.w, o.h); x.restore(); }
+function world(x, t, cam, sx, sy, lens) {
+  x.save(); x.translate(sx, sy); x.scale(cam.z, cam.z); x.translate(-cam.x, -cam.y);
+  x.fillStyle = '#121314'; x.fillRect(-3000, -3000, TW + 6000, TH + 6000);                      // the desk beyond
+  const tg = x.createRadialGradient(TW / 2, TH / 2, 200, TW / 2, TH / 2, TW * .7); tg.addColorStop(0, '#f6f8fa'); tg.addColorStop(1, '#e3e8ec'); x.fillStyle = tg; x.fillRect(0, 0, TW, TH);
+  x.globalAlpha = .07; x.fillStyle = tablePat; x.fillRect(0, 0, TW, TH); x.globalAlpha = 1;
+  x.strokeStyle = '#9aa0a6'; x.lineWidth = 34; x.strokeRect(-17, -17, TW + 34, TH + 34); x.strokeStyle = '#d5d9dd'; x.lineWidth = 4; x.strokeRect(-30, -30, TW + 60, TH + 60);
+  // objects
+  x.save(); x.translate(O.chart.x, O.chart.y); x.rotate(O.chart.r); x.translate(-O.chart.w / 2, -O.chart.h / 2); x.drawImage(cardTex, 0, 0, O.chart.w, O.chart.h); chart(x, t); x.restore();
+  drawObj(x, O.teldan, tex.teldan.neg); drawObj(x, O.pilate, tex.pilate.pos);
+  drawObj(x, O.scroll, tex.scroll.pos); drawObj(x, O.codex, tex.codex.pos);
+  for (const [o, c] of [[O.teldan, 'rgba(255,255,255,.5)'], [O.pilate, 'rgba(255,255,255,.42)'], [O.scroll, 'rgba(70,45,20,.5)'], [O.codex, 'rgba(70,50,30,.45)']]) reTag(x, o, c);
+  drawObj(x, O.tac, tex.tac.pos); drawObj(x, O.jos, tex.jos.pos); drawObj(x, O.pro, tex.pro.pos);
+  if (lens) lens(x);
+  x.restore();
+}
+
+// ---------- camera ----------
+const LENS = V ? { x: W / 2, y: H * .40, r: 250 } : { x: W * .34, y: H * .45, r: 270 };
+let CK;
+function camAt(t) {
+  let i = 0; while (i < CK.length - 2 && t > CK[i + 1][0]) i++;
+  const [t0, a] = CK[i], [t1, b] = CK[i + 1], u = eio(clamp((t - t0) / (t1 - t0))), glide = CK[i + 1][2] ? Math.sin(Math.PI * u) : 0;
+  return { x: lerp(a.x, b.x, u), y: lerp(a.y, b.y, u), z: Math.exp(lerp(Math.log(a.z), Math.log(b.z), u)) * (1 - .14 * glide) };
+}
+function buildCam() {
+  const zc = V ? .95 : 1.12, zo = V ? 1.25 : 1.35, zm = V ? 1.0 : .95;
+  const onLens = (o, key, z) => { const [wx, wy] = local2world(o, (key.x0 + key.x1) / 2, (key.y0 + key.y1) / 2); return { x: wx - (LENS.x - W / 2) / z, y: wy - (LENS.y - H / 2) / z, z }; };
+  const chartC = { x: O.chart.x + 20, y: V ? O.chart.y + 40 : 650, z: zc }, chartE = { ...chartC, z: zc * 1.04 };
+  const tel = onLens(O.teldan, tex.teldan.key, zo), pil = onLens(O.pilate, tex.pilate.key, zo);
+  const cmpY = (O.scroll.y + O.codex.y) / 2 + (V ? 0 : 10), cmpA = { x: O.scroll.x + (V ? 130 : 60), y: cmpY, z: zm }, cmpB = { x: O.scroll.x - (V ? 130 : 60), y: cmpY, z: zm };
+  const all = { x: TW / 2, y: TH / 2, z: V ? .27 : .43 }, endZ = V ? .58 : .66, end = { x: O.scroll.x, y: O.scroll.y - (V ? 520 : 300) / endZ, z: endZ };
+  CK = [[0, chartC], [8.7, chartE], [9.8, tel, 1], [13.5, tel], [14.6, pil, 1], [18.5, pil], [19.7, cmpA, 1], [24.0, cmpB], [25.3, cmpB], [28.0, all], [29.0, all], [39.5, { ...end, y: end.y + 20 }]];
+}
+const S2W = (cam, px, py) => [cam.x + (px - W / 2) / cam.z, cam.y + (py - H / 2) / cam.z];
+
+// ---------- the loupe ----------
+function loupe(ctx, t, cam, o, tx, land, lift) {
+  if (t < land - .01 || t > lift + .45) return;
+  const kin = eo(clamp((t - land) / .4)), kout = eo(clamp((t - lift) / .4)), sc = 1 + .35 * (1 - kin) + .35 * kout, al = kin * (1 - kout);
+  const r = LENS.r * sc, cx = LENS.x, cy = LENS.y, m = tx.m, [wx, wy] = S2W(cam, cx, cy), lc = { x: wx, y: wy, z: cam.z * m };
+  ctx.save(); ctx.globalAlpha = al;
+  // shadow on the glass, acrylic skirt
+  ctx.save(); ctx.filter = 'blur(26px)'; ctx.fillStyle = 'rgba(20,24,28,.38)'; ctx.beginPath(); ctx.arc(cx + 24 * sc, cy + 30 * sc, r * 1.12, 0, 6.3); ctx.fill(); ctx.restore();
+  ctx.fillStyle = 'rgba(255,255,255,.22)'; ctx.beginPath(); ctx.arc(cx, cy, r * 1.16, 0, 6.3); ctx.fill();
+  ctx.strokeStyle = 'rgba(255,255,255,.7)'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(cx, cy, r * 1.16, 0, 6.3); ctx.stroke();
+  // inside the lens
+  ctx.save(); ctx.beginPath(); ctx.arc(cx, cy, r, 0, 6.3); ctx.clip();
+  world(ctx, t, lc, cx, cy);
+  const dev = tx.dev;
+  if (dev) { const rd = r * 1.05 * eio(clamp((t - dev[0]) / (dev[1] - dev[0]))); if (rd > 0) {
+    ctx.save(); ctx.beginPath(); ctx.arc(cx, cy, rd, 0, 6.3); ctx.clip(); ctx.translate(cx, cy); ctx.scale(lc.z, lc.z); ctx.translate(-lc.x, -lc.y); drawObj(ctx, o, tx.pos); ctx.restore();
+    if (rd < r) { ctx.strokeStyle = 'rgba(255,190,110,.75)'; ctx.lineWidth = 5; ctx.filter = 'blur(2px)'; ctx.beginPath(); ctx.arc(cx, cy, rd, 0, 6.3); ctx.stroke(); ctx.filter = 'none'; } } }
+  // the line lights up: everything else dims, the word gets an underline
+  const lk = ss(tx.lit, tx.lit + .5, t); if (lk > 0) {
+    const k = tx.key, band = new Path2D(); const c4 = [[k.x0 - 10, k.y0 - 6], [k.x1 + 10, k.y0 - 6], [k.x1 + 10, k.y1 + 6], [k.x0 - 10, k.y1 + 6]].map(([a, b]) => local2world(o, a, b));
+    const sp = c4.map(([a, b]) => [cx + (a - lc.x) * lc.z, cy + (b - lc.y) * lc.z]);
+    ctx.fillStyle = `rgba(10,12,14,${.5 * lk})`; ctx.beginPath(); ctx.rect(cx - r, cy - r, 2 * r, 2 * r); sp.forEach(([a, b], i) => i ? ctx.lineTo(a, b) : ctx.moveTo(a, b)); ctx.closePath(); ctx.fill('evenodd');
+    const uk = eo(clamp((t - tx.lit - .3) / .5)); ctx.strokeStyle = SIG; ctx.lineWidth = 5; ctx.beginPath(); ctx.moveTo(sp[3][0], sp[3][1] + 8); ctx.lineTo(lerp(sp[3][0], sp[2][0], uk), lerp(sp[3][1], sp[2][1], uk) + 8); ctx.stroke(); }
+  // lens interior vignette + chromatic rim
+  const vg = ctx.createRadialGradient(cx, cy, r * .7, cx, cy, r); vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(0,0,0,.28)'); ctx.fillStyle = vg; ctx.fillRect(cx - r, cy - r, 2 * r, 2 * r);
+  ctx.restore();
+  ctx.lineWidth = 3; ctx.strokeStyle = 'rgba(255,60,40,.35)'; ctx.beginPath(); ctx.arc(cx - 1.5, cy, r - 3, 0, 6.3); ctx.stroke(); ctx.strokeStyle = 'rgba(40,120,255,.35)'; ctx.beginPath(); ctx.arc(cx + 1.5, cy, r - 3, 0, 6.3); ctx.stroke();
+  ctx.lineWidth = r * .07; ctx.strokeStyle = '#0c0d0e'; ctx.beginPath(); ctx.arc(cx, cy, r * 1.035, 0, 6.3); ctx.stroke();
+  ctx.lineWidth = 2.5; ctx.strokeStyle = 'rgba(255,255,255,.55)'; ctx.beginPath(); ctx.arc(cx, cy, r * 1.06, Math.PI * 1.05, Math.PI * 1.55); ctx.stroke();
+  ctx.restore();
+}
+function leaderCard(ctx, t, t0, t1, o) {   // anchor ring on the lens rim, a hairline, then the plate wipes in
+  const a = win(t, t0, t1, .3, .4); if (a <= 0) return;
+  const ax = V ? LENS.x : LENS.x + LENS.r * 1.06, ay = V ? LENS.y + LENS.r * 1.06 : LENS.y, bx = V ? LENS.x : LENS.x + LENS.r + 120, by = V ? LENS.y + LENS.r + 90 : LENS.y;
+  const lk = eo(clamp((t - t0) / .4));
+  ctx.save(); ctx.globalAlpha = a; ctx.strokeStyle = SIG; ctx.lineWidth = 2.5; ctx.beginPath(); ctx.arc(ax, ay, 9, 0, 6.3); ctx.stroke(); ctx.fillStyle = SIG; ctx.beginPath(); ctx.arc(ax, ay, 3.5, 0, 6.3); ctx.fill();
+  ctx.beginPath(); ctx.moveTo(ax, ay); ctx.lineTo(lerp(ax, bx, lk), lerp(ay, by, lk)); ctx.stroke(); ctx.restore();
+  const g = clamp((t - t0 - .3) / .5);
+  if (V) plateText(ctx, W / 2, by, { ...o, a: a * ss(0, .4, g), align: 'center', grow: g, w: 820 });
+  else plateText(ctx, bx, by - 110, { ...o, a: a * ss(0, .4, g), grow: g, w: 700 });
+}
+
+// ---------- compare: the scroll above the later standard text ----------
+function compare(ctx, t, cam) {
+  const a = win(t, 19.9, 25.4, .5, .6); if (a <= 0) return;
+  const W2S = (o, lx, ly) => { const [wx, wy] = local2world(o, lx, ly); return [W / 2 + (wx - cam.x) * cam.z, H / 2 + (wy - cam.y) * cam.z]; };
+  ctx.save(); ctx.globalAlpha = a;
+  // tags
+  const tag = (o, lx, ly, up, l1, l2, t0) => { const k = ss(t0, t0 + .5, t); if (k <= 0) return; const [px, py] = W2S(o, lx, ly), ey = py + (up ? -1 : 1) * 46 * eo(k);
+    ctx.globalAlpha = a * k; ctx.strokeStyle = SIG; ctx.fillStyle = SIG; ctx.lineWidth = 2.5; ctx.beginPath(); ctx.arc(px, py, 8, 0, 6.3); ctx.stroke(); ctx.beginPath(); ctx.arc(px, py, 3, 0, 6.3); ctx.fill();
+    ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(px, ey); ctx.stroke();
+    const ty = up ? ey - 12 : ey + 36; ctx.textAlign = 'left'; ctx.fillStyle = INK; ctx.font = `400 ${V ? 25 : 26}px ${MONO}`; ctx.fillText(l1, px + 14, ty - (up ? 34 : 0)); ctx.font = `500 ${V ? 28 : 28}px ${SANS}`; ctx.fillText(l2, px + 14, ty + (up ? 0 : 36)); };
+  const ox = V ? -260 : -560;
+  tag(O.scroll, ox, -O.scroll.h / 2 + 18, true, '1947 · 사해문서', '기원전 이사야서 사본', 20.0);
+  tag(O.codex, ox, -O.codex.h / 2 + 16, true, '약 1,000년 뒤', '표준 사본', 20.4);
+  // the sweep: right to left, a hairline joins each word of Isa 53:5 to the same word below
+  const R1 = tex.scroll.rows[1].words, R2 = tex.codex.rows[1].words, sw = clamp((t - 20.8) / 2.8);
+  const xr = lerp(O.scroll.w / 2 - 40, -O.scroll.w / 2 + 40, sw);
+  ctx.globalAlpha = a;
+  R1.forEach((w1, i) => { const w2 = R2[i]; if (!w2 || w1.cx < xr) return; const [x1, y1] = W2S(O.scroll, w1.cx, tex.scroll.rows[1].y + 24), [x2, y2] = W2S(O.codex, w2.cx, tex.codex.rows[1].y - 30);
+    ctx.strokeStyle = 'rgba(226,85,43,.85)'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+    ctx.fillStyle = SIG; [[x1, y1], [x2, y2]].forEach(([p, q]) => { ctx.beginPath(); ctx.arc(p, q, 3.5, 0, 6.3); ctx.fill(); }); });
+  if (sw > 0 && sw < 1) { const [p1, q1] = W2S(O.scroll, xr, -O.scroll.h / 2), [p2, q2] = W2S(O.codex, xr, O.codex.h / 2); ctx.strokeStyle = 'rgba(226,85,43,.6)'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(p1, q1); ctx.lineTo(p2, q2); ctx.stroke(); }
+  ctx.restore();
+  // verdict
+  const vk = clamp((t - 23.5) / .5);
+  const [, gy] = [0, H / 2 + ((O.scroll.y + O.scroll.h / 2 + O.codex.y - O.codex.h / 2) / 2 - cam.y) * cam.z];
+  plateText(ctx, V ? W / 2 : W / 2 + 190, V ? H / 2 + (O.codex.y + O.codex.h / 2 - cam.y) * cam.z + 36 : gy - 89, { label: '이사야 53:5', big: '거의 글자 그대로 일치', src: '사해문서 이사야 사본  ↔  표준 사본', a: win(t, 23.5, 25.4, .3, .5), align: 'center', grow: vk, w: V ? 700 : 760, bs: 50 });
+}
+
+// ---------- frame ----------
+function draw(ctx, t) {
+  const cam = camAt(t), on = tableOn(t);
+  world(ctx, t, cam, W / 2, H / 2);
+  // the table switches off; only the scroll keeps its light
+  if (on < .999) { ctx.fillStyle = `rgba(4,5,6,${(1 - on) * .97})`; ctx.fillRect(0, 0, W, H); }
+  const glow = ss(28.6, 30.5, t);
+  if (glow > 0) { ctx.save(); ctx.translate(W / 2, H / 2); ctx.scale(cam.z, cam.z); ctx.translate(-cam.x, -cam.y);
+    ctx.globalAlpha = glow; ctx.shadowColor = 'rgba(255,190,110,.9)'; ctx.shadowBlur = 90 * cam.z; drawObj(ctx, O.scroll, tex.scroll.pos); ctx.shadowBlur = 0;
+    ctx.globalCompositeOperation = 'screen'; ctx.globalAlpha = glow * .35; drawObj(ctx, O.scroll, tex.scroll.pos); ctx.restore(); }
+  loupe(ctx, t, cam, O.teldan, { ...tex.teldan, dev: [10.15, 11.0], lit: 11.0, m: 1.7 }, 9.85, 13.15);
+  loupe(ctx, t, cam, O.pilate, { ...tex.pilate, lit: 15.2, m: 1.45 }, 14.75, 18.2);
+  leaderCard(ctx, t, 11.5, 13.2, { label: '텔단 비석', big: '“다윗의 집”', src: '다윗 왕조' });
+  leaderCard(ctx, t, 15.7, 18.2, { label: '그 이름이 새겨진 비문', big: '본디오 빌라도', src: '예수님을 처형한 총독' });
+  compare(ctx, t, cam);
+  // grade: fine moving grain, light vignette
+  ctx.globalCompositeOperation = 'overlay'; ctx.globalAlpha = .16; ctx.drawImage(grains[Math.floor(t * 24) % grains.length], 0, 0, W, H); ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
+  const vg = ctx.createRadialGradient(W / 2, H / 2, Math.min(W, H) * .45, W / 2, H / 2, Math.max(W, H) * .78); vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(0,0,0,.28)'); ctx.fillStyle = vg; ctx.fillRect(0, 0, W, H);
+  // words
+  text(ctx, '18  ·  성경은 실화인가', V ? 80 : 110, V ? 200 : 120, { align: 'left', size: 30, weight: 600, color: V ? '#e9ecef' : INK, alpha: win(t, .8, 5.4, 1, 1), ls: 4 });
+  caption(ctx, '성경이 진짜 실화인가요?', win(t, 1.0, 4.7, .6, .5));
+  caption(ctx, V ? '그런데도 ‘그리스도를 통한 구원’이라는\n하나의 주제로 흐트러짐 없이 모입니다.' : '그런데도 ‘그리스도를 통한 구원’이라는 하나의 주제로 흐트러짐 없이 모입니다.', win(t, 5.0, 8.9, .6, .5));
+  caption(ctx, '땅속에서 계속 확인됩니다(고고학).', win(t, 9.3, 18.3, .6, .5));
+  caption(ctx, '가장 잘 보존된 고대 문서입니다(사본).', win(t, 19.4, 25.3, .6, .5));
+  const ty = V ? 640 : 300, st = { weight: 600, color: '#f3ead9', shadow: 'rgba(0,0,0,.9)', shadowBlur: 18 };
+  text(ctx, V ? '이 근거들은 성경을 믿는 것이 비합리적이지 않고\n오히려 합리적임을 보여줄 뿐,' : '이 근거들은 성경을 믿는 것이\n비합리적이지 않고 오히려 합리적임을 보여줄 뿐,', W / 2, ty, { ...st, size: V ? 40 : 46, alpha: win(t, 29.2, 32.8, 1, .6) });
+  text(ctx, V ? '수학 공식처럼 강제하는 “증명”은 아닙니다.' : '수학 공식처럼 강제하는 “증명”은 아닙니다.', W / 2, ty, { ...st, size: V ? 44 : 48, alpha: win(t, 32.8, 35.8, .8, .6) });
+  const va = win(t, 35.9, DUR - .2, 1, 1.2);
+  text(ctx,  '“믿음은 들음에서 나며\n들음은 그리스도의 말씀으로 말미암았느니라”', W / 2, ty, { ...st, size: V ? 44 : 52, color: '#fff3dc', alpha: va, shadowBlur: 24 });
+  text(ctx, '로마서 10:17 (개역개정)', W / 2, ty + (V ? 2 * 44 * 1.55 + 10 : 2 * 52 * 1.55 + 10), { size: 24, font: SANS, color: '#c9b89a', alpha: va * .9, ls: 2 });
+  const f = 1 - ss(0, 1.1, t) + ss(DUR - 1.2, DUR, t); if (f > 0) { ctx.fillStyle = `rgba(0,0,0,${clamp(f)})`; ctx.fillRect(0, 0, W, H); }
+}
+
+Pilot.run({ W, H, dur: DUR, audio: 'evidence.m4a', fonts: ["600 40px 'Noto Serif KR'", "400 20px 'Noto Sans KR'", "500 20px 'Noto Sans KR'", "400 20px 'DejaVu Sans Mono'", "400 30px FreeSerif"],
+  init: async () => {
+    for (let i = 0; i < 6; i++) grains.push(speckle(W / 2, H / 2, 46, 300 + i, .4));
+    const tp = speckle(256, 256, 90, 2, 1.2), pc = canvas(1, 1).getContext('2d'); tablePat = pc.createPattern(tp, 'repeat');
+    cardTex = buildCard(); buildTelDan(); buildPilate();
+    tex.scroll = hebrewStrip(O.scroll, HEB_SCROLL, { torn: true, base: '#d9b98a', ink: '#3b2414', seed: 41 });
+    tex.codex = hebrewStrip(O.codex, HEB_CODEX, { torn: false, base: '#efe6d2', ink: '#17110b', seed: 43 });
+    tex.tac = indexCard(O.tac, 'TACITUS', '타키투스', '로마 역사가'); tex.jos = indexCard(O.jos, 'JOSEPHUS', '요세푸스', '유대 역사가'); tex.pro = indexCard(O.pro, '미 5:2 · 사 53:5', '예언', '베들레헴 출생 · 고난받는 종');
+    const r = rng(66); SPINES = Array.from({ length: 66 }, (_, i) => ({ x: CL.x0 + i * CL.step, h: 72 + r() * 52, c: ['#2f3236', '#4a4e54', '#6b7077', '#8d9198'][(r() * 4) | 0] }));
+    buildCam();
+  },
+  draw });
+</script>
+</body>
+</html>

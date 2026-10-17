@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>시안 · 타락</title>
+<link rel="stylesheet" href="fonts.css">
+</head>
+<body>
+<script src="lib.js"></script>
+<script>
+/* 02 타락 — Chinese/Korean ink wash on rice paper.
+   A  a serene garden is painted into existence: far ranges in mist, a river of blank paper, one great tree, two small figures
+   B  a drop of ink falls from the tree and blooms over the painting; the two run and hide among the trees (Gen 3:8)
+   C  a breath of wind lifts the ink as it passes — God seeks: "네가 어디 있느냐" (Gen 3:9)
+   D  in the ink one tiny gold point survives and glows — the first promise (Gen 3:15); a vermilion seal */
+const { clamp, lerp, ss, eo, eio, win, rng, fbm, noise, canvas, hex, mix, rgb, speckle, text } = Pilot;
+const W = Pilot.W, H = Pilot.H, V = Pilot.ori === 'v', DUR = 34;
+const INK = [27, 25, 21], PAPER = [242, 236, 222], VERM = '#b02e22';
+const L = V ? { tree: [.63, .7, .36], fig: [[.26, .7], [.33, .705]], hide: [[.52, .705], [.74, .71]], fh: 128, gold: [.47, .735], top: .27, flood: [.6, .43] }
+            : { tree: [.63, .8, .46], fig: [[.34, .8], [.39, .805]], hide: [[.565, .8], [.705, .805]], fh: 116, gold: [.5, .835], top: .3, flood: [.63, .42] };
+const tx = L.tree[0] * W, ty = L.tree[1] * H, th = L.tree[2] * H;
+let paper, els = [], flood, floodF, FW, FH, fm, fmx, em, emx, tmp, tmx, trunkPath, grains = [], seal;
+
+// ---------- brush ----------
+function brush(x, pts, wfn, tone, o = {}) {      // centreline × pressure × bristles; dry > 0 breaks the bristles into flying white
+  const r = rng(o.seed || 1), n = o.n || 18, dry = o.dry || 0, N = pts.length;
+  const len = []; let acc = 0; for (let i = 0; i < N; i++) { if (i) acc += Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]); len.push(acc); }
+  const nrm = pts.map((p, i) => { const a = pts[Math.max(0, i - 1)], b = pts[Math.min(N - 1, i + 1)], nx = -(b[1] - a[1]), ny = b[0] - a[0], l = Math.hypot(nx, ny) || 1; return [nx / l, ny / l]; });
+  x.lineCap = 'round'; x.lineJoin = 'round';
+  for (let b = 0; b < n; b++) { const k = n === 1 ? 0 : b / (n - 1) - .5, side = o.loaded ? .55 + .45 * (k + .5) : 1, bj = (r() - .5) * .25, lw0 = .9 + r() * .8, bt = .78 + .22 * r(), ld = .6 + .6 * r();
+    let open = false;
+    const pt = i => { const w = wfn(len[i] / acc), off = (k + bj / n) * w; return [pts[i][0] + nrm[i][0] * off, pts[i][1] + nrm[i][1] * off, w]; };
+    for (let i = 1; i < N; i++) { const s = len[i] / acc, load = 1 - dry * s * ld, brk = dry > 0 && noise(len[i] / 26 + b * 13.1, b * 3.7) < dry * .55 * (.4 + s);
+      if (brk || load <= 0) { if (open) { x.stroke(); open = false; } continue; }
+      if (!open) { const p0 = pt(i - 1); x.strokeStyle = rgb(INK, tone * load * side * bt); x.lineWidth = Math.max(.6, (p0[2] + wfn(.5)) / 2 / n * 2.1 * lw0); x.beginPath(); x.moveTo(p0[0], p0[1]); open = true; }
+      const p1 = pt(i); x.lineTo(p1[0], p1[1]); }
+    if (open) x.stroke(); }
+}
+const curve = (a, c, b, n = 40) => Array.from({ length: n + 1 }, (_, i) => { const s = i / n, u = 1 - s; return [u * u * a[0] + 2 * u * s * c[0] + s * s * b[0], u * u * a[1] + 2 * u * s * c[1] + s * s * b[1]]; });
+const taper = (a, b) => s => lerp(a, b, s) * Math.min(1, s * 8 + .2);
+function dab(x, cx, cy, rx, ry, tone, rot = 0) {   // a wet dab: dark rim (edge pigment), paler inside
+  x.save(); x.translate(cx, cy); x.rotate(rot); x.scale(1, ry / rx);
+  const g = x.createRadialGradient(0, 0, 0, 0, 0, rx); g.addColorStop(0, rgb(INK, tone * .6)); g.addColorStop(.78, rgb(INK, tone * .8)); g.addColorStop(.92, rgb(INK, tone)); g.addColorStop(1, rgb(INK, 0));
+  x.fillStyle = g; x.beginPath(); x.arc(0, 0, rx, 0, 6.283); x.fill(); x.restore();
+}
+
+// ---------- the painting, element by element (each one is revealed by its own bloom/wipe field) ----------
+function el(t0, dur, field, paint) { const c = canvas(W, H), x = c.getContext('2d'); paint(x); const f = new Float32Array(FW * FH);
+  for (let j = 0; j < FH; j++) for (let i = 0; i < FW; i++) f[j * FW + i] = field(i * 4, j * 4); els.push({ c, t0, dur, f }); }
+const radial = (cx, cy, R, nz = .18) => (x, y) => Math.hypot(x - cx, y - cy) / R + (fbm(x * .008, y * .008, 3) - .5) * nz * 2;
+const sweep = (dx, dy, nz = .12) => (x, y) => (x * dx + y * dy) / (W * Math.abs(dx) + H * Math.abs(dy)) + (dx < 0 ? 1 : 0) * 0 + (fbm(x * .006, y * .006, 3) - .5) * nz * 2;
+function range(x, peaks, base, tone, depth, cun, seed) {   // peaks [[cx, height, halfwidth]] (fractions); ridge in dark, body dissolving into mist below
+  const ridge = px => { let m = 0; for (const [c, h, w] of peaks) { const u = Math.abs(px - c * W) / (w * W); if (u < 1) m = Math.max(m, h * H * Math.pow(1 - u, 1.35) * (1 + .1 * Math.sin(px * .03 + c * 9))); }
+    return base * H - m - 14 * (fbm(px * .01, seed, 3) - .5) - (m > 0 ? 18 * (fbm(px * .02 + seed, 3, 3) - .5) : 0); };
+  const d = x.getImageData(0, 0, W, H), D = d.data;
+  for (let px = 0; px < W; px++) { const top = ridge(px), dd = depth * H * (.4 + .6 * clamp((base * H - top) / (H * .2)));
+    for (let y = Math.max(0, top | 0); y < Math.min(H, top + dd); y++) { const k = (y - top) / dd, n = fbm(px * .015, y * .015, 3);
+      const pk = clamp((base * H - top - 8) / 40); let a = (tone * (1 - Math.pow(k, .55)) * (.6 + .7 * n) + (y - top < 2.5 ? tone * 1.6 : 0) + (y - top < 12 ? tone * .45 * (1 - (y - top) / 12) : 0)) * pk;
+      a = clamp(a); if (a < .005) continue; const i = (y * W + px) * 4; D[i] = INK[0]; D[i + 1] = INK[1]; D[i + 2] = INK[2]; D[i + 3] = Math.max(D[i + 3], a * 255); } }
+  x.putImageData(d, 0, 0);
+  if (cun) { const r = rng(seed * 7);                       // hemp-fibre strokes down the slopes + moss dots on the ridges
+    for (let i = 0; i < cun; i++) { const pk = peaks[(r() * peaks.length) | 0], px = (pk[0] + (r() - .5) * 1.6 * pk[2]) * W, top = ridge(px); if (base * H - top < 30) continue;
+      const sl = (ridge(px + 8) - ridge(px - 8)) / 16, dir = sl < 0 ? -1 : 1, l = 40 + r() * 110, y0 = top + 4 + r() * 20;
+      brush(x, curve([px, y0], [px + dir * l * .25, y0 + l * .5], [px + dir * l * .38 + (r() - .5) * 10, y0 + l]), taper(4.5, 1), tone * 1.5, { n: 5, dry: .65, seed: i + 3 }); }
+    for (let i = 0; i < cun * .5; i++) { const pk = peaks[(r() * peaks.length) | 0], px = (pk[0] + (r() - .5) * 1.4 * pk[2]) * W, top = ridge(px); if (base * H - top < 40) continue; dab(x, px, top + 1 + r() * 5, 2 + r() * 3.5, 1.6 + r() * 2.5, .92, r()); } }
+  return ridge;
+}
+function tree(x, bx, by, h, seed, tone = .82) {   // trunk and branches as loaded strokes; returns the branch tips
+  const r = rng(seed), tips = [];
+  const go = (p, ang, len, w, d) => { const e = [p[0] + Math.sin(ang) * len, p[1] - Math.cos(ang) * len], m = [(p[0] + e[0]) / 2 + Math.cos(ang) * len * (r() - .5) * .3, (p[1] + e[1]) / 2 + Math.sin(ang) * len * (r() - .5) * .3];
+    brush(x, curve(p, m, e, 30), taper(w, w * .55), tone, { n: Math.max(4, Math.round(w / 2.2)), loaded: true, dry: .18 + (3 - d) * .08, seed: seed + tips.length * 7 + d });
+    if (d <= 0) { tips.push(e); return; }
+    const k = d === 3 ? 3 : 2 + (r() < .4 ? 1 : 0);
+    for (let i = 0; i < k; i++) { const sp = k === 2 ? (i ? 1 : -1) * (.35 + r() * .35) : (i - 1) * (.55 + r() * .25); go(e, ang + sp + (r() - .5) * .2, len * (.6 + r() * .18), w * .62, d - 1); } };
+  go([bx, by], -.06, h * .4, h * .085, 3);
+  brush(x, curve([bx - h * .2, by + 6], [bx, by - 8], [bx + h * .22, by + 8]), taper(h * .03, h * .008), .5, { n: 10, dry: .5, seed: seed + 99 });   // roots and the bank
+  return tips;
+}
+function foliage(x, tips, rad, seed) {
+  const r = rng(seed);
+  for (const [cx, cy] of tips) { for (let j = 0; j < 22; j++) { const a = r() * 6.283, q = Math.sqrt(r()); dab(x, cx + Math.cos(a) * rad * q, cy + Math.sin(a) * rad * .7 * q - rad * .2, rad * (.18 + r() * .25), rad * (.12 + r() * .14), .08 + r() * .14, r() * 3); }
+    for (let j = 0; j < 7; j++) { const a = r() * 6.283, q = .4 + .6 * r(); dab(x, cx + Math.cos(a) * rad * q, cy + Math.sin(a) * rad * .6 * q - rad * .2, 2.5 + r() * 4, 2 + r() * 3, .6 + r() * .3, r() * 3); } }
+}
+function buildPainting() {
+  const r = rng(4);
+  // far peaks (clear tone) and near ranges (light tone, textured) at the sides; the middle is mist
+  el(.3, 3.0, sweep(1, .15), x => range(x, V ? [[.18, .17, .3], [.82, .2, .3], [.5, .08, .2]] : [[.12, .28, .16], [.27, .2, .12], [.85, .27, .15], [.97, .2, .1], [.5, .07, .14]], V ? .5 : .62, .13, V ? .14 : .22, 0, 3));
+  el(1.0, 3.0, sweep(-1, .1), x => range(x, V ? [[.04, .12, .22], [.95, .1, .2]] : [[.04, .2, .14], [.9, .2, .16], [.78, .11, .1]], V ? .6 : .76, .3, V ? .1 : .16, V ? 60 : 110, 8));
+  // the river (blank paper) and its banks: dry horizontal strokes, Song wave lines, reeds
+  el(2.0, 2.2, sweep(1, 0), x => {
+    const yb = H * (V ? .75 : .845);
+    for (let i = 0; i < 7; i++) { const y = yb + i * (V ? 16 : 13) + r() * 5, x0 = W * (r() * .4), l = W * (.1 + r() * .22); brush(x, curve([x0, y], [x0 + l / 2, y - 3], [x0 + l, y + 1]), taper(2.2, .6), .28, { n: 3, dry: .6, seed: 40 + i }); }
+    for (let i = 0; i < 14; i++) { const y = H * (V ? .8 : .9) + r() * H * .08, x0 = r() * W, l = 80 + r() * 240; brush(x, curve([x0, y], [x0 + l / 2, y - 5], [x0 + l, y]), taper(5, 1.2), .4, { n: 6, dry: .75, seed: 60 + i }); }
+    for (let i = 0; i < 34; i++) { const bx = W * (V ? .05 : .06) + r() * W * (V ? .3 : .2), by = H * (V ? .77 : .87) + r() * 26, h = 20 + r() * 50, lean = (r() - .2) * 18; brush(x, curve([bx, by], [bx + lean * .3, by - h * .5], [bx + lean, by - h]), taper(3, .4), .55, { n: 2, seed: 90 + i }); }
+  });
+  let tips;
+  el(2.6, 2.0, (x, y) => (ty - y) / th + (fbm(x * .01, y * .01, 3) - .5) * .2, x => { tips = tree(x, tx, ty, th, 11); });
+  el(3.4, 2.4, radial(tx, ty - th * .72, th * .75), x => foliage(x, tips, th * .13, 12));
+  // a smaller tree on the left bank and low shrubs by the great tree (hiding places)
+  el(3.8, 1.8, radial(W * .2, H * (V ? .64 : .7), H * .3), x => {
+    const sx = W * (V ? .14 : .19), sy = H * (V ? .74 : .83), sh = H * (V ? .2 : .3), t2 = tree(x, sx, sy, sh, 21, .72); foliage(x, t2, sh * .12, 22);
+    [[tx - th * .42, ty + 4], [tx + th * .5, ty + 6]].forEach(([bx, by], i) => { const r2 = rng(400 + i); for (let j = 0; j < 80; j++) { const q = r2(); dab(x, bx + (r2() - .5) * th * .32 * (1 - q * .5), by - q * th * .1, 4 + r2() * 7, 3 + r2() * 5, .12 + r2() * .2, r2() * 3); } });
+  });
+}
+
+// ---------- the two (xieyi): one pale body mass + two loaded strokes + a burnt-ink head ----------
+function figure(x, px, py, h, crouch, lean, fem, tone = 1, C = INK) {   // facing `lean` (±1); crouch > .5 = hiding, knees drawn up, head bowed
+  const u = h / 100, P_ = pts => { const p = new Path2D(); pts.forEach((q, i) => i ? p.lineTo(q[0], q[1]) : p.moveTo(q[0], q[1])); p.closePath(); return p; };
+  x.save(); x.translate(px, py); x.scale(lean * u, u); x.lineCap = 'round';
+  const cr = crouch > .5;
+  if (!cr) {
+    const mass = P_([[0, -84], [6, -80], [8.5, -66], [6.5, -52], [9, -38], [8, -22], [6.5, -3], [-5, -2], [-6.5, -20], [-9.5, -40], [-9.5, -50], [-6.5, -66], [-6, -80]]);
+    x.fillStyle = rgb(C, .34 * tone); x.fill(mass);
+    if (fem) { x.strokeStyle = rgb(C, .7 * tone); x.lineWidth = 5; x.beginPath(); x.moveTo(-2, -97); x.quadraticCurveTo(-11, -88, -9, -66); x.stroke(); }
+    x.strokeStyle = rgb(C, .85 * tone); x.lineWidth = 3.4; x.beginPath(); x.moveTo(-4, -84); x.bezierCurveTo(-10, -66, -11, -50, -8, -40); x.quadraticCurveTo(-6, -20, -5, -2); x.stroke();
+    x.lineWidth = 2.8; x.beginPath(); x.moveTo(2, -79); x.quadraticCurveTo(6.5, -66, 6, -48); x.stroke();
+    x.strokeStyle = rgb(C, .95 * tone); x.lineWidth = 1.6; x.beginPath(); x.moveTo(5, -30); x.lineTo(7.5, -1); x.moveTo(-3, -30); x.lineTo(-4.5, -1); x.stroke();
+    x.fillStyle = rgb(C, .95 * tone); x.beginPath(); x.ellipse(2, -92, 6.4, 7.6, .15, 0, 6.283); x.fill();
+  } else {
+    const mass = P_([[0, -50], [-9, -46], [-15, -35], [-16.5, -18], [-13, -3], [15, -3], [16, -10], [19, -28], [15, -34], [8, -40]]);
+    x.fillStyle = rgb(C, .27 * tone); x.fill(mass);
+    if (fem) { x.strokeStyle = rgb(C, .7 * tone); x.lineWidth = 5; x.beginPath(); x.moveTo(8, -54); x.quadraticCurveTo(-4, -54, -9, -38); x.stroke(); }
+    x.strokeStyle = rgb(C, .9 * tone); x.lineWidth = 3.4; x.beginPath(); x.moveTo(-1, -50); x.bezierCurveTo(-14, -46, -18, -30, -13, -3); x.stroke();    // the curled back
+    x.lineWidth = 2.6; x.beginPath(); x.moveTo(-12, -6); x.quadraticCurveTo(4, -12, 19, -28); x.lineTo(15, -3); x.stroke();                                // thigh and shin, knees drawn up
+    x.lineWidth = 2.8; x.beginPath(); x.moveTo(1, -46); x.quadraticCurveTo(10, -30, 21, -27); x.stroke();                                                   // arms around the knees
+    x.fillStyle = rgb(C, .95 * tone); x.beginPath(); x.ellipse(11, -44, 6.2, 7, .9, 0, 6.283); x.fill();                                                   // head bowed onto the knees
+  }
+  x.restore();
+}
+
+// ---------- seal (白文: lines knocked out of a red square) ----------
+function buildSeal() {
+  const s = 120, c = canvas(s, s), x = c.getContext('2d'), r = rng(12);
+  x.fillStyle = VERM; x.beginPath(); x.moveTo(4 + r() * 3, 3 + r() * 3); x.lineTo(s - 4 - r() * 3, 4 + r() * 2); x.lineTo(s - 3 - r() * 2, s - 4 - r() * 3); x.lineTo(5 + r() * 2, s - 3 - r() * 2); x.closePath(); x.fill();
+  x.globalCompositeOperation = 'destination-out'; x.fillStyle = '#000'; x.font = "900 46px 'Noto Serif KR'"; x.textAlign = 'center'; x.textBaseline = 'middle';
+  x.fillText('언', s / 2, s * .3); x.fillText('약', s / 2, s * .72);
+  for (let i = 0; i < 260; i++) { x.globalAlpha = .2 + r() * .6; x.fillRect(r() * s, r() * s, 1 + r() * 2.2, 1 + r() * 2.2); }   // ink-paste speckle
+  x.globalAlpha = 1; return c;
+}
+
+// ---------- frame ----------
+const T_DROP = 8.4, T_FLOOD = 8.7, T_WIND = [15.4, 20.8], T_GOLD = 21.4;
+function maskFor(e, p, soft = .06) {          // bloom field → alpha mask at 1/4 res
+  const d = emx.createImageData(FW, FH), D = d.data;
+  for (let i = 0; i < FW * FH; i++) { D[i * 4 + 3] = 255 * clamp((p * (1 + soft) - e.f[i]) / soft); }
+  emx.putImageData(d, 0, 0); return em;
+}
+function drawEl(ctx, e, t) {
+  const p = clamp((t - e.t0) / e.dur); if (p <= 0) return;
+  if (p >= 1) { ctx.drawImage(e.c, 0, 0); return; }
+  tmx.globalCompositeOperation = 'source-over'; tmx.clearRect(0, 0, W, H); tmx.drawImage(e.c, 0, 0);
+  tmx.globalCompositeOperation = 'destination-in'; tmx.imageSmoothingEnabled = true; tmx.drawImage(maskFor(e, eo(p)), 0, 0, W, H);
+  ctx.drawImage(tmp, 0, 0);
+}
+function floodP(t) { return 1.08 * eo(clamp((t - T_FLOOD) / 6.2)); }
+function drawFlood(ctx, t) {
+  const p = floodP(t); if (p <= 0) return;
+  const d = fmx.createImageData(FW, FH), D = d.data, ed = emx.createImageData(FW, FH), E = ed.data;
+  for (let i = 0; i < FW * FH; i++) { const f = floodF[i], a = clamp((p - f) / .07); D[i * 4 + 3] = 255 * a; const e = p - f; E[i * 4 + 3] = e > 0 ? 255 * Math.exp(-(((e - .012) / .018) ** 2)) : 0; }
+  fmx.putImageData(d, 0, 0); emx.putImageData(ed, 0, 0);
+  tmx.globalCompositeOperation = 'source-over'; tmx.clearRect(0, 0, W, H); tmx.drawImage(flood, 0, 0);
+  tmx.globalCompositeOperation = 'destination-in'; tmx.filter = 'blur(4px)'; tmx.drawImage(fm, 0, 0, W, H); tmx.filter = 'none';
+  ctx.globalCompositeOperation = 'multiply'; ctx.drawImage(tmp, 0, 0);
+  // the dark tide-line at the advancing edge (edge pigment)
+  { tmx.globalCompositeOperation = 'source-over'; tmx.clearRect(0, 0, W, H); tmx.fillStyle = rgb(INK, .55 * (1 - .55 * ss(1, 1.08, p))); tmx.fillRect(0, 0, W, H);
+    tmx.globalCompositeOperation = 'destination-in'; tmx.drawImage(em, 0, 0, W, H); ctx.drawImage(tmp, 0, 0); }
+  ctx.globalCompositeOperation = 'source-over';
+}
+function poses(t) {      // positions of the two, stepped on twos (12 fps)
+  const tf = Math.floor(t * 12) / 12, run = eio(clamp((tf - 9.1) / 1.9)), walk = clamp((tf - 4.4) / 4.6);
+  return [0, 1].map(i => { const a = L.fig[i], b = L.hide[i], wx = a[0] * W + walk * 26 * (i ? 1 : 1);
+    const x = lerp(wx, b[0] * W, run), y = lerp(a[1] * H, b[1] * H, run) - Math.abs(Math.sin(run * Math.PI * 4)) * 5 * (run > 0 && run < 1);
+    return { x, y, crouch: ss(.75, 1, run), lean: i === 0 ? (run > 0 && run < 1 ? 1 : run >= 1 ? -1 : 1) : (run > 0 && run < 1 ? 1 : run >= 1 ? 1 : -1), fem: i === 1 }; });
+}
+function draw(ctx, t) {
+  const gp = [L.gold[0] * W, L.gold[1] * H], z = lerp(1, 1.035, eio(t / T_DROP)) * lerp(1, 1.14, eio(clamp((t - T_GOLD) / 11)));
+  const ox = lerp(W / 2, gp[0], eio(clamp((t - T_GOLD) / 11))), oy = lerp(H / 2, gp[1], eio(clamp((t - T_GOLD) / 11)));
+  ctx.save(); ctx.translate(ox, oy); ctx.scale(z, z); ctx.translate(-ox, -oy);
+  ctx.drawImage(paper, 0, 0);
+  ctx.globalCompositeOperation = 'multiply';
+  for (const e of els) drawEl(ctx, e, t);
+  // the two: painted in at 4.4 s, they walk by the river, then run and hide
+  const fa = ss(4.2, 5.2, t), ps = poses(t);
+  if (fa > 0) for (const p of ps) figure(ctx, p.x, p.y, L.fh, p.crouch, p.lean, p.fem, fa);
+  ctx.globalCompositeOperation = 'source-over';
+  // the drop: a bead of ink falls from the canopy and blooms
+  if (t > T_DROP - .5 && t < T_FLOOD + .3) { const k = clamp((t - (T_DROP - .5)) / .5), fx = L.flood[0] * W, fy = lerp(L.flood[1] * H - 140, L.flood[1] * H, k * k);
+    ctx.fillStyle = rgb(INK, .9); ctx.beginPath(); ctx.ellipse(fx, fy, 6, 8 + 6 * k, 0, 0, 6.283); ctx.fill(); }
+  drawFlood(ctx, t);
+  // hidden among the trees: the two become pale shapes where the ink did not take
+  const ghost = ss(11.2, 12.6, t);
+  if (ghost > 0) for (const p of ps) { ctx.save(); ctx.globalAlpha = ghost * .8; ctx.filter = 'blur(.8px)'; figure(ctx, p.x, p.y, L.fh, 1, p.lean, p.fem, 1.5, PAPER); ctx.restore(); }
+  // the voice in the wind: a dry, light stroke lifts the ink as it passes through the garden
+  const wk = clamp((t - T_WIND[0]) / (T_WIND[1] - T_WIND[0]));
+  if (wk > 0 && wk < 1) { const r = rng(5), wy = H * (V ? .6 : .66), amp = ss(0, .15, wk) * (1 - ss(.8, 1, wk));
+    // soft dry-brush streaks with feathered ends sweep across; each lifts a little ink as it passes
+    ctx.save(); ctx.globalCompositeOperation = 'screen'; ctx.lineCap = 'round';
+    for (let i = 0; i < 46; i++) { const g1 = r() - .5 + (r() - .5), dy = g1 * H * .15, d = r() * .3, l = W * (.28 + .4 * r()), k = eio(clamp((wk - d) / .7)), hx = lerp(-W * .2, W * 1.2 + l, k);
+      const band = Math.exp(-((dy / (H * .12)) ** 2)), a = (.3 + .35 * r()) * band * amp * Math.sin(Math.PI * clamp(k * 1.15)); if (a < .01) { r(); r(); r(); continue; }
+      const y = wy + dy, x0 = hx - l, wav = 6 + r() * 10, ph = r() * 6, nb = 3 + (r() * 3 | 0);
+      for (let bI = 0; bI < nb; bI++) { const oy = (bI - nb / 2) * (1.6 + r() * 1.4);
+        const gr = ctx.createLinearGradient(x0, 0, hx, 0); gr.addColorStop(0, 'rgba(126,120,106,0)'); gr.addColorStop(.55 + .2 * r(), `rgba(126,120,106,${a * (.5 + .5 * r())})`); gr.addColorStop(1, 'rgba(126,120,106,0)');
+        ctx.strokeStyle = gr; ctx.lineWidth = .7 + r() * 1.8; ctx.setLineDash([40 + r() * 160, 4 + r() * 14]); ctx.lineDashOffset = r() * 100;
+        ctx.beginPath(); for (let q = 0; q <= 24; q++) { const px = x0 + l * q / 24, py = y + oy + Math.sin(q / 24 * 3 + ph) * wav * (q / 24); q ? ctx.lineTo(px, py) : ctx.moveTo(px, py); } ctx.stroke(); } }
+    ctx.setLineDash([]); ctx.restore(); }
+  // the gold point: one tiny light that the ink could not cover
+  const ga = ss(T_GOLD, T_GOLD + 2.2, t);
+  if (ga > 0) { const pul = 1 + .12 * Math.sin(t * 2.2) * ss(T_GOLD + 2, T_GOLD + 4, t), R0 = (5 + 8 * ss(T_GOLD + 1, T_GOLD + 8, t)) * pul;
+    ctx.save(); ctx.globalCompositeOperation = 'screen';
+    let g = ctx.createRadialGradient(gp[0], gp[1], 0, gp[0], gp[1], R0 * 22); g.addColorStop(0, `rgba(250,196,90,${.8 * ga})`); g.addColorStop(.22, `rgba(220,150,60,${.28 * ga})`); g.addColorStop(1, 'rgba(200,140,50,0)');
+    ctx.fillStyle = g; ctx.fillRect(gp[0] - R0 * 22, gp[1] - R0 * 22, R0 * 44, R0 * 44);
+    // light seeping into the wet ink like a bloom, along the paper fibres
+    const r = rng(8); for (let i = 0; i < 26; i++) { const a = r() * 6.283, l = R0 * (3 + r() * 9) * ss(T_GOLD + 1.5, T_GOLD + 9, t); ctx.strokeStyle = `rgba(240,190,90,${(.08 + r() * .1) * ga})`; ctx.lineWidth = 1 + r();
+      ctx.beginPath(); ctx.moveTo(gp[0], gp[1]); ctx.lineTo(gp[0] + Math.cos(a) * l, gp[1] + Math.sin(a) * l * .6); ctx.stroke(); }
+    ctx.globalCompositeOperation = 'source-over'; g = ctx.createRadialGradient(gp[0], gp[1], 0, gp[0], gp[1], R0); g.addColorStop(0, `rgba(255,248,220,${ga})`); g.addColorStop(.5, `rgba(250,206,110,${ga})`); g.addColorStop(1, 'rgba(240,184,74,0)');
+    ctx.fillStyle = g; ctx.beginPath(); ctx.arc(gp[0], gp[1], R0, 0, 6.283); ctx.fill(); ctx.restore(); }
+  ctx.restore();
+  // mist over the top of the scroll keeps the inscription on empty paper
+  const mg = ctx.createLinearGradient(0, 0, 0, H * (L.top + .1)); mg.addColorStop(0, rgb(PAPER, .92)); mg.addColorStop(.6, rgb(PAPER, .7)); mg.addColorStop(1, rgb(PAPER, 0)); ctx.fillStyle = mg; ctx.fillRect(0, 0, W, H * (L.top + .1));
+  // paper grain on top (fibres show through the ink), light vignette
+  ctx.globalCompositeOperation = 'overlay'; ctx.globalAlpha = .1; ctx.drawImage(grains[0], 0, 0, W, H); ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
+  const vg = ctx.createRadialGradient(W / 2, H / 2, Math.min(W, H) * .4, W / 2, H / 2, Math.max(W, H) * .75); vg.addColorStop(0, 'rgba(60,50,36,0)'); vg.addColorStop(1, 'rgba(60,50,36,.28)'); ctx.fillStyle = vg; ctx.fillRect(0, 0, W, H);
+
+  // inscriptions, in the empty paper at the top
+  const ink = '#221e18', st = { size: V ? 52 : 50, weight: 600, color: ink, shadow: 'rgba(242,236,222,.9)', shadowBlur: 14 }, cs = { size: 24, font: "'Noto Sans KR',sans-serif", color: '#5a5246', ls: 2 };
+  const ty0 = V ? 300 : 150, lh = V ? 76 : 72;
+  text(ctx, '02  ·  타락', V ? 80 : 110, V ? 190 : 120, { align: 'left', size: 30, weight: 600, color: ink, alpha: win(t, .6, 5, 1, 1), ls: 4 });
+  const line = (s, a, two) => { text(ctx, s, W / 2, ty0, { ...st, alpha: a, lh: lh / st.size }); return two ? ty0 + lh : ty0; };
+  const cite = (s, a, y) => text(ctx, s, W / 2, y + 54, { ...cs, alpha: a * .9 });
+  const a1 = win(t, 11.4, 15.6, 1, .8); cite('창세기 3:8 (개역개정)', a1, line('“여호와 하나님의 낯을 피하여\n동산 나무 사이에 숨은지라”', a1, true));
+  const a2 = win(t, 16.4, 21.2, 1.2, .9); text(ctx, '“네가 어디 있느냐”', W / 2, ty0 + (V ? 30 : 20), { ...st, size: V ? 76 : 80, alpha: a2, ls: 6 }); cite('창세기 3:9 (개역개정)', a2, ty0 + (V ? 50 : 40));
+  const a3 = win(t, 22.6, 28.4, 1.2, .9); cite('창세기 3:15 (개역개정)', a3, line(V ? '“여자의 후손은\n네 머리를 상하게 할 것이요”' : '“여자의 후손은 네 머리를 상하게 할 것이요”', a3, V));
+  const a4 = win(t, 28.8, DUR - 1, 1.2, 1); text(ctx, '타락 직후 주신 첫 복음의 약속', W / 2, ty0, { ...st, size: V ? 46 : 44, weight: 400, alpha: a4, ls: 3 });
+  // the seal is pressed beside the last line
+  const sk = ss(29.8, 30.1, t); if (sk > 0) { const s = (V ? 76 : 70) * lerp(1.25, 1, eo(clamp((t - 29.8) / .3))), sx = (ctx.save(), ctx.font = `400 ${V ? 46 : 44}px 'Noto Serif KR'`, ctx.letterSpacing = '3px', W / 2 + ctx.measureText('타락 직후 주신 첫 복음의 약속').width / 2 + s * .75 + (ctx.restore(), 0)), sy = ty0 - (V ? 15 : 14);
+    ctx.save(); ctx.globalAlpha = sk * a4 / Math.max(a4, .001) * Math.min(1, a4 * 1.4); ctx.globalCompositeOperation = 'multiply'; ctx.drawImage(seal, sx - s / 2, sy - s / 2, s, s); ctx.restore(); }
+  const f = 1 - ss(0, 1.2, t) + ss(DUR - 1.2, DUR, t); if (f > 0) { ctx.fillStyle = `rgba(0,0,0,${clamp(f)})`; ctx.fillRect(0, 0, W, H); }
+}
+
+Pilot.run({ W, H, dur: DUR, audio: 'fall.m4a', fonts: ["600 40px 'Noto Serif KR'", "400 40px 'Noto Serif KR'", "900 40px 'Noto Serif KR'", "400 20px 'Noto Sans KR'"],
+  init: async () => {
+    FW = W / 4; FH = H / 4;
+    tmp = canvas(W, H); tmx = tmp.getContext('2d'); fm = canvas(FW, FH); fmx = fm.getContext('2d'); em = canvas(FW, FH); emx = em.getContext('2d');
+    // rice paper: warm, cloud-mottled, long fibres, pulp flecks
+    paper = canvas(W, H); { const x = paper.getContext('2d'), d = x.createImageData(W, H), D = d.data;
+      for (let y = 0; y < H; y++) for (let i = 0; i < W; i++) { const m = fbm(i * .004, y * .004, 4), m2 = noise(i * .05, y * .05), v = 1 - .045 * m - .015 * m2, k = (y * W + i) * 4;
+        D[k] = PAPER[0] * v; D[k + 1] = PAPER[1] * v; D[k + 2] = PAPER[2] * v * .995; D[k + 3] = 255; }
+      x.putImageData(d, 0, 0); const r = rng(2);
+      for (let i = 0; i < 1600; i++) { const px = r() * W, py = r() * H, a = r() * 6.283, l = 8 + r() * 40; x.strokeStyle = `rgba(${r() < .5 ? '255,252,244' : '200,190,170'},${.12 + r() * .2})`; x.lineWidth = .5 + r() * .6;
+        x.beginPath(); x.moveTo(px, py); x.quadraticCurveTo(px + Math.cos(a) * l * .5 + (r() - .5) * 6, py + Math.sin(a) * l * .5, px + Math.cos(a) * l, py + Math.sin(a) * l); x.stroke(); }
+      for (let i = 0; i < 500; i++) { x.fillStyle = `rgba(120,104,80,${.1 + r() * .2})`; x.fillRect(r() * W, r() * H, 1 + r() * 1.5, 1 + r() * 1.5); } }
+    grains.push(speckle(W / 2, H / 2, 30, 7, .4));
+    buildPainting();
+    // the flood: heavy ink with mottling, granulation and paler cauliflower blooms
+    flood = canvas(W, H); { const x = flood.getContext('2d'), d = x.createImageData(W, H), D = d.data, r = rng(3);
+      for (let y = 0; y < H; y++) for (let i = 0; i < W; i++) { const n = fbm(i * .006, y * .006, 4), g = noise(i * .4, y * .4), bl = fbm(i * .012 + 40, y * .012, 3);
+        const dc = clamp(1 - Math.hypot(i - L.flood[0] * W, y - L.flood[1] * H) / (H * 1.1)), a = clamp(.62 + .2 * n + .05 * g + .14 * dc - .12 * Math.max(0, bl - .6) * 3), k = (y * W + i) * 4; D[k] = INK[0]; D[k + 1] = INK[1]; D[k + 2] = INK[2]; D[k + 3] = a * 255; }
+      x.putImageData(d, 0, 0); }
+    floodF = new Float32Array(FW * FH); const tr = rng(61), tend = Array.from({ length: 12 }, (_, k) => [W * (.03 + .08 * k + tr() * .05), 90 + tr() * 130, 10 + tr() * 18]); const fx = L.flood[0] * W, fy = L.flood[1] * H, top = L.top * H;
+    for (let j = 0; j < FH; j++) for (let i = 0; i < FW; i++) { const px = i * 4, py = j * 4;
+      let f = Math.hypot((px - fx) * .85, py - fy) / Math.max(W, H) * 1.25 + (fbm(px * .005, py * .005, 4) - .5) * .32;
+      // the top edge soaks in unevenly, with a few tendrils wicking up along the fibres
+      const ey = top + 250 + 100 * (fbm(px * .0025, 5.3, 3) - .5) * 2 + 55 * (fbm(px * .008, 2.1, 3) - .5) * 2 + 18 * (fbm(px * .025, py * .01, 3) - .5) * 2;
+      if (py < ey) { let pen = Math.pow((ey - py) / 200, 1.1) * 1.3;
+        for (const [tx0, tl, tw] of tend) { const up = ey - py; if (up > tl) continue; const dd = Math.abs(px - (tx0 + 14 * Math.sin(py * .03 + tx0))); pen *= 1 - .97 * Math.exp(-((dd / (tw * (1 - .6 * up / tl))) ** 2)) * (1 - (up / tl) ** 2); }
+        f += pen; }
+      floodF[j * FW + i] = f; }
+    seal = buildSeal();
+  },
+  draw });
+</script>
+</body>
+</html>

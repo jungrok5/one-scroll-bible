@@ -19,7 +19,7 @@ FACES = [('Noto Serif KR', 400, 'Noto-400.ttf'), ('Noto Serif KR', 600, 'Noto-60
 GF = re.compile(r'<link rel="stylesheet" href="https://fonts\.googleapis\.com/[^"]*">')
 
 os.makedirs(OUT, exist_ok=True)
-srcs = [os.path.join(PILOT, s + '.html') for s in ORDER] + glob.glob(os.path.join(PILOT, '*.js')) + glob.glob(os.path.join(PILOT, 'i18n', '*.json'))   # translations: their glyphs too, where the Noto KR fonts have them
+srcs = [os.path.join(PILOT, s + '.html') for s in ORDER] + glob.glob(os.path.join(PILOT, '*.js')) + [p for p in glob.glob(os.path.join(PILOT, 'i18n', '*.json')) if '"_fonts"' not in open(p, encoding='utf-8').read()]   # translations drawn in the Noto KR faces (Latin); scripts with their own _fonts don't need them
 text = ''.join(open(p, encoding='utf-8').read() for p in srcs)
 chars = set(text) | {chr(c) for c in range(0x20, 0x7f)} | set('·—–…“”‘’「」『』()·•→←↑↓')
 open(os.path.join(OUT, '.chars.txt'), 'w', encoding='utf-8').write(''.join(sorted(c for c in chars if c >= ' ')))

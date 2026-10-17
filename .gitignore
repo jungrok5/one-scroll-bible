@@ -44,3 +44,4 @@ node_modules/
 /motion/out/
 /motion/pilot/*.wav
 /motion/pilot/*.m4a
+/motion/pilot/audio/

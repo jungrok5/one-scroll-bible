@@ -25,6 +25,7 @@
 | `pilot/rise.html` | 12 부활 (마 28:6) | 임파스토(팔레트 나이프) — 회색 세상이 색으로 다시 칠해짐 |
 
 ```
-python3 motion/pilot/sound.py                         # 소리 합성 → pilot/*.wav
+python3 motion/pilot/mix.py                           # ElevenLabs 음악·효과음(pilot/audio/*.mp3)을 장면 타이밍에 맞춰 믹스 → pilot/*.wav
+python3 motion/pilot/sound.py                         # (대안) ElevenLabs 없이 numpy로 소리 합성
 node motion/render.mjs h --page pilot/cross.html      # → motion/out/cross-h.mp4 (같은 이름의 .wav를 자동으로 합침)
 ```

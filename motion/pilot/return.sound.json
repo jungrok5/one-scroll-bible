@@ -1,0 +1,18 @@
+{ "duration": 35,
+  "music": [
+    { "id": "m1", "at": 0, "len": 9.4, "db": -5, "fin": 1.2, "fout": 0.4,
+      "prompt": "Quiet chamber-fantasy night music: a solo harp playing a slow, hopeful pentatonic melody with soft celesta sparkles and a warm low string pad, like a small light walking through the dark; gentle, 70 BPM, intimate" },
+    { "id": "m2", "at": 9.4, "len": 13.6, "db": -3, "fin": 0.3, "fout": 0.6,
+      "prompt": "Warm building music for a night of labour: lute and harp ostinato, soft hand drum on a steady pulse, low strings gradually layering in, each phrase a little fuller as more lamps are lit; determined, hopeful, about 84 BPM, steadily rising in energy" },
+    { "id": "m3", "at": 23.0, "len": 12, "db": -2, "fin": 0.6, "fout": 1.8,
+      "prompt": "Sunrise joy: full warm strings, soft horns and a wordless choir swelling into a bright major chord, harp glissandi, a gentle triumphant cadence, then settling into a tender sustained chord that fades" } ],
+  "sfx": [
+    { "id": "s1", "at": 0.5, "len": 8.5, "db": -20, "loop": true, "prompt": "Soft footsteps of a small group walking on a dusty desert road at night, light wind, distant crickets" },
+    { "id": "s2", "at": 0.5, "len": 8.5, "db": -24, "loop": true, "prompt": "Small oil lamp flame flickering softly, gentle crackle" },
+    { "id": "s3", "at": 11.0, "len": 1.5, "db": -12, "loop": false, "prompt": "A clay oil lamp set down gently on a stone, soft clink, then a small warm bell chime" },
+    { "id": "s4", "at": 12.0, "len": 3.5, "db": -14, "loop": false, "prompt": "Several small chimes ringing one after another, light and warm, like lamps lighting one by one" },
+    { "id": "s5", "at": 12.8, "len": 8.5, "db": -16, "loop": true, "prompt": "Stone blocks being set in place on a wall, soft knocks and scrapes of stone on stone, workers' footsteps, no voices" },
+    { "id": "s6", "at": 19.9, "len": 1.5, "db": -12, "loop": false, "prompt": "Heavy wooden gate doors swinging closed, a deep satisfying wooden thud" },
+    { "id": "s7", "at": 22.5, "len": 4, "db": -16, "loop": false, "prompt": "Morning birdsong beginning at dawn, a few birds, soft and distant" },
+    { "id": "s8", "at": 25.0, "len": 1, "db": -14, "loop": false, "prompt": "A soft fantasy game dialogue chime, a single gentle bell tone" } ],
+  "ducks": [ { "from": 8.9, "to": 9.6, "db": -12 } ] }

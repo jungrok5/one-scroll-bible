@@ -1,0 +1,23 @@
+{ "duration": 38,
+  "music": [
+    { "id": "m1", "at": 0, "len": 14.6, "db": -3, "fin": 0.8, "fout": 0.6,
+      "prompt": "Small shadow-puppet theatre ensemble, percussion first: low barrel drum, hard woodblock clapper, small hand gongs, and a nasal bowed two-string fiddle playing a stern, modal, slightly sorrowful melody. Slow processional pulse around 70 bpm, tension growing steadily; in the last four seconds the drum accelerates into a roll and then thins to almost nothing." },
+    { "id": "m2", "at": 14.6, "len": 9.0, "db": -5, "fin": 1.0, "fout": 0.8,
+      "prompt": "Night, hushed and reverent: a solo bamboo flute playing a few long, sparse pentatonic phrases over a very soft low drone, lots of space and silence between notes, intimate small-room reverb, no percussion." },
+    { "id": "m3", "at": 23.6, "len": 14.4, "db": -2, "fin": 0.2, "fout": 2.0,
+      "prompt": "The shadow-theatre ensemble returns in full and swells into an awe-filled, hopeful march: a big gong on the downbeat, frame drums and barrel drum at a steady walking tempo, bowed fiddle and bamboo flute in warm unison over them, rising in brightness, then settling gently onto a long resolved chord at the end." }
+  ],
+  "sfx": [
+    { "id": "s1", "at": 0.15, "len": 1.5, "db": -8, "loop": false, "prompt": "Oil lamp being lit behind a cloth screen: a soft whoomp of flame and a small sizzle" },
+    { "id": "s2", "at": 4.0, "len": 4.0, "db": -5, "loop": false, "prompt": "Single deep bronze gong strike with a long shimmering decay" },
+    { "id": "s3", "at": 8.8, "len": 2.2, "db": -10, "loop": false, "prompt": "A sudden chorus of many frogs croaking, short and dry" },
+    { "id": "s4", "at": 10.2, "len": 2.5, "db": -10, "loop": false, "prompt": "Hailstones pattering and bouncing hard on dry ground, short burst" },
+    { "id": "s5", "at": 13.0, "len": 1.6, "db": -8, "loop": false, "prompt": "Oil lamps guttering and going out, quick fluttering flames then a soft pfft and sizzle" },
+    { "id": "s6", "at": 19.0, "len": 3.8, "db": -6, "loop": false, "prompt": "A deep, slow, low wind passing high overhead from right to left, a dark whoosh that rises and fades away" },
+    { "id": "s7", "at": 23.6, "len": 3.0, "db": -4, "loop": false, "prompt": "Big gong crash together with oil lamps flaring up all at once" },
+    { "id": "s8", "at": 25.0, "len": 3.5, "db": -6, "loop": false, "prompt": "Great waters rushing apart and rising into walls, a deep roaring surge of the sea that settles into a low rumble" }
+  ],
+  "ducks": [
+    { "from": 13.6, "to": 14.6, "db": -22 },
+    { "from": 19.0, "to": 22.4, "db": -8 }
+  ] }

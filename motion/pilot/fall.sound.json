@@ -1,0 +1,24 @@
+{ "duration": 34,
+  "music": [
+    { "id": "m1", "at": 0, "len": 8.6, "db": -4, "fin": 1.0, "fout": 0.6,
+      "prompt": "Serene traditional Chinese solo guqin, unmetred gentle plucks with glassy harmonics and slow slides, a soft breathy xiao flute far away, pentatonic, peaceful and spacious, like a quiet garden at dawn" },
+    { "id": "m2", "at": 8.4, "len": 7.4, "db": -5, "fin": 0.2, "fout": 1.2,
+      "prompt": "The same guqin turns dark: low muted string bends and a slow descending figure, a deep low drum roll swelling underneath, a cold low xiao drone, minor pentatonic, sorrowful and heavy, no melody resolution" },
+    { "id": "m3", "at": 21.4, "len": 12.6, "db": -3, "fin": 2.0, "fout": 1.5,
+      "prompt": "Tender hopeful theme: guqin harmonics like small points of light, a warm low string pad entering slowly, a gentle xiao melody in a major pentatonic mode, slow and quiet, growing a little warmer toward the end, ending on a soft open chord" }
+  ],
+  "sfx": [
+    { "id": "s1", "at": 8.3, "len": 1.2, "db": -6, "loop": false,
+      "prompt": "A single drop of ink falling into water: short bright tink followed by a soft wet thud" },
+    { "id": "s2", "at": 8.7, "len": 5.5, "db": -14, "loop": false,
+      "prompt": "Slow low rumble of wet ink spreading through paper, soft and dark, like a distant swelling wave" },
+    { "id": "s3", "at": 9.1, "len": 2.0, "db": -12, "loop": false,
+      "prompt": "Two people running barefoot through tall grass and pushing into leaves to hide, quick soft rustling" },
+    { "id": "s4", "at": 15.4, "len": 5.6, "db": -8, "loop": false,
+      "prompt": "A gentle evening wind moving through the trees of a garden, rising softly and passing by, leaves whispering" },
+    { "id": "s5", "at": 21.4, "len": 3.0, "db": -12, "loop": false,
+      "prompt": "A tiny warm glassy shimmer, like one small bell tone glowing, very soft" },
+    { "id": "s6", "at": 29.8, "len": 1.0, "db": -10, "loop": false,
+      "prompt": "A wooden seal pressed onto rice paper: soft wooden thump with a faint paper crackle" }
+  ],
+  "ducks": [ { "from": 15.6, "to": 21.2, "db": -30 } ] }

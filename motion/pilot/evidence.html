@@ -20,7 +20,7 @@ const W = Pilot.W, H = Pilot.H, V = Pilot.ori === 'v', DUR = 40;
 const SIG = '#E2552B', INK = '#16181B', MONO = "'DejaVu Sans Mono','Liberation Mono',monospace", SANS = "'Noto Sans KR',sans-serif", SERIF = "'Noto Serif KR',serif", HEB = "'FreeSerif','DejaVu Serif',serif";
 const TW = 3800, TH = 2400;    // the table, world px
 const O = {
-  chart: { x: 1000, y: 700, w: 1300, h: 760, r: -.008 },
+  chart: V ? { x: 1000, y: 720, w: 900, h: 1120, r: -.008 } : { x: 1000, y: 700, w: 1300, h: 760, r: -.008 },
   teldan: { x: 2500, y: 640, w: 760, h: 600, r: .03, S: 2.5 },
   pilate: { x: 2520, y: 1500, w: 640, h: 640, r: -.025, S: 2.5 },
   scroll: { x: 1050, y: 1520, w: 1300, h: 300, r: -.01, S: 1.6 },
@@ -195,32 +195,34 @@ function buildCard() {   // chart paper: cream fibres, faint dot grid
 
 // ---------- the chart (live, card-local coords: 0..1300 × 0..760) ----------
 let SPINES = [];
+const CL = V ? { x0: 70, x1: 830, title: [70, 122], count: [826, 250], base: 560, sw: 8, step: 11.55, br: 600, brl: 652, ay: [730, 774], aper: 20, astep: 39, alab: [[ '40여 명의 저자', 856], ['왕·목자·어부·세리·의사', 902]], ly: 950, lstep: 230, llab: [70, 1050], conv: [856, 360], lab: [826, 334] }
+                : { x0: 80, x1: 1212, title: [80, 112], count: [1220, 118], base: 340, sw: 12, step: 17.15, br: 372, brl: 420, ay: [478], aper: 40, astep: 28.5, alab: [['40여 명의 저자 — 왕·목자·어부·세리·의사', 548]], ly: 600, lstep: 210, llab: [730, 624], conv: [1240, 210], lab: [1200, 192] };
 function chart(x, t) {
-  const L = (s, px, py, o = {}) => { x.font = o.font; x.fillStyle = o.color || INK; x.textAlign = o.align || 'left'; x.globalAlpha = o.a == null ? 1 : o.a; x.fillText(s, px, py); x.globalAlpha = 1; };
-  L('한 권이 아니라 ‘도서관’', 80, 112, { font: `600 54px ${SERIF}`, a: ss(1.0, 1.6, t) });
-  const n = Math.round(66 * clamp((t - 1.6) / 1.75)); if (t > 1.5) { L(String(n), 1220, 118, { font: `400 86px ${MONO}`, align: 'right' }); L('권', 1226, 118, { font: `400 38px ${SANS}`, a: ss(1.6, 2, t) }); }
+  const C = CL, L = (s, px, py, o = {}) => { x.font = o.font; x.fillStyle = o.color || INK; x.textAlign = o.align || 'left'; x.globalAlpha = o.a == null ? 1 : o.a; x.fillText(s, px, py); x.globalAlpha = 1; };
+  L('한 권이 아니라 ‘도서관’', C.title[0], C.title[1], { font: `600 54px ${SERIF}`, a: ss(1.0, 1.6, t) });
+  const n = Math.round(66 * clamp((t - 1.6) / 1.75)); if (n > 0) { L(String(n), C.count[0], C.count[1], { font: `400 86px ${MONO}`, align: 'right' }); L('권', C.count[0] + 6, C.count[1], { font: `400 38px ${SANS}`, a: ss(1.6, 2, t) }); }
   SPINES.forEach((s, i) => { const k = ss(1.6 + i * .026, 1.7 + i * .026, t); if (k <= 0) return; const hh = s.h * eo(k);
-    x.fillStyle = s.c; x.fillRect(s.x, 340 - hh, 12, hh); x.fillStyle = 'rgba(255,255,255,.25)'; x.fillRect(s.x + 2, 340 - hh + 8, 8, 2); });
+    x.fillStyle = s.c; x.fillRect(s.x, C.base - hh, C.sw, hh); x.fillStyle = 'rgba(255,255,255,.25)'; x.fillRect(s.x + 2, C.base - hh + 8, C.sw - 4, 2); });
   // the span
-  const bk = ss(3.3, 4.0, t); if (bk > 0) { x.strokeStyle = INK; x.lineWidth = 2; x.beginPath(); x.moveTo(80, 372); x.lineTo(80 + 1132 * bk, 372); x.stroke();
-    x.beginPath(); x.moveTo(80, 362); x.lineTo(80, 382); x.stroke(); if (bk > .98) { x.beginPath(); x.moveTo(1212, 362); x.lineTo(1212, 382); x.stroke(); }
-    L('약 1,500년', 646, 420, { font: `400 34px ${MONO}`, align: 'center', a: ss(3.7, 4.1, t) }); }
+  const bk = ss(3.3, 4.0, t); if (bk > 0) { x.strokeStyle = INK; x.lineWidth = 2; x.beginPath(); x.moveTo(C.x0, C.br); x.lineTo(C.x0 + (C.x1 - C.x0) * bk, C.br); x.stroke();
+    x.beginPath(); x.moveTo(C.x0, C.br - 10); x.lineTo(C.x0, C.br + 10); x.stroke(); if (bk > .98) { x.beginPath(); x.moveTo(C.x1, C.br - 10); x.lineTo(C.x1, C.br + 10); x.stroke(); }
+    L('약 1,500년', (C.x0 + C.x1) / 2, C.brl, { font: `400 34px ${MONO}`, align: 'center', a: ss(3.7, 4.1, t) }); }
   // forty authors
-  for (let i = 0; i < 40; i++) { const k = ss(4.0 + i * .018, 4.15 + i * .018, t); if (k <= 0) continue; const px = 86 + i * 28.5;
-    x.fillStyle = '#fff'; x.strokeStyle = INK; x.lineWidth = 2; x.beginPath(); x.arc(px, 478, 8 * eo(k) + .01, 0, 6.3); x.fill(); x.stroke(); }
-  L('40여 명의 저자 — 왕·목자·어부·세리·의사', 80, 548, { font: `400 34px ${SANS}`, a: ss(4.3, 4.9, t) });
+  for (let i = 0; i < 40; i++) { const k = ss(4.0 + i * .018, 4.15 + i * .018, t); if (k <= 0) continue; const px = C.x0 + 6 + (i % C.aper) * C.astep, py = C.ay[(i / C.aper) | 0];
+    x.fillStyle = '#fff'; x.strokeStyle = INK; x.lineWidth = 2; x.beginPath(); x.arc(px, py, 8 * eo(k) + .01, 0, 6.3); x.fill(); x.stroke(); }
+  C.alab.forEach(([s, y]) => L(s, C.x0, y, { font: `400 34px ${SANS}`, a: ss(4.3, 4.9, t) }));
   // three languages
-  const lk = ss(4.9, 5.5, t); if (lk > 0) { ['히브리어', '아람어', '헬라어'].forEach((s, i) => { const px = 80 + i * 210; x.globalAlpha = lk; x.strokeStyle = INK; x.lineWidth = 2; x.strokeRect(px, 600, 26, 26);
-      x.fillStyle = ['#3a3d42', '#8a8e95', '#c9ccd1'][i]; x.fillRect(px + 3, 603, 20, 20); x.globalAlpha = 1; L(s, px + 40, 624, { font: `400 32px ${SANS}`, a: lk }); });
-    L('세 가지 언어', 730, 624, { font: `400 32px ${SANS}`, color: '#6a6e74', a: lk }); }
+  const lk = ss(4.9, 5.5, t); if (lk > 0) { ['히브리어', '아람어', '헬라어'].forEach((s, i) => { const px = C.x0 + i * C.lstep; x.globalAlpha = lk; x.strokeStyle = INK; x.lineWidth = 2; x.strokeRect(px, C.ly, 26, 26);
+      x.fillStyle = ['#3a3d42', '#8a8e95', '#c9ccd1'][i]; x.fillRect(px + 3, C.ly + 3, 20, 20); x.globalAlpha = 1; L(s, px + 40, C.ly + 24, { font: `400 32px ${SANS}`, a: lk }); });
+    L('세 가지 언어', C.llab[0], C.llab[1], { font: `400 32px ${SANS}`, color: '#6a6e74', a: lk }); }
   // all of them flow into one line
-  const fk = clamp((t - 5.6) / 1.6); if (fk > 0) {
-    x.lineWidth = 1.4; SPINES.forEach((s, i) => { const k = eio(clamp(fk * 1.4 - i * .006)); if (k <= 0) return; const sx = s.x + 6, sy = 340 - s.h, ex = 1240, ey = 210;
-      x.strokeStyle = `rgba(22,24,27,${.32})`; x.beginPath(); const N = 24; for (let j = 0; j <= N * k; j++) { const u = j / N, a = 1 - u;
+  const fk = clamp((t - 5.6) / 1.6), [ex, ey] = C.conv; if (fk > 0) {
+    x.lineWidth = 1.4; SPINES.forEach((s, i) => { const k = eio(clamp(fk * 1.4 - i * .006)); if (k <= 0) return; const sx = s.x + C.sw / 2, sy = C.base - s.h;
+      x.strokeStyle = 'rgba(22,24,27,.32)'; x.beginPath(); const N = 24; for (let j = 0; j <= N * k; j++) { const u = j / N, a = 1 - u;
         const px = a * a * a * sx + 3 * a * a * u * sx + 3 * a * u * u * (sx + (ex - sx) * .7) + u * u * u * ex, py = a * a * a * sy + 3 * a * a * u * (sy - 60) + 3 * a * u * u * ey + u * u * u * ey; j ? x.lineTo(px, py) : x.moveTo(px, py); } x.stroke(); });
-    const gk = ss(6.6, 7.4, t); if (gk > 0) { x.save(); x.strokeStyle = '#d99a2b'; x.lineWidth = 6; x.shadowColor = 'rgba(240,170,60,.8)'; x.shadowBlur = 14; x.beginPath(); x.moveTo(1240, 210); x.lineTo(1240 + 400 * gk, 210); x.stroke(); x.restore();
-      x.fillStyle = SIG; x.beginPath(); x.arc(1240, 210, 7, 0, 6.3); x.fill();
-      L('그리스도를 통한 구원', 1200, 192, { font: `600 40px ${SERIF}`, align: 'right', color: '#8a5a12', a: ss(6.9, 7.5, t) }); } }
+    const gk = ss(6.6, 7.4, t); if (gk > 0) { x.save(); x.strokeStyle = '#d99a2b'; x.lineWidth = 6; x.shadowColor = 'rgba(240,170,60,.8)'; x.shadowBlur = 14; x.beginPath(); x.moveTo(ex, ey); x.lineTo(ex + 400 * gk, ey); x.stroke(); x.restore();
+      x.fillStyle = SIG; x.beginPath(); x.arc(ex, ey, 7, 0, 6.3); x.fill();
+      L('그리스도를 통한 구원', C.lab[0], C.lab[1], { font: `600 40px ${SERIF}`, align: 'right', color: '#8a5a12', a: ss(6.9, 7.5, t) }); } }
 }
 
 // ---------- the world ----------
@@ -254,9 +256,9 @@ function camAt(t) {
   return { x: lerp(a.x, b.x, u), y: lerp(a.y, b.y, u), z: Math.exp(lerp(Math.log(a.z), Math.log(b.z), u)) * (1 - .14 * glide) };
 }
 function buildCam() {
-  const zc = V ? .8 : 1.25, zo = V ? 1.25 : 1.35, zm = V ? 1.0 : .95;
+  const zc = V ? .95 : 1.12, zo = V ? 1.25 : 1.35, zm = V ? 1.0 : .95;
   const onLens = (o, key, z) => { const [wx, wy] = local2world(o, (key.x0 + key.x1) / 2, (key.y0 + key.y1) / 2); return { x: wx - (LENS.x - W / 2) / z, y: wy - (LENS.y - H / 2) / z, z }; };
-  const chartC = { x: O.chart.x + 20, y: O.chart.y + (V ? 0 : 30), z: zc }, chartE = { ...chartC, z: zc * 1.04 };
+  const chartC = { x: O.chart.x + 20, y: V ? O.chart.y + 40 : 650, z: zc }, chartE = { ...chartC, z: zc * 1.04 };
   const tel = onLens(O.teldan, tex.teldan.key, zo), pil = onLens(O.pilate, tex.pilate.key, zo);
   const cmpY = (O.scroll.y + O.codex.y) / 2 + (V ? 0 : 10), cmpA = { x: O.scroll.x + (V ? 130 : 60), y: cmpY, z: zm }, cmpB = { x: O.scroll.x - (V ? 130 : 60), y: cmpY, z: zm };
   const all = { x: TW / 2, y: TH / 2, z: V ? .27 : .43 }, endZ = V ? .58 : .66, end = { x: O.scroll.x, y: O.scroll.y - (V ? 520 : 300) / endZ, z: endZ };
@@ -331,7 +333,7 @@ function compare(ctx, t, cam) {
   // verdict
   const vk = clamp((t - 23.5) / .5);
   const [, gy] = [0, H / 2 + ((O.scroll.y + O.scroll.h / 2 + O.codex.y - O.codex.h / 2) / 2 - cam.y) * cam.z];
-  plateText(ctx, V ? W / 2 + 60 : W / 2 + 190, gy - 89, { label: '이사야 53:5', big: '거의 글자 그대로 일치', src: '사해문서 이사야 사본  ↔  표준 사본', a: win(t, 23.5, 25.4, .3, .5), align: 'center', grow: vk, w: V ? 700 : 760, bs: 50 });
+  plateText(ctx, V ? W / 2 : W / 2 + 190, V ? H / 2 + (O.codex.y + O.codex.h / 2 - cam.y) * cam.z + 36 : gy - 89, { label: '이사야 53:5', big: '거의 글자 그대로 일치', src: '사해문서 이사야 사본  ↔  표준 사본', a: win(t, 23.5, 25.4, .3, .5), align: 'center', grow: vk, w: V ? 700 : 760, bs: 50 });
 }
 
 // ---------- frame ----------
@@ -353,7 +355,7 @@ function draw(ctx, t) {
   ctx.globalCompositeOperation = 'overlay'; ctx.globalAlpha = .16; ctx.drawImage(grains[Math.floor(t * 24) % grains.length], 0, 0, W, H); ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
   const vg = ctx.createRadialGradient(W / 2, H / 2, Math.min(W, H) * .45, W / 2, H / 2, Math.max(W, H) * .78); vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(0,0,0,.28)'); ctx.fillStyle = vg; ctx.fillRect(0, 0, W, H);
   // words
-  text(ctx, '18  ·  성경은 실화인가', V ? 80 : 110, V ? 200 : 120, { align: 'left', size: 30, weight: 600, color: INK, alpha: win(t, .8, 5.4, 1, 1), ls: 4 });
+  text(ctx, '18  ·  성경은 실화인가', V ? 80 : 110, V ? 200 : 120, { align: 'left', size: 30, weight: 600, color: V ? '#e9ecef' : INK, alpha: win(t, .8, 5.4, 1, 1), ls: 4 });
   caption(ctx, '성경이 진짜 실화인가요?', win(t, 1.0, 4.7, .6, .5));
   caption(ctx, V ? '그런데도 ‘그리스도를 통한 구원’이라는\n하나의 주제로 흐트러짐 없이 모입니다.' : '그런데도 ‘그리스도를 통한 구원’이라는 하나의 주제로\n흐트러짐 없이 모입니다.', win(t, 5.0, 8.9, .6, .5));
   caption(ctx, '땅속에서 계속 확인됩니다(고고학).', win(t, 9.3, 18.3, .6, .5));
@@ -375,7 +377,7 @@ Pilot.run({ W, H, dur: DUR, audio: 'evidence.m4a', fonts: ["600 40px 'Noto Serif
     tex.scroll = hebrewStrip(O.scroll, HEB_SCROLL, { torn: true, base: '#d9b98a', ink: '#3b2414', seed: 41 });
     tex.codex = hebrewStrip(O.codex, HEB_CODEX, { torn: false, base: '#efe6d2', ink: '#17110b', seed: 43 });
     tex.tac = indexCard(O.tac, 'TACITUS', '타키투스', '로마 역사가'); tex.jos = indexCard(O.jos, 'JOSEPHUS', '요세푸스', '유대 역사가'); tex.pro = indexCard(O.pro, '미 5:2 · 사 53:5', '예언', '베들레헴 출생 · 고난받는 종');
-    const r = rng(66); SPINES = Array.from({ length: 66 }, (_, i) => ({ x: 80 + i * 17.15, h: 72 + r() * 52, c: ['#2f3236', '#4a4e54', '#6b7077', '#8d9198'][(r() * 4) | 0] }));
+    const r = rng(66); SPINES = Array.from({ length: 66 }, (_, i) => ({ x: CL.x0 + i * CL.step, h: 72 + r() * 52, c: ['#2f3236', '#4a4e54', '#6b7077', '#8d9198'][(r() * 4) | 0] }));
     buildCam();
   },
   draw });

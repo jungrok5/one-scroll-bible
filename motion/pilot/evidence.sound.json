@@ -1,0 +1,16 @@
+{ "duration": 40,
+  "music": [
+    { "id": "m1", "at": 0.8, "len": 27.6, "db": -6, "fin": 1.5, "fout": 1.5,
+      "prompt": "Restrained documentary score: soft felt piano playing patient repeated eighth notes, a quiet bed of muted strings, occasional glassy bowed-vibraphone tones; curious, careful, investigative, steady tempo around 84 bpm, builds only by adding a second piano voice and a higher string line, no drums" },
+    { "id": "m2", "at": 29.0, "len": 11.0, "db": -4, "fin": 1.2, "fout": 1.8,
+      "prompt": "After silence, a warm sustained string chord and a few slow, tender felt-piano notes, intimate and reverent, like a single lamp in a dark room, resolving gently on a major chord" }
+  ],
+  "sfx": [
+    { "id": "s1", "at": 0.25, "len": 1.4, "db": -10, "loop": false, "prompt": "Fluorescent light table switching on: two quick starter clicks and a soft electrical ballast hum starting" },
+    { "id": "s2", "at": 1.6, "len": 1.8, "db": -16, "loop": false, "prompt": "Rapid soft ticks of a mechanical counter, quiet and precise" },
+    { "id": "s3", "at": 9.85, "len": 1.0, "db": -8, "loop": false, "prompt": "Glass loupe set down on a glass plate, a small clack with a high glassy ring" },
+    { "id": "s4", "at": 14.75, "len": 1.0, "db": -8, "loop": false, "prompt": "Glass loupe set down on a glass slide, a small clack with a soft ring" },
+    { "id": "s5", "at": 20.8, "len": 2.8, "db": -14, "loop": false, "prompt": "Fine pencil drawing quick straight lines on paper, light and rhythmic" },
+    { "id": "s6", "at": 28.2, "len": 1.2, "db": -9, "loop": false, "prompt": "Light table switching off: a single switch click, the electrical hum dying away" }
+  ],
+  "ducks": [ { "from": 28.3, "to": 29.1, "db": -30 } ] }

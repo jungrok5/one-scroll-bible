@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>시안 · 분열 왕국 · 포로</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;900&family=Noto+Sans+KR:wght@400&display=swap">
+</head>
+<body>
+<script src="lib.js"></script>
+<script>
+/* 08 분열 왕국 · 포로 — a woodcut novel in four plates. Black is the wood, white is what the knife removed;
+   pictures appear by being carved. 1) the crown cracks and the kingdom splits (1 Ki 12:19) 2) Jerusalem goes dark
+   3) a line of captives walks away toward the horizon 4) by the rivers of Babylon, harps hang on the willows (Ps 137:1–2).
+   One colour plate only — gold, for the promise — printed on carved white at the very end: a single star and its path on the water.
+   No violence is shown: the city is not burned on screen, the light simply goes out. */
+const { clamp, lerp, ss, eo, eio, win, rng, fbm, noise, canvas, speckle, text } = Pilot;
+const W = Pilot.W, H = Pilot.H, V = Pilot.ori === 'v', DUR = 36;
+const INK = '#17130F', PAPER = '#E8DFCA';
+const PL = V ? { x: 50, y: 170, w: 980, h: 1230 } : { x: 70, y: 56, w: 1780, h: 812 };   // the printed plate; the margin below holds captions
+const PW = PL.w, PH = PL.h;
+const CUTS = [0, 8.6, 14.4, 20.6, DUR];
+let paper, inkTex, edge, M, mx, cache = {};
+
+// ---------- the knife ----------
+// a cut: blunt entry, swelling a little, tapered exit; white on the mask
+function cutP(x0, y0, x1, y1, w) {
+  const dx = x1 - x0, dy = y1 - y0, L = Math.hypot(dx, dy) || 1, nx = -dy / L * w / 2, ny = dx / L * w / 2, p = new Path2D();
+  p.moveTo(x0 + nx, y0 + ny); p.quadraticCurveTo(x0 + dx * .45 + nx * 1.15, y0 + dy * .45 + ny * 1.15, x1, y1);
+  p.quadraticCurveTo(x0 + dx * .45 - nx * 1.15, y0 + dy * .45 - ny * 1.15, x0 - nx, y0 - ny);
+  p.quadraticCurveTo(x0 - dx / L * w * .4, y0 - dy / L * w * .4, x0 + nx, y0 + ny); return p;
+}
+function curveP(pts, w0, w1) {          // a curved cut along a polyline, width w0 → w1
+  const a = [], b = [];
+  for (let i = 0; i < pts.length; i++) { const p = pts[i], q = pts[Math.min(i + 1, pts.length - 1)], o = pts[Math.max(i - 1, 0)], dx = q[0] - o[0], dy = q[1] - o[1], L = Math.hypot(dx, dy) || 1, w = lerp(w0, w1, i / (pts.length - 1)) / 2;
+    a.push([p[0] - dy / L * w, p[1] + dx / L * w]); b.push([p[0] + dy / L * w, p[1] - dx / L * w]); }
+  const p = new Path2D(); a.forEach((q, i) => i ? p.lineTo(q[0], q[1]) : p.moveTo(q[0], q[1])); for (let i = b.length - 1; i >= 0; i--) p.lineTo(b[i][0], b[i][1]); p.closePath(); return p;
+}
+// stroke list: {p: Path2D (full), seg: [x0,y0,x1,y1,w] for growing straight cuts, t0, dur}
+function drawStrokes(m, list, t) {
+  m.fillStyle = '#fff';
+  for (const s of list) { if (s.t0 > t) continue; const k = clamp((t - s.t0) / s.dur);
+    if (k >= 1 || !s.seg) { if (k > 0) { if (k < 1 && !s.seg) { m.globalAlpha = 1; } m.fill(s.p); } }
+    else { const [x0, y0, x1, y1, w] = s.seg; m.fill(cutP(x0, y0, lerp(x0, x1, k), lerp(y0, y1, k), w)); } }
+}
+const seg = (x0, y0, x1, y1, w, t0, dur = .15) => ({ p: cutP(x0, y0, x1, y1, w), seg: [x0, y0, x1, y1, w], t0, dur });
+// hatching: parallel cuts across a region; width follows tone (bright = wide), entry/exit jittered so no machine line
+function hatch(list, inside, o) {
+  const r = rng(o.seed || 1), ang = o.ang || 0, ca = Math.cos(ang), sa = Math.sin(ang), [bx0, by0, bx1, by1] = o.box, sp = o.sp || 9;
+  const cx = (bx0 + bx1) / 2, cy = (by0 + by1) / 2, R = Math.hypot(bx1 - bx0, by1 - by0) / 2;
+  for (let v = -R; v < R; v += sp * (.85 + r() * .3)) {
+    let u = -R + r() * 30;
+    while (u < R) { const len = lerp(o.len[0], o.len[1], r()), gap = (o.gap || 6) * (.5 + r());
+      const ux = cx + ca * u - sa * v, uy = cy + sa * u + ca * v, mxp = ux + ca * len / 2, myp = uy + sa * len / 2;
+      if (mxp > bx0 && mxp < bx1 && myp > by0 && myp < by1 && inside(mxp, myp)) { const w = o.w(mxp, myp, r); if (w > .7) {
+        const a2 = ang + (r() - .5) * .06, ex = ux + Math.cos(a2) * len, ey = uy + Math.sin(a2) * len;
+        list.push(seg(ux, uy, ex, ey, w, o.key(mxp, myp, r), o.dur || .12)); } }
+      u += len + gap; }
+  }
+}
+function halo(m, p, w = 7) { m.save(); m.lineJoin = 'round'; m.lineCap = 'round'; m.strokeStyle = '#fff'; m.lineWidth = w; m.stroke(p); m.restore(); }
+function blk(m, p) { m.fillStyle = '#000'; m.fill(p); }
+function poly(pts) { const p = new Path2D(); pts.forEach((q, i) => i ? p.lineTo(q[0], q[1]) : p.moveTo(q[0], q[1])); p.closePath(); return p; }
+let hit; const inP = (p) => (x, y) => hit.isPointInPath(p, x, y);
+
+// ---------- plate 1: the crown ----------
+const C1 = { cx: PW / 2, cy: V ? PH * .5 : PH * .56, s: V ? 1.0 : .92 };
+const crack = (() => { const r = rng(4), pts = []; for (let i = 0; i <= 12; i++) pts.push([.18 * 300 + (r() - .5) * 34 + (i % 2 ? 14 : -14), -250 + i * 40]); return pts; })();   // in crown space, right of centre (10 ≠ 2)
+function crownShape() {                // crown space: band 600 × 130, five points
+  const p = new Path2D(); p.moveTo(-300, 80); p.lineTo(-300, -50); p.lineTo(-330, -200); p.lineTo(-210, -90); p.lineTo(-140, -230); p.lineTo(-60, -95); p.lineTo(0, -260);
+  p.lineTo(60, -95); p.lineTo(140, -230); p.lineTo(210, -90); p.lineTo(330, -200); p.lineTo(300, -50); p.lineTo(300, 80); p.closePath(); return p;
+}
+function crownMask(m, side, lt) {      // carve the crown (black body, halo, lit-edge cuts, jewels), clipped to one side of the crack
+  const r = rng(9), body = crownShape();
+  m.save();
+  const clip = new Path2D(); if (side < 0) { clip.moveTo(-600, -300); crack.forEach(q => clip.lineTo(q[0], q[1])); clip.lineTo(-600, 300); } else { clip.moveTo(600, -300); crack.forEach(q => clip.lineTo(q[0], q[1])); clip.lineTo(600, 300); }
+  clip.closePath(); if (side) m.clip(clip);
+  halo(m, body, 12); blk(m, body);
+  m.save(); m.clip(body); m.fillStyle = '#fff';
+  for (let y = -40; y < 70; y += 11) { const k = 1 - (y + 40) / 110; for (let x = -290; x < 290; x += 30 + r() * 30) { const w = 1.5 + k * 6 * (r() * .5 + .5); m.fill(cutP(x, y, x + 24 + r() * 26, y + (r() - .5) * 2, w)); } }
+  [[-330, -200, -300, -50], [-140, -230, -210, -90], [0, -260, -60, -95], [140, -230, 60, -95], [330, -200, 210, -90]].forEach(([ax, ay, bx, by]) => { for (let k = 0; k < 7; k++) { const t0 = .15 + k * .11, x0 = lerp(ax, bx, t0), y0 = lerp(ay, by, t0); m.fill(cutP(x0 + 4, y0, x0 + 30, y0 + 6, 5 - k * .4)); } });
+  m.restore();
+  m.fillStyle = '#fff'; m.fillRect(-300, -58, 600, 6); m.fillRect(-300, 74, 600, 4);
+  [-200, -100, 0, 100, 200].forEach((jx, i) => { const p = new Path2D(); i % 2 ? p.ellipse(jx, 14, 22, 30, 0, 0, 6.28) : p.rect(jx - 22, -10, 44, 48); halo(m, p, 6); blk(m, p); m.fillStyle = '#fff'; m.beginPath(); m.arc(jx - 6, 4, 6, 0, 6.28); m.fill(); });
+  [[-330, -200], [-140, -230], [0, -260], [140, -230], [330, -200]].forEach(([bx, by]) => { const p = new Path2D(); p.arc(bx, by - 18, 18, 0, 6.28); halo(m, p, 6); blk(m, p); m.fillStyle = '#fff'; m.beginPath(); m.arc(bx - 5, by - 23, 5, 0, 6.28); m.fill(); });
+  m.restore();
+}
+function plate1(lt) {
+  const key = 'p1';
+  if (!cache[key]) {
+    const list = [], r = rng(2), { cx, cy } = C1;
+    // rays of carved light from the crown: the glory of the united kingdom
+    for (let i = 0; i < 90; i++) { const a = i / 90 * 6.2832 + (r() - .5) * .03, r0 = 330 + r() * 40, r1 = Math.max(PW, PH) * (.5 + r() * .5), w = 6 + (i % 2) * 10 + r() * 4;
+      for (let k = 0; k < 3; k++) { const a0 = r0 + (r1 - r0) * k / 3, a1 = r0 + (r1 - r0) * (k + .8) / 3;
+        list.push(seg(cx + Math.cos(a) * a0, cy + Math.sin(a) * a0 * .9, cx + Math.cos(a) * a1, cy + Math.sin(a) * a1 * .9, w * (1 - k * .25), .4 + a0 / 900 + r() * .2, .3)); } }
+    // ground: a cushion of horizontal cuts under the crown
+    hatch(list, () => true, { box: [0, cy + 230, PW, PH], ang: 0, sp: 13, len: [40, 120], w: (x, y) => 2 + 7 * (1 - Math.abs(x - cx) / (PW * .6)) * (1 - (y - cy - 230) / (PH - cy)), key: (x, y) => .9 + Math.abs(x - cx) / 900, seed: 3 });
+    list.sort((a, b) => a.t0 - b.t0); cache[key] = list;
+  }
+  mx.fillStyle = '#000'; mx.fillRect(0, 0, PW, PH);
+  // after the split the rays between the halves are inked back in (a dark gap opens)
+  const sp = eio(clamp((lt - 4.3) / 2.6)), gx = C1.cx + 54 * C1.s, gw = sp * (V ? 150 : 230);
+  drawStrokes(mx, sp > 0 ? cache[key].filter(s => { const mxp = (s.seg[0] + s.seg[2]) / 2; return Math.abs(mxp - gx) > gw * (.6 + .4 * Math.abs(Math.sin(mxp * .37))); }) : cache[key], lt);
+  // the crown: carved in by .2–2.4 (revealed by a wipe of cuts), cracked at 3.9, parting from 4.3
+  const rv = clamp((lt - .2) / 2.2), shake = lt > 3.8 && lt < 4.3 ? Math.sin(lt * 90) * 4 * (1 - (lt - 3.8) / .5) : 0;
+  mx.save(); mx.translate(C1.cx + shake, C1.cy); mx.scale(C1.s, C1.s);
+  if (rv < 1) { const cl = new Path2D(); cl.rect(-420, 300 - 620 * eo(rv), 840, 620 * eo(rv)); mx.clip(cl); }
+  if (lt < 3.9) crownMask(mx, 0, lt);
+  else { const d = sp * (V ? 70 : 120);
+    mx.save(); mx.translate(-d, sp * 26); mx.rotate(-sp * .10); crownMask(mx, -1, lt); mx.restore();
+    mx.save(); mx.translate(d * 1.1, sp * 40); mx.rotate(sp * .16); crownMask(mx, 1, lt); mx.restore(); }
+  // the crack itself: a jagged white cut that runs down through the band
+  const ck = clamp((lt - 3.9) / .25); if (ck > 0 && lt < 4.4) { const n = Math.max(2, Math.round(crack.length * ck)); mx.fillStyle = '#fff'; mx.fill(curveP(crack.slice(0, n), 9, 3)); }
+  mx.restore();
+  // carved labels under the halves
+  const la = clamp((lt - 5.0) / .4);
+  if (la > 0) { const d = sp * (V ? 70 : 120), y = C1.cy + (V ? 210 : 230) * C1.s + 70;
+    panel(C1.cx - d - 70 * C1.s, y, V ? 46 : 44, '북이스라엘'); panel(C1.cx + d * 1.1 + 245 * C1.s, y + 20, V ? 46 : 44, '남유다');
+    carveText('북이스라엘', C1.cx - d - 70 * C1.s, y, V ? 46 : 44, la); carveText('남유다', C1.cx + d * 1.1 + 245 * C1.s, y + 20, V ? 46 : 44, la); }
+  // carved chapter label (first ~5 s)
+  const ca = 1 - clamp((lt - 5.6) / .2);
+  if (lt > .5 && ca > 0) { const lx = V ? 60 : 50, ly = V ? 90 : 70, lk = clamp((lt - .5) / .6);
+    mx.fillStyle = '#000'; mx.fillRect(lx - 20, ly - 50, V ? 640 : 700, 110);
+    carveText('08  ·  분열 왕국 · 포로', lx, ly, 34, lk * ca, 'left', 900); carveText('BC 930 – 586  ·  열왕기상 12장 – 열왕기하 25장', lx, ly + 44, 22, lk * ca, 'left', 600); }
+}
+function panel(x, y, size, s) { mx.save(); mx.font = `900 ${size}px 'Noto Serif KR'`; mx.letterSpacing = (size * .08) + 'px'; const w = mx.measureText(s).width; mx.fillStyle = '#000'; mx.fillRect(x - w / 2 - 30, y - size * 1.25, w + 60, size * 1.75); mx.restore(); }
+function carveText(s, x, y, size, a, align = 'center', weight = 900) {
+  if (a <= 0) return; mx.save(); mx.font = `${weight} ${size}px 'Noto Serif KR'`; mx.textAlign = align; mx.letterSpacing = (size * .08) + 'px';
+  const w = mx.measureText(s).width, x0 = align === 'left' ? x : x - w / 2; const c = new Path2D(); c.rect(x0 - 10, y - size * 1.2, (w + 20) * a, size * 1.6); mx.clip(c);
+  mx.fillStyle = '#fff'; mx.fillText(s, x, y); mx.restore();
+}
+
+// ---------- plate 2: Jerusalem goes dark ----------
+const J = V ? { hx: PW * .5, top: PH * .58, wl: PW * .08, wr: PW * .92 } : { hx: PW * .5, top: PH * .6, wl: PW * .26, wr: PW * .74 };
+function hillTop(x) { return J.top + 40 + Math.pow(Math.abs(x - J.hx) / (PW * .55), 1.6) * PH * .35; }
+function plate2(lt) {
+  const key = 'p2';
+  if (!cache[key]) {
+    const list = [], sky = [], r = rng(5);
+    // sky: wide sweeps near the horizon, thin up high
+    hatch(sky, (x, y) => y < hillTop(x) - 4, { box: [0, 0, PW, J.top + 200], ang: -.03, sp: 12, len: [60, 200], w: (x, y) => 1 + 13 * Math.pow(y / J.top, 2.2), key: (x, y) => .05 + (J.top - y) / J.top * .5 + Math.random() * 0, seed: 6, dur: .1 });
+    sky.forEach(s => s.sky = true);
+    // hill: fall-line cuts, lit from the upper left
+    const hill = new Path2D(); hill.moveTo(0, PH); for (let x = 0; x <= PW; x += 10) hill.lineTo(x, hillTop(x)); hill.lineTo(PW, PH); hill.closePath();
+    for (let i = 0; i < 900; i++) { const x = r() * PW, y = hillTop(x) + 30 + r() * (PH - hillTop(x)), sl = (hillTop(x + 5) - hillTop(x - 5)) / 10, a = Math.atan(sl) + 1.2 * Math.sign(x - J.hx || 1) * 0 + (x < J.hx ? .5 : -.5) + Math.PI / 2 * 0;
+      const lit = x < J.hx ? .9 : .35, w = (1.2 + 5 * lit * (1 - (y - J.top) / PH)) * (.6 + r() * .6); if (w < 1.2) continue;
+      const L = 30 + r() * 60, ang = x < J.hx ? .55 : Math.PI - .55; list.push(seg(x, y, x + Math.cos(ang) * L, y + Math.sin(ang) * L, w, .3 + (y - J.top) / PH * .8 + r() * .2, .12)); }
+    list.push(...sky); list.sort((a, b) => a.t0 - b.t0); cache[key] = list; cache.hill = hill;
+  }
+  mx.fillStyle = '#000'; mx.fillRect(0, 0, PW, PH);
+  // the light goes out: sky cuts are inked back in from the top as the smoke rises
+  const dark = ss(1.8, 5.2, lt);
+  mx.fillStyle = '#fff';
+  for (const s of cache[key]) { if (s.t0 > lt) continue; if (s.sky && dark > 0) { const yy = s.seg[1]; if (yy < J.top * dark * 1.15 - 40) continue; }
+    const k = clamp((lt - s.t0) / s.dur); if (k >= 1) mx.fill(s.p); else { const [x0, y0, x1, y1, w] = s.seg; mx.fill(cutP(x0, y0, lerp(x0, x1, k), lerp(y0, y1, k), w)); } }
+  // smoke behind the city: billowing columns (uncut wood) rising into the carved sky; a few curling cuts on their lit side
+  const sm = ss(.8, 5.2, lt), tq = Math.floor(lt * 12) / 12;
+  if (sm > 0) { const bil = [];
+    [[-.2, 1], [.05, 1.3], [.24, .85]].forEach(([fx, hk], i) => { const rr = rng(50 + i), bx = J.hx + fx * (J.wr - J.wl) * 1.4, by = J.top - 10, n = 16;
+      for (let k = 0; k < n; k++) { const u = k / n; if (u > sm * hk) break; const y = by - u * (J.top + 60) * hk, c = bx + Math.sin(u * 3 + i + tq * .5) * 18 * u + u * u * 160 + (rr() - .5) * 30, rad = (26 + u * 90 * hk) * (.8 + rr() * .4) * (1 + .05 * Math.sin(tq * 2 + k));
+        bil.push([c, y, rad]); } });
+    bil.forEach(([c, y, rad]) => { const p = new Path2D(); p.arc(c, y, rad, 0, 6.28); halo(mx, p, 7); });
+    bil.forEach(([c, y, rad]) => { const p = new Path2D(); p.arc(c, y, rad, 0, 6.28); blk(mx, p); });
+    mx.fillStyle = '#fff'; bil.forEach(([c, y, rad], k) => { if (k % 2) return; const a0 = 2.3, pts = []; for (let q = 0; q <= 6; q++) { const a = a0 + q * .22; pts.push([c + Math.cos(a) * rad * .78, y + Math.sin(a) * rad * .78]); } mx.fill(curveP(pts, 4, 1)); }); }
+  // the hill and the city
+  mx.save(); halo(mx, cache.hill, 8); blk(mx, cache.hill); mx.restore();
+  drawStrokes(mx, cache[key].filter(s => !s.sky), lt);
+  city(mx, lt, dark);
+}
+function city(m, lt, dark) {
+  const r = rng(12), base = J.top + 50, wl = J.wl, wr = J.wr, wh = V ? 90 : 96;
+  const parts = [];
+  // wall with crenellations
+  const wall = new Path2D(); wall.moveTo(wl, base + 40); wall.lineTo(wl, base - wh); for (let x = wl; x < wr; x += 36) { wall.lineTo(x, base - wh - 18); wall.lineTo(x + 18, base - wh - 18); wall.lineTo(x + 18, base - wh); wall.lineTo(x + 36, base - wh); } wall.lineTo(wr, base + 40); wall.closePath(); parts.push(wall);
+  const towers = V ? [.1, .35, .65, .9] : [.08, .3, .7, .92];
+  towers.forEach(f => { const x = wl + (wr - wl) * f, tw = 70, th = wh + 90; const p = new Path2D(); p.rect(x - tw / 2, base - th, tw, th + 40); for (let k = 0; k < 3; k++) p.rect(x - tw / 2 + k * 26, base - th - 20, 18, 22); parts.push(p); });
+  // the temple on the summit: a tall block, a portico of columns
+  const tx = J.hx, tb = base - wh - 10, tw = V ? 260 : 290, th = V ? 190 : 200;
+  const temple = new Path2D(); temple.rect(tx - tw / 2, tb - th * .72, tw, th * .72 + 20); temple.rect(tx - tw * .3, tb - th, tw * .6, th + 20); temple.rect(tx - tw * .34, tb - th - 16, tw * .68, 18); parts.push(temple);
+  const houses = []; for (let i = 0; i < 14; i++) { const x = wl + 40 + r() * (wr - wl - 80); if (Math.abs(x - tx) < tw / 2 + 30) continue; const w = 50 + r() * 40, h = 40 + r() * 50; const p = new Path2D(); p.rect(x - w / 2, base - wh - h + 6, w, h); parts.push(p); houses.push([x, w, h]); }
+  parts.forEach(p => halo(m, p, 7)); parts.forEach(p => blk(m, p));
+  // lit faces: brick courses and window cuts on the left-lit planes; they go back to black as the light fails
+  const lit = 1 - dark * .85; if (lit < .05) return;
+  m.save(); m.globalAlpha = 1; m.fillStyle = '#fff'; const rr = rng(3);
+  m.save(); m.clip(wall); for (let y = base - wh + 10; y < base + 30; y += 16) for (let x = wl + ((y / 16 | 0) % 2) * 24; x < wr; x += 48) if (rr() < lit) m.fill(cutP(x, y, x + 34 + rr() * 6, y, 2.5 + 3 * (1 - (y - base + wh) / (wh + 40)))); m.restore();
+  m.save(); m.clip(temple);
+  for (let k = 0; k < 8; k++) { const y = tb - th * .7 + 10 + k * 18; if (rr() < lit + .1) { m.fill(cutP(tx - tw / 2 + 6, y, tx - tw * .3 - 6, y, 3 + 2 * lit)); m.fill(cutP(tx + tw * .3 + 6, y, tx + tw / 2 - 6, y, 2)); } }
+  for (let k = 0; k < 12; k++) { const y = tb - th + 30 + k * 16; if (rr() < lit + .2) m.fill(cutP(tx - tw * .28, y, tx - tw * .12, y, 2.5 + 3 * lit)); }
+  m.restore();
+  // the two bronze pillars of the porch and the doorway: they stay carved longest, then go dark too
+  [-1, 1].forEach(sd => { const px = tx + sd * tw * .2; const pp = new Path2D(); pp.rect(px - 11, tb - th + 26, 22, th - 20); halo(m, pp, 6); blk(m, pp); if (lit > .2) m.fill(cutP(px - 6, tb - th + 34, px - 6, tb, 5)); const cp = new Path2D(); cp.ellipse(px, tb - th + 24, 20, 12, 0, 0, 6.28); halo(m, cp, 5); blk(m, cp); });
+  if (lit > .1) { m.fillRect(tx - 22, tb - th * .55, 4, th * .55); m.fillRect(tx + 18, tb - th * .55, 4, th * .55); m.fillRect(tx - 22, tb - th * .55, 44, 4); }
+  for (let k = 0; k < 3; k++) m.fill(cutP(tx - tw * .34 + k * 10, tb + 6 + k * 9, tx + tw * .34 - k * 10, tb + 6 + k * 9, 3 * Math.max(lit, .3)));
+  towers.forEach(f => { const x = wl + (wr - wl) * f; if (rr() < lit) { m.fill(cutP(x - 10, base - wh - 40, x - 10, base - wh - 6, 8)); } m.fill(cutP(x - 30, base - wh - 60, x - 30, base + 20, 3 * lit)); });
+  houses.forEach(([x, w, h]) => { if (rr() < lit) m.fill(cutP(x - w / 2 + 6, base - wh - h + 14, x - w / 2 + 6, base - wh + 4, 3)); if (rr() < lit * .7) { m.fillRect(x - 5, base - wh - h + 18, 10, 12); } });
+  m.restore();
+}
+
+// ---------- figures ----------
+function walker(m, x, y, h, ph, o = {}) {   // a captive walking right, head bowed, hooded; drawn black with a knife halo
+  const s = h / 200, step = Math.sin(ph), parts = [];
+  const lean = o.old ? .14 : .08;
+  const body = new Path2D(); body.moveTo(x - 30 * s, y - 40 * s); body.quadraticCurveTo(x - 40 * s, y - 120 * s, x - 18 * s + lean * 60 * s, y - 165 * s);
+  body.quadraticCurveTo(x + 10 * s + lean * 80 * s, y - 180 * s, x + 26 * s + lean * 60 * s, y - 150 * s); body.quadraticCurveTo(x + 30 * s, y - 100 * s, x + 32 * s, y - 40 * s); body.closePath(); parts.push(body);
+  const head = new Path2D(); head.ellipse(x + 18 * s + lean * 100 * s, y - 170 * s, 19 * s, 22 * s, .5, 0, 6.28); parts.push(head);
+  const hood = new Path2D(); hood.moveTo(x - 10 * s + lean * 80 * s, y - 188 * s); hood.quadraticCurveTo(x + 20 * s + lean * 90 * s, y - 206 * s, x + 36 * s + lean * 100 * s, y - 176 * s); hood.lineTo(x + 6 * s + lean * 60 * s, y - 140 * s); hood.closePath(); parts.push(hood);
+  const legs = new Path2D(); legs.moveTo(x - 8 * s, y - 44 * s); legs.lineTo(x - 8 * s + step * 22 * s, y); legs.lineTo(x + 4 * s + step * 22 * s, y); legs.lineTo(x + 6 * s, y - 44 * s); legs.closePath();
+  legs.moveTo(x + 4 * s, y - 44 * s); legs.lineTo(x + 4 * s - step * 22 * s, y); legs.lineTo(x + 16 * s - step * 22 * s, y); legs.lineTo(x + 18 * s, y - 44 * s); legs.closePath(); parts.push(legs);
+  if (o.bundle) { const b = new Path2D(); b.ellipse(x - 30 * s, y - 140 * s, 30 * s, 38 * s, -.4, 0, 6.28); parts.push(b); }
+  if (o.staff) { const st = new Path2D(); st.rect(x + 40 * s + step * 6 * s, y - 150 * s, 6 * s, 150 * s); parts.push(st); }
+  if (o.child) { const cx = x + 60 * s, cs = s * .55, c = new Path2D(); c.moveTo(cx - 24 * cs, y - 10 * cs); c.quadraticCurveTo(cx - 30 * cs, y - 120 * cs, cx, y - 150 * cs); c.quadraticCurveTo(cx + 30 * cs, y - 120 * cs, cx + 24 * cs, y - 10 * cs); c.closePath(); c.ellipse(cx + 4 * cs, y - 175 * cs, 22 * cs, 24 * cs, 0, 0, 6.28);
+    c.moveTo(cx - 10 * cs, y - 20 * cs); c.lineTo(cx - 10 * cs - step * 16 * cs, y); c.lineTo(cx + 2 * cs - step * 16 * cs, y); c.lineTo(cx + 2 * cs, y - 20 * cs); c.closePath(); parts.push(c);
+    const arm = new Path2D(); arm.moveTo(x + 20 * s, y - 120 * s); arm.lineTo(cx - 8 * cs, y - 110 * cs); arm.lineTo(cx - 8 * cs, y - 100 * cs); arm.lineTo(x + 20 * s, y - 108 * s); arm.closePath(); parts.push(arm); }
+  parts.forEach(p => halo(m, p, Math.max(4, 7 * s))); parts.forEach(p => blk(m, p));
+  // grazing light on the back edge (lit from behind-left): a few cuts along the cloak
+  m.save(); m.clip(body); m.fillStyle = '#fff'; for (let k = 0; k < 5; k++) { const yy = y - (60 + k * 22) * s; m.fill(cutP(x - 34 * s + k * 1.5 * s, yy, x - 18 * s, yy - 14 * s, 3.5 * s)); } m.restore();
+}
+function mourner(m, x, y, h, dir, pose) {   // a seated captive on the bank: knees drawn up, arms round them; head bowed on the knees (0) or in the hands (1)
+  const s = h / 200; m.save(); m.translate(x, y); m.scale(dir * s, s); const parts = [];
+  const body = P2s(pose !== 0 ? 'M -70 0 C -80 -50 -76 -110 -50 -150 C -36 -168 -10 -170 6 -160 C 20 -140 30 -110 46 -90 L 84 -70 C 100 -62 104 -30 96 0 Z'
+                        : 'M -76 0 C -86 -60 -82 -110 -60 -140 C -44 -158 -14 -160 4 -140 C 20 -122 36 -104 58 -100 L 92 -94 C 108 -84 110 -40 100 0 Z');
+  parts.push(body);
+  const hd = new Path2D(); pose === 1 ? hd.ellipse(18, -176, 24, 27, .5, 0, 6.28) : pose === 2 ? hd.ellipse(30, -168, 24, 27, .9, 0, 6.28) : hd.ellipse(40, -146, 24, 27, 1.0, 0, 6.28); parts.push(hd);
+  const veil = P2s(pose === 2 ? 'M -34 -150 C -26 -192 4 -208 36 -194 C 50 -180 54 -166 50 -152 C 30 -164 4 -158 -10 -128 Z' : pose ? 'M -30 -150 C -24 -196 6 -214 34 -200 C 44 -186 46 -170 40 -160 C 20 -170 0 -160 -10 -130 Z' : 'M -40 -150 C -26 -186 20 -188 54 -164 C 62 -150 64 -138 60 -128 C 40 -146 10 -148 -10 -130 Z');
+  parts.push(veil);
+  if (pose === 1) { const hands = P2s('M 20 -150 C 36 -160 50 -150 52 -136 C 40 -128 26 -132 16 -140 Z M 46 -96 C 40 -120 32 -136 24 -148 L 34 -150 C 44 -136 54 -118 58 -98 Z'); parts.push(hands); }
+  parts.forEach(p => halo(m, p, 7)); parts.forEach(p => blk(m, p));
+  // carved light on the back (left) and along the shin; the face stays in shadow
+  m.save(); m.clip(body); m.fillStyle = '#fff';
+  for (let k = 0; k < 8; k++) { const yy = -18 - k * 17; m.fill(cutP(-80 + k * 2.5, yy, -54 + k * 3, yy - 12, 5 - k * .3)); }
+  for (let k = 0; k < 4; k++) m.fill(cutP(60 + k * 9, -88 + k * 4, 70 + k * 9, -20, 2.4));
+  m.restore();
+  m.save(); m.clip(veil); m.fillStyle = '#fff'; for (let k = 0; k < 4; k++) m.fill(cutP(-16 + k * 8, -150 - k * 10, 10 + k * 8, -176 - k * 6, 3)); m.restore();
+  m.restore();
+}
+const P2s = d => new Path2D(d);
+
+// ---------- plate 3: the line of captives ----------
+const HZ3 = V ? PH * .55 : PH * .5;
+function roadPt(k) {        // k 0 (foreground, left) → 1 (horizon, right)
+  return V ? [lerp(PW * .16, PW * .78, Math.pow(k, .8)), lerp(PH * .95, HZ3, Math.pow(k, .55))] : [lerp(PW * .06, PW * .86, Math.pow(k, .75)), lerp(PH * .95, HZ3, Math.pow(k, .5))];
+}
+function plate3(lt) {
+  const key = 'p3';
+  if (!cache[key]) {
+    const list = [];
+    // sky carved almost white near the horizon so the walkers stand black against it; grey high up
+    hatch(list, (x, y) => y < HZ3, { box: [0, 0, PW, HZ3 + 2], ang: 0, sp: 11, len: [80, 260], gap: 4, w: (x, y) => 1.5 + 12 * Math.pow(y / HZ3, 1.6), key: (x, y) => .1 + (HZ3 - y) / HZ3 * .9, seed: 8, dur: .12 });
+    // the road: a band of wide cuts narrowing to the horizon
+    for (let i = 0; i < 160; i++) { const k = i / 160, [x, y] = roadPt(k), [x2, y2] = roadPt(k + 1 / 160), wd = lerp(V ? 260 : 300, 6, Math.pow(k, .6));
+      for (let j = -3; j <= 3; j++) list.push(seg(x + j * wd / 7 - 20, y + j * 2, x2 + j * wd / 7 + 20, y2 + j * 2, lerp(10, 1.5, k), .3 + k * .9, .1)); }
+    // ground: sparse cuts (dark field)
+    hatch(list, (x, y) => y > HZ3 + 6, { box: [0, HZ3, PW, PH], ang: 0, sp: 18, len: [20, 70], gap: 30, w: (x, y, r) => r() < .5 ? 2 + 3 * (y - HZ3) / (PH - HZ3) : 0, key: (x, y) => .6 + (y - HZ3) / PH, seed: 9 });
+    list.sort((a, b) => a.t0 - b.t0); cache[key] = list;
+  }
+  mx.fillStyle = '#000'; mx.fillRect(0, 0, PW, PH); drawStrokes(mx, cache[key], lt);
+  // far city of the exiles' journey: Babylon's tower on the right horizon
+  zig(mx, V ? PW * .82 : PW * .9, HZ3 + 4, V ? 70 : 90);
+  // the walkers: stepped on twos, moving along the road away from us
+  const tq = Math.floor(lt * 12) / 12, N = V ? 9 : 13, opts = [{ bundle: 1 }, { child: 1 }, { old: 1, staff: 1 }, {}, { bundle: 1 }, {}, { staff: 1 }, { child: 1 }, {}, { bundle: 1 }, {}, {}, {}];
+  for (let i = N - 1; i >= 0; i--) { const k = clamp(((i / N) * .92 + tq * .012) % 1), [x, y] = roadPt(k), h = lerp(V ? 430 : 360, 18, Math.pow(k, .45));
+    const app = clamp((lt - .6 - i * .08) / .4); if (app <= 0) continue; walker(mx, x + (i % 2 ? -h * .12 : h * .1), y, h, tq * 5.5 + i * 1.7, opts[i % opts.length]); }
+}
+function zig(m, x, y, s) {
+  const p = new Path2D(); for (let k = 0; k < 5; k++) { const w = (5 - k) * s * .44, hh = s * .28; p.rect(x - w, y - (k + 1) * hh, w * 2, hh + 1); }
+  halo(m, p, 4); blk(m, p);
+}
+
+// ---------- plate 4: by the rivers of Babylon ----------
+const R4 = V ? { bank: PH * .74, hz: PH * .66, tx: PW * .2 } : { bank: PH * .7, hz: PH * .62, tx: PW * .2 };
+function plate4(lt, t) {
+  const key = 'p4';
+  if (!cache[key]) {
+    const list = [];
+    hatch(list, (x, y) => y < R4.hz, { box: [0, 0, PW, R4.hz + 2], ang: -.02, sp: 12, len: [70, 220], gap: 5, w: (x, y) => 1.2 + 9 * Math.pow(y / R4.hz, 1.8), key: (x, y) => .2 + (R4.hz - y) / R4.hz * 1.2 + x / PW * .3, seed: 14, dur: .14 });
+    // far bank between horizon and river: a dark strip with a few cuts
+    hatch(list, (x, y) => y > R4.hz + 4 && y < R4.bank - 30, { box: [0, R4.hz, PW, R4.bank], ang: 0, sp: 10, len: [20, 60], gap: 20, w: () => 2, key: () => .9, seed: 15 });
+    // near bank (foreground) under the river? the river is the lower band; the mourners sit on the near bank strip at the bottom
+    list.sort((a, b) => a.t0 - b.t0); cache[key] = list;
+  }
+  mx.fillStyle = '#000'; mx.fillRect(0, 0, PW, PH); drawStrokes(mx, cache[key], lt);
+  zig(mx, V ? PW * .78 : PW * .82, R4.hz + 6, V ? 80 : 110);
+  // the river: horizontal wave cuts, wide where they mirror the sky; re-cut on twos (the water's own boil)
+  const tq = Math.floor(lt * 12), r = rng(1000 + tq % 4), rv = clamp((lt - .5) / 1.4), y0 = R4.bank - 26, y1 = V ? PH * .9 : PH * .86;
+  mx.fillStyle = '#fff';
+  for (let y = y0; y < y1; y += 15) { const k = (y - y0) / (y1 - y0); let x = -r() * 80; while (x < PW * rv) { const len = 30 + r() * 90 * (1 - k * .4), w = (9 - k * 6) * (.6 + r() * .6), wy = Math.sin(x * .03 + y * .2 + tq * .5) * 4; if (w > .8) mx.fill(curveP([[x, y + wy], [x + len * .5, y + wy - 3], [x + len, y + wy]], w, 1)); x += len + 14 + r() * 40 * (1 + k * 2); } }
+  // the gold path of the star on the water (colour plate, printed later on these cuts)
+  // near bank: black with grass cuts
+  const nb = new Path2D(); nb.moveTo(0, PH); nb.lineTo(0, y1 - 10); for (let x = 0; x <= PW; x += 20) nb.lineTo(x, y1 - 6 + Math.sin(x * .02) * 6); nb.lineTo(PW, PH); nb.closePath(); halo(mx, nb, 6); blk(mx, nb);
+  const rg = rng(17); mx.fillStyle = '#fff'; for (let i = 0; i < 120; i++) { const x = rg() * PW, y = y1 + 10 + rg() * (PH - y1 - 10); mx.fill(cutP(x, y, x + (rg() - .5) * 8, y - 14 - rg() * 16, 2.5)); }
+  // the willow: trunk on the left, a heavy crown of hanging strands
+  willow(mx, lt, t);
+  // the mourners on the bank
+  const mb = y1 + (V ? 4 : 0);
+  if (V) { mourner(mx, PW * .62, mb + 70, 250, -1, 2); mourner(mx, PW * .86, mb + 90, 220, -1, 1); }
+  else { mourner(mx, PW * .48, mb + 30, 240, -1, 2); mourner(mx, PW * .62, mb + 54, 260, -1, 1); mourner(mx, PW * .76, mb + 20, 200, -1, 2); }
+}
+const HARPS = V ? [[.40, .5], [.62, .46], [.24, .56]] : [[.27, .5], [.38, .44], [.15, .56]];
+function willow(m, lt, t) {
+  const r = rng(21), tx = R4.tx, base = V ? PH * .9 : PH * .87, top = V ? PH * .16 : PH * .12, reach = V ? PW * .5 : PW * .24;
+  const tq = Math.floor(lt * 12) / 12, ty = top + (V ? 240 : 200);
+  const trunk = new Path2D(); trunk.moveTo(tx - 60, base); trunk.quadraticCurveTo(tx - 22, (base + ty) * .55, tx - 30, ty); trunk.lineTo(tx + 24, ty - 6); trunk.quadraticCurveTo(tx + 30, (base + ty) * .55, tx + 64, base); trunk.closePath();
+  halo(m, trunk, 8); blk(m, trunk);
+  // a weeping crown: branches spring up from the trunk, arch over and pour down; strands hang from every arch
+  const arches = [];
+  for (let i = 0; i < 30; i++) { const side = i % 4 === 0 ? -1 : 1, dx = side * reach * (.25 + r() * .85), peak = top + r() * 70, fall = base - (V ? 260 : 170) - r() * (V ? 300 : 200);
+    const pts = []; for (let k = 0; k <= 24; k++) { const u = k / 24, x = tx + dx * Math.sin(u * Math.PI / 2 * 1.1), y = u < .45 ? lerp(ty, peak, Math.sin(u / .45 * Math.PI / 2)) : lerp(peak, fall, Math.pow((u - .45) / .55, 1.6)); pts.push([x + Math.sin(tq * 1.1 + i) * 4 * u * u, y]); }
+    arches.push(pts); }
+  const strands = [];
+  arches.forEach((pts, i) => { for (let k = 7; k < pts.length; k += 1) { if (r() < .35) continue; const [x, y] = pts[k], L = 60 + r() * (V ? 300 : 230) * (1 - k / 36), sw = Math.sin(tq * 1.2 + k * .5 + i) * 5;
+    strands.push(curveP([[x, y], [x + sw * .3 + 1, y + L * .4], [x + sw * .7 + 2, y + L * .75], [x + sw + 2, y + L]], 3.4, .8)); } });
+  const archP = arches.map(p => curveP(p, 10, 2.5));
+  [...archP, ...strands].forEach(p => halo(m, p, 5)); [...archP, ...strands].forEach(p => blk(m, p));
+  // light on the crown: short cuts along the tops of the arches
+  m.fillStyle = '#fff'; arches.forEach(pts => { for (let k = 4; k < 14; k += 3) { const [x, y] = pts[k], [x2, y2] = pts[k + 1]; m.fill(cutP(x, y - 3, x2, y2 - 3, 2.6)); } });
+  m.save(); m.clip(trunk); m.fillStyle = '#fff'; for (let i = 0; i < 18; i++) { const y = ty + 20 + i * (base - ty - 20) / 18, x = tx - 46 + Math.sin(i) * 6; m.fill(cutP(x, y, x + 6 + r() * 10, y + 30 + r() * 20, 3 + r() * 2)); } m.restore();
+  // the harps hung on the willows (Ps 137:2): lyres on cords, gently swinging
+  HARPS.forEach(([fx, fy], i) => { const hx = PW * fx, hy = PH * fy, sw = Math.sin(tq * 1.3 + i * 2) * .07, app = clamp((lt - (6.5 + i * .5)) / .8); if (app <= 0) return;
+    m.save(); m.translate(hx, top + 90 + (i % 2) * 30); m.rotate(sw); const hs = V ? 1.25 : 1.1, cord = hy - (top + 90), L = cord;
+    { const rc = new Path2D(); rc.rect(-200, -60, 400, 60 + (L + 140 * hs) * eo(app)); m.clip(rc); }
+    const body = new Path2D(); body.moveTo(-24 * hs, L + 96 * hs); body.quadraticCurveTo(-34 * hs, L + 130 * hs, 0, L + 132 * hs); body.quadraticCurveTo(34 * hs, L + 130 * hs, 24 * hs, L + 96 * hs); body.closePath();
+    const arms = new Path2D(); arms.moveTo(-22 * hs, L + 100 * hs); arms.bezierCurveTo(-56 * hs, L + 60 * hs, -50 * hs, L + 20 * hs, -36 * hs, L + 4 * hs); arms.moveTo(22 * hs, L + 100 * hs); arms.bezierCurveTo(56 * hs, L + 60 * hs, 50 * hs, L + 20 * hs, 36 * hs, L + 4 * hs);
+    arms.moveTo(-42 * hs, L + 8 * hs); arms.lineTo(42 * hs, L + 8 * hs);
+    m.lineCap = 'round'; m.lineJoin = 'round';
+    m.strokeStyle = '#fff'; m.lineWidth = 3; m.beginPath(); m.moveTo(0, -10); m.lineTo(-20 * hs, L + 6 * hs); m.moveTo(0, -10); m.lineTo(20 * hs, L + 6 * hs); m.stroke();
+    m.lineWidth = 17 * hs; m.stroke(arms); halo(m, body, 7 * hs);
+    m.strokeStyle = '#000'; m.lineWidth = 9 * hs; m.stroke(arms); blk(m, body);
+    m.strokeStyle = '#fff'; m.lineWidth = 2.2; for (let k = -2; k <= 2; k++) { m.beginPath(); m.moveTo(k * 11 * hs, L + 13 * hs); m.lineTo(k * 6 * hs, L + 98 * hs); m.stroke(); }
+    m.fillStyle = '#fff'; m.fill(cutP(-16 * hs, L + 110 * hs, 6 * hs, L + 124 * hs, 4 * hs)); m.fill(cutP(-38 * hs, L + 30 * hs, -42 * hs, L + 70 * hs, 3 * hs));
+    m.restore(); });
+}
+// the gold colour plate: a star low in the west and its path on the river (only on carved white)
+function goldPlate(c, lt) {
+  const a = ss(8.2, 10.5, lt); if (a <= 0) return;
+  const sx = V ? PW * .78 : PW * .9, sy = V ? PH * .3 : PH * .26, y0 = R4.bank - 26, y1 = V ? PH * .9 : PH * .86;
+  c.save(); c.globalAlpha = a;
+  // the star: carved white (in the mask) then gold on it
+  c.fillStyle = '#D9A441';
+  const st = new Path2D(); for (let k = 0; k < 16; k++) { const ang = k * Math.PI / 8 - Math.PI / 2, rr = k % 2 ? 6 : (k % 4 ? 18 : 34); k ? st.lineTo(sx + Math.cos(ang) * rr, sy + Math.sin(ang) * rr) : st.moveTo(sx + Math.cos(ang) * rr, sy + Math.sin(ang) * rr); } st.closePath(); c.fill(st);
+  // its glittering path on the water
+  const sp = ss(9.4, 12.5, lt), r = rng(77 + Math.floor(lt * 12) % 3);
+  for (let y = y0; y < lerp(y0, y1, sp); y += 13) { const k = (y - y0) / (y1 - y0), wv = 16 + k * (V ? 70 : 110); for (let j = 0; j < 3; j++) { const x = sx + (r() - .5) * wv * 2, len = 14 + r() * 50 * (1 - k * .3); c.fill(cutP(x, y + 1, x + len, y + 1, 5 - k * 2.5)); } }
+  c.restore();
+}
+function starCut(lt) {   // the star cut into the block before the gold is printed on it
+  const a = ss(7.8, 8.6, lt); if (a <= 0) return; const sx = V ? PW * .78 : PW * .9, sy = V ? PH * .3 : PH * .26;
+  mx.save(); mx.globalAlpha = a; const p = new Path2D(); p.arc(sx, sy, 46 * a, 0, 6.28); mx.fillStyle = '#000'; mx.fill(p);
+  mx.fillStyle = '#fff'; for (let k = 0; k < 16; k++) { const ang = k * Math.PI / 8 - Math.PI / 2, rr = k % 4 ? 22 : 40; mx.fill(cutP(sx, sy, sx + Math.cos(ang) * rr, sy + Math.sin(ang) * rr, k % 4 ? 5 : 8)); } mx.restore();
+  // the gold path needs carved white under it: a column of short cuts on the river below the star
+  const sp = ss(9.4, 12.5, lt), y0 = R4.bank - 26, y1 = V ? PH * .9 : PH * .86, r = rng(77 + Math.floor(lt * 12) % 3); if (sp <= 0) return;
+  mx.fillStyle = '#fff'; for (let y = y0; y < lerp(y0, y1, sp); y += 13) { const k = (y - y0) / (y1 - y0), wv = 16 + k * (V ? 70 : 110); for (let j = 0; j < 3; j++) { const x = sx + (r() - .5) * wv * 2, len = 14 + r() * 50 * (1 - k * .3); mx.fill(cutP(x, y + 1, x + len, y + 1, 7 - k * 3)); } }
+}
+
+// ---------- printing ----------
+function caption(ctx, lines, cite, a) {
+  if (a <= 0) return; const size = V ? 46 : 42, lh = size * 1.5, y0 = V ? PL.y + PL.h + 110 : PL.y + PL.h + 72;
+  ctx.save(); ctx.globalAlpha = a; ctx.fillStyle = INK; ctx.textAlign = 'center'; ctx.font = `600 ${size}px 'Noto Serif KR'`; ctx.letterSpacing = '1px';
+  lines.forEach((s, i) => ctx.fillText(s, W / 2, y0 + i * lh));
+  if (cite) { ctx.font = `400 ${V ? 24 : 22}px 'Noto Sans KR'`; ctx.letterSpacing = '2px'; ctx.fillStyle = '#4a4036'; ctx.fillText(cite, W / 2, y0 + (lines.length - 1) * lh + (V ? 62 : 52)); }
+  ctx.restore();
+}
+function draw(ctx, t) {
+  ctx.drawImage(paper, 0, 0);
+  const pi = t < CUTS[1] ? 0 : t < CUTS[2] ? 1 : t < CUTS[3] ? 2 : 3, lt = t - CUTS[pi];
+  if (pi === 0) plate1(lt); else if (pi === 1) plate2(lt); else if (pi === 2) plate3(lt); else { plate4(lt, t); starCut(lt); }
+  // camera: a slow push per plate inside the fixed margin; a hard cut is a new impression (two frames of misregistration)
+  const push = [1.0, 1.03, 1.02, 1.0][pi] + [.04, .04, .03, .05][pi] * eio(clamp(lt / (CUTS[pi + 1] - CUTS[pi]))), fxp = [C1.cx, J.hx, PW * .4, PW * .45][pi], fyp = [C1.cy, J.top, HZ3, R4.hz][pi];
+  const mis = lt < 2 / 30 && pi > 0 ? [5, -3] : lt < 4 / 30 && pi > 0 ? [-2, 2] : [0, 0];
+  ctx.save(); ctx.clip(edge);
+  ctx.translate(PL.x + fxp + mis[0], PL.y + fyp + mis[1]); ctx.scale(push, push); ctx.translate(-fxp, -fyp);
+  ctx.globalCompositeOperation = 'multiply'; ctx.drawImage(M, 0, 0);
+  if (pi === 3) goldPlate(ctx, lt);
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.globalCompositeOperation = 'lighten'; ctx.drawImage(inkTex, PL.x, PL.y);
+  ctx.restore(); ctx.globalCompositeOperation = 'source-over';
+  // paper tooth over everything (ink sits in the fibres)
+  ctx.globalCompositeOperation = 'multiply'; ctx.globalAlpha = .18; ctx.drawImage(paper, 0, 0); ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
+  // captions: letterpress in the margin; ink comes up fast and fades fast
+  const cw = (a, b) => win(t, a, b, .15, .3);
+  caption(ctx, ['이스라엘이 다윗의 집을 배반하여 오늘까지 이르렀더라'].flatMap(s => V ? ['이스라엘이 다윗의 집을 배반하여', '오늘까지 이르렀더라'] : [s]), '열왕기상 12:19 (개역개정)', cw(4.6, 8.45));
+  caption(ctx, V ? ['성전이 불타고,', '백성은 바벨론으로 끌려갑니다.'] : ['성전이 불타고, 백성은 바벨론으로 끌려갑니다.'], 'BC 586  ·  예루살렘', cw(9.8, 14.25));
+  caption(ctx, V ? ['우리가 바벨론의 여러 강변 거기에 앉아서', '시온을 기억하며 울었도다'] : ['우리가 바벨론의 여러 강변 거기에 앉아서 시온을 기억하며 울었도다'], '시편 137:1 (개역개정)', cw(21.8, 27.3));
+  caption(ctx, ['그 중의 버드나무에 우리가 우리의 수금을 걸었나니'].flatMap(s => V ? ['그 중의 버드나무에', '우리가 우리의 수금을 걸었나니'] : [s]), '시편 137:2 (개역개정)', cw(27.5, 31.3));
+  caption(ctx, V ? ['가장 어두운 포로의 땅까지 함께 가시며,', '회복을 약속하셨습니다.'] : ['가장 어두운 포로의 땅까지 함께 가시며, 회복을 약속하셨습니다.'], null, cw(31.6, DUR - .5));
+  const f = 1 - ss(0, 1.2, t) + ss(DUR - 1.2, DUR, t); if (f > 0) { ctx.fillStyle = `rgba(10,8,6,${clamp(f)})`; ctx.fillRect(0, 0, W, H); }
+}
+
+Pilot.run({ W, H, dur: DUR, audio: 'exile.m4a', fonts: ["600 40px 'Noto Serif KR'", "900 40px 'Noto Serif KR'", "400 20px 'Noto Sans KR'"],
+  init: async () => {
+    M = canvas(PW, PH); mx = M.getContext('2d'); hit = canvas(8, 8).getContext('2d');
+    // laid paper: warm white, fibres, faint chain lines
+    paper = canvas(W, H); { const x = paper.getContext('2d'); x.fillStyle = PAPER; x.fillRect(0, 0, W, H);
+      x.globalCompositeOperation = 'multiply'; x.globalAlpha = .12; x.drawImage(speckle(W, H, 26, 5, .8), 0, 0); x.globalAlpha = 1; x.globalCompositeOperation = 'source-over';
+      const r = rng(6); x.strokeStyle = 'rgba(150,130,100,.10)'; x.lineWidth = 1; for (let y = 0; y < H; y += 4) { x.beginPath(); x.moveTo(0, y); x.lineTo(W, y + (r() - .5) * 2); x.stroke(); }
+      x.strokeStyle = 'rgba(150,130,100,.08)'; for (let px = 0; px < W; px += 90) { x.beginPath(); x.moveTo(px, 0); x.lineTo(px + 4, H); x.stroke(); }
+      x.strokeStyle = 'rgba(120,100,70,.25)'; for (let i = 0; i < 500; i++) { const px = r() * W, py = r() * H, a = r() * 6.28, l = 3 + r() * 8; x.beginPath(); x.moveTo(px, py); x.lineTo(px + Math.cos(a) * l, py + Math.sin(a) * l); x.stroke(); } }
+    // ink: near-black with wood-grain streaks and specks where the ink didn't take
+    inkTex = canvas(PW, PH); { const x = inkTex.getContext('2d'), d = x.createImageData(PW, PH), r = rng(8);
+      for (let y = 0; y < PH; y++) for (let px = 0; px < PW; px++) { const g = fbm(px * .004, y * .09, 3), streak = Math.pow(Math.abs(Math.sin(y * .35 + g * 9)), 18) * 22, n = (r() - .5) * 8, k = (y * PW + px) * 4, v = 23 + streak + n + (g - .5) * 10;
+        d.data[k] = v; d.data[k + 1] = v * .84; d.data[k + 2] = v * .65; d.data[k + 3] = 255; }
+      x.putImageData(d, 0, 0); x.fillStyle = '#cfc4aa'; for (let i = 0; i < 900; i++) { x.globalAlpha = .4 + r() * .5; x.beginPath(); x.arc(r() * PW, r() * PH, .5 + r() * 1.2, 0, 6.28); x.fill(); } x.globalAlpha = 1; }
+    // the block edge: ragged, never a clean rectangle
+    edge = new Path2D(); { const r = rng(3), j = () => (r() - .5) * 3, x0 = PL.x, y0 = PL.y, x1 = PL.x + PL.w, y1 = PL.y + PL.h;
+      edge.moveTo(x0, y0); for (let x = x0; x < x1; x += 12) edge.lineTo(x, y0 + j()); for (let y = y0; y < y1; y += 12) edge.lineTo(x1 + j(), y); for (let x = x1; x > x0; x -= 12) edge.lineTo(x, y1 + j()); for (let y = y1; y > y0; y -= 12) edge.lineTo(x0 + j(), y); edge.closePath(); }
+  },
+  draw });
+</script>
+</body>
+</html>

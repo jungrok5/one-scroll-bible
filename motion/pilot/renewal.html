@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>시안 · 회복</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600&family=Noto+Sans+KR:wght@400&display=swap">
+</head>
+<body>
+<script src="lib.js"></script>
+<script>
+/* 15 회복 — a watercolour handscroll that paints itself, one unbroken walk.
+   The dry world paints in first and stops at a river; beyond it is bare paper. A traveller walks through the desert,
+   kneels at the water; we lean in: a face, a tear, and the tear is wiped away (Rev 21:4).
+   Then the far bank paints itself in as he walks — grass, trees heavy with fruit, flowers, birds — and at the end of the
+   road a city of light paints in on the hill. No night: the sky only grows brighter (Rev 21:5). */
+const { clamp, lerp, ss, eo, eio, win, rng, noise, fbm, canvas, hex, mix, rgb, ramp, text } = Pilot;
+const W = Pilot.W, H = Pilot.H, V = Pilot.ori === 'v', DUR = 36;
+const K = V ? 1.12 : 1, HZ = V ? H * .53 : H * .6;              // world→screen scale, horizon on screen
+const Y0 = -HZ / K - 30, Y1 = (H - HZ) / K + 30;                 // world rows a layer must cover
+const RIVER = 2150, BANK = 2420, CITY = 4720, PATHY = 170;
+const INK = '#3b2c22', PAPER = '#f2e8d5';
+let paper, grain, layers = {}, objs = [], fig = {}, faceStrokes = [], faceFix = [];
+
+// ---------- watercolour stroke engine ----------
+let R = rng(1);
+const prof = { brush: u => Math.pow(Math.sin(Math.PI * clamp(u * .92 + .04)), .5), tip: u => Math.pow(1 - u, .7) * Math.min(1, u * 8 + .3), leaf: u => Math.sin(Math.PI * u), even: u => Math.min(1, u * 10 + .2, (1 - u) * 10 + .2), trunk: u => 1 - .65 * u };
+function mk(pts, w, col, o = {}) {           // a brush stroke: ribbon + bristle tracks, resampled along its length
+  if (pts.length === 2) pts = [pts[0], [(pts[0][0] + pts[1][0]) / 2, (pts[0][1] + pts[1][1]) / 2], pts[1]];
+  const L = [[pts[0][0], pts[0][1]]]; let acc = 0;
+  for (let i = 1; i < pts.length; i++) { const a = pts[i - 1], b = pts[i], d = Math.hypot(b[0] - a[0], b[1] - a[1]), n = Math.max(1, Math.ceil(d / 5)); for (let k = 1; k <= n; k++) L.push([lerp(a[0], b[0], k / n), lerp(a[1], b[1], k / n)]); acc += d; }
+  const s = R() * 100, pf = prof[o.prof || 'brush'], N = L.length;
+  const pt = L.map((p, i) => { const u = i / (N - 1), q = L[Math.min(N - 1, i + 1)], r = L[Math.max(0, i - 1)], dx = q[0] - r[0], dy = q[1] - r[1], m = Math.hypot(dx, dy) || 1;
+    return [p[0], p[1], -dy / m, dx / m, w * pf(u) * (1 + .44 * (noise(u * 5 + s, s) - .5))]; });
+  const nb = o.bristles == null ? 3 + (R() * 5 | 0) : o.bristles, br = [];
+  for (let i = 0; i < nb; i++) br.push({ off: (R() - .5) * .8, w: Math.max(.7, w * (.05 + R() * .08)), a: .3 + R() * .55, end: .55 + R() * .45, dash: [4 + R() * 26, 1 + R() * 9, 2 + R() * 14, 1 + R() * 6] });
+  const c = typeof col === 'string' ? hex(col) : col;
+  const xs = L.map(p => p[0]), ys = L.map(p => p[1]);
+  return { pt, br, c, a: o.a == null ? .55 : o.a, len: acc, bb: [Math.min(...xs) - w, Math.min(...ys) - w, Math.max(...xs) + w, Math.max(...ys) + w], x: xs[0] };
+}
+function drawS(ctx, S, prog = 1) {
+  const n = Math.max(2, Math.round(S.pt.length * clamp(prog))); if (prog <= 0) return;
+  const P = S.pt; ctx.beginPath();
+  for (let i = 0; i < n; i++) ctx.lineTo(P[i][0] + P[i][2] * P[i][4] / 2, P[i][1] + P[i][3] * P[i][4] / 2);
+  for (let i = n - 1; i >= 0; i--) ctx.lineTo(P[i][0] - P[i][2] * P[i][4] / 2, P[i][1] - P[i][3] * P[i][4] / 2);
+  ctx.closePath(); ctx.fillStyle = rgb(S.c, S.a); ctx.fill();
+  ctx.strokeStyle = rgb(S.c.map(v => v * .8), S.a * .3); ctx.lineWidth = .9; ctx.stroke();             // pooled edge
+  ctx.lineCap = 'round';
+  for (const b of S.br) { const m = Math.min(n, Math.round(P.length * b.end)); if (m < 2) continue; ctx.setLineDash(b.dash); ctx.beginPath();
+    for (let i = 0; i < m; i++) ctx.lineTo(P[i][0] + P[i][2] * P[i][4] * b.off, P[i][1] + P[i][3] * P[i][4] * b.off);
+    ctx.strokeStyle = rgb(S.c.map(v => v * .82), b.a * S.a * 1.1); ctx.lineWidth = b.w; ctx.stroke(); }
+  ctx.setLineDash([]);
+}
+function wash(pts, col, a, o = {}) {          // a flat wash painted in three jittered passes (edges pool darker)
+  const s = R() * 100, c = typeof col === 'string' ? hex(col) : col, j = o.j == null ? 7 : o.j;
+  const passes = [0, 1, 2].map(k => pts.map(([x, y], i) => [x + (noise(i * .7 + s + k * 9, k) - .5) * 2 * j, y + (noise(i * .7 + s + k * 9, k + 5) - .5) * 2 * j]));
+  const xs = pts.map(p => p[0]), ys = pts.map(p => p[1]);
+  return { wash: passes, c, a, bb: [Math.min(...xs) - j, Math.min(...ys) - j, Math.max(...xs) + j, Math.max(...ys) + j], x: Math.min(...xs) };
+}
+function drawW(ctx, Wv, prog = 1) {
+  if (prog <= 0) return; ctx.globalAlpha = clamp(prog * 1.5);
+  for (const p of Wv.wash) { ctx.beginPath(); p.forEach((q, i) => i ? ctx.lineTo(q[0], q[1]) : ctx.moveTo(q[0], q[1])); ctx.closePath(); ctx.fillStyle = rgb(Wv.c, Wv.a / 2.2); ctx.fill(); ctx.strokeStyle = rgb(Wv.c.map(v => v * .85), Wv.a * .22); ctx.lineWidth = 1.2; ctx.stroke(); }
+  ctx.globalAlpha = 1;
+}
+const draw1 = (ctx, s, p = 1) => s.wash ? drawW(ctx, s, p) : drawS(ctx, s, p);
+function drawList(ctx, list, prog = 1) { const n = list.length * clamp(prog); for (let i = 0; i < list.length; i++) { const k = clamp(n - i); if (k <= 0) break; draw1(ctx, list[i], k); } }
+const colAt = (keys, x) => ramp(keys, x);
+function smooth(pts, closed = true, seg = 6) {   // Catmull-Rom through control points
+  const n = pts.length, out = [], g = i => pts[closed ? (i + n) % n : clamp(i, 0, n - 1)];
+  for (let i = 0; i < (closed ? n : n - 1); i++) { const p0 = g(i - 1), p1 = g(i), p2 = g(i + 1), p3 = g(i + 2);
+    for (let k = 0; k < seg; k++) { const t = k / seg, t2 = t * t, t3 = t2 * t; out.push([0, 1].map(d => .5 * ((2 * p1[d]) + (-p0[d] + p2[d]) * t + (2 * p0[d] - 5 * p1[d] + 4 * p2[d] - p3[d]) * t2 + (-p0[d] + 3 * p1[d] - 3 * p2[d] + p3[d]) * t3))); } }
+  if (!closed) out.push(pts[n - 1]); return out; }
+
+// ---------- the world (x along the walk, y from the horizon, down positive) ----------
+const SKY = [[0, '#ecd6ad'], [1500, '#efdcb8'], [2300, '#e3e6dc'], [3200, '#e7efe2'], [4200, '#fbefcf'], [5600, '#fff3d2']];
+const GROUND = [[0, '#d6b07c'], [1400, '#d3ae7e'], [2050, '#c9b48a'], [2500, '#a7b47e'], [3100, '#8eac6a'], [3900, '#98b870'], [4500, '#c9c27c'], [5600, '#e2cf8a']];
+const FAR = [[0, '#d7a98f'], [1600, '#d4ab95'], [2400, '#a9b6b8'], [3400, '#9db5ad'], [4300, '#e4caa0'], [5600, '#ecd3a6']];
+const MID = [[0, '#c99a6e'], [1700, '#c5a07a'], [2400, '#94a77e'], [3400, '#7f9f6a'], [4300, '#bdb47c'], [5600, '#d8c486']];
+function band(list, x0, x1, y, h, keys, p, a, rr, dark = 1) {   // a row of overlapping soft washes, colour by place
+  let x = x0 - rr() * 300; while (x < x1) { const len = 420 + rr() * 700, c = colAt(keys, (x + len / 2) / p).map(v => v * dark), top = y + (rr() - .5) * h * .3, bot = y + h + (rr() - .5) * h * .3, n = 7, pts = [];
+    for (let i = 0; i <= n; i++) pts.push([x + len * i / n, top + (rr() - .5) * h * .25]); for (let i = n; i >= 0; i--) pts.push([x + len * i / n, bot + (rr() - .5) * h * .25]);
+    list.push(wash(pts, c, a * (.75 + rr() * .5), { j: 12 })); x += len * (.45 + rr() * .3); } }
+function buildLayers() {
+  const sky = [], far = [], mid = [], gnd = [];
+  R = rng(3); const rr = R;
+  // sky: broad soft washes, very light — the paper is the light
+  for (let y = Y0; y < 30; y += 120) band(sky, -300, 5800 * .15 + W, y, 170, SKY, .15, .22, rr);
+  for (let i = 0; i < 22; i++) { const x = rr() * (5800 * .15 + W), y = -460 + rr() * 330; sky.push(mk([[x, y], [x + 140 + rr() * 160, y - 6 + rr() * 12], [x + 300 + rr() * 200, y + rr() * 8]], 10 + rr() * 16, colAt(SKY, x / .15).map(v => v * .9), { a: .2, bristles: 5 })); }
+  // far hills: mesas in the desert, soft hills beyond the river, a golden hill at the end
+  for (let x = -300; x < 5800 * .35 + W; x += 120 + rr() * 80) { const wx = x / .35, desert = wx < 2100, w = 110 + rr() * 120, h = desert ? (fbm(x * .004, 2) > .55 ? 150 : 60 + 60 * fbm(x * .01, 3)) : 70 + 90 * fbm(x * .006, 5);
+    const top = -h - (wx > 4300 ? 40 * ss(4300, 4700, wx) : 0), c = colAt(FAR, wx), round = !desert;
+    const pts = round ? Array.from({ length: 9 }, (_, i) => [x - w + i / 8 * 2 * w, 20 + (top - 20) * Math.sin(i / 8 * Math.PI) * (.8 + rr() * .3)]) : [[x - w * .6, 20], [x - w * .45, top + (rr() - .5) * 14], [x + w * .45, top + (rr() - .5) * 14], [x + w * .6, 20]];
+    far.push(wash(pts, c, .34, { j: 7 })); }
+  band(far, -300, 5800 * .35 + W, -4, 34, [[0, PAPER], [9999, PAPER]], 1, .5, rr);                        // mist band
+  // mid: dunes → green hills
+  for (let x = -300; x < 5800 * .65 + W; x += 160 + rr() * 100) { const wx = x / .65, w = 160 + rr() * 140, h = 26 + 40 * fbm(x * .006, 7), c = colAt(MID, wx);
+    mid.push(wash(Array.from({ length: 9 }, (_, i) => [x - w + i / 8 * 2 * w, 60 - (h + 30) * Math.sin(i / 8 * Math.PI)]), c, .4, { j: 8 })); }
+  band(mid, -300, 5800 * .65 + W, 42, 30, [[0, PAPER], [9999, PAPER]], 1, .42, rr);
+  // ground: layered washes, darker toward the front, then dry-brush texture
+  for (let y = 26; y < Y1; y += 70) band(gnd, -300, 5900, y, 110, GROUND, 1, .26, rr, 1 - .14 * y / 800);
+  for (let i = 0; i < 520; i++) { const x = -200 + rr() * 6100, y = 40 + Math.pow(rr(), .9) * (Y1 - 40), l = 50 + rr() * 150 * (1 + y / 500);
+    gnd.push(mk([[x, y], [x + l / 2, y + (rr() - .5) * 4], [x + l, y + (rr() - .5) * 6]], 4 + rr() * 8 * (1 + y / 600), colAt(GROUND, x).map(v => v * (.86 + rr() * .1)), { a: .3, bristles: 4 })); }
+  // the path
+  for (let x = -300; x < 5900; x += 150 + rr() * 120) gnd.push(mk([[x, PATHY + 16 + (rr() - .5) * 6], [x + 120, PATHY + 12], [x + 260, PATHY + 16 + (rr() - .5) * 6]], 22, colAt(GROUND, x).map(v => Math.min(255, v * 1.14)), { a: .4, bristles: 4 }));
+  // cracks in the dry ground
+  for (let i = 0; i < 70; i++) { let x = rr() * 1950, y = 60 + Math.pow(rr(), .8) * (Y1 - 60); const pts = [[x, y]];
+    for (let k = 0; k < 5; k++) { x += 14 + rr() * 30; y += (rr() - .5) * 14; pts.push([x, y]); } gnd.push(mk(pts, 2.2 + y / 300, '#8a6444', { a: .5, prof: 'tip', bristles: 1 })); }
+  // the river: from the far hills toward us, widening
+  const rv = []; for (let y = 10; y < Y1; y += 8) { const w = 18 + y * .55, cx = RIVER + Math.sin(y * .012) * 40 - y * .12; rv.push([cx, y, w]); }
+  gnd.push(wash([...rv.map(([x, y, w]) => [x - w / 2, y]), ...rv.slice().reverse().map(([x, y, w]) => [x + w / 2, y])], '#7fa7c4', .7, { j: 5 }));
+  for (let i = 0; i < 40; i++) { const k = (i * 37 % 100) / 100, y = 20 + k * (Y1 - 30), r2 = rv[Math.min(rv.length - 1, (y - 10) / 8 | 0)];
+    gnd.push(mk([[r2[0] - r2[2] * .3, y], [r2[0] + r2[2] * .3, y + 4]], 3 + y * .02, '#5d86a8', { a: .35, bristles: 2 })); }
+  // a stream from the city's gate
+  const st = []; for (let y = -4; y < Y1; y += 8) { const w = 8 + (y + 4) * .42, cx = CITY + Math.sin(y * .015) * 26 + y * .05; st.push([cx, y, w]); }
+  gnd.push(wash([...st.map(([x, y, w]) => [x - w / 2, y]), ...st.slice().reverse().map(([x, y, w]) => [x + w / 2, y])], '#8bb6cf', .6, { j: 4 }));
+  layers.sky = chunked(sky, .15); layers.far = chunked(far, .35); layers.mid = chunked(mid, .65); layers.gnd = chunked(gnd, 1);
+  layers.river = rv; layers.stream = st;
+}
+function chunked(list, p) {                  // bake a layer into canvas chunks (layer-space x)
+  const CW = 1024, maxX = Math.max(...list.map(s => s.bb[2])), chunks = [];
+  for (let x0 = -400; x0 < maxX; x0 += CW) { const c = canvas(CW, Math.ceil(Y1 - Y0)), x = c.getContext('2d'); x.translate(-x0, -Y0);
+    for (const s of list) if (s.bb[2] > x0 && s.bb[0] < x0 + CW) draw1(x, s); chunks.push({ x0, c }); }
+  return { p, chunks };
+}
+
+// ---------- props: painted stroke by stroke as they appear, then cached ----------
+function addObj(x, y, p, list, o = {}) { objs.push({ x, y, p, list, o, spr: null }); }
+function branchy(x0, y0, len, ang, w, depth, col, out, leafFn) {
+  const x1 = x0 + Math.cos(ang) * len, y1 = y0 + Math.sin(ang) * len, xm = (x0 + x1) / 2 + (R() - .5) * len * .2, ym = (y0 + y1) / 2 + (R() - .5) * len * .1;
+  out.push(mk([[x0, y0], [xm, ym], [x1, y1]], w, col, { prof: 'trunk', a: .8, bristles: 3 }));
+  if (depth <= 0) { if (leafFn) leafFn(x1, y1); return; }
+  const n = 2 + (R() < .4 ? 1 : 0); for (let i = 0; i < n; i++) branchy(x1, y1, len * (.62 + R() * .15), ang + (i - (n - 1) / 2) * (.5 + R() * .3), w * .62, depth - 1, col, out, leafFn);
+}
+function deadTree(s) { const out = []; branchy(0, 0, 70 * s, -Math.PI / 2 + .1, 13 * s, 3, '#6e5440', out); return out; }
+function thorn(s) { const out = []; for (let i = 0; i < 14; i++) { const a = -Math.PI / 2 + (R() - .5) * 2.4, l = (20 + R() * 30) * s; out.push(mk([[0, 0], [Math.cos(a) * l * .5, Math.sin(a) * l * .5 - 4], [Math.cos(a) * l, Math.sin(a) * l]], 2.4 * s, '#7a6550', { prof: 'tip', a: .7, bristles: 1 })); } return out; }
+function rock(s, c = '#b39a80') { const pts = []; for (let i = 0; i <= 8; i++) { const a = Math.PI + i / 8 * Math.PI, r = (24 + R() * 10) * s; pts.push([Math.cos(a) * r * 1.4, Math.sin(a) * r * .9]); }
+  return [wash(pts, c, .6, { j: 3 }), mk([[-30 * s, 0], [0, 3 * s], [32 * s, 0]], 5 * s, '#7d6650', { a: .5, bristles: 2 })]; }
+function tuft(s, c) { const out = []; for (let i = 0; i < 9; i++) { const a = -Math.PI / 2 + (R() - .5) * 1.1, l = (18 + R() * 22) * s, bx = (R() - .5) * 16 * s; out.push(mk([[bx, 0], [bx + Math.cos(a) * l * .5, Math.sin(a) * l * .5], [bx + Math.cos(a + (R() - .5) * .4) * l, Math.sin(a) * l]], 3.2 * s, c, { prof: 'tip', a: .6, bristles: 1 })); } return out; }
+function fruitTree(s, seed) {             // the tree of life: trunk, branches, heavy leaves, fruit
+  R = rng(seed); const out = [], leaves = [], fruit = [];
+  branchy(0, 0, 80 * s, -Math.PI / 2 + (R() - .5) * .2, 18 * s, 3, '#6a4e36', out, (x, y) => {
+    for (let i = 0; i < 7; i++) { const a = R() * 6.28, r = (16 + R() * 22) * s, cx = x + Math.cos(a) * r, cy = y + Math.sin(a) * r * .7, la = R() * 6.28, ll = (16 + R() * 14) * s;
+      leaves.push(mk([[cx - Math.cos(la) * ll / 2, cy - Math.sin(la) * ll / 2], [cx + Math.cos(la) * ll / 2, cy + Math.sin(la) * ll / 2]], 11 * s, R() < .5 ? '#6f9a52' : R() < .5 ? '#88b062' : '#4f7a42', { prof: 'leaf', a: .55, bristles: 2 })); }
+    if (R() < .8) fruit.push(wash(Array.from({ length: 8 }, (_, i) => [x + (R() - .5) * 20 * s + Math.cos(i / 8 * 6.28) * 6 * s, y + 8 * s + Math.sin(i / 8 * 6.28) * 6 * s]), R() < .5 ? '#e0703c' : '#e9a23a', .8, { j: 1.5 })); });
+  return out.concat(leaves, fruit);
+}
+function cypress(s) { const out = [mk([[0, 0], [0, -20 * s]], 5 * s, '#5b4632', { a: .7 })]; for (let i = 0; i < 6; i++) { const y = -18 * s - i * 18 * s, w = (24 - i * 3) * s; out.push(mk([[-w / 2, y], [0, y - 14 * s], [w / 2, y]], 12 * s, i % 2 ? '#4f7a4a' : '#5f8a52', { prof: 'leaf', a: .6, bristles: 2 })); } return out; }
+function flowers(s, seed) { R = rng(seed); const out = [], cols = ['#e07a7a', '#f0c050', '#f4f0f6', '#b98ad0', '#e9944a'];
+  for (let i = 0; i < 14; i++) { const x = (R() - .5) * 120 * s, y = (R() - .5) * 26 * s, c = cols[(R() * cols.length) | 0];
+    out.push(mk([[x, y], [x + (R() - .5) * 4, y - 14 * s]], 1.6 * s, '#5f8a46', { prof: 'tip', a: .6, bristles: 0 }));
+    out.push(wash(Array.from({ length: 7 }, (_, k) => [x + Math.cos(k / 7 * 6.28) * 5 * s, y - 16 * s + Math.sin(k / 7 * 6.28) * 4 * s]), c, .85, { j: 1.2 })); } return out; }
+function reeds(s) { const out = []; for (let i = 0; i < 8; i++) { const x = (R() - .5) * 50 * s, l = (60 + R() * 50) * s; out.push(mk([[x, 0], [x + (R() - .5) * 10, -l * .6], [x + (R() - .5) * 20, -l]], 3 * s, '#7c9a5a', { prof: 'tip', a: .65, bristles: 1 })); } return out; }
+function cityList() {                      // the city of light: pale gold like clear glass, gates of pearl, light from within
+  R = rng(55); const out = [], gold = ['#f4dd9a', '#f0d48a', '#f7e6b4'], shade = '#c9b9d6';
+  out.push(wash(smooth([[-700, 40], [-520, -20], [-260, -66], [0, -78], [260, -66], [520, -20], [700, 40], [0, 60]], true, 5), '#d9cf8e', .42, { j: 10 }));
+  // skyline behind the wall: towers and domes, lit from the centre (shadow side away from it)
+  for (let i = 0; i < 15; i++) { const x = -300 + i * 43 + (R() - .5) * 16, w = 26 + R() * 22, h = 150 + R() * 150 * (1 - Math.abs(x) / 420), top = -200 - h * .6;
+    out.push(wash([[x - w / 2, -150], [x - w / 2, top], [x + w / 2, top], [x + w / 2, -150]], gold[i % 3], .5, { j: 3 }));
+    out.push(wash([[x + (x < 0 ? -w / 2 : w / 2 - 8), -150], [x + (x < 0 ? -w / 2 : w / 2 - 8), top], [x + (x < 0 ? -w / 2 + 8 : w / 2), top], [x + (x < 0 ? -w / 2 + 8 : w / 2), -150]], shade, .28, { j: 2 }));
+    if (R() < .6) out.push(wash(smooth(Array.from({ length: 6 }, (_, k) => [x + Math.cos(Math.PI + k / 5 * Math.PI) * w * .55, top + Math.sin(Math.PI + k / 5 * Math.PI) * w * .6]), false, 3).concat([[x + w * .55, top]]), '#f8ecc6', .7, { j: 2 })); }
+  // the wall: long, low, translucent gold, a few glazes
+  const wallT = -190, wallB = -64, x0 = -380, x1 = 380;
+  out.push(wash([[x0, wallB], [x0, wallT], [x1, wallT], [x1, wallB]], '#f2da92', .55, { j: 4 }));
+  for (let i = 0; i < 5; i++) out.push(mk([[x0 + 10, wallT + 18 + i * 24], [x1 - 10, wallT + 20 + i * 24]], 10, '#f8e8b4', { a: .3, bristles: 4 }));
+  for (const tx of [x0, x1]) out.push(wash([[tx - 30, wallB], [tx - 30, wallT - 50], [tx + 30, wallT - 50], [tx + 30, wallB]], '#efd283', .55, { j: 3 }));
+  for (let i = 0; i < 19; i++) out.push(mk([[x0 + i * 42, wallT + 1], [x0 + i * 42 + 16, wallT + 1]], 5, '#d8b866', { a: .45, bristles: 1, prof: 'even' }));
+  // three gates of pearl
+  for (const gx of [-200, 0, 200]) { const arc = []; for (let i = 0; i <= 12; i++) { const a = Math.PI + i / 12 * Math.PI; arc.push([gx + Math.cos(a) * 30, wallB - 62 + Math.sin(a) * 30]); }
+    out.push(wash([[gx - 30, wallB], ...arc, [gx + 30, wallB]], '#fffaf2', .95, { j: 1.5 }));
+    out.push(mk([[gx - 34, wallB], [gx - 34, wallB - 62], ...arc.map(([x, y]) => [gx + (x - gx) * 1.13, wallB - 62 + (y - wallB + 62) * 1.13]), [gx + 34, wallB - 62], [gx + 34, wallB]], 5, '#d8cfe4', { a: .5, bristles: 2, prof: 'even' })); }
+  out.push(mk([[x0, wallB + 2], [x1, wallB + 2]], 5, '#c8ac66', { a: .4, bristles: 3 }));
+  return out;
+}
+function buildObjs() {
+  R = rng(9);
+  // desert
+  [[160, 230, 1.1], [620, 190, .9], [1180, 260, 1.2], [1560, 205, .8], [1880, 300, 1.4]].forEach(([x, y, s]) => addObj(x, y, 1, thorn(s)));
+  [[380, 250, 1], [980, 215, .8], [1420, 330, 1.3], [1760, 190, .7]].forEach(([x, y, s]) => addObj(x, y, 1, rock(s)));
+  addObj(820, 150, 1, deadTree(1.25)); addObj(1640, 120, 1, deadTree(.8));
+  for (let i = 0; i < 8; i++) addObj(80 + i * 260, 60 + (i % 3) * 20, .65, deadTree(.35));
+  // the river's edge: reeds on both banks
+  [[1990, 200, 1], [2040, 330, 1.3], [2330, 190, 1], [2380, 300, 1.2]].forEach(([x, y, s]) => addObj(x, y, 1, reeds(s)));
+  // the far bank and the garden
+  R = rng(21);
+  const trees = [[2560, 150, 1.15, 0], [2900, 120, .8, 1], [3240, 175, 1.3, 2], [3560, 130, .9, 3], [3880, 160, 1.2, 4], [4180, 120, .85, 5], [4430, 150, 1.0, 6]];
+  trees.forEach(([x, y, s, k]) => addObj(x, y, 1, fruitTree(s, 300 + k)));
+  for (let i = 0; i < 26; i++) { const x = 2460 + i * 80 + (i * 37 % 40), y = 200 + ((i * 53) % 260); addObj(x, y, 1, flowers(.9 + (i % 3) * .2, 500 + i)); }
+  for (let i = 0; i < 34; i++) { const x = 2440 + i * 64, y = 190 + ((i * 71) % 330); R = rng(700 + i); addObj(x, y, 1, tuft(1 + (i % 3) * .3, i % 2 ? '#6f9a52' : '#86ad5e')); }
+  for (let i = 0; i < 12; i++) { R = rng(800 + i); addObj(2500 + i * 190, 40 + (i % 3) * 14, .65, i % 2 ? cypress(.8) : fruitTree(.45, 900 + i)); }
+  addObj(CITY, -6, 1, cityList(), { city: true });
+  objs.forEach(o => { const xs = o.list.flatMap(s => [s.bb[0], s.bb[2]]), ys = o.list.flatMap(s => [s.bb[1], s.bb[3]]); o.bb = [Math.min(...xs) - 6, Math.min(...ys) - 6, Math.max(...xs) + 6, Math.max(...ys) + 6]; });
+  objs.sort((a, b) => a.p - b.p || a.y - b.y);
+}
+
+// ---------- the traveller ----------
+function figure(ctx, x, y, s, ph, kneel, robe, bow) {
+  R = rng(4242); const sw = Math.sin(ph), hb = Math.abs(Math.cos(ph)) * 2 * (1 - kneel), H0 = 122 * s * (1 - .32 * kneel), L = [], dk = robe.map(v => v * .72);
+  const sh = y - H0 + 22 * s + hb, head = [x + (3 + bow * 7) * s, y - H0 + (2 + bow * 6) * s + hb];
+  L.push(wash(Array.from({ length: 10 }, (_, i) => [x + 4 * s + Math.cos(i / 10 * 6.28) * 26 * s, y + 2 + Math.sin(i / 10 * 6.28) * 5 * s]), '#8a7a62', .25, { j: 2 }));   // shadow
+  if (kneel < .5) for (const d of [-1, 1]) L.push(mk([[x + d * 4 * s, y - 36 * s], [x + d * 4 * s + d * sw * 11 * s, y - 2]], 6 * s, '#6b5545', { a: .8, bristles: 1 }));
+  const hem = kneel > .5 ? [[x - 22 * s, y - 2], [x + 30 * s, y - 2]] : [[x - 17 * s + sw * 2, y - 24 * s], [x + 19 * s - sw * 2, y - 24 * s]];
+  L.push(wash(smooth([hem[0], [x - 15 * s, sh + 18 * s], [x - 9 * s, sh], [x + 9 * s, sh - 1 * s], [x + 15 * s, sh + 16 * s], hem[1], [x + 2 * s, hem[1][1] + 3 * s]], true, 4), robe, .9, { j: 1.2 }));
+  L.push(mk([[x - 5 * s, sh + 8 * s], [x - 9 * s, (sh + hem[0][1]) / 2], [x - 11 * s, hem[0][1] - 4 * s]], 2.6 * s, dk, { a: .45, bristles: 1 }));
+  L.push(mk([[x + 4 * s, sh + 8 * s], [x + 6 * s, (sh + hem[1][1]) / 2], [x + 8 * s, hem[1][1] - 4 * s]], 2 * s, dk, { a: .35, bristles: 1 }));
+  const ax = kneel > .5 ? 16 : -sw * 9; L.push(mk([[x + 6 * s, sh + 6 * s], [x + (9 + ax * .6) * s, sh + 30 * s], [x + (10 + ax) * s, sh + 50 * s]], 7 * s, robe.map(v => v * .9), { a: .8, bristles: 1 }));
+  L.push(wash(Array.from({ length: 12 }, (_, i) => [head[0] + Math.cos(i / 12 * 6.28) * 9.5 * s, head[1] - 10 * s + Math.sin(i / 12 * 6.28) * 11 * s]), '#dca57c', .95, { j: .8 }));
+  L.push(wash(smooth(Array.from({ length: 7 }, (_, i) => { const a = Math.PI * .6 + i / 6 * Math.PI * 1.25; return [head[0] - 2 * s + Math.cos(a) * 10.5 * s, head[1] - 11 * s + Math.sin(a) * 11.5 * s]; }), false, 3), '#4f3a2c', .9, { j: .6 }));
+  L.forEach(S => draw1(ctx, S));
+}
+
+// ---------- the face (close-up on the bank) ----------
+function buildFace() {
+  R = rng(77); const f = [];
+  f.push(wash(smooth([[-620, -420], [520, -460], [700, 380], [-560, 420]], true, 4), '#e6dcc8', .28, { j: 30 }));
+  f.push(wash(smooth([[260, -420], [700, -440], [720, 300], [380, 120], [300, -100]], true, 4), '#cfdbe0', .22, { j: 30 }));
+  // the head in profile: skin, a shadow glaze, then hair laid in strokes
+  const skin = smooth([[-20, -262], [40, -254], [108, -218], [144, -164], [148, -134], [166, -98], [188, -62], [200, -47], [188, -35], [176, -24], [184, -12], [175, -2], [181, 10], [168, 24], [174, 48], [158, 76], [122, 96], [112, 140], [110, 250], [-74, 250], [-84, 120], [-112, 40], [-140, -60], [-122, -190]], true, 5);
+  f.push(wash(skin, '#ecc09c', .72, { j: 3 }));
+  f.push(wash(smooth([[-70, -40], [30, -30], [80, 40], [110, 130], [110, 248], [-70, 248], [-90, 90]], true, 4), '#cf9474', .34, { j: 10 }));
+  f.push(wash(smooth([[120, -210], [146, -160], [150, -130], [120, -150], [96, -196]], true, 3), '#d89b7a', .22, { j: 4 }));
+  f.push(wash(smooth([[-150, -40], [-162, -150], [-122, -242], [-30, -288], [62, -278], [124, -242], [142, -206], [90, -218], [40, -206], [-8, -190], [-42, -150], [-58, -90], [-70, -20], [-82, 60], [-104, 112], [-142, 92]], true, 4), '#5b4130', .78, { j: 4 }));
+  for (let i = 0; i < 16; i++) { const t0 = i / 15, sx = lerp(130, -20, t0), sy = lerp(-222, -186, t0) - 4 * Math.sin(t0 * 3);
+    f.push(mk(smooth([[sx, sy], [sx - 60 - R() * 40, sy - 40 + R() * 30], [sx - 130 - R() * 50, sy + 30 + R() * 60], [sx - 170 - R() * 30, sy + 120 + R() * 80]], false, 4), 5 + R() * 6, R() < .5 ? '#4a3426' : '#6a4c36', { a: .55, prof: 'tip', bristles: 3 })); }
+  f.push(mk(smooth([[-10, -66], [-24, -78], [-38, -60], [-34, -26], [-16, -10]], false, 4), 6, '#c88a6a', { a: .55, bristles: 1 }));
+  f.push(mk(smooth([[-20, -54], [-28, -40], [-22, -26]], false, 4), 3, '#a86a52', { a: .5, bristles: 0 }));
+  // ink along the profile, broken by the bristles
+  f.push(mk(skin.slice(4, 76).map(([x, y]) => [x + 1.5, y]), 2.6, '#6a4634', { a: .55, prof: 'even', bristles: 2 }));
+  f.push(mk(smooth([[96, -152], [122, -160], [148, -150]], false, 4), 4.2, '#4f3a2c', { a: .75, prof: 'brush', bristles: 2 }));    // brow
+  f.push(mk([[174, -50], [180, -44]], 2.2, '#9a5a4a', { a: .55, prof: 'even', bristles: 0 }));                                       // nostril
+  f.push(wash([[170, -14], [185, -10], [177, -3], [167, -5]], '#c97a6c', .55, { j: 1 }));
+  f.push(wash([[168, 3], [181, 10], [172, 20], [163, 14]], '#c97a6c', .45, { j: 1 }));
+  return f;
+}
+const EYE = [126, -118];
+function faceShot(ctx, t, a) {
+  const lt = t - 11.6, z = lerp(1.0, 1.06, clamp(lt / 6)), fx = V ? W * .52 : W * .54, fy = V ? H * .43 : H * .5, sc = (V ? .9 : 1) * z;
+  ctx.save(); ctx.globalAlpha = a; ctx.translate(fx, fy); ctx.scale(sc, sc);
+  drawW(ctx, faceStrokes[0]); drawW(ctx, faceStrokes[1]);
+  const lift = eio(clamp((t - 14.9) / 1.4)), rot = lerp(.12, -.09, lift); ctx.translate(20, 200); ctx.rotate(rot); ctx.translate(-20, -200);
+  drawList(ctx, faceStrokes.slice(2), clamp(lt / 1.4));
+  if (lt > .9) { const sm = ss(15.2, 15.8, t); ctx.globalAlpha = a * clamp((lt - .9) / .4) * (1 - sm); drawS(ctx, faceFix[6]); ctx.globalAlpha = a * sm; drawS(ctx, faceFix[7]); ctx.globalAlpha = a; }
+  const open = ss(15.0, 15.4, t), wipe = ss(14.3, 15.3, t);
+  // eye: closed (a lowered lid with lashes) → open, lifted toward the light
+  if (lt > .8) { ctx.globalAlpha = a * clamp((lt - .8) / .5);
+    if (open < 1) { ctx.globalAlpha *= 1 - open; drawS(ctx, faceFix[0]); drawS(ctx, faceFix[1]); }
+    if (open > 0) { ctx.globalAlpha = a * open; drawW(ctx, faceFix[2]); drawW(ctx, faceFix[3]); drawS(ctx, faceFix[4]); }
+    ctx.globalAlpha = a; }
+  // warm wash on the cheek once the tear is wiped
+  if (wipe > 0) { ctx.globalAlpha = a * wipe; drawW(ctx, faceFix[5]); ctx.globalAlpha = a; }
+  // the tear: forms at the eye, runs down the cheek, and is wiped away
+  const form = ss(12.6, 13.2, t), run = eio(clamp((t - 13.2) / 1.0)), gone = wipe;
+  if (form > 0 && gone < 1) { ctx.globalAlpha = a * (1 - gone);
+    const ty = lerp(EYE[1] + 14, EYE[1] + 92, run), tx = EYE[0] + 4 - run * 10;
+    if (run > 0) { ctx.strokeStyle = 'rgba(110,160,205,.45)'; ctx.lineWidth = 5; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(EYE[0] + 4, EYE[1] + 14); ctx.quadraticCurveTo(EYE[0] + 2, (EYE[1] + ty) / 2, tx, ty); ctx.stroke(); }
+    ctx.fillStyle = 'rgba(96,150,205,.85)'; ctx.beginPath(); ctx.ellipse(tx, ty, 6 * form, 9 * form, 0, 0, 6.28); ctx.fill();
+    ctx.fillStyle = 'rgba(255,255,255,.8)'; ctx.beginPath(); ctx.arc(tx - 2, ty - 3, 1.8 * form, 0, 6.28); ctx.fill(); ctx.globalAlpha = a; }
+  ctx.restore();
+  // the light that wipes it: a broad gold wash sweeping in from the right
+  const lw = ss(13.9, 15.0, t) * (1 - .45 * ss(15.6, 17, t)); if (lw > 0) { ctx.save(); ctx.globalAlpha = a; ctx.globalCompositeOperation = 'multiply';
+    const g = ctx.createRadialGradient(W * 1.05, H * .1, 0, W * 1.05, H * .1, W * .9); g.addColorStop(0, `rgba(255,214,120,${.55 * lw})`); g.addColorStop(1, 'rgba(255,214,120,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+    ctx.globalCompositeOperation = 'screen'; const g2 = ctx.createRadialGradient(W * .95, H * .15, 0, W * .95, H * .15, W * .7); g2.addColorStop(0, `rgba(255,236,190,${.6 * lw})`); g2.addColorStop(1, 'rgba(255,236,190,0)'); ctx.fillStyle = g2; ctx.fillRect(0, 0, W, H); ctx.restore(); }
+}
+
+// ---------- the walk ----------
+const fxAt = t => t < 9 ? lerp(380, 1800, t / 9) : t < 10.6 ? lerp(1800, 1930, eo((t - 9) / 1.6)) : t < 18 ? 1930 : t < 28 ? lerp(BANK + 20, 3720, (t - 18) / 10) : lerp(3720, 3980, eo((t - 28) / 6));
+const camAt = t => { const fx = fxAt(t), base = fx - W / K * .38; if (t < 18) return base; if (t < 27) return base; const k = eio(clamp((t - 27) / 5)); return lerp(base, CITY - W / K * .56, k); };
+const frontAt = t => t < 18.2 ? lerp(-200, BANK + 40, eio(clamp((t - .4) / 3.4))) : t < 27.6 ? lerp(BANK + 40, 4250, eio(clamp((t - 18.2) / 4.2))) : lerp(4250, 5600, eio(clamp((t - 27.6) / 3.6)));
+function walkScene(ctx, t, zoom) {
+  const cam = camAt(t), front = frontAt(t), fsx = (front - cam) * K;
+  // paper, then the painted layers (masked beyond the paint front), then props
+  const sc = layersCanvas; const x = sc.getContext('2d'); x.setTransform(1, 0, 0, 1, 0, 0); x.clearRect(0, 0, W, H);
+  for (const k of ['sky', 'far', 'mid', 'gnd']) { const L = layers[k]; for (const ch of L.chunks) { const sx = (ch.x0 - cam * L.p) * K; if (sx > W || sx + ch.c.width * K < 0) continue; x.drawImage(ch.c, sx, HZ + Y0 * K, ch.c.width * K, ch.c.height * K); } }
+  // the river and the city stream move: highlights drift toward us
+  x.save(); x.translate(-cam * K, HZ); x.scale(K, K);
+  for (const [lst, n] of [[layers.river, 18], [layers.stream, 10]]) { for (let i = 0; i < n; i++) { const k = ((t * .08 + i / n) % 1), y = 10 + k * k * (Y1 - 20), r2 = lst[Math.min(lst.length - 1, Math.max(0, (y - lst[0][1]) / 8 | 0))];
+    x.strokeStyle = `rgba(250,252,255,${.5 * Math.sin(k * Math.PI)})`; x.lineWidth = 1.5 + k * 3; x.beginPath(); x.moveTo(r2[0] - r2[2] * .25, y); x.lineTo(r2[0] + r2[2] * .15, y + 2); x.stroke(); } }
+  x.restore();
+  // objects
+  for (const o of objs) { const sx = (o.x - cam * o.p) * K; if (sx + o.bb[2] * K < -50 || sx + o.bb[0] * K > W + 50) continue;
+    const ox = o.p === 1 ? o.x : o.x - cam * o.p + cam;        // world x at ground parallax for the paint test
+    const prog = o.o.city ? clamp((front - (o.x - 260)) / 900) : clamp((front - ox) / 260);
+    if (prog <= 0) continue;
+    x.save(); x.translate(sx, HZ + o.y * K); x.scale(K, K);
+    if (o.o.city) cityGlow(x, t, prog);
+    if (prog >= 1) { if (!o.spr) { const w = o.bb[2] - o.bb[0], h = o.bb[3] - o.bb[1], c = canvas(Math.ceil(w), Math.ceil(h)), cx2 = c.getContext('2d'); cx2.translate(-o.bb[0], -o.bb[1]); drawList(cx2, o.list); o.spr = c; } x.drawImage(o.spr, o.bb[0], o.bb[1]); }
+    else drawList(x, o.list, prog);
+    x.restore(); }
+  // the traveller
+  const fx = fxAt(t), kneel = ss(10.0, 10.8, t) * (t < 18 ? 1 : 0), robe = mix([118, 112, 120], [244, 238, 226], ss(17.5, 18.5, t)), walk = t < 10.6 || t > 18;
+  const bow = t < 18 ? 1 : 0; x.save(); x.translate(-cam * K, HZ); x.scale(K, K);
+  if (t > .9) { x.globalAlpha = clamp((t - .9) / .6); figure(x, fx, PATHY + 24, 1.3, walk ? fx / 26 : 0, kneel, robe, bow); x.globalAlpha = 1; }
+  // birds over the garden
+  if (t > 21) for (let i = 0; i < 6; i++) { const bx = 2900 + i * 130 + (t - 21) * (60 + i * 8), by = -260 - i * 24 + Math.sin(t * 1.5 + i) * 10, fl = Math.sin(t * 9 + i * 2) * 5;
+    x.strokeStyle = 'rgba(80,70,60,.7)'; x.lineWidth = 2; x.beginPath(); x.moveTo(bx - 9, by - fl); x.quadraticCurveTo(bx - 4, by - 3, bx, by); x.quadraticCurveTo(bx + 4, by - 3, bx + 9, by - fl); x.stroke(); }
+  x.restore();
+  // mask everything beyond the paint front with a wavy brush edge
+  if (fsx < W + 60) { x.save(); x.globalCompositeOperation = 'destination-out'; x.beginPath(); x.moveTo(W + 10, -10);
+    for (let y = -10; y <= H + 10; y += 12) x.lineTo(fsx + 26 * Math.sin(y * .021 + t * .6) + 30 * (noise(y * .01, t * .3) - .5), y);
+    x.lineTo(W + 10, H + 10); x.closePath(); const g = x.createLinearGradient(fsx - 40, 0, fsx + 60, 0); g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(.5, 'rgba(0,0,0,.85)'); g.addColorStop(1, 'rgba(0,0,0,1)'); x.fillStyle = g; x.fill(); x.restore(); }
+  ctx.save(); if (zoom) { ctx.translate(zoom[0], zoom[1]); ctx.scale(zoom[2], zoom[2]); ctx.translate(-zoom[0], -zoom[1]); } ctx.drawImage(sc, 0, 0); ctx.restore();
+}
+function cityGlow(x, t, prog) {          // the light of the city: no sun, no night
+  const k = ss(.1, .9, prog) * (.9 + .1 * Math.sin(t * .8)); if (k <= 0) return;
+  x.save(); x.globalCompositeOperation = 'screen';
+  const g = x.createRadialGradient(0, -150, 20, 0, -150, 900); g.addColorStop(0, `rgba(255,236,170,${.8 * k})`); g.addColorStop(.35, `rgba(255,220,140,${.35 * k})`); g.addColorStop(1, 'rgba(255,220,140,0)'); x.fillStyle = g; x.fillRect(-1000, -1100, 2000, 1300);
+  for (let i = 0; i < 13; i++) { const a = -Math.PI / 2 + (i - 6) * .2 + Math.sin(t * .2 + i) * .02, l = 900; x.fillStyle = `rgba(255,232,170,${.10 * k})`; x.beginPath(); x.moveTo(0, -150); x.lineTo(Math.cos(a - .04) * l, -150 + Math.sin(a - .04) * l); x.lineTo(Math.cos(a + .04) * l, -150 + Math.sin(a + .04) * l); x.fill(); }
+  x.restore();
+}
+let layersCanvas;
+
+function draw(ctx, t) {
+  ctx.drawImage(paper, 0, 0);
+  // camera: lean in on the kneeling traveller as the mist rises; pull back out after
+  const fxs = (fxAt(t) - camAt(t)) * K, fys = HZ + (PATHY - 50) * K, zin = 1 + .7 * eio(clamp((t - 9.6) / 2.0)) * (1 - ss(16.8, 18.6, t)) + .0 * t;
+  walkScene(ctx, t, zin > 1.001 ? [fxs, fys, zin] : null);
+  // mist: paper rises over the scene, the face is painted on the clean sheet, then the mist falls away
+  const mist = ss(10.6, 11.6, t) * (1 - ss(17.2, 18.4, t));
+  if (mist > 0) { const top = lerp(H + 80, -80, mist); ctx.save(); ctx.beginPath(); ctx.moveTo(-10, H + 10);
+    for (let x = -10; x <= W + 10; x += 14) ctx.lineTo(x, top + 34 * Math.sin(x * .012 + t * .7) + 40 * (noise(x * .006, t * .4) - .5)); ctx.lineTo(W + 10, H + 10); ctx.closePath(); ctx.clip();
+    ctx.drawImage(paper, 0, 0); ctx.restore();
+    if (mist > .98 || (t > 11.4 && t < 17.6)) faceShot(ctx, t, clamp(Math.min((t - 11.4) / .3, (17.5 - t) / .5))); }
+  // grain over everything (the sheet), soft vignette
+  ctx.globalCompositeOperation = 'multiply'; ctx.drawImage(grain, 0, 0); ctx.globalCompositeOperation = 'source-over';
+  // words, in ink on the paper
+  const sc = V ? 1.05 : 1, cx0 = W / 2, st = { size: 50 * sc, weight: 600, color: INK, shadow: 'rgba(250,244,230,.95)', shadowBlur: 16 }, ty = V ? 300 : 160;
+  text(ctx, '15  ·  회복', V ? 72 : 110, V ? 190 : 120, { align: 'left', size: 30, weight: 600, color: INK, alpha: win(t, .6, 5, 1, 1), ls: 4, shadow: 'rgba(250,244,230,.9)' });
+  const a0 = win(t, 3.6, 8.8, 1.2, .8);
+  if (V) { text(ctx, '예수님이 다시 오셔서', cx0, ty, { ...st, size: 46, alpha: a0 }); text(ctx, '모든 것을 새롭게 하신다.', cx0, ty + 74, { ...st, size: 46, alpha: a0 }); }
+  else text(ctx, '예수님이 다시 오셔서 모든 것을 새롭게 하신다.', cx0, ty, { ...st, size: 46, alpha: a0 });
+  const a1 = win(t, 12.4, 16.9, 1.1, .8), a2 = win(t, 19.2, 23.0, 1.1, .7), a3 = win(t, 22.8, 27.6, 1.1, .9), a4 = win(t, 29.4, 34.6, 1.4, 1.2);
+  const y1 = V ? H - 330 : H - 150;
+  text(ctx, '“모든 눈물을 그 눈에서 닦아 주시니”', cx0, y1, { ...st, alpha: a1 });
+  text(ctx, '“다시는 사망이 없고”', cx0, ty, { ...st, alpha: a2 });
+  if (V) { text(ctx, '“애통하는 것이나 곡하는 것이나', cx0, ty, { ...st, size: 46, alpha: a3 }); text(ctx, '아픈 것이 다시 있지 아니하리니”', cx0, ty + 74, { ...st, size: 46, alpha: a3 }); }
+  else text(ctx, '“애통하는 것이나 곡하는 것이나 아픈 것이 다시 있지 아니하리니”', cx0, ty, { ...st, size: 46, alpha: a3 });
+  const cite = { size: 23 * sc, font: "'Noto Sans KR',sans-serif", color: '#6a5646', ls: 2, shadow: 'rgba(250,244,230,.9)' };
+  text(ctx, '요한계시록 21:4 (개역개정)', cx0, y1 + 56 * sc, { ...cite, alpha: a1 * .9 });
+  text(ctx, '요한계시록 21:4 (개역개정)', cx0, ty + (V ? (a3 > 0 ? 140 : 62) : 56), { ...cite, alpha: Math.max(a2, a3) * .9 });
+  text(ctx, '“보라 내가 만물을 새롭게 하노라”', cx0, ty + (V ? 0 : 0), { ...st, size: 58 * sc, alpha: a4 });
+  text(ctx, '요한계시록 21:5 (개역개정)', cx0, ty + 64 * sc, { ...cite, alpha: a4 * .9 });
+  const f = 1 - ss(0, 1.2, t) + ss(DUR - 1.4, DUR, t); if (f > 0) { ctx.fillStyle = `rgba(0,0,0,${clamp(f)})`; ctx.fillRect(0, 0, W, H); }
+}
+
+Pilot.run({ W, H, dur: DUR, audio: 'renewal.m4a', fonts: ["600 40px 'Noto Serif KR'", "400 20px 'Noto Sans KR'"],
+  init: async () => {
+    // paper: warm base, soft clouds of tone, fibres
+    paper = canvas(W, H); { const x = paper.getContext('2d'), d = x.createImageData(W, H), r = rng(2);
+      for (let j = 0; j < H; j++) for (let i = 0; i < W; i++) { const v = (fbm(i * .004, j * .004, 3) - .5) * 14 + (r() - .5) * 6, k = (j * W + i) * 4; d.data[k] = 242 + v; d.data[k + 1] = 233 + v; d.data[k + 2] = 214 + v * .9; d.data[k + 3] = 255; }
+      x.putImageData(d, 0, 0); x.strokeStyle = 'rgba(150,130,100,.10)'; x.lineWidth = .8;
+      for (let i = 0; i < 2600; i++) { const px = r() * W, py = r() * H, a = r() * 6.28, l = 6 + r() * 16; x.beginPath(); x.moveTo(px, py); x.quadraticCurveTo(px + Math.cos(a + .5) * l / 2, py + Math.sin(a + .5) * l / 2, px + Math.cos(a) * l, py + Math.sin(a) * l); x.stroke(); } }
+    grain = canvas(W, H); { const x = grain.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0, 0, W, H); x.globalAlpha = .5; x.drawImage(Pilot.speckle(W, H, 18, 7), 0, 0); x.globalAlpha = 1;
+      x.globalCompositeOperation = 'screen'; x.fillStyle = 'rgba(255,255,255,.6)'; x.fillRect(0, 0, W, H); x.globalCompositeOperation = 'source-over';
+      const g = x.createRadialGradient(W / 2, H / 2, H * .45, W / 2, H / 2, H * 1.1); g.addColorStop(0, 'rgba(255,255,255,0)'); g.addColorStop(1, 'rgba(200,180,150,.5)'); x.fillStyle = g; x.fillRect(0, 0, W, H); }
+    buildLayers(); buildObjs(); faceStrokes = buildFace();
+    R = rng(91); faceFix = [
+      mk([[EYE[0] - 18, EYE[1]], [EYE[0] - 2, EYE[1] + 8], [EYE[0] + 16, EYE[1] + 4]], 4, '#4a3428', { a: .8, prof: 'brush', bristles: 1 }),                 // closed lid
+      mk([[EYE[0] - 6, EYE[1] + 8], [EYE[0] - 4, EYE[1] + 16], [EYE[0] + 6, EYE[1] + 9], [EYE[0] + 8, EYE[1] + 15]], 1.6, '#4a3428', { a: .7, prof: 'even', bristles: 0 }),   // lashes
+      wash([[EYE[0] - 18, EYE[1] + 2], [EYE[0] - 2, EYE[1] - 10], [EYE[0] + 16, EYE[1] - 4], [EYE[0] + 4, EYE[1] + 6]], '#fbf6ee', .9, { j: 1 }),                // eye white
+      wash(Array.from({ length: 8 }, (_, i) => [EYE[0] + 3 + Math.cos(i / 8 * 6.28) * 6, EYE[1] - 3 + Math.sin(i / 8 * 6.28) * 6]), '#4a3428', .9, { j: .6 }),  // iris, lifted
+      mk([[EYE[0] - 20, EYE[1] - 2], [EYE[0] - 2, EYE[1] - 13], [EYE[0] + 18, EYE[1] - 5]], 4, '#4a3428', { a: .85, prof: 'brush', bristles: 1 }),              // upper lid
+      wash(smooth([[70, -60], [140, -70], [168, -20], [140, 30], [86, 26]], true, 4), '#e98f7c', .3, { j: 8 }),                                       // a warm flush on the cheek
+      mk([[160, 2], [168, 4], [177, 6]], 2.4, '#8a4a40', { a: .6, prof: 'even', bristles: 0 }),                                                       // mouth, sad
+      mk(smooth([[159, -2], [167, 4], [178, 1]], false, 4), 2.4, '#8a4a40', { a: .6, prof: 'even', bristles: 0 })];                                    // mouth, a small smile                                                              // a warm flush on the cheek
+    layersCanvas = canvas(W, H);
+  },
+  draw });
+</script>
+</body>
+</html>

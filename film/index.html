@@ -190,9 +190,17 @@
   $('share').onclick = function () {
     var i = cur >= 0 ? cur : START_AT, url = location.origin + '/film/' + (LANG !== 'ko' ? '?lang=' + LANG : '') + (i > 0 ? '#' + S[i][0] : '');
     var title = UI.title || '영상으로 보는 성경 이야기', text = (UI.shareText || '창조에서 새 하늘과 새 땅까지, 성경 이야기를 13분 영상으로') + (i > 0 ? ' — ' + S[i][1] : '');
-    if (navigator.share) navigator.share({ title: title, text: text, url: url }).then(function () { if (window.gtag) gtag('event', 'share', { method: 'native', content_type: 'film', item_id: S[i][0] }); }).catch(function () {});
-    else if (navigator.clipboard) navigator.clipboard.writeText(url).then(function () { toast(UI.copied || '링크를 복사했어요'); if (window.gtag) gtag('event', 'share', { method: 'copy', content_type: 'film', item_id: S[i][0] }); }, function () { prompt('', url); });
-    else prompt('', url);
+    function copy() {   // PC (and any share-sheet failure): copy the link and say so
+      var done = function () { toast(UI.copied || '링크를 복사했어요'); if (window.gtag) gtag('event', 'share', { method: 'copy', content_type: 'film', item_id: S[i][0] }); };
+      if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(url).then(done, legacy); else legacy();
+      function legacy() { var ta = document.createElement('textarea'); ta.value = url; ta.setAttribute('readonly', ''); ta.style.cssText = 'position:fixed;left:-9999px';
+        document.body.appendChild(ta); ta.select(); var ok = false; try { ok = document.execCommand('copy'); } catch (e) {} ta.remove(); if (ok) done(); else prompt('', url); }
+    }
+    // phones: the share sheet (KakaoTalk, messages…); PCs: copy the link — desktop share dialogs are unreliable
+    if (navigator.share && matchMedia('(pointer: coarse)').matches)
+      navigator.share({ title: title, text: text, url: url }).then(function () { if (window.gtag) gtag('event', 'share', { method: 'native', content_type: 'film', item_id: S[i][0] }); })
+        .catch(function (e) { if (!e || e.name !== 'AbortError') copy(); });
+    else copy();
   };
   $('prev').onclick = function () { go(Math.max(0, cur - 1), playing || cur < 0); };
   $('next').onclick = function () { go(Math.min(S.length - 1, cur + 1), playing || cur < 0); };

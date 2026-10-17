@@ -361,7 +361,11 @@ function draw(ctx, t) {
   const p3 = win(t, 26.3, 30.2, 1, .7), ink = { weight: 600, color: '#3A2418', shadow: 'rgba(250,240,215,.95)', shadowBlur: 20 };
   text(ctx, V ? '약속의 땅 문 앞에 선 백성,\n이제 들어갑니다…' : '약속의 땅 문 앞에 선 백성, 이제 들어갑니다…', W / 2, vy, { ...ink, size: V ? 50 : 48, alpha: p3 });
   // the whole road: Deuteronomy 1:31 in two cards
-  const c1 = win(t, 33.0, 36.4, 1, .6), c2 = win(t, 36.3, DUR - .4, .7, 1), sz = V ? 46 : 44, fx = V ? W / 2 : 110, fy = V ? 1610 : H * .4, al = V ? 'center' : 'left';
+  let c1 = win(t, 33.0, 36.4, 1, .6), c2 = win(t, 36.3, DUR - .4, .7, 1), sz = V ? 46 : 44, fx = V ? W / 2 : 110, fy = V ? 1610 : H * .4, al = V ? 'center' : 'left';
+  if (Pilot.dir === 'rtl' && !V) {   // right-to-left: the same block, set flush right (its right edge where the widest line ends)
+    ctx.save(); ctx.font = `600 ${sz}px 'Noto Serif KR',serif`;
+    const bw = Math.max(...['“사람이 자기의 아들을 안는 것 같이\n너희의 하나님 여호와께서', '너희가 걸어온 길에서 너희를 안으사\n이 곳까지 이르게 하셨느니라”'].flatMap(k => Pilot.tr(k).split('\n')).map(l => ctx.measureText(l).width));
+    ctx.restore(); fx += bw; al = 'right'; }
   text(ctx, '“사람이 자기의 아들을 안는 것 같이\n너희의 하나님 여호와께서', fx, fy, { ...ink, size: sz, alpha: c1, lh: 1.5, align: al });
   text(ctx, '너희가 걸어온 길에서 너희를 안으사\n이 곳까지 이르게 하셨느니라”', fx, fy, { ...ink, size: sz, alpha: c2, lh: 1.5, align: al });
   text(ctx, '신명기 1:31 (개역개정)', fx, fy + sz * 1.5 + (V ? 58 : 54), { size: V ? 24 : 22, font: "'Noto Sans KR',sans-serif", color: '#5a4030', alpha: Math.max(c1, c2) * .9, ls: 2, shadow: 'rgba(250,240,215,.95)', shadowBlur: 12, align: al });

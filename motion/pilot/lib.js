@@ -121,7 +121,10 @@
         P.fontsToLoad = [F.serif, F.sans].filter(Boolean); }
       document.documentElement.lang = P.lang; document.documentElement.dir = P.dir;
     } catch (e) { console.warn('no language file for', P.lang); }
-    try { for (const f of (cfg.fonts || [])) await document.fonts.load(f); await document.fonts.ready; } catch (e) {}
+    try { for (const f of (cfg.fonts || [])) await document.fonts.load(f);
+      // the language's own faces (_fonts): fetch them before the first frame, as the Korean ones are
+      for (const st of (P.fontsToLoad || [])) for (const fam of (st.match(/'[^']+'/g) || [])) for (const w of [400, 600, 700]) await document.fonts.load(`${w} 40px ${fam}`);
+      await document.fonts.ready; } catch (e) {}
     if (cfg.init) await cfg.init();
     const draw = t => { ctx.save(); cfg.draw(ctx, Math.max(0, Math.min(cfg.dur - 1e-3, t))); ctx.restore(); };
     window.seek = draw; window.DURATION = cfg.dur; draw(0); window.__ready = true;

@@ -5,7 +5,7 @@
      replaced by fonts.css, which serves Noto Serif KR / Noto Sans KR subset to the characters the scenes use.
    - Audio: the mixed pilot/<scene>.wav → <scene>.m4a (AAC 96 kb/s), loudness-normalised to −16 LUFS like the film.
    Needs: ffmpeg, fonttools + brotli (pip install fonttools brotli), the Noto TTFs in ~/.local/share/fonts."""
-import os, re, glob, shutil, subprocess
+import os, re, glob, json, shutil, subprocess
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 PILOT = os.path.join(HERE, 'pilot')
@@ -30,18 +30,26 @@ for fam, w, f in FACES:
     subprocess.run(['pyftsubset', os.path.join(FONTS, f), f'--text-file={os.path.join(OUT, ".chars.txt")}', '--flavor=woff2',
                     '--layout-features=*', f'--output-file={os.path.join(OUT, name)}'], check=True)
     css.append(f"@font-face{{font-family:'{fam}';font-weight:{w};font-style:normal;font-display:block;src:url({name}) format('woff2')}}")
-# Latin-script languages draw in Noto Serif / Noto Sans (their _fonts name them): the Korean faces' Latin is fine, but
-# their CJK-style punctuation (a centred "⋯" for "…") is not. Variable fonts, subset to the glyphs those languages use.
-lat = [p for p in glob.glob(os.path.join(PILOT, 'i18n', '*.json')) if "'Noto Serif'" in open(p, encoding='utf-8').read()]
-if lat:
-    lt = set(''.join(open(p, encoding='utf-8').read() for p in lat)) | {chr(c) for c in range(0x20, 0x7f)} | set('…—–“”‘’«»·•')
-    open(os.path.join(OUT, '.lat.txt'), 'w', encoding='utf-8').write(''.join(sorted(c for c in lt if c >= ' ' and ord(c) < 0x3000)))
-    for fam, f in (('Noto Serif', 'NotoSerif.ttf'), ('Noto Sans', 'NotoSans.ttf')):
-        name = fam.replace(' ', '') + '.woff2'
-        subprocess.run(['pyftsubset', os.path.join(FONTS, f), f'--text-file={os.path.join(OUT, ".lat.txt")}', '--flavor=woff2',
-                        '--layout-features=*', f'--output-file={os.path.join(OUT, name)}'], check=True)
-        css.append(f"@font-face{{font-family:'{fam}';font-weight:100 900;font-style:normal;font-display:block;src:url({name}) format('woff2')}}")
-    os.remove(os.path.join(OUT, '.lat.txt'))
+# Languages that name their own faces in _fonts (Latin: Noto Serif/Sans — the Korean faces draw "…" as a centred "⋯";
+# Chinese, Japanese, Arabic …): publish each named Noto face we have locally, subset to the glyphs those languages use,
+# so the live film looks like the renders instead of falling back to whatever the viewer's device has.
+LOCAL = {'Noto Serif': 'NotoSerif.ttf', 'Noto Sans': 'NotoSans.ttf', 'Noto Serif SC': 'NotoSerifSC.ttf', 'Noto Sans SC': 'NotoSansSC.ttf',
+         'Noto Serif JP': 'NotoSerifJP.ttf', 'Noto Sans JP': 'NotoSansJP.ttf', 'Noto Naskh Arabic': 'NotoNaskhArabic.ttf', 'Noto Sans Arabic': 'NotoSansArabic.ttf'}
+need = {}   # family → glyphs
+for p in glob.glob(os.path.join(PILOT, 'i18n', '*.json')):
+    j = json.load(open(p, encoding='utf-8')); f = j.get('_fonts')
+    if not f: continue
+    txt = json.dumps(j, ensure_ascii=False)
+    for fam in re.findall(r"'([^']+)'", (f.get('serif') or '') + ',' + (f.get('sans') or '')):
+        if fam in LOCAL and os.path.exists(os.path.join(FONTS, LOCAL[fam])): need.setdefault(fam, set()).update(txt)
+for fam, gl in sorted(need.items()):
+    gl |= {chr(c) for c in range(0x20, 0x7f)} | set('…—–“”‘’«»·•')
+    tf = os.path.join(OUT, '.sub.txt'); open(tf, 'w', encoding='utf-8').write(''.join(sorted(c for c in gl if c >= ' ')))
+    name = fam.replace(' ', '') + '.woff2'
+    subprocess.run(['pyftsubset', os.path.join(FONTS, LOCAL[fam]), f'--text-file={tf}', '--flavor=woff2', '--layout-features=*',
+                    f'--output-file={os.path.join(OUT, name)}'], check=True)
+    os.remove(tf)
+    css.append(f"@font-face{{font-family:'{fam}';font-weight:100 900;font-style:normal;font-display:block;src:url({name}) format('woff2')}}")
 open(os.path.join(OUT, 'fonts.css'), 'w').write('\n'.join(css) + '\n')
 os.remove(os.path.join(OUT, '.chars.txt'))
 

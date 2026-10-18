@@ -561,14 +561,11 @@ function buildE() {
           return mixc(c, mixc(C.fire, C.amber, .45), .7 * f); },
         ang: (px, py) => { const z = zAt(px), hy = yAt(px, py) / WALLH; return Math.atan2(vy - py, vx - px) + .5 * Math.sin(z * 3 + hy * 9) + .2 * Math.sin(z * 11); },
         len: 38, wid: 15, lk: (px) => clamp(.25 + Math.abs(px - vx) / (W * .45), .25, 1.8), cov: 2.6, seed: 410 + sd });
-      // glints of the fire on the face of the water
-      { const r3 = rng(415 + sd); x.save(); x.clip(face); for (let k = 0; k < 500; k++) { const z = lerp(1.2, 6.5, Math.pow(r3(), .8)), hy = r3() * .8, p = P3(sd * XW, hy * WALLH, z), f = Math.exp(-Math.abs(z - PILLAR.z) / 4) * (1 - hy * .7), sc = 1 / Math.sqrt(z);
-          if (r3() > f * 1.4) continue; dab(x, p[0], p[1], Math.atan2(vy - p[1], vx - p[0]) + (r3() - .5) * .4, 26 * sc + 4, 4 * sc + 1, css(mixc(C.amber, C.hot, r3())), .35 + r3() * .3); } x.restore(); }
       // the crest: a lip of foam curling over the corridor, its underside in shadow
       x.save(); x.lineCap = 'round'; x.lineJoin = 'round';
       for (const [w, col, a, dy] of [[40, mixc(C.night, C.teal, .3), .45, 10], [70, mixc(C.pale, C.teal, .4), .08], [46, mixc(C.pale, C.teal, .4), .12], [24, C.cream, .18]]) { x.strokeStyle = css(col, a);
         for (let k = 0; k < top.length - 1; k++) { const z = zN * Math.pow(zF / zN, k / 40), o = (dy || 0) / Math.sqrt(z * 4); x.lineWidth = Math.max(2, w / Math.sqrt(z * 4)); x.beginPath(); x.moveTo(top[k][0], top[k][1] + o); x.lineTo(top[k + 1][0], top[k + 1][1] + o); x.stroke(); } }
-      const r2 = rng(420 + sd); for (let k = 0; k < 420; k++) { const u2 = r2() * .48, z = zN * Math.pow(zF / zN, u2), i = Math.min(39, Math.floor(u2 * 40)), a0 = top[i], a1 = top[i + 1], f2 = u2 * 40 - i, sc = 1 / Math.sqrt(z * 4);
+      const r2 = rng(420 + sd); for (let k = 0; k < 320; k++) { const u2 = r2() * .38, z = zN * Math.pow(zF / zN, u2), i = Math.min(39, Math.floor(u2 * 40)), a0 = top[i], a1 = top[i + 1], f2 = u2 * 40 - i, sc = 1 / Math.sqrt(z * 4);
         const px = lerp(a0[0], a1[0], f2), py = lerp(a0[1], a1[1], f2) + (r2() - .6) * 14 * sc, ang = Math.atan2(a1[1] - a0[1], a1[0] - a0[0]);
         dab(x, px, py, ang + (r2() - .5) * .35, (30 + r2() * 30) * sc, (8 + r2() * 8) * sc, css(mixc(mixc(C.cream, C.pale, r2() * .6), C.amber, .35 * Math.exp(-Math.abs(z - PILLAR.z) / 4))), .5 + r2() * .35, (r2() - .5)); }
       x.restore();
@@ -651,7 +648,7 @@ function drawE(ctx, t) {
   view(ctx, s, vx, vy, 0, up); put(ctx, PE.walls); put(ctx, PE.floor);
   // the crowd walking toward us, far ones first; Moses ahead of them all
   const list = PE.crowd.map(p => { const z = p.z0 - u * .05; return { ...p, z }; }).filter(p => p.z > .19 && Math.abs(p.x) / p.z * FE < W * .7);
-  list.push({ mo: 1, x: V ? -.008 : -.02, z: (V ? .13 : .17) - u * .002, ph: 0 }); list.sort((a, b) => b.z - a.z);
+  list.push({ mo: 1, x: V ? -.008 : -.02, z: (V ? .2 : .17) - u * .002, ph: 0 }); list.sort((a, b) => b.z - a.z);
   for (const p of list) { const [X, Y] = P3(p.x, 0, p.z), hpx = .06 / p.z * FE, bob = Math.abs(Math.sin(u * 3.2 + p.ph)) * hpx * .02, rot = Math.sin(u * 3.2 + p.ph) * .025;
     const fade = ss(.19, .26, p.z) * clamp(1.4 - p.z / 7);
     ctx.save(); view(ctx, s, vx, vy, 0, up); ctx.translate(X, Y - bob); ctx.rotate(rot); ctx.globalAlpha = p.mo ? 1 : fade;

@@ -49,7 +49,7 @@ function noisyLoop(ctrl, seed, amp, step = 7) {           // a closed coastline:
 }
 
 // ---------- the chart (engraved once) ----------
-const ROSES = [[2250, 560, 250], [700, 2060, 140], [2980, 1240, 115]];
+const ROSES = [[2250, 560, 250], V ? [660, 1770, 140] : [700, 2060, 140], [2980, 1240, 115]];   // portrait: the small SW rose sits higher, clear of the narration band
 const CART = V ? { x: 980, y: 520, w: 800, h: 460, fs: 54 } : { x: 980, y: 540, w: 1120, h: 380, fs: 54 };
 const HARB = { x: 3255, y: 2205, w: 470, h: 118 }, SUN = [3050, 620], BAY = [3262, 1925], MON = [1300, 2030];
 function lands() {
@@ -555,7 +555,7 @@ const relO = (dx, dy) => t => { const p = oldP(t); return [p[0] + dx, p[1] + dy]
 const CAM = V ? [
   [0, [980, 560], 1.18], [6.2, [980, 580], 1.24], [9.4, [1300, 1350], .8], [13.4, relO(10, -250), 1.5], [15.2, relO(-30, -110), 2.0], [18.4, relO(20, -110), 2.0], [20.6, relO(0, -330), 1.3],
   [23.4, relO(60, -300), 1.22], [26.8, [3080, 1880], 1.05], [28.6, [3070, 1900], 1.1], [31.6, relO(-420, -200), .8], [35.0, relO(-490, -220), .86], [37.0, relO(-460, -120), 1.4], [41.6, relO(-560, -150), 1.4],
-  [44.5, relN(170, -170), 1.35], [49.0, relN(330, -230), 1.0], [52.0, [2330, 1200], .8], [57.5, [2340, 1190], .82]]
+  [44.5, relN(170, -170), 1.35], [49.0, relN(330, -230), 1.0], [52.0, [1560, 1120], .78], [57.5, [1620, 1100], .8]]
   : [
   [0, [980, 470], .98], [6.2, [980, 482], 1.04], [9.2, [1800, 1250], .54], [13.4, relO(10, -250), 1.3], [15.2, relO(-30, -110), 1.85], [18.4, relO(20, -110), 1.85], [20.6, relO(0, -300), 1.02],
   [23.4, relO(60, -290), .98], [26.8, [3080, 1880], 1.0], [28.6, [3070, 1900], 1.04], [31.6, [1700, 1350], .62], [35.0, relO(-490, -220), .9], [37.0, relO(-470, -130), 1.25], [41.6, relO(-560, -150), 1.25],
@@ -568,14 +568,27 @@ function cam(t) {
 }
 
 // ---------- words ----------
-function say(ctx, s, a) {           // narration, engraved in ink on the paper with a soft clearing round it
-  if (a <= 0) return; const lines = Pilot.tr(s).split('\n'), fs0 = V ? 42 : 44, lh = fs0 * 1.5, maxW = W - (V ? 100 : 160);
+function say(ctx, s, a, R = W) {    // narration, engraved in ink on the paper with a soft clearing round it; R: keep left of this screen x
+  if (a <= 0) return; const lines = Pilot.tr(s).split('\n'), fs0 = V ? 42 : 44, lh = fs0 * 1.5, mg = V ? 50 : 80, maxW = Math.min(W - 2 * mg, R - 24 - mg);
   ctx.save(); ctx.font = `600 ${fs0}px ${SERIF}`; const wd = Math.max(...lines.map(l => ctx.measureText(l).width)), fs = wd > maxW ? fs0 * maxW / wd : fs0; ctx.restore();
-  const yl = V ? H - 290 : H - 74, y0 = yl - (lines.length - 1) * lh, cy = (y0 + yl) / 2 - fs * .35, rx = Math.min(W * .62, Math.min(wd, maxW) * .62 + 140), ry = lines.length * lh * .5 + 70;
-  ctx.save(); ctx.globalAlpha = a; ctx.translate(W / 2, cy); ctx.scale(rx, ry); const g = ctx.createRadialGradient(0, 0, 0, 0, 0, 1); g.addColorStop(0, 'rgba(242,232,206,.9)'); g.addColorStop(.55, 'rgba(242,232,206,.72)'); g.addColorStop(1, 'rgba(242,232,206,0)');
+  const xc = Math.min(W / 2, R - 24 - Math.min(wd, maxW) / 2), yl = V ? H - 290 : H - 74, y0 = yl - (lines.length - 1) * lh, cy = (y0 + yl) / 2 - fs * .35, rx = Math.min(W * .62, Math.min(wd, maxW) * .62 + 140), ry = lines.length * lh * .5 + 70;
+  ctx.save(); ctx.globalAlpha = a; ctx.translate(xc, cy); ctx.scale(rx, ry); const g = ctx.createRadialGradient(0, 0, 0, 0, 0, 1); g.addColorStop(0, 'rgba(242,232,206,.9)'); g.addColorStop(.55, 'rgba(242,232,206,.72)'); g.addColorStop(1, 'rgba(242,232,206,0)');
   ctx.fillStyle = g; ctx.beginPath(); ctx.arc(0, 0, 1, 0, TAU); ctx.fill(); ctx.restore();
-  text(ctx, s, W / 2, y0, { size: fs, weight: 600, color: 'rgba(239,227,196,1)', alpha: a, shadow: 'rgba(239,227,196,1)', shadowBlur: 14, lh: 1.5, maxW });
-  text(ctx, s, W / 2, y0, { size: fs, weight: 600, color: '#24180E', alpha: a, lh: 1.5, maxW });
+  text(ctx, s, xc, y0, { size: fs, weight: 600, color: 'rgba(239,227,196,1)', alpha: a, shadow: 'rgba(239,227,196,1)', shadowBlur: 14, lh: 1.5, maxW });
+  text(ctx, s, xc, y0, { size: fs, weight: 600, color: '#24180E', alpha: a, lh: 1.5, maxW });
+}
+
+function harbourName(ctx) {         // 심판의 항구 on its banner: a translation may run to two lines, so shrink to fit and centre the block
+  const lines = Pilot.tr('심판의 항구').split('\n'), n = lines.length, lh = 1.12, maxW = HARB.w - 50;
+  ctx.save(); ctx.font = `600 46px ${SERIF}`; ctx.letterSpacing = '6px'; const wd = Math.max(...lines.map(l => ctx.measureText(l).width)); ctx.restore();
+  const fs = Math.min(46, 46 * maxW / wd * .999, 80 / (.78 + (n - 1) * lh));
+  text(ctx, '심판의 항구', HARB.x, HARB.y - .56 + fs * .36 - (n - 1) * fs * lh / 2, { size: fs, weight: 600, color: '#24180E', ls: 6, lh, maxW });
+}
+let HARB_L = null;
+function harbLeft() {                // landscape: the furthest left the harbour banner reaches on screen while its line is spoken (that line keeps clear of it)
+  if (HARB_L == null) { HARB_L = W; for (let τ = 23.7; τ <= 29.9; τ += .1) { const [cx, cy, s] = cam(τ), x = W / 2 + (HARB.x - HARB.w / 2 - 80 - cx) * s, y = H / 2 + (HARB.y - HARB.h / 2 - 20 - cy) * s;
+    if (y < H - 20 && x < W) HARB_L = Math.min(HARB_L, x); } }
+  return HARB_L;
 }
 
 // ---------- frame ----------
@@ -594,7 +607,7 @@ function draw(ctx, t) {
   routes(ctx, t, so, sn);
   // question in the title cartouche (engraved lettering, inked in at the start)
   text(ctx, V ? '예수님 안 믿어도,\n그냥 착하게 살면\n되는 것 아닌가요?' : '예수님 안 믿어도,\n그냥 착하게 살면 되는 것 아닌가요?', CART.x, CART.y - (V ? 64 : 26), { size: CART.fs, weight: 600, color: '#24180E', alpha: ss(.9, 2.4, t) * (1 - .75 * ss(49.2, 50.6, t)), lh: 1.42, maxW: CART.w - 110 });
-  text(ctx, '심판의 항구', HARB.x, HARB.y + 16, { size: 46, weight: 600, color: '#24180E', ls: 6, maxW: HARB.w - 50 });
+  harbourName(ctx);
   // ships: the lit one (farther) first, then the pirate ship, then the boat
   const boatOn = t > 33.9, inBoat = hs.layer === 'boat';
   if (t > 19.5) drawShip(ctx, t, 'new', sn, () => { lightFig(t, sn, ctx); if (hs.layer === 'new') figure(ctx, sn, hs.lx, deck(hs.lx), hs.P, hs.o, hs.f); });
@@ -618,12 +631,12 @@ function draw(ctx, t) {
 
   // chapter label, narration, verse
   const ca = win(t, .6, 5, 1, 1);
-  if (ca > 0) { text(ctx, '19  ·  착하게 살면?', V ? 80 : 110, V ? 200 : 120, { align: 'left', size: 30, weight: 600, color: 'rgba(239,227,196,1)', alpha: ca, ls: 4, shadow: 'rgba(239,227,196,1)', shadowBlur: 16 });
-    text(ctx, '19  ·  착하게 살면?', V ? 80 : 110, V ? 200 : 120, { align: 'left', size: 30, weight: 600, color: '#3A2614', alpha: ca, ls: 4 }); }
+  if (ca > 0) { text(ctx, '19  ·  착하게 살면?', V ? 80 : 110, V ? 200 : 144, { align: 'left', size: 30, weight: 600, color: 'rgba(239,227,196,1)', alpha: ca, ls: 4, shadow: 'rgba(239,227,196,1)', shadowBlur: 16 });
+    text(ctx, '19  ·  착하게 살면?', V ? 80 : 110, V ? 200 : 144, { align: 'left', size: 30, weight: 600, color: '#3A2614', alpha: ca, ls: 4 }); }
   say(ctx, '해적선에 타고 있다고 해봅시다.', win(t, 7.2, 11.9, .6, .5));
   say(ctx, V ? '그 배 위에서 아무리 갑판을 깨끗이 닦고,\n동료에게 친절하고, 누구보다 모범적으로 산다 해도 —' : '그 배 위에서 아무리 갑판을 깨끗이 닦고, 동료에게 친절하고,\n누구보다 모범적으로 산다 해도 —', win(t, 12.2, 18.7, .6, .5));
   say(ctx, '당신은 여전히 ‘해적’입니다.', win(t, 18.9, 23.5, .6, .5));
-  say(ctx, '그 배가 향하는 곳(심판의 항구)으로\n배와 함께 실려 가기 때문입니다.', win(t, 23.7, 29.9, .6, .5));
+  say(ctx, '그 배가 향하는 곳(심판의 항구)으로\n배와 함께 실려 가기 때문입니다.', win(t, 23.7, 29.9, .6, .5), V ? W : harbLeft());
   say(ctx, '문제는 ‘행동의 점수’가 아니라\n‘어느 배에 속했는가’(신분)입니다.', win(t, 30.1, 36.3, .6, .5));
   say(ctx, '그래서 복음은 “더 착해져라”가 아니라\n“배를 옮겨 타라”고 말합니다.', win(t, 36.5, 42.7, .6, .5));
   say(ctx, '죄의 배에서 내려, 예수님께로 —\n하나님의 자녀라는 새 신분으로 건너가는 것입니다.', win(t, 42.9, 49.3, .6, .5));

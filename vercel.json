@@ -2,6 +2,7 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "buildCommand": "node tools/build-pages.mjs",
   "outputDirectory": ".",
+  "git": { "deploymentEnabled": { "**": false, "main": true } },
   "headers": [
     {
       "source": "/(.*)",

@@ -98,7 +98,7 @@
     <button type="button" id="next" aria-label="다음 장면" data-ui-aria="next">⏭</button>
     <span class="now" id="now">00 하나의 줄거리</span>
     <span class="grow" aria-hidden="true"><i id="prog"></i></span>
-    <span id="tm" style="font-variant-numeric:tabular-nums">0:00 / 13:35</span>
+    <span id="tm" style="font-variant-numeric:tabular-nums">0:00 / 14:18</span>
     <button type="button" data-o="h" aria-pressed="true" data-ui="landscape">가로</button>
     <button type="button" data-o="v" aria-pressed="false" data-ui="portrait">세로</button>
     <button type="button" id="fs" aria-label="전체 화면" data-ui-aria="full">⛶</button>
@@ -120,9 +120,9 @@
   var LANG = (location.search.match(/[?&]lang=([\w-]+)/) || [])[1] || 'ko', UI = {};
   // [file, label, seconds]
   var S = [['opening','하나의 줄거리',36],['creation','창조',35],['fall','타락',34],['patriarch','족장',26],['exodus','출애굽',38],
-    ['wilderness','광야 여정',39.5],['judges','사사 시대',40],['kingdom','통일 왕국',39],['exile','분열 · 포로',36],['return','포로 귀환',35],
-    ['silence','400년 침묵',34],['advent','예수님의 오심',36],['cross','십자가',39],['rise','부활',27],['church','교회',35],['renewal','회복',36],
-    ['mirror','거울',40],['gospel','복음의 핵심',66.85],['evidence','성경은 실화인가',40],['ship','착하게 살면?',46.5],['invite','초대',57]];
+    ['wilderness','광야 여정',39.5],['judges','사사 시대',40],['kingdom','통일 왕국',39],['exile','분열 · 포로',36],['return','포로 귀환',38],
+    ['silence','400년 침묵',38],['advent','예수님의 오심',36],['cross','십자가',39],['rise','부활',27],['church','교회',35],['renewal','회복',36],
+    ['mirror','거울',44.5],['gospel','복음의 핵심',66.85],['evidence','성경은 실화인가',60],['ship','착하게 살면?',57.5],['invite','초대',57]];
   // other languages: page text from film/s/i18n/<lang>.json "_ui" (the scenes read the same file)
   if (LANG !== 'ko') { try { var x = new XMLHttpRequest(); x.open('GET', '/film/s/i18n/' + LANG + '.json', false); x.send();
     var J = JSON.parse(x.responseText); UI = J._ui || {}; document.documentElement.lang = LANG; document.documentElement.dir = J._dir || 'ltr'; } catch (e) { LANG = 'ko'; } }

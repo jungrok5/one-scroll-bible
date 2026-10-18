@@ -354,7 +354,7 @@ function buildP4() {
     const boughs = V ? [[[tx, PH * .1], [PW * .3, PH * .04], [PW * .55, PH * .06], [PW * .78, PH * .12]]] : [[[tx, PH * .1], [PW * .2, PH * .05], [PW * .34, PH * .06], [PW * .48, PH * .14]], [[tx, PH * .2], [PW * .14, PH * .16], [PW * .24, PH * .14]]];
     boughs.forEach((b, i) => ops.push({ t0: .8 + i * .1, d: .4, f: (m, k) => { m.fillStyle = '#000'; m.fill(gouge(prefix(b, k), 26, rng(i), .3)); } }));
     const r = rng(94); for (let i = 0; i < (V ? 70 : 90); i++) { const b = boughs[i % boughs.length], u = .1 + r() * .9, j = Math.min(b.length - 2, Math.floor(u * (b.length - 1))), f = u * (b.length - 1) - j, x = lerp(b[j][0], b[j + 1][0], f), y = lerp(b[j][1], b[j + 1][1], f), len = PH * (.22 + r() * .3), sw = (r() - .5) * 40;
-      const out2 = (r() - .5) * 60, pts = []; for (let q = 0; q <= 8; q++) { const u2 = q / 8; pts.push([x + out2 * Math.sin(u2 * 1.6) + sw * u2 * u2, y + len * u2]); } const wd = 4 + r() * 3;
+      const dir = r() < .5 ? -1 : 1, out2 = dir * (30 + r() * 80), pts = []; for (let q = 0; q <= 10; q++) { const u2 = q / 10; pts.push([x + out2 * Math.sin(u2 * 2.2) * (1 - u2 * .35) + sw * u2 * u2, y - 18 * Math.sin(u2 * 3.1) * (1 - u2) + len * Math.pow(u2, 1.25)]); } const wd = 4 + r() * 3;
       ops.push({ t0: 1.0 + r() * .8, d: .3, f: (m, k) => { m.fillStyle = '#000'; const pp = prefix(pts, k); m.fill(gouge(pp, wd, rng(i), .6)); for (let q = 1; q < pp.length; q++) { const [px, py] = pp[q]; m.fill(gouge(line(px, py, px + (q % 2 ? 9 : -9), py + 12, 1, 2), 3.5, rng(i + q))); } } }); }
     // the near bank
     ops.push({ t0: .7, d: .01, f: m => { m.fillStyle = '#000'; m.fillRect(0, rv[1], PW, PH - rv[1]); } });

@@ -94,9 +94,9 @@ function faceOps(ops, cx, cy, o) {
   const P = shape(outline), box = [Math.min(...outline.map(p => p[0])), Math.min(...outline.map(p => p[1])), Math.max(...outline.map(p => p[0])), Math.max(...outline.map(p => p[1]))];
   fillOp(ops, P, '#fff', t0, .45, box, o.ang + Math.PI / 2 * 0);
   // the shadow side: black, its edge jagged down the line of the nose; a few reflected-light cuts inside it
-  const shd = T([[fx * .1 + sd * 3, -60], [sd * 4 + fx * .3, -24], [sd * 6 + fx * .8, -4], [sd * 9 + fx, 16], [sd * 5 + fx * .7, 30], [sd * 9 + fx * .5, 44], [sd * 6, 70], [sd * 70, 70], [sd * 70, -70]]);
+  const shd = T([[sd * 20 + fx * .2, -60], [sd * 22 + fx * .3, -30], [sd * 17 + fx * .5, -8], [sd * 21 + fx * .6, 14], [sd * 15 + fx * .5, 32], [sd * 10 + fx * .3, 48], [sd * 6, 70], [sd * 70, 70], [sd * 70, -70]]);
   ops.push({ t0: t0 + .35, d: .25, f: (m, k) => { m.save(); m.clip(P); m.globalAlpha = k; m.fillStyle = '#000'; m.fill(shape(shd)); m.restore(); } });
-  for (let i = 0; i < 4; i++) { const y = -20 + i * 15 + r() * 5, a = T([[sd * (12 + i * 2) + fx * .5, y], [sd * (26 - i * 1.5) + fx * .3, y + 9]]); cutOp(ops, line(a[0][0], a[0][1], a[1][0], a[1][1], 1), 3.2 * s, t0 + .7 + i * .05, .1, (o.seed || 1) * 13 + i); }
+  for (let i = 0; i < 4; i++) { const y = -24 + i * 16 + r() * 5, a = T([[sd * (22 + i) + fx * .4, y], [sd * (31 - i * 1.5) + fx * .2, y + 10]]); cutOp(ops, line(a[0][0], a[0][1], a[1][0], a[1][1], 1), 3.2 * s, t0 + .7 + i * .05, .1, (o.seed || 1) * 13 + i); }
   const blk = (pts, w, dt) => { const pp = T(pts); ops.push({ t0: t0 + dt, d: .12, f: (m, k) => { m.fillStyle = '#000'; m.fill(gouge(prefix(pp, k), w * s, rng(5))); } }); };
   const blob = (pts, dt) => { const pp = shape(T(pts)); ops.push({ t0: t0 + dt, d: .1, f: (m, k) => { m.globalAlpha = k; m.fillStyle = '#000'; m.fill(pp); } }); };
   // brows: heavy, the inner ends lifted by grief
@@ -123,15 +123,16 @@ function faceOps(ops, cx, cy, o) {
 // a big hand: palm, four fingers and a thumb cut out white, black lines between the fingers
 // o: s (hand ≈ 100·s long, wrist at x,y pointing along ang), spread, curl (0 open … 1 fist), flip, t0
 function handOps(ops, x, y, ang, o) {
-  const s = o.s, f = o.flip ? -1 : 1, sp = o.spread || 0, cu = o.curl || 0, T = pts => tfm(x, y, s, pts, ang, f);
+  const s = o.s, f = o.flip ? -1 : 1, sp = o.spread == null ? .3 : Math.max(o.spread, .25), cu = o.curl || 0, T = pts => tfm(x, y, s, pts, ang, f);
   const palm = T([[-19, 2], [19, 2], [23, -24], [22, -46], [-21, -46], [-23, -22]]);
   const segs = [], fing = [[-15, 36], [-5, 44], [6, 42], [16, 34]];
-  fing.forEach(([bx, L], i) => { const a = (i - 1.5) * .13 * sp, L2 = L * (1 - cu * .45); segs.push([T([[bx, -44], [bx + Math.sin(a) * L2 * .55, -44 - Math.cos(a) * L2 * .55 + cu * 8], [bx + Math.sin(a) * L2 - cu * 6, -44 - Math.cos(a) * L2 + cu * 22]]), 10.5 - i * .6]); });
+  fing.forEach(([bx, L], i) => { const a = (i - 1.5) * .13 * sp, L2 = L * (1 - cu * .45); segs.push([T([[bx, -44], [bx + Math.sin(a) * L2 * .55, -44 - Math.cos(a) * L2 * .55 + cu * 8], [bx + Math.sin(a) * L2 - cu * 6, -44 - Math.cos(a) * L2 + cu * 22]]), 8.2 - i * .5]); });
   segs.push([T([[-20, -12], [-30, -28 + cu * 6], [-36 + cu * 10, -44 + cu * 14]]), 11]);
   ops.push({ t0: o.t0, d: .4, f: (m, k) => { m.globalAlpha = Math.min(1, k * 1.6); m.fillStyle = '#fff'; m.fill(shape(palm)); m.strokeStyle = '#fff'; m.lineCap = 'round'; m.lineJoin = 'round';
     for (const [pts, w] of segs) { m.lineWidth = w * s; m.beginPath(); prefix(pts, clamp(k * 1.4 - .2)).forEach((p, i) => i ? m.lineTo(p[0], p[1]) : m.moveTo(p[0], p[1])); m.stroke(); } } });
   // the gaps between the fingers, knuckle creases, the shadow under the palm
-  for (let i = 0; i < 3; i++) { const bx = -10 + i * 10.5, pp = T([[bx, -46], [bx + (i - 1) * 2 * sp, -60 + cu * 6], [bx + (i - 1) * 3 * sp, -74 + cu * 14]]); ops.push({ t0: o.t0 + .4, d: .1, f: (m, k) => { m.fillStyle = '#000'; m.fill(gouge(prefix(pp, k), 2.6 * s, rng(i))); } }); }
+  for (let i = 0; i < 3; i++) { const bx = -10 + i * 10.5, pp = T([[bx, -46], [bx + (i - 1) * 2 * sp, -60 + cu * 6], [bx + (i - 1) * 3 * sp, -74 + cu * 14]]); ops.push({ t0: o.t0 + .4, d: .1, f: (m, k) => { m.fillStyle = '#000'; m.fill(gouge(prefix(pp, k), 3.4 * s, rng(i))); } }); }
+  { const pp = T([[-22, 4], [0, 8], [22, 4]]); ops.push({ t0: o.t0 + .45, d: .1, f: (m, k) => { m.fillStyle = '#000'; m.fill(gouge(prefix(pp, k), 6 * s, rng(4))); } }); }
   for (let i = 0; i < 4; i++) { const bx = -15 + i * 10.5, pp = T([[bx - 3, -50 + cu * 4], [bx + 3, -50 + cu * 4]]); ops.push({ t0: o.t0 + .45, d: .1, f: (m, k) => { m.fillStyle = '#000'; m.fill(gouge(prefix(pp, k), 1.8 * s, rng(9 + i))); } }); }
   { const pp = T([[18, -4], [20, -26], [14, -44]]); ops.push({ t0: o.t0 + .45, d: .12, f: (m, k) => { m.fillStyle = '#000'; m.fill(gouge(prefix(pp, k), 4 * s, rng(3))); } }); }
 }
@@ -139,10 +140,11 @@ function handOps(ops, x, y, ang, o) {
 function bodyOps(ops, pts, L, o) {
   const P = shape(pts), b = [Math.min(...pts.map(p => p[0])), Math.min(...pts.map(p => p[1])), Math.max(...pts.map(p => p[0])), Math.max(...pts.map(p => p[1]))];
   ops.push({ t0: o.t0, d: .01, f: m => { m.fillStyle = '#000'; m.fill(P); } });
-  contourOps(ops, pts, L, o.wmin || 1.5, o.wmax || 7, o.t0, o.d || 1, o.seed || 3, o.out == null ? 3 : o.out);
+  contourOps(ops, pts, L, o.wmin || 2.5, o.wmax || 12, o.t0, o.d || 1, o.seed || 3, o.out == null ? 3 : o.out);
   if (o.folds) { const r = rng(o.seed || 3), cx = (b[0] + b[2]) / 2, cy = (b[1] + b[3]) / 2;
     for (let i = 0; i < o.folds; i++) { const u = r(), a = o.foldAng == null ? Math.PI / 2 : o.foldAng, x0 = lerp(b[0], b[2], .5 + L[0] * (.25 + r() * .2)) + (r() - .5) * (b[2] - b[0]) * .25, y0 = lerp(b[1], b[3], .15 + u * .6), len = (b[3] - b[1]) * (.12 + r() * .2);
-      if (!hit.isPointInPath(P, x0, y0)) continue; cutOp(ops, line(x0, y0, x0 + Math.cos(a) * len, y0 + Math.sin(a) * len, (r() - .5) * 10), (o.foldW || 4) * (.6 + r() * .6), o.t0 + .3 + r() * (o.d || 1), .2, (x0 * 3 + y0) | 0); } }
+      if (!hit.isPointInPath(P, x0, y0)) continue; const nb = 1 + Math.floor(r() * 3), bw = (o.foldW || 4) * (.6 + r() * .6), bow = (r() - .5) * 14, tt = o.t0 + .3 + r() * (o.d || 1);
+      for (let q = 0; q < nb; q++) { const ox = -Math.sin(a) * q * bw * 2.6, oy = Math.cos(a) * q * bw * 2.6, l2 = len * (1 - q * .2); cutOp(ops, line(x0 + ox, y0 + oy, x0 + ox + Math.cos(a) * l2, y0 + oy + Math.sin(a) * l2, bow), bw * (1 - q * .2), tt + q * .05, .2, ((x0 + ox) * 3 + y0) | 0); } } }
   return P;
 }
 
@@ -150,14 +152,14 @@ function bodyOps(ops, pts, L, o) {
 // cov: 'cloth' (men's headcloth), 'veil' (falls to the shoulders and down the back), 'hair', 'crown'
 function personOps(ops, o) {
   const { hx, hy, s, t0 } = o, tr = o.tr || 0, ang = o.ang || 0, L = o.L || [o.lx || -1, -.4], back = tr >= 0 ? -1 : 1;
-  if (o.body) bodyOps(ops, o.body, L, { t0: t0 - .2, d: 1.2, seed: o.seed || 3, folds: o.folds || 6, wmax: o.wmax || 8 * s / 1.6, foldW: 4 * s / 1.6 });
+  if (o.body) bodyOps(ops, o.body, L, { t0: t0 - .2, d: 1.2, seed: o.seed || 3, folds: o.folds || 14, wmin: 2.5, wmax: o.wmax || 14 * s / 1.6, foldW: 6 * s / 1.6 });
   const cv = o.cov || 'cloth', C = (pts) => tfm(hx, hy, s, pts, ang);
   const cover = cv === 'veil' ? C([[0, -66], [back * 34, -60], [back * 52, -26], [back * 58, 30], [back * 62, 100], [back * 40, 130], [0, 80], [-back * 40, 40], [-back * 44, -20], [-back * 30, -56]])
               : cv === 'hair' ? C([[0, -62], [back * 34, -56], [back * 46, -20], [back * 42, 26], [back * 26, 40], [-back * 30, 20], [-back * 40, -24], [-back * 26, -54]])
               : C([[0, -68], [back * 36, -62], [back * 52, -30], [back * 54, 20], [back * 50, 74], [back * 22, 70], [-back * 36, 30], [-back * 46, -18], [-back * 30, -58]]);
-  bodyOps(ops, cover, L, { t0: t0 - .1, d: .8, seed: (o.seed || 3) + 50, wmax: 7 * s / 1.6, folds: cv === 'veil' ? 4 : 2, foldW: 3 * s / 1.6, foldAng: Math.PI / 2 + back * .3 });
+  bodyOps(ops, cover, L, { t0: t0 - .1, d: .8, seed: (o.seed || 3) + 50, wmin: 2.2, wmax: 12 * s / 1.6, folds: cv === 'veil' ? 9 : 4, foldW: 5 * s / 1.6, foldAng: Math.PI / 2 + back * .3 });
   const F = faceOps(ops, hx, hy, { s, ang, tr, lx: o.lx || -1, eyes: o.eyes, mouth: o.mouth, grief: o.grief, beard: o.beard, t0, seed: o.seed || 3 });
-  contourOps(ops, F.outline, L, 1.2, 5 * s / 1.6, t0 + .9, .6, (o.seed || 3) + 90, 2);
+  contourOps(ops, F.outline, L, 2, 9 * s / 1.6, t0 + .9, .6, (o.seed || 3) + 90, 3);
   if (cv === 'crown') { const cr = C([[-34, -46], [-36, -78], [-24, -62], [-12, -92], [0, -66], [12, -92], [24, -62], [36, -78], [34, -46]]);
     ops.push({ t0: t0 + 1.0, d: .01, f: m => { m.fillStyle = '#000'; m.fill(shape(cr.concat([[cr[8][0], cr[8][1]]]))); } });
     contourOps(ops, cr, [0, -1], 3, 6, t0 + 1.0, .6, 77, 2);
@@ -230,7 +232,7 @@ function buildP2() {
     const { tx, hill } = G2, fy = hill - (V ? 90 : 110);
     // the sky over the city: the fire's light, cut in rays from the temple
     hatchOps(ops, (x, y) => y < hill + 10, { box: [0, 0, PW, hill + 20], ang: 0, sp: 9, len: [30, 130], gap: 9, seed: 41, d: .12,
-      w: (x, y, r) => { const d = Math.hypot(x - tx, (y - fy) * 1.6) / PW; return Math.max(0, 12 * (1 - d * 1.6)) * (r() < .9 ? 1 : 0); }, t: (x, y) => .1 + Math.hypot(x - tx, y - fy) / PW * 1.6 });
+      w: (x, y, r) => { const d = Math.hypot(x - tx, (y - fy) * 1.4) / PW; return Math.max(0, 17 * (1 - d * 1.25)) * (r() < .92 ? 1 : 0); }, t: (x, y) => .1 + Math.hypot(x - tx, y - fy) / PW * 1.6 });
     // the hill and the city on it: black against the glow
     const hp = [[G2.cx0 - 80, PH + 20], [G2.cx0, hill + 30], [tx - 60, hill - 10], [tx + 80, hill - 6], [G2.cx1, hill + 20], [G2.cx1, PH + 20]];
     const cityPts = []; for (let x = G2.cx0 + 20; x < G2.cx1 - 10; x += 34) cityPts.push([x, hill - 34 - ((x / 34) % 3) * 10]);
@@ -256,8 +258,8 @@ function plate2(lt) {
   if (a <= 0) return;
   // the temple burns: white tongues licking up, re-cut on twos; black smoke rolling up and away to the left
   mx.save(); mx.fillStyle = '#fff';
-  for (let i = 0; i < 16; i++) { const x = tx - 66 + i * 8.8 + (r() - .5) * 6, h = (40 + r() * 110) * a * (1 - Math.abs(i - 7.5) / 12), sw = (r() - .5) * 30;
-    mx.fill(gouge([[x, fy], [x + sw * .3, fy - h * .4], [x + sw * .8, fy - h * .75], [x + sw, fy - h]], 9 + r() * 6, r)); }
+  for (let i = 0; i < 22; i++) { const x = tx - 90 + i * 8.6 + (r() - .5) * 6, h = (70 + r() * 190) * a * (1 - Math.abs(i - 10.5) / 15), sw = (r() - .5) * 40;
+    mx.fill(gouge([[x, fy + 6], [x + sw * .3, fy - h * .4], [x + sw * .8, fy - h * .75], [x + sw, fy - h]], 11 + r() * 8, r)); }
   for (let i = 0; i < 10; i++) { const x = tx + (r() - .5) * 200, y = fy - 60 - r() * 160 * a; mx.fill(gouge(line(x, y, x + (r() - .5) * 8, y - 6 - r() * 10), 3, r)); }
   mx.restore();
   const sm = ss(.6, 6, lt), rs = rng(510);
@@ -307,7 +309,7 @@ function buildP3() {
 function plate3(lt) {
   show(S3, lt, mx);
   const gap = V ? 330 : 380, sp = V ? 32 : 46, x0 = V ? -120 : -100, tq = Math.floor(lt * 8) / 8, hz = V ? PH * .5 : PH * .58;
-  const pos = CAP.map((c, i) => { const x = x0 + tq * sp - i * gap + (V ? 3 : 4) * gap * .55, bob = Math.abs(Math.sin(tq * 3.2 + i * 1.3)) * 6; return [x, (V ? PH * .2 : PH * .12) - bob]; });
+  const pos = CAP.map((c, i) => { const x = PW * (V ? .78 : .9) + tq * sp - i * gap * (V ? .62 : .8), bob = Math.abs(Math.sin(tq * 3.2 + i * 1.3)) * 6; return [x, (V ? PH * .2 : PH * .12) - bob]; });
   // the rope from one pair of bound hands to the next
   CAP.forEach((c, i) => { const [x, y] = pos[i], a = ss(.2 + i * .12, .7 + i * .12, lt); if (a <= 0) return; mx.globalAlpha = a; mx.drawImage(c, x - c.width / 2, y); mx.globalAlpha = 1; });
   mx.fillStyle = '#fff'; for (let i = 0; i < CAP.length - 1; i++) { const a = pos[i], b = pos[i + 1]; if (a[0] > PW + 300) continue; const ya = (V ? PH * .2 : PH * .12) + CAP[0].height * .55;
@@ -315,22 +317,24 @@ function plate3(lt) {
 }
 
 // ================= plate 4: by the rivers of Babylon =================
-const G4 = V ? { hz: PH * .34, rv: [PH * .37, PH * .52], tx: PW * .1, harps: [[PW * .25, PH * .2], [PW * .45, PH * .14], [PW * .66, PH * .22]], ray: [[PW * .98, -10], [PW * .9, -10], [PW * .6, PH * .62], [PW * .74, PH * .62]] }
-             : { hz: PH * .4, rv: [PH * .45, PH * .63], tx: PW * .09, harps: [[PW * .17, PH * .26], [PW * .29, PH * .18], [PW * .41, PH * .29]], ray: [[PW * .86, -10], [PW * .82, -10], [PW * .58, PH * .5], [PW * .65, PH * .5]] };
+const G4 = V ? { hz: PH * .34, rv: [PH * .37, PH * .52], tx: PW * .1, harps: [[PW * .25, PH * .2], [PW * .45, PH * .14], [PW * .66, PH * .22]], ray: [[PW * .96, -10], [PW * .93, -10], [PW * .66, PH * .52], [PW * .72, PH * .52]] }
+             : { hz: PH * .4, rv: [PH * .45, PH * .63], tx: PW * .09, harps: [[PW * .17, PH * .26], [PW * .29, PH * .18], [PW * .41, PH * .29]], ray: [[PW * .875, -10], [PW * .86, -10], [PW * .6, PH * .42], [PW * .64, PH * .42]] };
 let S4;
-function lyre(ops, x, y, s, t0) {   // a harp hung by a cord from the branch: frame, crossbar, strings — black on the carved sky
-  const pts = [[x - 30 * s, y + 10 * s], [x - 34 * s, y + 70 * s], [x - 10 * s, y + 104 * s], [x + 10 * s, y + 104 * s], [x + 34 * s, y + 70 * s], [x + 30 * s, y + 10 * s]];
-  ops.push({ t0, d: .5, f: (m, k) => { m.globalAlpha = Math.min(1, k * 2); m.strokeStyle = '#000'; m.lineCap = 'round'; m.lineJoin = 'round';
-    m.lineWidth = 2.5 * s; m.beginPath(); m.moveTo(x, y - 60 * s); m.lineTo(x, y + 6 * s); m.stroke();
-    m.lineWidth = 9 * s; m.beginPath(); m.moveTo(pts[0][0], pts[0][1]); m.bezierCurveTo(pts[1][0], pts[1][1], pts[2][0], pts[2][1], x, y + 104 * s); m.bezierCurveTo(pts[3][0], pts[3][1], pts[4][0], pts[4][1], pts[5][0], pts[5][1]); m.stroke();
-    m.beginPath(); m.moveTo(x - 36 * s, y + 6 * s); m.lineTo(x + 36 * s, y + 6 * s); m.stroke();
-    m.lineWidth = 1.6 * s; for (let i = -2; i <= 2; i++) { m.beginPath(); m.moveTo(x + i * 9 * s, y + 8 * s); m.lineTo(x + i * 5 * s, y + 98 * s); m.stroke(); } } });
+function lyre(ops, x, y, s, t0) {   // a harp hung by a cord from the bough: its frame, crossbar and strings cut out white
+  const box = [[x - 34 * s, y + 46 * s], [x - 30 * s, y + 84 * s], [x, y + 104 * s], [x + 30 * s, y + 84 * s], [x + 34 * s, y + 46 * s]];
+  ops.push({ t0, d: .01, f: m => { m.fillStyle = '#000'; m.beginPath(); m.ellipse(x, y + 46 * s, 60 * s, 74 * s, 0, 0, 6.29); m.fill(); } });
+  cutOp(ops, line(x, y - 74 * s, x, y - 14 * s, 2), 3 * s, t0, .2, 400 + x);                                             // the cord
+  cutOp(ops, box, 10 * s, t0 + .1, .3, 401 + x);                                                                          // the sound box
+  cutOp(ops, [[x - 32 * s, y + 50 * s], [x - 44 * s, y + 20 * s], [x - 40 * s, y - 6 * s], [x - 48 * s, y - 22 * s]], 8 * s, t0 + .3, .2, 404 + x);   // the two arms, curling out
+  cutOp(ops, [[x + 32 * s, y + 50 * s], [x + 44 * s, y + 20 * s], [x + 40 * s, y - 6 * s], [x + 48 * s, y - 22 * s]], 8 * s, t0 + .35, .2, 405 + x);
+  cutOp(ops, line(x - 46 * s, y - 12 * s, x + 46 * s, y - 14 * s, 1), 7 * s, t0 + .5, .15, 402 + x);                     // the yoke
+  for (let i = -2; i <= 2; i++) cutOp(ops, line(x + i * 9 * s, y - 10 * s, x + i * 6 * s, y + 92 * s, 0), 2.2 * s, t0 + .6 + (i + 2) * .05, .15, 403 + x + i);
 }
 function buildP4() {
   const { hz, rv, tx } = G4;
   S4 = sheet(ops => {
     // sky: carved light, widest at the horizon
-    hatchOps(ops, (x, y) => y < hz, { box: [0, 0, PW, hz], ang: -.015, sp: 9, len: [70, 240], gap: 5, seed: 91, d: .12, w: (x, y) => 2 + 11 * Math.pow(y / hz, 1.2), t: (x, y) => .1 + (hz - y) / hz * 1.2 + x / PW * .2 });
+    hatchOps(ops, (x, y) => y < hz, { box: [0, 0, PW, hz], ang: -.015, sp: 8, len: [90, 300], gap: 3, seed: 91, d: .12, w: (x, y) => 5 + 12 * Math.pow(y / hz, .7), t: (x, y) => .1 + (hz - y) / hz * 1.2 + x / PW * .2 });
     // far bank and the walls of Babylon
     ops.push({ t0: .5, d: .01, f: m => { m.fillStyle = '#000'; m.fillRect(0, hz, PW, rv[0] - hz + 2); const bx = V ? PW * .62 : PW * .72, s = V ? .8 : 1;
       for (let k = 0; k < 5; k++) { const w = (5 - k) * 46 * s, hh = 24 * s; m.fillRect(bx - w, hz - (k + 1) * hh + 2, w * 2, hh + 1); } m.fillRect(bx - 330 * s, hz - 30 * s, 660 * s, 32 * s);
@@ -343,8 +347,9 @@ function buildP4() {
     const boughs = V ? [[[tx, PH * .1], [PW * .3, PH * .04], [PW * .55, PH * .06], [PW * .78, PH * .12]]] : [[[tx, PH * .1], [PW * .2, PH * .05], [PW * .34, PH * .06], [PW * .48, PH * .14]], [[tx, PH * .2], [PW * .14, PH * .16], [PW * .24, PH * .14]]];
     boughs.forEach((b, i) => ops.push({ t0: .8 + i * .1, d: .4, f: (m, k) => { m.fillStyle = '#000'; m.fill(gouge(prefix(b, k), 26, rng(i), .3)); } }));
     const r = rng(94); for (let i = 0; i < (V ? 70 : 90); i++) { const b = boughs[i % boughs.length], u = .1 + r() * .9, j = Math.min(b.length - 2, Math.floor(u * (b.length - 1))), f = u * (b.length - 1) - j, x = lerp(b[j][0], b[j + 1][0], f), y = lerp(b[j][1], b[j + 1][1], f), len = PH * (.18 + r() * .28), sw = (r() - .5) * 30;
-      const pts = [[x, y], [x + sw * .3, y + len * .35], [x + sw * .8, y + len * .7], [x + sw, y + len]]; ops.push({ t0: 1.0 + r() * .8, d: .3, f: (m, k) => { m.fillStyle = '#000'; m.fill(gouge(prefix(pts, k), 3 + r() * 0, rng(i))); } }); }
-    G4.harps.forEach(([x, y], i) => lyre(ops, x, y, V ? 1.0 : 1.1, 1.6 + i * .2));
+      const out2 = (r() - .5) * 60, pts = []; for (let q = 0; q <= 8; q++) { const u2 = q / 8; pts.push([x + out2 * Math.sin(u2 * 1.6) + sw * u2 * u2, y + len * u2]); } const wd = 2.5 + r() * 2.5;
+      ops.push({ t0: 1.0 + r() * .8, d: .3, f: (m, k) => { m.fillStyle = '#000'; const pp = prefix(pts, k); m.fill(gouge(pp, wd, rng(i), .6)); for (let q = 1; q < pp.length; q++) { const [px, py] = pp[q]; m.fill(gouge(line(px, py, px + (q % 2 ? 9 : -9), py + 12, 1, 2), 3.5, rng(i + q))); } } }); }
+    G4.harps.forEach(([x, y], i) => lyre(ops, x, y, V ? 1.25 : 1.35, 1.6 + i * .2));
     // the near bank
     ops.push({ t0: .7, d: .01, f: m => { m.fillStyle = '#000'; m.fillRect(0, rv[1], PW, PH - rv[1]); } });
     // the weepers
@@ -373,8 +378,9 @@ function buildP4() {
     }
     // the light that falls at the end: new cuts along its path, where the gold will print
     const [a, b, c, d] = G4.ray, rr = rng(102);
-    for (let i = 0; i < 40; i++) { const u = rr(), v = rr(), top = [lerp(b[0], a[0], v), lerp(b[1], a[1], v)], bot = [lerp(c[0], d[0], v), lerp(c[1], d[1], v)], p = [lerp(top[0], bot[0], u), lerp(top[1], bot[1], u)];
-      if (p[1] < G4.hz) continue; cutOp(ops, line(p[0], p[1], p[0] - 30, p[1] + 50, 2), 4 + rr() * 3, 13.4 + u * 1.6, .2, 300 + i); }
+    const dx = (c[0] + d[0]) / 2 - (a[0] + b[0]) / 2, dy = (c[1] + d[1]) / 2 - (a[1] + b[1]) / 2, dl = Math.hypot(dx, dy), ux = dx / dl, uy = dy / dl;
+    for (let i = 0; i < 110; i++) { const u = Math.sqrt(rr()), v = .15 + rr() * .7, top = [lerp(b[0], a[0], v), lerp(b[1], a[1], v)], bot = [lerp(c[0], d[0], v), lerp(c[1], d[1], v)], p = [lerp(top[0], bot[0], u), lerp(top[1], bot[1], u)], l = 40 + rr() * 70;
+      cutOp(ops, line(p[0], p[1], p[0] + ux * l, p[1] + uy * l, 1), 2.5 + rr() * 3.5, 13.2 + u * 1.8, .2, 300 + i); }
   });
 }
 function plate4(lt) {
@@ -407,10 +413,10 @@ function caption(ctx, lines, cite, a) {
   ctx.restore();
 }
 
-const FOC = [V ? [PW * .5, PH * .5] : [PW * .5, PH * .5], V ? [PW * .42, PH * .52] : [PW * .33, PH * .42], [PW * .5, PH * .45], null];
+const FOC = [V ? [PW * .5, PH * .5] : [PW * .5, PH * .5], V ? [PW * .5, PH * .45] : [PW * .48, PH * .4], [PW * .5, PH * .45], null];
 function camAt(pi, lt) {
   if (pi === 0) return { s: 1 + .04 * eio(clamp(lt / 9.6)), fx: FOC[0][0], fy: FOC[0][1] };
-  if (pi === 1) return { s: 1.02 + .12 * eio(clamp(lt / 6.8)), fx: FOC[1][0], fy: FOC[1][1] };
+  if (pi === 1) return { s: 1.0 + .07 * eio(clamp(lt / 6.8)), fx: FOC[1][0], fy: FOC[1][1] };
   if (pi === 2) return { s: 1.03 + .02 * lt / 6.2, fx: FOC[2][0], fy: FOC[2][1] };
   // by the river: on the weepers, up to the harps in the willow, then back to see them all under the light
   const K = V ? [[0, 1.0, .5, .7], [6.8, 1.12, .55, .66], [8.6, 1.12, .55, .66], [11.6, 1.14, .42, .26], [13.2, 1.14, .42, .26], [16.4, 1.0, .5, .5]]
@@ -430,9 +436,9 @@ function draw(ctx, t) {
   ctx.translate(PL.x + PW / 2 + mis[0], PL.y + PH / 2 + mis[1]); ctx.scale(c.s, c.s); ctx.translate(-fx, -fy);
   ctx.globalCompositeOperation = 'multiply'; ctx.drawImage(M, 0, 0);
   // the one colour block: a thin warm light falling on the weepers at the end, printed over the cuts
-  if (pi === 3) { const g = ss(13.4, 15.6, lt); if (g > 0) { const [a, b, cc, d] = G4.ray; ctx.globalAlpha = g; ctx.fillStyle = GOLD; ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]);
+  if (pi === 3) { const g = ss(13.4, 15.6, lt); if (g > 0) { const [a, b, cc, d] = G4.ray; ctx.globalAlpha = g * .85; ctx.fillStyle = GOLD; ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]);
     const r = rng(9); for (let k = 0; k <= 10; k++) ctx.lineTo(lerp(b[0], cc[0], k / 10) + (r() - .5) * 6, lerp(b[1], cc[1], k / 10)); ctx.lineTo(d[0], d[1]); for (let k = 10; k >= 0; k--) ctx.lineTo(lerp(a[0], d[0], k / 10) + (r() - .5) * 6, lerp(a[1], d[1], k / 10)); ctx.closePath(); ctx.fill();
-    ctx.globalAlpha = g * .9; ctx.beginPath(); ctx.ellipse((cc[0] + d[0]) / 2, cc[1] + (V ? 30 : 20), (d[0] - cc[0]) * 1.1, V ? 50 : 40, 0, 0, 6.29); ctx.fill(); ctx.globalAlpha = 1; } }
+    ctx.globalAlpha = 1; } }
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   ctx.globalCompositeOperation = 'lighten'; ctx.drawImage(inkTex, PL.x, PL.y);
   ctx.restore(); ctx.globalCompositeOperation = 'source-over';

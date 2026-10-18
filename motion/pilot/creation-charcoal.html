@@ -66,15 +66,15 @@ function mask(w, h, f) { const c = canvas(w, h), x = c.getContext('2d'), d = x.c
   for (let j = 0; j < h; j++) for (let i = 0; i < w; i++) { const k = (j * w + i) * 4; D[k] = D[k + 1] = D[k + 2] = 255; D[k + 3] = 255 * clamp(f(i, j)); }
   x.putImageData(d, 0, 0); return c; }
 function tint(m, col) { const c = canvas(m.width, m.height), x = c.getContext('2d'); x.drawImage(m, 0, 0); x.globalCompositeOperation = 'source-in'; x.fillStyle = col; x.fillRect(0, 0, c.width, c.height); return c; }
-function strokeMask(seed, soft, dry) {           // an eraser / side-of-stick stroke: crisp ragged edge, streaks along it, a rounded start, a lifting-off end
+function strokeMask(seed, soft, dry, fall = 0) {           // an eraser / side-of-stick stroke: crisp ragged edge, streaks along it, a rounded start, a lifting-off end
   const w = 512, h = 64, r = rng(seed), o1 = r() * 60, o2 = r() * 60, t0 = .03 + r() * .05, t1 = .12 + r() * .3;
   return mask(w, h, (i, j) => { const u = i / (w - 1), shape = Math.pow(clamp(u / t0), .5) * Math.pow(clamp((1 - u) / t1), .9);
     if (shape <= 0) return 0;
     const hw = (h / 2 - 6) * (.8 + .2 * noise(u * 5 + o1, o2)) * (.3 + .7 * shape), cy = h / 2 + (noise(u * 2.2 + o2, 3) - .5) * 6, dd = Math.abs(j + .5 - cy);
     const edge = clamp((hw - dd) / (1.4 + soft * 9) + (noise(u * 34 + o1, j * .45) - .5) * .9 * (1 - soft));
     const stri = .45 + .55 * noise(j * 1.1 + o1, u * 1.4 + o2), drag = .78 + .22 * noise(u * 40 + o2, j * .2);
-    const skip = lerp(1, ss(.28, .56, noise(u * 16 + o1, j * .33 + o2)), dry);
-    return edge * lerp(stri, 1, .3 + soft * .45) * drag * skip * Math.min(1, .5 + shape); }); }
+    const skip = lerp(1, ss(.28, .56, noise(u * 16 + o1, j * .33 + o2)), clamp(dry + fall * u * .8));
+    return edge * lerp(stri, 1, .3 + soft * .45) * drag * skip * Math.min(1, .5 + shape) * lerp(1, .12, fall * Math.pow(u, 1.1)); }); }
 function dabMask(seed) {                          // kneaded eraser: a mottled, irregular soft lift
   const n = 128, r = rng(seed), o = r() * 60;
   return mask(n, n, (i, j) => { const x = (i + .5) / n * 2 - 1, y = (j + .5) / n * 2 - 1, rr = Math.hypot(x, y), th = Math.atan2(y, x);
@@ -88,11 +88,11 @@ function smudgeMask(seed) {                       // a finger smudge, dragged al
   const w = 256, h = 96, r = rng(seed), o = r() * 60;
   return mask(w, h, (i, j) => { const u = i / (w - 1) * 2 - 1, v = (j + .5) / h * 2 - 1, wob = (noise(u * 1.6 + o, 1) - .5) * .5;
     return Math.exp(-u * u * 2.6 - (v - wob) ** 2 * 5.5) * (.5 + .5 * noise(j * .28 + o, u * 1.8)); }); }
-let SK = [], SKS = [], DB = [], DT = [], SM = [];   // raw masks
+let SK = [], SKS = [], RY = [], DB = [], DT = [], SM = [];   // raw masks
 let L = {}, K = {};                                // tinted: L.x lifts (paper), K.x charcoal
 function tintAll() {
   const set = (arr, col) => arr.map(m => tint(m, col));
-  L = { sk: set(SK, val(1)), skw: set(SK, val(1, .7)), sks: set(SKS, val(1)), db: set(DB, val(1)), dbw: set(DB, val(1, .8)), dt: set(DT, val(1)), sm: set(SM, val(1)), smw: set(SM, val(1, .6)) };
+  L = { ry: set(RY, val(1)), ryw: set(RY, val(1, .7)), sk: set(SK, val(1)), skw: set(SK, val(1, .7)), sks: set(SKS, val(1)), db: set(DB, val(1)), dbw: set(DB, val(1, .8)), dt: set(DT, val(1)), sm: set(SM, val(1)), smw: set(SM, val(1, .6)) };
   K = { sk: set(SK, val(0)), sks: set(SKS, val(0)), db: set(DB, val(0)), sm: set(SM, val(0)), dt: set(DT, val(0)),
         sk2: set(SK, val(.16)), db3: set(DB, val(.32)), db5: set(DB, val(.55)), db8: set(DB, val(.84)) };
 }
@@ -103,8 +103,9 @@ function buildPaper() {
   // tooth: ~1/600 of the frame width, a little elongated (laid paper), contrast stretched — peaks and valleys
   TOOTH = canvas(W, H); { const x = TOOTH.getContext('2d'), d = x.createImageData(W, H), D = d.data, r = rng(3);
     for (let j = 0; j < H; j++) for (let i = 0; i < W; i++) {
-      const v = .55 * noise(i / 1.9, j / 2.4) + .3 * noise(i / 4.6 + 40, j / 3.8 + 9) + .15 * r();
-      const s = clamp(.5 + (v - .5) * 2.6), k = (j * W + i) * 4; D[k] = D[k + 1] = D[k + 2] = s * 255; D[k + 3] = 255; }
+      const c1 = 1 - Math.abs(noise(i / 2.6, j / 3.1) * 2 - 1), c2 = 1 - Math.abs(noise(i / 5.5 + 40, j / 4.4 + 9) * 2 - 1), laid = .5 + .5 * Math.sin(j * 1.25 + noise(i * .02, j * .01) * 6);
+      const v = .5 * c1 + .3 * c2 + .12 * laid + .08 * r();
+      const s = clamp(.5 + (v - .62) * 1.7), k = (j * W + i) * 4; D[k] = D[k + 1] = D[k + 2] = s * 255; D[k + 3] = 255; }
     x.putImageData(d, 0, 0); }
   // mottle: the sheet's uneven sizing and fibres (soft-light)
   const mw = W / 4 | 0, mh = H / 4 | 0; MOTTLE = canvas(mw, mh); { const x = MOTTLE.getContext('2d'), d = x.createImageData(mw, mh), D = d.data;
@@ -116,9 +117,10 @@ function buildPaper() {
     x.fillStyle = g; x.fillRect(0, 0, W, H); }
   // ground: the sheet laid in with charcoal — side-of-the-stick sweeps, never a flat fill
   const GW = W * 1.3 | 0, GH = H * 1.3 | 0; GROUND = canvas(GW, GH); { const x = GROUND.getContext('2d'), r = rng(12);
-    x.fillStyle = val(.07); x.fillRect(0, 0, GW, GH);
-    for (let i = 0; i < 1300; i++) { const px = r() * GW, py = r() * GH, ang = -.55 + (r() - .5) * .5, len = 180 + r() * 520, wd = 22 + r() * 70;
-      put(x, I0, r() < .55 ? K.sk[i % K.sk.length] : K.sk2[i % K.sk2.length], px - Math.cos(ang) * len / 2, py - Math.sin(ang) * len / 2, ang, len, wd, .18 + r() * .4); }
+    x.fillStyle = val(.075); x.fillRect(0, 0, GW, GH);
+    for (let i = 0; i < 1500; i++) { const px = r() * GW, py = r() * GH, ang = (i % 3 ? -.5 : .45) + (r() - .5) * .9, len = 120 + r() * 420, wd = 30 + r() * 90;
+      put(x, I0, r() < .6 ? K.sk[i % K.sk.length] : K.sk2[i % K.sk2.length], px - Math.cos(ang) * len / 2, py - Math.sin(ang) * len / 2, ang, len, wd, .1 + r() * .22); }
+    for (let i = 0; i < 160; i++) dab(x, I0, K.db[i % K.db.length], r() * GW, r() * GH, 120 + r() * 300, .15 + r() * .2, r() * 6);
     for (let i = 0; i < 70; i++) { const px = r() * GW, py = r() * GH; put(x, I0, L.sm[i % L.sm.length], px, py, (r() - .5) * .6, 300 + r() * 500, 80 + r() * 140, .025 + r() * .03); }
     x.setTransform(1, 0, 0, 1, 0, 0); x.globalAlpha = 1; }
 }
@@ -132,42 +134,57 @@ function ground(ctx, t, par = .25) {   // the charcoal ground follows the camera
 let WAVES = [], BURST = [], KNEAD = [], REFL = [];
 function buildDeep() {
   const r = rng(41);
-  for (let i = 0; i < 260; i++) { const z = 1 + Math.pow(r(), 1.5) * 26; WAVES.push({ z, x: (r() - .5) * U * (1.6 + z * .5), l: (.05 + r() * .22) * U, w: 3 + r() * 16, s: (r() - .5) * 18, a: .4 + r() * .6, sp: i % SK.length, ph: r() * 6 }); }
+  for (let i = 0; i < 420; i++) { const z = 1 + Math.pow(r(), 1.5) * 26; WAVES.push({ z, x: (r() - .5) * U * (1.6 + z * .5), l: (.05 + r() * .22) * U, w: 3 + r() * 16, s: (r() - .5) * 18, a: .4 + r() * .6, sp: i % SK.length, ph: r() * 6 }); }
   for (let i = 0; i < 120; i++) { const z = 1 + Math.pow(r(), 1.3) * 22; REFL.push({ z, x: (r() - .5) * U * (.05 + .55 / z + .02 * z), l: (.03 + r() * .14) * U, w: 2 + r() * 9, t0: T_FL + .15 + Math.pow(r(), 1.5) * 2.6, a: .45 + r() * .55, sp: i % SK.length, ph: r() * 6 }); }
   const lim = th => { const s = Math.sin(th); return s > .05 ? (HZ - LY) / s * .9 : 9e9; };   // rays stop at the deep
-  // the first stroke (6.0), then the burst: 76 fast long strokes in .6 s, then 84 more filling in over three seconds
-  BURST.push({ th: -Math.PI / 2 - .2, r0: .01 * U, len: .26 * U, lenG: .3 * U, w: 15, t0: 5.95, d: .55, a: .9, sp: 0, warm: 1 });
-  for (let i = 0; i < 76; i++) { const th = (i + r() * .7) / 76 * 6.283 - Math.PI, len = Math.min(lim(th), (.3 + .85 * Math.pow(r(), .8)) * U);
-    BURST.push({ th, r0: r() * .025 * U, len, lenG: (.25 + .5 * Math.pow(r(), .6)) * U, w: 6 + r() * 30, t0: T_FL + Math.pow(r(), 1.7) * .6, d: .1 + r() * .16, a: .5 + r() * .45, sp: i % SK.length, warm: r() < .4 }); }
-  for (let i = 0; i < 84; i++) { const th = r() * 6.283 - Math.PI, r0 = (.04 + r() * .22) * U, len = Math.min(lim(th) - r0, (.12 + .45 * r()) * U);
+  // the first stroke (6.0), then the burst: long rays in .6 s, then short off-radial strokes, cross-lifts and smudges for three seconds
+  BURST.push({ th: -Math.PI / 2 - .2, r0: .005 * U, len: .2 * U, lenG: .26 * U, w: 22, t0: 5.95, d: .6, a: .85, sp: 0, warm: 1, ry: 1 });
+  BURST.push({ th: -Math.PI / 2 + .5, r0: .005 * U, len: .15 * U, lenG: .2 * U, w: 16, t0: 6.35, d: .4, a: .7, sp: 3, warm: 1, ry: 1 });
+  for (let i = 0; i < 48; i++) { const th = (i + r() * .8) / 48 * 6.283 - Math.PI, len = Math.min(lim(th), (.35 + .8 * Math.pow(r(), 1.2)) * U);
+    BURST.push({ th, r0: r() * .03 * U, len, lenG: (.25 + .5 * Math.pow(r(), .6)) * U, w: 10 + r() * 34, t0: T_FL + Math.pow(r(), 1.7) * .55, d: .1 + r() * .16, a: .35 + r() * .5, sp: i % 8, warm: r() < .45, ry: 1 }); }
+  for (let i = 0; i < 150; i++) { const th0 = r() * 6.283 - Math.PI, r0 = (.02 + Math.pow(r(), 1.4) * .3) * U, len = Math.min(lim(th0) - r0, (.06 + .3 * r()) * U), th = th0 + (r() - .5) * .3;
     if (len < 20) continue;
-    BURST.push({ th, r0, len, lenG: len * .8, w: 4 + r() * 20, t0: T_FL + .4 + Math.pow(r(), 1.4) * 3.2, d: .12 + r() * .25, a: .3 + r() * .5, sp: (i + 3) % SK.length, warm: r() < .3 }); }
-  for (let i = 0; i < 90; i++) { const t0 = T_FL + .05 + Math.pow(r(), 1.25) * 4, reach = .02 + .2 * Math.pow(r(), 1.3) * clamp((t0 - T_FL) / 3 + .25), a = r() * 6.283;
-    KNEAD.push({ x: Math.cos(a) * reach * U, y: Math.sin(a) * reach * U * .85, s: (.05 + .11 * r()) * U * (1 - reach), t0, a: .3 + r() * .45, rot: r() * 6, sp: i % DB.length }); }
+    BURST.push({ th, r0, len, lenG: len * .8, w: 5 + r() * 34, t0: T_FL + .25 + Math.pow(r(), 1.3) * 3.4, d: .1 + r() * .2, a: .18 + r() * .45, sp: (i + 3) % 8, warm: r() < .35, ry: r() < .5 }); }
+  for (let i = 0; i < 40; i++) { const at = r() * 6.283, rr = (.03 + r() * .09) * U, th = at + Math.PI / 2 + (r() - .5) * .6, len = (.04 + r() * .07) * U;   // the eraser worked across the rays
+    if (Math.sin(at) * rr > (HZ - LY) * .85) continue;
+    BURST.push({ th, r0: 0, ox: Math.cos(at) * rr - Math.cos(th) * len / 2, oy: Math.sin(at) * rr - Math.sin(th) * len / 2, len, lenG: len, w: 6 + r() * 16, t0: T_FL + .8 + r() * 3, d: .15, a: .15 + r() * .25, sp: i % 4, warm: 1, sks: 1 }); }
+  for (let i = 0; i < 26; i++) { const th = r() * 6.283 - Math.PI, len = Math.min(lim(th), (.25 + r() * .45) * U);   // finger smudges dragged out of the core
+    BURST.push({ th, r0: .02 * U, len, lenG: len * .7, w: (.06 + r() * .1) * U, t0: T_FL + .3 + r() * 3, d: .5, a: .1 + r() * .12, sp: i % 4, sm: 1 }); }
+  for (let i = 0; i < 120; i++) { const t0 = T_FL + .05 + Math.pow(r(), 1.25) * 4, reach = .02 + .26 * Math.pow(r(), 1.5) * clamp((t0 - T_FL) / 3 + .25), a = r() * 6.283;
+    KNEAD.push({ x: Math.cos(a) * reach * U, y: Math.sin(a) * reach * U * .85, s: (.05 + .13 * r()) * U * (1 - reach * .8), t0, a: (.25 + r() * .45) * (1 - reach * 1.8), rot: r() * 6, sp: i % DB.length }); }
 }
 function drawDeep(ctx, t, fade) {
   if (fade <= 0) return; const lit = ss(T_FL, T_FL + 1.5, t), sx = spiritX(t);
   // the surface of the deep: a smudged grey band at the horizon, a few lifted swells
   const [hx0, hy0] = ws(0, HZ);
-  for (let i = 0; i < 7; i++) put(ctx, CM, L.sm[i % L.sm.length], -U * 1.6 + i * U * .5, HZ + 10 + (i % 3) * 10, (i % 2 - .5) * .02, U * 1.1, U * .12, fade * (.05 + .1 * lit));
+  for (let i = 0; i < 9; i++) put(ctx, CM, L.sm[i % L.sm.length], -U * 1.8 + i * U * .45, HZ + U * (.06 + (i % 3) * .03), (i % 2 - .5) * .02, U * 1.1, U * .16, fade * (.09 + .04 * lit));
   for (const w of WAVES) {
     const y = HZ + U * .7 / w.z, x = w.x + (t * w.s) / w.z * 6, wid = Math.max(1.6, w.w * 2.4 / w.z), len = w.l * 3 / Math.sqrt(w.z);
     const breath = Math.exp(-(((x - sx) / (U * .3)) ** 2)) * (1 - lit), col = Math.exp(-((x / (U * (.06 + .45 / w.z))) ** 2));
-    let a = (.07 + .1 * breath + .06 * (.5 + .5 * Math.sin(t * .8 + w.ph))) * w.a + lit * (.06 + .5 * col) * w.a * (.6 + .4 * Math.sin(fr(t) * .9 + w.ph));
+    let a = (.1 + .16 * breath + .08 * (.5 + .5 * Math.sin(t * .8 + w.ph))) * w.a + lit * (.06 + .5 * col) * w.a * (.6 + .4 * Math.sin(fr(t) * .9 + w.ph));
     a *= fade * clamp((y - HZ) / 6) ; if (a < .01) continue;
-    put(ctx, CM, (lit > .3 && col > .3 ? L.skw : L.sk)[w.sp], x - len / 2, y + jit(t, w.ph) * 1.2, jit(t, w.ph + 1, .01), len, wid, a);
+    const sw = Math.sin(t * .9 + w.ph + x * .004) * wid * .6;
+    put(ctx, CM, K.sk[w.sp], x - len * .45, y + wid * .9 + sw, jit(t, w.ph + 1, .01), len * .9, wid * 1.3, Math.min(.5, a * 2.2) * fade);
+    put(ctx, CM, (lit > .3 && col > .3 ? L.skw : L.sk)[w.sp], x - len / 2, y + sw + jit(t, w.ph) * 1.2, jit(t, w.ph + 1, .01), len, wid, a);
   }
   // the reflection: horizontal eraser strokes lifted in a column under the light
   for (const q of REFL) { if (t < q.t0) continue; const p = eo(clamp((t - q.t0) / .25)), y = HZ + U * .7 / q.z, len = q.l * 3 / Math.sqrt(q.z), wid = Math.max(1.4, q.w * 2.6 / q.z);
     const a = q.a * fade * (.55 + .45 * Math.sin(fr(t) * 1.3 + q.ph)); put(ctx, CM, L.skw[q.sp], q.x - len / 2, y, jit(t, q.ph, .01), len, wid, a, p); }
   // mist lifted along the horizon once the light is there
-  if (lit > 0) for (let i = 0; i < 5; i++) put(ctx, CM, L.sks[i % L.sks.length], -U * 1.5 + i * U * .62 + (t - T_FL) * 6, HZ - 6 - i % 2 * 8, 0, U * .9, 18 + i % 3 * 8, .16 * lit * fade);
+  if (lit > 0) for (let i = 0; i < 26; i++) { const xx = -U * 1.6 + ((i * 397) % 26) / 26 * U * 3.2 + (t - T_FL) * (4 + i % 3 * 3), yy = HZ - 4 - (i * 7 % 5) * 5 + (i % 4) * 3, cl = Math.exp(-((xx / (U * .7)) ** 2));
+    put(ctx, CM, L.sks[i % L.sks.length], xx, yy, (i % 3 - 1) * .006, U * (.12 + (i * 13 % 7) * .04), 6 + i % 4 * 5, (.05 + .2 * cl) * lit * fade); }
 }
 const spiritX = t => lerp(-.95, .7, t / 6.6) * (V ? U * .7 : U * .95);
 function drawSpirit(ctx, t) {        // "하나님의 영은 수면 위에 운행하시니라": a breath of lifted grey moving over the waters, with the ghosts it leaves behind
-  const a0 = ss(.6, 2, t) * (1 - ss(5.6, 7.2, t)); if (a0 <= 0) return;
-  for (let g = 6; g >= 0; g--) { const tg = t - g * .45; if (tg < 0) continue; const x = spiritX(tg), y = HZ - .035 * U + Math.sin(tg * 1.4) * 8, a = a0 * (g ? .05 * Math.pow(.72, g) : .16);
-    for (let k = 0; k < 3; k++) put(ctx, CM, L.sm[(k + g) % L.sm.length], x - U * (.22 - k * .06), y + (k - 1) * 10 + Math.sin(tg * 2 + k) * 6, Math.sin(tg * .9 + k) * .06 - .03, U * (.42 - k * .08), U * (.06 + k * .015), a * (k === 1 ? 1.3 : 1)); }
+  const a0 = ss(.6, 2.2, t) * (1 - ss(5.4, 7.0, t)); if (a0 <= 0) return;
+  for (let g = 5; g >= 0; g--) { const tg = t - g * .5; if (tg < 0) continue; const x0 = spiritX(tg), ga = a0 * (g ? .3 * Math.pow(.6, g) : 1);
+    for (let w = 0; w < 3; w++) {                // three wisps, each a ribbon of smudge slices along a travelling wave
+      const N = 9, len = U * (.5 - w * .1), amp = U * (.02 + w * .008), y0 = HZ - U * (.03 + w * .022);
+      let px = x0 - len, py = y0 + Math.sin(tg * 2.2 + w * 1.3) * amp;
+      for (let i = 1; i <= N; i++) { const u = i / N, qx = x0 - len + len * u, qy = y0 + Math.sin(tg * 2.2 + w * 1.3 - u * 5.5) * amp * (.4 + u * .8);
+        const env = Math.sin(u * Math.PI);
+        put(ctx, CM, L.sm[(i + w) % L.sm.length], px, py, Math.atan2(qy - py, qx - px), Math.hypot(qx - px, qy - py) * 1.5, U * (.035 + .03 * env) * (1 - w * .2), ga * (.11 + .17 * env) * (w ? .7 : 1));
+        px = qx; py = qy; } } }
 }
 // the light: kneaded dabs open a core of bare paper; eraser strokes radiate from it. tw = twist into a galaxy (0..1)
 function galaxyXY(px, py, tw, t) {
@@ -179,20 +196,23 @@ function galaxyXY(px, py, tw, t) {
 function drawLight(ctx, t, tw) {
   if (t < T_IGN) return; const ox = 0, oy = LY;
   // the first touch: one point of paper, the tooth sparkling round it
-  const p0 = ss(T_IGN, T_IGN + .5, t);
-  dab(ctx, CM, L.dbw[0], ox, oy, (10 + 26 * ss(T_IGN, T_FL, t)) * (1 + 2 * ss(T_FL - .3, T_FL + .3, t)), .9 * p0, .3);
-  dab(ctx, CM, L.dt[1], ox, oy, 7 + 3 * Math.sin(fr(t)), p0);
+  const p0 = ss(T_IGN, T_IGN + .12, t);
+  dab(ctx, CM, L.dbw[0], ox, oy, (26 + 40 * ss(T_IGN, T_FL, t)) * (1 + 2 * ss(T_FL - .3, T_FL + .3, t)), .9 * p0, .3);
+  dab(ctx, CM, L.dt[1], ox, oy, 12 + 3 * Math.sin(fr(t)), p0);
+  if (t < T_FL + .4) for (let i = 0; i < 9; i++) { const a = i * 2.4 + fr(t) * .7, rr = 14 + (i * 7 % 13) * 3 * (1 + ss(T_IGN, T_FL, t)); dab(ctx, CM, L.dt[i % 6], ox + Math.cos(a) * rr, oy + Math.sin(a) * rr * .8, 2 + i % 3, p0 * .7 * (1 - ss(T_FL, T_FL + .4, t))); }
   const keep = 1 - .35 * tw;
   // kneaded dabs (the core)
   for (const k of KNEAD) { if (t < k.t0) continue; const p = ss(k.t0, k.t0 + .12, t), [x, y] = galaxyXY(k.x, k.y, tw, t);
     dab(ctx, CM, (tw > .5 ? L.db : L.dbw)[k.sp], ox + x, oy + y, k.s * lerp(1, .55, tw), k.a * p * keep, k.rot, lerp(1, .6, tw)); }
   // eraser strokes
-  for (const s of BURST) { if (t < s.t0) continue; const p = eo(clamp((t - s.t0) / s.d)), spr = (s.warm ? L.skw : L.sk)[s.sp], a = s.a * keep, j = jit(t, s.th * 7, .006);
+  for (const s of BURST) { if (t < s.t0) continue; const p = eo(clamp((t - s.t0) / s.d)), spr = s.sm ? (s.warm ? L.smw : L.sm)[s.sp % 4] : s.sks ? L.sks[s.sp % 4] : s.ry ? (s.warm ? L.ryw : L.ry)[s.sp] : (s.warm ? L.skw : L.sk)[s.sp], a = s.a * keep, j = jit(t, s.th * 7, .006);
     const len = lerp(s.len, s.lenG, tw), wid = s.w * lerp(1, .55, tw);
-    if (tw <= .001) { put(ctx, CM, spr, ox + Math.cos(s.th + j) * s.r0, oy + Math.sin(s.th + j) * s.r0, s.th + j, len, wid, a, p); continue; }
+    const bx = s.ox || 0, by = s.oy || 0;
+    if (tw <= .001) { put(ctx, CM, spr, ox + bx + Math.cos(s.th + j) * s.r0, oy + by + Math.sin(s.th + j) * s.r0, s.th + j, len * p, wid, a * (s.sm ? 1 : .7 + .3 * p)); continue; }
+    if (s.sks) { if (tw < .5) { const [gx, gy] = galaxyXY(bx, by, tw, t); put(ctx, CM, spr, ox + gx, oy + gy, s.th, len, wid, a * (1 - tw * 2)); } continue; }
     const N = 7;   // bend it along the spiral, a slice of the stroke per segment
     for (let i = 0; i < N; i++) { const u0 = i / N, u1 = (i + 1) / N; if (u0 >= p) break;
-      const ra = s.r0 + len * u0, rb = s.r0 + len * Math.min(u1, p), A = galaxyXY(Math.cos(s.th) * ra, Math.sin(s.th) * ra, tw, t), B = galaxyXY(Math.cos(s.th) * rb, Math.sin(s.th) * rb, tw, t);
+      const ra = s.r0 + len * u0, rb = s.r0 + len * Math.min(u1, p), A = galaxyXY(bx + Math.cos(s.th) * ra, by + Math.sin(s.th) * ra, tw, t), B = galaxyXY(bx + Math.cos(s.th) * rb, by + Math.sin(s.th) * rb, tw, t);
       const dx = B[0] - A[0], dy = B[1] - A[1], sl = Math.hypot(dx, dy); if (sl < .3) continue;
       put(ctx, CM, spr, ox + A[0], oy + A[1], Math.atan2(dy, dx), sl * 1.06 / (Math.min(u1, p) - u0) , wid * lerp(1, .8, u0 * tw), a * (1 - .45 * tw * u0), Math.min(u1, p) - u0, u0); }
   }
@@ -204,14 +224,15 @@ function buildHeavens() {
   const r = rng(77);
   const inv = (t, u, v, p) => { const z = CZ(t), cx = CX(t), cy = CY(t), zz = Math.pow(z, p) * Math.exp(.09 * p * Math.max(0, t - 16)); return [(u - W / 2) / zz + cx * p, (v - H / 2) / zz + cy * p]; };
   for (let i = 0; i < 1500; i++) { const p = .25 + .75 * r(), tt = i % 2 ? 17.6 : 23.5, [x, y] = inv(tt, (r() * 1.3 - .15) * W, (r() * 1.3 - .15) * H, p);
-    const big = r() < .035; STARS.push({ x, y, p, s: big ? 7 + r() * 6 : 1.6 + Math.pow(r(), 3) * 6, b: big, a: .35 + r() * .65, ph: r() * 6, sp: i % DT.length, d: r() }); }
+    const big = r() < .018; STARS.push({ x, y, p, s: big ? 11 + r() * 7 : 3.4 + Math.pow(r(), 2.2) * 10, b: big, a: .5 + r() * .5, ph: r() * 6, sp: i % DT.length, d: r() }); }
   // far galaxies: smudged spirals lifted out with a kneaded eraser and a few flicks
   for (let g = 0; g < 3; g++) { const n = 384, c = canvas(n, n), x = c.getContext('2d'), rr = rng(90 + g), M = [1, 0, 0, 1, n / 2, n / 2];
-    for (let i = 0; i < 26; i++) dab(x, M, L.db[i % L.db.length], (rr() - .5) * n * .08, (rr() - .5) * n * .08, n * (.08 + rr() * .1), .35 + rr() * .4, rr() * 6);
-    for (let arm = 0; arm < 2; arm++) for (let i = 0; i < 26; i++) { const u0 = i / 26, u1 = (i + 1) / 26, f = u => [Math.cos(arm * Math.PI + u * 4.6) * n * .42 * u, Math.sin(arm * Math.PI + u * 4.6) * n * .42 * u];
-      const A = f(u0), B = f(u1); put(x, M, L.sks[(i + arm) % L.sks.length], A[0], A[1], Math.atan2(B[1] - A[1], B[0] - A[0]), Math.hypot(B[0] - A[0], B[1] - A[1]) * 1.4, n * .07 * (1 - u0 * .6), .5 * (1 - u0 * .7));
-      if (i % 2) dab(x, M, L.db[i % L.db.length], A[0], A[1], n * .09 * (1 - u0 * .5), .16, rr() * 6); }
-    for (let i = 0; i < 60; i++) { const u = rr(), a = rr() * 2 * Math.PI, R = n * .45 * Math.sqrt(u); dab(x, M, L.dt[i % L.dt.length], Math.cos(a) * R, Math.sin(a) * R, 2 + rr() * 4, .5 + rr() * .5); }
+    for (let i = 0; i < 30; i++) dab(x, M, L.db[i % L.db.length], (rr() - .5) * n * .14, (rr() - .5) * n * .1, n * (.1 + rr() * .16), .12 + rr() * .2, rr() * 6);
+    for (let arm = 0; arm < 2; arm++) for (let i = 0; i < 40; i++) { const u = i / 40, th = arm * Math.PI + u * 3.9 + (rr() - .5) * .3, R = n * (.05 + .36 * u);
+      dab(x, M, L.db[i % L.db.length], Math.cos(th) * R, Math.sin(th) * R, n * (.13 - .08 * u), (.24 - .16 * u) * (.6 + rr() * .6), rr() * 6);
+      if (i % 3 === 0) { const th2 = th + .35; put(x, M, L.sks[i % L.sks.length], Math.cos(th) * R, Math.sin(th) * R, th + Math.PI / 2 + .25, R * .5, n * .025, .22 * (1 - u)); } }
+    for (let i = 0; i < 10; i++) dab(x, M, L.dbw[i % L.dbw.length], (rr() - .5) * n * .05, (rr() - .5) * n * .04, n * (.04 + rr() * .05), .5 + rr() * .4, rr() * 6);
+    for (let i = 0; i < 50; i++) { const u = rr(), a = rr() * 2 * Math.PI, R = n * .42 * Math.sqrt(u); dab(x, M, L.dt[i % L.dt.length], Math.cos(a) * R, Math.sin(a) * R, 2 + rr() * 3, .4 + rr() * .4); }
     x.setTransform(1, 0, 0, 1, 0, 0); x.globalAlpha = 1; GALT.push(c); }
   const G = V ? [[.78, .22, .5, -.5, .45], [.2, .8, .32, .3, .5], [.84, .7, .22, 1.1, .38], [.55, .1, .16, .8, .6]] : [[.8, .25, .42, -.5, .45], [.18, .78, .3, .3, .5], [.62, .82, .2, 1.1, .38], [.93, .55, .14, .8, .6]];
   G.forEach(([u, v, s, rot, sq], i) => { const [x, y] = inv(18.6, u * W, v * H, 1); GALS.push({ x, y, s: s * U / CZ(18.6), rot, sq, t0: 15.4 + i * .55, tex: i % 3 }); });
@@ -229,7 +250,7 @@ function drawHeavens(ctx, t) {
     const ts = 14.5 + 2.2 * Math.min(1, Math.hypot(sx - lx, sy - ly) / diag) + s.d * .7, a = ss(ts, ts + .25, t) * s.a * sa * (.8 + .2 * Math.sin(fr(t) * .7 + s.ph));
     if (a < .02) continue; const sz = s.s * (.8 + .4 * s.p);
     dab(ctx, I0, L.dt[s.sp], sx, sy, sz, a, s.ph);
-    if (s.b) { put(ctx, I0, L.sk[s.sp % SK.length], sx - sz * 1.6, sy, .05, sz * 3.2, 3, a * .7); put(ctx, I0, L.sk[(s.sp + 1) % SK.length], sx, sy - sz * 1.4, Math.PI / 2 + .05, sz * 2.8, 2.6, a * .6); }
+    if (s.b) { dab(ctx, I0, L.db[s.sp], sx, sy, sz * 3.5, a * .25, s.ph); put(ctx, I0, L.sk[s.sp % SK.length], sx - sz * 1.8, sy + 1, .12 + s.ph * .02, sz * 3.6, 3.4, a * .55); }
   }
 }
 
@@ -242,31 +263,31 @@ function buildEarth() {
   for (let j = 0; j < MH; j++) for (let i = 0; i < MW; i++) { const lon = (i / MW - .5) * Math.PI * 1.1, lat = (.5 - j / MH) * Math.PI;
     const w1 = fbm(lon * 1.4 + 3.1, lat * 1.8 + 1.7, 3), l = fbm(lon * 1.5 + w1 * 1.1 + 10, lat * 1.9 + w1 * .8 + 4, 5);
     const cw = fbm(lon * 2 + 20, lat * 2.6 + 5, 3), cl = fbm(lon * 3 + cw * 1.8 + 30, lat * 7.5 + cw * 2.4, 5);
-    land[j * MW + i] = l; cld[j * MW + i] = ss(.5, .72, cl) * (.55 + .45 * ss(.15, .7, Math.abs(Math.sin(lat * 3.2 + cw * 2.2)))); }
+    land[j * MW + i] = l; cld[j * MW + i] = ss(.56, .74, cl) * (.4 + .6 * ss(.3, .85, Math.abs(Math.sin(lat * 3.2 + cw * 2.2)))); }
   const samp = (A, lon, lat) => { const fx = clamp((lon / (Math.PI * 1.1) + .5) * MW - .5, 0, MW - 1.001), fy = clamp((.5 - lat / Math.PI) * MH - .5, 0, MH - 1.001), i = fx | 0, j = fy | 0, ax = fx - i, ay = fy - j, k = j * MW + i;
     return (A[k] * (1 - ax) + A[k + 1] * ax) * (1 - ay) + (A[k + MW] * (1 - ax) + A[k + MW + 1] * ax) * ay; };
-  const Lv = [-.66, -.52, .54], ln = Math.hypot(...Lv), lx = Lv[0] / ln, ly = Lv[1] / ln, lz = Lv[2] / ln;
+  const Lv = [-.8, -.5, .32], ln = Math.hypot(...Lv), lx = Lv[0] / ln, ly = Lv[1] / ln, lz = Lv[2] / ln;
   for (let j = 0; j < CW; j++) for (let i = 0; i < CW; i++) {
     const X = ((i + .5) / CW * 2 - 1) * M, Y = ((j + .5) / CW * 2 - 1) * M, rr = X * X + Y * Y, k = (j * CW + i) * 4; let v, a;
     if (rr <= 1) { const z = Math.sqrt(1 - rr), dif = X * lx + Y * ly + z * lz, lon = Math.atan2(X, z), lat = Math.asin(-Y);
-      const ld = samp(land, lon, lat), isL = ss(.515, .55, ld), cl = samp(cld, lon, lat), lit = ss(-.2, .62, dif);
+      const ld = samp(land, lon, lat), isL = ss(.515, .55, ld), cl = samp(cld, lon, lat), lit = ss(-.12, .7, dif);
       v = lerp(.36, .2, isL) - (ld - .55) * .25 * isL + (noise(i * .02, j * .02) - .5) * .05;
-      v *= .1 + .9 * lit;
+      v *= .06 + .94 * lit;
       const hatch = Math.pow(.5 + .5 * Math.sin(lat * 70 + (noise(lon * 4, lat * 4) - .5) * 5), 5);         // contour hatching across the half-tone
       v -= .09 * hatch * ss(.04, .3, lit) * (1 - ss(.55, .9, lit));
-      v = lerp(v, .08 + .84 * lit, cl * .9);
-      const rim = Math.pow(clamp(1 - z), 2.4); v = lerp(v, .97, rim * ss(.05, .75, dif) * .92);
+      v = lerp(v, .06 + .86 * lit, cl * .8);
+      const rim = Math.pow(clamp(1 - z), 1.8); v = lerp(v, .97, rim * ss(0, .6, dif) * .95);
       v = clamp(v); a = clamp((1 - Math.sqrt(rr)) * N * .5);
-    } else { const rho = Math.sqrt(rr), dl = (X * lx + Y * ly) / rho / Math.hypot(lx, ly); v = .92; a = Math.exp(-(rho - 1) * 16) * ss(-.3, .8, dl) * .5 + Math.exp(-(rho - 1) * 60) * .12; }
+    } else { const rho = Math.sqrt(rr), dl = (X * lx + Y * ly) / rho / Math.hypot(lx, ly); v = .92; a = Math.exp(-(rho - 1) * 11) * ss(-.2, .9, dl) * .7; }
     const c0 = mix(mix(INK, PAPER, v), WARM, .35 * v * v); D[k] = c0[0]; D[k + 1] = c0[1]; D[k + 2] = c0[2]; D[k + 3] = 255 * a; }
   x.putImageData(d, 0, 0);
   // the draughtsman's hand over it: eraser strokes along the cloud bands, side-of-stick strokes across the night side
   x.save(); x.beginPath(); x.arc(CW / 2, CW / 2, ER, 0, 6.283); x.clip(); const r = rng(55), Mx = [ER, 0, 0, ER, CW / 2, CW / 2];
   const P = (lat, lon) => { const cl = Math.cos(lat); return [cl * Math.sin(lon), -Math.sin(lat), cl * Math.cos(lon)]; };
-  for (let i = 0; i < 90; i++) { const lat = (r() - .5) * 2.4, lon0 = (r() - .5) * 2.6, span = .25 + r() * .7, N2 = 8, wd = .01 + r() * .03;
+  for (let i = 0; i < 160; i++) { const lat = (r() - .5) * 2.4, lon0 = (r() - .5) * 2.6, span = .25 + r() * .8, N2 = 10, wd = .012 + r() * .035, curl = (r() - .5) * .5;
     let lit0 = 0; { const q = P(lat, lon0 + span / 2); lit0 = q[0] * lx + q[1] * ly + q[2] * lz; } if (lit0 < -.05) continue;
-    for (let s = 0; s < N2; s++) { const A = P(lat + Math.sin(s * .5 + i) * .02, lon0 + span * s / N2), B = P(lat + Math.sin(s * .5 + .5 + i) * .02, lon0 + span * (s + 1) / N2); if (A[2] < .05 || B[2] < .05) continue;
-      put(x, Mx, L.sk[(i + s) % SK.length], A[0], A[1], Math.atan2(B[1] - A[1], B[0] - A[0]), Math.hypot(B[0] - A[0], B[1] - A[1]) * 1.1 * 8 / 8, wd * (.4 + .6 * A[2]), (.12 + .22 * r()) * ss(-.05, .5, lit0), 1); } }
+    for (let s = 0; s < N2; s++) { const A = P(lat + curl * (s / N2) ** 2, lon0 + span * s / N2), B = P(lat + curl * ((s + 1) / N2) ** 2, lon0 + span * (s + 1) / N2); if (A[2] < .05 || B[2] < .05) continue;
+      put(x, Mx, L.sk[(i + s) % SK.length], A[0], A[1], Math.atan2(B[1] - A[1], B[0] - A[0]), Math.hypot(B[0] - A[0], B[1] - A[1]) * 1.1 * 8 / 8, wd * (.4 + .6 * A[2]), (.18 + .3 * r()) * ss(-.05, .5, lit0) * Math.sin((s + .5) / N2 * Math.PI), 1); } }
   for (let i = 0; i < 70; i++) { const ang = -.6 + (r() - .5) * .3, px = .2 + r() * .9, py = .1 + r() * .9 - .3; put(x, Mx, K.sk[i % SK.length], px - .4, py, ang, .5 + r() * .5, .05 + r() * .08, .12 + r() * .18); }
   x.restore(); x.setTransform(1, 0, 0, 1, 0, 0); x.globalAlpha = 1;
   EARTH = c;
@@ -282,22 +303,27 @@ function drawEarth(ctx, t) {
 // ---------------- E: through the clouds ----------------
 let CLOUDS = [], CLL = [];
 function buildClouds() {
-  for (let g = 0; g < 4; g++) { const cw = 900, ch = 560, c = canvas(cw, ch), x = c.getContext('2d'), r = rng(130 + g);
-    const lobes = []; for (let i = 0; i < 9; i++) lobes.push([cw * (.15 + .7 * i / 8 + (r() - .5) * .05), ch * (.6 - .28 * Math.sin(i / 8 * Math.PI) * (.7 + .5 * r())), ch * (.14 + .14 * r())]);
-    const pass = (spr, n, f) => { for (let i = 0; i < n; i++) { const [lx0, ly0, lr] = lobes[i % lobes.length], a = r() * 6.283, q = Math.sqrt(r()), px = lx0 + Math.cos(a) * lr * q, py = ly0 + Math.sin(a) * lr * q * .8; f(spr, px, py, lr); } };
-    pass(K.db5, 140, (s, px, py, lr) => dab(x, I0, s[(px | 0) % s.length], px, py + lr * .2, lr * (.6 + r() * .6), .5 + r() * .4, r() * 6));               // the body, mid grey
-    pass(K.db3, 70, (s, px, py, lr) => dab(x, I0, s[(py | 0) % s.length], px, py + lr * .55, lr * (.5 + r() * .5), .45 + r() * .3, r() * 6, .55));          // dark smudged undersides
-    pass(K.db8, 120, (s, px, py, lr) => { if (py < ch * .62) dab(x, I0, s[(px | 0) % s.length], px, py - lr * .25, lr * (.35 + r() * .45), .55 + r() * .4, r() * 6); });   // lifted, sunlit tops
-    for (let i = 0; i < 26; i++) put(x, I0, L.sks[i % SKS.length], cw * (.05 + r() * .5), ch * (.3 + r() * .5), (r() - .5) * .1, cw * (.3 + r() * .4), 10 + r() * 22, .25 + r() * .3);   // eraser drag
-    x.setTransform(1, 0, 0, 1, 0, 0); x.globalAlpha = 1; CLOUDS.push(c); }
+  for (let g = 0; g < 4; g++) { const cw = 900, ch = 560, c = canvas(cw, ch), x = c.getContext('2d'), r = rng(130 + g), bil = [];
+    for (let i = 0; i < 26; i++) { const u = r(), R = ch * (.07 + .13 * Math.sin(u * Math.PI) * (.6 + .5 * r())); bil.push([cw * (.14 + .72 * u), ch * .7 - Math.sin(u * Math.PI) * ch * .3 * r() - R * .3, R]); }
+    bil.sort((a, b) => b[1] - a[1]);
+    for (const [bx, by, R] of bil) {
+      for (let k = 0; k < 6; k++) dab(x, I0, K.db5[k % 6], bx + (r() - .5) * R * .5, by + (r() - .5) * R * .4, R * (1.6 + r() * .5), .5 + r() * .3, r() * 6);      // the billow, mid grey
+      for (let k = 0; k < 4; k++) dab(x, I0, K.db3[k % 6], bx + (r() - .5) * R * .6, by + R * (.45 + r() * .2), R * (1 + r() * .5), .45 + r() * .25, r() * 6, .45);   // its shadowed underside
+      for (let k = 0; k < 7; k++) dab(x, I0, K.db8[k % 6], bx - R * (.2 + r() * .3), by - R * (.25 + r() * .35), R * (.5 + r() * .6), .55 + r() * .4, r() * 6);    // the sunlit top, lifted
+    }
+    for (let i = 0; i < 16; i++) put(x, I0, L.sks[i % SKS.length], cw * (.15 + r() * .4), ch * (.35 + r() * .35), (r() - .5) * .08, cw * (.2 + r() * .35), 8 + r() * 16, .2 + r() * .25);
+    x.setTransform(1, 0, 0, 1, 0, 0); x.globalAlpha = 1; x.globalCompositeOperation = 'destination-in';
+    const fe = x.createRadialGradient(cw / 2, ch * .55, ch * .3, cw / 2, ch * .55, cw * .5); fe.addColorStop(0, '#000'); fe.addColorStop(1, 'rgba(0,0,0,0)'); x.fillStyle = fe; x.fillRect(0, 0, cw, ch); x.globalCompositeOperation = 'source-over';
+    CLOUDS.push(c); }
   const r = rng(140); for (let i = 0; i < 9; i++) CLL.push({ t0: 23.9 + i * .26, ang: r() * 6.283, off: .25 + r() * .3, tex: i % 4, flip: r() < .5, rot: (r() - .5) * .3 });
 }
 function drawClouds(ctx, t) {
   if (t < 23.9 || t > 27.6) return; ctx.setTransform(1, 0, 0, 1, 0, 0);
   // the inside of the cloud: a lifted grey, dragged across with the eraser (never a flat white card)
-  const wash = ss(24.9, 25.5, t) * (1 - ss(26, 26.9, t));
-  if (wash > 0) { ctx.globalAlpha = wash; ctx.fillStyle = val(.66, .3); ctx.fillRect(0, 0, W, H);
-    for (let i = 0; i < 14; i++) { const y = ((i * 137 + (t - 24.9) * (420 + i * 30)) % (H + 300)) - 150; put(ctx, I0, (i % 3 ? L.sks : K.sks)[i % SKS.length], -60, y, (i % 2 - .5) * .04, W + 120, 30 + i % 4 * 24, wash * (i % 3 ? .4 : .18)); } }
+  const wash = .85 * ss(24.9, 25.5, t) * (1 - ss(26, 26.9, t));
+  if (wash > 0) { ctx.globalAlpha = wash; ctx.fillStyle = val(.8, .4); ctx.fillRect(0, 0, W, H);
+    for (let i = 0; i < 14; i++) { const y = ((i * 137 + (t - 24.9) * (420 + i * 30)) % (H + 300)) - 150; if (i % 2) continue; put(ctx, I0, (i % 4 === 1 ? K.sks : L.sks)[i % SKS.length], W * ((i * .37) % .5) - 80, y, (i % 2 - .5) * .04, W * .8, 40 + i % 4 * 30, wash * .14); }
+    for (let i = 0; i < 3; i++) { const s0 = 1.6 + i * .5 + (t - 24.9) * .5, w = W * s0, h = w * .62; ctx.setTransform(1, 0, 0, 1, W * (.2 + .3 * i), H * (.75 - .2 * i)); ctx.globalAlpha = wash * .5; ctx.drawImage(CLOUDS[i], -w / 2, -h / 2, w, h); } ctx.setTransform(1, 0, 0, 1, 0, 0); }
   for (const c of CLL) { const tt = t - c.t0; if (tt < 0) continue; const s = .5 * Math.exp(1.25 * tt), a = clamp(tt / .35) * (1 - ss(1.9, 2.6, tt)); if (a <= 0) continue;
     const w = W * s, h = w * .62, cx = W / 2 + Math.cos(c.ang) * c.off * w * .9, cy = H / 2 + Math.sin(c.ang) * c.off * h * .9;
     ctx.setTransform(c.flip ? -1 : 1, 0, 0, 1, cx, cy); ctx.rotate(c.rot); ctx.globalAlpha = a; ctx.drawImage(CLOUDS[c.tex], -w / 2, -h / 2, w, h); }
@@ -305,8 +331,8 @@ function drawClouds(ctx, t) {
 }
 
 // ---------------- F: Eden ----------------
-const EL = V ? { hz: .49, lt: [.66, .455], cp: [.37, .705], fh: .1, river: [[.66, .5], [.5, .58], [.8, .7], [.62, 1.08]], trees: [[.04, 1.02, .62, 1], [.97, .8, .36, -1], [.83, .57, .14, -1]] }
-             : { hz: .52, lt: [.665, .475], cp: [.39, .76], fh: .155, river: [[.665, .53], [.56, .62], [.8, .76], [.64, 1.1]], trees: [[.06, 1.04, .98, 1], [.9, .82, .5, -1], [.79, .6, .2, -1]] };
+const EL = V ? { hz: .49, lt: [.66, .455], cp: [.42, .72], fh: .1, river: [[.66, .5], [.5, .565], [.74, .65], [1.12, .79]], trees: [[-.04, 1.04, .5, 1], [.99, .8, .34, -1], [.86, .575, .13, -1]] }
+             : { hz: .52, lt: [.665, .475], cp: [.39, .76], fh: .155, river: [[.665, .53], [.57, .595], [.78, .68], [1.1, .86]], trees: [[.06, 1.04, .98, 1], [.9, .82, .5, -1], [.79, .6, .2, -1]] };
 let EDEN, EFG, MIST, EW, EH, EX0, EY0;
 const ex = f => EX0 + f * W, ey = f => EY0 + f * H;
 function charTree(x, r, bx, by, h, side, lt) {   // trunk of side-strokes, broken vine branches, foliage of charcoal dabs, a lifted rim toward the light
@@ -335,20 +361,32 @@ function buildEden() {
   // far hills, two smudged ranges, rimmed where the light touches them; a mist band erased along their feet
   [[.075, .48, .0028, .5], [.04, .38, .0042, .32]].forEach(([amp, v, f, tone], j) => { const base = hz + j * 8;
     const ridge = px => base - amp * H * (.35 + fbm(px * f + j * 9, j * 3, 4)) - (j ? 0 : Math.max(0, 1 - Math.abs(px - lt[0] + W * .2) / (W * .35)) * H * .04);
-    x.beginPath(); x.moveTo(0, hz + 40); for (let px = 0; px <= EW; px += 8) x.lineTo(px, ridge(px)); x.lineTo(EW, hz + 40); x.closePath(); x.fillStyle = val(v); x.fill();
+    x.setTransform(1, 0, 0, 1, 0, 0); x.globalAlpha = 1; x.beginPath(); x.moveTo(0, hz + 40); for (let px = 0; px <= EW; px += 8) x.lineTo(px, ridge(px)); x.lineTo(EW, hz + 40); x.closePath(); x.fillStyle = val(v); x.fill();
     x.save(); x.clip(); for (let i = 0; i < 260; i++) { const px = r() * EW; put(x, I0, K.sk[i % SK.length], px, ridge(px) + r() * 50, .3 + (r() - .5) * .5, 40 + r() * 120, 6 + r() * 14, .12 + r() * .14); } x.restore();
     for (let px = 0; px < EW; px += 14) { const near = Math.exp(-(((px - lt[0]) / (W * .25)) ** 2)); if (near < .05) continue; put(x, I0, L.skw[(px / 14 | 0) % SK.length], px, ridge(px) + 2, (r() - .5) * .3, 18 + r() * 14, 3 + r() * 2, .5 * near); } });
+  // haze lifted along the far edge of the plain, so the horizon is breathed rather than ruled
+  const hazeAt = () => { x.setTransform(1, 0, 0, 1, 0, 0); x.globalAlpha = 1; for (let i = 0; i < 70; i++) put(x, I0, (i % 3 ? L.sks : L.smw)[i % 4], r() * EW - 300, hz + (r() - .6) * H * .035, (r() - .5) * .01, 300 + r() * 600, i % 3 ? 8 + r() * 18 : 40 + r() * 40, i % 3 ? .1 + r() * .15 : .12 + r() * .1); };
   // the plain: hatched mid greys, darker toward us
-  const pg = x.createLinearGradient(0, hz, 0, EH); pg.addColorStop(0, val(.58, .3)); pg.addColorStop(.25, val(.44)); pg.addColorStop(.7, val(.24)); pg.addColorStop(1, val(.08)); x.fillStyle = pg; x.fillRect(0, hz, EW, EH - hz);
+  x.setTransform(1, 0, 0, 1, 0, 0); x.globalAlpha = 1; const pg = x.createLinearGradient(0, hz, 0, EH); pg.addColorStop(0, val(.58, .3)); pg.addColorStop(.25, val(.44)); pg.addColorStop(.7, val(.24)); pg.addColorStop(1, val(.08)); x.fillStyle = pg; x.fillRect(0, hz, EW, EH - hz);
   for (let i = 0; i < 2600; i++) { const d = Math.pow(r(), .8), py = hz + d * (EH - hz), px = r() * EW; put(x, I0, K.sk[i % SK.length], px, py, (r() - .5) * .08, (60 + d * 340) * (.5 + r()), 4 + d * 22, .06 + .14 * r()); }
+  hazeAt();
   // the river, from under the light toward us: lifted paper, ruled across with ripples, dark banks
-  const R0 = EL.river.map(([u, v]) => [ex(u), ey(v)]), rv = new Path2D(), wA = W * .006, wB = W * .16;
-  const P = (k, side) => { const i = Math.min(2, Math.floor(k * 3)), u = k * 3 - i, a = R0[i], b = R0[i + 1], m = u * u * (3 - 2 * u), px = lerp(a[0], b[0], u), py = lerp(a[1], b[1], m), w = lerp(wA, wB, Math.pow(k, 1.6)); return [px + side * w, py]; };
+  const R0 = EL.river.map(([u, v]) => [ex(u), ey(v)]), rv = new Path2D(), wA = W * .006, wB = W * (V ? .13 : .13);
+  const CR = (p0, p1, p2, p3, u) => .5 * (2 * p1 + (-p0 + p2) * u + (2 * p0 - 5 * p1 + 4 * p2 - p3) * u * u + (-p0 + 3 * p1 - 3 * p2 + p3) * u * u * u);
+  const P = (k, side) => { k = clamp(k); const i = Math.min(2, Math.floor(k * 3)), u = k * 3 - i, q = j => R0[clamp(j, 0, 3)];
+    const px = CR(q(i - 1)[0], q(i)[0], q(i + 1)[0], q(i + 2)[0], u), py = CR(q(i - 1)[1], q(i)[1], q(i + 1)[1], q(i + 2)[1], u);
+    const w = lerp(wA, wB, Math.pow(k, 1.8)) * (1 + .25 * (noise(k * 9, side + 3) - .5) * 2); return [px + side * w, py + side * w * .08]; };
   rv.moveTo(...P(0, -1)); for (let k = .02; k <= 1.001; k += .02) rv.lineTo(...P(k, -1)); for (let k = 1; k >= -.001; k -= .02) rv.lineTo(...P(k, 1)); rv.closePath();
-  x.save(); x.clip(rv); const rg = x.createLinearGradient(0, hz, 0, EH); rg.addColorStop(0, val(.95, .8)); rg.addColorStop(.3, val(.7, .3)); rg.addColorStop(1, val(.36)); x.fillStyle = rg; x.fillRect(0, hz, EW, EH - hz);
-  for (let i = 0; i < 420; i++) { const k = Math.pow(r(), .9), [px, py] = P(k, (r() - .5) * 2), d = k; put(x, I0, (r() < .55 ? L.skw : K.sk)[i % SK.length], px - (20 + d * 160) / 2, py, (r() - .5) * .03, 20 + d * 200, 2 + d * 9, .2 + r() * .4); }
-  x.restore();
-  for (const side of [-1, 1]) for (let k = 0; k < 1; k += .012) { const [px, py] = P(k, side * 1.05); put(x, I0, K.sk[(k * 300 | 0) % SK.length], px - 10 - k * 40, py, (r() - .5) * .2, 20 + k * 80, 3 + k * 14, .35 + r() * .3); }
+  x.setTransform(1, 0, 0, 1, 0, 0); x.globalAlpha = 1; const RV = canvas(EW, EH), rx = RV.getContext('2d');      // the water is drawn on its own sheet, then laid in with a feathered edge
+  rx.save(); rx.clip(rv); const rg = rx.createLinearGradient(0, hz, 0, EH); rg.addColorStop(0, val(.9, .8)); rg.addColorStop(.2, val(.56, .3)); rg.addColorStop(.55, val(.32)); rg.addColorStop(1, val(.16)); rx.fillStyle = rg; rx.fillRect(0, hz, EW, EH - hz);
+  for (let i = 0; i < 900; i++) { const k = Math.pow(r(), .9), [px, py] = P(k, (r() - .5) * 2.2), d = k, under = Math.exp(-(((px - lt[0]) / (W * (.05 + .1 * k))) ** 2)), lift = r() < .15 + .7 * under * (1 - k * .4);
+    put(rx, I0, (lift ? L.skw : K.sk)[i % SK.length], px - (16 + d * 140) / 2, py, (r() - .5) * .03, 16 + d * 160, 1.5 + d * 7, lift ? (.25 + r() * .5) * (.4 + .6 * under) : .1 + r() * .2); }
+  EL.trees.forEach(([u, v, sc]) => { const tx = ex(u); for (let i = 0; i < 30; i++) { const k = r(), [px, py] = P(k, (r() - .5) * 2); if (Math.abs(px - tx) < sc * H * .25) put(rx, I0, K.sks[i % SKS.length], px, py, Math.PI / 2, 20 + k * 120, 6 + k * 20, .15); } });   // trees reflected
+  rx.restore(); rx.setTransform(1, 0, 0, 1, 0, 0); rx.globalAlpha = 1;
+  x.setTransform(1, 0, 0, 1, 0, 0); x.globalAlpha = 1; x.filter = 'blur(3px)'; x.drawImage(RV, 0, 0); x.filter = 'none'; x.globalAlpha = .65; x.drawImage(RV, 0, 0, EW, EH); x.globalAlpha = 1;
+  for (const side of [-1, 1]) for (let k = 0; k < 1; k += .006) { const [px, py] = P(k, side * (1 + (r() - .3) * .12)); if (r() < .25) continue;
+    dab(x, I0, K.db[(k * 300 | 0) % DB.length], px, py + 2, 8 + k * 50, .14 + r() * .16, r() * 6, .4);
+    for (let g = 0; g < 2; g++) put(x, I0, K.sk[(k * 500 + g | 0) % SK.length], px + (r() - .5) * 12, py + 3 + k * 6, -Math.PI / 2 + (r() - .5) * .8, 8 + k * 40 * r(), 1.5 + k * 2.5, .4 + r() * .4); }   // grass over the bank
   // groves along the far banks
   for (let i = 0; i < 30; i++) { const k = r() * .45, [px, py] = P(k, (r() < .5 ? -1 : 1) * (1.6 + r() * 3)), s = (20 + k * 120) * (.7 + r() * .6) * (V ? .8 : 1);
     for (let j = 0; j < 30; j++) { const a = r() * 6.283, q = Math.sqrt(r()); dab(x, I0, K.db[j % DB.length], px + Math.cos(a) * s * .6 * q, py - s * .7 + Math.sin(a) * s * .5 * q, s * (.25 + r() * .3), .25 + r() * .3, r() * 6); }
@@ -411,7 +449,7 @@ function drawEden(ctx, t) {
   ctx.setTransform(M[0], 0, 0, M[3], M[4] + jit(t, 3) * .8, M[5]);
   ctx.save(); ctx.translate(cx, cy); ctx.transform(1, 0, -1.6, .2, 0, 0); ctx.globalAlpha = .4; const sg = ctx.createRadialGradient(0, 0, 0, 0, 0, fh * .5); sg.addColorStop(0, 'rgba(18,17,17,.9)'); sg.addColorStop(1, 'rgba(18,17,17,0)');
   ctx.fillStyle = sg; ctx.fillRect(-fh * .6, -fh * .6, fh * 1.2, fh * 1.2); ctx.restore(); ctx.globalAlpha = 1;
-  couple(ctx, cx + fh * .03, cy, fh, val(1, .9)); couple(ctx, cx, cy + fh * .004, fh, val(.04));
+  ctx.globalAlpha = 1; couple(ctx, cx + fh * .012, cy - fh * .006, fh, val(1, .9)); couple(ctx, cx, cy + fh * .004, fh, val(.04));
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   // foreground parting
   const pz = 1 + .35 * eio(clamp((t - 26) / 9)); ctx.setTransform(pz, 0, 0, pz, W / 2 * (1 - pz), 0); ctx.drawImage(EFG, 0, -dy * .6); ctx.setTransform(1, 0, 0, 1, 0, 0);
@@ -423,7 +461,7 @@ function smudgeBehind(ctx, y, h, a) {   // the draughtsman darkens the ground wh
 }
 function finish(ctx, t) {
   ctx.setTransform(1, 0, 0, 1, 0, 0);
-  ctx.globalCompositeOperation = 'overlay'; ctx.globalAlpha = .62; ctx.drawImage(TOOTH, 0, 0);
+  ctx.globalCompositeOperation = 'overlay'; ctx.globalAlpha = .34; ctx.drawImage(TOOTH, 0, 0);
   ctx.globalCompositeOperation = 'soft-light'; ctx.globalAlpha = .55; ctx.drawImage(MOTTLE, 0, 0, W, H);
   ctx.globalCompositeOperation = 'multiply'; ctx.globalAlpha = 1; ctx.drawImage(TONE, 0, 0);
   ctx.globalCompositeOperation = 'source-over';
@@ -467,6 +505,7 @@ Pilot.run({ W, H, dur: DUR, audio: 'creation.m4a', fonts: ["600 40px 'Noto Serif
   init: async () => {
     for (let i = 0; i < 8; i++) SK.push(strokeMask(100 + i, 0, i % 3 === 0 ? .5 : .15));
     for (let i = 0; i < 4; i++) SKS.push(strokeMask(200 + i, 1, .3));
+    for (let i = 0; i < 8; i++) RY.push(strokeMask(600 + i, .15, .1, 1));
     for (let i = 0; i < 6; i++) DB.push(dabMask(300 + i));
     for (let i = 0; i < 6; i++) DT.push(dotMask(400 + i));
     for (let i = 0; i < 4; i++) SM.push(smudgeMask(500 + i));

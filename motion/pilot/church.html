@@ -220,8 +220,8 @@ function buildGlobe() {
   GB = canvas(W / 2, H / 2); gbx = GB.getContext('2d'); GD = gbx.createImageData(W / 2, H / 2);
 }
 function globeShot(ctx, t) {
-  const lt = t - CUT, k = eio(clamp(lt / 12.5)), base = V ? 440 : 470;
-  const R = Math.exp(lerp(Math.log(base * 2.5), Math.log(base), eio(clamp(lt / 9)))), lon0 = lerp(JLM[0], 82, k), la0 = lerp(JLM[1], 18, k) * Math.PI / 180, cx = W / 2, cy = V ? H * .44 : H * .47;
+  const lt = t - CUT, k = eio(clamp(lt / 12.5)), base = V ? 440 : 390;   // landscape: small and high enough that the captions below never touch the rim
+  const R = Math.exp(lerp(Math.log(base * 2.5), Math.log(base), eio(clamp(lt / 9)))), lon0 = lerp(JLM[0], 82, k), la0 = lerp(JLM[1], 18, k) * Math.PI / 180, cx = W / 2, cy = V ? H * .44 : H * .43;
   ctx.fillStyle = '#02030a'; ctx.fillRect(0, 0, W, H);
   for (const s of starList) { const tw = .6 + .4 * Math.sin(t * s.f + s.p); ctx.fillStyle = `rgba(230,236,255,${s.a * tw * .8})`; ctx.fillRect(s.x * W, s.y * H, s.r, s.r); }
   // the sphere, per pixel at half resolution: night land, sea, and the lights that have come on
@@ -278,13 +278,15 @@ function draw(ctx, t) {
   } else globeShot(ctx, t);
   const sc = V ? 1.05 : 1, cx0 = W / 2, st = { size: 50 * sc, weight: 600, color: '#fffaf0', shadow: 'rgba(0,0,0,.85)', shadowBlur: 22 };
   text(ctx, '14  ·  교회의 시작', V ? 72 : 110, V ? 190 : 120, { align: 'left', size: 30, weight: 600, color: '#fff6e6', alpha: win(t, .6, 5, 1, 1), ls: 4, shadow: 'rgba(0,0,0,.7)' });
-  const a1 = win(t, 4.8, 9.6, 1.1, .8), y1 = V ? 380 : 170;
+  const a1 = win(t, 4.8, 9.6, 1.1, .8); let y1 = V ? 380 : 170;
   // a translation too wide for the frame breaks into two balanced lines (Korean: never — it is one line as authored)
   let q1 = Pilot.tr('“오직 성령이 너희에게 임하시면”'), n1 = 1;
   if (Pilot.lang !== 'ko' && !q1.includes('\n')) { ctx.save(); ctx.font = `600 ${st.size}px 'Noto Serif KR'`; if (ctx.measureText(q1).width > W - 120) { const w = q1.split(' '); let best = 1, bd = 1e9;
     for (let i = 1; i < w.length; i++) { const d = Math.abs(ctx.measureText(w.slice(0, i).join(' ')).width - ctx.measureText(w.slice(i).join(' ')).width); if (d < bd) { bd = d; best = i; } }
     q1 = w.slice(0, best).join(' ') + '\n' + w.slice(best).join(' '); } ctx.restore(); }
   n1 = q1.split('\n').length;
+  // portrait: a wrapped verse moves up by its extra lines, so the verse and its citation still end above the window arch
+  if (V && n1 > 1) y1 -= (n1 - 1) * (st.size * 1.6 + 50);
   text(ctx, q1, cx0, y1, { ...st, alpha: a1, lh: 1.6 });
   text(ctx, '사도행전 1:8 (개역개정)', cx0, y1 + (n1 - 1) * st.size * 1.6 + 58 * sc, { size: 23 * sc, font: "'Noto Sans KR',sans-serif", color: '#fff0dc', alpha: a1 * .9, ls: 2, shadow: 'rgba(0,0,0,.8)' });
   const a2 = win(t, 21.6, 27.0, 1.2, .8), y2 = V ? 1560 : H - 150;

@@ -27,7 +27,8 @@ const PW = 420, PH = 520, PR = 1.5, BR = .5, DX = 384, DY = 610;     // panel in
 const COLS = V ? 3 : 6, SILVER = '#BABCC0', Y = '#F3BE14', PK = '#F2A197', CR = '#EFE6CF', RD = '#E2462B';
 const LABEL = ['금송아지', '돈', '성공', '인정', '나 자신'];
 const SERIF = "'Noto Serif KR',serif", SANS = "'Noto Sans KR',sans-serif", TAU = Math.PI * 2;
-let SDF = [], PLATE = [], MASK = [], GLASS, BGM = [], FLOOD = [], WALL, GRAIN, MESH, BLK = {};
+let SDF = [], PLATE = [], MASK = [], GLASS, BGM = [], FLOOD = [], DRIP, STEN = [], WALL, GRAIN, MESH, BLK = {};
+const SM = 14;                                                     // the stencil's margin round the panel (world units)
 
 // ---------- the six shapes (white on black, field space; all stand on the same base slab) ----------
 function slab(x) { x.beginPath(); x.roundRect(110, 650, 420, 30, 6); x.fill(); }
@@ -242,30 +243,46 @@ function firstPrint(ctx, t, e, x0, y0) {   // the first calf, through the whole 
   if (wash >= 1) { ctx.drawImage(tinted(BGM[2], CR), x0, y0, PW, PH); return; }
   if (cry > 0) { ctx.globalAlpha = cry; ctx.drawImage(tinted(BGM[1], RD), x0, y0, PW, PH); ctx.globalAlpha = 1; }
   printArt(ctx, e, x0, y0);
-  if (flood > 0) { ctx.save(); ctx.globalAlpha = .55 * flood; ctx.fillStyle = SILVER; ctx.fillRect(x0, y0, PW, PH); ctx.restore(); }   // the colour drains
+  if (flood > 0) { ctx.save(); ctx.globalAlpha = .3 * flood; ctx.fillStyle = SILVER; ctx.fillRect(x0, y0, PW, PH); ctx.restore(); }   // the colour dulls
   ctx.drawImage(PLATE[0][0], x0, y0, PW, PH);
-  if (flood > 0) for (let i = 0; i < FLOOD.length; i++) { const a = clamp(flood * FLOOD.length - i); if (a > 0) { ctx.globalAlpha = a * .92; ctx.drawImage(FLOOD[i], x0, y0, PW, PH); } }
+  // too much ink: wet black blooms from the heavy areas, spreads and pools low, then drains away in runs
+  const lv = ss(3.25, 4.6, t) * (FLOOD.length - 1) - ss(5.0, 6.2, t) * 1.6, drain = ss(4.4, 6.3, t);
+  if (lv > -1) { const i0 = Math.floor(lv), f = lv - i0;
+    if (i0 >= 0) { ctx.drawImage(FLOOD[Math.min(i0, FLOOD.length - 1)], x0, y0, PW, PH); }
+    if (i0 + 1 < FLOOD.length && f > 0) { ctx.globalAlpha = f; ctx.drawImage(FLOOD[i0 + 1], x0, y0, PW, PH); ctx.globalAlpha = 1; } }
+  if (drain > 0) { ctx.save(); ctx.beginPath(); ctx.rect(x0, y0, PW, PH * (.35 + .65 * drain)); ctx.clip(); ctx.globalAlpha = Math.min(1, drain * 2.5); ctx.drawImage(DRIP, x0, y0, PW, PH); ctx.restore(); }
   ctx.globalAlpha = 1;
   if (wash > 0) { const wx = x0 - 10 + (PW + 20) * eio(wash); ctx.save(); ctx.beginPath(); ctx.moveTo(x0 - 20, y0 - 20); for (let i = 0; i <= 12; i++) ctx.lineTo(wx + Math.sin(i * 1.7) * 6, y0 - 20 + i / 12 * (PH + 40)); ctx.lineTo(x0 - 20, y0 + PH + 20); ctx.closePath(); ctx.clip();
     ctx.drawImage(tinted(BGM[2], CR), x0, y0, PW, PH); ctx.restore();
     if (wash < 1) { ctx.save(); ctx.fillStyle = 'rgba(0,0,0,.18)'; ctx.fillRect(wx + 8, y0 - 30, 26, PH + 60); ctx.fillStyle = '#d9d2c2'; ctx.fillRect(wx - 6, y0 - 34, 22, PH + 68); ctx.fillStyle = 'rgba(255,255,255,.5)'; ctx.fillRect(wx - 2, y0 - 34, 5, PH + 68);   // the paint roller
       ctx.fillStyle = '#3a3a3a'; ctx.fillRect(wx + 2, y0 + PH / 2 - 4, 90, 8); ctx.restore(); } }
 }
-function rig(ctx, t) {      // the screen frame and the squeegee for every pull in progress (drawn above the prints)
-  for (const e of EV) { const a = t - e.t0; if (a < -.32 || a > e.pass + .34) continue;
-    const [x0, y0] = cellXY(e.r, e.c), down = ss(-.32, 0, a), lift = ss(e.pass, e.pass + .34, a), oy = (1 - down) * -50 - lift * 70, al = down * (1 - lift);
-    if (al <= 0) continue; const fx = x0 - 34, fy = y0 - 34 + oy, fw = PW + 68, fh = PH + 68;
+function rig(ctx, t) {      // the screen and the squeegee for every pull in progress (drawn above the prints)
+  for (const e of EV) { const a = t - e.t0; if (a < -.24 || a > e.pass + .26) continue;
+    const [x0, y0] = cellXY(e.r, e.c), down = ss(-.24, 0, a), lift = ss(e.pass, e.pass + .26, a), oy = (1 - down) * -36 - lift * 120, al = down * (1 - lift);
+    if (al <= 0) continue; const fx = x0 - SM - 20, fy = y0 - SM - 20 + oy, fw = PW + 2 * SM + 40, fh = PH + 2 * SM + 40, ix = fx + 20, iy = fy + 20, iw = fw - 40, ih = fh - 40;
+    const u = clamp(a / e.pass), by = y0 - 16 + (PH + 40) * eio(u) + oy;
     ctx.save(); ctx.globalAlpha = al;
-    ctx.fillStyle = 'rgba(20,20,24,.16)'; for (const g of [14, 8]) ctx.fillRect(fx + g, fy + g + 10, fw, fh);       // shadow on the wall
-    ctx.fillStyle = 'rgba(232,232,226,.22)'; ctx.fillRect(fx + 22, fy + 22, fw - 44, fh - 44); ctx.globalAlpha = al * .5; ctx.fillStyle = ctx.createPattern(MESH, 'repeat'); ctx.fillRect(fx + 22, fy + 22, fw - 44, fh - 44); ctx.globalAlpha = al;   // the mesh
-    ctx.fillStyle = '#8a6a44'; for (const [rx, ry, rw, rh] of [[fx, fy, fw, 22], [fx, fy + fh - 22, fw, 22], [fx, fy, 22, fh], [fx + fw - 22, fy, 22, fh]]) ctx.fillRect(rx, ry, rw, rh);
-    ctx.strokeStyle = 'rgba(40,25,10,.5)'; ctx.lineWidth = 1.2; ctx.strokeRect(fx, fy, fw, fh); ctx.strokeRect(fx + 22, fy + 22, fw - 44, fh - 44);
-    const u = clamp(a / e.pass);
-    if (u > 0 && u < 1) { const by = y0 - 16 + (PH + 40) * eio(u), sx = fx + 26, sw = fw - 52;
-      ctx.fillStyle = 'rgba(10,10,10,.85)'; ctx.beginPath(); ctx.moveTo(sx + 4, by + 2); for (let i = 0; i <= 16; i++) ctx.lineTo(sx + 4 + i / 16 * (sw - 8), by + 6 + Math.sin(i * 1.9 + e.t0) * 3); ctx.lineTo(sx + sw - 4, by + 2); ctx.fill();   // ink bead
-      ctx.fillStyle = 'rgba(0,0,0,.25)'; ctx.fillRect(sx + 6, by - 2, sw, 16);
-      ctx.fillStyle = '#26262a'; ctx.fillRect(sx, by - 14, sw, 12);                    // rubber blade
-      ctx.fillStyle = '#b48a56'; ctx.fillRect(sx - 6, by - 46, sw + 12, 34); ctx.fillStyle = 'rgba(255,240,210,.35)'; ctx.fillRect(sx - 6, by - 46, sw + 12, 6); ctx.strokeStyle = 'rgba(60,35,10,.6)'; ctx.strokeRect(sx - 6, by - 46, sw + 12, 34); }
+    ctx.fillStyle = 'rgba(20,20,24,.14)'; for (const g of [16, 9]) { ctx.fillRect(fx + g, fy + g + 12, fw, 20); ctx.fillRect(fx + fw - 20 + g, fy + g + 12, 20, fh); ctx.fillRect(fx + g, fy + fh - 20 + g + 12, fw, 20); }   // the frame's shadow
+    // the stretched mesh: emulsion everywhere except the image (open dots), so the print shows through only there
+    ctx.save(); ctx.beginPath(); ctx.rect(ix, iy, iw, ih); ctx.clip();
+    ctx.globalAlpha = al * .5; ctx.drawImage(STEN[e.idol], x0 - SM, y0 - SM + oy, PW + 2 * SM, PH + 2 * SM);
+    if (u > 0) { ctx.globalAlpha = al * .3; ctx.fillStyle = '#0d0d0f'; ctx.fillRect(ix, iy, iw, Math.max(0, Math.min(ih, by - iy))); }      // ink left on the mesh behind the blade
+    ctx.globalAlpha = al * .7; ctx.fillStyle = MESH; ctx.fillRect(ix, iy, iw, ih);
+    ctx.restore();
+    // the wooden frame
+    ctx.globalAlpha = al; ctx.fillStyle = '#9b7a50'; for (const [rx, ry, rw, rh] of [[fx, fy, fw, 20], [fx, fy + fh - 20, fw, 20], [fx, fy, 20, fh], [fx + fw - 20, fy, 20, fh]]) ctx.fillRect(rx, ry, rw, rh);
+    ctx.fillStyle = 'rgba(255,235,200,.28)'; ctx.fillRect(fx, fy, fw, 4); ctx.fillRect(fx, fy, 4, fh);
+    ctx.strokeStyle = 'rgba(60,38,15,.55)'; ctx.lineWidth = 1.2; ctx.strokeRect(fx, fy, fw, fh); ctx.strokeRect(ix, iy, iw, ih);
+    // the squeegee: a rubber blade in a wooden handle, pushing a rolling bead of ink down the screen
+    if (u > 0 && u < 1) { const sx = fx + 12, sw = fw - 24, tilt = Math.sin(a * 9) * 1.5;
+      ctx.fillStyle = 'rgba(0,0,0,.28)'; ctx.fillRect(sx + 10, by + 4, sw, 22);
+      ctx.fillStyle = '#0b0b0d'; ctx.beginPath(); ctx.moveTo(sx + 6, by - 2); for (let i = 0; i <= 24; i++) ctx.lineTo(sx + 6 + i / 24 * (sw - 12), by + 9 + Math.sin(i * 1.3 + a * 14) * 3 + Math.sin(i * .5 + e.t0) * 2); ctx.lineTo(sx + sw - 6, by - 2); ctx.fill();
+      ctx.fillStyle = 'rgba(255,255,255,.35)'; for (let i = 1; i < 6; i++) ctx.fillRect(sx + i * sw / 6 + Math.sin(a * 11 + i) * 6, by + 3, 14, 2);   // glints on the wet bead
+      ctx.fillStyle = '#2a2a2e'; ctx.fillRect(sx, by - 14, sw, 13);
+      ctx.fillStyle = '#c0955c'; ctx.beginPath(); ctx.moveTo(sx - 10, by - 14); ctx.lineTo(sx + sw + 10, by - 14 + tilt); ctx.lineTo(sx + sw + 4, by - 58 + tilt); ctx.lineTo(sx - 4, by - 58); ctx.closePath(); ctx.fill();
+      ctx.fillStyle = 'rgba(255,240,210,.4)'; ctx.fillRect(sx - 4, by - 58, sw + 8, 6); ctx.strokeStyle = 'rgba(60,35,10,.7)'; ctx.stroke();
+      ctx.fillStyle = '#e8d2b0'; for (const hx of [sx + sw * .3, sx + sw * .7]) { ctx.beginPath(); ctx.ellipse(hx, by - 64, 18, 10, 0, 0, TAU); ctx.fill(); ctx.stroke(); } }   // hands on the handle
     ctx.restore(); }
 }
 
@@ -299,7 +316,7 @@ const CYC = ['우상을 섬김', '→', '고난', '→', '부르짖음', '→', 
 const CYCOL = [Y, null, '#8E9096', null, RD, null, CR, null, Y];
 function cycle(ctx, t) {
   const a = win(t, 1.6, 10.2, .8, 1); if (a <= 0) return;
-  const size = V ? 42 : 40, rows = V ? [[0, 5], [5, 9]] : [[0, 9]], y0 = V ? H - 262 : H - 96, lh = size * 1.8;
+  const size = V ? 46 : 46, rows = V ? [[0, 5], [5, 9]] : [[0, 9]], y0 = V ? H - 262 : H - 92, lh = size * 1.75;
   halo(ctx, W / 2, y0 - size * .3 + (rows.length - 1) * lh / 2, W * .58, rows.length * lh * .5 + size, a);
   const CY = CYC.map(Pilot.tr);
   ctx.save(); ctx.font = `600 ${size}px ${SERIF}`; ctx.textBaseline = 'alphabetic'; ctx.textAlign = 'left';
@@ -327,8 +344,9 @@ function draw(ctx, t) {
   const rows = V ? 6 : 3; for (let r = 0; r < rows; r++) for (let c = 0; c < COLS; c++) drawPanel(ctx, t, r, c);
   // the titles of the series, stencilled under them
   SER.forEach((cells, k) => { const a = ss(LAB_T[k], LAB_T[k] + .6, t); if (a <= 0) return; const [r, c] = cells[1], [x, y] = cen(r, c), col = SER_COL[k][0];
-    text(ctx, LABEL[k], x + 4, y + PH / 2 + 56, { size: 40, weight: 700, font: SANS, color: col === CR ? PK : col, alpha: a * .9, ls: 6, maxW: PW * 1.6 });
-    text(ctx, LABEL[k], x, y + PH / 2 + 52, { size: 40, weight: 700, font: SANS, color: '#141414', alpha: a, ls: 6, maxW: PW * 1.6 }); });
+    const ls = Math.max(36, 29 / s), ly = y + PH / 2 + 34 + ls * .55;   // at least ~29 px on screen however far the camera pulls back
+    text(ctx, LABEL[k], x + 4, ly + 4, { size: ls, weight: 700, font: SANS, color: col === CR ? PK : col, alpha: a * .9, ls: ls * .15, maxW: PW * 1.7 });
+    text(ctx, LABEL[k], x, ly, { size: ls, weight: 700, font: SANS, color: '#141414', alpha: a, ls: ls * .15, maxW: PW * 1.7 }); });
   rig(ctx, t);
   // the golden thread comes down to one mirror
   { const k = ss(36.6, 39.4, t); if (k > 0) { const [mx, my] = cen(...CENTRE), topY = my - PH / 2 + 6, y = lerp(cy - H / s, topY, eo(k));
@@ -354,7 +372,7 @@ function draw(ctx, t) {
   say(ctx, V ? '이스라엘의 악순환은\n사실 ‘나’의 모습' : '이스라엘의 악순환은 사실 ‘나’의 모습', W / 2, V ? TY - 75 : TY, { size: TS, alpha: win(t, 31.2, 35.5, .9, .8), under: RD });
   const pa = win(t, 35.8, 43.4, 1.2, 1), py = V ? H - 300 : H - 170;
   if (pa > 0) halo(ctx, W / 2, py + 30, W * .6, 150, pa);
-  text(ctx, '결국 가장 깊은 우상은', W / 2, py, { size: V ? 48 : 44, weight: 600, color: '#1a1a1a', alpha: pa, maxW: W - 120 });
+  text(ctx, '결국 가장 깊은 우상은', W / 2, py, { size: V ? 50 : 48, weight: 600, color: '#1a1a1a', alpha: pa, maxW: W - 120 });
   const pb = win(t, 36.8, 43.4, 1.2, 1);
   text(ctx, '“하나님 자리에 앉은 나 자신”입니다.', W / 2 + 5, py + (V ? 92 : 84) + 4, { size: 58, weight: 600, color: Y, alpha: pb * .9, maxW: W - 120 });
   text(ctx, '“하나님 자리에 앉은 나 자신”입니다.', W / 2, py + (V ? 92 : 84), { size: 58, weight: 600, color: '#111', alpha: pb, maxW: W - 120 });
@@ -368,14 +386,28 @@ Pilot.run({ W, H, dur: DUR, audio: 'mirror.m4a', fonts: ["600 40px 'Noto Serif K
     for (let i = 0; i < 6; i++) { const ink = inkField(i); PLATE[i] = [0, 1, 2].map(v => makePlate(ink, 11 + i * 7 + v * 3)); MASK[i] = [0, 1, 2].map(v => silMask(i, i * 5 + v * 2.3)); }
     GLASS = glassMask(); BGM = [0, 1, 2].map(v => bgMask(3 + v * 4.1));
     // ink floods for the first calf: three stages of blotches
-    for (let k = 0; k < 3; k++) FLOOD.push(makeMask((X, Y) => fbm(X * .012 + 4, Y * .012, 4) > .66 - k * .09 + (Y / PH) * .05));
-    FLOOD = FLOOD.map(m => tinted(m, '#111111'));
+    { const ink0 = inkField(0), K = .72, OXf = (PW - FW * K) / 2, OYf = PH - 14 - FH * K, dens = (X, Y) => { let s = 0; for (const [dx, dy] of [[0, 0], [14, 0], [-14, 0], [0, 14], [0, -14]]) { const fx = Math.round((X + dx - OXf) / K), fy = Math.round((Y + dy - OYf) / K); if (fx >= 0 && fy >= 0 && fx < FW && fy < FH) s += ink0[fy * FW + fx]; } return s / 5; };
+      const w = Math.round(PW * BR), h = Math.round(PH * BR), F = new Float32Array(w * h);      // flood field: where the photo is darkest, ink blooms first; it sinks and pools toward the bottom
+      for (let j = 0; j < h; j++) for (let i = 0; i < w; i++) { const X = i / BR, Y = j / BR, edge = Math.min(X, PW - X, Y, PH - Y) / 30;
+        F[j * w + i] = (.55 * dens(X, Y) + .45 * fbm(X * .011 + 4, Y * .011, 4) + .18 * (Y / PH)) * Math.min(1, edge); }
+      for (let k = 0; k < 6; k++) { const thr = .62 - k * .055, c = canvas(w, h), x = c.getContext('2d'), id = x.createImageData(w, h), r = rng(k + 3);
+        for (let q = 0; q < w * h; q++) { const a = ss(thr - .03, thr + .02, F[q]), v = 8 + 22 * noise(q % w * .3, (q / w | 0) * .3); id.data[q * 4] = id.data[q * 4 + 1] = v; id.data[q * 4 + 2] = v + 2; id.data[q * 4 + 3] = 255 * a * .97; }
+        x.putImageData(id, 0, 0); FLOOD.push(c); }
+      // runs: ink draining down from the pooled blotches, tapering
+      const c = canvas(w, h), x = c.getContext('2d'), r = rng(31); x.fillStyle = '#0c0c0e';
+      for (let n = 0; n < 26; n++) { const X = 20 + r() * (PW - 40), y0 = PH * (.3 + r() * .4), len = 30 + r() * (PH - y0 - 20), wd = 2 + r() * 5;
+        x.beginPath(); x.moveTo((X - wd) * BR, y0 * BR); x.quadraticCurveTo((X - wd * .3) * BR, (y0 + len * .7) * BR, X * BR, (y0 + len) * BR); x.quadraticCurveTo((X + wd * .3) * BR, (y0 + len * .7) * BR, (X + wd) * BR, y0 * BR); x.fill();
+        x.beginPath(); x.arc(X * BR, (y0 + len) * BR, wd * .7 * BR, 0, TAU); x.fill(); }
+      DRIP = c; }
     // the brushed silver wall, the screen mesh, film grain
     { const c = canvas(1024, 1024), x = c.getContext('2d'); x.fillStyle = SILVER; x.fillRect(0, 0, 1024, 1024); const r = rng(8);
       for (let i = 0; i < 900; i++) { const y = r() * 1024; x.strokeStyle = r() < .5 ? `rgba(255,255,255,${.05 + r() * .12})` : `rgba(60,62,68,${.04 + r() * .08})`; x.lineWidth = .6 + r() * 2.4; x.beginPath(); x.moveTo(r() * 1024 - 200, y); x.lineTo(r() * 1024 + 300, y + (r() - .5) * 4); x.stroke(); }
       x.globalAlpha = .05; x.strokeStyle = '#000'; x.lineWidth = 1; for (let i = 0; i < 1024; i += 4) { x.beginPath(); x.moveTo(i, 0); x.lineTo(i, 1024); x.stroke(); x.beginPath(); x.moveTo(0, i); x.lineTo(1024, i); x.stroke(); }
       x.globalAlpha = 1; x.globalCompositeOperation = 'overlay'; x.drawImage(speckle(512, 512, 30, 4, 2), 0, 0, 1024, 1024); WALL = x.createPattern(c, 'repeat'); }
-    { const c = canvas(6, 6), x = c.getContext('2d'); x.fillStyle = 'rgba(90,90,90,.6)'; x.fillRect(0, 0, 6, 1); x.fillRect(0, 0, 1, 6); MESH = c; }
+    { const c = canvas(4, 4), x = c.getContext('2d'); x.fillStyle = 'rgba(205,205,200,.18)'; x.fillRect(0, 0, 4, 4); x.fillStyle = 'rgba(45,45,48,.55)'; x.fillRect(0, 0, 4, 1); x.fillRect(0, 0, 1, 4);
+      MESH = x.createPattern(c, 'repeat'); MESH.setTransform(new DOMMatrix().scale(.8)); }
+    for (let i = 0; i < 6; i++) { const m = SM * PR, c = canvas(Math.round(PW * PR + 2 * m), Math.round(PH * PR + 2 * m)), x = c.getContext('2d');    // the stencil: blue photo-emulsion with the image open
+      x.fillStyle = '#5E93AE'; x.fillRect(0, 0, c.width, c.height); x.globalCompositeOperation = 'destination-out'; x.drawImage(PLATE[i][0], m, m); STEN.push(c); }
     GRAIN = canvas(1, 1).getContext('2d').createPattern(speckle(256, 256, 70, 21), 'repeat');
     // pre-colour every block the film uses, so nothing is built mid-play
     for (const e of EV) { if (e.bg !== SILVER) tinted(BGM[e.v], e.bg); tinted(MASK[e.idol][e.v], e.blk); if (e.glass) tinted(GLASS, e.glass); }

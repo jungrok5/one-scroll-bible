@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#000000">
 <meta name="color-scheme" content="dark">
 <title>영상으로 보는 성경 이야기 · 한눈에 보는 성경 이야기</title>
-<meta name="description" content="창조에서 새 하늘과 새 땅까지, 성경의 큰 줄거리를 21개 장면으로 — 장면마다 다른 화풍으로 그린 약 13분의 이야기.">
+<meta name="description" content="창조에서 새 하늘과 새 땅까지, 성경의 큰 줄거리를 21개 장면으로 — 장면마다 다른 화풍으로 그린 약 14분의 이야기.">
 <meta name="robots" content="index, follow, max-image-preview:large" />
 <link rel="canonical" href="https://one-scroll-bible.com/film/" />
 <link rel="manifest" href="/manifest.webmanifest" />
@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="한눈에 보는 성경 이야기" />
 <meta property="og:url" content="https://one-scroll-bible.com/film/" />
 <meta property="og:title" content="영상으로 보는 성경 이야기" />
-<meta property="og:description" content="창조에서 새 하늘과 새 땅까지, 성경의 큰 줄거리를 약 13분의 장면으로." />
+<meta property="og:description" content="창조에서 새 하늘과 새 땅까지, 성경의 큰 줄거리를 약 14분의 장면으로." />
 <meta property="og:image" content="https://one-scroll-bible.com/film/poster-h.jpg" />
 <meta property="og:locale" content="ko_KR" />
 <meta name="twitter:card" content="summary_large_image" />
@@ -51,6 +51,7 @@
   .chapters button b{color:var(--ink);font-weight:600;margin-right:4px}
   .chapters button[aria-current="true"]{border-color:var(--accent);color:var(--ink)}
   .back{display:inline-block;margin-top:26px;color:var(--accent);text-decoration:none;border-bottom:1px solid var(--line)}
+  .yt{margin-top:14px;color:var(--muted);font-size:.95em}.yt a{color:var(--accent);text-decoration:none;border-bottom:1px solid var(--line)}
   footer{margin-top:32px;padding-top:16px;border-top:1px solid var(--line);color:var(--muted);font-size:.75rem;line-height:1.7}
   /* theatre: the stage fills the screen */
   body.full{overflow:hidden}
@@ -80,7 +81,7 @@
 </head>
 <body>
 <main>
-  <div class="top"><a href="/" id="home" data-ui="home">← 한눈에 보는 성경 이야기</a><span style="color:var(--muted)" data-ui="len">약 13분 · 소리와 함께</span></div>
+  <div class="top"><a href="/" id="home" data-ui="home">← 한눈에 보는 성경 이야기</a><span style="color:var(--muted)" data-ui="len">약 14분 · 소리와 함께</span></div>
   <h1 data-ui-html="h1">영상으로 보는 <span class="em">성경 이야기</span></h1>
   <p class="sub" data-ui="sub">창조에서 새 하늘과 새 땅까지 — 장면마다 다른 화풍으로 그린 21개 장면이 하나의 줄거리로 이어집니다. 그림은 브라우저에서 실시간으로 그려집니다.</p>
 
@@ -109,6 +110,7 @@
   <div class="toast" id="toast" role="status" hidden></div>
 
   <a class="back" href="/" id="back" data-ui="back">글로 천천히 읽어 보기 →</a>
+  <p class="yt" id="yt">유튜브에서 보기: <a href="https://youtu.be/H637tHHEkeI" target="_blank" rel="noopener" data-yt="h">가로 영상</a> · <a href="https://youtu.be/isQDamifphI" target="_blank" rel="noopener" data-yt="v">세로 영상</a></p>
 
   <footer data-ui-html="legal">
     성경 인용: 「성경전서 개역개정판」 © 대한성서공회. 저작권은 대한성서공회에 있으며, 출처를 밝혀 인용했습니다.
@@ -131,6 +133,8 @@
   document.querySelectorAll('[data-ui-html]').forEach(function (e) { if (UI[e.dataset.uiHtml]) e.innerHTML = UI[e.dataset.uiHtml]; });
   document.querySelectorAll('[data-ui-aria]').forEach(function (e) { if (UI[e.dataset.uiAria]) e.setAttribute('aria-label', UI[e.dataset.uiAria]); });
   if (UI.title) document.title = UI.title;
+  if (LANG !== 'ko') document.getElementById('yt').hidden = true;   // the YouTube uploads are the Korean film
+  document.querySelectorAll('#yt a').forEach(function (a) { a.onclick = function () { if (window.gtag) gtag('event', 'youtube_click', { orientation: a.dataset.yt }); }; });
   if (LANG !== 'ko') { document.getElementById('home').href = '/' + LANG + '/'; document.getElementById('back').href = '/' + LANG + '/'; }
   // a shared link can point at one scene: /film/#cross
   var START_AT = Math.max(0, S.findIndex(function (s) { return '#' + s[0] === location.hash; }));
@@ -189,7 +193,7 @@
   function toast(msg) { var t = $('toast'); t.textContent = msg; t.hidden = false; clearTimeout(toast.h); toast.h = setTimeout(function () { t.hidden = true; }, 2200); }
   $('share').onclick = function () {
     var i = cur >= 0 ? cur : START_AT, url = location.origin + '/film/' + (LANG !== 'ko' ? '?lang=' + LANG : '') + (i > 0 ? '#' + S[i][0] : '');
-    var title = UI.title || '영상으로 보는 성경 이야기', text = (UI.shareText || '창조에서 새 하늘과 새 땅까지, 성경 이야기를 13분 영상으로') + (i > 0 ? ' — ' + S[i][1] : '');
+    var title = UI.title || '영상으로 보는 성경 이야기', text = (UI.shareText || '창조에서 새 하늘과 새 땅까지, 성경 이야기를 14분 영상으로') + (i > 0 ? ' — ' + S[i][1] : '');
     function copy() {   // PC (and any share-sheet failure): copy the link and say so
       var done = function () { toast(UI.copied || '링크를 복사했어요'); if (window.gtag) gtag('event', 'share', { method: 'copy', content_type: 'film', item_id: S[i][0] }); };
       if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(url).then(done, legacy); else legacy();

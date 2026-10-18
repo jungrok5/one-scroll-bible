@@ -405,7 +405,7 @@ function makePage(m){
   if (m.code === 'en') h = h.replace('<span id="ccLink">', '<span id="ccLink" hidden>');
   // 영상(/film/) 버튼: index.html 의 FILM_CTA 에 있는 언어만 그 언어 글자·링크로, 나머지는 정적으로도 숨김.
   { const t = FILM_CTA[m.code];
-    h = t ? h.replace('<a class="film-cta" id="filmCta" href="/film/"><span class="pl" aria-hidden="true">▶</span>13분 영상으로 보기</a>',
+    h = t ? h.replace('<a class="film-cta" id="filmCta" href="/film/"><span class="pl" aria-hidden="true">▶</span>14분 영상으로 보기</a>',
                       `<a class="film-cta" id="filmCta" href="/film/?lang=${m.code}"><span class="pl" aria-hidden="true">▶</span>${xml(t)}</a>`)
           : h.replace('<a class="film-cta" id="filmCta"', '<a class="film-cta" id="filmCta" hidden'); }
 

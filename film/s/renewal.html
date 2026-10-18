@@ -58,9 +58,9 @@ function wash(pts, col, a, o = {}) {          // a flat wash painted in three ji
   return { wash: passes, c, a, bb: [Math.min(...xs) - j, Math.min(...ys) - j, Math.max(...xs) + j, Math.max(...ys) + j], x: Math.min(...xs) };
 }
 function drawW(ctx, Wv, prog = 1) {
-  if (prog <= 0) return; ctx.globalAlpha = clamp(prog * 1.5);
+  if (prog <= 0) return; ctx.globalAlpha = clamp(prog * 1.5); if (Wv.blur) ctx.filter = `blur(${Wv.blur}px)`;
   for (const p of Wv.wash) { ctx.beginPath(); p.forEach((q, i) => i ? ctx.lineTo(q[0], q[1]) : ctx.moveTo(q[0], q[1])); ctx.closePath(); ctx.fillStyle = rgb(Wv.c, Wv.a / 2.2); ctx.fill(); ctx.strokeStyle = rgb(Wv.c.map(v => v * .85), Wv.a * .22); ctx.lineWidth = 1.2; ctx.stroke(); }
-  ctx.globalAlpha = 1;
+  ctx.globalAlpha = 1; if (Wv.blur) ctx.filter = 'none';
 }
 const draw1 = (ctx, s, p = 1) => s.wash ? drawW(ctx, s, p) : drawS(ctx, s, p);
 function drawList(ctx, list, prog = 1) { const n = list.length * clamp(prog); for (let i = 0; i < list.length; i++) { const k = clamp(n - i); if (k <= 0) break; draw1(ctx, list[i], k); } }
@@ -88,7 +88,7 @@ function buildLayers() {
   for (let i = 0; i < 22; i++) { const x = rr() * (5800 * .15 + W), y = -460 + rr() * 330; sky.push(mk([[x, y], [x + 140 + rr() * 160, y - 6 + rr() * 12], [x + 300 + rr() * 200, y + rr() * 8]], 10 + rr() * 16, colAt(SKY, x / .15).map(v => v * .9), { a: .2, bristles: 5 })); }
   // far hills: mesas in the desert, soft hills beyond the river, a golden hill at the end
   for (let x = -300; x < 5800 * .35 + W; x += 120 + rr() * 80) { const wx = x / .35, desert = wx < 2100, w = 110 + rr() * 120, h = desert ? (fbm(x * .004, 2) > .55 ? 150 : 60 + 60 * fbm(x * .01, 3)) : 70 + 90 * fbm(x * .006, 5);
-    const top = -h - (wx > 4300 ? 40 * ss(4300, 4700, wx) : 0), c = colAt(FAR, wx), round = !desert;
+    const top = -h - (wx > 4300 ? 40 * ss(4300, 4700, wx) : 0), c = colAt(FAR, desert ? Math.min(wx, 1600) : wx), round = !desert;   // a mesa keeps the desert's warm rock colour
     const pts = round ? Array.from({ length: 9 }, (_, i) => [x - w + i / 8 * 2 * w, 20 + (top - 20) * Math.sin(i / 8 * Math.PI) * (.8 + rr() * .3)]) : [[x - w * .6, 20], [x - w * .45, top + (rr() - .5) * 14], [x + w * .45, top + (rr() - .5) * 14], [x + w * .6, 20]];
     far.push(wash(pts, c, .34, { j: 7 })); }
   band(far, -300, 5800 * .35 + W, -4, 34, [[0, PAPER], [9999, PAPER]], 1, .5, rr);                        // mist band
@@ -218,9 +218,9 @@ function buildFace() {
   f.push(wash(smooth([[-620, -420], [520, -460], [700, 380], [-560, 420]], true, 4), '#e6dcc8', .28, { j: 30 }));
   f.push(wash(smooth([[260, -420], [700, -440], [720, 300], [380, 120], [300, -100]], true, 4), '#cfdbe0', .22, { j: 30 }));
   // the head in profile: skin, a shadow glaze, then hair laid in strokes
-  const skin = smooth([[-10, -262], [60, -250], [118, -214], [148, -160], [152, -128], [170, -92], [192, -58], [202, -46], [190, -34], [178, -24], [186, -12], [177, -2], [183, 10], [170, 24], [176, 46], [164, 72], [132, 92], [100, 104], [86, 150], [80, 222], [-50, 222], [-44, 130], [-80, 70], [-150, 0], [-170, -100], [-140, -200], [-80, -248]], true, 5);
+  const skin = smooth([[-10, -262], [60, -250], [118, -214], [148, -160], [152, -128], [170, -92], [192, -58], [202, -46], [190, -34], [178, -24], [186, -12], [177, -2], [183, 10], [170, 24], [176, 46], [164, 72], [132, 92], [100, 104], [86, 150], [88, 186], [-60, 190], [-52, 130], [-80, 70], [-150, 0], [-170, -100], [-140, -200], [-80, -248]], true, 5);
   f.push(wash(skin, '#efc5a2', .7, { j: 3 }));
-  f.push(wash(smooth([[-50, -10], [30, -2], [80, 70], [84, 140], [78, 220], [-48, 220], [-50, 110]], true, 4), '#cf9474', .24, { j: 10 }));
+  f.push({ ...wash(smooth([[-30, 0], [30, 8], [70, 74], [74, 140], [72, 180], [-36, 180], [-34, 100]], true, 4), '#cf9474', .3, { j: 6 }), blur: 14 });   // neck shadow: a soft glaze inside the neck, ending at the collar
   f.push(wash(smooth([[120, -210], [146, -160], [150, -130], [120, -150], [96, -196]], true, 3), '#d89b7a', .2, { j: 4 }));
   f.push(wash(smooth([[-110, 40], [-160, 0], [-182, -100], [-150, -215], [-80, -268], [0, -286], [70, -276], [124, -238], [134, -212], [96, -206], [58, -180], [30, -140], [8, -96], [-30, -50], [-60, 10], [-80, 40]], true, 4), '#5b4130', .8, { j: 4 }));
   for (let i = 0; i < 5; i++) { const t0 = i / 4, p0 = [lerp(124, 10, t0), lerp(-232, -110, t0)], q = [p0[0] - 90 - R() * 50, p0[1] - 30 + R() * 30], e = [-120 - R() * 50, lerp(-180, 20, t0) + R() * 30];

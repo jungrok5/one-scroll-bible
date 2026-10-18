@@ -159,7 +159,7 @@ function draw(ctx, t) {
 
   // words: plain serif in a calm plane (the sky)
   text(ctx, '13  ·  부활', 110, 120, { align: 'left', size: 30, weight: 600, color: '#f4efe6', alpha: win(t, 1, 5.2, 1, 1), ls: 4, shadow: 'rgba(0,0,0,.6)' });
-  const a1 = win(t, 11.2, 16.4, 1.2, .8), a2 = win(t, 16, DUR - .3, 1.2, 1.2), st = { size: 54, weight: 600, color: '#fffaf0', shadow: 'rgba(60,40,30,.75)', shadowBlur: 22 };
+  const a1 = win(t, 11.2, 16.4, 1.2, .8), a2 = win(t, 16.45, DUR - .3, 1.1, 1.2), st = { size: 54, weight: 600, color: '#fffaf0', shadow: 'rgba(60,40,30,.75)', shadowBlur: 22 };
   text(ctx, '“그가 여기 계시지 않고”', W / 2, 190, { ...st, alpha: a1 });
   text(ctx, '“그가 말씀 하시던 대로 살아나셨느니라”', W / 2, 190, { ...st, alpha: a2 });
   text(ctx, '마태복음 28:6 (개역개정)', W / 2, 248, { size: 24, font: "'Noto Sans KR',sans-serif", color: '#fff2dc', alpha: Math.max(a1, a2) * .9, ls: 2, shadow: 'rgba(60,40,30,.7)' });

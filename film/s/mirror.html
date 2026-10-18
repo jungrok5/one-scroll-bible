@@ -211,7 +211,7 @@ const SER = V ? [[[0, 0], [0, 1], [0, 2]], [[1, 0], [1, 1], [1, 2]], [[2, 2], [2
 const SER_T = [[7.8, 8.6, 9.4], [12.8, 13.6, 14.4], [16.4, 17.2, 18.0], [19.6, 20.4, 21.2], [23.2, 23.85, 24.4, 24.9, 25.35, 25.75]];
 const SER_PASS = [.85, .8, .8, .8, .5];
 const SER_COL = [[Y, [SILVER, PK, RD]], [CR, [Y, SILVER, PK]], [Y, [RD, CR, SILVER]], [PK, [Y, RD, CR]], [PK, [RD, Y, CR, SILVER, Y, RD]]];
-const CENTRE = V ? [2, 1] : [1, 2], WAVE0 = 26.3;
+const CENTRE = V ? [5, 1] : [2, 2], WAVE0 = 26.3;   // the bottom row's mirror, so the bare wall under it is left for the words
 const EV = [];
 EV.push({ r: 0, c: 0, t0: 1.0, idol: 0, v: 0, bg: SILVER, blk: Y, off: [16, -10], pass: .9, first: true });
 SER.forEach((cells, s) => cells.forEach(([r, c], i) => { const [blk, bgs] = SER_COL[s], bg = bgs[i % bgs.length];
@@ -288,11 +288,14 @@ function rig(ctx, t) {      // the screen and the squeegee for every pull in pro
 
 // ---------- camera ----------
 const C = (r, c, dx = 0, dy = 0) => { const [x, y] = cen(r, c); return [x + dx, y + dy]; };
-const MID = V ? C(2.5, 1, 0, 60) : C(1, 2.5, 0, 160);   // the whole wall, set high enough to leave the captions bare silver
-const CAM = V ? [[0, C(0, 0), 1.9], [7.6, C(0, 0, 0, 10), 1.8], [10.0, C(0, 1), .86], [12.4, C(0, 1, 0, 30), .84], [14.6, C(1, 1), .86], [17.0, C(2, 1), .86], [19.0, C(2, 1, 0, 40), .86], [21.0, C(3, 1), .86], [23.0, C(4, 1), .86], [25.6, C(4.6, 1), .74],
-  [27.6, MID, .5], [31.0, MID, .52], [35.6, MID, .55], [44.5, C(2, 1, 0, 20), .92]]
+// the whole wall, set high enough to leave the captions bare silver (portrait: the wall is taller than the frame, so the
+// camera sits low on it — the top rows run off the frame and the wall ends above the words)
+const MID = V ? C(4.25, 1) : C(1, 2.5, 0, 160);
+// portrait: the camera reaches each row a beat before it is pulled, so the screen and squeegee work above the captions
+const CAM = V ? [[0, C(0, 0), 1.9], [7.6, C(0, 0, 0, 10), 1.8], [10.0, C(0, 1), .86], [12.2, C(.75, 1), .85], [14.6, C(1, 1), .86], [17.0, C(2, 1), .86], [19.0, C(2.75, 1), .86], [21.0, C(3, 1), .86], [23.0, C(4, 1), .86], [25.6, C(4.6, 1), .74],
+  [27.6, MID, .5], [31.0, MID, .52], [35.6, MID, .55], [44.5, C(5, 1, 0, 220), .92]]
   : [[0, C(0, 0), 1.45], [7.6, C(0, 0, 0, 10), 1.38], [10.0, C(0, 1), .94], [12.4, C(0, 1, 40), .92], [14.6, C(0, 4), .95], [16.6, C(1, 4.4), .95], [18.4, C(1, 4), .95], [21.4, C(1, 1), .95], [23.0, C(1.7, 1), .84], [25.6, C(2, 3.4), .78],
-  [27.6, MID, .5], [31.0, MID, .53], [35.6, MID, .56], [44.5, C(1, 2, 0, 30), .95]];
+  [27.6, MID, .5], [31.0, MID, .53], [35.6, C(1.7, 2.5), .56], [44.5, C(2, 2, 0, 40), .95]]   // the last words come in below the wall;
 function cam(t) {
   let i = 0; while (i < CAM.length - 2 && t > CAM[i + 1][0]) i++;
   const a = CAM[i], b = CAM[i + 1], u = eio(clamp((t - a[0]) / (b[0] - a[0])));
@@ -343,8 +346,11 @@ function draw(ctx, t) {
   ctx.imageSmoothingQuality = 'high';
   const rows = V ? 6 : 3; for (let r = 0; r < rows; r++) for (let c = 0; c < COLS; c++) drawPanel(ctx, t, r, c);
   // the titles of the series, stencilled under them
-  SER.forEach((cells, k) => { const a = ss(LAB_T[k], LAB_T[k] + .6, t); if (a <= 0) return; const [r, c] = cells[1], [x, y] = cen(r, c), col = SER_COL[k][0];
+  // a label that would sit in the caption band gives way while the words are up (text never lies over text)
+  const capA = Math.max(win(t, 9.8, 23.8, .6, .9), win(t, 26.2, 43.6, .8, 1)), [bt, bb] = V ? [H - 560, H - 100] : [H - 240, H + 40];
+  SER.forEach((cells, k) => { let a = ss(LAB_T[k], LAB_T[k] + .6, t); if (a <= 0) return; const [r, c] = cells[1], [x, y] = cen(r, c), col = SER_COL[k][0];
     const ls = Math.max(36, 29 / s), ly = y + PH / 2 + 34 + ls * .55;   // at least ~29 px on screen however far the camera pulls back
+    const sy = H / 2 + (ly - ls * .35 - cy) * s; a *= 1 - capA * ss(bt - 40, bt, sy) * (1 - ss(bb, bb + 40, sy)); if (a <= 0.004) return;
     text(ctx, LABEL[k], x + 4, ly + 4, { size: ls, weight: 700, font: SANS, color: col === CR ? PK : col, alpha: a * .9, ls: ls * .15, maxW: PW * 1.7 });
     text(ctx, LABEL[k], x, ly, { size: ls, weight: 700, font: SANS, color: '#141414', alpha: a, ls: ls * .15, maxW: PW * 1.7 }); });
   rig(ctx, t);

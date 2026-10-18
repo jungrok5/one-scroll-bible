@@ -555,11 +555,12 @@ function draw(ctx, t) {
   vg.addColorStop(0, 'rgba(50,26,10,0)'); vg.addColorStop(1, 'rgba(40,20,6,.62)'); ctx.fillStyle = vg; ctx.fillRect(0, 0, W, H);
   ctx.globalCompositeOperation = 'overlay'; ctx.globalAlpha = .22; ctx.drawImage(grain, 0, 0); ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
   // chapter label
-  const la = win(t, .8, 6.2, 1.2, 1.2), lx = V ? 110 : 150, ly = V ? 205 : 150;
+  // set in clear vellum, on no box: portrait — the top margin above the bar border; landscape — the head of the text column,
+  // right-aligned between the top vines and the rubric (clear of the frame rail, the arch and every ornament)
+  const la = win(t, .8, 6.2, 1.2, 1.2), right = !V || RTL(), lx = V ? (RTL() ? W - 60 : 110) : L.col.x + L.col.w, ly = V ? 52 : 246, mw = V ? W - 170 : 700, al = right ? 'right' : 'left';
   if (la > 0) {
-    ctx.save(); ctx.globalAlpha = la * .9; ctx.fillStyle = '#efe0bc'; ctx.filter = 'blur(16px)'; ctx.fillRect(lx - 24, ly - 46, V ? 520 : 560, 104); ctx.restore();
-    text(ctx, '07  ·  통일 왕국', lx, ly, { align: 'left', size: 30, weight: 600, color: '#3a1e0c', alpha: la, ls: 4 });
-    text(ctx, '약 BC 1050–930  ·  사무엘상 – 열왕기상 11장', lx, ly + 44, { align: 'left', size: 22, font: "'Noto Sans KR',sans-serif", color: '#6a3a1c', alpha: la * .95, ls: 2 });
+    text(ctx, '07  ·  통일 왕국', lx, ly, { align: al, size: 30, weight: 600, color: '#3a1e0c', alpha: la, ls: 4, maxW: mw });
+    text(ctx, '약 BC 1050–930  ·  사무엘상 – 열왕기상 11장', lx, ly + (V ? 38 : 42), { align: al, size: 22, font: "'Noto Sans KR',sans-serif", color: '#6a3a1c', alpha: la * .95, ls: 2, maxW: mw });
   }
   // cuts are hard; the scene opens from and closes to black
   const f = 1 - ss(0, 1.4, t) + ss(DUR - 1.3, DUR, t); if (f > 0) { ctx.fillStyle = `rgba(8,5,2,${clamp(f)})`; ctx.fillRect(0, 0, W, H); }

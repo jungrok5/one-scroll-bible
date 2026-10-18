@@ -398,7 +398,7 @@ function draw(ctx, t) {
       ctx.fillStyle = `rgba(255,236,200,${a * d.a})`; ctx.beginPath(); ctx.arc(px, py, d.r, 0, 6.28); ctx.fill(); }
     ctx.restore(); }
   // labels cut in the stone beside each promise, gilded as its pane wakes (landscape)
-  if (!V) LABELS.forEach((s, i) => { const a = ss(.3, 1, ls[i]) * (1 - ss(16.4, 17.6, t)); if (a <= 0) return; const rg = regions[i], L = i < 2, my = (rg.rb[1] + rg.rb[3]) / 2;
+  if (!V) LABELS.forEach((s, i) => { const a = ss(.3, 1, ls[i]) * (1 - ss(15.2, 16.2, t)); /* gone before the push-in carries them off the frame */ if (a <= 0) return; const rg = regions[i], L = i < 2, my = (rg.rb[1] + rg.rb[3]) / 2;
     const lx = i === 4 ? 560 : L ? -560 : 560, ly = i === 4 ? -860 : my + 12;
     if (i === 4) { ctx.strokeStyle = `rgba(227,165,38,${.45 * a})`; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(96, -862); ctx.lineTo(540, -862); ctx.stroke(); }
     if (labSize == null) { labSize = 34; if (Pilot.lang !== 'ko') { ctx.save(); ctx.font = "600 34px 'Noto Serif KR',serif"; const wd = Math.max(...LABELS.map(l => ctx.measureText(Pilot.tr(l)).width)); ctx.restore(); if (wd > 330) labSize = 34 * 330 / wd; } }   // a translation must stay inside the frame while the camera pans; one size for all five
@@ -417,7 +417,7 @@ function draw(ctx, t) {
   if (!V && k1 > 0) { const g = ctx.createLinearGradient(0, H - 360, 0, H); g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, `rgba(0,0,0,${.78 * k1})`); ctx.fillStyle = g; ctx.fillRect(0, H - 360, W, 360); }
   if (V) { text(ctx, '한 사람 예수님 안에서', cx0, 1668, { ...st, alpha: k1 }); text(ctx, '모두 이루어집니다', cx0, 1750, { ...st, alpha: win(t, 18.3, 22.2, 1, .8) }); }
   else text(ctx, '한 사람 예수님 안에서 모두 이루어집니다', cx0, H - 120, { ...st, alpha: k1 });
-  const a1 = win(t, 24.6, 29.6, 1.2, .8), a2 = win(t, 29.2, 34.6, 1.2, 1.1), vy = V ? 470 : H - 150;
+  const a1 = win(t, 24.6, 29.2, 1.2, .7), a2 = win(t, 29.3, 34.6, 1.0, 1.1), /* one verse line at a time, no cross-fade */ vy = V ? 470 : H - 150;
   if (V) { text(ctx, '“말씀이 육신이 되어', cx0, vy - 40, { ...st, alpha: a1 }); text(ctx, '우리 가운데 거하시매”', cx0, vy + 42, { ...st, alpha: a1 });
     text(ctx, '“… 은혜와 진리가', cx0, vy - 40, { ...st, alpha: a2 }); text(ctx, '충만하더라”', cx0, vy + 42, { ...st, alpha: a2 }); }
   else { text(ctx, '“말씀이 육신이 되어 우리 가운데 거하시매”', cx0, vy, { ...st, alpha: a1 }); text(ctx, '“… 은혜와 진리가 충만하더라”', cx0, vy, { ...st, alpha: a2 }); }

@@ -53,7 +53,7 @@
   "“… 은혜와 진리가 충만하더라”": "„… voller Gnade und Wahrheit“",
   "“말씀이 육신이 되어": "„Und das Wort ward Fleisch",
   "“말씀이 육신이 되어 우리 가운데 거하시매”": "„Und das Wort ward Fleisch und wohnte unter uns“",
-  "다윗의 영원한 왕": "Davids ewiger König",
+  "다윗의 영원한 왕": "Der ewige König Davids",
   "모두 이루어집니다": "in einem Einzigen: Jesus",
   "새 언약": "Der neue Bund",
   "아브라함의 복": "Der Segen Abrahams",
@@ -62,10 +62,10 @@
   "약속 3 / 5": "Verheißung 3 / 5",
   "약속 4 / 5": "Verheißung 4 / 5",
   "약속 5 / 5": "Verheißung 5 / 5",
-  "여자의 후손": "Der Same der Frau",
+  "여자의 후손": "Der Nachkomme der Frau",
   "요한복음 1:14 (개역개정)": "Johannes 1,14 (Luther)",
   "우리 가운데 거하시매”": "und wohnte unter uns“",
-  "유월절 어린 양": "Das Passahlamm",
+  "유월절 어린 양": "Das Passalamm",
   "충만하더라”": "und Wahrheit“",
   "한 사람 예수님 안에서": "Alle erfüllen sich",
   "한 사람 예수님 안에서 모두 이루어집니다": "Alle erfüllen sich in einem Einzigen: Jesus"
@@ -96,7 +96,7 @@
   "12  ·  십자가": "12  ·  Das Kreuz",
   "“그가 상함은\n우리의 죄악 때문이라”": "„und um unsrer Sünde willen\nzerschlagen“",
   "“그가 상함은 우리의 죄악 때문이라”": "„und um unsrer Sünde willen zerschlagen“",
-  "“그가 찔림은\n우리의 허물 때문이요”": "„Aber er ist\num unsrer Missetat willen verwundet“",
+  "“그가 찔림은\n우리의 허물 때문이요”": "„Aber er ist um unsrer Missetat willen\nverwundet“",
   "“그가 찔림은 우리의 허물 때문이요”": "„Aber er ist um unsrer Missetat willen verwundet“",
   "“그가 채찍에 맞으므로\n우리는 나음을 받았도다”": "„und durch seine Wunden\nsind wir geheilt“",
   "“그가 채찍에 맞으므로 우리는 나음을 받았도다”": "„und durch seine Wunden sind wir geheilt“",
@@ -211,14 +211,14 @@
   "“율법으로는 죄를 깨달음이니라 … 율법이 우리를 그리스도께로 인도하는 초등교사가 되어”": "„Durch das Gesetz kommt Erkenntnis der Sünde … Also ist das Gesetz unser Zuchtmeister gewesen auf Christum“",
   "“의인은 없나니 하나도 없으며 … 모든 사람이 죄를 범하였으매 하나님의 영광에 이르지 못하더니”": "„Da ist nicht, der gerecht sei, auch nicht einer … sie sind allzumal Sünder und mangeln des Ruhmes, den sie bei Gott haben sollten“",
   "“이 성경이 곧 내게 대하여 증언하는 것이니라 … 모든 성경에 쓴 바 자기에 관한 것을 자세히 설명하시니라”": "„sie ist's, die von mir zeuget … und legte ihnen alle Schriften aus, die von ihm gesagt waren“",
-  "“행하라”가 아니라 “이루어졌다”": "Nicht „tu“, sondern „es ist vollbracht“",
+  "“행하라”가 아니라 “이루어졌다”": "Nicht „Tue das“, sondern „Es ist vollbracht“",
   "거저 주시는 하나님의 선물": "Gottes Gabe – umsonst geschenkt",
   "구약 39  ·  신약 27  =  66": "Altes Testament 39  ·  Neues Testament 27  =  66",
   "구원하지 못한다": "nicht retten",
-  "그리스도께서 우리를 위하여 죽으심으로": "starb Christus für uns",
-  "그분의 의를 입는 것": "sondern in seine gekleidet",
+  "그리스도께서 우리를 위하여 죽으심으로": "da wir noch Sünder waren.",
+  "그분의 의를 입는 것": "ich bin in seine gekleidet",
   "그분이 다 이루셨다": "er hat alles vollbracht",
-  "내 의가 아니라": "Nicht in meine Gerechtigkeit,",
+  "내 의가 아니라": "Nicht meine eigene Gerechtigkeit –",
   "누구도 의롭지 않다": "keiner ist gerecht",
   "다 이루었다": "Es ist vollbracht",
   "때가 찼고": "Die Zeit ist erfüllet",
@@ -247,7 +247,7 @@
   "요 5:39 · 눅 24:27": "Joh 5,39 · Lk 24,27",
   "요한복음 19:30 (개역개정)": "Johannes 19,30 (Luther)",
   "요한복음 5:39 · 누가복음 24:27 (개역개정)": "Johannes 5,39 · Lukas 24,27 (Luther)",
-  "우리가 아직 죄인 되었을 때에": "Als wir noch Sünder waren,",
+  "우리가 아직 죄인 되었을 때에": "Christus für uns gestorben ist,",
   "원죄 —": "Erbsünde –",
   "율법은 나를": "Das Gesetz kann mich",
   "은혜로, 노력이 아니라": "Aus Gnade –",
@@ -257,7 +257,7 @@
   "하나님 나라 —": "Das Reich Gottes –",
   "하나님의 영광": "Die Herrlichkeit Gottes",
   "행위": "Werke",
-  "행하라": "Tu es"
+  "행하라": "Tue das"
  },
  "invite": {
   "20  ·  초대": "20  ·  Die Einladung",
@@ -470,6 +470,6 @@
   "요단강": "Jordan",
   "지 중 해": "MITTELMEER",
   "출애굽기 6:7 (개역개정)": "2. Mose 6,7 (Luther)",
-  "홍 해": "ROTES MEER"
+  "홍 해": "SCHILFMEER"
  }
 }

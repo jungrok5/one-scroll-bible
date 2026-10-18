@@ -143,11 +143,11 @@ function buildWorld() {
     if (westNear(g) && !g.gate) rh = Math.max(rh, 2.4 + 3.6 * fbm(i * .31, 1.1, 2)) * (noise(i * .23, 5.5) < .22 ? .45 : 1);
     g.rh = rh; g.mx = mx; g.mz = mz;
     g.st = 10.4 + 3.2 * noise(i * .045, 1.7) + (westNear(g) ? .4 : 0); g.du = 8.6 + 3 * noise(i * .09, 4.2);
-    g.tone = .94 + .1 * fbm(i * .2, 7.7, 2); g.ds = Math.abs(((g.s0 - VALLEY_S) % PERIM + PERIM * 1.5) % PERIM - PERIM / 2) / (PERIM / 2); });
+    g.tone = 1; g.ds = Math.abs(((g.s0 - VALLEY_S) % PERIM + PERIM * 1.5) % PERIM - PERIM / 2) / (PERIM / 2); });
   TOWERS.forEach(T => { T.s0 = SEGS.reduce((m, g) => Math.hypot(g.ax - T.x, g.az - T.z) < Math.hypot(m.ax - T.x, m.az - T.z) ? g : m, SEGS[0]).s0; });
   TOWERS.forEach((T, i) => { T.rh = T.gate ? 2.2 + 2.4 * r() : 2.5 + 5.5 * r(); T.st = 10.8 + 3 * r(); T.du = 9 + 2.5 * r(); T.i = i; T.nx = T.uz; T.nz = -T.ux; });
   // houses inside (few: "the city was large and the people few, the houses not yet built" — Neh 7:4)
-  for (let tries = 0; HOUSES.length < 64 && tries < 4000; tries++) {
+  for (let tries = 0; HOUSES.length < 150 && tries < 9000; tries++) {
     const x = -150 + r() * 300, z = -500 + r() * 800; if (!inPoly(x, z, LOOP) || distLoop(x, z) < 16 || flight(x, z) || nearCam(x - 8, z) || (x > 30 && x < 130 && z > 150 && z < 280)) continue;
     const w = 6 + r() * 7, d = 6 + r() * 7, ruin = r() < .4; if (HOUSES.some(h => Math.abs(h.x - x) < (h.w + w) / 2 + 3 && Math.abs(h.z - z) < (h.d + d) / 2 + 3)) continue;
     HOUSES.push({ x, z, w, d, h: ruin ? 1.2 + r() * 1.8 : 3.4 + r() * 3, ruin, alb: ruin ? STONE.map(v => v * .86) : [.92, .84, .7].map(v => v * (.92 + r() * .1)), win: r() < .35, a: r() * .25 - .12 }); }
@@ -167,6 +167,10 @@ function buildWorld() {
   [-31, -13, 7, 29, 51].forEach(z => add(z, .9, 'set'));
   [-23, 1, 20, 42, 62].forEach(z => add(z, 1.5, 'hammer'));
   [-18, 13, 36].forEach(z => add(z, 1.2, 'carry', { len: 9 + r() * 4 }));
+  [-27, 16, 58, 84].forEach(z => add(z, 3.4 + (z % 3), 'guard', { fx: -.3, fz: 1 }));   // half worked, half held spears (Neh 4:16-17)
+  [74, 96, 104].forEach((z, k) => add(z, 1 + k * .4, k ? 'hammer' : 'set'));
+  [-4, 40, 68].forEach(z => add(z, 9 + (z % 5), 'carry', { len: 7 }));
+  [-44, -6, 33, 62, 92].forEach(z => { const g = SEGS.filter(q => q.mx < -140 && !q.gate && Math.abs(q.mz - z) < 6)[0]; if (g) WORK.push({ x: g.mx + g.nx * .3, z: g.mz, onWall: g, type: 'guard', ph: r() * 6, sp: 1, robe: ROBES[(r() * ROBES.length) | 0], cloth: CLOTHS[(r() * CLOTHS.length) | 0], fx: g.nx, fz: g.nz }); });
   [-38, 24, 66].forEach(z => { const w = add(z, 2.6, 'lamp'); LAMPS.push({ fig: w, on: 14.6, b: .8, ph: r() * 9 }); });
   [[-12, 7], [46, 8]].forEach(([z, o]) => LAMPS.push({ x: westX(z) + o, z, y: .5, fire: 1, on: 14.2, b: 1.3, ph: r() * 9 }));   // braziers
   WORK.push({ x: NEH[0], z: NEH[1], type: 'neh', ph: 0, robe: [.36, .3, .44], cloth: [.9, .86, .76], dir: 1, neh: 1, fx: -1, fz: .25 });
@@ -186,9 +190,9 @@ function buildWorld() {
       const w = 1 + .22 * (fbm(a * .08, k * 3.1, 3) - .5); pts.push([dx * (lo + off * w), -110 + dz * (lo * 1.6 + off * w * 1.15)]); } TERR.push(pts); }
   VALLEYS.push([[200, 520], [215, 300], [205, 80], [195, -150], [160, -420], [90, -610], [40, -720]], [[-260, 300], [-245, 60], [-230, -200], [-190, -420], [-120, -580], [-20, -640], [40, -720]]);
   for (let i = 0; i < 320; i++) DECALS.push({ x: -1000 + r() * 2000, z: -1100 + r() * 1800, s: 14 + r() * 70, dark: r() < .62, a: .2 + r() * .3, rot: r() * 6.28 });
-  for (let ring = 0; ring < 2; ring++) { const R = ring ? 4600 : 1500, pts = [];
+  for (let ring = 0; ring < 2; ring++) { const R = ring ? 4600 : 950, pts = [];
     for (let i = 0; i < 240; i++) { const th = i / 240 * 6.2832, az = th / D2R, east = Math.exp(-((((((az - 90) % 360) + 540) % 360 - 180) / 34) ** 2));
-      pts.push([Math.sin(th) * R, (ring ? 90 + 190 * fbm(i * .05, 3, 4) : 22 + 45 * fbm(i * .09, 8, 4) + 70 * east), -110 + Math.cos(th) * R]); } RING.push(pts); }
+      pts.push([Math.sin(th) * R, (ring ? 90 + 190 * fbm(i * .05, 3, 4) : 18 + 34 * fbm(i * .09, 8, 4) + 92 * east), -110 + Math.cos(th) * R]); } RING.push(pts); }
   for (let i = 0; i < 420; i++) { const az = r() * 6.2832, el = Math.asin(.03 + .97 * Math.pow(r(), .8)); STARS.push([Math.sin(az) * Math.cos(el), Math.sin(el), Math.cos(az) * Math.cos(el), .3 + r() * .7, r() * 6, r() < .08 ? 2.2 : 1.3]); }
   // each wall segment knows the lamps that can light it
   LAMPS.forEach((L, j) => { const lx = L.fig ? L.fig.x : L.x, lz = L.fig ? L.fig.z : L.z; SEGS.forEach(g => { if (Math.hypot(g.mx - lx, g.mz - lz) < 18) g.lamps.push(j); }); });
@@ -219,6 +223,7 @@ function pose(f, t) {   // → lean, arm angles (0 = hanging, + = forward), walk
     case 'set': { const c = .5 - .5 * Math.cos(w * 1.3); p.lean = .25 + .45 * c; p.a1 = .7 + .5 * c; p.e1 = .3; p.a2 = .6 + .5 * c; p.e2 = .35; p.item = (w * 1.3 / 6.2832) % 1 < .55 ? 'stone' : null; break; }
     case 'hammer': { const c = Math.max(0, Math.sin(w * 3.1)); p.lean = .18; p.a1 = .7 + 1.5 * c; p.e1 = .4 - .3 * c; p.a2 = .95; p.e2 = .5; p.item = 'hammer'; break; }
     case 'carry': { p.walk = w * 2.4; if (f._carry) { p.lean = .12; p.a1 = .7; p.e1 = .9; p.a2 = .65; p.e2 = .95; p.item = 'stone'; } else { p.lean = .06; p.a1 = .35 * Math.sin(p.walk); p.e1 = .3; p.a2 = -.35 * Math.sin(p.walk); p.e2 = .3; } break; }
+    case 'guard': { p.a1 = .55 + .03 * Math.sin(w * .4); p.e1 = -1.35; p.a2 = .06; p.e2 = .15; p.item = 'spear'; p.lean = .02; break; }
     case 'lamp': { p.a1 = 1.9 + .06 * Math.sin(w); p.e1 = .5; p.a2 = .1; p.item = 'lamp'; break; }
     case 'neh': { const k = ss(11.5, 13, t); p.a1 = lerp(1.15, 2.1, k); p.e1 = lerp(.35, .5, k); p.a2 = .05; p.item = 'lamp'; p.look = -.12; break; }
     case 'read': { p.a1 = 1.1; p.e1 = .7; p.a2 = 1.05; p.e2 = .75; p.item = 'scroll'; break; }
@@ -230,7 +235,7 @@ function pose(f, t) {   // → lean, arm angles (0 = hanging, + = forward), walk
 function person(x, sx, sy, s, f, p, lit, mode, alpha = 1) {
   const sc = f.child ? .72 : 1, d = f.dir || 1; s *= sc;
   if (s < 3) { if (mode !== 'line') { x.fillStyle = css(mix(lit.base, [0, 0, 0], .2), alpha); x.fillRect(sx - s * .22, sy - s * 1.7, s * .44, s * 1.7); } return; }
-  x.save(); x.translate(sx, sy); x.scale(d * s, s); x.globalAlpha = alpha;
+  x.save(); x.translate(sx, sy); x.scale(d * s * 1.2, s); x.globalAlpha = alpha;
   const sw = p.walk ? Math.sin(p.walk) * .09 : 0, hip = [0, -.95], ln = p.lean;
   const R = (px, py) => { const dy = py - hip[1]; return [px * Math.cos(ln) - dy * Math.sin(ln), hip[1] + px * Math.sin(ln) + dy * Math.cos(ln)]; };   // rotate about the hip (lean forward = +x)
   const sh = R(.02, -1.41), sh2 = R(-.05, -1.4), nk = R(.01, -1.49), hd = R(.03, -1.62);
@@ -253,6 +258,7 @@ function person(x, sx, sy, s, f, p, lit, mode, alpha = 1) {
   const item = () => {   // what the hands hold
     const h = a1[2];
     if (p.item === 'stone') { const c = [(a1[2][0] + a2[2][0]) / 2, (a1[2][1] + a2[2][1]) / 2 - .06]; x.rect(c[0] - .2, c[1] - .14, .4, .22); }
+    if (p.item === 'spear') { x.rect(h[0] - .014, -2.55, .028, 2.55); x.moveTo(h[0] - .04, -2.55); x.lineTo(h[0], -2.78); x.lineTo(h[0] + .04, -2.55); x.closePath(); }
     if (p.item === 'hammer') { x.save(); x.translate(h[0], h[1]); x.rotate(-a1[3] - Math.PI / 2); x.rect(-.018, -.02, .036, .36); x.rect(-.07, .3, .14, .08); x.restore(); }
     if (p.item === 'scroll') { const c = [(a1[2][0] + a2[2][0]) / 2, (a1[2][1] + a2[2][1]) / 2]; x.rect(c[0] - .2, c[1] - .12, .4, .2); }
   };
@@ -281,7 +287,7 @@ function person(x, sx, sy, s, f, p, lit, mode, alpha = 1) {
   if (lit.lamp) { const [lx, ly, li] = lit.lamp, lg = x.createRadialGradient(lx, ly, 0, lx, ly, 1.6); lg.addColorStop(0, `rgba(255,170,90,${.75 * li})`); lg.addColorStop(1, 'rgba(255,150,70,0)'); x.fillStyle = lg; x.fillRect(-.8, -2.1, 1.6, 2.2); }
   x.restore();
   // 3 what they hold
-  if (p.item && p.item !== 'lamp') { x.beginPath(); item(); x.fillStyle = css(p.item === 'hammer' ? [60, 44, 34].map((v, i) => v * lit.base[i] / 120) : p.item === 'scroll' ? [236, 222, 190].map((v, i) => Math.min(255, v * (lit.base[i] / 150 + .2))) : STONE.map((v, i) => v * lit.base[i] * 1.25 + lit.key[i] * .35)); x.fill(); }
+  if (p.item && p.item !== 'lamp') { x.beginPath(); item(); x.fillStyle = css(p.item === 'hammer' || p.item === 'spear' ? [60, 44, 34].map((v, i) => v * lit.base[i] / 120) : p.item === 'scroll' ? [236, 222, 190].map((v, i) => Math.min(255, v * (lit.base[i] / 150 + .2))) : STONE.map((v, i) => v * lit.base[i] * 1.25 + lit.key[i] * .35)); x.fill(); }
   if (p.item === 'lamp') { const h = a1[2]; x.strokeStyle = css(lit.base.map(v => v * .3)); x.lineWidth = .015; x.beginPath(); x.moveTo(h[0], h[1]); x.lineTo(h[0], h[1] + .12); x.stroke();
     x.fillStyle = css([90, 64, 40].map((v, i) => v * lit.base[i] / 110)); x.beginPath(); x.ellipse(h[0], h[1] + .2, .06, .075, 0, 0, 6.2832); x.fill(); f.hand = [h[0] * d * sc, -(h[1] + .2) * sc]; }
   x.restore();
@@ -347,7 +353,7 @@ function mist(x, c, L, hy) { if (hy < -200) return; const g = x.createLinearGrad
 
 function faceGrad(x, c, A, B, h0, h1, col, aoK) {   // vertical gradient for a wall face (darker at the foot)
   const m = [(A[0] + B[0]) / 2, (A[1] + B[1]) / 2], p0 = P(c, m[0], h0, m[1]), p1 = P(c, m[0], h1, m[1]);
-  if (!p0 || !p1) return css(col); const g = x.createLinearGradient(p0[0], p0[1], p1[0], p1[1]); g.addColorStop(0, css(col.map(v => v * aoK))); g.addColorStop(1, css(col)); return g;
+  if (!p0 || !p1) return css(col); const g = x.createLinearGradient(0, p0[1], 0, p1[1]); g.addColorStop(0, css(col.map(v => v * aoK))); g.addColorStop(1, css(col)); return g;
 }
 function lampLight(x, c, L, t, ids, k = 1) {   // warm light from nearby lamps on the current path
   if (L.lamp < .02 && t > 12) return; x.save(); x.globalCompositeOperation = 'lighter';
@@ -360,10 +366,11 @@ const TPM = 48, TXW = 3072, TXH = 528;   // px per metre; the texture is 64 m lo
 function texFace(x, c, A, B, u0, y0, y1, len, dist, alpha) {   // A,B: face ends (x,z); u0: metres along the wall at A
   if (dist > 110) return; const n = Math.max(1, Math.ceil(len / 2)); x.save(); x.globalCompositeOperation = 'overlay'; x.globalAlpha = alpha * clamp((110 - dist) / 40);
   for (let i = 0; i < n; i++) { const k0 = i / n, k1 = (i + 1) / n, a = [lerp(A[0], B[0], k0), lerp(A[1], B[1], k0)], b = [lerp(A[0], B[0], k1), lerp(A[1], B[1], k1)];
-    const p00 = P(c, a[0], y0, a[1]), p10 = P(c, b[0], y0, b[1]), p01 = P(c, a[0], y1, a[1]); if (!p00 || !p10 || !p01) continue;
-    let tx0 = ((u0 + len * k0) * TPM) % TXW; const tw = len / n * TPM, ty0 = TXH - y1 * TPM, th = (y1 - y0) * TPM; if (tx0 + tw > TXW) tx0 -= tw;
+    const p00 = P(c, a[0], y0, a[1]), p10 = P(c, b[0], y0, b[1]), p01 = P(c, a[0], y1, a[1]), p11 = P(c, b[0], y1, b[1]); if (!p00 || !p10 || !p01 || !p11) continue;
+    let tx0 = ((u0 + len * k0) * TPM) % TXW; const tw = len / n * TPM, ty0 = TXH - y1 * TPM, th = (y1 - y0) * TPM; if (tx0 + tw > TXW - 2) tx0 -= tw;
+    x.save(); x.beginPath(); x.moveTo(p00[0], p00[1]); x.lineTo(p10[0], p10[1]); x.lineTo(p11[0], p11[1]); x.lineTo(p01[0], p01[1]); x.closePath(); x.clip();
     x.setTransform((p10[0] - p00[0]) / tw, (p10[1] - p00[1]) / tw, (p01[0] - p00[0]) / -th, (p01[1] - p00[1]) / -th, p00[0], p00[1]);
-    x.drawImage(STEX, tx0, ty0, tw + .5, th, 0, -th, tw + .5, th); }
+    x.drawImage(STEX, tx0, ty0 - 2, tw + 2, th + 4, 0, -th - 2, tw + 2, th + 4); x.restore(); }
   x.restore();
 }
 let STEX;
@@ -401,8 +408,8 @@ function drawSeg(x, c, L, g, t, dist) {
     [[-1, g.i - 1, A, Ai], [1, g.i + 1, B, Bi]].forEach(([sd, j, E, Ei]) => { const nb = SEGS[(j + SEGS.length) % SEGS.length], hn = nb.gate ? 0 : (near ? segH(nb, t).base : segH(nb, t).h);
       if (hn >= h - .05 || ((c.x - E[0]) * g.ux + (c.z - E[1]) * g.uz) * sd <= 0) return; poly(x, c, [[E[0], hn, E[1]], [Ei[0], hn, Ei[1]], [Ei[0], h, Ei[1]], [E[0], h, E[1]]]);
       x.fillStyle = css(shade(alb, g.ux * sd, 0, g.uz * sd, dist, L, .95)); x.fill(); });
-    poly(x, c, [[A[0], 0, A[1]], [B[0], 0, B[1]], [B[0], h, B[1]], [A[0], h, A[1]]]); x.fillStyle = faceGrad(x, c, A, B, 0, h, col, .66); x.fill(); lampLight(x, c, L, t, g.lamps);
-    const dif = nx * L.sd[0] + nz * L.sd[2], rim = L.sunI * clamp((L.elev + 1) / 3) * clamp(-dif * 2);
+    poly(x, c, [[A[0], 0, A[1]], [B[0], 0, B[1]], [B[0], h, B[1]], [A[0], h, A[1]]]); x.fillStyle = x.strokeStyle = faceGrad(x, c, A, B, 0, h, col, .66); x.lineWidth = 1.2; x.stroke(); x.fill(); lampLight(x, c, L, t, g.lamps);
+    const dif = nx * L.sd[0] + nz * L.sd[2], rim = L.sunI * clamp((L.elev + 1) / 3) * clamp(-dif * 2) * (H0.p >= .999 ? 0 : 1);
     if (rim > .02) { x.beginPath(); seg3(x, c, [A[0], h, A[1]], [B[0], h, B[1]]); x.strokeStyle = css(mix(L.glow, [255, 240, 210], .4), .75 * rim); x.lineWidth = Math.max(1, Math.min(3, 90 / dist)); x.stroke(); }
     if (dist < 110) texFace(x, c, A, B, g.s0, 0, h, g.len, dist, .95);
     else if (dist < 220) { x.beginPath(); for (let j = 1; j * COURSE < h - .01; j++) seg3(x, c, [A[0], j * COURSE, A[1]], [B[0], j * COURSE, B[1]]); x.strokeStyle = css(col.map(v => v * .6), .35 * clamp((220 - dist) / 110)); x.lineWidth = 1; x.stroke(); }
@@ -417,7 +424,11 @@ function drawSeg(x, c, L, g, t, dist) {
   if (H0.p >= .999 && dist < 260) { const n = Math.max(1, Math.round(g.len / 2.1)), mc = css(shade(alb, nx, 0, nz, dist, L, .97)), tc = css(shade(alb, 0, 1, 0, dist, L, 1.05));
     for (let k = 0; k < n; k++) { const u0 = (k + .2) / n, u1 = (k + .75) / n, a = [lerp(A[0], B[0], u0), lerp(A[1], B[1], u0)], b = [lerp(A[0], B[0], u1), lerp(A[1], B[1], u1)];
       if (c.y > FULL + 1) { poly(x, c, [[a[0], FULL + 1, a[1]], [b[0], FULL + 1, b[1]], [b[0] - nx * .7, FULL + 1, b[1] - nz * .7], [a[0] - nx * .7, FULL + 1, a[1] - nz * .7]]); x.fillStyle = tc; x.fill(); }
-      poly(x, c, [[a[0], FULL - .02, a[1]], [b[0], FULL - .02, b[1]], [b[0], FULL + 1, b[1]], [a[0], FULL + 1, a[1]]]); x.fillStyle = mc; x.fill(); } }
+      for (const [e, sd] of [[a, -1], [b, 1]]) { if (((c.x - e[0]) * g.ux + (c.z - e[1]) * g.uz) * sd <= 0) continue;   // the merlon's side, in shade
+        poly(x, c, [[e[0], FULL - .02, e[1]], [e[0] - nx * .75, FULL - .02, e[1] - nz * .75], [e[0] - nx * .75, FULL + 1, e[1] - nz * .75], [e[0], FULL + 1, e[1]]]); x.fillStyle = css(shade(alb, g.ux * sd, 0, g.uz * sd, dist, L, .8)); x.fill(); }
+      poly(x, c, [[a[0], FULL - .05, a[1]], [b[0], FULL - .05, b[1]], [b[0], FULL + 1, b[1]], [a[0], FULL + 1, a[1]]]); x.fillStyle = x.strokeStyle = css(shade(alb, nx, 0, nz, dist, L, .98)); x.lineWidth = 1; x.stroke(); x.fill(); lampLight(x, c, L, t, g.lamps, .8);
+      texFace(x, c, a, b, g.s0 + (u0 * g.len), FULL - .05, FULL + 1, (u1 - u0) * g.len, dist, .95);
+      if (dist < 140) { x.beginPath(); seg3(x, c, [a[0] - nx * .05, FULL, a[1] - nz * .05], [a[0] - nx * .05, FULL + 1, a[1] - nz * .05]); x.strokeStyle = css(shade(alb, 0, 0, 0, dist, L, .5), .35); x.lineWidth = 1; x.stroke(); } } }
 }
 function boxFaces(x, c, L, cx, cz, ux, uz, hw, hd, h, alb, dist, o = {}) {   // a box: visible sides + top
   const nx = uz, nz = -ux, y0 = o.y0 || 0, Cn = (a, b) => [cx + ux * a * hw + nx * b * hd, cz + uz * a * hw + nz * b * hd];
@@ -479,7 +490,7 @@ function colourWorld(x, c, t, L) {
   for (const R of RUBBLE) { const p = P(c, R.x, 0, R.z); if (!p || p[0] < -200 || p[0] > W + 200 || p[2] < .6) continue; items.push([p[3] + 1, () => rubble(x, p, p[2], R, L, t)]); }
   // Ezra's platform
   { const dist = Math.hypot(116 - c.x, 1 - c.y, -86.8 - c.z); if (cull(116, -86.8, 6) != null) items.push([dist + 2, () => boxFaces(x, c, L, 116.4, -86.8, 0, 1, 3.4, 1.4, 1.6, [.55, .4, .28], dist)]); }
-  const people = (list, vis) => { for (const f of list) { const a = vis(f); if (a <= .01) continue; const st = figState(f, t), fy = f.y || 0, fq = toC(c, st.x, fy, st.z); if (fq[2] < .8) continue;
+  const people = (list, vis) => { for (const f of list) { const a = vis(f); if (a <= .01) continue; const st = figState(f, t), fy = f.onWall ? segH(f.onWall, t).h : (f.y || 0), fq = toC(c, st.x, fy, st.z); if (fq[2] < .8) continue;
       const [px, py] = sxy(c, fq), s = c.F / fq[2]; if (px < -s * 2 || px > W + s * 2 || py < -s * 3) continue;
       items.push([fq[2] - .3, () => {
         const L2 = figLight(c, L, t); let lamp = null;

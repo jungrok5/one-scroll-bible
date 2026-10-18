@@ -1,23 +1,18 @@
-{ "duration": 38,
+{ "duration": 44,
   "music": [
-    { "id": "m1", "at": 0, "len": 14.6, "db": -3, "fin": 0.8, "fout": 0.6,
-      "prompt": "Small shadow-puppet theatre ensemble, percussion first: low barrel drum, hard woodblock clapper, small hand gongs, and a nasal bowed two-string fiddle playing a stern, modal, slightly sorrowful melody. Slow processional pulse around 70 bpm, tension growing steadily; in the last four seconds the drum accelerates into a roll and then thins to almost nothing." },
-    { "id": "m2", "at": 14.6, "len": 9.0, "db": -5, "fin": 1.0, "fout": 0.8,
-      "prompt": "Night, hushed and reverent: a solo bamboo flute playing a few long, sparse pentatonic phrases over a very soft low drone, lots of space and silence between notes, intimate small-room reverb, no percussion." },
-    { "id": "m3", "at": 23.6, "len": 14.4, "db": -2, "fin": 0.2, "fout": 2.0,
-      "prompt": "The shadow-theatre ensemble returns in full and swells into an awe-filled, hopeful march: a big gong on the downbeat, frame drums and barrel drum at a steady walking tempo, bowed fiddle and bamboo flute in warm unison over them, rising in brightness, then settling gently onto a long resolved chord at the end." }
-  ],
+    { "id": "m4", "at": 0, "len": 12.8, "db": -3, "fin": 1.2, "fout": 0.5,
+      "prompt": "1960s epic desert film score, full symphony orchestra: opens on a vast low string drone and a soft timpani roll under a lonely modal woodwind melody (oboe and wooden flute) like a desert dawn; at about 4 seconds the whole orchestra swells into a broad, noble horn and string theme in a minor-to-major Middle Eastern mode, then from 6 seconds stern brass chords and a slow pounding timpani pulse, proud and confrontational, about 70 BPM; big and cinematic, no synths, no drum kit" },
+    { "id": "m5", "at": 12.8, "len": 15.8, "db": -4, "fin": 0.2, "fout": 1.5,
+      "prompt": "Dark cinematic orchestral storm that collapses into a hushed night: starts with ominous low brass clusters, tremolo strings and rolling timpani building in waves of dread for about 5 seconds, then everything drops away into near silence; from 7 seconds a very quiet, tender night lament: a solo clarinet or wooden flute over soft sustained low strings, slow and reverent, with long pauses; minor mode, no percussion in the second half, no synths" },
+    { "id": "m6", "at": 28.6, "len": 15.4, "db": -2, "fin": 0.3, "fout": 2.0,
+      "prompt": "Awe-filled triumphant epic orchestral finale with wordless choir: begins with deep surging low strings and a steady processional timpani pulse like a great crowd walking, a heroic horn theme rising over it; at about 10 seconds the choir and full orchestra open up into a radiant, glowing major chord as if looking up at a towering pillar of fire, high strings shimmering, then a long resolving sustain; majestic, hopeful, 1960s widescreen epic, no synths, no drum kit" } ],
   "sfx": [
-    { "id": "s1", "at": 0.15, "len": 1.5, "db": -8, "loop": false, "prompt": "Oil lamp being lit behind a cloth screen: a soft whoomp of flame and a small sizzle" },
-    { "id": "s2", "at": 4.0, "len": 4.0, "db": -5, "loop": false, "prompt": "Single deep bronze gong strike with a long shimmering decay" },
-    { "id": "s3", "at": 8.8, "len": 2.2, "db": -10, "loop": false, "prompt": "A sudden chorus of many frogs croaking, short and dry" },
-    { "id": "s4", "at": 10.2, "len": 2.5, "db": -10, "loop": false, "prompt": "Hailstones pattering and bouncing hard on dry ground, short burst" },
-    { "id": "s5", "at": 13.0, "len": 1.6, "db": -8, "loop": false, "prompt": "Oil lamps guttering and going out, quick fluttering flames then a soft pfft and sizzle" },
-    { "id": "s6", "at": 19.0, "len": 3.8, "db": -6, "loop": false, "prompt": "A deep, slow, low wind passing high overhead from right to left, a dark whoosh that rises and fades away" },
-    { "id": "s7", "at": 23.6, "len": 3.0, "db": -4, "loop": false, "prompt": "Big gong crash together with oil lamps flaring up all at once" },
-    { "id": "s8", "at": 25.0, "len": 3.5, "db": -6, "loop": false, "prompt": "Great waters rushing apart and rising into walls, a deep roaring surge of the sea that settles into a low rumble" }
-  ],
-  "ducks": [
-    { "from": 13.6, "to": 14.6, "db": -22 },
-    { "from": 19.0, "to": 22.4, "db": -8 }
-  ] }
+    { "id": "s9", "at": 0.2, "len": 5.0, "db": -14, "loop": false, "prompt": "Dry desert wind blowing across sand dunes, soft hiss of drifting sand, open and vast" },
+    { "id": "s10", "at": 14.2, "len": 3.0, "db": -10, "loop": false, "prompt": "Hailstones pelting hard dry ground and stone, a heavy rattling downpour of ice" },
+    { "id": "s11", "at": 14.55, "len": 3.0, "db": -6, "loop": false, "prompt": "A close lightning strike: a sharp crack followed by a deep rolling thunder rumble" },
+    { "id": "s12", "at": 15.8, "len": 3.4, "db": -10, "loop": false, "prompt": "A vast swarm of locusts approaching, a rising dense whirring buzz of countless wings" },
+    { "id": "s13", "at": 23.9, "len": 1.8, "db": -8, "loop": false, "prompt": "A heavy old wooden door swinging shut with a creak and a deep wooden thud, then a latch" },
+    { "id": "s14", "at": 25.0, "len": 3.6, "db": -12, "loop": false, "prompt": "A cold night wind passing slowly down an empty stone street, low and eerie, then gone" },
+    { "id": "s15", "at": 28.6, "len": 6.0, "db": -9, "loop": false, "prompt": "Towering walls of sea water standing on both sides: a deep continuous roar of churning water, low rumble, spray" },
+    { "id": "s16", "at": 38.4, "len": 5.4, "db": -10, "loop": false, "prompt": "A huge column of fire burning steadily: deep soft roar of flames, crackle, warm and powerful" } ],
+  "ducks": [ { "from": 18.4, "to": 19.4, "db": -20 } ] }

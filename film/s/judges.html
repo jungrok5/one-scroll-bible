@@ -266,7 +266,7 @@ function draw(ctx, t) {
   ctx.save(); const rr = 34 * G.w / FW; ctx.beginPath(); ctx.roundRect(G.x, G.y, G.w, G.h, rr); ctx.clip(); ctx.drawImage(film, G.x, G.y, G.w, G.h);
   ctx.lineWidth = 16 * G.w / FW; ctx.strokeStyle = 'rgba(0,0,0,.6)'; ctx.filter = 'blur(6px)'; ctx.beginPath(); ctx.roundRect(G.x, G.y, G.w, G.h, rr); ctx.stroke(); ctx.filter = 'none'; ctx.restore();
 
-  const lx = V ? 80 : 60, ly = V ? 250 : 112;
+  const lx = V ? 80 : G.x + 140, ly = V ? 250 : 180;   // landscape: on the picture, inside its ornamented frame
   text(ctx, '06  ·  사사 시대', lx, ly, { align: 'left', size: V ? 32 : 30, weight: 600, color: '#efe6d4', alpha: win(t, .6, 5.2, 1, 1), ls: 4, shadow: 'rgba(0,0,0,.8)' });
   text(ctx, '약 BC 1400–1050  ·  사사기', lx, ly + 44, { align: 'left', size: V ? 23 : 22, font: "'Noto Sans KR',sans-serif", color: '#d8ccb6', alpha: win(t, 1.1, 5.2, 1, 1) * .85, ls: 2, shadow: 'rgba(0,0,0,.8)' });
   const f = 1 - ss(0, 1.0, t) + ss(DUR - 1.0, DUR, t); if (f > 0) { ctx.fillStyle = `rgba(0,0,0,${clamp(f)})`; ctx.fillRect(0, 0, W, H); }

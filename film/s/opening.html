@@ -108,7 +108,8 @@ function labels(ctx, cam, t) {
   const fade = 1 - ss(29.6, 30.6, t), keys = ['rb', 'hg', 'cr'];
   for (const [s, i, t0] of LAB) { const m = M[keys[i]], [sx, sy] = GL.toScreen(cam, W, H, m[0], m[1] + 78), size = clamp(56 * cam.z, 38, 72);
     const edge = 1 - ss(H * .36, H * .46, Math.abs(sy - H / 2));        // a label drifting to the frame edge (the previous row in portrait) bows out
-    GL.write(ctx, s, sx, sy + size * (Pilot.dir === 'rtl' ? .1 : .35), clamp((t - t0) / 1.0),   // right-to-left (Naskh descenders): a little higher, clear of the subtitle
+    const subTop = V ? H - 330 - 44 * 1.55 - 44 : H - 96 - 40, ly = Math.min(sy + size * (Pilot.dir === 'rtl' ? .1 : .35), subTop - size * .55);   // never down onto the subtitle
+    GL.write(ctx, s, sx, ly, clamp((t - t0) / 1.0),   // right-to-left (Naskh descenders): a little higher, clear of the subtitle
       { size, weight: 600, color: '#f3d08e', glow: 'rgba(255,170,70,.55)', alpha: fade * edge, ls: size * .12 }); }
 }
 function sub(ctx, t, lines, t0, t1) {

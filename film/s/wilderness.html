@@ -100,7 +100,7 @@ function buildMap() {
     if (o.dot) { x.beginPath(); x.arc(px, py, 7, 0, 6.283); x.fillStyle = INK; x.fill(); x.beginPath(); x.arc(px, py, 3, 0, 6.283); x.fillStyle = '#e9dcc0'; x.fill(); } x.restore(); };
   lab('애 굽', 30.2, 29.4, 96, 30); lab('지 중 해', 31.6, 32.35, 72, 34, { c: '#4a3a30' }); lab('홍 해', 34.85, 27.15, 58, 22, { c: '#4a3a30' });
   lab('가 나 안', 34.75, 32.25, 70, 26, { mw: 360 }); lab('바란 광야', 34.05, 29.75, 44, 12, { w: 400 }); lab('에돔', 35.92, 30.2, 50, 16, { mw: 170 }); lab('모압', 36.2, 31.35, 50, 16, { mw: 130 });
-  lab('라암셋', 31.83, 30.8, 36, 4, { dot: true, dx: -10, dy: -40 }); lab('시내산', 33.97, 28.54, 44, 6, { dx: 120, dy: 30, al: 'left' });
+  lab('라암셋', 31.83, 30.8, 36, 4, { dot: true, dx: -10, dy: -40 }); lab('시내산', 33.97, 28.54, 44, 6, V ? { dx: 0, dy: 96, al: 'center' } : { dx: 120, dy: 30, al: 'left' });   // portrait: under the summit — the zoom leaves no room either side
   lab('가데스 바네아', 34.4, 30.62, 32, 2, { dot: true, dx: -190, dy: -6 }); lab('에시온 게벨', 34.95, 29.56, 30, 2, { dot: true, dx: 12, dy: 34, al: 'left' });
   lab('여리고', 35.44, 31.87, 34, 4, { dot: true, dx: -26, dy: -38, al: 'right' }); lab('요단강', 35.74, 32.4, 32, 4, { al: 'left' }); lab('염해', 35.66, 31.36, 28, 2, { al: 'left', c: '#4a3a30' });
   // cartouche and compass
@@ -366,6 +366,9 @@ function draw(ctx, t) {
     ctx.save(); ctx.font = `600 ${sz}px 'Noto Serif KR',serif`;
     const bw = Math.max(...['“사람이 자기의 아들을 안는 것 같이\n너희의 하나님 여호와께서', '너희가 걸어온 길에서 너희를 안으사\n이 곳까지 이르게 하셨느니라”'].flatMap(k => Pilot.tr(k).split('\n')).map(l => ctx.measureText(l).width));
     ctx.restore(); fx += bw; al = 'right'; }
+  if (V && Math.max(c1, c2) > 0) {   // portrait: the verse sits over the busy coast — a soft parchment wash behind it keeps it readable
+    ctx.save(); ctx.globalAlpha = Math.max(c1, c2) * .82; ctx.translate(W / 2, fy + 50); ctx.scale(1, .36); const g = ctx.createRadialGradient(0, 0, 0, 0, 0, 560);
+    g.addColorStop(0, 'rgba(238,226,200,1)'); g.addColorStop(.62, 'rgba(238,226,200,.9)'); g.addColorStop(1, 'rgba(238,226,200,0)'); ctx.fillStyle = g; ctx.fillRect(-560, -560, 1120, 1120); ctx.restore(); }
   text(ctx, '“사람이 자기의 아들을 안는 것 같이\n너희의 하나님 여호와께서', fx, fy, { ...ink, size: sz, alpha: c1, lh: 1.5, align: al });
   text(ctx, '너희가 걸어온 길에서 너희를 안으사\n이 곳까지 이르게 하셨느니라”', fx, fy, { ...ink, size: sz, alpha: c2, lh: 1.5, align: al });
   text(ctx, '신명기 1:31 (개역개정)', fx, fy + sz * 1.5 + (V ? 58 : 54), { size: V ? 24 : 22, font: "'Noto Sans KR',sans-serif", color: '#5a4030', alpha: Math.max(c1, c2) * .9, ls: 2, shadow: 'rgba(250,240,215,.95)', shadowBlur: 12, align: al });

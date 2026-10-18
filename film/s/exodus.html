@@ -523,9 +523,9 @@ function drawD(ctx, t) {
   // the father at the door, then he steps inside
   const inK = ss(3.5, 4.4, u);
   if (inK < 1) { const s = PD.fs, ky = 1 - .12 * inK; ctx.save(); ctx.globalAlpha = 1 - inK;
-    ctx.translate(PD.fx, db); ctx.scale(ky, ky); ctx.translate(-PD.fx, -db); put(ctx, PD.fa, 1 - inK * .4);
+    ctx.translate(PD.fx, db); ctx.scale(ky, ky); ctx.translate(-PD.fx, -db); put(ctx, PD.fa, (1 - inK) * (1 - inK * .4)); ctx.globalAlpha = 1 - inK;   // put() sets its own alpha: fade the body and the arm together
     // his arm (sleeve, forearm, hand) reaching to where the hyssop is laying the blood
-    const bl = PD.blood.filter(b => b[5] <= u && b[4] > 8).pop(), tgt = bl && u < 3.5 ? [bl[0], bl[1] + 14] : [PD.fx + 16 * s, db - 40 * s], sh = [PD.fx + 11 * s, db + 8 - 77 * s];
+    const bl = PD.blood.filter(b => b[5] <= u && b[4] > 8).pop(), sh = [PD.fx + 11 * s, db + 8 - 77 * s], tgt = bl && u < 3.5 ? [bl[0], bl[1] + 14] : [sh[0] + 6 * s, sh[1] + 58 * s];   // done: the arm hangs at his side
     const L1 = 30 * s, L2 = 30 * s, dd = Math.min(Math.hypot(tgt[0] - sh[0], tgt[1] - sh[1]), L1 + L2 - 1), an = Math.atan2(tgt[1] - sh[1], tgt[0] - sh[0]), bend = Math.acos(clamp((L1 * L1 + dd * dd - L2 * L2) / (2 * L1 * dd), -1, 1));
     const el = [sh[0] + Math.cos(an + bend) * L1, sh[1] + Math.sin(an + bend) * L1], hd = [sh[0] + Math.cos(an) * dd, sh[1] + Math.sin(an) * dd];
     ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.strokeStyle = css(mixc(C.umber, C.night, .4)); ctx.lineWidth = 9 * s; ctx.beginPath(); ctx.moveTo(sh[0], sh[1]); ctx.lineTo(el[0], el[1]); ctx.stroke();

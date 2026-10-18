@@ -237,13 +237,14 @@ function drawEarth(ctx, t) {
   const cx = W / 2, cy = H * (V ? .5 : .54) + 0, Re = 7 * Math.exp(1.3 * k);
   // the sun (the light) behind, upper left
   const sx = cx - Re * 1.25 - 40, sy = cy - Re * .9 - 30;
-  ctx.globalCompositeOperation = 'lighter'; const sg = ctx.createRadialGradient(sx, sy, 0, sx, sy, 260 + Re * .6); sg.addColorStop(0, `rgba(255,236,190,${.55 * ss(21.2, 22.4, t)})`); sg.addColorStop(1, 'rgba(255,200,140,0)');
+  ctx.globalCompositeOperation = 'lighter'; const sg = ctx.createRadialGradient(sx, sy, 0, sx, sy, 260 + Re * .6); const sa0 = .55 * ss(21.2, 22.4, t); sg.addColorStop(0, `rgba(255,236,190,${sa0})`); sg.addColorStop(.45, `rgba(255,220,170,${sa0 * .3})`); sg.addColorStop(1, 'rgba(255,200,140,0)');   // eased falloff: no visible rim
   ctx.fillStyle = sg; ctx.fillRect(0, 0, W, H); ctx.globalCompositeOperation = 'source-over';
   if (Re > 2.4 * H) { ctx.fillStyle = '#5f8fcf'; ctx.fillRect(0, 0, W, H); return; }
   const N = Math.min(520, Math.max(24, Math.ceil(Re * 1.2))), E = canvas(N, N), ex = E.getContext('2d'), d = ex.createImageData(N, N), D = d.data;
+  const m = 1 + 6 / N;   // a margin round the disc, so its soft edge never meets the texture's border (that cut the pole flat)
   const L = [-.55, -.45, .7], ln = Math.hypot(...L), Lx = L[0] / ln, Ly = L[1] / ln, Lz = L[2] / ln, rot = t * .05;
   for (let j = 0; j < N; j++) for (let i = 0; i < N; i++) {
-    const x = (i + .5) / N * 2 - 1, y = (j + .5) / N * 2 - 1, rr = x * x + y * y; if (rr > 1) continue;
+    const x = ((i + .5) / N * 2 - 1) * m, y = ((j + .5) / N * 2 - 1) * m, rr = x * x + y * y; if (rr > 1) continue;
     const z = Math.sqrt(1 - rr), lat = Math.asin(-y), lon = Math.atan2(x, z) + rot;
     const fx = ((lon / 6.2832 + 10) % 1) * 512, fy = clamp((.5 - lat / Math.PI) * 256 - .5, 0, 254.99), x0 = fx | 0, y0 = fy | 0, ax = fx - x0, ay = fy - y0, x1 = (x0 + 1) % 512;
     const i00 = (y0 * 512 + x0) * 4, i10 = (y0 * 512 + x1) * 4, i01 = (y0 * 512 + 512 + x0) * 4, i11 = (y0 * 512 + 512 + x1) * 4;
@@ -251,10 +252,10 @@ function drawEarth(ctx, t) {
     const dif = clamp(x * Lx + y * Ly + z * Lz), lit = .06 + .94 * Math.pow(dif, .8), rim = Math.pow(1 - z, 3);
     const k4 = (j * N + i) * 4;
     D[k4] = Math.min(255, smp[0] * lit + 90 * rim * (.3 + dif)); D[k4 + 1] = Math.min(255, smp[1] * lit + 150 * rim * (.3 + dif)); D[k4 + 2] = Math.min(255, smp[2] * lit + 255 * rim * (.3 + dif));
-    D[k4 + 3] = 255 * clamp((1 - Math.sqrt(rr)) * N * .5);
+    D[k4 + 3] = 255 * clamp((1 - Math.sqrt(rr)) * N * .5 / m);
   }
   ex.putImageData(d, 0, 0);
-  ctx.globalAlpha = ss(21.2, 21.8, t); ctx.imageSmoothingQuality = 'high'; const bl = Math.max((Re / H - .6) * 16, 2 * Re / N * .7 - 1); if (bl > .3) ctx.filter = `blur(${bl}px)`; ctx.drawImage(E, cx - Re, cy - Re, Re * 2, Re * 2); ctx.filter = 'none';
+  ctx.globalAlpha = ss(21.2, 21.8, t); ctx.imageSmoothingQuality = 'high'; const bl = Math.max((Re / H - .6) * 16, 2 * Re / N * .7 - 1); if (bl > .3) ctx.filter = `blur(${bl}px)`; ctx.drawImage(E, cx - Re * m, cy - Re * m, Re * 2 * m, Re * 2 * m); ctx.filter = 'none';
   // atmosphere halo
   ctx.globalCompositeOperation = 'lighter'; const ag = ctx.createRadialGradient(cx, cy, Re * .96, cx, cy, Re * 1.12); ag.addColorStop(0, 'rgba(110,170,255,.55)'); ag.addColorStop(1, 'rgba(110,170,255,0)');
   ctx.fillStyle = ag; ctx.beginPath(); ctx.arc(cx, cy, Re * 1.12, 0, 6.283); ctx.fill(); ctx.globalCompositeOperation = 'source-over'; ctx.globalAlpha = 1;

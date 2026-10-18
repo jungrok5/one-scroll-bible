@@ -245,11 +245,11 @@ function draw(ctx, t) {
   const ink = '#221e18', st = { size: V ? 52 : 50, weight: 600, color: ink, shadow: 'rgba(242,236,222,.9)', shadowBlur: 14 }, cs = { size: 24, font: "'Noto Sans KR',sans-serif", color: '#5a5246', ls: 2 };
   const ty0 = V ? 300 : 150, lh = V ? 76 : 72;
   text(ctx, '02  ·  타락', V ? 80 : 110, V ? 190 : 120, { align: 'left', size: 30, weight: 600, color: ink, alpha: win(t, .6, 5, 1, 1), ls: 4 });
-  const line = (s, a, two) => { text(ctx, s, W / 2, ty0, { ...st, alpha: a, lh: lh / st.size }); return two ? ty0 + lh : ty0; };
+  const line = (s, a) => { text(ctx, s, W / 2, ty0, { ...st, alpha: a, lh: lh / st.size }); return ty0 + (String(Pilot.tr(s)).split('\n').length - 1) * lh; };   // the citation goes under the last line, however many the translation has
   const cite = (s, a, y) => text(ctx, s, W / 2, y + 54, { ...cs, alpha: a * .9 });
-  const a1 = win(t, 11.4, 15.6, 1, .8); cite('창세기 3:8 (개역개정)', a1, line('“여호와 하나님의 낯을 피하여\n동산 나무 사이에 숨은지라”', a1, true));
+  const a1 = win(t, 11.4, 15.6, 1, .8); cite('창세기 3:8 (개역개정)', a1, line('“여호와 하나님의 낯을 피하여\n동산 나무 사이에 숨은지라”', a1));
   const a2 = win(t, 16.4, 21.2, 1.2, .9); text(ctx, '“네가 어디 있느냐”', W / 2, ty0 + (V ? 30 : 20), { ...st, size: V ? 76 : 80, alpha: a2, ls: 6 }); cite('창세기 3:9 (개역개정)', a2, ty0 + (V ? 50 : 40));
-  const a3 = win(t, 22.6, 28.4, 1.2, .9); cite('창세기 3:15 (개역개정)', a3, line(V ? '“여자의 후손은\n네 머리를 상하게 할 것이요”' : '“여자의 후손은 네 머리를 상하게 할 것이요”', a3, V));
+  const a3 = win(t, 22.6, 28.4, 1.2, .9); cite('창세기 3:15 (개역개정)', a3, line(V ? '“여자의 후손은\n네 머리를 상하게 할 것이요”' : '“여자의 후손은 네 머리를 상하게 할 것이요”', a3));
   const a4 = win(t, 28.8, DUR - 1, 1.2, 1), L4 = last4(ctx, '타락 직후 주신 첫 복음의 약속', V ? 46 : 44, V ? 76 : 70);
   text(ctx, L4.s, W / 2, ty0, { ...st, size: L4.size, weight: 400, alpha: a4, ls: 3 });
   // the seal is pressed beside the last line

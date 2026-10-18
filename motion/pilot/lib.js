@@ -24,8 +24,20 @@
   };
   // collect mode: also record every Hangul string that reaches the canvas, so untranslated text (a leak) shows up
   P.drawn = new Set();
-  if (P.collect) for (const k of ['fillText', 'strokeText']) { const f = CanvasRenderingContext2D.prototype[k];
-    CanvasRenderingContext2D.prototype[k] = function (t, ...r) { if (HANGUL.test(String(t))) P.drawn.add(String(t)); return f.call(this, t, ...r); }; }
+  // iPhone Safari (iOS 17.4+) ignores globalAlpha for text drawn with a shadow, so every faded-out line showed at once.
+  // So text never relies on globalAlpha: fully faded text is skipped, and a partial fade is baked into its colours.
+  const RGBA = new Map(), fade = (c, a) => {
+    let v = RGBA.get(c); if (!v) { const m = c[0] === '#' ? null : c.match(/[\d.]+/g);
+      v = m ? [+m[0], +m[1], +m[2], m[3] == null ? 1 : +m[3]] : [parseInt(c.slice(1, 3), 16), parseInt(c.slice(3, 5), 16), parseInt(c.slice(5, 7), 16), 1]; RGBA.set(c, v); }
+    return v.some(isNaN) ? c : `rgba(${v[0]},${v[1]},${v[2]},${v[3] * a})`; };
+  for (const k of ['fillText', 'strokeText']) { const f = CanvasRenderingContext2D.prototype[k], sk = k === 'fillText' ? 'fillStyle' : 'strokeStyle';
+    CanvasRenderingContext2D.prototype[k] = function (t, ...r) {
+      if (P.collect && HANGUL.test(String(t))) P.drawn.add(String(t));   // collect mode: every Hangul string that reaches the canvas (leaks show up)
+      const ga = this.globalAlpha; if (ga >= .999) return f.call(this, t, ...r);
+      if (ga < .004) return;
+      const st = this[sk], sc = this.shadowColor; if (typeof st !== 'string') return f.call(this, t, ...r);   // gradient/pattern: as before
+      this[sk] = fade(st, ga); this.shadowColor = fade(sc, ga); this.globalAlpha = 1;
+      try { return f.call(this, t, ...r); } finally { this.globalAlpha = ga; this[sk] = st; this.shadowColor = sc; } }; }
   // a counted phrase: Pilot.trn('{n}년', n) — the language file may add plural forms by CLDR category,
   // e.g. "{n}년#one": "{n} año", "{n}년#two": "سنتان", "{n}년#few": "{n} سنوات"; otherwise the plain key is used.
   // An exact number wins over the category: "{n}년#=1": "{n} ano" (for languages whose CLDR "one" also covers 0, e.g. pt).

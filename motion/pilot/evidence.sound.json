@@ -1,16 +1,18 @@
-{ "duration": 40,
+{ "duration": 60,
   "music": [
-    { "id": "m1", "at": 0.8, "len": 27.6, "db": -6, "fin": 1.5, "fout": 1.5,
-      "prompt": "Restrained documentary score: soft felt piano playing patient repeated eighth notes, a quiet bed of muted strings, occasional glassy bowed-vibraphone tones; curious, careful, investigative, steady tempo around 84 bpm, builds only by adding a second piano voice and a higher string line, no drums" },
-    { "id": "m2", "at": 29.0, "len": 11.0, "db": -4, "fin": 1.2, "fout": 1.8,
-      "prompt": "After silence, a warm sustained string chord and a few slow, tender felt-piano notes, intimate and reverent, like a single lamp in a dark room, resolving gently on a major chord" }
+    { "id": "m3", "at": 0.6, "len": 40.0, "db": -7, "fin": 2.0, "fout": 2.0,
+      "prompt": "Intimate cinematic score for a journey through an explorer's journal: a solo cello playing a long, searching, slightly Middle-Eastern melody over a soft bed of warm strings and a low hand-frame-drum heartbeat, a plucked oud answering in short phrases, around 72 bpm; curious and warm at first, a gentle lift with a second string line as discoveries pile up, never busy; desert dusk mood, analog warmth, no synths, no piano loops" },
+    { "id": "m4", "at": 41.6, "len": 18.4, "db": -4, "fin": 1.5, "fout": 2.0,
+      "prompt": "Slow tender orchestral close: sustained strings swell gently, a solo cello sings a calm phrase over a soft warm major chord, a single high oud note now and then, opening up like evening air over the desert, reverent and peaceful, resolving quietly on a long major chord; no drums, no synths" }
   ],
   "sfx": [
-    { "id": "s1", "at": 0.25, "len": 1.4, "db": -10, "loop": false, "prompt": "Fluorescent light table switching on: two quick starter clicks and a soft electrical ballast hum starting" },
-    { "id": "s2", "at": 1.6, "len": 1.8, "db": -16, "loop": false, "prompt": "Rapid soft ticks of a mechanical counter, quiet and precise" },
-    { "id": "s3", "at": 9.85, "len": 1.0, "db": -8, "loop": false, "prompt": "Glass loupe set down on a glass plate, a small clack with a high glassy ring" },
-    { "id": "s4", "at": 14.75, "len": 1.0, "db": -8, "loop": false, "prompt": "Glass loupe set down on a glass slide, a small clack with a soft ring" },
-    { "id": "s5", "at": 20.8, "len": 2.8, "db": -14, "loop": false, "prompt": "Fine pencil drawing quick straight lines on paper, light and rhythmic" },
-    { "id": "s6", "at": 28.2, "len": 1.2, "db": -9, "loop": false, "prompt": "Light table switching off: a single switch click, the electrical hum dying away" }
+    { "id": "e1", "at": 0.4, "len": 2.0, "db": -14, "loop": false, "prompt": "An old leather-bound journal lying open on a wooden desk, a soft creak of the spine and a light rustle of thick paper" },
+    { "id": "e2", "at": 1.2, "len": 2.2, "db": -12, "loop": false, "prompt": "A dip pen writing a short handwritten line on thick paper, fine scratchy nib strokes, close and quiet" },
+    { "id": "e3", "at": 8.8, "len": 1.8, "db": -13, "loop": false, "prompt": "A pencil quickly ticking off tally marks on paper, rapid short dry strokes" },
+    { "id": "e4", "at": 15.0, "len": 1.6, "db": -9, "loop": false, "prompt": "A single heavy page of an old scrapbook turning over, papery whoosh and a soft flap as it settles" },
+    { "id": "e5", "at": 26.8, "len": 1.6, "db": -9, "loop": false, "prompt": "A thick scrapbook page turning, crisp paper rustle with a pasted photograph flexing, soft landing" },
+    { "id": "e6", "at": 31.6, "len": 2.4, "db": -14, "loop": false, "prompt": "A fine pen drawing a row of short straight lines on paper, light rhythmic scratches" },
+    { "id": "e7", "at": 41.6, "len": 1.6, "db": -9, "loop": false, "prompt": "The last page of an old journal turning slowly, a long soft paper sweep and a gentle settle" },
+    { "id": "e8", "at": 43.4, "len": 14.0, "db": -20, "loop": false, "prompt": "Quiet desert at dusk: a soft warm wind over sand, the faint flutter of a small lantern flame, very still and spacious" }
   ],
-  "ducks": [ { "from": 28.3, "to": 29.1, "db": -30 } ] }
+  "ducks": [ { "from": 41.3, "to": 41.7, "db": -18 } ] }

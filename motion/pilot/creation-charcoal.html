@@ -1,0 +1,478 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>시안 · 창조 (목탄)</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600&family=Noto+Sans+KR:wght@400&display=swap">
+</head>
+<body>
+<script src="lib.js"></script>
+<script>
+/* 01 창조 — Gothic charcoal drawing on toothed paper: light is made by REMOVING darkness (an eraser lifts it out).
+   A  0–6.8   a sheet of velvet charcoal; smudged grey waters; the Spirit, a faint breath of lifted grey, moves over them.
+              4.9 the eraser touches the black (one point of paper); 6.0 a first stroke.
+   B  6.8–14  "빛이 있으라": many fast eraser strokes radiate, kneaded-eraser dabs open a core of bare paper,
+              the deep catches it in lifted streaks. The camera pushes in.
+   C  14–21   the drawing turns: the waters are smudged away, the rays twist into a spiral galaxy, the camera pulls back
+              and the eraser dots the dark with stars, flicks, smudged nebulae and far galaxies.
+   D  21–24.2 the Earth: a charcoal sphere modelled with the stump, a lifted crescent, cloud bands erased out.
+   E  24.2–26.4 falling through smudged, lifted cloud masses.
+   F  26.4–35 Eden as a charcoal landscape lit by the lifted light; the man and the woman by the river (Gen 1:31). */
+const { clamp, lerp, ss, eo, eio, win, rng, fbm, noise, canvas, mix, text } = Pilot;
+const W = Pilot.W, H = Pilot.H, V = Pilot.ori === 'v', DUR = 35, U = 1080;
+const T_IGN = 4.9, T_FL = 6.8;
+const INK = [18, 17, 17], PAPER = [238, 236, 231], WARM = [244, 228, 196];
+const LY = V ? -.17 * U : -.1 * U, HZ = V ? .19 * U : .17 * U;     // the light's height, the horizon of the deep (world)
+const val = (v, warm = 0) => { const c = mix(mix(INK, PAPER, clamp(v)), WARM, warm * clamp(v)); return `rgb(${c[0] | 0},${c[1] | 0},${c[2] | 0})`; };
+const fr = t => Math.floor(t * 12);                                 // drawings "boil" on twos (12 fps)
+const jit = (t, s, k = 1) => (noise(fr(t) * 1.7 + s, s * .37) - .5) * k;
+
+// ---------------- camera (world → screen), monotone cubic through keys: continuous motion ----------------
+const CK = [[0, -28, 14, 1.0], [6.8, 0, 0, 1.06], [14, 0, LY * .45, 1.3], [17.6, .22 * U, LY + .02 * U, .5], [21, .6 * U, LY + .1 * U, .6], [26.5, 1.15 * U, LY + .2 * U, .8]];
+const CT = CK.map(k => k[0]);
+function hermite(ch) {               // Fritsch–Carlson tangents per channel
+  const y = CK.map(k => k[ch]), n = y.length, d = [], m = [];
+  for (let i = 0; i < n - 1; i++) d.push((y[i + 1] - y[i]) / (CT[i + 1] - CT[i]));
+  for (let i = 0; i < n; i++) m.push(i === 0 ? d[0] * .5 : i === n - 1 ? d[n - 2] * .5 : d[i - 1] * d[i] <= 0 ? 0 : (d[i - 1] + d[i]) / 2);
+  return t => { let i = 0; while (i < n - 2 && t > CT[i + 1]) i++; const h = CT[i + 1] - CT[i], s = clamp((t - CT[i]) / h), s2 = s * s, s3 = s2 * s;
+    return (2 * s3 - 3 * s2 + 1) * y[i] + (s3 - 2 * s2 + s) * h * m[i] + (-2 * s3 + 3 * s2) * y[i + 1] + (s3 - s2) * h * m[i + 1]; };
+}
+const CX = hermite(1), CY = hermite(2), CZ = hermite(3);
+let CM = [1, 0, 0, 1, 0, 0], CAM = [0, 0, 1];
+function setCam(t) {
+  const z = CZ(t), cx = CX(t) + (noise(t * .35, 4) - .5) * 10, cy = CY(t) + (noise(t * .3, 8) - .5) * 8;
+  CAM = [cx, cy, z]; CM = [z, 0, 0, z, W / 2 - cx * z, H / 2 - cy * z];
+}
+const ws = (x, y) => [CM[0] * x + CM[2] * y + CM[4], CM[1] * x + CM[3] * y + CM[5]];
+// draw a mark sprite along +x from world (x,y), rotated by ang; frac = how much of it the hand has drawn so far
+function put(ctx, M, spr, x, y, ang, len, wid, a, frac = 1, u0 = 0) {
+  if (a < .004 || len < .5 || frac <= 0) return;
+  const c = Math.cos(ang), s = Math.sin(ang), [A, B, C, D, E, F] = M;
+  ctx.setTransform(A * c + C * s, B * c + D * s, -A * s + C * c, -B * s + D * c, A * x + C * y + E, B * x + D * y + F);
+  ctx.globalAlpha = Math.min(1, a);
+  const sw = spr.width, sh = spr.height, f0 = u0, f1 = Math.min(1, u0 + frac);
+  ctx.drawImage(spr, sw * f0, 0, sw * (f1 - f0), sh, 0, -wid / 2, len * (f1 - f0), wid);
+}
+function dab(ctx, M, spr, x, y, size, a, rot = 0, sy = 1) {
+  if (a < .004 || size < .5) return; const c = Math.cos(rot), s = Math.sin(rot), [A, B, C, D, E, F] = M;
+  ctx.setTransform((A * c + C * s), (B * c + D * s), (-A * s + C * c) * sy, (-B * s + D * c) * sy, A * x + C * y + E, B * x + D * y + F);
+  ctx.globalAlpha = Math.min(1, a); ctx.drawImage(spr, -size / 2, -size / 2, size, size);
+}
+const I0 = [1, 0, 0, 1, 0, 0];
+
+// ---------------- marks (alpha masks, tinted once) ----------------
+function mask(w, h, f) { const c = canvas(w, h), x = c.getContext('2d'), d = x.createImageData(w, h), D = d.data;
+  for (let j = 0; j < h; j++) for (let i = 0; i < w; i++) { const k = (j * w + i) * 4; D[k] = D[k + 1] = D[k + 2] = 255; D[k + 3] = 255 * clamp(f(i, j)); }
+  x.putImageData(d, 0, 0); return c; }
+function tint(m, col) { const c = canvas(m.width, m.height), x = c.getContext('2d'); x.drawImage(m, 0, 0); x.globalCompositeOperation = 'source-in'; x.fillStyle = col; x.fillRect(0, 0, c.width, c.height); return c; }
+function strokeMask(seed, soft, dry) {           // an eraser / side-of-stick stroke: crisp ragged edge, streaks along it, a rounded start, a lifting-off end
+  const w = 512, h = 64, r = rng(seed), o1 = r() * 60, o2 = r() * 60, t0 = .03 + r() * .05, t1 = .12 + r() * .3;
+  return mask(w, h, (i, j) => { const u = i / (w - 1), shape = Math.pow(clamp(u / t0), .5) * Math.pow(clamp((1 - u) / t1), .9);
+    if (shape <= 0) return 0;
+    const hw = (h / 2 - 6) * (.8 + .2 * noise(u * 5 + o1, o2)) * (.3 + .7 * shape), cy = h / 2 + (noise(u * 2.2 + o2, 3) - .5) * 6, dd = Math.abs(j + .5 - cy);
+    const edge = clamp((hw - dd) / (1.4 + soft * 9) + (noise(u * 34 + o1, j * .45) - .5) * .9 * (1 - soft));
+    const stri = .45 + .55 * noise(j * 1.1 + o1, u * 1.4 + o2), drag = .78 + .22 * noise(u * 40 + o2, j * .2);
+    const skip = lerp(1, ss(.28, .56, noise(u * 16 + o1, j * .33 + o2)), dry);
+    return edge * lerp(stri, 1, .3 + soft * .45) * drag * skip * Math.min(1, .5 + shape); }); }
+function dabMask(seed) {                          // kneaded eraser: a mottled, irregular soft lift
+  const n = 128, r = rng(seed), o = r() * 60;
+  return mask(n, n, (i, j) => { const x = (i + .5) / n * 2 - 1, y = (j + .5) / n * 2 - 1, rr = Math.hypot(x, y), th = Math.atan2(y, x);
+    const R = .66 + .5 * (fbm(Math.cos(th) * 1.4 + o, Math.sin(th) * 1.4 + o, 3) - .5);
+    return clamp((R - rr) / .3) * (.5 + .5 * fbm(i * .06 + o, j * .06 + o * .5, 3)); }); }
+function dotMask(seed) {                          // an eraser dot / star
+  const n = 32, r = rng(seed), o = r() * 60;
+  return mask(n, n, (i, j) => { const x = (i + .5) / n * 2 - 1, y = (j + .5) / n * 2 - 1, rr = Math.hypot(x, y), th = Math.atan2(y, x);
+    const R = .5 + .3 * (noise(Math.cos(th) * 1.6 + o, Math.sin(th) * 1.6 + o) - .5); return clamp((R - rr) / .2) * (.65 + .35 * noise(i * .5 + o, j * .5)); }); }
+function smudgeMask(seed) {                       // a finger smudge, dragged along +x
+  const w = 256, h = 96, r = rng(seed), o = r() * 60;
+  return mask(w, h, (i, j) => { const u = i / (w - 1) * 2 - 1, v = (j + .5) / h * 2 - 1, wob = (noise(u * 1.6 + o, 1) - .5) * .5;
+    return Math.exp(-u * u * 2.6 - (v - wob) ** 2 * 5.5) * (.5 + .5 * noise(j * .28 + o, u * 1.8)); }); }
+let SK = [], SKS = [], DB = [], DT = [], SM = [];   // raw masks
+let L = {}, K = {};                                // tinted: L.x lifts (paper), K.x charcoal
+function tintAll() {
+  const set = (arr, col) => arr.map(m => tint(m, col));
+  L = { sk: set(SK, val(1)), skw: set(SK, val(1, .7)), sks: set(SKS, val(1)), db: set(DB, val(1)), dbw: set(DB, val(1, .8)), dt: set(DT, val(1)), sm: set(SM, val(1)), smw: set(SM, val(1, .6)) };
+  K = { sk: set(SK, val(0)), sks: set(SKS, val(0)), db: set(DB, val(0)), sm: set(SM, val(0)), dt: set(DT, val(0)),
+        sk2: set(SK, val(.16)), db3: set(DB, val(.32)), db5: set(DB, val(.55)), db8: set(DB, val(.84)) };
+}
+
+// ---------------- paper ----------------
+let TOOTH, MOTTLE, TONE, GROUND;
+function buildPaper() {
+  // tooth: ~1/600 of the frame width, a little elongated (laid paper), contrast stretched — peaks and valleys
+  TOOTH = canvas(W, H); { const x = TOOTH.getContext('2d'), d = x.createImageData(W, H), D = d.data, r = rng(3);
+    for (let j = 0; j < H; j++) for (let i = 0; i < W; i++) {
+      const v = .55 * noise(i / 1.9, j / 2.4) + .3 * noise(i / 4.6 + 40, j / 3.8 + 9) + .15 * r();
+      const s = clamp(.5 + (v - .5) * 2.6), k = (j * W + i) * 4; D[k] = D[k + 1] = D[k + 2] = s * 255; D[k + 3] = 255; }
+    x.putImageData(d, 0, 0); }
+  // mottle: the sheet's uneven sizing and fibres (soft-light)
+  const mw = W / 4 | 0, mh = H / 4 | 0; MOTTLE = canvas(mw, mh); { const x = MOTTLE.getContext('2d'), d = x.createImageData(mw, mh), D = d.data;
+    for (let j = 0; j < mh; j++) for (let i = 0; i < mw; i++) { const v = .5 + .5 * (fbm(i * .02, j * .02, 4) - .5) + .25 * (noise(i * .5 + 3, j * .08) - .5), k = (j * mw + i) * 4;
+      D[k] = D[k + 1] = D[k + 2] = clamp(v) * 255; D[k + 3] = 255; } x.putImageData(d, 0, 0); }
+  // tone: a warm toned sheet, rubbed darker toward the edges (multiply)
+  TONE = canvas(W, H); { const x = TONE.getContext('2d'); x.fillStyle = '#fbf6ec'; x.fillRect(0, 0, W, H);
+    const g = x.createRadialGradient(W / 2, H / 2, Math.min(W, H) * .35, W / 2, H / 2, Math.hypot(W, H) * .58); g.addColorStop(0, 'rgba(160,150,140,0)'); g.addColorStop(1, 'rgba(120,112,104,.75)');
+    x.fillStyle = g; x.fillRect(0, 0, W, H); }
+  // ground: the sheet laid in with charcoal — side-of-the-stick sweeps, never a flat fill
+  const GW = W * 1.3 | 0, GH = H * 1.3 | 0; GROUND = canvas(GW, GH); { const x = GROUND.getContext('2d'), r = rng(12);
+    x.fillStyle = val(.07); x.fillRect(0, 0, GW, GH);
+    for (let i = 0; i < 1300; i++) { const px = r() * GW, py = r() * GH, ang = -.55 + (r() - .5) * .5, len = 180 + r() * 520, wd = 22 + r() * 70;
+      put(x, I0, r() < .55 ? K.sk[i % K.sk.length] : K.sk2[i % K.sk2.length], px - Math.cos(ang) * len / 2, py - Math.sin(ang) * len / 2, ang, len, wd, .18 + r() * .4); }
+    for (let i = 0; i < 70; i++) { const px = r() * GW, py = r() * GH; put(x, I0, L.sm[i % L.sm.length], px, py, (r() - .5) * .6, 300 + r() * 500, 80 + r() * 140, .025 + r() * .03); }
+    x.setTransform(1, 0, 0, 1, 0, 0); x.globalAlpha = 1; }
+}
+function ground(ctx, t, par = .25) {   // the charcoal ground follows the camera only a little (it is the sheet)
+  const z = 1 + (CAM[2] - 1) * par * .5, gx = -(GROUND.width - W) / 2 - CAM[0] * par * .3, gy = -(GROUND.height - H) / 2 - CAM[1] * par * .3;
+  ctx.setTransform(z, 0, 0, z, W / 2 * (1 - z), H / 2 * (1 - z)); ctx.globalAlpha = 1;
+  ctx.drawImage(GROUND, clamp(gx, W - GROUND.width, 0), clamp(gy, H - GROUND.height, 0));
+}
+
+// ---------------- A/B: the deep and the light ----------------
+let WAVES = [], BURST = [], KNEAD = [], REFL = [];
+function buildDeep() {
+  const r = rng(41);
+  for (let i = 0; i < 260; i++) { const z = 1 + Math.pow(r(), 1.5) * 26; WAVES.push({ z, x: (r() - .5) * U * (1.6 + z * .5), l: (.05 + r() * .22) * U, w: 3 + r() * 16, s: (r() - .5) * 18, a: .4 + r() * .6, sp: i % SK.length, ph: r() * 6 }); }
+  for (let i = 0; i < 120; i++) { const z = 1 + Math.pow(r(), 1.3) * 22; REFL.push({ z, x: (r() - .5) * U * (.05 + .55 / z + .02 * z), l: (.03 + r() * .14) * U, w: 2 + r() * 9, t0: T_FL + .15 + Math.pow(r(), 1.5) * 2.6, a: .45 + r() * .55, sp: i % SK.length, ph: r() * 6 }); }
+  const lim = th => { const s = Math.sin(th); return s > .05 ? (HZ - LY) / s * .9 : 9e9; };   // rays stop at the deep
+  // the first stroke (6.0), then the burst: 76 fast long strokes in .6 s, then 84 more filling in over three seconds
+  BURST.push({ th: -Math.PI / 2 - .2, r0: .01 * U, len: .26 * U, lenG: .3 * U, w: 15, t0: 5.95, d: .55, a: .9, sp: 0, warm: 1 });
+  for (let i = 0; i < 76; i++) { const th = (i + r() * .7) / 76 * 6.283 - Math.PI, len = Math.min(lim(th), (.3 + .85 * Math.pow(r(), .8)) * U);
+    BURST.push({ th, r0: r() * .025 * U, len, lenG: (.25 + .5 * Math.pow(r(), .6)) * U, w: 6 + r() * 30, t0: T_FL + Math.pow(r(), 1.7) * .6, d: .1 + r() * .16, a: .5 + r() * .45, sp: i % SK.length, warm: r() < .4 }); }
+  for (let i = 0; i < 84; i++) { const th = r() * 6.283 - Math.PI, r0 = (.04 + r() * .22) * U, len = Math.min(lim(th) - r0, (.12 + .45 * r()) * U);
+    if (len < 20) continue;
+    BURST.push({ th, r0, len, lenG: len * .8, w: 4 + r() * 20, t0: T_FL + .4 + Math.pow(r(), 1.4) * 3.2, d: .12 + r() * .25, a: .3 + r() * .5, sp: (i + 3) % SK.length, warm: r() < .3 }); }
+  for (let i = 0; i < 90; i++) { const t0 = T_FL + .05 + Math.pow(r(), 1.25) * 4, reach = .02 + .2 * Math.pow(r(), 1.3) * clamp((t0 - T_FL) / 3 + .25), a = r() * 6.283;
+    KNEAD.push({ x: Math.cos(a) * reach * U, y: Math.sin(a) * reach * U * .85, s: (.05 + .11 * r()) * U * (1 - reach), t0, a: .3 + r() * .45, rot: r() * 6, sp: i % DB.length }); }
+}
+function drawDeep(ctx, t, fade) {
+  if (fade <= 0) return; const lit = ss(T_FL, T_FL + 1.5, t), sx = spiritX(t);
+  // the surface of the deep: a smudged grey band at the horizon, a few lifted swells
+  const [hx0, hy0] = ws(0, HZ);
+  for (let i = 0; i < 7; i++) put(ctx, CM, L.sm[i % L.sm.length], -U * 1.6 + i * U * .5, HZ + 10 + (i % 3) * 10, (i % 2 - .5) * .02, U * 1.1, U * .12, fade * (.05 + .1 * lit));
+  for (const w of WAVES) {
+    const y = HZ + U * .7 / w.z, x = w.x + (t * w.s) / w.z * 6, wid = Math.max(1.6, w.w * 2.4 / w.z), len = w.l * 3 / Math.sqrt(w.z);
+    const breath = Math.exp(-(((x - sx) / (U * .3)) ** 2)) * (1 - lit), col = Math.exp(-((x / (U * (.06 + .45 / w.z))) ** 2));
+    let a = (.07 + .1 * breath + .06 * (.5 + .5 * Math.sin(t * .8 + w.ph))) * w.a + lit * (.06 + .5 * col) * w.a * (.6 + .4 * Math.sin(fr(t) * .9 + w.ph));
+    a *= fade * clamp((y - HZ) / 6) ; if (a < .01) continue;
+    put(ctx, CM, (lit > .3 && col > .3 ? L.skw : L.sk)[w.sp], x - len / 2, y + jit(t, w.ph) * 1.2, jit(t, w.ph + 1, .01), len, wid, a);
+  }
+  // the reflection: horizontal eraser strokes lifted in a column under the light
+  for (const q of REFL) { if (t < q.t0) continue; const p = eo(clamp((t - q.t0) / .25)), y = HZ + U * .7 / q.z, len = q.l * 3 / Math.sqrt(q.z), wid = Math.max(1.4, q.w * 2.6 / q.z);
+    const a = q.a * fade * (.55 + .45 * Math.sin(fr(t) * 1.3 + q.ph)); put(ctx, CM, L.skw[q.sp], q.x - len / 2, y, jit(t, q.ph, .01), len, wid, a, p); }
+  // mist lifted along the horizon once the light is there
+  if (lit > 0) for (let i = 0; i < 5; i++) put(ctx, CM, L.sks[i % L.sks.length], -U * 1.5 + i * U * .62 + (t - T_FL) * 6, HZ - 6 - i % 2 * 8, 0, U * .9, 18 + i % 3 * 8, .16 * lit * fade);
+}
+const spiritX = t => lerp(-.95, .7, t / 6.6) * (V ? U * .7 : U * .95);
+function drawSpirit(ctx, t) {        // "하나님의 영은 수면 위에 운행하시니라": a breath of lifted grey moving over the waters, with the ghosts it leaves behind
+  const a0 = ss(.6, 2, t) * (1 - ss(5.6, 7.2, t)); if (a0 <= 0) return;
+  for (let g = 6; g >= 0; g--) { const tg = t - g * .45; if (tg < 0) continue; const x = spiritX(tg), y = HZ - .035 * U + Math.sin(tg * 1.4) * 8, a = a0 * (g ? .05 * Math.pow(.72, g) : .16);
+    for (let k = 0; k < 3; k++) put(ctx, CM, L.sm[(k + g) % L.sm.length], x - U * (.22 - k * .06), y + (k - 1) * 10 + Math.sin(tg * 2 + k) * 6, Math.sin(tg * .9 + k) * .06 - .03, U * (.42 - k * .08), U * (.06 + k * .015), a * (k === 1 ? 1.3 : 1)); }
+}
+// the light: kneaded dabs open a core of bare paper; eraser strokes radiate from it. tw = twist into a galaxy (0..1)
+function galaxyXY(px, py, tw, t) {
+  if (tw <= 0) return [px, py];
+  const r0 = Math.hypot(px, py), th = Math.atan2(py, px), rs = r0 * lerp(1, .62, tw), phi = th + tw * (2.6 * Math.pow(r0 / (.6 * U), .65) + .05 * Math.max(0, t - 14));
+  let x = Math.cos(phi) * rs, y = Math.sin(phi) * rs * lerp(1, .5, tw); const a = .42 * tw, c = Math.cos(a), s = Math.sin(a);
+  return [x * c - y * s, x * s + y * c];
+}
+function drawLight(ctx, t, tw) {
+  if (t < T_IGN) return; const ox = 0, oy = LY;
+  // the first touch: one point of paper, the tooth sparkling round it
+  const p0 = ss(T_IGN, T_IGN + .5, t);
+  dab(ctx, CM, L.dbw[0], ox, oy, (10 + 26 * ss(T_IGN, T_FL, t)) * (1 + 2 * ss(T_FL - .3, T_FL + .3, t)), .9 * p0, .3);
+  dab(ctx, CM, L.dt[1], ox, oy, 7 + 3 * Math.sin(fr(t)), p0);
+  const keep = 1 - .35 * tw;
+  // kneaded dabs (the core)
+  for (const k of KNEAD) { if (t < k.t0) continue; const p = ss(k.t0, k.t0 + .12, t), [x, y] = galaxyXY(k.x, k.y, tw, t);
+    dab(ctx, CM, (tw > .5 ? L.db : L.dbw)[k.sp], ox + x, oy + y, k.s * lerp(1, .55, tw), k.a * p * keep, k.rot, lerp(1, .6, tw)); }
+  // eraser strokes
+  for (const s of BURST) { if (t < s.t0) continue; const p = eo(clamp((t - s.t0) / s.d)), spr = (s.warm ? L.skw : L.sk)[s.sp], a = s.a * keep, j = jit(t, s.th * 7, .006);
+    const len = lerp(s.len, s.lenG, tw), wid = s.w * lerp(1, .55, tw);
+    if (tw <= .001) { put(ctx, CM, spr, ox + Math.cos(s.th + j) * s.r0, oy + Math.sin(s.th + j) * s.r0, s.th + j, len, wid, a, p); continue; }
+    const N = 7;   // bend it along the spiral, a slice of the stroke per segment
+    for (let i = 0; i < N; i++) { const u0 = i / N, u1 = (i + 1) / N; if (u0 >= p) break;
+      const ra = s.r0 + len * u0, rb = s.r0 + len * Math.min(u1, p), A = galaxyXY(Math.cos(s.th) * ra, Math.sin(s.th) * ra, tw, t), B = galaxyXY(Math.cos(s.th) * rb, Math.sin(s.th) * rb, tw, t);
+      const dx = B[0] - A[0], dy = B[1] - A[1], sl = Math.hypot(dx, dy); if (sl < .3) continue;
+      put(ctx, CM, spr, ox + A[0], oy + A[1], Math.atan2(dy, dx), sl * 1.06 / (Math.min(u1, p) - u0) , wid * lerp(1, .8, u0 * tw), a * (1 - .45 * tw * u0), Math.min(u1, p) - u0, u0); }
+  }
+}
+
+// ---------------- C: the heavens ----------------
+let STARS = [], GALS = [], GALT = [], NEB = [];
+function buildHeavens() {
+  const r = rng(77);
+  const inv = (t, u, v, p) => { const z = CZ(t), cx = CX(t), cy = CY(t), zz = Math.pow(z, p) * Math.exp(.09 * p * Math.max(0, t - 16)); return [(u - W / 2) / zz + cx * p, (v - H / 2) / zz + cy * p]; };
+  for (let i = 0; i < 1500; i++) { const p = .25 + .75 * r(), tt = i % 2 ? 17.6 : 23.5, [x, y] = inv(tt, (r() * 1.3 - .15) * W, (r() * 1.3 - .15) * H, p);
+    const big = r() < .035; STARS.push({ x, y, p, s: big ? 7 + r() * 6 : 1.6 + Math.pow(r(), 3) * 6, b: big, a: .35 + r() * .65, ph: r() * 6, sp: i % DT.length, d: r() }); }
+  // far galaxies: smudged spirals lifted out with a kneaded eraser and a few flicks
+  for (let g = 0; g < 3; g++) { const n = 384, c = canvas(n, n), x = c.getContext('2d'), rr = rng(90 + g), M = [1, 0, 0, 1, n / 2, n / 2];
+    for (let i = 0; i < 26; i++) dab(x, M, L.db[i % L.db.length], (rr() - .5) * n * .08, (rr() - .5) * n * .08, n * (.08 + rr() * .1), .35 + rr() * .4, rr() * 6);
+    for (let arm = 0; arm < 2; arm++) for (let i = 0; i < 26; i++) { const u0 = i / 26, u1 = (i + 1) / 26, f = u => [Math.cos(arm * Math.PI + u * 4.6) * n * .42 * u, Math.sin(arm * Math.PI + u * 4.6) * n * .42 * u];
+      const A = f(u0), B = f(u1); put(x, M, L.sks[(i + arm) % L.sks.length], A[0], A[1], Math.atan2(B[1] - A[1], B[0] - A[0]), Math.hypot(B[0] - A[0], B[1] - A[1]) * 1.4, n * .07 * (1 - u0 * .6), .5 * (1 - u0 * .7));
+      if (i % 2) dab(x, M, L.db[i % L.db.length], A[0], A[1], n * .09 * (1 - u0 * .5), .16, rr() * 6); }
+    for (let i = 0; i < 60; i++) { const u = rr(), a = rr() * 2 * Math.PI, R = n * .45 * Math.sqrt(u); dab(x, M, L.dt[i % L.dt.length], Math.cos(a) * R, Math.sin(a) * R, 2 + rr() * 4, .5 + rr() * .5); }
+    x.setTransform(1, 0, 0, 1, 0, 0); x.globalAlpha = 1; GALT.push(c); }
+  const G = V ? [[.78, .22, .5, -.5, .45], [.2, .8, .32, .3, .5], [.84, .7, .22, 1.1, .38], [.55, .1, .16, .8, .6]] : [[.8, .25, .42, -.5, .45], [.18, .78, .3, .3, .5], [.62, .82, .2, 1.1, .38], [.93, .55, .14, .8, .6]];
+  G.forEach(([u, v, s, rot, sq], i) => { const [x, y] = inv(18.6, u * W, v * H, 1); GALS.push({ x, y, s: s * U / CZ(18.6), rot, sq, t0: 15.4 + i * .55, tex: i % 3 }); });
+  for (let i = 0; i < 9; i++) { const [x, y] = inv(18, r() * W, r() * H, .8); NEB.push({ x, y, l: (.5 + r() * .9) * U, w: (.18 + r() * .3) * U, rot: (r() - .5) * 1.2, a: .045 + r() * .05, sp: i % SM.length }); }
+}
+function drawHeavens(ctx, t) {
+  const sa = ss(14.3, 16.5, t) * (1 - ss(25.2, 26, t)); if (sa <= 0) return;
+  for (const n of NEB) put(ctx, CM, L.sm[n.sp], n.x - n.l / 2, n.y, n.rot, n.l, n.w, n.a * sa);
+  for (const g of GALS) { const a = ss(g.t0, g.t0 + .9, t) * sa; if (a <= 0) continue; const [sx, sy] = ws(g.x, g.y), sz = g.s * CAM[2] * (.8 + .2 * ss(g.t0, g.t0 + 1.2, t));
+    if (sx < -sz || sx > W + sz || sy < -sz || sy > H + sz) continue; dab(ctx, I0, GALT[g.tex], sx, sy, sz, a * .9, g.rot + .02 * t, g.sq); }
+  const [lx, ly] = ws(0, LY), diag = Math.hypot(W, H), z = CAM[2];
+  for (const s of STARS) {
+    const zz = Math.pow(z, s.p) * Math.exp(.09 * s.p * Math.max(0, t - 16)), sx = W / 2 + (s.x - CAM[0] * s.p) * zz, sy = H / 2 + (s.y - CAM[1] * s.p) * zz;
+    if (sx < -20 || sx > W + 20 || sy < -20 || sy > H + 20) continue;
+    const ts = 14.5 + 2.2 * Math.min(1, Math.hypot(sx - lx, sy - ly) / diag) + s.d * .7, a = ss(ts, ts + .25, t) * s.a * sa * (.8 + .2 * Math.sin(fr(t) * .7 + s.ph));
+    if (a < .02) continue; const sz = s.s * (.8 + .4 * s.p);
+    dab(ctx, I0, L.dt[s.sp], sx, sy, sz, a, s.ph);
+    if (s.b) { put(ctx, I0, L.sk[s.sp % SK.length], sx - sz * 1.6, sy, .05, sz * 3.2, 3, a * .7); put(ctx, I0, L.sk[(s.sp + 1) % SK.length], sx, sy - sz * 1.4, Math.PI / 2 + .05, sz * 2.8, 2.6, a * .6); }
+  }
+}
+
+// ---------------- D: the Earth — a charcoal study ----------------
+let EARTH, ER = 0;
+function buildEarth() {
+  const N = 1240, M = 1.18, CW = Math.round(N * M), c = canvas(CW, CW), x = c.getContext('2d'), d = x.createImageData(CW, CW), D = d.data; ER = N / 2;
+  // land and cloud on a lat/lon chart (only the front hemisphere is ever seen)
+  const MW = 360, MH = 200, land = new Float32Array(MW * MH), cld = new Float32Array(MW * MH);
+  for (let j = 0; j < MH; j++) for (let i = 0; i < MW; i++) { const lon = (i / MW - .5) * Math.PI * 1.1, lat = (.5 - j / MH) * Math.PI;
+    const w1 = fbm(lon * 1.4 + 3.1, lat * 1.8 + 1.7, 3), l = fbm(lon * 1.5 + w1 * 1.1 + 10, lat * 1.9 + w1 * .8 + 4, 5);
+    const cw = fbm(lon * 2 + 20, lat * 2.6 + 5, 3), cl = fbm(lon * 3 + cw * 1.8 + 30, lat * 7.5 + cw * 2.4, 5);
+    land[j * MW + i] = l; cld[j * MW + i] = ss(.5, .72, cl) * (.55 + .45 * ss(.15, .7, Math.abs(Math.sin(lat * 3.2 + cw * 2.2)))); }
+  const samp = (A, lon, lat) => { const fx = clamp((lon / (Math.PI * 1.1) + .5) * MW - .5, 0, MW - 1.001), fy = clamp((.5 - lat / Math.PI) * MH - .5, 0, MH - 1.001), i = fx | 0, j = fy | 0, ax = fx - i, ay = fy - j, k = j * MW + i;
+    return (A[k] * (1 - ax) + A[k + 1] * ax) * (1 - ay) + (A[k + MW] * (1 - ax) + A[k + MW + 1] * ax) * ay; };
+  const Lv = [-.66, -.52, .54], ln = Math.hypot(...Lv), lx = Lv[0] / ln, ly = Lv[1] / ln, lz = Lv[2] / ln;
+  for (let j = 0; j < CW; j++) for (let i = 0; i < CW; i++) {
+    const X = ((i + .5) / CW * 2 - 1) * M, Y = ((j + .5) / CW * 2 - 1) * M, rr = X * X + Y * Y, k = (j * CW + i) * 4; let v, a;
+    if (rr <= 1) { const z = Math.sqrt(1 - rr), dif = X * lx + Y * ly + z * lz, lon = Math.atan2(X, z), lat = Math.asin(-Y);
+      const ld = samp(land, lon, lat), isL = ss(.515, .55, ld), cl = samp(cld, lon, lat), lit = ss(-.2, .62, dif);
+      v = lerp(.36, .2, isL) - (ld - .55) * .25 * isL + (noise(i * .02, j * .02) - .5) * .05;
+      v *= .1 + .9 * lit;
+      const hatch = Math.pow(.5 + .5 * Math.sin(lat * 70 + (noise(lon * 4, lat * 4) - .5) * 5), 5);         // contour hatching across the half-tone
+      v -= .09 * hatch * ss(.04, .3, lit) * (1 - ss(.55, .9, lit));
+      v = lerp(v, .08 + .84 * lit, cl * .9);
+      const rim = Math.pow(clamp(1 - z), 2.4); v = lerp(v, .97, rim * ss(.05, .75, dif) * .92);
+      v = clamp(v); a = clamp((1 - Math.sqrt(rr)) * N * .5);
+    } else { const rho = Math.sqrt(rr), dl = (X * lx + Y * ly) / rho / Math.hypot(lx, ly); v = .92; a = Math.exp(-(rho - 1) * 16) * ss(-.3, .8, dl) * .5 + Math.exp(-(rho - 1) * 60) * .12; }
+    const c0 = mix(mix(INK, PAPER, v), WARM, .35 * v * v); D[k] = c0[0]; D[k + 1] = c0[1]; D[k + 2] = c0[2]; D[k + 3] = 255 * a; }
+  x.putImageData(d, 0, 0);
+  // the draughtsman's hand over it: eraser strokes along the cloud bands, side-of-stick strokes across the night side
+  x.save(); x.beginPath(); x.arc(CW / 2, CW / 2, ER, 0, 6.283); x.clip(); const r = rng(55), Mx = [ER, 0, 0, ER, CW / 2, CW / 2];
+  const P = (lat, lon) => { const cl = Math.cos(lat); return [cl * Math.sin(lon), -Math.sin(lat), cl * Math.cos(lon)]; };
+  for (let i = 0; i < 90; i++) { const lat = (r() - .5) * 2.4, lon0 = (r() - .5) * 2.6, span = .25 + r() * .7, N2 = 8, wd = .01 + r() * .03;
+    let lit0 = 0; { const q = P(lat, lon0 + span / 2); lit0 = q[0] * lx + q[1] * ly + q[2] * lz; } if (lit0 < -.05) continue;
+    for (let s = 0; s < N2; s++) { const A = P(lat + Math.sin(s * .5 + i) * .02, lon0 + span * s / N2), B = P(lat + Math.sin(s * .5 + .5 + i) * .02, lon0 + span * (s + 1) / N2); if (A[2] < .05 || B[2] < .05) continue;
+      put(x, Mx, L.sk[(i + s) % SK.length], A[0], A[1], Math.atan2(B[1] - A[1], B[0] - A[0]), Math.hypot(B[0] - A[0], B[1] - A[1]) * 1.1 * 8 / 8, wd * (.4 + .6 * A[2]), (.12 + .22 * r()) * ss(-.05, .5, lit0), 1); } }
+  for (let i = 0; i < 70; i++) { const ang = -.6 + (r() - .5) * .3, px = .2 + r() * .9, py = .1 + r() * .9 - .3; put(x, Mx, K.sk[i % SK.length], px - .4, py, ang, .5 + r() * .5, .05 + r() * .08, .12 + r() * .18); }
+  x.restore(); x.setTransform(1, 0, 0, 1, 0, 0); x.globalAlpha = 1;
+  EARTH = c;
+}
+const earthR = t => .034 * U * Math.exp(1.0 * (t - 21));
+function drawEarth(ctx, t) {
+  if (t < 20.6 || t > 26.6) return; const Re = earthR(t), kk = ss(21.6, 25.5, t);
+  const cx = W * (V ? .52 : .58) + .36 * Re * kk, cy = H * (V ? .56 : .52) + .3 * Re * kk, s = Re / ER, sz = EARTH.width * s;
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = ss(20.6, 21.5, t) * (1 - ss(25.6, 26.4, t));
+  ctx.translate(cx, cy); ctx.rotate(-.12 + .012 * (t - 21)); ctx.drawImage(EARTH, -sz / 2, -sz / 2, sz, sz); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1;
+}
+
+// ---------------- E: through the clouds ----------------
+let CLOUDS = [], CLL = [];
+function buildClouds() {
+  for (let g = 0; g < 4; g++) { const cw = 900, ch = 560, c = canvas(cw, ch), x = c.getContext('2d'), r = rng(130 + g);
+    const lobes = []; for (let i = 0; i < 9; i++) lobes.push([cw * (.15 + .7 * i / 8 + (r() - .5) * .05), ch * (.6 - .28 * Math.sin(i / 8 * Math.PI) * (.7 + .5 * r())), ch * (.14 + .14 * r())]);
+    const pass = (spr, n, f) => { for (let i = 0; i < n; i++) { const [lx0, ly0, lr] = lobes[i % lobes.length], a = r() * 6.283, q = Math.sqrt(r()), px = lx0 + Math.cos(a) * lr * q, py = ly0 + Math.sin(a) * lr * q * .8; f(spr, px, py, lr); } };
+    pass(K.db5, 140, (s, px, py, lr) => dab(x, I0, s[(px | 0) % s.length], px, py + lr * .2, lr * (.6 + r() * .6), .5 + r() * .4, r() * 6));               // the body, mid grey
+    pass(K.db3, 70, (s, px, py, lr) => dab(x, I0, s[(py | 0) % s.length], px, py + lr * .55, lr * (.5 + r() * .5), .45 + r() * .3, r() * 6, .55));          // dark smudged undersides
+    pass(K.db8, 120, (s, px, py, lr) => { if (py < ch * .62) dab(x, I0, s[(px | 0) % s.length], px, py - lr * .25, lr * (.35 + r() * .45), .55 + r() * .4, r() * 6); });   // lifted, sunlit tops
+    for (let i = 0; i < 26; i++) put(x, I0, L.sks[i % SKS.length], cw * (.05 + r() * .5), ch * (.3 + r() * .5), (r() - .5) * .1, cw * (.3 + r() * .4), 10 + r() * 22, .25 + r() * .3);   // eraser drag
+    x.setTransform(1, 0, 0, 1, 0, 0); x.globalAlpha = 1; CLOUDS.push(c); }
+  const r = rng(140); for (let i = 0; i < 9; i++) CLL.push({ t0: 23.9 + i * .26, ang: r() * 6.283, off: .25 + r() * .3, tex: i % 4, flip: r() < .5, rot: (r() - .5) * .3 });
+}
+function drawClouds(ctx, t) {
+  if (t < 23.9 || t > 27.6) return; ctx.setTransform(1, 0, 0, 1, 0, 0);
+  // the inside of the cloud: a lifted grey, dragged across with the eraser (never a flat white card)
+  const wash = ss(24.9, 25.5, t) * (1 - ss(26, 26.9, t));
+  if (wash > 0) { ctx.globalAlpha = wash; ctx.fillStyle = val(.66, .3); ctx.fillRect(0, 0, W, H);
+    for (let i = 0; i < 14; i++) { const y = ((i * 137 + (t - 24.9) * (420 + i * 30)) % (H + 300)) - 150; put(ctx, I0, (i % 3 ? L.sks : K.sks)[i % SKS.length], -60, y, (i % 2 - .5) * .04, W + 120, 30 + i % 4 * 24, wash * (i % 3 ? .4 : .18)); } }
+  for (const c of CLL) { const tt = t - c.t0; if (tt < 0) continue; const s = .5 * Math.exp(1.25 * tt), a = clamp(tt / .35) * (1 - ss(1.9, 2.6, tt)); if (a <= 0) continue;
+    const w = W * s, h = w * .62, cx = W / 2 + Math.cos(c.ang) * c.off * w * .9, cy = H / 2 + Math.sin(c.ang) * c.off * h * .9;
+    ctx.setTransform(c.flip ? -1 : 1, 0, 0, 1, cx, cy); ctx.rotate(c.rot); ctx.globalAlpha = a; ctx.drawImage(CLOUDS[c.tex], -w / 2, -h / 2, w, h); }
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1;
+}
+
+// ---------------- F: Eden ----------------
+const EL = V ? { hz: .49, lt: [.66, .455], cp: [.37, .705], fh: .1, river: [[.66, .5], [.5, .58], [.8, .7], [.62, 1.08]], trees: [[.04, 1.02, .62, 1], [.97, .8, .36, -1], [.83, .57, .14, -1]] }
+             : { hz: .52, lt: [.665, .475], cp: [.39, .76], fh: .155, river: [[.665, .53], [.56, .62], [.8, .76], [.64, 1.1]], trees: [[.06, 1.04, .98, 1], [.9, .82, .5, -1], [.79, .6, .2, -1]] };
+let EDEN, EFG, MIST, EW, EH, EX0, EY0;
+const ex = f => EX0 + f * W, ey = f => EY0 + f * H;
+function charTree(x, r, bx, by, h, side, lt) {   // trunk of side-strokes, broken vine branches, foliage of charcoal dabs, a lifted rim toward the light
+  const toL = Math.sign(lt[0] - bx) || 1, tw = h * .05;
+  for (let k = 0; k < 16; k++) put(x, I0, K.sk[k % SK.length], bx + (r() - .5) * tw, by + 4, -Math.PI / 2 + side * .05 + (r() - .5) * .06, h * (.45 + r() * .15), tw * (.35 + r() * .4), .55 + r() * .4);
+  const br = (x0, y0, ang, len, wd, dep) => { const x1 = x0 + Math.cos(ang) * len, y1 = y0 + Math.sin(ang) * len; put(x, I0, K.sk[(dep * 3 + (len | 0)) % SK.length], x0, y0, ang, len * 1.05, wd, .85);
+    if (dep < 4) { const n = 2 + (r() < .4); for (let i = 0; i < n; i++) br(x1, y1, ang + (r() - .5) * 1.1 + (i - (n - 1) / 2) * .5, len * (.6 + r() * .2), wd * .62, dep + 1); } };
+  for (let i = 0; i < 3; i++) br(bx + (r() - .5) * tw * .4, by - h * (.42 + r() * .1), -Math.PI / 2 + (i - 1) * .55 + side * .1, h * .2, tw * .6, 1);
+  const lobes = []; for (let i = 0; i < 7; i++) lobes.push([bx + side * h * .04 + (r() - .5) * h * .62, by - h * (.62 + r() * .3), h * (.12 + r() * .12)]);
+  for (let i = 0; i < 420; i++) { const [lx, ly, lr] = lobes[i % 7], a = r() * 6.283, q = Math.sqrt(r()); dab(x, I0, K.db[i % DB.length], lx + Math.cos(a) * lr * q, ly + Math.sin(a) * lr * q * .8, h * (.03 + r() * .07), .2 + r() * .4, r() * 6); }
+  for (let i = 0; i < 160; i++) { const [lx, ly, lr] = lobes[i % 7], a = r() * 6.283; put(x, I0, K.sk[i % SK.length], lx + Math.cos(a) * lr * .8, ly + Math.sin(a) * lr * .6, r() * 6.283, h * (.03 + r() * .05), h * .012, .4 + r() * .4); }
+  for (let i = 0; i < 90; i++) { const [lx, ly, lr] = lobes[i % 7], a = Math.atan2(lt[1] - ly, lt[0] - lx) + (r() - .5) * 1.6, q = .55 + r() * .45;   // the lit edge, lifted
+    dab(x, I0, L.dbw[i % DB.length], lx + Math.cos(a) * lr * q, ly + Math.sin(a) * lr * q * .8, h * (.015 + r() * .035), .18 + r() * .3, r() * 6); }
+}
+function buildEden() {
+  EW = Math.round(W * 1.12); EH = Math.round(H * 1.1) + 280; EX0 = (EW - W) / 2; EY0 = 280 + H * .05;
+  const c = canvas(EW, EH), x = c.getContext('2d'), r = rng(5), hz = ey(EL.hz), lt = [ex(EL.lt[0]), ey(EL.lt[1])];
+  // sky: toned with long horizontal side-strokes, heavier overhead (no empty bright sky)
+  const g = x.createLinearGradient(0, 0, 0, hz); g.addColorStop(0, val(.2)); g.addColorStop(.45, val(.34)); g.addColorStop(.8, val(.6, .3)); g.addColorStop(1, val(.74, .5)); x.fillStyle = g; x.fillRect(0, 0, EW, hz + 30);
+  for (let i = 0; i < 1500; i++) { const y = Math.pow(r(), 1.4) * hz, a = (.05 + .22 * Math.pow(1 - y / hz, 1.5)); put(x, I0, K.sk[i % SK.length], r() * EW - 200, y, (r() - .5) * .05, 160 + r() * 520, 12 + r() * 40, a); }
+  for (let i = 0; i < 46; i++) { const y = hz * (.25 + r() * .62); put(x, I0, L.sks[i % SKS.length], r() * EW - 300, y, (r() - .5) * .03, 200 + r() * 600, 8 + r() * 22, .1 + r() * .18); }   // long thin dawn clouds, erased
+  // the light: the same eraser that made the first light, low over the far hills
+  for (let i = 0; i < 70; i++) { const th = -Math.PI + .08 + r() * (Math.PI - .16), len = (.12 + .5 * Math.pow(r(), .8)) * U, r0 = r() * .03 * U;
+    put(x, I0, (r() < .5 ? L.skw : L.sk)[i % SK.length], lt[0] + Math.cos(th) * r0, lt[1] + Math.sin(th) * r0, th, len, 4 + r() * 16, .2 + r() * .3); }
+  for (let i = 0; i < 40; i++) { const a = r() * 6.283, q = Math.pow(r(), 1.5) * .09 * U; dab(x, I0, L.dbw[i % DB.length], lt[0] + Math.cos(a) * q, lt[1] + Math.sin(a) * q * .7, (.04 + r() * .08) * U, .35 + r() * .4, r() * 6); }
+  // far hills, two smudged ranges, rimmed where the light touches them; a mist band erased along their feet
+  [[.075, .48, .0028, .5], [.04, .38, .0042, .32]].forEach(([amp, v, f, tone], j) => { const base = hz + j * 8;
+    const ridge = px => base - amp * H * (.35 + fbm(px * f + j * 9, j * 3, 4)) - (j ? 0 : Math.max(0, 1 - Math.abs(px - lt[0] + W * .2) / (W * .35)) * H * .04);
+    x.beginPath(); x.moveTo(0, hz + 40); for (let px = 0; px <= EW; px += 8) x.lineTo(px, ridge(px)); x.lineTo(EW, hz + 40); x.closePath(); x.fillStyle = val(v); x.fill();
+    x.save(); x.clip(); for (let i = 0; i < 260; i++) { const px = r() * EW; put(x, I0, K.sk[i % SK.length], px, ridge(px) + r() * 50, .3 + (r() - .5) * .5, 40 + r() * 120, 6 + r() * 14, .12 + r() * .14); } x.restore();
+    for (let px = 0; px < EW; px += 14) { const near = Math.exp(-(((px - lt[0]) / (W * .25)) ** 2)); if (near < .05) continue; put(x, I0, L.skw[(px / 14 | 0) % SK.length], px, ridge(px) + 2, (r() - .5) * .3, 18 + r() * 14, 3 + r() * 2, .5 * near); } });
+  // the plain: hatched mid greys, darker toward us
+  const pg = x.createLinearGradient(0, hz, 0, EH); pg.addColorStop(0, val(.58, .3)); pg.addColorStop(.25, val(.44)); pg.addColorStop(.7, val(.24)); pg.addColorStop(1, val(.08)); x.fillStyle = pg; x.fillRect(0, hz, EW, EH - hz);
+  for (let i = 0; i < 2600; i++) { const d = Math.pow(r(), .8), py = hz + d * (EH - hz), px = r() * EW; put(x, I0, K.sk[i % SK.length], px, py, (r() - .5) * .08, (60 + d * 340) * (.5 + r()), 4 + d * 22, .06 + .14 * r()); }
+  // the river, from under the light toward us: lifted paper, ruled across with ripples, dark banks
+  const R0 = EL.river.map(([u, v]) => [ex(u), ey(v)]), rv = new Path2D(), wA = W * .006, wB = W * .16;
+  const P = (k, side) => { const i = Math.min(2, Math.floor(k * 3)), u = k * 3 - i, a = R0[i], b = R0[i + 1], m = u * u * (3 - 2 * u), px = lerp(a[0], b[0], u), py = lerp(a[1], b[1], m), w = lerp(wA, wB, Math.pow(k, 1.6)); return [px + side * w, py]; };
+  rv.moveTo(...P(0, -1)); for (let k = .02; k <= 1.001; k += .02) rv.lineTo(...P(k, -1)); for (let k = 1; k >= -.001; k -= .02) rv.lineTo(...P(k, 1)); rv.closePath();
+  x.save(); x.clip(rv); const rg = x.createLinearGradient(0, hz, 0, EH); rg.addColorStop(0, val(.95, .8)); rg.addColorStop(.3, val(.7, .3)); rg.addColorStop(1, val(.36)); x.fillStyle = rg; x.fillRect(0, hz, EW, EH - hz);
+  for (let i = 0; i < 420; i++) { const k = Math.pow(r(), .9), [px, py] = P(k, (r() - .5) * 2), d = k; put(x, I0, (r() < .55 ? L.skw : K.sk)[i % SK.length], px - (20 + d * 160) / 2, py, (r() - .5) * .03, 20 + d * 200, 2 + d * 9, .2 + r() * .4); }
+  x.restore();
+  for (const side of [-1, 1]) for (let k = 0; k < 1; k += .012) { const [px, py] = P(k, side * 1.05); put(x, I0, K.sk[(k * 300 | 0) % SK.length], px - 10 - k * 40, py, (r() - .5) * .2, 20 + k * 80, 3 + k * 14, .35 + r() * .3); }
+  // groves along the far banks
+  for (let i = 0; i < 30; i++) { const k = r() * .45, [px, py] = P(k, (r() < .5 ? -1 : 1) * (1.6 + r() * 3)), s = (20 + k * 120) * (.7 + r() * .6) * (V ? .8 : 1);
+    for (let j = 0; j < 30; j++) { const a = r() * 6.283, q = Math.sqrt(r()); dab(x, I0, K.db[j % DB.length], px + Math.cos(a) * s * .6 * q, py - s * .7 + Math.sin(a) * s * .5 * q, s * (.25 + r() * .3), .25 + r() * .3, r() * 6); }
+    put(x, I0, K.sk[i % SK.length], px, py, -Math.PI / 2, s * .5, Math.max(2, s * .06), .7);
+    for (let j = 0; j < 8; j++) dab(x, I0, L.dbw[j % DB.length], px + Math.sign(lt[0] - px) * s * .3 + (r() - .5) * s * .3, py - s * .9 + (r() - .5) * s * .3, s * .2, .2 + r() * .2, r() * 6); }
+  // light pooled on the grass round the place where the two will stand
+  const cp = [ex(EL.cp[0]), ey(EL.cp[1])];
+  for (let i = 0; i < 26; i++) { const a = r() * 6.283, q = Math.sqrt(r()); dab(x, I0, L.dbw[i % DB.length], cp[0] + W * .04 + Math.cos(a) * q * W * .13, cp[1] + Math.sin(a) * q * H * .03, W * (.04 + r() * .05), .1 + r() * .12, r() * 6, .35); }
+  // trees
+  EL.trees.forEach(([u, v, s, side], i) => charTree(x, r, ex(u), ey(v), s * H, side, lt));
+  // grass in front: vine-charcoal blades silhouetted, the nearest ground in deep black
+  const fgY = ey(.9);
+  for (let i = 0; i < 1600; i++) { const d = r(), py = lerp(fgY, EH, Math.pow(d, .6)), px = r() * EW, len = (14 + d * 70) * (.5 + r()); put(x, I0, K.sk[i % SK.length], px, py, -Math.PI / 2 + (r() - .5) * .7, len, 2 + d * 4, .35 + r() * .5); }
+  const fg = x.createLinearGradient(0, ey(.92), 0, EH); fg.addColorStop(0, 'rgba(18,17,17,0)'); fg.addColorStop(1, 'rgba(18,17,17,.85)'); x.setTransform(1, 0, 0, 1, 0, 0); x.globalAlpha = 1; x.fillStyle = fg; x.fillRect(0, ey(.92), EW, EH);
+  x.setTransform(1, 0, 0, 1, 0, 0); x.globalAlpha = 1; EDEN = c;
+  // mist strip: horizontal streaks erased out of a toned area (two bands drift at different speeds)
+  MIST = canvas(W * 2, 150); { const m = MIST.getContext('2d'), rm = rng(66);
+    for (let i = 0; i < 120; i++) put(m, I0, L.sks[i % SKS.length], rm() * W * 2 - 200, 75 + (rm() - .5) * 90 * rm(), (rm() - .5) * .02, 200 + rm() * 700, 6 + rm() * 22, .12 + rm() * .22);
+    m.setTransform(1, 0, 0, 1, 0, 0); m.globalCompositeOperation = 'destination-in'; const mg = m.createLinearGradient(0, 0, 0, 150); mg.addColorStop(0, 'rgba(0,0,0,0)'); mg.addColorStop(.5, 'rgba(0,0,0,1)'); mg.addColorStop(1, 'rgba(0,0,0,0)'); m.fillStyle = mg; m.fillRect(0, 0, W * 2, 150); m.globalCompositeOperation = 'source-over'; }
+  // foreground foliage at the edges, parting as the camera pushes in
+  EFG = canvas(W, H); { const f = EFG.getContext('2d'), rf = rng(9);
+    for (let i = 0; i < 260; i++) { const left = i % 2 === 0, px = left ? rf() * W * .2 - 40 : W - rf() * W * .2 + 40, py = rf() * H * (V ? .14 : .26) - 30;
+      dab(f, I0, K.db[i % DB.length], px, py, 40 + rf() * 90, .45 + rf() * .45, rf() * 6, .5); if (i % 5 === 0) put(f, I0, K.sk[i % SK.length], px, py, rf() * 6.28, 60 + rf() * 120, 4 + rf() * 5, .7); }
+    f.setTransform(1, 0, 0, 1, 0, 0); f.globalAlpha = 1; }
+}
+function person(x, sx, sy, h, fem, side) {   // a standing figure, head turned a little toward the light; side = which hand reaches out
+  const u = h / 100, P_ = (pts) => { x.beginPath(); pts.forEach((q, i) => { if (q.length === 4) x.quadraticCurveTo(sx + q[0] * u, sy + q[1] * u, sx + q[2] * u, sy + q[3] * u); else if (i) x.lineTo(sx + q[0] * u, sy + q[1] * u); else x.moveTo(sx + q[0] * u, sy + q[1] * u); }); x.closePath(); x.fill(); };
+  if (fem) P_([[-6.5, -96], [-9.5, -88, -10, -74], [-11, -64], [-3, -66], [3, -66], [11, -64], [10, -74, 9.5, -88], [6.5, -96]]);
+  x.beginPath(); x.ellipse(sx + .8 * u, sy - 91 * u, 6.3 * u, 7.8 * u, .08, 0, 6.283); x.fill();
+  x.beginPath(); x.ellipse(sx + 5.6 * u, sy - 90.5 * u, 1.6 * u, 2 * u, 0, 0, 6.283); x.fill();
+  P_([[-2.6, -85], [2.8, -85], [3.2, -80], [-3, -80]]);
+  const sh = fem ? 10 : 13.5, wa = fem ? 6.6 : 9.2, hp = fem ? 10.6 : 9.4;
+  P_([[-3, -81], [-sh + 2, -80, -sh, -76], [-wa - .6, -60, -wa, -52], [-hp, -46, -hp, -40], [-hp + .4, -34], [hp - .4, -34], [hp, -46, hp, -40], [wa, -52], [wa + .6, -60, sh, -76], [sh - 2, -80, 3, -81]]);
+  P_([[-hp + .6, -38], [-1, -36], [-1.6, -20], [-2.4, -2], [-5.6, -.5], [-5.4, -3], [-6, -20], [-hp + 1.4, -30]]);
+  P_([[hp - .6, -38], [1, -36], [1.8, -20], [2.6, -2], [6.4, -.5], [6, -3], [6.4, -20], [hp - 1.4, -30]]);
+  x.lineCap = 'round';
+  const arm = (dir, reach) => { x.lineWidth = 4.2 * u; x.beginPath(); x.moveTo(sx + dir * (sh - 1.8) * u, sy - 75 * u);
+    if (reach) x.quadraticCurveTo(sx + dir * (sh + 3) * u, sy - 60 * u, sx + dir * (sh + 7) * u, sy - 47 * u); else x.quadraticCurveTo(sx + dir * (sh + 2) * u, sy - 58 * u, sx + dir * (sh + .5) * u, sy - 41 * u); x.stroke();
+    x.lineWidth = 3 * u; x.beginPath(); x.moveTo(sx + dir * (sh + (reach ? 7 : .5)) * u, sy - (reach ? 47 : 41) * u); x.lineTo(sx + dir * (sh + (reach ? 8 : .8)) * u, sy - (reach ? 43 : 37) * u); x.stroke(); };
+  arm(1, side === 1); arm(-1, side === -1);
+}
+function couple(ctx, cx, cy, fh, col) { ctx.fillStyle = col; ctx.strokeStyle = col;
+  person(ctx, cx - fh * .16, cy, fh, false, 1); person(ctx, cx + fh * .14, cy, fh * .93, true, -1);
+  ctx.lineWidth = 3.4 * fh / 100; ctx.beginPath(); ctx.moveTo(cx - fh * .16 + 20 * fh / 100, cy - fh * .47); ctx.quadraticCurveTo(cx, cy - fh * .43, cx + fh * .14 - 16.5 * fh / 100, cy - fh * .44); ctx.stroke(); }
+function drawEden(ctx, t) {
+  const k = eio(clamp((t - 25.7) / 4.8)), dy = lerp(280, 0, k), z = 1 + .075 * eio(clamp((t - 28) / 7)) + .05 * (1 - k);
+  const fx = W * EL.cp[0], fy = H * EL.cp[1];                       // the push goes toward the two of them
+  const M = [z, 0, 0, z, fx * (1 - z), fy * (1 - z)];
+  ctx.setTransform(...M); ctx.drawImage(EDEN, -EX0, -EY0 + dy);
+  const base = dy;                                                   // frame-fraction items move with the crane
+  // mist drifting over the plain (two bands, different speeds)
+  for (const [yy, sp, a] of [[EL.hz + .015, 14, .55], [EL.hz + .07, 26, .4]]) { const y = yy * H + base - 75, ox = -((t * sp) % W) - W * .1;
+    ctx.globalAlpha = a * ss(26, 27.5, t); ctx.drawImage(MIST, ox, y); }
+  ctx.globalAlpha = 1;
+  // the light breathes: a few kneaded lifts and long rays shimmer over the drawing
+  const lx = W * EL.lt[0], ly = H * EL.lt[1] + base, br = .5 + .5 * Math.sin(t * 1.3);
+  for (let i = 0; i < 6; i++) dab(ctx, M, L.dbw[i % DB.length], lx + Math.cos(i * 2.1 + t * .2) * 30, ly + Math.sin(i * 1.7) * 14, U * (.07 + .03 * i), .07 + .05 * br, i + fr(t) * .02);
+  // the man and the woman: charcoal figures, rimmed by the lifted light on the side that faces it
+  const cx = W * EL.cp[0], cy = H * EL.cp[1] + base, fh = H * EL.fh;
+  ctx.setTransform(M[0], 0, 0, M[3], M[4] + jit(t, 3) * .8, M[5]);
+  ctx.save(); ctx.translate(cx, cy); ctx.transform(1, 0, -1.6, .2, 0, 0); ctx.globalAlpha = .4; const sg = ctx.createRadialGradient(0, 0, 0, 0, 0, fh * .5); sg.addColorStop(0, 'rgba(18,17,17,.9)'); sg.addColorStop(1, 'rgba(18,17,17,0)');
+  ctx.fillStyle = sg; ctx.fillRect(-fh * .6, -fh * .6, fh * 1.2, fh * 1.2); ctx.restore(); ctx.globalAlpha = 1;
+  couple(ctx, cx + fh * .03, cy, fh, val(1, .9)); couple(ctx, cx, cy + fh * .004, fh, val(.04));
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  // foreground parting
+  const pz = 1 + .35 * eio(clamp((t - 26) / 9)); ctx.setTransform(pz, 0, 0, pz, W / 2 * (1 - pz), 0); ctx.drawImage(EFG, 0, -dy * .6); ctx.setTransform(1, 0, 0, 1, 0, 0);
+}
+
+// ---------------- frame ----------------
+function smudgeBehind(ctx, y, h, a) {   // the draughtsman darkens the ground where words will sit
+  if (a <= 0) return; put(ctx, I0, K.sm[0], W * .5 - W * .55, y, 0, W * 1.1, h, .55 * a); put(ctx, I0, K.sm[2], W * .5 - W * .45, y + 6, .01, W * .9, h * .7, .45 * a);
+}
+function finish(ctx, t) {
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.globalCompositeOperation = 'overlay'; ctx.globalAlpha = .62; ctx.drawImage(TOOTH, 0, 0);
+  ctx.globalCompositeOperation = 'soft-light'; ctx.globalAlpha = .55; ctx.drawImage(MOTTLE, 0, 0, W, H);
+  ctx.globalCompositeOperation = 'multiply'; ctx.globalAlpha = 1; ctx.drawImage(TONE, 0, 0);
+  ctx.globalCompositeOperation = 'source-over';
+}
+function draw(ctx, t) {
+  setCam(t);
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.fillStyle = val(.07); ctx.fillRect(0, 0, W, H);
+  if (t < 26.6) {
+    ground(ctx, t);
+    const tw = eio(clamp((t - 14.2) / 3.8)), deep = 1 - ss(14.2, 16.4, t);
+    drawHeavens(ctx, t);
+    drawDeep(ctx, t, deep); drawSpirit(ctx, t);
+    drawLight(ctx, t, tw);
+    ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1;
+    drawEarth(ctx, t);
+  }
+  if (t > 25.7) { ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; drawEden(ctx, t); }
+  drawClouds(ctx, t);
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1;
+  // the words get a darker smudge to sit on
+  const a1 = win(t, 9.3, 14.1, 1.2, .9), y1 = V ? 330 : 170, a2 = win(t, 28.4, DUR - 1.1, 1.3, 1.1), y2 = V ? 330 : 150, l2 = V ? 78 : 76;
+  smudgeBehind(ctx, y1 + 10, 260, a1); smudgeBehind(ctx, y2 + 50, 380, a2 * .8);
+  finish(ctx, t);
+
+  // words
+  const rtl = Pilot.dir === 'rtl';
+  const st = { size: V ? 54 : 52, weight: 600, color: '#fbf7ee', shadow: 'rgba(10,9,9,.9)', shadowBlur: 22 }, cs = { size: 24, font: "'Noto Sans KR',sans-serif", color: '#e9e2d6', ls: 2, shadow: 'rgba(10,9,9,.85)' };
+  text(ctx, '01  ·  창조', rtl ? W - (V ? 80 : 110) : (V ? 80 : 110), V ? 190 : 120, { align: rtl ? 'right' : 'left', size: 30, weight: 600, color: '#e8e2d6', alpha: win(t, .6, 5, 1, 1), ls: 4 });
+  const a0 = win(t, 1.6, 6.5, 1.2, .5), y0 = V ? H * .76 : H * .8;
+  text(ctx, '“하나님이 이르시되 빛이 있으라”', W / 2, y0, { ...st, alpha: a0 });
+  text(ctx, '창세기 1:3 (개역개정)', W / 2, y0 + 58, { ...cs, alpha: a0 * .85 });
+  text(ctx, '“하시니 빛이 있었고”', W / 2, y1, { ...st, alpha: a1 });
+  text(ctx, '창세기 1:3 (개역개정)', W / 2, y1 + 58, { ...cs, alpha: a1 * .85 });
+  text(ctx, '“하나님이 지으신 그 모든 것을 보시니\n보시기에 심히 좋았더라”', W / 2, y2, { ...st, alpha: a2, lh: l2 / st.size });
+  text(ctx, '창세기 1:31 (개역개정)', W / 2, y2 + l2 + 58, { ...cs, color: '#fff8ec', alpha: a2 * .95, shadowBlur: 12 });
+  const f = 1 - ss(0, 1.2, t) + ss(DUR - 1.2, DUR, t); if (f > 0) { ctx.fillStyle = `rgba(0,0,0,${clamp(f)})`; ctx.fillRect(0, 0, W, H); }
+}
+
+Pilot.scene = 'creation';   // the same words as scene 01: use its translations
+Pilot.run({ W, H, dur: DUR, audio: 'creation.m4a', fonts: ["600 40px 'Noto Serif KR'", "400 20px 'Noto Sans KR'"],
+  init: async () => {
+    for (let i = 0; i < 8; i++) SK.push(strokeMask(100 + i, 0, i % 3 === 0 ? .5 : .15));
+    for (let i = 0; i < 4; i++) SKS.push(strokeMask(200 + i, 1, .3));
+    for (let i = 0; i < 6; i++) DB.push(dabMask(300 + i));
+    for (let i = 0; i < 6; i++) DT.push(dotMask(400 + i));
+    for (let i = 0; i < 4; i++) SM.push(smudgeMask(500 + i));
+    tintAll(); buildPaper(); buildDeep(); buildHeavens(); buildEarth(); buildClouds(); buildEden();
+  },
+  draw });
+</script>
+</body>
+</html>

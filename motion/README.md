@@ -1,31 +1,33 @@
-# 모션그래픽 (한눈에 보는 성경 이야기)
+# 영상 (한눈에 보는 성경 이야기 — 21장면, 약 14분)
 
-사이트 한국어 본문(13장면 · 복음의 핵심 · 영접 기도)을 약 4분짜리 모션그래픽으로 만든 것입니다.
-성경 인용은 사이트와 같은 개역개정 원문 그대로입니다.
+사이트의 큰 줄거리를 21개 장면으로 만든 영상입니다. 장면마다 다른 화풍(수묵, 그림자극, 스테인드글라스, 필름…)으로
+**코드로 그리며**, https://one-scroll-bible.com/film/ 에서 브라우저가 실시간으로 그립니다(영상 파일 없음).
+성경 인용은 원문 그대로입니다(한국어 개역개정, 각 언어는 사이트 팩과 같은 성경).
 
-- `index.html` — 브라우저에서 바로 재생 (화면 비율에 따라 가로/세로 자동, 버튼으로 전환)
-- `render.mjs` — 프레임 단위로 MP4 녹화
-  ```
-  node motion/render.mjs h   # 1920×1080 → motion/out/one-scroll-bible-h.mp4
-  node motion/render.mjs v   # 1080×1920 → motion/out/one-scroll-bible-v.mp4
-  node motion/render.mjs h --stills 20,98   # 확인용 정지 화면
-  ```
-  Playwright(Chromium) + ffmpeg, 로컬에 설치된 Noto Sans KR / Noto Serif KR 글꼴이 필요합니다.
-
-`motion/`은 사이트에 배포되지 않고(`.vercelignore`), 녹화 결과 `motion/out/`은 커밋하지 않습니다.
-
-## 시안 (`pilot/`)
-
-주제마다 다른 화풍으로 만든 장면 시안입니다. 화풍은 lemo-opuscar(MIT)의 스타일 지침을 참고했고, 그림과 소리는 모두 코드로 만듭니다.
-
-| 파일 | 장면 | 화풍 |
-|---|---|---|
-| `pilot/patriarch.html` | 03 족장 시대 (창 15:5) | 해 질 녘 소프트 파스텔 |
-| `pilot/cross.html` | 11 십자가 (눅 23:44 · 사 53:5 · 요 19:30) | 흑백 필름에 빨강 하나 → 렘브란트 탑라이트 유화 |
-| `pilot/rise.html` | 12 부활 (마 28:6) | 임파스토(팔레트 나이프) — 회색 세상이 색으로 다시 칠해짐 |
+| 위치 | 무엇 |
+|---|---|
+| `pilot/<scene>.html` | 장면 21개 (한 파일 = 한 장면). 공통 하네스 `pilot/lib.js` |
+| `pilot/<scene>.sound.json` · `pilot/mix.py` | 음악·효과음 큐(ElevenLabs) → `pilot/<scene>.wav` |
+| `pilot/i18n/<lang>/<scene>.json` | 번역 파일 — `"한국어 원문": "번역"` (`_ui.json` 플레이어 문구, `_fonts.json` 글꼴) |
+| `i18n-scan.mjs` · `i18n-merge.mjs` | 번역할 문구 목록 / 누락·누출 검사 · 언어별 파일 합치기 |
+| `sheets.mjs` | 언어별 확인용 컨택트시트 (장면 × 가로·세로) |
+| `poster.sh` | 언어별 포스터(제목 카드) |
+| `publish-film.py` | 사이트용 게시 → `film/s/` (장면·글꼴 서브셋·m4a·번역 파일) |
+| `render.mjs` · `assemble.py` | (선택) MP4 녹화 — 정지 화면 확인은 `--stills` |
+| `I18N.md` · `pilot/SCENES.md` | 번역 지침(상세) · 장면 설명 |
 
 ```
-python3 motion/pilot/mix.py                           # ElevenLabs 음악·효과음(pilot/audio/*.mp3)을 장면 타이밍에 맞춰 믹스 → pilot/*.wav
-python3 motion/pilot/sound.py                         # (대안) ElevenLabs 없이 numpy로 소리 합성
-node motion/render.mjs h --page pilot/cross.html      # → motion/out/cross-h.mp4 (같은 이름의 .wav를 자동으로 합침)
+node motion/render.mjs h --page pilot/cross.html --stills 3,12          # 정지 화면 → motion/out/
+node motion/render.mjs v --page pilot/cross.html --lang en --stills 3   # 세로 · 영어
+python3 motion/pilot/mix.py cross                                        # 소리 믹스
+python3 motion/publish-film.py                                           # 사이트에 게시(film/s/)
 ```
+필요: Node + Playwright(Chromium), ffmpeg, Python 3(numpy · fonttools+brotli), `~/.local/share/fonts`의 Noto 글꼴.
+`motion/`은 배포되지 않고(`.vercelignore`), `motion/out/`은 커밋하지 않습니다.
+
+## 영상 번역 (새 언어 추가)
+절차는 **`/add-film-language` 스킬**(`.claude/skills/add-film-language/SKILL.md`)에 있습니다 — 번역 → 검사
+(`i18n-scan`, 컨택트시트) → 원어민 검토(`review-prompt.md`) → 포스터·버튼·게시. 사람이 직접 번역할 때도 같은 파일
+형식(`pilot/i18n/<lang>/<scene>.json`)이면 됩니다 — `CONTRIBUTING.md`의 "D · 영상 번역"을 보세요.
+
+같은 방식을 다른 프로젝트에서 쓰려면 재사용 가능한 스킬 **canvas-film** (github.com/jungrok5/motion-skills)을 쓰면 됩니다.

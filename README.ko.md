@@ -71,12 +71,20 @@
 
 자세한 절차는 스킬의 `SKILL.md`에 있습니다.
 
+**영상** (`/film/` — 장면마다 다른 화풍의 21장면, 브라우저가 언어별로 실시간으로 그림): 장면·소리·도구는 `motion/`
+(`motion/README.md` 참고). **`/add-film-language` 스킬**(`.claude/skills/add-film-language/`) — 사이트에 이미 있는 언어로
+영상을 번역: 장면별 번역 파일, 성경 원문 그대로, `motion/i18n-scan.mjs`·`motion/sheets.mjs` 검사, 원어민 검토 프롬프트,
+`motion/poster.sh`, 게시. 같은 파이프라인을 다른 프로젝트에서도 쓰도록 **canvas-film** 스킬로 묶어 두었습니다 —
+[jungrok5/motion-skills](https://github.com/jungrok5/motion-skills).
+
 ## 함께 번역하기 (Contribute) — 다 같이, 모든 언어로
 이 일은 **다 같이** 할 때 빨라집니다. 당신의 언어를 더하거나 다듬어 주세요. **코딩 지식은 필요 없고, 번역(텍스트)만** 손보면 됩니다 — 빌드·이미지·구절 링크·배포는 관리자가 합니다.
 
 - ✏️ **문구 고치기 (제일 쉬움)**: GitHub에서 `i18n/<언어코드>.json` 을 열고 연필(Edit) → 문장 수정 → *Propose changes* → *Pull request*. 끝.
 - 🌍 **새 언어 추가**: `i18n/en.json` 을 복사해 `i18n/<코드>.json` 으로 만들고 값을 번역 → Pull request.
 - 📜 **딱 두 가지만**: ① 성경 인용은 **당신 언어 공인 번역본 그대로(verbatim)** — 의역 금지(실제 성경에서 복사). ② **키·HTML 태그·구조는 그대로**, 값(문장)만 번역.
+
+- 🎬 **영상 번역**: 장면마다 작은 JSON 파일 하나(`motion/pilot/i18n/<code>/`) — CONTRIBUTING의 *D · 영상 번역하기* 참고.
 
 자세한 단계는 **[CONTRIBUTING.ko.md](CONTRIBUTING.ko.md)** (한국어) · **[CONTRIBUTING.md](CONTRIBUTING.md)** (English). 질문은 [이슈](../../issues)로.
 

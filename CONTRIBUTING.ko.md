@@ -45,6 +45,18 @@
 
 ⭐ **가장 좋은 건 둘의 결합** — Claude가 초안+verbatim 검증, 원어민이 자연스러움 검수.
 
+### D · 영상 번역하기 (`/film/`)
+21장면 영상은 브라우저가 실시간으로 그리므로, 언어 하나를 더하는 일은 **텍스트 파일 작업**입니다(영상 편집 없음).
+- 파일: `motion/pilot/i18n/<code>/<scene>.json` — 장면마다 하나, 내용은 `{ "한국어 원문 그대로": "번역" }`
+  (+ 플레이어 문구 `_ui.json`). 완성된 언어 폴더(예: `en/`)를 복사해 값만 바꾸세요 — **번역은 한국어 키에서**,
+  줄바꿈 `\n`은 그 언어에서 끊고 싶은 곳에.
+- 규칙은 같습니다: 성경은 그 언어 사이트 팩이 쓰는 성경(`i18n/<code>.json`의 `ui.version`)에서 **원문 그대로**,
+  사이트에도 있는 문장은 `i18n/<code>.json` 문구를 그대로.
+- 그 언어가 먼저 사이트에 있어야 합니다(B/C 먼저).
+- Claude Code로: *"`/add-film-language` 스킬로 «언어»를 영상에 추가해줘."* — 번역, 장면별 검사(`motion/i18n-scan.mjs`,
+  `motion/sheets.mjs` 컨택트시트), 원어민 검토(`.claude/skills/add-film-language/review-prompt.md`), 포스터·영상 버튼 준비까지 합니다.
+- PR을 열면 관리자가 `/film/?lang=<code>`에 게시합니다.
+
 ## 두 자매 페이지 (`/about/`, `/maps/`)
 메인 스크롤 외에, 사이트에는 **자체 팩**을 쓰는 두 페이지가 있습니다 — `i18n/about/<code>.json`, `i18n/maps/<code>.json`. **같은 두 규칙**(구절 verbatim · 키/HTML/구조 유지)을 따릅니다. 보통 메인테이너가 `/add-language` 스킬 §9로 확장하므로, 새 언어는 메인 `i18n/<code>.json`부터 하면 됩니다 — 물론 `i18n/about`·`i18n/maps`를 각 `en.json` 템플릿에서 번역하는 PR도 환영합니다. 각 팩의 히어로 절 텍스트(`s.verse`)는 메인테이너의 verbatim 도구가 채우니 그대로 두고, 나머지를 번역하세요.
 

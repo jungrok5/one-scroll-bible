@@ -28,9 +28,10 @@
     CanvasRenderingContext2D.prototype[k] = function (t, ...r) { if (HANGUL.test(String(t))) P.drawn.add(String(t)); return f.call(this, t, ...r); }; }
   // a counted phrase: Pilot.trn('{n}년', n) — the language file may add plural forms by CLDR category,
   // e.g. "{n}년#one": "{n} año", "{n}년#two": "سنتان", "{n}년#few": "{n} سنوات"; otherwise the plain key is used.
+  // An exact number wins over the category: "{n}년#=1": "{n} ano" (for languages whose CLDR "one" also covers 0, e.g. pt).
   P.trn = (key, n) => {
     let cat = 'other'; try { cat = new Intl.PluralRules(P.lang).select(n); } catch (e) {}
-    const f = P.lang !== 'ko' && P.L[key + '#' + cat];
+    const ex = P.lang !== 'ko' && P.L[key + '#=' + n], f = ex != null && ex !== false ? ex : P.lang !== 'ko' && P.L[key + '#' + cat];
     return String(f != null && f !== false ? f : P.tr(key)).replace('{n}', n);
   };
   // user-perceived characters (keeps combining marks and syllable clusters together for typewriter effects)

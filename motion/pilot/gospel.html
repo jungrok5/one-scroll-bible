@@ -19,7 +19,9 @@
    Same beat grid as the score (101 BPM: B = one beat), so cues land on the music. */
 const { clamp, lerp, ss, eo, eio, win, rng, noise, canvas, speckle } = Pilot;
 const W = Pilot.W, H = Pilot.H, V = Pilot.ori === 'v';
-const B = 4.75 / 8, T0 = 4 * B, ITEM = 8 * B, T7 = T0 + 6 * ITEM, DUR = 40;
+// each truth gets 14 beats (≈ 8.3 s) — time to read the verse and watch it drawn; the drawings run on an 8-beat clock (KA)
+// slowed to fit, and the last truth is held before the cross (FS)
+const B = 4.75 / 8, IB = 14, KA = 8 / IB, T0 = 4 * B, ITEM = IB * B, T7 = T0 + 6 * ITEM, FS = 3.2, DUR = T7 + 9.2 + FS + 2.2;
 const SANS = "'Noto Sans KR',sans-serif", SERIF = "'Noto Serif KR',serif";
 const GOLD = '255,212,138', WARM = '255,244,222', ASH = '150,144,136';
 // hl: the line's height · eh/ew: the room above it for each drawing · tt/ts/tl: title y/size/leading · vs/vl/vw: verse size/leading/width
@@ -42,7 +44,7 @@ const CORE = [
 ];
 
 // ---------- camera and line ----------
-const PAN = i => T0 + i * ITEM + 6.8 * B;              // the camera leaves truth i …
+const PAN = i => T0 + i * ITEM + (IB - 1.2) * B;              // the camera leaves truth i …
 function camX(t) { let p = 0; for (let i = 0; i < 6; i++) p += eio(clamp((t - PAN(i)) / (1.5 * B))); return p * SP + 4 * Math.sin(t * .4); }
 function headX(t) {                                    // how far the line has drawn (world x)
   const i0 = T0 + .5 * B; if (t < i0) return lerp(-W * .62, LY.ew * .55, eio(clamp((t - .3) / (i0 - .3))));
@@ -188,7 +190,7 @@ function grade(ctx, t) {
 // ---------- frame ----------
 const verseLines = [];
 function draw(ctx, t) {
-  const cx = camX(t), f = t - T7;
+  const cx = camX(t), f = t - T7 - FS;   // f: time into the finale
   room(ctx, t, cx);
   // the line: from off-screen left to its head; in the finale it gives itself up to the cross
   const hx = headX(t), lo = cx - W * .6, la = 1 - ss(2.6, 3.8, f);
@@ -202,9 +204,9 @@ function draw(ctx, t) {
   say(ctx, '복음의 핵심 7가지', W / 2, LY.hl - LY.eh * .45, { size: V ? 70 : 66, weight: 600, alpha: win(t, .5, T0 + .3, .8, .5), maxW: W - 160, glow: 20 });
 
   for (let i = 0; i < 7; i++) {
-    const s = T0 + i * ITEM, e = i < 6 ? s + 6.9 * B : T7 + 2.8; if (t < s - .1 || t > e + 1.2) continue;
+    const s = T0 + i * ITEM, e = i < 6 ? s + (IB - 1.1) * B : T7 + 2.8 + FS; if (t < s - .1 || t > e + 1.2) continue;
     const c = CORE[i], b = (t - s) / B, ox = i * SP - cx + W / 2, oy = LY.hl, out = 1 - ss(e - .45, e, t);
-    if (ox > -W * .7 && ox < W * 1.7) { ctx.save(); ctx.globalAlpha = i === 6 ? out : 1; ART[i](ctx, b, ox, oy); ctx.restore(); }
+    if (ox > -W * .7 && ox < W * 1.7) { ctx.save(); ctx.globalAlpha = i === 6 ? out : 1; ART[i](ctx, b * KA, ox, oy); ctx.restore(); }
     // title and Scripture: like a title card and its subtitle, they come and go with the truth
     const tl = c.t.map(x => Pilot.tr(x)).filter(Boolean);
     tl.forEach((ln, j) => { const a = ss(s + (.2 + j * .15) * B, s + (.2 + j * .15) * B + .7, t) * out;
@@ -227,12 +229,12 @@ function draw(ctx, t) {
     const hg = ctx.createRadialGradient(X, Y, 0, X, Y, 120); hg.addColorStop(0, `rgba(${WARM},${.7 * ss(3.4, 3.6, f)})`); hg.addColorStop(1, `rgba(${GOLD},0)`);
     ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.fillStyle = hg; ctx.fillRect(X - 120, Y - 120, 240, 240); ctx.restore();
     // “다 이루었다” — the only words left
-    const fx = RTL() ? W - FIN.x : FIN.x, al = RTL() ? 'right' : 'left', fw = V ? FIN.X - 36 - FIN.x - 30 : W - FIN.x - 96, a1 = ss(T7 + 4.5, T7 + 5.4, t);
+    const fx = RTL() ? W - FIN.x : FIN.x, al = RTL() ? 'right' : 'left', fw = V ? FIN.X - 36 - FIN.x - 30 : W - FIN.x - 96, a1 = ss(T7 + FS + 4.5, T7 + FS + 5.4, t);
     say(ctx, '다 이루었다', fx, FIN.y + 12 * (1 - a1), { size: FIN.size, weight: 900, align: al, color: '#fff6e2', alpha: a1, maxW: fw, glow: 30 });
-    say(ctx, '요한복음 19:30 (개역개정)', fx, FIN.cite, { size: 22, font: SANS, align: al, color: '#a89a82', ls: 1, alpha: ss(T7 + 4.9, T7 + 5.6, t) * .9, maxW: fw });
+    say(ctx, '요한복음 19:30 (개역개정)', fx, FIN.cite, { size: 22, font: SANS, align: al, color: '#a89a82', ls: 1, alpha: ss(T7 + FS + 4.9, T7 + FS + 5.6, t) * .9, maxW: fw });
     ['우리가 아직 죄인 되었을 때에', '그리스도께서 우리를 위하여 죽으심으로'].forEach((ln, j) =>
-      say(ctx, ln, fx, FIN.r[0] + j * FIN.r[2], { size: FIN.r[1], weight: 600, align: al, color: '#efe4cf', alpha: ss(T7 + 5.2 + j * .15, T7 + 6 + j * .15, t), maxW: fw }));
-    say(ctx, '로마서 5:8 (개역개정)', fx, FIN.rc, { size: 22, font: SANS, align: al, color: '#a89a82', ls: 1, alpha: ss(T7 + 5.6, T7 + 6.3, t) * .9, maxW: fw });
+      say(ctx, ln, fx, FIN.r[0] + j * FIN.r[2], { size: FIN.r[1], weight: 600, align: al, color: '#efe4cf', alpha: ss(T7 + FS + 5.2 + j * .15, T7 + FS + 6 + j * .15, t), maxW: fw }));
+    say(ctx, '로마서 5:8 (개역개정)', fx, FIN.rc, { size: 22, font: SANS, align: al, color: '#a89a82', ls: 1, alpha: ss(T7 + FS + 5.6, T7 + FS + 6.3, t) * .9, maxW: fw });
   }
   grade(ctx, t);
   const k = 1 - ss(0, .9, t) + ss(DUR - .8, DUR, t); if (k > 0) { ctx.fillStyle = `rgba(0,0,0,${clamp(k)})`; ctx.fillRect(0, 0, W, H); }

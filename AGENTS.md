@@ -73,6 +73,10 @@ Protestant church; Korean Revised Version (개역개정) as the Korean baseline.
 - GA4 events: language_select · share{method} · scene_view · section_view · prayer_view · read_more.
 - `vercel.json` (`buildCommand = node tools/build-pages.mjs` + security/cache headers), `robots.txt`.
   **`.vercelignore` keeps `AGENTS.md`, `CLAUDE.md` and `.claude` out of the deploy.**
+- **Film** (`/film/`): 21 canvas scenes drawn live per language — sources in `motion/` (see `motion/README.md`), published
+  copies in `film/s/` (`python3 motion/publish-film.py`). Korean scene strings are translation keys shared by every language —
+  change looks/timing freely, but changing a Korean string drops that line in every language until re-translated.
+  New film language → the **/add-film-language skill** (`.claude/skills/add-film-language/`).
 - `.claude/skills/add-language/` — the **/add-language skill**. Follow its `SKILL.md` when adding a
   language. Helpers in `lib/`: detect-mode (probe sources → recommend mode) · validate · audit-links ·
   integrate · convert-digits · fetch-verse · verify-verbatim · verify-inline · verify-prose · native-review-prompt.

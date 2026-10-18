@@ -71,12 +71,20 @@ Site builds and language additions are automated by in-repo scripts and a Claude
 
 Full procedure lives in the skill's `SKILL.md`.
 
+**The film** (`/film/` — 21 scenes, each in its own visual style, drawn live in the browser in every language that has one):
+scenes, sound and tools are in `motion/` (see `motion/README.md`). **`/add-film-language` skill**
+(`.claude/skills/add-film-language/`) — translate the film into a language the site already has: per-scene translation files,
+verbatim Scripture, `motion/i18n-scan.mjs` + `motion/sheets.mjs` checks, a native-review prompt, `motion/poster.sh`, publish.
+The same pipeline is packaged for reuse in any project as the **canvas-film** skill — [jungrok5/motion-skills](https://github.com/jungrok5/motion-skills).
+
 ## Contribute — together, in every language
 This goes faster **together**. Please add or polish your language. **You don't need to code — just the text**; the maintainer handles building, images, verse links and deployment.
 
 - ✏️ **Fix wording (easiest)**: on GitHub, open `i18n/<code>.json`, click the pencil (Edit), change the text, then *Propose changes* → *Pull request*. Done.
 - 🌍 **Add a language**: copy `i18n/en.json` to `i18n/<code>.json`, translate the values → Pull request.
 - 📜 **Just two rules**: ① Bible quotes must be **verbatim from your language's official translation** — no paraphrase (copy from a real Bible). ② **Keep the keys, HTML tags and structure**; translate only the values.
+
+- 🎬 **Translate the film**: one small JSON file per scene (`motion/pilot/i18n/<code>/`) — see *D · Translate the film* in CONTRIBUTING.
 
 Full step-by-step: **[CONTRIBUTING.md](CONTRIBUTING.md)** (English) · **[CONTRIBUTING.ko.md](CONTRIBUTING.ko.md)** (한국어). Questions → [issues](../../issues).
 

@@ -929,8 +929,8 @@ function draw(ctx, t) {
   const vg = ctx.createRadialGradient(W / 2, H / 2, Math.min(W, H) * .42, W / 2, H / 2, Math.max(W, H) * .78); vg.addColorStop(0, 'rgba(20,10,4,0)'); vg.addColorStop(1, 'rgba(20,10,4,.5)'); ctx.fillStyle = vg; ctx.fillRect(0, 0, W, H);
   // words
   Pilot.text(ctx, '18  ·  성경은 실화인가', RTL ? W - (V ? 80 : 110) : (V ? 80 : 110), V ? 200 : 116, { align: RTL ? 'right' : 'left', size: 30, weight: 600, color: '#f6ecd8', shadow: 'rgba(10,5,2,.9)', shadowBlur: 12, alpha: win(t, .8, 5.4, 1, 1), ls: 4, maxW: W * .6 });
-  sub(ctx, V ? '그런데도 ‘그리스도를 통한 구원’이라는\n하나의 주제로 흐트러짐 없이 모입니다.' : '그런데도 ‘그리스도를 통한 구원’이라는 하나의 주제로 흐트러짐 없이 모입니다.', win(t, 12.4, 17.0, .6, .6));
-  sub(ctx, '땅속에서 계속 확인됩니다(고고학).', win(t, 17.2, V ? 20.0 : 21.9, .6, .6));   // portrait: gone before the camera brings the Pilate photo under it
+  sub(ctx, V ? '그런데도 ‘그리스도를 통한 구원’이라는\n하나의 주제로 흐트러짐 없이 모입니다.' : '그런데도 ‘그리스도를 통한 구원’이라는 하나의 주제로 흐트러짐 없이 모입니다.', V ? win(t, 12.4, 16.5, .6, .5) : win(t, 12.4, 17.0, .6, .6));
+  sub(ctx, '땅속에서 계속 확인됩니다(고고학).', V ? win(t, 16.6, 19.55, .5, .5) : win(t, 17.2, 21.9, .6, .6));   // portrait: on the desk below the book, gone before the camera brings the Pilate photo under it
   sub(ctx, '가장 잘 보존된 고대 문서입니다(사본).', win(t, 28.6, 33.4, .6, .6));
   const ty = V ? 520 : 150, st = { weight: 600, color: '#fbf0dc', shadow: 'rgba(30,12,20,.95)', shadowBlur: 22 };
   Pilot.text(ctx, V ? '이 근거들은 성경을 믿는 것이 비합리적이지 않고\n오히려 합리적임을 보여줄 뿐,' : '이 근거들은 성경을 믿는 것이\n비합리적이지 않고 오히려 합리적임을 보여줄 뿐,', W / 2, ty, { ...st, size: V ? 40 : 46, alpha: win(t, 44.2, 48.6, 1, .6) });

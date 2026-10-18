@@ -555,7 +555,7 @@ const relO = (dx, dy) => t => { const p = oldP(t); return [p[0] + dx, p[1] + dy]
 const CAM = V ? [
   [0, [980, 560], 1.18], [6.2, [980, 580], 1.24], [9.4, [1300, 1350], .8], [13.4, relO(10, -250), 1.5], [15.2, relO(-30, -110), 2.0], [18.4, relO(20, -110), 2.0], [20.6, relO(0, -330), 1.3],
   [23.4, relO(60, -300), 1.22], [26.8, [3080, 1880], 1.05], [28.6, [3070, 1900], 1.1], [31.6, relO(-420, -200), .8], [35.0, relO(-490, -220), .86], [37.0, relO(-460, -120), 1.4], [41.6, relO(-560, -150), 1.4],
-  [44.5, relN(170, -170), 1.35], [49.0, relN(330, -230), 1.0], [52.0, [1560, 1120], .78], [57.5, [1620, 1100], .8]]
+  [44.5, relN(170, -170), 1.35], [49.0, relN(250, -230), .95], [52.0, [1560, 1200], .8], [57.5, [1600, 1190], .82]]
   : [
   [0, [980, 470], .98], [6.2, [980, 482], 1.04], [9.2, [1800, 1250], .54], [13.4, relO(10, -250), 1.3], [15.2, relO(-30, -110), 1.85], [18.4, relO(20, -110), 1.85], [20.6, relO(0, -300), 1.02],
   [23.4, relO(60, -290), .98], [26.8, [3080, 1880], 1.0], [28.6, [3070, 1900], 1.04], [31.6, [1700, 1350], .62], [35.0, relO(-490, -220), .9], [37.0, relO(-470, -130), 1.25], [41.6, relO(-560, -150), 1.25],
@@ -606,7 +606,7 @@ function draw(ctx, t) {
   { const L = .25 + .75 * ss(43, 52, t) + .06 * Math.sin(t * 1.3); ctx.save(); ctx.globalCompositeOperation = 'multiply'; const g = ctx.createRadialGradient(SUN[0], SUN[1], 0, SUN[0], SUN[1], 520); g.addColorStop(0, `rgba(240,196,96,${.42 * L})`); g.addColorStop(1, 'rgba(240,196,96,0)'); ctx.fillStyle = g; ctx.fillRect(SUN[0] - 520, SUN[1] - 520, 1040, 1040); ctx.restore(); }
   routes(ctx, t, so, sn);
   // question in the title cartouche (engraved lettering, inked in at the start)
-  text(ctx, V ? '예수님 안 믿어도,\n그냥 착하게 살면\n되는 것 아닌가요?' : '예수님 안 믿어도,\n그냥 착하게 살면 되는 것 아닌가요?', CART.x, CART.y - (V ? 64 : 26), { size: CART.fs, weight: 600, color: '#24180E', alpha: ss(.9, 2.4, t) * (1 - .75 * ss(49.2, 50.6, t)), lh: 1.42, maxW: CART.w - 110 });
+  text(ctx, V ? '예수님 안 믿어도,\n그냥 착하게 살면\n되는 것 아닌가요?' : '예수님 안 믿어도,\n그냥 착하게 살면 되는 것 아닌가요?', CART.x, CART.y - (V ? 64 : 26), { size: CART.fs, weight: 600, color: '#24180E', alpha: ss(.9, 2.4, t) * (1 - (V ? 1 : .75) * ss(49.2, 50.6, t)), lh: 1.42, maxW: CART.w - 110 });
   harbourName(ctx);
   // ships: the lit one (farther) first, then the pirate ship, then the boat
   const boatOn = t > 33.9, inBoat = hs.layer === 'boat';
@@ -641,8 +641,9 @@ function draw(ctx, t) {
   say(ctx, '그래서 복음은 “더 착해져라”가 아니라\n“배를 옮겨 타라”고 말합니다.', win(t, 36.5, 42.7, .6, .5));
   say(ctx, '죄의 배에서 내려, 예수님께로 —\n하나님의 자녀라는 새 신분으로 건너가는 것입니다.', win(t, 42.9, 49.3, .6, .5));
   const va = win(t, 49.7, DUR - .25, .9, .6);
-  if (va > 0) { const vy = V ? 330 : 128, vs = V ? 46 : 50, maxW = W - (V ? 90 : 200);
-    ctx.save(); ctx.globalAlpha = va; ctx.translate(W / 2, vy + vs * 1.3); ctx.scale(Math.min(W * .6, 900), vs * 3.2); const g = ctx.createRadialGradient(0, 0, 0, 0, 0, 1); g.addColorStop(0, 'rgba(242,232,206,.92)'); g.addColorStop(.6, 'rgba(242,232,206,.75)'); g.addColorStop(1, 'rgba(242,232,206,0)'); ctx.fillStyle = g; ctx.beginPath(); ctx.arc(0, 0, 1, 0, TAU); ctx.fill(); ctx.restore();
+  if (va > 0) {   // portrait: a wider, denser clearing, so the cartouche and the big rose along the top stay quiet under the verse
+    const vy = V ? 330 : 128, vs = V ? 46 : 50, maxW = W - (V ? 90 : 200);
+    ctx.save(); ctx.globalAlpha = va; ctx.translate(W / 2, vy + vs * 1.3); ctx.scale(V ? W * .78 : Math.min(W * .6, 900), vs * (V ? 4 : 3.2)); const g = ctx.createRadialGradient(0, 0, 0, 0, 0, 1); g.addColorStop(0, `rgba(242,232,206,${V ? .95 : .92})`); g.addColorStop(.6, `rgba(242,232,206,${V ? .86 : .75})`); g.addColorStop(1, 'rgba(242,232,206,0)'); ctx.fillStyle = g; ctx.beginPath(); ctx.arc(0, 0, 1, 0, TAU); ctx.fill(); ctx.restore();
     const vt = '“그가 우리를 흑암의 권세에서 건져내사\n그의 사랑의 아들의 나라로 옮기셨으니”';
     text(ctx, vt, W / 2, vy, { size: vs, weight: 600, color: 'rgba(239,227,196,1)', alpha: va, shadow: 'rgba(239,227,196,1)', shadowBlur: 16, maxW });
     text(ctx, vt, W / 2, vy, { size: vs, weight: 600, color: '#24180E', alpha: va, maxW });

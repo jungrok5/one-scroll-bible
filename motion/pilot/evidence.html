@@ -882,7 +882,7 @@ function spreadAt(t) { for (let i = 0; i < 3; i++) { if (t < TURN[i]) return { k
 // ================= camera =================
 // [time, x, y, zoom, glide] — world: the book's gutter at 0, a page is 1400 × 1900; glide = ease with a slight pull-back on the way
 const CKH = [[0, -760, -600, 1.06], [4.4, -720, -400, 1.0], [5.7, 640, -500, 1.0, 1], [7.2, 660, -420, 1.0], [10.2, 680, -40, .98], [11.4, 690, 90, .96], [13.0, 100, 70, .58], [15.0, 0, 20, .56],
-  [16.4, 0, 0, .55], [17.2, -40, 0, .56], [18.4, -680, 100, .84, 1], [19.7, -636, 206, .88], [20.3, 650, -175, .87, 1], [22.2, 660, -160, .9], [23.2, 700, 580, .98, 1], [25.8, 680, 580, .97], [27.0, 0, 0, .56],
+  [16.4, 0, 0, .55], [17.2, -40, 0, .56], [18.4, -680, 100, .84, 1], [20.0, -636, 206, .88], [20.6, 650, -175, .87, 1], [22.2, 660, -160, .9], [23.2, 700, 580, .98, 1], [25.8, 680, 580, .97], [27.0, 0, 0, .56],
   [28.2, 0, -100, .56], [29.0, -700, -420, .92, 1], [30.2, -700, -390, 1.0], [31.1, -700, 400, 1.0, 1], [35.2, -690, 410, 1.02], [36.3, 660, -290, .98, 1], [37.9, 670, -250, .98], [38.7, 640, 470, .98, 1], [39.8, 600, 450, .98], [41.0, 100, 150, .62], [41.6, 0, 0, .56],
   [43.0, 0, 0, .56], [43.8, 60, 20, .6], [47.6, 150, 120, .86], [60, 150, 112, .885]];
 const CKV = [[0, -720, -440, .85], [4.4, -720, -260, .87], [5.7, 700, -380, .86, 1], [7.2, 700, -330, .86], [10.2, 700, 0, .86], [11.4, 700, 80, .84], [13.0, 360, 40, .6], [15.0, 0, 0, .5],
@@ -898,11 +898,11 @@ function camAt(t) {
 }
 
 // ================= words on screen =================
-function sub(ctx, s, a) {                 // subtitle: cream, lower third, a soft shade behind (no box)
+function sub(ctx, s, a, ybAt) {                 // subtitle: cream, lower third, a soft shade behind (no box)
   if (a <= .003) return; s = tr(s); const lines = s.split('\n'); let size = V ? 40 : 36;
   ctx.save(); ctx.font = `400 ${size}px ${SANS}`; if (RTL) ctx.direction = 'rtl';
   const maxW = W - (V ? 120 : 260); let wd = Math.max(...lines.map(l => ctx.measureText(l).width)); if (wd > maxW) { size *= maxW / wd; ctx.font = `400 ${size}px ${SANS}`; wd = maxW; }
-  const lh = size * 1.5, yb = V ? H - 300 : H - 96, y0 = yb - (lines.length - 1) * lh, cy = y0 - size * .35 + (lines.length - 1) * lh / 2, rx = wd / 2 + 160, ry = lines.length * lh / 2 + 60;
+  const lh = size * 1.5, yb = ybAt || (V ? H - 300 : H - 96), y0 = yb - (lines.length - 1) * lh, cy = y0 - size * .35 + (lines.length - 1) * lh / 2, rx = wd / 2 + 160, ry = lines.length * lh / 2 + 60;
   ctx.globalAlpha = a; ctx.save(); ctx.translate(W / 2, cy); ctx.scale(1, ry / rx); const g = ctx.createRadialGradient(0, 0, 0, 0, 0, rx);
   g.addColorStop(0, 'rgba(22,12,6,.55)'); g.addColorStop(.55, 'rgba(22,12,6,.35)'); g.addColorStop(1, 'rgba(22,12,6,0)'); ctx.fillStyle = g; ctx.fillRect(-rx, -rx, 2 * rx, 2 * rx); ctx.restore();
   ctx.textAlign = 'center'; ctx.fillStyle = '#fbf1dc'; ctx.shadowColor = 'rgba(16,8,2,.95)'; ctx.shadowBlur = 12; lines.forEach((l, i) => ctx.fillText(l, W / 2, y0 + i * lh));
@@ -932,8 +932,8 @@ function draw(ctx, t) {
   // at the top of the left page, right-aligned clear of the handwritten heading, gone before the camera glides across the gutter
   if (V) Pilot.text(ctx, '18  ·  성경은 실화인가', RTL ? W - 80 : 80, 200, { align: RTL ? 'right' : 'left', size: 30, weight: 600, color: '#f6ecd8', shadow: 'rgba(10,5,2,.9)', shadowBlur: 12, alpha: win(t, .8, 5.4, 1, 1), ls: 4, maxW: W * .6 });
   else Pilot.text(ctx, '18  ·  성경은 실화인가', 1540, 116, { align: 'right', size: 30, weight: 600, color: '#3e2a1c', shadow: 'rgba(250,240,220,.7)', shadowBlur: 8, alpha: win(t, .8, 4.6, 1, .8), ls: 4, maxW: 900 });
-  sub(ctx, V ? '그런데도 ‘그리스도를 통한 구원’이라는\n하나의 주제로 흐트러짐 없이 모입니다.' : '그런데도 ‘그리스도를 통한 구원’이라는 하나의 주제로 흐트러짐 없이 모입니다.', V ? win(t, 12.4, 16.5, .6, .5) : win(t, 12.4, 16.9, .6, .5));
-  sub(ctx, '땅속에서 계속 확인됩니다(고고학).', V ? win(t, 16.6, 19.55, .5, .5) : win(t, 17.45, 19.95, .45, .35));   // gone before the camera glides over the Pilate photo to the Tel Dan page (portrait: it sits on the desk below the book)
+  sub(ctx, V ? '그런데도 ‘그리스도를 통한 구원’이라는\n하나의 주제로 흐트러짐 없이 모입니다.' : '그런데도 ‘그리스도를 통한 구원’이라는 하나의 주제로 흐트러짐 없이 모입니다.', V ? win(t, 12.4, 16.5, .6, .5) : win(t, 12.4, 16.7, .6, .45));
+  sub(ctx, '땅속에서 계속 확인됩니다(고고학).', V ? win(t, 16.8, 21.6, .6, .6) : win(t, 16.8, 20.55, .5, .4), V ? 200 : 0);   // portrait: up on the dark desk above the book, clear of the photos; landscape: over the dig, gone before the camera reaches the Pilate photo   // gone before the camera glides over the Pilate photo to the Tel Dan page (portrait: it sits on the desk below the book)
   sub(ctx, '가장 잘 보존된 고대 문서입니다(사본).', win(t, 28.6, 33.4, .6, .6));
   const ty = V ? 520 : 150, st = { weight: 600, color: '#fbf0dc', shadow: 'rgba(30,12,20,.95)', shadowBlur: 22 };
   Pilot.text(ctx, V ? '이 근거들은 성경을 믿는 것이 비합리적이지 않고\n오히려 합리적임을 보여줄 뿐,' : '이 근거들은 성경을 믿는 것이\n비합리적이지 않고 오히려 합리적임을 보여줄 뿐,', W / 2, ty, { ...st, size: V ? 40 : 46, alpha: win(t, 44.2, 48.6, 1, .6) });

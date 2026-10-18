@@ -1,26 +1,88 @@
-{ "duration": 35,
-  "music": [
-    { "id": "m1", "at": 0, "len": 20, "db": -3, "fin": 1.0, "fout": 0.3,
-      "prompt": "Gentle event-driven pentatonic piece for marimba, kalimba and soft celesta over a warm airy pad, calm and expectant at first; after about 5 seconds a warm swell, then from 9 seconds a bright plucked ostinato that grows denser note by note (halves to quarters to eighths) like something being built, light shaker joins, hopeful and joyful, steady 96 bpm, no piano, no strings" },
-    { "id": "m2", "at": 20, "len": 15, "db": -2, "fin": 0.1, "fout": 2.0,
-      "prompt": "Wide, luminous orchestral-free finale: a deep warm synth pad and soft choir 'aah', bells and vibraphone sparkling in widening rings, a slow majestic rise that blooms gently and resolves on a sustained major chord; awe, worldwide, hopeful; no drums, no piano" }
-  ],
-  "sfx": [
-    { "id": "s1", "at": 0.3, "len": 9, "db": -16, "loop": false,
-      "prompt": "Calm sea at dusk, soft low waves lapping on a small island shore, faint distant gulls" },
-    { "id": "s2", "at": 2.4, "len": 3.2, "db": -6, "loop": false,
-      "prompt": "Sudden rushing mighty wind sweeping around a small stone house, a strong airy whoosh that swirls and fades" },
-    { "id": "s3", "at": 3.6, "len": 2.6, "db": -8, "loop": false,
-      "prompt": "Several soft flames igniting one after another, gentle warm whooshes of fire, crackle" },
-    { "id": "s4", "at": 5.4, "len": 2.5, "db": -7, "loop": false,
-      "prompt": "Low warm whump as lights switch on, with a soft rising shimmer of a bell" },
-    { "id": "s5", "at": 8.9, "len": 3.0, "db": -10, "loop": false,
-      "prompt": "Many small wooden tiles rising out of water one after another, playful bubbly splashes and soft wooden knocks" },
-    { "id": "s6", "at": 11.0, "len": 3.0, "db": -14, "loop": false,
-      "prompt": "Small wooden sailing boat creaking softly, water lapping against the hull" },
-    { "id": "s7", "at": 14.6, "len": 4.0, "db": -12, "loop": false,
-      "prompt": "Distant islands rising from the sea, soft splashes in sequence, each followed by a tiny bright glass chime" },
-    { "id": "s8", "at": 19.7, "len": 4.0, "db": -6, "loop": false,
-      "prompt": "Airy whoosh rising into a deep soft cinematic boom with a long shimmering tail, like zooming out into space" }
-  ],
-  "ducks": [ { "from": 19.4, "to": 20.0, "db": -22 } ] }
+{
+ "duration": 35,
+ "music": [
+  {
+   "id": "m1",
+   "at": 0,
+   "len": 20,
+   "db": -3,
+   "fin": 1.0,
+   "fout": 0.3,
+   "prompt": "Cinematic orchestral score: hushed and intimate at first, a low sustained cello note and soft breathing strings in a dark quiet room; at about 2.5 seconds a sudden rushing swell of string tremolo and breathy choir, then at 4 seconds warm radiant strings and soft choir bloom in D major, glowing and joyful; from 9 seconds a gentle steady pulse of low strings and soft timpani as the music travels outward, growing, hopeful and spacious; no piano, no synths, no drum kit"
+  },
+  {
+   "id": "m2",
+   "at": 20,
+   "len": 15,
+   "db": -2,
+   "fin": 0.1,
+   "fout": 2.0,
+   "prompt": "Wide, awe-filled cinematic orchestral finale in D major: soft full choir and warm strings, a slow majestic rise with gentle bells sparkling high above, blooming and resolving on a long sustained major chord; reverent, worldwide, hopeful; no drums, no synths, no piano"
+  }
+ ],
+ "sfx": [
+  {
+   "id": "s1",
+   "at": 0.3,
+   "len": 9,
+   "db": -18,
+   "loop": false,
+   "prompt": "Quiet night inside a small stone room: faint soft crackle of a tiny oil lamp flame, very distant crickets outside, still and hushed"
+  },
+  {
+   "id": "s2",
+   "at": 2.4,
+   "len": 3.2,
+   "db": -6,
+   "loop": false,
+   "prompt": "Sudden rushing mighty wind sweeping around a small stone house, a strong airy whoosh that swirls and fades"
+  },
+  {
+   "id": "s3",
+   "at": 3.6,
+   "len": 2.6,
+   "db": -8,
+   "loop": false,
+   "prompt": "Several soft flames igniting one after another, gentle warm whooshes of fire, crackle"
+  },
+  {
+   "id": "s4",
+   "at": 5.4,
+   "len": 2.5,
+   "db": -9,
+   "loop": false,
+   "prompt": "Warm soft swell of firelight filling a room, a gentle airy bloom with a faint choir-like shimmer"
+  },
+  {
+   "id": "s5",
+   "at": 8.7,
+   "len": 2.6,
+   "db": -11,
+   "loop": false,
+   "prompt": "Airy whoosh gliding out through a window into open night air, soft wind rising and opening up wide"
+  },
+  {
+   "id": "s7",
+   "at": 12.0,
+   "len": 4.0,
+   "db": -16,
+   "loop": false,
+   "prompt": "Distant village bells softly ringing across dark night hills, far away and gentle, with a light breeze"
+  },
+  {
+   "id": "s8",
+   "at": 19.7,
+   "len": 4.0,
+   "db": -6,
+   "loop": false,
+   "prompt": "Airy whoosh rising into a deep soft cinematic boom with a long shimmering tail, like zooming out into space"
+  }
+ ],
+ "ducks": [
+  {
+   "from": 19.4,
+   "to": 20.0,
+   "db": -22
+  }
+ ]
+}

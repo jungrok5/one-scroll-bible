@@ -1,20 +1,18 @@
-{ "duration": 38,
+{ "duration": 34,
   "music": [
-    { "id": "m1h", "at": 1.0, "len": 23.4, "db": -6, "fin": 2.0, "fout": 2.0,
-      "prompt": "Very sparse, patient chamber music: a lone solo cello playing a slow, long-breathed melody with many rests, a soft sustained viola drone underneath, very slow tempo around 54 BPM, quiet and lonely like an empty room in afternoon light; after about eight seconds a soft piano begins a gentle repeating figure that slowly quickens, like days passing, then thins out again; wistful, waiting, no drums" },
-    { "id": "m2h", "at": 27.6, "len": 10.4, "db": -3, "fin": 0.2, "fout": 2.0,
-      "prompt": "A sudden soft arrival: a high shimmering string chord blooming out of silence, celesta and harp glittering on top, then a warm string ensemble and a soft wordless choir swelling slowly, major key, tender and full of quiet awe, ending on a long open sustained chord" }
+    { "id": "m1", "at": 0.6, "len": 23.6, "db": -4, "fin": 1.5, "fout": 1.2,
+      "prompt": "Quiet patient lullaby for felt piano and music box with soft harp, slow tempo around 66 BPM, a gentle steady pulse like a ticking clock, a simple repeating melody that returns again and again as seasons pass, warm but wistful, waiting and longing, very sparse, no drums" },
+    { "id": "m2", "at": 24.8, "len": 9.2, "db": -2, "fin": 0.3, "fout": 1.5,
+      "prompt": "Hopeful arrival: warm string ensemble swelling slowly from silence, celesta and harp glittering on top, a soft wordless choir, major key, tender and full of quiet joy, ending on a long open sustained chord" }
   ],
   "sfx": [
-    { "id": "s1h", "at": 0.8, "len": 22.0, "db": -26, "loop": false,
-      "prompt": "Quiet room tone in an old stone house in the day: faint distant birds outside a window, a soft breeze, almost silent" },
-    { "id": "s2h", "at": 9.0, "len": 14.0, "db": -22, "loop": false,
-      "prompt": "Slow steady ticking of an old wooden clock in a quiet room, gradually speeding up, soft and distant" },
-    { "id": "s3h", "at": 23.6, "len": 1.5, "db": -18, "loop": false,
-      "prompt": "A small oil lamp being lit: a soft match strike and a tiny flame catching" },
-    { "id": "s4h", "at": 24.6, "len": 3.0, "db": -26, "loop": false,
-      "prompt": "Night falling in a quiet village: a few faint crickets, very still" },
-    { "id": "s5h", "at": 27.6, "len": 3.0, "db": -8, "loop": false,
-      "prompt": "A clear bright bell chime with a long shimmering tail, like a new star appearing in the night sky" }
+    { "id": "s1", "at": 0.6, "len": 2.0, "db": -10, "loop": false,
+      "prompt": "Small lamp switch click followed by a soft rising warm shimmer of light" },
+    { "id": "s2", "at": 1.0, "len": 22.5, "db": -24, "loop": false,
+      "prompt": "Calm night ambience in a quiet village: distant crickets, a faint breeze, very soft and still" },
+    { "id": "s3", "at": 8.0, "len": 1.0, "db": -18, "loop": false,
+      "prompt": "Single soft wooden block tap, like a paper card sliding into place" },
+    { "id": "s4", "at": 24.8, "len": 3.0, "db": -8, "loop": false,
+      "prompt": "A clear bright bell chime with a long shimmering tail, like a new star appearing" }
   ],
-  "ducks": [ { "from": 26.6, "to": 27.6, "db": -26 } ] }
+  "ducks": [ { "from": 23.6, "to": 24.8, "db": -24 } ] }

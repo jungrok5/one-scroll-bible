@@ -484,9 +484,10 @@ function shotAnoint(x, t) {
 function banderole(m, b, lt, k) {
   const un = eio(clamp((lt - 3.2) / 1.4)); if (un <= 0) return;
   const two = V, txt = (two ? ['사람은 외모를 보거니와', '나 여호와는 중심을 보느니라'] : ['사람은 외모를 보거니와 나 여호와는 중심을 보느니라']).map(Pilot.tr);
-  let size = V ? 50 : 46; m.save(); m.font = `600 ${size}px 'Noto Serif KR'`; let tw = Math.max(...txt.map(s => m.measureText(s).width)) + 90;
-  if (Pilot.lang !== 'ko' && tw > b.w - 120) { size *= (b.w - 210) / (tw - 90); m.font = `600 ${size}px 'Noto Serif KR'`; tw = Math.max(...txt.map(s => m.measureText(s).width)) + 90; }   // a longer translation
-  const hh = (two ? 2.5 : 1.55) * size, cx = b.w / 2, cy = V ? b.h * .885 : b.h * .86, x0 = cx - tw / 2, x1 = x0 + tw * un;
+  let size = V ? 48 : 46; m.save(); m.font = `600 ${size}px 'Noto Serif KR'`; const PAD = size * 3.4;   // room around the words, clear of the curled ends
+  let tw = Math.max(...txt.map(s => m.measureText(s).width)) + PAD;
+  if (tw > b.w - 120) { const w0 = tw - PAD; size *= (b.w - 120) / (w0 + PAD); m.font = `600 ${size}px 'Noto Serif KR'`; tw = Math.max(...txt.map(s => m.measureText(s).width)) + size * 3.4; }   // a longer line: shrink to fit
+  const hh = (two ? 3.2 : 2.0) * size, cx = b.w / 2, cy = V ? b.h * .885 : b.h * .86, x0 = cx - tw / 2, x1 = x0 + tw * un;
   const rib = new Path2D(); rib.moveTo(x0, cy - hh / 2); for (let px = x0; px <= x1; px += 20) rib.lineTo(px, cy - hh / 2 + Math.sin((px - x0) * .012) * 8);
   for (let px = x1; px >= x0; px -= 20) rib.lineTo(px, cy + hh / 2 + Math.sin((px - x0) * .012) * 8); rib.closePath();
   m.shadowColor = 'rgba(40,20,8,.35)'; m.shadowBlur = 10; m.shadowOffsetY = 4; fillInk(m, rib, '#f6ecd2', 2.4); m.shadowColor = 'transparent';
@@ -495,7 +496,7 @@ function banderole(m, b, lt, k) {
   curl(x0, -1); curl(x1, 1);
   m.save(); m.clip(rib); m.fillStyle = INK; m.textAlign = 'center'; m.textBaseline = 'middle'; if (RTL()) m.direction = 'rtl';
   const ta = clamp((lt - 4.2) / .6); m.globalAlpha = ta;
-  txt.forEach((s, i) => m.fillText(s, cx, cy + (i - (txt.length - 1) / 2) * size * 1.18 + 4));
+  txt.forEach((s, i) => m.fillText(s, cx, cy + (i - (txt.length - 1) / 2) * size * 1.3 + 4));
   m.restore(); m.restore();
   // the citation under the banderole: cream on a soft dark wash so it reads over the green ground
   if (ta > 0) { const cyy = cy + hh / 2 + (V ? 50 : 44), cs = V ? 26 : 24;

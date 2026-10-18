@@ -239,9 +239,16 @@ function colossus(x, cx, by, h, seed) {
   part(x, U([[-205, -900], [-120, -930], [120, -930], [205, -900], [185, -700], [165, -590], [-165, -590], [-185, -700]]), stoneC, { ...o, ang, r: .9 });   // torso
   for (const sd of [-1, 1]) { part(x, U([[sd * 210, -905], [sd * 300, -870], [sd * 290, -700], [sd * 265, -560], [sd * 220, -520], [sd * 180, -560], [sd * 200, -700], [sd * 190, -860]]), stoneC, { ...o, ang });   // arms
     part(x, U([[sd * 90, -545], [sd * 245, -545], [sd * 255, -500], [sd * 95, -500]]), stoneC, { ...o, open: 1, ang: () => 0, rimW: 2 }); }           // hands on the knees
-  part(x, U([[-120, -1180], [120, -1180], [150, -1100], [215, -930], [215, -800], [140, -800], [120, -930], [-120, -930], [-140, -800], [-215, -800], [-215, -930], [-150, -1100]]), stoneC, { ...o, open: 1, r: .8 });   // nemes
-  x.save(); x.clip(polyline(U([[-120, -1180], [120, -1180], [150, -1100], [215, -930], [215, -800], [140, -800], [120, -930], [-120, -930], [-140, -800], [-215, -800], [-215, -930], [-150, -1100]])));
-  x.strokeStyle = css(stoneC[0], .45); x.lineWidth = 9 * s; for (let k = 0; k < 14; k++) { const y = by + (-1170 + k * 28) * s; x.beginPath(); x.moveTo(cx - 230 * s, y); x.lineTo(cx + 230 * s, y + 4 * s); x.stroke(); } x.restore();
+  // nemes: a rounded crown over the head, so the headdress reads as a solid head-cloth, not a flat board behind the face
+  const NE = [[0, -1214], [70, -1206], [118, -1180], [146, -1140], [158, -1090], [215, -930], [215, -800], [140, -800], [120, -930], [-120, -930], [-140, -800], [-215, -800], [-215, -930], [-158, -1090], [-146, -1140], [-118, -1180], [-70, -1206]];
+  part(x, U(NE), stoneC, { ...o, open: 1, r: .8 });
+  x.save(); x.clip(polyline(U(NE)));
+  { const g = x.createLinearGradient(cx - 215 * s, 0, cx + 215 * s, 0); g.addColorStop(0, css(stoneC[0], .38)); g.addColorStop(.32, css(stoneC[0], 0)); g.addColorStop(.6, css(stoneC[2] || stoneC[1], .10)); g.addColorStop(1, css(stoneC[0], .42));
+    x.fillStyle = g; x.fillRect(cx - 230 * s, by - 1230 * s, 460 * s, 440 * s); }                                                                   // rounded volume: shaded at the sides
+  x.strokeStyle = css(stoneC[0], .5); x.lineWidth = 9 * s;
+  for (let k = 0; k < 15; k++) { const yy = -1196 + k * 28, y = by + yy * s, bow = 26 * s * Math.max(0, 1 - k / 9); x.beginPath(); x.moveTo(cx - 230 * s, y + bow); x.quadraticCurveTo(cx, y - bow, cx + 230 * s, y + bow); x.stroke(); }   // pleats follow the crown
+  x.restore();
+  part(x, U([[-96, -1132], [96, -1132], [100, -1112], [-100, -1112]]), stoneC, { ...o, open: 1, rimW: 1.5, ang: () => 0 });                  // brow band
   part(x, U([[-82, -1120], [82, -1120], [86, -1040], [62, -975], [0, -950], [-62, -975], [-86, -1040]]), stoneC, { ...o, len: 16 * s / .64, wid: 6 * s / .64, bias: .1 });   // face
   part(x, U([[-26, -965], [26, -965], [22, -880], [-22, -880]]), stoneC, { ...o, open: 1, rimW: 1.5 });                                             // false beard
   // carved features, in shadow tone
@@ -287,6 +294,9 @@ function moses(x, ox, oy, s) {
   part(x, U([[0, -780], [80, -850], [150, -910], [178, -935], [208, -880], [176, -828], [116, -760], [50, -700], [6, -712]]), moR, { ...o, ang: (px, py) => -.9, len: 26 * k, wid: 9 * k, rimW: 4 * k });
   part(x, U([[176, -920], [205, -955], [232, -1000], [252, -990], [226, -935], [204, -890]]), skinC, { ...o, ang: () => -1.1, len: 14 * k, wid: 5 * k, rimW: 3 * k });
   part(x, U([[224, -1006], [240, -1014], [252, -1000], [249, -984], [234, -980], [222, -992]]), skinC, { ...o, len: 10 * k, wid: 4 * k, rimW: 3 * k });
+  // the back of the headcloth: falls from the crown behind the neck onto the shoulders, so nothing shows through behind the head
+  part(x, U([[10, -960], [-40, -995], [-110, -975], [-190, -930], [-262, -888], [-300, -840], [-292, -786], [-240, -748], [-160, -730], [-100, -742], [-60, -775], [-20, -812], [6, -860]]), [mixc(C.vio, C.pale, .5), mixc(C.white, C.sand, .45), mixc(C.white, C.hot, .5)],
+    { ...o, c: [ox - 20 * s, oy - 1000 * s], ang: (px, py) => Math.PI / 2 + .55, len: 22 * k, wid: 8 * k, rimW: 4 * k });
   // head: white hair and the headcloth streaming back, the face in profile toward the throne, a long white beard over the chest
   part(x, U([[26, -985], [-30, -1000], [-80, -975], [-118, -930], [-120, -880], [-90, -850], [-40, -850], [0, -880], [20, -930]]), [mixc(C.vio, C.white, .4), C.white, C.hot], { ...o, ang: () => Math.PI + .3, len: 14 * k, wid: 5 * k, rimW: 2 * k });
   part(x, U([[96, -968], [70, -1012], [10, -1030], [-56, -1010], [-110, -968], [-178, -930], [-280, -900], [-250, -872], [-160, -858], [-100, -872], [-70, -905], [-30, -930], [6, -950], [40, -962]]), [mixc(C.vio, C.pale, .45), mixc(C.white, C.sand, .35), C.hot],

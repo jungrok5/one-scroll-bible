@@ -320,21 +320,28 @@ function plate3(lt) {
 const G4 = V ? { hz: PH * .34, rv: [PH * .37, PH * .52], tx: PW * .1, harps: [[PW * .25, PH * .2], [PW * .45, PH * .14], [PW * .66, PH * .22]], ray: [[PW * .96, -10], [PW * .93, -10], [PW * .66, PH * .52], [PW * .72, PH * .52]] }
              : { hz: PH * .4, rv: [PH * .45, PH * .63], tx: PW * .09, harps: [[PW * .17, PH * .26], [PW * .29, PH * .18], [PW * .41, PH * .29]], ray: [[PW * .875, -10], [PW * .86, -10], [PW * .6, PH * .42], [PW * .64, PH * .42]] };
 let S4;
-function lyre(ops, x, y, s, t0) {   // a harp hung by a cord from the bough: its frame, crossbar and strings cut out white
-  const box = [[x - 34 * s, y + 46 * s], [x - 30 * s, y + 84 * s], [x, y + 104 * s], [x + 30 * s, y + 84 * s], [x + 34 * s, y + 46 * s]];
-  ops.push({ t0, d: .01, f: m => { m.fillStyle = '#000'; m.beginPath(); m.ellipse(x, y + 46 * s, 60 * s, 74 * s, 0, 0, 6.29); m.fill(); } });
-  cutOp(ops, line(x, y - 74 * s, x, y - 14 * s, 2), 3 * s, t0, .2, 400 + x);                                             // the cord
-  cutOp(ops, box, 10 * s, t0 + .1, .3, 401 + x);                                                                          // the sound box
-  cutOp(ops, [[x - 32 * s, y + 50 * s], [x - 44 * s, y + 20 * s], [x - 40 * s, y - 6 * s], [x - 48 * s, y - 22 * s]], 8 * s, t0 + .3, .2, 404 + x);   // the two arms, curling out
-  cutOp(ops, [[x + 32 * s, y + 50 * s], [x + 44 * s, y + 20 * s], [x + 40 * s, y - 6 * s], [x + 48 * s, y - 22 * s]], 8 * s, t0 + .35, .2, 405 + x);
-  cutOp(ops, line(x - 46 * s, y - 12 * s, x + 46 * s, y - 14 * s, 1), 7 * s, t0 + .5, .15, 402 + x);                     // the yoke
-  for (let i = -2; i <= 2; i++) cutOp(ops, line(x + i * 9 * s, y - 10 * s, x + i * 6 * s, y + 92 * s, 0), 2.2 * s, t0 + .6 + (i + 2) * .05, .15, 403 + x + i);
+// a kinnor hung by its cord from a willow bough, swaying: a sound box, two arms curving out, a yoke, strings catching the light
+function kinnor(m, x, y, s, ang, a) {
+  if (a <= 0) return; m.save(); m.globalAlpha = a; m.translate(x, y); m.rotate(ang); m.scale(s, s);
+  const armL = [[-22, 70], [-30, 40], [-28, 14], [-36, -6], [-42, -14]], armR = [[22, 70], [30, 40], [28, 14], [36, -6], [42, -14]], yoke = [[-50, -4], [0, -10], [50, -4]];
+  const boxP = new Path2D(); boxP.moveTo(-30, 64); boxP.quadraticCurveTo(-32, 104, 0, 108); boxP.quadraticCurveTo(32, 104, 30, 64); boxP.closePath();
+  const inner = new Path2D(); inner.moveTo(-22, 68); armL.slice(1, 4).forEach(p => inner.lineTo(p[0] + 4, p[1])); inner.lineTo(-30, -3); inner.lineTo(30, -3); armR.slice(1, 4).reverse().forEach(p => inner.lineTo(p[0] - 4, p[1])); inner.lineTo(22, 68); inner.closePath();
+  const path = pts => { m.beginPath(); pts.forEach((p, i) => i ? m.lineTo(p[0], p[1]) : m.moveTo(p[0], p[1])); };
+  m.lineCap = 'round'; m.lineJoin = 'round';
+  m.strokeStyle = '#fff'; m.lineWidth = 6; path([[0, -10], [0, -90]]); m.stroke(); m.strokeStyle = '#000'; m.lineWidth = 2.5; m.stroke();   // the cord up to the bough
+  m.fillStyle = '#000'; m.fill(inner);
+  m.strokeStyle = '#fff'; m.lineWidth = 18; for (const pts of [armL, armR, yoke]) { path(pts); m.stroke(); } m.stroke(boxP); m.fillStyle = '#fff'; m.fill(boxP);   // a knife-cut halo off the sky
+  m.strokeStyle = '#000'; m.lineWidth = 9; for (const pts of [armL, armR]) { path(pts); m.stroke(); } m.lineWidth = 8; path(yoke); m.stroke();
+  m.fillStyle = '#000'; m.fill(boxP); m.lineWidth = 3; m.stroke(boxP);
+  m.strokeStyle = '#fff'; m.lineWidth = 2.2; m.beginPath(); m.moveTo(-24, 70); m.quadraticCurveTo(-24, 96, -6, 102); m.stroke(); path(armL.map(([px, py]) => [px + 2, py])); m.stroke();   // light on the left edges
+  m.lineWidth = 1.4; for (let i = 0; i < 8; i++) { const u = (i + .5) / 8 - .5; m.beginPath(); m.moveTo(u * 46, -6); m.lineTo(u * 30, 70); m.stroke(); }   // eight strings
+  m.restore();
 }
 function buildP4() {
   const { hz, rv, tx } = G4;
   S4 = sheet(ops => {
     // sky: carved light, widest at the horizon
-    hatchOps(ops, (x, y) => y < hz, { box: [0, 0, PW, hz], ang: -.015, sp: 8, len: [90, 300], gap: 3, seed: 91, d: .12, w: (x, y) => 5 + 12 * Math.pow(y / hz, .7), t: (x, y) => .1 + (hz - y) / hz * 1.2 + x / PW * .2 });
+    hatchOps(ops, (x, y) => y < hz, { box: [0, 0, PW, hz], ang: -.015, sp: 8, len: [90, 300], gap: 3, seed: 91, d: .12, w: (x, y) => 8 + 10 * Math.pow(y / hz, .7), t: (x, y) => .1 + (hz - y) / hz * 1.2 + x / PW * .2 });
     // far bank and the walls of Babylon
     ops.push({ t0: .5, d: .01, f: m => { m.fillStyle = '#000'; m.fillRect(0, hz, PW, rv[0] - hz + 2); const bx = V ? PW * .62 : PW * .72, s = V ? .8 : 1;
       for (let k = 0; k < 5; k++) { const w = (5 - k) * 46 * s, hh = 24 * s; m.fillRect(bx - w, hz - (k + 1) * hh + 2, w * 2, hh + 1); } m.fillRect(bx - 330 * s, hz - 30 * s, 660 * s, 32 * s);
@@ -346,10 +353,9 @@ function buildP4() {
     bodyOps(ops, trunk, [1, -.3], { t0: .6, d: .6, seed: 93, folds: 10, foldW: 3 });
     const boughs = V ? [[[tx, PH * .1], [PW * .3, PH * .04], [PW * .55, PH * .06], [PW * .78, PH * .12]]] : [[[tx, PH * .1], [PW * .2, PH * .05], [PW * .34, PH * .06], [PW * .48, PH * .14]], [[tx, PH * .2], [PW * .14, PH * .16], [PW * .24, PH * .14]]];
     boughs.forEach((b, i) => ops.push({ t0: .8 + i * .1, d: .4, f: (m, k) => { m.fillStyle = '#000'; m.fill(gouge(prefix(b, k), 26, rng(i), .3)); } }));
-    const r = rng(94); for (let i = 0; i < (V ? 70 : 90); i++) { const b = boughs[i % boughs.length], u = .1 + r() * .9, j = Math.min(b.length - 2, Math.floor(u * (b.length - 1))), f = u * (b.length - 1) - j, x = lerp(b[j][0], b[j + 1][0], f), y = lerp(b[j][1], b[j + 1][1], f), len = PH * (.18 + r() * .28), sw = (r() - .5) * 30;
-      const out2 = (r() - .5) * 60, pts = []; for (let q = 0; q <= 8; q++) { const u2 = q / 8; pts.push([x + out2 * Math.sin(u2 * 1.6) + sw * u2 * u2, y + len * u2]); } const wd = 2.5 + r() * 2.5;
+    const r = rng(94); for (let i = 0; i < (V ? 70 : 90); i++) { const b = boughs[i % boughs.length], u = .1 + r() * .9, j = Math.min(b.length - 2, Math.floor(u * (b.length - 1))), f = u * (b.length - 1) - j, x = lerp(b[j][0], b[j + 1][0], f), y = lerp(b[j][1], b[j + 1][1], f), len = PH * (.22 + r() * .3), sw = (r() - .5) * 40;
+      const out2 = (r() - .5) * 60, pts = []; for (let q = 0; q <= 8; q++) { const u2 = q / 8; pts.push([x + out2 * Math.sin(u2 * 1.6) + sw * u2 * u2, y + len * u2]); } const wd = 4 + r() * 3;
       ops.push({ t0: 1.0 + r() * .8, d: .3, f: (m, k) => { m.fillStyle = '#000'; const pp = prefix(pts, k); m.fill(gouge(pp, wd, rng(i), .6)); for (let q = 1; q < pp.length; q++) { const [px, py] = pp[q]; m.fill(gouge(line(px, py, px + (q % 2 ? 9 : -9), py + 12, 1, 2), 3.5, rng(i + q))); } } }); }
-    G4.harps.forEach(([x, y], i) => lyre(ops, x, y, V ? 1.25 : 1.35, 1.6 + i * .2));
     // the near bank
     ops.push({ t0: .7, d: .01, f: m => { m.fillStyle = '#000'; m.fillRect(0, rv[1], PW, PH - rv[1]); } });
     // the weepers
@@ -383,8 +389,10 @@ function buildP4() {
       cutOp(ops, line(p[0], p[1], p[0] + ux * l, p[1] + uy * l, 1), 2.5 + rr() * 3.5, 13.2 + u * 1.8, .2, 300 + i); }
   });
 }
+function speedP4() { for (const o of S4.ops) if (o.t0 >= 0 && o.t0 < 10) { o.t0 *= .42; o.d *= .7; o.end = o.t0 + o.d; } }
 function plate4(lt) {
   show(S4, lt, mx);
+  G4.harps.forEach(([x, y], i) => kinnor(mx, x, y - (V ? 70 : 80), V ? 1.2 : 1.25, Math.sin(lt * .9 + i * 1.7) * .05, ss(.5 + i * .12, 1.0 + i * .12, lt)));
   // the river keeps moving: a few cuts re-made on twos
   const fr = Math.floor(lt * 6), r = rng(700 + fr % 4), { rv } = G4; mx.fillStyle = '#fff';
   for (let i = 0; i < (V ? 26 : 40); i++) { const y = lerp(rv[0] + 10, rv[1] - 8, r()), x = r() * PW, l = 30 + r() * 80; mx.fill(gouge(line(x, y, x + l, y + (r() - .5) * 3, 1), 2 + 4 * (1 - (y - rv[0]) / (rv[1] - rv[0])), r)); }
@@ -471,7 +479,7 @@ Pilot.run({ W, H, dur: DUR, audio: 'exile.m4a', fonts: ["600 40px 'Noto Serif KR
     // the block edge: ragged, never a clean rectangle
     edge = new Path2D(); { const r = rng(3), j = () => (r() - .5) * 3, x0 = PL.x, y0 = PL.y, x1 = PL.x + PL.w, y1 = PL.y + PL.h;
       edge.moveTo(x0, y0); for (let x = x0; x < x1; x += 12) edge.lineTo(x, y0 + j()); for (let y = y0; y < y1; y += 12) edge.lineTo(x1 + j(), y); for (let x = x1; x > x0; x -= 12) edge.lineTo(x, y1 + j()); for (let y = y1; y > y0; y -= 12) edge.lineTo(x0 + j(), y); edge.closePath(); }
-    buildP1(); buildP2(); buildP3(); buildP4();
+    buildP1(); buildP2(); buildP3(); buildP4(); speedP4();
   },
   draw });
 </script>

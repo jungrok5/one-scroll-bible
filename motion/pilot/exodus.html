@@ -297,7 +297,18 @@ function moses(x, ox, oy, s) {
   part(x, U([[98, -968], [-20, -980], [-22, -966], [100, -955]]), [C.umber, mixc(C.umber, C.sien, .5), C.ochre], { ...o, open: 1, ang: () => 0, len: 10 * k, wid: 3 * k, rimW: 1.5 * k });   // the cord
   // features: a heavy white brow, the deep-set eye under it, nostril, the mouth line in the beard
   x.save(); x.lineCap = 'round'; const ln = (pts, col, w) => { const q = U(pts); x.strokeStyle = col; x.lineWidth = w * k; x.beginPath(); q.forEach((p, i) => i ? x.lineTo(p[0], p[1]) : x.moveTo(p[0], p[1])); x.stroke(); };
-  ln([[74, -924], [88, -920]], css(C.umber, .95), 5); ln([[68, -936], [86, -939], [100, -934]], css(mixc(C.white, C.vio, .15)), 6);
+  // deep-set eye under the brow ridge, the temple and cheek modelled, weathered lines, strands in the beard
+  { const e = U([[78, -920]])[0]; x.fillStyle = css(mixc(C.sien, C.umber, .6), .75); x.beginPath(); x.ellipse(e[0], e[1], 12 * k, 7 * k, -.1, 0, 6.29); x.fill();
+    x.fillStyle = css(mixc(C.umber, C.night, .4)); x.beginPath(); x.ellipse(e[0] + 4 * k, e[1] + .5 * k, 4.8 * k, 2.8 * k, 0, 0, 6.29); x.fill();
+    x.fillStyle = css(C.hot, .85); x.beginPath(); x.arc(e[0] + 6 * k, e[1] - .4 * k, 1.2 * k, 0, 6.29); x.fill(); }
+  ln([[40, -940], [46, -905], [40, -880]], css(mixc(C.sien, C.umber, .5), .5), 9);
+  ln([[76, -898], [92, -895]], css(mixc(C.amber, C.cream, .4), .6), 6);
+  ln([[58, -949], [84, -951]], css(mixc(C.sien, C.umber, .4), .55), 2.2); ln([[60, -942], [82, -943]], css(mixc(C.sien, C.umber, .4), .45), 2);
+  ln([[64, -910], [56, -902]], css(mixc(C.sien, C.umber, .4), .5), 1.8); ln([[66, -906], [60, -898]], css(mixc(C.sien, C.umber, .4), .45), 1.6);
+  ln([[102, -890], [106, -882], [102, -877]], css(mixc(C.amber, C.hot, .3), .7), 2.5);
+  ln([[68, -936], [86, -939], [100, -934]], css(mixc(C.white, C.vio, .15)), 6);
+  for (let i = 0; i < 12; i++) { const bx = 24 + i * 7.5; ln([[bx + 4, -858], [bx + 6, -800 + (i % 3) * 10], [bx - 4 + (i % 2) * 6, -700 - i * 4]], css(i % 3 ? C.hot : mixc(C.vio, C.white, .4), .55), 1.6); }
+  ln([[106, -868], [94, -863], [74, -866]], css(mixc(C.white, C.pale, .2)), 5);
   ln([[96, -930], [90, -916]], css(C.sien, .6), 4); ln([[108, -880], [100, -879]], css(C.sien, .9), 3.2); ln([[104, -862], [86, -858]], css(mixc(C.vio, C.white, .3), .9), 3);
   x.restore();
 }
@@ -531,6 +542,87 @@ function drawD(ctx, t) {
   ctx.fillStyle = `rgba(8,12,30,${.25 * ss(5.6, 7, u)})`; ctx.fillRect(0, 0, W, H);
 }
 
+// ---------- people walking toward us, lit from behind (unit: 100 tall, feet at 0,0) ----------
+const RIM_E = () => mixc(C.amber, C.hot, .45);
+function partE(x, pts, pal, o = {}) {
+  const P = spline(pts), b = bbox(pts, 2);
+  paint(x, { path: P, box: b, col: o.col || form((b[0] + b[2]) / 2, (b[1] + b[3]) / 2, (b[2] - b[0]) / 2, (b[3] - b[1]) / 2, o.L || [0, -1], pal[0], pal[1], pal[2]), ang: o.ang || (() => Math.PI / 2), len: o.len, wid: o.wid, cov: 2.4, seed: (b[0] * 7 + b[1]) | 0, jit: .06 });
+  if (o.rim !== 0) for (const L of [[0, -1], [.9, -.45], [-.9, -.45]]) rim(x, P, L, L[1] === -1 ? o.rw : o.rw * .6, o.rc || RIM_E(), (o.rim || .85) * (L[1] === -1 ? 1 : .55), b, .9);
+  return P;
+}
+function faceE(x, hx, hy, s, o = {}) {   // a face lit warm from below and in front; brows, deep-set eyes, nose, cheeks
+  const F = pts => tf(hx, hy, s, pts), k = s / 2.6, skin = [mixc(C.umber, C.sien, .4), mixc(C.sien, C.ochre, .5), mixc(C.amber, C.ochre, .35)];
+  const face = F([[-4.4, -5.5], [0, -6.6], [4.4, -5.5], [5, 0], [3.8, 4.6], [0, 6.4], [-3.8, 4.6], [-5, 0]]);
+  partE(x, face, skin, { L: [.15, .9], len: 6 * k, wid: 2.4 * k, rw: 1.2 * k, rim: .5, col: form(hx, hy + s, 5 * s, 6 * s, [.1, .95], skin[0], skin[1], skin[2], .1) });
+  const st = (pts, col, w, a = 1) => { const q = F(pts); x.save(); x.lineCap = 'round'; x.lineJoin = 'round'; x.globalAlpha = a; x.strokeStyle = css(col); x.lineWidth = w * k; x.beginPath(); q.forEach((p, i) => i ? x.lineTo(p[0], p[1]) : x.moveTo(p[0], p[1])); x.stroke(); x.restore(); };
+  st([[-3.6, -2.2], [-1.2, -2.8]], mixc(C.umber, C.night, .3), 2.2, .85); st([[3.6, -2.2], [1.2, -2.8]], mixc(C.umber, C.night, .3), 2.2, .85);              // the brow's shadow
+  st([[-2.8, -1.1], [-1.3, -1]], mixc(C.night, C.umber, .3), 1.3); st([[2.8, -1.1], [1.3, -1]], mixc(C.night, C.umber, .3), 1.3);                          // the eyes, deep-set
+  if (o.glint) { x.fillStyle = css(C.hot, .8); for (const e of [-2, 2]) { const q = F([[e, -1.25]])[0]; x.beginPath(); x.arc(q[0], q[1], .35 * s, 0, 6.29); x.fill(); } }
+  st([[.2, -1.5], [.4, 1.6]], mixc(C.amber, C.cream, .3), 1.0, .7); st([[.9, -.6], [1.1, 1.8], [.1, 2.4]], mixc(C.umber, C.sien, .3), .9, .75);              // nose: lit bridge, shadow side
+  st([[-3.6, .6], [-2.4, 1.6]], mixc(C.amber, C.cream, .2), 1.2, .5); st([[3.6, .6], [2.4, 1.6]], mixc(C.amber, C.cream, .2), 1.2, .45);                    // cheekbones
+  if (o.beard) { const bc = o.beard === 'white' ? [mixc(C.vio, C.white, .45), mixc(C.white, C.pale, .3), C.hot] : o.beard === 'grey' ? [mixc(C.dvio, C.umber, .3), mixc(C.vio, C.white, .3), C.cream] : [C.umber, mixc(C.umber, C.night, .3), mixc(C.sien, C.umber, .5)];
+    const L = o.long ? 11 : 4, bd = F([[-4.6, 1.2], [-2, 3.2], [0, 2.6], [2, 3.2], [4.6, 1.2], [4.2, 5], [2.2, 6 + L * .6], [0, 6.4 + L], [-2.2, 6 + L * .6], [-4.2, 5]]);
+    partE(x, bd, bc, { ang: () => Math.PI / 2, len: 6 * k, wid: 1.6 * k, rw: 1.4 * k, rim: o.beard === 'white' ? .95 : .7 });
+    if (o.beard !== 'black') for (let i = 0; i < 9; i++) { const xx = -3.6 + i * .9; st([[xx, 3 + (i % 2)], [xx * .8, 5 + L * .5], [xx * .45, 5.6 + L * (.85 + (i % 3) * .05)]], i % 3 ? bc[2] : bc[0], .45, .6); }
+    st([[-2.6, 2.3], [0, 1.8], [2.6, 2.3]], o.beard === 'black' ? C.night : bc[1], 1.3, .9); }                                                              // moustache
+  else st([[-1.4, 3.4], [1.4, 3.4]], mixc(C.umber, C.night, .3), .9, .8);
+}
+function walkerArt(x, ox, oy, s, kind) {
+  const U = pts => tf(ox, oy, s, pts), k = s / 2.6, base = mixc(mixc(C.night, C.umber, .5), C.dvio, .3), alt = mixc(base, C.sien, .25), cloth = mixc(C.dvio, C.vio, .35);
+  const pal = c => [shade(c, .75), c, mixc(c, C.amber, .28)], rw = 2.2 * k, R = { len: 18 * k, wid: 6 * k, rw };
+  const skin = [mixc(C.umber, C.sien, .4), mixc(C.sien, C.ochre, .5), mixc(C.amber, C.ochre, .35)];
+  const hand = (hx, hy) => { const P = new Path2D(); P.ellipse(hx, hy, 2.7 * s, 3.1 * s, 0, 0, 6.29); x.fillStyle = css(skin[1]); x.fill(P); rim(x, P, [0, -1], 1.2 * k, RIM_E(), .7, [hx - 4 * s, hy - 4 * s, hx + 4 * s, hy + 4 * s]); };
+  const staff = (a, b) => { const p = U([a, b]); x.save(); x.lineCap = 'round'; x.strokeStyle = css(mixc(C.umber, C.night, .3)); x.lineWidth = 2.2 * s; x.beginPath(); x.moveTo(...p[0]); x.lineTo(...p[1]); x.stroke(); x.strokeStyle = css(RIM_E(), .8); x.lineWidth = .6 * s; x.beginPath(); x.moveTo(p[0][0] + .9 * s, p[0][1]); x.lineTo(p[1][0] + .9 * s, p[1][1]); x.stroke(); x.restore(); };
+  // one person: o = { dx, sc, lean, veil, robe, beard, long, arms: [left, right] poses, jar, bundle }
+  const person = (o) => { const S = o.sc || 1, dx = o.dx || 0, ln = o.lean || 0, P = pts => U(pts.map(([a, b]) => [dx + a * S + ln * (-b * S) * .1, b * S]));
+    const hx = dx + ln * 9 * S, hy = -89 * S;
+    partE(x, P([[-12, -79.5], [-6, -82], [6, -82], [12, -79.5], [15.5, -71], [15, -48], [17.5, -18], [21, -1], [10, .5], [-10, .5], [-21, -1], [-17.5, -18], [-15, -48], [-15.5, -71]]), pal(o.robe || base), R);
+    // folds catching the light from behind
+    x.save(); x.lineCap = 'round'; for (const fx2 of [-11, -4, 5, 12]) { const q = P([[fx2, -60], [fx2 * 1.1, -30], [fx2 * 1.2, -2]]); x.strokeStyle = css(mixc(o.robe || base, C.amber, .35), .5); x.lineWidth = 1.1 * s * S; x.beginPath(); q.forEach((p, i) => i ? x.lineTo(p[0], p[1]) : x.moveTo(p[0], p[1])); x.stroke(); } x.restore();
+    partE(x, P([[-15, -51], [15, -51], [15, -49], [-15, -49]]), pal(mixc(o.robe || base, C.sien, .3)), { ...R, rim: 0, ang: () => 0 });
+    if (o.bundle) { partE(x, P([[4, -96], [14, -98], [22, -90], [20, -80], [10, -79], [3, -86]]), pal(mixc(C.ochre, C.umber, .45)), R); }
+    // arms: 'hang', 'staff' (hand forward at the side), 'up' (to the head or shoulder), 'hip' (round a child)
+    for (const [sd, pose] of [[-1, o.arms[0]], [1, o.arms[1]]]) {
+      const sh = [sd * 12.5, -77], hand2 = pose === 'staff' ? [sd * 18, -50] : pose === 'raise' ? [sd * 22, -112] : pose === 'up' ? [sd * 10, -95] : pose === 'hip' ? [sd * 4, -48] : pose === 'out' ? [sd * 24, -56] : [sd * 17, -44];
+      const el = pose === 'raise' ? [sd * 22, -92] : pose === 'up' ? [sd * 22, -80] : pose === 'hip' ? [sd * 17, -58] : [sd * (Math.abs(hand2[0]) + 2), (sh[1] + hand2[1]) / 2];
+      const pts = [[sh[0] - sd * 4, sh[1]], [sh[0] + sd * 3.5, sh[1] + 1], [el[0] + sd * 4.5, el[1]], [hand2[0] + sd * 4, hand2[1] + 2], [hand2[0] - sd * 4, hand2[1]], [el[0] - sd * 4, el[1] - 2]];
+      partE(x, P(pts), pal(mixc(o.robe || base, C.dvio, .2)), { ...R, rw: rw * .8 });
+      const hp = P([hand2])[0]; hand(hp[0], hp[1]);
+      if (pose === 'staff') staff([dx + sd * 18.5, 2], [dx + sd * 19.5, -108 * S]); }
+    if (o.jar) partE(x, P([[-6, -100], [6, -100], [7, -108], [4, -114], [-4, -114], [-7, -108]]), pal(mixc(C.ochre, C.sien, .5)), { ...R, rw: rw * .8 });
+    // the head in its cloth, the face inside it
+    const hc = o.veil ? [[-8.5, -90], [-8, -97], [-4, -101.5], [0, -102.5], [4, -101.5], [8, -97], [8.5, -90], [10, -80], [15, -70], [-15, -70], [-10, -80]] : [[-8, -91], [-7.5, -98], [-4, -101], [0, -102], [4, -101], [7.5, -98], [8, -91], [9, -83], [13, -77], [-13, -77], [-9, -83]];
+    partE(x, P(hc), pal(o.cloth || cloth), { ...R, rw: rw * 1.1, rim: 1 });
+    faceE(x, U([[hx, hy - 1 * S]])[0][0], U([[hx, hy - 1 * S]])[0][1], s * S, { beard: o.beard, long: o.long, glint: o.glint });
+    return { hx, hy };
+  };
+  if (kind === 0) person({ arms: ['hang', 'staff'], beard: 'black' });
+  else if (kind === 1) { person({ veil: 1, robe: alt, cloth: mixc(C.vio, C.pale, .2), arms: ['hang', 'hip'] });   // a mother with her child on her hip
+    const c = { dx: 13, sc: .48 }; const P = pts => U(pts.map(([a, b]) => [c.dx + a * c.sc, -38 + b * c.sc]));
+    partE(x, P([[-12, -78], [12, -78], [15, -50], [12, -30], [-12, -30], [-15, -50]]), pal(mixc(C.ochre, C.umber, .5)), R);
+    partE(x, P([[-8, -88], [-7, -97], [0, -101], [7, -97], [8, -88], [9, -80], [-9, -80]]), pal(mixc(C.umber, C.night, .2)), { ...R, rim: 1 });
+    const hp = U([[13, -38 - 89 * .48]])[0]; faceE(x, hp[0], hp[1], s * .48, {});
+    const hd = U([[9, -50]])[0]; hand(hd[0], hd[1]); }
+  else if (kind === 2) person({ arms: ['up', 'hang'], bundle: 1, beard: 'black', robe: alt, lean: .05 });
+  else if (kind === 3) { person({ dx: -14, lean: .3, arms: ['staff', 'hang'], beard: 'white', long: 1, sc: .96, cloth: mixc(C.vio, C.pale, .3) });   // an old man leaning on his son
+    person({ dx: 14, arms: ['out', 'hang'], beard: 'black', robe: alt }); }
+  else if (kind === 4) person({ veil: 1, jar: 1, arms: ['up', 'hang'], robe: mixc(base, C.blood, .15), cloth: mixc(C.sien, C.vio, .4) });
+  else { person({ dx: -10, arms: ['hang', 'out'], beard: 'grey' });                                                                        // a man leading a sheep
+    const sx = 26, sy = 0, wool = [mixc(C.vio, C.sien, .4), mixc(C.cream, C.vio, .45), mixc(C.cream, C.amber, .3)];
+    for (const lx2 of [-8, -3, 4, 9]) { const q = U([[sx + lx2, sy - 12], [sx + lx2, sy]]); x.save(); x.lineCap = 'round'; x.strokeStyle = css(C.umber); x.lineWidth = 1.6 * s; x.beginPath(); x.moveTo(...q[0]); x.lineTo(...q[1]); x.stroke(); x.restore(); }
+    partE(x, U([[sx - 13, sy - 24], [sx, sy - 28], [sx + 13, sy - 24], [sx + 15, sy - 15], [sx + 10, sy - 9], [sx - 10, sy - 9], [sx - 15, sy - 15]]), wool, { ...R, ang: (px, py) => Math.random() * 0 + (px + py) * .3 });
+    partE(x, U([[sx - 18, sy - 28], [sx - 13, sy - 30], [sx - 9, sy - 24], [sx - 12, sy - 18], [sx - 18, sy - 20]]), [C.umber, mixc(C.umber, C.sien, .4), mixc(C.sien, C.ochre, .4)], { ...R, rw: rw * .7 });
+    const a = U([[3, -56], [sx - 14, sy - 22]]); x.save(); x.strokeStyle = css(mixc(C.umber, C.sien, .3)); x.lineWidth = .7 * s; x.beginPath(); x.moveTo(...a[0]); x.quadraticCurveTo((a[0][0] + a[1][0]) / 2, a[1][1] + 6 * s, ...a[1]); x.stroke(); x.restore(); }
+  if (kind === 'moses') {
+    staff([-22.5, -142], [-21, -40]);
+    person({ arms: ['raise', 'hang'], beard: 'white', long: 1, glint: 1, cloth: mixc(C.pale, C.cream, .3), robe: mixc(C.dvio, C.night, .25) });
+    // the mantle over his shoulders, ochre, catching the fire
+    partE(x, U([[-15, -79], [-8, -83], [8, -83], [15, -79], [17, -62], [12, -50], [7, -66], [-7, -66], [-12, -50], [-17, -62]]), [mixc(C.sien, C.night, .3), mixc(C.ochre, C.sien, .5), mixc(C.amber, C.ochre, .3)], { len: 18 * s / 2.6, wid: 6 * s / 2.6, rw: 2.6 * s / 2.6 });
+    faceE(x, ...U([[0, -90]])[0], s, { beard: 'white', long: 1, glint: 1 });
+    const hp = U([[-22, -112]])[0]; hand(hp[0], hp[1]);
+  }
+}
+
 // ================= E · the sea: walls of water, the people on dry ground, the pillar of fire =================
 // a corridor in perspective: x across (walls at ±1), y up from the sea floor, z away from the camera
 const VPE = V ? [W * .5, H * .5] : [W * .5, H * .47], FE = V ? W * .62 : W * .5, CH = .07, WALLH = .62, XW = .32;
@@ -606,29 +698,13 @@ function buildE() {
       paint(x, { path: P, clip: false, box: [bx - rad, by - rad * .8, bx + rad, by + rad * .8], col: form(bx, by, rad, rad * .8, [-sd, -.15], mixc(C.sien, C.dvio, .55), mixc(C.sien, C.fire, .45), mixc(C.fire, C.hot, .35), .1), ang: (px, py) => Math.atan2(py - by, px - bx) + Math.PI / 2, len: Math.max(14, rad * .4), wid: Math.max(6, rad * .14), cov: 1.6, seed: (bx + by) | 0 }); }
     x.globalCompositeOperation = 'destination-in'; const g = x.createLinearGradient(0, 0, 0, sh); g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(.12, 'rgba(0,0,0,.95)'); g.addColorStop(1, 'rgba(0,0,0,1)'); x.fillStyle = g; x.fillRect(0, 0, sw, sh);
     PE.sheath = c; }
-  // the people: front-on, backlit by the fire behind them
-  const lit = mixc(C.amber, C.hot, .45), base = mixc(mixc(C.night, C.umber, .5), C.dvio, .3), bh = 260, sc = bh / 100;
-  const kinds = [{ staff: 1 }, { veil: 1, robe: mixc(base, C.sien, .2) }, { bundle: 1, front: 1 }, { veil: 1, jar: 1 }, { front: 1 }, { veil: 1, bundle: 1 }];
-  PE.folk = kinds.map((o, i) => { const sp = sprite(-40 * sc, -132 * sc, 40 * sc, 6 * sc), x = sp.x; figure(x, 0, 0, sc, { ...o, col: o.robe || base, L: [0, -1], lit, side: 1, front: 1, seed: i }); return sp.c; });
-  { const sp = sprite(-50 * sc, -150 * sc, 50 * sc, 6 * sc), x = sp.x; figure(x, 0, 0, sc * .5, { col: base, L: [0, -1], lit, side: 1, front: 1 }); PE.child = sp.c; }
+  // the people: front-on, backlit by the fire behind them, their faces warm in the light thrown up off the sand
+  const sc = 2.6; PE.folk = [0, 1, 2, 3, 4, 5].map(k => { const sp = sprite(-70 * sc, -140 * sc, 70 * sc, 6 * sc); walkerArt(sp.x, 0, 0, sc, k); return sp.c; });
   // Moses, leading, staff held high; a white beard catching the light
-  { const s = 6.2, sp = sprite(-46 * s, -142 * s, 46 * s, 4 * s), x = sp.x, U = pts => tf(0, 0, s, pts), dk = [mixc(C.night, C.umber, .4), mixc(C.dvio, C.umber, .35), mixc(C.vio, C.sien, .4)];
-    const parts = [
-      [[[-17, -78], [-8, -83], [8, -83], [17, -78], [20, -55], [18, -30], [21, 0], [-21, 0], [-18, -30], [-20, -55]], dk],                                        // robe
-      [[[-9, -84], [-10, -94], [-6, -101], [0, -103], [6, -101], [10, -94], [9, -84], [13, -74], [-13, -74]], [mixc(C.vio, C.dvio, .4), mixc(C.vio, C.pale, .25), mixc(C.pale, C.cream, .3)]],   // headcloth
-      [[[-5, -96], [5, -96], [5.5, -89], [3, -85], [-3, -85], [-5.5, -89]], [mixc(C.umber, C.night, .4), mixc(C.sien, C.umber, .55), mixc(C.sien, C.ochre, .4)]],                    // face
-      [[[-5, -88], [5, -88], [6, -80], [3, -70], [0, -64], [-3, -70], [-6, -80]], [mixc(C.vio, C.white, .4), mixc(C.white, C.pale, .3), C.hot]],                    // beard
-      [[[-15, -79], [-21, -88], [-26, -100], [-22, -103], [-16, -92], [-9, -82]], dk],                                                                           // raised arm (sleeve)
-    ];
-    for (const [pts, pal] of parts) { const P = spline(U(pts)), b = bbox(U(pts), 2); paint(x, { path: P, box: b, col: form((b[0] + b[2]) / 2, (b[1] + b[3]) / 2, (b[2] - b[0]) / 2, (b[3] - b[1]) / 2, [0, -1], pal[0], pal[1], pal[2]), ang: () => Math.PI / 2, len: 22, wid: 7, seed: b[0] | 0 });
-      for (const L of [[0, -1], [1, -.3], [-1, -.3]]) rim(x, P, L, 3, lit, .8, b, 1); }
-    const a = U([[-24, -132]])[0], b2 = U([[-23, -40]])[0]; x.lineCap = 'round'; x.strokeStyle = css(mixc(C.umber, C.night, .3)); x.lineWidth = 2.4 * s; x.beginPath(); x.moveTo(a[0], a[1]); x.lineTo(b2[0], b2[1]); x.stroke();
-    x.strokeStyle = css(lit, .8); x.lineWidth = .7 * s; x.beginPath(); x.moveTo(a[0] + 1.2 * s, a[1]); x.lineTo(b2[0] + 1.2 * s, b2[1]); x.stroke();
-    const hd = U([[-24, -101]])[0]; x.fillStyle = css(mixc(C.sien, C.umber, .4)); x.beginPath(); x.arc(hd[0], hd[1], 3.4 * s, 0, 6.29); x.fill();
-    PE.moses = sp.c; PE.ms = s; }
+  { const s = 6.2, sp = sprite(-46 * s, -150 * s, 46 * s, 4 * s); walkerArt(sp.x, 0, 0, s, 'moses'); PE.moses = sp.c; PE.ms = s; }
   // the crowd: seeded places in the corridor
   const r = rng(450); PE.crowd = [];
-  for (let i = 0; i < (V ? 60 : 80); i++) PE.crowd.push({ x: (r() - .5) * XW * 1.5, z0: .2 + Math.pow(r(), 1.2) * 6.5, k: (r() * 6) | 0, ph: r() * 6.28, child: r() < .12 });
+  for (let i = 0; i < (V ? 110 : 150); i++) { const q = { x: (r() - .5) * XW * 1.6, z0: .3 + Math.pow(r(), 1.05) * 6.5, k: (r() * 6) | 0, ph: r() * 6.28, sc: .9 + r() * .2, fl: r() < .5 ? -1 : 1 }; if (q.z0 < 1.6 && Math.abs(q.x + .02) < .11) continue; PE.crowd.push(q); }
 }
 function drawE(ctx, t) {
   const u = t - SHOT[4], push = eio(clamp(u / 10)), tilt = eio(clamp((u - 9.4) / 5.4)), up = tilt * H * (V ? .5 : .78);
@@ -647,13 +723,13 @@ function drawE(ctx, t) {
     bloom(ctx, px, pyb - 20, wpx * 3, C.hot, .55, 'screen'); bloom(ctx, px, pyb - hpx, wpx * 4, C.fire, .3, 'screen'); bloom(ctx, px, pyb - hpx * .5, wpx * 3, C.amber, .25 + .05 * Math.sin(u * 7), 'screen'); }
   view(ctx, s, vx, vy, 0, up); put(ctx, PE.walls); put(ctx, PE.floor);
   // the crowd walking toward us, far ones first; Moses ahead of them all
-  const list = PE.crowd.map(p => { const z = p.z0 - u * .05; return { ...p, z }; }).filter(p => p.z > .19 && Math.abs(p.x) / p.z * FE < W * .7);
+  const list = PE.crowd.map(p => { const z = p.z0 - u * .05; return { ...p, z }; }).filter(p => p.z > .23 && Math.abs(p.x) / p.z * FE < W * .7);
   list.push({ mo: 1, x: V ? -.008 : -.02, z: (V ? .2 : .17) - u * .002, ph: 0 }); list.sort((a, b) => b.z - a.z);
   for (const p of list) { const [X, Y] = P3(p.x, 0, p.z), hpx = .06 / p.z * FE, bob = Math.abs(Math.sin(u * 3.2 + p.ph)) * hpx * .02, rot = Math.sin(u * 3.2 + p.ph) * .025;
-    const fade = ss(.19, .26, p.z) * clamp(1.4 - p.z / 7);
+    const fade = ss(.23, .3, p.z) * clamp(1.4 - p.z / 7);
     ctx.save(); view(ctx, s, vx, vy, 0, up); ctx.translate(X, Y - bob); ctx.rotate(rot); ctx.globalAlpha = p.mo ? 1 : fade;
     if (p.mo) { const sc = hpx * 1.08 / (100 * PE.ms); ctx.scale(sc, sc); put(ctx, PE.moses); }
-    else { const sc = hpx / 260; ctx.scale(sc, sc); put(ctx, p.child ? PE.child : PE.folk[p.k]); }
+    else { const sc = hpx / 260 * p.sc; ctx.scale(sc * p.fl, sc); put(ctx, PE.folk[p.k]); }
     ctx.restore();
     // the long shadow each one throws toward us
     if (p.z < 4) { ctx.save(); view(ctx, s, vx, vy, 0, up); ctx.globalAlpha = .35 * (p.mo ? 1 : fade); ctx.fillStyle = css(C.deep); ctx.beginPath(); ctx.ellipse(X, Y + hpx * .35, hpx * .14, hpx * .4, 0, 0, 6.29); ctx.fill(); ctx.restore(); } }

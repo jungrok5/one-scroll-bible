@@ -56,8 +56,9 @@ function flame(ctx, x, y, s, t, ph, a) {             // a tongue of fire: glow, 
   ctx.restore();
 }
 let stoneTex, motesA = [], dustA = [];
-function room(ctx, t) {
+function room(ctx, t, front) {        // back: the wall and the window (drawn with the window cut out); front: what stands in the room before it
   const F = fireK(t), wind = ss(2.4, 2.9, t) * (1 - ss(4.2, 5.4, t)), lampA = (1 - .55 * wind) * (.9 + .1 * noise(t * 7, 3));
+  if (!front) {
   // wall
   const wg = ctx.createLinearGradient(0, 0, 0, FY); wg.addColorStop(0, '#0b0806'); wg.addColorStop(1, '#1d1510'); ctx.fillStyle = wg; ctx.fillRect(-W, -H, W * 3, FY + H);
   const fg = ctx.createLinearGradient(0, FY, 0, H); fg.addColorStop(0, '#17110c'); fg.addColorStop(1, '#070504'); ctx.fillStyle = fg; ctx.fillRect(-W, FY, W * 3, H * 2);
@@ -76,12 +77,14 @@ function room(ctx, t) {
   ctx.beginPath(); winPath(ctx, 1.12); ctx.strokeStyle = `rgba(255,190,120,${.1 + .25 * F})`; ctx.lineWidth = 3; ctx.stroke();
   ctx.fillStyle = `rgba(${mix([40, 30, 24], [120, 84, 52], F).join(',')},1)`; ctx.fillRect(WIN.x - WIN.w * .62, WIN.y + WIN.h / 2, WIN.w * 1.24, 16);
   ctx.restore();
-  // the curtain, billowing in the wind
-  { const cx = WIN.x - WIN.w * .56, ty = WIN.y - WIN.h / 2 - 20, by = WIN.y + WIN.h / 2 + 8, bil = 10 + 70 * wind, ph = t * (2 + 6 * wind);
+  return; }
+  // the curtains, one each side, billowing in the wind (the right one mirrored, a little out of step)
+  for (const sd of [-1, 1]) { const cx = WIN.x - WIN.w * .56, ty = WIN.y - WIN.h / 2 - 20, by = WIN.y + WIN.h / 2 + 8, bil = 10 + 34 * wind, ph = t * (2 + 6 * wind) + (sd > 0 ? 1.9 : 0);
+    ctx.save(); ctx.globalAlpha *= 1 - ss(8.7, 9.4, t); if (sd > 0) { ctx.translate(2 * WIN.x, 0); ctx.scale(-1, 1); }   // gone before the camera passes through
     ctx.beginPath(); ctx.moveTo(cx - 40, ty);
     for (let i = 0; i <= 16; i++) { const k = i / 16, y = lerp(ty, by, k); ctx.lineTo(cx + 34 + Math.sin(ph + k * 4) * bil * k + bil * .8 * k, y); }
     for (let i = 16; i >= 0; i--) { const k = i / 16, y = lerp(ty, by, k); ctx.lineTo(cx - 40 + Math.sin(ph + k * 4 + 1) * bil * .4 * k, y); }
-    const cg = ctx.createLinearGradient(cx - 40, 0, cx + 60, 0); cg.addColorStop(0, `rgb(${mix([40, 14, 12], [120, 44, 30], F)})`); cg.addColorStop(1, `rgb(${mix([20, 8, 8], [70, 26, 20], F)})`); ctx.fillStyle = cg; ctx.fill(); }
+    const cg = ctx.createLinearGradient(cx - 40, 0, cx + 60, 0); cg.addColorStop(0, `rgb(${mix([40, 14, 12], [120, 44, 30], F)})`); cg.addColorStop(1, `rgb(${mix([20, 8, 8], [70, 26, 20], F)})`); ctx.fillStyle = cg; ctx.fill(); ctx.restore(); }
   // the lamp
   { const [x, y] = LAMP; ctx.fillStyle = '#2a1a10'; ctx.beginPath(); ctx.ellipse(x, y + 6, 26, 9, 0, 0, 6.283); ctx.fill();
     const fp = ctx.createRadialGradient(x, y + 8, 0, x, y + 8, 240); fp.addColorStop(0, `rgba(255,170,90,${.32 * lampA})`); fp.addColorStop(1, 'rgba(255,170,90,0)');
@@ -263,7 +266,11 @@ function draw(ctx, t) {
       const wind = ss(2.4, 2.9, t) * (1 - ss(4.2, 5.4, t)), shx = (noise(t * 9, 1) - .5) * 8 * wind, shy = (noise(t * 9, 5) - .5) * 6 * wind;
       ctx.save(); ctx.globalAlpha = fade; ctx.translate(WIN.x + shx, WIN.y + shy); ctx.scale(sc, sc); ctx.translate(-WIN.x, -WIN.y);
       ctx.beginPath(); ctx.rect(-W * 2, -H * 2, W * 5, H * 5); winPath(ctx); ctx.clip('evenodd');
-      room(ctx, t); fireComing(ctx, t); motesOut(ctx, t, sc);
+      room(ctx, t, false);
+      ctx.restore();
+      // the people, the fire and the light leaving pass in front of the window, so they are not cut by it
+      ctx.save(); ctx.globalAlpha = fade; ctx.translate(WIN.x + shx, WIN.y + shy); ctx.scale(sc, sc); ctx.translate(-WIN.x, -WIN.y);
+      room(ctx, t, true); fireComing(ctx, t); motesOut(ctx, t, sc);
       ctx.restore();
     }
     placeLabel(ctx, t, '예루살렘', 9.8, 12.2); placeLabel(ctx, t, '온 유대', 12.2, 14.5); placeLabel(ctx, t, '사마리아', 14.5, 16.9); placeLabel(ctx, t, '땅 끝까지', 17.1, CUT - .05);

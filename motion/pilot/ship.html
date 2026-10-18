@@ -198,7 +198,6 @@ function buildChart() {
   { const r = rng(9); x.lineWidth = 1.3; for (let i = 0; i < 26; i++) { const px = 3050 + r() * 150, py = 1850 + r() * 150; if (x.isPointInPath(LAND.B, px * TF, py * TF)) continue; x.beginPath(); x.moveTo(px - 5, py); x.lineTo(px + 5, py); x.moveTo(px, py - 5); x.lineTo(px, py + 5); x.stroke(); }
     const [ax, ay] = BAY; x.lineWidth = 2.4; x.beginPath(); x.moveTo(ax, ay - 22); x.lineTo(ax, ay + 18); x.moveTo(ax - 10, ay - 12); x.lineTo(ax + 10, ay - 12); x.moveTo(ax - 16, ay + 6); x.quadraticCurveTo(ax - 14, ay + 22, ax, ay + 20); x.quadraticCurveTo(ax + 14, ay + 22, ax + 16, ay + 6); x.stroke();
     x.beginPath(); x.arc(ax, ay - 27, 5, 0, TAU); x.stroke(); }
-  // a lighthouse-less, unlit tower on the harbour point (judgement is no welcome)
   ROSES.forEach(([rx, ry, R]) => rose(x, rx, ry, R));
   monster(x, MON[0], MON[1]);
   sunEngr(x, SUN[0], SUN[1]);
@@ -429,7 +428,7 @@ function hero(t, so, sn, bw) {
   return { layer: 'new', s: sn, lx: BOARD, P: blend(POSE.stand, POSE.joy, ss(44.2, 45.6, t) * (1 - .55 * ss(50, 52, t))), o: HO, f: 1 };
 }
 function lightFig(t, sn, ctx) {   // the one on the lit ship: drawn in light, leaning down to give a hand
-  const lean = ss(40.2, 40.8, t) * (1 - ss(41.6, 42.4, t)), reachT = toW(sn, BOARD + 6, 0);
+  const lean = ss(40.2, 40.8, t) * (1 - ss(41.6, 42.4, t));
   const s = sn, lx = 150;
   const P = { hip: [0, -35], feet: [[-4, 0], [5, 0]], hands: [[-3, -37], [7, -38]], lean: .04 + .5 * lean, look: -.1 + .5 * lean };
   if (lean > 0) { const tgt = lp([30, -38], [44, -10], lean); P.hands[1] = tgt; }
@@ -597,7 +596,7 @@ function draw(ctx, t) {
   text(ctx, V ? '예수님 안 믿어도,\n그냥 착하게 살면\n되는 것 아닌가요?' : '예수님 안 믿어도,\n그냥 착하게 살면 되는 것 아닌가요?', CART.x, CART.y - (V ? 64 : 26), { size: CART.fs, weight: 600, color: '#24180E', alpha: ss(.9, 2.4, t) * (1 - .75 * ss(49.2, 50.6, t)), lh: 1.42, maxW: CART.w - 110 });
   text(ctx, '심판의 항구', HARB.x, HARB.y + 16, { size: 46, weight: 600, color: '#24180E', ls: 6, maxW: HARB.w - 50 });
   // ships: the lit one (farther) first, then the pirate ship, then the boat
-  const boatOn = t > 33.9 && t < 57.5, bA = Math.atan2(sn.p[1] - so.p[1], sn.p[0] - so.p[0]) * 0, inBoat = hs.layer === 'boat';
+  const boatOn = t > 33.9, inBoat = hs.layer === 'boat';
   if (t > 19.5) drawShip(ctx, t, 'new', sn, () => { lightFig(t, sn, ctx); if (hs.layer === 'new') figure(ctx, sn, hs.lx, deck(hs.lx), hs.P, hs.o, hs.f); });
   if (t > 42.3) banderole(ctx, t, sn);
   drawShip(ctx, t, 'old', so, () => { crew(ctx, t, so); if (hs.layer === 'old') figure(ctx, so, hs.lx, deck(hs.lx), hs.P, hs.o, hs.f); });

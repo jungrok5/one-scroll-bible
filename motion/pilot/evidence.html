@@ -26,7 +26,8 @@
    Hebrew = Isa 53:4–6 (Masoretic text: consonants on the scroll, pointed in print); scraps: Gen 1:1, Dan 5:25, John 1:1. */
 const { clamp, lerp, ss, eo, eio, win, rng, fbm, noise, canvas, speckle } = Pilot;
 const W = Pilot.W, H = Pilot.H, V = Pilot.ori === 'v', DUR = 60;
-const tr = Pilot.tr, KO = Pilot.lang === 'ko', RTL = Pilot.dir === 'rtl';
+const tr = Pilot.tr, KO = Pilot.lang === 'ko';
+let RTL = false;                                      // set in init, once the language file (and its direction) has loaded
 const SERIF = "'Noto Serif KR',serif", SANS = "'Noto Sans KR',sans-serif", HEB = "'FreeSerif','DejaVu Serif',serif";
 const INK = '#2a1e16';
 const PW = 1400, PH = 1900, PS = .8;                 // one page, world units; page bitmaps are baked at PS
@@ -940,6 +941,7 @@ function draw(ctx, t) {
 
 Pilot.run({ W, H, dur: DUR, audio: 'evidence.m4a', fonts: ["400 40px 'Noto Serif KR'", "600 40px 'Noto Serif KR'", "300 20px 'Noto Sans KR'", "400 20px 'Noto Sans KR'", "400 30px FreeSerif"],
   init: async () => {
+    RTL = Pilot.dir === 'rtl';
     const r = rng(1);
     MOTT = alphaTex(512, 512, (i, j) => (fbm(i * .012 + 3, j * .012 + 7, 4) - .5) * 2.6 + .5);
     GRANC = alphaTex(256, 256, (i, j) => { const v = r(); return v > .5 ? (v - .5) * 2 * (.4 + .9 * noise(i * .2, j * .2)) : 0; });

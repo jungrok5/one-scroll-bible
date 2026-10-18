@@ -1,17 +1,20 @@
-{ "duration": 40,
+{ "duration": 44.5,
   "music": [
-    { "id": "m1", "at": 0, "len": 23.6, "db": -4, "fin": 1.0, "fout": 1.5,
-      "prompt": "Dark, elegant minimal score: a slow pulse of low cello and soft synth bass at 60 bpm, a glassy celesta motif that circles the same four notes again and again like a loop you cannot leave, faint shimmering metallic textures; restrained, hypnotic, a little seductive, gradually tighter and more insistent, no drums, no vocals" },
-    { "id": "m2", "at": 23.6, "len": 16.4, "db": -3, "fin": 0.3, "fout": 2.0,
-      "prompt": "The loop stops; a single sustained low string note and a quiet bowed-vibraphone tone ring out, then a slow, tender solo piano plays a few searching chords in a minor key, intimate and honest, lots of space, ending on one unresolved but hopeful warm chord that hangs in the air" }
+    { "id": "w1", "at": 0, "len": 23.2, "db": -5, "fin": 0.8, "fout": 0.4,
+      "prompt": "Late-1960s New York art-studio groove: a hypnotic, repetitive loop of muted electric guitar ostinato over soft brushed drums and a walking bass at about 96 bpm, with a lonely harmonica phrase drifting over the top; mechanical and cyclical like a printing press, each time the loop comes round it adds a layer and grows a little more insistent; no vocals" },
+    { "id": "w2", "at": 23.2, "len": 3.2, "db": -4, "fin": 0.1, "fout": 0.2,
+      "prompt": "The same hypnotic guitar-and-harmonica loop speeding up and thickening like a machine running too fast, tape-pulse rhythm, layered and slightly overdriven, rising tension, cut off abruptly at the end; no vocals" },
+    { "id": "w3", "at": 26.3, "len": 18.2, "db": -4, "fin": 0.2, "fout": 2.0,
+      "prompt": "A hushed, reflective cinematic piece: a shimmering sustained organ chord and soft strings fill a wide reverberant space; after a few seconds a lonely harmonica plays a slow, tender, searching phrase, very sparse, honest and intimate; it ends on one warm unresolved chord that hangs in the air; no drums, no vocals" }
   ],
   "sfx": [
-    { "id": "s1", "at": 0.3, "len": 2.5, "db": -10, "loop": false, "prompt": "Large studio spotlight switching on, heavy electrical clunk followed by a low hum" },
-    { "id": "s2", "at": 9.6, "len": 1.6, "db": -8, "loop": false, "prompt": "Molten metal shifting and bubbling, short liquid gold slosh with a soft hiss" },
-    { "id": "s3", "at": 10.6, "len": 1.5, "db": -12, "loop": false, "prompt": "A handful of gold coins clinking and settling on a stack" },
-    { "id": "s4", "at": 13.4, "len": 1.6, "db": -9, "loop": false, "prompt": "Molten metal reforming, deep liquid swirl ending in a bright metallic ring" },
-    { "id": "s5", "at": 17.4, "len": 3.0, "db": -14, "loop": false, "prompt": "Distant crowd applause in a large hall, swelling then fading out" },
-    { "id": "s6", "at": 23.6, "len": 2.2, "db": -9, "loop": false, "prompt": "Liquid metal settling into a solid shape, then a soft crystalline shimmer like glass being polished" },
-    { "id": "s7", "at": 36.6, "len": 3.0, "db": -14, "loop": false, "prompt": "A single soft high glass harmonic tone, pure and warm, slowly fading" }
+    { "id": "p1", "at": 0.6, "len": 1.8, "db": -10, "loop": false, "prompt": "A wooden silkscreen frame set down on canvas with a soft knock, then a rubber squeegee pulled slowly across the mesh with a wet ink squelch" },
+    { "id": "p2", "at": 3.3, "len": 1.6, "db": -12, "loop": false, "prompt": "Thick black ink spilling and spreading across paper, a slow wet glug" },
+    { "id": "p3", "at": 4.7, "len": 1.4, "db": -12, "loop": false, "prompt": "A low muffled drum hit and a sharp, tense intake of breath" },
+    { "id": "p4", "at": 6.2, "len": 1.0, "db": -12, "loop": false, "prompt": "A paint roller pushed across canvas in one long sticky stroke" },
+    { "id": "p5", "at": 7.5, "len": 2.6, "db": -11, "loop": false, "prompt": "Three silkscreen pulls in a row: wooden frame knocks and rubber squeegee scrapes, rhythmic and mechanical" },
+    { "id": "p6", "at": 22.9, "len": 3.2, "db": -10, "loop": false, "prompt": "Silkscreen squeegee pulls repeating faster and faster like a machine, frame knocks and scrapes accelerating" },
+    { "id": "p7", "at": 26.3, "len": 2.6, "db": -12, "loop": false, "prompt": "A sweeping shimmer of glass, like many mirrors catching the light one after another" },
+    { "id": "p8", "at": 36.6, "len": 3.0, "db": -14, "loop": false, "prompt": "A single soft high glass harmonic tone, pure and warm, slowly fading" }
   ],
-  "ducks": [ { "from": 23.4, "to": 24.4, "db": -20 } ] }
+  "ducks": [ { "from": 26.0, "to": 26.4, "db": -18 } ] }

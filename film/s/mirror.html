@@ -9,20 +9,26 @@
 <body>
 <script src="lib.js"></script>
 <script>
-/* 16 거울 — 이스라엘의 악순환은 나의 모습. A luxury-product film turned inside out: one piece of polished gold
-   on a black plinth under a single studio light. It is a golden calf; it melts and re-forms as money, a trophy,
-   a thumbs-up, a person — and finally an oval mirror that faces the viewer, with "me" inside the glass.
-   The gold is a signed-distance field shaded per pixel as metal (key light, a sweeping strip light, fresnel rim);
-   between shapes the fields are blended with a liquid wobble and a molten glow. Pure function of t. */
-const { clamp, lerp, ss, eo, eio, win, rng, fbm, canvas, mix, rgb, text } = Pilot;
-const W = Pilot.W, H = Pilot.H, V = Pilot.ori === 'v', DUR = 40;
-const FW = 640, FH = 720, R = 30, NP = 200, NW = FW + NP;                       // field size (shape space), bevel radius
-const K = V ? 1.2 : .80, BASEY = V ? 1236 : 742;       // field → screen scale; screen y of the plinth top
-const OX = W / 2 - 320 * K, OY = BASEY - 680 * K;
-const MORPH = [[9.6, 11.0], [13.4, 14.8], [16.8, 18.2], [20.2, 21.8], [23.6, 25.4]];
-const LABEL = ['금송아지', '돈', '성공', '인정', '나 자신', ''];
-const SERIF = "'Noto Serif KR',serif", SANS = "'Noto Sans KR',sans-serif";
-let SDF = [], NF, D, HT, TMP, fimg, fcv, fcx, motes = [], plinth, LUT;
+/* 16 거울 — 이스라엘의 악순환은 나의 모습. A Warhol photo-silkscreen (OPUSCAR 98 · 1969 Midnight Cowboy / Double Elvis):
+   a high-contrast black halftone photo plate at 45° pulled over loose, off-register blocks of flat colour on brushed
+   silver. The camera is handheld on the studio wall while the screen comes down and the squeegee pulls each print.
+     · the golden calf is printed; the cycle runs under it — the print floods with ink (고난), the ground turns red
+       (부르짖음), a clean cream coat is rolled over it (하나님의 구원) — and the calf is pulled again, twice, three times.
+     · the series multiplies along the wall: money, the trophy, the thumbs-up — every idol pulled again and again,
+       colours shifting per print, until the squeegee is printing a person: me, six times, faster.
+     · the camera pulls back: a squeegee wave reprints every panel as a mirror — and every mirror shows me.
+       The serial wall itself is the point: we keep printing our idols. The golden thread comes down to one mirror.
+   The photo plates are shaded from signed-distance fields (as sculpture), screened to dots, and given uneven squeegee
+   pressure (flooded blotches, dry streaks, pinholes) once in init. Pure function of t. */
+const { clamp, lerp, ss, eo, eio, win, rng, fbm, noise, canvas, mix, rgb, speckle, text } = Pilot;
+const W = Pilot.W, H = Pilot.H, V = Pilot.ori === 'v', DUR = 44.5;
+const FW = 640, FH = 720, R = 30;                                    // shape field (old SDF space)
+const PW = 420, PH = 520, PR = 1.5, BR = .5, DX = 384, DY = 610;     // panel in world units, plate / colour-block resolution, grid pitch
+const COLS = V ? 3 : 6, SILVER = '#BABCC0', Y = '#F3BE14', PK = '#F2A197', CR = '#EFE6CF', RD = '#E2462B';
+const LABEL = ['금송아지', '돈', '성공', '인정', '나 자신'];
+const SERIF = "'Noto Serif KR',serif", SANS = "'Noto Sans KR',sans-serif", TAU = Math.PI * 2;
+let SDF = [], PLATE = [], MASK = [], GLASS, BGM = [], FLOOD = [], DRIP, STEN = [], WALL, GRAIN, MESH, BLK = {};
+const SM = 14;                                                     // the stencil's margin round the panel (world units)
 
 // ---------- the six shapes (white on black, field space; all stand on the same base slab) ----------
 function slab(x) { x.beginPath(); x.roundRect(110, 650, 420, 30, 6); x.fill(); }
@@ -43,7 +49,7 @@ const SHAPES = [
     x.strokeStyle = '#fff'; strokeQ(x, 9, 494, 420, 528, 470, 510, 560); el(x, 510, 578, 12, 22);
     slab(x);
   },
-  x => {   // money: a sack marked ₩ and two stacks of coins
+  x => {   // money: a sack marked with the currency sign and two stacks of coins
     x.beginPath(); x.moveTo(212, 330); x.bezierCurveTo(88, 400, 76, 650, 240, 650); x.lineTo(290, 650); x.bezierCurveTo(440, 650, 418, 400, 300, 330); x.closePath(); x.fill();
     rr(x, 198, 314, 112, 26, 10);
     x.beginPath(); x.moveTo(214, 318); x.quadraticCurveTo(168, 252, 204, 240); x.quadraticCurveTo(226, 272, 240, 234); x.quadraticCurveTo(256, 270, 276, 236);
@@ -74,14 +80,14 @@ const SHAPES = [
     star(160, 190, 34); star(530, 200, 26); star(548, 420, 20); star(110, 300, 16);
     slab(x);
   },
-  x => {   // a person, standing like a statue, facing us
-    el(x, 320, 150, 50, 58); rr(x, 298, 192, 44, 46, 10);
-    x.beginPath(); x.moveTo(232, 240); x.quadraticCurveTo(320, 222, 408, 240); x.quadraticCurveTo(440, 250, 434, 292); x.lineTo(392, 432); x.lineTo(248, 432);
-    x.lineTo(206, 292); x.quadraticCurveTo(200, 250, 232, 240); x.fill();
-    x.strokeStyle = '#fff'; strokeQ(x, 42, 224, 268, 206, 360, 204, 452); strokeQ(x, 42, 416, 268, 434, 360, 436, 452); el(x, 204, 470, 24, 30); el(x, 436, 470, 24, 30);
-    x.beginPath(); x.moveTo(250, 420); x.lineTo(318, 420); x.lineTo(310, 640); x.lineTo(264, 640); x.fill();
-    x.beginPath(); x.moveTo(322, 420); x.lineTo(390, 420); x.lineTo(376, 640); x.lineTo(330, 640); x.fill();
-    el(x, 284, 645, 32, 10); el(x, 356, 645, 32, 10);
+  x => {   // a person, full length, standing square to the camera like a statue
+    el(x, 320, 128, 46, 54); rr(x, 300, 170, 40, 40, 10);
+    x.beginPath(); x.moveTo(236, 214); x.quadraticCurveTo(320, 198, 404, 214); x.quadraticCurveTo(436, 224, 430, 266); x.lineTo(396, 420); x.lineTo(244, 420);
+    x.lineTo(210, 266); x.quadraticCurveTo(204, 224, 236, 214); x.fill();
+    x.strokeStyle = '#fff'; strokeQ(x, 38, 226, 244, 200, 340, 196, 440); strokeQ(x, 38, 414, 244, 440, 340, 444, 440); el(x, 196, 458, 22, 28); el(x, 444, 458, 22, 28);
+    x.beginPath(); x.moveTo(246, 410); x.lineTo(318, 410); x.lineTo(306, 636); x.lineTo(256, 636); x.fill();
+    x.beginPath(); x.moveTo(322, 410); x.lineTo(394, 410); x.lineTo(384, 636); x.lineTo(334, 636); x.fill();
+    el(x, 278, 642, 34, 11); el(x, 362, 642, 34, 11);
     slab(x);
   },
   x => {   // the mirror: an oval frame with a crest, on its foot
@@ -103,7 +109,7 @@ function edt1(f, n, d, v, z) {
   }
   k = 0; for (let q = 0; q < n; q++) { while (z[k + 1] < q) k++; d[q] = (q - v[k]) * (q - v[k]) + f[v[k]]; }
 }
-function edt(feat) {      // feat[i] true → distance 0; returns squared distances
+function edt(feat) {
   const n = Math.max(FW, FH), f = new Float64Array(n), d = new Float64Array(n), v = new Int32Array(n), z = new Float64Array(n + 1), out = new Float64Array(FW * FH);
   for (let i = 0; i < FW * FH; i++) out[i] = feat[i] ? 0 : 1e20;
   for (let x = 0; x < FW; x++) { for (let y = 0; y < FH; y++) f[y] = out[y * FW + x]; edt1(f, FH, d, v, z); for (let y = 0; y < FH; y++) out[y * FW + x] = d[y]; }
@@ -117,193 +123,296 @@ function buildSDF(fn) {
   for (let i = 0; i < FW * FH; i++) s[i] = m[i] ? -(Math.sqrt(din[i]) - .5) : Math.sqrt(dout[i]) - .5;
   return s;
 }
-
-// ---------- gold ----------
-function buildLUT() {     // brightness → gold, 0..1.6
-  const keys = [[0, [16, 9, 3]], [.18, [70, 40, 10]], [.38, [140, 92, 30]], [.6, [206, 150, 58]], [.85, [244, 204, 120]], [1.15, [255, 240, 200]], [1.6, [255, 252, 240]]], L = new Uint8ClampedArray(256 * 3);
-  for (let i = 0; i < 256; i++) { const v = i / 255 * 1.6; let j = 0; while (j < keys.length - 2 && v > keys[j + 1][0]) j++;
-    const a = keys[j], b = keys[j + 1], k = clamp((v - a[0]) / (b[0] - a[0])); for (let c = 0; c < 3; c++) L[i * 3 + c] = a[1][c] + (b[1][c] - a[1][c]) * k; }
-  return L;
-}
-function stage(t) {        // which shapes, blend, and the morph energy
-  for (let i = 0; i < MORPH.length; i++) { const [a, b] = MORPH[i]; if (t < a) return { A: i, B: i, k: 0, e: 0 }; if (t < b) { const u = (t - a) / (b - a); return { A: i, B: i + 1, k: eio(u), e: Math.sin(Math.PI * u) }; } }
-  return { A: 5, B: 5, k: 0, e: 0 };
-}
-function light(t) {        // the cycle, told by the one light: idol (gold) → suffering (dim, cold) → crying out (dark) → rescue (white from above) → idol again
-  const dim = ss(3.0, 3.6, t) - ss(5.4, 6.0, t), dark = ss(4.2, 4.8, t) - ss(5.4, 5.9, t), save = ss(5.4, 6.0, t) - ss(6.6, 7.3, t);
-  const end = ss(36.4, 38.4, t);
-  return { I: (1 - .5 * dim - .3 * dark + .35 * save) * (1 - .55 * end), cool: dim * .8, white: save, end };
-}
-function boxBlur(a, tmp, r) {       // separable box blur, in place
+function boxBlur(a, tmp, r) {
   const n = 2 * r + 1;
   for (let y = 0; y < FH; y++) { const o = y * FW; let s = 0; for (let x = -r; x <= r; x++) s += a[o + clamp(x, 0, FW - 1)];
     for (let x = 0; x < FW; x++) { tmp[o + x] = s / n; s += a[o + Math.min(FW - 1, x + r + 1)] - a[o + Math.max(0, x - r)]; } }
   for (let x = 0; x < FW; x++) { let s = 0; for (let y = -r; y <= r; y++) s += tmp[clamp(y, 0, FH - 1) * FW + x];
     for (let y = 0; y < FH; y++) { a[y * FW + x] = s / n; s += tmp[Math.min(FH - 1, y + r + 1) * FW + x] - tmp[Math.max(0, y - r) * FW + x]; } }
 }
-function shadeField(t) {
-  const st = stage(t), A = SDF[st.A], B = SDF[st.B], k = st.k, e = st.e, L = light(t);
-  const tri = (v, n) => { v = v % (2 * n); return v < n ? v : 2 * n - v; }, ox = Math.floor(tri(t * 23, NP)), oy = Math.floor(tri(t * 31, NP)), wob = 30 * e, bulge = 14 * e;
-  for (let y = 0; y < FH; y++) { const ny = (y + oy) * NW + ox; for (let x = 0; x < FW; x++) { const i = y * FW + x;
-    let d = A[i] + (B[i] - A[i]) * k; if (e > 0) d += (NF[ny + x] - .5) * wob - bulge; D[i] = d; HT[i] = d < 0 ? Math.min(R, -d) : 0; } }
-  boxBlur(HT, TMP, 9); boxBlur(HT, TMP, 9); boxBlur(HT, TMP, 8);
-  const P = fimg.data, sweep = -1.1 + ((t * .16) % 1.6) * 1.4 + .25 * Math.sin(t * .4);   // the strip light slides across the reflections
-  const kx = -.42, ky = -.62, kz = .66, sx2 = 0, sy2 = -.86, sz2 = .5;
-  for (let y = 1; y < FH - 1; y++) for (let x = 1; x < FW - 1; x++) { const i = y * FW + x, d = D[i], o = i * 4;
-    if (d > 1.5) { P[o + 3] = 0; continue; }
-    let nx = (HT[i - 1] - HT[i + 1]) * 1.1, ny = (HT[i - FW] - HT[i + FW]) * 1.1, nz = 1; const nl = 1 / Math.sqrt(nx * nx + ny * ny + 1); nx *= nl; ny *= nl; nz *= nl;
-    const rx = 2 * nz * nx, ry = 2 * nz * ny, rz = 2 * nz * nz - 1;
-    const dif = Math.max(0, nx * kx + ny * ky + nz * kz);
-    const top = Math.pow(Math.max(0, rx * sx2 + ry * sy2 + rz * sz2), 28) * (1.3 + .9 * L.white);
-    const strip = Math.exp(-((rx - sweep) * (rx - sweep)) / .045) * ss(-.9, -.3, ry) * (1 - ss(.3, .7, ry)) * .55;
-    const key = Math.pow(Math.max(0, rx * kx + ry * ky + rz * kz), 60) * 1.2, rim = Math.pow(1 - nz, 2.2) * .55, floor = Math.max(0, ry) * .12;
-    let v = (.07 + .32 * dif + top + strip + key + rim + floor) * L.I * (.86 + .28 * NF[y * NW + x]); v = clamp(v, 0, 1.6);
-    const li = Math.round(v / 1.6 * 255) * 3; let r = LUT[li], g = LUT[li + 1], b = LUT[li + 2];
-    if (L.white > 0) { const wv = Math.min(255, v * 210); r = lerp(r, wv, L.white * .75); g = lerp(g, wv, L.white * .75); b = lerp(b, wv * 1.02, L.white * .75); }
-    if (L.cool > 0) { const gr = (r + g + b) / 3; r = lerp(r, gr * .8, L.cool); g = lerp(g, gr * .9, L.cool); b = lerp(b, gr * 1.15, L.cool); }
-    if (e > 0) { const hot = e * Math.exp(Math.min(0, d) / 14) * .9; r = lerp(r, 255, hot); g = lerp(g, 170, hot * .8); b = lerp(b, 70, hot * .6); }
-    P[o] = r; P[o + 1] = g; P[o + 2] = b; P[o + 3] = 255 * clamp(.5 - d);
-  }
-  fcx.putImageData(fimg, 0, 0); return st;
-}
 
-// ---------- the room ----------
-const F2S = (fx, fy) => [OX + fx * K, OY + fy * K];
-function room(ctx, t) {
-  const L = light(t), cx = W / 2;
-  ctx.fillStyle = '#050403'; ctx.fillRect(0, 0, W, H);
-  const bg = ctx.createRadialGradient(cx, BASEY - 300 * K, 0, cx, BASEY - 300 * K, H * .9); bg.addColorStop(0, `rgba(48,36,22,${.55 * L.I})`); bg.addColorStop(1, 'rgba(0,0,0,0)'); ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
-  // the single light: a cone from above, warm (or cold, or white, as the cycle turns)
-  const col = L.white > .01 ? mix([255, 214, 150], [235, 242, 255], L.white) : mix([255, 214, 150], [150, 170, 200], L.cool);
-  ctx.save(); ctx.globalCompositeOperation = 'screen';
-  const topW = 70 * K, botW = 520 * K, y0 = -40, y1 = BASEY + 30;
-  const cg = ctx.createLinearGradient(0, y0, 0, y1); cg.addColorStop(0, rgb(col, .30 * L.I)); cg.addColorStop(.7, rgb(col, .10 * L.I)); cg.addColorStop(1, rgb(col, .04 * L.I));
-  ctx.filter = `blur(${28 * K}px)`; ctx.fillStyle = cg; ctx.beginPath(); ctx.moveTo(cx - topW, y0); ctx.lineTo(cx + topW, y0); ctx.lineTo(cx + botW, y1); ctx.lineTo(cx - botW, y1); ctx.fill(); ctx.filter = 'none';
-  // dust in the beam
-  for (const m of motes) { const yy = ((m.y + t * m.v) % 1), py = lerp(y0, y1, yy), half = lerp(topW, botW, yy), px = cx + (m.x - .5) * 1.7 * half + Math.sin(t * m.f + m.p) * 6;
-    const a = (.25 + .35 * Math.sin(t * m.f * 2 + m.p) ** 2) * L.I * (1 - Math.abs(m.x - .5) * 1.6); if (a <= 0) continue;
-    ctx.fillStyle = rgb(col, a); ctx.beginPath(); ctx.arc(px, py, m.r * K, 0, 6.283); ctx.fill(); }
-  ctx.restore();
-  // floor: polished black, a warm pool where the light lands
-  const fy = BASEY + 210 * K;
-  const fl = ctx.createLinearGradient(0, fy, 0, H); fl.addColorStop(0, '#0d0a07'); fl.addColorStop(1, '#030202'); ctx.fillStyle = fl; ctx.fillRect(0, fy, W, H - fy);
-  ctx.save(); ctx.translate(cx, fy + 40 * K); ctx.scale(1, .16); const pg = ctx.createRadialGradient(0, 0, 0, 0, 0, 700 * K); pg.addColorStop(0, rgb(col, .22 * L.I)); pg.addColorStop(1, rgb(col, 0));
-  ctx.fillStyle = pg; ctx.beginPath(); ctx.arc(0, 0, 700 * K, 0, 6.283); ctx.fill(); ctx.restore();
-  // the plinth, and its reflection in the floor
-  ctx.save(); ctx.translate(0, fy * 2); ctx.scale(1, -1); ctx.globalAlpha = .22; ctx.drawImage(plinth, cx - plinth.width / 2, BASEY - 14 * K); ctx.restore();
-  const rf = ctx.createLinearGradient(0, fy, 0, fy + 200 * K); rf.addColorStop(0, 'rgba(5,4,3,0)'); rf.addColorStop(1, 'rgba(5,4,3,1)'); ctx.fillStyle = rf; ctx.fillRect(0, fy, W, 220 * K);
-  ctx.drawImage(plinth, cx - plinth.width / 2, BASEY - 14 * K);
-  // light on the plinth top
-  ctx.save(); ctx.globalCompositeOperation = 'screen'; ctx.translate(cx, BASEY); ctx.scale(1, .09); const tg = ctx.createRadialGradient(0, 0, 0, 0, 0, 280 * K); tg.addColorStop(0, rgb(col, .5 * L.I)); tg.addColorStop(1, rgb(col, 0));
-  ctx.fillStyle = tg; ctx.beginPath(); ctx.arc(0, 0, 280 * K, 0, 6.283); ctx.fill(); ctx.restore();
+// ---------- the photograph: each shape lit like a sculpture, then pushed to a hard, high-contrast print ----------
+const GL = { x: 320, y: 360, rx: 172, ry: 242 };          // the mirror's glass (field space)
+function meInGlass(fx, fy) {                               // the reflection: head and shoulders of a person facing out of the glass
+  const hx = 320, hy = 330, s = 1;
+  if (((fx - hx) / 58) ** 2 + ((fy - (hy - 70)) / 68) ** 2 < 1) return true;
+  if (fy > hy - 8 && fy < hy + 20 && Math.abs(fx - hx) < 30) return true;
+  if (fy >= hy + 14) { const w = 60 + Math.min(1, (fy - hy - 14) / 80) * 130; return Math.abs(fx - hx) < w; }
+  return false;
 }
-function buildPlinth() {     // black stone block with a brass plate (label engraved per frame)
-  const w = Math.round(560 * K), h = Math.round(226 * K), c = canvas(w, h), x = c.getContext('2d');
-  x.fillStyle = '#16120d'; x.fillRect(0, 0, w, 16 * K);                                     // top face, seen just from above
-  const g = x.createLinearGradient(0, 0, w, 0); g.addColorStop(0, '#060504'); g.addColorStop(.18, '#1d1812'); g.addColorStop(.5, '#0e0b08'); g.addColorStop(.86, '#1a1510'); g.addColorStop(1, '#050403');
-  x.fillStyle = g; x.fillRect(0, 14 * K, w, h - 14 * K);
-  x.fillStyle = 'rgba(255,220,160,.10)'; x.fillRect(0, 14 * K, w, 2);
-  const r = rng(5); x.globalAlpha = .07; for (let i = 0; i < 26; i++) { x.strokeStyle = r() < .5 ? '#d8c7a8' : '#000'; x.lineWidth = .6 + r() * 1.4; x.beginPath(); let px = r() * w, py = 14 * K + r() * h;
-    x.moveTo(px, py); for (let j = 0; j < 6; j++) { px += (r() - .3) * 60; py += (r() - .5) * 30; x.lineTo(px, py); } x.stroke(); } x.globalAlpha = 1;   // marble veins
+function inkField(idx) {
+  const sdf = SDF[idx], N = FW * FH, HT = new Float32Array(N), TMP = new Float32Array(N), ink = new Float32Array(N);
+  for (let i = 0; i < N; i++) HT[i] = sdf[i] < 0 ? Math.min(R, -sdf[i]) : 0;
+  boxBlur(HT, TMP, 9); boxBlur(HT, TMP, 9); boxBlur(HT, TMP, 8);
+  const kx = -.5, ky = -.62, kz = .6;
+  for (let y = 1; y < FH - 1; y++) for (let x = 1; x < FW - 1; x++) { const i = y * FW + x, d = sdf[i];
+    if (d > 0) {                                           // empty silver, but a soft shadow lies on the ground under the base
+      const e = ((x - 316) / 250) ** 2 + ((y - 684) / 30) ** 2; ink[i] = y > 650 && e < 1 ? .62 * (1 - e) : 0;
+      if (idx === 5 && ((x - GL.x) / GL.rx) ** 2 + ((y - GL.y) / GL.ry) ** 2 < 1) ink[i] = meInGlass(x, y) ? .97 : .28 + .32 * ((x - GL.x + y - GL.y) / 600 + .5);
+      continue; }
+    let nx = (HT[i - 1] - HT[i + 1]) * 1.1, ny = (HT[i - FW] - HT[i + FW]) * 1.1; const nl = 1 / Math.sqrt(nx * nx + ny * ny + 1); nx *= nl; ny *= nl; const nz = nl;
+    const dif = Math.max(0, nx * kx + ny * ky + nz * kz), rz = 2 * nz * nz - 1, rx = 2 * nz * nx, ry = 2 * nz * ny;
+    const spec = Math.pow(Math.max(0, rx * kx + ry * ky + rz * kz), 24), rim = Math.pow(1 - nz, 2);
+    let lum = .05 + .78 * dif + 1.0 * spec - .35 * rim;
+    let k = clamp((1 - lum - .22) / .52);                   // hard photographic contrast: few mid-tones
+    if (d > -2.6) k = Math.max(k, .8);                     // the silhouette edge prints dark
+    ink[i] = k; }
+  return ink;
+}
+// plate: black dots on a 45° screen, ~1/200 of the frame wide, with uneven squeegee pressure
+function makePlate(ink, seed) {
+  const w = Math.round(PW * PR), h = Math.round(PH * PR), c = canvas(w, h), x = c.getContext('2d'), r = rng(seed), cell = 5.4 * PR;
+  const K = .72, OXf = (PW - FW * K) / 2, OYf = PH - 14 - FH * K;              // field → panel placement
+  const samp = (X, Y) => { const fx = Math.round(((X / PR) - OXf) / K), fy = Math.round(((Y / PR) - OYf) / K); return fx < 0 || fy < 0 || fx >= FW || fy >= FH ? 0 : ink[fy * FW + fx]; };
+  const press = (X, Y) => fbm(X * .0035 + seed * 3.1, Y * .014 + seed, 3) + .3 * (fbm(X * .02 + seed, Y * .02, 2) - .5);
+  x.fillStyle = '#121212'; const ca = Math.SQRT1_2, D = Math.hypot(w, h) / 2 + cell;
+  x.beginPath();
+  for (let u = -D; u <= D; u += cell) for (let v = -D; v <= D; v += cell) {
+    const X = w / 2 + (u - v) * ca, Y = h / 2 + (u + v) * ca; if (X < -cell || Y < -cell || X > w + cell || Y > h + cell) continue;
+    const k = samp(X, Y); if (k < .05) continue; const p = press(X, Y);
+    let rad = cell * .5 * 1.28 * Math.sqrt(k);
+    if (p > .6) rad *= 1 + (p - .6) * 3.2;                                     // flooded: dots swell into blotches
+    if (p < .4) { rad *= .5 + (p / .4) * .5; if (r() < (.4 - p) * 2.2) continue; }   // starved: pinholes
+    x.moveTo(X + rad, Y); x.arc(X, Y, rad, 0, TAU);
+  }
+  x.fill();
+  // dry drag streaks where the pressure is lowest
+  x.globalCompositeOperation = 'destination-out'; x.strokeStyle = '#000';
+  for (let Y = 0; Y < h; Y += 2.2) { let X = 0; while (X < w) { const p = press(X, Y), len = 20 + r() * 120; if (p < .44 && r() < .5) { x.globalAlpha = .35 + r() * .5; x.lineWidth = .8 + r() * 1.6; x.beginPath(); x.moveTo(X, Y); x.lineTo(X + len, Y + (r() - .5)); x.stroke(); } X += len; } }
+  x.globalAlpha = 1; x.globalCompositeOperation = 'source-over';
   return c;
 }
-function plate(ctx, t, st) {  // brass plate on the plinth, its word changing with the shape
-  const pw = 250 * K, ph = 56 * K, px = W / 2 - pw / 2, py = BASEY + 62 * K, L = light(t);
-  const g = ctx.createLinearGradient(0, py, 0, py + ph); g.addColorStop(0, '#6b4d22'); g.addColorStop(.45, '#a7803f'); g.addColorStop(1, '#4e3716');
-  ctx.save(); ctx.globalAlpha = .55 + .45 * L.I; ctx.fillStyle = g; ctx.fillRect(px, py, pw, ph); ctx.strokeStyle = 'rgba(255,230,170,.35)'; ctx.lineWidth = 1.5; ctx.strokeRect(px + 4, py + 4, pw - 8, ph - 8);
-  const lab = (s, a) => { if (a <= 0 || !s) return; s = Pilot.tr(s); ctx.globalAlpha = a; ctx.font = `600 ${30 * K}px ${SERIF}`; ctx.textAlign = 'center'; ctx.letterSpacing = 6 * K + 'px';
-    if (Pilot.lang !== 'ko') { const w = ctx.measureText(s).width, mw = pw - 28 * K; if (w > mw) { ctx.font = `600 ${30 * K * mw / w}px ${SERIF}`; ctx.letterSpacing = 6 * K * mw / w + 'px'; } }   // fit the plate
-    ctx.fillStyle = 'rgba(255,240,200,.35)'; ctx.fillText(s, W / 2, py + ph * .69 + 1.5); ctx.fillStyle = '#2a1a08'; ctx.fillText(s, W / 2, py + ph * .69); };
-  if (st.A === st.B) lab(LABEL[st.A], 1); else { const u = st.k; lab(LABEL[st.A], 1 - ss(.2, .5, u)); lab(LABEL[st.B], ss(.5, .8, u)); }
-  ctx.restore();
+// colour blocks: hand-painted, loose — the silhouette dilated with a wobbly edge (low resolution: it is flat paint)
+function makeMask(fn) {
+  const w = Math.round(PW * BR), h = Math.round(PH * BR), c = canvas(w, h), x = c.getContext('2d'), id = x.createImageData(w, h);
+  for (let j = 0; j < h; j++) for (let i = 0; i < w; i++) if (fn(i / BR, j / BR)) id.data[(j * w + i) * 4 + 3] = 255;
+  x.putImageData(id, 0, 0); return c;
 }
-function glass(ctx, t) {      // the mirror's glass: dark silver, the light above, and a silhouette facing us — the viewer
-  const g = ss(24.6, 26.2, t); if (g <= 0) return;
-  const [cx, cy] = F2S(320, 360), rx = 176 * K, ry = 246 * K, L = light(t);
-  ctx.save(); ctx.beginPath(); ctx.ellipse(cx, cy, rx, ry, 0, 0, 6.283); ctx.clip(); ctx.globalAlpha = g;
-  const bg = ctx.createLinearGradient(cx - rx, cy - ry, cx + rx, cy + ry); bg.addColorStop(0, '#2a2620'); bg.addColorStop(.5, '#121110'); bg.addColorStop(1, '#070706'); ctx.fillStyle = bg; ctx.fillRect(cx - rx, cy - ry, rx * 2, ry * 2);
-  const up = ctx.createRadialGradient(cx, cy - ry * 1.05, 0, cx, cy - ry * 1.05, ry * 1.3); up.addColorStop(0, `rgba(255,222,170,${.5 * L.I})`); up.addColorStop(1, 'rgba(255,222,170,0)'); ctx.fillStyle = up; ctx.fillRect(cx - rx, cy - ry, rx * 2, ry * 2);
-  // the reflection: a person, head and shoulders, facing out of the glass
-  const bz = 1 + .006 * Math.sin(t * 1.3), s = K * bz, hx = cx, hy = cy + 20 * K, emerge = ss(25.6, 28.4, t);
-  const person = () => { ctx.beginPath(); ctx.ellipse(hx, hy - 60 * s, 58 * s, 68 * s, 0, 0, 6.283);
-    ctx.moveTo(hx - 34 * s, hy); ctx.lineTo(hx + 34 * s, hy); ctx.quadraticCurveTo(hx + 40 * s, hy + 20 * s, hx + 60 * s, hy + 30 * s); ctx.quadraticCurveTo(hx + 170 * s, hy + 46 * s, hx + 190 * s, hy + 140 * s);
-    ctx.lineTo(hx + 210 * s, hy + 260 * s); ctx.lineTo(hx - 210 * s, hy + 260 * s); ctx.lineTo(hx - 190 * s, hy + 140 * s); ctx.quadraticCurveTo(hx - 170 * s, hy + 46 * s, hx - 60 * s, hy + 30 * s);
-    ctx.quadraticCurveTo(hx - 40 * s, hy + 20 * s, hx - 34 * s, hy); ctx.closePath(); };
-  ctx.globalAlpha = g * emerge; ctx.filter = `blur(${3 * K}px)`; ctx.fillStyle = `rgba(232,180,100,${.55 * L.I})`; ctx.save(); ctx.translate(0, -3 * K); person(); ctx.fill(); ctx.restore(); ctx.filter = 'none';
-  ctx.fillStyle = '#0b0907'; ctx.save(); ctx.translate(0, 3 * K); person(); ctx.fill(); ctx.restore();
-  // a sheen sweeps across as the glass is laid
-  const sw = clamp((t - 24.9) / 1.6); if (sw > 0 && sw < 1) { ctx.globalAlpha = g * Math.sin(Math.PI * sw) * .55; ctx.globalCompositeOperation = 'screen';
-    const sx = lerp(cx - rx * 1.6, cx + rx * 1.6, sw), sg = ctx.createLinearGradient(sx - 90 * K, 0, sx + 90 * K, 0); sg.addColorStop(0, 'rgba(255,250,235,0)'); sg.addColorStop(.5, 'rgba(255,250,235,.9)'); sg.addColorStop(1, 'rgba(255,250,235,0)');
-    ctx.save(); ctx.translate(sx, cy); ctx.rotate(.35); ctx.translate(-sx, -cy); ctx.fillStyle = sg; ctx.fillRect(sx - 90 * K, cy - ry * 1.5, 180 * K, ry * 3); ctx.restore(); }
-  // a faint permanent highlight on the glass
-  ctx.globalCompositeOperation = 'screen'; ctx.globalAlpha = g * .16; const hl = ctx.createLinearGradient(cx - rx, cy - ry, cx, cy); hl.addColorStop(0, 'rgba(255,255,255,.8)'); hl.addColorStop(1, 'rgba(255,255,255,0)');
-  ctx.fillStyle = hl; ctx.fillRect(cx - rx, cy - ry, rx * 2, ry * 2);
-  ctx.restore();
+function silMask(idx, seed) { const K = .72, OXf = (PW - FW * K) / 2, OYf = PH - 14 - FH * K, s = SDF[idx];
+  return makeMask((X, Y) => { const fx = Math.round((X - OXf) / K), fy = Math.round((Y - OYf) / K); if (fx < 0 || fy < 0 || fx >= FW || fy >= FH) return false;
+    if (fy > 646) return false; return s[fy * FW + fx] < 10 + (fbm(X * .02 + seed, Y * .02, 3) - .5) * 34; }); }
+function glassMask() { const K = .72, OXf = (PW - FW * K) / 2, OYf = PH - 14 - FH * K;
+  return makeMask((X, Y) => { const fx = (X - OXf) / K, fy = (Y - OYf) / K; return ((fx - GL.x) / (GL.rx + 6)) ** 2 + ((fy - GL.y) / (GL.ry + 6)) ** 2 < 1 + (fbm(X * .03, Y * .03, 2) - .5) * .12; }); }
+function bgMask(seed) { const m = 14;
+  return makeMask((X, Y) => { const e = (fbm(X * .03 + seed, Y * .03, 3) - .5) * 26, f = (fbm(Y * .05 + seed, X * .004, 2) - .5) * 30;
+    return X > m + e && X < PW - m - e * .7 + f * .3 && Y > m + f && Y < PH - m + e; }); }
+function tint(mask, col) {   // a coloured copy of a mask, with faint brush streaks in the paint
+  const k = col + '|' + BLK.n++; const c = canvas(mask.width, mask.height), x = c.getContext('2d'); x.drawImage(mask, 0, 0); x.globalCompositeOperation = 'source-in'; x.fillStyle = col; x.fillRect(0, 0, c.width, c.height);
+  x.globalCompositeOperation = 'source-atop'; const r = rng(col.length + mask.width + BLK.n); for (let i = 0; i < 40; i++) { x.fillStyle = r() < .5 ? 'rgba(255,255,255,.10)' : 'rgba(0,0,0,.05)'; x.fillRect(r() * c.width - 20, r() * c.height, 40 + r() * 140, 1 + r() * 3); }
+  return c;
 }
-function thread(ctx, t) {      // the end: the one golden thread of light comes down to the mirror
-  const k = ss(36.6, 38.6, t); if (k <= 0) return; const [cx, cy] = F2S(320, 48), y = lerp(-20, cy, eo(k));
-  ctx.save(); ctx.globalCompositeOperation = 'screen';
-  const g = ctx.createLinearGradient(0, -20, 0, y); g.addColorStop(0, 'rgba(255,214,140,0)'); g.addColorStop(.4, 'rgba(255,214,140,.5)'); g.addColorStop(1, 'rgba(255,236,190,1)');
-  ctx.strokeStyle = g; ctx.lineWidth = 2.2 * Math.max(1, K); ctx.shadowColor = 'rgba(255,200,120,.9)'; ctx.shadowBlur = 16; ctx.beginPath(); ctx.moveTo(cx, -20); ctx.lineTo(cx, y); ctx.stroke();
-  const p = ctx.createRadialGradient(cx, y, 0, cx, y, 40 * K); p.addColorStop(0, `rgba(255,240,200,${.8 * k})`); p.addColorStop(1, 'rgba(255,220,150,0)'); ctx.fillStyle = p; ctx.fillRect(cx - 40 * K, y - 40 * K, 80 * K, 80 * K);
-  ctx.restore();
+const tinted = (mask, col) => { mask.__t = mask.__t || {}; return mask.__t[col] || (mask.__t[col] = tint(mask, col)); };
+
+// ---------- the prints: when each panel is pulled, with what ----------
+const cellXY = (r, c) => [c * DX, r * DY];
+const cen = (r, c) => [c * DX + PW / 2, r * DY + PH / 2];
+const SER = V ? [[[0, 0], [0, 1], [0, 2]], [[1, 0], [1, 1], [1, 2]], [[2, 2], [2, 1], [2, 0]], [[3, 0], [3, 1], [3, 2]], [[4, 2], [4, 1], [4, 0], [5, 0], [5, 1], [5, 2]]]
+               : [[[0, 0], [0, 1], [0, 2]], [[0, 3], [0, 4], [0, 5]], [[1, 5], [1, 4], [1, 3]], [[1, 2], [1, 1], [1, 0]], [[2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5]]];
+const SER_T = [[7.8, 8.6, 9.4], [12.8, 13.6, 14.4], [16.4, 17.2, 18.0], [19.6, 20.4, 21.2], [23.2, 23.85, 24.4, 24.9, 25.35, 25.75]];
+const SER_PASS = [.85, .8, .8, .8, .5];
+const SER_COL = [[Y, [SILVER, PK, RD]], [CR, [Y, SILVER, PK]], [Y, [RD, CR, SILVER]], [PK, [Y, RD, CR]], [PK, [RD, Y, CR, SILVER, Y, RD]]];
+const CENTRE = V ? [2, 1] : [1, 2], WAVE0 = 26.3;
+const EV = [];
+EV.push({ r: 0, c: 0, t0: 1.0, idol: 0, v: 0, bg: SILVER, blk: Y, off: [16, -10], pass: .9, first: true });
+SER.forEach((cells, s) => cells.forEach(([r, c], i) => { const [blk, bgs] = SER_COL[s], bg = bgs[i % bgs.length];
+  EV.push({ r, c, t0: SER_T[s][i], idol: s, v: (i + s) % 3, bg, blk: bg === blk ? (blk === Y ? PK : Y) : blk, off: [((i * 5 + s * 3) % 7 - 3) * 5.5 + 6, ((i * 3 + s) % 5 - 2) * 5 - 4], pass: SER_PASS[s], series: s, k: i }); }));
+{ const all = []; SER.forEach(cells => cells.forEach(rc => all.push(rc)));         // the mirror wave: every panel reprinted, from the centre outward
+  all.forEach(([r, c], i) => { const d = Math.hypot(r - CENTRE[0], (c - CENTRE[1]) * (V ? 1 : .9)); EV.push({ r, c, t0: WAVE0 + d * .32, idol: 5, v: i % 3, bg: [CR, SILVER, PK, Y, SILVER, RD][i % 6], blk: Y, glass: CR, off: [((i * 7) % 5 - 2) * 6 + 4, ((i * 3) % 5 - 2) * 5], pass: .55 }); }); }
+const LAB_T = SER_T.map(a => a[0] + .7);
+
+// ---------- drawing a panel ----------
+function printArt(ctx, e, x0, y0) {
+  if (e.bg !== SILVER) ctx.drawImage(tinted(BGM[e.v], e.bg), x0, y0, PW, PH);
+  ctx.drawImage(tinted(MASK[e.idol][e.v], e.blk), x0 + e.off[0], y0 + e.off[1], PW, PH);
+  if (e.glass) ctx.drawImage(tinted(GLASS, e.glass), x0 + e.off[0] * .6, y0 + e.off[1] * .6, PW, PH);
+}
+function drawPanel(ctx, t, r, c) {
+  const [x0, y0] = cellXY(r, c), evs = EV.filter(e => e.r === r && e.c === c && e.t0 <= t);
+  if (!evs.length) return;
+  const cur = evs[evs.length - 1], prev = evs.length > 1 ? evs[evs.length - 2] : null, u = clamp((t - cur.t0) / cur.pass);
+  const layer = (e) => { if (e.first) firstPrint(ctx, t, e, x0, y0); else { printArt(ctx, e, x0, y0); ctx.drawImage(PLATE[e.idol][e.v], x0, y0, PW, PH); } };
+  if (u < 1 && prev) layer(prev);
+  if (u <= 0) return;
+  const by = y0 - 16 + (PH + 40) * eio(u);                          // the squeegee line; above it the new print is down
+  if (u < 1) { ctx.save(); ctx.beginPath(); ctx.moveTo(x0 - 30, y0 - 40); ctx.lineTo(x0 + PW + 30, y0 - 40); for (let i = 12; i >= 0; i--) { const xx = x0 - 30 + i / 12 * (PW + 60); ctx.lineTo(xx, by + Math.sin(i * 2.3 + cur.t0 * 7) * 4); } ctx.closePath(); ctx.clip(); }
+  layer(cur);
+  if (u < 1) ctx.restore();
+}
+function firstPrint(ctx, t, e, x0, y0) {   // the first calf, through the whole cycle: flooded, a red ground, then rolled over in cream
+  const flood = ss(3.3, 4.4, t), cry = ss(4.7, 5.0, t), wash = clamp((t - 6.2) / .8);
+  if (wash >= 1) { ctx.drawImage(tinted(BGM[2], CR), x0, y0, PW, PH); return; }
+  if (cry > 0) { ctx.globalAlpha = cry; ctx.drawImage(tinted(BGM[1], RD), x0, y0, PW, PH); ctx.globalAlpha = 1; }
+  printArt(ctx, e, x0, y0);
+  if (flood > 0) { ctx.save(); ctx.globalAlpha = .3 * flood; ctx.fillStyle = SILVER; ctx.fillRect(x0, y0, PW, PH); ctx.restore(); }   // the colour dulls
+  ctx.drawImage(PLATE[0][0], x0, y0, PW, PH);
+  // too much ink: wet black blooms from the heavy areas, spreads and pools low, then drains away in runs
+  const lv = ss(3.25, 4.6, t) * (FLOOD.length - 1) - ss(5.0, 6.2, t) * 1.6, drain = ss(4.4, 6.3, t);
+  if (lv > -1) { const i0 = Math.floor(lv), f = lv - i0;
+    if (i0 >= 0) { ctx.drawImage(FLOOD[Math.min(i0, FLOOD.length - 1)], x0, y0, PW, PH); }
+    if (i0 + 1 < FLOOD.length && f > 0) { ctx.globalAlpha = f; ctx.drawImage(FLOOD[i0 + 1], x0, y0, PW, PH); ctx.globalAlpha = 1; } }
+  if (drain > 0) { ctx.save(); ctx.beginPath(); ctx.rect(x0, y0, PW, PH * (.35 + .65 * drain)); ctx.clip(); ctx.globalAlpha = Math.min(1, drain * 2.5); ctx.drawImage(DRIP, x0, y0, PW, PH); ctx.restore(); }
+  ctx.globalAlpha = 1;
+  if (wash > 0) { const wx = x0 - 10 + (PW + 20) * eio(wash); ctx.save(); ctx.beginPath(); ctx.moveTo(x0 - 20, y0 - 20); for (let i = 0; i <= 12; i++) ctx.lineTo(wx + Math.sin(i * 1.7) * 6, y0 - 20 + i / 12 * (PH + 40)); ctx.lineTo(x0 - 20, y0 + PH + 20); ctx.closePath(); ctx.clip();
+    ctx.drawImage(tinted(BGM[2], CR), x0, y0, PW, PH); ctx.restore();
+    if (wash < 1) { ctx.save(); ctx.fillStyle = 'rgba(0,0,0,.18)'; ctx.fillRect(wx + 8, y0 - 30, 26, PH + 60); ctx.fillStyle = '#d9d2c2'; ctx.fillRect(wx - 6, y0 - 34, 22, PH + 68); ctx.fillStyle = 'rgba(255,255,255,.5)'; ctx.fillRect(wx - 2, y0 - 34, 5, PH + 68);   // the paint roller
+      ctx.fillStyle = '#3a3a3a'; ctx.fillRect(wx + 2, y0 + PH / 2 - 4, 90, 8); ctx.restore(); } }
+}
+function rig(ctx, t) {      // the screen and the squeegee for every pull in progress (drawn above the prints)
+  for (const e of EV) { const a = t - e.t0; if (a < -.24 || a > e.pass + .26) continue;
+    const [x0, y0] = cellXY(e.r, e.c), down = ss(-.24, 0, a), lift = ss(e.pass, e.pass + .26, a), oy = (1 - down) * -36 - lift * 120, al = down * (1 - lift);
+    if (al <= 0) continue; const fx = x0 - SM - 20, fy = y0 - SM - 20 + oy, fw = PW + 2 * SM + 40, fh = PH + 2 * SM + 40, ix = fx + 20, iy = fy + 20, iw = fw - 40, ih = fh - 40;
+    const u = clamp(a / e.pass), by = y0 - 16 + (PH + 40) * eio(u) + oy;
+    ctx.save(); ctx.globalAlpha = al;
+    ctx.fillStyle = 'rgba(20,20,24,.14)'; for (const g of [16, 9]) { ctx.fillRect(fx + g, fy + g + 12, fw, 20); ctx.fillRect(fx + fw - 20 + g, fy + g + 12, 20, fh); ctx.fillRect(fx + g, fy + fh - 20 + g + 12, fw, 20); }   // the frame's shadow
+    // the stretched mesh: emulsion everywhere except the image (open dots), so the print shows through only there
+    ctx.save(); ctx.beginPath(); ctx.rect(ix, iy, iw, ih); ctx.clip();
+    ctx.globalAlpha = al * .5; ctx.drawImage(STEN[e.idol], x0 - SM, y0 - SM + oy, PW + 2 * SM, PH + 2 * SM);
+    if (u > 0) { ctx.globalAlpha = al * .3; ctx.fillStyle = '#0d0d0f'; ctx.fillRect(ix, iy, iw, Math.max(0, Math.min(ih, by - iy))); }      // ink left on the mesh behind the blade
+    ctx.globalAlpha = al * .7; ctx.fillStyle = MESH; ctx.fillRect(ix, iy, iw, ih);
+    ctx.restore();
+    // the wooden frame
+    ctx.globalAlpha = al; ctx.fillStyle = '#9b7a50'; for (const [rx, ry, rw, rh] of [[fx, fy, fw, 20], [fx, fy + fh - 20, fw, 20], [fx, fy, 20, fh], [fx + fw - 20, fy, 20, fh]]) ctx.fillRect(rx, ry, rw, rh);
+    ctx.fillStyle = 'rgba(255,235,200,.28)'; ctx.fillRect(fx, fy, fw, 4); ctx.fillRect(fx, fy, 4, fh);
+    ctx.strokeStyle = 'rgba(60,38,15,.55)'; ctx.lineWidth = 1.2; ctx.strokeRect(fx, fy, fw, fh); ctx.strokeRect(ix, iy, iw, ih);
+    // the squeegee: a rubber blade in a wooden handle, pushing a rolling bead of ink down the screen
+    if (u > 0 && u < 1) { const sx = fx + 12, sw = fw - 24, tilt = Math.sin(a * 9) * 1.5;
+      ctx.fillStyle = 'rgba(0,0,0,.28)'; ctx.fillRect(sx + 10, by + 4, sw, 22);
+      ctx.fillStyle = '#0b0b0d'; ctx.beginPath(); ctx.moveTo(sx + 6, by - 2); for (let i = 0; i <= 24; i++) ctx.lineTo(sx + 6 + i / 24 * (sw - 12), by + 9 + Math.sin(i * 1.3 + a * 14) * 3 + Math.sin(i * .5 + e.t0) * 2); ctx.lineTo(sx + sw - 6, by - 2); ctx.fill();
+      ctx.fillStyle = 'rgba(255,255,255,.35)'; for (let i = 1; i < 6; i++) ctx.fillRect(sx + i * sw / 6 + Math.sin(a * 11 + i) * 6, by + 3, 14, 2);   // glints on the wet bead
+      ctx.fillStyle = '#2a2a2e'; ctx.fillRect(sx, by - 14, sw, 13);
+      ctx.fillStyle = '#c0955c'; ctx.beginPath(); ctx.moveTo(sx - 10, by - 14); ctx.lineTo(sx + sw + 10, by - 14 + tilt); ctx.lineTo(sx + sw + 4, by - 58 + tilt); ctx.lineTo(sx - 4, by - 58); ctx.closePath(); ctx.fill();
+      ctx.fillStyle = 'rgba(255,240,210,.4)'; ctx.fillRect(sx - 4, by - 58, sw + 8, 6); ctx.strokeStyle = 'rgba(60,35,10,.7)'; ctx.stroke();
+      ctx.fillStyle = '#e8d2b0'; for (const hx of [sx + sw * .3, sx + sw * .7]) { ctx.beginPath(); ctx.ellipse(hx, by - 64, 18, 10, 0, 0, TAU); ctx.fill(); ctx.stroke(); } }   // hands on the handle
+    ctx.restore(); }
+}
+
+// ---------- camera ----------
+const C = (r, c, dx = 0, dy = 0) => { const [x, y] = cen(r, c); return [x + dx, y + dy]; };
+const MID = V ? C(2.5, 1, 0, 60) : C(1, 2.5, 0, 160);   // the whole wall, set high enough to leave the captions bare silver
+const CAM = V ? [[0, C(0, 0), 1.9], [7.6, C(0, 0, 0, 10), 1.8], [10.0, C(0, 1), .86], [12.4, C(0, 1, 0, 30), .84], [14.6, C(1, 1), .86], [17.0, C(2, 1), .86], [19.0, C(2, 1, 0, 40), .86], [21.0, C(3, 1), .86], [23.0, C(4, 1), .86], [25.6, C(4.6, 1), .74],
+  [27.6, MID, .5], [31.0, MID, .52], [35.6, MID, .55], [44.5, C(2, 1, 0, 20), .92]]
+  : [[0, C(0, 0), 1.45], [7.6, C(0, 0, 0, 10), 1.38], [10.0, C(0, 1), .94], [12.4, C(0, 1, 40), .92], [14.6, C(0, 4), .95], [16.6, C(1, 4.4), .95], [18.4, C(1, 4), .95], [21.4, C(1, 1), .95], [23.0, C(1.7, 1), .84], [25.6, C(2, 3.4), .78],
+  [27.6, MID, .5], [31.0, MID, .53], [35.6, MID, .56], [44.5, C(1, 2, 0, 30), .95]];
+function cam(t) {
+  let i = 0; while (i < CAM.length - 2 && t > CAM[i + 1][0]) i++;
+  const a = CAM[i], b = CAM[i + 1], u = eio(clamp((t - a[0]) / (b[0] - a[0])));
+  return [lerp(a[1][0], b[1][0], u), lerp(a[1][1], b[1][1], u), Math.exp(lerp(Math.log(a[2]), Math.log(b[2]), u))];
+}
+function shake(t) {         // handheld: a slow drift and a little jitter, harder at the cry
+  const k = 1 + 3 * (ss(4.7, 4.9, t) - ss(5.4, 6.2, t));
+  return [(noise(t * .9, 1) - .5) * 14 * k + (noise(t * 7, 5) - .5) * 2 * k, (noise(t * .8, 9) - .5) * 10 * k + (noise(t * 6.5, 3) - .5) * 2 * k, (noise(t * .5, 4) - .5) * .012 * k];
 }
 
 // ---------- words ----------
-const CYC = ['우상을 섬김', '→', '고난', '→', '부르짖음', '→', '하나님의 구원', '→', '다시 우상…'], CT = [1.9, 2.6, 3.1, 3.8, 4.3, 5.0, 5.6, 6.4, 6.9];
+function halo(ctx, cx, cy, rx, ry, a) { if (a <= 0) return; ctx.save(); ctx.globalAlpha = a; ctx.translate(cx, cy); ctx.scale(rx, ry); const g = ctx.createRadialGradient(0, 0, 0, 0, 0, 1);
+  g.addColorStop(0, 'rgba(198,200,205,.92)'); g.addColorStop(.6, 'rgba(198,200,205,.72)'); g.addColorStop(1, 'rgba(198,200,205,0)'); ctx.fillStyle = g; ctx.beginPath(); ctx.arc(0, 0, 1, 0, TAU); ctx.fill(); ctx.restore(); }
+function say(ctx, s, x, y, o) {     // black type, as if printed, with a misregistered colour block offset behind it
+  const a = o.alpha; if (a <= 0) return; const lines = Pilot.tr(s).split('\n'), n = lines.length, size = o.size, lh = size * 1.5;
+  halo(ctx, x, y - size * .35 + (n - 1) * lh / 2, Math.min(W * .62, (o.w || 700)), n * lh * .5 + size * 1.1, a);
+  if (o.under) text(ctx, s, x + 5, y + 4, { size, weight: 600, color: o.under, alpha: a * .85, maxW: W - 120, lh: 1.5 });
+  text(ctx, s, x, y, { size, weight: 600, color: '#111', alpha: a, maxW: W - 120, lh: 1.5 });
+}
+const CYC = ['우상을 섬김', '→', '고난', '→', '부르짖음', '→', '하나님의 구원', '→', '다시 우상…'], CT = [1.9, 2.7, 3.3, 4.1, 4.7, 5.6, 6.2, 7.2, 7.8];
+const CYCOL = [Y, null, '#8E9096', null, RD, null, CR, null, Y];
 function cycle(ctx, t) {
-  const a = win(t, 1.6, 9.2, .8, 1); if (a <= 0) return;
-  const size = V ? 42 : 40, rows = V ? [[0, 5], [5, 9]] : [[0, 9]], y0 = V ? H - 262 : H - 96, lh = size * 1.8;
-  const CY = CYC.map(Pilot.tr);   // each step translated (the site's own cycle words)
-  ctx.save(); ctx.font = `600 ${size}px ${SERIF}`; ctx.textBaseline = 'alphabetic'; ctx.textAlign = 'left'; ctx.shadowColor = 'rgba(0,0,0,.9)'; ctx.shadowBlur = 16;
+  const a = win(t, 1.6, 10.2, .8, 1); if (a <= 0) return;
+  const size = V ? 46 : 46, rows = V ? [[0, 5], [5, 9]] : [[0, 9]], y0 = V ? H - 262 : H - 92, lh = size * 1.75;
+  halo(ctx, W / 2, y0 - size * .3 + (rows.length - 1) * lh / 2, W * .58, rows.length * lh * .5 + size, a);
+  const CY = CYC.map(Pilot.tr);
+  ctx.save(); ctx.font = `600 ${size}px ${SERIF}`; ctx.textBaseline = 'alphabetic'; ctx.textAlign = 'left';
   rows.forEach(([i0, i1], ri) => { let gap = size * .45, ws = []; for (let i = i0; i < i1; i++) ws.push(ctx.measureText(CY[i]).width);
-    if (Pilot.lang !== 'ko') { const tot = ws.reduce((p, q) => p + q, 0) + gap * (ws.length - 1), mw = W - 120; if (tot > mw) { const k = mw / tot;   // fit the row
-      ctx.font = `600 ${size * k}px ${SERIF}`; gap *= k; ws = ws.map(w => w * k); } }
-    const RTL = Pilot.dir === 'rtl';   // right-to-left: the cycle runs from the right, with ← arrows
-    if (RTL) ctx.direction = 'rtl';
+    if (Pilot.lang !== 'ko') { const tot = ws.reduce((p, q) => p + q, 0) + gap * (ws.length - 1), mw = W - 120; if (tot > mw) { const k = mw / tot; ctx.font = `600 ${size * k}px ${SERIF}`; gap *= k; ws = ws.map(w => w * k); } }
+    const RTL = Pilot.dir === 'rtl'; if (RTL) ctx.direction = 'rtl';
     let x = W / 2 + (RTL ? 1 : -1) * (ws.reduce((p, q) => p + q, 0) + gap * (ws.length - 1)) / 2;
-    if (RTL) for (let i = i0; i < i1; i++) { const on = ss(CT[i], CT[i] + .45, t), cur = i + 2 < CT.length ? 1 - ss(CT[i + 2], CT[i + 2] + .5, t) : 1, arrow = CYC[i] === '→';
-      const c = arrow ? [190, 150, 90] : mix([150, 128, 98], i === 6 ? [250, 248, 240] : [255, 214, 140], cur);
-      x -= ws[i - i0]; ctx.globalAlpha = a * on; ctx.fillStyle = rgb(c); ctx.fillText(arrow ? '←' : CY[i], x, y0 + ri * lh); x -= gap; }
-    else for (let i = i0; i < i1; i++) { const on = ss(CT[i], CT[i] + .45, t), cur = i + 2 < CT.length ? 1 - ss(CT[i + 2], CT[i + 2] + .5, t) : 1, arrow = CYC[i] === '→';
-      const c = arrow ? [190, 150, 90] : mix([150, 128, 98], i === 6 ? [250, 248, 240] : [255, 214, 140], cur);
-      ctx.globalAlpha = a * on; ctx.fillStyle = rgb(c); ctx.fillText(CY[i], x, y0 + ri * lh); x += ws[i - i0] + gap; } ctx.font = `600 ${size}px ${SERIF}`; });
+    for (let i = i0; i < i1; i++) { const on = ss(CT[i], CT[i] + .45, t), cur = i + 2 < CT.length ? 1 - ss(CT[i + 2], CT[i + 2] + .5, t) : 1, arrow = CYC[i] === '→', w = ws[i - i0], yy = y0 + ri * lh;
+      if (RTL) x -= w;
+      if (!arrow && CYCOL[i] && on * cur > 0) { ctx.save(); ctx.globalAlpha = a * on * cur; ctx.fillStyle = CYCOL[i]; ctx.beginPath(); ctx.moveTo(x - 10, yy - size * .95 + 6); ctx.lineTo(x + w + 12, yy - size * .95); ctx.lineTo(x + w + 8, yy + size * .3 + 4); ctx.lineTo(x - 6, yy + size * .3); ctx.fill(); ctx.restore(); }   // a painted block under the live word
+      ctx.globalAlpha = a * on; ctx.fillStyle = arrow ? '#55575c' : rgb(mix([110, 112, 118], [17, 17, 17], cur)); ctx.fillText(arrow ? (RTL ? '←' : '→') : CY[i], x, yy);
+      if (RTL) x -= gap; else x += w + gap; }
+  });
   ctx.restore();
 }
-function draw(ctx, t) {
-  const z = lerp(1, 1.07, eio(t / DUR)), pz = [W / 2, BASEY - 320 * K];
-  ctx.save(); ctx.translate(pz[0], pz[1]); ctx.scale(z, z); ctx.translate(-pz[0], -pz[1]);
-  room(ctx, t); const st = shadeField(t); plate(ctx, t, st);
-  glass(ctx, t);
-  // soft contact glow under the gold, then the gold itself
-  ctx.imageSmoothingQuality = 'high'; ctx.drawImage(fcv, OX, OY, FW * K, FH * K);
-  thread(ctx, t);
-  ctx.restore();
-  // grade: vignette and a faint warm grain-free bloom
-  const vg = ctx.createRadialGradient(W / 2, H / 2, Math.min(W, H) * .35, W / 2, H / 2, Math.max(W, H) * .75); vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(0,0,0,.7)'); ctx.fillStyle = vg; ctx.fillRect(0, 0, W, H);
 
-  const tw = { weight: 600, color: '#f6ead2', shadow: 'rgba(0,0,0,.95)', shadowBlur: 20 }, TS = V ? 50 : 50, TY = V ? 330 : 128;
-  text(ctx, '16  ·  거울', V ? 80 : 110, V ? 200 : 120, { align: 'left', size: 30, weight: 600, color: '#e8dcc4', alpha: win(t, .6, 5, 1, 1), ls: 4 });
+// ---------- frame ----------
+function draw(ctx, t) {
+  const [cx0, cy0, s] = cam(t), [jx, jy, jr] = shake(t), cx = cx0 + jx / s, cy = cy0 + jy / s;
+  ctx.fillStyle = SILVER; ctx.fillRect(0, 0, W, H);
+  ctx.save(); ctx.translate(W / 2, H / 2); ctx.rotate(jr); ctx.scale(s, s); ctx.translate(-cx, -cy);
+  // the wall: brushed silver paint on canvas
+  { const hw = W / s, hh = H / s; ctx.fillStyle = WALL; ctx.fillRect(cx - hw, cy - hh, hw * 2, hh * 2); }
+  ctx.imageSmoothingQuality = 'high';
+  const rows = V ? 6 : 3; for (let r = 0; r < rows; r++) for (let c = 0; c < COLS; c++) drawPanel(ctx, t, r, c);
+  // the titles of the series, stencilled under them
+  SER.forEach((cells, k) => { const a = ss(LAB_T[k], LAB_T[k] + .6, t); if (a <= 0) return; const [r, c] = cells[1], [x, y] = cen(r, c), col = SER_COL[k][0];
+    const ls = Math.max(36, 29 / s), ly = y + PH / 2 + 34 + ls * .55;   // at least ~29 px on screen however far the camera pulls back
+    text(ctx, LABEL[k], x + 4, ly + 4, { size: ls, weight: 700, font: SANS, color: col === CR ? PK : col, alpha: a * .9, ls: ls * .15, maxW: PW * 1.7 });
+    text(ctx, LABEL[k], x, ly, { size: ls, weight: 700, font: SANS, color: '#141414', alpha: a, ls: ls * .15, maxW: PW * 1.7 }); });
+  rig(ctx, t);
+  // the golden thread comes down to one mirror
+  { const k = ss(36.6, 39.4, t); if (k > 0) { const [mx, my] = cen(...CENTRE), topY = my - PH / 2 + 6, y = lerp(cy - H / s, topY, eo(k));
+      ctx.save(); ctx.globalCompositeOperation = 'lighter'; const g = ctx.createLinearGradient(0, cy - H / s, 0, y); g.addColorStop(0, 'rgba(255,214,140,0)'); g.addColorStop(.5, 'rgba(255,214,140,.55)'); g.addColorStop(1, 'rgba(255,236,190,1)');
+      ctx.strokeStyle = g; ctx.lineWidth = 2.6 / Math.min(1, s); ctx.shadowColor = 'rgba(255,200,120,.9)'; ctx.shadowBlur = 18; ctx.beginPath(); ctx.moveTo(mx, cy - H / s); ctx.lineTo(mx, y); ctx.stroke();
+      const p = ctx.createRadialGradient(mx, y, 0, mx, y, 34); p.addColorStop(0, `rgba(255,236,190,${.45 * k})`); p.addColorStop(1, 'rgba(255,214,140,0)'); ctx.fillStyle = p; ctx.fillRect(mx - 34, y - 34, 68, 68); ctx.restore(); } }
+  ctx.restore();
+
+  // light: a soft key from the upper left whose sheen slides over the silver, a moving sheen when the mirrors land, grain
+  ctx.save(); ctx.globalCompositeOperation = 'soft-light'; const sx = W * (.15 + .1 * Math.sin(t * .2)), lg = ctx.createRadialGradient(sx, -H * .1, 0, sx, -H * .1, Math.max(W, H) * 1.15); lg.addColorStop(0, 'rgba(255,255,255,.55)'); lg.addColorStop(1, 'rgba(0,0,0,.35)'); ctx.fillStyle = lg; ctx.fillRect(0, 0, W, H); ctx.restore();
+  { const m = clamp((t - WAVE0 - .2) / 2.6); if (m > 0 && m < 1) { ctx.save(); ctx.globalCompositeOperation = 'screen'; const x = lerp(-W * .4, W * 1.4, m), g = ctx.createLinearGradient(x - 260, 0, x + 260, 0); g.addColorStop(0, 'rgba(255,255,255,0)'); g.addColorStop(.5, `rgba(255,255,255,${.35 * Math.sin(Math.PI * m)})`); g.addColorStop(1, 'rgba(255,255,255,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H); ctx.restore(); } }
+  const vg = ctx.createRadialGradient(W / 2, H / 2, Math.min(W, H) * .38, W / 2, H / 2, Math.max(W, H) * .78); vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(0,0,0,.42)'); ctx.fillStyle = vg; ctx.fillRect(0, 0, W, H);
+  { const f = Math.floor(t * 24), r = rng(f); ctx.save(); ctx.globalCompositeOperation = 'overlay'; ctx.globalAlpha = .14; ctx.translate(-r() * 256, -r() * 256); ctx.fillStyle = GRAIN; ctx.fillRect(0, 0, W + 256, H + 256); ctx.restore(); }
+
+  // words
+  { const ca = win(t, .6, 5, 1, 1); if (ca > 0) { halo(ctx, V ? 230 : 250, V ? 190 : 110, 260, 60, ca);
+      text(ctx, '16  ·  거울', V ? 80 : 110, V ? 200 : 120, { align: 'left', size: 30, weight: 600, color: '#1a1a1a', alpha: ca, ls: 4 }); } }
   cycle(ctx, t);
-  text(ctx, '우상이란 나무 조각상만이 아닙니다.', W / 2, TY, { ...tw, size: TS, alpha: win(t, 9.6, 13.4, 1, .7) });
-  text(ctx, V ? '하나님보다 더 사랑하고\n의지하는 모든 것' : '하나님보다 더 사랑하고 의지하는 모든 것', W / 2, V ? TY - 40 : TY, { ...tw, size: TS, alpha: win(t, 13.7, 23.4, 1, .9) });
-  text(ctx, '이것은 거울입니다.', W / 2, TY, { ...tw, size: V ? 62 : 58, alpha: win(t, 26.0, 29.6, 1.1, .7) });
-  text(ctx, V ? '이스라엘의 악순환은\n사실 ‘나’의 모습' : '이스라엘의 악순환은 사실 ‘나’의 모습', W / 2, V ? TY - 40 : TY, { ...tw, size: TS, alpha: win(t, 29.6, 33.4, 1, .8) });
-  const pa = win(t, 33.6, 39.3, 1.2, 1), py = V ? H - 290 : H - 176;
-  if (pa > 0) { const sc = ctx.createLinearGradient(0, py - 120, 0, H); sc.addColorStop(0, 'rgba(0,0,0,0)'); sc.addColorStop(.3, `rgba(0,0,0,${.72 * pa})`); sc.addColorStop(1, `rgba(0,0,0,${.85 * pa})`); ctx.fillStyle = sc; ctx.fillRect(0, py - 120, W, H - py + 120); }
-  text(ctx, '결국 가장 깊은 우상은', W / 2, py, { ...tw, size: V ? 48 : 44, color: '#e9dcc2', alpha: pa });
-  text(ctx, '“하나님 자리에 앉은 나 자신”입니다.', W / 2, py + (V ? 92 : 84), { ...tw, size: V ? 58 : 58, color: '#ffe6b8', alpha: win(t, 34.6, 39.3, 1.2, 1), shadowBlur: 26 });
+  const TS = 50, TY = V ? H - 380 : H - 104;   // captions sit low: the rows below the one being printed are still bare silver
+  say(ctx, '우상이란 나무 조각상만이 아닙니다.', W / 2, TY, { size: TS, alpha: win(t, 10.4, 14.4, .8, .7), under: Y });
+  say(ctx, V ? '하나님보다 더 사랑하고\n의지하는 모든 것' : '하나님보다 더 사랑하고 의지하는 모든 것', W / 2, V ? TY - 75 : TY, { size: TS, alpha: win(t, 14.6, 23.6, .9, .9), under: PK });
+  say(ctx, '이것은 거울입니다.', W / 2, TY, { size: V ? 62 : 58, alpha: win(t, 27.0, 31.0, 1.0, .7), under: CR, w: 520 });
+  say(ctx, V ? '이스라엘의 악순환은\n사실 ‘나’의 모습' : '이스라엘의 악순환은 사실 ‘나’의 모습', W / 2, V ? TY - 75 : TY, { size: TS, alpha: win(t, 31.2, 35.5, .9, .8), under: RD });
+  const pa = win(t, 35.8, 43.4, 1.2, 1), py = V ? H - 300 : H - 170;
+  if (pa > 0) halo(ctx, W / 2, py + 30, W * .6, 150, pa);
+  text(ctx, '결국 가장 깊은 우상은', W / 2, py, { size: V ? 50 : 48, weight: 600, color: '#1a1a1a', alpha: pa, maxW: W - 120 });
+  const pb = win(t, 36.8, 43.4, 1.2, 1);
+  text(ctx, '“하나님 자리에 앉은 나 자신”입니다.', W / 2 + 5, py + (V ? 92 : 84) + 4, { size: 58, weight: 600, color: Y, alpha: pb * .9, maxW: W - 120 });
+  text(ctx, '“하나님 자리에 앉은 나 자신”입니다.', W / 2, py + (V ? 92 : 84), { size: 58, weight: 600, color: '#111', alpha: pb, maxW: W - 120 });
   const f = 1 - ss(0, 1.3, t) + ss(DUR - 1.3, DUR, t); if (f > 0) { ctx.fillStyle = `rgba(0,0,0,${clamp(f)})`; ctx.fillRect(0, 0, W, H); }
 }
 
 Pilot.run({ W, H, dur: DUR, audio: 'mirror.m4a', fonts: ["600 40px 'Noto Serif KR'", "400 20px 'Noto Sans KR'", "700 40px 'Noto Sans KR'"],
   init: async () => {
+    BLK.n = 0;
     SDF = SHAPES.map(buildSDF);
-    NF = new Float32Array(NW * (FH + NP)); for (let y = 0; y < FH + NP; y++) for (let x = 0; x < NW; x++) NF[y * NW + x] = fbm(x * .018, y * .018, 3);
-    D = new Float32Array(FW * FH); HT = new Float32Array(FW * FH); TMP = new Float32Array(FW * FH);
-    fcv = canvas(FW, FH); fcx = fcv.getContext('2d'); fimg = fcx.createImageData(FW, FH);
-    LUT = buildLUT(); plinth = buildPlinth();
-    const r = rng(16); for (let i = 0; i < 110; i++) motes.push({ x: r(), y: r(), v: .006 + r() * .012, r: .8 + r() * 1.8, f: .3 + r() * .8, p: r() * 6.28 });
+    for (let i = 0; i < 6; i++) { const ink = inkField(i); PLATE[i] = [0, 1, 2].map(v => makePlate(ink, 11 + i * 7 + v * 3)); MASK[i] = [0, 1, 2].map(v => silMask(i, i * 5 + v * 2.3)); }
+    GLASS = glassMask(); BGM = [0, 1, 2].map(v => bgMask(3 + v * 4.1));
+    // ink floods for the first calf: three stages of blotches
+    { const ink0 = inkField(0), K = .72, OXf = (PW - FW * K) / 2, OYf = PH - 14 - FH * K, dens = (X, Y) => { let s = 0; for (const [dx, dy] of [[0, 0], [14, 0], [-14, 0], [0, 14], [0, -14]]) { const fx = Math.round((X + dx - OXf) / K), fy = Math.round((Y + dy - OYf) / K); if (fx >= 0 && fy >= 0 && fx < FW && fy < FH) s += ink0[fy * FW + fx]; } return s / 5; };
+      const w = Math.round(PW * BR), h = Math.round(PH * BR), F = new Float32Array(w * h);      // flood field: where the photo is darkest, ink blooms first; it sinks and pools toward the bottom
+      for (let j = 0; j < h; j++) for (let i = 0; i < w; i++) { const X = i / BR, Y = j / BR, edge = Math.min(X, PW - X, Y, PH - Y) / 30;
+        F[j * w + i] = (.55 * dens(X, Y) + .45 * fbm(X * .011 + 4, Y * .011, 4) + .18 * (Y / PH)) * Math.min(1, edge); }
+      for (let k = 0; k < 6; k++) { const thr = .62 - k * .055, c = canvas(w, h), x = c.getContext('2d'), id = x.createImageData(w, h), r = rng(k + 3);
+        for (let q = 0; q < w * h; q++) { const a = ss(thr - .03, thr + .02, F[q]), v = 8 + 22 * noise(q % w * .3, (q / w | 0) * .3); id.data[q * 4] = id.data[q * 4 + 1] = v; id.data[q * 4 + 2] = v + 2; id.data[q * 4 + 3] = 255 * a * .97; }
+        x.putImageData(id, 0, 0); FLOOD.push(c); }
+      // runs: ink draining down from the pooled blotches, tapering
+      const c = canvas(w, h), x = c.getContext('2d'), r = rng(31); x.fillStyle = '#0c0c0e';
+      for (let n = 0; n < 26; n++) { const X = 20 + r() * (PW - 40), y0 = PH * (.3 + r() * .4), len = 30 + r() * (PH - y0 - 20), wd = 2 + r() * 5;
+        x.beginPath(); x.moveTo((X - wd) * BR, y0 * BR); x.quadraticCurveTo((X - wd * .3) * BR, (y0 + len * .7) * BR, X * BR, (y0 + len) * BR); x.quadraticCurveTo((X + wd * .3) * BR, (y0 + len * .7) * BR, (X + wd) * BR, y0 * BR); x.fill();
+        x.beginPath(); x.arc(X * BR, (y0 + len) * BR, wd * .7 * BR, 0, TAU); x.fill(); }
+      DRIP = c; }
+    // the brushed silver wall, the screen mesh, film grain
+    { const c = canvas(1024, 1024), x = c.getContext('2d'); x.fillStyle = SILVER; x.fillRect(0, 0, 1024, 1024); const r = rng(8);
+      for (let i = 0; i < 900; i++) { const y = r() * 1024; x.strokeStyle = r() < .5 ? `rgba(255,255,255,${.05 + r() * .12})` : `rgba(60,62,68,${.04 + r() * .08})`; x.lineWidth = .6 + r() * 2.4; x.beginPath(); x.moveTo(r() * 1024 - 200, y); x.lineTo(r() * 1024 + 300, y + (r() - .5) * 4); x.stroke(); }
+      x.globalAlpha = .05; x.strokeStyle = '#000'; x.lineWidth = 1; for (let i = 0; i < 1024; i += 4) { x.beginPath(); x.moveTo(i, 0); x.lineTo(i, 1024); x.stroke(); x.beginPath(); x.moveTo(0, i); x.lineTo(1024, i); x.stroke(); }
+      x.globalAlpha = 1; x.globalCompositeOperation = 'overlay'; x.drawImage(speckle(512, 512, 30, 4, 2), 0, 0, 1024, 1024); WALL = x.createPattern(c, 'repeat'); }
+    { const c = canvas(4, 4), x = c.getContext('2d'); x.fillStyle = 'rgba(205,205,200,.18)'; x.fillRect(0, 0, 4, 4); x.fillStyle = 'rgba(45,45,48,.55)'; x.fillRect(0, 0, 4, 1); x.fillRect(0, 0, 1, 4);
+      MESH = x.createPattern(c, 'repeat'); MESH.setTransform(new DOMMatrix().scale(.8)); }
+    for (let i = 0; i < 6; i++) { const m = SM * PR, c = canvas(Math.round(PW * PR + 2 * m), Math.round(PH * PR + 2 * m)), x = c.getContext('2d');    // the stencil: blue photo-emulsion with the image open
+      x.fillStyle = '#5E93AE'; x.fillRect(0, 0, c.width, c.height); x.globalCompositeOperation = 'destination-out'; x.drawImage(PLATE[i][0], m, m); STEN.push(c); }
+    GRAIN = canvas(1, 1).getContext('2d').createPattern(speckle(256, 256, 70, 21), 'repeat');
+    // pre-colour every block the film uses, so nothing is built mid-play
+    for (const e of EV) { if (e.bg !== SILVER) tinted(BGM[e.v], e.bg); tinted(MASK[e.idol][e.v], e.blk); if (e.glass) tinted(GLASS, e.glass); }
+    tinted(BGM[1], RD); tinted(BGM[2], CR);
+    const warm = canvas(4, 4).getContext('2d'); for (const p of PLATE.flat()) warm.drawImage(p, 0, 0, 4, 4);
   },
   draw });
 </script>

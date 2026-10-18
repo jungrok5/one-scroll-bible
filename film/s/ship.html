@@ -9,351 +9,643 @@
 <body>
 <script src="lib.js"></script>
 <script>
-/* 19 FAQ · 착하게 살면 되지 않나요? — a paper pop-up book on a desk under a warm lamp. Cut-paper actors with white
-   borders and cardboard edges. A pirate ship pops up; a boy scrubs the deck, is kind to his crewmate, earns a star —
-   and is still a pirate, carried with the ship toward the harbour of judgement. A bright ship pops up beside it; an arm
-   reaches across; the boy takes the hand, jumps, and lands in a new identity: 하나님의 자녀. A sun on a stick rises. Col 1:13.
-   All words are the site's own (index.html FAQ a2). Pure function of t. */
-const { clamp, lerp, ss, eo, eio, win, rng, fbm, canvas, mix, rgb, speckle, text } = Pilot;
-const W = Pilot.W, H = Pilot.H, V = Pilot.ori === 'v', DUR = 46.5;
-// film time T → story time t: the action is authored on a 40 s clock and stretched so every two-line caption holds ≥ 4.5 s
-const TK = [[0, 0], [5.6, 5.6], [9.3, 9.25], [14.8, 13.65], [18.5, 16.85], [24.0, 20.65], [29.5, 24.45], [35.0, 28.55], [40.5, 32.6], [46.5, 40]];
-const warp = T => { let i = 0; while (i < TK.length - 2 && T > TK[i + 1][0]) i++; const [a0, b0] = TK[i], [a1, b1] = TK[i + 1]; return b0 + (b1 - b0) * clamp((T - a0) / (a1 - a0)); };
-const INK = '#3b2618', SANS = "'Noto Sans KR',sans-serif", SERIF = "'Noto Serif KR',serif";
-const GY = 640, FY = 930;                          // gutter and front edge of the lower page (stage y)
-const PX0 = [260, 1660], PX1 = [120, 1800];        // page x-extent at the gutter / at the front edge
-let SP = {}, grain, room, wood, seaPage, cache = {};
-const tr = Pilot.tr, KO = Pilot.lang === 'ko';
-// outside Korean: the largest font size ≤ fs at which every line fits maxW
-const fitSize = (x, f, fs, lines, maxW) => { if (KO) return fs; x.font = f(fs); const wd = Math.max(...lines.map(l => x.measureText(l).width)); return wd > maxW ? fs * maxW / wd : fs; };
+/* 19 FAQ · 착하게 살면 되지 않나요? — an 18th-century Admiralty sea chart in copperplate (OPUSCAR 98 · 1935 Mutiny on the
+   Bounty): burin hatching on laid paper, thin hand colour, rhumb lines from compass roses, cartouches, a sea monster.
+   The film never leaves the chart; one camera glides over it.
+     · the title cartouche asks the question; the camera pulls back over the whole sheet and glides into an engraved
+       vignette: a pirate ship sailing her dotted track toward the dark bay marked 「심판의 항구」.
+     · on deck a man in a coral coat scrubs the planks and hands a crewmate a mug — under the black flag; the ship carries
+       him on along the course to the harbour of judgement, where storm clouds are hatched in.
+     · a second ship, lit, comes up behind on another course; its boat crosses on a line; he climbs down, is drawn across
+       (his own route inks itself in coral) and is lifted aboard by a hand of light. A banderole: 하나님의 자녀.
+     · the old course to the harbour is struck through; a new course draws itself toward the light. Col 1:13.
+   All words are the site's own (index.html FAQ a2). Everything is a pure function of t; the chart, the ships and the sea
+   texture are engraved once in init. */
+const { clamp, lerp, ss, eo, eio, win, rng, fbm, noise, canvas, speckle, text } = Pilot;
+const W = Pilot.W, H = Pilot.H, V = Pilot.ori === 'v', DUR = 57.5;
+const WW = 3600, WH = 2400, TF = 1.25, SR = 2;                       // chart in world units; texture and sprite resolution
+const INK = '#1C1610', PAPER = '#EFE3C4', HERO = '#D97757', GILT = '#B98A34';
+const SERIF = "'Noto Serif KR',serif", SANS = "'Noto Sans KR',sans-serif", TAU = Math.PI * 2;
+let TILES = [], CLOUD, SHIP = {}, LAND = {};
 
-// ---------- easing ----------
-const back = u => { u = clamp(u); const c1 = 1.9, c3 = c1 + 1; return 1 + c3 * Math.pow(u - 1, 3) + c1 * Math.pow(u - 1, 2); };
-const pop = (t, t0, t1 = 99, d = .55) => t < t0 ? 0 : t < t1 ? back((t - t0) / d) : 1 - eio((t - t1) / .5);
-const spring = (t, t0) => { if (t < t0) return 0; const u = t - t0; return 1 - Math.exp(-5 * u) * Math.cos(9 * u); };
-
-// ---------- cut paper ----------
-function shape(x, p, base, shade, lw = 5) {     // fill with one hard crescent of shade, then the ink line
-  x.save(); x.fillStyle = shade; x.fill(p); x.clip(p); x.translate(-7, -6); x.fillStyle = base; x.fill(p); x.restore();
-  x.lineWidth = lw; x.strokeStyle = INK; x.lineJoin = 'round'; x.lineCap = 'round'; x.stroke(p);
+// ---------- small geometry ----------
+const P2 = (pts, close = true) => { const p = new Path2D(); pts.forEach((q, i) => i ? p.lineTo(q[0], q[1]) : p.moveTo(q[0], q[1])); if (close) p.closePath(); return p; };
+const BB = pts => { let a = 1e9, b = 1e9, c = -1e9, d = -1e9; for (const [x, y] of pts) { a = Math.min(a, x); b = Math.min(b, y); c = Math.max(c, x); d = Math.max(d, y); } return [a, b, c, d]; };
+const bez = (a, b, c, u) => [(1 - u) * (1 - u) * a[0] + 2 * u * (1 - u) * b[0] + u * u * c[0], (1 - u) * (1 - u) * a[1] + 2 * u * (1 - u) * b[1] + u * u * c[1]];
+const qpts = (a, c, b, n = 16) => Array.from({ length: n + 1 }, (_, i) => bez(a, c, b, i / n));
+function hatch(x, clip, box, ang, gap, lw, o = {}) {      // parallel burin lines across a region
+  const [x0, y0, x1, y1] = box, cx = (x0 + x1) / 2, cy = (y0 + y1) / 2, R = Math.hypot(x1 - x0, y1 - y0) / 2 + 2, ca = Math.cos(ang), sa = Math.sin(ang), r = rng(o.seed || 7);
+  x.save(); if (clip) x.clip(clip, o.rule || 'nonzero'); x.strokeStyle = o.col || INK; x.globalAlpha = o.a == null ? 1 : o.a; x.lineWidth = lw; x.lineCap = 'round'; x.beginPath();
+  for (let d = -R; d <= R; d += gap) { const nx = -sa * d, ny = ca * d, n = o.wob ? 8 : 1; x.moveTo(cx + nx - ca * R, cy + ny - sa * R);
+    for (let i = 1; i <= n; i++) { const s = -R + 2 * R * i / n, w = o.wob ? (r() - .5) * o.wob : 0; x.lineTo(cx + nx + ca * s - sa * w, cy + ny + sa * s + ca * w); } }
+  x.stroke(); x.restore();
 }
-const P = f => { const p = new Path2D(); f(p); return p; };
-const RR = (a, b, w, h, r) => P(p => p.roundRect(a, b, w, h, r)), EL = (a, b, rx, ry, rot = 0) => P(p => p.ellipse(a, b, rx, ry, rot, 0, 6.2832));
-function cut(w, h, fn, b = 9) {                  // art + off-white border + grey cardboard edge + grain; anchor = bottom centre of the art box
-  const pad = b + 8, w2 = w + pad * 2, h2 = h + pad * 2, art = canvas(w2, h2), ax = art.getContext('2d'); ax.translate(pad, pad); fn(ax);
-  const sil = (col, r, dy) => { const c = canvas(w2, h2), x = c.getContext('2d');
-    for (const rr of [r, r * .55]) for (let a = 0; a < 20; a++) { const g = a / 20 * 6.2832; x.drawImage(art, Math.cos(g) * rr, Math.sin(g) * rr + dy); }
-    x.drawImage(art, 0, dy); x.globalCompositeOperation = 'source-in'; x.fillStyle = col; x.fillRect(0, 0, w2, h2); return c; };
-  const out = canvas(w2, h2), o = out.getContext('2d');
-  o.drawImage(sil('#9a9284', b, 3.5), 0, 0); o.drawImage(sil('#fbf7ee', b, 0), 0, 0); o.drawImage(art, 0, 0);
-  o.globalCompositeOperation = 'source-atop'; o.globalAlpha = .32; o.fillStyle = o.createPattern(grain, 'repeat'); o.fillRect(0, 0, w2, h2); o.globalAlpha = 1; o.globalCompositeOperation = 'source-over';
-  const sh = sil('#000', b, 0);
-  return { c: out, sh, pad, w: w2, h: h2 };
+function noisyLoop(ctrl, seed, amp, step = 7) {           // a closed coastline: the control polygon, subdivided and pushed along its normals by fbm
+  const out = [];
+  for (let i = 0; i < ctrl.length; i++) { const a = ctrl[i], b = ctrl[(i + 1) % ctrl.length], L = Math.hypot(b[0] - a[0], b[1] - a[1]), n = Math.max(1, Math.round(L / step)), nx = -(b[1] - a[1]) / L, ny = (b[0] - a[0]) / L;
+    for (let j = 0; j < n; j++) { const u = j / n, px = lerp(a[0], b[0], u), py = lerp(a[1], b[1], u), d = (fbm(px * .006 + seed, py * .006, 5) - .5) * 2 * amp + (noise(px * .05, py * .05 + seed) - .5) * amp * .25;
+      out.push([px + nx * d, py + ny * d]); } }
+  return out;
 }
 
-// ---------- art ----------
-function shipBack(x, bright) {
-  const mast = bright ? '#a8743e' : '#5a3a24', sail = bright ? ['#fffaf0', '#e8dcc6'] : ['#55535c', '#3c3a43'];
-  shape(x, RR(292, 34, 16, 300, 4), mast, mast); shape(x, RR(163, 118, 14, 216, 4), mast, mast);
-  const s1 = P(p => { p.moveTo(196, 78); p.quadraticCurveTo(300, 58, 404, 78); p.lineTo(414, 250); p.quadraticCurveTo(300, 282, 186, 250); p.closePath(); });
-  const s2 = P(p => { p.moveTo(104, 150); p.quadraticCurveTo(170, 138, 236, 150); p.lineTo(240, 282); p.quadraticCurveTo(170, 300, 100, 282); p.closePath(); });
-  shape(x, s2, ...sail); shape(x, s1, ...sail);
-  if (bright) {   // a gold band and a small sun on the main sail
-    x.save(); x.clip(s1); x.fillStyle = '#efc25a'; x.fillRect(180, 232, 240, 14); x.restore();
-    shape(x, EL(300, 160, 30, 30), '#f4c04a', '#dc9e2c', 4);
-    x.strokeStyle = '#e0a640'; x.lineWidth = 4; for (let i = 0; i < 8; i++) { const a = i * Math.PI / 4; x.beginPath(); x.moveTo(300 + Math.cos(a) * 40, 160 + Math.sin(a) * 40); x.lineTo(300 + Math.cos(a) * 52, 160 + Math.sin(a) * 52); x.stroke(); }
-    shape(x, P(p => { p.moveTo(308, 30); p.lineTo(388, 44); p.lineTo(308, 60); p.closePath(); }), '#f0b93a', '#d89a24', 4);
-  } else {        // patches, and the black flag with a skull
-    x.save(); x.clip(s1); [[230, 120, 50, 40], [340, 180, 44, 36]].forEach(([a, b, w, h]) => { x.fillStyle = '#7b7882'; x.fillRect(a, b, w, h); x.setLineDash([6, 5]); x.strokeStyle = '#2a2830'; x.lineWidth = 2.5; x.strokeRect(a + 4, b + 4, w - 8, h - 8); x.setLineDash([]); }); x.restore();
-    shape(x, P(p => { p.moveTo(308, 26); p.quadraticCurveTo(350, 18, 392, 30); p.lineTo(390, 80); p.quadraticCurveTo(350, 70, 308, 78); p.closePath(); }), '#2b292f', '#1c1b20', 4);
-    x.fillStyle = '#f6f1e6'; x.beginPath(); x.arc(349, 46, 12, 0, 6.3); x.fill(); x.fillRect(343, 52, 12, 8);
-    x.fillStyle = '#2b292f'; x.beginPath(); x.arc(344, 46, 3.2, 0, 6.3); x.arc(354, 46, 3.2, 0, 6.3); x.fill();
-    x.strokeStyle = '#f6f1e6'; x.lineWidth = 4; x.lineCap = 'round'; x.beginPath(); x.moveTo(334, 62); x.lineTo(364, 72); x.moveTo(364, 62); x.lineTo(334, 72); x.stroke();
-    shape(x, RR(284, 108, 32, 16, 3), mast, mast, 4);
+// ---------- the chart (engraved once) ----------
+const ROSES = [[2250, 560, 250], [700, 2060, 140], [2980, 1240, 115]];
+const CART = V ? { x: 980, y: 520, w: 800, h: 460, fs: 54 } : { x: 980, y: 540, w: 1120, h: 380, fs: 54 };
+const HARB = { x: 3255, y: 2205, w: 470, h: 118 }, SUN = [3050, 620], BAY = [3262, 1925], MON = [1300, 2030];
+function lands() {
+  const A = noisyLoop([[-80, 1390], [140, 1365], [255, 1440], [330, 1600], [282, 1760], [385, 1905], [342, 2080], [425, 2250], [385, 2490], [-80, 2490]], 11, 34);
+  const B = noisyLoop([[3700, 1500], [3400, 1555], [3210, 1650], [3075, 1770], [3115, 1845], [3330, 1878], [3372, 1960], [3160, 2008], [3015, 2085], [2905, 2205], [2860, 2490], [3700, 2490]], 23, 30);
+  const C = noisyLoop([[3700, -80], [3700, 470], [3560, 455], [3440, 400], [3330, 300], [3235, 210], [3160, 90], [3180, -80]], 37, 26);
+  const isl = (cx, cy, r, s) => noisyLoop(Array.from({ length: 9 }, (_, i) => { const a = i / 9 * TAU; return [cx + Math.cos(a) * r * (1 + .25 * Math.sin(i * 2.1 + s)), cy + Math.sin(a) * r * .72 * (1 + .2 * Math.cos(i * 1.7 + s))]; }), s, r * .22, 4);
+  const I = [isl(980, 1980, 70, 1), isl(1078, 2060, 34, 2), isl(1148, 1948, 22, 3), isl(2640, 860, 56, 4), isl(2716, 822, 22, 5), isl(560, 930, 40, 6), isl(2060, 2160, 58, 7), isl(2150, 2214, 26, 8), isl(1720, 2260, 30, 9)];
+  return { A, B, C, I };
+}
+function rose(x, cx, cy, R) {
+  x.save(); x.translate(cx, cy);
+  x.fillStyle = PAPER; x.beginPath(); x.arc(0, 0, R * 1.02, 0, TAU); x.fill();
+  x.strokeStyle = INK; x.lineWidth = 2; x.beginPath(); x.arc(0, 0, R, 0, TAU); x.stroke(); x.lineWidth = 1; x.beginPath(); x.arc(0, 0, R * .93, 0, TAU); x.stroke();
+  x.beginPath(); for (let i = 0; i < 128; i++) { const a = i / 128 * TAU, l = i % 4 ? .965 : .94; x.moveTo(Math.cos(a) * R * .93, Math.sin(a) * R * .93); x.lineTo(Math.cos(a) * R * l, Math.sin(a) * R * l); } x.lineWidth = .9; x.stroke();
+  x.lineWidth = .8; x.beginPath(); x.arc(0, 0, R * .5, 0, TAU); x.stroke();
+  for (let lev = 3; lev >= 0; lev--) for (let i = 0; i < 32; i++) {
+    const L = i % 8 === 0 ? 0 : i % 4 === 0 ? 1 : i % 2 === 0 ? 2 : 3; if (L !== lev) continue;
+    const a = i / 32 * TAU - Math.PI / 2, len = [.9, .7, .54, .42][L] * R, w = [.11, .085, .06, .045][L] * R;
+    const tip = [Math.cos(a) * len, Math.sin(a) * len], sl = [Math.cos(a - Math.PI / 2) * w, Math.sin(a - Math.PI / 2) * w], sr = [-sl[0], -sl[1]];
+    x.fillStyle = INK; x.beginPath(); x.moveTo(0, 0); x.lineTo(...tip); x.lineTo(...sl); x.closePath(); x.fill();
+    x.fillStyle = PAPER; x.beginPath(); x.moveTo(0, 0); x.lineTo(...tip); x.lineTo(...sr); x.closePath(); x.fill(); x.lineWidth = .9; x.strokeStyle = INK; x.stroke();
   }
+  x.fillStyle = PAPER; x.beginPath(); x.arc(0, 0, R * .05, 0, TAU); x.fill(); x.stroke();
+  // fleur-de-lis at north
+  x.translate(0, -R * .93); x.fillStyle = INK; x.beginPath(); x.moveTo(0, -R * .2); x.quadraticCurveTo(R * .06, -R * .1, 0, 0); x.quadraticCurveTo(-R * .06, -R * .1, 0, -R * .2); x.fill();
+  x.lineWidth = 1.6; x.beginPath(); x.moveTo(0, -R * .02); x.bezierCurveTo(R * .14, -R * .02, R * .13, -R * .16, R * .06, -R * .13); x.moveTo(0, -R * .02); x.bezierCurveTo(-R * .14, -R * .02, -R * .13, -R * .16, -R * .06, -R * .13); x.stroke();
+  x.restore();
 }
-function shipHull(x, bright) {
-  const c = bright ? ['#d69c5e', '#b07a41', '#ecbf80', '#ffd98a'] : ['#6e4529', '#4c2f1c', '#8a5a36', '#2b2320'];
-  const hull = P(p => { p.moveTo(18, 296); p.lineTo(140, 296); p.lineTo(150, 326); p.lineTo(546, 318); p.quadraticCurveTo(524, 420, 440, 452); p.lineTo(118, 452); p.quadraticCurveTo(46, 428, 18, 296); p.closePath(); });
-  shape(x, hull, c[0], c[1]);
-  x.save(); x.clip(hull); x.strokeStyle = INK; x.globalAlpha = .55; x.lineWidth = 2.5; [362, 398, 430].forEach(y => { x.beginPath(); x.moveTo(0, y); x.quadraticCurveTo(300, y + 12, 560, y - 14); x.stroke(); }); x.restore();
-  shape(x, RR(146, 312, 404, 14, 5), c[2], c[2], 4); shape(x, RR(16, 286, 128, 14, 5), c[2], c[2], 4);
-  [200, 270, 340, 410].forEach(px => shape(x, EL(px, 378, 11, 11), c[3], c[3], 3.5));
-  x.strokeStyle = INK; x.lineWidth = 6; x.beginPath(); x.moveTo(530, 322); x.lineTo(574, 292); x.stroke();
+function scroll(x, cx, cy, r, dir) {   // a volute: a spiral with hatched body
+  x.save(); x.translate(cx, cy); x.scale(dir, 1); x.beginPath();
+  for (let i = 0; i <= 60; i++) { const a = i / 60 * TAU * 1.6, rr = r * (1 - i / 75); x.lineTo(Math.cos(a) * rr, Math.sin(a) * rr); }
+  x.strokeStyle = INK; x.lineWidth = 2.4; x.stroke(); x.lineWidth = .9;
+  for (let i = 0; i < 30; i++) { const a = i / 30 * TAU * .9 + .4; x.beginPath(); x.moveTo(Math.cos(a) * r * .55, Math.sin(a) * r * .55); x.lineTo(Math.cos(a) * r * .92, Math.sin(a) * r * .92); x.stroke(); }
+  x.restore();
 }
-function kid(x, pose, ph, newOut) {     // 110×180, feet at (55,178), facing right
-  const skin = ['#f3c9a3', '#dfa77f'], shirt = newOut ? ['#f6c94e', '#dca634'] : ['#f8f3e9', '#ddd5c6'];
-  const arm = (ax, ay, hx, hy) => { x.strokeStyle = INK; x.lineCap = 'round'; x.lineWidth = 15; x.beginPath(); x.moveTo(ax, ay); x.lineTo(hx, hy); x.stroke();
-    x.strokeStyle = shirt[0]; x.lineWidth = 9; x.beginPath(); x.moveTo(ax, ay); x.lineTo(hx, hy); x.stroke(); shape(x, EL(hx, hy, 8, 8), ...skin, 3.5); };
-  // legs
-  if (pose === 'jump') { shape(x, RR(36, 124, 14, 34, 6), '#3d3a52', '#2c2a3e', 4); shape(x, RR(60, 120, 14, 34, 6), '#3d3a52', '#2c2a3e', 4); shape(x, EL(42, 160, 11, 6), '#5a3a24', '#3e2818', 3.5); shape(x, EL(70, 156, 11, 6), '#5a3a24', '#3e2818', 3.5); }
-  else { shape(x, RR(40, 126, 14, 44, 6), '#3d3a52', '#2c2a3e', 4); shape(x, RR(57, 126, 14, 44, 6), '#3d3a52', '#2c2a3e', 4); shape(x, EL(46, 172, 12, 6), '#5a3a24', '#3e2818', 3.5); shape(x, EL(66, 172, 12, 6), '#5a3a24', '#3e2818', 3.5); }
-  // back arm
-  if (pose === 'scrub') arm(40, 92, 74 + ph * 10, 118); else if (pose === 'joy') arm(38, 90, 18, 44); else if (pose === 'reach') arm(40, 92, 30, 122); else if (pose === 'jump') arm(40, 90, 22, 70); else arm(38, 92, 32, 126);
-  // body
-  const body = RR(30, 78, 50, 58, 15); shape(x, body, ...shirt);
-  if (!newOut) { x.save(); x.clip(body); x.fillStyle = '#c8362e'; for (let y = 86; y < 136; y += 13) x.fillRect(30, y, 50, 5.5); x.restore(); x.lineWidth = 5; x.strokeStyle = INK; x.stroke(body); }
-  else { x.fillStyle = '#fff6d8'; x.beginPath(); x.arc(55, 100, 7, 0, 6.3); x.fill(); }
-  // head
-  shape(x, EL(55, 50, 28, 27), ...skin);
-  if (newOut) shape(x, P(p => { p.moveTo(28, 46); p.quadraticCurveTo(34, 18, 58, 20); p.quadraticCurveTo(82, 20, 84, 44); p.quadraticCurveTo(70, 34, 56, 38); p.quadraticCurveTo(40, 32, 28, 46); p.closePath(); }), '#6a3f22', '#4e2d17', 4);
-  else { shape(x, P(p => { p.moveTo(26, 46); p.quadraticCurveTo(30, 16, 58, 18); p.quadraticCurveTo(86, 20, 84, 42); p.lineTo(26, 46); p.closePath(); }), '#c8362e', '#a52a24', 4);
-    shape(x, P(p => { p.moveTo(28, 38); p.lineTo(8, 30); p.lineTo(12, 48); p.closePath(); }), '#c8362e', '#a52a24', 3.5);
-    x.fillStyle = '#f6efe2'; [[44, 30], [60, 26], [74, 34]].forEach(([a, b]) => { x.beginPath(); x.arc(a, b, 3, 0, 6.3); x.fill(); }); }
-  x.fillStyle = INK; x.beginPath(); x.arc(64, 52, 3.4, 0, 6.3); x.arc(76, 52, 3.4, 0, 6.3); x.fill();
-  x.fillStyle = 'rgba(230,110,100,.45)'; x.beginPath(); x.arc(58, 62, 5, 0, 6.3); x.arc(80, 61, 4, 0, 6.3); x.fill();
-  x.strokeStyle = INK; x.lineWidth = 3; x.beginPath(); if (pose === 'joy' || newOut) x.arc(70, 62, 8, .2, 2.9); else x.arc(70, 64, 6, .4, 2.7); x.stroke();
-  // front arm (+ the mop)
-  if (pose === 'scrub') { const mx = 100 + ph * 16; x.strokeStyle = '#8a6a44'; x.lineWidth = 6; x.beginPath(); x.moveTo(60 + ph * 12, 74); x.lineTo(mx, 172); x.stroke(); x.lineWidth = 3; x.strokeStyle = INK; x.stroke();
-    shape(x, P(p => { p.moveTo(mx - 20, 178); p.quadraticCurveTo(mx, 160, mx + 20, 178); p.closePath(); }), '#b9c7d4', '#93a5b6', 3.5); arm(70, 92, 66 + ph * 12, 108); arm(70, 92, 80 + ph * 14, 130); }
-  else if (pose === 'reach') arm(72, 92, 106, 60); else if (pose === 'joy') arm(72, 90, 94, 42); else if (pose === 'jump') arm(72, 90, 104, 70); else arm(72, 92, 80, 126);
+function cartouche(x, c) {
+  const { x: cx, y: cy, w, h } = c, R = 46, k = (dx, dy) => [cx + dx, cy + dy];
+  const frame = (ins) => { const hw = w / 2 - ins, hh = h / 2 - ins, r = R - ins * .4, p = new Path2D();   // a rectangle with concave corners
+    p.moveTo(cx - hw + r, cy - hh); p.lineTo(cx + hw - r, cy - hh); p.arc(cx + hw, cy - hh, r, Math.PI, Math.PI / 2, true); p.lineTo(cx + hw, cy + hh - r);
+    p.arc(cx + hw, cy + hh, r, -Math.PI / 2, Math.PI, true); p.lineTo(cx - hw + r, cy + hh); p.arc(cx - hw, cy + hh, r, 0, -Math.PI / 2, true); p.lineTo(cx - hw, cy - hh + r); p.arc(cx - hw, cy - hh, r, Math.PI / 2, 0, true); p.closePath(); return p; };
+  // shadowed drapery behind, then the frame band
+  { const q = .25, pad = 80, sc = canvas(Math.ceil((w + pad * 2) * q), Math.ceil((h + pad * 2) * q)), s = sc.getContext('2d'), sb = canvas(sc.width, sc.height), b = sb.getContext('2d');   // soft shadow, blurred small
+    s.scale(q, q); s.translate(pad - cx + w / 2, pad - cy + h / 2); s.fillStyle = 'rgba(60,40,20,.12)'; s.fill(frame(-14)); b.filter = 'blur(3px)'; b.drawImage(sc, 0, 0); x.drawImage(sb, cx - w / 2 - pad, cy - h / 2 - pad, w + pad * 2, h + pad * 2); }
+  x.fillStyle = PAPER; x.fill(frame(0));
+  const band = new Path2D(); band.addPath(frame(0)); band.addPath(frame(22));
+  hatch(x, band, [cx - w / 2, cy - h / 2, cx + w / 2, cy + h / 2], .78, 3.2, .8, { rule: 'evenodd' });
+  x.strokeStyle = INK; x.lineWidth = 3; x.stroke(frame(0)); x.lineWidth = 1.4; x.stroke(frame(22)); x.lineWidth = .8; x.stroke(frame(30));
+  // a shell crest on top, acanthus scrolls at the sides and below
+  const sx = cx, sy = cy - h / 2 - 4, sr = Math.min(80, w * .09);
+  x.fillStyle = PAPER; x.beginPath(); x.arc(sx, sy, sr, Math.PI, 0); x.fill(); x.lineWidth = 2; x.stroke();
+  x.lineWidth = .9; for (let i = 1; i < 14; i++) { const a = Math.PI + i / 14 * Math.PI; x.beginPath(); x.moveTo(sx, sy); x.lineTo(sx + Math.cos(a) * sr, sy + Math.sin(a) * sr); x.stroke(); }
+  x.beginPath(); for (let i = 0; i <= 14; i++) { const a = Math.PI + i / 14 * Math.PI; x.lineTo(sx + Math.cos(a) * (sr + 8 * (i % 2)), sy + Math.sin(a) * (sr + 8 * (i % 2))); } x.lineWidth = 1.4; x.stroke();
+  scroll(x, cx - w / 2 - 6, cy, 40, -1); scroll(x, cx + w / 2 + 6, cy, 40, 1);
+  for (const d of [-1, 1]) { x.save(); x.translate(cx, cy + h / 2); x.scale(d, 1); x.fillStyle = PAPER; x.strokeStyle = INK; x.lineWidth = 1.8;
+    const leaf = new Path2D(); leaf.moveTo(6, -4); leaf.bezierCurveTo(60, 40, 150, 10, 190, 34); leaf.bezierCurveTo(150, 46, 70, 64, 6, 22); leaf.closePath();
+    x.fill(leaf); x.stroke(leaf); hatch(x, leaf, [0, -10, 200, 70], 1.2, 3, .7); scroll(x, 200, 30, 16, 1); x.restore(); }
 }
-function crew(x, ph) {      // 140×210, a big friendly pirate, facing left
-  shape(x, RR(46, 150, 20, 56, 7), '#3d3a52', '#2c2a3e', 4); shape(x, RR(74, 150, 20, 56, 7), '#3d3a52', '#2c2a3e', 4);
-  const body = RR(30, 88, 82, 74, 22); shape(x, body, '#f3efe6', '#d9d2c4'); x.save(); x.clip(body); x.fillStyle = '#3b6fa8'; for (let y = 96; y < 162; y += 14) x.fillRect(30, y, 82, 6); x.restore(); x.lineWidth = 5; x.strokeStyle = INK; x.stroke(body);
-  shape(x, EL(70, 60, 32, 31), '#f0c29c', '#dca27a');
-  shape(x, P(p => { p.moveTo(40, 66); p.quadraticCurveTo(52, 104, 70, 102); p.quadraticCurveTo(90, 104, 100, 66); p.quadraticCurveTo(70, 80, 40, 66); p.closePath(); }), '#7a4a26', '#5c3519', 4);
-  shape(x, P(p => { p.moveTo(26, 40); p.quadraticCurveTo(70, 2, 114, 40); p.quadraticCurveTo(70, 28, 26, 40); p.closePath(); }), '#2b292f', '#1c1b20', 4);
-  x.fillStyle = INK; x.beginPath(); x.arc(58, 58, 3.4, 0, 6.3); x.arc(80, 58, 3.4, 0, 6.3); x.fill();
-  x.strokeStyle = INK; x.lineCap = 'round'; x.lineWidth = 15; x.beginPath(); x.moveTo(34, 106); x.lineTo(14, 74 + ph * 8); x.stroke(); x.strokeStyle = '#f3efe6'; x.lineWidth = 9; x.stroke(); shape(x, EL(14, 70 + ph * 8, 9, 9), '#f0c29c', '#dca27a', 3.5);
+function smallCart(x, c) {     // a scroll banner for the harbour's name
+  const { x: cx, y: cy, w, h } = c;
+  const p = new Path2D(); p.moveTo(cx - w / 2, cy - h / 2); p.quadraticCurveTo(cx, cy - h / 2 - 16, cx + w / 2, cy - h / 2); p.lineTo(cx + w / 2, cy + h / 2); p.quadraticCurveTo(cx, cy + h / 2 - 16, cx - w / 2, cy + h / 2); p.closePath();
+  for (const d of [-1, 1]) { const e = new Path2D(), ex = cx + d * w / 2; e.moveTo(ex, cy - h / 2 + 20); e.lineTo(ex + d * 70, cy - h / 2 + 28); e.lineTo(ex + d * 44, cy + 10); e.lineTo(ex + d * 74, cy + h / 2 + 22); e.lineTo(ex, cy + h / 2 + 12); e.closePath();
+    x.fillStyle = PAPER; x.fill(e); hatch(x, e, [ex - 80, cy - h, ex + 80, cy + h], .9, 2.6, .8); x.strokeStyle = INK; x.lineWidth = 1.6; x.stroke(e); }
+  x.fillStyle = PAPER; x.fill(p); x.strokeStyle = INK; x.lineWidth = 2.2; x.stroke(p);
+  x.save(); x.clip(p); x.lineWidth = .8; x.beginPath(); x.moveTo(cx - w / 2 + 12, cy - h / 2 + 8); x.quadraticCurveTo(cx, cy - h / 2 - 6, cx + w / 2 - 12, cy - h / 2 + 8); x.stroke(); x.restore();
 }
-function armArt(x) {       // 340×90, shoulder at (0,45): a white sleeve and an open hand reaching right
-  shape(x, P(p => { p.moveTo(0, 22); p.quadraticCurveTo(120, 18, 232, 30); p.lineTo(232, 62); p.quadraticCurveTo(120, 72, 0, 70); p.closePath(); }), '#fdf9f0', '#e6dcc8');
-  shape(x, RR(222, 26, 16, 40, 5), '#efc25a', '#d6a33c', 4);
-  [[296, 28, 40], [300, 40, 44], [298, 52, 42], [292, 63, 34]].forEach(([a, b, l]) => shape(x, RR(a - 20, b - 6, l, 12, 6), '#f3c9a3', '#dfa77f', 3.5));
-  shape(x, EL(266, 46, 34, 24), '#f3c9a3', '#dfa77f', 4);
-  shape(x, P(p => { p.moveTo(250, 32); p.quadraticCurveTo(262, 4, 286, 14); p.quadraticCurveTo(276, 30, 270, 38); p.closePath(); }), '#f3c9a3', '#dfa77f', 3.5);
+function monster(x, cx, cy) {   // a sea serpent in four humps, its head turned toward the ships
+  x.save(); x.translate(cx, cy);
+  const ripple = (px, py, w) => { x.lineWidth = .9; for (let k = 0; k < 3; k++) { x.beginPath(); for (let i = 0; i <= 12; i++) { const u = i / 12; x.lineTo(px - w / 2 + u * w, py + k * 6 + Math.sin(u * 9 + k) * 1.4); } x.stroke(); } };
+  x.strokeStyle = INK;
+  for (let i = 0; i < 4; i++) { const hx = -60 + i * 92, R1 = 44 - i * 4, R2 = R1 - 18, hy = 0;
+    const p = new Path2D(); p.ellipse(hx, hy, R1, R1 * 1.15, 0, Math.PI, 0); p.lineTo(hx + R2, hy); p.ellipse(hx, hy, R2, R2 * 1.1, 0, 0, Math.PI, true); p.closePath();
+    x.fillStyle = PAPER; x.fill(p); x.save(); x.clip(p); x.lineWidth = .8;
+    for (let r = R2 + 2; r < R1; r += 3.2) { x.beginPath(); x.ellipse(hx, hy, r, r * 1.12, 0, Math.PI * 1.05, Math.PI * 1.9); x.stroke(); }
+    hatch(x, null, [hx, hy - R1 * 1.2, hx + R1, hy], 2.2, 3, .8); x.restore(); x.lineWidth = 2; x.stroke(p);
+    ripple(hx, hy + 4, R1 * 2.6); }
+  // neck and head (left)
+  const neck = new Path2D(); neck.moveTo(-104, 2); neck.bezierCurveTo(-112, -60, -150, -96, -196, -88); neck.lineTo(-206, -60); neck.bezierCurveTo(-170, -64, -142, -40, -134, 2); neck.closePath();
+  x.fillStyle = PAPER; x.fill(neck); x.save(); x.clip(neck); hatch(x, null, [-220, -110, -100, 10], .5, 3.4, .8); x.restore(); x.lineWidth = 2; x.stroke(neck);
+  const head = new Path2D(); head.moveTo(-190, -96); head.quadraticCurveTo(-230, -112, -268, -96); head.lineTo(-250, -86); head.lineTo(-272, -74); head.quadraticCurveTo(-236, -58, -204, -58); head.closePath();
+  x.fill(head); x.save(); x.clip(head); hatch(x, null, [-280, -120, -180, -50], 1.9, 3, .8); x.restore(); x.lineWidth = 2; x.stroke(head);
+  x.fillStyle = INK; x.beginPath(); x.arc(-222, -92, 3.2, 0, TAU); x.fill();
+  x.lineWidth = 1.4; for (let i = 0; i < 6; i++) { x.beginPath(); x.moveTo(-150 - i * 9, -86 + i * 4 - (i > 2 ? 6 : 0)); x.lineTo(-156 - i * 9, -108 + i * 3); x.lineTo(-162 - i * 9, -84 + i * 4); x.stroke(); }   // crest
+  // tail curl (right)
+  x.lineWidth = 2; x.beginPath(); x.moveTo(250, 2); x.bezierCurveTo(262, -40, 300, -60, 322, -40); x.bezierCurveTo(340, -22, 316, -2, 304, -18); x.stroke();
+  x.lineWidth = 1; x.beginPath(); x.moveTo(258, 2); x.bezierCurveTo(268, -30, 296, -48, 314, -36); x.stroke(); ripple(268, 6, 70); ripple(-130, 6, 70);
+  x.restore();
 }
-function waveArt(x, w, c) {
-  const p = P(p => { p.moveTo(0, 110); p.lineTo(0, 40); for (let i = 0; i * 90 < w; i++) p.quadraticCurveTo(i * 90 + 45, 4 + (i % 2) * 8, i * 90 + 90, 40); p.lineTo(w, 110); p.closePath(); });
-  shape(x, p, c[0], c[1]); x.strokeStyle = 'rgba(240,250,250,.85)'; x.lineWidth = 4; x.lineCap = 'round';
-  for (let i = 0; i * 90 < w; i++) { x.beginPath(); x.arc(i * 90 + 45, 46, 22, 3.6, 5.8); x.stroke(); }
+function sunEngr(x, cx, cy) {   // a radiant rising over the far coast, with a thin gilt wash
+  x.save(); const g = x.createRadialGradient(cx, cy, 0, cx, cy, 300); g.addColorStop(0, 'rgba(226,182,90,.45)'); g.addColorStop(1, 'rgba(226,182,90,0)');
+  x.globalCompositeOperation = 'multiply'; x.fillStyle = g; x.fillRect(cx - 300, cy - 300, 600, 600); x.restore();
+  x.save(); x.translate(cx, cy); x.strokeStyle = INK; x.lineCap = 'round';
+  for (let i = 0; i < 48; i++) { const a = i / 48 * TAU, l0 = 82, l1 = i % 2 ? 150 : 210;
+    if (i % 2) { x.lineWidth = .9; x.beginPath(); for (let k = 0; k <= 16; k++) { const r = lerp(l0, l1, k / 16), w = Math.sin(k * 1.6) * 4; x.lineTo(Math.cos(a) * r - Math.sin(a) * w, Math.sin(a) * r + Math.cos(a) * w); } x.stroke(); }
+    else { x.lineWidth = 1.3; x.beginPath(); x.moveTo(Math.cos(a) * l0, Math.sin(a) * l0); x.lineTo(Math.cos(a) * l1, Math.sin(a) * l1); x.stroke(); } }
+  x.fillStyle = '#F2DFAA'; x.beginPath(); x.arc(0, 0, 70, 0, TAU); x.fill(); x.lineWidth = 2; x.stroke();
+  x.lineWidth = .8; for (let r = 12; r < 66; r += 6) { x.beginPath(); x.arc(0, 0, r, 0, TAU); x.stroke(); }
+  x.restore();
 }
-function cloudArt(x, w, h, c, s) { const r = rng(s), p = P(p => { const n = 6; for (let i = 0; i < n; i++) { const cx = w * (.14 + .72 * i / (n - 1)), cy = h * (.58 - .25 * Math.sin(Math.PI * i / (n - 1))) + (r() - .5) * 10, rr = h * (.26 + .14 * Math.sin(Math.PI * i / (n - 1))); p.moveTo(cx + rr, cy); p.arc(cx, cy, rr, 0, 6.3); } p.rect(w * .12, h * .55, w * .76, h * .3); });
-  x.lineWidth = 10; x.strokeStyle = INK; x.lineJoin = 'round'; x.stroke(p);
-  x.save(); x.fillStyle = c[1]; x.fill(p); x.clip(p); x.translate(-7, -6); x.fillStyle = c[0]; x.fill(p); x.restore(); }
-function cliffArt(x) {     // 620×320: dark rocks and an unlit tower
-  shape(x, P(p => { p.moveTo(0, 320); p.lineTo(20, 210); p.lineTo(70, 150); p.lineTo(120, 190); p.lineTo(170, 120); p.lineTo(230, 200); p.lineTo(250, 320); p.closePath(); }), '#4b4655', '#363240');
-  shape(x, P(p => { p.moveTo(330, 320); p.lineTo(360, 200); p.lineTo(420, 170); p.lineTo(470, 90); p.lineTo(530, 160); p.lineTo(600, 230); p.lineTo(620, 320); p.closePath(); }), '#4b4655', '#363240');
-  shape(x, P(p => { p.moveTo(452, 100); p.lineTo(470, 20); p.lineTo(500, 20); p.lineTo(514, 100); p.closePath(); }), '#5c5664', '#45404e', 4);
-  shape(x, RR(462, 6, 46, 18, 4), '#3c3844', '#2c2933', 4);
+function buildChart() {
+  const c = canvas(Math.round(WW * TF), Math.round(WH * TF)), x = c.getContext('2d'); x.scale(TF, TF);
+  x.fillStyle = PAPER; x.fillRect(0, 0, WW, WH);
+  const M = 64, NL = [M + 34, M + 34, WW - M - 34, WH - M - 34];                   // the neat line (inside the graduated border)
+  // laid paper: chain lines
+  x.strokeStyle = 'rgba(120,90,50,.06)'; x.lineWidth = 1.4; for (let px = 20; px < WW; px += 36) { x.beginPath(); x.moveTo(px, 0); x.lineTo(px, WH); x.stroke(); }
+  x.strokeStyle = 'rgba(255,250,235,.10)'; x.lineWidth = .8; for (let py = 0; py < WH; py += 3.2) { x.beginPath(); x.moveTo(0, py); x.lineTo(WW, py); x.stroke(); }
+  // rhumb lines
+  x.save(); x.beginPath(); x.rect(NL[0], NL[1], NL[2] - NL[0], NL[3] - NL[1]); x.clip();
+  for (const [rx, ry, R] of ROSES) for (let i = 0; i < 32; i++) { const a = i / 32 * TAU; x.strokeStyle = INK; x.globalAlpha = i % 8 ? .38 : .55; x.lineWidth = i % 8 ? .8 : 1.3;
+    x.beginPath(); x.moveTo(rx + Math.cos(a) * R, ry + Math.sin(a) * R); x.lineTo(rx + Math.cos(a) * 5000, ry + Math.sin(a) * 5000); x.stroke(); }
+  x.restore(); x.globalAlpha = 1;
+  // land: a blue wash along the coasts, water-lining, then the land itself
+  const L = lands(); LAND = { A: P2(L.A), B: P2(L.B), C: P2(L.C), I: L.I.map(p => P2(p)) };
+  const all = [[L.A, 'A'], [L.B, 'B'], [L.C, 'C'], ...L.I.map((p, i) => [p, 'I' + i])], pathOf = k => k[0] === 'I' ? LAND.I[+k.slice(1)] : LAND[k];
+  { const q = .125, wc = canvas(Math.ceil(WW * q), Math.ceil(WH * q)), w = wc.getContext('2d'), wb = canvas(wc.width, wc.height), b = wb.getContext('2d');   // the wash, blurred at low resolution
+    w.scale(q, q); w.strokeStyle = 'rgba(158,188,188,.75)'; w.lineJoin = 'round'; for (const [, k] of all) { w.lineWidth = k[0] === 'I' ? 60 : 110; w.stroke(pathOf(k)); }
+    b.filter = 'blur(2px)'; b.drawImage(wc, 0, 0); x.save(); x.globalCompositeOperation = 'multiply'; x.imageSmoothingQuality = 'high'; x.drawImage(wb, 0, 0, WW, WH); x.restore(); }
+  for (const [pts, k] of all) {             // concentric water lines, drawn on a scratch layer so the gaps are true gaps
+    const [a, b, cc, d] = BB(pts), pad = 70, sc = canvas(Math.ceil((cc - a + pad * 2) * TF), Math.ceil((d - b + pad * 2) * TF)), s = sc.getContext('2d');
+    s.scale(TF, TF); s.translate(pad - a, pad - b); s.lineJoin = 'round'; const p = pathOf(k), n = k[0] === 'I' ? 4 : 6;
+    for (let i = n; i >= 1; i--) { const dist = i * (k[0] === 'I' ? 7 : 9) + i * i * .8; s.globalCompositeOperation = 'source-over'; s.strokeStyle = `rgba(28,22,16,${.75 - i * .09})`; s.lineWidth = dist * 2 + 1.1; s.stroke(p);
+      s.globalCompositeOperation = 'destination-out'; s.strokeStyle = '#000'; s.lineWidth = dist * 2 - .1; s.stroke(p); }
+    x.drawImage(sc, a - pad, b - pad, sc.width / TF, sc.height / TF);
+  }
+  for (const [, k] of all) { const p = pathOf(k); x.fillStyle = PAPER; x.fill(p);
+    x.save(); x.globalCompositeOperation = 'multiply'; x.globalAlpha = k === 'B' ? .5 : .42; x.fillStyle = k === 'B' ? '#A8A68C' : k === 'C' ? '#C9C88E' : '#B8C08C'; x.fill(p); x.restore(); }
+  // hills in hachures (light from the upper left), dark cliffs round the harbour, stipple on the gentle shores
+  const hills = [['A', 130, 1640, 95], ['A', 205, 1960, 120], ['A', 150, 2270, 120], ['B', 3470, 1720, 105], ['B', 3420, 2010, 70], ['B', 3540, 2160, 120], ['B', 3060, 2330, 90], ['C', 3420, 190, 110], ['C', 3580, 380, 80],
+    ['I0', 975, 1985, 46], ['I3', 2640, 862, 36], ['I6', 2062, 2160, 38]];
+  for (const [k, hx, hy, R] of hills) for (const [ox, oy, rs] of [[0, 0, 1], [-R * .55, R * .2, .6], [R * .5, R * .24, .55]]) {   // molehill hachures: strokes fall from a short ridge to the foot, heavier on the shaded right
+    const r = rng(Math.round(hx + ox * 3)), cx = hx + ox, cy = hy + oy, RR = R * rs, n = Math.round(RR * .8); x.save(); x.clip(pathOf(k)); x.strokeStyle = INK; x.lineCap = 'round';
+    for (let i = 0; i <= n; i++) { const u = i / n, a = Math.PI * (1 - u), bx = cx + Math.cos(a) * RR * (.9 + r() * .2), by = cy + RR * .1 + Math.sin(a) * RR * .12 + (r() - .5) * 3;
+      const tx = cx + (u - .5) * RR * .5, ty = cy - RR * (.42 + .1 * Math.sin(u * Math.PI)) + r() * 4, k0 = .04 + r() * .12;
+      x.lineWidth = .55 + 1.4 * Math.pow(u, 1.5) * (k === 'B' ? 1.3 : 1); x.beginPath(); x.moveTo(lerp(tx, bx, k0), lerp(ty, by, k0)); x.quadraticCurveTo((tx + bx) / 2 + (u - .5) * RR * .25, (ty + by) / 2 - RR * .05, bx, by); x.stroke(); }
+    x.restore(); }
+  { const r = rng(5); x.save(); x.clip(LAND.B); x.strokeStyle = INK; x.lineCap = 'round';     // cliffs: hatched strokes into the land all along the harbour coast
+    for (let i = 0; i < L.B.length - 1; i++) { const [px, py] = L.B[i], [qx, qy] = L.B[i + 1]; if (px > 3650 || py > 2470) continue; const d = Math.hypot(qx - px, qy - py) || 1, nx = -(qy - py) / d, ny = (qx - px) / d;
+      for (let k = 0; k < 2; k++) { const u = k / 2, ax = lerp(px, qx, u), ay = lerp(py, qy, u), l = 14 + r() * 22; x.lineWidth = 1.1 + r() * .8; x.beginPath(); x.moveTo(ax, ay); x.lineTo(ax - nx * l, ay - ny * l); x.stroke(); } }
+    x.restore(); }
+  for (const k of ['A', 'C', 'I0', 'I3', 'I5', 'I6']) { const pts = k[0] === 'I' ? L.I[+k.slice(1)] : L[k], r = rng(k.length * 13 + pts.length); x.save(); x.clip(pathOf(k)); x.fillStyle = INK;
+    for (let i = 0; i < pts.length; i += 1) for (let j = 0; j < 2; j++) { const [px, py] = pts[i], [qx, qy] = pts[(i + 1) % pts.length], d = Math.hypot(qx - px, qy - py) || 1, nx = -(qy - py) / d, ny = (qx - px) / d, o = 4 + r() * 18;
+      x.globalAlpha = .7 - o / 30; x.beginPath(); x.arc(px - nx * o + (r() - .5) * 6, py - ny * o + (r() - .5) * 6, .9, 0, TAU); x.fill(); } x.restore(); }
+  x.globalAlpha = 1; x.strokeStyle = INK; x.lineJoin = 'round';
+  for (const [, k] of all) { x.lineWidth = k === 'B' ? 3 : 2.2; x.stroke(pathOf(k)); }
+  // rocks at the harbour mouth, and an anchorage in the bay
+  { const r = rng(9); x.lineWidth = 1.3; for (let i = 0; i < 26; i++) { const px = 3050 + r() * 150, py = 1850 + r() * 150; if (x.isPointInPath(LAND.B, px * TF, py * TF)) continue; x.beginPath(); x.moveTo(px - 5, py); x.lineTo(px + 5, py); x.moveTo(px, py - 5); x.lineTo(px, py + 5); x.stroke(); }
+    const [ax, ay] = BAY; x.lineWidth = 2.4; x.beginPath(); x.moveTo(ax, ay - 22); x.lineTo(ax, ay + 18); x.moveTo(ax - 10, ay - 12); x.lineTo(ax + 10, ay - 12); x.moveTo(ax - 16, ay + 6); x.quadraticCurveTo(ax - 14, ay + 22, ax, ay + 20); x.quadraticCurveTo(ax + 14, ay + 22, ax + 16, ay + 6); x.stroke();
+    x.beginPath(); x.arc(ax, ay - 27, 5, 0, TAU); x.stroke(); }
+  ROSES.forEach(([rx, ry, R]) => rose(x, rx, ry, R));
+  monster(x, MON[0], MON[1]);
+  sunEngr(x, SUN[0], SUN[1]);
+  cartouche(x, CART); smallCart(x, HARB);
+  // soundings in fine italic figures, and little ripple marks on the open sea
+  { const r = rng(21); x.fillStyle = INK; x.font = `italic 400 17px ${SERIF}`; x.textAlign = 'center';
+    const keep = (px, py) => { if (x.isPointInPath(LAND.A, px * TF, py * TF) || x.isPointInPath(LAND.B, px * TF, py * TF) || x.isPointInPath(LAND.C, px * TF, py * TF) || LAND.I.some(p => x.isPointInPath(p, px * TF, py * TF))) return false;
+      if (ROSES.some(([rx, ry, R]) => Math.hypot(px - rx, py - ry) < R * 1.1)) return false; if (Math.abs(px - CART.x) < CART.w / 2 + 70 && Math.abs(py - CART.y) < CART.h / 2 + 100) return false;
+      if (Math.abs(px - HARB.x) < HARB.w / 2 + 90 && Math.abs(py - HARB.y) < HARB.h) return false; if (Math.abs(px - MON[0]) < 330 && Math.abs(py - MON[1] + 40) < 90) return false; if (Math.hypot(px - SUN[0], py - SUN[1]) < 230) return false; return true; };
+    for (let gx = 140; gx < WW - 120; gx += 120) for (let gy = 140; gy < WH - 120; gy += 105) { if (r() < .42) continue; const px = gx + r() * 90, py = gy + r() * 80; if (!keep(px, py)) continue;
+      x.globalAlpha = .82; x.fillText(String(Math.round(4 + r() * 40)), px, py); }
+    x.globalAlpha = .55; x.strokeStyle = INK; x.lineWidth = .9;
+    for (let i = 0; i < 260; i++) { const px = 160 + r() * (WW - 320), py = 160 + r() * (WH - 320); if (!keep(px, py)) continue; x.beginPath(); x.moveTo(px - 9, py); x.quadraticCurveTo(px - 4, py - 4, px, py); x.quadraticCurveTo(px + 4, py + 4, px + 9, py); x.stroke(); }
+    x.globalAlpha = 1; }
+  // graduated border
+  x.strokeStyle = INK; x.lineWidth = 3; x.strokeRect(M, M, WW - 2 * M, WH - 2 * M); x.lineWidth = 1.2; x.strokeRect(M + 10, M + 10, WW - 2 * M - 20, WH - 2 * M - 20); x.strokeRect(M + 26, M + 26, WW - 2 * M - 52, WH - 2 * M - 52);
+  x.lineWidth = 2; x.strokeRect(NL[0], NL[1], NL[2] - NL[0], NL[3] - NL[1]);
+  x.fillStyle = INK; for (let i = 0; (M + 10) + i * 60 < WW - M - 10; i += 2) { const px = M + 10 + i * 60; x.fillRect(px, M + 10, Math.min(60, WW - M - 10 - px), 16); x.fillRect(px, WH - M - 26, Math.min(60, WW - M - 10 - px), 16); }
+  for (let i = 0; (M + 10) + i * 60 < WH - M - 10; i += 2) { const py = M + 10 + i * 60; x.fillRect(M + 10, py, 16, Math.min(60, WH - M - 10 - py)); x.fillRect(WW - M - 26, py, 16, Math.min(60, WH - M - 10 - py)); }
+  x.lineWidth = .8; for (let px = M + 10; px < WW - M; px += 12) { x.beginPath(); x.moveTo(px, M + 26); x.lineTo(px, M + 31); x.moveTo(px, WH - M - 26); x.lineTo(px, WH - M - 31); x.stroke(); }
+  // age: mottling and foxing, folds, a darker rim
+  x.setTransform(1, 0, 0, 1, 0, 0);
+  const n = canvas(300, 200), nx = n.getContext('2d'), id = nx.createImageData(300, 200);
+  for (let j = 0; j < 200; j++) for (let i = 0; i < 300; i++) { const v = fbm(i * .025, j * .025, 5), f = Math.max(0, fbm(i * .09 + 40, j * .09, 3) - .62) * 2.2, e = Math.max(Math.abs(i / 150 - 1), Math.abs(j / 100 - 1)), rim = Math.pow(Math.max(0, e - .7) / .3, 2) * .16;
+    const fx = Math.max(0, noise(i * .7 + 7, j * .7) - .94) * 2.4, k = (i + j * 300) * 4, dk = .07 * v + f * .1 + rim + fx; id.data[k] = 255 * (1 - dk * .75); id.data[k + 1] = 255 * (1 - dk * .95); id.data[k + 2] = 255 * (1 - dk * 1.35); id.data[k + 3] = 255; }
+  nx.putImageData(id, 0, 0); x.globalCompositeOperation = 'multiply'; x.imageSmoothingQuality = 'high'; x.drawImage(n, 0, 0, c.width, c.height);
+  const fold = (vert, pos) => { const g = vert ? x.createLinearGradient(pos - 40, 0, pos + 40, 0) : x.createLinearGradient(0, pos - 40, 0, pos + 40);
+    g.addColorStop(0, 'rgba(255,255,255,0)'); g.addColorStop(.47, 'rgba(150,120,80,.22)'); g.addColorStop(.5, 'rgba(110,85,55,.32)'); g.addColorStop(.53, 'rgba(255,255,255,0)'); g.addColorStop(1, 'rgba(255,255,255,0)');
+    x.fillStyle = g; vert ? x.fillRect(pos - 40, 0, 80, c.height) : x.fillRect(0, pos - 40, c.width, 80); };
+  fold(true, c.width / 2); fold(false, c.height / 2);
+  x.globalCompositeOperation = 'screen'; x.fillStyle = 'rgba(255,248,230,.25)'; x.fillRect(c.width / 2 + 1, 0, 3, c.height); x.fillRect(0, c.height / 2 + 1, c.width, 3);
+  x.globalCompositeOperation = 'multiply'; x.globalAlpha = .22; x.fillStyle = x.createPattern(speckle(512, 512, 40, 3, .6), 'repeat'); x.fillRect(0, 0, c.width, c.height);
+  x.globalAlpha = 1; x.globalCompositeOperation = 'source-over';
+  return c;
 }
-function signArt(x) {      // 300×230: a wooden sign — 심판의 항구
-  shape(x, RR(138, 90, 24, 140, 4), '#6b4a2e', '#52381f');
-  shape(x, RR(10, 14, 280, 96, 12), '#8a6240', '#6e4c30');
-  x.textAlign = 'center'; x.fillStyle = '#f8ecd4'; const lines = tr('심판의 항구').split('\n'), f = n => `700 ${n}px ${SANS}`;
-  if (lines.length === 1) { x.font = f(fitSize(x, f, 40, lines, 248)); x.fillText(lines[0], 150, 77); }
-  else { const fs = fitSize(x, f, 37, lines, 248); x.font = f(fs); lines.forEach((l, i) => x.fillText(l, 150, 62 + (i - (lines.length - 1) / 2) * fs * 1.12 + fs * .36)); }
-}
-function sunArt(x) {       // 240×320: a sun on a stick (a pull-tab)
-  shape(x, RR(110, 170, 20, 150, 4), '#9a7046', '#7a5432', 4);
-  x.fillStyle = '#f7c24c'; x.strokeStyle = INK; x.lineWidth = 4; x.lineJoin = 'round';
-  for (let i = 0; i < 12; i++) { const a = i * Math.PI / 6; x.beginPath(); x.moveTo(120 + Math.cos(a - .14) * 82, 110 + Math.sin(a - .14) * 82); x.lineTo(120 + Math.cos(a) * 112, 110 + Math.sin(a) * 112); x.lineTo(120 + Math.cos(a + .14) * 82, 110 + Math.sin(a + .14) * 82); x.fill(); x.stroke(); }
-  shape(x, EL(120, 110, 84, 84), '#f9c94f', '#eba83a');
-  x.fillStyle = INK; x.beginPath(); x.arc(98, 104, 5, 0, 6.3); x.arc(142, 104, 5, 0, 6.3); x.fill(); x.lineWidth = 4; x.beginPath(); x.arc(120, 120, 22, .3, 2.84); x.stroke();
-}
-function bannerArt(x) {    // 480×130: 하나님의 자녀
-  shape(x, P(p => { p.moveTo(0, 40); p.lineTo(60, 40); p.lineTo(60, 116); p.lineTo(0, 116); p.lineTo(22, 78); p.closePath(); }), '#e4c27a', '#c9a35a', 4);
-  shape(x, P(p => { p.moveTo(480, 40); p.lineTo(420, 40); p.lineTo(420, 116); p.lineTo(480, 116); p.lineTo(458, 78); p.closePath(); }), '#e4c27a', '#c9a35a', 4);
-  shape(x, RR(40, 14, 400, 92, 10), '#fff4da', '#f0dcb0');
-  const s = tr('하나님의 자녀'), f = n => `600 ${n}px ${SERIF}`; x.font = f(fitSize(x, f, 50, [s], 360)); x.textAlign = 'center'; x.fillStyle = '#7a4a10'; x.fillText(s, 240, 78);
-}
-function qSignArt(x, w, h, s, fs) {     // s: the whole question, lines split on \n (translated as one string)
-  shape(x, RR(0, 0, w, h, 16), '#f6ead0', '#e2d0a8');
-  const lines = tr(s).split('\n'); fs = fitSize(x, n => `700 ${n}px ${SANS}`, fs, lines, w - 70); if (!KO) fs = Math.min(fs, (h - 40) / (lines.length * 1.45 - .45));
-  x.font = `700 ${fs}px ${SANS}`; x.textAlign = 'center'; x.fillStyle = '#4a2c14'; lines.forEach((l, i) => x.fillText(l, w / 2, h / 2 + (i - (lines.length - 1) / 2) * fs * 1.45 + fs * .36));
-}
-function heartArt(x) { shape(x, P(p => { p.roundRect(0, 0, 90, 70, 18); p.moveTo(30, 66); p.lineTo(22, 92); p.lineTo(48, 66); }), '#ffffff', '#eae4da', 4);
-  shape(x, P(p => { p.moveTo(45, 54); p.bezierCurveTo(14, 36, 24, 10, 45, 24); p.bezierCurveTo(66, 10, 76, 36, 45, 54); p.closePath(); }), '#e2473c', '#c23128', 3.5); }
-function starArt(x) { shape(x, P(p => { for (let i = 0; i < 10; i++) { const a = -Math.PI / 2 + i * Math.PI / 5, r = i % 2 ? 18 : 40; p.lineTo(44 + Math.cos(a) * r, 44 + Math.sin(a) * r); } p.closePath(); }), '#f7c843', '#e2a52d', 4); }
-
-// ---------- the room, the desk, the book ----------
-function buildRoom() {
-  room = canvas(1200, 900); { const x = room.getContext('2d'), g = x.createLinearGradient(0, 0, 0, 900); g.addColorStop(0, '#3a2a20'); g.addColorStop(1, '#5a4030'); x.fillStyle = g; x.fillRect(0, 0, 1200, 900);
-    const r = rng(9); x.filter = 'blur(14px)'; for (let i = 0; i < 22; i++) { x.globalAlpha = .12 + r() * .2; x.fillStyle = r() < .5 ? '#ffcf8a' : '#f2a65a'; x.beginPath(); x.arc(r() * 1200, r() * 560, 20 + r() * 50, 0, 6.3); x.fill(); }
-    x.globalAlpha = 1; x.filter = 'blur(40px)'; x.fillStyle = 'rgba(255,214,150,.5)'; x.beginPath(); x.arc(160, 120, 220, 0, 6.3); x.fill();
-    x.fillStyle = 'rgba(40,28,20,.8)'; x.fillRect(820, 140, 300, 560); x.fillStyle = 'rgba(120,80,50,.6)'; for (let i = 0; i < 9; i++) x.fillRect(840 + i * 30, 200 + (i % 3) * 8, 22, 140); }   // a blurred shelf of books
-  wood = canvas(2600, 1300); { const x = wood.getContext('2d'), g = x.createLinearGradient(0, 0, 0, 1300); g.addColorStop(0, '#6e4a30'); g.addColorStop(1, '#4a2f1d'); x.fillStyle = g; x.fillRect(0, 0, 2600, 1300);
-    const r = rng(4); for (let i = 0; i < 260; i++) { const y = r() * 1300; x.strokeStyle = r() < .5 ? 'rgba(40,24,14,.25)' : 'rgba(150,104,70,.18)'; x.lineWidth = 1 + r() * 3; x.beginPath(); x.moveTo(0, y); for (let px = 0; px <= 2600; px += 100) x.lineTo(px, y + Math.sin(px * .004 + i) * 8 + (fbm(px * .002, i) - .5) * 20); x.stroke(); }
-    x.globalCompositeOperation = 'overlay'; x.globalAlpha = .4; x.drawImage(speckle(1300, 650, 40, 5, 1), 0, 0, 2600, 1300); }
-  seaPage = canvas(1680, 300); { const x = seaPage.getContext('2d'), g = x.createLinearGradient(0, 0, 0, 300); g.addColorStop(0, '#5fb3c3'); g.addColorStop(1, '#8fd0d6'); x.fillStyle = g; x.fillRect(0, 0, 1680, 300);
-    const r = rng(2); x.strokeStyle = 'rgba(255,255,255,.45)'; x.lineWidth = 3; x.lineCap = 'round'; for (let i = 0; i < 70; i++) { const px = r() * 1680, py = 20 + r() * 270; x.beginPath(); x.arc(px, py, 14 + r() * 10, 3.5, 5.9); x.stroke(); }
-    x.globalCompositeOperation = 'multiply'; x.globalAlpha = .5; x.drawImage(grain, 0, 0, 1680, 300); }
-}
-const pageX = (z, u) => lerp(lerp(PX0[0], PX1[0], z), lerp(PX0[1], PX1[1], z), u);
-const zY = z => lerp(GY, FY, z), zS = z => lerp(.62, 1, z);
-function book(ctx, t) {
-  // desk and room
-  ctx.drawImage(room, -600, -900, 3120, 1700);
-  ctx.drawImage(wood, -340, 600, 2600, 1300);
-  const sh = ctx.createRadialGradient(960, 900, 200, 960, 900, 1100); sh.addColorStop(0, 'rgba(20,12,6,.0)'); sh.addColorStop(1, 'rgba(20,12,6,.5)'); ctx.fillStyle = sh; ctx.fillRect(-600, 600, 3120, 1300);
-  // book: shadow, cover boards, page block
-  ctx.save(); ctx.filter = 'blur(18px)'; ctx.fillStyle = 'rgba(15,8,4,.55)'; ctx.beginPath(); ctx.moveTo(250, 640); ctx.lineTo(1700, 640); ctx.lineTo(1880, 1000); ctx.lineTo(60, 1000); ctx.fill(); ctx.restore();
-  ctx.fillStyle = '#7a2a24'; ctx.beginPath(); ctx.moveTo(236, 634); ctx.lineTo(1684, 634); ctx.lineTo(1836, 982); ctx.lineTo(84, 982); ctx.fill();
-  ctx.fillStyle = '#5c1d18'; ctx.fillRect(84, 970, 1752, 12);
-  ctx.fillStyle = '#efe6d2'; ctx.beginPath(); ctx.moveTo(120, 930); ctx.lineTo(1800, 930); ctx.lineTo(1812, 962); ctx.lineTo(108, 962); ctx.fill();
-  ctx.strokeStyle = 'rgba(120,100,70,.35)'; ctx.lineWidth = 1; for (let y = 936; y < 962; y += 4) { ctx.beginPath(); ctx.moveTo(116, y); ctx.lineTo(1806, y); ctx.stroke(); }
-  // the lower page: sea art mapped onto the trapezoid in strips
-  for (let i = 0; i < 60; i++) { const z0 = i / 60, z1 = (i + 1) / 60, y0 = zY(z0), y1 = zY(z1), x0 = pageX(z0, 0), x1 = pageX(z0, 1);
-    ctx.drawImage(seaPage, 0, z0 * 300, 1680, 300 / 60 + .5, x0, y0, x1 - x0, y1 - y0 + .6); }
-  const gg = ctx.createLinearGradient(0, GY, 0, GY + 60); gg.addColorStop(0, 'rgba(30,20,10,.35)'); gg.addColorStop(1, 'rgba(30,20,10,0)'); ctx.fillStyle = gg; ctx.fillRect(PX0[0], GY, PX0[1] - PX0[0], 60);
-}
-function board(ctx, t) {     // the standing page: sky that turns stormy on the right and to dawn on the left
-  const k = Math.sin(Math.PI / 2 * clamp(pop(t, .4, 99, 1.1), 0, 1.06)), hb = 530 * k, top = GY - hb; if (k <= .01) return;
-  ctx.save(); ctx.beginPath(); ctx.rect(PX0[0], top, PX0[1] - PX0[0], hb); ctx.clip();
-  const g = ctx.createLinearGradient(0, top, 0, GY); g.addColorStop(0, '#8cc4d4'); g.addColorStop(1, '#dff0ee'); ctx.fillStyle = g; ctx.fillRect(PX0[0], top, PX0[1] - PX0[0], hb);
-  const storm = ss(14.4, 16.5, t) * (1 - .3 * ss(33, 38, t)), dawn = ss(29.4, 32.5, t);
-  if (storm > 0) { const sg = ctx.createLinearGradient(PX0[1], 0, 900, 0); sg.addColorStop(0, `rgba(52,56,74,${.8 * storm})`); sg.addColorStop(1, 'rgba(52,56,74,0)'); ctx.fillStyle = sg; ctx.fillRect(PX0[0], top, PX0[1] - PX0[0], hb); }
-  if (dawn > 0) { const dg = ctx.createRadialGradient(420, GY, 0, 420, GY, 900); dg.addColorStop(0, `rgba(255,200,120,${.85 * dawn})`); dg.addColorStop(.5, `rgba(255,170,120,${.4 * dawn})`); dg.addColorStop(1, 'rgba(255,170,120,0)'); ctx.fillStyle = dg; ctx.fillRect(PX0[0], top, PX0[1] - PX0[0], hb); }
-  [[560, 210, .9], [1060, 160, 1.1], [1420, 260, .8]].forEach(([cx, cy, s], i) => { const sp = SP.sky, w = sp.w * s * .8, h = sp.h * s * .8; ctx.globalAlpha = 1 - (i === 2 ? .7 * storm : 0); ctx.drawImage(sp.c, cx - w / 2, GY - (GY - cy) * k - h / 2, w, h * k); });
-  ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'multiply'; ctx.globalAlpha = .35; ctx.drawImage(grain, PX0[0], top, PX0[1] - PX0[0], hb); ctx.restore();
-  ctx.fillStyle = '#d8ccb4'; ctx.fillRect(PX0[0] - 4, top - 6, PX0[1] - PX0[0] + 8, 7);                  // cardboard edge
-  ctx.fillStyle = '#7a2a24'; ctx.fillRect(PX0[0] - 22, top - 10, 18, hb + 10); ctx.fillRect(PX0[1] + 4, top - 10, 18, hb + 10);  // cover board behind
-}
-
-// ---------- pop-up cards ----------
-function card(ctx, sp, x, z, rise, o = {}) {
-  const k = Math.sin(Math.PI / 2 * clamp(rise, 0, 1.08)); if (k <= .01) return;
-  const by = zY(z) + (o.dy || 0), s = zS(z) * (o.s || 1), fx = o.fx == null ? 1 : o.fx, w = sp.w * s, h = sp.h * s, pad = sp.pad * s;
-  if (!o.noShadow) { ctx.save(); ctx.translate(x, by); ctx.transform(1, 0, -.55, .3 * k, 0, 0); ctx.scale(fx, 1); ctx.globalAlpha = .2 * (o.a == null ? 1 : o.a); ctx.filter = 'blur(6px)'; ctx.drawImage(sp.sh, -w / 2, -h + pad, w, h); ctx.restore(); }
-  ctx.save(); ctx.translate(x, by); if (o.rot) ctx.rotate(o.rot); ctx.scale(fx, k); if (o.a != null) ctx.globalAlpha = o.a;
-  if (k < .97) ctx.filter = `brightness(${.72 + .28 * k})`; ctx.drawImage(sp.c, -w / 2, -h + pad, w, h); ctx.restore();
-}
-function hang(ctx, t, sp, x, y, s, t0, t1, swing) {   // a paper sign dropping on two strings, swinging on a spring
-  const d = spring(t, t0), up = t1 ? eio(clamp((t - t1) / .6)) : 0, yy = lerp(-400, y, d) - up * 900, rot = swing * Math.exp(-2 * Math.max(0, t - t0)) * Math.sin((t - t0) * 5);
-  if (t < t0 || yy < -380) return; const w = sp.w * s, h = sp.h * s;
-  ctx.save(); ctx.translate(x, yy); ctx.rotate(rot);
-  ctx.strokeStyle = 'rgba(240,230,210,.8)'; ctx.lineWidth = 2; [-w * .36, w * .36].forEach(a => { ctx.beginPath(); ctx.moveTo(a, -h / 2 + 16); ctx.lineTo(a, -2400); ctx.stroke(); });
-  ctx.save(); ctx.filter = 'blur(10px)'; ctx.globalAlpha = .3; ctx.drawImage(sp.sh, -w / 2 + 16, -h / 2 + 24, w, h); ctx.restore();
-  ctx.drawImage(sp.c, -w / 2, -h / 2, w, h); ctx.restore();
-}
-
-// ---------- the story, in stage space ----------
-const pirX = t => t < 14 ? 820 : t < 24 ? lerp(820, 1150, eio((t - 14) / 10)) : t < 28.6 ? 1150 : lerp(1150, 1470, eio((t - 28.6) / 8));
-const briX = t => t < 21.4 ? 430 : t < 24 ? lerp(430, 650, eio((t - 21.4) / 2.6)) : t < 33.2 ? 650 : lerp(650, 520, eio((t - 33.2) / 5));
-const briF = t => Math.cos(Math.PI * eio(clamp((t - 32.8) / .5)));       // the bright ship turns toward the sunrise (scale.x flip)
-const SZ = .5, DECK = 128;                                                 // ships' depth; deck height above the waterline (stage px at z)
-function sprite(key, w, h, fn) { return cache[key] || (cache[key] = cut(w, h, fn)); }
-function kidSprite(pose, ph, nw) { const q = Math.round(ph * 4) / 4; return sprite(`k${pose}${q}${nw}`, 110, 180, x => kid(x, pose, q, nw)); }
-function stage(ctx, t) {
-  book(ctx, t); board(ctx, t);
-  // far pieces, back to front
-  card(ctx, SP.sun, 430, .02, pop(t, 29.4, 99, 1.2), { dy: lerp(240, 0, eo(clamp((t - 29.4) / 2.6))), noShadow: true });
-  const pirateFold = t > 35.6 ? 1 - eio((t - 35.6) / .7) : 1;
-  const hx = V ? -120 : 0; card(ctx, SP.cloud, 1450 + hx, .03, pop(t, 14.4), { s: 1.2 }); card(ctx, SP.cliff, 1440 + hx, .1, pop(t, 14.8), { s: .95 });
-  card(ctx, SP.wave1, 960, .24, pop(t, 3.8), { dy: Math.sin(t * 1.3) * 2 });
-  card(ctx, SP.sign, 1370 + hx, .3, pop(t, 15.3), { s: .9 });
-  // the two ships: sails, people, then hulls
-  const bob = (ph, a = 1) => [Math.sin(t * 1.6 + ph) * 3 * a, Math.sin(t * 1.1 + ph) * .012 * a];
-  const [pb, pr] = bob(0), [bb, br] = bob(2), px = pirX(t), bx = briX(t), bf = briF(t), sS = zS(SZ);
-  const pRise = pop(t, 4.6) * pirateFold, bRise = pop(t, 21.0);
-  if (bRise > 0) { const gl = ss(21.2, 23, t); ctx.save(); ctx.globalCompositeOperation = 'screen'; const g = ctx.createRadialGradient(bx, zY(SZ) - 160, 0, bx, zY(SZ) - 160, 360); g.addColorStop(0, `rgba(255,220,140,${.45 * gl})`); g.addColorStop(1, 'rgba(255,220,140,0)'); ctx.fillStyle = g; ctx.fillRect(bx - 400, zY(SZ) - 560, 800, 800); ctx.restore(); }
-  card(ctx, SP.pBack, px, SZ, pRise, { dy: pb, rot: pr });
-  card(ctx, SP.bBack, bx, SZ, bRise, { dy: bb, rot: br, fx: bf });
-  // the crewmate and the boy
-  const deckP = -DECK * sS + pb, deckB = -DECK * sS + bb;
-  card(ctx, sprite('crew' + Math.round(Math.sin(t * 3) * 2) / 2, 140, 210, x => crew(x, Math.round(Math.sin(t * 3) * 2) / 2)), px + 130 * sS, SZ, pRise, { dy: deckP, noShadow: true });
-  boy(ctx, t, px, bx, bf, deckP, deckB, sS, pRise);
-  // the arm reaches across
-  if (t > 24.4 && t < 28.6) { const u = clamp((t - 24.5) / 1.0), back2 = clamp((t - 27.5) / .8), ang = lerp(1.25, -.08, back(u)) + lerp(0, 1.4, eio(back2));
-    const ax = bx + 150 * sS, ay = zY(SZ) + deckB - 64 * sS, s = sS * .95, sp = SP.arm;
-    ctx.save(); ctx.translate(ax, ay); ctx.rotate(ang); ctx.globalAlpha = 1 - ss(.6, 1, back2); ctx.drawImage(sp.c, -sp.pad * s, -sp.h / 2 * s, sp.w * s, sp.h * s); ctx.restore();
-    ctx.save(); ctx.globalCompositeOperation = 'screen'; const g = ctx.createRadialGradient(ax, ay, 0, ax, ay, 70); g.addColorStop(0, 'rgba(255,230,170,.7)'); g.addColorStop(1, 'rgba(255,230,170,0)'); ctx.fillStyle = g; ctx.fillRect(ax - 70, ay - 70, 140, 140); ctx.restore(); }
-  card(ctx, SP.pHull, px, SZ, pRise, { dy: pb, rot: pr, noShadow: true });
-  card(ctx, SP.bHull, bx, SZ, bRise, { dy: bb, rot: br, fx: bf, noShadow: true });
-  // little rewards for being good (they mean nothing about which ship he is on)
-  badges(ctx, t, px, deckP, sS);
-  card(ctx, SP.wave2, 960, .62, pop(t, 4.0), { dy: Math.sin(t * 1.5 + 1) * 3 });
-  card(ctx, SP.wave3, 960, .9, pop(t, 4.2), { dy: Math.sin(t * 1.2 + 2) * 3 });
-  // hanging signs
-  hang(ctx, t, SP.q, 960, V ? 300 : 300, 1, 1.0, 5.3, .05);
-  if (t > 27.6) { const bxx = briX(t) + (bf > 0 ? 60 : -60) * sS; hang(ctx, t, SP.banner, bxx, 300, .9, 27.7, 32.2, .08); }
-}
-function boy(ctx, t, px, bx, bf, deckP, deckB, sS, pRise) {
-  const kidP = px - 110 * sS, kidB = bx + (bf >= 0 ? 80 : -80) * sS;
-  let pose = 'stand', ph = 0, x = kidP, dy = deckP, nw = false, fx = 1, sq = 1;
-  if (t > 5.4 && t < 10.3) { pose = 'scrub'; ph = Math.sin(t * 5) * .5 + .5; x = kidP + Math.sin(t * 2.5) * 12; }
-  if (t > 10.3 && t < 11.8) { pose = 'reach'; }
-  if (t > 25.4) pose = 'reach';
-  const j0 = 26.2, j1 = 27.0;
-  if (t > j0) { const u = clamp((t - j0) / (j1 - j0)); x = lerp(kidP, kidB, eio(u)); dy = lerp(deckP, deckB, u) - Math.sin(Math.PI * u) * 150 * sS; pose = u < 1 ? 'jump' : 'stand';
-    if (t > j1) { sq = 1 - .18 * Math.exp(-8 * (t - j1)) * Math.cos((t - j1) * 14); x = kidB; dy = deckB; } }
-  if (t > 27.2) { const u = clamp((t - 27.2) / .4); fx = Math.cos(Math.PI * u); nw = u > .5; if (u >= 1) { fx = 1; pose = 'joy'; } }
-  if (t > 30.5) pose = 'stand';
-  if (t > 32.8) fx = bf;
-  card(ctx, kidSprite(pose, ph, nw), x, SZ, t < j0 ? pRise : 1, { dy, fx, s: sq, noShadow: true });
-}
-function badges(ctx, t, px, deckP, sS) {
-  const y0 = zY(SZ) + deckP - 200 * sS, kx = px - 110 * sS, fold = 1 - eio(clamp((t - 17.4) / .6));
-  // sparkles while he scrubs
-  if (t > 6 && t < 10.6) { const r = rng(Math.floor(t * 6)); for (let i = 0; i < 4; i++) { const sx = kx + 20 + r() * 120, sy = zY(SZ) + deckP - 10 - r() * 40, s = 5 + r() * 7;
-      ctx.fillStyle = 'rgba(255,250,220,.95)'; ctx.beginPath(); for (let k = 0; k < 8; k++) { const a = k * Math.PI / 4, q = k % 2 ? s * .3 : s; ctx.lineTo(sx + Math.cos(a) * q, sy + Math.sin(a) * q); } ctx.fill(); } }
-  const hb = pop(t, 10.6) * fold, sb = pop(t, 12.0) * fold;
-  if (hb > 0) { const sp = SP.heart, s = sS * .9 * Math.min(1, hb); ctx.save(); ctx.translate(kx + 90 * sS, y0 + 10); ctx.scale(s, s); ctx.drawImage(sp.c, -sp.w / 2, -sp.h / 2); ctx.restore(); }
-  if (sb > 0) { const sp = SP.star, s = sS * Math.min(1.1, sb); ctx.save(); ctx.translate(kx, y0 - 30); ctx.rotate(Math.sin(t * 2) * .08); ctx.scale(s, s); ctx.drawImage(sp.c, -sp.w / 2, -sp.h / 2); ctx.restore(); }
+function buildCloud() {        // engraved storm clouds over the harbour: only burin lines, heavier toward the bellies (faded in live)
+  const w = 760, h = 360, c = canvas(w * TF, h * TF), x = c.getContext('2d'); x.scale(TF, TF);
+  const r = rng(12), lumps = []; for (let i = 0; i < 11; i++) { const u = i / 10; lumps.push([70 + u * 620 + (r() - .5) * 30, 200 - Math.sin(u * Math.PI) * 80 + (r() - .5) * 40, 55 + Math.sin(u * Math.PI) * 55 + r() * 20]); }
+  const field = (px, py) => { let m = -1, lb = 0; for (const [cx, cy, rr] of lumps) { const v = 1 - Math.hypot(px - cx, (py - cy) * 1.25) / rr; if (v > m) { m = v; lb = (py - (cy - rr * .6)) / (rr * 1.5); } }
+    return [m + .22 * (fbm(px * .02, py * .03, 3) - .5) - Math.max(0, (py - 250) / 60), lb]; };
+  x.strokeStyle = INK; x.lineCap = 'round';
+  for (let py = 20; py < 320; py += 3.3) { let run = null;
+    for (let px = 0; px <= w; px += 3) { const [f, lb] = field(px, py), on = f > 0;
+      if (on && !run) run = [px, lb]; if ((!on || px >= w) && run) { x.lineWidth = .35 + 1.5 * clamp(run[1]); x.beginPath(); x.moveTo(run[0], py + Math.sin(run[0] * .05) * .8); x.lineTo(px, py + Math.sin(px * .05) * .8); x.stroke(); run = null; } } }
+  x.globalAlpha = .55; x.lineWidth = .9; for (let i = 0; i < 80; i++) { const px = 110 + r() * 540, py = 250 + r() * 30; x.beginPath(); x.moveTo(px, py); x.lineTo(px - 14, py + 50 + r() * 40); x.stroke(); }   // rain
+  x.globalAlpha = 1; x.globalCompositeOperation = 'destination-out'; const g = x.createLinearGradient(0, 300, 0, 360); g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, 'rgba(0,0,0,1)'); x.fillStyle = g; x.fillRect(0, 290, w, 70);
+  return c;
 }
 
-// ---------- camera, light, words ----------
-const CAM = V ? [[0, 960, 560, 1.3], [5.0, 960, 560, 1.3], [6.4, 860, 640, 1.5], [13.6, 900, 640, 1.45], [15.6, 1110, 630, 1.14], [20.3, 1110, 630, 1.14], [23.2, 880, 620, 1.1], [24.2, 900, 620, 1.12], [26.4, 900, 640, 1.2], [29, 860, 620, 1.12], [33, 720, 600, 1.15], [40, 690, 600, 1.18]]
-              : [[0, 960, 540, 1.0], [5.4, 960, 540, 1.0], [13.6, 960, 560, 1.03], [21, 1020, 560, 1.03], [24, 960, 560, 1.02], [26.4, 920, 600, 1.16], [29, 940, 560, 1.04], [40, 900, 540, 1.06]];
-function cam(t) { let i = 0; while (i < CAM.length - 2 && t > CAM[i + 1][0]) i++; const a = CAM[i], b = CAM[i + 1], u = eio(clamp((t - a[0]) / (b[0] - a[0])));
-  return [lerp(a[1], b[1], u), lerp(a[2], b[2], u), lerp(a[3], b[3], u)]; }
-function say(ctx, s, a) {     // narration: cream with a thick dark-brown outline
-  if (a <= 0) return; s = tr(s); const lines = s.split('\n'), lh = (V ? 40 : 42) * 1.5, y0 = V ? H - 150 - (lines.length - 1) * lh : H - 66 - (lines.length - 1) * lh;
-  const fs = fitSize(ctx, n => `700 ${n}px ${SANS}`, V ? 40 : 42, lines, W - 100);
-  ctx.save(); ctx.globalAlpha = a; ctx.font = `700 ${fs}px ${SANS}`; ctx.textAlign = 'center'; ctx.lineJoin = 'round';
-  lines.forEach((l, i) => { ctx.shadowColor = 'rgba(30,15,5,.6)'; ctx.shadowBlur = 12; ctx.lineWidth = 9; ctx.strokeStyle = '#3b2210'; ctx.strokeText(l, W / 2, y0 + i * lh); ctx.shadowBlur = 0; ctx.fillStyle = '#fff4dc'; ctx.fillText(l, W / 2, y0 + i * lh); });
+// ---------- ships (local units: waterline at y = 0, bow toward +x) ----------
+const rail = lx => -70 - .00026 * (lx + 20) * (lx + 20);
+const MASTS = [{ x: -175, h: 430 }, { x: 0, h: 560 }, { x: 165, h: 500 }];
+const SB = { x0: -380, y0: -640, w: 840, h: 680 };
+function sailShape(mx, yT, yB, wT, wB) {
+  const TL = [mx - wT / 2, yT], TR = [mx + wT / 2, yT], BR = [mx + wB / 2 + 6, yB], BL = [mx - wB / 2 + 4, yB];
+  const pts = [TL, TR, ...qpts(TR, [(TR[0] + BR[0]) / 2 + 26, (yT + yB) / 2], BR, 12).slice(1), ...qpts(BR, [mx + 8, yB - 16], BL, 10).slice(1), ...qpts(BL, [(TL[0] + BL[0]) / 2 + 16, (yT + yB) / 2], TL, 12).slice(1, -1)];
+  return { pts, TL, TR, BR, BL };
+}
+function sail(x, s, kind) {
+  const old = kind === 'old', p = P2(s.pts);
+  x.fillStyle = old ? '#E6D9BC' : '#F8F0DD'; x.fill(p);
+  x.save(); x.clip(p); x.strokeStyle = INK; x.lineCap = 'round';
+  const uMax = old ? .62 : .4, n = 30;
+  for (let i = 0; i <= n; i++) { const u = i / n, lw = (old ? 1.1 : .95) * Math.pow(Math.max(0, 1 - u / uMax), .9); if (lw < .12) continue;
+    const a = [lerp(s.TL[0], s.TR[0], u), s.TL[1]], b = [lerp(s.BL[0], s.BR[0], u), s.BL[1]], c = [(a[0] + b[0]) / 2 + lerp(16, 26, u), (a[1] + b[1]) / 2];
+    x.lineWidth = lw; x.beginPath(); x.moveTo(...a); x.quadraticCurveTo(...c, ...b); x.stroke(); }
+  if (old) { hatch(x, null, [s.TL[0] - 10, s.TL[1], s.TL[0] + (s.TR[0] - s.TL[0]) * .22, s.BL[1]], .12, 3.6, .5);
+    if (s.patch) { const [a, b] = [s.TL[0] + (s.TR[0] - s.TL[0]) * .58, lerp(s.TL[1], s.BL[1], .32)], pw = 26, ph = 20;     // a stitched patch
+      x.fillStyle = '#DACBAA'; x.fillRect(a, b, pw, ph); x.lineWidth = .8; x.strokeRect(a, b, pw, ph); x.setLineDash([2, 2.5]); x.strokeRect(a + 2.5, b + 2.5, pw - 5, ph - 5); x.setLineDash([]); }
+  } else { const g = x.createLinearGradient(s.TL[0], 0, s.TR[0], 0); g.addColorStop(0, 'rgba(255,240,200,0)'); g.addColorStop(1, 'rgba(240,206,120,.18)'); x.fillStyle = g; x.fillRect(s.TL[0] - 20, s.TL[1], s.TR[0] - s.TL[0] + 60, s.BL[1] - s.TL[1]); }
+  x.lineWidth = .45; x.globalAlpha = .6; for (let u = .14; u < 1; u += .14) { const a = [lerp(s.TL[0], s.TR[0], u), s.TL[1]], b = [lerp(s.BL[0], s.BR[0], u), s.BL[1]]; x.beginPath(); x.moveTo(...a); x.quadraticCurveTo((a[0] + b[0]) / 2 + 20, (a[1] + b[1]) / 2, ...b); x.stroke(); }
+  x.globalAlpha = 1; x.setLineDash([2, 5]); x.lineWidth = .9; x.beginPath(); x.moveTo(s.TL[0] + 4, s.TL[1] + 14); x.lineTo(s.TR[0] - 4, s.TR[1] + 14); x.stroke(); x.setLineDash([]);
+  x.restore(); x.strokeStyle = INK; x.lineWidth = 1.6; x.lineJoin = 'round'; x.stroke(p);
+}
+function rigAndSails(x, kind) {
+  const old = kind === 'old';
+  x.strokeStyle = INK; x.lineCap = 'round';
+  const line = (a, b, lw = .9) => { x.lineWidth = lw; x.beginPath(); x.moveTo(...a); x.lineTo(...b); x.stroke(); };
+  // stays and backstays first (behind the sails)
+  const [mz, mn, fr] = MASTS;
+  line([mn.x, -mn.h * .86], [fr.x, rail(fr.x) - 10]); line([fr.x, -fr.h * .86], [428, -162]); line([fr.x, -fr.h * .66], [380, -140]); line([mz.x, -mz.h * .86], [mn.x, -mn.h * .5]);
+  line([mn.x, -mn.h * .9], [-300, -96], .7); line([fr.x, -fr.h * .9], [60, -74], .7); line([mz.x, -mz.h * .9], [-330, -100], .7);
+  // spanker
+  const sp = [[mz.x + 4, -mz.h * .55], [-335, -mz.h * .64], ...qpts([-335, -mz.h * .64], [-310, -190], [-352, -110], 8).slice(1), [mz.x + 2, -104]];
+  { const p = P2(sp); x.fillStyle = old ? '#E6D9BC' : '#F8F0DD'; x.fill(p); hatch(x, p, BB(sp), 1.45, old ? 3.6 : 5.5, old ? .8 : .6); if (old) hatch(x, p, [-360, -300, -300, -100], .2, 4, .5); x.lineWidth = 1.6; x.stroke(p);
+    line([mz.x, -mz.h * .55], [-345, -mz.h * .65], 3); line([mz.x, -104], [-362, -110], 3.4); }
+  // masts
+  for (const m of MASTS) { const p = P2([[m.x - 6, -20], [m.x - 3, -m.h], [m.x + 3, -m.h], [m.x + 6, -20]]); x.fillStyle = '#E0D2B2'; x.fill(p); hatch(x, p, [m.x - 8, -m.h, m.x, -20], 1.57, 2.2, .7); x.lineWidth = 1.2; x.stroke(p);
+    for (const f of [.62, .85]) { x.fillStyle = INK; x.fillRect(m.x - 16, -m.h * f - 3, 32, 5); } }
+  // headsails
+  const jib = [[fr.x + 8, -fr.h * .66], [412, -158], [276, -118]], stay = [[fr.x + 6, -fr.h * .42], [330, -120], [222, -104]];
+  for (const j of [stay, jib]) { const p = P2([j[0], ...qpts(j[1], [j[1][0] - 30, j[2][1] + 10], j[2], 6), ...qpts(j[2], [(j[0][0] + j[2][0]) / 2 + 24, (j[0][1] + j[2][1]) / 2], j[0], 8).slice(1)]);
+    x.fillStyle = old ? '#E6D9BC' : '#F8F0DD'; x.fill(p); hatch(x, p, BB([...j, [j[0][0] - 20, j[0][1]]]), 1.2, old ? 3.8 : 6, old ? .75 : .55); x.lineWidth = 1.5; x.stroke(p); }
+  // square sails, aft to fore (each overlaps the one behind)
+  for (const m of MASTS) { const lv = m === mz ? [[.86, .70, .22, .3], [.68, .46, .33, .4]] : [[.86, .70, .22, .3], [.68, .46, .32, .4], [.43, 0, .41, .47]];
+    for (const [a, b, wt, wb] of lv) { const yT = -m.h * a, yB = b ? -m.h * b : rail(m.x) - 22; const s = sailShape(m.x, yT, yB, m.h * wt, m.h * wb); s.patch = (m.x === 0 && a === .68) || (m.x === 165 && a === .43) || (m.x === -175 && a === .86); sail(x, s, kind);
+      x.fillStyle = '#E0D2B2'; x.strokeStyle = INK; const yp = P2([[m.x - m.h * wt / 2 - 10, yT - 3], [m.x + m.h * wt / 2 + 10, yT - 3], [m.x + m.h * wt / 2 + 8, yT + 2], [m.x - m.h * wt / 2 - 8, yT + 2]]); x.fill(yp); x.lineWidth = 1.2; x.stroke(yp); } }
+  // shrouds
+  for (const m of MASTS) { const yb = rail(m.x) - 2, top = -m.h * .62; for (const dx of [-42, -30, -18, 18, 30]) line([m.x + dx, yb], [m.x + Math.sign(dx) * 4, top], .8);
+    x.lineWidth = .5; for (let k = 1; k < 9; k++) { const y = lerp(yb, top, k / 10); x.beginPath(); x.moveTo(m.x - 42 + 38 * k / 10, y); x.lineTo(m.x - 4, y); x.stroke(); } }
+  // bowsprit
+  { const p = P2([[262, -96], [440, -168], [442, -162], [266, -86]]); x.fillStyle = '#E0D2B2'; x.fill(p); x.lineWidth = 1.2; x.stroke(p); }
+}
+const htop = lx => rail(lx) - 22 * ss(-150, -300, lx);      // the sheer, rising smoothly to the stern
+function hullPts() {
+  const top = []; for (let lx = -306; lx <= 262; lx += 8) top.push([lx, htop(lx)]);
+  const bow = qpts([262, htop(262)], [302, htop(262)], [304, -66], 8).slice(1).concat(qpts([304, -66], [302, -18], [284, -1], 8).slice(1));
+  const keel = []; for (let lx = 280; lx >= -288; lx -= 12) keel.push([lx, -1 + Math.sin(lx * .07) * 1.2]);
+  return top.concat(bow, keel, [[-298, -30], [-306, -70]]);
+}
+function hull(x, kind) {
+  const old = kind === 'old', pts = hullPts(), p = P2(pts), hy = (lx, f) => lerp(htop(Math.min(262, lx)), 0, f);
+  x.fillStyle = old ? '#E2D4B6' : '#EEE3CB'; x.fill(p);
+  x.save(); x.clip(p); x.strokeStyle = INK; x.lineCap = 'round';
+  const line = (f, lw) => { x.lineWidth = lw; x.beginPath(); for (let lx = -320; lx <= 310; lx += 10) { const y = hy(lx, f); lx === -320 ? x.moveTo(lx, y) : x.lineTo(lx, y); } x.stroke(); };
+  const n = old ? 26 : 17; for (let k = 1; k < n; k++) { const f = k / n; if (f > .26 && f < .45) continue; line(f, (old ? .8 : .6) + (old ? .5 : .3) * f); }
+  x.save(); x.beginPath(); for (let lx = -320; lx <= 310; lx += 10) x.lineTo(lx, hy(lx, .66)); x.lineTo(310, 10); x.lineTo(-320, 10); x.closePath(); x.clip();
+  hatch(x, null, [-340, -50, 340, 6], .55, old ? 3.2 : 5, old ? .8 : .5); if (old) hatch(x, null, [-340, -50, 340, 6], -.5, 3.8, .65); x.restore();
+  for (const [f, lw] of [[.04, 1.6], [.26, 2.4], [.45, 2.4], [.66, 1.4]]) line(f, lw);
+  if (!old) { x.save(); x.globalCompositeOperation = 'multiply'; x.strokeStyle = 'rgba(217,182,94,.75)'; x.lineWidth = 7; x.beginPath(); for (let lx = -300; lx <= 262; lx += 10) x.lineTo(lx, hy(lx, .15)); x.stroke(); x.restore(); }
+  for (let lx = -226; lx <= 224; lx += 50) { const y = hy(lx, .355) - 5; x.fillStyle = INK; x.fillRect(lx - 7, y, 14, 10); x.lineWidth = 1; x.strokeRect(lx - 9, y - 2, 18, 14);
+    if (old) { x.lineWidth = .7; x.globalAlpha = .6; for (let j = 0; j < 3; j++) { x.beginPath(); x.moveTo(lx - 4 + j * 4, y + 12); x.lineTo(lx - 5 + j * 4, y + 26 + j * 5); x.stroke(); } x.globalAlpha = 1; } }
+  for (let j = 0; j < 3; j++) { x.fillStyle = INK; x.fillRect(-298 + j * 2, -96 + j * 13, 9, 8); }
+  x.restore();
+  x.strokeStyle = INK; x.lineWidth = 2; x.lineJoin = 'round'; x.stroke(p);
+  x.lineWidth = 1.2; x.beginPath(); for (let lx = -302; lx <= 258; lx += 8) x.lineTo(lx, htop(lx) - 7); x.stroke();
+  x.lineWidth = .9; for (let lx = -296; lx <= 254; lx += 14) { x.beginPath(); x.moveTo(lx, htop(lx) - 7); x.lineTo(lx, htop(lx)); x.stroke(); }
+  scroll(x, 298, -86, 9, 1);
+}
+function buildShip(kind) {
+  const mk = fn => { const c = canvas(SB.w * SR, SB.h * SR), x = c.getContext('2d'); x.scale(SR, SR); x.translate(-SB.x0, -SB.y0); fn(x); return c; };
+  return { back: mk(x => rigAndSails(x, kind)), hull: mk(x => hull(x, kind)) };
+}
+
+// ---------- the voyage: positions as functions of t ----------
+const course = x => 1395 + 545 * Math.pow(clamp((x - 560) / 2640), 1.7);
+const oldP = t => { const x = 760 + 28 * t; return [x, course(x)]; };
+const P0 = (() => { const o = oldP(42); return [o[0] - 980, o[1] - 120]; })(), P1 = [P0[0] + 700, P0[1]], P2END = [3000, 720];
+const newU = t => Math.min(1, (28 * (t - 42) + .9 * (t - 42) * (t - 42)) / 1400);
+function newP(t) { if (t <= 42) { const o = oldP(t), k = eo(clamp((t - 20) / 15)); return [o[0] + lerp(-1770, -980, k), o[1] + lerp(-268, -120, k)]; } return bez(P0, P1, P2END, newU(t)); }
+function shipState(kind, t) {
+  const f = kind === 'old' ? oldP : newP, p = f(t), q = f(t + .05), m = f(t - .05), ph = kind === 'old' ? 0 : 2.1;
+  const a = Math.atan2(q[1] - m[1], q[0] - m[0]) * .45 + .011 * Math.sin(t * 1.05 + ph);
+  return { p: [p[0], p[1] + 2.5 * Math.sin(t * 1.3 + ph)], a };
+}
+const toW = (s, lx, ly) => [s.p[0] + Math.cos(s.a) * lx - Math.sin(s.a) * ly, s.p[1] + Math.sin(s.a) * lx + Math.cos(s.a) * ly];
+
+// ---------- people (local: feet at 0,0, facing +x; ~70 units tall) ----------
+function ik(a, b, l1, l2, s) {
+  const dx = b[0] - a[0], dy = b[1] - a[1]; let d = Math.hypot(dx, dy); d = clamp(d, Math.abs(l1 - l2) + .01, l1 + l2 - .01);
+  const base = Math.atan2(dy, dx), off = Math.acos(clamp((l1 * l1 + d * d - l2 * l2) / (2 * l1 * d), -1, 1));
+  return [a[0] + Math.cos(base + s * off) * l1, a[1] + Math.sin(base + s * off) * l1];
+}
+const POSE = {
+  stand: { hip: [0, -34], feet: [[-4, 0], [5, 0]], hands: [[-4, -35], [6, -35]], lean: .04, look: 0 },
+  scrub: { hip: [-4, -17], feet: [[-21, 0], [14, 0]], hands: [[25, -5], [28, -6]], lean: 1.08, look: .2 },
+  offer: { hip: [0, -34], feet: [[-4, 0], [5, 0]], hands: [[-3, -36], [22, -47]], lean: .1, look: 0 },
+  look: { hip: [0, -34], feet: [[-5, 0], [5, 0]], hands: [[-6, -36], [5, -38]], lean: -.03, look: -.35 },
+  climb: { hip: [-3, -33], feet: [[0, 0], [4, -12]], hands: [[4, -64], [7, -74]], lean: -.04, look: -.2 },
+  line: { hip: [0, -33], feet: [[-6, 0], [6, 0]], hands: [[14, -48], [20, -52]], lean: .12, look: .05 },
+  reach: { hip: [0, -35], feet: [[-3, 0], [4, 0]], hands: [[-4, -36], [10, -84]], lean: -.04, look: -.6 },
+  joy: { hip: [0, -34], feet: [[-5, 0], [5, 0]], hands: [[-18, -60], [20, -64]], lean: -.06, look: -.3 },
+  sit: { hip: [0, -29], feet: [[13, 0], [17, 0]], hands: [[7, -32], [11, -33]], lean: -.05, look: 0 },
+};
+const lp = (a, b, k) => [lerp(a[0], b[0], k), lerp(a[1], b[1], k)];
+function blend(A, B, k) { if (k <= 0) return A; if (k >= 1) return B; return { hip: lp(A.hip, B.hip, k), feet: [lp(A.feet[0], B.feet[0], k), lp(A.feet[1], B.feet[1], k)], hands: [lp(A.hands[0], B.hands[0], k), lp(A.hands[1], B.hands[1], k)], lean: lerp(A.lean, B.lean, k), look: lerp(A.look, B.look, k) }; }
+function walkPose(ph) { const s = Math.sin(ph), c = Math.cos(ph); return { hip: [0, -33 + 1.2 * Math.abs(c)], feet: [[-7 * s, -3 * Math.max(0, c)], [7 * s, -3 * Math.max(0, -c)]], hands: [[5 * s, -36], [-5 * s, -36]], lean: .08, look: 0 }; }
+function man(x, P, o) {            // o: coat, hat ('kerchief' | 'tricorne' | 'bare'), mug, brush, light, robe
+  const hip = P.hip, ca = Math.cos(P.lean), sa = Math.sin(P.lean), sh = [hip[0] + sa * 24, hip[1] - ca * 24], hl = P.lean + P.look * .5, hd = [sh[0] + Math.sin(hl) * 10, sh[1] - Math.cos(hl) * 10];
+  const LIGHT = !!o.light, edge = LIGHT ? '#9C7424' : INK, skin = LIGHT ? '#FFF6E2' : '#EAD2AE', coat = LIGHT ? '#FCF5E3' : (o.coat || '#B9A989'), dark = !LIGHT && !o.coat;
+  const knee = P.feet.map(f => ik(hip, f, 17.5, 17.5, -1)), elb = P.hands.map(h => ik([sh[0], sh[1] + 2], h, 13.5, 13.5, 1));
+  const limb = (a, j, b, w, col) => { x.lineCap = 'round'; x.lineJoin = 'round'; x.beginPath(); x.moveTo(...a); x.lineTo(...j); x.lineTo(...b); x.strokeStyle = edge; x.lineWidth = w + 2.4; x.stroke(); x.strokeStyle = col; x.lineWidth = w; x.stroke(); };
+  const shoe = f => { x.fillStyle = edge; x.beginPath(); x.ellipse(f[0] + 2.8, f[1] - 1.6, 5.4, 2.6, 0, 0, TAU); x.fill(); };
+  const shade = (path, ang, gap, lw) => { x.save(); x.clip(path); x.strokeStyle = edge; x.lineWidth = lw; x.globalAlpha = .85; x.beginPath();
+    for (let d = -40; d < 40; d += gap) { x.moveTo(hip[0] - 30 + d, hip[1] - 40); x.lineTo(hip[0] - 30 + d + Math.cos(ang) * 90, hip[1] - 40 + Math.sin(ang) * 90); } x.stroke(); x.restore(); };
+  // the body as one coat: shoulders, waist, a skirt that flares to mid-thigh (or a robe to the deck)
+  const nx = ca, ny = sa, at = (p, u, w) => [lerp(hip[0], sh[0], u) + nx * w, lerp(hip[1], sh[1], u) + ny * w];
+  const hemY = o.robe ? 0 : hip[1] + 12, hemW = o.robe ? 17 : 10.5;
+  const body = P2([at(0, 1, -7.5), at(0, 1, 7.5), at(0, .55, 6.4), [hip[0] + hemW + sa * 4, hemY], [hip[0] - hemW - 2 + sa * 4, hemY], at(0, .55, -6.6)]);
+  if (!o.robe) { limb(hip, knee[0], P.feet[0], 6.2, dark ? '#D9CCAE' : '#E8DCC0'); shoe(P.feet[0]); }
+  limb([sh[0], sh[1] + 2], elb[0], P.hands[0], 5.4, coat); x.fillStyle = skin; x.beginPath(); x.arc(...P.hands[0], 2.7, 0, TAU); x.fill(); x.strokeStyle = edge; x.lineWidth = .9; x.stroke();
+  if (!o.robe) { limb(hip, knee[1], P.feet[1], 6.2, dark ? '#E2D6BA' : '#EEE3CA'); shoe(P.feet[1]); }
+  x.fillStyle = coat; x.fill(body);
+  if (o.robe) { x.save(); x.clip(body); x.strokeStyle = edge; x.lineWidth = .7; for (const d of [-9, -3, 3, 9]) { x.beginPath(); x.moveTo(sh[0] + d * .3, sh[1] + 8); x.quadraticCurveTo(hip[0] + d * .8, hip[1], hip[0] + d * 1.4, 0); x.stroke(); } x.restore(); }
+  else shade(body, 1.2, dark ? 2.2 : 3.2, dark ? .75 : .6);
+  x.strokeStyle = edge; x.lineWidth = 1.4; x.lineJoin = 'round'; x.stroke(body);
+  if (!LIGHT) { x.strokeStyle = edge; x.lineWidth = .9; x.beginPath(); x.moveTo(...at(0, .98, 2)); x.lineTo(hip[0] + 3 + sa * 4, hemY); x.stroke(); }   // the coat's front edge
+  // neck, head
+  x.beginPath(); x.moveTo(...sh); x.lineTo(hd[0], hd[1] + 3); x.strokeStyle = edge; x.lineWidth = 6.4; x.stroke(); x.strokeStyle = skin; x.lineWidth = 4; x.stroke();
+  x.fillStyle = skin; x.beginPath(); x.ellipse(hd[0], hd[1] - 4.5, 7.2, 8, hl * .3, 0, TAU); x.fill(); x.strokeStyle = edge; x.lineWidth = 1.3; x.stroke();
+  if (!LIGHT) { x.save(); x.translate(hd[0], hd[1] - 4.5); x.rotate(P.look * .6);
+      x.beginPath(); x.moveTo(6.6, -2.4); x.lineTo(10, 1.6); x.lineTo(6.8, 2.8); x.fillStyle = skin; x.fill(); x.stroke();      // nose
+      x.fillStyle = INK; x.beginPath(); x.arc(3.8, -1.8, 1, 0, TAU); x.fill(); x.lineWidth = .8; x.beginPath(); x.moveTo(4, 4.6); x.lineTo(6.4, 4.4); x.stroke();
+      x.save(); x.beginPath(); x.ellipse(0, 0, 7.2, 8, 0, 0, TAU); x.clip(); x.lineWidth = .7; x.beginPath(); for (let k = -8; k < 2; k += 2.2) { x.moveTo(k, -9); x.lineTo(k - 3, 9); } x.stroke(); x.restore();   // shade at the back of the head
+      if (o.hat === 'kerchief') { x.fillStyle = INK; x.beginPath(); x.ellipse(0, -1.5, 8, 8, 0, Math.PI * 1.02, Math.PI * 1.98); x.closePath(); x.fill(); x.beginPath(); x.moveTo(-7, -3); x.lineTo(-14, 4); x.lineTo(-12, -5); x.fill(); }
+      else if (o.hat === 'tricorne') { x.fillStyle = INK; x.beginPath(); x.moveTo(-12, -5); x.quadraticCurveTo(0, -11, 13, -6); x.lineTo(8, -13); x.quadraticCurveTo(0, -18, -7, -13); x.closePath(); x.fill(); }
+      else { x.fillStyle = '#5A4632'; x.beginPath(); x.ellipse(-.6, -1.8, 7.6, 8.2, 0, Math.PI * .92, Math.PI * 1.86); x.lineTo(-1.5, -3.5); x.closePath(); x.fill(); }
+      x.restore(); }
+  if (o.mug) { const m = o.mug === 1 ? P.hands[1] : o.mug; x.fillStyle = '#C9B48E'; x.fillRect(m[0] - 2, m[1] - 7, 6.5, 8); x.strokeStyle = INK; x.lineWidth = 1; x.strokeRect(m[0] - 2, m[1] - 7, 6.5, 8); }
+  limb([sh[0], sh[1] + 2], elb[1], P.hands[1], 5.4, coat); x.fillStyle = skin; x.beginPath(); x.arc(...P.hands[1], 2.7, 0, TAU); x.fill(); x.strokeStyle = edge; x.lineWidth = .9; x.stroke();
+  if (o.brush) { const b = lp(P.hands[0], P.hands[1], .5); x.fillStyle = '#B49C72'; x.fillRect(b[0] - 9, b[1] + 1, 18, 5); x.strokeStyle = INK; x.lineWidth = 1; x.strokeRect(b[0] - 9, b[1] + 1, 18, 5); x.beginPath(); for (let i = -8; i <= 8; i += 2) { x.moveTo(b[0] + i, b[1] + 6); x.lineTo(b[0] + i, b[1] + 8.5); } x.stroke(); }
+}
+function figure(ctx, s, lx, ly, P, o, f = 1) { const [wx, wy] = s ? toW(s, lx, ly) : [lx, ly]; ctx.save(); ctx.translate(wx, wy); if (s) ctx.rotate(s.a); ctx.scale(f, 1); man(ctx, P, o); ctx.restore(); }
+const deck = lx => htop(lx) + 3;
+
+// the man in the coral coat: where he is and what he is doing
+const EXIT = -212, BOARD = 186;
+function boatW(t, so, sn) {     // world position of the boat (its keel centre)
+  const A = toW(sn, 214, 30), B = toW(so, -228, 30);
+  if (t < 34.4) return A; if (t < 36.0) return lp(A, B, eio((t - 34.4) / 1.6)); if (t < 38.1) return B; if (t < 40.5) return lp(B, A, eio((t - 38.1) / 2.4)); return A;
+}
+function hero(t, so, sn, bw) {
+  const HO = { coat: HERO, hat: t < 40.5 ? 'kerchief' : 'bare' };
+  if (t < 16.0) { const ph = Math.sin(t * 5.2) * .5 + .5, P = { ...POSE.scrub, hands: [[24 + 8 * ph, -5], [27 + 8 * ph, -6]] }; return { layer: 'old', s: so, lx: -70, P, o: { ...HO, brush: 1 }, f: 1 }; }
+  if (t < 16.7) return { layer: 'old', s: so, lx: -70, P: blend(POSE.scrub, POSE.stand, eio((t - 16) / .7)), o: HO, f: 1 };
+  if (t < 17.5) { const u = (t - 16.7) / .8; return { layer: 'old', s: so, lx: lerp(-70, 4, eio(u)), P: walkPose(u * 9), o: HO, f: 1 }; }
+  if (t < 18.5) return { layer: 'old', s: so, lx: 4, P: blend(POSE.stand, POSE.offer, eio((t - 17.5) / .7)), o: { ...HO, mug: 1 }, f: 1 };
+  if (t < 20.6) return { layer: 'old', s: so, lx: 4, P: blend(POSE.offer, POSE.look, eio((t - 18.6) / .9)), o: HO, f: 1 };
+  if (t < 32.4) return { layer: 'old', s: so, lx: 4, P: blend(POSE.look, POSE.stand, ss(23, 24.5, t)), o: HO, f: 1 };
+  if (t < 32.9) return { layer: 'old', s: so, lx: 4, P: POSE.stand, o: HO, f: -1 };
+  if (t < 35.8) { const u = (t - 32.9) / 2.9; return { layer: 'old', s: so, lx: lerp(4, EXIT, eio(u)), P: walkPose(u * 24), o: HO, f: -1 }; }
+  if (t < 36.6) return { layer: 'old', s: so, lx: EXIT, P: blend(POSE.stand, POSE.climb, eio((t - 35.8) / .8)), o: HO, f: -1 };
+  if (t < 38.0) { const u = eio((t - 36.6) / 1.4), [x0, y0] = toW(so, EXIT, deck(EXIT)), [x1, y1] = [bw[0], bw[1] - 6];   // over the rail and down the ladder
+    return { layer: 'front', lx: lerp(x0, x1, u), ly: lerp(y0, y1, u) - Math.sin(Math.PI * u) * 8, P: blend(POSE.climb, POSE.stand, ss(.75, 1, u)), o: HO, f: -1 }; }
+  if (t < 40.5) return { layer: 'boat', lx: bw[0], ly: bw[1] - 6, P: blend(POSE.stand, POSE.line, eio((t - 38.0) / .6)), o: HO, f: -1 };
+  if (t < 41.0) return { layer: 'boat', lx: bw[0], ly: bw[1] - 6, P: blend(POSE.line, POSE.reach, eio((t - 40.5) / .5)), o: HO, f: -1 };
+  if (t < 42.3) { const u = eio((t - 41.0) / 1.3), [x1, y1] = toW(sn, BOARD, deck(BOARD)); return { layer: 'front', lx: lerp(bw[0], x1, u), ly: lerp(bw[1] - 6, y1, u) - Math.sin(Math.PI * u) * 14, P: blend(POSE.reach, POSE.stand, ss(.6, 1, u)), o: HO, f: u < .55 ? -1 : 1 }; }
+  return { layer: 'new', s: sn, lx: BOARD, P: blend(POSE.stand, POSE.joy, ss(44.2, 45.6, t) * (1 - .55 * ss(50, 52, t))), o: HO, f: 1 };
+}
+function lightFig(t, sn, ctx) {   // the one on the lit ship: drawn in light, leaning down to give a hand
+  const lean = ss(40.2, 40.8, t) * (1 - ss(41.6, 42.4, t));
+  const s = sn, lx = 150;
+  const P = { hip: [0, -35], feet: [[-4, 0], [5, 0]], hands: [[-3, -37], [7, -38]], lean: .04 + .5 * lean, look: -.1 + .5 * lean };
+  if (lean > 0) { const tgt = lp([30, -38], [44, -10], lean); P.hands[1] = tgt; }
+  if (t > 42.3) P.hands[0] = lp([-3, -37], [-10, -48], ss(44.2, 45.6, t) * .6);
+  const [wx, wy] = toW(s, lx, deck(lx)), glow = .55 + .25 * Math.sin(t * 1.7) * .3 + .3 * ss(42, 46, t);
+  // engraved glory: fine gilt rays round the head
+  ctx.save(); ctx.translate(wx, wy); ctx.rotate(s.a);
+  const hd = [Math.sin(P.lean) * 33, -35 - Math.cos(P.lean) * 33 - 4];
+  ctx.save(); ctx.globalCompositeOperation = 'multiply'; const g = ctx.createRadialGradient(hd[0], hd[1], 0, hd[0], hd[1], 120); g.addColorStop(0, `rgba(236,196,104,${.5 * glow})`); g.addColorStop(1, 'rgba(236,196,104,0)'); ctx.fillStyle = g; ctx.fillRect(hd[0] - 120, hd[1] - 120, 240, 240); ctx.restore();
+  ctx.strokeStyle = GILT; ctx.lineCap = 'round'; for (let i = 0; i < 40; i++) { const a = i / 40 * TAU, l0 = 11, l1 = i % 2 ? 30 : 46; ctx.lineWidth = i % 2 ? .6 : .9; ctx.globalAlpha = .85 * glow; ctx.beginPath(); ctx.moveTo(hd[0] + Math.cos(a) * l0, hd[1] + Math.sin(a) * l0); ctx.lineTo(hd[0] + Math.cos(a) * l1, hd[1] + Math.sin(a) * l1); ctx.stroke(); }
+  ctx.globalAlpha = 1; man(ctx, P, { light: true, robe: true }); ctx.restore();
+}
+function crew(ctx, t, so) {
+  // a helmsman at the wheel, a lookout on the forecastle, an old hand on a barrel who takes the mug
+  figure(ctx, so, -248, deck(-248) - 4, { ...POSE.stand, hands: [[16, -40], [20, -44]], lean: .1 }, { hat: 'tricorne' });
+  { const [wx, wy] = toW(so, -226, deck(-226) - 30); ctx.save(); ctx.translate(wx, wy); ctx.rotate(so.a + t * .1 * 0); ctx.strokeStyle = INK; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.arc(0, 0, 12, 0, TAU); ctx.stroke(); ctx.lineWidth = 1.1;
+    for (let i = 0; i < 8; i++) { const a = i / 8 * TAU + Math.sin(t * .7) * .3; ctx.beginPath(); ctx.moveTo(Math.cos(a) * 3, Math.sin(a) * 3); ctx.lineTo(Math.cos(a) * 17, Math.sin(a) * 17); ctx.stroke(); } ctx.restore(); }
+  figure(ctx, so, 228, deck(228), { ...POSE.stand, hands: [[-2, -36], [13, -62]], lean: -.02, look: -.1 }, { hat: 'tricorne' });
+  { const [wx, wy] = toW(so, 228, deck(228)); ctx.save(); ctx.translate(wx, wy); ctx.rotate(so.a - .1); ctx.fillStyle = '#C9B48E'; ctx.strokeStyle = INK; ctx.lineWidth = 1; ctx.fillRect(12, -67, 20, 5); ctx.strokeRect(12, -67, 20, 5); ctx.restore(); }
+  // barrel and the old hand
+  { const bx = 52, [wx, wy] = toW(so, bx, deck(bx)); ctx.save(); ctx.translate(wx, wy); ctx.rotate(so.a); const p = new Path2D(); p.moveTo(-11, 0); p.quadraticCurveTo(-14, -14, -11, -28); p.lineTo(11, -28); p.quadraticCurveTo(14, -14, 11, 0); p.closePath();
+    ctx.fillStyle = '#D8C8A6'; ctx.fill(p); hatch(ctx, p, [-14, -28, 14, 0], 1.57, 3, .7); ctx.strokeStyle = INK; ctx.lineWidth = 1.3; ctx.stroke(p); ctx.lineWidth = 1.6; for (const y of [-6, -22]) { ctx.beginPath(); ctx.moveTo(-12, y); ctx.lineTo(12, y); ctx.stroke(); } ctx.restore(); }
+  const take = ss(18.0, 18.5, t), drink = ss(19.2, 20.2, t) * (1 - ss(22, 23.5, t));
+  const hand = take < 1 ? lp([11, -33], [17, -45], ss(17.6, 18.2, t)) : lp([17, -45], [6, -62], drink);
+  figure(ctx, so, 52, deck(52), { ...POSE.sit, hands: [[6, -31], hand] }, { hat: 'tricorne', coat: '#B7A584', mug: take >= 1 ? 1 : 0 }, -1);
+}
+
+// ---------- the sea round a ship (live strokes, so the water flows past) ----------
+function seaLines(ctx, s, t, front, k = 1) {
+  ctx.save(); ctx.translate(...s.p); ctx.strokeStyle = INK; ctx.lineCap = 'round';
+  const rows = front ? [6, 82] : [-74, 4];
+  for (let y = rows[0]; y < rows[1]; y += 6.5) { const e = Math.abs(y - 6) / 82, half = 560 * Math.sqrt(Math.max(0, 1 - e * e)) * k; if (half < 40) continue;
+    const g = ctx.createLinearGradient(-half, 0, half, 0); g.addColorStop(0, 'rgba(28,22,16,0)'); g.addColorStop(.3, `rgba(28,22,16,${.85 - e * .5})`); g.addColorStop(.7, `rgba(28,22,16,${.85 - e * .5})`); g.addColorStop(1, 'rgba(28,22,16,0)');
+    ctx.strokeStyle = g; ctx.lineWidth = front ? 1.1 - e * .5 : .9; const seed = Math.round(y * 7); ctx.setLineDash([30 + (seed % 23), 8 + (seed % 7), 12 + (seed % 11), 6]); ctx.lineDashOffset = t * 28 + seed;
+    ctx.beginPath(); for (let px = -half; px <= half; px += 14) { const yy = y + 1.6 * Math.sin(px * .045 + y + t * 1.4) + .8 * Math.sin(px * .13 - t * 2); px === -half ? ctx.moveTo(px, yy) : ctx.lineTo(px, yy); } ctx.stroke(); }
+  ctx.setLineDash([]);
+  if (front) {                    // bow wave and a few curling crests at the hull
+    ctx.strokeStyle = INK; ctx.lineWidth = 1.2; for (let i = 0; i < 4; i++) { const ph = (t * .9 + i * .25) % 1, x0 = 300 - ph * 60; ctx.globalAlpha = Math.sin(Math.PI * ph); ctx.beginPath(); ctx.arc(x0, 4, 9 + i * 3, Math.PI * 1.05, Math.PI * 1.75); ctx.stroke(); }
+    ctx.globalAlpha = 1; }
   ctx.restore();
 }
-function draw(ctx, T) {
-  const t = warp(T), [cx, cy, k] = cam(t);
-  ctx.fillStyle = '#2a1d14'; ctx.fillRect(0, 0, W, H);
-  ctx.save(); ctx.translate(W / 2, H / 2); ctx.scale(k, k); ctx.translate(-cx, -cy); stage(ctx, t); ctx.restore();
-  // lamp light from the upper left, warm; the storm cools the right; vignette
-  ctx.save(); ctx.globalCompositeOperation = 'soft-light'; const lg = ctx.createRadialGradient(W * .15, -H * .1, 0, W * .15, -H * .1, Math.max(W, H) * 1.1); lg.addColorStop(0, 'rgba(255,214,150,.55)'); lg.addColorStop(1, 'rgba(60,30,10,.35)'); ctx.fillStyle = lg; ctx.fillRect(0, 0, W, H); ctx.restore();
-  const st = ss(14.4, 16.5, t) * (1 - ss(31, 36, t)); if (st > 0) { const sg = ctx.createLinearGradient(W, 0, W * .45, 0); sg.addColorStop(0, `rgba(30,34,52,${.32 * st})`); sg.addColorStop(1, 'rgba(30,34,52,0)'); ctx.fillStyle = sg; ctx.fillRect(0, 0, W, H); }
-  const vg = ctx.createRadialGradient(W / 2, H / 2, Math.min(W, H) * .4, W / 2, H / 2, Math.max(W, H) * .8); vg.addColorStop(0, 'rgba(20,10,4,0)'); vg.addColorStop(1, 'rgba(20,10,4,.5)'); ctx.fillStyle = vg; ctx.fillRect(0, 0, W, H);
-
-  text(ctx, '19  ·  착하게 살면?', V ? 80 : 110, V ? 200 : 120, { align: 'left', size: 30, weight: 600, color: '#f6e8cf', alpha: win(T, .6, 5, 1, 1), ls: 4, shadow: 'rgba(0,0,0,.6)' });
-  const sb = ss(5.3, 5.9, T) * (1 - ss(40.3, 41.0, T)); if (sb > 0) { const y0 = V ? H - 330 : H - 210, g = ctx.createLinearGradient(0, y0, 0, H); g.addColorStop(0, 'rgba(26,13,5,0)'); g.addColorStop(.35, `rgba(26,13,5,${.62 * sb})`); g.addColorStop(1, `rgba(20,10,4,${.78 * sb})`); ctx.fillStyle = g; ctx.fillRect(0, y0, W, H - y0); }
-  say(ctx, '해적선에 타고 있다고 해봅시다.', win(T, 5.65, 9.25, .5, .4));
-  say(ctx, V ? '그 배 위에서 아무리 갑판을 깨끗이 닦고,\n동료에게 친절하고, 누구보다 모범적으로 산다 해도 —' : '그 배 위에서 아무리 갑판을 깨끗이 닦고, 동료에게 친절하고,\n누구보다 모범적으로 산다 해도 —', win(T, 9.35, 14.75, .5, .4));
-  say(ctx, '당신은 여전히 ‘해적’입니다.', win(T, 14.85, 18.45, .5, .4));
-  say(ctx, '그 배가 향하는 곳(심판의 항구)으로\n배와 함께 실려 가기 때문입니다.', win(T, 18.55, 23.95, .5, .4));
-  say(ctx, '문제는 ‘행동의 점수’가 아니라\n‘어느 배에 속했는가’(신분)입니다.', win(T, 24.05, 29.45, .5, .4));
-  say(ctx, '그래서 복음은 “더 착해져라”가 아니라\n“배를 옮겨 타라”고 말합니다.', win(T, 29.55, 34.95, .5, .4));
-  say(ctx, '죄의 배에서 내려, 예수님께로 —\n하나님의 자녀라는 새 신분으로 건너가는 것입니다.', win(T, 35.05, 40.45, .5, .4));
-  const va = win(T, 40.6, DUR - .2, .7, .5), vy = V ? 250 : 140, vs = V ? 44 : 50, vst = { weight: 600, color: '#fff6e2', shadow: 'rgba(40,20,5,.95)', shadowBlur: 16, alpha: va };
-  if (va > 0) { const sg = ctx.createLinearGradient(0, 0, 0, vy + 220); sg.addColorStop(0, `rgba(30,16,6,${.7 * va})`); sg.addColorStop(1, 'rgba(30,16,6,0)'); ctx.fillStyle = sg; ctx.fillRect(0, 0, W, vy + 220); }
-  text(ctx, '“그가 우리를 흑암의 권세에서 건져내사\n그의 사랑의 아들의 나라로 옮기셨으니”', W / 2, vy, { ...vst, size: vs });
-  text(ctx, '골로새서 1:13 (개역개정)', W / 2, vy + 2 * vs * 1.55 + 4, { size: 24, font: SANS, color: '#f3dcb4', alpha: va * .95, ls: 2, shadow: 'rgba(40,20,5,.9)' });
-  const f = 1 - ss(0, 1.2, T) + ss(DUR - .9, DUR, T); if (f > 0) { ctx.fillStyle = `rgba(0,0,0,${clamp(f)})`; ctx.fillRect(0, 0, W, H); }
+function drawShip(ctx, t, kind, s, deckFn) {
+  seaLines(ctx, s, t, false);
+  ctx.save(); ctx.translate(...s.p); ctx.rotate(s.a); ctx.drawImage(SHIP[kind].back, SB.x0, SB.y0, SB.w, SB.h);
+  flags(ctx, t, kind); ctx.restore();
+  deckFn && deckFn();
+  ctx.save(); ctx.translate(...s.p); ctx.rotate(s.a); ctx.drawImage(SHIP[kind].hull, SB.x0, SB.y0, SB.w, SB.h); ctx.restore();
+  seaLines(ctx, s, t, true);
+}
+function flags(ctx, t, kind) {
+  const wave = (u, ph) => Math.sin(u * 5 - t * 4.2 + ph) * 4 * u;
+  if (kind === 'old') {           // the black flag at the main, a dark pennant at the fore
+    const mx = 2, top = -598, fw = 96, fh = 62, pts = [];
+    for (let i = 0; i <= 10; i++) { const u = i / 10; pts.push([mx + u * fw, top + wave(u, 0)]); } for (let i = 10; i >= 0; i--) { const u = i / 10; pts.push([mx + u * fw * .97, top + fh + wave(u, .6)]); }
+    ctx.strokeStyle = INK; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(0, -560); ctx.lineTo(0, -604); ctx.stroke();
+    ctx.fillStyle = INK; ctx.fill(P2(pts)); ctx.save(); ctx.clip(P2(pts)); hatch(ctx, null, [mx, top - 10, mx + fw, top + fh + 10], .7, 3, .6, { col: '#4a3e30' }); ctx.restore();
+    const sx = mx + fw * .42, sy = top + fh * .4 + wave(.42, .3);
+    ctx.strokeStyle = '#EFE3C4'; ctx.lineWidth = 3.4; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(sx - 15, sy + 6); ctx.lineTo(sx + 15, sy + 22); ctx.moveTo(sx + 15, sy + 6); ctx.lineTo(sx - 15, sy + 22); ctx.stroke();
+    ctx.fillStyle = '#EFE3C4'; ctx.beginPath(); ctx.arc(sx, sy, 10, 0, TAU); ctx.fill(); ctx.fillRect(sx - 6, sy + 6, 12, 7);
+    ctx.fillStyle = INK; ctx.beginPath(); ctx.arc(sx - 4, sy, 2.6, 0, TAU); ctx.arc(sx + 4, sy, 2.6, 0, TAU); ctx.fill(); ctx.fillRect(sx - 3, sy + 9, 1.2, 4); ctx.fillRect(sx + 1.6, sy + 9, 1.2, 4);
+    const pp = []; for (let i = 0; i <= 14; i++) { const u = i / 14; pp.push([168 + u * 130, -500 + wave(u, 1.2) - 6 * (1 - u)]); } for (let i = 14; i >= 0; i--) { const u = i / 14; pp.push([168 + u * 130, -500 + wave(u, 1.2) + 6 * (1 - u)]); }
+    ctx.fillStyle = INK; ctx.fill(P2(pp));
+  } else {                        // a long white pennant with a gilt cross at the hoist
+    const pp = []; for (let i = 0; i <= 20; i++) { const u = i / 20; pp.push([2 + u * 230, -566 + wave(u, 0) * 1.5 - 9 * (1 - u)]); } for (let i = 20; i >= 0; i--) { const u = i / 20; pp.push([2 + u * 230, -566 + wave(u, 0) * 1.5 + 9 * (1 - u)]); }
+    ctx.fillStyle = '#FBF5E4'; ctx.fill(P2(pp)); ctx.strokeStyle = INK; ctx.lineWidth = 1.2; ctx.stroke(P2(pp));
+    ctx.strokeStyle = GILT; ctx.lineWidth = 2.4; ctx.beginPath(); ctx.moveTo(18, -573); ctx.lineTo(18, -559); ctx.moveTo(12, -567); ctx.lineTo(24, -567); ctx.stroke();
+    ctx.strokeStyle = INK; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(0, -560); ctx.lineTo(0, -578); ctx.stroke();
+  }
+}
+function boat(ctx, t, bw, a, part) {   // a small engraved boat; part 'back' (inside) or 'front' (its side)
+  ctx.save(); ctx.translate(...bw); ctx.rotate(a + .02 * Math.sin(t * 2.3)); ctx.scale(-1, 1);
+  if (part === 'back') { ctx.fillStyle = '#CDBB96'; ctx.beginPath(); ctx.ellipse(0, -14, 56, 6, 0, 0, TAU); ctx.fill(); ctx.strokeStyle = INK; ctx.lineWidth = 1; ctx.stroke(); ctx.restore(); return; }
+  const p = new Path2D(); p.moveTo(-62, -18); p.quadraticCurveTo(0, -10, 64, -24); p.quadraticCurveTo(58, 0, 40, 6); p.lineTo(-50, 6); p.quadraticCurveTo(-62, 0, -62, -18); p.closePath();
+  ctx.fillStyle = '#E4D6B8'; ctx.fill(p); ctx.save(); ctx.clip(p); ctx.strokeStyle = INK; ctx.lineWidth = .8; for (let k = 0; k < 9; k++) { ctx.beginPath(); ctx.moveTo(-64, -14 + k * 3); ctx.quadraticCurveTo(0, -6 + k * 3, 66, -20 + k * 3.4); ctx.stroke(); } ctx.restore();
+  ctx.strokeStyle = INK; ctx.lineWidth = 1.6; ctx.stroke(p); ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(-62, -18); ctx.quadraticCurveTo(0, -10, 64, -24); ctx.stroke();
+  ctx.restore();
+  ctx.save(); ctx.translate(...bw); ctx.strokeStyle = INK; ctx.lineWidth = 1; for (let k = 0; k < 4; k++) { const w = 80 - k * 10; ctx.globalAlpha = .7 - k * .12; ctx.beginPath(); for (let i = 0; i <= 10; i++) { const u = i / 10; ctx.lineTo(-w + u * 2 * w, 9 + k * 6 + Math.sin(u * 8 + t * 2 + k) * 1.4); } ctx.stroke(); } ctx.restore();
 }
 
-// right-to-left scripts: every string in Arabic script is laid out right-to-left at the same anchor (the scene's own
-// left / centre / right alignment is kept, so the layout does not move). Only installed for a right-to-left language.
-function rtlCanvas() {
-  const P = CanvasRenderingContext2D.prototype, AR = /[\u0600-\u06ff\u0750-\u077f\ufb50-\ufdff\ufe70-\ufeff]/, ft = P.fillText, st = P.strokeText;
-  const wrap = (c, s, fn) => { if (!AR.test(s)) return fn(); const d = c.direction, a = c.textAlign;
-    c.direction = 'rtl'; c.textAlign = a === 'start' ? 'left' : a === 'end' ? 'right' : a; try { return fn(); } finally { c.direction = d; c.textAlign = a; } };
-  P.fillText = function (s, ...r) { return wrap(this, String(s), () => ft.call(this, s, ...r)); };
-  P.strokeText = function (s, ...r) { return wrap(this, String(s), () => st.call(this, s, ...r)); };
+// ---------- routes on the chart ----------
+function polyPath(ctx, pts) { ctx.beginPath(); pts.forEach((q, i) => i ? ctx.lineTo(q[0], q[1]) : ctx.moveTo(q[0], q[1])); }
+function trimTo(pts, k) { if (k >= 1) return pts; if (k <= 0) return pts.slice(0, 1); let L = 0; const seg = []; for (let i = 1; i < pts.length; i++) { const d = Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]); seg.push(d); L += d; }
+  let rem = L * k; const out = [pts[0]]; for (let i = 1; i < pts.length; i++) { if (seg[i - 1] >= rem) { out.push(lp(pts[i - 1], pts[i], rem / seg[i - 1])); break; } rem -= seg[i - 1]; out.push(pts[i]); } return out; }
+function routes(ctx, t, so, sn) {
+  ctx.save(); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+  // the old ship's wake (dots) and its course ahead to the harbour (dashes, inked in as the camera first sees it)
+  const ox = oldP(t)[0], wake = []; for (let x = 120; x <= ox - 330; x += 12) wake.push([x, course(x)]);
+  ctx.strokeStyle = INK; ctx.lineWidth = 3; ctx.setLineDash([0.1, 13]); polyPath(ctx, wake); ctx.stroke();
+  const ahead = []; for (let x = ox + 470; x <= 3150; x += 12) ahead.push([x, course(x)]); ahead.push([3215, 1912], [BAY[0] - 22, BAY[1] + 4]);
+  const ink = ss(9.0, 12.6, t);
+  if (ink > 0 && ahead.length > 1) { const a = trimTo(ahead, ink); ctx.lineWidth = 2; ctx.setLineDash([14, 9]); polyPath(ctx, a); ctx.stroke();
+    if (ink >= 1) { const e = ahead[ahead.length - 1], d = ahead[ahead.length - 3]; ctx.setLineDash([]); ctx.lineWidth = 2; const an = Math.atan2(e[1] - d[1], e[0] - d[0]); ctx.beginPath(); ctx.moveTo(e[0] - Math.cos(an - .45) * 18, e[1] - Math.sin(an - .45) * 18); ctx.lineTo(...e); ctx.lineTo(e[0] - Math.cos(an + .45) * 18, e[1] - Math.sin(an + .45) * 18); ctx.stroke(); }
+    // struck through: a ruled line and hatched slashes, cut by the engraver after he has crossed
+    const st = ss(44.0, 47.0, t); if (st > 0) { const a2 = trimTo(ahead, st); ctx.setLineDash([]); ctx.lineWidth = 2.6; polyPath(ctx, a2); ctx.stroke(); ctx.lineWidth = 2;
+      for (let i = 2; i < a2.length; i += 4) { const [px, py] = a2[i]; ctx.beginPath(); ctx.moveTo(px - 10, py + 13); ctx.lineTo(px + 10, py - 13); ctx.stroke(); } } }
+  // the lit ship's wake
+  if (t > 20) { const nw = []; for (let τ = 20; τ <= t; τ += .2) { const p = newP(τ); if (Math.hypot(p[0] - sn.p[0], p[1] - sn.p[1]) < 330) break; nw.push(p); }
+    ctx.setLineDash([0.1, 13]); ctx.lineWidth = 3; ctx.strokeStyle = INK; polyPath(ctx, nw); ctx.stroke(); }
+  // his own route, in coral: across the water on the boat, then the new course to the light
+  if (t > 38.1) { const tr2 = []; for (let τ = 38.1; τ <= Math.min(t, 40.5); τ += .05) tr2.push(boatW(τ, shipState('old', τ), shipState('new', τ)));
+    ctx.setLineDash([0.1, 9]); ctx.lineWidth = 4.2; ctx.strokeStyle = HERO; polyPath(ctx, tr2); ctx.stroke(); }
+  const nk = ss(43.0, 50.0, t);
+  if (nk > 0) { const u0 = Math.max(0, newU(t)) + .2, pts = []; for (let u = u0; u <= 1.0001; u += .01) pts.push(bez(P0, P1, P2END, u)); const a = trimTo(pts, nk);
+    ctx.setLineDash([16, 9]); ctx.lineWidth = 3.4; ctx.strokeStyle = HERO; polyPath(ctx, a); ctx.stroke();
+    if (nk >= 1) { const e = pts[pts.length - 1], d = pts[pts.length - 4], an = Math.atan2(e[1] - d[1], e[0] - d[0]); ctx.setLineDash([]); ctx.beginPath(); ctx.moveTo(e[0] - Math.cos(an - .45) * 22, e[1] - Math.sin(an - .45) * 22); ctx.lineTo(...e); ctx.lineTo(e[0] - Math.cos(an + .45) * 22, e[1] - Math.sin(an + .45) * 22); ctx.stroke(); } }
+  ctx.restore();
+}
+function banderole(ctx, t, sn) {     // an engraved ribbon unfurls above him: 하나님의 자녀
+  const u = eio(clamp((t - 43.3) / 1.3)); if (u <= 0) return;
+  const [cx, cy] = toW(sn, BOARD - 10, -205), w = 400 * u, h = 64;
+  ctx.save(); ctx.translate(cx, cy + Math.sin(t * 1.2) * 3);
+  const top = x => -h / 2 + Math.sin(x / 200 * Math.PI * 1.5 + t * .8) * 7, p = new Path2D();
+  for (let i = 0; i <= 24; i++) { const x = -w / 2 + i / 24 * w; i ? p.lineTo(x, top(x)) : p.moveTo(x, top(x)); } for (let i = 24; i >= 0; i--) { const x = -w / 2 + i / 24 * w; p.lineTo(x, top(x) + h); } p.closePath();
+  for (const d of [-1, 1]) { const ex = d * w / 2, e = new Path2D(); e.moveTo(ex, top(ex) + 12); e.lineTo(ex + d * 64 * u, top(ex) + 4); e.lineTo(ex + d * 40 * u, top(ex) + h / 2 + 10); e.lineTo(ex + d * 66 * u, top(ex) + h + 18); e.lineTo(ex, top(ex) + h + 6); e.closePath();
+    ctx.fillStyle = '#F6EDD6'; ctx.fill(e); hatch(ctx, e, [ex - 70, -80, ex + 70, 80], .9, 2.8, .8); ctx.strokeStyle = INK; ctx.lineWidth = 1.5; ctx.stroke(e); }
+  ctx.fillStyle = '#FBF5E4'; ctx.fill(p); ctx.strokeStyle = INK; ctx.lineWidth = 2; ctx.stroke(p);
+  ctx.save(); ctx.clip(p); ctx.strokeStyle = INK; ctx.lineWidth = .7; ctx.globalAlpha = .6; for (let i = 0; i < 6; i++) { const x = -w / 2 + 6 + i * 3; ctx.beginPath(); ctx.moveTo(x, -h); ctx.lineTo(x, h); ctx.stroke(); ctx.beginPath(); ctx.moveTo(w / 2 - 6 - i * 3, -h); ctx.lineTo(w / 2 - 6 - i * 3, h); ctx.stroke(); } ctx.restore();
+  if (u > .8) text(ctx, '하나님의 자녀', 0, top(0) + h / 2 + 12, { size: 34, weight: 600, color: '#5A2E14', alpha: ss(.8, 1, u), maxW: w - 50 });
+  ctx.restore();
 }
 
-Pilot.run({ W, H, dur: DUR, audio: 'ship.m4a', fonts: ["600 40px 'Noto Serif KR'", "400 20px 'Noto Sans KR'", "700 40px 'Noto Sans KR'"],
+// ---------- camera ----------
+const relO = (dx, dy) => t => { const p = oldP(t); return [p[0] + dx, p[1] + dy]; }, relN = (dx, dy) => t => { const p = newP(t); return [p[0] + dx, p[1] + dy]; };
+const CAM = V ? [
+  [0, [980, 560], 1.18], [6.2, [980, 580], 1.24], [9.4, [1300, 1350], .8], [13.4, relO(10, -250), 1.5], [15.2, relO(-30, -110), 2.0], [18.4, relO(20, -110), 2.0], [20.6, relO(0, -330), 1.3],
+  [23.4, relO(60, -300), 1.22], [26.8, [3080, 1880], 1.05], [28.6, [3070, 1900], 1.1], [31.6, relO(-420, -200), .8], [35.0, relO(-490, -220), .86], [37.0, relO(-460, -120), 1.4], [41.6, relO(-560, -150), 1.4],
+  [44.5, relN(170, -170), 1.35], [49.0, relN(330, -230), 1.0], [52.0, [2330, 1200], .8], [57.5, [2340, 1190], .82]]
+  : [
+  [0, [980, 470], .98], [6.2, [980, 482], 1.04], [9.2, [1800, 1250], .54], [13.4, relO(10, -250), 1.3], [15.2, relO(-30, -110), 1.85], [18.4, relO(20, -110), 1.85], [20.6, relO(0, -300), 1.02],
+  [23.4, relO(60, -290), .98], [26.8, [3080, 1880], 1.0], [28.6, [3070, 1900], 1.04], [31.6, [1700, 1350], .62], [35.0, relO(-490, -220), .9], [37.0, relO(-470, -130), 1.25], [41.6, relO(-560, -150), 1.25],
+  [44.5, relN(170, -170), 1.22], [49.0, relN(380, -220), .95], [52.0, [2200, 1290], .7], [57.5, [2215, 1285], .72]];
+function cam(t) {
+  let i = 0; while (i < CAM.length - 2 && t > CAM[i + 1][0]) i++;
+  const a = CAM[i], b = CAM[i + 1], u = eio(clamp((t - a[0]) / (b[0] - a[0]))), pa = typeof a[1] === 'function' ? a[1](t) : a[1], pb = typeof b[1] === 'function' ? b[1](t) : b[1];
+  const s = Math.exp(lerp(Math.log(a[2]), Math.log(b[2]), u)), hw = W / 2 / s, hh = H / 2 / s;
+  return [clamp(lerp(pa[0], pb[0], u), hw, WW - hw), clamp(lerp(pa[1], pb[1], u), hh, WH - hh), s];
+}
+
+// ---------- words ----------
+function say(ctx, s, a) {           // narration, engraved in ink on the paper with a soft clearing round it
+  if (a <= 0) return; const lines = Pilot.tr(s).split('\n'), fs0 = V ? 42 : 44, lh = fs0 * 1.5, maxW = W - (V ? 100 : 160);
+  ctx.save(); ctx.font = `600 ${fs0}px ${SERIF}`; const wd = Math.max(...lines.map(l => ctx.measureText(l).width)), fs = wd > maxW ? fs0 * maxW / wd : fs0; ctx.restore();
+  const yl = V ? H - 290 : H - 74, y0 = yl - (lines.length - 1) * lh, cy = (y0 + yl) / 2 - fs * .35, rx = Math.min(W * .62, Math.min(wd, maxW) * .62 + 140), ry = lines.length * lh * .5 + 70;
+  ctx.save(); ctx.globalAlpha = a; ctx.translate(W / 2, cy); ctx.scale(rx, ry); const g = ctx.createRadialGradient(0, 0, 0, 0, 0, 1); g.addColorStop(0, 'rgba(242,232,206,.9)'); g.addColorStop(.55, 'rgba(242,232,206,.72)'); g.addColorStop(1, 'rgba(242,232,206,0)');
+  ctx.fillStyle = g; ctx.beginPath(); ctx.arc(0, 0, 1, 0, TAU); ctx.fill(); ctx.restore();
+  text(ctx, s, W / 2, y0, { size: fs, weight: 600, color: 'rgba(239,227,196,1)', alpha: a, shadow: 'rgba(239,227,196,1)', shadowBlur: 14, lh: 1.5, maxW });
+  text(ctx, s, W / 2, y0, { size: fs, weight: 600, color: '#24180E', alpha: a, lh: 1.5, maxW });
+}
+
+// ---------- frame ----------
+function draw(ctx, t) {
+  const [cx, cy, s] = cam(t), so = shipState('old', t), sn = shipState('new', t), bw = boatW(t, so, sn), hs = hero(t, so, sn, bw);
+  ctx.fillStyle = '#2a1f14'; ctx.fillRect(0, 0, W, H);
+  ctx.save(); ctx.translate(W / 2, H / 2); ctx.scale(s, s); ctx.translate(-cx, -cy); ctx.imageSmoothingQuality = 'high';
+  { const vx0 = cx - W / 2 / s, vx1 = cx + W / 2 / s, vy0 = cy - H / 2 / s, vy1 = cy + H / 2 / s;   // only the tiles in view
+    for (const T of TILES) if (T.x + T.w > vx0 && T.x < vx1 && T.y + T.h > vy0 && T.y < vy1) ctx.drawImage(T.c, T.x, T.y, T.w, T.h); }
+  // storm clouds hatch in over the harbour once the course to it is drawn
+  const storm = ss(10.5, 13.5, t) * .55 + ss(23.8, 26.4, t) * .45;
+  if (storm > 0) { ctx.save(); ctx.globalAlpha = storm; ctx.drawImage(CLOUD, 2880, 1480 + Math.sin(t * .3) * 6, 760, 360); ctx.globalAlpha = storm * .7; ctx.drawImage(CLOUD, 2640, 1600, 500, 236); ctx.restore();
+    ctx.save(); ctx.globalCompositeOperation = 'multiply'; const g = ctx.createRadialGradient(3250, 1860, 0, 3250, 1860, 700); g.addColorStop(0, `rgba(90,80,70,${.38 * storm})`); g.addColorStop(1, 'rgba(90,80,70,0)'); ctx.fillStyle = g; ctx.fillRect(2550, 1160, 1400, 1400); ctx.restore(); }
+  // the light warms at the end of the new course
+  { const L = .25 + .75 * ss(43, 52, t) + .06 * Math.sin(t * 1.3); ctx.save(); ctx.globalCompositeOperation = 'multiply'; const g = ctx.createRadialGradient(SUN[0], SUN[1], 0, SUN[0], SUN[1], 520); g.addColorStop(0, `rgba(240,196,96,${.42 * L})`); g.addColorStop(1, 'rgba(240,196,96,0)'); ctx.fillStyle = g; ctx.fillRect(SUN[0] - 520, SUN[1] - 520, 1040, 1040); ctx.restore(); }
+  routes(ctx, t, so, sn);
+  // question in the title cartouche (engraved lettering, inked in at the start)
+  text(ctx, V ? '예수님 안 믿어도,\n그냥 착하게 살면\n되는 것 아닌가요?' : '예수님 안 믿어도,\n그냥 착하게 살면 되는 것 아닌가요?', CART.x, CART.y - (V ? 64 : 26), { size: CART.fs, weight: 600, color: '#24180E', alpha: ss(.9, 2.4, t) * (1 - .75 * ss(49.2, 50.6, t)), lh: 1.42, maxW: CART.w - 110 });
+  text(ctx, '심판의 항구', HARB.x, HARB.y + 16, { size: 46, weight: 600, color: '#24180E', ls: 6, maxW: HARB.w - 50 });
+  // ships: the lit one (farther) first, then the pirate ship, then the boat
+  const boatOn = t > 33.9, inBoat = hs.layer === 'boat';
+  if (t > 19.5) drawShip(ctx, t, 'new', sn, () => { lightFig(t, sn, ctx); if (hs.layer === 'new') figure(ctx, sn, hs.lx, deck(hs.lx), hs.P, hs.o, hs.f); });
+  if (t > 42.3) banderole(ctx, t, sn);
+  drawShip(ctx, t, 'old', so, () => { crew(ctx, t, so); if (hs.layer === 'old') figure(ctx, so, hs.lx, deck(hs.lx), hs.P, hs.o, hs.f); });
+  // a rope ladder over the old ship's quarter
+  { const k = ss(35.6, 36.3, t); if (k > 0) { const a = toW(so, EXIT - 6, deck(EXIT) - 6), b = toW(so, EXIT - 6, lerp(deck(EXIT), 18, k)); ctx.save(); ctx.strokeStyle = INK; ctx.lineWidth = 1.2;
+      for (const d of [-5, 5]) { ctx.beginPath(); ctx.moveTo(a[0] + d, a[1]); ctx.lineTo(b[0] + d, b[1]); ctx.stroke(); } for (let y = a[1] + 8; y < b[1]; y += 9) { ctx.beginPath(); ctx.moveTo(a[0] - 5, y); ctx.lineTo(a[0] + 5, y); ctx.stroke(); } ctx.restore(); } }
+  if (boatOn) { const fa = ss(33.9, 34.6, t); ctx.save(); ctx.globalAlpha = fa;
+    // the line from the lit ship's bow to the boat
+    if (t < 42.6) { const a = toW(sn, 300, -88), b = [bw[0] + 52, bw[1] - 20], m = [(a[0] + b[0]) / 2, Math.max(a[1], b[1]) + 34 - 26 * ss(38.1, 38.6, t)]; ctx.strokeStyle = INK; ctx.lineWidth = 1.4; ctx.beginPath(); ctx.moveTo(...a); ctx.quadraticCurveTo(...m, ...b); ctx.stroke(); }
+    boat(ctx, t, bw, sn.a, 'back');
+    if (inBoat) figure(ctx, null, hs.lx, hs.ly, hs.P, hs.o, hs.f);
+    boat(ctx, t, bw, sn.a, 'front'); ctx.restore(); }
+  if (hs.layer === 'front') figure(ctx, null, hs.lx, hs.ly, hs.P, hs.o, hs.f);
+  ctx.restore();
+
+  // grade: lamplight from the upper left, a sepia rim, and the paper's own shadow at the very edge
+  ctx.save(); ctx.globalCompositeOperation = 'soft-light'; const lg = ctx.createRadialGradient(W * .22, -H * .1, 0, W * .22, -H * .1, Math.max(W, H) * 1.2); lg.addColorStop(0, 'rgba(255,226,170,.55)'); lg.addColorStop(1, 'rgba(70,40,15,.45)'); ctx.fillStyle = lg; ctx.fillRect(0, 0, W, H); ctx.restore();
+  const vg = ctx.createRadialGradient(W / 2, H / 2, Math.min(W, H) * .42, W / 2, H / 2, Math.max(W, H) * .78); vg.addColorStop(0, 'rgba(40,24,10,0)'); vg.addColorStop(1, 'rgba(40,24,10,.42)'); ctx.fillStyle = vg; ctx.fillRect(0, 0, W, H);
+
+  // chapter label, narration, verse
+  const ca = win(t, .6, 5, 1, 1);
+  if (ca > 0) { text(ctx, '19  ·  착하게 살면?', V ? 80 : 110, V ? 200 : 120, { align: 'left', size: 30, weight: 600, color: 'rgba(239,227,196,1)', alpha: ca, ls: 4, shadow: 'rgba(239,227,196,1)', shadowBlur: 16 });
+    text(ctx, '19  ·  착하게 살면?', V ? 80 : 110, V ? 200 : 120, { align: 'left', size: 30, weight: 600, color: '#3A2614', alpha: ca, ls: 4 }); }
+  say(ctx, '해적선에 타고 있다고 해봅시다.', win(t, 7.2, 11.9, .6, .5));
+  say(ctx, V ? '그 배 위에서 아무리 갑판을 깨끗이 닦고,\n동료에게 친절하고, 누구보다 모범적으로 산다 해도 —' : '그 배 위에서 아무리 갑판을 깨끗이 닦고, 동료에게 친절하고,\n누구보다 모범적으로 산다 해도 —', win(t, 12.2, 18.7, .6, .5));
+  say(ctx, '당신은 여전히 ‘해적’입니다.', win(t, 18.9, 23.5, .6, .5));
+  say(ctx, '그 배가 향하는 곳(심판의 항구)으로\n배와 함께 실려 가기 때문입니다.', win(t, 23.7, 29.9, .6, .5));
+  say(ctx, '문제는 ‘행동의 점수’가 아니라\n‘어느 배에 속했는가’(신분)입니다.', win(t, 30.1, 36.3, .6, .5));
+  say(ctx, '그래서 복음은 “더 착해져라”가 아니라\n“배를 옮겨 타라”고 말합니다.', win(t, 36.5, 42.7, .6, .5));
+  say(ctx, '죄의 배에서 내려, 예수님께로 —\n하나님의 자녀라는 새 신분으로 건너가는 것입니다.', win(t, 42.9, 49.3, .6, .5));
+  const va = win(t, 49.7, DUR - .25, .9, .6);
+  if (va > 0) { const vy = V ? 330 : 128, vs = V ? 46 : 50, maxW = W - (V ? 90 : 200);
+    ctx.save(); ctx.globalAlpha = va; ctx.translate(W / 2, vy + vs * 1.3); ctx.scale(Math.min(W * .6, 900), vs * 3.2); const g = ctx.createRadialGradient(0, 0, 0, 0, 0, 1); g.addColorStop(0, 'rgba(242,232,206,.92)'); g.addColorStop(.6, 'rgba(242,232,206,.75)'); g.addColorStop(1, 'rgba(242,232,206,0)'); ctx.fillStyle = g; ctx.beginPath(); ctx.arc(0, 0, 1, 0, TAU); ctx.fill(); ctx.restore();
+    const vt = '“그가 우리를 흑암의 권세에서 건져내사\n그의 사랑의 아들의 나라로 옮기셨으니”';
+    text(ctx, vt, W / 2, vy, { size: vs, weight: 600, color: 'rgba(239,227,196,1)', alpha: va, shadow: 'rgba(239,227,196,1)', shadowBlur: 16, maxW });
+    text(ctx, vt, W / 2, vy, { size: vs, weight: 600, color: '#24180E', alpha: va, maxW });
+    text(ctx, '골로새서 1:13 (개역개정)', W / 2, vy + 2 * vs * 1.55 + 2, { size: 24, font: SANS, color: '#5A3A1E', alpha: va, ls: 2, shadow: 'rgba(239,227,196,1)', shadowBlur: 10 }); }
+  const f = 1 - ss(0, 1.3, t) + ss(DUR - 1.1, DUR, t); if (f > 0) { ctx.fillStyle = `rgba(0,0,0,${clamp(f)})`; ctx.fillRect(0, 0, W, H); }
+}
+
+Pilot.run({ W, H, dur: DUR, audio: 'ship.m4a', fonts: ["600 40px 'Noto Serif KR'", "italic 400 17px 'Noto Serif KR'", "400 20px 'Noto Sans KR'"],
   init: async () => {
-    if (Pilot.dir === 'rtl') rtlCanvas();
-    grain = speckle(1024, 1024, 46, 19, .6); buildRoom();
-    const pw = 560, ph = 470;
-    SP.pBack = cut(pw, ph, x => shipBack(x, false)); SP.pHull = cut(pw, ph, x => shipHull(x, false));
-    SP.bBack = cut(pw, ph, x => shipBack(x, true)); SP.bHull = cut(pw, ph, x => shipHull(x, true));
-    SP.arm = cut(340, 90, armArt, 7); SP.sign = cut(300, 230, signArt); SP.cliff = cut(620, 320, cliffArt); SP.cloud = cut(560, 260, x => cloudArt(x, 560, 260, ['#5b5f6e', '#454957'], 3));
-    SP.sky = cut(300, 120, x => cloudArt(x, 300, 120, ['#fbf7ee', '#e6ddcc'], 8), 6);
-    SP.wave1 = cut(2060, 110, x => waveArt(x, 2060, ['#62b9c8', '#4aa1b2'])); SP.wave2 = cut(1840, 110, x => waveArt(x, 1840, ['#3f9fb5', '#2f8199'])); SP.wave3 = cut(1720, 110, x => waveArt(x, 1720, ['#2f8aa3', '#21718a']));
-    SP.sun = cut(240, 320, sunArt); SP.banner = cut(480, 130, bannerArt); SP.heart = cut(90, 94, heartArt, 6); SP.star = cut(88, 88, starArt, 6);
-    SP.q = V ? cut(720, 260, x => qSignArt(x, 720, 260, '예수님 안 믿어도,\n그냥 착하게 살면\n되는 것 아닌가요?', 50)) : cut(900, 230, x => qSignArt(x, 900, 230, '예수님 안 믿어도,\n그냥 착하게 살면 되는 것 아닌가요?', 52));
-    // warm the pose cache so the first frames don't stall
-    for (const p of ['stand', 'reach', 'jump', 'joy']) { kidSprite(p, 0, false); kidSprite(p, 0, true); }
+    // the chart is engraved once at 1.25× and cut into tiles small enough to stay on the GPU (≤ 1504 px), overlapping by 2 px so no seam shows
+    const big = buildChart(), TS = 1500, PD = 2;
+    for (let ty = 0; ty < big.height; ty += TS) for (let tx = 0; tx < big.width; tx += TS) { const w = Math.min(TS, big.width - tx) + PD * 2, h = Math.min(TS, big.height - ty) + PD * 2, c = canvas(w, h);
+      c.getContext('2d').drawImage(big, tx - PD, ty - PD, w, h, 0, 0, w, h); TILES.push({ c, x: (tx - PD) / TF, y: (ty - PD) / TF, w: w / TF, h: h / TF }); }
+    big.width = big.height = 1;
+    CLOUD = buildCloud(); SHIP.old = buildShip('old'); SHIP.new = buildShip('new');
+    const warm = canvas(4, 4).getContext('2d'); for (const c of [...TILES.map(T => T.c), CLOUD, SHIP.old.back, SHIP.old.hull, SHIP.new.back, SHIP.new.hull]) warm.drawImage(c, 0, 0, 4, 4);   // rasterise now, not on the first frame
   },
   draw });
 </script>

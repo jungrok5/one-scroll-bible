@@ -20,7 +20,7 @@ const INK = '#17130F', PAPER = '#E8DFCA';
 const PL = V ? { x: 50, y: 170, w: 980, h: 1230 } : { x: 70, y: 56, w: 1780, h: 812 };   // the printed plate; the margin below holds captions
 const PW = PL.w, PH = PL.h;
 const CUTS = [0, 8.6, 14.4, 20.6, DUR];
-let paper, inkTex, edge, M, mx, cache = {};
+let paper, inkTex, edge, M, mx, G, gx, cache = {};
 
 // ---------- the knife ----------
 // a cut: blunt entry, swelling a little, tapered exit; white on the mask
@@ -216,7 +216,6 @@ function walker(m, x, y, h, ph, o = {}) {   // a captive walking right, head bow
   const hood = new Path2D(); hood.moveTo(x - 10 * s + lean * 80 * s, y - 188 * s); hood.quadraticCurveTo(x + 20 * s + lean * 90 * s, y - 206 * s, x + 36 * s + lean * 100 * s, y - 176 * s); hood.lineTo(x + 6 * s + lean * 60 * s, y - 140 * s); hood.closePath(); parts.push(hood);
   const legs = new Path2D(); legs.moveTo(x - 8 * s, y - 44 * s); legs.lineTo(x - 8 * s + step * 22 * s, y); legs.lineTo(x + 4 * s + step * 22 * s, y); legs.lineTo(x + 6 * s, y - 44 * s); legs.closePath();
   legs.moveTo(x + 4 * s, y - 44 * s); legs.lineTo(x + 4 * s - step * 22 * s, y); legs.lineTo(x + 16 * s - step * 22 * s, y); legs.lineTo(x + 18 * s, y - 44 * s); legs.closePath(); parts.push(legs);
-  if (o.bundle) { const b = new Path2D(); b.ellipse(x - 30 * s, y - 140 * s, 30 * s, 38 * s, -.4, 0, 6.28); parts.push(b); }
   if (o.staff) { const st = new Path2D(); st.rect(x + 40 * s + step * 6 * s, y - 150 * s, 6 * s, 150 * s); parts.push(st); }
   if (o.child) { const cx = x + 60 * s, cs = s * .55, c = new Path2D(); c.moveTo(cx - 24 * cs, y - 10 * cs); c.quadraticCurveTo(cx - 30 * cs, y - 120 * cs, cx, y - 150 * cs); c.quadraticCurveTo(cx + 30 * cs, y - 120 * cs, cx + 24 * cs, y - 10 * cs); c.closePath(); c.ellipse(cx + 4 * cs, y - 175 * cs, 22 * cs, 24 * cs, 0, 0, 6.28);
     c.moveTo(cx - 10 * cs, y - 20 * cs); c.lineTo(cx - 10 * cs - step * 16 * cs, y); c.lineTo(cx + 2 * cs - step * 16 * cs, y); c.lineTo(cx + 2 * cs, y - 20 * cs); c.closePath(); parts.push(c);
@@ -224,6 +223,11 @@ function walker(m, x, y, h, ph, o = {}) {   // a captive walking right, head bow
   parts.forEach(p => halo(m, p, Math.max(4, 7 * s))); parts.forEach(p => blk(m, p));
   // grazing light on the back edge (lit from behind-left): a few cuts along the cloak
   m.save(); m.clip(body); m.fillStyle = '#fff'; for (let k = 0; k < 5; k++) { const yy = y - (60 + k * 22) * s; m.fill(cutP(x - 34 * s + k * 1.5 * s, yy, x - 18 * s, yy - 14 * s, 3.5 * s)); } m.restore();
+  // the load: a smaller sack slung low on the back, cut free of the cloak by its own knife line, a strap over the shoulder
+  if (o.bundle) { const bx = x - 34 * s, by = y - 112 * s, b = new Path2D(); b.ellipse(bx, by, 22 * s, 27 * s, -.3, 0, 6.28);
+    halo(m, b, Math.max(3, 5 * s)); blk(m, b);
+    m.fillStyle = '#fff'; m.fill(curveP([[bx + 8 * s, by - 22 * s], [x - 4 * s, y - 146 * s], [x + 10 * s, y - 150 * s]], 4 * s, 2.5 * s));
+    m.save(); m.clip(b); for (let k = 0; k < 3; k++) { const yy = by - 12 * s + k * 11 * s; m.fill(cutP(bx - 18 * s, yy, bx - 6 * s, yy - 6 * s, 3 * s)); } m.restore(); }
 }
 function mourner(m, x, y, h, dir, pose) {   // a seated captive on the bank: knees drawn up, arms round them; head bowed on the knees (0) or in the hands (1)
   const s = h / 200; m.save(); m.translate(x, y); m.scale(dir * s, s); const parts = [];
@@ -294,16 +298,21 @@ function plate4(lt, t) {
   const tq = Math.floor(lt * 12), r = rng(1000 + tq % 4), rv = clamp((lt - .5) / 1.4), y0 = R4.bank - 26, y1 = V ? PH * .9 : PH * .86;
   mx.fillStyle = '#fff';
   for (let y = y0; y < y1; y += 15) { const k = (y - y0) / (y1 - y0); let x = -r() * 80; while (x < PW * rv) { const len = 30 + r() * 90 * (1 - k * .4), w = (9 - k * 6) * (.6 + r() * .6), wy = Math.sin(x * .03 + y * .2 + tq * .5) * 4; if (w > .8) mx.fill(curveP([[x, y + wy], [x + len * .5, y + wy - 3], [x + len, y + wy]], w, 1)); x += len + 14 + r() * 40 * (1 + k * 2); } }
-  // the gold path of the star on the water (colour plate, printed later on these cuts)
+  // the gold path of the star on the water (colour plate, printed later on these cuts): cut here, before the willow and the
+  // mourners are drawn, so the reflection passes behind the people and never across them
+  starPathCut(lt);
   // near bank: black with grass cuts
   const nb = new Path2D(); nb.moveTo(0, PH); nb.lineTo(0, y1 - 10); for (let x = 0; x <= PW; x += 20) nb.lineTo(x, y1 - 6 + Math.sin(x * .02) * 6); nb.lineTo(PW, PH); nb.closePath(); halo(mx, nb, 6); blk(mx, nb);
   const rg = rng(17); mx.fillStyle = '#fff'; for (let i = 0; i < 120; i++) { const x = rg() * PW, y = y1 + 10 + rg() * (PH - y1 - 10); mx.fill(cutP(x, y, x + (rg() - .5) * 8, y - 14 - rg() * 16, 2.5)); }
   // the willow: trunk on the left, a heavy crown of hanging strands
   willow(mx, lt, t);
   // the mourners on the bank
-  const mb = y1 + (V ? 4 : 0);
-  if (V) { mourner(mx, PW * .62, mb + 70, 250, -1, 2); mourner(mx, PW * .86, mb + 90, 220, -1, 1); }
-  else { mourner(mx, PW * .48, mb + 30, 240, -1, 2); mourner(mx, PW * .62, mb + 54, 260, -1, 1); mourner(mx, PW * .76, mb + 20, 200, -1, 2); }
+  mourners(mx);
+}
+function mourners(m) {
+  const mb = (V ? PH * .9 : PH * .86) + (V ? 4 : 0);
+  if (V) { mourner(m, PW * .62, mb + 70, 250, -1, 2); mourner(m, PW * .86, mb + 90, 220, -1, 1); }
+  else { mourner(m, PW * .48, mb + 30, 240, -1, 2); mourner(m, PW * .62, mb + 54, 260, -1, 1); mourner(m, PW * .76, mb + 20, 200, -1, 2); }
 }
 const HARPS = V ? [[.40, .5], [.62, .46], [.24, .56]] : [[.27, .5], [.38, .44], [.15, .56]];
 function willow(m, lt, t) {
@@ -347,16 +356,21 @@ function goldPlate(c, lt) {
   // the star: carved white (in the mask) then gold on it
   c.fillStyle = '#D9A441';
   const st = new Path2D(); for (let k = 0; k < 16; k++) { const ang = k * Math.PI / 8 - Math.PI / 2, rr = k % 2 ? 6 : (k % 4 ? 18 : 34); k ? st.lineTo(sx + Math.cos(ang) * rr, sy + Math.sin(ang) * rr) : st.moveTo(sx + Math.cos(ang) * rr, sy + Math.sin(ang) * rr); } st.closePath(); c.fill(st);
-  // its glittering path on the water
+  // its glittering path on the water: printed on its own layer, with the mourners (and their halo) knocked out of it
   const sp = ss(9.4, 12.5, lt), r = rng(77 + Math.floor(lt * 12) % 3);
-  for (let y = y0; y < lerp(y0, y1, sp); y += 13) { const k = (y - y0) / (y1 - y0), wv = 16 + k * (V ? 70 : 110); for (let j = 0; j < 3; j++) { const x = sx + (r() - .5) * wv * 2, len = 14 + r() * 50 * (1 - k * .3); c.fill(cutP(x, y + 1, x + len, y + 1, 5 - k * 2.5)); } }
+  if (sp > 0) { gx.setTransform(1, 0, 0, 1, 0, 0); gx.globalCompositeOperation = 'source-over'; gx.clearRect(0, 0, PW, PH); gx.fillStyle = '#D9A441';
+    for (let y = y0; y < lerp(y0, y1, sp); y += 13) { const k = (y - y0) / (y1 - y0), wv = 16 + k * (V ? 70 : 110); for (let j = 0; j < 3; j++) { const x = sx + (r() - .5) * wv * 2, len = 14 + r() * 50 * (1 - k * .3); gx.fill(cutP(x, y + 1, x + len, y + 1, 5 - k * 2.5)); } }
+    gx.globalCompositeOperation = 'destination-out'; mourners(gx); gx.globalCompositeOperation = 'source-over';
+    c.drawImage(G, 0, 0); }
   c.restore();
 }
 function starCut(lt) {   // the star cut into the block before the gold is printed on it
   const a = ss(7.8, 8.6, lt); if (a <= 0) return; const sx = V ? PW * .78 : PW * .9, sy = V ? PH * .3 : PH * .26;
   mx.save(); mx.globalAlpha = a; const p = new Path2D(); p.arc(sx, sy, 46 * a, 0, 6.28); mx.fillStyle = '#000'; mx.fill(p);
   mx.fillStyle = '#fff'; for (let k = 0; k < 16; k++) { const ang = k * Math.PI / 8 - Math.PI / 2, rr = k % 4 ? 22 : 40; mx.fill(cutP(sx, sy, sx + Math.cos(ang) * rr, sy + Math.sin(ang) * rr, k % 4 ? 5 : 8)); } mx.restore();
-  // the gold path needs carved white under it: a column of short cuts on the river below the star
+}
+function starPathCut(lt) {   // the gold path needs carved white under it: a column of short cuts on the river below the star
+  const sx = V ? PW * .78 : PW * .9;
   const sp = ss(9.4, 12.5, lt), y0 = R4.bank - 26, y1 = V ? PH * .9 : PH * .86, r = rng(77 + Math.floor(lt * 12) % 3); if (sp <= 0) return;
   mx.fillStyle = '#fff'; for (let y = y0; y < lerp(y0, y1, sp); y += 13) { const k = (y - y0) / (y1 - y0), wv = 16 + k * (V ? 70 : 110); for (let j = 0; j < 3; j++) { const x = sx + (r() - .5) * wv * 2, len = 14 + r() * 50 * (1 - k * .3); mx.fill(cutP(x, y + 1, x + len, y + 1, 7 - k * 3)); } }
 }
@@ -400,7 +414,7 @@ function draw(ctx, t) {
 
 Pilot.run({ W, H, dur: DUR, audio: 'exile.m4a', fonts: ["600 40px 'Noto Serif KR'", "900 40px 'Noto Serif KR'", "400 20px 'Noto Sans KR'"],
   init: async () => {
-    M = canvas(PW, PH); mx = M.getContext('2d'); hit = canvas(8, 8).getContext('2d');
+    M = canvas(PW, PH); mx = M.getContext('2d'); G = canvas(PW, PH); gx = G.getContext('2d'); hit = canvas(8, 8).getContext('2d');
     // laid paper: warm white, fibres, faint chain lines
     paper = canvas(W, H); { const x = paper.getContext('2d'); x.fillStyle = PAPER; x.fillRect(0, 0, W, H);
       x.globalCompositeOperation = 'multiply'; x.globalAlpha = .12; x.drawImage(speckle(W, H, 26, 5, .8), 0, 0); x.globalAlpha = 1; x.globalCompositeOperation = 'source-over';

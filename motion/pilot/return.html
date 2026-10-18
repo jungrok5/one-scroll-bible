@@ -172,7 +172,7 @@ function buildWorld() {
   [-4, 40, 68].forEach(z => add(z, 9 + (z % 5), 'carry', { len: 7 }));
   [-44, -6, 33, 62, 92].forEach(z => { const g = SEGS.filter(q => q.mx < -140 && !q.gate && Math.abs(q.mz - z) < 6)[0]; if (g) WORK.push({ x: g.mx + g.nx * .3, z: g.mz, onWall: g, type: 'guard', ph: r() * 6, sp: 1, robe: ROBES[(r() * ROBES.length) | 0], cloth: CLOTHS[(r() * CLOTHS.length) | 0], fx: g.nx, fz: g.nz }); });
   [-38, 24, 66].forEach(z => { const w = add(z, 2.6, 'lamp'); LAMPS.push({ fig: w, on: 14.6, b: .8, ph: r() * 9 }); });
-  [[-12, 7], [46, 8]].forEach(([z, o]) => LAMPS.push({ x: westX(z) + o, z, y: .5, fire: 1, on: 14.2, b: 1.3, ph: r() * 9 }));   // braziers
+  [[-12, 7], [46, 8]].forEach(([z, o]) => LAMPS.push({ x: westX(z) + o, z, y: .82, fire: 1, on: 14.2, b: 1.3, ph: r() * 9 }));   // braziers
   WORK.push({ x: NEH[0], z: NEH[1], type: 'neh', ph: 0, robe: [.36, .3, .44], cloth: [.9, .86, .76], dir: 1, neh: 1, fx: -1, fz: .25 });
   LAMPS.push({ fig: WORK[WORK.length - 1], on: -1, b: 1, ph: 2 });
   // builders everywhere else on the ring: small groups, each with a lamp at night
@@ -474,7 +474,26 @@ let camF = [0, 0, 1];
 function lampGlow(x, p, I, fire, t, ph) {
   if (I < .02) return; const r = Math.max(5, (fire ? 3.4 : 2.4) * p[2]) * (.9 + .1 * noise(t * 5, ph)); x.save(); x.globalCompositeOperation = 'lighter';
   x.globalAlpha = Math.min(1, I); x.drawImage(GLOW, p[0] - r * 2, p[1] - r * 2, r * 4, r * 4);
-  const core = Math.max(1.6, .1 * p[2]); x.fillStyle = `rgba(255,244,214,${Math.min(1, I)})`; x.beginPath(); x.ellipse(p[0], p[1], core, core * 1.4, 0, 0, 6.2832); x.fill(); x.restore();
+  const core = Math.max(1.6, .1 * p[2]); x.fillStyle = `rgba(255,244,214,${Math.min(1, I)})`; x.beginPath();
+  if (fire && core > 3) { const fl = 1 + .18 * noise(t * 7, ph + 3), lean = (noise(t * 4, ph) - .5) * core * .8;   // a flame rising out of the bowl, not a floating orb
+    x.moveTo(p[0] - core * 1.2, p[1] + core * .3); x.quadraticCurveTo(p[0] - core * 1.1, p[1] - core * 1.4 * fl, p[0] + lean, p[1] - core * 3.2 * fl); x.quadraticCurveTo(p[0] + core * 1.1, p[1] - core * 1.4 * fl, p[0] + core * 1.2, p[1] + core * .3); x.closePath(); }
+  else x.ellipse(p[0], p[1], core, core * 1.4, 0, 0, 6.2832);
+  x.fill(); x.restore();
+}
+function brazier(x, c, L, lp, I, t) {   // an iron fire-bowl on three legs under the fire: rim, coals, legs, lit from inside
+  const y1 = lp.y - .1, y0 = y1 - .26, R1 = .36, R0 = .2, n = 18, ring = (r, y) => { const o = []; for (let i = 0; i < n; i++) { const a = i / n * 6.2832, q = P(c, lp.x + Math.cos(a) * r, y, lp.z + Math.sin(a) * r); if (!q) return null; o.push(q); } return o; };
+  const rim = ring(R1, y1), bot = ring(R0, y0), mid = P(c, lp.x, y0, lp.z); if (!rim || !bot || !mid) return; const s = mid[2];
+  const iron = shade([.2, .16, .13], 0, .3, 0, mid[3], L, 1), fireC = [255, 150, 70], lit = k => css(iron.map((v, i) => v + fireC[i] * I * k));
+  // legs
+  x.save(); x.lineCap = 'round'; x.strokeStyle = lit(.12); x.lineWidth = Math.max(1, .045 * s); x.beginPath();
+  for (let k = 0; k < 3; k++) { const a = k / 3 * 6.2832 + .5, A = P(c, lp.x + Math.cos(a) * R0 * .9, y0 + .04, lp.z + Math.sin(a) * R0 * .9), B = P(c, lp.x + Math.cos(a) * .4, 0, lp.z + Math.sin(a) * .4); if (A && B) { x.moveTo(A[0], A[1]); x.lineTo(B[0], B[1]); } } x.stroke();
+  // the bowl: union of the strips between rim and foot, warmer toward the rim
+  const g = x.createLinearGradient(0, mid[1], 0, Math.min(...rim.map(q => q[1]))); g.addColorStop(0, lit(.05)); g.addColorStop(1, lit(.3));
+  x.fillStyle = g; x.beginPath(); for (let i = 0; i < n; i++) { const j = (i + 1) % n; x.moveTo(rim[i][0], rim[i][1]); x.lineTo(rim[j][0], rim[j][1]); x.lineTo(bot[j][0], bot[j][1]); x.lineTo(bot[i][0], bot[i][1]); x.closePath(); } x.fill();
+  // the mouth: glowing coals, and the rim catching the light
+  x.beginPath(); rim.forEach((q, i) => i ? x.lineTo(q[0], q[1]) : x.moveTo(q[0], q[1])); x.closePath();
+  const cg = x.createRadialGradient(mid[0], (rim[0][1] + rim[n / 2][1]) / 2, 0, mid[0], (rim[0][1] + rim[n / 2][1]) / 2, R1 * s); cg.addColorStop(0, `rgba(255,214,140,${Math.min(1, I)})`); cg.addColorStop(.6, `rgba(220,90,40,${.9 * Math.min(1, I)})`); cg.addColorStop(1, css(iron));
+  x.fillStyle = cg; x.fill(); x.strokeStyle = lit(.55); x.lineWidth = Math.max(1, .03 * s); x.stroke(); x.restore();
 }
 
 function colourWorld(x, c, t, L) {
@@ -515,7 +534,7 @@ function colourWorld(x, c, t, L) {
         f.dir = st.d; f.back = st.back; person(x, px, py, s, f, pose(f, t), L2, 'color', a); }]);
       const own = LAMPS.find(lp => lp.fig === f); if (own) { const I = lampI(own, t, L); if (I > .02) items.push([fq[2] - .35, () => { const hh = f.hand || [.3 * st.d, 2.05]; lampGlow(x, [px + hh[0] * s, py - hh[1] * s, s, fq[2]], I, 0, t, own.ph); }]); } } };
   people(WORK, () => 1); people(FAR, () => 1); people(CROWD, f => ss(27, 30.5, t));
-  LAMPS.forEach(lp => { if (lp.fig) return; const I = lampI(lp, t, L); if (I < .02) return; const pos = lampPos(lp, t), p = P(c, pos[0], pos[1], pos[2]); if (!p || p[0] < -50 || p[0] > W + 50) return; items.push([p[3] - .5, () => lampGlow(x, p, I, lp.fire, t, lp.ph)]); });
+  LAMPS.forEach(lp => { if (lp.fig) return; const I = lampI(lp, t, L); if (I < .02) return; const pos = lampPos(lp, t), p = P(c, pos[0], pos[1], pos[2]); if (!p || p[0] < -50 || p[0] > W + 50) return; items.push([p[3] - .5, () => lampGlow(x, p, I, lp.fire, t, lp.ph)]); if (lp.fire) items.push([p[3] - .4, () => brazier(x, c, L, lp, I, t)]); });
   items.sort((a, b) => b[0] - a[0]); for (const it of items) it[1]();
   // dust in the low light, drifting (world-anchored, so it parallaxes with the camera)
   const da = ss(8.4, 10, t) * (1 - ss(19, 22, t)) + .6 * ss(31, 33, t); if (da > .01) { x.save(); x.globalCompositeOperation = 'lighter';

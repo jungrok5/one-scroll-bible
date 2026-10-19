@@ -1,0 +1,621 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>시안 · 창조 (마키에)</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600&family=Noto+Sans+KR:wght@400&display=swap">
+</head>
+<body>
+<script src="lib.js"></script>
+<script>
+/* 01 창조 — maki-e: gold and silver powder on black urushi lacquer, with mother-of-pearl inlay (raden).
+   Light is never a flare here: it is precious material SPRINKLED onto the black, and it shines only where the
+   light gliding over the polished surface (the sheen) catches the grains.
+   A  0–6.8    black lacquer; the deep as receding rows of seigaiha waves in faint silver powder; the Spirit,
+               a breath of fine gold dust, drifts over them. 4.9 a single grain of gold falls; a thin trickle follows.
+   B  6.8–14   "빛이 있으라": a veil of gold powder and cut-foil squares falls over the whole frame and settles,
+               densest at the centre, into a burnished radiance (nashiji / bokashi); the waves under it are gilded.
+   C  14–21    the camera tilts up into the heavens: the settled grains lift and swirl into galaxies of graded powder;
+               gold and silver flecks, kirikane squares and pieces of shell for stars.
+   D  21–24.2  the Earth: an inlaid mother-of-pearl orb, raised gold land, a gold rim on the lit side.
+   E  24.2–26.4 the camera passes through suyari-gasumi cloud bands of raised gold and silver.
+   F  26.4–35  Eden as a maki-e landscape: gold relief hills, gold and nacre trees, a river of silver powder,
+               the man and the woman as small gold figures (Gen 1:31). */
+const { clamp, lerp, ss, eo, eio, win, rng, fbm, noise, canvas, mix, text } = Pilot;
+const W = Pilot.W, H = Pilot.H, V = Pilot.ori === 'v', DUR = 35, M = Math.min(W, H);
+const T_IGN = 4.9, T_FL = 6.8;
+const F = 1000, HC0 = H * (V ? .6 : .62), ZL = 40;
+const LQ = [8, 6, 7];
+const GR = [[58, 36, 12], [110, 74, 24], [160, 114, 40], [198, 150, 62], [228, 188, 94], [244, 216, 144], [253, 240, 204]];
+const SR = [[60, 64, 72], [110, 115, 124], [160, 165, 174], [206, 210, 217], [240, 242, 246]];
+const CR = [[96, 40, 20], [150, 72, 40], [196, 112, 72], [228, 158, 116]];
+const AO = [[50, 46, 20], [100, 96, 50], [150, 146, 84], [196, 192, 128], [230, 228, 180]];   // aokin: green-gold
+const rampc = (R, v) => { v = clamp(v) * (R.length - 1); const i = Math.min(R.length - 2, v | 0); return mix(R[i], R[i + 1], v - i); };
+const css = (c, a = 1) => `rgba(${c[0] | 0},${c[1] | 0},${c[2] | 0},${a})`;
+function hsl(h, s, l) { h = (((h % 360) + 360) % 360) / 360; const q = l < .5 ? l * (1 + s) : l + s - l * s, p = 2 * l - q;
+  const f = u => { u = (u + 1) % 1; return u < 1 / 6 ? p + (q - p) * 6 * u : u < .5 ? q : u < 2 / 3 ? p + (q - p) * (2 / 3 - u) * 6 : p; };
+  return [f(h + 1 / 3) * 255, f(h) * 255, f(h - 1 / 3) * 255]; }
+const nacre = (h, l) => hsl(h, .38 + .14 * Math.sin(h * .07), l);
+const gauss = r => (r() + r() + r() + r() - 2) * 1.73;
+const fl = (ph, fr, t) => Math.pow(.5 + .5 * Math.sin(t * fr + ph), 16);
+function pix(w, h, fn) { const c = canvas(w, h), x = c.getContext('2d'), d = x.createImageData(w, h), D = d.data, o = [0, 0, 0, 0];
+  for (let j = 0; j < h; j++) for (let i = 0; i < w; i++) { o[3] = 0; fn(i, j, o); if (o[3] <= 0) continue; const k = (j * w + i) * 4;
+    D[k] = o[0]; D[k + 1] = o[1]; D[k + 2] = o[2]; D[k + 3] = Math.min(255, o[3] * 255); }
+  x.putImageData(d, 0, 0); return c; }
+
+// ---------------- camera: glide over the deep, then tilt up into the heavens (one continuous move) ----------------
+function cam(t) { return { x: 0, y: 0, z: .12 * t + 2.6 * eio((t - 6.6) / 8.5) + 8 * eio((t - 13.8) / 11), hc: HC0 + H * 1.45 * eio((t - 13.8) / 6.8) }; }
+function proj(c, X, Y, Z) { const d = Z - c.z; if (d < .05) return null; const s = F / d; return [W / 2 + (X - c.x) * s, c.hc + (Y - c.y) * s, s]; }
+function unproj(c, sx, sy, d) { return [c.x + (sx - W / 2) * d / F, c.y + (sy - c.hc) * d / F, c.z + d]; }
+const C9 = cam(9), D9 = ZL - C9.z, RS = V ? .5 * W : .38 * H;
+const LC = unproj(C9, W / 2, H * (V ? .45 : .46), D9), RR = RS * D9 / F;   // the radiance: centre (world) and radius
+const C20 = cam(20);
+
+// ---------------- the sheen: the light gliding across the polished lacquer ----------------
+const SA = -.38, SNX = -Math.sin(SA), SNY = Math.cos(SA), SL = Math.hypot(W, H), SWD = M * .17;
+let SPX = 0, SPY = 0;
+function sheenPos(t) { const f = ((((t - 8.5) / 11 + .5) % 1) + 1) % 1, o = (f - .5) * SL * 1.5; SPX = W / 2 + SNX * o; SPY = H / 2 + SNY * o; }
+function sheenAt(x, y) { const d = (x - SPX) * SNX + (y - SPY) * SNY; return Math.exp(-(d * d) / (SWD * SWD)); }
+let BASE, SHT, GL;
+function drawSheen(ctx, a) { ctx.save(); ctx.globalCompositeOperation = 'screen'; ctx.globalAlpha = a; ctx.translate(SPX, SPY); ctx.rotate(SA);
+  ctx.drawImage(SHT, -SL * .75, -SWD * 2.2, SL * 1.5, SWD * 4.4); ctx.restore(); }
+const GLQ = [];
+function glint(x, y, s, a) { if (a > .03) GLQ.push(x, y, s, Math.min(1, a)); }
+function flushGlints(ctx) { ctx.globalCompositeOperation = 'lighter';
+  for (let i = 0; i < GLQ.length; i += 4) { const s = GLQ[i + 2]; ctx.globalAlpha = GLQ[i + 3]; ctx.drawImage(GL, GLQ[i] - s, GLQ[i + 1] - s, 2 * s, 2 * s); }
+  GLQ.length = 0; ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over'; }
+
+// ---------------- the deep: rows of seigaiha waves in silver powder, receding to the horizon ----------------
+const WR = 150, WN = 16, WSW = WR * 2 * WN, WCY = Math.round(WR * 1.04), WSH = Math.round(WR * 1.62), RW = .22, WDZ = .16;
+let WD, WS, WG, FB, FBG;
+function buildWaves() {
+  const mk = () => { const c = canvas(WSW, WSH); return [c, c.getContext('2d')]; };
+  const [dk, dx] = mk(), [sv, sx] = mk(), [gd, gx] = mk();
+  for (const x of [dx, sx]) { x.fillStyle = css(LQ); x.fillRect(0, WCY, WSW, WSH - WCY); for (let i = 0; i < WN; i++) { x.beginPath(); x.arc(WR + 2 * WR * i, WCY, WR, 0, 6.2832); x.fill(); } }
+  const r = rng(31), rings = [.95, .76, .57, .38, .19];
+  for (let i = 0; i < WN; i++) { const cx = WR + 2 * WR * i, sv0 = .7 + .5 * r();
+    rings.forEach((f, ri) => { const rr = WR * f, wd = WR * (ri ? .034 : .05), n = Math.PI * rr * (ri ? 2.3 : 3.2);
+      for (let k = 0; k < n; k++) { const ph = r() * Math.PI, sn = Math.sin(ph), wgt = (.22 + .78 * Math.pow(sn, .7)) * sv0, rad = rr + gauss(r) * wd * .5;
+        const px = cx + Math.cos(ph) * rad, py = WCY - sn * rad, sz = .8 + r() * 1.7, v = r();
+        sx.globalAlpha = clamp(wgt * (.4 + .6 * v)); sx.fillStyle = css(rampc(SR, .3 + .7 * v * wgt)); sx.fillRect(px, py, sz, sz);
+        const gw = Math.exp(-(((px - WSW / 2) / (WSW * .13)) ** 2));
+        if (r() < gw * .95) { gx.globalAlpha = clamp(wgt * (.55 + .45 * v)); gx.fillStyle = css(rampc(GR, .4 + .6 * v * wgt)); gx.fillRect(px, py, sz * 1.1, sz * 1.1); } } });
+    for (let k = 0; k < 260; k++) { const ph = r() * Math.PI, rad = WR * Math.sqrt(r()) * .95, px = cx + Math.cos(ph) * rad, py = WCY - Math.sin(ph) * rad;   // a little nashiji in each scale
+      sx.globalAlpha = .1 + .25 * r(); sx.fillStyle = css(rampc(SR, .4 + .4 * r())); sx.fillRect(px, py, 1.2, 1.2); }
+  }
+  WD = dk; WS = sv; WG = gd;
+  // the far sea: the rows too small to draw, compressed into fine lines; opaque, its top edge feathered (no ruled horizon)
+  const fh = 120;
+  FB = pix(W, fh, (i, j, o) => { const v = j / fh, n = noise(i * .02, j * .9), line = Math.pow(.5 + .5 * Math.sin(j * (1.4 + v * 1.2) + n * 2), 6);
+    const g = Math.random() < (.15 + .5 * line) * (.3 + .7 * v) ? .25 + .5 * Math.random() : .02;
+    const c = mix(LQ, rampc(SR, .5), g * (.45 + .4 * v)); o[0] = c[0]; o[1] = c[1]; o[2] = c[2]; o[3] = ss(0, 10, j); });
+  FBG = pix(W, fh, (i, j, o) => { const v = j / fh, cx = (i - W / 2) / (W * (.05 + .1 * v)), col = Math.exp(-cx * cx), line = Math.pow(.5 + .5 * Math.sin(j * (1.4 + v * 1.2) + noise(i * .02, j * .9) * 2), 4);
+    if (Math.random() > col * (.25 + .75 * line)) return; const c = rampc(GR, .5 + .5 * Math.random()); o[0] = c[0]; o[1] = c[1]; o[2] = c[2]; o[3] = (.4 + .6 * Math.random()) * ss(0, 10, j) * col; });
+}
+function drawSea(ctx, t, c, lit, base) {
+  const hz = c.hc; if (hz > H + 5) return;
+  const wW = RW * 2 * WN, sc0 = RW / WR, y15 = hz + F / 15;
+  ctx.globalAlpha = 1; ctx.drawImage(FB, 0, hz - 8, W, y15 - hz + 14);
+  if (lit > 0) { ctx.globalAlpha = lit; ctx.drawImage(FBG, 0, hz - 8, W, y15 - hz + 14); }
+  for (let k = Math.ceil((c.z + 15) / WDZ); ; k--) { const d = k * WDZ - c.z; if (d < .5) break;
+    const s = F / d, y = hz + s, sc = s * sc0, top = y - WCY * sc; if (top > H) break;
+    const tw = WSW * sc, th = WSH * sc, hk = Math.abs(Math.sin(k * 12.9898) * 43758.5453) % 1, off = hk * 2 * RW;
+    let x0 = W / 2 + (off - c.x) * s; x0 -= Math.ceil(x0 / tw) * tw;
+    const a = base * (.3 + .7 * (1 - ss(4, 15, d))) * (.55 + .45 * noise(k * .23, 3.7));
+    for (let x = x0; x < W; x += tw) { if (a < .98) { ctx.globalAlpha = 1; ctx.drawImage(WD, x, top, tw, th); } if (a > .02) { ctx.globalAlpha = Math.min(1, a); ctx.drawImage(WS, x, top, tw, th); } }
+    if (lit > .01) { ctx.globalAlpha = Math.min(1, lit * (1.15 - .55 * ss(6, 15, d))); ctx.drawImage(WG, W / 2 + (off - wW / 2 - c.x) * s, top, tw, th); }
+  }
+  ctx.globalAlpha = 1;
+}
+let SPI = [];
+function drawSpirit(ctx, t) {   // "하나님의 영은 수면 위에 운행하시니라": a breath of fine gold dust drifting over the waters
+  const vis = ss(.5, 2.2, t) * (1 - ss(6.4, 7.6, t)); if (vis <= 0) return;
+  const head = W * (-.2 + .2 * t), L = W * 1.05, y0 = HC0 + (V ? 120 : 62);
+  for (const p of SPI) { const x = head - p.u * L + (noise(p.u * 5, t * .3 + p.ph) - .5) * 90; if (x < -4 || x > W + 4) continue;
+    const y = y0 - Math.sin(x * .0035 + t * .5) * (V ? 50 : 28) + p.o * (5 + 52 * p.u) - p.u * 30 + (noise(p.ph * 9, t * .6) - .5) * 26 * p.u;
+    const sh = sheenAt(x, y), f = fl(p.ph, p.fr, t), a = vis * p.a * Math.pow(1 - p.u, .5) * ss(0, .05, p.u) * (.4 + .6 * f + 1.2 * sh);
+    if (a < .02) continue; ctx.globalAlpha = Math.min(1, a); ctx.fillStyle = p.c; ctx.fillRect(x, y, p.s, p.s);
+    if (f > .7 && p.s > 1.4) glint(x, y, 4 + 3 * f, a * .6); }
+  ctx.globalAlpha = 1;
+}
+
+// ---------------- the radiance: gold powder settled on the black, burnished at the centre ----------------
+const RT = 1400, RC = RT / 2, RTR = RT / 2 / 1.15;
+let RAD, RB, rbx, RG = [], VP = [], TR = [];
+const radD = r => (Math.exp(-((r / .46) ** 2)) * .95 + .26 * Math.exp(-((r / .88) ** 2))) * (1 - ss(.92, 1.14, r));
+function buildRadiance() {
+  const r = rng(41);
+  RAD = pix(RT, RT, (i, j, o) => { const dx = (i - RC) / RTR, dy = (j - RC) / RTR, rr = Math.hypot(dx, dy); if (rr > 1.14) return;   // the bokashi underlayer
+    const n = fbm(dx * 3 + 7, dy * 3 + 2, 4), D = radD(rr) * (.72 + .56 * n), bur = Math.exp(-((rr / .17) ** 3)), g = r();
+    const a = clamp(D * .5 * (.85 + .3 * g) + bur); if (a < .01) return;
+    const c = rampc(GR, clamp(.34 + .3 * D + .06 * (g - .5) + .36 * bur * (1 - .25 * rr / .17) + .08 * (n - .5)));
+    o[0] = c[0]; o[1] = c[1]; o[2] = c[2]; o[3] = a; });
+  { const x = RAD.getContext('2d');   // sprinkled grains: discrete, resolvable, densest at the centre
+    for (let k = 0; k < 150000; k++) { const a = r() * 6.2832, rr = Math.sqrt(r()) * 1.1, D = radD(rr); if (r() > D * 1.1) continue;
+      const px = RC + Math.cos(a) * rr * RTR, py = RC + Math.sin(a) * rr * RTR, v = r(), s = 1.4 + r() * 1.8, kind = r();
+      x.globalAlpha = .45 + .55 * r(); x.fillStyle = css(kind < .05 ? rampc(CR, .5 + .5 * v) : kind < .1 ? rampc(SR, .6 + .4 * v) : rampc(GR, .42 + .5 * v));
+      x.fillRect(px, py, s, s); }
+    // the burnished pool: a soft highlight polished into the gold
+    const g = x.createRadialGradient(RC - RTR * .05, RC - RTR * .06, 0, RC, RC, RTR * .2); g.addColorStop(0, 'rgba(250,228,160,.55)'); g.addColorStop(.6, 'rgba(236,200,120,.18)'); g.addColorStop(1, 'rgba(230,190,110,0)');
+    x.globalAlpha = 1; x.fillStyle = g; x.fillRect(0, 0, RT, RT); }
+  const x = RAD.getContext('2d');
+  // coarse flakes (hirame): irregular, two-toned
+  for (let k = 0; k < 2600; k++) { const a = r() * 6.2832, rr = Math.sqrt(r()) * 1.08; if (r() > radD(rr) * 1.3) continue;
+    const px = RC + Math.cos(a) * rr * RTR, py = RC + Math.sin(a) * rr * RTR, s = 1.4 + r() * 2.6, cu = r() < .1, si = !cu && r() < .08;
+    const col = cu ? rampc(CR, .5 + .5 * r()) : si ? rampc(SR, .6 + .4 * r()) : rampc(GR, .55 + .45 * r());
+    x.globalAlpha = .7 + .3 * r(); x.fillStyle = css(col); x.beginPath();
+    for (let v = 0; v < 4; v++) { const b = v * 1.57 + r() * .8, q = s * (.6 + .5 * r()); v ? x.lineTo(px + Math.cos(b) * q, py + Math.sin(b) * q) : x.moveTo(px + Math.cos(b) * q, py + Math.sin(b) * q); }
+    x.fill(); }
+  // kirikane: cut-foil squares set in two sparse rings and scattered — the light's "rays", without spokes
+  const kiri = (px, py, s, rot) => { x.save(); x.translate(px, py); x.rotate(rot); x.globalAlpha = .95; x.fillStyle = css(GR[5]); x.fillRect(-s / 2, -s / 2, s, s);
+    x.fillStyle = css(GR[3]); x.beginPath(); x.moveTo(-s / 2, s / 2); x.lineTo(s / 2, -s / 2); x.lineTo(s / 2, s / 2); x.fill(); x.restore(); };
+  [[.6, 44, 8], [.8, 64, 6.5], [.97, 84, 5]].forEach(([rf, n, s], ri) => { for (let k = 0; k < n; k++) { if (r() < .18) continue; const a = (k + (ri & 1) * .5) / n * 6.2832 + gauss(r) * .01, rr = rf + gauss(r) * .012;
+    kiri(RC + Math.cos(a) * rr * RTR, RC + Math.sin(a) * rr * RTR, s * (.8 + .4 * r()), (k + ri) % 2 ? .785 : a); } });
+  for (let k = 0; k < 90; k++) { const a = r() * 6.2832, rr = .15 + .8 * Math.sqrt(r()); kiri(RC + Math.cos(a) * rr * RTR, RC + Math.sin(a) * rr * RTR, 3 + r() * 4, r() * 3); }
+  x.globalAlpha = 1;
+  // glint points: grains that flash as the sheen passes
+  while (RG.length < 1000) { const a = r() * 6.2832, rr = Math.sqrt(r()) * 1.05; if (r() > radD(rr) * 1.2 + .03) continue;
+    RG.push({ x: Math.cos(a) * rr, y: Math.sin(a) * rr, r: rr, ph: r() * 40, fr: 1.5 + r() * 4, s: 3 + r() * 5, b: .5 + r() }); }
+}
+function rev(t) { if (t < 5.62) return 0; if (t < T_FL) return .05 * ss(5.62, T_FL, t); return .05 + 1.22 * Math.pow(clamp((t - T_FL) / 3.4), .85); }
+
+// ---------------- the heavens ----------------
+const GCFG = V ? [[.4, .31, 22, .34 * W, .52, .5, 1], [.76, .6, 40, .19 * W, .42, -.7, -1], [.24, .79, 30, .12 * W, .62, 1.1, 1]]
+               : [[.29, .37, 22, .2 * H, .52, .45, 1], [.78, .26, 40, .12 * H, .42, -.7, -1], [.64, .77, 30, .075 * H, .62, 1.1, 1]];
+const GAL = GCFG.map(([fx, fy, d, rs, tilt, ang, spin]) => ({ c: unproj(C20, W * fx, H * fy, d), R: rs * d / F, tilt, ang, spin }));
+let GTX = [], MWY, MWC, ST = [], NAC = [], NACB = [];
+const GTN = 900, GTR = 420;
+function buildGalaxy(seed) { const r = rng(seed);
+  const c = pix(GTN, GTN, (i, j, o) => { const dx = (i - GTN / 2) / GTR, dy = (j - GTN / 2) / GTR, rr = Math.hypot(dx, dy); if (rr > 1.08) return;
+    const th = Math.atan2(dy, dx); let arm = 0;
+    for (let a = 0; a < 2; a++) { let d = th - (a * Math.PI + Math.log(Math.max(rr, .02) / .06) * 2); d = ((d % 6.2832) + 9.4248) % 6.2832 - 3.1416; arm = Math.max(arm, Math.exp(-((d / (.26 + .3 * rr)) ** 2))); }
+    const n = fbm(dx * 4 + seed, dy * 4, 4), core = Math.exp(-((rr / .12) ** 2)), fall = 1 - ss(.5, 1.06, rr);
+    const D = core * 1.2 + arm * fall * (.3 + .9 * n) * ss(.03, .2, rr) + .05 * fall, g = r(), g2 = r();
+    const a = D * .4 * (1 - core * .3) + (g2 < D * .9 ? .3 + .7 * g : 0) + core * .7; if (a < .02) return;
+    const w = ss(.12, .85, rr), cc = mix(rampc(GR, .5 + .45 * Math.min(1, D) + .1 * g), rampc(SR, .45 + .5 * g), w * .85);
+    o[0] = cc[0]; o[1] = cc[1]; o[2] = cc[2]; o[3] = Math.min(1, a); });
+  const x = c.getContext('2d');   // a few cut-foil squares along the arms
+  for (let k = 0; k < 40; k++) { const [rr, th] = galSample(r); if (rr < .15) continue; const s = 3 + r() * 4; x.save(); x.translate(GTN / 2 + Math.cos(th) * rr * GTR, GTN / 2 + Math.sin(th) * rr * GTR); x.rotate(r() * 3);
+    x.fillStyle = css(rr > .6 ? SR[4] : GR[5]); x.globalAlpha = .9; x.fillRect(-s / 2, -s / 2, s, s); x.restore(); }
+  return c; }
+function galSample(r) { if (r() < .16) return [Math.abs(gauss(r)) * .1, r() * 6.2832]; const rr = .08 + .9 * Math.pow(r(), .9), a = r() < .5 ? 0 : 1;
+  return [rr, a * Math.PI + Math.log(rr / .06) * 2 + gauss(r) * (.1 + .13 * rr)]; }
+function galPt(g, gr, gth, t) { const ph = gth + g.spin * .05 * (t - 14), lx = gr * Math.cos(ph), ly = gr * Math.sin(ph) * g.tilt, ca = Math.cos(g.ang), sa = Math.sin(g.ang);
+  return [g.c[0] + (lx * ca - ly * sa) * g.R, g.c[1] + (lx * sa + ly * ca) * g.R, g.c[2]]; }
+function buildSky() {
+  // a band of graded silver dust across the heavens (a far plane)
+  MWC = unproj(C20, W * .5, H * .45, 140);
+  MWY = pix(1600, 900, (i, j, o) => { const u = i / 1600 - .5, v = (j / 900 - .5) * .5625, d = v * Math.cos(.38) + u * Math.sin(.38);
+    const n = fbm(i * .006, j * .006, 5), D = Math.exp(-((d / (.07 + .05 * n)) ** 2)) * (.3 + .9 * n) * (1 - ss(.38, .5, Math.abs(u))) * (1 - ss(.22, .28, Math.abs(v)));
+    if (Math.random() > D * .14) return; const c = Math.random() < .25 ? rampc(GR, .5 + .5 * Math.random()) : rampc(SR, .3 + .7 * Math.random());
+    o[0] = c[0]; o[1] = c[1]; o[2] = c[2]; o[3] = .2 + .45 * Math.random(); });
+  // stars: gold and silver flecks, cut-foil squares, a few pieces of shell
+  const r = rng(21);
+  for (let i = 0; i < 800; i++) { const k = i < 30 ? 2 : i < 160 ? 1 : 0, sx = (-.4 + 1.8 * r()) * W, sy = (-.7 + 2.2 * r()) * H, d = 3 * Math.pow(55, r()), p = unproj(C20, sx, sy, d);
+    const gold = r() < .55; ST.push({ X: p[0], Y: p[1], Z: p[2], k, c: css(gold ? rampc(GR, .5 + .5 * r()) : rampc(SR, .45 + .55 * r())), b: .35 + .65 * r(), ph: r() * 40, fr: .8 + r() * 3, n: (r() * 10) | 0, sz: .7 + r() * .8 }); }
+  // shell pieces for stars and inlay accents (two hue phases: the colour shifts with the light)
+  for (let k = 0; k < 10; k++) { const pr = rng(500 + k), pts = [], nv = 5 + (pr() * 3 | 0);
+    for (let v = 0; v < nv; v++) { const a = v / nv * 6.2832 + (pr() - .5) * .7, q = 18 + pr() * 12; pts.push([32 + Math.cos(a) * q, 32 + Math.sin(a) * q * (.6 + pr() * .4)]); }
+    const h0 = 150 + pr() * 120, ga = pr() * 6.28;
+    const mk = dh => { const c = canvas(64, 64), x = c.getContext('2d'); x.beginPath(); pts.forEach(([a, b], i) => i ? x.lineTo(a, b) : x.moveTo(a, b)); x.closePath();
+      const g = x.createLinearGradient(32 - 30 * Math.cos(ga), 32 - 30 * Math.sin(ga), 32 + 30 * Math.cos(ga), 32 + 30 * Math.sin(ga));
+      g.addColorStop(0, css(nacre(h0 + dh, .55))); g.addColorStop(.5, css(nacre(h0 + dh + 50, .78))); g.addColorStop(1, css(nacre(h0 + dh + 110, .5))); x.fillStyle = g; x.fill();
+      x.save(); x.clip(); x.strokeStyle = 'rgba(255,255,255,.22)'; x.lineWidth = .8; for (let l = 0; l < 7; l++) { x.beginPath(); x.arc(32 + 40 * Math.cos(ga + 2), 32 + 40 * Math.sin(ga + 2), 22 + l * 6, 0, 6.28); x.stroke(); } x.restore();
+      x.strokeStyle = 'rgba(20,14,10,.7)'; x.lineWidth = 1.2; x.stroke(); return c; };
+    NAC.push(mk(0)); NACB.push(mk(85)); }
+}
+function drawHeavens(ctx, t, c, sa) {
+  // the dust band
+  let q = proj(c, ...MWC); if (q) { const w = 2.6 * W * 140 / F * q[2]; ctx.globalAlpha = sa * .85; ctx.drawImage(MWY, q[0] - w / 2, q[1] - w * .5625 / 2, w, w * .5625); }
+  // galaxies of graded powder
+  const ga = ss(15.6, 18.8, t) * (1 - ss(22, 23.8, t));
+  if (ga > 0) GAL.forEach((g, i) => { const q = proj(c, ...g.c); if (!q) return; const sc = q[2] * g.R / GTR;
+    ctx.save(); ctx.translate(q[0], q[1]); ctx.rotate(g.ang); ctx.scale(1, g.tilt); ctx.rotate(g.spin * .05 * (t - 14)); ctx.globalAlpha = ga;
+    ctx.drawImage(GTX[i], -GTN / 2 * sc, -GTN / 2 * sc, GTN * sc, GTN * sc); ctx.restore(); });
+  // stars
+  const w2 = .5 + .5 * Math.sin(t * .9);
+  for (const s of ST) { const q = proj(c, s.X, s.Y, s.Z); if (!q || q[0] < -30 || q[0] > W + 30 || q[1] < -30 || q[1] > H + 30) continue;
+    const sh = sheenAt(q[0], q[1]), f = fl(s.ph, s.fr, t), a = sa * Math.min(1, s.b * (.45 + .55 * Math.min(1, q[2] / 40)) * (.65 + .35 * f + .8 * sh)); if (a < .02) continue;
+    if (s.k === 0) { const z = Math.min(3.4, s.sz + q[2] * .006); ctx.globalAlpha = a; ctx.fillStyle = s.c; ctx.fillRect(q[0], q[1], z, z); if (f > .75) glint(q[0], q[1], 3 + z * 1.5, a * .7); }
+    else if (s.k === 1) { const z = Math.min(12, 2.2 + q[2] * .02), cs = Math.cos(s.ph + t * s.fr * .4), wz = z * Math.abs(cs); ctx.globalAlpha = a; ctx.fillStyle = Math.abs(cs) > .85 ? '#fff1c4' : s.c;
+      ctx.fillRect(q[0] - wz / 2, q[1] - z / 2, wz, z); if (Math.abs(cs) > .97) glint(q[0], q[1], 6 + z, a * .6); }
+    else { const z = Math.min(46, 7 + q[2] * .06), cs = .5 + .5 * Math.sin(s.ph + t * .8); ctx.save(); ctx.translate(q[0], q[1]); ctx.rotate(s.ph);
+      ctx.globalAlpha = a; ctx.drawImage(NAC[s.n], -z / 2, -z / 2, z, z); ctx.globalAlpha = a * cs; ctx.drawImage(NACB[s.n], -z / 2, -z / 2, z, z); ctx.restore(); if (sh > .6) glint(q[0], q[1], z * .4, a * sh * .6); } }
+  ctx.globalAlpha = 1;
+}
+
+// ---------------- the veil of powder: falls at the word, settles into the radiance, later lifts into the heavens ----------------
+function buildVeil() { const r = rng(61);
+  while (VP.length < 3600) { const a = r() * 6.2832, rr = Math.sqrt(r()) * 1.08; if (r() > radD(rr) * 1.25 + .02) continue;
+    const tx = Math.cos(a) * rr, ty = Math.sin(a) * rr, tl = Math.max(T_FL + .1, T_FL + 3.4 * Math.pow(Math.max(0, rr - .02) / 1.22, 1 / .85) + (r() - .5) * .3);
+    const k = r() < .05 ? 2 : r() < .12 ? 1 : 0, s = k === 2 ? 5 + r() * 4 : k === 1 ? 2.4 + r() * 1.6 : 1 + r() * 1.3;
+    const col = k === 2 ? css(GR[4]) : r() < .08 ? css(rampc(CR, .6 + .4 * r())) : r() < .08 ? css(rampc(SR, .7 + .3 * r())) : css(rampc(GR, .5 + .5 * r()));
+    const p = { tx, ty, r: rr, tl, k, s, c: col, ph: r() * 40, fr: 2 + r() * 5, fall: (ty + 1.3 + .6 * r()) * (.25 + .75 * Math.pow(r(), .6)), dx: gauss(r) * .45, L: 14 + 1.7 * r() };
+    if (r() < .74) { p.g = r() < .5 ? 0 : r() < .6 ? 1 : 2; [p.gr, p.gth] = galSample(r); }
+    else { p.g = -1; const d = 4 * Math.pow(30, r()), q = unproj(C20, (-.2 + 1.4 * r()) * W, (-.2 + 1.4 * r()) * H, d); p.X = q[0]; p.Y = q[1]; p.Z = q[2]; }
+    VP.push(p); }
+  for (let i = 0; i < 170; i++) { const ts = 5.6 + 1.3 * Math.pow(r(), .8); TR.push({ ts, d: .5 + r() * .25, dx: gauss(r) * 5, s: 1 + r() * 1.2, c: css(rampc(GR, .55 + .45 * r())), ph: r() * 40 }); }
+}
+function drawPowder(ctx, t, c) {
+  const q0 = proj(c, LC[0], LC[1], LC[2]);
+  // the first grain, then a thin trickle onto the same spot
+  if (t > T_IGN && t < 7.4 && q0) {
+    const u = clamp((t - T_IGN) / .72), y = lerp(-20, q0[1], Math.pow(u, 1.3));
+    if (u < 1) { ctx.fillStyle = '#fff2c8'; ctx.fillRect(q0[0] - 1.2, y - 1.2, 2.4, 2.4 + 6 * u); glint(q0[0], y, 7 + 3 * Math.sin(t * 20), .85); }
+    else glint(q0[0], q0[1], 16 * (1 - ss(5.62, 6.6, t)) + 5, .9 * (1 - ss(5.62, 6.9, t)) + .2);
+    for (const p of TR) { const v = (t - p.ts) / p.d; if (v < 0 || v > 1) continue; const yy = lerp(-30, q0[1] - 2, Math.pow(v, 1.25)), xx = q0[0] + p.dx * (1 - v);
+      ctx.globalAlpha = .55 + .45 * fl(p.ph, 9, t); ctx.fillStyle = p.c; ctx.fillRect(xx, yy, p.s, p.s * (1 + 4 * v)); }
+    ctx.globalAlpha = 1; }
+  if (t < T_FL || t > 26.2) return;
+  const rot = .6 * eio((t - 13.8) / 6), cr = Math.cos(rot), sr = Math.sin(rot), ga = 1 - ss(22, 23.8, t), sa = 1 - ss(25.3, 26.1, t), C = clamp((t - T_FL) / .12);
+  for (const p of VP) { let X, Y, Z, a, sz = p.s, e = 1;
+    if (t < p.tl) { const u = (t - T_FL) / (p.tl - T_FL); e = 1 - Math.pow(1 - u, 1.6); X = LC[0] + (p.tx + p.dx * (1 - e)) * RR; Y = LC[1] + (p.ty - p.fall * (1 - e)) * RR; Z = LC[2]; a = C * (u > .94 ? (1 - u) / .06 : 1); }
+    else if (t > p.L) { const m = eio((t - p.L) / 3.2), sx = LC[0] + (p.tx * cr - p.ty * sr) * RR, sy = LC[1] + (p.tx * sr + p.ty * cr) * RR, T = p.g >= 0 ? galPt(GAL[p.g], p.gr, p.gth, t) : [p.X, p.Y, p.Z];
+      X = lerp(sx, T[0], m); Y = lerp(sy, T[1], m); Z = lerp(LC[2], T[2], m); a = ss(0, .1, m) * (p.g >= 0 ? ga : 1) * sa; }
+    else continue;
+    if (a < .02) continue;
+    const q = proj(c, X, Y, Z); if (!q || q[0] < -10 || q[0] > W + 10 || q[1] < -40 || q[1] > H + 10) continue;
+    if (t > p.L && p.g < 0) sz = Math.min(3.2, sz * .8 + q[2] * .006);
+    const sh = sheenAt(q[0], q[1]), f = fl(p.ph, p.fr, t), A = Math.min(1, a * (.55 + .45 * f + .8 * sh));
+    ctx.globalAlpha = A;
+    if (p.k === 2) { const cs = Math.cos(p.ph + t * p.fr * .5), wz = sz * Math.abs(cs); ctx.fillStyle = Math.abs(cs) > .85 ? '#fff1c4' : p.c; ctx.fillRect(q[0] - wz / 2, q[1] - sz / 2, wz, sz); if (Math.abs(cs) > .96) glint(q[0], q[1], 5 + sz, A * .8); }
+    else { ctx.fillStyle = p.c; ctx.fillRect(q[0] - sz / 2, q[1] - sz / 2, sz, sz * (1 + (1 - e) * 3)); if (f > .8) glint(q[0], q[1], 3 + sz * 2, A * .7); }
+  }
+  ctx.globalAlpha = 1;
+}
+function drawRadiance(ctx, t, c) {
+  const a = 1 - ss(14.6, 17.2, t), rv = rev(t); if (a <= 0 || rv <= 0) return; const q = proj(c, LC[0], LC[1], LC[2]); if (!q) return;
+  const sc = q[2] * RR / RTR, rot = .6 * eio((t - 13.8) / 6), R1 = rv * RR * q[2], masked = rv < 1.27;
+  // the polished black around it picks up a warm reflection (the lacquer itself, not a glow on the lens)
+  const wr = ss(T_FL, T_FL + .3, t) * (.35 + .65 * Math.exp(-Math.max(0, t - T_FL) / 1.6)) * a;
+  if (wr > 0) { const g = ctx.createRadialGradient(q[0], q[1], 0, q[0], q[1], RS * 2.2); g.addColorStop(0, `rgba(120,80,30,${.22 * wr})`); g.addColorStop(.5, `rgba(70,44,16,${.1 * wr})`); g.addColorStop(1, 'rgba(40,24,8,0)');
+    ctx.globalCompositeOperation = 'screen'; ctx.fillStyle = g; ctx.fillRect(0, 0, W, H); ctx.globalCompositeOperation = 'source-over'; }
+  let x = ctx; if (masked) { x = rbx; x.setTransform(1, 0, 0, 1, 0, 0); x.globalCompositeOperation = 'source-over'; x.clearRect(0, 0, W, H); }
+  x.save(); x.translate(q[0], q[1]); x.rotate(rot); x.globalAlpha = a; x.drawImage(RAD, -RC * sc, -RC * sc, RT * sc, RT * sc); x.restore();
+  if (masked) { const fe = Math.min(.2, rv * .7) * RR * q[2], g = x.createRadialGradient(q[0], q[1], Math.max(0, R1 - fe), q[0], q[1], R1 + 1);
+    g.addColorStop(0, 'rgba(0,0,0,1)'); g.addColorStop(1, 'rgba(0,0,0,0)'); x.globalCompositeOperation = 'destination-in'; x.fillStyle = g; x.fillRect(0, 0, W, H); x.globalCompositeOperation = 'source-over';
+    ctx.drawImage(RB, 0, 0); }
+  const cr = Math.cos(rot), sr = Math.sin(rot), lift = 1 - ss(14, 16, t);
+  for (const p of RG) { if (p.r > rv) continue; const X = q[0] + (p.x * cr - p.y * sr) * RR * q[2], Y = q[1] + (p.x * sr + p.y * cr) * RR * q[2];
+    const sh = sheenAt(X, Y), v = (fl(p.ph, p.fr, t) * .7 + sh * sh * p.b * 1.1) * a * lift; glint(X, Y, p.s * (.5 + .6 * v), v); }
+}
+
+// ---------------- the Earth: an inlaid mother-of-pearl orb ----------------
+const EN = 1000, EC = EN / 2, ER = EC / 1.12;
+let EA, EB, ES = [];
+function buildEarth() {
+  const MWm = 512, MHm = 256, LAND = new Float32Array(MWm * MHm), CLD = new Float32Array(MWm * MHm);
+  for (let j = 0; j < MHm; j++) for (let i = 0; i < MWm; i++) { const lat = (.5 - (j + .5) / MHm) * Math.PI, lon = (i + .5) / MWm * 6.2832, cl = Math.cos(lat);
+    const p0 = cl * Math.cos(lon), p1 = Math.sin(lat), p2 = cl * Math.sin(lon);
+    LAND[j * MWm + i] = fbm(p0 * 1.7 + 5, p2 * 1.7 + p1 * .9 + 9, 5) * .65 + fbm(p1 * 2.3 + 3, p0 * 2.1 - p2 * 1.3 + 1, 4) * .35;
+    CLD[j * MWm + i] = fbm(p0 * 3 + 11, p1 * 7 + p2 * 2, 5); }
+  const smp = (A, lon, lat) => { const fx = (((lon / 6.2832) % 1 + 1) % 1) * MWm, fy = clamp((.5 - lat / Math.PI) * MHm - .5, 0, MHm - 1.001), x0 = fx | 0, y0 = fy | 0, ax = fx - x0, ay = fy - y0, x1 = (x0 + 1) % MWm;
+    return (A[y0 * MWm + x0] * (1 - ax) + A[y0 * MWm + x1] * ax) * (1 - ay) + (A[(y0 + 1) * MWm + x0] * (1 - ax) + A[(y0 + 1) * MWm + x1] * ax) * ay; };
+  const h3 = (a, b, c, s) => { let h = Math.imul(a, 374761393) ^ Math.imul(b, 668265263) ^ Math.imul(c, 2147483647) ^ Math.imul(s, 1274126177); h = Math.imul(h ^ h >>> 13, 1274126177); return ((h ^ h >>> 16) >>> 0) / 4294967296; };
+  const Ln = Math.hypot(.55, .5, .67), Lx = -.55 / Ln, Ly = -.5 / Ln, Lz = .67 / Ln, L2 = Math.hypot(Lx, Ly), r = rng(77), LON0 = 5.4;
+  const cA = canvas(EN, EN), cB = canvas(EN, EN), xa = cA.getContext('2d'), xb = cB.getContext('2d'), dA = xa.createImageData(EN, EN), dB = xb.createImageData(EN, EN), A = dA.data, B = dB.data;
+  const put = (D, k, c, a) => { D[k] = c[0]; D[k + 1] = c[1]; D[k + 2] = c[2]; D[k + 3] = a * 255; };
+  for (let j = 0; j < EN; j++) for (let i = 0; i < EN; i++) {
+    const x = (i + .5 - EC) / ER, y = (j + .5 - EC) / ER, rr = x * x + y * y, rho = Math.sqrt(rr), k = (j * EN + i) * 4, g = r();
+    const d2 = rho > 0 ? (x * Lx + y * Ly) / (rho * L2) : 0;
+    if (rho >= 1) { // a sprinkled halo of gold powder beyond the lit limb
+      const dens = Math.pow(1 - clamp((rho - 1) / .09), 2) * clamp(d2 + .15); if (g < dens * .5) { const c = rampc(GR, .5 + .5 * r()); put(A, k, c, .5 + .5 * r()); put(B, k, c, A[k + 3] / 255); } continue; }
+    const z = Math.sqrt(1 - rr), dif = x * Lx + y * Ly + z * Lz, lat = Math.asin(-y), lon = Math.atan2(x, z) + LON0;
+    const n = smp(LAND, lon, lat), land = n - .515, dl = .02;
+    let cA_, cB_;
+    if (land > 0) {   // raised gold: bevelled at the coast, incised contour lines, powder grain
+      const gE = smp(LAND, lon + dl, lat) - smp(LAND, lon - dl, lat), gN = smp(LAND, lon, lat + dl) - smp(LAND, lon, lat - dl), bev = clamp(.5 + (gE * Lx * -1 * -1 + gN * -Ly) * 14);
+      const ht = clamp(land * 9), cont = (land * 46) % 1 < .1 && land > .015 ? .55 : 1, coast = land < .006 ? 1.25 : 1;
+      cA_ = rampc(GR, clamp((.42 + .3 * ht + .35 * (bev - .5) + .22 * (g - .5)) * coast)).map(v => v * cont); cB_ = cA_;
+    } else {          // the seas: shell pieces set like a mosaic, thin black lacquer between them
+      const P0 = x * 12, P1 = y * 12, P2 = z * 12, ix = Math.floor(P0), iy = Math.floor(P1), iz = Math.floor(P2); let f1 = 9, f2 = 9, id = 0;
+      for (let a = -1; a <= 1; a++) for (let b = -1; b <= 1; b++) for (let cc = -1; cc <= 1; cc++) { const X = ix + a, Y = iy + b, Z = iz + cc;
+        const fx = X + h3(X, Y, Z, 1), fy = Y + h3(X, Y, Z, 2), fz = Z + h3(X, Y, Z, 3), dd = (fx - P0) ** 2 + (fy - P1) ** 2 + (fz - P2) ** 2;
+        if (dd < f1) { f2 = f1; f1 = dd; id = h3(X, Y, Z, 4); } else if (dd < f2) f2 = dd; }
+      const edge = Math.sqrt(f2) - Math.sqrt(f1), gap = 1 - ss(.007, .022, edge), h0 = 172 + 46 * smp(CLD, lon + 1.7, -lat) + 22 * (id - .5), facet = (id * 7.3) % 1;
+      const growth = .04 * Math.sin((x * Math.cos(id * 9) + y * Math.sin(id * 9)) * 90), sweep = .1 * (x * Math.cos(id * 5) + y * Math.sin(id * 5)) * 6, l = .42 + .14 * facet + growth + sweep * .3 + (land > -.025 ? .1 : 0);
+      const ir = Math.sin((x * 3 + y * 2 + id * 20) * 4 + growth * 30) * 26;   // iridescent banding inside each piece
+      cA_ = mix(nacre(h0 + ir, l), LQ, gap * .85); cB_ = mix(nacre(h0 - 34 + 16 * facet - ir * .6, l + .05), LQ, gap * .85);
+      const cl = smp(CLD, lon - .3, lat); if (cl > .6) { const w = clamp((cl - .6) * 3.5) * (g < .7 ? 1 : .4); const sc = rampc(SR, .6 + .4 * r()); cA_ = mix(cA_, sc, w * .8); cB_ = mix(cB_, sc, w * .8); }
+    }
+    // light: lit side shines, the night side dissolves into scattered grains and then black lacquer
+    const lit = .16 + .95 * Math.pow(clamp(dif), .85), f = ss(-.28, .32, dif), keep = f >= 1 || g < Math.pow(f, .7) * .9 + .02;
+    const rim = ss(.965, .99, rho) * clamp(d2) * (1 - ss(.996, 1, rho) * .5), rc = rampc(GR, .85 + .15 * g);
+    let pa = keep ? .35 + .65 * f : 0;
+    const shade = cc => mix(mix(LQ, cc.map(v => Math.min(255, v * lit)), pa), rc, rim);
+    const al = clamp((1 - rho) * ER * (.45 + 3 * (1 - f)) / (1 + 30 * (1 - f)));   // crisp on the lit limb, soft on the night limb
+    put(A, k, shade(cA_), al); put(B, k, shade(cB_), al);
+  }
+  xa.putImageData(dA, 0, 0); xb.putImageData(dB, 0, 0); EA = cA; EB = cB;
+  const rr = rng(78); while (ES.length < 240) { const x = rr() * 2 - 1, y = rr() * 2 - 1; if (x * x + y * y > .96) continue; const z = Math.sqrt(1 - x * x - y * y); if (x * Lx + y * Ly + z * Lz < .15) continue;
+    ES.push({ x, y, ph: rr() * 40, fr: 1 + rr() * 3, s: .6 + rr() }); }
+}
+function earthR(t) { return 24 * Math.exp(.92 * (t - 21)); }
+function drawEarth(ctx, t) { if (t < 21) return; const Re = earthR(t), cx = W / 2, cy = H * .5, S = Re * 1.12, a = ss(21, 21.7, t);
+  ctx.save(); ctx.translate(cx, cy); ctx.rotate(-.06 * (t - 21)); ctx.globalAlpha = a; ctx.drawImage(EA, -S, -S, 2 * S, 2 * S);
+  const w = .5 + .5 * Math.sin((t - 21) * 1.15 - 1.2); ctx.globalAlpha = a * w; ctx.drawImage(EB, -S, -S, 2 * S, 2 * S); ctx.restore();
+  const cs = Math.cos(-.06 * (t - 21)), sn = Math.sin(-.06 * (t - 21));
+  for (const p of ES) { const X = cx + (p.x * cs - p.y * sn) * Re, Y = cy + (p.x * sn + p.y * cs) * Re, v = (fl(p.ph, p.fr, t) * .8 + Math.pow(sheenAt(X, Y), 2) * .9) * a; glint(X, Y, (3 + Re * .008) * p.s, v); }
+  ctx.globalAlpha = 1; }
+
+// ---------------- suyari-gasumi: raised cloud bands of gold and silver ----------------
+let BT = [];
+function buildBand(seed, kind) { const BW = 2400, BH = 440, c = canvas(BW, BH), x = c.getContext('2d'), r = rng(seed);
+  const h0 = 100 + r() * 24, caps = [[170 + r() * 80, 160, BW - 380 - r() * 160, h0]];
+  caps.push([caps[0][0] + 260 + r() * 520, 160 + h0 * .62, 640 + r() * 620, h0 * .74]);
+  if (r() < .75) caps.push([caps[0][0] + 80 + r() * 900, 160 - h0 * .55, 420 + r() * 520, h0 * .66]);
+  const path = new Path2D();   // stadium shapes with a hand-drawn, slightly uneven edge
+  const RXS = [], inBand = (px, py) => caps.some(([x0, y0, w, h], ci) => { const R = h / 2, Rx = RXS[ci], cy = y0 + R, dy = (py - cy) / R; if (px < x0 || px > x0 + w || Math.abs(dy) > 1) return false;
+    const ex = px < x0 + Rx ? (px - x0 - Rx) / Rx : px > x0 + w - Rx ? (px - x0 - w + Rx) / Rx : 0; return ex * ex + dy * dy <= 1; });
+  caps.forEach(([x0, y0, w, h], ci) => { const R = h / 2, Rx = h * (1.1 + .5 * r()), cy = y0 + R, pts = [], L = w - 2 * Rx; RXS.push(Rx);   // long tapered ends, like drawn-out mist
+    for (let k = 0; k <= 160; k++) { const u = k / 160; let px, py;
+      if (u < .25) { px = x0 + Rx + L * u / .25; py = y0; } else if (u < .5) { const a = -Math.PI / 2 + Math.PI * (u - .25) / .25; px = x0 + Rx + L + Math.cos(a) * Rx; py = cy + Math.sin(a) * R * (Math.cos(a) > 0 ? 1 - .25 * Math.cos(a) : 1); }
+      else if (u < .75) { px = x0 + Rx + L * (1 - (u - .5) / .25); py = y0 + h; } else { const a = Math.PI / 2 + Math.PI * (u - .75) / .25; px = x0 + Rx + Math.cos(a) * Rx; py = cy + Math.sin(a) * R; }
+      const wob = (noise(u * 22 + ci * 7 + seed, 1.3) - .5) * 7; pts.push([px, py + wob * (py < cy ? -1 : 1) * .6]); }
+    pts.forEach(([px, py], k) => k ? path.lineTo(px, py) : path.moveTo(px, py)); path.closePath(); });
+  const pal = kind === 1 ? SR : GR;
+  x.save(); x.filter = 'blur(14px)'; x.translate(4, 14); x.fillStyle = 'rgba(0,0,0,.45)'; x.fill(path); x.restore();   // the raised edge casts a shadow
+  const g = x.createLinearGradient(0, 60, 0, 380); g.addColorStop(0, css(rampc(pal, .5))); g.addColorStop(.5, css(rampc(pal, .36))); g.addColorStop(1, css(rampc(pal, .22)));
+  x.fillStyle = g; x.fill(path);
+  // nashiji: flakes densest along the top of each band, thinning downward (bokashi)
+  const tops = caps.map(([x0, y0, w, h]) => [x0, y0, w, h]);
+  for (let k = 0; k < 110000; k++) { const ci = (r() * tops.length) | 0, [x0, y0, w, h] = tops[ci], px = x0 + r() * w, v = Math.pow(r(), 1.4), py = y0 + v * h;
+    if (r() > .25 + .9 * fbm(px * .012 + seed, py * .03, 3) ** 2 * 2) continue;
+    if (!inBand(px, py)) continue; const sv = kind === 2 && r() < .35, b = 1 - v;
+    x.globalAlpha = .45 + .55 * r(); x.fillStyle = css(rampc(sv ? SR : pal, .45 + .5 * b * r() + .1)); const s = 1.2 + r() * 2.2; x.fillRect(px, py, s, s); }
+  for (const [x0, y0, w, h] of tops) for (let k = 0; k < w * 1.2; k++) {   // overspray: grains that fell just outside the edge
+    const u = r(), side = r() < .5 ? -1 : 1, px = x0 + u * w, py = side < 0 ? y0 - Math.abs(gauss(r)) * 7 : y0 + h + Math.abs(gauss(r)) * 7;
+    if (inBand(px, py)) continue; x.globalAlpha = .3 + .5 * r(); x.fillStyle = css(rampc(pal, .55 + .4 * r())); x.fillRect(px, py, 1.5, 1.5); }
+  // a fine raised outline of brighter powder
+  x.save(); x.clip(path); x.globalAlpha = .7; x.lineWidth = 2.4; x.strokeStyle = css(rampc(pal, .8)); x.setLineDash([2, 2.5]); x.stroke(path); x.restore();
+  x.globalAlpha = 1; return c; }
+const BANDS = [[24.1, -1, -.6, 0], [24.3, 1, .45, 1], [24.55, -.4, -.12, 2], [24.8, 1, -.5, 0], [24.95, -1, .3, 1], [25.15, .6, .05, 2], [25.3, -1, -.3, 0], [25.5, .3, .5, 1], [25.62, -.7, .1, 0], [25.8, 1, -.15, 2]];
+function drawBands(ctx, t) { if (t < 24 || t > 27.4) return;
+  for (let i = BANDS.length - 1; i >= 0; i--) { const [tb, side, yo, kind] = BANDS[i], u = t - tb; if (u < 0) continue; const S = .32 * Math.exp(1.55 * Math.min(u, 1.2)) + .5 * Math.max(0, u - 1.2), sl = Math.sign(side) * ss(.85, 1.45, u) * W * (V ? 2.6 : 1.8);   // grow, then part like curtains
+    const w = (V ? 1.8 : 1) * W * .95 * S, h = w * 440 / 2400, x = W / 2 + side * W * .12 * S - w / 2 + sl, y = H / 2 + yo * H * .36 * S - h * .55; if (u > 1.5) continue;
+    ctx.globalAlpha = ss(0, .3, u); ctx.drawImage(BT[kind], x, y, w, h); }
+  ctx.globalAlpha = 1; }
+
+// ---------------- Eden: a maki-e landscape in four layers ----------------
+const EL = V ? { hz: .5, sun: [.68, .405, .075 * W], fig: [.37, .755, .115 * H] } : { hz: .555, sun: [.69, .41, .062 * H], fig: [.41, .81, .175 * H] };
+const LW = Math.ceil(W * 1.12), LH = Math.ceil(H * 1.42), OX = Math.round((LW - W) / 2), OY = Math.round(H * .26);
+const HZ = H * EL.hz, EF = [.12, .35, .75, 1.25];
+const RV = V ? { x0: .62, sw: .2, sk: .5, w0: .006, w1: .3 } : { x0: .6, sw: .12, sk: .32, w0: .004, w1: .2 };
+const rivY = u => HZ + (H * 1.15 - HZ) * Math.pow(u, 1.7), rivX = u => W * (RV.x0 - RV.sw * Math.sin(Math.PI * u * 1.2) + RV.sk * u * u * u), rivW = u => W * (RV.w0 + RV.w1 * Math.pow(u, 1.6));
+let EDN = [], EG = [], RIV = [], MOT = [];
+const layer = () => { const c = canvas(LW, LH), x = c.getContext('2d'); x.translate(OX, OY); return [c, x]; };
+function leaf(x, px, py, L, ang, col, rib) { const c = Math.cos(ang), s = Math.sin(ang), w = L * .36;
+  x.fillStyle = col; x.beginPath(); x.moveTo(px, py); x.quadraticCurveTo(px + c * L * .5 - s * w, py + s * L * .5 + c * w, px + c * L, py + s * L); x.quadraticCurveTo(px + c * L * .5 + s * w, py + s * L * .5 - c * w, px, py); x.fill();
+  if (rib && L > 7) { x.strokeStyle = 'rgba(30,18,6,.6)'; x.lineWidth = .7; x.beginPath(); x.moveTo(px + c * L * .1, py + s * L * .1); x.lineTo(px + c * L * .85, py + s * L * .85); x.stroke(); } }
+function clump(x, r, cx, cy, rx, ry, o, li) {   // a rounded mass of gold and shell leaves on black
+  if (rx > 24) { x.save(); x.filter = 'blur(4px)'; x.fillStyle = css(LQ, .75); x.beginPath(); x.ellipse(cx, cy, rx * .8, ry * .62, 0, 0, 6.2832); x.fill(); x.restore(); }
+  const n = Math.round(rx * ry * o.dens), L0 = o.leaf, items = []; ry *= .78;
+  for (let i = 0; i < n; i++) { const a = r() * 6.2832, q = Math.sqrt(r()), px = cx + Math.cos(a) * rx * q, py = cy + Math.sin(a) * ry * q;
+    const lt = clamp(.5 + .5 * (((px - cx) / rx) * o.lit * .55 - ((py - cy) / ry) * .65) + (r() - .5) * .3);
+    items.push([lt, px, py, L0 * (.65 + .7 * r()), a + gauss(r) * .45, r() < o.nac]); }
+  items.sort((p, q) => p[0] - q[0]);
+  for (const [lt, px, py, L, ang, nc] of items) { x.globalAlpha = .85 + .15 * r();
+    leaf(x, px, py, L, ang, css(nc ? nacre(150 + r() * 150, .35 + .4 * lt) : rampc(GR, .2 + .72 * lt + .08 * r())), !nc);
+    if (r() < .06 * (lt + .2)) EG.push({ l: li, x: px + Math.cos(ang) * L * .5, y: py + Math.sin(ang) * L * .5, ph: r() * 40, fr: 1 + r() * 3, s: 3 + L * .25 }); }
+  x.globalAlpha = 1;
+  for (let i = 0; i < (o.fruit || 0); i++) { const a = r() * 6.2832, q = Math.sqrt(r()) * .8, px = cx + Math.cos(a) * rx * q, py = cy + Math.sin(a) * ry * q, s = L0 * .32;
+    const g = x.createRadialGradient(px - s * .35, py - s * .35, 0, px, py, s); g.addColorStop(0, css(CR[3])); g.addColorStop(.5, css(CR[2])); g.addColorStop(1, css(CR[0]));
+    x.fillStyle = g; x.beginPath(); x.arc(px, py, s, 0, 6.2832); x.fill(); EG.push({ l: li, x: px - s * .3, y: py - s * .3, ph: r() * 40, fr: 1 + r() * 2, s: 4 + s * .4 }); }
+}
+function tree(x, r, bx, by, ht, o, li) {   // raised-gold trunk, branches, clumps of gold and shell leaves
+  const lean = o.lean || 0, tw = ht * (o.tw || .05), tx = bx + lean * ht, ty = by - ht * .58, lit = o.lit || 1;
+  x.beginPath(); x.moveTo(bx - tw * 1.3, by); x.quadraticCurveTo(bx - tw * .5 + lean * ht * .3, by - ht * .3, tx - tw * .4, ty); x.lineTo(tx + tw * .4, ty);
+  x.quadraticCurveTo(bx + tw * .6 + lean * ht * .3, by - ht * .3, bx + tw * 1.4, by); x.closePath();
+  const g = x.createLinearGradient(bx - tw * lit, 0, bx + tw * lit, 0); g.addColorStop(0, css(GR[1])); g.addColorStop(.55, css(GR[3])); g.addColorStop(1, css(GR[5])); x.fillStyle = g; x.fill();
+  x.save(); x.clip(); x.strokeStyle = 'rgba(26,14,4,.8)'; for (let i = 0; i < ht * .3; i++) { const f = r(), yy = lerp(by, ty, f), xx = lerp(bx, tx, f) + (r() - .5) * tw * 1.6, ln = tw * (.3 + .7 * r());
+    x.lineWidth = .6 + r() * .8; x.beginPath(); x.moveTo(xx - ln * .5, yy); x.quadraticCurveTo(xx, yy - 2 - r() * 4, xx + ln * .5, yy + r() * 3); x.stroke(); }
+  x.strokeStyle = 'rgba(255,236,180,.5)'; x.lineWidth = 1.2; for (let i = 0; i < 3; i++) { const o_ = (.25 + i * .22) * tw * lit; x.beginPath(); x.moveTo(bx + o_ * 1.2, by); x.quadraticCurveTo(bx + o_ + lean * ht * .3, by - ht * .3, tx + o_ * .4, ty); x.stroke(); } x.restore();
+  const ends = [[tx, ty - ht * .14, ht * .26, ht * .19]];
+  for (const [f, ang, len] of o.br || []) { const sx = lerp(bx, tx, f), sy = lerp(by, ty, f), ex = sx + Math.cos(ang) * len * ht, ey = sy + Math.sin(ang) * len * ht;
+    x.strokeStyle = css(GR[3]); x.lineCap = 'round'; x.lineWidth = tw * .55; x.beginPath(); x.moveTo(sx, sy); x.quadraticCurveTo((sx + ex) / 2, (sy + ey) / 2 - len * ht * .15, ex, ey); x.stroke();
+    ends.push([ex, ey - ht * .04, ht * (.15 + len * .3), ht * (.11 + len * .2)]); }
+  for (const [cx, cy, rx, ry] of ends) clump(x, r, cx, cy, rx * (o.cs || 1), ry * (o.cs || 1), { dens: o.dens || .05, leaf: o.leaf || 9, nac: o.nac || .25, lit, fruit: o.fruit }, li);
+}
+function figure(x, px, py, h, fem, dir) {   // a small refined gold figure: robe, sleeves, head on a neck, hair; fine incised lines
+  const u = h / 100, X = v => px + v * u * dir, Y = v => py + v * u;
+  const P = pts => { x.beginPath(); pts.forEach((q, i) => q.length === 4 ? x.quadraticCurveTo(X(q[0]), Y(q[1]), X(q[2]), Y(q[3])) : i ? x.lineTo(X(q[0]), Y(q[1])) : x.moveTo(X(q[0]), Y(q[1]))); x.closePath(); };
+  const g = x.createLinearGradient(px - 18 * u, 0, px + 18 * u, 0); g.addColorStop(0, '#6a4616'); g.addColorStop(.5, '#c4963f'); g.addColorStop(1, '#f6dc94');
+  const ink = 'rgba(40,24,6,.85)', fillOut = () => { x.fillStyle = g; x.fill(); x.strokeStyle = ink; x.lineWidth = Math.max(.7, .9 * u); x.stroke(); };
+  const hairCol = '#4a3010', hairLine = '#e2bd66';
+  if (fem) { P([[-3, -97], [-9, -94, -9.5, -84], [-10.5, -66, -8, -54], [-3, -50, 2, -55], [5, -66, 5, -86], [3, -96, -3, -97]]); x.fillStyle = hairCol; x.fill(); x.strokeStyle = hairLine; x.lineWidth = .8 * u; x.stroke();
+    x.lineWidth = .5 * u; for (let k = 0; k < 4; k++) { x.beginPath(); x.moveTo(X(-6 + k * 2), Y(-92)); x.quadraticCurveTo(X(-8.5 + k * 2), Y(-72), X(-5 + k * 2.4), Y(-55)); x.stroke(); } }
+  const sh = fem ? 9.5 : 11.5, hem = fem ? 15.5 : 14;
+  // robe
+  const wa = fem ? 6.6 : 8.6, wy0 = fem ? -60 : -51;
+  P([[-sh, -78], [-sh - 1.2, -70, -wa - .4, wy0 + 2], [-wa - 1, wy0 + 14, -hem, -2], [-hem + 5, -.5, 0, -1.6], [hem - 5, -.5, hem, -2], [wa + 1, wy0 + 14, wa + .4, wy0 + 2], [sh + 1.2, -70, sh, -78], [4, -80.5], [0, -76.5], [-4, -80.5]]); fillOut();
+  // feet
+  x.fillStyle = '#8a6224'; for (const fx of [-4.5, 4.5]) { x.beginPath(); x.ellipse(X(fx + 1.2), Y(-1), 3 * u, 1.3 * u, 0, 0, 6.2832); x.fill(); }
+  // sash, collar, folds (incised: the black lacquer left showing as fine lines)
+  x.strokeStyle = ink; x.lineWidth = Math.max(.6, .7 * u);
+  const wy = fem ? -60 : -51;
+  x.beginPath(); x.moveTo(X(-wa), Y(wy)); x.quadraticCurveTo(X(0), Y(wy + 1.2), X(wa), Y(wy)); x.moveTo(X(-wa - .3), Y(wy + 3)); x.quadraticCurveTo(X(0), Y(wy + 4.2), X(wa + .3), Y(wy + 3)); x.stroke();
+  x.beginPath(); x.moveTo(X(-1), Y(wy + 3.5)); x.quadraticCurveTo(X(-2), Y(wy + 9), X(-3.5), Y(wy + 13)); x.moveTo(X(1), Y(wy + 3.5)); x.quadraticCurveTo(X(1.5), Y(wy + 9), X(2.5), Y(wy + 12)); x.stroke();
+  x.beginPath(); x.moveTo(X(-4), Y(-80)); x.lineTo(X(2), Y(-67)); x.moveTo(X(4), Y(-80)); x.lineTo(X(-1), Y(-71)); x.stroke();
+  for (const [a, b, c2] of [[-5, -9, -11], [-1.5, -3, -4], [2.5, 4.5, 5.5], [6, 9.5, 11.5]]) { x.beginPath(); x.moveTo(X(a * .8), Y(wy + 6)); x.quadraticCurveTo(X(b), Y(-28), X(c2), Y(-4)); x.stroke(); }
+  // sleeves: the far arm hangs; the near one reaches to the other's hand
+  P([[-sh + .5, -77], [-sh - 4, -64], [-sh - 6, -46], [-sh - 1.5, -44.5], [-sh + .5, -58]]); fillOut();
+  x.fillStyle = '#d9b468'; x.beginPath(); x.ellipse(X(-sh - 3.2), Y(-42.5), 2 * u, 2.6 * u, 0, 0, 6.2832); x.fill();
+  P([[sh - .5, -77], [sh + 5, -64], [sh + 10, -53.5], [sh + 6.8, -50.5], [sh, -60]]); fillOut();
+  x.fillStyle = '#f2d48c'; x.beginPath(); x.ellipse(X(sh + 9.6), Y(-51), 2.3 * u, 2 * u, 0, 0, 6.2832); x.fill();
+  x.beginPath(); x.moveTo(X(sh + 1), Y(-70)); x.quadraticCurveTo(X(sh + 4), Y(-62), X(sh + 7.5), Y(-55)); x.stroke();
+  // neck and head (turned a little toward the other)
+  P([[-2.2, -86], [2.4, -86], [2.8, -79.5], [-2.6, -79.5]]); x.fillStyle = '#cfa452'; x.fill();
+  x.beginPath(); x.ellipse(X(.8), Y(-91.5), 5.8 * u, 7.2 * u, .08 * dir, 0, 6.2832); fillOut();
+  // hair, front
+  if (fem) P([[-6.2, -88], [-7, -99, 0.5, -99.6], [6.2, -99, 6.4, -93], [3, -96.5, -1, -95], [-4, -92, -4.5, -84]]);
+  else P([[-6.3, -88], [-7, -99, 0.5, -99.2], [6.3, -98.6, 6.4, -93.5], [2.5, -96, -1.5, -94.5], [-4.2, -91, -4.3, -85]]);
+  x.fillStyle = hairCol; x.fill(); x.strokeStyle = hairLine; x.lineWidth = .7 * u; x.stroke();
+  x.lineWidth = .45 * u; for (let k = 0; k < 3; k++) { x.beginPath(); x.moveTo(X(-4.5 + k * 2.5), Y(-97.5)); x.quadraticCurveTo(X(-5.5 + k * 2.2), Y(-92.5), X(-5 + k * 1.2), Y(-88)); x.stroke(); }
+}
+function buildEden() {
+  const r = rng(91);
+  // E0: the sky — black lacquer, powder thickening into a gold dawn at the horizon, the sun as a burnished disc
+  let n = 0; const sky = pix(LW, LH, (i, j, o) => { const y = j - OY, x0 = i - OX, gg = clamp((y - (HZ - H * .55)) / (H * .55)); if (!(i & 3)) n = fbm(x0 * .004, y * .025, 4);
+    const dens = Math.pow(gg, 2.2) * (.5 + .7 * n), g = Math.random(), grain = Math.random() < dens * .85 ? .4 + .6 * g : 0;
+    const a = clamp(dens * .5 + grain), c = mix(mix(LQ, [10, 8, 6], .5), rampc(GR, .35 + .5 * gg + .15 * g), a);
+    o[0] = c[0] + (Math.random() - .5) * 2; o[1] = c[1]; o[2] = c[2]; o[3] = 1; });
+  const [e0, x0] = layer(); x0.drawImage(sky, -OX, -OY);
+  { const [sx, sy, sr] = [W * EL.sun[0], H * EL.sun[1], EL.sun[2]];
+    for (let k = 0; k < 2600; k++) { const a = r() * 6.2832, d = sr * (1 + Math.abs(gauss(r)) * .55); x0.globalAlpha = .3 + .6 * r() * Math.exp(-(d / sr - 1) * 3); x0.fillStyle = css(rampc(GR, .5 + .5 * r())); x0.fillRect(sx + Math.cos(a) * d, sy + Math.sin(a) * d, 1.4, 1.4); }
+    x0.globalAlpha = 1; const g = x0.createRadialGradient(sx - sr * .3, sy - sr * .35, 0, sx, sy, sr); g.addColorStop(0, '#fff3cc'); g.addColorStop(.55, '#efcb78'); g.addColorStop(.92, '#c8963e'); g.addColorStop(1, '#a87a2c');
+    x0.fillStyle = g; x0.beginPath(); x0.arc(sx, sy, sr, 0, 6.2832); x0.fill(); x0.strokeStyle = css(GR[5]); x0.lineWidth = 1.5; x0.stroke();
+    for (let k = 0; k < sr * sr * .9; k++) { const a = r() * 6.2832, d = sr * Math.sqrt(r()) * .98; x0.globalAlpha = .25 + .5 * r(); x0.fillStyle = css(rampc(GR, .45 + .55 * r())); x0.fillRect(sx + Math.cos(a) * d, sy + Math.sin(a) * d, 1.6, 1.6); } x0.globalAlpha = 1;
+    EG.push({ l: 0, x: sx - sr * .3, y: sy - sr * .4, ph: 3, fr: 1.2, s: sr * .5 }); }
+  for (let k = 0; k < 70; k++) { const px = r() * W, py = HZ - H * (.25 + r() * .6), s = 2 + r() * 4; x0.save(); x0.translate(px, py); x0.rotate(r() * 3); x0.globalAlpha = .35 + .4 * r(); x0.fillStyle = css(GR[5]); x0.fillRect(-s / 2, -s / 2, s, s); x0.restore(); }
+  x0.globalAlpha = 1;
+  // E1: hills — gold relief ranges with powder fading down from the ridges, and gasumi bands across them
+  const ridge = (k, xs) => { if (k === 0) return HZ - H * (.03 + .05 * fbm(xs * .0032 + 1, 2.3, 4));
+    if (k === 1) return HZ - H * (.012 + (V ? .13 : .165) * Math.exp(-(((xs - W * .16) / (W * .3)) ** 2)) * (.7 + .45 * fbm(xs * .006 + 4, 1.1, 4)));
+    return HZ - H * (.01 + (V ? .1 : .13) * Math.exp(-(((xs - W * .95) / (W * .26)) ** 2)) * (.7 + .45 * fbm(xs * .006 + 8, 3.1, 4))); };
+  const RDG = [0, 1, 2].map(k => { const a = new Float32Array(LW); for (let i = 0; i < LW; i++) a[i] = ridge(k, i - OX); return a; });
+  const FLD = [0, 1, 2].map(k => { const a = new Float32Array(LW); for (let i = 0; i < LW; i++) a[i] = RDG[k][i] + (HZ - RDG[k][i]) * (.3 + .3 * fbm((i - OX) * .005 + k * 3, 7, 3)) + 6; return a; });
+  const fallK = [H * .012, H * .03, H * .028], palK = [AO, GR, GR];
+  const hills = pix(LW, LH, (i, j, o) => { const y = j - OY; if (y > HZ + H * .22) return;
+    for (const k of [1, 2, 0]) { const rg = RDG[k][i]; if (y < rg) continue; const dd = y - rg, fa = fallK[k], fd = FLD[k][i];
+      let v = Math.exp(-dd / fa); if (y > fd) v += .55 * Math.exp(-(y - fd) / (fa * .55)); v *= 1 - ss(HZ, HZ + H * .2, y) * .9;
+      const g = Math.random(), grain = Math.random() < v * .85 ? .35 + .65 * g : 0, a = clamp(v * .45 + grain + (dd < 1.8 ? .9 : 0));
+      const c = mix(LQ, rampc(palK[k], .3 + .6 * Math.min(1, v) + .15 * g), a); o[0] = c[0]; o[1] = c[1]; o[2] = c[2]; o[3] = 1; return; } });
+  const [e1, x1] = layer(); x1.drawImage(hills, -OX, -OY);
+  [[-.04, HZ - H * .07, .5, 0], [.62, HZ - H * .03, .5, 1], [.3, HZ - H * .2, .32, 2]].forEach(([fx, y, fw, kd]) => { const w = W * fw * (V ? 1.5 : 1); x1.drawImage(BT[kd], W * fx, y - w * .09, w, w * 440 / 2400); });
+  for (let k = 0; k < 9; k++) { const xs = W * (.04 + k * .11 + r() * .04); if (xs > W * .52 && xs < W * .72) continue; const kk = xs < W * .55 ? 1 : 2, ys = ridge(kk, xs) + 4;
+    tree(x1, r, xs, ys, H * (.04 + r() * .025), { dens: .3, leaf: 2.6, nac: .2, lit: 1, tw: .06 }, 1); }
+  // E2: the ground — black with sparse powder, the river of silver powder, grasses, flowers, two trees, the man and the woman
+  const ground = pix(LW, LH, (i, j, o) => { const y = j - OY; if (y < HZ - 2) return; const xs = i - OX, d = (y - HZ) / (H - HZ); if (!(i & 3)) n = fbm(xs * .004, y * .01, 3);
+    const dens = .05 + .3 * Math.exp(-(y - HZ) / (H * .05)) + .12 * n * d, g = Math.random(), grain = Math.random() < dens * .6 ? .3 + .6 * g : 0;
+    const c = mix(LQ, rampc(GR, .3 + .4 * g), clamp(dens * .25 + grain)); o[0] = c[0]; o[1] = c[1]; o[2] = c[2]; o[3] = clamp((y - HZ + 2) / (H * .045)) ** 1.5; });
+  const [e2, x2] = layer(); x2.drawImage(ground, -OX, -OY);
+  { const L = [], R = []; for (let k = 0; k <= 160; k++) { const u = k / 160, x = rivX(u), y = rivY(u), w = rivW(u) * (1 + .12 * Math.sin(u * 17)); L.push([x - w / 2, y]); R.push([x + w / 2, y]); }
+    const pth = new Path2D(); L.forEach(([a, b], i) => i ? pth.lineTo(a, b) : pth.moveTo(a, b)); for (let i = R.length - 1; i >= 0; i--) pth.lineTo(R[i][0], R[i][1]); pth.closePath();
+    x2.fillStyle = css(LQ); x2.fill(pth);
+    for (let k = 0; k < 26000; k++) { const u = Math.pow(r(), .8), o_ = r() * 2 - 1, w = rivW(u), x = rivX(u) + o_ * w / 2, y = rivY(u) + (r() - .5) * 3, b = .25 + .5 * (1 - o_ * o_);   // silver nashiji, soft at the banks
+      if (r() > b * (1 - ss(.8, 1, Math.abs(o_)) * .8)) continue; x2.globalAlpha = .25 + .45 * r(); x2.fillStyle = css(rampc(SR, .35 + .5 * r())); const s = .8 + 1.4 * u * r(); x2.fillRect(x, y, s, s); }
+    for (let j = 0; j < 16; j++) { const o0 = -.85 + 1.7 * (j + .5) / 16 + (r() - .5) * .06, ph = r() * 9, fr = 24 + r() * 26;   // flowing-water lines (ryūsui), long and curling
+      for (let u = .002; u < 1; u += .0009) { const nz = noise(u * 9 + j * 3.1, j * .7); if (nz < .38) continue; const w = rivW(u), oo = o0 + .09 * Math.sin(u * fr + ph) * (1 - Math.abs(o0) * .5), x = rivX(u) + oo * w / 2, y = rivY(u);
+        x2.globalAlpha = (.35 + .5 * r()) * ss(.38, .5, nz); x2.fillStyle = css(rampc(SR, .6 + .4 * r())); const s = .9 + 2.2 * u; x2.fillRect(x, y - s * .3, s * 1.2, s * .6); } }
+    for (let k = 0; k < 1400; k++) { const u = Math.pow(r(), 1.6) * .5, o_ = gauss(r) * .16, w = rivW(u);   // the sun's reflection in gold, far up the river
+      x2.globalAlpha = .4 + .5 * r(); x2.fillStyle = css(rampc(GR, .6 + .4 * r())); x2.fillRect(rivX(u) + o_ * w / 2, rivY(u), 1.4, 1.1); }
+    for (const side of [L, R]) for (let k = 0; k < side.length - 1; k++) { const [a, b] = side[k], [c2, d] = side[k + 1], u = k / 160;   // banks: a soft spill of gold sand, no drawn line
+      for (let m = 0; m < 3 + u * 16; m++) { const f = r(); x2.globalAlpha = .2 + .35 * r(); x2.fillStyle = css(rampc(GR, .4 + .45 * r())); x2.fillRect(lerp(a, c2, f) + gauss(r) * (2 + 9 * u) * (side === L ? -1 : 1) * .7, lerp(b, d, f) + gauss(r) * 2, 1 + u * 1.6, 1 + u * 1.6); } }
+    x2.globalAlpha = 1;
+    for (let k = 0; k < 170; k++) RIV.push({ u0: r(), o: gauss(r) * .3, sp: .012 + .02 * r(), ph: r() * 40, fr: 2 + r() * 4 });
+  }
+  const inRiver = (x, y) => { if (y < HZ) return false; const u = Math.pow(clamp((y - HZ) / (H * 1.15 - HZ)), 1 / 1.7); return Math.abs(x - rivX(u)) < rivW(u) * .62 + 6; };
+  const [fx, fy, fh] = [W * EL.fig[0], H * EL.fig[1], EL.fig[2]];
+  // grasses and flowers, with perspective
+  for (let k = 0; k < 950; k++) { const y = HZ + 4 + Math.pow(r(), .75) * (H * 1.1 - HZ), x = -OX + r() * LW; if (inRiver(x, y)) continue; const d = (y - HZ) / (H - HZ), sc = .25 + 1.7 * d;
+    if (Math.abs(x - fx) < fh * .35 && Math.abs(y - fy) < fh * .06) continue;
+    const nb = 3 + (r() * 3 | 0); x2.strokeStyle = css(rampc(GR, .3 + .45 * r())); x2.lineWidth = .5 + .5 * sc; x2.globalAlpha = .4 + .4 * r();
+    for (let b = 0; b < nb; b++) { const ln = (5 + 9 * r()) * sc, lean = (b - nb / 2) * .25 + (r() - .5) * .3; x2.beginPath(); x2.moveTo(x + b * sc, y); x2.quadraticCurveTo(x + b * sc + lean * ln * .3, y - ln * .6, x + b * sc + lean * ln, y - ln); x2.stroke(); } }
+  for (let k = 0; k < 260; k++) { const y = HZ + 10 + Math.pow(r(), .7) * (H * 1.05 - HZ), x = -OX + r() * LW; if (inRiver(x, y)) continue; const d = (y - HZ) / (H - HZ), s = (1.2 + 3.5 * d) * (.7 + .6 * r());
+    if (r() < .55) { const h0 = 150 + r() * 160; for (let p = 0; p < 5; p++) { const a = p * 1.2566 + r() * .3; x2.globalAlpha = .85; x2.fillStyle = css(nacre(h0 + p * 12, .62)); x2.beginPath(); x2.ellipse(x + Math.cos(a) * s, y + Math.sin(a) * s * .7, s * .8, s * .45, a, 0, 6.2832); x2.fill(); } }
+    x2.globalAlpha = 1; x2.fillStyle = css(GR[5]); x2.beginPath(); x2.arc(x, y, s * .45, 0, 6.2832); x2.fill(); if (r() < .3) EG.push({ l: 2, x, y, ph: r() * 40, fr: 1 + r() * 3, s: 3 + s }); }
+  x2.globalAlpha = 1;
+  if (V) { tree(x2, r, W * .17, HZ + H * .075, H * .25, { lean: .04, dens: .022, leaf: 16, nac: .3, lit: 1, fruit: 6, br: [[.75, -2.5, .22], [.7, -.7, .2]] }, 2); tree(x2, r, W * .88, HZ + H * .04, H * .19, { lean: -.05, dens: .024, leaf: 13, nac: .25, lit: -1, br: [[.7, -2.4, .18]] }, 2); }
+  else { tree(x2, r, W * .27, HZ + H * .09, H * .36, { lean: .03, dens: .02, leaf: 17, nac: .3, lit: 1, fruit: 7, br: [[.7, -2.6, .24], [.75, -.6, .22]] }, 2); tree(x2, r, W * .84, HZ + H * .045, H * .25, { lean: -.04, dens: .022, leaf: 14, nac: .25, lit: -1, fruit: 3, br: [[.7, -2.5, .2], [.8, -.5, .16]] }, 2); }
+  // the man and the woman, hands joined, facing each other
+  x2.save(); x2.filter = 'blur(3px)'; x2.fillStyle = 'rgba(0,0,0,.6)'; x2.beginPath(); x2.ellipse(fx, fy + 1, fh * .3, fh * .03, 0, 0, 6.2832); x2.fill(); x2.restore();
+  figure(x2, fx - fh * .2, fy, fh, false, 1); figure(x2, fx + fh * .2, fy, fh * .95, true, -1);
+  EG.push({ l: 2, x: fx - fh * .14, y: fy - fh * .5, ph: 1, fr: .9, s: 6 }, { l: 2, x: fx + fh * .25, y: fy - fh * .62, ph: 4, fr: .8, s: 6 });
+  // E3: the foreground — a great tree at the left, a hanging branch at the right, plants at the bank
+  const [e3, x3] = layer();
+  if (V) { tree(x3, r, W * .0, H * 1.05, H * .9, { lean: .04, tw: .035, dens: .011, leaf: 26, nac: .35, lit: 1, cs: .72, fruit: 4, br: [[.72, -1.3, .16], [.86, -2.2, .1]] }, 3);
+    x3.strokeStyle = css(GR[3]); x3.lineWidth = 8; x3.lineCap = 'round'; x3.beginPath(); x3.moveTo(W * 1.08, -H * .03); x3.quadraticCurveTo(W * .95, H * .01, W * .8, H * .04); x3.stroke();
+    for (const [cx, cy, rx, ry] of [[W * .95, H * .05, W * .14, H * .05], [W * .82, H * .03, W * .12, H * .035]]) clump(x3, r, cx, cy, rx, ry, { dens: .009, leaf: 24, nac: .4, lit: -1, fruit: 2 }, 3); }
+  else { tree(x3, r, W * .03, H * 1.08, H * 1.05, { lean: .05, tw: .04, dens: .01, leaf: 28, nac: .35, lit: 1, cs: .85, fruit: 5, br: [[.7, -1.25, .2], [.84, -2.3, .12]] }, 3);
+    x3.strokeStyle = css(GR[3]); x3.lineWidth = 9; x3.lineCap = 'round'; x3.beginPath(); x3.moveTo(W * 1.06, -H * .02); x3.quadraticCurveTo(W * .95, H * .04, W * .84, H * .09); x3.stroke();
+    for (const [cx, cy, rx, ry] of [[W * .88, H * .1, W * .07, H * .07], [W * .97, H * .06, W * .07, H * .08], [W * .8, H * .13, W * .04, H * .05]]) clump(x3, r, cx, cy, rx, ry, { dens: .01, leaf: 24, nac: .4, lit: -1, fruit: 2 }, 3); }
+  for (const [bx, by, n, s] of [[W * .1, H * 1.02, 16, 1], [W * .93, H * 1.0, 12, .8]]) for (let k = 0; k < n; k++) {   // irises: long gold blades, shell petals
+    const a = -Math.PI / 2 + (k / n - .5) * 1.4 + gauss(r) * .1, ln = H * (.1 + .12 * r()) * s, ex = bx + Math.cos(a) * ln, ey = by + Math.sin(a) * ln, bw = 5 * s;
+    const g = x3.createLinearGradient(bx - bw, 0, bx + bw, 0); g.addColorStop(0, css(GR[2])); g.addColorStop(1, css(GR[5]));
+    x3.fillStyle = g; x3.beginPath(); x3.moveTo(bx - bw, by); x3.quadraticCurveTo((bx + ex) / 2 - bw, (by + ey) / 2, ex, ey); x3.quadraticCurveTo((bx + ex) / 2 + bw, (by + ey) / 2, bx + bw, by); x3.fill();
+    x3.strokeStyle = 'rgba(30,18,6,.6)'; x3.lineWidth = .8; x3.beginPath(); x3.moveTo(bx, by); x3.quadraticCurveTo((bx + ex) / 2, (by + ey) / 2, ex, ey); x3.stroke();
+    if (k % 4 === 1) { const h0 = 230 + r() * 60; for (let p = 0; p < 3; p++) { const pa = -Math.PI / 2 + (p - 1) * 1.1; x3.fillStyle = css(nacre(h0 + p * 20, .55)); x3.beginPath(); x3.ellipse(ex + Math.cos(pa) * 9 * s, ey + Math.sin(pa) * 9 * s, 10 * s, 5 * s, pa, 0, 6.2832); x3.fill(); }
+      EG.push({ l: 3, x: ex, y: ey - 6 * s, ph: r() * 40, fr: 1 + r(), s: 7 }); } }
+  EDN = [e0, e1, e2, e3];
+  const rr = rng(95); for (let i = 0; i < 110; i++) MOT.push({ x: (rr() - .5) * 2, y: rr(), v: .02 + .04 * rr(), ph: rr() * 40, s: 1 + rr() * 1.6, w: .3 + rr() * .6 });
+}
+function edenXf(l, t) { const k = eio(clamp((t - 25.5) / 9.3)), f = EF[l]; return [1 + .07 * k * f, -W * .025 * k * f, (1 - k) * H * .22 * f]; }
+function edenPt(l, t, x, y) { const [s, dx, dy] = edenXf(l, t), Px = W * EL.fig[0], Py = H * EL.fig[1]; return [(x - Px) * s + Px + dx, (y - Py) * s + Py + dy, s]; }
+function drawEden(ctx, t) {
+  const a = ss(25.5, 26.1, t); if (a <= 0) return; const Px = W * EL.fig[0], Py = H * EL.fig[1];
+  for (let l = 0; l < 4; l++) { const [s, dx, dy] = edenXf(l, t); ctx.save(); ctx.globalAlpha = a; ctx.setTransform(s, 0, 0, s, Px * (1 - s) + dx, Py * (1 - s) + dy); ctx.drawImage(EDN[l], -OX, -OY); ctx.restore();
+    if (l === 2) {   // the figures glow softly; silver glints flow down the river; gold dust drifts in the air
+      const [gx, gy, gs] = edenPt(2, t, Px, Py - EL.fig[2] * .55), R0 = EL.fig[2] * .9 * gs * (1 + .04 * Math.sin(t * 1.7)), g = ctx.createRadialGradient(gx, gy, 0, gx, gy, R0);
+      g.addColorStop(0, `rgba(255,214,140,${.2 * a})`); g.addColorStop(.5, `rgba(220,160,70,${.07 * a})`); g.addColorStop(1, 'rgba(200,140,60,0)'); ctx.globalCompositeOperation = 'lighter'; ctx.fillStyle = g; ctx.fillRect(gx - R0, gy - R0, 2 * R0, 2 * R0); ctx.globalCompositeOperation = 'source-over';
+      for (const p of RIV) { const u = (p.u0 + t * p.sp) % 1, q = edenPt(2, t, rivX(u) + p.o * rivW(u) / 2, rivY(u)); if (q[1] > H) continue; const v = (fl(p.ph, p.fr, t) * .9 + .25) * a * Math.min(1, u * 4); glint(q[0], q[1], 2 + 6 * u, v); }
+      for (const m of MOT) { const yy = Py - EL.fig[2] * (.2 + 2.2 * ((m.y + t * m.v) % 1)), xx = Px + m.x * W * .3 + Math.sin(t * m.w + m.ph) * 30, q = edenPt(2, t, xx, yy), f = fl(m.ph, 2 + m.w * 3, t);
+        ctx.globalAlpha = a * (.35 + .65 * f) * Math.sin(Math.PI * ((m.y + t * m.v) % 1)); ctx.fillStyle = '#f6dc98'; ctx.fillRect(q[0], q[1], m.s, m.s); }
+      ctx.globalAlpha = 1; }
+  }
+  for (const p of EG) { const q = edenPt(p.l, t, p.x, p.y), sh = sheenAt(q[0], q[1]), v = (fl(p.ph, p.fr, t) * .55 + sh * sh * .9) * a; glint(q[0], q[1], p.s * (.6 + .5 * v) * q[2], v); }
+}
+
+// ---------------- frame ----------------
+let Hal, hx;
+function grade(ctx) {
+  hx.globalCompositeOperation = 'source-over'; hx.clearRect(0, 0, Hal.width, Hal.height); hx.drawImage(ctx.canvas, 0, 0, Hal.width, Hal.height);
+  ctx.save(); ctx.globalCompositeOperation = 'screen'; ctx.globalAlpha = .13; ctx.filter = 'blur(5px)'; ctx.drawImage(Hal, 0, 0, W, H); ctx.restore();
+  const vg = ctx.createRadialGradient(W / 2, H / 2, M * .45, W / 2, H / 2, Math.max(W, H) * .75); vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(0,0,0,.55)');
+  ctx.fillStyle = vg; ctx.fillRect(0, 0, W, H);
+}
+function draw(ctx, t) {
+  const c = cam(t); sheenPos(t); GLQ.length = 0;
+  ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over'; ctx.drawImage(BASE, 0, 0);
+  const lit = ss(5.6, T_FL, t) * .12 + ss(T_FL, 9.6, t) * .88;
+  if (t < 26.2) {
+    const sa = ss(14.6, 17.6, t) * (1 - ss(25.4, 26.2, t));
+    if (sa > 0) drawHeavens(ctx, t, c, sa);
+    if (t > 5.5 && t < 17.6) drawRadiance(ctx, t, c);
+    drawPowder(ctx, t, c);
+    if (c.hc < H + 10) { drawSea(ctx, t, c, lit, .5 + .5 * ss(T_FL, 9.5, t)); drawSpirit(ctx, t); }
+    drawEarth(ctx, t);
+  }
+  drawEden(ctx, t);
+  flushGlints(ctx);
+  drawBands(ctx, t);
+  drawSheen(ctx, .06);
+  grade(ctx);
+
+  // words
+  const rtl = Pilot.dir === 'rtl';
+  const st = { size: V ? 54 : 52, weight: 600, color: '#fcf5e4', shadow: 'rgba(0,0,0,.95)', shadowBlur: 22 }, cs = { size: 24, font: "'Noto Sans KR',sans-serif", color: '#e9d6a8', ls: 2, shadow: 'rgba(0,0,0,.9)' };
+  text(ctx, '01  ·  창조', rtl ? W - (V ? 80 : 110) : (V ? 80 : 110), V ? 190 : 120, { align: rtl ? 'right' : 'left', size: 30, weight: 600, color: '#e8dcc4', alpha: win(t, .6, 5, 1, 1), ls: 4 });
+  const a0 = win(t, 1.6, 6.5, 1.2, .5), y0 = V ? H * .76 : H * .82;
+  text(ctx, '“하나님이 이르시되 빛이 있으라”', W / 2, y0, { ...st, alpha: a0 });
+  text(ctx, '창세기 1:3 (개역개정)', W / 2, y0 + 58, { ...cs, alpha: a0 * .85 });
+  const a1 = win(t, 9.3, 14.1, 1.2, .9), y1 = V ? 300 : 140;
+  text(ctx, '“하시니 빛이 있었고”', W / 2, y1, { ...st, alpha: a1 });
+  text(ctx, '창세기 1:3 (개역개정)', W / 2, y1 + 58, { ...cs, alpha: a1 * .85 });
+  const a2 = win(t, 28.4, DUR - 1.1, 1.3, 1.1), y2 = V ? 330 : 150, l2 = V ? 78 : 76;
+  text(ctx, '“하나님이 지으신 그 모든 것을 보시니\n보시기에 심히 좋았더라”', W / 2, y2, { ...st, alpha: a2, lh: l2 / st.size });
+  text(ctx, '창세기 1:31 (개역개정)', W / 2, y2 + l2 + 58, { ...cs, color: '#f4e4bc', alpha: a2 * .95, shadowBlur: 14 });
+  const f = 1 - ss(0, 1.2, t) + ss(DUR - 1.2, DUR, t); if (f > 0) { ctx.fillStyle = `rgba(0,0,0,${clamp(f)})`; ctx.fillRect(0, 0, W, H); }
+}
+
+Pilot.scene = 'creation';   // the same words as scene 01: use its translations
+Pilot.run({ W, H, dur: DUR, audio: 'creation.m4a', fonts: ["600 40px 'Noto Serif KR'", "400 20px 'Noto Sans KR'"],
+  init: async () => {
+    { const w = W / 4 | 0, h = H / 4 | 0, c = pix(w, h, (i, j, o) => { const n = fbm(i * .012, j * .012, 4), e = Math.hypot(i / w - .5, j / h - .5) * 1.4, v = (n - .5) * 7 - e * 3;
+        o[0] = LQ[0] + v * 1.1 + 1; o[1] = LQ[1] + v * .8; o[2] = LQ[2] + v * .7; o[3] = 1; });
+      BASE = canvas(W, H); const x = BASE.getContext('2d'); x.imageSmoothingQuality = 'high'; x.drawImage(c, 0, 0, W, H); }
+    SHT = pix(512, 128, (i, j, o) => { o[0] = 236; o[1] = 238; o[2] = 244; o[3] = Math.exp(-(((j - 64) / 30) ** 2)) * ss(0, .3, i / 512) * ss(1, .7, i / 512); });
+    GL = canvas(32, 32); { const x = GL.getContext('2d'), g = x.createRadialGradient(16, 16, 0, 16, 16, 16); g.addColorStop(0, 'rgba(255,250,232,1)'); g.addColorStop(.16, 'rgba(255,232,170,.7)'); g.addColorStop(.45, 'rgba(255,200,110,.1)'); g.addColorStop(1, 'rgba(255,190,100,0)');
+      x.fillStyle = g; x.fillRect(0, 0, 32, 32); x.globalCompositeOperation = 'lighter';
+      for (const rot of [0, Math.PI / 2]) { x.save(); x.translate(16, 16); x.rotate(rot); x.scale(1, .05); const g2 = x.createRadialGradient(0, 0, 0, 0, 0, 16); g2.addColorStop(0, 'rgba(255,244,210,.8)'); g2.addColorStop(1, 'rgba(255,230,180,0)'); x.fillStyle = g2; x.fillRect(-16, -16, 32, 32); x.restore(); } }
+    RB = canvas(W, H); rbx = RB.getContext('2d'); Hal = canvas(W / 8, H / 8); hx = Hal.getContext('2d');
+    const r = rng(13); for (let i = 0; i < 1700; i++) SPI.push({ u: r(), o: gauss(r), ph: r() * 40, fr: 2 + r() * 5, a: .6 + .8 * r(), s: 1 + r() * 1.3, c: css(rampc(GR, .55 + .45 * r())) });
+    buildWaves(); buildRadiance(); buildVeil();
+    GTX = [buildGalaxy(3), buildGalaxy(7), buildGalaxy(11)]; buildSky(); buildEarth();
+    BT = [buildBand(201, 0), buildBand(202, 1), buildBand(203, 2)];
+    buildEden();
+  },
+  draw });
+</script>
+</body>
+</html>

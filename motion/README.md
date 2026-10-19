@@ -13,7 +13,7 @@
 | `sheets.mjs` | 언어별 확인용 컨택트시트 (장면 × 가로·세로) |
 | `poster.sh` | 언어별 포스터(제목 카드) |
 | `publish-film.py` | 사이트용 게시 → `film/s/` (장면·글꼴 서브셋·m4a·번역 파일) |
-| `render.mjs` · `assemble.py` | (선택) MP4 녹화 — 정지 화면 확인은 `--stills` |
+| `render.mjs` · `assemble.py` | (선택) MP4 녹화 — 정지 화면 확인은 `--stills`. 유튜브·인스타 업로드용은 `assemble.py h\|v --upload` |
 | `I18N.md` · `pilot/SCENES.md` | 번역 지침(상세) · 장면 설명 |
 
 ```
@@ -21,7 +21,10 @@ node motion/render.mjs h --page pilot/cross.html --stills 3,12          # 정지
 node motion/render.mjs v --page pilot/cross.html --lang en --stills 3   # 세로 · 영어
 python3 motion/pilot/mix.py cross                                        # 소리 믹스
 python3 motion/publish-film.py                                           # 사이트에 게시(film/s/)
+python3 motion/assemble.py h --upload                                    # 전체 영상 + 유튜브 업로드용 사본
 ```
+**유튜브·인스타에 올릴 때는 반드시 `--upload` 사본(`film-h-upload.mp4`)을 올리세요.** 장면이 바뀌는 곳마다 영상이 잠깐
+튀는 문제(일부 폰·일부 화질에서만 보임)를 막도록 2초마다 완전한 화면을 넣고, 앞뒤 참조를 없앤 구조입니다(H.265, 400MB 이하).
 필요: Node + Playwright(Chromium), ffmpeg, Python 3(numpy · fonttools+brotli), `~/.local/share/fonts`의 Noto 글꼴.
 `motion/`은 배포되지 않고(`.vercelignore`), `motion/out/`은 커밋하지 않습니다.
 

@@ -1,0 +1,753 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>시안 · 창조 (도레 판화)</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600&family=Noto+Sans+KR:wght@400&display=swap">
+</head>
+<body>
+<script src="lib.js"></script>
+<script>
+/* 01 창조 — after Gustave Doré's wood engravings for the Bible (1866): every tone is made of engraved lines.
+   A  0–6.8    engraved black over the deep: long swell lines on the water, a solid hatched sky; the Spirit moves over the
+               waters as a travelling brightening + wind in the lines. 4.9 the lines part round one point.
+   B  6.8–14   "빛이 있으라": the hatching opens from the centre — lines fan and curve apart round a growing white,
+               engraved cloud masses are driven back in rolling banks, the deep catches the light in broken lines.
+   C  14–21    the camera plunges into the light; the page goes white; the engraver cuts the heavens back in from the edges:
+               stars left as white flicks and stipple, the last light winds into a galaxy of swirling lines.
+   D  21–24.2  an engraved globe: contour hatching following the sphere, a lit crescent, night side by line density.
+   E  24.2–26.4 falling through Doré's engraved cumulus.
+   F  26.4–35  Eden as a Doré landscape: trees of engraved foliage, a glimmering river, the far light, the man and the woman (Gen 1:31).
+   Tone/deflection/mode plates are drawn with Canvas 2D (half-res per frame, or pre-built for Eden); a WebGL pass engraves them. */
+const { clamp, lerp, ss, eo, eio, win, rng, fbm, noise, canvas, text } = Pilot;
+const W = Pilot.W, H = Pilot.H, V = Pilot.ori === 'v', DUR = 35;
+const HW = W / 2, HH = H / 2;
+const T_IGN = 4.9, T_FL = 6.8;
+const LA = V ? { cy: H * .4, hz: 240 } : { cy: H * .43, hz: 170 };     // the light on screen (Z = 1); the horizon (world y below the light)
+const C3 = (t, d = .5, b = 0) => `rgb(${clamp(t) * 255 | 0},${clamp(d) * 255 | 0},${clamp(b) * 255 | 0})`;
+const G8 = v => { const c = clamp(v) * 255 | 0; return `rgb(${c},${c},${c})`; };
+let gl, glc, prog, U = {}, TX = {}, BG, bgx, BGD, bgd, DARK, NEB, STARS = [], BANKS = [], GSPR = [], EDEN = null;
+
+// ======================= the engraver (WebGL) =======================
+const FS = `#extension GL_OES_standard_derivatives : enable
+precision highp float;
+uniform vec2 uRes; uniform float uT;
+uniform sampler2D uBG, uE1, uE2, uBGD;
+uniform float uHaze, uRo;
+uniform float uEdenA, uDamp, uEDamp, uS;
+uniform vec4 uEM; uniform vec2 uES;
+uniform vec2 uC, uCam; uniform float uZ, uZc, uR, uEx, uSpace, uRoll;
+uniform float uHz, uSea, uWph, uWA, uWC; uniform vec3 uSpirit;
+uniform vec4 uG[3]; uniform vec4 uGt[3];
+uniform vec4 uGlobe; uniform float uGlobeA;
+uniform vec4 uBed; uniform float uBedA;
+float h21(vec2 p){ vec3 p3 = fract(vec3(p.xyx) * .1031); p3 += dot(p3, p3.yzx + 33.33); return fract((p3.x + p3.y) * p3.z); }
+float vn(vec2 p){ vec2 i = floor(p), f = fract(p); f = f * f * (3. - 2. * f);
+  return mix(mix(h21(i), h21(i + vec2(1., 0.)), f.x), mix(h21(i + vec2(0., 1.)), h21(i + vec2(1., 1.)), f.x), f.y); }
+float h31(vec3 p){ p = fract(p * .1031); p += dot(p, p.zyx + 31.32); return fract((p.x + p.y) * p.z); }
+float vn3(vec3 p){ vec3 i = floor(p), f = fract(p); f = f * f * (3. - 2. * f);
+  return mix(mix(mix(h31(i), h31(i + vec3(1., 0., 0.)), f.x), mix(h31(i + vec3(0., 1., 0.)), h31(i + vec3(1., 1., 0.)), f.x), f.y),
+             mix(mix(h31(i + vec3(0., 0., 1.)), h31(i + vec3(1., 0., 1.)), f.x), mix(h31(i + vec3(0., 1., 1.)), h31(i + vec3(1., 1., 1.)), f.x), f.y), f.z); }
+float fb2(vec2 p){ return (.5 * vn(p) + .25 * vn(p * 2.03 + 5.2) + .125 * vn(p * 4.01 + 1.7) + .0625 * vn(p * 8.03 + 9.1)) / .9375; }
+float fb3(vec3 p){ return (.5 * vn3(p) + .25 * vn3(p * 2.03 + 3.1) + .125 * vn3(p * 4.01 + 7.7) + .0625 * vn3(p * 8.02 + 1.3)) / .9375; }
+// coverage of the nearest engraved line (centres at integer u), box-filtered over one pixel; fw = lines per pixel
+float cov(float u, float fw, float w){
+  w = min(w, .97 / fw);
+  float d = abs(u - floor(u + .5)) / fw;
+  float k = clamp(min(d + .5, w * .5) - max(d - .5, -w * .5), 0., 1.);
+  return mix(k, clamp(w * fw, 0., 1.), smoothstep(.3, .6, fw));
+}
+float fam(float u, float w){ return cov(u, max(fwidth(u), 1e-5), w); }
+// a line system whose lines split / merge by octaves so they stay about sp px apart (globe, galaxies)
+float famO(float u, float fw, float w, float sp){          // w: line width in px at sp spacing (kept as a fraction of the actual spacing)
+  fw = max(fw, 1e-6); float k = log2(fw * sp), k0 = floor(k), f = k - k0, fr = w / sp;
+  float a = exp2(-k0 - 1.), b = exp2(-k0);
+  return max(cov(u * a, fw * a, fr / (fw * a)), (1. - f) * cov(u * b, fw * b, fr / (fw * b)));
+}
+// darkness → line widths (px) for the three families: one set of lines, then the cross, then a third in the deepest black
+float W1(float d, float sp){ return sp * .95 * pow(clamp(d, 0., 1.), .8); }
+float W2(float d, float sp){ return sp * .82 * smoothstep(.55, .97, d); }
+float W3(float d, float sp){ return sp * .7 * smoothstep(.74, 1., d); }
+float hatch(float d, float u1, float u2, float u3, float sp, float wv){
+  return max(fam(u1, W1(d, sp) * wv), max(fam(u2, W2(d, sp)), fam(u3, W3(d, sp))));
+}
+void main(){
+  vec2 p = vec2(gl_FragCoord.x, uRes.y - gl_FragCoord.y), q = p / uRes;
+  float S = uS;
+  float bed = uBedA * exp(-pow((p.x - uBed.x) / uBed.z, 2.) - pow((p.y - uBed.y) / uBed.w, 2.));
+  // ---------- background plate: the deep and the sky, or space ----------
+  vec4 bg = texture2D(uBG, q);
+  float tone = bg.r * (1. - bed * .9), Dd = (texture2D(uBGD, q).r - .5) * 2. * uDamp;
+  vec2 w = (p - uC) / uZ + uCam, sp = p - uRes * .5;
+  float cr = cos(uRoll), sr = sin(uRoll); vec2 vv = vec2(cr * sp.x + sr * sp.y, -sr * sp.x + cr * sp.y);
+  float X = mix(w.x, vv.x, uSpace), Y = mix(w.y, vv.y, uSpace), kz = mix(uZ / uZc, 1., uSpace);
+  float wob = (vn(vec2(X, Y) * .0035 + 3.) - .5) * 14. + (vn(vec2(X * .002, Y * .03)) - .5) * 3.;
+  float r2 = X * X / (uEx * uEx) + Y * Y;
+  float psi = uSpace > .5 ? Y : Y * r2 / (r2 + uR * uR + 1e-3);      // lines part and curve round the growing light
+  float u1 = (psi + wob) * kz / S + Dd / S + .5;
+  float u2 = (psi * .6 + X * .8 + wob * .4) * kz / (S * 1.1) + Dd * .5 / S;
+  float u3 = (psi * .52 - X * .855) * kz / (S * 1.2) + Dd * .3 / S;
+  float wvS = .82 + .36 * vn(vec2(X * .004, u1 * .23));
+  // the deep: long swell lines in perspective
+  float hzS = uC.y + (uHz - uCam.y) * uZ, dy = p.y - hzS, dyc = max(dy, 0.), pers = dyc + 3.;
+  float zeta = log(dyc + uWC * uZ), Xw = (p.x - uC.x) / (pers + 60.);      // coordinates on the water plane
+  float swell = pers * pers / (pers + 160.) * .024 * (sin(Xw * 4.2 + zeta * 6. + uT * .5) + .55 * sin(Xw * 9.5 - zeta * 11. + uT * .8 + 1.3) + 1.2 * (vn(vec2(Xw * 5., zeta * 5. + uT * .08)) - .5));
+  float sg = exp(-pow((p.x - uSpirit.x) / uSpirit.z, 2.)) * uSpirit.y;
+  swell += sg * pers * .011 * sin(p.x / (8. + pers * .06) - uT * 4.) * (.6 + .4 * sin(zeta * 6. - uT * 2.));
+  float uw = uWA * log(dyc + swell + uWC * uZ) - uWph;
+  float fww = max(fwidth(uw), 1e-5);
+  float wvw = .6 + .75 * vn(vec2(p.x / (26. + dyc * .7), floor(uw) * 1.71));
+  float br = smoothstep(.45, .9, tone);
+  float glit = smoothstep(.3, .6, vn(vec2(p.x / (9. + dyc * .12) + floor(uw) * 7.3, floor(uw) * 3.1 + uT * 1.4)));
+  float iSea = max(cov(uw, fww, (1. / fww) * .96 * pow(clamp(1. - tone, 0., 1.), .75) * wvw * mix(1., glit, br)),
+                   fam((p.y * .97 + p.x * .22) / 6.5, W3(1. - tone, 6.5) * .7));
+  float iSky = hatch(1. - tone, u1, u2, u3, S, wvS);
+  float ink = mix(iSky, iSea, uSea * smoothstep(-1., 1.5, dy));
+  // galaxies: swirling line systems
+  for (int i = 0; i < 3; i++) {
+    vec4 g = uG[i], gt = uGt[i];
+    if (gt.z > 0.) {
+      vec2 d = p - g.xy; float a = d.x * cos(g.w) + d.y * sin(g.w), b = (-d.x * sin(g.w) + d.y * cos(g.w)) / gt.x;
+      float cs = cos(-gt.y), sn = sin(-gt.y); vec2 l = vec2(a * cs - b * sn, a * sn + b * cs);
+      float rr = length(l) / g.z + 1e-4, th = atan(l.y, l.x), th2 = atan(-l.y, -l.x);
+      float ua = (th - 2.2 * log(rr)) * 40.743665, ub = (th2 - 2.2 * log(rr)) * 40.743665;   // 256 lines / 2π
+      float uc = (th + 2.4 * log(rr)) * 40.743665, ud = (th2 + 2.4 * log(rr)) * 40.743665;
+      float f1 = min(fwidth(ua), fwidth(ub)), f2 = min(fwidth(uc), fwidth(ud));
+      float dg = 1. - tone;
+      float ig = max(famO(ua, f1, W1(dg, S) * 1.05, S), famO(uc, f2, W2(dg, S), S * 1.1));
+      ink = mix(ink, ig, gt.z * (1. - smoothstep(.55, 1., rr)));
+    }
+  }
+  // ---------- the globe ----------
+  if (uGlobeA > 0.) {
+    vec2 g = (p - uGlobe.xy) / uGlobe.z; float gr = length(g), gz = sqrt(max(1. - gr * gr, 0.));
+    vec3 n = vec3(g, gz), Ld = normalize(vec3(-.62, -.52, .58));
+    float ro = uGlobe.w, c1 = cos(ro), s1 = sin(ro);
+    vec3 nb = vec3(n.x * c1 + n.z * s1, n.y, -n.x * s1 + n.z * c1);
+    nb = vec3(nb.x, nb.y * .92 - nb.z * .39, nb.y * .39 + nb.z * .92);
+    float ln = fb3(nb * 1.7 + 4.), land = smoothstep(.535, .55, ln);
+    float cl = smoothstep(.56, .8, fb3(nb * 3.2 + vec3(9., uT * .015, 2.))) * (1. - .5 * land);
+    float dif = clamp(dot(n, Ld), 0., 1.);
+    float alb = mix(.62, .86, land); alb = mix(alb, 1.08, cl);
+    float gt = clamp(alb * pow(dif, .7) * 1.12 + .015, 0., 1.);
+    gt = mix(gt, max(gt, .9 * dif + .08), pow(1. - gz, 3.) * .7 * smoothstep(.0, .3, dif));     // a lit atmosphere at the limb
+    float dg = 1. - gt * (1. - bed * .5);
+    vec3 A1 = normalize(vec3(.28, -.95, .1)), A2 = normalize(vec3(-.95, -.22, .2));
+    float ug1 = acos(clamp(dot(n, A1), -1., 1.)) * 162.97, ug2 = acos(clamp(dot(n, A2), -1., 1.)) * 162.97;   // 512 lines / π
+    float wvg = .8 + .4 * vn(vec2(ug1 * .05, nb.x * 6.));
+    float lines = max(famO(ug1, fwidth(ug1), W1(dg, S) * wvg * mix(1., .55, land * gt), S), famO(ug2, fwidth(ug2), W2(dg, S), S * 1.1));
+    // land: stipple, as on an engraved atlas globe
+    vec2 cc = floor(p / 3.4), co = fract(p / 3.4) - .5 - (vec2(h21(cc), h21(cc + 7.)) - .5) * .5;
+    float st = 1. - smoothstep(.0, .12, length(co) - .42 * sqrt(clamp(dg, 0., 1.)));
+    float coast = 1. - smoothstep(.6, 1.6, abs(ln - .54) / max(fwidth(ln), 1e-5));
+    float ig = max(mix(lines, max(lines, st * .9), land), coast * .85 * smoothstep(.05, .4, dif));
+    // the space round the globe brightens a little on the lit side (atmosphere), outside the disc
+    float atm = exp(-max(gr - 1., 0.) * 16.) * clamp(dot(normalize(g + 1e-5), normalize(Ld.xy)) * 1.1 + .25, 0., 1.);
+    float iAtm = hatch(1. - clamp(tone + atm * .7, 0., 1.), u1, u2, u3, S, wvS);
+    ink = mix(ink, iAtm, uGlobeA * step(1., gr));
+    float cv = 1. - smoothstep(1. - 1.6 / uGlobe.z, 1. + .4 / uGlobe.z, gr);
+    ink = mix(ink, ig, uGlobeA * cv);
+  }
+  // ---------- Eden ----------
+  if (uEdenA > 0.) {
+    vec2 ep = (p - uEM.xy) / uEM.z, eq = ep / uES;
+    vec4 e1 = texture2D(uE1, eq), e2 = texture2D(uE2, eq);
+    float et = e1.r * (1. - bed * .82), ed = (e1.g - .5) * 2. * uEDamp, vt = e1.b, fol = e2.r, wat = e2.g, fig = e2.b;
+    float d = 1. - et, se = S * .9;
+    float wb = (vn(ep * vec2(.004, .02)) - .5) * 4.;
+    float uH = (ep.y + ed + wb) / se, uX = (ep.x * .64 + ep.y * .77 + ed * .6) / (se * 1.1), uY = (-ep.x * .5 + ep.y * .866) / (se * 1.2);
+    float wve = .8 + .4 * vn(vec2(ep.x * .006, uH * .3));
+    float iE = hatch(d, uH, uX, uY, se, wve);
+    // trunks and stems: vertical engraved lines
+    float uV = (ep.x + ed * .6 + (vn(ep * vec2(.03, .006)) - .5) * 3.) / (se * .9);
+    iE = mix(iE, max(fam(uV, W1(d, se * .9) * wve), fam(uH, W2(d, se))), vt);
+    // foliage: clumps of short curved strokes, each clump its own direction, dark seams between them
+    vec2 cs = ep / 9.5, ci = floor(cs); float b1 = 9., b2 = 9.; vec2 bc = vec2(0.); float bh = 0.;
+    for (int j = -1; j <= 1; j++) for (int i = -1; i <= 1; i++) {
+      vec2 c = ci + vec2(float(i), float(j)), cp = c + .15 + .7 * vec2(h21(c), h21(c + 17.3));
+      float dd = length(cs - cp);
+      if (dd < b1) { b2 = b1; b1 = dd; bc = cp; bh = h21(c + 5.1); } else if (dd < b2) b2 = dd;
+    }
+    float an = (vn(bc * .25) - .5) * 2.4 + (bh - .5) * 1.5 + sin(uT * .7 + bh * 30.) * .05;
+    vec2 rel = (cs - bc) * 9.5, nn = vec2(-sin(an), cos(an));
+    float uf = (dot(rel, nn) + dot(rel, rel) * .02 * (bh - .3)) / (S * .66);
+    float iF = max(fam(uf, W1(d, S * .66) * 1.05), (1. - smoothstep(.0, .06, b2 - b1)) * smoothstep(.5, .85, d) * .85);
+    iF = max(iF, fam(uX, W3(d, se)));
+    iE = mix(iE, iF, fol);
+    // water: level lines, broken into glitter where they catch the light
+    float uW = (ep.y + sin(ep.x * .02 + uT * .8) * .6) / (S * .7);
+    float gw = smoothstep(.25, .55, vn(vec2(ep.x / 16. + floor(uW) * 13.7, floor(uW) * 2.3 + uT * 1.6)));
+    float iW = max(fam(uW, W1(d, S * .7) * mix(1., gw, smoothstep(.62, .95, et)) * (.75 + .5 * vn(vec2(ep.x * .03, floor(uW))))), fam(uV, W3(d, se)));
+    iE = mix(iE, iW, wat);
+    // the figures: finer lines that wrap round the limbs
+    float uF = (ep.y + ed) / (S * .56), uF2 = (ep.x * .7 + ep.y * .714 + ed * .4) / (S * .62);
+    float iG = max(fam(uF, W1(d, S * .56)), fam(uF2, W2(d, S * .62)));
+    iE = mix(iE, iG, fig);
+    ink = mix(ink, iE, uEdenA);
+  }
+  // ---------- the cumulus we fall through: two layers of billowing masses, lit from above, rising past ----------
+  // ---------- into the cloud, and out: the white parts from the centre like the first light, its masses rolling back ----------
+  if (uHaze > 0.) {
+    vec2 dc = (p - uRes * .5) / vec2(V_EX, 1.); float dist = length(dc);
+    float e = (fb2(p * .0032 + vec2(3., uT * .06)) - .5) * (110. + uRo * .45);
+    float rr = dist + e, op = step(1., uRo);
+    float m = smoothstep(uRo - 22., uRo + 22., rr);
+    float shade = smoothstep(uRo + 10., uRo + 420., rr) * op;
+    float ht = clamp(.84 - .08 * (1. - op) * smoothstep(.4, .7, fb2(p * .003 + uT * .2)) - .6 * shade * (.55 + .6 * smoothstep(.3, .7, fb2(p * .0038 + 7.))) + .08 * exp(-pow((rr - uRo - 26.) / 34., 2.)) * op, 0., 1.) * (1. - bed * .6);
+    float yy = p.y - uRes.y * .5, r2 = dist * dist, ps = yy * r2 / (r2 + uRo * uRo * .5 + 1.) + (vn(p * .003) - .5) * 18.;
+    float ih = hatch(1. - ht, ps / S + .5, (ps * .6 + p.x * .8) / (S * 1.1), (ps * .52 - p.x * .855) / (S * 1.2), S, .9 + .2 * vn(p * .01));
+    ink = mix(ink, ih, uHaze * m);
+  }
+  // print: warm paper, ink that does not quite cover
+  vec3 paper = vec3(.928, .902, .848) * (.975 + .035 * vn(p * .6) + .012 * vn(p * vec2(.02, .4)));
+  vec3 ic = vec3(.075, .066, .06);
+  float ik = ink * (.94 + .06 * vn(p * .35 + 4.));
+  vec3 col = mix(paper, ic, ik);
+  gl_FragColor = vec4(col, 1.);
+}`;
+const FSV = FS.replace(/V_EX/g, V ? '.8' : '1.35');
+const VSH = 'attribute vec2 a; void main(){ gl_Position = vec4(a, 0., 1.); }';
+function initGL() {
+  glc = canvas(W, H);
+  gl = glc.getContext('webgl', { preserveDrawingBuffer: true, antialias: false, alpha: false, premultipliedAlpha: false });
+  if (!gl || !gl.getExtension('OES_standard_derivatives')) { gl = null; return; }
+  const sh = (type, src) => { const s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s); if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s)); return s; };
+  prog = gl.createProgram(); gl.attachShader(prog, sh(gl.VERTEX_SHADER, VSH)); gl.attachShader(prog, sh(gl.FRAGMENT_SHADER, FSV)); gl.linkProgram(prog);
+  if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(prog));
+  gl.useProgram(prog);
+  const b = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, b); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+  const al = gl.getAttribLocation(prog, 'a'); gl.enableVertexAttribArray(al); gl.vertexAttribPointer(al, 2, gl.FLOAT, false, 0, 0);
+  const n = gl.getProgramParameter(prog, gl.ACTIVE_UNIFORMS);
+  for (let i = 0; i < n; i++) { const u = gl.getActiveUniform(prog, i), nm = u.name.replace(/\[0\]$/, ''); U[nm] = gl.getUniformLocation(prog, nm); }
+  gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, false);
+  ['uBG', 'uE1', 'uE2', 'uBGD'].forEach((k, i) => { const tx = gl.createTexture(); gl.activeTexture(gl.TEXTURE0 + i); gl.bindTexture(gl.TEXTURE_2D, tx);
+    for (const [p, v] of [[gl.TEXTURE_MIN_FILTER, gl.LINEAR], [gl.TEXTURE_MAG_FILTER, gl.LINEAR], [gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE], [gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE]]) gl.texParameteri(gl.TEXTURE_2D, p, v);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([0, 128, 0, 255]));
+    gl.uniform1i(U[k], i); TX[k] = [tx, i]; });
+  gl.viewport(0, 0, W, H);
+}
+function upload(k, cv) { const [tx, i] = TX[k]; gl.activeTexture(gl.TEXTURE0 + i); gl.bindTexture(gl.TEXTURE_2D, tx); gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, cv); }
+const u1 = (k, ...v) => U[k] && gl['uniform' + v.length + 'f'](U[k], ...v);
+
+// ======================= time line =======================
+function state(t) {
+  const s = {};
+  const plunge = ss(13.7, 15.6, t);
+  s.Z = (1 + .13 * eio(clamp(t / 14))) * Math.exp(2.4 * Math.pow(plunge, 1.7));
+  s.Zc = Math.min(s.Z, 1.2);
+  s.cam = [lerp(-60, 0, eio(clamp(t / 10.5))), lerp(44, 0, eio(clamp(t / 11)))];
+  s.C = [W / 2, LA.cy];
+  const u = t - T_FL;
+  s.R = t < T_IGN ? 0 : t < T_FL ? 1.5 + 22 * ss(T_IGN, T_FL, t) : 23 + 330 * (1 - Math.exp(-u / .95)) + 11 * u;
+  s.space = t >= 15.3;
+  s.sx = (wx) => s.C[0] + (wx - s.cam[0]) * s.Z;
+  // the globe
+  s.Re = 15 * Math.exp(1.36 * (t - 21.2));
+  const P0 = V ? [W * .6, H * .56] : [W * .67, H * .55], P1 = [W * .5, H * .5], k = eio(ss(21.2, 24.4, t)), o = [-.44, -.38];
+  const P = [lerp(P0[0], P1[0], k), lerp(P0[1], P1[1], k)];
+  s.gc = [P[0] - o[0] * s.Re * ss(21.6, 23.6, t), P[1] - o[1] * s.Re * ss(21.6, 23.6, t)];
+  s.globeA = t > 21.1 && t < 25.2 ? ss(21.1, 21.7, t) : 0;
+  s.edenA = ss(24.6, 25.0, t);
+  return s;
+}
+function pan(t) { const k = eio(clamp((t - 15.5) / 9)); return [-W * .09 * k, H * .02 * k]; }
+
+// ======================= plates drawn per frame (half resolution) =======================
+function drawBanks(x, t, k) {         // cloud banks, lit on the side that faces the light, driven back in rolling masses
+  if (t < T_FL - .1) return;
+  for (const b of BANKS) {
+    const push = 360 * eo(clamp(u0(t) / 4.2)) + 22 * Math.max(0, t - T_FL), r = b.r0 + push * b.sp;
+    const px = b.dx * r, py = b.dy * r, rot = Math.atan2(b.dx, -b.dy) + b.roll * Math.max(0, t - T_FL);
+    x.save(); x.translate(px, py); x.rotate(rot); x.globalAlpha = ss(T_FL - .05, T_FL + .9, t) * (k === 't' ? b.a : 1);
+    const sc = 1 + .05 * Math.max(0, t - T_FL);
+    x.drawImage(b.spr[k], -b.w * sc / 2, -b.h * sc * .62, b.w * sc, b.h * sc); x.restore();
+  }
+}
+function paintSkyD(x, t, s) {          // the deflection plate (quarter res): how the engraved lines bow over the masses
+  x.setTransform(1, 0, 0, 1, 0, 0); x.globalAlpha = 1; x.globalCompositeOperation = 'source-over'; x.fillStyle = G8(.5); x.fillRect(0, 0, W / 4, H / 4);
+  const Z = s.Z, ox = s.C[0] - s.cam[0] * Z, oy = s.C[1] - s.cam[1] * Z, HZ = LA.hz;
+  x.setTransform(Z / 4, 0, 0, Z / 4, ox / 4, oy / 4);
+  x.save(); x.beginPath(); x.rect(-6000, -6000, 12000, 6000 + HZ); x.clip();
+  x.drawImage(DARK.d, -DARK.ww / 2, HZ - DARK.wh, DARK.ww, DARK.wh); drawBanks(x, t, 'd'); x.restore();
+}
+function paintSky(x, t, s) {
+  x.fillStyle = C3(.07); x.fillRect(0, 0, HW, HH);
+  const Z = s.Z, ox = s.C[0] - s.cam[0] * Z, oy = s.C[1] - s.cam[1] * Z, HZ = LA.hz;
+  x.setTransform(Z / 2, 0, 0, Z / 2, ox / 2, oy / 2);
+  const lit = ss(T_FL - .05, T_FL + .8, t), pre = ss(T_IGN, T_FL, t);
+  x.save(); x.beginPath(); x.rect(-6000, -6000, 12000, 6000 + HZ); x.clip();
+  x.drawImage(DARK.t, -DARK.ww / 2, HZ - DARK.wh, DARK.ww, DARK.wh);         // the darkness: heavy masses in the black
+  // vapour of the Spirit, faint, above the water
+  const spx = lerp(-W * .8, W * .62, ss(.6, 6.4, t)), spa = win(t, .5, 7.2, 1.4, 1.2);
+  x.globalCompositeOperation = 'lighter';
+  let g = x.createRadialGradient(0, 0, 0, 0, 0, 1);
+  g.addColorStop(0, `rgba(255,0,0,${.09 * spa})`); g.addColorStop(1, 'rgba(255,0,0,0)');
+  x.save(); x.translate(spx - 80, HZ - 50); x.scale(380, 70); x.fillStyle = g; x.beginPath(); x.arc(0, 0, 1, 0, 6.283); x.fill(); x.restore();
+  x.globalCompositeOperation = 'source-over';
+  drawBanks(x, t, 't');
+  x.restore();
+  x.globalAlpha = 1;
+  // the deep
+  g = x.createLinearGradient(0, HZ, 0, HZ + 720);
+  g.addColorStop(0, C3(.36)); g.addColorStop(.04, C3(.27)); g.addColorStop(.3, C3(.22)); g.addColorStop(1, C3(.13));
+  x.fillStyle = g; x.fillRect(-6000, HZ, 12000, 6000);
+  x.globalCompositeOperation = 'lighter';
+  // the Spirit: a brightening that moves over the face of the waters
+  g = x.createRadialGradient(0, 0, 0, 0, 0, 1); g.addColorStop(0, `rgba(255,0,0,${.2 * spa})`); g.addColorStop(.5, `rgba(255,0,0,${.08 * spa})`); g.addColorStop(1, 'rgba(255,0,0,0)');
+  x.save(); x.translate(spx, HZ + 70); x.scale(340, 60); x.fillStyle = g; x.beginPath(); x.arc(0, 0, 1, 0, 6.283); x.fill(); x.restore();
+  // the light: white where the lines have parted, falling off into the hatching
+  if (t > T_IGN) {
+    const rc = t < T_FL ? 2 + 7 * pre : 9 + 140 * (1 - Math.exp(-u0(t) / .7)) + 7 * u0(t);
+    const rg = t < T_FL ? 18 + 90 * pre : 108 + 560 * (1 - Math.exp(-u0(t) / 1.0)) + 30 * u0(t);
+    const I = t < T_FL ? .55 + .45 * pre : 1;
+    g = x.createRadialGradient(0, 0, 0, 0, 0, rg);
+    const e = rc / rg;
+    g.addColorStop(0, `rgba(255,0,0,${I})`); g.addColorStop(e, `rgba(255,0,0,${I})`);
+    for (const k of [.15, .3, .5, .7, .85]) g.addColorStop(e + (1 - e) * k, `rgba(255,0,0,${I * Math.pow(1 - k, 2.2) * .85})`);
+    g.addColorStop(1, 'rgba(255,0,0,0)');
+    x.save(); x.beginPath(); x.rect(-6000, -6000, 12000, 6000 + HZ); x.clip(); x.scale(1.7, 1); x.fillStyle = g; x.fillRect(-rg, -rg, rg * 2, rg * 2); x.restore();
+    // the deep catches it: a broad column and the horizon
+    const wa = t < T_FL ? .35 * pre : .4 + .5 * lit;
+    const cw = (t < T_FL ? 24 + 60 * pre : 90 + 200 * (1 - Math.exp(-u0(t) / 1.4))) ;
+    x.save(); x.beginPath(); x.rect(-6000, HZ, 12000, 6000); x.clip();
+    g = x.createRadialGradient(0, 0, 0, 0, 0, 1); g.addColorStop(0, `rgba(255,0,0,${.95 * wa})`); g.addColorStop(.25, `rgba(255,0,0,${.55 * wa})`); g.addColorStop(.6, `rgba(255,0,0,${.18 * wa})`); g.addColorStop(1, 'rgba(255,0,0,0)');
+    x.save(); x.translate(0, HZ); x.scale(cw, 760); x.fillStyle = g; x.beginPath(); x.arc(0, 0, 1, 0, 6.283); x.fill(); x.restore();
+    const hg = x.createRadialGradient(0, 0, 0, 0, 0, 1); hg.addColorStop(0, `rgba(255,0,0,${.7 * wa})`); hg.addColorStop(1, 'rgba(255,0,0,0)');
+    x.translate(0, HZ); x.scale(rg * 2.6, 26 + 30 * lit); x.fillStyle = hg; x.beginPath(); x.arc(0, 0, 1, 0, 6.283); x.fill();
+    x.restore();
+  }
+  // the plunge: the light fills the page
+  x.setTransform(1, 0, 0, 1, 0, 0);
+  const va = (1 - ss(13.8, 14.8, t)) * ss(T_FL, T_FL + 1.5, t);
+  if (va > 0) { x.globalCompositeOperation = 'multiply'; const vg = x.createLinearGradient(0, 0, 0, HH * (V ? .3 : .42));
+    vg.addColorStop(0, `rgba(${255 * (1 - .72 * va) | 0},255,255,1)`); vg.addColorStop(.55, `rgba(${255 * (1 - .4 * va) | 0},255,255,1)`); vg.addColorStop(1, 'rgba(255,255,255,1)');
+    x.fillStyle = vg; x.fillRect(0, 0, HW, HH); x.globalCompositeOperation = 'lighter'; }
+  const wo = ss(14.6, 15.25, t); if (wo > 0) { x.fillStyle = `rgba(255,0,0,${wo})`; x.fillRect(0, 0, HW, HH); }
+  x.globalCompositeOperation = 'source-over';
+}
+const u0 = t => Math.max(0, t - T_FL);
+
+function galState(t) {
+  const P = pan(t), L = V
+    ? [{ p0: [.5, .4], p1: [.4, .29], R0: 40, R1: 250, phi: .45, k: .46, a: 15.35 }, { p1: [.8, .13], R1: 110, phi: -.7, k: .55, a: 16.6 }, { p1: [.22, .79], R1: 70, phi: 1.1, k: .36, a: 17.2 }]
+    : [{ p0: [.5, .43], p1: [.33, .4], R0: 40, R1: 225, phi: .45, k: .46, a: 15.35 }, { p1: [.82, .24], R1: 120, phi: -.7, k: .55, a: 16.6 }, { p1: [.6, .82], R1: 62, phi: 1.1, k: .36, a: 17.2 }];
+  return L.map((g, i) => {
+    const m = eio(ss(15.4, 20.5, t)), fwd = 1 + .035 * Math.max(0, t - 16);
+    let px = g.p1[0] * W, py = g.p1[1] * H, R = g.R1;
+    if (g.p0) { px = lerp(g.p0[0] * W, px, m); py = lerp(g.p0[1] * H, py, m); R = lerp(g.R0, g.R1, eo(ss(15.3, 19.5, t))); }
+    px = W / 2 + (px - W / 2) * fwd + P[0] * .5; py = H / 2 + (py - H / 2) * fwd + P[1] * .5; R *= fwd;
+    const spin = .05 * (t - 15) + (i ? 0 : 2.4 * (1 - eo(clamp((t - 15.3) / 4.5))));
+    const a = ss(g.a, g.a + 1.6, t) * (1 - ss(23.4, 24.6, t));
+    return { px, py, R, phi: g.phi, k: g.k, spin, a };
+  });
+}
+function paintSpace(x, t, s) {
+  x.fillStyle = C3(.055); x.fillRect(0, 0, HW, HH);
+  x.setTransform(.5, 0, 0, .5, 0, 0);
+  const P = pan(t);
+  x.globalCompositeOperation = 'lighter';
+  // faint nebulae
+  const sc = 1.05 + .02 * (t - 15.3);
+  x.globalAlpha = ss(15.5, 18.5, t) * (1 - ss(24, 25, t));
+  x.drawImage(NEB, W / 2 - NEB.width * sc / 2 + P[0] * .3, H / 2 - NEB.height * sc / 2 + P[1] * .3, NEB.width * sc, NEB.height * sc);
+  // galaxies (their swirling lines are cut in the engraving pass)
+  galState(t).forEach((g, i) => { if (g.a <= 0) return; x.save(); x.globalAlpha = g.a; x.translate(g.px, g.py); x.rotate(g.phi); x.scale(1, g.k); x.rotate(g.spin);
+    x.drawImage(GSPR[i], -g.R * 1.7, -g.R * 1.7, g.R * 3.4, g.R * 3.4); x.restore(); });
+  x.globalAlpha = 1;
+  // the light's last whiteness, closing in as the heavens are engraved from the edges
+  const k = eo(ss(15.25, 18.8, t)), Rw = lerp(Math.hypot(W, H) * .8, 110, k), wa = 1 - ss(18, 19, t);
+  if (wa > 0) { const c = galState(t)[0], g = x.createRadialGradient(0, 0, 0, 0, 0, 1);      // it closes into the first galaxy's ellipse
+    g.addColorStop(0, `rgba(255,0,0,${wa})`); g.addColorStop(.3, `rgba(255,0,0,${wa})`); g.addColorStop(.6, `rgba(255,0,0,${.5 * wa})`); g.addColorStop(.85, `rgba(255,0,0,${.15 * wa})`); g.addColorStop(1, 'rgba(255,0,0,0)');
+    x.save(); x.translate(c.px, c.py); x.rotate(c.phi); x.scale(Rw, Rw * lerp(1, c.k, k)); x.fillStyle = g; x.beginPath(); x.arc(0, 0, 1, 0, 6.283); x.fill(); x.restore(); }
+  // the sun beyond the frame: the globe's light
+  const sa = ss(20.6, 22.6, t) * (1 - ss(25, 26.2, t));
+  if (sa > 0) { const g = x.createRadialGradient(-W * .05, -H * .1, 0, -W * .05, -H * .1, Math.max(W, H) * .8); g.addColorStop(0, `rgba(255,0,0,${.55 * sa})`); g.addColorStop(.4, `rgba(255,0,0,${.18 * sa})`); g.addColorStop(1, 'rgba(255,0,0,0)'); x.fillStyle = g; x.fillRect(0, 0, W, H); }
+  x.globalCompositeOperation = 'source-over';
+  // stars: white flicks and stipple left standing in the black, three depths drifting past
+  const sa2 = ss(15.6, 17.6, t) * (1 - ss(25.2, 26, t));
+  STARS.forEach((st, l) => { const f = 1 + [.012, .03, .065][l] * Math.max(0, t - 15.3), d = [.25, .55, 1][l];
+    x.globalAlpha = sa2; const w = st.width * 2 * f, h = st.height * 2 * f; x.drawImage(st, W / 2 - w / 2 + P[0] * d, H / 2 - h / 2 + P[1] * d, w, h); });
+  x.globalAlpha = 1;
+}
+// ======================= sprites and textures (init) =======================
+function packed(w, h, f) {           // f(i, j) → [tone, defl, alpha]  (RGBA plate sprite)
+  const c = canvas(w, h), x = c.getContext('2d'), d = x.createImageData(w, h), D = d.data;
+  for (let j = 0; j < h; j++) for (let i = 0; i < w; i++) { const v = f(i, j), k = (j * w + i) * 4; D[k] = clamp(v[0]) * 255; D[k + 1] = clamp(v[1]) * 255; D[k + 2] = 0; D[k + 3] = clamp(v[2]) * 255; }
+  x.putImageData(d, 0, 0); return c;
+}
+// a Doré cumulus heap: big rounded lobes budding smaller ones on the face toward the light (+y in the sprite),
+// the mass behind dissolving into the dark. R = tone, G = how far the engraved lines bow over it (smoothed height), A = cover
+function blur(a, w, h, rad) {
+  const b = new Float32Array(a.length);
+  for (let pass = 0; pass < 2; pass++) {
+    for (let j = 0; j < h; j++) { let acc = 0; const o = j * w; for (let i = -rad; i <= rad; i++) acc += a[o + clamp(i, 0, w - 1)];
+      for (let i = 0; i < w; i++) { b[o + i] = acc / (2 * rad + 1); acc += a[o + Math.min(w - 1, i + rad + 1)] - a[o + Math.max(0, i - rad)]; } }
+    for (let i = 0; i < w; i++) { let acc = 0; for (let j = -rad; j <= rad; j++) acc += b[clamp(j, 0, h - 1) * w + i];
+      for (let j = 0; j < h; j++) { a[j * w + i] = acc / (2 * rad + 1); acc += b[Math.min(h - 1, j + rad + 1) * w + i] - b[Math.max(0, j - rad) * w + i]; } }
+  }
+  return a;
+}
+function heap(seed, w, h, o = {}) {
+  const r = rng(seed), B = [], n0 = o.n || 4;
+  for (let i = 0; i < n0; i++) B.push([w * (.2 + .6 * (i + .2 + .6 * r()) / n0), h * (.5 + .08 * (r() - .5)), h * (.19 + .08 * r()), 0]);
+  for (let lvl = 1; lvl <= 3; lvl++) for (const b of B.filter(q => q[3] === lvl - 1)) {
+    const k = lvl === 1 ? 6 : lvl === 2 ? 4 : 3;
+    for (let i = 0; i < k; i++) { const a = (.06 + .88 * r()) * Math.PI * (o.up ? -1 : 1), rad = b[2] * (.36 + .22 * r()), d = b[2] * (.72 + .16 * r());
+      const cx = clamp(b[0] + Math.cos(a) * d * 1.2, rad + 2, w - rad - 2), cy = clamp(b[1] + Math.sin(a) * d * .78, rad + 2, h - rad - 2);
+      B.push([cx, cy, rad, lvl]); } }
+  const z = new Float32Array(w * h);
+  for (const [cx, cy, rad] of B) { const x0 = Math.max(0, cx - rad | 0), x1 = Math.min(w - 1, cx + rad + 1 | 0), y0 = Math.max(0, cy - rad | 0), y1 = Math.min(h - 1, cy + rad + 1 | 0);
+    for (let j = y0; j <= y1; j++) for (let i = x0; i <= x1; i++) { const q = rad * rad - (i - cx) ** 2 - (j - cy) ** 2; if (q > 0) { const v = Math.sqrt(q); if (v > z[j * w + i]) z[j * w + i] = v; } } }
+  const zs = blur(Float32Array.from(z), w, h, 1), zb = blur(Float32Array.from(z), w, h, 7), zd = blur(Float32Array.from(z), w, h, 20);
+  let hmax = 0; for (const v of zd) if (v > hmax) hmax = v;
+  const L = [0, o.up ? -.8 : .8, .6], amb = o.amb == null ? .08 : o.amb, lit = o.lit || 1;
+  const tc = canvas(w, h), dc = canvas(w, h), tx = tc.getContext('2d'), dx = dc.getContext('2d'), td = tx.createImageData(w, h), dd = dx.createImageData(w, h);
+  const g = (a, k, d) => a[Math.min(w * h - 1, Math.max(0, k + d))];
+  for (let j = 0; j < h; j++) for (let i = 0; i < w; i++) {
+    const k = j * w + i, q = k * 4, zz = z[k];
+    // deflection: smooth and wider than the cloud, so the lines bow round it without a break at its edge
+    const dv = clamp(zd[k] / hmax); dd.data[q] = dd.data[q + 1] = dd.data[q + 2] = (.5 + .45 * dv) * 255; dd.data[q + 3] = clamp(dv * 3) * 255;
+    if (zz <= 0) continue;
+    let nx = -(g(zs, k, 1) - g(zs, k, -1)) / 2, ny = -(g(zs, k, w) - g(zs, k, -w)) / 2, nl = Math.hypot(nx, ny, 1);
+    let bx = -(g(zb, k, 1) - g(zb, k, -1)) / 2, by = -(g(zb, k, w) - g(zb, k, -w)) / 2, bl = Math.hypot(bx, by, 1);
+    nx = nx / nl * .6 + bx / bl * .4; ny = ny / nl * .6 + by / bl * .4; const nz = 1 / nl * .6 + 1 / bl * .4;
+    const dif = clamp((nx * L[0] + ny * L[1] + nz * L[2]) / Math.hypot(nx, ny, nz)), ao = clamp(1 - (zb[k] - zs[k]) / (h * .035)), nv = fbm(i * .025 + seed, j * .025, 3);
+    let tone = amb + lit * ss(.42, .82, dif + (nv - .5) * .25) * (.45 + .55 * ao);           // a decided terminator, as an engraver cuts it
+    const far = o.far == null ? .3 : o.far; const jj = o.up ? 1 - j / h : j / h; tone *= far + (1 - far) * clamp(jj * 2 - .15);     // the far side sinks into the dark
+    const er = fbm(i * .012 + seed * 3, j * .012, 3), a = clamp(zz / 1.6) * clamp((er - .35) * 1.7 + jj * 2.3);
+    td.data[q] = td.data[q + 1] = td.data[q + 2] = clamp(Math.min(tone, o.cap || .87)) * 255; td.data[q + 3] = a * 255;
+  }
+  tx.putImageData(td, 0, 0); dx.putImageData(dd, 0, 0);
+  return { t: tc, d: dc };
+}
+function buildDark() {                 // the darkness over the deep: barely-lit masses (quarter res, world size)
+  const ww = W * 2.8, wh = H * 1.7, cw = ww / 4 | 0, ch = wh / 4 | 0, f = [];
+  const T = packed(cw, ch, (i, j) => { const x = i / cw, y = j / ch, n = fbm(x * 7 + 2, y * 4.4 + 5, 5), m = fbm(x * 3 + 9, y * 2 + 1, 3);
+    f.push(.5 + .4 * (m - .5) + .3 * (n - .5)); return [.035 + .2 * Math.pow(clamp((n - .35) * 1.8), 2) * (.4 + .6 * y) + .05 * y * y, 0, 1]; });
+  let k = 0; const D = packed(cw, ch, () => { const v = f[k++]; return [v, 0, 1]; });
+  DARK = { t: T, d: D, ww, wh };
+}
+function buildBanks() {
+  const r = rng(77), N = 13;
+  for (let i = 0; i < N; i++) {
+    const a = lerp(-3.02, -.12, (i + .2 + r() * .6) / N), ex = 1.7, dx0 = Math.cos(a) * ex, dy0 = Math.sin(a), L = Math.hypot(dx0, dy0);
+    const w = (V ? 620 : 780) + r() * 420;
+    BANKS.push({ dx: dx0 / L * 1.25, dy: dy0 / L, r0: (V ? 200 : 240) + r() * 120, sp: (dy0 / L < -.75 ? .35 : .75) + r() * .35, w, h: w * .62, roll: (r() - .5) * .04, a: .9 + r() * .1,
+      spr: heap(300 + i, 420, 260, { lit: .9, amb: .1, far: .5, cap: .8, n: 3 + (i % 3) }) });
+  }
+}
+function buildSpace() {
+  const r = rng(21);
+  NEB = packed(W / 4 | 0, H / 4 | 0, (i, j) => { const n = fbm(i * .02 + 3, j * .02 + 8, 5), m = fbm(i * .006 + 1, j * .006 + 4, 3);
+    return [.2 * Math.pow(clamp((n - .45) * 2.4), 2) * clamp((m - .35) * 3), 0, 1]; });
+  NEB = (() => { const c = canvas(W * 1.2, H * 1.2), x = c.getContext('2d'); x.fillStyle = '#000'; x.fillRect(0, 0, c.width, c.height); x.filter = 'blur(6px)'; x.drawImage(NEB, 0, 0, c.width, c.height); return c; })();
+  // three depths of stars (half-res canvases, 1.3× the frame)
+  for (let l = 0; l < 3; l++) {
+    const cw = HW * 1.3 | 0, ch = HH * 1.3 | 0, c = canvas(cw, ch), x = c.getContext('2d'), n = [2600, 900, 260][l];
+    x.fillStyle = 'rgb(255,128,0)'; x.strokeStyle = 'rgb(255,128,0)';
+    for (let i = 0; i < n; i++) { const px = r() * cw, py = r() * ch, b = Math.pow(r(), 3);
+      const rad = [.45, .6, .75][l] + b * [.4, .8, 1.3][l];
+      x.globalAlpha = .55 + .45 * r(); x.beginPath(); x.arc(px, py, rad, 0, 6.283); x.fill();
+      if (l && b > .55) { const L = rad * (3 + 4 * b); x.lineCap = 'round';           // a burin flick: four tapered cuts
+        for (const [dx, dy, k] of [[1, 0, 1], [0, 1, 1], [.7, .7, .5], [.7, -.7, .5]]) { x.lineWidth = rad * .55; x.beginPath(); x.moveTo(px - dx * L * k, py - dy * L * k); x.lineTo(px + dx * L * k, py + dy * L * k); x.stroke(); } } }
+    if (l === 0) {                                                                   // a band of stipple: the far stars
+      x.globalAlpha = .7; for (let i = 0; i < 9000; i++) { const u = r(), v = (r() + r() + r() - 1.5) * .17, px = u * cw, py = ch * (.85 - u * .7) + v * ch;
+        x.fillRect(px, py, .7, .7); } }
+    STARS.push(c);
+  }
+  // galaxies: brightness along the same spiral the engraving pass cuts (θ − 2.2 ln r)
+  for (let gi = 0; gi < 3; gi++) {
+    const N = 300; GSPR.push(packed(N, N, (i, j) => {
+      const x = (i - N / 2) / (N / 2) * 1.7, y = (j - N / 2) / (N / 2) * 1.7, rr = Math.hypot(x, y) + 1e-4, th = Math.atan2(y, x);
+      const ph = th - 2.2 * Math.log(rr), arm = Math.pow(.5 + .5 * Math.cos(2 * ph + 1.4 * (fbm(x * 3 + gi * 5, y * 3, 3) - .5)), 2.4);
+      const v = 1.1 * Math.exp(-rr / .12) + .8 * arm * Math.exp(-rr / .5) * clamp(rr / .12) + .12 * Math.exp(-rr / .7);
+      return [v * clamp((1.7 - rr) / .4), 0, 1]; }));
+  }
+}
+
+// ======================= Eden: a Doré landscape, pre-built at full resolution =======================
+// six grey plates: T tone · D deflection of the lines · Vt vertical-line weight · F foliage · Wt water · G figures → packed into two textures
+function buildEden() {
+  const PX = Math.round(W * .06), PY = Math.round(V ? H * .16 : H * .22), EW = W + 2 * PX, EH = H + PY;
+  const names = ['T', 'D', 'Vt', 'F', 'Wt', 'G'], C = {}, X = {};
+  names.forEach(k => { C[k] = canvas(EW, EH); X[k] = C[k].getContext('2d'); X[k].fillStyle = k === 'D' ? G8(.5) : k === 'T' ? G8(.5) : '#000'; X[k].fillRect(0, 0, EW, EH); X[k].translate(PX, PY); });
+  const r = rng(5), all = fn => names.forEach(k => fn(X[k], k));
+  const L = V ? { hz: .52, lt: [.63, .485], fig: [.38, .835], fh: 300, tree: [.03, 1.0, 1100, .62], tr2: [1.02, .95, 820, .6] }
+              : { hz: .585, lt: [.635, .54], fig: [.37, .855], fh: 205, tree: [.12, 1.02, 620, 1], tr2: [.95, .9, 520, 1] };
+  const hz = H * L.hz, LT = [W * L.lt[0], H * L.lt[1]], T = X.T, D = X.D;
+  // ---- the sky: graded toward the far light, then Doré's cloud masses ----
+  let g = T.createLinearGradient(0, -PY, 0, hz); g.addColorStop(0, G8(.2)); g.addColorStop(.45, G8(.42)); g.addColorStop(1, G8(.78));
+  T.fillStyle = g; T.fillRect(-PX, -PY, EW, hz + PY + 2);
+  T.globalCompositeOperation = 'lighter';
+  g = T.createRadialGradient(0, 0, 0, 0, 0, 1); g.addColorStop(0, G8(.9)); g.addColorStop(.08, G8(.75)); g.addColorStop(.3, G8(.32)); g.addColorStop(.65, G8(.1)); g.addColorStop(1, G8(0));
+  T.save(); T.translate(LT[0], LT[1]); T.scale(W * (V ? .9 : .55), H * (V ? .32 : .5)); T.fillStyle = g; T.beginPath(); T.arc(0, 0, 1, 0, 6.283); T.fill(); T.restore();
+  T.globalCompositeOperation = 'source-over';
+  // cloud heaps (tone + their own line curvature), lit on the side that faces the light
+  const cl = V ? [[.3, -.12, 1200], [.85, -.08, 1100], [.55, .07, 900], [.15, .2, 700], [.88, .25, 640]]
+               : [[.12, -.1, 1200], [.5, -.06, 1400], [.88, -.08, 1200], [.3, .13, 900], [.74, .15, 820], [.02, .26, 700], [.98, .28, 640]];
+  cl.forEach(([fx, fy, w0], i) => {
+    const px = W * fx, py = H * fy, sp = heap(500 + i, 420, 260, { lit: .9, amb: .2, far: .62, cap: .82, n: 3 + (i % 3) }), w = w0 * (V ? 1 : 1.0), h = w * .62;
+    const dx = LT[0] - px, dy = LT[1] - py, rot = Math.atan2(-dx, dy);     // the lit (+y) side toward the light
+    const dist = Math.hypot(dx, dy) / Math.hypot(W, H), lift = clamp(1.25 - dist * 1.6, .55, 1.1), tc = sp.t, dc = sp.d;
+    if (lift !== 1) { const tx = tc.getContext('2d'), id = tx.getImageData(0, 0, 420, 260); for (let k = 0; k < id.data.length; k += 4) id.data[k] = id.data[k + 1] = id.data[k + 2] = Math.min(255, id.data[k] * lift); tx.putImageData(id, 0, 0); }
+    for (const [c, k] of [[tc, 'T'], [dc, 'D']]) { const x = X[k]; x.save(); x.translate(px, py); x.rotate(rot); x.globalAlpha = k === 'T' ? .96 : 1; x.drawImage(c, -w / 2, -h * .62, w, h); x.restore(); }
+  });
+  // the light again, over the nearest clouds: a radiant opening
+  T.globalCompositeOperation = 'lighter';
+  g = T.createRadialGradient(0, 0, 0, 0, 0, 1); g.addColorStop(0, G8(.85)); g.addColorStop(.12, G8(.5)); g.addColorStop(.4, G8(.14)); g.addColorStop(1, G8(0));
+  T.save(); T.translate(LT[0], LT[1]); T.scale(W * (V ? .55 : .34), H * (V ? .17 : .3)); T.fillStyle = g; T.beginPath(); T.arc(0, 0, 1, 0, 6.283); T.fill(); T.restore();
+  T.globalCompositeOperation = 'source-over';
+  // ---- far hills: pale with distance, catching the light at their crests ----
+  [[.94, .74, .0035, 110, 0], [.985, .6, .006, 60, 1]].forEach(([k, tone, fr, amp, j]) => {
+    const path = new Path2D(); path.moveTo(-PX, hz + 4);
+    for (let px = -PX; px <= W + PX; px += 8) { const near = Math.exp(-Math.pow((px - LT[0]) / (W * .2), 2)); path.lineTo(px, hz * k - amp * fbm(px * fr + j * 7, 3 + j, 4) * (1 - .55 * near) - (j ? 0 : 30 * Math.sin(px * .0024))); }
+    path.lineTo(W + PX, hz + 4); path.closePath();
+    g = T.createLinearGradient(0, hz * k - amp, 0, hz); g.addColorStop(0, G8(tone + .06)); g.addColorStop(1, G8(tone + .14)); T.fillStyle = g; T.fill(path);
+  });
+  // ---- the meadow: undulating ground; lines follow its folds ----
+  g = T.createLinearGradient(0, hz, 0, H); g.addColorStop(0, G8(.8)); g.addColorStop(.15, G8(.66)); g.addColorStop(.55, G8(.52)); g.addColorStop(1, G8(.36));
+  T.fillStyle = g; T.fillRect(-PX, hz, EW, H - hz + 2);
+  for (let i = 0; i < 14; i++) { const px = -PX + r() * EW, py = hz + 30 + Math.pow(r(), .8) * (H - hz), s = 120 + (py - hz) * 2 * (.5 + r());
+    const gg = D.createRadialGradient(px, py, 0, px, py, s); gg.addColorStop(0, `rgba(${r() < .5 ? 200 : 60},128,128,.35)`); gg.addColorStop(1, 'rgba(128,128,128,0)');
+    D.save(); D.translate(px, py); D.scale(1, .22); D.translate(-px, -py); D.fillStyle = gg; D.fillRect(px - s, py - s, s * 2, s * 2); D.restore(); }
+  // shadows of clouds lying across the plain
+  for (let i = 0; i < 7; i++) { const py = hz + 14 + Math.pow(r(), 1.3) * (H - hz) * .8, px = -PX + r() * EW, d = (py - hz) / (H - hz), s = 160 + d * 700;
+    const gg = T.createRadialGradient(px, py, 0, px, py, s); gg.addColorStop(0, 'rgba(0,0,0,.22)'); gg.addColorStop(1, 'rgba(0,0,0,0)');
+    T.save(); T.translate(px, py); T.scale(1, .12 + d * .1); T.translate(-px, -py); T.fillStyle = gg; T.fillRect(px - s, py - s, s * 2, s * 2); T.restore(); }
+  // the light lies along the plain
+  T.globalCompositeOperation = 'lighter';
+  g = T.createRadialGradient(0, 0, 0, 0, 0, 1); g.addColorStop(0, G8(.3)); g.addColorStop(1, G8(0));
+  T.save(); T.translate(LT[0], hz + 10); T.scale(W * .5, 60); T.fillStyle = g; T.beginPath(); T.arc(0, 0, 1, 0, 6.283); T.fill(); T.restore();
+  T.globalCompositeOperation = 'source-over';
+  // ---- the river: born under the light at the horizon, winding toward us, holding the sky ----
+  const rv = V ? [[.63, .52], [.49, .552], [.72, .605], [.42, .685], [.72, .785], [1.18, .9]]
+               : [[.635, .585], [.59, .615], [.6, .68], [.72, .77], [.93, .88], [1.15, 1.0]];
+  const ctr = []; for (let i = 0; i < rv.length - 1; i++) for (let k = 0; k < 24; k++) { const u = k / 24, a = rv[Math.max(0, i - 1)], b = rv[i], c = rv[i + 1], d = rv[Math.min(rv.length - 1, i + 2)];
+    const cr = (p0, p1, p2, p3) => .5 * ((2 * p1) + (-p0 + p2) * u + (2 * p0 - 5 * p1 + 4 * p2 - p3) * u * u + (-p0 + 3 * p1 - 3 * p2 + p3) * u * u * u);
+    ctr.push([cr(a[0], b[0], c[0], d[0]) * W, cr(a[1], b[1], c[1], d[1]) * H]); }
+  ctr.push([rv[rv.length - 1][0] * W, rv[rv.length - 1][1] * H]);
+  const left = [], right = [];
+  ctr.forEach((p, i) => { const q = ctr[Math.min(ctr.length - 1, i + 1)], o = ctr[Math.max(0, i - 1)], tx = q[0] - o[0], ty = q[1] - o[1], tl = Math.hypot(tx, ty) || 1;
+    const depth = clamp((p[1] - hz) / (H - hz)), ww = ((V ? 46 : 60) + Math.pow(depth, 1.1) * (V ? 640 : 820)) * (.82 + .3 * fbm(i * .09, 7, 3));
+    // the width is measured across the flow, foreshortened: wide water lies flat
+    left.push([p[0] - ty / tl * ww / 2, p[1] + tx / tl * ww / 2 * .55]); right.push([p[0] + ty / tl * ww / 2, p[1] - tx / tl * ww / 2 * .55]); });
+  const river = new Path2D(); left.forEach((p, i) => i ? river.lineTo(p[0], p[1]) : river.moveTo(p[0], p[1])); right.reverse().forEach(p => river.lineTo(p[0], p[1])); river.closePath();
+  // banks: a darker strip of earth along the water, reeds at its edge
+  g = T.createLinearGradient(0, hz, 0, H); g.addColorStop(0, G8(.95)); g.addColorStop(.12, G8(.72)); g.addColorStop(.5, G8(.5)); g.addColorStop(1, G8(.42));
+  T.fillStyle = g; T.fill(river);
+  X.Wt.fillStyle = '#fff'; X.Wt.fill(river); D.fillStyle = G8(.5); D.fill(river);
+  T.save(); T.clip(river);
+  // the sky's light laid down the middle of the water
+  T.globalCompositeOperation = 'lighter'; g = T.createRadialGradient(0, 0, 0, 0, 0, 1); g.addColorStop(0, G8(.5)); g.addColorStop(.4, G8(.3)); g.addColorStop(1, G8(0));
+  T.translate(LT[0], hz); T.scale(V ? 170 : 240, (H - hz) * .9); T.fillStyle = g; T.beginPath(); T.arc(0, 0, 1, 0, 6.283); T.fill(); T.setTransform(1, 0, 0, 1, PX, PY); T.globalCompositeOperation = 'source-over';
+  // dark under the banks and the trees standing in it
+  T.filter = 'blur(8px)'; T.strokeStyle = G8(.25); T.globalAlpha = .7; T.lineWidth = V ? 34 : 44; T.stroke(river); T.filter = 'none';
+  T.globalAlpha = .55; T.fillStyle = G8(.18);
+  for (const [fx2, w2] of [[L.tr2[0], .12], [L.tr2[0] - .1, .05]]) { const gx = W * fx2; const gg = T.createLinearGradient(gx - W * w2, 0, gx + W * w2, 0); gg.addColorStop(0, 'rgba(40,40,40,0)'); gg.addColorStop(.5, 'rgba(40,40,40,1)'); gg.addColorStop(1, 'rgba(40,40,40,0)');
+    T.fillStyle = gg; T.fillRect(gx - W * w2, H * .78, W * w2 * 2, H * .3); }
+  T.restore();
+  T.save(); T.strokeStyle = G8(.15); T.lineCap = 'round';
+  for (const side of [left, right.slice().reverse()]) for (let i = 4; i < side.length; i += 2) { const p = side[i], depth = clamp((p[1] - hz) / (H - hz)); if (r() < .45) continue;
+    for (let k = 0; k < 3; k++) { const len = (4 + depth * 34) * (.5 + r()), x0 = p[0] + (r() - .5) * 10 * (1 + depth * 3); T.lineWidth = .8 + depth * 1.6; T.globalAlpha = .7;
+      T.beginPath(); T.moveTo(x0, p[1] + 2); T.quadraticCurveTo(x0 + (r() - .5) * len * .3, p[1] - len * .6, x0 + (r() - .5) * len * .6, p[1] - len); T.stroke(); } }
+  T.restore();
+  // ---- foliage: canopies of rounded masses, each lit on the side toward the light and from the sky above ----
+  const canopy = (cx, cy, rw, rh, nl, lo, hi) => {
+    let lx = LT[0] - cx, ly = LT[1] - cy; const ll = Math.hypot(lx, ly) || 1; lx = lx / ll * .65; ly = ly / ll * .65 - .55;
+    const lobes = []; for (let i = 0; i < nl; i++) { const a = r() * 6.283, q = Math.pow(r(), .6); lobes.push([cx + Math.cos(a) * rw * q * .75, cy + Math.sin(a) * rh * q * .7, (rw + rh) * .5 * (.28 + .2 * r())]); }
+    lobes.sort((p, q) => (p[0] - cx) * lx + (p[1] - cy) * ly - ((q[0] - cx) * lx + (q[1] - cy) * ly));      // shadowed lobes first, lit ones on top
+    for (const [px, py, rr] of lobes) {
+      const hx = px + lx * rr * .5, hy = py + ly * rr * .5, face = clamp(.45 + ((px - cx) / rw * lx + (py - cy) / rh * ly) * .7);
+      const gg = T.createRadialGradient(hx, hy, rr * .05, px - lx * rr * .2, py - ly * rr * .2, rr * 1.05);
+      gg.addColorStop(0, G8(lerp(lo, hi, .35 + .65 * face))); gg.addColorStop(.45, G8(lerp(lo, hi, .12 + .55 * face))); gg.addColorStop(1, G8(lo * .8));
+      const lobe = new Path2D(); for (let k = 0; k <= 28; k++) { const an = k / 28 * 6.283, rk = rr * (1 + .1 * Math.sin(an * 5 + px) + .06 * Math.sin(an * 11 + py)); lobe[k ? 'lineTo' : 'moveTo'](px + Math.cos(an) * rk, py + Math.sin(an) * rk * .9); }
+      T.fillStyle = gg; T.fill(lobe); X.F.fillStyle = '#fff'; X.F.fill(lobe); X.Wt.fillStyle = '#000'; X.Wt.fill(lobe); X.Vt.fillStyle = '#000'; X.Vt.fill(lobe);
+      // leaf clusters: small marks that break the edges and the light
+      for (let k = 0; k < rr * rr / 90; k++) { const a = r() * 6.283, q = Math.sqrt(r()), qx = px + Math.cos(a) * rr * q, qy = py + Math.sin(a) * rr * q * .9, f2 = clamp(face * .6 + (Math.cos(a) * lx + Math.sin(a) * ly) * q * .6 + .1);
+        T.globalAlpha = .45; T.fillStyle = G8(lerp(lo * .6, hi, f2)); T.beginPath(); T.ellipse(qx, qy, 2 + rr * .07 * r(), 1.5 + rr * .05 * r(), r() * 3, 0, 6.283); T.fill(); }
+      T.globalAlpha = 1;
+    }
+  };
+  const trunk = (x0, y0, x1, y1, w0, w1, tone0, tone1) => {
+    const p = new Path2D(), nx = -(y1 - y0), ny = x1 - x0, nl = Math.hypot(nx, ny), ux = nx / nl, uy = ny / nl, mx = (x0 + x1) / 2 + ux * w0 * .3, my = (y0 + y1) / 2;
+    p.moveTo(x0 - ux * w0 / 2, y0 - uy * w0 / 2); p.quadraticCurveTo(mx - ux * (w0 + w1) / 4, my, x1 - ux * w1 / 2, y1 - uy * w1 / 2); p.lineTo(x1 + ux * w1 / 2, y1 + uy * w1 / 2);
+    p.quadraticCurveTo(mx + ux * (w0 + w1) / 4, my, x0 + ux * w0 / 2, y0 + uy * w0 / 2); p.closePath();
+    const gg = T.createLinearGradient(x0 - ux * w0, y0 - uy * w0, x0 + ux * w0, y0 + uy * w0); gg.addColorStop(0, G8(tone0)); gg.addColorStop(1, G8(tone1));
+    T.fillStyle = gg; T.fill(p); X.Vt.fillStyle = '#fff'; X.Vt.fill(p); X.F.fillStyle = '#000'; X.F.fill(p); X.Wt.fillStyle = '#000'; X.Wt.fill(p);
+  };
+  const groves = V ? [[.08, .53, 70], [.2, .545, 50], [.86, .54, 60], [.98, .55, 80], [.43, .527, 30]] : [[.05, .6, 90], [.16, .607, 64], [.27, .598, 44], [.8, .603, 60], [.92, .617, 96], [.5, .592, 30]];
+  groves.forEach(([fx, fy, s]) => { const px = W * fx, py = H * fy; trunk(px, py + s * .3, px + 2, py - s * .3, s * .1, s * .06, .4, .6);
+    canopy(px, py - s * .6, s * .8, s * .6, 9, .42, .9); });
+  // ---- the big trees that frame the garden ----
+  const big = (bx, by, s, side, ck = 1) => {
+    const tx = bx + side * s * .12;
+    trunk(bx, by, tx, by - s * 1.05, s * .13, s * .07, side < 0 ? .55 : .1, side < 0 ? .1 : .55);
+    trunk(tx, by - s * .8, tx - side * s * .45, by - s * 1.25, s * .055, s * .03, .2, .5);
+    trunk(tx, by - s * .95, tx + side * s * .3, by - s * 1.4, s * .05, s * .025, .2, .5);
+    const cs = [[-.75 * side, -1.05, .34, .26], [-.42 * side, -1.22, .45, .32], [0, -1.7, .45, .25], [0, -1.35, .62, .4], [.3 * side, -1.5, .5, .32], [.55 * side, -1.15, .36, .3], [-.15 * side, -.98, .3, .2]];
+    cs.forEach(([ox, oy, rw, rh]) => canopy(bx + ox * s * ck, by + oy * s, rw * s * ck, rh * s * ck, 10, .12, .92));
+  };
+  big(W * L.tree[0], H * L.tree[1], L.tree[2], 1, L.tree[3]);
+  big(W * L.tr2[0], H * L.tr2[1], L.tr2[2], -1, L.tr2[3]);
+  // ---- the near bank: dark earth and grass in front ----
+  const bank = new Path2D(); bank.moveTo(-PX, H * (V ? .9 : .9)); for (let px = -PX; px <= W * .8; px += 10) bank.lineTo(px, H * (V ? .9 : .885) + 30 * Math.sin(px * .006) + (px / W) * 40 - 18 * fbm(px * .01, 3, 3) + Math.pow(Math.max(0, px - W * .42) / (W * .3), 2) * H * .14);
+  bank.lineTo(W * .8, H + 40); bank.lineTo(-PX, H + 40); bank.closePath();
+  g = T.createLinearGradient(0, H * .85, 0, H); g.addColorStop(0, G8(.4)); g.addColorStop(1, G8(.14)); T.fillStyle = g; T.fill(bank);
+  X.Wt.fillStyle = '#000'; X.Wt.fill(bank);
+  T.save(); T.clip(bank); T.lineCap = 'round';
+  for (let i = 0; i < 2200; i++) { const px = -PX + r() * (W * .62 + PX), py = H * .86 + r() * H * .16, len = 8 + r() * 22, lean = (r() - .5) * .9;
+    T.strokeStyle = G8(r() < .3 ? .75 : .08); T.globalAlpha = .6; T.lineWidth = .9 + r() * 1.6; T.beginPath(); T.moveTo(px, py); T.quadraticCurveTo(px + lean * len * .3, py - len * .6, px + lean * len, py - len); T.stroke(); }
+  T.restore();
+  // tufts on the meadow, and small flowers: white flicks in the grass
+  T.save(); T.lineCap = 'round'; { const off = new Path2D(); off.rect(-PX, -PY, EW, EH); off.addPath(river); T.clip(off, 'evenodd'); }
+  for (let i = 0; i < 0; i++) { const py = hz + 16 + Math.pow(r(), .7) * (H - hz - 16), px = -PX + r() * EW, d = (py - hz) / (H - hz), n = 3 + (r() * 4 | 0);
+    for (let k = 0; k < n; k++) { const len = (3 + d * 22) * (.5 + r()), x0 = px + (r() - .5) * (4 + d * 14); T.strokeStyle = G8(.32); T.globalAlpha = .3; T.lineWidth = .6 + d * 1.1;
+      T.beginPath(); T.moveTo(x0, py); T.lineTo(x0 + (r() - .5) * len * .5, py - len); T.stroke(); } }
+  T.globalAlpha = 1;
+  for (let i = 0; i < 140; i++) { const py = hz + 30 + Math.pow(r(), .6) * (H - hz - 30), px = -PX + r() * EW, d = (py - hz) / (H - hz), s = .7 + d * 2.2;
+    T.fillStyle = G8(.97); for (let k = 0; k < 4; k++) { T.beginPath(); T.arc(px + Math.cos(k * 1.57) * s, py + Math.sin(k * 1.57) * s * .7, s * .8, 0, 6.283); T.fill(); } }
+  T.restore();
+  // ---- the man and the woman ----
+  const [fx, fy] = [W * L.fig[0], H * L.fig[1]], fh = L.fh;
+  // their ground, a gentle rise, and their shadows falling toward us
+  T.save(); T.translate(fx + fh * .15, fy + 2); T.scale(1, .12); g = T.createRadialGradient(0, 0, 0, 0, 0, fh * .9); g.addColorStop(0, 'rgba(0,0,0,.45)'); g.addColorStop(1, 'rgba(0,0,0,0)');
+  T.fillStyle = g; T.fillRect(-fh, -fh, fh * 2, fh * 2); T.restore();
+  // a dark thicket behind them, so their lit forms stand out against it
+  trunk(fx - fh * .55, fy - fh * .05, fx - fh * .5, fy - fh * .5, fh * .05, fh * .03, .15, .35);
+  canopy(fx - fh * .4, fy - fh * .66, fh * 1.05, fh * .5, 14, .1, .62);
+  canopy(fx + fh * .6, fy - fh * .48, fh * .55, fh * .32, 8, .12, .66);
+  figurePair(X, fx, fy, fh, LT);
+  // ---- pack ----
+  const get = k => X[k].getImageData(0, 0, EW, EH).data, Tp = get('T'), Dp = get('D'), Vp = get('Vt'), Fp = get('F'), Wp = get('Wt'), Gp = get('G');
+  const e1 = canvas(EW, EH), e2 = canvas(EW, EH), x1 = e1.getContext('2d'), x2 = e2.getContext('2d'), d1 = x1.createImageData(EW, EH), d2 = x2.createImageData(EW, EH);
+  for (let k = 0; k < Tp.length; k += 4) { d1.data[k] = Tp[k]; d1.data[k + 1] = Dp[k]; d1.data[k + 2] = Vp[k]; d1.data[k + 3] = 255; d2.data[k] = Fp[k]; d2.data[k + 1] = Wp[k]; d2.data[k + 2] = Gp[k]; d2.data[k + 3] = 255; }
+  x1.putImageData(d1, 0, 0); x2.putImageData(d2, 0, 0);
+  EDEN = { e1, e2, EW, EH, PX, PY, fig: [fx, fy - fh * .5], T: C.T };
+}
+// two small classical figures, seen from behind and a little to the side, turned toward the far light, holding hands.
+// Modelled in tone (a lit rim and a lit side toward the light, the rest in half-shadow), with fine lines that wrap round each limb.
+function limbPath(pts, ws) {                 // a smooth tapered shape round a polyline: pts [[x,y]…], half-widths ws[…]
+  const L = [], R = [], n = pts.length;
+  for (let i = 0; i < n; i++) { const a = pts[Math.max(0, i - 1)], b = pts[Math.min(n - 1, i + 1)], tx = b[0] - a[0], ty = b[1] - a[1], tl = Math.hypot(tx, ty) || 1;
+    L.push([pts[i][0] - ty / tl * ws[i], pts[i][1] + tx / tl * ws[i]]); R.push([pts[i][0] + ty / tl * ws[i], pts[i][1] - tx / tl * ws[i]]); }
+  const p = new Path2D(), seq = L.concat(R.reverse());
+  const m = (q, r) => [(q[0] + r[0]) / 2, (q[1] + r[1]) / 2];
+  let s0 = m(seq[seq.length - 1], seq[0]); p.moveTo(s0[0], s0[1]);
+  for (let i = 0; i < seq.length; i++) { const c = seq[i], e = m(c, seq[(i + 1) % seq.length]); p.quadraticCurveTo(c[0], c[1], e[0], e[1]); }
+  p.closePath(); return p;
+}
+function figurePath(x, y, h, fem, reach) {
+  const u = h / 100, P = (a) => a.map(([px, py]) => [x + px * u, y + py * u]), parts = [];
+  const add = (pts, ws, o) => parts.push({ path: limbPath(P(pts), ws.map(w => w * u)), axis: [...P([pts[0]])[0], ...P([pts[pts.length - 1]])[0], Math.max(...ws) * u], ...o });
+  // legs: weight on the far leg, the near one a little forward and bent
+  add([[-4.4, -47], [-4.2, -36], [-3.9, -26], [-4.3, -18], [-4.3, -5], [-4.8, -1]], fem ? [6.6, 5, 3.4, 3.9, 1.9, 2.2] : [6.8, 5.2, 3.6, 4.3, 2, 2.3], { mid: .5 });
+  add([[4.4, -47], [4.9, -36], [5.6, -26], [5.7, -18], [6.6, -5], [7.6, -1.4]], fem ? [6.6, 5, 3.3, 3.8, 1.9, 2.2] : [6.8, 5.2, 3.5, 4.2, 2, 2.3], { mid: .58 });
+  // torso: sloping shoulders, back, waist, hips
+  if (fem) add([[0, -85], [0, -80], [0, -72], [0, -61], [0, -52], [0, -45]], [3, 10.2, 8.8, 6.4, 10.8, 10.4], { mid: .6 });
+  else add([[0, -85], [0, -80.5], [0, -73], [0, -61], [0, -52], [0, -45]], [3.4, 13.8, 12.2, 8.4, 9.4, 9.4], { mid: .58 });
+  const sh = fem ? 9.6 : 12.4;
+  // arms: the inner hand reaches to the other's; the outer one hangs
+  if (reach > 0) add([[sh - 1, -78], [sh + 2.2, -64], [sh + 7.5, -53.5], [sh + 11.5, -50]], [2.9, 2.4, 1.8, 1.7], { mid: .62 });
+  else add([[-sh + 1, -78], [-sh - 2.2, -64], [-sh - 6.5, -53.5], [-sh - 10.5, -50.5]], [2.7, 2.2, 1.6, 1.6], { mid: .62 });
+  if (reach > 0) add([[-sh + 1, -78], [-sh - .8, -63], [-sh - .4, -50], [-sh + .4, -42]], [3, 2.4, 1.8, 1.7], { mid: .4 });
+  else add([[sh - 1, -78], [sh + .6, -63], [sh + .4, -50], [sh - .2, -42]], [2.7, 2.2, 1.6, 1.6], { mid: .55 });
+  add([[0, -88], [0, -82.5]], [2.6, 3], { mid: .5 });                                  // neck
+  const head = new Path2D(); head.ellipse(x + 1.2 * u, y - 93 * u, 6 * u, 7.3 * u, .1, 0, 6.283);
+  parts.push({ path: head, axis: [x + 1.2 * u, y - 100 * u, x + 1.2 * u, y - 86 * u, 6 * u], mid: .56 });
+  if (fem) add([[-1, -98.5], [-2.6, -90], [-4, -80], [-4.6, -68], [-4.2, -60]], [6.4, 7, 7.2, 6.4, 3], { mid: .3, dark: .16, hair: 1 });   // long hair down her back
+  else add([[.4, -98.6], [-.4, -94.5], [-.2, -91.5]], [5.8, 5.4, 4.2], { mid: .26, dark: .14, hair: 1 });
+  return { parts };
+}
+function figurePair(X, fx, fy, fh, LT) {
+  const man = figurePath(fx, fy, fh, false, 1), wom = figurePath(fx + fh * .3, fy + fh * .012, fh * .94, true, -1);
+  const hold = new Path2D(); hold.ellipse(fx + fh * .15, fy - fh * .49, fh * .024, fh * .02, 0, 0, 6.283);
+  for (const fig of [man, wom]) {
+    const parts = fig.parts;
+    for (const k of ['F', 'Wt']) { X[k].fillStyle = '#000'; parts.forEach(p => X[k].fill(p.path)); }
+    X.G.fillStyle = '#fff'; parts.forEach(p => X.G.fill(p.hair ? new Path2D() : p.path));
+    X.Vt.fillStyle = '#000'; parts.forEach(p => X.Vt.fill(p.path)); X.Vt.fillStyle = '#fff'; parts.forEach(p => p.hair && X.Vt.fill(p.path));
+    // the lines bow over each limb
+    parts.forEach(p => { const D = X.D, [ax, ay, bx, by, wd] = p.axis, nx = -(by - ay), ny = bx - ax, nl = Math.hypot(nx, ny) || 1, k = .5 - .1 * Math.min(1, wd / (fh * .06));
+      const gg = D.createLinearGradient(ax - nx / nl * wd, ay - ny / nl * wd, ax + nx / nl * wd, ay + ny / nl * wd);
+      gg.addColorStop(0, G8(.5)); gg.addColorStop(.5, G8(k)); gg.addColorStop(1, G8(.5)); D.fillStyle = gg; D.fill(p.path); });
+    const T = X.T;
+    parts.forEach(p => { T.save(); T.clip(p.path); T.fillStyle = G8(.97); T.fill(p.path);
+      // light from the right (the far light) and from the sky: a rim on that side, half-shadow away from it
+      const [ax, ay, bx, by, wd] = p.axis, ox = wd * .26, oy = -fh * .003;
+      T.translate(-ox, -oy);
+      const cx = (ax + bx) / 2, gg = T.createLinearGradient(cx - wd * 1.1, 0, cx + wd * 1.1, 0);
+      gg.addColorStop(0, G8((p.dark || p.mid - .18) + .04)); gg.addColorStop(.6, G8(p.mid + .12)); gg.addColorStop(1, G8(Math.min(.95, p.mid + .34)));
+      T.fillStyle = gg; T.fill(p.path); T.restore(); });
+    // a fine dark contour on the shadow side holds the shapes apart
+    T.save(); T.strokeStyle = G8(.12); T.lineWidth = Math.max(1, fh / 150); T.globalAlpha = .75;
+    parts.forEach(p => { T.save(); T.clip(p.path); T.translate(fh * .006, 0); T.lineWidth *= 2; T.stroke(p.path); T.restore(); }); T.restore();
+  }
+  X.T.fillStyle = G8(.7); X.T.fill(hold); X.G.fillStyle = '#fff'; X.G.fill(hold);
+}
+// ======================= frame =======================
+let uploaded = false;
+function draw(ctx, t) {
+  const s = state(t);
+  // plates
+  bgx.setTransform(1, 0, 0, 1, 0, 0); bgx.globalAlpha = 1; bgx.globalCompositeOperation = 'source-over';
+  if (t < 26.8) { if (!s.space) { paintSky(bgx, t, s); paintSkyD(bgd, t, s); } else { paintSpace(bgx, t, s); bgd.setTransform(1, 0, 0, 1, 0, 0); bgd.globalAlpha = 1; bgd.fillStyle = G8(.5); bgd.fillRect(0, 0, W / 4, H / 4); } }
+  // camera into the garden: descending out of the clouds, then a slow push toward the two
+  let eM = [0, 0, 1];
+  if (EDEN) { const k = eio(clamp((t - 24.6) / 7.4)), sc0 = 1.07, push = 1 + .05 * ss(29, DUR, t);
+    const offEnd = [-EDEN.PX, -EDEN.PY], off0 = [W / 2 - EDEN.EW / 2 * sc0, 0];
+    let sc = lerp(sc0, 1, k), ox = lerp(off0[0], offEnd[0], k), oy = lerp(off0[1], offEnd[1], k);
+    const F = [EDEN.fig[0], EDEN.fig[1]], fsx = ox + (F[0] + EDEN.PX) * sc, fsy = oy + (F[1] + EDEN.PY) * sc;   // push about the figures
+    ox = fsx - (fsx - ox) * push; oy = fsy - (fsy - oy) * push; sc *= push;
+    eM = [ox, oy, sc]; }
+  // text beds: the hatching thickens under the words
+  const a0 = win(t, 1.6, 6.5, 1.2, .5), a1 = win(t, 9.3, 14.1, 1.2, .9), a2 = win(t, 28.4, DUR - 1.1, 1.3, 1.1);
+  const y0 = V ? H * .76 : H * .8, y1 = V ? 330 : 170, y2 = V ? 330 : 150, l2 = V ? 78 : 76;
+  let bed = [W / 2, y2 + 70, W * .42, V ? 190 : 165], bedA = ss(26.5, 28.4, t);
+  if (t < 8) { bed = [W / 2, y0 + 24, W * .4, 90]; bedA = a0 * .55; } else if (t < 16) { bed = [W / 2, y1 + 30, W * .38, 100]; bedA = ss(8, 9.3, t) * (1 - ss(14, 15, t)); }
+  if (gl) {
+    if (t < 26.8 || !uploaded) { upload('uBG', BG); upload('uBGD', BGD); uploaded = t >= 26.8; }
+    u1('uRes', W, H); u1('uT', t); u1('uS', 5.2); u1('uDamp', 40); u1('uEDamp', 22);
+    u1('uC', ...s.C); u1('uCam', ...s.cam); u1('uZ', s.Z); u1('uZc', s.Zc); u1('uR', s.R); u1('uEx', 1.7);
+    u1('uSpace', s.space ? 1 : 0); u1('uRoll', s.space ? .05 * Math.sin((t - 15) * .25) + .012 * (t - 15) : 0);
+    u1('uHz', LA.hz); u1('uSea', s.space ? 0 : 1); u1('uWph', .9 * t + 9 * ss(13.7, 15.6, t)); u1('uWA', V ? 100 : 64); u1('uWC', V ? 210 : 140);
+    const spx = s.C[0] + (lerp(-W * .8, W * .62, ss(.6, 6.4, t)) - s.cam[0]) * s.Z;
+    u1('uSpirit', spx, win(t, .5, 7.2, 1.4, 1.2) * (1 - ss(T_FL - .3, T_FL + .5, t)), 260 * s.Z);
+    const gs = s.space && t < 24.8 ? galState(t) : null, G = [], Gt = [];
+    for (let i = 0; i < 3; i++) { const g = gs && gs[i]; G.push(g ? g.px : 0, g ? g.py : 0, g ? g.R : 1, g ? g.phi : 0); Gt.push(g ? g.k : 1, g ? g.spin : 0, g ? g.a : 0, 0); }
+    gl.uniform4fv(U.uG, G); gl.uniform4fv(U.uGt, Gt);
+    u1('uGlobe', s.gc[0], s.gc[1], s.Re, .06 * t); u1('uGlobeA', s.globeA);
+    u1('uEdenA', EDEN ? s.edenA : 0); u1('uEM', eM[0], eM[1], eM[2], 0); u1('uES', EDEN ? EDEN.EW : 1, EDEN ? EDEN.EH : 1);
+    u1('uHaze', ss(24.2, 24.75, t) * (1 - ss(26.5, 27.1, t))); u1('uRo', Math.hypot(W, H) * .75 * Math.pow(eio(clamp((t - 24.8) / 2.2)), 1.4));
+    u1('uBed', ...bed); u1('uBedA', bedA);
+    gl.drawArrays(gl.TRIANGLES, 0, 3);
+    ctx.drawImage(glc, 0, 0);
+  } else {                                     // no WebGL: show the tone plates plainly
+    ctx.filter = 'grayscale(1)'; ctx.drawImage(BG, 0, 0, W, H); if (EDEN && s.edenA > 0) { ctx.globalAlpha = s.edenA; ctx.drawImage(EDEN.T, eM[0], eM[1], EDEN.EW * eM[2], EDEN.EH * eM[2]); ctx.globalAlpha = 1; } ctx.filter = 'none';
+  }
+
+  // words
+  const rtl = Pilot.dir === 'rtl';
+  const st = { size: V ? 54 : 52, weight: 600, color: '#fbf7ee', shadow: 'rgba(12,10,8,.95)', shadowBlur: 22 }, cs = { size: 24, font: "'Noto Sans KR',sans-serif", color: '#f4eee2', ls: 2, shadow: 'rgba(8,6,5,1)', shadowBlur: 9 };
+  text(ctx, '01  ·  창조', rtl ? W - (V ? 80 : 110) : (V ? 80 : 110), V ? 190 : 120, { align: rtl ? 'right' : 'left', size: 30, weight: 600, color: '#ece6da', shadow: 'rgba(12,10,8,.9)', alpha: win(t, .6, 5, 1, 1), ls: 4 });
+  text(ctx, '“하나님이 이르시되 빛이 있으라”', W / 2, y0, { ...st, alpha: a0 });
+  text(ctx, '창세기 1:3 (개역개정)', W / 2, y0 + 58, { ...cs, alpha: a0 * .85 });
+  text(ctx, '“하시니 빛이 있었고”', W / 2, y1, { ...st, alpha: a1 });
+  text(ctx, '창세기 1:3 (개역개정)', W / 2, y1 + 58, { ...cs, alpha: a1 * .85 });
+  text(ctx, '“하나님이 지으신 그 모든 것을 보시니\n보시기에 심히 좋았더라”', W / 2, y2, { ...st, alpha: a2, lh: l2 / st.size });
+  text(ctx, '창세기 1:31 (개역개정)', W / 2, y2 + l2 + 58, { ...cs, color: '#fff8ec', alpha: a2 * .95 });
+  const f = 1 - ss(0, 1.2, t) + ss(DUR - 1.2, DUR, t); if (f > 0) { ctx.fillStyle = `rgba(0,0,0,${clamp(f)})`; ctx.fillRect(0, 0, W, H); }
+}
+
+Pilot.scene = 'creation';   // the same words as scene 01: use its translations
+Pilot.run({ W, H, dur: DUR, audio: 'creation.m4a', fonts: ["600 40px 'Noto Serif KR'", "400 20px 'Noto Sans KR'"],
+  init: async () => {
+    BG = canvas(HW, HH); bgx = BG.getContext('2d'); BGD = canvas(W / 4, H / 4); bgd = BGD.getContext('2d');
+    buildDark(); buildBanks(); buildSpace(); buildEden();
+    initGL();
+    if (gl) { upload('uE1', EDEN.e1); upload('uE2', EDEN.e2); }
+  },
+  draw });
+</script>
+</body>
+</html>

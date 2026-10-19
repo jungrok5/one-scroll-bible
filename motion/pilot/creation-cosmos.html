@@ -1,0 +1,707 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>시안 · 창조 (우주)</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600&family=Noto+Sans+KR:wght@400&display=swap">
+</head>
+<body>
+<script src="lib.js"></script>
+<script>
+/* 01 창조 — after the creation sequence of The Tree of Life (2011; Douglas Trumbull's practical effects): luminous matter that
+   looks like dye, milk and ink blooming in liquid, photographed macro. One fragment shader, rendered at ~55% and upscaled
+   (soft, alias-free, nothing fine enough to shimmer); text through Pilot.text on the 2D canvas; the two figures are a
+   pre-rendered 2D sprite placed with the shader's camera.
+   A  0–4.9     darkness over the deep: ink volumes turning in dark water; the Spirit, a faint luminous current, moves across
+   B  4.9       one point of light (tiny, intense, soft glow); it draws in just before the word
+   C  6.8       "빛이 있으라": the point erupts into a billowing shell of white-hot matter, the camera inside the expansion
+                (layered domain-warped plumes rushing outward); colours cool white → gold → amber → rose → violet; dust lanes
+   D  10–19.5   the glow thins into nebulae, stars ignite, a spiral galaxy gathers and turns; the camera flies into an arm
+   E  18.5–24.4 a young sun in its dusty disc; a molten sphere cools, oceans and clouds appear: the blue Earth, a crescent
+                widening to dawn as the camera falls toward the terminator
+   F  24.4–26.4 one dive: atmosphere haze → three cloud decks (the last parts round the camera) → the valley at dawn
+   G  26.4–35   the camera levels out over Eden: mist, river catching the low sun, trees, the man and the woman (Gen 1:31) */
+const { clamp, lerp, ss, eo, eio, win, rng, canvas, text } = Pilot;
+const W = Pilot.W, H = Pilot.H, V = Pilot.ori === 'v', DUR = 35, SH = Math.min(W, H);
+const T_IGN = 4.9, T_FL = 6.8;
+const X = V ? .56 : 1;                    // horizontal room (uv units are relative to the short side)
+const RENDER = /[?&]render=1/.test(location.search);
+let gl = null, glc, U = {}, SCALE = .55, FIG = null;
+
+// ======================= the shader =======================
+const VSH = 'attribute vec2 a; void main(){ gl_Position = vec4(a, 0., 1.); }';
+const FSH = `
+#ifdef GL_FRAGMENT_PRECISION_HIGH
+precision highp float;
+#else
+precision mediump float;
+#endif
+uniform vec2 uRes; uniform float uT;
+uniform float uDeep; uniform vec3 uSpirit; uniform vec4 uPt;
+uniform vec4 uBurst; uniform vec4 uNeb; uniform vec3 uStars;
+uniform vec4 uGal; uniform vec4 uGal2;
+uniform vec4 uSun; uniform vec4 uDisc;
+uniform vec4 uEC; uniform vec4 uEP; uniform vec3 uEL; uniform vec3 uTg; uniform float uEHaze;
+uniform float uDive; uniform vec4 uCam; uniform float uFoc; uniform vec3 uLs; uniform vec4 uDv; uniform float uZE;
+uniform vec4 uTree[10]; uniform float uHill;
+uniform vec4 uBed; uniform float uBedA;
+
+float h21(vec2 p){ vec3 p3 = fract(vec3(p.xyx) * .1031); p3 += dot(p3, p3.yzx + 33.33); return fract((p3.x + p3.y) * p3.z); }
+float h31(vec3 p){ p = fract(p * .1031); p += dot(p, p.zyx + 31.32); return fract((p.x + p.y) * p.z); }
+float vn(vec2 p){ vec2 i = floor(p), f = fract(p); f = f * f * (3. - 2. * f);
+  return mix(mix(h21(i), h21(i + vec2(1., 0.)), f.x), mix(h21(i + vec2(0., 1.)), h21(i + vec2(1., 1.)), f.x), f.y); }
+float vn3(vec3 p){ vec3 i = floor(p), f = fract(p); f = f * f * (3. - 2. * f);
+  return mix(mix(mix(h31(i), h31(i + vec3(1., 0., 0.)), f.x), mix(h31(i + vec3(0., 1., 0.)), h31(i + vec3(1., 1., 0.)), f.x), f.y),
+             mix(mix(h31(i + vec3(0., 0., 1.)), h31(i + vec3(1., 0., 1.)), f.x), mix(h31(i + vec3(0., 1., 1.)), h31(i + vec3(1., 1., 1.)), f.x), f.y), f.z); }
+mat2 rot(float a){ float c = cos(a), s = sin(a); return mat2(c, -s, s, c); }
+const mat2 OM = mat2(.8, .6, -.6, .8);
+float fb2(vec2 p){ float s = 0., a = .5; for (int i = 0; i < 4; i++) { s += a * vn(p); p = OM * p * 2.03 + vec2(1.7, 9.2); a *= .5; } return s / .9375; }
+// level-of-detail fbm: an octave whose wavelength drops under ~3 pixels fades to its mean (px = one pixel in p units)
+float fbL(vec2 p, float px){ float s = 0., a = .5, f = 1.;
+  for (int i = 0; i < 6; i++) { float w = clamp(2. - 6. * f * px, 0., 1.); if (w > 0.) s += a * mix(.5, vn(p), w); else s += a * .5;
+    p = OM * p * 2.03 + vec2(1.7, 9.2); f *= 2.03; a *= .5; } return s / .984375; }
+float fbL3(vec3 p, float px){ float s = 0., a = .5, f = 1.;
+  for (int i = 0; i < 7; i++) { float w = clamp(2. - 6. * f * px, 0., 1.); if (w > 0.) s += a * mix(.5, vn3(p), w); else s += a * .5;
+    p = p * 2.02 + vec3(1.7, 9.2, 3.3); f *= 2.02; a *= .5; } return s / .9921875; }
+float S(float a, float b, float x){ return smoothstep(a, b, x); }
+
+// ---------------- the deep ----------------
+vec3 deep(vec2 uv){
+  vec2 p = rot(uT * .012) * uv * 1.5; float t = uT * .045;
+  vec2 q = vec2(fb2(p + vec2(0., t)), fb2(p + vec2(5.2, 1.3) - t * .8));
+  vec2 r = vec2(fb2(p + 2.6 * q + vec2(1.7, 9.2) + t * .5), fb2(p + 2.6 * q + vec2(8.3, 2.8) - t * .3));
+  float f = fb2(p + 2.4 * r);
+  vec3 ink = mix(vec3(.010, .016, .045), vec3(.040, .020, .075), S(.3, .8, q.x));
+  ink = mix(ink, vec3(.012, .040, .085), S(.45, .9, r.y));
+  vec3 c = ink * f * f * f * .5;
+  // the Spirit: a faint luminous current moving across the face of the waters
+  float sx = uSpirit.x;
+  float y0 = .07 * sin(uv.x * 2.1 + uT * .25) + .06 * (fb2(vec2(uv.x * 1.3 - uT * .12, 3.)) - .5) - .1;
+  float wdt = uSpirit.z * (.55 + 1.1 * f);
+  float band = exp(-pow((uv.y - y0) / wdt, 2.));
+  float head = exp(-pow((uv.x - sx) / .32, 2.));
+  float tail = S(sx - 1.5, sx, uv.x) * (1. - S(sx, sx + .12, uv.x));
+  float fl = fb2(vec2(uv.x * 2.4 - uT * .7, uv.y * 6.5 + r.x * 2.));
+  c += vec3(.16, .20, .30) * band * max(head, tail * .5) * (.2 + f) * S(.35, .8, fl) * .3 * uSpirit.y;
+  // the ink catches the first light
+  vec2 d = uv - uPt.xy; float pl = uPt.z * .0035 / (.003 + dot(d, d));
+  c += vec3(.55, .38, .26) * f * f * f * pl * .12;
+  return c;
+}
+
+// ---------------- the light: burst, plumes, nebulae ----------------
+vec3 heat(float T){
+  vec3 c = mix(vec3(.12, .04, .24), vec3(.55, .12, .34), S(0., .22, T));
+  c = mix(c, vec3(1., .36, .24), S(.18, .42, T));
+  c = mix(c, vec3(1., .56, .14), S(.38, .6, T));
+  c = mix(c, vec3(1., .80, .44), S(.56, .8, T));
+  return mix(c, vec3(1., .96, .9), S(.78, 1., T));
+}
+vec3 plumes(vec2 uv, float pxs){
+  vec2 d = uv - uPt.xy; float dl = length(d);
+  float Z = uBurst.w, T = uBurst.z;
+  vec3 acc = vec3(0.); float tr = 1.;
+  float cool = .35 * S(.15, 1., dl / (uBurst.x + .01)) * (1. - S(1.2, 2.4, uBurst.x));
+  for (int i = 0; i < 4; i++) {
+    float fi = fract(Z + float(i) * .25), cyc = floor(Z + float(i) * .25);
+    float sc = 6.5 * pow(.06, fi);
+    float w = S(0., .3, fi) * (1. - S(.62, 1., fi));
+    vec2 p = rot(fi * 1.2 + float(i) * 1.9 + cyc * .7) * d * sc + vec2(cyc * 7.31 + float(i) * 13.7, cyc * 3.17 - float(i) * 5.1);
+    float px = sc * pxs;
+    vec2 q = vec2(fbL(p, px), fbL(p + vec2(5.2, 1.3), px));
+    float dn = fbL(p + 2.5 * q + vec2(3., 1.), px * 2.);
+    float e = S(uNeb.y, uNeb.y + .22, dn), core = S(uNeb.y + .08, uNeb.y + .5, dn);
+    vec3 hc = heat(T + (dn - .55) * .55 - fi * .12 - (1. - core) * .22 - cool);
+    vec3 nc = mix(mix(vec3(.85, .22, .42), vec3(.30, .17, .78), S(.25, .75, q.x)), vec3(.10, .52, .62), S(.55, .78, q.y));
+    nc = mix(nc, vec3(1., .78, .52), S(.72, .95, dn) * .7);
+    vec3 col = mix(hc, nc, uNeb.w);
+    acc += col * e * e * (.22 + 1.5 * core * core) * w * (.45 + 1.2 * q.y * q.y);
+    float du = S(.56, .8, fbL(p * .6 + 3.1 * q + 7., px * .6));
+    tr *= 1. - du * w * uNeb.z * .8;
+  }
+  acc *= tr * uNeb.x;
+  // the expanding shell: a bloom whose lobes scale with it (self-similar, like dye unfurling); its leading edge cooler
+  float R = uBurst.x;
+  if (R < 3.5) {
+    vec2 nq = d / (R + .02) * 1.5;
+    float edge = fb2(nq + .75 * vec2(fb2(nq * 1.2 + vec2(uT * .4, 0.)), fb2(nq * 1.2 + 4.)));
+    float rr = dl / (R + 1e-3) + (.5 - edge) * .85;
+    float young = 1. - S(.9, 1.8, R);
+    acc *= (1. - S(.58, .9, rr)) * mix(1., .35 + 1.1 * edge, young);
+    acc += heat(T - .4) * exp(-pow((rr - .72) / .13, 2.)) * .45 * young * uNeb.x;
+  }
+  return acc * uBurst.y;
+}
+vec3 pointLight(vec2 uv){
+  vec2 d = uv - uPt.xy; float dd = dot(d, d), s2 = uPt.w * uPt.w;
+  return uPt.z * (vec3(1., .95, .86) * exp(-dd / s2) + vec3(1., .76, .48) * .06 * s2 * 14. / (s2 * 14. + dd) + vec3(.55, .5, .9) * .012 * exp(-sqrt(dd) / .22));
+}
+vec3 stars(vec2 uv, float pxs){
+  vec3 s = vec3(0.);
+  for (int i = 0; i < 3; i++) {
+    float fi = fract(uStars.z + float(i) / 3.), cyc = floor(uStars.z + float(i) / 3.);
+    float sc = 46. * pow(.13, fi);
+    float w = S(0., .18, fi) * (1. - S(.82, 1., fi));
+    vec2 p = uv * sc + vec2(float(i) * 37.1 + cyc * 11.3, cyc * 5.7 - float(i) * 3.3);
+    vec2 cl = floor(p), f = fract(p);
+    float h = h21(cl + vec2(cyc * .37, float(i)));
+    if (h < .2) {
+      vec2 sp = .25 + .5 * vec2(h21(cl + 3.1), h21(cl + 7.7));
+      float px = sc * pxs, sig = px * (1.25 + 1.1 * fi);
+      float b = pow(h21(cl + 1.3), 9.) * 3. + .045;
+      float ig = S(uStars.y + h * 14., uStars.y + h * 14. + 1.4, uT);
+      vec2 dv = f - sp;
+      vec3 tint = mix(vec3(1., .82, .66), vec3(.68, .8, 1.), h21(cl + 9.9));
+      s += tint * exp(-dot(dv, dv) / (sig * sig)) * b * w * ig;
+    }
+  }
+  return s * uStars.x;
+}
+vec3 galaxy(vec2 uv, float pxs){
+  vec2 p = rot(uGal2.z) * (uv - uGal.xy); p.y /= uGal2.w; p /= uGal.z;
+  float px = pxs / uGal.z / uGal2.w;
+  float r = length(p), th = atan(p.y, p.x), sp = uGal.w, lr = log(r + .02);
+  vec2 q = rot(-sp) * p;
+  float n = fbL(q * 2.6 + 4., px * 2.6), n2 = fbL(q * 5.5 + 9., px * 5.5);
+  float ph = 2. * (th - sp) - lr * 4.6 + n * 2.2;
+  float arm = .5 + .5 * cos(ph), spur = .5 + .5 * cos(2. * ph + 1.3 + n2 * 2.);
+  float fade = S(1.15, .1, r);
+  float floc = .5 + .5 * cos(4. * (th - sp) - lr * 6. + n2 * 5.);
+  float armD = (pow(arm, 4.) + .3 * pow(spur, 4.) * arm + .22 * pow(floc, 3.)) * fade;
+  float cloud = S(.35, .8, n) * S(1.2, .1, r);
+  float knots = S(.64, .84, n2) * pow(arm, 2.) * fade;
+  armD = mix(cloud * .5, armD * (.2 + 1.5 * n2 * n2) + knots * .7, uGal2.y);
+  float disk = exp(-r * 3.2), bulge = exp(-r * r / .009);
+  float dust = S(.6, .9, .5 + .5 * cos(ph + .8 + (n2 - .5) * 1.5)) * S(.04, .25, r) * S(1., .3, r);
+  vec3 c = vec3(1., .86, .62) * bulge * 2.2 * uGal2.y + vec3(.95, .74, .58) * disk * .45
+         + mix(vec3(.42, .56, 1.), vec3(1., .52, .74), S(.45, .75, n2)) * armD * 1.2;
+  c *= 1. - dust * .75 * uGal2.y;
+  return c * uGal2.x;
+}
+vec3 youngSun(vec2 uv, float pxs){
+  vec2 d = uv - uSun.xy; float dd = dot(d, d), s2 = uSun.w * uSun.w;
+  vec3 c = uSun.z * (vec3(1., .93, .8) * exp(-dd / s2) * 6. + vec3(1., .72, .42) * .25 * s2 * 40. / (s2 * 40. + dd));
+  if (uDisc.x > 0.) {
+    vec2 p = rot(uDisc.z) * d; p.y /= uDisc.w; p /= uDisc.y;
+    float r = length(p), px = pxs / uDisc.y / uDisc.w;
+    vec2 q = rot(-uT * .12 / (r + .35)) * p;
+    vec2 wq = q * 2. + .7 * vec2(fbL(q * 1.5 + 1., px * 1.5), fbL(q * 1.5 + 6., px * 1.5));
+    float n = fbL(wq + 3., px * 2.);
+    float rings = .72 + .28 * cos(r * 11. + n * 6.);
+    float band = S(.05, .3, r) * (1. - S(.35, 1.1, r + (n - .5) * .5));
+    float dust = band * rings * (.15 + 1.2 * n * n);
+    float lane = exp(-pow(p.y / (.07 + .05 * r), 2.)) * S(.0, .25, r) * (1. - S(.6, 1.1, r));
+    c *= 1. - .75 * exp(-pow(p.y / .09, 2.)) * (1. - S(.5, 1.1, r)) * uDisc.x;
+    c += mix(vec3(1., .6, .3), vec3(.8, .3, .4), S(.25, .9, r)) * dust * (1. - .8 * lane) * .55 / (r + .15) * uDisc.x;
+  }
+  return c;
+}
+
+// ---------------- the Earth ----------------
+float eDm = 9.;
+vec4 earth(vec2 uv, float pxs){
+  vec3 rd = normalize(vec3(uv, -1.6)), C = uEC.xyz;
+  float b = dot(C, rd); vec3 cp = rd * b - C; float dm = length(cp); eDm = dm;
+  float pw = pxs / 1.6 * b;
+  vec3 L = uEL; float mk = uEP.x, ok = uEP.y, ck = uEP.z;
+  float hh = max(dm - 1., 0.); vec3 n0 = cp / dm;
+  float lit0 = S(-.35, .55, dot(n0, L));
+  vec3 atm = vec3(.28, .52, 1.) * exp(-hh / .03) * lit0 * 1.3 * (1. - mk) + vec3(1., .42, .16) * exp(-hh / .06) * mk * .9;
+  vec3 col = vec3(0.); float a = 0.;
+  if (dm < 1.) {
+    float th = sqrt(1. - dm * dm); vec3 P = rd * (b - th), n = normalize(P - C);
+    float sp = uEP.w;
+    vec3 ns = vec3(cos(sp) * n.x + sin(sp) * n.z, n.y, -sin(sp) * n.x + cos(sp) * n.z);
+    float mu = max(dot(n, -rd), .12), fp = pw / mu;
+    vec3 tg = ns - uTg;
+    float hgt = fbL3(ns * 1.6 + vec3(3.1, 1.2, .4), fp * 1.6) + .17 * exp(-dot(tg, tg) / .05);
+    float land = S(.535, .55, hgt) * ok;
+    float lat = abs(ns.y);
+    vec3 sea = mix(vec3(.006, .035, .11), vec3(.02, .13, .25), S(.42, .535, hgt));
+    float lv = fbL3(ns * 4. + 7., fp * 4.);
+    vec3 grd = mix(vec3(.045, .1, .03), vec3(.2, .16, .08), S(.45, .65, lv));
+    grd = mix(grd, vec3(.3, .28, .25), S(.62, .7, hgt));
+    vec3 alb = mix(sea, grd, land);
+    alb = mix(alb, vec3(.8, .85, .9), S(.84, .9, lat + .06 * lv) * ok);
+    // molten: dark crust with soft glowing cracks
+    float rn = 1. - abs(2. * fbL3(ns * 2.1 + 7., fp * 2.1) - 1.);
+    float cr = pow(rn, 5. + (1. - mk) * 10.);
+    float crust = fbL3(ns * 3.6 + 1., fp * 3.6);
+    vec3 em = (vec3(.4, .06, .01) * pow(crust, 3.) * .9 + vec3(1.7, .55, .12) * cr * 1.6) * mk;
+    alb = mix(vec3(.05, .035, .03) * (.5 + crust), alb, ok);
+    // clouds: swirled bands
+    vec3 c3 = ns * 2.5 + vec3(0., 0., uT * .02);
+    c3 += .8 * vec3(fbL3(c3 * .7 + 2., fp * 1.75), fbL3(c3 * .7 + 5., fp * 1.75), 0.);
+    float cl = fbL3(c3, fp * 2.5);
+    vec3 Lsp = vec3(cos(sp) * L.x + sin(sp) * L.z, L.y, -sin(sp) * L.x + cos(sp) * L.z);
+    float cl2 = fbL3(c3 + (Lsp - ns * dot(Lsp, ns)) * clamp(fp * 60., .012, .1), fp * 2.5), relief = clamp(.5 + (cl - cl2) * 7., 0., 1.);
+    float cov = S(.52, .72, cl) * ck * (1. - .55 * exp(-dot(tg, tg) / .004) * uEHaze);
+    float ndl = dot(n, L);
+    float day = S(-.12, .32, ndl), tw = exp(-pow((ndl - .02) / .08, 2.));
+    vec3 sunC = vec3(1., .95, .88), twC = vec3(1., .5, .26);
+    vec3 surf = alb * (day * sunC * 1.5 + tw * twC * .15);
+    vec3 rr = reflect(rd, n);
+    surf += vec3(1., .9, .75) * pow(max(dot(rr, L), 0.), 30.) * .55 * (1. - land) * ok * day;
+    vec3 cloudC = mix(vec3(1.2, .78, .5), vec3(1.05, 1.02, 1.), S(.1, .6, ndl)) * day * 1.6;
+    cloudC *= mix(vec3(.38, .46, .7), vec3(1.05), relief);
+    surf = mix(surf, cloudC + twC * tw * .2, cov);
+    surf = mix(surf, vec3(.25, .45, .85) * day, .1 * ok);
+    float fres = pow(1. - mu, 2.6);
+    surf += vec3(.25, .5, 1.) * fres * S(-.25, .5, ndl) * .9 * (1. - mk);
+    surf += em * (1. - cov);
+    surf += vec3(1., .4, .15) * fres * mk * .8;
+    a = S(1., 1. - max(2.5 * pw, .03 * (1. - lit0)), dm);
+    col = surf;
+  }
+  // approaching the atmosphere from above: the whole view lifts into luminous haze
+  col = mix(col, vec3(.4, .6, 1.05), uEHaze * .18 * a);
+  return vec4(col * a + atm * (1. - a), a);
+}
+
+// ---------------- the dive and Eden ----------------
+vec3 sky(vec3 rd, float pxa){
+  float y = rd.y, yy = max(y, 0.), sd = max(dot(rd, uLs), 0.);
+  vec3 c = mix(vec3(1., .7, .44), vec3(.34, .48, .76), S(0., .2, yy));
+  c = mix(c, vec3(.07, .15, .38), S(.16, .75, yy));
+  c += vec3(1., .55, .25) * pow(sd, 10.) * .45 + vec3(1., .78, .5) * pow(sd, 50.) * 1.2 + vec3(1., .9, .75) * pow(sd, 600.) * 3.;
+  c += vec3(1., .95, .85) * S(.99966, .99986, sd) * 30.;
+  if (y > 0.) {
+    float k = 1. / (y + .07); vec2 p = rd.xz * k * 1.2 + vec2(3., uT * .008);
+    float n = fbL(p, pxa * 1.2 * k * k);
+    float cv = S(.54, .82, n) * S(0., .1, y) * (1. - S(.45, .85, y));
+    vec3 cc = mix(vec3(1., .62, .52), vec3(1., .84, .7), S(.6, .9, n)) * (.55 + 1.4 * pow(sd, 4.));
+    c = mix(c, cc, cv * .45);
+  } else c = mix(vec3(1., .7, .46) * .8, vec3(.3, .32, .36), S(0., -.3, y));
+  return c;
+}
+float riverX(float z){ float dz = z - uZE;
+  return .16 * max(dz, 0.) + 3.2 + (2. + .06 * max(dz, 0.)) * sin(dz * .035 - .9) + 22. * (1. - S(-30., 11., dz)) + 25. * sin(dz * .006) * S(0., -200., dz); }
+vec3 fogit(vec3 c, vec3 ro, vec3 rd, float d, float patch){
+  float ry = rd.y; ry = abs(ry) < 1e-4 ? 1e-4 : ry;
+  float ye = max(ro.y + ry * d, 0.);
+  float H1 = 3.5, k1 = .0035 * patch, H2 = 900., k2 = .00026;
+  float f1 = k1 * H1 * (exp(-ro.y / H1) - exp(-ye / H1)) / ry;
+  float f2 = k2 * H2 * (exp(-ro.y / H2) - exp(-ye / H2)) / ry;
+  float fa = 1. - exp(-max(f1 + f2, 0.));
+  float sd = max(dot(rd, uLs), 0.);
+  vec3 fc = mix(vec3(.52, .58, .72), vec3(1., .74, .48), pow(sd, 2.5)) + vec3(1., .8, .52) * pow(sd, 16.) * 1.1;
+  return mix(c, fc, fa);
+}
+float ridgeH(float x, float zk, float k, float px){
+  float xc = .16 * (zk - uZE) + 3.;
+  float ax = abs(x - xc) / (zk - uZE);
+  float base = (18. + 55. * k * k) * (.35 + 1.4 * S(.04, .6, ax));
+  return base + (22. + 70. * k) * (fbL(vec2(x / (60. + 120. * k), k * 7.), px / (60. + 120. * k)) - .4);
+}
+vec3 groundCol(vec3 P, vec3 rd, float fp, float pxa){
+  vec2 xz = P.xz;
+  float m1 = fbL(xz * .02, fp * .02), m2 = fbL(xz * .11 + 5., fp * .11), m3 = fbL(xz * .7 + 2., fp * .7);
+  float fo = fbL(xz * .012 + 9., fp * .012);
+  float rx = riverX(P.z), dr = abs(P.x - rx);
+  float forest = S(.55, .64, fo + .22 * S(25., 180., dr) - .25 * S(30., 0., dr) - .35 * S(70., 0., length(xz - vec2(0., uZE + 14.))));
+  vec3 base = mix(vec3(.07, .12, .035), vec3(.18, .21, .06), m1) * (.75 + .45 * m2) * (.85 + .3 * m3);
+  float fo2 = fbL((xz + uLs.xz * 9.) * .012 + 9., fp * .012);
+  float rel = clamp((fo2 - fo) * 14., -1., 1.);
+  base = mix(base, vec3(.025, .055, .025) * (.7 + .6 * m2), forest);
+  // dawn: long shadows thrown toward us by the woods that stand between this point and the low sun
+  vec2 sh = xz + uLs.xz / uLs.y * 11.;
+  float sfo = fbL(sh * .012 + 9., fp * .012);
+  float shadow = S(.53, .62, sfo + .22 * S(25., 180., abs(sh.x - riverX(sh.y))) - .35 * S(70., 0., length(sh - vec2(0., uZE + 14.))));
+  float sunlit = (1. - shadow) * (1. - forest) * (.75 + .25 * m2) + forest * max(rel, 0.) * 1.3;
+  vec3 c = base * (vec3(.3, .37, .52) * .55 + vec3(1., .68, .38) * (.1 + .75 * sunlit));
+  vec3 rg = reflect(rd, vec3(0., 1., 0.));
+  c += vec3(1., .74, .36) * pow(max(dot(rg, uLs), 0.), 6.) * (1. - forest) * (1. - shadow * .7) * (.2 + .6 * m3) * .45;
+  float wr = 1.15 + .018 * max(P.z - uZE, 0.) + .35 * sin(P.z * .05) + (fbL(xz * .07 + 3., fp * .07) - .5) * .7;
+  float water = 1. - S(wr - fp, wr + fp * 1.5 + .15, dr);
+  if (water > 0.) {
+    float am = .16 * clamp(1. - fp * .6, 0., 1.);
+    vec3 nrm = normalize(vec3((vn(xz * .3) - .5) * am, 1., (vn(xz * .3 + 7.) - .5) * am * 2.));
+    vec3 rr = reflect(rd, nrm); rr.y = abs(rr.y);
+    float fr = .05 + .95 * pow(1. - max(-rd.y, 0.), 5.);
+    vec3 refl = sky(rr, pxa); refl = mix(refl * .3, refl * 1.1, pow(max(dot(rr, uLs), 0.), 10.) * (.4 + .9 * vn(xz * vec2(.6, .15) + uT * vec2(0., .4))));
+    c = mix(c, mix(vec3(.015, .03, .04), refl * .85, fr), water);
+  }
+  c *= 1. - .4 * exp(-pow((dr - wr) / (1. + fp), 2.)) * (1. - water);
+  // the long dawn shadows of the nearest trees, thrown toward us
+  vec2 sd2 = normalize(-uLs.xz);
+  for (int i = 0; i < 4; i++) { vec4 T = uTree[i]; vec2 v = xz - vec2(T.x, T.y + uZE); float al = dot(v, sd2), pe = abs(v.x * sd2.y - v.y * sd2.x);
+    c *= 1. - .4 * uDv.z * S(-.5, 2., al) * (1. - S(T.z * .15, T.z * .4 + fp, pe - al * .015)) * (1. - S(T.z * 2., T.z * 9., al)); }
+  return c;
+}
+vec4 slab(vec3 ro, vec3 rd, float Hc, float sd, float pxa, float hole){
+  float s = (Hc - ro.y) / rd.y; if (s <= 0.) return vec4(0.);
+  vec3 P = ro + rd * s; float sc = Hc * .9; vec2 p = P.xz / sc + sd;
+  float px = s * pxa / max(abs(rd.y), .08) / sc;
+  vec2 wq = vec2(fbL(p * .6 + 3., px * .6), fbL(p * .6 + 8., px * .6));
+  float d = fbL(p + 1.1 * wq, px), d2 = fbL(p + 1.1 * wq + uLs.xz * .3, px);
+  float a = S(.53, .7, d);
+  a *= S(hole * .3, hole, length(P.xz - uCam.xz) + (d - .5) * hole * 1.6) * (1. - S(sc * 2.2, sc * 4.5, length(P.xz - uCam.xz)));
+  float lit = clamp(.5 + (d - d2) * 9., 0., 1.);
+  vec3 cc = mix(vec3(.26, .32, .52), vec3(1.25, .94, .66), lit) * (.75 + .5 * S(.6, .9, d)) + vec3(1., .72, .45) * (1. - S(.47, .56, d)) * .4;
+  return vec4(cc * a, a);
+}
+vec4 tree(vec3 ro, vec3 rd, vec4 T, float pxa, float dmax){
+  float s = (T.y + uZE - ro.z) / rd.z; if (rd.z <= 0. || s < .8 || s > dmax) return vec4(0.);
+  vec3 P = ro + rd * s; float h = T.z;
+  vec2 l = vec2(P.x - T.x, P.y) / h;
+  if (abs(l.x) > .7 || l.y < -.03 || l.y > 1.1) return vec4(0.);
+  float px = s * pxa / h, sd = T.w;
+  float n = fbL(l * 4. + sd * 7., px * 4.) - .5;
+  float cd = 9.;
+  for (int j = 0; j < 6; j++) { float fj = float(j);
+    vec2 c = vec2((h21(vec2(sd, fj)) - .5) * .56, .48 + .4 * h21(vec2(fj, sd + 1.)));
+    vec2 r = vec2(.17 + .1 * h21(vec2(sd + 2., fj)), .15 + .09 * h21(vec2(fj, sd + 3.)));
+    cd = min(cd, length((l - c) / r)); }
+  cd = (cd - 1. + n * .9) * .22;
+  float ed = max(px * 1.6, .016);
+  float ca = 1. - S(-ed, ed, cd);
+  float tx = l.x - .03 * sin(l.y * 5. + sd), tw = .022 + .022 * (1. - l.y / .55);
+  float ta = (1. - S(tw - ed, tw + ed, abs(tx))) * (1. - S(.52, .62, l.y)) * S(-.03, .0, l.y);
+  float b1 = abs(l.x - (l.y - .36) * .75) , b2 = abs(l.x + (l.y - .4) * .6);
+  float br = max((1. - S(.011 - ed, .011 + ed, b1)) * S(.34, .38, l.y) * (1. - S(.62, .7, l.y)), (1. - S(.01 - ed, .01 + ed, b2)) * S(.38, .42, l.y) * (1. - S(.6, .68, l.y)));
+  float aa = max(ca, max(ta, br));
+  if (aa <= 0.) return vec4(0.);
+  float leaf = fbL(l * 7. + sd * 3., px * 7.);
+  vec3 cc = mix(vec3(.012, .022, .01), vec3(.045, .075, .025), leaf * S(.35, 1., l.y));
+  cc += vec3(1., .72, .38) * S(-.06, 0., cd) * S(.5, .8, leaf) * .22;
+  cc = mix(cc, vec3(.02, .016, .012), max(ta, br) * (1. - ca));
+  return vec4(cc, aa);
+}
+vec3 ground(vec2 uv, float pxs){
+  vec3 ro = uCam.xyz; float pt = uCam.w;
+  vec3 fw = vec3(0., sin(pt), cos(pt)), up = vec3(0., cos(pt), -sin(pt)), rt = vec3(1., 0., 0.);
+  vec3 rd = normalize(fw * uFoc + rt * uv.x + up * uv.y);
+  float pxa = pxs / uFoc;
+  vec3 bg = sky(rd, pxa); float dist = 1e7; float patch = 1.;
+  if (rd.y < 0.) {
+    float tg = -ro.y / rd.y; vec3 P = ro + rd * tg;
+    float fp = tg * pxa / max(-rd.y, .03);
+    bg = groundCol(P, rd, fp, pxa); dist = tg;
+    patch = .15 + 1.7 * S(.35, .75, fbL(P.xz * .006 + vec2(uT * .02, uT * .01), fp * .006));
+  }
+  if (dist < 1e6) bg = fogit(bg, ro, rd, dist, patch);
+  // hills (near → far), soft at the base so they rise out of the valley mist instead of standing like walls
+  vec3 hacc = vec3(0.); float ha = 0.;
+  if (rd.z > 0.) for (int k = 0; k < 3; k++) {
+    float fk = float(k), zk = uZE + (k == 0 ? 260. : k == 1 ? 700. : 1700.);
+    float s = (zk - ro.z) / rd.z;
+    if (s > 0. && s < dist) {
+      vec3 P = ro + rd * s; float rh = ridgeH(P.x, zk, fk, s * pxa), ed = s * pxa * 1.5 + .2;
+      float a = (1. - S(rh - ed, rh + ed, P.y)) * S(0., .6 * rh, P.y) * uHill;
+      if (a > 0.) {
+        float tex = fbL(vec2(P.x, P.y * 1.6) * (.06 / (fk + 1.)), s * pxa * .06 / (fk + 1.));
+        vec3 rc = mix(vec3(.03, .055, .03), vec3(.05, .07, .1), fk * .5) * (.65 + .7 * tex);
+        float sd = max(dot(rd, uLs), 0.);
+        rc += vec3(1., .7, .4) * exp(-(rh - P.y) / (6. + fk * 18.)) * (.05 + .45 * pow(sd, 5.));
+        rc = fogit(rc, ro, rd, s, 1.);
+        hacc += (1. - ha) * a * rc; ha += (1. - ha) * a;
+      }
+    }
+  }
+  bg = hacc + (1. - ha) * bg;
+  // trees, front to back
+  vec3 acc = vec3(0.); float aa = 0.;
+  if (uDv.z > 0.) for (int i = 0; i < 10; i++) {
+    vec4 t4 = tree(ro, rd, uTree[i], pxa, dist);
+    if (t4.a > 0.) {
+      float s = (uTree[i].y + uZE - ro.z) / rd.z;
+      vec3 tc = fogit(t4.rgb, ro, rd, s, 1.);
+      float ta = t4.a * uDv.z;
+      acc += (1. - aa) * ta * tc; aa += (1. - aa) * ta;
+    }
+  }
+  vec3 c = acc + (1. - aa) * bg;
+  // cloud decks, top to bottom (the camera falls through them; the last one parts round it)
+  if (uDv.y > 0. && rd.y < 0.) {
+    vec3 sa = vec3(0.); float sa_a = 0.;
+    for (int k = 0; k < 3; k++) {
+      float Hc = k == 0 ? 1300. : k == 1 ? 600. : 260.;
+      vec4 s4 = slab(ro, rd, Hc, float(k) * 4.7 + 1.3, pxa, k == 2 ? uDv.w : k == 0 ? 420. : 0.);
+      sa += (1. - sa_a) * s4.rgb; sa_a += (1. - sa_a) * s4.a;
+    }
+    c = sa * uDv.y + (1. - sa_a * uDv.y) * c;
+  }
+  // inside a cloud: the view whitens, wisps stream past
+  float wash = 0.;
+  wash = exp(-abs(ro.y - 600.) / 30.) * .85;
+  float wisp = fb2(uv * 2.4 / (.5 + length(uv)) + vec2(uT * .9, -uT * 2.6));
+  wash *= uDv.y * S(.3, .75, wisp + .25 * (1. - length(uv)));
+  c = mix(c, vec3(1.02, .93, .8), clamp(wash, 0., 1.));
+  c = mix(c, vec3(.4, .6, 1.05), uDv.x);
+  return c;
+}
+
+vec3 aces(vec3 x){ return clamp((x * (2.51 * x + .03)) / (x * (2.43 * x + .59) + .14), 0., 1.); }
+void main(){
+  vec2 fc = gl_FragCoord.xy, uv = (fc - .5 * uRes) / min(uRes.x, uRes.y);
+  float pxs = 1. / min(uRes.x, uRes.y);
+  vec3 c = vec3(0.);
+  if (uDive < .999) {
+    vec3 sp = vec3(0.);
+    if (uDeep > 0.) sp += deep(uv) * uDeep;
+    if (uBurst.y > 0.) sp += plumes(uv, pxs);
+    vec3 st = uStars.x > 0. ? stars(uv, pxs) : vec3(0.);
+    if (uGal2.x > 0.) sp += galaxy(uv, pxs);
+    if (uSun.z > 0.) sp += youngSun(uv, pxs);
+    if (uEC.w > 0.) {
+      vec4 e = earth(uv, pxs);
+      st *= S(1., 1.04, eDm);
+      sp = (sp + st) * (1. - e.a * uEC.w) + e.rgb * uEC.w; st = vec3(0.);
+    }
+    sp += st;
+    sp += pointLight(uv);
+    c = sp;
+  }
+  if (uDive > .001) c = mix(c, ground(uv, pxs), uDive);
+  // a soft bed under the words
+  vec2 bd = (uv - uBed.xy) / uBed.zw;
+  c *= 1. - uBedA * .45 * exp(-dot(bd, bd));
+  c = aces(c);
+  c = pow(c, vec3(1. / 2.2));
+  c += (h21(fc) - .5) / 255.;
+  gl_FragColor = vec4(c, 1.);
+}`;
+
+function initGL() {
+  glc = canvas(Math.round(W * SCALE), Math.round(H * SCALE));
+  try { gl = glc.getContext('webgl', { preserveDrawingBuffer: true, antialias: false, alpha: false, depth: false, powerPreference: 'high-performance' }); } catch (e) { gl = null; }
+  if (!gl) return;
+  const sh = (type, src) => { const s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s); if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s)); return s; };
+  try {
+    const prog = gl.createProgram(); gl.attachShader(prog, sh(gl.VERTEX_SHADER, VSH)); gl.attachShader(prog, sh(gl.FRAGMENT_SHADER, FSH)); gl.linkProgram(prog);
+    if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(prog));
+    gl.useProgram(prog);
+    const b = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, b); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+    const al = gl.getAttribLocation(prog, 'a'); gl.enableVertexAttribArray(al); gl.vertexAttribPointer(al, 2, gl.FLOAT, false, 0, 0);
+    const n = gl.getProgramParameter(prog, gl.ACTIVE_UNIFORMS);
+    for (let i = 0; i < n; i++) { const u = gl.getActiveUniform(prog, i), nm = u.name.replace(/\[0\]$/, ''); U[nm] = gl.getUniformLocation(prog, nm); }
+  } catch (e) { console.warn('creation-cosmos: WebGL shader failed, using the 2D fallback', e); gl = null; }
+}
+function setScale(s) { SCALE = s; glc.width = Math.round(W * s); glc.height = Math.round(H * s); }
+const uf = (k, ...v) => U[k] && gl['uniform' + v.length + 'f'](U[k], ...v);
+
+// ======================= the timeline =======================
+const P0 = [0, V ? .1 : .06];                 // where the light is born (uv)
+const L0 = V ? [.2, .2, -1] : [.35, .12, -1], L1 = [.95, .3, .3];
+const LS = norm([.16, .072, 1]);              // the dawn sun in Eden (world)
+const FOC = V ? 1.25 : 1.0;
+const FIGZ = 11, FIGX = -.15;                 // the two figures, relative to the camera's resting place
+const TREES = [[-8.5, 15, 12, 1.3], [-7, 34, 8, 4.1], [11.5, 37, 9, 2.7], [16, 58, 12, 5.2], [-21, 72, 14, 6.6],
+  [-38, 108, 15, 7.4], [30, 138, 16, 8.8], [-70, 160, 20, 2.2], [-12, 182, 12, 9.1], [55, 205, 18, 3.3]];
+function norm(v) { const l = Math.hypot(...v); return v.map(x => x / l); }
+function rot2(a, x, y) { const c = Math.cos(a), s = Math.sin(a); return [c * x + s * y, -s * x + c * y]; }   // = GLSL rot(a) * v
+function irot2(a, x, y) { const c = Math.cos(a), s = Math.sin(a); return [c * x - s * y, s * x + c * y]; }
+const keys = (k, t) => { let i = 0; while (i < k.length - 2 && t > k[i + 1][0]) i++; const a = k[i], b = k[i + 1]; return lerp(a[1], b[1], ss(a[0], b[0], t)); };
+
+// the dive: altitude falls on a log curve (matching the Earth approach), pitch lifts from straight down to level
+const D0 = 24.25, D1 = 29.05, HA = 4000, HB = 1.3;
+function diveH(t) { const s = clamp((t - D0) / (D1 - D0)), f = (1 - s) * (1 - s) * (1 + s); return Math.exp(Math.log(HB) + Math.log(HA / HB) * f); }
+const diveP = t => { const u = Math.max(0, t - 24.9); return lerp(-1.53, -.035, (1 - Math.exp(-u / .55)) * ss(0, .35, u)); };
+let ZT = null, ZE = 0;                         // forward travel, integrated once (deterministic)
+function buildDive() { const n = Math.ceil((D1 - D0) * 400); ZT = new Float64Array(n + 1); let z = 0;
+  for (let i = 0; i <= n; i++) { ZT[i] = z; const t = D0 + i / 400; z += .42 * diveH(t) * Math.cos(diveP(t) * .4) / 400; } ZE = z; }
+function diveCam(t) {
+  let z; if (t <= D0) z = 0; else if (t >= D1) z = ZE + .5 * (t - D1); else { const f = (t - D0) * 400, i = Math.floor(f); z = lerp(ZT[i], ZT[Math.min(ZT.length - 1, i + 1)], f - i); }
+  return { x: 0, y: t >= D1 ? HB : diveH(t), z, p: t >= D1 ? -.035 + .01 * ss(D1, DUR, t) : diveP(t) };
+}
+function proj(c, x, y, z) {                   // world → canvas px with the shader's camera
+  const fw = [0, Math.sin(c.p), Math.cos(c.p)], up = [0, Math.cos(c.p), -Math.sin(c.p)], d = [x - c.x, y - c.y, z - c.z];
+  const zc = d[1] * fw[1] + d[2] * fw[2], xc = d[0], yc = d[1] * up[1] + d[2] * up[2];
+  if (zc < .1) return null; return [W / 2 + xc / zc * FOC * SH, H / 2 - yc / zc * FOC * SH, FOC * SH / zc];
+}
+
+const EK = [[19.4, 90], [21, 14], [22, 7.2], [23, 4.3], [23.6, 3.0], [24, 1.85], [24.3, 1.25], [24.6, 1.06], [25, 1.02]];
+function earthDist(t) {   // log-linear keys, box-smoothed so the approach never jerks
+  let acc = 0; for (let i = -3; i <= 3; i++) { const u = clamp(t + i * .1, EK[0][0], EK[EK.length - 1][0]); let j = 0; while (j < EK.length - 2 && u > EK[j + 1][0]) j++;
+    const a = EK[j], b = EK[j + 1], k = clamp((u - a[0]) / (b[0] - a[0])); acc += Math.log(a[1] - 1) * (1 - k) + Math.log(b[1] - 1) * k; }
+  return 1 + Math.exp(acc / 7); }
+function state(t) {
+  const s = {}, u = Math.max(0, t - T_FL), lit = t >= T_FL;
+  s.deep = 1 - ss(6.8, 7.7, t);
+  s.spirit = [lerp(-1.3 * X - .3, 1.3 * X + .2, ss(.3, 6.6, t)), win(t, .4, 7.0, 1.8, .7) * (1 - ss(6.5, 6.9, t)), .06];
+  let pI = 0, pS = .0032;
+  if (t >= T_IGN && !lit) { pI = ss(T_IGN, T_IGN + .3, t) * (1.5 + .2 * Math.sin((t - T_IGN) * 2.2)) * (1 + .7 * ss(5.1, 6.3, t)); pI *= 1 - .5 * ss(6.3, 6.75, t);
+    pS = .0032 + .0012 * ss(T_IGN, 6.3, t) - .0012 * ss(6.3, 6.75, t); }
+  if (lit) { pI = 5 * Math.exp(-u * 4.5); pS = .004 + .035 * (1 - Math.exp(-u * 3)); }
+  s.pt = [P0[0], P0[1], pI, pS];
+  const R = lit ? 2.6 * (1 - Math.exp(-u * 1.4)) : 0;
+  const E = lit ? (.72 + 1.7 * Math.exp(-u * 2.2)) * ss(T_FL, T_FL + .05, t) * (1 - .35 * ss(12, 17, t)) : 0;
+  const T = keys([[6.8, 1], [7.8, .84], [9, .64], [10.5, .44], [12.5, .27], [15, .12], [18, .05]], t);
+  const Z = lit ? 1.9 * (1 - Math.exp(-u * 1.05)) + .09 * u : 0;
+  s.burst = [R, E, T, Z];
+  s.neb = [lit ? (1 - .45 * ss(13.5, 16.5, t)) * (1 - .55 * ss(18.5, 21.5, t)) * (1 - .92 * ss(21.4, 22.8, t)) : 0, lerp(.3, .5, ss(7.6, 14, t)), .25 + .5 * ss(9, 13, t), ss(10.5, 15.5, t)];
+  s.stars = [ss(9.6, 12.5, t) * (1 - .4 * ss(21.4, 22.8, t)), 9.8, Z * .9];
+  // the galaxy: gathers, turns; the camera flies into one arm
+  const gA = ss(12.6, 14.4, t) * (1 - ss(17.6, 19.4, t)), gS = .07 * Math.exp((t - 13) * .52), roll = .45 + .03 * (t - 13), inc = .48;
+  const tgt = [.44, .2], tg = irot2(roll, tgt[0] * gS, tgt[1] * inc * gS), st0 = [.3 * X, .1], st1 = [.04 - tg[0], -.02 - tg[1]], gk = ss(14.5, 19, t);
+  s.gal = [lerp(st0[0], st1[0], gk), lerp(st0[1], st1[1], gk), gS, .2 * (t - 12)]; s.gal2 = [gA, ss(12.8, 16.2, t), roll, inc];
+  // the young sun and its disc; then the sun is wherever the Earth's light comes from
+  const ek = ss(21.5, 24.2, t), L = norm([lerp(L0[0], L1[0], ek), lerp(L0[1], L1[1], ek), lerp(L0[2], L1[2], ek)]);
+  const sl = [L[0] / Math.max(.05, -L[2]) * 1.6, L[1] / Math.max(.05, -L[2]) * 1.6];
+  const sp0 = [lerp(.05 * X, sl[0], ss(18.6, 21.2, t)), lerp(.02, sl[1], ss(18.6, 21.2, t))];
+  s.sun = [sp0[0], sp0[1], ss(18.4, 19.6, t) * (1 - ss(23.6, 24.4, t)) * (L[2] < -.05 ? 1 : 1 - ss(-.05, .05, L[2])), lerp(.004, .011, ss(18.4, 21, t))];
+  s.disc = [ss(18.8, 19.8, t) * (1 - ss(21.6, 23, t)), .12 * Math.exp((t - 19) * .9), .28, .3];
+  // the Earth
+  const dist = earthDist(t), o = [lerp(-.24 * X, 0, ss(20.6, 24, t)), lerp(-.05, 0, ss(20.6, 24, t))], on = norm([o[0], o[1], -1.6]);
+  s.ec = [on[0] * dist, on[1] * dist, on[2] * dist, ss(19.9, 20.6, t)];
+  const spin = .9 + .05 * t, spE = .9 + .05 * D0;
+  s.ep = [1 - ss(21.2, 22.6, t), ss(21.6, 22.9, t), ss(22.1, 23.4, t), spin];
+  s.tg = [Math.sin(spE), 0, Math.cos(spE)];     // the point under the final dive (spun into place)
+  s.el = L; s.ehaze = ss(23.9, 24.6, t);
+  // the dive
+  s.dive = ss(24.25, 24.6, t);
+  const c = diveCam(t); s.cam = c;
+  s.dv = [(1 - ss(24.5, 25.1, t)) * s.dive * .15, 1 - ss(26.0, 26.6, t), ss(-.72, -.38, c.p), lerp(60, 1400, ss(25.2, 26.0, t))];
+  return s;
+}
+
+// ======================= the man and the woman (2D sprite, backlit) =======================
+function buildFigures() {
+  const FH = 520, c = canvas(FH * 1.1, FH * 1.12), x = c.getContext('2d'), ox = c.width / 2, oy = FH * 1.06;
+  const body = (k, fem, sx) => {   // one figure seen from behind, facing the sunrise; k = height px, sx = x centre
+    const h = k, P = (a, b) => [sx + a * h, oy - b * h];
+    k = x; k.beginPath();
+    const sw = fem ? .1 : .128, ww = fem ? .068 : .085, hw = fem ? .1 : .09;
+    const pts = [[-.03, .865], [-.034, .835], [-sw, .815], [-sw - .012, .78], [-ww - .01, .6], [-ww, .55], [-hw, .47], [-hw + .004, .4], [-.06, .25], [-.05, .12], [-.047, .03], [-.06, 0], [-.012, 0], [-.016, .1], [-.012, .25], [-.008, .45], [0, .47]];
+    const all = pts.concat(pts.slice().reverse().map(([a, b]) => [-a, b]));
+    k.moveTo(...P(all[0][0], all[0][1]));
+    for (let i = 1; i < all.length - 1; i++) { const m = [(all[i][0] + all[i + 1][0]) / 2, (all[i][1] + all[i + 1][1]) / 2]; k.quadraticCurveTo(...P(all[i][0], all[i][1]), ...P(m[0], m[1])); }
+    k.closePath(); k.fill();
+    k.beginPath(); k.ellipse(...P(0, .925), .058 * h, .072 * h, 0, 0, 6.283); k.fill();          // head
+    k.fillRect(...P(-.03, .88), .06 * h, .05 * h);                                                // neck
+    if (fem) { k.beginPath(); k.moveTo(...P(-.055, .95)); k.quadraticCurveTo(...P(-.09, .8), ...P(-.075, .6)); k.quadraticCurveTo(...P(0, .56), ...P(.075, .6));
+      k.quadraticCurveTo(...P(.09, .8), ...P(.055, .95)); k.closePath(); k.fill(); }                  // long hair down her back
+    return P;
+  };
+  const arm = (P, sxs, tx, ty) => { const k = x; k.lineCap = 'round'; k.lineJoin = 'round';
+    k.lineWidth = .045 * FH; k.beginPath(); k.moveTo(...P(sxs * .118, .79)); k.quadraticCurveTo(...P(sxs * .14, .64), ...P(tx, ty)); k.stroke(); };
+  const paint = (col) => { x.fillStyle = col; x.strokeStyle = col;
+    const m = body(FH, false, ox - FH * .17), w = body(FH * .93, true, ox + FH * .16);
+    arm(m, -1, -.15, .42); arm(w, 1, .145, .44);
+    // their hands meet between them
+    x.lineWidth = .04 * FH; x.beginPath(); x.moveTo(...m(.118, .79)); x.quadraticCurveTo(...m(.16, .6), ...m(.185, .47)); x.lineTo(ox - FH * .005, oy - FH * .45);
+    x.lineTo(...w(-.17, .47)); x.quadraticCurveTo(...w(-.15, .6), ...w(-.11, .785)); x.stroke(); };
+  // rim: gold silhouette, then the dark body shifted away from the light, kept inside the silhouette
+  paint('#f2c487');
+  const d = canvas(c.width, c.height), dx = d.getContext('2d');
+  dx.drawImage(c, 0, 0); dx.globalCompositeOperation = 'source-in';
+  const g = dx.createLinearGradient(ox - FH * .4, 0, ox + FH * .4, 0); g.addColorStop(0, '#2e231b'); g.addColorStop(.5, '#382a1f'); g.addColorStop(1, '#433124');
+  dx.fillStyle = g; dx.fillRect(0, 0, d.width, d.height);
+  x.save(); x.globalCompositeOperation = 'source-atop'; x.drawImage(d, -FH * .011, FH * .007); x.restore();
+  // a warm bounce from the meadow on their lower halves, a little light through the woman's hair
+  x.save(); x.globalCompositeOperation = 'source-atop'; const lg = x.createLinearGradient(0, oy - FH * .5, 0, oy); lg.addColorStop(0, 'rgba(120,96,50,0)'); lg.addColorStop(1, 'rgba(110,100,60,.2)'); x.fillStyle = lg; x.fillRect(0, 0, c.width, c.height); x.restore();
+  // soften to the picture's focus
+  const c2 = canvas(c.width, c.height), x2 = c2.getContext('2d'); x2.filter = 'blur(1.6px)'; x2.drawImage(c, 0, 0);
+  return { c: c2, FH, ox, oy };
+}
+function drawFigures(ctx, t, s) {
+  if (!FIG || t < 26.6) return;
+  const c = s.cam, q = proj(c, FIGX, 0, ZE + FIGZ); if (!q) return;
+  const hpx = 1.75 * q[2], k = hpx / FIG.FH, a = ss(26.8, 27.8, t);
+  ctx.save(); ctx.globalAlpha = a;
+  // their long shadow falls toward us
+  const sg = ctx.createRadialGradient(q[0], q[1] + hpx * .06, 0, q[0], q[1] + hpx * .06, hpx * .9);
+  sg.addColorStop(0, 'rgba(20,24,14,.42)'); sg.addColorStop(1, 'rgba(20,24,14,0)');
+  ctx.save(); ctx.translate(q[0], q[1] + hpx * .05); ctx.scale(.55, .22); ctx.translate(-q[0], -(q[1] + hpx * .05)); ctx.fillStyle = sg; ctx.fillRect(q[0] - hpx, q[1] - hpx, hpx * 2, hpx * 2.4); ctx.restore();
+  ctx.drawImage(FIG.c, q[0] - FIG.ox * k, q[1] - FIG.oy * k, FIG.c.width * k, FIG.c.height * k);
+  // the morning mist round their feet
+  const mg = ctx.createRadialGradient(q[0], q[1], 0, q[0], q[1], hpx * .9);
+  mg.addColorStop(0, 'rgba(236,206,168,.32)'); mg.addColorStop(1, 'rgba(236,206,168,0)');
+  ctx.save(); ctx.translate(q[0], q[1]); ctx.scale(1.6, .16); ctx.translate(-q[0], -q[1]); ctx.fillStyle = mg; ctx.fillRect(q[0] - hpx, q[1] - hpx, hpx * 2, hpx * 2); ctx.restore();
+  ctx.restore();
+}
+
+// ======================= foreground meadow (2D, out of focus, backlit) =======================
+let GRASS = null;
+function buildGrass() {
+  const mk = (seed, n, hk, blur, dark) => {
+    const gw = W + 240, gh = Math.round(H * hk), c = canvas(gw, gh), x = c.getContext('2d'), r = rng(seed);
+    for (let i = 0; i < n; i++) {
+      const bx = r() * gw, h = gh * (.2 + .8 * Math.pow(r(), 1.6)), lean = (r() - .5) * h * .55, w = 2 + r() * (V ? 4 : 6);
+      const g = x.createLinearGradient(0, gh - h, 0, gh);
+      g.addColorStop(0, `rgba(235,190,110,${.55 + r() * .35})`); g.addColorStop(.1, dark[0]); g.addColorStop(1, dark[1]);
+      x.fillStyle = g; x.beginPath(); x.moveTo(bx - w, gh + 2);
+      x.quadraticCurveTo(bx + lean * .25, gh - h * .6, bx + lean, gh - h); x.quadraticCurveTo(bx + lean * .25 + w * .4, gh - h * .55, bx + w, gh + 2); x.fill();
+      if (r() < .12) { x.fillStyle = `rgba(255,${200 + r() * 40 | 0},${150 + r() * 60 | 0},.8)`; x.beginPath(); x.arc(bx + lean, gh - h, 3 + r() * 4, 0, 6.283); x.fill(); }   // a seed head catching the sun
+    }
+    const c2 = canvas(gw, gh), x2 = c2.getContext('2d'); x2.filter = `blur(${blur}px)`; x2.drawImage(c, 0, 0); return c2;
+  };
+  GRASS = [mk(31, V ? 260 : 420, V ? .13 : .19, 3, ['#2a3517', '#10170a']), mk(47, V ? 120 : 190, V ? .17 : .25, 8, ['#1a2210', '#080c05'])];
+}
+function drawGrass(ctx, t) {
+  if (!GRASS) return; const k = ss(27.3, 29.6, t); if (k <= 0) return;
+  GRASS.forEach((g, i) => { const sw = Math.sin(t * .35 + i * 1.7) * (8 + i * 10), push = (t - 29) * (6 + i * 10);
+    ctx.drawImage(g, -120 + sw - push * .3, H - g.height * k + i * 10); });
+}
+
+// ======================= 2D fallback (no WebGL) =======================
+function fallback(ctx, t, s) {
+  ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H);
+  const px = (u, v) => [W / 2 + u * SH, H / 2 - v * SH];
+  if (s.dive < 1) {
+    let g;
+    if (s.deep > 0) { g = ctx.createRadialGradient(W * .4, H * .6, 0, W * .4, H * .6, SH); g.addColorStop(0, `rgba(18,16,40,${s.deep})`); g.addColorStop(1, 'rgba(0,0,0,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H); }
+    if (s.burst[1] > 0) { const [cx, cy] = px(s.pt[0], s.pt[1]), r = Math.max(10, s.burst[0] * SH), col = s.burst[2];
+      g = ctx.createRadialGradient(cx, cy, 0, cx, cy, r); g.addColorStop(0, `rgba(255,${200 + 50 * col | 0},${120 + 120 * col | 0},${Math.min(1, .45 + s.burst[1] * .3) * s.neb[0]})`);
+      g.addColorStop(.6, `rgba(${200 + 40 * col | 0},${90 + 80 * col | 0},${120 - 40 * col | 0},${.4 * s.neb[0]})`); g.addColorStop(1, 'rgba(60,20,80,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H); }
+    if (s.pt[2] > 0) { const [cx, cy] = px(s.pt[0], s.pt[1]); g = ctx.createRadialGradient(cx, cy, 0, cx, cy, 30 + s.pt[3] * SH); g.addColorStop(0, `rgba(255,245,225,${Math.min(1, s.pt[2])})`); g.addColorStop(1, 'rgba(255,200,140,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H); }
+    if (s.stars[0] > 0) { const r = rng(7); ctx.fillStyle = '#e8ecff'; for (let i = 0; i < 400; i++) { ctx.globalAlpha = s.stars[0] * r(); ctx.fillRect(r() * W, r() * H, 2, 2); } ctx.globalAlpha = 1; }
+    if (s.ec[3] > 0) { const d = Math.hypot(s.ec[0], s.ec[1], s.ec[2]), rr = 1.6 / Math.sqrt(Math.max(1e-3, d * d - 1)) * SH, [cx, cy] = px(s.ec[0] / -s.ec[2] * 1.6, s.ec[1] / -s.ec[2] * 1.6);
+      g = ctx.createRadialGradient(cx + rr * .4, cy - rr * .2, 0, cx, cy, rr); const m = s.ep[0]; g.addColorStop(0, m > .5 ? '#ff9a40' : '#6aa0e0'); g.addColorStop(.85, m > .5 ? '#5a1a08' : '#0d2a5a'); g.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.globalAlpha = s.ec[3]; ctx.fillStyle = g; ctx.beginPath(); ctx.arc(cx, cy, rr, 0, 6.283); ctx.fill(); ctx.globalAlpha = 1; }
+  }
+  if (s.dive > 0) { ctx.globalAlpha = s.dive; const g = ctx.createLinearGradient(0, 0, 0, H); g.addColorStop(0, '#1d3466'); g.addColorStop(.5, '#f2b27a'); g.addColorStop(.56, '#4a5a3a'); g.addColorStop(1, '#1c2a12');
+    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H); ctx.globalAlpha = 1; }
+}
+
+// ======================= frame =======================
+let lastNow = 0, slow = 0;
+function draw(ctx, t) {
+  const s = state(t);
+  // the words, and the soft beds under them
+  const a0 = win(t, 1.6, 6.5, 1.2, .5), a1 = win(t, 9.3, 14.1, 1.2, .9), a2 = win(t, 28.4, DUR - 1.1, 1.3, 1.1);
+  const y0 = V ? H * .76 : H * .8, y1 = V ? 330 : 170, y2 = V ? 330 : 150, l2 = V ? 78 : 76;
+  const toUV = (yy) => (H / 2 - yy) / SH;
+  let bed = [0, toUV(y0 + 20), .6 * X, .09], bedA = a0 * .3;
+  if (t > 8 && t < 16) { bed = [0, toUV(y1 + 20), .62 * X, .11]; bedA = a1; } else if (t >= 16) { bed = [0, toUV(y2 + 60), .7 * X, V ? .14 : .13]; bedA = a2 * .9; }
+  if (gl) {
+    if (!RENDER) {   // live: keep the frame rate by lowering the shader's resolution on a slow device
+      const now = performance.now(), dt = now - lastNow; lastNow = now;
+      if (dt > 0 && dt < 200) { slow = slow * .95 + (dt > 30 ? 1 : 0) * .05; if (slow > .6 && SCALE > .34) { setScale(Math.max(.34, SCALE - .1)); slow = 0; } }
+    }
+    gl.viewport(0, 0, glc.width, glc.height);
+    uf('uRes', glc.width, glc.height); uf('uT', t);
+    uf('uDeep', s.deep); uf('uSpirit', ...s.spirit); uf('uPt', ...s.pt);
+    uf('uBurst', ...s.burst); uf('uNeb', ...s.neb); uf('uStars', ...s.stars);
+    uf('uGal', ...s.gal); uf('uGal2', ...s.gal2); uf('uSun', ...s.sun); uf('uDisc', ...s.disc);
+    uf('uEC', ...s.ec); uf('uEP', ...s.ep); uf('uEL', ...s.el); uf('uTg', ...s.tg); uf('uEHaze', s.ehaze);
+    uf('uDive', s.dive); uf('uCam', s.cam.x, s.cam.y, s.cam.z, s.cam.p); uf('uFoc', FOC); uf('uLs', ...LS); uf('uDv', ...s.dv); uf('uZE', ZE);
+    if (U.uTree) gl.uniform4fv(U.uTree, TREES.flat());
+    uf('uBed', ...bed); uf('uBedA', bedA); uf('uHill', ss(-.95, -.55, s.cam.p));
+    gl.drawArrays(gl.TRIANGLES, 0, 3);
+    ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = 'high';
+    ctx.drawImage(glc, 0, 0, W, H);
+  } else fallback(ctx, t, s);
+  drawFigures(ctx, t, s);
+  drawGrass(ctx, t);
+
+  const rtl = Pilot.dir === 'rtl';
+  const st = { size: V ? 54 : 52, weight: 600, color: '#fff8ea', shadow: 'rgba(0,0,0,.8)', shadowBlur: 22 }, cs = { size: 24, font: "'Noto Sans KR',sans-serif", color: '#efe4d2', ls: 2, shadow: 'rgba(0,0,0,.85)', shadowBlur: 10 };
+  text(ctx, '01  ·  창조', rtl ? W - (V ? 80 : 110) : (V ? 80 : 110), V ? 190 : 120, { align: rtl ? 'right' : 'left', size: 30, weight: 600, color: '#e8e2d6', shadow: 'rgba(0,0,0,.7)', alpha: win(t, .6, 5, 1, 1), ls: 4 });
+  text(ctx, '“하나님이 이르시되 빛이 있으라”', W / 2, y0, { ...st, alpha: a0 });
+  text(ctx, '창세기 1:3 (개역개정)', W / 2, y0 + 58, { ...cs, alpha: a0 * .85 });
+  text(ctx, '“하시니 빛이 있었고”', W / 2, y1, { ...st, alpha: a1, shadow: 'rgba(50,16,0,.9)' });
+  text(ctx, '창세기 1:3 (개역개정)', W / 2, y1 + 58, { ...cs, alpha: a1 * .85, shadow: 'rgba(50,16,0,.9)' });
+  text(ctx, '“하나님이 지으신 그 모든 것을 보시니\n보시기에 심히 좋았더라”', W / 2, y2, { ...st, alpha: a2, lh: l2 / st.size, shadow: 'rgba(10,16,40,.8)' });
+  text(ctx, '창세기 1:31 (개역개정)', W / 2, y2 + l2 + 58, { ...cs, color: '#fff8ec', alpha: a2 * .95, shadow: 'rgba(10,16,40,.9)' });
+  const f = 1 - ss(0, 1.2, t) + ss(DUR - 1.2, DUR, t); if (f > 0) { ctx.fillStyle = `rgba(0,0,0,${clamp(f)})`; ctx.fillRect(0, 0, W, H); }
+}
+
+Pilot.scene = 'creation';   // the same words as scene 01: use its translations
+Pilot.run({ W, H, dur: DUR, audio: 'creation.m4a', fonts: ["600 40px 'Noto Serif KR'", "400 20px 'Noto Sans KR'"],
+  init: async () => { buildDive(); FIG = buildFigures(); buildGrass(); initGL(); },
+  draw });
+</script>
+</body>
+</html>

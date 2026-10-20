@@ -34,3 +34,16 @@ python3 motion/assemble.py h --upload                                    # 전�
 형식(`pilot/i18n/<lang>/<scene>.json`)이면 됩니다 — `CONTRIBUTING.md`의 "D · 영상 번역"을 보세요.
 
 같은 방식을 다른 프로젝트에서 쓰려면 재사용 가능한 스킬 **canvas-film** (github.com/jungrok5/motion-skills)을 쓰면 됩니다.
+
+## 인스타그램 (한국어만)
+인스타는 3분이 넘는 릴스를 팔로워가 아닌 사람에게 추천하지 않으므로 7편(3장면씩)과 1분 예고편으로 나눠 올립니다.
+`out/<scene>-v.mp4`(장면별 세로 원본)가 있어야 합니다. 결과는 `out/insta/`.
+```
+python3 motion/social/insta_parts.py [1 2 …]     # 1~7편 (배지 + 다음 편 끝화면), 번호를 주면 그 편만
+python3 motion/social/insta_teaser.py            # 1분 예고편 (박자 길이 클립 12개 + 음악 한 곡)
+python3 motion/social/insta_covers.py            # 편별 릴스 표지 (세 장면을 작은 액자로 통째로)
+python3 motion/social/insta_teaser_cover.py      # 예고편 표지
+```
+- H.264로 인코딩합니다(인스타 권장). 앱의 "최고 화질로 업로드"를 켜야 화질이 덜 뭉개집니다.
+- 끝화면의 장면 이름은 한 줄에 하나씩(한 줄로 이으면 화면 밖으로 넘침). 표지는 가운데 3:4 안에 제목을 둡니다.
+- 폰트 경로(`/root/.local/share/fonts/Noto-*.ttf`)는 이 환경 기준이니 다른 곳에서는 바꾸세요.

@@ -7,6 +7,9 @@
    every 2 s, no B-frames). Video sites re-encode each upload in chunks cut at keyframes; with open-GOP/B-frame files some
    renditions show a later frame for a moment at every scene start ("the start jumps"), on some phones only.
 
+   Add --shorts (portrait) to write one file per scene instead of the film, for YouTube Shorts:
+   out/shorts/<lang>/NN-<scene>.mp4 (the upload encode + that scene's sound, 30 ms fades against clicks). No film is made.
+
    Fast: nothing is re-encoded as a whole. Pictures are joined as they are (stream copy); the upload copy is encoded per
    scene once and cached in out/upcache/ (re-made only when that scene's clip is newer). So after fixing one scene,
    re-render that scene and run this again: it takes about as long as encoding that one scene. A scene whose clip was
@@ -64,6 +67,25 @@ def mux(video_paths, dst):
     run(['-f', 'concat', '-safe', '0', '-i', concat_list('vid.txt', video_paths), '-i', sound, '-map', '0:v', '-map', '1:a',
          '-c:v', 'copy', '-c:a', 'aac', '-b:a', '192k', '-movflags', '+faststart', dst])
 
+def upload_encode(s, v):
+    u = os.path.join(UPC, f'{s}{tag}-{ori}.mp4')
+    if v != u and (not os.path.exists(u) or os.path.getmtime(u) < os.path.getmtime(v)):
+        print('  upload encode:', s, flush=True)
+        run(['-i', v, '-map', '0:v', '-c:v', 'libx265', '-preset', 'fast', '-x265-params', X265,
+             '-pix_fmt', 'yuv420p', '-tag:v', 'hvc1', u])
+    return u
+
+if '--shorts' in argv:   # one file per scene (YouTube Shorts), no film
+    SD = os.path.join(OUT, 'shorts', lang); os.makedirs(SD, exist_ok=True)
+    for (s, v, _), aud in zip(have, auds):
+        u = upload_encode(s, v); d = frames(v) / FPS; n = ORDER.index(s) + 1
+        dst = os.path.join(SD, f'{n:02d}-{s}.mp4')
+        run(['-i', u, '-i', aud, '-map', '0:v', '-map', '1:a', '-c:v', 'copy',
+             '-af', f'afade=t=in:d=0.03,afade=t=out:st={d - 0.03:.3f}:d=0.03', '-c:a', 'aac', '-b:a', '192k',
+             '-movflags', '+faststart', dst])
+        print('→', dst, f'{d:.1f}s')
+    sys.exit(0)
+
 dst = os.path.join(OUT, f'film{tag}-{ori}.mp4')
 if any(os.path.dirname(v) == UPC for _, v, _ in have):   # can't mix codecs by stream copy: only the upload copy
     print('master skipped (some scene clips were deleted; their cached upload encodes are used)')
@@ -73,14 +95,7 @@ else:
     print('→', dst, '·', len(have), 'scenes:', ' → '.join(h[0] for h in have))
 
 if '--upload' in argv:
-    ups = []
-    for s, v, _ in have:
-        u = os.path.join(UPC, f'{s}{tag}-{ori}.mp4')
-        if v != u and (not os.path.exists(u) or os.path.getmtime(u) < os.path.getmtime(v)):
-            print('  upload encode:', s, flush=True)
-            run(['-i', v, '-map', '0:v', '-c:v', 'libx265', '-preset', 'fast', '-x265-params', X265,
-                 '-pix_fmt', 'yuv420p', '-tag:v', 'hvc1', u])
-        ups.append(u)
+    ups = [upload_encode(s, v) for s, v, _ in have]
     up = dst[:-4] + '-upload.mp4'
     mux(ups, up)
     print('→', up, '(upload copy)')

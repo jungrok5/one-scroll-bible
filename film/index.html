@@ -239,6 +239,10 @@
   } catch (e) {} }
 
   if (fpsOn) { fpsEl = document.createElement('div'); fpsEl.className = 'fps'; stage.appendChild(fpsEl); }
+  // scrolled out of view (reading the chapter list while listening): the sound plays on, the picture is not drawn
+  var onScreen = true;
+  if ('IntersectionObserver' in window) new IntersectionObserver(function (e) { var v = e[0].isIntersecting; if (v && !onScreen) drawnKey = ''; onScreen = v; }).observe(stage);
+  var shownW = '', shownTm = '';
   var selfPause = false, srcT = 0, fc = 0, fl = performance.now(), lastSeek = -1, drawnKey = '', drawnAt = 0, pending = false, clk = 0, lastNow = performance.now();
   (function loop(now) {
     if (cur >= 0) {
@@ -254,11 +258,13 @@
         // phone's battery); for 1 s after a change it keeps drawing so late-arriving fonts/textures still show up
         var key = front + ':' + loadedIdx[front] + ':' + ori + ':' + t;
         if (key !== drawnKey) { drawnKey = key; drawnAt = now; }
-        if (t !== lastSeek || now - drawnAt < 1000) { try { frames[front].contentWindow.seek(t); } catch (e) {} lastSeek = t; fc++; }
+        if (onScreen && (t !== lastSeek || now - drawnAt < 1000)) { try { frames[front].contentWindow.seek(t); } catch (e) {} lastSeek = t; fc++; }
         if (playing && au.paused && !au.ended && !pending) { pending = true; au.play().catch(function () {}).then(function () { pending = false; }); }
       } else if (playing && !au.paused) { selfPause = true; au.pause(); }   // keep sound in step with the picture while a scene loads
-      $('prog').style.width = (100 * t / S[cur][2]) + '%';
-      $('tm').textContent = fmt(START[cur] + t) + ' / ' + fmt(TOTAL);
+      // the bar and the clock: touch the page only when what they show changes (not 60 times a second)
+      var pw = (100 * t / S[cur][2]).toFixed(1) + '%', tx = fmt(START[cur] + t) + ' / ' + fmt(TOTAL);
+      if (pw !== shownW) { $('prog').style.width = pw; shownW = pw; }
+      if (tx !== shownTm) { $('tm').textContent = tx; shownTm = tx; }
     }
     if (fpsEl && now - fl > 1000) { fpsEl.textContent = Math.round(fc * 1000 / (now - fl)) + ' fps'; fc = 0; fl = now; }
     lastNow = now; requestAnimationFrame(loop);

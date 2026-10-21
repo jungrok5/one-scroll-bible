@@ -130,8 +130,8 @@ function makeSrt(lang, ori) {
     const L = pack ? pack[sc] || {} : null;
     const cues = s.cues.map(c => {
       const lines = c.keys.map(k => { const v = L ? L[k] : k; if (L && v == null) missing++; return String(v ?? k).replace(/\s+/g, ' ').trim(); });
-      return { start: c.start, end: c.end, text: [...new Set(lines)].join('\n') };   // two keys can share one translation
-    });
+      return { start: c.start, end: c.end, text: [...new Set(lines)].filter(Boolean).join('\n') };   // two keys can share one translation; a key translated to '' (a decoration) shows nothing
+    }).filter(c => c.text);
     writeFileSync(join(dir, `${String(i + 1).padStart(2, '0')}-${sc}.srt`), srt(cues));
     all.push(...cues.map(c => ({ ...c, start: c.start + off, end: c.end + off })));
     off += s.frames / FPS;

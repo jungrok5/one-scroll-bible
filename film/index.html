@@ -168,7 +168,7 @@
   addEventListener('resize', size);
 
   function src(i) { return '/film/s/' + S[i][0] + '.html?render=1' + (ori === 'v' ? '&o=v' : '') + (LANG !== 'ko' ? '&lang=' + LANG : ''); }
-  function load(slot, i) { if (loadedIdx[slot] === i && frames[slot].dataset.o === ori) return; loadedIdx[slot] = i; frames[slot].dataset.o = ori; frames[slot].src = src(i); }
+  function load(slot, i) { if (loadedIdx[slot] === i && frames[slot].dataset.o === ori) return; loadedIdx[slot] = i; frames[slot].dataset.o = ori; frames[slot].src = src(i); drawnKey = ''; }
   function ready(slot) { try { var w = frames[slot].contentWindow; return !!(w && w.__ready && w.seek) && loadedIdx[slot] === cur; } catch (e) { return false; } }
 
   function go(i, play) {
@@ -239,7 +239,7 @@
   } catch (e) {} }
 
   if (fpsOn) { fpsEl = document.createElement('div'); fpsEl.className = 'fps'; stage.appendChild(fpsEl); }
-  var selfPause = false, srcT = 0, fc = 0, fl = performance.now(), lastSeek = -1, pending = false, clk = 0, lastNow = performance.now();
+  var selfPause = false, srcT = 0, fc = 0, fl = performance.now(), lastSeek = -1, drawnKey = '', drawnAt = 0, pending = false, clk = 0, lastNow = performance.now();
   (function loop(now) {
     if (cur >= 0) {
       var ok = ready(front), dt = Math.min(.5, (now - lastNow) / 1000);
@@ -250,7 +250,11 @@
       wait.hidden = ok || !started;
       if (ok) {
         if (!playing && au.paused && au.readyState < 1) t = 0;
-        if (t !== lastSeek || !playing) { try { frames[front].contentWindow.seek(t); } catch (e) {} lastSeek = t; fc++; }
+        // draw only when the picture can change: a new time, scene or orientation (paused = no 60 Hz redraw burning a
+        // phone's battery); for 1 s after a change it keeps drawing so late-arriving fonts/textures still show up
+        var key = front + ':' + loadedIdx[front] + ':' + ori + ':' + t;
+        if (key !== drawnKey) { drawnKey = key; drawnAt = now; }
+        if (t !== lastSeek || now - drawnAt < 1000) { try { frames[front].contentWindow.seek(t); } catch (e) {} lastSeek = t; fc++; }
         if (playing && au.paused && !au.ended && !pending) { pending = true; au.play().catch(function () {}).then(function () { pending = false; }); }
       } else if (playing && !au.paused) { selfPause = true; au.pause(); }   // keep sound in step with the picture while a scene loads
       $('prog').style.width = (100 * t / S[cur][2]) + '%';

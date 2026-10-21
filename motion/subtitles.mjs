@@ -63,7 +63,7 @@ async function scan(ori, scenes) {
         return f.call(this, t, x, y, ...r);
       };
     });
-    await page.goto(pathToFileURL(join(here, 'pilot', sc + '.html')).href + `?render=1&o=${ori}`);
+    await page.goto(pathToFileURL(join(here, 'pilot', sc + '.html')).href + `?render=1&nocache=1&o=${ori}`);
     await page.waitForFunction(() => window.__ready === true, null, { timeout: 120000 });
     const dur = await page.evaluate(() => window.DURATION);
     const samples = await page.evaluate(([step, minA]) => {

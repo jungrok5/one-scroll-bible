@@ -57,7 +57,9 @@ async function scan(ori, scenes) {
         const p = m[1].split(','); return p.length > 3 ? +p[3] : 1; };
       CanvasRenderingContext2D.prototype.fillText = function (t, x, y, ...r) {
         const a = this.globalAlpha * alphaOf(this.fillStyle), m = this.getTransform();
-        window.__txt.push([String(t), a, m.b * x + m.d * y + m.f]);
+        const px = m.a * x + m.c * y + m.e, py = m.b * x + m.d * y + m.f, cw = this.canvas.width, ch = this.canvas.height;
+        // only text whose anchor lands inside the frame (camera pans carry labels off-screen)
+        if (px > -cw * .02 && px < cw * 1.02 && py > 0 && py < ch * 1.02) window.__txt.push([String(t), a, py]);
         return f.call(this, t, x, y, ...r);
       };
     });

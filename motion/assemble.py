@@ -10,6 +10,7 @@
    Add --shorts (portrait) to write one file per scene instead of the film, for YouTube Shorts:
    out/shorts/<lang>/NN-<scene>.mp4 (the upload encode + that scene's sound, 30 ms fades against clicks). No film is made.
 
+   Clips rendered straight to the upload format (render.mjs default, H.265) are joined as they are — no encode at all.
    Fast: nothing is re-encoded as a whole. Pictures are joined as they are (stream copy); the upload copy is encoded per
    scene once and cached in out/upcache/ (re-made only when that scene's clip is newer). So after fixing one scene,
    re-render that scene and run this again: it takes about as long as encoding that one scene. A scene whose clip was
@@ -67,7 +68,12 @@ def mux(video_paths, dst):
     run(['-f', 'concat', '-safe', '0', '-i', concat_list('vid.txt', video_paths), '-i', sound, '-map', '0:v', '-map', '1:a',
          '-c:v', 'copy', '-c:a', 'aac', '-b:a', '192k', '-movflags', '+faststart', dst])
 
+def codec(path):
+    return subprocess.run(['ffprobe', '-v', 'error', '-select_streams', 'v:0', '-show_entries', 'stream=codec_name', '-of', 'csv=p=0', path],
+                          capture_output=True, text=True).stdout.strip()
+
 def upload_encode(s, v):
+    if codec(v) == 'hevc': return v   # render.mjs already wrote the upload format (its default): nothing to encode
     u = os.path.join(UPC, f'{s}{tag}-{ori}.mp4')
     if v != u and (not os.path.exists(u) or os.path.getmtime(u) < os.path.getmtime(v)):
         print('  upload encode:', s, flush=True)
@@ -87,6 +93,9 @@ if '--shorts' in argv:   # one file per scene (YouTube Shorts), no film
     sys.exit(0)
 
 dst = os.path.join(OUT, f'film{tag}-{ori}.mp4')
+if '--upload' in argv and all(codec(v) == 'hevc' for _, v, _ in have):   # clips are already the upload format: one file serves both
+    up = dst[:-4] + '-upload.mp4'; mux([v for _, v, _ in have], up)
+    print('→', up, '(upload copy; clips joined as rendered, no encode) ·', len(have), 'scenes'); sys.exit(0)
 if any(os.path.dirname(v) == UPC for _, v, _ in have):   # can't mix codecs by stream copy: only the upload copy
     print('master skipped (some scene clips were deleted; their cached upload encodes are used)')
     if '--upload' not in argv: argv.append('--upload')

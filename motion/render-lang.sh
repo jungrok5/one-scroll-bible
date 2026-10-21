@@ -9,6 +9,10 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 lang=$1; shift; oris=${*:-h v}
 SCENES="opening creation fall patriarch exodus wilderness judges kingdom exile return silence advent cross rise church renewal mirror gospel evidence ship invite"
+# a clip already in the upload format (H.265, the render.mjs default) moves to out/upcache/ — later fixes re-join from there;
+# an old H.264 clip is deleted (its upload encode is already in upcache/)
+keep_or_rm() { mkdir -p motion/out/upcache; for s in $SCENES; do f=motion/out/$s-$lang-$1.mp4; [ -f $f ] || continue
+  if [ "$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 $f)" = hevc ]; then mv -f $f motion/out/upcache/; else rm -f $f; fi; done; }
 for o in $oris; do
   for s in $SCENES; do
     [ -s motion/out/$s-$lang-$o.mp4 ] || [ -s motion/out/upcache/$s-$lang-$o.mp4 ] && continue
@@ -17,12 +21,12 @@ for o in $oris; do
   done
   if [ $o = v ]; then
     python3 motion/assemble.py v --lang $lang --shorts
-    [ $(ls motion/out/shorts/$lang/*.mp4 | wc -l) -eq 21 ] && rm -f $(for s in $SCENES; do echo motion/out/$s-$lang-v.mp4; done)
+    [ $(ls motion/out/shorts/$lang/*.mp4 | wc -l) -eq 21 ] && keep_or_rm v
     echo "[$(date +%H:%M)] done motion/out/shorts/$lang ($(du -sm motion/out/shorts/$lang | cut -f1) MB)"
   else
     python3 motion/assemble.py $o --lang $lang --upload
     up=motion/out/film-$lang-$o-upload.mp4
-    [ -s "$up" ] && rm -f motion/out/film-$lang-$o.mp4 $(for s in $SCENES; do echo motion/out/$s-$lang-$o.mp4; done)
+    [ -s "$up" ] && { rm -f motion/out/film-$lang-$o.mp4; keep_or_rm $o; }
     echo "[$(date +%H:%M)] done $up ($(du -m $up | cut -f1) MB)"
   fi
 done

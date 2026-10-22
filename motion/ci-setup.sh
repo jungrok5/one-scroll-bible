@@ -10,7 +10,11 @@ for f in notosanskr/NotoSansKR[wght].ttf notoserifkr/NotoSerifKR[wght].ttf \
          notosansjp/NotoSansJP[wght].ttf notoserifjp/NotoSerifJP[wght].ttf \
          notosanssc/NotoSansSC[wght].ttf notoserifsc/NotoSerifSC[wght].ttf \
          notosanstc/NotoSansTC[wght].ttf notoseriftc/NotoSerifTC[wght].ttf \
-         notonaskharabic/NotoNaskhArabic[wght].ttf notosansarabic/NotoSansArabic[wdth,wght].ttf; do
+         notonaskharabic/NotoNaskhArabic[wght].ttf notosansarabic/NotoSansArabic[wdth,wght].ttf \
+         notoserifdevanagari/NotoSerifDevanagari[wdth,wght].ttf notosansdevanagari/NotoSansDevanagari[wdth,wght].ttf \
+         notoserifthai/NotoSerifThai[wdth,wght].ttf notosansthai/NotoSansThai[wdth,wght].ttf \
+         notosansmyanmar/NotoSansMyanmar[wdth,wght].ttf \
+         notoserifkhmer/NotoSerifKhmer[wdth,wght].ttf notosanskhmer/NotoSansKhmer[wdth,wght].ttf; do
   out="$FD/$(basename "$f" | tr -d '[],')"
   [ -s "$out" ] || curl -fsSL "$G/$(echo "$f" | sed 's/\[/%5B/g; s/\]/%5D/g')" -o "$out"
 done

@@ -1,0 +1,54 @@
+# Contact sheets for checking a film translation (step 2 of /add-film-language) on a machine that has every Noto font:
+# each scene × both orientations, a few moments each → artifact sheets-<lang> (kept 3 days). Look at every image.
+# Runs by itself when a work branch (not main) changes a merged film language file, for the languages that changed.
+name: film-sheets
+on:
+  workflow_dispatch:
+    inputs:
+      languages:
+        description: "film language codes (space-separated)"
+        required: true
+  push:
+    branches-ignore: [main]
+    paths: ['motion/pilot/i18n/*.json']
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    outputs:
+      langs: ${{ steps.m.outputs.langs }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - id: m
+        run: |
+          langs="${{ inputs.languages }}"
+          if [ -z "$langs" ]; then
+            base="${{ github.event.before }}"; git cat-file -e "$base" 2>/dev/null || base=$(git rev-list --max-parents=0 HEAD | tail -1)
+            langs=$(git diff --name-only "$base" HEAD -- 'motion/pilot/i18n/*.json' | sed -E 's#.*/([^/]+)\.json#\1#' | tr '\n' ' ')
+          fi
+          echo "languages: $langs"
+          j() { printf '['; sep=''; for x in $1; do printf '%s"%s"' "$sep" "$x"; sep=','; done; printf ']'; }
+          echo "langs=$(j "$langs")" >> "$GITHUB_OUTPUT"
+  sheets:
+    needs: plan
+    if: needs.plan.outputs.langs != '[]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        lang: ${{ fromJSON(needs.plan.outputs.langs) }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: bash motion/ci-setup.sh
+      - run: node motion/i18n-scan.mjs ${{ matrix.lang }}
+      - run: node motion/sheets.mjs ${{ matrix.lang }} --n 6
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sheets-${{ matrix.lang }}
+          path: motion/out/sheets/${{ matrix.lang }}/*.png
+          retention-days: 3

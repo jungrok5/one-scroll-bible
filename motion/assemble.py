@@ -58,8 +58,10 @@ if missing: print('skipped (not rendered or no sound yet):', ', '.join(m[0] for 
 # sound: per scene, normalised and cut/padded to the picture's exact length
 auds = []
 for s, v, a in have:
-    d = frames(v) / FPS; out = os.path.join(TMP, f'aud-{s}.wav')
-    run(['-i', a, '-af', f'aresample=48000,loudnorm=I=-16:TP=-1.5:LRA=11,aresample=48000,apad,atrim=0:{d:.6f}',
+    n = frames(v) * 48000 // FPS; out = os.path.join(TMP, f'aud-{s}.wav')
+    # exactly as many samples as the picture has frames: cut by sample count, not by timestamps — an AAC source (the m4a)
+    # carries an encoder delay that made a time-based cut 90 ms short per scene, and the sound drifted ahead of the picture
+    run(['-i', a, '-af', f'aresample=48000,loudnorm=I=-16:TP=-1.5:LRA=11,aresample=48000,atrim=start=0,asetpts=PTS-STARTPTS,apad,atrim=end_sample={n}',
          '-ac', '2', '-ar', '48000', '-c:a', 'pcm_s16le', out])
     auds.append(out)
 sound = os.path.join(TMP, 'sound.wav')

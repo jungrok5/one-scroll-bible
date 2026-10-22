@@ -1,19 +1,19 @@
-{
+﻿{
  "_note": "YouTube video ids on the one-scroll-bible channel (UCtCcbrM2mCgfhSryo4SWxzg). film = the landscape film; status as last set from Studio. The public Korean film's URL was already shared — never replace that video.",
  "film": {
   "ko": { "id": "66VfBSXxAs8", "status": "public", "note": "original upload 2026-10-20; description + thumbnail test (A/B/D) updated 2026-10-22" },
   "ko-vertical": { "id": "3X5HbQKBpRI", "status": "private", "note": "whole vertical film, superseded by the 21 Shorts" },
-  "en": { "id": "IDvto63DZC8", "status": "private" },
-  "es": { "id": "h6HTeZijyr8", "status": "private" },
-  "pt-BR": { "id": "b74m2kxl4jM", "status": "private" },
-  "fr": { "id": "zCPsT6RbqE4", "status": "private" },
-  "de": { "id": "nGR-70YYL-E", "status": "private" },
-  "ru": { "id": "rPBUPZC4PnA", "status": "private" },
-  "id": { "id": "Jntp5xDBBJg", "status": "private" },
-  "zh-Hans": { "id": "4MvbvszEQHU", "status": "private" },
-  "zh-Hant": { "id": "UEr4oQAZS6s", "status": "private" },
-  "ja": { "id": "VIGqzFaWkTU", "status": "private" },
-  "ar": { "id": "IlhNG5Mul9I", "status": "private" }
+  "en": { "id": "IDvto63DZC8", "status": "public", "note": "public + thumbnail test A/B/D 2026-10-22" },
+  "es": { "id": "h6HTeZijyr8", "status": "public", "note": "public + thumbnail test A/B/D 2026-10-22" },
+  "pt-BR": { "id": "b74m2kxl4jM", "status": "public", "note": "public + thumbnail test A/B/D 2026-10-22" },
+  "fr": { "id": "zCPsT6RbqE4", "status": "public", "note": "public + thumbnail test A/B/D 2026-10-22" },
+  "de": { "id": "nGR-70YYL-E", "status": "public", "note": "public + thumbnail test A/B/D 2026-10-22" },
+  "ru": { "id": "rPBUPZC4PnA", "status": "public", "note": "public + thumbnail test A/B/D 2026-10-22" },
+  "id": { "id": "Jntp5xDBBJg", "status": "public", "note": "public + thumbnail test A/B/D 2026-10-22" },
+  "zh-Hans": { "id": "4MvbvszEQHU", "status": "public", "note": "public + thumbnail test A/B/D 2026-10-22" },
+  "zh-Hant": { "id": "UEr4oQAZS6s", "status": "public", "note": "public + thumbnail test A/B/D 2026-10-22" },
+  "ja": { "id": "VIGqzFaWkTU", "status": "public", "note": "public + thumbnail test A/B/D 2026-10-22" },
+  "ar": { "id": "IlhNG5Mul9I", "status": "public", "note": "public + thumbnail test A/B/D 2026-10-22" }
  },
  "shorts": {}
 }

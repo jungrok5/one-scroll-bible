@@ -26,7 +26,7 @@ python3 motion/assemble.py h --upload                                    # 전�
 **장면 하나를 고친 뒤**: 그 장면만 다시 렌더하고 `assemble.py h --upload`를 다시 실행하면 됩니다. 장면 파일을 재압축 없이 이어 붙이고, 업로드용은 장면별로 `out/upcache/`에 저장해 두고 바뀐 장면만 다시 압축하므로 몇 분이면 끝납니다(예전에는 매번 50분). 다른 언어는 `--lang en`, 전체 언어 렌더는 `bash motion/render-lang.sh en`.
 
 **유튜브·인스타에 올릴 때는 반드시 `--upload` 사본(`film-h-upload.mp4`)을 올리세요.** 장면이 바뀌는 곳마다 영상이 잠깐
-튀는 문제(일부 폰·일부 화질에서만 보임)를 막도록 2초마다 완전한 화면을 넣고, 앞뒤 참조를 없앤 구조입니다(H.265, 400MB 이하).
+튀는 문제(일부 폰·일부 화질에서만 보임)를 막도록 2초마다 완전한 화면을 넣고, 앞뒤 참조를 없앤 구조입니다(형식은 아래 **렌더 속도**).
 필요: Node + Playwright(Chromium), ffmpeg, Python 3(numpy · fonttools+brotli), `~/.local/share/fonts`의 Noto 글꼴.
 `motion/`은 배포되지 않고(`.vercelignore`), `motion/out/`은 커밋하지 않습니다.
 
@@ -64,3 +64,21 @@ python3 motion/social/insta_teaser_cover.py      # 예고편 표지
 **GitHub Actions로 병렬 렌더** (`.github/workflows/render-film.yml`, 공개 저장소라 무료·동시 20개): Actions 탭 → render-film →
 Run workflow에서 언어·방향(·시험용 장면)을 넣으면 언어×방향마다 작업이 하나씩 돌고, 결과는 아티팩트(3일 보관)로 받는다
 (`film-<lang>-h` = 가로 전체 영상, `shorts-<lang>` = 쇼츠 21개). 새 머신 준비는 `bash motion/ci-setup.sh`(Noto 가변 글꼴·ffmpeg·Playwright).
+
+## 유튜브 업로드 자료 — 텔레포트·다른 컴퓨터에서 이어서 할 때
+컨테이너를 떠나도 잃지 않도록 **작은 것은 git에, 영상은 GitHub 릴리즈에** 둡니다 (`motion/out/`만 컴퓨터마다 새로 생깁니다).
+
+| 무엇 | 어디 | 다시 만들기 |
+|---|---|---|
+| 영상 (언어별 가로 전체 + 쇼츠 21개) | **GitHub 릴리즈 `youtube-v1`** — `film-<lang>.mp4`, `shorts-<lang>-NN-<scene>.mp4` | Actions → render-film (언어·방향) → 끝나면 Actions → **publish-release**(그 run id)로 릴리즈에 추가 |
+| 썸네일 (언어별 4안 + 생성기) | `motion/youtube/thumbs/<lang>/{A-exodus,B-cross,C-split,D-earth}.jpg` | `python3 motion/youtube/thumbs/make.py [lang…]` (글꼴은 없으면 내려받음) |
+| 자막 (언어별 전체 영상 + 쇼츠별 SRT) | `motion/subs/<lang>/film-h.srt`, `motion/subs/<lang>/{h,v}/NN-<scene>.srt` | `node motion/subtitles.mjs srt <lang> h` (타임라인은 `motion/subs/timeline-<h\|v>.json`, 장면 타이밍이 바뀐 뒤에만 `scan`) |
+| 소리 | 원본 클립 `motion/pilot/audio/*.mp3`(git) + 큐 `pilot/<scene>.sound.json` → 믹스 `pilot/<scene>.wav` | `python3 motion/pilot/mix.py` (wav가 없으면 assemble은 사이트의 `film/s/<scene>.m4a`를 씀 — CI가 만든 영상이 그것) |
+
+```
+gh release download youtube-v1 -R jungrok5/one-scroll-bible -p 'film-de.mp4' -p 'shorts-de-*' -D motion/out/release   # 한 언어
+gh release download youtube-v1 -R jungrok5/one-scroll-bible -D motion/out/release                                      # 전부 (약 20 GB)
+```
+- 썸네일은 네 안 모두 같은 문구("성경 전체를 14분 만에")에 그림만 다릅니다 — 유튜브 스튜디오 **"테스트 및 비교"**에 세 장까지 넣어
+  고르면 됩니다(승자는 시청시간 점유율 기준, 며칠~2주). 오른쪽 아래는 재생시간 배지가 덮으므로 비워 둔 레이아웃입니다.
+- 쇼츠는 커스텀 썸네일을 받지 않고(영상 프레임 중 선택) 자막은 쇼츠별 SRT(`v/NN-*.srt`)를 올립니다.

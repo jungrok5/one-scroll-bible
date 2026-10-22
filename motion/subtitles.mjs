@@ -1,11 +1,11 @@
 // Subtitles for the rendered film, in any language that has a translation file — for YouTube caption tracks on the
 // English (or any) video when that language has no rendered film of its own.
-//   node motion/subtitles.mjs scan h|v [scene…]   → motion/out/subs/timeline-<h|v>.json
+//   node motion/subtitles.mjs scan h|v [scene…]   → motion/subs/timeline-<h|v>.json
 //        Plays every scene in Korean (the source) and records, every 0.2 s, which on-screen strings are visible
 //        (fill alpha ≥ 0.35) and where (y), mapped back to their translation keys. Timing is the same in every
 //        language, so this runs once per orientation (again only after a scene's timing changes).
-//   node motion/subtitles.mjs srt <lang> [h|v]     → motion/out/subs/<lang>/film-<h|v>.srt (the whole film)
-//                                                      + motion/out/subs/<lang>/<h|v>/NN-<scene>.srt (one per Short)
+//   node motion/subtitles.mjs srt <lang> [h|v]     → motion/subs/<lang>/film-<h|v>.srt (the whole film)
+//                                                      + motion/subs/<lang>/<h|v>/NN-<scene>.srt (one per Short)
 //        Fills the timeline with motion/pilot/i18n/<lang>.json. Seconds per language.
 // Rules: counters ("343년") and single characters are skipped; when a sentence is on screen, short labels next to it
 // (map names, plate labels) are dropped so a cue never stacks more than 3 lines; cues shorter than 0.6 s are merged.
@@ -19,7 +19,7 @@ const here = dirname(fileURLToPath(import.meta.url));
 const ORDER = ['opening', 'creation', 'fall', 'patriarch', 'exodus', 'wilderness', 'judges', 'kingdom', 'exile', 'return',
   'silence', 'advent', 'cross', 'rise', 'church', 'renewal', 'mirror', 'gospel', 'evidence', 'ship', 'invite'];
 const FPS = 30, STEP = 0.2, MIN_ALPHA = 0.35, MIN_CUE = 0.6;
-const SUBS = join(here, 'out', 'subs');
+const SUBS = join(here, 'subs');   // committed: the SRTs ride along in git (YouTube caption tracks)
 const [cmd, a1, a2, ...rest] = process.argv.slice(2);
 
 const HANGUL = /[가-힣]/;

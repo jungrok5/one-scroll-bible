@@ -1,0 +1,77 @@
+# Keep rendered films and Shorts for good: copy a render-film run's artifacts (which expire after 3 days) to a GitHub
+# Release, where they stay downloadable with no expiry (one asset per file, 2 GB max each). Start it from the Actions tab
+# ("Run workflow") with the render-film run id (the number in the run's URL); re-running with the same tag adds or
+# replaces assets, so several render runs can fill one release.
+#   release assets:  film-<lang>.mp4   (the whole film, YouTube upload format)
+#                    shorts-<lang>-NN-<scene>.mp4   (the 21 Shorts)
+# Download on any machine:  gh release download <tag> -R jungrok5/one-scroll-bible -p 'film-de.mp4' -p 'shorts-de-*'
+name: publish-release
+on:
+  workflow_dispatch:
+    inputs:
+      run_id:
+        description: "render-film run id whose artifacts to publish (the number in the run URL)"
+        required: true
+      tag:
+        description: "release tag (one release can hold many runs' files)"
+        default: "youtube-v1"
+      languages:
+        description: "languages to publish (space-separated; empty = every language the run rendered)"
+        default: ""
+permissions:
+  contents: write
+  actions: read
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    outputs:
+      langs: ${{ steps.m.outputs.langs }}
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - id: m
+        run: |
+          langs="${{ inputs.languages }}"
+          if [ -z "$langs" ]; then
+            langs=$(gh api "repos/${{ github.repository }}/actions/runs/${{ inputs.run_id }}/artifacts?per_page=100" --jq '.artifacts[].name' \
+                    | sed -nE 's/^(film-(.+)-h|shorts-(.+))$/\2\3/p' | sort -u | tr '\n' ' ')
+          fi
+          echo "languages: $langs"
+          j() { printf '['; sep=''; for x in $1; do printf '%s"%s"' "$sep" "$x"; sep=','; done; printf ']'; }
+          echo "langs=$(j "$langs")" >> "$GITHUB_OUTPUT"
+      - name: create the release if it does not exist yet
+        run: |
+          gh release view "${{ inputs.tag }}" -R "${{ github.repository }}" >/dev/null 2>&1 && exit 0
+          gh release create "${{ inputs.tag }}" -R "${{ github.repository }}" --title "YouTube files (${{ inputs.tag }})" \
+            --notes "Rendered films and Shorts in the YouTube upload format (H.264 CRF 18 ≤ 12 Mbps, closed 2-second GOP, AAC 192 kbps). One asset per file: film-<lang>.mp4 = the whole film, shorts-<lang>-NN-<scene>.mp4 = the 21 Shorts. Thumbnails are in motion/youtube/thumbs/, subtitles in motion/subs/ (in git)."
+  publish:
+    needs: plan
+    if: needs.plan.outputs.langs != '[]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        lang: ${{ fromJSON(needs.plan.outputs.langs) }}
+    env:
+      GH_TOKEN: ${{ github.token }}
+      REPO: ${{ github.repository }}
+      RUN: ${{ inputs.run_id }}
+      TAG: ${{ inputs.tag }}
+      L: ${{ matrix.lang }}
+    steps:
+      - name: download this language's artifacts
+        run: |
+          mkdir -p up
+          if gh run download "$RUN" -R "$REPO" -n "film-$L-h" -D dl-film; then
+            f=$(find dl-film -name '*.mp4' | head -1); [ -n "$f" ] && mv "$f" "up/film-$L.mp4"
+          else echo "no film-$L-h artifact"; fi
+          if gh run download "$RUN" -R "$REPO" -n "shorts-$L" -D dl-shorts; then
+            for f in $(find dl-shorts -name '*.mp4' | sort); do mv "$f" "up/shorts-$L-$(basename "$f")"; done
+          else echo "no shorts-$L artifact"; fi
+          ls -la up; [ -n "$(ls up)" ] || { echo "nothing to publish for $L"; exit 1; }
+      - name: upload to the release
+        run: gh release upload "$TAG" -R "$REPO" --clobber up/*
+      - name: verify
+        run: gh release view "$TAG" -R "$REPO" --json assets --jq '.assets[] | select(.name | test("-'"$L"'[.-]")) | "\(.name) \(.size)"'

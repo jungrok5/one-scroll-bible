@@ -45,4 +45,5 @@ node_modules/
 /motion/out/
 /motion/pilot/*.wav
 /motion/pilot/*.m4a
-/motion/pilot/audio/
+# motion/pilot/audio/ (the ElevenLabs clips the mixes are made from) IS committed: with it and *.sound.json,
+# `python3 motion/pilot/mix.py` rebuilds every <scene>.wav anywhere (the wav/m4a themselves stay generated)

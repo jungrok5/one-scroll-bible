@@ -1,6 +1,6 @@
 # YouTube upload sheet
 
-Videos: release **youtube-v1** (`gh release download youtube-v1 -R jungrok5/one-scroll-bible`). Paths below are relative to the repository root.
+Videos: release **youtube-v1** (`gh release download youtube-v1 -R jungrok5/one-scroll-bible`). Paths are relative to the repository root.
 
 ## ko — 한눈에 보는 성경 이야기
 **Film** `film-ko.mp4` · thumbnail `motion/youtube/thumbs/ko/A-exodus.jpg` (alternatives B/C/D) · captions 11 languages
@@ -40,27 +40,27 @@ Videos: release **youtube-v1** (`gh release download youtube-v1 -R jungrok5/one-
 - tags: 한눈에 보는 성경 이야기, 성경, 성경 이야기, 성경 개관, 구속사, 복음, 예수님, 기독교, 성경 애니메이션, 하나의 줄거리, 창조, 타락, 족장 시대, 출애굽, 광야 여정, 사사 시대, 통일 왕국, 분열 왕국 · 포로, 포로 귀환, 400년 침묵, 예수님의 오심, 십자가, 부활, 교회의 시작, 회복, 거울, 복음의 핵심, 성경은 실화인가, 착하게 살면?, 초대
 
 **Shorts** (`shorts-ko-NN-<scene>.mp4`)
-01. 하나의 줄거리 · 장면 1/21 · 한눈에 보는 성경 이야기  (36.0 s)
-02. 창조 · 장면 2/21 · 한눈에 보는 성경 이야기  (35.0 s)
-03. 타락 · 장면 3/21 · 한눈에 보는 성경 이야기  (34.0 s)
-04. 족장 시대 · 장면 4/21 · 한눈에 보는 성경 이야기  (26.0 s)
-05. 출애굽 · 장면 5/21 · 한눈에 보는 성경 이야기  (44.0 s)
-06. 광야 여정 · 장면 6/21 · 한눈에 보는 성경 이야기  (39.5 s)
-07. 사사 시대 · 장면 7/21 · 한눈에 보는 성경 이야기  (40.0 s)
-08. 통일 왕국 · 장면 8/21 · 한눈에 보는 성경 이야기  (39.0 s)
-09. 분열 왕국 · 포로 · 장면 9/21 · 한눈에 보는 성경 이야기  (36.0 s)
-10. 포로 귀환 · 장면 10/21 · 한눈에 보는 성경 이야기  (38.0 s)
-11. 400년 침묵 · 장면 11/21 · 한눈에 보는 성경 이야기  (34.0 s)
-12. 예수님의 오심 · 장면 12/21 · 한눈에 보는 성경 이야기  (36.0 s)
-13. 십자가 · 장면 13/21 · 한눈에 보는 성경 이야기  (39.0 s)
-14. 부활 · 장면 14/21 · 한눈에 보는 성경 이야기  (27.0 s)
-15. 교회의 시작 · 장면 15/21 · 한눈에 보는 성경 이야기  (35.0 s)
-16. 회복 · 장면 16/21 · 한눈에 보는 성경 이야기  (36.0 s)
-17. 거울 · 장면 17/21 · 한눈에 보는 성경 이야기  (44.5 s)
-18. 복음의 핵심 · 장면 18/21 · 한눈에 보는 성경 이야기  (66.9 s)
-19. 성경은 실화인가 · 장면 19/21 · 한눈에 보는 성경 이야기  (60.0 s)
-20. 착하게 살면? · 장면 20/21 · 한눈에 보는 성경 이야기  (57.5 s)
-21. 초대 · 장면 21/21 · 한눈에 보는 성경 이야기  (57.0 s)
+01. 성경은 결국 한 편의 이야기입니다 1/21  (36 s)
+02. “하나님이 이르시되 빛이 있으라” — 창조 2/21  (35 s)
+03. “네가 어디 있느냐” — 타락 3/21  (34 s)
+04. “하늘을 우러러 뭇별을 셀 수 있나 보라” — 족장 시대 4/21  (26 s)
+05. “내 백성을 보내라” — 출애굽 5/21  (44 s)
+06. 약속의 땅 문 앞에 선 백성, 이제 들어갑니다… — 광야 여정 6/21  (39.5 s)
+07. 왕이 없어 제멋대로 행하다. — 사사 시대 7/21  (40 s)
+08. 사람은 외모를 보거니와 나 여호와는 중심을 보느니라 — 통일 왕국 8/21  (39 s)
+09. 성전이 불타고, 백성은 바벨론으로 끌려갑니다. — 분열 왕국 · 포로 9/21  (36 s)
+10. 여호와로 인하여 기뻐하는 것이 너희의 힘이니라 — 포로 귀환 10/21  (38 s)
+11. 선지자의 음성이 멈춘 400년 — 400년 침묵 11/21  (34 s)
+12. “말씀이 육신이 되어 우리 가운데 거하시매” — 예수님의 오심 12/21  (36 s)
+13. 그 십자가에 달려야 했던 사람은 바로 나였습니다. — 십자가 13/21  (39 s)
+14. “그가 말씀 하시던 대로 살아나셨느니라” — 부활 14/21  (27 s)
+15. “… 땅 끝까지 이르러 내 증인이 되리라” — 교회의 시작 15/21  (35 s)
+16. “모든 눈물을 그 눈에서 닦아 주시니” — 회복 16/21  (36 s)
+17. 결국 가장 깊은 우상은 “하나님 자리에 앉은 나 자신”입니다. — 거울 17/21  (44.5 s)
+18. “행하라”가 아니라 “이루어졌다” — 복음의 핵심 18/21  (66.9 s)
+19. 성경이 진짜 실화인가요? 19/21  (60 s)
+20. 예수님 안 믿어도, 그냥 착하게 살면 되는 것 아닌가요? — 착하게 살면? 20/21  (57.5 s)
+21. 이 사랑은 정보가 아니라 초대입니다. — 초대 21/21  (57 s)
 
 ## en — Bible in One Scroll
 **Film** `film-en.mp4` · thumbnail `motion/youtube/thumbs/en/A-exodus.jpg` (alternatives B/C/D) · captions 11 languages
@@ -100,387 +100,27 @@ Scripture quotations are from the ESV® Bible (The Holy Bible, English Standard 
 - tags: Bible in One Scroll, Bible, Bible story, Bible overview, gospel, Jesus, Christianity, Bible animation, redemptive history, One Story, Creation, The Fall, The Patriarchs, The Exodus, The Wilderness, The Judges, The United Kingdom, The Divided Kingdom & Exile, The Return, The Silent Years, Jesus Comes, The Cross, The Resurrection, The Church Begins, Restoration, The Mirror, The Heart of the Gospel, Is the Bible a True Story?, Just Live a Good Life?, The Invitation
 
 **Shorts** (`shorts-en-NN-<scene>.mp4`)
-01. One Story · Scene 1 of 21 · Bible in One Scroll  (36.0 s)
-02. Creation · Scene 2 of 21 · Bible in One Scroll  (35.0 s)
-03. The Fall · Scene 3 of 21 · Bible in One Scroll  (34.0 s)
-04. The Patriarchs · Scene 4 of 21 · Bible in One Scroll  (26.0 s)
-05. The Exodus · Scene 5 of 21 · Bible in One Scroll  (44.0 s)
-06. The Wilderness · Scene 6 of 21 · Bible in One Scroll  (39.5 s)
-07. The Judges · Scene 7 of 21 · Bible in One Scroll  (40.0 s)
-08. The United Kingdom · Scene 8 of 21 · Bible in One Scroll  (39.0 s)
-09. The Divided Kingdom & Exile · Scene 9 of 21 · Bible in One Scroll  (36.0 s)
-10. The Return · Scene 10 of 21 · Bible in One Scroll  (38.0 s)
-11. The Silent Years · Scene 11 of 21 · Bible in One Scroll  (34.0 s)
-12. Jesus Comes · Scene 12 of 21 · Bible in One Scroll  (36.0 s)
-13. The Cross · Scene 13 of 21 · Bible in One Scroll  (39.0 s)
-14. The Resurrection · Scene 14 of 21 · Bible in One Scroll  (27.0 s)
-15. The Church Begins · Scene 15 of 21 · Bible in One Scroll  (35.0 s)
-16. Restoration · Scene 16 of 21 · Bible in One Scroll  (36.0 s)
-17. The Mirror · Scene 17 of 21 · Bible in One Scroll  (44.5 s)
-18. The Heart of the Gospel · Scene 18 of 21 · Bible in One Scroll  (66.9 s)
-19. Is the Bible a True Story? · Scene 19 of 21 · Bible in One Scroll  (60.0 s)
-20. Just Live a Good Life? · Scene 20 of 21 · Bible in One Scroll  (57.5 s)
-21. The Invitation · Scene 21 of 21 · Bible in One Scroll  (57.0 s)
-
-## es — La Biblia de un vistazo
-**Film** `film-es.mp4` · thumbnail `motion/youtube/thumbs/es/A-exodus.jpg` (alternatives B/C/D) · captions 11 languages
-- title: De la creación al cielo nuevo y la tierra nueva: la historia de la Biblia en 14 minutos
-- description:
-```
-De la creación al cielo nuevo y la tierra nueva: 21 escenas, cada una pintada con su propio estilo, cuentan una sola historia.
-
-Lee toda la historia con calma · la página de la película: https://one-scroll-bible.com/film/?lang=es
-
-0:00 Una sola historia
-0:36 Creación
-1:11 La caída
-1:45 Los patriarcas
-2:11 El éxodo
-2:55 El desierto
-3:34 Los jueces
-4:14 El reino unido
-4:53 El reino dividido · El exilio
-5:29 El regreso del exilio
-6:07 400 años de silencio
-6:41 La venida de Jesús
-7:17 La cruz
-7:56 La resurrección
-8:23 El comienzo de la iglesia
-8:58 La restauración
-9:34 El espejo
-10:19 El corazón del evangelio
-11:25 ¿Es la Biblia una historia real?
-12:25 ¿No basta con ser bueno?
-13:23 La invitación
-
-El texto bíblico ha sido tomado de la versión Reina-Valera © 1960 Sociedades Bíblicas en América Latina; © renovado 1988 Sociedades Bíblicas Unidas. Utilizado con permiso. Reina-Valera 1960® es una marca registrada de Sociedades Bíblicas Unidas, y se puede usar solamente bajo licencia. La licencia CC BY 4.0 del sitio se aplica únicamente a los textos escritos por este sitio — no cubre las citas bíblicas. Las escenas están dibujadas con código; la música y los efectos de sonido se crearon con ElevenLabs.
-
-#Biblia #historiadelaBiblia #resumendelaBiblia
-```
-- tags: La Biblia de un vistazo, Biblia, historia de la Biblia, resumen de la Biblia, evangelio, Jesús, cristianismo, animación bíblica, Una sola historia, Creación, La caída, Los patriarcas, El éxodo, El desierto, Los jueces, El reino unido, El reino dividido · El exilio, El regreso del exilio, 400 años de silencio, La venida de Jesús, La cruz, La resurrección, El comienzo de la iglesia, La restauración, El espejo, El corazón del evangelio, ¿Es la Biblia una historia real?, ¿No basta con ser bueno?
-
-**Shorts** (`shorts-es-NN-<scene>.mp4`)
-01. Una sola historia · Escena 1 de 21 · La Biblia de un vistazo  (36.0 s)
-02. Creación · Escena 2 de 21 · La Biblia de un vistazo  (35.0 s)
-03. La caída · Escena 3 de 21 · La Biblia de un vistazo  (34.0 s)
-04. Los patriarcas · Escena 4 de 21 · La Biblia de un vistazo  (26.0 s)
-05. El éxodo · Escena 5 de 21 · La Biblia de un vistazo  (44.0 s)
-06. El desierto · Escena 6 de 21 · La Biblia de un vistazo  (39.5 s)
-07. Los jueces · Escena 7 de 21 · La Biblia de un vistazo  (40.0 s)
-08. El reino unido · Escena 8 de 21 · La Biblia de un vistazo  (39.0 s)
-09. El reino dividido · El exilio · Escena 9 de 21 · La Biblia de un vistazo  (36.0 s)
-10. El regreso del exilio · Escena 10 de 21 · La Biblia de un vistazo  (38.0 s)
-11. 400 años de silencio · Escena 11 de 21 · La Biblia de un vistazo  (34.0 s)
-12. La venida de Jesús · Escena 12 de 21 · La Biblia de un vistazo  (36.0 s)
-13. La cruz · Escena 13 de 21 · La Biblia de un vistazo  (39.0 s)
-14. La resurrección · Escena 14 de 21 · La Biblia de un vistazo  (27.0 s)
-15. El comienzo de la iglesia · Escena 15 de 21 · La Biblia de un vistazo  (35.0 s)
-16. La restauración · Escena 16 de 21 · La Biblia de un vistazo  (36.0 s)
-17. El espejo · Escena 17 de 21 · La Biblia de un vistazo  (44.5 s)
-18. El corazón del evangelio · Escena 18 de 21 · La Biblia de un vistazo  (66.9 s)
-19. ¿Es la Biblia una historia real? · Escena 19 de 21 · La Biblia de un vistazo  (60.0 s)
-20. ¿No basta con ser bueno? · Escena 20 de 21 · La Biblia de un vistazo  (57.5 s)
-21. La invitación · Escena 21 de 21 · La Biblia de un vistazo  (57.0 s)
-
-## pt-BR — A Bíblia num relance
-**Film** `film-pt-BR.mp4` · thumbnail `motion/youtube/thumbs/pt-BR/A-exodus.jpg` (alternatives B/C/D) · captions 11 languages
-- title: Da criação ao novo céu e à nova terra: a história da Bíblia em 14 minutos
-- description:
-```
-Da criação ao novo céu e à nova terra: 21 cenas, cada uma pintada em seu próprio estilo, contam uma só história.
-
-Leia toda a história com calma · a página do filme: https://one-scroll-bible.com/film/?lang=pt-BR
-
-0:00 Uma só história
-0:36 Criação
-1:11 A queda
-1:45 Os patriarcas
-2:11 O êxodo
-2:55 A jornada no deserto
-3:34 Os juízes
-4:14 O reino unificado
-4:53 O reino dividido · O exílio
-5:29 O regresso do exílio
-6:07 400 anos de silêncio
-6:41 A vinda de Jesus
-7:17 A cruz
-7:56 A ressurreição
-8:23 O começo da igreja
-8:58 A restauração
-9:34 O espelho
-10:19 O centro do evangelho
-11:25 A Bíblia é uma história verdadeira?
-12:25 Não basta ser bom?
-13:23 O convite
-
-Citações bíblicas: Almeida — citadas com indicação da fonte; quaisquer direitos sobre essa tradução permanecem com a sua editora. A licença CC BY 4.0 do site aplica-se apenas aos textos escritos pelo próprio site — não abrange as citações bíblicas. As cenas são desenhadas com código; a música e os efeitos sonoros foram criados com o ElevenLabs.
-
-#Bíblia #históriadaBíblia #resumodaBíblia
-```
-- tags: A Bíblia num relance, Bíblia, história da Bíblia, resumo da Bíblia, evangelho, Jesus, cristianismo, animação bíblica, Uma só história, Criação, A queda, Os patriarcas, O êxodo, A jornada no deserto, Os juízes, O reino unificado, O reino dividido · O exílio, O regresso do exílio, 400 anos de silêncio, A vinda de Jesus, A cruz, A ressurreição, O começo da igreja, A restauração, O espelho, O centro do evangelho, A Bíblia é uma história verdadeira?, Não basta ser bom?, O convite
-
-**Shorts** (`shorts-pt-BR-NN-<scene>.mp4`)
-01. Uma só história · Cena 1 de 21 · A Bíblia num relance  (36.0 s)
-02. Criação · Cena 2 de 21 · A Bíblia num relance  (35.0 s)
-03. A queda · Cena 3 de 21 · A Bíblia num relance  (34.0 s)
-04. Os patriarcas · Cena 4 de 21 · A Bíblia num relance  (26.0 s)
-05. O êxodo · Cena 5 de 21 · A Bíblia num relance  (44.0 s)
-06. A jornada no deserto · Cena 6 de 21 · A Bíblia num relance  (39.5 s)
-07. Os juízes · Cena 7 de 21 · A Bíblia num relance  (40.0 s)
-08. O reino unificado · Cena 8 de 21 · A Bíblia num relance  (39.0 s)
-09. O reino dividido · O exílio · Cena 9 de 21 · A Bíblia num relance  (36.0 s)
-10. O regresso do exílio · Cena 10 de 21 · A Bíblia num relance  (38.0 s)
-11. 400 anos de silêncio · Cena 11 de 21 · A Bíblia num relance  (34.0 s)
-12. A vinda de Jesus · Cena 12 de 21 · A Bíblia num relance  (36.0 s)
-13. A cruz · Cena 13 de 21 · A Bíblia num relance  (39.0 s)
-14. A ressurreição · Cena 14 de 21 · A Bíblia num relance  (27.0 s)
-15. O começo da igreja · Cena 15 de 21 · A Bíblia num relance  (35.0 s)
-16. A restauração · Cena 16 de 21 · A Bíblia num relance  (36.0 s)
-17. O espelho · Cena 17 de 21 · A Bíblia num relance  (44.5 s)
-18. O centro do evangelho · Cena 18 de 21 · A Bíblia num relance  (66.9 s)
-19. A Bíblia é uma história verdadeira? · Cena 19 de 21 · A Bíblia num relance  (60.0 s)
-20. Não basta ser bom? · Cena 20 de 21 · A Bíblia num relance  (57.5 s)
-21. O convite · Cena 21 de 21 · A Bíblia num relance  (57.0 s)
-
-## fr — La Bible en un coup d’œil
-**Film** `film-fr.mp4` · thumbnail `motion/youtube/thumbs/fr/A-exodus.jpg` (alternatives B/C/D) · captions 11 languages
-- title: De la création au nouveau ciel et à la nouvelle terre : l’histoire de la Bible en 14 minutes
-- description:
-```
-De la création au nouveau ciel et à la nouvelle terre : 21 scènes, chacune peinte dans son propre style, racontent une seule histoire.
-
-Lisez toute l’histoire à votre rythme · la page du film: https://one-scroll-bible.com/film/?lang=fr
-
-0:00 Une seule histoire
-0:36 La création
-1:11 La chute
-1:45 Les patriarches
-2:11 L’Exode
-2:55 Le désert
-3:34 Les juges
-4:14 Le royaume unifié
-4:53 Le royaume divisé · L’exil
-5:29 Le retour de l’exil
-6:07 400 ans de silence
-6:41 La venue de Jésus
-7:17 La croix
-7:56 La résurrection
-8:23 Le début de l’Église
-8:58 La restauration
-9:34 Le miroir
-10:19 Le cœur de l’Évangile
-11:25 La Bible est-elle une histoire vraie ?
-12:25 Suffit-il d’être quelqu’un de bien ?
-13:23 L’invitation
-
-Citations bibliques : Louis Segond (LSG), citées avec mention de la source ; les droits éventuels sur cette traduction restent à son éditeur. La licence CC BY 4.0 du site ne s’applique qu’aux textes rédigés par ce site — elle ne couvre pas les citations bibliques. Les scènes sont dessinées par du code ; la musique et les effets sonores ont été créés avec ElevenLabs.
-
-#Bible #histoiredelaBible #résumédelaBible
-```
-- tags: La Bible en un coup d’œil, Bible, histoire de la Bible, résumé de la Bible, Évangile, Jésus, christianisme, animation biblique, Une seule histoire, La création, La chute, Les patriarches, L’Exode, Le désert, Les juges, Le royaume unifié, Le royaume divisé · L’exil, Le retour de l’exil, 400 ans de silence, La venue de Jésus, La croix, La résurrection, Le début de l’Église, La restauration, Le miroir, Le cœur de l’Évangile, La Bible est-elle une histoire vraie ?, Suffit-il d’être quelqu’un de bien ?
-
-**Shorts** (`shorts-fr-NN-<scene>.mp4`)
-01. Une seule histoire · Scène 1 sur 21 · La Bible en un coup d’œil  (36.0 s)
-02. La création · Scène 2 sur 21 · La Bible en un coup d’œil  (35.0 s)
-03. La chute · Scène 3 sur 21 · La Bible en un coup d’œil  (34.0 s)
-04. Les patriarches · Scène 4 sur 21 · La Bible en un coup d’œil  (26.0 s)
-05. L’Exode · Scène 5 sur 21 · La Bible en un coup d’œil  (44.0 s)
-06. Le désert · Scène 6 sur 21 · La Bible en un coup d’œil  (39.5 s)
-07. Les juges · Scène 7 sur 21 · La Bible en un coup d’œil  (40.0 s)
-08. Le royaume unifié · Scène 8 sur 21 · La Bible en un coup d’œil  (39.0 s)
-09. Le royaume divisé · L’exil · Scène 9 sur 21 · La Bible en un coup d’œil  (36.0 s)
-10. Le retour de l’exil · Scène 10 sur 21 · La Bible en un coup d’œil  (38.0 s)
-11. 400 ans de silence · Scène 11 sur 21 · La Bible en un coup d’œil  (34.0 s)
-12. La venue de Jésus · Scène 12 sur 21 · La Bible en un coup d’œil  (36.0 s)
-13. La croix · Scène 13 sur 21 · La Bible en un coup d’œil  (39.0 s)
-14. La résurrection · Scène 14 sur 21 · La Bible en un coup d’œil  (27.0 s)
-15. Le début de l’Église · Scène 15 sur 21 · La Bible en un coup d’œil  (35.0 s)
-16. La restauration · Scène 16 sur 21 · La Bible en un coup d’œil  (36.0 s)
-17. Le miroir · Scène 17 sur 21 · La Bible en un coup d’œil  (44.5 s)
-18. Le cœur de l’Évangile · Scène 18 sur 21 · La Bible en un coup d’œil  (66.9 s)
-19. La Bible est-elle une histoire vraie ? · Scène 19 sur 21 · La Bible en un coup d’œil  (60.0 s)
-20. Suffit-il d’être quelqu’un de bien ? · Scène 20 sur 21 · La Bible en un coup d’œil  (57.5 s)
-21. L’invitation · Scène 21 sur 21 · La Bible en un coup d’œil  (57.0 s)
-
-## de — Die Bibel auf einen Blick
-**Film** `film-de.mp4` · thumbnail `motion/youtube/thumbs/de/A-exodus.jpg` (alternatives B/C/D) · captions 11 languages
-- title: Von der Schöpfung bis zum neuen Himmel und der neuen Erde: die Geschichte der Bibel in 14 Minuten
-- description:
-```
-Von der Schöpfung bis zum neuen Himmel und der neuen Erde: 21 Szenen, jede in ihrem eigenen Stil gemalt, erzählen eine einzige Geschichte.
-
-Die ganze Geschichte in Ruhe lesen · die Filmseite: https://one-scroll-bible.com/film/?lang=de
-
-0:00 Der rote Faden
-0:36 Schöpfung
-1:11 Der Sündenfall
-1:45 Die Erzväter
-2:11 Der Auszug aus Ägypten
-2:55 Die Wüstenwanderung
-3:34 Die Richterzeit
-4:14 Das vereinte Königreich
-4:53 Das geteilte Reich · Das Exil
-5:29 Die Rückkehr aus dem Exil
-6:07 400 Jahre Schweigen
-6:41 Das Kommen Jesu
-7:17 Das Kreuz
-7:56 Die Auferstehung
-8:23 Der Beginn der Gemeinde
-8:58 Die Wiederherstellung
-9:34 Der Spiegel
-10:19 Der Kern des Evangeliums
-11:25 Ist die Bibel eine wahre Geschichte?
-12:25 Genügt es, gut zu sein?
-13:23 Die Einladung
-
-Bibelzitate nach der Lutherbibel (1912), mit Quellenangabe zitiert; etwaige Rechte an dieser Übersetzung verbleiben bei ihrem Herausgeber. Die Lizenz CC BY 4.0 dieser Website gilt nur für die eigenen Texte der Website – nicht für die Bibelzitate. Die Szenen sind mit Code gezeichnet; Musik und Klangeffekte wurden mit ElevenLabs erstellt.
-
-#Bibel #GeschichtederBibel #BibelÜberblick
-```
-- tags: Die Bibel auf einen Blick, Bibel, Geschichte der Bibel, Bibel Überblick, Evangelium, Jesus, Christentum, Bibel Animation, Der rote Faden, Schöpfung, Der Sündenfall, Die Erzväter, Der Auszug aus Ägypten, Die Wüstenwanderung, Die Richterzeit, Das vereinte Königreich, Das geteilte Reich · Das Exil, Die Rückkehr aus dem Exil, 400 Jahre Schweigen, Das Kommen Jesu, Das Kreuz, Die Auferstehung, Der Beginn der Gemeinde, Die Wiederherstellung, Der Spiegel, Der Kern des Evangeliums
-
-**Shorts** (`shorts-de-NN-<scene>.mp4`)
-01. Der rote Faden · Szene 1 von 21 · Die Bibel auf einen Blick  (36.0 s)
-02. Schöpfung · Szene 2 von 21 · Die Bibel auf einen Blick  (35.0 s)
-03. Der Sündenfall · Szene 3 von 21 · Die Bibel auf einen Blick  (34.0 s)
-04. Die Erzväter · Szene 4 von 21 · Die Bibel auf einen Blick  (26.0 s)
-05. Der Auszug aus Ägypten · Szene 5 von 21 · Die Bibel auf einen Blick  (44.0 s)
-06. Die Wüstenwanderung · Szene 6 von 21 · Die Bibel auf einen Blick  (39.5 s)
-07. Die Richterzeit · Szene 7 von 21 · Die Bibel auf einen Blick  (40.0 s)
-08. Das vereinte Königreich · Szene 8 von 21 · Die Bibel auf einen Blick  (39.0 s)
-09. Das geteilte Reich · Das Exil · Szene 9 von 21 · Die Bibel auf einen Blick  (36.0 s)
-10. Die Rückkehr aus dem Exil · Szene 10 von 21 · Die Bibel auf einen Blick  (38.0 s)
-11. 400 Jahre Schweigen · Szene 11 von 21 · Die Bibel auf einen Blick  (34.0 s)
-12. Das Kommen Jesu · Szene 12 von 21 · Die Bibel auf einen Blick  (36.0 s)
-13. Das Kreuz · Szene 13 von 21 · Die Bibel auf einen Blick  (39.0 s)
-14. Die Auferstehung · Szene 14 von 21 · Die Bibel auf einen Blick  (27.0 s)
-15. Der Beginn der Gemeinde · Szene 15 von 21 · Die Bibel auf einen Blick  (35.0 s)
-16. Die Wiederherstellung · Szene 16 von 21 · Die Bibel auf einen Blick  (36.0 s)
-17. Der Spiegel · Szene 17 von 21 · Die Bibel auf einen Blick  (44.5 s)
-18. Der Kern des Evangeliums · Szene 18 von 21 · Die Bibel auf einen Blick  (66.9 s)
-19. Ist die Bibel eine wahre Geschichte? · Szene 19 von 21 · Die Bibel auf einen Blick  (60.0 s)
-20. Genügt es, gut zu sein? · Szene 20 von 21 · Die Bibel auf einen Blick  (57.5 s)
-21. Die Einladung · Szene 21 von 21 · Die Bibel auf einen Blick  (57.0 s)
-
-## ru — Библия с одного взгляда
-**Film** `film-ru.mp4` · thumbnail `motion/youtube/thumbs/ru/A-exodus.jpg` (alternatives B/C/D) · captions 11 languages
-- title: От творения до нового неба и новой земли — история Библии за 14 минут
-- description:
-```
-От творения до нового неба и новой земли — 21 сцена, каждая нарисована в своём стиле, рассказывает одну историю.
-
-Прочитать всю историю не спеша · страница фильма: https://one-scroll-bible.com/film/?lang=ru
-
-0:00 Одна история
-0:36 Творение
-1:11 Грехопадение
-1:45 Эпоха патриархов
-2:11 Исход
-2:55 Странствие по пустыне
-3:34 Эпоха судей
-4:14 Единое царство
-4:53 Разделённое царство · Плен
-5:29 Возвращение из плена
-6:07 400 лет молчания
-6:41 Пришествие Иисуса
-7:17 Крест
-7:56 Воскресение
-8:23 Начало Церкви
-8:58 Восстановление
-9:34 Зеркало
-10:19 Суть Евангелия
-11:25 Библия — правдивая история?
-12:25 Просто быть хорошим?
-13:23 Приглашение
-
-Цитаты из Священного Писания приводятся по Синодальному переводу с указанием источника; все права на этот перевод остаются за его издателем. Лицензия CC BY 4.0 этого сайта распространяется только на собственные тексты сайта и не охватывает цитаты из Писания. Сцены нарисованы программным кодом; музыка и звуковые эффекты созданы с помощью ElevenLabs.
-
-#Библия #историяБиблии #обзорБиблии
-```
-- tags: Библия с одного взгляда, Библия, история Библии, обзор Библии, Евангелие, Иисус, христианство, библейская анимация, Одна история, Творение, Грехопадение, Эпоха патриархов, Исход, Странствие по пустыне, Эпоха судей, Единое царство, Разделённое царство · Плен, Возвращение из плена, 400 лет молчания, Пришествие Иисуса, Крест, Воскресение, Начало Церкви, Восстановление, Зеркало, Суть Евангелия, Библия — правдивая история?, Просто быть хорошим?, Приглашение
-
-**Shorts** (`shorts-ru-NN-<scene>.mp4`)
-01. Одна история · Сцена 1 из 21 · Библия с одного взгляда  (36.0 s)
-02. Творение · Сцена 2 из 21 · Библия с одного взгляда  (35.0 s)
-03. Грехопадение · Сцена 3 из 21 · Библия с одного взгляда  (34.0 s)
-04. Эпоха патриархов · Сцена 4 из 21 · Библия с одного взгляда  (26.0 s)
-05. Исход · Сцена 5 из 21 · Библия с одного взгляда  (44.0 s)
-06. Странствие по пустыне · Сцена 6 из 21 · Библия с одного взгляда  (39.5 s)
-07. Эпоха судей · Сцена 7 из 21 · Библия с одного взгляда  (40.0 s)
-08. Единое царство · Сцена 8 из 21 · Библия с одного взгляда  (39.0 s)
-09. Разделённое царство · Плен · Сцена 9 из 21 · Библия с одного взгляда  (36.0 s)
-10. Возвращение из плена · Сцена 10 из 21 · Библия с одного взгляда  (38.0 s)
-11. 400 лет молчания · Сцена 11 из 21 · Библия с одного взгляда  (34.0 s)
-12. Пришествие Иисуса · Сцена 12 из 21 · Библия с одного взгляда  (36.0 s)
-13. Крест · Сцена 13 из 21 · Библия с одного взгляда  (39.0 s)
-14. Воскресение · Сцена 14 из 21 · Библия с одного взгляда  (27.0 s)
-15. Начало Церкви · Сцена 15 из 21 · Библия с одного взгляда  (35.0 s)
-16. Восстановление · Сцена 16 из 21 · Библия с одного взгляда  (36.0 s)
-17. Зеркало · Сцена 17 из 21 · Библия с одного взгляда  (44.5 s)
-18. Суть Евангелия · Сцена 18 из 21 · Библия с одного взгляда  (66.9 s)
-19. Библия — правдивая история? · Сцена 19 из 21 · Библия с одного взгляда  (60.0 s)
-20. Просто быть хорошим? · Сцена 20 из 21 · Библия с одного взгляда  (57.5 s)
-21. Приглашение · Сцена 21 из 21 · Библия с одного взгляда  (57.0 s)
-
-## id — Alkitab Sekilas
-**Film** `film-id.mp4` · thumbnail `motion/youtube/thumbs/id/A-exodus.jpg` (alternatives B/C/D) · captions 11 languages
-- title: Dari penciptaan sampai langit yang baru dan bumi yang baru — kisah Alkitab dalam 14 menit
-- description:
-```
-Dari penciptaan sampai langit yang baru dan bumi yang baru — 21 adegan, masing-masing dilukis dengan gayanya sendiri, menuturkan satu kisah.
-
-Baca seluruh kisah perlahan · halaman film: https://one-scroll-bible.com/film/?lang=id
-
-0:00 Satu Kisah
-0:36 Penciptaan
-1:11 Kejatuhan
-1:45 Zaman Para Bapa Leluhur
-2:11 Keluaran
-2:55 Perjalanan di Padang Gurun
-3:34 Zaman Hakim-hakim
-4:14 Kerajaan Israel Bersatu
-4:53 Kerajaan Terpecah · Pembuangan
-5:29 Kembali dari Pembuangan
-6:07 400 Tahun Keheningan
-6:41 Kedatangan Yesus
-7:17 Salib
-7:56 Kebangkitan
-8:23 Awal Mula Gereja
-8:58 Pemulihan
-9:34 Cermin
-10:19 Inti Injil
-11:25 Apakah Alkitab Kisah Nyata?
-12:25 Cukup Menjadi Orang Baik?
-13:23 Undangan
-
-Kutipan Alkitab: Terjemahan Baru (TB) — dikutip dengan menyebutkan sumbernya; segala hak atas terjemahan tersebut tetap pada penerbitnya. Lisensi CC BY 4.0 situs ini hanya berlaku untuk tulisan situs ini sendiri — tidak mencakup kutipan Alkitab. Adegan-adegan digambar dengan kode; musik dan efek suara dibuat dengan ElevenLabs.
-
-#Alkitab #kisahAlkitab #ringkasanAlkitab
-```
-- tags: Alkitab Sekilas, Alkitab, kisah Alkitab, ringkasan Alkitab, Injil, Yesus, Kristen, animasi Alkitab, Satu Kisah, Penciptaan, Kejatuhan, Zaman Para Bapa Leluhur, Keluaran, Perjalanan di Padang Gurun, Zaman Hakim-hakim, Kerajaan Israel Bersatu, Kerajaan Terpecah · Pembuangan, Kembali dari Pembuangan, 400 Tahun Keheningan, Kedatangan Yesus, Salib, Kebangkitan, Awal Mula Gereja, Pemulihan, Cermin, Inti Injil, Apakah Alkitab Kisah Nyata?, Cukup Menjadi Orang Baik?, Undangan
-
-**Shorts** (`shorts-id-NN-<scene>.mp4`)
-01. Satu Kisah · Adegan 1 dari 21 · Alkitab Sekilas  (36.0 s)
-02. Penciptaan · Adegan 2 dari 21 · Alkitab Sekilas  (35.0 s)
-03. Kejatuhan · Adegan 3 dari 21 · Alkitab Sekilas  (34.0 s)
-04. Zaman Para Bapa Leluhur · Adegan 4 dari 21 · Alkitab Sekilas  (26.0 s)
-05. Keluaran · Adegan 5 dari 21 · Alkitab Sekilas  (44.0 s)
-06. Perjalanan di Padang Gurun · Adegan 6 dari 21 · Alkitab Sekilas  (39.5 s)
-07. Zaman Hakim-hakim · Adegan 7 dari 21 · Alkitab Sekilas  (40.0 s)
-08. Kerajaan Israel Bersatu · Adegan 8 dari 21 · Alkitab Sekilas  (39.0 s)
-09. Kerajaan Terpecah · Pembuangan · Adegan 9 dari 21 · Alkitab Sekilas  (36.0 s)
-10. Kembali dari Pembuangan · Adegan 10 dari 21 · Alkitab Sekilas  (38.0 s)
-11. 400 Tahun Keheningan · Adegan 11 dari 21 · Alkitab Sekilas  (34.0 s)
-12. Kedatangan Yesus · Adegan 12 dari 21 · Alkitab Sekilas  (36.0 s)
-13. Salib · Adegan 13 dari 21 · Alkitab Sekilas  (39.0 s)
-14. Kebangkitan · Adegan 14 dari 21 · Alkitab Sekilas  (27.0 s)
-15. Awal Mula Gereja · Adegan 15 dari 21 · Alkitab Sekilas  (35.0 s)
-16. Pemulihan · Adegan 16 dari 21 · Alkitab Sekilas  (36.0 s)
-17. Cermin · Adegan 17 dari 21 · Alkitab Sekilas  (44.5 s)
-18. Inti Injil · Adegan 18 dari 21 · Alkitab Sekilas  (66.9 s)
-19. Apakah Alkitab Kisah Nyata? · Adegan 19 dari 21 · Alkitab Sekilas  (60.0 s)
-20. Cukup Menjadi Orang Baik? · Adegan 20 dari 21 · Alkitab Sekilas  (57.5 s)
-21. Undangan · Adegan 21 dari 21 · Alkitab Sekilas  (57.0 s)
+01. In the end, the Bible is one single story 1/21  (36 s)
+02. “And God said, ‘Let there be light’” — Creation 2/21  (35 s)
+03. “Where are you?” — The Fall 3/21  (34 s)
+04. “Look toward heaven, and number the stars, if you are able to number them” — The Patriarchs 4/21  (26 s)
+05. “Let my people go” — The Exodus 5/21  (44 s)
+06. Standing at the edge of the promised land, they prepare to enter… — The Wilderness 6/21  (39.5 s)
+07. But with no king everyone did as they pleased. — The Judges 7/21  (40 s)
+08. Man looks on the outward appearance, but the LORD looks on the heart. — The United Kingdom 8/21  (39 s)
+09. The temple burns and the people are carried to Babylon. — The Divided Kingdom & Exile 9/21  (36 s)
+10. For the joy of the LORD is your strength. — The Return 10/21  (38 s)
+11. 400 years with no prophet’s voice — The Silent Years 11/21  (34 s)
+12. “And the Word became flesh and dwelt among us” — Jesus Comes 12/21  (36 s)
+13. The one who should have hung on that cross was me. — The Cross 13/21  (39 s)
+14. “For he has risen, as he said” — The Resurrection 14/21  (27 s)
+15. “… You will be my witnesses … to the end of the earth” — The Church Begins 15/21  (35 s)
+16. “He will wipe away every tear from their eyes” — Restoration 16/21  (36 s)
+17. In the end, the deepest idol is “myself, seated on God’s throne.” — The Mirror 17/21  (44.5 s)
+18. Not “do this” but “it is finished” — The Heart of the Gospel 18/21  (66.9 s)
+19. Is the Bible really a true story? 19/21  (60 s)
+20. Can’t I just live a good life without believing in Jesus? — Just Live a Good Life? 20/21  (57.5 s)
+21. This love is not information but an invitation. — The Invitation 21/21  (57 s)
 
 ## zh-Hans — 一卷读懂圣经
 **Film** `film-zh-Hans.mp4` · thumbnail `motion/youtube/thumbs/zh-Hans/A-exodus.jpg` (alternatives B/C/D) · captions 11 languages
@@ -520,27 +160,27 @@ Kutipan Alkitab: Terjemahan Baru (TB) — dikutip dengan menyebutkan sumbernya; 
 - tags: 一卷读懂圣经, 圣经, 圣经故事, 圣经概览, 福音, 耶稣, 基督教, 圣经动画, 一个故事, 创造, 堕落, 族长时代, 出埃及, 旷野的旅程, 士师时代, 统一王国, 分裂王国 · 被掳, 被掳归回, 四百年的沉默, 耶稣降临, 十字架, 复活, 教会的开始, 复兴（万物更新）, 镜子, 福音的核心, 圣经是真实的吗, 做好人就够了吗？, 邀请
 
 **Shorts** (`shorts-zh-Hans-NN-<scene>.mp4`)
-01. 一个故事 · 第 1/21 场景 · 一卷读懂圣经  (36.0 s)
-02. 创造 · 第 2/21 场景 · 一卷读懂圣经  (35.0 s)
-03. 堕落 · 第 3/21 场景 · 一卷读懂圣经  (34.0 s)
-04. 族长时代 · 第 4/21 场景 · 一卷读懂圣经  (26.0 s)
-05. 出埃及 · 第 5/21 场景 · 一卷读懂圣经  (44.0 s)
-06. 旷野的旅程 · 第 6/21 场景 · 一卷读懂圣经  (39.5 s)
-07. 士师时代 · 第 7/21 场景 · 一卷读懂圣经  (40.0 s)
-08. 统一王国 · 第 8/21 场景 · 一卷读懂圣经  (39.0 s)
-09. 分裂王国 · 被掳 · 第 9/21 场景 · 一卷读懂圣经  (36.0 s)
-10. 被掳归回 · 第 10/21 场景 · 一卷读懂圣经  (38.0 s)
-11. 四百年的沉默 · 第 11/21 场景 · 一卷读懂圣经  (34.0 s)
-12. 耶稣降临 · 第 12/21 场景 · 一卷读懂圣经  (36.0 s)
-13. 十字架 · 第 13/21 场景 · 一卷读懂圣经  (39.0 s)
-14. 复活 · 第 14/21 场景 · 一卷读懂圣经  (27.0 s)
-15. 教会的开始 · 第 15/21 场景 · 一卷读懂圣经  (35.0 s)
-16. 复兴（万物更新） · 第 16/21 场景 · 一卷读懂圣经  (36.0 s)
-17. 镜子 · 第 17/21 场景 · 一卷读懂圣经  (44.5 s)
-18. 福音的核心 · 第 18/21 场景 · 一卷读懂圣经  (66.9 s)
-19. 圣经是真实的吗 · 第 19/21 场景 · 一卷读懂圣经  (60.0 s)
-20. 做好人就够了吗？ · 第 20/21 场景 · 一卷读懂圣经  (57.5 s)
-21. 邀请 · 第 21/21 场景 · 一卷读懂圣经  (57.0 s)
+01. 圣经归根到底是一个故事 1/21  (36 s)
+02. “神说：‘要有光’” — 创造 2/21  (35 s)
+03. “你在哪里？” — 堕落 3/21  (34 s)
+04. “你向天观看，数算众星，能数得过来吗？” — 族长时代 4/21  (26 s)
+05. “容我的百姓去” — 出埃及 5/21  (44 s)
+06. 站在应许之地门口，他们预备进入…… — 旷野的旅程 6/21  (39.5 s)
+07. 却因没有王而各人任意而行。 — 士师时代 7/21  (40 s)
+08. 人是看外貌；耶和华是看内心 — 统一王国 8/21  (39 s)
+09. 圣殿被焚，百姓被掳到巴比伦。 — 分裂王国 · 被掳 9/21  (36 s)
+10. 因靠耶和华而得的喜乐是你们的力量 — 被掳归回 10/21  (38 s)
+11. 四百年没有先知的声音 — 四百年的沉默 11/21  (34 s)
+12. “道成了肉身，住在我们中间” — 耶稣降临 12/21  (36 s)
+13. 那本该被钉十字架的，正是我。 — 十字架 13/21  (39 s)
+14. “照他所说的，已经复活了” — 复活 14/21  (27 s)
+15. “……直到地极，作我的见证” — 教会的开始 15/21  (35 s)
+16. “神要擦去他们一切的眼泪” — 复兴（万物更新） 16/21  (36 s)
+17. 归根到底，最深的偶像是“坐在神位上的我自己”。 — 镜子 17/21  (44.5 s)
+18. 不是“去做”，而是“成了” — 福音的核心 18/21  (66.9 s)
+19. 圣经真的是真实的故事吗？ 19/21  (60 s)
+20. 不信耶稣，只要好好做个好人不行吗？ — 做好人就够了吗？ 20/21  (57.5 s)
+21. 这份爱不是信息，而是邀请。 — 邀请 21/21  (57 s)
 
 ## zh-Hant — 一卷讀懂聖經
 **Film** `film-zh-Hant.mp4` · thumbnail `motion/youtube/thumbs/zh-Hant/A-exodus.jpg` (alternatives B/C/D) · captions 11 languages
@@ -580,27 +220,27 @@ Kutipan Alkitab: Terjemahan Baru (TB) — dikutip dengan menyebutkan sumbernya; 
 - tags: 一卷讀懂聖經, 聖經, 聖經故事, 聖經概覽, 福音, 耶穌, 基督教, 聖經動畫, 一條主線, 創造, 墮落, 族長時代, 出埃及, 曠野的旅程, 士師時代, 統一王國, 分裂王國 · 被擄, 被擄歸回, 四百年的沉默, 耶穌降臨, 十字架, 復活, 教會的開始, 復興（萬物更新）, 鏡子, 福音的核心, 聖經是真實的嗎？, 做好人就夠了嗎？, 邀請
 
 **Shorts** (`shorts-zh-Hant-NN-<scene>.mp4`)
-01. 一條主線 · 第 1/21 場景 · 一卷讀懂聖經  (36.0 s)
-02. 創造 · 第 2/21 場景 · 一卷讀懂聖經  (35.0 s)
-03. 墮落 · 第 3/21 場景 · 一卷讀懂聖經  (34.0 s)
-04. 族長時代 · 第 4/21 場景 · 一卷讀懂聖經  (26.0 s)
-05. 出埃及 · 第 5/21 場景 · 一卷讀懂聖經  (44.0 s)
-06. 曠野的旅程 · 第 6/21 場景 · 一卷讀懂聖經  (39.5 s)
-07. 士師時代 · 第 7/21 場景 · 一卷讀懂聖經  (40.0 s)
-08. 統一王國 · 第 8/21 場景 · 一卷讀懂聖經  (39.0 s)
-09. 分裂王國 · 被擄 · 第 9/21 場景 · 一卷讀懂聖經  (36.0 s)
-10. 被擄歸回 · 第 10/21 場景 · 一卷讀懂聖經  (38.0 s)
-11. 四百年的沉默 · 第 11/21 場景 · 一卷讀懂聖經  (34.0 s)
-12. 耶穌降臨 · 第 12/21 場景 · 一卷讀懂聖經  (36.0 s)
-13. 十字架 · 第 13/21 場景 · 一卷讀懂聖經  (39.0 s)
-14. 復活 · 第 14/21 場景 · 一卷讀懂聖經  (27.0 s)
-15. 教會的開始 · 第 15/21 場景 · 一卷讀懂聖經  (35.0 s)
-16. 復興（萬物更新） · 第 16/21 場景 · 一卷讀懂聖經  (36.0 s)
-17. 鏡子 · 第 17/21 場景 · 一卷讀懂聖經  (44.5 s)
-18. 福音的核心 · 第 18/21 場景 · 一卷讀懂聖經  (66.9 s)
-19. 聖經是真實的嗎？ · 第 19/21 場景 · 一卷讀懂聖經  (60.0 s)
-20. 做好人就夠了嗎？ · 第 20/21 場景 · 一卷讀懂聖經  (57.5 s)
-21. 邀請 · 第 21/21 場景 · 一卷讀懂聖經  (57.0 s)
+01. 聖經歸根到底是一個故事 1/21  (36 s)
+02. 「神說：『要有光』」 — 創造 2/21  (35 s)
+03. 「你在哪裏？」 — 墮落 3/21  (34 s)
+04. 「你向天觀看，數算眾星，能數得過來嗎？」 — 族長時代 4/21  (26 s)
+05. 「容我的百姓去」 — 出埃及 5/21  (44 s)
+06. 站在應許之地門口，他們預備進入…… — 曠野的旅程 6/21  (39.5 s)
+07. 卻因沒有王而各人任意而行。 — 士師時代 7/21  (40 s)
+08. 人是看外貌；耶和華是看內心 — 統一王國 8/21  (39 s)
+09. 聖殿被焚，百姓被擄到巴比倫。 — 分裂王國 · 被擄 9/21  (36 s)
+10. 因靠耶和華而得的喜樂是你們的力量 — 被擄歸回 10/21  (38 s)
+11. 四百年沒有先知的聲音 — 四百年的沉默 11/21  (34 s)
+12. 「道成了肉身，住在我們中間」 — 耶穌降臨 12/21  (36 s)
+13. 那本該被釘十字架的，正是我。 — 十字架 13/21  (39 s)
+14. 「照他所說的，已經復活了」 — 復活 14/21  (27 s)
+15. 「……直到地極，作我的見證」 — 教會的開始 15/21  (35 s)
+16. 「神要擦去他們一切的眼淚」 — 復興（萬物更新） 16/21  (36 s)
+17. 歸根到底，最深的偶像是「坐在神位上的我自己」。 — 鏡子 17/21  (44.5 s)
+18. 不是「去做」，而是「成了」 — 福音的核心 18/21  (66.9 s)
+19. 聖經真的是真實的故事嗎？ 19/21  (60 s)
+20. 不信耶穌，只要好好做個好人不行嗎？ — 做好人就夠了嗎？ 20/21  (57.5 s)
+21. 這份愛不是信息，而是邀請。 — 邀請 21/21  (57 s)
 
 ## ja — ひと目でわかる聖書の物語
 **Film** `film-ja.mp4` · thumbnail `motion/youtube/thumbs/ja/A-exodus.jpg` (alternatives B/C/D) · captions 11 languages
@@ -640,27 +280,327 @@ Kutipan Alkitab: Terjemahan Baru (TB) — dikutip dengan menyebutkan sumbernya; 
 - tags: ひと目でわかる聖書の物語, 聖書, 聖書の物語, 聖書 概観, 福音, イエス, キリスト教, 聖書 アニメーション, 一つの物語, 創造, 堕落, 族長, 出エジプト, 荒れ野の旅, 士師の時代, 統一王国, 分裂 · 捕囚, 捕囚からの帰還, 四百年の沈黙, イエスの降誕, 十字架, 復活, 教会, 回復, 鏡, 福音の核心, 聖書は実話か, 善く生きれば？, 招き
 
 **Shorts** (`shorts-ja-NN-<scene>.mp4`)
-01. 一つの物語 · 場面 1/21 · ひと目でわかる聖書の物語  (36.0 s)
-02. 創造 · 場面 2/21 · ひと目でわかる聖書の物語  (35.0 s)
-03. 堕落 · 場面 3/21 · ひと目でわかる聖書の物語  (34.0 s)
-04. 族長 · 場面 4/21 · ひと目でわかる聖書の物語  (26.0 s)
-05. 出エジプト · 場面 5/21 · ひと目でわかる聖書の物語  (44.0 s)
-06. 荒れ野の旅 · 場面 6/21 · ひと目でわかる聖書の物語  (39.5 s)
-07. 士師の時代 · 場面 7/21 · ひと目でわかる聖書の物語  (40.0 s)
-08. 統一王国 · 場面 8/21 · ひと目でわかる聖書の物語  (39.0 s)
-09. 分裂 · 捕囚 · 場面 9/21 · ひと目でわかる聖書の物語  (36.0 s)
-10. 捕囚からの帰還 · 場面 10/21 · ひと目でわかる聖書の物語  (38.0 s)
-11. 四百年の沈黙 · 場面 11/21 · ひと目でわかる聖書の物語  (34.0 s)
-12. イエスの降誕 · 場面 12/21 · ひと目でわかる聖書の物語  (36.0 s)
-13. 十字架 · 場面 13/21 · ひと目でわかる聖書の物語  (39.0 s)
-14. 復活 · 場面 14/21 · ひと目でわかる聖書の物語  (27.0 s)
-15. 教会 · 場面 15/21 · ひと目でわかる聖書の物語  (35.0 s)
-16. 回復 · 場面 16/21 · ひと目でわかる聖書の物語  (36.0 s)
-17. 鏡 · 場面 17/21 · ひと目でわかる聖書の物語  (44.5 s)
-18. 福音の核心 · 場面 18/21 · ひと目でわかる聖書の物語  (66.9 s)
-19. 聖書は実話か · 場面 19/21 · ひと目でわかる聖書の物語  (60.0 s)
-20. 善く生きれば？ · 場面 20/21 · ひと目でわかる聖書の物語  (57.5 s)
-21. 招き · 場面 21/21 · ひと目でわかる聖書の物語  (57.0 s)
+01. 聖書は結局、一つの物語です 1/21  (36 s)
+02. 「神は言われた。『光あれ。』」 — 創造 2/21  (35 s)
+03. 「どこにいるのか。」 — 堕落 3/21  (34 s)
+04. 「天を仰いで、星を数えることができるなら、数えてみるがよい。」 — 族長 4/21  (26 s)
+05. 「わたしの民を去らせて……」 — 出エジプト 5/21  (44 s)
+06. 約束の地の入り口に立ち、いよいよ入ろうとします…… — 荒れ野の旅 6/21  (39.5 s)
+07. 王がなく、人々は思いのままにふるまった。 — 士師の時代 7/21  (40 s)
+08. 人は目に映ることを見るが、主は心によって見る。 — 統一王国 8/21  (39 s)
+09. 神殿は焼け、民はバビロンへ引かれます。 — 分裂 · 捕囚 9/21  (36 s)
+10. 主を喜び祝うことこそ、あなたたちの力の源である。 — 捕囚からの帰還 10/21  (38 s)
+11. 四百年、預言者の声が絶えた — 四百年の沈黙 11/21  (34 s)
+12. 「言は肉となって、わたしたちの間に宿られた。」 — イエスの降誕 12/21  (36 s)
+13. その十字架にかかるべきだったのは、ほかならぬわたしでした。 — 十字架 13/21  (39 s)
+14. 「かねて言われていたとおり、復活なさったのだ。」 — 復活 14/21  (27 s)
+15. 「……地の果てに至るまで、わたしの証人となる。」 — 教会 15/21  (35 s)
+16. 「彼らの目の涙をことごとくぬぐい取ってくださる。」 — 回復 16/21  (36 s)
+17. 結局、最も深い偶像は「神の座に着いた自分自身」です。 — 鏡 17/21  (44.5 s)
+18. 「行え」ではなく「成し遂げられた」 — 福音の核心 18/21  (66.9 s)
+19. 聖書は本当に実話なのでしょうか。 19/21  (60 s)
+20. イエスを信じなくても、ただ善く生きればいいのでは？ — 善く生きれば？ 20/21  (57.5 s)
+21. この愛は情報ではなく、招きです。 — 招き 21/21  (57 s)
+
+## es — La Biblia de un vistazo
+**Film** `film-es.mp4` · thumbnail `motion/youtube/thumbs/es/A-exodus.jpg` (alternatives B/C/D) · captions 11 languages
+- title: De la creación al cielo nuevo y la tierra nueva: la historia de la Biblia en 14 minutos
+- description:
+```
+De la creación al cielo nuevo y la tierra nueva: 21 escenas, cada una pintada con su propio estilo, cuentan una sola historia.
+
+Lee toda la historia con calma · la página de la película: https://one-scroll-bible.com/film/?lang=es
+
+0:00 Una sola historia
+0:36 Creación
+1:11 La caída
+1:45 Los patriarcas
+2:11 El éxodo
+2:55 El desierto
+3:34 Los jueces
+4:14 El reino unido
+4:53 El reino dividido · El exilio
+5:29 El regreso del exilio
+6:07 400 años de silencio
+6:41 La venida de Jesús
+7:17 La cruz
+7:56 La resurrección
+8:23 El comienzo de la iglesia
+8:58 La restauración
+9:34 El espejo
+10:19 El corazón del evangelio
+11:25 ¿Es la Biblia una historia real?
+12:25 ¿No basta con ser bueno?
+13:23 La invitación
+
+El texto bíblico ha sido tomado de la versión Reina-Valera © 1960 Sociedades Bíblicas en América Latina; © renovado 1988 Sociedades Bíblicas Unidas. Utilizado con permiso. Reina-Valera 1960® es una marca registrada de Sociedades Bíblicas Unidas, y se puede usar solamente bajo licencia. La licencia CC BY 4.0 del sitio se aplica únicamente a los textos escritos por este sitio — no cubre las citas bíblicas. Las escenas están dibujadas con código; la música y los efectos de sonido se crearon con ElevenLabs.
+
+#Biblia #historiadelaBiblia #resumendelaBiblia
+```
+- tags: La Biblia de un vistazo, Biblia, historia de la Biblia, resumen de la Biblia, evangelio, Jesús, cristianismo, animación bíblica, Una sola historia, Creación, La caída, Los patriarcas, El éxodo, El desierto, Los jueces, El reino unido, El reino dividido · El exilio, El regreso del exilio, 400 años de silencio, La venida de Jesús, La cruz, La resurrección, El comienzo de la iglesia, La restauración, El espejo, El corazón del evangelio, ¿Es la Biblia una historia real?, ¿No basta con ser bueno?
+
+**Shorts** (`shorts-es-NN-<scene>.mp4`)
+01. La Biblia es, al final, una sola historia 1/21  (36 s)
+02. «Y dijo Dios: Sea la luz» — Creación 2/21  (35 s)
+03. «¿Dónde estás tú?» — La caída 3/21  (34 s)
+04. «Mira ahora los cielos, y cuenta las estrellas, si las puedes contar» — Los patriarcas 4/21  (26 s)
+05. «Deja ir a mi pueblo» — El éxodo 5/21  (44 s)
+06. De pie ante la tierra prometida, se disponen a entrar… — El desierto 6/21  (39.5 s)
+07. Pero, sin rey, cada cual hace lo que bien le parece. — Los jueces 7/21  (40 s)
+08. El hombre mira lo que está delante de sus ojos, pero Jehová mira el corazón. — El reino unido 8/21  (39 s)
+09. El templo arde y el pueblo es llevado a Babilonia. — El reino dividido · El exilio 9/21  (36 s)
+10. Porque el gozo de Jehová es vuestra fuerza. — El regreso del exilio 10/21  (38 s)
+11. 400 años sin voz profética — 400 años de silencio 11/21  (34 s)
+12. «Y aquel Verbo fue hecho carne, y habitó entre nosotros» — La venida de Jesús 12/21  (36 s)
+13. Quien debía estar en aquella cruz era yo. — La cruz 13/21  (39 s)
+14. «Pues ha resucitado, como dijo» — La resurrección 14/21  (27 s)
+15. «… Me seréis testigos … hasta lo último de la tierra» — El comienzo de la iglesia 15/21  (35 s)
+16. «Enjugará Dios toda lágrima de los ojos de ellos» — La restauración 16/21  (36 s)
+17. Al final, el ídolo más profundo es «yo mismo sentado en el trono de Dios». — El espejo 17/21  (44.5 s)
+18. No «haz», sino «consumado es» — El corazón del evangelio 18/21  (66.9 s)
+19. ¿De verdad la Biblia es una historia real? 19/21  (60 s)
+20. ¿No basta con ser buena persona, aunque no crea en Jesús? — ¿No basta con ser bueno? 20/21  (57.5 s)
+21. Este amor no es información, sino una invitación. — La invitación 21/21  (57 s)
+
+## pt-BR — A Bíblia num relance
+**Film** `film-pt-BR.mp4` · thumbnail `motion/youtube/thumbs/pt-BR/A-exodus.jpg` (alternatives B/C/D) · captions 11 languages
+- title: Da criação ao novo céu e à nova terra: a história da Bíblia em 14 minutos
+- description:
+```
+Da criação ao novo céu e à nova terra: 21 cenas, cada uma pintada em seu próprio estilo, contam uma só história.
+
+Leia toda a história com calma · a página do filme: https://one-scroll-bible.com/film/?lang=pt-BR
+
+0:00 Uma só história
+0:36 Criação
+1:11 A queda
+1:45 Os patriarcas
+2:11 O êxodo
+2:55 A jornada no deserto
+3:34 Os juízes
+4:14 O reino unificado
+4:53 O reino dividido · O exílio
+5:29 O regresso do exílio
+6:07 400 anos de silêncio
+6:41 A vinda de Jesus
+7:17 A cruz
+7:56 A ressurreição
+8:23 O começo da igreja
+8:58 A restauração
+9:34 O espelho
+10:19 O centro do evangelho
+11:25 A Bíblia é uma história verdadeira?
+12:25 Não basta ser bom?
+13:23 O convite
+
+Citações bíblicas: Almeida — citadas com indicação da fonte; quaisquer direitos sobre essa tradução permanecem com a sua editora. A licença CC BY 4.0 do site aplica-se apenas aos textos escritos pelo próprio site — não abrange as citações bíblicas. As cenas são desenhadas com código; a música e os efeitos sonoros foram criados com o ElevenLabs.
+
+#Bíblia #históriadaBíblia #resumodaBíblia
+```
+- tags: A Bíblia num relance, Bíblia, história da Bíblia, resumo da Bíblia, evangelho, Jesus, cristianismo, animação bíblica, Uma só história, Criação, A queda, Os patriarcas, O êxodo, A jornada no deserto, Os juízes, O reino unificado, O reino dividido · O exílio, O regresso do exílio, 400 anos de silêncio, A vinda de Jesus, A cruz, A ressurreição, O começo da igreja, A restauração, O espelho, O centro do evangelho, A Bíblia é uma história verdadeira?, Não basta ser bom?, O convite
+
+**Shorts** (`shorts-pt-BR-NN-<scene>.mp4`)
+01. A Bíblia é, no fim, uma só história 1/21  (36 s)
+02. «E disse Deus: Haja luz» — Criação 2/21  (35 s)
+03. «Onde estás?» — A queda 3/21  (34 s)
+04. «Olha, agora, para os céus e conta as estrelas, se as podes contar» — Os patriarcas 4/21  (26 s)
+05. «Deixa ir o meu povo» — O êxodo 5/21  (44 s)
+06. Diante da terra prometida, preparam-se para entrar… — A jornada no deserto 6/21  (39.5 s)
+07. Mas, sem rei, cada um faz o que acha mais reto. — Os juízes 7/21  (40 s)
+08. Pois o homem vê o que está diante dos olhos, porém o SENHOR olha para o coração. 8/21  (39 s)
+09. O templo arde e o povo é levado à Babilônia. — O reino dividido · O exílio 9/21  (36 s)
+10. Porque a alegria do SENHOR é a vossa força. — O regresso do exílio 10/21  (38 s)
+11. 400 anos sem voz profética — 400 anos de silêncio 11/21  (34 s)
+12. «E o Verbo se fez carne e habitou entre nós» — A vinda de Jesus 12/21  (36 s)
+13. Quem devia estar naquela cruz era eu. — A cruz 13/21  (39 s)
+14. «Porque já ressuscitou, como tinha dito» — A ressurreição 14/21  (27 s)
+15. «… Ser-me-eis testemunhas … até aos confins da terra» — O começo da igreja 15/21  (35 s)
+16. «E Deus limpará de seus olhos toda lágrima» — A restauração 16/21  (36 s)
+17. No fim, o ídolo mais profundo é «eu mesmo sentado no trono de Deus». — O espelho 17/21  (44.5 s)
+18. Não «faça», mas «está consumado» — O centro do evangelho 18/21  (66.9 s)
+19. A Bíblia é mesmo uma história verdadeira? 19/21  (60 s)
+20. Não basta ser uma boa pessoa, mesmo sem crer em Jesus? — Não basta ser bom? 20/21  (57.5 s)
+21. Este amor não é informação, mas um convite. — O convite 21/21  (57 s)
+
+## fr — La Bible en un coup d’œil
+**Film** `film-fr.mp4` · thumbnail `motion/youtube/thumbs/fr/A-exodus.jpg` (alternatives B/C/D) · captions 11 languages
+- title: De la création au nouveau ciel et à la nouvelle terre : l’histoire de la Bible en 14 minutes
+- description:
+```
+De la création au nouveau ciel et à la nouvelle terre : 21 scènes, chacune peinte dans son propre style, racontent une seule histoire.
+
+Lisez toute l’histoire à votre rythme · la page du film: https://one-scroll-bible.com/film/?lang=fr
+
+0:00 Une seule histoire
+0:36 La création
+1:11 La chute
+1:45 Les patriarches
+2:11 L’Exode
+2:55 Le désert
+3:34 Les juges
+4:14 Le royaume unifié
+4:53 Le royaume divisé · L’exil
+5:29 Le retour de l’exil
+6:07 400 ans de silence
+6:41 La venue de Jésus
+7:17 La croix
+7:56 La résurrection
+8:23 Le début de l’Église
+8:58 La restauration
+9:34 Le miroir
+10:19 Le cœur de l’Évangile
+11:25 La Bible est-elle une histoire vraie ?
+12:25 Suffit-il d’être quelqu’un de bien ?
+13:23 L’invitation
+
+Citations bibliques : Louis Segond (LSG), citées avec mention de la source ; les droits éventuels sur cette traduction restent à son éditeur. La licence CC BY 4.0 du site ne s’applique qu’aux textes rédigés par ce site — elle ne couvre pas les citations bibliques. Les scènes sont dessinées par du code ; la musique et les effets sonores ont été créés avec ElevenLabs.
+
+#Bible #histoiredelaBible #résumédelaBible
+```
+- tags: La Bible en un coup d’œil, Bible, histoire de la Bible, résumé de la Bible, Évangile, Jésus, christianisme, animation biblique, Une seule histoire, La création, La chute, Les patriarches, L’Exode, Le désert, Les juges, Le royaume unifié, Le royaume divisé · L’exil, Le retour de l’exil, 400 ans de silence, La venue de Jésus, La croix, La résurrection, Le début de l’Église, La restauration, Le miroir, Le cœur de l’Évangile, La Bible est-elle une histoire vraie ?, Suffit-il d’être quelqu’un de bien ?
+
+**Shorts** (`shorts-fr-NN-<scene>.mp4`)
+01. La Bible est, au fond, une seule histoire 1/21  (36 s)
+02. « Dieu dit : Que la lumière soit ! » — La création 2/21  (35 s)
+03. « Où es-tu ? » — La chute 3/21  (34 s)
+04. « Regarde vers le ciel, et compte les étoiles, si tu peux les compter » — Les patriarches 4/21  (26 s)
+05. « Laisse aller mon peuple » — L’Exode 5/21  (44 s)
+06. Devant la terre promise, ils s’apprêtent à entrer… — Le désert 6/21  (39.5 s)
+07. Mais, sans roi, chacun fait ce qui lui semble bon. — Les juges 7/21  (40 s)
+08. L’homme regarde à ce qui frappe les yeux, mais l’Éternel regarde au cœur. — Le royaume unifié 8/21  (39 s)
+09. Le temple brûle, et le peuple est emmené à Babylone. — Le royaume divisé · L’exil 9/21  (36 s)
+10. La joie de l’Éternel sera votre force. — Le retour de l’exil 10/21  (38 s)
+11. 400 ans sans voix prophétique — 400 ans de silence 11/21  (34 s)
+12. « Et la parole a été faite chair, et elle a habité parmi nous » — La venue de Jésus 12/21  (36 s)
+13. Celui qui aurait dû être sur cette croix, c’était moi. — La croix 13/21  (39 s)
+14. « Il est ressuscité, comme il l’avait dit » — La résurrection 14/21  (27 s)
+15. « … Vous serez mes témoins … jusqu’aux extrémités de la terre » — Le début de l’Église 15/21  (35 s)
+16. « Il essuiera toute larme de leurs yeux » — La restauration 16/21  (36 s)
+17. Au fond, l’idole la plus profonde, c’est « moi-même assis sur le trône de Dieu ». — Le miroir 17/21  (44.5 s)
+18. Non « fais », mais « tout est accompli » — Le cœur de l’Évangile 18/21  (66.9 s)
+19. La Bible est-elle vraiment une histoire vraie ? 19/21  (60 s)
+20. Ne suffit-il pas d’être quelqu’un de bien, même sans croire en Jésus ? 20/21  (57.5 s)
+21. Cet amour n’est pas une information, mais une invitation. — L’invitation 21/21  (57 s)
+
+## de — Die Bibel auf einen Blick
+**Film** `film-de.mp4` · thumbnail `motion/youtube/thumbs/de/A-exodus.jpg` (alternatives B/C/D) · captions 11 languages
+- title: Von der Schöpfung bis zum neuen Himmel und der neuen Erde: die Geschichte der Bibel in 14 Minuten
+- description:
+```
+Von der Schöpfung bis zum neuen Himmel und der neuen Erde: 21 Szenen, jede in ihrem eigenen Stil gemalt, erzählen eine einzige Geschichte.
+
+Die ganze Geschichte in Ruhe lesen · die Filmseite: https://one-scroll-bible.com/film/?lang=de
+
+0:00 Der rote Faden
+0:36 Schöpfung
+1:11 Der Sündenfall
+1:45 Die Erzväter
+2:11 Der Auszug aus Ägypten
+2:55 Die Wüstenwanderung
+3:34 Die Richterzeit
+4:14 Das vereinte Königreich
+4:53 Das geteilte Reich · Das Exil
+5:29 Die Rückkehr aus dem Exil
+6:07 400 Jahre Schweigen
+6:41 Das Kommen Jesu
+7:17 Das Kreuz
+7:56 Die Auferstehung
+8:23 Der Beginn der Gemeinde
+8:58 Die Wiederherstellung
+9:34 Der Spiegel
+10:19 Der Kern des Evangeliums
+11:25 Ist die Bibel eine wahre Geschichte?
+12:25 Genügt es, gut zu sein?
+13:23 Die Einladung
+
+Bibelzitate nach der Lutherbibel (1912), mit Quellenangabe zitiert; etwaige Rechte an dieser Übersetzung verbleiben bei ihrem Herausgeber. Die Lizenz CC BY 4.0 dieser Website gilt nur für die eigenen Texte der Website – nicht für die Bibelzitate. Die Szenen sind mit Code gezeichnet; Musik und Klangeffekte wurden mit ElevenLabs erstellt.
+
+#Bibel #GeschichtederBibel #BibelÜberblick
+```
+- tags: Die Bibel auf einen Blick, Bibel, Geschichte der Bibel, Bibel Überblick, Evangelium, Jesus, Christentum, Bibel Animation, Der rote Faden, Schöpfung, Der Sündenfall, Die Erzväter, Der Auszug aus Ägypten, Die Wüstenwanderung, Die Richterzeit, Das vereinte Königreich, Das geteilte Reich · Das Exil, Die Rückkehr aus dem Exil, 400 Jahre Schweigen, Das Kommen Jesu, Das Kreuz, Die Auferstehung, Der Beginn der Gemeinde, Die Wiederherstellung, Der Spiegel, Der Kern des Evangeliums
+
+**Shorts** (`shorts-de-NN-<scene>.mp4`)
+01. Die Bibel ist am Ende eine einzige Geschichte 1/21  (36 s)
+02. „Und Gott sprach: Es werde Licht!“ — Schöpfung 2/21  (35 s)
+03. „Wo bist du?“ — Der Sündenfall 3/21  (34 s)
+04. „Siehe gen Himmel und zähle die Sterne; kannst du sie zählen?“ — Die Erzväter 4/21  (26 s)
+05. „Laß mein Volk ziehen“ — Der Auszug aus Ägypten 5/21  (44 s)
+06. Vor den Toren des verheißenen Landes steht das Volk – nun zieht es hinein… 6/21  (39.5 s)
+07. Doch ohne König tat jeder, was er wollte. — Die Richterzeit 7/21  (40 s)
+08. Ein Mensch sieht, was vor Augen ist; der HERR aber sieht das Herz an. — Das vereinte Königreich 8/21  (39 s)
+09. Der Tempel brennt, und das Volk wird nach Babylon weggeführt. — Das geteilte Reich · Das Exil 9/21  (36 s)
+10. Denn die Freude am HERRN ist eure Stärke. — Die Rückkehr aus dem Exil 10/21  (38 s)
+11. 400 Jahre ohne prophetische Stimme — 400 Jahre Schweigen 11/21  (34 s)
+12. „Und das Wort ward Fleisch und wohnte unter uns“ — Das Kommen Jesu 12/21  (36 s)
+13. Wer an jenem Kreuz hätte hängen müssen, war ich. — Das Kreuz 13/21  (39 s)
+14. „Er ist auferstanden, wie er gesagt hat“ — Die Auferstehung 14/21  (27 s)
+15. „… Und werdet meine Zeugen sein … bis an das Ende der Erde“ — Der Beginn der Gemeinde 15/21  (35 s)
+16. „Und Gott wird abwischen alle Tränen von ihren Augen“ — Die Wiederherstellung 16/21  (36 s)
+17. Am Ende ist der tiefste Götze „ich selbst auf dem Thron Gottes“. — Der Spiegel 17/21  (44.5 s)
+18. Nicht „Tue das“, sondern „Es ist vollbracht“ — Der Kern des Evangeliums 18/21  (66.9 s)
+19. Ist die Bibel wirklich eine wahre Geschichte? 19/21  (60 s)
+20. Genügt es nicht, ein guter Mensch zu sein, auch ohne an Jesus zu glauben? 20/21  (57.5 s)
+21. Diese Liebe ist keine Information, sondern eine Einladung. — Die Einladung 21/21  (57 s)
+
+## ru — Библия с одного взгляда
+**Film** `film-ru.mp4` · thumbnail `motion/youtube/thumbs/ru/A-exodus.jpg` (alternatives B/C/D) · captions 11 languages
+- title: От творения до нового неба и новой земли — история Библии за 14 минут
+- description:
+```
+От творения до нового неба и новой земли — 21 сцена, каждая нарисована в своём стиле, рассказывает одну историю.
+
+Прочитать всю историю не спеша · страница фильма: https://one-scroll-bible.com/film/?lang=ru
+
+0:00 Одна история
+0:36 Творение
+1:11 Грехопадение
+1:45 Эпоха патриархов
+2:11 Исход
+2:55 Странствие по пустыне
+3:34 Эпоха судей
+4:14 Единое царство
+4:53 Разделённое царство · Плен
+5:29 Возвращение из плена
+6:07 400 лет молчания
+6:41 Пришествие Иисуса
+7:17 Крест
+7:56 Воскресение
+8:23 Начало Церкви
+8:58 Восстановление
+9:34 Зеркало
+10:19 Суть Евангелия
+11:25 Библия — правдивая история?
+12:25 Просто быть хорошим?
+13:23 Приглашение
+
+Цитаты из Священного Писания приводятся по Синодальному переводу с указанием источника; все права на этот перевод остаются за его издателем. Лицензия CC BY 4.0 этого сайта распространяется только на собственные тексты сайта и не охватывает цитаты из Писания. Сцены нарисованы программным кодом; музыка и звуковые эффекты созданы с помощью ElevenLabs.
+
+#Библия #историяБиблии #обзорБиблии
+```
+- tags: Библия с одного взгляда, Библия, история Библии, обзор Библии, Евангелие, Иисус, христианство, библейская анимация, Одна история, Творение, Грехопадение, Эпоха патриархов, Исход, Странствие по пустыне, Эпоха судей, Единое царство, Разделённое царство · Плен, Возвращение из плена, 400 лет молчания, Пришествие Иисуса, Крест, Воскресение, Начало Церкви, Восстановление, Зеркало, Суть Евангелия, Библия — правдивая история?, Просто быть хорошим?, Приглашение
+
+**Shorts** (`shorts-ru-NN-<scene>.mp4`)
+01. Библия — это, в конце концов, одна история 1/21  (36 s)
+02. «И сказал Бог: да будет свет» — Творение 2/21  (35 s)
+03. «Где ты?» — Грехопадение 3/21  (34 s)
+04. «Посмотри на небо и сосчитай звезды, если ты можешь счесть их» — Эпоха патриархов 4/21  (26 s)
+05. «Отпусти народ Мой» — Исход 5/21  (44 s)
+06. Народ у порога земли обетованной — и вот он входит в неё… — Странствие по пустыне 6/21  (39.5 s)
+07. Но без царя каждый делает, что ему кажется справедливым. — Эпоха судей 7/21  (40 s)
+08. Человек смотрит на лице, а Господь смотрит на сердце. — Единое царство 8/21  (39 s)
+09. Храм горит, народ уводят в Вавилон. — Разделённое царство · Плен 9/21  (36 s)
+10. Радость пред Господом — подкрепление для вас. — Возвращение из плена 10/21  (38 s)
+11. 400 лет без пророческого голоса — 400 лет молчания 11/21  (34 s)
+12. «И Слово стало плотию, и обитало с нами» — Пришествие Иисуса 12/21  (36 s)
+13. Тем, кто должен был быть на том кресте, был я. — Крест 13/21  (39 s)
+14. «Он воскрес, как сказал» — Воскресение 14/21  (27 s)
+15. «… И будете Мне свидетелями … даже до края земли» — Начало Церкви 15/21  (35 s)
+16. «И отрет Бог всякую слезу с очей их» — Восстановление 16/21  (36 s)
+17. В конце концов, самый глубокий идол — «я сам на престоле Бога». — Зеркало 17/21  (44.5 s)
+18. Не «делай», а «совершилось» — Суть Евангелия 18/21  (66.9 s)
+19. Действительно ли Библия — правдивая история? 19/21  (60 s)
+20. Разве недостаточно просто быть хорошим человеком, даже не веря в Иисуса? 20/21  (57.5 s)
+21. Эта любовь — не информация, а приглашение. — Приглашение 21/21  (57 s)
 
 ## ar — الكتاب المقدس في لمحة
 **Film** `film-ar.mp4` · thumbnail `motion/youtube/thumbs/ar/A-exodus.jpg` (alternatives B/C/D) · captions 11 languages
@@ -700,24 +640,84 @@ Kutipan Alkitab: Terjemahan Baru (TB) — dikutip dengan menyebutkan sumbernya; 
 - tags: الكتاب المقدس في لمحة, الكتاب المقدس, قصة الكتاب المقدس, نظرة عامة على الكتاب المقدس, الإنجيل, يسوع, المسيحية, رسوم متحركة الكتاب المقدس, قصة واحدة, الخلق, السقوط, عصر الآباء, الخروج, رحلة البرية, عصر القضاة, المملكة الموحَّدة, المملكة المنقسمة والسبي, العودة من السبي, زمن الصمت, مجيء يسوع, الصليب, القيامة, بداية الكنيسة, الاستعادة, المرآة, جوهر الإنجيل, هل الكتاب المقدس قصة حقيقية؟, ألا يكفي أن أكون صالحاً؟, الدعوة
 
 **Shorts** (`shorts-ar-NN-<scene>.mp4`)
-01. قصة واحدة · المشهد 1 من 21 · الكتاب المقدس في لمحة  (36.0 s)
-02. الخلق · المشهد 2 من 21 · الكتاب المقدس في لمحة  (35.0 s)
-03. السقوط · المشهد 3 من 21 · الكتاب المقدس في لمحة  (34.0 s)
-04. عصر الآباء · المشهد 4 من 21 · الكتاب المقدس في لمحة  (26.0 s)
-05. الخروج · المشهد 5 من 21 · الكتاب المقدس في لمحة  (44.0 s)
-06. رحلة البرية · المشهد 6 من 21 · الكتاب المقدس في لمحة  (39.5 s)
-07. عصر القضاة · المشهد 7 من 21 · الكتاب المقدس في لمحة  (40.0 s)
-08. المملكة الموحَّدة · المشهد 8 من 21 · الكتاب المقدس في لمحة  (39.0 s)
-09. المملكة المنقسمة والسبي · المشهد 9 من 21 · الكتاب المقدس في لمحة  (36.0 s)
-10. العودة من السبي · المشهد 10 من 21 · الكتاب المقدس في لمحة  (38.0 s)
-11. زمن الصمت · المشهد 11 من 21 · الكتاب المقدس في لمحة  (34.0 s)
-12. مجيء يسوع · المشهد 12 من 21 · الكتاب المقدس في لمحة  (36.0 s)
-13. الصليب · المشهد 13 من 21 · الكتاب المقدس في لمحة  (39.0 s)
-14. القيامة · المشهد 14 من 21 · الكتاب المقدس في لمحة  (27.0 s)
-15. بداية الكنيسة · المشهد 15 من 21 · الكتاب المقدس في لمحة  (35.0 s)
-16. الاستعادة · المشهد 16 من 21 · الكتاب المقدس في لمحة  (36.0 s)
-17. المرآة · المشهد 17 من 21 · الكتاب المقدس في لمحة  (44.5 s)
-18. جوهر الإنجيل · المشهد 18 من 21 · الكتاب المقدس في لمحة  (66.9 s)
-19. هل الكتاب المقدس قصة حقيقية؟ · المشهد 19 من 21 · الكتاب المقدس في لمحة  (60.0 s)
-20. ألا يكفي أن أكون صالحاً؟ · المشهد 20 من 21 · الكتاب المقدس في لمحة  (57.5 s)
-21. الدعوة · المشهد 21 من 21 · الكتاب المقدس في لمحة  (57.0 s)
+01. الكتاب المقدس في النهاية قصة واحدة 1/21  (36 s)
+02. «وَقَالَ ٱللهُ: لِيَكُنْ نُورٌ» — الخلق 2/21  (35 s)
+03. «أَيْنَ أَنْتَ؟» — السقوط 3/21  (34 s)
+04. «ٱنْظُرْ إِلَى ٱلسَّمَاءِ وَعُدَّ ٱلنُّجُومَ إِنِ ٱسْتَطَعْتَ أَنْ تَعُدَّهَا» — عصر الآباء 4/21  (26 s)
+05. «أَطْلِقْ شَعْبِي» — الخروج 5/21  (44 s)
+06. وأمام أرض الموعد، يستعدون للدخول… — رحلة البرية 6/21  (39.5 s)
+07. لكن بلا ملك صار كل واحد يعمل ما يحسن في عينيه. — عصر القضاة 7/21  (40 s)
+08. وَأَمَّا ٱلرَّبُّ فَإِنَّهُ يَنْظُرُ إِلَى ٱلْقَلْبِ — المملكة الموحَّدة 8/21  (39 s)
+09. يحترق الهيكل، ويُساق الشعب إلى بابل. — المملكة المنقسمة والسبي 9/21  (36 s)
+10. لِأَنَّ فَرَحَ ٱلرَّبِّ هُوَ قُوَّتُكُمْ — العودة من السبي 10/21  (38 s)
+11. أربعمائة سنة بلا صوت نبوي — زمن الصمت 11/21  (34 s)
+12. «وَٱلْكَلِمَةُ صَارَ جَسَدًا وَحَلَّ بَيْنَنَا» — مجيء يسوع 12/21  (36 s)
+13. من كان يجب أن يكون على ذلك الصليب هو أنا. — الصليب 13/21  (39 s)
+14. «لِأَنَّهُ قَامَ كَمَا قَالَ!» — القيامة 14/21  (27 s)
+15. «… وَتَكُونُونَ لِي شُهُودًا … وَإِلَى أَقْصَى ٱلْأَرْضِ» — بداية الكنيسة 15/21  (35 s)
+16. «وَسَيَمْسَحُ ٱللهُ كُلَّ دَمْعَةٍ مِنْ عُيُونِهِمْ» — الاستعادة 16/21  (36 s)
+17. وفي النهاية، أعمق وثن هو «أنا نفسي جالساً على عرش الله». — المرآة 17/21  (44.5 s)
+18. لا «افعل»، بل «قد أُكمل» — جوهر الإنجيل 18/21  (66.9 s)
+19. هل الكتاب المقدس قصة حقيقية فعلاً؟ 19/21  (60 s)
+20. ألا يكفي أن يكون المرء صالحاً، حتى لو لم يؤمن بيسوع؟ — ألا يكفي أن أكون صالحاً؟ 20/21  (57.5 s)
+21. هذه المحبة ليست معلومة، بل دعوة. — الدعوة 21/21  (57 s)
+
+## id — Alkitab Sekilas
+**Film** `film-id.mp4` · thumbnail `motion/youtube/thumbs/id/A-exodus.jpg` (alternatives B/C/D) · captions 11 languages
+- title: Dari penciptaan sampai langit yang baru dan bumi yang baru — kisah Alkitab dalam 14 menit
+- description:
+```
+Dari penciptaan sampai langit yang baru dan bumi yang baru — 21 adegan, masing-masing dilukis dengan gayanya sendiri, menuturkan satu kisah.
+
+Baca seluruh kisah perlahan · halaman film: https://one-scroll-bible.com/film/?lang=id
+
+0:00 Satu Kisah
+0:36 Penciptaan
+1:11 Kejatuhan
+1:45 Zaman Para Bapa Leluhur
+2:11 Keluaran
+2:55 Perjalanan di Padang Gurun
+3:34 Zaman Hakim-hakim
+4:14 Kerajaan Israel Bersatu
+4:53 Kerajaan Terpecah · Pembuangan
+5:29 Kembali dari Pembuangan
+6:07 400 Tahun Keheningan
+6:41 Kedatangan Yesus
+7:17 Salib
+7:56 Kebangkitan
+8:23 Awal Mula Gereja
+8:58 Pemulihan
+9:34 Cermin
+10:19 Inti Injil
+11:25 Apakah Alkitab Kisah Nyata?
+12:25 Cukup Menjadi Orang Baik?
+13:23 Undangan
+
+Kutipan Alkitab: Terjemahan Baru (TB) — dikutip dengan menyebutkan sumbernya; segala hak atas terjemahan tersebut tetap pada penerbitnya. Lisensi CC BY 4.0 situs ini hanya berlaku untuk tulisan situs ini sendiri — tidak mencakup kutipan Alkitab. Adegan-adegan digambar dengan kode; musik dan efek suara dibuat dengan ElevenLabs.
+
+#Alkitab #kisahAlkitab #ringkasanAlkitab
+```
+- tags: Alkitab Sekilas, Alkitab, kisah Alkitab, ringkasan Alkitab, Injil, Yesus, Kristen, animasi Alkitab, Satu Kisah, Penciptaan, Kejatuhan, Zaman Para Bapa Leluhur, Keluaran, Perjalanan di Padang Gurun, Zaman Hakim-hakim, Kerajaan Israel Bersatu, Kerajaan Terpecah · Pembuangan, Kembali dari Pembuangan, 400 Tahun Keheningan, Kedatangan Yesus, Salib, Kebangkitan, Awal Mula Gereja, Pemulihan, Cermin, Inti Injil, Apakah Alkitab Kisah Nyata?, Cukup Menjadi Orang Baik?, Undangan
+
+**Shorts** (`shorts-id-NN-<scene>.mp4`)
+01. Pada akhirnya, Alkitab adalah satu kisah 1/21  (36 s)
+02. “Berfirmanlah Allah: ‘Jadilah terang.’” — Penciptaan 2/21  (35 s)
+03. “Di manakah engkau?” — Kejatuhan 3/21  (34 s)
+04. “Coba lihat ke langit, hitunglah bintang-bintang, jika engkau dapat menghitungnya” 4/21  (26 s)
+05. “Biarkanlah umat-Ku pergi” — Keluaran 5/21  (44 s)
+06. Berdiri di ambang Tanah Perjanjian, mereka bersiap masuk… — Perjalanan di Padang Gurun 6/21  (39.5 s)
+07. Tetapi tanpa raja setiap orang berbuat sesukanya. — Zaman Hakim-hakim 7/21  (40 s)
+08. Manusia melihat apa yang di depan mata, tetapi TUHAN melihat hati. — Kerajaan Israel Bersatu 8/21  (39 s)
+09. Bait Suci terbakar, dan umat dibuang ke Babel. — Kerajaan Terpecah · Pembuangan 9/21  (36 s)
+10. Sukacita karena TUHAN itulah perlindunganmu! — Kembali dari Pembuangan 10/21  (38 s)
+11. 400 tahun tanpa suara nabi — 400 Tahun Keheningan 11/21  (34 s)
+12. “Firman itu telah menjadi manusia, dan diam di antara kita” — Kedatangan Yesus 12/21  (36 s)
+13. Yang seharusnya ada di salib itu adalah aku. — Salib 13/21  (39 s)
+14. “Sebab Ia telah bangkit, sama seperti yang telah dikatakan-Nya” — Kebangkitan 14/21  (27 s)
+15. “… Kamu akan menjadi saksi-Ku … sampai ke ujung bumi” — Awal Mula Gereja 15/21  (35 s)
+16. “Dan Ia akan menghapus segala air mata dari mata mereka” — Pemulihan 16/21  (36 s)
+17. Pada akhirnya, berhala terdalam adalah “diriku sendiri yang duduk di takhta Allah”. — Cermin 17/21  (44.5 s)
+18. Bukan “lakukanlah”, melainkan “sudah selesai” — Inti Injil 18/21  (66.9 s)
+19. Apakah Alkitab benar-benar kisah nyata? 19/21  (60 s)
+20. Bukankah cukup menjadi orang baik, meski tak percaya kepada Yesus? — Cukup Menjadi Orang Baik? 20/21  (57.5 s)
+21. Kasih ini bukan informasi, melainkan sebuah undangan. — Undangan 21/21  (57 s)

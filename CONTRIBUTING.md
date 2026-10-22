@@ -53,10 +53,14 @@ The 21-scene film is drawn live in the browser, so a language is just **text fil
 - Same two rules: Scripture **verbatim** from the Bible your language's site pack uses (`ui.version` in `i18n/<code>.json`);
   lines that also appear on the site are copied from `i18n/<code>.json` exactly.
 - Your language must already exist on the site (path B/C first).
-- With Claude Code: *"Add «language» to the film with the `/add-film-language` skill."* It translates, checks every scene
-  (`motion/i18n-scan.mjs`, contact sheets from `motion/sheets.mjs`), runs a native-speaker review
-  (`.claude/skills/add-film-language/review-prompt.md`) and prepares the poster and the film button.
-- Open a PR; the maintainer publishes it to `/film/?lang=<code>`.
+- Also `_ui.json` → `"cta"` (the film button on your language's page) and `motion/youtube/lang/<code>.json` (thumbnail text,
+  two description lines, tags — copy `en.json`).
+- Check it: `node motion/film-lang.mjs check <code>` (every scene "complete", no Korean left on screen);
+  `node motion/film-lang.mjs status <code>` shows what is still missing.
+- With Claude Code: *"Add «language» to the film with the `/add-film-language` skill."* It translates, checks every scene,
+  makes contact sheets on GitHub Actions, runs a native-speaker review and prepares the poster, the film button and the
+  YouTube files — every step is one `node motion/film-lang.mjs …` command (`motion/README.md` → "새 언어로 영상 만들기").
+- Open a PR; the maintainer publishes it to `/film/?lang=<code>` after the native review (`motion/reviews/<code>.md`).
 
 ## The two companion pages (`/about/`, `/maps/`)
 Besides the main scroll, the site has two smaller pages with their **own** packs — `i18n/about/<code>.json` and `i18n/maps/<code>.json`. They follow the **same two rules** (verbatim Scripture; keep keys/HTML/structure). They're usually extended by the maintainer (via the `/add-language` skill's §9), so for a new language just do the main `i18n/<code>.json` first — but PRs that translate `i18n/about` / `i18n/maps` from their `en.json` templates are welcome too. Leave each pack's hero verse text (`s.verse`) for the maintainer's verbatim tool; translate everything else.

@@ -18,6 +18,12 @@ for f in notosanskr/NotoSansKR[wght].ttf notoserifkr/NotoSerifKR[wght].ttf \
   out="$FD/$(basename "$f" | tr -d '[],')"
   [ -s "$out" ] || curl -fsSL "$G/$(echo "$f" | sed 's/\[/%5B/g; s/\]/%5D/g')" -o "$out"
 done
+# static Korean faces per weight — what publish-film.py subsets for the site (fonts.css serves one file per weight)
+C=https://raw.githubusercontent.com/notofonts/noto-cjk/main
+for f in Serif/SubsetOTF/KR/NotoSerifKR-Regular.otf Serif/SubsetOTF/KR/NotoSerifKR-SemiBold.otf Serif/SubsetOTF/KR/NotoSerifKR-Black.otf \
+         Sans/SubsetOTF/KR/NotoSansKR-Light.otf Sans/SubsetOTF/KR/NotoSansKR-Regular.otf Sans/SubsetOTF/KR/NotoSansKR-Bold.otf; do
+  out="$FD/$(basename "$f")"; [ -s "$out" ] || curl -fsSL "$C/$f" -o "$out"
+done
 fc-cache -f >/dev/null
 echo "fonts: $(fc-list : family | grep -c Noto) Noto families"
 if ! command -v ffmpeg >/dev/null; then sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg >/dev/null; fi
@@ -25,3 +31,5 @@ ffmpeg -version | head -1
 if ! node -e "require(require('child_process').execSync('npm root -g').toString().trim()+'/playwright')" 2>/dev/null; then npm i -g playwright@1.56.1 >/dev/null; fi
 npx --yes playwright@1.56.1 install --with-deps chromium >/dev/null
 echo "playwright chromium ready"
+# Python side (site publish: fonttools + brotli; thumbnails: pillow) — only when asked: WITH_PYTHON=1 bash motion/ci-setup.sh
+if [ "${WITH_PYTHON:-}" = 1 ]; then python3 -m pip install -q fonttools brotli pillow; echo "python: fonttools brotli pillow"; fi

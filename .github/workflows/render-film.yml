@@ -1,20 +1,30 @@
-# Render the film for several languages at once on GitHub's runners (free for a public repository, up to 20 jobs in
-# parallel) instead of one language after another on one machine. Start it from the Actions tab ("Run workflow") or
-# the API; each language × orientation is its own job, and the results are downloadable artifacts (kept 3 days).
-#   h → film-<lang>-h-upload.mp4 (the whole film, YouTube upload format)     v → shorts/<lang>/NN-<scene>.mp4 (21 Shorts)
+# The film pipeline for any film language, on GitHub's runners (free for a public repository, up to 20 jobs in parallel).
+# Start it from the Actions tab ("Run workflow", pick the work branch) or: node motion/film-lang.mjs ci <lang…> --steps "…"
+# Steps (any of, space-separated):
+#   sheets   contact sheets of every scene (to check a translation)            → artifact sheets-<lang>
+#   site     the site's film files: poster + film/s (fonts, language files)     → artifact site   (commit it, then deploy)
+#   h        the whole film, YouTube upload format                              → artifact film-<lang>-h
+#   v        the 21 Shorts                                                      → artifact shorts-<lang>
+#   kit      thumbnails, upload sheet (manifest), subtitles                     → artifact kit    (commit it)
+#   release  copy this run's films/Shorts into the GitHub release (no expiry)   → release <tag>
+# Artifacts are kept 3 days. The creation scene's cosmos (WebGL, ~0.5 s a frame without a GPU) is the same in every
+# language: it is built once and kept in the Actions cache, so later runs skip it until the scene's code changes.
 name: render-film
 on:
   workflow_dispatch:
     inputs:
       languages:
-        description: "languages (space-separated film language codes; ko = Korean source)"
-        default: "en es pt-BR fr de ru id zh-Hans zh-Hant ja ar"
-      orientations:
-        description: "orientations: h (landscape film) and/or v (Shorts)"
+        description: "film language codes (space-separated; ko = Korean source)"
+        default: "en"
+      steps:
+        description: "steps: sheets site h v kit release"
         default: "h v"
       scenes:
         description: "scenes to render (empty = all 21; e.g. 'rise church' for a quick test)"
         default: ""
+      release:
+        description: "release tag for the release step"
+        default: "youtube-v1"
 jobs:
   plan:
     runs-on: ubuntu-latest
@@ -27,9 +37,58 @@ jobs:
         run: |
           j() { printf '['; sep=''; for x in $1; do printf '%s"%s"' "$sep" "$x"; sep=','; done; printf ']'; }
           echo "langs=$(j "${{ inputs.languages }}")" >> "$GITHUB_OUTPUT"
-          echo "oris=$(j "${{ inputs.orientations }}")" >> "$GITHUB_OUTPUT"
-          s="${{ inputs.scenes }}"; if [ -z "$s" ] || echo " $s " | grep -q " creation "; then echo "cache=true" >> "$GITHUB_OUTPUT"; else echo "cache=false" >> "$GITHUB_OUTPUT"; fi
-  # the creation scene's cosmos (WebGL, ~0.6 s a frame on a CPU) is the same in every language: build it once per orientation
+          o=""; for s in ${{ inputs.steps }}; do case $s in h|v) o="$o $s";; esac; done
+          echo "oris=$(j "$o")" >> "$GITHUB_OUTPUT"
+          s="${{ inputs.scenes }}"
+          if [ -n "$o" ] && { [ -z "$s" ] || echo " $s " | grep -q " creation "; }; then echo "cache=true" >> "$GITHUB_OUTPUT"; else echo "cache=false" >> "$GITHUB_OUTPUT"; fi
+
+  sheets:
+    needs: plan
+    if: contains(format(' {0} ', inputs.steps), ' sheets ')
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        lang: ${{ fromJSON(needs.plan.outputs.langs) }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: bash motion/ci-setup.sh
+      - run: node motion/i18n-scan.mjs ${{ matrix.lang }}
+      - run: node motion/sheets.mjs ${{ matrix.lang }} --n 6
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sheets-${{ matrix.lang }}
+          path: motion/out/sheets/${{ matrix.lang }}/*.png
+          retention-days: 3
+
+  site:
+    needs: plan
+    if: contains(format(' {0} ', inputs.steps), ' site ')
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: WITH_PYTHON=1 bash motion/ci-setup.sh
+      - name: posters
+        run: for L in ${{ inputs.languages }}; do bash motion/poster.sh $L; done
+      - name: film/s (scenes, fonts subset to every published language, language files)
+        run: python3 motion/publish-film.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: site
+          path: |
+            film/poster-*.jpg
+            film/s/
+          retention-days: 3
+
+  # the creation scene's cosmos, once per orientation, kept in the Actions cache (key = the scene's code)
   glcache:
     needs: plan
     if: needs.plan.outputs.cache == 'true'
@@ -40,20 +99,29 @@ jobs:
         o: ${{ fromJSON(needs.plan.outputs.oris) }}
     steps:
       - uses: actions/checkout@v4
+      - id: c
+        uses: actions/cache/restore@v4
+        with:
+          path: motion/out/glcache
+          key: glcache-${{ matrix.o }}-${{ hashFiles('motion/pilot/creation.html', 'motion/pilot/lib.js') }}
+          lookup-only: true
       - uses: actions/setup-node@v4
+        if: steps.c.outputs.cache-hit != 'true'
         with:
           node-version: 22
       - run: bash motion/ci-setup.sh
+        if: steps.c.outputs.cache-hit != 'true'
       - run: node motion/render.mjs ${{ matrix.o }} --page pilot/creation.html --glcache build
-      - uses: actions/upload-artifact@v4
+        if: steps.c.outputs.cache-hit != 'true'
+      - uses: actions/cache/save@v4
+        if: steps.c.outputs.cache-hit != 'true'
         with:
-          name: glcache-${{ matrix.o }}
           path: motion/out/glcache
-          retention-days: 3
-          compression-level: 0
+          key: glcache-${{ matrix.o }}-${{ hashFiles('motion/pilot/creation.html', 'motion/pilot/lib.js') }}
+
   render:
     needs: [plan, glcache]
-    if: always() && needs.plan.result == 'success' && (needs.glcache.result == 'success' || needs.glcache.result == 'skipped')
+    if: always() && needs.plan.result == 'success' && needs.plan.outputs.oris != '[]' && (needs.glcache.result == 'success' || needs.glcache.result == 'skipped')
     runs-on: ubuntu-latest
     timeout-minutes: 300
     strategy:
@@ -67,11 +135,11 @@ jobs:
         with:
           node-version: 22
       - run: bash motion/ci-setup.sh
-      - uses: actions/download-artifact@v4
-        if: needs.glcache.result == 'success'
+      - uses: actions/cache/restore@v4
+        if: needs.plan.outputs.cache == 'true'
         with:
-          name: glcache-${{ matrix.o }}
           path: motion/out/glcache
+          key: glcache-${{ matrix.o }}-${{ hashFiles('motion/pilot/creation.html', 'motion/pilot/lib.js') }}
       - name: render
         env:
           SCENES: ${{ inputs.scenes }}
@@ -92,3 +160,59 @@ jobs:
           path: motion/out/shorts/${{ matrix.lang }}
           retention-days: 3
           compression-level: 0
+
+  kit:
+    needs: plan
+    if: contains(format(' {0} ', inputs.steps), ' kit ')
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: python3 -m pip install -q pillow
+      - name: thumbnails
+        run: python3 motion/youtube/thumbs/make.py ${{ inputs.languages }}
+      - name: upload sheet (titles, descriptions, chapters, tags)
+        run: node motion/youtube/manifest.mjs
+      - name: subtitles
+        run: for L in ${{ inputs.languages }}; do [ "$L" = ko ] || { node motion/subtitles.mjs srt $L h; node motion/subtitles.mjs srt $L v; }; done
+      - uses: actions/upload-artifact@v4
+        with:
+          name: kit
+          path: |
+            motion/youtube/thumbs/
+            motion/youtube/manifest.json
+            motion/youtube/manifest.md
+            motion/youtube/shorts-titles.md
+            motion/subs/
+          retention-days: 3
+
+  release:
+    needs: [plan, render]
+    if: always() && needs.render.result == 'success' && contains(format(' {0} ', inputs.steps), ' release ')
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    permissions:
+      contents: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      TAG: ${{ inputs.release }}
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: dl
+      - name: collect
+        run: |
+          mkdir -p up
+          for L in ${{ inputs.languages }}; do
+            f=$(find "dl/film-$L-h" -name '*.mp4' 2>/dev/null | head -1); [ -n "$f" ] && mv "$f" "up/film-$L.mp4"
+            for f in $(find "dl/shorts-$L" -name '*.mp4' 2>/dev/null | sort); do mv "$f" "up/shorts-$L-$(basename "$f")"; done
+          done
+          ls -la up
+      - name: upload
+        run: |
+          gh release view "$TAG" -R "${{ github.repository }}" >/dev/null 2>&1 || gh release create "$TAG" -R "${{ github.repository }}" --title "YouTube files ($TAG)" \
+            --notes "Rendered films and Shorts in the YouTube upload format. film-<lang>.mp4 = the whole film, shorts-<lang>-NN-<scene>.mp4 = the 21 Shorts."
+          gh release upload "$TAG" -R "${{ github.repository }}" --clobber up/*

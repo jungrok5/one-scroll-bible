@@ -6,35 +6,29 @@
 # duration badge. The hook text is the same in all four variants; only the picture differs — put up to three in YouTube
 # Studio's "Test & compare". Pictures in src/ are frames of the film (render.mjs --stills), saved as JPEG.
 # Fonts: Google's Noto Sans variable fonts (Black weight), looked up in motion/out/fonts/ and downloaded there if missing.
-import os, sys, urllib.request
+import os, sys, json, urllib.request, urllib.error
 from PIL import Image, ImageDraw, ImageFont, ImageFilter, ImageEnhance, ImageOps
 HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.dirname(os.path.dirname(HERE))
 FONTS = os.path.join(ROOT, 'out', 'fonts'); os.makedirs(FONTS, exist_ok=True)
 G = 'https://raw.githubusercontent.com/google/fonts/main/ofl/'
-FONT_URL = {'NotoSansKR': 'notosanskr/NotoSansKR%5Bwght%5D.ttf', 'NotoSans': 'notosans/NotoSans%5Bwdth,wght%5D.ttf',
-            'NotoSansJP': 'notosansjp/NotoSansJP%5Bwght%5D.ttf', 'NotoSansSC': 'notosanssc/NotoSansSC%5Bwght%5D.ttf',
-            'NotoSansTC': 'notosanstc/NotoSansTC%5Bwght%5D.ttf', 'NotoSansArabic': 'notosansarabic/NotoSansArabic%5Bwdth,wght%5D.ttf'}
-# top: the line(s) above the number · big: the number (+ unit when the language glues them) · tail: the word after it
-LANGS = {
-  'ko':      dict(font='NotoSansKR', top=['성경 전체를'], big='14분', tail='만에'),
-  'en':      dict(font='NotoSans', top=['THE WHOLE', 'BIBLE IN'], big='14', tail='MIN'),
-  'es':      dict(font='NotoSans', top=['TODA LA', 'BIBLIA EN'], big='14', tail='MIN'),
-  'pt-BR':   dict(font='NotoSans', top=['A BÍBLIA', 'INTEIRA EM'], big='14', tail='MIN'),
-  'fr':      dict(font='NotoSans', top=['TOUTE LA', 'BIBLE EN'], big='14', tail='MIN'),
-  'de':      dict(font='NotoSans', top=['DIE GANZE', 'BIBEL IN'], big='14', tail='MIN'),
-  'ru':      dict(font='NotoSans', top=['ВСЯ БИБЛИЯ ЗА'], big='14', tail='МИНУТ'),
-  'id':      dict(font='NotoSans', top=['SELURUH', 'ALKITAB DALAM'], big='14', tail='MENIT'),
-  'zh-Hans': dict(font='NotoSansSC', top=['整本圣经'], big='14分钟', tail='看完'),
-  'zh-Hant': dict(font='NotoSansTC', top=['整本聖經'], big='14分鐘', tail='看完'),
-  'ja':      dict(font='NotoSansJP', top=['聖書全体を'], big='14分', tail='で'),
-  'ar':      dict(font='NotoSansArabic', top=['الكتاب المقدس كله في'], big='14', tail='دقيقة', rtl=True),   # the film's Arabic uses Western digits
-}
+# Any Noto family on Google Fonts works: 'NotoSansThai' → ofl/notosansthai/NotoSansThai[wdth,wght].ttf (or [wght]).
+FONT_URL = {'NotoSansKR': 'notosanskr/NotoSansKR%5Bwght%5D.ttf', 'NotoSansJP': 'notosansjp/NotoSansJP%5Bwght%5D.ttf',
+            'NotoSansSC': 'notosanssc/NotoSansSC%5Bwght%5D.ttf', 'NotoSansTC': 'notosanstc/NotoSansTC%5Bwght%5D.ttf'}
+# Per-language text lives in motion/youtube/lang/<code>.json → "thumb": {font, top: [line…], big, tail, rtl?}
+#   top: the line(s) above the number · big: the number (+ unit when the language glues them) · tail: the word after it
+LANG_DIR = os.path.join(os.path.dirname(HERE), 'lang')
+LANGS = {f[:-5]: json.load(open(os.path.join(LANG_DIR, f), encoding='utf-8'))['thumb'] for f in sorted(os.listdir(LANG_DIR)) if f.endswith('.json')}
 GOLD = (255, 204, 80); WHITE = (255, 255, 255); INK = (12, 10, 8); W, H = 1280, 720
 _fc = {}
 def font(name, size, weight='Black'):
     p = os.path.join(FONTS, name + '.ttf')
     if not os.path.exists(p):
-        print('fetching font', name); urllib.request.urlretrieve(G + FONT_URL[name], p)
+        print('fetching font', name)
+        tries = [FONT_URL[name]] if name in FONT_URL else [f'{name.lower()}/{name}%5B{ax}%5D.ttf' for ax in ('wdth,wght', 'wght')]
+        for t in tries:
+            try: urllib.request.urlretrieve(G + t, p); break
+            except urllib.error.HTTPError: pass
+        else: raise SystemExit(f'font {name} not found on Google Fonts — set "font" in motion/youtube/lang/<code>.json')
     f = ImageFont.truetype(p, size)
     try: f.set_variation_by_name(weight)
     except Exception: pass

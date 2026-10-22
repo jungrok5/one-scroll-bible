@@ -46,6 +46,75 @@
 20. Can’t I just live a good life without believing in Jesus? — Just Live a Good Life? 20/21
 21. This love is not information but an invitation. — The Invitation 21/21
 
+## zh-Hans
+01. 圣经归根到底是一个故事 1/21
+02. “神说：‘要有光’” — 创造 2/21
+03. “你在哪里？” — 堕落 3/21
+04. “你向天观看，数算众星，能数得过来吗？” — 族长时代 4/21
+05. “容我的百姓去” — 出埃及 5/21
+06. 站在应许之地门口，他们预备进入…… — 旷野的旅程 6/21
+07. 却因没有王而各人任意而行。 — 士师时代 7/21
+08. 人是看外貌；耶和华是看内心 — 统一王国 8/21
+09. 圣殿被焚，百姓被掳到巴比伦。 — 分裂王国 · 被掳 9/21
+10. 因靠耶和华而得的喜乐是你们的力量 — 被掳归回 10/21
+11. 四百年没有先知的声音 — 四百年的沉默 11/21
+12. “道成了肉身，住在我们中间” — 耶稣降临 12/21
+13. 那本该被钉十字架的，正是我。 — 十字架 13/21
+14. “照他所说的，已经复活了” — 复活 14/21
+15. “……直到地极，作我的见证” — 教会的开始 15/21
+16. “神要擦去他们一切的眼泪” — 复兴（万物更新） 16/21
+17. 归根到底，最深的偶像是“坐在神位上的我自己”。 — 镜子 17/21
+18. 不是“去做”，而是“成了” — 福音的核心 18/21
+19. 圣经真的是真实的故事吗？ 19/21
+20. 不信耶稣，只要好好做个好人不行吗？ — 做好人就够了吗？ 20/21
+21. 这份爱不是信息，而是邀请。 — 邀请 21/21
+
+## zh-Hant
+01. 聖經歸根到底是一個故事 1/21
+02. 「神說：『要有光』」 — 創造 2/21
+03. 「你在哪裏？」 — 墮落 3/21
+04. 「你向天觀看，數算眾星，能數得過來嗎？」 — 族長時代 4/21
+05. 「容我的百姓去」 — 出埃及 5/21
+06. 站在應許之地門口，他們預備進入…… — 曠野的旅程 6/21
+07. 卻因沒有王而各人任意而行。 — 士師時代 7/21
+08. 人是看外貌；耶和華是看內心 — 統一王國 8/21
+09. 聖殿被焚，百姓被擄到巴比倫。 — 分裂王國 · 被擄 9/21
+10. 因靠耶和華而得的喜樂是你們的力量 — 被擄歸回 10/21
+11. 四百年沒有先知的聲音 — 四百年的沉默 11/21
+12. 「道成了肉身，住在我們中間」 — 耶穌降臨 12/21
+13. 那本該被釘十字架的，正是我。 — 十字架 13/21
+14. 「照他所說的，已經復活了」 — 復活 14/21
+15. 「……直到地極，作我的見證」 — 教會的開始 15/21
+16. 「神要擦去他們一切的眼淚」 — 復興（萬物更新） 16/21
+17. 歸根到底，最深的偶像是「坐在神位上的我自己」。 — 鏡子 17/21
+18. 不是「去做」，而是「成了」 — 福音的核心 18/21
+19. 聖經真的是真實的故事嗎？ 19/21
+20. 不信耶穌，只要好好做個好人不行嗎？ — 做好人就夠了嗎？ 20/21
+21. 這份愛不是信息，而是邀請。 — 邀請 21/21
+
+## ja
+01. 聖書は結局、一つの物語です 1/21
+02. 「神は言われた。『光あれ。』」 — 創造 2/21
+03. 「どこにいるのか。」 — 堕落 3/21
+04. 「天を仰いで、星を数えることができるなら、数えてみるがよい。」 — 族長 4/21
+05. 「わたしの民を去らせて……」 — 出エジプト 5/21
+06. 約束の地の入り口に立ち、いよいよ入ろうとします…… — 荒れ野の旅 6/21
+07. 王がなく、人々は思いのままにふるまった。 — 士師の時代 7/21
+08. 人は目に映ることを見るが、主は心によって見る。 — 統一王国 8/21
+09. 神殿は焼け、民はバビロンへ引かれます。 — 分裂 · 捕囚 9/21
+10. 主を喜び祝うことこそ、あなたたちの力の源である。 — 捕囚からの帰還 10/21
+11. 四百年、預言者の声が絶えた — 四百年の沈黙 11/21
+12. 「言は肉となって、わたしたちの間に宿られた。」 — イエスの降誕 12/21
+13. その十字架にかかるべきだったのは、ほかならぬわたしでした。 — 十字架 13/21
+14. 「かねて言われていたとおり、復活なさったのだ。」 — 復活 14/21
+15. 「……地の果てに至るまで、わたしの証人となる。」 — 教会 15/21
+16. 「彼らの目の涙をことごとくぬぐい取ってくださる。」 — 回復 16/21
+17. 結局、最も深い偶像は「神の座に着いた自分自身」です。 — 鏡 17/21
+18. 「行え」ではなく「成し遂げられた」 — 福音の核心 18/21
+19. 聖書は本当に実話なのでしょうか。 19/21
+20. イエスを信じなくても、ただ善く生きればいいのでは？ — 善く生きれば？ 20/21
+21. この愛は情報ではなく、招きです。 — 招き 21/21
+
 ## es
 01. La Biblia es, al final, una sola historia 1/21
 02. «Y dijo Dios: Sea la luz» — Creación 2/21
@@ -161,98 +230,6 @@
 20. Разве недостаточно просто быть хорошим человеком, даже не веря в Иисуса? 20/21
 21. Эта любовь — не информация, а приглашение. — Приглашение 21/21
 
-## id
-01. Pada akhirnya, Alkitab adalah satu kisah 1/21
-02. “Berfirmanlah Allah: ‘Jadilah terang.’” — Penciptaan 2/21
-03. “Di manakah engkau?” — Kejatuhan 3/21
-04. “Coba lihat ke langit, hitunglah bintang-bintang, jika engkau dapat menghitungnya” 4/21
-05. “Biarkanlah umat-Ku pergi” — Keluaran 5/21
-06. Berdiri di ambang Tanah Perjanjian, mereka bersiap masuk… — Perjalanan di Padang Gurun 6/21
-07. Tetapi tanpa raja setiap orang berbuat sesukanya. — Zaman Hakim-hakim 7/21
-08. Manusia melihat apa yang di depan mata, tetapi TUHAN melihat hati. — Kerajaan Israel Bersatu 8/21
-09. Bait Suci terbakar, dan umat dibuang ke Babel. — Kerajaan Terpecah · Pembuangan 9/21
-10. Sukacita karena TUHAN itulah perlindunganmu! — Kembali dari Pembuangan 10/21
-11. 400 tahun tanpa suara nabi — 400 Tahun Keheningan 11/21
-12. “Firman itu telah menjadi manusia, dan diam di antara kita” — Kedatangan Yesus 12/21
-13. Yang seharusnya ada di salib itu adalah aku. — Salib 13/21
-14. “Sebab Ia telah bangkit, sama seperti yang telah dikatakan-Nya” — Kebangkitan 14/21
-15. “… Kamu akan menjadi saksi-Ku … sampai ke ujung bumi” — Awal Mula Gereja 15/21
-16. “Dan Ia akan menghapus segala air mata dari mata mereka” — Pemulihan 16/21
-17. Pada akhirnya, berhala terdalam adalah “diriku sendiri yang duduk di takhta Allah”. — Cermin 17/21
-18. Bukan “lakukanlah”, melainkan “sudah selesai” — Inti Injil 18/21
-19. Apakah Alkitab benar-benar kisah nyata? 19/21
-20. Bukankah cukup menjadi orang baik, meski tak percaya kepada Yesus? — Cukup Menjadi Orang Baik? 20/21
-21. Kasih ini bukan informasi, melainkan sebuah undangan. — Undangan 21/21
-
-## zh-Hans
-01. 圣经归根到底是一个故事 1/21
-02. “神说：‘要有光’” — 创造 2/21
-03. “你在哪里？” — 堕落 3/21
-04. “你向天观看，数算众星，能数得过来吗？” — 族长时代 4/21
-05. “容我的百姓去” — 出埃及 5/21
-06. 站在应许之地门口，他们预备进入…… — 旷野的旅程 6/21
-07. 却因没有王而各人任意而行。 — 士师时代 7/21
-08. 人是看外貌；耶和华是看内心 — 统一王国 8/21
-09. 圣殿被焚，百姓被掳到巴比伦。 — 分裂王国 · 被掳 9/21
-10. 因靠耶和华而得的喜乐是你们的力量 — 被掳归回 10/21
-11. 四百年没有先知的声音 — 四百年的沉默 11/21
-12. “道成了肉身，住在我们中间” — 耶稣降临 12/21
-13. 那本该被钉十字架的，正是我。 — 十字架 13/21
-14. “照他所说的，已经复活了” — 复活 14/21
-15. “……直到地极，作我的见证” — 教会的开始 15/21
-16. “神要擦去他们一切的眼泪” — 复兴（万物更新） 16/21
-17. 归根到底，最深的偶像是“坐在神位上的我自己”。 — 镜子 17/21
-18. 不是“去做”，而是“成了” — 福音的核心 18/21
-19. 圣经真的是真实的故事吗？ 19/21
-20. 不信耶稣，只要好好做个好人不行吗？ — 做好人就够了吗？ 20/21
-21. 这份爱不是信息，而是邀请。 — 邀请 21/21
-
-## zh-Hant
-01. 聖經歸根到底是一個故事 1/21
-02. 「神說：『要有光』」 — 創造 2/21
-03. 「你在哪裏？」 — 墮落 3/21
-04. 「你向天觀看，數算眾星，能數得過來嗎？」 — 族長時代 4/21
-05. 「容我的百姓去」 — 出埃及 5/21
-06. 站在應許之地門口，他們預備進入…… — 曠野的旅程 6/21
-07. 卻因沒有王而各人任意而行。 — 士師時代 7/21
-08. 人是看外貌；耶和華是看內心 — 統一王國 8/21
-09. 聖殿被焚，百姓被擄到巴比倫。 — 分裂王國 · 被擄 9/21
-10. 因靠耶和華而得的喜樂是你們的力量 — 被擄歸回 10/21
-11. 四百年沒有先知的聲音 — 四百年的沉默 11/21
-12. 「道成了肉身，住在我們中間」 — 耶穌降臨 12/21
-13. 那本該被釘十字架的，正是我。 — 十字架 13/21
-14. 「照他所說的，已經復活了」 — 復活 14/21
-15. 「……直到地極，作我的見證」 — 教會的開始 15/21
-16. 「神要擦去他們一切的眼淚」 — 復興（萬物更新） 16/21
-17. 歸根到底，最深的偶像是「坐在神位上的我自己」。 — 鏡子 17/21
-18. 不是「去做」，而是「成了」 — 福音的核心 18/21
-19. 聖經真的是真實的故事嗎？ 19/21
-20. 不信耶穌，只要好好做個好人不行嗎？ — 做好人就夠了嗎？ 20/21
-21. 這份愛不是信息，而是邀請。 — 邀請 21/21
-
-## ja
-01. 聖書は結局、一つの物語です 1/21
-02. 「神は言われた。『光あれ。』」 — 創造 2/21
-03. 「どこにいるのか。」 — 堕落 3/21
-04. 「天を仰いで、星を数えることができるなら、数えてみるがよい。」 — 族長 4/21
-05. 「わたしの民を去らせて……」 — 出エジプト 5/21
-06. 約束の地の入り口に立ち、いよいよ入ろうとします…… — 荒れ野の旅 6/21
-07. 王がなく、人々は思いのままにふるまった。 — 士師の時代 7/21
-08. 人は目に映ることを見るが、主は心によって見る。 — 統一王国 8/21
-09. 神殿は焼け、民はバビロンへ引かれます。 — 分裂 · 捕囚 9/21
-10. 主を喜び祝うことこそ、あなたたちの力の源である。 — 捕囚からの帰還 10/21
-11. 四百年、預言者の声が絶えた — 四百年の沈黙 11/21
-12. 「言は肉となって、わたしたちの間に宿られた。」 — イエスの降誕 12/21
-13. その十字架にかかるべきだったのは、ほかならぬわたしでした。 — 十字架 13/21
-14. 「かねて言われていたとおり、復活なさったのだ。」 — 復活 14/21
-15. 「……地の果てに至るまで、わたしの証人となる。」 — 教会 15/21
-16. 「彼らの目の涙をことごとくぬぐい取ってくださる。」 — 回復 16/21
-17. 結局、最も深い偶像は「神の座に着いた自分自身」です。 — 鏡 17/21
-18. 「行え」ではなく「成し遂げられた」 — 福音の核心 18/21
-19. 聖書は本当に実話なのでしょうか。 19/21
-20. イエスを信じなくても、ただ善く生きればいいのでは？ — 善く生きれば？ 20/21
-21. この愛は情報ではなく、招きです。 — 招き 21/21
-
 ## ar
 01. الكتاب المقدس في النهاية قصة واحدة 1/21
 02. «وَقَالَ ٱللهُ: لِيَكُنْ نُورٌ» — الخلق 2/21
@@ -275,3 +252,26 @@
 19. هل الكتاب المقدس قصة حقيقية فعلاً؟ 19/21
 20. ألا يكفي أن يكون المرء صالحاً، حتى لو لم يؤمن بيسوع؟ — ألا يكفي أن أكون صالحاً؟ 20/21
 21. هذه المحبة ليست معلومة، بل دعوة. — الدعوة 21/21
+
+## id
+01. Pada akhirnya, Alkitab adalah satu kisah 1/21
+02. “Berfirmanlah Allah: ‘Jadilah terang.’” — Penciptaan 2/21
+03. “Di manakah engkau?” — Kejatuhan 3/21
+04. “Coba lihat ke langit, hitunglah bintang-bintang, jika engkau dapat menghitungnya” 4/21
+05. “Biarkanlah umat-Ku pergi” — Keluaran 5/21
+06. Berdiri di ambang Tanah Perjanjian, mereka bersiap masuk… — Perjalanan di Padang Gurun 6/21
+07. Tetapi tanpa raja setiap orang berbuat sesukanya. — Zaman Hakim-hakim 7/21
+08. Manusia melihat apa yang di depan mata, tetapi TUHAN melihat hati. — Kerajaan Israel Bersatu 8/21
+09. Bait Suci terbakar, dan umat dibuang ke Babel. — Kerajaan Terpecah · Pembuangan 9/21
+10. Sukacita karena TUHAN itulah perlindunganmu! — Kembali dari Pembuangan 10/21
+11. 400 tahun tanpa suara nabi — 400 Tahun Keheningan 11/21
+12. “Firman itu telah menjadi manusia, dan diam di antara kita” — Kedatangan Yesus 12/21
+13. Yang seharusnya ada di salib itu adalah aku. — Salib 13/21
+14. “Sebab Ia telah bangkit, sama seperti yang telah dikatakan-Nya” — Kebangkitan 14/21
+15. “… Kamu akan menjadi saksi-Ku … sampai ke ujung bumi” — Awal Mula Gereja 15/21
+16. “Dan Ia akan menghapus segala air mata dari mata mereka” — Pemulihan 16/21
+17. Pada akhirnya, berhala terdalam adalah “diriku sendiri yang duduk di takhta Allah”. — Cermin 17/21
+18. Bukan “lakukanlah”, melainkan “sudah selesai” — Inti Injil 18/21
+19. Apakah Alkitab benar-benar kisah nyata? 19/21
+20. Bukankah cukup menjadi orang baik, meski tak percaya kepada Yesus? — Cukup Menjadi Orang Baik? 20/21
+21. Kasih ini bukan informasi, melainkan sebuah undangan. — Undangan 21/21

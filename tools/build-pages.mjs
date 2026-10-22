@@ -298,7 +298,7 @@ function ldBlock({ name, desc, url, code, s, modified }){
   const orgRef = { '@id': `${ORIGIN}/#org` };
   const org = { '@type':'Organization', '@id': orgRef['@id'], name, alternateName: KO.brand, url: `${ORIGIN}/`, logo: `${ORIGIN}/icon-512.png`,
     description: desc, areaServed: 'Worldwide', knowsLanguage: LANGS.map(L => L.code),
-    sameAs: ['https://github.com/jungrok5/one-scroll-bible'] };
+    sameAs: ['https://www.youtube.com/@one-scroll-bible', 'https://www.instagram.com/one.scroll.bible/', 'https://github.com/jungrok5/one-scroll-bible'] };   // 공식 표면 전부 = 같은 실체(LLMO)
   const site = { '@type':'WebSite', '@id': `${ORIGIN}/#website`, name, alternateName: KO.brand, url, inLanguage: code, description: desc, publisher: orgRef };
   // 이 페이지 자체 = 성경 전체 줄거리를 설명하는 장문 글(Article). dateModified 는 빌드 시각이 아니라 이 페이지 소스의
   // 마지막 커밋 날짜(sitemap <lastmod> 와 같은 값) — 모르면 넣지 않는다(답변엔진은 날짜 조작을 감점한다).

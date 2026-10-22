@@ -5,3 +5,4 @@ CLAUDE.md
 *.NATIVE-REVIEW.md
 tools/jp-cache.json
 motion
+tools/*.md

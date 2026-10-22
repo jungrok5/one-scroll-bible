@@ -78,7 +78,7 @@ Protestant church; Korean Revised Version (개역개정) as the Korean baseline.
   watched} · film_complete{watched_sec} · film_pause/film_exit{scene,position_sec,watched_sec} (drop-off) · film_chapter · film_nav ·
   film_orientation · film_fullscreen · film_stall{scene} (picture not ready 5 s — slow device) · film_error{kind} · share.
   Maps: map_play · map_step · map_journey · map_point{map} · section_view. Params show in GA reports only once registered as
-  custom dimensions (Admin → Custom definitions). Inbound links we control carry UTM (`?utm_source=youtube&utm_medium=video&utm_campaign=film_<lang>`).
+  custom dimensions (Admin → Custom definitions). Inbound links we control carry UTM (`?utm_source=youtube&utm_medium=video&utm_campaign=film_<lang>`). Account-side setup (GA4 custom dimensions·key events, YouTube description links, Instagram bio): **`tools/ANALYTICS-SETUP.md`**.
 - `vercel.json` (`buildCommand = node tools/build-pages.mjs` + security/cache headers), `robots.txt`.
   **`.vercelignore` keeps `AGENTS.md`, `CLAUDE.md` and `.claude` out of the deploy.**
 - **Film** (`/film/`): 21 canvas scenes drawn live per language — sources in `motion/` (see `motion/README.md`), published

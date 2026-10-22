@@ -49,6 +49,7 @@ scenes = only.split(',') if only else ORDER
 have, missing = [], []
 for s in scenes:
     v, a = os.path.join(OUT, f'{s}{tag}-{ori}.mp4'), os.path.join(HERE, 'pilot', f'{s}.wav')
+    if not os.path.exists(a): a = os.path.join(HERE, '..', 'film', 's', f'{s}.m4a')   # the mix the site plays (committed; the wav is not)
     u = os.path.join(UPC, f'{s}{tag}-{ori}.mp4')
     if not os.path.exists(v) and os.path.exists(u): v = u   # clip deleted to save disk: its cached upload encode stands in
     (have if os.path.exists(v) and os.path.exists(a) else missing).append((s, v, a))

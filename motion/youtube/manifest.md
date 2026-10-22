@@ -9,7 +9,7 @@ Videos: release **youtube-v1** (`gh release download youtube-v1 -R jungrok5/one-
 ```
 창조에서 새 하늘과 새 땅까지 — 장면마다 다른 화풍으로 그린 21개 장면이 하나의 줄거리로 이어집니다.
 
-전체 이야기를 글로 천천히 읽기 · 영상 페이지: https://one-scroll-bible.com/film/
+전체 이야기를 글로 천천히 읽기: https://one-scroll-bible.com/?utm_source=youtube&utm_medium=video&utm_campaign=film_ko
 
 0:00 하나의 줄거리
 0:36 창조
@@ -69,7 +69,7 @@ Videos: release **youtube-v1** (`gh release download youtube-v1 -R jungrok5/one-
 ```
 From creation to the new heaven and new earth — 21 scenes, each painted in its own style, tell one story.
 
-Read the whole story slowly · the film page: https://one-scroll-bible.com/film/?lang=en
+Read the whole story slowly: https://one-scroll-bible.com/en/?utm_source=youtube&utm_medium=video&utm_campaign=film_en
 
 0:00 One Story
 0:36 Creation
@@ -129,7 +129,7 @@ Scripture quotations are from the ESV® Bible (The Holy Bible, English Standard 
 ```
 从创造到新天新地——21 个场景，各以不同的画风绘成，连成一个故事。
 
-用文字慢慢读完整个故事 · 影片页面: https://one-scroll-bible.com/film/?lang=zh-Hans
+用文字慢慢读完整个故事: https://one-scroll-bible.com/zh-Hans/?utm_source=youtube&utm_medium=video&utm_campaign=film_zh-Hans
 
 0:00 一个故事
 0:36 创造
@@ -189,7 +189,7 @@ Scripture quotations are from the ESV® Bible (The Holy Bible, English Standard 
 ```
 從創造到新天新地——21 個場景，各以不同的畫風繪成，連成一個故事。
 
-用文字慢慢讀完整個故事 · 影片頁面: https://one-scroll-bible.com/film/?lang=zh-Hant
+用文字慢慢讀完整個故事: https://one-scroll-bible.com/zh-Hant/?utm_source=youtube&utm_medium=video&utm_campaign=film_zh-Hant
 
 0:00 一條主線
 0:36 創造
@@ -249,7 +249,7 @@ Scripture quotations are from the ESV® Bible (The Holy Bible, English Standard 
 ```
 創造から新しい天と地まで——場面ごとに異なる画風で描いた21の場面が、一つの物語としてつながります。
 
-物語全体を文章でゆっくり読む · 映像ページ: https://one-scroll-bible.com/film/?lang=ja
+物語全体を文章でゆっくり読む: https://one-scroll-bible.com/ja/?utm_source=youtube&utm_medium=video&utm_campaign=film_ja
 
 0:00 一つの物語
 0:36 創造
@@ -309,7 +309,7 @@ Scripture quotations are from the ESV® Bible (The Holy Bible, English Standard 
 ```
 De la creación al cielo nuevo y la tierra nueva: 21 escenas, cada una pintada con su propio estilo, cuentan una sola historia.
 
-Lee toda la historia con calma · la página de la película: https://one-scroll-bible.com/film/?lang=es
+Lee toda la historia con calma: https://one-scroll-bible.com/es/?utm_source=youtube&utm_medium=video&utm_campaign=film_es
 
 0:00 Una sola historia
 0:36 Creación
@@ -369,7 +369,7 @@ El texto bíblico ha sido tomado de la versión Reina-Valera © 1960 Sociedades 
 ```
 Da criação ao novo céu e à nova terra: 21 cenas, cada uma pintada em seu próprio estilo, contam uma só história.
 
-Leia toda a história com calma · a página do filme: https://one-scroll-bible.com/film/?lang=pt-BR
+Leia toda a história com calma: https://one-scroll-bible.com/pt-BR/?utm_source=youtube&utm_medium=video&utm_campaign=film_pt-BR
 
 0:00 Uma só história
 0:36 Criação
@@ -429,7 +429,7 @@ Citações bíblicas: Almeida — citadas com indicação da fonte; quaisquer di
 ```
 De la création au nouveau ciel et à la nouvelle terre : 21 scènes, chacune peinte dans son propre style, racontent une seule histoire.
 
-Lisez toute l’histoire à votre rythme · la page du film: https://one-scroll-bible.com/film/?lang=fr
+Lisez toute l’histoire à votre rythme: https://one-scroll-bible.com/fr/?utm_source=youtube&utm_medium=video&utm_campaign=film_fr
 
 0:00 Une seule histoire
 0:36 La création
@@ -489,7 +489,7 @@ Citations bibliques : Louis Segond (LSG), citées avec mention de la source ; le
 ```
 Von der Schöpfung bis zum neuen Himmel und der neuen Erde: 21 Szenen, jede in ihrem eigenen Stil gemalt, erzählen eine einzige Geschichte.
 
-Die ganze Geschichte in Ruhe lesen · die Filmseite: https://one-scroll-bible.com/film/?lang=de
+Die ganze Geschichte in Ruhe lesen: https://one-scroll-bible.com/de/?utm_source=youtube&utm_medium=video&utm_campaign=film_de
 
 0:00 Der rote Faden
 0:36 Schöpfung
@@ -549,7 +549,7 @@ Bibelzitate nach der Lutherbibel (1912), mit Quellenangabe zitiert; etwaige Rech
 ```
 От творения до нового неба и новой земли — 21 сцена, каждая нарисована в своём стиле, рассказывает одну историю.
 
-Прочитать всю историю не спеша · страница фильма: https://one-scroll-bible.com/film/?lang=ru
+Прочитать всю историю не спеша: https://one-scroll-bible.com/ru/?utm_source=youtube&utm_medium=video&utm_campaign=film_ru
 
 0:00 Одна история
 0:36 Творение
@@ -609,7 +609,7 @@ Bibelzitate nach der Lutherbibel (1912), mit Quellenangabe zitiert; etwaige Rech
 ```
 من الخلق إلى السماء الجديدة والأرض الجديدة — 21 مشهداً، رُسم كل منها بأسلوب مختلف، تروي قصة واحدة.
 
-اقرأ القصة كاملة على مهل · صفحة الفيلم: https://one-scroll-bible.com/film/?lang=ar
+اقرأ القصة كاملة على مهل: https://one-scroll-bible.com/ar/?utm_source=youtube&utm_medium=video&utm_campaign=film_ar
 
 0:00 قصة واحدة
 0:36 الخلق
@@ -669,7 +669,7 @@ Bibelzitate nach der Lutherbibel (1912), mit Quellenangabe zitiert; etwaige Rech
 ```
 Dari penciptaan sampai langit yang baru dan bumi yang baru — 21 adegan, masing-masing dilukis dengan gayanya sendiri, menuturkan satu kisah.
 
-Baca seluruh kisah perlahan · halaman film: https://one-scroll-bible.com/film/?lang=id
+Baca seluruh kisah perlahan: https://one-scroll-bible.com/id/?utm_source=youtube&utm_medium=video&utm_campaign=film_id
 
 0:00 Satu Kisah
 0:36 Penciptaan

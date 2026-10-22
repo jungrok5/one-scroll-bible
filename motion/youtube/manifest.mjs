@@ -60,11 +60,16 @@ for (const L of LANGS) {
   const ui = pack ? pack._ui : KO_UI, ch = pack ? ui.ch : koCh, X = read(join(HERE, 'lang', L + '.json'));
   for (const k of ['watch', 'short_tail', 'tags', 'thumb']) if (!X[k]) problems.push(`${L}: motion/youtube/lang/${L}.json has no "${k}"`);
   const page = `${SITE}/film/` + (L === 'ko' ? '' : `?lang=${L}`);
+  // the description links to the language's home page (gospel → prayer), tagged so GA4 can tell YouTube visits apart;
+  // not to the film page: the site's film button sends people to YouTube, so the two would only point at each other
+  const home = `${SITE}/${L === 'ko' ? '' : L + '/'}`;
+  const utm = (medium, campaign, content) => `?utm_source=youtube&utm_medium=${medium}&utm_campaign=${campaign}` + (content ? `&utm_content=${content}` : '');
   const chapters = ORDER.map((sc, i) => ({ time: mmss(starts[sc]), seconds: +starts[sc].toFixed(1), title: ch[i] }));
   const hashtags = n => (X.tags || []).slice(0, n).map(t => '#' + t.replace(/\s/g, '')).join(' ');
-  const description = [blurb(ui.sub), '', `${X.watch}: ${page}`, '', ...chapters.map(c => `${c.time} ${c.title}`), '', strip(ui.legal), '', hashtags(3)].join('\n');
+  const link = home + utm('video', `film_${L}`);
+  const description = [blurb(ui.sub), '', `${X.watch}: ${link}`, '', ...chapters.map(c => `${c.time} ${c.title}`), '', strip(ui.legal), '', hashtags(3)].join('\n');
   const tags = [ui.brand, ...(X.tags || []), ...ch]; while (tags.join(',').length > 480) tags.pop();   // YouTube: 500 characters in all
-  const film = { file: `film-${L}.mp4`, local: `motion/out/release/film-${L}.mp4`, title: ui.shareText.slice(0, 100), description, tags, language: L,
+  const film = { file: `film-${L}.mp4`, local: `motion/out/release/film-${L}.mp4`, title: ui.shareText.slice(0, 100), description, link, tags, language: L,
     thumbnail: `motion/youtube/thumbs/${L}/A-exodus.jpg`, thumbnail_alternatives: ['B-cross', 'C-split', 'D-earth'].map(v => `motion/youtube/thumbs/${L}/${v}.jpg`),
     captions: subsOf('', 'film-h.srt'), chapters, playlist: ui.brand, page };
   titlesMd.push(`## ${L}`);
@@ -82,8 +87,9 @@ for (const L of LANGS) {
     if (long(title) && ALT[sc]) title = make(hookFor(ALT[sc]));
     if (long(title)) problems.push(`${L}/${sc}: title over 100 characters`);
     titlesMd.push(`${String(n).padStart(2, '0')}. ${title}`);
-    return { n, scene: sc, file: `shorts-${L}-${name}.mp4`, local: `motion/out/release/shorts-${L}-${name}.mp4`, title,
-      description: [ui.shareText, `${X.short_tail}: ${page}`, '', '#Shorts ' + hashtags(2)].join('\n'),
+    const slink = home + utm('shorts', `shorts_${L}`, name);
+    return { n, scene: sc, file: `shorts-${L}-${name}.mp4`, local: `motion/out/release/shorts-${L}-${name}.mp4`, title, link: slink,
+      description: [ui.shareText, `${X.short_tail}: ${slink}`, '', '#Shorts ' + hashtags(2)].join('\n'),
       tags: tags.slice(0, 12), language: L, seconds: +(tl[sc].frames / 30).toFixed(1), captions: subsOf('v', name + '.srt') };
   });
   titlesMd.push('');

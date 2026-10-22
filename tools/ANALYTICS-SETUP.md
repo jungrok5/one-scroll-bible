@@ -117,15 +117,18 @@
 ### B2. Studio에 반영
 
 대상: `motion/youtube/uploaded.json` 의 영상 — 가로 영상(`film`)에서 상태가 public 인 12개, 그리고 기록된 쇼츠.
-**설명란만** 새 manifest 의 `description` 으로 바꿔 저장한다(기존 스튜디오 도우미 `studio-upload.js` / `studio-shorts.js` 에 설명만
-갱신하는 경로가 있으면 그걸 쓰고, 없으면 영상 세부정보 화면에서 설명 칸만 교체).
+**설명란 전체를 바꾸지 말고, 사이트 링크가 있는 줄만** 새 manifest 의 해당 줄로 바꾼다. 영상마다 스튜디오에서 손본 설명이 있을 수
+있다 — 특히 한국어 가로 영상 `66VfBSXxAs8` 은 사용자 승인으로 첫 문단·해시태그·챕터 이름을 따로 다듬었으므로 manifest 설명과 다르다.
+도우미: `motion/youtube/studio-describe.js` (기존 링크 줄을 찾아 그 줄만 바꾸고, 저장 뒤 예약 시각이 그대로인지 영상 데이터로 확인).
 
 1. **먼저 한 개만**(한국어 가로 영상 `66VfBSXxAs8`) 바꾸고, 공개 페이지에서 링크를 눌러 첫 페이지가 열리는지 확인한 뒤 나머지를 한다.
-2. 예약된 쇼츠는 **예약 시각·공개 범위를 다시 고르지 않는다** — 설명만 바꾸고 저장.
+2. 예약된 쇼츠는 **예약 시각·공개 범위를 다시 고르지 않는다** — 설명만 바꾸고 저장. 저장할 때마다 예약 시각(`scheduledPublishingDetails`)과
+   관련 동영상이 그대로인지 다시 읽어 확인한다(스튜디오의 예약 시간 칸은 목록에서 고르지 않은 값을 0시로 저장한 적이 있다).
 3. 결과를 `uploaded.json` 각 항목의 `note` 에 "description UTM 2026-MM-DD" 로 남긴다.
 
-선택(권장): 각 가로 영상에 **고정 댓글** 한 줄 — 그 언어의 `respond.h3`(사이트 팩의 이미 번역된 "그래서, 나는 어떻게?" 문구) +
+선택: 각 가로 영상에 **고정 댓글** 한 줄 — 그 언어의 `respond.h3`(사이트 팩의 이미 번역된 "그래서, 나는 어떻게?" 문구) +
 `home(L) + utm('video', 'film_' + L, 'pinned') + '#respond'` (영접 기도 섹션으로 바로 감). 새 번역 문장은 만들지 않는다.
+**채널 이름으로 공개 글을 쓰는 일이므로 문구를 보여 주고 사용자 허락을 받은 뒤에만** 단다.
 
 ---
 
@@ -181,14 +184,19 @@ YouTube Studio → **맞춤설정(Customization) → 기본 정보(Basic info) �
 채널 설명의 다른 문구는 바꾸지 않는다. (사이트의 구조화 데이터가 이미 이 채널을 공식 계정으로 가리키므로 양쪽이 서로를 가리키게 된다.)
 
 ### E7. GitHub 저장소
-github.com/jungrok5/one-scroll-bible → 오른쪽 **About 옆 톱니** → Website 에 `https://one-scroll-bible.com` → Topics 에
-`bible, gospel, christianity, multilingual, redemptive-history` 를 추가 → Save. (설명 문구가 비어 있으면 README 첫 문장을 그대로 쓴다.)
+브라우저보다 GitHub CLI 가 확실하다(로그인 계정은 `gh auth status` 로 확인 — `jungrok5`):
+```
+gh repo edit jungrok5/one-scroll-bible --homepage https://one-scroll-bible.com \
+  --add-topic bible --add-topic gospel --add-topic christianity --add-topic multilingual --add-topic redemptive-history
+```
+(설명 문구가 비어 있으면 `--description` 에 README 첫 문장을 그대로 쓴다.) 브라우저로 할 때: 오른쪽 **About 옆 톱니** → Website · Topics → Save.
 
 ### E8. AI 인용 기준선
 `tools/seo-log.md` 의 "AI 인용 기준선" 표 질문 8개를 **로그아웃 상태 또는 새 대화**에서 그대로 묻는다.
 - ChatGPT(검색 켜기), Perplexity, 네이버(앱 또는 웹 검색 → AI 브리핑).
 - 답의 출처 목록에 `one-scroll-bible.com` 이 있으면 O, 없으면 X. 다른 사이트가 인용되면 어느 사이트인지 짧게 적는다.
 - 답 내용을 길게 옮겨 적지 않는다.
+- 로봇 확인(CAPTCHA)이 나오면 풀지 말고 멈춘다 — 그 서비스는 사용자가 직접 하도록 표에 "사용자 확인 필요"로 남긴다.
 
 ---
 
@@ -204,7 +212,8 @@ github.com/jungrok5/one-scroll-bible → 오른쪽 **About 옆 톱니** → Webs
 |---|---|---|---|---|
 | | A1 | | 맞춤 측정기준 __/18 | |
 | | A2 | | 핵심 이벤트 __/4 | |
-| | B1 | | manifest.mjs·lang 파일 수정 | |
+| 2026-10-23 | B1 | (저장소) | manifest.mjs: 설명 링크 = 언어 첫 페이지 + UTM(영화 video/film_<L>, 쇼츠 shorts/shorts_<L>/NN-<scene>), lang 16개 `watch` 의 " · 영상 페이지" 삭제; 스튜디오 도우미 studio-describe.js | ko·en 설명 눈으로 확인 |
+| 2026-10-23 | E7 | jungrok5 (gh) | 바꿀 것 없음 — Website `https://one-scroll-bible.com`, Topics 에 bible·gospel·christianity·multilingual·redemptive-history 이미 있음 | `gh repo view` |
 | | B2 | | 설명 갱신: 가로 __/12 · 쇼츠 __ | |
 | | C | | 인스타 프로필 링크 | |
 | | E1–E2 | | 서치콘솔 기준선·/film/ 색인 요청·GA 연결 | |

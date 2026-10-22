@@ -1,19 +1,154 @@
-﻿{
+{
  "_note": "YouTube video ids on the one-scroll-bible channel (UCtCcbrM2mCgfhSryo4SWxzg). film = the landscape film; status as last set from Studio. The public Korean film's URL was already shared — never replace that video.",
  "film": {
-  "ko": { "id": "66VfBSXxAs8", "status": "public", "note": "original upload 2026-10-20; description + thumbnail test (A/B/D) updated 2026-10-22" },
-  "ko-vertical": { "id": "3X5HbQKBpRI", "status": "private", "note": "whole vertical film, superseded by the 21 Shorts" },
-  "en": { "id": "IDvto63DZC8", "status": "public", "note": "public + thumbnail test A/B/D 2026-10-22" },
-  "es": { "id": "h6HTeZijyr8", "status": "public", "note": "public + thumbnail test A/B/D 2026-10-22" },
-  "pt-BR": { "id": "b74m2kxl4jM", "status": "public", "note": "public + thumbnail test A/B/D 2026-10-22" },
-  "fr": { "id": "zCPsT6RbqE4", "status": "public", "note": "public + thumbnail test A/B/D 2026-10-22" },
-  "de": { "id": "nGR-70YYL-E", "status": "public", "note": "public + thumbnail test A/B/D 2026-10-22" },
-  "ru": { "id": "rPBUPZC4PnA", "status": "public", "note": "public + thumbnail test A/B/D 2026-10-22" },
-  "id": { "id": "Jntp5xDBBJg", "status": "public", "note": "public + thumbnail test A/B/D 2026-10-22" },
-  "zh-Hans": { "id": "4MvbvszEQHU", "status": "public", "note": "public + thumbnail test A/B/D 2026-10-22" },
-  "zh-Hant": { "id": "UEr4oQAZS6s", "status": "public", "note": "public + thumbnail test A/B/D 2026-10-22" },
-  "ja": { "id": "VIGqzFaWkTU", "status": "public", "note": "public + thumbnail test A/B/D 2026-10-22" },
-  "ar": { "id": "IlhNG5Mul9I", "status": "public", "note": "public + thumbnail test A/B/D 2026-10-22" }
+  "ko": {
+   "id": "66VfBSXxAs8",
+   "status": "public",
+   "note": "original upload 2026-10-20; description + thumbnail test (A/B/D) updated 2026-10-22"
+  },
+  "ko-vertical": {
+   "id": "3X5HbQKBpRI",
+   "status": "private",
+   "note": "whole vertical film, superseded by the 21 Shorts"
+  },
+  "en": {
+   "id": "IDvto63DZC8",
+   "status": "public",
+   "note": "public + thumbnail test A/B/D 2026-10-22"
+  },
+  "es": {
+   "id": "h6HTeZijyr8",
+   "status": "public",
+   "note": "public + thumbnail test A/B/D 2026-10-22"
+  },
+  "pt-BR": {
+   "id": "b74m2kxl4jM",
+   "status": "public",
+   "note": "public + thumbnail test A/B/D 2026-10-22"
+  },
+  "fr": {
+   "id": "zCPsT6RbqE4",
+   "status": "public",
+   "note": "public + thumbnail test A/B/D 2026-10-22"
+  },
+  "de": {
+   "id": "nGR-70YYL-E",
+   "status": "public",
+   "note": "public + thumbnail test A/B/D 2026-10-22"
+  },
+  "ru": {
+   "id": "rPBUPZC4PnA",
+   "status": "public",
+   "note": "public + thumbnail test A/B/D 2026-10-22"
+  },
+  "id": {
+   "id": "Jntp5xDBBJg",
+   "status": "public",
+   "note": "public + thumbnail test A/B/D 2026-10-22"
+  },
+  "zh-Hans": {
+   "id": "4MvbvszEQHU",
+   "status": "public",
+   "note": "public + thumbnail test A/B/D 2026-10-22"
+  },
+  "zh-Hant": {
+   "id": "UEr4oQAZS6s",
+   "status": "public",
+   "note": "public + thumbnail test A/B/D 2026-10-22"
+  },
+  "ja": {
+   "id": "VIGqzFaWkTU",
+   "status": "public",
+   "note": "public + thumbnail test A/B/D 2026-10-22"
+  },
+  "ar": {
+   "id": "IlhNG5Mul9I",
+   "status": "public",
+   "note": "public + thumbnail test A/B/D 2026-10-22"
+  }
  },
- "shorts": {}
+ "shorts": {
+  "en": {
+   "time_kst": "08:00",
+   "first_day": "2026-10-24",
+   "ids": {
+    "10": "g5i7vw7feXM",
+    "11": "jsIZLMOoALo",
+    "12": "UerRQV068FU",
+    "13": "mO1bqIuMFCU",
+    "14": "cXoHyNY7opo",
+    "15": "GneTfYuFejQ",
+    "16": "6zeppE_rO0s",
+    "17": "QCzLn5vZXnE",
+    "18": "VjR6DWU3Mys",
+    "19": "rGBGCe6PVbw",
+    "20": "5sIsAMO_jgY",
+    "21": "oL_ZMhWcyvM",
+    "01": "ZJKs9IpX2Cc",
+    "02": "2dfkd4jB44g",
+    "03": "7A0na25fSP0",
+    "04": "pGJ65xYfNtU",
+    "05": "MOoUSQRFPMU",
+    "06": "oX2u0I4lzeE",
+    "07": "nnyJBvRUgrA",
+    "08": "aLISIpOa_Q0",
+    "09": "YxLoO2C3ejI"
+   }
+  },
+  "es": {
+   "time_kst": "10:00",
+   "first_day": "2026-10-24",
+   "ids": {
+    "10": "WJqnJjbmczo",
+    "11": "GvhClSm-42w",
+    "12": "zRyd9ey3gaE",
+    "13": "FQC9kcILlb4",
+    "14": "jUrqtZ6omrA",
+    "15": "vZfPQzyFBO0",
+    "16": "EaZkOaRUpMI",
+    "17": "jNdidPuUW14",
+    "18": "fJ1xqOa6He0",
+    "19": "R6RIl6XLBYo",
+    "20": "PCXZyfZz1Jg",
+    "21": "FHqZP6pSOig",
+    "01": "5g5m4LdzQoA",
+    "02": "A4EZ1mV5azQ",
+    "03": "VxJH0T0-evQ",
+    "04": "tEM35nJDNJ0",
+    "05": "Zu6GmffyzZk",
+    "06": "VXsLSa_IU_M",
+    "07": "MsX6UbjMEjE",
+    "08": "fnEV-hrkI0M",
+    "09": "AARGLCoBiCE"
+   }
+  },
+  "pt-BR": {
+   "time_kst": "06:00",
+   "first_day": "2026-10-24",
+   "ids": {
+    "10": "sDB8aE0Rdg8",
+    "11": "IxEdkNL5mnk",
+    "12": "BsVJAIzgxwY",
+    "13": "MjZWXhZSfL4",
+    "14": "NRgl4YNB8Lg",
+    "15": "91ZfO3anhhw",
+    "16": "qqZaRCVY8G8",
+    "17": "VgasRWyQjYc",
+    "18": "mRWSAaWPZi8",
+    "19": "s7fzfLMXzNY",
+    "20": "sXepLtXjTUw",
+    "21": "vwEEhLaY5vA",
+    "01": "hxdpRNr5mz0",
+    "02": "zjyXhbZnTbE",
+    "03": "ISzXit-N8_w",
+    "04": "i680UOxtBNs",
+    "05": "oyxX9rA2tnE",
+    "06": "xcwXBXVnp94",
+    "07": "hllOeiBKnFk",
+    "08": "9zfcDb_I-gs",
+    "09": "RCNm0sZqUaA"
+   }
+  }
+ },
+ "_shorts_note": "Shorts are scheduled one scene a day in story order (scene n on 2026-10-24 + n-1 days), at the language's evening, given in KST (GMT+9); every Short links its language's film as the related video. Phases of 21 days: 1 = ko en es pt-BR, 2 = id fr de ru, 3 = zh-Hans zh-Hant ja ar."
 }

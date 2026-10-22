@@ -1,4 +1,4 @@
-﻿// Paste-in helper for YouTube Studio (run in the upload dialog page, e.g. through Claude in Chrome's javascript tool):
+// Paste-in helper for YouTube Studio (run in the upload dialog page, e.g. through Claude in Chrome's javascript tool):
 // uploads one language's film as a PRIVATE video with everything from motion/youtube/manifest.json filled in.
 // Needs the local file server (motion/out/release + motion/youtube served on http://127.0.0.1:8765, CORS for Studio).
 //   open https://studio.youtube.com/channel/<id>/videos/upload?d=ud, then: await __osbUpload('de')

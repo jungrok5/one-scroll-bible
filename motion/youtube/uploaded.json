@@ -68,6 +68,34 @@
   }
  },
  "shorts": {
+  "ko": {
+   "time_kst": "19:00",
+   "first_day": "2026-10-24",
+   "note": "subscriber notification on (Korean)",
+   "ids": {
+    "10": "DkMfG7PzRHk",
+    "11": "jH6fIWRdigA",
+    "12": "W4ZsYvy7GDw",
+    "13": "VX4N7S_tikQ",
+    "14": "kmsCi4aTNrs",
+    "15": "WPNk5xMxvJo",
+    "16": "QwF34RhMhZU",
+    "17": "oKU48PPGI_k",
+    "18": "hUaZL1LGaiU",
+    "19": "X7SU-igJIlk",
+    "20": "RecD-FBSYDQ",
+    "21": "-di7YnZZyyU",
+    "01": "jr3PxWQY7Nk",
+    "02": "Ub6aw-WBNco",
+    "03": "Idr2IkdsA-o",
+    "04": "9E5U3jX2ndY",
+    "05": "t6SHBm6dPVw",
+    "06": "gopZZma-qdU",
+    "07": "t04z72YSKfw",
+    "08": "sVNVHUNPGwE",
+    "09": "tdbvPVsBnGU"
+   }
+  },
   "en": {
    "time_kst": "08:00",
    "first_day": "2026-10-24",

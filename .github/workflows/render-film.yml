@@ -41,11 +41,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-        with: { node-version: 20 }
+        with:
+          node-version: 20
       - run: bash motion/ci-setup.sh
       - run: node motion/render.mjs ${{ matrix.o }} --page pilot/creation.html --glcache build
       - uses: actions/upload-artifact@v4
-        with: { name: "glcache-${{ matrix.o }}", path: motion/out/glcache, retention-days: 3, compression-level: 0 }
+        with:
+          name: glcache-${{ matrix.o }}
+          path: motion/out/glcache
+          retention-days: 3
+          compression-level: 0
   render:
     needs: [plan, glcache]
     if: always() && needs.plan.result == 'success' && (needs.glcache.result == 'success' || needs.glcache.result == 'skipped')
@@ -59,11 +64,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-        with: { node-version: 20 }
+        with:
+          node-version: 20
       - run: bash motion/ci-setup.sh
       - uses: actions/download-artifact@v4
         if: needs.glcache.result == 'success'
-        with: { name: "glcache-${{ matrix.o }}", path: motion/out/glcache }
+        with:
+          name: glcache-${{ matrix.o }}
+          path: motion/out/glcache
       - name: render
         env:
           SCENES: ${{ inputs.scenes }}
@@ -72,7 +80,15 @@ jobs:
           bash motion/render-lang.sh ${{ matrix.lang }} ${{ matrix.o }}
       - uses: actions/upload-artifact@v4
         if: matrix.o == 'h'
-        with: { name: "film-${{ matrix.lang }}-h", path: motion/out/film-${{ matrix.lang }}-h-upload.mp4, retention-days: 3, compression-level: 0 }
+        with:
+          name: film-${{ matrix.lang }}-h
+          path: motion/out/film-${{ matrix.lang }}-h-upload.mp4
+          retention-days: 3
+          compression-level: 0
       - uses: actions/upload-artifact@v4
         if: matrix.o == 'v'
-        with: { name: "shorts-${{ matrix.lang }}", path: motion/out/shorts/${{ matrix.lang }}, retention-days: 3, compression-level: 0 }
+        with:
+          name: shorts-${{ matrix.lang }}
+          path: motion/out/shorts/${{ matrix.lang }}
+          retention-days: 3
+          compression-level: 0

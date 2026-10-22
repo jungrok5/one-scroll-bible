@@ -71,6 +71,7 @@ Run workflow에서 언어·방향(·시험용 장면)을 넣으면 언어×방�
 | 무엇 | 어디 | 다시 만들기 |
 |---|---|---|
 | 영상 (언어별 가로 전체 + 쇼츠 21개) | **GitHub 릴리즈 `youtube-v1`** — `film-<lang>.mp4`, `shorts-<lang>-NN-<scene>.mp4` | Actions → render-film (언어·방향) → 끝나면 Actions → **publish-release**(그 run id)로 릴리즈에 추가 |
+| 업로드 시트 (언어별 제목·설명+챕터·태그·썸네일·자막 경로, 영상+쇼츠 21개) | `motion/youtube/manifest.json` (읽기용 `manifest.md`) | `python3 motion/youtube/manifest.py` — 영상 페이지의 언어별 문구(`_ui`)와 장면 타이밍에서 만듦 |
 | 썸네일 (언어별 4안 + 생성기) | `motion/youtube/thumbs/<lang>/{A-exodus,B-cross,C-split,D-earth}.jpg` | `python3 motion/youtube/thumbs/make.py [lang…]` (글꼴은 없으면 내려받음) |
 | 자막 (언어별 전체 영상 + 쇼츠별 SRT) | `motion/subs/<lang>/film-h.srt`, `motion/subs/<lang>/{h,v}/NN-<scene>.srt` | `node motion/subtitles.mjs srt <lang> h` (타임라인은 `motion/subs/timeline-<h\|v>.json`, 장면 타이밍이 바뀐 뒤에만 `scan`) |
 | 소리 | 원본 클립 `motion/pilot/audio/*.mp3`(git) + 큐 `pilot/<scene>.sound.json` → 믹스 `pilot/<scene>.wav` | `python3 motion/pilot/mix.py` (wav가 없으면 assemble은 사이트의 `film/s/<scene>.m4a`를 씀 — CI가 만든 영상이 그것) |

@@ -28,6 +28,18 @@ const T_IGN = 4.9, T_FL = 6.8;
 const X = V ? .56 : 1;                    // horizontal room (uv units are relative to the short side)
 const RENDER = /[?&]render=1/.test(location.search);
 let gl = null, glc, U = {}, SCALE = .55, FIG = null;
+// Rendering: the cosmos (the shader's output) is the same in every language, so render.mjs stores it once per orientation
+// as lossless PNGs and passes ?glcache=<dir url>; __prepare(t) loads the frame before seek(t) and draw() blits it instead of
+// running the shader (0.6 s a frame on a CPU). The live page never uses this. __glFrame() hands the shader's frame out
+// for building that cache.
+const GLCACHE = RENDER ? (location.search.match(/[?&]glcache=([^&]+)/) || [])[1] : null;
+let GLC = {};
+window.__prepare = async t => {
+  if (!GLCACHE || !gl) return; const f = Math.round(t * 30); if (GLC.f === f && GLC.img) return;
+  const img = new Image(); img.src = decodeURIComponent(GLCACHE) + String(f).padStart(5, '0') + '.png';
+  try { await img.decode(); GLC = { f, img }; } catch (e) { GLC = {}; }   // missing frame: the shader draws it
+};
+window.__glFrame = () => glc ? glc.toDataURL('image/png') : null;
 
 // ======================= the shader =======================
 const VSH = 'attribute vec2 a; void main(){ gl_Position = vec4(a, 0., 1.); }';
@@ -664,7 +676,10 @@ function draw(ctx, t) {
   const toUV = (yy) => (H / 2 - yy) / SH;
   let bed = [0, toUV(y0 + 20), .6 * X, .09], bedA = a0 * .3;
   if (t > 8 && t < 16) { bed = [0, toUV(y1 + 20), .62 * X, .11]; bedA = a1 * 1.5; } else if (t >= 16) { bed = [0, toUV(y2 + 60), .7 * X, V ? .14 : .13]; bedA = a2 * .9; }
-  if (gl) {
+  if (gl && GLC.img && GLC.f === Math.round(t * 30)) {   // the cached cosmos frame (see __prepare)
+    ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = 'high';
+    ctx.drawImage(GLC.img, 0, 0, W, H);
+  } else if (gl) {
     if (!RENDER) {   // live: keep the frame rate by lowering the shader's resolution on a slow device
       const now = performance.now(), dt = now - lastNow; lastNow = now;
       if (dt > 0 && dt < 200) { slow = slow * .95 + (dt > 30 ? 1 : 0) * .05; if (slow > .6 && SCALE > .34) { setScale(Math.max(.34, SCALE - .1)); slow = 0; } }

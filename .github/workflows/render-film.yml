@@ -1,0 +1,78 @@
+# Render the film for several languages at once on GitHub's runners (free for a public repository, up to 20 jobs in
+# parallel) instead of one language after another on one machine. Start it from the Actions tab ("Run workflow") or
+# the API; each language × orientation is its own job, and the results are downloadable artifacts (kept 3 days).
+#   h → film-<lang>-h-upload.mp4 (the whole film, YouTube upload format)     v → shorts/<lang>/NN-<scene>.mp4 (21 Shorts)
+name: render-film
+on:
+  workflow_dispatch:
+    inputs:
+      languages:
+        description: "languages (space-separated film language codes; ko = Korean source)"
+        default: "en es pt-BR fr de ru id zh-Hans zh-Hant ja ar"
+      orientations:
+        description: "orientations: h (landscape film) and/or v (Shorts)"
+        default: "h v"
+      scenes:
+        description: "scenes to render (empty = all 21; e.g. 'rise church' for a quick test)"
+        default: ""
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    outputs:
+      langs: ${{ steps.m.outputs.langs }}
+      oris: ${{ steps.m.outputs.oris }}
+      cache: ${{ steps.m.outputs.cache }}
+    steps:
+      - id: m
+        run: |
+          j() { printf '['; sep=''; for x in $1; do printf '%s"%s"' "$sep" "$x"; sep=','; done; printf ']'; }
+          echo "langs=$(j "${{ inputs.languages }}")" >> "$GITHUB_OUTPUT"
+          echo "oris=$(j "${{ inputs.orientations }}")" >> "$GITHUB_OUTPUT"
+          s="${{ inputs.scenes }}"; if [ -z "$s" ] || echo " $s " | grep -q " creation "; then echo "cache=true" >> "$GITHUB_OUTPUT"; else echo "cache=false" >> "$GITHUB_OUTPUT"; fi
+  # the creation scene's cosmos (WebGL, ~0.6 s a frame on a CPU) is the same in every language: build it once per orientation
+  glcache:
+    needs: plan
+    if: needs.plan.outputs.cache == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    strategy:
+      matrix:
+        o: ${{ fromJSON(needs.plan.outputs.oris) }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - run: bash motion/ci-setup.sh
+      - run: node motion/render.mjs ${{ matrix.o }} --page pilot/creation.html --glcache build
+      - uses: actions/upload-artifact@v4
+        with: { name: "glcache-${{ matrix.o }}", path: motion/out/glcache, retention-days: 3, compression-level: 0 }
+  render:
+    needs: [plan, glcache]
+    if: always() && needs.plan.result == 'success' && (needs.glcache.result == 'success' || needs.glcache.result == 'skipped')
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    strategy:
+      fail-fast: false
+      matrix:
+        lang: ${{ fromJSON(needs.plan.outputs.langs) }}
+        o: ${{ fromJSON(needs.plan.outputs.oris) }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - run: bash motion/ci-setup.sh
+      - uses: actions/download-artifact@v4
+        if: needs.glcache.result == 'success'
+        with: { name: "glcache-${{ matrix.o }}", path: motion/out/glcache }
+      - name: render
+        env:
+          SCENES: ${{ inputs.scenes }}
+        run: |
+          if [ -z "$SCENES" ]; then unset SCENES; fi
+          bash motion/render-lang.sh ${{ matrix.lang }} ${{ matrix.o }}
+      - uses: actions/upload-artifact@v4
+        if: matrix.o == 'h'
+        with: { name: "film-${{ matrix.lang }}-h", path: motion/out/film-${{ matrix.lang }}-h-upload.mp4, retention-days: 3, compression-level: 0 }
+      - uses: actions/upload-artifact@v4
+        if: matrix.o == 'v'
+        with: { name: "shorts-${{ matrix.lang }}", path: motion/out/shorts/${{ matrix.lang }}, retention-days: 3, compression-level: 0 }

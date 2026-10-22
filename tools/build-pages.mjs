@@ -293,16 +293,17 @@ function faqLd(s){
   }));
   return { '@type':'FAQPage', mainEntity: main };
 }
-function ldBlock({ name, desc, url, code, s }){
+function ldBlock({ name, desc, url, code, s, modified }){
   // 발행 주체(Organization) — AI 엔진이 사이트와 운영 주체를 엔티티로 묶도록. 연락처 이메일은 일부러 넣지 않는다(스크래핑 노출).
   const orgRef = { '@id': `${ORIGIN}/#org` };
   const org = { '@type':'Organization', '@id': orgRef['@id'], name, alternateName: KO.brand, url: `${ORIGIN}/`, logo: `${ORIGIN}/icon-512.png`,
     description: desc, areaServed: 'Worldwide', knowsLanguage: LANGS.map(L => L.code),
     sameAs: ['https://github.com/jungrok5/one-scroll-bible'] };
   const site = { '@type':'WebSite', '@id': `${ORIGIN}/#website`, name, alternateName: KO.brand, url, inLanguage: code, description: desc, publisher: orgRef };
-  // 이 페이지 자체 = 성경 전체 줄거리를 설명하는 장문 글(Article). 날짜는 빌드 시각이 곧 내용 시각이 아니므로 넣지 않는다.
+  // 이 페이지 자체 = 성경 전체 줄거리를 설명하는 장문 글(Article). dateModified 는 빌드 시각이 아니라 이 페이지 소스의
+  // 마지막 커밋 날짜(sitemap <lastmod> 와 같은 값) — 모르면 넣지 않는다(답변엔진은 날짜 조작을 감점한다).
   const article = { '@type':'Article', headline: name, description: desc, url, mainEntityOfPage: url, inLanguage: code,
-    image: `${ORIGIN}/og.png`, author: orgRef, publisher: orgRef, isPartOf: { '@id': site['@id'] } };
+    image: `${ORIGIN}/og.png`, author: orgRef, publisher: orgRef, isPartOf: { '@id': site['@id'] }, ...(modified ? { dateModified: modified } : {}) };
   const faq = s && faqLd(s);
   const graph = faq && faq.mainEntity.length
     ? [site, org, article, { ...faq, name: `${name} — FAQ`, url, inLanguage: code, isPartOf: { '@id': site['@id'] } }]
@@ -429,10 +430,43 @@ function makePage(m){
     const obsBanner = obsBannerHtml(pack);
     if (obsBanner) h = h.replace('<div class="partial-note" id="partialNote" hidden></div>', `<div class="partial-note" id="partialNote">${obsBanner}</div>`);
     h = h.replace(/<script type="application\/ld\+json">[\s\S]*?<\/script>/,
-      ldBlock({ name: pack.brand, desc: (pack.share && pack.share.text) || m.desc, url, code: m.code, s: pack.s }));
+      ldBlock({ name: pack.brand, desc: (pack.share && pack.share.text) || m.desc, url, code: m.code, s: pack.s, modified: LASTMOD[srcOfMain(m.code)] }));
   }
   return h;
 }
+
+// ---- lastmod: 콘텐츠가 실제로 바뀐 날짜(git) — 빌드 날짜가 아니다 ----
+// (페이지 생성보다 먼저 계산: 같은 날짜를 sitemap <lastmod> 와 JSON-LD dateModified 에 함께 쓴다)
+// 모든 URL 에 빌드 날짜를 찍으면 검색엔진은 lastmod 를 신뢰하지 않고 무시한다(Google sitemaps 문서).
+// 각 페이지의 소스 파일(ko/en = index.html, 그 외 = i18n/<code>.json, about/maps 도 같은 규칙)의
+// 마지막 커밋 날짜를 쓴다. Vercel 클론은 shallow 라 git 이력이 없으므로: 전체 이력이 있는 로컬 빌드가
+// tools/lastmod.json 을 갱신(커밋 대상, en.json·sw.js 스탬프와 같은 부수 산출물)하고, 이력이 없는
+// 빌드는 그 표를 읽는다. 표에도 없는 파일은 <lastmod> 를 생략한다 — 틀린 날짜보다 낫다.
+// 커밋되지 않은 수정이 있는 파일은 오늘(곧 커밋될 변경이므로 표가 한 커밋 뒤처지지 않게).
+const LASTMOD_FILE = `${root}/tools/lastmod.json`;
+const today = new Date().toISOString().slice(0,10);
+function gitOut(cmd){ try { return execSync(cmd, { cwd: root, stdio: ['ignore','pipe','ignore'] }).toString().trim(); } catch { return null; } }
+const gitFull = gitOut('git rev-parse --is-shallow-repository') === 'false';
+const srcOfMain = code => (code==='ko'||code==='en') ? 'index.html' : `i18n/${code}.json`;
+const srcOfSub = (slug, code) => (code==='ko'||code==='en') ? `${slug}/index.html` : `i18n/${slug}/${code}.json`;
+let LASTMOD = {};
+if (gitFull) {
+  const files = new Set(LANGS.map(L => srcOfMain(L.code)));
+  for (const slug of ['about','maps']) for (const c of subLangsFor(slug)) files.add(srcOfSub(slug, c));
+  files.add('film/index.html');   // /film/ (영상 페이지) — sitemap lastmod
+  for (const file of [...files].sort()) {
+    if (!fs.existsSync(`${root}/${file}`)) continue;
+    const d = gitOut(`git status --porcelain -- "${file}"`) ? today : gitOut(`git log -1 --format=%cs -- "${file}"`);
+    if (d) LASTMOD[file] = d;
+  }
+  const json = JSON.stringify(LASTMOD, null, 1) + '\n';
+  if (!fs.existsSync(LASTMOD_FILE) || fs.readFileSync(LASTMOD_FILE, 'utf8') !== json) { fs.writeFileSync(LASTMOD_FILE, json); console.log('tools/lastmod.json 갱신 (커밋 대상)'); }
+} else {
+  try { LASTMOD = JSON.parse(fs.readFileSync(LASTMOD_FILE, 'utf8')); console.log('lastmod: git 이력 없음 → tools/lastmod.json 사용'); }
+  catch { console.log('lastmod: git 이력도 tools/lastmod.json 도 없음 → <lastmod> 생략'); }
+}
+const lastmodTag = file => LASTMOD[file] ? `<lastmod>${LASTMOD[file]}</lastmod>` : '';
+const siteLastmod = Object.values(LASTMOD).sort().pop() || today;
 
 buildIcons();
 buildSharedOG();
@@ -463,7 +497,7 @@ rootHtml = rootHtml.replace('<link rel="canonical" href="https://one-scroll-bibl
   `<link rel="canonical" href="${ORIGIN}/" />\n${HREF}`);
 const koS = {}; for (const k of ['faq.q1','faq.a1','faq.q2','faq.a2','faq.q3','faq.a3','faq.q4','faq.a4']) koS[k] = getInner(src, k);
 rootHtml = rootHtml.replace(/<script type="application\/ld\+json">[\s\S]*?<\/script>/,
-  ldBlock({ name: KO.brand, desc: KO.desc, url: `${ORIGIN}/`, code: 'ko', s: koS }));
+  ldBlock({ name: KO.brand, desc: KO.desc, url: `${ORIGIN}/`, code: 'ko', s: koS, modified: LASTMOD['index.html'] }));
 // 루트 og:image/twitter:image 도 버전(?v=) 부착 — 캐시 버스팅
 // 한글 루트 본문 프리렌더 — JS 없이도(검색·AI 크롤러) 13개 시대·핵심 7가지가 보이게. 비-ko 페이지와 같은 함수 사용.
 rootHtml = rootHtml.replace('<main id="epochs"></main>', `<main id="epochs"><!--pre-->${epochsHtml(KO_PACK)}<!--/pre--></main>`);
@@ -478,36 +512,6 @@ if (rootHtml !== srcRaw) fs.writeFileSync(`${root}/index.html`, rootHtml);
 subBake();          // ko 루트 프리렌더 + hreflang 갱신(멱등)
 subGenerate();      // 비-ko 언어 페이지 생성 → /about/<code>/·/maps/<code>/
 
-// ---- lastmod: 콘텐츠가 실제로 바뀐 날짜(git) — 빌드 날짜가 아니다 ----
-// 모든 URL 에 빌드 날짜를 찍으면 검색엔진은 lastmod 를 신뢰하지 않고 무시한다(Google sitemaps 문서).
-// 각 페이지의 소스 파일(ko/en = index.html, 그 외 = i18n/<code>.json, about/maps 도 같은 규칙)의
-// 마지막 커밋 날짜를 쓴다. Vercel 클론은 shallow 라 git 이력이 없으므로: 전체 이력이 있는 로컬 빌드가
-// tools/lastmod.json 을 갱신(커밋 대상, en.json·sw.js 스탬프와 같은 부수 산출물)하고, 이력이 없는
-// 빌드는 그 표를 읽는다. 표에도 없는 파일은 <lastmod> 를 생략한다 — 틀린 날짜보다 낫다.
-// 커밋되지 않은 수정이 있는 파일은 오늘(곧 커밋될 변경이므로 표가 한 커밋 뒤처지지 않게).
-const LASTMOD_FILE = `${root}/tools/lastmod.json`;
-const today = new Date().toISOString().slice(0,10);
-function gitOut(cmd){ try { return execSync(cmd, { cwd: root, stdio: ['ignore','pipe','ignore'] }).toString().trim(); } catch { return null; } }
-const gitFull = gitOut('git rev-parse --is-shallow-repository') === 'false';
-const srcOfMain = code => (code==='ko'||code==='en') ? 'index.html' : `i18n/${code}.json`;
-const srcOfSub = (slug, code) => (code==='ko'||code==='en') ? `${slug}/index.html` : `i18n/${slug}/${code}.json`;
-let LASTMOD = {};
-if (gitFull) {
-  const files = new Set(LANGS.map(L => srcOfMain(L.code)));
-  for (const slug of ['about','maps']) for (const c of subLangsFor(slug)) files.add(srcOfSub(slug, c));
-  for (const file of [...files].sort()) {
-    if (!fs.existsSync(`${root}/${file}`)) continue;
-    const d = gitOut(`git status --porcelain -- "${file}"`) ? today : gitOut(`git log -1 --format=%cs -- "${file}"`);
-    if (d) LASTMOD[file] = d;
-  }
-  const json = JSON.stringify(LASTMOD, null, 1) + '\n';
-  if (!fs.existsSync(LASTMOD_FILE) || fs.readFileSync(LASTMOD_FILE, 'utf8') !== json) { fs.writeFileSync(LASTMOD_FILE, json); console.log('tools/lastmod.json 갱신 (커밋 대상)'); }
-} else {
-  try { LASTMOD = JSON.parse(fs.readFileSync(LASTMOD_FILE, 'utf8')); console.log('lastmod: git 이력 없음 → tools/lastmod.json 사용'); }
-  catch { console.log('lastmod: git 이력도 tools/lastmod.json 도 없음 → <lastmod> 생략'); }
-}
-const lastmodTag = file => LASTMOD[file] ? `<lastmod>${LASTMOD[file]}</lastmod>` : '';
-const siteLastmod = Object.values(LASTMOD).sort().pop() || today;
 
 // ---- /languages/: 모든 언어로 가는 정적 링크 한 장 ----
 // 언어 전환 UI 는 JS(🌐 검색)라서 HTML 에는 about·maps 두 링크뿐이었다 → 크롤러·무JS 방문자에게
@@ -595,7 +599,8 @@ const extra = subUrls().map(loc => {
   return `  <url><loc>${loc}</loc>${m ? lastmodTag(srcOfSub(m[1], m[2] || 'ko')) : ''}<changefreq>monthly</changefreq><priority>0.6</priority></url>`;
 }).join('\n');
 const langsIndex = `  <url><loc>${ORIGIN}/languages/</loc>${lastmodTag('index.html')}<changefreq>monthly</changefreq><priority>0.5</priority></url>`;
-fs.writeFileSync(`${root}/sitemap.xml`, `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n${extra}\n${langsIndex}\n</urlset>\n`);
+const filmUrl = `  <url><loc>${ORIGIN}/film/</loc>${lastmodTag('film/index.html')}<changefreq>monthly</changefreq><priority>0.7</priority></url>`;
+fs.writeFileSync(`${root}/sitemap.xml`, `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n${extra}\n${filmUrl}\n${langsIndex}\n</urlset>\n`);
 
 // ---- llms.txt (LLM/AI 엔진용 사이트 요약) ----
 // 링크는 llmstxt.org 규격의 마크다운 링크 `[이름](URL): 설명`. (예전엔 `- ko: URL` 평문이라 AI 도구가 링크로 인식하지 못했다)
@@ -617,6 +622,7 @@ ${LANGS.map(langLine).join('\n')}
 - [Languages / 언어](${ORIGIN}/languages/): every language on one page — pick yours.
 - [About / 소개](${ORIGIN}/about/): rare facts from translating one gospel story into ${LANGS.length} languages; translation reach, speaker statistics, languages still waiting.
 - [Bible by Map / 지도로 보는 성경](${ORIGIN}/maps/): the Old Testament timeline, the life of Jesus, and Paul's journeys traced on a real map, in time order.
+- [The film / 영상으로 보는 성경 이야기](${ORIGIN}/film/): the same storyline as a 14-minute film in 21 scenes, each painted in its own style and drawn live in the browser; Korean, and in ${Object.keys(FILM_CTA).filter(c => c !== 'ko').map(c => (LANGS.find(L => L.code === c) || {}).en || c).join(', ')} via ?lang=<code>.
 
 ## Resources
 - [Full text outline (llms-full.txt)](${ORIGIN}/llms-full.txt): the 13-epoch storyline, FAQ and language list in one file, without Scripture quotations.

@@ -70,6 +70,7 @@ Protestant church; Korean Revised Version (개역개정) as the Korean baseline.
   QR modal — **`/qr.js` is lazy-loaded on first open** (kazuhikoarase encoder, EC-M) and renders the current
   URL as **SVG on screen + high-res PNG on download**; no per-language image, no `qrcode` build dep. Deep links `#s1`–`#s13`.
   (The canvas verse-image option was removed — canvas fonts can't render most non-Latin scripts.)
+- Search/AI-citation work (SEO·AEO·GEO·LLMO·Naver): the **/fire-your-seo-agency skill** (`.claude/skills/fire-your-seo-agency/`, vendored MIT); changes, baselines and re-measure dates go in `tools/seo-log.md`. After each deploy `.github/workflows/indexnow.yml` pings IndexNow (Bing·Naver·Yandex) with the URLs whose `<lastmod>` changed.
 - GA4 events: language_select · share{method} · scene_view · section_view · prayer_view · read_more.
 - `vercel.json` (`buildCommand = node tools/build-pages.mjs` + security/cache headers), `robots.txt`.
   **`.vercelignore` keeps `AGENTS.md`, `CLAUDE.md` and `.claude` out of the deploy.**
@@ -103,7 +104,7 @@ language PR (now removed: build-pages no longer has its own LANGS array).
 1. After editing content (index.html / i18n), run `node tools/build-pages.mjs`. Its page output is
    gitignored, so locally the run is to **confirm it succeeds** and to refresh the **committed**
    side-effects: `i18n/en.json`, the `sw.js` cache stamp, and `tools/lastmod.json` (per-source
-   content dates from git for sitemap `<lastmod>`; Vercel's shallow clone reads this table instead of git). (OG/icon image steps need
+   content dates from git for sitemap `<lastmod>`; Vercel's shallow clone reads this table instead of git). **A shallow clone (cloud sessions) can't compute it — run `git fetch --unshallow` before building**, or the table silently stays stale (it sat at July dates until 2026-10-22). (OG/icon image steps need
    `rsvg-convert` + Noto/Nanum fonts; without them they are skipped and the committed PNGs are used.)
    - The generator uses index.html as the template, so editing index.html (en inline) re-derives all
      language pages — expected.

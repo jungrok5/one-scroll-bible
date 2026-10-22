@@ -49,9 +49,7 @@ const name = (pageRel === 'index.html' ? 'one-scroll-bible' : pageRel.replace(/^
 let url = pathToFileURL(join(here, pageRel)).href + `?render=1&o=${ori}` + (lang === 'ko' ? '' : `&lang=${lang}`);
 const pageSrc = readFileSync(join(here, pageRel), 'utf8');
 const glAble = glmode !== 'off' && /__glFrame/.test(pageSrc);
-const glDir = glAble ? join(here, 'out', 'glcache', `${pageRel.replace(/^.*\//, '').replace(/\.html$/, '')}-${ori}-${createHash('sha1').update(pageSrc).digest('hex').slice(0, 8)}`) : null;
-const glReady = glAble && existsSync(join(glDir, 'done'));
-if (glAble && glReady && glmode !== 'build') url += '&glcache=' + encodeURIComponent(pathToFileURL(glDir).href + '/');
+let glDir = null, glReady = false;   // set after the probe page: the scene may name its own cache key (__glFrame.key)
 const wav = join(here, pageRel.replace(/\.html$/, '.wav'));
 
 async function openPage(browser) {
@@ -65,6 +63,11 @@ async function openPage(browser) {
 const browser = await chromium.launch({ args: ['--font-render-hinting=none', '--disable-lcd-text', '--allow-file-access-from-files'] });
 const probe = await openPage(browser);
 const DUR = await probe.evaluate(() => window.DURATION);
+if (glAble) {
+  const key = (await probe.evaluate(() => window.__glFrame && window.__glFrame.key || null)) || createHash('sha1').update(pageSrc).digest('hex').slice(0, 8);
+  glDir = join(out, 'glcache', `${pageRel.replace(/^.*\//, '').replace(/\.html$/, '')}-${ori}-${key}`); glReady = existsSync(join(glDir, 'done'));
+  if (glReady && glmode !== 'build') url += '&glcache=' + encodeURIComponent(pathToFileURL(glDir).href + '/');
+}
 await probe.close();
 
 if (glAble && !glReady) {   // build the scene's cached layer first (all frames at the 30 fps grid), then use it

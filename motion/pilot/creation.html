@@ -33,13 +33,26 @@ let gl = null, glc, U = {}, SCALE = .55, FIG = null;
 // running the shader (0.6 s a frame on a CPU). The live page never uses this. __glFrame() hands the shader's frame out
 // for building that cache.
 const GLCACHE = RENDER ? (location.search.match(/[?&]glcache=([^&]+)/) || [])[1] : null;
-let GLC = {};
+let GLC = {}; const GLQ = new Map();   // GLC: the frame ready to draw (f, c = a 2D copy at glc's size); GLQ: frames being loaded ahead
+const glLoad = f => { if (!GLQ.has(f)) GLQ.set(f, new Promise(res => {   // XHR: fetch() is not allowed on file:// pages
+  const q = new XMLHttpRequest(); q.open('GET', decodeURIComponent(GLCACHE) + String(f).padStart(5, '0') + '.png'); q.responseType = 'blob';
+  q.onload = () => (q.status === 0 || q.status === 200) && q.response.size ? createImageBitmap(q.response).then(res, () => res(null)) : res(null); q.onerror = () => res(null); q.send(); })); return GLQ.get(f); };
 window.__prepare = async t => {
-  if (!GLCACHE || !gl) return; const f = Math.round(t * 30); if (GLC.f === f && GLC.img) return;
-  const img = new Image(); img.src = decodeURIComponent(GLCACHE) + String(f).padStart(5, '0') + '.png';
-  try { await img.decode(); GLC = { f, img }; } catch (e) { GLC = {}; }   // missing frame: the shader draws it
+  if (!GLCACHE || !gl) return; const f = Math.round(t * 30); if (GLC.f === f) return;
+  for (let k = 1; k <= 3; k++) glLoad(f + k);   // read the next frames while this one is drawn and encoded (disk latency hides)
+  const bm = await glLoad(f); GLQ.delete(f);
+  for (const k of [...GLQ.keys()]) if (k < f) { GLQ.get(k).then(b => b && b.close()); GLQ.delete(k); }
+  if (!bm) { GLC = {}; return; }   // missing frame: the shader draws it
+  // via a 2D canvas of the shader's size: drawing the decoded image straight to the frame resamples differently (±35),
+  // through a canvas it matches the live blit of glc to within a few pixels of ±1
+  if (!GLC.c) GLC.c = canvas(glc.width, glc.height);
+  GLC.c.getContext('2d').drawImage(bm, 0, 0); bm.close(); GLC.f = f;
 };
 window.__glFrame = () => glc ? glc.toDataURL('image/png') : null;
+// what the cached frames depend on: the shader, the timeline that drives its uniforms, its resolution. Bump the tag if
+// something else that feeds the shader changes (render.mjs keys the cache on this, so unrelated edits keep the cache).
+Object.defineProperty(window.__glFrame, 'key', { get() { let h = 2166136261; const src = 'cosmos-v1|' + VSH + FSH + '|' + SCALE + '|' + state.toString();
+  for (let i = 0; i < src.length; i++) { h ^= src.charCodeAt(i); h = Math.imul(h, 16777619) >>> 0; } return h.toString(16).padStart(8, '0'); } });   // (a getter: VSH/FSH are defined further down)
 
 // ======================= the shader =======================
 const VSH = 'attribute vec2 a; void main(){ gl_Position = vec4(a, 0., 1.); }';
@@ -676,9 +689,9 @@ function draw(ctx, t) {
   const toUV = (yy) => (H / 2 - yy) / SH;
   let bed = [0, toUV(y0 + 20), .6 * X, .09], bedA = a0 * .3;
   if (t > 8 && t < 16) { bed = [0, toUV(y1 + 20), .62 * X, .11]; bedA = a1 * 1.5; } else if (t >= 16) { bed = [0, toUV(y2 + 60), .7 * X, V ? .14 : .13]; bedA = a2 * .9; }
-  if (gl && GLC.img && GLC.f === Math.round(t * 30)) {   // the cached cosmos frame (see __prepare)
+  if (gl && GLC.c && GLC.f === Math.round(t * 30)) {   // the cached cosmos frame (see __prepare)
     ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = 'high';
-    ctx.drawImage(GLC.img, 0, 0, W, H);
+    ctx.drawImage(GLC.c, 0, 0, W, H);
   } else if (gl) {
     if (!RENDER) {   // live: keep the frame rate by lowering the shader's resolution on a slow device
       const now = performance.now(), dt = now - lastNow; lastNow = now;

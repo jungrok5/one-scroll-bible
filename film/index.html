@@ -57,7 +57,6 @@
   .chapters button{width:100%;text-align:left;font:inherit;font-size:.8125rem;color:var(--muted);border:1px solid var(--line);border-radius:10px;padding:8px 10px;background:var(--card);cursor:pointer}
   .chapters button b{color:var(--ink);font-weight:600;margin-right:4px}
   .chapters button[aria-current="true"]{border-color:var(--accent);color:var(--ink)}
-  .yt{margin-top:22px}.yt a{display:inline-flex;align-items:center;gap:9px;padding:9px 16px 9px 12px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--ink);text-decoration:none;font-size:.9375rem;font-weight:600}.yt a:hover,.yt a:focus-visible{border-color:#ff3b30}.yt svg{width:26px;height:18px;flex:none}
   footer{margin-top:32px;padding-top:16px;border-top:1px solid var(--line);color:var(--muted);font-size:.75rem;line-height:1.7}
   /* theatre: the stage fills the screen */
   body.full{overflow:hidden}
@@ -118,7 +117,6 @@
   <ol class="chapters" id="chapters"></ol>
   <div class="toast" id="toast" role="status" hidden></div>
 
-  <p class="yt" id="yt"><a href="https://youtu.be/66VfBSXxAs8" target="_blank" rel="noopener" data-yt="h"><svg viewBox="0 0 26 18" aria-hidden="true"><rect width="26" height="18" rx="5" fill="#ff0033"/><path d="M10.5 5v8l7-4z" fill="#fff"/></svg>YouTube에서 보기</a></p>
 
   <footer data-ui-html="legal">
     성경 인용: 「성경전서 개역개정판」 © 대한성서공회. 저작권은 대한성서공회에 있으며, 출처를 밝혀 인용했습니다.
@@ -141,8 +139,6 @@
   document.querySelectorAll('[data-ui-html]').forEach(function (e) { if (UI[e.dataset.uiHtml]) e.innerHTML = UI[e.dataset.uiHtml]; });
   document.querySelectorAll('[data-ui-aria]').forEach(function (e) { if (UI[e.dataset.uiAria]) e.setAttribute('aria-label', UI[e.dataset.uiAria]); });
   if (UI.title) document.title = UI.title;
-  if (LANG !== 'ko') document.getElementById('yt').hidden = true;   // the YouTube uploads are the Korean film
-  document.querySelectorAll('#yt a').forEach(function (a) { a.onclick = function () { if (window.gtag) gtag('event', 'youtube_click', { orientation: a.dataset.yt }); }; });
   if (LANG !== 'ko') document.getElementById('home').href = '/' + LANG + '/';
   document.getElementById('shareTop').onclick = function () { document.getElementById('share').click(); };
   // a shared link can point at one scene: /film/#cross

@@ -78,7 +78,7 @@ function review(list) {
     const pack = read(join(ROOT, 'i18n', L + '.json')), name = names.find(n => n.code === L)?.en || L;
     const edition = String(pack.ui?.version || '').replace(/^[(（]|[)）]$/g, '') || `YouVersion ${pack.yv}`;
     const p = join(M, 'out', `review-${L}.md`);
-    writeFileSync(p, tpl.replaceAll('«LANG»', name).replaceAll('«CODE»', L).replaceAll('«EDITION»', edition).replaceAll('«YV»', String(pack.yv)));
+    writeFileSync(p, tpl.replace(/^<!--[\s\S]*?-->\s*/, '').replaceAll('«LANG»', name).replaceAll('«CODE»', L).replaceAll('«EDITION»', edition).replaceAll('«YV»', String(pack.yv)));
     console.log(`→ ${p}\n  Give it to a fresh agent (it reports only). Apply every HIGH/MED finding, run check again, and keep the`);
     console.log(`  final report as motion/reviews/${L}.md — "status" counts a language as reviewed only when that file exists.`);
   }

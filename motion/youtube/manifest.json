@@ -65,32 +65,32 @@
     "chapters": [
      {
       "time": "0:00",
-      "seconds": 0.0,
+      "seconds": 0,
       "title": "하나의 줄거리"
      },
      {
       "time": "0:36",
-      "seconds": 36.0,
+      "seconds": 36,
       "title": "창조"
      },
      {
       "time": "1:11",
-      "seconds": 71.0,
+      "seconds": 71,
       "title": "타락"
      },
      {
       "time": "1:45",
-      "seconds": 105.0,
+      "seconds": 105,
       "title": "족장 시대"
      },
      {
       "time": "2:11",
-      "seconds": 131.0,
+      "seconds": 131,
       "title": "출애굽"
      },
      {
       "time": "2:55",
-      "seconds": 175.0,
+      "seconds": 175,
       "title": "광야 여정"
      },
      {
@@ -150,7 +150,7 @@
      },
      {
       "time": "10:19",
-      "seconds": 619.0,
+      "seconds": 619,
       "title": "복음의 핵심"
      },
      {
@@ -178,7 +178,7 @@
      "scene": "opening",
      "file": "shorts-ko-01-opening.mp4",
      "local": "motion/out/release/shorts-ko-01-opening.mp4",
-     "title": "하나의 줄거리 · 장면 1/21 · 한눈에 보는 성경 이야기",
+     "title": "성경은 결국 한 편의 이야기입니다 1/21",
      "description": "창조에서 새 하늘과 새 땅까지, 성경 이야기를 14분 영상으로\n전체 영상(14분)과 글로 읽는 성경 이야기: https://one-scroll-bible.com/film/\n\n#Shorts #성경 #성경이야기",
      "tags": [
       "한눈에 보는 성경 이야기",
@@ -195,7 +195,7 @@
       "타락"
      ],
      "language": "ko",
-     "seconds": 36.0,
+     "seconds": 36,
      "captions": {
       "en": "motion/subs/en/v/01-opening.srt",
       "es": "motion/subs/es/v/01-opening.srt",
@@ -215,7 +215,7 @@
      "scene": "creation",
      "file": "shorts-ko-02-creation.mp4",
      "local": "motion/out/release/shorts-ko-02-creation.mp4",
-     "title": "창조 · 장면 2/21 · 한눈에 보는 성경 이야기",
+     "title": "“하나님이 이르시되 빛이 있으라” — 창조 2/21",
      "description": "창조에서 새 하늘과 새 땅까지, 성경 이야기를 14분 영상으로\n전체 영상(14분)과 글로 읽는 성경 이야기: https://one-scroll-bible.com/film/\n\n#Shorts #성경 #성경이야기",
      "tags": [
       "한눈에 보는 성경 이야기",
@@ -232,7 +232,7 @@
       "타락"
      ],
      "language": "ko",
-     "seconds": 35.0,
+     "seconds": 35,
      "captions": {
       "en": "motion/subs/en/v/02-creation.srt",
       "es": "motion/subs/es/v/02-creation.srt",
@@ -252,7 +252,7 @@
      "scene": "fall",
      "file": "shorts-ko-03-fall.mp4",
      "local": "motion/out/release/shorts-ko-03-fall.mp4",
-     "title": "타락 · 장면 3/21 · 한눈에 보는 성경 이야기",
+     "title": "“네가 어디 있느냐” — 타락 3/21",
      "description": "창조에서 새 하늘과 새 땅까지, 성경 이야기를 14분 영상으로\n전체 영상(14분)과 글로 읽는 성경 이야기: https://one-scroll-bible.com/film/\n\n#Shorts #성경 #성경이야기",
      "tags": [
       "한눈에 보는 성경 이야기",
@@ -269,7 +269,7 @@
       "타락"
      ],
      "language": "ko",
-     "seconds": 34.0,
+     "seconds": 34,
      "captions": {
       "en": "motion/subs/en/v/03-fall.srt",
       "es": "motion/subs/es/v/03-fall.srt",
@@ -289,7 +289,7 @@
      "scene": "patriarch",
      "file": "shorts-ko-04-patriarch.mp4",
      "local": "motion/out/release/shorts-ko-04-patriarch.mp4",
-     "title": "족장 시대 · 장면 4/21 · 한눈에 보는 성경 이야기",
+     "title": "“하늘을 우러러 뭇별을 셀 수 있나 보라” — 족장 시대 4/21",
      "description": "창조에서 새 하늘과 새 땅까지, 성경 이야기를 14분 영상으로\n전체 영상(14분)과 글로 읽는 성경 이야기: https://one-scroll-bible.com/film/\n\n#Shorts #성경 #성경이야기",
      "tags": [
       "한눈에 보는 성경 이야기",
@@ -306,7 +306,7 @@
       "타락"
      ],
      "language": "ko",
-     "seconds": 26.0,
+     "seconds": 26,
      "captions": {
       "en": "motion/subs/en/v/04-patriarch.srt",
       "es": "motion/subs/es/v/04-patriarch.srt",
@@ -326,7 +326,7 @@
      "scene": "exodus",
      "file": "shorts-ko-05-exodus.mp4",
      "local": "motion/out/release/shorts-ko-05-exodus.mp4",
-     "title": "출애굽 · 장면 5/21 · 한눈에 보는 성경 이야기",
+     "title": "“내 백성을 보내라” — 출애굽 5/21",
      "description": "창조에서 새 하늘과 새 땅까지, 성경 이야기를 14분 영상으로\n전체 영상(14분)과 글로 읽는 성경 이야기: https://one-scroll-bible.com/film/\n\n#Shorts #성경 #성경이야기",
      "tags": [
       "한눈에 보는 성경 이야기",
@@ -343,7 +343,7 @@
       "타락"
      ],
      "language": "ko",
-     "seconds": 44.0,
+     "seconds": 44,
      "captions": {
       "en": "motion/subs/en/v/05-exodus.srt",
       "es": "motion/subs/es/v/05-exodus.srt",
@@ -363,7 +363,7 @@
      "scene": "wilderness",
      "file": "shorts-ko-06-wilderness.mp4",
      "local": "motion/out/release/shorts-ko-06-wilderness.mp4",
-     "title": "광야 여정 · 장면 6/21 · 한눈에 보는 성경 이야기",
+     "title": "약속의 땅 문 앞에 선 백성, 이제 들어갑니다… — 광야 여정 6/21",
      "description": "창조에서 새 하늘과 새 땅까지, 성경 이야기를 14분 영상으로\n전체 영상(14분)과 글로 읽는 성경 이야기: https://one-scroll-bible.com/film/\n\n#Shorts #성경 #성경이야기",
      "tags": [
       "한눈에 보는 성경 이야기",
@@ -400,7 +400,7 @@
      "scene": "judges",
      "file": "shorts-ko-07-judges.mp4",
      "local": "motion/out/release/shorts-ko-07-judges.mp4",
-     "title": "사사 시대 · 장면 7/21 · 한눈에 보는 성경 이야기",
+     "title": "왕이 없어 제멋대로 행하다. — 사사 시대 7/21",
      "description": "창조에서 새 하늘과 새 땅까지, 성경 이야기를 14분 영상으로\n전체 영상(14분)과 글로 읽는 성경 이야기: https://one-scroll-bible.com/film/\n\n#Shorts #성경 #성경이야기",
      "tags": [
       "한눈에 보는 성경 이야기",
@@ -417,7 +417,7 @@
       "타락"
      ],
      "language": "ko",
-     "seconds": 40.0,
+     "seconds": 40,
      "captions": {
       "en": "motion/subs/en/v/07-judges.srt",
       "es": "motion/subs/es/v/07-judges.srt",
@@ -437,7 +437,7 @@
      "scene": "kingdom",
      "file": "shorts-ko-08-kingdom.mp4",
      "local": "motion/out/release/shorts-ko-08-kingdom.mp4",
-     "title": "통일 왕국 · 장면 8/21 · 한눈에 보는 성경 이야기",
+     "title": "사람은 외모를 보거니와 나 여호와는 중심을 보느니라 — 통일 왕국 8/21",
      "description": "창조에서 새 하늘과 새 땅까지, 성경 이야기를 14분 영상으로\n전체 영상(14분)과 글로 읽는 성경 이야기: https://one-scroll-bible.com/film/\n\n#Shorts #성경 #성경이야기",
      "tags": [
       "한눈에 보는 성경 이야기",
@@ -454,7 +454,7 @@
       "타락"
      ],
      "language": "ko",
-     "seconds": 39.0,
+     "seconds": 39,
      "captions": {
       "en": "motion/subs/en/v/08-kingdom.srt",
       "es": "motion/subs/es/v/08-kingdom.srt",
@@ -474,7 +474,7 @@
      "scene": "exile",
      "file": "shorts-ko-09-exile.mp4",
      "local": "motion/out/release/shorts-ko-09-exile.mp4",
-     "title": "분열 왕국 · 포로 · 장면 9/21 · 한눈에 보는 성경 이야기",
+     "title": "성전이 불타고, 백성은 바벨론으로 끌려갑니다. — 분열 왕국 · 포로 9/21",
      "description": "창조에서 새 하늘과 새 땅까지, 성경 이야기를 14분 영상으로\n전체 영상(14분)과 글로 읽는 성경 이야기: https://one-scroll-bible.com/film/\n\n#Shorts #성경 #성경이야기",
      "tags": [
       "한눈에 보는 성경 이야기",
@@ -491,7 +491,7 @@
       "타락"
      ],
      "language": "ko",
-     "seconds": 36.0,
+     "seconds": 36,
      "captions": {
       "en": "motion/subs/en/v/09-exile.srt",
       "es": "motion/subs/es/v/09-exile.srt",
@@ -511,7 +511,7 @@
      "scene": "return",
      "file": "shorts-ko-10-return.mp4",
      "local": "motion/out/release/shorts-ko-10-return.mp4",
-     "title": "포로 귀환 · 장면 10/21 · 한눈에 보는 성경 이야기",
+     "title": "여호와로 인하여 기뻐하는 것이 너희의 힘이니라 — 포로 귀환 10/21",
      "description": "창조에서 새 하늘과 새 땅까지, 성경 이야기를 14분 영상으로\n전체 영상(14분)과 글로 읽는 성경 이야기: https://one-scroll-bible.com/film/\n\n#Shorts #성경 #성경이야기",
      "tags": [
       "한눈에 보는 성경 이야기",
@@ -528,7 +528,7 @@
       "타락"
      ],
      "language": "ko",
-     "seconds": 38.0,
+     "seconds": 38,
      "captions": {
       "en": "motion/subs/en/v/10-return.srt",
       "es": "motion/subs/es/v/10-return.srt",
@@ -548,7 +548,7 @@
      "scene": "silence",
      "file": "shorts-ko-11-silence.mp4",
      "local": "motion/out/release/shorts-ko-11-silence.mp4",
-     "title": "400년 침묵 · 장면 11/21 · 한눈에 보는 성경 이야기",
+     "title": "선지자의 음성이 멈춘 400년 — 400년 침묵 11/21",
      "description": "창조에서 새 하늘과 새 땅까지, 성경 이야기를 14분 영상으로\n전체 영상(14분)과 글로 읽는 성경 이야기: https://one-scroll-bible.com/film/\n\n#Shorts #성경 #성경이야기",
      "tags": [
       "한눈에 보는 성경 이야기",
@@ -565,7 +565,7 @@
       "타락"
      ],
      "language": "ko",
-     "seconds": 34.0,
+     "seconds": 34,
      "captions": {
       "en": "motion/subs/en/v/11-silence.srt",
       "es": "motion/subs/es/v/11-silence.srt",
@@ -585,7 +585,7 @@
      "scene": "advent",
      "file": "shorts-ko-12-advent.mp4",
      "local": "motion/out/release/shorts-ko-12-advent.mp4",
-     "title": "예수님의 오심 · 장면 12/21 · 한눈에 보는 성경 이야기",
+     "title": "“말씀이 육신이 되어 우리 가운데 거하시매” — 예수님의 오심 12/21",
      "description": "창조에서 새 하늘과 새 땅까지, 성경 이야기를 14분 영상으로\n전체 영상(14분)과 글로 읽는 성경 이야기: https://one-scroll-bible.com/film/\n\n#Shorts #성경 #성경이야기",
      "tags": [
       "한눈에 보는 성경 이야기",
@@ -602,7 +602,7 @@
       "타락"
      ],
      "language": "ko",
-     "seconds": 36.0,
+     "seconds": 36,
      "captions": {
       "en": "motion/subs/en/v/12-advent.srt",
       "es": "motion/subs/es/v/12-advent.srt",
@@ -622,7 +622,7 @@
      "scene": "cross",
      "file": "shorts-ko-13-cross.mp4",
      "local": "motion/out/release/shorts-ko-13-cross.mp4",
-     "title": "십자가 · 장면 13/21 · 한눈에 보는 성경 이야기",
+     "title": "그 십자가에 달려야 했던 사람은 바로 나였습니다. — 십자가 13/21",
      "description": "창조에서 새 하늘과 새 땅까지, 성경 이야기를 14분 영상으로\n전체 영상(14분)과 글로 읽는 성경 이야기: https://one-scroll-bible.com/film/\n\n#Shorts #성경 #성경이야기",
      "tags": [
       "한눈에 보는 성경 이야기",
@@ -639,7 +639,7 @@
       "타락"
      ],
      "language": "ko",
-     "seconds": 39.0,
+     "seconds": 39,
      "captions": {
       "en": "motion/subs/en/v/13-cross.srt",
       "es": "motion/subs/es/v/13-cross.srt",
@@ -659,7 +659,7 @@
      "scene": "rise",
      "file": "shorts-ko-14-rise.mp4",
      "local": "motion/out/release/shorts-ko-14-rise.mp4",
-     "title": "부활 · 장면 14/21 · 한눈에 보는 성경 이야기",
+     "title": "“그가 말씀 하시던 대로 살아나셨느니라” — 부활 14/21",
      "description": "창조에서 새 하늘과 새 땅까지, 성경 이야기를 14분 영상으로\n전체 영상(14분)과 글로 읽는 성경 이야기: https://one-scroll-bible.com/film/\n\n#Shorts #성경 #성경이야기",
      "tags": [
       "한눈에 보는 성경 이야기",
@@ -676,7 +676,7 @@
       "타락"
      ],
      "language": "ko",
-     "seconds": 27.0,
+     "seconds": 27,
      "captions": {
       "en": "motion/subs/en/v/14-rise.srt",
       "es": "motion/subs/es/v/14-rise.srt",
@@ -696,7 +696,7 @@
      "scene": "church",
      "file": "shorts-ko-15-church.mp4",
      "local": "motion/out/release/shorts-ko-15-church.mp4",
-     "title": "교회의 시작 · 장면 15/21 · 한눈에 보는 성경 이야기",
+     "title": "“… 땅 끝까지 이르러 내 증인이 되리라” — 교회의 시작 15/21",
      "description": "창조에서 새 하늘과 새 땅까지, 성경 이야기를 14분 영상으로\n전체 영상(14분)과 글로 읽는 성경 이야기: https://one-scroll-bible.com/film/\n\n#Shorts #성경 #성경이야기",
      "tags": [
       "한눈에 보는 성경 이야기",
@@ -713,7 +713,7 @@
       "타락"
      ],
      "language": "ko",
-     "seconds": 35.0,
+     "seconds": 35,
      "captions": {
       "en": "motion/subs/en/v/15-church.srt",
       "es": "motion/subs/es/v/15-church.srt",
@@ -733,7 +733,7 @@
      "scene": "renewal",
      "file": "shorts-ko-16-renewal.mp4",
      "local": "motion/out/release/shorts-ko-16-renewal.mp4",
-     "title": "회복 · 장면 16/21 · 한눈에 보는 성경 이야기",
+     "title": "“모든 눈물을 그 눈에서 닦아 주시니” — 회복 16/21",
      "description": "창조에서 새 하늘과 새 땅까지, 성경 이야기를 14분 영상으로\n전체 영상(14분)과 글로 읽는 성경 이야기: https://one-scroll-bible.com/film/\n\n#Shorts #성경 #성경이야기",
      "tags": [
       "한눈에 보는 성경 이야기",
@@ -750,7 +750,7 @@
       "타락"
      ],
      "language": "ko",
-     "seconds": 36.0,
+     "seconds": 36,
      "captions": {
       "en": "motion/subs/en/v/16-renewal.srt",
       "es": "motion/subs/es/v/16-renewal.srt",
@@ -770,7 +770,7 @@
      "scene": "mirror",
      "file": "shorts-ko-17-mirror.mp4",
      "local": "motion/out/release/shorts-ko-17-mirror.mp4",
-     "title": "거울 · 장면 17/21 · 한눈에 보는 성경 이야기",
+     "title": "결국 가장 깊은 우상은 “하나님 자리에 앉은 나 자신”입니다. — 거울 17/21",
      "description": "창조에서 새 하늘과 새 땅까지, 성경 이야기를 14분 영상으로\n전체 영상(14분)과 글로 읽는 성경 이야기: https://one-scroll-bible.com/film/\n\n#Shorts #성경 #성경이야기",
      "tags": [
       "한눈에 보는 성경 이야기",
@@ -807,7 +807,7 @@
      "scene": "gospel",
      "file": "shorts-ko-18-gospel.mp4",
      "local": "motion/out/release/shorts-ko-18-gospel.mp4",
-     "title": "복음의 핵심 · 장면 18/21 · 한눈에 보는 성경 이야기",
+     "title": "“행하라”가 아니라 “이루어졌다” — 복음의 핵심 18/21",
      "description": "창조에서 새 하늘과 새 땅까지, 성경 이야기를 14분 영상으로\n전체 영상(14분)과 글로 읽는 성경 이야기: https://one-scroll-bible.com/film/\n\n#Shorts #성경 #성경이야기",
      "tags": [
       "한눈에 보는 성경 이야기",
@@ -844,7 +844,7 @@
      "scene": "evidence",
      "file": "shorts-ko-19-evidence.mp4",
      "local": "motion/out/release/shorts-ko-19-evidence.mp4",
-     "title": "성경은 실화인가 · 장면 19/21 · 한눈에 보는 성경 이야기",
+     "title": "성경이 진짜 실화인가요? 19/21",
      "description": "창조에서 새 하늘과 새 땅까지, 성경 이야기를 14분 영상으로\n전체 영상(14분)과 글로 읽는 성경 이야기: https://one-scroll-bible.com/film/\n\n#Shorts #성경 #성경이야기",
      "tags": [
       "한눈에 보는 성경 이야기",
@@ -861,7 +861,7 @@
       "타락"
      ],
      "language": "ko",
-     "seconds": 60.0,
+     "seconds": 60,
      "captions": {
       "en": "motion/subs/en/v/19-evidence.srt",
       "es": "motion/subs/es/v/19-evidence.srt",
@@ -881,7 +881,7 @@
      "scene": "ship",
      "file": "shorts-ko-20-ship.mp4",
      "local": "motion/out/release/shorts-ko-20-ship.mp4",
-     "title": "착하게 살면? · 장면 20/21 · 한눈에 보는 성경 이야기",
+     "title": "예수님 안 믿어도, 그냥 착하게 살면 되는 것 아닌가요? — 착하게 살면? 20/21",
      "description": "창조에서 새 하늘과 새 땅까지, 성경 이야기를 14분 영상으로\n전체 영상(14분)과 글로 읽는 성경 이야기: https://one-scroll-bible.com/film/\n\n#Shorts #성경 #성경이야기",
      "tags": [
       "한눈에 보는 성경 이야기",
@@ -918,7 +918,7 @@
      "scene": "invite",
      "file": "shorts-ko-21-invite.mp4",
      "local": "motion/out/release/shorts-ko-21-invite.mp4",
-     "title": "초대 · 장면 21/21 · 한눈에 보는 성경 이야기",
+     "title": "이 사랑은 정보가 아니라 초대입니다. — 초대 21/21",
      "description": "창조에서 새 하늘과 새 땅까지, 성경 이야기를 14분 영상으로\n전체 영상(14분)과 글로 읽는 성경 이야기: https://one-scroll-bible.com/film/\n\n#Shorts #성경 #성경이야기",
      "tags": [
       "한눈에 보는 성경 이야기",
@@ -935,7 +935,7 @@
       "타락"
      ],
      "language": "ko",
-     "seconds": 57.0,
+     "seconds": 57,
      "captions": {
       "en": "motion/subs/en/v/21-invite.srt",
       "es": "motion/subs/es/v/21-invite.srt",
@@ -1014,32 +1014,32 @@
     "chapters": [
      {
       "time": "0:00",
-      "seconds": 0.0,
+      "seconds": 0,
       "title": "One Story"
      },
      {
       "time": "0:36",
-      "seconds": 36.0,
+      "seconds": 36,
       "title": "Creation"
      },
      {
       "time": "1:11",
-      "seconds": 71.0,
+      "seconds": 71,
       "title": "The Fall"
      },
      {
       "time": "1:45",
-      "seconds": 105.0,
+      "seconds": 105,
       "title": "The Patriarchs"
      },
      {
       "time": "2:11",
-      "seconds": 131.0,
+      "seconds": 131,
       "title": "The Exodus"
      },
      {
       "time": "2:55",
-      "seconds": 175.0,
+      "seconds": 175,
       "title": "The Wilderness"
      },
      {
@@ -1099,7 +1099,7 @@
      },
      {
       "time": "10:19",
-      "seconds": 619.0,
+      "seconds": 619,
       "title": "The Heart of the Gospel"
      },
      {
@@ -1127,7 +1127,7 @@
      "scene": "opening",
      "file": "shorts-en-01-opening.mp4",
      "local": "motion/out/release/shorts-en-01-opening.mp4",
-     "title": "One Story · Scene 1 of 21 · Bible in One Scroll",
+     "title": "In the end, the Bible is one single story 1/21",
      "description": "From creation to the new heaven and new earth — the Bible story in 14 minutes\nThe whole film (14 min) and the story in text: https://one-scroll-bible.com/film/?lang=en\n\n#Shorts #Bible #Biblestory",
      "tags": [
       "Bible in One Scroll",
@@ -1144,7 +1144,7 @@
       "The Fall"
      ],
      "language": "en",
-     "seconds": 36.0,
+     "seconds": 36,
      "captions": {
       "en": "motion/subs/en/v/01-opening.srt",
       "es": "motion/subs/es/v/01-opening.srt",
@@ -1164,7 +1164,7 @@
      "scene": "creation",
      "file": "shorts-en-02-creation.mp4",
      "local": "motion/out/release/shorts-en-02-creation.mp4",
-     "title": "Creation · Scene 2 of 21 · Bible in One Scroll",
+     "title": "“And God said, ‘Let there be light’” — Creation 2/21",
      "description": "From creation to the new heaven and new earth — the Bible story in 14 minutes\nThe whole film (14 min) and the story in text: https://one-scroll-bible.com/film/?lang=en\n\n#Shorts #Bible #Biblestory",
      "tags": [
       "Bible in One Scroll",
@@ -1181,7 +1181,7 @@
       "The Fall"
      ],
      "language": "en",
-     "seconds": 35.0,
+     "seconds": 35,
      "captions": {
       "en": "motion/subs/en/v/02-creation.srt",
       "es": "motion/subs/es/v/02-creation.srt",
@@ -1201,7 +1201,7 @@
      "scene": "fall",
      "file": "shorts-en-03-fall.mp4",
      "local": "motion/out/release/shorts-en-03-fall.mp4",
-     "title": "The Fall · Scene 3 of 21 · Bible in One Scroll",
+     "title": "“Where are you?” — The Fall 3/21",
      "description": "From creation to the new heaven and new earth — the Bible story in 14 minutes\nThe whole film (14 min) and the story in text: https://one-scroll-bible.com/film/?lang=en\n\n#Shorts #Bible #Biblestory",
      "tags": [
       "Bible in One Scroll",
@@ -1218,7 +1218,7 @@
       "The Fall"
      ],
      "language": "en",
-     "seconds": 34.0,
+     "seconds": 34,
      "captions": {
       "en": "motion/subs/en/v/03-fall.srt",
       "es": "motion/subs/es/v/03-fall.srt",
@@ -1238,7 +1238,7 @@
      "scene": "patriarch",
      "file": "shorts-en-04-patriarch.mp4",
      "local": "motion/out/release/shorts-en-04-patriarch.mp4",
-     "title": "The Patriarchs · Scene 4 of 21 · Bible in One Scroll",
+     "title": "“Look toward heaven, and number the stars, if you are able to number them” — The Patriarchs 4/21",
      "description": "From creation to the new heaven and new earth — the Bible story in 14 minutes\nThe whole film (14 min) and the story in text: https://one-scroll-bible.com/film/?lang=en\n\n#Shorts #Bible #Biblestory",
      "tags": [
       "Bible in One Scroll",
@@ -1255,7 +1255,7 @@
       "The Fall"
      ],
      "language": "en",
-     "seconds": 26.0,
+     "seconds": 26,
      "captions": {
       "en": "motion/subs/en/v/04-patriarch.srt",
       "es": "motion/subs/es/v/04-patriarch.srt",
@@ -1275,7 +1275,7 @@
      "scene": "exodus",
      "file": "shorts-en-05-exodus.mp4",
      "local": "motion/out/release/shorts-en-05-exodus.mp4",
-     "title": "The Exodus · Scene 5 of 21 · Bible in One Scroll",
+     "title": "“Let my people go” — The Exodus 5/21",
      "description": "From creation to the new heaven and new earth — the Bible story in 14 minutes\nThe whole film (14 min) and the story in text: https://one-scroll-bible.com/film/?lang=en\n\n#Shorts #Bible #Biblestory",
      "tags": [
       "Bible in One Scroll",
@@ -1292,7 +1292,7 @@
       "The Fall"
      ],
      "language": "en",
-     "seconds": 44.0,
+     "seconds": 44,
      "captions": {
       "en": "motion/subs/en/v/05-exodus.srt",
       "es": "motion/subs/es/v/05-exodus.srt",
@@ -1312,7 +1312,7 @@
      "scene": "wilderness",
      "file": "shorts-en-06-wilderness.mp4",
      "local": "motion/out/release/shorts-en-06-wilderness.mp4",
-     "title": "The Wilderness · Scene 6 of 21 · Bible in One Scroll",
+     "title": "Standing at the edge of the promised land, they prepare to enter… — The Wilderness 6/21",
      "description": "From creation to the new heaven and new earth — the Bible story in 14 minutes\nThe whole film (14 min) and the story in text: https://one-scroll-bible.com/film/?lang=en\n\n#Shorts #Bible #Biblestory",
      "tags": [
       "Bible in One Scroll",
@@ -1349,7 +1349,7 @@
      "scene": "judges",
      "file": "shorts-en-07-judges.mp4",
      "local": "motion/out/release/shorts-en-07-judges.mp4",
-     "title": "The Judges · Scene 7 of 21 · Bible in One Scroll",
+     "title": "But with no king everyone did as they pleased. — The Judges 7/21",
      "description": "From creation to the new heaven and new earth — the Bible story in 14 minutes\nThe whole film (14 min) and the story in text: https://one-scroll-bible.com/film/?lang=en\n\n#Shorts #Bible #Biblestory",
      "tags": [
       "Bible in One Scroll",
@@ -1366,7 +1366,7 @@
       "The Fall"
      ],
      "language": "en",
-     "seconds": 40.0,
+     "seconds": 40,
      "captions": {
       "en": "motion/subs/en/v/07-judges.srt",
       "es": "motion/subs/es/v/07-judges.srt",
@@ -1386,7 +1386,7 @@
      "scene": "kingdom",
      "file": "shorts-en-08-kingdom.mp4",
      "local": "motion/out/release/shorts-en-08-kingdom.mp4",
-     "title": "The United Kingdom · Scene 8 of 21 · Bible in One Scroll",
+     "title": "Man looks on the outward appearance, but the LORD looks on the heart. — The United Kingdom 8/21",
      "description": "From creation to the new heaven and new earth — the Bible story in 14 minutes\nThe whole film (14 min) and the story in text: https://one-scroll-bible.com/film/?lang=en\n\n#Shorts #Bible #Biblestory",
      "tags": [
       "Bible in One Scroll",
@@ -1403,7 +1403,7 @@
       "The Fall"
      ],
      "language": "en",
-     "seconds": 39.0,
+     "seconds": 39,
      "captions": {
       "en": "motion/subs/en/v/08-kingdom.srt",
       "es": "motion/subs/es/v/08-kingdom.srt",
@@ -1423,7 +1423,7 @@
      "scene": "exile",
      "file": "shorts-en-09-exile.mp4",
      "local": "motion/out/release/shorts-en-09-exile.mp4",
-     "title": "The Divided Kingdom & Exile · Scene 9 of 21 · Bible in One Scroll",
+     "title": "The temple burns and the people are carried to Babylon. — The Divided Kingdom & Exile 9/21",
      "description": "From creation to the new heaven and new earth — the Bible story in 14 minutes\nThe whole film (14 min) and the story in text: https://one-scroll-bible.com/film/?lang=en\n\n#Shorts #Bible #Biblestory",
      "tags": [
       "Bible in One Scroll",
@@ -1440,7 +1440,7 @@
       "The Fall"
      ],
      "language": "en",
-     "seconds": 36.0,
+     "seconds": 36,
      "captions": {
       "en": "motion/subs/en/v/09-exile.srt",
       "es": "motion/subs/es/v/09-exile.srt",
@@ -1460,7 +1460,7 @@
      "scene": "return",
      "file": "shorts-en-10-return.mp4",
      "local": "motion/out/release/shorts-en-10-return.mp4",
-     "title": "The Return · Scene 10 of 21 · Bible in One Scroll",
+     "title": "For the joy of the LORD is your strength. — The Return 10/21",
      "description": "From creation to the new heaven and new earth — the Bible story in 14 minutes\nThe whole film (14 min) and the story in text: https://one-scroll-bible.com/film/?lang=en\n\n#Shorts #Bible #Biblestory",
      "tags": [
       "Bible in One Scroll",
@@ -1477,7 +1477,7 @@
       "The Fall"
      ],
      "language": "en",
-     "seconds": 38.0,
+     "seconds": 38,
      "captions": {
       "en": "motion/subs/en/v/10-return.srt",
       "es": "motion/subs/es/v/10-return.srt",
@@ -1497,7 +1497,7 @@
      "scene": "silence",
      "file": "shorts-en-11-silence.mp4",
      "local": "motion/out/release/shorts-en-11-silence.mp4",
-     "title": "The Silent Years · Scene 11 of 21 · Bible in One Scroll",
+     "title": "400 years with no prophet’s voice — The Silent Years 11/21",
      "description": "From creation to the new heaven and new earth — the Bible story in 14 minutes\nThe whole film (14 min) and the story in text: https://one-scroll-bible.com/film/?lang=en\n\n#Shorts #Bible #Biblestory",
      "tags": [
       "Bible in One Scroll",
@@ -1514,7 +1514,7 @@
       "The Fall"
      ],
      "language": "en",
-     "seconds": 34.0,
+     "seconds": 34,
      "captions": {
       "en": "motion/subs/en/v/11-silence.srt",
       "es": "motion/subs/es/v/11-silence.srt",
@@ -1534,7 +1534,7 @@
      "scene": "advent",
      "file": "shorts-en-12-advent.mp4",
      "local": "motion/out/release/shorts-en-12-advent.mp4",
-     "title": "Jesus Comes · Scene 12 of 21 · Bible in One Scroll",
+     "title": "“And the Word became flesh and dwelt among us” — Jesus Comes 12/21",
      "description": "From creation to the new heaven and new earth — the Bible story in 14 minutes\nThe whole film (14 min) and the story in text: https://one-scroll-bible.com/film/?lang=en\n\n#Shorts #Bible #Biblestory",
      "tags": [
       "Bible in One Scroll",
@@ -1551,7 +1551,7 @@
       "The Fall"
      ],
      "language": "en",
-     "seconds": 36.0,
+     "seconds": 36,
      "captions": {
       "en": "motion/subs/en/v/12-advent.srt",
       "es": "motion/subs/es/v/12-advent.srt",
@@ -1571,7 +1571,7 @@
      "scene": "cross",
      "file": "shorts-en-13-cross.mp4",
      "local": "motion/out/release/shorts-en-13-cross.mp4",
-     "title": "The Cross · Scene 13 of 21 · Bible in One Scroll",
+     "title": "The one who should have hung on that cross was me. — The Cross 13/21",
      "description": "From creation to the new heaven and new earth — the Bible story in 14 minutes\nThe whole film (14 min) and the story in text: https://one-scroll-bible.com/film/?lang=en\n\n#Shorts #Bible #Biblestory",
      "tags": [
       "Bible in One Scroll",
@@ -1588,7 +1588,7 @@
       "The Fall"
      ],
      "language": "en",
-     "seconds": 39.0,
+     "seconds": 39,
      "captions": {
       "en": "motion/subs/en/v/13-cross.srt",
       "es": "motion/subs/es/v/13-cross.srt",
@@ -1608,7 +1608,7 @@
      "scene": "rise",
      "file": "shorts-en-14-rise.mp4",
      "local": "motion/out/release/shorts-en-14-rise.mp4",
-     "title": "The Resurrection · Scene 14 of 21 · Bible in One Scroll",
+     "title": "“For he has risen, as he said” — The Resurrection 14/21",
      "description": "From creation to the new heaven and new earth — the Bible story in 14 minutes\nThe whole film (14 min) and the story in text: https://one-scroll-bible.com/film/?lang=en\n\n#Shorts #Bible #Biblestory",
      "tags": [
       "Bible in One Scroll",
@@ -1625,7 +1625,7 @@
       "The Fall"
      ],
      "language": "en",
-     "seconds": 27.0,
+     "seconds": 27,
      "captions": {
       "en": "motion/subs/en/v/14-rise.srt",
       "es": "motion/subs/es/v/14-rise.srt",
@@ -1645,7 +1645,7 @@
      "scene": "church",
      "file": "shorts-en-15-church.mp4",
      "local": "motion/out/release/shorts-en-15-church.mp4",
-     "title": "The Church Begins · Scene 15 of 21 · Bible in One Scroll",
+     "title": "“… You will be my witnesses … to the end of the earth” — The Church Begins 15/21",
      "description": "From creation to the new heaven and new earth — the Bible story in 14 minutes\nThe whole film (14 min) and the story in text: https://one-scroll-bible.com/film/?lang=en\n\n#Shorts #Bible #Biblestory",
      "tags": [
       "Bible in One Scroll",
@@ -1662,7 +1662,7 @@
       "The Fall"
      ],
      "language": "en",
-     "seconds": 35.0,
+     "seconds": 35,
      "captions": {
       "en": "motion/subs/en/v/15-church.srt",
       "es": "motion/subs/es/v/15-church.srt",
@@ -1682,7 +1682,7 @@
      "scene": "renewal",
      "file": "shorts-en-16-renewal.mp4",
      "local": "motion/out/release/shorts-en-16-renewal.mp4",
-     "title": "Restoration · Scene 16 of 21 · Bible in One Scroll",
+     "title": "“He will wipe away every tear from their eyes” — Restoration 16/21",
      "description": "From creation to the new heaven and new earth — the Bible story in 14 minutes\nThe whole film (14 min) and the story in text: https://one-scroll-bible.com/film/?lang=en\n\n#Shorts #Bible #Biblestory",
      "tags": [
       "Bible in One Scroll",
@@ -1699,7 +1699,7 @@
       "The Fall"
      ],
      "language": "en",
-     "seconds": 36.0,
+     "seconds": 36,
      "captions": {
       "en": "motion/subs/en/v/16-renewal.srt",
       "es": "motion/subs/es/v/16-renewal.srt",
@@ -1719,7 +1719,7 @@
      "scene": "mirror",
      "file": "shorts-en-17-mirror.mp4",
      "local": "motion/out/release/shorts-en-17-mirror.mp4",
-     "title": "The Mirror · Scene 17 of 21 · Bible in One Scroll",
+     "title": "In the end, the deepest idol is “myself, seated on God’s throne.” — The Mirror 17/21",
      "description": "From creation to the new heaven and new earth — the Bible story in 14 minutes\nThe whole film (14 min) and the story in text: https://one-scroll-bible.com/film/?lang=en\n\n#Shorts #Bible #Biblestory",
      "tags": [
       "Bible in One Scroll",
@@ -1756,7 +1756,7 @@
      "scene": "gospel",
      "file": "shorts-en-18-gospel.mp4",
      "local": "motion/out/release/shorts-en-18-gospel.mp4",
-     "title": "The Heart of the Gospel · Scene 18 of 21 · Bible in One Scroll",
+     "title": "Not “do this” but “it is finished” — The Heart of the Gospel 18/21",
      "description": "From creation to the new heaven and new earth — the Bible story in 14 minutes\nThe whole film (14 min) and the story in text: https://one-scroll-bible.com/film/?lang=en\n\n#Shorts #Bible #Biblestory",
      "tags": [
       "Bible in One Scroll",
@@ -1793,7 +1793,7 @@
      "scene": "evidence",
      "file": "shorts-en-19-evidence.mp4",
      "local": "motion/out/release/shorts-en-19-evidence.mp4",
-     "title": "Is the Bible a True Story? · Scene 19 of 21 · Bible in One Scroll",
+     "title": "Is the Bible really a true story? 19/21",
      "description": "From creation to the new heaven and new earth — the Bible story in 14 minutes\nThe whole film (14 min) and the story in text: https://one-scroll-bible.com/film/?lang=en\n\n#Shorts #Bible #Biblestory",
      "tags": [
       "Bible in One Scroll",
@@ -1810,7 +1810,7 @@
       "The Fall"
      ],
      "language": "en",
-     "seconds": 60.0,
+     "seconds": 60,
      "captions": {
       "en": "motion/subs/en/v/19-evidence.srt",
       "es": "motion/subs/es/v/19-evidence.srt",
@@ -1830,7 +1830,7 @@
      "scene": "ship",
      "file": "shorts-en-20-ship.mp4",
      "local": "motion/out/release/shorts-en-20-ship.mp4",
-     "title": "Just Live a Good Life? · Scene 20 of 21 · Bible in One Scroll",
+     "title": "Can’t I just live a good life without believing in Jesus? — Just Live a Good Life? 20/21",
      "description": "From creation to the new heaven and new earth — the Bible story in 14 minutes\nThe whole film (14 min) and the story in text: https://one-scroll-bible.com/film/?lang=en\n\n#Shorts #Bible #Biblestory",
      "tags": [
       "Bible in One Scroll",
@@ -1867,7 +1867,7 @@
      "scene": "invite",
      "file": "shorts-en-21-invite.mp4",
      "local": "motion/out/release/shorts-en-21-invite.mp4",
-     "title": "The Invitation · Scene 21 of 21 · Bible in One Scroll",
+     "title": "This love is not information but an invitation. — The Invitation 21/21",
      "description": "From creation to the new heaven and new earth — the Bible story in 14 minutes\nThe whole film (14 min) and the story in text: https://one-scroll-bible.com/film/?lang=en\n\n#Shorts #Bible #Biblestory",
      "tags": [
       "Bible in One Scroll",
@@ -1884,7 +1884,7 @@
       "The Fall"
      ],
      "language": "en",
-     "seconds": 57.0,
+     "seconds": 57,
      "captions": {
       "en": "motion/subs/en/v/21-invite.srt",
       "es": "motion/subs/es/v/21-invite.srt",
@@ -1961,32 +1961,32 @@
     "chapters": [
      {
       "time": "0:00",
-      "seconds": 0.0,
+      "seconds": 0,
       "title": "Una sola historia"
      },
      {
       "time": "0:36",
-      "seconds": 36.0,
+      "seconds": 36,
       "title": "Creación"
      },
      {
       "time": "1:11",
-      "seconds": 71.0,
+      "seconds": 71,
       "title": "La caída"
      },
      {
       "time": "1:45",
-      "seconds": 105.0,
+      "seconds": 105,
       "title": "Los patriarcas"
      },
      {
       "time": "2:11",
-      "seconds": 131.0,
+      "seconds": 131,
       "title": "El éxodo"
      },
      {
       "time": "2:55",
-      "seconds": 175.0,
+      "seconds": 175,
       "title": "El desierto"
      },
      {
@@ -2046,7 +2046,7 @@
      },
      {
       "time": "10:19",
-      "seconds": 619.0,
+      "seconds": 619,
       "title": "El corazón del evangelio"
      },
      {
@@ -2074,7 +2074,7 @@
      "scene": "opening",
      "file": "shorts-es-01-opening.mp4",
      "local": "motion/out/release/shorts-es-01-opening.mp4",
-     "title": "Una sola historia · Escena 1 de 21 · La Biblia de un vistazo",
+     "title": "La Biblia es, al final, una sola historia 1/21",
      "description": "De la creación al cielo nuevo y la tierra nueva: la historia de la Biblia en 14 minutos\nLa película completa (14 min) y la historia en texto: https://one-scroll-bible.com/film/?lang=es\n\n#Shorts #Biblia #historiadelaBiblia",
      "tags": [
       "La Biblia de un vistazo",
@@ -2091,7 +2091,7 @@
       "Los patriarcas"
      ],
      "language": "es",
-     "seconds": 36.0,
+     "seconds": 36,
      "captions": {
       "en": "motion/subs/en/v/01-opening.srt",
       "es": "motion/subs/es/v/01-opening.srt",
@@ -2111,7 +2111,7 @@
      "scene": "creation",
      "file": "shorts-es-02-creation.mp4",
      "local": "motion/out/release/shorts-es-02-creation.mp4",
-     "title": "Creación · Escena 2 de 21 · La Biblia de un vistazo",
+     "title": "«Y dijo Dios: Sea la luz» — Creación 2/21",
      "description": "De la creación al cielo nuevo y la tierra nueva: la historia de la Biblia en 14 minutos\nLa película completa (14 min) y la historia en texto: https://one-scroll-bible.com/film/?lang=es\n\n#Shorts #Biblia #historiadelaBiblia",
      "tags": [
       "La Biblia de un vistazo",
@@ -2128,7 +2128,7 @@
       "Los patriarcas"
      ],
      "language": "es",
-     "seconds": 35.0,
+     "seconds": 35,
      "captions": {
       "en": "motion/subs/en/v/02-creation.srt",
       "es": "motion/subs/es/v/02-creation.srt",
@@ -2148,7 +2148,7 @@
      "scene": "fall",
      "file": "shorts-es-03-fall.mp4",
      "local": "motion/out/release/shorts-es-03-fall.mp4",
-     "title": "La caída · Escena 3 de 21 · La Biblia de un vistazo",
+     "title": "«¿Dónde estás tú?» — La caída 3/21",
      "description": "De la creación al cielo nuevo y la tierra nueva: la historia de la Biblia en 14 minutos\nLa película completa (14 min) y la historia en texto: https://one-scroll-bible.com/film/?lang=es\n\n#Shorts #Biblia #historiadelaBiblia",
      "tags": [
       "La Biblia de un vistazo",
@@ -2165,7 +2165,7 @@
       "Los patriarcas"
      ],
      "language": "es",
-     "seconds": 34.0,
+     "seconds": 34,
      "captions": {
       "en": "motion/subs/en/v/03-fall.srt",
       "es": "motion/subs/es/v/03-fall.srt",
@@ -2185,7 +2185,7 @@
      "scene": "patriarch",
      "file": "shorts-es-04-patriarch.mp4",
      "local": "motion/out/release/shorts-es-04-patriarch.mp4",
-     "title": "Los patriarcas · Escena 4 de 21 · La Biblia de un vistazo",
+     "title": "«Mira ahora los cielos, y cuenta las estrellas, si las puedes contar» — Los patriarcas 4/21",
      "description": "De la creación al cielo nuevo y la tierra nueva: la historia de la Biblia en 14 minutos\nLa película completa (14 min) y la historia en texto: https://one-scroll-bible.com/film/?lang=es\n\n#Shorts #Biblia #historiadelaBiblia",
      "tags": [
       "La Biblia de un vistazo",
@@ -2202,7 +2202,7 @@
       "Los patriarcas"
      ],
      "language": "es",
-     "seconds": 26.0,
+     "seconds": 26,
      "captions": {
       "en": "motion/subs/en/v/04-patriarch.srt",
       "es": "motion/subs/es/v/04-patriarch.srt",
@@ -2222,7 +2222,7 @@
      "scene": "exodus",
      "file": "shorts-es-05-exodus.mp4",
      "local": "motion/out/release/shorts-es-05-exodus.mp4",
-     "title": "El éxodo · Escena 5 de 21 · La Biblia de un vistazo",
+     "title": "«Deja ir a mi pueblo» — El éxodo 5/21",
      "description": "De la creación al cielo nuevo y la tierra nueva: la historia de la Biblia en 14 minutos\nLa película completa (14 min) y la historia en texto: https://one-scroll-bible.com/film/?lang=es\n\n#Shorts #Biblia #historiadelaBiblia",
      "tags": [
       "La Biblia de un vistazo",
@@ -2239,7 +2239,7 @@
       "Los patriarcas"
      ],
      "language": "es",
-     "seconds": 44.0,
+     "seconds": 44,
      "captions": {
       "en": "motion/subs/en/v/05-exodus.srt",
       "es": "motion/subs/es/v/05-exodus.srt",
@@ -2259,7 +2259,7 @@
      "scene": "wilderness",
      "file": "shorts-es-06-wilderness.mp4",
      "local": "motion/out/release/shorts-es-06-wilderness.mp4",
-     "title": "El desierto · Escena 6 de 21 · La Biblia de un vistazo",
+     "title": "De pie ante la tierra prometida, se disponen a entrar… — El desierto 6/21",
      "description": "De la creación al cielo nuevo y la tierra nueva: la historia de la Biblia en 14 minutos\nLa película completa (14 min) y la historia en texto: https://one-scroll-bible.com/film/?lang=es\n\n#Shorts #Biblia #historiadelaBiblia",
      "tags": [
       "La Biblia de un vistazo",
@@ -2296,7 +2296,7 @@
      "scene": "judges",
      "file": "shorts-es-07-judges.mp4",
      "local": "motion/out/release/shorts-es-07-judges.mp4",
-     "title": "Los jueces · Escena 7 de 21 · La Biblia de un vistazo",
+     "title": "Pero, sin rey, cada cual hace lo que bien le parece. — Los jueces 7/21",
      "description": "De la creación al cielo nuevo y la tierra nueva: la historia de la Biblia en 14 minutos\nLa película completa (14 min) y la historia en texto: https://one-scroll-bible.com/film/?lang=es\n\n#Shorts #Biblia #historiadelaBiblia",
      "tags": [
       "La Biblia de un vistazo",
@@ -2313,7 +2313,7 @@
       "Los patriarcas"
      ],
      "language": "es",
-     "seconds": 40.0,
+     "seconds": 40,
      "captions": {
       "en": "motion/subs/en/v/07-judges.srt",
       "es": "motion/subs/es/v/07-judges.srt",
@@ -2333,7 +2333,7 @@
      "scene": "kingdom",
      "file": "shorts-es-08-kingdom.mp4",
      "local": "motion/out/release/shorts-es-08-kingdom.mp4",
-     "title": "El reino unido · Escena 8 de 21 · La Biblia de un vistazo",
+     "title": "El hombre mira lo que está delante de sus ojos, pero Jehová mira el corazón. — El reino unido 8/21",
      "description": "De la creación al cielo nuevo y la tierra nueva: la historia de la Biblia en 14 minutos\nLa película completa (14 min) y la historia en texto: https://one-scroll-bible.com/film/?lang=es\n\n#Shorts #Biblia #historiadelaBiblia",
      "tags": [
       "La Biblia de un vistazo",
@@ -2350,7 +2350,7 @@
       "Los patriarcas"
      ],
      "language": "es",
-     "seconds": 39.0,
+     "seconds": 39,
      "captions": {
       "en": "motion/subs/en/v/08-kingdom.srt",
       "es": "motion/subs/es/v/08-kingdom.srt",
@@ -2370,7 +2370,7 @@
      "scene": "exile",
      "file": "shorts-es-09-exile.mp4",
      "local": "motion/out/release/shorts-es-09-exile.mp4",
-     "title": "El reino dividido · El exilio · Escena 9 de 21 · La Biblia de un vistazo",
+     "title": "El templo arde y el pueblo es llevado a Babilonia. — El reino dividido · El exilio 9/21",
      "description": "De la creación al cielo nuevo y la tierra nueva: la historia de la Biblia en 14 minutos\nLa película completa (14 min) y la historia en texto: https://one-scroll-bible.com/film/?lang=es\n\n#Shorts #Biblia #historiadelaBiblia",
      "tags": [
       "La Biblia de un vistazo",
@@ -2387,7 +2387,7 @@
       "Los patriarcas"
      ],
      "language": "es",
-     "seconds": 36.0,
+     "seconds": 36,
      "captions": {
       "en": "motion/subs/en/v/09-exile.srt",
       "es": "motion/subs/es/v/09-exile.srt",
@@ -2407,7 +2407,7 @@
      "scene": "return",
      "file": "shorts-es-10-return.mp4",
      "local": "motion/out/release/shorts-es-10-return.mp4",
-     "title": "El regreso del exilio · Escena 10 de 21 · La Biblia de un vistazo",
+     "title": "Porque el gozo de Jehová es vuestra fuerza. — El regreso del exilio 10/21",
      "description": "De la creación al cielo nuevo y la tierra nueva: la historia de la Biblia en 14 minutos\nLa película completa (14 min) y la historia en texto: https://one-scroll-bible.com/film/?lang=es\n\n#Shorts #Biblia #historiadelaBiblia",
      "tags": [
       "La Biblia de un vistazo",
@@ -2424,7 +2424,7 @@
       "Los patriarcas"
      ],
      "language": "es",
-     "seconds": 38.0,
+     "seconds": 38,
      "captions": {
       "en": "motion/subs/en/v/10-return.srt",
       "es": "motion/subs/es/v/10-return.srt",
@@ -2444,7 +2444,7 @@
      "scene": "silence",
      "file": "shorts-es-11-silence.mp4",
      "local": "motion/out/release/shorts-es-11-silence.mp4",
-     "title": "400 años de silencio · Escena 11 de 21 · La Biblia de un vistazo",
+     "title": "400 años sin voz profética — 400 años de silencio 11/21",
      "description": "De la creación al cielo nuevo y la tierra nueva: la historia de la Biblia en 14 minutos\nLa película completa (14 min) y la historia en texto: https://one-scroll-bible.com/film/?lang=es\n\n#Shorts #Biblia #historiadelaBiblia",
      "tags": [
       "La Biblia de un vistazo",
@@ -2461,7 +2461,7 @@
       "Los patriarcas"
      ],
      "language": "es",
-     "seconds": 34.0,
+     "seconds": 34,
      "captions": {
       "en": "motion/subs/en/v/11-silence.srt",
       "es": "motion/subs/es/v/11-silence.srt",
@@ -2481,7 +2481,7 @@
      "scene": "advent",
      "file": "shorts-es-12-advent.mp4",
      "local": "motion/out/release/shorts-es-12-advent.mp4",
-     "title": "La venida de Jesús · Escena 12 de 21 · La Biblia de un vistazo",
+     "title": "«Y aquel Verbo fue hecho carne, y habitó entre nosotros» — La venida de Jesús 12/21",
      "description": "De la creación al cielo nuevo y la tierra nueva: la historia de la Biblia en 14 minutos\nLa película completa (14 min) y la historia en texto: https://one-scroll-bible.com/film/?lang=es\n\n#Shorts #Biblia #historiadelaBiblia",
      "tags": [
       "La Biblia de un vistazo",
@@ -2498,7 +2498,7 @@
       "Los patriarcas"
      ],
      "language": "es",
-     "seconds": 36.0,
+     "seconds": 36,
      "captions": {
       "en": "motion/subs/en/v/12-advent.srt",
       "es": "motion/subs/es/v/12-advent.srt",
@@ -2518,7 +2518,7 @@
      "scene": "cross",
      "file": "shorts-es-13-cross.mp4",
      "local": "motion/out/release/shorts-es-13-cross.mp4",
-     "title": "La cruz · Escena 13 de 21 · La Biblia de un vistazo",
+     "title": "Quien debía estar en aquella cruz era yo. — La cruz 13/21",
      "description": "De la creación al cielo nuevo y la tierra nueva: la historia de la Biblia en 14 minutos\nLa película completa (14 min) y la historia en texto: https://one-scroll-bible.com/film/?lang=es\n\n#Shorts #Biblia #historiadelaBiblia",
      "tags": [
       "La Biblia de un vistazo",
@@ -2535,7 +2535,7 @@
       "Los patriarcas"
      ],
      "language": "es",
-     "seconds": 39.0,
+     "seconds": 39,
      "captions": {
       "en": "motion/subs/en/v/13-cross.srt",
       "es": "motion/subs/es/v/13-cross.srt",
@@ -2555,7 +2555,7 @@
      "scene": "rise",
      "file": "shorts-es-14-rise.mp4",
      "local": "motion/out/release/shorts-es-14-rise.mp4",
-     "title": "La resurrección · Escena 14 de 21 · La Biblia de un vistazo",
+     "title": "«Pues ha resucitado, como dijo» — La resurrección 14/21",
      "description": "De la creación al cielo nuevo y la tierra nueva: la historia de la Biblia en 14 minutos\nLa película completa (14 min) y la historia en texto: https://one-scroll-bible.com/film/?lang=es\n\n#Shorts #Biblia #historiadelaBiblia",
      "tags": [
       "La Biblia de un vistazo",
@@ -2572,7 +2572,7 @@
       "Los patriarcas"
      ],
      "language": "es",
-     "seconds": 27.0,
+     "seconds": 27,
      "captions": {
       "en": "motion/subs/en/v/14-rise.srt",
       "es": "motion/subs/es/v/14-rise.srt",
@@ -2592,7 +2592,7 @@
      "scene": "church",
      "file": "shorts-es-15-church.mp4",
      "local": "motion/out/release/shorts-es-15-church.mp4",
-     "title": "El comienzo de la iglesia · Escena 15 de 21 · La Biblia de un vistazo",
+     "title": "«… Me seréis testigos … hasta lo último de la tierra» — El comienzo de la iglesia 15/21",
      "description": "De la creación al cielo nuevo y la tierra nueva: la historia de la Biblia en 14 minutos\nLa película completa (14 min) y la historia en texto: https://one-scroll-bible.com/film/?lang=es\n\n#Shorts #Biblia #historiadelaBiblia",
      "tags": [
       "La Biblia de un vistazo",
@@ -2609,7 +2609,7 @@
       "Los patriarcas"
      ],
      "language": "es",
-     "seconds": 35.0,
+     "seconds": 35,
      "captions": {
       "en": "motion/subs/en/v/15-church.srt",
       "es": "motion/subs/es/v/15-church.srt",
@@ -2629,7 +2629,7 @@
      "scene": "renewal",
      "file": "shorts-es-16-renewal.mp4",
      "local": "motion/out/release/shorts-es-16-renewal.mp4",
-     "title": "La restauración · Escena 16 de 21 · La Biblia de un vistazo",
+     "title": "«Enjugará Dios toda lágrima de los ojos de ellos» — La restauración 16/21",
      "description": "De la creación al cielo nuevo y la tierra nueva: la historia de la Biblia en 14 minutos\nLa película completa (14 min) y la historia en texto: https://one-scroll-bible.com/film/?lang=es\n\n#Shorts #Biblia #historiadelaBiblia",
      "tags": [
       "La Biblia de un vistazo",
@@ -2646,7 +2646,7 @@
       "Los patriarcas"
      ],
      "language": "es",
-     "seconds": 36.0,
+     "seconds": 36,
      "captions": {
       "en": "motion/subs/en/v/16-renewal.srt",
       "es": "motion/subs/es/v/16-renewal.srt",
@@ -2666,7 +2666,7 @@
      "scene": "mirror",
      "file": "shorts-es-17-mirror.mp4",
      "local": "motion/out/release/shorts-es-17-mirror.mp4",
-     "title": "El espejo · Escena 17 de 21 · La Biblia de un vistazo",
+     "title": "Al final, el ídolo más profundo es «yo mismo sentado en el trono de Dios». — El espejo 17/21",
      "description": "De la creación al cielo nuevo y la tierra nueva: la historia de la Biblia en 14 minutos\nLa película completa (14 min) y la historia en texto: https://one-scroll-bible.com/film/?lang=es\n\n#Shorts #Biblia #historiadelaBiblia",
      "tags": [
       "La Biblia de un vistazo",
@@ -2703,7 +2703,7 @@
      "scene": "gospel",
      "file": "shorts-es-18-gospel.mp4",
      "local": "motion/out/release/shorts-es-18-gospel.mp4",
-     "title": "El corazón del evangelio · Escena 18 de 21 · La Biblia de un vistazo",
+     "title": "No «haz», sino «consumado es» — El corazón del evangelio 18/21",
      "description": "De la creación al cielo nuevo y la tierra nueva: la historia de la Biblia en 14 minutos\nLa película completa (14 min) y la historia en texto: https://one-scroll-bible.com/film/?lang=es\n\n#Shorts #Biblia #historiadelaBiblia",
      "tags": [
       "La Biblia de un vistazo",
@@ -2740,7 +2740,7 @@
      "scene": "evidence",
      "file": "shorts-es-19-evidence.mp4",
      "local": "motion/out/release/shorts-es-19-evidence.mp4",
-     "title": "¿Es la Biblia una historia real? · Escena 19 de 21 · La Biblia de un vistazo",
+     "title": "¿De verdad la Biblia es una historia real? 19/21",
      "description": "De la creación al cielo nuevo y la tierra nueva: la historia de la Biblia en 14 minutos\nLa película completa (14 min) y la historia en texto: https://one-scroll-bible.com/film/?lang=es\n\n#Shorts #Biblia #historiadelaBiblia",
      "tags": [
       "La Biblia de un vistazo",
@@ -2757,7 +2757,7 @@
       "Los patriarcas"
      ],
      "language": "es",
-     "seconds": 60.0,
+     "seconds": 60,
      "captions": {
       "en": "motion/subs/en/v/19-evidence.srt",
       "es": "motion/subs/es/v/19-evidence.srt",
@@ -2777,7 +2777,7 @@
      "scene": "ship",
      "file": "shorts-es-20-ship.mp4",
      "local": "motion/out/release/shorts-es-20-ship.mp4",
-     "title": "¿No basta con ser bueno? · Escena 20 de 21 · La Biblia de un vistazo",
+     "title": "¿No basta con ser buena persona, aunque no crea en Jesús? — ¿No basta con ser bueno? 20/21",
      "description": "De la creación al cielo nuevo y la tierra nueva: la historia de la Biblia en 14 minutos\nLa película completa (14 min) y la historia en texto: https://one-scroll-bible.com/film/?lang=es\n\n#Shorts #Biblia #historiadelaBiblia",
      "tags": [
       "La Biblia de un vistazo",
@@ -2814,7 +2814,7 @@
      "scene": "invite",
      "file": "shorts-es-21-invite.mp4",
      "local": "motion/out/release/shorts-es-21-invite.mp4",
-     "title": "La invitación · Escena 21 de 21 · La Biblia de un vistazo",
+     "title": "Este amor no es información, sino una invitación. — La invitación 21/21",
      "description": "De la creación al cielo nuevo y la tierra nueva: la historia de la Biblia en 14 minutos\nLa película completa (14 min) y la historia en texto: https://one-scroll-bible.com/film/?lang=es\n\n#Shorts #Biblia #historiadelaBiblia",
      "tags": [
       "La Biblia de un vistazo",
@@ -2831,7 +2831,7 @@
       "Los patriarcas"
      ],
      "language": "es",
-     "seconds": 57.0,
+     "seconds": 57,
      "captions": {
       "en": "motion/subs/en/v/21-invite.srt",
       "es": "motion/subs/es/v/21-invite.srt",
@@ -2909,32 +2909,32 @@
     "chapters": [
      {
       "time": "0:00",
-      "seconds": 0.0,
+      "seconds": 0,
       "title": "Uma só história"
      },
      {
       "time": "0:36",
-      "seconds": 36.0,
+      "seconds": 36,
       "title": "Criação"
      },
      {
       "time": "1:11",
-      "seconds": 71.0,
+      "seconds": 71,
       "title": "A queda"
      },
      {
       "time": "1:45",
-      "seconds": 105.0,
+      "seconds": 105,
       "title": "Os patriarcas"
      },
      {
       "time": "2:11",
-      "seconds": 131.0,
+      "seconds": 131,
       "title": "O êxodo"
      },
      {
       "time": "2:55",
-      "seconds": 175.0,
+      "seconds": 175,
       "title": "A jornada no deserto"
      },
      {
@@ -2994,7 +2994,7 @@
      },
      {
       "time": "10:19",
-      "seconds": 619.0,
+      "seconds": 619,
       "title": "O centro do evangelho"
      },
      {
@@ -3022,7 +3022,7 @@
      "scene": "opening",
      "file": "shorts-pt-BR-01-opening.mp4",
      "local": "motion/out/release/shorts-pt-BR-01-opening.mp4",
-     "title": "Uma só história · Cena 1 de 21 · A Bíblia num relance",
+     "title": "A Bíblia é, no fim, uma só história 1/21",
      "description": "Da criação ao novo céu e à nova terra: a história da Bíblia em 14 minutos\nO filme completo (14 min) e a história em texto: https://one-scroll-bible.com/film/?lang=pt-BR\n\n#Shorts #Bíblia #históriadaBíblia",
      "tags": [
       "A Bíblia num relance",
@@ -3039,7 +3039,7 @@
       "Os patriarcas"
      ],
      "language": "pt-BR",
-     "seconds": 36.0,
+     "seconds": 36,
      "captions": {
       "en": "motion/subs/en/v/01-opening.srt",
       "es": "motion/subs/es/v/01-opening.srt",
@@ -3059,7 +3059,7 @@
      "scene": "creation",
      "file": "shorts-pt-BR-02-creation.mp4",
      "local": "motion/out/release/shorts-pt-BR-02-creation.mp4",
-     "title": "Criação · Cena 2 de 21 · A Bíblia num relance",
+     "title": "«E disse Deus: Haja luz» — Criação 2/21",
      "description": "Da criação ao novo céu e à nova terra: a história da Bíblia em 14 minutos\nO filme completo (14 min) e a história em texto: https://one-scroll-bible.com/film/?lang=pt-BR\n\n#Shorts #Bíblia #históriadaBíblia",
      "tags": [
       "A Bíblia num relance",
@@ -3076,7 +3076,7 @@
       "Os patriarcas"
      ],
      "language": "pt-BR",
-     "seconds": 35.0,
+     "seconds": 35,
      "captions": {
       "en": "motion/subs/en/v/02-creation.srt",
       "es": "motion/subs/es/v/02-creation.srt",
@@ -3096,7 +3096,7 @@
      "scene": "fall",
      "file": "shorts-pt-BR-03-fall.mp4",
      "local": "motion/out/release/shorts-pt-BR-03-fall.mp4",
-     "title": "A queda · Cena 3 de 21 · A Bíblia num relance",
+     "title": "«Onde estás?» — A queda 3/21",
      "description": "Da criação ao novo céu e à nova terra: a história da Bíblia em 14 minutos\nO filme completo (14 min) e a história em texto: https://one-scroll-bible.com/film/?lang=pt-BR\n\n#Shorts #Bíblia #históriadaBíblia",
      "tags": [
       "A Bíblia num relance",
@@ -3113,7 +3113,7 @@
       "Os patriarcas"
      ],
      "language": "pt-BR",
-     "seconds": 34.0,
+     "seconds": 34,
      "captions": {
       "en": "motion/subs/en/v/03-fall.srt",
       "es": "motion/subs/es/v/03-fall.srt",
@@ -3133,7 +3133,7 @@
      "scene": "patriarch",
      "file": "shorts-pt-BR-04-patriarch.mp4",
      "local": "motion/out/release/shorts-pt-BR-04-patriarch.mp4",
-     "title": "Os patriarcas · Cena 4 de 21 · A Bíblia num relance",
+     "title": "«Olha, agora, para os céus e conta as estrelas, se as podes contar» — Os patriarcas 4/21",
      "description": "Da criação ao novo céu e à nova terra: a história da Bíblia em 14 minutos\nO filme completo (14 min) e a história em texto: https://one-scroll-bible.com/film/?lang=pt-BR\n\n#Shorts #Bíblia #históriadaBíblia",
      "tags": [
       "A Bíblia num relance",
@@ -3150,7 +3150,7 @@
       "Os patriarcas"
      ],
      "language": "pt-BR",
-     "seconds": 26.0,
+     "seconds": 26,
      "captions": {
       "en": "motion/subs/en/v/04-patriarch.srt",
       "es": "motion/subs/es/v/04-patriarch.srt",
@@ -3170,7 +3170,7 @@
      "scene": "exodus",
      "file": "shorts-pt-BR-05-exodus.mp4",
      "local": "motion/out/release/shorts-pt-BR-05-exodus.mp4",
-     "title": "O êxodo · Cena 5 de 21 · A Bíblia num relance",
+     "title": "«Deixa ir o meu povo» — O êxodo 5/21",
      "description": "Da criação ao novo céu e à nova terra: a história da Bíblia em 14 minutos\nO filme completo (14 min) e a história em texto: https://one-scroll-bible.com/film/?lang=pt-BR\n\n#Shorts #Bíblia #históriadaBíblia",
      "tags": [
       "A Bíblia num relance",
@@ -3187,7 +3187,7 @@
       "Os patriarcas"
      ],
      "language": "pt-BR",
-     "seconds": 44.0,
+     "seconds": 44,
      "captions": {
       "en": "motion/subs/en/v/05-exodus.srt",
       "es": "motion/subs/es/v/05-exodus.srt",
@@ -3207,7 +3207,7 @@
      "scene": "wilderness",
      "file": "shorts-pt-BR-06-wilderness.mp4",
      "local": "motion/out/release/shorts-pt-BR-06-wilderness.mp4",
-     "title": "A jornada no deserto · Cena 6 de 21 · A Bíblia num relance",
+     "title": "Diante da terra prometida, preparam-se para entrar… — A jornada no deserto 6/21",
      "description": "Da criação ao novo céu e à nova terra: a história da Bíblia em 14 minutos\nO filme completo (14 min) e a história em texto: https://one-scroll-bible.com/film/?lang=pt-BR\n\n#Shorts #Bíblia #históriadaBíblia",
      "tags": [
       "A Bíblia num relance",
@@ -3244,7 +3244,7 @@
      "scene": "judges",
      "file": "shorts-pt-BR-07-judges.mp4",
      "local": "motion/out/release/shorts-pt-BR-07-judges.mp4",
-     "title": "Os juízes · Cena 7 de 21 · A Bíblia num relance",
+     "title": "Mas, sem rei, cada um faz o que acha mais reto. — Os juízes 7/21",
      "description": "Da criação ao novo céu e à nova terra: a história da Bíblia em 14 minutos\nO filme completo (14 min) e a história em texto: https://one-scroll-bible.com/film/?lang=pt-BR\n\n#Shorts #Bíblia #históriadaBíblia",
      "tags": [
       "A Bíblia num relance",
@@ -3261,7 +3261,7 @@
       "Os patriarcas"
      ],
      "language": "pt-BR",
-     "seconds": 40.0,
+     "seconds": 40,
      "captions": {
       "en": "motion/subs/en/v/07-judges.srt",
       "es": "motion/subs/es/v/07-judges.srt",
@@ -3281,7 +3281,7 @@
      "scene": "kingdom",
      "file": "shorts-pt-BR-08-kingdom.mp4",
      "local": "motion/out/release/shorts-pt-BR-08-kingdom.mp4",
-     "title": "O reino unificado · Cena 8 de 21 · A Bíblia num relance",
+     "title": "Pois o homem vê o que está diante dos olhos, porém o SENHOR olha para o coração. 8/21",
      "description": "Da criação ao novo céu e à nova terra: a história da Bíblia em 14 minutos\nO filme completo (14 min) e a história em texto: https://one-scroll-bible.com/film/?lang=pt-BR\n\n#Shorts #Bíblia #históriadaBíblia",
      "tags": [
       "A Bíblia num relance",
@@ -3298,7 +3298,7 @@
       "Os patriarcas"
      ],
      "language": "pt-BR",
-     "seconds": 39.0,
+     "seconds": 39,
      "captions": {
       "en": "motion/subs/en/v/08-kingdom.srt",
       "es": "motion/subs/es/v/08-kingdom.srt",
@@ -3318,7 +3318,7 @@
      "scene": "exile",
      "file": "shorts-pt-BR-09-exile.mp4",
      "local": "motion/out/release/shorts-pt-BR-09-exile.mp4",
-     "title": "O reino dividido · O exílio · Cena 9 de 21 · A Bíblia num relance",
+     "title": "O templo arde e o povo é levado à Babilônia. — O reino dividido · O exílio 9/21",
      "description": "Da criação ao novo céu e à nova terra: a história da Bíblia em 14 minutos\nO filme completo (14 min) e a história em texto: https://one-scroll-bible.com/film/?lang=pt-BR\n\n#Shorts #Bíblia #históriadaBíblia",
      "tags": [
       "A Bíblia num relance",
@@ -3335,7 +3335,7 @@
       "Os patriarcas"
      ],
      "language": "pt-BR",
-     "seconds": 36.0,
+     "seconds": 36,
      "captions": {
       "en": "motion/subs/en/v/09-exile.srt",
       "es": "motion/subs/es/v/09-exile.srt",
@@ -3355,7 +3355,7 @@
      "scene": "return",
      "file": "shorts-pt-BR-10-return.mp4",
      "local": "motion/out/release/shorts-pt-BR-10-return.mp4",
-     "title": "O regresso do exílio · Cena 10 de 21 · A Bíblia num relance",
+     "title": "Porque a alegria do SENHOR é a vossa força. — O regresso do exílio 10/21",
      "description": "Da criação ao novo céu e à nova terra: a história da Bíblia em 14 minutos\nO filme completo (14 min) e a história em texto: https://one-scroll-bible.com/film/?lang=pt-BR\n\n#Shorts #Bíblia #históriadaBíblia",
      "tags": [
       "A Bíblia num relance",
@@ -3372,7 +3372,7 @@
       "Os patriarcas"
      ],
      "language": "pt-BR",
-     "seconds": 38.0,
+     "seconds": 38,
      "captions": {
       "en": "motion/subs/en/v/10-return.srt",
       "es": "motion/subs/es/v/10-return.srt",
@@ -3392,7 +3392,7 @@
      "scene": "silence",
      "file": "shorts-pt-BR-11-silence.mp4",
      "local": "motion/out/release/shorts-pt-BR-11-silence.mp4",
-     "title": "400 anos de silêncio · Cena 11 de 21 · A Bíblia num relance",
+     "title": "400 anos sem voz profética — 400 anos de silêncio 11/21",
      "description": "Da criação ao novo céu e à nova terra: a história da Bíblia em 14 minutos\nO filme completo (14 min) e a história em texto: https://one-scroll-bible.com/film/?lang=pt-BR\n\n#Shorts #Bíblia #históriadaBíblia",
      "tags": [
       "A Bíblia num relance",
@@ -3409,7 +3409,7 @@
       "Os patriarcas"
      ],
      "language": "pt-BR",
-     "seconds": 34.0,
+     "seconds": 34,
      "captions": {
       "en": "motion/subs/en/v/11-silence.srt",
       "es": "motion/subs/es/v/11-silence.srt",
@@ -3429,7 +3429,7 @@
      "scene": "advent",
      "file": "shorts-pt-BR-12-advent.mp4",
      "local": "motion/out/release/shorts-pt-BR-12-advent.mp4",
-     "title": "A vinda de Jesus · Cena 12 de 21 · A Bíblia num relance",
+     "title": "«E o Verbo se fez carne e habitou entre nós» — A vinda de Jesus 12/21",
      "description": "Da criação ao novo céu e à nova terra: a história da Bíblia em 14 minutos\nO filme completo (14 min) e a história em texto: https://one-scroll-bible.com/film/?lang=pt-BR\n\n#Shorts #Bíblia #históriadaBíblia",
      "tags": [
       "A Bíblia num relance",
@@ -3446,7 +3446,7 @@
       "Os patriarcas"
      ],
      "language": "pt-BR",
-     "seconds": 36.0,
+     "seconds": 36,
      "captions": {
       "en": "motion/subs/en/v/12-advent.srt",
       "es": "motion/subs/es/v/12-advent.srt",
@@ -3466,7 +3466,7 @@
      "scene": "cross",
      "file": "shorts-pt-BR-13-cross.mp4",
      "local": "motion/out/release/shorts-pt-BR-13-cross.mp4",
-     "title": "A cruz · Cena 13 de 21 · A Bíblia num relance",
+     "title": "Quem devia estar naquela cruz era eu. — A cruz 13/21",
      "description": "Da criação ao novo céu e à nova terra: a história da Bíblia em 14 minutos\nO filme completo (14 min) e a história em texto: https://one-scroll-bible.com/film/?lang=pt-BR\n\n#Shorts #Bíblia #históriadaBíblia",
      "tags": [
       "A Bíblia num relance",
@@ -3483,7 +3483,7 @@
       "Os patriarcas"
      ],
      "language": "pt-BR",
-     "seconds": 39.0,
+     "seconds": 39,
      "captions": {
       "en": "motion/subs/en/v/13-cross.srt",
       "es": "motion/subs/es/v/13-cross.srt",
@@ -3503,7 +3503,7 @@
      "scene": "rise",
      "file": "shorts-pt-BR-14-rise.mp4",
      "local": "motion/out/release/shorts-pt-BR-14-rise.mp4",
-     "title": "A ressurreição · Cena 14 de 21 · A Bíblia num relance",
+     "title": "«Porque já ressuscitou, como tinha dito» — A ressurreição 14/21",
      "description": "Da criação ao novo céu e à nova terra: a história da Bíblia em 14 minutos\nO filme completo (14 min) e a história em texto: https://one-scroll-bible.com/film/?lang=pt-BR\n\n#Shorts #Bíblia #históriadaBíblia",
      "tags": [
       "A Bíblia num relance",
@@ -3520,7 +3520,7 @@
       "Os patriarcas"
      ],
      "language": "pt-BR",
-     "seconds": 27.0,
+     "seconds": 27,
      "captions": {
       "en": "motion/subs/en/v/14-rise.srt",
       "es": "motion/subs/es/v/14-rise.srt",
@@ -3540,7 +3540,7 @@
      "scene": "church",
      "file": "shorts-pt-BR-15-church.mp4",
      "local": "motion/out/release/shorts-pt-BR-15-church.mp4",
-     "title": "O começo da igreja · Cena 15 de 21 · A Bíblia num relance",
+     "title": "«… Ser-me-eis testemunhas … até aos confins da terra» — O começo da igreja 15/21",
      "description": "Da criação ao novo céu e à nova terra: a história da Bíblia em 14 minutos\nO filme completo (14 min) e a história em texto: https://one-scroll-bible.com/film/?lang=pt-BR\n\n#Shorts #Bíblia #históriadaBíblia",
      "tags": [
       "A Bíblia num relance",
@@ -3557,7 +3557,7 @@
       "Os patriarcas"
      ],
      "language": "pt-BR",
-     "seconds": 35.0,
+     "seconds": 35,
      "captions": {
       "en": "motion/subs/en/v/15-church.srt",
       "es": "motion/subs/es/v/15-church.srt",
@@ -3577,7 +3577,7 @@
      "scene": "renewal",
      "file": "shorts-pt-BR-16-renewal.mp4",
      "local": "motion/out/release/shorts-pt-BR-16-renewal.mp4",
-     "title": "A restauração · Cena 16 de 21 · A Bíblia num relance",
+     "title": "«E Deus limpará de seus olhos toda lágrima» — A restauração 16/21",
      "description": "Da criação ao novo céu e à nova terra: a história da Bíblia em 14 minutos\nO filme completo (14 min) e a história em texto: https://one-scroll-bible.com/film/?lang=pt-BR\n\n#Shorts #Bíblia #históriadaBíblia",
      "tags": [
       "A Bíblia num relance",
@@ -3594,7 +3594,7 @@
       "Os patriarcas"
      ],
      "language": "pt-BR",
-     "seconds": 36.0,
+     "seconds": 36,
      "captions": {
       "en": "motion/subs/en/v/16-renewal.srt",
       "es": "motion/subs/es/v/16-renewal.srt",
@@ -3614,7 +3614,7 @@
      "scene": "mirror",
      "file": "shorts-pt-BR-17-mirror.mp4",
      "local": "motion/out/release/shorts-pt-BR-17-mirror.mp4",
-     "title": "O espelho · Cena 17 de 21 · A Bíblia num relance",
+     "title": "No fim, o ídolo mais profundo é «eu mesmo sentado no trono de Deus». — O espelho 17/21",
      "description": "Da criação ao novo céu e à nova terra: a história da Bíblia em 14 minutos\nO filme completo (14 min) e a história em texto: https://one-scroll-bible.com/film/?lang=pt-BR\n\n#Shorts #Bíblia #históriadaBíblia",
      "tags": [
       "A Bíblia num relance",
@@ -3651,7 +3651,7 @@
      "scene": "gospel",
      "file": "shorts-pt-BR-18-gospel.mp4",
      "local": "motion/out/release/shorts-pt-BR-18-gospel.mp4",
-     "title": "O centro do evangelho · Cena 18 de 21 · A Bíblia num relance",
+     "title": "Não «faça», mas «está consumado» — O centro do evangelho 18/21",
      "description": "Da criação ao novo céu e à nova terra: a história da Bíblia em 14 minutos\nO filme completo (14 min) e a história em texto: https://one-scroll-bible.com/film/?lang=pt-BR\n\n#Shorts #Bíblia #históriadaBíblia",
      "tags": [
       "A Bíblia num relance",
@@ -3688,7 +3688,7 @@
      "scene": "evidence",
      "file": "shorts-pt-BR-19-evidence.mp4",
      "local": "motion/out/release/shorts-pt-BR-19-evidence.mp4",
-     "title": "A Bíblia é uma história verdadeira? · Cena 19 de 21 · A Bíblia num relance",
+     "title": "A Bíblia é mesmo uma história verdadeira? 19/21",
      "description": "Da criação ao novo céu e à nova terra: a história da Bíblia em 14 minutos\nO filme completo (14 min) e a história em texto: https://one-scroll-bible.com/film/?lang=pt-BR\n\n#Shorts #Bíblia #históriadaBíblia",
      "tags": [
       "A Bíblia num relance",
@@ -3705,7 +3705,7 @@
       "Os patriarcas"
      ],
      "language": "pt-BR",
-     "seconds": 60.0,
+     "seconds": 60,
      "captions": {
       "en": "motion/subs/en/v/19-evidence.srt",
       "es": "motion/subs/es/v/19-evidence.srt",
@@ -3725,7 +3725,7 @@
      "scene": "ship",
      "file": "shorts-pt-BR-20-ship.mp4",
      "local": "motion/out/release/shorts-pt-BR-20-ship.mp4",
-     "title": "Não basta ser bom? · Cena 20 de 21 · A Bíblia num relance",
+     "title": "Não basta ser uma boa pessoa, mesmo sem crer em Jesus? — Não basta ser bom? 20/21",
      "description": "Da criação ao novo céu e à nova terra: a história da Bíblia em 14 minutos\nO filme completo (14 min) e a história em texto: https://one-scroll-bible.com/film/?lang=pt-BR\n\n#Shorts #Bíblia #históriadaBíblia",
      "tags": [
       "A Bíblia num relance",
@@ -3762,7 +3762,7 @@
      "scene": "invite",
      "file": "shorts-pt-BR-21-invite.mp4",
      "local": "motion/out/release/shorts-pt-BR-21-invite.mp4",
-     "title": "O convite · Cena 21 de 21 · A Bíblia num relance",
+     "title": "Este amor não é informação, mas um convite. — O convite 21/21",
      "description": "Da criação ao novo céu e à nova terra: a história da Bíblia em 14 minutos\nO filme completo (14 min) e a história em texto: https://one-scroll-bible.com/film/?lang=pt-BR\n\n#Shorts #Bíblia #históriadaBíblia",
      "tags": [
       "A Bíblia num relance",
@@ -3779,7 +3779,7 @@
       "Os patriarcas"
      ],
      "language": "pt-BR",
-     "seconds": 57.0,
+     "seconds": 57,
      "captions": {
       "en": "motion/subs/en/v/21-invite.srt",
       "es": "motion/subs/es/v/21-invite.srt",
@@ -3856,32 +3856,32 @@
     "chapters": [
      {
       "time": "0:00",
-      "seconds": 0.0,
+      "seconds": 0,
       "title": "Une seule histoire"
      },
      {
       "time": "0:36",
-      "seconds": 36.0,
+      "seconds": 36,
       "title": "La création"
      },
      {
       "time": "1:11",
-      "seconds": 71.0,
+      "seconds": 71,
       "title": "La chute"
      },
      {
       "time": "1:45",
-      "seconds": 105.0,
+      "seconds": 105,
       "title": "Les patriarches"
      },
      {
       "time": "2:11",
-      "seconds": 131.0,
+      "seconds": 131,
       "title": "L’Exode"
      },
      {
       "time": "2:55",
-      "seconds": 175.0,
+      "seconds": 175,
       "title": "Le désert"
      },
      {
@@ -3941,7 +3941,7 @@
      },
      {
       "time": "10:19",
-      "seconds": 619.0,
+      "seconds": 619,
       "title": "Le cœur de l’Évangile"
      },
      {
@@ -3969,7 +3969,7 @@
      "scene": "opening",
      "file": "shorts-fr-01-opening.mp4",
      "local": "motion/out/release/shorts-fr-01-opening.mp4",
-     "title": "Une seule histoire · Scène 1 sur 21 · La Bible en un coup d’œil",
+     "title": "La Bible est, au fond, une seule histoire 1/21",
      "description": "De la création au nouveau ciel et à la nouvelle terre : l’histoire de la Bible en 14 minutes\nLe film complet (14 min) et l’histoire en texte: https://one-scroll-bible.com/film/?lang=fr\n\n#Shorts #Bible #histoiredelaBible",
      "tags": [
       "La Bible en un coup d’œil",
@@ -3986,7 +3986,7 @@
       "Les patriarches"
      ],
      "language": "fr",
-     "seconds": 36.0,
+     "seconds": 36,
      "captions": {
       "en": "motion/subs/en/v/01-opening.srt",
       "es": "motion/subs/es/v/01-opening.srt",
@@ -4006,7 +4006,7 @@
      "scene": "creation",
      "file": "shorts-fr-02-creation.mp4",
      "local": "motion/out/release/shorts-fr-02-creation.mp4",
-     "title": "La création · Scène 2 sur 21 · La Bible en un coup d’œil",
+     "title": "« Dieu dit : Que la lumière soit ! » — La création 2/21",
      "description": "De la création au nouveau ciel et à la nouvelle terre : l’histoire de la Bible en 14 minutes\nLe film complet (14 min) et l’histoire en texte: https://one-scroll-bible.com/film/?lang=fr\n\n#Shorts #Bible #histoiredelaBible",
      "tags": [
       "La Bible en un coup d’œil",
@@ -4023,7 +4023,7 @@
       "Les patriarches"
      ],
      "language": "fr",
-     "seconds": 35.0,
+     "seconds": 35,
      "captions": {
       "en": "motion/subs/en/v/02-creation.srt",
       "es": "motion/subs/es/v/02-creation.srt",
@@ -4043,7 +4043,7 @@
      "scene": "fall",
      "file": "shorts-fr-03-fall.mp4",
      "local": "motion/out/release/shorts-fr-03-fall.mp4",
-     "title": "La chute · Scène 3 sur 21 · La Bible en un coup d’œil",
+     "title": "« Où es-tu ? » — La chute 3/21",
      "description": "De la création au nouveau ciel et à la nouvelle terre : l’histoire de la Bible en 14 minutes\nLe film complet (14 min) et l’histoire en texte: https://one-scroll-bible.com/film/?lang=fr\n\n#Shorts #Bible #histoiredelaBible",
      "tags": [
       "La Bible en un coup d’œil",
@@ -4060,7 +4060,7 @@
       "Les patriarches"
      ],
      "language": "fr",
-     "seconds": 34.0,
+     "seconds": 34,
      "captions": {
       "en": "motion/subs/en/v/03-fall.srt",
       "es": "motion/subs/es/v/03-fall.srt",
@@ -4080,7 +4080,7 @@
      "scene": "patriarch",
      "file": "shorts-fr-04-patriarch.mp4",
      "local": "motion/out/release/shorts-fr-04-patriarch.mp4",
-     "title": "Les patriarches · Scène 4 sur 21 · La Bible en un coup d’œil",
+     "title": "« Regarde vers le ciel, et compte les étoiles, si tu peux les compter » — Les patriarches 4/21",
      "description": "De la création au nouveau ciel et à la nouvelle terre : l’histoire de la Bible en 14 minutes\nLe film complet (14 min) et l’histoire en texte: https://one-scroll-bible.com/film/?lang=fr\n\n#Shorts #Bible #histoiredelaBible",
      "tags": [
       "La Bible en un coup d’œil",
@@ -4097,7 +4097,7 @@
       "Les patriarches"
      ],
      "language": "fr",
-     "seconds": 26.0,
+     "seconds": 26,
      "captions": {
       "en": "motion/subs/en/v/04-patriarch.srt",
       "es": "motion/subs/es/v/04-patriarch.srt",
@@ -4117,7 +4117,7 @@
      "scene": "exodus",
      "file": "shorts-fr-05-exodus.mp4",
      "local": "motion/out/release/shorts-fr-05-exodus.mp4",
-     "title": "L’Exode · Scène 5 sur 21 · La Bible en un coup d’œil",
+     "title": "« Laisse aller mon peuple » — L’Exode 5/21",
      "description": "De la création au nouveau ciel et à la nouvelle terre : l’histoire de la Bible en 14 minutes\nLe film complet (14 min) et l’histoire en texte: https://one-scroll-bible.com/film/?lang=fr\n\n#Shorts #Bible #histoiredelaBible",
      "tags": [
       "La Bible en un coup d’œil",
@@ -4134,7 +4134,7 @@
       "Les patriarches"
      ],
      "language": "fr",
-     "seconds": 44.0,
+     "seconds": 44,
      "captions": {
       "en": "motion/subs/en/v/05-exodus.srt",
       "es": "motion/subs/es/v/05-exodus.srt",
@@ -4154,7 +4154,7 @@
      "scene": "wilderness",
      "file": "shorts-fr-06-wilderness.mp4",
      "local": "motion/out/release/shorts-fr-06-wilderness.mp4",
-     "title": "Le désert · Scène 6 sur 21 · La Bible en un coup d’œil",
+     "title": "Devant la terre promise, ils s’apprêtent à entrer… — Le désert 6/21",
      "description": "De la création au nouveau ciel et à la nouvelle terre : l’histoire de la Bible en 14 minutes\nLe film complet (14 min) et l’histoire en texte: https://one-scroll-bible.com/film/?lang=fr\n\n#Shorts #Bible #histoiredelaBible",
      "tags": [
       "La Bible en un coup d’œil",
@@ -4191,7 +4191,7 @@
      "scene": "judges",
      "file": "shorts-fr-07-judges.mp4",
      "local": "motion/out/release/shorts-fr-07-judges.mp4",
-     "title": "Les juges · Scène 7 sur 21 · La Bible en un coup d’œil",
+     "title": "Mais, sans roi, chacun fait ce qui lui semble bon. — Les juges 7/21",
      "description": "De la création au nouveau ciel et à la nouvelle terre : l’histoire de la Bible en 14 minutes\nLe film complet (14 min) et l’histoire en texte: https://one-scroll-bible.com/film/?lang=fr\n\n#Shorts #Bible #histoiredelaBible",
      "tags": [
       "La Bible en un coup d’œil",
@@ -4208,7 +4208,7 @@
       "Les patriarches"
      ],
      "language": "fr",
-     "seconds": 40.0,
+     "seconds": 40,
      "captions": {
       "en": "motion/subs/en/v/07-judges.srt",
       "es": "motion/subs/es/v/07-judges.srt",
@@ -4228,7 +4228,7 @@
      "scene": "kingdom",
      "file": "shorts-fr-08-kingdom.mp4",
      "local": "motion/out/release/shorts-fr-08-kingdom.mp4",
-     "title": "Le royaume unifié · Scène 8 sur 21 · La Bible en un coup d’œil",
+     "title": "L’homme regarde à ce qui frappe les yeux, mais l’Éternel regarde au cœur. — Le royaume unifié 8/21",
      "description": "De la création au nouveau ciel et à la nouvelle terre : l’histoire de la Bible en 14 minutes\nLe film complet (14 min) et l’histoire en texte: https://one-scroll-bible.com/film/?lang=fr\n\n#Shorts #Bible #histoiredelaBible",
      "tags": [
       "La Bible en un coup d’œil",
@@ -4245,7 +4245,7 @@
       "Les patriarches"
      ],
      "language": "fr",
-     "seconds": 39.0,
+     "seconds": 39,
      "captions": {
       "en": "motion/subs/en/v/08-kingdom.srt",
       "es": "motion/subs/es/v/08-kingdom.srt",
@@ -4265,7 +4265,7 @@
      "scene": "exile",
      "file": "shorts-fr-09-exile.mp4",
      "local": "motion/out/release/shorts-fr-09-exile.mp4",
-     "title": "Le royaume divisé · L’exil · Scène 9 sur 21 · La Bible en un coup d’œil",
+     "title": "Le temple brûle, et le peuple est emmené à Babylone. — Le royaume divisé · L’exil 9/21",
      "description": "De la création au nouveau ciel et à la nouvelle terre : l’histoire de la Bible en 14 minutes\nLe film complet (14 min) et l’histoire en texte: https://one-scroll-bible.com/film/?lang=fr\n\n#Shorts #Bible #histoiredelaBible",
      "tags": [
       "La Bible en un coup d’œil",
@@ -4282,7 +4282,7 @@
       "Les patriarches"
      ],
      "language": "fr",
-     "seconds": 36.0,
+     "seconds": 36,
      "captions": {
       "en": "motion/subs/en/v/09-exile.srt",
       "es": "motion/subs/es/v/09-exile.srt",
@@ -4302,7 +4302,7 @@
      "scene": "return",
      "file": "shorts-fr-10-return.mp4",
      "local": "motion/out/release/shorts-fr-10-return.mp4",
-     "title": "Le retour de l’exil · Scène 10 sur 21 · La Bible en un coup d’œil",
+     "title": "La joie de l’Éternel sera votre force. — Le retour de l’exil 10/21",
      "description": "De la création au nouveau ciel et à la nouvelle terre : l’histoire de la Bible en 14 minutes\nLe film complet (14 min) et l’histoire en texte: https://one-scroll-bible.com/film/?lang=fr\n\n#Shorts #Bible #histoiredelaBible",
      "tags": [
       "La Bible en un coup d’œil",
@@ -4319,7 +4319,7 @@
       "Les patriarches"
      ],
      "language": "fr",
-     "seconds": 38.0,
+     "seconds": 38,
      "captions": {
       "en": "motion/subs/en/v/10-return.srt",
       "es": "motion/subs/es/v/10-return.srt",
@@ -4339,7 +4339,7 @@
      "scene": "silence",
      "file": "shorts-fr-11-silence.mp4",
      "local": "motion/out/release/shorts-fr-11-silence.mp4",
-     "title": "400 ans de silence · Scène 11 sur 21 · La Bible en un coup d’œil",
+     "title": "400 ans sans voix prophétique — 400 ans de silence 11/21",
      "description": "De la création au nouveau ciel et à la nouvelle terre : l’histoire de la Bible en 14 minutes\nLe film complet (14 min) et l’histoire en texte: https://one-scroll-bible.com/film/?lang=fr\n\n#Shorts #Bible #histoiredelaBible",
      "tags": [
       "La Bible en un coup d’œil",
@@ -4356,7 +4356,7 @@
       "Les patriarches"
      ],
      "language": "fr",
-     "seconds": 34.0,
+     "seconds": 34,
      "captions": {
       "en": "motion/subs/en/v/11-silence.srt",
       "es": "motion/subs/es/v/11-silence.srt",
@@ -4376,7 +4376,7 @@
      "scene": "advent",
      "file": "shorts-fr-12-advent.mp4",
      "local": "motion/out/release/shorts-fr-12-advent.mp4",
-     "title": "La venue de Jésus · Scène 12 sur 21 · La Bible en un coup d’œil",
+     "title": "« Et la parole a été faite chair, et elle a habité parmi nous » — La venue de Jésus 12/21",
      "description": "De la création au nouveau ciel et à la nouvelle terre : l’histoire de la Bible en 14 minutes\nLe film complet (14 min) et l’histoire en texte: https://one-scroll-bible.com/film/?lang=fr\n\n#Shorts #Bible #histoiredelaBible",
      "tags": [
       "La Bible en un coup d’œil",
@@ -4393,7 +4393,7 @@
       "Les patriarches"
      ],
      "language": "fr",
-     "seconds": 36.0,
+     "seconds": 36,
      "captions": {
       "en": "motion/subs/en/v/12-advent.srt",
       "es": "motion/subs/es/v/12-advent.srt",
@@ -4413,7 +4413,7 @@
      "scene": "cross",
      "file": "shorts-fr-13-cross.mp4",
      "local": "motion/out/release/shorts-fr-13-cross.mp4",
-     "title": "La croix · Scène 13 sur 21 · La Bible en un coup d’œil",
+     "title": "Celui qui aurait dû être sur cette croix, c’était moi. — La croix 13/21",
      "description": "De la création au nouveau ciel et à la nouvelle terre : l’histoire de la Bible en 14 minutes\nLe film complet (14 min) et l’histoire en texte: https://one-scroll-bible.com/film/?lang=fr\n\n#Shorts #Bible #histoiredelaBible",
      "tags": [
       "La Bible en un coup d’œil",
@@ -4430,7 +4430,7 @@
       "Les patriarches"
      ],
      "language": "fr",
-     "seconds": 39.0,
+     "seconds": 39,
      "captions": {
       "en": "motion/subs/en/v/13-cross.srt",
       "es": "motion/subs/es/v/13-cross.srt",
@@ -4450,7 +4450,7 @@
      "scene": "rise",
      "file": "shorts-fr-14-rise.mp4",
      "local": "motion/out/release/shorts-fr-14-rise.mp4",
-     "title": "La résurrection · Scène 14 sur 21 · La Bible en un coup d’œil",
+     "title": "« Il est ressuscité, comme il l’avait dit » — La résurrection 14/21",
      "description": "De la création au nouveau ciel et à la nouvelle terre : l’histoire de la Bible en 14 minutes\nLe film complet (14 min) et l’histoire en texte: https://one-scroll-bible.com/film/?lang=fr\n\n#Shorts #Bible #histoiredelaBible",
      "tags": [
       "La Bible en un coup d’œil",
@@ -4467,7 +4467,7 @@
       "Les patriarches"
      ],
      "language": "fr",
-     "seconds": 27.0,
+     "seconds": 27,
      "captions": {
       "en": "motion/subs/en/v/14-rise.srt",
       "es": "motion/subs/es/v/14-rise.srt",
@@ -4487,7 +4487,7 @@
      "scene": "church",
      "file": "shorts-fr-15-church.mp4",
      "local": "motion/out/release/shorts-fr-15-church.mp4",
-     "title": "Le début de l’Église · Scène 15 sur 21 · La Bible en un coup d’œil",
+     "title": "« … Vous serez mes témoins … jusqu’aux extrémités de la terre » — Le début de l’Église 15/21",
      "description": "De la création au nouveau ciel et à la nouvelle terre : l’histoire de la Bible en 14 minutes\nLe film complet (14 min) et l’histoire en texte: https://one-scroll-bible.com/film/?lang=fr\n\n#Shorts #Bible #histoiredelaBible",
      "tags": [
       "La Bible en un coup d’œil",
@@ -4504,7 +4504,7 @@
       "Les patriarches"
      ],
      "language": "fr",
-     "seconds": 35.0,
+     "seconds": 35,
      "captions": {
       "en": "motion/subs/en/v/15-church.srt",
       "es": "motion/subs/es/v/15-church.srt",
@@ -4524,7 +4524,7 @@
      "scene": "renewal",
      "file": "shorts-fr-16-renewal.mp4",
      "local": "motion/out/release/shorts-fr-16-renewal.mp4",
-     "title": "La restauration · Scène 16 sur 21 · La Bible en un coup d’œil",
+     "title": "« Il essuiera toute larme de leurs yeux » — La restauration 16/21",
      "description": "De la création au nouveau ciel et à la nouvelle terre : l’histoire de la Bible en 14 minutes\nLe film complet (14 min) et l’histoire en texte: https://one-scroll-bible.com/film/?lang=fr\n\n#Shorts #Bible #histoiredelaBible",
      "tags": [
       "La Bible en un coup d’œil",
@@ -4541,7 +4541,7 @@
       "Les patriarches"
      ],
      "language": "fr",
-     "seconds": 36.0,
+     "seconds": 36,
      "captions": {
       "en": "motion/subs/en/v/16-renewal.srt",
       "es": "motion/subs/es/v/16-renewal.srt",
@@ -4561,7 +4561,7 @@
      "scene": "mirror",
      "file": "shorts-fr-17-mirror.mp4",
      "local": "motion/out/release/shorts-fr-17-mirror.mp4",
-     "title": "Le miroir · Scène 17 sur 21 · La Bible en un coup d’œil",
+     "title": "Au fond, l’idole la plus profonde, c’est « moi-même assis sur le trône de Dieu ». — Le miroir 17/21",
      "description": "De la création au nouveau ciel et à la nouvelle terre : l’histoire de la Bible en 14 minutes\nLe film complet (14 min) et l’histoire en texte: https://one-scroll-bible.com/film/?lang=fr\n\n#Shorts #Bible #histoiredelaBible",
      "tags": [
       "La Bible en un coup d’œil",
@@ -4598,7 +4598,7 @@
      "scene": "gospel",
      "file": "shorts-fr-18-gospel.mp4",
      "local": "motion/out/release/shorts-fr-18-gospel.mp4",
-     "title": "Le cœur de l’Évangile · Scène 18 sur 21 · La Bible en un coup d’œil",
+     "title": "Non « fais », mais « tout est accompli » — Le cœur de l’Évangile 18/21",
      "description": "De la création au nouveau ciel et à la nouvelle terre : l’histoire de la Bible en 14 minutes\nLe film complet (14 min) et l’histoire en texte: https://one-scroll-bible.com/film/?lang=fr\n\n#Shorts #Bible #histoiredelaBible",
      "tags": [
       "La Bible en un coup d’œil",
@@ -4635,7 +4635,7 @@
      "scene": "evidence",
      "file": "shorts-fr-19-evidence.mp4",
      "local": "motion/out/release/shorts-fr-19-evidence.mp4",
-     "title": "La Bible est-elle une histoire vraie ? · Scène 19 sur 21 · La Bible en un coup d’œil",
+     "title": "La Bible est-elle vraiment une histoire vraie ? 19/21",
      "description": "De la création au nouveau ciel et à la nouvelle terre : l’histoire de la Bible en 14 minutes\nLe film complet (14 min) et l’histoire en texte: https://one-scroll-bible.com/film/?lang=fr\n\n#Shorts #Bible #histoiredelaBible",
      "tags": [
       "La Bible en un coup d’œil",
@@ -4652,7 +4652,7 @@
       "Les patriarches"
      ],
      "language": "fr",
-     "seconds": 60.0,
+     "seconds": 60,
      "captions": {
       "en": "motion/subs/en/v/19-evidence.srt",
       "es": "motion/subs/es/v/19-evidence.srt",
@@ -4672,7 +4672,7 @@
      "scene": "ship",
      "file": "shorts-fr-20-ship.mp4",
      "local": "motion/out/release/shorts-fr-20-ship.mp4",
-     "title": "Suffit-il d’être quelqu’un de bien ? · Scène 20 sur 21 · La Bible en un coup d’œil",
+     "title": "Ne suffit-il pas d’être quelqu’un de bien, même sans croire en Jésus ? 20/21",
      "description": "De la création au nouveau ciel et à la nouvelle terre : l’histoire de la Bible en 14 minutes\nLe film complet (14 min) et l’histoire en texte: https://one-scroll-bible.com/film/?lang=fr\n\n#Shorts #Bible #histoiredelaBible",
      "tags": [
       "La Bible en un coup d’œil",
@@ -4709,7 +4709,7 @@
      "scene": "invite",
      "file": "shorts-fr-21-invite.mp4",
      "local": "motion/out/release/shorts-fr-21-invite.mp4",
-     "title": "L’invitation · Scène 21 sur 21 · La Bible en un coup d’œil",
+     "title": "Cet amour n’est pas une information, mais une invitation. — L’invitation 21/21",
      "description": "De la création au nouveau ciel et à la nouvelle terre : l’histoire de la Bible en 14 minutes\nLe film complet (14 min) et l’histoire en texte: https://one-scroll-bible.com/film/?lang=fr\n\n#Shorts #Bible #histoiredelaBible",
      "tags": [
       "La Bible en un coup d’œil",
@@ -4726,7 +4726,7 @@
       "Les patriarches"
      ],
      "language": "fr",
-     "seconds": 57.0,
+     "seconds": 57,
      "captions": {
       "en": "motion/subs/en/v/21-invite.srt",
       "es": "motion/subs/es/v/21-invite.srt",
@@ -4801,32 +4801,32 @@
     "chapters": [
      {
       "time": "0:00",
-      "seconds": 0.0,
+      "seconds": 0,
       "title": "Der rote Faden"
      },
      {
       "time": "0:36",
-      "seconds": 36.0,
+      "seconds": 36,
       "title": "Schöpfung"
      },
      {
       "time": "1:11",
-      "seconds": 71.0,
+      "seconds": 71,
       "title": "Der Sündenfall"
      },
      {
       "time": "1:45",
-      "seconds": 105.0,
+      "seconds": 105,
       "title": "Die Erzväter"
      },
      {
       "time": "2:11",
-      "seconds": 131.0,
+      "seconds": 131,
       "title": "Der Auszug aus Ägypten"
      },
      {
       "time": "2:55",
-      "seconds": 175.0,
+      "seconds": 175,
       "title": "Die Wüstenwanderung"
      },
      {
@@ -4886,7 +4886,7 @@
      },
      {
       "time": "10:19",
-      "seconds": 619.0,
+      "seconds": 619,
       "title": "Der Kern des Evangeliums"
      },
      {
@@ -4914,7 +4914,7 @@
      "scene": "opening",
      "file": "shorts-de-01-opening.mp4",
      "local": "motion/out/release/shorts-de-01-opening.mp4",
-     "title": "Der rote Faden · Szene 1 von 21 · Die Bibel auf einen Blick",
+     "title": "Die Bibel ist am Ende eine einzige Geschichte 1/21",
      "description": "Von der Schöpfung bis zum neuen Himmel und der neuen Erde: die Geschichte der Bibel in 14 Minuten\nDer ganze Film (14 Min.) und die Geschichte zum Lesen: https://one-scroll-bible.com/film/?lang=de\n\n#Shorts #Bibel #GeschichtederBibel",
      "tags": [
       "Die Bibel auf einen Blick",
@@ -4931,7 +4931,7 @@
       "Die Erzväter"
      ],
      "language": "de",
-     "seconds": 36.0,
+     "seconds": 36,
      "captions": {
       "en": "motion/subs/en/v/01-opening.srt",
       "es": "motion/subs/es/v/01-opening.srt",
@@ -4951,7 +4951,7 @@
      "scene": "creation",
      "file": "shorts-de-02-creation.mp4",
      "local": "motion/out/release/shorts-de-02-creation.mp4",
-     "title": "Schöpfung · Szene 2 von 21 · Die Bibel auf einen Blick",
+     "title": "„Und Gott sprach: Es werde Licht!“ — Schöpfung 2/21",
      "description": "Von der Schöpfung bis zum neuen Himmel und der neuen Erde: die Geschichte der Bibel in 14 Minuten\nDer ganze Film (14 Min.) und die Geschichte zum Lesen: https://one-scroll-bible.com/film/?lang=de\n\n#Shorts #Bibel #GeschichtederBibel",
      "tags": [
       "Die Bibel auf einen Blick",
@@ -4968,7 +4968,7 @@
       "Die Erzväter"
      ],
      "language": "de",
-     "seconds": 35.0,
+     "seconds": 35,
      "captions": {
       "en": "motion/subs/en/v/02-creation.srt",
       "es": "motion/subs/es/v/02-creation.srt",
@@ -4988,7 +4988,7 @@
      "scene": "fall",
      "file": "shorts-de-03-fall.mp4",
      "local": "motion/out/release/shorts-de-03-fall.mp4",
-     "title": "Der Sündenfall · Szene 3 von 21 · Die Bibel auf einen Blick",
+     "title": "„Wo bist du?“ — Der Sündenfall 3/21",
      "description": "Von der Schöpfung bis zum neuen Himmel und der neuen Erde: die Geschichte der Bibel in 14 Minuten\nDer ganze Film (14 Min.) und die Geschichte zum Lesen: https://one-scroll-bible.com/film/?lang=de\n\n#Shorts #Bibel #GeschichtederBibel",
      "tags": [
       "Die Bibel auf einen Blick",
@@ -5005,7 +5005,7 @@
       "Die Erzväter"
      ],
      "language": "de",
-     "seconds": 34.0,
+     "seconds": 34,
      "captions": {
       "en": "motion/subs/en/v/03-fall.srt",
       "es": "motion/subs/es/v/03-fall.srt",
@@ -5025,7 +5025,7 @@
      "scene": "patriarch",
      "file": "shorts-de-04-patriarch.mp4",
      "local": "motion/out/release/shorts-de-04-patriarch.mp4",
-     "title": "Die Erzväter · Szene 4 von 21 · Die Bibel auf einen Blick",
+     "title": "„Siehe gen Himmel und zähle die Sterne; kannst du sie zählen?“ — Die Erzväter 4/21",
      "description": "Von der Schöpfung bis zum neuen Himmel und der neuen Erde: die Geschichte der Bibel in 14 Minuten\nDer ganze Film (14 Min.) und die Geschichte zum Lesen: https://one-scroll-bible.com/film/?lang=de\n\n#Shorts #Bibel #GeschichtederBibel",
      "tags": [
       "Die Bibel auf einen Blick",
@@ -5042,7 +5042,7 @@
       "Die Erzväter"
      ],
      "language": "de",
-     "seconds": 26.0,
+     "seconds": 26,
      "captions": {
       "en": "motion/subs/en/v/04-patriarch.srt",
       "es": "motion/subs/es/v/04-patriarch.srt",
@@ -5062,7 +5062,7 @@
      "scene": "exodus",
      "file": "shorts-de-05-exodus.mp4",
      "local": "motion/out/release/shorts-de-05-exodus.mp4",
-     "title": "Der Auszug aus Ägypten · Szene 5 von 21 · Die Bibel auf einen Blick",
+     "title": "„Laß mein Volk ziehen“ — Der Auszug aus Ägypten 5/21",
      "description": "Von der Schöpfung bis zum neuen Himmel und der neuen Erde: die Geschichte der Bibel in 14 Minuten\nDer ganze Film (14 Min.) und die Geschichte zum Lesen: https://one-scroll-bible.com/film/?lang=de\n\n#Shorts #Bibel #GeschichtederBibel",
      "tags": [
       "Die Bibel auf einen Blick",
@@ -5079,7 +5079,7 @@
       "Die Erzväter"
      ],
      "language": "de",
-     "seconds": 44.0,
+     "seconds": 44,
      "captions": {
       "en": "motion/subs/en/v/05-exodus.srt",
       "es": "motion/subs/es/v/05-exodus.srt",
@@ -5099,7 +5099,7 @@
      "scene": "wilderness",
      "file": "shorts-de-06-wilderness.mp4",
      "local": "motion/out/release/shorts-de-06-wilderness.mp4",
-     "title": "Die Wüstenwanderung · Szene 6 von 21 · Die Bibel auf einen Blick",
+     "title": "Vor den Toren des verheißenen Landes steht das Volk – nun zieht es hinein… 6/21",
      "description": "Von der Schöpfung bis zum neuen Himmel und der neuen Erde: die Geschichte der Bibel in 14 Minuten\nDer ganze Film (14 Min.) und die Geschichte zum Lesen: https://one-scroll-bible.com/film/?lang=de\n\n#Shorts #Bibel #GeschichtederBibel",
      "tags": [
       "Die Bibel auf einen Blick",
@@ -5136,7 +5136,7 @@
      "scene": "judges",
      "file": "shorts-de-07-judges.mp4",
      "local": "motion/out/release/shorts-de-07-judges.mp4",
-     "title": "Die Richterzeit · Szene 7 von 21 · Die Bibel auf einen Blick",
+     "title": "Doch ohne König tat jeder, was er wollte. — Die Richterzeit 7/21",
      "description": "Von der Schöpfung bis zum neuen Himmel und der neuen Erde: die Geschichte der Bibel in 14 Minuten\nDer ganze Film (14 Min.) und die Geschichte zum Lesen: https://one-scroll-bible.com/film/?lang=de\n\n#Shorts #Bibel #GeschichtederBibel",
      "tags": [
       "Die Bibel auf einen Blick",
@@ -5153,7 +5153,7 @@
       "Die Erzväter"
      ],
      "language": "de",
-     "seconds": 40.0,
+     "seconds": 40,
      "captions": {
       "en": "motion/subs/en/v/07-judges.srt",
       "es": "motion/subs/es/v/07-judges.srt",
@@ -5173,7 +5173,7 @@
      "scene": "kingdom",
      "file": "shorts-de-08-kingdom.mp4",
      "local": "motion/out/release/shorts-de-08-kingdom.mp4",
-     "title": "Das vereinte Königreich · Szene 8 von 21 · Die Bibel auf einen Blick",
+     "title": "Ein Mensch sieht, was vor Augen ist; der HERR aber sieht das Herz an. — Das vereinte Königreich 8/21",
      "description": "Von der Schöpfung bis zum neuen Himmel und der neuen Erde: die Geschichte der Bibel in 14 Minuten\nDer ganze Film (14 Min.) und die Geschichte zum Lesen: https://one-scroll-bible.com/film/?lang=de\n\n#Shorts #Bibel #GeschichtederBibel",
      "tags": [
       "Die Bibel auf einen Blick",
@@ -5190,7 +5190,7 @@
       "Die Erzväter"
      ],
      "language": "de",
-     "seconds": 39.0,
+     "seconds": 39,
      "captions": {
       "en": "motion/subs/en/v/08-kingdom.srt",
       "es": "motion/subs/es/v/08-kingdom.srt",
@@ -5210,7 +5210,7 @@
      "scene": "exile",
      "file": "shorts-de-09-exile.mp4",
      "local": "motion/out/release/shorts-de-09-exile.mp4",
-     "title": "Das geteilte Reich · Das Exil · Szene 9 von 21 · Die Bibel auf einen Blick",
+     "title": "Der Tempel brennt, und das Volk wird nach Babylon weggeführt. — Das geteilte Reich · Das Exil 9/21",
      "description": "Von der Schöpfung bis zum neuen Himmel und der neuen Erde: die Geschichte der Bibel in 14 Minuten\nDer ganze Film (14 Min.) und die Geschichte zum Lesen: https://one-scroll-bible.com/film/?lang=de\n\n#Shorts #Bibel #GeschichtederBibel",
      "tags": [
       "Die Bibel auf einen Blick",
@@ -5227,7 +5227,7 @@
       "Die Erzväter"
      ],
      "language": "de",
-     "seconds": 36.0,
+     "seconds": 36,
      "captions": {
       "en": "motion/subs/en/v/09-exile.srt",
       "es": "motion/subs/es/v/09-exile.srt",
@@ -5247,7 +5247,7 @@
      "scene": "return",
      "file": "shorts-de-10-return.mp4",
      "local": "motion/out/release/shorts-de-10-return.mp4",
-     "title": "Die Rückkehr aus dem Exil · Szene 10 von 21 · Die Bibel auf einen Blick",
+     "title": "Denn die Freude am HERRN ist eure Stärke. — Die Rückkehr aus dem Exil 10/21",
      "description": "Von der Schöpfung bis zum neuen Himmel und der neuen Erde: die Geschichte der Bibel in 14 Minuten\nDer ganze Film (14 Min.) und die Geschichte zum Lesen: https://one-scroll-bible.com/film/?lang=de\n\n#Shorts #Bibel #GeschichtederBibel",
      "tags": [
       "Die Bibel auf einen Blick",
@@ -5264,7 +5264,7 @@
       "Die Erzväter"
      ],
      "language": "de",
-     "seconds": 38.0,
+     "seconds": 38,
      "captions": {
       "en": "motion/subs/en/v/10-return.srt",
       "es": "motion/subs/es/v/10-return.srt",
@@ -5284,7 +5284,7 @@
      "scene": "silence",
      "file": "shorts-de-11-silence.mp4",
      "local": "motion/out/release/shorts-de-11-silence.mp4",
-     "title": "400 Jahre Schweigen · Szene 11 von 21 · Die Bibel auf einen Blick",
+     "title": "400 Jahre ohne prophetische Stimme — 400 Jahre Schweigen 11/21",
      "description": "Von der Schöpfung bis zum neuen Himmel und der neuen Erde: die Geschichte der Bibel in 14 Minuten\nDer ganze Film (14 Min.) und die Geschichte zum Lesen: https://one-scroll-bible.com/film/?lang=de\n\n#Shorts #Bibel #GeschichtederBibel",
      "tags": [
       "Die Bibel auf einen Blick",
@@ -5301,7 +5301,7 @@
       "Die Erzväter"
      ],
      "language": "de",
-     "seconds": 34.0,
+     "seconds": 34,
      "captions": {
       "en": "motion/subs/en/v/11-silence.srt",
       "es": "motion/subs/es/v/11-silence.srt",
@@ -5321,7 +5321,7 @@
      "scene": "advent",
      "file": "shorts-de-12-advent.mp4",
      "local": "motion/out/release/shorts-de-12-advent.mp4",
-     "title": "Das Kommen Jesu · Szene 12 von 21 · Die Bibel auf einen Blick",
+     "title": "„Und das Wort ward Fleisch und wohnte unter uns“ — Das Kommen Jesu 12/21",
      "description": "Von der Schöpfung bis zum neuen Himmel und der neuen Erde: die Geschichte der Bibel in 14 Minuten\nDer ganze Film (14 Min.) und die Geschichte zum Lesen: https://one-scroll-bible.com/film/?lang=de\n\n#Shorts #Bibel #GeschichtederBibel",
      "tags": [
       "Die Bibel auf einen Blick",
@@ -5338,7 +5338,7 @@
       "Die Erzväter"
      ],
      "language": "de",
-     "seconds": 36.0,
+     "seconds": 36,
      "captions": {
       "en": "motion/subs/en/v/12-advent.srt",
       "es": "motion/subs/es/v/12-advent.srt",
@@ -5358,7 +5358,7 @@
      "scene": "cross",
      "file": "shorts-de-13-cross.mp4",
      "local": "motion/out/release/shorts-de-13-cross.mp4",
-     "title": "Das Kreuz · Szene 13 von 21 · Die Bibel auf einen Blick",
+     "title": "Wer an jenem Kreuz hätte hängen müssen, war ich. — Das Kreuz 13/21",
      "description": "Von der Schöpfung bis zum neuen Himmel und der neuen Erde: die Geschichte der Bibel in 14 Minuten\nDer ganze Film (14 Min.) und die Geschichte zum Lesen: https://one-scroll-bible.com/film/?lang=de\n\n#Shorts #Bibel #GeschichtederBibel",
      "tags": [
       "Die Bibel auf einen Blick",
@@ -5375,7 +5375,7 @@
       "Die Erzväter"
      ],
      "language": "de",
-     "seconds": 39.0,
+     "seconds": 39,
      "captions": {
       "en": "motion/subs/en/v/13-cross.srt",
       "es": "motion/subs/es/v/13-cross.srt",
@@ -5395,7 +5395,7 @@
      "scene": "rise",
      "file": "shorts-de-14-rise.mp4",
      "local": "motion/out/release/shorts-de-14-rise.mp4",
-     "title": "Die Auferstehung · Szene 14 von 21 · Die Bibel auf einen Blick",
+     "title": "„Er ist auferstanden, wie er gesagt hat“ — Die Auferstehung 14/21",
      "description": "Von der Schöpfung bis zum neuen Himmel und der neuen Erde: die Geschichte der Bibel in 14 Minuten\nDer ganze Film (14 Min.) und die Geschichte zum Lesen: https://one-scroll-bible.com/film/?lang=de\n\n#Shorts #Bibel #GeschichtederBibel",
      "tags": [
       "Die Bibel auf einen Blick",
@@ -5412,7 +5412,7 @@
       "Die Erzväter"
      ],
      "language": "de",
-     "seconds": 27.0,
+     "seconds": 27,
      "captions": {
       "en": "motion/subs/en/v/14-rise.srt",
       "es": "motion/subs/es/v/14-rise.srt",
@@ -5432,7 +5432,7 @@
      "scene": "church",
      "file": "shorts-de-15-church.mp4",
      "local": "motion/out/release/shorts-de-15-church.mp4",
-     "title": "Der Beginn der Gemeinde · Szene 15 von 21 · Die Bibel auf einen Blick",
+     "title": "„… Und werdet meine Zeugen sein … bis an das Ende der Erde“ — Der Beginn der Gemeinde 15/21",
      "description": "Von der Schöpfung bis zum neuen Himmel und der neuen Erde: die Geschichte der Bibel in 14 Minuten\nDer ganze Film (14 Min.) und die Geschichte zum Lesen: https://one-scroll-bible.com/film/?lang=de\n\n#Shorts #Bibel #GeschichtederBibel",
      "tags": [
       "Die Bibel auf einen Blick",
@@ -5449,7 +5449,7 @@
       "Die Erzväter"
      ],
      "language": "de",
-     "seconds": 35.0,
+     "seconds": 35,
      "captions": {
       "en": "motion/subs/en/v/15-church.srt",
       "es": "motion/subs/es/v/15-church.srt",
@@ -5469,7 +5469,7 @@
      "scene": "renewal",
      "file": "shorts-de-16-renewal.mp4",
      "local": "motion/out/release/shorts-de-16-renewal.mp4",
-     "title": "Die Wiederherstellung · Szene 16 von 21 · Die Bibel auf einen Blick",
+     "title": "„Und Gott wird abwischen alle Tränen von ihren Augen“ — Die Wiederherstellung 16/21",
      "description": "Von der Schöpfung bis zum neuen Himmel und der neuen Erde: die Geschichte der Bibel in 14 Minuten\nDer ganze Film (14 Min.) und die Geschichte zum Lesen: https://one-scroll-bible.com/film/?lang=de\n\n#Shorts #Bibel #GeschichtederBibel",
      "tags": [
       "Die Bibel auf einen Blick",
@@ -5486,7 +5486,7 @@
       "Die Erzväter"
      ],
      "language": "de",
-     "seconds": 36.0,
+     "seconds": 36,
      "captions": {
       "en": "motion/subs/en/v/16-renewal.srt",
       "es": "motion/subs/es/v/16-renewal.srt",
@@ -5506,7 +5506,7 @@
      "scene": "mirror",
      "file": "shorts-de-17-mirror.mp4",
      "local": "motion/out/release/shorts-de-17-mirror.mp4",
-     "title": "Der Spiegel · Szene 17 von 21 · Die Bibel auf einen Blick",
+     "title": "Am Ende ist der tiefste Götze „ich selbst auf dem Thron Gottes“. — Der Spiegel 17/21",
      "description": "Von der Schöpfung bis zum neuen Himmel und der neuen Erde: die Geschichte der Bibel in 14 Minuten\nDer ganze Film (14 Min.) und die Geschichte zum Lesen: https://one-scroll-bible.com/film/?lang=de\n\n#Shorts #Bibel #GeschichtederBibel",
      "tags": [
       "Die Bibel auf einen Blick",
@@ -5543,7 +5543,7 @@
      "scene": "gospel",
      "file": "shorts-de-18-gospel.mp4",
      "local": "motion/out/release/shorts-de-18-gospel.mp4",
-     "title": "Der Kern des Evangeliums · Szene 18 von 21 · Die Bibel auf einen Blick",
+     "title": "Nicht „Tue das“, sondern „Es ist vollbracht“ — Der Kern des Evangeliums 18/21",
      "description": "Von der Schöpfung bis zum neuen Himmel und der neuen Erde: die Geschichte der Bibel in 14 Minuten\nDer ganze Film (14 Min.) und die Geschichte zum Lesen: https://one-scroll-bible.com/film/?lang=de\n\n#Shorts #Bibel #GeschichtederBibel",
      "tags": [
       "Die Bibel auf einen Blick",
@@ -5580,7 +5580,7 @@
      "scene": "evidence",
      "file": "shorts-de-19-evidence.mp4",
      "local": "motion/out/release/shorts-de-19-evidence.mp4",
-     "title": "Ist die Bibel eine wahre Geschichte? · Szene 19 von 21 · Die Bibel auf einen Blick",
+     "title": "Ist die Bibel wirklich eine wahre Geschichte? 19/21",
      "description": "Von der Schöpfung bis zum neuen Himmel und der neuen Erde: die Geschichte der Bibel in 14 Minuten\nDer ganze Film (14 Min.) und die Geschichte zum Lesen: https://one-scroll-bible.com/film/?lang=de\n\n#Shorts #Bibel #GeschichtederBibel",
      "tags": [
       "Die Bibel auf einen Blick",
@@ -5597,7 +5597,7 @@
       "Die Erzväter"
      ],
      "language": "de",
-     "seconds": 60.0,
+     "seconds": 60,
      "captions": {
       "en": "motion/subs/en/v/19-evidence.srt",
       "es": "motion/subs/es/v/19-evidence.srt",
@@ -5617,7 +5617,7 @@
      "scene": "ship",
      "file": "shorts-de-20-ship.mp4",
      "local": "motion/out/release/shorts-de-20-ship.mp4",
-     "title": "Genügt es, gut zu sein? · Szene 20 von 21 · Die Bibel auf einen Blick",
+     "title": "Genügt es nicht, ein guter Mensch zu sein, auch ohne an Jesus zu glauben? 20/21",
      "description": "Von der Schöpfung bis zum neuen Himmel und der neuen Erde: die Geschichte der Bibel in 14 Minuten\nDer ganze Film (14 Min.) und die Geschichte zum Lesen: https://one-scroll-bible.com/film/?lang=de\n\n#Shorts #Bibel #GeschichtederBibel",
      "tags": [
       "Die Bibel auf einen Blick",
@@ -5654,7 +5654,7 @@
      "scene": "invite",
      "file": "shorts-de-21-invite.mp4",
      "local": "motion/out/release/shorts-de-21-invite.mp4",
-     "title": "Die Einladung · Szene 21 von 21 · Die Bibel auf einen Blick",
+     "title": "Diese Liebe ist keine Information, sondern eine Einladung. — Die Einladung 21/21",
      "description": "Von der Schöpfung bis zum neuen Himmel und der neuen Erde: die Geschichte der Bibel in 14 Minuten\nDer ganze Film (14 Min.) und die Geschichte zum Lesen: https://one-scroll-bible.com/film/?lang=de\n\n#Shorts #Bibel #GeschichtederBibel",
      "tags": [
       "Die Bibel auf einen Blick",
@@ -5671,7 +5671,7 @@
       "Die Erzväter"
      ],
      "language": "de",
-     "seconds": 57.0,
+     "seconds": 57,
      "captions": {
       "en": "motion/subs/en/v/21-invite.srt",
       "es": "motion/subs/es/v/21-invite.srt",
@@ -5749,32 +5749,32 @@
     "chapters": [
      {
       "time": "0:00",
-      "seconds": 0.0,
+      "seconds": 0,
       "title": "Одна история"
      },
      {
       "time": "0:36",
-      "seconds": 36.0,
+      "seconds": 36,
       "title": "Творение"
      },
      {
       "time": "1:11",
-      "seconds": 71.0,
+      "seconds": 71,
       "title": "Грехопадение"
      },
      {
       "time": "1:45",
-      "seconds": 105.0,
+      "seconds": 105,
       "title": "Эпоха патриархов"
      },
      {
       "time": "2:11",
-      "seconds": 131.0,
+      "seconds": 131,
       "title": "Исход"
      },
      {
       "time": "2:55",
-      "seconds": 175.0,
+      "seconds": 175,
       "title": "Странствие по пустыне"
      },
      {
@@ -5834,7 +5834,7 @@
      },
      {
       "time": "10:19",
-      "seconds": 619.0,
+      "seconds": 619,
       "title": "Суть Евангелия"
      },
      {
@@ -5862,7 +5862,7 @@
      "scene": "opening",
      "file": "shorts-ru-01-opening.mp4",
      "local": "motion/out/release/shorts-ru-01-opening.mp4",
-     "title": "Одна история · Сцена 1 из 21 · Библия с одного взгляда",
+     "title": "Библия — это, в конце концов, одна история 1/21",
      "description": "От творения до нового неба и новой земли — история Библии за 14 минут\nВесь фильм (14 мин) и история в тексте: https://one-scroll-bible.com/film/?lang=ru\n\n#Shorts #Библия #историяБиблии",
      "tags": [
       "Библия с одного взгляда",
@@ -5879,7 +5879,7 @@
       "Эпоха патриархов"
      ],
      "language": "ru",
-     "seconds": 36.0,
+     "seconds": 36,
      "captions": {
       "en": "motion/subs/en/v/01-opening.srt",
       "es": "motion/subs/es/v/01-opening.srt",
@@ -5899,7 +5899,7 @@
      "scene": "creation",
      "file": "shorts-ru-02-creation.mp4",
      "local": "motion/out/release/shorts-ru-02-creation.mp4",
-     "title": "Творение · Сцена 2 из 21 · Библия с одного взгляда",
+     "title": "«И сказал Бог: да будет свет» — Творение 2/21",
      "description": "От творения до нового неба и новой земли — история Библии за 14 минут\nВесь фильм (14 мин) и история в тексте: https://one-scroll-bible.com/film/?lang=ru\n\n#Shorts #Библия #историяБиблии",
      "tags": [
       "Библия с одного взгляда",
@@ -5916,7 +5916,7 @@
       "Эпоха патриархов"
      ],
      "language": "ru",
-     "seconds": 35.0,
+     "seconds": 35,
      "captions": {
       "en": "motion/subs/en/v/02-creation.srt",
       "es": "motion/subs/es/v/02-creation.srt",
@@ -5936,7 +5936,7 @@
      "scene": "fall",
      "file": "shorts-ru-03-fall.mp4",
      "local": "motion/out/release/shorts-ru-03-fall.mp4",
-     "title": "Грехопадение · Сцена 3 из 21 · Библия с одного взгляда",
+     "title": "«Где ты?» — Грехопадение 3/21",
      "description": "От творения до нового неба и новой земли — история Библии за 14 минут\nВесь фильм (14 мин) и история в тексте: https://one-scroll-bible.com/film/?lang=ru\n\n#Shorts #Библия #историяБиблии",
      "tags": [
       "Библия с одного взгляда",
@@ -5953,7 +5953,7 @@
       "Эпоха патриархов"
      ],
      "language": "ru",
-     "seconds": 34.0,
+     "seconds": 34,
      "captions": {
       "en": "motion/subs/en/v/03-fall.srt",
       "es": "motion/subs/es/v/03-fall.srt",
@@ -5973,7 +5973,7 @@
      "scene": "patriarch",
      "file": "shorts-ru-04-patriarch.mp4",
      "local": "motion/out/release/shorts-ru-04-patriarch.mp4",
-     "title": "Эпоха патриархов · Сцена 4 из 21 · Библия с одного взгляда",
+     "title": "«Посмотри на небо и сосчитай звезды, если ты можешь счесть их» — Эпоха патриархов 4/21",
      "description": "От творения до нового неба и новой земли — история Библии за 14 минут\nВесь фильм (14 мин) и история в тексте: https://one-scroll-bible.com/film/?lang=ru\n\n#Shorts #Библия #историяБиблии",
      "tags": [
       "Библия с одного взгляда",
@@ -5990,7 +5990,7 @@
       "Эпоха патриархов"
      ],
      "language": "ru",
-     "seconds": 26.0,
+     "seconds": 26,
      "captions": {
       "en": "motion/subs/en/v/04-patriarch.srt",
       "es": "motion/subs/es/v/04-patriarch.srt",
@@ -6010,7 +6010,7 @@
      "scene": "exodus",
      "file": "shorts-ru-05-exodus.mp4",
      "local": "motion/out/release/shorts-ru-05-exodus.mp4",
-     "title": "Исход · Сцена 5 из 21 · Библия с одного взгляда",
+     "title": "«Отпусти народ Мой» — Исход 5/21",
      "description": "От творения до нового неба и новой земли — история Библии за 14 минут\nВесь фильм (14 мин) и история в тексте: https://one-scroll-bible.com/film/?lang=ru\n\n#Shorts #Библия #историяБиблии",
      "tags": [
       "Библия с одного взгляда",
@@ -6027,7 +6027,7 @@
       "Эпоха патриархов"
      ],
      "language": "ru",
-     "seconds": 44.0,
+     "seconds": 44,
      "captions": {
       "en": "motion/subs/en/v/05-exodus.srt",
       "es": "motion/subs/es/v/05-exodus.srt",
@@ -6047,7 +6047,7 @@
      "scene": "wilderness",
      "file": "shorts-ru-06-wilderness.mp4",
      "local": "motion/out/release/shorts-ru-06-wilderness.mp4",
-     "title": "Странствие по пустыне · Сцена 6 из 21 · Библия с одного взгляда",
+     "title": "Народ у порога земли обетованной — и вот он входит в неё… — Странствие по пустыне 6/21",
      "description": "От творения до нового неба и новой земли — история Библии за 14 минут\nВесь фильм (14 мин) и история в тексте: https://one-scroll-bible.com/film/?lang=ru\n\n#Shorts #Библия #историяБиблии",
      "tags": [
       "Библия с одного взгляда",
@@ -6084,7 +6084,7 @@
      "scene": "judges",
      "file": "shorts-ru-07-judges.mp4",
      "local": "motion/out/release/shorts-ru-07-judges.mp4",
-     "title": "Эпоха судей · Сцена 7 из 21 · Библия с одного взгляда",
+     "title": "Но без царя каждый делает, что ему кажется справедливым. — Эпоха судей 7/21",
      "description": "От творения до нового неба и новой земли — история Библии за 14 минут\nВесь фильм (14 мин) и история в тексте: https://one-scroll-bible.com/film/?lang=ru\n\n#Shorts #Библия #историяБиблии",
      "tags": [
       "Библия с одного взгляда",
@@ -6101,7 +6101,7 @@
       "Эпоха патриархов"
      ],
      "language": "ru",
-     "seconds": 40.0,
+     "seconds": 40,
      "captions": {
       "en": "motion/subs/en/v/07-judges.srt",
       "es": "motion/subs/es/v/07-judges.srt",
@@ -6121,7 +6121,7 @@
      "scene": "kingdom",
      "file": "shorts-ru-08-kingdom.mp4",
      "local": "motion/out/release/shorts-ru-08-kingdom.mp4",
-     "title": "Единое царство · Сцена 8 из 21 · Библия с одного взгляда",
+     "title": "Человек смотрит на лице, а Господь смотрит на сердце. — Единое царство 8/21",
      "description": "От творения до нового неба и новой земли — история Библии за 14 минут\nВесь фильм (14 мин) и история в тексте: https://one-scroll-bible.com/film/?lang=ru\n\n#Shorts #Библия #историяБиблии",
      "tags": [
       "Библия с одного взгляда",
@@ -6138,7 +6138,7 @@
       "Эпоха патриархов"
      ],
      "language": "ru",
-     "seconds": 39.0,
+     "seconds": 39,
      "captions": {
       "en": "motion/subs/en/v/08-kingdom.srt",
       "es": "motion/subs/es/v/08-kingdom.srt",
@@ -6158,7 +6158,7 @@
      "scene": "exile",
      "file": "shorts-ru-09-exile.mp4",
      "local": "motion/out/release/shorts-ru-09-exile.mp4",
-     "title": "Разделённое царство · Плен · Сцена 9 из 21 · Библия с одного взгляда",
+     "title": "Храм горит, народ уводят в Вавилон. — Разделённое царство · Плен 9/21",
      "description": "От творения до нового неба и новой земли — история Библии за 14 минут\nВесь фильм (14 мин) и история в тексте: https://one-scroll-bible.com/film/?lang=ru\n\n#Shorts #Библия #историяБиблии",
      "tags": [
       "Библия с одного взгляда",
@@ -6175,7 +6175,7 @@
       "Эпоха патриархов"
      ],
      "language": "ru",
-     "seconds": 36.0,
+     "seconds": 36,
      "captions": {
       "en": "motion/subs/en/v/09-exile.srt",
       "es": "motion/subs/es/v/09-exile.srt",
@@ -6195,7 +6195,7 @@
      "scene": "return",
      "file": "shorts-ru-10-return.mp4",
      "local": "motion/out/release/shorts-ru-10-return.mp4",
-     "title": "Возвращение из плена · Сцена 10 из 21 · Библия с одного взгляда",
+     "title": "Радость пред Господом — подкрепление для вас. — Возвращение из плена 10/21",
      "description": "От творения до нового неба и новой земли — история Библии за 14 минут\nВесь фильм (14 мин) и история в тексте: https://one-scroll-bible.com/film/?lang=ru\n\n#Shorts #Библия #историяБиблии",
      "tags": [
       "Библия с одного взгляда",
@@ -6212,7 +6212,7 @@
       "Эпоха патриархов"
      ],
      "language": "ru",
-     "seconds": 38.0,
+     "seconds": 38,
      "captions": {
       "en": "motion/subs/en/v/10-return.srt",
       "es": "motion/subs/es/v/10-return.srt",
@@ -6232,7 +6232,7 @@
      "scene": "silence",
      "file": "shorts-ru-11-silence.mp4",
      "local": "motion/out/release/shorts-ru-11-silence.mp4",
-     "title": "400 лет молчания · Сцена 11 из 21 · Библия с одного взгляда",
+     "title": "400 лет без пророческого голоса — 400 лет молчания 11/21",
      "description": "От творения до нового неба и новой земли — история Библии за 14 минут\nВесь фильм (14 мин) и история в тексте: https://one-scroll-bible.com/film/?lang=ru\n\n#Shorts #Библия #историяБиблии",
      "tags": [
       "Библия с одного взгляда",
@@ -6249,7 +6249,7 @@
       "Эпоха патриархов"
      ],
      "language": "ru",
-     "seconds": 34.0,
+     "seconds": 34,
      "captions": {
       "en": "motion/subs/en/v/11-silence.srt",
       "es": "motion/subs/es/v/11-silence.srt",
@@ -6269,7 +6269,7 @@
      "scene": "advent",
      "file": "shorts-ru-12-advent.mp4",
      "local": "motion/out/release/shorts-ru-12-advent.mp4",
-     "title": "Пришествие Иисуса · Сцена 12 из 21 · Библия с одного взгляда",
+     "title": "«И Слово стало плотию, и обитало с нами» — Пришествие Иисуса 12/21",
      "description": "От творения до нового неба и новой земли — история Библии за 14 минут\nВесь фильм (14 мин) и история в тексте: https://one-scroll-bible.com/film/?lang=ru\n\n#Shorts #Библия #историяБиблии",
      "tags": [
       "Библия с одного взгляда",
@@ -6286,7 +6286,7 @@
       "Эпоха патриархов"
      ],
      "language": "ru",
-     "seconds": 36.0,
+     "seconds": 36,
      "captions": {
       "en": "motion/subs/en/v/12-advent.srt",
       "es": "motion/subs/es/v/12-advent.srt",
@@ -6306,7 +6306,7 @@
      "scene": "cross",
      "file": "shorts-ru-13-cross.mp4",
      "local": "motion/out/release/shorts-ru-13-cross.mp4",
-     "title": "Крест · Сцена 13 из 21 · Библия с одного взгляда",
+     "title": "Тем, кто должен был быть на том кресте, был я. — Крест 13/21",
      "description": "От творения до нового неба и новой земли — история Библии за 14 минут\nВесь фильм (14 мин) и история в тексте: https://one-scroll-bible.com/film/?lang=ru\n\n#Shorts #Библия #историяБиблии",
      "tags": [
       "Библия с одного взгляда",
@@ -6323,7 +6323,7 @@
       "Эпоха патриархов"
      ],
      "language": "ru",
-     "seconds": 39.0,
+     "seconds": 39,
      "captions": {
       "en": "motion/subs/en/v/13-cross.srt",
       "es": "motion/subs/es/v/13-cross.srt",
@@ -6343,7 +6343,7 @@
      "scene": "rise",
      "file": "shorts-ru-14-rise.mp4",
      "local": "motion/out/release/shorts-ru-14-rise.mp4",
-     "title": "Воскресение · Сцена 14 из 21 · Библия с одного взгляда",
+     "title": "«Он воскрес, как сказал» — Воскресение 14/21",
      "description": "От творения до нового неба и новой земли — история Библии за 14 минут\nВесь фильм (14 мин) и история в тексте: https://one-scroll-bible.com/film/?lang=ru\n\n#Shorts #Библия #историяБиблии",
      "tags": [
       "Библия с одного взгляда",
@@ -6360,7 +6360,7 @@
       "Эпоха патриархов"
      ],
      "language": "ru",
-     "seconds": 27.0,
+     "seconds": 27,
      "captions": {
       "en": "motion/subs/en/v/14-rise.srt",
       "es": "motion/subs/es/v/14-rise.srt",
@@ -6380,7 +6380,7 @@
      "scene": "church",
      "file": "shorts-ru-15-church.mp4",
      "local": "motion/out/release/shorts-ru-15-church.mp4",
-     "title": "Начало Церкви · Сцена 15 из 21 · Библия с одного взгляда",
+     "title": "«… И будете Мне свидетелями … даже до края земли» — Начало Церкви 15/21",
      "description": "От творения до нового неба и новой земли — история Библии за 14 минут\nВесь фильм (14 мин) и история в тексте: https://one-scroll-bible.com/film/?lang=ru\n\n#Shorts #Библия #историяБиблии",
      "tags": [
       "Библия с одного взгляда",
@@ -6397,7 +6397,7 @@
       "Эпоха патриархов"
      ],
      "language": "ru",
-     "seconds": 35.0,
+     "seconds": 35,
      "captions": {
       "en": "motion/subs/en/v/15-church.srt",
       "es": "motion/subs/es/v/15-church.srt",
@@ -6417,7 +6417,7 @@
      "scene": "renewal",
      "file": "shorts-ru-16-renewal.mp4",
      "local": "motion/out/release/shorts-ru-16-renewal.mp4",
-     "title": "Восстановление · Сцена 16 из 21 · Библия с одного взгляда",
+     "title": "«И отрет Бог всякую слезу с очей их» — Восстановление 16/21",
      "description": "От творения до нового неба и новой земли — история Библии за 14 минут\nВесь фильм (14 мин) и история в тексте: https://one-scroll-bible.com/film/?lang=ru\n\n#Shorts #Библия #историяБиблии",
      "tags": [
       "Библия с одного взгляда",
@@ -6434,7 +6434,7 @@
       "Эпоха патриархов"
      ],
      "language": "ru",
-     "seconds": 36.0,
+     "seconds": 36,
      "captions": {
       "en": "motion/subs/en/v/16-renewal.srt",
       "es": "motion/subs/es/v/16-renewal.srt",
@@ -6454,7 +6454,7 @@
      "scene": "mirror",
      "file": "shorts-ru-17-mirror.mp4",
      "local": "motion/out/release/shorts-ru-17-mirror.mp4",
-     "title": "Зеркало · Сцена 17 из 21 · Библия с одного взгляда",
+     "title": "В конце концов, самый глубокий идол — «я сам на престоле Бога». — Зеркало 17/21",
      "description": "От творения до нового неба и новой земли — история Библии за 14 минут\nВесь фильм (14 мин) и история в тексте: https://one-scroll-bible.com/film/?lang=ru\n\n#Shorts #Библия #историяБиблии",
      "tags": [
       "Библия с одного взгляда",
@@ -6491,7 +6491,7 @@
      "scene": "gospel",
      "file": "shorts-ru-18-gospel.mp4",
      "local": "motion/out/release/shorts-ru-18-gospel.mp4",
-     "title": "Суть Евангелия · Сцена 18 из 21 · Библия с одного взгляда",
+     "title": "Не «делай», а «совершилось» — Суть Евангелия 18/21",
      "description": "От творения до нового неба и новой земли — история Библии за 14 минут\nВесь фильм (14 мин) и история в тексте: https://one-scroll-bible.com/film/?lang=ru\n\n#Shorts #Библия #историяБиблии",
      "tags": [
       "Библия с одного взгляда",
@@ -6528,7 +6528,7 @@
      "scene": "evidence",
      "file": "shorts-ru-19-evidence.mp4",
      "local": "motion/out/release/shorts-ru-19-evidence.mp4",
-     "title": "Библия — правдивая история? · Сцена 19 из 21 · Библия с одного взгляда",
+     "title": "Действительно ли Библия — правдивая история? 19/21",
      "description": "От творения до нового неба и новой земли — история Библии за 14 минут\nВесь фильм (14 мин) и история в тексте: https://one-scroll-bible.com/film/?lang=ru\n\n#Shorts #Библия #историяБиблии",
      "tags": [
       "Библия с одного взгляда",
@@ -6545,7 +6545,7 @@
       "Эпоха патриархов"
      ],
      "language": "ru",
-     "seconds": 60.0,
+     "seconds": 60,
      "captions": {
       "en": "motion/subs/en/v/19-evidence.srt",
       "es": "motion/subs/es/v/19-evidence.srt",
@@ -6565,7 +6565,7 @@
      "scene": "ship",
      "file": "shorts-ru-20-ship.mp4",
      "local": "motion/out/release/shorts-ru-20-ship.mp4",
-     "title": "Просто быть хорошим? · Сцена 20 из 21 · Библия с одного взгляда",
+     "title": "Разве недостаточно просто быть хорошим человеком, даже не веря в Иисуса? 20/21",
      "description": "От творения до нового неба и новой земли — история Библии за 14 минут\nВесь фильм (14 мин) и история в тексте: https://one-scroll-bible.com/film/?lang=ru\n\n#Shorts #Библия #историяБиблии",
      "tags": [
       "Библия с одного взгляда",
@@ -6602,7 +6602,7 @@
      "scene": "invite",
      "file": "shorts-ru-21-invite.mp4",
      "local": "motion/out/release/shorts-ru-21-invite.mp4",
-     "title": "Приглашение · Сцена 21 из 21 · Библия с одного взгляда",
+     "title": "Эта любовь — не информация, а приглашение. — Приглашение 21/21",
      "description": "От творения до нового неба и новой земли — история Библии за 14 минут\nВесь фильм (14 мин) и история в тексте: https://one-scroll-bible.com/film/?lang=ru\n\n#Shorts #Библия #историяБиблии",
      "tags": [
       "Библия с одного взгляда",
@@ -6619,7 +6619,7 @@
       "Эпоха патриархов"
      ],
      "language": "ru",
-     "seconds": 57.0,
+     "seconds": 57,
      "captions": {
       "en": "motion/subs/en/v/21-invite.srt",
       "es": "motion/subs/es/v/21-invite.srt",
@@ -6697,32 +6697,32 @@
     "chapters": [
      {
       "time": "0:00",
-      "seconds": 0.0,
+      "seconds": 0,
       "title": "Satu Kisah"
      },
      {
       "time": "0:36",
-      "seconds": 36.0,
+      "seconds": 36,
       "title": "Penciptaan"
      },
      {
       "time": "1:11",
-      "seconds": 71.0,
+      "seconds": 71,
       "title": "Kejatuhan"
      },
      {
       "time": "1:45",
-      "seconds": 105.0,
+      "seconds": 105,
       "title": "Zaman Para Bapa Leluhur"
      },
      {
       "time": "2:11",
-      "seconds": 131.0,
+      "seconds": 131,
       "title": "Keluaran"
      },
      {
       "time": "2:55",
-      "seconds": 175.0,
+      "seconds": 175,
       "title": "Perjalanan di Padang Gurun"
      },
      {
@@ -6782,7 +6782,7 @@
      },
      {
       "time": "10:19",
-      "seconds": 619.0,
+      "seconds": 619,
       "title": "Inti Injil"
      },
      {
@@ -6810,7 +6810,7 @@
      "scene": "opening",
      "file": "shorts-id-01-opening.mp4",
      "local": "motion/out/release/shorts-id-01-opening.mp4",
-     "title": "Satu Kisah · Adegan 1 dari 21 · Alkitab Sekilas",
+     "title": "Pada akhirnya, Alkitab adalah satu kisah 1/21",
      "description": "Dari penciptaan sampai langit yang baru dan bumi yang baru — kisah Alkitab dalam 14 menit\nFilm lengkap (14 menit) dan kisahnya dalam teks: https://one-scroll-bible.com/film/?lang=id\n\n#Shorts #Alkitab #kisahAlkitab",
      "tags": [
       "Alkitab Sekilas",
@@ -6827,7 +6827,7 @@
       "Zaman Para Bapa Leluhur"
      ],
      "language": "id",
-     "seconds": 36.0,
+     "seconds": 36,
      "captions": {
       "en": "motion/subs/en/v/01-opening.srt",
       "es": "motion/subs/es/v/01-opening.srt",
@@ -6847,7 +6847,7 @@
      "scene": "creation",
      "file": "shorts-id-02-creation.mp4",
      "local": "motion/out/release/shorts-id-02-creation.mp4",
-     "title": "Penciptaan · Adegan 2 dari 21 · Alkitab Sekilas",
+     "title": "“Berfirmanlah Allah: ‘Jadilah terang.’” — Penciptaan 2/21",
      "description": "Dari penciptaan sampai langit yang baru dan bumi yang baru — kisah Alkitab dalam 14 menit\nFilm lengkap (14 menit) dan kisahnya dalam teks: https://one-scroll-bible.com/film/?lang=id\n\n#Shorts #Alkitab #kisahAlkitab",
      "tags": [
       "Alkitab Sekilas",
@@ -6864,7 +6864,7 @@
       "Zaman Para Bapa Leluhur"
      ],
      "language": "id",
-     "seconds": 35.0,
+     "seconds": 35,
      "captions": {
       "en": "motion/subs/en/v/02-creation.srt",
       "es": "motion/subs/es/v/02-creation.srt",
@@ -6884,7 +6884,7 @@
      "scene": "fall",
      "file": "shorts-id-03-fall.mp4",
      "local": "motion/out/release/shorts-id-03-fall.mp4",
-     "title": "Kejatuhan · Adegan 3 dari 21 · Alkitab Sekilas",
+     "title": "“Di manakah engkau?” — Kejatuhan 3/21",
      "description": "Dari penciptaan sampai langit yang baru dan bumi yang baru — kisah Alkitab dalam 14 menit\nFilm lengkap (14 menit) dan kisahnya dalam teks: https://one-scroll-bible.com/film/?lang=id\n\n#Shorts #Alkitab #kisahAlkitab",
      "tags": [
       "Alkitab Sekilas",
@@ -6901,7 +6901,7 @@
       "Zaman Para Bapa Leluhur"
      ],
      "language": "id",
-     "seconds": 34.0,
+     "seconds": 34,
      "captions": {
       "en": "motion/subs/en/v/03-fall.srt",
       "es": "motion/subs/es/v/03-fall.srt",
@@ -6921,7 +6921,7 @@
      "scene": "patriarch",
      "file": "shorts-id-04-patriarch.mp4",
      "local": "motion/out/release/shorts-id-04-patriarch.mp4",
-     "title": "Zaman Para Bapa Leluhur · Adegan 4 dari 21 · Alkitab Sekilas",
+     "title": "“Coba lihat ke langit, hitunglah bintang-bintang, jika engkau dapat menghitungnya” 4/21",
      "description": "Dari penciptaan sampai langit yang baru dan bumi yang baru — kisah Alkitab dalam 14 menit\nFilm lengkap (14 menit) dan kisahnya dalam teks: https://one-scroll-bible.com/film/?lang=id\n\n#Shorts #Alkitab #kisahAlkitab",
      "tags": [
       "Alkitab Sekilas",
@@ -6938,7 +6938,7 @@
       "Zaman Para Bapa Leluhur"
      ],
      "language": "id",
-     "seconds": 26.0,
+     "seconds": 26,
      "captions": {
       "en": "motion/subs/en/v/04-patriarch.srt",
       "es": "motion/subs/es/v/04-patriarch.srt",
@@ -6958,7 +6958,7 @@
      "scene": "exodus",
      "file": "shorts-id-05-exodus.mp4",
      "local": "motion/out/release/shorts-id-05-exodus.mp4",
-     "title": "Keluaran · Adegan 5 dari 21 · Alkitab Sekilas",
+     "title": "“Biarkanlah umat-Ku pergi” — Keluaran 5/21",
      "description": "Dari penciptaan sampai langit yang baru dan bumi yang baru — kisah Alkitab dalam 14 menit\nFilm lengkap (14 menit) dan kisahnya dalam teks: https://one-scroll-bible.com/film/?lang=id\n\n#Shorts #Alkitab #kisahAlkitab",
      "tags": [
       "Alkitab Sekilas",
@@ -6975,7 +6975,7 @@
       "Zaman Para Bapa Leluhur"
      ],
      "language": "id",
-     "seconds": 44.0,
+     "seconds": 44,
      "captions": {
       "en": "motion/subs/en/v/05-exodus.srt",
       "es": "motion/subs/es/v/05-exodus.srt",
@@ -6995,7 +6995,7 @@
      "scene": "wilderness",
      "file": "shorts-id-06-wilderness.mp4",
      "local": "motion/out/release/shorts-id-06-wilderness.mp4",
-     "title": "Perjalanan di Padang Gurun · Adegan 6 dari 21 · Alkitab Sekilas",
+     "title": "Berdiri di ambang Tanah Perjanjian, mereka bersiap masuk… — Perjalanan di Padang Gurun 6/21",
      "description": "Dari penciptaan sampai langit yang baru dan bumi yang baru — kisah Alkitab dalam 14 menit\nFilm lengkap (14 menit) dan kisahnya dalam teks: https://one-scroll-bible.com/film/?lang=id\n\n#Shorts #Alkitab #kisahAlkitab",
      "tags": [
       "Alkitab Sekilas",
@@ -7032,7 +7032,7 @@
      "scene": "judges",
      "file": "shorts-id-07-judges.mp4",
      "local": "motion/out/release/shorts-id-07-judges.mp4",
-     "title": "Zaman Hakim-hakim · Adegan 7 dari 21 · Alkitab Sekilas",
+     "title": "Tetapi tanpa raja setiap orang berbuat sesukanya. — Zaman Hakim-hakim 7/21",
      "description": "Dari penciptaan sampai langit yang baru dan bumi yang baru — kisah Alkitab dalam 14 menit\nFilm lengkap (14 menit) dan kisahnya dalam teks: https://one-scroll-bible.com/film/?lang=id\n\n#Shorts #Alkitab #kisahAlkitab",
      "tags": [
       "Alkitab Sekilas",
@@ -7049,7 +7049,7 @@
       "Zaman Para Bapa Leluhur"
      ],
      "language": "id",
-     "seconds": 40.0,
+     "seconds": 40,
      "captions": {
       "en": "motion/subs/en/v/07-judges.srt",
       "es": "motion/subs/es/v/07-judges.srt",
@@ -7069,7 +7069,7 @@
      "scene": "kingdom",
      "file": "shorts-id-08-kingdom.mp4",
      "local": "motion/out/release/shorts-id-08-kingdom.mp4",
-     "title": "Kerajaan Israel Bersatu · Adegan 8 dari 21 · Alkitab Sekilas",
+     "title": "Manusia melihat apa yang di depan mata, tetapi TUHAN melihat hati. — Kerajaan Israel Bersatu 8/21",
      "description": "Dari penciptaan sampai langit yang baru dan bumi yang baru — kisah Alkitab dalam 14 menit\nFilm lengkap (14 menit) dan kisahnya dalam teks: https://one-scroll-bible.com/film/?lang=id\n\n#Shorts #Alkitab #kisahAlkitab",
      "tags": [
       "Alkitab Sekilas",
@@ -7086,7 +7086,7 @@
       "Zaman Para Bapa Leluhur"
      ],
      "language": "id",
-     "seconds": 39.0,
+     "seconds": 39,
      "captions": {
       "en": "motion/subs/en/v/08-kingdom.srt",
       "es": "motion/subs/es/v/08-kingdom.srt",
@@ -7106,7 +7106,7 @@
      "scene": "exile",
      "file": "shorts-id-09-exile.mp4",
      "local": "motion/out/release/shorts-id-09-exile.mp4",
-     "title": "Kerajaan Terpecah · Pembuangan · Adegan 9 dari 21 · Alkitab Sekilas",
+     "title": "Bait Suci terbakar, dan umat dibuang ke Babel. — Kerajaan Terpecah · Pembuangan 9/21",
      "description": "Dari penciptaan sampai langit yang baru dan bumi yang baru — kisah Alkitab dalam 14 menit\nFilm lengkap (14 menit) dan kisahnya dalam teks: https://one-scroll-bible.com/film/?lang=id\n\n#Shorts #Alkitab #kisahAlkitab",
      "tags": [
       "Alkitab Sekilas",
@@ -7123,7 +7123,7 @@
       "Zaman Para Bapa Leluhur"
      ],
      "language": "id",
-     "seconds": 36.0,
+     "seconds": 36,
      "captions": {
       "en": "motion/subs/en/v/09-exile.srt",
       "es": "motion/subs/es/v/09-exile.srt",
@@ -7143,7 +7143,7 @@
      "scene": "return",
      "file": "shorts-id-10-return.mp4",
      "local": "motion/out/release/shorts-id-10-return.mp4",
-     "title": "Kembali dari Pembuangan · Adegan 10 dari 21 · Alkitab Sekilas",
+     "title": "Sukacita karena TUHAN itulah perlindunganmu! — Kembali dari Pembuangan 10/21",
      "description": "Dari penciptaan sampai langit yang baru dan bumi yang baru — kisah Alkitab dalam 14 menit\nFilm lengkap (14 menit) dan kisahnya dalam teks: https://one-scroll-bible.com/film/?lang=id\n\n#Shorts #Alkitab #kisahAlkitab",
      "tags": [
       "Alkitab Sekilas",
@@ -7160,7 +7160,7 @@
       "Zaman Para Bapa Leluhur"
      ],
      "language": "id",
-     "seconds": 38.0,
+     "seconds": 38,
      "captions": {
       "en": "motion/subs/en/v/10-return.srt",
       "es": "motion/subs/es/v/10-return.srt",
@@ -7180,7 +7180,7 @@
      "scene": "silence",
      "file": "shorts-id-11-silence.mp4",
      "local": "motion/out/release/shorts-id-11-silence.mp4",
-     "title": "400 Tahun Keheningan · Adegan 11 dari 21 · Alkitab Sekilas",
+     "title": "400 tahun tanpa suara nabi — 400 Tahun Keheningan 11/21",
      "description": "Dari penciptaan sampai langit yang baru dan bumi yang baru — kisah Alkitab dalam 14 menit\nFilm lengkap (14 menit) dan kisahnya dalam teks: https://one-scroll-bible.com/film/?lang=id\n\n#Shorts #Alkitab #kisahAlkitab",
      "tags": [
       "Alkitab Sekilas",
@@ -7197,7 +7197,7 @@
       "Zaman Para Bapa Leluhur"
      ],
      "language": "id",
-     "seconds": 34.0,
+     "seconds": 34,
      "captions": {
       "en": "motion/subs/en/v/11-silence.srt",
       "es": "motion/subs/es/v/11-silence.srt",
@@ -7217,7 +7217,7 @@
      "scene": "advent",
      "file": "shorts-id-12-advent.mp4",
      "local": "motion/out/release/shorts-id-12-advent.mp4",
-     "title": "Kedatangan Yesus · Adegan 12 dari 21 · Alkitab Sekilas",
+     "title": "“Firman itu telah menjadi manusia, dan diam di antara kita” — Kedatangan Yesus 12/21",
      "description": "Dari penciptaan sampai langit yang baru dan bumi yang baru — kisah Alkitab dalam 14 menit\nFilm lengkap (14 menit) dan kisahnya dalam teks: https://one-scroll-bible.com/film/?lang=id\n\n#Shorts #Alkitab #kisahAlkitab",
      "tags": [
       "Alkitab Sekilas",
@@ -7234,7 +7234,7 @@
       "Zaman Para Bapa Leluhur"
      ],
      "language": "id",
-     "seconds": 36.0,
+     "seconds": 36,
      "captions": {
       "en": "motion/subs/en/v/12-advent.srt",
       "es": "motion/subs/es/v/12-advent.srt",
@@ -7254,7 +7254,7 @@
      "scene": "cross",
      "file": "shorts-id-13-cross.mp4",
      "local": "motion/out/release/shorts-id-13-cross.mp4",
-     "title": "Salib · Adegan 13 dari 21 · Alkitab Sekilas",
+     "title": "Yang seharusnya ada di salib itu adalah aku. — Salib 13/21",
      "description": "Dari penciptaan sampai langit yang baru dan bumi yang baru — kisah Alkitab dalam 14 menit\nFilm lengkap (14 menit) dan kisahnya dalam teks: https://one-scroll-bible.com/film/?lang=id\n\n#Shorts #Alkitab #kisahAlkitab",
      "tags": [
       "Alkitab Sekilas",
@@ -7271,7 +7271,7 @@
       "Zaman Para Bapa Leluhur"
      ],
      "language": "id",
-     "seconds": 39.0,
+     "seconds": 39,
      "captions": {
       "en": "motion/subs/en/v/13-cross.srt",
       "es": "motion/subs/es/v/13-cross.srt",
@@ -7291,7 +7291,7 @@
      "scene": "rise",
      "file": "shorts-id-14-rise.mp4",
      "local": "motion/out/release/shorts-id-14-rise.mp4",
-     "title": "Kebangkitan · Adegan 14 dari 21 · Alkitab Sekilas",
+     "title": "“Sebab Ia telah bangkit, sama seperti yang telah dikatakan-Nya” — Kebangkitan 14/21",
      "description": "Dari penciptaan sampai langit yang baru dan bumi yang baru — kisah Alkitab dalam 14 menit\nFilm lengkap (14 menit) dan kisahnya dalam teks: https://one-scroll-bible.com/film/?lang=id\n\n#Shorts #Alkitab #kisahAlkitab",
      "tags": [
       "Alkitab Sekilas",
@@ -7308,7 +7308,7 @@
       "Zaman Para Bapa Leluhur"
      ],
      "language": "id",
-     "seconds": 27.0,
+     "seconds": 27,
      "captions": {
       "en": "motion/subs/en/v/14-rise.srt",
       "es": "motion/subs/es/v/14-rise.srt",
@@ -7328,7 +7328,7 @@
      "scene": "church",
      "file": "shorts-id-15-church.mp4",
      "local": "motion/out/release/shorts-id-15-church.mp4",
-     "title": "Awal Mula Gereja · Adegan 15 dari 21 · Alkitab Sekilas",
+     "title": "“… Kamu akan menjadi saksi-Ku … sampai ke ujung bumi” — Awal Mula Gereja 15/21",
      "description": "Dari penciptaan sampai langit yang baru dan bumi yang baru — kisah Alkitab dalam 14 menit\nFilm lengkap (14 menit) dan kisahnya dalam teks: https://one-scroll-bible.com/film/?lang=id\n\n#Shorts #Alkitab #kisahAlkitab",
      "tags": [
       "Alkitab Sekilas",
@@ -7345,7 +7345,7 @@
       "Zaman Para Bapa Leluhur"
      ],
      "language": "id",
-     "seconds": 35.0,
+     "seconds": 35,
      "captions": {
       "en": "motion/subs/en/v/15-church.srt",
       "es": "motion/subs/es/v/15-church.srt",
@@ -7365,7 +7365,7 @@
      "scene": "renewal",
      "file": "shorts-id-16-renewal.mp4",
      "local": "motion/out/release/shorts-id-16-renewal.mp4",
-     "title": "Pemulihan · Adegan 16 dari 21 · Alkitab Sekilas",
+     "title": "“Dan Ia akan menghapus segala air mata dari mata mereka” — Pemulihan 16/21",
      "description": "Dari penciptaan sampai langit yang baru dan bumi yang baru — kisah Alkitab dalam 14 menit\nFilm lengkap (14 menit) dan kisahnya dalam teks: https://one-scroll-bible.com/film/?lang=id\n\n#Shorts #Alkitab #kisahAlkitab",
      "tags": [
       "Alkitab Sekilas",
@@ -7382,7 +7382,7 @@
       "Zaman Para Bapa Leluhur"
      ],
      "language": "id",
-     "seconds": 36.0,
+     "seconds": 36,
      "captions": {
       "en": "motion/subs/en/v/16-renewal.srt",
       "es": "motion/subs/es/v/16-renewal.srt",
@@ -7402,7 +7402,7 @@
      "scene": "mirror",
      "file": "shorts-id-17-mirror.mp4",
      "local": "motion/out/release/shorts-id-17-mirror.mp4",
-     "title": "Cermin · Adegan 17 dari 21 · Alkitab Sekilas",
+     "title": "Pada akhirnya, berhala terdalam adalah “diriku sendiri yang duduk di takhta Allah”. — Cermin 17/21",
      "description": "Dari penciptaan sampai langit yang baru dan bumi yang baru — kisah Alkitab dalam 14 menit\nFilm lengkap (14 menit) dan kisahnya dalam teks: https://one-scroll-bible.com/film/?lang=id\n\n#Shorts #Alkitab #kisahAlkitab",
      "tags": [
       "Alkitab Sekilas",
@@ -7439,7 +7439,7 @@
      "scene": "gospel",
      "file": "shorts-id-18-gospel.mp4",
      "local": "motion/out/release/shorts-id-18-gospel.mp4",
-     "title": "Inti Injil · Adegan 18 dari 21 · Alkitab Sekilas",
+     "title": "Bukan “lakukanlah”, melainkan “sudah selesai” — Inti Injil 18/21",
      "description": "Dari penciptaan sampai langit yang baru dan bumi yang baru — kisah Alkitab dalam 14 menit\nFilm lengkap (14 menit) dan kisahnya dalam teks: https://one-scroll-bible.com/film/?lang=id\n\n#Shorts #Alkitab #kisahAlkitab",
      "tags": [
       "Alkitab Sekilas",
@@ -7476,7 +7476,7 @@
      "scene": "evidence",
      "file": "shorts-id-19-evidence.mp4",
      "local": "motion/out/release/shorts-id-19-evidence.mp4",
-     "title": "Apakah Alkitab Kisah Nyata? · Adegan 19 dari 21 · Alkitab Sekilas",
+     "title": "Apakah Alkitab benar-benar kisah nyata? 19/21",
      "description": "Dari penciptaan sampai langit yang baru dan bumi yang baru — kisah Alkitab dalam 14 menit\nFilm lengkap (14 menit) dan kisahnya dalam teks: https://one-scroll-bible.com/film/?lang=id\n\n#Shorts #Alkitab #kisahAlkitab",
      "tags": [
       "Alkitab Sekilas",
@@ -7493,7 +7493,7 @@
       "Zaman Para Bapa Leluhur"
      ],
      "language": "id",
-     "seconds": 60.0,
+     "seconds": 60,
      "captions": {
       "en": "motion/subs/en/v/19-evidence.srt",
       "es": "motion/subs/es/v/19-evidence.srt",
@@ -7513,7 +7513,7 @@
      "scene": "ship",
      "file": "shorts-id-20-ship.mp4",
      "local": "motion/out/release/shorts-id-20-ship.mp4",
-     "title": "Cukup Menjadi Orang Baik? · Adegan 20 dari 21 · Alkitab Sekilas",
+     "title": "Bukankah cukup menjadi orang baik, meski tak percaya kepada Yesus? — Cukup Menjadi Orang Baik? 20/21",
      "description": "Dari penciptaan sampai langit yang baru dan bumi yang baru — kisah Alkitab dalam 14 menit\nFilm lengkap (14 menit) dan kisahnya dalam teks: https://one-scroll-bible.com/film/?lang=id\n\n#Shorts #Alkitab #kisahAlkitab",
      "tags": [
       "Alkitab Sekilas",
@@ -7550,7 +7550,7 @@
      "scene": "invite",
      "file": "shorts-id-21-invite.mp4",
      "local": "motion/out/release/shorts-id-21-invite.mp4",
-     "title": "Undangan · Adegan 21 dari 21 · Alkitab Sekilas",
+     "title": "Kasih ini bukan informasi, melainkan sebuah undangan. — Undangan 21/21",
      "description": "Dari penciptaan sampai langit yang baru dan bumi yang baru — kisah Alkitab dalam 14 menit\nFilm lengkap (14 menit) dan kisahnya dalam teks: https://one-scroll-bible.com/film/?lang=id\n\n#Shorts #Alkitab #kisahAlkitab",
      "tags": [
       "Alkitab Sekilas",
@@ -7567,7 +7567,7 @@
       "Zaman Para Bapa Leluhur"
      ],
      "language": "id",
-     "seconds": 57.0,
+     "seconds": 57,
      "captions": {
       "en": "motion/subs/en/v/21-invite.srt",
       "es": "motion/subs/es/v/21-invite.srt",
@@ -7645,32 +7645,32 @@
     "chapters": [
      {
       "time": "0:00",
-      "seconds": 0.0,
+      "seconds": 0,
       "title": "一个故事"
      },
      {
       "time": "0:36",
-      "seconds": 36.0,
+      "seconds": 36,
       "title": "创造"
      },
      {
       "time": "1:11",
-      "seconds": 71.0,
+      "seconds": 71,
       "title": "堕落"
      },
      {
       "time": "1:45",
-      "seconds": 105.0,
+      "seconds": 105,
       "title": "族长时代"
      },
      {
       "time": "2:11",
-      "seconds": 131.0,
+      "seconds": 131,
       "title": "出埃及"
      },
      {
       "time": "2:55",
-      "seconds": 175.0,
+      "seconds": 175,
       "title": "旷野的旅程"
      },
      {
@@ -7730,7 +7730,7 @@
      },
      {
       "time": "10:19",
-      "seconds": 619.0,
+      "seconds": 619,
       "title": "福音的核心"
      },
      {
@@ -7758,7 +7758,7 @@
      "scene": "opening",
      "file": "shorts-zh-Hans-01-opening.mp4",
      "local": "motion/out/release/shorts-zh-Hans-01-opening.mp4",
-     "title": "一个故事 · 第 1/21 场景 · 一卷读懂圣经",
+     "title": "圣经归根到底是一个故事 1/21",
      "description": "从创造到新天新地——14 分钟看完圣经的故事\n完整影片（14 分钟）与文字版圣经故事: https://one-scroll-bible.com/film/?lang=zh-Hans\n\n#Shorts #圣经 #圣经故事",
      "tags": [
       "一卷读懂圣经",
@@ -7775,7 +7775,7 @@
       "族长时代"
      ],
      "language": "zh-Hans",
-     "seconds": 36.0,
+     "seconds": 36,
      "captions": {
       "en": "motion/subs/en/v/01-opening.srt",
       "es": "motion/subs/es/v/01-opening.srt",
@@ -7795,7 +7795,7 @@
      "scene": "creation",
      "file": "shorts-zh-Hans-02-creation.mp4",
      "local": "motion/out/release/shorts-zh-Hans-02-creation.mp4",
-     "title": "创造 · 第 2/21 场景 · 一卷读懂圣经",
+     "title": "“神说：‘要有光’” — 创造 2/21",
      "description": "从创造到新天新地——14 分钟看完圣经的故事\n完整影片（14 分钟）与文字版圣经故事: https://one-scroll-bible.com/film/?lang=zh-Hans\n\n#Shorts #圣经 #圣经故事",
      "tags": [
       "一卷读懂圣经",
@@ -7812,7 +7812,7 @@
       "族长时代"
      ],
      "language": "zh-Hans",
-     "seconds": 35.0,
+     "seconds": 35,
      "captions": {
       "en": "motion/subs/en/v/02-creation.srt",
       "es": "motion/subs/es/v/02-creation.srt",
@@ -7832,7 +7832,7 @@
      "scene": "fall",
      "file": "shorts-zh-Hans-03-fall.mp4",
      "local": "motion/out/release/shorts-zh-Hans-03-fall.mp4",
-     "title": "堕落 · 第 3/21 场景 · 一卷读懂圣经",
+     "title": "“你在哪里？” — 堕落 3/21",
      "description": "从创造到新天新地——14 分钟看完圣经的故事\n完整影片（14 分钟）与文字版圣经故事: https://one-scroll-bible.com/film/?lang=zh-Hans\n\n#Shorts #圣经 #圣经故事",
      "tags": [
       "一卷读懂圣经",
@@ -7849,7 +7849,7 @@
       "族长时代"
      ],
      "language": "zh-Hans",
-     "seconds": 34.0,
+     "seconds": 34,
      "captions": {
       "en": "motion/subs/en/v/03-fall.srt",
       "es": "motion/subs/es/v/03-fall.srt",
@@ -7869,7 +7869,7 @@
      "scene": "patriarch",
      "file": "shorts-zh-Hans-04-patriarch.mp4",
      "local": "motion/out/release/shorts-zh-Hans-04-patriarch.mp4",
-     "title": "族长时代 · 第 4/21 场景 · 一卷读懂圣经",
+     "title": "“你向天观看，数算众星，能数得过来吗？” — 族长时代 4/21",
      "description": "从创造到新天新地——14 分钟看完圣经的故事\n完整影片（14 分钟）与文字版圣经故事: https://one-scroll-bible.com/film/?lang=zh-Hans\n\n#Shorts #圣经 #圣经故事",
      "tags": [
       "一卷读懂圣经",
@@ -7886,7 +7886,7 @@
       "族长时代"
      ],
      "language": "zh-Hans",
-     "seconds": 26.0,
+     "seconds": 26,
      "captions": {
       "en": "motion/subs/en/v/04-patriarch.srt",
       "es": "motion/subs/es/v/04-patriarch.srt",
@@ -7906,7 +7906,7 @@
      "scene": "exodus",
      "file": "shorts-zh-Hans-05-exodus.mp4",
      "local": "motion/out/release/shorts-zh-Hans-05-exodus.mp4",
-     "title": "出埃及 · 第 5/21 场景 · 一卷读懂圣经",
+     "title": "“容我的百姓去” — 出埃及 5/21",
      "description": "从创造到新天新地——14 分钟看完圣经的故事\n完整影片（14 分钟）与文字版圣经故事: https://one-scroll-bible.com/film/?lang=zh-Hans\n\n#Shorts #圣经 #圣经故事",
      "tags": [
       "一卷读懂圣经",
@@ -7923,7 +7923,7 @@
       "族长时代"
      ],
      "language": "zh-Hans",
-     "seconds": 44.0,
+     "seconds": 44,
      "captions": {
       "en": "motion/subs/en/v/05-exodus.srt",
       "es": "motion/subs/es/v/05-exodus.srt",
@@ -7943,7 +7943,7 @@
      "scene": "wilderness",
      "file": "shorts-zh-Hans-06-wilderness.mp4",
      "local": "motion/out/release/shorts-zh-Hans-06-wilderness.mp4",
-     "title": "旷野的旅程 · 第 6/21 场景 · 一卷读懂圣经",
+     "title": "站在应许之地门口，他们预备进入…… — 旷野的旅程 6/21",
      "description": "从创造到新天新地——14 分钟看完圣经的故事\n完整影片（14 分钟）与文字版圣经故事: https://one-scroll-bible.com/film/?lang=zh-Hans\n\n#Shorts #圣经 #圣经故事",
      "tags": [
       "一卷读懂圣经",
@@ -7980,7 +7980,7 @@
      "scene": "judges",
      "file": "shorts-zh-Hans-07-judges.mp4",
      "local": "motion/out/release/shorts-zh-Hans-07-judges.mp4",
-     "title": "士师时代 · 第 7/21 场景 · 一卷读懂圣经",
+     "title": "却因没有王而各人任意而行。 — 士师时代 7/21",
      "description": "从创造到新天新地——14 分钟看完圣经的故事\n完整影片（14 分钟）与文字版圣经故事: https://one-scroll-bible.com/film/?lang=zh-Hans\n\n#Shorts #圣经 #圣经故事",
      "tags": [
       "一卷读懂圣经",
@@ -7997,7 +7997,7 @@
       "族长时代"
      ],
      "language": "zh-Hans",
-     "seconds": 40.0,
+     "seconds": 40,
      "captions": {
       "en": "motion/subs/en/v/07-judges.srt",
       "es": "motion/subs/es/v/07-judges.srt",
@@ -8017,7 +8017,7 @@
      "scene": "kingdom",
      "file": "shorts-zh-Hans-08-kingdom.mp4",
      "local": "motion/out/release/shorts-zh-Hans-08-kingdom.mp4",
-     "title": "统一王国 · 第 8/21 场景 · 一卷读懂圣经",
+     "title": "人是看外貌；耶和华是看内心 — 统一王国 8/21",
      "description": "从创造到新天新地——14 分钟看完圣经的故事\n完整影片（14 分钟）与文字版圣经故事: https://one-scroll-bible.com/film/?lang=zh-Hans\n\n#Shorts #圣经 #圣经故事",
      "tags": [
       "一卷读懂圣经",
@@ -8034,7 +8034,7 @@
       "族长时代"
      ],
      "language": "zh-Hans",
-     "seconds": 39.0,
+     "seconds": 39,
      "captions": {
       "en": "motion/subs/en/v/08-kingdom.srt",
       "es": "motion/subs/es/v/08-kingdom.srt",
@@ -8054,7 +8054,7 @@
      "scene": "exile",
      "file": "shorts-zh-Hans-09-exile.mp4",
      "local": "motion/out/release/shorts-zh-Hans-09-exile.mp4",
-     "title": "分裂王国 · 被掳 · 第 9/21 场景 · 一卷读懂圣经",
+     "title": "圣殿被焚，百姓被掳到巴比伦。 — 分裂王国 · 被掳 9/21",
      "description": "从创造到新天新地——14 分钟看完圣经的故事\n完整影片（14 分钟）与文字版圣经故事: https://one-scroll-bible.com/film/?lang=zh-Hans\n\n#Shorts #圣经 #圣经故事",
      "tags": [
       "一卷读懂圣经",
@@ -8071,7 +8071,7 @@
       "族长时代"
      ],
      "language": "zh-Hans",
-     "seconds": 36.0,
+     "seconds": 36,
      "captions": {
       "en": "motion/subs/en/v/09-exile.srt",
       "es": "motion/subs/es/v/09-exile.srt",
@@ -8091,7 +8091,7 @@
      "scene": "return",
      "file": "shorts-zh-Hans-10-return.mp4",
      "local": "motion/out/release/shorts-zh-Hans-10-return.mp4",
-     "title": "被掳归回 · 第 10/21 场景 · 一卷读懂圣经",
+     "title": "因靠耶和华而得的喜乐是你们的力量 — 被掳归回 10/21",
      "description": "从创造到新天新地——14 分钟看完圣经的故事\n完整影片（14 分钟）与文字版圣经故事: https://one-scroll-bible.com/film/?lang=zh-Hans\n\n#Shorts #圣经 #圣经故事",
      "tags": [
       "一卷读懂圣经",
@@ -8108,7 +8108,7 @@
       "族长时代"
      ],
      "language": "zh-Hans",
-     "seconds": 38.0,
+     "seconds": 38,
      "captions": {
       "en": "motion/subs/en/v/10-return.srt",
       "es": "motion/subs/es/v/10-return.srt",
@@ -8128,7 +8128,7 @@
      "scene": "silence",
      "file": "shorts-zh-Hans-11-silence.mp4",
      "local": "motion/out/release/shorts-zh-Hans-11-silence.mp4",
-     "title": "四百年的沉默 · 第 11/21 场景 · 一卷读懂圣经",
+     "title": "四百年没有先知的声音 — 四百年的沉默 11/21",
      "description": "从创造到新天新地——14 分钟看完圣经的故事\n完整影片（14 分钟）与文字版圣经故事: https://one-scroll-bible.com/film/?lang=zh-Hans\n\n#Shorts #圣经 #圣经故事",
      "tags": [
       "一卷读懂圣经",
@@ -8145,7 +8145,7 @@
       "族长时代"
      ],
      "language": "zh-Hans",
-     "seconds": 34.0,
+     "seconds": 34,
      "captions": {
       "en": "motion/subs/en/v/11-silence.srt",
       "es": "motion/subs/es/v/11-silence.srt",
@@ -8165,7 +8165,7 @@
      "scene": "advent",
      "file": "shorts-zh-Hans-12-advent.mp4",
      "local": "motion/out/release/shorts-zh-Hans-12-advent.mp4",
-     "title": "耶稣降临 · 第 12/21 场景 · 一卷读懂圣经",
+     "title": "“道成了肉身，住在我们中间” — 耶稣降临 12/21",
      "description": "从创造到新天新地——14 分钟看完圣经的故事\n完整影片（14 分钟）与文字版圣经故事: https://one-scroll-bible.com/film/?lang=zh-Hans\n\n#Shorts #圣经 #圣经故事",
      "tags": [
       "一卷读懂圣经",
@@ -8182,7 +8182,7 @@
       "族长时代"
      ],
      "language": "zh-Hans",
-     "seconds": 36.0,
+     "seconds": 36,
      "captions": {
       "en": "motion/subs/en/v/12-advent.srt",
       "es": "motion/subs/es/v/12-advent.srt",
@@ -8202,7 +8202,7 @@
      "scene": "cross",
      "file": "shorts-zh-Hans-13-cross.mp4",
      "local": "motion/out/release/shorts-zh-Hans-13-cross.mp4",
-     "title": "十字架 · 第 13/21 场景 · 一卷读懂圣经",
+     "title": "那本该被钉十字架的，正是我。 — 十字架 13/21",
      "description": "从创造到新天新地——14 分钟看完圣经的故事\n完整影片（14 分钟）与文字版圣经故事: https://one-scroll-bible.com/film/?lang=zh-Hans\n\n#Shorts #圣经 #圣经故事",
      "tags": [
       "一卷读懂圣经",
@@ -8219,7 +8219,7 @@
       "族长时代"
      ],
      "language": "zh-Hans",
-     "seconds": 39.0,
+     "seconds": 39,
      "captions": {
       "en": "motion/subs/en/v/13-cross.srt",
       "es": "motion/subs/es/v/13-cross.srt",
@@ -8239,7 +8239,7 @@
      "scene": "rise",
      "file": "shorts-zh-Hans-14-rise.mp4",
      "local": "motion/out/release/shorts-zh-Hans-14-rise.mp4",
-     "title": "复活 · 第 14/21 场景 · 一卷读懂圣经",
+     "title": "“照他所说的，已经复活了” — 复活 14/21",
      "description": "从创造到新天新地——14 分钟看完圣经的故事\n完整影片（14 分钟）与文字版圣经故事: https://one-scroll-bible.com/film/?lang=zh-Hans\n\n#Shorts #圣经 #圣经故事",
      "tags": [
       "一卷读懂圣经",
@@ -8256,7 +8256,7 @@
       "族长时代"
      ],
      "language": "zh-Hans",
-     "seconds": 27.0,
+     "seconds": 27,
      "captions": {
       "en": "motion/subs/en/v/14-rise.srt",
       "es": "motion/subs/es/v/14-rise.srt",
@@ -8276,7 +8276,7 @@
      "scene": "church",
      "file": "shorts-zh-Hans-15-church.mp4",
      "local": "motion/out/release/shorts-zh-Hans-15-church.mp4",
-     "title": "教会的开始 · 第 15/21 场景 · 一卷读懂圣经",
+     "title": "“……直到地极，作我的见证” — 教会的开始 15/21",
      "description": "从创造到新天新地——14 分钟看完圣经的故事\n完整影片（14 分钟）与文字版圣经故事: https://one-scroll-bible.com/film/?lang=zh-Hans\n\n#Shorts #圣经 #圣经故事",
      "tags": [
       "一卷读懂圣经",
@@ -8293,7 +8293,7 @@
       "族长时代"
      ],
      "language": "zh-Hans",
-     "seconds": 35.0,
+     "seconds": 35,
      "captions": {
       "en": "motion/subs/en/v/15-church.srt",
       "es": "motion/subs/es/v/15-church.srt",
@@ -8313,7 +8313,7 @@
      "scene": "renewal",
      "file": "shorts-zh-Hans-16-renewal.mp4",
      "local": "motion/out/release/shorts-zh-Hans-16-renewal.mp4",
-     "title": "复兴（万物更新） · 第 16/21 场景 · 一卷读懂圣经",
+     "title": "“神要擦去他们一切的眼泪” — 复兴（万物更新） 16/21",
      "description": "从创造到新天新地——14 分钟看完圣经的故事\n完整影片（14 分钟）与文字版圣经故事: https://one-scroll-bible.com/film/?lang=zh-Hans\n\n#Shorts #圣经 #圣经故事",
      "tags": [
       "一卷读懂圣经",
@@ -8330,7 +8330,7 @@
       "族长时代"
      ],
      "language": "zh-Hans",
-     "seconds": 36.0,
+     "seconds": 36,
      "captions": {
       "en": "motion/subs/en/v/16-renewal.srt",
       "es": "motion/subs/es/v/16-renewal.srt",
@@ -8350,7 +8350,7 @@
      "scene": "mirror",
      "file": "shorts-zh-Hans-17-mirror.mp4",
      "local": "motion/out/release/shorts-zh-Hans-17-mirror.mp4",
-     "title": "镜子 · 第 17/21 场景 · 一卷读懂圣经",
+     "title": "归根到底，最深的偶像是“坐在神位上的我自己”。 — 镜子 17/21",
      "description": "从创造到新天新地——14 分钟看完圣经的故事\n完整影片（14 分钟）与文字版圣经故事: https://one-scroll-bible.com/film/?lang=zh-Hans\n\n#Shorts #圣经 #圣经故事",
      "tags": [
       "一卷读懂圣经",
@@ -8387,7 +8387,7 @@
      "scene": "gospel",
      "file": "shorts-zh-Hans-18-gospel.mp4",
      "local": "motion/out/release/shorts-zh-Hans-18-gospel.mp4",
-     "title": "福音的核心 · 第 18/21 场景 · 一卷读懂圣经",
+     "title": "不是“去做”，而是“成了” — 福音的核心 18/21",
      "description": "从创造到新天新地——14 分钟看完圣经的故事\n完整影片（14 分钟）与文字版圣经故事: https://one-scroll-bible.com/film/?lang=zh-Hans\n\n#Shorts #圣经 #圣经故事",
      "tags": [
       "一卷读懂圣经",
@@ -8424,7 +8424,7 @@
      "scene": "evidence",
      "file": "shorts-zh-Hans-19-evidence.mp4",
      "local": "motion/out/release/shorts-zh-Hans-19-evidence.mp4",
-     "title": "圣经是真实的吗 · 第 19/21 场景 · 一卷读懂圣经",
+     "title": "圣经真的是真实的故事吗？ 19/21",
      "description": "从创造到新天新地——14 分钟看完圣经的故事\n完整影片（14 分钟）与文字版圣经故事: https://one-scroll-bible.com/film/?lang=zh-Hans\n\n#Shorts #圣经 #圣经故事",
      "tags": [
       "一卷读懂圣经",
@@ -8441,7 +8441,7 @@
       "族长时代"
      ],
      "language": "zh-Hans",
-     "seconds": 60.0,
+     "seconds": 60,
      "captions": {
       "en": "motion/subs/en/v/19-evidence.srt",
       "es": "motion/subs/es/v/19-evidence.srt",
@@ -8461,7 +8461,7 @@
      "scene": "ship",
      "file": "shorts-zh-Hans-20-ship.mp4",
      "local": "motion/out/release/shorts-zh-Hans-20-ship.mp4",
-     "title": "做好人就够了吗？ · 第 20/21 场景 · 一卷读懂圣经",
+     "title": "不信耶稣，只要好好做个好人不行吗？ — 做好人就够了吗？ 20/21",
      "description": "从创造到新天新地——14 分钟看完圣经的故事\n完整影片（14 分钟）与文字版圣经故事: https://one-scroll-bible.com/film/?lang=zh-Hans\n\n#Shorts #圣经 #圣经故事",
      "tags": [
       "一卷读懂圣经",
@@ -8498,7 +8498,7 @@
      "scene": "invite",
      "file": "shorts-zh-Hans-21-invite.mp4",
      "local": "motion/out/release/shorts-zh-Hans-21-invite.mp4",
-     "title": "邀请 · 第 21/21 场景 · 一卷读懂圣经",
+     "title": "这份爱不是信息，而是邀请。 — 邀请 21/21",
      "description": "从创造到新天新地——14 分钟看完圣经的故事\n完整影片（14 分钟）与文字版圣经故事: https://one-scroll-bible.com/film/?lang=zh-Hans\n\n#Shorts #圣经 #圣经故事",
      "tags": [
       "一卷读懂圣经",
@@ -8515,7 +8515,7 @@
       "族长时代"
      ],
      "language": "zh-Hans",
-     "seconds": 57.0,
+     "seconds": 57,
      "captions": {
       "en": "motion/subs/en/v/21-invite.srt",
       "es": "motion/subs/es/v/21-invite.srt",
@@ -8593,32 +8593,32 @@
     "chapters": [
      {
       "time": "0:00",
-      "seconds": 0.0,
+      "seconds": 0,
       "title": "一條主線"
      },
      {
       "time": "0:36",
-      "seconds": 36.0,
+      "seconds": 36,
       "title": "創造"
      },
      {
       "time": "1:11",
-      "seconds": 71.0,
+      "seconds": 71,
       "title": "墮落"
      },
      {
       "time": "1:45",
-      "seconds": 105.0,
+      "seconds": 105,
       "title": "族長時代"
      },
      {
       "time": "2:11",
-      "seconds": 131.0,
+      "seconds": 131,
       "title": "出埃及"
      },
      {
       "time": "2:55",
-      "seconds": 175.0,
+      "seconds": 175,
       "title": "曠野的旅程"
      },
      {
@@ -8678,7 +8678,7 @@
      },
      {
       "time": "10:19",
-      "seconds": 619.0,
+      "seconds": 619,
       "title": "福音的核心"
      },
      {
@@ -8706,7 +8706,7 @@
      "scene": "opening",
      "file": "shorts-zh-Hant-01-opening.mp4",
      "local": "motion/out/release/shorts-zh-Hant-01-opening.mp4",
-     "title": "一條主線 · 第 1/21 場景 · 一卷讀懂聖經",
+     "title": "聖經歸根到底是一個故事 1/21",
      "description": "從創造到新天新地——14 分鐘看完聖經的故事\n完整影片（14 分鐘）與文字版聖經故事: https://one-scroll-bible.com/film/?lang=zh-Hant\n\n#Shorts #聖經 #聖經故事",
      "tags": [
       "一卷讀懂聖經",
@@ -8723,7 +8723,7 @@
       "族長時代"
      ],
      "language": "zh-Hant",
-     "seconds": 36.0,
+     "seconds": 36,
      "captions": {
       "en": "motion/subs/en/v/01-opening.srt",
       "es": "motion/subs/es/v/01-opening.srt",
@@ -8743,7 +8743,7 @@
      "scene": "creation",
      "file": "shorts-zh-Hant-02-creation.mp4",
      "local": "motion/out/release/shorts-zh-Hant-02-creation.mp4",
-     "title": "創造 · 第 2/21 場景 · 一卷讀懂聖經",
+     "title": "「神說：『要有光』」 — 創造 2/21",
      "description": "從創造到新天新地——14 分鐘看完聖經的故事\n完整影片（14 分鐘）與文字版聖經故事: https://one-scroll-bible.com/film/?lang=zh-Hant\n\n#Shorts #聖經 #聖經故事",
      "tags": [
       "一卷讀懂聖經",
@@ -8760,7 +8760,7 @@
       "族長時代"
      ],
      "language": "zh-Hant",
-     "seconds": 35.0,
+     "seconds": 35,
      "captions": {
       "en": "motion/subs/en/v/02-creation.srt",
       "es": "motion/subs/es/v/02-creation.srt",
@@ -8780,7 +8780,7 @@
      "scene": "fall",
      "file": "shorts-zh-Hant-03-fall.mp4",
      "local": "motion/out/release/shorts-zh-Hant-03-fall.mp4",
-     "title": "墮落 · 第 3/21 場景 · 一卷讀懂聖經",
+     "title": "「你在哪裏？」 — 墮落 3/21",
      "description": "從創造到新天新地——14 分鐘看完聖經的故事\n完整影片（14 分鐘）與文字版聖經故事: https://one-scroll-bible.com/film/?lang=zh-Hant\n\n#Shorts #聖經 #聖經故事",
      "tags": [
       "一卷讀懂聖經",
@@ -8797,7 +8797,7 @@
       "族長時代"
      ],
      "language": "zh-Hant",
-     "seconds": 34.0,
+     "seconds": 34,
      "captions": {
       "en": "motion/subs/en/v/03-fall.srt",
       "es": "motion/subs/es/v/03-fall.srt",
@@ -8817,7 +8817,7 @@
      "scene": "patriarch",
      "file": "shorts-zh-Hant-04-patriarch.mp4",
      "local": "motion/out/release/shorts-zh-Hant-04-patriarch.mp4",
-     "title": "族長時代 · 第 4/21 場景 · 一卷讀懂聖經",
+     "title": "「你向天觀看，數算眾星，能數得過來嗎？」 — 族長時代 4/21",
      "description": "從創造到新天新地——14 分鐘看完聖經的故事\n完整影片（14 分鐘）與文字版聖經故事: https://one-scroll-bible.com/film/?lang=zh-Hant\n\n#Shorts #聖經 #聖經故事",
      "tags": [
       "一卷讀懂聖經",
@@ -8834,7 +8834,7 @@
       "族長時代"
      ],
      "language": "zh-Hant",
-     "seconds": 26.0,
+     "seconds": 26,
      "captions": {
       "en": "motion/subs/en/v/04-patriarch.srt",
       "es": "motion/subs/es/v/04-patriarch.srt",
@@ -8854,7 +8854,7 @@
      "scene": "exodus",
      "file": "shorts-zh-Hant-05-exodus.mp4",
      "local": "motion/out/release/shorts-zh-Hant-05-exodus.mp4",
-     "title": "出埃及 · 第 5/21 場景 · 一卷讀懂聖經",
+     "title": "「容我的百姓去」 — 出埃及 5/21",
      "description": "從創造到新天新地——14 分鐘看完聖經的故事\n完整影片（14 分鐘）與文字版聖經故事: https://one-scroll-bible.com/film/?lang=zh-Hant\n\n#Shorts #聖經 #聖經故事",
      "tags": [
       "一卷讀懂聖經",
@@ -8871,7 +8871,7 @@
       "族長時代"
      ],
      "language": "zh-Hant",
-     "seconds": 44.0,
+     "seconds": 44,
      "captions": {
       "en": "motion/subs/en/v/05-exodus.srt",
       "es": "motion/subs/es/v/05-exodus.srt",
@@ -8891,7 +8891,7 @@
      "scene": "wilderness",
      "file": "shorts-zh-Hant-06-wilderness.mp4",
      "local": "motion/out/release/shorts-zh-Hant-06-wilderness.mp4",
-     "title": "曠野的旅程 · 第 6/21 場景 · 一卷讀懂聖經",
+     "title": "站在應許之地門口，他們預備進入…… — 曠野的旅程 6/21",
      "description": "從創造到新天新地——14 分鐘看完聖經的故事\n完整影片（14 分鐘）與文字版聖經故事: https://one-scroll-bible.com/film/?lang=zh-Hant\n\n#Shorts #聖經 #聖經故事",
      "tags": [
       "一卷讀懂聖經",
@@ -8928,7 +8928,7 @@
      "scene": "judges",
      "file": "shorts-zh-Hant-07-judges.mp4",
      "local": "motion/out/release/shorts-zh-Hant-07-judges.mp4",
-     "title": "士師時代 · 第 7/21 場景 · 一卷讀懂聖經",
+     "title": "卻因沒有王而各人任意而行。 — 士師時代 7/21",
      "description": "從創造到新天新地——14 分鐘看完聖經的故事\n完整影片（14 分鐘）與文字版聖經故事: https://one-scroll-bible.com/film/?lang=zh-Hant\n\n#Shorts #聖經 #聖經故事",
      "tags": [
       "一卷讀懂聖經",
@@ -8945,7 +8945,7 @@
       "族長時代"
      ],
      "language": "zh-Hant",
-     "seconds": 40.0,
+     "seconds": 40,
      "captions": {
       "en": "motion/subs/en/v/07-judges.srt",
       "es": "motion/subs/es/v/07-judges.srt",
@@ -8965,7 +8965,7 @@
      "scene": "kingdom",
      "file": "shorts-zh-Hant-08-kingdom.mp4",
      "local": "motion/out/release/shorts-zh-Hant-08-kingdom.mp4",
-     "title": "統一王國 · 第 8/21 場景 · 一卷讀懂聖經",
+     "title": "人是看外貌；耶和華是看內心 — 統一王國 8/21",
      "description": "從創造到新天新地——14 分鐘看完聖經的故事\n完整影片（14 分鐘）與文字版聖經故事: https://one-scroll-bible.com/film/?lang=zh-Hant\n\n#Shorts #聖經 #聖經故事",
      "tags": [
       "一卷讀懂聖經",
@@ -8982,7 +8982,7 @@
       "族長時代"
      ],
      "language": "zh-Hant",
-     "seconds": 39.0,
+     "seconds": 39,
      "captions": {
       "en": "motion/subs/en/v/08-kingdom.srt",
       "es": "motion/subs/es/v/08-kingdom.srt",
@@ -9002,7 +9002,7 @@
      "scene": "exile",
      "file": "shorts-zh-Hant-09-exile.mp4",
      "local": "motion/out/release/shorts-zh-Hant-09-exile.mp4",
-     "title": "分裂王國 · 被擄 · 第 9/21 場景 · 一卷讀懂聖經",
+     "title": "聖殿被焚，百姓被擄到巴比倫。 — 分裂王國 · 被擄 9/21",
      "description": "從創造到新天新地——14 分鐘看完聖經的故事\n完整影片（14 分鐘）與文字版聖經故事: https://one-scroll-bible.com/film/?lang=zh-Hant\n\n#Shorts #聖經 #聖經故事",
      "tags": [
       "一卷讀懂聖經",
@@ -9019,7 +9019,7 @@
       "族長時代"
      ],
      "language": "zh-Hant",
-     "seconds": 36.0,
+     "seconds": 36,
      "captions": {
       "en": "motion/subs/en/v/09-exile.srt",
       "es": "motion/subs/es/v/09-exile.srt",
@@ -9039,7 +9039,7 @@
      "scene": "return",
      "file": "shorts-zh-Hant-10-return.mp4",
      "local": "motion/out/release/shorts-zh-Hant-10-return.mp4",
-     "title": "被擄歸回 · 第 10/21 場景 · 一卷讀懂聖經",
+     "title": "因靠耶和華而得的喜樂是你們的力量 — 被擄歸回 10/21",
      "description": "從創造到新天新地——14 分鐘看完聖經的故事\n完整影片（14 分鐘）與文字版聖經故事: https://one-scroll-bible.com/film/?lang=zh-Hant\n\n#Shorts #聖經 #聖經故事",
      "tags": [
       "一卷讀懂聖經",
@@ -9056,7 +9056,7 @@
       "族長時代"
      ],
      "language": "zh-Hant",
-     "seconds": 38.0,
+     "seconds": 38,
      "captions": {
       "en": "motion/subs/en/v/10-return.srt",
       "es": "motion/subs/es/v/10-return.srt",
@@ -9076,7 +9076,7 @@
      "scene": "silence",
      "file": "shorts-zh-Hant-11-silence.mp4",
      "local": "motion/out/release/shorts-zh-Hant-11-silence.mp4",
-     "title": "四百年的沉默 · 第 11/21 場景 · 一卷讀懂聖經",
+     "title": "四百年沒有先知的聲音 — 四百年的沉默 11/21",
      "description": "從創造到新天新地——14 分鐘看完聖經的故事\n完整影片（14 分鐘）與文字版聖經故事: https://one-scroll-bible.com/film/?lang=zh-Hant\n\n#Shorts #聖經 #聖經故事",
      "tags": [
       "一卷讀懂聖經",
@@ -9093,7 +9093,7 @@
       "族長時代"
      ],
      "language": "zh-Hant",
-     "seconds": 34.0,
+     "seconds": 34,
      "captions": {
       "en": "motion/subs/en/v/11-silence.srt",
       "es": "motion/subs/es/v/11-silence.srt",
@@ -9113,7 +9113,7 @@
      "scene": "advent",
      "file": "shorts-zh-Hant-12-advent.mp4",
      "local": "motion/out/release/shorts-zh-Hant-12-advent.mp4",
-     "title": "耶穌降臨 · 第 12/21 場景 · 一卷讀懂聖經",
+     "title": "「道成了肉身，住在我們中間」 — 耶穌降臨 12/21",
      "description": "從創造到新天新地——14 分鐘看完聖經的故事\n完整影片（14 分鐘）與文字版聖經故事: https://one-scroll-bible.com/film/?lang=zh-Hant\n\n#Shorts #聖經 #聖經故事",
      "tags": [
       "一卷讀懂聖經",
@@ -9130,7 +9130,7 @@
       "族長時代"
      ],
      "language": "zh-Hant",
-     "seconds": 36.0,
+     "seconds": 36,
      "captions": {
       "en": "motion/subs/en/v/12-advent.srt",
       "es": "motion/subs/es/v/12-advent.srt",
@@ -9150,7 +9150,7 @@
      "scene": "cross",
      "file": "shorts-zh-Hant-13-cross.mp4",
      "local": "motion/out/release/shorts-zh-Hant-13-cross.mp4",
-     "title": "十字架 · 第 13/21 場景 · 一卷讀懂聖經",
+     "title": "那本該被釘十字架的，正是我。 — 十字架 13/21",
      "description": "從創造到新天新地——14 分鐘看完聖經的故事\n完整影片（14 分鐘）與文字版聖經故事: https://one-scroll-bible.com/film/?lang=zh-Hant\n\n#Shorts #聖經 #聖經故事",
      "tags": [
       "一卷讀懂聖經",
@@ -9167,7 +9167,7 @@
       "族長時代"
      ],
      "language": "zh-Hant",
-     "seconds": 39.0,
+     "seconds": 39,
      "captions": {
       "en": "motion/subs/en/v/13-cross.srt",
       "es": "motion/subs/es/v/13-cross.srt",
@@ -9187,7 +9187,7 @@
      "scene": "rise",
      "file": "shorts-zh-Hant-14-rise.mp4",
      "local": "motion/out/release/shorts-zh-Hant-14-rise.mp4",
-     "title": "復活 · 第 14/21 場景 · 一卷讀懂聖經",
+     "title": "「照他所說的，已經復活了」 — 復活 14/21",
      "description": "從創造到新天新地——14 分鐘看完聖經的故事\n完整影片（14 分鐘）與文字版聖經故事: https://one-scroll-bible.com/film/?lang=zh-Hant\n\n#Shorts #聖經 #聖經故事",
      "tags": [
       "一卷讀懂聖經",
@@ -9204,7 +9204,7 @@
       "族長時代"
      ],
      "language": "zh-Hant",
-     "seconds": 27.0,
+     "seconds": 27,
      "captions": {
       "en": "motion/subs/en/v/14-rise.srt",
       "es": "motion/subs/es/v/14-rise.srt",
@@ -9224,7 +9224,7 @@
      "scene": "church",
      "file": "shorts-zh-Hant-15-church.mp4",
      "local": "motion/out/release/shorts-zh-Hant-15-church.mp4",
-     "title": "教會的開始 · 第 15/21 場景 · 一卷讀懂聖經",
+     "title": "「……直到地極，作我的見證」 — 教會的開始 15/21",
      "description": "從創造到新天新地——14 分鐘看完聖經的故事\n完整影片（14 分鐘）與文字版聖經故事: https://one-scroll-bible.com/film/?lang=zh-Hant\n\n#Shorts #聖經 #聖經故事",
      "tags": [
       "一卷讀懂聖經",
@@ -9241,7 +9241,7 @@
       "族長時代"
      ],
      "language": "zh-Hant",
-     "seconds": 35.0,
+     "seconds": 35,
      "captions": {
       "en": "motion/subs/en/v/15-church.srt",
       "es": "motion/subs/es/v/15-church.srt",
@@ -9261,7 +9261,7 @@
      "scene": "renewal",
      "file": "shorts-zh-Hant-16-renewal.mp4",
      "local": "motion/out/release/shorts-zh-Hant-16-renewal.mp4",
-     "title": "復興（萬物更新） · 第 16/21 場景 · 一卷讀懂聖經",
+     "title": "「神要擦去他們一切的眼淚」 — 復興（萬物更新） 16/21",
      "description": "從創造到新天新地——14 分鐘看完聖經的故事\n完整影片（14 分鐘）與文字版聖經故事: https://one-scroll-bible.com/film/?lang=zh-Hant\n\n#Shorts #聖經 #聖經故事",
      "tags": [
       "一卷讀懂聖經",
@@ -9278,7 +9278,7 @@
       "族長時代"
      ],
      "language": "zh-Hant",
-     "seconds": 36.0,
+     "seconds": 36,
      "captions": {
       "en": "motion/subs/en/v/16-renewal.srt",
       "es": "motion/subs/es/v/16-renewal.srt",
@@ -9298,7 +9298,7 @@
      "scene": "mirror",
      "file": "shorts-zh-Hant-17-mirror.mp4",
      "local": "motion/out/release/shorts-zh-Hant-17-mirror.mp4",
-     "title": "鏡子 · 第 17/21 場景 · 一卷讀懂聖經",
+     "title": "歸根到底，最深的偶像是「坐在神位上的我自己」。 — 鏡子 17/21",
      "description": "從創造到新天新地——14 分鐘看完聖經的故事\n完整影片（14 分鐘）與文字版聖經故事: https://one-scroll-bible.com/film/?lang=zh-Hant\n\n#Shorts #聖經 #聖經故事",
      "tags": [
       "一卷讀懂聖經",
@@ -9335,7 +9335,7 @@
      "scene": "gospel",
      "file": "shorts-zh-Hant-18-gospel.mp4",
      "local": "motion/out/release/shorts-zh-Hant-18-gospel.mp4",
-     "title": "福音的核心 · 第 18/21 場景 · 一卷讀懂聖經",
+     "title": "不是「去做」，而是「成了」 — 福音的核心 18/21",
      "description": "從創造到新天新地——14 分鐘看完聖經的故事\n完整影片（14 分鐘）與文字版聖經故事: https://one-scroll-bible.com/film/?lang=zh-Hant\n\n#Shorts #聖經 #聖經故事",
      "tags": [
       "一卷讀懂聖經",
@@ -9372,7 +9372,7 @@
      "scene": "evidence",
      "file": "shorts-zh-Hant-19-evidence.mp4",
      "local": "motion/out/release/shorts-zh-Hant-19-evidence.mp4",
-     "title": "聖經是真實的嗎？ · 第 19/21 場景 · 一卷讀懂聖經",
+     "title": "聖經真的是真實的故事嗎？ 19/21",
      "description": "從創造到新天新地——14 分鐘看完聖經的故事\n完整影片（14 分鐘）與文字版聖經故事: https://one-scroll-bible.com/film/?lang=zh-Hant\n\n#Shorts #聖經 #聖經故事",
      "tags": [
       "一卷讀懂聖經",
@@ -9389,7 +9389,7 @@
       "族長時代"
      ],
      "language": "zh-Hant",
-     "seconds": 60.0,
+     "seconds": 60,
      "captions": {
       "en": "motion/subs/en/v/19-evidence.srt",
       "es": "motion/subs/es/v/19-evidence.srt",
@@ -9409,7 +9409,7 @@
      "scene": "ship",
      "file": "shorts-zh-Hant-20-ship.mp4",
      "local": "motion/out/release/shorts-zh-Hant-20-ship.mp4",
-     "title": "做好人就夠了嗎？ · 第 20/21 場景 · 一卷讀懂聖經",
+     "title": "不信耶穌，只要好好做個好人不行嗎？ — 做好人就夠了嗎？ 20/21",
      "description": "從創造到新天新地——14 分鐘看完聖經的故事\n完整影片（14 分鐘）與文字版聖經故事: https://one-scroll-bible.com/film/?lang=zh-Hant\n\n#Shorts #聖經 #聖經故事",
      "tags": [
       "一卷讀懂聖經",
@@ -9446,7 +9446,7 @@
      "scene": "invite",
      "file": "shorts-zh-Hant-21-invite.mp4",
      "local": "motion/out/release/shorts-zh-Hant-21-invite.mp4",
-     "title": "邀請 · 第 21/21 場景 · 一卷讀懂聖經",
+     "title": "這份愛不是信息，而是邀請。 — 邀請 21/21",
      "description": "從創造到新天新地——14 分鐘看完聖經的故事\n完整影片（14 分鐘）與文字版聖經故事: https://one-scroll-bible.com/film/?lang=zh-Hant\n\n#Shorts #聖經 #聖經故事",
      "tags": [
       "一卷讀懂聖經",
@@ -9463,7 +9463,7 @@
       "族長時代"
      ],
      "language": "zh-Hant",
-     "seconds": 57.0,
+     "seconds": 57,
      "captions": {
       "en": "motion/subs/en/v/21-invite.srt",
       "es": "motion/subs/es/v/21-invite.srt",
@@ -9541,32 +9541,32 @@
     "chapters": [
      {
       "time": "0:00",
-      "seconds": 0.0,
+      "seconds": 0,
       "title": "一つの物語"
      },
      {
       "time": "0:36",
-      "seconds": 36.0,
+      "seconds": 36,
       "title": "創造"
      },
      {
       "time": "1:11",
-      "seconds": 71.0,
+      "seconds": 71,
       "title": "堕落"
      },
      {
       "time": "1:45",
-      "seconds": 105.0,
+      "seconds": 105,
       "title": "族長"
      },
      {
       "time": "2:11",
-      "seconds": 131.0,
+      "seconds": 131,
       "title": "出エジプト"
      },
      {
       "time": "2:55",
-      "seconds": 175.0,
+      "seconds": 175,
       "title": "荒れ野の旅"
      },
      {
@@ -9626,7 +9626,7 @@
      },
      {
       "time": "10:19",
-      "seconds": 619.0,
+      "seconds": 619,
       "title": "福音の核心"
      },
      {
@@ -9654,7 +9654,7 @@
      "scene": "opening",
      "file": "shorts-ja-01-opening.mp4",
      "local": "motion/out/release/shorts-ja-01-opening.mp4",
-     "title": "一つの物語 · 場面 1/21 · ひと目でわかる聖書の物語",
+     "title": "聖書は結局、一つの物語です 1/21",
      "description": "創造から新しい天と地まで——聖書の物語を14分の映像で\n全編（14分）と文章で読む聖書の物語: https://one-scroll-bible.com/film/?lang=ja\n\n#Shorts #聖書 #聖書の物語",
      "tags": [
       "ひと目でわかる聖書の物語",
@@ -9671,7 +9671,7 @@
       "族長"
      ],
      "language": "ja",
-     "seconds": 36.0,
+     "seconds": 36,
      "captions": {
       "en": "motion/subs/en/v/01-opening.srt",
       "es": "motion/subs/es/v/01-opening.srt",
@@ -9691,7 +9691,7 @@
      "scene": "creation",
      "file": "shorts-ja-02-creation.mp4",
      "local": "motion/out/release/shorts-ja-02-creation.mp4",
-     "title": "創造 · 場面 2/21 · ひと目でわかる聖書の物語",
+     "title": "「神は言われた。『光あれ。』」 — 創造 2/21",
      "description": "創造から新しい天と地まで——聖書の物語を14分の映像で\n全編（14分）と文章で読む聖書の物語: https://one-scroll-bible.com/film/?lang=ja\n\n#Shorts #聖書 #聖書の物語",
      "tags": [
       "ひと目でわかる聖書の物語",
@@ -9708,7 +9708,7 @@
       "族長"
      ],
      "language": "ja",
-     "seconds": 35.0,
+     "seconds": 35,
      "captions": {
       "en": "motion/subs/en/v/02-creation.srt",
       "es": "motion/subs/es/v/02-creation.srt",
@@ -9728,7 +9728,7 @@
      "scene": "fall",
      "file": "shorts-ja-03-fall.mp4",
      "local": "motion/out/release/shorts-ja-03-fall.mp4",
-     "title": "堕落 · 場面 3/21 · ひと目でわかる聖書の物語",
+     "title": "「どこにいるのか。」 — 堕落 3/21",
      "description": "創造から新しい天と地まで——聖書の物語を14分の映像で\n全編（14分）と文章で読む聖書の物語: https://one-scroll-bible.com/film/?lang=ja\n\n#Shorts #聖書 #聖書の物語",
      "tags": [
       "ひと目でわかる聖書の物語",
@@ -9745,7 +9745,7 @@
       "族長"
      ],
      "language": "ja",
-     "seconds": 34.0,
+     "seconds": 34,
      "captions": {
       "en": "motion/subs/en/v/03-fall.srt",
       "es": "motion/subs/es/v/03-fall.srt",
@@ -9765,7 +9765,7 @@
      "scene": "patriarch",
      "file": "shorts-ja-04-patriarch.mp4",
      "local": "motion/out/release/shorts-ja-04-patriarch.mp4",
-     "title": "族長 · 場面 4/21 · ひと目でわかる聖書の物語",
+     "title": "「天を仰いで、星を数えることができるなら、数えてみるがよい。」 — 族長 4/21",
      "description": "創造から新しい天と地まで——聖書の物語を14分の映像で\n全編（14分）と文章で読む聖書の物語: https://one-scroll-bible.com/film/?lang=ja\n\n#Shorts #聖書 #聖書の物語",
      "tags": [
       "ひと目でわかる聖書の物語",
@@ -9782,7 +9782,7 @@
       "族長"
      ],
      "language": "ja",
-     "seconds": 26.0,
+     "seconds": 26,
      "captions": {
       "en": "motion/subs/en/v/04-patriarch.srt",
       "es": "motion/subs/es/v/04-patriarch.srt",
@@ -9802,7 +9802,7 @@
      "scene": "exodus",
      "file": "shorts-ja-05-exodus.mp4",
      "local": "motion/out/release/shorts-ja-05-exodus.mp4",
-     "title": "出エジプト · 場面 5/21 · ひと目でわかる聖書の物語",
+     "title": "「わたしの民を去らせて……」 — 出エジプト 5/21",
      "description": "創造から新しい天と地まで——聖書の物語を14分の映像で\n全編（14分）と文章で読む聖書の物語: https://one-scroll-bible.com/film/?lang=ja\n\n#Shorts #聖書 #聖書の物語",
      "tags": [
       "ひと目でわかる聖書の物語",
@@ -9819,7 +9819,7 @@
       "族長"
      ],
      "language": "ja",
-     "seconds": 44.0,
+     "seconds": 44,
      "captions": {
       "en": "motion/subs/en/v/05-exodus.srt",
       "es": "motion/subs/es/v/05-exodus.srt",
@@ -9839,7 +9839,7 @@
      "scene": "wilderness",
      "file": "shorts-ja-06-wilderness.mp4",
      "local": "motion/out/release/shorts-ja-06-wilderness.mp4",
-     "title": "荒れ野の旅 · 場面 6/21 · ひと目でわかる聖書の物語",
+     "title": "約束の地の入り口に立ち、いよいよ入ろうとします…… — 荒れ野の旅 6/21",
      "description": "創造から新しい天と地まで——聖書の物語を14分の映像で\n全編（14分）と文章で読む聖書の物語: https://one-scroll-bible.com/film/?lang=ja\n\n#Shorts #聖書 #聖書の物語",
      "tags": [
       "ひと目でわかる聖書の物語",
@@ -9876,7 +9876,7 @@
      "scene": "judges",
      "file": "shorts-ja-07-judges.mp4",
      "local": "motion/out/release/shorts-ja-07-judges.mp4",
-     "title": "士師の時代 · 場面 7/21 · ひと目でわかる聖書の物語",
+     "title": "王がなく、人々は思いのままにふるまった。 — 士師の時代 7/21",
      "description": "創造から新しい天と地まで——聖書の物語を14分の映像で\n全編（14分）と文章で読む聖書の物語: https://one-scroll-bible.com/film/?lang=ja\n\n#Shorts #聖書 #聖書の物語",
      "tags": [
       "ひと目でわかる聖書の物語",
@@ -9893,7 +9893,7 @@
       "族長"
      ],
      "language": "ja",
-     "seconds": 40.0,
+     "seconds": 40,
      "captions": {
       "en": "motion/subs/en/v/07-judges.srt",
       "es": "motion/subs/es/v/07-judges.srt",
@@ -9913,7 +9913,7 @@
      "scene": "kingdom",
      "file": "shorts-ja-08-kingdom.mp4",
      "local": "motion/out/release/shorts-ja-08-kingdom.mp4",
-     "title": "統一王国 · 場面 8/21 · ひと目でわかる聖書の物語",
+     "title": "人は目に映ることを見るが、主は心によって見る。 — 統一王国 8/21",
      "description": "創造から新しい天と地まで——聖書の物語を14分の映像で\n全編（14分）と文章で読む聖書の物語: https://one-scroll-bible.com/film/?lang=ja\n\n#Shorts #聖書 #聖書の物語",
      "tags": [
       "ひと目でわかる聖書の物語",
@@ -9930,7 +9930,7 @@
       "族長"
      ],
      "language": "ja",
-     "seconds": 39.0,
+     "seconds": 39,
      "captions": {
       "en": "motion/subs/en/v/08-kingdom.srt",
       "es": "motion/subs/es/v/08-kingdom.srt",
@@ -9950,7 +9950,7 @@
      "scene": "exile",
      "file": "shorts-ja-09-exile.mp4",
      "local": "motion/out/release/shorts-ja-09-exile.mp4",
-     "title": "分裂 · 捕囚 · 場面 9/21 · ひと目でわかる聖書の物語",
+     "title": "神殿は焼け、民はバビロンへ引かれます。 — 分裂 · 捕囚 9/21",
      "description": "創造から新しい天と地まで——聖書の物語を14分の映像で\n全編（14分）と文章で読む聖書の物語: https://one-scroll-bible.com/film/?lang=ja\n\n#Shorts #聖書 #聖書の物語",
      "tags": [
       "ひと目でわかる聖書の物語",
@@ -9967,7 +9967,7 @@
       "族長"
      ],
      "language": "ja",
-     "seconds": 36.0,
+     "seconds": 36,
      "captions": {
       "en": "motion/subs/en/v/09-exile.srt",
       "es": "motion/subs/es/v/09-exile.srt",
@@ -9987,7 +9987,7 @@
      "scene": "return",
      "file": "shorts-ja-10-return.mp4",
      "local": "motion/out/release/shorts-ja-10-return.mp4",
-     "title": "捕囚からの帰還 · 場面 10/21 · ひと目でわかる聖書の物語",
+     "title": "主を喜び祝うことこそ、あなたたちの力の源である。 — 捕囚からの帰還 10/21",
      "description": "創造から新しい天と地まで——聖書の物語を14分の映像で\n全編（14分）と文章で読む聖書の物語: https://one-scroll-bible.com/film/?lang=ja\n\n#Shorts #聖書 #聖書の物語",
      "tags": [
       "ひと目でわかる聖書の物語",
@@ -10004,7 +10004,7 @@
       "族長"
      ],
      "language": "ja",
-     "seconds": 38.0,
+     "seconds": 38,
      "captions": {
       "en": "motion/subs/en/v/10-return.srt",
       "es": "motion/subs/es/v/10-return.srt",
@@ -10024,7 +10024,7 @@
      "scene": "silence",
      "file": "shorts-ja-11-silence.mp4",
      "local": "motion/out/release/shorts-ja-11-silence.mp4",
-     "title": "四百年の沈黙 · 場面 11/21 · ひと目でわかる聖書の物語",
+     "title": "四百年、預言者の声が絶えた — 四百年の沈黙 11/21",
      "description": "創造から新しい天と地まで——聖書の物語を14分の映像で\n全編（14分）と文章で読む聖書の物語: https://one-scroll-bible.com/film/?lang=ja\n\n#Shorts #聖書 #聖書の物語",
      "tags": [
       "ひと目でわかる聖書の物語",
@@ -10041,7 +10041,7 @@
       "族長"
      ],
      "language": "ja",
-     "seconds": 34.0,
+     "seconds": 34,
      "captions": {
       "en": "motion/subs/en/v/11-silence.srt",
       "es": "motion/subs/es/v/11-silence.srt",
@@ -10061,7 +10061,7 @@
      "scene": "advent",
      "file": "shorts-ja-12-advent.mp4",
      "local": "motion/out/release/shorts-ja-12-advent.mp4",
-     "title": "イエスの降誕 · 場面 12/21 · ひと目でわかる聖書の物語",
+     "title": "「言は肉となって、わたしたちの間に宿られた。」 — イエスの降誕 12/21",
      "description": "創造から新しい天と地まで——聖書の物語を14分の映像で\n全編（14分）と文章で読む聖書の物語: https://one-scroll-bible.com/film/?lang=ja\n\n#Shorts #聖書 #聖書の物語",
      "tags": [
       "ひと目でわかる聖書の物語",
@@ -10078,7 +10078,7 @@
       "族長"
      ],
      "language": "ja",
-     "seconds": 36.0,
+     "seconds": 36,
      "captions": {
       "en": "motion/subs/en/v/12-advent.srt",
       "es": "motion/subs/es/v/12-advent.srt",
@@ -10098,7 +10098,7 @@
      "scene": "cross",
      "file": "shorts-ja-13-cross.mp4",
      "local": "motion/out/release/shorts-ja-13-cross.mp4",
-     "title": "十字架 · 場面 13/21 · ひと目でわかる聖書の物語",
+     "title": "その十字架にかかるべきだったのは、ほかならぬわたしでした。 — 十字架 13/21",
      "description": "創造から新しい天と地まで——聖書の物語を14分の映像で\n全編（14分）と文章で読む聖書の物語: https://one-scroll-bible.com/film/?lang=ja\n\n#Shorts #聖書 #聖書の物語",
      "tags": [
       "ひと目でわかる聖書の物語",
@@ -10115,7 +10115,7 @@
       "族長"
      ],
      "language": "ja",
-     "seconds": 39.0,
+     "seconds": 39,
      "captions": {
       "en": "motion/subs/en/v/13-cross.srt",
       "es": "motion/subs/es/v/13-cross.srt",
@@ -10135,7 +10135,7 @@
      "scene": "rise",
      "file": "shorts-ja-14-rise.mp4",
      "local": "motion/out/release/shorts-ja-14-rise.mp4",
-     "title": "復活 · 場面 14/21 · ひと目でわかる聖書の物語",
+     "title": "「かねて言われていたとおり、復活なさったのだ。」 — 復活 14/21",
      "description": "創造から新しい天と地まで——聖書の物語を14分の映像で\n全編（14分）と文章で読む聖書の物語: https://one-scroll-bible.com/film/?lang=ja\n\n#Shorts #聖書 #聖書の物語",
      "tags": [
       "ひと目でわかる聖書の物語",
@@ -10152,7 +10152,7 @@
       "族長"
      ],
      "language": "ja",
-     "seconds": 27.0,
+     "seconds": 27,
      "captions": {
       "en": "motion/subs/en/v/14-rise.srt",
       "es": "motion/subs/es/v/14-rise.srt",
@@ -10172,7 +10172,7 @@
      "scene": "church",
      "file": "shorts-ja-15-church.mp4",
      "local": "motion/out/release/shorts-ja-15-church.mp4",
-     "title": "教会 · 場面 15/21 · ひと目でわかる聖書の物語",
+     "title": "「……地の果てに至るまで、わたしの証人となる。」 — 教会 15/21",
      "description": "創造から新しい天と地まで——聖書の物語を14分の映像で\n全編（14分）と文章で読む聖書の物語: https://one-scroll-bible.com/film/?lang=ja\n\n#Shorts #聖書 #聖書の物語",
      "tags": [
       "ひと目でわかる聖書の物語",
@@ -10189,7 +10189,7 @@
       "族長"
      ],
      "language": "ja",
-     "seconds": 35.0,
+     "seconds": 35,
      "captions": {
       "en": "motion/subs/en/v/15-church.srt",
       "es": "motion/subs/es/v/15-church.srt",
@@ -10209,7 +10209,7 @@
      "scene": "renewal",
      "file": "shorts-ja-16-renewal.mp4",
      "local": "motion/out/release/shorts-ja-16-renewal.mp4",
-     "title": "回復 · 場面 16/21 · ひと目でわかる聖書の物語",
+     "title": "「彼らの目の涙をことごとくぬぐい取ってくださる。」 — 回復 16/21",
      "description": "創造から新しい天と地まで——聖書の物語を14分の映像で\n全編（14分）と文章で読む聖書の物語: https://one-scroll-bible.com/film/?lang=ja\n\n#Shorts #聖書 #聖書の物語",
      "tags": [
       "ひと目でわかる聖書の物語",
@@ -10226,7 +10226,7 @@
       "族長"
      ],
      "language": "ja",
-     "seconds": 36.0,
+     "seconds": 36,
      "captions": {
       "en": "motion/subs/en/v/16-renewal.srt",
       "es": "motion/subs/es/v/16-renewal.srt",
@@ -10246,7 +10246,7 @@
      "scene": "mirror",
      "file": "shorts-ja-17-mirror.mp4",
      "local": "motion/out/release/shorts-ja-17-mirror.mp4",
-     "title": "鏡 · 場面 17/21 · ひと目でわかる聖書の物語",
+     "title": "結局、最も深い偶像は「神の座に着いた自分自身」です。 — 鏡 17/21",
      "description": "創造から新しい天と地まで——聖書の物語を14分の映像で\n全編（14分）と文章で読む聖書の物語: https://one-scroll-bible.com/film/?lang=ja\n\n#Shorts #聖書 #聖書の物語",
      "tags": [
       "ひと目でわかる聖書の物語",
@@ -10283,7 +10283,7 @@
      "scene": "gospel",
      "file": "shorts-ja-18-gospel.mp4",
      "local": "motion/out/release/shorts-ja-18-gospel.mp4",
-     "title": "福音の核心 · 場面 18/21 · ひと目でわかる聖書の物語",
+     "title": "「行え」ではなく「成し遂げられた」 — 福音の核心 18/21",
      "description": "創造から新しい天と地まで——聖書の物語を14分の映像で\n全編（14分）と文章で読む聖書の物語: https://one-scroll-bible.com/film/?lang=ja\n\n#Shorts #聖書 #聖書の物語",
      "tags": [
       "ひと目でわかる聖書の物語",
@@ -10320,7 +10320,7 @@
      "scene": "evidence",
      "file": "shorts-ja-19-evidence.mp4",
      "local": "motion/out/release/shorts-ja-19-evidence.mp4",
-     "title": "聖書は実話か · 場面 19/21 · ひと目でわかる聖書の物語",
+     "title": "聖書は本当に実話なのでしょうか。 19/21",
      "description": "創造から新しい天と地まで——聖書の物語を14分の映像で\n全編（14分）と文章で読む聖書の物語: https://one-scroll-bible.com/film/?lang=ja\n\n#Shorts #聖書 #聖書の物語",
      "tags": [
       "ひと目でわかる聖書の物語",
@@ -10337,7 +10337,7 @@
       "族長"
      ],
      "language": "ja",
-     "seconds": 60.0,
+     "seconds": 60,
      "captions": {
       "en": "motion/subs/en/v/19-evidence.srt",
       "es": "motion/subs/es/v/19-evidence.srt",
@@ -10357,7 +10357,7 @@
      "scene": "ship",
      "file": "shorts-ja-20-ship.mp4",
      "local": "motion/out/release/shorts-ja-20-ship.mp4",
-     "title": "善く生きれば？ · 場面 20/21 · ひと目でわかる聖書の物語",
+     "title": "イエスを信じなくても、ただ善く生きればいいのでは？ — 善く生きれば？ 20/21",
      "description": "創造から新しい天と地まで——聖書の物語を14分の映像で\n全編（14分）と文章で読む聖書の物語: https://one-scroll-bible.com/film/?lang=ja\n\n#Shorts #聖書 #聖書の物語",
      "tags": [
       "ひと目でわかる聖書の物語",
@@ -10394,7 +10394,7 @@
      "scene": "invite",
      "file": "shorts-ja-21-invite.mp4",
      "local": "motion/out/release/shorts-ja-21-invite.mp4",
-     "title": "招き · 場面 21/21 · ひと目でわかる聖書の物語",
+     "title": "この愛は情報ではなく、招きです。 — 招き 21/21",
      "description": "創造から新しい天と地まで——聖書の物語を14分の映像で\n全編（14分）と文章で読む聖書の物語: https://one-scroll-bible.com/film/?lang=ja\n\n#Shorts #聖書 #聖書の物語",
      "tags": [
       "ひと目でわかる聖書の物語",
@@ -10411,7 +10411,7 @@
       "族長"
      ],
      "language": "ja",
-     "seconds": 57.0,
+     "seconds": 57,
      "captions": {
       "en": "motion/subs/en/v/21-invite.srt",
       "es": "motion/subs/es/v/21-invite.srt",
@@ -10489,32 +10489,32 @@
     "chapters": [
      {
       "time": "0:00",
-      "seconds": 0.0,
+      "seconds": 0,
       "title": "قصة واحدة"
      },
      {
       "time": "0:36",
-      "seconds": 36.0,
+      "seconds": 36,
       "title": "الخلق"
      },
      {
       "time": "1:11",
-      "seconds": 71.0,
+      "seconds": 71,
       "title": "السقوط"
      },
      {
       "time": "1:45",
-      "seconds": 105.0,
+      "seconds": 105,
       "title": "عصر الآباء"
      },
      {
       "time": "2:11",
-      "seconds": 131.0,
+      "seconds": 131,
       "title": "الخروج"
      },
      {
       "time": "2:55",
-      "seconds": 175.0,
+      "seconds": 175,
       "title": "رحلة البرية"
      },
      {
@@ -10574,7 +10574,7 @@
      },
      {
       "time": "10:19",
-      "seconds": 619.0,
+      "seconds": 619,
       "title": "جوهر الإنجيل"
      },
      {
@@ -10602,7 +10602,7 @@
      "scene": "opening",
      "file": "shorts-ar-01-opening.mp4",
      "local": "motion/out/release/shorts-ar-01-opening.mp4",
-     "title": "قصة واحدة · المشهد 1 من 21 · الكتاب المقدس في لمحة",
+     "title": "الكتاب المقدس في النهاية قصة واحدة 1/21",
      "description": "من الخلق إلى السماء الجديدة والأرض الجديدة — قصة الكتاب المقدس في 14 دقيقة\nالفيلم الكامل (14 دقيقة) والقصة مكتوبة: https://one-scroll-bible.com/film/?lang=ar\n\n#Shorts #الكتابالمقدس #قصةالكتابالمقدس",
      "tags": [
       "الكتاب المقدس في لمحة",
@@ -10619,7 +10619,7 @@
       "عصر الآباء"
      ],
      "language": "ar",
-     "seconds": 36.0,
+     "seconds": 36,
      "captions": {
       "en": "motion/subs/en/v/01-opening.srt",
       "es": "motion/subs/es/v/01-opening.srt",
@@ -10639,7 +10639,7 @@
      "scene": "creation",
      "file": "shorts-ar-02-creation.mp4",
      "local": "motion/out/release/shorts-ar-02-creation.mp4",
-     "title": "الخلق · المشهد 2 من 21 · الكتاب المقدس في لمحة",
+     "title": "«وَقَالَ ٱللهُ: لِيَكُنْ نُورٌ» — الخلق 2/21",
      "description": "من الخلق إلى السماء الجديدة والأرض الجديدة — قصة الكتاب المقدس في 14 دقيقة\nالفيلم الكامل (14 دقيقة) والقصة مكتوبة: https://one-scroll-bible.com/film/?lang=ar\n\n#Shorts #الكتابالمقدس #قصةالكتابالمقدس",
      "tags": [
       "الكتاب المقدس في لمحة",
@@ -10656,7 +10656,7 @@
       "عصر الآباء"
      ],
      "language": "ar",
-     "seconds": 35.0,
+     "seconds": 35,
      "captions": {
       "en": "motion/subs/en/v/02-creation.srt",
       "es": "motion/subs/es/v/02-creation.srt",
@@ -10676,7 +10676,7 @@
      "scene": "fall",
      "file": "shorts-ar-03-fall.mp4",
      "local": "motion/out/release/shorts-ar-03-fall.mp4",
-     "title": "السقوط · المشهد 3 من 21 · الكتاب المقدس في لمحة",
+     "title": "«أَيْنَ أَنْتَ؟» — السقوط 3/21",
      "description": "من الخلق إلى السماء الجديدة والأرض الجديدة — قصة الكتاب المقدس في 14 دقيقة\nالفيلم الكامل (14 دقيقة) والقصة مكتوبة: https://one-scroll-bible.com/film/?lang=ar\n\n#Shorts #الكتابالمقدس #قصةالكتابالمقدس",
      "tags": [
       "الكتاب المقدس في لمحة",
@@ -10693,7 +10693,7 @@
       "عصر الآباء"
      ],
      "language": "ar",
-     "seconds": 34.0,
+     "seconds": 34,
      "captions": {
       "en": "motion/subs/en/v/03-fall.srt",
       "es": "motion/subs/es/v/03-fall.srt",
@@ -10713,7 +10713,7 @@
      "scene": "patriarch",
      "file": "shorts-ar-04-patriarch.mp4",
      "local": "motion/out/release/shorts-ar-04-patriarch.mp4",
-     "title": "عصر الآباء · المشهد 4 من 21 · الكتاب المقدس في لمحة",
+     "title": "«ٱنْظُرْ إِلَى ٱلسَّمَاءِ وَعُدَّ ٱلنُّجُومَ إِنِ ٱسْتَطَعْتَ أَنْ تَعُدَّهَا» — عصر الآباء 4/21",
      "description": "من الخلق إلى السماء الجديدة والأرض الجديدة — قصة الكتاب المقدس في 14 دقيقة\nالفيلم الكامل (14 دقيقة) والقصة مكتوبة: https://one-scroll-bible.com/film/?lang=ar\n\n#Shorts #الكتابالمقدس #قصةالكتابالمقدس",
      "tags": [
       "الكتاب المقدس في لمحة",
@@ -10730,7 +10730,7 @@
       "عصر الآباء"
      ],
      "language": "ar",
-     "seconds": 26.0,
+     "seconds": 26,
      "captions": {
       "en": "motion/subs/en/v/04-patriarch.srt",
       "es": "motion/subs/es/v/04-patriarch.srt",
@@ -10750,7 +10750,7 @@
      "scene": "exodus",
      "file": "shorts-ar-05-exodus.mp4",
      "local": "motion/out/release/shorts-ar-05-exodus.mp4",
-     "title": "الخروج · المشهد 5 من 21 · الكتاب المقدس في لمحة",
+     "title": "«أَطْلِقْ شَعْبِي» — الخروج 5/21",
      "description": "من الخلق إلى السماء الجديدة والأرض الجديدة — قصة الكتاب المقدس في 14 دقيقة\nالفيلم الكامل (14 دقيقة) والقصة مكتوبة: https://one-scroll-bible.com/film/?lang=ar\n\n#Shorts #الكتابالمقدس #قصةالكتابالمقدس",
      "tags": [
       "الكتاب المقدس في لمحة",
@@ -10767,7 +10767,7 @@
       "عصر الآباء"
      ],
      "language": "ar",
-     "seconds": 44.0,
+     "seconds": 44,
      "captions": {
       "en": "motion/subs/en/v/05-exodus.srt",
       "es": "motion/subs/es/v/05-exodus.srt",
@@ -10787,7 +10787,7 @@
      "scene": "wilderness",
      "file": "shorts-ar-06-wilderness.mp4",
      "local": "motion/out/release/shorts-ar-06-wilderness.mp4",
-     "title": "رحلة البرية · المشهد 6 من 21 · الكتاب المقدس في لمحة",
+     "title": "وأمام أرض الموعد، يستعدون للدخول… — رحلة البرية 6/21",
      "description": "من الخلق إلى السماء الجديدة والأرض الجديدة — قصة الكتاب المقدس في 14 دقيقة\nالفيلم الكامل (14 دقيقة) والقصة مكتوبة: https://one-scroll-bible.com/film/?lang=ar\n\n#Shorts #الكتابالمقدس #قصةالكتابالمقدس",
      "tags": [
       "الكتاب المقدس في لمحة",
@@ -10824,7 +10824,7 @@
      "scene": "judges",
      "file": "shorts-ar-07-judges.mp4",
      "local": "motion/out/release/shorts-ar-07-judges.mp4",
-     "title": "عصر القضاة · المشهد 7 من 21 · الكتاب المقدس في لمحة",
+     "title": "لكن بلا ملك صار كل واحد يعمل ما يحسن في عينيه. — عصر القضاة 7/21",
      "description": "من الخلق إلى السماء الجديدة والأرض الجديدة — قصة الكتاب المقدس في 14 دقيقة\nالفيلم الكامل (14 دقيقة) والقصة مكتوبة: https://one-scroll-bible.com/film/?lang=ar\n\n#Shorts #الكتابالمقدس #قصةالكتابالمقدس",
      "tags": [
       "الكتاب المقدس في لمحة",
@@ -10841,7 +10841,7 @@
       "عصر الآباء"
      ],
      "language": "ar",
-     "seconds": 40.0,
+     "seconds": 40,
      "captions": {
       "en": "motion/subs/en/v/07-judges.srt",
       "es": "motion/subs/es/v/07-judges.srt",
@@ -10861,7 +10861,7 @@
      "scene": "kingdom",
      "file": "shorts-ar-08-kingdom.mp4",
      "local": "motion/out/release/shorts-ar-08-kingdom.mp4",
-     "title": "المملكة الموحَّدة · المشهد 8 من 21 · الكتاب المقدس في لمحة",
+     "title": "وَأَمَّا ٱلرَّبُّ فَإِنَّهُ يَنْظُرُ إِلَى ٱلْقَلْبِ — المملكة الموحَّدة 8/21",
      "description": "من الخلق إلى السماء الجديدة والأرض الجديدة — قصة الكتاب المقدس في 14 دقيقة\nالفيلم الكامل (14 دقيقة) والقصة مكتوبة: https://one-scroll-bible.com/film/?lang=ar\n\n#Shorts #الكتابالمقدس #قصةالكتابالمقدس",
      "tags": [
       "الكتاب المقدس في لمحة",
@@ -10878,7 +10878,7 @@
       "عصر الآباء"
      ],
      "language": "ar",
-     "seconds": 39.0,
+     "seconds": 39,
      "captions": {
       "en": "motion/subs/en/v/08-kingdom.srt",
       "es": "motion/subs/es/v/08-kingdom.srt",
@@ -10898,7 +10898,7 @@
      "scene": "exile",
      "file": "shorts-ar-09-exile.mp4",
      "local": "motion/out/release/shorts-ar-09-exile.mp4",
-     "title": "المملكة المنقسمة والسبي · المشهد 9 من 21 · الكتاب المقدس في لمحة",
+     "title": "يحترق الهيكل، ويُساق الشعب إلى بابل. — المملكة المنقسمة والسبي 9/21",
      "description": "من الخلق إلى السماء الجديدة والأرض الجديدة — قصة الكتاب المقدس في 14 دقيقة\nالفيلم الكامل (14 دقيقة) والقصة مكتوبة: https://one-scroll-bible.com/film/?lang=ar\n\n#Shorts #الكتابالمقدس #قصةالكتابالمقدس",
      "tags": [
       "الكتاب المقدس في لمحة",
@@ -10915,7 +10915,7 @@
       "عصر الآباء"
      ],
      "language": "ar",
-     "seconds": 36.0,
+     "seconds": 36,
      "captions": {
       "en": "motion/subs/en/v/09-exile.srt",
       "es": "motion/subs/es/v/09-exile.srt",
@@ -10935,7 +10935,7 @@
      "scene": "return",
      "file": "shorts-ar-10-return.mp4",
      "local": "motion/out/release/shorts-ar-10-return.mp4",
-     "title": "العودة من السبي · المشهد 10 من 21 · الكتاب المقدس في لمحة",
+     "title": "لِأَنَّ فَرَحَ ٱلرَّبِّ هُوَ قُوَّتُكُمْ — العودة من السبي 10/21",
      "description": "من الخلق إلى السماء الجديدة والأرض الجديدة — قصة الكتاب المقدس في 14 دقيقة\nالفيلم الكامل (14 دقيقة) والقصة مكتوبة: https://one-scroll-bible.com/film/?lang=ar\n\n#Shorts #الكتابالمقدس #قصةالكتابالمقدس",
      "tags": [
       "الكتاب المقدس في لمحة",
@@ -10952,7 +10952,7 @@
       "عصر الآباء"
      ],
      "language": "ar",
-     "seconds": 38.0,
+     "seconds": 38,
      "captions": {
       "en": "motion/subs/en/v/10-return.srt",
       "es": "motion/subs/es/v/10-return.srt",
@@ -10972,7 +10972,7 @@
      "scene": "silence",
      "file": "shorts-ar-11-silence.mp4",
      "local": "motion/out/release/shorts-ar-11-silence.mp4",
-     "title": "زمن الصمت · المشهد 11 من 21 · الكتاب المقدس في لمحة",
+     "title": "أربعمائة سنة بلا صوت نبوي — زمن الصمت 11/21",
      "description": "من الخلق إلى السماء الجديدة والأرض الجديدة — قصة الكتاب المقدس في 14 دقيقة\nالفيلم الكامل (14 دقيقة) والقصة مكتوبة: https://one-scroll-bible.com/film/?lang=ar\n\n#Shorts #الكتابالمقدس #قصةالكتابالمقدس",
      "tags": [
       "الكتاب المقدس في لمحة",
@@ -10989,7 +10989,7 @@
       "عصر الآباء"
      ],
      "language": "ar",
-     "seconds": 34.0,
+     "seconds": 34,
      "captions": {
       "en": "motion/subs/en/v/11-silence.srt",
       "es": "motion/subs/es/v/11-silence.srt",
@@ -11009,7 +11009,7 @@
      "scene": "advent",
      "file": "shorts-ar-12-advent.mp4",
      "local": "motion/out/release/shorts-ar-12-advent.mp4",
-     "title": "مجيء يسوع · المشهد 12 من 21 · الكتاب المقدس في لمحة",
+     "title": "«وَٱلْكَلِمَةُ صَارَ جَسَدًا وَحَلَّ بَيْنَنَا» — مجيء يسوع 12/21",
      "description": "من الخلق إلى السماء الجديدة والأرض الجديدة — قصة الكتاب المقدس في 14 دقيقة\nالفيلم الكامل (14 دقيقة) والقصة مكتوبة: https://one-scroll-bible.com/film/?lang=ar\n\n#Shorts #الكتابالمقدس #قصةالكتابالمقدس",
      "tags": [
       "الكتاب المقدس في لمحة",
@@ -11026,7 +11026,7 @@
       "عصر الآباء"
      ],
      "language": "ar",
-     "seconds": 36.0,
+     "seconds": 36,
      "captions": {
       "en": "motion/subs/en/v/12-advent.srt",
       "es": "motion/subs/es/v/12-advent.srt",
@@ -11046,7 +11046,7 @@
      "scene": "cross",
      "file": "shorts-ar-13-cross.mp4",
      "local": "motion/out/release/shorts-ar-13-cross.mp4",
-     "title": "الصليب · المشهد 13 من 21 · الكتاب المقدس في لمحة",
+     "title": "من كان يجب أن يكون على ذلك الصليب هو أنا. — الصليب 13/21",
      "description": "من الخلق إلى السماء الجديدة والأرض الجديدة — قصة الكتاب المقدس في 14 دقيقة\nالفيلم الكامل (14 دقيقة) والقصة مكتوبة: https://one-scroll-bible.com/film/?lang=ar\n\n#Shorts #الكتابالمقدس #قصةالكتابالمقدس",
      "tags": [
       "الكتاب المقدس في لمحة",
@@ -11063,7 +11063,7 @@
       "عصر الآباء"
      ],
      "language": "ar",
-     "seconds": 39.0,
+     "seconds": 39,
      "captions": {
       "en": "motion/subs/en/v/13-cross.srt",
       "es": "motion/subs/es/v/13-cross.srt",
@@ -11083,7 +11083,7 @@
      "scene": "rise",
      "file": "shorts-ar-14-rise.mp4",
      "local": "motion/out/release/shorts-ar-14-rise.mp4",
-     "title": "القيامة · المشهد 14 من 21 · الكتاب المقدس في لمحة",
+     "title": "«لِأَنَّهُ قَامَ كَمَا قَالَ!» — القيامة 14/21",
      "description": "من الخلق إلى السماء الجديدة والأرض الجديدة — قصة الكتاب المقدس في 14 دقيقة\nالفيلم الكامل (14 دقيقة) والقصة مكتوبة: https://one-scroll-bible.com/film/?lang=ar\n\n#Shorts #الكتابالمقدس #قصةالكتابالمقدس",
      "tags": [
       "الكتاب المقدس في لمحة",
@@ -11100,7 +11100,7 @@
       "عصر الآباء"
      ],
      "language": "ar",
-     "seconds": 27.0,
+     "seconds": 27,
      "captions": {
       "en": "motion/subs/en/v/14-rise.srt",
       "es": "motion/subs/es/v/14-rise.srt",
@@ -11120,7 +11120,7 @@
      "scene": "church",
      "file": "shorts-ar-15-church.mp4",
      "local": "motion/out/release/shorts-ar-15-church.mp4",
-     "title": "بداية الكنيسة · المشهد 15 من 21 · الكتاب المقدس في لمحة",
+     "title": "«… وَتَكُونُونَ لِي شُهُودًا … وَإِلَى أَقْصَى ٱلْأَرْضِ» — بداية الكنيسة 15/21",
      "description": "من الخلق إلى السماء الجديدة والأرض الجديدة — قصة الكتاب المقدس في 14 دقيقة\nالفيلم الكامل (14 دقيقة) والقصة مكتوبة: https://one-scroll-bible.com/film/?lang=ar\n\n#Shorts #الكتابالمقدس #قصةالكتابالمقدس",
      "tags": [
       "الكتاب المقدس في لمحة",
@@ -11137,7 +11137,7 @@
       "عصر الآباء"
      ],
      "language": "ar",
-     "seconds": 35.0,
+     "seconds": 35,
      "captions": {
       "en": "motion/subs/en/v/15-church.srt",
       "es": "motion/subs/es/v/15-church.srt",
@@ -11157,7 +11157,7 @@
      "scene": "renewal",
      "file": "shorts-ar-16-renewal.mp4",
      "local": "motion/out/release/shorts-ar-16-renewal.mp4",
-     "title": "الاستعادة · المشهد 16 من 21 · الكتاب المقدس في لمحة",
+     "title": "«وَسَيَمْسَحُ ٱللهُ كُلَّ دَمْعَةٍ مِنْ عُيُونِهِمْ» — الاستعادة 16/21",
      "description": "من الخلق إلى السماء الجديدة والأرض الجديدة — قصة الكتاب المقدس في 14 دقيقة\nالفيلم الكامل (14 دقيقة) والقصة مكتوبة: https://one-scroll-bible.com/film/?lang=ar\n\n#Shorts #الكتابالمقدس #قصةالكتابالمقدس",
      "tags": [
       "الكتاب المقدس في لمحة",
@@ -11174,7 +11174,7 @@
       "عصر الآباء"
      ],
      "language": "ar",
-     "seconds": 36.0,
+     "seconds": 36,
      "captions": {
       "en": "motion/subs/en/v/16-renewal.srt",
       "es": "motion/subs/es/v/16-renewal.srt",
@@ -11194,7 +11194,7 @@
      "scene": "mirror",
      "file": "shorts-ar-17-mirror.mp4",
      "local": "motion/out/release/shorts-ar-17-mirror.mp4",
-     "title": "المرآة · المشهد 17 من 21 · الكتاب المقدس في لمحة",
+     "title": "وفي النهاية، أعمق وثن هو «أنا نفسي جالساً على عرش الله». — المرآة 17/21",
      "description": "من الخلق إلى السماء الجديدة والأرض الجديدة — قصة الكتاب المقدس في 14 دقيقة\nالفيلم الكامل (14 دقيقة) والقصة مكتوبة: https://one-scroll-bible.com/film/?lang=ar\n\n#Shorts #الكتابالمقدس #قصةالكتابالمقدس",
      "tags": [
       "الكتاب المقدس في لمحة",
@@ -11231,7 +11231,7 @@
      "scene": "gospel",
      "file": "shorts-ar-18-gospel.mp4",
      "local": "motion/out/release/shorts-ar-18-gospel.mp4",
-     "title": "جوهر الإنجيل · المشهد 18 من 21 · الكتاب المقدس في لمحة",
+     "title": "لا «افعل»، بل «قد أُكمل» — جوهر الإنجيل 18/21",
      "description": "من الخلق إلى السماء الجديدة والأرض الجديدة — قصة الكتاب المقدس في 14 دقيقة\nالفيلم الكامل (14 دقيقة) والقصة مكتوبة: https://one-scroll-bible.com/film/?lang=ar\n\n#Shorts #الكتابالمقدس #قصةالكتابالمقدس",
      "tags": [
       "الكتاب المقدس في لمحة",
@@ -11268,7 +11268,7 @@
      "scene": "evidence",
      "file": "shorts-ar-19-evidence.mp4",
      "local": "motion/out/release/shorts-ar-19-evidence.mp4",
-     "title": "هل الكتاب المقدس قصة حقيقية؟ · المشهد 19 من 21 · الكتاب المقدس في لمحة",
+     "title": "هل الكتاب المقدس قصة حقيقية فعلاً؟ 19/21",
      "description": "من الخلق إلى السماء الجديدة والأرض الجديدة — قصة الكتاب المقدس في 14 دقيقة\nالفيلم الكامل (14 دقيقة) والقصة مكتوبة: https://one-scroll-bible.com/film/?lang=ar\n\n#Shorts #الكتابالمقدس #قصةالكتابالمقدس",
      "tags": [
       "الكتاب المقدس في لمحة",
@@ -11285,7 +11285,7 @@
       "عصر الآباء"
      ],
      "language": "ar",
-     "seconds": 60.0,
+     "seconds": 60,
      "captions": {
       "en": "motion/subs/en/v/19-evidence.srt",
       "es": "motion/subs/es/v/19-evidence.srt",
@@ -11305,7 +11305,7 @@
      "scene": "ship",
      "file": "shorts-ar-20-ship.mp4",
      "local": "motion/out/release/shorts-ar-20-ship.mp4",
-     "title": "ألا يكفي أن أكون صالحاً؟ · المشهد 20 من 21 · الكتاب المقدس في لمحة",
+     "title": "ألا يكفي أن يكون المرء صالحاً، حتى لو لم يؤمن بيسوع؟ — ألا يكفي أن أكون صالحاً؟ 20/21",
      "description": "من الخلق إلى السماء الجديدة والأرض الجديدة — قصة الكتاب المقدس في 14 دقيقة\nالفيلم الكامل (14 دقيقة) والقصة مكتوبة: https://one-scroll-bible.com/film/?lang=ar\n\n#Shorts #الكتابالمقدس #قصةالكتابالمقدس",
      "tags": [
       "الكتاب المقدس في لمحة",
@@ -11342,7 +11342,7 @@
      "scene": "invite",
      "file": "shorts-ar-21-invite.mp4",
      "local": "motion/out/release/shorts-ar-21-invite.mp4",
-     "title": "الدعوة · المشهد 21 من 21 · الكتاب المقدس في لمحة",
+     "title": "هذه المحبة ليست معلومة، بل دعوة. — الدعوة 21/21",
      "description": "من الخلق إلى السماء الجديدة والأرض الجديدة — قصة الكتاب المقدس في 14 دقيقة\nالفيلم الكامل (14 دقيقة) والقصة مكتوبة: https://one-scroll-bible.com/film/?lang=ar\n\n#Shorts #الكتابالمقدس #قصةالكتابالمقدس",
      "tags": [
       "الكتاب المقدس في لمحة",
@@ -11359,7 +11359,7 @@
       "عصر الآباء"
      ],
      "language": "ar",
-     "seconds": 57.0,
+     "seconds": 57,
      "captions": {
       "en": "motion/subs/en/v/21-invite.srt",
       "es": "motion/subs/es/v/21-invite.srt",

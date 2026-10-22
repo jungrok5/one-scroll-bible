@@ -1,0 +1,277 @@
+# Shorts titles (hook — chapter n/21)
+
+## ko
+01. 성경은 결국 한 편의 이야기입니다 1/21
+02. “하나님이 이르시되 빛이 있으라” — 창조 2/21
+03. “네가 어디 있느냐” — 타락 3/21
+04. “하늘을 우러러 뭇별을 셀 수 있나 보라” — 족장 시대 4/21
+05. “내 백성을 보내라” — 출애굽 5/21
+06. 약속의 땅 문 앞에 선 백성, 이제 들어갑니다… — 광야 여정 6/21
+07. 왕이 없어 제멋대로 행하다. — 사사 시대 7/21
+08. 사람은 외모를 보거니와 나 여호와는 중심을 보느니라 — 통일 왕국 8/21
+09. 성전이 불타고, 백성은 바벨론으로 끌려갑니다. — 분열 왕국 · 포로 9/21
+10. 여호와로 인하여 기뻐하는 것이 너희의 힘이니라 — 포로 귀환 10/21
+11. 선지자의 음성이 멈춘 400년 — 400년 침묵 11/21
+12. “말씀이 육신이 되어 우리 가운데 거하시매” — 예수님의 오심 12/21
+13. 그 십자가에 달려야 했던 사람은 바로 나였습니다. — 십자가 13/21
+14. “그가 말씀 하시던 대로 살아나셨느니라” — 부활 14/21
+15. “… 땅 끝까지 이르러 내 증인이 되리라” — 교회의 시작 15/21
+16. “모든 눈물을 그 눈에서 닦아 주시니” — 회복 16/21
+17. 결국 가장 깊은 우상은 “하나님 자리에 앉은 나 자신”입니다. — 거울 17/21
+18. “행하라”가 아니라 “이루어졌다” — 복음의 핵심 18/21
+19. 성경이 진짜 실화인가요? 19/21
+20. 예수님 안 믿어도, 그냥 착하게 살면 되는 것 아닌가요? — 착하게 살면? 20/21
+21. 이 사랑은 정보가 아니라 초대입니다. — 초대 21/21
+
+## en
+01. In the end, the Bible is one single story 1/21
+02. “And God said, ‘Let there be light’” — Creation 2/21
+03. “Where are you?” — The Fall 3/21
+04. “Look toward heaven, and number the stars, if you are able to number them” — The Patriarchs 4/21
+05. “Let my people go” — The Exodus 5/21
+06. Standing at the edge of the promised land, they prepare to enter… — The Wilderness 6/21
+07. But with no king everyone did as they pleased. — The Judges 7/21
+08. Man looks on the outward appearance, but the LORD looks on the heart. — The United Kingdom 8/21
+09. The temple burns and the people are carried to Babylon. — The Divided Kingdom & Exile 9/21
+10. For the joy of the LORD is your strength. — The Return 10/21
+11. 400 years with no prophet’s voice — The Silent Years 11/21
+12. “And the Word became flesh and dwelt among us” — Jesus Comes 12/21
+13. The one who should have hung on that cross was me. — The Cross 13/21
+14. “For he has risen, as he said” — The Resurrection 14/21
+15. “… You will be my witnesses … to the end of the earth” — The Church Begins 15/21
+16. “He will wipe away every tear from their eyes” — Restoration 16/21
+17. In the end, the deepest idol is “myself, seated on God’s throne.” — The Mirror 17/21
+18. Not “do this” but “it is finished” — The Heart of the Gospel 18/21
+19. Is the Bible really a true story? 19/21
+20. Can’t I just live a good life without believing in Jesus? — Just Live a Good Life? 20/21
+21. This love is not information but an invitation. — The Invitation 21/21
+
+## es
+01. La Biblia es, al final, una sola historia 1/21
+02. «Y dijo Dios: Sea la luz» — Creación 2/21
+03. «¿Dónde estás tú?» — La caída 3/21
+04. «Mira ahora los cielos, y cuenta las estrellas, si las puedes contar» — Los patriarcas 4/21
+05. «Deja ir a mi pueblo» — El éxodo 5/21
+06. De pie ante la tierra prometida, se disponen a entrar… — El desierto 6/21
+07. Pero, sin rey, cada cual hace lo que bien le parece. — Los jueces 7/21
+08. El hombre mira lo que está delante de sus ojos, pero Jehová mira el corazón. — El reino unido 8/21
+09. El templo arde y el pueblo es llevado a Babilonia. — El reino dividido · El exilio 9/21
+10. Porque el gozo de Jehová es vuestra fuerza. — El regreso del exilio 10/21
+11. 400 años sin voz profética — 400 años de silencio 11/21
+12. «Y aquel Verbo fue hecho carne, y habitó entre nosotros» — La venida de Jesús 12/21
+13. Quien debía estar en aquella cruz era yo. — La cruz 13/21
+14. «Pues ha resucitado, como dijo» — La resurrección 14/21
+15. «… Me seréis testigos … hasta lo último de la tierra» — El comienzo de la iglesia 15/21
+16. «Enjugará Dios toda lágrima de los ojos de ellos» — La restauración 16/21
+17. Al final, el ídolo más profundo es «yo mismo sentado en el trono de Dios». — El espejo 17/21
+18. No «haz», sino «consumado es» — El corazón del evangelio 18/21
+19. ¿De verdad la Biblia es una historia real? 19/21
+20. ¿No basta con ser buena persona, aunque no crea en Jesús? — ¿No basta con ser bueno? 20/21
+21. Este amor no es información, sino una invitación. — La invitación 21/21
+
+## pt-BR
+01. A Bíblia é, no fim, uma só história 1/21
+02. «E disse Deus: Haja luz» — Criação 2/21
+03. «Onde estás?» — A queda 3/21
+04. «Olha, agora, para os céus e conta as estrelas, se as podes contar» — Os patriarcas 4/21
+05. «Deixa ir o meu povo» — O êxodo 5/21
+06. Diante da terra prometida, preparam-se para entrar… — A jornada no deserto 6/21
+07. Mas, sem rei, cada um faz o que acha mais reto. — Os juízes 7/21
+08. Pois o homem vê o que está diante dos olhos, porém o SENHOR olha para o coração. 8/21
+09. O templo arde e o povo é levado à Babilônia. — O reino dividido · O exílio 9/21
+10. Porque a alegria do SENHOR é a vossa força. — O regresso do exílio 10/21
+11. 400 anos sem voz profética — 400 anos de silêncio 11/21
+12. «E o Verbo se fez carne e habitou entre nós» — A vinda de Jesus 12/21
+13. Quem devia estar naquela cruz era eu. — A cruz 13/21
+14. «Porque já ressuscitou, como tinha dito» — A ressurreição 14/21
+15. «… Ser-me-eis testemunhas … até aos confins da terra» — O começo da igreja 15/21
+16. «E Deus limpará de seus olhos toda lágrima» — A restauração 16/21
+17. No fim, o ídolo mais profundo é «eu mesmo sentado no trono de Deus». — O espelho 17/21
+18. Não «faça», mas «está consumado» — O centro do evangelho 18/21
+19. A Bíblia é mesmo uma história verdadeira? 19/21
+20. Não basta ser uma boa pessoa, mesmo sem crer em Jesus? — Não basta ser bom? 20/21
+21. Este amor não é informação, mas um convite. — O convite 21/21
+
+## fr
+01. La Bible est, au fond, une seule histoire 1/21
+02. « Dieu dit : Que la lumière soit ! » — La création 2/21
+03. « Où es-tu ? » — La chute 3/21
+04. « Regarde vers le ciel, et compte les étoiles, si tu peux les compter » — Les patriarches 4/21
+05. « Laisse aller mon peuple » — L’Exode 5/21
+06. Devant la terre promise, ils s’apprêtent à entrer… — Le désert 6/21
+07. Mais, sans roi, chacun fait ce qui lui semble bon. — Les juges 7/21
+08. L’homme regarde à ce qui frappe les yeux, mais l’Éternel regarde au cœur. — Le royaume unifié 8/21
+09. Le temple brûle, et le peuple est emmené à Babylone. — Le royaume divisé · L’exil 9/21
+10. La joie de l’Éternel sera votre force. — Le retour de l’exil 10/21
+11. 400 ans sans voix prophétique — 400 ans de silence 11/21
+12. « Et la parole a été faite chair, et elle a habité parmi nous » — La venue de Jésus 12/21
+13. Celui qui aurait dû être sur cette croix, c’était moi. — La croix 13/21
+14. « Il est ressuscité, comme il l’avait dit » — La résurrection 14/21
+15. « … Vous serez mes témoins … jusqu’aux extrémités de la terre » — Le début de l’Église 15/21
+16. « Il essuiera toute larme de leurs yeux » — La restauration 16/21
+17. Au fond, l’idole la plus profonde, c’est « moi-même assis sur le trône de Dieu ». — Le miroir 17/21
+18. Non « fais », mais « tout est accompli » — Le cœur de l’Évangile 18/21
+19. La Bible est-elle vraiment une histoire vraie ? 19/21
+20. Ne suffit-il pas d’être quelqu’un de bien, même sans croire en Jésus ? 20/21
+21. Cet amour n’est pas une information, mais une invitation. — L’invitation 21/21
+
+## de
+01. Die Bibel ist am Ende eine einzige Geschichte 1/21
+02. „Und Gott sprach: Es werde Licht!“ — Schöpfung 2/21
+03. „Wo bist du?“ — Der Sündenfall 3/21
+04. „Siehe gen Himmel und zähle die Sterne; kannst du sie zählen?“ — Die Erzväter 4/21
+05. „Laß mein Volk ziehen“ — Der Auszug aus Ägypten 5/21
+06. Vor den Toren des verheißenen Landes steht das Volk – nun zieht es hinein… 6/21
+07. Doch ohne König tat jeder, was er wollte. — Die Richterzeit 7/21
+08. Ein Mensch sieht, was vor Augen ist; der HERR aber sieht das Herz an. — Das vereinte Königreich 8/21
+09. Der Tempel brennt, und das Volk wird nach Babylon weggeführt. — Das geteilte Reich · Das Exil 9/21
+10. Denn die Freude am HERRN ist eure Stärke. — Die Rückkehr aus dem Exil 10/21
+11. 400 Jahre ohne prophetische Stimme — 400 Jahre Schweigen 11/21
+12. „Und das Wort ward Fleisch und wohnte unter uns“ — Das Kommen Jesu 12/21
+13. Wer an jenem Kreuz hätte hängen müssen, war ich. — Das Kreuz 13/21
+14. „Er ist auferstanden, wie er gesagt hat“ — Die Auferstehung 14/21
+15. „… Und werdet meine Zeugen sein … bis an das Ende der Erde“ — Der Beginn der Gemeinde 15/21
+16. „Und Gott wird abwischen alle Tränen von ihren Augen“ — Die Wiederherstellung 16/21
+17. Am Ende ist der tiefste Götze „ich selbst auf dem Thron Gottes“. — Der Spiegel 17/21
+18. Nicht „Tue das“, sondern „Es ist vollbracht“ — Der Kern des Evangeliums 18/21
+19. Ist die Bibel wirklich eine wahre Geschichte? 19/21
+20. Genügt es nicht, ein guter Mensch zu sein, auch ohne an Jesus zu glauben? 20/21
+21. Diese Liebe ist keine Information, sondern eine Einladung. — Die Einladung 21/21
+
+## ru
+01. Библия — это, в конце концов, одна история 1/21
+02. «И сказал Бог: да будет свет» — Творение 2/21
+03. «Где ты?» — Грехопадение 3/21
+04. «Посмотри на небо и сосчитай звезды, если ты можешь счесть их» — Эпоха патриархов 4/21
+05. «Отпусти народ Мой» — Исход 5/21
+06. Народ у порога земли обетованной — и вот он входит в неё… — Странствие по пустыне 6/21
+07. Но без царя каждый делает, что ему кажется справедливым. — Эпоха судей 7/21
+08. Человек смотрит на лице, а Господь смотрит на сердце. — Единое царство 8/21
+09. Храм горит, народ уводят в Вавилон. — Разделённое царство · Плен 9/21
+10. Радость пред Господом — подкрепление для вас. — Возвращение из плена 10/21
+11. 400 лет без пророческого голоса — 400 лет молчания 11/21
+12. «И Слово стало плотию, и обитало с нами» — Пришествие Иисуса 12/21
+13. Тем, кто должен был быть на том кресте, был я. — Крест 13/21
+14. «Он воскрес, как сказал» — Воскресение 14/21
+15. «… И будете Мне свидетелями … даже до края земли» — Начало Церкви 15/21
+16. «И отрет Бог всякую слезу с очей их» — Восстановление 16/21
+17. В конце концов, самый глубокий идол — «я сам на престоле Бога». — Зеркало 17/21
+18. Не «делай», а «совершилось» — Суть Евангелия 18/21
+19. Действительно ли Библия — правдивая история? 19/21
+20. Разве недостаточно просто быть хорошим человеком, даже не веря в Иисуса? 20/21
+21. Эта любовь — не информация, а приглашение. — Приглашение 21/21
+
+## id
+01. Pada akhirnya, Alkitab adalah satu kisah 1/21
+02. “Berfirmanlah Allah: ‘Jadilah terang.’” — Penciptaan 2/21
+03. “Di manakah engkau?” — Kejatuhan 3/21
+04. “Coba lihat ke langit, hitunglah bintang-bintang, jika engkau dapat menghitungnya” 4/21
+05. “Biarkanlah umat-Ku pergi” — Keluaran 5/21
+06. Berdiri di ambang Tanah Perjanjian, mereka bersiap masuk… — Perjalanan di Padang Gurun 6/21
+07. Tetapi tanpa raja setiap orang berbuat sesukanya. — Zaman Hakim-hakim 7/21
+08. Manusia melihat apa yang di depan mata, tetapi TUHAN melihat hati. — Kerajaan Israel Bersatu 8/21
+09. Bait Suci terbakar, dan umat dibuang ke Babel. — Kerajaan Terpecah · Pembuangan 9/21
+10. Sukacita karena TUHAN itulah perlindunganmu! — Kembali dari Pembuangan 10/21
+11. 400 tahun tanpa suara nabi — 400 Tahun Keheningan 11/21
+12. “Firman itu telah menjadi manusia, dan diam di antara kita” — Kedatangan Yesus 12/21
+13. Yang seharusnya ada di salib itu adalah aku. — Salib 13/21
+14. “Sebab Ia telah bangkit, sama seperti yang telah dikatakan-Nya” — Kebangkitan 14/21
+15. “… Kamu akan menjadi saksi-Ku … sampai ke ujung bumi” — Awal Mula Gereja 15/21
+16. “Dan Ia akan menghapus segala air mata dari mata mereka” — Pemulihan 16/21
+17. Pada akhirnya, berhala terdalam adalah “diriku sendiri yang duduk di takhta Allah”. — Cermin 17/21
+18. Bukan “lakukanlah”, melainkan “sudah selesai” — Inti Injil 18/21
+19. Apakah Alkitab benar-benar kisah nyata? 19/21
+20. Bukankah cukup menjadi orang baik, meski tak percaya kepada Yesus? — Cukup Menjadi Orang Baik? 20/21
+21. Kasih ini bukan informasi, melainkan sebuah undangan. — Undangan 21/21
+
+## zh-Hans
+01. 圣经归根到底是一个故事 1/21
+02. “神说：‘要有光’” — 创造 2/21
+03. “你在哪里？” — 堕落 3/21
+04. “你向天观看，数算众星，能数得过来吗？” — 族长时代 4/21
+05. “容我的百姓去” — 出埃及 5/21
+06. 站在应许之地门口，他们预备进入…… — 旷野的旅程 6/21
+07. 却因没有王而各人任意而行。 — 士师时代 7/21
+08. 人是看外貌；耶和华是看内心 — 统一王国 8/21
+09. 圣殿被焚，百姓被掳到巴比伦。 — 分裂王国 · 被掳 9/21
+10. 因靠耶和华而得的喜乐是你们的力量 — 被掳归回 10/21
+11. 四百年没有先知的声音 — 四百年的沉默 11/21
+12. “道成了肉身，住在我们中间” — 耶稣降临 12/21
+13. 那本该被钉十字架的，正是我。 — 十字架 13/21
+14. “照他所说的，已经复活了” — 复活 14/21
+15. “……直到地极，作我的见证” — 教会的开始 15/21
+16. “神要擦去他们一切的眼泪” — 复兴（万物更新） 16/21
+17. 归根到底，最深的偶像是“坐在神位上的我自己”。 — 镜子 17/21
+18. 不是“去做”，而是“成了” — 福音的核心 18/21
+19. 圣经真的是真实的故事吗？ 19/21
+20. 不信耶稣，只要好好做个好人不行吗？ — 做好人就够了吗？ 20/21
+21. 这份爱不是信息，而是邀请。 — 邀请 21/21
+
+## zh-Hant
+01. 聖經歸根到底是一個故事 1/21
+02. 「神說：『要有光』」 — 創造 2/21
+03. 「你在哪裏？」 — 墮落 3/21
+04. 「你向天觀看，數算眾星，能數得過來嗎？」 — 族長時代 4/21
+05. 「容我的百姓去」 — 出埃及 5/21
+06. 站在應許之地門口，他們預備進入…… — 曠野的旅程 6/21
+07. 卻因沒有王而各人任意而行。 — 士師時代 7/21
+08. 人是看外貌；耶和華是看內心 — 統一王國 8/21
+09. 聖殿被焚，百姓被擄到巴比倫。 — 分裂王國 · 被擄 9/21
+10. 因靠耶和華而得的喜樂是你們的力量 — 被擄歸回 10/21
+11. 四百年沒有先知的聲音 — 四百年的沉默 11/21
+12. 「道成了肉身，住在我們中間」 — 耶穌降臨 12/21
+13. 那本該被釘十字架的，正是我。 — 十字架 13/21
+14. 「照他所說的，已經復活了」 — 復活 14/21
+15. 「……直到地極，作我的見證」 — 教會的開始 15/21
+16. 「神要擦去他們一切的眼淚」 — 復興（萬物更新） 16/21
+17. 歸根到底，最深的偶像是「坐在神位上的我自己」。 — 鏡子 17/21
+18. 不是「去做」，而是「成了」 — 福音的核心 18/21
+19. 聖經真的是真實的故事嗎？ 19/21
+20. 不信耶穌，只要好好做個好人不行嗎？ — 做好人就夠了嗎？ 20/21
+21. 這份愛不是信息，而是邀請。 — 邀請 21/21
+
+## ja
+01. 聖書は結局、一つの物語です 1/21
+02. 「神は言われた。『光あれ。』」 — 創造 2/21
+03. 「どこにいるのか。」 — 堕落 3/21
+04. 「天を仰いで、星を数えることができるなら、数えてみるがよい。」 — 族長 4/21
+05. 「わたしの民を去らせて……」 — 出エジプト 5/21
+06. 約束の地の入り口に立ち、いよいよ入ろうとします…… — 荒れ野の旅 6/21
+07. 王がなく、人々は思いのままにふるまった。 — 士師の時代 7/21
+08. 人は目に映ることを見るが、主は心によって見る。 — 統一王国 8/21
+09. 神殿は焼け、民はバビロンへ引かれます。 — 分裂 · 捕囚 9/21
+10. 主を喜び祝うことこそ、あなたたちの力の源である。 — 捕囚からの帰還 10/21
+11. 四百年、預言者の声が絶えた — 四百年の沈黙 11/21
+12. 「言は肉となって、わたしたちの間に宿られた。」 — イエスの降誕 12/21
+13. その十字架にかかるべきだったのは、ほかならぬわたしでした。 — 十字架 13/21
+14. 「かねて言われていたとおり、復活なさったのだ。」 — 復活 14/21
+15. 「……地の果てに至るまで、わたしの証人となる。」 — 教会 15/21
+16. 「彼らの目の涙をことごとくぬぐい取ってくださる。」 — 回復 16/21
+17. 結局、最も深い偶像は「神の座に着いた自分自身」です。 — 鏡 17/21
+18. 「行え」ではなく「成し遂げられた」 — 福音の核心 18/21
+19. 聖書は本当に実話なのでしょうか。 19/21
+20. イエスを信じなくても、ただ善く生きればいいのでは？ — 善く生きれば？ 20/21
+21. この愛は情報ではなく、招きです。 — 招き 21/21
+
+## ar
+01. الكتاب المقدس في النهاية قصة واحدة 1/21
+02. «وَقَالَ ٱللهُ: لِيَكُنْ نُورٌ» — الخلق 2/21
+03. «أَيْنَ أَنْتَ؟» — السقوط 3/21
+04. «ٱنْظُرْ إِلَى ٱلسَّمَاءِ وَعُدَّ ٱلنُّجُومَ إِنِ ٱسْتَطَعْتَ أَنْ تَعُدَّهَا» — عصر الآباء 4/21
+05. «أَطْلِقْ شَعْبِي» — الخروج 5/21
+06. وأمام أرض الموعد، يستعدون للدخول… — رحلة البرية 6/21
+07. لكن بلا ملك صار كل واحد يعمل ما يحسن في عينيه. — عصر القضاة 7/21
+08. وَأَمَّا ٱلرَّبُّ فَإِنَّهُ يَنْظُرُ إِلَى ٱلْقَلْبِ — المملكة الموحَّدة 8/21
+09. يحترق الهيكل، ويُساق الشعب إلى بابل. — المملكة المنقسمة والسبي 9/21
+10. لِأَنَّ فَرَحَ ٱلرَّبِّ هُوَ قُوَّتُكُمْ — العودة من السبي 10/21
+11. أربعمائة سنة بلا صوت نبوي — زمن الصمت 11/21
+12. «وَٱلْكَلِمَةُ صَارَ جَسَدًا وَحَلَّ بَيْنَنَا» — مجيء يسوع 12/21
+13. من كان يجب أن يكون على ذلك الصليب هو أنا. — الصليب 13/21
+14. «لِأَنَّهُ قَامَ كَمَا قَالَ!» — القيامة 14/21
+15. «… وَتَكُونُونَ لِي شُهُودًا … وَإِلَى أَقْصَى ٱلْأَرْضِ» — بداية الكنيسة 15/21
+16. «وَسَيَمْسَحُ ٱللهُ كُلَّ دَمْعَةٍ مِنْ عُيُونِهِمْ» — الاستعادة 16/21
+17. وفي النهاية، أعمق وثن هو «أنا نفسي جالساً على عرش الله». — المرآة 17/21
+18. لا «افعل»، بل «قد أُكمل» — جوهر الإنجيل 18/21
+19. هل الكتاب المقدس قصة حقيقية فعلاً؟ 19/21
+20. ألا يكفي أن يكون المرء صالحاً، حتى لو لم يؤمن بيسوع؟ — ألا يكفي أن أكون صالحاً؟ 20/21
+21. هذه المحبة ليست معلومة، بل دعوة. — الدعوة 21/21

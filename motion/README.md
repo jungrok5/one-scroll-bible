@@ -78,6 +78,7 @@ Run workflow에서 언어·방향(·시험용 장면)을 넣으면 언어×방�
 ```
 gh release download youtube-v1 -R jungrok5/one-scroll-bible -p 'film-de.mp4' -p 'shorts-de-*' -D motion/out/release   # 한 언어
 gh release download youtube-v1 -R jungrok5/one-scroll-bible -D motion/out/release                                      # 전부 (약 20 GB)
+curl -LO https://github.com/jungrok5/one-scroll-bible/releases/download/youtube-v1/film-de.mp4                        # gh 없이 (공개 URL)
 ```
 - 썸네일은 네 안 모두 같은 문구("성경 전체를 14분 만에")에 그림만 다릅니다 — 유튜브 스튜디오 **"테스트 및 비교"**에 세 장까지 넣어
   고르면 됩니다(승자는 시청시간 점유율 기준, 며칠~2주). 오른쪽 아래는 재생시간 배지가 덮으므로 비워 둔 레이아웃입니다.

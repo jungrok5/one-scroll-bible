@@ -3,6 +3,8 @@
 // for Google the sitemap's honest <lastmod> is the signal.
 //   node tools/indexnow.mjs --since 2026-10-22 [--dry]   → pings every sitemap URL whose <lastmod> is on/after that date
 //   node tools/indexnow.mjs https://one-scroll-bible.com/film/ …  → pings those URLs
+//   node tools/indexnow.mjs --all-langs              → every language page (the template, index.html or the build, changed:
+//        every page's HTML changes although each language's own source — and so its <lastmod> — did not)
 // Reads sitemap.xml from the repo root (run node tools/build-pages.mjs first). The key file /<KEY>.txt at the site root
 // proves we own the host; it is public by design. Run automatically after each deploy by .github/workflows/indexnow.yml.
 import fs from 'node:fs';
@@ -15,6 +17,10 @@ if (!KEY) { console.error('indexnow: no <32-hex>.txt key file at the repo root')
 const args = process.argv.slice(2), dry = args.includes('--dry');
 const si = args.indexOf('--since');
 let urls = args.filter((a, i) => /^https:\/\//.test(a) && args[i - 1] !== '--since');
+if (args.includes('--all-langs')) {
+  const xml = fs.readFileSync(path.join(root, 'sitemap.xml'), 'utf8');
+  for (const m of xml.matchAll(/<loc>(https:\/\/[^/]+\/(?:[A-Za-z-]+\/)?)<\/loc>/g)) if (!/\/(languages|film|about|maps)\/$/.test(m[1])) urls.push(m[1]);
+}
 if (si >= 0) {
   const since = args[si + 1], xml = fs.readFileSync(path.join(root, 'sitemap.xml'), 'utf8');
   for (const m of xml.matchAll(/<loc>([^<]+)<\/loc><lastmod>([^<]+)<\/lastmod>/g)) if (m[2] >= since) urls.push(m[1]);

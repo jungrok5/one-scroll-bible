@@ -40,4 +40,9 @@ jobs:
             sleep 30
           done
           echo "live sitemap still differs after 15 min — pinging anyway"
-      - run: node tools/indexnow.mjs --since ${{ steps.s.outputs.since }}
+      - name: ping
+        run: |
+          all=""
+          # the template (index.html) or the build changed → every language page's HTML changed, though their <lastmod> did not
+          if git cat-file -e "${{ github.event.before }}^{commit}" 2>/dev/null && git diff --name-only "${{ github.event.before }}" HEAD | grep -qxE 'index.html|tools/build-pages.mjs'; then all="--all-langs"; fi
+          node tools/indexnow.mjs --since ${{ steps.s.outputs.since }} $all

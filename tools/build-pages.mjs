@@ -219,6 +219,21 @@ for (const L of LANGS) {
   };
 }
 
+// ---- 검색 결과용 설명(meta description): 공유 문장 + 13개 시대 제목 ----
+// 공유 문장 하나(한 줄)는 검색엔진 권장 길이(150~160자)의 절반이라 Bing 이 "설명이 너무 짧음"으로 표시했다.
+// 새 번역 문장을 만들지 않고(번역 품질 게이트), 이미 번역·검수되어 본문에 보이는 시대 제목을 차례로 덧붙여
+// 160자 안에서 채운다 — 화면에 있는 말만 쓰고, 이 페이지가 무엇을 다루는지(창조→재림의 순서)를 그대로 보여 준다.
+// 공유 카드(og/twitter:description)는 짧은 문장 그대로 둔다.
+function metaDesc(base, pack){
+  const titles = ((pack && pack.epochs) || []).map(e => e && cleanText(e.title || '')).filter(Boolean);
+  base = cleanText(base || '');
+  if (!titles.length || [...base].length >= 140) return base;
+  const len = t => [...t].length;
+  let out = base + ' ' + titles[0], i = 1;
+  for (; i < titles.length && len(out + ' · ' + titles[i]) <= 158; i++) out += ' · ' + titles[i];
+  return i < titles.length ? out + ' …' : out;
+}
+
 // ---- DOM 헬퍼(의존성 없이 균형 태그 기반 innerHTML 치환/추출) ----
 function findClose(html, openEnd, tag){
   const re = new RegExp('<'+tag+'\\b|</'+tag+'>','g');
@@ -389,7 +404,7 @@ function makePage(m){
   h = h.replace('<meta charset="UTF-8" />',
     `<meta charset="UTF-8" />\n<base href="${ORIGIN}/" />\n<script>window.__BOOTLANG__=${JSON.stringify(m.code)}</script>\n${XLANGS_SCRIPT}\n${HREF}`);
   h = h.replace(/<title>[\s\S]*?<\/title>/, `<title>${xml(m.docTitle)}</title>`);
-  h = h.replace(/(<meta name="description" content=")[^"]*(")/, `$1${xml(m.desc)}$2`);
+  h = h.replace(/(<meta name="description" content=")[^"]*(")/, `$1${xml(metaDesc(m.desc, packFor(m.code)))}$2`);
   h = h.replace('<link rel="canonical" href="https://one-scroll-bible.com/" />', `<link rel="canonical" href="${url}" />`);
   h = h.replace('<meta property="og:title" content="한눈에 보는 성경 이야기 · 창조에서 교회까지" />', `<meta property="og:title" content="${xml(m.docTitle)}" />`);
   h = h.replace('<meta property="og:description" content="스크롤 한 번으로 성경의 큰 줄거리와 예수님이 오신 이유를 만나보세요." />', `<meta property="og:description" content="${xml(m.desc)}" />`);
@@ -498,6 +513,8 @@ rootHtml = rootHtml.replace('<link rel="canonical" href="https://one-scroll-bibl
 const koS = {}; for (const k of ['faq.q1','faq.a1','faq.q2','faq.a2','faq.q3','faq.a3','faq.q4','faq.a4']) koS[k] = getInner(src, k);
 rootHtml = rootHtml.replace(/<script type="application\/ld\+json">[\s\S]*?<\/script>/,
   ldBlock({ name: KO.brand, desc: KO.desc, url: `${ORIGIN}/`, code: 'ko', s: koS, modified: LASTMOD['index.html'] }));
+// 루트 meta description 도 같은 규칙(공유 문장 + 시대 제목, 160자 안) — 이미 140자 이상이면 그대로(멱등)
+rootHtml = rootHtml.replace(/(<meta name="description" content=")([^"]*)(")/, (_, a, b, c) => a + xml(metaDesc(decodeEnt(b), { epochs: KO_PACK.epochs || EPOCHS })) + c);
 // 루트 og:image/twitter:image 도 버전(?v=) 부착 — 캐시 버스팅
 // 한글 루트 본문 프리렌더 — JS 없이도(검색·AI 크롤러) 13개 시대·핵심 7가지가 보이게. 비-ko 페이지와 같은 함수 사용.
 rootHtml = rootHtml.replace('<main id="epochs"></main>', `<main id="epochs"><!--pre-->${epochsHtml(KO_PACK)}<!--/pre--></main>`);

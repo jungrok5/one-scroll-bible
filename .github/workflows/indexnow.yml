@@ -1,0 +1,43 @@
+# After a deploy to main, ping IndexNow (Bing, Naver, Yandex, …) with the pages whose content changed in that push.
+# Changed = sitemap <lastmod> on/after the date of the commit before the push (lastmod is the source file's last
+# commit date — tools/build-pages.mjs). Waits until Vercel serves the new sitemap so the engines fetch the new page.
+name: indexnow
+on:
+  push:
+    branches: [main]
+    paths-ignore: ['motion/**', '.claude/**', '.github/**', '*.md']
+  workflow_dispatch:
+    inputs:
+      since:
+        description: "ping every URL with <lastmod> on/after this date (YYYY-MM-DD)"
+        required: true
+permissions:
+  contents: read
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: build (sitemap with git lastmod)
+        run: node tools/build-pages.mjs > /dev/null
+      - name: since
+        id: s
+        run: |
+          if [ -n "${{ inputs.since }}" ]; then since="${{ inputs.since }}"
+          elif git cat-file -e "${{ github.event.before }}^{commit}" 2>/dev/null; then since=$(git log -1 --format=%cs "${{ github.event.before }}")
+          else since=$(date -u +%F); fi
+          echo "since=$since" >> "$GITHUB_OUTPUT"; echo "since $since"
+      - name: wait for the deploy
+        run: |
+          for i in $(seq 1 30); do
+            curl -fsSL https://one-scroll-bible.com/sitemap.xml -o live.xml && cmp -s live.xml sitemap.xml && { echo "deploy is live"; exit 0; }
+            sleep 30
+          done
+          echo "live sitemap still differs after 15 min — pinging anyway"
+      - run: node tools/indexnow.mjs --since ${{ steps.s.outputs.since }}

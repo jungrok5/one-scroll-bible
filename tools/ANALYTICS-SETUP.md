@@ -1,13 +1,14 @@
-# 분석 설정 가이드 — GA4 · 유튜브 · 인스타 (브라우저를 직접 조작하는 세션용)
+# 분석·검색 등록 가이드 — GA4 · 유튜브 · 인스타 · 검색엔진 (브라우저를 직접 조작하는 세션용)
 
 이 문서는 **사람 계정으로 로그인된 브라우저를 조작할 수 있는 Claude 세션**(로컬 세션)이 그대로 따라 하도록 쓴 절차다.
-사이트 코드 쪽 추적은 이미 배포돼 있다(이벤트 목록: `AGENTS.md`의 "GA4 events"). 여기서 할 일은 계정 화면에서만 할 수 있는 세 가지다.
+사이트 코드 쪽 추적은 이미 배포돼 있다(이벤트 목록: `AGENTS.md`의 "GA4 events"). 여기서 할 일은 계정 화면에서만 할 수 있는 것들이다. 순서는 A → B → C → E → D(마무리).
 
 | 파트 | 어디서 | 왜 |
 |---|---|---|
 | A | Google Analytics 4 | 이벤트에 붙어 오는 값(장면·언어·목적지…)을 보고서에서 보이게 등록, 핵심 이벤트 지정 |
 | B | 저장소 + YouTube Studio | 영상 설명란의 사이트 링크를 언어 홈 + UTM 으로 바꿔 유튜브에서 온 방문을 언어·영상별로 구분 |
 | C | Instagram | 프로필 링크에 UTM |
+| E | 검색엔진 도구 · 유튜브 채널 · GitHub | 남은 등록(사이트맵 제출·연결·다음 검색 등록), 재측정용 기준선, AI 인용 확인 |
 
 ## 지켜야 할 것
 
@@ -118,11 +119,64 @@ https://one-scroll-bible.com/?utm_source=instagram&utm_medium=social&utm_campaig
 
 ---
 
+## E. 검색엔진 등록 · 기준선 · 연결
+
+SEO 작업 기록(`tools/seo-log.md`)의 **"기준선"과 "AI 인용 기준선"** 표를 채우는 단계이고, 11월 5일 재측정이 이 값과 비교한다.
+숫자는 화면에 보이는 그대로 적고, 못 찾은 값은 비워 두고 이유를 적는다(추정해서 채우지 않는다).
+
+### E1. Google Search Console (search.google.com/search-console)
+속성 `one-scroll-bible.com`(또는 `https://one-scroll-bible.com/`).
+1. **Sitemaps**: `sitemap.xml` 이 제출돼 있고 상태가 "성공(Success)"인지. 없으면 `sitemap.xml` 입력 → 제출. 발견된 URL 수를 적는다(약 445).
+2. **실적(Performance)** → 기간 "지난 28일": 총 클릭·총 노출·평균 CTR·평균 게재순위를 적는다. "검색어(Queries)" 탭 상위 10개도 적는다.
+3. **페이지 색인 생성(Pages)**: 색인됨/색인 안 됨 수.
+4. **URL 검사**: `https://one-scroll-bible.com/film/` → 색인 안 됐으면 "색인 생성 요청(Request indexing)".
+
+### E2. GA4 ↔ Search Console 연결
+GA4 **관리 → 제품 링크(Product links) → Search Console 링크** → 연결 → 위 속성 선택 → 웹 스트림 선택 → 제출.
+(GA 보고서에서 검색어별 유입을 볼 수 있게 된다. 다른 제품 링크 — Google Ads 등 — 는 만들지 않는다.)
+
+### E3. 네이버 서치어드바이저 (searchadvisor.naver.com)
+사이트는 이미 소유 확인돼 있다(사이트에 `naver-site-verification` 메타).
+1. **요청 → 사이트맵 제출**: `https://one-scroll-bible.com/sitemap.xml` 이 있는지, 없으면 제출.
+2. **검증 → robots.txt**: 수집 허용(Yeti)으로 나오는지.
+3. **요청 → 웹 페이지 수집**: `https://one-scroll-bible.com/`, `https://one-scroll-bible.com/film/` 수집 요청.
+4. **리포트 → 검색 유입 / 콘텐츠 노출 및 클릭**: 최근 28일 노출·클릭과 검색어 상위 10개를 적는다.
+
+### E4. Bing Webmaster Tools (bing.com/webmasters)
+등록·소유 확인은 돼 있다.
+1. **사이트맵**: `sitemap.xml` 제출·성공 상태 확인.
+2. **IndexNow**: 최근 제출 내역에 우리 주소가 보이는지(배포마다 자동 핑 — 2026-10-22에 4개 + 214개 제출).
+3. **검색 성능**(최근 28일 노출·클릭)과 **AI Performance**(Copilot 인용 수) 값을 적는다.
+4. **Recommendations**: "Meta descriptions too short" 페이지 수를 적는다(10-22 기준 88 → 다시 스캔되면 줄어야 함).
+
+### E5. 다음(카카오) 웹마스터도구 (webmaster.daum.net) — 아직 미등록
+한국 검색 점유율 3위. 등록하려면 다음이 주는 **PIN 줄을 robots.txt 에 넣어야** 한다.
+1. 사이트 등록 → `https://one-scroll-bible.com` 입력 → 화면에 나오는 `#DaumWebMasterTool:…` 한 줄을 **글자 그대로** 복사.
+2. 저장소 `robots.txt` 맨 위 주석 줄들 아래에 그 줄을 붙여 커밋하고, **사용자에게 배포 허락을 받은 뒤** main 에 반영
+   (`AGENTS.md`의 배포 절차). 배포가 라이브에 반영되면(`curl https://one-scroll-bible.com/robots.txt` 로 확인) 다음 화면에서 인증 → 사이트맵 제출.
+
+### E6. 유튜브 채널 링크
+YouTube Studio → **맞춤설정(Customization) → 기본 정보(Basic info) → 링크(Links)**: 사이트 링크가 없으면 추가
+(제목 "한눈에 보는 성경 이야기", 주소 `https://one-scroll-bible.com/?utm_source=youtube&utm_medium=channel&utm_campaign=about`).
+채널 설명의 다른 문구는 바꾸지 않는다. (사이트의 구조화 데이터가 이미 이 채널을 공식 계정으로 가리키므로 양쪽이 서로를 가리키게 된다.)
+
+### E7. GitHub 저장소
+github.com/jungrok5/one-scroll-bible → 오른쪽 **About 옆 톱니** → Website 에 `https://one-scroll-bible.com` → Topics 에
+`bible, gospel, christianity, multilingual, redemptive-history` 를 추가 → Save. (설명 문구가 비어 있으면 README 첫 문장을 그대로 쓴다.)
+
+### E8. AI 인용 기준선
+`tools/seo-log.md` 의 "AI 인용 기준선" 표 질문 8개를 **로그아웃 상태 또는 새 대화**에서 그대로 묻는다.
+- ChatGPT(검색 켜기), Perplexity, 네이버(앱 또는 웹 검색 → AI 브리핑).
+- 답의 출처 목록에 `one-scroll-bible.com` 이 있으면 O, 없으면 X. 다른 사이트가 인용되면 어느 사이트인지 짧게 적는다.
+- 답 내용을 길게 옮겨 적지 않는다.
+
+---
+
 ## D. 끝난 뒤
 
 1. 시크릿 창에서 바꾼 링크 하나씩(유튜브 1개, 인스타 1개)을 눌러 사이트가 열리는지 확인.
 2. 다음 날 GA4 **보고서 → 획득 → 트래픽 획득**에서 "세션 소스/매체"에 `youtube / video`, `youtube / shorts`, `instagram / social` 이 보이는지.
-3. 아래 작업 기록을 채우고 커밋. 사용자에게: 바꾼 것 개수, 확인 결과, 멈춘 곳과 이유.
+3. 아래 작업 기록과 `tools/seo-log.md` 기준선 표를 채우고 커밋. 사용자에게: 바꾼 것 개수, 확인 결과, 멈춘 곳과 이유.
 
 ## 작업 기록
 
@@ -133,3 +187,8 @@ https://one-scroll-bible.com/?utm_source=instagram&utm_medium=social&utm_campaig
 | | B1 | manifest.mjs·lang 파일 수정 | |
 | | B2 | 설명 갱신: 가로 __/12 · 쇼츠 __ | |
 | | C | 인스타 프로필 링크 | |
+| | E1–E2 | 서치콘솔 기준선·/film/ 색인 요청·GA 연결 | |
+| | E3–E4 | 네이버·빙 기준선, 사이트맵·IndexNow 확인 | |
+| | E5 | 다음 웹마스터도구 PIN → robots.txt (배포 허락 대기) | |
+| | E6–E7 | 유튜브 채널 링크 · GitHub Website/Topics | |
+| | E8 | AI 인용 기준선 __/24 | |

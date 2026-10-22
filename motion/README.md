@@ -108,6 +108,10 @@ curl -LO https://github.com/jungrok5/one-scroll-bible/releases/download/youtube-
 ```
 - 썸네일은 네 안 모두 같은 문구("성경 전체를 14분 만에")에 그림만 다릅니다 — 유튜브 스튜디오 **"테스트 및 비교"**에 세 장까지 넣어
   고르면 됩니다(승자는 시청시간 점유율 기준, 며칠~2주). 오른쪽 아래는 재생시간 배지가 덮으므로 비워 둔 레이아웃입니다.
+- **유튜브·인스타에서 사이트로 거는 링크에는 UTM을 붙인다** — GA에서 어느 영상·어느 언어에서 온 방문인지 보인다:
+  `https://one-scroll-bible.com/<lang>/?utm_source=youtube&utm_medium=video&utm_campaign=film_<lang>` (쇼츠는 `utm_medium=shorts`,
+  `utm_content=NN-<scene>`; 인스타 프로필은 `utm_source=instagram&utm_medium=social&utm_campaign=bio`). 복음·기도로 바로: 끝에 `#respond`.
+  canonical 이 정본을 가리키므로 검색 중복 문제는 없다.
 - **새 언어 영상을 유튜브에 공개하면** `index.html`의 `FILM_YT`에 그 언어의 영상 id를 넣는다 — 첫 화면 영상 버튼이 `/film/` 대신
   그 유튜브 영상으로 간다(없는 언어는 `/film/?lang=`). 비공개 id는 넣지 않는다('비공개 동영상'이 뜸).
 - 쇼츠는 커스텀 썸네일을 받지 않고(영상 프레임 중 선택) 자막은 쇼츠별 SRT(`v/NN-*.srt`)를 올립니다.

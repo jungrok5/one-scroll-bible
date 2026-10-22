@@ -146,6 +146,11 @@
   var TOTAL = S.reduce(function (a, s) { return a + s[2]; }, 0), START = [], acc = 0;
   S.forEach(function (s) { START.push(acc); acc += s[2]; });
   var $ = function (id) { return document.getElementById(id); };
+  // GA4 — every event carries the film's language (same parameter name as the main site's events)
+  function ev(n, p) { if (window.gtag) try { gtag('event', n, Object.assign({ language: LANG }, p || {})); } catch (e) {} }
+  // watched = seconds actually played (not position): milestones say how far people really watch
+  var watched = 0, MILE = [10, 25, 50, 75, 90], mileSent = {}, stallT = 0, stallSent = {}, pausedBy = '';
+  function pos() { return Math.round(cur >= 0 ? START[cur] + (au.currentTime || 0) : 0); }
   var stage = $('stage'), frames = [$('fa'), $('fb')], big = $('big'), wait = $('wait'), poster = $('poster');
   var au = new Audio(); au.preload = 'auto'; au.setAttribute('playsinline', '');
   var pre = new Audio(); pre.preload = 'auto';
@@ -157,7 +162,7 @@
   // chapter buttons
   var ch = $('chapters');
   S.forEach(function (s, i) { var li = document.createElement('li'); li.innerHTML = '<button type="button"><b>' + pad(i) + '</b>' + s[1] + '</button>';
-    li.firstChild.onclick = function () { go(i, true); stage.scrollIntoView({ behavior: 'smooth', block: 'center' }); }; ch.appendChild(li); });
+    li.firstChild.onclick = function () { ev('film_chapter', { scene: s[0], scene_index: i, from_scene: cur >= 0 ? S[cur][0] : '' }); go(i, true); stage.scrollIntoView({ behavior: 'smooth', block: 'center' }); }; ch.appendChild(li); });
 
   function size() {
     var W = ori === 'v' ? 1080 : 1920, H = ori === 'v' ? 1920 : 1080, full = document.body.classList.contains('full');
@@ -177,7 +182,7 @@
   function ready(slot) { try { var w = frames[slot].contentWindow; return !!(w && w.__ready && w.seek) && loadedIdx[slot] === cur; } catch (e) { return false; } }
 
   function go(i, play) {
-    if (i < 0 || i >= S.length) { if (i >= S.length) { setPlay(false); cur = S.length - 1; } return; }
+    if (i < 0 || i >= S.length) { if (i >= S.length) { pausedBy = 'end'; setPlay(false); cur = S.length - 1; ev('film_complete', { watched_sec: Math.round(watched), orientation: ori }); } return; }
     var back = 1 - front;
     if (loadedIdx[back] === i && frames[back].dataset.o === ori) front = back; else load(front, i);
     cur = i; frames[front].classList.add('on'); frames[1 - front].classList.remove('on');
@@ -186,13 +191,15 @@
     $('now').textContent = pad(i) + ' ' + S[i][1];
     ch.querySelectorAll('button').forEach(function (b, k) { b.setAttribute('aria-current', String(k === i)); });
     if (play !== undefined) setPlay(play); else if (playing) au.play().catch(function () {});
-    if (window.gtag && started) gtag('event', 'film_scene', { scene: S[i][0], orientation: ori });
+    if (started) ev('film_scene', { scene: S[i][0], scene_index: i, orientation: ori });
   }
   function setPlay(p) {
     playing = p; $('pp').textContent = p ? '❚❚' : '▶'; $('pp').setAttribute('aria-label', p ? '일시정지' : '재생');
     big.hidden = p || started; if (p) { started = true; poster.hidden = true; big.hidden = true; au.play().catch(function () {}); } else au.pause();
+    if (!p && started && cur >= 0 && !pausedBy) ev('film_pause', { scene: S[cur][0], position_sec: pos(), watched_sec: Math.round(watched) });
+    pausedBy = '';
   }
-  big.onclick = function () { if (window.gtag) gtag('event', 'film_play', { orientation: ori }); if (cur < 0) go(START_AT, true); else setPlay(true); };
+  big.onclick = function () { ev('film_play', { orientation: ori, start_scene: S[START_AT][0], from_link: START_AT > 0 }); if (cur < 0) go(START_AT, true); else setPlay(true); };
   $('pp').onclick = function () { if (cur < 0) go(START_AT, true); else setPlay(!playing); };
   // share: the film link (with the scene now showing, e.g. /film/#cross) — the phone's share sheet, else copy the link
   function toast(msg) { var t = $('toast'); t.textContent = msg; t.hidden = false; clearTimeout(toast.h); toast.h = setTimeout(function () { t.hidden = true; }, 2200); }
@@ -200,7 +207,7 @@
     var i = cur >= 0 ? cur : START_AT, url = location.origin + '/film/' + (LANG !== 'ko' ? '?lang=' + LANG : '') + (i > 0 ? '#' + S[i][0] : '');
     var title = UI.title || '영상으로 보는 성경 이야기', text = (UI.shareText || '창조에서 새 하늘과 새 땅까지, 성경 이야기를 14분 영상으로') + (i > 0 ? ' — ' + S[i][1] : '');
     function copy() {   // PC (and any share-sheet failure): copy the link and say so
-      var done = function () { toast(UI.copied || '링크를 복사했어요'); if (window.gtag) gtag('event', 'share', { method: 'copy', content_type: 'film', item_id: S[i][0] }); };
+      var done = function () { toast(UI.copied || '링크를 복사했어요'); ev('share', { method: 'copy', content_type: 'film', item_id: S[i][0] }); };
       if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(url).then(done, legacy); else legacy();
       function legacy() { var ta = document.createElement('textarea'); ta.value = url; ta.setAttribute('readonly', ''); ta.style.cssText = 'position:fixed;left:-9999px';
         document.body.appendChild(ta); ta.select(); var ok = false; try { ok = document.execCommand('copy'); } catch (e) {} ta.remove(); if (ok) done(); else prompt('', url); }
@@ -208,18 +215,18 @@
     // the system share sheet wherever the browser has one (phones and Windows/macOS PCs alike); if it can't open, copy the link
     var data = { title: title, text: text, url: url };
     if (navigator.share && (!navigator.canShare || navigator.canShare(data)))
-      navigator.share(data).then(function () { if (window.gtag) gtag('event', 'share', { method: 'native', content_type: 'film', item_id: S[i][0] }); })
+      navigator.share(data).then(function () { ev('share', { method: 'native', content_type: 'film', item_id: S[i][0] }); })
         .catch(function (e) { if (!e || e.name !== 'AbortError') { console.warn('share failed:', e); copy(); } });
     else copy();
   };
-  $('prev').onclick = function () { go(Math.max(0, cur - 1), playing || cur < 0); };
-  $('next').onclick = function () { go(Math.min(S.length - 1, cur + 1), playing || cur < 0); };
+  $('prev').onclick = function () { ev('film_nav', { dir: 'prev', from_scene: cur >= 0 ? S[cur][0] : '' }); go(Math.max(0, cur - 1), playing || cur < 0); };
+  $('next').onclick = function () { ev('film_nav', { dir: 'next', from_scene: cur >= 0 ? S[cur][0] : '' }); go(Math.min(S.length - 1, cur + 1), playing || cur < 0); };
   stage.onclick = function (e) { if (e.target === big || big.contains(e.target)) return; if (started) setPlay(!playing); };
   document.querySelectorAll('.bar [data-o]').forEach(function (b) { b.onclick = function () {
-    if (ori === b.dataset.o) return; ori = b.dataset.o; var t = au.currentTime; size();
+    if (ori === b.dataset.o) return; ori = b.dataset.o; ev('film_orientation', { to: ori }); var t = au.currentTime; size();
     if (cur >= 0) { loadedIdx = [-1, -1]; var i = cur; cur = -1; go(i); au.currentTime = t; } }; });
   $('fs').onclick = function () {
-    var on = !document.body.classList.contains('full'); document.body.classList.toggle('full', on);
+    var on = !document.body.classList.contains('full'); document.body.classList.toggle('full', on); ev('film_fullscreen', { on: on });
     try { if (on && document.documentElement.requestFullscreen) document.documentElement.requestFullscreen().catch(function () {}); else if (!on && document.fullscreenElement) document.exitFullscreen(); } catch (e) {}
     size(); poke();
   };
@@ -227,12 +234,17 @@
   var idleT; function poke() { document.body.classList.remove('idle'); clearTimeout(idleT); idleT = setTimeout(function () { if (playing) document.body.classList.add('idle'); }, 2500); }
   addEventListener('pointermove', poke); addEventListener('touchstart', poke, { passive: true });
   au.addEventListener('ended', function () { if (playing) go(cur + 1); });
+  au.addEventListener('error', function () { if (cur >= 0 && started) ev('film_error', { kind: 'audio', scene: S[cur][0] }); });
   // 소리가 이 재생기 밖에서 멈추거나(잠금화면·알림·이어폰·시스템) 시작되면 재생 상태를 그대로 따른다 — 다시 틀지 않음
   au.addEventListener('pause', function () { if (selfPause) { selfPause = false; return; } if (performance.now() - srcT < 400) return; if (playing && !au.ended) setPlay(false); });
   au.addEventListener('play', function () { if (!playing && started) { playing = true; $('pp').textContent = '❚❚'; $('pp').setAttribute('aria-label', '일시정지'); } });
   // 화면을 떠나면(탭 전환·앱 전환·브라우저 닫기) 소리도 멈춘다 — 그림은 숨은 탭에서 멈추므로 소리만 남지 않게
-  document.addEventListener('visibilitychange', function () { if (document.hidden && playing) setPlay(false); });
-  addEventListener('pagehide', function () { setPlay(false); try { au.removeAttribute('src'); au.load(); } catch (e) {} });
+  document.addEventListener('visibilitychange', function () { if (document.hidden && playing) { pausedBy = 'hidden'; setPlay(false); } });
+  // leaving: how much was watched and where — the drop-off point (sent with the beacon transport so it survives the unload)
+  var exitSent = false;
+  addEventListener('pagehide', function () {
+    if (started && !exitSent) { exitSent = true; ev('film_exit', { scene: cur >= 0 ? S[cur][0] : '', position_sec: pos(), watched_sec: Math.round(watched), percent: Math.round(watched / TOTAL * 100), transport_type: 'beacon' }); }
+    pausedBy = 'leave'; setPlay(false); try { au.removeAttribute('src'); au.load(); } catch (e) {} });
   // 잠금 화면·알림의 재생 컨트롤이 이 재생기를 따르도록
   if ('mediaSession' in navigator) { try {
     navigator.mediaSession.metadata = new MediaMetadata({ title: UI.title || '영상으로 보는 성경 이야기', artist: UI.brand || '한눈에 보는 성경 이야기', artwork: [{ src: '/icon-512.png', sizes: '512x512', type: 'image/png' }] });
@@ -257,6 +269,8 @@
       var t = clk;
       if (au.error && playing && clk >= S[cur][2]) { go(cur + 1); requestAnimationFrame(loop); lastNow = now; return; }
       wait.hidden = ok || !started;
+      if (playing && ok) { watched += dt; stallT = 0; var pc = watched / TOTAL * 100; for (var mi = 0; mi < MILE.length; mi++) if (pc >= MILE[mi] && !mileSent[MILE[mi]]) { mileSent[MILE[mi]] = 1; ev('film_progress', { percent: MILE[mi], scene: S[cur][0], orientation: ori }); } }
+      else if (playing && !ok) { stallT += dt; if (stallT > 5 && !stallSent[cur]) { stallSent[cur] = 1; ev('film_stall', { scene: S[cur][0], orientation: ori }); } }
       if (ok) {
         if (!playing && au.paused && au.readyState < 1) t = 0;
         // draw only when the picture can change: a new time, scene or orientation (paused = no 60 Hz redraw burning a

@@ -798,7 +798,7 @@
       </details>
     </div>
 
-    <div class="respond reveal" data-ga="respond">
+    <div class="respond reveal" id="respond" data-ga="respond">
       <h3 data-i18n="respond.h3">그래서, 나는 어떻게?</h3>
       <p class="r-sub" data-i18n="respond.sub">이 사랑은 정보가 아니라 <b>초대</b>입니다. 나를 대신해 못 박히신 그 사랑이 마음에 닿았다면, 지금 이 기도를 한 문장씩 천천히 따라 드려 보세요.</p>
       <div class="prayer" data-i18n="respond.prayer" data-clarity-mask="true">
@@ -1501,8 +1501,9 @@ var SVG={
 /* 영상(/film/)이 준비된 언어와 첫 화면 버튼 글자 — 단일 출처(tools/build-pages.mjs 도 여기서 읽어 정적 페이지에 반영) */
 const FILM_CTA={ko:'14분 영상으로 보기',en:'Watch the 14-minute film',es:'Ver el video de 14 minutos','zh-Hans':'观看14分钟影片',ja:'14分の映像で見る',ar:'شاهد الفيلم (14 دقيقة)','zh-Hant':'觀看14分鐘影片',fr:'Voir le film de 14 minutes',ru:'Смотреть фильм (14 минут)',id:'Tonton film 14 menit',de:'Den 14-Minuten-Film ansehen','pt-BR':'Assistir ao filme de 14 minutos'};
 /* 유튜브에 공개된 언어별 전체 영상 id — 있으면 첫 화면 영상 버튼이 유튜브로(새 탭), 없으면 /film/ 페이지로. 공개로 바꾼 영상만
-   넣는다(비공개 id 는 '비공개 동영상'이 뜸). 기록: motion/youtube/uploaded.json. tools/build-pages.mjs 도 여기서 읽는다 */
-const FILM_YT={"ko":"66VfBSXxAs8","en":"IDvto63DZC8","es":"h6HTeZijyr8","pt-BR":"b74m2kxl4jM","fr":"zCPsT6RbqE4","de":"nGR-70YYL-E","ru":"rPBUPZC4PnA","id":"Jntp5xDBBJg","zh-Hans":"4MvbvszEQHU","zh-Hant":"UEr4oQAZS6s","ja":"VIGqzFaWkTU","ar":"IlhNG5Mul9I"};
+   넣는다(비공개 id 는 '비공개 동영상'이 뜸). 기록: motion/youtube/uploaded.json. tools/build-pages.mjs 도 여기서 읽는다.
+   zh-Hans 는 공개돼 있어도 넣지 않는다 — 간체 사용자 대부분이 있는 중국 본토에서 유튜브가 막혀 있어 /film/ 로 보낸다 */
+const FILM_YT={"ko":"66VfBSXxAs8","en":"IDvto63DZC8","es":"h6HTeZijyr8","pt-BR":"b74m2kxl4jM","fr":"zCPsT6RbqE4","de":"nGR-70YYL-E","ru":"rPBUPZC4PnA","id":"Jntp5xDBBJg","zh-Hant":"UEr4oQAZS6s","ja":"VIGqzFaWkTU","ar":"IlhNG5Mul9I"};
 function doApply(pack,code){
   curPack=pack; curCode=code;
   /* 영어 페이지는 CC BY 제외: ESV 약관이 "CC 라이선스로 공개되는 출판물에 인용 불가"를 명시하므로,
@@ -1688,6 +1689,20 @@ main.addEventListener('toggle',function(e){ var d=e.target; if(d.tagName==='DETA
 var _qrLoading; function loadQR(cb){ if(window.__QR__)return cb(); if(_qrLoading){_qrLoading.push(cb);return;} _qrLoading=[cb]; var sc=document.createElement('script'); sc.src='/qr.js'; sc.onload=function(){ var q=_qrLoading; _qrLoading=null; q.forEach(function(f){f();}); }; sc.onerror=function(){ _qrLoading=null; }; document.head.appendChild(sc); }
 function openQR(){ var code=curCode||'ko'; var box=document.getElementById('qrImg'); if(!box)return; var url=shareUrl(); document.getElementById('qrUrl').textContent=url; document.getElementById('qrModal').hidden=false; gevent('share',{method:'qr'}); loadQR(function(){ if(!window.__QR__)return; box.innerHTML=window.__QR__.svg(url); var dl=document.getElementById('qrDl'); if(dl){ dl.href=window.__QR__.pngDataUrl(url); dl.setAttribute('download','qr-one-scroll-bible-'+code+'.png'); } }); }
 (function(){ var qm=document.getElementById('qrModal'); if(!qm)return; var cl=document.getElementById('qrClose'); if(cl)cl.addEventListener('click',function(){qm.hidden=true;}); qm.addEventListener('click',function(e){ if(e.target===qm)qm.hidden=true; }); })();
+
+/* GA4 — 클릭 추적(한곳에서): 영상 버튼의 목적지, 사이트 안 다른 페이지로의 이동, 바깥 링크, 연락·테마·QR 저장.
+   성경 구절 링크는 verse_open 이 따로 잡으므로 바깥 링크에서 뺀다. 캡처 단계라 다른 핸들러가 막아도 기록된다. */
+document.addEventListener('click',function(e){
+  var a=e.target&&e.target.closest&&e.target.closest('a,button'); if(!a) return;
+  if(a.id==='filmCta'){ var y=/youtu/.test(a.href); gevent('film_cta_click',{dest:y?'youtube':'film',video_id:y?a.href.split('/').pop():''}); return; }
+  if(a.id==='themeBtn'){ gevent('theme_toggle'); return; }
+  if(a.id==='qrDl'){ gevent('qr_download'); return; }
+  if(a.id==='contact'){ gevent('contact_click'); return; }
+  if(a.tagName!=='A'||!a.href||a.hasAttribute('data-ref')) return;
+  var u; try{ u=new URL(a.href,location.href); }catch(x){ return; }
+  if(u.host===location.host){ var m=u.pathname.match(/^\/(film|maps|about|languages)\//); if(m) gevent('nav_click',{to:m[1]}); }
+  else if(/^https?:$/.test(u.protocol)) gevent('outbound_click',{host:u.host,url:u.href.slice(0,100)});
+},true);
 
 /* 섹션 노출 분석(언어별 이탈 지점 파악) */
 var _gaSeen={};

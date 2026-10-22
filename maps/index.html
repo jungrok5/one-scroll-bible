@@ -787,7 +787,7 @@ $('#themeBtn').addEventListener('click',()=>{
   document.querySelector('meta[name=theme-color]').setAttribute('content',sp?'#efe6d3':'#0e1118');
 });
 /* ---- share sheet + QR modal (ported verbatim from main index.html; adapted: L/PACK, no-op gevent, maps URL) ---- */
-function gevent(){}
+function gevent(n,p){ if(window.gtag){ try{ gtag('event',n,Object.assign({language:L,page_type:'maps'},p||{})); }catch(e){} } }   /* GA4 (예전엔 빈 함수라 공유 이벤트가 버려졌다) */
 function showToast(){
   var t=document.getElementById('toast'); if(!t) return;
   t.classList.add('show'); clearTimeout(window.__toastT);
@@ -888,6 +888,30 @@ Promise.all([
   fetch('/maps/data.json').then(r=>r.json())
 ]).then(([g,d])=>{ GEO=g; DATA=d; hydratePlaces(d); buildAll(); })
   .catch(e=>{ $$('.mapcard').forEach(c=>c.innerHTML='<div class="loading">지도를 불러오지 못했습니다. / Could not load maps.</div>'); console.error(e); });
+</script>
+<script>
+/* GA4 — 링크·버튼 클릭과 섹션 도달 (언어·페이지 종류 포함) */
+(function(){
+  document.addEventListener('click',function(e){
+    var t=e.target, a=t&&t.closest&&t.closest('a,button'), sec=t&&t.closest&&t.closest('section[id]'), where=sec?sec.id:'';
+    if(a&&a.matches('.ctrls .play')) return gevent('map_play',{map:where});
+    if(a&&a.matches('.ctrls .prev,.ctrls .next')) return gevent('map_step',{map:where,dir:a.classList.contains('prev')?'prev':'next'});
+    if(a&&a.matches('.chip')) return gevent('map_journey',{map:where,journey:+a.dataset.i});
+    var mk=t&&t.closest&&t.closest('g.mk'); if(mk) return gevent('map_point',{map:where});
+    if(!a) return;
+    if(a.id==='themeBtn') return gevent('theme_toggle');
+    if(a.id==='qrDl') return gevent('qr_download');
+    if(a.id==='contact') return gevent('contact_click');
+    if(a.tagName!=='A'||!a.href) return;
+    var u; try{ u=new URL(a.href,location.href); }catch(x){ return; }
+    if(u.host===location.host&&u.pathname===location.pathname) return;   // an anchor on this page
+    if(u.host===location.host){ var m=u.pathname.match(/^\/(film|maps|about|languages)?\/?([a-zA-Z-]*)\/?$/); gevent('nav_click',{to:(m&&m[1])||'home',from:'maps'}); }
+    else if(/^https?:$/.test(u.protocol)) gevent('outbound_click',{host:u.host,url:u.href.slice(0,100),section:where});
+  },true);
+  if('IntersectionObserver' in window){ var seen={}; var o=new IntersectionObserver(function(es){ es.forEach(function(en){ var id=en.target.id;
+    if(en.isIntersecting&&!seen[id]){ seen[id]=1; gevent('section_view',{section:id}); } }); },{threshold:.35});
+    document.querySelectorAll('section[id]').forEach(function(s){ o.observe(s); }); }
+})();
 </script>
 </body>
 </html>

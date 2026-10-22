@@ -71,7 +71,14 @@ Protestant church; Korean Revised Version (개역개정) as the Korean baseline.
   URL as **SVG on screen + high-res PNG on download**; no per-language image, no `qrcode` build dep. Deep links `#s1`–`#s13`.
   (The canvas verse-image option was removed — canvas fonts can't render most non-Latin scripts.)
 - Search/AI-citation work (SEO·AEO·GEO·LLMO·Naver): the **/fire-your-seo-agency skill** (`.claude/skills/fire-your-seo-agency/`, vendored MIT); changes, baselines and re-measure dates go in `tools/seo-log.md`. After each deploy `.github/workflows/indexnow.yml` pings IndexNow (Bing·Naver·Yandex) with the URLs whose `<lastmod>` changed.
-- GA4 events: language_select · share{method} · scene_view · section_view · prayer_view · read_more.
+- GA4 events (all carry `language`; maps/about also `page_type`) — main: language_select · share{method} · scene_view{scene} ·
+  section_view{section} · prayer_view · prayer_complete · read_more · faq_open{q} · scroll_depth{percent} · verse_open{ref} ·
+  film_cta_click{dest youtube|film, video_id} · nav_click{to} · outbound_click{host,url} · contact_click · theme_toggle · qr_download.
+  Film: film_play{start_scene,from_link} · film_scene{scene,scene_index} · film_progress{percent 10/25/50/75/90 of time actually
+  watched} · film_complete{watched_sec} · film_pause/film_exit{scene,position_sec,watched_sec} (drop-off) · film_chapter · film_nav ·
+  film_orientation · film_fullscreen · film_stall{scene} (picture not ready 5 s — slow device) · film_error{kind} · share.
+  Maps: map_play · map_step · map_journey · map_point{map} · section_view. Params show in GA reports only once registered as
+  custom dimensions (Admin → Custom definitions). Inbound links we control carry UTM (`?utm_source=youtube&utm_medium=video&utm_campaign=film_<lang>`).
 - `vercel.json` (`buildCommand = node tools/build-pages.mjs` + security/cache headers), `robots.txt`.
   **`.vercelignore` keeps `AGENTS.md`, `CLAUDE.md` and `.claude` out of the deploy.**
 - **Film** (`/film/`): 21 canvas scenes drawn live per language — sources in `motion/` (see `motion/README.md`), published

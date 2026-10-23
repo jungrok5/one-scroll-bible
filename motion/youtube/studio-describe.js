@@ -9,10 +9,14 @@
 
 window.__osbDescribe = async (id, L, n) => {
   const sleep = ms => new Promise(r => setTimeout(r, ms));
-  const m = window.__man || (window.__man = await (await fetch('http://127.0.0.1:8765/youtube/manifest.json')).json());
-  const lang = await (await fetch(`http://127.0.0.1:8765/youtube/lang/${L}.json`)).json();
-  const item = n ? m.languages[L].shorts[n - 1] : m.languages[L].film;
-  const newLine = (n ? lang.short_tail : lang.watch) + ': ' + item.link;
+  // always fetch fresh (no-store): a manifest cached in the tab from before `link` existed once wrote "…: undefined" into a
+  // public description (2026-10-23, fixed within minutes)
+  const m = await (await fetch('http://127.0.0.1:8765/youtube/manifest.json', { cache: 'no-store' })).json();
+  const lang = await (await fetch(`http://127.0.0.1:8765/youtube/lang/${L}.json`, { cache: 'no-store' })).json();
+  const item = n ? m.languages[L]?.shorts?.[n - 1] : m.languages[L]?.film;
+  const label = n ? lang.short_tail : lang.watch;
+  if (!/^https:\/\/one-scroll-bible\.com\/[^\s]*utm_source=youtube/.test(item?.link || '') || !label) return { id, L, n, error: 'manifest has no link/label — run node motion/youtube/manifest.mjs', link: item?.link };
+  const newLine = label + ': ' + item.link;
   // open the edit page through the SPA router (list → edit, or the editor can stay on the previous video)
   let v = null;
   for (let a = 0; a < 3 && !v; a++) {

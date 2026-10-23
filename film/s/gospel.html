@@ -79,11 +79,14 @@ function say(ctx, s, x, y, o) {                        // o: size, weight, font,
   if (!o.raw) s = Pilot.tr(s); if (!s) return; const a = o.alpha == null ? 1 : o.alpha; if (a <= .003) return;
   let size = o.size; const f = o.font || SERIF, wt = o.weight || 400, set = () => { ctx.font = `${wt} ${size}px ${f}`; ctx.letterSpacing = (o.ls || 0) * size / o.size + 'px'; };
   ctx.save(); set(); if (RTL()) ctx.direction = 'rtl';
-  if (o.maxW && Pilot.lang !== 'ko') { const wd = ctx.measureText(s).width; if (wd > o.maxW) { size *= o.maxW / wd; set(); } }
+  // a translation may break a long line with \n (Korean never does): the lines stack around y, the widest one sets the shrink
+  const lines = s.split('\n');
+  if (o.maxW && Pilot.lang !== 'ko') { const wd = Math.max(...lines.map(l => ctx.measureText(l).width)); if (wd > o.maxW) { size *= o.maxW / wd; set(); } }
   ctx.textAlign = o.align || 'center'; ctx.textBaseline = 'alphabetic'; ctx.globalAlpha *= a;   // multiplies: a drawing's fade-out carries to its words
   ctx.shadowColor = o.glow ? `rgba(${GOLD},.75)` : 'rgba(0,0,0,.85)'; ctx.shadowBlur = o.glow || 14;
   if (o.blur) ctx.filter = `blur(${o.blur}px)`;
-  ctx.fillStyle = o.color || `rgb(${WARM})`; ctx.fillText(s, x, y); ctx.restore();
+  ctx.fillStyle = o.color || `rgb(${WARM})`;
+  lines.forEach((l, i) => ctx.fillText(l, x, y + (i - (lines.length - 1) / 2) * size * 1.15)); ctx.restore();
 }
 function wrap(ctx, s, maxW, f) { ctx.font = f; const out = []; let cur = '';
   for (const w of s.split(' ')) { const n = cur ? cur + ' ' + w : w; if (ctx.measureText(n).width > maxW && cur) { out.push(cur); cur = w; } else cur = n; } if (cur) out.push(cur); return out; }

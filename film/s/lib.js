@@ -126,6 +126,14 @@
       const j = await new Promise((ok, no) => { const x = new XMLHttpRequest();   // XHR, not fetch: also works from file:// when rendering
         x.open('GET', 'i18n/' + P.lang + '.json'); x.onload = () => { try { ok(JSON.parse(x.responseText)); } catch (e) { no(e); } }; x.onerror = no; x.send(); });
       P.L = Object.assign({}, j._common || {}, j[P.scene] || {}); P.dir = j._dir || 'ltr';
+      // letter-spacing (tracking) is for Latin/Cyrillic/CJK titles: in a joined or stacked script it pulls conjuncts and
+      // headlines apart (Devanagari भूमध्य → भू म ध् य) or breaks Arabic joining — such a language draws with no tracking
+      if (/[\p{Script=Arabic}\p{Script=Syriac}\p{Script=Devanagari}\p{Script=Bengali}\p{Script=Gurmukhi}\p{Script=Gujarati}\p{Script=Oriya}\p{Script=Tamil}\p{Script=Telugu}\p{Script=Kannada}\p{Script=Malayalam}\p{Script=Sinhala}\p{Script=Thai}\p{Script=Lao}\p{Script=Myanmar}\p{Script=Khmer}\p{Script=Tibetan}\p{Script=Mongolian}]/u
+          .test(JSON.stringify(j._ui || j[P.scene] || ''))) {
+        const ls = Object.getOwnPropertyDescriptor(CanvasRenderingContext2D.prototype, 'letterSpacing');
+        if (ls) Object.defineProperty(CanvasRenderingContext2D.prototype, 'letterSpacing', { configurable: true, get: ls.get, set() { ls.set.call(this, '0px'); } });
+        P.noTracking = true;
+      }
       // a language file may swap the scenes' Korean typefaces for ones that suit its script:
       // "_fonts": { "serif": "'Noto Serif SC','Songti SC',serif", "sans": "'Noto Sans SC','PingFang SC',sans-serif" }
       if (j._fonts) { const F = j._fonts, d = Object.getOwnPropertyDescriptor(CanvasRenderingContext2D.prototype, 'font');

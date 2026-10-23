@@ -1,12 +1,12 @@
 <!doctype html>
 <meta charset="utf-8">
 <title>osb relay</title>
-<!-- Opened as a popup by a page whose CSP blocks fetching 127.0.0.1 (Meta Business Suite). On request from its opener
+<!-- Opened as a popup by a page whose CSP blocks fetching 127.0.0.1 (Meta Business Suite, Threads). On request from its opener
      it reads a file from this local server (same origin) and hands the bytes back with postMessage. Answers only the
      origins below and only paths under this server. -->
 <p id="s">relay ready</p>
 <script>
-const OK = new Set(['https://business.facebook.com']);
+const OK = new Set(['https://business.facebook.com', 'https://www.threads.com']);
 addEventListener('message', async e => {
   if (!OK.has(e.origin) || !e.data || e.data.osb !== 'get') return;
   const s = document.getElementById('s');

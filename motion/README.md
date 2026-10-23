@@ -72,6 +72,8 @@ node motion/youtube/serve.mjs                            # 파일 서버(그대�
 - 그 페이지의 보안 정책(CSP)이 127.0.0.1을 막아서, 파일은 `motion/youtube/relay.html` 팝업이 받아 넘깁니다(빨간 OSB RELAY 버튼).
 - 설명은 **실제 키 입력으로** 넣습니다. 스크립트로 넣으면 해시태그가 뒤섞이고 편집기가 멈춥니다.
 - 프로필 링크는 앱에서만 바꿀 수 있습니다. Threads 동시 게시는 비즈니스 도구 예약에는 없습니다.
+- **Threads**에는 같은 21개를 threads.com 웹 예약으로 따로 올립니다(`insta_reels_plan.mjs ko --threads` → `threads.json`,
+  설명에 사이트 링크(`utm_source=threads`)와 주제 태그 하나). 붙여 넣기 도우미 `motion/social/threads-reels.js` — 순서와 함정은 파일 머리말.
 
 예전 방식(3분 넘는 릴스는 비팔로워에게 추천되지 않아 7편 + 1분 예고편으로 나눈 것):
 `out/<scene>-v.mp4`(장면별 세로 원본)가 있어야 합니다. 결과는 `out/insta/`.

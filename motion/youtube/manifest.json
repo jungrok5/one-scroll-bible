@@ -9,8 +9,8 @@
     "file": "film-ko.mp4",
     "local": "motion/out/release/film-ko.mp4",
     "title": "창조에서 새 하늘과 새 땅까지, 성경 이야기를 14분 영상으로",
-    "description": "창조에서 새 하늘과 새 땅까지 — 장면마다 다른 화풍으로 그린 21개 장면이 하나의 줄거리로 이어집니다.\n\n전체 이야기를 글로 천천히 읽기: https://one-scroll-bible.com/?utm_source=youtube&utm_medium=video&utm_campaign=film_ko\n\n0:00 하나의 줄거리\n0:36 창조\n1:11 타락\n1:45 족장 시대\n2:11 출애굽\n2:55 광야 여정\n3:34 사사 시대\n4:14 통일 왕국\n4:53 분열 왕국 · 포로\n5:29 포로 귀환\n6:07 400년 침묵\n6:41 예수님의 오심\n7:17 십자가\n7:56 부활\n8:23 교회의 시작\n8:58 회복\n9:34 거울\n10:19 복음의 핵심\n11:25 성경은 실화인가\n12:25 착하게 살면?\n13:23 초대\n\n성경 인용: 「성경전서 개역개정판」 © 대한성서공회. 저작권은 대한성서공회에 있으며, 출처를 밝혀 인용했습니다. 장면의 그림은 모두 코드로 그렸고, 음악·효과음은 ElevenLabs로 만들었습니다.\n\n#성경 #성경이야기 #성경개관",
-    "link": "https://one-scroll-bible.com/?utm_source=youtube&utm_medium=video&utm_campaign=film_ko",
+    "description": "창조에서 새 하늘과 새 땅까지 — 장면마다 다른 화풍으로 그린 21개 장면이 하나의 줄거리로 이어집니다.\n\n전체 이야기를 글로 천천히 읽기: https://one-scroll-bible.com/?lang=ko&utm_source=youtube&utm_medium=video&utm_campaign=film_ko\n\n0:00 하나의 줄거리\n0:36 창조\n1:11 타락\n1:45 족장 시대\n2:11 출애굽\n2:55 광야 여정\n3:34 사사 시대\n4:14 통일 왕국\n4:53 분열 왕국 · 포로\n5:29 포로 귀환\n6:07 400년 침묵\n6:41 예수님의 오심\n7:17 십자가\n7:56 부활\n8:23 교회의 시작\n8:58 회복\n9:34 거울\n10:19 복음의 핵심\n11:25 성경은 실화인가\n12:25 착하게 살면?\n13:23 초대\n\n성경 인용: 「성경전서 개역개정판」 © 대한성서공회. 저작권은 대한성서공회에 있으며, 출처를 밝혀 인용했습니다. 장면의 그림은 모두 코드로 그렸고, 음악·효과음은 ElevenLabs로 만들었습니다.\n\n#성경 #성경이야기 #성경개관",
+    "link": "https://one-scroll-bible.com/?lang=ko&utm_source=youtube&utm_medium=video&utm_campaign=film_ko",
     "tags": [
      "한눈에 보는 성경 이야기",
      "성경",
@@ -175,7 +175,11 @@
      }
     ],
     "playlist": "한눈에 보는 성경 이야기",
-    "page": "https://one-scroll-bible.com/film/"
+    "page": "https://one-scroll-bible.com/film/",
+    "pinned": {
+     "text": "혹시, 이런 게 마음에 걸리나요?",
+     "link": "https://one-scroll-bible.com/?lang=ko&utm_source=youtube&utm_medium=video&utm_campaign=film_ko&utm_content=pinned#faq"
+    }
    },
    "shorts": [
     {
@@ -184,8 +188,8 @@
      "file": "shorts-ko-01-opening.mp4",
      "local": "motion/out/release/shorts-ko-01-opening.mp4",
      "title": "성경은 결국 한 편의 이야기입니다 1/21",
-     "link": "https://one-scroll-bible.com/?utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=01-opening",
-     "description": "창조에서 새 하늘과 새 땅까지, 성경 이야기를 14분 영상으로\n전체 영상(14분)과 글로 읽는 성경 이야기: https://one-scroll-bible.com/?utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=01-opening\n\n#Shorts #성경 #성경이야기",
+     "link": "https://one-scroll-bible.com/?lang=ko&utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=01-opening",
+     "description": "창조에서 새 하늘과 새 땅까지, 성경 이야기를 14분 영상으로\n전체 영상(14분)과 글로 읽는 성경 이야기: https://one-scroll-bible.com/?lang=ko&utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=01-opening\n\n#Shorts #성경 #성경이야기",
      "tags": [
       "한눈에 보는 성경 이야기",
       "성경",
@@ -226,8 +230,8 @@
      "file": "shorts-ko-02-creation.mp4",
      "local": "motion/out/release/shorts-ko-02-creation.mp4",
      "title": "“하나님이 이르시되 빛이 있으라” — 창조 2/21",
-     "link": "https://one-scroll-bible.com/?utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=02-creation",
-     "description": "창조에서 새 하늘과 새 땅까지, 성경 이야기를 14분 영상으로\n전체 영상(14분)과 글로 읽는 성경 이야기: https://one-scroll-bible.com/?utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=02-creation\n\n#Shorts #성경 #성경이야기",
+     "link": "https://one-scroll-bible.com/?lang=ko&utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=02-creation",
+     "description": "창조에서 새 하늘과 새 땅까지, 성경 이야기를 14분 영상으로\n전체 영상(14분)과 글로 읽는 성경 이야기: https://one-scroll-bible.com/?lang=ko&utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=02-creation\n\n#Shorts #성경 #성경이야기",
      "tags": [
       "한눈에 보는 성경 이야기",
       "성경",
@@ -268,8 +272,8 @@
      "file": "shorts-ko-03-fall.mp4",
      "local": "motion/out/release/shorts-ko-03-fall.mp4",
      "title": "“네가 어디 있느냐” — 타락 3/21",
-     "link": "https://one-scroll-bible.com/?utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=03-fall",
-     "description": "창조에서 새 하늘과 새 땅까지, 성경 이야기를 14분 영상으로\n전체 영상(14분)과 글로 읽는 성경 이야기: https://one-scroll-bible.com/?utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=03-fall\n\n#Shorts #성경 #성경이야기",
+     "link": "https://one-scroll-bible.com/?lang=ko&utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=03-fall",
+     "description": "창조에서 새 하늘과 새 땅까지, 성경 이야기를 14분 영상으로\n전체 영상(14분)과 글로 읽는 성경 이야기: https://one-scroll-bible.com/?lang=ko&utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=03-fall\n\n#Shorts #성경 #성경이야기",
      "tags": [
       "한눈에 보는 성경 이야기",
       "성경",
@@ -310,8 +314,8 @@
      "file": "shorts-ko-04-patriarch.mp4",
      "local": "motion/out/release/shorts-ko-04-patriarch.mp4",
      "title": "“하늘을 우러러 뭇별을 셀 수 있나 보라” — 족장 시대 4/21",
-     "link": "https://one-scroll-bible.com/?utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=04-patriarch",
-     "description": "창조에서 새 하늘과 새 땅까지, 성경 이야기를 14분 영상으로\n전체 영상(14분)과 글로 읽는 성경 이야기: https://one-scroll-bible.com/?utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=04-patriarch\n\n#Shorts #성경 #성경이야기",
+     "link": "https://one-scroll-bible.com/?lang=ko&utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=04-patriarch",
+     "description": "창조에서 새 하늘과 새 땅까지, 성경 이야기를 14분 영상으로\n전체 영상(14분)과 글로 읽는 성경 이야기: https://one-scroll-bible.com/?lang=ko&utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=04-patriarch\n\n#Shorts #성경 #성경이야기",
      "tags": [
       "한눈에 보는 성경 이야기",
       "성경",
@@ -352,8 +356,8 @@
      "file": "shorts-ko-05-exodus.mp4",
      "local": "motion/out/release/shorts-ko-05-exodus.mp4",
      "title": "“내 백성을 보내라” — 출애굽 5/21",
-     "link": "https://one-scroll-bible.com/?utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=05-exodus",
-     "description": "창조에서 새 하늘과 새 땅까지, 성경 이야기를 14분 영상으로\n전체 영상(14분)과 글로 읽는 성경 이야기: https://one-scroll-bible.com/?utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=05-exodus\n\n#Shorts #성경 #성경이야기",
+     "link": "https://one-scroll-bible.com/?lang=ko&utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=05-exodus",
+     "description": "창조에서 새 하늘과 새 땅까지, 성경 이야기를 14분 영상으로\n전체 영상(14분)과 글로 읽는 성경 이야기: https://one-scroll-bible.com/?lang=ko&utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=05-exodus\n\n#Shorts #성경 #성경이야기",
      "tags": [
       "한눈에 보는 성경 이야기",
       "성경",
@@ -394,8 +398,8 @@
      "file": "shorts-ko-06-wilderness.mp4",
      "local": "motion/out/release/shorts-ko-06-wilderness.mp4",
      "title": "약속의 땅 문 앞에 선 백성, 이제 들어갑니다… — 광야 여정 6/21",
-     "link": "https://one-scroll-bible.com/?utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=06-wilderness",
-     "description": "창조에서 새 하늘과 새 땅까지, 성경 이야기를 14분 영상으로\n전체 영상(14분)과 글로 읽는 성경 이야기: https://one-scroll-bible.com/?utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=06-wilderness\n\n#Shorts #성경 #성경이야기",
+     "link": "https://one-scroll-bible.com/?lang=ko&utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=06-wilderness",
+     "description": "창조에서 새 하늘과 새 땅까지, 성경 이야기를 14분 영상으로\n전체 영상(14분)과 글로 읽는 성경 이야기: https://one-scroll-bible.com/?lang=ko&utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=06-wilderness\n\n#Shorts #성경 #성경이야기",
      "tags": [
       "한눈에 보는 성경 이야기",
       "성경",
@@ -436,8 +440,8 @@
      "file": "shorts-ko-07-judges.mp4",
      "local": "motion/out/release/shorts-ko-07-judges.mp4",
      "title": "왕이 없어 제멋대로 행하다. — 사사 시대 7/21",
-     "link": "https://one-scroll-bible.com/?utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=07-judges",
-     "description": "창조에서 새 하늘과 새 땅까지, 성경 이야기를 14분 영상으로\n전체 영상(14분)과 글로 읽는 성경 이야기: https://one-scroll-bible.com/?utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=07-judges\n\n#Shorts #성경 #성경이야기",
+     "link": "https://one-scroll-bible.com/?lang=ko&utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=07-judges",
+     "description": "창조에서 새 하늘과 새 땅까지, 성경 이야기를 14분 영상으로\n전체 영상(14분)과 글로 읽는 성경 이야기: https://one-scroll-bible.com/?lang=ko&utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=07-judges\n\n#Shorts #성경 #성경이야기",
      "tags": [
       "한눈에 보는 성경 이야기",
       "성경",
@@ -478,8 +482,8 @@
      "file": "shorts-ko-08-kingdom.mp4",
      "local": "motion/out/release/shorts-ko-08-kingdom.mp4",
      "title": "사람은 외모를 보거니와 나 여호와는 중심을 보느니라 — 통일 왕국 8/21",
-     "link": "https://one-scroll-bible.com/?utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=08-kingdom",
-     "description": "창조에서 새 하늘과 새 땅까지, 성경 이야기를 14분 영상으로\n전체 영상(14분)과 글로 읽는 성경 이야기: https://one-scroll-bible.com/?utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=08-kingdom\n\n#Shorts #성경 #성경이야기",
+     "link": "https://one-scroll-bible.com/?lang=ko&utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=08-kingdom",
+     "description": "창조에서 새 하늘과 새 땅까지, 성경 이야기를 14분 영상으로\n전체 영상(14분)과 글로 읽는 성경 이야기: https://one-scroll-bible.com/?lang=ko&utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=08-kingdom\n\n#Shorts #성경 #성경이야기",
      "tags": [
       "한눈에 보는 성경 이야기",
       "성경",
@@ -520,8 +524,8 @@
      "file": "shorts-ko-09-exile.mp4",
      "local": "motion/out/release/shorts-ko-09-exile.mp4",
      "title": "성전이 불타고, 백성은 바벨론으로 끌려갑니다. — 분열 왕국 · 포로 9/21",
-     "link": "https://one-scroll-bible.com/?utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=09-exile",
-     "description": "창조에서 새 하늘과 새 땅까지, 성경 이야기를 14분 영상으로\n전체 영상(14분)과 글로 읽는 성경 이야기: https://one-scroll-bible.com/?utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=09-exile\n\n#Shorts #성경 #성경이야기",
+     "link": "https://one-scroll-bible.com/?lang=ko&utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=09-exile",
+     "description": "창조에서 새 하늘과 새 땅까지, 성경 이야기를 14분 영상으로\n전체 영상(14분)과 글로 읽는 성경 이야기: https://one-scroll-bible.com/?lang=ko&utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=09-exile\n\n#Shorts #성경 #성경이야기",
      "tags": [
       "한눈에 보는 성경 이야기",
       "성경",
@@ -562,8 +566,8 @@
      "file": "shorts-ko-10-return.mp4",
      "local": "motion/out/release/shorts-ko-10-return.mp4",
      "title": "여호와로 인하여 기뻐하는 것이 너희의 힘이니라 — 포로 귀환 10/21",
-     "link": "https://one-scroll-bible.com/?utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=10-return",
-     "description": "창조에서 새 하늘과 새 땅까지, 성경 이야기를 14분 영상으로\n전체 영상(14분)과 글로 읽는 성경 이야기: https://one-scroll-bible.com/?utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=10-return\n\n#Shorts #성경 #성경이야기",
+     "link": "https://one-scroll-bible.com/?lang=ko&utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=10-return",
+     "description": "창조에서 새 하늘과 새 땅까지, 성경 이야기를 14분 영상으로\n전체 영상(14분)과 글로 읽는 성경 이야기: https://one-scroll-bible.com/?lang=ko&utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=10-return\n\n#Shorts #성경 #성경이야기",
      "tags": [
       "한눈에 보는 성경 이야기",
       "성경",
@@ -604,8 +608,8 @@
      "file": "shorts-ko-11-silence.mp4",
      "local": "motion/out/release/shorts-ko-11-silence.mp4",
      "title": "선지자의 음성이 멈춘 400년 — 400년 침묵 11/21",
-     "link": "https://one-scroll-bible.com/?utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=11-silence",
-     "description": "창조에서 새 하늘과 새 땅까지, 성경 이야기를 14분 영상으로\n전체 영상(14분)과 글로 읽는 성경 이야기: https://one-scroll-bible.com/?utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=11-silence\n\n#Shorts #성경 #성경이야기",
+     "link": "https://one-scroll-bible.com/?lang=ko&utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=11-silence",
+     "description": "창조에서 새 하늘과 새 땅까지, 성경 이야기를 14분 영상으로\n전체 영상(14분)과 글로 읽는 성경 이야기: https://one-scroll-bible.com/?lang=ko&utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=11-silence\n\n#Shorts #성경 #성경이야기",
      "tags": [
       "한눈에 보는 성경 이야기",
       "성경",
@@ -646,8 +650,8 @@
      "file": "shorts-ko-12-advent.mp4",
      "local": "motion/out/release/shorts-ko-12-advent.mp4",
      "title": "“말씀이 육신이 되어 우리 가운데 거하시매” — 예수님의 오심 12/21",
-     "link": "https://one-scroll-bible.com/?utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=12-advent",
-     "description": "창조에서 새 하늘과 새 땅까지, 성경 이야기를 14분 영상으로\n전체 영상(14분)과 글로 읽는 성경 이야기: https://one-scroll-bible.com/?utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=12-advent\n\n#Shorts #성경 #성경이야기",
+     "link": "https://one-scroll-bible.com/?lang=ko&utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=12-advent",
+     "description": "창조에서 새 하늘과 새 땅까지, 성경 이야기를 14분 영상으로\n전체 영상(14분)과 글로 읽는 성경 이야기: https://one-scroll-bible.com/?lang=ko&utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=12-advent\n\n#Shorts #성경 #성경이야기",
      "tags": [
       "한눈에 보는 성경 이야기",
       "성경",
@@ -688,8 +692,8 @@
      "file": "shorts-ko-13-cross.mp4",
      "local": "motion/out/release/shorts-ko-13-cross.mp4",
      "title": "그 십자가에 달려야 했던 사람은 바로 나였습니다. — 십자가 13/21",
-     "link": "https://one-scroll-bible.com/?utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=13-cross",
-     "description": "창조에서 새 하늘과 새 땅까지, 성경 이야기를 14분 영상으로\n전체 영상(14분)과 글로 읽는 성경 이야기: https://one-scroll-bible.com/?utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=13-cross\n\n#Shorts #성경 #성경이야기",
+     "link": "https://one-scroll-bible.com/?lang=ko&utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=13-cross",
+     "description": "창조에서 새 하늘과 새 땅까지, 성경 이야기를 14분 영상으로\n전체 영상(14분)과 글로 읽는 성경 이야기: https://one-scroll-bible.com/?lang=ko&utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=13-cross\n\n#Shorts #성경 #성경이야기",
      "tags": [
       "한눈에 보는 성경 이야기",
       "성경",
@@ -730,8 +734,8 @@
      "file": "shorts-ko-14-rise.mp4",
      "local": "motion/out/release/shorts-ko-14-rise.mp4",
      "title": "“그가 말씀 하시던 대로 살아나셨느니라” — 부활 14/21",
-     "link": "https://one-scroll-bible.com/?utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=14-rise",
-     "description": "창조에서 새 하늘과 새 땅까지, 성경 이야기를 14분 영상으로\n전체 영상(14분)과 글로 읽는 성경 이야기: https://one-scroll-bible.com/?utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=14-rise\n\n#Shorts #성경 #성경이야기",
+     "link": "https://one-scroll-bible.com/?lang=ko&utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=14-rise",
+     "description": "창조에서 새 하늘과 새 땅까지, 성경 이야기를 14분 영상으로\n전체 영상(14분)과 글로 읽는 성경 이야기: https://one-scroll-bible.com/?lang=ko&utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=14-rise\n\n#Shorts #성경 #성경이야기",
      "tags": [
       "한눈에 보는 성경 이야기",
       "성경",
@@ -772,8 +776,8 @@
      "file": "shorts-ko-15-church.mp4",
      "local": "motion/out/release/shorts-ko-15-church.mp4",
      "title": "“… 땅 끝까지 이르러 내 증인이 되리라” — 교회의 시작 15/21",
-     "link": "https://one-scroll-bible.com/?utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=15-church",
-     "description": "창조에서 새 하늘과 새 땅까지, 성경 이야기를 14분 영상으로\n전체 영상(14분)과 글로 읽는 성경 이야기: https://one-scroll-bible.com/?utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=15-church\n\n#Shorts #성경 #성경이야기",
+     "link": "https://one-scroll-bible.com/?lang=ko&utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=15-church",
+     "description": "창조에서 새 하늘과 새 땅까지, 성경 이야기를 14분 영상으로\n전체 영상(14분)과 글로 읽는 성경 이야기: https://one-scroll-bible.com/?lang=ko&utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=15-church\n\n#Shorts #성경 #성경이야기",
      "tags": [
       "한눈에 보는 성경 이야기",
       "성경",
@@ -814,8 +818,8 @@
      "file": "shorts-ko-16-renewal.mp4",
      "local": "motion/out/release/shorts-ko-16-renewal.mp4",
      "title": "“모든 눈물을 그 눈에서 닦아 주시니” — 회복 16/21",
-     "link": "https://one-scroll-bible.com/?utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=16-renewal",
-     "description": "창조에서 새 하늘과 새 땅까지, 성경 이야기를 14분 영상으로\n전체 영상(14분)과 글로 읽는 성경 이야기: https://one-scroll-bible.com/?utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=16-renewal\n\n#Shorts #성경 #성경이야기",
+     "link": "https://one-scroll-bible.com/?lang=ko&utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=16-renewal",
+     "description": "창조에서 새 하늘과 새 땅까지, 성경 이야기를 14분 영상으로\n전체 영상(14분)과 글로 읽는 성경 이야기: https://one-scroll-bible.com/?lang=ko&utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=16-renewal\n\n#Shorts #성경 #성경이야기",
      "tags": [
       "한눈에 보는 성경 이야기",
       "성경",
@@ -856,8 +860,8 @@
      "file": "shorts-ko-17-mirror.mp4",
      "local": "motion/out/release/shorts-ko-17-mirror.mp4",
      "title": "결국 가장 깊은 우상은 “하나님 자리에 앉은 나 자신”입니다. — 거울 17/21",
-     "link": "https://one-scroll-bible.com/?utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=17-mirror",
-     "description": "창조에서 새 하늘과 새 땅까지, 성경 이야기를 14분 영상으로\n전체 영상(14분)과 글로 읽는 성경 이야기: https://one-scroll-bible.com/?utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=17-mirror\n\n#Shorts #성경 #성경이야기",
+     "link": "https://one-scroll-bible.com/?lang=ko&utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=17-mirror",
+     "description": "창조에서 새 하늘과 새 땅까지, 성경 이야기를 14분 영상으로\n전체 영상(14분)과 글로 읽는 성경 이야기: https://one-scroll-bible.com/?lang=ko&utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=17-mirror\n\n#Shorts #성경 #성경이야기",
      "tags": [
       "한눈에 보는 성경 이야기",
       "성경",
@@ -898,8 +902,8 @@
      "file": "shorts-ko-18-gospel.mp4",
      "local": "motion/out/release/shorts-ko-18-gospel.mp4",
      "title": "“행하라”가 아니라 “이루어졌다” — 복음의 핵심 18/21",
-     "link": "https://one-scroll-bible.com/?utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=18-gospel",
-     "description": "창조에서 새 하늘과 새 땅까지, 성경 이야기를 14분 영상으로\n전체 영상(14분)과 글로 읽는 성경 이야기: https://one-scroll-bible.com/?utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=18-gospel\n\n#Shorts #성경 #성경이야기",
+     "link": "https://one-scroll-bible.com/?lang=ko&utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=18-gospel",
+     "description": "창조에서 새 하늘과 새 땅까지, 성경 이야기를 14분 영상으로\n전체 영상(14분)과 글로 읽는 성경 이야기: https://one-scroll-bible.com/?lang=ko&utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=18-gospel\n\n#Shorts #성경 #성경이야기",
      "tags": [
       "한눈에 보는 성경 이야기",
       "성경",
@@ -940,8 +944,8 @@
      "file": "shorts-ko-19-evidence.mp4",
      "local": "motion/out/release/shorts-ko-19-evidence.mp4",
      "title": "성경이 진짜 실화인가요? 19/21",
-     "link": "https://one-scroll-bible.com/?utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=19-evidence",
-     "description": "창조에서 새 하늘과 새 땅까지, 성경 이야기를 14분 영상으로\n전체 영상(14분)과 글로 읽는 성경 이야기: https://one-scroll-bible.com/?utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=19-evidence\n\n#Shorts #성경 #성경이야기",
+     "link": "https://one-scroll-bible.com/?lang=ko&utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=19-evidence",
+     "description": "창조에서 새 하늘과 새 땅까지, 성경 이야기를 14분 영상으로\n전체 영상(14분)과 글로 읽는 성경 이야기: https://one-scroll-bible.com/?lang=ko&utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=19-evidence\n\n#Shorts #성경 #성경이야기",
      "tags": [
       "한눈에 보는 성경 이야기",
       "성경",
@@ -982,8 +986,8 @@
      "file": "shorts-ko-20-ship.mp4",
      "local": "motion/out/release/shorts-ko-20-ship.mp4",
      "title": "예수님 안 믿어도, 그냥 착하게 살면 되는 것 아닌가요? — 착하게 살면? 20/21",
-     "link": "https://one-scroll-bible.com/?utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=20-ship",
-     "description": "창조에서 새 하늘과 새 땅까지, 성경 이야기를 14분 영상으로\n전체 영상(14분)과 글로 읽는 성경 이야기: https://one-scroll-bible.com/?utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=20-ship\n\n#Shorts #성경 #성경이야기",
+     "link": "https://one-scroll-bible.com/?lang=ko&utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=20-ship",
+     "description": "창조에서 새 하늘과 새 땅까지, 성경 이야기를 14분 영상으로\n전체 영상(14분)과 글로 읽는 성경 이야기: https://one-scroll-bible.com/?lang=ko&utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=20-ship\n\n#Shorts #성경 #성경이야기",
      "tags": [
       "한눈에 보는 성경 이야기",
       "성경",
@@ -1024,8 +1028,8 @@
      "file": "shorts-ko-21-invite.mp4",
      "local": "motion/out/release/shorts-ko-21-invite.mp4",
      "title": "이 사랑은 정보가 아니라 초대입니다. — 초대 21/21",
-     "link": "https://one-scroll-bible.com/?utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=21-invite",
-     "description": "창조에서 새 하늘과 새 땅까지, 성경 이야기를 14분 영상으로\n전체 영상(14분)과 글로 읽는 성경 이야기: https://one-scroll-bible.com/?utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=21-invite\n\n#Shorts #성경 #성경이야기",
+     "link": "https://one-scroll-bible.com/?lang=ko&utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=21-invite",
+     "description": "창조에서 새 하늘과 새 땅까지, 성경 이야기를 14분 영상으로\n전체 영상(14분)과 글로 읽는 성경 이야기: https://one-scroll-bible.com/?lang=ko&utm_source=youtube&utm_medium=shorts&utm_campaign=shorts_ko&utm_content=21-invite\n\n#Shorts #성경 #성경이야기",
      "tags": [
       "한눈에 보는 성경 이야기",
       "성경",
@@ -1234,7 +1238,11 @@
      }
     ],
     "playlist": "Bible in One Scroll",
-    "page": "https://one-scroll-bible.com/film/?lang=en"
+    "page": "https://one-scroll-bible.com/film/?lang=en",
+    "pinned": {
+     "text": "Still wrestling with something?",
+     "link": "https://one-scroll-bible.com/en/?utm_source=youtube&utm_medium=video&utm_campaign=film_en&utm_content=pinned#faq"
+    }
    },
    "shorts": [
     {
@@ -2292,7 +2300,11 @@
      }
     ],
     "playlist": "一卷读懂圣经",
-    "page": "https://one-scroll-bible.com/film/?lang=zh-Hans"
+    "page": "https://one-scroll-bible.com/film/?lang=zh-Hans",
+    "pinned": {
+     "text": "或许，你心里还有这些疑问？",
+     "link": "https://one-scroll-bible.com/zh-Hans/?utm_source=youtube&utm_medium=video&utm_campaign=film_zh-Hans&utm_content=pinned#faq"
+    }
    },
    "shorts": [
     {
@@ -3350,7 +3362,11 @@
      }
     ],
     "playlist": "一卷讀懂聖經",
-    "page": "https://one-scroll-bible.com/film/?lang=zh-Hant"
+    "page": "https://one-scroll-bible.com/film/?lang=zh-Hant",
+    "pinned": {
+     "text": "或許，你心裡還有這些疑問？",
+     "link": "https://one-scroll-bible.com/zh-Hant/?utm_source=youtube&utm_medium=video&utm_campaign=film_zh-Hant&utm_content=pinned#faq"
+    }
    },
    "shorts": [
     {
@@ -4408,7 +4424,11 @@
      }
     ],
     "playlist": "ひと目でわかる聖書の物語",
-    "page": "https://one-scroll-bible.com/film/?lang=ja"
+    "page": "https://one-scroll-bible.com/film/?lang=ja",
+    "pinned": {
+     "text": "もしかして、こんなことが心に引っかかっていませんか？",
+     "link": "https://one-scroll-bible.com/ja/?utm_source=youtube&utm_medium=video&utm_campaign=film_ja&utm_content=pinned#faq"
+    }
    },
    "shorts": [
     {
@@ -5465,7 +5485,11 @@
      }
     ],
     "playlist": "La Biblia de un vistazo",
-    "page": "https://one-scroll-bible.com/film/?lang=es"
+    "page": "https://one-scroll-bible.com/film/?lang=es",
+    "pinned": {
+     "text": "¿Quizá algo de esto te inquieta?",
+     "link": "https://one-scroll-bible.com/es/?utm_source=youtube&utm_medium=video&utm_campaign=film_es&utm_content=pinned#faq"
+    }
    },
    "shorts": [
     {
@@ -6523,7 +6547,11 @@
      }
     ],
     "playlist": "A Bíblia num relance",
-    "page": "https://one-scroll-bible.com/film/?lang=pt-BR"
+    "page": "https://one-scroll-bible.com/film/?lang=pt-BR",
+    "pinned": {
+     "text": "Será que algo disto te incomoda?",
+     "link": "https://one-scroll-bible.com/pt-BR/?utm_source=youtube&utm_medium=video&utm_campaign=film_pt-BR&utm_content=pinned#faq"
+    }
    },
    "shorts": [
     {
@@ -7580,7 +7608,11 @@
      }
     ],
     "playlist": "La Bible en un coup d’œil",
-    "page": "https://one-scroll-bible.com/film/?lang=fr"
+    "page": "https://one-scroll-bible.com/film/?lang=fr",
+    "pinned": {
+     "text": "Peut-être qu'une de ces questions vous trouble ?",
+     "link": "https://one-scroll-bible.com/fr/?utm_source=youtube&utm_medium=video&utm_campaign=film_fr&utm_content=pinned#faq"
+    }
    },
    "shorts": [
     {
@@ -8635,7 +8667,11 @@
      }
     ],
     "playlist": "Die Bibel auf einen Blick",
-    "page": "https://one-scroll-bible.com/film/?lang=de"
+    "page": "https://one-scroll-bible.com/film/?lang=de",
+    "pinned": {
+     "text": "Vielleicht beschäftigt dich eines davon?",
+     "link": "https://one-scroll-bible.com/de/?utm_source=youtube&utm_medium=video&utm_campaign=film_de&utm_content=pinned#faq"
+    }
    },
    "shorts": [
     {
@@ -9693,7 +9729,11 @@
      }
     ],
     "playlist": "Библия с одного взгляда",
-    "page": "https://one-scroll-bible.com/film/?lang=ru"
+    "page": "https://one-scroll-bible.com/film/?lang=ru",
+    "pinned": {
+     "text": "Может быть, что-то из этого вас тревожит?",
+     "link": "https://one-scroll-bible.com/ru/?utm_source=youtube&utm_medium=video&utm_campaign=film_ru&utm_content=pinned#faq"
+    }
    },
    "shorts": [
     {
@@ -10751,7 +10791,11 @@
      }
     ],
     "playlist": "الكتاب المقدس في لمحة",
-    "page": "https://one-scroll-bible.com/film/?lang=ar"
+    "page": "https://one-scroll-bible.com/film/?lang=ar",
+    "pinned": {
+     "text": "ربما يشغل بالك أحد هذه الأسئلة؟",
+     "link": "https://one-scroll-bible.com/ar/?utm_source=youtube&utm_medium=video&utm_campaign=film_ar&utm_content=pinned#faq"
+    }
    },
    "shorts": [
     {
@@ -11811,7 +11855,11 @@
      }
     ],
     "playlist": "एक नज़र में बाइबल",
-    "page": "https://one-scroll-bible.com/film/?lang=hi"
+    "page": "https://one-scroll-bible.com/film/?lang=hi",
+    "pinned": {
+     "text": "कहीं इनमें से कोई बात मन में खटक तो नहीं रही?",
+     "link": "https://one-scroll-bible.com/hi/?utm_source=youtube&utm_medium=video&utm_campaign=film_hi&utm_content=pinned#faq"
+    }
    },
    "shorts": [
     {
@@ -12869,7 +12917,11 @@
      }
     ],
     "playlist": "Alkitab Sekilas",
-    "page": "https://one-scroll-bible.com/film/?lang=id"
+    "page": "https://one-scroll-bible.com/film/?lang=id",
+    "pinned": {
+     "text": "Mungkin ada yang masih mengganjal di hatimu?",
+     "link": "https://one-scroll-bible.com/id/?utm_source=youtube&utm_medium=video&utm_campaign=film_id&utm_content=pinned#faq"
+    }
    },
    "shorts": [
     {
@@ -13926,7 +13978,11 @@
      }
     ],
     "playlist": "Kinh Thánh trong một cái nhìn",
-    "page": "https://one-scroll-bible.com/film/?lang=vi"
+    "page": "https://one-scroll-bible.com/film/?lang=vi",
+    "pinned": {
+     "text": "Biết đâu có điều này đang vướng mắc trong lòng bạn?",
+     "link": "https://one-scroll-bible.com/vi/?utm_source=youtube&utm_medium=video&utm_campaign=film_vi&utm_content=pinned#faq"
+    }
    },
    "shorts": [
     {
@@ -14984,7 +15040,11 @@
      }
     ],
     "playlist": "พระคัมภีร์ในพริบตา",
-    "page": "https://one-scroll-bible.com/film/?lang=th"
+    "page": "https://one-scroll-bible.com/film/?lang=th",
+    "pinned": {
+     "text": "บางทีมีเรื่องเหล่านี้ค้างคาใจคุณอยู่หรือเปล่า?",
+     "link": "https://one-scroll-bible.com/th/?utm_source=youtube&utm_medium=video&utm_campaign=film_th&utm_content=pinned#faq"
+    }
    },
    "shorts": [
     {
@@ -16038,7 +16098,11 @@
      }
     ],
     "playlist": "Ang Bibliya sa Isang Pag-scroll",
-    "page": "https://one-scroll-bible.com/film/?lang=tl"
+    "page": "https://one-scroll-bible.com/film/?lang=tl",
+    "pinned": {
+     "text": "May ilan pa bang bumabagabag sa iyo?",
+     "link": "https://one-scroll-bible.com/tl/?utm_source=youtube&utm_medium=video&utm_campaign=film_tl&utm_content=pinned#faq"
+    }
    },
    "shorts": [
     {

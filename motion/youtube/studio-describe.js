@@ -30,10 +30,12 @@ window.__osbDescribe = async (id, L, n) => {
   const box = document.querySelectorAll('#textbox')[1], old = box.innerText.replace(/\n$/, '');
   const lines = old.split('\n');
   let i;
-  if (id === '66VfBSXxAs8') i = lines.findIndex(s => /one-scroll-bible\.com\/?(\s|$)/.test(s) && !/\/film\//.test(s));   // hand-edited Korean film: its home-page line only
+  // hand-edited Korean film: only the URL in its home-page line (bare, or an earlier tagged form); its film-page line stays
+  const HOME_URL = /https:\/\/one-scroll-bible\.com\/(?!film\/)\S*/;
+  if (id === '66VfBSXxAs8') i = lines.findIndex(s => HOME_URL.test(s));
   else i = lines.findIndex(s => /one-scroll-bible\.com\/(film\/|\?|[a-zA-Z-]+\/\?utm)/.test(s));
   if (i < 0) return { id, L, n, error: 'no site-link line found', old: old.slice(0, 200) };
-  const replaced = id === '66VfBSXxAs8' ? lines[i].replace(/https:\/\/one-scroll-bible\.com\/?(?=\s|$)/, item.link) : newLine;
+  const replaced = id === '66VfBSXxAs8' ? lines[i].replace(HOME_URL, item.link) : newLine;
   if (lines[i] === replaced) return { id, L, n, unchanged: true };
   lines[i] = replaced; const text = lines.join('\n');
   box.focus(); document.execCommand('selectAll'); document.execCommand('insertText', false, text); box.dispatchEvent(new Event('input', { bubbles: true }));

@@ -34,6 +34,10 @@ const ALT = { kingdom: ['나 여호와는 중심을 보느니라'] };   // when 
 const NO_CHAPTER = new Set(['opening', 'evidence']);   // the hook already says the chapter name
 
 const read = p => JSON.parse(readFileSync(p, 'utf8').replace(/^﻿/, ''));
+// the site's FAQ heading per language: ko from index.html's markup, the rest from i18n/<L>.json (en.json mirrors EN_PACK)
+const faqHeading = L => L === 'ko'
+  ? (readFileSync(join(M, '..', 'index.html'), 'utf8').match(/data-i18n="faq\.h">([^<]+)</) || [])[1]
+  : existsSync(join(M, '..', 'i18n', L + '.json')) ? read(join(M, '..', 'i18n', L + '.json')).s?.['faq.h'] : undefined;
 const strip = s => String(s).replace(/<[^>]+>/g, '').replace(/ /g, ' ');
 // drop the last sentence "…drawn live in your browser" (true on the site only); Hindi ends sentences with "।";
 // a script without sentence marks (Thai) gives its YouTube blurb in motion/youtube/lang/<code>.json → "blurb"
@@ -65,7 +69,9 @@ for (const L of LANGS) {
   // the description links to the language's home page (gospel → prayer), tagged so GA4 can tell YouTube visits apart;
   // not to the film page: the site's film button sends people to YouTube, so the two would only point at each other
   const home = `${SITE}/${L === 'ko' ? '' : L + '/'}`;
-  const utm = (medium, campaign, content) => `?utm_source=youtube&utm_medium=${medium}&utm_campaign=${campaign}` + (content ? `&utm_content=${content}` : '');
+  // Korean lives at the root, which (unlike /en/, /es/ …) picks its language from a saved choice or the browser language —
+  // lang=ko pins it, so a Korean link never opens in English (2026-10-23)
+  const utm = (medium, campaign, content) => `?${L === 'ko' ? 'lang=ko&' : ''}utm_source=youtube&utm_medium=${medium}&utm_campaign=${campaign}` + (content ? `&utm_content=${content}` : '');
   const chapters = ORDER.map((sc, i) => ({ time: mmss(starts[sc]), seconds: +starts[sc].toFixed(1), title: ch[i] }));
   const hashtags = n => (X.tags || []).slice(0, n).map(t => '#' + t.replace(/\s/g, '')).join(' ');
   const link = home + utm('video', `film_${L}`);
@@ -73,7 +79,12 @@ for (const L of LANGS) {
   const tags = [ui.brand, ...(X.tags || []), ...ch]; while (tags.join(',').length > 480) tags.pop();   // YouTube: 500 characters in all
   const film = { file: `film-${L}.mp4`, local: `motion/out/release/film-${L}.mp4`, title: ui.shareText.slice(0, 100), description, link, tags, language: L,
     thumbnail: `motion/youtube/thumbs/${L}/A-exodus.jpg`, thumbnail_alternatives: ['B-cross', 'C-split', 'D-earth'].map(v => `motion/youtube/thumbs/${L}/${v}.jpg`),
-    captions: subsOf('', 'film-h.srt'), chapters, playlist: ui.brand, page };
+    captions: subsOf('', 'film-h.srt'), chapters, playlist: ui.brand, page,
+    // pinned comment: the site's FAQ ("still wrestling with something?") — the film already ends on the prayer, and the
+    // description already links the home page, so the comment points at what the film does not have. Text = the site
+    // pack's already-reviewed faq.h (no new translation). Posted/updated with studio-comment.js.
+    pinned: { text: faqHeading(L), link: home + utm('video', `film_${L}`, 'pinned') + '#faq' } };
+  if (!film.pinned.text) problems.push(`${L}: no faq.h in the site pack`);
   titlesMd.push(`## ${L}`);
   const shorts = ORDER.map((sc, i) => {
     const n = i + 1, name = `${String(n).padStart(2, '0')}-${sc}`;

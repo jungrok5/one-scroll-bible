@@ -7,7 +7,11 @@
 window.__osbUpload = async (L, { save = true } = {}) => {
   const S = 'http://127.0.0.1:8765/', sleep = ms => new Promise(r => setTimeout(r, ms));
   const LANG_LABEL = { en: '영어', es: '스페인어', 'pt-BR': '포르투갈어(브라질)', fr: '프랑스어', de: '독일어', ru: '러시아어', id: '인도네시아어',
-    'zh-Hans': '중국어(간체)', 'zh-Hant': '중국어(번체)', ja: '일본어', ar: '아랍어', ko: '한국어' };
+    'zh-Hans': '중국어(간체)', 'zh-Hant': '중국어(번체)', ja: '일본어', ar: '아랍어', ko: '한국어',
+    // a list = the names Studio's Korean UI may use; the first one present in the dropdown is picked
+    hi: '힌디어', vi: '베트남어', th: '태국어', tl: ['필리핀어', '타갈로그어'] };
+  const labels = [].concat(LANG_LABEL[L] || []);
+  if (!labels.length) return { L, error: `no Studio language label for ${L} — add it to LANG_LABEL` };
   const wait = async (fn, ms = 20000) => { for (let t = 0; t < ms; t += 250) { const v = fn(); if (v) return v; await sleep(250); } return null; };
   const m = await (await fetch(S + 'youtube/manifest.json')).json(); const f = m.languages[L].film;
   const fileInput = await wait(() => document.querySelector('ytcp-uploads-dialog input[type=file]'));
@@ -31,7 +35,7 @@ window.__osbUpload = async (L, { save = true } = {}) => {
   const nbox = notify?.querySelector('[role=checkbox]') || notify; if (L !== 'ko' && nbox?.getAttribute('aria-checked') === 'true') { nbox.click(); await sleep(300); }
   // video language
   D.querySelector('#language-input ytcp-dropdown-trigger, ytcp-form-language-input ytcp-dropdown-trigger')?.click(); await sleep(900);
-  [...document.querySelectorAll('tp-yt-paper-item')].find(e => e.innerText.trim() === LANG_LABEL[L])?.click(); await sleep(700);
+  { const items = [...document.querySelectorAll('tp-yt-paper-item')]; for (const lb of labels) { const it = items.find(e => e.innerText.trim() === lb); if (it) { it.click(); break; } } } await sleep(700);
   const checks = { L, title: title.innerText.slice(0, 50), desc: desc.innerText.length, tags: count(), language: (D.innerText.match(/동영상 언어\s*\n\s*(.+)/) || [])[1],
     notify: nbox?.getAttribute('aria-checked'), ai: D.querySelector('[name=VIDEO_HAS_ALTERED_CONTENT_NO]').getAttribute('aria-checked'), kids: D.querySelector('[name="VIDEO_MADE_FOR_KIDS_NOT_MFK"]').getAttribute('aria-checked') };
   for (let i = 0; i < 3; i++) { D.querySelector('#next-button').click(); await sleep(1500); }
@@ -39,7 +43,7 @@ window.__osbUpload = async (L, { save = true } = {}) => {
   checks.private = D.querySelector('tp-yt-paper-radio-button[name="PRIVATE"]').getAttribute('aria-checked');
   await wait(() => /업로드 완료|처리/.test(D.querySelector('ytcp-video-upload-progress')?.innerText || ''), 600000);
   checks.url = [...D.querySelectorAll('a')].map(a => a.href).find(h => /youtu\.be\//.test(h));
-  if (save && checks.private === 'true' && checks.notify !== 'true' && checks.ai === 'true' && checks.language === LANG_LABEL[L]) {
+  if (save && checks.private === 'true' && checks.notify !== 'true' && checks.ai === 'true' && labels.includes(checks.language)) {
     D.querySelector('#done-button').click(); await sleep(3000);
     [...document.querySelectorAll('ytcp-button, button')].find(b => b.innerText?.trim() === '닫기' && b.offsetParent)?.click();
     checks.saved = true;

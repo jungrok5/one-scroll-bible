@@ -50,3 +50,13 @@ node_modules/
 
 # Python bytecode (motion/*.py run locally)
 __pycache__/
+
+# Secrets and per-machine settings — this repo is PUBLIC. YouTube/API credentials go in environment variables
+# (YT_CLIENT_ID, YT_CLIENT_SECRET, YT_REFRESH_TOKEN), never in a file here; these patterns are a safety net.
+.env
+.env.*
+*.pem
+*.key
+client_secret*.json
+token*.json
+.claude/settings.local.json

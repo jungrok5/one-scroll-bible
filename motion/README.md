@@ -49,7 +49,7 @@ python3 motion/assemble.py h --upload                                    # 전�
 - 여러 언어를 한 번에: 모든 명령이 `<code…>` 여러 개를 받습니다(GitHub은 언어×방향마다 작업을 동시에 돌림).
 - 사이트에 게시되는 언어 = `index.html`의 `FILM_CTA`에 있는 언어. `publish-film.py`는 그 언어의 파일만 `film/s/`에 내보내므로,
   검토를 통과하지 않은 번역이 실수로 공개되지 않습니다. 업로드 시트(`manifest.mjs`)도 `motion/reviews/<code>.md`가 있는 언어만 담습니다.
-- 유튜브에 실제로 올리는 일은 이 과정 밖입니다(사람이 스튜디오에서).
+- 유튜브에 올리는 일은 아래 **"유튜브에 올리기"**(스튜디오 도우미, 사람 확인 필요)로 이어집니다.
 
 **어디서 렌더할까** (2026-10-23 측정, 같은 장면·영어 가로): GitHub 러너(4코어) 부활 57초·타락 183초, 이 저장소 관리자의 PC(i5-9600K 6코어)
 51초·146초 — PC가 10~20% 빠를 뿐이고 헤드리스 크롬은 GPU를 쓰지 않아 창조 장면 WebGL도 프레임당 0.5초 대 0.6초로 비슷합니다.
@@ -115,3 +115,29 @@ curl -LO https://github.com/jungrok5/one-scroll-bible/releases/download/youtube-
 - **새 언어 영상을 유튜브에 공개하면** `index.html`의 `FILM_YT`에 그 언어의 영상 id를 넣는다 — 첫 화면 영상 버튼이 `/film/` 대신
   그 유튜브 영상으로 간다(없는 언어는 `/film/?lang=`). 비공개 id는 넣지 않는다('비공개 동영상'이 뜸).
 - 쇼츠는 커스텀 썸네일을 받지 않고(영상 프레임 중 선택) 자막은 쇼츠별 SRT(`v/NN-*.srt`)를 올립니다.
+
+## 유튜브에 올리기 — 스튜디오 도우미 (6단계 다음)
+브라우저(Claude in Chrome 등)로 채널 **@one-scroll-bible**에 로그인한 스튜디오/시청 페이지에 붙여 넣어 쓰는 도우미들입니다. API 키는 쓰지
+않습니다. **공개·게시는 공개적인 행동이므로 관리자 허락을 받은 뒤**에만 합니다. 결과 id·상태는 `motion/youtube/uploaded.json`에 적습니다.
+
+| # | 할 일 | 도우미 | 메모 |
+|---|---|---|---|
+| 0 | 로컬 파일 서버 | `node motion/youtube/serve.mjs` (켜 둔 채로) | `motion/`을 127.0.0.1:8765에 읽기 전용으로. 스튜디오·유튜브 시청 페이지만 허용 |
+| 1 | 영상 내려받기 | `gh release download youtube-v1 -p 'film-<code>.mp4' -D motion/out/release` | 약 0.9 GB |
+| 2 | 비공개 업로드 | `studio-upload.js` → `__osbChain(['<code>', …])` (업로드 창 `…/videos/upload?d=ud`) | 제목·설명(챕터)·태그·썸네일 A·아동용 아님·AI 아님·알림 끔(한국어만 켬)·동영상 언어 |
+| 3 | 썸네일 A/B + 공개 | `studio-publish.js` → `__osbPublish('<code>', '<id>')` | **처리가 끝난 뒤** 편집 페이지에서(업로드 창에서는 A/B 버튼이 반응 안 함) |
+| 4 | 고정 댓글 | `studio-comment.js` → `__osbComment('<code>')` (시청 페이지) | 사이트 FAQ 제목(`faq.h`, 이미 검토된 번역) + 그 언어 첫 페이지 `#faq` |
+| 5 | 사이트 버튼 | `index.html`의 `FILM_YT`에 공개 id 추가 → 빌드 → 배포 | 첫 화면 영상 버튼이 유튜브로 감 |
+| 6 | 설명 링크만 고칠 때 | `studio-describe.js` → `__osbDescribe(id, '<code>', n?)` | 링크 줄만 바꾸고, 쇼츠는 예약 시각·관련 영상이 그대로인지 다시 읽어 확인 |
+| 7 | 쇼츠 예약 | `studio-shorts.js` (`__osbShort`, `__pickTime`) | 예약 시간은 **목록에서 골라야** 함(입력하면 0시로 저장됨) |
+
+**함정 (겪은 것만)**
+- 탭에 남은 예전 매니페스트를 쓰면 안 된다 — 2026-10-23 한국어 공개 영상 설명에 `…: undefined`가 1~2분 저장됐다. 도우미는 매번
+  `cache: 'no-store'`로 새로 받고, 값이 비면 저장하지 않는다. `includes(undefined)`는 검사가 아니다(문자열 "undefined"와 맞음).
+- 유튜브 시청 페이지의 댓글 메뉴(⋮)와 고정 확인 버튼은 **스크립트 클릭에 반응하지 않을 때가 많다** — 위치만 스크립트로 구하고
+  실제 클릭을 한다. 글 넣기·저장은 `execCommand('insertText')` + `insertLineBreak` 후 스크립트 클릭으로 된다.
+- 저장 확인 전에 다음 영상으로 넘어가면 저장이 사라진다(중국어 간체 1번) — 결과를 읽은 뒤 넘어간다.
+- 한국어 링크는 루트(`/`)라서 저장된 언어 선택·브라우저 언어를 따른다 → 유튜브 링크에는 `?lang=ko`를 붙인다(`manifest.mjs`가 함).
+- 도우미는 한 번도 저장소 밖(대화·임시 폴더)에만 두지 않는다 — 다음 세션이 다시 만들다 실수한다. `serve.mjs`·`studio-publish.js`가
+  그렇게 빠져 있었다(2026-10-23에 저장소로).
+- 스튜디오 동영상 언어 이름은 한국어 UI 기준(`studio-upload.js`의 `LANG_LABEL`). 새 언어는 거기에 먼저 넣는다.

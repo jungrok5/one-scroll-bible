@@ -38,7 +38,7 @@ const KO = {
   brand:'한눈에 보는 성경 이야기',
   docTitle:'한눈에 보는 성경 이야기 · 창조에서 교회까지',
   kicker:'창조에서 교회까지',
-  desc:'스크롤 한 번으로 성경의 큰 줄거리와 예수님이 오신 이유를 만나보세요.',
+  desc:'성경 이야기를 처음부터 끝까지 한눈에. 창조부터 예수님, 교회와 다시 오심까지 66권의 큰 줄거리를 스크롤 한 번으로 만나고, 영접 기도까지 이어집니다.',
   keywords:'성경 요약, 성경 한눈에, 성경 줄거리, 성경 통독, 성경 전체 흐름, 성경 개요, 복음, 복음 제시, 구속사, 창조 타락 구속 회복, 예수님, 예수님은 누구인가, 구원의 길, 영접 기도, 기독교 입문, 성경 입문, 성경 공부',
 };
 // English 팩은 index.html에 인라인 → 직접 지정
@@ -409,13 +409,13 @@ function makePage(m){
   h = h.replace(/(<meta name="description" content=")[^"]*(")/, `$1${xml(metaDesc(m.desc, packFor(m.code)))}$2`);
   h = h.replace('<link rel="canonical" href="https://one-scroll-bible.com/" />', `<link rel="canonical" href="${url}" />`);
   h = h.replace('<meta property="og:title" content="한눈에 보는 성경 이야기 · 창조에서 교회까지" />', `<meta property="og:title" content="${xml(m.docTitle)}" />`);
-  h = h.replace('<meta property="og:description" content="스크롤 한 번으로 성경의 큰 줄거리와 예수님이 오신 이유를 만나보세요." />', `<meta property="og:description" content="${xml(m.desc)}" />`);
+  h = h.replace(/<meta property="og:description" content="[^"]*" \/>/, `<meta property="og:description" content="${xml(m.desc)}" />`);
   h = h.replace('<meta property="og:url" content="https://one-scroll-bible.com/" />', `<meta property="og:url" content="${url}" />`);
   h = h.replace('<meta property="og:locale" content="ko_KR" />', `<meta property="og:locale" content="${m.locale}" />`);
   h = h.replace('<meta property="og:image" content="https://one-scroll-bible.com/og.png" />', `<meta property="og:image" content="${img}" />`);
   h = h.replace('<meta property="og:image:alt" content="한눈에 보는 성경 이야기 · 창조에서 교회까지" />', `<meta property="og:image:alt" content="${xml(m.docTitle)}" />`);
   h = h.replace('<meta name="twitter:title" content="한눈에 보는 성경 이야기" />', `<meta name="twitter:title" content="${xml(m.brand)}" />`);
-  h = h.replace('<meta name="twitter:description" content="스크롤 한 번으로 성경의 큰 줄거리와 예수님이 오신 이유를 만나보세요." />', `<meta name="twitter:description" content="${xml(m.desc)}" />`);
+  h = h.replace(/<meta name="twitter:description" content="[^"]*" \/>/, `<meta name="twitter:description" content="${xml(m.desc)}" />`);
   h = h.replace('<meta name="twitter:image" content="https://one-scroll-bible.com/og.png" />', `<meta name="twitter:image" content="${img}" />`);
 
   // 영어만 CC BY 제외 — ESV 약관이 "CC 라이선스로 공개되는 출판물에 인용 불가"를 명시하므로,

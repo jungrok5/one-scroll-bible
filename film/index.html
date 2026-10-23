@@ -102,7 +102,7 @@
   </div>
 
   <div class="bar" id="bar">
-    <button type="button" id="pp" aria-label="재생">▶</button>
+    <button type="button" id="pp" aria-label="재생" data-ui-aria="play">▶</button>
     <button type="button" id="prev" aria-label="이전 장면" data-ui-aria="prev">⏮</button>
     <button type="button" id="next" aria-label="다음 장면" data-ui-aria="next">⏭</button>
     <span class="now" id="now">00 하나의 줄거리</span>
@@ -193,8 +193,12 @@
     if (play !== undefined) setPlay(play); else if (playing) au.play().catch(function () {});
     if (started) ev('film_scene', { scene: S[i][0], scene_index: i, orientation: ori });
   }
+  // play/pause button for screen readers: Korean keeps 재생/일시정지; other languages have only a translated "play"
+  // (UI.play), so they use it as a toggle button (aria-pressed) instead of falling back to Korean words
+  function ppLabel(p) { var b = $('pp'); if (LANG === 'ko' || !UI.play) b.setAttribute('aria-label', p ? '일시정지' : '재생');
+    else { b.setAttribute('aria-label', UI.play); b.setAttribute('aria-pressed', p ? 'true' : 'false'); } }
   function setPlay(p) {
-    playing = p; $('pp').textContent = p ? '❚❚' : '▶'; $('pp').setAttribute('aria-label', p ? '일시정지' : '재생');
+    playing = p; $('pp').textContent = p ? '❚❚' : '▶'; ppLabel(p);
     big.hidden = p || started; if (p) { started = true; poster.hidden = true; big.hidden = true; au.play().catch(function () {}); } else au.pause();
     if (!p && started && cur >= 0 && !pausedBy) ev('film_pause', { scene: S[cur][0], position_sec: pos(), watched_sec: Math.round(watched) });
     pausedBy = '';
@@ -237,7 +241,7 @@
   au.addEventListener('error', function () { if (cur >= 0 && started) ev('film_error', { kind: 'audio', scene: S[cur][0] }); });
   // 소리가 이 재생기 밖에서 멈추거나(잠금화면·알림·이어폰·시스템) 시작되면 재생 상태를 그대로 따른다 — 다시 틀지 않음
   au.addEventListener('pause', function () { if (selfPause) { selfPause = false; return; } if (performance.now() - srcT < 400) return; if (playing && !au.ended) setPlay(false); });
-  au.addEventListener('play', function () { if (!playing && started) { playing = true; $('pp').textContent = '❚❚'; $('pp').setAttribute('aria-label', '일시정지'); } });
+  au.addEventListener('play', function () { if (!playing && started) { playing = true; $('pp').textContent = '❚❚'; ppLabel(true); } });
   // 화면을 떠나면(탭 전환·앱 전환·브라우저 닫기) 소리도 멈춘다 — 그림은 숨은 탭에서 멈추므로 소리만 남지 않게
   document.addEventListener('visibilitychange', function () { if (document.hidden && playing) { pausedBy = 'hidden'; setPlay(false); } });
   // leaving: how much was watched and where — the drop-off point (sent with the beacon transport so it survives the unload)

@@ -25,6 +25,7 @@ const SCOPE = 'https://www.googleapis.com/auth/youtube.force-ssl https://www.goo
 const verifier = randomBytes(32).toString('base64url'), challenge = createHash('sha256').update(verifier).digest('base64url'), state = randomBytes(8).toString('hex');
 
 const srv = createServer(async (req, res) => {
+  res.setHeader('Content-Type', 'text/plain; charset=utf-8');
   const u = new URL(req.url, 'http://127.0.0.1');
   if (u.pathname !== '/cb') { res.writeHead(404); return res.end(); }
   if (u.searchParams.get('state') !== state || !u.searchParams.get('code')) { res.end('sign-in failed (state/code) — run again'); srv.close(); process.exit(1); }
@@ -46,6 +47,7 @@ srv.listen(0, '127.0.0.1', () => {
   const url = 'https://accounts.google.com/o/oauth2/v2/auth?' + new URLSearchParams({ client_id: c.client_id, redirect_uri: redirect, response_type: 'code', scope: SCOPE,
     access_type: 'offline', prompt: 'consent', state, code_challenge: challenge, code_challenge_method: 'S256' });
   console.log('Opening the Google consent page… (if it does not open, paste this into the browser)\n' + url);
-  const open = platform() === 'win32' ? ['cmd', ['/c', 'start', '', url]] : platform() === 'darwin' ? ['open', [url]] : ['xdg-open', [url]];
+  // not `cmd /c start`: cmd treats the URL's & as a command separator and cuts it after client_id
+  const open = platform() === 'win32' ? ['rundll32', ['url.dll,FileProtocolHandler', url]] : platform() === 'darwin' ? ['open', [url]] : ['xdg-open', [url]];
   spawn(open[0], open[1], { stdio: 'ignore', detached: true }).unref();
 });

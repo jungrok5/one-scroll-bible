@@ -1,36 +1,36 @@
 1
-00:00:00,600 --> 00:00:04,800
+00:00:00,000 --> 00:00:03,800
 930 – 586 av. J.-C. · 1 Rois 12 – 2 Rois 25
 
 2
-00:00:04,800 --> 00:00:05,800
+00:00:03,800 --> 00:00:04,800
 930 – 586 av. J.-C. · 1 Rois 12 – 2 Rois 25
 C’est ainsi qu’Israël s’est détaché de la maison de David jusqu’à ce jour.
 1 Rois 12:19 (LSG)
 
 3
-00:00:05,800 --> 00:00:08,400
+00:00:04,800 --> 00:00:07,400
 C’est ainsi qu’Israël s’est détaché de la maison de David jusqu’à ce jour.
 1 Rois 12:19 (LSG)
 
 4
-00:00:10,000 --> 00:00:14,200
+00:00:09,000 --> 00:00:13,200
 Le temple brûle, et le peuple est emmené à Babylone.
 
 5
-00:00:22,000 --> 00:00:25,800
+00:00:21,000 --> 00:00:24,800
 Sur les bords des fleuves de Babylone, nous étions assis et nous pleurions, en nous souvenant de Sion.
 Psaume 137:1 (LSG)
 
 6
-00:00:25,800 --> 00:00:27,200
+00:00:24,800 --> 00:00:26,200
 Sur les bords des fleuves de Babylone, nous étions assis et nous pleurions, en nous souvenant de Sion.
 
 7
-00:00:27,600 --> 00:00:31,200
+00:00:26,600 --> 00:00:30,200
 Aux saules de la contrée nous avions suspendu nos harpes.
 Psaume 137:2 (LSG)
 
 8
-00:00:31,800 --> 00:00:35,400
+00:00:30,800 --> 00:00:34,400
 Jusqu’à la terre la plus sombre de l’exil, Dieu est descendu avec eux et a promis la restauration.

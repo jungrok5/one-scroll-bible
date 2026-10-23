@@ -34,6 +34,7 @@ const ALT = { kingdom: ['나 여호와는 중심을 보느니라'] };   // when 
 const NO_CHAPTER = new Set(['opening', 'evidence']);   // the hook already says the chapter name
 
 const read = p => JSON.parse(readFileSync(p, 'utf8').replace(/^﻿/, ''));
+const OPEN = read(join(HERE, 'shorts-open.json'));   // a Short starts this far into its scene (skips the fade-in)
 // the site's FAQ heading per language: ko from index.html's markup, the rest from i18n/<L>.json (en.json mirrors EN_PACK)
 const faqHeading = L => L === 'ko'
   ? (readFileSync(join(M, '..', 'index.html'), 'utf8').match(/data-i18n="faq\.h">([^<]+)</) || [])[1]
@@ -103,7 +104,7 @@ for (const L of LANGS) {
     const slink = home + utm('shorts', `shorts_${L}`, name);
     return { n, scene: sc, file: `shorts-${L}-${name}.mp4`, local: `motion/out/release/shorts-${L}-${name}.mp4`, title, link: slink,
       description: [ui.shareText, `${X.short_tail}: ${slink}`, '', '#Shorts ' + hashtags(2)].join('\n'),
-      tags: tags.slice(0, 12), language: L, seconds: +(tl[sc].frames / 30).toFixed(1), captions: subsOf('v', name + '.srt') };
+      tags: tags.slice(0, 12), language: L, seconds: +(tl[sc].frames / 30 - (OPEN.scenes[sc] ?? OPEN.default)).toFixed(1), captions: subsOf('v', name + '.srt') };
   });
   titlesMd.push('');
   out.languages[L] = { brand: ui.brand, film, shorts };

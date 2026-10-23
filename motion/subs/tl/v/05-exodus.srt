@@ -1,46 +1,46 @@
 1
-00:00:01,200 --> 00:00:01,800
+00:00:00,200 --> 00:00:00,800
 04 · Ang Exodo
 
 2
-00:00:01,800 --> 00:00:04,200
+00:00:00,800 --> 00:00:03,200
 04 · Ang Exodo
 mga 1446 B.C. · Exodo
 
 3
-00:00:04,200 --> 00:00:05,000
+00:00:03,200 --> 00:00:04,000
 mga 1446 B.C. · Exodo
 
 4
-00:00:06,400 --> 00:00:09,400
+00:00:05,400 --> 00:00:08,400
 “Ipinapasabi ni Yahweh … na payagan ninyong pumunta sa ilang ang kanyang bayang Israel …”
 Exodo 5:1 (MBB)
 
 5
-00:00:09,400 --> 00:00:10,200
+00:00:08,400 --> 00:00:09,200
 Exodo 5:1 (MBB)
 
 6
-00:00:14,000 --> 00:00:17,000
+00:00:13,000 --> 00:00:16,000
 Ang Sampung Salot
 
 7
-00:00:21,200 --> 00:00:25,600
+00:00:20,200 --> 00:00:24,600
 “Lahat ng bahay na makita kong may pahid ng dugo ay lalampasan ko”
 Exodo 12:13 (MBB)
 
 8
-00:00:30,200 --> 00:00:33,200
+00:00:29,200 --> 00:00:32,200
 “Ang mga Israelita'y tumawid sa dagat
 na ang nilakara'y tuyong lupa”
 Exodo 14:22 (MBB)
 
 9
-00:00:33,200 --> 00:00:34,200
+00:00:32,200 --> 00:00:33,200
 “Ang mga Israelita'y tumawid sa dagat
 Exodo 14:22 (MBB)
 
 10
-00:00:36,000 --> 00:00:40,000
+00:00:35,000 --> 00:00:39,000
 “… sa pagitan ng tubig na parang pader.”
 Exodo 14:22 (MBB)

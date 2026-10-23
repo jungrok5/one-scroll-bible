@@ -1,13 +1,13 @@
 1
-00:00:01,400 --> 00:00:04,400
+00:00:00,000 --> 00:00:00,400
 13 · Kebangkitan
 
 2
-00:00:11,800 --> 00:00:15,800
+00:00:07,800 --> 00:00:11,800
 “Ia tidak ada di sini”
 Matius 28:6 (TB)
 
 3
-00:00:17,000 --> 00:00:21,600
+00:00:13,000 --> 00:00:17,600
 “sebab Ia telah bangkit, sama seperti yang telah dikatakan-Nya”
 Matius 28:6 (TB)

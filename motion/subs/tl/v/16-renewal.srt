@@ -1,28 +1,28 @@
 1
-00:00:01,000 --> 00:00:04,000
+00:00:00,000 --> 00:00:03,000
 15 · Ang Pagpapanumbalik
 
 2
-00:00:04,200 --> 00:00:07,600
+00:00:03,200 --> 00:00:06,600
 at gagawing bago ang lahat ng bagay.
 
 3
-00:00:13,000 --> 00:00:16,600
+00:00:12,000 --> 00:00:15,600
 “At papahirin niya ang bawat luha sa kanilang mga mata.”
 Pahayag 21:4 (MBB)
 
 4
-00:00:19,800 --> 00:00:22,800
+00:00:18,800 --> 00:00:21,800
 “Wala nang kamatayan,”
 Pahayag 21:4 (MBB)
 
 5
-00:00:23,400 --> 00:00:27,400
+00:00:22,400 --> 00:00:26,400
 “Wala nang … dalamhati, pagtangis,
 at paghihirap …”
 Pahayag 21:4 (MBB)
 
 6
-00:00:30,000 --> 00:00:34,000
+00:00:29,000 --> 00:00:33,000
 “Pagmasdan ninyo, binabago ko na ang lahat ng bagay!”
 Pahayag 21:5 (MBB)

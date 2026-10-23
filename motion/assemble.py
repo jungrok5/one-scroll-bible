@@ -94,15 +94,21 @@ def upload_target():   # the codec most of the clips already have (so the fewest
     return max(set(cs), key=cs.count) if cs else 'h264'
 
 if '--shorts' in argv:   # one file per scene (YouTube Shorts), no film
+    import json
     SD = os.path.join(OUT, 'shorts', lang); os.makedirs(SD, exist_ok=True)
     tgt = upload_target()
+    # how a Short opens: skip the scene's fade-in from black (and the rise scene's silent tomb) + a peak limiter —
+    # motion/youtube/shorts-open.json, shared with shorts-retrim.mjs / subtitles.mjs / manifest.mjs
+    OPEN = json.load(open(os.path.join(HERE, 'youtube', 'shorts-open.json'), encoding='utf-8'))
     for (s, v, _), aud in zip(have, auds):
         u = upload_encode(s, v, tgt); d = frames(v) / FPS; n = ORDER.index(s) + 1
+        skip = OPEN['scenes'].get(s, OPEN['default']); dd = d - skip
         dst = os.path.join(SD, f'{n:02d}-{s}.mp4')
-        run(['-i', u, '-i', aud, '-map', '0:v', '-map', '1:a', '-c:v', 'copy',
-             '-af', f'afade=t=in:d=0.03,afade=t=out:st={d - 0.03:.3f}:d=0.03', '-c:a', 'aac', '-b:a', '192k',
-             '-movflags', '+faststart', dst])
-        print('→', dst, f'{d:.1f}s')
+        vid = ['-c:v', 'copy'] if skip == 0 else ENC['h264'] + ['-pix_fmt', 'yuv420p']   # a cut off the 2 s keyframe grid is re-encoded
+        run(['-ss', f'{skip}', '-i', u, '-ss', f'{skip}', '-i', aud, '-map', '0:v', '-map', '1:a'] + vid +
+            ['-af', f'alimiter=limit={OPEN["limit"]}:level=false,afade=t=in:d=0.05,afade=t=out:st={dd - 0.03:.3f}:d=0.03',
+             '-c:a', 'aac', '-b:a', '192k', '-metadata', 'comment=osb-upload osb-open', '-movflags', '+faststart', dst])
+        print('→', dst, f'{dd:.1f}s (from {skip:g} s)')
     sys.exit(0)
 
 dst = os.path.join(OUT, f'film{tag}-{ori}.mp4')

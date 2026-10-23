@@ -1,0 +1,6 @@
+{
+ "_note": "How a Short opens (2026-10-23 review): every scene fades in from black over ~1.2 s and the rise scene starts with ~4.7 s of near-silence (tomb wind at -26 dB) — fine inside the film, but a Short is judged in its first second. A Short therefore starts `skip` seconds into its scene (default, or per scene), and its sound goes through a limiter (`limit`, linear; 0.84 ≈ -1.5 dBFS, the exodus Short peaked at -0.8). Read by motion/assemble.py --shorts (new renders), motion/youtube/shorts-retrim.mjs (already rendered Shorts), motion/subtitles.mjs (per-Short SRTs) and motion/youtube/manifest.mjs (Short length). Wave 1 (ko en es pt-BR, uploaded 2026-10-22) still has the old openings — compare its first-week numbers with wave 2.",
+ "default": 1.0,
+ "scenes": { "cross": 0, "rise": 4.0 },
+ "limit": 0.84
+}

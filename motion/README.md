@@ -132,6 +132,18 @@ curl -LO https://github.com/jungrok5/one-scroll-bible/releases/download/youtube-
 | 7 | 쇼츠 예약 | `studio-shorts.js` (`__osbShort`, `__pickTime`) | 예약 시간은 **목록에서 골라야** 함(입력하면 0시로 저장됨) |
 | 8 | 언어 재생목록 | `studio-playlist.js` → `__osbPlaylist` + `__plShorts` (파일 머리말 순서대로) | 쇼츠 21편을 예약한 뒤 한 번에: 가로 영상 → 쇼츠 1~21(게시일 오래된순). id는 `uploaded.json` `playlists`. 채널 홈 탭(켜 둠)의 "생성된 재생목록"에 자동으로 뜸 |
 
+| 9 | 자막(검색용) | `node motion/youtube/yt-api.mjs captions [<code>…]` (YouTube Data API) | 영상에 말소리가 없어 자동 자막이 없고, 화면에 박힌 글자는 검색이 못 읽음 → 그 언어 `film-h.srt`를 그 언어 영상에. 스튜디오 화면의 수동 업로드는 스크립트로 넣은 파일을 거부함(2026-10-23) |
+
+**YouTube Data API (한 번만)**: 관리자가 Google Cloud에서 프로젝트 → "YouTube Data API v3"·"YouTube Analytics API" 사용 →
+OAuth 동의 화면(외부, 본인을 테스트 사용자로) → OAuth 클라이언트 ID(데스크톱 앱) JSON 내려받기 →
+`node motion/youtube/yt-auth.mjs <그 JSON>` → 채널 계정으로 허용. 값은 이 컴퓨터 사용자 환경 변수에만 저장되고 화면·채팅에 나오지 않는다
+(JSON은 저장소 밖에 두거나 지운다 — `.gitignore`가 `client_secret*.json`을 막음). 확인: `node motion/youtube/yt-api.mjs whoami`.
+
+**쇼츠 시작 규칙** (`motion/youtube/shorts-open.json`, 2026-10-23 리뷰): 장면은 검은 화면에서 약 1.2초 동안 밝아지고 부활 장면은 첫 4.7초가
+거의 무음이라, 쇼츠는 장면 안 1초(십자가 0초, 부활 4초) 지점부터 시작하고 소리에 리미터(-1.5 dBFS)를 건다. `assemble.py --shorts`가 새로
+만들 때 적용하고, 이미 만든 쇼츠는 `node motion/youtube/shorts-retrim.mjs <code…> [--upload]`로 다시 자른다(업로드 전인 것만).
+1물결(ko·en·es·pt-BR)은 예전 시작으로 이미 예약돼 있어 그대로 두고, 첫 주 수치를 2물결과 비교한다.
+
 ### 공개 정책 — 4개 언어씩 "물결" (2026-10-23 관리자 승인)
 번역은 계속 늘지만 한 번에 다 할 수 없으므로 같은 순서를 반복한다.
 

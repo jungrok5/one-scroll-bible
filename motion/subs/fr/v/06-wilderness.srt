@@ -1,48 +1,48 @@
 1
-00:00:01,000 --> 00:00:01,600
+00:00:00,000 --> 00:00:00,600
 05 · Le désert
 
 2
-00:00:01,600 --> 00:00:04,800
+00:00:00,600 --> 00:00:03,800
 vers 1446–1406 av. J.-C. · Exode–Josué
 
 3
-00:00:07,000 --> 00:00:10,000
+00:00:06,000 --> 00:00:09,000
 Le mont Sinaï · Les Dix Commandements
 
 4
-00:00:13,200 --> 00:00:15,000
+00:00:12,200 --> 00:00:14,000
 40 ans au désert
 
 5
-00:00:16,600 --> 00:00:17,400
+00:00:15,600 --> 00:00:16,400
 « Je vous prendrai pour mon peuple,
 Exode 6:7 (LSG)
 
 6
-00:00:17,400 --> 00:00:20,400
+00:00:16,400 --> 00:00:19,400
 « Je vous prendrai pour mon peuple,
 je serai votre Dieu »
 Exode 6:7 (LSG)
 
 7
-00:00:20,400 --> 00:00:21,200
+00:00:19,400 --> 00:00:20,200
 je serai votre Dieu »
 
 8
-00:00:26,800 --> 00:00:30,000
+00:00:25,800 --> 00:00:29,000
 Devant la terre promise, ils s’apprêtent à entrer…
 
 9
-00:00:33,400 --> 00:00:33,600
+00:00:32,400 --> 00:00:32,600
 « L’Éternel, ton Dieu, t’a porté comme un homme porte son fils,
 
 10
-00:00:33,600 --> 00:00:36,200
+00:00:32,600 --> 00:00:35,200
 « L’Éternel, ton Dieu, t’a porté comme un homme porte son fils,
 Deutéronome 1:31 (LSG)
 
 11
-00:00:36,600 --> 00:00:38,800
+00:00:35,600 --> 00:00:37,800
 pendant toute la route que vous avez faite jusqu’à votre arrivée en ce lieu »
 Deutéronome 1:31 (LSG)

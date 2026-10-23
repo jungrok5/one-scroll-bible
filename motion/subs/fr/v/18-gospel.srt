@@ -1,126 +1,126 @@
 1
-00:00:01,000 --> 00:00:03,400
+00:00:00,000 --> 00:00:02,400
 17 · Le cœur de l’Évangile
 Le cœur de l’Évangile en 7 points
 
 2
-00:00:03,400 --> 00:00:05,800
+00:00:02,400 --> 00:00:04,800
 Le péché originel :
 « Il n’y a point de juste, pas même un seul … car tous ont péché et sont privés de la gloire de Dieu »
 Romains 3:10, 23 (LSG)
 
 3
-00:00:05,800 --> 00:00:07,600
+00:00:04,800 --> 00:00:06,600
 « Il n’y a point de juste, pas même un seul … car tous ont péché et sont privés de la gloire de Dieu »
 Romains 3:10, 23 (LSG)
 
 4
-00:00:07,600 --> 00:00:10,000
+00:00:06,600 --> 00:00:09,000
 « Il n’y a point de juste, pas même un seul … car tous ont péché et sont privés de la gloire de Dieu »
 
 5
-00:00:11,200 --> 00:00:11,800
+00:00:10,200 --> 00:00:10,800
 La loi ne peut pas
 me sauver
 
 6
-00:00:11,800 --> 00:00:17,200
+00:00:10,800 --> 00:00:16,200
 « c’est par la loi que vient la connaissance du péché … la loi a été comme un pédagogue pour nous conduire à Christ »
 Romains 3:20 · Galates 3:24 (LSG)
 
 7
-00:00:17,200 --> 00:00:18,200
+00:00:16,200 --> 00:00:17,200
 « c’est par la loi que vient la connaissance du péché … la loi a été comme un pédagogue pour nous conduire à Christ »
 
 8
-00:00:18,200 --> 00:00:18,800
+00:00:17,200 --> 00:00:17,800
 Non une échelle, mais un miroir
 péché
 
 9
-00:00:19,400 --> 00:00:20,000
+00:00:18,400 --> 00:00:19,000
 Par la grâce :
 
 10
-00:00:20,000 --> 00:00:24,000
+00:00:19,000 --> 00:00:23,000
 « Car c’est par la grâce que vous êtes sauvés, par le moyen de la foi … Ce n’est point par les œuvres »
 Éphésiens 2:8-9 (LSG)
 
 11
-00:00:24,000 --> 00:00:27,200
+00:00:23,000 --> 00:00:26,200
 « Car c’est par la grâce que vous êtes sauvés, par le moyen de la foi … Ce n’est point par les œuvres »
 
 12
-00:00:27,800 --> 00:00:28,400
+00:00:26,800 --> 00:00:27,400
 Justifiés par la foi
 
 13
-00:00:28,400 --> 00:00:33,600
+00:00:27,400 --> 00:00:32,600
 « Étant donc justifiés par la foi … ce n’est pas par les œuvres de la loi que l’homme est justifié, mais par la foi en Jésus-Christ »
 Romains 5:1 · Galates 2:16 (LSG)
 
 14
-00:00:33,600 --> 00:00:34,800
+00:00:32,600 --> 00:00:33,800
 « Étant donc justifiés par la foi … ce n’est pas par les œuvres de la loi que l’homme est justifié, mais par la foi en Jésus-Christ »
 
 15
-00:00:36,200 --> 00:00:36,600
+00:00:35,200 --> 00:00:35,600
 La Bible
 montre Jésus
 
 16
-00:00:36,600 --> 00:00:42,200
+00:00:35,600 --> 00:00:41,200
 « ce sont elles qui rendent témoignage de moi … il leur expliqua dans toutes les Écritures ce qui le concernait »
 Jean 5:39 · Luc 24:27 (LSG)
 
 17
-00:00:42,200 --> 00:00:43,200
+00:00:41,200 --> 00:00:42,200
 « ce sont elles qui rendent témoignage de moi … il leur expliqua dans toutes les Écritures ce qui le concernait »
 
 18
-00:00:44,400 --> 00:00:45,000
+00:00:43,400 --> 00:00:44,000
 Le royaume de Dieu :
 
 19
-00:00:45,000 --> 00:00:47,400
+00:00:44,000 --> 00:00:46,400
 Le royaume de Dieu :
 « Le temps est accompli, et le royaume de Dieu est proche. Repentez-vous, et croyez à la bonne nouvelle »
 Marc 1:15 (LSG)
 
 20
-00:00:47,400 --> 00:00:49,000
+00:00:46,400 --> 00:00:48,000
 « Le temps est accompli, et le royaume de Dieu est proche. Repentez-vous, et croyez à la bonne nouvelle »
 Marc 1:15 (LSG)
 
 21
-00:00:49,000 --> 00:00:51,200
+00:00:48,000 --> 00:00:50,200
 « Le temps est accompli, et le royaume de Dieu est proche. Repentez-vous, et croyez à la bonne nouvelle »
 
 22
-00:00:51,200 --> 00:00:52,000
+00:00:50,200 --> 00:00:51,000
 Le temps est accompli
 
 23
-00:00:52,800 --> 00:00:55,800
+00:00:51,800 --> 00:00:54,800
 L’Évangile :
 
 24
-00:00:55,800 --> 00:00:56,400
+00:00:54,800 --> 00:00:55,400
 Tout est accompli
 
 25
-00:00:56,400 --> 00:00:58,200
+00:00:55,400 --> 00:00:57,200
 Non « fais », mais « tout est accompli »
 
 26
-00:01:00,400 --> 00:01:01,200
+00:00:59,400 --> 00:01:00,200
 Tout est accompli
 
 27
-00:01:01,200 --> 00:01:04,800
+00:01:00,200 --> 00:01:03,800
 Jean 19:30 (LSG)
 Christ est mort pour nous
 
 28
-00:01:04,800 --> 00:01:05,600
+00:01:03,800 --> 00:01:04,600
 Christ est mort pour nous

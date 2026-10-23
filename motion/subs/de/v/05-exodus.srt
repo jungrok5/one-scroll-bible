@@ -1,46 +1,46 @@
 1
-00:00:01,200 --> 00:00:01,800
+00:00:00,200 --> 00:00:00,800
 04 · Der Auszug aus Ägypten
 
 2
-00:00:01,800 --> 00:00:04,200
+00:00:00,800 --> 00:00:03,200
 04 · Der Auszug aus Ägypten
 um 1446 v. Chr. · 2. Mose
 
 3
-00:00:04,200 --> 00:00:05,000
+00:00:03,200 --> 00:00:04,000
 um 1446 v. Chr. · 2. Mose
 
 4
-00:00:06,400 --> 00:00:09,400
+00:00:05,400 --> 00:00:08,400
 „Laß mein Volk ziehen“
 2. Mose 5,1 (Luther)
 
 5
-00:00:09,400 --> 00:00:10,200
+00:00:08,400 --> 00:00:09,200
 2. Mose 5,1 (Luther)
 
 6
-00:00:14,000 --> 00:00:17,000
+00:00:13,000 --> 00:00:16,000
 Die zehn Plagen
 
 7
-00:00:21,200 --> 00:00:25,600
+00:00:20,200 --> 00:00:24,600
 „wenn ich das Blut sehe, an euch vorübergehe“
 2. Mose 12,13 (Luther)
 
 8
-00:00:30,200 --> 00:00:33,200
+00:00:29,200 --> 00:00:32,200
 „Und die Kinder Israel gingen hinein,
 mitten ins Meer auf dem Trockenen“
 2. Mose 14,22 (Luther)
 
 9
-00:00:33,200 --> 00:00:34,200
+00:00:32,200 --> 00:00:33,200
 „Und die Kinder Israel gingen hinein,
 2. Mose 14,22 (Luther)
 
 10
-00:00:36,000 --> 00:00:40,000
+00:00:35,000 --> 00:00:39,000
 „und das Wasser war ihnen für Mauern zur Rechten und zur Linken“
 2. Mose 14,22 (Luther)

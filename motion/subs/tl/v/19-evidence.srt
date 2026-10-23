@@ -1,113 +1,113 @@
 1
-00:00:01,200 --> 00:00:01,400
+00:00:00,200 --> 00:00:00,400
 18 · Totoong Kuwento ba ang Bibliya?
 
 2
-00:00:01,400 --> 00:00:04,800
+00:00:00,400 --> 00:00:03,800
 Tunay nga bang totoong kuwento ang Bibliya?
 
 3
-00:00:05,600 --> 00:00:08,200
+00:00:04,600 --> 00:00:07,200
 Hindi isang aklat kundi isang “aklatan”
 
 4
-00:00:08,200 --> 00:00:09,400
+00:00:07,200 --> 00:00:08,400
 Hindi isang aklat kundi isang “aklatan”
 aklat
 halos 1,500 taon
 
 5
-00:00:09,400 --> 00:00:10,200
+00:00:08,400 --> 00:00:09,200
 aklat
 halos 1,500 taon
 mga 40 manunulat
 
 6
-00:00:10,200 --> 00:00:12,800
+00:00:09,200 --> 00:00:11,800
 mga hari, pastol, mangingisda, isang maniningil ng buwis, isang manggagamot
 
 7
-00:00:12,800 --> 00:00:14,000
+00:00:11,800 --> 00:00:13,000
 mga hari, pastol, mangingisda, isang maniningil ng buwis, isang manggagamot
 Gayunman, ang lahat ay nagtatagpo, nang walang kaguluhan, sa iisang tema: kaligtasan sa pamamagitan ni Cristo.
 
 8
-00:00:14,000 --> 00:00:16,400
+00:00:13,000 --> 00:00:15,400
 Gayunman, ang lahat ay nagtatagpo, nang walang kaguluhan, sa iisang tema: kaligtasan sa pamamagitan ni Cristo.
 
 9
-00:00:17,200 --> 00:00:20,600
+00:00:16,200 --> 00:00:19,600
 Patuloy itong pinatutunayan mula sa lupa (arkeolohiya).
 
 10
-00:00:20,600 --> 00:00:21,400
+00:00:19,600 --> 00:00:20,400
 Patuloy itong pinatutunayan mula sa lupa (arkeolohiya).
 “ang sambahayan ni David”
 
 11
-00:00:21,400 --> 00:00:24,400
+00:00:20,400 --> 00:00:23,400
 “ang sambahayan ni David”
 
 12
-00:00:24,400 --> 00:00:25,200
+00:00:23,400 --> 00:00:24,200
 Nakaukit ang pangalan niya
 Poncio Pilato
 
 13
-00:00:25,200 --> 00:00:26,200
+00:00:24,200 --> 00:00:25,200
 Nakaukit ang pangalan niya
 Poncio Pilato
 ang gobernador na nagpatay kay Jesus
 
 14
-00:00:26,200 --> 00:00:27,200
+00:00:25,200 --> 00:00:26,200
 Poncio Pilato
 ang gobernador na nagpatay kay Jesus
 
 15
-00:00:29,000 --> 00:00:34,800
+00:00:28,000 --> 00:00:33,800
 Ito ang pinakamahusay na napreserbang sinaunang dokumento (mga manuskrito).
 
 16
-00:00:34,800 --> 00:00:36,200
+00:00:33,800 --> 00:00:35,200
 Balumbon ng Isaias (Dagat na Patay) ↔ karaniwang teksto
 
 17
-00:00:36,400 --> 00:00:36,800
+00:00:35,400 --> 00:00:35,800
 Tacitus
 
 18
-00:00:36,800 --> 00:00:37,400
+00:00:35,800 --> 00:00:36,400
 Tacitus
 Romanong mananalaysay
 
 19
-00:00:37,400 --> 00:00:40,200
+00:00:36,400 --> 00:00:39,200
 Tacitus
 Romanong mananalaysay
 Josephus
 
 20
-00:00:40,200 --> 00:00:43,200
+00:00:39,200 --> 00:00:42,200
 Balumbon ng Isaias (Dagat na Patay) ↔ karaniwang teksto
 
 21
-00:00:44,600 --> 00:00:48,400
+00:00:43,600 --> 00:00:47,400
 Ipinakikita ng mga batayang ito na ang paniniwala sa Bibliya ay hindi walang katuwiran kundi makatuwiran;
 
 22
-00:00:49,000 --> 00:00:52,400
+00:00:48,000 --> 00:00:51,400
 hindi ang mga ito isang “patunay” na pumipilit gaya ng isang pormulang matematika.
 
 23
-00:00:53,200 --> 00:00:53,400
+00:00:52,200 --> 00:00:52,400
 “Kaya't ang pananampalataya ay bunga ng pakikinig, at ang pakikinig naman ay bunga ng pangangaral tungkol kay Cristo.”
 
 24
-00:00:53,400 --> 00:00:57,400
+00:00:52,400 --> 00:00:56,400
 “Kaya't ang pananampalataya ay bunga ng pakikinig, at ang pakikinig naman ay bunga ng pangangaral tungkol kay Cristo.”
 Roma 10:17 (MBB)
 
 25
-00:00:57,400 --> 00:00:59,200
+00:00:56,400 --> 00:00:58,200
 “Kaya't ang pananampalataya ay bunga ng pakikinig, at ang pakikinig naman ay bunga ng pangangaral tungkol kay Cristo.”

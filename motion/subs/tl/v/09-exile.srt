@@ -1,36 +1,36 @@
 1
-00:00:00,600 --> 00:00:04,800
+00:00:00,000 --> 00:00:03,800
 930 – 586 B.C. · 1 Mga Hari 12 – 2 Mga Hari 25
 
 2
-00:00:04,800 --> 00:00:05,800
+00:00:03,800 --> 00:00:04,800
 930 – 586 B.C. · 1 Mga Hari 12 – 2 Mga Hari 25
 Magmula noon, patuloy na naghimagsik ang sampung lipi ng Israel sa paghahari ng angkan ni David.
 1 Mga Hari 12:19 (MBB)
 
 3
-00:00:05,800 --> 00:00:08,400
+00:00:04,800 --> 00:00:07,400
 Magmula noon, patuloy na naghimagsik ang sampung lipi ng Israel sa paghahari ng angkan ni David.
 1 Mga Hari 12:19 (MBB)
 
 4
-00:00:10,000 --> 00:00:14,200
+00:00:09,000 --> 00:00:13,200
 Nasunog ang templo at dinala ang bayan sa Babilonia.
 
 5
-00:00:22,000 --> 00:00:25,800
+00:00:21,000 --> 00:00:24,800
 Sa pampang ng mga ilog nitong bansang Babilonia, kami'y nakaupong tumatangis, sa tuwing Zion, aming naaalala.
 Awit 137:1 (MBB)
 
 6
-00:00:25,800 --> 00:00:27,200
+00:00:24,800 --> 00:00:26,200
 Sa pampang ng mga ilog nitong bansang Babilonia, kami'y nakaupong tumatangis, sa tuwing Zion, aming naaalala.
 
 7
-00:00:27,600 --> 00:00:31,200
+00:00:26,600 --> 00:00:30,200
 Sa sanga ng mga kahoy, sa tabi ng ilog nila, isinabit namin doon, yaong dala naming lira.
 Awit 137:2 (MBB)
 
 8
-00:00:31,800 --> 00:00:35,400
+00:00:30,800 --> 00:00:34,400
 Sumama pa siya hanggang sa pinakamadilim na lupain ng pagkatapon, at nangako ng pagpapanumbalik.

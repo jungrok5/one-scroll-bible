@@ -20,6 +20,7 @@ const ORDER = ['opening', 'creation', 'fall', 'patriarch', 'exodus', 'wilderness
   'silence', 'advent', 'cross', 'rise', 'church', 'renewal', 'mirror', 'gospel', 'evidence', 'ship', 'invite'];
 const FPS = 30, STEP = 0.2, MIN_ALPHA = 0.35, MIN_CUE = 0.6;
 const SUBS = join(here, 'subs');   // committed: the SRTs ride along in git (YouTube caption tracks)
+const OPEN = JSON.parse(readFileSync(join(here, 'youtube', 'shorts-open.json'), 'utf8'));   // where each Short starts in its scene
 const [cmd, a1, a2, ...rest] = process.argv.slice(2);
 
 const HANGUL = /[가-힣]/;
@@ -132,7 +133,10 @@ function makeSrt(lang, ori) {
       const lines = c.keys.map(k => { const v = L ? L[k] : k; if (L && v == null) missing++; return String(v ?? k).replace(/\s+/g, ' ').trim(); });
       return { start: c.start, end: c.end, text: [...new Set(lines)].filter(Boolean).join('\n') };   // two keys can share one translation; a key translated to '' (a decoration) shows nothing
     }).filter(c => c.text);
-    writeFileSync(join(dir, `${String(i + 1).padStart(2, '0')}-${sc}.srt`), srt(cues));
+    // a Short starts `skip` s into its scene (motion/youtube/shorts-open.json) — its own SRT is shifted to match
+    const skip = ori === 'v' ? (OPEN.scenes[sc] ?? OPEN.default) : 0;
+    const own = cues.filter(c => c.end > skip + 0.2).map(c => ({ ...c, start: Math.max(0, c.start - skip), end: c.end - skip }));
+    writeFileSync(join(dir, `${String(i + 1).padStart(2, '0')}-${sc}.srt`), srt(own));
     all.push(...cues.map(c => ({ ...c, start: c.start + off, end: c.end + off })));
     off += s.frames / FPS;
   });

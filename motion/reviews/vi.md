@@ -13,3 +13,5 @@ site pack does; names keep theirs).
 | (site) | `i18n/vi.json` FAQ a4 cited "Mi-chê 5:2" | **Fixed** → 5:1 (2 places; validate passes) |
 
 Site-pack note: `s['ui.legal']` still English. Verdict: publishable (no open HIGH/MED).
+
+Follow-up 2026-10-23 (site pack, second review agent + publisher pages): ui.legal now in this language with the publisher's TEXT notice from the YouVersion version page (an earlier draft had taken the audio recording's notice — wrong; never use `copyright_short` of the audio). See the commit for the exact line.

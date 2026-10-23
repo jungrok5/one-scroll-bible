@@ -51,6 +51,16 @@ auto-derived from `LANGS`; only these **non-derivable decisions** need a home:
 > A new trap usually appears with each new language. When you hit a new one, add it here so the next
 > session doesn't step on it.
 
+**Publisher notice for `ui.legal` = the TEXT notice, not the audio one (2026-10-23)** — a YouVersion chapter page carries
+two `copyright_short` blocks: the edition's text notice and, for "dramatized"/audio editions, the recording's notice
+(e.g. 1683 hi "The Bible Society of India 2016", 193 vi "© Rev. Nguyen Thi 2014" were AUDIO notices; the text ones are
+"Copyright © 2012 by The Bible Society of India" and "© 1998 United Bible Societies"). Read the notice shown on
+`bible.com/versions/<id>` (or the chapter page's version block) and confirm the edition name there too — 1683 is
+HINOVBSI "पवित्र बाइबिल OV (Re-edited)", not IRV. Drop "Used by permission" unless there is a real permission. "any rights"
+≠ "all rights": translate it softly (hi जो भी अधिकार, vi mọi quyền (nếu có)). 202 packs still carry the English generic
+line (only ar de es fr id ja pt-BR ru zh-Hans zh-Hant + hi vi th tl are localized) — localize a pack's line when that
+language is next reviewed, with a review agent, not in bulk.
+
 **Numbered-book surface form (most frequent)** — integrate only generates `number + space + name`
 ("2 Samuel"). Anything else must go into **books_single** with the exact surface form:
 - leading Arabic "2 Samuel" (default) / trailing "Samuel 2" (hr·he NT·to NT) / Roman "II Samuel"

@@ -14,3 +14,6 @@ only), all 42 contact sheets (CI, Noto Thai) looked at; every Scripture line che
 | LOW | church ประทาน, พระบัญญัติ, เชื้อสายของหญิง | left — would change site prose; judges ทรงส่ง now differs from site `love[4]` by ทรง |
 
 Verdict: publishable (no open HIGH/MED in the film).
+
+Follow-up 2026-10-23 (site pack, second review agent + publisher pages): ui.legal now in this language with the publisher's TEXT notice from the YouVersion version page (an earlier draft had taken the audio recording's notice — wrong; never use `copyright_short` of the audio). See the commit for the exact line.
+Site pack: version tag (ฉบับไทย) → (ฉบับมาตรฐาน) and footer → ฉบับมาตรฐาน 2011 (reviewer: the natural short name, = YouVersion's own).

@@ -134,9 +134,11 @@ curl -LO https://github.com/jungrok5/one-scroll-bible/releases/download/youtube-
 
 | 9 | 자막(검색용) | `node motion/youtube/yt-api.mjs captions [<code>…]` (YouTube Data API) | 영상에 말소리가 없어 자동 자막이 없고, 화면에 박힌 글자는 검색이 못 읽음 → 그 언어 `film-h.srt`를 그 언어 영상에. 스튜디오 화면의 수동 업로드는 스크립트로 넣은 파일을 거부함(2026-10-23) |
 
-**YouTube Data API (한 번만)**: 관리자가 Google Cloud에서 프로젝트 → "YouTube Data API v3"·"YouTube Analytics API" 사용 →
-OAuth 동의 화면(외부, 본인을 테스트 사용자로) → OAuth 클라이언트 ID(데스크톱 앱) JSON 내려받기 →
-`node motion/youtube/yt-auth.mjs <그 JSON>` → 채널 계정으로 허용. 값은 이 컴퓨터 사용자 환경 변수에만 저장되고 화면·채팅에 나오지 않는다
+**YouTube Data API (한 번만)**: Google Cloud 프로젝트 **`one-scroll-bible`**(jungrok5 계정, 2026-10-23 생성 — YouTube Data API v3·
+YouTube Analytics API 사용, OAuth 앱 "one-scroll-bible tools" 외부·**프로덕션**(테스트 중이면 인증이 7일마다 만료), 홈페이지·
+처리방침 `/privacy.html`·승인 도메인 one-scroll-bible.com, 테스트 사용자 onescrollbible@ · jungrok5@)에서 남은 것은 관리자가 직접:
+사용자 인증 정보 → OAuth 클라이언트 ID(데스크톱 앱) JSON 내려받기 → `node motion/youtube/yt-auth.mjs <그 JSON>` →
+**채널 소유 계정 onescrollbible@gmail.com**으로 허용("확인되지 않은 앱" 화면이 나오면 고급 → 이동 — 우리 앱이 맞음). 값은 이 컴퓨터 사용자 환경 변수에만 저장되고 화면·채팅에 나오지 않는다
 (JSON은 저장소 밖에 두거나 지운다 — `.gitignore`가 `client_secret*.json`을 막음). 확인: `node motion/youtube/yt-api.mjs whoami`.
 
 **쇼츠 시작 규칙** (`motion/youtube/shorts-open.json`, 2026-10-23 리뷰): 장면은 검은 화면에서 약 1.2초 동안 밝아지고 부활 장면은 첫 4.7초가

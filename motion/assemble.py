@@ -38,8 +38,8 @@ os.makedirs(TMP, exist_ok=True); os.makedirs(UPC, exist_ok=True)
 def run(args): subprocess.run(['ffmpeg', '-y', '-loglevel', 'error'] + args, check=True)
 def frames(path):
     r = subprocess.run(['ffprobe', '-v', 'error', '-select_streams', 'v:0', '-count_packets', '-show_entries',
-                        'stream=nb_read_packets', '-of', 'csv=p=0', path], capture_output=True, text=True, check=True)
-    return int(r.stdout.strip())
+                        'stream=nb_read_packets', '-of', 'default=nw=1:nk=1', path], capture_output=True, text=True, check=True)
+    return int(r.stdout.split()[0].strip(','))   # bare value (ffprobe 8 printed "1080," with -of csv=p=0)
 def concat_list(name, paths):
     p = os.path.join(TMP, name)
     with open(p, 'w') as f: f.writelines(f"file '{x}'\n" for x in paths)
@@ -72,7 +72,7 @@ def mux(video_paths, dst):
          '-c:v', 'copy', '-c:a', 'aac', '-b:a', '192k', '-movflags', '+faststart', dst])
 
 def probe(path, what):
-    return subprocess.run(['ffprobe', '-v', 'error', '-select_streams', 'v:0', '-show_entries', what, '-of', 'csv=p=0', path],
+    return subprocess.run(['ffprobe', '-v', 'error', '-select_streams', 'v:0', '-show_entries', what, '-of', 'default=nw=1:nk=1', path],
                           capture_output=True, text=True).stdout.strip()
 def is_upload(path):   # written by render.mjs in the upload format (tagged), or a legacy HEVC upload encode
     return 'osb-upload' in probe(path, 'format_tags=comment') or probe(path, 'stream=codec_name') == 'hevc'

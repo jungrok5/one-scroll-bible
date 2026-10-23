@@ -14,7 +14,7 @@ SCENES=${SCENES:-"opening creation fall patriarch exodus wilderness judges kingd
 # a clip already in the upload format (the render.mjs default, tagged osb-upload; or a legacy HEVC one) moves to out/upcache/ — later fixes re-join from there;
 # an old H.264 clip is deleted (its upload encode is already in upcache/)
 keep_or_rm() { mkdir -p motion/out/upcache; for s in $SCENES; do f=motion/out/$s$t-$1.mp4; [ -f $f ] || continue
-  if ffprobe -v error -show_entries format_tags=comment -of csv=p=0 $f | grep -q osb-upload || [ "$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 $f)" = hevc ]; then mv -f $f motion/out/upcache/; else rm -f $f; fi; done; }
+  if ffprobe -v error -show_entries format_tags=comment -of default=nw=1:nk=1 $f | grep -q osb-upload || [ "$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of default=nw=1:nk=1 $f)" = hevc ]; then mv -f $f motion/out/upcache/; else rm -f $f; fi; done; }
 for o in $oris; do
   for s in $SCENES; do
     [ -s motion/out/$s$t-$o.mp4 ] || [ -s motion/out/upcache/$s$t-$o.mp4 ] && continue

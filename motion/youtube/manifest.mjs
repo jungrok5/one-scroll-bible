@@ -30,7 +30,7 @@ const HOOK = {   // scene → Korean key(s), exactly as in motion/pilot/i18n/_ko
   mirror: ['결국 가장 깊은 우상은', '“하나님 자리에 앉은 나 자신”입니다.'], gospel: ['“행하라”가 아니라 “이루어졌다”'],
   evidence: ['성경이 진짜 실화인가요?'], ship: ['예수님 안 믿어도,\n그냥 착하게 살면 되는 것 아닌가요?'], invite: ['이 사랑은 정보가 아니라 초대입니다.'],
 };
-const ALT = { kingdom: ['나 여호와는 중심을 보느니라'] };   // when the full line makes the title too long (Arabic)
+const ALT = { kingdom: ['나 여호와는 중심을 보느니라'], mirror: ['“하나님 자리에 앉은 나 자신”입니다.'] };   // when the full line makes the title too long (Arabic; Swahili mirror)
 const NO_CHAPTER = new Set(['opening', 'evidence']);   // the hook already says the chapter name
 
 const read = p => JSON.parse(readFileSync(p, 'utf8').replace(/^﻿/, ''));

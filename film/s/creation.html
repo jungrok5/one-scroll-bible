@@ -689,7 +689,9 @@ function draw(ctx, t) {
   const toUV = (yy) => (H / 2 - yy) / SH;
   let bed = [0, toUV(y0 + 20), .6 * X, .09], bedA = a0 * .3;
   if (t > 8 && t < 16) { bed = [0, toUV(y1 + 20), .62 * X, .11]; bedA = a1 * 1.5; } else if (t >= 16) { bed = [0, toUV(y2 + 60), .7 * X, V ? .14 : .13]; bedA = a2 * .9; }
-  if (gl && GLC.c && GLC.f === Math.round(t * 30)) {   // the cached cosmos frame (see __prepare)
+  if (Pilot.collect) {   // the string scan (i18n-scan ?collect=1) needs only the words — the shader was most of its time
+    ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H);
+  } else if (gl && GLC.c && GLC.f === Math.round(t * 30)) {   // the cached cosmos frame (see __prepare)
     ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = 'high';
     ctx.drawImage(GLC.c, 0, 0, W, H);
   } else if (gl) {

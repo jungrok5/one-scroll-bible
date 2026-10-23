@@ -7,14 +7,18 @@
 @font-face{font-family:'Noto Naskh Arabic';font-weight:100 900;font-style:normal;font-display:block;src:url(NotoNaskhArabic.woff2) format('woff2')}
 @font-face{font-family:'Noto Sans';font-weight:100 900;font-style:normal;font-display:block;src:url(NotoSans.woff2) format('woff2')}
 @font-face{font-family:'Noto Sans Arabic';font-weight:100 900;font-style:normal;font-display:block;src:url(NotoSansArabic.woff2) format('woff2')}
+@font-face{font-family:'Noto Sans Bengali';font-weight:100 900;font-style:normal;font-display:block;src:url(NotoSansBengali.woff2) format('woff2')}
 @font-face{font-family:'Noto Sans Devanagari';font-weight:100 900;font-style:normal;font-display:block;src:url(NotoSansDevanagari.woff2) format('woff2')}
 @font-face{font-family:'Noto Sans JP';font-weight:100 900;font-style:normal;font-display:block;src:url(NotoSansJP.woff2) format('woff2')}
 @font-face{font-family:'Noto Sans SC';font-weight:100 900;font-style:normal;font-display:block;src:url(NotoSansSC.woff2) format('woff2')}
 @font-face{font-family:'Noto Sans TC';font-weight:100 900;font-style:normal;font-display:block;src:url(NotoSansTC.woff2) format('woff2')}
+@font-face{font-family:'Noto Sans Tamil';font-weight:100 900;font-style:normal;font-display:block;src:url(NotoSansTamil.woff2) format('woff2')}
 @font-face{font-family:'Noto Sans Thai';font-weight:100 900;font-style:normal;font-display:block;src:url(NotoSansThai.woff2) format('woff2')}
 @font-face{font-family:'Noto Serif';font-weight:100 900;font-style:normal;font-display:block;src:url(NotoSerif.woff2) format('woff2')}
+@font-face{font-family:'Noto Serif Bengali';font-weight:100 900;font-style:normal;font-display:block;src:url(NotoSerifBengali.woff2) format('woff2')}
 @font-face{font-family:'Noto Serif Devanagari';font-weight:100 900;font-style:normal;font-display:block;src:url(NotoSerifDevanagari.woff2) format('woff2')}
 @font-face{font-family:'Noto Serif JP';font-weight:100 900;font-style:normal;font-display:block;src:url(NotoSerifJP.woff2) format('woff2')}
 @font-face{font-family:'Noto Serif SC';font-weight:100 900;font-style:normal;font-display:block;src:url(NotoSerifSC.woff2) format('woff2')}
 @font-face{font-family:'Noto Serif TC';font-weight:100 900;font-style:normal;font-display:block;src:url(NotoSerifTC.woff2) format('woff2')}
+@font-face{font-family:'Noto Serif Tamil';font-weight:100 900;font-style:normal;font-display:block;src:url(NotoSerifTamil.woff2) format('woff2')}
 @font-face{font-family:'Noto Serif Thai';font-weight:100 900;font-style:normal;font-display:block;src:url(NotoSerifThai.woff2) format('woff2')}

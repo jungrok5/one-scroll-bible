@@ -20,8 +20,8 @@ if (!langs.length) { console.log('usage: node motion/youtube/shorts-retrim.mjs <
 mkdirSync(DST, { recursive: true });
 
 const run = (cmd, a) => new Promise((res, rej) => execFile(cmd, a, { maxBuffer: 64 << 20 }, (e, so, se) => e ? rej(new Error(se || e.message)) : res(so)));
-const tagged = f => /osb-open/.test(execFileSync('ffprobe', ['-v', 'error', '-show_entries', 'format_tags=comment', '-of', 'csv=p=0', f]).toString());
-const dur = f => +execFileSync('ffprobe', ['-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', f]).toString();
+const tagged = f => /osb-open/.test(execFileSync('ffprobe', ['-v', 'error', '-show_entries', 'format_tags=comment', '-of', 'default=nw=1:nk=1', f]).toString());
+const dur = f => +execFileSync('ffprobe', ['-v', 'error', '-show_entries', 'format=duration', '-of', 'default=nw=1:nk=1', f]).toString();
 // same video settings as assemble.py ENC['h264'] (closed GOP, 2 s keyframes, no B-frames)
 const ENC = ['-c:v', 'libx264', '-preset', 'faster', '-crf', '18', '-maxrate', '12M', '-bufsize', '24M', '-g', '60', '-keyint_min', '60', '-sc_threshold', '0', '-bf', '0', '-pix_fmt', 'yuv420p'];
 

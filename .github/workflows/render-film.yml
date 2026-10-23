@@ -56,8 +56,16 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+      - uses: actions/cache@v4   # fonts, Chromium, ffmpeg: setup in ~1 min instead of 1–50 (apt mirrors vary)
+        with:
+          path: |
+            ~/.local/share/fonts
+            ~/.cache/ms-playwright
+            ~/.local/ffmpeg
+          key: ci-tools-${{ runner.os }}-${{ hashFiles('motion/ci-setup.sh') }}
       - run: bash motion/ci-setup.sh
-      - run: node motion/i18n-scan.mjs ${{ matrix.lang }}
+      # the missing-string scan (i18n-scan, 9–17 min here) is `node motion/film-lang.mjs check` on the translator's machine,
+      # before the push; the sheets themselves take ~4 min
       - run: node motion/sheets.mjs ${{ matrix.lang }} --n 6
       - uses: actions/upload-artifact@v4
         with:
@@ -75,6 +83,13 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.local/share/fonts
+            ~/.cache/ms-playwright
+            ~/.local/ffmpeg
+          key: ci-tools-${{ runner.os }}-${{ hashFiles('motion/ci-setup.sh') }}
       - run: WITH_PYTHON=1 bash motion/ci-setup.sh
       - name: posters
         run: for L in ${{ inputs.languages }}; do bash motion/poster.sh $L; done
@@ -109,6 +124,13 @@ jobs:
         if: steps.c.outputs.cache-hit != 'true'
         with:
           node-version: 22
+      - uses: actions/cache@v4   # fonts, Chromium, ffmpeg: setup in ~1 min instead of 1–50 (apt mirrors vary)
+        with:
+          path: |
+            ~/.local/share/fonts
+            ~/.cache/ms-playwright
+            ~/.local/ffmpeg
+          key: ci-tools-${{ runner.os }}-${{ hashFiles('motion/ci-setup.sh') }}
       - run: bash motion/ci-setup.sh
         if: steps.c.outputs.cache-hit != 'true'
       - run: node motion/render.mjs ${{ matrix.o }} --page pilot/creation.html --glcache build
@@ -134,6 +156,13 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+      - uses: actions/cache@v4   # fonts, Chromium, ffmpeg: setup in ~1 min instead of 1–50 (apt mirrors vary)
+        with:
+          path: |
+            ~/.local/share/fonts
+            ~/.cache/ms-playwright
+            ~/.local/ffmpeg
+          key: ci-tools-${{ runner.os }}-${{ hashFiles('motion/ci-setup.sh') }}
       - run: bash motion/ci-setup.sh
       - uses: actions/cache/restore@v4
         if: needs.plan.outputs.cache == 'true'

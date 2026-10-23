@@ -18,7 +18,7 @@ for f in notosanskr/NotoSansKR[wght].ttf notoserifkr/NotoSerifKR[wght].ttf \
          notosansmyanmar/NotoSansMyanmar[wdth,wght].ttf \
          notoserifkhmer/NotoSerifKhmer[wdth,wght].ttf notosanskhmer/NotoSansKhmer[wdth,wght].ttf; do
   out="$FD/$(basename "$f" | tr -d '[],')"
-  [ -s "$out" ] || curl -fsSL "$G/$(echo "$f" | sed 's/\[/%5B/g; s/\]/%5D/g')" -o "$out"
+  [ -s "$out" ] || curl -fsSL --retry 3 "$G/$(echo "$f" | sed 's/\[/%5B/g; s/\]/%5D/g')" -o "$out"
 done
 # static Korean faces per weight — what publish-film.py subsets for the site (fonts.css serves one file per weight)
 C=https://raw.githubusercontent.com/notofonts/noto-cjk/main
@@ -28,10 +28,20 @@ for f in Serif/SubsetOTF/KR/NotoSerifKR-Regular.otf Serif/SubsetOTF/KR/NotoSerif
 done
 fc-cache -f >/dev/null
 echo "fonts: $(fc-list : family | grep -c Noto) Noto families"
-if ! command -v ffmpeg >/dev/null; then sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg >/dev/null; fi
+# ffmpeg: a static build from GitHub, not apt — apt on the runners took anywhere from 1 to 43 minutes (2026-10-23)
+if ! command -v ffmpeg >/dev/null; then
+  FF=${FFMPEG_DIR:-$HOME/.local/ffmpeg}; mkdir -p "$FF"
+  [ -x "$FF/bin/ffmpeg" ] || curl -fsSL --retry 3 https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-n8.1-latest-linux64-gpl-8.1.tar.xz | tar -xJ -C "$FF" --strip-components=1
+  export PATH="$FF/bin:$PATH"; if [ -n "${GITHUB_PATH:-}" ]; then echo "$FF/bin" >> "$GITHUB_PATH"; fi
+fi
 ffmpeg -version | head -1
 if ! node -e "require(require('child_process').execSync('npm root -g').toString().trim()+'/playwright')" 2>/dev/null; then npm i -g playwright@1.56.1 >/dev/null; fi
-npx --yes playwright@1.56.1 install --with-deps chromium >/dev/null
+# Chromium only; the system libraries it needs are already on GitHub's Ubuntu image (it ships Google Chrome). --with-deps
+# (apt again) only if the browser will not start.
+npx --yes playwright@1.56.1 install chromium >/dev/null
+if ! node -e "require(require('child_process').execSync('npm root -g').toString().trim()+'/playwright').chromium.launch().then(b=>b.close())" 2>/dev/null; then
+  echo "chromium needs system libraries — installing them"; NEEDRESTART_MODE=l sudo -E npx --yes playwright@1.56.1 install-deps chromium >/dev/null
+fi
 echo "playwright chromium ready"
 # Python side (site publish: fonttools + brotli; thumbnails: pillow) — only when asked: WITH_PYTHON=1 bash motion/ci-setup.sh
 if [ "${WITH_PYTHON:-}" = 1 ]; then python3 -m pip install -q fonttools brotli pillow; echo "python: fonttools brotli pillow"; fi

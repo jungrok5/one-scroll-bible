@@ -19,7 +19,7 @@
   "landscape": "Mlalo",
   "portrait": "Wima",
   "back": "Au isome polepole →",
-  "legal": "Manukuu ya Maandiko: SRUV — yamenukuliwa kwa kutaja chanzo; haki zozote za tafsiri hiyo zinabaki kwa mchapishaji wake. Leseni ya CC BY 4.0 ya tovuti hii inahusu maandishi ya tovuti hii pekee — haihusu manukuu ya Maandiko. Matukio yamechorwa kwa msimbo; muziki na madoido ya sauti yametengenezwa kwa ElevenLabs.",
+  "legal": "Manukuu ya Maandiko: Swahili Revised Union Version Bible © Bible Society of Kenya, and Bible Society of Tanzania, 2005. Leseni ya CC BY 4.0 ya tovuti hii inahusu maandishi ya tovuti hii pekee — haihusu manukuu ya Maandiko. Matukio yamechorwa kwa msimbo; muziki na madoido ya sauti yametengenezwa kwa ElevenLabs.",
   "ch": [
    "Hadithi Moja",
    "Uumbaji",
@@ -32,7 +32,7 @@
    "Ufalme Uliogawanyika · Uhamisho",
    "Kurudi Kutoka Uhamishoni",
    "Miaka ya Ukimya",
-   "Yesu Anakuja",
+   "Kuja kwa Yesu",
    "Msalaba",
    "Ufufuo",
    "Kanisa Laanza",
@@ -49,7 +49,7 @@
   "cta": "Tazama filamu ya dakika 14"
  },
  "advent": {
-  "11  ·  예수님의 오심": "11  ·  Yesu Anakuja",
+  "11  ·  예수님의 오심": "11  ·  Kuja kwa Yesu",
   "여자의 후손": "Uzao wa mwanamke",
   "아브라함의 복": "Baraka ya Abrahamu",
   "유월절 어린 양": "Mwana-kondoo wa Pasaka",
@@ -126,12 +126,12 @@
   "그런데도 ‘그리스도를 통한 구원’이라는\n하나의 주제로 흐트러짐 없이 모입니다.": "Lakini vyote vinakutana, bila vurugu,\njuu ya wazo moja: wokovu kupitia Kristo.",
   "그리스도를 통한 구원": "Wokovu kupitia Kristo",
   "땅속에서 계속 확인됩니다(고고학).": "Inaendelea kuthibitishwa kutoka ardhini (akiolojia).",
-  "텔단 비석": "Mnara wa Tel Dan",
+  "텔단 비석": "Jiwe la Tel Dan",
   "“다윗의 집”": "“nyumba ya Daudi”",
   "다윗 왕조": "ukoo wa Daudi",
   "빌라도 비문": "Jiwe la Pilato",
   "본디오 빌라도": "Pontio Pilato",
-  "예수님을 처형한 총독": "mtawala aliyemuua Yesu",
+  "예수님을 처형한 총독": "mtawala aliyeamuru Yesu asulubiwe",
   "그 이름이 새겨진 비문": "andiko lenye jina lake",
   "재현": "kielelezo",
   "가장 잘 보존된 고대 문서입니다(사본).": "Ni hati ya kale iliyohifadhiwa vizuri zaidi (nakala za mkono).",
@@ -195,8 +195,8 @@
   "창세기 3:8 (개역개정)": "Mwanzo 3:8 (SRUV)",
   "“네가 어디 있느냐”": "“Uko wapi?”",
   "창세기 3:9 (개역개정)": "Mwanzo 3:9 (SRUV)",
-  "“여자의 후손은\n네 머리를 상하게 할 것이요”": "“… na kati ya uzao wako na uzao wake;\nhuo utakuponda kichwa”",
-  "“여자의 후손은 네 머리를 상하게 할 것이요”": "“… na kati ya uzao wako na uzao wake; huo utakuponda kichwa”",
+  "“여자의 후손은\n네 머리를 상하게 할 것이요”": "“… uzao wake;\nhuo utakuponda kichwa”",
+  "“여자의 후손은 네 머리를 상하게 할 것이요”": "“… uzao wake; huo utakuponda kichwa”",
   "창세기 3:15 (개역개정)": "Mwanzo 3:15 (SRUV)",
   "언약": "AGANO",
   "타락 직후 주신 첫 복음의 약속": "Ahadi ya kwanza ya Injili, iliyotolewa mara tu baada ya Anguko"
@@ -277,8 +277,8 @@
   "요한복음 1:12 (개역개정)": "Yohana 1:12 (SRUV)",
   "한눈에 보는": "Biblia kwa",
   "성경 이야기": "Mkunjo Mmoja",
-  "성경 인용: 「성경전서 개역개정판」 © 대한성서공회.": "Manukuu ya Maandiko: SRUV.",
-  "저작권은 대한성서공회에 있으며, 출처를 밝혀 인용했습니다.": "Haki zozote za tafsiri hiyo zinabaki kwa mchapishaji wake; yamenukuliwa kwa kutaja chanzo."
+  "성경 인용: 「성경전서 개역개정판」 © 대한성서공회.": "Manukuu ya Maandiko: Swahili Revised Union Version Bible",
+  "저작권은 대한성서공회에 있으며, 출처를 밝혀 인용했습니다.": "© Bible Society of Kenya, and Bible Society of Tanzania, 2005."
  },
  "judges": {
   "06  ·  사사 시대": "06  ·  Zama za Waamuzi",
@@ -297,8 +297,8 @@
   "사람이 각기 자기의 소견에": "kila mtu alifanya yaliyokuwa ni mema",
   "옳은 대로 행하였더라”": "machoni pake mwenyewe.”",
   "사사기 21:25 (개역개정)": "Waamuzi 21:25 (SRUV)",
-  "배신하고 또 배신해도, 부르짖을 때마다": "Walisalitiwa tena na tena,\nlakini kila walipolia",
-  "구원자를 보내 다시 일으키셨습니다.": "aliwatumia mwokozi\nna kuwainua."
+  "배신하고 또 배신해도, 부르짖을 때마다": "Ingawa walimsaliti tena na tena,\nkila walipomlilia",
+  "구원자를 보내 다시 일으키셨습니다.": "aliwatumia mwokozi\nna kuwainua tena."
  },
  "kingdom": {
   "07  ·  통일 왕국": "07  ·  Ufalme Ulioungana",
@@ -452,7 +452,7 @@
   "“너희를 내 백성으로 삼고": "“nami nitawatwaeni kuwa watu wangu,",
   "나는 너희의 하나님이 되리니”": "nitakuwa Mungu kwenu”",
   "출애굽기 6:7 (개역개정)": "Kutoka 6:7 (SRUV)",
-  "“사람이 자기의 아들을 안는 것 같이\n너희의 하나님 여호와께서": "“ulipoona alivyokuchukua BWANA, Mungu wako,\nkama mtu amchukuavyo mwanawe,",
+  "“사람이 자기의 아들을 안는 것 같이\n너희의 하나님 여호와께서": "“… ulipoona alivyokuchukua BWANA, Mungu wako,\nkama mtu amchukuavyo mwanawe,",
   "너희가 걸어온 길에서 너희를 안으사\n이 곳까지 이르게 하셨느니라”": "njia yote mliyoiendea,\nhata mkafika mahali hapa”",
   "신명기 1:31 (개역개정)": "Kumbukumbu la Torati 1:31 (SRUV)",
   "약속의 땅 문 앞에 선 백성, 이제 들어갑니다…": "Wakiwa wamesimama ukingoni mwa nchi ya ahadi, wanajiandaa kuingia…",

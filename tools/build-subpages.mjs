@@ -115,7 +115,17 @@ function bakeHead(html, page, lang, langs, get, pack) {
   const url = lang === 'ko' ? `${ORIGIN}/${slug}/` : `${ORIGIN}/${slug}/${lang}/`;
   const title = (pack && pack.docTitle) || page.title[lang]
     || (stripTags(get('title')) + ' · ' + (BRAND[lang] || BRAND.en));
-  const desc = (pack && pack.metaDesc) || stripTags(get('purpose')) || stripTags(get('verse'));
+  let desc = (pack && pack.metaDesc) || stripTags(get('purpose')) || stripTags(get('verse'));
+  // Bing: "meta description too short" (CJK descriptions ~45 chars). Append the page's own, already translated
+  // map headings (OT · Jesus · Paul) while under 160 characters — no new translated text.
+  if (slug === 'maps' && [...desc].length < 100) {
+    const base = desc;
+    for (const k of ['ot_h', 'je_h', 'pa_h']) {
+      const e = stripTags(get(k) || ''); if (!e) continue;
+      const n = desc + (desc === base ? ' ' : ' · ') + e;
+      if ([...n].length > 160) break; desc = n;
+    }
+  }
   const locMain = lang === 'ko' ? 'ko_KR' : (lang === 'en' ? 'en_US' : lang);
 
   let h = html;

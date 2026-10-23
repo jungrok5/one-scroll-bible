@@ -60,7 +60,20 @@ GitHub은 언어×방향을 최대 20개 동시에 돌리므로 **여러 언어�
 같은 방식을 다른 프로젝트에서 쓰려면 재사용 가능한 스킬 **canvas-film** (github.com/jungrok5/motion-skills)을 쓰면 됩니다.
 
 ## 인스타그램 (한국어만)
-인스타는 3분이 넘는 릴스를 팔로워가 아닌 사람에게 추천하지 않으므로 7편(3장면씩)과 1분 예고편으로 나눠 올립니다.
+**2026-10-23부터: 장면 하나 = 릴스 하나**(유튜브 쇼츠와 같은 파일, 검은 화면을 건너뛴 `out/release-open/`), 매일 저녁 7시 1개씩
+21일. 예전 7편 묶음과 예고편은 지웠습니다. 상태 기록은 `motion/social/instagram.json`.
+```
+node motion/youtube/shorts-retrim.mjs ko                 # 쇼츠를 1초 지점부터 (out/release-open/)
+python motion/social/insta_reel_covers.py ko             # 표지 21개 + 격자 미리보기 grid.jpg (out/insta/reels-ko/)
+node motion/social/insta_reels_plan.mjs ko --start 2026-10-24   # 설명·예약 시각 → plan.json / plan.md
+node motion/youtube/serve.mjs                            # 파일 서버(그대로 켜 둠) → Meta 비즈니스 도구에 meta-reels.js 붙여 넣기
+```
+- 예약은 Meta 비즈니스 도구(business.facebook.com → 콘텐츠 → Create reel → Schedule). 인스타 웹은 예약이 없습니다.
+- 그 페이지의 보안 정책(CSP)이 127.0.0.1을 막아서, 파일은 `motion/youtube/relay.html` 팝업이 받아 넘깁니다(빨간 OSB RELAY 버튼).
+- 설명은 **실제 키 입력으로** 넣습니다. 스크립트로 넣으면 해시태그가 뒤섞이고 편집기가 멈춥니다.
+- 프로필 링크는 앱에서만 바꿀 수 있습니다. Threads 동시 게시는 비즈니스 도구 예약에는 없습니다.
+
+예전 방식(3분 넘는 릴스는 비팔로워에게 추천되지 않아 7편 + 1분 예고편으로 나눈 것):
 `out/<scene>-v.mp4`(장면별 세로 원본)가 있어야 합니다. 결과는 `out/insta/`.
 ```
 python3 motion/social/insta_parts.py [1 2 …]     # 1~7편 (배지 + 다음 편 끝화면), 번호를 주면 그 편만

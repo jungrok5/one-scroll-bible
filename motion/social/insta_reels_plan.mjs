@@ -16,11 +16,13 @@ const man = JSON.parse(readFileSync(join(M, 'youtube', 'manifest.json'), 'utf8')
 const OUT = join(M, 'out', 'insta', `reels-${lang}`);
 const LINE = { ko: '창조부터 새 하늘과 새 땅까지, 성경 전체를 14분 영상으로.\n전체 영상과 글로 읽는 성경 이야기는 프로필 링크에서.' };
 const TAGS = { ko: ['#성경', '#성경이야기', '#한눈에보는성경', '#기독교'] };
-const FIRST = { ko: '하나의 줄거리' };
+// chapter name when the Short's title has none ("hook n/21")
+const CHAPTER = { ko: { opening: '하나의 줄거리', evidence: '성경은 실화인가' } };
 
 const plan = man.shorts.map((s, i) => {
   const m = s.title.match(/^(.*?)\s+(\d+)\/(\d+)$/); const body = m[1], n = +m[2], tot = +m[3];
-  const k = body.lastIndexOf(' — '), hook = k < 0 ? body : body.slice(0, k), chap = k < 0 ? FIRST[lang] : body.slice(k + 3);
+  const k = body.lastIndexOf(' — '), hook = k < 0 ? body : body.slice(0, k), chap = k < 0 ? (CHAPTER[lang]?.[s.scene] || '') : body.slice(k + 3);
+  if (!chap) throw new Error(`no chapter name for ${s.scene} — add it to CHAPTER`);
   const at = new Date(Date.parse(`${start}T${time}:00${tz}`) + i * 864e5).toISOString();
   const video = join(M, 'out', 'release-open', s.file), cover = join(OUT, `cover-${String(n).padStart(2, '0')}-${s.scene}.jpg`);
   for (const f of [video, cover]) if (!existsSync(f)) throw new Error('missing ' + f);

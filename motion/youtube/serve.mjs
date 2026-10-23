@@ -12,8 +12,9 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');   // motion/
 const PORT = +(process.env.PORT || 8765);
-const ORIGINS = new Set(['https://studio.youtube.com', 'https://www.youtube.com']);
-const TYPES = { '.mp4': 'video/mp4', '.jpg': 'image/jpeg', '.png': 'image/png', '.srt': 'text/plain; charset=utf-8', '.json': 'application/json', '.md': 'text/plain; charset=utf-8' };
+// + Meta Business Suite, where the Instagram Reels are scheduled (motion/social/insta_reels_plan.mjs)
+const ORIGINS = new Set(['https://studio.youtube.com', 'https://www.youtube.com', 'https://business.facebook.com']);
+const TYPES = { '.html': 'text/html; charset=utf-8', '.mp4': 'video/mp4', '.jpg': 'image/jpeg', '.png': 'image/png', '.srt': 'text/plain; charset=utf-8', '.json': 'application/json', '.md': 'text/plain; charset=utf-8' };
 
 createServer((req, res) => {
   const o = req.headers.origin;

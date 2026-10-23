@@ -1,0 +1,132 @@
+{
+ "_note": "Instagram @one.scroll.bible (creator account, Korean only). 2026-10-23: old 3 reels (1/7, 2/7, 1-min trailer) deleted from Instagram (Threads copies: delete by hand — the browser extension cannot open threads.com); bio rewritten; profile link can only be changed in the app (wanted: https://one-scroll-bible.com/?lang=ko&utm_source=instagram&utm_medium=social&utm_campaign=bio). 21 Reels scheduled in Meta Business Suite with cover + caption, one a day 19:00 KST, Business Suite offers no Threads cross-post.",
+ "tools": "motion/social/insta_reel_covers.py (covers) · insta_reels_plan.mjs (plan.json) · meta-reels.js (Business Suite paste-in) · motion/youtube/relay.html + serve.mjs (files past the CSP)",
+ "reels_ko": [
+  {
+   "n": 1,
+   "scene": "opening",
+   "at": "2026-10-24T10:00:00.000Z",
+   "status": "scheduled"
+  },
+  {
+   "n": 2,
+   "scene": "creation",
+   "at": "2026-10-25T10:00:00.000Z",
+   "status": "scheduled"
+  },
+  {
+   "n": 3,
+   "scene": "fall",
+   "at": "2026-10-26T10:00:00.000Z",
+   "status": "scheduled"
+  },
+  {
+   "n": 4,
+   "scene": "patriarch",
+   "at": "2026-10-27T10:00:00.000Z",
+   "status": "scheduled"
+  },
+  {
+   "n": 5,
+   "scene": "exodus",
+   "at": "2026-10-28T10:00:00.000Z",
+   "status": "scheduled"
+  },
+  {
+   "n": 6,
+   "scene": "wilderness",
+   "at": "2026-10-29T10:00:00.000Z",
+   "status": "scheduled"
+  },
+  {
+   "n": 7,
+   "scene": "judges",
+   "at": "2026-10-30T10:00:00.000Z",
+   "status": "scheduled"
+  },
+  {
+   "n": 8,
+   "scene": "kingdom",
+   "at": "2026-10-31T10:00:00.000Z",
+   "status": "scheduled"
+  },
+  {
+   "n": 9,
+   "scene": "exile",
+   "at": "2026-11-01T10:00:00.000Z",
+   "status": "scheduled"
+  },
+  {
+   "n": 10,
+   "scene": "return",
+   "at": "2026-11-02T10:00:00.000Z",
+   "status": "scheduled"
+  },
+  {
+   "n": 11,
+   "scene": "silence",
+   "at": "2026-11-03T10:00:00.000Z",
+   "status": "scheduled"
+  },
+  {
+   "n": 12,
+   "scene": "advent",
+   "at": "2026-11-04T10:00:00.000Z",
+   "status": "scheduled"
+  },
+  {
+   "n": 13,
+   "scene": "cross",
+   "at": "2026-11-05T10:00:00.000Z",
+   "status": "scheduled"
+  },
+  {
+   "n": 14,
+   "scene": "rise",
+   "at": "2026-11-06T10:00:00.000Z",
+   "status": "scheduled"
+  },
+  {
+   "n": 15,
+   "scene": "church",
+   "at": "2026-11-07T10:00:00.000Z",
+   "status": "scheduled"
+  },
+  {
+   "n": 16,
+   "scene": "renewal",
+   "at": "2026-11-08T10:00:00.000Z",
+   "status": "scheduled"
+  },
+  {
+   "n": 17,
+   "scene": "mirror",
+   "at": "2026-11-09T10:00:00.000Z",
+   "status": "scheduled"
+  },
+  {
+   "n": 18,
+   "scene": "gospel",
+   "at": "2026-11-10T10:00:00.000Z",
+   "status": "scheduled"
+  },
+  {
+   "n": 19,
+   "scene": "evidence",
+   "at": "2026-11-11T10:00:00.000Z",
+   "status": "scheduled"
+  },
+  {
+   "n": 20,
+   "scene": "ship",
+   "at": "2026-11-12T10:00:00.000Z",
+   "status": "scheduled"
+  },
+  {
+   "n": 21,
+   "scene": "invite",
+   "at": "2026-11-13T10:00:00.000Z",
+   "status": "scheduled"
+  }
+ ]
+}

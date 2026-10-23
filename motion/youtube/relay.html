@@ -1,0 +1,21 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>osb relay</title>
+<!-- Opened as a popup by a page whose CSP blocks fetching 127.0.0.1 (Meta Business Suite). On request from its opener
+     it reads a file from this local server (same origin) and hands the bytes back with postMessage. Answers only the
+     origins below and only paths under this server. -->
+<p id="s">relay ready</p>
+<script>
+const OK = new Set(['https://business.facebook.com']);
+addEventListener('message', async e => {
+  if (!OK.has(e.origin) || !e.data || e.data.osb !== 'get') return;
+  const s = document.getElementById('s');
+  try {
+    const path = String(e.data.path).replace(/^\/+/, '');
+    const r = await fetch('/' + path, { cache: 'no-store' }); if (!r.ok) throw new Error(r.status + ' ' + path);
+    const buf = await r.arrayBuffer(); s.textContent = 'sent ' + path + ' ' + (buf.byteLength / 1e6).toFixed(1) + ' MB';
+    e.source.postMessage({ osb: 'file', id: e.data.id, path, buf, type: r.headers.get('content-type') }, e.origin, [buf]);
+  } catch (err) { e.source.postMessage({ osb: 'err', id: e.data.id, msg: String(err) }, e.origin); }
+});
+if (opener) for (const o of OK) try { opener.postMessage({ osb: 'ready' }, o); } catch {}
+</script>

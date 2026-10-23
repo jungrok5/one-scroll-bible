@@ -13,6 +13,8 @@ for f in notosanskr/NotoSansKR[wght].ttf notoserifkr/NotoSerifKR[wght].ttf \
          notonaskharabic/NotoNaskhArabic[wght].ttf notosansarabic/NotoSansArabic[wdth,wght].ttf \
          notoserifdevanagari/NotoSerifDevanagari[wdth,wght].ttf notosansdevanagari/NotoSansDevanagari[wdth,wght].ttf \
          notoserifthai/NotoSerifThai[wdth,wght].ttf notosansthai/NotoSansThai[wdth,wght].ttf \
+         notoserifbengali/NotoSerifBengali[wdth,wght].ttf notosansbengali/NotoSansBengali[wdth,wght].ttf \
+         notoseriftamil/NotoSerifTamil[wdth,wght].ttf notosanstamil/NotoSansTamil[wdth,wght].ttf \
          notosansmyanmar/NotoSansMyanmar[wdth,wght].ttf \
          notoserifkhmer/NotoSerifKhmer[wdth,wght].ttf notosanskhmer/NotoSansKhmer[wdth,wght].ttf; do
   out="$FD/$(basename "$f" | tr -d '[],')"

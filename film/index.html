@@ -147,7 +147,7 @@
   S.forEach(function (s) { START.push(acc); acc += s[2]; });
   var $ = function (id) { return document.getElementById(id); };
   // GA4 — every event carries the film's language (same parameter name as the main site's events)
-  function ev(n, p) { if (window.gtag) try { gtag('event', n, Object.assign({ language: LANG }, p || {})); } catch (e) {} }
+  function ev(n, p) { if (window.gtag) try { gtag('event', n, Object.assign({ site_language: LANG }, p || {})); } catch (e) {} }
   // watched = seconds actually played (not position): milestones say how far people really watch
   var watched = 0, MILE = [10, 25, 50, 75, 90], mileSent = {}, stallT = 0, stallSent = {}, pausedBy = '';
   function pos() { return Math.round(cur >= 0 ? START[cur] + (au.currentTime || 0) : 0); }

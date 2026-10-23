@@ -1,6 +1,6 @@
 {
- "about/index.html": "2026-10-22",
- "film/index.html": "2026-10-22",
+ "about/index.html": "2026-10-23",
+ "film/index.html": "2026-10-23",
  "i18n/about/ar.json": "2026-06-28",
  "i18n/about/bn.json": "2026-06-28",
  "i18n/about/de.json": "2026-06-28",
@@ -439,5 +439,5 @@
  "i18n/zlm.json": "2026-07-25",
  "i18n/zu.json": "2026-07-25",
  "index.html": "2026-10-23",
- "maps/index.html": "2026-10-22"
+ "maps/index.html": "2026-10-23"
 }

@@ -71,7 +71,7 @@ Protestant church; Korean Revised Version (개역개정) as the Korean baseline.
   URL as **SVG on screen + high-res PNG on download**; no per-language image, no `qrcode` build dep. Deep links `#s1`–`#s13`.
   (The canvas verse-image option was removed — canvas fonts can't render most non-Latin scripts.)
 - Search/AI-citation work (SEO·AEO·GEO·LLMO·Naver): the **/fire-your-seo-agency skill** (`.claude/skills/fire-your-seo-agency/`, vendored MIT); changes, baselines and re-measure dates go in `tools/seo-log.md`. After each deploy `.github/workflows/indexnow.yml` pings IndexNow (Bing·Naver·Yandex) with the URLs whose `<lastmod>` changed.
-- GA4 events (all carry `language`; maps/about also `page_type`) — main: language_select · share{method} · scene_view{scene} ·
+- GA4 events (all carry `site_language` — never `language`, which gtag treats as the reserved browser-language field `ul` and drops; maps/about also `page_type`) — main: language_select · share{method} · scene_view{scene} ·
   section_view{section} · prayer_view · prayer_complete · read_more · faq_open{q} · scroll_depth{percent} · verse_open{ref} ·
   film_cta_click{dest youtube|film, video_id} · nav_click{to} · outbound_click{host,url} · contact_click · theme_toggle · qr_download.
   Film: film_play{start_scene,from_link} · film_scene{scene,scene_index} · film_progress{percent 10/25/50/75/90 of time actually

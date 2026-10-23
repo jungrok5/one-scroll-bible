@@ -814,7 +814,7 @@ if(shareLink) shareLink.addEventListener('click',e=>{
   if(navigator.clipboard){ navigator.clipboard.writeText(url).then(flash,flash); } else { flash(); }
 });
 /* ===== share popup — ported verbatim from the main site (index.html), about-adapted ===== */
-function gevent(n,p){ if(window.gtag){ try{ gtag('event',n,Object.assign({language:L,page_type:'about'},p||{})); }catch(e){} } }   /* GA4 (예전엔 빈 함수라 공유 이벤트가 버려졌다) */
+function gevent(n,p){ if(window.gtag){ try{ gtag('event',n,Object.assign({site_language:L,page_type:'about'},p||{})); }catch(e){} } }   /* GA4 (예전엔 빈 함수라 공유 이벤트가 버려졌다) */
 let _toastTimer=null;
 function showToast(){ var t=document.getElementById('toast'); if(!t)return; t.textContent=lx('toast_copied'); t.classList.add('show'); clearTimeout(_toastTimer); _toastTimer=setTimeout(function(){t.classList.remove('show');},1800); }
 /* share context = the CURRENT about page */

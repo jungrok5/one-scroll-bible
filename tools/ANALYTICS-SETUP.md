@@ -49,11 +49,12 @@
 → **맞춤 측정기준 만들기(Create custom dimension)**.
 
 각 줄마다: 측정기준 이름 = 아래 "표시 이름", **범위(Scope) = 이벤트(Event)**, 설명 = 아래 "설명", 이벤트 매개변수(Event parameter) = 아래 "매개변수"(글자 그대로) → 저장.
+**주의**: 언어 매개변수 이름은 `site_language` 다. `language` 는 gtag 가 예약 필드(브라우저 언어 `ul`)로 가져가 이벤트 매개변수로 오지 않는다(2026-10-23 실시간 확인 후 이름 변경, 예전 "Site language"(`language`) 측정기준은 보관 처리).
 이미 같은 매개변수로 등록된 것이 있으면 건너뛴다. 매개변수 칸 드롭다운에 아직 안 보이면 직접 입력한다(처음 받은 날부터 목록에 뜬다).
 
 | 매개변수 | 표시 이름 | 설명 |
 |---|---|---|
-| `language` | Site language | 페이지·영상 언어 코드 (GA 기본 "언어"=브라우저 언어와 다름) |
+| `site_language` | Site language | 페이지·영상 언어 코드 (GA 기본 "언어"=브라우저 언어와 다름) |
 | `page_type` | Page type | maps / about (본문·영상 페이지는 비어 있음) |
 | `scene` | Scene | 영상 장면 id 또는 본문 장면 번호 |
 | `scene_index` | Scene index | 영상 장면 순번 0–20 |
@@ -88,7 +89,7 @@
 
 1. 시크릿 창으로 `https://one-scroll-bible.com/?utm_source=setup_test` 를 연다 → "14분 영상으로 보기" 버튼을 누른다(유튜브 새 탭은 닫아도 됨).
 2. GA4 **보고서 → 실시간(Realtime)** 의 "이벤트 수(Event count by Event name)" 카드에 `film_cta_click` 이 1분 안에 보이면 성공.
-3. 그 이벤트를 눌러 매개변수에 `dest = youtube`, `language = ko` 가 보이면 측정기준 이름과 매개변수가 맞다.
+3. 그 이벤트를 눌러 매개변수에 `dest = youtube`, `site_language = ko` 가 보이면 측정기준 이름과 매개변수가 맞다.
 
 ---
 

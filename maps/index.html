@@ -787,7 +787,7 @@ $('#themeBtn').addEventListener('click',()=>{
   document.querySelector('meta[name=theme-color]').setAttribute('content',sp?'#efe6d3':'#0e1118');
 });
 /* ---- share sheet + QR modal (ported verbatim from main index.html; adapted: L/PACK, no-op gevent, maps URL) ---- */
-function gevent(n,p){ if(window.gtag){ try{ gtag('event',n,Object.assign({language:L,page_type:'maps'},p||{})); }catch(e){} } }   /* GA4 (예전엔 빈 함수라 공유 이벤트가 버려졌다) */
+function gevent(n,p){ if(window.gtag){ try{ gtag('event',n,Object.assign({site_language:L,page_type:'maps'},p||{})); }catch(e){} } }   /* GA4 (예전엔 빈 함수라 공유 이벤트가 버려졌다) */
 function showToast(){
   var t=document.getElementById('toast'); if(!t) return;
   t.classList.add('show'); clearTimeout(window.__toastT);

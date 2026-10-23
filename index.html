@@ -1576,7 +1576,7 @@ function buildLangList(filter){
     try{localStorage.setItem('lang',l.code);}catch(e){}
     // 사용자가 실제로 고른 언어만 집계(부팅 발화 제외). 전환은 URL 이동이라 doApply 밖 여기서 발화.
     // gtag 기본 transport=beacon 이라 location.href 이동 중에도 전송됨.
-    gevent('language_select',{language:l.code});
+    gevent('language_select',{site_language:l.code});
     // 프리렌더된 해당 언어 URL로 이동(about/maps 스위처와 동일) — in-place 전환 시 ko 폴백(ORIG) 깨짐 + URL/내용 불일치를 방지하고 공유 URL을 정확히 함. #해시(섹션) 유지.
     location.href=(l.code==='ko'?'/':'/'+l.code+'/')+location.hash;
   });langList.appendChild(li);});
@@ -1621,7 +1621,7 @@ function showToast(){
   window.__toastT=setTimeout(function(){ t.classList.remove('show'); },1900);
 }
 /* GA4 이벤트 */
-function gevent(n,p){ if(window.gtag){ try{ gtag('event',n,Object.assign({language:curCode||'ko'},p||{})); }catch(e){} } }
+function gevent(n,p){ if(window.gtag){ try{ gtag('event',n,Object.assign({site_language:curCode||'ko'},p||{})); }catch(e){} } }
 /* 현재 언어 URL + 해시 이동 */
 function shareUrl(){ var lp=(curCode&&curCode!=='ko')?(curCode+'/'):''; return 'https://one-scroll-bible.com/'+lp; }
 function gotoHash(){ try{ if(location.hash&&location.hash.length>1){ var el=document.querySelector(location.hash); if(el) setTimeout(function(){ el.scrollIntoView(); },70); } }catch(e){} }

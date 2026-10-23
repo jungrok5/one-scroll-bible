@@ -253,6 +253,29 @@
 20. ألا يكفي أن يكون المرء صالحاً، حتى لو لم يؤمن بيسوع؟ — ألا يكفي أن أكون صالحاً؟ 20/21
 21. هذه المحبة ليست معلومة، بل دعوة. — الدعوة 21/21
 
+## hi
+01. बाइबल अंततः एक ही कहानी है 1/21
+02. “परमेश्‍वर ने कहा, ‘उजियाला हो’” — सृष्टि 2/21
+03. “तू कहाँ है?” — पतन 3/21
+04. “आकाश की ओर दृष्‍टि करके तारागण को गिन, क्या तू उनको गिन सकता है?” — कुलपिताओं का युग 4/21
+05. “मेरी प्रजा के लोगों को जाने दे” — मिस्र से निर्गमन 5/21
+06. प्रतिज्ञा किए देश के द्वार पर खड़े होकर, वे भीतर जाने को तैयार होते हैं… — जंगल की यात्रा 6/21
+07. पर राजा न होने से हर कोई मनमानी करने लगा। — न्यायियों का युग 7/21
+08. मनुष्य तो बाहर का रूप देखता है, परन्तु यहोवा की दृष्‍टि मन पर रहती है। — अविभाजित राज्य 8/21
+09. मन्दिर जलता है, प्रजा बेबीलोन ले जाई जाती है। — विभाजित राज्य · बंधुआई 9/21
+10. क्योंकि यहोवा का आनन्द तुम्हारा दृढ़ गढ़ है। — बंधुआई से वापसी 10/21
+11. चार सौ वर्ष बिना भविष्यद्वक्ता की वाणी — 400 वर्ष का मौन 11/21
+12. “और वचन देहधारी हुआ; … हमारे बीच में डेरा किया” — यीशु का आना 12/21
+13. उस क्रूस पर जिसे होना चाहिए था, वह मैं था। — क्रूस 13/21
+14. “परन्तु अपने वचन के अनुसार जी उठा है” — पुनरुत्थान 14/21
+15. “… पृथ्वी की छोर तक मेरे गवाह होगे” — कलीसिया का आरंभ 15/21
+16. “वह उनकी आँखों से सब आँसू पोंछ डालेगा” — पुनरुद्धार 16/21
+17. अंत में, सबसे गहरी मूर्ति है “परमेश्वर के सिंहासन पर बैठा हुआ मैं स्वयं”। — दर्पण 17/21
+18. “करो” नहीं, “पूरा हुआ” — सुसमाचार का मर्म 18/21
+19. क्या बाइबल सचमुच एक सच्ची कहानी है? 19/21
+20. यीशु पर विश्वास न करके भी, बस भला इंसान बने रहना क्या काफ़ी नहीं? — भला जीवन काफ़ी है? 20/21
+21. यह प्रेम जानकारी नहीं, बल्कि एक निमंत्रण है। — निमंत्रण 21/21
+
 ## id
 01. Pada akhirnya, Alkitab adalah satu kisah 1/21
 02. “Berfirmanlah Allah: ‘Jadilah terang.’” — Penciptaan 2/21
@@ -275,3 +298,72 @@
 19. Apakah Alkitab benar-benar kisah nyata? 19/21
 20. Bukankah cukup menjadi orang baik, meski tak percaya kepada Yesus? — Cukup Menjadi Orang Baik? 20/21
 21. Kasih ini bukan informasi, melainkan sebuah undangan. — Undangan 21/21
+
+## vi
+01. Rốt cuộc, Kinh Thánh là một câu chuyện 1/21
+02. “Đức Chúa Trời phán rằng: Phải có sự sáng” — Sáng tạo 2/21
+03. “Ngươi ở đâu?” — Sa ngã 3/21
+04. “Ngươi hãy ngó lên trời, và nếu ngươi đếm được các ngôi sao thì hãy đếm đi” — Thời các tổ phụ 4/21
+05. “Hãy cho dân ta đi” — Xuất Ê-díp-tô 5/21
+06. Đứng trước đất hứa, họ chuẩn bị tiến vào… — Hành trình trong đồng vắng 6/21
+07. Nhưng không có vua nên ai nấy làm theo ý mình. — Thời các quan xét 7/21
+08. Loài người xem bề ngoài, nhưng Đức Giê-hô-va nhìn thấy trong lòng. — Vương quốc thống nhất 8/21
+09. Đền thờ cháy, dân bị bắt sang Ba-by-lôn. — Vương quốc chia đôi · Lưu đày 9/21
+10. Vì sự vui vẻ của Đức Giê-hô-va là sức lực của các ngươi. — Hồi hương từ lưu đày 10/21
+11. 400 năm không tiếng tiên tri — 400 năm im lặng 11/21
+12. “Ngôi Lời đã trở nên xác thịt, ở giữa chúng ta” — Chúa Giê-xu giáng thế 12/21
+13. Người lẽ ra phải bị treo trên thập tự ấy chính là tôi. — Thập tự giá 13/21
+14. “Ngài sống lại rồi, như lời Ngài đã phán” — Sự sống lại 14/21
+15. “… Làm chứng về ta … cho đến cùng trái đất” — Khởi đầu Hội thánh 15/21
+16. “Ngài sẽ lau ráo hết nước mắt khỏi mắt chúng” — Phục hồi 16/21
+17. Rốt cuộc, thần tượng sâu xa nhất là “chính tôi ngồi trên ngai của Đức Chúa Trời”. — Tấm gương 17/21
+18. Không phải “hãy làm”, mà là “đã được trọn” — Cốt lõi của Tin Lành 18/21
+19. Kinh Thánh có thật sự là một câu chuyện có thật không? 19/21
+20. Không tin Chúa Giê-xu, chỉ cần sống tử tế chẳng đủ sao? — Chỉ cần sống tử tế? 20/21
+21. Tình yêu này không phải thông tin, mà là một lời mời. — Lời mời 21/21
+
+## th
+01. สุดท้ายแล้ว พระคัมภีร์คือเรื่องราวเดียว 1/21
+02. “พระเจ้าตรัสว่า ‘จงเกิดความสว่าง’” — การทรงสร้าง 2/21
+03. “เจ้าอยู่ที่ไหน?” — การล้มลงในบาป 3/21
+04. “มองดูฟ้าสิ ถ้าเจ้าสามารถนับดาวทั้งหลายได้ ก็นับไป” — ยุคบรรพบุรุษ 4/21
+05. “จงปล่อยประชากรของเราไป” — การอพยพ 5/21
+06. ยืนอยู่หน้าแผ่นดินพันธสัญญา พวกเขาเตรียมเข้าไป… — การเดินทางในถิ่นทุรกันดาร 6/21
+07. แต่เมื่อไม่มีกษัตริย์ ต่างคนต่างทำตามใจตน — ยุคผู้วินิจฉัย 7/21
+08. มนุษย์ดูที่รูปร่างภายนอก แต่พระยาห์เวห์ทอดพระเนตรจิตใจ — ราชอาณาจักรเป็นปึกแผ่น 8/21
+09. พระวิหารถูกเผา ประชาชนถูกกวาดไปบาบิโลน — ราชอาณาจักรที่แตกแยก · การเป็นเชลย 9/21
+10. เพราะความชื่นบานของตนในพระยาห์เวห์เป็นกำลังของท่าน — การกลับจากเชลย 10/21
+11. 400 ปีไร้เสียงผู้เผยพระวจนะ — ความเงียบ 400 ปี 11/21
+12. “พระวาทะทรงเกิดเป็นมนุษย์และทรงอยู่ท่ามกลางเรา” — การเสด็จมาของพระเยซู 12/21
+13. ผู้ที่สมควรอยู่บนกางเขนนั้น คือฉัน — กางเขน 13/21
+14. “เพราะทรงเป็นขึ้นมาแล้วตามที่พระองค์ตรัสไว้นั้น” — การคืนพระชนม์ 14/21
+15. “… ท่านทั้งหลายจะเป็นสักขีพยานของเรา … จนถึงที่สุดปลายแผ่นดินโลก” — จุดเริ่มต้นของคริสตจักร 15/21
+16. “พระเจ้าจะทรงเช็ดน้ำตาทุกๆ หยดจากตาของเขาทั้งหลาย” — การฟื้นฟู 16/21
+17. สุดท้าย รูปเคารพที่ลึกที่สุดคือ “ตัวฉันเองที่นั่งบนบัลลังก์ของพระเจ้า” — กระจกเงา 17/21
+18. ไม่ใช่ “จงทำ” แต่ “สำเร็จแล้ว” — แก่นของข่าวประเสริฐ 18/21
+19. พระคัมภีร์เป็นเรื่องจริงหรือ? 19/21
+20. ไม่เชื่อพระเยซูก็ได้ แค่เป็นคนดีก็พอไม่ใช่หรือ? — แค่เป็นคนดีก็พอ? 20/21
+21. ความรักนี้ไม่ใช่ข้อมูล แต่เป็นคำเชิญ — คำเชิญ 21/21
+
+## tl
+01. Sa bandang huli, ang Bibliya ay iisang kuwento lamang 1/21
+02. “Sinabi ng Diyos: ‘Magkaroon ng liwanag!’” — Paglikha 2/21
+03. “Saan ka naroon?” — Ang Pagkahulog 3/21
+04. “Tumingin ka sa langit at masdan mo ang mga bituin! Mabibilang mo ba iyan?” 4/21
+05. “Ipinapasabi ni Yahweh … na payagan ninyong pumunta sa ilang ang kanyang bayang Israel …” 5/21
+06. Nakatayo sa hangganan ng lupang pangako, naghahanda silang pumasok… — Ang Paglalakbay sa Ilang 6/21
+07. Ngunit walang hari kaya ginagawa ng bawat isa ang nais niya. — Ang Panahon ng mga Hukom 7/21
+08. Panlabas na anyo ang tinitingnan ng tao ngunit sa puso tumitingin si Yahweh. 8/21
+09. Nasunog ang templo at dinala ang bayan sa Babilonia. — Ang Hating Kaharian · Ang Pagkatapon 9/21
+10. Ang kagalakang dulot ni Yahweh ang magpapalakas sa inyo. — Ang Pagbabalik 10/21
+11. 400 taon na walang tinig ng propeta — 400 Taon ng Katahimikan 11/21
+12. “Ang Salita ay naging tao at nanirahan sa piling namin” — Dumating si Jesus 12/21
+13. Ang dapat na nakapako sa krus na iyon ay ako. — Ang Krus 13/21
+14. “Sapagkat siya'y muling nabuhay gaya ng kanyang sinabi” — Ang Muling Pagkabuhay 14/21
+15. “… Kayo'y magiging mga saksi ko … hanggang sa dulo ng daigdig” — Nagsimula ang Iglesya 15/21
+16. “At papahirin niya ang bawat luha sa kanilang mga mata.” — Ang Pagpapanumbalik 16/21
+17. Sa huli, ang pinakamalalim na diyus-diyosan ay “ang sarili ko, na nakaupo sa trono ng Diyos.” 17/21
+18. Hindi “gawin mo ito” kundi “naganap na” — Ang Puso ng Ebanghelyo 18/21
+19. Tunay nga bang totoong kuwento ang Bibliya? 19/21
+20. Hindi ba sapat na maging mabuting tao kahit hindi sumampalataya kay Jesus? 20/21
+21. Ang pag-ibig na ito ay hindi impormasyon kundi isang paanyaya. — Ang Paanyaya 21/21

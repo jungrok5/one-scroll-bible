@@ -136,7 +136,9 @@ function buildSeal() {
   x.globalCompositeOperation = 'destination-out'; x.fillStyle = '#000'; x.font = "900 46px 'Noto Serif KR'"; x.textAlign = 'center'; x.textBaseline = 'middle';
   // the inscription is its own translatable word: a short word stacks one character per line (Korean 언/약);
   // a translation sets its own lines with \n (e.g. COVE/NANT) and shrinks to fit the square
-  const word = Pilot.tr('언약'), ch = Pilot.chars(word), lines = word.includes('\n') ? word.split('\n') : ch.length <= 4 ? ch : [word];
+  // (stacking one per line suits Han/Hangul/Kana only — a joined script such as Devanagari वाचा stays on one line)
+  const word = Pilot.tr('언약'), ch = Pilot.chars(word), cjk = /[\p{Script=Han}\p{Script=Hangul}\p{Script=Hiragana}\p{Script=Katakana}]/u.test(word);
+  const lines = word.includes('\n') ? word.split('\n') : ch.length <= 4 && cjk ? ch : [word];
   let fs = 46; const wd = Math.max(...lines.map(l => x.measureText(l).width)); if (wd > s - 26) fs *= (s - 26) / wd; fs = Math.min(fs, (s - 14) / (lines.length * 1.1));
   if (fs !== 46) x.font = `900 ${fs}px 'Noto Serif KR'`;
   const step = fs === 46 ? s * .42 : fs * 1.2; lines.forEach((l, i) => x.fillText(l, s / 2, s * .51 + (i - (lines.length - 1) / 2) * step));

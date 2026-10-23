@@ -662,6 +662,66 @@ Bibelzitate nach der Lutherbibel (1912), mit Quellenangabe zitiert; etwaige Rech
 20. ألا يكفي أن يكون المرء صالحاً، حتى لو لم يؤمن بيسوع؟ — ألا يكفي أن أكون صالحاً؟ 20/21  (57.5 s)
 21. هذه المحبة ليست معلومة، بل دعوة. — الدعوة 21/21  (57 s)
 
+## hi — एक नज़र में बाइबल
+**Film** `film-hi.mp4` · thumbnail `motion/youtube/thumbs/hi/A-exodus.jpg` (alternatives B/C/D) · captions 11 languages
+- title: सृष्टि से नए आकाश और नई पृथ्वी तक — 14 मिनट में बाइबल की कहानी
+- description:
+```
+सृष्टि से नए आकाश और नई पृथ्वी तक — अपनी-अपनी अलग शैली में चित्रित 21 दृश्य मिलकर एक ही कहानी सुनाते हैं।
+
+पूरी कहानी धीरे-धीरे पढ़ें: https://one-scroll-bible.com/hi/?utm_source=youtube&utm_medium=video&utm_campaign=film_hi
+
+0:00 एक ही कहानी
+0:36 सृष्टि
+1:11 पतन
+1:45 कुलपिताओं का युग
+2:11 मिस्र से निर्गमन
+2:55 जंगल की यात्रा
+3:34 न्यायियों का युग
+4:14 अविभाजित राज्य
+4:53 विभाजित राज्य · बंधुआई
+5:29 बंधुआई से वापसी
+6:07 400 वर्ष का मौन
+6:41 यीशु का आना
+7:17 क्रूस
+7:56 पुनरुत्थान
+8:23 कलीसिया का आरंभ
+8:58 पुनरुद्धार
+9:34 दर्पण
+10:19 सुसमाचार का मर्म
+11:25 क्या बाइबल सच्ची कहानी है?
+12:25 भला जीवन काफ़ी है?
+13:23 निमंत्रण
+
+बाइबल के उद्धरण हिन्दी बाइबल से हैं — स्रोत बताकर उद्धृत; उस अनुवाद के सभी अधिकार उसके प्रकाशक के पास हैं। इस साइट का CC BY 4.0 लाइसेंस केवल साइट के अपने लेखन पर लागू होता है — बाइबल के उद्धरणों पर नहीं। दृश्य कोड से बनाए गए हैं; संगीत और ध्वनि-प्रभाव ElevenLabs से बनाए गए हैं।
+
+#बाइबल #बाइबलकीकहानी #बाइबलसारांश
+```
+- tags: एक नज़र में बाइबल, बाइबल, बाइबल की कहानी, बाइबल सारांश, सुसमाचार, यीशु, मसीही विश्वास, बाइबल एनिमेशन, उद्धार का इतिहास, ईसाई धर्म, एक ही कहानी, सृष्टि, पतन, कुलपिताओं का युग, मिस्र से निर्गमन, जंगल की यात्रा, न्यायियों का युग, अविभाजित राज्य, विभाजित राज्य · बंधुआई, बंधुआई से वापसी, 400 वर्ष का मौन, यीशु का आना, क्रूस, पुनरुत्थान, कलीसिया का आरंभ, पुनरुद्धार, दर्पण, सुसमाचार का मर्म, क्या बाइबल सच्ची कहानी है?, भला जीवन काफ़ी है?, निमंत्रण
+
+**Shorts** (`shorts-hi-NN-<scene>.mp4`)
+01. बाइबल अंततः एक ही कहानी है 1/21  (36 s)
+02. “परमेश्‍वर ने कहा, ‘उजियाला हो’” — सृष्टि 2/21  (35 s)
+03. “तू कहाँ है?” — पतन 3/21  (34 s)
+04. “आकाश की ओर दृष्‍टि करके तारागण को गिन, क्या तू उनको गिन सकता है?” — कुलपिताओं का युग 4/21  (26 s)
+05. “मेरी प्रजा के लोगों को जाने दे” — मिस्र से निर्गमन 5/21  (44 s)
+06. प्रतिज्ञा किए देश के द्वार पर खड़े होकर, वे भीतर जाने को तैयार होते हैं… — जंगल की यात्रा 6/21  (39.5 s)
+07. पर राजा न होने से हर कोई मनमानी करने लगा। — न्यायियों का युग 7/21  (40 s)
+08. मनुष्य तो बाहर का रूप देखता है, परन्तु यहोवा की दृष्‍टि मन पर रहती है। — अविभाजित राज्य 8/21  (39 s)
+09. मन्दिर जलता है, प्रजा बेबीलोन ले जाई जाती है। — विभाजित राज्य · बंधुआई 9/21  (36 s)
+10. क्योंकि यहोवा का आनन्द तुम्हारा दृढ़ गढ़ है। — बंधुआई से वापसी 10/21  (38 s)
+11. चार सौ वर्ष बिना भविष्यद्वक्ता की वाणी — 400 वर्ष का मौन 11/21  (34 s)
+12. “और वचन देहधारी हुआ; … हमारे बीच में डेरा किया” — यीशु का आना 12/21  (36 s)
+13. उस क्रूस पर जिसे होना चाहिए था, वह मैं था। — क्रूस 13/21  (39 s)
+14. “परन्तु अपने वचन के अनुसार जी उठा है” — पुनरुत्थान 14/21  (27 s)
+15. “… पृथ्वी की छोर तक मेरे गवाह होगे” — कलीसिया का आरंभ 15/21  (35 s)
+16. “वह उनकी आँखों से सब आँसू पोंछ डालेगा” — पुनरुद्धार 16/21  (36 s)
+17. अंत में, सबसे गहरी मूर्ति है “परमेश्वर के सिंहासन पर बैठा हुआ मैं स्वयं”। — दर्पण 17/21  (44.5 s)
+18. “करो” नहीं, “पूरा हुआ” — सुसमाचार का मर्म 18/21  (66.9 s)
+19. क्या बाइबल सचमुच एक सच्ची कहानी है? 19/21  (60 s)
+20. यीशु पर विश्वास न करके भी, बस भला इंसान बने रहना क्या काफ़ी नहीं? — भला जीवन काफ़ी है? 20/21  (57.5 s)
+21. यह प्रेम जानकारी नहीं, बल्कि एक निमंत्रण है। — निमंत्रण 21/21  (57 s)
+
 ## id — Alkitab Sekilas
 **Film** `film-id.mp4` · thumbnail `motion/youtube/thumbs/id/A-exodus.jpg` (alternatives B/C/D) · captions 11 languages
 - title: Dari penciptaan sampai langit yang baru dan bumi yang baru — kisah Alkitab dalam 14 menit
@@ -721,3 +781,183 @@ Kutipan Alkitab: Terjemahan Baru (TB) — dikutip dengan menyebutkan sumbernya; 
 19. Apakah Alkitab benar-benar kisah nyata? 19/21  (60 s)
 20. Bukankah cukup menjadi orang baik, meski tak percaya kepada Yesus? — Cukup Menjadi Orang Baik? 20/21  (57.5 s)
 21. Kasih ini bukan informasi, melainkan sebuah undangan. — Undangan 21/21  (57 s)
+
+## vi — Kinh Thánh trong một cái nhìn
+**Film** `film-vi.mp4` · thumbnail `motion/youtube/thumbs/vi/A-exodus.jpg` (alternatives B/C/D) · captions 11 languages
+- title: Từ sáng tạo đến trời mới đất mới — câu chuyện Kinh Thánh trong 14 phút
+- description:
+```
+Từ sáng tạo đến trời mới đất mới — 21 cảnh, mỗi cảnh được vẽ theo một phong cách riêng, cùng kể một câu chuyện.
+
+Đọc chậm rãi cả câu chuyện: https://one-scroll-bible.com/vi/?utm_source=youtube&utm_medium=video&utm_campaign=film_vi
+
+0:00 Một mạch truyện
+0:36 Sáng tạo
+1:11 Sa ngã
+1:45 Thời các tổ phụ
+2:11 Xuất Ê-díp-tô
+2:55 Hành trình trong đồng vắng
+3:34 Thời các quan xét
+4:14 Vương quốc thống nhất
+4:53 Vương quốc chia đôi · Lưu đày
+5:29 Hồi hương từ lưu đày
+6:07 400 năm im lặng
+6:41 Chúa Giê-xu giáng thế
+7:17 Thập tự giá
+7:56 Sự sống lại
+8:23 Khởi đầu Hội thánh
+8:58 Phục hồi
+9:34 Tấm gương
+10:19 Cốt lõi của Tin Lành
+11:25 Kinh Thánh có thật không?
+12:25 Chỉ cần sống tử tế?
+13:23 Lời mời
+
+Trích dẫn Kinh Thánh: bản Truyền Thống — được trích dẫn có ghi rõ nguồn; mọi quyền (nếu có) đối với bản dịch này thuộc về nhà xuất bản. Giấy phép CC BY 4.0 của trang này chỉ áp dụng cho phần nội dung do trang tự viết — không bao gồm các câu Kinh Thánh được trích dẫn. Các cảnh được vẽ bằng mã lập trình; nhạc và hiệu ứng âm thanh được tạo bằng ElevenLabs.
+
+#KinhThánh #câuchuyệnKinhThánh #tómtắtKinhThánh
+```
+- tags: Kinh Thánh trong một cái nhìn, Kinh Thánh, câu chuyện Kinh Thánh, tóm tắt Kinh Thánh, Tin Lành, Chúa Giê-xu, Cơ Đốc giáo, hoạt hình Kinh Thánh, lịch sử cứu rỗi, Một mạch truyện, Sáng tạo, Sa ngã, Thời các tổ phụ, Xuất Ê-díp-tô, Hành trình trong đồng vắng, Thời các quan xét, Vương quốc thống nhất, Vương quốc chia đôi · Lưu đày, Hồi hương từ lưu đày, 400 năm im lặng, Chúa Giê-xu giáng thế, Thập tự giá, Sự sống lại, Khởi đầu Hội thánh, Phục hồi, Tấm gương, Cốt lõi của Tin Lành, Kinh Thánh có thật không?
+
+**Shorts** (`shorts-vi-NN-<scene>.mp4`)
+01. Rốt cuộc, Kinh Thánh là một câu chuyện 1/21  (36 s)
+02. “Đức Chúa Trời phán rằng: Phải có sự sáng” — Sáng tạo 2/21  (35 s)
+03. “Ngươi ở đâu?” — Sa ngã 3/21  (34 s)
+04. “Ngươi hãy ngó lên trời, và nếu ngươi đếm được các ngôi sao thì hãy đếm đi” — Thời các tổ phụ 4/21  (26 s)
+05. “Hãy cho dân ta đi” — Xuất Ê-díp-tô 5/21  (44 s)
+06. Đứng trước đất hứa, họ chuẩn bị tiến vào… — Hành trình trong đồng vắng 6/21  (39.5 s)
+07. Nhưng không có vua nên ai nấy làm theo ý mình. — Thời các quan xét 7/21  (40 s)
+08. Loài người xem bề ngoài, nhưng Đức Giê-hô-va nhìn thấy trong lòng. — Vương quốc thống nhất 8/21  (39 s)
+09. Đền thờ cháy, dân bị bắt sang Ba-by-lôn. — Vương quốc chia đôi · Lưu đày 9/21  (36 s)
+10. Vì sự vui vẻ của Đức Giê-hô-va là sức lực của các ngươi. — Hồi hương từ lưu đày 10/21  (38 s)
+11. 400 năm không tiếng tiên tri — 400 năm im lặng 11/21  (34 s)
+12. “Ngôi Lời đã trở nên xác thịt, ở giữa chúng ta” — Chúa Giê-xu giáng thế 12/21  (36 s)
+13. Người lẽ ra phải bị treo trên thập tự ấy chính là tôi. — Thập tự giá 13/21  (39 s)
+14. “Ngài sống lại rồi, như lời Ngài đã phán” — Sự sống lại 14/21  (27 s)
+15. “… Làm chứng về ta … cho đến cùng trái đất” — Khởi đầu Hội thánh 15/21  (35 s)
+16. “Ngài sẽ lau ráo hết nước mắt khỏi mắt chúng” — Phục hồi 16/21  (36 s)
+17. Rốt cuộc, thần tượng sâu xa nhất là “chính tôi ngồi trên ngai của Đức Chúa Trời”. — Tấm gương 17/21  (44.5 s)
+18. Không phải “hãy làm”, mà là “đã được trọn” — Cốt lõi của Tin Lành 18/21  (66.9 s)
+19. Kinh Thánh có thật sự là một câu chuyện có thật không? 19/21  (60 s)
+20. Không tin Chúa Giê-xu, chỉ cần sống tử tế chẳng đủ sao? — Chỉ cần sống tử tế? 20/21  (57.5 s)
+21. Tình yêu này không phải thông tin, mà là một lời mời. — Lời mời 21/21  (57 s)
+
+## th — พระคัมภีร์ในพริบตา
+**Film** `film-th.mp4` · thumbnail `motion/youtube/thumbs/th/A-exodus.jpg` (alternatives B/C/D) · captions 11 languages
+- title: จากการทรงสร้างถึงฟ้าใหม่และแผ่นดินใหม่ — เรื่องราวพระคัมภีร์ใน 14 นาที
+- description:
+```
+จากการทรงสร้างถึงฟ้าใหม่และแผ่นดินใหม่ — 21 ฉากที่วาดด้วยลีลาแตกต่างกันในแต่ละฉาก ร้อยเรียงเป็นเรื่องราวเดียว
+
+อ่านเรื่องราวทั้งหมดอย่างช้า ๆ: https://one-scroll-bible.com/th/?utm_source=youtube&utm_medium=video&utm_campaign=film_th
+
+0:00 เรื่องราวเดียว
+0:36 การทรงสร้าง
+1:11 การล้มลงในบาป
+1:45 ยุคบรรพบุรุษ
+2:11 การอพยพ
+2:55 การเดินทางในถิ่นทุรกันดาร
+3:34 ยุคผู้วินิจฉัย
+4:14 ราชอาณาจักรเป็นปึกแผ่น
+4:53 ราชอาณาจักรที่แตกแยก · การเป็นเชลย
+5:29 การกลับจากเชลย
+6:07 ความเงียบ 400 ปี
+6:41 การเสด็จมาของพระเยซู
+7:17 กางเขน
+7:56 การคืนพระชนม์
+8:23 จุดเริ่มต้นของคริสตจักร
+8:58 การฟื้นฟู
+9:34 กระจกเงา
+10:19 แก่นของข่าวประเสริฐ
+11:25 พระคัมภีร์เป็นเรื่องจริงหรือ?
+12:25 แค่เป็นคนดีก็พอ?
+13:23 คำเชิญ
+
+ข้อพระคัมภีร์ที่อ้างอิงมาจากพระคัมภีร์ฉบับไทย (อ้างอิงโดยระบุที่มา สิทธิ์ในฉบับแปลนั้นเป็นของผู้จัดพิมพ์) สัญญาอนุญาต CC BY 4.0 ของเว็บไซต์นี้ใช้กับงานเขียนของเว็บไซต์เองเท่านั้น ไม่ครอบคลุมข้อพระคัมภีร์ที่อ้างอิง ภาพในทุกฉากวาดขึ้นด้วยโค้ด ส่วนดนตรีและเสียงประกอบสร้างด้วย ElevenLabs
+
+#พระคัมภีร์ #พระคัมภีร์ไบเบิล #เรื่องราวพระคัมภีร์
+```
+- tags: พระคัมภีร์ในพริบตา, พระคัมภีร์, พระคัมภีร์ไบเบิล, เรื่องราวพระคัมภีร์, ภาพรวมพระคัมภีร์, ข่าวประเสริฐ, พระเยซู, คริสเตียน, เรื่องราวเดียว, การทรงสร้าง, การล้มลงในบาป, ยุคบรรพบุรุษ, การอพยพ, การเดินทางในถิ่นทุรกันดาร, ยุคผู้วินิจฉัย, ราชอาณาจักรเป็นปึกแผ่น, ราชอาณาจักรที่แตกแยก · การเป็นเชลย, การกลับจากเชลย, ความเงียบ 400 ปี, การเสด็จมาของพระเยซู, กางเขน, การคืนพระชนม์, จุดเริ่มต้นของคริสตจักร, การฟื้นฟู, กระจกเงา, แก่นของข่าวประเสริฐ, พระคัมภีร์เป็นเรื่องจริงหรือ?, แค่เป็นคนดีก็พอ?, คำเชิญ
+
+**Shorts** (`shorts-th-NN-<scene>.mp4`)
+01. สุดท้ายแล้ว พระคัมภีร์คือเรื่องราวเดียว 1/21  (36 s)
+02. “พระเจ้าตรัสว่า ‘จงเกิดความสว่าง’” — การทรงสร้าง 2/21  (35 s)
+03. “เจ้าอยู่ที่ไหน?” — การล้มลงในบาป 3/21  (34 s)
+04. “มองดูฟ้าสิ ถ้าเจ้าสามารถนับดาวทั้งหลายได้ ก็นับไป” — ยุคบรรพบุรุษ 4/21  (26 s)
+05. “จงปล่อยประชากรของเราไป” — การอพยพ 5/21  (44 s)
+06. ยืนอยู่หน้าแผ่นดินพันธสัญญา พวกเขาเตรียมเข้าไป… — การเดินทางในถิ่นทุรกันดาร 6/21  (39.5 s)
+07. แต่เมื่อไม่มีกษัตริย์ ต่างคนต่างทำตามใจตน — ยุคผู้วินิจฉัย 7/21  (40 s)
+08. มนุษย์ดูที่รูปร่างภายนอก แต่พระยาห์เวห์ทอดพระเนตรจิตใจ — ราชอาณาจักรเป็นปึกแผ่น 8/21  (39 s)
+09. พระวิหารถูกเผา ประชาชนถูกกวาดไปบาบิโลน — ราชอาณาจักรที่แตกแยก · การเป็นเชลย 9/21  (36 s)
+10. เพราะความชื่นบานของตนในพระยาห์เวห์เป็นกำลังของท่าน — การกลับจากเชลย 10/21  (38 s)
+11. 400 ปีไร้เสียงผู้เผยพระวจนะ — ความเงียบ 400 ปี 11/21  (34 s)
+12. “พระวาทะทรงเกิดเป็นมนุษย์และทรงอยู่ท่ามกลางเรา” — การเสด็จมาของพระเยซู 12/21  (36 s)
+13. ผู้ที่สมควรอยู่บนกางเขนนั้น คือฉัน — กางเขน 13/21  (39 s)
+14. “เพราะทรงเป็นขึ้นมาแล้วตามที่พระองค์ตรัสไว้นั้น” — การคืนพระชนม์ 14/21  (27 s)
+15. “… ท่านทั้งหลายจะเป็นสักขีพยานของเรา … จนถึงที่สุดปลายแผ่นดินโลก” — จุดเริ่มต้นของคริสตจักร 15/21  (35 s)
+16. “พระเจ้าจะทรงเช็ดน้ำตาทุกๆ หยดจากตาของเขาทั้งหลาย” — การฟื้นฟู 16/21  (36 s)
+17. สุดท้าย รูปเคารพที่ลึกที่สุดคือ “ตัวฉันเองที่นั่งบนบัลลังก์ของพระเจ้า” — กระจกเงา 17/21  (44.5 s)
+18. ไม่ใช่ “จงทำ” แต่ “สำเร็จแล้ว” — แก่นของข่าวประเสริฐ 18/21  (66.9 s)
+19. พระคัมภีร์เป็นเรื่องจริงหรือ? 19/21  (60 s)
+20. ไม่เชื่อพระเยซูก็ได้ แค่เป็นคนดีก็พอไม่ใช่หรือ? — แค่เป็นคนดีก็พอ? 20/21  (57.5 s)
+21. ความรักนี้ไม่ใช่ข้อมูล แต่เป็นคำเชิญ — คำเชิญ 21/21  (57 s)
+
+## tl — Ang Bibliya sa Isang Pag-scroll
+**Film** `film-tl.mp4` · thumbnail `motion/youtube/thumbs/tl/A-exodus.jpg` (alternatives B/C/D) · captions 11 languages
+- title: Mula sa paglikha hanggang sa bagong langit at bagong lupa — ang kuwento ng Bibliya sa 14 na minuto
+- description:
+```
+Mula sa paglikha hanggang sa bagong langit at bagong lupa — 21 eksenang iginuhit sa kani-kanyang istilo, na bumubuo ng iisang kuwento.
+
+Basahin nang dahan-dahan ang buong kuwento: https://one-scroll-bible.com/tl/?utm_source=youtube&utm_medium=video&utm_campaign=film_tl
+
+0:00 Iisang Kuwento
+0:36 Paglikha
+1:11 Ang Pagkahulog
+1:45 Ang mga Patriyarka
+2:11 Ang Exodo
+2:55 Ang Paglalakbay sa Ilang
+3:34 Ang Panahon ng mga Hukom
+4:14 Ang Nagkakaisang Kaharian ng Israel
+4:53 Ang Hating Kaharian · Ang Pagkatapon
+5:29 Ang Pagbabalik
+6:07 400 Taon ng Katahimikan
+6:41 Dumating si Jesus
+7:17 Ang Krus
+7:56 Ang Muling Pagkabuhay
+8:23 Nagsimula ang Iglesya
+8:58 Ang Pagpapanumbalik
+9:34 Ang Salamin
+10:19 Ang Puso ng Ebanghelyo
+11:25 Totoong Kuwento ba ang Bibliya?
+12:25 Sapat na bang Maging Mabuti?
+13:23 Ang Paanyaya
+
+Mga sipi mula sa Bibliya: Magandang Balita Biblia (MBB) — sinipi nang may pagbanggit sa pinagmulan; ang anumang karapatan sa saling iyon ay nananatili sa tagapaglathala nito. Ang lisensyang CC BY 4.0 ng site na ito ay para lamang sa sariling mga sulat ng site — hindi nito saklaw ang mga sipi mula sa Bibliya. Ang mga eksena ay iginuhit sa pamamagitan ng code; ang musika at mga sound effect ay ginawa gamit ang ElevenLabs.
+
+#Bibliya #kuwentongBibliya #buodngBibliya
+```
+- tags: Ang Bibliya sa Isang Pag-scroll, Bibliya, kuwento ng Bibliya, buod ng Bibliya, ebanghelyo, Jesus, Kristiyanismo, animasyon ng Bibliya, kasaysayan ng pagtubos, Iisang Kuwento, Paglikha, Ang Pagkahulog, Ang mga Patriyarka, Ang Exodo, Ang Paglalakbay sa Ilang, Ang Panahon ng mga Hukom, Ang Nagkakaisang Kaharian ng Israel, Ang Hating Kaharian · Ang Pagkatapon, Ang Pagbabalik, 400 Taon ng Katahimikan, Dumating si Jesus, Ang Krus, Ang Muling Pagkabuhay, Nagsimula ang Iglesya, Ang Pagpapanumbalik
+
+**Shorts** (`shorts-tl-NN-<scene>.mp4`)
+01. Sa bandang huli, ang Bibliya ay iisang kuwento lamang 1/21  (36 s)
+02. “Sinabi ng Diyos: ‘Magkaroon ng liwanag!’” — Paglikha 2/21  (35 s)
+03. “Saan ka naroon?” — Ang Pagkahulog 3/21  (34 s)
+04. “Tumingin ka sa langit at masdan mo ang mga bituin! Mabibilang mo ba iyan?” 4/21  (26 s)
+05. “Ipinapasabi ni Yahweh … na payagan ninyong pumunta sa ilang ang kanyang bayang Israel …” 5/21  (44 s)
+06. Nakatayo sa hangganan ng lupang pangako, naghahanda silang pumasok… — Ang Paglalakbay sa Ilang 6/21  (39.5 s)
+07. Ngunit walang hari kaya ginagawa ng bawat isa ang nais niya. — Ang Panahon ng mga Hukom 7/21  (40 s)
+08. Panlabas na anyo ang tinitingnan ng tao ngunit sa puso tumitingin si Yahweh. 8/21  (39 s)
+09. Nasunog ang templo at dinala ang bayan sa Babilonia. — Ang Hating Kaharian · Ang Pagkatapon 9/21  (36 s)
+10. Ang kagalakang dulot ni Yahweh ang magpapalakas sa inyo. — Ang Pagbabalik 10/21  (38 s)
+11. 400 taon na walang tinig ng propeta — 400 Taon ng Katahimikan 11/21  (34 s)
+12. “Ang Salita ay naging tao at nanirahan sa piling namin” — Dumating si Jesus 12/21  (36 s)
+13. Ang dapat na nakapako sa krus na iyon ay ako. — Ang Krus 13/21  (39 s)
+14. “Sapagkat siya'y muling nabuhay gaya ng kanyang sinabi” — Ang Muling Pagkabuhay 14/21  (27 s)
+15. “… Kayo'y magiging mga saksi ko … hanggang sa dulo ng daigdig” — Nagsimula ang Iglesya 15/21  (35 s)
+16. “At papahirin niya ang bawat luha sa kanilang mga mata.” — Ang Pagpapanumbalik 16/21  (36 s)
+17. Sa huli, ang pinakamalalim na diyus-diyosan ay “ang sarili ko, na nakaupo sa trono ng Diyos.” 17/21  (44.5 s)
+18. Hindi “gawin mo ito” kundi “naganap na” — Ang Puso ng Ebanghelyo 18/21  (66.9 s)
+19. Tunay nga bang totoong kuwento ang Bibliya? 19/21  (60 s)
+20. Hindi ba sapat na maging mabuting tao kahit hindi sumampalataya kay Jesus? 20/21  (57.5 s)
+21. Ang pag-ibig na ito ay hindi impormasyon kundi isang paanyaya. — Ang Paanyaya 21/21  (57 s)

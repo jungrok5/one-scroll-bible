@@ -35,7 +35,9 @@ const NO_CHAPTER = new Set(['opening', 'evidence']);   // the hook already says 
 
 const read = p => JSON.parse(readFileSync(p, 'utf8').replace(/^﻿/, ''));
 const strip = s => String(s).replace(/<[^>]+>/g, '').replace(/ /g, ' ');
-const blurb = s => strip(s).replace(/([.。])[^.。]+[.。]\s*$/u, '$1');   // drop "…drawn live in your browser" (true on the site only)
+// drop the last sentence "…drawn live in your browser" (true on the site only); Hindi ends sentences with "।";
+// a script without sentence marks (Thai) gives its YouTube blurb in motion/youtube/lang/<code>.json → "blurb"
+const blurb = s => strip(s).replace(/([.。।])[^.。।]+[.。।]\s*$/u, '$1');
 const mmss = t => `${Math.floor(t / 60)}:${String(Math.floor(t % 60)).padStart(2, '0')}`;
 const CJK = '\\p{Script=Han}\\p{Script=Hiragana}\\p{Script=Katakana}\\u3000-\\u303f\\uff00-\\uffef';
 const clean = s => String(s).replace(new RegExp(`(?<=[${CJK}])\\s*\\n\\s*|\\s*\\n\\s*(?=[${CJK}])`, 'gu'), '').replace(/\s*\n\s*/g, ' ').replace(/\s+/g, ' ').trim();
@@ -67,7 +69,7 @@ for (const L of LANGS) {
   const chapters = ORDER.map((sc, i) => ({ time: mmss(starts[sc]), seconds: +starts[sc].toFixed(1), title: ch[i] }));
   const hashtags = n => (X.tags || []).slice(0, n).map(t => '#' + t.replace(/\s/g, '')).join(' ');
   const link = home + utm('video', `film_${L}`);
-  const description = [blurb(ui.sub), '', `${X.watch}: ${link}`, '', ...chapters.map(c => `${c.time} ${c.title}`), '', strip(ui.legal), '', hashtags(3)].join('\n');
+  const description = [X.blurb || blurb(ui.sub), '', `${X.watch}: ${link}`, '', ...chapters.map(c => `${c.time} ${c.title}`), '', strip(ui.legal), '', hashtags(3)].join('\n');
   const tags = [ui.brand, ...(X.tags || []), ...ch]; while (tags.join(',').length > 480) tags.pop();   // YouTube: 500 characters in all
   const film = { file: `film-${L}.mp4`, local: `motion/out/release/film-${L}.mp4`, title: ui.shareText.slice(0, 100), description, link, tags, language: L,
     thumbnail: `motion/youtube/thumbs/${L}/A-exodus.jpg`, thumbnail_alternatives: ['B-cross', 'C-split', 'D-earth'].map(v => `motion/youtube/thumbs/${L}/${v}.jpg`),

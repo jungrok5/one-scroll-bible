@@ -78,7 +78,8 @@
 ### A2. 핵심 이벤트(전환) 지정
 
 경로: **관리 → 데이터 표시 → 이벤트(Events)** → 아래 이벤트 줄의 **"핵심 이벤트로 표시(Mark as key event)"** 별/토글을 켠다.
-목록에 아직 없으면(최근 발생 전) **관리 → 데이터 표시 → 핵심 이벤트(Key events) → 새 핵심 이벤트(New key event)** 에 이름을 그대로 입력한다.
+목록에 아직 없으면(최근 발생 전) 같은 화면의 **이벤트 만들기(Create event)** → 이벤트 이름 입력 → **주요 이벤트로 표시** 켬
+(기본 값은 "설정 안함", 계산은 "이벤트당 한 번") → 생성 방법 **코드로 만들기(Create with code)** → 만들기. (2026-10 화면에는 "새 핵심 이벤트" 버튼이 없다.)
 
 - `prayer_complete` — 영접 기도를 끝까지 읽음 (이 사이트의 목적)
 - `prayer_view` — 영접 기도 섹션에 도달
@@ -211,13 +212,14 @@ gh repo edit jungrok5/one-scroll-bible --homepage https://one-scroll-bible.com \
 
 | 날짜 | 파트 | 계정(사용자 확인) | 한 일 | 확인 |
 |---|---|---|---|---|
-| | A1 | | 맞춤 측정기준 __/18 | |
-| | A2 | | 핵심 이벤트 __/4 | |
+| 2026-10-23 | A1 | ju…@gmail.com (속성 one-scroll-bible, G-JTXXC8TYVX = 스트림 "메인") | 맞춤 측정기준 18/18 — 이후 `language` 가 gtag 예약 필드라 안 온다는 걸 A3 에서 확인 → 사이트 매개변수를 `site_language` 로 바꾸고, 예전 Site language 보관·새로 등록 | 목록 18개 이벤트 범위 |
+| 2026-10-23 | A2 | ju…@gmail.com | 핵심 이벤트 4/4 (prayer_complete·prayer_view 별표, film_complete·film_cta_click 은 "이벤트 만들기 → 코드로 만들기") | 주요 이벤트 탭 4개 ★ |
+| 2026-10-23 | A3 | ju…@gmail.com | 실시간: film_cta_click 1건(주요 이벤트로 집계), dest=youtube, video_id 옴. language 없음 → 위 A1 수정(배포 후 site_language 재확인) | 실시간 카드 |
 | 2026-10-23 | B1 | (저장소) | manifest.mjs: 설명 링크 = 언어 첫 페이지 + UTM(영화 video/film_<L>, 쇼츠 shorts/shorts_<L>/NN-<scene>), lang 16개 `watch` 의 " · 영상 페이지" 삭제; 스튜디오 도우미 studio-describe.js | ko·en 설명 눈으로 확인 |
 | 2026-10-23 | E7 | jungrok5 (gh) | 바꿀 것 없음 — Website `https://one-scroll-bible.com`, Topics 에 bible·gospel·christianity·multilingual·redemptive-history 이미 있음 | `gh repo view` |
 | | B2 | | 설명 갱신: 가로 __/12 · 쇼츠 __ | |
 | | C | | 인스타 프로필 링크 | |
-| | E1–E2 | | 서치콘솔 기준선·/film/ 색인 요청·GA 연결 | |
+| 2026-10-23 | E1–E2 | ju…@gmail.com (속성 https://one-scroll-bible.com/) | 사이트맵 재제출(6-19 이후 안 읽혀 45개 → 즉시 445개 성공), 기준선 seo-log.md, /film/ 색인 생성 요청("발견됨 - 색인 안 됨"이었음). GA 연결은 2026-06-17 에 이미 있으나 **데이터 없는 "Domain" 스트림**(15089714499)에 붙어 있음 — 실제 측정은 "메인" 스트림. 연결 삭제·재연결은 자동 실행이 막혀 사용자 확인 필요 | 사이트맵 표·URL 검사 |
 | | E3–E4 | | 네이버·빙 기준선, 사이트맵·IndexNow 확인 | |
 | | E5 | | 다음 웹마스터도구 PIN → robots.txt (배포 허락 대기) | |
 | | E6–E7 | | 유튜브 채널 링크 · GitHub Website/Topics | |

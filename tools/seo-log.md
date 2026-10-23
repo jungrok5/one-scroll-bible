@@ -23,7 +23,7 @@
 - IndexNow: 키 파일 + `tools/indexnow.mjs` + 배포 후 자동 핑 워크플로(`.github/workflows/indexnow.yml`)
 
 ### 기준선 (사람이 계정으로 찍어야 하는 것)
-- [ ] Google Search Console: 최근 28일 노출·클릭·평균 순위
+- [x] Google Search Console: 최근 28일 노출·클릭·평균 순위 (2026-10-23, 아래)
 - [ ] 네이버 서치어드바이저: 콘텐츠 노출/클릭, 검색어 Top
 - [ ] Bing Webmaster Tools(등록됨): 검색 성능 28일 + AI Performance(베타) + 권고 목록 + IndexNow 탭에서 핑 수신 확인
 
@@ -38,6 +38,14 @@
 | 착하게 살면 천국 가나요 | | | |
 | Bible story summary from creation to the second coming | | | |
 | whole Bible overview in one page | | | |
+
+### 기준선 — Google Search Console (2026-10-23, 계정 ju…@gmail.com, 속성 https://one-scroll-bible.com/)
+- 실적, 지난 28일(2026-09-23 ~ 10-20): **클릭 24 · 노출 424 · CTR 5.7% · 평균 게재순위 7.1**
+- 검색어(전부 5개): 성경 지도 0/6 · 성경지도 0/1 · kapernaum karte 0/1 · ስነ ፍጥረት ትግርኛ 0/1 · salmo 35 na papiamentu 0/1 (클릭/노출)
+- 페이지 색인: **색인됨 179 · 안 됨 69** (크롤링됨-색인 안 됨 66, 404 2, 다른 표준 선택 1)
+- 사이트맵: 6-17 제출, **6-19 이후 안 읽힘(발견 45)** → 10-23 재제출, 즉시 읽혀 **445** 성공
+- `/film/`: "발견됨 - 현재 색인이 생성되지 않음"(크롤링 전) → 색인 생성 요청
+- GA4 연결: 있음(6-17), 단 데이터 없는 "Domain" 스트림에 연결 — "메인" 스트림으로 다시 연결해야 GA의 자연검색 보고서가 채워짐
 
 ### 재측정
 - 배포 후 14일 (최근 2~3일 제외하고 비교): 위 표 전부 + 사이트맵 제출 상태

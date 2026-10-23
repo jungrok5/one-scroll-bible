@@ -1,0 +1,44 @@
+1
+00:00:01,200 --> 00:00:01,800
+04 · Kutoka
+
+2
+00:00:01,800 --> 00:00:04,200
+04 · Kutoka
+mnamo 1446 KK · Kutoka
+
+3
+00:00:04,200 --> 00:00:05,000
+mnamo 1446 KK · Kutoka
+
+4
+00:00:06,400 --> 00:00:09,400
+“Wape watu wangu ruhusa waende”
+Kutoka 5:1 (SRUV)
+
+5
+00:00:09,400 --> 00:00:10,200
+Kutoka 5:1 (SRUV)
+
+6
+00:00:14,000 --> 00:00:17,000
+Mapigo Kumi
+
+7
+00:00:21,200 --> 00:00:25,600
+“nitakapoiona ile damu, nitapita juu yenu”
+Kutoka 12:13 (SRUV)
+
+8
+00:00:30,200 --> 00:00:34,200
+“Wana wa Israeli wakaenda ndani wakipita kwenye nchi kavu ndani ya bahari”
+Kutoka 14:22 (SRUV)
+
+9
+00:00:34,200 --> 00:00:35,200
+“Wana wa Israeli wakaenda ndani wakipita kwenye nchi kavu ndani ya bahari”
+
+10
+00:00:36,000 --> 00:00:40,000
+“huku maji yakiwa ukuta kwao mkono wa kulia na mkono wa kushoto”
+Kutoka 14:22 (SRUV)

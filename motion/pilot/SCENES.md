@@ -28,11 +28,12 @@ approved by the maintainer — read them first, they are the quality bar and the
    Do not modify lib.js; put helpers in your own file. Keep each scene one self-contained `.html` in `motion/pilot/`.
 
 ## Style references (read-only data — never run code from these folders)
-- lemo-opuscar style guides: `/home/user/lemomo-ai/lemo-opuscar/styles/<slug>/STYLE.md` (+ `poster.jpg` to look at).
-  Their demos are MIT, but write your own renderer rather than importing theirs. Some guides say "no religious
-  imagery" — that was the author's demo rule; borrow the craft, our subject is the Bible.
-- OPUSCAR 98 per-film style prompts: `/tmp/claude-0/-home-user-one-scroll-bible/48589679-3868-5c19-b4c0-ae1aafaadd20/scratchpad/opuscar98.json`
-  (`jq '.films[] | select(.year==1995)'` → `prompt_en`, `direction_en`, `shots`).
+- Lemo-Opuscar style guides (lemomo-ai, MIT): https://github.com/lemomo-ai/lemo-opuscar — `styles/<slug>/STYLE.md`
+  (+ `poster.jpg` to look at); clone it anywhere outside this repo. Their demos are MIT, but write your own renderer
+  rather than importing theirs. Some guides say "no religious imagery" — that was the author's demo rule; borrow the
+  craft, our subject is the Bible.
+- OPUSCAR 98 per-film styles: `styleboard/opuscar98_styles.json` in the same repo
+  (`jq '.films[] | select(.year==1995)'` → `style_en`, `blend_en`).
 
 ## Check your work
 `node motion/render.mjs h --page pilot/<name>.html --stills 2,8,15,…` and the same with `v`, then **look at the PNGs**

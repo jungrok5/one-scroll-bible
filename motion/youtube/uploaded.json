@@ -201,5 +201,24 @@
    "note": "description UTM 2026-10-23 (all 21; schedule + related video re-checked)"
   }
  },
- "_shorts_note": "Shorts are scheduled one scene a day in story order (scene n on 2026-10-24 + n-1 days), at the language's evening, given in KST (GMT+9); every Short links its language's film as the related video. Phases of 21 days: 1 = ko en es pt-BR, 2 = id fr de ru, 3 = zh-Hans zh-Hant ja ar."
+ "_shorts_note": "Shorts are scheduled one scene a day in story order (scene n on first_day + n-1 days), at the language's evening, given in KST (GMT+9); every Short links its language's film as the related video. Waves of 4 languages (policy approved 2026-10-23, motion/README.md \"공개 정책\"): max two waves overlapping (8 Shorts a day); a new wave starts after the previous one has 7 days of data. 1 = ko en es pt-BR (from 2026-10-24), 2 = id fr de ru (~10-31), 3 = zh-Hans zh-Hant ja ar (~11-14), 4 = hi vi th tl (~11-21).",
+ "playlists": {
+  "_note": "one public playlist per language (title = the site brand, description = the film blurb, order = published date oldest first → film, then Shorts 1–21). Created 2026-10-23 with studio-playlist.js; the channel Home tab (turned on) shows them in its Created playlists section.",
+  "ko": "PLWbLhnVLU-Gg",
+  "en": "PLHnGBKKZ8kg8",
+  "zh-Hans": "PLJnN8ibs4E0Y",
+  "zh-Hant": "PLLFPvQagPVec",
+  "ja": "PLd0fzFVBBGWQ",
+  "es": "PLCyCcDenUtQ8",
+  "pt-BR": "PLdVSn99NaNdU",
+  "fr": "PLJ1-oOSxk0CU",
+  "de": "PLZo6Ab9PwsYY",
+  "ru": "PLUJwSdZFb5wI",
+  "ar": "PLXFTNqo7TvRs",
+  "hi": "PLQ5RFGSznG5U",
+  "id": "PLDPJLAYulCg8",
+  "vi": "PLVeKuwQaKric",
+  "th": "PLLg6F8kgfAQw",
+  "tl": "PLFzrds9ajwV8"
+ }
 }

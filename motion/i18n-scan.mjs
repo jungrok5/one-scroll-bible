@@ -22,7 +22,7 @@ const scenes = only.length ? only : ORDER;
 const step = 0.25;
 const browser = await chromium.launch({ args: ['--allow-file-access-from-files'] });
 let bad = 0;
-// scenes are independent: scan several at once (JOBS, default 4 — one scene at a time took 9–17 min on a CI runner)
+// scenes are independent: scan several at once (JOBS, default cores-1 up to 8; one at a time took 9–17 min on a CI runner — CPU-bound, fall ~1.5 min alone)
 const scan = async sc => {
   const seen = new Set(), miss = new Set(), drawn = new Set();
   for (const ori of ['h', 'v']) {
@@ -37,7 +37,7 @@ const scan = async sc => {
   return { seen, miss, drawn };
 };
 const results = {}, queue = [...scenes];
-await Promise.all(Array.from({ length: Math.min(+(process.env.JOBS || 4), scenes.length) }, async () => {
+await Promise.all(Array.from({ length: Math.min(+(process.env.JOBS || Math.min(8, Math.max(2, (await import('node:os')).cpus().length - 1))), scenes.length) }, async () => {
   while (queue.length) { const sc = queue.shift(); results[sc] = await scan(sc); }
 }));
 for (const sc of scenes) {   // report in scene order

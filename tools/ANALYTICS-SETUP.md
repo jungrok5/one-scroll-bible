@@ -219,7 +219,7 @@ gh repo edit jungrok5/one-scroll-bible --homepage https://one-scroll-bible.com \
 | 2026-10-23 | E7 | jungrok5 (gh) | 바꿀 것 없음 — Website `https://one-scroll-bible.com`, Topics 에 bible·gospel·christianity·multilingual·redemptive-history 이미 있음 | `gh repo view` |
 | 2026-10-23 | B2 | 채널 @one-scroll-bible | 설명 갱신: 가로 12/12 · 쇼츠 84/84 (ko·en·es·pt-BR). 한국어 가로 영상은 "글로 천천히 읽기" 줄의 주소만. ⚠ 첫 시도에서 탭에 남은 예전 매니페스트 때문에 한국어 설명에 "…: undefined" 가 1~2분 저장됐다가 바로 고침 → studio-describe.js 가 매번 새로 받고 값이 없으면 저장 안 함. 고정 댓글 12/12 (사용자 허락: "유튜브 댓글도달아") — respond.h3 + 언어 첫 페이지 UTM(utm_content=pinned)#respond | 공개 페이지 설명·고정 표시, 쇼츠는 저장 뒤 예약 시각·관련 영상 다시 읽어 84개 모두 그대로 |
 | | C | | 인스타 프로필 링크 (사용자: 일단 보류) | |
-| 2026-10-23 | E1–E2 | ju…@gmail.com (속성 https://one-scroll-bible.com/) | 사이트맵 재제출(6-19 이후 안 읽혀 45개 → 즉시 445개 성공), 기준선 seo-log.md, /film/ 색인 생성 요청("발견됨 - 색인 안 됨"이었음). GA 연결은 2026-06-17 에 이미 있으나 **데이터 없는 "Domain" 스트림**(15089714499)에 붙어 있음 — 실제 측정은 "메인" 스트림. 연결 삭제·재연결은 자동 실행이 막혀 사용자 확인 필요 | 사이트맵 표·URL 검사 |
+| 2026-10-23 | E1–E2 | ju…@gmail.com (속성 https://one-scroll-bible.com/) | 사이트맵 재제출(6-19 이후 안 읽혀 45개 → 즉시 445개 성공), 기준선 seo-log.md, /film/ 색인 생성 요청("발견됨 - 색인 안 됨"이었음). GA 연결은 2026-06-17 에 이미 있으나 **데이터 없는 "Domain" 스트림**(15089714499)에 붙어 있음 — 실제 측정은 "메인" 스트림. → 사용자 지시("G4a도 해봐")로 예전 연결 해제 후 **"메인"(15081818451)에 다시 연결** (2026-10-23) | 사이트맵 표·URL 검사 |
 | | E3–E4 | | 네이버·빙 기준선, 사이트맵·IndexNow 확인 | |
 | | E5 | | 다음 웹마스터도구 PIN → robots.txt (배포 허락 대기) | |
 | 2026-10-23 | E6 | 채널 @one-scroll-bible | 바꿀 것 없음 — 채널 링크에 이미 "one-scroll-bible → https://one-scroll-bible.com/" 있음(UTM 없음, 안내대로 그대로 둠). 채널 설명은 비어 있음 | 맞춤설정 → 프로필 |

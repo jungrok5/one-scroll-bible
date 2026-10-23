@@ -40,6 +40,8 @@ function status(list) {
   const cta = filmCta(); let assets = null;
   try { assets = JSON.parse(out('gh', ['api', `repos/${REPO}/releases/tags/youtube-v1`, '--jq', '[.assets[].name]'])); } catch { }
   const manifest = existsSync(join(M, 'youtube', 'manifest.json')) ? read(join(M, 'youtube', 'manifest.json')).languages : {};
+  const up = existsSync(join(M, 'youtube', 'uploaded.json')) ? read(join(M, 'youtube', 'uploaded.json')) : {};
+  const yt = JSON.parse((readFileSync(join(ROOT, 'index.html'), 'utf8').match(/const FILM_YT=(\{[^}]*\})/) || [, '{}'])[1]);
   const rows = list.map(L => {
     const dir = join(I18N, L), files = existsSync(dir) ? readdirSync(dir) : [];
     const scenes = SCENES.filter(s => files.includes(s + '.json')).length, merged = join(I18N, L + '.json');
@@ -53,12 +55,17 @@ function status(list) {
       thumbs: has(`motion/youtube/thumbs/${L}/A-exodus.jpg`) ? 'yes' : '-', sheet: manifest[L] ? 'yes' : '-',
       subs: has(`motion/subs/${L}/film-h.srt`) ? 'yes' : '-',
       release: assets ? `${assets.includes(`film-${L}.mp4`) ? 'film' : '-'}/${assets.filter(a => a.startsWith(`shorts-${L}-`)).length}` : '?',
+      // YouTube side (motion/youtube/uploaded.json, kept by hand from Studio) and the site's button target (FILM_YT)
+      youtube: up.film?.[L] ? up.film[L].status : '-', ab: /thumbnail test/.test(up.film?.[L]?.note || '') ? 'yes' : '-',
+      pinned: /pinned comment faq/.test(up.film?.[L]?.note || '') ? 'faq' : /pinned comment/.test(up.film?.[L]?.note || '') ? 'old' : '-',
+      ytButton: yt[L] ? 'yes' : '-', shorts: up.shorts?.[L]?.ids ? Object.keys(up.shorts[L].ids).length : 0,
     };
   });
   console.table(rows);
   console.log('translated = scene files/21 (+ui = _ui.json) · merged = pilot/i18n/<lang>.json up to date · ytText = motion/youtube/lang/<lang>.json');
   console.log('review = motion/reviews/<lang>.md (native review, no open HIGH/MED) · button = FILM_CTA in index.html · siteFiles = film/s + poster');
   console.log('thumbs/sheet/subs = YouTube kit · release = film / Shorts count in the youtube-v1 release');
+  console.log('youtube/ab/pinned/shorts = motion/youtube/uploaded.json (film status, thumbnail A/B test, pinned FAQ comment, Shorts ids) · ytButton = FILM_YT in index.html');
 }
 
 function check(list) {

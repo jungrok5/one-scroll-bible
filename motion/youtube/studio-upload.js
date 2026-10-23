@@ -15,6 +15,7 @@ window.__osbUpload = async (L, { save = true } = {}) => {
   const wait = async (fn, ms = 20000) => { for (let t = 0; t < ms; t += 250) { const v = fn(); if (v) return v; await sleep(250); } return null; };
   const m = await (await fetch(S + 'youtube/manifest.json')).json(); const f = m.languages[L].film;
   const fileInput = await wait(() => document.querySelector('ytcp-uploads-dialog input[type=file]'));
+  if (!fileInput) return { L, error: 'upload dialog not open — open …/videos/upload?d=ud (a fresh page load is safest)' };
   const blob = async (p, name, type) => { const b = await (await fetch(S + p)).blob(); const dt = new DataTransfer(); dt.items.add(new File([b], name, { type })); return dt.files; };
   fileInput.files = await blob('out/release/' + f.file, f.file, 'video/mp4'); fileInput.dispatchEvent(new Event('change', { bubbles: true }));
   const D = await wait(() => document.querySelectorAll('ytcp-uploads-dialog #textbox').length >= 2 && document.querySelector('ytcp-uploads-dialog'));
@@ -53,7 +54,12 @@ window.__osbUpload = async (L, { save = true } = {}) => {
 // Several languages in a row without reloading (a reload drops __osbUpload): reopen the upload dialog through the SPA router.
 window.__osbChain = async langs => { const sleep = ms => new Promise(r => setTimeout(r, ms)); window.__osbLog = [];
   for (const L of langs) {
-    if (!document.querySelector('ytcp-uploads-dialog input[type=file]')) { history.pushState({}, '', location.pathname + '?d=ud'); dispatchEvent(new PopStateEvent('popstate', { state: {} })); await sleep(3000); }
+    // reopen the dialog: pushing the same "?d=ud" URL again does nothing (2026-10-23: the 2nd language failed with
+    // "Cannot set properties of null") — leave to the bare list first, then push ?d=ud
+    for (let a = 0; a < 3 && !document.querySelector('ytcp-uploads-dialog input[type=file]'); a++) {
+      history.pushState({}, '', location.pathname); dispatchEvent(new PopStateEvent('popstate', { state: {} })); await sleep(1500);
+      history.pushState({}, '', location.pathname + '?d=ud'); dispatchEvent(new PopStateEvent('popstate', { state: {} })); await sleep(3000);
+    }
     let r; try { r = await window.__osbUpload(L); } catch (e) { r = { L, error: e.message }; }
     window.__osbLog.push(r); if (!r.saved) break; await sleep(2500);
   } window.__osbLog.push('END'); };

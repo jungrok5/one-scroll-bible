@@ -126,7 +126,7 @@ curl -LO https://github.com/jungrok5/one-scroll-bible/releases/download/youtube-
 | 1 | 영상 내려받기 | `gh release download youtube-v1 -p 'film-<code>.mp4' -D motion/out/release` | 약 0.9 GB |
 | 2 | 비공개 업로드 | `studio-upload.js` → `__osbChain(['<code>', …])` (업로드 창 `…/videos/upload?d=ud`) | 제목·설명(챕터)·태그·썸네일 A·아동용 아님·AI 아님·알림 끔(한국어만 켬)·동영상 언어 |
 | 3 | 썸네일 A/B + 공개 | `studio-publish.js` → `__osbPublish('<code>', '<id>')` | **처리가 끝난 뒤** 편집 페이지에서(업로드 창에서는 A/B 버튼이 반응 안 함) |
-| 4 | 고정 댓글 | `studio-comment.js` → `__osbComment('<code>')` (시청 페이지) | 사이트 FAQ 제목(`faq.h`, 이미 검토된 번역) + 그 언어 첫 페이지 `#faq` |
+| 4 | 고정 댓글 | `studio-comment.js` → `__osbCommentPrep` → 메뉴 실제 클릭 → `__osbMenuItems` → 고정/수정 (시청 페이지, 파일 머리말 순서대로) | 사이트 FAQ 제목(`faq.h`, 이미 검토된 번역) + 그 언어 첫 페이지 `#faq` |
 | 5 | 사이트 버튼 | `index.html`의 `FILM_YT`에 공개 id 추가 → 빌드 → 배포 | 첫 화면 영상 버튼이 유튜브로 감 |
 | 6 | 설명 링크만 고칠 때 | `studio-describe.js` → `__osbDescribe(id, '<code>', n?)` | 링크 줄만 바꾸고, 쇼츠는 예약 시각·관련 영상이 그대로인지 다시 읽어 확인 |
 | 7 | 쇼츠 예약 | `studio-shorts.js` (`__osbShort`, `__pickTime`) | 예약 시간은 **목록에서 골라야** 함(입력하면 0시로 저장됨) |

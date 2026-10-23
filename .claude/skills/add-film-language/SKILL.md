@@ -80,6 +80,15 @@ node motion/film-lang.mjs ci <code> --steps "h v kit release" --wait
 (`motion/youtube/manifest.json` / `.md`: titles, descriptions with chapters, tags, Shorts titles = a hook line from each scene)
 and subtitles (`motion/subs/<code>/`). Commit the kit. The creation scene's WebGL cosmos comes from the Actions cache.
 
+## 6 · On YouTube (browser session signed in as @one-scroll-bible; public steps need the maintainer's OK)
+Follow `motion/README.md` → "유튜브에 올리기": `node motion/youtube/serve.mjs` → download `film-<code>.mp4` →
+`studio-upload.js` (private; add the language's Studio name to `LANG_LABEL` first) → after processing `studio-publish.js`
+(thumbnail A/B A·B·D + public) → `studio-comment.js` (pinned FAQ comment) → `FILM_YT` in `index.html` (site button → YouTube) →
+record ids/status in `motion/youtube/uploaded.json`. `node motion/film-lang.mjs status <code>` shows youtube / ab / pinned /
+ytButton per language, so a language that is on the site but not on YouTube is visible at a glance.
+A new lesson → that README's "함정" list (and the tool), never only the chat — a helper that lived only in a chat or a
+scratch folder had to be rebuilt (and was once rebuilt wrong).
+
 ## Changing a scene's wording or timing
 Korean keys are shared by every language: if you change a Korean string, every language loses that line until it is
 translated again (`i18n-scan` shows it as missing). Change the look, layout or timing freely; keep the strings.

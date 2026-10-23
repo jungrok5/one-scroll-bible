@@ -27,17 +27,17 @@
 - [ ] 네이버 서치어드바이저: 콘텐츠 노출/클릭, 검색어 Top
 - [ ] Bing Webmaster Tools(등록됨): 검색 성능 28일 + AI Performance(베타) + 권고 목록 + IndexNow 탭에서 핑 수신 확인
 
-### AI 인용 기준선 — 아래 질문을 ChatGPT(검색)·Perplexity·네이버 AI 브리핑에 던져 출처에 도메인이 뜨면 O
+### AI 인용 기준선 (Perplexity 2026-10-23, jungrok5 로그인, 출처 "링크" 탭 기준: 1/8 · ChatGPT 로그아웃 검색 0/3, 나머지는 로그인 필요 · 네이버는 브라우저 확장이 막아 사용자 확인 필요) — 아래 질문을 ChatGPT(검색)·Perplexity·네이버 AI 브리핑에 던져 출처에 도메인이 뜨면 O
 | 질문 | ChatGPT | Perplexity | 네이버 |
 |---|---|---|---|
-| 성경 전체 줄거리 한눈에 요약 | | | |
-| 성경 흐름 창조부터 재림까지 정리 | | | |
-| 구속사 흐름 쉽게 | | | |
-| 예수님이 오신 이유 | | | |
-| 영접기도 | | | |
-| 착하게 살면 천국 가나요 | | | |
-| Bible story summary from creation to the second coming | | | |
-| whole Bible overview in one page | | | |
+| 성경 전체 줄거리 한눈에 요약 | X (이미지 출처만) | O | 확장 프로그램이 막음 |
+| 성경 흐름 창조부터 재림까지 정리 | X (BibleProject) | X (TGC·BibleGateway·블로그) | 확장 프로그램이 막음 |
+| 구속사 흐름 쉽게 | X (BibleProject) | X (네이버 블로그·유튜브) | 확장 프로그램이 막음 |
+| 예수님이 오신 이유 | — (로그아웃: 웹 검색 없이 답함) | X (열린교회·Logos·GTY) | 확장 프로그램이 막음 |
+| 영접기도 | — (로그아웃: 웹 검색 없이 답함) | X (ddaglebible·유튜브·교회 사이트) | 확장 프로그램이 막음 |
+| 착하게 살면 천국 가나요 | 로그인 필요 | X (국민일보·티스토리·브런치) | 확장 프로그램이 막음 |
+| Bible story summary from creation to the second coming | 로그인 필요 | X (TGC·Wikipedia·BibleGateway) | 확장 프로그램이 막음 |
+| whole Bible overview in one page | 로그인 필요 | X (Desiring God·Tyndale·American Bible) | 확장 프로그램이 막음 |
 
 ### 기준선 — Google Search Console (2026-10-23, 계정 ju…@gmail.com, 속성 https://one-scroll-bible.com/)
 - 실적, 지난 28일(2026-09-23 ~ 10-20): **클릭 24 · 노출 424 · CTR 5.7% · 평균 게재순위 7.1**

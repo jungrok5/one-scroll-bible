@@ -7,6 +7,8 @@
 //   node motion/youtube/yt-api.mjs status [<lang…>]           → public / scheduled / private + views per language (film, Shorts)
 //   node motion/youtube/yt-api.mjs stats [<lang…>] [--from D]  → YouTube Analytics per language: views, minutes, avg % viewed
 //   node motion/youtube/yt-api.mjs playlist-add <playlistId> <videoId…> → append (playlist ids in uploaded.json "playlists")
+//   node motion/youtube/yt-api.mjs upload <lang> film|<n…> [--publish-at ISO] [--dry] → videos.insert from the upload sheet
+//        (locked private until the API audit passes — motion/youtube/API-AUDIT.md)
 // Why captions: the film has no speech, so YouTube makes no captions; its text is burned into the picture, which search
 // cannot read. A caption track in the film's language makes those lines searchable (and lets viewers turn on auto-translate).
 import { readFileSync, existsSync } from 'node:fs';
@@ -104,4 +106,35 @@ if (cmd === 'whoami') {
       body: JSON.stringify({ snippet: { playlistId: pl, resourceId: { kind: 'youtube#video', videoId: id } } }) });
     console.log(`${id}: added to ${pl}`);
   }
-} else console.log('usage: node motion/youtube/yt-api.mjs whoami | captions [<lang…>] [--dry] | status [<lang…>] | stats [<lang…>] [--from D] [--to D] | playlist-add <playlistId> <videoId…>');
+} else if (cmd === 'upload') {
+  // upload <lang> film|<n…> [--publish-at <ISO>] [--dry]: videos.insert (resumable) from the upload sheet (manifest.json):
+  // title, description, tags, category Education (27), the language, made-for-kids no; private, or scheduled with
+  // --publish-at (Shorts: one per day from that time, n-1 days later each). Film: also thumbnails.set (thumbnail A).
+  // NOTE: until the API project passes YouTube's audit, every API upload is locked private (motion/youtube/API-AUDIT.md).
+  const [L, ...what] = rest.filter(a => !a.startsWith('--') && !/^\d{4}-\d\d-\d\dT/.test(a)), dry = rest.includes('--dry');
+  const at = rest.includes('--publish-at') ? rest[rest.indexOf('--publish-at') + 1] : null;
+  const m = JSON.parse(readFileSync(join(HERE, 'manifest.json'), 'utf8')).languages[L];
+  if (!m || !what.length) { console.log('usage: upload <lang> film|<n…> [--publish-at 2026-11-28T10:00:00Z] [--dry]'); process.exit(1); }
+  const items = what[0] === 'film' ? [{ ...m.film, n: 0 }] : what.map(n => m.shorts.find(s => s.n === +n)).filter(Boolean);
+  const ROOT = join(M, '..');
+  for (const it of items) {
+    const file = join(ROOT, it.local), lang = YT_LANG[L] || L;
+    if (!existsSync(file)) { console.log(`${L} ${it.n || 'film'}: missing ${it.local}`); continue; }
+    const when = at && new Date(Date.parse(at) + Math.max(0, (it.n || 1) - 1) * 864e5).toISOString();
+    const meta = { snippet: { title: it.title, description: it.description, tags: it.tags, categoryId: '27', defaultLanguage: lang, defaultAudioLanguage: lang },
+      status: { privacyStatus: 'private', ...(when ? { publishAt: when } : {}), selfDeclaredMadeForKids: false } };
+    const buf = readFileSync(file);
+    if (dry) { console.log(`${L} ${it.n || 'film'}: would upload ${it.local} (${(buf.length / 1e6).toFixed(1)} MB) "${it.title}"${when ? ' → ' + when : ' (private)'}`); continue; }
+    const r = await fetch('https://www.googleapis.com/upload/youtube/v3/videos?uploadType=resumable&part=snippet,status', { method: 'POST',
+      headers: { Authorization: 'Bearer ' + await token(), 'Content-Type': 'application/json; charset=UTF-8', 'X-Upload-Content-Type': 'video/mp4', 'X-Upload-Content-Length': String(buf.length) },
+      body: JSON.stringify(meta) });
+    if (!r.ok) { console.error(`${L} ${it.n || 'film'}: start failed ${r.status} ${(await r.text()).slice(0, 200)}`); process.exit(1); }
+    const v = await (await fetch(r.headers.get('location'), { method: 'PUT', headers: { 'Content-Type': 'video/mp4' }, body: buf })).json();
+    if (!v.id) { console.error(`${L} ${it.n || 'film'}: upload failed ${JSON.stringify(v).slice(0, 200)}`); process.exit(1); }
+    console.log(`${L} ${it.n || 'film'}: uploaded ${v.id} (${v.status?.privacyStatus}${v.status?.publishAt ? ' → ' + v.status.publishAt : ''}) — record it in uploaded.json`);
+    if (!it.n && it.thumbnail && existsSync(join(ROOT, it.thumbnail))) {
+      await api(`https://www.googleapis.com/upload/youtube/v3/thumbnails/set?videoId=${v.id}`, { method: 'POST', headers: { 'Content-Type': 'image/jpeg' }, body: readFileSync(join(ROOT, it.thumbnail)) });
+      console.log(`  thumbnail set from ${it.thumbnail}`);
+    }
+  }
+} else console.log('usage: node motion/youtube/yt-api.mjs whoami | captions [<lang…>] [--dry] | status [<lang…>] | stats [<lang…>] [--from D] [--to D] | playlist-add <playlistId> <videoId…> | upload <lang> film|<n…> [--publish-at ISO] [--dry]');

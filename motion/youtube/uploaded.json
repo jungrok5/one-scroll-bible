@@ -4,7 +4,7 @@
   "ko": {
    "id": "66VfBSXxAs8",
    "status": "public",
-   "note": "original upload 2026-10-20; description + thumbnail test (A/B/D) updated 2026-10-22"
+   "note": "original upload 2026-10-20; description + thumbnail test (A/B/D) updated 2026-10-22; description UTM 2026-10-23; pinned comment respond.h3 + home#respond 2026-10-23"
   },
   "ko-vertical": {
    "id": "3X5HbQKBpRI",
@@ -14,64 +14,64 @@
   "en": {
    "id": "IDvto63DZC8",
    "status": "public",
-   "note": "public + thumbnail test A/B/D 2026-10-22"
+   "note": "public + thumbnail test A/B/D 2026-10-22; description UTM 2026-10-23; pinned comment respond.h3 + home#respond 2026-10-23"
   },
   "es": {
    "id": "h6HTeZijyr8",
    "status": "public",
-   "note": "public + thumbnail test A/B/D 2026-10-22"
+   "note": "public + thumbnail test A/B/D 2026-10-22; description UTM 2026-10-23; pinned comment respond.h3 + home#respond 2026-10-23"
   },
   "pt-BR": {
    "id": "b74m2kxl4jM",
    "status": "public",
-   "note": "public + thumbnail test A/B/D 2026-10-22"
+   "note": "public + thumbnail test A/B/D 2026-10-22; description UTM 2026-10-23; pinned comment respond.h3 + home#respond 2026-10-23"
   },
   "fr": {
    "id": "zCPsT6RbqE4",
    "status": "public",
-   "note": "public + thumbnail test A/B/D 2026-10-22"
+   "note": "public + thumbnail test A/B/D 2026-10-22; description UTM 2026-10-23; pinned comment respond.h3 + home#respond 2026-10-23"
   },
   "de": {
    "id": "nGR-70YYL-E",
    "status": "public",
-   "note": "public + thumbnail test A/B/D 2026-10-22"
+   "note": "public + thumbnail test A/B/D 2026-10-22; description UTM 2026-10-23; pinned comment respond.h3 + home#respond 2026-10-23"
   },
   "ru": {
    "id": "rPBUPZC4PnA",
    "status": "public",
-   "note": "public + thumbnail test A/B/D 2026-10-22"
+   "note": "public + thumbnail test A/B/D 2026-10-22; description UTM 2026-10-23; pinned comment respond.h3 + home#respond 2026-10-23"
   },
   "id": {
    "id": "Jntp5xDBBJg",
    "status": "public",
-   "note": "public + thumbnail test A/B/D 2026-10-22"
+   "note": "public + thumbnail test A/B/D 2026-10-22; description UTM 2026-10-23; pinned comment respond.h3 + home#respond 2026-10-23"
   },
   "zh-Hans": {
    "id": "4MvbvszEQHU",
    "status": "public",
-   "note": "public + thumbnail test A/B/D 2026-10-22"
+   "note": "public + thumbnail test A/B/D 2026-10-22; description UTM 2026-10-23; pinned comment respond.h3 + home#respond 2026-10-23"
   },
   "zh-Hant": {
    "id": "UEr4oQAZS6s",
    "status": "public",
-   "note": "public + thumbnail test A/B/D 2026-10-22"
+   "note": "public + thumbnail test A/B/D 2026-10-22; description UTM 2026-10-23; pinned comment respond.h3 + home#respond 2026-10-23"
   },
   "ja": {
    "id": "VIGqzFaWkTU",
    "status": "public",
-   "note": "public + thumbnail test A/B/D 2026-10-22"
+   "note": "public + thumbnail test A/B/D 2026-10-22; description UTM 2026-10-23; pinned comment respond.h3 + home#respond 2026-10-23"
   },
   "ar": {
    "id": "IlhNG5Mul9I",
    "status": "public",
-   "note": "public + thumbnail test A/B/D 2026-10-22"
+   "note": "public + thumbnail test A/B/D 2026-10-22; description UTM 2026-10-23; pinned comment respond.h3 + home#respond 2026-10-23"
   }
  },
  "shorts": {
   "ko": {
    "time_kst": "19:00",
    "first_day": "2026-10-24",
-   "note": "subscriber notification on (Korean)",
+   "note": "subscriber notification on (Korean); description UTM 2026-10-23 (all 21; schedule + related video re-checked)",
    "ids": {
     "10": "DkMfG7PzRHk",
     "11": "jH6fIWRdigA",
@@ -121,7 +121,8 @@
     "07": "nnyJBvRUgrA",
     "08": "aLISIpOa_Q0",
     "09": "YxLoO2C3ejI"
-   }
+   },
+   "note": "description UTM 2026-10-23 (all 21; schedule + related video re-checked)"
   },
   "es": {
    "time_kst": "10:00",
@@ -148,7 +149,8 @@
     "07": "MsX6UbjMEjE",
     "08": "fnEV-hrkI0M",
     "09": "AARGLCoBiCE"
-   }
+   },
+   "note": "description UTM 2026-10-23 (all 21; schedule + related video re-checked)"
   },
   "pt-BR": {
    "time_kst": "06:00",
@@ -175,7 +177,8 @@
     "07": "hllOeiBKnFk",
     "08": "9zfcDb_I-gs",
     "09": "RCNm0sZqUaA"
-   }
+   },
+   "note": "description UTM 2026-10-23 (all 21; schedule + related video re-checked)"
   }
  },
  "_shorts_note": "Shorts are scheduled one scene a day in story order (scene n on 2026-10-24 + n-1 days), at the language's evening, given in KST (GMT+9); every Short links its language's film as the related video. Phases of 21 days: 1 = ko en es pt-BR, 2 = id fr de ru, 3 = zh-Hans zh-Hant ja ar."

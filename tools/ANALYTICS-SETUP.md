@@ -223,4 +223,4 @@ gh repo edit jungrok5/one-scroll-bible --homepage https://one-scroll-bible.com \
 | | E3–E4 | | 네이버·빙 기준선, 사이트맵·IndexNow 확인 | |
 | | E5 | | 다음 웹마스터도구 PIN → robots.txt (배포 허락 대기) | |
 | 2026-10-23 | E6 | 채널 @one-scroll-bible | 바꿀 것 없음 — 채널 링크에 이미 "one-scroll-bible → https://one-scroll-bible.com/" 있음(UTM 없음, 안내대로 그대로 둠). 채널 설명은 비어 있음 | 맞춤설정 → 프로필 |
-| | E8 | | AI 인용 기준선 __/24 | |
+| 2026-10-23 | E8 | — | AI 인용 기준선 0/24 — Perplexity 가 첫 질문에서 로그인 요구(로그인은 하지 않음) → 사용자 확인 필요. ChatGPT·네이버도 사용자 몫으로 남김 | 로그인 창 |

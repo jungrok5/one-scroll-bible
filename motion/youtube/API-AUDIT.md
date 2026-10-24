@@ -86,19 +86,16 @@ correction and daily videos.list / analytics reads (< 1,000 units). Uploads are 
 (at most two waves overlap, ≤ 8 Shorts published per day), so the channel is never flooded. The site already supports
 214 languages and new film languages are added after native-speaker review, so this volume will recur every few weeks.
 
-## 데모 녹화 순서 (2~3분, 화면 녹화만 — 목소리 없어도 됨)
-1. 터미널에서 `node motion/youtube/yt-auth.mjs <client_secret.json>` → 브라우저의 Google 동의 화면(앱 이름 "one-scroll-bible
-   tools", 요청 권한 두 개)이 보이게 → 허용 → "Done". (이미 인증돼 있으면 이 단계만 다시 해도 됩니다. 새 클라이언트 JSON이
-   필요하면 Google Cloud → 클라이언트에서 받고, 녹화 뒤 지웁니다.)
-2. `node motion/youtube/yt-api.mjs whoami` → 우리 채널 이름이 나오는 것.
-   (word-log는 같은 계정의 브랜드 채널 — `node motion/youtube/yt-auth.mjs --as WORDLOG`로 동의 화면에서 채널을 고르는 장면을
-   보여 주고, word-log 저장소의 `node tools/youtube.mjs whoami`로 @word-log가 나오는 것도 보여 주면 좋습니다.)
-3. `node motion/youtube/yt-api.mjs status` → 언어별 공개·예약 상태.
-4. `node motion/youtube/yt-api.mjs stats` → 언어별 조회수·시청 시간.
-5. `node motion/youtube/yt-api.mjs captions --dry` → 자막 올릴 대상 목록.
-6. `node motion/youtube/yt-api.mjs upload fr 1 --publish-at 2026-12-01T10:00:00Z --dry` → 업로드할 파일·제목·예약 시각.
-7. 브라우저에서 https://one-scroll-bible.com/privacy.html 7항을 잠깐 보여 주기.
-(환경 변수 값이나 client_secret 파일 내용이 화면에 나오지 않게 주의 — 위 명령들은 비밀 값을 출력하지 않습니다.)
+## 데모 녹화 순서 (약 1분, 화면 녹화만 — 목소리 없어도 됨)
+`node motion/youtube/demo.mjs` 하나가 아래를 차례로 보여 줍니다(명령을 화면에 찍고, 결과를 읽을 시간을 두고 다음으로):
+두 채널의 whoami(one-scroll-bible, word-log) → status → stats → captions --dry → upload … --dry → 개인정보처리방침 주소.
+업로드·변경은 하지 않고 비밀 값도 출력하지 않습니다. 하루 할당량을 꽤 쓰므로(captions --dry ≈ 1,000) 할당량이 초기화된
+뒤(태평양 자정 = 한국 16시, 겨울 17시)에 녹화합니다.
+1. 시작 메뉴 → "Windows PowerShell"로 **새 창**을 엽니다(VS Code 터미널·채팅 패널은 녹화하지 않음 — 이메일·다른 작업이 보임).
+2. `cd C:\Project\one-scroll-bible` → 창 최대화 → `cls`.
+3. **Win+Alt+R**(녹화 시작 — 이때 선택된 창 하나만 녹화됨) → `node motion/youtube/demo.mjs` 입력·실행 → 끝나면 **Win+Alt+R**(중지).
+4. (선택) 크롬에서 https://one-scroll-bible.com/privacy.html 7항을 띄우고 Win+Alt+R로 10초짜리 두 번째 영상.
+5. 영상은 `동영상\캡처` 폴더(C:\Users\<이름>\Videos\Captures)에 저장됩니다 → 양식에 첨부.
 
 ## 통과 후
 - `upload`로 영상·쇼츠를 올리고(`--publish-at`으로 예약), `captions`, `playlist-add`로 마무리. 썸네일 A/B 테스트와

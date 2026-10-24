@@ -34,7 +34,8 @@ playlistItems.insert, channels.list) and YouTube Analytics API (reports.query).
 
 **Describe your API client / use case**
 "one-scroll-bible tools" is a small command-line tool used only by the operator of the non-commercial Bible education
-site one-scroll-bible.com to manage the site's own YouTube channel, @one-scroll-bible (channel ID UCtCcbrM2mCgfhSryo4SWxzg).
+site one-scroll-bible.com to manage the site's own YouTube channels: today @one-scroll-bible (channel ID UCtCcbrM2mCgfhSryo4SWxzg);
+we may add language-specific channels owned by the same account (Brand Account channels), managed the same way.
 The channel publishes one original 14-minute animated film about the whole Bible, drawn in code, in many languages (the
 on-screen text is translated for each language), plus 21 short clips (Shorts) per language cut from that film.
 The tool:
@@ -45,10 +46,10 @@ The tool:
 3. adds the videos to that language's playlist (playlistItems.insert);
 4. reads view counts and YouTube Analytics for our own videos to decide when to publish the next language
    (videos.list, reports.query).
-It is not offered to anyone else, has no user interface besides the terminal, and acts only on our own channel.
+It is not offered to anyone else, has no user interface besides the terminal, and acts only on our own channels.
 
 **Who are the users? How do they sign in?**
-One user: the channel owner. They sign in once with Google OAuth (installed-application flow with PKCE, loopback
+One user: the owner of our channels. They sign in once per channel with Google OAuth (installed-application flow with PKCE, loopback
 redirect). The refresh token is kept only on the operator's computer, in the operator's user environment variables;
 it is never sent anywhere else or committed to the repository.
 

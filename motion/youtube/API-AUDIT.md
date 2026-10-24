@@ -34,10 +34,12 @@ playlistItems.insert, channels.list) and YouTube Analytics API (reports.query).
 
 **Describe your API client / use case**
 "one-scroll-bible tools" is a small command-line tool used only by the operator of the non-commercial Bible education
-site one-scroll-bible.com to manage the site's own YouTube channels: today @one-scroll-bible (channel ID UCtCcbrM2mCgfhSryo4SWxzg);
-we may add language-specific channels owned by the same account (Brand Account channels), managed the same way.
-The channel publishes one original 14-minute animated film about the whole Bible, drawn in code, in many languages (the
-on-screen text is translated for each language), plus 21 short clips (Shorts) per language cut from that film.
+site one-scroll-bible.com to manage the YouTube channels that the same operator owns and runs:
+- @one-scroll-bible (channel ID UCtCcbrM2mCgfhSryo4SWxzg) publishes one original 14-minute animated film about the whole
+  Bible, drawn in code, in many languages (the on-screen text is translated for each language), plus 21 short clips
+  (Shorts) per language cut from that film. We may split it into language-specific channels later.
+- word-log, a second channel of the same operator, publishes original worship videos, about one per week.
+All channels are owned by the operator's own Google account (as Brand Account channels) and managed the same way.
 The tool:
 1. uploads each language's film and Shorts with the title, description, tags and language prepared in our repository,
    and schedules their publish time (videos.insert, thumbnails.set);
@@ -76,7 +78,7 @@ No. The site and channel are non-commercial; there are no ads or paid features.
 Requested: **100,000 units/day.**
 We release the film in batches of four languages ("waves"). One wave = 4 films + 4 × 21 Shorts = 88 uploads.
 88 × 1,600 (videos.insert) ≈ 140,800 units, plus captions (4 × 400 = 1,600), playlist inserts (88 × 50 = 4,400) and
-thumbnails (4 × 50). Spread over two days that is ≈ 73,500 units/day; the rest of the headroom covers re-uploads after a
+thumbnails (4 × 50); the word-log channel adds about one upload a week (≈ 2,000 units). Spread over two days that is ≈ 73,500 units/day; the rest of the headroom covers re-uploads after a
 correction and daily videos.list / analytics reads (< 1,000 units). Uploads are scheduled for publication over 21 days
 (at most two waves overlap, ≤ 8 Shorts published per day), so the channel is never flooded. The site already supports
 214 languages and new film languages are added after native-speaker review, so this volume will recur every few weeks.
@@ -86,6 +88,7 @@ correction and daily videos.list / analytics reads (< 1,000 units). Uploads are 
    tools", 요청 권한 두 개)이 보이게 → 허용 → "Done". (이미 인증돼 있으면 이 단계만 다시 해도 됩니다. 새 클라이언트 JSON이
    필요하면 Google Cloud → 클라이언트에서 받고, 녹화 뒤 지웁니다.)
 2. `node motion/youtube/yt-api.mjs whoami` → 우리 채널 이름이 나오는 것.
+   (word-log 채널을 같은 계정의 브랜드 채널로 만들었다면, 1단계 동의 화면에서 채널 고르는 장면이 보여도 됩니다.)
 3. `node motion/youtube/yt-api.mjs status` → 언어별 공개·예약 상태.
 4. `node motion/youtube/yt-api.mjs stats` → 언어별 조회수·시청 시간.
 5. `node motion/youtube/yt-api.mjs captions --dry` → 자막 올릴 대상 목록.

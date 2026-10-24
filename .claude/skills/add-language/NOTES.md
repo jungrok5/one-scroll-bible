@@ -58,8 +58,16 @@ two `copyright_short` blocks: the edition's text notice and, for "dramatized"/au
 `bible.com/versions/<id>` (or the chapter page's version block) and confirm the edition name there too — 1683 is
 HINOVBSI "पवित्र बाइबिल OV (Re-edited)", not IRV. Drop "Used by permission" unless there is a real permission. "any rights"
 ≠ "all rights": translate it softly (hi जो भी अधिकार, vi mọi quyền (nếu có)). 202 packs still carry the English generic
-line (only ar de es fr id ja pt-BR ru zh-Hans zh-Hant + hi vi th tl are localized) — localize a pack's line when that
-language is next reviewed, with a review agent, not in bulk.
+line (only ar de es fr id ja pt-BR ru zh-Hans zh-Hant + hi vi th tl + sw fa bn ta are localized) — localize a pack's line when that
+language is next reviewed, with a review agent, not in bulk. (2026-10-24: bn 1681 "Copyright © 2016 by The Bible Society of
+India", ta 339 "Copyright © 2017 by The Bible Society of India" — read from the chapter page's text `copyright_short`; the
+versions page often has no notice at all, only the publisher. The /versions/ page can take >60 s to download.)
+
+**YouVersion versification shifts found by verify-verbatim (2026-10-24)** — fa 136 (ترجمه قدیم) John 5 is one verse behind:
+"…آنها است که به من شهادت میدهد" is JHN.5.38 there (standard 5:39) → cite یوحنا 5:38. ta 339 Gal 4: the clauses of 4:4–5
+are in Tamil order, so "காலம் நிறைவேறினபோது… குமாரனை தேவன் அனுப்பினார்" is GAL.4.5 → cite கலாத்தியர் 4:4-5 (true in either
+numbering), also for bare refs. When verify-verbatim says NOT VERBATIM but the fetched text is a neighbouring verse,
+fetch v−1 and v+1 before rewriting the quote.
 
 **Numbered-book surface form (most frequent)** — integrate only generates `number + space + name`
 ("2 Samuel"). Anything else must go into **books_single** with the exact surface form:

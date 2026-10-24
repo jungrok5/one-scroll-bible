@@ -9,7 +9,7 @@ const steps = [
   ['Same tool, the second channel of the same owner (word-log, a Brand Account channel)', 'yt-api.mjs whoami', { YT_AS: 'WORDLOG' }],
   ['Publish status of our own videos, per language', 'yt-api.mjs status', {}],
   ['YouTube Analytics for our own videos (used to decide when to publish the next language)', 'yt-api.mjs stats', {}],
-  ['Caption tracks it would upload (dry run)', 'yt-api.mjs captions --dry', {}],
+  ['Caption tracks it would upload (dry run; the four newest languages)', 'yt-api.mjs captions bn sw fa ta --dry', {}],
   ['An upload it would make: file, title, scheduled time (dry run)', 'yt-api.mjs upload fr 1 --publish-at 2026-12-01T10:00:00Z --dry', {}],
 ];
 console.log('one-scroll-bible tools — YouTube Data API v3 / YouTube Analytics API demo\n');

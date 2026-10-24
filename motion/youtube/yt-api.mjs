@@ -17,6 +17,8 @@ import { homedir } from 'node:os';
 import { fileURLToPath } from 'node:url';
 
 const HERE = dirname(fileURLToPath(import.meta.url)), M = join(HERE, '..');
+// an API error (quota, permission) is one readable line, not a stack trace
+process.on('uncaughtException', e => { console.error('error: ' + String(e.message).replace(/<[^>]+>/g, '')); process.exit(1); });
 function creds() {
   const env = { ...process.env }, f = join(homedir(), '.config', 'one-scroll-bible', 'youtube.env');
   if (existsSync(f)) for (const l of readFileSync(f, 'utf8').split('\n')) { const m = l.match(/^(YT_\w+)=(.*)$/); if (m && !env[m[1]]) env[m[1]] = m[2]; }

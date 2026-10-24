@@ -20,6 +20,7 @@ const HERE = dirname(fileURLToPath(import.meta.url)), M = join(HERE, '..');
 function creds() {
   const env = { ...process.env }, f = join(homedir(), '.config', 'one-scroll-bible', 'youtube.env');
   if (existsSync(f)) for (const l of readFileSync(f, 'utf8').split('\n')) { const m = l.match(/^(YT_\w+)=(.*)$/); if (m && !env[m[1]]) env[m[1]] = m[2]; }
+  if (env.YT_AS) env.YT_REFRESH_TOKEN = env['YT_REFRESH_TOKEN_' + env.YT_AS.toUpperCase()];   // YT_AS=WORDLOG → that channel's token (yt-auth --as)
   const need = ['YT_CLIENT_ID', 'YT_CLIENT_SECRET', 'YT_REFRESH_TOKEN'].filter(k => !env[k]);
   if (need.length) { console.error(`missing ${need.join(', ')} — run node motion/youtube/yt-auth.mjs <client_secret.json> first (and open a new terminal)`); process.exit(1); }
   return env;

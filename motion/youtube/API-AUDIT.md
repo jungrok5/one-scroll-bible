@@ -38,8 +38,11 @@ site one-scroll-bible.com to manage the YouTube channels that the same operator 
 - @one-scroll-bible (channel ID UCtCcbrM2mCgfhSryo4SWxzg) publishes one original 14-minute animated film about the whole
   Bible, drawn in code, in many languages (the on-screen text is translated for each language), plus 21 short clips
   (Shorts) per language cut from that film. We may split it into language-specific channels later.
-- word-log, a second channel of the same operator, publishes original worship videos, about one per week.
-All channels are owned by the operator's own Google account (as Brand Account channels) and managed the same way.
+- @word-log (channel ID UCrzEUsnUGuptKGVs-z2j1Ig), a second channel of the same operator, publishes original 30-second
+  animated Shorts, about one a week, each drawing one insight from a sermon, a retreat, a book, a daily devotional or
+  everyday life, to help people engage with the Bible (its tool: github.com/jungrok5/word-log tools/youtube.mjs;
+  privacy page https://jungrok5.github.io/word-log/privacy.html).
+Both are owned by the operator's own Google account (@word-log as a Brand Account channel of it) and managed the same way.
 The tool:
 1. uploads each language's film and Shorts with the title, description, tags and language prepared in our repository,
    and schedules their publish time (videos.insert, thumbnails.set);
@@ -88,7 +91,8 @@ correction and daily videos.list / analytics reads (< 1,000 units). Uploads are 
    tools", 요청 권한 두 개)이 보이게 → 허용 → "Done". (이미 인증돼 있으면 이 단계만 다시 해도 됩니다. 새 클라이언트 JSON이
    필요하면 Google Cloud → 클라이언트에서 받고, 녹화 뒤 지웁니다.)
 2. `node motion/youtube/yt-api.mjs whoami` → 우리 채널 이름이 나오는 것.
-   (word-log 채널을 같은 계정의 브랜드 채널로 만들었다면, 1단계 동의 화면에서 채널 고르는 장면이 보여도 됩니다.)
+   (word-log는 같은 계정의 브랜드 채널 — `node motion/youtube/yt-auth.mjs --as WORDLOG`로 동의 화면에서 채널을 고르는 장면을
+   보여 주고, word-log 저장소의 `node tools/youtube.mjs whoami`로 @word-log가 나오는 것도 보여 주면 좋습니다.)
 3. `node motion/youtube/yt-api.mjs status` → 언어별 공개·예약 상태.
 4. `node motion/youtube/yt-api.mjs stats` → 언어별 조회수·시청 시간.
 5. `node motion/youtube/yt-api.mjs captions --dry` → 자막 올릴 대상 목록.

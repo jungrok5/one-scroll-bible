@@ -85,6 +85,26 @@
    "id": "pSUmeB_WdS8",
    "status": "public",
    "note": "public + thumbnail test A/B/D 2026-10-23; pinned comment faq.h + home#faq 2026-10-23; Studio language = 필리핀어 (fil) — Studio lists both 타갈로그어 and 필리핀어, PH viewers use Filipino; category Education 2026-10-23; caption track film-h.srt via API 2026-10-23"
+  },
+  "bn": {
+   "id": "krjSTdlgmX0",
+   "status": "public",
+   "note": "uploaded via Studio 2026-10-24 (category Education, notify off); public + thumbnail test A/B/D 2026-10-24; caption track film-h.srt via API 2026-10-24"
+  },
+  "sw": {
+   "id": "l0zNoe3DNi4",
+   "status": "public",
+   "note": "uploaded via Studio 2026-10-24 (category Education, notify off); public + thumbnail test A/B/D 2026-10-24; caption track film-h.srt via API 2026-10-24"
+  },
+  "fa": {
+   "id": "o-6bd5PN7bA",
+   "status": "public",
+   "note": "uploaded via Studio 2026-10-24 (category Education, notify off); public + thumbnail test A/B/D 2026-10-24; caption track film-h.srt via API 2026-10-24"
+  },
+  "ta": {
+   "id": "yAsxN6b4i6g",
+   "status": "public",
+   "note": "uploaded via Studio 2026-10-24 (category Education, notify off); public + thumbnail test A/B/D 2026-10-24; caption track film-h.srt via API 2026-10-24"
   }
  },
  "shorts": {

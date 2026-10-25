@@ -248,7 +248,103 @@
  "global": {
   "_note": "International channel Bible in One Scroll (@bibleinonescroll) — every language except Korean, from 2026-10-26",
   "channel": "UCOI5LbYpQGgHkcbMEStvnlw",
-  "film": {},
+  "film": {
+   "en": {
+    "id": "MFH3Hj4V6KA",
+    "status": "private",
+    "note": "uploaded via Studio 2026-10-26 (moved from the Korean channel)"
+   },
+   "es": {
+    "id": "20CdOZWWDIw",
+    "status": "private",
+    "note": "uploaded via Studio 2026-10-26 (moved from the Korean channel)"
+   },
+   "pt-BR": {
+    "id": "mqLeYW8YAQ8",
+    "status": "private",
+    "note": "uploaded via Studio 2026-10-26 (moved from the Korean channel)"
+   },
+   "fr": {
+    "id": "SXjW13X9-L0",
+    "status": "private",
+    "note": "uploaded via Studio 2026-10-26 (moved from the Korean channel)"
+   },
+   "de": {
+    "id": "srmmnp0plwY",
+    "status": "private",
+    "note": "uploaded via Studio 2026-10-26 (moved from the Korean channel)"
+   },
+   "ru": {
+    "id": "Ie8b_l4tzIs",
+    "status": "private",
+    "note": "uploaded via Studio 2026-10-26 (moved from the Korean channel)"
+   },
+   "zh-Hans": {
+    "id": "BbYsO1vXSx8",
+    "status": "private",
+    "note": "uploaded via Studio 2026-10-26 (moved from the Korean channel); form filled by API (global-move fill)"
+   },
+   "id": {
+    "id": "DIBnsJ1qdzc",
+    "status": "private",
+    "note": "uploaded via Studio 2026-10-26 (moved from the Korean channel)"
+   },
+   "zh-Hant": {
+    "id": "2Uhv41vhXEs",
+    "status": "private",
+    "note": "uploaded via Studio 2026-10-26 (moved from the Korean channel)"
+   },
+   "ja": {
+    "id": "ELJ2d07sBxA",
+    "status": "private",
+    "note": "uploaded via Studio 2026-10-26 (moved from the Korean channel); form filled by API (global-move fill)"
+   },
+   "ar": {
+    "id": "JJpe_VhveC0",
+    "status": "private",
+    "note": "uploaded via Studio 2026-10-26 (moved from the Korean channel); form filled by API (global-move fill)"
+   },
+   "hi": {
+    "id": "ZQ6kf-aTDUo",
+    "status": "private",
+    "note": "uploaded via Studio 2026-10-26 (moved from the Korean channel); form filled by API (global-move fill)"
+   },
+   "vi": {
+    "id": "82WMUahPt44",
+    "status": "private",
+    "note": "uploaded via Studio 2026-10-26 (moved from the Korean channel); form filled by API (global-move fill)"
+   },
+   "th": {
+    "id": "m-D8mtmkcgU",
+    "status": "private",
+    "note": "uploaded via Studio 2026-10-26 (moved from the Korean channel); form filled by API (global-move fill)"
+   },
+   "tl": {
+    "id": "ARZZh4I4hIs",
+    "status": "private",
+    "note": "uploaded via Studio 2026-10-26 (moved from the Korean channel); form filled by API (global-move fill)"
+   },
+   "bn": {
+    "id": "EzW6pqbOJ7M",
+    "status": "private",
+    "note": "uploaded via Studio 2026-10-26 (moved from the Korean channel); form filled by API (global-move fill)"
+   },
+   "sw": {
+    "id": "QMrpKwbezf8",
+    "status": "private",
+    "note": "uploaded via Studio 2026-10-26 (moved from the Korean channel); form filled by API (global-move fill)"
+   },
+   "fa": {
+    "id": "whf45w0nbYQ",
+    "status": "private",
+    "note": "uploaded via Studio 2026-10-26 (moved from the Korean channel); form filled by API (global-move fill)"
+   },
+   "ta": {
+    "id": "SSEKjYgBJEg",
+    "status": "private",
+    "note": "uploaded via Studio 2026-10-26 (moved from the Korean channel); form filled by API (global-move fill)"
+   }
+  },
   "shorts": {},
   "playlists": {
    "en": "PLBkDtJBoQyaE",

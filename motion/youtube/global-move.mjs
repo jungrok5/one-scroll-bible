@@ -51,6 +51,19 @@ if (cmd === 'playlists') {
     await api('playlistItems?part=snippet', { method: 'POST', body: JSON.stringify({ snippet: { playlistId: pl, position: 0, resourceId: { kind: 'youtube#video', videoId: id } } }) });
     console.log(L, 'added');
   }
+} else if (cmd === 'fill') {
+  // fill <L> <id>: a film whose file uploaded but whose form was not filled (the Studio dialog got stuck) — set the
+  // upload sheet's title, description, tags (under YouTube's 500-character total), language, Education, not for kids,
+  // no altered content, private; then record it. The thumbnail comes with the A/B test when it is published.
+  const [L, id] = rest; const f = man.languages[L]?.film; if (!f || !/^[\w-]{11}$/.test(id || '')) { console.log('usage: fill <L> <id>'); process.exit(1); }
+  await me();
+  const tags = []; for (const t of f.tags) { if ([...tags, t].join(',').length + 2 * (tags.length + 1) > 480) break; tags.push(t); }
+  const lang = L === 'pt-BR' ? 'pt-BR' : L === 'tl' ? 'fil' : L;
+  await api('videos?part=snippet,status', { method: 'PUT', body: JSON.stringify({ id,
+    snippet: { title: f.title, description: f.description, tags, categoryId: '27', defaultLanguage: lang, defaultAudioLanguage: lang },
+    status: { privacyStatus: 'private', selfDeclaredMadeForKids: false, containsSyntheticMedia: false } }) });
+  g.film[L] = { id, status: 'private', note: 'uploaded via Studio 2026-10-26 (moved from the Korean channel); form filled by API (global-move fill)' }; save();
+  console.log(L, id, 'filled:', f.title.slice(0, 40), '| tags', tags.length);
 } else if (cmd === 'status') {
   const ids = Object.values(g.film).map(f => f.id); if (!ids.length) { console.log('no films recorded'); process.exit(0); }
   const v = await api(`videos?part=status,processingDetails,snippet&id=${ids.join(',')}`);

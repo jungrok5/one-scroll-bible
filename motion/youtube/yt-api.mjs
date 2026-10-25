@@ -40,6 +40,9 @@ async function api(path, opt = {}) {
   const t = await r.text(); let j; try { j = JSON.parse(t); } catch { j = { raw: t }; }
   if (!r.ok) throw new Error(`${r.status} ${j.error?.message || t.slice(0, 200)}`); return j;
 }
+// which channel's ids: the Korean channel's (uploaded.json top level) or, with YT_AS=GLOBAL, the international
+// channel's (uploaded.json "global" — every language except Korean since 2026-10-26, global-move.mjs)
+function records() { const u = JSON.parse(readFileSync(join(HERE, 'uploaded.json'), 'utf8')); return process.env.YT_AS?.toUpperCase() === 'GLOBAL' ? u.global : u; }
 // site language code → YouTube caption language code
 const YT_LANG = { tl: 'fil' };
 
@@ -47,7 +50,7 @@ const [cmd, ...rest] = process.argv.slice(2);
 if (cmd === 'whoami') {
   const j = await api('channels?part=snippet&mine=true'); for (const c of j.items || []) console.log(c.id, c.snippet.title, c.snippet.customUrl || '');
 } else if (cmd === 'captions') {
-  const dry = rest.includes('--dry'), up = JSON.parse(readFileSync(join(HERE, 'uploaded.json'), 'utf8'));
+  const dry = rest.includes('--dry'), up = records();
   const langs = rest.filter(a => !a.startsWith('--')); const list = (langs.length ? langs : Object.keys(up.film)).filter(L => L !== 'ko-vertical');
   for (const L of list) {
     const id = up.film[L]?.id, srt = join(M, 'subs', L, 'film-h.srt'), lang = YT_LANG[L] || L;
@@ -64,8 +67,8 @@ if (cmd === 'whoami') {
   // status: privacy / scheduled time / views of every uploaded film and Short (videos.list, 1 unit per 50 ids)
   // stats [--from YYYY-MM-DD] [--to YYYY-MM-DD]: YouTube Analytics per language (views, minutes watched, average % viewed,
   //   subscribers gained), film and Shorts apart — the numbers the 7-day wave check needs
-  const up = JSON.parse(readFileSync(join(HERE, 'uploaded.json'), 'utf8')), langs = rest.filter(a => !a.startsWith('--'));
-  const val = (n, d) => (rest.includes('--' + n) ? rest[rest.indexOf('--' + n) + 1] : d);
+  const up = records(), langs = rest.filter(a => !a.startsWith('--'));
+  const val =(n, d) => (rest.includes('--' + n) ? rest[rest.indexOf('--' + n) + 1] : d);
   const vids = [];   // {lang, kind, n, id}
   for (const [L, f] of Object.entries(up.film)) if (f?.id && L !== 'ko-vertical') vids.push({ lang: L, kind: 'film', n: 0, id: f.id });
   for (const [L, s] of Object.entries(up.shorts || {})) for (const [n, id] of Object.entries(s.ids || {})) vids.push({ lang: L, kind: 'shorts', n: +n, id });

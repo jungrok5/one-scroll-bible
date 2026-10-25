@@ -64,6 +64,43 @@ if (cmd === 'playlists') {
     status: { privacyStatus: 'private', selfDeclaredMadeForKids: false, containsSyntheticMedia: false } }) });
   g.film[L] = { id, status: 'private', note: 'uploaded via Studio 2026-10-26 (moved from the Korean channel); form filled by API (global-move fill)' }; save();
   console.log(L, id, 'filled:', f.title.slice(0, 40), '| tags', tags.length);
+} else if (cmd === 'record-shorts') {
+  // record-shorts <log.json>: [{L, n, id}, …] from the Studio file-only uploads → global.shorts[L].ids[NN]
+  const log = JSON.parse(readFileSync(rest[0], 'utf8'));
+  for (const r of log) if (r?.L && r.n && /^[\w-]{11}$/.test(r.id || '')) ((g.shorts[r.L] ||= { ids: {} }).ids[String(r.n).padStart(2, '0')] = r.id);
+  save(); for (const [L, s] of Object.entries(g.shorts)) console.log(L, Object.keys(s.ids).length);
+} else if (cmd === 'fill-shorts') {
+  // fill-shorts <L> [--dry]: title/description/tags/language from the upload sheet; the same schedule the Korean channel had
+  // (uploaded.json shorts[L]: Short n at first_day + n−1, time_kst) — a Short whose time has passed goes public now
+  const [L] = rest, s = g.shorts[L], old = up.shorts[L]; if (!s || !old) { console.log('no shorts for', L); process.exit(1); }
+  if (!dry) await me();
+  const lang = L === 'tl' ? 'fil' : L;
+  for (const [nn, id] of Object.entries(s.ids).sort()) {
+    const f = man.languages[L].shorts[+nn - 1], when = new Date(Date.parse(old.first_day + 'T' + old.time_kst + ':00+09:00') + (+nn - 1) * 864e5);
+    const tags = []; for (const t of f.tags) { if ([...tags, t].join(',').length + 2 * (tags.length + 1) > 480) break; tags.push(t); }
+    const future = when > new Date(Date.now() + 15 * 60e3);
+    const status = future ? { privacyStatus: 'private', publishAt: when.toISOString(), selfDeclaredMadeForKids: false, containsSyntheticMedia: false }
+      : { privacyStatus: 'public', selfDeclaredMadeForKids: false, containsSyntheticMedia: false };
+    console.log(L, nn, id, future ? 'scheduled ' + when.toISOString() : 'public now', '|', f.title.slice(0, 40)); if (dry) continue;
+    await api('videos?part=snippet,status', { method: 'PUT', body: JSON.stringify({ id, snippet: { title: f.title, description: f.description, tags, categoryId: '27', defaultLanguage: lang, defaultAudioLanguage: lang }, status }) });
+  }
+  s.time_kst = old.time_kst; s.first_day = old.first_day; s.note = 'moved from the Korean channel 2026-10-26 (same schedule); related video = global.film[L] (set in Studio)'; save();
+} else if (cmd === 'unschedule-old') {
+  // unschedule-old <L> [--dry]: on the KOREAN channel (YT_REFRESH_TOKEN): the Shorts of L that are public → unlisted (links keep
+  // working), the scheduled ones → plain private (schedule cancelled). Nothing is deleted.
+  const [L] = rest, old = up.shorts[L]; if (!old) { console.log('no shorts for', L); process.exit(1); }
+  let kt; const kapi = async (path, opt = {}) => {
+    kt ||= (await (await fetch('https://oauth2.googleapis.com/token', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({ client_id: e.YT_CLIENT_ID, client_secret: e.YT_CLIENT_SECRET, refresh_token: e.YT_REFRESH_TOKEN, grant_type: 'refresh_token' }) })).json()).access_token;
+    const r = await fetch('https://www.googleapis.com/youtube/v3/' + path, { ...opt, headers: { Authorization: 'Bearer ' + kt, 'Content-Type': 'application/json' } });
+    const j = await r.json(); if (!r.ok) throw new Error(`${r.status} ${j.error?.message}`.replace(/<[^>]+>/g, '')); return j; };
+  const ids = Object.values(old.ids), v = (await kapi(`videos?part=status&id=${ids.join(',')}`)).items;
+  for (const x of v) {
+    const next = x.status.privacyStatus === 'public' ? 'unlisted' : 'private'; if (x.status.privacyStatus === next && !x.status.publishAt) continue;
+    console.log(L, x.id, x.status.privacyStatus, x.status.publishAt || '', '→', next); if (dry) continue;
+    await kapi('videos?part=status', { method: 'PUT', body: JSON.stringify({ id: x.id, status: { privacyStatus: next, selfDeclaredMadeForKids: false, containsSyntheticMedia: false } }) });
+  }
+  if (!dry) { old.note = (old.note || '') + '; moved to the international channel 2026-10-26 — public ones unlisted, scheduled ones unscheduled (private)'; save(); }
 } else if (cmd === 'status') {
   const ids = Object.values(g.film).map(f => f.id); if (!ids.length) { console.log('no films recorded'); process.exit(0); }
   const v = await api(`videos?part=status,processingDetails,snippet&id=${ids.join(',')}`);

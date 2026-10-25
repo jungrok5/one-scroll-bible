@@ -345,7 +345,83 @@
     "note": "uploaded via Studio 2026-10-26 (moved from the Korean channel); form filled by API (global-move fill); public + thumbnail test A/B/D 2026-10-26; pinned comment faq.h + home#faq 2026-10-26; caption pending (quota)"
    }
   },
-  "shorts": {},
+  "shorts": {
+   "en": {
+    "ids": {
+     "10": "VJLTFEsgdyw",
+     "11": "Dj5usLAHHD8",
+     "12": "TclnY9mBbsM",
+     "13": "MWaVBMPm6Io",
+     "14": "0zXHiLRjK3g",
+     "15": "bfelS7WFI1s",
+     "16": "R8FYppntgDo",
+     "17": "zgWBeUneAwY",
+     "18": "fujx86Or0Bw",
+     "19": "2Xen3MoOWZA",
+     "20": "0OrLCl2Fpic",
+     "21": "S91HH7LCt7A",
+     "01": "qkxhuaXI9PY",
+     "02": "rCm2Tu2Z32A",
+     "03": "ryXJWraI9FI",
+     "04": "09eOQm-nZwk",
+     "05": "L-HZEm9wDy4",
+     "06": "3oJ2t3s6wqo",
+     "07": "b-fHpPF81Og",
+     "08": "Xl-a5Ru5Wu0",
+     "09": "YTbOcNNB47c"
+    }
+   },
+   "pt-BR": {
+    "ids": {
+     "10": "MubjwN90KME",
+     "11": "rau08MAS4EU",
+     "12": "BjTzN9f55Xw",
+     "13": "KlUVE22imAs",
+     "14": "0iBngbkcXEw",
+     "15": "K7yp3NM4mbs",
+     "16": "fppFp5kzsaI",
+     "17": "j0oMQat-7bY",
+     "18": "DdhSZLMS00w",
+     "19": "tygKz320nTU",
+     "20": "wxXBEtfw21I",
+     "21": "PS8STTbX0Vc",
+     "01": "QH_000hqFkA",
+     "02": "V2EEzxpIqiE",
+     "03": "K_np8v6hE3E",
+     "04": "iHIbvCxz90Q",
+     "05": "1n-4EzTh2I4",
+     "06": "C4r4JBg-f_k",
+     "07": "BWA-bMBLpN4",
+     "08": "aZj-aiWQ-FY",
+     "09": "i5KmdYloNqw"
+    }
+   },
+   "es": {
+    "ids": {
+     "10": "OKZMRsTd-ic",
+     "11": "W9-Sd_lgyXg",
+     "12": "SFEJqvK2lrE",
+     "13": "eHG6tQ0UAHA",
+     "14": "HMzRswVDP_c",
+     "15": "ycyEqWi0JgI",
+     "16": "nfSRS7UhDpg",
+     "17": "7SAsKNk0W0k",
+     "18": "dHVZGa47w-g",
+     "19": "8-X3smlRLr4",
+     "20": "3mapM334taI",
+     "21": "P7UDNryIZ9g",
+     "01": "ePqN5CdwQrY",
+     "02": "vH7CE_YhEy0",
+     "03": "M4GYV98JKUg",
+     "04": "koCw_m8dFAQ",
+     "05": "z52aqGKEx8M",
+     "06": "h2fvCeLHFM4",
+     "07": "SgsYMbJh8kE",
+     "08": "pIPxuttYBYM",
+     "09": "vveUpuRMX8U"
+    }
+   }
+  },
   "playlists": {
    "en": "PLBkDtJBoQyaE",
    "zh-Hans": "PLRLfXFpOv25o",

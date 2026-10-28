@@ -137,7 +137,10 @@
    },
    "comments": {
     "1": "UgwyT-CZaBqVbnNa46B4AaABAg",
-    "2": "UgxgKUQ7nlc8OtGBUo54AaABAg"
+    "2": "UgxgKUQ7nlc8OtGBUo54AaABAg",
+    "3": "UgzlSACmsoogcTuUxZx4AaABAg",
+    "4": "UgzOHPek0j6byeHSgdt4AaABAg",
+    "5": "UgzpsziwLW9crlnWPwl4AaABAg"
    }
   },
   "en": {
@@ -369,7 +372,10 @@
      "07": "b-fHpPF81Og",
      "08": "Xl-a5Ru5Wu0",
      "09": "YTbOcNNB47c"
-    }
+    },
+    "time_kst": "08:00",
+    "first_day": "2026-10-24",
+    "note": "moved from the Korean channel 2026-10-26 (same schedule); related video = global.film[L] (set in Studio)"
    },
    "pt-BR": {
     "ids": {
@@ -394,7 +400,10 @@
      "07": "BWA-bMBLpN4",
      "08": "aZj-aiWQ-FY",
      "09": "i5KmdYloNqw"
-    }
+    },
+    "time_kst": "06:00",
+    "first_day": "2026-10-24",
+    "note": "moved from the Korean channel 2026-10-26 (same schedule); related video = global.film[L] (set in Studio)"
    },
    "es": {
     "ids": {
@@ -419,7 +428,10 @@
      "07": "SgsYMbJh8kE",
      "08": "pIPxuttYBYM",
      "09": "vveUpuRMX8U"
-    }
+    },
+    "time_kst": "10:00",
+    "first_day": "2026-10-24",
+    "note": "moved from the Korean channel 2026-10-26 (same schedule); related video = global.film[L] (set in Studio)"
    }
   },
   "playlists": {

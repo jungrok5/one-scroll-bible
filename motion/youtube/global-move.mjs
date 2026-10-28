@@ -101,6 +101,27 @@ if (cmd === 'playlists') {
     await kapi('videos?part=status', { method: 'PUT', body: JSON.stringify({ id: x.id, status: { privacyStatus: next, selfDeclaredMadeForKids: false, containsSyntheticMedia: false } }) });
   }
   if (!dry) { old.note = (old.note || '') + '; moved to the international channel 2026-10-26 — public ones unlisted, scheduled ones unscheduled (private)'; save(); }
+} else if (cmd === 'playlist-shorts') {
+  // playlist-shorts <L…>: append the language's Shorts 1–21 to its playlist after the film (50 units each; skips ones in it)
+  await me();
+  for (const L of rest.filter(a => !a.startsWith('--'))) {
+    const pl = g.playlists[L], ids = Object.entries(g.shorts[L]?.ids || {}).sort().map(([, id]) => id); if (!pl || !ids.length) { console.log(L, 'skip'); continue; }
+    const have = new Set((await api(`playlistItems?part=contentDetails&maxResults=50&playlistId=${pl}`)).items.map(i => i.contentDetails.videoId));
+    let n = 0; for (const id of ids) { if (have.has(id)) continue; if (!dry) await api('playlistItems?part=snippet', { method: 'POST', body: JSON.stringify({ snippet: { playlistId: pl, resourceId: { kind: 'youtube#video', videoId: id } } }) }); n++; }
+    console.log(L, dry ? 'would add' : 'added', n);
+  }
+} else if (cmd === 'unlist-old-films') {
+  // unlist-old-films [--dry]: the non-Korean films still public on the KOREAN channel → unlisted (old links keep working)
+  const tk = (await (await fetch('https://oauth2.googleapis.com/token', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams({ client_id: e.YT_CLIENT_ID, client_secret: e.YT_CLIENT_SECRET, refresh_token: e.YT_REFRESH_TOKEN, grant_type: 'refresh_token' }) })).json()).access_token;
+  const H = { Authorization: 'Bearer ' + tk, 'Content-Type': 'application/json' };
+  const films = Object.entries(up.film).filter(([L, f]) => f?.id && L !== 'ko' && L !== 'ko-vertical');
+  const v = (await (await fetch(`https://www.googleapis.com/youtube/v3/videos?part=status&id=${films.map(([, f]) => f.id).join(',')}`, { headers: H })).json()).items;
+  for (const x of v) { const L = films.find(([, f]) => f.id === x.id)[0]; if (x.status.privacyStatus !== 'public') { console.log(L, x.id, 'already', x.status.privacyStatus); continue; }
+    console.log(L, x.id, 'public → unlisted'); if (dry) continue;
+    const r = await fetch('https://www.googleapis.com/youtube/v3/videos?part=status', { method: 'PUT', headers: H, body: JSON.stringify({ id: x.id, status: { privacyStatus: 'unlisted', selfDeclaredMadeForKids: false, containsSyntheticMedia: false } }) });
+    if (!r.ok) { console.log('  error', r.status, (await r.json()).error?.message); break; }
+    up.film[L].status = 'unlisted'; up.film[L].note += '; unlisted 2026-10-28 (moved to the international channel: global.film)'; save(); }
 } else if (cmd === 'status') {
   const ids = Object.values(g.film).map(f => f.id); if (!ids.length) { console.log('no films recorded'); process.exit(0); }
   const v = await api(`videos?part=status,processingDetails,snippet&id=${ids.join(',')}`);

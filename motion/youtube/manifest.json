@@ -227,7 +227,10 @@
     ],
     "language": "ko",
     "thumbnail": "motion/youtube/thumbs/ko/narr-A-exodus.jpg",
-    "thumbnail_alternatives": [],
+    "thumbnail_alternatives": [
+     "motion/youtube/thumbs/ko/narr-B-cross.jpg",
+     "motion/youtube/thumbs/ko/narr-D-earth.jpg"
+    ],
     "captions": {},
     "chapters": [
      {

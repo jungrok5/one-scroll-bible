@@ -93,7 +93,8 @@ for (const L of LANGS) {
   const narr = L === 'ko' && (() => {
     const nlink = home + utm('video', 'film_ko_narr');
     return { ...film, file: 'film-ko-narr.mp4', local: 'motion/out/release/film-ko-narr.mp4', title: `${ui.shareText} (목소리 해설판)`, link: nlink,
-      thumbnail: 'motion/youtube/thumbs/ko/narr-A-exodus.jpg', thumbnail_alternatives: [],
+      // A/B test = the film's A·B·D with a "🔊 목소리 해설판" badge (scratch filter: drawbox + drawtext, both vertically centred)
+      thumbnail: 'motion/youtube/thumbs/ko/narr-A-exodus.jpg', thumbnail_alternatives: ['B-cross', 'D-earth'].map(v => `motion/youtube/thumbs/ko/narr-${v}.jpg`),
       description: ['화면의 말씀과 설명을 목소리로 읽어 드리는 해설판입니다. 글씨가 작거나 읽기 어려우신 분도 편안히 들으실 수 있습니다.', '',
         `${X.watch}: ${nlink}`, ...(UPL.ko?.id ? [`🎵 해설 없이 음악으로만 보기: https://youtu.be/${UPL.ko.id}`] : []), '', ...chapters.map(c => `${c.time} ${c.title}`), '', strip(ui.legal) + ' 목소리는 AI(ElevenLabs)로 만들었습니다.', '', hashtags(3)].join('\n'),
       tags: (() => { const t = [ui.brand, '내레이션', '성경 해설', ...(X.tags || []), ...ch]; while (t.join(',').length > 480) t.pop(); return t; })(),

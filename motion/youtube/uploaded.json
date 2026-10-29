@@ -116,8 +116,38 @@
   "ko": {
    "time_kst": "19:00",
    "first_day": "2026-10-24",
-   "note": "subscriber notification on (Korean); description UTM 2026-10-23 (all 21; schedule + related video re-checked); links ?lang=ko 2026-10-23",
+   "note": "subscriber notification on (Korean); description UTM 2026-10-23 (all 21; schedule + related video re-checked); links ?lang=ko 2026-10-23; 2026-10-29: Shorts 7–21 replaced by the narrated cut (motion/out/release-narr, AI voice line in the description, related video = the narrated film wrEYqvOU1O8, same schedule, category 27) — the music ones are in music_ids, set to private (schedule cancelled, not deleted); playlist items swapped in place",
    "ids": {
+    "10": "0rdPczV5gqA",
+    "11": "mosfXiuZ6pA",
+    "12": "w-9I7bIYKc4",
+    "13": "Yvt7STBe944",
+    "14": "TWuDpuC3Zvo",
+    "15": "03sEk06XHNc",
+    "16": "Mos5h5A56Mo",
+    "17": "HY4v-_4wutY",
+    "18": "qQV4jPwkeis",
+    "19": "S4zCHRIC9Bo",
+    "20": "JKUzFrfmTzs",
+    "21": "4-oQFjABwwA",
+    "01": "jr3PxWQY7Nk",
+    "02": "Ub6aw-WBNco",
+    "03": "Idr2IkdsA-o",
+    "04": "9E5U3jX2ndY",
+    "05": "t6SHBm6dPVw",
+    "06": "gopZZma-qdU",
+    "07": "3Qiy-2d1REU",
+    "08": "aHDniuv9JZ8",
+    "09": "0m0KL7Hcakk"
+   },
+   "comments": {
+    "1": "UgwyT-CZaBqVbnNa46B4AaABAg",
+    "2": "UgxgKUQ7nlc8OtGBUo54AaABAg",
+    "3": "UgzlSACmsoogcTuUxZx4AaABAg",
+    "4": "UgzOHPek0j6byeHSgdt4AaABAg",
+    "5": "UgzpsziwLW9crlnWPwl4AaABAg"
+   },
+   "music_ids": {
     "10": "DkMfG7PzRHk",
     "11": "jH6fIWRdigA",
     "12": "W4ZsYvy7GDw",
@@ -130,22 +160,9 @@
     "19": "X7SU-igJIlk",
     "20": "RecD-FBSYDQ",
     "21": "-di7YnZZyyU",
-    "01": "jr3PxWQY7Nk",
-    "02": "Ub6aw-WBNco",
-    "03": "Idr2IkdsA-o",
-    "04": "9E5U3jX2ndY",
-    "05": "t6SHBm6dPVw",
-    "06": "gopZZma-qdU",
     "07": "t04z72YSKfw",
     "08": "sVNVHUNPGwE",
     "09": "tdbvPVsBnGU"
-   },
-   "comments": {
-    "1": "UgwyT-CZaBqVbnNa46B4AaABAg",
-    "2": "UgxgKUQ7nlc8OtGBUo54AaABAg",
-    "3": "UgzlSACmsoogcTuUxZx4AaABAg",
-    "4": "UgzOHPek0j6byeHSgdt4AaABAg",
-    "5": "UgzpsziwLW9crlnWPwl4AaABAg"
    }
   },
   "en": {

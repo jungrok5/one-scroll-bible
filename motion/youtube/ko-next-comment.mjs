@@ -8,12 +8,13 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 const HERE = dirname(fileURLToPath(import.meta.url));
-const PL = 'https://www.youtube.com/playlist?list=PLWbLhnVLU-Gg', FILM = 'https://youtu.be/66VfBSXxAs8';
+// Shorts 7–21 are the narrated cut (2026-10-29), so the last one points at the narrated film
+const PL = 'https://www.youtube.com/playlist?list=PLWbLhnVLU-Gg', FILM = 'https://youtu.be/wrEYqvOU1O8';
 const up = JSON.parse(readFileSync(join(HERE, 'uploaded.json'), 'utf8')), man = JSON.parse(readFileSync(join(HERE, 'manifest.json'), 'utf8'));
 const shorts = man.languages.ko.shorts, ko = up.shorts.ko;
 const name = s => { const t = s.title.replace(/\s*\d+\/21$/, ''); const i = t.lastIndexOf(' — '); return i >= 0 ? t.slice(i + 3) : t; };
 export const text = n => n >= 21
-  ? `마지막 편입니다. 끝까지 함께해 주셔서 감사합니다 🙏\n1편부터 다시 보기: ${PL}\n전체 영상(14분): ${FILM}`
+  ? `마지막 편입니다. 끝까지 함께해 주셔서 감사합니다 🙏\n1편부터 다시 보기: ${PL}\n전체 영상(14분, 목소리 해설): ${FILM}`
   : `▶ 다음 편: ${n + 1}/21 ${name(shorts[n])} (매일 저녁 7시에 한 편씩)\n1편부터 순서대로 보기: ${PL}`;   // no "tomorrow": the comment stays true later
 
 const args = process.argv.slice(2), dry = args.includes('--dry');

@@ -6,149 +6,180 @@
    "n": 1,
    "scene": "opening",
    "at": "2026-10-24T10:00:00.000Z",
-   "status": "scheduled",
-   "threads": "scheduled"
+   "status": "published",
+   "threads": "published"
   },
   {
    "n": 2,
    "scene": "creation",
    "at": "2026-10-25T10:00:00.000Z",
-   "status": "scheduled",
-   "threads": "scheduled"
+   "status": "published",
+   "threads": "published"
   },
   {
    "n": 3,
    "scene": "fall",
    "at": "2026-10-26T10:00:00.000Z",
-   "status": "scheduled",
-   "threads": "scheduled"
+   "status": "published",
+   "threads": "published"
   },
   {
    "n": 4,
    "scene": "patriarch",
    "at": "2026-10-27T10:00:00.000Z",
-   "status": "scheduled",
-   "threads": "scheduled"
+   "status": "published",
+   "threads": "published"
   },
   {
    "n": 5,
    "scene": "exodus",
    "at": "2026-10-28T10:00:00.000Z",
-   "status": "scheduled",
-   "threads": "scheduled"
+   "status": "published",
+   "threads": "published"
   },
   {
    "n": 6,
    "scene": "wilderness",
    "at": "2026-10-29T10:00:00.000Z",
-   "status": "scheduled",
-   "threads": "scheduled"
+   "status": "published",
+   "threads": "published"
   },
   {
    "n": 7,
    "scene": "judges",
    "at": "2026-10-30T10:00:00.000Z",
    "status": "scheduled",
-   "threads": "scheduled"
+   "threads": "scheduled",
+   "cut": "narrated",
+   "video": "motion/out/release-narr/shorts-ko-narr-07-judges.mp4"
   },
   {
    "n": 8,
    "scene": "kingdom",
    "at": "2026-10-31T10:00:00.000Z",
    "status": "scheduled",
-   "threads": "scheduled"
+   "threads": "scheduled",
+   "cut": "narrated",
+   "video": "motion/out/release-narr/shorts-ko-narr-08-kingdom.mp4"
   },
   {
    "n": 9,
    "scene": "exile",
    "at": "2026-11-01T10:00:00.000Z",
    "status": "scheduled",
-   "threads": "scheduled"
+   "threads": "scheduled",
+   "cut": "narrated",
+   "video": "motion/out/release-narr/shorts-ko-narr-09-exile.mp4"
   },
   {
    "n": 10,
    "scene": "return",
    "at": "2026-11-02T10:00:00.000Z",
    "status": "scheduled",
-   "threads": "scheduled"
+   "threads": "scheduled",
+   "cut": "narrated",
+   "video": "motion/out/release-narr/shorts-ko-narr-10-return.mp4"
   },
   {
    "n": 11,
    "scene": "silence",
    "at": "2026-11-03T10:00:00.000Z",
    "status": "scheduled",
-   "threads": "scheduled"
+   "threads": "scheduled",
+   "cut": "narrated",
+   "video": "motion/out/release-narr/shorts-ko-narr-11-silence.mp4"
   },
   {
    "n": 12,
    "scene": "advent",
    "at": "2026-11-04T10:00:00.000Z",
    "status": "scheduled",
-   "threads": "scheduled"
+   "threads": "scheduled",
+   "cut": "narrated",
+   "video": "motion/out/release-narr/shorts-ko-narr-12-advent.mp4"
   },
   {
    "n": 13,
    "scene": "cross",
    "at": "2026-11-05T10:00:00.000Z",
    "status": "scheduled",
-   "threads": "scheduled"
+   "threads": "scheduled",
+   "cut": "narrated",
+   "video": "motion/out/release-narr/shorts-ko-narr-13-cross.mp4"
   },
   {
    "n": 14,
    "scene": "rise",
    "at": "2026-11-06T10:00:00.000Z",
    "status": "scheduled",
-   "threads": "scheduled"
+   "threads": "scheduled",
+   "cut": "narrated",
+   "video": "motion/out/release-narr/shorts-ko-narr-14-rise.mp4"
   },
   {
    "n": 15,
    "scene": "church",
    "at": "2026-11-07T10:00:00.000Z",
    "status": "scheduled",
-   "threads": "scheduled"
+   "threads": "scheduled",
+   "cut": "narrated",
+   "video": "motion/out/release-narr/shorts-ko-narr-15-church.mp4"
   },
   {
    "n": 16,
    "scene": "renewal",
    "at": "2026-11-08T10:00:00.000Z",
    "status": "scheduled",
-   "threads": "scheduled"
+   "threads": "scheduled",
+   "cut": "narrated",
+   "video": "motion/out/release-narr/shorts-ko-narr-16-renewal.mp4"
   },
   {
    "n": 17,
    "scene": "mirror",
    "at": "2026-11-09T10:00:00.000Z",
    "status": "scheduled",
-   "threads": "scheduled"
+   "threads": "scheduled",
+   "cut": "narrated",
+   "video": "motion/out/release-narr/shorts-ko-narr-17-mirror.mp4"
   },
   {
    "n": 18,
    "scene": "gospel",
    "at": "2026-11-10T10:00:00.000Z",
    "status": "scheduled",
-   "threads": "scheduled"
+   "threads": "scheduled",
+   "cut": "narrated",
+   "video": "motion/out/release-narr/shorts-ko-narr-18-gospel.mp4"
   },
   {
    "n": 19,
    "scene": "evidence",
    "at": "2026-11-11T10:00:00.000Z",
    "status": "scheduled",
-   "threads": "scheduled"
+   "threads": "scheduled",
+   "cut": "narrated",
+   "video": "motion/out/release-narr/shorts-ko-narr-19-evidence.mp4"
   },
   {
    "n": 20,
    "scene": "ship",
    "at": "2026-11-12T10:00:00.000Z",
    "status": "scheduled",
-   "threads": "scheduled"
+   "threads": "scheduled",
+   "cut": "narrated",
+   "video": "motion/out/release-narr/shorts-ko-narr-20-ship.mp4"
   },
   {
    "n": 21,
    "scene": "invite",
    "at": "2026-11-13T10:00:00.000Z",
    "status": "scheduled",
-   "threads": "scheduled"
+   "threads": "scheduled",
+   "cut": "narrated",
+   "video": "motion/out/release-narr/shorts-ko-narr-21-invite.mp4"
   }
  ],
- "threads_note": "Threads @one.scroll.bible: the same 21 Shorts scheduled on threads.com (one a day 19:00 KST, 2026-10-24…11-13); caption links to the site with utm_source=threads&utm_medium=social&utm_campaign=reels_ko&utm_content=NN-scene, one topic tag #성경. Bio matched to Instagram, profile link → https://one-scroll-bible.com/?lang=ko&utm_source=threads&utm_medium=social&utm_campaign=bio (2026-10-23). Helper: motion/social/threads-reels.js"
+ "threads_note": "Threads @one.scroll.bible: the same 21 Shorts scheduled on threads.com (one a day 19:00 KST, 2026-10-24…11-13); caption links to the site with utm_source=threads&utm_medium=social&utm_campaign=reels_ko&utm_content=NN-scene, one topic tag #성경. Bio matched to Instagram, profile link → https://one-scroll-bible.com/?lang=ko&utm_source=threads&utm_medium=social&utm_campaign=bio (2026-10-23). Helper: motion/social/threads-reels.js",
+ "narr_note": "2026-10-29: Reels/Threads 7-21 swapped for the narrated cut (AI voice). The owner deleted the scheduled music 7-21 on Instagram (Business Suite) and Threads (composer → 임시 저장본 → ⋯ → 임시 저장본 삭제); the narrated 7-21 were rescheduled at the same 19:00 KST times with the same covers, caption + \"목소리 해설은 AI 음성으로 만들었습니다.\" (plans: out/insta/reels-ko/plan-narr.json, threads-narr.json; meta-reels.js / threads-reels.js with __loadPlan pointed at them). Verified: Business Suite Scheduled = 15 (Oct 30…Nov 13), Threads 임시 저장본 = 15. 1-6 stay the music cut (6 published 10/29 19:00)."
 }

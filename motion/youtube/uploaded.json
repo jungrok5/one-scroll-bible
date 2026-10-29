@@ -230,7 +230,7 @@
  },
  "_shorts_note": "Shorts are scheduled one scene a day in story order (scene n on first_day + n-1 days), at the language's evening, given in KST (GMT+9); every Short links its language's film as the related video. Waves of 4 languages (policy approved 2026-10-23, motion/README.md \"공개 정책\"): max two waves overlapping (8 Shorts a day); a new wave starts after the previous one has 7 days of data. 1 = ko en es pt-BR (from 2026-10-24), 2 = id fr de ru (~10-31), 3 = zh-Hans zh-Hant ja ar (~11-14), 4 = hi vi th tl (~11-21). Waves 2-4 Shorts use the new opening (motion/youtube/shorts-open.json: start 1 s in, rise 4 s, cross 0; peak limiter) — wave 1 keeps the old one, compare.",
  "playlists": {
-  "_note": "one public playlist per language (title = the site brand, description = the film blurb, order = published date oldest first → film, then Shorts 1–21). Created 2026-10-23 with studio-playlist.js; the channel Home tab (turned on) shows them in its Created playlists section.",
+  "_note": "one public playlist per language (title = the site brand, description = the film blurb, order = published date oldest first → film, then Shorts 1–21). Created 2026-10-23 with studio-playlist.js; the channel Home tab (turned on) shows them in its Created playlists section. 2026-10-29: the non-Korean playlists on this (Korean) channel set to private (15: en zh-Hans zh-Hant ja es pt-BR fr de ru ar hi id vi th tl) — their videos moved to the international channel (global.playlists); not deleted.",
   "ko": "PLWbLhnVLU-Gg",
   "en": "PLHnGBKKZ8kg8",
   "zh-Hans": "PLJnN8ibs4E0Y",

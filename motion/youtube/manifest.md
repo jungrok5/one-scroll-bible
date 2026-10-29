@@ -10,6 +10,7 @@ Videos: release **youtube-v1** (`gh release download youtube-v1 -R jungrok5/one-
 창조에서 새 하늘과 새 땅까지 — 장면마다 다른 화풍으로 그린 21개 장면이 하나의 줄거리로 이어집니다.
 
 전체 이야기를 글로 천천히 읽기: https://one-scroll-bible.com/?lang=ko&utm_source=youtube&utm_medium=video&utm_campaign=film_ko
+🔊 목소리로 듣는 해설판: https://youtu.be/wrEYqvOU1O8
 
 0:00 하나의 줄거리
 0:36 창조

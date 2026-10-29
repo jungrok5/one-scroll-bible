@@ -4,7 +4,7 @@
   "ko": {
    "id": "66VfBSXxAs8",
    "status": "public",
-   "note": "original upload 2026-10-20; description + thumbnail test (A/B/D) updated 2026-10-22; description UTM 2026-10-23; pinned comment faq.h + home#faq 2026-10-23 (first respond.h3 #respond, changed same day); Korean links pinned to ?lang=ko 2026-10-23; category Education 2026-10-23; tags added (manifest ko, 30) 2026-10-23; caption track film-h.srt via API 2026-10-23"
+   "note": "original upload 2026-10-20; description + thumbnail test (A/B/D) updated 2026-10-22; description UTM 2026-10-23; pinned comment faq.h + home#faq 2026-10-23 (first respond.h3 #respond, changed same day); Korean links pinned to ?lang=ko 2026-10-23; category Education 2026-10-23; tags added (manifest ko, 30) 2026-10-23; caption track film-h.srt via API 2026-10-23; 2026-10-29 description: \"🔊 목소리로 듣는 해설판\" link to the narrated cut (film ko-narr)"
   },
   "ko-vertical": {
    "id": "3X5HbQKBpRI",
@@ -108,8 +108,8 @@
   },
   "ko-narr": {
    "id": "wrEYqvOU1O8",
-   "status": "private",
-   "note": "Korean narrated cut (film-ko-narr.mp4, AI voice), uploaded via Studio 2026-10-29 with manifest languages.ko.film_narr; public on the user's OK"
+   "status": "public",
+   "note": "Korean narrated cut (film-ko-narr.mp4, AI voice), uploaded via Studio 2026-10-29 with manifest languages.ko.film_narr; public on the user's OK; 2026-10-29 public: thumbnail narr-A-exodus.jpg (A + \"목소리 해설판\" badge), description = the original's live copy + narration line + link back + AI-voice note, added to the Korean playlist (end; not manually sorted); pinned comment faq.h + home#faq (utm film_ko_narr pinned) 2026-10-29"
   }
  },
  "shorts": {

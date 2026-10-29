@@ -76,7 +76,9 @@ for (const L of LANGS) {
   const chapters = ORDER.map((sc, i) => ({ time: mmss(starts[sc]), seconds: +starts[sc].toFixed(1), title: ch[i] }));
   const hashtags = n => (X.tags || []).slice(0, n).map(t => '#' + t.replace(/\s/g, '')).join(' ');
   const link = home + utm('video', `film_${L}`);
-  const description = [X.blurb || blurb(ui.sub), '', `${X.watch}: ${link}`, '', ...chapters.map(c => `${c.time} ${c.title}`), '', strip(ui.legal), '', hashtags(3)].join('\n');
+  // the Korean film and its narrated cut point at each other (ids from uploaded.json once both are up)
+  const UPL = read(join(HERE, 'uploaded.json')).film || {}, cross = L === 'ko' && UPL['ko-narr']?.id ? [`🔊 목소리로 듣는 해설판: https://youtu.be/${UPL['ko-narr'].id}`] : [];
+  const description = [X.blurb || blurb(ui.sub), '', `${X.watch}: ${link}`, ...cross, '', ...chapters.map(c => `${c.time} ${c.title}`), '', strip(ui.legal), '', hashtags(3)].join('\n');
   const tags = [ui.brand, ...(X.tags || []), ...ch]; while (tags.join(',').length > 480) tags.pop();   // YouTube: 500 characters in all
   const film = { file: `film-${L}.mp4`, local: `motion/out/release/film-${L}.mp4`, title: ui.shareText.slice(0, 100), description, link, tags, language: L,
     thumbnail: `motion/youtube/thumbs/${L}/A-exodus.jpg`, thumbnail_alternatives: ['B-cross', 'C-split', 'D-earth'].map(v => `motion/youtube/thumbs/${L}/${v}.jpg`),
@@ -91,8 +93,9 @@ for (const L of LANGS) {
   const narr = L === 'ko' && (() => {
     const nlink = home + utm('video', 'film_ko_narr');
     return { ...film, file: 'film-ko-narr.mp4', local: 'motion/out/release/film-ko-narr.mp4', title: `${ui.shareText} (목소리 해설판)`, link: nlink,
+      thumbnail: 'motion/youtube/thumbs/ko/narr-A-exodus.jpg', thumbnail_alternatives: [],
       description: ['화면의 말씀과 설명을 목소리로 읽어 드리는 해설판입니다. 글씨가 작거나 읽기 어려우신 분도 편안히 들으실 수 있습니다.', '',
-        `${X.watch}: ${nlink}`, '', ...chapters.map(c => `${c.time} ${c.title}`), '', strip(ui.legal) + ' 목소리는 AI(ElevenLabs)로 만들었습니다.', '', hashtags(3)].join('\n'),
+        `${X.watch}: ${nlink}`, ...(UPL.ko?.id ? [`🎵 해설 없이 음악으로만 보기: https://youtu.be/${UPL.ko.id}`] : []), '', ...chapters.map(c => `${c.time} ${c.title}`), '', strip(ui.legal) + ' 목소리는 AI(ElevenLabs)로 만들었습니다.', '', hashtags(3)].join('\n'),
       tags: (() => { const t = [ui.brand, '내레이션', '성경 해설', ...(X.tags || []), ...ch]; while (t.join(',').length > 480) t.pop(); return t; })(),
       captions: {}, pinned: { ...film.pinned, link: home + utm('video', 'film_ko_narr', 'pinned') + '#faq' } };
   })();

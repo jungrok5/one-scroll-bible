@@ -105,6 +105,11 @@
    "id": "yAsxN6b4i6g",
    "status": "unlisted",
    "note": "uploaded via Studio 2026-10-24 (category Education, notify off); public + thumbnail test A/B/D 2026-10-24; caption track film-h.srt via API 2026-10-24; pinned comment faq.h + home#faq 2026-10-24; unlisted 2026-10-28 (moved to the international channel: global.film)"
+  },
+  "ko-narr": {
+   "id": "wrEYqvOU1O8",
+   "status": "private",
+   "note": "Korean narrated cut (film-ko-narr.mp4, AI voice), uploaded via Studio 2026-10-29 with manifest languages.ko.film_narr; public on the user's OK"
   }
  },
  "shorts": {

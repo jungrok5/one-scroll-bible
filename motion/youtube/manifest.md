@@ -3,7 +3,7 @@
 Videos: release **youtube-v1** (`gh release download youtube-v1 -R jungrok5/one-scroll-bible`). Paths are relative to the repository root.
 
 ## ko — 한눈에 보는 성경 이야기
-**Film** `film-ko.mp4` · thumbnail `motion/youtube/thumbs/ko/A-exodus.jpg` (alternatives B/C/D) · captions 15 languages
+**Film** `film-ko.mp4` · thumbnail `motion/youtube/thumbs/ko/A-exodus.jpg` (alternatives B/C/D) · captions 19 languages
 - title: 창조에서 새 하늘과 새 땅까지, 성경 이야기를 14분 영상으로
 - description:
 ```
@@ -63,7 +63,7 @@ Videos: release **youtube-v1** (`gh release download youtube-v1 -R jungrok5/one-
 21. 이 사랑은 정보가 아니라 초대입니다. — 초대 21/21  (56 s)
 
 ## en — Bible in One Scroll
-**Film** `film-en.mp4` · thumbnail `motion/youtube/thumbs/en/A-exodus.jpg` (alternatives B/C/D) · captions 15 languages
+**Film** `film-en.mp4` · thumbnail `motion/youtube/thumbs/en/A-exodus.jpg` (alternatives B/C/D) · captions 19 languages
 - title: From creation to the new heaven and new earth — the Bible story in 14 minutes
 - description:
 ```
@@ -123,7 +123,7 @@ Scripture quotations are from the ESV® Bible (The Holy Bible, English Standard 
 21. This love is not information but an invitation. — The Invitation 21/21  (56 s)
 
 ## zh-Hans — 一卷读懂圣经
-**Film** `film-zh-Hans.mp4` · thumbnail `motion/youtube/thumbs/zh-Hans/A-exodus.jpg` (alternatives B/C/D) · captions 15 languages
+**Film** `film-zh-Hans.mp4` · thumbnail `motion/youtube/thumbs/zh-Hans/A-exodus.jpg` (alternatives B/C/D) · captions 19 languages
 - title: 从创造到新天新地——14 分钟看完圣经的故事
 - description:
 ```
@@ -183,7 +183,7 @@ Scripture quotations are from the ESV® Bible (The Holy Bible, English Standard 
 21. 这份爱不是信息，而是邀请。 — 邀请 21/21  (56 s)
 
 ## zh-Hant — 一卷讀懂聖經
-**Film** `film-zh-Hant.mp4` · thumbnail `motion/youtube/thumbs/zh-Hant/A-exodus.jpg` (alternatives B/C/D) · captions 15 languages
+**Film** `film-zh-Hant.mp4` · thumbnail `motion/youtube/thumbs/zh-Hant/A-exodus.jpg` (alternatives B/C/D) · captions 19 languages
 - title: 從創造到新天新地——14 分鐘看完聖經的故事
 - description:
 ```
@@ -243,7 +243,7 @@ Scripture quotations are from the ESV® Bible (The Holy Bible, English Standard 
 21. 這份愛不是信息，而是邀請。 — 邀請 21/21  (56 s)
 
 ## ja — ひと目でわかる聖書の物語
-**Film** `film-ja.mp4` · thumbnail `motion/youtube/thumbs/ja/A-exodus.jpg` (alternatives B/C/D) · captions 15 languages
+**Film** `film-ja.mp4` · thumbnail `motion/youtube/thumbs/ja/A-exodus.jpg` (alternatives B/C/D) · captions 19 languages
 - title: 創造から新しい天と地まで——聖書の物語を14分の映像で
 - description:
 ```
@@ -303,7 +303,7 @@ Scripture quotations are from the ESV® Bible (The Holy Bible, English Standard 
 21. この愛は情報ではなく、招きです。 — 招き 21/21  (56 s)
 
 ## es — La Biblia de un vistazo
-**Film** `film-es.mp4` · thumbnail `motion/youtube/thumbs/es/A-exodus.jpg` (alternatives B/C/D) · captions 15 languages
+**Film** `film-es.mp4` · thumbnail `motion/youtube/thumbs/es/A-exodus.jpg` (alternatives B/C/D) · captions 19 languages
 - title: De la creación al cielo nuevo y la tierra nueva: la historia de la Biblia en 14 minutos
 - description:
 ```
@@ -363,7 +363,7 @@ El texto bíblico ha sido tomado de la versión Reina-Valera © 1960 Sociedades 
 21. Este amor no es información, sino una invitación. — La invitación 21/21  (56 s)
 
 ## pt-BR — A Bíblia num relance
-**Film** `film-pt-BR.mp4` · thumbnail `motion/youtube/thumbs/pt-BR/A-exodus.jpg` (alternatives B/C/D) · captions 15 languages
+**Film** `film-pt-BR.mp4` · thumbnail `motion/youtube/thumbs/pt-BR/A-exodus.jpg` (alternatives B/C/D) · captions 19 languages
 - title: Da criação ao novo céu e à nova terra: a história da Bíblia em 14 minutos
 - description:
 ```
@@ -423,7 +423,7 @@ Citações bíblicas: Almeida — citadas com indicação da fonte; quaisquer di
 21. Este amor não é informação, mas um convite. — O convite 21/21  (56 s)
 
 ## fr — La Bible en un coup d’œil
-**Film** `film-fr.mp4` · thumbnail `motion/youtube/thumbs/fr/A-exodus.jpg` (alternatives B/C/D) · captions 15 languages
+**Film** `film-fr.mp4` · thumbnail `motion/youtube/thumbs/fr/A-exodus.jpg` (alternatives B/C/D) · captions 19 languages
 - title: De la création au nouveau ciel et à la nouvelle terre : l’histoire de la Bible en 14 minutes
 - description:
 ```
@@ -483,7 +483,7 @@ Citations bibliques : Louis Segond (LSG), citées avec mention de la source ; le
 21. Cet amour n’est pas une information, mais une invitation. — L’invitation 21/21  (56 s)
 
 ## de — Die Bibel auf einen Blick
-**Film** `film-de.mp4` · thumbnail `motion/youtube/thumbs/de/A-exodus.jpg` (alternatives B/C/D) · captions 15 languages
+**Film** `film-de.mp4` · thumbnail `motion/youtube/thumbs/de/A-exodus.jpg` (alternatives B/C/D) · captions 19 languages
 - title: Von der Schöpfung bis zum neuen Himmel und der neuen Erde: die Geschichte der Bibel in 14 Minuten
 - description:
 ```
@@ -543,7 +543,7 @@ Bibelzitate nach der Lutherbibel (1912), mit Quellenangabe zitiert; etwaige Rech
 21. Diese Liebe ist keine Information, sondern eine Einladung. — Die Einladung 21/21  (56 s)
 
 ## ru — Библия с одного взгляда
-**Film** `film-ru.mp4` · thumbnail `motion/youtube/thumbs/ru/A-exodus.jpg` (alternatives B/C/D) · captions 15 languages
+**Film** `film-ru.mp4` · thumbnail `motion/youtube/thumbs/ru/A-exodus.jpg` (alternatives B/C/D) · captions 19 languages
 - title: От творения до нового неба и новой земли — история Библии за 14 минут
 - description:
 ```
@@ -603,7 +603,7 @@ Bibelzitate nach der Lutherbibel (1912), mit Quellenangabe zitiert; etwaige Rech
 21. Эта любовь — не информация, а приглашение. — Приглашение 21/21  (56 s)
 
 ## ar — الكتاب المقدس في لمحة
-**Film** `film-ar.mp4` · thumbnail `motion/youtube/thumbs/ar/A-exodus.jpg` (alternatives B/C/D) · captions 15 languages
+**Film** `film-ar.mp4` · thumbnail `motion/youtube/thumbs/ar/A-exodus.jpg` (alternatives B/C/D) · captions 19 languages
 - title: من الخلق إلى السماء الجديدة والأرض الجديدة — قصة الكتاب المقدس في 14 دقيقة
 - description:
 ```
@@ -663,7 +663,7 @@ Bibelzitate nach der Lutherbibel (1912), mit Quellenangabe zitiert; etwaige Rech
 21. هذه المحبة ليست معلومة، بل دعوة. — الدعوة 21/21  (56 s)
 
 ## hi — एक नज़र में बाइबल
-**Film** `film-hi.mp4` · thumbnail `motion/youtube/thumbs/hi/A-exodus.jpg` (alternatives B/C/D) · captions 15 languages
+**Film** `film-hi.mp4` · thumbnail `motion/youtube/thumbs/hi/A-exodus.jpg` (alternatives B/C/D) · captions 19 languages
 - title: सृष्टि से नए आकाश और नई पृथ्वी तक — 14 मिनट में बाइबल की कहानी
 - description:
 ```
@@ -723,7 +723,7 @@ Bibelzitate nach der Lutherbibel (1912), mit Quellenangabe zitiert; etwaige Rech
 21. यह प्रेम जानकारी नहीं, बल्कि एक निमंत्रण है। — निमंत्रण 21/21  (56 s)
 
 ## id — Alkitab Sekilas
-**Film** `film-id.mp4` · thumbnail `motion/youtube/thumbs/id/A-exodus.jpg` (alternatives B/C/D) · captions 15 languages
+**Film** `film-id.mp4` · thumbnail `motion/youtube/thumbs/id/A-exodus.jpg` (alternatives B/C/D) · captions 19 languages
 - title: Dari penciptaan sampai langit yang baru dan bumi yang baru — kisah Alkitab dalam 14 menit
 - description:
 ```
@@ -783,7 +783,7 @@ Kutipan Alkitab: Terjemahan Baru (TB) — dikutip dengan menyebutkan sumbernya; 
 21. Kasih ini bukan informasi, melainkan sebuah undangan. — Undangan 21/21  (56 s)
 
 ## vi — Kinh Thánh trong một cái nhìn
-**Film** `film-vi.mp4` · thumbnail `motion/youtube/thumbs/vi/A-exodus.jpg` (alternatives B/C/D) · captions 15 languages
+**Film** `film-vi.mp4` · thumbnail `motion/youtube/thumbs/vi/A-exodus.jpg` (alternatives B/C/D) · captions 19 languages
 - title: Từ sáng tạo đến trời mới đất mới — câu chuyện Kinh Thánh trong 14 phút
 - description:
 ```
@@ -843,7 +843,7 @@ Trích dẫn Kinh Thánh: bản Truyền Thống — được trích dẫn có g
 21. Tình yêu này không phải thông tin, mà là một lời mời. — Lời mời 21/21  (56 s)
 
 ## th — พระคัมภีร์ในพริบตา
-**Film** `film-th.mp4` · thumbnail `motion/youtube/thumbs/th/A-exodus.jpg` (alternatives B/C/D) · captions 15 languages
+**Film** `film-th.mp4` · thumbnail `motion/youtube/thumbs/th/A-exodus.jpg` (alternatives B/C/D) · captions 19 languages
 - title: จากการทรงสร้างถึงฟ้าใหม่และแผ่นดินใหม่ — เรื่องราวพระคัมภีร์ใน 14 นาที
 - description:
 ```
@@ -903,7 +903,7 @@ Trích dẫn Kinh Thánh: bản Truyền Thống — được trích dẫn có g
 21. ความรักนี้ไม่ใช่ข้อมูล แต่เป็นคำเชิญ — คำเชิญ 21/21  (56 s)
 
 ## tl — Ang Bibliya sa Isang Pag-scroll
-**Film** `film-tl.mp4` · thumbnail `motion/youtube/thumbs/tl/A-exodus.jpg` (alternatives B/C/D) · captions 15 languages
+**Film** `film-tl.mp4` · thumbnail `motion/youtube/thumbs/tl/A-exodus.jpg` (alternatives B/C/D) · captions 19 languages
 - title: Mula sa paglikha hanggang sa bagong langit at bagong lupa — ang kuwento ng Bibliya sa 14 na minuto
 - description:
 ```
@@ -963,7 +963,7 @@ Mga sipi mula sa Bibliya: Magandang Balita Biblia (MBB) — sinipi nang may pagb
 21. Ang pag-ibig na ito ay hindi impormasyon kundi isang paanyaya. — Ang Paanyaya 21/21  (56 s)
 
 ## bn — এক স্ক্রলে বাইবেল
-**Film** `film-bn.mp4` · thumbnail `motion/youtube/thumbs/bn/A-exodus.jpg` (alternatives B/C/D) · captions 15 languages
+**Film** `film-bn.mp4` · thumbnail `motion/youtube/thumbs/bn/A-exodus.jpg` (alternatives B/C/D) · captions 19 languages
 - title: সৃষ্টি থেকে নতুন আকাশ ও নতুন পৃথিবী পর্যন্ত — 14 মিনিটে বাইবেলের কাহিনি
 - description:
 ```
@@ -1023,7 +1023,7 @@ Mga sipi mula sa Bibliya: Magandang Balita Biblia (MBB) — sinipi nang may pagb
 21. এই প্রেম তথ্য নয়, বরং একটি আমন্ত্রণ। — আমন্ত্রণ 21/21  (56 s)
 
 ## sw — Biblia kwa Mkunjo Mmoja
-**Film** `film-sw.mp4` · thumbnail `motion/youtube/thumbs/sw/A-exodus.jpg` (alternatives B/C/D) · captions 15 languages
+**Film** `film-sw.mp4` · thumbnail `motion/youtube/thumbs/sw/A-exodus.jpg` (alternatives B/C/D) · captions 19 languages
 - title: Kutoka uumbaji hadi mbingu mpya na nchi mpya — hadithi ya Biblia kwa dakika 14
 - description:
 ```
@@ -1083,7 +1083,7 @@ Manukuu ya Maandiko: Swahili Revised Union Version Bible © Bible Society of Ken
 21. Upendo huu si habari bali ni mwaliko. — Mwaliko 21/21  (56 s)
 
 ## fa — کتاب‌مقدس در یک نگاه
-**Film** `film-fa.mp4` · thumbnail `motion/youtube/thumbs/fa/A-exodus.jpg` (alternatives B/C/D) · captions 15 languages
+**Film** `film-fa.mp4` · thumbnail `motion/youtube/thumbs/fa/A-exodus.jpg` (alternatives B/C/D) · captions 19 languages
 - title: از آفرینش تا آسمان و زمین تازه — داستان کتاب‌مقدس در ۱۴ دقیقه
 - description:
 ```
@@ -1143,7 +1143,7 @@ Manukuu ya Maandiko: Swahili Revised Union Version Bible © Bible Society of Ken
 21. این محبت اطلاعات نیست، بلکه یک دعوت است. — دعوت 21/21  (56 s)
 
 ## ta — ஒரே பார்வையில் பைபிள்
-**Film** `film-ta.mp4` · thumbnail `motion/youtube/thumbs/ta/A-exodus.jpg` (alternatives B/C/D) · captions 15 languages
+**Film** `film-ta.mp4` · thumbnail `motion/youtube/thumbs/ta/A-exodus.jpg` (alternatives B/C/D) · captions 19 languages
 - title: சிருஷ்டிப்பு முதல் புதிய வானம், புதிய பூமி வரை — 14 நிமிடங்களில் பைபிளின் கதை
 - description:
 ```

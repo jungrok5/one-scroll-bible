@@ -86,6 +86,16 @@ for (const L of LANGS) {
     // pack's already-reviewed faq.h (no new translation). Posted/updated with studio-comment.js.
     pinned: { text: faqHeading(L), link: home + utm('video', `film_${L}`, 'pinned') + '#faq' } };
   if (!film.pinned.text) problems.push(`${L}: no faq.h in the site pack`);
+  // Korean narrated cut (motion/narration: every on-screen line read aloud, for viewers who find the text hard to read) —
+  // same picture, chapters and thumbnail; its own title, link tag and an AI-voice note
+  const narr = L === 'ko' && (() => {
+    const nlink = home + utm('video', 'film_ko_narr');
+    return { ...film, file: 'film-ko-narr.mp4', local: 'motion/out/release/film-ko-narr.mp4', title: `${ui.shareText} (목소리 해설판)`, link: nlink,
+      description: ['화면의 말씀과 설명을 목소리로 읽어 드리는 해설판입니다. 글씨가 작거나 읽기 어려우신 분도 편안히 들으실 수 있습니다.', '',
+        `${X.watch}: ${nlink}`, '', ...chapters.map(c => `${c.time} ${c.title}`), '', strip(ui.legal) + ' 목소리는 AI(ElevenLabs)로 만들었습니다.', '', hashtags(3)].join('\n'),
+      tags: (() => { const t = [ui.brand, '내레이션', '성경 해설', ...(X.tags || []), ...ch]; while (t.join(',').length > 480) t.pop(); return t; })(),
+      captions: {}, pinned: { ...film.pinned, link: home + utm('video', 'film_ko_narr', 'pinned') + '#faq' } };
+  })();
   titlesMd.push(`## ${L}`);
   const shorts = ORDER.map((sc, i) => {
     const n = i + 1, name = `${String(n).padStart(2, '0')}-${sc}`;
@@ -107,7 +117,7 @@ for (const L of LANGS) {
       tags: tags.slice(0, 12), language: L, seconds: +(tl[sc].frames / 30 - (OPEN.scenes[sc] ?? OPEN.default)).toFixed(1), captions: subsOf('v', name + '.srt') };
   });
   titlesMd.push('');
-  out.languages[L] = { brand: ui.brand, film, shorts };
+  out.languages[L] = { brand: ui.brand, film, ...(narr && { film_narr: narr }), shorts };
   md.push(`## ${L} — ${ui.brand}`, `**Film** \`${film.file}\` · thumbnail \`${film.thumbnail}\` (alternatives B/C/D) · captions ${Object.keys(film.captions).length} languages`,
     `- title: ${film.title}`, '- description:', '```', description, '```', `- tags: ${tags.join(', ')}`, '', `**Shorts** (\`shorts-${L}-NN-<scene>.mp4\`)`,
     ...shorts.map(s => `${String(s.n).padStart(2, '0')}. ${s.title}  (${s.seconds} s)`), '');

@@ -4,7 +4,8 @@
 //   open https://studio.youtube.com/channel/<id>/videos/upload?d=ud, then: await __osbUpload('de')
 // The javascript tool times out after 45 s, so start it without awaiting and read window.__osbResult later.
 // Returns a check list; nothing is published — the final "저장" saves it as 비공개 (private).
-window.__osbUpload = async (L, { save = true } = {}) => {
+//   key: which manifest entry — 'film' (default) or 'film_narr' (the Korean narrated cut)
+window.__osbUpload = async (L, { save = true, key = 'film' } = {}) => {
   const S = 'http://127.0.0.1:8765/', sleep = ms => new Promise(r => setTimeout(r, ms));
   const LANG_LABEL = { en: '영어', es: '스페인어', 'pt-BR': '포르투갈어(브라질)', fr: '프랑스어', de: '독일어', ru: '러시아어', id: '인도네시아어',
     'zh-Hans': '중국어(간체)', 'zh-Hant': '중국어(번체)', ja: '일본어', ar: '아랍어', ko: '한국어',
@@ -14,7 +15,8 @@ window.__osbUpload = async (L, { save = true } = {}) => {
   const labels = [].concat(LANG_LABEL[L] || []);
   if (!labels.length) return { L, error: `no Studio language label for ${L} — add it to LANG_LABEL` };
   const wait = async (fn, ms = 20000) => { for (let t = 0; t < ms; t += 250) { const v = fn(); if (v) return v; await sleep(250); } return null; };
-  const m = await (await fetch(S + 'youtube/manifest.json')).json(); const f = m.languages[L].film;
+  const m = await (await fetch(S + 'youtube/manifest.json', { cache: 'no-store' })).json(); const f = m.languages[L][key];
+  if (!f?.file || !f.title || !f.description) return { L, key, error: 'manifest entry missing or incomplete' };
   const fileInput = await wait(() => document.querySelector('ytcp-uploads-dialog input[type=file]'));
   if (!fileInput) return { L, error: 'upload dialog not open — open …/videos/upload?d=ud (a fresh page load is safest)' };
   const blob = async (p, name, type) => { const b = await (await fetch(S + p)).blob(); const dt = new DataTransfer(); dt.items.add(new File([b], name, { type })); return dt.files; };

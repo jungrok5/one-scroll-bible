@@ -85,7 +85,7 @@
   F.quote = (ctx, id, t, a, b, o = {}) => {
     const k = P.win(t, a, b, o.fi || .8, o.fo || .7); if (k <= 0) return;
     const size = o.size || (P.ori === 'v' ? 56 : 54); ctx.save(); ctx.font = F.font(size, 600);
-    const lines = F.wrapEven(ctx, F.text(id), o.maxW || (P.ori === 'v' ? P.W - 150 : P.W * .7)); ctx.restore();
+    const txt = o.join ? F.text(id).replace(/\s*\/\s*/g, ' ') : F.text(id), lines = F.wrapEven(ctx, txt, o.maxW || (P.ori === 'v' ? P.W - 150 : P.W * .7)); ctx.restore();   // o.join: ignore the portrait breaks
     const lh = size * 1.55, rise = (1 - P.eo(P.clamp((t - a) / 1.4))) * 12;
     const y0 = (o.bottom != null ? o.bottom - 50 - (lines.length - 1) * lh : (o.y || P.H * .45) - (lines.length - 1) * lh / 2) + rise;   // o.bottom: the cite sits on it
     const x = o.x || P.W / 2;

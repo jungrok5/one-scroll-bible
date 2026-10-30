@@ -14,6 +14,7 @@
 <script src="illum.js"></script>
 <script src="papercut.js"></script>
 <script src="shipsprite.js"></script>
+<script src="water.js"></script>
 <script>
 /* 침묵의 400년 — one continuous ~2:50 film. Look: night, lamplight and gold on parchment; one scroll is the main
    character (it goes dark at the start and lights again at the end). Line ids = script.json. */
@@ -326,6 +327,16 @@ function buildShipSmall() {   // the copperplate ship from the first film, stepp
   SHIPSM = { c, kx: -SB.x0 / SB.w, ky: -SB.y0 / SB.h, ar: SB.h / SB.w }; }
 function smallShip(ctx, x, y, len, dir, a) { if (a <= 0 || !SHIPSM) return; const { c, kx, ky, ar } = SHIPSM, h = len * ar; ctx.save(); ctx.globalAlpha = a; ctx.translate(x, y + h * .06); ctx.scale(dir, 1);
   ctx.drawImage(c, -len * kx, -h * ky, len, h); ctx.restore(); }
+function inkShip(ctx, x, y, s, dir, a, t) {   // a small ship as old maps draw them: ink hull, one square sail, a pennant (it rocks gently)
+  if (a <= 0) return; ctx.save(); ctx.globalAlpha = a; ctx.translate(x, y); ctx.rotate(Math.sin(t * 1.7) * .05); ctx.scale(dir * s / 40, s / 40); ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+  ctx.fillStyle = '#7a5130'; ctx.strokeStyle = MINK; ctx.lineWidth = 2.2; ctx.beginPath(); ctx.moveTo(-34, -6); ctx.lineTo(34, -6); ctx.quadraticCurveTo(28, 8, 14, 10); ctx.lineTo(-20, 10); ctx.quadraticCurveTo(-32, 6, -34, -6); ctx.closePath(); ctx.fill(); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(-26, 0); ctx.lineTo(24, 0); ctx.lineWidth = 1.2; ctx.stroke();
+  ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(0, -6); ctx.lineTo(0, -52); ctx.stroke();
+  ctx.fillStyle = '#f1e2bd'; ctx.lineWidth = 1.8; ctx.beginPath(); ctx.moveTo(-18, -46); ctx.lineTo(18, -46); ctx.quadraticCurveTo(24, -30, 18, -14); ctx.lineTo(-18, -14); ctx.quadraticCurveTo(-12, -30, -18, -46); ctx.closePath(); ctx.fill(); ctx.stroke();
+  ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(-14, -34); ctx.quadraticCurveTo(0, -30, 16, -34); ctx.moveTo(-14, -24); ctx.quadraticCurveTo(0, -20, 17, -24); ctx.stroke();
+  ctx.fillStyle = '#B23A1E'; ctx.beginPath(); ctx.moveTo(0, -52); ctx.lineTo(16, -48); ctx.lineTo(0, -44); ctx.closePath(); ctx.fill();
+  ctx.strokeStyle = 'rgba(44,74,94,.6)'; ctx.lineWidth = 1.4; ctx.beginPath(); ctx.moveTo(-44, 12); ctx.quadraticCurveTo(-56, 14, -70, 12); ctx.moveTo(-40, 16); ctx.quadraticCurveTo(-50, 19, -62, 18); ctx.stroke();
+  ctx.restore(); }
 function cityLamp(ctx, p, k, z, t, seed) { if (k <= 0) return; const [x, y] = P_(p), f = 1 + .12 * Math.sin(t * 5 + seed * 7);
   glow(ctx, x, y, 30 / z * f, [255, 196, 90], .55 * k); ctx.fillStyle = `rgba(150,60,20,${k})`; ctx.beginPath(); ctx.arc(x, y, 4 / z, 0, 6.283); ctx.fill(); ctx.fillStyle = `rgba(255,236,170,${k})`; ctx.beginPath(); ctx.arc(x, y - 1 / z, 2 / z, 0, 6.283); ctx.fill(); }
 
@@ -354,9 +365,9 @@ function mapRome(ctx, t) {
     ctx.strokeStyle = MINK; ctx.lineWidth = 6.5 / z; partial(ctx, pts, p); ctx.strokeStyle = '#c8402a'; ctx.lineWidth = 3.4 / z; const hd = partial(ctx, pts, p);
     if (p < 1) { ctx.fillStyle = MINK; ctx.beginPath(); ctx.arc(hd[0], hd[1], 5 / z, 0, 6.283); ctx.fill(); } });
   const lk = ss(95, 96.5, t);
-  if (lk > 0) MAP.lanes.forEach((l, i) => { const pts = l.length === 2 ? arcPts(l[0], l[1], .08) : smoothPts(l.map(P_), 8);
+  if (lk > 0) MAP.lanes.forEach((l, i) => { const pts = l.length === 2 ? arcPts(l[0], l[1], .08) : smoothPts(l.map(P_), 8), v0 = 95.6 + i * 1.1, vu = clamp((t - v0) / 11);
     ctx.strokeStyle = `rgba(40,70,110,${.8 * lk})`; ctx.lineWidth = 2.2 / z; ctx.setLineDash([3 / z, 7 / z]); partial(ctx, pts, ss(95 + i * .2, 97.5 + i * .2, t)); ctx.setLineDash([]);
-    const u = ((t - 95) * .045 + i * .37) % 1, q = pointAt(pts, u), q2 = pointAt(pts, Math.min(1, u + .02)); smallShip(ctx, q[0], q[1], (V ? 96 : 88) / z, q2[0] >= q[0] ? 1 : -1, lk); });
+    if (vu > 0 && vu < 1) { const q = pointAt(pts, vu), q2 = pointAt(pts, Math.min(1, vu + .03)), a = lk * ss(0, .1, vu) * (1 - ss(.9, 1, vu)); inkShip(ctx, q[0], q[1], (V ? 46 : 42) / z, q2[0] >= q[0] ? 1 : -1, a, t + i); } });
   MAP.synagogues.forEach((c, i) => cityLamp(ctx, c, ss(100.3 + i * .25, 100.9 + i * .25, t) * (1 + .3 * ss(108, 111, t)), z, t, i));
   mapEnd(ctx);
   if (t > 99.5 && t < 108.5) { const k = win(t, 99.6, 108.2, .6, .6), g = ctx.createLinearGradient(0, 0, 0, H * .42); g.addColorStop(0, `rgba(10,6,3,${.85 * k})`); g.addColorStop(1, 'rgba(10,6,3,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H * .42); }
@@ -450,19 +461,32 @@ function copying(ctx, t) {   // 1:15–1:27 in the dark, someone copies the word
   Film.quote(ctx, '13', t, 79.3, 86.7, { y: cy - (V ? 40 : 30), color: INK, shadow: 'rgba(0,0,0,0)', citeColor: '#5a3d1f', citeShadow: 'rgba(0,0,0,0)', maxW: sw - 200, size: V ? 50 : 52 });
 }
 
-function promiseLink(ctx, t) {   // 1:58–2:12 the last promise and its answer, set like the site's own pages: two verses on the night page,
-  // the words they share lit in gold, and between them a fine gold rule that counts the 400 years (a tick for each decade)
+function quoteLayout(id, y, size, maxW) {   // where Film.quote puts an id's lines (to find its highlighted words)
+  const m = canvas(4, 4).getContext('2d'); m.font = Film.font(size, 600); const ls = Film.wrapEven(m, Film.text(id), maxW), lh = size * 1.55, y0 = y - (ls.length - 1) * lh / 2, hl = Film.lines[id].hl;
+  for (let i = 0; i < ls.length; i++) { const j = hl ? ls[i].indexOf(hl) : -1; if (j < 0) continue; const lw = m.measureText(ls[i]).width, x0 = W / 2 - lw / 2 + m.measureText(ls[i].slice(0, j)).width, w = m.measureText(hl).width;
+    return { x: x0, y: y0 + i * lh, w, size }; } return null; }
+function promiseLink(ctx, t) {   // 1:58–2:12 the last promise and its answer: the words they share lift out of Malachi, pass down through the
+  // 400 years (a fine gold rule ticking off the decades), and settle into the empty place in Luke's sentence — which is then complete
   ctx.fillStyle = '#0e1118'; ctx.fillRect(0, 0, W, H);
-  glow(ctx, W / 2, H * .4, Math.max(W, H) * .7, [233, 185, 73], .05 + .07 * ss(126, 129, t));
-  const yA = H * .2, yB = V ? H * .5 : H * .56, lt = V ? H * .3 : H * .315, lb = V ? H * .43 : H * .465, x = W / 2, dr = eio(clamp((t - 123.2) / 2.6)), out = 1 - ss(131.2, 132, t);
-  if (dr > 0) { const yE = lerp(lt, lb, dr); ctx.save(); ctx.globalAlpha = out; ctx.strokeStyle = 'rgba(233,199,122,.8)'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(x, lt); ctx.lineTo(x, yE); ctx.stroke();
-    for (let i = 0; i <= 40; i++) { const y = lerp(lt, lb, i / 40); if (y > yE + .5) break; const big = i % 10 === 0, l = big ? 18 : i % 5 === 0 ? 11 : 6; ctx.globalAlpha = out * (big ? .9 : .55); ctx.beginPath(); ctx.moveTo(x - l, y); ctx.lineTo(x, y); ctx.stroke(); }
-    ctx.restore(); if (dr < 1) glow(ctx, x, yE, 46, [255, 226, 150], .95);
-    Pilot.text(ctx, Film.text('C2'), x + 26, (lt + lb) / 2 + 10, { size: V ? 32 : 28, font: "'Noto Sans KR',sans-serif", align: 'left', color: '#e9c77a', alpha: ss(124.2, 125.4, t) * out, ls: 3 }); }
-  const q = { color: '#f4efe6', size: V ? 48 : 46, maxW: V ? W - 150 : W * .64, citeColor: '#c9a85a' };
-  Film.quote(ctx, '19', t, 118.2, 131.9, { ...q, y: yA, hl: Film.lines['19'].hl, hlk: .35 * ss(118.8, 120.4, t) + .65 * ss(125.2, 126.2, t) });
-  Film.quote(ctx, '20', t, 122.4, 131.9, { ...q, y: yB, hl: Film.lines['20'].hl, hlk: ss(125.6, 126.6, t) });
+  glow(ctx, W / 2, H * .4, Math.max(W, H) * .7, [233, 185, 73], .05 + .08 * ss(124.6, 126, t));
+  const size = V ? 48 : 46, maxW = V ? W - 150 : W * .64, yA = H * .2, yB = V ? H * .52 : H * .58, A = quoteLayout('19', yA, size, maxW), B = quoteLayout('20', yB, size, maxW);
+  const q = { color: '#f4efe6', size, maxW, citeColor: '#c9a85a' }, lift = ss(120.4, 121.2, t), fly = eio(clamp((t - 121.2) / 3.0)), land = ss(124.2, 124.5, t), out = 1 - ss(131.2, 132, t);
+  Film.quote(ctx, '19', t, 118.2, 131.9, { ...q, y: yA, hl: Film.lines['19'].hl, hlk: .5 * ss(119, 120.4, t) * (1 - lift) });
+  if (A && lift > 0) { ctx.save(); ctx.fillStyle = '#0e1118'; ctx.globalAlpha = .75 * lift * out; ctx.fillRect(A.x - 4, A.y - size, A.w + 8, size * 1.3); ctx.restore(); }   // the words have left: a pale gap
+  Film.quote(ctx, '20', t, 122.2, 131.9, { ...q, y: yB, hl: Film.lines['20'].hl, hlk: land });
+  if (B && land < 1) { ctx.save(); ctx.fillStyle = '#0e1118'; ctx.fillRect(B.x - 4, B.y - size, B.w + 8, size * 1.3); ctx.strokeStyle = `rgba(233,199,122,${.6 * ss(122.6, 123.4, t)})`; ctx.setLineDash([4, 6]); ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(B.x, B.y + 10); ctx.lineTo(B.x + B.w, B.y + 10); ctx.stroke(); ctx.restore(); }                                                  // Luke's sentence waits with an empty place
+  if (A && B && lift > 0 && land < 1) {   // the words in flight, and the rule they draw behind them
+    const fx = lerp(A.x, B.x, fly), fy = lerp(A.y, B.y, fly), cxm = (A.x + A.w / 2 + B.x + B.w / 2) / 2, top = A.y + 30, bot = B.y - size - 10, ry = clamp((fy - top) / (bot - top));
+    if (fly > 0) { ctx.save(); ctx.strokeStyle = 'rgba(233,199,122,.75)'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(cxm, top); ctx.lineTo(cxm, lerp(top, bot, ry)); ctx.stroke();
+      for (let i = 0; i <= 40; i++) { const y = lerp(top, bot, i / 40); if (y > lerp(top, bot, ry)) break; const big = i % 10 === 0, l = big ? 16 : i % 5 === 0 ? 10 : 5; ctx.globalAlpha = big ? .9 : .5; ctx.beginPath(); ctx.moveTo(cxm - l, y); ctx.lineTo(cxm, y); ctx.stroke(); } ctx.restore();
+      Pilot.text(ctx, Film.text('C2'), cxm + 24, lerp(top, bot, .5) + 10, { size: V ? 30 : 26, font: "'Noto Sans KR',sans-serif", align: 'left', color: '#e9c77a', alpha: ss(121.6, 122.6, t), ls: 3 }); }
+    ctx.save(); ctx.font = Film.font(size, 600); ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic'; ctx.shadowColor = 'rgba(233,185,73,.95)'; ctx.shadowBlur = 30; ctx.fillStyle = '#f6d68a';
+    ctx.fillText(Film.lines['19'].hl, fx, fy - Math.sin(fly * Math.PI) * 14); ctx.shadowBlur = 0; ctx.fillText(Film.lines['19'].hl, fx, fy - Math.sin(fly * Math.PI) * 14); ctx.restore(); }
+  if (B && t > 124.2 && t < 126) { const k = clamp((t - 124.3) / 1.4); ctx.save(); ctx.strokeStyle = `rgba(255,226,160,${.8 * (1 - k)})`; ctx.lineWidth = 2; ctx.beginPath(); ctx.ellipse(B.x + B.w / 2, B.y - size * .35, B.w * (.6 + k * 1.4), size * (.8 + k * 1.6), 0, 0, 6.283); ctx.stroke(); ctx.restore();
+    glow(ctx, B.x + B.w / 2, B.y - size * .35, B.w * 1.2, [255, 230, 170], .7 * (1 - k)); }   // landing: a ring of light
 }
+
 let SKY = null;
 function buildSky() {   // the waiting sky: a milky-way band (dust with dark lanes) and stars with colour, for long-exposure trails
   const Dg = Math.ceil(Math.hypot(W, H) * 1.4), s = 2, w = Dg / s | 0, h = w, c = canvas(w, h), x = c.getContext('2d'), d = x.createImageData(w, h), ang = .55;
@@ -524,17 +548,33 @@ function twoScrolls(ctx, t) {   // 1:58–2:12 the promise lights again; Luke 1:
 const ZY = { gold: 80, silver: 260, bronze: 465, iron: 730, clay: 940 };
 function desk(ctx, t) { ctx.fillStyle = '#0b0806'; ctx.fillRect(0, 0, W, H); glow(ctx, W * .12, -H * .05, Math.max(W, H) * .9, [255, 170, 90], .22 * (1 + .04 * Math.sin(t * 6.1))); }
 function camPush(ctx, t, t0, amt = .04) { const k = 1 + amt * eio(clamp((t - t0) / 12)); ctx.translate(W / 2, H * .5); ctx.scale(k, k); ctx.translate(-W / 2, -H * .5); }
+const EDGE = { gold: 60, silver: 200, bronze: 150, iron: 110 }, SIDE = { gold: -1, silver: 1, bronze: -1, iron: 1 }, TAG = { gold: 'L0', silver: 'L1', bronze: 'L2', iron: 'L3' };
+function callouts(ctx, t, items) {   // tags beside the statue: a gold leader from the part to its name (metal, or metal · nation)
+  const b = Illum.statueBox(), [px, , pw] = Illum.L.page;
+  for (const { z, a, bright, names } of items) { if (a <= 0) continue; const y = b.top + b.hs * ZY[z] / 1000, sd = SIDE[z], ex = b.cx + sd * b.hs * EDGE[z] / 1000;
+    const lx = V ? b.cx + sd * 150 : (sd < 0 ? px - 26 : px + pw + 26), full = Film.text(TAG[z]), s = names ? full : full.split(/\s*·\s*/)[0];
+    ctx.save(); ctx.globalAlpha = a; ctx.strokeStyle = bright ? 'rgba(242,207,122,.95)' : 'rgba(205,185,138,.7)'; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(ex + sd * 6, y); ctx.lineTo(lx - sd * 10, y); ctx.stroke();
+    ctx.fillStyle = ctx.strokeStyle; ctx.beginPath(); ctx.arc(ex + sd * 6, y, 4, 0, 6.283); ctx.fill(); ctx.restore();
+    Pilot.text(ctx, s, lx, y + 10, { size: V ? 30 : 30, weight: 600, align: sd < 0 ? 'right' : 'left', color: bright ? '#f2cf7a' : '#cdb98a', alpha: a, shadow: 'rgba(0,0,0,.95)', shadowBlur: 10, maxW: V ? 230 : 520 }); } }
 function statueScene(ctx, t, lit, t0) {
   desk(ctx, t); ctx.save(); camPush(ctx, t, t0, .03);
   const b = Illum.statueBox(), z = Object.keys(lit).find(k => lit[k] > .05), k = z ? lit[z] : 0;
   Illum.page(ctx, t, x => Illum.statue(x, b.cx, b.top, b.hs, {}, lit, t, .9 * k), { glint: clamp((t - t0 - .4) / 2.4), rays: z ? { k, at: [b.cx, b.top + b.hs * ZY[z] / 1000] } : null });
+  callouts(ctx, t, ['gold', 'silver', 'bronze', 'iron'].map(q => ({ z: q, a: ss(t0, t0 + .8, t) * (q === z ? 1 : .55), bright: q === z, names: true })));
   ctx.restore(); }
-function statueRise(ctx, t) {   // 0:31–0:45: the statue is painted onto the page zone by zone, head first; the gold flares and fades (Babylon is past); then the silver
-  desk(ctx, t); ctx.save(); camPush(ctx, t, 31, .05);
-  const b = Illum.statueBox(), show = {}; Illum.ZONES.forEach((z, i) => show[z] = ss(31.4 + i * .75, 32.4 + i * .75, t));
-  const lit = { gold: .8 * win(t, 32, 35.5, .6, 1.4), silver: ss(42, 43, t) }, z = lit.silver > .05 ? 'silver' : 'gold';
-  Illum.page(ctx, t, x => Illum.statue(x, b.cx, b.top, b.hs, show, lit, t, .9 * lit.silver), { glint: t > 41.6 ? clamp((t - 42) / 2.4) : clamp((t - 32) / 2.6), rays: { k: Math.max(lit.gold, lit.silver), at: [b.cx, b.top + b.hs * ZY[z] / 1000] } });
+
+function statueRise(ctx, t) {   // 0:31–0:45: first a faint drawing; then each part is painted as Dan 2:32–33 names it, with its tag;
+  // then the tags gain their nations (Dan 2:38: the king of Babylon is the head of gold) and the gold fades, the silver lights
+  desk(ctx, t); ctx.save(); camPush(ctx, t, 31, .04);
+  const b = Illum.statueBox(), AT = { gold: 35.0, silver: 36.2, bronze: 37.4, iron: 38.4, clay: 39.3 }, show = {};
+  for (const z of Illum.ZONES) show[z] = .16 * ss(31.4, 32.6, t) + .84 * ss(AT[z], AT[z] + .8, t);
+  const names = t > 40.9, lit = { gold: names ? .85 * win(t, 41.1, 43.6, .5, .9) : .5 * win(t, 35, 36.4, .3, .6), silver: ss(43.6, 44.6, t) };
+  for (const z of ['bronze', 'iron', 'clay']) lit[z] = .5 * win(t, AT[z], AT[z] + 1.3, .3, .6); if (!names) lit.silver = .5 * win(t, AT.silver, AT.silver + 1.3, .3, .6);
+  const zl = Object.keys(lit).reduce((m, q) => lit[q] > (lit[m] || 0) ? q : m, 'gold');
+  Illum.page(ctx, t, x => Illum.statue(x, b.cx, b.top, b.hs, show, lit, t, names ? .9 * lit.silver : 0), { glint: clamp((t - 35) / 2.6), rays: { k: lit[zl] || 0, at: [b.cx, b.top + b.hs * ZY[zl] / 1000] } });
+  callouts(ctx, t, ['gold', 'silver', 'bronze', 'iron'].map(q => ({ z: q, a: ss(AT[q] + .2, AT[q] + .9, t), bright: (lit[q] || 0) > .3, names })));
   ctx.restore(); }
+
 let ishards = [], icracks = [];
 function buildIllumShards() {
   const tc = canvas(4, 4).getContext('2d'), r = rng(5);
@@ -557,8 +597,7 @@ function strike(ctx, t) {   // 2:12–2:21 a stone cut out without hands comes f
     if (t < hitT + 2) { const cx = lerp(sx0, sx1, fly), cy = lerp(sy0, sy1, fly) - Math.sin(fly * Math.PI) * b.hs * .1; stone(x, cx, cy, s0, fly * -5, ss(132.3, 133.0, t)); }
     if (gone < 1) Illum.statue(x, b.cx, b.top, b.hs, { gold: 1 - gone, silver: 1 - gone, bronze: 1 - gone, iron: 1 - gone, clay: 1 - gone }, {}, t);
     const cp = ss(hitT, hitT + 2.2, t); if (cp > 0 && gone < 1) { x.save(); x.translate(b.cx, b.top); x.scale(b.hs, b.hs); x.strokeStyle = `rgba(42,26,16,${1 - gone})`; x.lineWidth = 3 / b.hs; for (const c of icracks) partial(x, c, cp); x.restore(); }
-    // the stone becomes a great mountain that fills the earth (Dan 2:35)
-    if (t > hitT + 2) { const g = grow, cx = lerp(sx1, b.cx, g), base = ay + ah * .93, mh = lerp(s0 * 1.6, ah * .62, g), mw = lerp(s0 * 2, aw * 1.1, g);
+    if (false) { const g = grow, cx = lerp(sx1, b.cx, g), base = ay + ah * .93, mh = lerp(s0 * 1.6, ah * .62, g), mw = lerp(s0 * 2, aw * 1.1, g);
       x.save(); x.beginPath(); x.moveTo(cx - mw / 2, base); x.quadraticCurveTo(cx - mw * .2, base - mh * 1.05, cx, base - mh); x.quadraticCurveTo(cx + mw * .2, base - mh * 1.05, cx + mw / 2, base); x.closePath();
       x.fillStyle = '#b9b0a0'; x.fill(); x.save(); x.clip(); const lg = x.createLinearGradient(0, base - mh, 0, base); lg.addColorStop(0, 'rgba(255,236,190,.55)'); lg.addColorStop(1, 'rgba(90,70,50,.3)'); x.fillStyle = lg; x.fillRect(cx - mw, base - mh * 1.1, mw * 2, mh * 1.2); x.restore();
       x.strokeStyle = Illum.INK; x.lineWidth = 3; x.stroke(); x.restore();
@@ -571,7 +610,18 @@ function strike(ctx, t) {   // 2:12–2:21 a stone cut out without hands comes f
       const px = bx - Math.pow(u, 1.6) * (W * .22) * (.5 + r1), py = by - u * 50 * r2 + Math.sin(u * 2 + r3 * 9) * 20, a = 1 - ss(1.4, 3.4, u); if (a <= 0) continue;
       ctx.fillStyle = rgb(Illum.METAL[z], a); ctx.fillRect(px, py, 2.4 + r2 * 2.6, 2.4 + r1 * 2.2); } }
   ctx.restore();
+  // the stone's light grows until it fills everything (and opens on Bethlehem)
+  const fl = ss(136.4, 137.6, t); if (fl > 0) { glow(ctx, b.cx + b.hs * .13, b.top + b.hs * .93, Math.max(W, H) * (.2 + 1.2 * fl), [255, 246, 226], .95 * fl); ctx.fillStyle = `rgba(244,236,214,${ss(137, 137.6, t)})`; ctx.fillRect(0, 0, W, H); }
 }
+function bethScene(ctx, t) {   // 2:17–2:21 "그 아들, 예수님이 오셨습니다" — Bethlehem by night in watercolour: the star, and the stable's light
+  ctx.fillStyle = '#ece2cc'; ctx.fillRect(0, 0, W, H);
+  Water.draw(ctx, 'beth', ss(137.4, 139.6, t), lerp(1, 1.05, eio(clamp((t - 137.4) / 4))), (x, z) => { const [sx, sy] = Water.geo.star(), tw = .5 + .5 * Math.sin(t * 2.3);
+    glow(x, W / 2 + (sx - W / 2) * z, H / 2 + (sy - H / 2) * z, 90 + 30 * tw, [255, 250, 230], .35 + .2 * tw); });
+  bottomBand(ctx, 'rgba(20,16,36,'); }
+function shepScene(ctx, t) {   // 2:21–2:27 Luke 19:10 — at dawn the shepherd comes home with the lost lamb (watercolour; no face)
+  ctx.fillStyle = '#ece2cc'; ctx.fillRect(0, 0, W, H);
+  Water.draw(ctx, 'shep', ss(141, 143, t), lerp(1, 1.06, eio(clamp((t - 141) / 6.2))));
+  bottomBand(ctx, 'rgba(40,30,20,'); }
 
 // =====================================================================================================================
 function temple(ctx, t) {   // 1:53–1:58 Zechariah at the altar of incense; the angel stands at its right side (Luke 1:11)
@@ -589,15 +639,26 @@ function figure(ctx, t) {   // 2:21–2:27 the good shepherd carries the lost on
     x.save(); x.strokeStyle = 'rgba(233,199,122,.55)'; x.lineWidth = 3; for (let i = 0; i < 24; i++) { const an = i / 24 * 6.283 + t * .04; x.beginPath(); x.moveTo(ax + aw * .62 + Math.cos(an) * ah * .14, ay + ah * .3 + Math.sin(an) * ah * .14); x.lineTo(ax + aw * .62 + Math.cos(an) * ah * .5, ay + ah * .3 + Math.sin(an) * ah * .5); x.stroke(); } x.restore();
     const walk = (t - 141) * 6; Illum.shepherdBack(x, ax + aw * .4 + walk, gy, s * .8, t); }, { glint: clamp((t - 141.4) / 2.6) });
   ctx.restore(); }
-function nazareth(ctx, t) {   // 2:27–2:32 the scroll opened in the synagogue at Nazareth (Luke 4:17–21)
+function nazareth(ctx, t) {   // 2:27–2:33 the synagogue at Nazareth (Luke 4:17–21): the words he read, lit as they are read — then fulfilled
   ctx.fillStyle = '#060403'; ctx.fillRect(0, 0, W, H);
-  const cx = W / 2, cy = V ? H * .52 : H * .6, sw = V ? 920 : 1240, sh = V ? 560 : 400, open = eio(clamp((t - 147) / 2.2));
-  ctx.save(); ctx.globalCompositeOperation = 'lighter'; const g = ctx.createLinearGradient(0, 0, cx, cy); g.addColorStop(0, 'rgba(255,230,180,0)'); g.addColorStop(1, 'rgba(255,220,160,.22)');
+  const cx = W / 2, cy = V ? H * .4 : H * .4, sw = V ? 940 : 1320, sh = V ? 700 : 470, open = eio(clamp((t - 147) / 1.8)), burn = ss(149.8, 150.8, t);
+  ctx.save(); ctx.globalCompositeOperation = 'lighter'; const g = ctx.createLinearGradient(0, 0, cx, cy); g.addColorStop(0, 'rgba(255,230,180,0)'); g.addColorStop(1, `rgba(255,220,160,${.18 + .2 * burn})`);
   ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(V ? 0 : W * .12, 0); ctx.lineTo(V ? W * .4 : W * .36, 0); ctx.lineTo(cx + sw * .45, cy + sh * .5); ctx.lineTo(cx - sw * .45, cy + sh * .5); ctx.closePath(); ctx.fill(); ctx.restore();
   scroll(ctx, cx, cy, sw, sh, open, .9);
-  if (open > .3) ink(ctx, cx - sw / 2 + 90, cy - sh / 2 + 60, sw - 180, V ? 8 : 6, V ? 56 : 52, V ? 22 : 24, 17, 1, INK, ss(147.6, 148.8, t) * .85);
-  glow(ctx, cx, cy - sh * .1, sw * .35, [255, 220, 150], .25 * ss(149, 151, t));
+  if (open > .6) { const size = V ? 38 : 36, m = ctx; m.save(); m.font = Film.font(size, 600); const lines = Film.wrapEven(m, Film.text('25a'), sw - 200), lh = size * 1.7, y0 = cy - (lines.length - 1) * lh / 2 - 26, a = ss(147.6, 148.4, t);
+    const total = lines.reduce((n, l) => n + m.measureText(l).width, 0), read = clamp((t - 147.9) / 2.0) * total; let acc = 0;
+    lines.forEach((l, i) => { const w = m.measureText(l).width, x0 = cx - w / 2, y = y0 + i * lh, done = clamp((read - acc) / w); acc += w;
+      m.textAlign = 'left'; m.globalAlpha = a; m.fillStyle = '#2b1a0b'; m.fillText(l, x0, y);
+      if (done > 0) { m.save(); m.beginPath(); m.rect(x0 - 4, y - size, w * done + 8, size * 1.5); m.clip(); m.shadowColor = 'rgba(255,190,80,.9)'; m.shadowBlur = 16; m.fillStyle = '#a8660e'; m.fillText(l, x0, y); m.restore();
+        if (done < 1) glow(m, x0 + w * done, y - size * .3, 40, [255, 220, 140], .8); }
+      if (burn > 0) { m.save(); m.globalAlpha = a * burn; m.shadowColor = 'rgba(255,214,120,1)'; m.shadowBlur = 30; m.fillStyle = '#f6d68a'; m.fillText(l, x0, y); m.restore(); } });
+    Pilot.text(m, Film.cite('25a'), cx, cy + sh / 2 - 34, { size: V ? 24 : 22, font: "'Noto Sans KR',sans-serif", color: '#5a3d1f', alpha: a }); m.restore(); }
+  // fulfilled: the light floods out from the scroll
+  if (burn > 0) { glow(ctx, cx, cy, Math.max(W, H) * (.3 + .5 * burn), [255, 226, 160], .45 * burn); ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.strokeStyle = `rgba(255,226,170,${.08 * burn})`; ctx.lineWidth = 24;
+    for (let i = 0; i < 24; i++) { const an = i / 24 * 6.283 + t * .03; ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(cx + Math.cos(an) * W, cy + Math.sin(an) * W); ctx.stroke(); } ctx.restore(); }
+  bottomBand(ctx, 'rgba(6,4,3,');
 }
+
 function endCard(ctx, t) { ctx.fillStyle = '#030305'; ctx.fillRect(0, 0, W, H); glow(ctx, W / 2, H / 2, Math.max(W, H) * .5, [233, 185, 73], .12 * ss(167, 168, t));
   const k = ss(167.2, 168.2, t), s = Film.text('E1').split(/\s*→\s*/);
   Pilot.text(ctx, s[0], W / 2, H * (V ? .45 : .44), { size: V ? 62 : 60, weight: 600, color: '#f3ece0', alpha: k, shadow: 'rgba(0,0,0,.9)' });
@@ -610,16 +671,16 @@ const SCENES = [
   [0, 20.6, partOpening, 0, .6], [20.4, 31.2, waitingSky], [31, 45.3, statueRise],
   [45, 52.3, mapDiaspora], [52, 55.3, (c, t) => statueScene(c, t, { bronze: ss(52.3, 53.3, t) }, 52)], [55, 61.6, mapAlexander], [61.4, 69.2, translation],
   [69, 75.2, fire], [75, 87.2, copying], [87, 90.3, (c, t) => statueScene(c, t, { iron: ss(87.3, 88.3, t), clay: .8 * ss(87.6, 88.6, t) }, 87)], [90, 113.2, mapRome],
-  [113, 118.2, temple], [118, 132.2, promiseLink], [132, 141.2, strike], [141, 147.2, figure], [147, 152.2, nazareth], [152, 159.2, mapGospel],
+  [113, 118.2, temple], [118, 132.2, promiseLink], [132, 137.62, strike, .5, .01], [137.4, 141.2, bethScene, .01, .5], [141, 147.2, shepScene], [147, 153.4, nazareth], [153.2, 159.2, mapGospel],
   [159, 167.2, (c, t) => { Papercut.draw(c, lerp(23.6, 31.5, clamp((t - 159) / 8.2))); bottomBand(c, 'rgba(2,4,16,'); }], [167, 170, endCard],
 ];
 const TEXT = [
-  ['sub', '04', 20.6, 24.7], ['quote', '05', 25, 30.7, { y: H * (V ? .3 : .3) }], ['sub', '06', 31.2, 34.9], ['sub', '07', 35, 41.8],
-  ['label', 'L1', 42, 52], ['sub', '08', 45.4, 51.8], ['label', 'L2', 52, 69], ['sub', '09', 55.2, 60.8], ['sub', '10', 61.5, 68.7], ['sub', '11', 69.3, 74.8], ['sub', '12', 75.2, 78.9],
+  ['sub', '04', 20.6, 24.7], ['quote', '05', 25, 30.7, { y: H * (V ? .3 : .3) }], ['sub', '06', 31.2, 34.4], ['quote', '06a', 34.6, 40.6, { bottom: Film.subBottom() + 40, size: V ? 42 : 40, join: !V, maxW: V ? W - 150 : W * .84 }], ['sub', '07', 40.9, 45.0],
+  ['label', 'L1', 45, 52], ['sub', '08', 45.4, 51.8], ['label', 'L2', 52, 69], ['sub', '09', 55.2, 60.8], ['sub', '10', 61.5, 68.7], ['sub', '11', 69.3, 74.8], ['sub', '12', 75.2, 78.9],
   ['label', 'L3', 87, 99.6], ['sub', '14', 90.2, 94.8], ['sub', '15', 95.2, 99.8], ['quote', '16', 100.2, 107.8, { y: H * (V ? .19 : .16) }], ['sub', '17', 108.2, 112.8],
   ['quote', '18', 113.6, 117.9, { bottom: Film.subBottom() + 40, size: V ? 50 : 46 }], ['sub', '21', 126, 131.9],
   ['quote', '22', 132.4, 137, { bottom: Film.subBottom() + 40, size: V ? 50 : 46 }], ['sub', '23', 137.4, 141],
-  ['quote', '24', 141.4, 146.8, { bottom: Film.subBottom() + 40, size: V ? 48 : 44 }], ['quote', '25', 147.4, 152, { y: H * (V ? .22 : .2) }], ['sub', '26', 152.4, 158.8], ['sub', '27', 159.4, 166.8],
+  ['quote', '24', 141.4, 146.8, { bottom: Film.subBottom() + 40, size: V ? 48 : 44 }], ['quote', '25', 150.1, 153.2, { bottom: Film.subBottom() + 40, size: V ? 54 : 52, color: '#fff3d6', shadow: 'rgba(255,190,90,.55)' }], ['sub', '26', 153.6, 158.8], ['sub', '27', 159.4, 166.8],
 ];
 function counter(ctx, t) { const k = win(t, 20.8, 30.4, 1, 1); if (k <= 0) return; const n = Math.round(430 - 300 * ss(21.2, 30.4, t));
   Pilot.text(ctx, Pilot.trn ? String(Film.text('C1')).replace('{n}', n) : n, W / 2, V ? 240 : 96, { size: V ? 34 : 30, font: "'Noto Sans KR',sans-serif", color: '#c9b48a', alpha: k * .9, ls: 3, shadow: 'rgba(0,0,0,.9)' }); }
@@ -637,7 +698,7 @@ function draw(ctx, t) {
 }
 
 Pilot.run({ W, H, dur: DUR, fonts: ["600 40px 'Noto Serif KR'", "400 40px 'Noto Serif KR'", "400 20px 'Noto Sans KR'"],
-  init: async () => { await Film.load(); init(); GoldLine.init(W, H, [0, 0, W, H]); buildStars(); buildStatue(); Illum.init(); buildIllumShards(); await Papercut.init(); buildShipSmall(); buildSky(); buildMap(); buildBurn(); }, draw });
+  init: async () => { await Film.load(); init(); GoldLine.init(W, H, [0, 0, W, H]); buildStars(); buildStatue(); Illum.init(); buildIllumShards(); await Papercut.init(); buildShipSmall(); buildSky(); Water.init(); buildMap(); buildBurn(); }, draw });
 </script>
 </body>
 </html>

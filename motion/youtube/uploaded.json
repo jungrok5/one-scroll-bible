@@ -455,6 +455,35 @@
     "time_kst": "10:00",
     "first_day": "2026-10-24",
     "note": "moved from the Korean channel 2026-10-26 (same schedule); related video = global.film[L] (set in Studio); related video set to global.film[L] in Studio 2026-10-28"
+   },
+   "id": {
+    "ids": {
+     "10": "PJlg9QSfHgU",
+     "11": "zJcUNdVzqWs",
+     "12": "ULMl8Op3pYc",
+     "13": "U8y_1wRidr8",
+     "14": "gxs142ocSW8",
+     "15": "Jmfy_2iO9ag",
+     "16": "GCpuAvcz0Bc",
+     "17": "bzHZHLhOmKA",
+     "18": "DqjOjfSEw3c",
+     "19": "CtkRF4Cys_0",
+     "20": "GlZWzQOoOGI",
+     "21": "zNtHyguz-MI",
+     "01": "hwQoDM3hpEY",
+     "09": "9cSp4nv78-w",
+     "08": "A-kEnWuuxRM",
+     "07": "zTQo45vusqQ",
+     "06": "jsv0RMaEK04",
+     "05": "lLxw1OBw7I0",
+     "04": "7DeZROyN8kk",
+     "03": "cXvIUQPX2Ok",
+     "02": "ooXLSS7iRhk"
+    },
+    "first_day": "2026-10-31",
+    "time_local": "19:00",
+    "utc_offset": "+07:00",
+    "note": "wave 2 (2026-10-30): uploaded to this channel via Studio (file only), filled + scheduled by API (schedule-shorts); related video = global.film[L] (set in Studio)"
    }
   },
   "playlists": {

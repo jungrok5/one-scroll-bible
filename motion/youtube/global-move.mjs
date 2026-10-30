@@ -85,6 +85,50 @@ if (cmd === 'playlists') {
     await api('videos?part=snippet,status', { method: 'PUT', body: JSON.stringify({ id, snippet: { title: f.title, description: f.description, tags, categoryId: '27', defaultLanguage: lang, defaultAudioLanguage: lang }, status }) });
   }
   s.time_kst = old.time_kst; s.first_day = old.first_day; s.note = 'moved from the Korean channel 2026-10-26 (same schedule); related video = global.film[L] (set in Studio)'; save();
+} else if (cmd === 'schedule-shorts') {
+  // schedule-shorts <L> <first day YYYY-MM-DD> <local time HH:MM> <UTC offset +HH:MM> [--dry]: a NEW wave (uploaded straight to
+  // this channel, file only): title/description/tags/language from the upload sheet, not for kids, no altered content, and
+  // Short n scheduled at first day + n−1 at the language's local evening time. Only Shorts recorded in global.shorts[L].ids.
+  const [L, day, hm, off] = rest, s = g.shorts[L];
+  if (!s || !/^\d{4}-\d\d-\d\d$/.test(day || '') || !/^\d\d:\d\d$/.test(hm || '') || !/^[+-]\d\d:\d\d$/.test(off || '')) { console.log('usage: schedule-shorts <L> <YYYY-MM-DD> <HH:MM> <+HH:MM> [--dry]'); process.exit(1); }
+  if (!dry) await me();
+  const lang = L === 'tl' ? 'fil' : L, t0 = Date.parse(`${day}T${hm}:00${off}`);
+  // a rerun (e.g. after the daily quota ran out) skips the ones already done: 1 unit per 50 to look, 50 units per update
+  const done = {}; if (!dry) for (let i = 0, ids = Object.values(s.ids); i < ids.length; i += 50)
+    for (const x of (await api(`videos?part=status,snippet&id=${ids.slice(i, i + 50).join(',')}`)).items) done[x.id] = x;
+  for (const [nn, id] of Object.entries(s.ids).sort()) {
+    const f = man.languages[L].shorts[+nn - 1], when = new Date(t0 + (+nn - 1) * 864e5);
+    if (when < new Date(Date.now() + 30 * 60e3)) { console.log(L, nn, id, 'time already passed — skipped', when.toISOString()); continue; }
+    const x = done[id]; if (x && x.status.publishAt === when.toISOString().replace('.000Z', 'Z') && x.snippet.title === f.title) { console.log(L, nn, id, 'already scheduled'); continue; }
+    const tags = []; for (const t of f.tags) { if ([...tags, t].join(',').length + 2 * (tags.length + 1) > 480) break; tags.push(t); }
+    console.log(L, nn, id, 'scheduled', when.toISOString(), '|', f.title.slice(0, 40)); if (dry) continue;
+    await api('videos?part=snippet,status', { method: 'PUT', body: JSON.stringify({ id, snippet: { title: f.title, description: f.description, tags, categoryId: '27', defaultLanguage: lang, defaultAudioLanguage: lang },
+      status: { privacyStatus: 'private', publishAt: when.toISOString(), selfDeclaredMadeForKids: false, containsSyntheticMedia: false } }) });
+  }
+  if (!dry) { Object.assign(s, { first_day: day, time_local: hm, utc_offset: off, note: `wave 2 (${new Date().toISOString().slice(0, 10)}): uploaded to this channel via Studio (file only), filled + scheduled by API (schedule-shorts); related video = global.film[L] (set in Studio)` }); save(); }
+} else if (cmd === 'recent') {
+  // recent [n]: the channel's newest uploads (any privacy) — to see what a Studio upload run really created
+  await me(); const up_ = (await api('channels?part=contentDetails&mine=true')).items[0].contentDetails.relatedPlaylists.uploads;
+  const items = (await api(`playlistItems?part=snippet,contentDetails&maxResults=${Math.min(50, +rest[0] || 30)}&playlistId=${up_}`)).items;
+  const v = (await api(`videos?part=status,snippet,fileDetails&id=${items.map(i => i.contentDetails.videoId).join(',')}`)).items;
+  for (const x of v) console.log(x.id, x.status.privacyStatus, x.status.publishAt || '-', x.snippet.publishedAt, x.fileDetails?.fileName || '', '|', x.snippet.title.slice(0, 40));
+} else if (cmd === 'record-from-files') {
+  // record-from-files <L…>: find the channel's uploads by their file name (shorts-<L>-NN-<scene>.mp4) → global.shorts[L].ids[NN].
+  // Safer than a browser log: it records exactly what YouTube has. Two uploads of the same file = reported, not recorded.
+  await me(); const plU = (await api('channels?part=contentDetails&mine=true')).items[0].contentDetails.relatedPlaylists.uploads;
+  const want = rest.filter(a => !a.startsWith('--')), found = {}; let page = '';
+  for (let k = 0; k < 8; k++) {
+    const pl = await api(`playlistItems?part=contentDetails&maxResults=50&playlistId=${plU}${page ? '&pageToken=' + page : ''}`);
+    const v = (await api(`videos?part=fileDetails&id=${pl.items.map(i => i.contentDetails.videoId).join(',')}`)).items;
+    for (const x of v) { const m = (x.fileDetails?.fileName || '').match(/^shorts-(.+)-(\d\d)-[a-z]+\.mp4$/); if (m && want.includes(m[1])) ((found[m[1]] ||= {})[m[2]] ||= []).push(x.id); }
+    if (!pl.nextPageToken) break; page = pl.nextPageToken; }
+  for (const L of want) { const s = (g.shorts[L] ||= { ids: {} }); let n = 0;
+    for (const [nn, ids] of Object.entries(found[L] || {})) { if (ids.length > 1) { console.log(L, nn, 'DUPLICATE uploads:', ids.join(' ')); continue; } s.ids[nn] = ids[0]; n++; }
+    console.log(L, 'recorded', n, '/ 21'); }
+  save();
+} else if (cmd === 'check') {
+  const v = await api(`videos?part=status,processingDetails,snippet&id=${rest.filter(a => /^[\w-]{11}$/.test(a)).join(',')}`);
+  for (const x of v.items) console.log(x.id, x.status.privacyStatus, x.status.publishAt || '-', x.status.uploadStatus, x.processingDetails?.processingStatus || '', x.snippet.defaultLanguage || '', x.snippet.title.slice(0, 40));
 } else if (cmd === 'unschedule-old') {
   // unschedule-old <L> [--dry]: on the KOREAN channel (YT_REFRESH_TOKEN): the Shorts of L that are public → unlisted (links keep
   // working), the scheduled ones → plain private (schedule cancelled). Nothing is deleted.

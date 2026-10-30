@@ -68,11 +68,11 @@
   // narration subtitle: the one place spoken words appear (always on screen — deaf viewers read every word)
   // The narration is anchored by its LAST line to one fixed baseline near the bottom (a longer translation grows upward),
   // and every picture keeps clear of the band above it (F.SAFE: the lowest y a picture may use) — so the words never sit on art.
-  // Portrait: Shorts/Reels cover the bottom ~20% (channel, title) and a column of buttons on the right (~86–98% of the
-  // width, from mid-height down) — so words end at 74% of the height and sit a little left of centre, at most 80% wide.
+  // Portrait: Shorts/Reels cover the bottom ~20% (channel, title) and a column of buttons on the right — so words end at
+  // 74% of the height, centred (the film is also played on its own), at most 80% wide.
   F.subBottom = () => P.ori === 'v' ? P.H * .74 : P.H - 104;
   F.SAFE = () => P.ori === 'v' ? P.H * .64 : P.H - 270;
-  F.cx = () => P.ori === 'v' ? P.W * .47 : P.W / 2;
+  F.cx = () => P.W / 2;
   F.vw = () => P.W * .8;
   // portrait: a narration with '/' pieces is shown piece by piece (each one or two big lines), its time shared by length
   F.pieces = (txt, a, b) => { const segs = String(txt).split(/\s*\/\s*/).filter(Boolean), w = segs.map(s => P.chars(s).length + 6), tw = w.reduce((x, y) => x + y, 0);

@@ -147,6 +147,81 @@
     x.restore();
   };
 
+  // ---------- figures, after the first film's kingdom.html (face, curls, sheep) — local coordinates, scaled by the caller ----------
+  const FLESH = '#f0d6ba', WOOL = '#f3ecd8', HAIR = '#8e4020', LINEN = '#f1ead6', ROSE = '#c4776c';
+  const ell = (cx, cy, rx, ry, r = 0) => { const p = new Path2D(); p.ellipse(cx, cy, rx, ry, r, 0, 6.2832); return p; };
+  const line = (x, d, lw = 2, c = INK, a = 1) => { x.save(); x.globalAlpha *= a; x.strokeStyle = c; x.lineWidth = lw; x.lineCap = 'round'; x.lineJoin = 'round'; x.stroke(P2(d)); x.restore(); };
+  function face(x, cx, cy, s, dir = 1, up = 0) {    // a gothic face: pale oval, few ink lines, rosy cheek
+    x.save(); x.translate(cx, cy); x.rotate(up * dir); x.scale(dir, 1);
+    fillInk(x, ell(0, 0, 21 * s, 27 * s), FLESH, 1.8 * s);
+    line(x, `M${4 * s} ${-6 * s} q${5 * s} ${-3 * s} ${10 * s} 0`, 1.6 * s); line(x, `M${5 * s} ${-1 * s} q${4 * s} ${2 * s} ${8 * s} 0`, 1.8 * s);
+    x.fillStyle = INK; x.beginPath(); x.arc(10 * s, 0, 1.6 * s, 0, 6.28); x.fill();
+    line(x, `M${16 * s} ${-2 * s} q${4 * s} ${8 * s} ${1 * s} ${10 * s}`, 1.5 * s); line(x, `M${8 * s} ${15 * s} q${4 * s} ${2 * s} ${8 * s} ${-1 * s}`, 1.5 * s, '#8a2a18');
+    x.fillStyle = 'rgba(205,90,70,.35)'; x.beginPath(); x.arc(6 * s, 8 * s, 5 * s, 0, 6.28); x.fill(); x.restore(); }
+  function sheep(x, px, py, s, dir, rot = 0) {      // a fleecy sheep (scalloped body, ink curls, dark face)
+    x.save(); x.translate(px, py); x.rotate(rot); x.scale(s * dir, s);
+    const r = rng(11), body = new Path2D(), N = 14;
+    for (let i = 0; i <= N; i++) { const a = i / N * 6.2832, rx = 62, ry = 36, x1 = Math.cos(a) * rx, y1 = Math.sin(a) * ry, a2 = (i + .5) / N * 6.2832, x2 = Math.cos(a2) * (rx + 9), y2 = Math.sin(a2) * (ry + 9), a3 = (i + 1) / N * 6.2832;
+      if (!i) body.moveTo(x1, y1); body.quadraticCurveTo(x2, y2, Math.cos(a3) * rx, Math.sin(a3) * ry); }
+    x.fillStyle = INK; [[-38, 0], [-22, 4], [24, 2], [40, -2]].forEach(([lx, k]) => x.fillRect(lx - 3.5, 26, 7, 30 + k));
+    fillInk(x, body, WOOL, 2.2);
+    for (let i = 0; i < 12; i++) { const cx = (r() - .5) * 90, cy = (r() - .5) * 46; line(x, `M${cx} ${cy} a5 5 0 1 1 6 4`, 1.3, INK, .55); }
+    x.save(); x.translate(66, 6); x.rotate(.5); fillInk(x, ell(6, 0, 22, 14), '#4a3a30', 2); fillInk(x, ell(-6, -11, 10, 5, -.6), '#5a483a', 1.6);
+    x.fillStyle = WHT; x.beginPath(); x.arc(10, -3, 2.2, 0, 6.28); x.fill(); x.restore(); x.restore(); }
+
+  // the altar of incense: gold, with horns, and stylised ink-and-white smoke scrolls rising
+  I.altar = (x, cx, by, s, t) => { x.save(); x.translate(cx, by); x.scale(s, s);
+    gold(x, P2('M-70 0 L-70 -150 L70 -150 L70 0 Z'), { lw: 3 }); gold(x, P2('M-86 -150 L86 -150 L86 -172 L-86 -172 Z'), { lw: 3 });
+    for (const hx of [-1, 1]) gold(x, P2(`M${hx * 86} -172 L${hx * 76} -204 L${hx * 66} -172 Z`), { lw: 2.4 });
+    line(x, 'M-70 -110 H70 M-70 -40 H70', 2.4); x.fillStyle = VERM; for (const hx of [-36, 0, 36]) { x.beginPath(); x.arc(hx, -75, 7, 0, 6.28); x.fill(); x.lineWidth = 1.6; x.strokeStyle = INK; x.stroke(); }
+    // smoke: a chain of scrolls drifting up and to the side
+    for (let i = 0; i < 7; i++) { const u = ((t * .12 + i / 7) % 1), yy = -190 - u * 460, xx = Math.sin(u * 5 + i) * 40 * (.4 + u), rr = 22 + u * 40, a = Math.sin(u * Math.PI);
+      x.save(); x.globalAlpha = .85 * a; x.translate(xx, yy); const p = new Path2D(); p.arc(0, 0, rr, 0, 6.283); p.arc(rr * .9, rr * .3, rr * .7, 0, 6.283); p.arc(-rr * .8, rr * .35, rr * .65, 0, 6.283);
+      x.fillStyle = 'rgba(250,246,236,.9)'; x.fill(p); line(x, `M${-rr * .5} 0 a${rr * .5} ${rr * .5} 0 1 1 ${rr * .6} ${rr * .4}`, 1.8, INK, .7); x.restore(); }
+    x.restore(); };
+  // Zechariah the priest: white linen robe and turban, a blue sash, hands lifted in prayer before the altar; facing right
+  I.priest = (x, px, py, s, t) => { x.save(); x.translate(px, py); x.scale(s, s);
+    fillInk(x, P2('M -70 -560 C -110 -400 -130 -180 -150 0 L 130 0 C 110 -160 100 -360 60 -560 Q 0 -590 -70 -560 Z'), LINEN, 3);
+    line(x, 'M -40 -400 Q -70 -200 -90 -6 M 10 -380 Q 0 -200 10 -4 M 50 -360 Q 70 -180 90 -6', 2.2, '#b8ad92', .9);
+    fillInk(x, P2('M -84 -300 L 82 -310 L 84 -284 L -88 -274 Z'), LAP, 2); line(x, 'M 60 -290 q 18 80 6 170', 9, LAP); line(x, 'M 60 -290 q 18 80 6 170', 2, INK, .5);
+    fillInk(x, P2('M -60 0 l 0 -14 l 50 0 q 20 6 20 14 Z'), '#3a2a20', 2); fillInk(x, P2('M 30 0 l 0 -14 l 54 0 q 20 6 18 14 Z'), '#3a2a20', 2);
+    const sw = Math.sin(t * 1.2) * 4;
+    fillInk(x, P2(`M 30 -540 C 90 -560 130 ${-620 + sw} 170 ${-660 + sw} L 192 ${-646 + sw} C 150 ${-600 + sw} 100 -520 50 -500 Z`), LINEN, 2.4);
+    fillInk(x, P2(`M -20 -520 C 40 -520 100 ${-600 + sw} 140 ${-640 + sw} L 160 ${-628 + sw} C 120 ${-576 + sw} 60 -486 0 -486 Z`), '#e2d9c0', 2.2);
+    fillInk(x, ell(186, -664 + sw, 11, 15, .4), FLESH, 1.8); fillInk(x, ell(154, -642 + sw, 11, 14, .4), FLESH, 1.8);
+    fillInk(x, P2('M -18 -604 L 16 -604 L 20 -560 L -20 -560 Z'), FLESH, 1.8);
+    x.save(); x.translate(6, -650); x.rotate(-.12);
+    face(x, 0, 0, 1.75, 1, 0);
+    fillInk(x, P2('M -14 22 C -16 60 0 104 18 124 C 34 96 38 56 34 20 Q 26 34 10 32 Q -2 30 -14 22 Z'), WHT, 1.8); line(x, 'M 4 46 q 4 30 10 60 M 18 44 q 4 30 6 60', 1.3, '#9a9078');
+    fillInk(x, P2('M -44 -14 C -50 -60 -10 -76 20 -64 C 44 -56 48 -34 40 -18 C 20 -30 -20 -30 -44 -14 Z'), LINEN, 2); line(x, 'M -40 -30 Q 0 -44 40 -30 M -36 -46 Q 0 -60 32 -48', 1.4, '#b8ad92');
+    x.restore(); x.restore(); };
+  // the angel Gabriel: white robe with a gold hem, gold-leaf wings and nimbus, one hand raised; facing left
+  I.angel = (x, px, py, s, t, k = 1) => { if (k <= 0) return; x.save(); x.globalAlpha = k; x.translate(px, py); x.scale(s, s);
+    const fl = Math.sin(t * 1.6) * 6;
+    for (const d of [1, .82]) { const wing = P2(`M 20 -520 C 120 ${-700 + fl} 200 ${-640 + fl} 230 -470 C 200 -420 170 -330 150 -230 C 110 -300 70 -380 30 -440 Z`); x.save(); x.translate((1 - d) * 60, (1 - d) * 40); x.scale(d, d); gold(x, wing, { lw: 2.6 });
+      line(x, 'M 60 -470 Q 150 -560 200 -480 M 70 -420 Q 140 -470 180 -400 M 90 -360 Q 130 -400 160 -320', 1.8, '#7a5418'); x.restore(); }
+    fillInk(x, P2('M -60 -540 C -100 -380 -110 -180 -130 0 L 120 0 C 100 -170 90 -380 50 -540 Q -6 -566 -60 -540 Z'), WHT, 3);
+    gold(x, P2('M -130 0 L 120 0 L 117 -26 L -127 -26 Z'), { lw: 2 }); line(x, 'M -30 -420 Q -50 -200 -64 -6 M 20 -400 Q 24 -200 30 -4', 2.2, '#b8ad92', .9);
+    fillInk(x, P2('M -40 -520 C -90 -540 -140 -600 -170 -650 L -150 -664 C -120 -620 -76 -580 -30 -556 Z'), WHT, 2.4); fillInk(x, ell(-166, -666, 11, 15, -.5), FLESH, 1.8);
+    const halo = new Path2D(); halo.arc(-4, -640, 64, 0, 6.283); gold(x, halo, { lw: 2.4 }); line(x, 'M -4 -704 a 64 64 0 0 1 0 128', 1.4, '#7a5418', .5);
+    fillInk(x, P2('M -18 -604 L 16 -604 L 20 -560 L -20 -560 Z'), FLESH, 1.8);
+    x.save(); x.translate(-4, -640); face(x, 0, 0, 1.7, -1, 0); fillInk(x, P2('M 40 -10 C 46 -52 10 -66 -20 -56 C -40 -46 -44 -20 -36 0 C -30 -20 -10 -34 14 -32 C 30 -30 36 -20 40 -10 Z'), '#e2b45a', 1.6); x.restore();
+    x.restore(); };
+  // the good shepherd seen from behind, walking toward the light with the lost sheep across his shoulders (no face is shown)
+  I.shepherdBack = (x, px, py, s, t) => { x.save(); x.translate(px, py); x.scale(s, s); const step = Math.sin(t * 2.4) * 6;
+    line(x, `M 150 ${-20 + step * .2} L 120 -640 q -6 -30 18 -36 q 24 0 22 22`, 8, '#5a3a20');                       // the staff
+    fillInk(x, P2(`M -40 0 l ${-8 + step} -120 l 40 0 l ${4 - step} 120 Z M 20 0 l ${4 - step} -120 l 40 0 l ${-4 + step} 120 Z`), '#7a5a3a', 2);   // legs
+    fillInk(x, P2('M -96 -500 C -120 -360 -120 -220 -110 -120 L 110 -120 C 120 -220 120 -360 96 -500 Q 0 -540 -96 -500 Z'), VERM, 3);    // tunic
+    line(x, 'M -60 -440 Q -80 -300 -76 -130 M 0 -470 V -130 M 60 -440 Q 80 -300 76 -130', 2.2, '#7a1c0c', .8);
+    fillInk(x, P2('M -108 -500 C -160 -380 -150 -240 -120 -170 C -60 -200 -20 -320 -24 -500 Q -70 -520 -108 -500 Z'), LAP, 3);          // the mantle over one shoulder
+    line(x, 'M -110 -440 Q -130 -330 -120 -200', 2, '#10224f', .8);
+    fillInk(x, P2('M 90 -470 C 120 -440 130 -380 128 -320 L 108 -318 C 108 -370 100 -420 80 -450 Z'), VERM, 2.2); fillInk(x, ell(118, -312, 12, 14), FLESH, 1.6);   // arm to the staff
+    // the sheep across the shoulders, legs held at the front
+    sheep(x, 0, -548, 1.7, -1, .04);
+    fillInk(x, ell(0, -620, 44, 50), HAIR, 2);                                                                            // head from behind: hair
+    for (let i = 0; i < 6; i++) line(x, `M ${-30 + i * 12} -650 q 4 20 -2 46`, 1.4, '#4a1e0c', .8);
+    x.restore(); };
+
   // the miniature: the page, the punched gold ground with tooled rays behind the lit metal, a strip of ground, and what paint() adds
   I.page = (ctx, t, paint, o = {}) => {
     const [ax, ay, aw, ah] = I.L.arch, arch = archP(ax, ay, aw, ah);
@@ -158,6 +233,10 @@
     { const vg = ctx.createRadialGradient(ax + aw / 2, ay + ah * .4, 0, ax + aw / 2, ay + ah * .4, ah * .8); vg.addColorStop(0, 'rgba(90,130,220,.25)'); vg.addColorStop(1, 'rgba(5,10,40,.35)'); ctx.fillStyle = vg; ctx.fillRect(ax, ay, aw, ah); }
     if (o.rays) { ctx.save(); ctx.globalCompositeOperation = 'screen'; ctx.strokeStyle = `rgba(240,200,110,${.45 * o.rays.k})`; ctx.lineWidth = 2.4; const [rx, ry] = o.rays.at;
       for (let i = 0; i < 64; i++) { const a = i / 64 * 6.283; ctx.beginPath(); ctx.moveTo(rx + Math.cos(a) * 40, ry + Math.sin(a) * 40); ctx.lineTo(rx + Math.cos(a) * 900, ry + Math.sin(a) * 900); ctx.stroke(); } ctx.restore(); }
+    if (o.ground === 'floor') { const gy = ay + ah * .88, n = 12; ctx.fillStyle = '#6e3a1e'; ctx.fillRect(ax, gy, aw, ah - (gy - ay));
+      for (let i = 0; i < n; i++) for (let j = 0; j < 3; j++) { if ((i + j) % 2) continue; const x0 = ax + i * aw / n, y0 = gy + j * (ah * .12) / 3; ctx.fillStyle = '#c9a25a'; ctx.fillRect(x0, y0, aw / n, ah * .04); }
+      ctx.strokeStyle = INK; ctx.lineWidth = 2.4; ctx.beginPath(); ctx.moveTo(ax, gy); ctx.lineTo(ax + aw, gy); ctx.stroke(); paint(ctx, { ax, ay, aw, ah, gy }); ctx.restore();
+      ctx.save(); ctx.lineWidth = 10; ctx.strokeStyle = VERM; ctx.stroke(arch); ctx.lineWidth = 2; ctx.strokeStyle = INK; ctx.stroke(arch); ctx.setLineDash([1, 9]); ctx.lineCap = 'round'; ctx.lineWidth = 3; ctx.strokeStyle = WHT; ctx.stroke(arch); ctx.restore(); return; }
     // the ground: a green hill with ink grass
     const gy = ay + ah * .9; ctx.fillStyle = GRN; ctx.beginPath(); ctx.moveTo(ax, ay + ah); ctx.lineTo(ax, gy + 10); ctx.quadraticCurveTo(ax + aw / 2, gy - 26, ax + aw, gy + 10); ctx.lineTo(ax + aw, ay + ah); ctx.closePath(); ctx.fill();
     ctx.strokeStyle = INK; ctx.lineWidth = 2.4; ctx.stroke(); ctx.lineWidth = 1.4; const r = rng(9); for (let i = 0; i < 40; i++) { const gx = ax + r() * aw, gg = gy + 4 + r() * (ah * .1 - 10); ctx.beginPath(); ctx.moveTo(gx, gg); ctx.lineTo(gx - 3, gg - 9); ctx.moveTo(gx, gg); ctx.lineTo(gx + 4, gg - 8); ctx.stroke(); }

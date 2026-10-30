@@ -483,7 +483,7 @@
     "first_day": "2026-10-31",
     "time_local": "19:00",
     "utc_offset": "+07:00",
-    "note": "wave 2 (2026-10-30): uploaded to this channel via Studio (file only), filled + scheduled by API (schedule-shorts); related video = global.film[L] (set in Studio)"
+    "note": "wave 2 (2026-10-30): uploaded to this channel via Studio (file only), filled + scheduled by API (schedule-shorts); related video = global.film[L] (set in Studio); playlist added by API, related video = global.film[L] set in Studio for all 21 (2026-10-30)"
    },
    "fr": {
     "ids": {
@@ -512,7 +512,7 @@
     "first_day": "2026-10-31",
     "time_local": "19:00",
     "utc_offset": "+01:00",
-    "note": "wave 2 (2026-10-30): uploaded to this channel via Studio (file only), filled + scheduled by API (schedule-shorts); related video = global.film[L] (set in Studio)",
+    "note": "wave 2 (2026-10-30): uploaded to this channel via Studio (file only), filled + scheduled by API (schedule-shorts); related video = global.film[L] (set in Studio); playlist added by API, related video = global.film[L] set in Studio for all 21 (2026-10-30)",
     "duplicates": {
      "14": "vPFDn0R0sQg (re-uploaded 2026-10-30 by mistake: the uploads list had not shown m9osRHpzFBQ yet) — private, unscheduled; owner to delete"
     }
@@ -544,7 +544,7 @@
     "first_day": "2026-10-31",
     "time_local": "19:00",
     "utc_offset": "+01:00",
-    "note": "wave 2 (2026-10-30): uploaded to this channel via Studio (file only), filled + scheduled by API (schedule-shorts); related video = global.film[L] (set in Studio)"
+    "note": "wave 2 (2026-10-30): uploaded to this channel via Studio (file only), filled + scheduled by API (schedule-shorts); related video = global.film[L] (set in Studio); playlist added by API, related video = global.film[L] set in Studio for all 21 (2026-10-30)"
    },
    "ru": {
     "ids": {
@@ -573,7 +573,7 @@
     "first_day": "2026-10-31",
     "time_local": "19:00",
     "utc_offset": "+03:00",
-    "note": "wave 2 (2026-10-30): uploaded to this channel via Studio (file only), filled + scheduled by API (schedule-shorts); related video = global.film[L] (set in Studio)"
+    "note": "wave 2 (2026-10-30): uploaded to this channel via Studio (file only), filled + scheduled by API (schedule-shorts); related video = global.film[L] (set in Studio); playlist added by API, related video = global.film[L] set in Studio for all 21 (2026-10-30)"
    }
   },
   "playlists": {

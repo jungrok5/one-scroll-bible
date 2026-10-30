@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>침묵의 400년</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;900&family=Noto+Sans+KR:wght@300;400;700&display=swap">
+</head>
+<body>
+<script src="../../pilot/lib.js"></script>
+<script src="../lib-film.js"></script>
+<script>
+/* 침묵의 400년 — one continuous ~2:50 film. Look: night, lamplight and gold on parchment; one scroll is the main
+   character (it goes dark at the start and lights again at the end). Line ids = script.json. */
+const { clamp, lerp, ss, eo, eio, win, rng, fbm, canvas, hex, mix, rgb } = Pilot;
+const W = Pilot.W, H = Pilot.H, V = Pilot.ori === 'v', DUR = 170;
+let parch, grain, motes = [];
+
+function init() {
+  // parchment texture: low-res fbm stretched (soft fibres + blotches), warm
+  const pw = 480, ph = 270, c = canvas(pw, ph), x = c.getContext('2d'), d = x.createImageData(pw, ph);
+  for (let j = 0; j < ph; j++) for (let i = 0; i < pw; i++) {
+    const n = fbm(i / 60, j / 60, 5), f = fbm(i / 6, j / 90, 2), v = .78 + (n - .5) * .35 + (f - .5) * .08, o = (j * pw + i) * 4;
+    d.data[o] = 222 * v; d.data[o + 1] = 196 * v; d.data[o + 2] = 150 * v; d.data[o + 3] = 255; }
+  x.putImageData(d, 0, 0); parch = c;
+  grain = Pilot.speckle(512, 512, 22, 7, .4);
+  const r = rng(11); for (let i = 0; i < 70; i++) motes.push([r(), r(), .3 + r() * .9, r() * 6.28, .2 + r() * .8]);
+}
+
+// ---------- shared furniture ----------
+function vignette(ctx, k = .85) { const g = ctx.createRadialGradient(W / 2, H * .45, Math.min(W, H) * .25, W / 2, H / 2, Math.max(W, H) * .78);
+  g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, `rgba(0,0,0,${k})`); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H); }
+function filmGrain(ctx, t, a = .06) { ctx.save(); ctx.globalAlpha = a; ctx.globalCompositeOperation = 'overlay';
+  const ox = (Math.floor(t * 24) * 137) % 512, oy = (Math.floor(t * 24) * 251) % 512;
+  for (let y = -oy; y < H; y += 512) for (let x = -ox; x < W; x += 512) ctx.drawImage(grain, x, y); ctx.restore(); }
+function dust(ctx, t, light, a = 1) {   // motes drifting in the lamplight
+  ctx.save(); for (const [mx, my, s, ph, b] of motes) {
+    const x = ((mx * W + t * 9 * s + Math.sin(t * .3 + ph) * 30) % W + W) % W, y = ((my * H - t * 6 * s) % H + H) % H;
+    const d = Math.hypot(x - light[0], y - light[1]) / (Math.max(W, H) * .5), k = clamp(1 - d) * b * a; if (k < .02) continue;
+    ctx.fillStyle = `rgba(255,220,160,${k * .5})`; ctx.beginPath(); ctx.arc(x, y, 1.2 + s * 1.6, 0, 6.283); ctx.fill(); }
+  ctx.restore(); }
+
+// the scroll: open width 0..1, light 0..1 (lamplight on it), centred at (cx, cy) with size (w, h)
+function scroll(ctx, cx, cy, w, h, open, light) {
+  const ow = w * open, x0 = cx - ow / 2, y0 = cy - h / 2;
+  ctx.save();
+  // shadow under
+  ctx.fillStyle = 'rgba(0,0,0,.55)'; ctx.filter = 'blur(24px)'; ctx.fillRect(x0 + 10, y0 + 30, ow, h); ctx.filter = 'none';
+  // sheet
+  ctx.beginPath(); ctx.rect(x0, y0, ow, h); ctx.clip();
+  ctx.drawImage(parch, cx - w / 2, y0, w, h);
+  const g = ctx.createRadialGradient(cx, cy - h * .3, 0, cx, cy, Math.max(w, h) * .75);   // lamplight from above
+  g.addColorStop(0, `rgba(255,214,150,${.18 * light})`); g.addColorStop(1, `rgba(20,10,0,${.55 + (1 - light) * .45})`);
+  ctx.fillStyle = g; ctx.fillRect(x0, y0, ow, h);
+  ctx.fillStyle = `rgba(0,0,0,${(1 - light) * .55})`; ctx.fillRect(x0, y0, ow, h);
+  // edge burn
+  const e = ctx.createLinearGradient(0, y0, 0, y0 + h); e.addColorStop(0, 'rgba(60,30,5,.45)'); e.addColorStop(.08, 'rgba(60,30,5,0)'); e.addColorStop(.92, 'rgba(60,30,5,0)'); e.addColorStop(1, 'rgba(60,30,5,.45)');
+  ctx.fillStyle = e; ctx.fillRect(x0, y0, ow, h);
+  ctx.restore();
+  // rollers at both ends (wood, lit from above)
+  for (const sx of [x0, x0 + ow]) { const rw = V ? 34 : 40, rh = h + (V ? 60 : 70);
+    const rg = ctx.createLinearGradient(sx - rw / 2, 0, sx + rw / 2, 0);
+    const base = mix([92, 58, 30], [160, 110, 60], light * .8);
+    rg.addColorStop(0, rgb(mix(base, [0, 0, 0], .6))); rg.addColorStop(.45, rgb(mix(base, [255, 220, 170], .25))); rg.addColorStop(1, rgb(mix(base, [0, 0, 0], .7)));
+    ctx.fillStyle = rg; ctx.beginPath(); ctx.roundRect(sx - rw / 2, cy - rh / 2, rw, rh, rw / 2); ctx.fill();
+    ctx.fillStyle = rgb(mix(base, [0, 0, 0], .35)); for (const yy of [cy - rh / 2 - 26, cy + rh / 2 + 2]) { ctx.beginPath(); ctx.roundRect(sx - rw * .32, yy, rw * .64, 24, 8); ctx.fill(); } }
+}
+
+// ---------- 0:00–0:20  the last line goes out ----------
+function partOpening(ctx, t) {
+  ctx.fillStyle = '#05060a'; ctx.fillRect(0, 0, W, H);
+  const cx = W / 2, cy = V ? H * .4 : H * .43, sw = V ? 900 : 1340, sh = V ? 780 : 560;
+  const open = eio(clamp((t - .6) / 2.4)), dark = ss(9.6, 12.2, t);
+  const flick = 1 + .05 * Math.sin(t * 7.3) * Math.sin(t * 2.9 + 1) + .03 * Math.sin(t * 17.1), light = ss(.3, 2.2, t) * (1 - dark) * flick;
+  // the camera creeps toward the scroll (it never cuts; the push makes the stillness feel held)
+  const push = 1 + .07 * eio(clamp(t / 12)); ctx.save(); ctx.translate(W / 2, H * .45); ctx.scale(push, push); ctx.translate(-W / 2, -H * .45);
+  // warm pool of lamplight on the table
+  const lp = ctx.createRadialGradient(cx, cy - sh * .2, 0, cx, cy, Math.max(W, H) * .7);
+  lp.addColorStop(0, `rgba(120,80,40,${.35 * light})`); lp.addColorStop(1, 'rgba(0,0,0,0)'); ctx.fillStyle = lp; ctx.fillRect(0, 0, W, H);
+  if (t < 13) {
+    scroll(ctx, cx, cy, sw, sh, open, light);
+    // Mal 4:6 on the scroll — the promise half faint, the warning half in ink; then the letters go out one by one
+    const size = V ? 44 : 46, maxW = sw - (V ? 130 : 220); ctx.save(); ctx.font = Film.font(size, 600);
+    const lines = Film.wrapEven(ctx, Film.text('01'), maxW), promise = Film.wrapEven(ctx, Film.text('01').split(/\s*\/\s*/)[0], maxW).length; ctx.restore();
+    const lh = size * 1.7, y0 = cy - (lines.length - 1) * lh / 2 - (V ? 30 : 24);
+    const tin = ss(2.4, 4.2, t), out0 = 8.8, out1 = 10.6;
+    Film.block(ctx, lines, cx, y0, { size, weight: 600, lh: 1.7, color: '#2b1a0b', alpha: tin,
+      lineAlpha: i => i < promise ? .38 : 1,
+      charAlpha: (k, n) => { const at = out0 + (out1 - out0) * k / n; return 1 - ss(at, at + .35, t); },
+      charGlow: (k, n) => { const at = out0 + (out1 - out0) * k / n; return ss(at - .25, at, t) * (1 - ss(at, at + .3, t)); } });
+    const ca = tin * (1 - ss(out1 - .2, out1 + .6, t));
+    if (ca > 0) Pilot.text(ctx, Film.cite('01'), cx, cy + sh / 2 - (V ? 50 : 44), { size: V ? 26 : 24, font: "'Noto Sans KR',sans-serif", color: '#5a3d1f', alpha: ca });
+  }
+  dust(ctx, t, [cx, cy - sh * .3], light);
+  ctx.restore();
+  Film.sub(ctx, '02', t, 6.4, 10.4);
+  // 03 in total silence on black
+  Film.sub(ctx, '03', t, 11.2, 15.4, { y: V ? H * .47 : H * .5, size: V ? 58 : 54 });
+  // title
+  const ta = win(t, 15.9, 20.4, 1.2, 1.1);
+  if (ta > 0) { const sz = V ? 104 : 116, ty = V ? H * .47 : H * .5;
+    Pilot.text(ctx, Film.text('T1'), W / 2, ty, { size: sz, weight: 600, color: '#e9c77a', alpha: ta, shadow: 'rgba(233,185,73,.35)', shadowBlur: 40, ls: 6 });
+    const lw = (V ? 420 : 520) * eo(clamp((t - 16.3) / 2.2)); ctx.fillStyle = `rgba(233,199,122,${ta * .8})`; ctx.fillRect(W / 2 - lw / 2, ty + (V ? 54 : 58), lw, 2); }
+}
+
+function draw(ctx, t) {
+  partOpening(ctx, t);
+  vignette(ctx, .8); filmGrain(ctx, t);
+  ctx.fillStyle = `rgba(0,0,0,${1 - ss(0, 1.2, t)})`; ctx.fillRect(0, 0, W, H);   // fade in from black
+}
+
+Pilot.run({ W, H, dur: DUR, fonts: ["600 40px 'Noto Serif KR'", "400 40px 'Noto Serif KR'", "400 20px 'Noto Sans KR'"],
+  init: async () => { await Film.load(); init(); }, draw });
+</script>
+</body>
+</html>

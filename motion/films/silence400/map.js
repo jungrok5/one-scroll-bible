@@ -51,9 +51,9 @@ window.MAP = {
     gaza: [34.45, 31.5], issus: [36.2, 36.8], gaugamela: [43.4, 36.4], hellespont: [26.4, 40.2], gades: [-6.3, 36.5], tarraco: [1.2, 41.1],
     salamis: [33.9, 35.2], seleucia: [44.5, 33.1], ctesiphon: [44.6, 33.1], petra: [35.4, 30.3], aquileia: [13.4, 45.8], lugdunum: [4.8, 45.8],
   },
-  // where the scattered people (and their Scriptures) went, Persian period
+  // where the scattered people (and their Scriptures) went, Persian period (no Alexandria or Cyrene: those communities begin after Alexander)
   diaspora: [['jerusalem', 'babylon'], ['babylon', 'susa'], ['babylon', 'ecbatana'], ['jerusalem', 'memphis'], ['memphis', 'elephantine'],
-    ['jerusalem', 'alexandria'], ['babylon', 'sardis'], ['jerusalem', 'damascus'], ['babylon', 'persepolis'], ['jerusalem', 'cyrene']],
+    ['babylon', 'sardis'], ['jerusalem', 'damascus'], ['babylon', 'persepolis']],
   // Alexander, 334–323 BC
   alexander: ['pella', 'hellespont', 'sardis', 'issus', 'tyre', 'gaza', 'memphis', 'alexandria', 'memphis', 'tyre', 'gaugamela', 'babylon', 'susa', 'persepolis', [60, 33]],
   // Roman roads (the great trunk lines only)

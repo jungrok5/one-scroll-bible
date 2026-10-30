@@ -74,5 +74,19 @@
     const lh = size * 1.55, y = (o.y || F.subY()) - (lines.length - 1) * lh / 2 + (1 - P.eo(P.clamp((t - a) / 1.2))) * 10;
     F.block(ctx, lines, P.W / 2, y, { size, weight: 600, alpha: k, color: o.color || '#f3ece0', shadow: 'rgba(0,0,0,.85)', shadowBlur: 22, lh: 1.55 });
   };
+  // a verse on screen: the text (that language's Bible, verbatim) with its reference under it
+  F.quote = (ctx, id, t, a, b, o = {}) => {
+    const k = P.win(t, a, b, o.fi || .8, o.fo || .7); if (k <= 0) return;
+    const size = o.size || (P.ori === 'v' ? 56 : 54); ctx.save(); ctx.font = F.font(size, 600);
+    const lines = F.wrapEven(ctx, F.text(id), o.maxW || (P.ori === 'v' ? P.W - 150 : P.W * .7)); ctx.restore();
+    const lh = size * 1.55, y0 = (o.y || P.H * .45) - (lines.length - 1) * lh / 2 + (1 - P.eo(P.clamp((t - a) / 1.4))) * 12;
+    const x = o.x || P.W / 2;
+    F.block(ctx, lines, x, y0, { size, weight: 600, alpha: k, color: o.color || '#f6ead0', shadow: o.shadow || 'rgba(0,0,0,.9)', shadowBlur: 26, lh: 1.55, ...(o.block || {}) });
+    const c = F.cite(id); if (c) P.text(ctx, c, x, y0 + lines.length * lh - size * .35 + 18, { size: P.ori === 'v' ? 28 : 26, font: "'Noto Sans KR',sans-serif",
+      color: o.citeColor || '#d9b56a', alpha: k * .95, shadow: o.citeShadow || 'rgba(0,0,0,.9)', shadowBlur: 12 });
+  };
+  // a section label (on screen only): small, tracked, gold, at the top — clear of the phone UI
+  F.label = (ctx, id, t, a, b) => { const k = P.win(t, a, b, .8, .8); if (k <= 0) return;
+    P.text(ctx, F.text(id), P.W / 2, P.ori === 'v' ? 240 : 96, { size: P.ori === 'v' ? 38 : 34, weight: 600, color: '#e9c77a', alpha: k * .95, ls: 4, shadow: 'rgba(0,0,0,.9)', shadowBlur: 14 }); };
   window.Film = F;
 })();

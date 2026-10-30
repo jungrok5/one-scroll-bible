@@ -9,6 +9,7 @@
   { "id": "02", "part": 1, "at": 7, "kind": "narr", "text": "구약의 마지막 말씀입니다.", "screen": "글자가 한 자씩 꺼짐" },
   { "id": "03", "part": 1, "at": 11, "kind": "narr", "text": "그리고 400년 동안, / 하늘의 새 말씀은 들리지 않았습니다.", "screen": "완전한 정적" },
   { "id": "T1", "part": 1, "at": 16, "kind": "label", "voice": null, "text": "침묵의 400년", "screen": "제목" },
+  { "id": "C1", "part": 1, "at": 20, "kind": "label", "voice": null, "text": "약 BC {n}년", "note": "연도 카운터. {n}은 숫자로 바뀐다(430에서 줄어듦)", "screen": "별 타임랩스 위 작은 글자" },
   { "id": "04", "part": 1, "at": 20, "kind": "narr", "text": "사람들은 기다렸습니다.", "screen": "별 타임랩스, 연도 카운터 '약 BC 430 →'(끝 연도는 찍지 않음)" },
   { "id": "05", "part": 1, "at": 25, "kind": "quote", "usfm": "HAB.2.3", "cite": "하박국 2:3", "text": "비록 더딜지라도 기다리라", "screen": "하늘을 올려다보는 사람들" },
   { "id": "06", "part": 1, "at": 31, "kind": "narr", "text": "그러나 하나님은 멈추지 않으셨습니다.", "screen": "어둠 속에서 다니엘의 신상이 떠오름" },

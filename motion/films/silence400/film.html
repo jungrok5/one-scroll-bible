@@ -363,7 +363,7 @@ function mapRome(ctx, t) {
 }
 
 function mapGospel(ctx, t) {
-  const z = mapBegin(ctx, V ? camAt([[152, 30, 35, 1.1], [159, 26, 37, .85]], t) : camAt([[152, 28, 35, 1.2], [159, 22, 37.5, .95]], t));
+  const z = mapBegin(ctx, V ? camAt([[152, 30, 35, 1.1], [159, 26, 37, .85]], t) : camAt([[152, 28, 33.6, 1.2], [159, 22, 35.2, .95]], t));
   ctx.lineCap = 'round'; ctx.lineJoin = 'round'; const up = ss(152, 158, t);
   for (const r of MAP.roads) { const pts = roadPts(r); ctx.strokeStyle = MINK; ctx.lineWidth = 6.5 / z; partial(ctx, pts, 1); ctx.strokeStyle = '#c8402a'; ctx.lineWidth = 3.4 / z; partial(ctx, pts, 1); }
   // gold runs out from Jerusalem along every road, nearer roads first (gold leaf laid on the vermilion)

@@ -118,7 +118,7 @@ function scrollReturn(ctx, t) {   // 1:36–2:00 — the opening's scroll: silen
       Pilot.text(ctx, Film.text('P3'), Mx, cy - sh / 2 + (V ? 64 : 58), { size: V ? 30 : 28, weight: 600, color: '#6a4a26', alpha: ss(97, 98, t) * light, ls: 3 }); }
     scrollText(ctx, '01', Mx, y0, size, maxW, { lines, lit: ss(r1, r1 + 1, t) * (1 - .5 * ss(102.4, 104, t)) + .5 * hlk, reveal: k => ss(r0 + (r1 - r0) * k / n, r0 + (r1 - r0) * k / n + .3, t), glow: k => { const at = r0 + (r1 - r0) * k / n; return ss(at, at + .15, t) * (1 - ss(at + .2, at + .7, t)); } });
     hlUnder(ctx, lines, Mx, y0, size, Film.lines['19'].hl, hlk);
-    Pilot.text(ctx, Film.cite('19'), Mx, cy + sh / 2 - (V ? 50 : 44), { size: V ? 26 : 24, font: "'Noto Sans KR',sans-serif", color: '#5a3d1f', alpha: ss(99, 100, t) * light }); }
+    Pilot.text(ctx, citeRange('19a', '19'), Mx, cy + sh / 2 - (V ? 50 : 44), { size: V ? 26 : 24, font: "'Noto Sans KR',sans-serif", color: '#5a3d1f', alpha: ss(99, 100, t) * light }); }
   { const a = Mx + sw0 / 2 + 60, b = Lx - sw0 / 2 - 60, yb = cy + sh / 2 - 46; ctx.save(); ctx.strokeStyle = 'rgba(70,44,20,.55)'; ctx.lineWidth = 2;
     for (let i = 0; i <= 40; i++) { const x = lerp(a, b, i / 40); if (x > x1 - 30) break; const l = i % 10 === 0 ? 22 : i % 5 === 0 ? 14 : 8; ctx.beginPath(); ctx.moveTo(x, yb); ctx.lineTo(x, yb - l); ctx.stroke(); }
     ctx.restore(); Pilot.text(ctx, Film.text('C2'), (a + b) / 2, cy + 22, { size: V ? 84 : 92, weight: 700, color: '#4a2f16', alpha: .8, ls: 10 }); }
@@ -136,10 +136,13 @@ function scrollReturn(ctx, t) {   // 1:36–2:00 — the opening's scroll: silen
     glow(ctx, Mx, cy - sh * .05, sw0 * .5, [255, 214, 130], .5 * on * Math.exp(-k * 6)); glow(ctx, Lx, cy, sw0 * .5, [255, 214, 130], .7 * on * ss(.85, 1, k)); }
   ctx.restore(); bottomBand(ctx, 'rgba(5,6,10,'); }
 
+function citeRange(a, b) {   // "말라기 4:5" + "말라기 4:6" → "말라기 4:5–6 (개역개정)"; falls back to b's cite when the two are not in one chapter
+  const A = (Film.lines[a] || {}).cite || '', B = (Film.lines[b] || {}).cite || '', ma = A.match(/^(.*\D)(\d+)$/), mb = B.match(/^(.*\D)(\d+)$/);
+  return ma && mb && ma[1] === mb[1] ? Film.cite(a).replace(A, A + '–' + mb[2]) : Film.cite(b); }
 function nazarethPull(ctx, t) {   // 2:21–2:37 — Nazareth: the pen of light underlines Luke 4:18 at reading pace; silence; "오늘" — the words burn,
   // the light runs out along the scroll to the other promises, the camera pulls back and holds: one scroll
   ctx.fillStyle = '#05060a'; ctx.fillRect(0, 0, W, H);
-  const cy = V ? H * .4 : H * .42, sh = V ? 640 : 470, sw = V ? 940 : 1320, Dd = V ? 1050 : 1450, segs = [['13', -2], ['05', -1], ['25a', 0], ['19', 1], ['22', 2]];
+  const cy = V ? H * .4 : H * .42, sh = V ? 640 : 470, sw = V ? 940 : 1320, Dd = V ? 1050 : 1450, segs = [['13', -2], ['05', -1], ['25a', 0], ['19a', 1], ['19', 2]];
   const x0 = W / 2 - 2 * Dd - sw / 2, x1 = W / 2 + 2 * Dd + sw / 2, fire = ss(150.2, 150.7, t), pull = eio(clamp((t - 150.4) / 4.0)), zf = W * .95 / (2 * Dd + sw + 120);
   const z = Math.exp(lerp(Math.log(1), Math.log(zf), pull)), light = ss(140.8, 141.8, t) * (1 - .35 * ss(148.5, 149.6, t) + .35 * fire);
   ctx.save(); ctx.translate(W / 2, cy); ctx.scale(z, z); ctx.translate(-W / 2, -cy);
@@ -218,6 +221,19 @@ function inkRows(seed, rows, w, s) {
   for (let i = 0; i < rows; i++) { const row = []; let x = 0; const end = w * (i === rows - 1 ? .55 : .9 + r() * .1);
     while (x < end) { row.push([x, r() * 7 | 0]); x += s * (r() < .12 ? 1.9 : 1.05 + r() * .25); } out.push(row); }
   return inkCache[k] = out; }
+const HEB_SHEMA = 'שמע ישראל יהוה אלהינו יהוה אחד ואהבת את יהוה אלהיך בכל לבבך ובכל נפשך ובכל מאדך והיו הדברים האלה אשר אנכי מצוך היום על לבבך ושננתם לבניך ודברת בם בשבתך בביתך ובלכתך בדרך ובשכבך ובקומך וקשרתם לאות על ידך והיו לטטפת בין עיניך וכתבתם על מזזות ביתך ובשעריך';
+const HEB_ISA40 = 'קול אמר קרא ואמר מה אקרא כל הבשר חציר וכל חסדו כציץ השדה יבש חציר נבל ציץ כי רוח יהוה נשבה בו אכן חציר העם יבש חציר נבל ציץ ודבר אלהינו יקום לעולם';
+const hebRowsC = {};
+function hebInk(ctx, x0, y0, w, rows, lh, s, text, prog = 1, col = INK, a = 1) {   // real Hebrew (Masoretic consonants, from Sefaria), right to left, written in at prog
+  const fs = s * 1.45, font = `400 ${fs}px 'Noto Serif Hebrew','SBL Hebrew','Times New Roman',serif`, key = text.length + ':' + w + ':' + fs;
+  if (!hebRowsC[key]) { const c = canvas(2, 2).getContext('2d'); c.font = font; const R = []; let cur = '';
+    for (const wd of text.split(' ')) { const nx = cur ? cur + ' ' + wd : wd; if (c.measureText(nx).width > w && cur) { R.push([cur, c.measureText(cur).width]); cur = wd; } else cur = nx; }
+    if (cur) R.push([cur, c.measureText(cur).width]); hebRowsC[key] = R; }
+  const R = hebRowsC[key].slice(0, rows), total = R.reduce((m, r) => m + r[1], 0); let rd = prog * total, head = null;
+  ctx.save(); ctx.globalAlpha *= a; ctx.fillStyle = col; ctx.font = font; ctx.direction = 'rtl'; ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+  R.forEach(([ln, lw], i) => { if (rd <= 0) return; const d = Math.min(lw, rd); rd -= lw; const y = y0 + i * lh + s * .5;
+    ctx.save(); ctx.beginPath(); ctx.rect(x0 + w - d, y - lh / 2, d + 4, lh); ctx.clip(); ctx.fillText(ln, x0 + w, y); ctx.restore(); head = [x0 + w - d, y]; });
+  ctx.restore(); return prog >= 1 ? null : head; }
 function ink(ctx, x0, y0, w, rows, lh, s, seed, prog = 1, col = INK, a = 1, rtl = true) {
   const R = inkRows(seed, rows, w, s), n = R.reduce((m, r) => m + r.length, 0); let k = 0, head = null;
   ctx.save(); ctx.strokeStyle = col; ctx.globalAlpha = a; ctx.lineWidth = s * .16; ctx.lineCap = 'round';
@@ -467,7 +483,7 @@ function mapRome(ctx, t) {
 }
 
 function mapGospel(ctx, t) {   // the gospel goes out along those roads, in that language, into those synagogues: Paul's journeys drawn in gold
-  const z = mapBegin(ctx, V ? camAt([[152, 30, 37, 1.0], [159, 25, 38, .86]], t) : camAt([[152, 27, 37, 1.1], [159, 22, 37.5, .95]], t));
+  const z = mapBegin(ctx, V ? camAt([[146, 34.8, 31.6, 1.6], [150.4, 34.8, 31.6, 1.5], [152.6, 30, 37, 1.0], [159, 25, 38, .86]], t) : camAt([[146, 34.2, 32.2, 1.6], [150.4, 34.2, 32.2, 1.5], [152.6, 27, 37, 1.1], [159, 22, 37.5, .95]], t));
   ctx.lineCap = 'round'; ctx.lineJoin = 'round';
   for (const r of MAP.roads) { const pts = roadPts(r); ctx.strokeStyle = MINK; ctx.lineWidth = 6.5 / z; partial(ctx, pts, 1); ctx.strokeStyle = '#c8402a'; ctx.lineWidth = 3.4 / z; partial(ctx, pts, 1); }
   const lamps = new Set(); const J = P_('jerusalem');
@@ -476,7 +492,10 @@ function mapGospel(ctx, t) {   // the gospel goes out along those roads, in that
     if (p < 1) { glow(ctx, hd[0], hd[1], 34 / z, [255, 226, 150], 1); glow(ctx, hd[0], hd[1], 8 / z, [255, 255, 240], 1); }
     for (const c of r) if (typeof c === 'string' && MAP.synagogues.includes(c)) { const q = P_(c), k = pts.findIndex(pp => Math.hypot(pp[0] - q[0], pp[1] - q[1]) < 3); if (k >= 0 && k / pts.length <= p) lamps.add(c); } });
   MAP.synagogues.forEach((c, i) => cityLamp(ctx, c, lamps.has(c) ? 1 : .25, z, t, i));
-  const out = ss(157.6, 159.2, t);   // then the light runs out along every road
+  { const ca = ss(146.3, 147.4, t), rise = ss(149.3, 150.2, t), s = (V ? 110 : 100) / z, cx = J[0], cy = J[1] - s * .72;   // the cross; at "살아나셨습니다" it flares
+    if (ca > 0) { ctx.save(); ctx.globalAlpha = ca; glow(ctx, cx, cy, s * (1.6 + 3.4 * rise), [255, 222, 150], .5 + .45 * rise); if (rise > 0) { glow(ctx, cx, cy, s * 1.3, [255, 252, 235], rise * (.35 + .65 * Math.exp(-(t - 149.3) * 1.2))); glow(ctx, cx, cy, s * 6, [255, 230, 170], .35 * rise); }
+      const cr = new Path2D(), u = s / 10; cr.rect(cx - u * .9, cy - u * 6, u * 1.8, u * 12); cr.rect(cx - u * 4.2, cy - u * 3.4, u * 8.4, u * 1.8); Illum.gold(ctx, cr, { lw: 2.6 / z }); ctx.restore(); } }
+  const out = ss(150.2, 152.8, t);   // then the light runs out from Jerusalem along every road
   if (out > 0) MAP.roads.forEach(r => { const pts = roadPts(r), d0 = Math.hypot(pts[0][0] - J[0], pts[0][1] - J[1]), d1 = Math.hypot(pts[pts.length - 1][0] - J[0], pts[pts.length - 1][1] - J[1]), path = d1 < d0 ? pts.slice().reverse() : pts;
     ctx.save(); ctx.globalAlpha = .7; ctx.strokeStyle = '#f2c96a'; ctx.lineWidth = 3.4 / z; partial(ctx, path, out); ctx.restore(); });
   glow(ctx, J[0], J[1], 110 / z, [255, 214, 130], .55);
@@ -520,7 +539,7 @@ function fire(ctx, t) {   // 1:09–1:15 the scroll burns
   ctx.fillStyle = '#050403'; ctx.fillRect(0, 0, W, H);
   const R = FIRE_R(), th = lerp(.1, .95, ss(69.6, 74.9, t)), { w, h, v, c, g } = burnF;
   glow(ctx, R.cx, R.cy, Math.max(W, H) * .6, [255, 120, 40], .3 * win(t, 69.4, 75, .8, 1.2));
-  const layer = scrollLayer('fire', x => { scroll(x, R.cx, R.cy, R.sw, R.sh, 1, .85); ink(x, R.x0 + 90, R.y0 + 80, R.sw - 180, V ? 11 : 8, V ? 58 : 54, V ? 24 : 26, 7); });
+  const layer = scrollLayer('fire', x => { scroll(x, R.cx, R.cy, R.sw, R.sh, 1, .85); hebInk(x, R.x0 + 90, R.y0 + 80, R.sw - 180, V ? 11 : 8, V ? 58 : 54, V ? 24 : 26, HEB_SHEMA); });
   // paper that remains (soft edge) and the char band behind the front
   const cx2 = c.getContext('2d'), d = cx2.createImageData(w, h), gx2 = g.getContext('2d'), dg = gx2.createImageData(w, h);
   for (let i = 0; i < w * h; i++) { const e = v[i] - th, keep = clamp(e / .012), ch = e > 0 ? clamp(1 - e / .07) : 0, rim = clamp(1 - Math.abs(e - .004) / .016);
@@ -550,7 +569,7 @@ function copying(ctx, t) {   // 1:15–1:27 in the dark, someone copies the word
   const push = 1 + .05 * eio(clamp((t - 75) / 12)); ctx.save(); ctx.translate(W / 2, cy); ctx.scale(push, push); ctx.translate(-W / 2, -cy);
   glow(ctx, cx, cy, Math.max(W, H) * .55, [150, 100, 50], .35 * light);
   scroll(ctx, cx, cy, sw, sh, 1, .35 + .6 * light);
-  const ia = 1 - ss(78.6, 79.6, t), head = ink(ctx, cx - sw / 2 + 90, cy - sh / 2 + 70, sw - 180, V ? 10 : 7, V ? 56 : 54, V ? 24 : 26, 9, ss(75.3, 79.0, t), INK, ia);
+  const ia = 1 - ss(78.6, 79.6, t), head = hebInk(ctx, cx - sw / 2 + 90, cy - sh / 2 + 70, sw - 180, V ? 10 : 7, V ? 56 : 54, V ? 24 : 26, HEB_ISA40, ss(75.3, 79.0, t), INK, ia);
   if (head && ia > 0) quill(ctx, head[0], head[1], V ? 150 : 170);
   lamp(ctx, cx - sw / 2 - (V ? -60 : 60), cy + sh / 2 + (V ? 120 : 70), V ? 46 : 52, t, light);
   ctx.restore();
@@ -665,7 +684,7 @@ function strike(ctx, t) {   // 2:12–2:21 a stone cut out without hands comes f
   // the stone grows into a great mountain (Dan 2:34–35), and a small light rests on it
   const hitT = 134.0, sh = t > hitT ? Math.exp(-(t - hitT) * 3) * 1.6 : 0, rr = rng(Math.floor(t * 30)), b = Illum.statueBox(), [ax, ay, aw, ah] = Illum.L.arch;
   desk(ctx, t); ctx.save(); ctx.translate((rr() - .5) * 22 * sh, (rr() - .5) * 16 * sh);
-  const gone = ss(135.0, 135.5, t), grow = eio(clamp((t - 137.4) / 3.2)), s0 = b.hs * .075;
+  const gone = ss(135.0, 136.8, t), grow = eio(clamp((t - 137.4) / 3.2)), s0 = b.hs * .075;
   const sx0 = ax + aw * .9, sy0 = ay + ah * .62, sx1 = b.cx + b.hs * .13, sy1 = b.top + b.hs * .93, fly = eio(clamp((t - 132.6) / (hitT - 132.6)));
   const stone = (x, cx, cy, s, rot, a) => { x.save(); x.globalAlpha = a; x.translate(cx, cy); x.rotate(rot); x.beginPath(); stoneShape.forEach(([px, py], i) => i ? x.lineTo(px * s, py * s) : x.moveTo(px * s, py * s)); x.closePath();
       const sg = x.createRadialGradient(-s * .3, -s * .3, 0, 0, 0, s * 1.1); sg.addColorStop(0, '#fff6dc'); sg.addColorStop(.5, '#e9c87a'); sg.addColorStop(1, '#a8823a'); x.fillStyle = sg; x.shadowColor = 'rgba(255,220,140,.95)'; x.shadowBlur = 30; x.fill(); x.shadowBlur = 0;
@@ -681,7 +700,7 @@ function strike(ctx, t) {   // 2:12–2:21 a stone cut out without hands comes f
     if (t > 135.4) { const gk = eio(clamp((t - 135.5) / 1.8)), g = new Path2D(); g.arc(sx1, sy1 - b.hs * .05, Math.max(1, gk * ah * 1.3), 0, 6.283); Illum.gold(x, g, { lw: 0 }); glow(x, sx1, sy1 - b.hs * .05, 60 + gk * 200, [255, 240, 200], .7 * (1 - gk * .5)); }
     if (gone < 1) Illum.statue(x, b.cx, b.top, b.hs, { gold: 1 - gone, silver: 1 - gone, bronze: 1 - gone, iron: 1 - gone, clay: 1 - gone }, {}, t);
     const cp = eio(clamp((t - hitT) / .45)); if (cp > 0 && gone < 1) { x.save(); x.translate(b.cx, b.top); x.scale(b.hs, b.hs); x.lineCap = 'round'; x.lineJoin = 'round';   // cracks of light race up from the feet
-      x.globalAlpha = 1 - gone; x.shadowColor = 'rgba(255,214,120,1)'; x.shadowBlur = 10; x.strokeStyle = 'rgba(255,214,120,.85)'; x.lineWidth = 5 / b.hs; for (const c of icracks) partial(x, c, cp);
+      x.globalAlpha = 1 - ss(135.0, 135.7, t); x.shadowColor = 'rgba(255,214,120,1)'; x.shadowBlur = 10; x.strokeStyle = 'rgba(255,214,120,.85)'; x.lineWidth = 5 / b.hs; for (const c of icracks) partial(x, c, cp);
       x.shadowBlur = 0; x.strokeStyle = '#fffbe8'; x.lineWidth = 1.8 / b.hs; for (const c of icracks) partial(x, c, cp); x.restore(); }
     if (false) { const g = grow, cx = lerp(sx1, b.cx, g), base = ay + ah * .93, mh = lerp(s0 * 1.6, ah * .62, g), mw = lerp(s0 * 2, aw * 1.1, g);
       x.save(); x.beginPath(); x.moveTo(cx - mw / 2, base); x.quadraticCurveTo(cx - mw * .2, base - mh * 1.05, cx, base - mh); x.quadraticCurveTo(cx + mw * .2, base - mh * 1.05, cx + mw / 2, base); x.closePath();
@@ -744,9 +763,9 @@ const SCENES = [
   [96.4, 120.0, scrollReturn],
   [119.8, 128.0, on([[119.8, 132.0], [120.8, 132.3], [121.2, 132.6], [122.8, 134.0], [124.0, 135.0], [126.0, 136.8], [128.0, 137.6]], strike)],
   [127.8, 137.8, (c, t) => { Advent.draw(c, lerp(13.8, 27.4, clamp((t - 127.8) / 10.0))); bottomBand(c, 'rgba(0,0,0,'); }, .6, .5],
-  [137.6, 157.4, on([[137.6, 140.8], [142.4, 142.0], [143.4, 142.2], [157.4, 156.6]], nazarethPull)],
-  [157.2, 167.2, on([[157.2, 153.2], [167.2, 159.2]], mapGospel)],
-  [167.0, 176.0, (c, t) => { Papercut.draw(c, lerp(23.6, 31.5, clamp((t - 167.0) / 9.0))); bottomBand(c, 'rgba(2,4,16,'); }],
+  [137.6, 156.0, on([[137.6, 140.8], [142.4, 142.0], [143.4, 142.2], [156.0, 155.2]], nazarethPull)],
+  [155.8, 168.2, on([[155.8, 146.0], [161.8, 152.0], [168.2, 159.2]], mapGospel)],
+  [168.0, 176.0, (c, t) => { Papercut.draw(c, lerp(23.6, 31.5, clamp((t - 168.0) / 8.0))); bottomBand(c, 'rgba(2,4,16,'); }],
   [175.8, 179, endCard],
 ];
 const TEXT = [
@@ -758,8 +777,8 @@ const TEXT = [
   ['sub', '21', 113.8, 119.6],
   ['quote', '22', 120.2, 124.8, { bottom: Film.subBottom() + 40, size: V ? 50 : 46 }], ['sub', '23', 128.6, 131.8],
   ['quote', '24', 132.2, 137.4, { bottom: Film.subBottom() + 40, size: V ? 48 : 44 }],
-  ['label', 'P2', 137.8, 147.0], ['sub', '24b', 138.0, 143.2], ['quote', '25', 150.4, 157.0, { bottom: Film.subBottom() + 40, size: V ? 54 : 52, color: '#fff3d6', shadow: 'rgba(255,190,90,.55)' }],
-  ['label', 'M7', 157.6, 162.8], ['sub', '26a', 157.8, 162.8], ['sub', '26b', 163.0, 167.0], ['sub', '27', 167.4, 175.6],
+  ['label', 'P2', 137.8, 147.0], ['sub', '24b', 138.0, 143.8], ['quote', '25', 150.4, 155.6, { bottom: Film.subBottom() + 40, size: V ? 54 : 52, color: '#fff3d6', shadow: 'rgba(255,190,90,.55)' }],
+  ['sub', '25b', 156.2, 161.8], ['label', 'M7', 162.0, 167.6], ['sub', '26a', 162.2, 167.8], ['sub', '27', 168.4, 175.6],
 ];
 function frags(ctx, id, t, a, b, at, o = {}) {   // a verse whose pieces (script 'frags', each verbatim) appear one by one, in place
   const k = win(t, a, b, .5, .6); if (k <= 0) return; const L = Film.lines[id], fr = L.frags || [L.text], joined = fr.join(' '), size = o.size || 40;
@@ -773,7 +792,7 @@ function counter(ctx, t) {   // the sky: about 430 → 400 BC; part 2: the years
   const k = win(t, 21.4, 29.4, 1, 1); if (k > 0) { const n = Math.round(430 - 30 * ss(21.6, 29.4, t));
     Pilot.text(ctx, String(Film.text('C1')).replace('{n}', n), W / 2, V ? 240 : 96, { size: V ? 34 : 30, font: "'Noto Sans KR',sans-serif", color: '#c9b48a', alpha: k * .9, ls: 3, shadow: 'rgba(0,0,0,.9)' }); }
   const k2 = win(t, 46.6, 96.4, .8, .8); if (k2 <= 0) return;
-  const Y = [[46.6, 400], [52.6, 340], [55.0, 333], [58.4, 280], [62.0, 250], [63.8, 170], [66.0, 167], [72.0, 130], [78.0, 100], [82.0, 63], [86.0, 27], [91.6, 6]];
+  const Y = [[46.6, 400], [52.6, 334], [55.0, 320], [58.4, 280], [62.0, 250], [63.8, 170], [66.0, 167], [72.0, 130], [78.0, 100], [82.0, 63], [86.0, 27], [91.6, 6]];
   let i = 0; while (i < Y.length - 2 && t > Y[i + 1][0]) i++; const n = Math.round(lerp(Y[i][1], Y[i + 1][1], clamp((t - Y[i][0]) / (Y[i + 1][0] - Y[i][0]))));
   const cx = V ? W - 54 - 75 : W - 60 - 66, cy = V ? 300 + 230 + 52 : 120 + 200 + 46;
   Pilot.text(ctx, String(Film.text('C1')).replace('{n}', n), cx, cy, { size: V ? 34 : 30, weight: 600, font: "'Noto Sans KR',sans-serif", color: '#f0d9a0', alpha: k2, shadow: 'rgba(0,0,0,.95)', shadowBlur: 12 }); }
@@ -787,8 +806,8 @@ function giftIcon(ctx, i, x, y, r) { ctx.save(); ctx.strokeStyle = '#f2cf7a'; ct
     ctx.lineWidth = r * .07; for (const k of [.2, .5, .78]) { ctx.beginPath(); ctx.moveTo(x, y - r * .45 + k * r * .9); ctx.lineTo(x, y - r * .45 + (k + .1) * r * .9); ctx.stroke(); } }
   ctx.restore(); }
 function gifts(ctx, t) {
-  const show = t < 92.2 ? 1 - ss(91.2, 92.2, t) : win(t, 157.6, 166.8, .8, .8); if (show <= 0) return;
-  const all = t < 100 ? win(t, 86.8, 91.2, .5, .6) : ss(158.2, 159.2, t), r = V ? 42 : 40, gap = V ? 156 : 150, x0 = V ? 96 : 110, y0 = V ? 330 : 116;
+  const show = t < 92.2 ? 1 - ss(91.2, 92.2, t) : win(t, 162.0, 167.8, .8, .8); if (show <= 0) return;
+  const all = t < 100 ? win(t, 86.8, 91.2, .5, .6) : ss(162.6, 163.6, t), r = V ? 42 : 40, gap = V ? 156 : 150, x0 = V ? 96 : 110, y0 = V ? 330 : 116;
   GIFTS.forEach(([id, at], i) => { const a = (t < 100 ? ss(at, at + .8, t) : 1) * show; if (a <= 0) return; const x = x0 + i * gap, y = y0, fresh = t < 100 ? win(t, at, at + 2.6, .3, 1.4) : 0, lit = Math.max(fresh, all);
     ctx.save(); ctx.globalAlpha = a; if (lit > 0) glow(ctx, x, y, r * 3.2, [255, 214, 130], .5 * lit);
     const ring = new Path2D(); ring.arc(x, y, r + 4, 0, 6.283); Illum.gold(ctx, ring, { lw: 1.2 }); ctx.fillStyle = '#0c1028'; ctx.beginPath(); ctx.arc(x, y, r - 2, 0, 6.283); ctx.fill();   // gold rim, dark face

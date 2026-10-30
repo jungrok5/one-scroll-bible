@@ -66,12 +66,15 @@
   };
 
   // narration subtitle: the one place spoken words appear (always on screen — deaf viewers read every word)
-  F.subY = () => P.ori === 'v' ? P.H * .74 : P.H - 150;
+  // The narration is anchored by its LAST line to one fixed baseline near the bottom (a longer translation grows upward),
+  // and every picture keeps clear of the band above it (F.SAFE: the lowest y a picture may use) — so the words never sit on art.
+  F.subBottom = () => P.ori === 'v' ? P.H * .79 : P.H - 104;
+  F.SAFE = () => P.ori === 'v' ? P.H * .68 : P.H - 270;
   F.sub = (ctx, id, t, a, b, o = {}) => {
     const k = P.win(t, a, b, o.fi || .6, o.fo || .6); if (k <= 0) return;
     const size = o.size || (P.ori === 'v' ? 54 : 50); ctx.save(); ctx.font = F.font(size, 600);
     const lines = F.wrap(ctx, F.text(id), P.ori === 'v' ? P.W - 140 : P.W * .72, P.ori === 'h'); ctx.restore();
-    const lh = size * 1.55, y = (o.y || F.subY()) - (lines.length - 1) * lh / 2 + (1 - P.eo(P.clamp((t - a) / 1.2))) * 10;
+    const lh = size * 1.55, rise = (1 - P.eo(P.clamp((t - a) / 1.2))) * 10, y = (o.y != null ? o.y - (lines.length - 1) * lh / 2 : F.subBottom() - (lines.length - 1) * lh) + rise;
     F.block(ctx, lines, P.W / 2, y, { size, weight: 600, alpha: k, color: o.color || '#f3ece0', shadow: 'rgba(0,0,0,.85)', shadowBlur: 22, lh: 1.55 });
   };
   // a verse on screen: the text (that language's Bible, verbatim) with its reference under it
@@ -79,14 +82,19 @@
     const k = P.win(t, a, b, o.fi || .8, o.fo || .7); if (k <= 0) return;
     const size = o.size || (P.ori === 'v' ? 56 : 54); ctx.save(); ctx.font = F.font(size, 600);
     const lines = F.wrapEven(ctx, F.text(id), o.maxW || (P.ori === 'v' ? P.W - 150 : P.W * .7)); ctx.restore();
-    const lh = size * 1.55, y0 = (o.y || P.H * .45) - (lines.length - 1) * lh / 2 + (1 - P.eo(P.clamp((t - a) / 1.4))) * 12;
+    const lh = size * 1.55, rise = (1 - P.eo(P.clamp((t - a) / 1.4))) * 12;
+    const y0 = (o.bottom != null ? o.bottom - 50 - (lines.length - 1) * lh : (o.y || P.H * .45) - (lines.length - 1) * lh / 2) + rise;   // o.bottom: the cite sits on it
     const x = o.x || P.W / 2;
     F.block(ctx, lines, x, y0, { size, weight: 600, alpha: k, color: o.color || '#f6ead0', shadow: o.shadow || 'rgba(0,0,0,.9)', shadowBlur: 26, lh: 1.55, ...(o.block || {}) });
+    // o.hl: words to light in gold (the same words in two verses), o.hlk 0..1 — left-to-right scripts only
+    if (o.hl && o.hlk > 0 && P.dir !== 'rtl') { ctx.save(); ctx.font = F.font(size, 600); ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
+      lines.forEach((l, i) => { const j = l.indexOf(o.hl); if (j < 0) return; const lw = ctx.measureText(l).width, px = x - lw / 2 + ctx.measureText(l.slice(0, j)).width, py = y0 + i * lh;
+        ctx.globalAlpha = k * o.hlk; ctx.shadowColor = 'rgba(233,185,73,.85)'; ctx.shadowBlur = 24 * o.hlk; ctx.fillStyle = '#f2cf7a'; ctx.fillText(o.hl, px, py); ctx.shadowBlur = 0; ctx.fillText(o.hl, px, py); }); ctx.restore(); }
     const c = F.cite(id); if (c) P.text(ctx, c, x, y0 + lines.length * lh - size * .35 + 18, { size: P.ori === 'v' ? 28 : 26, font: "'Noto Sans KR',sans-serif",
       color: o.citeColor || '#d9b56a', alpha: k * .95, shadow: o.citeShadow || 'rgba(0,0,0,.9)', shadowBlur: 12 });
   };
   // a section label (on screen only): small, tracked, gold, at the top — clear of the phone UI
   F.label = (ctx, id, t, a, b) => { const k = P.win(t, a, b, .8, .8); if (k <= 0) return;
-    P.text(ctx, F.text(id), P.W / 2, P.ori === 'v' ? 240 : 96, { size: P.ori === 'v' ? 38 : 34, weight: 600, color: '#e9c77a', alpha: k * .95, ls: 4, shadow: 'rgba(0,0,0,.9)', shadowBlur: 14 }); };
+    P.text(ctx, F.text(id), P.W / 2, P.ori === 'v' ? 226 : 66, { size: P.ori === 'v' ? 38 : 34, weight: 600, color: '#e9c77a', alpha: k * .95, ls: 4, shadow: 'rgba(0,0,0,.9)', shadowBlur: 14 }); };
   window.Film = F;
 })();

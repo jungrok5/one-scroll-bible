@@ -7,7 +7,7 @@
   const INK = '#2A1A10', VEL = '#ECDCB4', LAP = '#27469A', VERM = '#C43A20', WHT = '#fbf6e6', GRN = '#4e7a3c';
   const I = {};
   // the page in the frame (the space above holds the section label, below it the narration)
-  I.L = V ? { page: [80, 300, 920, 1040], arch: [160, 380, 760, 900] } : { page: [560, 118, 800, 752], arch: [636, 176, 648, 652] };
+  I.L = V ? { page: [80, 262, 920, 960], arch: [160, 336, 760, 814] } : { page: [584, 96, 752, 700], arch: [656, 150, 608, 600] };   // bottom ≤ Film.SAFE()
   let vellumC, goldTex, goldPat, pageC, glintAt = -1;
   const P2 = d => new Path2D(d);
   const rectP = (x0, y0, w, h) => { const p = new Path2D(); p.rect(x0, y0, w, h); return p; };

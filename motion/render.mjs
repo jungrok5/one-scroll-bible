@@ -46,7 +46,7 @@ const out = join(here, 'out'); mkdirSync(out, { recursive: true });
 const pageRel = opt('page', 'index.html');
 const lang = opt('lang', 'ko');
 const name = (pageRel === 'index.html' ? 'one-scroll-bible' : pageRel.replace(/^.*\//, '').replace(/\.html$/, '')) + (lang === 'ko' ? '' : '-' + lang);
-let url = pathToFileURL(join(here, pageRel)).href + `?render=1&o=${ori}` + (lang === 'ko' ? '' : `&lang=${lang}`);
+let url = pathToFileURL(join(here, pageRel)).href + `?render=1&o=${ori}` + (lang === 'ko' ? '' : `&lang=${lang}`) + (process.env.RENDER_QUERY ? '&' + process.env.RENDER_QUERY : '');   // e.g. RENDER_QUERY=clean=1 (a page may hide its captions — thumbnail frames)
 const pageSrc = readFileSync(join(here, pageRel), 'utf8');
 const glAble = glmode !== 'off' && /__glFrame/.test(pageSrc);
 let glDir = null, glReady = false;   // set after the probe page: the scene may name its own cache key (__glFrame.key)

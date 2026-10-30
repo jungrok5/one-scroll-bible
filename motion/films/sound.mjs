@@ -43,6 +43,14 @@ for (const id of ids) {
   info.push({ id, at: place.at[id], dur, gain: Math.max(-4, Math.min(4, (-18.5 - I) * .7)) });
 }
 info.forEach((x, i) => { const n = info[i + 1], end = x.at + x.dur; if (n && end > n.at - .15) console.log(`OVERLAP ${x.id} ends ${end.toFixed(2)} > ${n.id} at ${n.at}`); });
+// subtitles (YouTube search can't read words drawn into the picture): every spoken line at its spoken time, plus place.subs_extra
+// (silent on-screen verses, { id: [from, to] }) → sound/ko.srt
+{ const L = Object.fromEntries(json(join(HERE, film, 'script.json')).lines.map(l => [l.id, l])), ts = s => { const ms = Math.round(s * 1000);
+    return `${String(Math.floor(ms / 3600000)).padStart(2, '0')}:${String(Math.floor(ms / 60000) % 60).padStart(2, '0')}:${String(Math.floor(ms / 1000) % 60).padStart(2, '0')},${String(ms % 1000).padStart(3, '0')}`; };
+  const subs = [...info.map((x, i) => ({ id: x.id, a: x.at, b: Math.min(x.at + x.dur + .4, info[i + 1] ? info[i + 1].at - .05 : D) })),
+    ...Object.entries(place.subs_extra || {}).map(([id, [a, b]]) => ({ id, a, b }))].sort((p, q) => p.a - q.a);
+  const txt = id => { const l = L[id]; return (l.frags ? l.frags.join(' ') : (l.voice || l.text)).replace(/\s*\/\s*/g, '\n'); };
+  writeFileSync(join(S, 'ko.srt'), subs.map((s, i) => `${i + 1}\n${ts(s.a)} --> ${ts(s.b)}\n${txt(s.id)}\n`).join('\n')); }
 const voice = join(OUT, film + '-voice.wav');
 writeFileSync(join(T, 'voice-fc.txt'), info.map((x, i) => `[${i}:a]volume=${x.gain.toFixed(2)}dB,adelay=${Math.round(x.at * 1000)}:all=1[a${i}]`).join(';') +
   `;${info.map((_, i) => `[a${i}]`).join('')}amix=inputs=${info.length}:normalize=0:dropout_transition=0,apad,atrim=end=${D}[v]`);

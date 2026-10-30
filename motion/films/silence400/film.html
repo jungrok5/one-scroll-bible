@@ -163,8 +163,9 @@ function nazarethPull(ctx, t) {   // 2:21–2:37 — Nazareth: the pen of light 
 function partOpening(ctx, t) {
   ctx.fillStyle = '#05060a'; ctx.fillRect(0, 0, W, H);
   const cx = W / 2, cy = V ? H * .4 : H * .43, sw = V ? 900 : 1340, sh = V ? 780 : 560;
-  const open = eio(clamp((t - .6) / 2.4)), dark = ss(9.6, 12.2, t);
-  const flick = 1 + .05 * Math.sin(t * 7.3) * Math.sin(t * 2.9 + 1) + .03 * Math.sin(t * 17.1), light = ss(.3, 2.2, t) * (1 - dark) * flick;
+  // the first frame is already a picture (a feed's first impression; no fade from black): lamp lit, scroll partly open, its label on
+  const open = eio(clamp((t + 1.6) / 2.8)), dark = ss(9.6, 12.2, t);
+  const flick = 1 + .05 * Math.sin(t * 7.3) * Math.sin(t * 2.9 + 1) + .03 * Math.sin(t * 17.1), light = ss(-1.2, 1.0, t) * (1 - dark) * flick;
   // the camera creeps toward the scroll (it never cuts; the push makes the stillness feel held)
   const push = 1 + .07 * eio(clamp(t / 12)); ctx.save(); ctx.translate(W / 2, H * .45); ctx.scale(push, push); ctx.translate(-W / 2, -H * .45);
   // warm pool of lamplight on the table
@@ -177,13 +178,13 @@ function partOpening(ctx, t) {
     const size = V ? 44 : 46, maxW = sw - (V ? 130 : 220); ctx.save(); ctx.font = Film.font(size, 600);
     const lines = Film.wrapEven(ctx, Film.text('01'), maxW), promise = Film.wrapEven(ctx, Film.text('01').split(/\s*\/\s*/)[0], maxW).length; ctx.restore();
     const lh = size * 1.7, y0 = cy - (lines.length - 1) * lh / 2 + size * .32;   // the letters' bodies (not their baselines) centred on the scroll
-    const tin = ss(2.4, 4.2, t), out0 = 8.8, out1 = 10.6;
+    const tin = ss(0.6, 2.2, t), out0 = 8.8, out1 = 10.6;
     Film.block(ctx, lines, cx, y0, { size, weight: 600, lh: 1.7, color: '#2b1a0b', alpha: tin,
       lineAlpha: i => i < promise ? .38 : 1,
       charAlpha: (k, n) => { const at = out0 + (out1 - out0) * k / n; return 1 - ss(at, at + .35, t); },
       charGlow: (k, n) => { const at = out0 + (out1 - out0) * k / n; return ss(at - .25, at, t) * (1 - ss(at, at + .3, t)); } });
     const ca = tin * (1 - ss(out1 - .2, out1 + .6, t));
-    if (ca > 0) Pilot.text(ctx, Film.text('P0'), cx, cy - sh / 2 + (V ? 66 : 60), { size: V ? 36 : 34, weight: 600, color: '#6a4a26', alpha: ca * light, ls: 3 });   // where we are in the Bible
+    const pa = (1 - ss(out1 - .2, out1 + .6, t)) * ss(.45, .6, open); if (pa > 0) Pilot.text(ctx, Film.text('P0'), cx, cy - sh / 2 + (V ? 66 : 60), { size: V ? 36 : 34, weight: 600, color: '#6a4a26', alpha: pa * light, ls: 3 });   // where we are in the Bible
     if (ca > 0) Pilot.text(ctx, Film.cite('01'), cx, cy + sh / 2 - (V ? 50 : 44), { size: V ? 26 : 24, font: "'Noto Sans KR',sans-serif", color: '#5a3d1f', alpha: ca });
     ctx.restore(); }
   dust(ctx, t, [cx, cy - sh * .3], light);
@@ -900,6 +901,7 @@ function gifts(ctx, t) {
 // light run is voice-free) · stone's gold −0.8 · nativity −0.4 · Nazareth's hold +1.0 (line 25c) · the closing sky +0.8 (line 27)
 const EDIT = [[0, 0], [25.2, 25.2], [29.6, 30.2], [33.4, 34.0], [40.6, 42.0], [74.2, 75.6], [77.8, 80.0], [83.4, 87.0], [99.2, 102.8], [106.0, 106.6],
   [116.2, 116.8], [118.8, 120.2], [129.6, 131.4], [146.8, 148.6], [151.4, 152.2], [166.0, 166.8], [174.8, 174.8], [179.4, 179.4]];
+const CLEAN = /[?&]clean=1/.test(location.search);
 const story = warp(EDIT), FILM_DUR = EDIT[EDIT.length - 1][0];   // 2:59.4 — under the 3-minute Shorts/Reels limit
 function draw(ctx, T) {
   const t = story(T); mapT = t; const X = .7, act = SCENES.map((s, i) => [...s, i]).filter(([a, b, , , , i]) => t >= a && t < b + (i < SCENES.length - 1 ? X : 0));
@@ -910,10 +912,10 @@ function draw(ctx, T) {
     L.save(); f(L, t); L.restore();
     const pb = act[j - 1][1] + X; ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = eio(clamp((t - a) / Math.max(.2, pb - a))); ctx.drawImage(window.__xl, 0, 0); ctx.restore(); });
   vignette(ctx, .75); filmGrain(ctx, t);
+  if (CLEAN) return;   // ?clean=1: pictures only (thumbnail frames)
   counter(ctx, t); gifts(ctx, t);
   for (const [kind, id, a, b, o] of TEXT) { if (t < a - .1 || t > b + .1) continue;
     if (kind === 'sub') Film.sub(ctx, id, t, a, b, o); else if (kind === 'quote') Film.quote(ctx, id, t, a, b, o); else if (kind === 'label') Film.label(ctx, id, t, a, b); else if (kind === 'fragSolo') fragSolo(ctx, id, t, a, b, o.at, o); }
-  ctx.fillStyle = `rgba(0,0,0,${1 - ss(0, 1.2, t)})`; ctx.fillRect(0, 0, W, H);   // fade in from black
 }
 
 Pilot.run({ W, H, dur: FILM_DUR, fonts: ["600 40px 'Noto Serif KR'", "400 40px 'Noto Serif KR'", "400 20px 'Noto Sans KR'"],

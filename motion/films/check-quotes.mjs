@@ -13,7 +13,7 @@ const out = execFileSync('node', [join(HERE, '..', 'narration', 'krv.mjs'), ...r
 const V = Object.fromEntries(out.split(/\r?\n/).filter(Boolean).map(l => { const [k, t] = l.split('\t'); return [k.toUpperCase(), t]; }));
 let bad = 0;
 for (const l of Q) {
-  const v = expand(l.usfm).map(u => V[u] || '').join(' '), parts = l.text.split(/\s*\/\s*|\s*…\s*/).map(x => x.trim()).filter(Boolean);
+  const v = expand(l.usfm).map(u => V[u] || '').join(' '), parts = [...l.text.split(/\s*\/\s*|\s*…\s*/), ...(l.frags || [])].map(x => x.trim()).filter(Boolean);   // frags: pieces shown one by one, each verbatim
   const miss = parts.filter(p => !v.includes(p)),vmiss = l.voice && !v.includes(l.voice);
   if (miss.length || vmiss) bad++;
   console.log(l.id, l.usfm, miss.length || vmiss ? `MISMATCH ${JSON.stringify(miss)}${vmiss ? ' voice' : ''}` : 'ok');

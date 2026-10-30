@@ -19,7 +19,7 @@
 /* 침묵의 400년 — one continuous ~2:50 film. Look: night, lamplight and gold on parchment; one scroll is the main
    character (it goes dark at the start and lights again at the end). Line ids = script.json. */
 const { clamp, lerp, ss, eo, eio, win, rng, fbm, noise, canvas, hex, mix, rgb } = Pilot;
-const W = Pilot.W, H = Pilot.H, V = Pilot.ori === 'v', DUR = 170;
+const W = Pilot.W, H = Pilot.H, V = Pilot.ori === 'v', DUR = 178;
 let parch, grain, motes = [];
 
 function init() {
@@ -88,61 +88,67 @@ function longScroll(ctx, x0, x1, cy, h, light, lx) {
 // text written on the scroll in ink; 'lit' 0..1 turns it to burnished gold with a glow; reveal(i,n) → 0..1 per character
 function scrollText(ctx, id, cx, y, size, maxW, o = {}) {
   ctx.save(); ctx.font = Film.font(size, 600); const lines = o.lines || Film.wrapEven(ctx, Film.text(id), maxW); ctx.restore();
-  const lit = o.lit || 0, ink = rgb(mix([43, 26, 11], [150, 96, 20], lit));
-  Film.block(ctx, lines, cx, y, { size, weight: 600, lh: 1.7, color: ink, alpha: o.alpha == null ? 1 : o.alpha, charAlpha: o.reveal, charGlow: o.glow, lineAlpha: o.lineAlpha });
-  if (lit > 0) Film.block(ctx, lines, cx, y, { size, weight: 600, lh: 1.7, color: '#b8841f', alpha: lit * .9 * (o.alpha == null ? 1 : o.alpha), shadow: 'rgba(255,214,120,.9)', shadowBlur: 18, charAlpha: o.reveal, lineAlpha: o.lineAlpha });
+  const lit = o.lit || 0, a = o.alpha == null ? 1 : o.alpha;
+  if (lit > 0) Film.block(ctx, lines, cx, y, { size, weight: 600, lh: 1.7, color: 'rgba(255,214,130,1)', alpha: lit * .75 * a, shadow: 'rgba(255,200,90,1)', shadowBlur: 40, charAlpha: o.reveal, lineAlpha: o.lineAlpha });   // the halo
+  Film.block(ctx, lines, cx, y, { size, weight: 600, lh: 1.7, color: '#2b1a0b', alpha: a, charAlpha: o.reveal, charGlow: o.glow, lineAlpha: o.lineAlpha });                                                   // the ink
   return lines; }
+function hlUnder(ctx, lines, cx, y, size, hl, k) {   // a gold underline and a soft light under the words two verses share
+  if (!hl || k <= 0) return; ctx.save(); ctx.font = Film.font(size, 600); const lh = size * 1.7;
+  lines.forEach((l, i) => { const j = l.indexOf(hl); if (j < 0) return; const lw = ctx.measureText(l).width, x = cx - lw / 2 + ctx.measureText(l.slice(0, j)).width, w = ctx.measureText(hl).width, yy = y + i * lh;
+    glow(ctx, x + w / 2, yy - size * .3, w * .9, [255, 214, 130], .45 * k);
+    ctx.strokeStyle = `rgba(196,140,40,${k})`; ctx.shadowColor = 'rgba(255,200,90,.9)'; ctx.shadowBlur = 12; ctx.lineWidth = 3; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(x, yy + 12); ctx.lineTo(x + w * Math.min(1, k * 1.4), yy + 12); ctx.stroke(); });
+  ctx.restore(); }
 
-function scrollReturn(ctx, t) {   // 1:58–2:12 — the same scroll as the opening. The promise words that went out at 0:10 relight where they were;
-  // the scroll unrolls on through four hundred blank years, and a pen of light writes Luke 1:17 on the same scroll. Pull back: one scroll.
+function scrollReturn(ctx, t) {   // 1:36–2:00 — the opening's scroll: silence; the promise relights where it went out; the scroll unrolls through
+  // four hundred blank years; a pen of light writes Luke 1:17; the words both verses share light together; pull back — one scroll.
   ctx.fillStyle = '#05060a'; ctx.fillRect(0, 0, W, H);
   const cy = V ? H * .4 : H * .43, sh = V ? 780 : 560, sw0 = V ? 900 : 1340, Mx = W / 2, Lx = W / 2 + (V ? 1300 : 2000), x0 = Mx - sw0 / 2;
-  const x1 = lerp(Mx + sw0 / 2, Lx + sw0 / 2, eio(clamp((t - 120.4) / 3.0))), span = (Lx - Mx) + sw0 + 160, zf = W * .94 / span, pull = eio(clamp((t - 126.2) / 3.6));
-  let cx = lerp(Mx, Lx, eio(clamp((t - 120.4) / 3.0))), z = lerp(1.07, 1, eio(clamp((t - 120.4) / 3)));
-  cx = lerp(cx, (Mx + Lx) / 2, pull); z = Math.exp(lerp(Math.log(z), Math.log(zf), pull));
-  const light = ss(118.1, 119.6, t) * (1 + .04 * Math.sin(t * 7.3) * Math.sin(t * 2.9));
+  const un = eio(clamp((t - 102.2) / 4.0)), x1 = lerp(Mx + sw0 / 2, Lx + sw0 / 2, un), span = (Lx - Mx) + sw0 + 160, zf = W * .94 / span, pull = eio(clamp((t - 111.2) / 3.8));
+  let cx = lerp(Mx, Lx, un), z = lerp(1.07, 1, un); cx = lerp(cx, (Mx + Lx) / 2, pull); z = Math.exp(lerp(Math.log(z), Math.log(zf), pull));
+  const light = ss(96.6, 97.8, t) * (1 + .04 * Math.sin(t * 7.3) * Math.sin(t * 2.9));
   ctx.save(); ctx.translate(W / 2, cy); ctx.scale(z, z); ctx.translate(-cx, -cy);
   glow(ctx, cx, cy - sh * .2, Math.max(W, H) * .7 / z, [120, 80, 40], .3 * light);
   longScroll(ctx, x0, x1, cy, sh, light, cx);
-  // Malachi 4:6 where it stood at the opening: the promise relights letter by letter; the warning stays scorched
+  const hlk = ss(109.8, 110.8, t);
   { const size = V ? 44 : 46, maxW = sw0 - (V ? 130 : 220); ctx.save(); ctx.font = Film.font(size, 600); const all = Film.wrapEven(ctx, Film.text('01'), maxW), np = Film.wrapEven(ctx, Film.text('01').split(/\s*\/\s*/)[0], maxW).length; ctx.restore();
-    const lh = size * 1.7, y0 = cy - (all.length - 1) * lh / 2 - (V ? 30 : 24), n = all.slice(0, np).reduce((s, l) => s + Pilot.chars(l).length, 0), r0 = 118.6, r1 = 120.4;
-    Film.block(ctx, all.slice(np), Mx, y0 + np * lh, { size, weight: 600, lh: 1.7, color: '#2b1a0b', alpha: .14 * light });   // the scorched words
-    scrollText(ctx, '01', Mx, y0, size, maxW, { lines: all.slice(0, np), lit: ss(r1, r1 + 1.2, t), reveal: k => ss(r0 + (r1 - r0) * k / n, r0 + (r1 - r0) * k / n + .3, t), glow: k => { const at = r0 + (r1 - r0) * k / n; return ss(at, at + .15, t) * (1 - ss(at + .2, at + .7, t)); } });
-    Pilot.text(ctx, Film.cite('19'), Mx, cy + sh / 2 - (V ? 50 : 44), { size: V ? 26 : 24, font: "'Noto Sans KR',sans-serif", color: '#5a3d1f', alpha: ss(120, 121, t) * light }); }
-  // the four hundred years: the blank parchment, a tick for each decade along its foot, '400년' in faint ink
+    const lh = size * 1.7, y0 = cy - (all.length - 1) * lh / 2 - (V ? 30 : 24), lines = all.slice(0, np), n = lines.reduce((s, l) => s + Pilot.chars(l).length, 0), r0 = 97.6, r1 = 100.2;
+    Film.block(ctx, all.slice(np), Mx, y0 + np * lh, { size, weight: 600, lh: 1.7, color: '#2b1a0b', alpha: .14 * light });
+    scrollText(ctx, '01', Mx, y0, size, maxW, { lines, lit: ss(r1, r1 + 1, t) * (1 - .5 * ss(102.4, 104, t)) + .5 * hlk, reveal: k => ss(r0 + (r1 - r0) * k / n, r0 + (r1 - r0) * k / n + .3, t), glow: k => { const at = r0 + (r1 - r0) * k / n; return ss(at, at + .15, t) * (1 - ss(at + .2, at + .7, t)); } });
+    hlUnder(ctx, lines, Mx, y0, size, Film.lines['19'].hl, hlk);
+    Pilot.text(ctx, Film.cite('19'), Mx, cy + sh / 2 - (V ? 50 : 44), { size: V ? 26 : 24, font: "'Noto Sans KR',sans-serif", color: '#5a3d1f', alpha: ss(99, 100, t) * light }); }
   { const a = Mx + sw0 / 2 + 60, b = Lx - sw0 / 2 - 60, yb = cy + sh / 2 - 46; ctx.save(); ctx.strokeStyle = 'rgba(70,44,20,.55)'; ctx.lineWidth = 2;
     for (let i = 0; i <= 40; i++) { const x = lerp(a, b, i / 40); if (x > x1 - 30) break; const l = i % 10 === 0 ? 22 : i % 5 === 0 ? 14 : 8; ctx.beginPath(); ctx.moveTo(x, yb); ctx.lineTo(x, yb - l); ctx.stroke(); }
-    ctx.restore(); Pilot.text(ctx, Film.text('C2'), (a + b) / 2, cy + 10, { size: V ? 60 : 64, weight: 600, color: '#6a4a26', alpha: .55 * ss(121.6, 122.6, t) * (x1 > (a + b) / 2 ? 1 : 0), ls: 8 }); }
-  // the pen of light writes Luke 1:17 on the same scroll
-  { const size = V ? 48 : 50, w0 = 123.6, w1 = 125.6; ctx.save(); ctx.font = Film.font(size, 600); const ls = Film.wrapEven(ctx, Film.text('20'), sw0 - 200), n = ls.reduce((s, l) => s + Pilot.chars(l).length, 0), lw = Math.max(...ls.map(l => ctx.measureText(l).width)); ctx.restore();
+    ctx.restore(); Pilot.text(ctx, Film.text('C2'), (a + b) / 2, cy + 10, { size: V ? 60 : 64, weight: 600, color: '#6a4a26', alpha: .55 * (x1 > (a + b) / 2 ? ss(103.6, 104.6, t) : 0), ls: 8 }); }
+  { const size = V ? 54 : 50, w0 = 106.6, w1 = 109.6; ctx.save(); ctx.font = Film.font(size, 600); const ls = Film.wrapEven(ctx, Film.text('20'), sw0 - 200), n = ls.reduce((s, l) => s + Pilot.chars(l).length, 0), lw = Math.max(...ls.map(l => ctx.measureText(l).width)); ctx.restore();
     const ly = cy - (ls.length - 1) * size * 1.7 / 2 - 10;
-    if (t > w0 - .2) { scrollText(ctx, '20', Lx, ly, size, sw0 - 200, { lines: ls, lit: .55 + .45 * ss(w1, w1 + .8, t), reveal: k => ss(w0 + (w1 - w0) * k / n, w0 + (w1 - w0) * k / n + .12, t) });
+    if (t > w0 - .2) { scrollText(ctx, '20', Lx, ly, size, sw0 - 200, { lines: ls, lit: .5 * hlk, reveal: k => ss(w0 + (w1 - w0) * k / n, w0 + (w1 - w0) * k / n + .12, t) });
+      hlUnder(ctx, ls, Lx, ly, size, Film.lines['20'].hl, hlk);
       const k = clamp((t - w0) / (w1 - w0)); if (k > 0 && k < 1) { const nx = Lx - lw / 2 + lw * k, ny = ly - size * .3; glow(ctx, nx, ny, 70, [255, 236, 180], 1); glow(ctx, nx, ny, 14, [255, 255, 240], 1); }
       Pilot.text(ctx, Film.cite('20'), Lx, cy + sh / 2 - (V ? 50 : 44), { size: V ? 26 : 24, font: "'Noto Sans KR',sans-serif", color: '#5a3d1f', alpha: ss(w1, w1 + .6, t) }); } }
-  // pulled back: a quiet light runs the length of the one scroll, from the promise to its answer
-  if (t > 128.2) { const k = clamp((t - 128.2) / 2.2), sx = lerp(Mx, Lx, eio(k)); glow(ctx, sx, cy, sh * 1.2, [255, 220, 150], .35 * Math.sin(Math.PI * k)); }
+  if (t > 115.2) { const k = clamp((t - 115.2) / 2.8), sx = lerp(Mx, Lx, eio(k)); glow(ctx, sx, cy, sh * 1.2, [255, 220, 150], .35 * Math.sin(Math.PI * k)); }
   ctx.restore(); bottomBand(ctx, 'rgba(5,6,10,'); }
 
-function nazarethPull(ctx, t) {   // 2:27–2:33 — Nazareth: Luke 4:18 on the scroll, underlined by the pen of light as it is read; then "오늘":
-  // the words burn gold, the light runs out along the scroll, and the camera pulls back — every promise in this film was on one scroll
+function nazarethPull(ctx, t) {   // 2:21–2:37 — Nazareth: the pen of light underlines Luke 4:18 at reading pace; silence; "오늘" — the words burn,
+  // the light runs out along the scroll to the other promises, the camera pulls back and holds: one scroll
   ctx.fillStyle = '#05060a'; ctx.fillRect(0, 0, W, H);
   const cy = V ? H * .4 : H * .42, sh = V ? 640 : 470, sw = V ? 940 : 1320, Dd = V ? 1050 : 1450, segs = [['13', -2], ['05', -1], ['25a', 0], ['19', 1], ['22', 2]];
-  const x0 = W / 2 - 2 * Dd - sw / 2, x1 = W / 2 + 2 * Dd + sw / 2, fire = ss(150.2, 150.6, t), pull = eio(clamp((t - 150.4) / 2.4)), zf = W * .95 / (2 * Dd + sw + 120);   // three of the promises fill the frame; the scroll runs on past both edges
-  const z = Math.exp(lerp(Math.log(1), Math.log(zf), pull)), light = ss(147, 147.8, t) * (1 - .3 * ss(149.4, 150.1, t) + .3 * fire);
+  const x0 = W / 2 - 2 * Dd - sw / 2, x1 = W / 2 + 2 * Dd + sw / 2, fire = ss(150.2, 150.7, t), pull = eio(clamp((t - 150.4) / 4.0)), zf = W * .95 / (2 * Dd + sw + 120);
+  const z = Math.exp(lerp(Math.log(1), Math.log(zf), pull)), light = ss(140.8, 141.8, t) * (1 - .35 * ss(148.5, 149.6, t) + .35 * fire);
   ctx.save(); ctx.translate(W / 2, cy); ctx.scale(z, z); ctx.translate(-W / 2, -cy);
   longScroll(ctx, x0, x1, cy, sh, light, W / 2);
-  segs.forEach(([id, k]) => { const cx = W / 2 + k * Dd, size = id === '25a' ? (V ? 38 : 36) : (V ? 44 : 44); ctx.save(); ctx.font = Film.font(size, 600); const ls = Film.wrapEven(ctx, Film.text(id), sw - 200); ctx.restore();
-    const y = cy - (ls.length - 1) * size * 1.7 / 2 - 14, wave = ss(150.3 + Math.abs(k) * .45, 150.8 + Math.abs(k) * .45, t);
-    scrollText(ctx, id, cx, y, size, sw - 200, { lines: ls, lit: k === 0 ? fire : wave, alpha: k === 0 ? 1 : .9 });
+  // the burst sits behind the words (the ink stays dark and readable)
+  if (fire > 0) { glow(ctx, W / 2, cy, sh * .9 + Dd * 2.6 * clamp((t - 150.3) / 2), [255, 226, 160], .55 * fire); const fl = Math.exp(-(t - 150.2) * 2.2); glow(ctx, W / 2, cy, sw * .7, [255, 248, 225], .7 * fire * fl); }
+  segs.forEach(([id, k]) => { const cx = W / 2 + k * Dd, size = id === '25a' ? (V ? 40 : 38) : (V ? 44 : 44); ctx.save(); ctx.font = Film.font(size, 600); const ls = Film.wrapEven(ctx, Film.text(id), sw - 200); ctx.restore();
+    const y = cy - (ls.length - 1) * size * 1.7 / 2 - 14, wave = ss(150.4 + Math.abs(k) * .5, 151 + Math.abs(k) * .5, t);
+    scrollText(ctx, id, cx, y, size, sw - 200, { lines: ls, lit: k === 0 ? fire : wave, alpha: k === 0 ? 1 : .92 });
     Pilot.text(ctx, Film.cite(id), cx, cy + sh / 2 - 36, { size: V ? 24 : 22, font: "'Noto Sans KR',sans-serif", color: '#5a3d1f', alpha: .9 });
-    if (k === 0 && t < 150.4) {   // the pen of light underlines the words as they are read
-      ctx.save(); ctx.font = Film.font(size, 600); const lh = size * 1.7, total = ls.reduce((s, l) => s + ctx.measureText(l).width, 0); let acc = 0, rd = clamp((t - 147.8) / 2.0) * total;
+    if (k === 0) {   // the pen of light underlines the words at reading pace; the line stays once drawn
+      ctx.save(); ctx.font = Film.font(size, 600); const lh = size * 1.7, total = ls.reduce((s, l) => s + ctx.measureText(l).width, 0); let acc = 0; const rd = clamp((t - 142.2) / 6.3) * total;
       ls.forEach((l, i) => { const w = ctx.measureText(l).width, d = clamp((rd - acc) / w); acc += w; if (d <= 0) return; const lx0 = cx - w / 2, ly = y + i * lh + 12;
-        ctx.save(); ctx.strokeStyle = 'rgba(255,214,120,.95)'; ctx.shadowColor = 'rgba(255,200,90,.9)'; ctx.shadowBlur = 14; ctx.lineWidth = 3; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(lx0, ly); ctx.lineTo(lx0 + w * d, ly); ctx.stroke(); ctx.restore();
-        if (d < 1) { glow(ctx, lx0 + w * d, ly, 46, [255, 232, 170], 1); glow(ctx, lx0 + w * d, ly, 9, [255, 255, 240], 1); } }); ctx.restore(); } });
-  if (fire > 0) { const k = clamp((t - 150.3) / 1.6); glow(ctx, W / 2 + lerp(-2, 2, .5) * Dd * 0, cy, (sh + Dd * 2.6 * k), [255, 226, 160], .35 * fire); }
+        ctx.save(); ctx.strokeStyle = 'rgba(196,140,40,.95)'; ctx.shadowColor = 'rgba(255,200,90,.9)'; ctx.shadowBlur = 12; ctx.lineWidth = 3; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(lx0, ly); ctx.lineTo(lx0 + w * d, ly); ctx.stroke(); ctx.restore();
+        if (d < 1 && t < 148.6) { glow(ctx, lx0 + w * d, ly, 46, [255, 232, 170], 1); glow(ctx, lx0 + w * d, ly, 9, [255, 255, 240], 1); } }); ctx.restore(); } });
   ctx.restore(); bottomBand(ctx, 'rgba(5,6,10,'); }
+
 function partOpening(ctx, t) {
   ctx.fillStyle = '#05060a'; ctx.fillRect(0, 0, W, H);
   const cx = W / 2, cy = V ? H * .4 : H * .43, sw = V ? 900 : 1340, sh = V ? 780 : 560;
@@ -169,14 +175,14 @@ function partOpening(ctx, t) {
   }
   dust(ctx, t, [cx, cy - sh * .3], light);
   ctx.restore();
-  Film.sub(ctx, '02', t, 6.4, 10.4);
+  Film.sub(ctx, '02', t, 8.8, 11.4);
   // 03 in total silence on black
-  Film.sub(ctx, '03', t, 11.2, 15.4, { y: V ? H * .47 : H * .5, size: V ? 58 : 54 });
+  Film.sub(ctx, '03', t, 11.6, 16.4, { y: V ? H * .47 : H * .5, size: V ? 58 : 54 });
   // title
-  const ta = win(t, 15.9, 20.4, 1.2, 1.1);
+  const ta = win(t, 16.6, 21.0, 1.2, 1.1);
   if (ta > 0) { const sz = V ? 104 : 116, ty = V ? H * .47 : H * .5;
     Pilot.text(ctx, Film.text('T1'), W / 2, ty, { size: sz, weight: 600, color: '#e9c77a', alpha: ta, shadow: 'rgba(233,185,73,.35)', shadowBlur: 40, ls: 6 });
-    const lw = (V ? 420 : 520) * eo(clamp((t - 16.3) / 2.2)); ctx.fillStyle = `rgba(233,199,122,${ta * .8})`; ctx.fillRect(W / 2 - lw / 2, ty + (V ? 54 : 58), lw, 2); }
+    const lw = (V ? 420 : 520) * eo(clamp((t - 17.0) / 2.2)); ctx.fillStyle = `rgba(233,199,122,${ta * .8})`; ctx.fillRect(W / 2 - lw / 2, ty + (V ? 54 : 58), lw, 2); }
 }
 
 // =====================================================================================================================
@@ -690,7 +696,7 @@ function figure(ctx, t) {   // 2:21–2:27 the good shepherd carries the lost on
   ctx.restore(); }
 
 
-function endCard(ctx, t) { ctx.fillStyle = '#030305'; ctx.fillRect(0, 0, W, H); glow(ctx, W / 2, H / 2, Math.max(W, H) * .5, [233, 185, 73], .12 * ss(167, 168, t));
+function endCard(ctx, t) { ctx.fillStyle = '#030305'; ctx.fillRect(0, 0, W, H); t = 167 + (t - 174.6) * (3 / 3.4); glow(ctx, W / 2, H / 2, Math.max(W, H) * .5, [233, 185, 73], .12 * ss(167, 168, t));
   const k = ss(167.2, 168.2, t), s = Film.text('E1').split(/\s*→\s*/);
   Pilot.text(ctx, s[0], W / 2, H * (V ? .45 : .44), { size: V ? 62 : 60, weight: 600, color: '#f3ece0', alpha: k, shadow: 'rgba(0,0,0,.9)' });
   if (s[1]) Pilot.text(ctx, s[1], W / 2, H * (V ? .45 : .44) + (V ? 110 : 100), { size: V ? 52 : 50, weight: 600, color: '#e9c77a', alpha: k, font: "'Noto Sans KR',sans-serif", ls: 2 });
@@ -698,22 +704,48 @@ function endCard(ctx, t) { ctx.fillStyle = '#030305'; ctx.fillRect(0, 0, W, H); 
 
 // =====================================================================================================================
 // the timeline
+const warp = keys => t => { let i = 0; while (i < keys.length - 2 && t > keys[i + 1][0]) i++; const [a0, b0] = keys[i], [a1, b1] = keys[i + 1]; return lerp(b0, b1, clamp((t - a0) / (a1 - a0))); };
+const on = (keys, f) => { const w = warp(keys); return (c, t) => f(c, w(t)); };
 const SCENES = [
-  [0, 20.6, partOpening, 0, .6], [20.4, 31.2, waitingSky], [31, 45.3, statueRise],
-  [45, 52.2, mapDiaspora, .5, .01], [52.2, 61.6, mapAlexander, .01, .5], [61.4, 69.2, translation],
-  [69, 75.2, fire], [75, 87.2, copying], [87, 113.2, mapRome],
-  [113, 118.2, temple], [118, 132.2, scrollReturn], [132, 137.6, strike], [137.4, 147.2, (c, t) => { Advent.draw(c, lerp(13.8, 27.4, clamp((t - 137.4) / 9.8))); bottomBand(c, 'rgba(0,0,0,'); }, .6, .5], [147, 153.4, nazarethPull], [153.2, 159.2, mapGospel],
-  [159, 167.2, (c, t) => { Papercut.draw(c, lerp(23.6, 31.5, clamp((t - 159) / 8.2))); bottomBand(c, 'rgba(2,4,16,'); }], [167, 170, endCard],
+  [0, 21.2, partOpening, 0, .6],
+  [21.0, 29.8, on([[21.0, 20.4], [29.8, 31.2]], waitingSky)],
+  [29.6, 46.6, on([[29.6, 31.0], [33.8, 35.0], [35.4, 36.2], [37.0, 37.4], [38.6, 38.4], [40.0, 39.3], [42.0, 40.9], [46.6, 45.3]], statueRise)],
+  [46.4, 52.6, on([[46.4, 45], [52.6, 52.2]], mapDiaspora), .5, .01],
+  [52.6, 58.4, on([[52.6, 52.2], [53.0, 55.6], [57.4, 60.6], [58.4, 61.6]], mapAlexander), .01, .5],
+  [58.2, 63.8, on([[58.2, 61.4], [59.8, 63.6], [62.6, 67.4], [63.8, 69.2]], translation)],
+  [63.6, 68.4, on([[63.6, 69.0], [68.4, 75.2]], fire)],
+  [68.2, 78.2, on([[68.2, 75.0], [72.0, 78.8], [72.2, 79.3], [78.2, 87.2]], copying)],
+  [78.0, 91.6, on([[78.0, 87], [79.0, 90.4], [83.4, 96.5], [86.0, 104], [91.6, 113.2]], mapRome)],
+  [91.4, 96.6, on([[91.4, 113], [96.6, 118.2]], temple)],
+  [96.4, 120.0, scrollReturn],
+  [119.8, 128.0, on([[119.8, 132.0], [120.8, 132.3], [121.2, 132.6], [122.8, 134.0], [124.0, 135.0], [126.0, 136.8], [128.0, 137.6]], strike)],
+  [127.8, 141.0, (c, t) => { Advent.draw(c, lerp(13.8, 27.4, clamp((t - 127.8) / 13.2))); bottomBand(c, 'rgba(0,0,0,'); }, .6, .5],
+  [140.8, 156.6, nazarethPull],
+  [156.4, 163.4, on([[156.4, 153.2], [163.4, 159.2]], mapGospel)],
+  [163.2, 174.8, (c, t) => { Papercut.draw(c, lerp(23.6, 31.5, clamp((t - 163.2) / 11.6))); bottomBand(c, 'rgba(2,4,16,'); }],
+  [174.6, 178, endCard],
 ];
 const TEXT = [
-  ['sub', '04', 20.6, 24.7], ['quote', '05', 25, 30.7, { y: H * (V ? .3 : .3) }], ['sub', '06', 31.2, 34.4], ['quote', '06a', 34.6, 40.6, { bottom: Film.subBottom() + 40, size: V ? 42 : 40, join: !V, maxW: V ? W - 150 : W * .84 }], ['sub', '07', 40.9, 45.0],
-  ['label', 'L1', 45, 52], ['sub', '08', 45.4, 51.8], ['label', 'L2', 52, 69], ['sub', '09', 55.2, 60.8], ['sub', '10', 61.5, 68.7], ['sub', '11', 69.3, 74.8], ['sub', '12', 75.2, 78.9],
-  ['label', 'L3', 87, 99.6], ['sub', '14', 90.2, 94.8], ['sub', '15', 95.2, 99.8], ['quote', '16', 100.2, 107.8, { y: H * (V ? .19 : .16) }], ['sub', '17', 108.2, 112.8],
-  ['quote', '18', 113.6, 117.9, { bottom: Film.subBottom() + 40, size: V ? 50 : 46 }], ['sub', '21', 126.6, 131.9],
-  ['quote', '22', 132.4, 136.9, { bottom: Film.subBottom() + 40, size: V ? 50 : 46 }], ['sub', '23', 138.4, 141.8],
-  ['quote', '24', 142.2, 146.9, { bottom: Film.subBottom() + 40, size: V ? 48 : 44 }], ['quote', '25', 150.5, 153.3, { bottom: Film.subBottom() + 40, size: V ? 54 : 52, color: '#fff3d6', shadow: 'rgba(255,190,90,.55)' }], ['sub', '26', 153.6, 158.8], ['sub', '27', 159.4, 166.8],
+  ['sub', '04', 21.2, 24.4], ['quote', '05', 24.6, 28.6, { y: H * (V ? .3 : .3) }], ['sub', '06', 29.8, 33.4],
+  ['frags', '06a', 33.6, 41.8, { at: [33.8, 35.4, 37.0, 38.6, 40.0], bottom: Film.subBottom() + 40, size: V ? 42 : 40, maxW: V ? W - 150 : W * .84 }], ['sub', '07', 42.0, 46.2],
+  ['label', 'L1', 46.4, 52.4], ['sub', '08', 46.8, 51.4], ['label', 'L2', 52.6, 63.6], ['sub', '09', 52.8, 57.2], ['sub', '10', 57.4, 63.4], ['sub', '11', 63.8, 68.2], ['sub', '12', 68.4, 72.0],
+  ['label', 'L3', 78.2, 83.6], ['sub', '14b', 78.8, 83.6], ['label', 'M6', 84.0, 88.6], ['sub', '17', 86.6, 91.2],
+  ['label', 'P1', 91.6, 96.4], ['quote', '18', 92.2, 96.2, { bottom: Film.subBottom() + 40, size: V ? 50 : 46 }],
+  ['sub', '21', 113.8, 119.6],
+  ['quote', '22', 120.2, 124.8, { bottom: Film.subBottom() + 40, size: V ? 50 : 46 }], ['sub', '23', 129.0, 132.8],
+  ['quote', '24', 133.6, 139.6, { bottom: Film.subBottom() + 40, size: V ? 48 : 44 }],
+  ['label', 'P2', 141.0, 148.4], ['quote', '25', 149.6, 156.2, { bottom: Film.subBottom() + 40, size: V ? 54 : 52, color: '#fff3d6', shadow: 'rgba(255,190,90,.55)' }],
+  ['sub', '26', 157.0, 163.2], ['sub', '27', 164.0, 173.4],
 ];
-function counter(ctx, t) { const k = win(t, 20.8, 30.4, 1, 1); if (k <= 0) return; const n = Math.round(430 - 300 * ss(21.2, 30.4, t));
+function frags(ctx, id, t, a, b, at, o = {}) {   // a verse whose pieces (script 'frags', each verbatim) appear one by one, in place
+  const k = win(t, a, b, .5, .6); if (k <= 0) return; const L = Film.lines[id], fr = L.frags || [L.text], joined = fr.join(' '), size = o.size || 40;
+  ctx.save(); ctx.font = Film.font(size, 600); const lines = Film.wrapEven(ctx, joined, o.maxW || W * .84); ctx.restore();
+  const owner = []; let p = 0; const fi = []; let acc = 0; fr.forEach((f, i) => { for (const ch of Pilot.chars(f)) fi.push(i); fi.push(i); });
+  const flat = Pilot.chars(joined); for (const l of lines) for (const ch of Pilot.chars(l)) { while (p < flat.length && flat[p] !== ch) p++; owner.push(fi[Math.min(p, fi.length - 1)]); p++; }
+  const lh = size * 1.55, y0 = o.bottom - 50 - (lines.length - 1) * lh;
+  Film.block(ctx, lines, W / 2, y0, { size, weight: 600, lh: 1.55, alpha: k, color: '#f6ead0', shadow: 'rgba(0,0,0,.9)', shadowBlur: 26, charAlpha: j => ss(at[owner[j]] || a, (at[owner[j]] || a) + .5, t) });
+  Pilot.text(ctx, Film.cite(id), W / 2, y0 + lines.length * lh - size * .35 + 18, { size: V ? 28 : 26, font: "'Noto Sans KR',sans-serif", color: '#d9b56a', alpha: k * .95, shadow: 'rgba(0,0,0,.9)', shadowBlur: 12 }); }
+function counter(ctx, t) { const k = win(t, 21.4, 29.4, 1, 1); if (k <= 0) return; const n = Math.round(430 - 300 * ss(21.6, 29.4, t));
   Pilot.text(ctx, Pilot.trn ? String(Film.text('C1')).replace('{n}', n) : n, W / 2, V ? 240 : 96, { size: V ? 34 : 30, font: "'Noto Sans KR',sans-serif", color: '#c9b48a', alpha: k * .9, ls: 3, shadow: 'rgba(0,0,0,.9)' }); }
 
 function draw(ctx, t) {
@@ -724,7 +756,7 @@ function draw(ctx, t) {
   vignette(ctx, .75); filmGrain(ctx, t);
   counter(ctx, t);
   for (const [kind, id, a, b, o] of TEXT) { if (t < a - .1 || t > b + .1) continue;
-    if (kind === 'sub') Film.sub(ctx, id, t, a, b, o); else if (kind === 'quote') Film.quote(ctx, id, t, a, b, o); else if (kind === 'label') Film.label(ctx, id, t, a, b); }
+    if (kind === 'sub') Film.sub(ctx, id, t, a, b, o); else if (kind === 'quote') Film.quote(ctx, id, t, a, b, o); else if (kind === 'label') Film.label(ctx, id, t, a, b); else if (kind === 'frags') frags(ctx, id, t, a, b, o.at, o); }
   ctx.fillStyle = `rgba(0,0,0,${1 - ss(0, 1.2, t)})`; ctx.fillRect(0, 0, W, H);   // fade in from black
 }
 

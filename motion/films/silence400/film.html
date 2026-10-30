@@ -10,10 +10,11 @@
 <script src="../../pilot/lib.js"></script>
 <script src="../lib-film.js"></script>
 <script src="map.js"></script>
+<script src="illum.js"></script>
 <script>
 /* 침묵의 400년 — one continuous ~2:50 film. Look: night, lamplight and gold on parchment; one scroll is the main
    character (it goes dark at the start and lights again at the end). Line ids = script.json. */
-const { clamp, lerp, ss, eo, eio, win, rng, fbm, canvas, hex, mix, rgb } = Pilot;
+const { clamp, lerp, ss, eo, eio, win, rng, fbm, noise, canvas, hex, mix, rgb } = Pilot;
 const W = Pilot.W, H = Pilot.H, V = Pilot.ori === 'v', DUR = 170;
 let parch, grain, motes = [];
 
@@ -232,28 +233,72 @@ function haze(ctx, cx, top, hs, a = 1) {   // a cold shaft of light from above a
 function statueBox() { return V ? { cx: W / 2, top: H * .17, hs: H * .55 } : { cx: W / 2, top: H * .13, hs: H * .85 }; }
 
 // =====================================================================================================================
-// the map
-const MS = 44, COS = Math.cos(35 * Math.PI / 180), LON0 = -14, LAT0 = 58, mx = lon => (lon - LON0) * COS * MS, my = lat => (LAT0 - lat) * MS;
+// the map — an ink map on stained parchment, after the first film's 05 wilderness.html (pencil-ink coasts with ripple lines,
+// faint water washes, hatched peaks, desert stipple); routes in red ink, roads in vermilion like the Peutinger Table
+const MS = 52, COS = Math.cos(35 * Math.PI / 180), LON0 = -14, LAT0 = 58, mx = lon => (lon - LON0) * COS * MS, my = lat => (LAT0 - lat) * MS;
+const MINK = '#3A2418', MRED = '#B23A1E';
 let mapC;
 const P_ = p => typeof p === 'string' ? [mx(MAP.city[p][0]), my(MAP.city[p][1])] : [mx(p[0]), my(p[1])];
+function smoothPts(P, n = 10, closed = false) {   // Catmull-Rom through the points
+  const Q = closed ? [P[P.length - 1], ...P, P[0], P[1]] : [P[0], ...P, P[P.length - 1]], out = [];
+  for (let i = 1; i < Q.length - 2; i++) { const p0 = Q[i - 1], p1 = Q[i], p2 = Q[i + 1], p3 = Q[i + 2];
+    for (let k = 0; k < n; k++) { const t = k / n, t2 = t * t, t3 = t2 * t; out.push([0, 1].map(j => .5 * (2 * p1[j] + (-p0[j] + p2[j]) * t + (2 * p0[j] - 5 * p1[j] + 4 * p2[j] - p3[j]) * t2 + (-p0[j] + 3 * p1[j] - 3 * p2[j] + p3[j]) * t3))); } }
+  if (!closed) out.push(P[P.length - 1]); return out; }
+const wobble = (pts, amp, f, seed) => pts.map(([x, y], i) => [x + (noise(i * f, seed) - .5) * 2 * amp, y + (noise(i * f, seed + 9) - .5) * 2 * amp]);
+const pth = (pts, close) => { const p = new Path2D(); pts.forEach((q, i) => i ? p.lineTo(q[0], q[1]) : p.moveTo(q[0], q[1])); if (close) p.closePath(); return p; };
 function buildMap() {
-  const w = Math.ceil(mx(66)), h = Math.ceil(my(4)); mapC = canvas(w, h); const x = mapC.getContext('2d');
-  x.drawImage(parch, 0, 0, w, h); x.fillStyle = 'rgba(30,20,10,.72)'; x.fillRect(0, 0, w, h);
-  const poly = (pts) => { x.beginPath(); pts.forEach(([lo, la], i) => i ? x.lineTo(mx(lo), my(la)) : x.moveTo(mx(lo), my(la))); x.closePath(); };
-  x.strokeStyle = 'rgba(233,199,122,.05)'; x.lineWidth = 1; for (let lo = -10; lo <= 65; lo += 5) { x.beginPath(); x.moveTo(mx(lo), 0); x.lineTo(mx(lo), h); x.stroke(); }
+  const w = Math.ceil(mx(66)), h = Math.ceil(my(4)); mapC = canvas(w, h); const x = mapC.getContext('2d'), r = rng(12);
+  // parchment: warm base, slow stains, darker toward the edges (computed small, stretched)
+  const lw = w >> 3, lh = h >> 3, lo = canvas(lw, lh), lox = lo.getContext('2d'), d = lox.createImageData(lw, lh);
+  for (let j = 0; j < lh; j++) for (let i = 0; i < lw; i++) { const n = fbm(i * .012, j * .012, 5), n2 = fbm(i * .05 + 7, j * .05, 3), e = Math.min(i, j, lw - 1 - i, lh - 1 - j) / 30;
+    const burn = 1 - clamp(e), k = (j * lw + i) * 4, base = mix([233, 220, 192], [196, 168, 122], clamp((n - .42) * 1.4 + burn * .9)), st = 1 - .06 * ss(.58, .78, n2);
+    d.data[k] = base[0] * st; d.data[k + 1] = base[1] * st; d.data[k + 2] = base[2] * st * .98; d.data[k + 3] = 255; }
+  lox.putImageData(d, 0, 0); x.imageSmoothingQuality = 'high'; x.drawImage(lo, 0, 0, w, h);
+  x.strokeStyle = 'rgba(120,90,50,.06)'; x.lineWidth = 1; for (let lo2 = -10; lo2 <= 65; lo2 += 5) { x.beginPath(); x.moveTo(mx(lo2), 0); x.lineTo(mx(lo2), h); x.stroke(); }
   for (let la = 5; la <= 60; la += 5) { x.beginPath(); x.moveTo(0, my(la)); x.lineTo(w, my(la)); x.stroke(); }
-  const sea = x.createLinearGradient(0, 0, 0, h); sea.addColorStop(0, '#08121d'); sea.addColorStop(1, '#0c1a28');
-  for (const s of MAP.seas) { poly(s); x.fillStyle = sea; x.fill(); }
-  for (const s of MAP.seas) { poly(s); x.save(); x.clip(); for (const [lw, a] of [[30, .05], [14, .08], [5, .1]]) { x.strokeStyle = `rgba(130,170,210,${a})`; x.lineWidth = lw; poly(s); x.stroke(); } x.restore(); }
-  for (const s of MAP.islands) { poly(s); x.save(); x.clip(); x.drawImage(parch, 0, 0, w, h); x.fillStyle = 'rgba(30,20,10,.72)'; x.fillRect(0, 0, w, h); x.restore(); }
-  x.shadowColor = 'rgba(233,199,122,.6)'; x.shadowBlur = 6; x.strokeStyle = 'rgba(233,199,122,.55)'; x.lineWidth = 2; x.lineJoin = 'round';
-  for (const s of [...MAP.seas, ...MAP.islands]) { poly(s); x.stroke(); }
-  x.shadowBlur = 0; x.fillStyle = 'rgba(233,199,122,.35)';
-  for (const c of Object.values(MAP.city)) { x.beginPath(); x.arc(mx(c[0]), my(c[1]), 2.4, 0, 6.283); x.fill(); }
+  // water: a faint wash, ripple lines along the coasts, an ink coastline
+  const seas = MAP.seas.map((s, i) => wobble(smoothPts(s.map(([a, b]) => [mx(a), my(b)]), 6, true), 2.2, .5, 3 + i));
+  const isl = MAP.islands.map((s, i) => wobble(smoothPts(s.map(([a, b]) => [mx(a), my(b)]), 6, true), 1.4, .5, 40 + i));
+  const seaP = seas.map(s => pth(s, true)), islP = isl.map(s => pth(s, true));
+  x.save(); for (const p of seaP) { x.save(); x.clip(p); x.fillStyle = 'rgba(96,136,160,.42)'; x.fillRect(0, 0, w, h); x.globalCompositeOperation = 'multiply'; x.globalAlpha = .5; x.drawImage(lo, 0, 0, w, h); x.restore(); } x.restore();
+  const rip = canvas(w, h), rx = rip.getContext('2d'); rx.lineJoin = 'round';
+  for (const p of [...seaP, ...islP]) for (const dd of [40, 28, 17, 8]) { rx.globalCompositeOperation = 'source-over'; rx.strokeStyle = '#2c4a5e'; rx.globalAlpha = .5 - dd / 120; rx.lineWidth = dd * 2 + 1.6; rx.stroke(p);
+    rx.globalAlpha = 1; rx.globalCompositeOperation = 'destination-out'; rx.lineWidth = dd * 2 - .4; rx.stroke(p); }
+  x.save(); for (const p of seaP) { x.save(); x.clip(p); x.drawImage(rip, 0, 0); x.restore(); } x.restore();
+  for (const p of islP) { x.save(); x.clip(p); x.drawImage(lo, 0, 0, w, h); x.restore(); }
+  x.strokeStyle = MINK; x.lineJoin = 'round'; x.lineWidth = 2.6; for (const p of seaP) x.stroke(p); x.lineWidth = 2; for (const p of islP) x.stroke(p);
+  const isSea = (px, py) => seaP.some(p => x.isPointInPath(p, px, py)) && !islP.some(p => x.isPointInPath(p, px, py));
+  // rivers: the Nile, the Tigris and the Euphrates
+  const river = (ll, lw2, seed) => { x.lineWidth = lw2; x.strokeStyle = MINK; x.stroke(pth(wobble(smoothPts(ll.map(([a, b]) => [mx(a), my(b)]), 10), 3, .5, seed), false)); };
+  river([[32.9, 22], [32.6, 25], [32.7, 26.2], [31.2, 27.6], [30.9, 28.8], [31.2, 30.1], [30.6, 31.0], [30.4, 31.45]], 2.6, 21); river([[31.2, 30.1], [31.6, 30.9], [31.8, 31.45]], 2, 22);
+  river([[38.5, 38.8], [39.7, 37.2], [40.4, 35.6], [41.6, 34.5], [43.4, 33.3], [44.4, 32.5], [45.8, 31.4], [47.5, 30.6]], 2.4, 23);
+  river([[40.5, 38.2], [42.6, 37.1], [43.1, 36.3], [44.1, 34.6], [44.6, 33.1], [46.2, 31.8], [47.5, 30.6], [48.5, 29.9]], 2.4, 24); river([[35.6, 33.0], [35.55, 32.4], [35.55, 31.8]], 1.6, 25);
+  // hills as on old maps: outlined peaks hatched on the shadow side, along the great ranges
+  const peak = (px, py, s) => { x.fillStyle = 'rgba(236,224,198,.9)'; x.beginPath(); x.moveTo(px - s, py); x.lineTo(px - s * .12, py - s * 1.05); x.lineTo(px + s, py); x.closePath(); x.fill();
+    x.strokeStyle = MINK; x.lineWidth = 1.7; x.beginPath(); x.moveTo(px - s, py); x.lineTo(px - s * .12, py - s * 1.05); x.lineTo(px + s, py); x.stroke();
+    x.lineWidth = 1; for (let k = 1; k < 5; k++) { const f = k / 5, qx = lerp(px - s * .12, px + s, f), qy = lerp(py - s * 1.05, py, f); x.beginPath(); x.moveTo(qx, qy); x.lineTo(qx - s * .28, qy + s * .32); x.stroke(); } };
+  const range = (lo0, lo1, la0, la1, n, s0, s1) => { const pts = []; for (let i = 0; i < n; i++) { const px = mx(lerp(lo0, lo1, r())), py = my(lerp(la0, la1, r())); if (!isSea(px, py) && !isSea(px - 16, py) && !isSea(px + 16, py)) pts.push([px, py, s0 + r() * (s1 - s0)]); }
+    pts.sort((a, b) => a[1] - b[1]).forEach(([px, py, s]) => peak(px, py, s)); };
+  range(30, 38.5, 36.8, 38.2, 46, 9, 15); range(44, 53, 29.5, 35.5, 52, 9, 15); range(6, 14, 45.2, 47, 34, 9, 14); range(19.5, 24.5, 40.6, 43, 26, 8, 13); range(35.6, 36.6, 33.2, 34.6, 10, 8, 12);
+  range(-5, 9, 31.5, 35.2, 34, 8, 13); range(11.5, 16, 40.2, 44, 22, 7, 11); range(40, 48, 41.8, 43.6, 24, 9, 14); range(33.5, 35.5, 27.6, 29.4, 12, 8, 12); range(36, 44, 37.5, 39, 20, 8, 12);
+  x.fillStyle = 'rgba(58,36,24,.32)'; for (let i = 0; i < 7000; i++) { const lo2 = lerp(-10, 60, r()), la = lerp(14, 33, r()); const px = mx(lo2), py = my(la); if (isSea(px, py)) continue; x.beginPath(); x.arc(px, py, .7 + r() * 1, 0, 6.283); x.fill(); }
+  // labels (place names from the script, in each language's Bible words)
+  const lab = (id, p, size, o = {}) => { const s = Film.text(id); if (!s) return; const [px, py] = P_(p); x.save(); x.font = `600 ${size}px 'Noto Serif KR',serif`; x.letterSpacing = (o.ls || 0) + 'px'; x.textAlign = o.al || 'center'; x.textBaseline = 'middle';
+    const tx = px + (o.dx || 0), ty = py + (o.dy || 0); x.lineWidth = size * .22; x.strokeStyle = 'rgba(236,224,198,.85)'; x.lineJoin = 'round'; x.strokeText(s, tx, ty); x.fillStyle = o.c || MINK; x.fillText(s, tx, ty);
+    if (o.dot) { x.beginPath(); x.arc(px, py, 6, 0, 6.283); x.fillStyle = MINK; x.fill(); x.beginPath(); x.arc(px, py, 2.6, 0, 6.283); x.fillStyle = '#e9dcc0'; x.fill(); } x.restore(); };
+  lab('M1', [18, 34.6], 64, { ls: 22, c: '#4a3a30' }); lab('M2', 'jerusalem', 30, { dot: true, dx: 14, dy: 26, al: 'left' }); lab('M3', 'babylon', 30, { dot: true, dx: 0, dy: 30 });
+  lab('M4', 'alexandria', 30, { dot: true, dx: -12, dy: 30, al: 'right' }); lab('M5', 'rome', 30, { dot: true, dx: 0, dy: -28 });
+  // compass rose
+  { const cx = mx(55), cy = my(42); x.save(); x.translate(cx, cy); x.strokeStyle = MINK; x.fillStyle = MINK; x.lineWidth = 1.6; x.beginPath(); x.arc(0, 0, 64, 0, 6.283); x.stroke(); x.beginPath(); x.arc(0, 0, 50, 0, 6.283); x.stroke();
+    for (let k = 0; k < 8; k++) { const a = k * Math.PI / 4 - Math.PI / 2, l = k % 2 ? 50 : 100; x.beginPath(); x.moveTo(Math.cos(a) * l, Math.sin(a) * l); x.lineTo(Math.cos(a + .5) * 13, Math.sin(a + .5) * 13); x.lineTo(Math.cos(a - .5) * 13, Math.sin(a - .5) * 13); x.closePath(); k % 4 ? x.stroke() : x.fill(); } x.restore(); }
+  x.fillStyle = 'rgba(58,36,24,.55)'; for (const c of Object.values(MAP.city)) { x.beginPath(); x.arc(mx(c[0]), my(c[1]), 2.6, 0, 6.283); x.fill(); }
 }
 function camAt(keys, t) { let i = 0; while (i < keys.length - 2 && t > keys[i + 1][0]) i++; const a = keys[i], b = keys[i + 1], k = eio(clamp((t - a[0]) / (b[0] - a[0] || 1)));
   return [lerp(a[1], b[1], k), lerp(a[2], b[2], k), lerp(a[3], b[3], k)]; }
-function mapBegin(ctx, cam) { const [lo, la, z] = cam; ctx.save(); ctx.fillStyle = '#0a0705'; ctx.fillRect(0, 0, W, H); ctx.translate(W / 2, H / 2); ctx.scale(z, z); ctx.translate(-mx(lo), -my(la)); ctx.drawImage(mapC, 0, 0); return z; }
+function mapBegin(ctx, cam) { const [lo, la, z] = cam; ctx.save(); ctx.fillStyle = '#2a1d12'; ctx.fillRect(0, 0, W, H); ctx.translate(W / 2, H / 2); ctx.scale(z, z); ctx.translate(-mx(lo), -my(la)); ctx.drawImage(mapC, 0, 0); return z; }
+function mapEnd(ctx) { ctx.restore();   // soft dark bands where the narration and the section label are read (the parchment is light)
+  const tg = ctx.createLinearGradient(0, 0, 0, V ? 360 : 190); tg.addColorStop(0, 'rgba(10,6,3,.78)'); tg.addColorStop(1, 'rgba(10,6,3,0)'); ctx.fillStyle = tg; ctx.fillRect(0, 0, W, V ? 360 : 190);
+  const y0 = V ? H * .62 : H * .7, g = ctx.createLinearGradient(0, y0, 0, H); g.addColorStop(0, 'rgba(10,6,3,0)'); g.addColorStop(.45, 'rgba(10,6,3,.6)'); g.addColorStop(1, 'rgba(10,6,3,.82)'); ctx.fillStyle = g; ctx.fillRect(0, y0, W, H - y0); }
 function polyLen(pts) { let L = 0; for (let i = 1; i < pts.length; i++) L += Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]); return L; }
 function partial(ctx, pts, p) {   // stroke the first fraction p of a polyline; returns the head point
   const L = polyLen(pts) * clamp(p); let acc = 0; ctx.beginPath(); ctx.moveTo(pts[0][0], pts[0][1]); let head = pts[0];
@@ -265,55 +310,61 @@ function pointAt(pts, p) { const L = polyLen(pts) * clamp(p); let acc = 0; for (
   if (acc + d >= L) { const k = d ? (L - acc) / d : 0; return [lerp(pts[i - 1][0], pts[i][0], k), lerp(pts[i - 1][1], pts[i][1], k)]; } acc += d; } return pts[pts.length - 1]; }
 function arcPts(a, b, bend = .18, n = 24) { const [x0, y0] = P_(a), [x1, y1] = P_(b), mxp = (x0 + x1) / 2, myp = (y0 + y1) / 2, dx = x1 - x0, dy = y1 - y0;
   const cx = mxp - dy * bend, cy = myp + dx * bend, out = []; for (let i = 0; i <= n; i++) { const k = i / n; out.push([(1 - k) ** 2 * x0 + 2 * (1 - k) * k * cx + k * k * x1, (1 - k) ** 2 * y0 + 2 * (1 - k) * k * cy + k * k * y1]); } return out; }
-function tinyScroll(ctx, x, y, s, a) { if (a <= 0) return; glow(ctx, x, y, s * 5, [255, 210, 140], .45 * a); ctx.save(); ctx.globalAlpha = a;
-  ctx.fillStyle = '#e8d3a4'; ctx.fillRect(x - s, y - s * .6, s * 2, s * 1.2); ctx.fillStyle = '#7a5130'; ctx.fillRect(x - s * 1.2, y - s * .8, s * .35, s * 1.6); ctx.fillRect(x + s * .85, y - s * .8, s * .35, s * 1.6); ctx.restore(); }
+const roadPts = r => smoothPts(r.map(P_), 8);
+function tinyScroll(ctx, x, y, s, a) { if (a <= 0) return; ctx.save(); ctx.globalAlpha = a; ctx.lineWidth = 1.6; ctx.strokeStyle = MINK;
+  ctx.fillStyle = '#f1e2bd'; ctx.fillRect(x - s, y - s * .6, s * 2, s * 1.2); ctx.strokeRect(x - s, y - s * .6, s * 2, s * 1.2);
+  ctx.fillStyle = '#7a5130'; for (const sx of [-1.2, .85]) { ctx.fillRect(x + s * sx, y - s * .8, s * .35, s * 1.6); ctx.strokeRect(x + s * sx, y - s * .8, s * .35, s * 1.6); }
+  ctx.beginPath(); for (let k = 0; k < 3; k++) { ctx.moveTo(x - s * .7, y - s * .25 + k * s * .25); ctx.lineTo(x + s * .6, y - s * .25 + k * s * .25); } ctx.lineWidth = .9; ctx.stroke(); ctx.restore(); }
 function cityLamp(ctx, p, k, z, t, seed) { if (k <= 0) return; const [x, y] = P_(p), f = 1 + .12 * Math.sin(t * 5 + seed * 7);
-  glow(ctx, x, y, 34 / z * f, [255, 200, 120], .55 * k); ctx.fillStyle = `rgba(255,236,190,${k})`; ctx.beginPath(); ctx.arc(x, y, 3.2 / z, 0, 6.283); ctx.fill(); }
+  glow(ctx, x, y, 30 / z * f, [255, 196, 90], .55 * k); ctx.fillStyle = `rgba(150,60,20,${k})`; ctx.beginPath(); ctx.arc(x, y, 4 / z, 0, 6.283); ctx.fill(); ctx.fillStyle = `rgba(255,236,170,${k})`; ctx.beginPath(); ctx.arc(x, y - 1 / z, 2 / z, 0, 6.283); ctx.fill(); }
 
 function mapDiaspora(ctx, t) {
-  const z = mapBegin(ctx, V ? [41, 31, 1.0] : camAt([[45, 39, 33, 1.05], [52, 38, 32.5, 1.15]], t));
+  const z = mapBegin(ctx, V ? camAt([[45, 40, 32.5, 1.25], [52, 40.5, 32, 1.35]], t) : camAt([[45, 39, 33, 1.25], [52, 38.5, 32.5, 1.35]], t));
   MAP.diaspora.forEach(([a, b], i) => { const st = 45.8 + i * .42, p = ss(st, st + 2.6, t); if (p <= 0) return; const pts = arcPts(a, b, .16);
-    ctx.strokeStyle = 'rgba(255,214,150,.55)'; ctx.lineWidth = 2.2 / z; ctx.setLineDash([6 / z, 7 / z]); const h = partial(ctx, pts, p); ctx.setLineDash([]);
-    if (p < 1) glow(ctx, h[0], h[1], 16 / z, [255, 220, 160], .9); const [ex, ey] = P_(b); tinyScroll(ctx, ex, ey - 12 / z, 7 / z, ss(st + 2.2, st + 2.9, t)); });
-  cityLamp(ctx, 'jerusalem', 1, z, t, 0); ctx.restore(); }
+    ctx.strokeStyle = MINK; ctx.lineWidth = 2.4 / z; ctx.setLineDash([7 / z, 6 / z]); ctx.lineCap = 'round'; const hd = partial(ctx, pts, p); ctx.setLineDash([]);
+    if (p < 1) { ctx.fillStyle = MRED; ctx.beginPath(); ctx.arc(hd[0], hd[1], 5 / z, 0, 6.283); ctx.fill(); }
+    const [ex, ey] = P_(b); tinyScroll(ctx, ex, ey - 16 / z, 9 / z, ss(st + 2.2, st + 2.9, t)); });
+  mapEnd(ctx); }
 
 function mapAlexander(ctx, t) {
-  const cam = V ? camAt([[55, 34, 34, .95], [61, 36, 33, .95], [63.5, 29.9, 31.2, 2.4]], t) : camAt([[55, 36, 35, 1.1], [61, 37, 34, 1.05], [63.5, 29.9, 31.2, 2.6]], t);
-  const z = mapBegin(ctx, cam), pts = MAP.alexander.map(P_), p = ss(55.6, 60.6, t);
+  const cam = V ? camAt([[55, 37, 34, 1.0], [61, 37, 33, 1.0], [63.5, 29.9, 31.2, 2.4]], t) : camAt([[55, 36, 35, 1.15], [61, 37, 34, 1.1], [63.5, 29.9, 31.2, 2.6]], t);
+  const z = mapBegin(ctx, cam), pts = smoothPts(MAP.alexander.map(P_), 8), p = ss(55.6, 60.6, t);
   ctx.lineCap = 'round'; ctx.lineJoin = 'round';
-  ctx.strokeStyle = 'rgba(196,128,64,.13)'; ctx.lineWidth = 170; partial(ctx, pts, p); ctx.lineWidth = 90; ctx.strokeStyle = 'rgba(196,128,64,.12)'; partial(ctx, pts, p);
-  ctx.strokeStyle = 'rgba(232,170,100,.85)'; ctx.lineWidth = 3 / z; const h = partial(ctx, pts, p); if (p > 0 && p < 1) glow(ctx, h[0], h[1], 26 / z, [255, 190, 120], .9);
-  cityLamp(ctx, 'alexandria', ss(61, 62.5, t), z, t, 3);
-  ctx.restore(); }
+  // a bronze watercolour wash spreads where the army has passed (one language follows it)
+  ctx.save(); ctx.globalCompositeOperation = 'multiply'; ctx.filter = 'blur(18px)'; ctx.strokeStyle = 'rgba(196,122,58,.32)'; ctx.lineWidth = 230; partial(ctx, pts, p); ctx.lineWidth = 120; ctx.strokeStyle = 'rgba(196,122,58,.22)'; partial(ctx, pts, p); ctx.restore();
+  ctx.strokeStyle = MRED; ctx.lineWidth = 3.6 / z; ctx.setLineDash([12 / z, 8 / z]); const hd = partial(ctx, pts, p); ctx.setLineDash([]);
+  if (p > 0 && p < 1) { ctx.fillStyle = MRED; ctx.beginPath(); ctx.arc(hd[0], hd[1], 7 / z, 0, 6.283); ctx.fill(); }
+  mapEnd(ctx); }
 
 function mapRome(ctx, t) {
-  const z = mapBegin(ctx, V ? camAt([[90, 25, 38.5, .92], [113, 26, 37.5, .86]], t) : camAt([[90, 22, 38.5, 1.0], [113, 23, 37.5, .93]], t));
+  const z = mapBegin(ctx, V ? camAt([[90, 25, 38.5, .95], [113, 26, 37.5, .88]], t) : camAt([[90, 22, 38.5, 1.0], [113, 23, 37.5, .93]], t));
   ctx.lineCap = 'round'; ctx.lineJoin = 'round';
-  MAP.roads.forEach((r, i) => { const st = 90.4 + i * .32, p = ss(st, st + 2.4, t); if (p <= 0) return; const pts = r.map(P_);
-    ctx.strokeStyle = 'rgba(255,205,120,.22)'; ctx.lineWidth = 9 / z; partial(ctx, pts, p); ctx.strokeStyle = 'rgba(255,215,140,.95)'; ctx.lineWidth = 2.6 / z; const h = partial(ctx, pts, p);
-    if (p < 1) glow(ctx, h[0], h[1], 18 / z, [255, 220, 150], .9); });
+  MAP.roads.forEach((r, i) => { const st = 90.4 + i * .32, p = ss(st, st + 2.4, t); if (p <= 0) return; const pts = roadPts(r);
+    ctx.strokeStyle = MINK; ctx.lineWidth = 6.5 / z; partial(ctx, pts, p); ctx.strokeStyle = '#c8402a'; ctx.lineWidth = 3.4 / z; const hd = partial(ctx, pts, p);
+    if (p < 1) { ctx.fillStyle = MINK; ctx.beginPath(); ctx.arc(hd[0], hd[1], 5 / z, 0, 6.283); ctx.fill(); } });
   const lk = ss(95, 96.5, t);
-  if (lk > 0) MAP.lanes.forEach((l, i) => { const pts = l.length === 2 ? arcPts(l[0], l[1], .08) : l.map(P_);
-    ctx.strokeStyle = `rgba(160,200,240,${.5 * lk})`; ctx.lineWidth = 1.8 / z; ctx.setLineDash([10 / z, 10 / z]); ctx.lineDashOffset = -t * 30 / z; partial(ctx, pts, ss(95 + i * .2, 97.5 + i * .2, t)); ctx.setLineDash([]);
-    const q = pointAt(pts, ((t - 95) * .12 + i * .37) % 1); glow(ctx, q[0], q[1], 12 / z, [200, 225, 255], .8 * lk); });
+  if (lk > 0) MAP.lanes.forEach((l, i) => { const pts = l.length === 2 ? arcPts(l[0], l[1], .08) : smoothPts(l.map(P_), 8);
+    ctx.strokeStyle = `rgba(40,70,110,${.8 * lk})`; ctx.lineWidth = 2.2 / z; ctx.setLineDash([3 / z, 7 / z]); partial(ctx, pts, ss(95 + i * .2, 97.5 + i * .2, t)); ctx.setLineDash([]);
+    const q = pointAt(pts, ((t - 95) * .12 + i * .37) % 1); ctx.save(); ctx.translate(q[0], q[1]); ctx.fillStyle = `rgba(58,36,24,${lk})`; ctx.beginPath(); ctx.moveTo(-8 / z, 0); ctx.lineTo(8 / z, 0); ctx.lineTo(5 / z, 4 / z); ctx.lineTo(-5 / z, 4 / z); ctx.closePath(); ctx.fill();
+    ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(0, -10 / z); ctx.lineTo(6 / z, -3 / z); ctx.closePath(); ctx.fill(); ctx.restore(); });
   MAP.synagogues.forEach((c, i) => cityLamp(ctx, c, ss(100.3 + i * .25, 100.9 + i * .25, t) * (1 + .3 * ss(108, 111, t)), z, t, i));
-  ctx.restore();
-  if (t > 99.5 && t < 108.5) { const k = win(t, 99.6, 108.2, .6, .6), g = ctx.createLinearGradient(0, 0, 0, H * .42); g.addColorStop(0, `rgba(0,0,0,${.8 * k})`); g.addColorStop(1, 'rgba(0,0,0,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H * .42); }
+  mapEnd(ctx);
+  if (t > 99.5 && t < 108.5) { const k = win(t, 99.6, 108.2, .6, .6), g = ctx.createLinearGradient(0, 0, 0, H * .42); g.addColorStop(0, `rgba(10,6,3,${.85 * k})`); g.addColorStop(1, 'rgba(10,6,3,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H * .42); }
 }
 
 function mapGospel(ctx, t) {
-  const z = mapBegin(ctx, V ? camAt([[152, 30, 35, 1.05], [159, 26, 37, .8]], t) : camAt([[152, 28, 35, 1.15], [159, 22, 37.5, .9]], t));
+  const z = mapBegin(ctx, V ? camAt([[152, 30, 35, 1.1], [159, 26, 37, .85]], t) : camAt([[152, 28, 35, 1.2], [159, 22, 37.5, .95]], t));
   ctx.lineCap = 'round'; ctx.lineJoin = 'round'; const up = ss(152, 158, t);
-  for (const r of MAP.roads) { const pts = r.map(P_); ctx.strokeStyle = `rgba(255,215,140,${.25 + .45 * up})`; ctx.lineWidth = 2.2 / z; partial(ctx, pts, 1); }
-  // light runs out from Jerusalem: each road gets a pulse, nearer roads first
+  for (const r of MAP.roads) { const pts = roadPts(r); ctx.strokeStyle = MINK; ctx.lineWidth = 6.5 / z; partial(ctx, pts, 1); ctx.strokeStyle = '#c8402a'; ctx.lineWidth = 3.4 / z; partial(ctx, pts, 1); }
+  // gold runs out from Jerusalem along every road, nearer roads first (gold leaf laid on the vermilion)
   const J = P_('jerusalem');
-  MAP.roads.forEach((r, i) => { const pts = r.map(P_), d0 = Math.hypot(pts[0][0] - J[0], pts[0][1] - J[1]), d1 = Math.hypot(pts[pts.length - 1][0] - J[0], pts[pts.length - 1][1] - J[1]);
-    const path = d1 < d0 ? pts.slice().reverse() : pts, delay = Math.min(d0, d1) / 900, p = clamp((t - 152.6 - delay) / 3.2);
-    if (p <= 0) return; ctx.strokeStyle = 'rgba(255,240,200,.9)'; ctx.lineWidth = 4 / z; const h = partial(ctx, path, p); if (p < 1) glow(ctx, h[0], h[1], 30 / z, [255, 235, 190], 1); });
+  MAP.roads.forEach(r => { const pts = roadPts(r), d0 = Math.hypot(pts[0][0] - J[0], pts[0][1] - J[1]), d1 = Math.hypot(pts[pts.length - 1][0] - J[0], pts[pts.length - 1][1] - J[1]);
+    const path = d1 < d0 ? pts.slice().reverse() : pts, p = clamp((t - 152.6 - Math.min(d0, d1) / 900) / 3.2); if (p <= 0) return;
+    ctx.save(); ctx.shadowColor = 'rgba(255,200,90,.9)'; ctx.shadowBlur = 14; ctx.strokeStyle = '#f2c96a'; ctx.lineWidth = 5 / z; const hd = partial(ctx, path, p); ctx.restore();
+    if (p < 1) glow(ctx, hd[0], hd[1], 26 / z, [255, 220, 140], .9); });
   MAP.synagogues.forEach((c, i) => cityLamp(ctx, c, .6 + .4 * up, z, t, i));
-  glow(ctx, J[0], J[1], 140 / z * (1 + up), [255, 230, 180], .5 + .3 * up);
-  ctx.restore(); }
-
+  glow(ctx, J[0], J[1], 120 / z * (1 + up), [255, 214, 130], .55 + .3 * up);
+  mapEnd(ctx); }
 // =====================================================================================================================
 // scroll scenes
 function translation(ctx, t) {   // 0:61–0:69 at Alexandria: Hebrew turns into Greek on a scroll (Gen 1:1 — Masoretic text and the Septuagint)
@@ -331,34 +382,47 @@ function translation(ctx, t) {   // 0:61–0:69 at Alexandria: Hebrew turns into
     ctx.fillStyle = g; ctx.fillRect(sweep - 50, cy - sh / 2, 100, sh); }
   ctx.restore(); }
 
-let burnF, embers = [];
-function buildBurn() { const bw = V ? 135 : 240, bh = V ? 240 : 135; burnF = { w: bw, h: bh, v: new Float32Array(bw * bh), c: canvas(bw, bh) };
-  for (let j = 0; j < bh; j++) for (let i = 0; i < bw; i++) burnF.v[j * bw + i] = .55 * fbm(i / 16, j / 16, 4) + .45 * (1 - (i / bw * .5 + j / bh * .5));
-  const r = rng(31); for (let k = 0; k < 360; k++) { const i = r() * bw | 0, j = r() * bh | 0; embers.push([i / bw, j / bh, burnF.v[j * bw + i], r(), r()]); } }
 const scrollCanvas = {};
 function scrollLayer(key, draw) { if (!scrollCanvas[key]) scrollCanvas[key] = canvas(W, H); const c = scrollCanvas[key], x = c.getContext('2d'); x.clearRect(0, 0, W, H); draw(x); return c; }
+// the burning scroll: the burn front is computed on the scroll's own area at half resolution (soft, anti-aliased edges),
+// a charred band behind it, a glowing rim, and real tongues of flame riding the front
+const FIRE_R = () => { const cx = W / 2, cy = V ? H * .42 : H * .43, sw = V ? 900 : 1340, sh = V ? 780 : 560; return { cx, cy, sw, sh, x0: cx - sw / 2, y0: cy - sh / 2 }; };
+let burnF, fireFront = [];
+function buildBurn() { const R = FIRE_R(), bw = Math.round(R.sw / 2), bh = Math.round(R.sh / 2), v = new Float32Array(bw * bh);
+  for (let j = 0; j < bh; j++) for (let i = 0; i < bw; i++) v[j * bw + i] = .6 * fbm(i / 70, j / 70, 5) + .4 * (1 - (i / bw * .55 + j / bh * .45));
+  burnF = { w: bw, h: bh, v, c: canvas(bw, bh), g: canvas(bw, bh) };
+  const r = rng(31); for (let k = 0; k < 900; k++) { const i = r() * bw | 0, j = r() * bh | 0; fireFront.push([R.x0 + i * 2, R.y0 + j * 2, v[j * bw + i], r(), r()]); } }
+function flameAt(ctx, x, y, s, t, ph, a) {   // a tongue of fire: glow, body, white-hot core; it breathes and sways
+  if (a <= 0) return; const f = 1 + .18 * Math.sin(t * 11 + ph * 7) + .1 * Math.sin(t * 23 + ph * 3), h = s * 2.4 * f, sway = Math.sin(t * 5 + ph * 5) * s * .35;
+  ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.globalAlpha = a;
+  const g = ctx.createLinearGradient(x, y, x, y - h); g.addColorStop(0, 'rgba(255,190,80,.9)'); g.addColorStop(.45, 'rgba(255,120,30,.75)'); g.addColorStop(1, 'rgba(200,40,10,0)');
+  ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(x - s * .5, y); ctx.bezierCurveTo(x - s * .7, y - h * .45, x + sway - s * .1, y - h * .7, x + sway, y - h); ctx.bezierCurveTo(x + sway + s * .2, y - h * .6, x + s * .7, y - h * .4, x + s * .5, y); ctx.closePath(); ctx.fill();
+  const c = ctx.createLinearGradient(x, y, x, y - h * .5); c.addColorStop(0, 'rgba(255,250,220,.95)'); c.addColorStop(1, 'rgba(255,220,140,0)');
+  ctx.fillStyle = c; ctx.beginPath(); ctx.ellipse(x + sway * .2, y - h * .18, s * .22, h * .22, 0, 0, 6.283); ctx.fill(); ctx.restore(); }
 function fire(ctx, t) {   // 1:09–1:15 the scroll burns
   ctx.fillStyle = '#050403'; ctx.fillRect(0, 0, W, H);
-  const cx = W / 2, cy = V ? H * .42 : H * .43, sw = V ? 900 : 1340, sh = V ? 780 : 560, th = lerp(.12, .92, ss(69.6, 74.9, t));
-  const layer = scrollLayer('fire', x => { scroll(x, cx, cy, sw, sh, 1, .8); ink(x, cx - sw / 2 + 90, cy - sh / 2 + 80, sw - 180, V ? 11 : 8, V ? 58 : 54, V ? 24 : 26, 7); });
-  const { w, h, v, c } = burnF, cx2 = c.getContext('2d'), d = cx2.createImageData(w, h);
-  for (let i = 0; i < w * h; i++) { const e = v[i] - th; d.data[i * 4 + 3] = e <= 0 ? 0 : 255; const ch = clamp(1 - e / .07); d.data[i * 4] = 20; d.data[i * 4 + 1] = 10; d.data[i * 4 + 2] = 0; d.data[i * 4 + 3] = e <= 0 ? 0 : Math.round(255 * Math.max(0, 1 - ch * .0)); }
-  cx2.putImageData(d, 0, 0);
-  const lx = layer.getContext('2d'); lx.save(); lx.globalCompositeOperation = 'destination-in'; lx.imageSmoothingEnabled = true; lx.drawImage(c, 0, 0, W, H); lx.restore();
-  // char: darken near the burning edge
-  for (let i = 0; i < w * h; i++) { const e = v[i] - th; d.data[i * 4 + 3] = e <= 0 || e > .08 ? 0 : Math.round(230 * (1 - e / .08)); }
-  cx2.putImageData(d, 0, 0); lx.save(); lx.globalCompositeOperation = 'source-atop'; lx.drawImage(c, 0, 0, W, H); lx.restore();
+  const R = FIRE_R(), th = lerp(.1, .95, ss(69.6, 74.9, t)), { w, h, v, c, g } = burnF;
+  glow(ctx, R.cx, R.cy, Math.max(W, H) * .6, [255, 120, 40], .3 * win(t, 69.4, 75, .8, 1.2));
+  const layer = scrollLayer('fire', x => { scroll(x, R.cx, R.cy, R.sw, R.sh, 1, .85); ink(x, R.x0 + 90, R.y0 + 80, R.sw - 180, V ? 11 : 8, V ? 58 : 54, V ? 24 : 26, 7); });
+  // paper that remains (soft edge) and the char band behind the front
+  const cx2 = c.getContext('2d'), d = cx2.createImageData(w, h), gx2 = g.getContext('2d'), dg = gx2.createImageData(w, h);
+  for (let i = 0; i < w * h; i++) { const e = v[i] - th, keep = clamp(e / .012), ch = e > 0 ? clamp(1 - e / .07) : 0, rim = clamp(1 - Math.abs(e - .004) / .016);
+    const o = i * 4; d.data[o] = 30 * (1 - ch); d.data[o + 1] = 14 * (1 - ch); d.data[o + 2] = 4; d.data[o + 3] = Math.round(255 * keep);
+    dg.data[o] = 255; dg.data[o + 1] = 120 + 110 * rim; dg.data[o + 2] = 40 + 60 * rim * rim; dg.data[o + 3] = Math.round(235 * rim * rim); }
+  cx2.putImageData(d, 0, 0); gx2.putImageData(dg, 0, 0);
+  const lx = layer.getContext('2d'); lx.save(); lx.globalCompositeOperation = 'destination-in'; lx.imageSmoothingQuality = 'high';
+  lx.drawImage(c, R.x0 - 40, R.y0 - 50, R.sw + 80, R.sh + 100); lx.restore();   // (destination-in clears everything the mask does not cover: one draw only)
+  // char: brown-black toward the front (multiply the same mask's colour channels)
+  lx.save(); lx.globalCompositeOperation = 'source-atop'; for (let i = 0; i < w * h; i++) { const e = v[i] - th, ch = e > 0 ? clamp(1 - e / .07) : 0; d.data[i * 4 + 3] = Math.round(235 * ch * ch); }
+  cx2.putImageData(d, 0, 0); lx.drawImage(c, R.x0 - 40, R.y0 - 50, R.sw + 80, R.sh + 100); lx.restore();
   ctx.drawImage(layer, 0, 0);
-  // the glowing edge
-  // the glowing edge — only where there is paper (inside the scroll)
-  const rx0 = (cx - sw / 2) / W * w, rx1 = (cx + sw / 2) / W * w, ry0 = (cy - sh / 2) / H * h, ry1 = (cy + sh / 2) / H * h;
-  for (let j = 0; j < h; j++) for (let i = 0; i < w; i++) { const q = j * w + i, e = v[q] - th, inside = i >= rx0 && i <= rx1 && j >= ry0 && j <= ry1;
-    const k = inside && e > -.012 && e < .03 ? 1 - Math.abs(e - .009) / .021 : 0; d.data[q * 4] = 255; d.data[q * 4 + 1] = 120 + 90 * k; d.data[q * 4 + 2] = 30; d.data[q * 4 + 3] = Math.round(200 * clamp(k)); }
-  cx2.putImageData(d, 0, 0); ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.filter = 'blur(8px)'; ctx.globalAlpha = .8; ctx.drawImage(c, 0, 0, W, H); ctx.filter = 'none'; ctx.globalAlpha = .55; ctx.drawImage(c, 0, 0, W, H); ctx.restore();
-  glow(ctx, W * .7, H * .75, Math.max(W, H) * .6, [255, 120, 40], .22 * win(t, 69.4, 75, .8, 1.2));
-  for (const [ex, ey, ev, r1, r2] of embers) { const tb = lerp(69.6, 74.9, clamp((ev - .12) / .8)), u = t - tb; if (u < 0 || u > 2.2) continue;
-    const x = ex * W + Math.sin(u * 3 + r1 * 9) * 20 + u * 30 * (r2 - .3), y = ey * H - u * (80 + 120 * r1), a = (1 - u / 2.2) * (.5 + .5 * r2);
-    ctx.fillStyle = `rgba(255,${170 + 60 * r1 | 0},80,${a})`; ctx.beginPath(); ctx.arc(x, y, 1.5 + r2 * 2.2, 0, 6.283); ctx.fill(); }
+  ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.filter = 'blur(10px)'; ctx.drawImage(g, R.x0 - 40, R.y0 - 50, R.sw + 80, R.sh + 100); ctx.filter = 'blur(2px)'; ctx.drawImage(g, R.x0 - 40, R.y0 - 50, R.sw + 80, R.sh + 100); ctx.restore();
+  // flames ride the front; embers lift off behind it
+  for (const [x, y, ev, r1, r2] of fireFront) { const e = ev - th;
+    if (e > -.004 && e < .022 && r1 < .5) flameAt(ctx, x, y + 6, (V ? 18 : 16) + r2 * 22, t, r1 * 10 + r2, clamp(1 - Math.abs(e - .008) / .014) * .9);
+    const tb = lerp(69.6, 74.9, clamp((ev - .1) / .85)), u = t - tb; if (u < 0 || u > 2.4 || r2 > .6) continue;
+    const ex = x + Math.sin(u * 3 + r1 * 9) * 24 + u * 30 * (r2 - .3), ey = y - u * (90 + 140 * r1), a = (1 - u / 2.4) * (.5 + .5 * r2);
+    ctx.fillStyle = `rgba(255,${170 + 60 * r1 | 0},80,${a})`; ctx.beginPath(); ctx.arc(ex, ey, 1.4 + r2 * 2.2, 0, 6.283); ctx.fill(); }
 }
 function quill(ctx, x, y, s) { ctx.save(); ctx.translate(x, y); ctx.rotate(-.75);
   ctx.fillStyle = '#efe4cc'; ctx.beginPath(); ctx.moveTo(0, 0); ctx.quadraticCurveTo(s * .25, -s * .55, s * .05, -s * 1.5); ctx.quadraticCurveTo(-s * .3, -s * .6, 0, 0); ctx.fill();
@@ -393,49 +457,57 @@ function twoScrolls(ctx, t) {   // 1:58–2:12 the promise lights again; Luke 1:
 
 // =====================================================================================================================
 // the statue scenes
-function statueScene(ctx, t, lit, base, label) {
-  ctx.fillStyle = '#030305'; ctx.fillRect(0, 0, W, H);
-  const b = statueBox(), push = 1 + .03 * Math.sin((t - 31) * .1);
-  glow(ctx, b.cx, b.top + b.hs * .45, b.hs * .8, [80, 70, 90], .35);
-  ctx.save(); ctx.translate(W / 2, H / 2); ctx.scale(push, push); ctx.translate(-W / 2, -H / 2); haze(ctx, b.cx, b.top, b.hs); statue(ctx, b.cx, b.top, b.hs, lit, base); ctx.restore();
+// Daniel's statue is painted as an illuminated miniature on a manuscript page lying in candlelight (illum.js)
+const ZY = { gold: 80, silver: 260, bronze: 465, iron: 730, clay: 940 };
+function desk(ctx, t) { ctx.fillStyle = '#0b0806'; ctx.fillRect(0, 0, W, H); glow(ctx, W * .12, -H * .05, Math.max(W, H) * .9, [255, 170, 90], .22 * (1 + .04 * Math.sin(t * 6.1))); }
+function camPush(ctx, t, t0, amt = .04) { const k = 1 + amt * eio(clamp((t - t0) / 12)); ctx.translate(W / 2, H * .5); ctx.scale(k, k); ctx.translate(-W / 2, -H * .5); }
+function statueScene(ctx, t, lit, t0) {
+  desk(ctx, t); ctx.save(); camPush(ctx, t, t0, .03);
+  const b = Illum.statueBox(), z = Object.keys(lit).find(k => lit[k] > .05), k = z ? lit[z] : 0;
+  Illum.page(ctx, t, x => Illum.statue(x, b.cx, b.top, b.hs, {}, lit, t, .9 * k), { glint: clamp((t - t0 - .4) / 2.4), rays: z ? { k, at: [b.cx, b.top + b.hs * ZY[z] / 1000] } : null });
+  ctx.restore(); }
+function statueRise(ctx, t) {   // 0:31–0:45: the statue is painted onto the page zone by zone, head first; the gold flares and fades (Babylon is past); then the silver
+  desk(ctx, t); ctx.save(); camPush(ctx, t, 31, .05);
+  const b = Illum.statueBox(), show = {}; Illum.ZONES.forEach((z, i) => show[z] = ss(31.4 + i * .75, 32.4 + i * .75, t));
+  const lit = { gold: .8 * win(t, 32, 35.5, .6, 1.4), silver: ss(42, 43, t) }, z = lit.silver > .05 ? 'silver' : 'gold';
+  Illum.page(ctx, t, x => Illum.statue(x, b.cx, b.top, b.hs, show, lit, t, .9 * lit.silver), { glint: t > 41.6 ? clamp((t - 42) / 2.4) : clamp((t - 32) / 2.6), rays: { k: Math.max(lit.gold, lit.silver), at: [b.cx, b.top + b.hs * ZY[z] / 1000] } });
+  ctx.restore(); }
+let ishards = [], icracks = [];
+function buildIllumShards() {
+  const tc = canvas(4, 4).getContext('2d'), r = rng(5);
+  while (ishards.length < 2600) { const x = (r() - .5) * 400, y = r() * 990; const z = Illum.ZONES.find(z => tc.isPointInPath(Illum.ZP[z], x, y)); if (z) ishards.push([x / 1000, y / 1000, z, r(), r(), r()]); }
+  const rc = rng(8); for (let i = 0; i < 12; i++) { let x = (rc() - .5) * .22, y = .97; const pts = [[x, y]]; for (let k = 0; k < 14; k++) { x += (rc() - .5) * .05; y -= .02 + rc() * .035; pts.push([x, y]); } icracks.push(pts); }
 }
-function statueRise(ctx, t) {   // 0:31–0:45
-  const rev = z => ss(31.3 + z * .9, 32.6 + z * .9, t), lit = { gold: .7 * win(t, 31.6, 35, .6, 1.2), silver: ss(42, 43.2, t) }, base = .22 * ss(31, 34, t);
-  ctx.fillStyle = '#030305'; ctx.fillRect(0, 0, W, H); const b = statueBox();
-  glow(ctx, b.cx, b.top + b.hs * .45, b.hs * .8, [80, 70, 90], .35 * ss(31, 33, t));
-  ctx.save(); const rise = (1 - eo(clamp((t - 31) / 4))) * 60; ctx.translate(0, rise);
-  haze(ctx, b.cx, b.top, b.hs, ss(31, 34, t));
-  ctx.save(); ctx.beginPath(); ctx.rect(0, 0, W, b.top + b.hs * lerp(0, 1.02, ss(31.2, 36, t)) - rise); ctx.clip(); statue(ctx, b.cx, b.top, b.hs, lit, base); ctx.restore(); ctx.restore();
-}
-function strike(ctx, t) {   // 2:12–2:21 a stone cut without hands strikes the feet; the statue becomes chaff; a small light
-  ctx.fillStyle = '#030305'; ctx.fillRect(0, 0, W, H);
-  const b = V ? { cx: W / 2, top: H * .2, hs: H * .52 } : statueBox(), hitT = 134.4, sh = t > hitT ? Math.exp(-(t - hitT) * 4) : 0, r = rng(Math.floor(t * 30));
-  ctx.save(); ctx.translate((r() - .5) * 24 * sh, (r() - .5) * 18 * sh);
-  // the mountain the stone comes from
-  ctx.fillStyle = '#0b0a0d'; ctx.beginPath(); const mb = b.top + b.hs * .98; ctx.moveTo(W * (V ? .6 : .68), mb); ctx.quadraticCurveTo(W * (V ? .85 : .82), b.top + b.hs * (V ? .45 : .3), W * 1.05, b.top + b.hs * (V ? .35 : .22)); ctx.lineTo(W, mb); ctx.closePath(); ctx.fill();
-  ctx.fillStyle = '#060508'; ctx.fillRect(0, mb, W, H - mb);
-  haze(ctx, b.cx, b.top, b.hs, 1 - ss(136.8, 138, t));
-  const gone = ss(136.8, 137.4, t), all = .35 + .3 * ss(132, 133, t);
-  statue(ctx, b.cx, b.top, b.hs, { gold: all, silver: all, bronze: all, iron: all, clay: all }, .25, 1 - gone);
-  // cracks
-  const cp = ss(hitT, hitT + 2, t); if (cp > 0 && gone < 1) { ctx.save(); ctx.translate(b.cx, b.top); ctx.scale(b.hs, b.hs); ctx.strokeStyle = `rgba(255,236,190,${.9 * (1 - gone)})`; ctx.lineWidth = 2.2 / b.hs; ctx.shadowColor = 'rgba(255,220,150,.9)'; ctx.shadowBlur = 12;
-    for (const c of cracks) partial(ctx, c, cp); ctx.restore(); }
-  // the stone
-  const st = ss(132.3, 133.2, t), fly = eio(clamp((t - 132.8) / (hitT - 132.8)));
-  if (st > 0 && t < 139) { const sx0 = W * (V ? .82 : .8), sy0 = b.top + b.hs * (V ? .62 : .55), sx1 = b.cx + b.hs * .14, sy1 = b.top + b.hs * .92, s = b.hs * .07;
-    const x = lerp(sx0, sx1, fly), y = lerp(sy0, sy1, fly) - Math.sin(fly * Math.PI) * b.hs * .08, rot = fly * -4;
-    glow(ctx, x, y, s * 3, [255, 225, 170], .45 * st); ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.globalAlpha = st * (1 - ss(138, 139, t));
-    ctx.fillStyle = '#d8cdb8'; ctx.beginPath(); stoneShape.forEach(([px, py], i) => i ? ctx.lineTo(px * s, py * s) : ctx.moveTo(px * s, py * s)); ctx.closePath(); ctx.fill();
-    ctx.fillStyle = 'rgba(0,0,0,.25)'; ctx.beginPath(); ctx.ellipse(s * .2, s * .2, s * .5, s * .35, .4, 0, 6.283); ctx.fill(); ctx.restore(); }
-  if (t > hitT) glow(ctx, b.cx + b.hs * .1, b.top + b.hs * .92, b.hs * .5, [255, 240, 210], .8 * Math.exp(-(t - hitT) * 2.5));
-  // chaff on the wind (Dan 2:35)
-  if (t > 136.6) { const u0 = t - 136.9; for (const [x, y, z, r1, r2, r3] of shards) { const u = u0 - (1 - y) * .25 - r3 * .2; if (u <= 0) { if (gone > .5) { ctx.fillStyle = rgb(METAL[z], .6); ctx.fillRect(b.cx + x * b.hs, b.top + y * b.hs, 3, 3); } continue; }
-      const px = b.cx + x * b.hs - Math.pow(u, 1.6) * (W * .18) * (.5 + r1), py = b.top + y * b.hs - u * 40 * r2 + Math.sin(u * 2 + r3 * 9) * 18, a = 1 - ss(1.2, 3.2, u);
-      if (a <= 0) continue; ctx.fillStyle = rgb(mix(METAL[z], [255, 230, 190], .2), a * .85); ctx.fillRect(px, py, 2 + r2 * 2.5, 2 + r1 * 2); } }
+function strike(ctx, t) {   // 2:12–2:21 a stone cut out without hands comes from the mountain, strikes the feet; the statue becomes chaff on the wind;
+  // the stone grows into a great mountain (Dan 2:34–35), and a small light rests on it
+  const hitT = 134.4, sh = t > hitT ? Math.exp(-(t - hitT) * 4) : 0, rr = rng(Math.floor(t * 30)), b = Illum.statueBox(), [ax, ay, aw, ah] = Illum.L.arch;
+  desk(ctx, t); ctx.save(); ctx.translate((rr() - .5) * 22 * sh, (rr() - .5) * 16 * sh);
+  const gone = ss(136.8, 137.3, t), grow = eio(clamp((t - 137.4) / 3.2)), s0 = b.hs * .075;
+  const sx0 = ax + aw * .9, sy0 = ay + ah * .62, sx1 = b.cx + b.hs * .13, sy1 = b.top + b.hs * .93, fly = eio(clamp((t - 132.9) / (hitT - 132.9)));
+  const stone = (x, cx, cy, s, rot, a) => { x.save(); x.globalAlpha = a; x.translate(cx, cy); x.rotate(rot); x.beginPath(); stoneShape.forEach(([px, py], i) => i ? x.lineTo(px * s, py * s) : x.moveTo(px * s, py * s)); x.closePath();
+    x.fillStyle = '#b9b0a0'; x.fill(); x.save(); x.clip(); x.fillStyle = 'rgba(80,70,60,.35)'; x.beginPath(); x.ellipse(s * .25, s * .3, s * .7, s * .45, .4, 0, 6.283); x.fill(); x.restore();
+    x.strokeStyle = Illum.INK; x.lineWidth = 3; x.lineJoin = 'round'; x.stroke(); x.restore(); };
+  Illum.page(ctx, t, x => {
+    // the mountain on the right: painted rock with ink hatching; the stone breaks out of it
+    x.save(); x.fillStyle = '#8a7a5e'; x.beginPath(); x.moveTo(ax + aw * .62, ay + ah * .9); x.quadraticCurveTo(ax + aw * .8, ay + ah * .38, ax + aw * 1.02, ay + ah * .3); x.lineTo(ax + aw, ay + ah); x.lineTo(ax + aw * .62, ay + ah); x.closePath(); x.fill();
+    x.strokeStyle = Illum.INK; x.lineWidth = 3; x.stroke(); x.lineWidth = 1.4; for (let i = 0; i < 14; i++) { const k = i / 14, hx = ax + aw * (.7 + k * .3), hy = ay + ah * (.6 - k * .22 + .1); x.beginPath(); x.moveTo(hx, hy); x.lineTo(hx + 20, hy + 26); x.stroke(); } x.restore();
+    if (t < hitT + 2) { const cx = lerp(sx0, sx1, fly), cy = lerp(sy0, sy1, fly) - Math.sin(fly * Math.PI) * b.hs * .1; stone(x, cx, cy, s0, fly * -5, ss(132.3, 133.0, t)); }
+    if (gone < 1) Illum.statue(x, b.cx, b.top, b.hs, { gold: 1 - gone, silver: 1 - gone, bronze: 1 - gone, iron: 1 - gone, clay: 1 - gone }, {}, t);
+    const cp = ss(hitT, hitT + 2.2, t); if (cp > 0 && gone < 1) { x.save(); x.translate(b.cx, b.top); x.scale(b.hs, b.hs); x.strokeStyle = `rgba(42,26,16,${1 - gone})`; x.lineWidth = 3 / b.hs; for (const c of icracks) partial(x, c, cp); x.restore(); }
+    // the stone becomes a great mountain that fills the earth (Dan 2:35)
+    if (t > hitT + 2) { const g = grow, cx = lerp(sx1, b.cx, g), base = ay + ah * .93, mh = lerp(s0 * 1.6, ah * .62, g), mw = lerp(s0 * 2, aw * 1.1, g);
+      x.save(); x.beginPath(); x.moveTo(cx - mw / 2, base); x.quadraticCurveTo(cx - mw * .2, base - mh * 1.05, cx, base - mh); x.quadraticCurveTo(cx + mw * .2, base - mh * 1.05, cx + mw / 2, base); x.closePath();
+      x.fillStyle = '#b9b0a0'; x.fill(); x.save(); x.clip(); const lg = x.createLinearGradient(0, base - mh, 0, base); lg.addColorStop(0, 'rgba(255,236,190,.55)'); lg.addColorStop(1, 'rgba(90,70,50,.3)'); x.fillStyle = lg; x.fillRect(cx - mw, base - mh * 1.1, mw * 2, mh * 1.2); x.restore();
+      x.strokeStyle = Illum.INK; x.lineWidth = 3; x.stroke(); x.restore();
+      const ml = ss(138, 140.2, t); glow(x, cx, base - mh - 6, 60 + 80 * ml, [255, 236, 190], .85 * ml); }
+  }, { glint: clamp((t - 132.2) / 2.2) });
+  if (t > hitT) glow(ctx, b.cx + b.hs * .12, b.top + b.hs * .93, b.hs * .45, [255, 245, 225], .9 * Math.exp(-(t - hitT) * 2.6));
+  // chaff blown off the page (the wind carries it out of the picture)
+  if (t > 136.6) { const u0 = t - 136.85; for (const [x, y, z, r1, r2, r3] of ishards) { const u = u0 - (1 - y) * .25 - r3 * .2; const bx = b.cx + x * b.hs, by = b.top + y * b.hs;
+      if (u <= 0) { if (gone > .4) { ctx.fillStyle = rgb(Illum.METAL[z], .9); ctx.fillRect(bx, by, 3, 3); } continue; }
+      const px = bx - Math.pow(u, 1.6) * (W * .22) * (.5 + r1), py = by - u * 50 * r2 + Math.sin(u * 2 + r3 * 9) * 20, a = 1 - ss(1.4, 3.4, u); if (a <= 0) continue;
+      ctx.fillStyle = rgb(Illum.METAL[z], a); ctx.fillRect(px, py, 2.4 + r2 * 2.6, 2.4 + r1 * 2.2); } }
   ctx.restore();
-  // a small light where the statue stood
-  const ml = ss(137.6, 140, t); if (ml > 0) { const gx = b.cx, gy = b.top + b.hs * .86; glow(ctx, gx, gy, b.hs * .5, [255, 214, 150], .55 * ml); glow(ctx, gx, gy, b.hs * .12, [255, 245, 220], .9 * ml);
-    ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.strokeStyle = `rgba(255,225,170,${.12 * ml})`; ctx.lineWidth = 2; for (let i = 0; i < 18; i++) { const a = i / 18 * 6.283 + t * .05; ctx.beginPath(); ctx.moveTo(gx, gy); ctx.lineTo(gx + Math.cos(a) * b.hs * .6, gy + Math.sin(a) * b.hs * .6); ctx.stroke(); } ctx.restore(); }
 }
 
 // =====================================================================================================================
@@ -499,8 +571,8 @@ function endCard(ctx, t) { ctx.fillStyle = '#030305'; ctx.fillRect(0, 0, W, H); 
 // the timeline
 const SCENES = [
   [0, 20.6, partOpening, 0, .6], [20.4, 31.2, (c, t) => sky(c, t, 20.4)], [31, 45.3, statueRise],
-  [45, 52.3, mapDiaspora], [52, 55.3, (c, t) => statueScene(c, t, { bronze: ss(52.3, 53.3, t) }, .22)], [55, 61.6, mapAlexander], [61.4, 69.2, translation],
-  [69, 75.2, fire], [75, 87.2, copying], [87, 90.3, (c, t) => statueScene(c, t, { iron: ss(87.3, 88.3, t), clay: .8 * ss(87.6, 88.6, t) }, .22)], [90, 113.2, mapRome],
+  [45, 52.3, mapDiaspora], [52, 55.3, (c, t) => statueScene(c, t, { bronze: ss(52.3, 53.3, t) }, 52)], [55, 61.6, mapAlexander], [61.4, 69.2, translation],
+  [69, 75.2, fire], [75, 87.2, copying], [87, 90.3, (c, t) => statueScene(c, t, { iron: ss(87.3, 88.3, t), clay: .8 * ss(87.6, 88.6, t) }, 87)], [90, 113.2, mapRome],
   [113, 118.2, temple], [118, 132.2, twoScrolls], [132, 141.2, strike], [141, 147.2, figure], [147, 152.2, nazareth], [152, 159.2, mapGospel],
   [159, 167.2, (c, t) => sky(c, t, 159, ss(159, 165, t))], [167, 170, endCard],
 ];
@@ -509,7 +581,7 @@ const TEXT = [
   ['label', 'L1', 42, 52], ['sub', '08', 45.4, 51.8], ['label', 'L2', 52, 69], ['sub', '09', 55.2, 60.8], ['sub', '10', 61.5, 68.7], ['sub', '11', 69.3, 74.8], ['sub', '12', 75.2, 78.9],
   ['label', 'L3', 87, 99.6], ['sub', '14', 90.2, 94.8], ['sub', '15', 95.2, 99.8], ['quote', '16', 100.2, 107.8, { y: H * (V ? .19 : .16) }], ['sub', '17', 108.2, 112.8],
   ['quote', '18', 113.6, 117.9, { y: H * (V ? .26 : .22) }], ['sub', '21', 126, 131.9],
-  ['quote', '22', 132.4, 137, V ? { y: H * .1 } : { x: W * .23, y: H * .42, maxW: W * .34, size: 50 }], ['sub', '23', 137.4, 141],
+  ['quote', '22', 132.4, 137, { y: V ? H * .76 : H * .87, size: V ? 50 : 46 }], ['sub', '23', 137.4, 141],
   ['quote', '24', 141.4, 146.8, { y: H * (V ? .17 : .15) }], ['quote', '25', 147.4, 152, { y: H * (V ? .22 : .2) }], ['sub', '26', 152.4, 158.8], ['sub', '27', 159.4, 166.8],
 ];
 function counter(ctx, t) { const k = win(t, 20.8, 30.4, 1, 1); if (k <= 0) return; const n = Math.round(430 - 300 * ss(21.2, 30.4, t));
@@ -528,7 +600,7 @@ function draw(ctx, t) {
 }
 
 Pilot.run({ W, H, dur: DUR, fonts: ["600 40px 'Noto Serif KR'", "400 40px 'Noto Serif KR'", "400 20px 'Noto Sans KR'"],
-  init: async () => { await Film.load(); init(); buildStars(); buildStatue(); buildMap(); buildBurn(); }, draw });
+  init: async () => { await Film.load(); init(); buildStars(); buildStatue(); Illum.init(); buildIllumShards(); buildMap(); buildBurn(); }, draw });
 </script>
 </body>
 </html>

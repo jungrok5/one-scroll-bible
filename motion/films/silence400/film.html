@@ -19,7 +19,7 @@
 /* 침묵의 400년 — one continuous ~2:50 film. Look: night, lamplight and gold on parchment; one scroll is the main
    character (it goes dark at the start and lights again at the end). Line ids = script.json. */
 const { clamp, lerp, ss, eo, eio, win, rng, fbm, noise, canvas, hex, mix, rgb } = Pilot;
-const W = Pilot.W, H = Pilot.H, V = Pilot.ori === 'v', DUR = 179;
+const W = Pilot.W, H = Pilot.H, V = Pilot.ori === 'v';
 let parch, grain, motes = [];
 
 function init() {
@@ -183,13 +183,16 @@ function partOpening(ctx, t) {
       charAlpha: (k, n) => { const at = out0 + (out1 - out0) * k / n; return 1 - ss(at, at + .35, t); },
       charGlow: (k, n) => { const at = out0 + (out1 - out0) * k / n; return ss(at - .25, at, t) * (1 - ss(at, at + .3, t)); } });
     const ca = tin * (1 - ss(out1 - .2, out1 + .6, t));
+    if (ca > 0) Pilot.text(ctx, Film.text('P0'), cx, cy - sh / 2 + (V ? 66 : 60), { size: V ? 36 : 34, weight: 600, color: '#6a4a26', alpha: ca * light, ls: 3 });   // where we are in the Bible
     if (ca > 0) Pilot.text(ctx, Film.cite('01'), cx, cy + sh / 2 - (V ? 50 : 44), { size: V ? 26 : 24, font: "'Noto Sans KR',sans-serif", color: '#5a3d1f', alpha: ca });
     ctx.restore(); }
   dust(ctx, t, [cx, cy - sh * .3], light);
   ctx.restore();
   Film.sub(ctx, '02', t, 8.8, 11.4);
   // 03 in total silence on black
-  Film.sub(ctx, '03', t, 12.6, 17.0, { y: V ? H * .47 : H * .5, size: V ? 58 : 54 });
+  { const k = win(t, 12.6, 17.0, .6, .6); if (k > 0) {   // its own breaks: portrait one piece a line, landscape the first two pieces together
+    const sg = Film.text('03').split(/\s*\/\s*/), size = V ? 52 : 54, lines = V || sg.length < 3 ? sg : [sg[0] + ' ' + sg[1], ...sg.slice(2)], lh = size * 1.55;
+    Film.block(ctx, lines, W / 2, (V ? H * .47 : H * .5) - (lines.length - 1) * lh / 2 + (1 - eo(clamp((t - 12.6) / 1.2))) * 10, { size, weight: 600, alpha: k, color: '#f3ece0', shadow: 'rgba(0,0,0,.85)', shadowBlur: 22, lh: 1.55 }); } }
   // title
   const ta = win(t, 17.2, 21.3, 1.0, 1.0);
   if (ta > 0) { const sz = V ? 104 : 116, ty = V ? H * .47 : H * .5;
@@ -681,7 +684,9 @@ function statueRise(ctx, t) {   // 0:31–0:45: first a faint drawing; then each
   const zl = Object.keys(lit).reduce((m, q) => lit[q] > (lit[m] || 0) ? q : m, 'gold');
   Illum.page(ctx, t, x => Illum.statue(x, b.cx, b.top, b.hs, show, lit, t, names ? .9 * lit.silver : 0), { glint: clamp((t - 35) / 2.6), rays: { k: lit[zl] || 0, at: [b.cx, b.top + b.hs * ZY[zl] / 1000] } });
   callouts(ctx, t, ['gold', 'silver', 'bronze', 'iron'].map(q => ({ z: q, a: ss(AT[q] + .2, AT[q] + .9, t), bright: (lit[q] || 0) > .3, names })));
-  ctx.restore(); }
+  ctx.restore();
+  // what this statue is, and where to read it (above the page, clear of it)
+  Pilot.text(ctx, Film.text('D0'), W / 2, V ? 196 : 44, { size: V ? 38 : 32, weight: 600, color: '#e9c77a', alpha: .95 * win(t, 32.0, 44.6, .8, .8), ls: 4, shadow: 'rgba(0,0,0,.9)', shadowBlur: 14 }); }
 
 let ishards = [], icracks = [];
 function buildIllumShards() {
@@ -750,10 +755,12 @@ function figure(ctx, t) {   // 2:21–2:27 the good shepherd carries the lost on
 
 
 function endCard(ctx, t) { ctx.fillStyle = '#030305'; ctx.fillRect(0, 0, W, H); t = 167 + (t - 175.8) * (3 / 3.2); glow(ctx, W / 2, H / 2, Math.max(W, H) * .5, [233, 185, 73], .12 * ss(167, 168, t));
-  const k = ss(167.2, 168.2, t), s = Film.text('E1').split(/\s*→\s*/);
-  Pilot.text(ctx, s[0], W / 2, H * (V ? .45 : .44), { size: V ? 62 : 60, weight: 600, color: '#f3ece0', alpha: k, shadow: 'rgba(0,0,0,.9)' });
-  if (s[1]) Pilot.text(ctx, s[1], W / 2, H * (V ? .45 : .44) + (V ? 110 : 100), { size: V ? 52 : 50, weight: 600, color: '#e9c77a', alpha: k, font: "'Noto Sans KR',sans-serif", ls: 2 });
-  Pilot.text(ctx, '한눈에 보는 성경 이야기', W / 2, H * (V ? .45 : .44) + (V ? 200 : 180), { size: V ? 30 : 28, font: "'Noto Sans KR',sans-serif", color: '#9aa3b2', alpha: k * .9 }); }
+  // a reading card: read it yourself — the chapters the two climaxes come from — then the site
+  const k = ss(167.0, 167.7, t), k2 = ss(167.4, 168.1, t), s = Film.text('E1').split(/\s*→\s*/), y = H * (V ? .4 : .36), mw = W - (V ? 120 : 240);
+  Pilot.text(ctx, s[0], W / 2, y, { size: V ? 54 : 58, weight: 600, color: '#f3ece0', alpha: k, shadow: 'rgba(0,0,0,.9)', maxW: mw });
+  if (s[1]) Pilot.text(ctx, s[1], W / 2, y + (V ? 110 : 110), { size: V ? 44 : 48, weight: 600, color: '#e9c77a', alpha: k2, shadow: 'rgba(233,185,73,.3)', shadowBlur: 24, maxW: mw });
+  if (s[2]) Pilot.text(ctx, s[2], W / 2, y + (V ? 250 : 230), { size: V ? 42 : 42, weight: 600, color: '#d9b56a', alpha: k2, font: "'Noto Sans KR',sans-serif", ls: 2 });
+  Pilot.text(ctx, '한눈에 보는 성경 이야기', W / 2, y + (V ? 320 : 290), { size: V ? 30 : 28, font: "'Noto Sans KR',sans-serif", color: '#9aa3b2', alpha: k2 * .9 }); }
 
 // =====================================================================================================================
 // the timeline
@@ -824,8 +831,13 @@ function gifts(ctx, t) {
     giftIcon(ctx, i, x, y, r * .78); ctx.restore();
     Pilot.text(ctx, Film.text(id), x, y + r + (V ? 44 : 38), { size: V ? 36 : 34, weight: 600, color: lit > .2 ? '#ffe2a0' : '#e6d3a4', alpha: a, shadow: 'rgba(0,0,0,.95)', shadowBlur: 10 }); }); }
 
-function draw(ctx, t) {
-  mapT = t; const X = .7, act = SCENES.map((s, i) => [...s, i]).filter(([a, b, , , , i]) => t >= a && t < b + (i < SCENES.length - 1 ? X : 0));
+// the edit: the scenes and words above are timed on the story clock; this maps film time → story clock (slope 1 = as timed;
+// >1 tightens, <1 gives room) — 12th cut: room for the longer line 03 and the reading card, paid for by tighter holds elsewhere
+const EDIT = [[0, 0], [12.4, 12.4], [18.7, 17.1], [21.9, 21.3], [25.0, 24.4], [29.4, 29.6], [87.4, 87.6], [90.8, 91.2], [151.6, 152.0], [154.6, 155.8],
+  [161.8, 163.0], [166.2, 167.8], [174.2, 175.8], [179.4, 179.0]];
+const FILM_DUR = EDIT[EDIT.length - 1][0], story = warp(EDIT);
+function draw(ctx, T) {
+  const t = story(T); mapT = t; const X = .7, act = SCENES.map((s, i) => [...s, i]).filter(([a, b, , , , i]) => t >= a && t < b + (i < SCENES.length - 1 ? X : 0));
   act.forEach(([a, b, f, , , i], j) => {
     if (j === 0) { ctx.save(); f(ctx, t); ctx.restore(); return; }
     if (!window.__xl) { window.__xl = canvas(W, H); window.__xx = window.__xl.getContext('2d'); }
@@ -839,7 +851,7 @@ function draw(ctx, t) {
   ctx.fillStyle = `rgba(0,0,0,${1 - ss(0, 1.2, t)})`; ctx.fillRect(0, 0, W, H);   // fade in from black
 }
 
-Pilot.run({ W, H, dur: DUR, fonts: ["600 40px 'Noto Serif KR'", "400 40px 'Noto Serif KR'", "400 20px 'Noto Sans KR'"],
+Pilot.run({ W, H, dur: FILM_DUR, fonts: ["600 40px 'Noto Serif KR'", "400 40px 'Noto Serif KR'", "400 20px 'Noto Sans KR'"],
   init: async () => { await Film.load(); init(); GoldLine.init(W, H, [0, 0, W, H]); buildStars(); buildStatue(); Illum.init(); buildIllumShards(); await Papercut.init(); buildShipSmall(); buildSky(); await Advent.init(); buildMap(); buildBurn(); }, draw });
 </script>
 </body>

@@ -68,27 +68,40 @@
   // narration subtitle: the one place spoken words appear (always on screen — deaf viewers read every word)
   // The narration is anchored by its LAST line to one fixed baseline near the bottom (a longer translation grows upward),
   // and every picture keeps clear of the band above it (F.SAFE: the lowest y a picture may use) — so the words never sit on art.
-  F.subBottom = () => P.ori === 'v' ? P.H * .79 : P.H - 104;
-  F.SAFE = () => P.ori === 'v' ? P.H * .68 : P.H - 270;
+  // Portrait: Shorts/Reels cover the bottom ~20% (channel, title) and a column of buttons on the right (~86–98% of the
+  // width, from mid-height down) — so words end at 74% of the height and sit a little left of centre, at most 80% wide.
+  F.subBottom = () => P.ori === 'v' ? P.H * .74 : P.H - 104;
+  F.SAFE = () => P.ori === 'v' ? P.H * .64 : P.H - 270;
+  F.cx = () => P.ori === 'v' ? P.W * .47 : P.W / 2;
+  F.vw = () => P.W * .8;
+  // portrait: a narration with '/' pieces is shown piece by piece (each one or two big lines), its time shared by length
+  F.pieces = (txt, a, b) => { const segs = String(txt).split(/\s*\/\s*/).filter(Boolean), w = segs.map(s => P.chars(s).length + 6), tw = w.reduce((x, y) => x + y, 0);
+    let acc = a; return segs.map((s, i) => { const d = (b - a) * w[i] / tw, r = [s, acc, acc + d, i, segs.length]; acc += d; return r; }); };
   F.sub = (ctx, id, t, a, b, o = {}) => {
+    const txt0 = o.text != null ? o.text : F.text(id);
+    if (P.ori === 'v' && !o.whole && o.y == null && /\//.test(txt0)) { for (const [s, a1, b1, i, n] of F.pieces(txt0, a, b)) if (t >= a1 - .1 && t <= b1 + .1)
+      F.sub(ctx, id, t, a1, b1, { ...o, text: s, whole: true, fi: i ? .35 : o.fi, fo: i < n - 1 ? .35 : o.fo, still: i > 0 }); return; }
     const k = P.win(t, a, b, o.fi || .6, o.fo || .6); if (k <= 0) return;
-    const size = o.size || (P.ori === 'v' ? 54 : 50); ctx.save(); ctx.font = F.font(size, 600);
+    const size = o.size || (P.ori === 'v' ? 62 : 56); ctx.save(); ctx.font = F.font(size, 600);
     // landscape: one line if it fits, else the whole sentence re-broken into even lines (the '/' breaks are for portrait)
-    const txt = F.text(id), mw = P.W * .72, segs = txt.split(/\s*\/\s*/);
-    const lines = P.ori === 'v' ? F.wrap(ctx, txt, P.W - 140)
+    const txt = txt0, mw = P.W * .72, segs = txt.split(/\s*\/\s*/);
+    const lines = P.ori === 'v' ? F.wrapEven(ctx, txt, F.vw())
       : segs.length <= 2 ? F.wrap(ctx, txt, mw, true)                       // one line, or its own two natural lines
       : F.wrapEven(ctx, segs.join(' '), mw); ctx.restore();                   // three or more pieces: two even lines
-    const lh = size * 1.55, rise = (1 - P.eo(P.clamp((t - a) / 1.2))) * 10, y = (o.y != null ? o.y - (lines.length - 1) * lh / 2 : F.subBottom() - (lines.length - 1) * lh) + rise;
-    F.block(ctx, lines, P.W / 2, y, { size, weight: 600, alpha: k, color: o.color || '#f3ece0', shadow: 'rgba(0,0,0,.85)', shadowBlur: 22, lh: 1.55 });
+    const lh = size * 1.55, rise = o.still ? 0 : (1 - P.eo(P.clamp((t - a) / 1.2))) * 10, y = (o.y != null ? o.y - (lines.length - 1) * lh / 2 : F.subBottom() - (lines.length - 1) * lh) + rise;
+    F.block(ctx, lines, o.y != null ? P.W / 2 : F.cx(), y, { size, weight: 600, alpha: k, color: o.color || '#f3ece0', shadow: 'rgba(0,0,0,.85)', shadowBlur: 22, lh: 1.55 });
   };
   // a verse on screen: the text (that language's Bible, verbatim) with its reference under it
   F.quote = (ctx, id, t, a, b, o = {}) => {
+    const txt0 = o.text != null ? o.text : F.text(id);
+    if (P.ori === 'v' && o.bottom != null && !o.whole && /\//.test(txt0)) { for (const [s, a1, b1, i, n] of F.pieces(txt0, a, b)) if (t >= a1 - .1 && t <= b1 + .1)   // portrait: piece by piece
+      F.quote(ctx, id, t, a1, b1, { ...o, text: s, whole: true, fi: i ? .35 : o.fi, fo: i < n - 1 ? .35 : o.fo, still: i > 0 }); return; }
     const k = P.win(t, a, b, o.fi || .8, o.fo || .7); if (k <= 0) return;
-    const size = o.size || (P.ori === 'v' ? 56 : 54); ctx.save(); ctx.font = F.font(size, 600);
-    const txt = o.join ? F.text(id).replace(/\s*\/\s*/g, ' ') : F.text(id), lines = F.wrapEven(ctx, txt, o.maxW || (P.ori === 'v' ? P.W - 150 : P.W * .7)); ctx.restore();   // o.join: ignore the portrait breaks
-    const lh = size * 1.55, rise = (1 - P.eo(P.clamp((t - a) / 1.4))) * 12;
+    const size = o.size || (P.ori === 'v' ? 58 : 54); ctx.save(); ctx.font = F.font(size, 600);
+    const txt = o.join ? txt0.replace(/\s*\/\s*/g, ' ') : txt0, lines = F.wrapEven(ctx, txt, o.maxW || (P.ori === 'v' ? F.vw() : P.W * .7)); ctx.restore();   // o.join: ignore the portrait breaks
+    const lh = size * 1.55, rise = o.still ? 0 : (1 - P.eo(P.clamp((t - a) / 1.4))) * 12;
     const y0 = (o.bottom != null ? o.bottom - 50 - (lines.length - 1) * lh : (o.y || P.H * .45) - (lines.length - 1) * lh / 2) + rise;   // o.bottom: the cite sits on it
-    const x = o.x || P.W / 2;
+    const x = o.x || (o.bottom != null ? F.cx() : P.W / 2);
     F.block(ctx, lines, x, y0, { size, weight: 600, alpha: k, color: o.color || '#f6ead0', shadow: o.shadow || 'rgba(0,0,0,.9)', shadowBlur: 26, lh: 1.55, ...(o.block || {}) });
     // o.hl: words to light in gold (the same words in two verses), o.hlk 0..1 — left-to-right scripts only
     if (o.hl && o.hlk > 0 && P.dir !== 'rtl') { ctx.save(); ctx.font = F.font(size, 600); ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';

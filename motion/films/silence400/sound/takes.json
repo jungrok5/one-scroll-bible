@@ -1,0 +1,21 @@
+{
+ "_about": "ElevenLabs sources for this film's sound (flow 「침묵의 400년 — 해설·음악·효과음」, 2026-10-31). Narration: same voice and model as the first film's Korean narrated cut, one take per line; numbers spelled out in Hangul in the prompts (사백 년, 칠백여 년) so they are read naturally. Music: eleven_music_v2_5, instrumental, one take per cue (~15 credits/s). Effects: eleven_text_to_sound_v2. M8 is the first film's nativity hymn (motion/pilot/audio/advent__m2.mp3). Spent ≈ 880 (voice) + 2,650 (music) + 230 (effects) credits.",
+ "flow": "LtYoWzJVvymLxs3ok4px",
+ "voice": { "voice_id": "HYALOqtTLlRjxo4uBKeg", "model": "eleven_v4" },
+ "generations": {
+  "01": "fLj3qvEXK2QKyGusYnf4", "02": "vUzOGvOwtDzkymC6EFlJ", "03": "VzrV4lFxK9jMYAteRjMC", "04": "iCuvPks8WLOri9EFON4H",
+  "05": "Fi86MtfWMNnUAv5ff8EO", "06": "yV4Llxbd17wCWUl72DYJ", "07": "0tMTDeRF6SOOTTWVeoeJ", "07b": "H8PBYbBk19KSkYXoSkjo",
+  "08": "HH7bkTkW3AETLK1ZM7QG", "09": "JUgCWvxmwfPRMfL17QLu", "10": "yS8VDy3fFa2a4JgFJyrM", "14b": "tPWValk2MoanoEVc2iNn",
+  "15": "A74CVm4pUeWaTrduH6lG", "17": "c4rARlv5j70AxNNSNpWu", "18": "qhqgYlzTTuSqXzQ3gwRw", "19a": "O3bC1qa2SVTtujwrUVWC",
+  "19": "hWg6IE2h7H3nmdmWgXKu", "20": "5D0fnL8oOu1X1B5zKoHd", "21": "AFWF3ztfzJh1h4cNBNu2", "22a": "2u1deIvu4LbqRFw2vanT",
+  "22": "ne5Elg1J2VoGAKftkHhS", "23": "YAw38ARaAEbC8acuUpt4", "24": "okRCLODnQIQ1DQh0DO8H", "24b": "jkSwTVZPI64yGPX7XqbR",
+  "25": "3IDAfmpga6pGCAgU9ZgO", "25c": "7taFIKMPUogtGf1cnpOz", "25b": "ju5w10dNBwqghlmLXjNA", "26a": "zdOfxbUKZYtKVGZPVLI0",
+  "27": "q6ErToRkS1Bhv4PzBrGc",
+  "M1": "5W5H3L4X9fvAUkQhZVhv", "M2": "g5Yr0bSYMKs6xuhD6X4e", "M3": "h6JkJ1HOkIVtr20zXH0R", "M4": "nj2Fh9DHFXR3JNdSebVY",
+  "M6": "sGvdzt4a3FWEjqr1zlbi", "M7": "28b7hr7J40tijoHGrsYd", "M9": "AmYFa4arTC5ASFRo9rZD", "M10": "3kdmY0wWMae99doUCCSL", "M11": "TF5qumV5yNskjTlmGyxE",
+  "S1": "NKq2MI5ET3R9zzuRRmEL", "S2": "utnhBcb43nw3H5gTHg6F", "S3": "7bugugNLOzmv7Khky8Np", "S4": "Po7Q9ClJ1MnvtSZkrihb",
+  "S6": "M56viNIDmLiXZkK0frDx", "S7": "yyHsVTnYtiJRLuid0GmT", "S8": "WA4LJxQR3NDfO5kHyLnz", "S9": "S9xZcdMXvGVYESghr4pz",
+  "S10": "SoFgfd3F2Vr2bD1lGpps", "S11": "sSJXjO9RBNE022sygOsS", "S12": "4Oab6Nn63DiAryOwGUKN", "S13": "QyKvjns04fT9VlUaFdWp",
+  "S14": "ET6LCBhgXMaEOphHgMcb", "S15": "aiBTaPrBElfiWkZqJ7NB", "S16": "EqVauvPIxOElS3IPk9az", "S17": "JrhZX3KTlmCJugFCWAy9"
+ }
+}

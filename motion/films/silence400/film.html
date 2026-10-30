@@ -111,7 +111,7 @@ function scrollReturn(ctx, t) {   // 1:36–2:00 — the opening's scroll: silen
   longScroll(ctx, x0, x1, cy, sh, light, cx);
   const hlk = ss(109.8, 110.8, t);
   { const size = V ? 44 : 46, maxW = sw0 - (V ? 130 : 220); ctx.save(); ctx.font = Film.font(size, 600); const all = Film.wrapEven(ctx, Film.text('01'), maxW), np = Film.wrapEven(ctx, Film.text('01').split(/\s*\/\s*/)[0], maxW).length; ctx.restore();
-    const lh = size * 1.7, y0 = cy - (all.length - 1) * lh / 2 - (V ? 30 : 24), lines = all.slice(0, np), n = lines.reduce((s, l) => s + Pilot.chars(l).length, 0), r0 = 97.6, r1 = 100.2;
+    const lh = size * 1.7, y0 = cy - (all.length - 1) * lh / 2 + size * .32, lines = all.slice(0, np), n = lines.reduce((s, l) => s + Pilot.chars(l).length, 0), r0 = 97.6, r1 = 100.2;
     Film.block(ctx, all.slice(np), Mx, y0 + np * lh, { size, weight: 600, lh: 1.7, color: '#2b1a0b', alpha: .14 * light });
     scrollText(ctx, '01', Mx, y0, size, maxW, { lines, lit: ss(r1, r1 + 1, t) * (1 - .5 * ss(102.4, 104, t)) + .5 * hlk, reveal: k => ss(r0 + (r1 - r0) * k / n, r0 + (r1 - r0) * k / n + .3, t), glow: k => { const at = r0 + (r1 - r0) * k / n; return ss(at, at + .15, t) * (1 - ss(at + .2, at + .7, t)); } });
     hlUnder(ctx, lines, Mx, y0, size, Film.lines['19'].hl, hlk);
@@ -120,7 +120,7 @@ function scrollReturn(ctx, t) {   // 1:36–2:00 — the opening's scroll: silen
     for (let i = 0; i <= 40; i++) { const x = lerp(a, b, i / 40); if (x > x1 - 30) break; const l = i % 10 === 0 ? 22 : i % 5 === 0 ? 14 : 8; ctx.beginPath(); ctx.moveTo(x, yb); ctx.lineTo(x, yb - l); ctx.stroke(); }
     ctx.restore(); Pilot.text(ctx, Film.text('C2'), (a + b) / 2, cy + 10, { size: V ? 60 : 64, weight: 600, color: '#6a4a26', alpha: .55 * (x1 > (a + b) / 2 ? ss(103.6, 104.6, t) : 0), ls: 8 }); }
   { const size = V ? 54 : 50, w0 = 106.6, w1 = 109.6; ctx.save(); ctx.font = Film.font(size, 600); const ls = Film.wrapEven(ctx, Film.text('20'), sw0 - 200), n = ls.reduce((s, l) => s + Pilot.chars(l).length, 0), lw = Math.max(...ls.map(l => ctx.measureText(l).width)); ctx.restore();
-    const ly = cy - (ls.length - 1) * size * 1.7 / 2 - 10;
+    const ly = cy - (ls.length - 1) * size * 1.7 / 2 + size * .32;
     if (t > w0 - .2) { scrollText(ctx, '20', Lx, ly, size, sw0 - 200, { lines: ls, lit: .5 * hlk, reveal: k => ss(w0 + (w1 - w0) * k / n, w0 + (w1 - w0) * k / n + .12, t) });
       hlUnder(ctx, ls, Lx, ly, size, Film.lines['20'].hl, hlk);
       const k = clamp((t - w0) / (w1 - w0)); if (k > 0 && k < 1) { const nx = Lx - lw / 2 + lw * k, ny = ly - size * .3; glow(ctx, nx, ny, 70, [255, 236, 180], 1); glow(ctx, nx, ny, 14, [255, 255, 240], 1); }
@@ -139,7 +139,7 @@ function nazarethPull(ctx, t) {   // 2:21–2:37 — Nazareth: the pen of light 
   // the burst sits behind the words (the ink stays dark and readable)
   if (fire > 0) { glow(ctx, W / 2, cy, sh * .9 + Dd * 2.6 * clamp((t - 150.3) / 2), [255, 226, 160], .55 * fire); const fl = Math.exp(-(t - 150.2) * 2.2); glow(ctx, W / 2, cy, sw * .7, [255, 248, 225], .7 * fire * fl); }
   segs.forEach(([id, k]) => { const cx = W / 2 + k * Dd, size = id === '25a' ? (V ? 40 : 38) : (V ? 44 : 44); ctx.save(); ctx.font = Film.font(size, 600); const ls = Film.wrapEven(ctx, Film.text(id), sw - 200); ctx.restore();
-    const y = cy - (ls.length - 1) * size * 1.7 / 2 - 14, wave = ss(150.4 + Math.abs(k) * .5, 151 + Math.abs(k) * .5, t);
+    const y = cy - (ls.length - 1) * size * 1.7 / 2 + size * .32, wave = ss(150.4 + Math.abs(k) * .5, 151 + Math.abs(k) * .5, t);
     scrollText(ctx, id, cx, y, size, sw - 200, { lines: ls, lit: k === 0 ? fire : wave, alpha: k === 0 ? 1 : .92 });
     Pilot.text(ctx, Film.cite(id), cx, cy + sh / 2 - 36, { size: V ? 24 : 22, font: "'Noto Sans KR',sans-serif", color: '#5a3d1f', alpha: .9 });
     if (k === 0) {   // the pen of light underlines the words at reading pace; the line stays once drawn
@@ -164,7 +164,7 @@ function partOpening(ctx, t) {
     // Mal 4:6 on the scroll — the promise half faint, the warning half in ink; then the letters go out one by one
     const size = V ? 44 : 46, maxW = sw - (V ? 130 : 220); ctx.save(); ctx.font = Film.font(size, 600);
     const lines = Film.wrapEven(ctx, Film.text('01'), maxW), promise = Film.wrapEven(ctx, Film.text('01').split(/\s*\/\s*/)[0], maxW).length; ctx.restore();
-    const lh = size * 1.7, y0 = cy - (lines.length - 1) * lh / 2 - (V ? 30 : 24);
+    const lh = size * 1.7, y0 = cy - (lines.length - 1) * lh / 2 + size * .32;   // the letters' bodies (not their baselines) centred on the scroll
     const tin = ss(2.4, 4.2, t), out0 = 8.8, out1 = 10.6;
     Film.block(ctx, lines, cx, y0, { size, weight: 600, lh: 1.7, color: '#2b1a0b', alpha: tin,
       lineAlpha: i => i < promise ? .38 : 1,
@@ -482,8 +482,8 @@ function translation(ctx, t) {   // 0:61–0:69 at Alexandria: Hebrew turns into
   ctx.font = `400 ${fs * 1.15}px 'Noto Serif Hebrew','SBL Hebrew','Times New Roman',serif`; let hw = ctx.measureText(HEB).width, hsz = fs * 1.15 * Math.min(1, (sw - 140) / hw);
   ctx.font = `400 ${fs}px 'Noto Serif','Times New Roman',serif`; let gw = ctx.measureText(GRK).width, gsz = fs * Math.min(1, (sw - 140) / gw);
   ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = INK;
-  ctx.save(); ctx.beginPath(); ctx.rect(0, 0, sweep, H); ctx.clip(); ctx.font = `400 ${hsz}px 'Noto Serif Hebrew','SBL Hebrew','Times New Roman',serif`; ctx.direction = 'rtl'; ctx.fillText(HEB, cx, cy - 20); ctx.restore();
-  ctx.save(); ctx.beginPath(); ctx.rect(sweep, 0, W, H); ctx.clip(); ctx.font = `400 ${gsz}px 'Noto Serif','Times New Roman',serif`; ctx.fillText(GRK, cx, cy - 20); ctx.restore();
+  ctx.save(); ctx.beginPath(); ctx.rect(0, 0, sweep, H); ctx.clip(); ctx.font = `400 ${hsz}px 'Noto Serif Hebrew','SBL Hebrew','Times New Roman',serif`; ctx.direction = 'rtl'; ctx.fillText(HEB, cx, cy); ctx.restore();
+  ctx.save(); ctx.beginPath(); ctx.rect(sweep, 0, W, H); ctx.clip(); ctx.font = `400 ${gsz}px 'Noto Serif','Times New Roman',serif`; ctx.fillText(GRK, cx, cy); ctx.restore();
   if (t > 63.9 && t < 67.6) { const g = ctx.createLinearGradient(sweep - 50, 0, sweep + 50, 0); g.addColorStop(0, 'rgba(255,220,150,0)'); g.addColorStop(.5, 'rgba(255,220,150,.55)'); g.addColorStop(1, 'rgba(255,220,150,0)');
     ctx.fillStyle = g; ctx.fillRect(sweep - 50, cy - sh / 2, 100, sh); }
   ctx.restore(); }
@@ -543,7 +543,7 @@ function copying(ctx, t) {   // 1:15–1:27 in the dark, someone copies the word
   if (head && ia > 0) quill(ctx, head[0], head[1], V ? 150 : 170);
   lamp(ctx, cx - sw / 2 - (V ? -60 : 60), cy + sh / 2 + (V ? 120 : 70), V ? 46 : 52, t, light);
   ctx.restore();
-  Film.quote(ctx, '13', t, 79.3, 86.7, { y: cy - (V ? 40 : 30), color: INK, shadow: 'rgba(0,0,0,0)', citeColor: '#5a3d1f', citeShadow: 'rgba(0,0,0,0)', maxW: sw - 200, size: V ? 50 : 52 });
+  Film.quote(ctx, '13', t, 79.3, 86.7, { y: cy + (V ? 50 : 52) * .32, color: INK, shadow: 'rgba(0,0,0,0)', citeColor: '#5a3d1f', citeShadow: 'rgba(0,0,0,0)', maxW: sw - 200, size: V ? 50 : 52 });
 }
 
 

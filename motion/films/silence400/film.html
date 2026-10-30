@@ -14,7 +14,7 @@
 <script src="illum.js"></script>
 <script src="papercut.js"></script>
 <script src="shipsprite.js"></script>
-<script src="water.js"></script>
+<script src="advent.js"></script>
 <script>
 /* 침묵의 400년 — one continuous ~2:50 film. Look: night, lamplight and gold on parchment; one scroll is the main
    character (it goes dark at the start and lights again at the end). Line ids = script.json. */
@@ -73,6 +73,76 @@ function scroll(ctx, cx, cy, w, h, open, light) {
 }
 
 // ---------- 0:00–0:20  the last line goes out ----------
+// one scroll, unrolled: parchment from x0 to x1 (mirrored tiles, so no seams), rollers at both ends, lamp-lit around 'lx'
+function longScroll(ctx, x0, x1, cy, h, light, lx) {
+  const seg = V ? 900 : 1340, y0 = cy - h / 2; ctx.save(); ctx.fillStyle = 'rgba(0,0,0,.55)'; ctx.filter = 'blur(24px)'; ctx.fillRect(x0 + 10, y0 + 30, x1 - x0, h); ctx.filter = 'none';
+  ctx.beginPath(); ctx.rect(x0, y0, x1 - x0, h); ctx.clip();
+  for (let x = x0, i = 0; x < x1; x += seg, i++) { ctx.save(); if (i % 2) { ctx.translate(x + seg, 0); ctx.scale(-1, 1); ctx.drawImage(parch, 0, y0, seg + 1, h); } else ctx.drawImage(parch, x, y0, seg + 1, h); ctx.restore(); }
+  const g = ctx.createRadialGradient(lx, cy - h * .3, 0, lx, cy, seg * 1.1); g.addColorStop(0, `rgba(255,214,150,${.18 * light})`); g.addColorStop(1, `rgba(20,10,0,${.6 + (1 - light) * .4})`); ctx.fillStyle = g; ctx.fillRect(x0, y0, x1 - x0, h);
+  const e = ctx.createLinearGradient(0, y0, 0, y0 + h); e.addColorStop(0, 'rgba(60,30,5,.45)'); e.addColorStop(.08, 'rgba(60,30,5,0)'); e.addColorStop(.92, 'rgba(60,30,5,0)'); e.addColorStop(1, 'rgba(60,30,5,.45)'); ctx.fillStyle = e; ctx.fillRect(x0, y0, x1 - x0, h);
+  ctx.restore();
+  for (const sx of [x0, x1]) { const rw = V ? 34 : 40, rh = h + (V ? 60 : 70), rg = ctx.createLinearGradient(sx - rw / 2, 0, sx + rw / 2, 0), base = mix([92, 58, 30], [160, 110, 60], light * .8);
+    rg.addColorStop(0, rgb(mix(base, [0, 0, 0], .6))); rg.addColorStop(.45, rgb(mix(base, [255, 220, 170], .25))); rg.addColorStop(1, rgb(mix(base, [0, 0, 0], .7)));
+    ctx.fillStyle = rg; ctx.beginPath(); ctx.roundRect(sx - rw / 2, cy - rh / 2, rw, rh, rw / 2); ctx.fill();
+    ctx.fillStyle = rgb(mix(base, [0, 0, 0], .35)); for (const yy of [cy - rh / 2 - 26, cy + rh / 2 + 2]) { ctx.beginPath(); ctx.roundRect(sx - rw * .32, yy, rw * .64, 24, 8); ctx.fill(); } } }
+// text written on the scroll in ink; 'lit' 0..1 turns it to burnished gold with a glow; reveal(i,n) → 0..1 per character
+function scrollText(ctx, id, cx, y, size, maxW, o = {}) {
+  ctx.save(); ctx.font = Film.font(size, 600); const lines = o.lines || Film.wrapEven(ctx, Film.text(id), maxW); ctx.restore();
+  const lit = o.lit || 0, ink = rgb(mix([43, 26, 11], [150, 96, 20], lit));
+  Film.block(ctx, lines, cx, y, { size, weight: 600, lh: 1.7, color: ink, alpha: o.alpha == null ? 1 : o.alpha, charAlpha: o.reveal, charGlow: o.glow, lineAlpha: o.lineAlpha });
+  if (lit > 0) Film.block(ctx, lines, cx, y, { size, weight: 600, lh: 1.7, color: '#b8841f', alpha: lit * .9 * (o.alpha == null ? 1 : o.alpha), shadow: 'rgba(255,214,120,.9)', shadowBlur: 18, charAlpha: o.reveal, lineAlpha: o.lineAlpha });
+  return lines; }
+
+function scrollReturn(ctx, t) {   // 1:58–2:12 — the same scroll as the opening. The promise words that went out at 0:10 relight where they were;
+  // the scroll unrolls on through four hundred blank years, and a pen of light writes Luke 1:17 on the same scroll. Pull back: one scroll.
+  ctx.fillStyle = '#05060a'; ctx.fillRect(0, 0, W, H);
+  const cy = V ? H * .4 : H * .43, sh = V ? 780 : 560, sw0 = V ? 900 : 1340, Mx = W / 2, Lx = W / 2 + (V ? 1300 : 2000), x0 = Mx - sw0 / 2;
+  const x1 = lerp(Mx + sw0 / 2, Lx + sw0 / 2, eio(clamp((t - 120.4) / 3.0))), span = (Lx - Mx) + sw0 + 160, zf = W * .94 / span, pull = eio(clamp((t - 126.2) / 3.6));
+  let cx = lerp(Mx, Lx, eio(clamp((t - 120.4) / 3.0))), z = lerp(1.07, 1, eio(clamp((t - 120.4) / 3)));
+  cx = lerp(cx, (Mx + Lx) / 2, pull); z = Math.exp(lerp(Math.log(z), Math.log(zf), pull));
+  const light = ss(118.1, 119.6, t) * (1 + .04 * Math.sin(t * 7.3) * Math.sin(t * 2.9));
+  ctx.save(); ctx.translate(W / 2, cy); ctx.scale(z, z); ctx.translate(-cx, -cy);
+  glow(ctx, cx, cy - sh * .2, Math.max(W, H) * .7 / z, [120, 80, 40], .3 * light);
+  longScroll(ctx, x0, x1, cy, sh, light, cx);
+  // Malachi 4:6 where it stood at the opening: the promise relights letter by letter; the warning stays scorched
+  { const size = V ? 44 : 46, maxW = sw0 - (V ? 130 : 220); ctx.save(); ctx.font = Film.font(size, 600); const all = Film.wrapEven(ctx, Film.text('01'), maxW), np = Film.wrapEven(ctx, Film.text('01').split(/\s*\/\s*/)[0], maxW).length; ctx.restore();
+    const lh = size * 1.7, y0 = cy - (all.length - 1) * lh / 2 - (V ? 30 : 24), n = all.slice(0, np).reduce((s, l) => s + Pilot.chars(l).length, 0), r0 = 118.6, r1 = 120.4;
+    Film.block(ctx, all.slice(np), Mx, y0 + np * lh, { size, weight: 600, lh: 1.7, color: '#2b1a0b', alpha: .14 * light });   // the scorched words
+    scrollText(ctx, '01', Mx, y0, size, maxW, { lines: all.slice(0, np), lit: ss(r1, r1 + 1.2, t), reveal: k => ss(r0 + (r1 - r0) * k / n, r0 + (r1 - r0) * k / n + .3, t), glow: k => { const at = r0 + (r1 - r0) * k / n; return ss(at, at + .15, t) * (1 - ss(at + .2, at + .7, t)); } });
+    Pilot.text(ctx, Film.cite('19'), Mx, cy + sh / 2 - (V ? 50 : 44), { size: V ? 26 : 24, font: "'Noto Sans KR',sans-serif", color: '#5a3d1f', alpha: ss(120, 121, t) * light }); }
+  // the four hundred years: the blank parchment, a tick for each decade along its foot, '400년' in faint ink
+  { const a = Mx + sw0 / 2 + 60, b = Lx - sw0 / 2 - 60, yb = cy + sh / 2 - 46; ctx.save(); ctx.strokeStyle = 'rgba(70,44,20,.55)'; ctx.lineWidth = 2;
+    for (let i = 0; i <= 40; i++) { const x = lerp(a, b, i / 40); if (x > x1 - 30) break; const l = i % 10 === 0 ? 22 : i % 5 === 0 ? 14 : 8; ctx.beginPath(); ctx.moveTo(x, yb); ctx.lineTo(x, yb - l); ctx.stroke(); }
+    ctx.restore(); Pilot.text(ctx, Film.text('C2'), (a + b) / 2, cy + 10, { size: V ? 60 : 64, weight: 600, color: '#6a4a26', alpha: .55 * ss(121.6, 122.6, t) * (x1 > (a + b) / 2 ? 1 : 0), ls: 8 }); }
+  // the pen of light writes Luke 1:17 on the same scroll
+  { const size = V ? 48 : 50, w0 = 123.6, w1 = 125.6; ctx.save(); ctx.font = Film.font(size, 600); const ls = Film.wrapEven(ctx, Film.text('20'), sw0 - 200), n = ls.reduce((s, l) => s + Pilot.chars(l).length, 0), lw = Math.max(...ls.map(l => ctx.measureText(l).width)); ctx.restore();
+    const ly = cy - (ls.length - 1) * size * 1.7 / 2 - 10;
+    if (t > w0 - .2) { scrollText(ctx, '20', Lx, ly, size, sw0 - 200, { lines: ls, lit: .55 + .45 * ss(w1, w1 + .8, t), reveal: k => ss(w0 + (w1 - w0) * k / n, w0 + (w1 - w0) * k / n + .12, t) });
+      const k = clamp((t - w0) / (w1 - w0)); if (k > 0 && k < 1) { const nx = Lx - lw / 2 + lw * k, ny = ly - size * .3; glow(ctx, nx, ny, 70, [255, 236, 180], 1); glow(ctx, nx, ny, 14, [255, 255, 240], 1); }
+      Pilot.text(ctx, Film.cite('20'), Lx, cy + sh / 2 - (V ? 50 : 44), { size: V ? 26 : 24, font: "'Noto Sans KR',sans-serif", color: '#5a3d1f', alpha: ss(w1, w1 + .6, t) }); } }
+  // pulled back: a quiet light runs the length of the one scroll, from the promise to its answer
+  if (t > 128.2) { const k = clamp((t - 128.2) / 2.2), sx = lerp(Mx, Lx, eio(k)); glow(ctx, sx, cy, sh * 1.2, [255, 220, 150], .35 * Math.sin(Math.PI * k)); }
+  ctx.restore(); bottomBand(ctx, 'rgba(5,6,10,'); }
+
+function nazarethPull(ctx, t) {   // 2:27–2:33 — Nazareth: Luke 4:18 on the scroll, underlined by the pen of light as it is read; then "오늘":
+  // the words burn gold, the light runs out along the scroll, and the camera pulls back — every promise in this film was on one scroll
+  ctx.fillStyle = '#05060a'; ctx.fillRect(0, 0, W, H);
+  const cy = V ? H * .4 : H * .42, sh = V ? 640 : 470, sw = V ? 940 : 1320, Dd = V ? 1050 : 1450, segs = [['13', -2], ['05', -1], ['25a', 0], ['19', 1], ['22', 2]];
+  const x0 = W / 2 - 2 * Dd - sw / 2, x1 = W / 2 + 2 * Dd + sw / 2, fire = ss(150.2, 150.6, t), pull = eio(clamp((t - 150.4) / 2.4)), zf = W * .95 / (2 * Dd + sw + 120);   // three of the promises fill the frame; the scroll runs on past both edges
+  const z = Math.exp(lerp(Math.log(1), Math.log(zf), pull)), light = ss(147, 147.8, t) * (1 - .3 * ss(149.4, 150.1, t) + .3 * fire);
+  ctx.save(); ctx.translate(W / 2, cy); ctx.scale(z, z); ctx.translate(-W / 2, -cy);
+  longScroll(ctx, x0, x1, cy, sh, light, W / 2);
+  segs.forEach(([id, k]) => { const cx = W / 2 + k * Dd, size = id === '25a' ? (V ? 38 : 36) : (V ? 44 : 44); ctx.save(); ctx.font = Film.font(size, 600); const ls = Film.wrapEven(ctx, Film.text(id), sw - 200); ctx.restore();
+    const y = cy - (ls.length - 1) * size * 1.7 / 2 - 14, wave = ss(150.3 + Math.abs(k) * .45, 150.8 + Math.abs(k) * .45, t);
+    scrollText(ctx, id, cx, y, size, sw - 200, { lines: ls, lit: k === 0 ? fire : wave, alpha: k === 0 ? 1 : .9 });
+    Pilot.text(ctx, Film.cite(id), cx, cy + sh / 2 - 36, { size: V ? 24 : 22, font: "'Noto Sans KR',sans-serif", color: '#5a3d1f', alpha: .9 });
+    if (k === 0 && t < 150.4) {   // the pen of light underlines the words as they are read
+      ctx.save(); ctx.font = Film.font(size, 600); const lh = size * 1.7, total = ls.reduce((s, l) => s + ctx.measureText(l).width, 0); let acc = 0, rd = clamp((t - 147.8) / 2.0) * total;
+      ls.forEach((l, i) => { const w = ctx.measureText(l).width, d = clamp((rd - acc) / w); acc += w; if (d <= 0) return; const lx0 = cx - w / 2, ly = y + i * lh + 12;
+        ctx.save(); ctx.strokeStyle = 'rgba(255,214,120,.95)'; ctx.shadowColor = 'rgba(255,200,90,.9)'; ctx.shadowBlur = 14; ctx.lineWidth = 3; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(lx0, ly); ctx.lineTo(lx0 + w * d, ly); ctx.stroke(); ctx.restore();
+        if (d < 1) { glow(ctx, lx0 + w * d, ly, 46, [255, 232, 170], 1); glow(ctx, lx0 + w * d, ly, 9, [255, 255, 240], 1); } }); ctx.restore(); } });
+  if (fire > 0) { const k = clamp((t - 150.3) / 1.6); glow(ctx, W / 2 + lerp(-2, 2, .5) * Dd * 0, cy, (sh + Dd * 2.6 * k), [255, 226, 160], .35 * fire); }
+  ctx.restore(); bottomBand(ctx, 'rgba(5,6,10,'); }
 function partOpening(ctx, t) {
   ctx.fillStyle = '#05060a'; ctx.fillRect(0, 0, W, H);
   const cx = W / 2, cy = V ? H * .4 : H * .43, sw = V ? 900 : 1340, sh = V ? 780 : 560;
@@ -299,10 +369,17 @@ function buildMap() {
 }
 function camAt(keys, t) { let i = 0; while (i < keys.length - 2 && t > keys[i + 1][0]) i++; const a = keys[i], b = keys[i + 1], k = eio(clamp((t - a[0]) / (b[0] - a[0] || 1)));
   return [lerp(a[1], b[1], k), lerp(a[2], b[2], k), lerp(a[3], b[3], k)]; }
+let mapT = 0;
 function mapBegin(ctx, cam) { const [lo, la, z] = cam; ctx.save(); ctx.fillStyle = '#2a1d12'; ctx.fillRect(0, 0, W, H); ctx.translate(W / 2, H / 2); ctx.scale(z, z); ctx.translate(-mx(lo), -my(la)); ctx.drawImage(mapC, 0, 0); return z; }
+function miniStatue(ctx, t, zone, a) {   // the age on the map: a small miniature of the statue in the corner, its metal lit
+  if (a <= 0) return; const w = V ? 150 : 132, h = V ? 230 : 200, x0 = V ? W - w - 54 : W - w - 60, y0 = V ? 300 : 120, hs = h * .84; ctx.save(); ctx.globalAlpha = a;
+  ctx.shadowColor = 'rgba(0,0,0,.6)'; ctx.shadowBlur = 18; ctx.fillStyle = '#22408e'; ctx.fillRect(x0, y0, w, h); ctx.shadowBlur = 0;
+  const fr = new Path2D(); fr.rect(x0 - 6, y0 - 6, w + 12, h + 12); fr.rect(x0, y0, w, h); Illum.gold(ctx, fr, { lw: 1.6 });
+  ctx.save(); ctx.beginPath(); ctx.rect(x0, y0, w, h); ctx.clip(); Illum.statue(ctx, x0 + w / 2, y0 + h * .08, hs, {}, { [zone]: 1 }, t, .9); ctx.restore(); ctx.restore(); }
+let miniLater = null;
 function mapEnd(ctx) { ctx.restore();   // soft dark bands where the narration and the section label are read (the parchment is light)
   const tg = ctx.createLinearGradient(0, 0, 0, V ? 360 : 190); tg.addColorStop(0, 'rgba(10,6,3,.78)'); tg.addColorStop(1, 'rgba(10,6,3,0)'); ctx.fillStyle = tg; ctx.fillRect(0, 0, W, V ? 360 : 190);
-  bottomBand(ctx, 'rgba(10,6,3,'); }
+  bottomBand(ctx, 'rgba(10,6,3,'); if (miniLater) { miniStatue(ctx, mapT, miniLater[0], miniLater[1]); miniLater = null; } }
 function bottomBand(ctx, c) { const y0 = Film.SAFE() - (V ? 60 : 40), g = ctx.createLinearGradient(0, y0, 0, H); g.addColorStop(0, c + '0)'); g.addColorStop(.3, c + '.72)'); g.addColorStop(1, c + '.9)'); ctx.fillStyle = g; ctx.fillRect(0, y0, W, H - y0); }
 function polyLen(pts) { let L = 0; for (let i = 1; i < pts.length; i++) L += Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]); return L; }
 function partial(ctx, pts, p) {   // stroke the first fraction p of a polyline; returns the head point
@@ -341,16 +418,17 @@ function cityLamp(ctx, p, k, z, t, seed) { if (k <= 0) return; const [x, y] = P_
   glow(ctx, x, y, 30 / z * f, [255, 196, 90], .55 * k); ctx.fillStyle = `rgba(150,60,20,${k})`; ctx.beginPath(); ctx.arc(x, y, 4 / z, 0, 6.283); ctx.fill(); ctx.fillStyle = `rgba(255,236,170,${k})`; ctx.beginPath(); ctx.arc(x, y - 1 / z, 2 / z, 0, 6.283); ctx.fill(); }
 
 function mapDiaspora(ctx, t) {
-  const z = mapBegin(ctx, V ? camAt([[45, 40, 32.5, 1.25], [52, 40.5, 32, 1.35]], t) : camAt([[45, 39, 33, 1.25], [52, 38.5, 32.5, 1.35]], t));
-  MAP.diaspora.forEach(([a, b], i) => { const st = 45.8 + i * .42, p = ss(st, st + 2.6, t); if (p <= 0) return; const pts = arcPts(a, b, .16);
+  const z = mapBegin(ctx, V ? camAt([[45, 40, 32.5, 1.25], [52.2, 40.5, 32, 1.35]], t) : camAt([[45, 39, 33, 1.25], [52.2, 38.5, 32.5, 1.35]], t));
+  miniLater = ['silver', 1]; MAP.diaspora.forEach(([a, b], i) => { const st = 45.8 + i * .42, p = ss(st, st + 2.6, t); if (p <= 0) return; const pts = arcPts(a, b, .16);
     ctx.strokeStyle = MINK; ctx.lineWidth = 2.4 / z; ctx.setLineDash([7 / z, 6 / z]); ctx.lineCap = 'round'; const hd = partial(ctx, pts, p); ctx.setLineDash([]);
     if (p < 1) { ctx.fillStyle = MRED; ctx.beginPath(); ctx.arc(hd[0], hd[1], 5 / z, 0, 6.283); ctx.fill(); }
     const [ex, ey] = P_(b); tinyScroll(ctx, ex, ey - 16 / z, 9 / z, ss(st + 2.2, st + 2.9, t)); });
   mapEnd(ctx); }
 
 function mapAlexander(ctx, t) {
-  const cam = V ? camAt([[55, 37, 34, 1.0], [61, 37, 33, 1.0], [63.5, 29.9, 31.2, 2.4]], t) : camAt([[55, 36, 35, 1.15], [61, 37, 34, 1.1], [63.5, 29.9, 31.2, 2.6]], t);
-  const z = mapBegin(ctx, cam), pts = smoothPts(MAP.alexander.map(P_), 8), p = ss(55.6, 60.6, t);
+  const cam = V ? camAt([[52.2, 40.5, 32, 1.35], [55.4, 37, 34, 1.0], [61, 37, 33, 1.0], [63.5, 29.9, 31.2, 2.4]], t) : camAt([[52.2, 38.5, 32.5, 1.35], [55.4, 36, 35, 1.15], [61, 37, 34, 1.1], [63.5, 29.9, 31.2, 2.6]], t);
+  miniLater = ['bronze', 1 - ss(61.6, 62.4, t)]; const z = mapBegin(ctx, cam), pts = smoothPts(MAP.alexander.map(P_), 8), p = ss(55.6, 60.6, t);
+  MAP.diaspora.forEach(([a, b]) => { ctx.strokeStyle = 'rgba(58,36,24,.45)'; ctx.lineWidth = 2.2 / z; ctx.setLineDash([7 / z, 6 / z]); partial(ctx, arcPts(a, b, .16), 1); ctx.setLineDash([]); const [ex, ey] = P_(b); tinyScroll(ctx, ex, ey - 16 / z, 9 / z, .6); });
   ctx.lineCap = 'round'; ctx.lineJoin = 'round';
   // a bronze watercolour wash spreads where the army has passed (one language follows it)
   ctx.save(); ctx.globalCompositeOperation = 'multiply'; ctx.filter = 'blur(18px)'; ctx.strokeStyle = 'rgba(196,122,58,.32)'; ctx.lineWidth = 230; partial(ctx, pts, p); ctx.lineWidth = 120; ctx.strokeStyle = 'rgba(196,122,58,.22)'; partial(ctx, pts, p); ctx.restore();
@@ -359,7 +437,8 @@ function mapAlexander(ctx, t) {
   mapEnd(ctx); }
 
 function mapRome(ctx, t) {
-  const z = mapBegin(ctx, V ? camAt([[90, 25, 38.5, .95], [113, 26, 37.5, .88]], t) : camAt([[90, 22, 38.5, 1.0], [113, 23, 37.5, .93]], t));
+  miniLater = ['iron', 1 - ss(108, 109, t)];
+  const z = mapBegin(ctx, V ? camAt([[87, 25, 38.5, .95], [113, 26, 37.5, .88]], t) : camAt([[87, 22, 38.5, 1.0], [113, 23, 37.5, .93]], t));
   ctx.lineCap = 'round'; ctx.lineJoin = 'round';
   MAP.roads.forEach((r, i) => { const st = 90.4 + i * .32, p = ss(st, st + 2.4, t); if (p <= 0) return; const pts = roadPts(r);
     ctx.strokeStyle = MINK; ctx.lineWidth = 6.5 / z; partial(ctx, pts, p); ctx.strokeStyle = '#c8402a'; ctx.lineWidth = 3.4 / z; const hd = partial(ctx, pts, p);
@@ -461,31 +540,7 @@ function copying(ctx, t) {   // 1:15–1:27 in the dark, someone copies the word
   Film.quote(ctx, '13', t, 79.3, 86.7, { y: cy - (V ? 40 : 30), color: INK, shadow: 'rgba(0,0,0,0)', citeColor: '#5a3d1f', citeShadow: 'rgba(0,0,0,0)', maxW: sw - 200, size: V ? 50 : 52 });
 }
 
-function quoteLayout(id, y, size, maxW) {   // where Film.quote puts an id's lines (to find its highlighted words)
-  const m = canvas(4, 4).getContext('2d'); m.font = Film.font(size, 600); const ls = Film.wrapEven(m, Film.text(id), maxW), lh = size * 1.55, y0 = y - (ls.length - 1) * lh / 2, hl = Film.lines[id].hl;
-  for (let i = 0; i < ls.length; i++) { const j = hl ? ls[i].indexOf(hl) : -1; if (j < 0) continue; const lw = m.measureText(ls[i]).width, x0 = W / 2 - lw / 2 + m.measureText(ls[i].slice(0, j)).width, w = m.measureText(hl).width;
-    return { x: x0, y: y0 + i * lh, w, size }; } return null; }
-function promiseLink(ctx, t) {   // 1:58–2:12 the last promise and its answer: the words they share lift out of Malachi, pass down through the
-  // 400 years (a fine gold rule ticking off the decades), and settle into the empty place in Luke's sentence — which is then complete
-  ctx.fillStyle = '#0e1118'; ctx.fillRect(0, 0, W, H);
-  glow(ctx, W / 2, H * .4, Math.max(W, H) * .7, [233, 185, 73], .05 + .08 * ss(124.6, 126, t));
-  const size = V ? 48 : 46, maxW = V ? W - 150 : W * .64, yA = H * .2, yB = V ? H * .52 : H * .58, A = quoteLayout('19', yA, size, maxW), B = quoteLayout('20', yB, size, maxW);
-  const q = { color: '#f4efe6', size, maxW, citeColor: '#c9a85a' }, lift = ss(120.4, 121.2, t), fly = eio(clamp((t - 121.2) / 3.0)), land = ss(124.2, 124.5, t), out = 1 - ss(131.2, 132, t);
-  Film.quote(ctx, '19', t, 118.2, 131.9, { ...q, y: yA, hl: Film.lines['19'].hl, hlk: .5 * ss(119, 120.4, t) * (1 - lift) });
-  if (A && lift > 0) { ctx.save(); ctx.fillStyle = '#0e1118'; ctx.globalAlpha = .75 * lift * out; ctx.fillRect(A.x - 4, A.y - size, A.w + 8, size * 1.3); ctx.restore(); }   // the words have left: a pale gap
-  Film.quote(ctx, '20', t, 122.2, 131.9, { ...q, y: yB, hl: Film.lines['20'].hl, hlk: land });
-  if (B && land < 1) { ctx.save(); ctx.fillStyle = '#0e1118'; ctx.fillRect(B.x - 4, B.y - size, B.w + 8, size * 1.3); ctx.strokeStyle = `rgba(233,199,122,${.6 * ss(122.6, 123.4, t)})`; ctx.setLineDash([4, 6]); ctx.lineWidth = 1.5;
-    ctx.beginPath(); ctx.moveTo(B.x, B.y + 10); ctx.lineTo(B.x + B.w, B.y + 10); ctx.stroke(); ctx.restore(); }                                                  // Luke's sentence waits with an empty place
-  if (A && B && lift > 0 && land < 1) {   // the words in flight, and the rule they draw behind them
-    const fx = lerp(A.x, B.x, fly), fy = lerp(A.y, B.y, fly), cxm = (A.x + A.w / 2 + B.x + B.w / 2) / 2, top = A.y + 30, bot = B.y - size - 10, ry = clamp((fy - top) / (bot - top));
-    if (fly > 0) { ctx.save(); ctx.strokeStyle = 'rgba(233,199,122,.75)'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(cxm, top); ctx.lineTo(cxm, lerp(top, bot, ry)); ctx.stroke();
-      for (let i = 0; i <= 40; i++) { const y = lerp(top, bot, i / 40); if (y > lerp(top, bot, ry)) break; const big = i % 10 === 0, l = big ? 16 : i % 5 === 0 ? 10 : 5; ctx.globalAlpha = big ? .9 : .5; ctx.beginPath(); ctx.moveTo(cxm - l, y); ctx.lineTo(cxm, y); ctx.stroke(); } ctx.restore();
-      Pilot.text(ctx, Film.text('C2'), cxm + 24, lerp(top, bot, .5) + 10, { size: V ? 30 : 26, font: "'Noto Sans KR',sans-serif", align: 'left', color: '#e9c77a', alpha: ss(121.6, 122.6, t), ls: 3 }); }
-    ctx.save(); ctx.font = Film.font(size, 600); ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic'; ctx.shadowColor = 'rgba(233,185,73,.95)'; ctx.shadowBlur = 30; ctx.fillStyle = '#f6d68a';
-    ctx.fillText(Film.lines['19'].hl, fx, fy - Math.sin(fly * Math.PI) * 14); ctx.shadowBlur = 0; ctx.fillText(Film.lines['19'].hl, fx, fy - Math.sin(fly * Math.PI) * 14); ctx.restore(); }
-  if (B && t > 124.2 && t < 126) { const k = clamp((t - 124.3) / 1.4); ctx.save(); ctx.strokeStyle = `rgba(255,226,160,${.8 * (1 - k)})`; ctx.lineWidth = 2; ctx.beginPath(); ctx.ellipse(B.x + B.w / 2, B.y - size * .35, B.w * (.6 + k * 1.4), size * (.8 + k * 1.6), 0, 0, 6.283); ctx.stroke(); ctx.restore();
-    glow(ctx, B.x + B.w / 2, B.y - size * .35, B.w * 1.2, [255, 230, 170], .7 * (1 - k)); }   // landing: a ring of light
-}
+
 
 let SKY = null;
 function buildSky() {   // the waiting sky: a milky-way band (dust with dark lanes) and stars with colour, for long-exposure trails
@@ -549,13 +604,13 @@ const ZY = { gold: 80, silver: 260, bronze: 465, iron: 730, clay: 940 };
 function desk(ctx, t) { ctx.fillStyle = '#0b0806'; ctx.fillRect(0, 0, W, H); glow(ctx, W * .12, -H * .05, Math.max(W, H) * .9, [255, 170, 90], .22 * (1 + .04 * Math.sin(t * 6.1))); }
 function camPush(ctx, t, t0, amt = .04) { const k = 1 + amt * eio(clamp((t - t0) / 12)); ctx.translate(W / 2, H * .5); ctx.scale(k, k); ctx.translate(-W / 2, -H * .5); }
 const EDGE = { gold: 60, silver: 200, bronze: 150, iron: 110 }, SIDE = { gold: -1, silver: 1, bronze: -1, iron: 1 }, TAG = { gold: 'L0', silver: 'L1', bronze: 'L2', iron: 'L3' };
-function callouts(ctx, t, items) {   // tags beside the statue: a gold leader from the part to its name (metal, or metal · nation)
-  const b = Illum.statueBox(), [px, , pw] = Illum.L.page;
-  for (const { z, a, bright, names } of items) { if (a <= 0) continue; const y = b.top + b.hs * ZY[z] / 1000, sd = SIDE[z], ex = b.cx + sd * b.hs * EDGE[z] / 1000;
-    const lx = V ? b.cx + sd * 150 : (sd < 0 ? px - 26 : px + pw + 26), full = Film.text(TAG[z]), s = names ? full : full.split(/\s*·\s*/)[0];
-    ctx.save(); ctx.globalAlpha = a; ctx.strokeStyle = bright ? 'rgba(242,207,122,.95)' : 'rgba(205,185,138,.7)'; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(ex + sd * 6, y); ctx.lineTo(lx - sd * 10, y); ctx.stroke();
-    ctx.fillStyle = ctx.strokeStyle; ctx.beginPath(); ctx.arc(ex + sd * 6, y, 4, 0, 6.283); ctx.fill(); ctx.restore();
-    Pilot.text(ctx, s, lx, y + 10, { size: V ? 30 : 30, weight: 600, align: sd < 0 ? 'right' : 'left', color: bright ? '#f2cf7a' : '#cdb98a', alpha: a, shadow: 'rgba(0,0,0,.95)', shadowBlur: 10, maxW: V ? 230 : 520 }); } }
+function callouts(ctx, t, items) {   // inscriptions in the miniature beside each part: the metal, and under it the nation
+  const b = Illum.statueBox();
+  for (const { z, a, bright, names } of items) { if (a <= 0) continue; const y = b.top + b.hs * ZY[z] / 1000, sd = SIDE[z], x = b.cx + sd * (b.hs * EDGE[z] / 1000 + (V ? 22 : 18));
+    const [metal, nation] = Film.text(TAG[z]).split(/\s*·\s*/), col = bright ? '#ffe2a0' : '#d9bc78', al = sd < 0 ? 'right' : 'left';
+    Pilot.text(ctx, metal, x, y + (names ? -2 : 10), { size: V ? 34 : 30, weight: 700, align: al, color: col, alpha: a, shadow: 'rgba(8,16,48,.95)', shadowBlur: 10 });
+    if (names && nation) Pilot.text(ctx, nation, x, y + (V ? 30 : 26), { size: V ? 24 : 21, weight: 600, align: al, color: col, alpha: a * ss(40.9, 41.7, t), shadow: 'rgba(8,16,48,.95)', shadowBlur: 10, maxW: V ? 200 : 170 }); } }
+
 function statueScene(ctx, t, lit, t0) {
   desk(ctx, t); ctx.save(); camPush(ctx, t, t0, .03);
   const b = Illum.statueBox(), z = Object.keys(lit).find(k => lit[k] > .05), k = z ? lit[z] : 0;
@@ -583,10 +638,10 @@ function buildIllumShards() {
 }
 function strike(ctx, t) {   // 2:12–2:21 a stone cut out without hands comes from the mountain, strikes the feet; the statue becomes chaff on the wind;
   // the stone grows into a great mountain (Dan 2:34–35), and a small light rests on it
-  const hitT = 134.4, sh = t > hitT ? Math.exp(-(t - hitT) * 4) : 0, rr = rng(Math.floor(t * 30)), b = Illum.statueBox(), [ax, ay, aw, ah] = Illum.L.arch;
+  const hitT = 134.0, sh = t > hitT ? Math.exp(-(t - hitT) * 4) : 0, rr = rng(Math.floor(t * 30)), b = Illum.statueBox(), [ax, ay, aw, ah] = Illum.L.arch;
   desk(ctx, t); ctx.save(); ctx.translate((rr() - .5) * 22 * sh, (rr() - .5) * 16 * sh);
-  const gone = ss(136.8, 137.3, t), grow = eio(clamp((t - 137.4) / 3.2)), s0 = b.hs * .075;
-  const sx0 = ax + aw * .9, sy0 = ay + ah * .62, sx1 = b.cx + b.hs * .13, sy1 = b.top + b.hs * .93, fly = eio(clamp((t - 132.9) / (hitT - 132.9)));
+  const gone = ss(135.0, 135.5, t), grow = eio(clamp((t - 137.4) / 3.2)), s0 = b.hs * .075;
+  const sx0 = ax + aw * .9, sy0 = ay + ah * .62, sx1 = b.cx + b.hs * .13, sy1 = b.top + b.hs * .93, fly = eio(clamp((t - 132.6) / (hitT - 132.6)));
   const stone = (x, cx, cy, s, rot, a) => { x.save(); x.globalAlpha = a; x.translate(cx, cy); x.rotate(rot); x.beginPath(); stoneShape.forEach(([px, py], i) => i ? x.lineTo(px * s, py * s) : x.moveTo(px * s, py * s)); x.closePath();
     x.fillStyle = '#b9b0a0'; x.fill(); x.save(); x.clip(); x.fillStyle = 'rgba(80,70,60,.35)'; x.beginPath(); x.ellipse(s * .25, s * .3, s * .7, s * .45, .4, 0, 6.283); x.fill(); x.restore();
     x.strokeStyle = Illum.INK; x.lineWidth = 3; x.lineJoin = 'round'; x.stroke(); x.restore(); };
@@ -595,8 +650,9 @@ function strike(ctx, t) {   // 2:12–2:21 a stone cut out without hands comes f
     x.save(); x.fillStyle = '#8a7a5e'; x.beginPath(); x.moveTo(ax + aw * .62, ay + ah * .9); x.quadraticCurveTo(ax + aw * .8, ay + ah * .38, ax + aw * 1.02, ay + ah * .3); x.lineTo(ax + aw, ay + ah); x.lineTo(ax + aw * .62, ay + ah); x.closePath(); x.fill();
     x.strokeStyle = Illum.INK; x.lineWidth = 3; x.stroke(); x.lineWidth = 1.4; for (let i = 0; i < 14; i++) { const k = i / 14, hx = ax + aw * (.7 + k * .3), hy = ay + ah * (.6 - k * .22 + .1); x.beginPath(); x.moveTo(hx, hy); x.lineTo(hx + 20, hy + 26); x.stroke(); } x.restore();
     if (t < hitT + 2) { const cx = lerp(sx0, sx1, fly), cy = lerp(sy0, sy1, fly) - Math.sin(fly * Math.PI) * b.hs * .1; stone(x, cx, cy, s0, fly * -5, ss(132.3, 133.0, t)); }
+    if (t > 135.4) { const gk = eio(clamp((t - 135.5) / 1.8)), g = new Path2D(); g.arc(sx1, sy1 - b.hs * .05, Math.max(1, gk * ah * 1.3), 0, 6.283); Illum.gold(x, g, { lw: 0 }); glow(x, sx1, sy1 - b.hs * .05, 60 + gk * 200, [255, 240, 200], .7 * (1 - gk * .5)); }
     if (gone < 1) Illum.statue(x, b.cx, b.top, b.hs, { gold: 1 - gone, silver: 1 - gone, bronze: 1 - gone, iron: 1 - gone, clay: 1 - gone }, {}, t);
-    const cp = ss(hitT, hitT + 2.2, t); if (cp > 0 && gone < 1) { x.save(); x.translate(b.cx, b.top); x.scale(b.hs, b.hs); x.strokeStyle = `rgba(42,26,16,${1 - gone})`; x.lineWidth = 3 / b.hs; for (const c of icracks) partial(x, c, cp); x.restore(); }
+    const cp = ss(hitT, hitT + 1.0, t); if (cp > 0 && gone < 1) { x.save(); x.translate(b.cx, b.top); x.scale(b.hs, b.hs); x.strokeStyle = `rgba(42,26,16,${1 - gone})`; x.lineWidth = 3 / b.hs; for (const c of icracks) partial(x, c, cp); x.restore(); }
     if (false) { const g = grow, cx = lerp(sx1, b.cx, g), base = ay + ah * .93, mh = lerp(s0 * 1.6, ah * .62, g), mw = lerp(s0 * 2, aw * 1.1, g);
       x.save(); x.beginPath(); x.moveTo(cx - mw / 2, base); x.quadraticCurveTo(cx - mw * .2, base - mh * 1.05, cx, base - mh); x.quadraticCurveTo(cx + mw * .2, base - mh * 1.05, cx + mw / 2, base); x.closePath();
       x.fillStyle = '#b9b0a0'; x.fill(); x.save(); x.clip(); const lg = x.createLinearGradient(0, base - mh, 0, base); lg.addColorStop(0, 'rgba(255,236,190,.55)'); lg.addColorStop(1, 'rgba(90,70,50,.3)'); x.fillStyle = lg; x.fillRect(cx - mw, base - mh * 1.1, mw * 2, mh * 1.2); x.restore();
@@ -605,23 +661,16 @@ function strike(ctx, t) {   // 2:12–2:21 a stone cut out without hands comes f
   }, { glint: clamp((t - 132.2) / 2.2) });
   if (t > hitT) glow(ctx, b.cx + b.hs * .12, b.top + b.hs * .93, b.hs * .45, [255, 245, 225], .9 * Math.exp(-(t - hitT) * 2.6));
   // chaff blown off the page (the wind carries it out of the picture)
-  if (t > 136.6) { const u0 = t - 136.85; for (const [x, y, z, r1, r2, r3] of ishards) { const u = u0 - (1 - y) * .25 - r3 * .2; const bx = b.cx + x * b.hs, by = b.top + y * b.hs;
+  if (t > 134.9) { const u0 = t - 135.0; for (const [x, y, z, r1, r2, r3] of ishards) { const u = u0 - (1 - y) * .25 - r3 * .2; const bx = b.cx + x * b.hs, by = b.top + y * b.hs;
       if (u <= 0) { if (gone > .4) { ctx.fillStyle = rgb(Illum.METAL[z], .9); ctx.fillRect(bx, by, 3, 3); } continue; }
-      const px = bx - Math.pow(u, 1.6) * (W * .22) * (.5 + r1), py = by - u * 50 * r2 + Math.sin(u * 2 + r3 * 9) * 20, a = 1 - ss(1.4, 3.4, u); if (a <= 0) continue;
+      const px = bx - Math.pow(u, 1.5) * (W * .34) * (.5 + r1), py = by - u * 60 * r2 + Math.sin(u * 2 + r3 * 9) * 20, a = 1 - ss(.9, 1.7, u); if (a <= 0) continue;
       ctx.fillStyle = rgb(Illum.METAL[z], a); ctx.fillRect(px, py, 2.4 + r2 * 2.6, 2.4 + r1 * 2.2); } }
   ctx.restore();
-  // the stone's light grows until it fills everything (and opens on Bethlehem)
-  const fl = ss(136.4, 137.6, t); if (fl > 0) { glow(ctx, b.cx + b.hs * .13, b.top + b.hs * .93, Math.max(W, H) * (.2 + 1.2 * fl), [255, 246, 226], .95 * fl); ctx.fillStyle = `rgba(244,236,214,${ss(137, 137.6, t)})`; ctx.fillRect(0, 0, W, H); }
+  // (the scene ends on the gold; it fades to black, and the glass wakes)
 }
-function bethScene(ctx, t) {   // 2:17–2:21 "그 아들, 예수님이 오셨습니다" — Bethlehem by night in watercolour: the star, and the stable's light
-  ctx.fillStyle = '#ece2cc'; ctx.fillRect(0, 0, W, H);
-  Water.draw(ctx, 'beth', ss(137.4, 139.6, t), lerp(1, 1.05, eio(clamp((t - 137.4) / 4))), (x, z) => { const [sx, sy] = Water.geo.star(), tw = .5 + .5 * Math.sin(t * 2.3);
-    glow(x, W / 2 + (sx - W / 2) * z, H / 2 + (sy - H / 2) * z, 90 + 30 * tw, [255, 250, 230], .35 + .2 * tw); });
-  bottomBand(ctx, 'rgba(20,16,36,'); }
-function shepScene(ctx, t) {   // 2:21–2:27 Luke 19:10 — at dawn the shepherd comes home with the lost lamb (watercolour; no face)
-  ctx.fillStyle = '#ece2cc'; ctx.fillRect(0, 0, W, H);
-  Water.draw(ctx, 'shep', ss(141, 143, t), lerp(1, 1.06, eio(clamp((t - 141) / 6.2))));
-  bottomBand(ctx, 'rgba(40,30,20,'); }
+
+
+
 
 // =====================================================================================================================
 function temple(ctx, t) {   // 1:53–1:58 Zechariah at the altar of incense; the angel stands at its right side (Luke 1:11)
@@ -639,25 +688,7 @@ function figure(ctx, t) {   // 2:21–2:27 the good shepherd carries the lost on
     x.save(); x.strokeStyle = 'rgba(233,199,122,.55)'; x.lineWidth = 3; for (let i = 0; i < 24; i++) { const an = i / 24 * 6.283 + t * .04; x.beginPath(); x.moveTo(ax + aw * .62 + Math.cos(an) * ah * .14, ay + ah * .3 + Math.sin(an) * ah * .14); x.lineTo(ax + aw * .62 + Math.cos(an) * ah * .5, ay + ah * .3 + Math.sin(an) * ah * .5); x.stroke(); } x.restore();
     const walk = (t - 141) * 6; Illum.shepherdBack(x, ax + aw * .4 + walk, gy, s * .8, t); }, { glint: clamp((t - 141.4) / 2.6) });
   ctx.restore(); }
-function nazareth(ctx, t) {   // 2:27–2:33 the synagogue at Nazareth (Luke 4:17–21): the words he read, lit as they are read — then fulfilled
-  ctx.fillStyle = '#060403'; ctx.fillRect(0, 0, W, H);
-  const cx = W / 2, cy = V ? H * .4 : H * .4, sw = V ? 940 : 1320, sh = V ? 700 : 470, open = eio(clamp((t - 147) / 1.8)), burn = ss(149.8, 150.8, t);
-  ctx.save(); ctx.globalCompositeOperation = 'lighter'; const g = ctx.createLinearGradient(0, 0, cx, cy); g.addColorStop(0, 'rgba(255,230,180,0)'); g.addColorStop(1, `rgba(255,220,160,${.18 + .2 * burn})`);
-  ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(V ? 0 : W * .12, 0); ctx.lineTo(V ? W * .4 : W * .36, 0); ctx.lineTo(cx + sw * .45, cy + sh * .5); ctx.lineTo(cx - sw * .45, cy + sh * .5); ctx.closePath(); ctx.fill(); ctx.restore();
-  scroll(ctx, cx, cy, sw, sh, open, .9);
-  if (open > .6) { const size = V ? 38 : 36, m = ctx; m.save(); m.font = Film.font(size, 600); const lines = Film.wrapEven(m, Film.text('25a'), sw - 200), lh = size * 1.7, y0 = cy - (lines.length - 1) * lh / 2 - 26, a = ss(147.6, 148.4, t);
-    const total = lines.reduce((n, l) => n + m.measureText(l).width, 0), read = clamp((t - 147.9) / 2.0) * total; let acc = 0;
-    lines.forEach((l, i) => { const w = m.measureText(l).width, x0 = cx - w / 2, y = y0 + i * lh, done = clamp((read - acc) / w); acc += w;
-      m.textAlign = 'left'; m.globalAlpha = a; m.fillStyle = '#2b1a0b'; m.fillText(l, x0, y);
-      if (done > 0) { m.save(); m.beginPath(); m.rect(x0 - 4, y - size, w * done + 8, size * 1.5); m.clip(); m.shadowColor = 'rgba(255,190,80,.9)'; m.shadowBlur = 16; m.fillStyle = '#a8660e'; m.fillText(l, x0, y); m.restore();
-        if (done < 1) glow(m, x0 + w * done, y - size * .3, 40, [255, 220, 140], .8); }
-      if (burn > 0) { m.save(); m.globalAlpha = a * burn; m.shadowColor = 'rgba(255,214,120,1)'; m.shadowBlur = 30; m.fillStyle = '#f6d68a'; m.fillText(l, x0, y); m.restore(); } });
-    Pilot.text(m, Film.cite('25a'), cx, cy + sh / 2 - 34, { size: V ? 24 : 22, font: "'Noto Sans KR',sans-serif", color: '#5a3d1f', alpha: a }); m.restore(); }
-  // fulfilled: the light floods out from the scroll
-  if (burn > 0) { glow(ctx, cx, cy, Math.max(W, H) * (.3 + .5 * burn), [255, 226, 160], .45 * burn); ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.strokeStyle = `rgba(255,226,170,${.08 * burn})`; ctx.lineWidth = 24;
-    for (let i = 0; i < 24; i++) { const an = i / 24 * 6.283 + t * .03; ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(cx + Math.cos(an) * W, cy + Math.sin(an) * W); ctx.stroke(); } ctx.restore(); }
-  bottomBand(ctx, 'rgba(6,4,3,');
-}
+
 
 function endCard(ctx, t) { ctx.fillStyle = '#030305'; ctx.fillRect(0, 0, W, H); glow(ctx, W / 2, H / 2, Math.max(W, H) * .5, [233, 185, 73], .12 * ss(167, 168, t));
   const k = ss(167.2, 168.2, t), s = Film.text('E1').split(/\s*→\s*/);
@@ -669,24 +700,24 @@ function endCard(ctx, t) { ctx.fillStyle = '#030305'; ctx.fillRect(0, 0, W, H); 
 // the timeline
 const SCENES = [
   [0, 20.6, partOpening, 0, .6], [20.4, 31.2, waitingSky], [31, 45.3, statueRise],
-  [45, 52.3, mapDiaspora], [52, 55.3, (c, t) => statueScene(c, t, { bronze: ss(52.3, 53.3, t) }, 52)], [55, 61.6, mapAlexander], [61.4, 69.2, translation],
-  [69, 75.2, fire], [75, 87.2, copying], [87, 90.3, (c, t) => statueScene(c, t, { iron: ss(87.3, 88.3, t), clay: .8 * ss(87.6, 88.6, t) }, 87)], [90, 113.2, mapRome],
-  [113, 118.2, temple], [118, 132.2, promiseLink], [132, 137.62, strike, .5, .01], [137.4, 141.2, bethScene, .01, .5], [141, 147.2, shepScene], [147, 153.4, nazareth], [153.2, 159.2, mapGospel],
+  [45, 52.2, mapDiaspora, .5, .01], [52.2, 61.6, mapAlexander, .01, .5], [61.4, 69.2, translation],
+  [69, 75.2, fire], [75, 87.2, copying], [87, 113.2, mapRome],
+  [113, 118.2, temple], [118, 132.2, scrollReturn], [132, 137.6, strike], [137.4, 147.2, (c, t) => { Advent.draw(c, lerp(13.8, 27.4, clamp((t - 137.4) / 9.8))); bottomBand(c, 'rgba(0,0,0,'); }, .6, .5], [147, 153.4, nazarethPull], [153.2, 159.2, mapGospel],
   [159, 167.2, (c, t) => { Papercut.draw(c, lerp(23.6, 31.5, clamp((t - 159) / 8.2))); bottomBand(c, 'rgba(2,4,16,'); }], [167, 170, endCard],
 ];
 const TEXT = [
   ['sub', '04', 20.6, 24.7], ['quote', '05', 25, 30.7, { y: H * (V ? .3 : .3) }], ['sub', '06', 31.2, 34.4], ['quote', '06a', 34.6, 40.6, { bottom: Film.subBottom() + 40, size: V ? 42 : 40, join: !V, maxW: V ? W - 150 : W * .84 }], ['sub', '07', 40.9, 45.0],
   ['label', 'L1', 45, 52], ['sub', '08', 45.4, 51.8], ['label', 'L2', 52, 69], ['sub', '09', 55.2, 60.8], ['sub', '10', 61.5, 68.7], ['sub', '11', 69.3, 74.8], ['sub', '12', 75.2, 78.9],
   ['label', 'L3', 87, 99.6], ['sub', '14', 90.2, 94.8], ['sub', '15', 95.2, 99.8], ['quote', '16', 100.2, 107.8, { y: H * (V ? .19 : .16) }], ['sub', '17', 108.2, 112.8],
-  ['quote', '18', 113.6, 117.9, { bottom: Film.subBottom() + 40, size: V ? 50 : 46 }], ['sub', '21', 126, 131.9],
-  ['quote', '22', 132.4, 137, { bottom: Film.subBottom() + 40, size: V ? 50 : 46 }], ['sub', '23', 137.4, 141],
-  ['quote', '24', 141.4, 146.8, { bottom: Film.subBottom() + 40, size: V ? 48 : 44 }], ['quote', '25', 150.1, 153.2, { bottom: Film.subBottom() + 40, size: V ? 54 : 52, color: '#fff3d6', shadow: 'rgba(255,190,90,.55)' }], ['sub', '26', 153.6, 158.8], ['sub', '27', 159.4, 166.8],
+  ['quote', '18', 113.6, 117.9, { bottom: Film.subBottom() + 40, size: V ? 50 : 46 }], ['sub', '21', 126.6, 131.9],
+  ['quote', '22', 132.4, 136.9, { bottom: Film.subBottom() + 40, size: V ? 50 : 46 }], ['sub', '23', 138.4, 141.8],
+  ['quote', '24', 142.2, 146.9, { bottom: Film.subBottom() + 40, size: V ? 48 : 44 }], ['quote', '25', 150.5, 153.3, { bottom: Film.subBottom() + 40, size: V ? 54 : 52, color: '#fff3d6', shadow: 'rgba(255,190,90,.55)' }], ['sub', '26', 153.6, 158.8], ['sub', '27', 159.4, 166.8],
 ];
 function counter(ctx, t) { const k = win(t, 20.8, 30.4, 1, 1); if (k <= 0) return; const n = Math.round(430 - 300 * ss(21.2, 30.4, t));
   Pilot.text(ctx, Pilot.trn ? String(Film.text('C1')).replace('{n}', n) : n, W / 2, V ? 240 : 96, { size: V ? 34 : 30, font: "'Noto Sans KR',sans-serif", color: '#c9b48a', alpha: k * .9, ls: 3, shadow: 'rgba(0,0,0,.9)' }); }
 
 function draw(ctx, t) {
-  for (const [a, b, f, fi = .5, fo = .5] of SCENES) { if (t < a || t >= b) continue;
+  mapT = t; for (const [a, b, f, fi = .5, fo = .5] of SCENES) { if (t < a || t >= b) continue;
     ctx.save(); f(ctx, t); ctx.restore();
     const k = ss(a, a + fi, t) * (1 - ss(b - fo, b, t)); if (a === 0) continue;
     if (k < 1) { ctx.fillStyle = `rgba(0,0,0,${1 - k})`; ctx.fillRect(0, 0, W, H); } }
@@ -698,7 +729,7 @@ function draw(ctx, t) {
 }
 
 Pilot.run({ W, H, dur: DUR, fonts: ["600 40px 'Noto Serif KR'", "400 40px 'Noto Serif KR'", "400 20px 'Noto Sans KR'"],
-  init: async () => { await Film.load(); init(); GoldLine.init(W, H, [0, 0, W, H]); buildStars(); buildStatue(); Illum.init(); buildIllumShards(); await Papercut.init(); buildShipSmall(); buildSky(); Water.init(); buildMap(); buildBurn(); }, draw });
+  init: async () => { await Film.load(); init(); GoldLine.init(W, H, [0, 0, W, H]); buildStars(); buildStatue(); Illum.init(); buildIllumShards(); await Papercut.init(); buildShipSmall(); buildSky(); await Advent.init(); buildMap(); buildBurn(); }, draw });
 </script>
 </body>
 </html>

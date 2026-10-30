@@ -73,7 +73,11 @@
   F.sub = (ctx, id, t, a, b, o = {}) => {
     const k = P.win(t, a, b, o.fi || .6, o.fo || .6); if (k <= 0) return;
     const size = o.size || (P.ori === 'v' ? 54 : 50); ctx.save(); ctx.font = F.font(size, 600);
-    const lines = F.wrap(ctx, F.text(id), P.ori === 'v' ? P.W - 140 : P.W * .72, P.ori === 'h'); ctx.restore();
+    // landscape: one line if it fits, else the whole sentence re-broken into even lines (the '/' breaks are for portrait)
+    const txt = F.text(id), mw = P.W * .72, segs = txt.split(/\s*\/\s*/);
+    const lines = P.ori === 'v' ? F.wrap(ctx, txt, P.W - 140)
+      : segs.length <= 2 ? F.wrap(ctx, txt, mw, true)                       // one line, or its own two natural lines
+      : F.wrapEven(ctx, segs.join(' '), mw); ctx.restore();                   // three or more pieces: two even lines
     const lh = size * 1.55, rise = (1 - P.eo(P.clamp((t - a) / 1.2))) * 10, y = (o.y != null ? o.y - (lines.length - 1) * lh / 2 : F.subBottom() - (lines.length - 1) * lh) + rise;
     F.block(ctx, lines, P.W / 2, y, { size, weight: 600, alpha: k, color: o.color || '#f3ece0', shadow: 'rgba(0,0,0,.85)', shadowBlur: 22, lh: 1.55 });
   };

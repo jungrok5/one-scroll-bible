@@ -43,7 +43,7 @@ window.MAP = {
   ],
   city: {
     jerusalem: [35.2, 31.8], babylon: [44.4, 32.5], susa: [48.3, 32.2], persepolis: [52.9, 29.9], sardis: [28.0, 38.5], alexandria: [29.9, 31.2],
-    antioch: [36.2, 36.2], athens: [23.7, 38.0], rome: [12.5, 41.9], corinth: [22.9, 37.9], ephesus: [27.3, 37.9], thessalonica: [22.9, 40.6],
+    antioch: [36.2, 36.2], seleucia_p: [35.93, 36.12], athens: [23.7, 38.0], rome: [12.5, 41.9], corinth: [22.9, 37.9], ephesus: [27.3, 37.9], thessalonica: [22.9, 40.6],
     philippi: [24.3, 41.0], damascus: [36.3, 33.5], tarsus: [34.9, 36.9], pella: [22.5, 40.8], carthage: [10.3, 36.9], cyrene: [21.9, 32.8],
     brundisium: [17.9, 40.6], dyrrachium: [19.4, 41.3], byzantium: [29.0, 41.0], memphis: [31.2, 29.8], elephantine: [32.9, 24.1], ecbatana: [48.5, 34.8],
     caesarea: [34.9, 32.5], puteoli: [14.1, 40.8], syracuse: [15.3, 37.1], massilia: [5.4, 43.3], capua: [14.2, 41.1], ancyra: [32.9, 39.9],
@@ -70,6 +70,12 @@ window.MAP = {
   // sea lanes (Pompey cleared the pirates, 67 BC)
   lanes: [['alexandria', 'puteoli'], ['brundisium', 'dyrrachium'], ['corinth', 'puteoli'], ['ephesus', 'corinth'], ['caesarea', 'salamis', 'antioch'],
     ['carthage', 'syracuse', 'puteoli'], ['alexandria', 'caesarea'], ['troas', 'philippi']],
+  // Paul's journeys (Acts 13–14, 15:36–18:22, 18:23–21:17) and the voyage to Rome (Acts 27–28), simplified
+  paul: [
+    ['antioch', 'seleucia_p', 'salamis', [32.4, 34.75], [30.85, 36.96], 'pisidian', 'iconium', [32.35, 37.6], [33.4, 37.35], 'tarsus', 'antioch'],
+    ['antioch', 'tarsus', [33.4, 37.35], [32.35, 37.6], 'iconium', 'pisidian', 'troas', 'philippi', 'thessalonica', [22.2, 40.5], 'athens', 'corinth', 'ephesus', 'caesarea', 'jerusalem'],
+    ['caesarea', [35.37, 33.56], [29.98, 36.26], [24.8, 34.93], [14.4, 35.9], 'syracuse', [15.65, 38.1], 'puteoli', 'rome'],
+  ],
   // cities whose synagogue lamps light (Acts 15:21)
   synagogues: ['rome', 'corinth', 'athens', 'thessalonica', 'philippi', 'ephesus', 'pisidian', 'iconium', 'tarsus', 'antioch', 'damascus', 'alexandria',
     'cyrene', 'jerusalem', 'salamis', 'puteoli', 'babylon', 'caesarea', 'sardis', 'troas'],

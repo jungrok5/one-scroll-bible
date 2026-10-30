@@ -103,7 +103,7 @@
     const ink = (d, w = 3, c = INK) => { x.save(); x.strokeStyle = c; x.lineWidth = w; x.lineCap = 'round'; x.lineJoin = 'round'; x.stroke(typeof d === 'string' ? P2(d) : d); x.restore(); };
     const dot = (px, py, r, c) => { x.beginPath(); x.arc(px, py, r, 0, 6.283); x.fillStyle = c; x.fill(); x.lineWidth = 1.6; x.strokeStyle = INK; x.stroke(); };
     for (const z of I.ZONES) { const s = show[z] == null ? 1 : show[z]; if (s <= 0) continue; const p = I.ZP[z], L = lit[z] || 0;
-      x.save(); x.globalAlpha = s;
+      x.save(); x.globalAlpha *= s;   // (multiplies: a caller's fade carries through)
       if (L > .02) { x.save(); x.shadowColor = `rgba(255,214,120,${.85 * L})`; x.shadowBlur = 70; x.fillStyle = 'rgba(255,214,120,.01)'; x.fill(p); x.fill(p); x.restore(); }
       if (z === 'gold') gold(x, p, { lw: 0 });
       else { const [c1, c2] = PAINT[z], g = x.createLinearGradient(-200, 0, 200, 0); g.addColorStop(0, c2); g.addColorStop(.36, c1); g.addColorStop(.48, hexOf(mix(hex(c1), [255, 255, 255], .32))); g.addColorStop(.64, c1); g.addColorStop(1, c2); x.fillStyle = g; x.fill(p); }

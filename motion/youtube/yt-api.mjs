@@ -187,6 +187,14 @@ if (cmd === 'whoami') {
   for (const x of v.items || []) { const c = await api(`captions?part=snippet&videoId=${x.id}`);
     console.log(x.id, x.status.privacyStatus, x.status.publishAt || '-', x.status.uploadStatus, x.processingDetails?.processingStatus || '', x.snippet.defaultLanguage || '-', 'cat ' + x.snippet.categoryId,
       'captions ' + ((c.items || []).map(t => t.snippet.language + (t.snippet.trackKind === 'asr' ? '(auto)' : '')).join(',') || '-'), '|', x.snippet.title.slice(0, 40)); }
+} else if (cmd === 'caption-get') {
+  // caption-get <videoId> [asr|ko] → prints that track as SRT (the automatic one with "asr": where YouTube heard each line). 200 units
+  const [id, kind = 'asr'] = rest, list = (await api(`captions?part=snippet&videoId=${id}`)).items || [];
+  const t = list.find(c => kind === 'asr' ? c.snippet.trackKind === 'asr' : c.snippet.language === kind && c.snippet.trackKind !== 'asr');
+  if (!t) { console.log('no such track:', list.map(c => c.snippet.language + '/' + c.snippet.trackKind).join(' ')); process.exit(1); }
+  const r = await fetch(`https://www.googleapis.com/youtube/v3/captions/${t.id}?tfmt=srt`, { headers: { Authorization: 'Bearer ' + await token() } });
+  if (!r.ok) { console.error('download failed', r.status, (await r.text()).slice(0, 200)); process.exit(1); }
+  process.stdout.write(await r.text());
 } else if (cmd === 'film-schedule') {
   // film-schedule <film> <v|h> <videoId> <ISO> [--dry]: a new film's upload (motion/films/<film>/youtube.json) → title, description,
   // tags, category Education, Korean, and scheduled public at <ISO> (private until then). 50 units.

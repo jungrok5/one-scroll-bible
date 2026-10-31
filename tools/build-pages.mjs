@@ -32,6 +32,8 @@ const FILM_CTA = (() => { const h = fs.readFileSync(`${root}/index.html`, 'utf8'
   if (!m) throw new Error('build-pages: index.html 에 FILM_CTA 가 없음'); return Function('return ' + m[1])(); })();
 // 유튜브에 공개된 언어별 영상 id(index.html 의 FILM_YT) — 있으면 버튼이 유튜브로, 없으면 /film/?lang=
 const FILM_YT = (() => { const m = fs.readFileSync(`${root}/index.html`, 'utf8').match(/const FILM_YT=(\{[^;]*\});/); return m ? JSON.parse(m[1]) : {}; })();
+// /film/ 페이지들(sitemap) — 목록 + film/films.json 의 영상마다 하나 (2026-10-31 영상별 주소로 개편)
+const FILM_PAGES = ['film/index.html', ...JSON.parse(fs.readFileSync(`${root}/film/films.json`, 'utf8')).map(f => f.path.replace(/^\//, '') + 'index.html')];
 
 // 한국어(루트) 메타는 직접 지정, 나머지는 i18n 팩에서 로드
 const KO = {
@@ -472,7 +474,7 @@ let LASTMOD = {};
 if (gitFull) {
   const files = new Set(LANGS.map(L => srcOfMain(L.code)));
   for (const slug of ['about','maps']) for (const c of subLangsFor(slug)) files.add(srcOfSub(slug, c));
-  files.add('film/index.html');   // /film/ (영상 페이지) — sitemap lastmod
+  for (const f of FILM_PAGES) files.add(f);   // /film/ (영상 목록)과 영상별 페이지 — sitemap lastmod
   for (const file of [...files].sort()) {
     if (!fs.existsSync(`${root}/${file}`)) continue;
     const d = gitOut(`git status --porcelain -- "${file}"`) ? today : gitOut(`git log -1 --format=%cs -- "${file}"`);
@@ -620,7 +622,7 @@ const extra = subUrls().map(loc => {
   return `  <url><loc>${loc}</loc>${m ? lastmodTag(srcOfSub(m[1], m[2] || 'ko')) : ''}<changefreq>monthly</changefreq><priority>0.6</priority></url>`;
 }).join('\n');
 const langsIndex = `  <url><loc>${ORIGIN}/languages/</loc>${lastmodTag('index.html')}<changefreq>monthly</changefreq><priority>0.5</priority></url>`;
-const filmUrl = `  <url><loc>${ORIGIN}/film/</loc>${lastmodTag('film/index.html')}<changefreq>monthly</changefreq><priority>0.7</priority></url>`;
+const filmUrl = FILM_PAGES.map(f => `  <url><loc>${ORIGIN}/${f.replace(/index\.html$/, '')}</loc>${lastmodTag(f)}<changefreq>monthly</changefreq><priority>0.7</priority></url>`).join('\n');
 fs.writeFileSync(`${root}/sitemap.xml`, `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n${extra}\n${filmUrl}\n${langsIndex}\n</urlset>\n`);
 
 // ---- llms.txt (LLM/AI 엔진용 사이트 요약) ----
@@ -643,7 +645,9 @@ ${LANGS.map(langLine).join('\n')}
 - [Languages / 언어](${ORIGIN}/languages/): every language on one page — pick yours.
 - [About / 소개](${ORIGIN}/about/): rare facts from translating one gospel story into ${LANGS.length} languages; translation reach, speaker statistics, languages still waiting.
 - [Bible by Map / 지도로 보는 성경](${ORIGIN}/maps/): the Old Testament timeline, the life of Jesus, and Paul's journeys traced on a real map, in time order.
-- [The film / 영상으로 보는 성경 이야기](${ORIGIN}/film/): the same storyline as a 14-minute film in 21 scenes, each painted in its own style and drawn live in the browser; Korean, and in ${Object.keys(FILM_CTA).filter(c => c !== 'ko').map(c => (LANGS.find(L => L.code === c) || {}).en || c).join(', ')} via ?lang=<code>.
+- [Films / 영상](${ORIGIN}/film/): the films, drawn live in the browser (list: ${ORIGIN}/film/films.json).
+- [The story film / 영상으로 보는 성경 이야기](${ORIGIN}/film/story/): the same storyline as a 14-minute film in 21 scenes, each painted in its own style; Korean, and in ${Object.keys(FILM_CTA).filter(c => c !== 'ko').map(c => (LANGS.find(L => L.code === c) || {}).en || c).join(', ')} via ?lang=<code>.
+- [The Silent 400 Years / 침묵의 400년](${ORIGIN}/film/silence/): a 3-minute narrated film (Korean) on the years between Malachi and the New Testament — what God prepared (dispersion and synagogues, Greek and the Septuagint, Roman roads) — with the chapters to read.
 
 ## Resources
 - [Full text outline (llms-full.txt)](${ORIGIN}/llms-full.txt): the 13-epoch storyline, FAQ and language list in one file, without Scripture quotations.

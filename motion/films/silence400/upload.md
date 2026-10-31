@@ -64,5 +64,13 @@
 성경 전체 이야기: https://one-scroll-bible.com/?lang=ko&utm_source=youtube&utm_medium=comment&utm_campaign=film_silence400
 ```
 
+## 인스타그램 · 스레드
+- **인스타는 instagram.com 웹에서** 올린다: Meta Business Suite 릴스 작성기는 90초까지만 받는다(2026-10-31 확인, 2:59는 "trim to less than 90 seconds").
+  instagram.com의 만들기 → 게시물은 3분 영상을 릴스로 받고, 커버 업로드("컴퓨터에서 선택")와 "콘텐츠 예약"(최대 7일 뒤)이 있다.
+  파일은 relay(`motion/youtube/relay.html`, instagram.com 허용)로 넘긴다. 시간 입력은 시·분·오전오후 칸마다 클릭 → 숫자 → Tab.
+  예약 목록: 더 보기 → 예약된 콘텐츠(`/scheduled_content/`) — 날짜 변경·삭제가 여기서 된다.
+- 캡션·스레드 글: `motion/out/insta/reels-silence400/{plan,threads}.json` (스레드는 UTM 링크, `threads-reels.js`).
+- 2026-10-31: 오늘 20:30 예약(인스타·스레드). 처음 예약한 인스타 릴스(바탕체로 잘못 렌더된 파일)는 11/7 20:30으로 밀어 둠 → **관리자가 삭제**.
+
 ## 사운드판 (`silence400-<v|h>-sound.mp4`, 해설 없음)
 화면 글자에 모든 내용이 있어 그대로 볼 수 있다. 사이트 /film(개편 후)·교회 상영·해설 없이 보고 싶은 사람용. 유튜브에 따로 올릴지는 해설판 반응을 보고 정한다.

@@ -85,12 +85,22 @@
 
 main 배포는 관리자 허락을 받고 한다.
 
+**구현(2026-10-31)** — 1·2·3·4·6 완료, 5는 남음(메인 버튼은 아직 유튜브 14분 영상으로 감):
+- `film/index.html` 목록(`films.json`에서 카드), `film/story/`(14분 — 예전 /film/ 재생기), `film/silence/`(침묵의 400년 + 읽을 말씀 목록).
+- 재생기는 `film/player.js` 하나: 페이지가 `window.FILM`(장면 목록 또는 한 파일 + `marks` 챕터)을 주고 불러온다. 스타일 `film/film.css`.
+- `/film/?lang=xx`(ko 외)나 `#장면`이 붙은 옛 주소는 `/film/story/`로 그대로 넘긴다.
+- 새 영상 올리기: `py motion/films/publish.py <폴더> <slug>`(film.html·스크립트·script.json·글꼴 부분집합·film.m4a → `film/<slug>/f/`),
+  `film/<slug>/index.html`(silence를 본떠 `FILM` 설정·챕터·읽을 말씀), 포스터, `films.json` 한 줄. sitemap·llms.txt는 `films.json`에서 자동.
+- GA: 모든 재생 이벤트에 `film` 파라미터(맞춤 측정기준 등록 필요 — `tools/ANALYTICS-SETUP.md`).
+
 ## 7. 만드는 방식 (코드)
 
 - 한 파일짜리 캔버스 영상: `motion/films/<이름>/film.html` + `script.json` + 장면별 그림 모듈. 공용은 `../pilot/lib.js`, `lib-film.js`.
 - **화풍은 첫 영상의 것을 다시 쓴다**(금박 필사본, 잉크 지도, 종이 오림, 스테인드글라스, 금빛 선). 글자는 그림 안에 그리지 않는다.
 - 시간표: `SCENES`·`TEXT`는 이야기 시계로 적고, `EDIT` 표(영상 시간 ↔ 이야기 시계)로 전체 간격을 한곳에서 조정한다. 장면 사이는 0.7초 겹쳐 녹아드는 전환.
-- 렌더: `node motion/render.mjs v|h --page films/<이름>/film.html [--stills a,b] [--workers 6]`. 검토용 720p와 2초 간격 밀착 시트로 글자 겹침을 확인한 뒤 보낸다.
+- 렌더: `node motion/render.mjs v|h --page films/<이름>/film.html [--stills a,b] [--workers 6]`.
+  **글꼴**: `motion/out/fonts/NotoSerifKR.ttf`·`NotoSansKR.ttf`(google/fonts의 가변 글꼴)를 렌더러가 씀 — 없으면 멈춘다.
+  2026-10-31까지 이 PC에 Noto Serif KR이 없어 「침묵의 400년」이 바탕체(가짜 굵게)로 렌더됐고, 올린 뒤에야 발견해 다시 올렸다. 검토용 720p와 2초 간격 밀착 시트로 글자 겹침을 확인한 뒤 보낸다.
 
 ## 8. 검토 순서
 

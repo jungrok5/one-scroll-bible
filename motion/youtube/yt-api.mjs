@@ -195,6 +195,9 @@ if (cmd === 'whoami') {
   const r = await fetch(`https://www.googleapis.com/youtube/v3/captions/${t.id}?tfmt=srt`, { headers: { Authorization: 'Bearer ' + await token() } });
   if (!r.ok) { console.error('download failed', r.status, (await r.text()).slice(0, 200)); process.exit(1); }
   process.stdout.write(await r.text());
+} else if (cmd === 'unschedule') {
+  // unschedule <videoId…>: cancel a scheduled publish — the video stays private (nothing is deleted; the owner deletes). 50 units each
+  for (const id of rest) { await api('videos?part=status', { method: 'PUT', body: JSON.stringify({ id, status: { privacyStatus: 'private', selfDeclaredMadeForKids: false, containsSyntheticMedia: false } }) }); console.log(id, '→ private, schedule cancelled'); }
 } else if (cmd === 'film-schedule') {
   // film-schedule <film> <v|h> <videoId> <ISO> [--dry]: a new film's upload (motion/films/<film>/youtube.json) → title, description,
   // tags, category Education, Korean, and scheduled public at <ISO> (private until then). 50 units.

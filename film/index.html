@@ -5,67 +5,42 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#000000">
 <meta name="color-scheme" content="dark">
-<title>영상으로 보는 성경 이야기 · 한눈에 보는 성경 이야기</title>
-<meta name="description" content="창조에서 새 하늘과 새 땅까지, 성경의 큰 줄거리를 21개 장면으로 — 장면마다 다른 화풍으로 그린 약 14분의 이야기.">
+<!-- /film/ = the list of films (films.json). The 14-minute film moved to /film/story/ on 2026-10-31; links already shared
+     as /film/?lang=xx or /film/#cross (YouTube descriptions, Instagram, the site's film button) are sent there unchanged. -->
+<script>
+  (function () { var q = location.search, h = location.hash, L = (q.match(/[?&]lang=([\w-]+)/) || [])[1];
+    if (h || (L && L !== 'ko')) location.replace('/film/story/' + q + h); })();
+</script>
+<title>영상 · 한눈에 보는 성경 이야기</title>
+<meta name="description" content="성경 이야기를 영상으로 — 창조에서 새 하늘과 새 땅까지 14분 영상, 구약과 신약 사이 「침묵의 400년」. 그림은 브라우저에서 실시간으로 그려집니다.">
 <meta name="robots" content="index, follow, max-image-preview:large" />
 <link rel="canonical" href="https://one-scroll-bible.com/film/" />
 <link rel="manifest" href="/manifest.webmanifest" />
 <link rel="icon" href="/icon-192.png" />
 <link rel="apple-touch-icon" href="/icon-192.png" />
-<meta property="og:type" content="video.other" />
+<meta property="og:type" content="website" />
 <meta property="og:site_name" content="한눈에 보는 성경 이야기" />
 <meta property="og:url" content="https://one-scroll-bible.com/film/" />
 <meta property="og:title" content="영상으로 보는 성경 이야기" />
-<meta property="og:description" content="창조에서 새 하늘과 새 땅까지, 성경의 큰 줄거리를 약 14분의 장면으로." />
+<meta property="og:description" content="창조에서 새 하늘과 새 땅까지, 그리고 구약과 신약 사이 400년." />
 <meta property="og:image" content="https://one-scroll-bible.com/film/poster-h.jpg" />
 <meta property="og:locale" content="ko_KR" />
 <meta name="twitter:card" content="summary_large_image" />
 <script type="application/ld+json">
-{"@context": "https://schema.org", "@graph": [{"@type": "WebPage", "@id": "https://one-scroll-bible.com/film/#page", "url": "https://one-scroll-bible.com/film/", "name": "영상으로 보는 성경 이야기", "inLanguage": "ko", "description": "창조에서 새 하늘과 새 땅까지, 성경의 큰 줄거리를 21개 장면으로 — 장면마다 다른 화풍으로 그린 약 14분의 이야기.", "primaryImageOfPage": "https://one-scroll-bible.com/film/poster-h.jpg", "isPartOf": {"@id": "https://one-scroll-bible.com/#website"}, "publisher": {"@id": "https://one-scroll-bible.com/#org"}, "breadcrumb": {"@id": "https://one-scroll-bible.com/film/#breadcrumb"}, "video": {"@id": "https://one-scroll-bible.com/film/#video"}}, {"@type": "BreadcrumbList", "@id": "https://one-scroll-bible.com/film/#breadcrumb", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "한눈에 보는 성경 이야기", "item": "https://one-scroll-bible.com/"}, {"@type": "ListItem", "position": 2, "name": "영상으로 보는 성경 이야기", "item": "https://one-scroll-bible.com/film/"}]}, {"@type": "VideoObject", "@id": "https://one-scroll-bible.com/film/#video", "name": "영상으로 보는 성경 이야기", "description": "창조에서 새 하늘과 새 땅까지, 성경의 큰 줄거리를 21개 장면으로 — 장면마다 다른 화풍으로 그린 약 14분의 이야기.", "inLanguage": "ko", "thumbnailUrl": ["https://one-scroll-bible.com/film/poster-h.jpg", "https://i.ytimg.com/vi/66VfBSXxAs8/hqdefault.jpg"], "uploadDate": "2026-10-20", "duration": "PT14M20S", "embedUrl": "https://www.youtube.com/embed/66VfBSXxAs8", "url": "https://www.youtube.com/watch?v=66VfBSXxAs8", "publisher": {"@id": "https://one-scroll-bible.com/#org"}, "hasPart": [{"@type": "Clip", "name": "하나의 줄거리", "startOffset": 0, "endOffset": 36, "url": "https://www.youtube.com/watch?v=66VfBSXxAs8&t=0s"}, {"@type": "Clip", "name": "창조", "startOffset": 36, "endOffset": 71, "url": "https://www.youtube.com/watch?v=66VfBSXxAs8&t=36s"}, {"@type": "Clip", "name": "타락", "startOffset": 71, "endOffset": 105, "url": "https://www.youtube.com/watch?v=66VfBSXxAs8&t=71s"}, {"@type": "Clip", "name": "족장 시대", "startOffset": 105, "endOffset": 131, "url": "https://www.youtube.com/watch?v=66VfBSXxAs8&t=105s"}, {"@type": "Clip", "name": "출애굽", "startOffset": 131, "endOffset": 175, "url": "https://www.youtube.com/watch?v=66VfBSXxAs8&t=131s"}, {"@type": "Clip", "name": "광야 여정", "startOffset": 175, "endOffset": 214, "url": "https://www.youtube.com/watch?v=66VfBSXxAs8&t=175s"}, {"@type": "Clip", "name": "사사 시대", "startOffset": 214, "endOffset": 254, "url": "https://www.youtube.com/watch?v=66VfBSXxAs8&t=214s"}, {"@type": "Clip", "name": "통일 왕국", "startOffset": 254, "endOffset": 294, "url": "https://www.youtube.com/watch?v=66VfBSXxAs8&t=254s"}, {"@type": "Clip", "name": "분열 왕국 · 포로", "startOffset": 293, "endOffset": 330, "url": "https://www.youtube.com/watch?v=66VfBSXxAs8&t=293s"}, {"@type": "Clip", "name": "포로 귀환", "startOffset": 329, "endOffset": 368, "url": "https://www.youtube.com/watch?v=66VfBSXxAs8&t=329s"}, {"@type": "Clip", "name": "400년 침묵", "startOffset": 367, "endOffset": 402, "url": "https://www.youtube.com/watch?v=66VfBSXxAs8&t=367s"}, {"@type": "Clip", "name": "예수님의 오심", "startOffset": 401, "endOffset": 438, "url": "https://www.youtube.com/watch?v=66VfBSXxAs8&t=401s"}, {"@type": "Clip", "name": "십자가", "startOffset": 437, "endOffset": 476, "url": "https://www.youtube.com/watch?v=66VfBSXxAs8&t=437s"}, {"@type": "Clip", "name": "부활", "startOffset": 476, "endOffset": 504, "url": "https://www.youtube.com/watch?v=66VfBSXxAs8&t=476s"}, {"@type": "Clip", "name": "교회의 시작", "startOffset": 503, "endOffset": 538, "url": "https://www.youtube.com/watch?v=66VfBSXxAs8&t=503s"}, {"@type": "Clip", "name": "회복", "startOffset": 538, "endOffset": 574, "url": "https://www.youtube.com/watch?v=66VfBSXxAs8&t=538s"}, {"@type": "Clip", "name": "거울", "startOffset": 574, "endOffset": 619, "url": "https://www.youtube.com/watch?v=66VfBSXxAs8&t=574s"}, {"@type": "Clip", "name": "복음의 핵심", "startOffset": 619, "endOffset": 686, "url": "https://www.youtube.com/watch?v=66VfBSXxAs8&t=619s"}, {"@type": "Clip", "name": "성경은 실화인가", "startOffset": 685, "endOffset": 746, "url": "https://www.youtube.com/watch?v=66VfBSXxAs8&t=685s"}, {"@type": "Clip", "name": "착하게 살면?", "startOffset": 745, "endOffset": 803, "url": "https://www.youtube.com/watch?v=66VfBSXxAs8&t=745s"}, {"@type": "Clip", "name": "초대", "startOffset": 803, "endOffset": 860, "url": "https://www.youtube.com/watch?v=66VfBSXxAs8&t=803s"}]}]}
+{"@context": "https://schema.org", "@graph": [{"@type": "CollectionPage", "@id": "https://one-scroll-bible.com/film/#page", "url": "https://one-scroll-bible.com/film/", "name": "영상", "inLanguage": "ko", "isPartOf": {"@id": "https://one-scroll-bible.com/#website"}, "publisher": {"@id": "https://one-scroll-bible.com/#org"}, "hasPart": [{"@id": "https://one-scroll-bible.com/film/silence/#page"}, {"@id": "https://one-scroll-bible.com/film/story/#page"}]}]}
 </script>
+<link rel="stylesheet" href="/film/film.css">
 <style>
-  :root{--bg:#0e1118;--ink:#f4efe6;--muted:#9aa3b2;--line:rgba(255,255,255,.12);--card:rgba(255,255,255,.045);--accent:#e9b949;
-    --serif:"Nanum Myeongjo",Georgia,"Times New Roman",serif;--sans:-apple-system,BlinkMacSystemFont,"Segoe UI","Apple SD Gothic Neo","Noto Sans KR",Roboto,sans-serif;color-scheme:dark}
-  *{box-sizing:border-box}
-  html,body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);-webkit-text-size-adjust:100%}
-  main{max-width:1100px;margin:0 auto;padding:20px 16px 48px}
-  .top{display:flex;align-items:center;gap:8px;font-size:.8125rem;color:var(--muted)}
-  .top .dot{width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 12px var(--accent);flex:none}
-  .top .brand{color:var(--ink);text-decoration:none;font-weight:700}
-  .top .spacer{flex:1}
-  .iconbtn{cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:9px;padding:5px 9px;font:inherit;font-size:.8125rem;line-height:1}
-  .hero{text-align:center;padding:30px 0 22px;word-break:keep-all}
-  .kicker{font-size:.8125rem;letter-spacing:.35em;color:var(--accent);text-transform:uppercase;margin-bottom:14px}
-  h1{font-family:var(--serif);font-weight:700;font-size:clamp(1.75rem,7vw,2.75rem);line-height:1.28;margin:0 0 12px}
-  h1 .em{color:var(--accent)}
-  .sub{color:var(--muted);margin:0 auto;line-height:1.6;font-size:clamp(.9375rem,4.2vw,1.0625rem);max-width:34ch}
-  .stage{position:relative;margin:0 auto;background:#000;border-radius:12px;overflow:hidden;box-shadow:0 10px 40px rgba(0,0,0,.5);touch-action:manipulation}
-  .stage iframe{position:absolute;left:0;top:0;border:0;transform-origin:0 0;pointer-events:none;visibility:hidden}
-  .stage iframe.on{visibility:visible}
-  .stage img.poster{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-  .big{position:absolute;inset:0;display:grid;place-items:center;border:0;background:rgba(0,0,0,.25);cursor:pointer;padding:0;color:inherit}
-  .big span{display:grid;place-items:center;width:78px;height:78px;border-radius:50%;background:var(--accent);color:#14110b;font-size:1.6rem;padding-left:5px;box-shadow:0 6px 24px rgba(0,0,0,.5)}
-  .big[hidden],.wait[hidden]{display:none}
-  .wait{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);color:#ddd;font-size:.875rem;background:rgba(0,0,0,.55);padding:8px 14px;border-radius:999px}
-  .bar{display:flex;align-items:center;gap:8px;margin:10px auto 0;font-size:.8125rem;color:var(--muted);flex-wrap:wrap}
-  .bar button{font:inherit;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:7px 12px;cursor:pointer;min-width:40px}
-  .bar button[aria-pressed="true"]{background:var(--accent);color:#14110b;border-color:var(--accent)}
-  .bar .grow{flex:1;min-width:80px;height:4px;border-radius:2px;background:var(--line);position:relative;overflow:hidden}
-  .bar .grow i{position:absolute;left:0;top:0;bottom:0;background:var(--accent);width:0}
-  .bar .now{color:var(--ink);font-variant-numeric:tabular-nums}
-  .chapters{margin:22px 0 0;padding:0;list-style:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
-  .chapters button{width:100%;text-align:left;font:inherit;font-size:.8125rem;color:var(--muted);border:1px solid var(--line);border-radius:10px;padding:8px 10px;background:var(--card);cursor:pointer}
-  .chapters button b{color:var(--ink);font-weight:600;margin-right:4px}
-  .chapters button[aria-current="true"]{border-color:var(--accent);color:var(--ink)}
-  footer{margin-top:32px;padding-top:16px;border-top:1px solid var(--line);color:var(--muted);font-size:.75rem;line-height:1.7}
-  /* theatre: the stage fills the screen */
-  body.full{overflow:hidden}
-  body.full .stage{position:fixed;inset:0;margin:0;border-radius:0;z-index:10;width:100vw!important;height:100svh!important}
-  body.full .bar{position:fixed;left:0;right:0;bottom:0;z-index:11;margin:0;padding:10px max(12px,env(safe-area-inset-right)) calc(10px + env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left));background:linear-gradient(0deg,rgba(0,0,0,.8),rgba(0,0,0,0));transition:opacity .4s}
-  body.full.idle .bar{opacity:0}
-  .toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom));transform:translateX(-50%);background:#f4efe6;color:#14110b;padding:10px 16px;border-radius:999px;font-size:.875rem;z-index:20;box-shadow:0 6px 20px rgba(0,0,0,.4);transition:opacity .3s}
-  .toast[hidden]{display:none}
-  .fps{position:absolute;right:8px;top:6px;font:12px/1 ui-monospace,monospace;color:#7f7;background:rgba(0,0,0,.6);padding:3px 6px;border-radius:4px;z-index:12}
+  .films{display:grid;gap:18px;margin:8px 0 0}
+  .films a{display:block;color:inherit;text-decoration:none;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--card)}
+  .films a:hover{border-color:var(--accent)}
+  .films img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;background:#000}
+  .films .t{padding:12px 14px 14px}
+  .films h2{font-family:var(--serif);font-size:1.25rem;margin:0 0 4px}
+  .films p{margin:0;color:var(--muted);font-size:.875rem;line-height:1.5}
+  .films .meta{margin-top:6px;font-size:.75rem;color:var(--accent);letter-spacing:.05em}
+  .films .new{display:inline-block;margin-left:6px;font-size:.6875rem;color:#14110b;background:var(--accent);border-radius:999px;padding:1px 7px;vertical-align:2px}
+  @media (min-width:720px){ .films{grid-template-columns:1fr 1fr} .films a:first-child{grid-column:1/-1} .films a:first-child h2{font-size:1.625rem} }
 </style>
 <!-- Google Analytics (GA4) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-JTXXC8TYVX"></script>
@@ -73,7 +48,7 @@
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-  gtag('config', 'G-JTXXC8TYVX', { page_type: 'film' });
+  gtag('config', 'G-JTXXC8TYVX', { page_type: 'film_list' });
 </script>
 <!-- Microsoft Clarity (heatmaps · session insight) -->
 <script>
@@ -86,217 +61,34 @@
 </head>
 <body>
 <main>
-  <div class="top"><span class="dot"></span><a class="brand" href="/" id="home" data-ui="brand">한눈에 보는 성경 이야기</a><span class="spacer"></span><button type="button" class="iconbtn" id="shareTop" aria-label="공유" data-ui-aria="share">↗</button></div>
+  <div class="top"><span class="dot"></span><a class="brand" href="/?lang=ko">한눈에 보는 성경 이야기</a><span class="spacer"></span></div>
   <header class="hero">
-  <div class="kicker" data-ui="len">약 14분 · 소리와 함께</div>
-  <h1 data-ui-html="h1">영상으로 보는 <span class="em">성경 이야기</span></h1>
-  <p class="sub" data-ui="sub">창조에서 새 하늘과 새 땅까지 — 장면마다 다른 화풍으로 그린 21개 장면이 하나의 줄거리로 이어집니다. 그림은 브라우저에서 실시간으로 그려집니다.</p>
+  <div class="kicker">영상</div>
+  <h1>영상으로 보는 <span class="em">성경 이야기</span></h1>
+  <p class="sub">영상을 보고, 나온 말씀을 성경에서 직접 읽어 보세요. 그림은 브라우저에서 실시간으로 그려집니다.</p>
   </header>
-
-  <div class="stage" id="stage">
-    <iframe id="fa" title="장면" tabindex="-1" aria-hidden="true"></iframe>
-    <iframe id="fb" title="장면" tabindex="-1" aria-hidden="true"></iframe>
-    <img class="poster" id="poster" alt="한눈에 보는 성경 이야기 — 영상">
-    <button class="big" id="big" type="button" aria-label="재생" data-ui-aria="play"><span>▶</span></button>
-    <div class="wait" id="wait" hidden data-ui="loading">불러오는 중…</div>
+  <div class="films" id="films">
+    <!-- filled from films.json; the same links for crawlers and no-JS readers -->
+    <a href="/film/silence/"><div class="t"><h2>침묵의 400년</h2><p>구약과 신약 사이, 하나님은 무엇을 준비하셨나</p></div></a>
+    <a href="/film/story/"><div class="t"><h2>영상으로 보는 성경 이야기</h2><p>창조에서 새 하늘과 새 땅까지, 21개 장면</p></div></a>
   </div>
-
-  <div class="bar" id="bar">
-    <button type="button" id="pp" aria-label="재생" data-ui-aria="play">▶</button>
-    <button type="button" id="prev" aria-label="이전 장면" data-ui-aria="prev">⏮</button>
-    <button type="button" id="next" aria-label="다음 장면" data-ui-aria="next">⏭</button>
-    <span class="now" id="now">00 하나의 줄거리</span>
-    <span class="grow" aria-hidden="true"><i id="prog"></i></span>
-    <span id="tm" style="font-variant-numeric:tabular-nums">0:00 / 14:20</span>
-    <button type="button" data-o="h" aria-pressed="true" data-ui="landscape">가로</button>
-    <button type="button" data-o="v" aria-pressed="false" data-ui="portrait">세로</button>
-    <button type="button" id="fs" aria-label="전체 화면" data-ui-aria="full">⛶</button>
-    <button type="button" id="share" data-ui="share">공유</button>
-  </div>
-
-  <ol class="chapters" id="chapters"></ol>
-  <div class="toast" id="toast" role="status" hidden></div>
-
-
-  <footer data-ui-html="legal">
+  <footer>
     성경 인용: 「성경전서 개역개정판」 © 대한성서공회. 저작권은 대한성서공회에 있으며, 출처를 밝혀 인용했습니다.
-    장면의 그림은 모두 코드로 그렸고, 음악·효과음은 ElevenLabs로 만들었습니다.
+    그림은 모두 코드로 그렸고, 해설 목소리·음악·효과음은 ElevenLabs(AI)로 만들었습니다.
   </footer>
 </main>
 <script>
 (function () {
-  var LANG = (location.search.match(/[?&]lang=([\w-]+)/) || [])[1] || 'ko', UI = {};
-  // [file, label, seconds]
-  var S = [['opening','하나의 줄거리',36],['creation','창조',35],['fall','타락',34],['patriarch','족장',26],['exodus','출애굽',44],
-    ['wilderness','광야 여정',39.5],['judges','사사 시대',40],['kingdom','통일 왕국',39],['exile','분열 · 포로',36],['return','포로 귀환',38],
-    ['silence','400년 침묵',34],['advent','예수님의 오심',36],['cross','십자가',39],['rise','부활',27],['church','교회',35],['renewal','회복',36],
-    ['mirror','거울',44.5],['gospel','복음의 핵심',66.85],['evidence','성경은 실화인가',60],['ship','착하게 살면?',57.5],['invite','초대',57]];
-  // other languages: page text from film/s/i18n/<lang>.json "_ui" (the scenes read the same file)
-  if (LANG !== 'ko') { try { var x = new XMLHttpRequest(); x.open('GET', '/film/s/i18n/' + LANG + '.json', false); x.send();
-    var J = JSON.parse(x.responseText); UI = J._ui || {}; document.documentElement.lang = LANG; document.documentElement.dir = J._dir || 'ltr'; } catch (e) { LANG = 'ko'; } }
-  if (UI.ch) S.forEach(function (s, i) { if (UI.ch[i]) s[1] = UI.ch[i]; });
-  document.querySelectorAll('[data-ui]').forEach(function (e) { if (UI[e.dataset.ui]) e.textContent = UI[e.dataset.ui]; });
-  document.querySelectorAll('[data-ui-html]').forEach(function (e) { if (UI[e.dataset.uiHtml]) e.innerHTML = UI[e.dataset.uiHtml]; });
-  document.querySelectorAll('[data-ui-aria]').forEach(function (e) { if (UI[e.dataset.uiAria]) e.setAttribute('aria-label', UI[e.dataset.uiAria]); });
-  if (UI.title) document.title = UI.title;
-  if (LANG !== 'ko') document.getElementById('home').href = '/' + LANG + '/';
-  document.getElementById('shareTop').onclick = function () { document.getElementById('share').click(); };
-  // a shared link can point at one scene: /film/#cross
-  var START_AT = Math.max(0, S.findIndex(function (s) { return '#' + s[0] === location.hash; }));
-  var TOTAL = S.reduce(function (a, s) { return a + s[2]; }, 0), START = [], acc = 0;
-  S.forEach(function (s) { START.push(acc); acc += s[2]; });
-  var $ = function (id) { return document.getElementById(id); };
-  // GA4 — every event carries the film's language (same parameter name as the main site's events)
-  function ev(n, p) { if (window.gtag) try { gtag('event', n, Object.assign({ site_language: LANG }, p || {})); } catch (e) {} }
-  // watched = seconds actually played (not position): milestones say how far people really watch
-  var watched = 0, MILE = [10, 25, 50, 75, 90], mileSent = {}, stallT = 0, stallSent = {}, pausedBy = '';
-  function pos() { return Math.round(cur >= 0 ? START[cur] + (au.currentTime || 0) : 0); }
-  var stage = $('stage'), frames = [$('fa'), $('fb')], big = $('big'), wait = $('wait'), poster = $('poster');
-  var au = new Audio(); au.preload = 'auto'; au.setAttribute('playsinline', '');
-  var pre = new Audio(); pre.preload = 'auto';
-  var ori = matchMedia('(orientation: portrait)').matches ? 'v' : 'h';
-  var cur = -1, front = 0, playing = false, started = false, loadedIdx = [-1, -1], fpsOn = /[?&]fps=1/.test(location.search), fpsEl = null;
-  var pad = function (n) { return (n < 10 ? '0' : '') + n; };
-  var fmt = function (s) { s = Math.max(0, s | 0); return Math.floor(s / 60) + ':' + pad(s % 60); };
-
-  // chapter buttons
-  var ch = $('chapters');
-  S.forEach(function (s, i) { var li = document.createElement('li'); li.innerHTML = '<button type="button"><b>' + pad(i) + '</b>' + s[1] + '</button>';
-    li.firstChild.onclick = function () { ev('film_chapter', { scene: s[0], scene_index: i, from_scene: cur >= 0 ? S[cur][0] : '' }); go(i, true); stage.scrollIntoView({ behavior: 'smooth', block: 'center' }); }; ch.appendChild(li); });
-
-  function size() {
-    var W = ori === 'v' ? 1080 : 1920, H = ori === 'v' ? 1920 : 1080, full = document.body.classList.contains('full');
-    var pc = getComputedStyle(stage.parentNode), inner = stage.parentNode.clientWidth - parseFloat(pc.paddingLeft) - parseFloat(pc.paddingRight);
-    var maxW = full ? innerWidth : Math.min(inner, 1100), maxH = full ? innerHeight : Math.max(240, innerHeight - 150);
-    var s = Math.min(maxW / W, maxH / H), w = Math.round(W * s), h = Math.round(H * s);
-    if (!full) { stage.style.width = w + 'px'; stage.style.height = h + 'px'; }
-    var ox = full ? (innerWidth - w) / 2 : 0, oy = full ? (innerHeight - h) / 2 : 0;
-    frames.forEach(function (f) { f.width = W; f.height = H; f.style.transform = 'translate(' + ox + 'px,' + oy + 'px) scale(' + s + ')'; });
-    poster.src = '/film/poster-' + ori + (LANG !== 'ko' ? '-' + LANG : '') + '.jpg';   // the title card in the page's language
-    document.querySelectorAll('.bar [data-o]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.o === ori)); });
-  }
-  addEventListener('resize', size);
-
-  function src(i) { return '/film/s/' + S[i][0] + '.html?render=1' + (ori === 'v' ? '&o=v' : '') + (LANG !== 'ko' ? '&lang=' + LANG : ''); }
-  function load(slot, i) { if (loadedIdx[slot] === i && frames[slot].dataset.o === ori) return; loadedIdx[slot] = i; frames[slot].dataset.o = ori; frames[slot].src = src(i); drawnKey = ''; }
-  function ready(slot) { try { var w = frames[slot].contentWindow; return !!(w && w.__ready && w.seek) && loadedIdx[slot] === cur; } catch (e) { return false; } }
-
-  function go(i, play) {
-    if (i < 0 || i >= S.length) { if (i >= S.length) { pausedBy = 'end'; setPlay(false); cur = S.length - 1; ev('film_complete', { watched_sec: Math.round(watched), orientation: ori }); } return; }
-    var back = 1 - front;
-    if (loadedIdx[back] === i && frames[back].dataset.o === ori) front = back; else load(front, i);
-    cur = i; frames[front].classList.add('on'); frames[1 - front].classList.remove('on');
-    srcT = performance.now(); au.src = '/film/s/' + S[i][0] + '.m4a'; au.currentTime = 0; clk = 0;
-    if (i + 1 < S.length) { load(1 - front, i + 1); pre.src = '/film/s/' + S[i + 1][0] + '.m4a'; }
-    $('now').textContent = pad(i) + ' ' + S[i][1];
-    ch.querySelectorAll('button').forEach(function (b, k) { b.setAttribute('aria-current', String(k === i)); });
-    if (play !== undefined) setPlay(play); else if (playing) au.play().catch(function () {});
-    if (started) ev('film_scene', { scene: S[i][0], scene_index: i, orientation: ori });
-  }
-  // play/pause button for screen readers: Korean keeps 재생/일시정지; other languages have only a translated "play"
-  // (UI.play), so they use it as a toggle button (aria-pressed) instead of falling back to Korean words
-  function ppLabel(p) { var b = $('pp'); if (LANG === 'ko' || !UI.play) b.setAttribute('aria-label', p ? '일시정지' : '재생');
-    else { b.setAttribute('aria-label', UI.play); b.setAttribute('aria-pressed', p ? 'true' : 'false'); } }
-  function setPlay(p) {
-    playing = p; $('pp').textContent = p ? '❚❚' : '▶'; ppLabel(p);
-    big.hidden = p || started; if (p) { started = true; poster.hidden = true; big.hidden = true; au.play().catch(function () {}); } else au.pause();
-    if (!p && started && cur >= 0 && !pausedBy) ev('film_pause', { scene: S[cur][0], position_sec: pos(), watched_sec: Math.round(watched) });
-    pausedBy = '';
-  }
-  big.onclick = function () { ev('film_play', { orientation: ori, start_scene: S[START_AT][0], from_link: START_AT > 0 }); if (cur < 0) go(START_AT, true); else setPlay(true); };
-  $('pp').onclick = function () { if (cur < 0) go(START_AT, true); else setPlay(!playing); };
-  // share: the film link (with the scene now showing, e.g. /film/#cross) — the phone's share sheet, else copy the link
-  function toast(msg) { var t = $('toast'); t.textContent = msg; t.hidden = false; clearTimeout(toast.h); toast.h = setTimeout(function () { t.hidden = true; }, 2200); }
-  $('share').onclick = function () {
-    var i = cur >= 0 ? cur : START_AT, url = location.origin + '/film/' + (LANG !== 'ko' ? '?lang=' + LANG : '') + (i > 0 ? '#' + S[i][0] : '');
-    var title = UI.title || '영상으로 보는 성경 이야기', text = (UI.shareText || '창조에서 새 하늘과 새 땅까지, 성경 이야기를 14분 영상으로') + (i > 0 ? ' — ' + S[i][1] : '');
-    function copy() {   // PC (and any share-sheet failure): copy the link and say so
-      var done = function () { toast(UI.copied || '링크를 복사했어요'); ev('share', { method: 'copy', content_type: 'film', item_id: S[i][0] }); };
-      if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(url).then(done, legacy); else legacy();
-      function legacy() { var ta = document.createElement('textarea'); ta.value = url; ta.setAttribute('readonly', ''); ta.style.cssText = 'position:fixed;left:-9999px';
-        document.body.appendChild(ta); ta.select(); var ok = false; try { ok = document.execCommand('copy'); } catch (e) {} ta.remove(); if (ok) done(); else prompt('', url); }
-    }
-    // the system share sheet wherever the browser has one (phones and Windows/macOS PCs alike); if it can't open, copy the link
-    var data = { title: title, text: text, url: url };
-    if (navigator.share && (!navigator.canShare || navigator.canShare(data)))
-      navigator.share(data).then(function () { ev('share', { method: 'native', content_type: 'film', item_id: S[i][0] }); })
-        .catch(function (e) { if (!e || e.name !== 'AbortError') { console.warn('share failed:', e); copy(); } });
-    else copy();
-  };
-  $('prev').onclick = function () { ev('film_nav', { dir: 'prev', from_scene: cur >= 0 ? S[cur][0] : '' }); go(Math.max(0, cur - 1), playing || cur < 0); };
-  $('next').onclick = function () { ev('film_nav', { dir: 'next', from_scene: cur >= 0 ? S[cur][0] : '' }); go(Math.min(S.length - 1, cur + 1), playing || cur < 0); };
-  stage.onclick = function (e) { if (e.target === big || big.contains(e.target)) return; if (started) setPlay(!playing); };
-  document.querySelectorAll('.bar [data-o]').forEach(function (b) { b.onclick = function () {
-    if (ori === b.dataset.o) return; ori = b.dataset.o; ev('film_orientation', { to: ori }); var t = au.currentTime; size();
-    if (cur >= 0) { loadedIdx = [-1, -1]; var i = cur; cur = -1; go(i); au.currentTime = t; } }; });
-  $('fs').onclick = function () {
-    var on = !document.body.classList.contains('full'); document.body.classList.toggle('full', on); ev('film_fullscreen', { on: on });
-    try { if (on && document.documentElement.requestFullscreen) document.documentElement.requestFullscreen().catch(function () {}); else if (!on && document.fullscreenElement) document.exitFullscreen(); } catch (e) {}
-    size(); poke();
-  };
-  document.addEventListener('fullscreenchange', function () { if (!document.fullscreenElement && document.body.classList.contains('full')) { document.body.classList.remove('full'); size(); } });
-  var idleT; function poke() { document.body.classList.remove('idle'); clearTimeout(idleT); idleT = setTimeout(function () { if (playing) document.body.classList.add('idle'); }, 2500); }
-  addEventListener('pointermove', poke); addEventListener('touchstart', poke, { passive: true });
-  au.addEventListener('ended', function () { if (playing) go(cur + 1); });
-  au.addEventListener('error', function () { if (cur >= 0 && started) ev('film_error', { kind: 'audio', scene: S[cur][0] }); });
-  // 소리가 이 재생기 밖에서 멈추거나(잠금화면·알림·이어폰·시스템) 시작되면 재생 상태를 그대로 따른다 — 다시 틀지 않음
-  au.addEventListener('pause', function () { if (selfPause) { selfPause = false; return; } if (performance.now() - srcT < 400) return; if (playing && !au.ended) setPlay(false); });
-  au.addEventListener('play', function () { if (!playing && started) { playing = true; $('pp').textContent = '❚❚'; ppLabel(true); } });
-  // 화면을 떠나면(탭 전환·앱 전환·브라우저 닫기) 소리도 멈춘다 — 그림은 숨은 탭에서 멈추므로 소리만 남지 않게
-  document.addEventListener('visibilitychange', function () { if (document.hidden && playing) { pausedBy = 'hidden'; setPlay(false); } });
-  // leaving: how much was watched and where — the drop-off point (sent with the beacon transport so it survives the unload)
-  var exitSent = false;
-  addEventListener('pagehide', function () {
-    if (started && !exitSent) { exitSent = true; ev('film_exit', { scene: cur >= 0 ? S[cur][0] : '', position_sec: pos(), watched_sec: Math.round(watched), percent: Math.round(watched / TOTAL * 100), transport_type: 'beacon' }); }
-    pausedBy = 'leave'; setPlay(false); try { au.removeAttribute('src'); au.load(); } catch (e) {} });
-  // 잠금 화면·알림의 재생 컨트롤이 이 재생기를 따르도록
-  if ('mediaSession' in navigator) { try {
-    navigator.mediaSession.metadata = new MediaMetadata({ title: UI.title || '영상으로 보는 성경 이야기', artist: UI.brand || '한눈에 보는 성경 이야기', artwork: [{ src: '/icon-512.png', sizes: '512x512', type: 'image/png' }] });
-    navigator.mediaSession.setActionHandler('play', function () { if (cur < 0) go(0, true); else setPlay(true); });
-    navigator.mediaSession.setActionHandler('pause', function () { setPlay(false); });
-    navigator.mediaSession.setActionHandler('stop', function () { setPlay(false); });
-    navigator.mediaSession.setActionHandler('previoustrack', function () { go(Math.max(0, cur - 1)); });
-    navigator.mediaSession.setActionHandler('nexttrack', function () { go(Math.min(S.length - 1, cur + 1)); });
-  } catch (e) {} }
-
-  if (fpsOn) { fpsEl = document.createElement('div'); fpsEl.className = 'fps'; stage.appendChild(fpsEl); }
-  // scrolled out of view (reading the chapter list while listening): the sound plays on, the picture is not drawn
-  var onScreen = true;
-  if ('IntersectionObserver' in window) new IntersectionObserver(function (e) { var v = e[0].isIntersecting; if (v && !onScreen) drawnKey = ''; onScreen = v; }).observe(stage);
-  var shownW = '', shownTm = '';
-  var selfPause = false, srcT = 0, fc = 0, fl = performance.now(), lastSeek = -1, drawnKey = '', drawnAt = 0, pending = false, clk = 0, lastNow = performance.now();
-  (function loop(now) {
-    if (cur >= 0) {
-      var ok = ready(front), dt = Math.min(.5, (now - lastNow) / 1000);
-      // clock: the audio when it plays; a free clock if this browser can't play the sound file
-      if (!au.error) clk = au.currentTime || 0; else if (playing && ok) clk += dt;
-      var t = clk;
-      if (au.error && playing && clk >= S[cur][2]) { go(cur + 1); requestAnimationFrame(loop); lastNow = now; return; }
-      wait.hidden = ok || !started;
-      if (playing && ok) { watched += dt; stallT = 0; var pc = watched / TOTAL * 100; for (var mi = 0; mi < MILE.length; mi++) if (pc >= MILE[mi] && !mileSent[MILE[mi]]) { mileSent[MILE[mi]] = 1; ev('film_progress', { percent: MILE[mi], scene: S[cur][0], orientation: ori }); } }
-      else if (playing && !ok) { stallT += dt; if (stallT > 5 && !stallSent[cur]) { stallSent[cur] = 1; ev('film_stall', { scene: S[cur][0], orientation: ori }); } }
-      if (ok) {
-        if (!playing && au.paused && au.readyState < 1) t = 0;
-        // draw only when the picture can change: a new time, scene or orientation (paused = no 60 Hz redraw burning a
-        // phone's battery); for 1 s after a change it keeps drawing so late-arriving fonts/textures still show up
-        var key = front + ':' + loadedIdx[front] + ':' + ori + ':' + t;
-        if (key !== drawnKey) { drawnKey = key; drawnAt = now; }
-        if (onScreen && (t !== lastSeek || now - drawnAt < 1000)) { try { frames[front].contentWindow.seek(t); } catch (e) {} lastSeek = t; fc++; }
-        if (playing && au.paused && !au.ended && !pending) { pending = true; au.play().catch(function () {}).then(function () { pending = false; }); }
-      } else if (playing && !au.paused) { selfPause = true; au.pause(); }   // keep sound in step with the picture while a scene loads
-      // the bar and the clock: touch the page only when what they show changes (not 60 times a second)
-      var pw = (100 * t / S[cur][2]).toFixed(1) + '%', tx = fmt(START[cur] + t) + ' / ' + fmt(TOTAL);
-      if (pw !== shownW) { $('prog').style.width = pw; shownW = pw; }
-      if (tx !== shownTm) { $('tm').textContent = tx; shownTm = tx; }
-    }
-    if (fpsEl && now - fl > 1000) { fpsEl.textContent = Math.round(fc * 1000 / (now - fl)) + ' fps'; fc = 0; fl = now; }
-    lastNow = now; requestAnimationFrame(loop);
-  })(performance.now());
-
-  $('tm').textContent = '0:00 / ' + fmt(TOTAL);
-  size();
-  load(0, START_AT); loadedIdx[0] = START_AT; frames[0].dataset.o = ori;  // warm up the first scene behind the poster
-  $('now').textContent = pad(START_AT) + ' ' + S[START_AT][1]; if (START_AT > 0) $('tm').textContent = fmt(START[START_AT]) + ' / ' + fmt(TOTAL);
+  var box = document.getElementById('films'), NEW = 7 * 864e5;
+  var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+  fetch('/film/films.json').then(function (r) { return r.json(); }).then(function (F) {
+    box.innerHTML = F.map(function (f) {
+      var fresh = Date.now() - Date.parse(f.date) < NEW;
+      return '<a href="' + esc(f.path) + '" data-film="' + esc(f.id) + '"><img src="' + esc(f.card) + '" alt="" loading="lazy"><div class="t"><h2>' + esc(f.title) +
+        (fresh ? '<span class="new">새 영상</span>' : '') + '</h2><p>' + esc(f.sub) + '</p><div class="meta">' + esc(f.len) + '</div></div></a>';
+    }).join('');
+    box.querySelectorAll('a').forEach(function (a) { a.onclick = function () { if (window.gtag) try { gtag('event', 'nav_click', { to: 'film', film: a.dataset.film, site_language: 'ko' }); } catch (e) {} }; });
+  }).catch(function () {});
 })();
 </script>
 </body>

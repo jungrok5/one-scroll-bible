@@ -11,8 +11,8 @@
 | 14분 해설판(가로) | wrEYqvOU1O8 | 2026-10-29 |
 | 14분 음악판(가로) | 66VfBSXxAs8 | 2026-10-20 |
 | 한국어 쇼츠 1~21 | `motion/youtube/uploaded.json` `shorts.ko` | 10-24 ~ 11-13 매일 19:00 |
-| 침묵의 400년 가로 | SiSsE3W61eM | 2026-10-31 20:30 |
-| 침묵의 400년 세로(쇼츠) | vJh-gAZl4UU | 2026-10-31 20:30 |
+| 침묵의 400년 가로 | BWzpW2MVkCI | 2026-10-31 20:30 |
+| 침묵의 400년 세로(쇼츠) | smt-UIB_qss | 2026-10-31 20:30 |
 
 ## 판단 기준 (README 10절)
 평균 시청 비율, 공유·저장, utm 링크 유입(GA4 `utm_campaign=film_silence400`), 사이트 기도문 완독(`prayer_complete`).

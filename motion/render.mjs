@@ -52,11 +52,27 @@ const glAble = glmode !== 'off' && /__glFrame/.test(pageSrc);
 let glDir = null, glReady = false;   // set after the probe page: the scene may name its own cache key (__glFrame.key)
 const wav = join(here, pageRel.replace(/\.html$/, '.wav'));
 
+// The Google Fonts stylesheet is answered from local files instead of the network when motion/out/fonts/ has them
+// (NotoSerifKR.ttf / NotoSansKR.ttf, the variable fonts from github.com/google/fonts). Without this, a machine that has no
+// Noto Serif KR installed silently draws the film in its default serif (Windows: Batang, faux bold) — that is what happened
+// to 「침묵의 400년」 up to 2026-10-31. With neither the files nor an installed font, the render stops.
+const FONT_DIR = join(here, 'out', 'fonts');
+const LOCAL_FONTS = [['Noto Serif KR', 'NotoSerifKR.ttf'], ['Noto Sans KR', 'NotoSansKR.ttf']].filter(([, f]) => existsSync(join(FONT_DIR, f)));
+const FONT_CSS = LOCAL_FONTS.map(([fam, f]) => `@font-face{font-family:'${fam}';src:url('${pathToFileURL(join(FONT_DIR, f)).href}');font-weight:100 900;}`).join('\n');
 async function openPage(browser) {
   const page = await browser.newPage({ viewport: { width: W, height: H }, deviceScaleFactor: 1 });
-  await page.route(/fonts\.(googleapis|gstatic)\.com/, r => r.abort());
+  await page.route(/fonts\.googleapis\.com/, r => FONT_CSS ? r.fulfill({ status: 200, contentType: 'text/css', body: FONT_CSS }) : r.abort());
+  await page.route(/fonts\.gstatic\.com/, r => r.abort());
   await page.goto(url);
   await page.waitForFunction(() => window.__ready === true);
+  // load every weight before the first frame is drawn (a canvas does not wait for a font)
+  const fonts = await page.evaluate(async () => { const want = ["400 40px 'Noto Serif KR'", "600 40px 'Noto Serif KR'", "900 40px 'Noto Serif KR'", "300 40px 'Noto Sans KR'", "400 40px 'Noto Sans KR'", "700 40px 'Noto Sans KR'"];
+    await Promise.all(want.map(f => document.fonts.load(f, '가나다 ABC 123')));
+    // document.fonts.check() is true for a family nobody declared, so compare against a font that cannot exist
+    const c = document.createElement('canvas').getContext('2d'), w = f => { c.font = f; return c.measureText('하나님이 말씀하셨습니다').width; };
+    return [w("600 40px 'Noto Serif KR'") !== w("600 40px 'NoSuchFont-osb'")];
+  });
+  if (!fonts[0]) throw new Error("Noto Serif KR is not available — put NotoSerifKR.ttf in motion/out/fonts/ (see the comment above openPage)");
   return page;
 }
 

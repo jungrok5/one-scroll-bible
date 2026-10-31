@@ -6,7 +6,7 @@
      origins below and only paths under this server. -->
 <p id="s">relay ready</p>
 <script>
-const OK = new Set(['https://business.facebook.com', 'https://www.threads.com']);
+const OK = new Set(['https://business.facebook.com', 'https://www.threads.com', 'https://www.instagram.com']);   // instagram.com: Business Suite caps reels at 90 s (2026-10-31)
 addEventListener('message', async e => {
   if (!OK.has(e.origin) || !e.data || e.data.osb !== 'get') return;
   const s = document.getElementById('s');

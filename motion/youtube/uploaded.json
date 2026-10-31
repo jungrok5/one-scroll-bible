@@ -607,18 +607,24 @@
   }
  },
  "silence400": {
-  "note": "「침묵의 400년」 — same content, two versions (motion/films/silence400/upload.md). Uploaded via Studio 2026-10-31 (studio-upload.js entry = films/silence400/youtube.json), filled + scheduled by API (yt-api film-schedule) for 2026-10-31 20:30 KST, captions sound/ko.vtt (top-positioned, checked on the watch page) via API.",
+  "note": "「침묵의 400년」 — same content, two versions (motion/films/silence400/upload.md). 2026-10-31: first uploads (SiSsE3W61eM / vJh-gAZl4UU) were rendered without Noto Serif KR installed (Batang, faux bold) — unscheduled, kept private (owner deletes); re-rendered with the real font (render.mjs now serves motion/out/fonts) and uploaded again. Studio upload (studio-upload.js entry = films/silence400/youtube.json), filled + scheduled by API (yt-api film-schedule) for 2026-10-31 20:30 KST, captions sound/ko.vtt (top-positioned) via API.",
   "h": {
-   "id": "SiSsE3W61eM",
+   "id": "BWzpW2MVkCI",
    "file": "silence400-h-narr.mp4",
    "publish_at": "2026-10-31T11:30:00Z",
    "note": "thumbnail A/B A-glass · B-statue · C-strike (Studio); end screen last 5 s = 14-min narrated film wrEYqvOU1O8 + subscribe"
   },
   "v": {
-   "id": "vJh-gAZl4UU",
+   "id": "smt-UIB_qss",
    "file": "silence400-v-narr.mp4",
    "publish_at": "2026-10-31T11:30:00Z",
    "note": "Short; related video = wrEYqvOU1O8; custom cover V-A-glass (Studio now offers file upload for Shorts)"
-  }
+  },
+  "old_ids": {
+   "h": "SiSsE3W61eM",
+   "v": "vJh-gAZl4UU"
+  },
+  "instagram": "instagram.com web (Business Suite caps reels at 90 s): scheduled 2026-10-31 20:30 KST with cover V-A-glass + caption (out/insta/reels-silence400/plan.json); the first, wrong-font reel was moved to 2026-11-07 20:30 for the owner to delete",
+  "threads": "scheduled 2026-10-31 20:30 KST (threads-reels.js, out/insta/reels-silence400/threads.json)"
  }
 }

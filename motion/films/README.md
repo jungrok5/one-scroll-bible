@@ -117,7 +117,16 @@ main 배포는 관리자 허락을 받고 한다.
 ## 7. 만드는 방식 (코드)
 
 - 한 파일짜리 캔버스 영상: `motion/films/<이름>/film.html` + `script.json` + 장면별 그림 모듈. 공용은 `../pilot/lib.js`, `lib-film.js`.
-- **화풍은 첫 영상의 것을 다시 쓴다**(금박 필사본, 잉크 지도, 종이 오림, 스테인드글라스, 금빛 선). 글자는 그림 안에 그리지 않는다.
+- **화풍은 motion-skills에서 고른다**(관리자 결정 2026-10-31). 로컬 사본은 `C:\Project\motion-skills`(github.com/jungrok5/motion-skills)이고, 목록은 `canvas-film/references/STYLE-INDEX.md`입니다. 고르는 순서는 다음과 같습니다.
+  1. 키트(`canvas-film/kits/`): `lamplit` 등잔 아래 두루마리, `inkmap` 잉크 지도, `illuminated` 채색 필사본, `charcoal`, `hopper`, `bass`, `puppet`.
+  2. 첫 영상의 21개 화풍(종이 오림, 스테인드글라스, 금빛 선 …).
+  3. 맞는 것이 없으면 OPUSCAR 98개 영화 룩이나 그 바탕 레포 Lemo-Opuscar(기법 66개)에서 골라 우리 것으로 다시 그린다. 기법만 빌리고 장면·인물·음악은 베끼지 않는다.
+
+  장면 목록을 보여 줄 때 화풍마다 출처(키트/첫 영상/Opuscar 번호)를 함께 적는다. 영상이 끝나면 새로 만든 룩을 motion-skills의 키트로 다시 넣는다. 방법은 `kits/README.md` → Adding a kit입니다. 함수를 그대로 옮기고, 영상은 별칭으로 바꾸고, 전후 스틸이 픽셀 단위로 같은지 확인한다.
+
+  키트는 영상 폴더에 `kit-<이름>.js`로 복사해(vendored) 쓴다. 그래야 키트를 고쳐도 끝난 영상은 바뀌지 않는다. 「침묵의 400년」이 이 방식의 첫 예다: `kit-lamplit.js`·`kit-inkmap.js`·`kit-illuminated.js`에, 영상만의 인물은 `illum-figures.js`에 두었다.
+
+  글자는 그림 안에 그리지 않는다.
 - 시간표: `SCENES`·`TEXT`는 이야기 시계로 적고, `EDIT` 표(영상 시간 ↔ 이야기 시계)로 전체 간격을 한곳에서 조정한다. 장면 사이는 0.7초 겹쳐 녹아드는 전환.
 - 렌더: `node motion/render.mjs v|h --page films/<이름>/film.html [--stills a,b] [--workers 6]`.
   **글꼴**: `motion/out/fonts/NotoSerifKR.ttf`·`NotoSansKR.ttf`(google/fonts의 가변 글꼴)를 렌더러가 씀 — 없으면 멈춘다.

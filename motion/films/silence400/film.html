@@ -114,7 +114,7 @@ function scrollReturn(ctx, t) {   // 1:36–2:00 — the opening's scroll: silen
     const lh = size * 1.7, y0 = cy - (all.length - 1) * lh / 2 + size * .32, lines = all.slice(0, np), n = lines.reduce((s, l) => s + Pilot.chars(l).length, 0), r0 = 97.6, r1 = 100.2;
     Film.block(ctx, all.slice(np), Mx, y0 + np * lh, { size, weight: 600, lh: 1.7, color: '#2b1a0b', alpha: .14 * light });
     { const e1 = Film.wrapEven((() => { const c = canvas(2, 2).getContext('2d'); c.font = Film.font(size, 600); return c; })(), Film.text('19a'), maxW);   // Mal 4:5 above it
-      scrollText(ctx, '19a', Mx, y0 - lh * e1.length, size, maxW, { lines: e1, lit: ss(97.4, 98.6, t) * (1 - .5 * ss(102.4, 104, t)) + .5 * hlk, reveal: k => ss(96.8 + k * .05, 97.2 + k * .05, t) }); hlUnder(ctx, e1, Mx, y0 - lh * e1.length, size, '엘리야', hlk);
+      scrollText(ctx, '19a', Mx, y0 - lh * e1.length, size, maxW, { lines: e1, lit: ss(97.4, 98.6, t) * (1 - .5 * ss(102.4, 104, t)) + .5 * hlk, reveal: k => ss(96.8 + k * .05, 97.2 + k * .05, t) }); hlUnder(ctx, e1, Mx, y0 - lh * e1.length, size, Film.text('K1'), hlk);
       Pilot.text(ctx, Film.text('P3'), Mx, cy - sh / 2 + (V ? 66 : 60), { size: V ? 36 : 34, weight: 600, color: '#6a4a26', alpha: ss(97, 98, t) * light, ls: 3 }); }
     scrollText(ctx, '01', Mx, y0, size, maxW, { lines, lit: ss(r1, r1 + 1, t) * (1 - .5 * ss(102.4, 104, t)) + .5 * hlk, reveal: k => ss(r0 + (r1 - r0) * k / n, r0 + (r1 - r0) * k / n + .3, t), glow: k => { const at = r0 + (r1 - r0) * k / n; return ss(at, at + .15, t) * (1 - ss(at + .2, at + .7, t)); } });
     hlUnder(ctx, lines, Mx, y0, size, Film.lines['19'].hl, hlk);
@@ -125,7 +125,7 @@ function scrollReturn(ctx, t) {   // 1:36–2:00 — the opening's scroll: silen
   { const size = V ? 50 : 48, w0 = 106.4, w1 = 110.0; ctx.save(); ctx.font = Film.font(size, 600); const ls = Film.wrapEven(ctx, Film.text('20'), sw0 - 200), n = ls.reduce((s, l) => s + Pilot.chars(l).length, 0), lw = Math.max(...ls.map(l => ctx.measureText(l).width)); ctx.restore();
     const ly = cy - (ls.length - 1) * size * 1.7 / 2 + size * .32;
     if (t > w0 - .2) { scrollText(ctx, '20', Lx, ly, size, sw0 - 200, { lines: ls, lit: .5 * hlk, reveal: k => ss(w0 + (w1 - w0) * k / n, w0 + (w1 - w0) * k / n + .12, t) });
-      hlUnder(ctx, ls, Lx, ly, size, Film.lines['20'].hl, hlk); hlUnder(ctx, ls, Lx, ly, size, '엘리야', hlk);
+      hlUnder(ctx, ls, Lx, ly, size, Film.lines['20'].hl, hlk); hlUnder(ctx, ls, Lx, ly, size, Film.text('K1'), hlk);
       Pilot.text(ctx, Film.text('P4'), Lx, cy - sh / 2 + (V ? 66 : 60), { size: V ? 36 : 34, weight: 600, color: '#6a4a26', alpha: ss(w0 - .6, w0 + .4, t), ls: 3 });
       const k = clamp((t - w0) / (w1 - w0)); if (k > 0 && k < 1) { const nx = Lx - lw / 2 + lw * k, ny = ly - size * .3; glow(ctx, nx, ny, 70, [255, 236, 180], 1); glow(ctx, nx, ny, 14, [255, 255, 240], 1); }
       Pilot.text(ctx, Film.cite('20'), Lx, cy + sh / 2 - (V ? 50 : 44), { size: V ? 30 : 28, font: "'Noto Sans KR',sans-serif", color: '#5a3d1f', alpha: ss(w1, w1 + .6, t) }); } }
@@ -823,7 +823,7 @@ function endCard(ctx, t) { ctx.fillStyle = '#030305'; ctx.fillRect(0, 0, W, H); 
   Pilot.text(ctx, s[0], W / 2, y, { size: V ? 54 : 58, weight: 600, color: '#f3ece0', alpha: k, shadow: 'rgba(0,0,0,.9)', maxW: mw });
   if (s[1]) Pilot.text(ctx, s[1], W / 2, y + (V ? 110 : 110), { size: V ? 44 : 48, weight: 600, color: '#e9c77a', alpha: k2, shadow: 'rgba(233,185,73,.3)', shadowBlur: 24, maxW: mw });
   if (s[2]) Pilot.text(ctx, s[2], W / 2, y + (V ? 250 : 230), { size: V ? 42 : 42, weight: 600, color: '#d9b56a', alpha: k2, font: "'Noto Sans KR',sans-serif", ls: 2 });
-  Pilot.text(ctx, '한눈에 보는 성경 이야기', W / 2, y + (V ? 320 : 290), { size: V ? 30 : 28, font: "'Noto Sans KR',sans-serif", color: '#9aa3b2', alpha: k2 * .9 }); }
+  Pilot.text(ctx, Film.text('B1'), W / 2, y + (V ? 320 : 290), { size: V ? 30 : 28, font: "'Noto Sans KR',sans-serif", color: '#9aa3b2', alpha: k2 * .9 }); }
 
 // =====================================================================================================================
 // the timeline
@@ -895,7 +895,7 @@ function gifts(ctx, t) {
     ctx.save(); ctx.globalAlpha = a; if (lit > 0) glow(ctx, x, y, r * 3.2, [255, 214, 130], .5 * lit);
     const ring = new Path2D(); ring.arc(x, y, r + 4, 0, 6.283); Illum.gold(ctx, ring, { lw: 1.2 }); ctx.fillStyle = '#0c1028'; ctx.beginPath(); ctx.arc(x, y, r - 2, 0, 6.283); ctx.fill();   // gold rim, dark face
     giftIcon(ctx, ic, x, y, r * .78); ctx.restore();
-    Pilot.text(ctx, Film.text(id), x, y + r + (V ? 44 : 38), { size: V ? 36 : 34, weight: 600, color: lit > .2 ? '#ffe2a0' : '#e6d3a4', alpha: a, shadow: 'rgba(0,0,0,.95)', shadowBlur: 10 }); }); }
+    Pilot.text(ctx, Film.text(id), x, y + r + (V ? 44 : 38), { size: V ? 36 : 34, maxW: gap - 14, weight: 600, color: lit > .2 ? '#ffe2a0' : '#e6d3a4', alpha: a, shadow: 'rgba(0,0,0,.95)', shadowBlur: 10 }); }); }   // maxW: longer names in other languages ("Synagogues") shrink instead of running into the next medal
 
 // [film s, layout s]: sky −0.6 · Daniel's verse −0.8 · line 17 −0.8 · temple −1.4 · climax ①'s pull-back +3.0 (line 21 is said over it, so the
 // light run is voice-free) · stone's gold −0.8 · nativity −0.4 · Nazareth's hold +1.0 (line 25c) · the closing sky +0.8 (line 27)

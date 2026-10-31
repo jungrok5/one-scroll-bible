@@ -15,10 +15,11 @@
     for (const l of s.lines) F.lines[l.id] = { ...l };
     if (P.lang !== 'ko') { try { const j = await get('i18n/' + P.lang + '.json');
       for (const [id, v] of Object.entries(j)) if (F.lines[id] && v && typeof v === 'object') Object.assign(F.lines[id], v);
+      F.version = j._version || '';   // the quoted edition's short name, shown after each reference ("ESV", "RVR1960")
     } catch (e) { console.warn('no film language file for', P.lang); } }
   };
   F.text = id => (F.lines[id] || {}).text || '';
-  F.cite = id => { const l = F.lines[id] || {}; return l.cite ? l.cite + (P.lang === 'ko' ? ' (개역개정)' : '') : ''; };
+  F.cite = id => { const l = F.lines[id] || {}; return l.cite ? l.cite + (P.lang === 'ko' ? ' (개역개정)' : F.version ? ` (${F.version})` : '') : ''; };
 
   // break a text into lines that fit maxW: '/' first, then spaces, then characters
   F.wrap = (ctx, s, maxW, joinIfFits = false) => {

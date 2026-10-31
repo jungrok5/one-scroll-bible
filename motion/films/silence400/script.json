@@ -302,6 +302,24 @@
    "screen": "말라기 위 작은 글씨"
   },
   {
+   "id": "B1",
+   "part": 6,
+   "at": 175,
+   "kind": "label",
+   "voice": null,
+   "text": "한눈에 보는 성경 이야기",
+   "screen": "끝 화면 사이트 주소 아래 작은 글씨 — 그 언어 사이트 이름(film/s/i18n/<lang>.json _ui.brand)"
+  },
+  {
+   "id": "K1",
+   "part": 3,
+   "at": 110,
+   "kind": "label",
+   "voice": null,
+   "text": "엘리야",
+   "screen": "화면에 따로 쓰지 않음 — 말라기 4:5와 누가복음 1:17에서 밑줄 칠 이름. 번역은 그 언어 성경 본문에 쓰인 철자 그대로(Elijah, Elías, Elias)"
+  },
+  {
    "id": "19",
    "part": 3,
    "at": 118,

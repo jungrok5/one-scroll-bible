@@ -50,7 +50,10 @@ info.forEach((x, i) => { const n = info[i + 1], end = x.at + x.dur; if (n && end
   const subs = [...info.map((x, i) => ({ id: x.id, a: x.at, b: Math.min(x.at + x.dur + .4, info[i + 1] ? info[i + 1].at - .05 : D) })),
     ...Object.entries(place.subs_extra || {}).map(([id, [a, b]]) => ({ id, a, b }))].sort((p, q) => p.a - q.a);
   const txt = id => { const l = L[id]; return (l.frags ? l.frags.join(' ') : (l.voice || l.text)).replace(/\s*\/\s*/g, '\n'); };
-  writeFileSync(join(S, 'ko.srt'), subs.map((s, i) => `${i + 1}\n${ts(s.a)} --> ${ts(s.b)}\n${txt(s.id)}\n`).join('\n')); }
+  writeFileSync(join(S, 'ko.srt'), subs.map((s, i) => `${i + 1}\n${ts(s.a)} --> ${ts(s.b)}\n${txt(s.id)}\n`).join('\n'));
+  // the same lines as WebVTT placed at the TOP: a quarter of the first film's narrated-cut views had captions switched on (older
+  // viewers on TV, 2026-10-31) and the words are already drawn at the bottom of the picture — bottom captions would sit on them
+  writeFileSync(join(S, 'ko.vtt'), 'WEBVTT\n\n' + subs.map(s => `${ts(s.a).replace(',', '.')} --> ${ts(s.b).replace(',', '.')} line:6% position:50% align:center\n${txt(s.id)}\n`).join('\n')); }
 const voice = join(OUT, film + '-voice.wav');
 writeFileSync(join(T, 'voice-fc.txt'), info.map((x, i) => `[${i}:a]volume=${x.gain.toFixed(2)}dB,adelay=${Math.round(x.at * 1000)}:all=1[a${i}]`).join(';') +
   `;${info.map((_, i) => `[a${i}]`).join('')}amix=inputs=${info.length}:normalize=0:dropout_transition=0,apad,atrim=end=${D}[v]`);

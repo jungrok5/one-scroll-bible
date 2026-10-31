@@ -3,6 +3,8 @@
 > 정기 분석이 날짜순으로 아래에 쌓는다. 제작 기준이 바뀌면 [README.md](README.md)의 1b 표와 해당 절을 함께 고친다.
 > 보는 법: 스튜디오 분석(가장 최신, 연령·기기·유입·A/B — 브라우저) + `node motion/youtube/yt-api.mjs report <id…> [--from D]`
 > (YouTube Analytics API: 기기·연령·유입·10% 간격 시청 유지 — 2~3일 늦게 잡힘, 할당량 거의 안 씀).
+> 국제 채널(UCOI5LbYpQGgHkcbMEStvnlw)은 언어별로. 인스타그램(instagram.com 인사이트: 릴스별 조회·도달·저장·공유·프로필 링크 클릭)과
+> 스레드(threads.com 인사이트), 사이트 GA4(analytics.google.com `?authuser=1`)는 유입 출처만 — 2026-10-31부터 정기 분석(월·목)에 포함.
 
 ## 볼 영상
 

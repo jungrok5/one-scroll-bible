@@ -118,7 +118,7 @@ main 배포는 관리자 허락을 받고 한다.
 
 - 한 파일짜리 캔버스 영상: `motion/films/<이름>/film.html` + `script.json` + 장면별 그림 모듈. 공용은 `../pilot/lib.js`, `lib-film.js`.
 - **화풍은 motion-skills에서 고른다**(관리자 결정 2026-10-31). 로컬 사본은 `C:\Project\motion-skills`(github.com/jungrok5/motion-skills)이고, 목록은 `canvas-film/references/STYLE-INDEX.md`입니다. 고르는 순서는 다음과 같습니다.
-  1. 키트(`canvas-film/kits/`): `lamplit` 등잔 아래 두루마리, `inkmap` 잉크 지도, `illuminated` 채색 필사본, `charcoal`, `hopper`, `bass`, `puppet`.
+  1. 키트(`canvas-film/kits/`, 29개, 표는 `kits/README.md`): 이 영상에서 나온 `lamplit` 등잔 아래 두루마리, `inkmap` 잉크 지도, `illuminated` 채색 필사본. 여기에 word-log에서 온 `glass` 스테인드글라스, `papercut` 종이 오림, `ukiyoe`, `storybook`, `charcoal`, `hopper` 등.
   2. 첫 영상의 21개 화풍(종이 오림, 스테인드글라스, 금빛 선 …).
   3. 맞는 것이 없으면 OPUSCAR 98개 영화 룩이나 그 바탕 레포 Lemo-Opuscar(기법 66개)에서 골라 우리 것으로 다시 그린다. 기법만 빌리고 장면·인물·음악은 베끼지 않는다.
 

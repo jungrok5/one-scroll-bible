@@ -5,7 +5,9 @@
 // The javascript tool times out after 45 s, so start it without awaiting and read window.__osbResult later.
 // Returns a check list; nothing is published — the final "저장" saves it as 비공개 (private).
 //   key: which manifest entry — 'film' (default) or 'film_narr' (the Korean narrated cut)
-window.__osbUpload = async (L, { save = true, key = 'film' } = {}) => {
+//   entry: a ready entry instead of the manifest one ({ path, file, title, description, tags, thumbnail? } — e.g. a film's
+//          youtube.json: fetch('http://127.0.0.1:8765/films/silence400/youtube.json')); no thumbnail = leave YouTube's (Shorts)
+window.__osbUpload = async (L, { save = true, key = 'film', entry = null } = {}) => {
   const S = 'http://127.0.0.1:8765/', sleep = ms => new Promise(r => setTimeout(r, ms));
   const LANG_LABEL = { en: '영어', es: '스페인어', 'pt-BR': '포르투갈어(브라질)', fr: '프랑스어', de: '독일어', ru: '러시아어', id: '인도네시아어',
     'zh-Hans': '중국어(간체)', 'zh-Hant': '중국어(번체)', ja: '일본어', ar: '아랍어', ko: '한국어',
@@ -15,17 +17,17 @@ window.__osbUpload = async (L, { save = true, key = 'film' } = {}) => {
   const labels = [].concat(LANG_LABEL[L] || []);
   if (!labels.length) return { L, error: `no Studio language label for ${L} — add it to LANG_LABEL` };
   const wait = async (fn, ms = 20000) => { for (let t = 0; t < ms; t += 250) { const v = fn(); if (v) return v; await sleep(250); } return null; };
-  const m = await (await fetch(S + 'youtube/manifest.json', { cache: 'no-store' })).json(); const f = m.languages[L][key];
+  const f = entry || (await (await fetch(S + 'youtube/manifest.json', { cache: 'no-store' })).json()).languages[L][key];
   if (!f?.file || !f.title || !f.description) return { L, key, error: 'manifest entry missing or incomplete' };
   const fileInput = await wait(() => document.querySelector('ytcp-uploads-dialog input[type=file]'));
   if (!fileInput) return { L, error: 'upload dialog not open — open …/videos/upload?d=ud (a fresh page load is safest)' };
   const blob = async (p, name, type) => { const b = await (await fetch(S + p)).blob(); const dt = new DataTransfer(); dt.items.add(new File([b], name, { type })); return dt.files; };
-  fileInput.files = await blob('out/release/' + f.file, f.file, 'video/mp4'); fileInput.dispatchEvent(new Event('change', { bubbles: true }));
+  fileInput.files = await blob(f.path || 'out/release/' + f.file, f.file, 'video/mp4'); fileInput.dispatchEvent(new Event('change', { bubbles: true }));
   const D = await wait(() => document.querySelectorAll('ytcp-uploads-dialog #textbox').length >= 2 && document.querySelector('ytcp-uploads-dialog'));
   await sleep(1500);
   const put = (el, t) => { el.focus(); document.execCommand('selectAll'); document.execCommand('insertText', false, t); el.dispatchEvent(new Event('input', { bubbles: true })); };
   const [title, desc] = D.querySelectorAll('#textbox'); put(title, f.title); await sleep(300); put(desc, f.description);
-  const thumb = D.querySelector('input#file-loader'); thumb.files = await blob(f.thumbnail.replace(/^motion\//, ''), L + '-A.jpg', 'image/jpeg'); thumb.dispatchEvent(new Event('change', { bubbles: true }));
+  if (f.thumbnail) { const thumb = D.querySelector('input#file-loader'); thumb.files = await blob(f.thumbnail.replace(/^motion\//, ''), L + '-A.jpg', 'image/jpeg'); thumb.dispatchEvent(new Event('change', { bubbles: true })); }
   D.querySelector('tp-yt-paper-radio-button[name="VIDEO_MADE_FOR_KIDS_NOT_MFK"]').click();
   D.querySelector('#toggle-button').click(); await sleep(1200);
   D.querySelector('[name=VIDEO_HAS_ALTERED_CONTENT_NO]').click(); D.querySelector('[name=VIDEO_PAID_PRODUCT_PLACEMENT_NO]').click();   // by name: the label text is not in innerText
@@ -47,7 +49,7 @@ window.__osbUpload = async (L, { save = true, key = 'film' } = {}) => {
   checks.private = D.querySelector('tp-yt-paper-radio-button[name="PRIVATE"]').getAttribute('aria-checked');
   await wait(() => /업로드 완료|처리/.test(D.querySelector('ytcp-video-upload-progress')?.innerText || ''), 600000);
   checks.url = [...D.querySelectorAll('a')].map(a => a.href).find(h => /youtu\.be\//.test(h));
-  if (save && checks.private === 'true' && checks.notify !== 'true' && checks.ai === 'true' && labels.includes(checks.language)) {
+  if (save && checks.private === 'true' && (L === 'ko' || checks.notify !== 'true') && checks.ai === 'true' && labels.includes(checks.language)) {
     D.querySelector('#done-button').click(); await sleep(3000);
     [...document.querySelectorAll('ytcp-button, button')].find(b => b.innerText?.trim() === '닫기' && b.offsetParent)?.click();
     checks.saved = true;

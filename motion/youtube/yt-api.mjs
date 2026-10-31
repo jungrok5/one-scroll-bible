@@ -143,4 +143,58 @@ if (cmd === 'whoami') {
       console.log(`  thumbnail set from ${it.thumbnail}`);
     }
   }
-} else console.log('usage: node motion/youtube/yt-api.mjs whoami | captions [<lang…>] [--dry] | status [<lang…>] | stats [<lang…>] [--from D] [--to D] | playlist-add <playlistId> <videoId…> | upload <lang> film|<n…> [--publish-at ISO] [--dry]');
+} else if (cmd === 'caption-file') {
+  // caption-file <videoId> <file.srt|.vtt> [lang=ko]: one caption track from any file (a film's sound/ko.vtt); replaces nothing —
+  // skips when the video already has a non-automatic track in that language (400 units)
+  const [id, file, lang = 'ko'] = rest; if (!id || !file || !existsSync(file)) { console.log('usage: caption-file <videoId> <file> [lang]'); process.exit(1); }
+  const have = await api(`captions?part=snippet&videoId=${id}`);
+  if ((have.items || []).some(c => c.snippet.language === lang && c.snippet.trackKind !== 'asr')) { console.log(`${id}: already has a ${lang} track`); process.exit(0); }
+  const meta = JSON.stringify({ snippet: { videoId: id, language: lang, name: '', isDraft: false } }), b = 'osb' + Date.now();
+  const body = `--${b}\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n${meta}\r\n--${b}\r\nContent-Type: application/octet-stream\r\n\r\n${readFileSync(file, 'utf8')}\r\n--${b}--`;
+  const j = await api('https://www.googleapis.com/upload/youtube/v3/captions?uploadType=multipart&part=snippet', { method: 'POST', headers: { 'Content-Type': `multipart/related; boundary=${b}` }, body });
+  console.log(`${id}: uploaded caption ${j.id} (${lang}) from ${file}`);
+} else if (cmd === 'report') {
+  // report <videoId…> [--from D] [--to D]: what the periodic analysis reads (YouTube Analytics, no Data API quota) — per video:
+  // views, minutes, average duration and %, likes, shares, subscribers; then who and how: device, age, traffic source,
+  // and where viewers leave (retention at every 10 % of the video). Results go into motion/films/ANALYTICS.md by hand.
+  const ids = rest.filter(a => /^[\w-]{11}$/.test(a)), val = (n, d) => (rest.includes('--' + n) ? rest[rest.indexOf('--' + n) + 1] : d);
+  const from = val('from', '2026-10-20'), to = val('to', new Date().toISOString().slice(0, 10));
+  const q = async (o) => (await api('https://youtubeanalytics.googleapis.com/v2/reports?' + new URLSearchParams({ ids: 'channel==MINE', startDate: from, endDate: to, ...o }))).rows || [];
+  const info = Object.fromEntries(((await api(`videos?part=snippet,contentDetails&id=${ids.join(',')}`)).items || []).map(x => [x.id, x]));
+  console.log(`YouTube Analytics ${from} … ${to} (the last ~2 days are incomplete)`);
+  for (const id of ids) {
+    const t = info[id]?.snippet.title || id, dur = info[id]?.contentDetails.duration || '';
+    const [m] = await q({ dimensions: 'video', filters: 'video==' + id, metrics: 'views,estimatedMinutesWatched,averageViewDuration,averageViewPercentage,likes,shares,subscribersGained' });
+    console.log(`\n■ ${id} ${dur} ${t}`);
+    if (!m) { console.log('  no data yet'); continue; }
+    console.log(`  views ${m[1]} · minutes ${m[2]} · avg ${m[3]}s (${(+m[4]).toFixed(1)}%) · likes ${m[5]} · shares ${m[6]} · subs +${m[7]}`);
+    const pct = (rows, k = 1) => { const s = rows.reduce((a, r) => a + r[k], 0) || 1; return rows.sort((a, b) => b[k] - a[k]).map(r => `${r[0]} ${(100 * r[k] / s).toFixed(0)}%`).join(' · '); };
+    console.log('  device (minutes): ' + pct(await q({ dimensions: 'deviceType', filters: 'video==' + id, metrics: 'estimatedMinutesWatched' })));
+    console.log('  age (viewers):    ' + (await q({ dimensions: 'ageGroup', filters: 'video==' + id, metrics: 'viewerPercentage' })).sort((a, b) => b[1] - a[1]).map(r => `${r[0].replace('age', '')} ${r[1].toFixed(0)}%`).join(' · '));
+    console.log('  traffic (views):  ' + pct(await q({ dimensions: 'insightTrafficSourceType', filters: 'video==' + id, metrics: 'views' })));
+    const ret = await q({ dimensions: 'elapsedVideoTimeRatio', filters: 'video==' + id, metrics: 'audienceWatchRatio' });
+    if (ret.length) console.log('  still watching:   ' + ret.filter(r => Math.round(r[0] * 100) % 10 === 0).map(r => `${Math.round(r[0] * 100)}% ${(r[1] * 100).toFixed(0)}`).join(' · '));
+  }
+} else if (cmd === 'recent') {
+  // recent [n=10]: the channel's latest uploads with their file names (find the id of a Studio upload — 3 units)
+  const up_ = (await api('channels?part=contentDetails&mine=true')).items[0].contentDetails.relatedPlaylists.uploads;
+  const items = (await api(`playlistItems?part=contentDetails&maxResults=${Math.min(50, +rest[0] || 10)}&playlistId=${up_}`)).items;
+  for (const x of (await api(`videos?part=status,snippet,fileDetails&id=${items.map(i => i.contentDetails.videoId).join(',')}`)).items)
+    console.log(x.id, x.status.privacyStatus, x.status.publishAt || '-', x.fileDetails?.fileName || '', '|', x.snippet.title.slice(0, 40));
+} else if (cmd === 'check') {
+  // check <videoId…>: privacy · scheduled time · processing · language · category · caption tracks (1 + 50 units per id)
+  const v = await api(`videos?part=status,processingDetails,snippet&id=${rest.join(',')}`);
+  for (const x of v.items || []) { const c = await api(`captions?part=snippet&videoId=${x.id}`);
+    console.log(x.id, x.status.privacyStatus, x.status.publishAt || '-', x.status.uploadStatus, x.processingDetails?.processingStatus || '', x.snippet.defaultLanguage || '-', 'cat ' + x.snippet.categoryId,
+      'captions ' + ((c.items || []).map(t => t.snippet.language + (t.snippet.trackKind === 'asr' ? '(auto)' : '')).join(',') || '-'), '|', x.snippet.title.slice(0, 40)); }
+} else if (cmd === 'film-schedule') {
+  // film-schedule <film> <v|h> <videoId> <ISO> [--dry]: a new film's upload (motion/films/<film>/youtube.json) → title, description,
+  // tags, category Education, Korean, and scheduled public at <ISO> (private until then). 50 units.
+  const [film, o, id, at] = rest.filter(a => !a.startsWith('--')), f = JSON.parse(readFileSync(join(M, 'films', film, 'youtube.json'), 'utf8'))[o];
+  if (!f || !id || !at || !(Date.parse(at) > Date.now() + 15 * 60e3)) { console.log('usage: film-schedule <film> <v|h> <videoId> <ISO at least 15 min ahead>'); process.exit(1); }
+  const when = new Date(at).toISOString();
+  console.log(`${film} ${o} ${id} → public at ${when} | ${f.title}`); if (rest.includes('--dry')) process.exit(0);
+  await api('videos?part=snippet,status', { method: 'PUT', body: JSON.stringify({ id, snippet: { title: f.title, description: f.description, tags: f.tags, categoryId: '27', defaultLanguage: 'ko', defaultAudioLanguage: 'ko' },
+    status: { privacyStatus: 'private', publishAt: when, selfDeclaredMadeForKids: false, containsSyntheticMedia: false } }) });
+  console.log('  saved — confirm with: check ' + id + ' (a read right after the write can still show the old values)');
+} else console.log('usage: node motion/youtube/yt-api.mjs whoami | captions [<lang…>] [--dry] | caption-file <videoId> <file> [lang] | film-schedule <film> <v|h> <videoId> <ISO> | status [<lang…>] | stats [<lang…>] [--from D] [--to D] | playlist-add <playlistId> <videoId…> | upload <lang> film|<n…> [--publish-at ISO] [--dry]');

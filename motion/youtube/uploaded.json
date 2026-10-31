@@ -146,7 +146,8 @@
     "3": "UgzlSACmsoogcTuUxZx4AaABAg",
     "4": "UgzOHPek0j6byeHSgdt4AaABAg",
     "5": "UgzpsziwLW9crlnWPwl4AaABAg",
-    "6": "UgzjDcHWoZT2n2RQTGd4AaABAg"
+    "6": "UgzjDcHWoZT2n2RQTGd4AaABAg",
+    "7": "UgwbWJCB1zMX4KfVHPZ4AaABAg"
    },
    "music_ids": {
     "10": "DkMfG7PzRHk",
@@ -603,6 +604,21 @@
     "wU_58Q6TCag",
     "2dlq-5_x6v4"
    ]
+  }
+ },
+ "silence400": {
+  "note": "「침묵의 400년」 — same content, two versions (motion/films/silence400/upload.md). Uploaded via Studio 2026-10-31 (studio-upload.js entry = films/silence400/youtube.json), filled + scheduled by API (yt-api film-schedule) for 2026-10-31 20:30 KST, captions sound/ko.vtt (top-positioned, checked on the watch page) via API.",
+  "h": {
+   "id": "SiSsE3W61eM",
+   "file": "silence400-h-narr.mp4",
+   "publish_at": "2026-10-31T11:30:00Z",
+   "note": "thumbnail A/B A-glass · B-statue · C-strike (Studio); end screen last 5 s = 14-min narrated film wrEYqvOU1O8 + subscribe"
+  },
+  "v": {
+   "id": "vJh-gAZl4UU",
+   "file": "silence400-v-narr.mp4",
+   "publish_at": "2026-10-31T11:30:00Z",
+   "note": "Short; related video = wrEYqvOU1O8; custom cover V-A-glass (Studio now offers file upload for Shorts)"
   }
  }
 }

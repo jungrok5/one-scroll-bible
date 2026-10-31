@@ -48,3 +48,31 @@ ims = [make(*p) for p in PICS]
 sheet = Image.new('RGB', (3 * 340 + 40, 191 + 20), (24, 24, 24))   # the phone feed size
 for i, im in enumerate(ims): sheet.paste(im.convert('RGB').resize((340, 191), Image.LANCZOS), (10 + i * 350, 10))
 sheet.save(os.path.join(HERE, 'sheet.jpg'), quality=90)
+
+# 9:16 covers (1080×1920): Instagram Reels cover, the Shorts thumbnail once the channel gets the button, the site's /film poster.
+# The picture sits in the top part of the vertical frames; the words go in the dark band under it, all inside the middle 3:4
+# (y 240–1680 — what the Instagram profile grid shows). Frames: RENDER_QUERY=clean=1 node motion/render.mjs v … --stills 122,113.6,115.2
+VW, VH = 1080, 1920
+VPICS = [('V-A-glass', 'v-122.jpg', -260, 1.0), ('V-B-statue', 'v-113_6.jpg', -150, 1.06), ('V-C-strike', 'v-115_2.jpg', -150, 1.06)]
+
+def centered(base, y, s, f, fill, stroke):
+    w = ImageDraw.Draw(base).textbbox((0, 0), s, font=f, stroke_width=stroke)[2]
+    text(base, ((VW - w) // 2, y), s, f, fill, stroke)
+
+def make_v(name, src, dy, z):
+    pic = Image.open(os.path.join(HERE, 'src', src)).convert('RGB')
+    pic = pic.resize((int(VW * z), int(VH * z)), Image.LANCZOS)
+    im = Image.new('RGBA', (VW, VH), (8, 6, 4, 255)); im.paste(pic, ((VW - pic.width) // 2, dy))
+    shade = Image.new('RGBA', (VW, VH)); d = ImageDraw.Draw(shade)   # darken under the picture for the words
+    for y in range(VH): d.line([(0, y), (VW, y)], fill=(6, 4, 2, int(240 * min(1, max(0, (y - 1000) / 260)))))
+    im.alpha_composite(shade)
+    centered(im, 1110, TOP, font(78), WHITE, 7)
+    centered(im, 1180, BIG, font(300), GOLD, 16)
+    centered(im, 1580, TAIL, font(84), WHITE, 8)
+    out = os.path.join(HERE, name + '.jpg'); im.convert('RGB').save(out, quality=92); print(out)
+    return im
+
+vims = [make_v(*p) for p in VPICS]
+vsheet = Image.new('RGB', (3 * 240 + 40, 427 + 20), (24, 24, 24))   # the Shorts / Reels grid size
+for i, im in enumerate(vims): vsheet.paste(im.convert('RGB').resize((240, 427), Image.LANCZOS), (10 + i * 250, 10))
+vsheet.save(os.path.join(HERE, 'sheet-v.jpg'), quality=90)

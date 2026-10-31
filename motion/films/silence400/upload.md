@@ -1,13 +1,14 @@
 # 「침묵의 400년」 — 올리기 자료 (한국어 채널 @one-scroll-bible)
 
 영상은 저장소 밖(`motion/out/`)에서 만든다: `node motion/render.mjs v|h --page films/silence400/film.html` → `node motion/films/sound.mjs silence400 v|h`
-→ `motion/out/silence400-<v|h>-<narr|sound>.mp4`. 자막 `sound/ko.srt`, 썸네일 `thumbs/` (가로 A/B 3안: A-glass · B-statue · C-strike).
+→ `motion/out/silence400-<v|h>-<narr|sound>.mp4`. 자막 `sound/ko.srt`, 썸네일 `thumbs/` (가로 A/B 3안: A-glass · B-statue · C-strike, 세로 9:16 표지 3안: V-A-glass · V-B-statue · V-C-strike).
 공개·게시는 관리자 허락 후. 올리는 방법(스튜디오 업로드·API 예약·관련 동영상·고정 댓글)은 [../../README.md](../../README.md) "유튜브에 올리기"와
 "브라우저와 API 나눠 쓰기", 점검표는 [../README.md](../README.md) 9b.
 
 ## 쇼츠 (세로, 해설판 `silence400-v-narr.mp4`, 2:59)
 - 제목: `성경에서는 한 장 차이, 그 사이 400년 — 침묵의 400년`
-- 썸네일: 직접 올리기는 아직 이 채널에 없음 → 스튜디오에서 프레임 고르기: 0:20 제목 화면
+- 썸네일: 직접 올리기는 아직 이 채널에 없음 → 스튜디오에서 프레임 고르기: 0:20 제목 화면. 버튼이 생기면 `thumbs/V-A-glass.jpg`
+- 인스타 릴스 표지: `thumbs/V-A-glass.jpg`(글자는 프로필 격자 3:4 안에 있음) · 사이트 /film 포스터도 같은 그림
 - 관련 동영상: 14분 본편(가로) · 알림: 켬(한국어) · 아동용 아님 · 언어: 한국어 · 자막: `sound/ko.srt`(API `captions`)
 - 설명:
 ```

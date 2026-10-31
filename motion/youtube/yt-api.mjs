@@ -146,9 +146,16 @@ if (cmd === 'whoami') {
 } else if (cmd === 'caption-file') {
   // caption-file <videoId> <file.srt|.vtt> [lang=ko]: one caption track from any file (a film's sound/ko.vtt); replaces nothing —
   // skips when the video already has a non-automatic track in that language (400 units)
-  const [id, file, lang = 'ko'] = rest; if (!id || !file || !existsSync(file)) { console.log('usage: caption-file <videoId> <file> [lang]'); process.exit(1); }
-  const have = await api(`captions?part=snippet&videoId=${id}`);
-  if ((have.items || []).some(c => c.snippet.language === lang && c.snippet.trackKind !== 'asr')) { console.log(`${id}: already has a ${lang} track`); process.exit(0); }
+  // --replace: put the file into the existing track instead (captions.update, 450 units) — for a corrected caption file
+  const replace = rest.includes('--replace'), [id, file, lang = 'ko'] = rest.filter(a => a !== '--replace'); if (!id || !file || !existsSync(file)) { console.log('usage: caption-file <videoId> <file> [lang] [--replace]'); process.exit(1); }
+  const have = await api(`captions?part=snippet&videoId=${id}`), old = (have.items || []).find(c => c.snippet.language === lang && c.snippet.trackKind !== 'asr');
+  if (old && replace) {
+    const meta = JSON.stringify({ id: old.id, snippet: { isDraft: false } }), b = 'osb' + Date.now();
+    const body = `--${b}\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n${meta}\r\n--${b}\r\nContent-Type: application/octet-stream\r\n\r\n${readFileSync(file, 'utf8')}\r\n--${b}--`;
+    const j = await api('https://www.googleapis.com/upload/youtube/v3/captions?uploadType=multipart&part=snippet', { method: 'PUT', headers: { 'Content-Type': `multipart/related; boundary=${b}` }, body });
+    console.log(`${id}: replaced caption ${j.id} (${lang}) with ${file}`); process.exit(0);
+  }
+  if (old) { console.log(`${id}: already has a ${lang} track (--replace to update it)`); process.exit(0); }
   const meta = JSON.stringify({ snippet: { videoId: id, language: lang, name: '', isDraft: false } }), b = 'osb' + Date.now();
   const body = `--${b}\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n${meta}\r\n--${b}\r\nContent-Type: application/octet-stream\r\n\r\n${readFileSync(file, 'utf8')}\r\n--${b}--`;
   const j = await api('https://www.googleapis.com/upload/youtube/v3/captions?uploadType=multipart&part=snippet', { method: 'POST', headers: { 'Content-Type': `multipart/related; boundary=${b}` }, body });
@@ -198,6 +205,18 @@ if (cmd === 'whoami') {
 } else if (cmd === 'unschedule') {
   // unschedule <videoId…>: cancel a scheduled publish — the video stays private (nothing is deleted; the owner deletes). 50 units each
   for (const id of rest) { await api('videos?part=status', { method: 'PUT', body: JSON.stringify({ id, status: { privacyStatus: 'private', selfDeclaredMadeForKids: false, containsSyntheticMedia: false } }) }); console.log(id, '→ private, schedule cancelled'); }
+} else if (cmd === 'tags-add') {
+  // tags-add <videoId> <tag,tag,…>: add search terms viewers actually used (Studio → 분석 → 검색어) to a video's tags; keeps
+  // every existing tag and the rest of the snippet as it is (snippet PUT replaces all fields, so they are sent back). ~51 units
+  const [id, list] = rest, add = (list || '').split(',').map(s => s.trim()).filter(Boolean);
+  if (!id || !add.length) { console.log('usage: tags-add <videoId> <tag,tag,…>'); process.exit(1); }
+  const v = ((await api(`videos?part=snippet&id=${id}`)).items || [])[0]; if (!v) { console.log(id, 'not found'); process.exit(1); }
+  const s = v.snippet, old = s.tags || [], tags = [...old, ...add.filter(t => !old.includes(t))];
+  if (tags.length === old.length) { console.log(id, 'already has', add.join(', ')); process.exit(0); }
+  if (tags.join(',').length > 480) { console.log(id, 'tags would exceed YouTube\'s 500-character limit'); process.exit(1); }
+  const snippet = { title: s.title, description: s.description, categoryId: s.categoryId, tags, defaultLanguage: s.defaultLanguage, defaultAudioLanguage: s.defaultAudioLanguage };
+  await api('videos?part=snippet', { method: 'PUT', body: JSON.stringify({ id, snippet }) });
+  console.log(`${id}: tags ${old.length} → ${tags.length} (+ ${tags.slice(old.length).join(', ')})`);
 } else if (cmd === 'film-schedule') {
   // film-schedule <film> <v|h> <videoId> <ISO> [--dry]: a new film's upload (motion/films/<film>/youtube.json) → title, description,
   // tags, category Education, Korean, and scheduled public at <ISO> (private until then). 50 units.

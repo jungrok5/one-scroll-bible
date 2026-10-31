@@ -1,6 +1,6 @@
 {
  "10": {
-  "text": "As Escrituras foram traduzidas para essa língua, / para que também os gentios pudessem lê-las,"
+  "text": "As Escrituras foram traduzidas para essa língua, / e assim também os gentios puderam lê-las,"
  },
  "15": {
   "text": "Nas sinagogas de todo o império, / a Palavra era lida a cada sábado."
@@ -18,7 +18,7 @@
   "hl": "o coração dos pais"
  },
  "20": {
-  "text": "no espírito e virtude de Elias, … / para converter o coração dos pais aos filhos",
+  "text": "no espírito e virtude de Elias, / para converter o coração dos pais aos filhos",
   "cite": "Lucas 1:17",
   "hl": "o coração dos pais"
  },
@@ -30,7 +30,7 @@
   "cite": "Gálatas 4:4"
  },
  "23": {
-  "text": "A pedra que Deus enviou: / seu Filho, Jesus, havia chegado."
+  "text": "A pedra que Deus enviou: / seu Filho, Jesus, veio."
  },
  "24": {
   "text": "Porque o Filho do Homem veio / buscar e salvar o que se havia perdido.",
@@ -41,11 +41,11 @@
   "cite": "Lucas 4:21"
  },
  "27": {
-  "text": "Deus estava agindo mesmo quando estava em silêncio. / E agora, ele age também na sua espera."
+  "text": "Mesmo em silêncio, Deus estava agindo. / E agora, ele age também enquanto você espera."
  },
  "_dir": "ltr",
  "_yv": 212,
- "_version": "Almeida",
+ "_version": "ARC",
  "_common": {
   "여자의 후손": "A semente da mulher",
   "아브라함의 복": "A bênção de Abraão",
@@ -67,13 +67,13 @@
   "text": "O último livro do Antigo Testamento · Malaquias"
  },
  "D0": {
-  "text": "Daniel 2 · O sonho do rei Nabucodonosor"
+  "text": "Daniel 2 · o sonho do rei Nabucodonosor"
  },
  "T1": {
   "text": "Os 400 anos de silêncio"
  },
  "C1": {
-  "text": "c. {n} a.C."
+  "text": "cerca de {n} a.C."
  },
  "04": {
   "text": "As pessoas esperavam."
@@ -133,7 +133,7 @@
   "text": "O Antigo Testamento em grego · a Septuaginta"
  },
  "14b": {
-  "text": "Roma abriu estradas e rotas marítimas / até os confins do império."
+  "text": "Roma abriu estradas e rotas marítimas / a todos os cantos do império."
  },
  "P1": {
   "text": "O templo de Jerusalém · o sacerdote Zacarias"
@@ -152,17 +152,17 @@
   "text": "A Bíblia num relance"
  },
  "P4": {
-  "text": "400 anos depois, o anjo a Zacarias"
+  "text": "400 anos depois, o anjo diz a Zacarias"
  },
  "C2": {
   "text": "400 anos"
  },
  "22a": {
-  "text": "uma pedra foi cortada, sem mão, / a qual feriu a estátua nos pés de ferro e de barro / e os esmiuçou.",
+  "text": "uma pedra foi cortada, sem mão, / a qual feriu a estátua / nos pés de ferro e de barro / e os esmiuçou.",
   "cite": "Daniel 2:34"
  },
  "24b": {
-  "text": "Na sinagoga de sua cidade, Jesus abriu / as palavras do profeta Isaías, / escritas uns 700 anos antes."
+  "text": "Na sinagoga de sua cidade, Jesus abriu / o livro do profeta Isaías, / escrito há mais de 700 anos."
  },
  "P2": {
   "text": "A sinagoga de Nazaré"
@@ -172,13 +172,13 @@
   "cite": "Isaías 61:1"
  },
  "25c": {
-  "text": "O protagonista daquela promessa de 700 anos antes / era o próprio Jesus."
+  "text": "Aquele que fora prometido há mais de 700 anos / era o próprio Jesus."
  },
  "25b": {
   "text": "Jesus morreu na cruz por nossos pecados / e ressuscitou ao terceiro dia."
  },
  "26a": {
-  "text": "O apóstolo Paulo seguiu esses caminhos, em grego, / pregando o evangelho primeiro nas sinagogas."
+  "text": "O apóstolo Paulo seguiu esses caminhos, / pregando o evangelho em grego, / primeiro nas sinagogas."
  },
  "M7": {
   "text": "As viagens missionárias de Paulo"

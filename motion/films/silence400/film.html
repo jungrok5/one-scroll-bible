@@ -881,6 +881,7 @@ function counter(ctx, t) {   // the sky: about 430 → 400 BC; then through the 
 // ---------- what the 400 years prepared, kept as gold medallions top-left (one by one; they light again when Paul uses them) ----------
 // [line id, icon (0 lamp · 1 Greek · 2 road), seconds into the preparation shot] — in the order they are prepared
 const GIFTS = [['G2', 1, 11.4], ['G3', 2, 21.8], ['G1', 0, 25.8]];
+let giftGap = null;
 function giftIcon(ctx, i, x, y, r) { ctx.save(); ctx.strokeStyle = '#f2cf7a'; ctx.fillStyle = '#f2cf7a'; ctx.lineWidth = r * .09; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
   if (i === 0) { ctx.beginPath(); ctx.ellipse(x - r * .08, y + r * .2, r * .42, r * .17, 0, 0, 6.283); ctx.fill(); ctx.beginPath(); ctx.moveTo(x + r * .28, y + r * .12); ctx.quadraticCurveTo(x + r * .5, y + r * .1, x + r * .52, y + r * .22); ctx.stroke();   // a lamp
     ctx.beginPath(); ctx.moveTo(x + r * .44, y + r * .08); ctx.quadraticCurveTo(x + r * .3, y - r * .2, x + r * .5, y - r * .5); ctx.quadraticCurveTo(x + r * .66, y - r * .2, x + r * .54, y + r * .08); ctx.fill(); }
@@ -890,7 +891,10 @@ function giftIcon(ctx, i, x, y, r) { ctx.save(); ctx.strokeStyle = '#f2cf7a'; ct
   ctx.restore(); }
 function gifts(ctx, t) {
   const early = t < 120, show = early ? 1 - ss(PREP0 + 34.4, PREP0 + 35.2, t) : win(t, 158.2, 167.0, .8, .8); if (show <= 0) return;
-  const all = early ? win(t, PREP0 + 30.0, PREP0 + 35.0, .6, .6) : ss(158.8, 159.8, t), r = V ? 42 : 40, gap = V ? 156 : 150, x0 = V ? 96 : 110, y0 = V ? 330 : 116;
+  const all = early ? win(t, PREP0 + 30.0, PREP0 + 35.0, .6, .6) : ss(158.8, 159.8, t), r = V ? 42 : 40, x0 = V ? 96 : 110, y0 = V ? 330 : 116;
+  // medals sit as far apart as their longest name needs ("Caminos romanos"), so names stay readable instead of shrinking
+  if (giftGap == null) { const c = canvas(2, 2).getContext('2d'); c.font = Film.font(V ? 36 : 34, 600); giftGap = Math.min(V ? 300 : 320, Math.max(V ? 156 : 150, ...GIFTS.map(([id]) => c.measureText(Film.text(id)).width + 34))); }
+  const gap = giftGap;
   GIFTS.forEach(([id, ic, at0], i) => { const at = PREP0 + at0, a = (early ? ss(at, at + .8, t) : 1) * show; if (a <= 0) return; const x = x0 + i * gap, y = y0, fresh = early ? win(t, at, at + 2.6, .3, 1.4) : 0, lit = Math.max(fresh, all);
     ctx.save(); ctx.globalAlpha = a; if (lit > 0) glow(ctx, x, y, r * 3.2, [255, 214, 130], .5 * lit);
     const ring = new Path2D(); ring.arc(x, y, r + 4, 0, 6.283); Illum.gold(ctx, ring, { lw: 1.2 }); ctx.fillStyle = '#0c1028'; ctx.beginPath(); ctx.arc(x, y, r - 2, 0, 6.283); ctx.fill();   // gold rim, dark face

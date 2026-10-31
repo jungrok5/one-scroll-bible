@@ -607,7 +607,7 @@
   }
  },
  "silence400": {
-  "note": "「침묵의 400년」 — same content, two versions (motion/films/silence400/upload.md). 2026-10-31: first uploads (SiSsE3W61eM / vJh-gAZl4UU) were rendered without Noto Serif KR installed (Batang, faux bold) — unscheduled, kept private (owner deletes); re-rendered with the real font (render.mjs now serves motion/out/fonts) and uploaded again. Studio upload (studio-upload.js entry = films/silence400/youtube.json), filled + scheduled by API (yt-api film-schedule) for 2026-10-31 20:30 KST, captions sound/ko.vtt (top-positioned) via API.",
+  "note": "「침묵의 400년」 — same content, two versions (motion/films/silence400/upload.md). 2026-10-31: first uploads (SiSsE3W61eM / vJh-gAZl4UU) were rendered without Noto Serif KR installed (Batang, faux bold) — unscheduled, kept private (owner deletes); re-rendered with the real font (render.mjs now serves motion/out/fonts) and uploaded again. Studio upload (studio-upload.js entry = films/silence400/youtube.json), filled + scheduled by API (yt-api film-schedule) for 2026-10-31 20:30 KST, captions sound/ko.vtt (top-positioned) via API — uploaded to both and checked 2026-10-31 16:07 KST (private, publishAt 11:30Z, category 27, captions ko).",
   "h": {
    "id": "BWzpW2MVkCI",
    "file": "silence400-h-narr.mp4",
@@ -624,7 +624,7 @@
    "h": "SiSsE3W61eM",
    "v": "vJh-gAZl4UU"
   },
-  "instagram": "instagram.com web (Business Suite caps reels at 90 s): scheduled 2026-10-31 20:30 KST with cover V-A-glass + caption (out/insta/reels-silence400/plan.json); the first, wrong-font reel was moved to 2026-11-07 20:30 for the owner to delete",
+  "instagram": "instagram.com web (Business Suite caps reels at 90 s): scheduled 2026-10-31 20:30 KST with cover V-A-glass + caption (out/insta/reels-silence400/plan.json); the first, wrong-font reel was moved to 2026-11-07 and then deleted by the owner (2026-10-31)",
   "threads": "scheduled 2026-10-31 20:30 KST (threads-reels.js, out/insta/reels-silence400/threads.json)"
  }
 }

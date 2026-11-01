@@ -9,7 +9,8 @@ window.__osbCaption = async (L, path, { publish = true } = {}) => {
   const S = 'http://127.0.0.1:8765/', sleep = ms => new Promise(r => setTimeout(r, ms));
   const LABEL = { 'zh-Hans': '중국어(간체)', 'zh-Hant': '중국어(번체)', ja: '일본어', fr: '프랑스어', de: '독일어', ru: '러시아어', ar: '아랍어',
     hi: '힌디어', id: '인도네시아어', vi: '베트남어', th: '태국어', tl: ['필리핀어', '타갈로그어'], bn: ['벵골어', '뱅골어'], sw: ['스와힐리어', '스와힐리'],
-    fa: ['페르시아어', '페르시아어(이란)'], ta: '타밀어', en: '영어', es: '스페인어', 'pt-BR': '포르투갈어(브라질)', ko: '한국어' };
+    fa: ['페르시아어', '페르시아어(이란)'], ta: '타밀어', it: '이탈리아어', pl: '폴란드어', tr: ['튀르키예어', '터키어'],
+    uz: '우즈베크어', ne: '네팔어', km: '크메르어', mn: '몽골어', my: ['버마어', '미얀마어'], en: '영어', es: '스페인어', 'pt-BR': '포르투갈어(브라질)', ko: '한국어' };
   const labels = [].concat(LABEL[L] || []); if (!labels.length) return { L, error: 'no Studio label for ' + L };
   const wait = async (fn, ms = 15000) => { for (let t = 0; t < ms; t += 250) { const v = fn(); if (v) return v; await sleep(250); } return null; };
   const vis = e => e && e.offsetParent !== null;

@@ -24,6 +24,14 @@ pack's edition) — all 12 quote lines pass in all 16 languages after the fixes 
 | sw | SRUV (1818) | deployable | 25c "kabla yake", 26a line break |
 | ta | O.V. BSI (339) — Gal 4:4 = GAL.4.4-5 in this edition | deployable | 15 தேவவசனம், 25c anchor to Jesus' time |
 
+**Added the same evening** (owner's fixed caption list, films README §4 step 9):
+
+| Code | Edition (YV) | Verdict | Fixed after review |
+|---|---|---|---|
+| it | Nuova Riveduta (122) | deployable, 0 HIGH/MED | 10 pagani → stranieri (NR's word for Gentiles), 25c·26a line breaks |
+| pl | Biblia Gdańska (132) | **MED fixed**: 25c «obietnica sprzed około 700 lat» reads "700 years ago from today" → «dana około 700 lat wcześniej» | Gdańska spelling kept (Dziści, Elijasz, Ewangeliję) |
+| tr | Kutsal Kitap (170) | deployable | 08 «sözünü yanlarında götürdü», 24b «700 yılı aşkın bir süre önce»; Grekçe kept (the Bible's word, Acts 21:37) |
+
 Kept on purpose (reviewer notes): bn 19a "এলির ভাববাদীকে" is the edition's own (probable) typo — Scripture stays as printed;
 site-pack terms where the quoted verses don't contain the word (sw Kiyunani/Roma, id sinagoge, vi Chúa Giê-xu, hi आराधनालय
 follows the Bible — the site pack's सभा-घर is the outlier). Tooling added: `check-quotes.mjs` ignores case and supports a per-line

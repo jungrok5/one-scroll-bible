@@ -119,7 +119,10 @@
    → 자동 자막 지우기(`yt-api.mjs asr-off`, `../README.md` 11단계).
 8. **한국어판에도 같은 외국어 자막**(관리자 결정 2026-11-01): `node motion/films/captions-on-ko.mjs <이름> en es pt-BR` → 같은 번역문을 한국어 해설 시각에 맞춘
    `sound/<lang>.ko-timing.vtt`(국제판 자막은 그 언어 해설 시각이라 한국어판과 최대 2초 어긋남) → `yt-api.mjs caption-file <한국어판 id> <파일> <lang>`.
-9. **자막 언어 = 첫 영상의 언어 전부**(관리자 결정 2026-11-01, 해설은 그대로): 번역 `i18n/CAPTIONS-BRIEF.md`(언어 2개씩 에이전트) → 검수
+9. **자막 언어는 고정 목록 27개**(관리자 결정 2026-11-01, 해설은 그대로): en es pt-BR de fr it pl ru tr zh-Hans zh-Hant ja ar fa hi bn ta id vi th tl sw
+   uz ne km mn my (+ ko). 근거 — 채널 대상(성경을 잘 모르는 기독교인)·유튜브 시장·실제 조회 국가(ANALYTICS.md 11/1): 이탈리아·폴란드는 가톨릭 다수·고령층,
+   튀르키예는 큰 유튜브 시장, 우즈베크·네팔·크메르·몽골·미얀마는 **한국에 사는 이주민**(체류외국인 278만, 2025 법무부 — 한국 교회 이주민 사역,
+   한국어판 영상을 외국인 동료에게 보여 줄 때). 바꾸려면 관리자 결정. 번역 `i18n/CAPTIONS-BRIEF.md`(언어 2개씩 에이전트) → 검수
    `i18n/CAPTIONS-REVIEW.md`(언어마다 별도 에이전트, 보고만, HIGH/MED 남으면 안 올림) → 자막 파일 `captions-on-ko.mjs <이름> <lang…> [--timing en]`
    (국제판 = 영어 해설 시각) → 올리기는 **스튜디오 화면으로** `motion/youtube/studio-caption.js` `__osbCaptions([[lang, 파일], …])`
    — API 자막은 한 개 400점이라 16개 언어 × 영상 4편이면 며칠 걸리지만, 스튜디오는 할당량이 없다(한 언어 약 15초).

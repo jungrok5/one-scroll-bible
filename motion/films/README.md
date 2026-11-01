@@ -115,7 +115,10 @@
 6. 제목·설명: `youtube-intl.json` — 검수된 문장(T1, 해설 줄, 끝 화면, 화면 표기)만으로 짜고, 새 문장은 원어민 검수(`motion/reviews/film-<이름>-yt.md`).
    썸네일: `py motion/films/<이름>/thumbs/make.py --lang <lang>`.
 7. 올리기(국제 채널, 비공개): `node motion/films/intl.mjs entry <이름> v|h` → 스튜디오 `__osbUpload('en', { entry })` →
-   `YT_AS=GLOBAL node motion/films/intl.mjs api <이름> v|h <id>`(언어별 제목·설명, 자막, 표준 라이선스) → 스튜디오 언어 탭에서 오디오 트랙·언어별 썸네일(`../README.md` 10단계).
+   `YT_AS=GLOBAL node motion/films/intl.mjs api <이름> v|h <id>`(언어별 제목·설명, 자막, 표준 라이선스) → 스튜디오 언어 탭에서 오디오 트랙·언어별 썸네일(`../README.md` 10단계)
+   → 자동 자막 지우기(`yt-api.mjs asr-off`, `../README.md` 11단계).
+8. **한국어판에도 같은 외국어 자막**(관리자 결정 2026-11-01): `node motion/films/captions-on-ko.mjs <이름> en es pt-BR` → 같은 번역문을 한국어 해설 시각에 맞춘
+   `sound/<lang>.ko-timing.vtt`(국제판 자막은 그 언어 해설 시각이라 한국어판과 최대 2초 어긋남) → `yt-api.mjs caption-file <한국어판 id> <파일> <lang>`.
 
 **기존 영상** — 첫 영상(14분·21장면)은 언어마다 따로 그린 판이라 합칠 수 없다. 더 투자하지 않고, 이미 예약된 외국어 쇼츠는 그대로 둔다.
 

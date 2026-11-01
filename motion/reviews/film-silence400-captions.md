@@ -32,6 +32,19 @@ pack's edition) — all 12 quote lines pass in all 16 languages after the fixes 
 | pl | Biblia Gdańska (132) | **MED fixed**: 25c «obietnica sprzed około 700 lat» reads "700 years ago from today" → «dana około 700 lat wcześniej» | Gdańska spelling kept (Dziści, Elijasz, Ewangeliję) |
 | tr | Kutsal Kitap (170) | deployable | 08 «sözünü yanlarında götürdü», 24b «700 yılı aşkın bir süre önce»; Grekçe kept (the Bible's word, Acts 21:37) |
 
+**Migrant languages in Korea** (owner decision the same night — the list is now 27):
+
+| Code | Edition (YV) | Verdict | Fixed after review |
+|---|---|---|---|
+| uz | OʻzbMK (1939) | deployable | 14b «Rim oʻz imperiyasining»; 25a "U meni tanlagan" (chose me) is the edition's own word — Luke 4:18 matches |
+| ne | NNRV (1483) | deployable | 07 «राज्यहरूलाई जनाउँथे», 07b «क्रमैसँग» |
+| km | គខប (85) | deployable | 06a restores «ហើយ» (dropped at a break without …), 23 wording, 25 line break; 01 is the edition's positive wording, kept |
+| mn | АБ2004 (369) | deployable | 25c «Есүсийн үеэс»; баптисм хүртээгч Иохан (Mat 3:1) kept — the site pack's «Баптист Иохан» differs |
+| my | Judson (386) | **MED fixed**: 25c read as "the one who promised" → God named as the promiser | 25b line break; Gal 4:4-5 (Judson puts "sent his Son" in v. 5); 01 `voice` = the curse clause |
+
+Line 01 in tr, uz, ne now carries a `voice` (the clause the narrator reads), like hi/bn/tl — without it the caption began with a lone verb
+("döndürecek."). The tr track was uploaded before this fix and is replaced after the API quota reset.
+
 Kept on purpose (reviewer notes): bn 19a "এলির ভাববাদীকে" is the edition's own (probable) typo — Scripture stays as printed;
 site-pack terms where the quoted verses don't contain the word (sw Kiyunani/Roma, id sinagoge, vi Chúa Giê-xu, hi आराधनालय
 follows the Bible — the site pack's सभा-घर is the outlier). Tooling added: `check-quotes.mjs` ignores case and supports a per-line

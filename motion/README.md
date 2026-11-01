@@ -152,6 +152,7 @@ curl -LO https://github.com/jungrok5/one-scroll-bible/releases/download/youtube-
 | 8 | 언어 재생목록 | `studio-playlist.js` → `__osbPlaylist` + `__plShorts` (파일 머리말 순서대로) | 쇼츠 21편을 예약한 뒤 한 번에: 가로 영상 → 쇼츠 1~21(게시일 오래된순). id는 `uploaded.json` `playlists`. 채널 홈 탭(켜 둠)의 "생성된 재생목록"에 자동으로 뜸 |
 
 | 10 | 다른 언어 오디오 트랙(국제판, `films/README.md` 4절) | 스튜디오 `…/video/<id>/translations` → 언어 줄 클릭 → 오디오 "추가" → "파일 선택" 대신 `ytgn-audio-upload-dialog input#audio-file-loader`에 파일을 넣고(로컬 서버에서 blob → DataTransfer → `change`) "게시" → "업데이트". 언어별 썸네일은 같은 창의 `input#file-loader` | 파일 창이 뜨지 않게 먼저 `HTMLInputElement.prototype.click`을 가로챈다. 도우미 스크립트는 스튜디오 CSP 때문에 eval이 안 돼서 `trustedTypes.createPolicy` + nonce 붙인 `<script>`로 넣는다. 오디오 트랙은 API가 없다. 쇼츠는 언어별 썸네일이 없다 |
+| 11 | 자동 자막 지우기 | `node motion/youtube/yt-api.mjs asr-off <id…> [--dry]` (국제 채널은 `YT_AS=GLOBAL`) | **직접 올린 자막이 있는 언어의 자동 자막은 지운다**(관리자 결정 2026-11-01 — 정확한 자막만 보이게). 자막을 올린 직후 실행. 스튜디오 새 '언어' 화면엔 자동 자막 메뉴가 없어 API로만 가능, 되돌릴 수 없음(다른 언어로 잘못 들은 자동 자막은 이 명령이 건드리지 않음) |
 | 9 | 자막(검색용) | `node motion/youtube/yt-api.mjs captions [<code>…]` (YouTube Data API) | 영상에 말소리가 없어 자동 자막이 없고, 화면에 박힌 글자는 검색이 못 읽음 → 그 언어 `film-h.srt`를 그 언어 영상에. 스튜디오 화면의 수동 업로드는 스크립트로 넣은 파일을 거부함(2026-10-23) |
 
 **YouTube Data API (한 번만)**: Google Cloud 프로젝트 **`one-scroll-bible`**(jungrok5 계정, 2026-10-23 생성 — YouTube Data API v3·

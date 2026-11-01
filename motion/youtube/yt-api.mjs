@@ -217,6 +217,23 @@ if (cmd === 'whoami') {
   const snippet = { title: s.title, description: s.description, categoryId: s.categoryId, tags, defaultLanguage: s.defaultLanguage, defaultAudioLanguage: s.defaultAudioLanguage };
   await api('videos?part=snippet', { method: 'PUT', body: JSON.stringify({ id, snippet }) });
   console.log(`${id}: tags ${old.length} → ${tags.length} (+ ${tags.slice(old.length).join(', ')})`);
+} else if (cmd === 'comments') {
+  // comments [--since ISO|--hours N] [--max N]: viewers' top-level comments on this channel's videos, newest first (the channel's own
+  // are left out) — for the daily triage in motion/README.md "댓글 관리". Read-only, ~2–4 units. Default: the last 26 hours.
+  const flag = k => { const i = rest.indexOf(k); return i >= 0 ? rest[i + 1] : null; };
+  const since = Date.parse(flag('--since') || '') || Date.now() - (+flag('--hours') || 26) * 3600e3, max = +flag('--max') || 100;
+  const me = (await api('channels?part=id&mine=true')).items[0].id, out = [];
+  let tokn = '';
+  do { const j = await api(`commentThreads?part=snippet&allThreadsRelatedToChannelId=${me}&order=time&textFormat=plainText&maxResults=100${tokn ? '&pageToken=' + tokn : ''}`);
+    for (const t of j.items || []) { const s = t.snippet, c = s.topLevelComment.snippet;
+      if (Date.parse(c.publishedAt) < since) { tokn = ''; break; }
+      if (c.authorChannelId?.value !== me) out.push({ id: t.id, video: s.videoId, at: c.publishedAt, who: c.authorDisplayName, likes: c.likeCount, replies: s.totalReplyCount, text: c.textOriginal }); }
+    tokn = out.length < max && j.nextPageToken && !(j.items || []).some(t => Date.parse(t.snippet.topLevelComment.snippet.publishedAt) < since) ? j.nextPageToken : '';
+  } while (tokn);
+  const ids = [...new Set(out.map(c => c.video))], title = {};
+  for (let i = 0; i < ids.length; i += 50) for (const v of (await api(`videos?part=snippet&id=${ids.slice(i, i + 50).join(',')}`)).items || []) title[v.id] = v.snippet.title;
+  console.log(`${out.length} viewer comments since ${new Date(since).toISOString()}`);
+  for (const c of out.slice(0, max)) console.log(`\n${c.at.slice(0, 16)} ${c.id} on ${c.video} (${(title[c.video] || '').slice(0, 30)}) — ${c.who} · likes ${c.likes} · replies ${c.replies} · ${c.text.length} chars\n  ${c.text.replace(/\s*\n\s*/g, ' / ').slice(0, 400)}${c.text.length > 400 ? ' …' : ''}`);
 } else if (cmd === 'film-schedule') {
   // film-schedule <film> <v|h> <videoId> <ISO> [--dry]: a new film's upload (motion/films/<film>/youtube.json) → title, description,
   // tags, category Education, Korean, and scheduled public at <ISO> (private until then). 50 units.

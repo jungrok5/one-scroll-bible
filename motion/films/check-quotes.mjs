@@ -18,13 +18,23 @@ if (!L) { const out = execFileSync('node', [join(HERE, '..', 'narration', 'krv.m
 else { if (!L._yv) { console.error('i18n/' + lang + '.json has no "_yv" (YouVersion edition id)'); process.exit(1); }
   const out = execFileSync('node', [join(HERE, '..', '..', '.claude', 'skills', 'add-language', 'lib', 'fetch-verse.mjs'), String(L._yv), refs.join(',')], { encoding: 'utf8' });
   V = Object.fromEntries(out.split(/\r?\n/).filter(Boolean).map(l => { const [k, ...t] = l.split('\t'); return [k, t.join('\t')]; })); }
-const norm = x => x.replace(/[“”"‘’'«»]/g, '').replace(/\s+/g, '');
+// a line may name another source of the SAME edition when YouVersion's copy lacks the verse ("src": "ebible:pesOPV" —
+// 2026-11-01: YouVersion 136 (Persian Old Version) ends Malachi at 4:5); fetch-verse reads eBible.org for "ebible:<id>"
+const SRC = {};
+for (const l of Q.filter(q => q.src)) {
+  const out = execFileSync('node', [join(HERE, '..', '..', '.claude', 'skills', 'add-language', 'lib', 'fetch-verse.mjs'), l.src, expand(l.usfm).join(',')], { encoding: 'utf8' });
+  for (const line of out.split(/\r?\n/).filter(Boolean)) { const [k, ...t] = line.split('\t'); SRC[l.src + ' ' + k] = t.join('\t'); }
+}
+const verse = (l, u) => (l.src ? SRC[l.src + ' ' + u] : V[u]) || '';
+// case is ignored too: fetch-verse flattens small capitals (LORD/TUHAN/SENHOR print as Lord/Tuhan/Senhor), and the films keep
+// God's name as the Bible prints it (2026-11-01, id Isa 61:1 "Tuhan ALLAH … TUHAN")
+const norm = x => x.replace(/[“”"‘’'«»]/g, '').replace(/\s+/g, '').toLowerCase();
 let bad = 0;
 for (const l of Q) {
   if (!l.text) { console.log(l.id, l.usfm, 'MISSING text'); bad++; continue; }
-  const v = norm(expand(l.usfm).map(u => V[u] || '').join(' ')), parts = [...l.text.split(/\s*\/\s*|\s*…\s*/), ...(l.frags || [])].map(x => x.trim()).filter(Boolean);   // frags: pieces shown one by one, each verbatim
-  const miss = parts.filter(p => !v.includes(norm(p))), vmiss = l.voice && !v.includes(norm(l.voice)), hmiss = l.hl && !l.text.includes(l.hl);
+  const v = norm(expand(l.usfm).map(u => verse(l, u)).join(' ')), parts = [...l.text.split(/\s*\/\s*|\s*…\s*/), ...(l.frags || [])].map(x => x.trim()).filter(Boolean);   // frags: pieces shown one by one, each verbatim
+  const miss = parts.filter(p => !v.includes(norm(p))), vmiss = l.voice && !v.includes(norm(l.voice.replace(/\s*\/\s*/g, ' '))), hmiss = l.hl && !l.text.includes(l.hl);
   if (miss.length || vmiss || hmiss) bad++;
-  console.log(l.id, l.usfm, miss.length || vmiss || hmiss ? `MISMATCH ${JSON.stringify(miss)}${vmiss ? ' voice' : ''}${hmiss ? ' hl not in text' : ''}` : 'ok');
+  console.log(l.id, l.usfm + (l.src ? ` (${l.src})` : ''), miss.length || vmiss || hmiss ? `MISMATCH ${JSON.stringify(miss)}${vmiss ? ' voice' : ''}${hmiss ? ' hl not in text' : ''}` : 'ok');
 }
 process.exit(bad ? 1 : 0);

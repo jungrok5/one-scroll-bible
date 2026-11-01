@@ -25,7 +25,9 @@ Quotes (`kind: "quote"`): 01 MAL.4.6 · 05 HAB.2.3 · 06a DAN.2.32-33 · 18 LUK.
 1. **Scripture verbatim** from the site pack's Bible: `node .claude/skills/add-language/lib/fetch-verse.mjs <yv> MAL.4.5,MAL.4.6,…`
    (WebFetch is forbidden — it invents verses). Take the contiguous fragment that matches what the Korean line shows; `…`
    only where the Korean skips words. Line 01 is Mal 4:6 with a gap: first fragment / `…` / the last clause (the narrator reads
-   only the part after `…`) — keep that shape. God's name exactly as that Bible prints it.
+   only the part after `…`) — keep that shape. **The caption shows the part after the last `…` unless the line has `voice`** —
+   if that part does not start the "lest I come…" clause (verb-final languages leave a lone verb there), add `"voice"` = exactly
+   that clause, verbatim (see hi/bn/tr/fa). God's name exactly as that Bible prints it.
 2. **Narration prose**: translate from the Korean, faithful in meaning (en.json is the reviewed English rendering — use it to
    check meaning, don't paraphrase further). Natural, simple, for Christians who don't know the Bible well. Gentle tone.
    Keep `/` where a long line should break (captions show it as a line break) — at most two short lines per `/` piece.

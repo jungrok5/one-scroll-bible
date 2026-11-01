@@ -644,7 +644,23 @@
      "captions": [
       "en",
       "es",
-      "pt-BR"
+      "pt-BR",
+      "de",
+      "zh-Hans",
+      "zh-Hant",
+      "ja",
+      "fr",
+      "ru",
+      "ar",
+      "hi",
+      "id",
+      "vi",
+      "th",
+      "tl",
+      "bn",
+      "sw",
+      "ta",
+      "fa"
      ],
      "thumbnails": {
       "en": "A-glass-en",
@@ -663,11 +679,28 @@
      "captions": [
       "en",
       "es",
-      "pt-BR"
+      "pt-BR",
+      "de",
+      "zh-Hans",
+      "zh-Hant",
+      "ja",
+      "fr",
+      "ru",
+      "ar",
+      "hi",
+      "id",
+      "vi",
+      "th",
+      "tl",
+      "bn",
+      "sw",
+      "ta",
+      "fa"
      ],
      "thumbnail": "V-A-glass-en (API)"
     },
-    "todo_on_publish": "Short: related video = the horizontal one (Studio, once public); end screen on the horizontal (subscribe + a video); pinned comment only if a reviewed text exists"
+    "todo_on_publish": "Short: related video = the horizontal one (Studio, once public); end screen on the horizontal (subscribe + a video); pinned comment only if a reviewed text exists",
+    "captions_note": "2026-11-01: 19 caption languages (16 added through Studio — motion/youtube/studio-caption.js, no API quota), English-narration timing (sound/<lang>.en-timing.vtt); automatic en captions removed (yt-api asr-off)."
    }
   }
  },
@@ -693,6 +726,29 @@
   },
   "instagram": "instagram.com web (Business Suite caps reels at 90 s): scheduled 2026-10-31 20:30 KST with cover V-A-glass + caption (out/insta/reels-silence400/plan.json); the first, wrong-font reel was moved to 2026-11-07 and then deleted by the owner (2026-10-31); went live 20:30 as reel DfKDgZZn8wv (corrected font) — the only 400년 reel on the profile",
   "threads": "scheduled 2026-10-31 20:30 KST (threads-reels.js, out/insta/reels-silence400/threads.json)",
-  "published": "2026-10-31 20:41 KST checked: both public; pinned comment (upload.md block) posted + pinned as @one-scroll-bible on both; horizontal end screen (wrEYqvOU1O8 + subscribe) and top captions seen at the end"
+  "published": "2026-10-31 20:41 KST checked: both public; pinned comment (upload.md block) posted + pinned as @one-scroll-bible on both; horizontal end screen (wrEYqvOU1O8 + subscribe) and top captions seen at the end",
+  "captions": [
+   "ko",
+   "en",
+   "es",
+   "pt-BR",
+   "de",
+   "zh-Hans",
+   "zh-Hant",
+   "ja",
+   "fr",
+   "ru",
+   "ar",
+   "hi",
+   "id",
+   "vi",
+   "th",
+   "tl",
+   "bn",
+   "sw",
+   "ta",
+   "fa"
+  ],
+  "captions_note": "2026-11-01: the Korean video and Short carry every reviewed caption language on the Korean narration timing (sound/<lang>.ko-timing.vtt; en/es/pt-BR via the API, the other 16 through Studio); automatic ko captions removed."
  }
 }

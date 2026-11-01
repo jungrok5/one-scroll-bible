@@ -1,6 +1,9 @@
 {
  "dur": 179.4,
  "note": "film-time start (s) of each narration take; climax beats are left voice-free (title 18.8, light run 104.9–110.6, '오늘' sync 143.1, flare 156.2)",
+ "quiet": [[18.75, 19.4], [104.9, 110.6], [156.0, 156.8]],
+ "sync_start": { "25": 143.0 },
+ "sync_note": "other languages (fit-voice.mjs): quiet = no narration in these spans; sync_start = start of a line whose first word is the synced word (Luke 4:21 'Today' / 'Hoy' / 'Hoje' on the 143.1 beat)",
  "at": {
   "10": 59.8,
   "15": 69.5,

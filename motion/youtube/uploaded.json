@@ -629,6 +629,46 @@
     "wU_58Q6TCag",
     "2dlq-5_x6v4"
    ]
+  },
+  "films": {
+   "silence400": {
+    "note": "「침묵의 400년」 international video (films README §4, 2026-11-01): ONE English-text video per orientation; es + pt-BR as audio tracks (Studio → Languages → Audio, files motion/out/silence400-<lang>-narr.mp3) + captions (sound/<lang>.vtt, API) + localized title/description (API) + per-language thumbnails (horizontal only — Shorts have none). Text: motion/films/silence400/youtube-intl.json, review motion/reviews/film-silence400-yt.md. Uploaded private 2026-11-01; public only with the owner's OK.",
+    "h": {
+     "id": "oYKz_HHI8yw",
+     "privacy": "private",
+     "default": "en",
+     "audio": [
+      "es",
+      "pt-BR"
+     ],
+     "captions": [
+      "en",
+      "es",
+      "pt-BR"
+     ],
+     "thumbnails": {
+      "en": "A-glass-en",
+      "es": "A-glass-es",
+      "pt-BR": "A-glass-pt-BR"
+     }
+    },
+    "v": {
+     "id": "cbg5Z5xg65I",
+     "privacy": "private",
+     "default": "en",
+     "audio": [
+      "es",
+      "pt-BR"
+     ],
+     "captions": [
+      "en",
+      "es",
+      "pt-BR"
+     ],
+     "thumbnail": "V-A-glass-en (API)"
+    },
+    "todo_on_publish": "Short: related video = the horizontal one (Studio, once public); end screen on the horizontal (subscribe + a video); pinned comment only if a reviewed text exists"
+   }
   }
  },
  "silence400": {

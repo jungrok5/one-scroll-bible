@@ -87,7 +87,7 @@
     // landscape: one line if it fits, else the whole sentence re-broken into even lines (the '/' breaks are for portrait)
     const txt = txt0, mw = P.W * .72, segs = txt.split(/\s*\/\s*/);
     const lines = P.ori === 'v' ? F.wrapEven(ctx, txt, F.vw())
-      : segs.length <= 2 ? F.wrap(ctx, txt, mw, true)                       // one line, or its own two natural lines
+      : segs.length <= 2 ? (ctx.measureText(segs.join(' ')).width <= mw ? [segs.join(' ')] : F.wrapEven(ctx, txt, mw))   // one line, or its own natural lines (a piece too wide for the frame re-broken evenly — no one-word line)
       : F.wrapEven(ctx, segs.join(' '), mw); ctx.restore();                   // three or more pieces: two even lines
     const lh = size * 1.55, rise = o.still ? 0 : (1 - P.eo(P.clamp((t - a) / 1.2))) * 10, y = (o.y != null ? o.y - (lines.length - 1) * lh / 2 : F.subBottom() - (lines.length - 1) * lh) + rise;
     F.block(ctx, lines, o.y != null ? P.W / 2 : F.cx(), y, { size, weight: 600, alpha: k, color: o.color || '#f3ece0', shadow: 'rgba(0,0,0,.85)', shadowBlur: 22, lh: 1.55 });

@@ -1,0 +1,114 @@
+{
+ "note": "International channel (@bibleinonescroll), films README §4: ONE English-text video per orientation; Spanish and Brazilian Portuguese ride on it as audio tracks (Studio → Languages → Audio) + captions + localized title/description. Every sentence here is a reviewed one — the title (T1), narration lines 03 + 07b, the end card (E1), on-screen labels as chapters, the book names of each language pack, the Scripture notice of each pack's legal line — except the AI line, which adds 'the narration voice' to the reviewed 'scenes drawn in code; music and sound effects were made with ElevenLabs' (native review: motion/reviews/film-silence400-yt.md).",
+ "default_language": "en",
+ "audio_tracks": {
+  "es": "out/silence400-es-narr.mp3",
+  "pt-BR": "out/silence400-pt-BR-narr.mp3"
+ },
+ "captions": {
+  "en": "films/silence400/sound/en.vtt",
+  "es": "films/silence400/sound/es.vtt",
+  "pt-BR": "films/silence400/sound/pt-BR.vtt"
+ },
+ "v": {
+  "path": "out/silence400-en-v-narr.mp4",
+  "file": "silence400-en-v-narr.mp4"
+ },
+ "h": {
+  "path": "out/silence400-en-h-narr.mp4",
+  "file": "silence400-en-h-narr.mp4"
+ },
+ "tags": {
+  "en": [
+   "Bible",
+   "Bible story",
+   "The Silent 400 Years",
+   "intertestamental period",
+   "Malachi",
+   "Daniel 2",
+   "Septuagint",
+   "John the Baptist",
+   "Bible animation",
+   "400 years of silence",
+   "400 silent years"
+  ],
+  "es": [
+   "Biblia",
+   "historia de la Biblia",
+   "Los 400 años de silencio",
+   "Malaquías",
+   "Daniel 2",
+   "Septuaginta",
+   "Juan el Bautista",
+   "animación bíblica"
+  ],
+  "pt-BR": [
+   "Bíblia",
+   "história da Bíblia",
+   "Os 400 anos de silêncio",
+   "Malaquias",
+   "Daniel 2",
+   "Septuaginta",
+   "João Batista",
+   "animação bíblica"
+  ]
+ },
+ "text": {
+  "en": {
+   "title": "The Silent 400 Years",
+   "intro": "In your Bible, it is just one page to the next book. But in the 400 years between, no new word came from heaven.\nThrough those 400 years, God was preparing the world, step by step.",
+   "read": "📖 Read this story in your Bible\nMalachi 4:5–6 · Habakkuk 2:3 · Daniel 2 · Luke 1:5–17 · Galatians 4:4 · Luke 19:10 · Luke 4:16–21 · 1 Corinthians 15:3–4 · Acts 13:14–17",
+   "site": "one-scroll-bible.com",
+   "legal": "Scripture quotations are from the ESV® Bible (The Holy Bible, English Standard Version®), © 2001 by Crossway, a publishing ministry of Good News Publishers. ESV Text Edition: 2025. The ESV text may not be quoted in any publication made available to the public by a Creative Commons license. The ESV may not be translated in whole or in part into any other language. Used by permission. All rights reserved.",
+   "ai": "The scenes are animated in code; the narration voice, music and sound effects were generated with ElevenLabs (AI).",
+   "chapters": [
+    "0:00 The last book of the Old Testament · Malachi",
+    "0:30 Daniel 2 · King Nebuchadnezzar’s dream",
+    "0:44 Greek · Roman roads · Synagogues",
+    "1:18 400 years later, an angel speaks to Zechariah",
+    "1:50 The fullness of time",
+    "2:09 The synagogue in Nazareth",
+    "2:31 Paul’s missionary journeys",
+    "2:46 He is at work in your waiting too"
+   ]
+  },
+  "es": {
+   "title": "Los 400 años de silencio",
+   "intro": "En la Biblia, apenas una página de diferencia. Pero en los 400 años de por medio no se oyó ninguna palabra nueva del cielo.\nDurante esos 400 años, Dios fue preparando el mundo, paso a paso.",
+   "read": "📖 Lee esta historia en tu Biblia\nMalaquías 4:5–6 · Habacuc 2:3 · Daniel 2 · Lucas 1:5–17 · Gálatas 4:4 · Lucas 19:10 · Lucas 4:16–21 · 1 Corintios 15:3–4 · Hechos 13:14–17",
+   "site": "one-scroll-bible.com",
+   "legal": "El texto bíblico ha sido tomado de la versión Reina-Valera © 1960 Sociedades Bíblicas en América Latina; © renovado 1988 Sociedades Bíblicas Unidas. Utilizado con permiso. Reina-Valera 1960® es una marca registrada de Sociedades Bíblicas Unidas, y se puede usar solamente bajo licencia.",
+   "ai": "Las escenas están dibujadas con código; la voz de la narración, la música y los efectos de sonido se crearon con ElevenLabs (IA).",
+   "chapters": [
+    "0:00 El último libro del Antiguo Testamento · Malaquías",
+    "0:30 Daniel 2 · El sueño del rey Nabucodonosor",
+    "0:44 Griego · Caminos romanos · Sinagogas",
+    "1:18 400 años después, el ángel habla a Zacarías",
+    "1:50 El cumplimiento del tiempo",
+    "2:09 La sinagoga de Nazaret",
+    "2:31 Los viajes misioneros de Pablo",
+    "2:46 Dios también obra mientras tú esperas"
+   ]
+  },
+  "pt-BR": {
+   "title": "Os 400 anos de silêncio",
+   "intro": "Na Bíblia, apenas uma página de distância. Mas, nesses 400 anos, nenhuma palavra nova veio do céu.\nDurante esses 400 anos, Deus foi preparando o mundo, passo a passo.",
+   "read": "📖 Leia esta história na sua Bíblia\nMalaquias 4:5–6 · Habacuque 2:3 · Daniel 2 · Lucas 1:5–17 · Gálatas 4:4 · Lucas 19:10 · Lucas 4:16–21 · 1 Coríntios 15:3–4 · Atos 13:14–17",
+   "site": "one-scroll-bible.com",
+   "legal": "Citações bíblicas: Almeida Revista e Corrigida (ARC) — citadas com indicação da fonte; quaisquer direitos sobre essa tradução permanecem com a editora dessa tradução.",
+   "ai": "As cenas são desenhadas com código; a voz da narração, a música e os efeitos sonoros foram criados com o ElevenLabs (IA).",
+   "chapters": [
+    "0:00 O último livro do Antigo Testamento · Malaquias",
+    "0:30 Daniel 2 · O sonho do rei Nabucodonosor",
+    "0:44 Grego · Estradas romanas · Sinagogas",
+    "1:18 400 anos depois, um anjo fala com Zacarias",
+    "1:50 A plenitude dos tempos",
+    "2:09 A sinagoga de Nazaré",
+    "2:31 As viagens missionárias de Paulo",
+    "2:46 Deus age também enquanto você espera"
+   ]
+  }
+ },
+ "license": "youtube",
+ "reviews": "2026-11-01 native review en/es/pt-BR (agents, report only): all deployable, Scripture verbatim (fetch-verse). Applied: pt-BR 24b/25c \"há mais de 700 anos\" → \"mais de 700 anos antes\" (i18n + narration re-take), chapter titles, tags, pt legal wording, standard licence. Kept (identical to the reviewed film lines): intro sentences."
+}

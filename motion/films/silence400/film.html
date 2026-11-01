@@ -122,7 +122,11 @@ function partOpening(ctx, t) {
   Film.sub(ctx, '02', t, 8.8, 11.4);
   // 03 in total silence on black
   { const k = win(t, 11.6, 17.0, .6, .6); if (k > 0) {   // its own breaks: portrait one piece a line, landscape the first two pieces together
-    const sg = Film.text('03').split(/\s*\/\s*/), size = V ? 52 : 54, lines = V || sg.length < 3 ? sg : [sg[0] + ' ' + sg[1], ...sg.slice(2)], lh = size * 1.55;
+    const sg = Film.text('03').split(/\s*\/\s*/), size = V ? 52 : 54, lh = size * 1.55, mw = V ? W * .8 : W * .72;
+    ctx.save(); ctx.font = Film.font(size, 600);   // a longer translation: a piece wider than the frame wraps (Korean fits as it is)
+    const fits = a => a.every(l => ctx.measureText(l).width <= mw);
+    let lines = V || sg.length < 3 ? sg : [sg[0] + ' ' + sg[1], ...sg.slice(2)];
+    if (!fits(lines)) lines = sg.flatMap(s => Film.wrapEven(ctx, s, mw)); ctx.restore();
     Film.block(ctx, lines, W / 2, (V ? H * .47 : H * .5) - (lines.length - 1) * lh / 2 + (1 - eo(clamp((t - 11.6) / 1.2))) * 10, { size, weight: 600, alpha: k, color: '#f3ece0', shadow: 'rgba(0,0,0,.85)', shadowBlur: 22, lh: 1.55 }); } }
   // title
   const ta = win(t, 17.2, 21.3, 1.0, 1.0);

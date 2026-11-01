@@ -5,7 +5,9 @@
 # the duration badge. Pictures in src/ are frames of the film without captions:
 #   RENDER_QUERY=clean=1 node motion/render.mjs h --page films/silence400/film.html --stills 122,113.6,97.5
 # Shorts take no custom thumbnail on this channel yet (2026-10-31): in Studio pick the title frame (0:20 "침묵의 400년").
-import os, urllib.request
+#   py motion/films/silence400/thumbs/make.py --lang en|es|pt-BR   → A-glass-<lang>.jpg + V-A-glass-<lang>.jpg only: the
+#   international video's thumbnails (films README §4) — the words are the film's reviewed title T1 split round the number
+import os, sys, urllib.request
 from PIL import Image, ImageDraw, ImageFont, ImageFilter, ImageEnhance
 HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.dirname(os.path.dirname(os.path.dirname(HERE)))
 FONTS = os.path.join(ROOT, 'out', 'fonts'); os.makedirs(FONTS, exist_ok=True)
@@ -14,6 +16,10 @@ GOLD = (255, 204, 80); WHITE = (255, 255, 255); INK = (12, 10, 8); W, H = 1280, 
 TOP, BIG, TAIL = '구약과 신약 사이', '400년', '무슨 일이 있었나'
 # picture, crop focus (0..1 of width — the subject sits right of the text), brightness, zoom
 PICS = [('A-glass', 'h-122.jpg', .62, 1.08, 1.35), ('B-statue', 'h-113_6.jpg', .5, 1.12, 1.12), ('C-strike', 'h-115_2.jpg', .5, 1.12, 1.12)]
+# T1 per language (i18n/<lang>.json), as top line / number / bottom line
+T1 = {'en': ('THE SILENT', '400', 'YEARS'), 'es': ('LOS', '400', 'AÑOS DE SILENCIO'), 'pt-BR': ('OS', '400', 'ANOS DE SILÊNCIO')}
+LANG = sys.argv[sys.argv.index('--lang') + 1] if '--lang' in sys.argv else None
+if LANG: TOP, BIG, TAIL = T1[LANG]
 
 def font(size):
     p = os.path.join(FONTS, 'NotoSansKR.ttf')
@@ -44,10 +50,11 @@ def make(name, src, focus, bright, z):
     out = os.path.join(HERE, name + '.jpg'); im.convert('RGB').save(out, quality=92); print(out)
     return im
 
-ims = [make(*p) for p in PICS]
-sheet = Image.new('RGB', (3 * 340 + 40, 191 + 20), (24, 24, 24))   # the phone feed size
-for i, im in enumerate(ims): sheet.paste(im.convert('RGB').resize((340, 191), Image.LANCZOS), (10 + i * 350, 10))
-sheet.save(os.path.join(HERE, 'sheet.jpg'), quality=90)
+ims = [] if LANG else [make(*p) for p in PICS]
+if ims:
+  sheet = Image.new('RGB', (3 * 340 + 40, 191 + 20), (24, 24, 24))   # the phone feed size
+  for i, im in enumerate(ims): sheet.paste(im.convert('RGB').resize((340, 191), Image.LANCZOS), (10 + i * 350, 10))
+  sheet.save(os.path.join(HERE, 'sheet.jpg'), quality=90)
 
 # 9:16 covers (1080×1920): Instagram Reels cover, the Shorts thumbnail once the channel gets the button, the site's /film poster.
 # The picture sits in the top part of the vertical frames; the words go in the dark band under it, all inside the middle 3:4
@@ -72,6 +79,8 @@ def make_v(name, src, dy, z):
     out = os.path.join(HERE, name + '.jpg'); im.convert('RGB').save(out, quality=92); print(out)
     return im
 
+if LANG:   # the international video: picture A only, landscape (main thumbnail / per-language) and portrait (the Short)
+    make('A-glass-' + LANG, *PICS[0][1:]); make_v('V-A-glass-' + LANG, *VPICS[0][1:]); sys.exit(0)
 vims = [make_v(*p) for p in VPICS]
 vsheet = Image.new('RGB', (3 * 240 + 40, 427 + 20), (24, 24, 24))   # the Shorts / Reels grid size
 for i, im in enumerate(vims): vsheet.paste(im.convert('RGB').resize((240, 427), Image.LANCZOS), (10 + i * 250, 10))

@@ -13,7 +13,7 @@
 | 2 | 시나리오·원고(한국어, 개역개정 인용) + 화풍 | 3절, 7절(motion-skills 키트), `films/<이름>/script.json` | **관리자 컨펌**(8절 1) |
 | 3 | 관점 검수 → 시청자 리뷰 | 8절 2·3 | 리뷰는 보고만, 관리자가 고름 |
 | 4 | 그리기·렌더(세로·가로) | `render.mjs`, 밀착 시트·720p 시안(7절, 글꼴 확인) | 관리자·가족 시안 확인(8절 4) |
-| 5 | 소리: 한국어 해설·음악·효과음 → 섞기 | `sound/place.json`·`cues.json`, `sound.mjs <이름> v|h` → `ko.vtt`(위쪽 자막) | |
+| 5 | 소리: 한국어 해설·음악·효과음 → 섞기 | `sound/place.json`·`cues.json`, `sound.mjs <이름> v`·`h` → `ko.vtt`(위쪽 자막) | |
 | 6 | 올릴 글: 제목·설명·태그·읽기 목록·고정 댓글·썸네일 | `films/<이름>/upload.md`, `youtube.json`, `thumbs/make.py` | |
 | 7 | 한국어 채널 올리기 + 예약(주일 피함) | 스튜디오 `__osbUpload` → `yt-api film-schedule`, 자막 `caption-file`, 9b 점검표 전부 | **공개 시각은 관리자 OK** |
 | 8 | 인스타·스레드 같은 시각 | `motion/social/meta-reels.js`·`threads-reels.js` | |

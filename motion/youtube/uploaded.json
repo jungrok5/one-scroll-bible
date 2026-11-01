@@ -4,7 +4,8 @@
   "ko": {
    "id": "66VfBSXxAs8",
    "status": "public",
-   "note": "original upload 2026-10-20; description + thumbnail test (A/B/D) updated 2026-10-22; description UTM 2026-10-23; pinned comment faq.h + home#faq 2026-10-23 (first respond.h3 #respond, changed same day); Korean links pinned to ?lang=ko 2026-10-23; category Education 2026-10-23; tags added (manifest ko, 30) 2026-10-23; caption track film-h.srt via API 2026-10-23; 2026-10-29 description: \"🔊 목소리로 듣는 해설판\" link to the narrated cut (film ko-narr)"
+   "note": "original upload 2026-10-20; description + thumbnail test (A/B/D) updated 2026-10-22; description UTM 2026-10-23; pinned comment faq.h + home#faq 2026-10-23 (first respond.h3 #respond, changed same day); Korean links pinned to ?lang=ko 2026-10-23; category Education 2026-10-23; tags added (manifest ko, 30) 2026-10-23; caption track film-h.srt via API 2026-10-23; 2026-10-29 description: \"🔊 목소리로 듣는 해설판\" link to the narrated cut (film ko-narr)",
+   "captions_foreign": "2026-11-01: the first film's on-screen-text captions (motion/subs/<lang>/film-h.srt — same timing as Korean) in 18 languages via Studio: es pt-BR fr de ru id zh-Hans zh-Hant ja ar hi vi th tl bn sw fa ta. en pending (Studio counts the automatic en track as published) — API on 11/2, then asr-off."
   },
   "ko-vertical": {
    "id": "3X5HbQKBpRI",

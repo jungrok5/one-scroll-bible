@@ -4,7 +4,9 @@
 > 보는 법: 스튜디오 분석(가장 최신, 연령·기기·유입·A/B — 브라우저) + `node motion/youtube/yt-api.mjs report <id…> [--from D]`
 > (YouTube Analytics API: 기기·연령·유입·10% 간격 시청 유지 — 2~3일 늦게 잡힘, 할당량 거의 안 씀).
 > 국제 채널(UCOI5LbYpQGgHkcbMEStvnlw)은 언어별로. 인스타그램(instagram.com 인사이트: 릴스별 조회·도달·저장·공유·프로필 링크 클릭)과
-> 스레드(threads.com 인사이트), 사이트 GA4(analytics.google.com `?authuser=1`)는 유입 출처만 — 2026-10-31부터 정기 분석(월·목)에 포함.
+> 스레드(threads.com 인사이트), 사이트 GA4(analytics.google.com `?authuser=1` → 속성 `#/a52565752p541891245`, 국가 표 = `reports/explorer?r=user-demographics-detail`)는
+> 유입 출처만 — 2026-10-31부터 정기 분석(월·목)에 포함. GA4의 싱가포르·폴란드·네덜란드 사용자는 참여 0인 봇이다(10/4–31: 실제 참여는 거의 한국·미국).
+> 스튜디오 분석 화면은 `get_page_text`가 비어 나온다 — 자바스크립트로 `document.body.innerText`를 읽는다.
 
 ## 볼 영상
 

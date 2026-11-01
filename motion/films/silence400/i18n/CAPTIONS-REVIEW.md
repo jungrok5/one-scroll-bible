@@ -23,3 +23,6 @@ Check:
 
 Report per finding: `[HIGH/MED/LOW] <line id>  current: … / problem: … / suggest: …` (for Scripture, give the fetch-verse text).
 End with counts and a verdict: "deployable" (no unresolved HIGH/MED) or "recommend DEFER". If nothing: CLEAN.
+
+**Re-check after a HIGH/MED fix** (owner decision 2026-11-01): the main session applies the fix, then a fresh agent runs this
+prompt limited to the fixed line ids (plus check-quotes) and the earlier finding; only a "deployable" re-check lets it go up.

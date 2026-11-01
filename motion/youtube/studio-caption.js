@@ -5,7 +5,8 @@
 // Trusted Types policy), then: window.__osbCapResult = null; __osbCaption('de', 'films/silence400/sound/de.ko-timing.vtt')
 // and read window.__osbCapResult (the javascript tool times out after 45 s). Files come from the local server (serve.mjs).
 // A language whose row already shows a published caption is skipped. Nothing is published except that caption track.
-window.__osbCaption = async (L, path, { publish = true } = {}) => {
+// The row also counts an automatic (ASR) track as "1개 게시됨" — pass { force: true } to add a manual track to such a language.
+window.__osbCaption = async (L, path, { publish = true, force = false } = {}) => {
   const S = 'http://127.0.0.1:8765/', sleep = ms => new Promise(r => setTimeout(r, ms));
   const LABEL = { 'zh-Hans': '중국어(간체)', 'zh-Hant': '중국어(번체)', ja: '일본어', fr: '프랑스어', de: '독일어', ru: '러시아어', ar: '아랍어',
     hi: '힌디어', id: '인도네시아어', vi: '베트남어', th: '태국어', tl: ['필리핀어', '타갈로그어'], bn: ['벵골어', '뱅골어'], sw: ['스와힐리어', '스와힐리'],
@@ -20,7 +21,7 @@ window.__osbCaption = async (L, path, { publish = true } = {}) => {
     HTMLInputElement.prototype.click = function () { if (this.type === 'file') { window.__lastFileInput = this; return; } return orig.call(this); }; window.__osbClickPatched = true; }
   // 1. the language's row (already published → skip), or add the language
   const row = [...document.querySelectorAll('ytgn-video-translation-row')].find(r => labels.some(l => txt(r).startsWith(l)));
-  if (row && /개 게시됨/.test(txt(row))) return { L, skipped: 'already has a published caption' };
+  if (row && !force && /개 게시됨/.test(txt(row))) return { L, skipped: 'already has a published caption (automatic ones count too — { force: true })' };
   if (row) row.click();
   else {
     const add = byText('ytcp-button, button', '언어 추가'); if (!add) return { L, error: 'no "add language" button' };

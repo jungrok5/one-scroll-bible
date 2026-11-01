@@ -7,6 +7,7 @@
 //   node motion/youtube/yt-api.mjs status [<lang…>]           → public / scheduled / private + views per language (film, Shorts)
 //   node motion/youtube/yt-api.mjs stats [<lang…>] [--from D]  → YouTube Analytics per language: views, minutes, avg % viewed
 //   node motion/youtube/yt-api.mjs playlist-add <playlistId> <videoId…> → append (playlist ids in uploaded.json "playlists")
+//   node motion/youtube/yt-api.mjs privacy public|private|unlisted <id…>  (owner's OK first) · delete <id…> [--yes] (owner's OK, irreversible)
 //   node motion/youtube/yt-api.mjs upload <lang> film|<n…> [--publish-at ISO] [--dry] → videos.insert from the upload sheet
 //        (locked private until the API audit passes — motion/youtube/API-AUDIT.md)
 // Why captions: the film has no speech, so YouTube makes no captions; its text is burned into the picture, which search
@@ -218,6 +219,23 @@ if (cmd === 'whoami') {
       catch (e) { console.log(`${id}: could not remove automatic ${c.snippet.language} — ${e.message}`); }
     }
   }
+} else if (cmd === 'privacy') {
+  // privacy public|private|unlisted <videoId…>: change a video's visibility now (keeps the rest of its status; clears a schedule).
+  // Making a video public is an owner decision — run only after the owner's OK. 50 units each (+1 to read)
+  const [to, ...ids] = rest; if (!['public', 'private', 'unlisted'].includes(to) || !ids.length) { console.log('usage: privacy public|private|unlisted <id…>'); process.exit(1); }
+  const j = await api('videos?part=status&id=' + ids.join(','));
+  for (const v of j.items || []) {
+    const s = { ...v.status, privacyStatus: to }; for (const k of ['publishAt', 'uploadStatus', 'failureReason', 'rejectionReason']) delete s[k];
+    const r = await api('videos?part=status', { method: 'PUT', body: JSON.stringify({ id: v.id, status: s }) }); console.log(v.id, v.status.privacyStatus, '→', r.status.privacyStatus);
+  }
+} else if (cmd === 'delete') {
+  // delete <videoId…> --yes: delete videos for good (cannot be undone) — ONLY with the owner's explicit OK for those ids.
+  // Prints each video's title/privacy/views first; without --yes it stops there. 50 units each
+  const yes = rest.includes('--yes'), ids = rest.filter(a => a !== '--yes');
+  const j = await api('videos?part=snippet,status,statistics&id=' + ids.join(','));
+  for (const v of j.items || []) console.log(v.id, v.status.privacyStatus, 'views', v.statistics.viewCount, '|', v.snippet.channelTitle, '|', v.snippet.title);
+  if (!yes) { console.log('(dry run — add --yes to delete)'); process.exit(0); }
+  for (const v of j.items || []) { await api('videos?id=' + v.id, { method: 'DELETE' }); console.log('deleted', v.id); }
 } else if (cmd === 'unschedule') {
   // unschedule <videoId…>: cancel a scheduled publish — the video stays private (nothing is deleted; the owner deletes). 50 units each
   for (const id of rest) { await api('videos?part=status', { method: 'PUT', body: JSON.stringify({ id, status: { privacyStatus: 'private', selfDeclaredMadeForKids: false, containsSyntheticMedia: false } }) }); console.log(id, '→ private, schedule cancelled'); }

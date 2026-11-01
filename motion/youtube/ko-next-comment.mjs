@@ -15,11 +15,16 @@ const shorts = man.languages.ko.shorts, ko = up.shorts.ko;
 const name = s => { const t = s.title.replace(/\s*\d+\/21$/, ''); const i = t.lastIndexOf(' — '); return i >= 0 ? t.slice(i + 3) : t; };
 export const text = n => n >= 21
   ? `마지막 편입니다. 끝까지 함께해 주셔서 감사합니다 🙏\n1편부터 다시 보기: ${PL}\n전체 영상(14분, 목소리 해설): ${FILM}`
-  : `▶ 다음 편: ${n + 1}/21 ${name(shorts[n])} (매일 저녁 7시에 한 편씩)\n1편부터 순서대로 보기: ${PL}`;   // no "tomorrow": the comment stays true later
+  : `▶ 다음 편: ${n + 1}/21 ${name(shorts[n])} (주일을 뺀 매일 저녁 7시에 한 편씩)\n1편부터 순서대로 보기: ${PL}`;   // no "tomorrow": the comment stays true later
 
 const args = process.argv.slice(2), dry = args.includes('--dry');
 let ns = args.filter(a => /^\d+$/.test(a)).map(Number);
-if (args.includes('today')) ns.push(Math.floor((Date.now() + 9 * 3600e3) / 864e5) - Math.floor(Date.parse(ko.first_day + 'T00:00:00Z') / 864e5) + 1);
+// today: the Short whose date (shorts.ko.dates, written by ko-skip-sundays.mjs — nothing goes public on the Lord's Day) is today in
+// Korea; before those dates existed, day n = first_day + n − 1
+if (args.includes('today')) { const today = new Date(Date.now() + 9 * 3600e3).toISOString().slice(0, 10), hit = Object.entries(ko.dates || {}).find(([, d]) => d === today);
+  if (hit) ns.push(+hit[0]);
+  else if (!Object.keys(ko.dates || {}).length) ns.push(Math.floor((Date.now() + 9 * 3600e3) / 864e5) - Math.floor(Date.parse(ko.first_day + 'T00:00:00Z') / 864e5) + 1);
+  else { console.log(`${today}: no Korean Short goes public today (Lord's Day or series over)`); process.exit(0); } }
 if (!ns.length) { console.log('usage: ko-next-comment.mjs <n…>|today [--dry]'); process.exit(1); }
 
 const e = process.env;

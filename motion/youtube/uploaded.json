@@ -116,7 +116,7 @@
   "ko": {
    "time_kst": "19:00",
    "first_day": "2026-10-24",
-   "note": "subscriber notification on (Korean); description UTM 2026-10-23 (all 21; schedule + related video re-checked); links ?lang=ko 2026-10-23; 2026-10-29: Shorts 7–21 replaced by the narrated cut (motion/out/release-narr, AI voice line in the description, related video = the narrated film wrEYqvOU1O8, same schedule, category 27) — the music ones are in music_ids, set to private (schedule cancelled, not deleted); playlist items swapped in place",
+   "note": "subscriber notification on (Korean); description UTM 2026-10-23 (all 21; schedule + related video re-checked); links ?lang=ko 2026-10-23; 2026-10-29: Shorts 7–21 replaced by the narrated cut (motion/out/release-narr, AI voice line in the description, related video = the narrated film wrEYqvOU1O8, same schedule, category 27) — the music ones are in music_ids, set to private (schedule cancelled, not deleted); playlist items swapped in place; 2026-11-01: no publishing on the Lord's Day (owner) — Shorts 9–21 moved to skip Sundays (11/1, 11/8, 11/15): 9 = 11/2 … 21 = 11/16, same 19:00; Instagram reels and Threads posts moved the same way. dates = each Short's public day (KST)",
    "ids": {
     "10": "0rdPczV5gqA",
     "11": "mosfXiuZ6pA",
@@ -166,6 +166,29 @@
     "07": "t04z72YSKfw",
     "08": "sVNVHUNPGwE",
     "09": "tdbvPVsBnGU"
+   },
+   "dates": {
+    "1": "2026-10-24",
+    "2": "2026-10-25",
+    "3": "2026-10-26",
+    "4": "2026-10-27",
+    "5": "2026-10-28",
+    "6": "2026-10-29",
+    "7": "2026-10-30",
+    "8": "2026-10-31",
+    "9": "2026-11-02",
+    "10": "2026-11-03",
+    "11": "2026-11-04",
+    "12": "2026-11-05",
+    "13": "2026-11-06",
+    "14": "2026-11-07",
+    "15": "2026-11-09",
+    "16": "2026-11-10",
+    "17": "2026-11-11",
+    "18": "2026-11-12",
+    "19": "2026-11-13",
+    "20": "2026-11-14",
+    "21": "2026-11-16"
    }
   },
   "en": {

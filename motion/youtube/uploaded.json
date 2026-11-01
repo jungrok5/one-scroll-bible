@@ -635,7 +635,7 @@
     "note": "「침묵의 400년」 international video (films README §4, 2026-11-01): ONE English-text video per orientation; es + pt-BR as audio tracks (Studio → Languages → Audio, files motion/out/silence400-<lang>-narr.mp3) + captions (sound/<lang>.vtt, API) + localized title/description (API) + per-language thumbnails (horizontal only — Shorts have none). Text: motion/films/silence400/youtube-intl.json, review motion/reviews/film-silence400-yt.md. Uploaded private 2026-11-01; public only with the owner's OK.",
     "h": {
      "id": "oYKz_HHI8yw",
-     "privacy": "private",
+     "privacy": "public",
      "default": "en",
      "audio": [
       "es",
@@ -670,7 +670,7 @@
     },
     "v": {
      "id": "cbg5Z5xg65I",
-     "privacy": "private",
+     "privacy": "public",
      "default": "en",
      "audio": [
       "es",
@@ -699,8 +699,9 @@
      ],
      "thumbnail": "V-A-glass-en (API)"
     },
-    "todo_on_publish": "Short: related video = the horizontal one (Studio, once public); end screen on the horizontal (subscribe + a video); pinned comment only if a reviewed text exists",
-    "captions_note": "2026-11-01: 19 caption languages (16 added through Studio — motion/youtube/studio-caption.js, no API quota), English-narration timing (sound/<lang>.en-timing.vtt); automatic en captions removed (yt-api asr-off)."
+    "todo_on_publish": "Short: related video = the horizontal one (oYKz_HHI8yw) — NOT done yet: the Short's related-video picker has only the my-videos search, which found no video of the international channel on 2026-11-01 (index lag after publishing?) — retry; pinned comment only if a reviewed text exists",
+    "captions_note": "2026-11-01: 19 caption languages (16 added through Studio — motion/youtube/studio-caption.js, no API quota), English-narration timing (sound/<lang>.en-timing.vtt); automatic en captions removed (yt-api asr-off).",
+    "published": "2026-11-01 21:42 KST: both made public by the owner's OK (videos.update status, API); horizontal end screen saved in Studio — last 5 s (2:54.12–2:59.12) = English 14-min film MFH3Hj4V6KA bottom-left + subscribe bottom-right, below the end-card text (found via the picker's other-channel box with the video URL — the my-videos search returned nothing for this channel)"
    }
   }
  },
@@ -719,10 +720,6 @@
    "publish_at": "2026-10-31T11:30:00Z",
    "note": "Short; related video = wrEYqvOU1O8; custom cover V-A-glass (Studio now offers file upload for Shorts)",
    "pinned_comment": "UgzxcSKXxP6gNqA7l8V4AaABAg"
-  },
-  "old_ids": {
-   "h": "SiSsE3W61eM",
-   "v": "vJh-gAZl4UU"
   },
   "instagram": "instagram.com web (Business Suite caps reels at 90 s): scheduled 2026-10-31 20:30 KST with cover V-A-glass + caption (out/insta/reels-silence400/plan.json); the first, wrong-font reel was moved to 2026-11-07 and then deleted by the owner (2026-10-31); went live 20:30 as reel DfKDgZZn8wv (corrected font) — the only 400년 reel on the profile",
   "threads": "scheduled 2026-10-31 20:30 KST (threads-reels.js, out/insta/reels-silence400/threads.json)",
@@ -749,6 +746,7 @@
    "ta",
    "fa"
   ],
-  "captions_note": "2026-11-01: the Korean video and Short carry every reviewed caption language on the Korean narration timing (sound/<lang>.ko-timing.vtt; en/es/pt-BR via the API, the other 16 through Studio); automatic ko captions removed."
+  "captions_note": "2026-11-01: the Korean video and Short carry every reviewed caption language on the Korean narration timing (sound/<lang>.ko-timing.vtt; en/es/pt-BR via the API, the other 16 through Studio); automatic ko captions removed.",
+  "old_ids_deleted": "SiSsE3W61eM / vJh-gAZl4UU deleted 2026-11-01 (API videos.delete, owner's OK; both private, 0–1 views)"
  }
 }

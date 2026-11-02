@@ -11,6 +11,7 @@
 <script src="../lib-film.js"></script>
 <script src="kit-woodcut.js"></script>
 <script src="kit-silk.js"></script>
+<script src="kit-world3d.js"></script>
 <script src="kit-inkmap.js"></script>
 <script src="kit-cavesil.js"></script>
 <script>
@@ -229,8 +230,234 @@ function posterJourney(ctx, t) {
   infoBand(ctx, 1);
 }
 const HLPLACE = { nazareth: [35.30, 32.70], jerusalem: [35.23, 31.78], bethlehem: [35.20, 31.705] };
+
+// ---- 3C · the road (cinematic): the Judean wilderness at dusk; two small travellers on a long road; Bethlehem's lamps far ahead ----
+const RD = { xr: z => 26 * Math.sin(z * .006) + 14 * Math.sin(z * .017 + 1), BZ: 1480 };
+function rdH(x, z) { const d = x - RD.xr(z), ad = Math.abs(d);
+  let h = 2 * Math.sin(z * .01) + Math.min(70, .0028 * d * d) + 22 * (Pilot.fbm(x * .011 + 3, z * .011, 4) - .45) * ss(6, 50, ad) + 6 * (Pilot.fbm(x * .05, z * .05, 2) - .5) * ss(3, 20, ad);
+  const bx = RD.xr(RD.BZ) + 40; h += 78 * Math.exp(-((z - RD.BZ) ** 2) / (230 * 230) - ((x - bx) ** 2) / (320 * 320));   // the hill of Bethlehem
+  if (z > 1650) h += 50 * ss(1650, 2100, z) * (1 + .4 * Math.sin(x * .004));            // the hills beyond
+  return h; }
+let ROAD = null;
+function buildRoad() {
+  const rows = []; let z = -40; while (z < 2400) { rows.push(z); z += z < 160 ? 3 : 3 + (z - 160) * .022; }
+  const r = rng(13), houses = [], bx = RD.xr(RD.BZ) + 40;
+  for (let i = 0; i < 34; i++) { const a = r() * 6.283, d = Math.sqrt(r()) * 70, x = bx + Math.cos(a) * d * 1.4 - 20, zz = RD.BZ - 30 + Math.sin(a) * d; houses.push({ x, z: zz, w: 7 + r() * 7, d: 6 + r() * 6, h: 4 + r() * 4, lamp: r() < .55 ? .3 + r() * 4.5 : -1, k: r() }); }
+  houses.sort((a, b) => b.z - a.z);
+  const tz = t => 66 + 2.1 * (t - 76.6), KEY = (t, back, up, tzA, tyUp) => { const z = tz(t) - back, x = RD.xr(z) - 2.5, zt = tzA === 'town' ? RD.BZ : tz(t) + tzA, xt = RD.xr(zt) + (tzA === 'town' ? 30 : 0);
+    return [t, x, rdH(x, z) + up, z, xt, rdH(xt, zt) + tyUp, zt, 1250, 1750]; };
+  ROAD = { rows, houses, tz, cam: W3.cam([KEY(83.4, 46, 7, 120, 2), KEY(87.0, 52, 11, 300, 6), KEY(90.4, 58, 18, 'town', 26), KEY(95, 62, 21, 'town', 28)]),
+    light: W3.light([
+      [76.6, 9, 48, 1, [255, 192, 122], [92, 72, 90], [74, 98, 150], [252, 192, 130], [255, 198, 132], [226, 176, 146], 1100, 0],
+      [84.0, 4, 48, .9, [255, 170, 104], [86, 66, 88], [60, 80, 140], [248, 164, 116], [255, 170, 104], [212, 156, 140], 1000, 0],
+      [89.6, -2, 48, .25, [255, 136, 96], [56, 52, 86], [30, 40, 88], [196, 126, 124], [232, 128, 104], [126, 100, 132], 860, .45],
+      [95, -6, 48, 0, [255, 136, 96], [36, 38, 72], [12, 18, 46], [70, 64, 104], [120, 80, 100], [52, 54, 90], 800, .9]]) };
+}
+function travellerSil(ctx, x, y, s, step, rimCol, rimA) {   // Joseph walking ahead with a staff, Mary on a donkey — one dark silhouette, a warm rim on the sun side
+  ctx.save(); ctx.translate(x, y); ctx.scale(s, s);   // units: metres; origin at Joseph's feet; facing away from the camera, slightly right
+  const p = new Path2D(), sw = Math.sin(step * 6.283) * .12;
+  // Joseph (1.75 m)
+  p.ellipse(0, -1.62, .12, .13, 0, 0, 6.283);
+  p.moveTo(-.2, -1.46); p.quadraticCurveTo(-.28, -.8, -.27, -.08); p.lineTo(.27, -.08); p.quadraticCurveTo(.28, -.8, .2, -1.46); p.closePath();
+  p.rect(-.13 + sw, -.12, .1, .12); p.rect(.03 - sw, -.12, .1, .12);
+  p.rect(.36, -1.95, .045, 1.95);   // the staff
+  // the donkey with Mary, a step behind and to the left
+  p.ellipse(-.95, -.78, .55, .27, 0, 0, 6.283); p.moveTo(-.5, -.92); p.lineTo(-.28, -1.28); p.lineTo(-.16, -1.2); p.lineTo(-.38, -.82); p.closePath();
+  p.ellipse(-.2, -1.26, .13, .09, -.5, 0, 6.283); p.moveTo(-.28, -1.33); p.lineTo(-.31, -1.55); p.lineTo(-.24, -1.36); p.closePath();
+  for (const [lx, ph] of [[-1.35, 0], [-1.18, .5], [-.72, .5], [-.56, 0]]) { const d = Math.sin((step + ph) * 6.283) * .07; p.rect(lx + d, -.6, .07, .6); }
+  p.moveTo(-1.18, -.98); p.quadraticCurveTo(-1.16, -1.62, -.98, -1.78); p.quadraticCurveTo(-.82, -1.86, -.74, -1.7); p.quadraticCurveTo(-.7, -1.3, -.72, -.98); p.closePath();   // Mary, veiled
+  ctx.fillStyle = 'rgb(28,20,18)'; ctx.fill(p);
+  if (rimA > 0) { ctx.save(); ctx.clip(p); ctx.translate(-.05, .02); ctx.globalCompositeOperation = 'destination-out'; ctx.fill(p); ctx.restore();
+    ctx.save(); ctx.clip(p); ctx.globalAlpha = rimA; ctx.strokeStyle = rimCol; ctx.lineWidth = .07; ctx.translate(.0, 0); ctx.stroke(p); ctx.restore(); ctx.fillStyle = 'rgb(28,20,18)'; ctx.globalCompositeOperation = 'destination-over'; ctx.fill(p); }
+  ctx.restore();
+}
+function partRoad(ctx, t) {
+  const c = ROAD.cam(t), L = ROAD.light(t), { rows, houses } = ROAD;
+  const sk = W3.sky(ctx, c, L, t, { stars: true });
+  const alb = (x, z) => { const n = Pilot.fbm(x * .07, z * .07, 3), scrub = Pilot.noise(x * .21 + 5, z * .21) > .62 ? .72 : 1; return [(.86 - .14 * n) * scrub, (.72 - .12 * n) * scrub, (.52 - .1 * n) * scrub]; };
+  let hi = houses.length - 1;
+  for (let i = rows.length - 2; i >= 0; i--) {
+    const z0 = rows[i], z1 = rows[i + 1], dz = z1 - z0, dist = z0 - c.z; if (z1 < c.z) break;
+    const half = 50 + .62 * Math.max(0, z0 - c.z), xc = RD.xr(z0), dx = Math.max(2.6, dz * 1.25), n = Math.ceil(2 * half / dx);
+    for (let j = 0; j < n; j++) { const x0 = xc - half + j * dx, x1 = x0 + dx;
+      const a = rdH(x0, z0), b = rdH(x1, z0), cc = rdH(x1, z1), d = rdH(x0, z1);
+      const ux = dx, uy = b - a, vz = dz, vy = d - a, nrm = [-uy * vz, ux * vz, -ux * vy], nl = Math.hypot(...nrm); nrm[0] /= nl; nrm[1] /= nl; nrm[2] /= nl;
+      if (!W3.poly(ctx, c, [[x0, a, z0], [x1, b, z0], [x1, cc, z1], [x0, d, z1]])) continue;
+      const col = W3.shade(alb(x0, z0), nrm, Math.max(1, dist), L); ctx.fillStyle = W3.css(col); ctx.fill(); ctx.strokeStyle = W3.css(col); ctx.lineWidth = .8; ctx.stroke(); }
+    // the road over this row
+    { const w = 2.2, a0 = RD.xr(z0), a1 = RD.xr(z1); if (W3.poly(ctx, c, [[a0 - w, rdH(a0 - w, z0) + .06, z0], [a0 + w, rdH(a0 + w, z0) + .06, z0], [a1 + w, rdH(a1 + w, z1) + .06, z1], [a1 - w, rdH(a1 - w, z1) + .06, z1]])) {
+      ctx.fillStyle = W3.css(W3.shade([.97, .86, .68], [0, 1, 0], Math.max(1, dist), L)); ctx.fill(); } }
+    // Bethlehem's houses in this band of depth
+    while (hi >= 0 && houses[hi].z >= z0 - .01 && houses[hi].z < z1 + 400 && houses[hi].z > z0) hi--;
+    for (const hs of houses) if (hs.z >= z0 && hs.z < z1) house(ctx, c, L, hs, t);
+  }
+  // the travellers, on the road, walking toward the town
+  { const zz = ROAD.tz(t), xx = RD.xr(zz) + .8, yy = rdH(xx, zz), pp = W3.P(c, xx, yy, zz);
+    if (pp) { const sun = L.sunI, sd = L.sd; const sh = W3.P(c, xx - sd[0] * 6, yy, zz - sd[2] * 6);
+      if (sh && sun > .05) { ctx.save(); ctx.globalAlpha = .35 * sun; ctx.strokeStyle = 'rgb(40,26,22)'; ctx.lineWidth = 1.1 * pp[2]; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(pp[0], pp[1]); ctx.lineTo(sh[0], sh[1]); ctx.stroke(); ctx.restore(); }
+      travellerSil(ctx, pp[0], pp[1], pp[2], t * .75, W3.css(L.sunC), 0); } }
+  if (sk.sun && L.sunI > 0) W3.bloom(ctx, sk.sun[0], sk.sun[1], L.glow, L.sunI * (1 - ss(85, 89.6, t) * .6), { r: V ? 160 : 140 });
+  W3.finish(ctx, t);
+  { const y0 = Film.SAFE() - (V ? 150 : 70), g = ctx.createLinearGradient(0, y0, 0, H); g.addColorStop(0, 'rgba(10,8,10,0)'); g.addColorStop(.4, 'rgba(10,8,10,.7)'); g.addColorStop(1, 'rgba(10,8,10,.9)'); ctx.fillStyle = g; ctx.fillRect(0, y0, W, H - y0); }
+}
+function house(ctx, c, L, h, t) {   // a flat-roofed stone house; after sunset its lamp comes on
+  const y0 = rdH(h.x, h.z) - .5, x0 = h.x - h.w / 2, x1 = h.x + h.w / 2, z0 = h.z - h.d / 2, z1 = h.z + h.d / 2, y1 = y0 + h.h, dist = h.z - c.z, alb = [.92, .84, .7];
+  for (const [pts, n] of [[[[x0, y0, z0], [x1, y0, z0], [x1, y1, z0], [x0, y1, z0]], [0, 0, -1]], [[[x1, y0, z0], [x1, y0, z1], [x1, y1, z1], [x1, y1, z0]], [1, 0, 0]], [[[x0, y0, z0], [x0, y0, z1], [x0, y1, z1], [x0, y1, z0]], [-1, 0, 0]], [[[x0, y1, z0], [x1, y1, z0], [x1, y1, z1], [x0, y1, z1]], [0, 1, 0]]])
+    if (W3.poly(ctx, c, pts)) { ctx.fillStyle = W3.css(W3.shade(alb, n, dist, L)); ctx.fill(); }
+  if (h.lamp >= 0) { const on = ss(89.6 + h.lamp, 90.2 + h.lamp, t) * Math.min(1, L.night * 1.6); if (on > 0) { const p = W3.P(c, h.x, y0 + h.h * .45, z0 - .1); if (p) { ctx.save(); ctx.globalCompositeOperation = 'screen'; const R = Math.max(5, p[2] * 4); const g = ctx.createRadialGradient(p[0], p[1], 0, p[0], p[1], R * 3); g.addColorStop(0, `rgba(255,214,140,${on})`); g.addColorStop(.25, `rgba(255,180,90,${.55 * on})`); g.addColorStop(1, 'rgba(255,170,80,0)'); ctx.fillStyle = g; ctx.fillRect(p[0] - R * 3, p[1] - R * 3, R * 6, R * 6); ctx.restore(); } } }
+}
+
+
+// ---- 3C-1 · silhouettes on a ridge against the dusk (a side track): Mary on a donkey, Joseph walking ahead with a staff ----
+function profileTravellers(ctx, x, y, s, ph, rim) {   // facing right, units ≈ cm/100 at s = px per metre; backlit: dark body, a thin warm rim on the top edges
+  ctx.save(); ctx.translate(x, y); ctx.scale(s, s); const p = new Path2D(), leg = (bx, by, len, a) => { p.moveTo(bx - .045, by); p.lineTo(bx + .045, by); p.lineTo(bx + .03 + Math.sin(a) * len * .35, by + len); p.lineTo(bx - .03 + Math.sin(a) * len * .35, by + len); p.closePath(); };
+  const step = ph * 6.283;
+  // the donkey (body ~1.2 m), head low and forward, long ears, short mane, tail
+  p.moveTo(-1.55, -1.02); p.bezierCurveTo(-1.6, -1.22, -1.2, -1.3, -.8, -1.26); p.bezierCurveTo(-.45, -1.24, -.25, -1.24, -.12, -1.3);
+  p.bezierCurveTo(.0, -1.4, .08, -1.5, .16, -1.5); p.bezierCurveTo(.26, -1.48, .34, -1.36, .4, -1.26); p.lineTo(.42, -1.14); p.bezierCurveTo(.36, -1.08, .26, -1.1, .2, -1.18);
+  p.bezierCurveTo(.1, -1.12, -.02, -1.0, -.08, -.86); p.bezierCurveTo(-.3, -.76, -1.1, -.74, -1.4, -.82); p.bezierCurveTo(-1.52, -.86, -1.56, -.94, -1.55, -1.02); p.closePath();
+  p.moveTo(.12, -1.48); p.lineTo(.04, -1.74); p.lineTo(.12, -1.5); p.closePath(); p.moveTo(.18, -1.49); p.lineTo(.17, -1.76); p.lineTo(.22, -1.5); p.closePath();   // ears
+  p.moveTo(-1.55, -1.06); p.quadraticCurveTo(-1.7, -.9, -1.66, -.68); p.lineTo(-1.62, -.68); p.quadraticCurveTo(-1.64, -.9, -1.52, -1.02); p.closePath();   // tail
+  leg(-1.36, -.86, .86, Math.sin(step)); leg(-1.22, -.84, .84, Math.sin(step + Math.PI)); leg(-.36, -.84, .84, Math.sin(step + Math.PI)); leg(-.22, -.86, .86, Math.sin(step));
+  // Mary, sitting sideways on it, veiled, head a little bowed
+  p.moveTo(-1.02, -1.24); p.bezierCurveTo(-1.08, -1.6, -1.0, -1.92, -.86, -2.06); p.bezierCurveTo(-.78, -2.16, -.62, -2.16, -.56, -2.04);
+  p.bezierCurveTo(-.5, -1.94, -.52, -1.84, -.6, -1.78); p.bezierCurveTo(-.54, -1.6, -.5, -1.4, -.46, -1.24); p.closePath();
+  p.moveTo(-.62, -1.3); p.bezierCurveTo(-.6, -1.06, -.56, -.9, -.6, -.78); p.lineTo(-.48, -.78); p.bezierCurveTo(-.46, -.92, -.5, -1.1, -.52, -1.3); p.closePath();   // her robe falling over the side
+  // Joseph, walking ahead with a staff, a head cloth
+  const jx = .95, sw = Math.sin(step) * .14;
+  p.moveTo(jx - .1, -1.74); p.bezierCurveTo(jx - .16, -1.84, jx - .08, -1.96, jx + .04, -1.95); p.bezierCurveTo(jx + .13, -1.94, jx + .16, -1.84, jx + .12, -1.76); p.lineTo(jx + .1, -1.62);
+  p.bezierCurveTo(jx + .22, -1.5, jx + .24, -1.0, jx + .2, -.62); p.lineTo(jx - .2, -.62); p.bezierCurveTo(jx - .26, -1.0, jx - .26, -1.48, jx - .12, -1.62); p.closePath();
+  leg(jx - .05 + sw * .3, -.66, .66, sw * 2); leg(jx + .05 - sw * .3, -.66, .66, -sw * 2);
+  p.moveTo(jx + .2, -1.36); p.lineTo(jx + .38, -1.16); p.lineTo(jx + .33, -1.12); p.lineTo(jx + .17, -1.28); p.closePath();   // the arm to the staff
+  p.rect(jx + .34, -2.05, .035, 2.05);   // the staff
+  ctx.fillStyle = 'rgb(20,14,14)'; ctx.fill(p);
+  if (rim > 0) { ctx.save(); ctx.clip(p); ctx.globalAlpha = rim; ctx.strokeStyle = 'rgb(255,196,128)'; ctx.lineWidth = .05; ctx.translate(-.02, .03); ctx.stroke(p); ctx.restore(); ctx.save(); ctx.translate(-.02, .03); ctx.globalCompositeOperation = 'source-atop'; ctx.restore(); }
+  ctx.restore();
+}
+function partRidge(ctx, t) {
+  const L = ROAD.light(t), k = clamp((t - 76.6) / 7), truck = (V ? 120 : 200) * k;   // the camera trucks right with them
+  // sky with a low sun just left of centre, behind the ridge
+  const sunX = W * (V ? .38 : .34) - truck * .05, sunY = H * (V ? .4 : .5) + 26 * k, hz = H * (V ? .46 : .58);
+  { const g = ctx.createLinearGradient(0, 0, 0, hz); g.addColorStop(0, W3.css(L.skyT)); g.addColorStop(.6, W3.css(Pilot.mix(L.skyT, L.skyH, .6))); g.addColorStop(1, W3.css(L.skyH)); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H); }
+  { const R = Math.max(W, H) * .8, g = ctx.createRadialGradient(sunX, sunY, 0, sunX, sunY, R); g.addColorStop(0, W3.css(L.glow, .85)); g.addColorStop(.18, W3.css(L.glow, .35)); g.addColorStop(1, W3.css(L.glow, 0)); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = 'rgba(255,240,206,.95)'; ctx.beginPath(); ctx.arc(sunX, sunY, V ? 34 : 30, 0, 6.283); ctx.fill(); }
+  // hill layers, far → near (each its own parallax and haze); the near one is the ridge they walk on
+  const layer = (base, amp, f, ph, col, par) => { ctx.fillStyle = col; ctx.beginPath(); ctx.moveTo(-10, H); for (let x = -10; x <= W + 10; x += 8) { const X = x + truck * par; ctx.lineTo(x, base - amp * (.5 + .5 * Math.sin(X * f + ph)) - amp * .35 * Pilot.fbm(X * f * 3, ph, 3)); } ctx.lineTo(W + 10, H); ctx.closePath(); ctx.fill(); };
+  layer(hz - (V ? 40 : 30), V ? 90 : 70, .004, 1, W3.css(Pilot.mix(L.skyH, [150, 110, 120], .45)), .15);
+  layer(hz + (V ? 10 : 10), V ? 70 : 60, .006, 3, W3.css(Pilot.mix(L.skyH, [100, 72, 86], .65)), .35);
+  layer(hz + (V ? 60 : 50), V ? 60 : 50, .0048, 5, W3.css(Pilot.mix(L.skyH, [62, 44, 58], .8)), .6);
+  const crest = x => hz + (V ? 90 : 70) - (V ? 26 : 22) * Math.sin((x + truck) * .0026 + 2) - 10 * Pilot.fbm((x + truck) * .01, 7, 2);
+  ctx.fillStyle = 'rgb(22,16,18)'; ctx.beginPath(); ctx.moveTo(-10, H); for (let x = -10; x <= W + 10; x += 6) ctx.lineTo(x, crest(x)); ctx.lineTo(W + 10, H); ctx.closePath(); ctx.fill();
+  // a few dry bushes on the crest (silhouette)
+  { const r = rng(8); for (let i = 0; i < 14; i++) { const x0 = (r() * (W + 600) - truck) % (W + 600), y0 = crest(x0); ctx.fillStyle = 'rgb(22,16,18)'; ctx.beginPath(); for (let a = 0; a < 6.3; a += .5) ctx.lineTo(x0 + Math.cos(a) * (8 + 6 * r()), y0 - Math.abs(Math.sin(a)) * (10 + 10 * r())); ctx.fill(); } }
+  // the travellers walk right along the crest; the camera keeps them a little left of centre
+  const tx = W * (V ? .42 : .4) + 30 * k, ty = crest(tx) + 2, sc = V ? 86 : 74;
+  profileTravellers(ctx, tx, ty, sc, t * .9, .45 * L.sunI + .1);
+  W3.bloom(ctx, sunX, sunY, L.glow, .85 * L.sunI, { r: V ? 200 : 170, streak: .7 });
+  W3.finish(ctx, t);
+}
+
+
+// ---- 3A · Nazareth (cinematic): a small village on a Galilee hillside in the late sun; the camera pushes in slowly ----
+let NAZ = null;
+function nzH(x, z) { const valley = -26 * Math.exp(-((z - 110) ** 2) / (60 * 60)); return .16 * z + valley + 5 * Math.sin(x * .02) + 9 * (Pilot.fbm(x * .015 + 9, z * .015, 4) - .5) + 18 * ss(200, 280, z); }
+function buildNazareth() {
+  const r = rng(21), faces = [], trees = [];
+  for (let i = 0; i < 30; i++) { const x = 10 + (r() - .5) * 110, z = 230 + r() * 70, w = 6 + r() * 6, d = 6 + r() * 5, h = 3.5 + r() * 3, y = nzH(x, z) - .6;
+    faces.push(...W3.box(x - w / 2, y, z - d / 2, x + w / 2, y + h, z + d / 2, [.92, .85, .72], .95 + r() * .1));
+    if (r() < .5) faces.push({ pts: [[x - .7, y, z - d / 2 - .02], [x - .7, y + 2, z - d / 2 - .02], [x + .7, y + 2, z - d / 2 - .02], [x + .7, y, z - d / 2 - .02]], alb: [.12, .09, .08], two: true }); }
+  for (let i = 0; i < 40; i++) { const x = (r() - .5) * 260, z = 120 + r() * 200; if (z > 215 && Math.abs(x - 10) < 60 && r() < .8) continue; trees.push({ x, z, r: 2.2 + r() * 1.4 }); }
+  const rows = []; let z = -30; while (z < 900) { rows.push(z); z += z < 120 ? 3 : 3 + (z - 120) * .03; }
+  NAZ = { faces, trees, rows, cam: W3.cam([[61, -6, nzH(-6, 20) + 4, 20, 8, nzH(8, 260) + 8, 260, 1500, 2100], [68.6, -4, nzH(-4, 30) + 4.5, 30, 10, nzH(10, 260) + 7, 260, 1650, 2300]]),
+    light: W3.light([[61, 12, 230, 1.05, [255, 194, 128], [84, 74, 86], [70, 100, 150], [250, 200, 146], [255, 204, 140], [218, 192, 168], 420, 0], [68.6, 9, 230, 1.05, [255, 182, 116], [80, 70, 86], [64, 92, 144], [250, 190, 136], [255, 194, 130], [216, 184, 162], 400, 0]]) };
+}
+// ---- 3A · Nazareth (painted layers, like the ridge): evening in a hill village of Galilee — roofs dark against the sky, lamps in
+// the windows, two small figures in one doorway; the hills of Galilee fading behind. The camera creeps in. ----
+function partNazareth(ctx, t) {
+  const k = clamp((t - 61) / 7.6), z = 1 + .06 * k, hz = H * (V ? .5 : .6);
+  ctx.save(); ctx.translate(W / 2, hz); ctx.scale(z, z); ctx.translate(-W / 2, -hz);
+  { const g = ctx.createLinearGradient(0, 0, 0, hz); g.addColorStop(0, 'rgb(46,58,98)'); g.addColorStop(.55, 'rgb(150,112,128)'); g.addColorStop(.85, 'rgb(236,164,120)'); g.addColorStop(1, 'rgb(250,196,140)'); ctx.fillStyle = g; ctx.fillRect(-60, -60, W + 120, H + 120); }
+  { const sx = W * .78, sy = hz - 10, R = Math.max(W, H) * .7, g = ctx.createRadialGradient(sx, sy, 0, sx, sy, R); g.addColorStop(0, 'rgba(255,214,150,.65)'); g.addColorStop(.2, 'rgba(255,190,130,.25)'); g.addColorStop(1, 'rgba(255,190,130,0)'); ctx.fillStyle = g; ctx.fillRect(-60, -60, W + 120, H + 120); }
+  const layer = (base, amp, f, ph, col) => { ctx.fillStyle = col; ctx.beginPath(); ctx.moveTo(-60, H + 60); for (let x = -60; x <= W + 60; x += 8) ctx.lineTo(x, base - amp * (.5 + .5 * Math.sin(x * f + ph)) - amp * .3 * Pilot.fbm(x * f * 3, ph, 3)); ctx.lineTo(W + 60, H + 60); ctx.closePath(); ctx.fill(); };
+  layer(hz - (V ? 30 : 20), V ? 70 : 60, .005, 2, 'rgb(170,120,132)'); layer(hz + 10, V ? 60 : 50, .007, 4, 'rgb(118,84,104)');
+  // the village hill: a dark mass whose crest is crowded with flat roofs, a few olive crowns between them
+  const crest = x => hz + (V ? 120 : 90) - (V ? 80 : 60) * Math.exp(-((x - W * .45) ** 2) / ((V ? 420 : 620) ** 2));
+  ctx.fillStyle = 'rgb(30,22,30)'; ctx.beginPath(); ctx.moveTo(-60, H + 60); for (let x = -60; x <= W + 60; x += 6) ctx.lineTo(x, crest(x)); ctx.lineTo(W + 60, H + 60); ctx.closePath(); ctx.fill();
+  const rr = rng(33), houses = []; for (let i = 0; i < 26; i++) { const x = W * .45 + (rr() - .5) * (V ? 760 : 1000), w = (V ? 46 : 40) + rr() * 40, h = (V ? 36 : 30) + rr() * 34, y = crest(x) + 8 + rr() * 26; houses.push({ x, w, h, y, win: rr() < .55, d: rr() }); }
+  houses.sort((a, b) => a.y - b.y);
+  for (const hs of houses) { ctx.fillStyle = 'rgb(30,22,30)'; ctx.fillRect(hs.x - hs.w / 2, hs.y - hs.h, hs.w, hs.h + 40); ctx.fillRect(hs.x - hs.w / 2 - 2, hs.y - hs.h - 3, hs.w + 4, 4);
+    if (hs.win) { const on = ss(61.4 + hs.d * 4, 62 + hs.d * 4, t), wx = hs.x - hs.w * .2 + hs.d * hs.w * .3, wy = hs.y - hs.h * .55; if (on > 0) { ctx.fillStyle = `rgba(255,196,110,${on})`; ctx.fillRect(wx, wy, 8, 10); const g = ctx.createRadialGradient(wx + 4, wy + 5, 0, wx + 4, wy + 5, 30); g.addColorStop(0, `rgba(255,190,100,${.35 * on})`); g.addColorStop(1, 'rgba(255,190,100,0)'); ctx.fillStyle = g; ctx.fillRect(wx - 26, wy - 25, 60, 60); } } }
+  // one doorway open and lit, two small figures standing in it (Mary and Joseph)
+  { const hs = houses[Math.floor(houses.length * .6)], dx = hs.x + hs.w * .1, dy = hs.y, dw = V ? 22 : 20, dh = V ? 34 : 30;
+    const g = ctx.createRadialGradient(dx, dy - dh / 2, 0, dx, dy - dh / 2, 90); g.addColorStop(0, 'rgba(255,190,110,.45)'); g.addColorStop(1, 'rgba(255,190,110,0)'); ctx.fillStyle = g; ctx.fillRect(dx - 90, dy - dh / 2 - 90, 180, 180);
+    ctx.fillStyle = 'rgb(255,204,128)'; ctx.fillRect(dx - dw / 2, dy - dh, dw, dh);
+    ctx.fillStyle = 'rgb(30,22,30)'; for (const [fx, fh] of [[-5, dh * .86], [5, dh * .92]]) { ctx.beginPath(); ctx.ellipse(dx + fx, dy - fh + 3, 2.6, 3, 0, 0, 6.283); ctx.fill(); ctx.beginPath(); ctx.moveTo(dx + fx - 3.4, dy - fh + 6); ctx.lineTo(dx + fx + 3.4, dy - fh + 6); ctx.lineTo(dx + fx + 4.2, dy); ctx.lineTo(dx + fx - 4.2, dy); ctx.fill(); } }
+  for (let i = 0; i < 9; i++) { const x = rr() * W, y = crest(x) + 20 + rr() * 30, R = (V ? 24 : 20) + rr() * 14; ctx.fillStyle = 'rgb(26,20,26)'; ctx.beginPath(); ctx.ellipse(x, y - R * .6, R * 1.3, R * .8, 0, 0, 6.283); ctx.fill(); }
+  ctx.restore();
+  W3.finish(ctx, t, { vignette: .6 });
+  textBand(ctx);
+}
+function frameTree(ctx, t) {   // a dark olive tree in the near foreground, framing the view (it drifts a little against the far hill)
+  const sway = Math.sin(t * .6) * 4, ox = W * (V ? .9 : .86) + (t - 61) * 3, oy = H * (V ? .66 : .78), r = rng(41);
+  ctx.save(); ctx.fillStyle = 'rgb(18,16,14)'; ctx.strokeStyle = 'rgb(18,16,14)'; ctx.lineCap = 'round';
+  const br = (x, y, a, len, w, d) => { if (d > 6 || w < 1) return; const x2 = x + Math.cos(a) * len, y2 = y + Math.sin(a) * len; ctx.lineWidth = w; ctx.beginPath(); ctx.moveTo(x, y); ctx.quadraticCurveTo((x + x2) / 2 + (r() - .5) * len * .3, (y + y2) / 2, x2, y2); ctx.stroke();
+    if (d > 2) for (let i = 0; i < 9; i++) { const lx = x2 + (r() - .5) * len * .9, ly = y2 + (r() - .5) * len * .6; ctx.beginPath(); ctx.ellipse(lx + sway * (d / 6), ly, 3 + r() * 6, 1.6 + r() * 2.2, r() * 3, 0, 6.283); ctx.fill(); }
+    br(x2, y2, a - .35 - r() * .3, len * .74, w * .68, d + 1); br(x2, y2, a + .3 + r() * .3, len * .7, w * .66, d + 1); };
+  ctx.lineWidth = V ? 34 : 30; ctx.beginPath(); ctx.moveTo(ox + 40, H + 20); ctx.bezierCurveTo(ox + 10, oy + 120, ox + 50, oy + 40, ox, oy); ctx.stroke();
+  br(ox, oy, -2.1, V ? 190 : 150, V ? 22 : 20, 0); br(ox, oy, -1.4, V ? 160 : 130, V ? 18 : 16, 0); br(ox, oy, -2.7, V ? 170 : 140, V ? 16 : 14, 1);
+  ctx.restore(); }
+function olive(ctx, c, L, tr) { const y = nzH(tr.x, tr.z), p = W3.P(c, tr.x, y + tr.r * 1.1, tr.z); if (!p) return; const R = tr.r * p[2], dist = tr.z - c.z;
+  const dark = W3.shade([.24, .3, .2], [0, 0, -1], dist, L), lit = W3.shade([.36, .42, .26], [-L.sd[0], .5, -L.sd[2]], dist, L);
+  ctx.fillStyle = W3.css(W3.shade([.2, .16, .12], [0, 0, -1], dist, L)); ctx.fillRect(p[0] - R * .08, p[1], R * .16, R * 1.1);
+  ctx.fillStyle = W3.css(dark); ctx.beginPath(); ctx.ellipse(p[0], p[1], R * 1.2, R * .85, 0, 0, 6.283); ctx.fill();
+  ctx.fillStyle = W3.css(lit); ctx.beginPath(); ctx.ellipse(p[0] - R * .3 * Math.sign(L.sd[0] || 1), p[1] - R * .25, R * .75, R * .5, 0, 0, 6.283); ctx.fill(); }
+function textBand(ctx) { const y0 = Film.SAFE() - (V ? 150 : 70), g = ctx.createLinearGradient(0, y0, 0, H); g.addColorStop(0, 'rgba(10,8,10,0)'); g.addColorStop(.4, 'rgba(10,8,10,.7)'); g.addColorStop(1, 'rgba(10,8,10,.9)'); ctx.fillStyle = g; ctx.fillRect(0, y0, W, H - y0); }
+// ---- 3B · Rome (after the 65 mm epics): marble and gold under a hard sun; a colonnade, the temple; the camera dollies and cranes up ----
+let ROME = null;
+function buildRome() {
+  const F = [], marble = [.95, .92, .86], gold = [1.0, .78, .36], red = [.62, .12, .1];
+  for (let z = 0; z <= 66; z += 6) for (const x of [-11, 11]) { F.push(...W3.prism(x, z, .8, 0, 9, 10, marble)); F.push(...W3.box(x - 1.1, 9, z - 1.1, x + 1.1, 9.7, z + 1.1, marble)); }
+  for (const x of [-11, 11]) F.push(...W3.box(x - 1.3, 9.7, -1.5, x + 1.3, 11.4, 67.5, marble));
+  for (let z = 3; z <= 63; z += 12) for (const x of [-11, 11]) F.push({ pts: [[x - Math.sign(x) * 1.2, 9, z - 1.2], [x - Math.sign(x) * 1.2, 9, z + 1.2], [x - Math.sign(x) * 1.2, 4.2, z + 1.2], [x - Math.sign(x) * 1.2, 4.2, z - 1.2]], alb: red, two: true });   // banners
+  F.push(...W3.box(-16, 0, 76, 16, 4.5, 104, marble, .96));                                    // the podium
+  for (let k = 0; k < 6; k++) F.push(...W3.box(-12, k * .75, 70 + k, 12, (k + 1) * .75, 76, marble, .98));   // steps
+  for (let i = 0; i < 6; i++) F.push(...W3.prism(-12.5 + i * 5, 79, 1.0, 4.5, 16, 12, marble));
+  F.push(...W3.box(-15.5, 16, 77.5, 15.5, 18.4, 104, marble));                                   // entablature
+  F.push({ pts: [[-15.5, 18.4, 77.5], [15.5, 18.4, 77.5], [0, 24, 77.5]], alb: marble, k: .97, n: [0, 0, -1] }, { pts: [[15.5, 18.4, 77.5], [15.5, 18.4, 104], [0, 24, 104], [0, 24, 77.5]], alb: [.7, .38, .3] }, { pts: [[-15.5, 18.4, 104], [-15.5, 18.4, 77.5], [0, 24, 77.5], [0, 24, 104]], alb: [.7, .38, .3] });
+  const ground = []; for (let z = -40; z < 220; z += 8) for (let x = -80; x < 80; x += 8) ground.push({ pts: [[x, 0, z], [x, 0, z + 8], [x + 8, 0, z + 8], [x + 8, 0, z]], alb: (Math.abs(x) < 9 ? [.86, .8, .7] : [.8, .74, .62]).map(v => v * (.94 + .06 * Pilot.noise(x * .3, z * .3))) });
+  ROME = { F, ground, cam: W3.cam([[68.4, -2, 1.7, -16, 0, 12, 80, 1050, 1450], [72.6, -1, 4, 6, 0, 16, 88, 1050, 1450], [76.6, 0, 9, 22, 0, 20, 92, 1100, 1500]]),
+    light: W3.light([[68.4, 30, 6, 1.25, [255, 236, 200], [92, 92, 112], [52, 92, 158], [244, 230, 204], [255, 240, 206], [226, 214, 196], 230, 0], [76.6, 28, 6, 1.25, [255, 232, 196], [92, 92, 112], [48, 88, 154], [244, 226, 200], [255, 238, 204], [226, 214, 196], 230, 0]]) };
+}
+
+function rays(ctx, x, y, t, col, a) {   // slowly turning shafts of light from a bright source (haze between the columns)
+  ctx.save(); ctx.globalCompositeOperation = 'screen'; const R = Math.max(W, H) * 1.3;
+  for (let i = 0; i < 22; i++) { const ang = i / 22 * 6.283 + t * .02 + Math.sin(i * 3.1) * .2, w = .012 + .02 * Math.abs(Math.sin(i * 1.7)); const g = ctx.createRadialGradient(x, y, 0, x, y, R); g.addColorStop(0, W3.css(col, a)); g.addColorStop(1, W3.css(col, 0));
+    ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(x, y); ctx.arc(x, y, R, ang - w, ang + w); ctx.closePath(); ctx.fill(); }
+  ctx.restore(); }
+function aquila(ctx, x, y, s, t) {   // the legion's eagle on a short pole: a dark shape with a gold edge (backlit)
+  const k = s * 1.0; ctx.save(); ctx.translate(x, y); ctx.scale(k, k); const p = new Path2D();
+  p.rect(-.08, -1.2, .16, 1.2); p.rect(-.9, -1.3, 1.8, .14);
+  p.moveTo(0, -2.4); p.bezierCurveTo(-.5, -2.6, -1.1, -3.4, -1.9, -3.6); p.bezierCurveTo(-1.5, -3.0, -1.3, -2.5, -.7, -2.1); p.bezierCurveTo(-.4, -1.8, -.2, -1.5, 0, -1.4);
+  p.bezierCurveTo(.2, -1.5, .4, -1.8, .7, -2.1); p.bezierCurveTo(1.3, -2.5, 1.5, -3.0, 1.9, -3.6); p.bezierCurveTo(1.1, -3.4, .5, -2.6, 0, -2.4); p.closePath();
+  p.ellipse(0, -2.55, .2, .24, 0, 0, 6.283); p.moveTo(.12, -2.62); p.lineTo(.42, -2.55); p.lineTo(.14, -2.48); p.closePath();
+  ctx.fillStyle = 'rgb(70,52,30)'; ctx.fill(p); ctx.globalAlpha = .9; ctx.strokeStyle = 'rgb(255,214,130)'; ctx.lineWidth = .07; ctx.stroke(p); ctx.restore(); }
+function partRome(ctx, t) {
+  const c = ROME.cam(t), L = ROME.light(t); W3.sky(ctx, c, L, t);
+  // far city: a hazy band of roofs and domes on the horizon
+  { const hz = W3.P(c, c.x + c.f[0] * 1e4, 0, c.z + c.f[2] * 1e4); if (hz) { const r = rng(4); ctx.fillStyle = W3.css(Pilot.mix(L.fog, [160, 160, 170], .25)); ctx.beginPath(); ctx.moveTo(0, hz[1]); for (let x = 0; x <= W; x += 18) ctx.lineTo(x, hz[1] - (8 + 30 * r() * r())); ctx.lineTo(W, hz[1] + 4); ctx.lineTo(0, hz[1] + 4); ctx.fill(); } }
+  W3.faces(ctx, c, L, ROME.ground, { seam: true });
+  // long hard shadows of the colonnade on the pavement (the sun behind-left)
+  { ctx.save(); ctx.fillStyle = 'rgba(40,46,70,.22)'; for (let z = 0; z <= 66; z += 6) for (const x of [-11, 11]) { const sx = -L.sd[0] / L.sd[1] * 9, sz = -L.sd[2] / L.sd[1] * 9; if (W3.poly(ctx, c, [[x - .8, .02, z], [x + .8, .02, z], [x + .8 + sx, .02, z + sz], [x - .8 + sx, .02, z + sz]])) ctx.fill(); } ctx.restore(); }
+  W3.faces(ctx, c, L, ROME.F);
+  const s = W3.P(c, c.x + L.sd[0] * 1e5, c.y + L.sd[1] * 1e5, c.z + L.sd[2] * 1e5);
+  if (s) { rays(ctx, s[0], s[1], t, [255, 236, 200], .07); W3.bloom(ctx, s[0], s[1], [255, 236, 200], .9, { r: V ? 260 : 220, streak: .8 }); }
+  { const g = W3.P(c, 0, 24.2, 79); if (g) aquila(ctx, g[0], g[1], g[2], t); }   // the eagle standard on the apex, gold against the light
+  W3.finish(ctx, t, { vignette: .5, grain: .08 });
+  textBand(ctx);
+}
+
 function partDecree(ctx, t) {
-  if (t < 68.4) posterNazareth(ctx, t); else if (t < 76.6) posterEmpire(ctx, t); else posterJourney(ctx, t);
+  if (t < 68.4) partNazareth(ctx, t); else if (t < 76.6) partRome(ctx, t); else if (t < 83.4) partRidge(ctx, t); else partRoad(ctx, t);
 }
 function buildSilk() { PAPER = Silk.paper(W, H, 5); }
 
@@ -313,7 +540,7 @@ function draw(ctx, t) {
     else if (kind === 'quote') Film.quote(ctx, id, t, a, b, { ...o, hl: Film.lines[id].hl, hlk: o.hlAt ? ss(o.hlAt, o.hlAt + 1.2, t) : 0 }); }
 }
 Pilot.run({ W, H, dur: FILM_DUR, fonts: ["600 40px 'Noto Serif KR'", "400 40px 'Noto Serif KR'", "400 20px 'Noto Sans KR'"],
-  init: async () => { await Film.load(); buildBethlehem(); buildSilk(); buildNight(); }, draw });
+  init: async () => { await Film.load(); buildBethlehem(); buildSilk(); buildNight(); buildRoad(); buildRome(); }, draw });
 </script>
 </body>
 </html>

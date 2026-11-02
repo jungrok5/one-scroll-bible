@@ -45,6 +45,12 @@ each scoring every part 감동 0–5 / 전율 0–5 with the moment they would s
 primary audience, record in `motion/reviews/film-<name>-script.md`, then build and publish the draft page. In chat: what
 the reviews said, what changed, and what is left for the maintainer to choose.
 
+**Drawing (stage 4) — portrait first, legibility first** (maintainer, 2026-11-02): compose every scene for 1080×1920
+(Shorts) and adapt landscape for TV; pilots, stills and preview videos are portrait first. Search STYLE-INDEX, the
+Lemo-Opuscar repo AND the word-log kits (`kits/templates.jpg` — portrait-native, figures that read); reject a look whose
+texture buries the map, the words or the people on a phone (the mosaic pilot did). Pilot 2–3 parts → `review.json`
+`pilot` → draft page + a portrait preview video (SendUserFile) before building the rest.
+
 ## 2 · Review loop (stages 2–4)
 1. Feedback comes in chat (the maintainer and their wife read the draft page).
 2. Apply. Decided items move out of `decisions` into `feedback_log` (who said what → what changed). Anything unclear → ask.

@@ -139,15 +139,15 @@ if (RV.pilot?.shots?.length) {
   }
   const fig = s => `<figure><img src="data:image/jpeg;base64,${readFileSync(s.file).toString('base64')}" alt="${esc(s.cap)}"><figcaption>${esc(s.cap)}</figcaption></figure>`;
   pilotHtml = `<section id="pilot"><h2>시안 — 새 화풍으로 그린 장면 <small>${esc(RV.pilot.date || '')}${RV.pilot.note ? ' · ' + esc(RV.pilot.note) : ''}</small></h2>
-<div class="pil-h">${RV.pilot.shots.filter(s => s.o === 'h').map(fig).join('')}</div>
-<div class="pil-v">${RV.pilot.shots.filter(s => s.o === 'v').map(fig).join('')}</div></section>`;
+<div class="pil-v">${RV.pilot.shots.filter(s => s.o === 'v').map(fig).join('')}</div>
+${RV.pilot.shots.some(s => s.o === 'h') ? `<p class="note">가로(TV)</p><div class="pil-h">${RV.pilot.shots.filter(s => s.o === 'h').map(fig).join('')}</div>` : ''}</section>`;   // portrait is the main format (2026-11-02)
 }
 const dataUri = f => 'data:image/jpeg;base64,' + readFileSync(f).toString('base64');
 const byId = Object.fromEntries(S.lines.map(l => [l.id, l]));
 // 1) the whole film on one screen: per part one frame + name + feeling + its key line (review.json parts[].feel, .key = line id)
 // (2026-11-02 관리자: "쭉 읽으면서 검토하기 쉽지 않고 한눈에 안 들어옴")
 const keyHtml = l => l ? `<p class="key${l.kind === 'quote' ? ' q' : ''}">${lineHtml(l, true)}${l.cite ? `<cite>${esc(l.cite)}</cite>` : ''}</p>` : '';
-const boardHtml = `<section id="board"><ol class="board" style="--n: ${parts.length}">${parts.map(p => { const s = (p.samples || [])[0]; return `<li class="bd" style="--pc: var(--p${p.n})">${s ? `<figure><img${s.ref ? ' class="w"' : ''} src="${dataUri(s.file)}" alt="${esc(s.cap)}"><figcaption>${esc(s.cap)}</figcaption></figure>` : '<div class="noimg"></div>'}<div class="bx"><span class="no">${p.n}부 · ${tc(p.start)}</span><h3><a href="#say-${p.n}">${esc(p.name || '')}</a></h3>${p.feel ? `<span class="feel">${esc(p.feel)}</span>` : ''}${keyHtml(byId[p.key])}</div></li>`; }).join('')}</ol>
+const boardHtml = `<section id="board"><ol class="board" style="--n: ${parts.length}">${parts.map(p => { const s = (RV.pilot?.shots || []).find(x => x.part === p.n && x.o === 'v' && x.file) || (p.samples || [])[0]; return `<li class="bd" style="--pc: var(--p${p.n})">${s ? `<figure><img${s.ref ? ' class="w"' : ''} src="${dataUri(s.file)}" alt="${esc(s.cap)}"><figcaption>${esc(s.cap)}</figcaption></figure>` : '<div class="noimg"></div>'}<div class="bx"><span class="no">${p.n}부 · ${tc(p.start)}</span><h3><a href="#say-${p.n}">${esc(p.name || '')}</a></h3>${p.feel ? `<span class="feel">${esc(p.feel)}</span>` : ''}${keyHtml(byId[p.key])}</div></li>`; }).join('')}</ol>
 <p class="note">${parts.some(p => p.samples?.[0]?.ref) ? '그림은 이 화풍을 보여 주는 참고 장면입니다(대부분 참고 저장소 Lemo-Opuscar의 데모 영상 — 그 영상의 캐릭터·내용은 쓰지 않고 기법만 가져옵니다). 새 영상은 이 화풍으로 새로 그립니다.' : `그림은 앞 영상(「${esc(ref?.title || '')}」)에서 같은 화풍으로 그린 장면입니다. 새 영상은 이 화풍으로 새로 그립니다.`}</p></section>`;
 // 2) read as heard: only what the voice says, in order, one block per part; what is on screen in one muted sentence
 const sayHtml = `<section id="say"><h2>들리는 대로 <small>목소리로 읽는 말만 · 흐린 글씨는 화면에만 나오는 부분 · 금빛 = 화면에서 빛나는 말</small></h2><div class="say">${parts.map(p => {

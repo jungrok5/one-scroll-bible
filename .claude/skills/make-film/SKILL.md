@@ -45,6 +45,13 @@ each scoring every part 감동 0–5 / 전율 0–5 with the moment they would s
 primary audience, record in `motion/reviews/film-<name>-script.md`, then build and publish the draft page. In chat: what
 the reviews said, what changed, and what is left for the maintainer to choose.
 
+**Every film is cinematic, never illustration** (maintainer, 2026-11-02 — "이 채널에서 만드는 영상은 전부 지금 방향으로"): the first
+film is the bar — space with a camera moving through it, light as the main character (a source that blooms like a lens),
+small people in a vast world, restraint (dark calm palette, empty space, subtitle-like serif, grain, vignette; no
+counters, labelled maps, numbered lists), looks taken from films and paintings (OPUSCAR film looks with depth and light).
+Flat graphic / poster / cartoon-character / game looks are out (README 7절). Check a phone-size portrait still: cinematic?
+readable in one second?
+
 **Drawing (stage 4) — portrait first, legibility first** (maintainer, 2026-11-02): compose every scene for 1080×1920
 (Shorts) and adapt landscape for TV; pilots, stills and preview videos are portrait first. Search STYLE-INDEX, the
 Lemo-Opuscar repo AND the word-log kits (`kits/templates.jpg` — portrait-native, figures that read); reject a look whose

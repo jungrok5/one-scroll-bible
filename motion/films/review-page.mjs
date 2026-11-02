@@ -124,7 +124,23 @@ for (const p of parts) for (const s of p.samples || []) {
 for (const [k, ts] of Object.entries(need)) {
   const [fl, o] = k.split('|');
   execFileSync('node', [join(ROOT, 'motion', 'render.mjs'), o, '--page', `films/${fl}/film.html`, '--stills', [...ts].join(',')], { stdio: 'inherit', cwd: ROOT });
-  for (const t of ts) execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-i', join(ROOT, 'motion', 'out', `still-film-${o}-${t}.png`), '-vf', 'scale=540:-2', '-q:v', '5', join(IMG, `${fl}-${o}-${t}.jpg`)]);
+  for (const t of ts) execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-i', join(ROOT, 'motion', 'out', `still-film-${o}-${String(t).replace('.', '_')}.png`), '-vf', 'scale=540:-2', '-q:v', '5', join(IMG, `${fl}-${o}-${t}.jpg`)]);
+}
+// ---- pilot frames of THIS film (review.json pilot { date, note, shots: [{ o, t, cap }] }) — stage 4, the new looks drawn ----
+// keyed by the film's code (film.html + kit-*.js) so a changed scene is rendered again, never shown stale
+let pilotHtml = '';
+if (RV.pilot?.shots?.length) {
+  const { createHash } = await import('node:crypto'); const { readdirSync } = await import('node:fs');
+  const fdir = join(HERE, film), key = createHash('sha1').update(readdirSync(fdir).filter(f => /^(film\.html|kit-.*\.js|.*\.js)$/.test(f)).map(f => readFileSync(join(fdir, f))).join('')).digest('hex').slice(0, 8);
+  const want = {}; for (const s of RV.pilot.shots) { s.file = join(IMG, `pilot-${film}-${s.o}-${s.t}-${key}.jpg`); if (!existsSync(s.file)) (want[s.o] ||= []).push(s.t); }
+  for (const [o, ts] of Object.entries(want)) {
+    execFileSync('node', [join(ROOT, 'motion', 'render.mjs'), o, '--page', `films/${film}/film.html`, '--stills', ts.join(',')], { stdio: 'inherit', cwd: ROOT });
+    for (const t of ts) execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-i', join(ROOT, 'motion', 'out', `still-film-${o}-${String(t).replace('.', '_')}.png`), '-vf', `scale=${o === 'h' ? 960 : 540}:-2`, '-q:v', '4', join(IMG, `pilot-${film}-${o}-${t}-${key}.jpg`)]);
+  }
+  const fig = s => `<figure><img src="data:image/jpeg;base64,${readFileSync(s.file).toString('base64')}" alt="${esc(s.cap)}"><figcaption>${esc(s.cap)}</figcaption></figure>`;
+  pilotHtml = `<section id="pilot"><h2>시안 — 새 화풍으로 그린 장면 <small>${esc(RV.pilot.date || '')}${RV.pilot.note ? ' · ' + esc(RV.pilot.note) : ''}</small></h2>
+<div class="pil-h">${RV.pilot.shots.filter(s => s.o === 'h').map(fig).join('')}</div>
+<div class="pil-v">${RV.pilot.shots.filter(s => s.o === 'v').map(fig).join('')}</div></section>`;
 }
 const dataUri = f => 'data:image/jpeg;base64,' + readFileSync(f).toString('base64');
 const byId = Object.fromEntries(S.lines.map(l => [l.id, l]));
@@ -151,7 +167,7 @@ ${readFileSync(join(HERE, 'review', 'page.css'), 'utf8')}
   ${RV.logline ? `<p class="logline">${esc(RV.logline)}</p>` : ''}
   <p>${tc(S.dur)} · ${parts.length}부 · 세로(쇼츠·릴스)와 가로(유튜브) 같은 내용</p>
 </div></div>
-<div class="wide">${boardHtml}</div>
+<div class="wide">${boardHtml}${pilotHtml}</div>
 <main class="wrap">
 ${sayHtml}
 ${(RV.decisions || []).length ? `<section id="decide"><h2>정할 것 <small>${RV.decisions.length}가지</small></h2><ol class="decide">${RV.decisions.map(d => `<li><b>${esc(d.q)}</b><span>${d.options.filter(o => !/의견/.test(o)).map(esc).join(' · ')}</span></li>`).join('')}</ol></section>` : ''}

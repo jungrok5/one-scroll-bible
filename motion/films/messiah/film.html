@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>메시아 예언과 성탄</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;900&family=Noto+Sans+KR:wght@300;400;700&display=swap">
+</head>
+<body>
+<script src="../../pilot/lib.js"></script>
+<script src="../lib-film.js"></script>
+<script src="kit-woodcut.js"></script>
+<script src="kit-mosaic.js"></script>
+<script src="kit-inkmap.js"></script>
+<script src="kit-oil.js"></script>
+<script>
+/* 메시아 예언과 성탄 — one continuous ~2:59 film in five looks, each chosen for what its medium does
+   (review.json parts): 1 woodcut (a promise carved in advance) · 2 scratchboard long take (the promise narrowing,
+   years counting down) · 3 Roman floor mosaic (the emperor's decree spreads tile by tile) · 4 night oil painting (the
+   only light comes from the child) · 5 woodcut again (the block carved in part 1 is printed). One motif: gold — the
+   promise — shows only where something has been cut, scratched or laid for it. Line ids = script.json. */
+const { clamp, lerp, ss, eo, eio, win, rng, noise, canvas } = Pilot;
+const W = Pilot.W, H = Pilot.H, V = Pilot.ori === 'v';
+const GOLD = [233, 185, 92];
+
+// =====================================================================================================================
+// 1 · 0:00–0:21  a small town carved on a block under the night sky; Micah 5:2; the brayer inks it over
+let BETH = null;
+function hillTop(x) {   // the village hill's crest (frame units)
+  const c = V ? W * .5 : W * .52, r = V ? W * .62 : W * .36, top = V ? H * .37 : H * .46;
+  const d = (x - c) / r; return top + (V ? 210 : 190) * d * d + 14 * Math.sin(x * .013);
+}
+function farRidge(x) { return (V ? H * .40 : H * .52) - 60 * Math.sin(x * .0042 + 1.3) - 34 * Math.sin(x * .011); }
+function buildBethlehem() {
+  BETH = Woodcut.plate(41, pl => {
+    const moon = V ? [W * .74, H * .17] : [W * .8, H * .17], mr = V ? 40 : 46;
+    const ground = V ? H * .6 : H * .65;     // below this the block stays black (the words are read there)
+    const houses = [];
+    { const r = rng(5), c = V ? W * .5 : W * .52, n = V ? 15 : 19, spread = V ? W * .34 : W * .2;
+      for (let i = 0; i < n; i++) { const u = (i / (n - 1)) * 2 - 1, x = c + u * spread + (r() - .5) * 30, w = (V ? 70 : 64) + r() * 46, h = (V ? 52 : 46) + r() * 40 - Math.abs(u) * 18;
+        const base = hillTop(x) + 26 + Math.abs(u) * 24 + r() * 16; houses.push({ x, y: base, w, h, d: 14 + r() * 10, win: r() < .7, k: r() }); }
+      houses.sort((a, b) => a.y - b.y); }
+    // regions, back to front: 1 sky · 2 far ridge · 3 village hill · 4 dark ground · 10.. houses
+    pl.region(1, g => g.rect(0, 0, W, H));
+    pl.region(2, g => { g.moveTo(0, H); for (let x = 0; x <= W; x += 8) g.lineTo(x, farRidge(x)); g.lineTo(W, H); });
+    pl.region(3, g => { g.moveTo(0, H); for (let x = 0; x <= W; x += 8) g.lineTo(x, hillTop(x)); g.lineTo(W, H); });
+    pl.region(4, g => g.rect(0, ground, W, H - ground));
+    houses.forEach((h, i) => pl.region(10 + i, g => { g.rect(h.x - h.w / 2, h.y - h.h, h.w, h.h); g.moveTo(h.x + h.w / 2, h.y - h.h); g.lineTo(h.x + h.w / 2 + h.d, h.y - h.h - h.d * .6); g.lineTo(h.x + h.w / 2 + h.d, h.y - h.d * .6); g.lineTo(h.x + h.w / 2, h.y); }));
+    const mdist = (x, y) => Math.hypot(x - moon[0], y - moon[1]);
+    // sky: long horizontal gouges, wide near the moon and the horizon glow, none high up
+    { const lines = []; for (let y = 6; y < H * .75; y += V ? 11 : 10) { const L = []; for (let x = -20; x <= W + 20; x += 24) L.push([x, y + 5 * Math.sin(x * .003 + y * .05) + 10 * (Pilot.fbm(x * .002, y * .004) - .5)]); lines.push(L); }
+      pl.hatch(lines, { keep: (x, y) => pl.reg(x, y) === 1 && mdist(x, y) > mr + 10, kind: 'v', len: [70, 260], gap: [6, 40], thr: .1, wmin: 1, wmax: 7, gamma: 1.2,
+        tone: (x, y) => { const m = Math.exp(-(mdist(x, y) - mr) / (V ? 210 : 250)), hz = Math.exp(-Math.max(0, farRidge(x) - y) / (V ? 150 : 130)) * .8, cl = .45 + .9 * Pilot.fbm(x * .0022 + 3, y * .007);
+          return clamp((.04 + .8 * m + hz) * cl - .12 * (1 - y / farRidge(x))); } }); }
+    // the moon: carved white, rays of the U-gouge around it
+    { const pts = []; for (let a = 0; a < 6.3; a += .05) pts.push([moon[0] + Math.cos(a) * mr * (1 + .02 * Math.sin(a * 7)), moon[1] + Math.sin(a) * mr]);
+      for (let k = 0; k < mr * 2; k += 5) { const y = moon[1] - mr + k + 2, hw = Math.sqrt(Math.max(0, mr * mr - (y - moon[1]) ** 2)); if (hw > 3) pl.cut([[moon[0] - hw, y], [moon[0] + hw, y]], 7.5, { kind: 'u', chip: .05 }); }
+      for (const [rr, w] of [[mr + 16, 3.2], [mr + 30, 2.2], [mr + 42, 1.4]]) for (let a0 = 0; a0 < 6.28; a0 += .5 + (rr % 3) * .1) { const pts = []; for (let a = a0; a < a0 + .38; a += .04) pts.push([moon[0] + Math.cos(a) * rr, moon[1] + Math.sin(a) * rr]); pl.cut(pts, w, { kind: 'v' }); } }
+    // stars: stab cuts, some appear in the first seconds (the block is still being finished as we arrive)
+    { const r = rng(17), list = []; for (let i = 0; i < (V ? 120 : 150); i++) { const x = r() * W, y = r() * (V ? H * .34 : H * .5); if (pl.reg(x, y) === 1 && mdist(x, y) > mr * 3) list.push([x, y, 1.2 + r() * r() * 3.2]); }
+      pl.stabs(list, { t0: (x, y, r) => r() < .35 ? .2 + r() * 3.5 : undefined }); }
+    // far ridge: contour cuts following the ridge, catching the moonlight on its crest only
+    { const lines = []; for (let k = 6; k < 300; k += 9) { const L = []; for (let x = -20; x <= W + 20; x += 20) L.push([x, farRidge(x) + k + 4 * Math.sin(x * .01 + k)]); lines.push(L); }
+      pl.hatch(lines, { keep: (x, y) => pl.reg(x, y) === 2, len: [50, 180], gap: [8, 40], thr: .1, wmin: .8, wmax: 4.5, tone: (x, y) => clamp(.62 - (y - farRidge(x)) / 110 + .25 * (x / W - .5)) }); }
+    // village hill: terraces — contour cuts parallel to the crest, lit toward the moon (right), dark toward the bottom
+    { const lines = []; for (let k = 10; k < 520; k += 11) { const L = []; for (let x = -20; x <= W + 20; x += 16) L.push([x, hillTop(x) + k + 5 * Math.sin(x * .006 + k * .3)]); lines.push(L); }
+      pl.hatch(lines, { keep: (x, y) => pl.reg(x, y) === 3 && y < ground - 10, len: [40, 150], gap: [6, 30], thr: .12, wmin: .9, wmax: 5.5,
+        tone: (x, y) => clamp(.75 - (y - hillTop(x)) / (V ? 300 : 240) + .3 * (x / W - .45)) }); }
+    // olive trees on the slope: black crowns with a knife halo and a few lit cuts on the moon side
+    { const r = rng(23); for (let i = 0; i < (V ? 9 : 12); i++) { const x = r() * W, y = hillTop(x) + 90 + r() * (V ? 220 : 150); if (y > ground - 30 || pl.reg(x, y) !== 3) continue; const rr = 16 + r() * 12;
+      const R = a => rr * (1 + .22 * Math.sin(a * 3 + i) + .12 * Math.sin(a * 7 + i * 2));
+      pl.region(40, g => { for (let a = 0; a <= 6.3; a += .1) g.lineTo(x + Math.cos(a) * R(a) * 1.35, y + Math.sin(a) * R(a)); g.closePath(); g.rect(x - 3, y + rr * .5, 6, rr * 1.1); });
+      const ring = []; for (let a = -2.8; a <= .6; a += .08) ring.push([x + Math.cos(a) * (R(a) * 1.35 + 5), y + Math.sin(a) * (R(a) + 5)]); pl.halo(ring, { w: 2 });
+      const fl = []; for (let j = 0; j < 22; j++) { const a = -2.2 + r() * 2.6, d = .35 + r() * .55; fl.push([x + Math.cos(a) * R(a) * 1.3 * d, y + Math.sin(a) * R(a) * d, .9 + r() * 1.2]); } pl.stabs(fl); } }
+    // houses: the moon side carved in vertical cuts, the front in a few fine horizontals, a bright roof edge, lamplit windows
+    houses.forEach((h, i) => { const id = 10 + i, x0 = h.x - h.w / 2, x1 = h.x + h.w / 2, top = h.y - h.h;
+      const side = []; for (let k = 3; k < h.d; k += 4.2) side.push([[x1 + k, top - k * .6 + 3], [x1 + k, h.y - k * .6 - 2]]);
+      pl.hatch(side, { keep: (x, y) => pl.reg(x, y) === id, tone: () => .8, thr: .1, len: [400, 400], wmin: 1.6, wmax: 3.2 });
+      const front = []; for (let y = top + 7; y < h.y - 4; y += 7) front.push([[x0 + 3, y], [x1 - 3, y]]);
+      pl.hatch(front, { keep: (x, y) => pl.reg(x, y) === id, tone: (x, y) => clamp(.16 + .3 * (x - x0) / h.w - (y - top) / h.h * .3), thr: .2, len: [10, 30], gap: [10, 34], wmin: .6, wmax: 1.6 });
+      pl.cut([[x0 - 2, top], [x1 + 1, top], [x1 + h.d, top - h.d * .6]], 3.4, { kind: 'k', chip: .1 });          // roof edge in moonlight
+      if (h.win) { const wx = x0 + h.w * (.25 + .4 * h.k), wy = top + h.h * .35, ww = 9, wh = 13;
+        for (let k = 0; k < 4; k++) pl.cut([[wx + k * 2.4, wy], [wx + k * 2.4, wy + wh]], 3.4, { kind: 'u', chip: .05, t0: 1.0 + h.k * 4 + k * .05, dur: .2 });
+        h.wx = wx + 4; h.wy = wy + wh / 2; }
+      pl.cut([[x0 + 2, top + 4], [x1 - 2, top + 4]], 1.4); });
+    // the town wall at the foot of the houses: a long lit coping line and stone joints
+    { const c = V ? W * .5 : W * .52, half = V ? W * .4 : W * .25, pts = []; for (let x = c - half; x <= c + half; x += 12) pts.push([x, hillTop(x) + (V ? 110 : 96) + 12 * Math.abs((x - c) / half)]);
+      pl.cut(pts, 4.2, { kind: 'k', chip: .12 });
+      for (let x = c - half + 10; x < c + half; x += 26) { const y = hillTop(x) + (V ? 110 : 96) + 12 * Math.abs((x - c) / half); pl.cut([[x, y + 8], [x + 14, y + 8]], 1.6); pl.cut([[x + 13, y + 20], [x + 27, y + 20]], 1.4); } }
+    // gold plate (shows only through the cuts): lamplight in the windows; at "베들레헴" the whole town warms
+    pl.gold((g, t) => { const warm = ss(9.2, 11.6, t);
+      for (const h of houses) if (h.wx) { const a = ss(1.0 + h.k * 4, 1.6 + h.k * 4, t); if (a <= 0) continue; const gr = g.createRadialGradient(h.wx, h.wy, 0, h.wx, h.wy, 22 + 30 * warm); gr.addColorStop(0, `rgba(${GOLD},${a})`); gr.addColorStop(1, `rgba(${GOLD},0)`); g.fillStyle = gr; g.fillRect(h.wx - 60, h.wy - 60, 120, 120); }
+      if (warm > 0) { g.save(); g.beginPath(); for (const h of houses) g.rect(h.x - h.w / 2 - 6, h.y - h.h - h.d - 6, h.w + h.d + 12, h.h + h.d + 12); g.clip(); const c = V ? W * .5 : W * .52, cy = hillTop(c) - (V ? 10 : 20), R = V ? W * .5 : W * .3, gr = g.createRadialGradient(c, cy, 0, c, cy, R); gr.addColorStop(0, `rgba(${GOLD},${.95 * warm})`); gr.addColorStop(.6, `rgba(${GOLD},${.45 * warm})`); gr.addColorStop(1, `rgba(${GOLD},0)`); g.fillStyle = gr; g.fillRect(c - R, cy - R, 2 * R, 2 * R); g.restore(); } });
+  });
+}
+function partBethlehem(ctx, t) {
+  ctx.fillStyle = Woodcut.INK; ctx.fillRect(0, 0, W, H);
+  const c = V ? W * .5 : W * .52, push = eio(clamp(t / 16));
+  BETH.render(ctx, t, { x: lerp(W / 2, c, push * .6), y: lerp(H / 2, V ? H * .44 : H * .5, push), z: lerp(1, V ? 1.1 : 1.12, push) });
+  Woodcut.brayer(ctx, eio(clamp((t - 15.4) / 1.6)));
+}
+
+
+// =====================================================================================================================
+// 3 · 1:01–1:35  the emperor's decree — a Roman floor mosaic. The Holy Land in stone (Nazareth far from Bethlehem); pull back
+// to the whole empire: from Rome the decree turns stones red along the roads and sea lanes; back in: gold glass is laid stone by
+// stone from Nazareth to Bethlehem — and Micah's line lights over it. Then silence.
+const STONE = { sea: [128, 150, 160], sea2: [96, 120, 132], marble: [236, 224, 199], cream: [242, 233, 210], ochre: [222, 198, 150], umber: [91, 67, 50],
+  terra: [142, 60, 43], red: [178, 58, 36], gold: [226, 178, 76], olive: [176, 170, 132], river: [118, 146, 156] };
+const MRES = 1.5;
+let HL = null, EMP = null;
+function regionSampler(w, h, paint) {   // paint(g) fills region colours (r channel = id); returns (x, y) → id
+  const c = canvas(Math.ceil(w / 4), Math.ceil(h / 4)), g = c.getContext('2d', { willReadFrequently: true }); g.scale(.25, .25); paint(g);
+  const d = g.getImageData(0, 0, c.width, c.height).data; return (x, y) => { const xi = Math.min(c.width - 1, Math.max(0, x / 4 | 0)), yi = Math.min(c.height - 1, Math.max(0, y / 4 | 0)); return d[(yi * c.width + xi) * 4]; };
+}
+// --- the Holy Land: Galilee to Judea (lon/lat → canvas px) ---
+function hlProj() { const K = (V ? 820 : 560) * MRES, C = Math.cos(32 * Math.PI / 180), w = Math.round(W * 1.2 * MRES), h = Math.round(H * 1.2 * MRES), cx = w / 2, cy = h / 2 + (V ? -120 : -60) * MRES;
+  return { w, h, K, p: ([lon, lat]) => [cx + (lon - 35.3) * K * C, cy - (lat - 32.2) * K] }; }
+const HLPLACE = { nazareth: [35.30, 32.70], jerusalem: [35.23, 31.78], bethlehem: [35.20, 31.705], galilee: [34.98, 32.80], judea: [34.95, 31.50] };
+const HLROUTE = [[35.30, 32.70], [35.38, 32.64], [35.50, 32.50], [35.555, 32.28], [35.55, 32.05], [35.47, 31.90], [35.44, 31.86], [35.36, 31.82], [35.27, 31.79], [35.23, 31.78], [35.21, 31.745], [35.20, 31.705]];
+function buildHolyLand() {
+  const pr = hlProj(), P2 = pr.p, s = (V ? 15 : 14) * MRES;
+  const coast = [[35.10, 33.60], [35.20, 33.27], [35.08, 32.93], [34.97, 32.83], [34.92, 32.62], [34.89, 32.48], [34.80, 32.20], [34.75, 32.05], [34.66, 31.85], [34.55, 31.67], [34.45, 31.50], [34.30, 31.30], [34.20, 31.05]].map(P2);
+  const galilee = [[35.53, 32.82], [35.57, 32.89], [35.62, 32.88], [35.65, 32.82], [35.64, 32.74], [35.60, 32.70], [35.56, 32.72], [35.53, 32.77]].map(P2);
+  const dead = [[35.47, 31.78], [35.56, 31.75], [35.58, 31.55], [35.55, 31.30], [35.48, 31.10], [35.40, 31.05], [35.38, 31.25], [35.42, 31.50], [35.43, 31.70]].map(P2);
+  const jordan = [[35.59, 32.70], [35.57, 32.60], [35.58, 32.48], [35.55, 32.35], [35.56, 32.20], [35.54, 32.05], [35.55, 31.92], [35.53, 31.80], [35.52, 31.77]].map(P2);
+  const seaPoly = [[pr.w * -.1, -100], ...coast, [ -100, pr.h + 100]];
+  const reg = regionSampler(pr.w, pr.h, g => { g.fillStyle = 'rgb(2,0,0)'; g.fillRect(0, 0, pr.w, pr.h);   // 2 land
+    const poly = (pts, id) => { g.fillStyle = `rgb(${id},0,0)`; g.beginPath(); pts.forEach(([x, y], i) => i ? g.lineTo(x, y) : g.moveTo(x, y)); g.closePath(); g.fill(); };
+    poly([[-200, -200], [P2([35.10, 34])[0], -200], ...coast, [P2([34.2, 30.5])[0], pr.h + 200], [-200, pr.h + 200]], 1); poly(galilee, 3); poly(dead, 3); });
+  const jx = lat => { let best = jordan[0]; for (const p of jordan) if (Math.abs(p[1] - P2([0, lat])[1]) < Math.abs(best[1] - P2([0, lat])[1])) best = p; return best[0]; };
+  const color = (x, y) => { const id = reg(x, y), n = Pilot.fbm(x * .004, y * .004);
+    if (id === 1 || id === 3) return Pilot.mix(STONE.sea, STONE.cream, .25 * n);
+    const east = x > jx(32.2) + 40 * MRES;   // beyond the Jordan: paler, desert stone
+    return east ? Pilot.mix(STONE.ochre, STONE.cream, .5 * n) : Pilot.mix(STONE.marble, STONE.olive, clamp(.15 + .5 * (n - .45))); };
+  const off = (pts, d) => pts.map(([x, y]) => [x - d, y]);   // wave courses: the coast repeated out to sea
+  HL = Mosaic.build({ w: pr.w, h: pr.h, tile: s, seed: 31, color, outlines: [
+    { pts: coast, color: STONE.umber, courses: 1 }, { pts: off(coast, s * 1.1), color: STONE.sea2, courses: 1 }, { pts: off(coast, s * 3.4), color: STONE.sea2, courses: 1 }, { pts: off(coast, s * 6.2), color: STONE.sea2, courses: 1 },
+    { pts: galilee, color: STONE.umber, courses: 1, closed: true }, { pts: dead, color: STONE.umber, courses: 1, closed: true },
+    { pts: jordan, color: STONE.river, courses: 2 },
+    ...['nazareth', 'jerusalem', 'bethlehem'].map(k => { const [x, y] = P2(HLPLACE[k]), r = (k === 'jerusalem' ? 1.25 : .95) * s, ring = []; for (let a = 0; a < 6.3; a += .3) ring.push([x + Math.cos(a) * r, y + Math.sin(a) * r]); return { pts: ring, color: STONE.terra, courses: 1, closed: true }; }),
+  ] });
+  HL.pr = pr; HL.place = k => P2(HLPLACE[k]);
+  HL.road = HL.near(Mosaic.smooth(HLROUTE.map(P2), 2), s * .75);
+}
+// --- the empire: the Mediterranean from Spain to Judea ---
+const EMPROUTES = [   // [places, delay s] — the decree goes out from Rome by road and sea; the last reaches Judea
+  [[[12.5, 41.9], [11.3, 43.8], [8.9, 44.4], [5.4, 43.3], [3.0, 43.2], [1.2, 41.1], [-3.7, 40.4]], 0],
+  [[[12.5, 41.9], [11.3, 43.8], [9.2, 45.5], [6.5, 46.8], [3.5, 48.3]], .3],
+  [[[12.5, 41.9], [12.3, 41.75], [11.5, 39.0], [10.3, 36.9]], .2],
+  [[[12.5, 41.9], [14.2, 41.1], [17.9, 40.6], [19.4, 41.3], [22.9, 40.6], [26.0, 40.6], [29.0, 41.0], [32.9, 39.9]], .4],
+  [[[12.3, 41.75], [15.6, 38.2], [20.0, 35.5], [25.0, 33.5], [29.9, 31.2]], .6],
+  [[[17.9, 40.6], [20.5, 37.8], [24.5, 34.6], [29.5, 33.6], [33.0, 32.9], [34.9, 32.5], [35.2, 31.8]], 1.0],
+];
+function empProj() { const K = (V ? 30 : 47) * MRES * 1.4, C = Math.cos(38 * Math.PI / 180), w = Math.round(W * 1.4 * MRES * 1.4), h = Math.round(H * 1.4 * MRES * 1.4), cx = w / 2, cy = h / 2 + (V ? -260 : -40) * MRES;
+  return { w, h, K, p: ([lon, lat]) => [cx + (lon - (V ? 15 : 14)) * K * C, cy - (lat - 38) * K] }; }
+function buildEmpire() {
+  const pr = empProj(), P2 = pr.p, s = (V ? 11 : 12) * MRES * 1.4, D = InkMap.MED;
+  const reg = regionSampler(pr.w, pr.h, g => { g.fillStyle = 'rgb(2,0,0)'; g.fillRect(0, 0, pr.w, pr.h);
+    const poly = (pts, id) => { g.fillStyle = `rgb(${id},0,0)`; g.beginPath(); pts.forEach((p, i) => { const [x, y] = P2(p); i ? g.lineTo(x, y) : g.moveTo(x, y); }); g.closePath(); g.fill(); };
+    D.seas.forEach(sp => poly(sp, 1)); D.islands.forEach(sp => poly(sp, 2)); });
+  const color = (x, y) => { const n = Pilot.fbm(x * .003, y * .003); return reg(x, y) === 1 ? Pilot.mix(STONE.sea, STONE.cream, .2 * n) : Pilot.mix(STONE.marble, STONE.ochre, clamp(.2 + .6 * (n - .4))); };
+  const outlines = [...D.seas.slice(0, 4), ...D.islands].map(sp => ({ pts: sp.map(P2), color: STONE.umber, courses: 1, closed: true }));
+  EMP = Mosaic.build({ w: pr.w, h: pr.h, tile: s, seed: 37, color, outlines });
+  EMP.pr = pr; EMP.routes = EMPROUTES.map(([pts, delay]) => ({ ...EMP.near(Mosaic.smooth(pts.map(P2), 2), s * .7), delay }));
+  EMP.rome = P2([12.5, 41.9]); EMP.judea = P2([35.2, 31.8]);
+}
+function mosaicView(ctx, m, cam) {   // cam = { x, y (canvas px), z (screen px per frame px) }
+  ctx.setTransform(cam.z / MRES, 0, 0, cam.z / MRES, W / 2 - cam.x * cam.z / MRES, H / 2 - cam.y * cam.z / MRES); }
+const toScreen = (m, cam, [x, y]) => [W / 2 + (x - cam.x) * cam.z / MRES, H / 2 + (y - cam.y) * cam.z / MRES];
+function mapLabel(ctx, txt, x, y, a, o = {}) { if (a <= 0 || !txt) return; const size = o.size || (V ? 42 : 38);   // dark letters on light stone, as a mosaic inscription
+  Pilot.text(ctx, txt, x, y, { size, weight: 700, color: o.color || '#2a1c12', alpha: a, shadow: 'rgba(250,242,222,1)', shadowBlur: 12, ls: 2 }); Pilot.text(ctx, txt, x, y, { size, weight: 700, color: o.color || '#2a1c12', alpha: a, shadow: 'rgba(250,242,222,.9)', shadowBlur: 3, ls: 2 }); }
+function partDecree(ctx, t) {
+  ctx.fillStyle = Mosaic.GROUT; ctx.fillRect(0, 0, W, H);
+  const out = ss(67.6, 68.8, t) * (1 - ss(76.0, 77.2, t));   // 0 = the Holy Land, 1 = the empire
+  // ---- the empire ----
+  if (out > 0) {
+    const pull = eio(clamp((t - 68.0) / 3.4)), back = eio(clamp((t - 75.6) / 1.8)), z0 = V ? 3.2 : 3.0, cen = [EMP.pr.w / 2, EMP.pr.h / 2 - (V ? 0 : 60)];
+    let z = Math.exp(lerp(Math.log(z0), 0, pull)), cx = lerp(EMP.judea[0], cen[0], pull), cy = lerp(EMP.judea[1], cen[1], pull);
+    z = Math.exp(lerp(Math.log(z), Math.log(z0), back)); cx = lerp(cx, EMP.judea[0], back); cy = lerp(cy, EMP.judea[1], back);
+    const cam = { x: cx, y: cy, z: z / 1.4 };
+    ctx.save(); ctx.globalAlpha = out; mosaicView(ctx, EMP, cam); ctx.drawImage(EMP.canvas, 0, 0);
+    // the decree: stones turn red outward from Rome, along each road and sea lane in turn
+    const t0 = 71.4, speed = 520 * MRES * 1.4;   // canvas px per second along a route
+    for (const r of EMP.routes) for (const { i, d } of r.list) { const k = clamp((t - (t0 + r.delay + d / speed)) / .35); if (k > 0) Mosaic.flip(ctx, EMP, i, k, STONE.red); }
+    // Rome: a purple seal stone (the one imperial accent)
+    { const [rx, ry] = EMP.rome, a = ss(70.6, 71.4, t); if (a > 0) { ctx.globalAlpha = out * a; ctx.fillStyle = 'rgb(86,40,92)'; ctx.beginPath(); ctx.arc(rx, ry, EMP.s * 1.1, 0, 6.283); ctx.fill(); ctx.strokeStyle = 'rgb(226,178,76)'; ctx.lineWidth = EMP.s * .25; ctx.stroke(); } }
+    ctx.restore();
+    const la = out * win(t, 70.8, 75.8, .6, .6), [rx, ry] = toScreen(EMP, cam, EMP.rome);
+    mapLabel(ctx, Film.text('M6'), rx, ry - (V ? 44 : 40), la, { size: V ? 40 : 36 }); mapLabel(ctx, Film.text('A1'), rx, ry + (V ? 62 : 58), la, { size: V ? 32 : 30, color: '#4a1f50' });
+  }
+  // ---- the Holy Land ----
+  if (out < 1) {
+    const push = eio(clamp((t - 61) / 6.6)) * .06 + eio(clamp((t - 77) / 12)) * .08, c = HL.place('jerusalem'), n = HL.place('nazareth');
+    const b = HL.place('bethlehem'), z = 1 + push, my = (n[1] + b[1]) / 2, ty = V ? H * .33 : H * .4, cam = { x: HL.place('nazareth')[0] + (V ? 40 : 160) * MRES, y: my - (ty - H / 2) * MRES / z, z };
+    ctx.save(); ctx.globalAlpha = 1 - out; mosaicView(ctx, HL, cam); ctx.drawImage(HL.canvas, 0, 0);
+    // the road: gold glass laid stone by stone, Nazareth → Bethlehem; glints run along it when it arrives
+    const r0 = 77.6, r1 = 89.4, L = HL.road.len, arrive = ss(r1, r1 + .4, t);
+    for (const { i, d } of HL.road.list) { const at = r0 + (r1 - r0) * d / L, k = clamp((t - at) / .3); if (k > 0) { Mosaic.flip(ctx, HL, i, k, STONE.gold); Mosaic.glint(ctx, HL, i, .55 * win(t, at + .2, at + 1.2, .2, .8) + .8 * arrive * win(t, r1 + .3 + (L - d) / L * 1.2, r1 + 1.6 + (L - d) / L * 1.2, .3, .9)); } }
+    // Bethlehem lights when the road reaches it
+    if (arrive > 0) { const [bx, by] = HL.place('bethlehem'); const g = ctx.createRadialGradient(bx, by, 0, bx, by, HL.s * 7); g.addColorStop(0, `rgba(255,226,150,${.75 * arrive})`); g.addColorStop(1, 'rgba(255,226,150,0)'); ctx.fillStyle = g; ctx.globalCompositeOperation = 'screen'; ctx.fillRect(bx - HL.s * 8, by - HL.s * 8, HL.s * 16, HL.s * 16); ctx.globalCompositeOperation = 'source-over'; }
+    ctx.restore();
+    const la = (1 - out) * win(t, 61.6, 94.4, .8, .6), L2 = k => toScreen(HL, cam, HL.place(k));
+    for (const [k, id, dx, dy] of [['nazareth', 'M1', 0, -1], ['jerusalem', 'M3', 1, 0], ['bethlehem', 'M2', -1, .6]]) { const [x, y] = L2(k); mapLabel(ctx, Film.text(id), x + dx * (V ? 110 : 110), y + dy * (V ? 50 : 44) + (dy === 0 ? 12 : 0), la * (k === 'bethlehem' ? 1 : 1 - .5 * ss(84, 86, t))); }
+    for (const [k, id] of [['galilee', 'M4'], ['judea', 'M5']]) { const [x, y] = L2(k); mapLabel(ctx, Film.text(id), x, y, la * .85, { size: V ? 34 : 30, color: '#5b4332' }); }
+  }
+  // soft dark band under the words (the stone is light)
+  { const y0 = Film.SAFE() - (V ? 140 : 60), g = ctx.createLinearGradient(0, y0, 0, H); g.addColorStop(0, 'rgba(30,22,16,0)'); g.addColorStop(.35, 'rgba(30,22,16,.82)'); g.addColorStop(1, 'rgba(30,22,16,.92)'); ctx.fillStyle = g; ctx.fillRect(0, y0, W, H - y0); }
+}
+
+
+// =====================================================================================================================
+// 4 · 1:35–2:08  that night — an oil painting in the dark; the only light comes from the child in the manger
+const ORES = 1.2;
+let NATIV = null;
+// a silhouette from path commands ['M', x, y] ['C', x1, y1, x2, y2, x, y] ['L', x, y] (authored around the manger), mapped by T;
+// returns { p: Path2D, pts: outline points } — no smoothing, so heads, hands and folds keep their drawing
+function silhouette(cmds, T) { const pts = []; let cur = null;
+  for (const c of cmds) { if (c[0] === 'M' || c[0] === 'L') { cur = [c[1], c[2]]; pts.push(cur); }
+    else if (c[0] === 'C') { const [x1, y1, x2, y2, x, y] = c.slice(1), [x0, y0] = cur; for (let k = 1; k <= 10; k++) { const u = k / 10, m = 1 - u; pts.push([m * m * m * x0 + 3 * m * m * u * x1 + 3 * m * u * u * x2 + u * u * u * x, m * m * m * y0 + 3 * m * m * u * y1 + 3 * m * u * u * y2 + u * u * u * y]); } cur = [x, y]; } }
+  const tp = pts.map(T), p = new Path2D(); tp.forEach(([x, y], i) => i ? p.lineTo(x, y) : p.moveTo(x, y)); p.closePath(); return { p, pts: tp }; }
+const FIG = {
+  mary: [['M', -250, -205], ['C', -225, -222, -190, -212, -178, -188], ['C', -170, -172, -172, -160, -176, -150], ['L', -170, -146], ['C', -160, -138, -157, -130, -162, -123],
+    ['C', -159, -117, -161, -111, -166, -107], ['C', -165, -101, -169, -95, -178, -92], ['C', -186, -88, -190, -80, -186, -70], ['C', -175, -62, -158, -58, -140, -50],
+    ['C', -128, -46, -122, -38, -128, -30], ['C', -140, -24, -160, -24, -172, -20], ['C', -182, 10, -168, 50, -150, 96], ['C', -142, 120, -148, 146, -160, 152], ['L', -440, 156],
+    ['C', -470, 140, -476, 100, -462, 60], ['C', -444, 0, -410, -60, -380, -110], ['C', -356, -150, -330, -170, -300, -186], ['C', -284, -196, -266, -204, -250, -205]],
+  shepherd: [['M', 300, -200], ['C', 330, -206, 356, -190, 364, -160], ['C', 372, -130, 380, -110, 396, -90], ['C', 430, -50, 446, 20, 446, 90], ['C', 448, 120, 460, 146, 474, 154], ['L', 270, 158],
+    ['C', 250, 150, 244, 128, 252, 104], ['C', 258, 80, 246, 50, 232, 30], ['C', 222, 10, 216, -10, 214, -30], ['C', 200, -36, 186, -40, 182, -50], ['C', 190, -62, 210, -62, 224, -58],
+    ['C', 232, -70, 236, -84, 236, -96], ['C', 228, -104, 224, -114, 226, -122], ['C', 222, -130, 220, -140, 226, -146], ['C', 228, -156, 230, -166, 238, -174], ['C', 248, -190, 270, -200, 300, -200]],
+  joseph: [['M', 160, -400], ['C', 182, -404, 200, -390, 204, -370], ['C', 208, -350, 212, -332, 222, -318], ['C', 252, -300, 266, -270, 270, -230], ['C', 276, -150, 280, -60, 282, 10], ['L', 282, 60], ['L', 90, 60],
+    ['C', 92, 0, 96, -100, 104, -200], ['C', 108, -250, 114, -280, 130, -300], ['C', 128, -310, 126, -318, 128, -324], ['C', 122, -330, 118, -340, 122, -348], ['C', 116, -356, 116, -364, 122, -370], ['C', 124, -384, 140, -400, 160, -400]],
+  farL: [['M', -570, -300], ['C', -548, -306, -530, -292, -528, -272], ['C', -526, -252, -522, -238, -512, -226], ['C', -490, -200, -480, -150, -478, -60], ['L', -476, 150], ['L', -650, 150],
+    ['C', -652, 0, -646, -150, -628, -216], ['C', -620, -238, -604, -250, -598, -262], ['C', -600, -280, -590, -296, -570, -300]],
+  farR: [['M', 590, -312], ['C', 568, -318, 548, -304, 546, -284], ['C', 544, -264, 540, -250, 530, -238], ['C', 508, -212, 500, -160, 498, -70], ['L', 496, 150], ['L', 664, 150],
+    ['C', 666, 0, 662, -150, 646, -226], ['C', 638, -250, 624, -262, 618, -274], ['C', 620, -292, 610, -308, 590, -312]],
+};
+function buildNativity() {
+  const cw = Math.round(W * ORES), ch = Math.round(H * ORES), { c, g } = Oil.canvas(cw, ch), r = rng(61);
+  const sc = (V ? 1.0 : 1) * ORES, ox = cw / 2, oy = (V ? H * .4 : H * .57) * ORES;
+  const T = ([x, y]) => [ox + x * sc, oy + y * sc];
+  const L = { x: ox, y: oy - 26 * sc, r: 560 * sc };
+  Oil.ground(g, cw, ch, L, 7);
+  for (const [x0, w] of [[-720, 90], [730, 100]]) { const [a, b] = T([x0, -600]), [, d] = T([x0, 300]); for (let y = b; y < d; y += 18) Oil.stroke(g, a + (r() - .5) * 10, y, 1.57 + (r() - .5) * .1, 70, w * sc, P2mix(.06 + .08 * r()), { alpha: .5, flat: true, rnd: r }); }   // two dark posts of the stable
+  const fig = (k, o) => { const sh = silhouette(FIG[k], T); Oil.figure(g, sh.p, sh.pts, L, o); return sh; };
+  fig('farL', { seed: 11, gain: .4, reach: 1.1, density: 3 }); fig('farR', { seed: 13, gain: .36, reach: 1.1, density: 3 });
+  fig('joseph', { seed: 12, gain: 1.0, density: 5 });
+  { const [a, b] = T([84, -330]), [cc, d] = T([78, 60]); g.save(); g.strokeStyle = 'rgb(28,16,8)'; g.lineWidth = 10 * sc; g.lineCap = 'round'; g.beginPath(); g.moveTo(a, b); g.lineTo(cc, d); g.stroke(); g.restore();
+    for (let k = 0; k < 1; k += .07) { const x = lerp(a, cc, k), y = lerp(b, d, k); Oil.stroke(g, x + 3 * sc, y, Math.atan2(d - b, cc - a), 26 * sc, 3.5 * sc, Oil.lightCol(.5 * Math.exp(-Math.hypot(x - L.x, y - L.y) / L.r)), { alpha: .7, rnd: r }); } }
+  const mary = fig('mary', { seed: 21, gain: 1.4, density: 8, depth: 1.1 });
+  { g.save(); g.clip(mary.p); for (let i = 0; i < 80; i++) { const [x, y] = T([-250 + r() * 90, 10 + r() * 130]); Oil.stroke(g, x, y, 1.2 + r() * .4, 22 * sc, 6 * sc, [128 + r() * 24, 28, 22], { alpha: .6 * Math.exp(-Math.hypot(x - L.x, y - L.y) / L.r * .8), rnd: r }); } g.restore(); }   // the one red: her robe
+  fig('shepherd', { seed: 22, gain: 1.3, density: 7 });
+  // the manger: rough boards, lit along the top edge; crossed legs below
+  { const box = silhouette([['M', -186, -16], ['L', 186, -16], ['L', 152, 106], ['L', -152, 106], ['L', -186, -16]], T); Oil.figure(g, box.p, box.pts, { ...L, y: L.y - 80 * sc }, { seed: 23, gain: 1.7, density: 6, depth: .7 });
+    g.save(); g.clip(box.p); for (let y = 6; y < 106; y += 26) { const [a, b] = T([-190, y]), [cc] = T([190, y]); g.strokeStyle = 'rgba(8,4,2,.6)'; g.lineWidth = 2.4 * sc; g.beginPath(); g.moveTo(a, b); g.lineTo(cc, b); g.stroke(); } g.restore();
+    for (const [x0, x1] of [[-150, -60], [150, 60]]) { const [a, b] = T([x0, 100]), [cc, d] = T([x1, 156]); g.strokeStyle = 'rgb(30,17,8)'; g.lineWidth = 12 * sc; g.beginPath(); g.moveTo(a, b); g.lineTo(cc, d); g.stroke(); } }
+  for (let i = 0; i < 420; i++) { const x0 = lerp(-196, 196, r()), y0 = -20 + (r() - .5) * 16 + (Math.abs(x0) > 176 ? r() * 50 : 0), [x, y] = T([x0, y0]), k = clamp(1.1 - Math.hypot(x - L.x, y - L.y) / (L.r * .5));
+    Oil.stroke(g, x, y, (r() - .5) * 1.2, (12 + r() * 18) * sc, 2 * sc, Oil.lightCol(k * .9), { alpha: .5 + .5 * k, flat: true, rnd: r }); }
+  { const [, fy] = T([0, 40]), gr = g.createLinearGradient(0, fy, 0, fy + 110 * sc); gr.addColorStop(0, 'rgba(18,10,5,0)'); gr.addColorStop(.75, 'rgba(18,10,5,.93)'); gr.addColorStop(1, 'rgba(18,10,5,.98)'); g.fillStyle = gr; g.fillRect(0, fy, cw, ch - fy); }
+  for (let i = 0; i < 260; i++) { const x0 = (r() - .5) * 760, y0 = 110 + r() * 70, [x, y] = T([x0, y0]), kk = clamp(.8 - Math.hypot(x - L.x, y - L.y) / (L.r * .9)); if (kk <= 0) continue; Oil.stroke(g, x, y, (r() - .5) * .8, (10 + r() * 16) * sc, 1.8 * sc, Oil.lightCol(kk * .7), { alpha: .3 + .5 * kk, flat: true, rnd: r }); }
+  // the child — the source of the light: a swaddled bundle and a small head, solid light under thick strokes
+  Oil.glow(g, L.x, L.y, L.r * .55, Oil.TOP, .55); Oil.glow(g, L.x, L.y, L.r * .22, Oil.CREAM, .5);
+  { const bx = 14, by = -30, rx = 100, ry = 30, [cx0, cy0] = T([bx, by]);
+    g.save(); g.fillStyle = Pilot.rgb(Oil.lightCol(.86)); g.beginPath(); g.ellipse(cx0, cy0, rx * sc, ry * sc, -.05, 0, 6.283); g.fill(); g.restore();
+    for (let i = 0; i < 160; i++) { const a = r() * 6.283, d = Math.sqrt(r()) * .92, [x, y] = T([bx + Math.cos(a) * rx * d, by + Math.sin(a) * ry * d]);
+      Oil.stroke(g, x, y, .95 + (r() - .5) * .3, (16 + r() * 14) * sc, (5 + r() * 3) * sc, Oil.lightCol(.8 + .2 * r()), { alpha: .85, rnd: r }); }
+    for (let k = -2; k <= 2; k++) { const [x, y] = T([bx + k * 36, by]); Oil.stroke(g, x, y, 1.05, 58 * sc, 2.6 * sc, [196, 152, 98], { alpha: .5, flat: true, rnd: r }); }
+    const [hx, hy] = T([-96, -36]); g.save(); g.fillStyle = Pilot.rgb(Oil.lightCol(.9)); g.beginPath(); g.ellipse(hx, hy, 27 * sc, 24 * sc, 0, 0, 6.283); g.fill(); g.restore();
+    for (let i = 0; i < 40; i++) { const a = r() * 6.283, d = Math.sqrt(r()) * 20 * sc; Oil.stroke(g, hx + Math.cos(a) * d, hy + Math.sin(a) * d, a + 1.57, 9 * sc, 4 * sc, Oil.lightCol(.88 + .12 * r()), { alpha: .8, flat: true, rnd: r }); }
+    g.save(); g.strokeStyle = 'rgba(130,86,46,.75)'; g.lineWidth = 1.8 * sc; g.lineCap = 'round'; g.beginPath(); g.moveTo(hx + 2 * sc, hy - 3 * sc); g.quadraticCurveTo(hx + 7 * sc, hy, hx + 12 * sc, hy - 3 * sc); g.stroke(); g.restore(); }
+  Oil.finish(g, cw, ch, 9, L);
+  NATIV = { c, L };
+}
+function P2mix(k) { return Pilot.mix(Oil.DEEP, Oil.UMBER, 1 - k).map((v, i) => v + Oil.AMBER[i] * k * .3); }
+function partNight(ctx, t) {
+  ctx.fillStyle = 'rgb(7,4,3)'; ctx.fillRect(0, 0, W, H);
+  const pull = eio(clamp((t - 95) / 18)), z = lerp(1.14, 1.0, pull), L = NATIV.L, hw = W / 2 / z, hh = H / 2 / z, cx = clamp(lerp(L.x / ORES, W / 2, pull), hw, W * ORES / ORES - hw + (ORES - 1) * W), cy = clamp(lerp(L.y / ORES, H / 2, pull), hh, H * ORES - hh);
+  ctx.save(); ctx.setTransform(z / ORES, 0, 0, z / ORES, W / 2 - cx * z, H / 2 - cy * z); ctx.drawImage(NATIV.c, 0, 0);
+  // the light breathes a little (a living source, not a lamp flicker)
+  const b = .06 + .04 * Math.sin(t * 1.3) * Math.sin(t * .7 + 1); ctx.globalCompositeOperation = 'screen'; Oil.glow(ctx, L.x, L.y, L.r * .5, Oil.TOP, b); ctx.restore();
+}
+
+// =====================================================================================================================
+// the timeline (pilot: parts 1, 3, 4)
+const SCENES = [[0, 21, partBethlehem], [61, 95, partDecree], [95, 113, partNight]];
+const QB = () => ({ bottom: Film.subBottom() + 40 });
+const TEXT = [
+  ['sub', '01', 0.4, 6.6], ['label', 'P0', 4.0, 15.2], ['quote', '02', 7.0, 15.4, { ...QB(), hlk: 1, hlAt: 9.4 }],
+  ['title', 'T1', 16.6, 19.0], ['sub', 'Q1', 19.0, 21.0],
+  ['sub', '13', 61.4, 67.6], ['quote', '14', 68.4, 75.6, QB()], ['quote', '15', 76.8, 84.6, { ...QB(), hlAt: 81.5 }], ['sub', '16', 85.0, 89.6],
+  ['micah', '02', 89.8, 94.2],
+  ['quote', '17', 95.6, 104.0, QB()],
+];
+function title(ctx, id, t, a, b) { const ta = win(t, a, b, .9, .6); if (ta <= 0) return; const sz = V ? 100 : 108, ty = V ? H * .45 : H * .48;
+  Pilot.text(ctx, Film.text(id), W / 2, ty, { size: sz, weight: 600, color: '#e9c77a', alpha: ta, shadow: 'rgba(233,185,73,.35)', shadowBlur: 40, ls: 6 });
+  const lw = (V ? 420 : 520) * eo(clamp((t - a - .3) / 1.6)); ctx.fillStyle = `rgba(233,199,122,${ta * .8})`; ctx.fillRect(W / 2 - lw / 2, ty + (V ? 50 : 54), lw, 2); }
+const FILM_DUR = 113;
+function draw(ctx, t) {
+  for (const [a, b, f] of SCENES) if (t >= a && t < b) { ctx.save(); f(ctx, t); ctx.restore(); }
+  for (const [kind, id, a, b, o] of TEXT) { if (t < a - .1 || t > b + .1) continue;
+    if (kind === 'sub') Film.sub(ctx, id, t, a, b, o); else if (kind === 'label') Film.label(ctx, id, t, a, b); else if (kind === 'title') title(ctx, id, t, a, b);
+    else if (kind === 'micah') { const seg = Film.text(id).split(/\s*\/\s*/)[0]; Film.quote(ctx, id, t, a, b, { text: seg, ...QB(), hl: Film.lines[id].hl, hlk: ss(a + .4, a + 1.4, t), color: '#fff3d6', shadow: 'rgba(255,190,90,.45)' }); }
+    else if (kind === 'quote') Film.quote(ctx, id, t, a, b, { ...o, hl: Film.lines[id].hl, hlk: o.hlAt ? ss(o.hlAt, o.hlAt + 1.2, t) : 0 }); }
+}
+Pilot.run({ W, H, dur: FILM_DUR, fonts: ["600 40px 'Noto Serif KR'", "400 40px 'Noto Serif KR'", "400 20px 'Noto Sans KR'"],
+  init: async () => { await Film.load(); buildBethlehem(); buildHolyLand(); buildEmpire(); buildNativity(); }, draw });
+</script>
+</body>
+</html>

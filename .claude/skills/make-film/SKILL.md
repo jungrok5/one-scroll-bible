@@ -58,6 +58,13 @@ Lemo-Opuscar repo AND the word-log kits (`kits/templates.jpg` — portrait-nativ
 texture buries the map, the words or the people on a phone (the mosaic pilot did). Pilot 2–3 parts → `review.json`
 `pilot` → draft page + a portrait preview video (SendUserFile) before building the rest.
 
+**Verse-to-verse links — the maintainer picks per link** (2026-11-03: "4개 다 다음에 말씀 연결 시 골라 쓰게 해줘"). Never stack two
+verses with a line between them. Use `motion/films/lib-link.js`: `['link', 'A', a, b, { to: 'B', style }]`, where style is
+`carry` (light crosses, same place) · `depth` (old recedes, new comes forward) · `horizon` (camera trucks along a gold
+horizon) · `ember` (the shared words become embers and settle into the new ones). The shared words are each line's
+script.json `hl`. For each link in a new film, render the four as 12 s portrait clips (`RENDER_QUERY=link=<style>&lab=1`,
+`--from/--to` around the link), join them into one video, and ask which to use. 「메시아」 picked `ember`.
+
 ## 2 · Review loop (stages 2–4)
 1. Feedback comes in chat (the maintainer and their wife read the draft page).
 2. Apply. Decided items move out of `decisions` into `feedback_log` (who said what → what changed). Anything unclear → ask.

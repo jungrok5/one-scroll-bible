@@ -9,6 +9,7 @@
      horizon — one horizon of gold light; the camera trucks along it: A passes out to the left, B arrives from the right
                (time runs the way the film's thread runs)
      ember   — A's shared words break into gold embers that drift and settle into B's shared words
+   All four stay available: the maintainer picks one for each link in each film (README 7절; 「메시아」 = ember).
    Timing inside [a, b]: A in (0–.8 s), its words lit (1.4 s), the passage (4.2–6.8 s), B's words lit, out at b. */
 (function () {
   const P = window.Pilot, F = window.Film, { clamp, lerp, ss, eio } = P;

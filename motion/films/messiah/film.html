@@ -9,6 +9,7 @@
 <body>
 <script src="../../pilot/lib.js"></script>
 <script src="../lib-film.js"></script>
+<script src="../lib-link.js"></script>
 <script src="kit-world3d.js"></script>
 <script>
 /* 메시아 예언과 성탄 — one continuous ~2:59 film, made like the first film (motion/films/README 7절): a camera that moves
@@ -21,20 +22,32 @@ const W = Pilot.W, H = Pilot.H, V = Pilot.ori === 'v';
 // =====================================================================================================================
 // shared: the land as rows of shaded quads (rows are laid out from the camera outward, so any camera position is fine),
 // silhouettes, painted layers, a thread of gold light (the promise) that runs through every part
+// The grid is locked to the world (cells of 2^k m, larger with distance), so the land does not swim as the camera moves;
+// each cell is shaded smoothly from near edge to far edge with normals of the smoothed surface (no flat facets, no bricks).
 function terrain(ctx, c, L, o) {
-  const rows = []; let d = .5; while (d < (o.maxD || 2600)) { rows.push(c.z + d); d += 1.6 + d * .02; }
+  const S = d => Math.pow(2, Math.max(0, Math.round(Math.log2(1.6 + d * .02)))), rows = [];
+  let s = S(0), z = Math.floor((c.z + .5) / s) * s;
+  while (z - c.z < (o.maxD || 2600)) { rows.push([z, s]); const ns = S(z - c.z + s); if (ns > s && Math.abs(z / ns - Math.round(z / ns)) < 1e-6) s = ns; z += s; }
+  rows.push([z, s]);
   const dirx = c.f[0] / Math.max(.2, c.f[2]), spread = V ? .5 : .95, things = o.things || (() => {});
+  const nrm = (x, zz, e) => { const hx = o.h(x + e, zz) - o.h(x - e, zz), hz = o.h(x, zz + e) - o.h(x, zz - e), l = Math.hypot(hx, 2 * e, hz); return [-hx / l, 2 * e / l, -hz / l]; };
+  const col = (x, zz, e, dd) => W3.shade(o.alb(x, zz, e), nrm(x, zz, Math.max(1.5, e)), Math.max(1, dd), L);
   for (let i = rows.length - 2; i >= 0; i--) {
-    const z0 = rows[i], z1 = rows[i + 1], dz = z1 - z0, dd = z0 - c.z, half = 24 + spread * dd + (o.wide || 0), xc = c.x + dirx * dd, dx = Math.max(1.6, dz * 1.25), n = Math.ceil(2 * half / dx);
-    for (let j = 0; j < n; j++) { const x0 = xc - half + j * dx, x1 = x0 + dx, a = o.h(x0, z0), b = o.h(x1, z0), cc = o.h(x1, z1), e = o.h(x0, z1);
-      const nr = W3.normal([[x0, a, z0], [x0, e, z1], [x1, b, z0]]);
+    const [z0, sz] = rows[i], z1 = rows[i + 1][0], sN = rows[i + 1][1], dd = z0 - c.z; if (z1 < c.z) continue;
+    const half = 24 + spread * Math.max(0, dd) + (o.wide || 0), xc = c.x + dirx * Math.max(0, dd), j0 = Math.floor((xc - half) / sz), j1 = Math.ceil((xc + half) / sz);
+    // the far edge meets a coarser row: take its heights there along the coarse edges (no cracks)
+    const hFar = x => { if (sN === sz) return o.h(x, z1); const xa = Math.floor(x / sN) * sN; return lerp(o.h(xa, z1), o.h(xa + sN, z1), (x - xa) / sN); };
+    for (let j = j0; j < j1; j++) { const x0 = j * sz, x1 = x0 + sz, a = o.h(x0, z0), b = o.h(x1, z0), cc = hFar(x1), e = hFar(x0);
       if (!W3.poly(ctx, c, [[x0, a, z0], [x1, b, z0], [x1, cc, z1], [x0, e, z1]])) continue;
-      const col = W3.shade(o.alb(x0, z0), nr, Math.max(1, dd), L); ctx.fillStyle = W3.css(col); ctx.fill(); ctx.strokeStyle = ctx.fillStyle; ctx.lineWidth = .8; ctx.stroke(); }
+      const xm = x0 + sz / 2, cN = col(xm, z0, sz, dd), cF = col(xm, z1, sz, z1 - c.z), pN = W3.P(c, xm, (a + b) / 2, Math.max(z0, c.z + .6)), pF = W3.P(c, xm, (cc + e) / 2, z1);
+      if (pN && pF && Math.abs(pN[1] - pF[1]) > 2) { const g = ctx.createLinearGradient(pN[0], pN[1], pF[0], pF[1]); g.addColorStop(0, W3.css(cN)); g.addColorStop(1, W3.css(cF)); ctx.fillStyle = g; }
+      else ctx.fillStyle = W3.css(cN.map((v, k) => (v + cF[k]) / 2));
+      ctx.fill(); ctx.strokeStyle = ctx.fillStyle; ctx.lineWidth = 1; ctx.stroke(); }
     if (o.road) { const w = 2.2, a0 = RD.xr(z0), a1 = RD.xr(z1); if (W3.poly(ctx, c, [[a0 - w, o.h(a0 - w, z0) + .06, z0], [a0 + w, o.h(a0 + w, z0) + .06, z0], [a1 + w, o.h(a1 + w, z1) + .06, z1], [a1 - w, o.h(a1 - w, z1) + .06, z1]])) { ctx.fillStyle = W3.css(W3.shade([.97, .86, .68], [0, 1, 0], Math.max(1, dd), L)); ctx.fill(); } }
     things(z0, z1);
   }
 }
-const landAlb = (x, z) => { const n = Pilot.fbm(x * .07, z * .07, 3), scrub = Pilot.noise(x * .21 + 5, z * .21) > .62 ? .72 : 1; return [(.86 - .14 * n) * scrub, (.72 - .12 * n) * scrub, (.52 - .1 * n) * scrub]; };
+const landAlb = (x, z, e = 2) => { const n = Pilot.fbm(x * .035, z * .035, 2), scrub = 1 - .16 * ss(.5, .72, Pilot.noise(x * .06 + 5, z * .06)) * clamp(1.4 - e / 16); return [(.86 - .14 * n) * scrub, (.72 - .12 * n) * scrub, (.52 - .1 * n) * scrub]; };
 function townAt(ctx, c, L, t, z0, z1, lampK) { for (const hs of ROAD.houses) if (hs.z >= z0 && hs.z < z1) house(ctx, c, L, hs, t, lampK); }
 // a gold thread on the land: world points, revealed up to k (0..1), a bright head while it travels
 function threadWorld(ctx, c, pts, k, a = 1) { if (k <= 0) return; const sp = pts.map(p => W3.P(c, ...p)).filter(Boolean); if (sp.length < 2) return; const n = Math.max(2, Math.round(sp.length * clamp(k)));
@@ -226,9 +239,6 @@ function partPair(ctx, t) {   // back in the stable, closer; then dark, and the 
   const dim = ss(114.6, 116.2, t); ctx.fillStyle = `rgba(6,4,6,${.72 * dim})`; ctx.fillRect(0, 0, W, H);
   textBand(ctx);
 }
-function pairLink(ctx, t) {   // a fine gold line from 'the seed of the woman' (Gen 3:15, above) to 'born of a woman' (Gal 4:4, below)
-  const k = ss(120.6, 122.4, t) * (1 - ss(126.6, 127.6, t)); if (k <= 0) return;
-  const y0 = V ? H * .34 : H * .3, y1 = Film.subBottom() - (V ? 150 : 110); const pts = []; for (let i = 0; i <= 30; i++) { const u = i / 30; pts.push([W / 2 + Math.sin(u * 3.14) * (V ? 60 : 90), lerp(y0 + 30, y1 - 20, u)]); } thread2D(ctx, pts, k, .9); }
 
 // =====================================================================================================================
 // 5 · 2:08–2:59  the camera leaves the stable and rises over the town at night (1 · reversed); dawn on a hill with a cross —
@@ -302,23 +312,7 @@ function travellerSil(ctx, x, y, s, step, rimCol, rimA) {   // Joseph walking ah
 function partRoad(ctx, t) {
   const c = ROAD.cam(t), L = ROAD.light(t), { rows, houses } = ROAD;
   const sk = W3.sky(ctx, c, L, t, { stars: true });
-  const alb = (x, z) => { const n = Pilot.fbm(x * .07, z * .07, 3), scrub = Pilot.noise(x * .21 + 5, z * .21) > .62 ? .72 : 1; return [(.86 - .14 * n) * scrub, (.72 - .12 * n) * scrub, (.52 - .1 * n) * scrub]; };
-  let hi = houses.length - 1;
-  for (let i = rows.length - 2; i >= 0; i--) {
-    const z0 = rows[i], z1 = rows[i + 1], dz = z1 - z0, dist = z0 - c.z; if (z1 < c.z) break;
-    const half = 50 + .62 * Math.max(0, z0 - c.z), xc = RD.xr(z0), dx = Math.max(2.6, dz * 1.25), n = Math.ceil(2 * half / dx);
-    for (let j = 0; j < n; j++) { const x0 = xc - half + j * dx, x1 = x0 + dx;
-      const a = rdH(x0, z0), b = rdH(x1, z0), cc = rdH(x1, z1), d = rdH(x0, z1);
-      const ux = dx, uy = b - a, vz = dz, vy = d - a, nrm = [-uy * vz, ux * vz, -ux * vy], nl = Math.hypot(...nrm); nrm[0] /= nl; nrm[1] /= nl; nrm[2] /= nl;
-      if (!W3.poly(ctx, c, [[x0, a, z0], [x1, b, z0], [x1, cc, z1], [x0, d, z1]])) continue;
-      const col = W3.shade(alb(x0, z0), nrm, Math.max(1, dist), L); ctx.fillStyle = W3.css(col); ctx.fill(); ctx.strokeStyle = W3.css(col); ctx.lineWidth = .8; ctx.stroke(); }
-    // the road over this row
-    { const w = 2.2, a0 = RD.xr(z0), a1 = RD.xr(z1); if (W3.poly(ctx, c, [[a0 - w, rdH(a0 - w, z0) + .06, z0], [a0 + w, rdH(a0 + w, z0) + .06, z0], [a1 + w, rdH(a1 + w, z1) + .06, z1], [a1 - w, rdH(a1 - w, z1) + .06, z1]])) {
-      ctx.fillStyle = W3.css(W3.shade([.97, .86, .68], [0, 1, 0], Math.max(1, dist), L)); ctx.fill(); } }
-    // Bethlehem's houses in this band of depth
-    while (hi >= 0 && houses[hi].z >= z0 - .01 && houses[hi].z < z1 + 400 && houses[hi].z > z0) hi--;
-    for (const hs of houses) if (hs.z >= z0 && hs.z < z1) house(ctx, c, L, hs, t);
-  }
+  terrain(ctx, c, L, { h: rdH, alb: landAlb, road: true, wide: 26, things: (z0, z1) => townAt(ctx, c, L, t, z0, z1) });
   // the travellers, on the road, walking toward the town
   { const zz = ROAD.tz(t), xx = RD.xr(zz) + .8, yy = rdH(xx, zz), pp = W3.P(c, xx, yy, zz);
     if (pp) { const sun = L.sunI, sd = L.sd; const sh = W3.P(c, xx - sd[0] * 6, yy, zz - sd[2] * 6);
@@ -469,13 +463,15 @@ const TEXT = [
   ['label', 'M1', 61.6, 67.4], ['sub', '13', 61.4, 67.6], ['label', 'A1', 68.8, 75.8], ['quote', '14', 68.8, 75.6, QB()],
   ['quote', '15', 76.8, 84.6, { ...QB(), hlAt: 81.5 }], ['sub', '16', 85.0, 89.6], ['micah', '02', 89.8, 94.2],
   ['quote', '17', 95.6, 104.4, QB()], ['label', 'P5', 105.0, 112.4], ['quote', '18', 105.4, 113.2, { ...QB(), hlAt: 108 }],
-  ['sub', 'W0', 114.0, 116.4], ['quote', 'W1', 116.4, 127.4, { y: V ? H * .3 : H * .26, size: V ? 44 : 40, hlAt: 118, color: '#d9ccb0' }], ['quote', 'W2', 118.4, 127.4, { ...QB(), hlAt: 120 }],
+  ['sub', 'W0', 114.0, 116.4], ['link', 'W1', 116.4, 127.6, { to: 'W2' }],
   ['quote', '22', 128.6, 136.6, { ...QB(), hlAt: 131 }], ['quote', '23', 137.6, 149.4, { ...QB(), hlAt: 139 }], ['sub', '25', 150.4, 159.4], ['end', 'E1', 160.4, 179.0],
 ];
 function title(ctx, id, t, a, b) { const ta = win(t, a, b, .9, .6); if (ta <= 0) return; const sz = V ? 100 : 108, ty = V ? H * .45 : H * .48;
   Pilot.text(ctx, Film.text(id), W / 2, ty, { size: sz, weight: 600, color: '#e9c77a', alpha: ta, shadow: 'rgba(233,185,73,.35)', shadowBlur: 40, ls: 6 });
   const lw = (V ? 420 : 520) * eo(clamp((t - a - .3) / 1.6)); ctx.fillStyle = `rgba(233,199,122,${ta * .8})`; ctx.fillRect(W / 2 - lw / 2, ty + (V ? 50 : 54), lw, 2); }
 const FILM_DUR = 179.4;
+// how two verses are joined (motion/films/lib-link.js); ?link=carry|depth|horizon|ember, ?lab=1 names it on screen (drafts)
+const LINK = (location.search.match(/[?&]link=(\w+)/) || [])[1] || 'carry', LAB = /[?&]lab=1/.test(location.search) ? { carry: '시안 A · 빛이 건너감', depth: '시안 B · 시간의 깊이', horizon: '시안 C · 빛의 지평선', ember: '시안 D · 불씨' }[LINK] : '';
 let XL = null;
 function draw(ctx, t) {
   const act = SCENES.filter(([a, b]) => t >= a && t < b);
@@ -484,10 +480,10 @@ function draw(ctx, t) {
     if (!XL) { XL = canvas(W, H); XL.g = XL.getContext('2d'); }
     const L = XL.g; L.setTransform(1, 0, 0, 1, 0, 0); L.globalAlpha = 1; L.globalCompositeOperation = 'source-over'; L.clearRect(0, 0, W, H); L.save(); f(L, t); L.restore();
     const pb = act[j - 1][1]; ctx.save(); ctx.globalAlpha = eio(clamp((t - a) / Math.max(.2, pb - a))); ctx.drawImage(XL, 0, 0); ctx.restore(); });
-  pairLink(ctx, t);
   for (const [kind, id, a, b, o = {}] of TEXT) { if (t < a - .1 || t > b + .1) continue;
     if (kind === 'sub') Film.sub(ctx, id, t, a, b, o); else if (kind === 'label') Film.label(ctx, id, t, a, b); else if (kind === 'title') title(ctx, id, t, a, b);
     else if (kind === 'end') endCard(ctx, t, a, b);
+    else if (kind === 'link') { Film.link(ctx, t, id, o.to, a, b, { style: LINK }); if (LAB && t > a - .1 && t < b + .1) Pilot.text(ctx, LAB, W / 2, V ? 150 : 60, { size: V ? 34 : 30, font: "'Noto Sans KR',sans-serif", color: '#9fb4d8', alpha: .9, ls: 2 }); }
     else if (kind === 'micah') { const seg = Film.text(id).split(/\s*\/\s*/)[0]; Film.quote(ctx, id, t, a, b, { text: seg, ...QB(), hl: Film.lines[id].hl, hlk: ss(a + .4, a + 1.4, t), color: '#fff3d6', shadow: 'rgba(255,190,90,.45)' }); }
     else if (kind === 'quote') Film.quote(ctx, id, t, a, b, { ...o, hl: Film.lines[id].hl, hlk: o.hlAt ? ss(o.hlAt, o.hlAt + 1.2, t) : 0 }); }
 }

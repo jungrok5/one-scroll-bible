@@ -1,9 +1,9 @@
-// A film's review page — the same page every round, every film, every session.
+// A film's draft page — the draft itself (synopsis + style frames per part, then the whole script), nothing else.
 //   node motion/films/review-page.mjs <film> [--no-check]
-// Reads films/<film>/script.json + review.json (+ README 0절 for the step list), runs check-quotes, and writes
-// motion/out/review/<film>.html. Publish that file with the Artifact tool to review.json "artifact_url"
-// (first time: publish without url with capabilities {db:{}, user:{}}, then save the URL there). Reviewers' notes land in
-// the artifact's db collection "feedback" (doc "r<round>-<who>") — read them with ArtifactData list "feedback".
+// Reads films/<film>/script.json + review.json, runs check-quotes, prints the checks (quotes, length estimate, tight
+// reading time) for the agent, and writes motion/out/review/<film>.html. Publish that file with the Artifact tool to
+// review.json "artifact_url" (first time without url, then save the URL there). Feedback comes back in chat, not on the page
+// (2026-11-02 관리자: "검토용 페이지일 필요 없고 초안만").
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { dirname, join } from 'node:path';
@@ -60,11 +60,11 @@ function voiceMeta(l) {
   if (l.kind === 'quote' && typeof l.voice === 'string' && l.voice !== l.text) return '<span>밑줄 부분만 읽음</span>';
   return l.kind === 'quote' ? '<span>전체를 읽음</span>' : '';
 }
-const fbBox = (id, kind, add = '이 줄에 의견 쓰기') => `<div class="fb" data-id="${esc(id)}" data-kind="${kind}"><ul class="others"></ul>${add ? `<button class="addfb" type="button" data-id="${esc(id)}">＋ ${add}</button>` : ''}<textarea id="fb-${esc(id)}" data-kind="${kind}" data-id="${esc(id)}" ${add ? 'hidden' : ''} placeholder="고칠 점, 좋은 점, 궁금한 점"></textarea></div>`;
+const fbBox = () => '';   // draft page: no in-page feedback (2026-11-02 관리자 — 초안만, 의견은 대화로)
 function lineCard(l) {
   const tg = tight[l.id];
   const meta = [`<span class="kind">${KIND[l.kind] || l.kind}</span>`, l.cite ? `<span class="cite">${esc(l.cite)}</span>` : '', voiceMeta(l),
-    tg ? `<span class="flag" title="읽는 시간 기준: 1.5초 + 글자당 0.12초">읽는 시간 빠듯 · 필요 ${tg.need.toFixed(1)}초 / 다음 줄까지 ${tg.avail.toFixed(1)}초</span>` : '',
+    
     changed.has(l.id) ? '<span class="newtag">이번 차수에 바뀜</span>' : '', `<span>#${esc(l.id)}</span>`].filter(Boolean).join('');
   const aside = [l.screen ? `<dt>화면</dt><dd>${esc(l.screen)}</dd>` : '', l.note ? `<dt>메모</dt><dd>${esc(l.note)}</dd>` : ''].join('');
   return `<article class="ln k-${l.kind}${l.kind === 'label' ? ' label' : ''}${changed.has(l.id) ? ' changed' : ''}" id="L-${esc(l.id)}">
@@ -95,10 +95,7 @@ const facts = [
   { b: quoteCheck.ok === false ? '다름' : quoteCheck.ok ? '일치' : '—', s: `성경 인용 개역개정 원문 대조 · ${quoteCheck.text}`, c: quoteCheck.ok === false ? 'warn' : quoteCheck.ok ? 'ok' : '' },
   { b: tightN ? `${tightN}줄` : '없음', s: '읽는 시간이 빠듯한 줄(대략 시각 기준, 그림을 짤 때 다시 맞춤)', c: tightN ? 'warn' : 'ok' },
 ];
-const cfg = { film, title: S.title, round: RV.round, stageName, decisions: (RV.decisions || []).map(d => ({ key: d.key, q: d.q })),
-  lines: [...(RV.message_check || []).map(m => ({ id: 'M' + m.n, label: '메시지 점검 ' + m.n + ' ' + m.q })),
-    ...S.lines.map(l => ({ id: l.id, label: (l.cite ? l.cite + ' ' : '') + l.text.replace(/\s*\/\s*/g, ' ').slice(0, 40) }))] };
-const opt = o => `<span>${esc(o)}</span>`;
+facts.forEach(f => console.log(`  ${f.b} — ${f.s}`));   // the checks are for the agent; the page itself is only the draft
 
 // ---- style samples: real frames of an earlier film drawn in the same look (review.json parts[].samples {film, t, o?, cap}) ----
 // rendered once with render.mjs --stills, kept as small JPEGs in motion/out/review/img/, embedded in the page as data URIs
@@ -114,7 +111,7 @@ const dataUri = f => 'data:image/jpeg;base64,' + readFileSync(f).toString('base6
 const storyHtml = parts.some(p => p.story || p.samples) ? `<section id="story"><h2>초안 — 줄거리와 화풍 <small>${tc(S.dur)} · ${parts.length}부 · 그림은 앞 영상에서 같은 화풍으로 그린 장면(새 영상은 이 화풍으로 새로 그립니다)</small></h2>
 <div class="story">${parts.map(p => `<article class="sp" style="--pc: var(--p${p.n})"><div class="shots">${(p.samples || []).map(s => `<figure><img src="${dataUri(s.file)}" alt="${esc(s.cap)}"><figcaption>${esc(s.cap)}</figcaption></figure>`).join('')}</div><div class="sx"><span class="no">${p.n}부 · ${tc(p.start)}–${tc(p.end)}</span><h3>${esc(p.name || '')}</h3>${p.story ? `<p>${esc(p.story)}</p>` : ''}${p.style ? `<p class="style">화풍: ${esc(p.style)}${p.src ? ` <small>(${esc(p.src)})</small>` : ''}</p>` : ''}<a href="#part-${p.n}">이 부분 원고 보기 ↓</a></div></article>`).join('\n')}</div>
 </section>` : '';
-const html = `<title>${esc(S.title)} 검토</title>
+const html = `<title>${esc(S.title)} 초안</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@600;700&display=swap">
@@ -122,16 +119,9 @@ const html = `<title>${esc(S.title)} 검토</title>
 ${readFileSync(join(HERE, 'review', 'page.css'), 'utf8')}
 </style>
 <div class="band"><div class="wrap">
-  <span class="eyebrow">새 영상 ${esc(stageName)} 검토 · ${RV.round}차 · ${esc(round.date)}</span>
+  <span class="eyebrow">새 영상 원고 초안 · ${RV.round}차 · ${esc(round.date)}</span>
   <h1>「${esc(S.title)}」</h1>
-  <p>${esc(round.summary)}</p>
-  <span class="pill">${esc(RV.status || '')}</span>
-</div></div>
-<div class="who"><div class="wrap">
-  <span class="lbl">누가 보고 있나요?</span>
-  <div class="chips"><button class="chip" type="button" data-who="owner" aria-pressed="false">관리자</button><button class="chip" type="button" data-who="wife" aria-pressed="false">아내</button><button class="chip" type="button" data-who="other" aria-pressed="false">다른 사람</button></div>
-  <input id="whoName" type="text" placeholder="이름" hidden aria-label="이름">
-  <span id="saveState" class="save" role="status"></span>
+  <p>${tc(S.dur)} · ${parts.length}부 · 세로(쇼츠·릴스)와 가로(유튜브) 같은 내용</p>
 </div></div>
 <main class="wrap">
 ${storyHtml}
@@ -139,41 +129,9 @@ ${storyHtml}
 <p class="lede">'해설'은 목소리로 읽고 화면에도 같은 글자가 나옵니다. '성경'은 개역개정 원문 그대로입니다. '화면 글자'는 읽지 않고 화면에만 보입니다. 화면·메모는 그림 설명과 근거입니다.</p>
 ${parts.map(partHtml).join('\n')}
 </section>
-<section id="decide"><h2>정할 것 <small>골라 주시면 그대로 반영합니다</small></h2>
-<div class="decs">${(RV.decisions || []).map(d => `<div class="dec"><h3>${esc(d.q)}</h3>${d.detail ? `<p>${esc(d.detail)}</p>` : ''}<div class="opts">${d.options.map(o => `<button class="opt" type="button" aria-pressed="false" data-key="${esc(d.key)}" data-opt="${esc(o)}">${opt(o)}<span class="by"></span></button>`).join('')}</div>${fbBox(d.key, 'dec', '덧붙일 말')}</div>`).join('')}</div>
-</section>
-<section id="glance"><h2>한눈에</h2>
-<div class="bar" role="img" aria-label="부별 길이">${parts.map(p => `<span style="width:${((p.end - p.start) / S.dur * 100).toFixed(2)}%;background:var(--p${p.n})" title="${p.n}부 ${esc(p.name || '')}"></span>`).join('')}</div>
-<ul class="parts">${parts.map(p => `<li><span class="sw" style="background:var(--p${p.n})"></span><span><b>${p.n}부 ${esc(p.name || '')}</b> · ${tc(p.start)}–${tc(p.end)}<br><small>${esc(p.style || '')}</small></span></li>`).join('')}</ul>
-<div class="facts">${facts.map(f => `<div class="fact ${f.c || ''}"><b>${esc(f.b)}</b><span>${esc(f.s)}</span></div>`).join('')}</div>
-</section>
-${(RV.message_check || []).length ? `<section id="message"><h2>메시지 점검 <small>보여 주기 전 12문항(motion-skills canvas-film MESSAGE.md) · 주황 = 판단이 필요한 곳</small></h2>
-<div class="lines">${RV.message_check.map(m => `<article class="ln${m.flag ? ' changed' : ''}" id="L-M${m.n}" style="${m.flag ? '--gold: var(--warn)' : ''}"><div class="tc">${m.n}</div><div class="lb"><div class="meta"><span class="kind">${esc(m.q)}</span>${m.flag ? '<span class="flag">판단 필요</span>' : ''}</div><p class="txt" style="font-size:16px">${esc(m.a)}</p>${fbBox('M' + m.n, 'line', '이 점검에 의견 쓰기')}</div></article>`).join('\n')}</div>
-</section>` : ''}
-<section id="upload"><h2>올릴 글 <small>설명란·고정 댓글에 들어갈 것</small></h2>
-<div class="decs">
-${S._short_title ? `<div class="box"><h3>쇼츠 제목(첫 줄 훅)</h3><p>${esc(S._short_title)}</p></div>` : ''}
-${S.reading_list ? `<div class="box"><h3>읽기 목록</h3><p>${esc(S.reading_list)}</p></div>` : ''}
-${S.description_notes ? `<div class="box"><h3>설명란 배경 메모</h3><p>${esc(S.description_notes)}</p></div>` : ''}
-</div></section>
-<section id="steps"><h2>진행 순서 <small>지금 ${RV.stage}단계</small></h2>
-<div class="scroll"><table><thead><tr><th>#</th><th>단계</th><th>무엇으로</th><th>멈춤 지점</th></tr></thead><tbody>
-${steps.map(s => `<tr class="${s.n === RV.stage ? 'now' : s.n < RV.stage ? 'done' : ''}"><td class="n">${s.n}</td><td>${md(s.what)}</td><td>${md(s.how)}</td><td>${md(s.stop)}</td></tr>`).join('\n')}
-</tbody></table></div>
-${(RV.process_changes || []).length ? `<div class="box" style="margin-top:14px"><h3>이번 영상에서 고친 과정</h3><ul class="plain">${RV.process_changes.map(c => `<li>${esc(c.date)} — ${md(c.what)}</li>`).join('')}</ul></div>` : ''}
-${(RV.rounds || []).length > 1 ? `<div class="box" style="margin-top:14px"><h3>차수 기록</h3><ul class="plain">${RV.rounds.map(r => `<li>${r.n}차 ${esc(r.date)} — ${esc(r.summary)}</li>`).join('')}</ul></div>` : ''}
-</section>
-<section id="general"><h2>전체 의견</h2>
-${fbBox('general', 'general', '')}
-<div class="box" style="margin-top:14px"><h3>내 의견 복사</h3><p>공유 저장이 안 되는 화면이면, 아래 글을 복사해 카카오톡 등으로 보내 주세요.</p>
-<textarea id="copyOut" readonly></textarea><button class="btn" id="copyBtn" type="button">내 의견 복사</button></div>
-</section>
+${(RV.decisions || []).length ? `<section id="decide"><h2>정할 것</h2><ul class="plain">${RV.decisions.map(d => `<li><b>${esc(d.q)}</b> — ${d.options.map(esc).join(' / ')}${d.detail ? `<br><small>${esc(d.detail)}</small>` : ''}</li>`).join('')}</ul></section>` : ''}
 </main>
-<footer class="wrap">만든 곳: <code>motion/films/${esc(film)}/script.json</code> · <code>review.json</code> → <code>node motion/films/review-page.mjs ${esc(film)}</code> · ${new Date().toISOString().slice(0, 10)}</footer>
-<script>window.REVIEW = ${JSON.stringify(cfg).replace(/</g, '\\u003c')};</script>
-<script>
-${readFileSync(join(HERE, 'review', 'page.js'), 'utf8')}
-</script>
+<footer class="wrap">motion/films/${esc(film)}/script.json · ${new Date().toISOString().slice(0, 10)}</footer>
 `;
 const outDir = join(ROOT, 'motion', 'out', 'review'); mkdirSync(outDir, { recursive: true });
 const out = join(outDir, film + '.html'); writeFileSync(out, html);

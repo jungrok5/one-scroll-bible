@@ -2,7 +2,7 @@
  "_about": "이 영상의 진행 상태와 검토 기록 — 새 세션은 여기부터 읽는다(지금 몇 단계인지, 무엇을 정해야 하는지, 검토 페이지 주소). 검토 페이지는 `node motion/films/review-page.mjs messiah`로 만들어 아래 artifact_url에 다시 올린다(필름 README 8절). 단계 번호는 README 0절 표.",
  "stage": 2,
  "round": 1,
- "status": "원고 1차 초안 — 관리자·아내 검토 대기",
+ "status": "원고 1차 초안 — 관리자·아내가 초안 페이지를 보고 대화로 의견",
  "artifact_url": "https://claude.ai/artifact/A6a73tmrguTKJXWAaTFeCa",
  "ref_film": "silence400",
  "parts": [
@@ -231,6 +231,10 @@
   {
    "date": "2026-11-02",
    "what": "관리자 지적: 검토 페이지에서 초안 본문이 정할 것·점검 아래에 묻혀 안 보였고 화풍은 글로만 있었음 → 페이지 맨 위를 초안 자체로(부마다 줄거리 + 화풍 그림, 그다음 원고 전체). 화풍 그림은 앞 영상에서 같은 화풍으로 그린 실제 장면(parts[].samples → render.mjs --stills 자동)"
+  },
+  {
+   "date": "2026-11-02",
+   "what": "관리자: \"검토용 페이지일 필요 없고 초안만\" → 페이지에서 의견 칸·고르기·점검표를 빼고 초안(줄거리·화풍 그림·원고 전체·정할 것 목록)만. 점검은 에이전트가 하고 걸린 것만 대화로"
   }
  ],
  "feedback_log": []

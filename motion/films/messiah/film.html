@@ -9,229 +9,257 @@
 <body>
 <script src="../../pilot/lib.js"></script>
 <script src="../lib-film.js"></script>
-<script src="kit-woodcut.js"></script>
-<script src="kit-silk.js"></script>
 <script src="kit-world3d.js"></script>
-<script src="kit-inkmap.js"></script>
-<script src="kit-cavesil.js"></script>
 <script>
-/* 메시아 예언과 성탄 — one continuous ~2:59 film in five looks, each chosen for what its medium does
-   (review.json parts): 1 woodcut (a promise carved in advance) · 2 scratchboard long take (the promise narrowing,
-   years counting down) · 3 Roman floor mosaic (the emperor's decree spreads tile by tile) · 4 night oil painting (the
-   only light comes from the child) · 5 woodcut again (the block carved in part 1 is printed). One motif: gold — the
-   promise — shows only where something has been cut, scratched or laid for it. Line ids = script.json. */
+/* 메시아 예언과 성탄 — one continuous ~2:59 film, made like the first film (motion/films/README 7절): a camera that moves
+   through real space, light as the main character, small people in a large land, restraint. Portrait (Shorts) first.
+   One world: the hills of Judea and the small town of Bethlehem on its hill (kit-world3d.js, after the first film's
+   「포로 귀환」), seen at night from above (1), at dusk at the end of the road (3) and at night again (5). One motif: a
+   thread of gold light — the promise — runs through every part. Line ids = script.json. */
 const { clamp, lerp, ss, eo, eio, win, rng, noise, canvas } = Pilot;
 const W = Pilot.W, H = Pilot.H, V = Pilot.ori === 'v';
-const GOLD = [233, 185, 92];
+// =====================================================================================================================
+// shared: the land as rows of shaded quads (rows are laid out from the camera outward, so any camera position is fine),
+// silhouettes, painted layers, a thread of gold light (the promise) that runs through every part
+function terrain(ctx, c, L, o) {
+  const rows = []; let d = .5; while (d < (o.maxD || 2600)) { rows.push(c.z + d); d += 1.6 + d * .02; }
+  const dirx = c.f[0] / Math.max(.2, c.f[2]), spread = V ? .5 : .95, things = o.things || (() => {});
+  for (let i = rows.length - 2; i >= 0; i--) {
+    const z0 = rows[i], z1 = rows[i + 1], dz = z1 - z0, dd = z0 - c.z, half = 24 + spread * dd + (o.wide || 0), xc = c.x + dirx * dd, dx = Math.max(1.6, dz * 1.25), n = Math.ceil(2 * half / dx);
+    for (let j = 0; j < n; j++) { const x0 = xc - half + j * dx, x1 = x0 + dx, a = o.h(x0, z0), b = o.h(x1, z0), cc = o.h(x1, z1), e = o.h(x0, z1);
+      const nr = W3.normal([[x0, a, z0], [x0, e, z1], [x1, b, z0]]);
+      if (!W3.poly(ctx, c, [[x0, a, z0], [x1, b, z0], [x1, cc, z1], [x0, e, z1]])) continue;
+      const col = W3.shade(o.alb(x0, z0), nr, Math.max(1, dd), L); ctx.fillStyle = W3.css(col); ctx.fill(); ctx.strokeStyle = ctx.fillStyle; ctx.lineWidth = .8; ctx.stroke(); }
+    if (o.road) { const w = 2.2, a0 = RD.xr(z0), a1 = RD.xr(z1); if (W3.poly(ctx, c, [[a0 - w, o.h(a0 - w, z0) + .06, z0], [a0 + w, o.h(a0 + w, z0) + .06, z0], [a1 + w, o.h(a1 + w, z1) + .06, z1], [a1 - w, o.h(a1 - w, z1) + .06, z1]])) { ctx.fillStyle = W3.css(W3.shade([.97, .86, .68], [0, 1, 0], Math.max(1, dd), L)); ctx.fill(); } }
+    things(z0, z1);
+  }
+}
+const landAlb = (x, z) => { const n = Pilot.fbm(x * .07, z * .07, 3), scrub = Pilot.noise(x * .21 + 5, z * .21) > .62 ? .72 : 1; return [(.86 - .14 * n) * scrub, (.72 - .12 * n) * scrub, (.52 - .1 * n) * scrub]; };
+function townAt(ctx, c, L, t, z0, z1, lampK) { for (const hs of ROAD.houses) if (hs.z >= z0 && hs.z < z1) house(ctx, c, L, hs, t, lampK); }
+// a gold thread on the land: world points, revealed up to k (0..1), a bright head while it travels
+function threadWorld(ctx, c, pts, k, a = 1) { if (k <= 0) return; const sp = pts.map(p => W3.P(c, ...p)).filter(Boolean); if (sp.length < 2) return; const n = Math.max(2, Math.round(sp.length * clamp(k)));
+  ctx.save(); ctx.globalCompositeOperation = 'screen'; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+  for (const [w, al] of [[10, .16], [4, .5], [1.6, .95]]) { ctx.strokeStyle = `rgba(255,214,140,${al * a})`; ctx.lineWidth = w; ctx.beginPath(); sp.slice(0, n).forEach(([x, y], i) => i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)); ctx.stroke(); }
+  if (k < 1) { const [hx, hy] = sp[n - 1]; W3.bloom(ctx, hx, hy, [255, 214, 140], .7 * a, { r: 60, streak: .12 }); } ctx.restore(); }
+function thread2D(ctx, pts, k, a = 1) { if (k <= 0) return; const n = Math.max(2, Math.round(pts.length * clamp(k)));
+  ctx.save(); ctx.globalCompositeOperation = 'screen'; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+  for (const [w, al] of [[10, .16], [4, .5], [1.6, .95]]) { ctx.strokeStyle = `rgba(255,214,140,${al * a})`; ctx.lineWidth = w; ctx.beginPath(); pts.slice(0, n).forEach(([x, y], i) => i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)); ctx.stroke(); }
+  if (k < 1) { const [hx, hy] = pts[n - 1]; W3.bloom(ctx, hx, hy, [255, 214, 140], .7 * a, { r: 60, streak: .12 }); } ctx.restore(); }
+const hillLayer = (ctx, base, amp, f, ph, col, shift = 0) => { ctx.fillStyle = col; ctx.beginPath(); ctx.moveTo(-60, H + 60); for (let x = -60; x <= W + 60; x += 8) { const X = x + shift; ctx.lineTo(x, base - amp * (.5 + .5 * Math.sin(X * f + ph)) - amp * .3 * Pilot.fbm(X * f * 3, ph, 3)); } ctx.lineTo(W + 60, H + 60); ctx.closePath(); ctx.fill(); };
+function skyGrad(ctx, stops, y1 = H) { const g = ctx.createLinearGradient(0, 0, 0, y1); stops.forEach(([k, c]) => g.addColorStop(k, c)); ctx.fillStyle = g; ctx.fillRect(-60, -60, W + 120, H + 120); }
+function starField(ctx, a, y1, seed = 9, n = 420, t = 0) { if (a <= 0) return; const r = rng(seed); ctx.save(); ctx.fillStyle = '#fff'; for (let i = 0; i < n; i++) { const x = r() * W, y = r() * y1, s = r() < .08 ? 2.2 : r() < .3 ? 1.5 : 1; ctx.globalAlpha = a * (.25 + .75 * r()) * (.8 + .2 * Math.sin(t * (1 + r() * 2) + i)); ctx.fillRect(x, y, s, s); } ctx.restore(); }
+function milkyWay(ctx, a, cx, cy, ang, len, wid) { if (a <= 0) return; ctx.save(); ctx.translate(cx, cy); ctx.rotate(ang); const r = rng(77); ctx.globalCompositeOperation = 'screen';
+  for (let i = 0; i < 60; i++) { const x = (r() - .5) * len, y = (r() - .5) * wid * (1 - Math.abs(x) / len), R = 30 + r() * 90, g = ctx.createRadialGradient(x, y, 0, x, y, R); g.addColorStop(0, `rgba(200,206,236,${.06 * a})`); g.addColorStop(1, 'rgba(200,206,236,0)'); ctx.fillStyle = g; ctx.fillRect(x - R, y - R, 2 * R, 2 * R); }
+  ctx.fillStyle = '#fff'; for (let i = 0; i < 700; i++) { const x = (r() - .5) * len, y = (r() - .5) * wid * .7 * (1 - Math.abs(x) / len); ctx.globalAlpha = a * .6 * r(); ctx.fillRect(x, y, 1.1, 1.1); } ctx.restore(); }
+// silhouettes (units: metres at s px per metre, feet at the origin, facing right unless f = -1)
+// rim light only on the edge that faces the light: toward = unit vector to the light in screen space, rimPx = its width
+function sil(ctx, x, y, s, f, draw, rim = 0, rimCol = 'rgb(255,200,130)', body = 'rgb(18,13,14)', toward = [0, -1], rimPx = 4) {
+  ctx.save(); ctx.translate(x, y); ctx.scale(s * f, s); const p = new Path2D(); draw(p);
+  if (rim > 0) { ctx.save(); ctx.clip(p); ctx.globalAlpha = rim; ctx.fillStyle = rimCol; ctx.fill(p); ctx.restore(); ctx.save(); ctx.clip(p); const w = rimPx / s; ctx.translate(-toward[0] * f * w, -toward[1] * w); ctx.fillStyle = body; ctx.fill(p); ctx.restore(); }
+  else { ctx.fillStyle = body; ctx.fill(p); }
+  ctx.restore(); }
+const SIL = {
+  standing: (p, h = 1.75, staff = true, hood = true) => { p.ellipse(0, -h + .13, .11, .13, 0, 0, 6.283); if (hood) { p.moveTo(-.16, -h + .2); p.quadraticCurveTo(-.14, -h - .06, .02, -h - .04); p.quadraticCurveTo(.16, -h + .02, .14, -h + .22); p.closePath(); }
+    p.moveTo(-.18, -h + .3); p.quadraticCurveTo(-.27, -h * .5, -.25, -.02); p.lineTo(.25, -.02); p.quadraticCurveTo(.26, -h * .5, .18, -h + .3); p.closePath(); if (staff) { p.rect(.3, -h - .25, .04, h + .25); p.moveTo(.16, -h + .55); p.lineTo(.32, -h + .45); p.lineTo(.33, -h + .52); p.lineTo(.18, -h + .62); p.closePath(); } },
+  lookingUp: p => { p.ellipse(.03, -1.62, .11, .12, -.5, 0, 6.283); p.moveTo(-.18, -1.48); p.quadraticCurveTo(-.27, -.8, -.25, -.02); p.lineTo(.25, -.02); p.quadraticCurveTo(.26, -.8, .16, -1.46); p.closePath(); p.rect(.3, -1.95, .04, 1.95); },
+  kneeling: p => { p.ellipse(.12, -1.08, .1, .12, .4, 0, 6.283); p.moveTo(-.02, -.98); p.quadraticCurveTo(.2, -.96, .26, -.74); p.lineTo(.36, -.6); p.lineTo(.3, -.55); p.lineTo(.2, -.62); p.quadraticCurveTo(.14, -.42, .2, -.3); p.lineTo(.5, -.04); p.lineTo(.5, 0); p.lineTo(-.42, 0); p.quadraticCurveTo(-.36, -.5, -.18, -.86); p.closePath();
+    p.moveTo(-.04, -1.17); p.quadraticCurveTo(.1, -1.26, .22, -1.16); p.quadraticCurveTo(.12, -1.0, .02, -.9); p.closePath(); },
+  sheep: p => { p.ellipse(0, -.42, .42, .22, 0, 0, 6.283); p.ellipse(.42, -.52, .13, .1, .4, 0, 6.283); for (const lx of [-.26, -.12, .14, .26]) p.rect(lx, -.24, .045, .24); },
+  donkeyLying: p => { p.ellipse(0, -.3, .7, .3, 0, 0, 6.283); p.moveTo(.5, -.4); p.lineTo(.72, -.72); p.lineTo(.86, -.66); p.lineTo(.66, -.32); p.closePath(); p.ellipse(.84, -.66, .14, .09, -.4, 0, 6.283); p.moveTo(.74, -.74); p.lineTo(.7, -1.0); p.lineTo(.78, -.75); p.closePath(); },
+  boy: p => { p.ellipse(0, -1.38, .1, .11, 0, 0, 6.283); p.moveTo(-.15, -1.26); p.quadraticCurveTo(-.24, -.7, -.2, -.42); p.lineTo(.2, -.42); p.quadraticCurveTo(.22, -.7, .15, -1.26); p.closePath(); p.rect(-.13, -.44, .08, .44); p.rect(.05, -.44, .08, .44);
+    p.rect(.26, -1.7, .035, 1.7); p.moveTo(.26, -1.7); p.quadraticCurveTo(.44, -1.86, .5, -1.62); p.lineTo(.46, -1.6); p.quadraticCurveTo(.42, -1.78, .29, -1.66); p.closePath(); p.moveTo(.14, -1.1); p.lineTo(.28, -1.0); p.lineTo(.26, -.94); p.lineTo(.12, -1.02); p.closePath(); },
+  tent: p => { p.moveTo(-1.8, 0); p.lineTo(-1.2, -1.5); p.lineTo(1.0, -1.7); p.lineTo(1.9, 0); p.closePath(); p.rect(-.05, -2.0, .06, .5); },
+};
 
 // =====================================================================================================================
-// 1 · 0:00–0:21  a small town carved on a block under the night sky; Micah 5:2; the brayer inks it over
-let BETH = null;
-function hillTop(x) {   // the village hill's crest (frame units)
-  const c = V ? W * .5 : W * .52, r = V ? W * .62 : W * .36, top = V ? H * .37 : H * .46;
-  const d = (x - c) / r; return top + (V ? 210 : 190) * d * d + 14 * Math.sin(x * .013);
+// 1 · 0:00–0:21  over the hills of Judea at night, down toward one small town with lamps in its windows (the same world the
+// journey of part 3 crosses). At "베들레헴" the town warms; the title; "왜 하필 이 작은 마을이었을까요?"
+let FLY = null;
+function buildFly() {
+  const tw = RD.xr(RD.BZ) + 30, th = rdH(tw, RD.BZ);
+  const K = (t, z, up, side) => { const x = RD.xr(z) + side; return [t, x, rdH(x, z) + up, z, tw, th + 14, RD.BZ, 1300, 1800]; };
+  FLY = { cam: W3.cam([K(0, 520, 170, -60), K(8, 860, 120, -40), K(16, 1200, 60, -20), K(21, 1280, 46, -16)]),
+    light: W3.light([[0, 40, -40, .5, [150, 170, 226], [24, 30, 56], [6, 10, 30], [44, 56, 102], [120, 140, 204], [26, 32, 60], 1300, 1], [21, 40, -40, .5, [150, 170, 226], [24, 30, 56], [6, 10, 30], [44, 56, 102], [120, 140, 204], [26, 32, 60], 1300, 1]]),
+    town: [tw, th + 6, RD.BZ] };
 }
-function farRidge(x) { return (V ? H * .40 : H * .52) - 60 * Math.sin(x * .0042 + 1.3) - 34 * Math.sin(x * .011); }
-function buildBethlehem() {
-  BETH = Woodcut.plate(41, pl => {
-    const moon = V ? [W * .74, H * .17] : [W * .8, H * .17], mr = V ? 40 : 46;
-    const ground = V ? H * .6 : H * .65;     // below this the block stays black (the words are read there)
-    const houses = [];
-    { const r = rng(5), c = V ? W * .5 : W * .52, n = V ? 15 : 19, spread = V ? W * .34 : W * .2;
-      for (let i = 0; i < n; i++) { const u = (i / (n - 1)) * 2 - 1, x = c + u * spread + (r() - .5) * 30, w = (V ? 70 : 64) + r() * 46, h = (V ? 52 : 46) + r() * 40 - Math.abs(u) * 18;
-        const base = hillTop(x) + 26 + Math.abs(u) * 24 + r() * 16; houses.push({ x, y: base, w, h, d: 14 + r() * 10, win: r() < .7, k: r() }); }
-      houses.sort((a, b) => a.y - b.y); }
-    // regions, back to front: 1 sky · 2 far ridge · 3 village hill · 4 dark ground · 10.. houses
-    pl.region(1, g => g.rect(0, 0, W, H));
-    pl.region(2, g => { g.moveTo(0, H); for (let x = 0; x <= W; x += 8) g.lineTo(x, farRidge(x)); g.lineTo(W, H); });
-    pl.region(3, g => { g.moveTo(0, H); for (let x = 0; x <= W; x += 8) g.lineTo(x, hillTop(x)); g.lineTo(W, H); });
-    pl.region(4, g => g.rect(0, ground, W, H - ground));
-    houses.forEach((h, i) => pl.region(10 + i, g => { g.rect(h.x - h.w / 2, h.y - h.h, h.w, h.h); g.moveTo(h.x + h.w / 2, h.y - h.h); g.lineTo(h.x + h.w / 2 + h.d, h.y - h.h - h.d * .6); g.lineTo(h.x + h.w / 2 + h.d, h.y - h.d * .6); g.lineTo(h.x + h.w / 2, h.y); }));
-    const mdist = (x, y) => Math.hypot(x - moon[0], y - moon[1]);
-    // sky: long horizontal gouges, wide near the moon and the horizon glow, none high up
-    { const lines = []; for (let y = 6; y < H * .75; y += V ? 11 : 10) { const L = []; for (let x = -20; x <= W + 20; x += 24) L.push([x, y + 5 * Math.sin(x * .003 + y * .05) + 10 * (Pilot.fbm(x * .002, y * .004) - .5)]); lines.push(L); }
-      pl.hatch(lines, { keep: (x, y) => pl.reg(x, y) === 1 && mdist(x, y) > mr + 10, kind: 'v', len: [70, 260], gap: [6, 40], thr: .1, wmin: 1, wmax: 7, gamma: 1.2,
-        tone: (x, y) => { const m = Math.exp(-(mdist(x, y) - mr) / (V ? 210 : 250)), hz = Math.exp(-Math.max(0, farRidge(x) - y) / (V ? 150 : 130)) * .8, cl = .45 + .9 * Pilot.fbm(x * .0022 + 3, y * .007);
-          return clamp((.04 + .8 * m + hz) * cl - .12 * (1 - y / farRidge(x))); } }); }
-    // the moon: carved white, rays of the U-gouge around it
-    { const pts = []; for (let a = 0; a < 6.3; a += .05) pts.push([moon[0] + Math.cos(a) * mr * (1 + .02 * Math.sin(a * 7)), moon[1] + Math.sin(a) * mr]);
-      for (let k = 0; k < mr * 2; k += 5) { const y = moon[1] - mr + k + 2, hw = Math.sqrt(Math.max(0, mr * mr - (y - moon[1]) ** 2)); if (hw > 3) pl.cut([[moon[0] - hw, y], [moon[0] + hw, y]], 7.5, { kind: 'u', chip: .05 }); }
-      for (const [rr, w] of [[mr + 16, 3.2], [mr + 30, 2.2], [mr + 42, 1.4]]) for (let a0 = 0; a0 < 6.28; a0 += .5 + (rr % 3) * .1) { const pts = []; for (let a = a0; a < a0 + .38; a += .04) pts.push([moon[0] + Math.cos(a) * rr, moon[1] + Math.sin(a) * rr]); pl.cut(pts, w, { kind: 'v' }); } }
-    // stars: stab cuts, some appear in the first seconds (the block is still being finished as we arrive)
-    { const r = rng(17), list = []; for (let i = 0; i < (V ? 120 : 150); i++) { const x = r() * W, y = r() * (V ? H * .34 : H * .5); if (pl.reg(x, y) === 1 && mdist(x, y) > mr * 3) list.push([x, y, 1.2 + r() * r() * 3.2]); }
-      pl.stabs(list, { t0: (x, y, r) => r() < .35 ? .2 + r() * 3.5 : undefined }); }
-    // far ridge: contour cuts following the ridge, catching the moonlight on its crest only
-    { const lines = []; for (let k = 6; k < 300; k += 9) { const L = []; for (let x = -20; x <= W + 20; x += 20) L.push([x, farRidge(x) + k + 4 * Math.sin(x * .01 + k)]); lines.push(L); }
-      pl.hatch(lines, { keep: (x, y) => pl.reg(x, y) === 2, len: [50, 180], gap: [8, 40], thr: .1, wmin: .8, wmax: 4.5, tone: (x, y) => clamp(.62 - (y - farRidge(x)) / 110 + .25 * (x / W - .5)) }); }
-    // village hill: terraces — contour cuts parallel to the crest, lit toward the moon (right), dark toward the bottom
-    { const lines = []; for (let k = 10; k < 520; k += 11) { const L = []; for (let x = -20; x <= W + 20; x += 16) L.push([x, hillTop(x) + k + 5 * Math.sin(x * .006 + k * .3)]); lines.push(L); }
-      pl.hatch(lines, { keep: (x, y) => pl.reg(x, y) === 3 && y < ground - 10, len: [40, 150], gap: [6, 30], thr: .12, wmin: .9, wmax: 5.5,
-        tone: (x, y) => clamp(.75 - (y - hillTop(x)) / (V ? 300 : 240) + .3 * (x / W - .45)) }); }
-    // olive trees on the slope: black crowns with a knife halo and a few lit cuts on the moon side
-    { const r = rng(23); for (let i = 0; i < (V ? 9 : 12); i++) { const x = r() * W, y = hillTop(x) + 90 + r() * (V ? 220 : 150); if (y > ground - 30 || pl.reg(x, y) !== 3) continue; const rr = 16 + r() * 12;
-      const R = a => rr * (1 + .22 * Math.sin(a * 3 + i) + .12 * Math.sin(a * 7 + i * 2));
-      pl.region(40, g => { for (let a = 0; a <= 6.3; a += .1) g.lineTo(x + Math.cos(a) * R(a) * 1.35, y + Math.sin(a) * R(a)); g.closePath(); g.rect(x - 3, y + rr * .5, 6, rr * 1.1); });
-      const ring = []; for (let a = -2.8; a <= .6; a += .08) ring.push([x + Math.cos(a) * (R(a) * 1.35 + 5), y + Math.sin(a) * (R(a) + 5)]); pl.halo(ring, { w: 2 });
-      const fl = []; for (let j = 0; j < 22; j++) { const a = -2.2 + r() * 2.6, d = .35 + r() * .55; fl.push([x + Math.cos(a) * R(a) * 1.3 * d, y + Math.sin(a) * R(a) * d, .9 + r() * 1.2]); } pl.stabs(fl); } }
-    // houses: the moon side carved in vertical cuts, the front in a few fine horizontals, a bright roof edge, lamplit windows
-    houses.forEach((h, i) => { const id = 10 + i, x0 = h.x - h.w / 2, x1 = h.x + h.w / 2, top = h.y - h.h;
-      const side = []; for (let k = 3; k < h.d; k += 4.2) side.push([[x1 + k, top - k * .6 + 3], [x1 + k, h.y - k * .6 - 2]]);
-      pl.hatch(side, { keep: (x, y) => pl.reg(x, y) === id, tone: () => .8, thr: .1, len: [400, 400], wmin: 1.6, wmax: 3.2 });
-      const front = []; for (let y = top + 7; y < h.y - 4; y += 7) front.push([[x0 + 3, y], [x1 - 3, y]]);
-      pl.hatch(front, { keep: (x, y) => pl.reg(x, y) === id, tone: (x, y) => clamp(.16 + .3 * (x - x0) / h.w - (y - top) / h.h * .3), thr: .2, len: [10, 30], gap: [10, 34], wmin: .6, wmax: 1.6 });
-      pl.cut([[x0 - 2, top], [x1 + 1, top], [x1 + h.d, top - h.d * .6]], 3.4, { kind: 'k', chip: .1 });          // roof edge in moonlight
-      if (h.win) { const wx = x0 + h.w * (.25 + .4 * h.k), wy = top + h.h * .35, ww = 9, wh = 13;
-        for (let k = 0; k < 4; k++) pl.cut([[wx + k * 2.4, wy], [wx + k * 2.4, wy + wh]], 3.4, { kind: 'u', chip: .05, t0: 1.0 + h.k * 4 + k * .05, dur: .2 });
-        h.wx = wx + 4; h.wy = wy + wh / 2; }
-      pl.cut([[x0 + 2, top + 4], [x1 - 2, top + 4]], 1.4); });
-    // the town wall at the foot of the houses: a long lit coping line and stone joints
-    { const c = V ? W * .5 : W * .52, half = V ? W * .4 : W * .25, pts = []; for (let x = c - half; x <= c + half; x += 12) pts.push([x, hillTop(x) + (V ? 110 : 96) + 12 * Math.abs((x - c) / half)]);
-      pl.cut(pts, 4.2, { kind: 'k', chip: .12 });
-      for (let x = c - half + 10; x < c + half; x += 26) { const y = hillTop(x) + (V ? 110 : 96) + 12 * Math.abs((x - c) / half); pl.cut([[x, y + 8], [x + 14, y + 8]], 1.6); pl.cut([[x + 13, y + 20], [x + 27, y + 20]], 1.4); } }
-    // gold plate (shows only through the cuts): lamplight in the windows; at "베들레헴" the whole town warms
-    pl.gold((g, t) => { const warm = ss(9.2, 11.6, t);
-      for (const h of houses) if (h.wx) { const a = ss(1.0 + h.k * 4, 1.6 + h.k * 4, t); if (a <= 0) continue; const gr = g.createRadialGradient(h.wx, h.wy, 0, h.wx, h.wy, 22 + 30 * warm); gr.addColorStop(0, `rgba(${GOLD},${a})`); gr.addColorStop(1, `rgba(${GOLD},0)`); g.fillStyle = gr; g.fillRect(h.wx - 60, h.wy - 60, 120, 120); }
-      if (warm > 0) { g.save(); g.beginPath(); for (const h of houses) g.rect(h.x - h.w / 2 - 6, h.y - h.h - h.d - 6, h.w + h.d + 12, h.h + h.d + 12); g.clip(); const c = V ? W * .5 : W * .52, cy = hillTop(c) - (V ? 10 : 20), R = V ? W * .5 : W * .3, gr = g.createRadialGradient(c, cy, 0, c, cy, R); gr.addColorStop(0, `rgba(${GOLD},${.95 * warm})`); gr.addColorStop(.6, `rgba(${GOLD},${.45 * warm})`); gr.addColorStop(1, `rgba(${GOLD},0)`); g.fillStyle = gr; g.fillRect(c - R, cy - R, 2 * R, 2 * R); g.restore(); } });
-  });
+function partFlight(ctx, t, camT = t, o = {}) {
+  const c = FLY.cam(camT), L = FLY.light(0), warm = o.warm ?? ss(9.4, 11.6, t);
+  W3.sky(ctx, c, L, t, { stars: true });
+  milkyWay(ctx, .8, W * .62, H * (V ? .2 : .22), -.5, W * 1.6, V ? 300 : 260);
+  const moon = W3.P(c, c.x + L.sd[0] * 1e5, c.y + L.sd[1] * 1e5, c.z + L.sd[2] * 1e5); if (moon) { ctx.fillStyle = 'rgba(236,240,255,.95)'; ctx.beginPath(); ctx.arc(moon[0], moon[1], V ? 16 : 14, 0, 6.283); ctx.fill(); W3.bloom(ctx, moon[0], moon[1], [170, 190, 240], .5, { r: 120, streak: .2 }); }
+  terrain(ctx, c, L, { h: rdH, alb: landAlb, road: true, things: (z0, z1) => townAt(ctx, c, L, t, z0, z1, 1) });
+  // the town answers its name: a warm glow over the roofs
+  const tp = W3.P(c, ...FLY.town); if (tp && warm > 0) W3.bloom(ctx, tp[0], tp[1], [255, 196, 120], .55 * warm, { r: V ? 220 : 200, streak: .25 });
+  W3.finish(ctx, t, { vignette: .6 });
+  if (!o.noBand) textBand(ctx);
 }
-function partBethlehem(ctx, t) {
-  ctx.fillStyle = Woodcut.INK; ctx.fillRect(0, 0, W, H);
-  const c = V ? W * .5 : W * .52, push = eio(clamp(t / 16));
-  BETH.render(ctx, t, { x: lerp(W / 2, c, push * .6), y: lerp(H / 2, V ? H * .44 : H * .5, push), z: lerp(1, V ? 1.1 : 1.12, push) });
-  Woodcut.brayer(ctx, eio(clamp((t - 15.4) / 1.6)));
+function house(ctx, c, L, h, t, lampK) {   // a flat-roofed stone house; its lamp: lampK (0..1) if given, else on after sunset in part 3
+  const y0 = rdH(h.x, h.z) - .5, x0 = h.x - h.w / 2, x1 = h.x + h.w / 2, z0 = h.z - h.d / 2, z1 = h.z + h.d / 2, y1 = y0 + h.h, dist = h.z - c.z, alb = [.92, .84, .7];
+  for (const [pts, n] of [[[[x0, y0, z0], [x1, y0, z0], [x1, y1, z0], [x0, y1, z0]], [0, 0, -1]], [[[x1, y0, z0], [x1, y0, z1], [x1, y1, z1], [x1, y1, z0]], [1, 0, 0]], [[[x0, y0, z0], [x0, y0, z1], [x0, y1, z1], [x0, y1, z0]], [-1, 0, 0]], [[[x0, y1, z0], [x1, y1, z0], [x1, y1, z1], [x0, y1, z1]], [0, 1, 0]]])
+    if (W3.poly(ctx, c, pts)) { ctx.fillStyle = W3.css(W3.shade(alb, n, dist, L)); ctx.fill(); }
+  if (h.lamp >= 0) { const on = lampK != null ? lampK * (.85 + .15 * Math.sin(t * 2 + h.k * 9)) : ss(89.6 + h.lamp, 90.2 + h.lamp, t) * Math.min(1, L.night * 1.6); if (on > 0) { const p = W3.P(c, h.x, y0 + h.h * .45, z0 - .1); if (p) { ctx.save(); ctx.globalCompositeOperation = 'screen'; const R = Math.max(5, p[2] * 4); const g = ctx.createRadialGradient(p[0], p[1], 0, p[0], p[1], R * 3); g.addColorStop(0, `rgba(255,214,140,${on})`); g.addColorStop(.25, `rgba(255,180,90,${.55 * on})`); g.addColorStop(1, 'rgba(255,170,80,0)'); ctx.fillStyle = g; ctx.fillRect(p[0] - R * 3, p[1] - R * 3, R * 6, R * 6); ctx.restore(); } } }
 }
-
 
 // =====================================================================================================================
-// 3 · 1:01–1:35  the emperor's decree — silkscreen travel posters, printed one ink at a time (made to read on a phone):
-//   A 「나사렛」: a village in the Galilee hills at dusk, its name printed into the sky
-//   B the empire: from Rome the decree goes out — red routes stamped segment by segment, to Judea last
-//   C the journey: Nazareth → Bethlehem along the Jordan valley, Joseph and Mary on the road, a km counter; at Bethlehem
-//     the name turns gold and Micah 5:2 is read — then silence.
-const SILK = { sky: ['#F6CD98', '#F1B489', '#EE9A73', '#C98478'], far: '#9A7FA8', mid: '#3E7079', near: '#1E3B3F', gold: '#F2B134', red: '#E04F37',
-  sea: '#7FB3C8', navy: '#173247', night: '#1F2A3C', land: '#2E4A5A', ridge: '#3D6072', glint: '#BFD3DE', cream: '#F3E8CF' };
-let PAPER = null;
-const silkLayout = () => V ? { hz: H * .47, sun: [W * .7, H * .47 - 40], sr: 110, title: [W / 2, H * .2], ts: 200, lab: H * .2 + 96 }
-                            : { hz: H * .56, sun: [W * .74, H * .56 - 40], sr: 92, title: [W / 2, H * .27], ts: 170, lab: H * .27 + 84 };
-const ridgePath = (y0, amp, f, ph, toY) => { const p = new Path2D(); p.moveTo(0, toY); for (let x = 0; x <= W; x += 12) p.lineTo(x, y0 - amp * (.55 + .45 * Math.sin(x * f + ph)) - amp * .3 * Math.sin(x * f * 2.7 + ph * 2)); p.lineTo(W, toY); p.closePath(); return p; };
-function infoBand(ctx, k = 1) { const y0 = Film.SAFE() - (V ? 70 : 30), p = new Path2D(); p.rect(0, y0, W, H - y0); Silk.ink(ctx, p, SILK.near, { k, dir: 'up', reg: [1, 0] }); }
-function posterNazareth(ctx, t) {
-  const L = silkLayout(), pull = (a, d = .5) => clamp((t - a) / d);
-  ctx.drawImage(PAPER, 0, 0);
-  Silk.bands(ctx, 0, 0, W, L.hz + 30, SILK.sky, { k: pull(61.0, .6) });
-  { const p = new Path2D(); p.arc(L.sun[0], L.sun[1], L.sr, 0, 6.283); Silk.ink(ctx, p, SILK.gold, { k: pull(61.4, .4), reg: [2, -1] });
-    const rings = new Path2D(); for (const r of [L.sr + 26, L.sr + 52]) { rings.arc(L.sun[0], L.sun[1], r + 7, 0, 6.283); rings.arc(L.sun[0], L.sun[1], r, 0, 6.283, true); } Silk.ink(ctx, rings, '#F8DDA8', { k: pull(61.5, .4), rim: false }); }
-  Silk.ink(ctx, ridgePath(L.hz - (V ? 60 : 40), V ? 120 : 90, .0042, 1.2, H), SILK.far, { k: pull(61.7, .45), reg: [-2, 1] });
-  Silk.ink(ctx, ridgePath(L.hz + (V ? 70 : 60), V ? 90 : 70, .0063, 2.6, H), SILK.mid, { k: pull(62.0, .45), reg: [1, 2] });
-  // Nazareth: a small town of flat roofs on the middle hill; its windows are left as bare paper (lamplight)
-  { const k = pull(62.3, .35), cx = V ? W * .4 : W * .42, cy = L.hz + (V ? 30 : 30), houses = new Path2D(), wins = new Path2D(), r = rng(9);
-    for (let i = 0; i < 11; i++) { const x = cx + (i - 5) * (V ? 40 : 34) + (r() - .5) * 12, w = (V ? 48 : 40) + r() * 20, h = (V ? 40 : 34) + r() * 26, y = cy + Math.abs(i - 5) * 6 + r() * 10;
-      houses.rect(x - w / 2, y - h, w, h + 40); if (r() < .6) wins.rect(x - 4, y - h * .6, 9, 12); }
-    Silk.ink(ctx, houses, SILK.near, { k, reg: [1, 1] }); Silk.ink(ctx, wins, SILK.gold, { k: pull(62.6, .3), rim: false }); }
-  Silk.ink(ctx, ridgePath(L.hz + (V ? 230 : 190), V ? 60 : 50, .0031, .4, H), SILK.near, { k: pull(62.5, .45), reg: [0, 1] });
-  Silk.title(ctx, Film.text('M1'), L.title[0], L.title[1], L.ts, SILK.near, { k: pull(62.9, .5) });
-  Silk.title(ctx, Film.text('M4'), L.title[0], L.lab, V ? 56 : 48, SILK.mid, { k: pull(63.4, .4), weight: 700, ls: 14 });
-  infoBand(ctx, pull(61.2, .5));
+// 2 · 0:21–1:01  the promise narrows — one thread of gold light through time
+//   Eden at dusk: the great tree, the light going out of the garden; one gold point is left on the ground (Gen 3:15) and rises
+//   Abraham: the desert at night under a sky of stars; a small man before his tent (Gen 22:18); the thread crosses the sky
+//   David: the hills of Bethlehem at evening, a shepherd boy with a staff among his sheep (1 Sam 17:15 · 2 Sam 7)
+//   the land: the thread runs down the valley and across the hills to the small town (Gen 49:10 → Bethlehem)
+function partEden(ctx, t) {
+  const k = clamp((t - 21) / 16), dusk = ss(24, 34, t), hz = H * (V ? .56 : .64);
+  skyGrad(ctx, [[0, Pilot.rgb(Pilot.mix([70, 92, 140], [16, 20, 42], dusk))], [.6, Pilot.rgb(Pilot.mix([226, 170, 140], [62, 46, 70], dusk))], [1, Pilot.rgb(Pilot.mix([252, 206, 150], [120, 70, 70], dusk))]], hz);
+  starField(ctx, ss(30, 36, t) * .6, hz, 3, 200, t);
+  const sh = 40 * k; hillLayer(ctx, hz - 20, V ? 60 : 50, .006, 1, Pilot.rgb(Pilot.mix([150, 120, 120], [44, 36, 52], dusk)), sh * .2);
+  hillLayer(ctx, hz + 30, V ? 40 : 34, .009, 3, Pilot.rgb(Pilot.mix([70, 60, 66], [22, 18, 26], dusk)), sh * .5);
+  // the great tree in the middle of the garden
+  { const tx = W * (V ? .56 : .6) - sh * .6, ty = hz + (V ? 60 : 50), r = rng(5); ctx.save(); ctx.fillStyle = ctx.strokeStyle = 'rgb(16,12,16)'; ctx.lineCap = 'round';
+    const br = (x, y, a, len, w, d) => { if (d > 7 || w < .8) return; const x2 = x + Math.cos(a) * len, y2 = y + Math.sin(a) * len; ctx.lineWidth = w; ctx.beginPath(); ctx.moveTo(x, y); ctx.quadraticCurveTo((x + x2) / 2 + (r() - .5) * len * .25, (y + y2) / 2, x2, y2); ctx.stroke();
+      if (d > 3) for (let i = 0; i < 14; i++) { ctx.beginPath(); ctx.ellipse(x2 + (r() - .5) * len, y2 + (r() - .5) * len * .7, 6 + r() * 12, 4 + r() * 6, r() * 3, 0, 6.283); ctx.fill(); }
+      br(x2, y2, a - .38 - r() * .25, len * .76, w * .66, d + 1); br(x2, y2, a + .34 + r() * .25, len * .74, w * .66, d + 1); };
+    ctx.lineWidth = V ? 30 : 26; ctx.beginPath(); ctx.moveTo(tx - 20, ty + 80); ctx.quadraticCurveTo(tx + 10, ty - 40, tx, ty - (V ? 160 : 120)); ctx.stroke();
+    br(tx, ty - (V ? 160 : 120), -1.9, V ? 150 : 120, V ? 20 : 18, 0); br(tx, ty - (V ? 160 : 120), -1.2, V ? 140 : 110, V ? 18 : 16, 0); ctx.restore(); }
+  hillLayer(ctx, hz + (V ? 90 : 70), V ? 26 : 20, .004, 6, 'rgb(14,10,14)', sh);
+  // one gold point left in the dark garden; it rises into a thread (the first promise)
+  const px = W * (V ? .36 : .34) - sh * .8, py = hz + (V ? 76 : 58), pk = ss(25, 27, t);
+  if (pk > 0) { W3.bloom(ctx, px, py, [255, 210, 130], .55 * pk * (.85 + .15 * Math.sin(t * 2)), { r: 70, streak: .15 }); ctx.fillStyle = `rgba(255,236,190,${pk})`; ctx.beginPath(); ctx.arc(px, py, 3.5, 0, 6.283); ctx.fill(); }
+  const up = clamp((t - 33.5) / 3.5); if (up > 0) { const pts = []; for (let i = 0; i <= 40; i++) { const u = i / 40; pts.push([px + u * W * .7, py - Math.sin(u * 2.4) * H * .18 - u * H * .06]); } thread2D(ctx, pts, up); }
+  W3.finish(ctx, t, { vignette: .62 }); textBand(ctx);
 }
-// ---- the empire map ----
-const EMPROUTES = [   // [places, delay s] — the decree goes out from Rome by road and sea; Judea last
-  [[[12.5, 41.9], [11.3, 43.8], [8.9, 44.4], [5.4, 43.3], [3.0, 43.2], [1.2, 41.1], [-3.7, 40.4]], 0],
-  [[[12.5, 41.9], [11.3, 43.8], [9.2, 45.5], [6.5, 46.8], [3.5, 48.3]], .3],
-  [[[12.5, 41.9], [12.3, 41.75], [11.5, 39.0], [10.3, 36.9]], .2],
-  [[[12.5, 41.9], [14.2, 41.1], [17.9, 40.6], [19.4, 41.3], [22.9, 40.6], [26.0, 40.6], [29.0, 41.0], [32.9, 39.9]], .5],
-  [[[12.3, 41.75], [15.6, 38.2], [20.0, 35.5], [25.0, 33.5], [29.9, 31.2]], .7],
-  [[[17.9, 40.6], [20.5, 37.8], [24.5, 34.6], [29.5, 33.6], [33.0, 32.9], [34.9, 32.5], [35.2, 31.8]], 1.1],
-];
-const empP = () => { const C = Math.cos(38 * Math.PI / 180), K = V ? W * .98 / (44 * C) : W * .86 / (44 * C), cx = W / 2, cy = V ? H * .38 : H * .4;
-  return ([lon, lat]) => [cx + (lon - 15.5) * K * C, cy - (lat - 38.5) * K]; };
-function posterEmpire(ctx, t) {
-  const pull = (a, d = .5) => clamp((t - a) / d), P2 = empP(), D = InkMap.MED;
-  ctx.drawImage(PAPER, 0, 0);
-  const sea = new Path2D(); [...D.seas].forEach(sp => { sp.forEach((p, i) => { const [x, y] = P2(p); i ? sea.lineTo(x, y) : sea.moveTo(x, y); }); sea.closePath(); });
-  const isl = new Path2D(); D.islands.forEach(sp => { sp.forEach((p, i) => { const [x, y] = P2(p); i ? isl.lineTo(x, y) : isl.moveTo(x, y); }); isl.closePath(); });
-  Silk.ink(ctx, sea, SILK.sea, { k: pull(68.4, .5), reg: [2, 1] });
-  ctx.save(); ctx.clip(sea); ctx.drawImage(PAPER, 0, 0); ctx.restore();   // islands knocked out of the sea ink (paper again)
-  ctx.save(); const sea2 = new Path2D(); sea2.addPath(isl); ctx.clip(isl); ctx.drawImage(PAPER, 0, 0); ctx.restore();
-  Silk.ink(ctx, sea, SILK.sea, { k: pull(68.4, .5), reg: [2, 1], rim: false }); { ctx.save(); ctx.clip(isl); ctx.drawImage(PAPER, 0, 0); ctx.restore(); }
-  // the decree: red routes stamped from Rome, one segment at a time; the last one reaches Judea
-  const t0 = 70.6, sp = V ? 300 : 420;
-  let judea = 0; for (const [pts, delay] of EMPROUTES) { const q = pts.map(P2); let L = 0; for (let i = 1; i < q.length; i++) L += Math.hypot(q[i][0] - q[i - 1][0], q[i][1] - q[i - 1][1]);
-    const k = clamp((t - t0 - delay) * sp / L); Silk.dashes(ctx, q, k, { color: SILK.red, w: V ? 7 : 8, step: V ? 18 : 22, dash: V ? 11 : 14 }); if (delay > 1) judea = k; }
-  const [rx, ry] = P2([12.5, 41.9]), [jx, jy] = P2([35.2, 31.8]);
-  { const p = new Path2D(); p.arc(rx, ry, V ? 15 : 17, 0, 6.283); Silk.ink(ctx, p, SILK.red, { k: pull(70.0, .3) }); const q = new Path2D(); q.arc(rx, ry, V ? 6 : 7, 0, 6.283); Silk.ink(ctx, q, SILK.cream, { k: pull(70.1, .3), rim: false }); }
-  Silk.title(ctx, Film.text('M6'), rx, ry - (V ? 30 : 34), V ? 52 : 50, SILK.navy, { k: pull(70.2, .4), ls: 4 });
-  if (judea > .98) { const p = new Path2D(); p.arc(jx, jy, V ? 13 : 15, 0, 6.283); Silk.ink(ctx, p, SILK.gold, { k: 1, sheen: 1 - ss(75.2, 76, t) }); Silk.title(ctx, Film.text('M5'), jx - (V ? 6 : 0), jy - (V ? 26 : 28), V ? 44 : 44, SILK.navy, { k: pull(75.0, .4), ls: 4, align: V ? 'right' : 'center' }); }
-  // a navy header band: the emperor's name, printed last at the top
-  { const hb = V ? 300 : 150, p = new Path2D(); p.rect(0, 0, W, hb); Silk.ink(ctx, p, SILK.navy, { k: pull(68.9, .4), dir: 'down' });
-    Silk.title(ctx, Film.text('A1'), W / 2, hb * (V ? .62 : .66), V ? 60 : 58, SILK.cream, { k: pull(69.3, .5), weight: 800, ls: 6 }); }
-  infoBand(ctx, 1);
+function partAbraham(ctx, t) {
+  const k = clamp((t - 37) / 6.6), hz = H * (V ? .6 : .68);
+  skyGrad(ctx, [[0, 'rgb(4,6,20)'], [.7, 'rgb(14,20,48)'], [1, 'rgb(44,46,78)']], hz);
+  starField(ctx, 1, hz, 11, V ? 900 : 1100, t); milkyWay(ctx, 1, W * .5, hz * .45, V ? -1.1 : -.35, Math.max(W, H) * 1.3, V ? 380 : 300);
+  hillLayer(ctx, hz, V ? 30 : 24, .004, 2, 'rgb(20,18,30)', 30 * k);
+  { const g = ctx.createLinearGradient(0, hz - 10, 0, H); g.addColorStop(0, 'rgb(20,16,22)'); g.addColorStop(1, 'rgb(8,6,10)'); ctx.fillStyle = g; ctx.fillRect(0, hz + 6, W, H); }
+  const s = V ? 70 : 60, gx = W * (V ? .38 : .42) - 20 * k, gy = hz + (V ? 40 : 32);
+  sil(ctx, gx + s * 2.6, gy + 4, s * .9, 1, SIL.tent, .25, 'rgb(150,160,210)', 'rgb(14,12,16)');
+  { const g = ctx.createRadialGradient(gx + s * 2.4, gy - 4, 0, gx + s * 2.4, gy - 4, 60); g.addColorStop(0, 'rgba(255,170,90,.6)'); g.addColorStop(1, 'rgba(255,170,90,0)'); ctx.fillStyle = g; ctx.fillRect(gx + s * 2.4 - 60, gy - 64, 120, 120); }   // a fire by the tent
+  sil(ctx, gx, gy, s, 1, SIL.lookingUp, .35, 'rgb(160,176,226)');
+  // the thread crosses the sky above him, among the stars
+  const pts = []; for (let i = 0; i <= 40; i++) { const u = i / 40; pts.push([-40 + u * (W + 80), hz * (.55 - .25 * Math.sin(u * 3.1))]); } thread2D(ctx, pts, clamp((t - 37.4) / 5.4), .8);
+  W3.finish(ctx, t, { vignette: .55 }); textBand(ctx);
 }
-// ---- the journey poster ----
-const HLROUTE = [[35.30, 32.70], [35.38, 32.64], [35.50, 32.50], [35.555, 32.28], [35.55, 32.05], [35.47, 31.90], [35.44, 31.86], [35.36, 31.82], [35.27, 31.79], [35.23, 31.78], [35.21, 31.745], [35.20, 31.705]];
-const jrP = () => { const K = V ? 760 : 590, C = Math.cos(32 * Math.PI / 180), y0 = V ? 300 : 110, cx = V ? W * .5 : W * .5;
-  return ([lon, lat]) => [cx + (lon - 35.35) * K * C, y0 + (32.70 - lat) * K]; };
-const polyPath = (pts, close = true) => { const p = new Path2D(); pts.forEach(([x, y], i) => i ? p.lineTo(x, y) : p.moveTo(x, y)); if (close) p.closePath(); return p; };
-function chaikin(pts, n = 2) { let p = pts; for (let k = 0; k < n; k++) { const q = [p[0]]; for (let i = 0; i < p.length - 1; i++) { const [a, b] = [p[i], p[i + 1]]; q.push([a[0] * .75 + b[0] * .25, a[1] * .75 + b[1] * .25], [a[0] * .25 + b[0] * .75, a[1] * .25 + b[1] * .75]); } q.push(p[p.length - 1]); p = q; } return p; }
-function traveller(ctx, x, y, s, step) {   // a pictogram: Mary on a donkey, Joseph walking ahead with a staff (flat cream ink)
-  ctx.save(); ctx.translate(x, y); ctx.scale(s, s); ctx.fillStyle = SILK.cream; ctx.strokeStyle = SILK.cream; ctx.lineCap = 'round';
-  const sw = Math.sin(step * 6.283) * 5;
-  // donkey
-  ctx.beginPath(); ctx.ellipse(-12, 0, 30, 15, 0, 0, 6.283); ctx.fill();
-  ctx.beginPath(); ctx.moveTo(12, -6); ctx.lineTo(30, -26); ctx.lineTo(40, -22); ctx.lineTo(24, 2); ctx.closePath(); ctx.fill();
-  ctx.beginPath(); ctx.ellipse(38, -24, 9, 6, -.4, 0, 6.283); ctx.fill();
-  ctx.beginPath(); ctx.moveTo(30, -30); ctx.lineTo(27, -44); ctx.lineTo(33, -31); ctx.fill();
-  ctx.lineWidth = 5; for (const [lx, ph] of [[-32, 0], [-22, .5], [0, .5], [10, 0]]) { const d = Math.sin((step + ph) * 6.283) * 5; ctx.beginPath(); ctx.moveTo(lx, 8); ctx.lineTo(lx + d, 34); ctx.stroke(); }
-  ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(-41, -4); ctx.quadraticCurveTo(-50, 6, -46, 16); ctx.stroke();
-  // Mary, veiled, sitting
-  ctx.beginPath(); ctx.moveTo(-26, -8); ctx.quadraticCurveTo(-24, -36, -14, -46); ctx.quadraticCurveTo(-4, -52, 2, -44); ctx.quadraticCurveTo(4, -26, 0, -8); ctx.closePath(); ctx.fill();
-  ctx.fillStyle = SILK.gold; ctx.beginPath(); ctx.arc(-6, -46, 7, 0, 6.283); ctx.fill(); ctx.fillStyle = SILK.cream;
-  // Joseph, walking ahead, a staff
-  ctx.beginPath(); ctx.arc(64, -50, 8, 0, 6.283); ctx.fill();
-  ctx.beginPath(); ctx.moveTo(56, -40); ctx.lineTo(72, -40); ctx.lineTo(76, 10); ctx.lineTo(52, 10); ctx.closePath(); ctx.fill();
-  ctx.lineWidth = 5; ctx.beginPath(); ctx.moveTo(58, 10); ctx.lineTo(56 - sw, 34); ctx.moveTo(70, 10); ctx.lineTo(72 + sw, 34); ctx.stroke();
-  ctx.lineWidth = 3.5; ctx.beginPath(); ctx.moveTo(84, -60); ctx.lineTo(86, 34); ctx.stroke(); ctx.lineWidth = 5; ctx.beginPath(); ctx.moveTo(70, -34); ctx.lineTo(84, -22); ctx.stroke();
+function partDavid(ctx, t) {
+  const k = clamp((t - 43.4) / 7.8), hz = H * (V ? .56 : .64);
+  skyGrad(ctx, [[0, 'rgb(48,62,108)'], [.55, 'rgb(196,136,124)'], [.88, 'rgb(250,192,132)'], [1, 'rgb(255,214,160)']], hz);
+  { const sx = W * .3, sy = hz - 20, R = Math.max(W, H) * .7, g = ctx.createRadialGradient(sx, sy, 0, sx, sy, R); g.addColorStop(0, 'rgba(255,220,160,.6)'); g.addColorStop(.25, 'rgba(255,200,140,.2)'); g.addColorStop(1, 'rgba(255,200,140,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H); }
+  hillLayer(ctx, hz - 10, V ? 50 : 40, .005, 4, 'rgb(170,118,118)', 40 * k * .2); hillLayer(ctx, hz + 30, V ? 40 : 30, .008, 7, 'rgb(104,74,84)', 40 * k * .5);
+  const crest = x => hz + (V ? 110 : 84) - (V ? 40 : 30) * Math.sin((x + 60 * k) * .003 + 1);
+  ctx.fillStyle = 'rgb(26,18,22)'; ctx.beginPath(); ctx.moveTo(-60, H + 60); for (let x = -60; x <= W + 60; x += 6) ctx.lineTo(x, crest(x)); ctx.lineTo(W + 60, H + 60); ctx.closePath(); ctx.fill();
+  const s = V ? 78 : 66, r = rng(31);
+  for (let i = 0; i < 9; i++) { const x = W * (.12 + .8 * r()) - 30 * k, y = crest(x) + 2 + r() * 10, ph = Math.sin(t * .8 + i) * .02; sil(ctx, x, y, s * (.75 + .2 * r()), r() < .5 ? 1 : -1, p => { p.ellipse(0, -.42, .42, .22, ph, 0, 6.283); p.ellipse(.42, -.5 + ph, .13, .1, .4, 0, 6.283); for (const lx of [-.26, -.12, .14, .26]) p.rect(lx, -.24, .045, .24); }, .5, 'rgb(255,206,150)', 'rgb(26,18,22)'); }
+  const bx = W * (V ? .6 : .62) - 30 * k; sil(ctx, bx, crest(bx) + 2, s, -1, SIL.boy, .7, 'rgb(255,206,150)', 'rgb(26,18,22)', [-.9, -.43], 3);
+  const pts = []; for (let i = 0; i <= 40; i++) { const u = i / 40; pts.push([-40 + u * (W + 80), crest(-40 + u * (W + 80)) - (V ? 18 : 14)]); } thread2D(ctx, pts, clamp((t - 43.8) / 6), .8);
+  W3.finish(ctx, t, { vignette: .55 }); textBand(ctx);
+}
+let NARROW = null;
+function buildNarrow() {
+  const tw = RD.xr(RD.BZ) + 30, th = rdH(tw, RD.BZ);
+  const K = (t, z, up, side) => { const x = RD.xr(z) + side; return [t, x, rdH(x, z) + up, z, tw, th + 10, RD.BZ, 1250, 1750]; };
+  const path = []; for (let z = 120; z <= RD.BZ - 40; z += 10) { const x = RD.xr(z); path.push([x, rdH(x, z) + .8, z]); } path.push([tw - 10, th + 3, RD.BZ - 20]);
+  NARROW = { cam: W3.cam([K(51, -60, 150, -90), K(56, 200, 110, -60), K(61, 620, 80, -30)]), path,
+    light: W3.light([[51, 6, 60, .95, [255, 178, 110], [80, 66, 86], [60, 84, 140], [250, 180, 124], [255, 186, 120], [212, 162, 140], 1200, 0], [61, 2, 60, .6, [255, 150, 96], [64, 56, 84], [40, 54, 104], [232, 150, 118], [248, 150, 104], [168, 128, 132], 1100, .2]]) };
+}
+function partNarrow(ctx, t) {
+  const c = NARROW.cam(t), L = NARROW.light(t); W3.sky(ctx, c, L, t);
+  terrain(ctx, c, L, { h: rdH, alb: landAlb, road: true, things: (z0, z1) => townAt(ctx, c, L, t, z0, z1, ss(57, 59, t)) });
+  threadWorld(ctx, c, NARROW.path, clamp((t - 51.6) / 6.4));
+  const tp = W3.P(c, RD.xr(RD.BZ) + 30, rdH(RD.xr(RD.BZ) + 30, RD.BZ) + 6, RD.BZ); if (tp) W3.bloom(ctx, tp[0], tp[1], [255, 200, 120], .6 * ss(57.6, 59.6, t), { r: V ? 200 : 180, streak: .25 });
+  W3.finish(ctx, t, { vignette: .58 }); textBand(ctx);
+}
+
+// =====================================================================================================================
+// 4 · 1:35–2:08  that night. A stable in the rock: the only light comes from the child in the manger; figures small and in
+// shadow, their faces lit from below. The shepherds' hill: the sky opens with light. Then the two verses, in the dark.
+function bez(p, cmds) { for (const c of cmds) { if (c[0] === 'M') p.moveTo(c[1], c[2]); else if (c[0] === 'L') p.lineTo(c[1], c[2]); else if (c[0] === 'C') p.bezierCurveTo(c[1], c[2], c[3], c[4], c[5], c[6]); else if (c[0] === 'Q') p.quadraticCurveTo(c[1], c[2], c[3], c[4]); } p.closePath(); }
+const MARY_K = [['M', -.62, 0], ['C', -.6, -.3, -.52, -.62, -.38, -.88], ['C', -.3, -1.02, -.24, -1.1, -.2, -1.15], ['C', -.16, -1.24, -.06, -1.28, .04, -1.26],
+  ['C', .14, -1.24, .2, -1.16, .22, -1.06], ['C', .27, -1.03, .29, -.99, .26, -.95], ['C', .23, -.92, .22, -.88, .24, -.84], ['C', .3, -.8, .35, -.74, .37, -.68],
+  ['C', .39, -.63, .37, -.6, .33, -.6], ['C', .31, -.6, .3, -.6, .3, -.6], ['C', .38, -.42, .5, -.2, .58, -.06], ['L', .6, 0]];
+const JOSEPH = [['M', .3, 0], ['C', .3, -.4, .29, -.9, .27, -1.38], ['C', .26, -1.48, .22, -1.54, .15, -1.58], ['C', .17, -1.64, .16, -1.72, .1, -1.78], ['C', .04, -1.83, -.05, -1.8, -.08, -1.73],
+  ['C', -.1, -1.68, -.13, -1.64, -.12, -1.6], ['C', -.12, -1.55, -.1, -1.5, -.14, -1.47], ['C', -.2, -1.43, -.26, -1.36, -.3, -1.26], ['C', -.33, -1.2, -.37, -1.16, -.41, -1.15],
+  ['C', -.4, -1.1, -.34, -1.08, -.29, -1.1], ['C', -.28, -.7, -.3, -.3, -.32, 0]];
+function stableScene(ctx, t, o = {}) {
+  const z = o.z || 1, cx = W / 2, gy = H * (V ? .6 : .7), glowK = .9 + .1 * Math.sin(t * 1.3) * Math.sin(t * .7 + 1), lx = cx, ly = gy - (V ? 46 : 40);
+  ctx.save(); ctx.translate(cx, ly); ctx.scale(z, z); ctx.translate(-cx, -ly);
+  // the dark room, warm only near the light (no texture strokes: light and shadow do the work)
+  ctx.fillStyle = 'rgb(9,6,6)'; ctx.fillRect(-W, -H, 3 * W, 3 * H);
+  { const R = Math.max(W, H) * .8, g = ctx.createRadialGradient(lx, ly, 0, lx, ly, R); g.addColorStop(0, `rgba(220,150,80,${.55 * glowK})`); g.addColorStop(.18, `rgba(150,86,42,${.42 * glowK})`); g.addColorStop(.5, 'rgba(60,32,18,.3)'); g.addColorStop(1, 'rgba(10,6,6,0)'); ctx.fillStyle = g; ctx.fillRect(-W, -H, 3 * W, 3 * H); }
+  // timber posts and a beam of the stable, catching a little light on their inner edges
+  for (const [x0, w0] of [[W * .1, V ? 40 : 46], [W * .88, V ? 46 : 52]]) { ctx.fillStyle = 'rgb(14,9,7)'; ctx.fillRect(x0 - w0 / 2, -H, w0, 2 * H); const side = x0 < cx ? 1 : -1, g = ctx.createLinearGradient(x0 + side * w0 / 2, 0, x0 + side * (w0 / 2 - 10), 0); g.addColorStop(0, `rgba(200,130,70,${.35 * glowK})`); g.addColorStop(1, 'rgba(200,130,70,0)'); ctx.fillStyle = g; ctx.fillRect(x0 + side * (w0 / 2 - 10) - (side < 0 ? 0 : 0), -H, side * 10, 2 * H); }
+  ctx.fillStyle = 'rgb(14,9,7)'; ctx.fillRect(-W, H * (V ? .16 : .1), 3 * W, V ? 34 : 38);
+  // the floor: straw, lit near the manger
+  { const g = ctx.createLinearGradient(0, gy - 20, 0, H); g.addColorStop(0, 'rgb(34,20,12)'); g.addColorStop(1, 'rgb(8,5,4)'); ctx.fillStyle = g; ctx.fillRect(-W, gy - 6, 3 * W, H); const r = rng(14);
+    for (let i = 0; i < 420; i++) { const x = cx + (r() - .5) * W * 1.4, y = gy - 4 + r() * (V ? 120 : 90), d = Math.hypot(x - lx, (y - ly) * 2) / (V ? 520 : 600), k = clamp(1 - d); if (k <= 0) continue; ctx.strokeStyle = `rgba(255,206,130,${.6 * k * k * glowK})`; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x + (r() - .5) * 22, y - 2 - r() * 6); ctx.stroke(); } }
+  // Joseph behind the manger on the right, facing it, backlit
+  const sJ = V ? 300 : 250; sil(ctx, lx + (V ? 170 : 210), gy - (V ? 24 : 20), sJ, 1, p => { bez(p, JOSEPH); p.rect(-.42, -1.98, .035, 1.98); }, .95 * glowK, 'rgb(255,204,136)', 'rgb(12,8,7)', [-.94, .34], V ? 5 : 4);
+  // the manger: rough boards, the top edge lit; straw over it; the child — the light
+  const mw = V ? 210 : 230, mh = V ? 70 : 74; ctx.fillStyle = 'rgb(22,13,8)'; ctx.beginPath(); ctx.moveTo(lx - mw / 2, ly); ctx.lineTo(lx + mw / 2, ly); ctx.lineTo(lx + mw * .4, ly + mh); ctx.lineTo(lx - mw * .4, ly + mh); ctx.closePath(); ctx.fill();
+  ctx.strokeStyle = 'rgb(22,13,8)'; ctx.lineWidth = 9; ctx.beginPath(); ctx.moveTo(lx - mw * .36, ly + mh - 4); ctx.lineTo(lx - mw * .22, ly + mh + 34); ctx.moveTo(lx + mw * .36, ly + mh - 4); ctx.lineTo(lx + mw * .22, ly + mh + 34); ctx.stroke();
+  ctx.fillStyle = `rgba(255,214,150,${.9 * glowK})`; ctx.fillRect(lx - mw / 2, ly - 3, mw, 4);
+  { const r = rng(5); for (let i = 0; i < 90; i++) { const x = lx + (r() - .5) * mw * 1.05, y = ly - 2 + (r() - .5) * 8; ctx.strokeStyle = `rgba(255,226,170,${.5 + .5 * r()})`; ctx.lineWidth = 1.3; ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x + (r() - .5) * 20, y - 4 - r() * 10); ctx.stroke(); } }
+  { const g = ctx.createRadialGradient(lx - 6, ly - 16, 0, lx, ly - 12, mw * .32); g.addColorStop(0, 'rgb(255,252,240)'); g.addColorStop(.6, 'rgb(255,232,186)'); g.addColorStop(1, 'rgba(255,210,150,.0)'); ctx.fillStyle = g; ctx.beginPath(); ctx.ellipse(lx + 6, ly - 12, mw * .27, mh * .26, -.04, 0, 6.283); ctx.fill();
+    ctx.fillStyle = 'rgb(255,240,214)'; ctx.beginPath(); ctx.arc(lx - mw * .22, ly - 16, mh * .17, 0, 6.283); ctx.fill(); }
+  W3.bloom(ctx, lx, ly - 14, [255, 214, 150], .95 * glowK, { r: V ? 330 : 300, streak: .5 });
+  // Mary kneeling in the near foreground on the left, bowed toward the child (backlit, veiled)
+  const sM = V ? 420 : 340; sil(ctx, lx - (V ? 250 : 330), gy + (V ? 130 : 110), sM, 1, p => bez(p, MARY_K), .95 * glowK, 'rgb(255,210,146)', 'rgb(10,7,6)', [.9, -.44], V ? 6 : 5);
   ctx.restore();
+  return { lx, ly, glowK };
 }
-function townIcon(ctx, x, y, s, col, win) { const p = new Path2D(), w = new Path2D(); for (const [dx, h, bw] of [[-22, 26, 22], [-2, 36, 24], [20, 22, 20]]) { p.rect(x + (dx - bw / 2) * s, y - h * s, bw * s, h * s); w.rect(x + (dx - 2) * s, y - h * .6 * s, 5 * s, 6 * s); }
-  Silk.ink(ctx, p, col, { reg: [1, 1] }); if (win) Silk.ink(ctx, w, win, { rim: false }); }
-function posterJourney(ctx, t) {
-  const pull = (a, d = .5) => clamp((t - a) / d), P2 = jrP();
-  ctx.drawImage(PAPER, 0, 0);
-  { const p = new Path2D(); p.rect(0, 0, W, H); Silk.ink(ctx, p, SILK.night, { k: pull(76.6, .5), rim: false }); }
-  const coast = [[35.10, 33.60], [35.20, 33.27], [35.08, 32.93], [34.97, 32.83], [34.92, 32.62], [34.89, 32.48], [34.80, 32.20], [34.75, 32.05], [34.66, 31.85], [34.55, 31.67], [34.45, 31.50], [34.30, 31.30], [34.20, 31.05], [34.0, 30.5]].map(P2);
-  const land = polyPath([...coast, [W + 50, P2([34, 30.5])[1]], [W + 50, -50], [coast[0][0], -50]]);
-  Silk.ink(ctx, land, SILK.land, { k: pull(76.9, .5), reg: [2, 1] });
-  // the central hill country: stepped ridges (lighter ink), so the road is seen to go down to the valley and back up
-  { const r = rng(3), p = new Path2D(); for (let i = 0; i < 26; i++) { const lat = 31.6 + r() * 1.1, lon = 35.05 + r() * .28, [x, y] = P2([lon, lat]), w = (V ? 46 : 40) + r() * 30, h = (V ? 20 : 16) + r() * 12; p.moveTo(x - w / 2, y); p.lineTo(x - w * .1, y - h); p.lineTo(x + w * .1, y - h * .8); p.lineTo(x + w / 2, y); p.closePath(); }
-    Silk.ink(ctx, p, SILK.ridge, { k: pull(77.1, .4), rim: false }); }
-  // water left as pale ink: the Sea of Galilee, the Jordan, the Dead Sea
-  { const lake = polyPath([[35.53, 32.82], [35.57, 32.89], [35.62, 32.88], [35.65, 32.82], [35.64, 32.74], [35.60, 32.70], [35.56, 32.72], [35.53, 32.77]].map(P2));
-    const dead = polyPath([[35.47, 31.78], [35.56, 31.75], [35.58, 31.55], [35.55, 31.30], [35.48, 31.10], [35.40, 31.05], [35.38, 31.25], [35.42, 31.50], [35.43, 31.70]].map(P2));
-    const jor = chaikin([[35.59, 32.70], [35.57, 32.60], [35.58, 32.48], [35.55, 32.35], [35.56, 32.20], [35.54, 32.05], [35.55, 31.92], [35.53, 31.80], [35.52, 31.77]].map(P2));
-    const k = pull(77.3, .4); Silk.ink(ctx, lake, SILK.glint, { k, rim: false }); Silk.ink(ctx, dead, SILK.glint, { k, rim: false });
-    if (k > 0) { ctx.save(); ctx.strokeStyle = SILK.glint; ctx.lineWidth = V ? 6 : 5; ctx.lineJoin = 'round'; ctx.stroke(polyPath(jor, false)); ctx.restore(); }
-    const sea = polyPath([[-50, -50], [coast[0][0], -50], ...coast, [-50, H + 50]]); Silk.ink(ctx, sea, SILK.navy, { k, rim: false }); }
-  // the road and the travellers; a km counter
-  const route = chaikin(HLROUTE.map(P2), 2), r0 = 77.8, r1 = 89.4, k = clamp((t - r0) / (r1 - r0)), kk = k < 1 ? k * k * (3 - 2 * k) * .15 + k * .85 : 1;
-  const { head } = Silk.dashes(ctx, route, kk, { color: SILK.gold, w: V ? 9 : 8, step: V ? 24 : 20, dash: V ? 14 : 12 });
-  const arrive = ss(r1, r1 + .5, t);
-  townIcon(ctx, ...P2(HLPLACE.nazareth), V ? 1.5 : 1.25, SILK.cream, SILK.gold);
-  { const [jx, jy] = P2(HLPLACE.jerusalem); townIcon(ctx, jx + (V ? 30 : 26), jy - 2, V ? 1.0 : .85, '#9fb3c0', null); }
-  townIcon(ctx, ...P2(HLPLACE.bethlehem), V ? 1.5 : 1.25, arrive > 0 ? SILK.gold : SILK.cream, arrive > 0 ? SILK.cream : null);
-  const lab = (id, ll, dx, dy, col, size) => { const [x, y] = P2(ll); Silk.title(ctx, Film.text(id), x + dx, y + dy, size, col, { k: pull(77.4, .4), weight: 800, ls: 3, align: dx < 0 ? 'right' : dx > 0 ? 'left' : 'center' }); };
-  lab('M1', HLPLACE.nazareth, V ? -50 : -44, V ? -10 : -8, SILK.cream, V ? 54 : 44);
-  lab('M3', HLPLACE.jerusalem, V ? 70 : 60, V ? -2 : -2, '#c9d6de', V ? 40 : 34);
-  lab('M2', HLPLACE.bethlehem, V ? -46 : -40, V ? 54 : 46, arrive > 0 ? SILK.gold : SILK.cream, V ? 58 : 48);
-  if (k > 0 && k < 1.02) { const [hx, hy] = head; traveller(ctx, hx + (V ? 46 : 40), hy - (V ? 6 : 4), V ? .95 : .8, t * .9); }
-  // arrival: the town answers with rings of light (bare paper)
-  if (arrive > 0) { const [bx, by] = P2(HLPLACE.bethlehem); ctx.save(); ctx.globalAlpha = 1 - ss(r1 + 1.6, r1 + 3.2, t); ctx.strokeStyle = SILK.gold; for (let i = 0; i < 3; i++) { const rr = (30 + i * 26 + 40 * clamp((t - r1) / 1.6)) * (V ? 1.2 : 1); ctx.lineWidth = 4; ctx.beginPath(); ctx.arc(bx, by - 20, rr, 0, 6.283); ctx.stroke(); } ctx.restore(); }
-  // the counter: "나사렛에서 {n} km", top right, gold numbers
-  { const n = Math.round(150 * kk), a = pull(77.6, .3); if (a > 0) Silk.title(ctx, Film.text('K1').replace('{n}', n), V ? 60 : 90, V ? 190 : 110, V ? 52 : 46, SILK.gold, { k: a, weight: 800, ls: 2, align: 'left' }); }
-  infoBand(ctx, 1);
+function partStable(ctx, t) { stableScene(ctx, t, { z: 1.12 - .1 * eio(clamp((t - 95) / 10)) }); W3.finish(ctx, t, { vignette: .6 }); textBand(ctx); }
+function partShepherds(ctx, t) {
+  const k = clamp((t - 104.6) / 9), open = ss(105.6, 108.4, t), hz = H * (V ? .6 : .66);
+  skyGrad(ctx, [[0, 'rgb(6,8,24)'], [.8, 'rgb(18,24,52)'], [1, 'rgb(34,38,70)']], hz); starField(ctx, 1 - .7 * open, hz, 33, 500, t);
+  // the glory of the Lord: light opening in the sky above them (a soft corona, slow faint rays, warm-white)
+  if (open > 0) { const sx = W * .5, sy = H * (V ? .2 : .18); const g = ctx.createRadialGradient(sx, sy, 0, sx, sy, Math.max(W, H) * .9); g.addColorStop(0, `rgba(255,246,222,${.95 * open})`); g.addColorStop(.18, `rgba(255,226,170,${.5 * open})`); g.addColorStop(.55, `rgba(160,150,170,${.18 * open})`); g.addColorStop(1, 'rgba(60,60,90,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+    rays(ctx, sx, sy, t, [255, 236, 200], .03 * open); }
+  hillLayer(ctx, hz, V ? 50 : 40, .005, 2, Pilot.rgb(Pilot.mix([22, 22, 36], [120, 104, 96], open * .6)), 20 * k);
+  const crest = x => hz + (V ? 110 : 84) - (V ? 40 : 30) * Math.sin((x + 60 * k) * .003 + 1);   // the same hill as David's
+  ctx.fillStyle = Pilot.rgb(Pilot.mix([14, 12, 18], [40, 30, 30], open * .5)); ctx.beginPath(); ctx.moveTo(-60, H + 60); for (let x = -60; x <= W + 60; x += 6) ctx.lineTo(x, crest(x)); ctx.lineTo(W + 60, H + 60); ctx.closePath(); ctx.fill();
+  const s = V ? 82 : 70, r = rng(31), rimA = .25 + .7 * open, rc = 'rgb(255,236,200)';
+  for (let i = 0; i < 9; i++) { const x = W * (.12 + .8 * r()) - 30 * k, y = crest(x) + 2 + r() * 10; sil(ctx, x, y, s * (.75 + .2 * r()), r() < .5 ? 1 : -1, SIL.sheep, rimA * .6, rc, 'rgb(16,12,16)'); }
+  for (const [fx, f] of [[.36, 1], [.5, -1], [.62, 1]]) { const x = W * fx - 30 * k; sil(ctx, x, crest(x) + 2, s, f, SIL.lookingUp, rimA, rc, 'rgb(16,12,16)'); }
+  W3.finish(ctx, t, { vignette: .55 }); textBand(ctx);
 }
-const HLPLACE = { nazareth: [35.30, 32.70], jerusalem: [35.23, 31.78], bethlehem: [35.20, 31.705] };
+function partPair(ctx, t) {   // back in the stable, closer; then dark, and the two verses joined by gold
+  const st = stableScene(ctx, t, { z: 1.3 + .05 * clamp((t - 113.6) / 14) }); W3.finish(ctx, t, { vignette: .65 });
+  const dim = ss(114.6, 116.2, t); ctx.fillStyle = `rgba(6,4,6,${.72 * dim})`; ctx.fillRect(0, 0, W, H);
+  textBand(ctx);
+}
+function pairLink(ctx, t) {   // a fine gold line from 'the seed of the woman' (Gen 3:15, above) to 'born of a woman' (Gal 4:4, below)
+  const k = ss(120.6, 122.4, t) * (1 - ss(126.6, 127.6, t)); if (k <= 0) return;
+  const y0 = V ? H * .34 : H * .3, y1 = Film.subBottom() - (V ? 150 : 110); const pts = []; for (let i = 0; i <= 30; i++) { const u = i / 30; pts.push([W / 2 + Math.sin(u * 3.14) * (V ? 60 : 90), lerp(y0 + 30, y1 - 20, u)]); } thread2D(ctx, pts, k, .9); }
 
-// ---- 3C · the road (cinematic): the Judean wilderness at dusk; two small travellers on a long road; Bethlehem's lamps far ahead ----
+// =====================================================================================================================
+// 5 · 2:08–2:59  the camera leaves the stable and rises over the town at night (1 · reversed); dawn on a hill with a cross —
+// the sun rises behind it ("성경대로 … 다시 살아나사"); back to the night over Bethlehem, the first frame, the reading card.
+function partRise(ctx, t) { partFlight(ctx, t, lerp(21, 4, eio(clamp((t - 128) / 9))), { warm: .6 }); const k = 1 - ss(128, 129.4, t); if (k > 0) { ctx.fillStyle = `rgba(8,6,8,${k})`; ctx.fillRect(0, 0, W, H); } }
+function partDawn(ctx, t) {
+  const dawn = ss(139, 146.8, t), sun = ss(143.4, 147.4, t), hz = H * (V ? .58 : .64);
+  skyGrad(ctx, [[0, Pilot.rgb(Pilot.mix([6, 8, 22], [60, 92, 150], dawn))], [.6, Pilot.rgb(Pilot.mix([16, 20, 44], [226, 170, 150], dawn))], [1, Pilot.rgb(Pilot.mix([34, 34, 60], [255, 214, 160], dawn))]], hz);
+  starField(ctx, 1 - dawn, hz, 5, 300, t);
+  const sx = W * (V ? .58 : .6), sy = hz + 40 - (V ? 130 : 110) * eio(sun);
+  if (sun > 0) { const R = Math.max(W, H), g = ctx.createRadialGradient(sx, sy, 0, sx, sy, R); g.addColorStop(0, `rgba(255,236,190,${.9 * sun})`); g.addColorStop(.2, `rgba(255,200,140,${.4 * sun})`); g.addColorStop(1, 'rgba(255,200,140,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = `rgba(255,246,220,${sun})`; ctx.beginPath(); ctx.arc(sx, sy, V ? 34 : 30, 0, 6.283); ctx.fill(); }
+  hillLayer(ctx, hz, V ? 44 : 36, .005, 5, Pilot.rgb(Pilot.mix([18, 16, 28], [140, 100, 110], dawn * .7)));
+  // the hill with a cross, near; the light comes from behind it
+  const hx = W * (V ? .42 : .4), crest = x => hz + (V ? 110 : 80) - (V ? 120 : 90) * Math.exp(-((x - hx) ** 2) / ((V ? 260 : 340) ** 2));
+  ctx.fillStyle = 'rgb(16,11,14)'; ctx.beginPath(); ctx.moveTo(-60, H + 60); for (let x = -60; x <= W + 60; x += 6) ctx.lineTo(x, crest(x)); ctx.lineTo(W + 60, H + 60); ctx.closePath(); ctx.fill();
+  { const cxp = hx, cyp = crest(hx), s = V ? 2.2 : 1.9; ctx.fillStyle = 'rgb(16,11,14)'; ctx.fillRect(cxp - 6 * s, cyp - 120 * s, 12 * s, 122 * s); ctx.fillRect(cxp - 38 * s, cyp - 96 * s, 76 * s, 10 * s);
+    if (sun > 0) { ctx.save(); ctx.globalAlpha = .7 * sun; ctx.strokeStyle = 'rgb(255,206,140)'; ctx.lineWidth = 2; ctx.strokeRect(cxp - 6 * s, cyp - 120 * s, 12 * s, 122 * s); ctx.strokeRect(cxp - 38 * s, cyp - 96 * s, 76 * s, 10 * s); ctx.restore(); } }
+  if (sun > 0) W3.bloom(ctx, sx, sy, [255, 210, 150], sun, { r: V ? 300 : 260, streak: .9 });
+  const pts = []; for (let i = 0; i <= 40; i++) { const u = i / 40; pts.push([-40 + u * (W + 80), crest(-40 + u * (W + 80)) - 10]); } thread2D(ctx, pts, clamp((t - 140) / 4.4), .7 * (1 - sun * .5));
+  W3.finish(ctx, t, { vignette: .55 }); textBand(ctx);
+}
+function partEnd(ctx, t) { partFlight(ctx, t, lerp(4, 0, clamp((t - 150) / 9)), { warm: .5, noBand: t > 159.6 }); const k = ss(159.6, 161, t); if (k > 0) { ctx.fillStyle = `rgba(6,6,12,${.62 * k})`; ctx.fillRect(0, 0, W, H); } }
+function endCard(ctx, t, a, b) { const k = win(t, a, b, 1, .8); if (k <= 0) return; const segs = Film.text('E1').split(/\s*→\s*/), size = V ? 46 : 42, y0 = H * (V ? .4 : .38);
+  Pilot.text(ctx, segs[0], W / 2, y0, { size, weight: 600, font: "'Noto Serif KR',serif", color: '#f6ead0', alpha: k, shadow: 'rgba(0,0,0,.9)', shadowBlur: 18 });
+  Pilot.text(ctx, segs[1] || '', W / 2, y0 + size * 1.9, { size: size * .9, weight: 600, font: "'Noto Serif KR',serif", color: '#e9c77a', alpha: k * ss(a + .6, a + 1.4, t), shadow: 'rgba(0,0,0,.9)', shadowBlur: 18 });
+  Pilot.text(ctx, segs[2] || '', W / 2, y0 + size * 4.0, { size: size * .8, font: "'Noto Sans KR',sans-serif", color: '#f0e6d2', alpha: k * ss(a + 1.2, a + 2, t), shadow: 'rgba(0,0,0,.9)', shadowBlur: 14 });
+  Pilot.text(ctx, Film.text('B1'), W / 2, y0 + size * 5.1, { size: size * .56, font: "'Noto Sans KR',sans-serif", color: '#c9b78e', alpha: k * ss(a + 1.6, a + 2.4, t), ls: 3 }); }
+
+// =====================================================================================================================
+// 3 · 1:01–1:35  the emperor's decree, the road (see parts above for the shared land)
 const RD = { xr: z => 26 * Math.sin(z * .006) + 14 * Math.sin(z * .017 + 1), BZ: 1480 };
 function rdH(x, z) { const d = x - RD.xr(z), ad = Math.abs(d);
   let h = 2 * Math.sin(z * .01) + Math.min(70, .0028 * d * d) + 22 * (Pilot.fbm(x * .011 + 3, z * .011, 4) - .45) * ss(6, 50, ad) + 6 * (Pilot.fbm(x * .05, z * .05, 2) - .5) * ss(3, 20, ad);
@@ -300,12 +328,7 @@ function partRoad(ctx, t) {
   W3.finish(ctx, t);
   { const y0 = Film.SAFE() - (V ? 150 : 70), g = ctx.createLinearGradient(0, y0, 0, H); g.addColorStop(0, 'rgba(10,8,10,0)'); g.addColorStop(.4, 'rgba(10,8,10,.7)'); g.addColorStop(1, 'rgba(10,8,10,.9)'); ctx.fillStyle = g; ctx.fillRect(0, y0, W, H - y0); }
 }
-function house(ctx, c, L, h, t) {   // a flat-roofed stone house; after sunset its lamp comes on
-  const y0 = rdH(h.x, h.z) - .5, x0 = h.x - h.w / 2, x1 = h.x + h.w / 2, z0 = h.z - h.d / 2, z1 = h.z + h.d / 2, y1 = y0 + h.h, dist = h.z - c.z, alb = [.92, .84, .7];
-  for (const [pts, n] of [[[[x0, y0, z0], [x1, y0, z0], [x1, y1, z0], [x0, y1, z0]], [0, 0, -1]], [[[x1, y0, z0], [x1, y0, z1], [x1, y1, z1], [x1, y1, z0]], [1, 0, 0]], [[[x0, y0, z0], [x0, y0, z1], [x0, y1, z1], [x0, y1, z0]], [-1, 0, 0]], [[[x0, y1, z0], [x1, y1, z0], [x1, y1, z1], [x0, y1, z1]], [0, 1, 0]]])
-    if (W3.poly(ctx, c, pts)) { ctx.fillStyle = W3.css(W3.shade(alb, n, dist, L)); ctx.fill(); }
-  if (h.lamp >= 0) { const on = ss(89.6 + h.lamp, 90.2 + h.lamp, t) * Math.min(1, L.night * 1.6); if (on > 0) { const p = W3.P(c, h.x, y0 + h.h * .45, z0 - .1); if (p) { ctx.save(); ctx.globalCompositeOperation = 'screen'; const R = Math.max(5, p[2] * 4); const g = ctx.createRadialGradient(p[0], p[1], 0, p[0], p[1], R * 3); g.addColorStop(0, `rgba(255,214,140,${on})`); g.addColorStop(.25, `rgba(255,180,90,${.55 * on})`); g.addColorStop(1, 'rgba(255,170,80,0)'); ctx.fillStyle = g; ctx.fillRect(p[0] - R * 3, p[1] - R * 3, R * 6, R * 6); ctx.restore(); } } }
-}
+
 
 
 // ---- 3C-1 · silhouettes on a ridge against the dusk (a side track): Mary on a donkey, Joseph walking ahead with a staff ----
@@ -359,20 +382,6 @@ function partRidge(ctx, t) {
 
 
 // ---- 3A · Nazareth (cinematic): a small village on a Galilee hillside in the late sun; the camera pushes in slowly ----
-let NAZ = null;
-function nzH(x, z) { const valley = -26 * Math.exp(-((z - 110) ** 2) / (60 * 60)); return .16 * z + valley + 5 * Math.sin(x * .02) + 9 * (Pilot.fbm(x * .015 + 9, z * .015, 4) - .5) + 18 * ss(200, 280, z); }
-function buildNazareth() {
-  const r = rng(21), faces = [], trees = [];
-  for (let i = 0; i < 30; i++) { const x = 10 + (r() - .5) * 110, z = 230 + r() * 70, w = 6 + r() * 6, d = 6 + r() * 5, h = 3.5 + r() * 3, y = nzH(x, z) - .6;
-    faces.push(...W3.box(x - w / 2, y, z - d / 2, x + w / 2, y + h, z + d / 2, [.92, .85, .72], .95 + r() * .1));
-    if (r() < .5) faces.push({ pts: [[x - .7, y, z - d / 2 - .02], [x - .7, y + 2, z - d / 2 - .02], [x + .7, y + 2, z - d / 2 - .02], [x + .7, y, z - d / 2 - .02]], alb: [.12, .09, .08], two: true }); }
-  for (let i = 0; i < 40; i++) { const x = (r() - .5) * 260, z = 120 + r() * 200; if (z > 215 && Math.abs(x - 10) < 60 && r() < .8) continue; trees.push({ x, z, r: 2.2 + r() * 1.4 }); }
-  const rows = []; let z = -30; while (z < 900) { rows.push(z); z += z < 120 ? 3 : 3 + (z - 120) * .03; }
-  NAZ = { faces, trees, rows, cam: W3.cam([[61, -6, nzH(-6, 20) + 4, 20, 8, nzH(8, 260) + 8, 260, 1500, 2100], [68.6, -4, nzH(-4, 30) + 4.5, 30, 10, nzH(10, 260) + 7, 260, 1650, 2300]]),
-    light: W3.light([[61, 12, 230, 1.05, [255, 194, 128], [84, 74, 86], [70, 100, 150], [250, 200, 146], [255, 204, 140], [218, 192, 168], 420, 0], [68.6, 9, 230, 1.05, [255, 182, 116], [80, 70, 86], [64, 92, 144], [250, 190, 136], [255, 194, 130], [216, 184, 162], 400, 0]]) };
-}
-// ---- 3A · Nazareth (painted layers, like the ridge): evening in a hill village of Galilee — roofs dark against the sky, lamps in
-// the windows, two small figures in one doorway; the hills of Galilee fading behind. The camera creeps in. ----
 function partNazareth(ctx, t) {
   const k = clamp((t - 61) / 7.6), z = 1 + .06 * k, hz = H * (V ? .5 : .6);
   ctx.save(); ctx.translate(W / 2, hz); ctx.scale(z, z); ctx.translate(-W / 2, -hz);
@@ -397,22 +406,7 @@ function partNazareth(ctx, t) {
   W3.finish(ctx, t, { vignette: .6 });
   textBand(ctx);
 }
-function frameTree(ctx, t) {   // a dark olive tree in the near foreground, framing the view (it drifts a little against the far hill)
-  const sway = Math.sin(t * .6) * 4, ox = W * (V ? .9 : .86) + (t - 61) * 3, oy = H * (V ? .66 : .78), r = rng(41);
-  ctx.save(); ctx.fillStyle = 'rgb(18,16,14)'; ctx.strokeStyle = 'rgb(18,16,14)'; ctx.lineCap = 'round';
-  const br = (x, y, a, len, w, d) => { if (d > 6 || w < 1) return; const x2 = x + Math.cos(a) * len, y2 = y + Math.sin(a) * len; ctx.lineWidth = w; ctx.beginPath(); ctx.moveTo(x, y); ctx.quadraticCurveTo((x + x2) / 2 + (r() - .5) * len * .3, (y + y2) / 2, x2, y2); ctx.stroke();
-    if (d > 2) for (let i = 0; i < 9; i++) { const lx = x2 + (r() - .5) * len * .9, ly = y2 + (r() - .5) * len * .6; ctx.beginPath(); ctx.ellipse(lx + sway * (d / 6), ly, 3 + r() * 6, 1.6 + r() * 2.2, r() * 3, 0, 6.283); ctx.fill(); }
-    br(x2, y2, a - .35 - r() * .3, len * .74, w * .68, d + 1); br(x2, y2, a + .3 + r() * .3, len * .7, w * .66, d + 1); };
-  ctx.lineWidth = V ? 34 : 30; ctx.beginPath(); ctx.moveTo(ox + 40, H + 20); ctx.bezierCurveTo(ox + 10, oy + 120, ox + 50, oy + 40, ox, oy); ctx.stroke();
-  br(ox, oy, -2.1, V ? 190 : 150, V ? 22 : 20, 0); br(ox, oy, -1.4, V ? 160 : 130, V ? 18 : 16, 0); br(ox, oy, -2.7, V ? 170 : 140, V ? 16 : 14, 1);
-  ctx.restore(); }
-function olive(ctx, c, L, tr) { const y = nzH(tr.x, tr.z), p = W3.P(c, tr.x, y + tr.r * 1.1, tr.z); if (!p) return; const R = tr.r * p[2], dist = tr.z - c.z;
-  const dark = W3.shade([.24, .3, .2], [0, 0, -1], dist, L), lit = W3.shade([.36, .42, .26], [-L.sd[0], .5, -L.sd[2]], dist, L);
-  ctx.fillStyle = W3.css(W3.shade([.2, .16, .12], [0, 0, -1], dist, L)); ctx.fillRect(p[0] - R * .08, p[1], R * .16, R * 1.1);
-  ctx.fillStyle = W3.css(dark); ctx.beginPath(); ctx.ellipse(p[0], p[1], R * 1.2, R * .85, 0, 0, 6.283); ctx.fill();
-  ctx.fillStyle = W3.css(lit); ctx.beginPath(); ctx.ellipse(p[0] - R * .3 * Math.sign(L.sd[0] || 1), p[1] - R * .25, R * .75, R * .5, 0, 0, 6.283); ctx.fill(); }
 function textBand(ctx) { const y0 = Film.SAFE() - (V ? 150 : 70), g = ctx.createLinearGradient(0, y0, 0, H); g.addColorStop(0, 'rgba(10,8,10,0)'); g.addColorStop(.4, 'rgba(10,8,10,.7)'); g.addColorStop(1, 'rgba(10,8,10,.9)'); ctx.fillStyle = g; ctx.fillRect(0, y0, W, H - y0); }
-// ---- 3B · Rome (after the 65 mm epics): marble and gold under a hard sun; a colonnade, the temple; the camera dollies and cranes up ----
 let ROME = null;
 function buildRome() {
   const F = [], marble = [.95, .92, .86], gold = [1.0, .78, .36], red = [.62, .12, .1];
@@ -456,91 +450,49 @@ function partRome(ctx, t) {
   textBand(ctx);
 }
 
-function partDecree(ctx, t) {
-  if (t < 68.4) partNazareth(ctx, t); else if (t < 76.6) partRome(ctx, t); else if (t < 83.4) partRidge(ctx, t); else partRoad(ctx, t);
-}
-function buildSilk() { PAPER = Silk.paper(W, H, 5); }
-
 // =====================================================================================================================
-// 4 · 1:35–2:08  that night — a cave (the tradition since the early church: the birth in a cave at Bethlehem), in the
-// cavesil kit's look (word-log): everything cool blue and black, ONE warm thing — the child in the manger. Mary kneels by
-// it; Joseph stands, then kneels; two shepherds come in from the cave mouth and kneel. Rims warm as they near the child.
-const CK = () => Cavesil;
-const MX = 600;                                   // the manger (world x)
-function nightCam(t) { const K = CK(), { FY } = K.Y, z0 = V ? 1.75 : 1.35, z1 = V ? 1.32 : 1.0, zz = lerp(z0, z1, eio(clamp((t - 96) / 9)));
-  const yOn = (sy, z) => FY - (sy - H / 2) / z;     // world y whose screen y is sy
-  const k2 = eio(clamp((t - 104) / 4)), x = lerp(MX + 10, MX + 150, k2);
-  return { x, y: yOn(V ? H * .56 : H * .6, zz), z: zz, sx: 0, sy: 0 }; }
-function manger(ctx, t, glowK) {
-  const K = CK(), { FY } = K.Y, C = K.C, x = MX, y = FY;
-  K.glow(ctx, x, y - 60, 520, .5 * glowK); K.glow(ctx, x, y - 50, 260, .75 * glowK); K.glow(ctx, x, y - 40, 110, .9 * glowK);
-  // the trough: rough boards in the warm wood, lit from the child inside
-  ctx.save(); ctx.fillStyle = C.woodD || '#a9682e';
-  ctx.beginPath(); ctx.moveTo(x - 74, y - 58); ctx.lineTo(x + 74, y - 58); ctx.lineTo(x + 58, y - 14); ctx.lineTo(x - 58, y - 14); ctx.closePath(); ctx.fill();
-  ctx.fillStyle = '#e9b46a'; ctx.fillRect(x - 76, y - 62, 152, 7);
-  ctx.strokeStyle = '#7a4a22'; ctx.lineWidth = 2; for (const yy of [y - 42, y - 28]) { ctx.beginPath(); ctx.moveTo(x - 66, yy); ctx.lineTo(x + 66, yy); ctx.stroke(); }
-  ctx.strokeStyle = '#a9682e'; ctx.lineWidth = 7; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(x - 52, y - 16); ctx.lineTo(x - 30, y + 2); ctx.moveTo(x + 52, y - 16); ctx.lineTo(x + 30, y + 2); ctx.stroke();
-  // straw over the edge
-  const r = rng(77); ctx.strokeStyle = '#ffe4ac'; ctx.lineWidth = 1.6; for (let i = 0; i < 40; i++) { const sx = x - 70 + r() * 140, sy = y - 60 + r() * 4; ctx.globalAlpha = .6 + .4 * r(); ctx.beginPath(); ctx.moveTo(sx, sy); ctx.lineTo(sx + (r() - .5) * 18, sy - 6 - r() * 8); ctx.stroke(); }
-  ctx.globalAlpha = 1;
-  // the child, swaddled: a pale bundle with bands, a small head — the brightest thing in the cave
-  const g = ctx.createRadialGradient(x - 6, y - 70, 2, x, y - 66, 60); g.addColorStop(0, '#fff8e6'); g.addColorStop(.6, '#ffe8bd'); g.addColorStop(1, '#f6c98a');
-  ctx.fillStyle = g; ctx.beginPath(); ctx.ellipse(x + 8, y - 68, 44, 15, -.05, 0, 6.283); ctx.fill();
-  ctx.strokeStyle = 'rgba(200,150,90,.55)'; ctx.lineWidth = 2; for (let k = -2; k <= 2; k++) { ctx.beginPath(); ctx.moveTo(x + 8 + k * 15 - 5, y - 80); ctx.lineTo(x + 8 + k * 15 + 5, y - 56); ctx.stroke(); }
-  ctx.fillStyle = '#ffeccc'; ctx.beginPath(); ctx.arc(x - 40, y - 72, 13, 0, 6.283); ctx.fill();
-  ctx.strokeStyle = 'rgba(150,100,60,.8)'; ctx.lineWidth = 1.4; ctx.beginPath(); ctx.moveTo(x - 44, y - 74); ctx.quadraticCurveTo(x - 41, y - 72, x - 38, y - 74); ctx.stroke();
-  ctx.restore();
-}
-function nightPoses(t) {
-  const K = CK(), { FY, BY } = K.Y, tp = K.t12(t), child = [MX - 30, FY - 70], out = [];
-  // Mary: kneeling at the left, bent toward the child
-  { const F = K.kneel(MX - 150, FY, 1.0, 1, .62 + .04 * Math.sin(t * 1.2)); F.col = K.C.me; F.me = true; out.push(K.lookAt(F, child, .8)); }
-  // Joseph: standing at the right, then kneels beside the manger
-  { const ST = K.stand(MX + 150, BY, 1.06, -1, .06), KN = K.kneel(MX + 140, BY, 1.06, -1, .4); const F = K.mix(ST, KN, eio((tp - 99.6) / .5)); F.col = '#13293f'; out.push(K.lookAt(F, child, .7)); }
-  // two shepherds come in from the cave mouth (right) and kneel
-  [[1180, MX + 300, 104.0, FY], [1300, MX + 420, 104.6, BY]].forEach(([x0, xk, t0, gy], i) => {
-    const v = 150, xA = x0 - v * Math.max(0, tp - t0), arr = t0 + (x0 - xk) / v;
-    let F; if (tp < arr) F = K.walkFree(Math.max(xk, xA), gy, 1.02 - i * .04, -1, xA / 150, 150, .1, 22);
-    else { const W1 = K.stand(xk, gy, 1.02 - i * .04, -1, .05), KN = K.kneel(xk, gy, 1.02 - i * .04, -1, .5 + i * .1); F = K.mix(W1, KN, eio((tp - arr - .3) / .55)); }
-    F.col = '#17324f'; out.push(K.lookAt(F, child, .7)); });
-  return out;
-}
-function partNight(ctx, t) {
-  const K = CK(), cm = nightCam(t), lk = 1, glowK = .8 + .2 * Math.sin(t * 1.3) * Math.sin(t * .7 + 1);
-  K.warmAt = x => clamp(1.25 - Math.abs(x - MX) / 560) * glowK;
-  K.backdrop(ctx, t, cm, lk);
-  K.layer(ctx, cm, 1, () => { K.ground(ctx, t, cm, lk);
-    const F = nightPoses(t); K.figure(ctx, F[1]); K.figure(ctx, F[3]);   // back lane first (Joseph, the far shepherd)
-    manger(ctx, t, glowK); K.figure(ctx, F[0]); K.figure(ctx, F[2]);
-    K.ceiling(ctx, t, cm); });
-  K.fore(ctx, cm); K.dim(ctx, lk);
-}
-function buildNight() { const K = CK(); K.init(); K.buildCave({ x0: -1200, x1: 2400, shafts: [[-200, 260, 300, 140], [1500, 300, 320, 150]], spikesOK: x => Math.abs(x - MX) > 520 }); }
-
-// =====================================================================================================================
-// the timeline (pilot: parts 1, 3, 4)
-const SCENES = [[0, 21, partBethlehem], [61, 95, partDecree], [95, 113, partNight]];
+// the timeline (film seconds = the script's clock); scenes dissolve into each other over their overlap
+const SCENES = [
+  [0, 21.2, (c, t) => { partFlight(c, t); const k = ss(15.8, 17, t); if (k > 0) { c.fillStyle = `rgba(6,6,12,${.74 * k})`; c.fillRect(0, 0, W, H); } }],
+  [21.0, 37.2, partEden], [37.0, 43.6, partAbraham], [43.4, 51.2, partDavid], [51.0, 61.2, partNarrow],
+  [61.0, 68.6, partNazareth], [68.4, 76.8, partRome], [76.6, 83.6, partRidge], [83.4, 95.2, partRoad],
+  [95.0, 104.8, partStable], [104.6, 113.8, partShepherds], [113.6, 128.2, partPair],
+  [128.0, 137.2, partRise], [137.0, 150.2, partDawn], [150.0, 179.4, partEnd],
+];
 const QB = () => ({ bottom: Film.subBottom() + 40 });
 const TEXT = [
-  ['sub', '01', 0.4, 6.6], ['label', 'P0', 4.0, 15.2], ['quote', '02', 7.0, 15.4, { ...QB(), hlk: 1, hlAt: 9.4 }],
-  ['title', 'T1', 16.6, 19.0], ['sub', 'Q1', 19.0, 21.0],
-  ['sub', '13', 61.4, 67.6], ['quote', '14', 68.4, 75.6, QB()], ['quote', '15', 76.8, 84.6, { ...QB(), hlAt: 81.5 }], ['sub', '16', 85.0, 89.6],
-  ['micah', '02', 89.8, 94.2],
-  ['quote', '17', 95.6, 104.0, QB()],
+  ['sub', '01', 0.4, 6.6], ['label', 'P0', 4.0, 15.2], ['quote', '02', 7.0, 15.4, { ...QB(), hlAt: 9.4 }], ['title', 'T1', 16.6, 19.0], ['sub', 'Q1', 19.0, 21.0],
+  ['sub', '03', 21.2, 24.0], ['label', 'G0', 22.0, 30.6], ['quote', '04', 24.2, 30.6, { ...QB(), hlAt: 26 }], ['sub', '05', 31.0, 36.6],
+  ['label', 'G1', 37.2, 41.0], ['quote', '06', 37.6, 43.2, { ...QB(), hlAt: 38.6 }], ['label', 'G3', 41.2, 43.4],
+  ['label', 'G2', 43.6, 50.6], ['quote', '07', 44.0, 49.6, { y: V ? H * .22 : H * .2, size: V ? 44 : 40, hlAt: 45 }], ['sub', 'D1', 45.0, 50.6],
+  ['sub', '08', 51.2, 55.0], ['sub', '09', 55.2, 60.6],
+  ['label', 'M1', 61.6, 67.4], ['sub', '13', 61.4, 67.6], ['label', 'A1', 68.8, 75.8], ['quote', '14', 68.8, 75.6, QB()],
+  ['quote', '15', 76.8, 84.6, { ...QB(), hlAt: 81.5 }], ['sub', '16', 85.0, 89.6], ['micah', '02', 89.8, 94.2],
+  ['quote', '17', 95.6, 104.4, QB()], ['label', 'P5', 105.0, 112.4], ['quote', '18', 105.4, 113.2, { ...QB(), hlAt: 108 }],
+  ['sub', 'W0', 114.0, 116.4], ['quote', 'W1', 116.4, 127.4, { y: V ? H * .3 : H * .26, size: V ? 44 : 40, hlAt: 118, color: '#d9ccb0' }], ['quote', 'W2', 118.4, 127.4, { ...QB(), hlAt: 120 }],
+  ['quote', '22', 128.6, 136.6, { ...QB(), hlAt: 131 }], ['quote', '23', 137.6, 149.4, { ...QB(), hlAt: 139 }], ['sub', '25', 150.4, 159.4], ['end', 'E1', 160.4, 179.0],
 ];
 function title(ctx, id, t, a, b) { const ta = win(t, a, b, .9, .6); if (ta <= 0) return; const sz = V ? 100 : 108, ty = V ? H * .45 : H * .48;
   Pilot.text(ctx, Film.text(id), W / 2, ty, { size: sz, weight: 600, color: '#e9c77a', alpha: ta, shadow: 'rgba(233,185,73,.35)', shadowBlur: 40, ls: 6 });
   const lw = (V ? 420 : 520) * eo(clamp((t - a - .3) / 1.6)); ctx.fillStyle = `rgba(233,199,122,${ta * .8})`; ctx.fillRect(W / 2 - lw / 2, ty + (V ? 50 : 54), lw, 2); }
-const FILM_DUR = 113;
+const FILM_DUR = 179.4;
+let XL = null;
 function draw(ctx, t) {
-  for (const [a, b, f] of SCENES) if (t >= a && t < b) { ctx.save(); f(ctx, t); ctx.restore(); }
-  for (const [kind, id, a, b, o] of TEXT) { if (t < a - .1 || t > b + .1) continue;
+  const act = SCENES.filter(([a, b]) => t >= a && t < b);
+  act.forEach(([a, b, f], j) => {
+    if (j === 0) { ctx.save(); f(ctx, t); ctx.restore(); return; }
+    if (!XL) { XL = canvas(W, H); XL.g = XL.getContext('2d'); }
+    const L = XL.g; L.setTransform(1, 0, 0, 1, 0, 0); L.globalAlpha = 1; L.globalCompositeOperation = 'source-over'; L.clearRect(0, 0, W, H); L.save(); f(L, t); L.restore();
+    const pb = act[j - 1][1]; ctx.save(); ctx.globalAlpha = eio(clamp((t - a) / Math.max(.2, pb - a))); ctx.drawImage(XL, 0, 0); ctx.restore(); });
+  pairLink(ctx, t);
+  for (const [kind, id, a, b, o = {}] of TEXT) { if (t < a - .1 || t > b + .1) continue;
     if (kind === 'sub') Film.sub(ctx, id, t, a, b, o); else if (kind === 'label') Film.label(ctx, id, t, a, b); else if (kind === 'title') title(ctx, id, t, a, b);
+    else if (kind === 'end') endCard(ctx, t, a, b);
     else if (kind === 'micah') { const seg = Film.text(id).split(/\s*\/\s*/)[0]; Film.quote(ctx, id, t, a, b, { text: seg, ...QB(), hl: Film.lines[id].hl, hlk: ss(a + .4, a + 1.4, t), color: '#fff3d6', shadow: 'rgba(255,190,90,.45)' }); }
     else if (kind === 'quote') Film.quote(ctx, id, t, a, b, { ...o, hl: Film.lines[id].hl, hlk: o.hlAt ? ss(o.hlAt, o.hlAt + 1.2, t) : 0 }); }
 }
 Pilot.run({ W, H, dur: FILM_DUR, fonts: ["600 40px 'Noto Serif KR'", "400 40px 'Noto Serif KR'", "400 20px 'Noto Sans KR'"],
-  init: async () => { await Film.load(); buildBethlehem(); buildSilk(); buildNight(); buildRoad(); buildRome(); }, draw });
+  init: async () => { await Film.load(); buildRoad(); buildRome(); buildFly(); buildNarrow(); }, draw });
 </script>
 </body>
 </html>

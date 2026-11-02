@@ -96,7 +96,8 @@ const facts = [
   { b: tightN ? `${tightN}줄` : '없음', s: '읽는 시간이 빠듯한 줄(대략 시각 기준, 그림을 짤 때 다시 맞춤)', c: tightN ? 'warn' : 'ok' },
 ];
 const cfg = { film, title: S.title, round: RV.round, stageName, decisions: (RV.decisions || []).map(d => ({ key: d.key, q: d.q })),
-  lines: S.lines.map(l => ({ id: l.id, label: (l.cite ? l.cite + ' ' : '') + l.text.replace(/\s*\/\s*/g, ' ').slice(0, 40) })) };
+  lines: [...(RV.message_check || []).map(m => ({ id: 'M' + m.n, label: '메시지 점검 ' + m.n + ' ' + m.q })),
+    ...S.lines.map(l => ({ id: l.id, label: (l.cite ? l.cite + ' ' : '') + l.text.replace(/\s*\/\s*/g, ' ').slice(0, 40) }))] };
 const opt = o => `<span>${esc(o)}</span>`;
 const html = `<title>${esc(S.title)} 검토</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -126,6 +127,9 @@ ${readFileSync(join(HERE, 'review', 'page.css'), 'utf8')}
 <ul class="parts">${parts.map(p => `<li><span class="sw" style="background:var(--p${p.n})"></span><span><b>${p.n}부 ${esc(p.name || '')}</b> · ${tc(p.start)}–${tc(p.end)}<br><small>${esc(p.style || '')}</small></span></li>`).join('')}</ul>
 <div class="facts">${facts.map(f => `<div class="fact ${f.c || ''}"><b>${esc(f.b)}</b><span>${esc(f.s)}</span></div>`).join('')}</div>
 </section>
+${(RV.message_check || []).length ? `<section id="message"><h2>메시지 점검 <small>보여 주기 전 12문항(motion-skills canvas-film MESSAGE.md) · 주황 = 판단이 필요한 곳</small></h2>
+<div class="lines">${RV.message_check.map(m => `<article class="ln${m.flag ? ' changed' : ''}" id="L-M${m.n}" style="${m.flag ? '--gold: var(--warn)' : ''}"><div class="tc">${m.n}</div><div class="lb"><div class="meta"><span class="kind">${esc(m.q)}</span>${m.flag ? '<span class="flag">판단 필요</span>' : ''}</div><p class="txt" style="font-size:16px">${esc(m.a)}</p>${fbBox('M' + m.n, 'line', '이 점검에 의견 쓰기')}</div></article>`).join('\n')}</div>
+</section>` : ''}
 <section id="script"><h2>원고 <small>시각은 대략 · 금빛 = 강조 · 밑줄 = 목소리로 읽는 부분</small></h2>
 <p class="lede">'해설'은 목소리로 읽고 화면에도 같은 글자가 나옵니다. '성경'은 개역개정 원문 그대로입니다. '화면 글자'는 읽지 않고 화면에만 보입니다. 화면·메모는 그림 설명과 근거입니다.</p>
 ${parts.map(partHtml).join('\n')}

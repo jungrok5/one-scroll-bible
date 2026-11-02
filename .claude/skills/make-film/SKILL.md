@@ -6,6 +6,10 @@ description: Make a new film in the film series (motion/films/<name>/) from topi
 # /make-film — one film, the same way every time
 
 The rules live in **`motion/films/README.md`** (strategy, format, review order, lessons). This skill is the session procedure.
+The general film-making method underneath is the **canvas-film** skill in `C:\Project\motion-skills\canvas-film` (SKILL.md +
+`references/`): MESSAGE.md (12-question message check — before any script/storyboard is shown), STYLE-INDEX.md + `kits/`
+(looks), SCENE-RULES.md (scene authoring), BODY-CHECK.md (figures that act), LESSONS.md. The films README adapts it to this
+series; where they differ the README wins (e.g. many verbatim quotes on screen are intended here) — record the deviation.
 Talk to the maintainer in Korean. Never publish, make public, merge to main or delete without their OK (README 0절 stop points).
 
 ## 0 · Where are we? (every session, first)
@@ -26,6 +30,8 @@ Talk to the maintainer in Korean. Never publish, make public, merge to main or d
   later: the same file path in this session, or `url` = `artifact_url` from a new session). Tell the maintainer the page is
   private until they share it (Share menu) with their wife; she should be given edit access so her notes save — otherwise
   "내 의견 복사" → message.
+- `review.json` `message_check`: answer MESSAGE.md's 12 questions for this script (`flag: true` where the maintainer must
+  judge or the script should change); the page shows them above the script.
 - Fix what the page flags before sending it if it is cheap: quote mismatch (never send), voice estimate over the target length,
   tight reading time.
 

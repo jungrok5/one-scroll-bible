@@ -23,7 +23,9 @@ Talk to the maintainer in Korean. Never publish, make public, merge to main or d
 - `script.json` (format: README 3절; ids are translation keys — never reuse an id for a different line).
   Quotes verbatim: `node motion/narration/krv.mjs gen.3.15 …` (John = `jhn`, 1 John = `1jn`; drop section headings
   that bskorea appends to a verse) → `node motion/films/check-quotes.mjs <name>` must print all `ok`.
-- `review.json`: `parts` (name + style + source kit, README 7절), `decisions` (what only the maintainer can choose —
+- `review.json`: `parts` (name + style + source kit, README 7절, **`story`** = 1–2 sentence synopsis, **`samples`** =
+  frames of an earlier film drawn in that look `{film, t, cap}` — the page renders and embeds them; the maintainer judges the
+  style by eye, never from a style name alone), `decisions` (what only the maintainer can choose —
   title, dates, framing; each with `detail` and `options`), `rounds[0]`, `ref_film` (the previous film, for length estimates).
 - Review page: `node motion/films/review-page.mjs <name>` → publish `motion/out/review/<name>.html` with the Artifact tool
   (first time: no url, `capabilities: {db:{}, user:{}}`, icon `script`, then write the URL into `artifact_url`;

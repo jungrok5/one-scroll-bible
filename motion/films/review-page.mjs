@@ -4,7 +4,7 @@
 // motion/out/review/<film>.html. Publish that file with the Artifact tool to review.json "artifact_url"
 // (first time: publish without url with capabilities {db:{}, user:{}}, then save the URL there). Reviewers' notes land in
 // the artifact's db collection "feedback" (doc "r<round>-<who>") — read them with ArtifactData list "feedback".
-import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -99,6 +99,21 @@ const cfg = { film, title: S.title, round: RV.round, stageName, decisions: (RV.d
   lines: [...(RV.message_check || []).map(m => ({ id: 'M' + m.n, label: '메시지 점검 ' + m.n + ' ' + m.q })),
     ...S.lines.map(l => ({ id: l.id, label: (l.cite ? l.cite + ' ' : '') + l.text.replace(/\s*\/\s*/g, ' ').slice(0, 40) }))] };
 const opt = o => `<span>${esc(o)}</span>`;
+
+// ---- style samples: real frames of an earlier film drawn in the same look (review.json parts[].samples {film, t, o?, cap}) ----
+// rendered once with render.mjs --stills, kept as small JPEGs in motion/out/review/img/, embedded in the page as data URIs
+const IMG = join(ROOT, 'motion', 'out', 'review', 'img'); mkdirSync(IMG, { recursive: true });
+const need = {};
+for (const p of parts) for (const s of p.samples || []) { s.o ||= 'v'; s.file = join(IMG, `${s.film}-${s.o}-${s.t}.jpg`); if (!existsSync(s.file)) (need[s.film + '|' + s.o] ||= new Set()).add(s.t); }
+for (const [k, ts] of Object.entries(need)) {
+  const [fl, o] = k.split('|');
+  execFileSync('node', [join(ROOT, 'motion', 'render.mjs'), o, '--page', `films/${fl}/film.html`, '--stills', [...ts].join(',')], { stdio: 'inherit', cwd: ROOT });
+  for (const t of ts) execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-i', join(ROOT, 'motion', 'out', `still-film-${o}-${t}.png`), '-vf', 'scale=540:-2', '-q:v', '5', join(IMG, `${fl}-${o}-${t}.jpg`)]);
+}
+const dataUri = f => 'data:image/jpeg;base64,' + readFileSync(f).toString('base64');
+const storyHtml = parts.some(p => p.story || p.samples) ? `<section id="story"><h2>초안 — 줄거리와 화풍 <small>${tc(S.dur)} · ${parts.length}부 · 그림은 앞 영상에서 같은 화풍으로 그린 장면(새 영상은 이 화풍으로 새로 그립니다)</small></h2>
+<div class="story">${parts.map(p => `<article class="sp" style="--pc: var(--p${p.n})"><div class="shots">${(p.samples || []).map(s => `<figure><img src="${dataUri(s.file)}" alt="${esc(s.cap)}"><figcaption>${esc(s.cap)}</figcaption></figure>`).join('')}</div><div class="sx"><span class="no">${p.n}부 · ${tc(p.start)}–${tc(p.end)}</span><h3>${esc(p.name || '')}</h3>${p.story ? `<p>${esc(p.story)}</p>` : ''}${p.style ? `<p class="style">화풍: ${esc(p.style)}${p.src ? ` <small>(${esc(p.src)})</small>` : ''}</p>` : ''}<a href="#part-${p.n}">이 부분 원고 보기 ↓</a></div></article>`).join('\n')}</div>
+</section>` : '';
 const html = `<title>${esc(S.title)} 검토</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -119,6 +134,11 @@ ${readFileSync(join(HERE, 'review', 'page.css'), 'utf8')}
   <span id="saveState" class="save" role="status"></span>
 </div></div>
 <main class="wrap">
+${storyHtml}
+<section id="script"><h2>원고 전체 <small>시각은 대략 · 금빛 = 강조 · 밑줄 = 목소리로 읽는 부분</small></h2>
+<p class="lede">'해설'은 목소리로 읽고 화면에도 같은 글자가 나옵니다. '성경'은 개역개정 원문 그대로입니다. '화면 글자'는 읽지 않고 화면에만 보입니다. 화면·메모는 그림 설명과 근거입니다.</p>
+${parts.map(partHtml).join('\n')}
+</section>
 <section id="decide"><h2>정할 것 <small>골라 주시면 그대로 반영합니다</small></h2>
 <div class="decs">${(RV.decisions || []).map(d => `<div class="dec"><h3>${esc(d.q)}</h3>${d.detail ? `<p>${esc(d.detail)}</p>` : ''}<div class="opts">${d.options.map(o => `<button class="opt" type="button" aria-pressed="false" data-key="${esc(d.key)}" data-opt="${esc(o)}">${opt(o)}<span class="by"></span></button>`).join('')}</div>${fbBox(d.key, 'dec', '덧붙일 말')}</div>`).join('')}</div>
 </section>
@@ -130,10 +150,6 @@ ${readFileSync(join(HERE, 'review', 'page.css'), 'utf8')}
 ${(RV.message_check || []).length ? `<section id="message"><h2>메시지 점검 <small>보여 주기 전 12문항(motion-skills canvas-film MESSAGE.md) · 주황 = 판단이 필요한 곳</small></h2>
 <div class="lines">${RV.message_check.map(m => `<article class="ln${m.flag ? ' changed' : ''}" id="L-M${m.n}" style="${m.flag ? '--gold: var(--warn)' : ''}"><div class="tc">${m.n}</div><div class="lb"><div class="meta"><span class="kind">${esc(m.q)}</span>${m.flag ? '<span class="flag">판단 필요</span>' : ''}</div><p class="txt" style="font-size:16px">${esc(m.a)}</p>${fbBox('M' + m.n, 'line', '이 점검에 의견 쓰기')}</div></article>`).join('\n')}</div>
 </section>` : ''}
-<section id="script"><h2>원고 <small>시각은 대략 · 금빛 = 강조 · 밑줄 = 목소리로 읽는 부분</small></h2>
-<p class="lede">'해설'은 목소리로 읽고 화면에도 같은 글자가 나옵니다. '성경'은 개역개정 원문 그대로입니다. '화면 글자'는 읽지 않고 화면에만 보입니다. 화면·메모는 그림 설명과 근거입니다.</p>
-${parts.map(partHtml).join('\n')}
-</section>
 <section id="upload"><h2>올릴 글 <small>설명란·고정 댓글에 들어갈 것</small></h2>
 <div class="decs">
 ${S._short_title ? `<div class="box"><h3>쇼츠 제목(첫 줄 훅)</h3><p>${esc(S._short_title)}</p></div>` : ''}

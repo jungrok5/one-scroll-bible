@@ -80,6 +80,21 @@ h2 small { font-family: var(--sans); font-size: 14px; font-weight: 400; color: v
 .fact span { font-size: 13px; color: var(--muted) }
 .fact.warn b { color: var(--warn) } .fact.ok b { color: var(--ok) }
 
+/* story: one card per part, frames of the chosen look beside the synopsis */
+.story { display: grid; gap: 14px }
+.sp { display: grid; grid-template-columns: auto 1fr; gap: 16px; background: var(--paper); border: 1px solid var(--line); border-top: 3px solid var(--pc, var(--line)); border-radius: 12px; padding: 14px; min-width: 0 }
+.shots { display: flex; gap: 8px; align-items: start }
+.shots figure { margin: 0; width: 150px; display: grid; gap: 4px }
+.shots img { width: 100%; max-width: 100%; aspect-ratio: 9 / 16; object-fit: cover; border-radius: 8px; display: block; background: var(--night) }
+figcaption { font-size: 12px; line-height: 1.4; color: var(--muted) }
+.sx { display: grid; gap: 6px; align-content: start; min-width: 0 }
+.sx h3 { margin: 0; font-family: var(--serif); font-size: 21px }
+.sx p { margin: 0; font-size: 17px }
+.sx .style { font-size: 14px; color: var(--muted) }
+.sx .no { font-size: 13px; letter-spacing: .06em; color: var(--muted); font-family: var(--mono) }
+.sx a { font-size: 14px; width: fit-content }
+@media (max-width: 560px) { .sp { grid-template-columns: 1fr } .shots figure { width: calc(50% - 4px) } }
+
 /* script */
 .part { margin-top: 26px }
 .part > header { display: grid; gap: 2px; padding-bottom: 10px; border-bottom: 2px solid var(--pc, var(--line)); margin-bottom: 12px }

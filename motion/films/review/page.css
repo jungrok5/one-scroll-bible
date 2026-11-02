@@ -48,7 +48,10 @@ mark { background: var(--gold-soft); color: inherit; padding: 0 2px; border-radi
 
 /* 1 · board: the whole film on one screen */
 #board { padding-block: 22px 4px }
-.board { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 12px }
+.board { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(var(--n, 6), minmax(0, 1fr)); gap: 12px }
+.bd figure { margin: 0; display: grid; gap: 4px; min-width: 0 }
+.bd figcaption { font-size: 11px; line-height: 1.4; color: var(--muted) }
+.bd img.w { aspect-ratio: auto }
 .bd { display: grid; gap: 10px; align-content: start; min-width: 0; background: var(--paper); border: 1px solid var(--line); border-top: 4px solid var(--pc); border-radius: 12px; padding: 10px }
 .bd img, .bd .noimg { width: 100%; max-width: 100%; aspect-ratio: 9 / 16; object-fit: cover; border-radius: 8px; display: block; background: var(--night) }
 .bx { display: grid; gap: 4px; min-width: 0 }
@@ -62,7 +65,8 @@ mark { background: var(--gold-soft); color: inherit; padding: 0 2px; border-radi
 @media (max-width: 1020px) { .board { grid-template-columns: repeat(3, minmax(0, 1fr)) } }
 @media (max-width: 600px) {
   .board { grid-template-columns: 1fr; gap: 8px }
-  .bd { grid-template-columns: 88px minmax(0, 1fr); gap: 12px; align-items: start }
+  .bd { grid-template-columns: 130px minmax(0, 1fr); gap: 12px; align-items: start }
+  .bd figcaption { display: none }
 }
 
 /* 2 · as heard */

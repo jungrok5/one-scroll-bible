@@ -10,8 +10,8 @@
 | # | 단계 | 무엇으로 | 멈춤 지점 |
 |---|---|---|---|
 | 1 | 주제 고르기 | 정기 분석의 추천 2~3개(10절, `ANALYTICS.md`) | 관리자가 고름 |
-| 2 | 시나리오·원고(한국어, 개역개정 인용) + 화풍 + **메시지 점검 12문항** | 3절, 7절(motion-skills 키트), `films/<이름>/script.json` + `review.json`(`message_check` — canvas-film `references/MESSAGE.md`) → 초안 페이지(8절) | **관리자 컨펌**(8절 1, 아내와 함께 초안 페이지를 보고 대화로) |
-| 3 | 관점 검수 → 시청자 리뷰 | 8절 2·3 | 리뷰는 보고만, 관리자가 고름 |
+| 2 | 시나리오·원고(한국어, 개역개정 인용) + 화풍 + **메시지 점검 12문항** | 3절, 7절(motion-skills 키트), `films/<이름>/script.json` + `review.json`(`message_check` — canvas-film `references/MESSAGE.md`) | (관리자에게 아직 안 보임) |
+| 3 | **관점 검수 → 시청자 리뷰(부마다 감동·전율 점수) → 반영 → 초안 페이지** — 리뷰를 거친 원고만 관리자에게 보인다(2026-11-02 관리자: "리뷰 먼저 시킨 후 나온 초안인가?") | 8절 1~3, 리뷰 기록 `motion/reviews/film-<이름>-script.md` | **관리자 컨펌**(아내와 함께 초안 페이지를 보고 대화로) — 반영하지 않은 리뷰 의견은 관리자가 고름 |
 | 4 | 그리기·렌더(세로·가로) | `render.mjs`, 밀착 시트·720p 시안(7절, 글꼴 확인), canvas-film `references/SCENE-RULES.md`(장면 규칙) · 인물이 움직이면 `BODY-CHECK.md`(관절·손) · `LESSONS.md` — 같은 초안 페이지 주소에 올림 | 관리자·가족 시안 확인(8절 4) |
 | 5 | 소리: 한국어 해설·음악·효과음 → 섞기 | `sound/place.json`·`cues.json`, `sound.mjs <이름> v`·`h` → `ko.vtt`(위쪽 자막) | |
 | 6 | 올릴 글: 제목·설명·태그·읽기 목록·고정 댓글·썸네일 | `films/<이름>/upload.md`, `youtube.json`, `thumbs/make.py` | |
@@ -211,7 +211,12 @@ main 배포는 관리자 허락을 받고 한다.
 ## 7. 만드는 방식 (코드)
 
 - 한 파일짜리 캔버스 영상: `motion/films/<이름>/film.html` + `script.json` + 장면별 그림 모듈. 공용은 `../pilot/lib.js`, `lib-film.js`.
-- **화풍은 motion-skills에서 고른다**(관리자 결정 2026-10-31). 로컬 사본은 `C:\Project\motion-skills`(github.com/jungrok5/motion-skills)이고, 목록은 `canvas-film/references/STYLE-INDEX.md`입니다. 고르는 순서는 다음과 같습니다.
+- **화풍은 motion-skills에서 고른다**(관리자 결정 2026-10-31). 로컬 사본은 `C:\Project\motion-skills`(github.com/jungrok5/motion-skills)이고, 목록은 `canvas-film/references/STYLE-INDEX.md`입니다.
+  **지금은 재활용보다 발굴이 먼저다**(관리자 2026-11-02: "매번 같은 화풍만 쓰면 질릴 수 있으니 재활용을 우선하지 말고 아직은 스타일 발굴을 더"):
+  부마다 그 뜻을 재료 자체가 해내는 화풍을 STYLE-INDEX 전체(우리 21 · 키트 29 · Lemo-Opuscar 66 · OPUSCAR 98)와 Lemo-Opuscar 저장소에서 찾고,
+  앞 영상에서 쓴 화풍은 꼭 맞을 때만 쓴다. 초안 페이지에는 그 화풍의 실제 참고 장면을 보여 준다(`review.json` `samples.ref` — 저장소의
+  `styles/<slug>/poster.jpg`, `styleboard/img/opuscar98/<번호>.jpg`; 원작 마스코트는 `crop`으로 뺀다). 목록이 충분히 커지면 골라 쓰는 쪽으로 바꾼다.
+  찾을 곳은 다음과 같다(순서가 아니라 범위).
   1. 키트(`canvas-film/kits/`, 29개, 표는 `kits/README.md`): 이 영상에서 나온 `lamplit` 등잔 아래 두루마리, `inkmap` 잉크 지도, `illuminated` 채색 필사본. 여기에 word-log에서 온 `glass` 스테인드글라스, `papercut` 종이 오림, `ukiyoe`, `storybook`, `charcoal`, `hopper` 등.
   2. 첫 영상의 21개 화풍(종이 오림, 스테인드글라스, 금빛 선 …).
   3. 맞는 것이 없으면 OPUSCAR 98개 영화 룩이나 그 바탕 레포 Lemo-Opuscar(기법 66개)에서 골라 우리 것으로 다시 그린다. 기법만 빌리고 장면·인물·음악은 베끼지 않는다.
@@ -229,6 +234,8 @@ main 배포는 관리자 허락을 받고 한다.
 ## 8. 검토 순서
 
 1. **시나리오·원고를 먼저 제안하고 컨펌**받은 뒤 그린다. 큰 연출 변경도 계획 → 컨펌 → 작업.
+   **보이기 전에 아래 2·3(관점 검수·시청자 리뷰)을 먼저 돌려 반영한다** — 리뷰 에이전트는 부마다 감동·전율 점수(0–5)와 넘기고 싶은 순간을
+   보고하고, 에이전트가 반영한 뒤 초안 페이지를 만든다(2026-11-02~). 1번 대상(성경 잘 모르는 크리스천)의 점수가 낮은 부는 고친 뒤 다시 리뷰.
    - **초안 페이지(2026-11-02~)**: `node motion/films/review-page.mjs <이름>` → `motion/out/review/<이름>.html`을 아티팩트로 올린다
      (처음엔 새로 올리고 주소를 `review.json` `artifact_url`에, 다음부터는 그 주소에 다시 — 새 세션은 먼저 읽기). 관리자가 아내와 함께 본다.
    - **페이지는 초안만**(관리자, 2026-11-02 "검토용 페이지일 필요 없고 초안만"). 의견 칸·고르기 버튼·점검표는 넣지 않는다 — 의견은 대화로 받는다.

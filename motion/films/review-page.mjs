@@ -45,7 +45,8 @@ const stageName = (steps.find(s => s.n === RV.stage)?.what || '').split(/[(·]/)
 // flow = one running line ('/' → space) with the unread part of a quote dimmed instead of the read part underlined
 function lineHtml(l, flow = false) {
   const t = l.text, flag = Array.from(t, () => ({ hl: false, said: false }));
-  const mark = (sub, key) => { if (!sub) return; const pieces = sub.split(/\s*\/\s*/); let from = 0; for (const p of pieces) { const i = t.indexOf(p, from); if (i < 0) continue; for (let k = i; k < i + p.length; k++) flag[k][key] = true; from = i + p.length; } };
+  // a one-piece hl marks every occurrence (성경대로 … 성경대로); '/'-pieces are found in order
+  const mark = (sub, key) => { if (!sub) return; const pieces = sub.split(/\s*\/\s*/), all = pieces.length === 1; let from = 0; for (let n = 0; n < pieces.length; n += all ? 0 : 1) { const p = pieces[n], i = t.indexOf(p, from); if (i < 0) break; for (let k = i; k < i + p.length; k++) flag[k][key] = true; from = i + p.length; if (all && t.indexOf(p, from) < 0) break; } };
   const partial = l.kind === 'quote' && typeof l.voice === 'string' && l.voice !== l.text;
   mark(l.hl, 'hl'); if (partial) mark(l.voice, 'said');
   let out = '', cur = null, buf = '';
@@ -100,11 +101,26 @@ const facts = [
 ];
 facts.forEach(f => console.log(`  ${f.b} — ${f.s}`));   // the checks are for the agent; the page itself is only the draft
 
-// ---- style samples: real frames of an earlier film drawn in the same look (review.json parts[].samples {film, t, o?, cap}) ----
-// rendered once with render.mjs --stills, kept as small JPEGs in motion/out/review/img/, embedded in the page as data URIs
+// ---- style samples (review.json parts[].samples), kept as small JPEGs in motion/out/review/img/, embedded as data URIs ----
+//   {film, t, o?, cap}        a frame of an earlier film of ours in that look (render.mjs --stills)
+//   {ref, crop?, cap}         an image from the reference repo github.com/lemomo-ai/lemo-opuscar (cloned once into
+//                             motion/out/ref/), e.g. "styles/woodcut/poster.jpg" or "styleboard/img/opuscar98/73.jpg";
+//                             crop = [x, y, w, h] as fractions — use it to leave out that film's mascot (Clawd)
+// New looks are found by searching the whole STYLE-INDEX + the reference repo, not by reusing (2026-11-02 관리자).
 const IMG = join(ROOT, 'motion', 'out', 'review', 'img'); mkdirSync(IMG, { recursive: true });
+const REF = join(ROOT, 'motion', 'out', 'ref', 'lemo-opuscar');
 const need = {};
-for (const p of parts) for (const s of p.samples || []) { s.o ||= 'v'; s.file = join(IMG, `${s.film}-${s.o}-${s.t}.jpg`); if (!existsSync(s.file)) (need[s.film + '|' + s.o] ||= new Set()).add(s.t); }
+for (const p of parts) for (const s of p.samples || []) {
+  if (s.ref) {
+    s.file = join(IMG, 'ref-' + s.ref.replace(/[^\w]+/g, '_') + (s.crop ? '-' + s.crop.join('_') : '') + '.jpg');
+    if (existsSync(s.file)) continue;
+    if (!existsSync(REF)) execFileSync('git', ['clone', '-q', '--depth', '1', 'https://github.com/lemomo-ai/lemo-opuscar', REF], { stdio: 'inherit' });
+    const vf = (s.crop ? `crop=iw*${s.crop[2]}:ih*${s.crop[3]}:iw*${s.crop[0]}:ih*${s.crop[1]},` : '') + 'scale=640:-2';
+    execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-i', join(REF, s.ref), '-vf', vf, '-q:v', '4', s.file]);
+    continue;
+  }
+  s.o ||= 'v'; s.file = join(IMG, `${s.film}-${s.o}-${s.t}.jpg`); if (!existsSync(s.file)) (need[s.film + '|' + s.o] ||= new Set()).add(s.t);
+}
 for (const [k, ts] of Object.entries(need)) {
   const [fl, o] = k.split('|');
   execFileSync('node', [join(ROOT, 'motion', 'render.mjs'), o, '--page', `films/${fl}/film.html`, '--stills', [...ts].join(',')], { stdio: 'inherit', cwd: ROOT });
@@ -115,12 +131,12 @@ const byId = Object.fromEntries(S.lines.map(l => [l.id, l]));
 // 1) the whole film on one screen: per part one frame + name + feeling + its key line (review.json parts[].feel, .key = line id)
 // (2026-11-02 관리자: "쭉 읽으면서 검토하기 쉽지 않고 한눈에 안 들어옴")
 const keyHtml = l => l ? `<p class="key${l.kind === 'quote' ? ' q' : ''}">${lineHtml(l, true)}${l.cite ? `<cite>${esc(l.cite)}</cite>` : ''}</p>` : '';
-const boardHtml = `<section id="board"><ol class="board">${parts.map(p => { const s = (p.samples || [])[0]; return `<li class="bd" style="--pc: var(--p${p.n})">${s ? `<img src="${dataUri(s.file)}" alt="${esc(s.cap)}">` : '<div class="noimg"></div>'}<div class="bx"><span class="no">${p.n}부 · ${tc(p.start)}</span><h3><a href="#say-${p.n}">${esc(p.name || '')}</a></h3>${p.feel ? `<span class="feel">${esc(p.feel)}</span>` : ''}${keyHtml(byId[p.key])}</div></li>`; }).join('')}</ol>
-<p class="note">그림은 앞 영상(「${esc(ref?.title || '')}」)에서 같은 화풍으로 그린 장면입니다. 새 영상은 이 화풍으로 새로 그립니다.</p></section>`;
+const boardHtml = `<section id="board"><ol class="board" style="--n: ${parts.length}">${parts.map(p => { const s = (p.samples || [])[0]; return `<li class="bd" style="--pc: var(--p${p.n})">${s ? `<figure><img${s.ref ? ' class="w"' : ''} src="${dataUri(s.file)}" alt="${esc(s.cap)}"><figcaption>${esc(s.cap)}</figcaption></figure>` : '<div class="noimg"></div>'}<div class="bx"><span class="no">${p.n}부 · ${tc(p.start)}</span><h3><a href="#say-${p.n}">${esc(p.name || '')}</a></h3>${p.feel ? `<span class="feel">${esc(p.feel)}</span>` : ''}${keyHtml(byId[p.key])}</div></li>`; }).join('')}</ol>
+<p class="note">${parts.some(p => p.samples?.[0]?.ref) ? '그림은 이 화풍을 보여 주는 참고 장면입니다(대부분 참고 저장소 Lemo-Opuscar의 데모 영상 — 그 영상의 캐릭터·내용은 쓰지 않고 기법만 가져옵니다). 새 영상은 이 화풍으로 새로 그립니다.' : `그림은 앞 영상(「${esc(ref?.title || '')}」)에서 같은 화풍으로 그린 장면입니다. 새 영상은 이 화풍으로 새로 그립니다.`}</p></section>`;
 // 2) read as heard: only what the voice says, in order, one block per part; what is on screen in one muted sentence
 const sayHtml = `<section id="say"><h2>들리는 대로 <small>목소리로 읽는 말만 · 흐린 글씨는 화면에만 나오는 부분 · 금빛 = 화면에서 빛나는 말</small></h2><div class="say">${parts.map(p => {
   const ls = p.lines.filter(l => l.kind !== 'label' && l.voice !== null).sort((a, b) => a.at - b.at);
-  return `<article class="sy" id="say-${p.n}" style="--pc: var(--p${p.n})"><header><span class="no">${p.n}부 · ${tc(p.start)}–${tc(p.end)}${p.feel ? ` · ${esc(p.feel)}` : ''}</span><h3>${esc(p.name || '')}</h3></header>${p.story ? `<p class="see"><b>화면</b> ${esc(p.story)}</p>` : ''}${ls.map(l => l.kind === 'quote' ? `<blockquote>${lineHtml(l, true)}<cite>${esc(l.cite)}</cite></blockquote>` : `<p class="n">${lineHtml(l, true)}</p>`).join('')}${p.style ? `<p class="style">화풍: ${esc(p.style)}</p>` : ''}</article>`;
+  return `<article class="sy" id="say-${p.n}" style="--pc: var(--p${p.n})"><header><span class="no">${p.n}부 · ${tc(p.start)}–${tc(p.end)}${p.feel ? ` · ${esc(p.feel)}` : ''}</span><h3>${esc(p.name || '')}</h3></header>${p.story ? `<p class="see"><b>화면</b> ${esc(p.story)}</p>` : ''}${ls.map(l => l.kind === 'quote' ? `<blockquote>${lineHtml(l, true)}<cite>${esc(l.cite)}</cite></blockquote>` : `<p class="n">${lineHtml(l, true)}</p>`).join('')}${p.style ? `<p class="style">화풍: ${esc(p.style)}${p.why ? `<br>고른 까닭: ${esc(p.why)}` : ''}${p.src ? `<br><small>출처: ${esc(p.src)}</small>` : ''}</p>` : ''}</article>`;
 }).join('\n')}</div></section>`;
 const html = `<title>${esc(S.title)} 초안</title>
 <meta name="claude:viewport-fit-sides" content="cover">

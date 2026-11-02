@@ -39,11 +39,17 @@ Talk to the maintainer in Korean. Never publish, make public, merge to main or d
 - The generator prints the checks — fix what it flags before sending if it is cheap: quote mismatch (never send), voice estimate over the target length,
   tight reading time.
 
+**Before the maintainer sees any draft** (maintainer, 2026-11-02): run README 8절 2·3 first — one theology reviewer
+(관점 검수) + viewer reviewers (성경 잘 모르는 크리스천 63세 · 성경 잘 아는 신자 · 비신자), background agents, report only,
+each scoring every part 감동 0–5 / 전율 0–5 with the moment they would swipe away. Apply, re-review weak parts for the
+primary audience, record in `motion/reviews/film-<name>-script.md`, then build and publish the draft page. In chat: what
+the reviews said, what changed, and what is left for the maintainer to choose.
+
 ## 2 · Review loop (stages 2–4)
 1. Feedback comes in chat (the maintainer and their wife read the draft page).
 2. Apply. Decided items move out of `decisions` into `feedback_log` (who said what → what changed). Anything unclear → ask.
 3. Bump `round`, add `rounds[]` with `summary` and `changed` (line ids), set `status`, regenerate, republish the same URL.
-4. Stage 3 (관점 검수 → 시청자 리뷰, README 8절 2·3): reviewer agents report only; report their findings to the maintainer in chat, record outcomes in `motion/reviews/`.
+4. When the script changes a lot after feedback, run the reviewers again before republishing.
 5. Only after explicit 컨펌 move `stage` forward and start drawing.
 
 ## 3 · Later stages

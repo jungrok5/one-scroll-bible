@@ -5,7 +5,7 @@
    "id": "66VfBSXxAs8",
    "status": "public",
    "note": "original upload 2026-10-20; description + thumbnail test (A/B/D) updated 2026-10-22; description UTM 2026-10-23; pinned comment faq.h + home#faq 2026-10-23 (first respond.h3 #respond, changed same day); Korean links pinned to ?lang=ko 2026-10-23; category Education 2026-10-23; tags added (manifest ko, 30) 2026-10-23; caption track film-h.srt via API 2026-10-23; 2026-10-29 description: \"🔊 목소리로 듣는 해설판\" link to the narrated cut (film ko-narr)",
-   "captions_foreign": "2026-11-01: the first film's on-screen-text captions (motion/subs/<lang>/film-h.srt — same timing as Korean) in 18 languages via Studio: es pt-BR fr de ru id zh-Hans zh-Hant ja ar hi vi th tl bn sw fa ta. en pending (Studio counts the automatic en track as published) — API on 11/2, then asr-off."
+   "captions_foreign": "2026-11-01: the first film's on-screen-text captions (motion/subs/<lang>/film-h.srt — same timing as Korean) in 18 languages via Studio: es pt-BR fr de ru id zh-Hans zh-Hant ja ar hi vi th tl bn sw fa ta. 2026-11-02: en added via API (Studio counted the automatic en track as published), then automatic en removed (yt-api asr-off)."
   },
   "ko-vertical": {
    "id": "3X5HbQKBpRI",
@@ -716,8 +716,8 @@
      ],
      "thumbnail": "V-A-glass-en (API)"
     },
-    "todo_on_publish": "Short: related video = the horizontal one (oYKz_HHI8yw) — NOT done yet: the Short's related-video picker has only the my-videos search, which found no video of the international channel on 2026-11-01 (index lag after publishing?) — retry; pinned comment only if a reviewed text exists",
-    "captions_note": "2026-11-01: 19 caption languages (16 added through Studio — motion/youtube/studio-caption.js, no API quota), English-narration timing (sound/<lang>.en-timing.vtt); automatic en captions removed (yt-api asr-off). 2026-11-01 later: it, pl, tr added (owner's fixed caption list, films README §4 step 9) — Studio, all four videos. Then uz, ne, km, mn, my (migrant languages in Korea) — Studio, all four videos. TODO after the 2026-11-02 quota reset: replace the tr and fa tracks on all four (line 01 now shows only the voiced clause — first upload began with a lone verb).",
+    "related_video": "Short → horizontal oYKz_HHI8yw, set in Studio 2026-11-02 (on 11/1 the picker found no video of this channel — index lag; a day later it listed them). Pinned comment only if a reviewed text exists",
+    "captions_note": "2026-11-01: 19 caption languages (16 added through Studio — motion/youtube/studio-caption.js, no API quota), English-narration timing (sound/<lang>.en-timing.vtt); automatic en captions removed (yt-api asr-off). 2026-11-01 later: it, pl, tr added (owner's fixed caption list, films README §4 step 9) — Studio, all four videos. Then uz, ne, km, mn, my (migrant languages in Korea) — Studio, all four videos. 2026-11-02: tr and fa tracks replaced on all four via API caption-file --replace (line 01 now shows only the voiced clause — first upload began with a lone verb).",
     "published": "2026-11-01 21:42 KST: both made public by the owner's OK (videos.update status, API); horizontal end screen saved in Studio — last 5 s (2:54.12–2:59.12) = English 14-min film MFH3Hj4V6KA bottom-left + subscribe bottom-right, below the end-card text (found via the picker's other-channel box with the video URL — the my-videos search returned nothing for this channel)"
    }
   }
@@ -771,7 +771,7 @@
    "mn",
    "my"
   ],
-  "captions_note": "2026-11-01: the Korean video and Short carry every reviewed caption language on the Korean narration timing (sound/<lang>.ko-timing.vtt; en/es/pt-BR via the API, the other 16 through Studio); automatic ko captions removed. it, pl, tr added the same evening (Studio). Then uz, ne, km, mn, my (Studio). tr and fa to be replaced once (line 01 fix) after the quota reset.",
+  "captions_note": "2026-11-01: the Korean video and Short carry every reviewed caption language on the Korean narration timing (sound/<lang>.ko-timing.vtt; en/es/pt-BR via the API, the other 16 through Studio); automatic ko captions removed. it, pl, tr added the same evening (Studio). Then uz, ne, km, mn, my (Studio). 2026-11-02: tr and fa replaced (line 01 fix, API caption-file --replace).",
   "old_ids_deleted": "SiSsE3W61eM / vJh-gAZl4UU deleted 2026-11-01 (API videos.delete, owner's OK; both private, 0–1 views)"
  }
 }

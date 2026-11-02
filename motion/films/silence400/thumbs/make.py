@@ -14,8 +14,10 @@ FONTS = os.path.join(ROOT, 'out', 'fonts'); os.makedirs(FONTS, exist_ok=True)
 URL = 'https://raw.githubusercontent.com/google/fonts/main/ofl/notosanskr/NotoSansKR%5Bwght%5D.ttf'
 GOLD = (255, 204, 80); WHITE = (255, 255, 255); INK = (12, 10, 8); W, H = 1280, 720
 TOP, BIG, TAIL = '구약과 신약 사이', '400년', '무슨 일이 있었나'
-# picture, crop focus (0..1 of width — the subject sits right of the text), brightness, zoom
-PICS = [('A-glass', 'h-122.jpg', .62, 1.08, 1.35), ('B-statue', 'h-113_6.jpg', .5, 1.12, 1.12), ('C-strike', 'h-115_2.jpg', .5, 1.12, 1.12)]
+# picture, crop focus (0..1 of width — the subject sits right of the text), brightness, zoom[, shade strength]
+# D-night (2026-11-02, the owner's wife's pick): the last scene — star over Bethlehem — star and moon right of the words, lightly shaded (h-174.jpg)
+PICS = [('A-glass', 'h-122.jpg', .62, 1.08, 1.35), ('B-statue', 'h-113_6.jpg', .5, 1.12, 1.12), ('C-strike', 'h-115_2.jpg', .5, 1.12, 1.12),
+        ('D-night', 'h-174.jpg', 0, 1.0, .85, .55)]
 # T1 per language (i18n/<lang>.json), as top line / number / bottom line
 T1 = {'en': ('THE SILENT', '400', 'YEARS'), 'es': ('LOS', '400', 'AÑOS DE SILENCIO'), 'pt-BR': ('OS', '400', 'ANOS DE SILÊNCIO')}
 LANG = sys.argv[sys.argv.index('--lang') + 1] if '--lang' in sys.argv else None
@@ -35,14 +37,14 @@ def text(base, xy, s, f, fill, stroke):
     base.alpha_composite(sh.filter(ImageFilter.GaussianBlur(14)))
     ImageDraw.Draw(base).text(xy, s, font=f, fill=fill, stroke_width=stroke, stroke_fill=INK)
 
-def make(name, src, focus, bright, z):
+def make(name, src, focus, bright, z, shade_k=1.0):
     im = Image.open(os.path.join(HERE, 'src', src)).convert('RGB')
     # zoom in so the subject fills the right two-thirds; shift so `focus` lands at 66 % of the width
     im = im.resize((int(im.width * z), int(im.height * z)), Image.LANCZOS)
     x0 = int(min(max(focus * im.width - .66 * W, 0), im.width - W)); y0 = (im.height - H) // 2
     im = ImageEnhance.Brightness(im.crop((x0, y0, x0 + W, y0 + H))).enhance(bright).convert('RGBA')
     shade = Image.new('RGBA', (W, H)); d = ImageDraw.Draw(shade)   # darken the left for the words
-    for x in range(W): d.line([(x, 0), (x, H)], fill=(6, 4, 2, int(245 * min(1, max(0, 1.25 - x / (W * .62))) ** .9)))
+    for x in range(W): d.line([(x, 0), (x, H)], fill=(6, 4, 2, int(245 * shade_k * min(1, max(0, 1.25 - x / (W * .62))) ** .9)))
     im.alpha_composite(shade)
     text(im, (56, 78), TOP, font(64), WHITE, 6)
     text(im, (40, 150), BIG, font(250), GOLD, 14)
@@ -52,7 +54,7 @@ def make(name, src, focus, bright, z):
 
 ims = [] if LANG else [make(*p) for p in PICS]
 if ims:
-  sheet = Image.new('RGB', (3 * 340 + 40, 191 + 20), (24, 24, 24))   # the phone feed size
+  sheet = Image.new('RGB', (len(ims) * 350 + 10, 191 + 20), (24, 24, 24))   # the phone feed size
   for i, im in enumerate(ims): sheet.paste(im.convert('RGB').resize((340, 191), Image.LANCZOS), (10 + i * 350, 10))
   sheet.save(os.path.join(HERE, 'sheet.jpg'), quality=90)
 

@@ -1,7 +1,7 @@
 # 「침묵의 400년」 — 올리기 자료 (한국어 채널 @one-scroll-bible)
 
 영상은 저장소 밖(`motion/out/`)에서 만든다: `node motion/render.mjs v|h --page films/silence400/film.html` → `node motion/films/sound.mjs silence400 v|h`
-→ `motion/out/silence400-<v|h>-<narr|sound>.mp4`. 자막 `sound/ko.srt`, 썸네일 `thumbs/` (가로 A/B 3안: A-glass · B-statue · C-strike, 세로 9:16 표지 3안: V-A-glass · V-B-statue · V-C-strike).
+→ `motion/out/silence400-<v|h>-<narr|sound>.mp4`. 자막 `sound/ko.srt`, 썸네일 `thumbs/` (가로 A/B: A-glass · B-statue · C-strike, 11/2부터 D-night 포함 — 아래, 세로 9:16 표지 3안: V-A-glass · V-B-statue · V-C-strike).
 공개·게시는 관리자 허락 후. 올리는 방법(스튜디오 업로드·API 예약·관련 동영상·고정 댓글)은 [../../README.md](../../README.md) "유튜브에 올리기"와
 "브라우저와 API 나눠 쓰기", 점검표는 [../README.md](../README.md) 9b.
 
@@ -39,7 +39,8 @@
 세로판과 같은 내용의 가로 버전(본편·예고 관계가 아님). 첫 영상 해설판 기준 시청 시간의 44%가 TV, 조회의 86%가 홈 화면(탐색 기능)이라
 가로판이 TV·홈 추천을, 세로판이 폰 쇼츠 피드를 맡는다.
 - 제목: `침묵의 400년 | 구약과 신약 사이, 하나님은 무엇을 준비하셨나`
-- 썸네일: A-glass (B-statue, C-strike를 "테스트 및 비교"에)
+- 썸네일: A-glass (B-statue, C-strike를 "테스트 및 비교"에) → 2026-11-02 새 테스트 A-glass · D-night · B-statue
+  (D-night = 마지막 장면 베들레헴 별 하늘, 관리자 아내 의견. 첫 테스트는 데이터 없이 삭제, C-strike는 B와 거의 같아 뺌)
 - 자막·태그: 쇼츠와 같음
 - 최종 화면(스튜디오, 마지막 5초 2:54.4–2:59.4): 동영상 1개 = 14분 해설판(wrEYqvOU1O8), 구독 버튼 — 화면 아래쪽 1/3(읽기 안내 글자는 가운데 위)에.
   TV에서는 설명란 링크·고정 댓글이 잘 안 보이므로 다음 영상으로 이어 주는 길은 이것뿐이다(첫 영상은 최종 화면이 없었다).

@@ -22,14 +22,17 @@ Talk to the maintainer in Korean. Never publish, make public, merge to main or d
 - `script.json` (format: README 3절; ids are translation keys — never reuse an id for a different line).
   Quotes verbatim: `node motion/narration/krv.mjs gen.3.15 …` (John = `jhn`, 1 John = `1jn`; drop section headings
   that bskorea appends to a verse) → `node motion/films/check-quotes.mjs <name>` must print all `ok`.
-- `review.json`: `parts` (name + style + source kit, README 7절, **`story`** = 1–2 sentence synopsis, **`samples`** =
+- `review.json`: `logline` (the whole film in one sentence), `parts` (name + **`feel`** = one-word emotion (MESSAGE.md q7) +
+  **`key`** = id of the part's key line + style + source kit, README 7절, **`story`** = 1–2 sentence synopsis of what is seen, **`samples`** =
   frames of an earlier film drawn in that look `{film, t, cap}` — the page renders and embeds them; the maintainer judges the
   style by eye, never from a style name alone), `decisions` (what only the maintainer can choose —
   title, dates, framing; each with `detail` and `options`), `rounds[0]`, `ref_film` (the previous film, for length estimates).
 - Draft page: `node motion/films/review-page.mjs <name>` → publish `motion/out/review/<name>.html` with the Artifact tool
   (first time: no url, icon `script`, then write the URL into `artifact_url`; later: the same file path in this session, or
-  `url` = `artifact_url` from a new session). **The page is the draft only** — synopsis + style frames per part, the whole
-  script, the open decisions as a plain list. No feedback widgets, no checks on the page (maintainer, 2026-11-02). Tell the
+  `url` = `artifact_url` from a new session). **The page is the draft only, readable at a glance** — logline + one-screen
+  board (per part: frame, name, feel, key line), then the words as heard, the open decisions, and the full line-by-line
+  script folded. No feedback widgets, no checks on the page (maintainer, 2026-11-02). Screenshot it at 1280 and 400 px
+  before publishing (playwright, as render.mjs loads it). Tell the
   maintainer it is private until they share it (Share menu) with their wife.
 - `review.json` `message_check`: answer MESSAGE.md's 12 questions for this script (`flag: true` where the maintainer must
   judge or the script should change). Checks stay off the page: say the flagged ones in chat, in a few lines.

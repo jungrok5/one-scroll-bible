@@ -42,15 +42,18 @@ const steps = sec0.split(/\r?\n/).map(l => l.match(/^\|\s*(\d+)\s*\|(.*)\|(.*)\|
 const stageName = (steps.find(s => s.n === RV.stage)?.what || '').split(/[(·]/)[0].trim() || '검토';
 
 // ---- line text: '/' = line break, hl = gold mark, voice = underline ----------------------------------------------
-function lineHtml(l) {
+// flow = one running line ('/' → space) with the unread part of a quote dimmed instead of the read part underlined
+function lineHtml(l, flow = false) {
   const t = l.text, flag = Array.from(t, () => ({ hl: false, said: false }));
   const mark = (sub, key) => { if (!sub) return; const pieces = sub.split(/\s*\/\s*/); let from = 0; for (const p of pieces) { const i = t.indexOf(p, from); if (i < 0) continue; for (let k = i; k < i + p.length; k++) flag[k][key] = true; from = i + p.length; } };
-  mark(l.hl, 'hl'); if (l.kind === 'quote' && typeof l.voice === 'string' && l.voice !== l.text) mark(l.voice, 'said');
+  const partial = l.kind === 'quote' && typeof l.voice === 'string' && l.voice !== l.text;
+  mark(l.hl, 'hl'); if (partial) mark(l.voice, 'said');
   let out = '', cur = null, buf = '';
-  const close = () => { if (!buf) return; let h = esc(buf); if (cur.said) h = `<span class="said">${h}</span>`; if (cur.hl) h = `<mark>${h}</mark>`; out += h; buf = ''; };
+  // '/' is swapped inside each run, before tags are added (swapping the finished html broke every </mark>)
+  const close = () => { if (!buf) return; let h = esc(buf).replace(/\s*\/\s*/g, flow ? ' ' : '<br>'); if (partial && flow && !cur.said) h = `<span class="mute">${h}</span>`; else if (cur.said && !flow) h = `<span class="said">${h}</span>`; if (cur.hl) h = `<mark>${h}</mark>`; out += h; buf = ''; };
   Array.from(t).forEach((ch, i) => { const f = flag[i]; if (!cur || f.hl !== cur.hl || f.said !== cur.said) { close(); cur = f; } buf += ch; });
   close();
-  return out.replace(/\s*\/\s*/g, '<br>');
+  return out;
 }
 const changed = new Set(RV.rounds?.at(-1)?.changed || []);
 const KIND = { narr: '해설', quote: '성경', label: '화면 글자' };
@@ -108,9 +111,17 @@ for (const [k, ts] of Object.entries(need)) {
   for (const t of ts) execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-i', join(ROOT, 'motion', 'out', `still-film-${o}-${t}.png`), '-vf', 'scale=540:-2', '-q:v', '5', join(IMG, `${fl}-${o}-${t}.jpg`)]);
 }
 const dataUri = f => 'data:image/jpeg;base64,' + readFileSync(f).toString('base64');
-const storyHtml = parts.some(p => p.story || p.samples) ? `<section id="story"><h2>초안 — 줄거리와 화풍 <small>${tc(S.dur)} · ${parts.length}부 · 그림은 앞 영상에서 같은 화풍으로 그린 장면(새 영상은 이 화풍으로 새로 그립니다)</small></h2>
-<div class="story">${parts.map(p => `<article class="sp" style="--pc: var(--p${p.n})"><div class="shots">${(p.samples || []).map(s => `<figure><img src="${dataUri(s.file)}" alt="${esc(s.cap)}"><figcaption>${esc(s.cap)}</figcaption></figure>`).join('')}</div><div class="sx"><span class="no">${p.n}부 · ${tc(p.start)}–${tc(p.end)}</span><h3>${esc(p.name || '')}</h3>${p.story ? `<p>${esc(p.story)}</p>` : ''}${p.style ? `<p class="style">화풍: ${esc(p.style)}${p.src ? ` <small>(${esc(p.src)})</small>` : ''}</p>` : ''}<a href="#part-${p.n}">이 부분 원고 보기 ↓</a></div></article>`).join('\n')}</div>
-</section>` : '';
+const byId = Object.fromEntries(S.lines.map(l => [l.id, l]));
+// 1) the whole film on one screen: per part one frame + name + feeling + its key line (review.json parts[].feel, .key = line id)
+// (2026-11-02 관리자: "쭉 읽으면서 검토하기 쉽지 않고 한눈에 안 들어옴")
+const keyHtml = l => l ? `<p class="key${l.kind === 'quote' ? ' q' : ''}">${lineHtml(l, true)}${l.cite ? `<cite>${esc(l.cite)}</cite>` : ''}</p>` : '';
+const boardHtml = `<section id="board"><ol class="board">${parts.map(p => { const s = (p.samples || [])[0]; return `<li class="bd" style="--pc: var(--p${p.n})">${s ? `<img src="${dataUri(s.file)}" alt="${esc(s.cap)}">` : '<div class="noimg"></div>'}<div class="bx"><span class="no">${p.n}부 · ${tc(p.start)}</span><h3><a href="#say-${p.n}">${esc(p.name || '')}</a></h3>${p.feel ? `<span class="feel">${esc(p.feel)}</span>` : ''}${keyHtml(byId[p.key])}</div></li>`; }).join('')}</ol>
+<p class="note">그림은 앞 영상(「${esc(ref?.title || '')}」)에서 같은 화풍으로 그린 장면입니다. 새 영상은 이 화풍으로 새로 그립니다.</p></section>`;
+// 2) read as heard: only what the voice says, in order, one block per part; what is on screen in one muted sentence
+const sayHtml = `<section id="say"><h2>들리는 대로 <small>목소리로 읽는 말만 · 흐린 글씨는 화면에만 나오는 부분 · 금빛 = 화면에서 빛나는 말</small></h2><div class="say">${parts.map(p => {
+  const ls = p.lines.filter(l => l.kind !== 'label' && l.voice !== null).sort((a, b) => a.at - b.at);
+  return `<article class="sy" id="say-${p.n}" style="--pc: var(--p${p.n})"><header><span class="no">${p.n}부 · ${tc(p.start)}–${tc(p.end)}${p.feel ? ` · ${esc(p.feel)}` : ''}</span><h3>${esc(p.name || '')}</h3></header>${p.story ? `<p class="see"><b>화면</b> ${esc(p.story)}</p>` : ''}${ls.map(l => l.kind === 'quote' ? `<blockquote>${lineHtml(l, true)}<cite>${esc(l.cite)}</cite></blockquote>` : `<p class="n">${lineHtml(l, true)}</p>`).join('')}${p.style ? `<p class="style">화풍: ${esc(p.style)}</p>` : ''}</article>`;
+}).join('\n')}</div></section>`;
 const html = `<title>${esc(S.title)} 초안</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -121,18 +132,20 @@ ${readFileSync(join(HERE, 'review', 'page.css'), 'utf8')}
 <div class="band"><div class="wrap">
   <span class="eyebrow">새 영상 원고 초안 · ${RV.round}차 · ${esc(round.date)}</span>
   <h1>「${esc(S.title)}」</h1>
+  ${RV.logline ? `<p class="logline">${esc(RV.logline)}</p>` : ''}
   <p>${tc(S.dur)} · ${parts.length}부 · 세로(쇼츠·릴스)와 가로(유튜브) 같은 내용</p>
 </div></div>
+<div class="wide">${boardHtml}</div>
 <main class="wrap">
-${storyHtml}
-<section id="script"><h2>원고 전체 <small>시각은 대략 · 금빛 = 강조 · 밑줄 = 목소리로 읽는 부분</small></h2>
-<p class="lede">'해설'은 목소리로 읽고 화면에도 같은 글자가 나옵니다. '성경'은 개역개정 원문 그대로입니다. '화면 글자'는 읽지 않고 화면에만 보입니다. 화면·메모는 그림 설명과 근거입니다.</p>
-${parts.map(partHtml).join('\n')}
+${sayHtml}
+${(RV.decisions || []).length ? `<section id="decide"><h2>정할 것 <small>${RV.decisions.length}가지</small></h2><ol class="decide">${RV.decisions.map(d => `<li><b>${esc(d.q)}</b><span>${d.options.filter(o => !/의견/.test(o)).map(esc).join(' · ')}</span></li>`).join('')}</ol></section>` : ''}
+<section id="script"><h2>자세히 <small>화면 글자 · 그림 설명 · 메모 — 필요할 때만 펼쳐 보세요</small></h2>
+<p class="lede">'해설'은 목소리로 읽고 화면에도 같은 글자가 나옵니다. '성경'은 개역개정 원문 그대로입니다. '화면 글자'는 읽지 않고 화면에만 보입니다.</p>
+${parts.map(p => `<details class="more" style="--pc: var(--p${p.n})"><summary>${p.n}부 ${esc(p.name || '')}</summary>${partHtml(p)}</details>`).join('\n')}
 </section>
-${(RV.decisions || []).length ? `<section id="decide"><h2>정할 것</h2><ul class="plain">${RV.decisions.map(d => `<li><b>${esc(d.q)}</b> — ${d.options.map(esc).join(' / ')}${d.detail ? `<br><small>${esc(d.detail)}</small>` : ''}</li>`).join('')}</ul></section>` : ''}
 </main>
 <footer class="wrap">motion/films/${esc(film)}/script.json · ${new Date().toISOString().slice(0, 10)}</footer>
 `;
 const outDir = join(ROOT, 'motion', 'out', 'review'); mkdirSync(outDir, { recursive: true });
 const out = join(outDir, film + '.html'); writeFileSync(out, html);
-console.log(`${out}\n  quotes: ${quoteCheck.text} · voiced ${voiced.length} lines ${sylTotal} syllables${estSec ? ` ≈ ${tc(estSec)}` : ''} · tight ${tightN}${tightN ? ' (' + Object.keys(tight).join(', ') + ')' : ''}\n  publish: ${RV.artifact_url ? 'Artifact url=' + RV.artifact_url : 'new artifact, capabilities {db:{}, user:{}} → save the URL in review.json artifact_url'}`);
+console.log(`${out}\n  quotes: ${quoteCheck.text} · voiced ${voiced.length} lines ${sylTotal} syllables${estSec ? ` ≈ ${tc(estSec)}` : ''} · tight ${tightN}${tightN ? ' (' + Object.keys(tight).join(', ') + ')' : ''}\n  publish: ${RV.artifact_url ? 'Artifact url=' + RV.artifact_url : 'new artifact (no capabilities) → save the URL in review.json artifact_url'}`);

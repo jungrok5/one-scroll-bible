@@ -1,0 +1,986 @@
+{
+ "entries": [
+  {
+   "use": "toolu_01NKsXunFKxWUUA7cNCAGpfK",
+   "time": "2026-11-02T23:48:17.207Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "예수님이 태어나기 칠백여 년 전, 성경은 이미 그 마을의 이름을 적어 두었습니다.",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg",
+    "generations_count": 1
+   },
+   "why": "Korean narration line 01 of 「메시아 예언과 성탄」",
+   "node": "vKtLfGNqZg8mhPQTGiww",
+   "sessions": [
+    "1c2BrhL3uwrRmVMO8chD"
+   ],
+   "name": "01"
+  },
+  {
+   "use": "toolu_019nGQ42fT5Hu7RmAc1ssCMb",
+   "time": "2026-11-02T23:48:19.696Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "베들레헴 에브라다야 너는 유다 족속 중에 작을지라도 이스라엘을 다스릴 자가 네게서 내게로 나올 것이라",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg",
+    "generations_count": 1
+   },
+   "why": "Korean narration line 02 of 「메시아 예언과 성탄」 (Micah 5:2, 개역개정 verbatim)",
+   "node": "cwmXQ6vuiNJk4CfoI7L0",
+   "sessions": [
+    "eliP3IjcTpmzGkShxwIE"
+   ],
+   "name": "02"
+  },
+  {
+   "use": "toolu_01ShYjtCa3F7HuCCz37JnPka",
+   "time": "2026-11-02T23:48:21.508Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "왜 하필 이 작은 마을이었을까요?",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg",
+    "generations_count": 1
+   },
+   "why": "Korean narration line Q1 of 「메시아 예언과 성탄」",
+   "node": "GcQ87PFu8y5LgbMKF1lq",
+   "sessions": [
+    "li5uSrKEaLzA1q2bL76C"
+   ],
+   "name": "Q1"
+  },
+  {
+   "use": "toolu_01NhbdmVkexkb4njhuxE9CY8",
+   "time": "2026-11-02T23:48:23.558Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "이 약속은 성경의 첫 책에서 시작됩니다.",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg",
+    "generations_count": 1
+   },
+   "why": "Korean narration line 03 of 「메시아 예언과 성탄」",
+   "node": "USgvaJr3XrgoY8dzFxyV",
+   "sessions": [
+    "XhjCqQ1VF9f14STsEZOq"
+   ],
+   "name": "03"
+  },
+  {
+   "use": "toolu_01GSpdyU4JnBHBcS8zePpFfP",
+   "time": "2026-11-02T23:48:25.912Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "여자의 후손은 네 머리를 상하게 할 것이요 너는 그의 발꿈치를 상하게 할 것이니라",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg",
+    "generations_count": 1
+   },
+   "why": "Korean narration line 04 of 「메시아 예언과 성탄」 (Genesis 3:15, 개역개정 verbatim)",
+   "node": "FboqZxtE1ZsuRA6psAF9",
+   "sessions": [
+    "OTBoBZXjFYb99O8zXmdL"
+   ],
+   "name": "04"
+  },
+  {
+   "use": "toolu_0159A61jNhcvR2oBxxsyRJ9B",
+   "time": "2026-11-02T23:48:28.057Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "교회는 이 말씀을 '첫 복음'이라 불러 왔습니다. 뱀의 머리를 상하게 할 '여자의 후손'.",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg",
+    "generations_count": 1
+   },
+   "why": "Korean narration line 05 of 「메시아 예언과 성탄」",
+   "node": "Y33ujt1UTH5t99eBO4MM",
+   "sessions": [
+    "tsI9EXIxpDijdIdl0qoz"
+   ],
+   "name": "05"
+  },
+  {
+   "use": "toolu_013vNcdiLAo5859xgbejmq5d",
+   "time": "2026-11-02T23:48:30.108Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "베들레헴 들판에서 양을 치던 목동 다윗에게, 하나님은 영원한 왕위를 약속하셨습니다.",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg",
+    "generations_count": 1
+   },
+   "why": "Korean narration line D1 of 「메시아 예언과 성탄」",
+   "node": "8ynfnwnkoDOurpAhm3Fl",
+   "sessions": [
+    "Hl0ruNm5edAA8hluCfPT"
+   ],
+   "name": "D1"
+  },
+  {
+   "use": "toolu_01NBhxZi2hJQ36JpX3E6ZSpe",
+   "time": "2026-11-02T23:48:32.208Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "모든 사람 가운데 아브라함의 자손으로, 유다 지파로, 다윗의 집안으로,",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg",
+    "generations_count": 1
+   },
+   "why": "Korean narration line 08 of 「메시아 예언과 성탄」",
+   "node": "X893h9weYITRhPMzkCgX",
+   "sessions": [
+    "2V8oXEaMT1PNUqOEbavd"
+   ],
+   "name": "08"
+  },
+  {
+   "use": "toolu_01Y8Cx9jzzpgB44TC6hE9YQT",
+   "time": "2026-11-02T23:48:34.257Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "그리고 다윗이 자란 작은 마을, 베들레헴으로. 약속은 점점 좁혀졌습니다.",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg",
+    "generations_count": 1
+   },
+   "why": "Korean narration line 09 of 「메시아 예언과 성탄」",
+   "node": "bMigNzbkzkv6snHtf61J",
+   "sessions": [
+    "UNnHsQ8oGRxQuGLMleUo"
+   ],
+   "name": "09"
+  },
+  {
+   "use": "toolu_01S2cMiV2ZzHPrVs2nfeXaVw",
+   "time": "2026-11-02T23:48:36.163Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "그런데 마리아와 요셉이 살던 곳은 베들레헴이 아니라 북쪽 갈릴리의 나사렛이었습니다.",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg",
+    "generations_count": 1
+   },
+   "why": "Korean narration line 13 of 「메시아 예언과 성탄」",
+   "node": "oK1S8vi1fda1KXqdDPm3",
+   "sessions": [
+    "SwpCYxyHBVKp49zf2EvV"
+   ],
+   "name": "13"
+  },
+  {
+   "use": "toolu_01Q7HbMszSbnyqhXoPVgLvq1",
+   "time": "2026-11-02T23:48:50.743Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "그 때에 가이사 아구스도가 영을 내려 천하로 다 호적하라 하였으니",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg",
+    "generations_count": 1
+   },
+   "why": "Korean narration line 14 of 「메시아 예언과 성탄」 (Luke 2:1, 개역개정 verbatim)",
+   "node": "YUz083WUDHJSfL4PPIIm",
+   "sessions": [
+    "3oNgw0F4q5ueHAe5AsBw"
+   ],
+   "name": "14"
+  },
+  {
+   "use": "toolu_01WdpA4KbPcKotBBpWGJv1Yn",
+   "time": "2026-11-02T23:48:53.141Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "요셉도 다윗의 집 족속이므로 갈릴리 나사렛 동네에서 유대를 향하여 베들레헴이라 하는 다윗의 동네로",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg",
+    "generations_count": 1
+   },
+   "why": "Korean narration line 15 of 「메시아 예언과 성탄」 (Luke 2:4, 개역개정 verbatim)",
+   "node": "2IHAtaLNDZOWweuVg11q",
+   "sessions": [
+    "Sqo7twC0ZUHohvptmeKv"
+   ],
+   "name": "15"
+  },
+  {
+   "use": "toolu_013GqYUTVjV2L7hR4xHL6bAU",
+   "time": "2026-11-02T23:48:55.346Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "세상을 다스리던 황제의 명령이, 칠백여 년 전 선지자의 한 줄을 이루고 있었습니다.",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg",
+    "generations_count": 1
+   },
+   "why": "Korean narration line 16 of 「메시아 예언과 성탄」",
+   "node": "NSz27c4ccPYJmXgGk8Ri",
+   "sessions": [
+    "x6hwsZdgbJK0hMcMrBC5"
+   ],
+   "name": "16"
+  },
+  {
+   "use": "toolu_01AXEHM8nFqQ7B5QNKsmNukY",
+   "time": "2026-11-02T23:48:57.790Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "첫아들을 낳아 강보로 싸서 구유에 뉘었으니 이는 여관에 있을 곳이 없음이러라",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg",
+    "generations_count": 1
+   },
+   "why": "Korean narration line 17 of 「메시아 예언과 성탄」 (Luke 2:7, 개역개정 verbatim)",
+   "node": "2yrdXXl3fOhw5st65BZc",
+   "sessions": [
+    "46Jhw9u7YnoFpE1zCNuB"
+   ],
+   "name": "17"
+  },
+  {
+   "use": "toolu_013xTNYVCqQXW1xcxFzPwV4K",
+   "time": "2026-11-02T23:49:00.042Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "오늘 다윗의 동네에 너희를 위하여 구주가 나셨으니 곧 그리스도 주시니라",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg",
+    "generations_count": 1
+   },
+   "why": "Korean narration line 18 of 「메시아 예언과 성탄」 (Luke 2:11, 개역개정 verbatim)",
+   "node": "weW3HnyfOymvGY2Jtplr",
+   "sessions": [
+    "LEnHH0B1JKF5SEQYvbef"
+   ],
+   "name": "18"
+  },
+  {
+   "use": "toolu_01HbNb1q11oBudfa6Q3fCrXt",
+   "time": "2026-11-02T23:49:02.002Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "성경의 첫 약속을 기억하시나요?",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg",
+    "generations_count": 1
+   },
+   "why": "Korean narration line W0 of 「메시아 예언과 성탄」",
+   "node": "62LQWqenLU3IxFF3OFrj",
+   "sessions": [
+    "lK7UurPiW6GAlH1qmJ0v"
+   ],
+   "name": "W0"
+  },
+  {
+   "use": "toolu_013qhdqEtpZz1Ts3BVbSq5n6",
+   "time": "2026-11-02T23:49:04.193Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "때가 차매 하나님이 그 아들을 보내사 여자에게서 나게 하시고",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg",
+    "generations_count": 1
+   },
+   "why": "Korean narration line W2 of 「메시아 예언과 성탄」 (Galatians 4:4, 개역개정 verbatim)",
+   "node": "KXBzLPpd0gk3kZVkB3Jp",
+   "sessions": [
+    "DwB2f0VK0vUDXuRmxdaP"
+   ],
+   "name": "W2"
+  },
+  {
+   "use": "toolu_01MSEkfvoz5ZWzsmt8wAZ9sv",
+   "time": "2026-11-02T23:49:06.441Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "이름을 예수라 하라 이는 그가 자기 백성을 그들의 죄에서 구원할 자이심이라",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg",
+    "generations_count": 1
+   },
+   "why": "Korean narration line 22 of 「메시아 예언과 성탄」 (Matthew 1:21, 개역개정 verbatim)",
+   "node": "TkpueHEZeGgmWoeqV7Tx",
+   "sessions": [
+    "y0Uhd9kxSHVjN3OsIw8y"
+   ],
+   "name": "22"
+  },
+  {
+   "use": "toolu_01QSfdqBvNXYBDiGMWWdDALx",
+   "time": "2026-11-02T23:49:08.942Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "성경대로 그리스도께서 우리 죄를 위하여 죽으시고 장사 지낸 바 되셨다가 성경대로 사흘 만에 다시 살아나사",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg",
+    "generations_count": 1
+   },
+   "why": "Korean narration line 23 of 「메시아 예언과 성탄」 (1 Corinthians 15:3-4, 개역개정 verbatim)",
+   "node": "KCoRMo4Ts2rofou9ATTP",
+   "sessions": [
+    "Yj8KcO1ZxhSypmfkzRAD"
+   ],
+   "name": "23"
+  },
+  {
+   "use": "toolu_013qAbnB3nXw733cxpSic87D",
+   "time": "2026-11-02T23:49:10.893Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "하나님은 약속을 지키시는 분입니다. 그 약속은 오늘, 당신을 위한 약속입니다.",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg",
+    "generations_count": 1
+   },
+   "why": "Korean narration line 25 of 「메시아 예언과 성탄」",
+   "node": "54ngXcdeMmvfhHwtYWYe",
+   "sessions": [
+    "U1x2Od3wvdVmrYNmTinC"
+   ],
+   "name": "25"
+  },
+  {
+   "use": "toolu_01UZuPh1RGn9sYaTwCZvw13Q",
+   "time": "2026-11-02T23:50:11.633Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_add_flow_node:music",
+   "model": "eleven_music_v2_5",
+   "label": "M1 밤의 광야 (17s)",
+   "prompt": "Nocturne for a night sky over the Judean hills: a near-silent low string pedal on D and faint glassy high harmonics like distant stars, very still; at 3 seconds a solo cello begins a slow, noble five-note promise theme in D dorian, long-breathed and intimate; at about 9 seconds soft French horns and a wordless choir bloom warmly beneath it, like the lamps of a small town answering, then settle back to the cello alone; quiet enough under a spoken voice, no drums, no piano, wide natural reverb.",
+   "params": {
+    "duration_seconds": 17,
+    "instrumental": true,
+    "lyrics_type": "instrumental"
+   },
+   "why": "Music cue M1 (night flight over Judea to Bethlehem) for 「메시아 예언과 성탄」",
+   "node": "DmyotLNEHmEtOqWpwGNu",
+   "sessions": [
+    "CP7TfCs6sP7z1ZdHkZfY"
+   ],
+   "name": "M1"
+  },
+  {
+   "use": "toolu_017tZn5gzXqYe8qmNowPdf24",
+   "time": "2026-11-02T23:50:14.284Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_add_flow_node:music",
+   "model": "eleven_music_v2_5",
+   "label": "M2 제목 (6s)",
+   "prompt": "Title cue: one deep, warm orchestral chord in D swells immediately — low strings, soft French horns and a gentle timpani roll — glows for three seconds, then thins to a single suspended high string note that hangs in the air like a question. No drums, no vocals.",
+   "params": {
+    "duration_seconds": 6,
+    "instrumental": true,
+    "lyrics_type": "instrumental"
+   },
+   "why": "Music cue M2 (title) for 「메시아 예언과 성탄」",
+   "node": "MW1MnI7URbH7HAOG2XMd",
+   "sessions": [
+    "84S3LebS4VoyigzBLHE9"
+   ],
+   "name": "M2"
+  },
+  {
+   "use": "toolu_01AnWDFk6oHduhjJ4oqj71fZ",
+   "time": "2026-11-02T23:50:17.182Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_add_flow_node:music",
+   "model": "eleven_music_v2_5",
+   "label": "M3 에덴 (17s)",
+   "prompt": "Dusk in an ancient garden: a harp and a soft oud play the promise theme gently over a warm low string pad, tender and sorrowful as the light fades; at about 6 seconds the harmony darkens into minor and a low cello sighs; at about 12 seconds everything thins to one sustained high violin note with a faint celesta glint, like a single small light left in the dark. Quiet under a spoken voice, no drums, no piano.",
+   "params": {
+    "duration_seconds": 17,
+    "instrumental": true,
+    "lyrics_type": "instrumental"
+   },
+   "why": "Music cue M3 (Eden at dusk, first promise) for 「메시아 예언과 성탄」",
+   "node": "vHlICJFN8jL6xX4fxqPk",
+   "sessions": [
+    "QgQuYz2MybZr2wuTUJtC"
+   ],
+   "name": "M3"
+  },
+  {
+   "use": "toolu_017W9Xwqb6sNTPM8NhzWVyk7",
+   "time": "2026-11-02T23:50:20.184Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_add_flow_node:music",
+   "model": "eleven_music_v2_5",
+   "label": "M4 아브라함·다윗 (15s)",
+   "prompt": "Night under countless desert stars turning to evening on shepherd hills: a lone ney flute carries the promise theme over a soft warm string pad and a slow frame drum like distant footsteps; at about 7 seconds it turns pastoral, a shepherd's reed pipe and gentle harp arpeggios over warm low strings; restrained and spacious, quiet under a spoken voice, no piano, no synths.",
+   "params": {
+    "duration_seconds": 15,
+    "instrumental": true,
+    "lyrics_type": "instrumental"
+   },
+   "why": "Music cue M4 (Abraham's stars to David's hills) for 「메시아 예언과 성탄」",
+   "node": "mYeNa8SU7IcGVISP0mzn",
+   "sessions": [
+    "WFuTM04aK7VGOtAFfXm8"
+   ],
+   "name": "M4"
+  },
+  {
+   "use": "toolu_01SNPikY7RVPUoEzeFJPcRiH",
+   "time": "2026-11-02T23:50:23.184Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_add_flow_node:music",
+   "model": "eleven_music_v2_5",
+   "label": "M5 좁혀지는 약속 (11s)",
+   "prompt": "The promise narrows to one place: a steady soft low-string pulse and rising harp arpeggios, French horns gradually joining as a thread of light runs down a long valley; at about 6.5 seconds a warm glowing swell in D major with a soft wordless choir as a small town comes into view, then a held luminous chord to the end. Restrained under a spoken voice, no drum kit, no synths.",
+   "params": {
+    "duration_seconds": 11,
+    "instrumental": true,
+    "lyrics_type": "instrumental"
+   },
+   "why": "Music cue M5 (the promise narrows to Bethlehem) for 「메시아 예언과 성탄」",
+   "node": "QKosfgm7bQbXsbx3UgnH",
+   "sessions": [
+    "hZ9Kpw4Sn2QFKv7y1QLN"
+   ],
+   "name": "M5"
+  },
+  {
+   "use": "toolu_01RZYAedvj2U17B6du2RdsEa",
+   "time": "2026-11-02T23:50:25.587Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_add_flow_node:music",
+   "model": "eleven_music_v2_5",
+   "label": "M6 나사렛 (8s)",
+   "prompt": "Evening in a small Galilean village: a quiet lute and a soft solo viola, simple and humble, warm lamplight, gentle and unhurried, quiet under a spoken voice. No drums, no piano.",
+   "params": {
+    "duration_seconds": 8,
+    "instrumental": true,
+    "lyrics_type": "instrumental"
+   },
+   "why": "Music cue M6 (Nazareth evening) for 「메시아 예언과 성탄」",
+   "node": "F3eGHTgCDPEdq6rRWWo5",
+   "sessions": [
+    "PkTqTkuE3tPH9a8dUDw9"
+   ],
+   "name": "M6"
+  },
+  {
+   "use": "toolu_01C3Q784acJmkVQTCJiukveU",
+   "time": "2026-11-02T23:50:28.242Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_add_flow_node:music",
+   "model": "eleven_music_v2_5",
+   "label": "M7 로마 칙령 (9s)",
+   "prompt": "Imperial decree: stern, stately low brass chords and a slow, heavy timpani pulse, cold and grand like marble columns in harsh sunlight, a distant trumpet call answering; restrained under a spoken voice, no snare drum, no synths.",
+   "params": {
+    "duration_seconds": 9,
+    "instrumental": true,
+    "lyrics_type": "instrumental"
+   },
+   "why": "Music cue M7 (Roman emperor's decree) for 「메시아 예언과 성탄」",
+   "node": "YHmg2vkIjWeMYCiVmULZ",
+   "sessions": [
+    "SDncacCehiiazYRtGE5i"
+   ],
+   "name": "M7"
+  },
+  {
+   "use": "toolu_01MnUBZdzdaPQtEtCYTjLgy9",
+   "time": "2026-11-02T23:50:31.584Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_add_flow_node:music",
+   "model": "eleven_music_v2_5",
+   "label": "M8 베들레헴 가는 길 (19s)",
+   "prompt": "A long journey on foot at sunset: a gentle walking pulse of pizzicato low strings and a soft frame drum, a solo cello carrying the promise theme, warm but weary; at about 9 seconds the light fades and the harmony becomes hushed and expectant; at about 13 seconds small lamps begin to glow and the music warms with harp and a soft wordless choir, swelling gently to a radiant held chord at 16 seconds that sustains and softens to the end. Quiet under a spoken voice, no drum kit, no synths.",
+   "params": {
+    "duration_seconds": 19,
+    "instrumental": true,
+    "lyrics_type": "instrumental"
+   },
+   "why": "Music cue M8 (the long journey to Bethlehem, lamps lighting) for 「메시아 예언과 성탄」",
+   "node": "d5tRBiTvXJ0ztSc6mypA",
+   "sessions": [
+    "P3Hg11ZoqXUC4E1GriAq"
+   ],
+   "name": "M8"
+  },
+  {
+   "use": "toolu_01AU8n2ynkGBvbKWtsnJzGRV",
+   "time": "2026-11-02T23:50:34.136Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_add_flow_node:music",
+   "model": "eleven_music_v2_5",
+   "label": "M9 마구간 (10s)",
+   "prompt": "Holy night in a dark stable: a hushed celesta and harp, a soft wordless female voice singing the promise theme very slowly over a low warm drone, intimate and reverent, like a single lamp in the dark. No drums, no piano.",
+   "params": {
+    "duration_seconds": 10,
+    "instrumental": true,
+    "lyrics_type": "instrumental"
+   },
+   "why": "Music cue M9 (the stable, holy night) for 「메시아 예언과 성탄」",
+   "node": "yEnkMiO7gLE38t0pJI4q",
+   "sessions": [
+    "dbd6Z72z7cDNL2LIlWyE"
+   ],
+   "name": "M9"
+  },
+  {
+   "use": "toolu_01Amtj1E4iFizzGF91ASQ2wt",
+   "time": "2026-11-02T23:50:36.990Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_add_flow_node:music",
+   "model": "eleven_music_v2_5",
+   "label": "M10 목자들 위의 영광 (10s)",
+   "prompt": "Glory in the night sky: near silence for one second, then high strings shimmer open and a full wordless choir with warm French horns blooms radiantly in D major, bells sparkling, full of awe but gentle; from 4 seconds a glowing sustained chord, quiet enough for a spoken voice, thinning out at the end. No drum kit, no synths.",
+   "params": {
+    "duration_seconds": 10,
+    "instrumental": true,
+    "lyrics_type": "instrumental"
+   },
+   "why": "Music cue M10 (glory over the shepherds) for 「메시아 예언과 성탄」",
+   "node": "3fKvkcfmJ3HjZJVqRpkQ",
+   "sessions": [
+    "j2KtzgDdNFzkGr5pKSGE"
+   ],
+   "name": "M10"
+  },
+  {
+   "use": "toolu_017zBvd5Tz53BGGCKMcVcc7E",
+   "time": "2026-11-02T23:50:39.736Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_add_flow_node:music",
+   "model": "eleven_music_v2_5",
+   "label": "M11 첫 약속과 성취 (15s)",
+   "prompt": "Back in the quiet stable: a soft felt piano and a solo cello recall the promise theme slowly, tender and still; at about 7 seconds a delicate rising shimmer of celesta and harp like embers drifting upward, then the cello rises to one long warm note over a glowing major chord. Intimate, quiet under a spoken voice, no drums.",
+   "params": {
+    "duration_seconds": 15,
+    "instrumental": true,
+    "lyrics_type": "instrumental"
+   },
+   "why": "Music cue M11 (two verses joined, embers) for 「메시아 예언과 성탄」",
+   "node": "N3VOKOvVrJwggGo7WSwh",
+   "sessions": [
+    "7nOV3mhnHp5VkqaQS16x"
+   ],
+   "name": "M11"
+  },
+  {
+   "use": "toolu_019L4B53BEoGNDxH84nqSGoj",
+   "time": "2026-11-02T23:50:42.435Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_add_flow_node:music",
+   "model": "eleven_music_v2_5",
+   "label": "M12 마을 위로 (10s)",
+   "prompt": "Lifting away over a sleeping town at night: sustained warm strings in a slow rising chord progression, a solo French horn stating the promise theme nobly, soft harp arpeggios like many small lights below; reverent and spacious, quiet under a spoken voice, no drums, ending suspended on an open chord.",
+   "params": {
+    "duration_seconds": 10,
+    "instrumental": true,
+    "lyrics_type": "instrumental"
+   },
+   "why": "Music cue M12 (rising over the town at night) for 「메시아 예언과 성탄」",
+   "node": "fRClkof00oWKEkIpjm6L",
+   "sessions": [
+    "EpI5HfDWQj9su4ScTm0Y"
+   ],
+   "name": "M12"
+  },
+  {
+   "use": "toolu_015xeCSbsQm44zyFkpn9Drtb",
+   "time": "2026-11-02T23:50:45.335Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_add_flow_node:music",
+   "model": "eleven_music_v2_5",
+   "label": "M13 십자가와 새벽 (14s)",
+   "prompt": "The cross and the sunrise: solemn low strings and a soft grieving choir for the first 5 seconds; at about 6 seconds a luminous swell begins as the sun rises — French horns, full strings and a wordless choir opening into a radiant, triumphant but tender D major, the promise theme sung high by the violins; quiet enough for a spoken voice, no drum kit, no synths.",
+   "params": {
+    "duration_seconds": 14,
+    "instrumental": true,
+    "lyrics_type": "instrumental"
+   },
+   "why": "Music cue M13 (the cross and the sunrise) for 「메시아 예언과 성탄」",
+   "node": "usfTu8DluhqrNMujjAdm",
+   "sessions": [
+    "XRRni5i6w6CVrVhwjXSl"
+   ],
+   "name": "M13"
+  },
+  {
+   "use": "toolu_01F4qs1uepLBioM3Zbx7rr3r",
+   "time": "2026-11-02T23:50:47.935Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_add_flow_node:music",
+   "model": "eleven_music_v2_5",
+   "label": "M14 끝 (30s)",
+   "prompt": "Tender, hopeful resolution in D major: a soft piano and gentle strings play the promise theme one last time, quiet under a spoken voice for the first 10 seconds; then a warm wordless choir and French horns swell into a long glowing chord around 14 seconds; from 20 seconds it thins slowly to a solo cello holding the final note of the theme and fades to silence by 30 seconds. No drums.",
+   "params": {
+    "duration_seconds": 30,
+    "instrumental": true,
+    "lyrics_type": "instrumental"
+   },
+   "why": "Music cue M14 (ending and reading card) for 「메시아 예언과 성탄」",
+   "node": "5BTkha1df6VrcoU4dEuy",
+   "sessions": [
+    "RKCAGEux3f6RMSp26Gtp"
+   ],
+   "name": "M14"
+  },
+  {
+   "use": "toolu_011GUNmi34ahB8hnkFQ214Ko",
+   "time": "2026-11-02T23:51:04.433Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S1 밤 광야 바람",
+   "prompt": "Soft night wind over open desert hills, very quiet and wide, faint distant crickets, still air",
+   "params": {
+    "duration_seconds": 20,
+    "prompt_influence": 0.5,
+    "loop": true
+   },
+   "why": "Effect S1 for 「메시아 예언과 성탄」",
+   "node": "lEISNpYKyt8lTqblfs6Z",
+   "sessions": [
+    "DP1YVn0wSekqGgyWDqqR"
+   ],
+   "name": "S1"
+  },
+  {
+   "use": "toolu_01FKECqnj7nev3TiTkPXg4Ux",
+   "time": "2026-11-02T23:51:07.281Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S2 밤 마을 먼 소리",
+   "prompt": "A small town far away at night: one faint dog bark in the distance, a soft wooden door closing, almost silent",
+   "params": {
+    "duration_seconds": 8,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "Effect S2 for 「메시아 예언과 성탄」",
+   "node": "d1nWVR7csz0eibiSZVzi",
+   "sessions": [
+    "tLFsAf11KixOEItCLalI"
+   ],
+   "name": "S2"
+  },
+  {
+   "use": "toolu_01KopGXapWDXX8JgViPcgmBb",
+   "time": "2026-11-02T23:51:09.681Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S3 빛이 번짐",
+   "prompt": "Warm soft glowing swell of light, a gentle airy bloom with a faint glassy shimmer, no impact",
+   "params": {
+    "duration_seconds": 3,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "Effect S3 for 「메시아 예언과 성탄」",
+   "node": "77W1NjENsWz54LWGsQ3F",
+   "sessions": [
+    "Wr9iTRR8C0GqrOwvvJgS"
+   ],
+   "name": "S3"
+  },
+  {
+   "use": "toolu_0154HNt2F7JEHF2Dzstg2LZ2",
+   "time": "2026-11-02T23:51:12.231Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S4 해 질 녘 정원",
+   "prompt": "Garden at dusk: the last birds settling, leaves stirring in a soft breeze, crickets beginning, peaceful and slowly fading",
+   "params": {
+    "duration_seconds": 15,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "Effect S4 for 「메시아 예언과 성탄」",
+   "node": "bgzu9hDrVgNPIdin38WJ",
+   "sessions": [
+    "zINQW72Kzh2kG6b10UQJ"
+   ],
+   "name": "S4"
+  },
+  {
+   "use": "toolu_01G3M5hovrspznFXyvaXoX76",
+   "time": "2026-11-02T23:51:14.681Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S5 작은 빛 한 점",
+   "prompt": "A tiny clear crystalline chime glowing softly, like one small point of light appearing in the dark",
+   "params": {
+    "duration_seconds": 2.5,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "Effect S5 for 「메시아 예언과 성탄」",
+   "node": "Rg93V9DN1IFG6R4depWf",
+   "sessions": [
+    "pdXcbkAxx1nnAkND0OZz"
+   ],
+   "name": "S5"
+  },
+  {
+   "use": "toolu_01Pq8VABF9G43proRKhDG8Sm",
+   "time": "2026-11-02T23:51:17.231Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S6 금빛 실이 흐름",
+   "prompt": "A thin line of light gliding through the air: a soft airy glassy shimmer that travels smoothly and rises gently, quiet",
+   "params": {
+    "duration_seconds": 3.5,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "Effect S6 for 「메시아 예언과 성탄」",
+   "node": "FEqq2BeQ03RA8un0qrUq",
+   "sessions": [
+    "EAmj3MScMD2QNeuwkhCN"
+   ],
+   "name": "S6"
+  },
+  {
+   "use": "toolu_01YTAhe9TYPu9AqTSWfKqXME",
+   "time": "2026-11-02T23:51:19.784Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S7 별 아래 장막",
+   "prompt": "Desert camp under the stars: a small crackling fire, tent cloth stirring in a light night wind, very quiet",
+   "params": {
+    "duration_seconds": 7,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "Effect S7 for 「메시아 예언과 성탄」",
+   "node": "nOsYldZ6tosI4mzZfXPD",
+   "sessions": [
+    "Q4SwuWE7xWe53Xyk09W4"
+   ],
+   "name": "S7"
+  },
+  {
+   "use": "toolu_0169SpnrXRrrivrx8kyYZmon",
+   "time": "2026-11-02T23:51:22.381Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S8 저녁 언덕 양 떼",
+   "prompt": "Evening hillside pasture: a few sheep bleating far off, a small bell on a sheep, a soft breeze in dry grass",
+   "params": {
+    "duration_seconds": 8,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "Effect S8 for 「메시아 예언과 성탄」",
+   "node": "PEjawEty77ZY7d1Rx6fM",
+   "sessions": [
+    "8cjMhPCt8s08bRdnx3IC"
+   ],
+   "name": "S8"
+  },
+  {
+   "use": "toolu_01SLdZbvr9qhVmSdJ8a7GWQj",
+   "time": "2026-11-02T23:51:24.881Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S9 나사렛 저녁",
+   "prompt": "Quiet evening in a small stone village: swallows chirping, a distant dog, a wooden door closing softly, calm",
+   "params": {
+    "duration_seconds": 8,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "Effect S9 for 「메시아 예언과 성탄」",
+   "node": "Onsah2aI6apVEzAERcJc",
+   "sessions": [
+    "ZlpTzIvEo3oNAdL62fki"
+   ],
+   "name": "S9"
+  },
+  {
+   "use": "toolu_017NvorDY4qupsb76dBSkCUz",
+   "time": "2026-11-02T23:51:27.530Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S10 로마 광장",
+   "prompt": "A large stone forum in hard sunlight: a distant murmuring crowd, heavy banners flapping in the wind, sandals on marble, reverberant",
+   "params": {
+    "duration_seconds": 9,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "Effect S10 for 「메시아 예언과 성탄」",
+   "node": "hRJks8yDAGIezwWJ0VFZ",
+   "sessions": [
+    "GPhUc66Tf3zJzs6cOvHz"
+   ],
+   "name": "S10"
+  },
+  {
+   "use": "toolu_01RmjXhZ9a42K6b2Y1mS2GLz",
+   "time": "2026-11-02T23:51:30.231Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S11 나귀와 길",
+   "prompt": "A donkey's slow hooves and one person walking beside it on a stony desert road, steady unhurried steps, light evening wind",
+   "params": {
+    "duration_seconds": 12,
+    "prompt_influence": 0.5,
+    "loop": true
+   },
+   "why": "Effect S11 for 「메시아 예언과 성탄」",
+   "node": "7fSJOJW9RiyzvBVbpk2q",
+   "sessions": [
+    "g4sn89TSPvAxZ1rRZ0Ch"
+   ],
+   "name": "S11"
+  },
+  {
+   "use": "toolu_01SpU6PgQo6FQuEkhd4HrmT4",
+   "time": "2026-11-02T23:51:32.730Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S12 등불이 하나씩",
+   "prompt": "Several small oil lamps being lit one after another in the distance, each a tiny soft flame catch with a warm faint chime",
+   "params": {
+    "duration_seconds": 4,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "Effect S12 for 「메시아 예언과 성탄」",
+   "node": "YQIaKKmQaNvMhGdZuF8G",
+   "sessions": [
+    "TvytPicB7sJoG68engfp"
+   ],
+   "name": "S12"
+  },
+  {
+   "use": "toolu_01TMfje39HdNvEAiypByGRKP",
+   "time": "2026-11-02T23:51:35.580Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S13 마구간의 밤",
+   "prompt": "Night inside a small stable: soft straw rustling, an animal's slow breath, a tiny oil lamp flame crackling, very still and intimate",
+   "params": {
+    "duration_seconds": 14,
+    "prompt_influence": 0.5,
+    "loop": true
+   },
+   "why": "Effect S13 for 「메시아 예언과 성탄」",
+   "node": "IqDs1SeXFObiesSMNMJ2",
+   "sessions": [
+    "Cn8mu7rrCNCWuU79EmhK"
+   ],
+   "name": "S13"
+  },
+  {
+   "use": "toolu_01LtdJE65F7ei25UThLZ64Bc",
+   "time": "2026-11-02T23:51:38.381Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S14 하늘이 열림",
+   "prompt": "Light opening in the night sky: a vast soft rush of airy shimmer with a low warm bloom underneath, awe-filled, no explosion, no thunder",
+   "params": {
+    "duration_seconds": 4,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "Effect S14 for 「메시아 예언과 성탄」",
+   "node": "yhuRNGv3sjQkOVLxNkPC",
+   "sessions": [
+    "Zp4D8SYJYSkSAwlI98LX"
+   ],
+   "name": "S14"
+  },
+  {
+   "use": "toolu_019hPeYiDXkDU6AgMS7D2NR4",
+   "time": "2026-11-02T23:51:41.029Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S15 불씨",
+   "prompt": "Glittering embers drifting upward and settling: a soft crackling sparkle of light, gentle and quiet, ending in a tiny warm chime",
+   "params": {
+    "duration_seconds": 3.5,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "Effect S15 for 「메시아 예언과 성탄」",
+   "node": "02B36CCLy8UhKmcflYxw",
+   "sessions": [
+    "fEVzqwMPgGnPzGXfpc9Q"
+   ],
+   "name": "S15"
+  },
+  {
+   "use": "toolu_017SJsDrc7XrCaZ8Srf5X6vw",
+   "time": "2026-11-02T23:51:43.475Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S16 새벽 언덕",
+   "prompt": "Dawn on a quiet hill: the first birds beginning to sing, soft morning air, distant and calm",
+   "params": {
+    "duration_seconds": 8,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "Effect S16 for 「메시아 예언과 성탄」",
+   "node": "aUvXtvXyQjdodi7M4ru9",
+   "sessions": [
+    "02PPEDUOJbWIqk0T1823"
+   ],
+   "name": "S16"
+  }
+ ],
+ "title": "메시아 예언과 성탄",
+ "about": "2026-11-03, flow BcQHTd61fLqr0A3kjcfa (메시아 예언과 성탄 — 해설·음악·효과음). 해설: 첫 영상과 같은 목소리 HYALOqtTLlRjxo4uBKeg(Jaeil Warm Male Narrator) · eleven_v4, 줄당 한 번, 숫자는 한글로(칠백여). 음악: eleven_music_v2_5 instrumental, 큐당 한 번 — 첫 영상 프롬프트 방식(악기·선법·박자·몇 초에 무엇이 오는지·목소리 밑에 조용히·no drums), 다섯 부를 꿰는 하나의 「약속의 주제」(D 도리안, 다섯 음). 효과음: eleven_text_to_sound_v2. name = sound/voice/<id>.mp3 · sound/audio/<id>.mp3. 약 7,100 크레딧."
+}

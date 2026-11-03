@@ -1,0 +1,2539 @@
+{
+ "entries": [
+  {
+   "use": "toolu_01BvQm1t1y6TDrAv8xastSqM",
+   "time": "2026-10-30T15:48:21.903Z",
+   "flow": "LtYoWzJVvymLxs3ok4px",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "돌이키지 아니하면 두렵건대 내가 와서 저주로 그 땅을 칠까 하노라",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 01 of 「침묵의 400년」",
+   "node": "e21uf6YCqg0opd3vULij",
+   "sessions": [
+    "UYmBh3xbG8FI7A57ANIL"
+   ]
+  },
+  {
+   "use": "toolu_01CdZK5EPUjNxM7nFMxTkGpS",
+   "time": "2026-10-30T15:48:23.654Z",
+   "flow": "LtYoWzJVvymLxs3ok4px",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "구약의 마지막 말씀입니다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 02 of 「침묵의 400년」",
+   "node": "2D1oBKMrcRhj0Mmi2Ggu",
+   "sessions": [
+    "8geJBtVXcdyhD1IoAoLE"
+   ]
+  },
+  {
+   "use": "toolu_014ApZXeTY9rQnj6tCUdcRLG",
+   "time": "2026-10-30T15:48:25.704Z",
+   "flow": "LtYoWzJVvymLxs3ok4px",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "성경에서는 한 장 차이, 그러나 그 사이 사백 년 동안 하늘의 새 말씀은 들리지 않았습니다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 03 of 「침묵의 400년」",
+   "node": "bsF6f3lNMY7GuX3JehR5",
+   "sessions": [
+    "LWE2WLvFOc7D8dbbCjtO"
+   ]
+  },
+  {
+   "use": "toolu_011ms5P31kBd6S4svcnpDhCc",
+   "time": "2026-10-30T15:48:27.454Z",
+   "flow": "LtYoWzJVvymLxs3ok4px",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "사람들은 기다렸습니다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 04 of 「침묵의 400년」",
+   "node": "k56MOqlgClrdDwNqdiRy",
+   "sessions": [
+    "v1Zts61ngHArgOnOWFKO"
+   ]
+  },
+  {
+   "use": "toolu_01EwwzfCBeyw4kQBbLDLe55E",
+   "time": "2026-10-30T15:48:29.254Z",
+   "flow": "LtYoWzJVvymLxs3ok4px",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "비록 더딜지라도 기다리라",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 05 of 「침묵의 400년」",
+   "node": "0tIRUrveuOSL3KEqUjXt",
+   "sessions": [
+    "RJL8wI7OPRQR1vqu5ut6"
+   ]
+  },
+  {
+   "use": "toolu_01Jxmy7kHcgJxNC5iL511ck2",
+   "time": "2026-10-30T15:48:31.103Z",
+   "flow": "LtYoWzJVvymLxs3ok4px",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "그러나 하나님은 멈추지 않으셨습니다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 06 of 「침묵의 400년」",
+   "node": "o4WevVNsZTMYetu3loaA",
+   "sessions": [
+    "OLHumjS9bTzmNRnJwIkP"
+   ]
+  },
+  {
+   "use": "toolu_01NcfbLaB9cgSrYWVXmePKoD",
+   "time": "2026-10-30T15:48:32.904Z",
+   "flow": "LtYoWzJVvymLxs3ok4px",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "이 금속들은 차례로 일어날 나라들을 가리켰습니다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 07 of 「침묵의 400년」",
+   "node": "cenN5Ec2KT8gnIPWuA3F",
+   "sessions": [
+    "zk6uv969bOPIRO2ndqG4"
+   ]
+  },
+  {
+   "use": "toolu_01Xhjf2CghUnSrH6TCh5EU9e",
+   "time": "2026-10-30T15:48:34.854Z",
+   "flow": "LtYoWzJVvymLxs3ok4px",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "그 사백 년 동안, 하나님은 세상을 차곡차곡 준비하셨습니다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 07b of 「침묵의 400년」",
+   "node": "a4cvB1BJ4sfNJiWSkG5v",
+   "sessions": [
+    "DoayeNnarYdJvD23sTbG"
+   ]
+  },
+  {
+   "use": "toolu_0125NKmReenUKH9mzQdLr4c8",
+   "time": "2026-10-30T15:48:36.707Z",
+   "flow": "LtYoWzJVvymLxs3ok4px",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "흩어진 유대 백성은 가는 곳마다 말씀을 품고 갔고,",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 08 of 「침묵의 400년」",
+   "node": "ajQ0svzu1dN3GCHWH6bK",
+   "sessions": [
+    "ES5OQNUhFaGx7l1HLvt8"
+   ]
+  },
+  {
+   "use": "toolu_016pcoroyDje6bnY3YBUAGpH",
+   "time": "2026-10-30T15:48:38.394Z",
+   "flow": "LtYoWzJVvymLxs3ok4px",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "알렉산더 이후, 넓은 세상이 헬라어 하나로 통하게 되었습니다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 09 of 「침묵의 400년」",
+   "node": "SCwym8aW8Mf1Hwy3ZUlI",
+   "sessions": [
+    "SYU8zWnE3YDSeVxYk5FH"
+   ]
+  },
+  {
+   "use": "toolu_01QqtMpjjihUeHmfuQCfrK1U",
+   "time": "2026-10-30T15:48:54.708Z",
+   "flow": "LtYoWzJVvymLxs3ok4px",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "그 언어로 성경이 번역되어 이방인도 읽을 수 있게 되었고,",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 10 of 「침묵의 400년」",
+   "node": "TKuR8Fz4uXEbIba25oEU",
+   "sessions": [
+    "2nNVIcUFQutjftYkpDVF"
+   ]
+  },
+  {
+   "use": "toolu_01UNFCFwHz9yWrwschz5bs7B",
+   "time": "2026-10-30T15:48:56.559Z",
+   "flow": "LtYoWzJVvymLxs3ok4px",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "로마는 제국 구석구석까지 길과 바닷길을 열었습니다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 14b of 「침묵의 400년」",
+   "node": "7O1k887zkSOpAlI86FJV",
+   "sessions": [
+    "57GZICljUKhL90XpN3QA"
+   ]
+  },
+  {
+   "use": "toolu_01HRqjYCpf9YBirGwQxvQzzo",
+   "time": "2026-10-30T15:48:58.360Z",
+   "flow": "LtYoWzJVvymLxs3ok4px",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "제국 곳곳의 회당에서는 안식일마다 그 말씀을 읽었습니다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 15 of 「침묵의 400년」",
+   "node": "4qyrp7QV8WWOGCNzw7bM",
+   "sessions": [
+    "UDFEjjApCR2Aw7NqXuha"
+   ]
+  },
+  {
+   "use": "toolu_01XoWNtidDwk42h2mpjrppJC",
+   "time": "2026-10-30T15:49:00.160Z",
+   "flow": "LtYoWzJVvymLxs3ok4px",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "하나님은 이렇게 길을 준비하셨습니다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 17 of 「침묵의 400년」",
+   "node": "CkDxSI7MbUFX4Eh52q1q",
+   "sessions": [
+    "WihztTkTOiRtqNf0FBE9"
+   ]
+  },
+  {
+   "use": "toolu_013mTpsp552kciev8DbP4sUu",
+   "time": "2026-10-30T15:49:02.011Z",
+   "flow": "LtYoWzJVvymLxs3ok4px",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "네게 아들을 낳아 주리니 그 이름을 요한이라 하라",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 18 (Luke 1:13) of 「침묵의 400년」",
+   "node": "FkReTVtJmjW1jQ8wp4k1",
+   "sessions": [
+    "wikb6fW4upsNqHN1Y6iA"
+   ]
+  },
+  {
+   "use": "toolu_01VfNKLVw227hnveDVkBj3is",
+   "time": "2026-10-30T15:49:03.811Z",
+   "flow": "LtYoWzJVvymLxs3ok4px",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "내가 선지자 엘리야를 너희에게 보내리니",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 19a (Malachi 4:5) of 「침묵의 400년」",
+   "node": "E1p8JBVK352sdMeh3B5Q",
+   "sessions": [
+    "z69R85kBmntH5Qd3qN0X"
+   ]
+  },
+  {
+   "use": "toolu_01CABXbyiFdEqgaq4ycrxBxF",
+   "time": "2026-10-30T15:49:05.711Z",
+   "flow": "LtYoWzJVvymLxs3ok4px",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "그가 아버지의 마음을 자녀에게로 돌이키게 하고",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 19 (Malachi 4:6a) of 「침묵의 400년」",
+   "node": "NMY91sLRT7kFJVnwcKnz",
+   "sessions": [
+    "VJVwpvdS0syySd2sm6Yq"
+   ]
+  },
+  {
+   "use": "toolu_016b2mi2ebxDnWWZtRbfaDge",
+   "time": "2026-10-30T15:49:07.612Z",
+   "flow": "LtYoWzJVvymLxs3ok4px",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "엘리야의 심령과 능력으로… 아버지의 마음을 자식에게,",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 20 (Luke 1:17) of 「침묵의 400년」",
+   "node": "OAOOrRJdU6st7GCRxZAX",
+   "sessions": [
+    "xwWWPLea0eDWs29bFQ2T"
+   ]
+  },
+  {
+   "use": "toolu_01Ugsjg9ph1YMgt4kxSQrRia",
+   "time": "2026-10-30T15:49:09.511Z",
+   "flow": "LtYoWzJVvymLxs3ok4px",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "하나님이 사백 년 만에 다시 말씀하셨습니다. 엘리야처럼 올 그 사람, 세례 요한.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 21 of 「침묵의 400년」",
+   "node": "Mw0g8BiNInKkznCdq8Rc",
+   "sessions": [
+    "R1JEkW8EF3iE7o9g6vMS"
+   ]
+  },
+  {
+   "use": "toolu_0189hNUg6CAzS5mVJXe1amBy",
+   "time": "2026-10-30T15:49:11.300Z",
+   "flow": "LtYoWzJVvymLxs3ok4px",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "손대지 아니한 돌이 나와서 신상의 쇠와 진흙의 발을 쳐서 부서뜨리매",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 22a (Daniel 2:34) of 「침묵의 400년」",
+   "node": "IFGNGYugoxtOrV9STZ6C",
+   "sessions": [
+    "c0KwSxJyIOkHdXEhUKve"
+   ]
+  },
+  {
+   "use": "toolu_01Vkb2K41NjNZEyN8HXngR9u",
+   "time": "2026-10-30T15:49:27.648Z",
+   "flow": "LtYoWzJVvymLxs3ok4px",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "때가 차매 하나님이 그 아들을 보내사",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 22 (Galatians 4:4) of 「침묵의 400년」",
+   "node": "BR9wNiY0Wbg0s6AK1rRW",
+   "sessions": [
+    "A63y53Xv9MQDtyJeydtg"
+   ]
+  },
+  {
+   "use": "toolu_013kYF9HAY9Xjoh1CrYbKtxV",
+   "time": "2026-10-30T15:49:29.599Z",
+   "flow": "LtYoWzJVvymLxs3ok4px",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "하나님이 보내신 그 돌, 그 아들 예수님이 오셨습니다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 23 of 「침묵의 400년」",
+   "node": "xUD5cjV61xOCqN7Ogpnl",
+   "sessions": [
+    "zDHexAA9L756ihvQvsLS"
+   ]
+  },
+  {
+   "use": "toolu_011oBtxgwrLGfPC89Y2KWzrd",
+   "time": "2026-10-30T15:49:31.551Z",
+   "flow": "LtYoWzJVvymLxs3ok4px",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "인자가 온 것은 잃어버린 자를 찾아 구원하려 함이니라",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 24 (Luke 19:10) of 「침묵의 400년」",
+   "node": "4bLLPhP89dNC28rBv48V",
+   "sessions": [
+    "xPPMvdp2JcMjKjRnnt8I"
+   ]
+  },
+  {
+   "use": "toolu_01KqKrSy6a9zd7BeF5cPCa3H",
+   "time": "2026-10-30T15:49:33.501Z",
+   "flow": "LtYoWzJVvymLxs3ok4px",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "예수님은 고향 회당에서 칠백여 년 전 선지자 이사야의 글을 펴셨습니다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 24b of 「침묵의 400년」",
+   "node": "ln669BjLe8UKI8vOga6Z",
+   "sessions": [
+    "zTX84cx6xbSiENgjzVWH"
+   ]
+  },
+  {
+   "use": "toolu_01Siw8cB2Adk32ivw1JFpXrT",
+   "time": "2026-10-30T15:49:35.401Z",
+   "flow": "LtYoWzJVvymLxs3ok4px",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "이 글이 오늘 너희 귀에 응하였느니라",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 25 (Luke 4:21) of 「침묵의 400년」",
+   "node": "aThNf9odksFTuPMxSmB7",
+   "sessions": [
+    "wV8DwmgZeABaIbx0Y5e6"
+   ]
+  },
+  {
+   "use": "toolu_01CsPsmP3h75c2JZuhmH9TMX",
+   "time": "2026-10-30T15:49:37.302Z",
+   "flow": "LtYoWzJVvymLxs3ok4px",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "칠백여 년 전 약속의 주인공이, 바로 예수님이셨습니다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 25c of 「침묵의 400년」",
+   "node": "FRs0oRQimjVtBQTTfJqb",
+   "sessions": [
+    "EfRoZJySnn5BzciFRItL"
+   ]
+  },
+  {
+   "use": "toolu_01XyFNcyxs2YM52rXG6RMpK9",
+   "time": "2026-10-30T15:49:39.402Z",
+   "flow": "LtYoWzJVvymLxs3ok4px",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "예수님은 우리 죄를 위해 십자가에서 죽으시고, 사흘 만에 다시 살아나셨습니다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 25b of 「침묵의 400년」",
+   "node": "Qoy4KmTxXq7xF7DG4zvo",
+   "sessions": [
+    "stfJLwMNkAEOjTmeUnk9"
+   ]
+  },
+  {
+   "use": "toolu_01NkoY6T2itZZUsRqT5jNMUN",
+   "time": "2026-10-30T15:49:41.464Z",
+   "flow": "LtYoWzJVvymLxs3ok4px",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "사도 바울은 그 길을 따라, 헬라어로, 먼저 회당에서부터 복음을 전했습니다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 26a of 「침묵의 400년」",
+   "node": "vqF6B9arEN2tMqzaxf62",
+   "sessions": [
+    "BLSg88g07bjBfrT6RE55"
+   ]
+  },
+  {
+   "use": "toolu_01RwXvUKJramjaErpcNZzAZN",
+   "time": "2026-10-30T15:49:43.437Z",
+   "flow": "LtYoWzJVvymLxs3ok4px",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "하나님은 침묵하실 때에도 일하고 계셨습니다. 그리고 지금, 당신의 기다림 속에서도 일하고 계십니다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 27 (closing) of 「침묵의 400년」",
+   "node": "nShSwxthY8cHfMOzH0J0",
+   "sessions": [
+    "CSD3SuDDUYWYBzrK72zN"
+   ]
+  },
+  {
+   "use": "toolu_01JAXrfxZVmLRyhiEAH5MyvF",
+   "time": "2026-10-30T15:54:51.018Z",
+   "flow": "LtYoWzJVvymLxs3ok4px",
+   "tool": "creative_add_flow_node:music",
+   "model": "eleven_music_v2_5",
+   "label": "M4 준비 (38s)",
+   "prompt": "Cinematic orchestral underscore that grows layer by layer over 38 seconds around one gentle modal theme in D minor: it begins with a softly plucked oud and a quiet warm string pad, then a soft wordless choir hum joins, then flowing legato strings, then a steady soft low frame drum and warm French horns, reaching a full, warm, hopeful but restrained swell in the last 5 seconds. Slow-moderate tempo, spacious and reverent, mid-range kept uncluttered and soft for a spoken voice over it, no solo vocals.",
+   "params": {
+    "duration_seconds": 38,
+    "instrumental": true,
+    "lyrics_type": "instrumental"
+   },
+   "why": "Score cue M4 for the preparation montage of 「침묵의 400년」 (price check first)",
+   "node": "",
+   "sessions": []
+  },
+  {
+   "use": "toolu_01RScdgDfYAYk2qPqijbmEzD",
+   "time": "2026-10-30T15:55:06.775Z",
+   "flow": "LtYoWzJVvymLxs3ok4px",
+   "tool": "creative_add_flow_node:music",
+   "model": "eleven_music_v2_5",
+   "label": "M1 시작 (19s)",
+   "prompt": "Near-silent ambient drone: a very soft, low sustained string pedal on D and a faint airy breath of wind, intimate and solemn, almost motionless; it slowly thins to almost nothing over the last 6 seconds. No melody, no drums, no choir, very quiet throughout.",
+   "params": {
+    "duration_seconds": 19,
+    "instrumental": true,
+    "lyrics_type": "instrumental"
+   },
+   "why": "Score cue M1, opening near-silence of 「침묵의 400년」",
+   "node": "",
+   "sessions": []
+  },
+  {
+   "use": "toolu_01RBBEtNtrxiQ412AU1iUu4q",
+   "time": "2026-10-30T15:55:10.411Z",
+   "flow": "LtYoWzJVvymLxs3ok4px",
+   "tool": "creative_add_flow_node:music",
+   "model": "eleven_music_v2_5",
+   "label": "M2 제목·하늘 (12s)",
+   "prompt": "Cinematic opening: one deep, warm orchestral chord in D minor swells immediately (low strings, soft French horns, a low timpani roll) and blooms for 3 seconds, then thins into a sparse, patient lament — a solo cello over a soft string pad, very slow and longing, quiet enough for a spoken voice. No drums after the opening swell, no vocals.",
+   "params": {
+    "duration_seconds": 12,
+    "instrumental": true,
+    "lyrics_type": "instrumental"
+   },
+   "why": "Score cue M2, title swell and waiting sky",
+   "node": "",
+   "sessions": []
+  },
+  {
+   "use": "toolu_01S5ewpmAmMxgEZJ8Wwy7V5X",
+   "time": "2026-10-30T15:55:13.762Z",
+   "flow": "LtYoWzJVvymLxs3ok4px",
+   "tool": "creative_add_flow_node:music",
+   "model": "eleven_music_v2_5",
+   "label": "M3 신상 (12s)",
+   "prompt": "Ancient and mysterious orchestral underscore in D minor: a low string ostinato with a soft frame-drum pulse, a distant wordless low male choir drone, and every two seconds a new metallic shimmer of bowed cymbal, rising slightly in intensity, regal and ominous, slow tempo, restrained so a voice can be heard.",
+   "params": {
+    "duration_seconds": 12,
+    "instrumental": true,
+    "lyrics_type": "instrumental"
+   },
+   "why": "Score cue M3, Daniel's statue",
+   "node": "",
+   "sessions": []
+  },
+  {
+   "use": "toolu_01RooafPmZuxT8XTevsG9FjK",
+   "time": "2026-10-30T15:55:18.012Z",
+   "flow": "LtYoWzJVvymLxs3ok4px",
+   "tool": "creative_add_flow_node:music",
+   "model": "eleven_music_v2_5",
+   "label": "M6 성전·전율① (34s)",
+   "prompt": "Sacred cinematic cue in D: it opens with a hushed shimmer of celesta and high soft strings; at 6 seconds a tender, simple piano motif over warm low strings; at 13 seconds everything holds on one suspended, breathless high string note for 2 seconds; from 15 seconds the strings rise steadily with a soft choir and a building timpani pulse, kept gentle under a spoken voice; at 27 seconds a radiant full orchestral and choir climax bursts out, then resolves warmly into a glowing major chord by 34 seconds.",
+   "params": {
+    "duration_seconds": 34,
+    "instrumental": true,
+    "lyrics_type": "instrumental"
+   },
+   "why": "Score cue M6, temple and climax one (Malachi to Luke)",
+   "node": "",
+   "sessions": []
+  },
+  {
+   "use": "toolu_012Wxu6jrqugw7gQni4RKZ1L",
+   "time": "2026-10-30T15:55:21.412Z",
+   "flow": "LtYoWzJVvymLxs3ok4px",
+   "tool": "creative_add_flow_node:music",
+   "model": "eleven_music_v2_5",
+   "label": "M7 돌 (9s)",
+   "prompt": "Epic orchestral hit cue: a deep low rumble and rising string tremolo for 3.5 seconds, then one massive impact with timpani, low brass and a cymbal crash, followed by a shimmering, awed, quiet sustained high string chord in D major that fades gently to the end.",
+   "params": {
+    "duration_seconds": 9,
+    "instrumental": true,
+    "lyrics_type": "instrumental"
+   },
+   "why": "Score cue M7, the stone strikes the statue",
+   "node": "",
+   "sessions": []
+  },
+  {
+   "use": "toolu_01PXk39UZMq3SRFXZtPwryda",
+   "time": "2026-10-30T15:55:24.961Z",
+   "flow": "LtYoWzJVvymLxs3ok4px",
+   "tool": "creative_add_flow_node:music",
+   "model": "eleven_music_v2_5",
+   "label": "M9 나사렛·전율② (23s)",
+   "prompt": "Intimate, expectant cinematic cue in D minor: a soft solo ney flute and quiet low strings over a slow heartbeat-like low pulse that gradually tightens for 13 seconds, quiet under a voice; at 13.5 seconds a sudden radiant swell in D major with wordless choir and full strings, then a warm glowing sustained chord that slowly settles and fades to the end.",
+   "params": {
+    "duration_seconds": 23,
+    "instrumental": true,
+    "lyrics_type": "instrumental"
+   },
+   "why": "Score cue M9, Nazareth climax two",
+   "node": "",
+   "sessions": []
+  },
+  {
+   "use": "toolu_013eeSVbpV2wkooEWnn8Lh5z",
+   "time": "2026-10-30T15:55:28.711Z",
+   "flow": "LtYoWzJVvymLxs3ok4px",
+   "tool": "creative_add_flow_node:music",
+   "model": "eleven_music_v2_5",
+   "label": "M10 십자가·부활·바울 (16s)",
+   "prompt": "Cinematic orchestral cue: solemn, sorrowful low strings and a soft choir for the first 4.5 seconds, then at 4.8 seconds a bright, luminous, triumphant swell in D major (choir, strings, horns), then a hopeful, forward-moving theme with gently driving strings and warm horns at moderate tempo, building with confidence to the end, mid-range kept clear for a voice.",
+   "params": {
+    "duration_seconds": 16,
+    "instrumental": true,
+    "lyrics_type": "instrumental"
+   },
+   "why": "Score cue M10, cross, resurrection and the gospel going out",
+   "node": "",
+   "sessions": []
+  },
+  {
+   "use": "toolu_011iqbSnMCQFPbPQLqnypKZi",
+   "time": "2026-10-30T15:55:31.480Z",
+   "flow": "LtYoWzJVvymLxs3ok4px",
+   "tool": "creative_add_flow_node:music",
+   "model": "eleven_music_v2_5",
+   "label": "M11 끝 (14s)",
+   "prompt": "Tender, warm and hopeful resolution in D major: soft piano and gentle strings with a faint celesta sparkle, slow and peaceful, quiet under a voice for 8 seconds, then a long glowing major chord that swells softly and fades out completely by 14 seconds.",
+   "params": {
+    "duration_seconds": 14,
+    "instrumental": true,
+    "lyrics_type": "instrumental"
+   },
+   "why": "Score cue M11, closing sky and reading card",
+   "node": "",
+   "sessions": []
+  },
+  {
+   "use": "toolu_019xq661h5LQQvagxR695S3X",
+   "time": "2026-10-30T15:56:00.712Z",
+   "flow": "LtYoWzJVvymLxs3ok4px",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S1 등잔",
+   "prompt": "Quiet oil lamp flame fluttering in a silent stone room at night, faint soft crackle, very calm",
+   "params": {
+    "duration_seconds": 12,
+    "prompt_influence": 0.4
+   },
+   "why": "SFX S1 lamp room tone",
+   "node": "",
+   "sessions": []
+  },
+  {
+   "use": "toolu_014YCFMTnEcq9s4Lj96DnodM",
+   "time": "2026-10-30T15:56:03.306Z",
+   "flow": "LtYoWzJVvymLxs3ok4px",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S2 두루마리 펴짐",
+   "prompt": "Old parchment scroll slowly unrolling on a wooden table, soft dry paper rustle",
+   "params": {
+    "duration_seconds": 3,
+    "prompt_influence": 0.5
+   },
+   "why": "SFX S2 scroll unrolling",
+   "node": "",
+   "sessions": []
+  },
+  {
+   "use": "toolu_0137cm5pKhU45wrZ6tkZP7Y3",
+   "time": "2026-10-30T15:56:05.757Z",
+   "flow": "LtYoWzJVvymLxs3ok4px",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S3 글자 꺼짐",
+   "prompt": "Tiny embers softly fizzling out one after another, delicate crackle fading to silence",
+   "params": {
+    "duration_seconds": 2.5,
+    "prompt_influence": 0.5
+   },
+   "why": "SFX S3 letters going out",
+   "node": "",
+   "sessions": []
+  },
+  {
+   "use": "toolu_01AAmWTwzHzkZCAFGnrKH5Ct",
+   "time": "2026-10-30T15:56:08.307Z",
+   "flow": "LtYoWzJVvymLxs3ok4px",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S4 밤바람",
+   "prompt": "Gentle night wind over desert hills, very faint distant crickets, calm and wide",
+   "params": {
+    "duration_seconds": 8,
+    "prompt_influence": 0.4
+   },
+   "why": "SFX S4 night wind",
+   "node": "",
+   "sessions": []
+  },
+  {
+   "use": "toolu_01KJaPEY7wDVAGnrh1cXfy1s",
+   "time": "2026-10-30T15:56:10.861Z",
+   "flow": "LtYoWzJVvymLxs3ok4px",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S6 번역 반짝임",
+   "prompt": "A soft magical shimmer sweeping slowly across parchment, gentle glassy sparkle",
+   "params": {
+    "duration_seconds": 3,
+    "prompt_influence": 0.5
+   },
+   "why": "SFX S6 translation shimmer",
+   "node": "",
+   "sessions": []
+  },
+  {
+   "use": "toolu_015cc3tHV6ch5SvNyYZV8a9q",
+   "time": "2026-10-30T15:56:13.307Z",
+   "flow": "LtYoWzJVvymLxs3ok4px",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S7 등불 켜짐",
+   "prompt": "Several small oil lamps igniting one after another, soft gentle whooshes of flame",
+   "params": {
+    "duration_seconds": 4,
+    "prompt_influence": 0.5
+   },
+   "why": "SFX S7 synagogue lamps lighting",
+   "node": "",
+   "sessions": []
+  },
+  {
+   "use": "toolu_013t38RooBh3zW5e7smq8NB6",
+   "time": "2026-10-30T15:56:15.911Z",
+   "flow": "LtYoWzJVvymLxs3ok4px",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S8 성전 분향",
+   "prompt": "Quiet ancient temple interior with soft incense smoke, a faint holy shimmer of tiny bells, reverberant",
+   "params": {
+    "duration_seconds": 5,
+    "prompt_influence": 0.4
+   },
+   "why": "SFX S8 temple incense",
+   "node": "",
+   "sessions": []
+  },
+  {
+   "use": "toolu_018Ez9dR11WJM4J76sYupbDZ",
+   "time": "2026-10-30T15:56:18.211Z",
+   "flow": "LtYoWzJVvymLxs3ok4px",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S9 빛의 펜",
+   "prompt": "Quill pen writing steadily on parchment with a soft magical shimmer trailing it",
+   "params": {
+    "duration_seconds": 4.5,
+    "prompt_influence": 0.5
+   },
+   "why": "SFX S9 pen of light writing",
+   "node": "",
+   "sessions": []
+  },
+  {
+   "use": "toolu_0122iJZdUaM6kGSFFUSzcxtF",
+   "time": "2026-10-30T15:56:27.492Z",
+   "flow": "LtYoWzJVvymLxs3ok4px",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S10 빛이 달려감",
+   "prompt": "A shimmering beam of light rushing across from left to right, rising magical whoosh with soft chimes",
+   "params": {
+    "duration_seconds": 5,
+    "prompt_influence": 0.5
+   },
+   "why": "SFX S10 light run",
+   "node": "",
+   "sessions": []
+  },
+  {
+   "use": "toolu_011dycq5JDo7W1LjR9hzEsx4",
+   "time": "2026-10-30T15:56:30.090Z",
+   "flow": "LtYoWzJVvymLxs3ok4px",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S11 산에서 돌이 나옴",
+   "prompt": "Rock cracking and breaking open with a bright magical shimmer",
+   "params": {
+    "duration_seconds": 1.5,
+    "prompt_influence": 0.5
+   },
+   "why": "SFX S11 rock cracks open",
+   "node": "",
+   "sessions": []
+  },
+  {
+   "use": "toolu_01Jr5t8v5L12Jeptu55i3TgS",
+   "time": "2026-10-30T15:56:32.540Z",
+   "flow": "LtYoWzJVvymLxs3ok4px",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S12 돌이 날아감",
+   "prompt": "Heavy stone hurtling fast through the air, deep accelerating whoosh",
+   "params": {
+    "duration_seconds": 1.6,
+    "prompt_influence": 0.5
+   },
+   "why": "SFX S12 stone flying",
+   "node": "",
+   "sessions": []
+  },
+  {
+   "use": "toolu_01UAY8GMUVuP1MpMTeZRtvpW",
+   "time": "2026-10-30T15:56:35.040Z",
+   "flow": "LtYoWzJVvymLxs3ok4px",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S13 충격",
+   "prompt": "Massive stone impact shattering a metal and clay statue, deep boom and crumbling debris",
+   "params": {
+    "duration_seconds": 3,
+    "prompt_influence": 0.5
+   },
+   "why": "SFX S13 impact on the statue",
+   "node": "",
+   "sessions": []
+  },
+  {
+   "use": "toolu_01SjobmaW1W61ghEbAxwF3Pw",
+   "time": "2026-10-30T15:56:37.541Z",
+   "flow": "LtYoWzJVvymLxs3ok4px",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S14 겨 날림",
+   "prompt": "Fine dust and chaff blown away by a strong gust of wind",
+   "params": {
+    "duration_seconds": 3,
+    "prompt_influence": 0.5
+   },
+   "why": "SFX S14 chaff blown away",
+   "node": "",
+   "sessions": []
+  },
+  {
+   "use": "toolu_0153zP4QG8McRPmPSzZj7TD9",
+   "time": "2026-10-30T15:56:40.140Z",
+   "flow": "LtYoWzJVvymLxs3ok4px",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S15 오늘 빛",
+   "prompt": "Warm bright whoosh of sacred light blooming, soft shimmering sparkle",
+   "params": {
+    "duration_seconds": 3,
+    "prompt_influence": 0.5
+   },
+   "why": "SFX S15 'today' light",
+   "node": "",
+   "sessions": []
+  },
+  {
+   "use": "toolu_013Y56UDmjhMDxTmDjp4kF6c",
+   "time": "2026-10-30T15:56:42.639Z",
+   "flow": "LtYoWzJVvymLxs3ok4px",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S16 부활 빛",
+   "prompt": "Radiant burst of light, bright rising shimmer swelling and fading",
+   "params": {
+    "duration_seconds": 3,
+    "prompt_influence": 0.5
+   },
+   "why": "SFX S16 resurrection flare",
+   "node": "",
+   "sessions": []
+  },
+  {
+   "use": "toolu_01C5jZoxVp8E7dM6oPH91DJa",
+   "time": "2026-10-30T15:56:44.795Z",
+   "flow": "LtYoWzJVvymLxs3ok4px",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S17 끝 밤",
+   "prompt": "Peaceful night ambience over a small town, distant soft wind, faint crickets",
+   "params": {
+    "duration_seconds": 9,
+    "prompt_influence": 0.4
+   },
+   "why": "SFX S17 closing night ambience",
+   "node": "",
+   "sessions": []
+  },
+  {
+   "use": "toolu_017AJUPaydmdYUdSg3aRBxkN",
+   "time": "2026-11-01T07:23:26.467Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Lest I come and strike the land with a decree of utter destruction.",
+   "params": {
+    "voice_id": "wfDOIda26ysF4KJAAUlG"
+   },
+   "why": "English narration line 01 for the film's English track (verbatim ESV, Malachi 4:6b)",
+   "node": "3YQkAXgg8UNHcx8v1ZOo",
+   "sessions": [
+    "zL6CYDjPDjHaIg17ayv8",
+    "dS9G3j1LoFSHnkXm6L84"
+   ]
+  },
+  {
+   "use": "toolu_01FEAzGfJ9Ypxh3oGpVNPRah",
+   "time": "2026-11-01T07:23:28.120Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "These are the last words of the Old Testament.",
+   "params": {
+    "voice_id": "wfDOIda26ysF4KJAAUlG"
+   },
+   "why": "English narration line 02",
+   "node": "hEKC1bsGPeZgYe4x5MSJ",
+   "sessions": [
+    "zVAMauDJXcRsbE1n7lBz",
+    "XSAw9goGY90lekkvEK89"
+   ]
+  },
+  {
+   "use": "toolu_011p87J7PRHCgj4kmQcRX7nW",
+   "time": "2026-11-01T07:23:29.869Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "In your Bible, it is just one page to the next book. But in the 400 years between, no new word came from heaven.",
+   "params": {
+    "voice_id": "wfDOIda26ysF4KJAAUlG"
+   },
+   "why": "English narration line 03",
+   "node": "93UWgwkOoTRk45rfIetT",
+   "sessions": [
+    "OLhIy6qcXCxhbGh6J5xb",
+    "AOFEx47ijE9uK09edLM3"
+   ]
+  },
+  {
+   "use": "toolu_018bUVwsfEV2GQipPgwbGLvD",
+   "time": "2026-11-01T07:23:31.370Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "People waited.",
+   "params": {
+    "voice_id": "wfDOIda26ysF4KJAAUlG"
+   },
+   "why": "English narration line 04",
+   "node": "QcAsrYL5EqoqCffTwYzC",
+   "sessions": [
+    "BiBxNwzBDJKS98yFQ7XA",
+    "cWxCfSFZyWbP1ldo2XSR"
+   ]
+  },
+  {
+   "use": "toolu_01LDUnJU1WaNLRzADcrd2yUT",
+   "time": "2026-11-01T07:23:33.021Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "If it seems slow, wait for it",
+   "params": {
+    "voice_id": "wfDOIda26ysF4KJAAUlG"
+   },
+   "why": "English narration line 05 (verbatim ESV, Habakkuk 2:3)",
+   "node": "bvyepAYhKZnvkJFEvBXa",
+   "sessions": [
+    "iqBTb4bsID70n5XTAQWX",
+    "zM2tkUaBSaTkyJg9Yw7t"
+   ]
+  },
+  {
+   "use": "toolu_01235zQreQXzaEPX7NPBPrJh",
+   "time": "2026-11-01T07:23:34.670Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "But God had not stopped.",
+   "params": {
+    "voice_id": "wfDOIda26ysF4KJAAUlG"
+   },
+   "why": "English narration line 06",
+   "node": "CepvReY9ZHTngPqrqexd",
+   "sessions": [
+    "ikPJsFTo6R4QeUayVv08",
+    "ruHnh8CBwLoMOJ8gtCde"
+   ]
+  },
+  {
+   "use": "toolu_0186VL4dSPHKUusTaobuQiri",
+   "time": "2026-11-01T07:23:36.270Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "These metals pointed to kingdoms that would rise one after another.",
+   "params": {
+    "voice_id": "wfDOIda26ysF4KJAAUlG"
+   },
+   "why": "English narration line 07",
+   "node": "hKHfeJn0pR39ceBlzirk",
+   "sessions": [
+    "eeVIi220xeeMjk9SuMCo",
+    "5eff07qdzI6RoVgM73zt"
+   ]
+  },
+  {
+   "use": "toolu_015WxLTG2xCA5DHMgHb3zm95",
+   "time": "2026-11-01T07:23:37.871Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Through those 400 years, God was preparing the world, step by step.",
+   "params": {
+    "voice_id": "wfDOIda26ysF4KJAAUlG"
+   },
+   "why": "English narration line 07b",
+   "node": "cFdLTd9UewUpSXdTzldM",
+   "sessions": [
+    "PYGIj8ckys1cOjZmcuZo",
+    "64Pnfl2RY671cdX25quU"
+   ]
+  },
+  {
+   "use": "toolu_01JLX4vYsVGodwwbbXS2hdog",
+   "time": "2026-11-01T07:23:39.471Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Wherever the scattered Jewish people went, they carried the Word with them,",
+   "params": {
+    "voice_id": "wfDOIda26ysF4KJAAUlG"
+   },
+   "why": "English narration line 08",
+   "node": "vc59t5pmdudJ0P13Jd9r",
+   "sessions": [
+    "8tCpywb1DNkAVcpvlkYw",
+    "aIFGvYmdpWrK2lPPJ5fL"
+   ]
+  },
+  {
+   "use": "toolu_01SuJW8Y1rCJTsp71D9SSpmH",
+   "time": "2026-11-01T07:23:40.867Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "After Alexander, the wide world could talk in one common language: Greek.",
+   "params": {
+    "voice_id": "wfDOIda26ysF4KJAAUlG"
+   },
+   "why": "English narration line 09",
+   "node": "9UmBpjiXFg1IK3kDpT4j",
+   "sessions": [
+    "83qEm1gVKb6QnDiDJCF9",
+    "CfNL2JSao4zc38pgtQHT"
+   ]
+  },
+  {
+   "use": "toolu_01MrTzdUEukuo5TkrhdmDnYN",
+   "time": "2026-11-01T07:24:00.699Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "The Scriptures were translated into that language, and even Gentiles could now read them,",
+   "params": {
+    "voice_id": "wfDOIda26ysF4KJAAUlG"
+   },
+   "why": "English narration line 10",
+   "node": "Km6Nnx9YmFECGXZ3BT4R",
+   "sessions": [
+    "YutIIw1z9Jd4EYCUegGc",
+    "tUcMgD1a3VTDyBv67nQt"
+   ]
+  },
+  {
+   "use": "toolu_01JXHaLVDQSxFLRzpdDfCEdf",
+   "time": "2026-11-01T07:24:02.453Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Rome opened roads and sea lanes to every corner of the empire.",
+   "params": {
+    "voice_id": "wfDOIda26ysF4KJAAUlG"
+   },
+   "why": "English narration line 14b",
+   "node": "mwX6Lwm16NLY9iPQENGV",
+   "sessions": [
+    "hePuy6drAc6eq9Za6dQF",
+    "F9pELqI6d2zjriBchvT2"
+   ]
+  },
+  {
+   "use": "toolu_018BaiS5c2PgVcctUoF5JNyN",
+   "time": "2026-11-01T07:24:04.155Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "In synagogues across the empire, the Word was read every Sabbath.",
+   "params": {
+    "voice_id": "wfDOIda26ysF4KJAAUlG"
+   },
+   "why": "English narration line 15",
+   "node": "76pCfs6iI9C8jAmjj8S6",
+   "sessions": [
+    "ozA5EcEK8hDiOnk0zVOl",
+    "Ucjw1xokEu58onBNru4p"
+   ]
+  },
+  {
+   "use": "toolu_01MyEySDFjQpHSSHX8xjXFCu",
+   "time": "2026-11-01T07:24:05.807Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "This is how God prepared the way.",
+   "params": {
+    "voice_id": "wfDOIda26ysF4KJAAUlG"
+   },
+   "why": "English narration line 17",
+   "node": "oBQ2JDF4w2Q7HTFWUyYi",
+   "sessions": [
+    "Im6DgD84Qs8sereizsvi",
+    "hA0PfogtYo3vDwwtlzIn"
+   ]
+  },
+  {
+   "use": "toolu_014Kz2NiYz5NNNckNZSw22uV",
+   "time": "2026-11-01T07:24:07.707Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Your wife Elizabeth will bear you a son, and you shall call his name John.",
+   "params": {
+    "voice_id": "wfDOIda26ysF4KJAAUlG"
+   },
+   "why": "English narration line 18 (verbatim ESV, Luke 1:13)",
+   "node": "TbKqA3gJ343pvUYC0coH",
+   "sessions": [
+    "1Xsu45gX8II1kqnhdzMu",
+    "cpS2rkQHTtJsIeEPxCrs"
+   ]
+  },
+  {
+   "use": "toolu_018j4YRxZ29iiyvBXH429DA1",
+   "time": "2026-11-01T07:24:09.408Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Behold, I will send you Elijah the prophet",
+   "params": {
+    "voice_id": "wfDOIda26ysF4KJAAUlG"
+   },
+   "why": "English narration line 19a (verbatim ESV, Malachi 4:5)",
+   "node": "zXLvvWm9bcdMg76OMulG",
+   "sessions": [
+    "hHIOROxAkxpq9ynnovuT",
+    "QrDaXwIWuai5chVTTBio"
+   ]
+  },
+  {
+   "use": "toolu_01NAJ34mPgHSR23qK9fJuUCA",
+   "time": "2026-11-01T07:24:11.209Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "And he will turn the hearts of fathers to their children",
+   "params": {
+    "voice_id": "wfDOIda26ysF4KJAAUlG"
+   },
+   "why": "English narration line 19 (verbatim ESV, Malachi 4:6a)",
+   "node": "2iYTIyC7BPXEND6wT5d8",
+   "sessions": [
+    "S6kcVVrjnBo0SPf7vBjT",
+    "KPLAYrSA1qeLKibaUlHj"
+   ]
+  },
+  {
+   "use": "toolu_01Gcc2gJ9YtmCGhqgZzLH9U5",
+   "time": "2026-11-01T07:24:13.061Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "In the spirit and power of Elijah, to turn the hearts of the fathers to the children,",
+   "params": {
+    "voice_id": "wfDOIda26ysF4KJAAUlG"
+   },
+   "why": "English narration line 20 (verbatim ESV, Luke 1:17)",
+   "node": "O3OznsJRU1h0UAtXaa9h",
+   "sessions": [
+    "9rrdM87uCNgj613ZbjIe",
+    "rQQo82IWucqnJWDvKrhj"
+   ]
+  },
+  {
+   "use": "toolu_01B4yXD17Q3KD2a4CTXqShe6",
+   "time": "2026-11-01T07:24:14.909Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "After 400 years, God spoke again. The one to come like Elijah: John the Baptist.",
+   "params": {
+    "voice_id": "wfDOIda26ysF4KJAAUlG"
+   },
+   "why": "English narration line 21",
+   "node": "o3EJ6apiq2hLTsA4BvJe",
+   "sessions": [
+    "PaZTIaBqaejBpIs9PpEg",
+    "kPIOHyDhLDed78l9aW0V"
+   ]
+  },
+  {
+   "use": "toolu_01BJxwZ9d27vUnCc8TE2YXJM",
+   "time": "2026-11-01T07:24:16.645Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "A stone was cut out by no human hand, and it struck the image on its feet of iron and clay, and broke them in pieces.",
+   "params": {
+    "voice_id": "wfDOIda26ysF4KJAAUlG"
+   },
+   "why": "English narration line 22a (verbatim ESV, Daniel 2:34)",
+   "node": "H6TlvLQy3aCLPkGpESLI",
+   "sessions": [
+    "He0p2XC5stY8HO7cKO1L",
+    "GQ59co6e9o1zY1hXHDyQ"
+   ]
+  },
+  {
+   "use": "toolu_015KCwNyZVbjKwvrjkmpvBjr",
+   "time": "2026-11-01T07:24:32.505Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "But when the fullness of time had come, God sent forth his Son,",
+   "params": {
+    "voice_id": "wfDOIda26ysF4KJAAUlG"
+   },
+   "why": "English narration line 22 (verbatim ESV, Galatians 4:4)",
+   "node": "MSnhLEnt7nYgrJBdctnU",
+   "sessions": [
+    "q5MHne7d3HFv9WeViX0W",
+    "ov5CccXItf59kf0gAe7x"
+   ]
+  },
+  {
+   "use": "toolu_01P1xasKhVDmGSHXXh1E5dur",
+   "time": "2026-11-01T07:24:34.305Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "The stone God sent: his Son, Jesus, came.",
+   "params": {
+    "voice_id": "wfDOIda26ysF4KJAAUlG"
+   },
+   "why": "English narration line 23",
+   "node": "mC1pRRweU16jCiGELv8G",
+   "sessions": [
+    "yoLwnZCO0KwBrTKlYWom",
+    "MO8BpXV6QZah22l6WzSJ"
+   ]
+  },
+  {
+   "use": "toolu_01UMDJhrTWrP9YqLWnGQtmGh",
+   "time": "2026-11-01T07:24:36.254Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "For the Son of Man came to seek and to save the lost.",
+   "params": {
+    "voice_id": "wfDOIda26ysF4KJAAUlG"
+   },
+   "why": "English narration line 24 (verbatim ESV, Luke 19:10)",
+   "node": "R6X628t6ZTkF4ElmMl7i",
+   "sessions": [
+    "A6PpsnbJhEukqiwGyf6e",
+    "uoKfIfNM6DWJ3w6IYSQR"
+   ]
+  },
+  {
+   "use": "toolu_013vUvbbcUntAwuPCasnGzbo",
+   "time": "2026-11-01T07:24:38.356Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "In the synagogue of his hometown, Jesus unrolled the scroll of the prophet Isaiah, written some 700 years before.",
+   "params": {
+    "voice_id": "wfDOIda26ysF4KJAAUlG"
+   },
+   "why": "English narration line 24b",
+   "node": "wLKetwYVWrmV2Nlo9Fkq",
+   "sessions": [
+    "XkB3Ze6wASAcD4qsoIla",
+    "blTVugTByZdCHOmKvdHk"
+   ]
+  },
+  {
+   "use": "toolu_01Dmwpjcjx8fqeVhB3YuWWGu",
+   "time": "2026-11-01T07:24:40.302Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Today this Scripture has been fulfilled in your hearing.",
+   "params": {
+    "voice_id": "wfDOIda26ysF4KJAAUlG"
+   },
+   "why": "English narration line 25 (verbatim ESV, Luke 4:21)",
+   "node": "tom5xFyquGcGtmRfjd2I",
+   "sessions": [
+    "BazsHO38zZ04fb47JGy5",
+    "CW8ocxgyMX9yXpFUfcdy"
+   ]
+  },
+  {
+   "use": "toolu_01VZzjphVeKTU4JAUZedTvkr",
+   "time": "2026-11-01T07:24:42.103Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "The one promised some 700 years before was Jesus himself.",
+   "params": {
+    "voice_id": "wfDOIda26ysF4KJAAUlG"
+   },
+   "why": "English narration line 25c",
+   "node": "04Asu7iUtYHsNBfy4rzG",
+   "sessions": [
+    "0abTSjYK17psJd8UZVta",
+    "2SZpsaGijLjjSN1mIpR7"
+   ]
+  },
+  {
+   "use": "toolu_01JMcge82KXjEyjF4XqCo5kv",
+   "time": "2026-11-01T07:24:44.002Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Jesus died on the cross for our sins and was raised on the third day.",
+   "params": {
+    "voice_id": "wfDOIda26ysF4KJAAUlG"
+   },
+   "why": "English narration line 25b",
+   "node": "vsbWGTvNoC11KtmfL40H",
+   "sessions": [
+    "DeWKzRWX5RELOPirHRmQ",
+    "pq9vTbIRjK9mn31uwJCo"
+   ]
+  },
+  {
+   "use": "toolu_01WYv8fNvKnoh2hw9N489AFx",
+   "time": "2026-11-01T07:24:45.802Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Along those roads, Paul preached the gospel in Greek, starting in the synagogues.",
+   "params": {
+    "voice_id": "wfDOIda26ysF4KJAAUlG"
+   },
+   "why": "English narration line 26a",
+   "node": "IE3wgsaydrBZaZKn14Sy",
+   "sessions": [
+    "WSVSlTmzqfQh7zZDS5j9",
+    "HIGpOd0Ly4qZRJdpPMle"
+   ]
+  },
+  {
+   "use": "toolu_01PEZDGv8MMPBWbPFHoWn3M4",
+   "time": "2026-11-01T07:24:47.388Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "God was at work even when he was silent. And now, he is at work in your waiting too.",
+   "params": {
+    "voice_id": "wfDOIda26ysF4KJAAUlG"
+   },
+   "why": "English narration line 27 (closing line)",
+   "node": "FGFMcjyz3kIjzUL3WWfC",
+   "sessions": [
+    "whydiIPOMhwwohCBlLss",
+    "Qg47dCDyfUgMzrWoHLJ5"
+   ]
+  },
+  {
+   "use": "toolu_01J12Kt3BFxXVvsr8LtdXBNg",
+   "time": "2026-11-01T07:29:42.490Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "No sea que yo venga y hiera la tierra con maldición.",
+   "params": {
+    "voice_id": "eA1KGxXkPw301wzoKzzz"
+   },
+   "why": "Spanish narration line 01 (verbatim RVR1960, Malaquías 4:6b)",
+   "node": "GVUZpewJxrE1uNtJBdcf",
+   "sessions": [
+    "L7BbPeHPYY9zab7R4ppf",
+    "C4z53sXyG052ljh4jjQ4"
+   ]
+  },
+  {
+   "use": "toolu_01YJNQdCvnQypr9yzUiTqVRE",
+   "time": "2026-11-01T07:29:44.335Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Son las últimas palabras del Antiguo Testamento.",
+   "params": {
+    "voice_id": "eA1KGxXkPw301wzoKzzz"
+   },
+   "why": "Spanish narration line 02",
+   "node": "WhE0cyZF9e77iS0Adpkf",
+   "sessions": [
+    "YTDXXG1NfT7Tke50Dykk",
+    "UzRLXikJUaKUwwBCXD28"
+   ]
+  },
+  {
+   "use": "toolu_01XLt48se7ZpBmvu6UFMt6wQ",
+   "time": "2026-11-01T07:29:46.532Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "En la Biblia, apenas una página de diferencia. Pero en los 400 años de por medio no se oyó ninguna palabra nueva del cielo.",
+   "params": {
+    "voice_id": "eA1KGxXkPw301wzoKzzz"
+   },
+   "why": "Spanish narration line 03",
+   "node": "xlLBC6jc0YwHmE0oAXnW",
+   "sessions": [
+    "uAaDdvQJlnsTDXbDB7V8",
+    "v6SjyIl5o9MSsdUCeYGQ"
+   ]
+  },
+  {
+   "use": "toolu_01Hoz6ypNBViqYP9Pz4RjnAf",
+   "time": "2026-11-01T07:29:48.614Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "La gente esperaba.",
+   "params": {
+    "voice_id": "eA1KGxXkPw301wzoKzzz"
+   },
+   "why": "Spanish narration line 04",
+   "node": "NLGTcN2zAYebTeE0WpO1",
+   "sessions": [
+    "J8uTEktumrAR3OLrWqzo",
+    "BrktXRgRQju4EcDCIst1"
+   ]
+  },
+  {
+   "use": "toolu_01CJ2fTUK7FVhMxDEAT6BqvR",
+   "time": "2026-11-01T07:29:50.330Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Aunque tardare, espéralo",
+   "params": {
+    "voice_id": "eA1KGxXkPw301wzoKzzz"
+   },
+   "why": "Spanish narration line 05 (verbatim RVR1960, Habacuc 2:3)",
+   "node": "qaStuEstkuAmxQCYN8Sv",
+   "sessions": [
+    "8V7e4Sz2cbRC23yHKcdq",
+    "qEO4Y8fnAtYcb4ASAAbJ"
+   ]
+  },
+  {
+   "use": "toolu_01SCHhek1L4H2sfkcQwQMC2T",
+   "time": "2026-11-01T07:29:52.209Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Pero Dios no se había detenido.",
+   "params": {
+    "voice_id": "eA1KGxXkPw301wzoKzzz"
+   },
+   "why": "Spanish narration line 06",
+   "node": "MSUsllbe4Op4VgvGddkT",
+   "sessions": [
+    "K8SKhvqikRFCRRKoc1tD",
+    "bJtqDe8ahlle9xfgE7js"
+   ]
+  },
+  {
+   "use": "toolu_01XFG7Doa8wmftgxZKXZgmnv",
+   "time": "2026-11-01T07:29:54.112Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Estos metales señalaban reinos que se levantarían uno tras otro.",
+   "params": {
+    "voice_id": "eA1KGxXkPw301wzoKzzz"
+   },
+   "why": "Spanish narration line 07",
+   "node": "RhmfXAg3G4rmgxLr2eZF",
+   "sessions": [
+    "nAPRPJVfyWf8qXuB7G9D",
+    "9gDjxTJ2zaJY4AbqN0gg"
+   ]
+  },
+  {
+   "use": "toolu_01QPkdN4LN7dh3z6Qi7ZA9vC",
+   "time": "2026-11-01T07:29:55.918Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Durante esos 400 años, Dios fue preparando el mundo, paso a paso.",
+   "params": {
+    "voice_id": "eA1KGxXkPw301wzoKzzz"
+   },
+   "why": "Spanish narration line 07b",
+   "node": "p4tdoVkcVozf88R2KDo8",
+   "sessions": [
+    "3Wfd8MirSSvJ25dNRsgZ",
+    "zx6xRsl8VugRzj3w9EfJ"
+   ]
+  },
+  {
+   "use": "toolu_019otgSgCn4WikZ6KNeHynpS",
+   "time": "2026-11-01T07:29:57.888Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Dondequiera que iba el pueblo judío disperso, llevaba consigo la Palabra,",
+   "params": {
+    "voice_id": "eA1KGxXkPw301wzoKzzz"
+   },
+   "why": "Spanish narration line 08",
+   "node": "w6e0miW0gr7NpkiVAQZg",
+   "sessions": [
+    "OVqCqlUcWt3mg1T1iSBP",
+    "L3hseFVqwEXBT2QcpFAI"
+   ]
+  },
+  {
+   "use": "toolu_016h1qE2g9bGoND47ZaMdKwW",
+   "time": "2026-11-01T07:29:59.684Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Después de Alejandro, el ancho mundo llegó a entenderse en una sola lengua: el griego.",
+   "params": {
+    "voice_id": "eA1KGxXkPw301wzoKzzz"
+   },
+   "why": "Spanish narration line 09",
+   "node": "6o4PRuFfHrDMk2w1dSrT",
+   "sessions": [
+    "lQ7kuSmgLa8MgKnXU9Ea",
+    "pKC3FrbwegkN2mDVPkus"
+   ]
+  },
+  {
+   "use": "toolu_01RAXGkkmKcUTmFnqdVeVd2z",
+   "time": "2026-11-01T07:30:23.314Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "En esa lengua se tradujeron las Escrituras, y también los gentiles pudieron leerlas,",
+   "params": {
+    "voice_id": "eA1KGxXkPw301wzoKzzz"
+   },
+   "why": "Spanish narration line 10",
+   "node": "kcfPm2v1S6rVUA4CeDtA",
+   "sessions": [
+    "glmOIvsa8BKR6HuUn1MW",
+    "O5jfs28SBLX73UyO3WY0"
+   ]
+  },
+  {
+   "use": "toolu_01WZSoGg83HrcXWfiZ9GVhRP",
+   "time": "2026-11-01T07:30:25.323Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Roma abrió caminos y rutas marítimas hasta el último rincón del imperio.",
+   "params": {
+    "voice_id": "eA1KGxXkPw301wzoKzzz"
+   },
+   "why": "Spanish narration line 14b",
+   "node": "j5vG80wrGNPrQHv1tm4s",
+   "sessions": [
+    "PGKxOUvs6f9dytSplmFU",
+    "AFVuW8PQoIdMe4X1Wg5q"
+   ]
+  },
+  {
+   "use": "toolu_01AAtp2jCoAGagQpuFGdcqR5",
+   "time": "2026-11-01T07:30:27.216Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "En las sinagogas de todo el imperio, se leía la Palabra cada día de reposo.",
+   "params": {
+    "voice_id": "eA1KGxXkPw301wzoKzzz"
+   },
+   "why": "Spanish narration line 15",
+   "node": "rOIeeoLoQd9XCoIeSvCJ",
+   "sessions": [
+    "YgnkN5KAHiTlG3CO9gwl",
+    "nydKYcmjAsuf23Y2i7Ef"
+   ]
+  },
+  {
+   "use": "toolu_01VcDiJdGNPM9GH1AM8R5C4G",
+   "time": "2026-11-01T07:30:28.833Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Así preparó Dios el camino.",
+   "params": {
+    "voice_id": "eA1KGxXkPw301wzoKzzz"
+   },
+   "why": "Spanish narration line 17",
+   "node": "tBNxfdgtERmEhlz3JGdb",
+   "sessions": [
+    "1KMDbudFlcv19cu6Pqxh",
+    "vBfDtsqzY26jNJB8et8f"
+   ]
+  },
+  {
+   "use": "toolu_01CaQMPRv4NqRPyiWhbyrGN4",
+   "time": "2026-11-01T07:30:30.957Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Tu mujer Elisabet te dará a luz un hijo, y llamarás su nombre Juan.",
+   "params": {
+    "voice_id": "eA1KGxXkPw301wzoKzzz"
+   },
+   "why": "Spanish narration line 18 (verbatim RVR1960, Lucas 1:13)",
+   "node": "S6e0y0389ZHIvVNVeqeI",
+   "sessions": [
+    "KWw6hEcpsbUU1J2WU5XR",
+    "5v4Q7VLJ3Ud5iD58oTrz"
+   ]
+  },
+  {
+   "use": "toolu_01Tsc1MxgsF42zDTR7hiKybm",
+   "time": "2026-11-01T07:30:33.175Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "He aquí, yo os envío el profeta Elías",
+   "params": {
+    "voice_id": "eA1KGxXkPw301wzoKzzz"
+   },
+   "why": "Spanish narration line 19a (verbatim RVR1960, Malaquías 4:5)",
+   "node": "QaL9I2MaejcD9Pnt3g9G",
+   "sessions": [
+    "Y14KvZmAveE8SSGSTeAs",
+    "9tUbrK1sz3Uvz5pRLkaS"
+   ]
+  },
+  {
+   "use": "toolu_01GAtuzKzVxSMhNLbrG84MdW",
+   "time": "2026-11-01T07:30:35.448Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Él hará volver el corazón de los padres hacia los hijos",
+   "params": {
+    "voice_id": "eA1KGxXkPw301wzoKzzz"
+   },
+   "why": "Spanish narration line 19 (verbatim RVR1960, Malaquías 4:6a)",
+   "node": "uOwhLOqJpKNrtQgjzPAv",
+   "sessions": [
+    "RHlyTTbhT1Cde2a3fPzl",
+    "A02qi2CXSZXUcBons09E"
+   ]
+  },
+  {
+   "use": "toolu_01JcRGiQbdbe9HBKWmp1pjxG",
+   "time": "2026-11-01T07:30:37.321Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Con el espíritu y el poder de Elías, para hacer volver los corazones de los padres a los hijos,",
+   "params": {
+    "voice_id": "eA1KGxXkPw301wzoKzzz"
+   },
+   "why": "Spanish narration line 20 (verbatim RVR1960, Lucas 1:17)",
+   "node": "qoS3dMERaKWWgEnu1JTR",
+   "sessions": [
+    "ZN3NhEejZR1h3bMXhVe7",
+    "5R7n6BqQU7VTEmYrCQHw"
+   ]
+  },
+  {
+   "use": "toolu_0118wRNWU6ooyWk1XeKLri81",
+   "time": "2026-11-01T07:30:40.076Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Después de 400 años, Dios volvió a hablar. El que vendría como Elías: Juan el Bautista.",
+   "params": {
+    "voice_id": "eA1KGxXkPw301wzoKzzz"
+   },
+   "why": "Spanish narration line 21",
+   "node": "FPbCRKq6RlRTeCJGtAVS",
+   "sessions": [
+    "8tVFMqSs9NVXD3Q9rMti",
+    "rHygT2iFBwjgkCykfG9o"
+   ]
+  },
+  {
+   "use": "toolu_01CePWxghSUk8MM33dWNfnhQ",
+   "time": "2026-11-01T07:30:41.596Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Una piedra fue cortada, no con mano, e hirió a la imagen en sus pies de hierro y de barro cocido, y los desmenuzó.",
+   "params": {
+    "voice_id": "eA1KGxXkPw301wzoKzzz"
+   },
+   "why": "Spanish narration line 22a (verbatim RVR1960, Daniel 2:34)",
+   "node": "laLS1EdgxDLrBQqw8m8u",
+   "sessions": [
+    "P6NahmDm0d2zulwZrlkM",
+    "HFHXive4BMiXJYkWMgj6"
+   ]
+  },
+  {
+   "use": "toolu_01EeDvPQtjm9uinoykaa53kT",
+   "time": "2026-11-01T07:30:59.430Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Pero cuando vino el cumplimiento del tiempo, Dios envió a su Hijo,",
+   "params": {
+    "voice_id": "eA1KGxXkPw301wzoKzzz"
+   },
+   "why": "Spanish narration line 22 (verbatim RVR1960, Gálatas 4:4)",
+   "node": "b3YDtKlH6RuSkRjCwEB7",
+   "sessions": [
+    "1DI8e0aFIwSSt8XTccGE",
+    "9xPegmmihQOYRgSxRmga"
+   ]
+  },
+  {
+   "use": "toolu_015txc7wW7SnsyXasmShvzdC",
+   "time": "2026-11-01T07:31:01.445Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "La piedra que Dios envió: su Hijo, Jesús, vino al mundo.",
+   "params": {
+    "voice_id": "eA1KGxXkPw301wzoKzzz"
+   },
+   "why": "Spanish narration line 23",
+   "node": "pS1ngHkJzUMQD2S9KvvM",
+   "sessions": [
+    "wblaPT2qfCFSmFOfnpNq",
+    "s1M6H6uJ9pp5sxMUNQdK"
+   ]
+  },
+  {
+   "use": "toolu_01PE8d3uaqMD99MHojfUKqXJ",
+   "time": "2026-11-01T07:31:03.533Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Porque el Hijo del Hombre vino a buscar y a salvar lo que se había perdido.",
+   "params": {
+    "voice_id": "eA1KGxXkPw301wzoKzzz"
+   },
+   "why": "Spanish narration line 24 (verbatim RVR1960, Lucas 19:10)",
+   "node": "ENs53f8aUc0j79kifznf",
+   "sessions": [
+    "C4VFXpifQA9JRcpaNqf3",
+    "OOl5rPRrg3mA0LwyjSXO"
+   ]
+  },
+  {
+   "use": "toolu_01HoHJHNUV98pSXexXsUUyir",
+   "time": "2026-11-01T07:31:05.662Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "En la sinagoga de su tierra, Jesús abrió el libro del profeta Isaías, escrito unos 700 años antes.",
+   "params": {
+    "voice_id": "eA1KGxXkPw301wzoKzzz"
+   },
+   "why": "Spanish narration line 24b",
+   "node": "JMayX8AmFNejBuIXfdXV",
+   "sessions": [
+    "mgvL0mgf1KU9MjQfdirY",
+    "IlOMyzhaH2ZMJZtdtfUQ"
+   ]
+  },
+  {
+   "use": "toolu_01NQ2kQctCvDQ1iutLgyTxpj",
+   "time": "2026-11-01T07:31:07.923Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Hoy se ha cumplido esta Escritura delante de vosotros.",
+   "params": {
+    "voice_id": "eA1KGxXkPw301wzoKzzz"
+   },
+   "why": "Spanish narration line 25 (verbatim RVR1960, Lucas 4:21)",
+   "node": "L4QHIAAMSvHHkAEVQoU1",
+   "sessions": [
+    "yLyYwFWyBYlJFTUxKR2G",
+    "NBGLEeIOn9xb7ZEhD038"
+   ]
+  },
+  {
+   "use": "toolu_01FPs1234iT68g8ySutMuKqY",
+   "time": "2026-11-01T07:31:09.879Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Aquel de quien hablaba esa promesa, hecha 700 años antes, era Jesús mismo.",
+   "params": {
+    "voice_id": "eA1KGxXkPw301wzoKzzz"
+   },
+   "why": "Spanish narration line 25c",
+   "node": "ETEAOhAjmlZLCLf7xl9K",
+   "sessions": [
+    "coMEKATTLs17eIcb3GvJ",
+    "Z28vYBC0GHtBotyl30mC"
+   ]
+  },
+  {
+   "use": "toolu_01E6acz14iKwSGQf4MFZGtBz",
+   "time": "2026-11-01T07:31:12.803Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Jesús murió en la cruz por nuestros pecados y resucitó al tercer día.",
+   "params": {
+    "voice_id": "eA1KGxXkPw301wzoKzzz"
+   },
+   "why": "Spanish narration line 25b",
+   "node": "Um3BtSiyhN5Mk8ABOElb",
+   "sessions": [
+    "LVDGvJgiDgJkURVy42nF",
+    "vxnxszifLz816twasMcH"
+   ]
+  },
+  {
+   "use": "toolu_01Uzz9mMRDwdBaMHh8y8STXE",
+   "time": "2026-11-01T07:31:14.375Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "El apóstol Pablo recorrió esos caminos y anunció el evangelio en griego, primero en las sinagogas.",
+   "params": {
+    "voice_id": "eA1KGxXkPw301wzoKzzz"
+   },
+   "why": "Spanish narration line 26a",
+   "node": "GQFzH4erRsDl3x8QJIv4",
+   "sessions": [
+    "uNSjsD7qjrv4ACUWBwd0",
+    "KMFOdhRY4e7T8FDkgIOn"
+   ]
+  },
+  {
+   "use": "toolu_01HioXrj66m6fRkY9yiqLoye",
+   "time": "2026-11-01T07:31:16.155Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Dios estaba obrando aun cuando callaba. Y ahora también obra mientras tú esperas.",
+   "params": {
+    "voice_id": "eA1KGxXkPw301wzoKzzz"
+   },
+   "why": "Spanish narration line 27 (closing line)",
+   "node": "qDr1WNc1MJuJKeZSsdBX",
+   "sessions": [
+    "5zgCVqghiIZWrDTuSexj",
+    "j7VBrSUK71HWIzelyguy"
+   ]
+  },
+  {
+   "use": "toolu_0147SAcyd7WQbC8SJSeFLKVp",
+   "time": "2026-11-01T07:32:01.844Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Para que eu não venha e fira a terra com maldição.",
+   "params": {
+    "voice_id": "bZztR6P62TDbe6sgaZgz"
+   },
+   "why": "Brazilian Portuguese narration line 01 (verbatim Almeida ARC, Malaquias 4:6b)",
+   "node": "lhIFV3cwpsCPGx3tMeqX",
+   "sessions": [
+    "Gr80pDC0iZMy0LlvcKuQ",
+    "pS7apgMLKdzTuHlExKQ2"
+   ]
+  },
+  {
+   "use": "toolu_01WgwQAfZJyXnbGwjBCLnHtJ",
+   "time": "2026-11-01T07:32:03.724Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "São as últimas palavras do Antigo Testamento.",
+   "params": {
+    "voice_id": "bZztR6P62TDbe6sgaZgz"
+   },
+   "why": "Brazilian Portuguese narration line 02",
+   "node": "BmB4JyET2sKaW6FYwF2Y",
+   "sessions": [
+    "nWN39Gy8WVGNOL7RCjYC",
+    "wDV1BAWj0lRtQaT7QVV0"
+   ]
+  },
+  {
+   "use": "toolu_01JpJWobN9nccVGERFG8VFWE",
+   "time": "2026-11-01T07:32:05.579Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Na Bíblia, apenas uma página de distância. Mas, nesses 400 anos, nenhuma palavra nova veio do céu.",
+   "params": {
+    "voice_id": "bZztR6P62TDbe6sgaZgz"
+   },
+   "why": "Brazilian Portuguese narration line 03",
+   "node": "MFyLFaiYJTamsAV9cimt",
+   "sessions": [
+    "VkMYamSvRul8UuUOwj3A",
+    "h6C1xIezF0szsb6Y9JLX"
+   ]
+  },
+  {
+   "use": "toolu_01DoRBLPM2zAn6FcJHdaGEmq",
+   "time": "2026-11-01T07:32:07.365Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "As pessoas esperavam.",
+   "params": {
+    "voice_id": "bZztR6P62TDbe6sgaZgz"
+   },
+   "why": "Brazilian Portuguese narration line 04",
+   "node": "PqMvNOiFdFa4CPoM8zeb",
+   "sessions": [
+    "cvLXqPHge38KSIjA79pg",
+    "hDZSClNvyj3Aecx9x0QC"
+   ]
+  },
+  {
+   "use": "toolu_01LQCv9xjnvrE4RXpaNL3aY7",
+   "time": "2026-11-01T07:32:09.083Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Se tardar, espera-o",
+   "params": {
+    "voice_id": "bZztR6P62TDbe6sgaZgz"
+   },
+   "why": "Brazilian Portuguese narration line 05 (verbatim Almeida ARC, Habacuque 2:3)",
+   "node": "GEWc7AmtRqyQ7CqnEDBi",
+   "sessions": [
+    "TXpwR1hk3oXhfKwSogHX",
+    "vWFXaMS5NOGhMg2MDBx4"
+   ]
+  },
+  {
+   "use": "toolu_01M9D9f1b2Ad9Pe5ygFPxUv2",
+   "time": "2026-11-01T07:32:10.865Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Mas Deus não havia parado.",
+   "params": {
+    "voice_id": "bZztR6P62TDbe6sgaZgz"
+   },
+   "why": "Brazilian Portuguese narration line 06",
+   "node": "3xHU35MrDUoKhjupKz8e",
+   "sessions": [
+    "mIeOBLyK8fYwzAzmBCWP",
+    "ZOJb2Pfv7Cjka3LU9vLO"
+   ]
+  },
+  {
+   "use": "toolu_012mNn6DiDbv3U9CRpngi7b9",
+   "time": "2026-11-01T07:32:12.533Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Esses metais apontavam para reinos que surgiriam um após o outro.",
+   "params": {
+    "voice_id": "bZztR6P62TDbe6sgaZgz"
+   },
+   "why": "Brazilian Portuguese narration line 07",
+   "node": "PKX7masFrKhJSxckb48a",
+   "sessions": [
+    "ty4WuJTZ4yA37UFBsfZl",
+    "kUAtWniYAuG3D5sLovli"
+   ]
+  },
+  {
+   "use": "toolu_01UAwRsHCnST8oLzoXaQGJnT",
+   "time": "2026-11-01T07:32:14.337Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Durante esses 400 anos, Deus foi preparando o mundo, passo a passo.",
+   "params": {
+    "voice_id": "bZztR6P62TDbe6sgaZgz"
+   },
+   "why": "Brazilian Portuguese narration line 07b",
+   "node": "bTscZbkZ8ygpjmzFGKNV",
+   "sessions": [
+    "kxTNQgdwZhmH5jDoIKz8",
+    "Z9XUcEvaLQjmeOY2wG6B"
+   ]
+  },
+  {
+   "use": "toolu_01DzChZazDqofKNG8Dr9Gv7b",
+   "time": "2026-11-01T07:32:16.306Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Aonde quer que o povo judeu disperso fosse, levava consigo a Palavra,",
+   "params": {
+    "voice_id": "bZztR6P62TDbe6sgaZgz"
+   },
+   "why": "Brazilian Portuguese narration line 08",
+   "node": "JEke4v4ka47vyYyue9ts",
+   "sessions": [
+    "rXNc6p3m1NRCSQbJ4rzL",
+    "uZNBif5L5ubQ5yG6c8fn"
+   ]
+  },
+  {
+   "use": "toolu_01RnXP8857DrGiS5yRSphVEd",
+   "time": "2026-11-01T07:32:17.997Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Depois de Alexandre, o vasto mundo passou a se entender em uma só língua: o grego.",
+   "params": {
+    "voice_id": "bZztR6P62TDbe6sgaZgz"
+   },
+   "why": "Brazilian Portuguese narration line 09",
+   "node": "3d2hvvZ1WNAzymqhJ0j2",
+   "sessions": [
+    "hYqAjYyruUQwVopNFEU7",
+    "oSf2EkK6umzdCWa1ep5M"
+   ]
+  },
+  {
+   "use": "toolu_01TMZAcskLBRSpsa8NQTVVYA",
+   "time": "2026-11-01T07:32:34.722Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "As Escrituras foram traduzidas para essa língua, e assim também os gentios puderam lê-las,",
+   "params": {
+    "voice_id": "bZztR6P62TDbe6sgaZgz"
+   },
+   "why": "Brazilian Portuguese narration line 10",
+   "node": "xgrAOMnjlzmKNiXElTeU",
+   "sessions": [
+    "CrizaxF5jQ4IwSFR6wDC",
+    "DmVpBBn2y4btX4WYtSGQ"
+   ]
+  },
+  {
+   "use": "toolu_01NBRnmVatGocb58fFNpVgSx",
+   "time": "2026-11-01T07:32:36.669Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Roma abriu estradas e rotas marítimas a todos os cantos do império.",
+   "params": {
+    "voice_id": "bZztR6P62TDbe6sgaZgz"
+   },
+   "why": "Brazilian Portuguese narration line 14b",
+   "node": "BvslBZ5FVfRUAgo2aBDa",
+   "sessions": [
+    "OqqABP732Q81hPHQTnNv",
+    "8rHCpmrBBNi18ZRCVmiw"
+   ]
+  },
+  {
+   "use": "toolu_01JPApCPjXFCLBTcdkXscyEz",
+   "time": "2026-11-01T07:32:38.433Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Nas sinagogas de todo o império, a Palavra era lida a cada sábado.",
+   "params": {
+    "voice_id": "bZztR6P62TDbe6sgaZgz"
+   },
+   "why": "Brazilian Portuguese narration line 15",
+   "node": "6SPXMlmDyS36bTsSe9Wz",
+   "sessions": [
+    "MS344WJ2FlH4n92xSTOQ",
+    "XhjIj3cLoNWuNwNhLgQO"
+   ]
+  },
+  {
+   "use": "toolu_01LtCh3kzD8wRQfGYz2xuBo5",
+   "time": "2026-11-01T07:32:40.321Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Foi assim que Deus preparou o caminho.",
+   "params": {
+    "voice_id": "bZztR6P62TDbe6sgaZgz"
+   },
+   "why": "Brazilian Portuguese narration line 17",
+   "node": "Kmoor1juGthUhZTcMSai",
+   "sessions": [
+    "7MmVXAtE1q0mpFrgwbyD",
+    "501qj9LPYrbIlTmHk2SP"
+   ]
+  },
+  {
+   "use": "toolu_01WGDctCcuQ5tboktSgsS5CY",
+   "time": "2026-11-01T07:32:42.370Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Isabel, tua mulher, dará à luz um filho, e lhe porás o nome de João.",
+   "params": {
+    "voice_id": "bZztR6P62TDbe6sgaZgz"
+   },
+   "why": "Brazilian Portuguese narration line 18 (verbatim Almeida ARC, Lucas 1:13)",
+   "node": "dJdNluRNZrMSP4deiJRO",
+   "sessions": [
+    "1rQQVsfdcsI7TeMxOWLZ",
+    "KQDnl4P1kgk5Hdysfffd"
+   ]
+  },
+  {
+   "use": "toolu_01N1SvTJAHe1qebQP2PBCY1S",
+   "time": "2026-11-01T07:32:44.482Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Eis que eu vos envio o profeta Elias",
+   "params": {
+    "voice_id": "bZztR6P62TDbe6sgaZgz"
+   },
+   "why": "Brazilian Portuguese narration line 19a (verbatim Almeida ARC, Malaquias 4:5)",
+   "node": "ltg8o7At1JrK0S9euPcV",
+   "sessions": [
+    "5G2owo7GdLRNbMKd1Moe",
+    "O11Fap2ktn7aiMt6cgkR"
+   ]
+  },
+  {
+   "use": "toolu_014sqesdfpR3hhwBPvuej9yo",
+   "time": "2026-11-01T07:32:46.467Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "E converterá o coração dos pais aos filhos",
+   "params": {
+    "voice_id": "bZztR6P62TDbe6sgaZgz"
+   },
+   "why": "Brazilian Portuguese narration line 19 (verbatim Almeida ARC, Malaquias 4:6a)",
+   "node": "yR181qqCUQQUl77unXn3",
+   "sessions": [
+    "LUc95eilvurRI1xBEWFz",
+    "UdBo2iVpKmgibgghKTMC"
+   ]
+  },
+  {
+   "use": "toolu_013BtTd5L9Xf8TnNRTd7AHT1",
+   "time": "2026-11-01T07:32:48.679Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "No espírito e virtude de Elias, para converter o coração dos pais aos filhos",
+   "params": {
+    "voice_id": "bZztR6P62TDbe6sgaZgz"
+   },
+   "why": "Brazilian Portuguese narration line 20 (verbatim Almeida ARC, Lucas 1:17)",
+   "node": "vhHSSExGgkvhdz0XSaW5",
+   "sessions": [
+    "x5sOlOYknfGYN7GdBxDC",
+    "oJiCqmXZtvaXO5LYHuVA"
+   ]
+  },
+  {
+   "use": "toolu_013ui6WrXtBzMTyBgigbFbbD",
+   "time": "2026-11-01T07:32:50.772Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Depois de 400 anos, Deus voltou a falar. Aquele que viria como Elias: João Batista.",
+   "params": {
+    "voice_id": "bZztR6P62TDbe6sgaZgz"
+   },
+   "why": "Brazilian Portuguese narration line 21",
+   "node": "c3dkFiNir9Ebge2MPmyL",
+   "sessions": [
+    "oSH9DkJsEeVXvr7jFCR3",
+    "q2FU2tUwLID9dPEPlJJE"
+   ]
+  },
+  {
+   "use": "toolu_017rUfyabp5uubuJBaYbjqn3",
+   "time": "2026-11-01T07:32:52.653Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Uma pedra foi cortada, sem mão, a qual feriu a estátua nos pés de ferro e de barro e os esmiuçou.",
+   "params": {
+    "voice_id": "bZztR6P62TDbe6sgaZgz"
+   },
+   "why": "Brazilian Portuguese narration line 22a (verbatim Almeida ARC, Daniel 2:34)",
+   "node": "m5UyJ2LzI6Lx1HxaswFF",
+   "sessions": [
+    "ZmFAwfiQVOBtzyDTJvIh",
+    "KO7WInXguyH5uGk5zSrm"
+   ]
+  },
+  {
+   "use": "toolu_01HN6amGkQWN39ixwyF9xnPk",
+   "time": "2026-11-01T07:33:12.076Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Vindo a plenitude dos tempos, Deus enviou seu Filho,",
+   "params": {
+    "voice_id": "bZztR6P62TDbe6sgaZgz"
+   },
+   "why": "Brazilian Portuguese narration line 22 (verbatim Almeida ARC, Gálatas 4:4)",
+   "node": "6cYyJ2Ijz5XpyRpD5qdN",
+   "sessions": [
+    "LDMhaygGp28b3ZrKcZ1U",
+    "j4fIFAKMsSKc4ZyzOahh"
+   ]
+  },
+  {
+   "use": "toolu_011mhh8HF3hu3vrt26ZASfr8",
+   "time": "2026-11-01T07:33:14.026Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "A pedra que Deus enviou: seu Filho, Jesus, veio.",
+   "params": {
+    "voice_id": "bZztR6P62TDbe6sgaZgz"
+   },
+   "why": "Brazilian Portuguese narration line 23",
+   "node": "qrZTNoqAN8uBxOobyjMf",
+   "sessions": [
+    "H5kYdVOFgepSc7cChvdy",
+    "zc7ctvARCVOIpVL1RvQn"
+   ]
+  },
+  {
+   "use": "toolu_01LqUpy8eyneqLyYYvf72mJ5",
+   "time": "2026-11-01T07:33:16.124Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Porque o Filho do Homem veio buscar e salvar o que se havia perdido.",
+   "params": {
+    "voice_id": "bZztR6P62TDbe6sgaZgz"
+   },
+   "why": "Brazilian Portuguese narration line 24 (verbatim Almeida ARC, Lucas 19:10)",
+   "node": "VCuNuChUPH3SpPxrQyPM",
+   "sessions": [
+    "KW3fZY8H1Q1P8I05RDJn",
+    "CNztd3QyoKmMenneUVUu"
+   ]
+  },
+  {
+   "use": "toolu_0117tRmBRmP544kQWneKYL8Y",
+   "time": "2026-11-01T07:33:18.349Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Na sinagoga de sua cidade, Jesus abriu o livro do profeta Isaías, escrito há mais de 700 anos.",
+   "params": {
+    "voice_id": "bZztR6P62TDbe6sgaZgz"
+   },
+   "why": "Brazilian Portuguese narration line 24b",
+   "node": "XoVycIMvPdiwpcePjr2v",
+   "sessions": [
+    "nXQUfbCNoHUO0RLydle0",
+    "O32qqpiYNDNNKo7VDflr"
+   ]
+  },
+  {
+   "use": "toolu_013sGj9xkeFRQ85hGt52TUy9",
+   "time": "2026-11-01T07:33:20.530Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Hoje se cumpriu esta Escritura em vossos ouvidos.",
+   "params": {
+    "voice_id": "bZztR6P62TDbe6sgaZgz"
+   },
+   "why": "Brazilian Portuguese narration line 25 (verbatim Almeida ARC, Lucas 4:21)",
+   "node": "46NdJFXXv2COLAKddPOy",
+   "sessions": [
+    "Q82kqaS5GXOYcBtA2rIZ",
+    "tvdXZFrNerkB82l61v1E"
+   ]
+  },
+  {
+   "use": "toolu_01J13c5HohQTSSKVMd4nBMy6",
+   "time": "2026-11-01T07:33:22.411Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Aquele que fora prometido há mais de 700 anos era o próprio Jesus.",
+   "params": {
+    "voice_id": "bZztR6P62TDbe6sgaZgz"
+   },
+   "why": "Brazilian Portuguese narration line 25c",
+   "node": "a6c2zfnY0c2f1GskrBPP",
+   "sessions": [
+    "trAS9Fu2Xzk9JPtE827X",
+    "MIfuyM8RbsEMiMJtPfJP"
+   ]
+  },
+  {
+   "use": "toolu_019Tms6Y3NTNJoFNUFHSG4tG",
+   "time": "2026-11-01T07:33:24.401Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Jesus morreu na cruz por nossos pecados e ressuscitou ao terceiro dia.",
+   "params": {
+    "voice_id": "bZztR6P62TDbe6sgaZgz"
+   },
+   "why": "Brazilian Portuguese narration line 25b",
+   "node": "nFnowAAvz0gs4q0zXxJV",
+   "sessions": [
+    "mXLy3oTV5A7ktmY78XSB",
+    "A9IK0n1J4vaKrMIU51dc"
+   ]
+  },
+  {
+   "use": "toolu_019weZ2xL6Fias4c7wXQdBce",
+   "time": "2026-11-01T07:33:27.066Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "O apóstolo Paulo seguiu esses caminhos, pregando o evangelho em grego, primeiro nas sinagogas.",
+   "params": {
+    "voice_id": "bZztR6P62TDbe6sgaZgz"
+   },
+   "why": "Brazilian Portuguese narration line 26a",
+   "node": "fOOUqhcDICbWWfBkqA6q",
+   "sessions": [
+    "O3ypypUpaqDZ0K4EVlzf",
+    "m3RKdWkICVd96niy8Fds"
+   ]
+  },
+  {
+   "use": "toolu_01LD3eXLsFXTVmLeWMMkMWoD",
+   "time": "2026-11-01T07:33:29.260Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Mesmo em silêncio, Deus estava agindo. E agora, ele age também enquanto você espera.",
+   "params": {
+    "voice_id": "bZztR6P62TDbe6sgaZgz"
+   },
+   "why": "Brazilian Portuguese narration line 27 (closing line)",
+   "node": "zJZtb8EDnPJIk7BQgTbe",
+   "sessions": [
+    "T9BgMEe4X1yjjmkAwjsE",
+    "y9BiYkRkpqfjYKLqgdca"
+   ]
+  },
+  {
+   "use": "toolu_01SN3Td29okYv7XFiF9uqCsQ",
+   "time": "2026-11-01T07:55:00.953Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Na sinagoga de sua cidade, Jesus abriu o livro do profeta Isaías, escrito mais de 700 anos antes.",
+   "params": {
+    "voice_id": "bZztR6P62TDbe6sgaZgz"
+   },
+   "why": "Re-record Brazilian Portuguese line 24b after the native-review fix ('há' → 'antes')",
+   "node": "koaz3foJ74s2fi5ROuH3",
+   "sessions": [
+    "XpccOA2xBXTbY8hme15c",
+    "OOK5DNnbwUpKazIkTQFb"
+   ]
+  },
+  {
+   "use": "toolu_01JAxkLshtfcLye2LbWTQ859",
+   "time": "2026-11-01T07:55:03.200Z",
+   "flow": "lctjoKJlxNxPq2iwlPeg",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Aquele que fora prometido mais de 700 anos antes era o próprio Jesus.",
+   "params": {
+    "voice_id": "bZztR6P62TDbe6sgaZgz"
+   },
+   "why": "Re-record Brazilian Portuguese line 25c after the native-review fix ('há' → 'antes')",
+   "node": "YHz2PhoatAAmEGWDXuQi",
+   "sessions": [
+    "zAYo2gcLqMS452jldoM7",
+    "XLfef2D7KEqauiXfkMyw"
+   ]
+  }
+ ],
+ "title": "침묵의 400년",
+ "about": "2026-10-30~11-01, flow LtYoWzJVvymLxs3ok4px(한국어 해설·음악·효과음) + lctjoKJlxNxPq2iwlPeg(en/es/pt-BR 해설). 세션 기록에서 sound-prompts.mjs logs로 뽑음. 실제로 쓴 테이크는 takes.json."
+}

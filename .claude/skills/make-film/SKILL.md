@@ -58,6 +58,14 @@ Lemo-Opuscar repo AND the word-log kits (`kits/templates.jpg` — portrait-nativ
 texture buries the map, the words or the people on a phone (the mosaic pilot did). Pilot 2–3 parts → `review.json`
 `pilot` → draft page + a portrait preview video (SendUserFile) before building the rest.
 
+**Sound (stage 5) — like the first film, and the prompts go into git** (maintainer, 2026-11-03). Before writing prompts,
+read `motion/pilot/audio/prompts/first-film.md` (the first film's 262 music/effect prompts) and the last film's
+`sound/prompts.md`, and write in the same way: named instruments, mode and tempo, what happens at which second, "quiet under
+a spoken voice", "no drums, no synths", one theme that returns across parts. Narration uses the same voice (HYALOqtTLlRjxo4uBKeg,
+eleven_v4, one take per line, numbers in Hangul). Right after generating, archive: `node motion/films/sound-prompts.mjs logs
+motion/films/<name>/sound/prompts.json <flow_id> <session .jsonl>` → `names` (sessions-*.json) → `md`. Measure trimmed take
+lengths and move the picture's TEXT times to the voice, not the other way round.
+
 **Verse-to-verse links — the maintainer picks per link** (2026-11-03: "4개 다 다음에 말씀 연결 시 골라 쓰게 해줘"). Never stack two
 verses with a line between them. Use `motion/films/lib-link.js`: `['link', 'A', a, b, { to: 'B', style }]`, where style is
 `carry` (light crosses, same place) · `depth` (old recedes, new comes forward) · `horizon` (camera trucks along a gold

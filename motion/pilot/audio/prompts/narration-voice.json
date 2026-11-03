@@ -1,0 +1,2471 @@
+{
+ "entries": [
+  {
+   "use": "toolu_01J1PiiNVnkoDAJrGi2yuQxC",
+   "time": "2026-10-28T13:57:48.543Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "성경은 결국 한 편의 이야기입니다. 하나님이 약속하시고, 사람들이 오랫동안 기다리며, 마침내 예수님 안에서 그 약속이 이루어집니다. 그가 찔림은 우리의 허물 때문이요 그가 상함은 우리의 죄악 때문이라 그가 징계를 받으므로 우리는 평화를 누리고 그가 채찍에 맞으므로 우리는 나음을 받았도다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Voice sample A (middle-aged warm male) for Korean Bible film narration aimed at elderly viewers; user will pick one voice.",
+   "node": "mTh9tT4e7qwpm3RaARhA",
+   "sessions": [
+    "ohLbcdveyUNkAg4nSVRX"
+   ]
+  },
+  {
+   "use": "toolu_01Ruk3x9aexxGizSQmRvwYgi",
+   "time": "2026-10-28T13:57:51.595Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "성경은 결국 한 편의 이야기입니다. 하나님이 약속하시고, 사람들이 오랫동안 기다리며, 마침내 예수님 안에서 그 약속이 이루어집니다. 그가 찔림은 우리의 허물 때문이요 그가 상함은 우리의 죄악 때문이라 그가 징계를 받으므로 우리는 평화를 누리고 그가 채찍에 맞으므로 우리는 나음을 받았도다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "kiVK4omWhBQ9AzwcaRq7"
+   },
+   "why": "Voice sample B (mid-50s dignified male) for Korean Bible film narration aimed at elderly viewers; user will pick one voice.",
+   "node": "7btfquX5vnN8UlVWaOMp",
+   "sessions": [
+    "qsa40RdmkxJZqvImwLoU"
+   ]
+  },
+  {
+   "use": "toolu_01Y6FUV9S6oU4DKnixchdtPA",
+   "time": "2026-10-28T13:57:54.483Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "성경은 결국 한 편의 이야기입니다. 하나님이 약속하시고, 사람들이 오랫동안 기다리며, 마침내 예수님 안에서 그 약속이 이루어집니다. 그가 찔림은 우리의 허물 때문이요 그가 상함은 우리의 죄악 때문이라 그가 징계를 받으므로 우리는 평화를 누리고 그가 채찍에 맞으므로 우리는 나음을 받았도다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "0oqpliV6dVSr9XomngOW"
+   },
+   "why": "Voice sample C (middle-aged warm female) for Korean Bible film narration aimed at elderly viewers; user will pick one voice.",
+   "node": "mEGJnqN45deyHuLAPvpj",
+   "sessions": [
+    "g5t96aNCN4pBDtuU26gX"
+   ]
+  },
+  {
+   "use": "toolu_01WdoTsUECxBuUzAnKUXNQng",
+   "time": "2026-10-28T14:00:56.325Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "성경은 결국 한 편의 이야기입니다. 하나님이 약속하시고, 사람들이 오랫동안 기다리며, 마침내 예수님 안에서 그 약속이 이루어집니다. 그가 찔림은 우리의 허물 때문이요 그가 상함은 우리의 죄악 때문이라 그가 징계를 받으므로 우리는 평화를 누리고 그가 채찍에 맞으므로 우리는 나음을 받았도다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "dYYoaNsbIzON6ZOkqrct"
+   },
+   "why": "Additional voice sample D (calm Korean male docent) for elderly-friendly Bible film narration.",
+   "node": "TV3MYef6I3bESP9LDgVe",
+   "sessions": [
+    "9KfLEQT2x4xdQRuTCoNJ"
+   ]
+  },
+  {
+   "use": "toolu_013ALdPtSq2iafGY7u3AgkHL",
+   "time": "2026-10-28T14:00:59.431Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "성경은 결국 한 편의 이야기입니다. 하나님이 약속하시고, 사람들이 오랫동안 기다리며, 마침내 예수님 안에서 그 약속이 이루어집니다. 그가 찔림은 우리의 허물 때문이요 그가 상함은 우리의 죄악 때문이라 그가 징계를 받으므로 우리는 평화를 누리고 그가 채찍에 맞으므로 우리는 나음을 받았도다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "BaW4Cx7nYOh1XNVQBrK2"
+   },
+   "why": "Additional voice sample E (warm clear Korean male) for elderly-friendly Bible film narration.",
+   "node": "6FUON3j5u4mXKECJj7b2",
+   "sessions": [
+    "PxsQ6aFVzh05vuSRxUl8"
+   ]
+  },
+  {
+   "use": "toolu_01QXPLm54ie1fZArbX81jyuB",
+   "time": "2026-10-28T14:01:02.681Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "성경은 결국 한 편의 이야기입니다. 하나님이 약속하시고, 사람들이 오랫동안 기다리며, 마침내 예수님 안에서 그 약속이 이루어집니다. 그가 찔림은 우리의 허물 때문이요 그가 상함은 우리의 죄악 때문이라 그가 징계를 받으므로 우리는 평화를 누리고 그가 채찍에 맞으므로 우리는 나음을 받았도다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "qfwDoLSKOhzIgz7XedPT"
+   },
+   "why": "Additional voice sample F (calm Korean female narrator) for elderly-friendly Bible film narration.",
+   "node": "rCwkoImw8AucqRV5KBbc",
+   "sessions": [
+    "xEgvXKp4zYnfTTyzXQsG"
+   ]
+  },
+  {
+   "use": "toolu_019nEwPQs73YhpmWtzLVQast",
+   "time": "2026-10-28T14:01:05.662Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "성경은 결국 한 편의 이야기입니다. 하나님이 약속하시고, 사람들이 오랫동안 기다리며, 마침내 예수님 안에서 그 약속이 이루어집니다. 그가 찔림은 우리의 허물 때문이요 그가 상함은 우리의 죄악 때문이라 그가 징계를 받으므로 우리는 평화를 누리고 그가 채찍에 맞으므로 우리는 나음을 받았도다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "JQaWvPoEUkcuOTfxFYpJ"
+   },
+   "why": "Additional voice sample G (warm calm clear Korean female) for elderly-friendly Bible film narration.",
+   "node": "woKCo5rh0csXrMremIBr",
+   "sessions": [
+    "gMejnFfgfJcw1EIlsxkg"
+   ]
+  },
+  {
+   "use": "toolu_017f6ZdqaF9ScfCpR3WTvhK1",
+   "time": "2026-10-28T23:01:51.317Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "성경은 결국 한 편의 이야기입니다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 0 for Bible film (voice A chosen by user)",
+   "node": "XZW3B4z40aT94T7rnu8A",
+   "sessions": [
+    "ypk81OEUwHf71BYHhXed"
+   ]
+  },
+  {
+   "use": "toolu_01M6jJ9kvQnW4wb5fam16FfJ",
+   "time": "2026-10-28T23:01:58.337Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "하나님이 약속하시고,",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 1",
+   "node": "xdtC6XywiSeSrku7AXg1",
+   "sessions": [
+    "a3q4HCrRqmQeUlcv75Dh"
+   ]
+  },
+  {
+   "use": "toolu_015nSzxsis9mgLECsfJoLXbL",
+   "time": "2026-10-28T23:02:00.338Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "사람들이 오랫동안 기다리며,",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 2",
+   "node": "IMElBJYKbVB8te39Eln2",
+   "sessions": [
+    "2NLgeA4WzXvEnSHRxtW1"
+   ]
+  },
+  {
+   "use": "toolu_016SbeF1mc5etfE3XEYuv6HA",
+   "time": "2026-10-28T23:02:02.438Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "마침내 예수님 안에서 그 약속이 이루어집니다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 3",
+   "node": "Qb0AwW4Lphbs7SAaT0GB",
+   "sessions": [
+    "68Td4DEYsuZxIzyQDMSo"
+   ]
+  },
+  {
+   "use": "toolu_01EBBzmQihYxbGypU7MLVSCj",
+   "time": "2026-10-28T23:02:04.686Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "한눈에 보는 성경 이야기.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 4",
+   "node": "qjuTKtB2jinUQqpznFZa",
+   "sessions": [
+    "3gvHJiA0Zk35pG03WG8d"
+   ]
+  },
+  {
+   "use": "toolu_01BqwSW4XdGLjpXFUZqRuoTw",
+   "time": "2026-10-28T23:02:06.688Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "창조.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 5",
+   "node": "UlfgQMTVMCaAMaSp0cU7",
+   "sessions": [
+    "s2QzGKvI6rrPBBkH2RfC"
+   ]
+  },
+  {
+   "use": "toolu_014CuKLKyj7MHkngvLNYjCYG",
+   "time": "2026-10-28T23:02:08.750Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "하나님이 이르시되 빛이 있으라",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 6",
+   "node": "3w3BDeNTzfzPWAZ74SqV",
+   "sessions": [
+    "E3WEkVyGYknMnUbv2fRk"
+   ]
+  },
+  {
+   "use": "toolu_01H7YU5bfd9RFGjWB34mz8sb",
+   "time": "2026-10-28T23:02:10.787Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "하시니 빛이 있었고",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 7",
+   "node": "vGSIsvW7iRJiUVlqyem1",
+   "sessions": [
+    "Fi1suc5cWuwjcMAWpwcj"
+   ]
+  },
+  {
+   "use": "toolu_01L6ro5JjeL9P5t7XwzPevBE",
+   "time": "2026-10-28T23:02:13.136Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "하나님은 하늘과 땅, 그리고 모든 생명을 지으시고, 사람을 하나님의 형상대로 지으셨습니다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 8",
+   "node": "YraAjoTSTKYehuzRQRNR",
+   "sessions": [
+    "EpfoX1tlp1HOjrwWnoxh"
+   ]
+  },
+  {
+   "use": "toolu_01FDmQGkWc6kMQjfu3amXjE2",
+   "time": "2026-10-28T23:02:15.436Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "하나님이 지으신 그 모든 것을 보시니 보시기에 심히 좋았더라",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 9",
+   "node": "vtnaYDXSQn0LP6Muh3u6",
+   "sessions": [
+    "IDjinGeIqYXs4EUJHeDv"
+   ]
+  },
+  {
+   "use": "toolu_01T45pddfELWWcvweYMPsv85",
+   "time": "2026-10-28T23:02:17.586Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "타락.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 10",
+   "node": "jBnLmYC9GaaLeDBlSVKG",
+   "sessions": [
+    "OPHdIZwgphUUgY5XtBPN"
+   ]
+  },
+  {
+   "use": "toolu_01FVzYTzoJxupyCi84t1z3aE",
+   "time": "2026-10-28T23:02:19.987Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "그러나 사람은 하나님의 말씀을 거역하고, 하나님을 떠났습니다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 11",
+   "node": "HFjMNXuiGZ98JJlTshTy",
+   "sessions": [
+    "l05aMT0ZeVb64Pw1WKzg"
+   ]
+  },
+  {
+   "use": "toolu_01392amherc6cQwMXG8xyubi",
+   "time": "2026-10-28T23:02:22.187Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "여호와 하나님의 낯을 피하여 동산 나무 사이에 숨은지라",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 12",
+   "node": "LrTFmKmHImmK0GmjfcPp",
+   "sessions": [
+    "3IbIz5gGX47PypCoqFDC"
+   ]
+  },
+  {
+   "use": "toolu_01SihzLWErQFhoUN8NpdKtBP",
+   "time": "2026-10-28T23:02:24.187Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "네가 어디 있느냐",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 13",
+   "node": "d6K1K9MYd1vY0PP5HJO2",
+   "sessions": [
+    "ApgxhCuktUDoAjsmUw5U"
+   ]
+  },
+  {
+   "use": "toolu_0192BnixAzdz2R7YNYNsPpAy",
+   "time": "2026-10-28T23:02:26.385Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "여자의 후손은 네 머리를 상하게 할 것이요",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 14",
+   "node": "iuID0sCiGyy5bO3XABpm",
+   "sessions": [
+    "YSWgSWioRDtOU4MkwaXN"
+   ]
+  },
+  {
+   "use": "toolu_01CGaj8dWBaRM8ny1DEEhU3L",
+   "time": "2026-10-28T23:02:28.524Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "죄에 빠진 바로 그때 주신, 첫 복음의 약속입니다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 15",
+   "node": "mg8Ae1P5aV8xLQDEdeTl",
+   "sessions": [
+    "VAS6LyHA5ktsN5tvB976"
+   ]
+  },
+  {
+   "use": "toolu_01Rtkwpe15BRoTzqj39CTKbd",
+   "time": "2026-10-28T23:03:26.269Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "족장 시대.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 16",
+   "node": "ZPqpJcRFj8m00SPiWOfa",
+   "sessions": [
+    "WhidLlljWxVMDvWPFRcP"
+   ]
+  },
+  {
+   "use": "toolu_019LF836aQaQo8rs15q2N87Z",
+   "time": "2026-10-28T23:03:28.422Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "하나님은 아브라함을 부르시고, 그의 자손을 통해 온 세상에 복을 주시겠다고 약속하셨습니다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 17",
+   "node": "ZiW0DqzTghkWssuPEju6",
+   "sessions": [
+    "0WTrWuNAqnJFRTZPxIFr"
+   ]
+  },
+  {
+   "use": "toolu_01Ej6beHYaogqLYWsHZVuMWC",
+   "time": "2026-10-28T23:03:30.571Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "하늘을 우러러 뭇별을 셀 수 있나 보라",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 18",
+   "node": "WQi04h3F4xXUFaK4xbG5",
+   "sessions": [
+    "k85UTa05IkSTq0M8HUyj"
+   ]
+  },
+  {
+   "use": "toolu_01JFYxvssuDEzvwy89TZSGPi",
+   "time": "2026-10-28T23:03:32.521Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "네 자손이 이와 같으리라",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 19",
+   "node": "aBYPMkXQsX6hB4vsjCep",
+   "sessions": [
+    "A2vt1F8MNHYyfLISlg3c"
+   ]
+  },
+  {
+   "use": "toolu_01P3MRauBUwgmyaq6NvxGQaz",
+   "time": "2026-10-28T23:03:34.621Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "출애굽. 애굽에서 종살이하던 백성을 하나님이 건지십니다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 20",
+   "node": "idn6makD375EbnsQ6jnY",
+   "sessions": [
+    "wHUbbCHKLtcGudvFsDgE"
+   ]
+  },
+  {
+   "use": "toolu_01C5AxcEFZzVwYL4DTXeGxdW",
+   "time": "2026-10-28T23:03:36.620Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "내 백성을 보내라",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 21",
+   "node": "6smto3kSmpOWwhz63OXj",
+   "sessions": [
+    "GluMxqjuU36t2hOABjqg"
+   ]
+  },
+  {
+   "use": "toolu_01AtpcgdaYzSCuZTB5QRvN4D",
+   "time": "2026-10-28T23:03:38.721Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "열 가지 재앙이 애굽을 덮쳤고,",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 22",
+   "node": "xraNJFKn0SC52pBhvf8L",
+   "sessions": [
+    "OmmCtmsCalDAYNVO6rTs"
+   ]
+  },
+  {
+   "use": "toolu_01Np5rGJDte4kvGApCh2qFyL",
+   "time": "2026-10-28T23:03:40.770Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "내가 피를 볼 때에 너희를 넘어가리니",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 23",
+   "node": "OhIWEygBJuYHkgSzYVU9",
+   "sessions": [
+    "vamwP465aWLZ00iSz2VO"
+   ]
+  },
+  {
+   "use": "toolu_01WQYLLQAaxMmV9nzbzg3YSH",
+   "time": "2026-10-28T23:03:42.770Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "어린 양의 피가 백성을 살렸습니다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 24",
+   "node": "ePxiC8csFGsWqP0yYDFY",
+   "sessions": [
+    "LFjnC9ngIWQlf5pj1shR"
+   ]
+  },
+  {
+   "use": "toolu_01PNhazayZKvFJWdyMtufuPH",
+   "time": "2026-10-28T23:03:45.020Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "이스라엘 자손이 바다 가운데를 육지로 걸어가고 물은 그들의 좌우에 벽이 되니",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 25",
+   "node": "XOU195fmAnQ5yjwLVGd4",
+   "sessions": [
+    "vkjvcMXDN9vXWCZS3QH4"
+   ]
+  },
+  {
+   "use": "toolu_01An6Bp9BWt2uhKC1Fk5wy7g",
+   "time": "2026-10-28T23:03:46.970Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "광야 여정.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 26",
+   "node": "13hb4ok3rHDrgGjd2W64",
+   "sessions": [
+    "OKZcfnpHOcjFQ1rJLtWs"
+   ]
+  },
+  {
+   "use": "toolu_01JnQ8NjUcVnpoEgpGGPMkMa",
+   "time": "2026-10-28T23:03:49.071Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "시내산에서 하나님은 율법을 주시고, 사십 년 광야 길을 함께 걸으셨습니다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 27",
+   "node": "r3yxsLqy0ooHv0y5so0h",
+   "sessions": [
+    "pxpmHsWW5kDzjErCwLZf"
+   ]
+  },
+  {
+   "use": "toolu_01Tc1rRsaEF5pizt52YzEhRQ",
+   "time": "2026-10-28T23:03:51.220Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "너희를 내 백성으로 삼고 나는 너희의 하나님이 되리니",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 28",
+   "node": "3bk9oyQqbqE9mrkC427i",
+   "sessions": [
+    "xQqNi2iQY6nkneNY17FB"
+   ]
+  },
+  {
+   "use": "toolu_015ykwco8x7yaxJUNvNiXeEs",
+   "time": "2026-10-28T23:03:53.420Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "약속의 땅 문 앞에 선 백성, 이제 들어갑니다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 29",
+   "node": "Ora2WocdKUjBScHkhOR5",
+   "sessions": [
+    "GFOfA3mCN8lTVOqP7Tr0"
+   ]
+  },
+  {
+   "use": "toolu_015siAdgW8p8cpk1BSyHQhsQ",
+   "time": "2026-10-28T23:03:55.673Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "너희의 하나님 여호와께서 너희가 걸어온 길에서 너희를 안으사 이 곳까지 이르게 하셨느니라",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 30",
+   "node": "YGvYG5tS1gcttI7Uubh9",
+   "sessions": [
+    "cG2HVtA4StxzUErnVz07"
+   ]
+  },
+  {
+   "use": "toolu_01QqHDxJchmy1i5NBqqLCW1D",
+   "time": "2026-10-28T23:03:57.721Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "사사 시대.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 31",
+   "node": "PEPRuvGiNtFNmUYOIqjK",
+   "sessions": [
+    "aVeVoeF06mKwi8PPEE0n"
+   ]
+  },
+  {
+   "use": "toolu_01FTufTxqdhVYgiaSKX3jDCs",
+   "time": "2026-10-28T23:04:00.170Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "왕이 없던 시절, 백성은 죄를 짓고, 압제를 당하고, 부르짖으면 하나님이 사사를 보내 구원하셨습니다. 그리고 또다시 죄를 지었습니다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 32",
+   "node": "uddbwS2ouKmZc6T9smMP",
+   "sessions": [
+    "2YtveQ4DPIHrH5rl8lyO"
+   ]
+  },
+  {
+   "use": "toolu_013LnRVvEDougVrvc1FcK4wi",
+   "time": "2026-10-28T23:04:02.376Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "그 때에 이스라엘에 왕이 없으므로 사람이 각기 자기의 소견에 옳은 대로 행하였더라",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 33",
+   "node": "EDtklRtiLftXq2JVEHzk",
+   "sessions": [
+    "Y01caKjOvH8SrLFQk10I"
+   ]
+  },
+  {
+   "use": "toolu_0157oq3HqFqFzRftcKWZj2t1",
+   "time": "2026-10-28T23:04:04.719Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "배신하고 또 배신해도, 부르짖을 때마다 구원자를 보내 다시 일으키셨습니다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 34",
+   "node": "7kxd24AL3O1BLluuAEp3",
+   "sessions": [
+    "xAihOD1OXP8JKJpAugkU"
+   ]
+  },
+  {
+   "use": "toolu_017X1CyZ1zGuo5b3W3Urepjt",
+   "time": "2026-10-28T23:04:06.547Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "통일 왕국.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 35",
+   "node": "ndxqT5LiwtkKTQkt5c7m",
+   "sessions": [
+    "4BeolqiGxEZBQAhNcdib"
+   ]
+  },
+  {
+   "use": "toolu_016ur3qwMcwfVkjRk33FgWMH",
+   "time": "2026-10-28T23:04:52.417Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "하나님은 목동 다윗을 왕으로 세우셨습니다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 36",
+   "node": "NDrR5qNgJqEbo3YwejEW",
+   "sessions": [
+    "4i5nGhod3vVuPPsf55oN"
+   ]
+  },
+  {
+   "use": "toolu_01GKJi7PiSq3BGqjqP9UxCdj",
+   "time": "2026-10-28T23:04:54.418Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "여호와는 나의 목자시니 내게 부족함이 없으리로다",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 37",
+   "node": "P68quNHcD1CFRK38qoxz",
+   "sessions": [
+    "9z4Ki94upKHkizHcGkAy"
+   ]
+  },
+  {
+   "use": "toolu_01JPPnNgKrwQLJrpKJNNsjwu",
+   "time": "2026-10-28T23:04:56.616Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "사람은 외모를 보거니와 나 여호와는 중심을 보느니라",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 38",
+   "node": "IylXVVX2IeEbKvNHLs9j",
+   "sessions": [
+    "DJOV23Du9fjMNUGfkZgA"
+   ]
+  },
+  {
+   "use": "toolu_011BmdxQd8wuHDFK9q7Rs8kY",
+   "time": "2026-10-28T23:04:58.866Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "네 집과 네 나라가 내 앞에서 영원히 보전되고 네 왕위가 영원히 견고하리라",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 39",
+   "node": "qbrpVSMhkvPbz04atVgN",
+   "sessions": [
+    "E40BCuLxeGEeie68tKwI"
+   ]
+  },
+  {
+   "use": "toolu_014aSzXAL7xRJV7RZuyNwgBG",
+   "time": "2026-10-28T23:05:01.166Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "이 영원한 왕위는, 다윗의 자손으로 오신 예수님을 가리킵니다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 40",
+   "node": "WVuNvymBr40GgvgA09Zy",
+   "sessions": [
+    "v2OnVA3ixv8Sj8omP7zl"
+   ]
+  },
+  {
+   "use": "toolu_01TNPLTRuUBLKF2TSe7v1xbs",
+   "time": "2026-10-28T23:05:03.116Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "분열 왕국과 포로.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 41",
+   "node": "dPvoiGEcJF8DC28pNapA",
+   "sessions": [
+    "DFdXX8pzyfcFVtbnfeJt"
+   ]
+  },
+  {
+   "use": "toolu_01Uq5kNnKrc965BT1Y6mLRph",
+   "time": "2026-10-28T23:05:05.121Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "이스라엘이 다윗의 집을 배반하여 오늘까지 이르렀더라",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 42",
+   "node": "AvOlKdcO8IH1ZvXu2NIK",
+   "sessions": [
+    "yK3IEIM8VfBjZaOiCqTJ"
+   ]
+  },
+  {
+   "use": "toolu_01RFvtLJQMnTNqLgvSj5uJnw",
+   "time": "2026-10-28T23:05:07.367Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "우상을 섬기던 백성은 끝내 성전이 불타고, 바벨론으로 끌려갑니다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 43",
+   "node": "xPeSY86dhSyL3HOHNfaM",
+   "sessions": [
+    "qaEc2vCxjACXvTyg0Zne"
+   ]
+  },
+  {
+   "use": "toolu_01R225KzDvgUUG6tgxodH4f6",
+   "time": "2026-10-28T23:05:09.465Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "우리가 바벨론의 여러 강변 거기에 앉아서 시온을 기억하며 울었도다",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 44",
+   "node": "gy3DwoI3xFLYIL2Xb6L9",
+   "sessions": [
+    "z81x5P4vepeqti7XEtDc"
+   ]
+  },
+  {
+   "use": "toolu_0127pSgeBAMqPR3auB2DyjQs",
+   "time": "2026-10-28T23:05:11.721Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "그러나 하나님은 가장 어두운 포로의 땅까지 함께 가시며, 회복을 약속하셨습니다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 45",
+   "node": "0lbEUt3WO7lglIqGVLJn",
+   "sessions": [
+    "YifH8bQ2RjPuBTgAUj1i"
+   ]
+  },
+  {
+   "use": "toolu_01GxfAZYmCHQ4U9PiNVY6ByW",
+   "time": "2026-10-28T23:05:13.665Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "포로 귀환.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 46",
+   "node": "nxZBmIxa0ZWtlIFCxTUm",
+   "sessions": [
+    "wfyHFqjdjobCWYyV7DbH"
+   ]
+  },
+  {
+   "use": "toolu_01Dwfcmp7akHm3hjDiuv38dh",
+   "time": "2026-10-28T23:05:15.865Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "칠십 년 후, 하나님이 길을 여십니다. 백성은 고향으로 돌아갑니다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 47",
+   "node": "8Qo3ucP69CPBaar7Ub0p",
+   "sessions": [
+    "kQiqeBSRRppGorAFaeGF"
+   ]
+  },
+  {
+   "use": "toolu_01PzdMRqdn4HMmrnfoUPeUeB",
+   "time": "2026-10-28T23:05:18.064Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "무너진 성전과 성벽을 다시 세웠습니다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 48",
+   "node": "UoZSF4tAW5J3eKWeM6lp",
+   "sessions": [
+    "ojK1BSUoLAT4m0N4nGK1"
+   ]
+  },
+  {
+   "use": "toolu_01Kx7HcjNMXoY7WDVxmdBSCq",
+   "time": "2026-10-28T23:05:20.365Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "성벽 역사가 오십이 일 만인 엘룰월 이십오일에 끝나매",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 49",
+   "node": "lZBPDqb3YSg0OMEVI7o5",
+   "sessions": [
+    "XDg26nTBYw9KFZ9qQ7GF"
+   ]
+  },
+  {
+   "use": "toolu_01CiLsjjdzQbi21DWabDmMRL",
+   "time": "2026-10-28T23:05:22.577Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "여호와로 인하여 기뻐하는 것이 너희의 힘이니라",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 50",
+   "node": "NIPBlqjKUkBuWR05HLmY",
+   "sessions": [
+    "pi0bI0vS3tC1tTiPjMpH"
+   ]
+  },
+  {
+   "use": "toolu_01QiTBdF29hCnhWZBxqKxhSH",
+   "time": "2026-10-28T23:05:24.665Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "사백 년의 침묵.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 51",
+   "node": "lzY8IX62GrGcvztV24p1",
+   "sessions": [
+    "rIIASCxT9nalm3iyU5rq"
+   ]
+  },
+  {
+   "use": "toolu_01MZxAE9e5ZhjJCZ7Pq68U8j",
+   "time": "2026-10-28T23:05:26.763Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "선지자의 음성이 멈춘 사백 년.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 52",
+   "node": "cWkq8AcOZl9LRLIneOiN",
+   "sessions": [
+    "w7KzjiTjKJjN7SUcLyxf"
+   ]
+  },
+  {
+   "use": "toolu_017McSwq8FeUhYxrAqXSzyp9",
+   "time": "2026-10-28T23:05:28.913Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "그러나 무대는 조용히 준비되었습니다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 53",
+   "node": "JHrjsJO9YQAvejf5qAzh",
+   "sessions": [
+    "qhKajjHIIu4PrBXfamGn"
+   ]
+  },
+  {
+   "use": "toolu_0187Lb7VBgiGEa28DcUebR2N",
+   "time": "2026-10-28T23:05:31.114Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "하나님의 약속은 잊히지 않았습니다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 54",
+   "node": "uaqnlTy7IRnnFA7BCwA5",
+   "sessions": [
+    "k8ms47rctGtfYfnie80L"
+   ]
+  },
+  {
+   "use": "toolu_01JPPJzyxZcrhCWxmRWViwhi",
+   "time": "2026-10-28T23:05:32.982Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "때가 차매 하나님이 그 아들을 보내사 여자에게서 나게 하시고",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 55",
+   "node": "AQ0R6CGftcwW0D2AySKI",
+   "sessions": [
+    "ws9tMozq92U4D8AOeNWX"
+   ]
+  },
+  {
+   "use": "toolu_01Kt9jrJHZE5ZuqjikFDHh26",
+   "time": "2026-10-28T23:06:11.880Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "예수님의 오심.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 56",
+   "node": "aHCHQFPVsMYE1sAwywKJ",
+   "sessions": [
+    "6qK2l16zNhAsNVwBm7Tw"
+   ]
+  },
+  {
+   "use": "toolu_01XDxceebrvnd6Z8LKBDdt7N",
+   "time": "2026-10-28T23:06:13.935Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "여자의 후손, 아브라함의 복, 유월절 어린 양, 다윗의 영원한 왕, 새 언약.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 57",
+   "node": "tuYJdcdCCc9MQ8UtN7DQ",
+   "sessions": [
+    "dAxyoaiPOdaE2K3P3DZz"
+   ]
+  },
+  {
+   "use": "toolu_01TpcUp42GnHCuM31j7A65ik",
+   "time": "2026-10-28T23:06:15.931Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "이 모든 약속이 한 사람, 예수님 안에서 이루어집니다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 58",
+   "node": "GV8S2L9rW2TZYFOJnS2y",
+   "sessions": [
+    "Ha8qhHHbT2D7W5OPyrp9"
+   ]
+  },
+  {
+   "use": "toolu_01MdJ5Pbw1VMXy6LcUudCRoq",
+   "time": "2026-10-28T23:06:18.280Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "말씀이 육신이 되어 우리 가운데 거하시매 우리가 그의 영광을 보니 아버지의 독생자의 영광이요 은혜와 진리가 충만하더라",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 59",
+   "node": "rtd95myPU9gJA3ra6jd5",
+   "sessions": [
+    "NS64h9d94U0HbV0MAuWg"
+   ]
+  },
+  {
+   "use": "toolu_01QEyQg5RJq5QsJqMkwmxe9e",
+   "time": "2026-10-28T23:06:20.179Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "십자가.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 60",
+   "node": "Roiklp9fbopcFWtG8FXY",
+   "sessions": [
+    "PNPVmmTWA0Uc5kzZtr4P"
+   ]
+  },
+  {
+   "use": "toolu_01Gi3whn7V3KGhM7eygghrNu",
+   "time": "2026-10-28T23:06:22.230Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "해가 빛을 잃고 온 땅에 어둠이 임하여",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 61",
+   "node": "sRu4JCPub0V2CdxWTFY6",
+   "sessions": [
+    "vfPAuRZXoSNmbWiPQmrt"
+   ]
+  },
+  {
+   "use": "toolu_01Hz48ivpANaTPKMjTtAG3UA",
+   "time": "2026-10-28T23:06:24.080Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "예수님이 십자가에 달리셨습니다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 62",
+   "node": "V1A1mbcZ6IOBTRYGpgGM",
+   "sessions": [
+    "BrUgeDnaXkuy6WLnXFwq"
+   ]
+  },
+  {
+   "use": "toolu_01CdYzRGST8swNhmt4vCZHsP",
+   "time": "2026-10-28T23:06:26.581Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "그가 찔림은 우리의 허물 때문이요 그가 상함은 우리의 죄악 때문이라 그가 징계를 받으므로 우리는 평화를 누리고 그가 채찍에 맞으므로 우리는 나음을 받았도다",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 63",
+   "node": "9U2ugSOpeReNJg3d4m98",
+   "sessions": [
+    "v8C8NgQlVjCwkrVCBrT0"
+   ]
+  },
+  {
+   "use": "toolu_01XP49LjFQFK17YCcRjfmSwN",
+   "time": "2026-10-28T23:06:28.730Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "그 십자가에 달려야 했던 사람은, 바로 나였습니다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 64",
+   "node": "jFk9yrVynWtcO5CI43pJ",
+   "sessions": [
+    "UjfxYMZl6zk3w0vqPyZe"
+   ]
+  },
+  {
+   "use": "toolu_011vzYW3Pvkv2GZU68iRPM4w",
+   "time": "2026-10-28T23:06:30.579Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "다 이루었다",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 65",
+   "node": "yhF9xsppFfCkCyC1gpas",
+   "sessions": [
+    "SzYbt0pEm2qEfYs3nNoc"
+   ]
+  },
+  {
+   "use": "toolu_01HyZcZMLksArU9hnikpLzya",
+   "time": "2026-10-28T23:06:32.431Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "부활.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 66",
+   "node": "IHORaNdlowQqqpuF8sn5",
+   "sessions": [
+    "IkLhdIIonToCDbuEbi2Y"
+   ]
+  },
+  {
+   "use": "toolu_013PBPvQ4yrX2CeSaEJuTHmh",
+   "time": "2026-10-28T23:06:34.529Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "사흘 만에, 무덤이 비었습니다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 67",
+   "node": "c1UMrENxSRekw7fFndU8",
+   "sessions": [
+    "tcDwrAmuxer4zFYITe3O"
+   ]
+  },
+  {
+   "use": "toolu_013pdybaAbvtFvWGfWUQJSaR",
+   "time": "2026-10-28T23:06:36.728Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "그가 여기 계시지 않고 그가 말씀 하시던 대로 살아나셨느니라",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 68",
+   "node": "znFm9KI8RoSfYVrRifkQ",
+   "sessions": [
+    "VwCSaxlg0YVpjLtQqwCd"
+   ]
+  },
+  {
+   "use": "toolu_01EyF16aqFCxLucpGdg5HVPA",
+   "time": "2026-10-28T23:06:38.791Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "죽음은 끝이 아니었습니다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 69",
+   "node": "JGH3NgWu10TRxd5yyRsK",
+   "sessions": [
+    "8HQTUGD4iE4dWEDqS3Zc"
+   ]
+  },
+  {
+   "use": "toolu_01DBGNbouuffsstLdu3ZCTbA",
+   "time": "2026-10-28T23:06:40.736Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "교회의 시작.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 70",
+   "node": "z3ffMU9h2Y9uBVXGfanb",
+   "sessions": [
+    "92wDwzSms5FWKDtdbpY7"
+   ]
+  },
+  {
+   "use": "toolu_01TPLeLoEoiyt61cZqJw4vDp",
+   "time": "2026-10-28T23:06:43.029Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "오직 성령이 너희에게 임하시면 너희가 권능을 받고 예루살렘과 온 유대와 사마리아와 땅 끝까지 이르러 내 증인이 되리라",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 71",
+   "node": "QWALrQXyXsNxiaq27Wat",
+   "sessions": [
+    "yGFb96Uf3Jwwmuz6O1qe"
+   ]
+  },
+  {
+   "use": "toolu_012Ahv11pVTMLgYHkmdFeafr",
+   "time": "2026-10-28T23:06:45.078Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "복음은 예루살렘에서 땅 끝까지 퍼져 나갔습니다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 72",
+   "node": "6T9TMw04WQJoCabhHKxe",
+   "sessions": [
+    "KRN9W2vIMMnxpGBhLCCn"
+   ]
+  },
+  {
+   "use": "toolu_01UsYuEAzPvNJ6rCo96mh2nc",
+   "time": "2026-10-28T23:06:47.179Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "아브라함에게 하신 약속, 모든 족속이 복을 받으리라는 약속이 이루어지고 있습니다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 73",
+   "node": "04gE1YruCwXncp3Jkyqn",
+   "sessions": [
+    "qOYf9TzeGw379pXkjkg3"
+   ]
+  },
+  {
+   "use": "toolu_01JRDEGWKvt9MLEKYg8TaGTQ",
+   "time": "2026-10-28T23:06:48.927Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "회복.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 74",
+   "node": "Beu3ABoQeil66mIWC7L2",
+   "sessions": [
+    "k9MPoPs0RN9WDqCJPgIY"
+   ]
+  },
+  {
+   "use": "toolu_01Kto7Uxd7wLek2i5JGeuuHo",
+   "time": "2026-10-28T23:06:50.813Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "예수님이 다시 오셔서 모든 것을 새롭게 하십니다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 75",
+   "node": "78IfT7o71GlwZZ0HzM11",
+   "sessions": [
+    "RqlSNHHYwgBkdBT9a3pg"
+   ]
+  },
+  {
+   "use": "toolu_01AZLGduE9kmfTq1Rm5o4Kab",
+   "time": "2026-10-28T23:07:30.168Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "모든 눈물을 그 눈에서 닦아 주시니 다시는 사망이 없고 애통하는 것이나 곡하는 것이나 아픈 것이 다시 있지 아니하리니",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 76",
+   "node": "vDSsoZW9042PXvCAbwNg",
+   "sessions": [
+    "uon1FJuQRvhAf2zEwsgM"
+   ]
+  },
+  {
+   "use": "toolu_012esmFjPnzgS9D6V6MZExpW",
+   "time": "2026-10-28T23:07:32.116Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "보라 내가 만물을 새롭게 하노라",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 77",
+   "node": "G0SFG5TjteUIE3PYBxCg",
+   "sessions": [
+    "WKJBd65QCjg0dKGKIqcJ"
+   ]
+  },
+  {
+   "use": "toolu_013nxVGU6PMCGPTZbqMoyZc1",
+   "time": "2026-10-28T23:07:34.014Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "거울.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 78",
+   "node": "TYqd07HCwWPpsNjC4W7r",
+   "sessions": [
+    "W4i0PMV3W8t4V2PtOgxb"
+   ]
+  },
+  {
+   "use": "toolu_01148LLWyv2o6JQEcpQgWVKw",
+   "time": "2026-10-28T23:07:36.263Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "우상을 섬기고, 고난을 당하고, 부르짖고, 구원받고, 다시 우상에게로.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 79",
+   "node": "02FIMyM0hVmKMGufJlxX",
+   "sessions": [
+    "rOxXmTvn7pWCOVrKpzeA"
+   ]
+  },
+  {
+   "use": "toolu_015XMYePQKQzihC56E7nNESk",
+   "time": "2026-10-28T23:07:38.413Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "우상이란 나무 조각상만이 아닙니다. 하나님보다 더 사랑하는 모든 것입니다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 80",
+   "node": "qZh9zPuevk6DvbzzoXoP",
+   "sessions": [
+    "XmiYNzEXlkvYe11qhTWM"
+   ]
+  },
+  {
+   "use": "toolu_01NAZfC8fLCxZVkfJW6frDeq",
+   "time": "2026-10-28T23:07:40.413Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "금송아지, 인정, 성공, 그리고 나 자신.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 81",
+   "node": "6RFj4akunzhLyiNlZguP",
+   "sessions": [
+    "u37NyeNYFdvoi09stTM8"
+   ]
+  },
+  {
+   "use": "toolu_01EkkeAoQKSFZX5jSLskiPHT",
+   "time": "2026-10-28T23:07:42.463Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "이것은 거울입니다. 이스라엘의 악순환은 사실 나의 모습입니다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 82",
+   "node": "NkH0k9YifVG4SqcoOqH9",
+   "sessions": [
+    "qHG7AtmmDvSKziESG34C"
+   ]
+  },
+  {
+   "use": "toolu_016UaTcXKs5btwnH9HwGdrgj",
+   "time": "2026-10-28T23:07:44.565Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "결국 가장 깊은 우상은, 하나님 자리에 앉은 나 자신입니다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 83",
+   "node": "QbfMA0bMXsA5FC4PHIbc",
+   "sessions": [
+    "gjHoHcv95A44wpFagl7V"
+   ]
+  },
+  {
+   "use": "toolu_01AbczmVqYiN4FKzNffXdQ4e",
+   "time": "2026-10-28T23:07:46.463Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "복음의 핵심.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 84",
+   "node": "3cnRqPcQY7dJH65DVGQu",
+   "sessions": [
+    "O3YpC7bppWo87M4NHsNz"
+   ]
+  },
+  {
+   "use": "toolu_01NX6Yg3Nh2h6bEdR65znsCg",
+   "time": "2026-10-28T23:07:48.514Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "첫째,",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 85",
+   "node": "4rvg7IfmRtjVPypirdqO",
+   "sessions": [
+    "mAESXpLCEXI46N8XoFdM"
+   ]
+  },
+  {
+   "use": "toolu_01XbQcbWQnMB3De7J9ohm9b3",
+   "time": "2026-10-28T23:07:50.562Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "의인은 없나니 하나도 없으며",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 86",
+   "node": "yiqw1Op2eI1bJe73ZgtO",
+   "sessions": [
+    "xQSwWvfjszKoBk6aJvzK"
+   ]
+  },
+  {
+   "use": "toolu_01J35hPPsNucHcVNYaok94Jb",
+   "time": "2026-10-28T23:07:52.512Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "모든 사람이 죄를 범하였으매",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 87",
+   "node": "M2zRAixPgChobI1UKY87",
+   "sessions": [
+    "wdzF0qjHm2zdcKFIMdvw"
+   ]
+  },
+  {
+   "use": "toolu_01GUeUK6wGPvZNB1c5LD2FRh",
+   "time": "2026-10-28T23:07:54.612Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "둘째, 율법은 사다리가 아니라 거울입니다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 88",
+   "node": "QPoWXFdp1jklsKdXgkIv",
+   "sessions": [
+    "5Y5Xz7O5gtZdS9SLZgBr"
+   ]
+  },
+  {
+   "use": "toolu_01Vk7AxomqndGAPR3x3SzNpd",
+   "time": "2026-10-28T23:07:56.663Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "셋째, 노력이 아니라 은혜로.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 89",
+   "node": "JwAGkbXMNHzZntVF3DOR",
+   "sessions": [
+    "NUyI6CWsA8zwdt02plIr"
+   ]
+  },
+  {
+   "use": "toolu_01UFmCYFJ9hL8SQ4JmbcmJrL",
+   "time": "2026-10-28T23:07:58.766Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "그 은혜에 의하여 믿음으로 말미암아 구원을 받았으니",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 90",
+   "node": "9uoVCU9HtqO6eGmj1Qh8",
+   "sessions": [
+    "wPdOacwdTBo8OV2rYQeR"
+   ]
+  },
+  {
+   "use": "toolu_017XDBHdTDvVZKkJhD1LGWEP",
+   "time": "2026-10-28T23:08:00.712Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "넷째,",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 91",
+   "node": "0rZtheDH4AZuUCVRwVDw",
+   "sessions": [
+    "jaM2XPXBZFibDQ2sN5G2"
+   ]
+  },
+  {
+   "use": "toolu_014dQJNDGRSSNpddxnyynZcz",
+   "time": "2026-10-28T23:08:02.812Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "우리가 믿음으로 의롭다 하심을 받았으니",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 92",
+   "node": "cDNMH29KD6YyMhbbtc3b",
+   "sessions": [
+    "Hdxr2OrR7RrtCObGZiZT"
+   ]
+  },
+  {
+   "use": "toolu_01K1P2WCLbnnBQU96cqmq46Z",
+   "time": "2026-10-28T23:08:04.811Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "다섯째, 성경은 예수님을 가리킵니다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 93",
+   "node": "ofXZxEKS58bphWKA0PUu",
+   "sessions": [
+    "psTuhkIBDyxxjxzg0Snn"
+   ]
+  },
+  {
+   "use": "toolu_01TEo6CBHK3WfB1fVtr4cuod",
+   "time": "2026-10-28T23:08:06.860Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "이 성경이 곧 내게 대하여 증언하는 것이니라",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 94",
+   "node": "ywkzE11yPNpiLJSG6DCQ",
+   "sessions": [
+    "NVGffss4HHbbx4foO0Ti"
+   ]
+  },
+  {
+   "use": "toolu_01JsTN4msW9upiXuw8ZLLe7o",
+   "time": "2026-10-28T23:08:08.742Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "여섯째,",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 95",
+   "node": "b2hQJYKJOvGGIGtpMpky",
+   "sessions": [
+    "zVfNhOiwLZqVIWn3drCl"
+   ]
+  },
+  {
+   "use": "toolu_01D52BL9GBnGzfQgMYD84e4o",
+   "time": "2026-10-28T23:08:52.438Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "때가 찼고 하나님의 나라가 가까이 왔으니 회개하고 복음을 믿으라",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 96",
+   "node": "0JUJhoNIxSY9yz9bVki0",
+   "sessions": [
+    "kf6oWe5QNNkNXb2dkvTQ"
+   ]
+  },
+  {
+   "use": "toolu_014YnsSinrSzW74vZGhno9WU",
+   "time": "2026-10-28T23:08:54.388Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "일곱째, '행하라'가 아니라 '이루어졌다'.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 97",
+   "node": "pzjwT4mtNRGgFzMo06qX",
+   "sessions": [
+    "2RVk6QAnJwjbvD0MXEO2"
+   ]
+  },
+  {
+   "use": "toolu_015PzmSHnFnvVjLi8uGXYbRJ",
+   "time": "2026-10-28T23:08:56.791Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "그리스도께서 우리를 위하여 죽으심으로 하나님께서 우리에 대한 자기의 사랑을 확증하셨느니라",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 98",
+   "node": "kXIqbPhOp4bPeuSfMRn8",
+   "sessions": [
+    "VKJIVNjfQtZnr9ppBcub"
+   ]
+  },
+  {
+   "use": "toolu_011rSG9oja5KjaBEpMT5ugtT",
+   "time": "2026-10-28T23:08:58.739Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "성경은 정말 실화일까요?",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 99",
+   "node": "ah5HmsNr9LiIFGnlEzrH",
+   "sessions": [
+    "uM97GRGvb05Y3ufhdJig"
+   ]
+  },
+  {
+   "use": "toolu_01FutT3oU6CDiLqmEqkxrY6t",
+   "time": "2026-10-28T23:09:00.950Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "한 권이 아니라, 천오백 년 동안 사십여 명이 쓴 도서관입니다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 100",
+   "node": "I4fO9wKUbhfDtufDDUeM",
+   "sessions": [
+    "mMA3zh1yoRtFWcEzWDtR"
+   ]
+  },
+  {
+   "use": "toolu_014jgnULzbJVdR1DVQYj4crf",
+   "time": "2026-10-28T23:09:03.139Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "그런데도 하나의 주제, 그리스도를 통한 구원으로 모입니다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 101",
+   "node": "uS6ryiBuIYlXCW4PKBCL",
+   "sessions": [
+    "LPsFNHQJA66EoXm7ioAM"
+   ]
+  },
+  {
+   "use": "toolu_01HqgeMvbtAVsXLe1CzKg99A",
+   "time": "2026-10-28T23:09:05.339Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "땅속에서도 확인됩니다. 다윗의 집이 새겨진 비문, 빌라도의 이름이 새겨진 돌.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 102",
+   "node": "9HsKdwFUkqKM1umuBuTw",
+   "sessions": [
+    "gxW3nXSnzDSl08If1nc5"
+   ]
+  },
+  {
+   "use": "toolu_011tMb4YPhjXAadRmHQ3o7RK",
+   "time": "2026-10-28T23:09:07.188Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "가장 잘 보존된 고대 문서이기도 합니다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 103",
+   "node": "BO1J3NWj4p26gh6klfxs",
+   "sessions": [
+    "SvN6WugNDaNhm3z4mF1R"
+   ]
+  },
+  {
+   "use": "toolu_01P3DGkxWgoLyoaXpfGc3YrN",
+   "time": "2026-10-28T23:09:09.238Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "로마의 역사가 타키투스와 요세푸스도 예수님을 기록했습니다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 104",
+   "node": "5PS5TYhxfvOqp6KcLeH6",
+   "sessions": [
+    "TxKeWSCoj7RtVhiJPWxj"
+   ]
+  },
+  {
+   "use": "toolu_011fxnGPNSYPMUN2TmNFDZwP",
+   "time": "2026-10-28T23:09:11.489Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "이 근거들은 믿음이 비합리적이지 않다는 것을 보여 줄 뿐, 강제하는 증명은 아닙니다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 105",
+   "node": "o7V11tMnrRNmFNRhT4oj",
+   "sessions": [
+    "RHuzenqhcTcPWYvgo1RN"
+   ]
+  },
+  {
+   "use": "toolu_01AYRnxNbQVhVGhFwb53E9v6",
+   "time": "2026-10-28T23:09:13.588Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "믿음은 들음에서 나며 들음은 그리스도의 말씀으로 말미암았느니라",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 106",
+   "node": "Gfm6qjAB4xfW5RpG9rdS",
+   "sessions": [
+    "jLi2CLP6lExPDv0G3C4S"
+   ]
+  },
+  {
+   "use": "toolu_016wfyKy7aD6m6eQ9ygQvERE",
+   "time": "2026-10-28T23:09:15.687Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "예수님 안 믿어도, 그냥 착하게 살면 되는 것 아닌가요?",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 107",
+   "node": "4KCd4NcnbgYcuzO76iDb",
+   "sessions": [
+    "CZOLYU6Gc2jflPfWoMEQ"
+   ]
+  },
+  {
+   "use": "toolu_01LweUK1WVQDD5eS7B8wu8NQ",
+   "time": "2026-10-28T23:09:17.688Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "해적선에 타고 있다고 해 봅시다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 108",
+   "node": "7EZ2WwNaG2vty0crFy2g",
+   "sessions": [
+    "D9NwFq9y4vNGndv6SDJ6"
+   ]
+  },
+  {
+   "use": "toolu_01Qut51zb5jK2vz4xfoDGNq2",
+   "time": "2026-10-28T23:09:19.661Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "그 배 위에서 아무리 깨끗이 닦고, 친절하고, 모범적으로 산다 해도, 당신은 여전히 해적입니다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 109",
+   "node": "fFdwKWImqZbN9IJTaYl1",
+   "sessions": [
+    "jOSTQg1Ei2c9SOfJFGU4"
+   ]
+  },
+  {
+   "use": "toolu_01YFDXYjeZ9v4kE2AXauAuBe",
+   "time": "2026-10-28T23:09:33.108Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "그 배가 향하는 곳, 심판의 항구로 배와 함께 실려 가기 때문입니다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 110",
+   "node": "N5wB96zf6tq8XMIOD8Tl",
+   "sessions": [
+    "ThJ1JlsT10SCALFhrjDu"
+   ]
+  },
+  {
+   "use": "toolu_01Qwrxa6sRuqAo8ipyoaYJWH",
+   "time": "2026-10-28T23:09:35.260Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "문제는 행동의 점수가 아니라, 어느 배에 속했는가입니다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 111",
+   "node": "4TjLBwT1tEu5WAJ45TD5",
+   "sessions": [
+    "BuMrgggMT3ad7Z42u5L1"
+   ]
+  },
+  {
+   "use": "toolu_01QYbcHVMZJFJVZFxmHnNYmg",
+   "time": "2026-10-28T23:09:37.556Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "그래서 복음은 '더 착해져라'가 아니라 '배를 옮겨 타라'고 합니다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 112",
+   "node": "qzI5CMslbTMwBkAawjSV",
+   "sessions": [
+    "NPZXqymHFTEBoV0hbgQ9"
+   ]
+  },
+  {
+   "use": "toolu_01Fb55YRJnCXjjvQxnqb4saN",
+   "time": "2026-10-28T23:09:39.908Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "죄의 배에서 내려, 하나님의 자녀라는 새 신분으로 건너가는 것입니다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 113",
+   "node": "xnnZJCcUVF1UJ3l1Z4kP",
+   "sessions": [
+    "HGBOZcIkey08s5Rf2oZz"
+   ]
+  },
+  {
+   "use": "toolu_01MAwYyEG7BFbWdTqi3iBsSg",
+   "time": "2026-10-28T23:09:42.160Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "그가 우리를 흑암의 권세에서 건져내사 그의 사랑의 아들의 나라로 옮기셨으니",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 114",
+   "node": "EOxb4R6xRbPyJ6K4D2Ld",
+   "sessions": [
+    "231kXJWBgFyg934OEda3"
+   ]
+  },
+  {
+   "use": "toolu_01EAVFEPdXQ5cB2occBbrFLK",
+   "time": "2026-10-28T23:09:44.258Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "이 사랑은 정보가 아니라 초대입니다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 115",
+   "node": "qhfYvz0kyudo0MwthhW2",
+   "sessions": [
+    "liQp6GKp95GmZq5HCTGB"
+   ]
+  },
+  {
+   "use": "toolu_01S2NPf34MkboNsmprDCjjEt",
+   "time": "2026-10-28T23:09:46.458Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "마음으로 함께 기도해 보세요.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 116",
+   "node": "N0PkHR14N9pao86wvpiw",
+   "sessions": [
+    "h0fPO2VIU6fD3MCgtkfB"
+   ]
+  },
+  {
+   "use": "toolu_01XDNLQ9gXEvQAnzj9TCjWNg",
+   "time": "2026-10-28T23:09:48.558Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "하나님,",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 117",
+   "node": "nzMlBZTQML6Ob1gvJNbW",
+   "sessions": [
+    "3FAkw90YVIy4CS3aEUul"
+   ]
+  },
+  {
+   "use": "toolu_014FhFnKgzx3DGJeEbH7ahoN",
+   "time": "2026-10-28T23:09:50.656Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "저는 스스로를 구원할 수 없는 죄인임을 인정합니다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 118",
+   "node": "jhOUZYhLFdTUP9zZ2Vx0",
+   "sessions": [
+    "aFGMExsSYDLO9E2IR1ie"
+   ]
+  },
+  {
+   "use": "toolu_017hvRCbpSgjzGk9AXqV4KwQ",
+   "time": "2026-10-28T23:09:52.955Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "예수님이 저를 위해 십자가에서 죽으시고 다시 살아나신 것을 믿습니다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 119",
+   "node": "SwBiRUtpbLV0QMzU04zV",
+   "sessions": [
+    "JtYlqRGjaNR3Nq2ZbS4B"
+   ]
+  },
+  {
+   "use": "toolu_01Y63rjeZcPQSvJAVfn7y6VL",
+   "time": "2026-10-28T23:09:55.156Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "제 모든 죄를 용서해 주시고, 이제 제 삶의 주인이 되어 주세요.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 120",
+   "node": "gQu1ktRKKM5nwZflP8cU",
+   "sessions": [
+    "pgyNaCWz7VMfhAUEltBS"
+   ]
+  },
+  {
+   "use": "toolu_01PDo8cyZNiVtykGiCgXEZJz",
+   "time": "2026-10-28T23:09:57.356Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "저를 하나님의 자녀로 받아 주시고, 새로운 삶을 살게 해 주세요.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 121",
+   "node": "QTwetFwdm7lN9L5XnKDO",
+   "sessions": [
+    "93DpW8ddxyMYiu2IIJRj"
+   ]
+  },
+  {
+   "use": "toolu_01G7i64r5KZ4PBnj16Yef8sQ",
+   "time": "2026-10-28T23:09:59.458Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "예수님의 이름으로 기도합니다. 아멘.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 122",
+   "node": "SxVrbnLUVeqIAXlT8rpw",
+   "sessions": [
+    "Vo3d3w4g1pdXV3Rn7kxZ"
+   ]
+  },
+  {
+   "use": "toolu_01AK8nA2t521iAhXuBzhxs7j",
+   "time": "2026-10-28T23:10:01.523Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "영접하는 자 곧 그 이름을 믿는 자들에게는 하나님의 자녀가 되는 권세를 주셨으니",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line 123",
+   "node": "SvjUrKXwr0z5RfRmEkM5",
+   "sessions": [
+    "BDSYHTgB3ud4baBFwpxp"
+   ]
+  },
+  {
+   "use": "toolu_01VRKEmz1XiDkgkHWY9QheTb",
+   "time": "2026-10-29T06:33:40.217Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "하나님이 언약을 맺어 약속하시고,",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration revised line 1",
+   "node": "CKqq2uuVTf3ndX3MY1GB",
+   "sessions": [
+    "rbojEgEjxH2ApkDXrjZC"
+   ]
+  },
+  {
+   "use": "toolu_01UjwQyMAiAJUpB6e8aZtu66",
+   "time": "2026-10-29T06:33:42.321Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "사람은 하나님의 말씀을 거역했고, 죄와 죽음이 들어와 하나님과의 사이가 끊어졌습니다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration revised line 11",
+   "node": "JJ3EFQZE4JdevdsjYaqU",
+   "sessions": [
+    "rg0poZ03KI04lpcfjGjv"
+   ]
+  },
+  {
+   "use": "toolu_01PsBZjCAkA4A3JpFRJfDHte",
+   "time": "2026-10-29T06:33:44.325Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "하나님은 곧바로 구원을 약속하셨습니다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration new line 14",
+   "node": "gK22BdzXomMBiEnkMIne",
+   "sessions": [
+    "7RJ0DZ47TmI1S4e6LX16"
+   ]
+  },
+  {
+   "use": "toolu_01UFxJWULJVyUTzMMhkxjyMW",
+   "time": "2026-10-29T06:33:46.321Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "사탄의 머리를 깨뜨릴 여자의 후손, 그분이 바로 예수님이십니다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration revised line 16",
+   "node": "4Zc7slEHYUfz2XhbNMss",
+   "sessions": [
+    "tAsMM60rM14dXl5hVAad"
+   ]
+  },
+  {
+   "use": "toolu_01DHHvaB5XsywCtmBFoPeTHP",
+   "time": "2026-10-29T06:33:48.574Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "하나님은 아브라함을 부르시고, 그의 자손을 통해 온 세상에 복을 주시겠다고 언약하셨습니다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration revised line 18",
+   "node": "km0DzwybKL2IVSsG3dDl",
+   "sessions": [
+    "aG8SBf1cQfbHQ604FiZW"
+   ]
+  },
+  {
+   "use": "toolu_01BYsU4ahkgJYMG7upRcTuaJ",
+   "time": "2026-10-29T06:33:50.723Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "아브라함은 그 약속을 믿었고, 하나님은 그 믿음을 의로 여기셨습니다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration new line 19",
+   "node": "eYclwtFKGIoCIL2lrPTl",
+   "sessions": [
+    "qYWWH0NnTkUdpJwACtsU"
+   ]
+  },
+  {
+   "use": "toolu_01Eg73MvU2LX6kVvpgVmZBu2",
+   "time": "2026-10-29T06:33:52.771Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "출애굽. 하나님은 모세를 보내, 종살이하던 백성을 건지십니다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration revised line 22",
+   "node": "PccyoLdOIY0w42bx57Ft",
+   "sessions": [
+    "tQ3kXZYkboPR23HFKgmE"
+   ]
+  },
+  {
+   "use": "toolu_01LWsET4VxeQXqeGAcVGarwk",
+   "time": "2026-10-29T06:33:54.877Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "성막과 제사로, 피 흘림으로 죄를 용서하심을 보여 주셨습니다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration new line 30",
+   "node": "PPsjFR25PfeWuH29euzA",
+   "sessions": [
+    "jv2TrBoGBACZJdjcM9ym"
+   ]
+  },
+  {
+   "use": "toolu_0199DvV1CzhsidPCX5SvDGoU",
+   "time": "2026-10-29T06:33:57.027Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "그러나 하나님은 가장 어두운 포로의 땅까지 함께 가시며, 회복과 새 언약을 약속하셨습니다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration revised line 48",
+   "node": "iKVljdw1JpjiXzXpz5oB",
+   "sessions": [
+    "XjwkJM1HN0tePM4hq45S"
+   ]
+  },
+  {
+   "use": "toolu_018j5duamKiN7RRFnaWPCB1z",
+   "time": "2026-10-29T06:33:58.975Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "죄의 값이 다 치러졌다는 뜻입니다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration new line 69",
+   "node": "kYeon5By48RuzQZMwuqW",
+   "sessions": [
+    "hEkfOzPnBeyv7LYa2KDX"
+   ]
+  },
+  {
+   "use": "toolu_01GE1ycDuGo1dkhNPpE782U2",
+   "time": "2026-10-29T06:34:00.930Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "예수님은 죄와 죽음을 이기셨습니다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration revised line 73",
+   "node": "elXqEQqe8eZYLsTNpy0h",
+   "sessions": [
+    "qFJXAzMhQxSVG9evQe0o"
+   ]
+  },
+  {
+   "use": "toolu_0184fypLTvHNwx7WWAxxpiDm",
+   "time": "2026-10-29T06:34:03.025Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "오순절에 성령이 임하시고 교회가 태어났습니다. 복음은 땅 끝까지 퍼져 나갔습니다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration revised line 76",
+   "node": "oPAfMBt6yEfYX3tvoeA7",
+   "sessions": [
+    "4tGV67fJgorrkDg6VBeD"
+   ]
+  },
+  {
+   "use": "toolu_01RAwaweGwX98r8RaTg84jPR",
+   "time": "2026-10-29T06:34:05.271Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "로마 역사가 타키투스와 유대 역사가 요세푸스도 예수님을 기록했습니다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration revised line 108",
+   "node": "XYhHCdV2nDWy2Q8SrRP4",
+   "sessions": [
+    "SOdgVAMsVWqfr5lrQwWH"
+   ]
+  },
+  {
+   "use": "toolu_01F7jh8dv8NjHwErdCiZTMue",
+   "time": "2026-10-29T06:34:07.406Z",
+   "flow": "gwI9dhIkAwTAsYxSvHiR",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "prompt": "죄의 배에서 내려, 예수님께로. 하나님의 자녀라는 새 신분으로 건너가는 것입니다.",
+   "params": {
+    "generations_count": 1,
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration revised line 117",
+   "node": "eeLDYcrFXdkFYPQCWAgq",
+   "sessions": [
+    "nbSn9D0Q1VDwlQHhqK64"
+   ]
+  }
+ ],
+ "title": "한눈에 보는 성경 이야기 — 해설 목소리",
+ "about": "2026-10-28~29, flow gwI9dhIkAwTAsYxSvHiR: 목소리 후보 샘플과 첫 영상 해설판(narr) 대사. 고른 목소리 HYALOqtTLlRjxo4uBKeg · eleven_v4."
+}

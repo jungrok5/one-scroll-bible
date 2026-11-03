@@ -237,6 +237,13 @@ main 배포는 관리자 허락을 받고 한다.
   (「메시아」 창 3:15 → 갈 4:4 = `ember` 불씨, 2026-11-03 "오 굿굿 이번엔 4번 불씨로"). 새 방식은 이 키트에 더한다.
 - **땅(3D 지형)은 격자를 세상에 고정**하고(카메라를 따라 격자가 움직이면 카메라가 움직일 때 땅이 자글거린다), 칸마다 앞뒤로 부드럽게
   음영을 넣는다(칸마다 한 색이면 벽돌처럼 보인다). 「메시아」 `terrain()`이 그 방식이다(2026-11-03).
+- **소리도 영상처럼 기록이 남게 — ElevenLabs에 보낸 프롬프트는 깃에**(관리자 2026-11-03: "영상은 코드가 있고 눈으로 보면 알 텐데
+  사운드는 없으니까 일레븐랩스에 요청한 프롬프트를 깃에도 남겨 둬서 다음 세션이 참고할 수 있게"). 만든 뒤 바로:
+  `node motion/films/sound-prompts.mjs logs motion/films/<이름>/sound/prompts.json <flow_id> <세션 로그 .jsonl>` → `names … sessions-*.json`
+  → `md`(읽기 쉬운 표 `prompts.md`). 소리를 만들기 전에 **첫 영상의 프롬프트**(`motion/pilot/audio/prompts/first-film.md` — 262개, 2026-11-03
+  ElevenLabs 플로에서 꺼냄)와 앞 영상의 `prompts.md`를 읽고 같은 방식으로 쓴다: 악기·선법·박자를 이름으로, "몇 초에 무엇이 오는지",
+  "quiet under a spoken voice", "no drums, no synths", 한 영상을 꿰는 하나의 주제가 부마다 다른 악기로 돌아옴. 해설은 같은 목소리
+  (`HYALOqtTLlRjxo4uBKeg` · eleven_v4, 줄당 한 번, 숫자는 한글로). 큐마다 소리 크기가 크게 달라 `sound.mjs --envelope`로 재고 `cues.json` db로 맞춘다.
 - 한 파일짜리 캔버스 영상: `motion/films/<이름>/film.html` + `script.json` + 장면별 그림 모듈. 공용은 `../pilot/lib.js`, `lib-film.js`.
 - **화풍은 motion-skills에서 고른다**(관리자 결정 2026-10-31). 로컬 사본은 `C:\Project\motion-skills`(github.com/jungrok5/motion-skills)이고, 목록은 `canvas-film/references/STYLE-INDEX.md`입니다.
   **지금은 재활용보다 발굴이 먼저다**(관리자 2026-11-02: "매번 같은 화풍만 쓰면 질릴 수 있으니 재활용을 우선하지 말고 아직은 스타일 발굴을 더"):

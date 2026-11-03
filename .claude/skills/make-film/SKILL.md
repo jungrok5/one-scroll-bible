@@ -52,6 +52,14 @@ counters, labelled maps, numbered lists), looks taken from films and paintings (
 Flat graphic / poster / cartoon-character / game looks are out (README 7절). Check a phone-size portrait still: cinematic?
 readable in one second?
 
+**A fitting look per scene, never one look for the whole film; every film adds 1–2 new looks** (maintainer and wife, 2026-11-03,
+after 「메시아」 round 1 — "비주얼이 심심하다, 중간에 끄고 싶더라", "씬마다 적절하게 잘 표현할 화풍들을 다채롭게", "영상을 하나씩 추가할 때마다
+새로운 화풍 한두 개를 만들고 추가해서 점점 다양한 화풍을 얻게"). At stage 2 give each scene (or part) its own look from STYLE-INDEX
+(first-film looks, kits, OPUSCAR/Lemo-Opuscar) and make **1–2 of them new** (`parts[].style_new: true`). Kit the new ones into motion-skills
+when the film ships. Neighbouring scenes in the same look need a reason. One event on screen per verse, and no near-still stretch over 3 s.
+After each render, run `node motion/films/look-check.mjs <film.mp4>` and compare with the first film's Shorts (README 7절): brightness
+78–97/255, dark frames 1–11%, still frames 0–1%. 「메시아」 round 1 scored 49, 58% and 24%.
+
 **Drawing (stage 4) — portrait first, legibility first** (maintainer, 2026-11-02): compose every scene for 1080×1920
 (Shorts) and adapt landscape for TV; pilots, stills and preview videos are portrait first. Search STYLE-INDEX, the
 Lemo-Opuscar repo AND the word-log kits (`kits/templates.jpg` — portrait-native, figures that read); reject a look whose

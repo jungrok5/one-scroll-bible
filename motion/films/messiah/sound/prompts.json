@@ -1238,6 +1238,106 @@
     "pQQG9EggcuokUBKriakD"
    ],
    "name": "E7"
+  },
+  {
+   "use": "toolu_019vJq3fAmD6UcTUrZyBJcMY",
+   "time": "2026-11-03T14:56:41.295Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "E8a 목탄 어둠이 번짐 3.4s",
+   "prompt": "Vine charcoal being rubbed and smeared across toothed drawing paper by fingers and the side of the stick: a dry, soft, scratchy rubbing that slowly grows heavier and closes in, close and intimate, quiet",
+   "params": {
+    "duration_seconds": 3.4,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "「메시아」 round 2: charcoal darkness spreading in Eden (21.9 s, 3.4 s)",
+   "node": "guLGz7hatzsmx4WQYQXi",
+   "sessions": [
+    "yGWrT1hFU7HdHrQmlt31"
+   ],
+   "name": "E8a"
+  },
+  {
+   "use": "toolu_01KUkizVhFPDwm3gPMnD1bnX",
+   "time": "2026-11-03T14:56:41.309Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "E8b 지우개로 빛을 들어 올림 1.4s",
+   "prompt": "A soft kneaded eraser pressed and lifted off charcoal on paper, two short gentle rubs, then a tiny warm glassy shimmer, very quiet and close",
+   "params": {
+    "duration_seconds": 1.4,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "「메시아」 round 2: eraser lifting a point of light out of charcoal (26.8 s, 1.4 s)",
+   "node": "Mk8FFCRE2il9YSU2yCqV",
+   "sessions": [
+    "Yp5kfs5UveFUzjw4RWWj"
+   ],
+   "name": "E8b"
+  },
+  {
+   "use": "toolu_01NT1hnYujhaBnLGCVX9ZnLp",
+   "time": "2026-11-03T14:56:41.354Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "E8c 지도 위 여러 깃펜 4s",
+   "prompt": "Many fine quill pens drawing long lines on old parchment at the same time, a soft layered scratching that gathers and thins until only one pen is left, with a faint warm glassy shimmer, quiet and close",
+   "params": {
+    "duration_seconds": 4,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "「메시아」 round 2: many quill lines gathering on a parchment map (51.6 s, 4 s)",
+   "node": "3gxv8FsAupvr7ecuASrf",
+   "sessions": [
+    "XkREwsHfE90pR3OPaXst"
+   ],
+   "name": "E8c"
+  },
+  {
+   "use": "toolu_01Y92AfjZW2EpJWtGv36ZgKG",
+   "time": "2026-11-03T14:56:48.937Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "E8d 흑백 영사기 6.4s",
+   "prompt": "A faint old 16mm film projector running in a quiet room: a soft steady flutter and rattle of the film gate, distant and gentle, with low hum, slowly fading at the end",
+   "params": {
+    "duration_seconds": 6.4,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "「메시아」 round 2: black-and-white film projector under the cross (146 s, 6.4 s)",
+   "node": "IjCF7eSF8r8CULS2EuKK",
+   "sessions": [
+    "sA3VGy5zqP3ACMDZxXf6"
+   ],
+   "name": "E8d"
+  },
+  {
+   "use": "toolu_01D47X51gedso6KXUNQ4Qkvj",
+   "time": "2026-11-03T14:56:48.945Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "E8e 팔레트 나이프로 칠함 4.4s",
+   "prompt": "A palette knife spreading thick wet oil paint across a stretched canvas: several long, confident, buttery scrapes one after another, getting broader, close and warm, quiet",
+   "params": {
+    "duration_seconds": 4.4,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "「메시아」 round 2: palette knife repainting the world in colour (152.4 s, 4.4 s)",
+   "node": "gyxxseA7mHWSPKnYQRDC",
+   "sessions": [
+    "aP8JqDzeFE2uR2CkVjMX"
+   ],
+   "name": "E8e"
   }
  ],
  "title": "메시아 예언과 성탄",

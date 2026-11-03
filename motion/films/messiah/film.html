@@ -11,6 +11,17 @@
 <script src="../lib-film.js"></script>
 <script src="../lib-link.js"></script>
 <script src="kit-world3d.js"></script>
+<script src="look-oil.js"></script>
+<script src="oil-stable.js"></script>
+<script src="oil-journey.js"></script>
+<script src="look-engrave.js"></script>
+<script src="engrave-shepherds.js"></script>
+<script src="kit-charcoal.js"></script>
+<script src="charcoal-eden.js"></script>
+<script src="pastel-promises.js"></script>
+<script src="kit-inkmap.js"></script>
+<script src="inkmap-narrow.js"></script>
+<script src="impasto-dawn.js"></script>
 <script>
 /* 메시아 예언과 성탄 — one continuous ~2:59 film, made like the first film (motion/films/README 7절): a camera that moves
    through real space, light as the main character, small people in a large land, restraint. Portrait (Shorts) first.
@@ -119,53 +130,9 @@ function house(ctx, c, L, h, t, lampK) {   // a flat-roofed stone house; its lam
 //   Abraham: the desert at night under a sky of stars; a small man before his tent (Gen 22:18); the thread crosses the sky
 //   David: the hills of Bethlehem at evening, a shepherd boy with a staff among his sheep (1 Sam 17:15 · 2 Sam 7)
 //   the land: the thread runs down the valley and across the hills to the small town (Gen 49:10 → Bethlehem)
-function partEden(ctx, t) {
-  const k = clamp((t - 21) / 16), dusk = ss(24, 34, t), hz = H * (V ? .56 : .64);
-  skyGrad(ctx, [[0, Pilot.rgb(Pilot.mix([70, 92, 140], [16, 20, 42], dusk))], [.6, Pilot.rgb(Pilot.mix([226, 170, 140], [62, 46, 70], dusk))], [1, Pilot.rgb(Pilot.mix([252, 206, 150], [120, 70, 70], dusk))]], hz);
-  starField(ctx, ss(30, 36, t) * .6, hz, 3, 200, t);
-  const sh = 40 * k; hillLayer(ctx, hz - 20, V ? 60 : 50, .006, 1, Pilot.rgb(Pilot.mix([150, 120, 120], [44, 36, 52], dusk)), sh * .2);
-  hillLayer(ctx, hz + 30, V ? 40 : 34, .009, 3, Pilot.rgb(Pilot.mix([70, 60, 66], [22, 18, 26], dusk)), sh * .5);
-  // the great tree in the middle of the garden
-  { const tx = W * (V ? .56 : .6) - sh * .6, ty = hz + (V ? 60 : 50), r = rng(5); ctx.save(); ctx.fillStyle = ctx.strokeStyle = 'rgb(16,12,16)'; ctx.lineCap = 'round';
-    const br = (x, y, a, len, w, d) => { if (d > 7 || w < .8) return; const x2 = x + Math.cos(a) * len, y2 = y + Math.sin(a) * len; ctx.lineWidth = w; ctx.beginPath(); ctx.moveTo(x, y); ctx.quadraticCurveTo((x + x2) / 2 + (r() - .5) * len * .25, (y + y2) / 2, x2, y2); ctx.stroke();
-      if (d > 3) for (let i = 0; i < 14; i++) { ctx.beginPath(); ctx.ellipse(x2 + (r() - .5) * len, y2 + (r() - .5) * len * .7, 6 + r() * 12, 4 + r() * 6, r() * 3, 0, 6.283); ctx.fill(); }
-      br(x2, y2, a - .38 - r() * .25, len * .76, w * .66, d + 1); br(x2, y2, a + .34 + r() * .25, len * .74, w * .66, d + 1); };
-    ctx.lineWidth = V ? 30 : 26; ctx.beginPath(); ctx.moveTo(tx - 20, ty + 80); ctx.quadraticCurveTo(tx + 10, ty - 40, tx, ty - (V ? 160 : 120)); ctx.stroke();
-    br(tx, ty - (V ? 160 : 120), -1.9, V ? 150 : 120, V ? 20 : 18, 0); br(tx, ty - (V ? 160 : 120), -1.2, V ? 140 : 110, V ? 18 : 16, 0); ctx.restore(); }
-  hillLayer(ctx, hz + (V ? 90 : 70), V ? 26 : 20, .004, 6, 'rgb(14,10,14)', sh);
-  // one gold point left in the dark garden; it rises into a thread (the first promise)
-  const px = W * (V ? .36 : .34) - sh * .8, py = hz + (V ? 76 : 58), pk = ss(25, 27, t);
-  if (pk > 0) { W3.bloom(ctx, px, py, [255, 210, 130], .55 * pk * (.85 + .15 * Math.sin(t * 2)), { r: 70, streak: .15 }); ctx.fillStyle = `rgba(255,236,190,${pk})`; ctx.beginPath(); ctx.arc(px, py, 3.5, 0, 6.283); ctx.fill(); }
-  const up = clamp((t - 33.5) / 3.5); if (up > 0) { const pts = []; for (let i = 0; i <= 40; i++) { const u = i / 40; pts.push([px + u * W * .7, py - Math.sin(u * 2.4) * H * .18 - u * H * .06]); } thread2D(ctx, pts, up); }
-  W3.finish(ctx, t, { vignette: .62 }); textBand(ctx);
-}
-function partAbraham(ctx, t) {
-  const k = clamp((t - 37) / 6.6), hz = H * (V ? .6 : .68);
-  skyGrad(ctx, [[0, 'rgb(4,6,20)'], [.7, 'rgb(14,20,48)'], [1, 'rgb(44,46,78)']], hz);
-  starField(ctx, 1, hz, 11, V ? 900 : 1100, t); milkyWay(ctx, 1, W * .5, hz * .45, V ? -1.1 : -.35, Math.max(W, H) * 1.3, V ? 380 : 300);
-  hillLayer(ctx, hz, V ? 30 : 24, .004, 2, 'rgb(20,18,30)', 30 * k);
-  { const g = ctx.createLinearGradient(0, hz - 10, 0, H); g.addColorStop(0, 'rgb(20,16,22)'); g.addColorStop(1, 'rgb(8,6,10)'); ctx.fillStyle = g; ctx.fillRect(0, hz + 6, W, H); }
-  const s = V ? 70 : 60, gx = W * (V ? .38 : .42) - 20 * k, gy = hz + (V ? 40 : 32);
-  sil(ctx, gx + s * 2.6, gy + 4, s * .9, 1, SIL.tent, .25, 'rgb(150,160,210)', 'rgb(14,12,16)');
-  { const g = ctx.createRadialGradient(gx + s * 2.4, gy - 4, 0, gx + s * 2.4, gy - 4, 60); g.addColorStop(0, 'rgba(255,170,90,.6)'); g.addColorStop(1, 'rgba(255,170,90,0)'); ctx.fillStyle = g; ctx.fillRect(gx + s * 2.4 - 60, gy - 64, 120, 120); }   // a fire by the tent
-  sil(ctx, gx, gy, s, 1, SIL.lookingUp, .35, 'rgb(160,176,226)');
-  // the thread crosses the sky above him, among the stars
-  const pts = []; for (let i = 0; i <= 40; i++) { const u = i / 40; pts.push([-40 + u * (W + 80), hz * (.55 - .25 * Math.sin(u * 3.1))]); } thread2D(ctx, pts, clamp((t - 37.4) / 5.4), .8);
-  W3.finish(ctx, t, { vignette: .55 }); textBand(ctx);
-}
-function partDavid(ctx, t) {
-  const k = clamp((t - 43.4) / 7.8), hz = H * (V ? .56 : .64);
-  skyGrad(ctx, [[0, 'rgb(48,62,108)'], [.55, 'rgb(196,136,124)'], [.88, 'rgb(250,192,132)'], [1, 'rgb(255,214,160)']], hz);
-  { const sx = W * .3, sy = hz - 20, R = Math.max(W, H) * .7, g = ctx.createRadialGradient(sx, sy, 0, sx, sy, R); g.addColorStop(0, 'rgba(255,220,160,.6)'); g.addColorStop(.25, 'rgba(255,200,140,.2)'); g.addColorStop(1, 'rgba(255,200,140,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H); }
-  hillLayer(ctx, hz - 10, V ? 50 : 40, .005, 4, 'rgb(170,118,118)', 40 * k * .2); hillLayer(ctx, hz + 30, V ? 40 : 30, .008, 7, 'rgb(104,74,84)', 40 * k * .5);
-  const crest = x => hz + (V ? 110 : 84) - (V ? 40 : 30) * Math.sin((x + 60 * k) * .003 + 1);
-  ctx.fillStyle = 'rgb(26,18,22)'; ctx.beginPath(); ctx.moveTo(-60, H + 60); for (let x = -60; x <= W + 60; x += 6) ctx.lineTo(x, crest(x)); ctx.lineTo(W + 60, H + 60); ctx.closePath(); ctx.fill();
-  const s = V ? 78 : 66, r = rng(31);
-  for (let i = 0; i < 9; i++) { const x = W * (.12 + .8 * r()) - 30 * k, y = crest(x) + 2 + r() * 10, ph = Math.sin(t * .8 + i) * .02; sil(ctx, x, y, s * (.75 + .2 * r()), r() < .5 ? 1 : -1, p => { p.ellipse(0, -.42, .42, .22, ph, 0, 6.283); p.ellipse(.42, -.5 + ph, .13, .1, .4, 0, 6.283); for (const lx of [-.26, -.12, .14, .26]) p.rect(lx, -.24, .045, .24); }, .5, 'rgb(255,206,150)', 'rgb(26,18,22)'); }
-  const bx = W * (V ? .6 : .62) - 30 * k; sil(ctx, bx, crest(bx) + 2, s, -1, SIL.boy, .7, 'rgb(255,206,150)', 'rgb(26,18,22)', [-.9, -.43], 3);
-  const pts = []; for (let i = 0; i <= 40; i++) { const u = i / 40; pts.push([-40 + u * (W + 80), crest(-40 + u * (W + 80)) - (V ? 18 : 14)]); } thread2D(ctx, pts, clamp((t - 43.8) / 6), .8);
-  W3.finish(ctx, t, { vignette: .55 }); textBand(ctx);
-}
+// partEden: charcoal-eden.js (Gothic charcoal, kit-charcoal.js, 2026-11-03 round 2)
+// partAbraham: pastel-promises.js (soft pastel after the first film's patriarch scene, 2026-11-03 round 2)
+// partDavid: pastel-promises.js (soft pastel after the first film's patriarch scene, 2026-11-03 round 2)
 let NARROW = null;
 function buildNarrow() {
   const tw = RD.xr(RD.BZ) + 30, th = rdH(tw, RD.BZ);
@@ -174,13 +141,7 @@ function buildNarrow() {
   NARROW = { cam: W3.cam([K(51, -60, 150, -90), K(56, 200, 110, -60), K(61, 620, 80, -30)]), path,
     light: W3.light([[51, 6, 60, .95, [255, 178, 110], [80, 66, 86], [60, 84, 140], [250, 180, 124], [255, 186, 120], [212, 162, 140], 1200, 0], [61, 2, 60, .6, [255, 150, 96], [64, 56, 84], [40, 54, 104], [232, 150, 118], [248, 150, 104], [168, 128, 132], 1100, .2]]) };
 }
-function partNarrow(ctx, t) {
-  const c = NARROW.cam(t), L = NARROW.light(t); W3.sky(ctx, c, L, t);
-  terrain(ctx, c, L, { h: rdH, alb: landAlb, road: true, things: (z0, z1) => townAt(ctx, c, L, t, z0, z1, ss(57, 59, t)) });
-  threadWorld(ctx, c, NARROW.path, clamp((t - 51.6) / 6.4));
-  const tp = W3.P(c, RD.xr(RD.BZ) + 30, rdH(RD.xr(RD.BZ) + 30, RD.BZ) + 6, RD.BZ); if (tp) W3.bloom(ctx, tp[0], tp[1], [255, 200, 120], .6 * ss(57.6, 59.6, t), { r: V ? 200 : 180, streak: .25 });
-  W3.finish(ctx, t, { vignette: .58 }); textBand(ctx);
-}
+// partNarrow: inkmap-narrow.js (parchment ink map, kit-inkmap.js, 2026-11-03 round 2 — 51.0–70.6, through Nazareth)
 
 // =====================================================================================================================
 // 4 · 1:35–2:08  that night. A stable in the rock: the only light comes from the child in the manger; figures small and in
@@ -223,48 +184,14 @@ function stableScene(ctx, t, o = {}) {
   ctx.restore();
   return { lx, ly, glowK };
 }
-function partStable(ctx, t) { stableScene(ctx, t, { z: 1.12 - .1 * eio(clamp((t - 95) / 10)) }); W3.finish(ctx, t, { vignette: .6 }); textBand(ctx); }
-function partShepherds(ctx, t) {
-  const k = clamp((t - 104.6) / 9), open = ss(105.6, 108.4, t), hz = H * (V ? .6 : .66);
-  skyGrad(ctx, [[0, 'rgb(6,8,24)'], [.8, 'rgb(18,24,52)'], [1, 'rgb(34,38,70)']], hz); starField(ctx, 1 - .7 * open, hz, 33, 500, t);
-  // the glory of the Lord: light opening in the sky above them (a soft corona, slow faint rays, warm-white)
-  if (open > 0) { const sx = W * .5, sy = H * (V ? .2 : .18); const g = ctx.createRadialGradient(sx, sy, 0, sx, sy, Math.max(W, H) * .9); g.addColorStop(0, `rgba(255,246,222,${.95 * open})`); g.addColorStop(.18, `rgba(255,226,170,${.5 * open})`); g.addColorStop(.55, `rgba(160,150,170,${.18 * open})`); g.addColorStop(1, 'rgba(60,60,90,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
-    rays(ctx, sx, sy, t, [255, 236, 200], .03 * open); }
-  hillLayer(ctx, hz, V ? 50 : 40, .005, 2, Pilot.rgb(Pilot.mix([22, 22, 36], [120, 104, 96], open * .6)), 20 * k);
-  const crest = x => hz + (V ? 110 : 84) - (V ? 40 : 30) * Math.sin((x + 60 * k) * .003 + 1);   // the same hill as David's
-  ctx.fillStyle = Pilot.rgb(Pilot.mix([14, 12, 18], [40, 30, 30], open * .5)); ctx.beginPath(); ctx.moveTo(-60, H + 60); for (let x = -60; x <= W + 60; x += 6) ctx.lineTo(x, crest(x)); ctx.lineTo(W + 60, H + 60); ctx.closePath(); ctx.fill();
-  const s = V ? 82 : 70, r = rng(31), rimA = .25 + .7 * open, rc = 'rgb(255,236,200)';
-  for (let i = 0; i < 9; i++) { const x = W * (.12 + .8 * r()) - 30 * k, y = crest(x) + 2 + r() * 10; sil(ctx, x, y, s * (.75 + .2 * r()), r() < .5 ? 1 : -1, SIL.sheep, rimA * .6, rc, 'rgb(16,12,16)'); }
-  for (const [fx, f] of [[.36, 1], [.5, -1], [.62, 1]]) { const x = W * fx - 30 * k; sil(ctx, x, crest(x) + 2, s, f, SIL.lookingUp, rimA, rc, 'rgb(16,12,16)'); }
-  W3.finish(ctx, t, { vignette: .55 }); textBand(ctx);
-}
-function partPair(ctx, t) {   // back in the stable, closer; then dark, and the two verses joined by gold; the light comes back onto the manger (W3)
-  const st = stableScene(ctx, t, { z: 1.3 + .09 * eio(clamp((t - 113.6) / 23)) }); W3.finish(ctx, t, { vignette: .65 });
-  const dim = ss(114.6, 116.2, t) * (1 - .6 * ss(128.4, 131.4, t)); ctx.fillStyle = `rgba(6,4,6,${.72 * dim})`; ctx.fillRect(0, 0, W, H);
-  textBand(ctx);
-}
+// partStable / partPair: oil-stable.js (Rembrandt top-light oil, 2026-11-03 round 2)
+// partShepherds: engrave-shepherds.js (Doré line engraving, 2026-11-03 round 2)
 
 // =====================================================================================================================
 // 5 · 2:08–2:59  the camera leaves the stable and rises over the town at night (1 · reversed); dawn on a hill with a cross —
 // the sun rises behind it ("성경대로 … 다시 살아나사"); back to the night over Bethlehem, the first frame, the reading card.
 function partRise(ctx, t) { partFlight(ctx, t, lerp(21, 4, eio(clamp((t - 137) / 9))), { warm: .6 }); const k = 1 - ss(137, 138.4, t); if (k > 0) { ctx.fillStyle = `rgba(8,6,8,${k})`; ctx.fillRect(0, 0, W, H); } }
-function partDawn(ctx, t) {
-  const dawn = ss(148, 155.8, t), sun = ss(152.4, 156.4, t), hz = H * (V ? .58 : .64);
-  skyGrad(ctx, [[0, Pilot.rgb(Pilot.mix([6, 8, 22], [60, 92, 150], dawn))], [.6, Pilot.rgb(Pilot.mix([16, 20, 44], [226, 170, 150], dawn))], [1, Pilot.rgb(Pilot.mix([34, 34, 60], [255, 214, 160], dawn))]], hz);
-  starField(ctx, 1 - dawn, hz, 5, 300, t);
-  const sx = W * (V ? .58 : .6), sy = hz + 40 - (V ? 130 : 110) * eio(sun);
-  if (sun > 0) { const R = Math.max(W, H), g = ctx.createRadialGradient(sx, sy, 0, sx, sy, R); g.addColorStop(0, `rgba(255,236,190,${.9 * sun})`); g.addColorStop(.2, `rgba(255,200,140,${.4 * sun})`); g.addColorStop(1, 'rgba(255,200,140,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
-    ctx.fillStyle = `rgba(255,246,220,${sun})`; ctx.beginPath(); ctx.arc(sx, sy, V ? 34 : 30, 0, 6.283); ctx.fill(); }
-  hillLayer(ctx, hz, V ? 44 : 36, .005, 5, Pilot.rgb(Pilot.mix([18, 16, 28], [140, 100, 110], dawn * .7)));
-  // the hill with a cross, near; the light comes from behind it
-  const hx = W * (V ? .42 : .4), crest = x => hz + (V ? 110 : 80) - (V ? 120 : 90) * Math.exp(-((x - hx) ** 2) / ((V ? 260 : 340) ** 2));
-  ctx.fillStyle = 'rgb(16,11,14)'; ctx.beginPath(); ctx.moveTo(-60, H + 60); for (let x = -60; x <= W + 60; x += 6) ctx.lineTo(x, crest(x)); ctx.lineTo(W + 60, H + 60); ctx.closePath(); ctx.fill();
-  { const cxp = hx, cyp = crest(hx), s = V ? 2.2 : 1.9; ctx.fillStyle = 'rgb(16,11,14)'; ctx.fillRect(cxp - 6 * s, cyp - 120 * s, 12 * s, 122 * s); ctx.fillRect(cxp - 38 * s, cyp - 96 * s, 76 * s, 10 * s);
-    if (sun > 0) { ctx.save(); ctx.globalAlpha = .7 * sun; ctx.strokeStyle = 'rgb(255,206,140)'; ctx.lineWidth = 2; ctx.strokeRect(cxp - 6 * s, cyp - 120 * s, 12 * s, 122 * s); ctx.strokeRect(cxp - 38 * s, cyp - 96 * s, 76 * s, 10 * s); ctx.restore(); } }
-  if (sun > 0) W3.bloom(ctx, sx, sy, [255, 210, 150], sun, { r: V ? 300 : 260, streak: .9 });
-  const pts = []; for (let i = 0; i <= 40; i++) { const u = i / 40; pts.push([-40 + u * (W + 80), crest(-40 + u * (W + 80)) - 10]); } thread2D(ctx, pts, clamp((t - 149) / 4.4), .7 * (1 - sun * .5));
-  W3.finish(ctx, t, { vignette: .55 }); textBand(ctx);
-}
+// partDawn: impasto-dawn.js (black-and-white film → palette-knife colour, 2026-11-03 round 2)
 function partEnd(ctx, t) { partFlight(ctx, t, lerp(4, 0, clamp((t - 159) / 9)), { warm: .5, noBand: t > 168.6 }); const k = ss(168.6, 170, t); if (k > 0) { ctx.fillStyle = `rgba(6,6,12,${.62 * k})`; ctx.fillRect(0, 0, W, H); } }
 function endCard(ctx, t, a, b) { const k = win(t, a, b, 1, .8); if (k <= 0) return; const segs = Film.text('E1').split(/\s*→\s*/), size = V ? 46 : 42, y0 = H * (V ? .4 : .38);
   Pilot.text(ctx, segs[0], W / 2, y0, { size, weight: 600, font: "'Noto Serif KR',serif", color: '#f6ead0', alpha: k, shadow: 'rgba(0,0,0,.9)', shadowBlur: 18 });
@@ -324,7 +251,7 @@ function partRoad(ctx, t) {
       travellerSil(ctx, pp[0], pp[1], pp[2], t * .75, W3.css(L.sunC), 0); } }
   if (sk.sun && L.sunI > 0) W3.bloom(ctx, sk.sun[0], sk.sun[1], L.glow, L.sunI * (1 - ss(85, 89.6, t) * .6), { r: V ? 160 : 140 });
   W3.finish(ctx, t);
-  { const y0 = Film.SAFE() - (V ? 150 : 70), g = ctx.createLinearGradient(0, y0, 0, H); g.addColorStop(0, 'rgba(10,8,10,0)'); g.addColorStop(.4, 'rgba(10,8,10,.7)'); g.addColorStop(1, 'rgba(10,8,10,.9)'); ctx.fillStyle = g; ctx.fillRect(0, y0, W, H - y0); }
+  { const y0 = Film.SAFE() - (V ? 150 : 70), g = ctx.createLinearGradient(0, y0, 0, H); g.addColorStop(0, 'rgba(10,8,10,0)'); g.addColorStop(.45, 'rgba(10,8,10,.42)'); g.addColorStop(1, 'rgba(10,8,10,.55)'); ctx.fillStyle = g; ctx.fillRect(0, y0, W, H - y0); }   // lighter since round 2 (the picture shows through; the words keep their shadow)
 }
 
 
@@ -404,7 +331,7 @@ function partNazareth(ctx, t) {
   W3.finish(ctx, t, { vignette: .6 });
   textBand(ctx);
 }
-function textBand(ctx) { const y0 = Film.SAFE() - (V ? 150 : 70), g = ctx.createLinearGradient(0, y0, 0, H); g.addColorStop(0, 'rgba(10,8,10,0)'); g.addColorStop(.4, 'rgba(10,8,10,.7)'); g.addColorStop(1, 'rgba(10,8,10,.9)'); ctx.fillStyle = g; ctx.fillRect(0, y0, W, H - y0); }
+function textBand(ctx) { const y0 = Film.SAFE() - (V ? 150 : 70), g = ctx.createLinearGradient(0, y0, 0, H); g.addColorStop(0, 'rgba(10,8,10,0)'); g.addColorStop(.45, 'rgba(10,8,10,.42)'); g.addColorStop(1, 'rgba(10,8,10,.55)'); ctx.fillStyle = g; ctx.fillRect(0, y0, W, H - y0); }   // lighter since round 2 (the picture shows through; the words keep their shadow)
 let ROME = null;
 function buildRome() {
   const F = [], marble = [.95, .92, .86], gold = [1.0, .78, .36], red = [.62, .12, .1];
@@ -452,8 +379,8 @@ function partRome(ctx, t) {
 // the timeline (film seconds = the script's clock); scenes dissolve into each other over their overlap
 const SCENES = [
   [0, 21.2, (c, t) => { partFlight(c, t); const k = ss(15.8, 17, t); if (k > 0) { c.fillStyle = `rgba(6,6,12,${.74 * k})`; c.fillRect(0, 0, W, H); } }],
-  [21.0, 37.2, partEden], [37.0, 43.6, partAbraham], [43.4, 51.2, partDavid], [51.0, 63.8, partNarrow],
-  [63.6, 70.6, partNazareth], [70.4, 76.8, partRome], [76.6, 83.6, partRidge], [83.4, 95.2, partRoad],
+  [21.0, 37.2, partEden], [37.0, 43.6, partAbraham], [43.4, 51.2, partDavid], [51.0, 70.6, partNarrow],
+  [70.4, 76.8, partRome], [76.6, 95.2, partJourney],
   [95.0, 104.8, partStable], [104.6, 113.8, partShepherds], [113.6, 137.2, partPair],
   [137.0, 146.2, partRise], [146.0, 159.2, partDawn], [159.0, 179.4, partEnd],
 ];
@@ -464,7 +391,7 @@ const TEXT = [
   ['label', 'G1', 37.2, 41.0], ['quote', '06', 38.4, 43.2, { ...QB(), hlAt: 39.4 }], ['label', 'G3', 41.2, 43.4],
   ['label', 'G2', 43.6, 50.6], ['quote', '07', 44.0, 49.6, { y: V ? H * .22 : H * .2, size: V ? 44 : 40, hlAt: 45 }], ['sub', 'D1', 44.4, 51.1],
   ['sub', '08', 51.3, 56.9], ['sub', '09', 57.1, 63.5],
-  ['label', 'M1', 64.2, 70.0], ['sub', '13', 63.7, 70.3], ['label', 'A1', 70.8, 76.0], ['quote', '14', 70.6, 75.8, QB()],
+  ['sub', '13', 63.7, 70.3], ['label', 'A1', 70.8, 76.0], ['quote', '14', 70.6, 75.8, QB()],
   ['quote', '15', 77.0, 84.6, { ...QB(), hlAt: 81.5 }], ['sub', '16', 84.9, 90.8], ['micah', '02', 91.0, 95.0],
   ['quote', '17', 95.8, 104.4, QB()], ['label', 'P5', 105.0, 112.4], ['quote', '18', 105.6, 113.2, { ...QB(), hlAt: 108.2 }],
   ['sub', 'W0', 114.0, 116.6], ['link', 'W1', 116.4, 128.2, { to: 'W2', style: 'ember' }],
@@ -493,7 +420,7 @@ function draw(ctx, t) {
     else if (kind === 'quote') Film.quote(ctx, id, t, a, b, { ...o, hl: Film.lines[id].hl, hlk: o.hlAt ? ss(o.hlAt, o.hlAt + 1.2, t) : 0 }); }
 }
 Pilot.run({ W, H, dur: FILM_DUR, fonts: ["600 40px 'Noto Serif KR'", "400 40px 'Noto Serif KR'", "400 20px 'Noto Sans KR'"],
-  init: async () => { await Film.load(); buildRoad(); buildRome(); buildFly(); buildNarrow(); }, draw });
+  init: async () => { await Film.load(); buildRoad(); buildRome(); buildFly(); buildNarrow(); buildStableOil(); buildJourneyOil(); }, draw });
 </script>
 </body>
 </html>

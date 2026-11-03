@@ -5,6 +5,7 @@
 //   node motion/films/sound-check.mjs <mix.wav|mp4 …> [--bed <music-and-effects-only.wav|mp4>] [--from s] [--to s]
 import { execFileSync, spawnSync } from 'node:child_process';
 const args = process.argv.slice(2), opt = k => { const i = args.indexOf('--' + k); return i > -1 ? args.splice(i, 2)[1] : null; };
+const JSONOUT = args.includes('--json') ? (args.splice(args.indexOf('--json'), 1), []) : null, log = (...a) => { if (!JSONOUT) console.log(...a); };
 const bed = opt('bed'), from = +(opt('from') || 0), to = opt('to'), files = args;
 const SR = 8000, seg = ['-ss', String(from), ...(to ? ['-to', to] : [])];
 const pcm = (f, af, ch = 1) => { const raw = execFileSync('ffmpeg', ['-loglevel', 'error', ...seg, '-i', f, ...(af ? ['-af', af] : []), '-ac', String(ch), '-ar', String(SR), '-f', 'f32le', '-'], { maxBuffer: 1 << 30 });
@@ -21,15 +22,18 @@ function report(f) {
   const med = pct(db, .5), quiet = db.filter(v => v < med - 12).length / n, silent = db.filter(v => v < -50).length / n;
   const steps = []; for (let i = 2; i < n; i++) steps.push([db[i] - db[i - 2], (i * .5 + from).toFixed(1)]);
   steps.sort((a, b) => a[0] - b[0]);
-  console.log(`\n${f.split(/[\\/]/).pop()}  (${(n / 2).toFixed(0)} s)`);
-  console.log(`  loudness  I ${g(/I:\s+(-?[\d.]+) LUFS/)} LUFS · range ${g(/LRA:\s+([\d.]+) LU/)} LU · true peak ${g(/Peak:\s+(-?[\d.]+) dBFS/)} dBTP`);
-  console.log(`  level spread (0.5 s RMS)  10% ${pct(db, .1).toFixed(1)} · median ${med.toFixed(1)} · 90% ${pct(db, .9).toFixed(1)} dB   quiet (≤median−12) ${(quiet * 100).toFixed(0)}% · near-silent ${(silent * 100).toFixed(0)}%`);
-  console.log(`  stereo width (side/mid) ${(10 * Math.log10(ss / (mm || 1))).toFixed(1)} dB   energy: lows<150 Hz ${(100 * lo / all).toFixed(0)}% · voice band 300–3500 ${(100 * mid / all).toFixed(0)}%`);
-  console.log(`  biggest drops ${steps.slice(0, 4).map(([d, t]) => `${d.toFixed(0)}dB@${t}`).join(' ')}   swells ${steps.slice(-4).reverse().map(([d, t]) => `+${d.toFixed(0)}dB@${t}`).join(' ')}`);
+  if (JSONOUT) JSONOUT.push({ file: f, seconds: n / 2, lufs: g(/I:\s+(-?[\d.]+) LUFS/), lra: g(/LRA:\s+([\d.]+) LU/), peak: g(/Peak:\s+(-?[\d.]+) dBFS/), deepest: +Math.min(...db).toFixed(1), quiet: +quiet.toFixed(3), silent: +silent.toFixed(3), lows: +(lo / all).toFixed(3), voice: +(mid / all).toFixed(3) });
+  log(`\n${f.split(/[\\/]/).pop()}  (${(n / 2).toFixed(0)} s)`);
+  log(`  loudness  I ${g(/I:\s+(-?[\d.]+) LUFS/)} LUFS · range ${g(/LRA:\s+([\d.]+) LU/)} LU · true peak ${g(/Peak:\s+(-?[\d.]+) dBFS/)} dBTP`);
+  log(`  level spread (0.5 s RMS)  10% ${pct(db, .1).toFixed(1)} · median ${med.toFixed(1)} · 90% ${pct(db, .9).toFixed(1)} dB   quiet (≤median−12) ${(quiet * 100).toFixed(0)}% · near-silent ${(silent * 100).toFixed(0)}%`);
+  log(`  stereo width (side/mid) ${(10 * Math.log10(ss / (mm || 1))).toFixed(1)} dB   energy: lows<150 Hz ${(100 * lo / all).toFixed(0)}% · voice band 300–3500 ${(100 * mid / all).toFixed(0)}%`);
+  log(`  biggest drops ${steps.slice(0, 4).map(([d, t]) => `${d.toFixed(0)}dB@${t}`).join(' ')}   swells ${steps.slice(-4).reverse().map(([d, t]) => `+${d.toFixed(0)}dB@${t}`).join(' ')}`);
   return db;
 }
 const dbs = files.map(report);
 if (bed) {   // where the mix is louder than the bed by ≥3 dB someone speaks; the gap there = how far music sits under the voice
   const b = report(bed), m = dbs[0], gaps = []; for (let i = 0; i < Math.min(b.length, m.length); i++) if (m[i] - b[i] > 3) gaps.push(m[i] - b[i]);
-  console.log(`\n  under speech (${(gaps.length / 2).toFixed(0)} s): mix − bed  median ${pct(gaps, .5).toFixed(1)} dB · 10% ${pct(gaps, .1).toFixed(1)} · 90% ${pct(gaps, .9).toFixed(1)}`);
+  if (JSONOUT) JSONOUT.push({ underSpeech: +pct(gaps, .5).toFixed(1) });
+  log(`\n  under speech (${(gaps.length / 2).toFixed(0)} s): mix − bed  median ${pct(gaps, .5).toFixed(1)} dB · 10% ${pct(gaps, .1).toFixed(1)} · 90% ${pct(gaps, .9).toFixed(1)}`);
 }
+if (JSONOUT) console.log(JSON.stringify(JSONOUT));

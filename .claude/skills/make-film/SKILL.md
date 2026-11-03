@@ -12,6 +12,15 @@ The general film-making method underneath is the **canvas-film** skill in `C:\Pr
 series; where they differ the README wins (e.g. many verbatim quotes on screen are intended here) — record the deviation.
 Talk to the maintainer in Korean. Never publish, make public, merge to main or delete without their OK (README 0절 stop points).
 
+## The pipeline is code — start every film session with it (maintainer, 2026-11-04)
+"전부 코드화해서 항상 일관된 제작 절차와 동일한 수준의 결과물이 나올 수 있도록." The stages, gates, approvals and task briefs live in code:
+`motion/films/film.mjs` + `motion/films/pipeline/` (`stages.mjs` gates, `targets.json` bars, `tasks/<stage>.md` fixed briefs).
+1. `node motion/films/film.mjs status <film>`. Do **only** the NEXT it prints: read `film.mjs task <film> <stage>`, make what it lists, then
+   `film.mjs run <film> <stage>` (build commands) and `film.mjs check <film> <stage>` until every gate is ✓. Never skip ahead of a ✗ stage.
+2. Approvals: record one only when the maintainer said it, with their words: `film.mjs approve <film> <stage> "관리자: …"`.
+3. A rule that matters for quality belongs in a gate, not only in prose. When a lesson is learned, add or tighten the gate in
+   `stages.mjs` or the bar in `targets.json` (with source and date), then mention it in one line. The sections below are background for the briefs.
+
 ## 0 · Where are we? (every session, first)
 1. Read README **0절** (the 14 steps) and the film's **`motion/films/<name>/review.json`**: `stage`, `round`, `status`,
    open `decisions`, `artifact_url`, `rounds`, `feedback_log`, `process_changes`. No folder yet → stage 1 (topic from README 10절).

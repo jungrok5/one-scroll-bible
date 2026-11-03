@@ -1,0 +1,105 @@
+// The film pipeline as code (관리자 2026-11-04: "전부 코드화 해서 항상 일관된 제작 절차와 동일한 수준의 결과물이 나올 수 있도록").
+// Each stage: what it produces, the commands that (re)build it, the agent task for the creative part (a fixed brief in
+// pipeline/tasks/), the gates that must pass before the next stage, and the approval it needs from the maintainer.
+// Stage status is computed from the files every time (nothing to forget): a stage is done when its gates pass and its
+// approval is recorded (film.mjs approve). film.mjs status prints the first stage that is not done and exactly what to do.
+import { existsSync, readFileSync, statSync, readdirSync } from 'node:fs';
+import { execFileSync, spawnSync } from 'node:child_process';
+import { join } from 'node:path';
+
+export const ROOT = process.cwd(), FILMS = join(ROOT, 'motion/films'), OUT = join(ROOT, 'motion/out');
+export const T = JSON.parse(readFileSync(join(FILMS, 'pipeline/targets.json'), 'utf8'));
+const J = f => { try { return JSON.parse(readFileSync(f, 'utf8')); } catch { return null; } };
+const mt = f => existsSync(f) ? statSync(f).mtimeMs : 0;
+const node = (args, o = {}) => spawnSync(process.execPath, args, { encoding: 'utf8', maxBuffer: 1 << 26, ...o });
+export function ctx(film) {
+  const d = join(FILMS, film), s = J(join(d, 'script.json')), lines = s ? (Array.isArray(s) ? s : s.lines || []) : [];
+  return { film, d, s, lines, review: J(join(d, 'review.json')) || {}, place: J(join(d, 'sound/place.json')), cues: J(join(d, 'sound/cues.json')),
+    up: (J(join(ROOT, 'motion/youtube/uploaded.json')) || {})[film], src: () => readdirSync(d).filter(f => /\.(html|js)$/.test(f)).map(f => join(d, f)) };
+}
+const pass = () => ({ ok: true, why: [] }), fail = (...why) => ({ ok: false, why });
+const all = (...rs) => { const why = rs.flatMap(r => r.ok ? [] : r.why); return why.length ? { ok: false, why } : pass(); };
+const approved = (c, k) => (c.review.pipeline?.approvals || {})[k];
+
+// ---------------------------------------------------------------------------------------------------- gates
+const G = {
+  topic: c => c.review.logline ? pass() : fail('review.json에 logline(한 줄 요약)이 없다'),
+  script: c => {
+    if (!c.s) return fail('script.json이 없다');
+    const why = [], quotes = c.lines.filter(l => l.kind === 'quote');
+    for (const l of quotes) if (!l.usfm || !l.cite) why.push(`인용 ${l.id}: usfm/cite 없음`);
+    const r = node([join(FILMS, 'check-quotes.mjs'), c.film]); const bad = (r.stdout || '').split('\n').filter(x => /MISMATCH|MISSING/.test(x));
+    if (r.status !== 0 || bad.length) why.push(...(bad.length ? bad.map(b => '인용 원문 불일치: ' + b) : ['check-quotes 실패: ' + (r.stderr || '').slice(0, 200)]));
+    const mc = c.review.message_check; if (!mc || (Array.isArray(mc) ? mc.length : Object.keys(mc).length) < 12) why.push('message_check 12문항이 다 채워지지 않았다');
+    return why.length ? { ok: false, why } : pass(); },
+  looks: c => {
+    const L = c.review.looks; if (!Array.isArray(L) || !L.length) return fail('review.json looks(장면마다 화풍 표)가 없다');
+    const why = [], nw = L.filter(x => x.style_new).length, distinct = new Set(L.map(x => x.look.split(/[ (]/)[0])).size;
+    if (nw < T.looks.new_min || nw > T.looks.new_max) why.push(`새 화풍 ${nw}개 — ${T.looks.new_min}–${T.looks.new_max}개여야 한다`);
+    if (distinct < T.looks.distinct_min) why.push(`화풍 종류 ${distinct}개 — 적어도 ${T.looks.distinct_min}개`);
+    for (let i = 1; i < L.length; i++) if (L[i].look === L[i - 1].look && !L[i].same_reason) why.push(`${L[i - 1].scene} → ${L[i].scene}: 같은 화풍이 이어진다(same_reason 없음)`);
+    return why.length ? { ok: false, why } : pass(); },
+  reviews: c => { const f = join(ROOT, 'motion/reviews', `film-${c.film}-script.md`); if (!existsSync(f)) return fail(`motion/reviews/film-${c.film}-script.md 없음`);
+    const t = readFileSync(f, 'utf8'), why = []; if (!/관점 검수/.test(t)) why.push('리뷰 기록에 관점 검수가 없다'); if (!/성경 잘 모르는/.test(t)) why.push('리뷰 기록에 1번 대상(성경 잘 모르는 크리스천) 리뷰가 없다');
+    if (!c.review.artifact_url) why.push('초안 페이지 artifact_url 없음'); return why.length ? { ok: false, why } : pass(); },
+  picture: c => {
+    const vid = join(OUT, `${c.film}-v-narr.mp4`); if (!existsSync(vid)) return fail(`렌더+소리본 motion/out/${c.film}-v-narr.mp4 없음`);
+    const why = [], old = c.src().filter(f => mt(f) > mt(vid)); if (old.length) why.push('렌더가 그림 코드보다 오래됐다: ' + old.map(f => f.split(/[\\/]/).pop()).join(', '));
+    const r = node([join(FILMS, 'look-check.mjs'), vid, '--json']), j = JSON.parse((r.stdout || '[]').trim().split('\n').pop() || '[]')[0];
+    if (!j) return fail('look-check 실패');
+    if (j.brightness < T.look.brightness_min) why.push(`밝기 ${j.brightness} < ${T.look.brightness_min}`);
+    if (j.dark > T.look.dark_max) why.push(`어두운 화면 ${(j.dark * 100).toFixed(0)}% > ${T.look.dark_max * 100}% — 가장 어두운 곳 ${j.darkest.map(([t]) => t + 's').join(' ')}`);
+    if (j.still > T.look.still_max) why.push(`거의 멈춘 화면 ${(j.still * 100).toFixed(0)}% > ${T.look.still_max * 100}% — 가장 멈춘 곳 ${j.stillest.map(([t]) => t + 's').join(' ')}`);
+    if (j.seconds > T.format.portrait_max_s + .5) why.push(`세로판 ${j.seconds}s > ${T.format.portrait_max_s}s`);
+    return why.length ? { ok: false, why, info: j } : { ok: true, why: [], info: j }; },
+  sound: c => {
+    if (!c.place || !c.cues) return fail('sound/place.json · cues.json 없음');
+    const why = [], sd = join(c.d, 'sound');
+    for (const l of c.lines) if (l.kind === 'narr' && !existsSync(join(sd, 'voice', l.id + '.mp3'))) why.push(`해설 ${l.id}: voice/${l.id}.mp3 없음`);
+    for (const l of c.lines) if (l.kind === 'narr' && existsSync(join(sd, 'voice', l.id + '.mp3')) && c.place.at[l.id] == null && !(c.place.subs_extra || {})[l.id]) why.push(`해설 ${l.id}: place.json at 없음`);
+    const sfx = c.cues.sfx || [], dur = c.place.dur || 180, perMin = sfx.length / (dur / 60); if (perMin < T.sound.sfx_per_min_min) why.push(`효과음 분당 ${perMin.toFixed(1)}개 < ${T.sound.sfx_per_min_min} (SOUND.md — 화면 동작마다 소리)`);
+    if ((c.cues.ducks || []).length < T.sound.ducks_min) why.push(`숨 멈춤(ducks) ${(c.cues.ducks || []).length}개 < ${T.sound.ducks_min}`);
+    for (const q of [...(c.cues.music || []), ...sfx]) { const f = q.file ? join(ROOT, q.file) : join(sd, 'audio', q.id + '.mp3'); if (!existsSync(f)) why.push(`소리 ${q.id}: 파일 없음`); }
+    const pr = J(join(sd, 'prompts.json')), names = new Set((pr?.entries || []).map(e => e.name));
+    for (const q of [...(c.cues.music || []), ...sfx]) if (!q.file && !names.has(q.id)) why.push(`소리 ${q.id}: 프롬프트 기록 없음(sound-prompts.mjs)`);
+    const mix = join(OUT, `${c.film}-narr.wav`); if (!existsSync(mix)) why.push(`섞은 소리 motion/out/${c.film}-narr.wav 없음`);
+    else { if ([join(sd, 'cues.json'), join(sd, 'place.json')].some(f => mt(f) > mt(mix))) why.push('섞기가 cues/place보다 오래됐다 — sound.mjs 다시');
+      const r = node([join(FILMS, 'sound-check.mjs'), mix, '--json']), j = JSON.parse((r.stdout || '[]').trim().split('\n').pop() || '[]')[0];
+      if (j) { if (Math.abs(j.lufs - T.sound.lufs) > T.sound.lufs_tol) why.push(`크기 ${j.lufs} LUFS (목표 ${T.sound.lufs}±${T.sound.lufs_tol})`); if (j.peak > T.sound.peak_max) why.push(`최대 ${j.peak} dBTP > ${T.sound.peak_max}`); } }
+    if (!existsSync(join(sd, 'ko.vtt'))) why.push('sound/ko.vtt(위쪽 자막) 없음');
+    return why.length ? { ok: false, why } : pass(); },
+  sheet: c => {
+    const f = join(c.d, 'upload.md'); if (!existsSync(f)) return fail('upload.md 없음'); if (!existsSync(join(c.d, 'youtube.json'))) return fail('youtube.json 없음');
+    const t = readFileSync(f, 'utf8'), why = []; for (const k of ['제목', '설명', '태그', '고정 댓글']) if (!t.includes(k)) why.push(`upload.md에 '${k}' 칸이 없다`);
+    const y = J(join(c.d, 'youtube.json')) || {}, items = Array.isArray(y) ? y : (y.videos || Object.values(y).filter(v => v && typeof v === 'object'));
+    for (const v of items) { if (v.title && v.title.length > T.upload.title_max) why.push(`제목 ${v.title.length}자 > ${T.upload.title_max}`);
+      const first = (v.description || '').split('\n')[0]; if (first && first.length > T.upload.first_line_max) why.push(`설명 첫 줄 ${first.length}자 > ${T.upload.first_line_max}(단톡방 미리보기)`); }
+    return why.length ? { ok: false, why } : pass(); },
+  publish: c => { const u = c.up; if (!u?.h?.id || !u?.v?.id) return fail('uploaded.json에 가로·세로 id 없음');
+    const why = []; for (const k of ['h', 'v']) { const at = u[k].publish_at; if (!at) { why.push(`${k}: publish_at 없음`); continue; }
+      const kst = new Date(Date.parse(at) + 9 * 3600e3); if (T.upload.no_sunday_kst && kst.getUTCDay() === 0) why.push(`${k}: 공개가 주일(KST)`); }
+    return why.length ? { ok: false, why } : pass(); },
+  social: c => c.up?.instagram && c.up?.threads ? pass() : fail('uploaded.json에 instagram·threads 기록 없음'),
+  after: c => { const u = c.up || {}, why = []; if (!u.h?.pinned_comment || !u.v?.pinned_comment) why.push('고정 댓글 id 없음');
+    if (!/end screen|최종 화면/i.test(JSON.stringify(u.h || {}))) why.push('가로판 최종 화면 기록 없음'); if (!/related/i.test(JSON.stringify(u.v || {}))) why.push('쇼츠 관련 동영상 기록 없음');
+    return why.length ? { ok: false, why } : pass(); },
+  captions: c => { const have = new Set(c.up?.captions || []), miss = T.captions.langs.filter(l => !have.has(l)); return miss.length ? fail(`자막 없는 언어 ${miss.length}개: ${miss.join(' ')}`) : pass(); },
+};
+
+// ---------------------------------------------------------------------------------------------------- stages
+export const STAGES = [
+  { id: 'topic', n: 1, name: '주제', task: 'topic', gates: ['topic'], approve: '관리자가 주제를 고름' },
+  { id: 'script', n: 2, name: '원고·장면별 화풍·메시지 점검', task: 'script', gates: ['script', 'looks'] },
+  { id: 'review', n: 3, name: '관점 검수·시청자 리뷰·초안 페이지', task: 'review', run: [['node', 'motion/films/review-page.mjs', '{film}']], gates: ['reviews'], approve: '관리자·아내가 초안을 컨펌' },
+  { id: 'picture', n: 4, name: '그리기·렌더', task: 'picture', run: [['node', 'motion/render.mjs', 'v', '--page', 'films/{film}/film.html', '--workers', '6'], ['node', 'motion/films/sound.mjs', '{film}', 'v']], gates: ['picture'], approve: '관리자·가족이 시안 확인' },
+  { id: 'sound', n: 5, name: '해설·음악·효과음·섞기', task: 'sound', run: [['node', 'motion/films/sound.mjs', '{film}', 'v'], ['node', 'motion/films/sound-prompts.mjs', 'md', 'motion/films/{film}/sound/prompts.json']], gates: ['sound'] },
+  { id: 'sheet', n: 6, name: '올릴 글·썸네일', task: 'sheet', gates: ['sheet'] },
+  { id: 'publish', n: 7, name: '한국어 채널 올리기·예약', task: 'publish', gates: ['publish'], approve: '관리자가 공개 시각 OK' },
+  { id: 'social', n: 8, name: '인스타·스레드', task: 'social', gates: ['social'] },
+  { id: 'after', n: 9, name: '공개 직후(고정 댓글·최종 화면·관련 동영상)', task: 'after', gates: ['after'] },
+  { id: 'captions', n: 11, name: '외국어 자막 27개', task: 'captions', gates: ['captions'] },
+];
+export function stageStatus(c, st) {
+  const results = st.gates.map(g => [g, G[g](c)]), ok = results.every(([, r]) => r.ok), ap = st.approve ? approved(c, st.id) : true;
+  return { ok, approved: !!ap, done: ok && !!ap, results };
+}

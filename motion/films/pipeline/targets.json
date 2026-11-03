@@ -1,0 +1,38 @@
+{
+ "_about": "The bars every film is checked against (film.mjs gates). The periodic analysis writes here when the numbers teach something (README 10절) — this file is how what viewers did reaches the next film. Change a number only with its source and date.",
+ "look": {
+  "_source": "first film's Shorts (release-narr) measured with look-check.mjs, 2026-11-03: brightness 78–123, dark 1–11 %, still 0–1 % (20 % in the illuminated one); 「메시아」 round 1 failed at 49 · 58 % · 24 % (아내: '비주얼이 심심하다')",
+  "brightness_min": 60,
+  "dark_max": 0.35,
+  "still_max": 0.15,
+  "goal": { "brightness": 78, "dark": 0.12, "still": 0.05 }
+ },
+ "looks": {
+  "_source": "관리자 2026-11-03: 장면마다 맞는 화풍, 한 영상을 한 화풍으로 고정하지 않음, 영상마다 새 화풍 1–2개",
+  "new_min": 1,
+  "new_max": 2,
+  "distinct_min": 4
+ },
+ "sound": {
+  "_source": "motion/films/SOUND.md (first film: ~10 effects a minute, ducks in 19 of 21 scenes); YouTube loudness",
+  "lufs": -14,
+  "lufs_tol": 1.5,
+  "peak_max": -1.0,
+  "sfx_per_min_min": 8,
+  "ducks_min": 3
+ },
+ "format": {
+  "_source": "README 2절 — Shorts ≤ 3:00 (portrait is the main cut)",
+  "portrait_max_s": 180
+ },
+ "upload": {
+  "_source": "ANALYTICS 2026-11-04: shared in KakaoTalk/Telegram — the first line must read in a chat preview",
+  "title_max": 100,
+  "first_line_max": 60,
+  "no_sunday_kst": true
+ },
+ "captions": {
+  "_source": "관리자 2026-11-01 — fixed 27 + ko",
+  "langs": ["ko", "en", "es", "pt-BR", "de", "fr", "it", "pl", "ru", "tr", "zh-Hans", "zh-Hant", "ja", "ar", "fa", "hi", "bn", "ta", "id", "vi", "th", "tl", "sw", "uz", "ne", "km", "mn", "my"]
+ }
+}

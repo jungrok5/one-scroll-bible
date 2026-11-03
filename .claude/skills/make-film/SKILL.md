@@ -58,7 +58,12 @@ Lemo-Opuscar repo AND the word-log kits (`kits/templates.jpg` — portrait-nativ
 texture buries the map, the words or the people on a phone (the mosaic pilot did). Pilot 2–3 parts → `review.json`
 `pilot` → draft page + a portrait preview video (SendUserFile) before building the rest.
 
-**Sound (stage 5) — like the first film, and the prompts go into git** (maintainer, 2026-11-03). Before writing prompts,
+**Sound (stage 5) — the first film is the bar: read `motion/films/SOUND.md` first** (maintainer, 2026-11-03: "선이 지나갈 땐
+사각사각 소리도 나고 그랬거든 — 첫 번째 영상의 퀄리티가 기준"). Make an action sheet from `film.html` (every line drawn, light
+lit, gold word, lamp, camera move, particle — start and length from the code) and give each its own effect at that frame with
+`duration_seconds` = the action's length, in the material of the look (a drawn line = a pen scratching paper). Put a breath of
+silence (`cues.json` `ducks`) before the title, each climax and the end card. Music = one instrument family per scene, 2–3 cues
+written as sentences of the picture. Check the mix with `sound-check.mjs` against the first film's numbers. Before writing prompts,
 read `motion/pilot/audio/prompts/first-film.md` (the first film's 262 music/effect prompts) and the last film's
 `sound/prompts.md`, and write in the same way: named instruments, mode and tempo, what happens at which second, "quiet under
 a spoken voice", "no drums, no synths", one theme that returns across parts. Narration uses the same voice (HYALOqtTLlRjxo4uBKeg,

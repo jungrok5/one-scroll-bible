@@ -979,6 +979,206 @@
     "02PPEDUOJbWIqk0T1823"
    ],
    "name": "S16"
+  },
+  {
+   "use": "toolu_011Vi5hNdEZSH2RfhV5qu4nj",
+   "time": "2026-11-03T00:32:25.543Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "E1a 금빛 실 긋기 3.5s (에덴)",
+   "prompt": "A fine gold pen nib drawing one smooth rising line on thick paper: a soft continuous scratch that starts gently, flows and lifts away, with a faint glassy shimmer riding on top, very close and quiet",
+   "params": {
+    "duration_seconds": 3.5,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "Effect E1a for 「메시아」: gold thread rising in Eden, timed to the 3.5 s line",
+   "node": "PELg7Yviqzw4vhVyJJiB",
+   "sessions": [
+    "Z3XeDxJM5vf76n3U1aa1"
+   ],
+   "name": "E1a"
+  },
+  {
+   "use": "toolu_01HbLqK1HtgP6n4G7qwHUmCF",
+   "time": "2026-11-03T00:32:28.644Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "E1b 금빛 실 긋기 5.4s (아브라함)",
+   "prompt": "A fine gold pen nib drawing one long slow arc across thick paper: a soft continuous scratch, unhurried and even, with a faint glassy shimmer on top like starlight, very close and quiet, fading at the end",
+   "params": {
+    "duration_seconds": 5.4,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "Effect E1b for 「메시아」: gold thread across the star sky, 5.4 s",
+   "node": "zuuhhIBRtiCv0Bi3Lelc",
+   "sessions": [
+    "5exyPeLYea3eRYjrhWqb"
+   ],
+   "name": "E1b"
+  },
+  {
+   "use": "toolu_01LsBTs3qQxgFpBxepjFVe5r",
+   "time": "2026-11-03T00:32:31.601Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "E1c 금빛 실 긋기 6s (다윗)",
+   "prompt": "A fine gold pen nib drawing one long gently wavy line along thick paper, following the curve of a hill: soft continuous scratch with small rises and dips, a faint glassy shimmer on top, close and quiet",
+   "params": {
+    "duration_seconds": 6,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "Effect E1c for 「메시아」: gold thread along the hill crest, 6 s",
+   "node": "lNfd2O4M7BsWnp7wmXuC",
+   "sessions": [
+    "aFdtyqBj7PqR7MJQq8MZ"
+   ],
+   "name": "E1c"
+  },
+  {
+   "use": "toolu_016A1AoawVWCqraSkF1h5X76",
+   "time": "2026-11-03T00:32:34.749Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "E1d 금빛 실 긋기 6.4s (골짜기)",
+   "prompt": "A fine gold pen nib drawing one long winding line down thick paper, gradually slowing, a soft continuous scratch with a faint glassy shimmer on top, ending in a small bright glint as it arrives, close and quiet",
+   "params": {
+    "duration_seconds": 6.4,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "Effect E1d for 「메시아」: gold thread running down the valley to Bethlehem, 6.4 s",
+   "node": "CEhFMKA1vW4gc0ji53Ky",
+   "sessions": [
+    "AyLWTP25jzm8K9o1OEbc"
+   ],
+   "name": "E1d"
+  },
+  {
+   "use": "toolu_01AXSjeooZ2QejdazsrocFKn",
+   "time": "2026-11-03T00:32:37.650Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "E1e 금빛 실 긋기 4.4s (새벽)",
+   "prompt": "A fine gold pen nib drawing one calm line across thick paper at dawn: soft continuous scratch with a faint warm glassy shimmer on top, close and quiet, fading away",
+   "params": {
+    "duration_seconds": 4.4,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "Effect E1e for 「메시아」: gold thread along the dawn hill, 4.4 s",
+   "node": "911UNv9GXgils0jZhacw",
+   "sessions": [
+    "s6YoIGkCDn84WZMXucpu"
+   ],
+   "name": "E1e"
+  },
+  {
+   "use": "toolu_01PnDiMh5DwNPCBsEftoMSMs",
+   "time": "2026-11-03T00:32:40.502Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "E2 제목 밑줄 1.6s",
+   "prompt": "A single fine pen stroke drawn quickly and evenly across paper from left to right, a light airy scratch ending in a soft glassy glint",
+   "params": {
+    "duration_seconds": 1.6,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "Effect E2 for 「메시아」: the title's gold underline drawn, 1.6 s",
+   "node": "81X6mI4dpbP1jeqSw3D0",
+   "sessions": [
+    "Jy3T6ux0YTkszR2rP6F7"
+   ],
+   "name": "E2"
+  },
+  {
+   "use": "toolu_01XesgTF5Sf4P5KCb7p9UWjZ",
+   "time": "2026-11-03T00:32:43.301Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "E3 금빛 글자 1.8s",
+   "prompt": "A soft warm glassy shimmer swelling gently and settling, like golden light filling the letters of a word, delicate and quiet",
+   "params": {
+    "duration_seconds": 1.8,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "Effect E3 for 「메시아」: gold words of a verse lighting up",
+   "node": "R0EltXtja9JXiVu6kmi7",
+   "sessions": [
+    "35vCZhqQUCxpMOpq54bx"
+   ],
+   "name": "E3"
+  },
+  {
+   "use": "toolu_01FPu9L1m8aKCEDUdXcAzhUz",
+   "time": "2026-11-03T00:32:46.453Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "E4 창문 등잔 4.6s",
+   "prompt": "Small oil lamps catching flame one after another inside distant stone houses: tiny soft flame puffs spaced unevenly over a few seconds, very quiet, evening stillness",
+   "params": {
+    "duration_seconds": 4.6,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "Effect E4 for 「메시아」: Nazareth window lamps catching one by one over 4.6 s",
+   "node": "wkWkgwreWBumpeUrRJbZ",
+   "sessions": [
+    "9dhoL67i2gkl5qLAtJ6W"
+   ],
+   "name": "E4"
+  },
+  {
+   "use": "toolu_01Goy3DXVm4azwj9JLPyHFj9",
+   "time": "2026-11-03T00:32:49.802Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "E5 내려가는 카메라 16s",
+   "prompt": "A slow soft rush of cold night air as the view glides down over wide desert hills toward a small town: a smooth airy whoosh that builds gently for ten seconds and then settles to stillness, no wind gusts, no thunder",
+   "params": {
+    "duration_seconds": 16,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "Effect E5 for 「메시아」: camera gliding down over the night hills, 16 s",
+   "node": "kg7Z12SapC6jnf4HvGXR",
+   "sessions": [
+    "1NMcjDJPIkI3Dh5RurOz"
+   ],
+   "name": "E5"
+  },
+  {
+   "use": "toolu_01NG78PrpUZuDzQray8cQuPu",
+   "time": "2026-11-03T00:32:52.639Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "E6 떠오르는 카메라 9s",
+   "prompt": "The view lifting slowly away over a sleeping town at night: a soft airy whoosh rising and opening up wide, faint distant crickets below, calm",
+   "params": {
+    "duration_seconds": 9,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "Effect E6 for 「메시아」: camera lifting away over the town at night, 9 s",
+   "node": "1MN6C18AZ7ZH5RNwrfPa",
+   "sessions": [
+    "Od95I10d8nnusfVY7qOo"
+   ],
+   "name": "E6"
   }
  ],
  "title": "메시아 예언과 성탄",

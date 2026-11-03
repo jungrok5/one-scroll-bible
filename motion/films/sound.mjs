@@ -83,7 +83,10 @@ cues.forEach((c, i) => {
   inputs.push('-i', f);
   const len = c.len ? `atrim=start=${c.off || 0}:duration=${c.len},asetpts=PTS-STARTPTS,` : (c.off ? `atrim=start=${c.off},asetpts=PTS-STARTPTS,` : '');
   const fin = c.fin ? `afade=t=in:d=${c.fin},` : '', fout = c.fout ? `areverse,afade=t=in:d=${c.fout},areverse,` : '';
-  parts.push(`[${i}:a]aresample=48000,aformat=channel_layouts=stereo,${len}${fin}${fout}volume=${c.db}dB,adelay=${Math.round(c.at * 1000)}:all=1[c${i}]`);
+  // cues.json "ducks": [{ from, to, db, ramp }] — a breath of silence before a beat, as in the first film (pilot/mix.py): every cue
+  // that started before `from` is pulled down to `db` over `ramp` s and stays down until `to`; cues that start later are untouched
+  const dk = (C.ducks || []).filter(d => c.at < d.from).map(d => `(1-${(1 - 10 ** (d.db / 20)).toFixed(4)}*clip((t-${d.from})/${d.ramp || .3},0,1)*lt(t,${d.to}))`);
+  parts.push(`[${i}:a]aresample=48000,aformat=channel_layouts=stereo,${len}${fin}${fout}volume=${c.db}dB,adelay=${Math.round(c.at * 1000)}:all=1${dk.length ? `,volume='${dk.join('*')}':eval=frame` : ''}[c${i}]`);
 });
 const fc = [...parts, `${cues.map((_, i) => `[c${i}]`).join('')}amix=inputs=${cues.length}:normalize=0:dropout_transition=0,apad,atrim=end=${D}[bed]`,
   `[${cues.length}:a]aresample=48000,aformat=channel_layouts=stereo,asplit=3[v][k1][k2]`, `[bed]asplit=2[bd][bs]`,

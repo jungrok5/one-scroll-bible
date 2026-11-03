@@ -190,9 +190,9 @@ function stableScene(ctx, t, o = {}) {
 // =====================================================================================================================
 // 5 · 2:08–2:59  the camera leaves the stable and rises over the town at night (1 · reversed); dawn on a hill with a cross —
 // the sun rises behind it ("성경대로 … 다시 살아나사"); back to the night over Bethlehem, the first frame, the reading card.
-function partRise(ctx, t) { partFlight(ctx, t, lerp(21, 4, eio(clamp((t - 137) / 9))), { warm: .6 }); const k = 1 - ss(137, 138.4, t); if (k > 0) { ctx.fillStyle = `rgba(8,6,8,${k})`; ctx.fillRect(0, 0, W, H); } }
+function partRise(ctx, t) { partFlight(ctx, t, lerp(21, 4, eio(clamp((t - 137) / 9))), { warm: .6 }); const k = .5 * (1 - ss(137, 138.4, t));   /* a dip, never to black (frame-qa: 137.2 s went black, 2026-11-04) */ if (k > 0) { ctx.fillStyle = `rgba(8,6,8,${k})`; ctx.fillRect(0, 0, W, H); } }
 // partDawn: impasto-dawn.js (black-and-white film → palette-knife colour, 2026-11-03 round 2)
-function partEnd(ctx, t) { partFlight(ctx, t, lerp(4, 0, clamp((t - 159) / 9)), { warm: .5, noBand: t > 168.6 }); const k = ss(168.6, 170, t); if (k > 0) { ctx.fillStyle = `rgba(6,6,12,${.62 * k})`; ctx.fillRect(0, 0, W, H); } }
+function partEnd(ctx, t) { const zE = 1 + .12 * eio(clamp((t - 159) / 20.4)); ctx.save(); ctx.translate(W / 2, H * .45); ctx.scale(zE, zE); ctx.translate(-W / 2, -H * .45); partFlight(ctx, t, lerp(4, 0, eio(clamp((t - 159) / 20.4))), { warm: .5, noBand: true }); ctx.restore(); if (t <= 168.6) textBand(ctx);   /* the camera keeps moving under the end card (frame-qa: held 89 %) */ const k = ss(168.6, 170, t); if (k > 0) { ctx.fillStyle = `rgba(6,6,12,${.62 * k})`; ctx.fillRect(0, 0, W, H); } }
 function endCard(ctx, t, a, b) { const k = win(t, a, b, 1, .8); if (k <= 0) return; const segs = Film.text('E1').split(/\s*→\s*/), size = V ? 46 : 42, y0 = H * (V ? .4 : .38);
   Pilot.text(ctx, segs[0], W / 2, y0, { size, weight: 600, font: "'Noto Serif KR',serif", color: '#f6ead0', alpha: k, shadow: 'rgba(0,0,0,.9)', shadowBlur: 18 });
   Pilot.text(ctx, segs[1] || '', W / 2, y0 + size * 1.9, { size: size * .9, weight: 600, font: "'Noto Serif KR',serif", color: '#e9c77a', alpha: k * ss(a + .6, a + 1.4, t), shadow: 'rgba(0,0,0,.9)', shadowBlur: 18 });
@@ -386,22 +386,25 @@ const SCENES = [
 ];
 const QB = () => ({ bottom: Film.subBottom() + 40 });
 const TEXT = [
-  ['sub', '01', 0.4, 6.6], ['label', 'P0', 4.0, 15.2], ['quote', '02', 7.0, 15.4, { ...QB(), hlAt: 9.4 }], ['title', 'T1', 16.6, 19.0], ['sub', 'Q1', 19.0, 21.8],
-  ['sub', '03', 21.9, 24.9], ['label', 'G0', 22.0, 31.0], ['quote', '04', 25.2, 31.2, { ...QB(), hlAt: 26.8 }], ['sub', '05', 31.4, 38.1],
+  ['sub', '01', 0.4, 6.6], ['label', 'P0', 4.0, 15.2], ['quote', '02', 7.0, 15.4, { ...QB(), hlAt: 7.05 }], ['title', 'T1', 16.6, 19.0], ['sub', 'Q1', 19.0, 21.8],
+  ['sub', '03', 21.9, 24.9], ['label', 'G0', 22.0, 31.0], ['quote', '04', 25.2, 31.2, { ...QB(), hlAt: 25.29 }], ['sub', '05', 31.4, 38.1],
   ['label', 'G1', 37.2, 41.0], ['quote', '06', 38.4, 43.2, { ...QB(), hlAt: 39.4 }], ['label', 'G3', 41.2, 43.4],
   ['label', 'G2', 43.6, 50.6], ['quote', '07', 44.0, 49.6, { y: V ? H * .22 : H * .2, size: V ? 44 : 40, hlAt: 45 }], ['sub', 'D1', 44.4, 51.1],
   ['sub', '08', 51.3, 56.9], ['sub', '09', 57.1, 63.5],
   ['sub', '13', 63.7, 70.3], ['label', 'A1', 70.8, 76.0], ['quote', '14', 70.6, 75.8, QB()],
-  ['quote', '15', 77.0, 84.6, { ...QB(), hlAt: 81.5 }], ['sub', '16', 84.9, 90.8], ['micah', '02', 91.0, 95.0],
-  ['quote', '17', 95.8, 104.4, QB()], ['label', 'P5', 105.0, 112.4], ['quote', '18', 105.6, 113.2, { ...QB(), hlAt: 108.2 }],
+  ['quote', '15', 77.0, 84.6, { ...QB(), hlAt: 83.47 }], ['sub', '16', 84.9, 90.8], ['micah', '02', 91.0, 95.0],
+  ['quote', '17', 95.8, 104.4, { ...QB(), hlAt: 99.81 }], ['label', 'P5', 105.0, 112.4], ['quote', '18', 105.6, 113.2, { ...QB(), hlAt: 106.11 }],
   ['sub', 'W0', 114.0, 116.6], ['link', 'W1', 116.4, 128.2, { to: 'W2', style: 'ember' }],
   ['sub', 'W3', 128.6, 136.9],
-  ['quote', '22', 137.6, 145.6, { ...QB(), hlAt: 140 }], ['quote', '23', 146.6, 158.4, { ...QB(), hlAt: 148 }], ['sub', '25', 159.4, 168.4], ['end', 'E1', 169.4, 179.0],
+  ['quote', '22', 137.6, 145.6, { ...QB(), hlAt: 140.45 }], ['quote', '23', 146.6, 158.4, { ...QB(), hlAt: 146.77 }], ['sub', '25', 159.4, 168.4], ['end', 'E1', 169.4, 179.0],
 ];
 function title(ctx, id, t, a, b) { const ta = win(t, a, b, .9, .6); if (ta <= 0) return; const sz = V ? 100 : 108, ty = V ? H * .45 : H * .48;
   Pilot.text(ctx, Film.text(id), W / 2, ty, { size: sz, weight: 600, color: '#e9c77a', alpha: ta, shadow: 'rgba(233,185,73,.35)', shadowBlur: 40, ls: 6 });
   const lw = (V ? 420 : 520) * eo(clamp((t - a - .3) / 1.6)); ctx.fillStyle = `rgba(233,199,122,${ta * .8})`; ctx.fillRect(W / 2 - lw / 2, ty + (V ? 50 : 54), lw, 2); }
 const FILM_DUR = 179.4;
+// planned effects frame-qa.mjs must not count as faults: [from, to, why]
+const QA_HOLD = [[169.4, 179.4, 'the reading card (이 이야기를 성경에서 직접 읽어 보세요)']];
+const QA_PLANNED = [[105.4, 106.2, 'the glory opens over the shepherds'], [146.0, 152.6, 'black-and-white film: gate flicker'], [168.4, 169.6, 'the end card darkens']];
 // how two verses are joined (motion/films/lib-link.js); ?link=carry|depth|horizon|ember (this film: ember — 관리자 2026-11-03), ?lab=1 names it on screen (drafts)
 const LINKQ = (location.search.match(/[?&]link=(\w+)/) || [])[1], LINK = LINKQ || 'ember', LAB = /[?&]lab=1/.test(location.search) ? { carry: '시안 A · 빛이 건너감', depth: '시안 B · 시간의 깊이', horizon: '시안 C · 빛의 지평선', ember: '시안 D · 불씨' }[LINK] : '';
 let XL = null;

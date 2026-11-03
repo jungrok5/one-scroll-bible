@@ -21,7 +21,7 @@ export function ctx(film) {
 // film.mjs run <film> picture writes it next to the render: motion/out/<film>-v-narr.mp4.src.json
 import { createHash } from 'node:crypto';
 export function srcHash(c) { const h = createHash('sha256');
-  for (const f of c.src().sort()) h.update(f.split(/[\\/]/).pop() + '\n' + readFileSync(f, 'utf8').replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:'"`\\])\/\/[^\n]*/g, '$1').replace(/\s+/g, ' '));
+  for (const f of c.src().sort()) h.update(f.split(/[\\/]/).pop() + '\n' + readFileSync(f, 'utf8').replace(/const QA_(PLANNED|HOLD) = \[[\s\S]*?\];/g, '').replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:'"`\\])\/\/[^\n]*/g, '$1').replace(/\s+/g, ' '));
   for (const f of ['script.json']) if (existsSync(join(c.d, f))) h.update(readFileSync(join(c.d, f), 'utf8'));
   return h.digest('hex').slice(0, 16); }
 const pass = () => ({ ok: true, why: [] }), fail = (...why) => ({ ok: false, why });
@@ -55,12 +55,19 @@ const G = {
     const why = [], stamp = J(vid + '.src.json');
     if (stamp) { if (stamp.hash !== srcHash(c)) why.push('렌더 뒤에 그림 코드가 바뀌었다(내용 지문이 다름) — film.mjs run ' + c.film + ' picture'); }
     else { const old = c.src().filter(f => mt(f) > mt(vid)); if (old.length) why.push('렌더가 그림 코드보다 오래됐다: ' + old.map(f => f.split(/[\\/]/).pop()).join(', ')); }
-    const r = node([join(FILMS, 'look-check.mjs'), vid, '--json']), j = JSON.parse((r.stdout || '[]').trim().split('\n').pop() || '[]')[0];
+    const r = node([join(FILMS, 'look-check.mjs'), vid, '--json', '--film', c.film]), j = JSON.parse((r.stdout || '[]').trim().split('\n').pop() || '[]')[0];
     if (!j) return fail('look-check 실패');
     if (j.brightness < T.look.brightness_min) why.push(`밝기 ${j.brightness} < ${T.look.brightness_min}`);
     if (j.dark > T.look.dark_max) why.push(`어두운 화면 ${(j.dark * 100).toFixed(0)}% > ${T.look.dark_max * 100}% — 가장 어두운 곳 ${j.darkest.map(([t]) => t + 's').join(' ')}`);
     if (j.still > T.look.still_max) why.push(`거의 멈춘 화면 ${(j.still * 100).toFixed(0)}% > ${T.look.still_max * 100}% — 가장 멈춘 곳 ${j.stillest.map(([t]) => t + 's').join(' ')}`);
     if (j.seconds > T.format.portrait_max_s + .5) why.push(`세로판 ${j.seconds}s > ${T.format.portrait_max_s}s`);
+    // every frame (frame-qa.mjs): black, frozen, pops outside the film's planned effects, held share overall and per scene
+    const q = node([join(FILMS, 'frame-qa.mjs'), vid, '--film', c.film, '--json']), F = JSON.parse((q.stdout || '{}').trim().split('\n').pop() || '{}'), TF = T.frames;
+    if (F.frames) { if (F.black > TF.black_max) why.push(`검은 프레임 ${F.black}장 — ${F.blackAt.join(' ')}s`); if (F.frozen.length > TF.frozen_max) why.push(`얼어붙은 구간 ${F.frozen.map(([a, b]) => a + '–' + b + 's').join(' ')}`);
+      if (F.pops.length > TF.pops_max) why.push(`튀는 프레임 ${F.pops.length}개 — ${F.pops.slice(0, 8).join(' ')}s (의도한 효과면 film.html QA_PLANNED에)`);
+      if (F.held > TF.held_max) why.push(`정지 프레임 ${(F.held * 100).toFixed(0)}% > ${TF.held_max * 100}%`);
+      for (const s of F.perScene) if (s.held > TF.scene_held_max) why.push(`${s.scene}(${s.a}–${s.b}s) 정지 ${(s.held * 100).toFixed(0)}% > ${TF.scene_held_max * 100}% — 멈춘 장면도 카메라가 천천히 밀려 들어가야 한다`);
+      j.frames = { black: F.black, frozen: F.frozen.length, pops: F.pops.length, held: F.held }; }
     return why.length ? { ok: false, why, info: j } : { ok: true, why: [], info: j }; },
   sound: c => {
     if (!c.place || !c.cues) return fail('sound/place.json · cues.json 없음');
@@ -77,6 +84,12 @@ const G = {
       const r = node([join(FILMS, 'sound-check.mjs'), mix, '--json']), j = JSON.parse((r.stdout || '[]').trim().split('\n').pop() || '[]')[0];
       if (j) { if (Math.abs(j.lufs - T.sound.lufs) > T.sound.lufs_tol) why.push(`크기 ${j.lufs} LUFS (목표 ${T.sound.lufs}±${T.sound.lufs_tol})`); if (j.peak > T.sound.peak_max) why.push(`최대 ${j.peak} dBTP > ${T.sound.peak_max}`); } }
     if (!existsSync(join(sd, 'ko.vtt'))) why.push('sound/ko.vtt(위쪽 자막) 없음');
+    // word-level sync: every voiced gold word lights on its spoken word (word-sync.mjs, Scribe timings of the voice track)
+    const wf = join(sd, 'words-ko.json'), voice = join(OUT, `${c.film}-voice.wav`);
+    if (!existsSync(wf)) why.push('sound/words-ko.json(해설 단어 시각) 없음 — 목소리 트랙을 받아쓰기');
+    else { if (existsSync(voice) && [join(sd, 'place.json')].some(f => mt(f) > mt(wf))) why.push('해설 배치가 바뀐 뒤 단어 시각을 다시 받지 않았다');
+      const w = node([join(FILMS, 'word-sync.mjs'), c.film, '--json']), arr = JSON.parse((w.stdout || '[]').trim() || '[]');
+      for (const o of arr) if (o.delta == null && !o.note) why.push(`${o.id} 「${o.hl}」 금빛 시각이 없다 — word-sync.mjs --write`); else if (o.delta != null && Math.abs(o.delta) > T.sound.word_tol_s) why.push(`${o.id} 「${o.hl}」 금빛이 말과 ${o.delta > 0 ? '+' : ''}${o.delta}s 어긋남 — word-sync.mjs ${c.film} --write`); }
     return why.length ? { ok: false, why } : pass(); },
   sheet: c => {
     const f = join(c.d, 'upload.md'); if (!existsSync(f)) return fail('upload.md 없음'); if (!existsSync(join(c.d, 'youtube.json'))) return fail('youtube.json 없음');

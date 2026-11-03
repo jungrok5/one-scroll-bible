@@ -1,0 +1,12 @@
+{
+ "_about": "Which look each Short / film carries — the report's 화풍·요소 표 joins this with the numbers (ANALYTICS.md 요소 분석). Films made with the pipeline carry their per-scene looks in motion/films/<film>/review.json looks[]; this file is for the first film's 21 Shorts and anything older.",
+ "shorts_ko": {
+  "1": { "look": "한 줄 그림(금빛 선)", "cut": "음악판" }, "2": { "look": "렌즈 같은 빛, IMAX 입자", "cut": "음악판" }, "3": { "look": "수묵", "cut": "음악판" },
+  "4": { "look": "소프트 파스텔", "cut": "음악판" }, "5": { "look": "60년대 서사 포스터 과슈", "cut": "음악판" }, "6": { "look": "수채 + 양피지 지도", "cut": "음악판" },
+  "7": { "look": "1920년대 무성영화", "cut": "해설판" }, "8": { "look": "채색 필사본", "cut": "해설판" }, "9": { "look": "목판화", "cut": "해설판" },
+  "10": { "look": "청사진 → 3D 노을", "cut": "해설판" }, "11": { "look": "종이 오림 라이트박스", "cut": "해설판" }, "12": { "look": "스테인드글라스", "cut": "해설판" },
+  "13": { "look": "흑백 필름 + 빨강 → 렘브란트 유화", "cut": "해설판" }, "14": { "look": "임파스토", "cut": "해설판" }, "15": { "look": "밤 촬영(다락방 → 지구)", "cut": "해설판" },
+  "16": { "look": "수채 두루마리", "cut": "해설판" }, "17": { "look": "워홀 실크스크린", "cut": "해설판" }, "18": { "look": "금빛 한 줄 트래킹", "cut": "해설판" },
+  "19": { "look": "탐험가 수채 스크랩북", "cut": "해설판" }, "20": { "look": "18세기 해도 동판", "cut": "해설판" }, "21": { "look": "금빛 선 기도", "cut": "해설판" }
+ }
+}

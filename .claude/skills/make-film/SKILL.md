@@ -61,10 +61,10 @@ counters, labelled maps, numbered lists), looks taken from films and paintings (
 Flat graphic / poster / cartoon-character / game looks are out (README 7절). Check a phone-size portrait still: cinematic?
 readable in one second?
 
-**A fitting look per scene, never one look for the whole film; every film adds 1–2 new looks** (maintainer and wife, 2026-11-03,
+**A fitting look per scene, never one look for the whole film; every film adds new looks — at least one, more is fine** (maintainer and wife, 2026-11-03; 2026-11-04 "화풍 많은 건 나쁜 게 아님, 3개 화풍 좋아",
 after 「메시아」 round 1 — "비주얼이 심심하다, 중간에 끄고 싶더라", "씬마다 적절하게 잘 표현할 화풍들을 다채롭게", "영상을 하나씩 추가할 때마다
 새로운 화풍 한두 개를 만들고 추가해서 점점 다양한 화풍을 얻게"). At stage 2 give each scene (or part) its own look from STYLE-INDEX
-(first-film looks, kits, OPUSCAR/Lemo-Opuscar) and make **1–2 of them new** (`parts[].style_new: true`). Kit the new ones into motion-skills
+(first-film looks, kits, OPUSCAR/Lemo-Opuscar) and make **at least one of them new** (`looks[].style_new: true`, `looks[].kit`). Kit every new one into motion-skills canvas-film (stage `kits`, `film.mjs task <film> kits`)
 when the film ships. Neighbouring scenes in the same look need a reason. One event on screen per verse, and no near-still stretch over 3 s.
 After each render, run `node motion/films/look-check.mjs <film.mp4>` and compare with the first film's Shorts (README 7절): brightness
 78–97/255, dark frames 1–11%, still frames 0–1%. 「메시아」 round 1 scored 49, 58% and 24%.

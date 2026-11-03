@@ -1,4 +1,5 @@
-/* look-engrave.js — line engraving after Gustave Doré's Bible plates (2026-11-03, a new look for the kit library; Lemo-Opuscar
+/* kit-doreline.js — house style "line engraving" (global: window.ENG). Kits: canvas-film kits/doreline (STYLE.md). From one-scroll-bible
+   「메시아 예언과 성탄」 (2026-11-03: the shepherds' field). Line engraving after Gustave Doré's Bible plates (Lemo-Opuscar
    `engraving`, OPUSCAR 64). The picture is drawn as values only (a grey "plate", 0 = black … 1 = white); ENG.engrave() cuts it into
    parallel lines on cream paper: each line swells where the plate is dark, thins and breaks where it is light, a second set
    crosses it in the deepest shadows, and pure light is bare paper. Lines follow a field (horizontal swells in the sky, the

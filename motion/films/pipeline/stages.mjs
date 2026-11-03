@@ -17,6 +17,13 @@ export function ctx(film) {
   return { film, d, s, lines, review: J(join(d, 'review.json')) || {}, place: J(join(d, 'sound/place.json')), cues: J(join(d, 'sound/cues.json')),
     up: (J(join(ROOT, 'motion/youtube/uploaded.json')) || {})[film], src: () => readdirSync(d).filter(f => /\.(html|js)$/.test(f)).map(f => join(d, f)) };
 }
+// the picture's code as one fingerprint (comments and whitespace dropped, so a comment edit does not demand a re-render);
+// film.mjs run <film> picture writes it next to the render: motion/out/<film>-v-narr.mp4.src.json
+import { createHash } from 'node:crypto';
+export function srcHash(c) { const h = createHash('sha256');
+  for (const f of c.src().sort()) h.update(f.split(/[\\/]/).pop() + '\n' + readFileSync(f, 'utf8').replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:'"`\\])\/\/[^\n]*/g, '$1').replace(/\s+/g, ' '));
+  for (const f of ['script.json']) if (existsSync(join(c.d, f))) h.update(readFileSync(join(c.d, f), 'utf8'));
+  return h.digest('hex').slice(0, 16); }
 const pass = () => ({ ok: true, why: [] }), fail = (...why) => ({ ok: false, why });
 const all = (...rs) => { const why = rs.flatMap(r => r.ok ? [] : r.why); return why.length ? { ok: false, why } : pass(); };
 const approved = (c, k) => (c.review.pipeline?.approvals || {})[k];
@@ -35,7 +42,8 @@ const G = {
   looks: c => {
     const L = c.review.looks; if (!Array.isArray(L) || !L.length) return fail('review.json looks(장면마다 화풍 표)가 없다');
     const why = [], nw = L.filter(x => x.style_new).length, distinct = new Set(L.map(x => x.look.split(/[ (]/)[0])).size;
-    if (nw < T.looks.new_min || nw > T.looks.new_max) why.push(`새 화풍 ${nw}개 — ${T.looks.new_min}–${T.looks.new_max}개여야 한다`);
+    if (nw < T.looks.new_min) why.push(`새 화풍 ${nw}개 — 적어도 ${T.looks.new_min}개`);
+    if (T.looks.new_max != null && nw > T.looks.new_max) why.push(`새 화풍 ${nw}개 — 많아야 ${T.looks.new_max}개`);
     if (distinct < T.looks.distinct_min) why.push(`화풍 종류 ${distinct}개 — 적어도 ${T.looks.distinct_min}개`);
     for (let i = 1; i < L.length; i++) if (L[i].look === L[i - 1].look && !L[i].same_reason) why.push(`${L[i - 1].scene} → ${L[i].scene}: 같은 화풍이 이어진다(same_reason 없음)`);
     return why.length ? { ok: false, why } : pass(); },
@@ -44,7 +52,9 @@ const G = {
     if (!c.review.artifact_url) why.push('초안 페이지 artifact_url 없음'); return why.length ? { ok: false, why } : pass(); },
   picture: c => {
     const vid = join(OUT, `${c.film}-v-narr.mp4`); if (!existsSync(vid)) return fail(`렌더+소리본 motion/out/${c.film}-v-narr.mp4 없음`);
-    const why = [], old = c.src().filter(f => mt(f) > mt(vid)); if (old.length) why.push('렌더가 그림 코드보다 오래됐다: ' + old.map(f => f.split(/[\\/]/).pop()).join(', '));
+    const why = [], stamp = J(vid + '.src.json');
+    if (stamp) { if (stamp.hash !== srcHash(c)) why.push('렌더 뒤에 그림 코드가 바뀌었다(내용 지문이 다름) — film.mjs run ' + c.film + ' picture'); }
+    else { const old = c.src().filter(f => mt(f) > mt(vid)); if (old.length) why.push('렌더가 그림 코드보다 오래됐다: ' + old.map(f => f.split(/[\\/]/).pop()).join(', ')); }
     const r = node([join(FILMS, 'look-check.mjs'), vid, '--json']), j = JSON.parse((r.stdout || '[]').trim().split('\n').pop() || '[]')[0];
     if (!j) return fail('look-check 실패');
     if (j.brightness < T.look.brightness_min) why.push(`밝기 ${j.brightness} < ${T.look.brightness_min}`);
@@ -83,6 +93,14 @@ const G = {
   after: c => { const u = c.up || {}, why = []; if (!u.h?.pinned_comment || !u.v?.pinned_comment) why.push('고정 댓글 id 없음');
     if (!/end screen|최종 화면/i.test(JSON.stringify(u.h || {}))) why.push('가로판 최종 화면 기록 없음'); if (!/related/i.test(JSON.stringify(u.v || {}))) why.push('쇼츠 관련 동영상 기록 없음');
     return why.length ? { ok: false, why } : pass(); },
+  // every new look of this film is packaged as a motion-skills canvas-film kit (관리자 2026-11-04: "화풍 추가되면 재사용할 수 있게 캔버스필름에 추가")
+  kits: c => { const L = (c.review.looks || []).filter(x => x.style_new), why = [];
+    for (const x of L) { if (!x.kit) { why.push(`새 화풍 "${x.look}"(${x.scene}): looks[].kit(키트 이름)이 없다`); continue; }
+      const k = join(T.looks.skills_kits, x.kit); for (const f of ['kit.js', 'STYLE.md', 'template.html', 'script.example.js']) if (!existsSync(join(k, f))) why.push(`키트 ${x.kit}: ${f} 없음`);
+      const v = join(c.d, `kit-${x.kit}.js`); if (!existsSync(v)) why.push(`영상이 키트를 쓰지 않는다: ${c.film}/kit-${x.kit}.js 없음`);
+      else if (existsSync(join(k, 'kit.js')) && readFileSync(v, 'utf8').replace(/\r/g, '') !== readFileSync(join(k, 'kit.js'), 'utf8').replace(/\r/g, '')) why.push(`kit-${x.kit}.js가 키트 원본과 다르다(키트를 고쳤으면 다시 복사하거나 원본에 반영)`); }
+    const idx = join(T.looks.skills_kits, '..', 'references', 'STYLE-INDEX.md'); if (existsSync(idx)) { const s = readFileSync(idx, 'utf8'); for (const x of L) if (x.kit && !s.includes('`' + x.kit + '`')) why.push(`STYLE-INDEX에 ${x.kit}가 없다(scripts/style-index.py)`); }
+    return why.length ? { ok: false, why } : pass(); },
   captions: c => { const have = new Set(c.up?.captions || []), miss = T.captions.langs.filter(l => !have.has(l)); return miss.length ? fail(`자막 없는 언어 ${miss.length}개: ${miss.join(' ')}`) : pass(); },
 };
 
@@ -92,6 +110,7 @@ export const STAGES = [
   { id: 'script', n: 2, name: '원고·장면별 화풍·메시지 점검', task: 'script', gates: ['script', 'looks'] },
   { id: 'review', n: 3, name: '관점 검수·시청자 리뷰·초안 페이지', task: 'review', run: [['node', 'motion/films/review-page.mjs', '{film}']], gates: ['reviews'], approve: '관리자·아내가 초안을 컨펌' },
   { id: 'picture', n: 4, name: '그리기·렌더', task: 'picture', run: [['node', 'motion/render.mjs', 'v', '--page', 'films/{film}/film.html', '--workers', '6'], ['node', 'motion/films/sound.mjs', '{film}', 'v']], gates: ['picture'], approve: '관리자·가족이 시안 확인' },
+  { id: 'kits', n: 4.5, name: '새 화풍을 canvas-film 키트로', task: 'kits', gates: ['kits'] },
   { id: 'sound', n: 5, name: '해설·음악·효과음·섞기', task: 'sound', run: [['node', 'motion/films/sound.mjs', '{film}', 'v'], ['node', 'motion/films/sound-prompts.mjs', 'md', 'motion/films/{film}/sound/prompts.json']], gates: ['sound'] },
   { id: 'sheet', n: 6, name: '올릴 글·썸네일', task: 'sheet', gates: ['sheet'] },
   { id: 'publish', n: 7, name: '한국어 채널 올리기·예약', task: 'publish', gates: ['publish'], approve: '관리자가 공개 시각 OK' },

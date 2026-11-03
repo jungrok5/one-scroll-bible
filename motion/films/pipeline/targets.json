@@ -8,10 +8,11 @@
   "goal": { "brightness": 78, "dark": 0.12, "still": 0.05 }
  },
  "looks": {
-  "_source": "관리자 2026-11-03: 장면마다 맞는 화풍, 한 영상을 한 화풍으로 고정하지 않음, 영상마다 새 화풍 1–2개",
+  "_source": "관리자 2026-11-03: 장면마다 맞는 화풍, 한 영상을 한 화풍으로 고정하지 않음, 영상마다 새 화풍 1–2개 / 2026-11-04: \"화풍 많은 건 나쁜 게 아님, 3개 화풍 좋아\" — 상한 없음. 새 화풍은 motion-skills canvas-film 키트로 넣어 재사용",
   "new_min": 1,
-  "new_max": 2,
-  "distinct_min": 4
+  "new_max": null,
+  "distinct_min": 4,
+  "skills_kits": "C:/Project/motion-skills/canvas-film/kits"
  },
  "sound": {
   "_source": "motion/films/SOUND.md (first film: ~10 effects a minute, ducks in 19 of 21 scenes); YouTube loudness",

@@ -1,4 +1,5 @@
-/* look-oil.js — oil painting, two keys (2026-11-03; new looks for the kit library, motion/films/README 7절 "영상마다 새 화풍 1–2개"):
+/* kit-oilpaint.js — house style "oil painting" (global: window.OIL). Kits: canvas-film kits/oilpaint (STYLE.md). From one-scroll-bible
+   「메시아 예언과 성탄」 (2026-11-03: the stable after Rembrandt, the journey after Remington, the dawn repainted with the knife). Keys:
      rembrandt — chiaroscuro after Rembrandt's *Adoration of the Shepherds* (OPUSCAR 45, Gordon Willis top light): readable warm umber
                  darks in thin smooth glazes, one light, thick ridged impasto only on the lit planes, amber varnish, canvas grain
      remington — Remington's Western oils (OPUSCAR 65): a red-gold sunset in long horizontal strokes, dark warm silhouettes with a

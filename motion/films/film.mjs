@@ -9,7 +9,7 @@
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import { join } from 'node:path';
-import { STAGES, ctx, stageStatus, FILMS } from './pipeline/stages.mjs';
+import { STAGES, ctx, stageStatus, FILMS, srcHash } from './pipeline/stages.mjs';
 
 const [cmd, film, stage, ...rest] = process.argv.slice(2);
 if (!cmd || !film) { console.log('usage: node motion/films/film.mjs status|check|run|approve|task <film> [stage]'); process.exit(1); }
@@ -33,6 +33,7 @@ if (cmd === 'status') {
 if (cmd === 'check' || cmd === 'run') {
   const s = st(stage);
   if (cmd === 'run') for (const c of s.run || []) { const a = cmdline(c, film); console.log('$ ' + a.join(' ')); const p = spawnSync(a[0] === 'node' ? process.execPath : a[0], a.slice(1), { stdio: 'inherit' }); if (p.status) { console.error('실패: ' + a.join(' ')); process.exit(p.status); } }
+  if (cmd === 'run' && s.id === 'picture') { const c = ctx(film), f = join(FILMS, '..', 'out', `${film}-v-narr.mp4.src.json`); writeFileSync(f, JSON.stringify({ hash: srcHash(c), at: new Date().toISOString() }) + '\n'); }
   const r = stageStatus(ctx(film), s);
   for (const [g, x] of r.results) { console.log(`${x.ok ? '✓' : '✗'} ${g}`); for (const w of x.why) console.log('   - ' + w); if (x.info) console.log('   ' + JSON.stringify(x.info)); }
   console.log(r.done ? '단계 통과' : r.ok ? `검사 통과 · 승인 대기: ${s.approve}` : '단계 미통과');

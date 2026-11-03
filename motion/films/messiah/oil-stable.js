@@ -1,7 +1,7 @@
 /* oil-stable.js — 「메시아」 4부의 마구간을 렘브란트 톱라이트 유화로 (2026-11-03 2차: "비주얼이 심심하다" → 장면마다 맞는 화풍).
    After Rembrandt's *Adoration of the Shepherds* (1646): the only light is the child; Mary kneels near us on the left, Joseph
    stands behind the manger on the right, through a doorway the blue night and one star. The plate is
-   value-planned (look-oil.js paints it), the camera moves over the painting: a slow pull-back from the child (2:7), later a
+   value-planned (kit-oilpaint.js paints it), the camera moves over the painting: a slow pull-back from the child (2:7), later a
    push in while the two verses are joined, and the light coming back onto the manger (W3). Uses film.html's bez/MARY_K/JOSEPH. */
 const SOIL = { S: 1.5, art: null };
 // Joseph for the painting: hooded head bowed toward the child, a beard, one arm forward on the staff (metres, facing left)

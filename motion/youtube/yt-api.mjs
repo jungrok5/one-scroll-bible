@@ -169,10 +169,22 @@ if (cmd === 'whoami') {
   const from = val('from', '2026-10-20'), to = val('to', new Date().toISOString().slice(0, 10));
   const q = async (o) => (await api('https://youtubeanalytics.googleapis.com/v2/reports?' + new URLSearchParams({ ids: 'channel==MINE', startDate: from, endDate: to, ...o }))).rows || [];
   const info = Object.fromEntries(((await api(`videos?part=snippet,contentDetails&id=${ids.join(',')}`)).items || []).map(x => [x.id, x]));
-  console.log(`YouTube Analytics ${from} … ${to} (the last ~2 days are incomplete)`);
+  // --json: one machine-readable object per video (motion/films/analytics/collect.mjs api stores it), no text
+  const JSONOUT = rest.includes('--json'), out = {}, say = (...a) => { if (!JSONOUT) console.log(...a); };
+  say(`YouTube Analytics ${from} … ${to} (the last ~2 days are incomplete)`);
   for (const id of ids) {
     const t = info[id]?.snippet.title || id, dur = info[id]?.contentDetails.duration || '';
-    const [m] = await q({ dimensions: 'video', filters: 'video==' + id, metrics: 'views,estimatedMinutesWatched,averageViewDuration,averageViewPercentage,likes,shares,subscribersGained' });
+    let m, qerr = null; try { [m] = await q({ dimensions: 'video', filters: 'video==' + id, metrics: 'views,estimatedMinutesWatched,averageViewDuration,averageViewPercentage,likes,shares,subscribersGained' }); }
+    catch (e) { if (!JSONOUT) throw e; qerr = String(e.message || e).slice(0, 160); }
+    if (JSONOUT && qerr) { out[id] = { title: t, duration: dur, from, to, error: qerr }; continue; }
+    if (JSONOUT) { const o = out[id] = { title: t, duration: dur, from, to };
+      if (m) try { Object.assign(o, { views: m[1], minutes: m[2], avgSec: m[3], avgPct: +(+m[4]).toFixed(1), likes: m[5], shares: m[6], subs: m[7] });
+        const share = rows => { const s = rows.reduce((a, r) => a + r[1], 0) || 1; return Object.fromEntries(rows.map(r => [r[0], +(r[1] / s).toFixed(3)])); };
+        o.device = share(await q({ dimensions: 'deviceType', filters: 'video==' + id, metrics: 'estimatedMinutesWatched' }));
+        o.age = Object.fromEntries((await q({ dimensions: 'ageGroup', filters: 'video==' + id, metrics: 'viewerPercentage' })).map(r => [r[0].replace('age', ''), +(r[1] / 100).toFixed(3)]));
+        o.traffic = share(await q({ dimensions: 'insightTrafficSourceType', filters: 'video==' + id, metrics: 'views' }));
+        o.retention = (await q({ dimensions: 'elapsedVideoTimeRatio', filters: 'video==' + id, metrics: 'audienceWatchRatio' })).map(r => [+r[0].toFixed(2), +r[1].toFixed(3)]); } catch (e) { o.error = String(e.message || e).slice(0, 160); }
+      continue; }
     console.log(`\n■ ${id} ${dur} ${t}`);
     if (!m) { console.log('  no data yet'); continue; }
     console.log(`  views ${m[1]} · minutes ${m[2]} · avg ${m[3]}s (${(+m[4]).toFixed(1)}%) · likes ${m[5]} · shares ${m[6]} · subs +${m[7]}`);
@@ -183,6 +195,7 @@ if (cmd === 'whoami') {
     const ret = await q({ dimensions: 'elapsedVideoTimeRatio', filters: 'video==' + id, metrics: 'audienceWatchRatio' });
     if (ret.length) console.log('  still watching:   ' + ret.filter(r => Math.round(r[0] * 100) % 10 === 0).map(r => `${Math.round(r[0] * 100)}% ${(r[1] * 100).toFixed(0)}`).join(' · '));
   }
+  if (JSONOUT) console.log(JSON.stringify(out));
 } else if (cmd === 'recent') {
   // recent [n=10]: the channel's latest uploads with their file names (find the id of a Studio upload — 3 units)
   const up_ = (await api('channels?part=contentDetails&mine=true')).items[0].contentDetails.relatedPlaylists.uploads;

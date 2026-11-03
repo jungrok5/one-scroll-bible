@@ -1,4 +1,4 @@
-/* engrave-shepherds.js — 「메시아」 4부의 목자들을 도레풍 동판화로 (2026-11-03 2차; look-engrave.js).
+/* engrave-shepherds.js — 「메시아」 4부의 목자들을 도레풍 동판화로 (2026-11-03 2차; kit-doreline.js).
    Night on the hill above Bethlehem in dense engraved lines; "주의 영광이 그들을 두루 비추매" — the hatching parts from the top of the
    sky down and the light is bare paper; an angel stands in it; the shepherds' and sheep's upper edges catch the light. 104.6–113.8 s.
    Uses film.html's sil/SIL. */

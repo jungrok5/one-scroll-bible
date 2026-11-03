@@ -409,7 +409,8 @@
    "at": "0:21–0:37",
    "scene": "에덴 · 창 3:15",
    "look": "고딕 목탄 (어둠이 양옆에서 번지고, 여자의 후손에서 지우개로 빛 한 점)",
-   "source": "motion-skills kits/charcoal (이 채널 처음)"
+   "source": "motion-skills kits/charcoal (이 채널 처음)",
+   "kit": "charcoal"
   },
   {
    "at": "0:37–0:51",
@@ -421,7 +422,8 @@
    "at": "0:51–1:10",
    "scene": "좁혀지는 약속 → 나사렛",
    "look": "양피지 잉크 지도 (온 세상의 금실이 모여 한 줄로 베들레헴, 북쪽 나사렛)",
-   "source": "kits/inkmap (앞 영상에서도 씀 — \"좁혀진다\"를 가장 잘 보여 줌)"
+   "source": "kits/inkmap (앞 영상에서도 씀 — \"좁혀진다\"를 가장 잘 보여 줌)",
+   "kit": "inkmap"
   },
   {
    "at": "1:10–1:16",
@@ -434,21 +436,24 @@
    "scene": "여정 · 베들레헴 도착",
    "look": "레밍턴 서부 유화 (노을 → 창마다 등불 켜지는 밤)",
    "source": "OPUSCAR 65 — 새 화풍",
-   "style_new": true
+   "style_new": true,
+   "kit": "oilpaint"
   },
   {
    "at": "1:35–1:46 · 1:54–2:17",
    "scene": "마구간 · 두 말씀 잇기 · W3",
    "look": "렘브란트 톱라이트 유화 (빛은 아기에게서만)",
    "source": "OPUSCAR 45 — 새 화풍",
-   "style_new": true
+   "style_new": true,
+   "kit": "oilpaint"
   },
   {
    "at": "1:45–1:54",
    "scene": "목자 · 영광",
    "look": "도레풍 동판화 (영광이 비치자 선이 걷히고 종이가 드러남)",
    "source": "Lemo-Opuscar engraving / OPUSCAR 64 — 새 화풍",
-   "style_new": true
+   "style_new": true,
+   "kit": "doreline"
   },
   {
    "at": "2:17–2:26",

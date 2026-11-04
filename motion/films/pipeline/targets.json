@@ -43,7 +43,17 @@
  },
  "format": {
   "_source": "README 2절 — Shorts ≤ 3:00 (portrait is the main cut)",
-  "portrait_max_s": 180
+  "portrait_max_s": 180,
+  "tv_cut": true,
+  "_tv_source": "insights.json older-tv (2026-11-04): 14분 해설판 시청 시간의 35%가 TV, 시청자 55세 이상 약 77% — 가로판도 렌더·프레임 검사·그림 리뷰를 같은 기준으로"
+ },
+ "clips": {
+  "_source": "insights.json shorts-loop (2026-11-04): Shorts 피드는 평균 시청률 100% 넘는 편만 계속 밀어 줌(광야 110%, 포로 귀환 228%); 피드가 민 편은 27–40초",
+  "min": 2,
+  "len_min": 20,
+  "len_max": 60,
+  "len_goal": 40,
+  "first_spoken_max": 1.0
  },
  "upload": {
   "_source": "ANALYTICS 2026-11-04: shared in KakaoTalk/Telegram — the first line must read in a chat preview",

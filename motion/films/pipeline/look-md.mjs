@@ -1,8 +1,8 @@
 // motion/reviews/film-<film>-look.json (the film-look-review workflow's result) → .md: scores per scene × reviewer, swipe points,
 // fixes by severity and the list of what must change before the picture can be approved. Exit 2 if that list is not empty.
-//   node motion/films/pipeline/look-md.mjs <film>
+//   node motion/films/pipeline/look-md.mjs <film> [--ori h]     (the TV cut: motion/reviews/film-<film>-look-h.json)
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
-const film = process.argv[2], f = `motion/reviews/film-${film}-look.json`;
+const film = process.argv[2], H = process.argv.includes('h'), f = `motion/reviews/film-${film}-look${H ? '-h' : ''}.json`;
 if (!film || !existsSync(f)) { console.error(`${f} 없음 — film-look-review 워크플로 결과를 저장`); process.exit(1); }
 const R = JSON.parse(readFileSync(f, 'utf8')), T = JSON.parse(readFileSync('motion/films/pipeline/targets.json', 'utf8')).look_review;
 export const sceneScores = R => { const m = new Map(); for (const r of R.reviewers) for (const s of r.scenes) { const e = m.get(s.scene) || { scene: s.scene, by: {}, swipe: 0 }; e.by[r.key] = s.score; if (s.swipe) e.swipe++; m.set(s.scene, e); }

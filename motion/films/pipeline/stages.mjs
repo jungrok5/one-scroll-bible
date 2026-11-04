@@ -70,19 +70,37 @@ const G = {
       j.frames = { black: F.black, frozen: F.frozen.length, pops: F.pops.length, held: F.held };
       // darker-and-slower than anything in the first film (below its p10 on both the brightest tone and motion): named, judged by the look review
       const FF = TF.first_film; if (FF) j.below_first_film = F.perScene.filter(s => s.p98 < FF.p98[0] && s.motion < FF.motion[0]).map(s => `${s.scene}(${s.a}–${s.b}s)`); }
+    // the TV cut (insight older-tv: a third of the long film's watch time is on a TV): rendered from the same code, fresh, no black/frozen frames
+    if (T.format.tv_cut) { const hv = join(OUT, `${c.film}-h-narr.mp4`), hs = J(hv + '.src.json');
+      if (!existsSync(hv)) why.push(`가로판(TV) motion/out/${c.film}-h-narr.mp4 없음`);
+      else { if (!hs || hs.hash !== srcHash(c)) why.push('가로판 렌더가 지금 그림 코드가 아니다 — film.mjs run ' + c.film + ' picture');
+        const qh = node([join(FILMS, 'frame-qa.mjs'), hv, '--film', c.film, '--json']), FH = JSON.parse((qh.stdout || '{}').trim().split('\n').pop() || '{}');
+        if (FH.frames) { if (FH.black > TF.black_max) why.push(`가로판 검은 프레임 ${FH.black}장 — ${FH.blackAt.join(' ')}s`); if (FH.frozen.length > TF.frozen_max) why.push(`가로판 얼어붙은 구간 ${FH.frozen.map(([a, b]) => a + '–' + b + 's').join(' ')}`); j.frames_h = { black: FH.black, frozen: FH.frozen.length, held: FH.held }; } } }
     return why.length ? { ok: false, why, info: j } : { ok: true, why: [], info: j }; },
   // the picture scored scene by scene (.claude/workflows/film-look-review.js) — for this render, not an older one
-  lookreview: c => {
-    const f = join(ROOT, 'motion/reviews', `film-${c.film}-look.json`), R = J(f), TL = T.look_review;
-    if (!R) return fail(`motion/reviews/film-${c.film}-look.json 없음 — look-sheets.mjs ${c.film} → 워크플로 film-look-review`);
-    const stamp = J(join(OUT, `${c.film}-v-narr.mp4.src.json`)), why = [];
-    if (!stamp || R.render !== stamp.hash) why.push(`그림 리뷰가 지금 렌더(${stamp?.hash})가 아니라 ${R.render}에 대한 것이다 — 다시 리뷰`);
+  lookreview: c => { const why = [], TL = T.look_review;
+    for (const ori of T.format.tv_cut ? ['v', 'h'] : ['v']) { const sfx = ori === 'h' ? '-h' : '', name = ori === 'h' ? '가로판 ' : '';
+    const f = join(ROOT, 'motion/reviews', `film-${c.film}-look${sfx}.json`), R = J(f);
+    if (!R) { why.push(`motion/reviews/film-${c.film}-look${sfx}.json 없음 — look-sheets.mjs ${c.film} --ori ${ori} → 워크플로 film-look-review`); continue; }
+    const stamp = J(join(OUT, `${c.film}-${ori}-narr.mp4.src.json`));
+    if (!stamp || R.render !== stamp.hash) why.push(`${name}그림 리뷰가 지금 렌더(${stamp?.hash})가 아니라 ${R.render}에 대한 것이다 — 다시 리뷰`);
     const m = new Map(); for (const r of R.reviewers) for (const s of r.scenes) m.set(s.scene, [...(m.get(s.scene) || []), s.score]);
     const means = [...m].map(([k, v]) => [k, v.reduce((a, b) => a + b, 0) / v.length]), all = means.reduce((a, [, v]) => a + v, 0) / Math.max(1, means.length);
-    for (const [k, v] of means) if (v < TL.scene_min) why.push(`${k} 그림 평균 ${v.toFixed(1)} < ${TL.scene_min}`);
-    if (all < TL.mean_min) why.push(`그림 전체 평균 ${all.toFixed(2)} < ${TL.mean_min}`);
-    for (const r of R.reviewers) for (const x of r.fixes) if (x.severity === 'BLOCKER') why.push(`BLOCKER(${r.key}) ${x.scene}${x.at != null ? ' ' + x.at + 's' : ''}: ${x.what}`);
-    return why.length ? { ok: false, why } : { ok: true, why: [], info: { mean: +all.toFixed(2) } }; },
+    for (const [k, v] of means) if (v < TL.scene_min) why.push(`${name}${k} 그림 평균 ${v.toFixed(1)} < ${TL.scene_min}`);
+    if (all < TL.mean_min) why.push(`${name}그림 전체 평균 ${all.toFixed(2)} < ${TL.mean_min}`);
+    for (const r of R.reviewers) for (const x of r.fixes) if (x.severity === 'BLOCKER') why.push(`${name}BLOCKER(${r.key}) ${x.scene}${x.at != null ? ' ' + x.at + 's' : ''}: ${x.what}`); }
+    return why.length ? { ok: false, why } : pass(); },
+  // loop Shorts cut from the film (clips.mjs; insight shorts-loop): enough of them, each ~40 s, starting on a word, with the reason it loops
+  clips: c => { const K = T.clips, L = c.review.clips || [], why = [];
+    if (L.length < K.min) why.push(`review.json clips ${L.length}개 < ${K.min} — 끝이 처음으로 이어지는 짧은 쇼츠(clips.mjs)`);
+    const R = J(join(OUT, `${c.film}-clips.json`)) || [], vid = join(OUT, `${c.film}-v-narr.mp4`);
+    for (const x of L) { const r = R.find(o => o.id === x.id), f = join(OUT, `${c.film}-clip-${x.id}.mp4`);
+      if (!r || !existsSync(f)) { why.push(`clip ${x.id}: 아직 안 만듦 — node motion/films/clips.mjs ${c.film}`); continue; }
+      if (mt(f) < mt(vid)) why.push(`clip ${x.id}: 본편 렌더보다 오래됨 — clips.mjs 다시`);
+      if (r.len < K.len_min || r.len > K.len_max) why.push(`clip ${x.id}: ${r.len}s — ${K.len_min}–${K.len_max}초(목표 ${K.len_goal})`);
+      if (r.first == null || r.first > K.first_spoken_max) why.push(`clip ${x.id}: 첫 해설이 ${r.first}초 — ${K.first_spoken_max}초 안에`);
+      if (!x.why) why.push(`clip ${x.id}: why(끝이 어떻게 처음으로 이어지는지) 없음`); if (!x.title) why.push(`clip ${x.id}: title 없음`); }
+    return why.length ? { ok: false, why } : pass(); },
   sound: c => {
     if (!c.place || !c.cues) return fail('sound/place.json · cues.json 없음');
     const why = [], sd = join(c.d, 'sound');
@@ -136,9 +154,10 @@ export const STAGES = [
   { id: 'topic', n: 1, name: '주제', task: 'topic', gates: ['topic'], approve: '관리자가 주제를 고름' },
   { id: 'script', n: 2, name: '원고·장면별 화풍·메시지 점검', task: 'script', gates: ['script', 'looks'] },
   { id: 'review', n: 3, name: '관점 검수·시청자 리뷰·초안 페이지', task: 'review', run: [['node', 'motion/films/review-page.mjs', '{film}']], gates: ['reviews'], approve: '관리자·아내가 초안을 컨펌' },
-  { id: 'picture', n: 4, name: '그리기·렌더', task: 'picture', run: [['node', 'motion/render.mjs', 'v', '--page', 'films/{film}/film.html', '--workers', '6'], ['node', 'motion/films/sound.mjs', '{film}', 'v'], ['node', 'motion/films/pipeline/look-sheets.mjs', '{film}']], gates: ['picture', 'lookreview'], approve: '관리자·가족이 시안 확인' },
+  { id: 'picture', n: 4, name: '그리기·렌더', task: 'picture', run: [['node', 'motion/render.mjs', 'v', '--page', 'films/{film}/film.html', '--workers', '6'], ['node', 'motion/films/sound.mjs', '{film}', 'v'], ['node', 'motion/render.mjs', 'h', '--page', 'films/{film}/film.html', '--workers', '6'], ['node', 'motion/films/sound.mjs', '{film}', 'h']], gates: ['picture', 'lookreview'], approve: '관리자·가족이 시안 확인' },
   { id: 'kits', n: 4.5, name: '새 화풍을 canvas-film 키트로', task: 'kits', gates: ['kits'] },
   { id: 'sound', n: 5, name: '해설·음악·효과음·섞기', task: 'sound', run: [['node', 'motion/films/sound.mjs', '{film}', 'v'], ['node', 'motion/films/sound-prompts.mjs', 'md', 'motion/films/{film}/sound/prompts.json']], gates: ['sound'] },
+  { id: 'clips', n: 5.5, name: '반복용 짧은 쇼츠(끝이 처음으로)', task: 'clips', run: [['node', 'motion/films/clips.mjs', '{film}']], gates: ['clips'] },
   { id: 'sheet', n: 6, name: '올릴 글·썸네일', task: 'sheet', gates: ['sheet'] },
   { id: 'publish', n: 7, name: '한국어 채널 올리기·예약', task: 'publish', gates: ['publish'], approve: '관리자가 공개 시각 OK' },
   { id: 'social', n: 8, name: '인스타·스레드', task: 'social', gates: ['social'] },

@@ -33,7 +33,9 @@ if (cmd === 'status') {
 if (cmd === 'check' || cmd === 'run') {
   const s = st(stage);
   if (cmd === 'run') for (const c of s.run || []) { const a = cmdline(c, film); console.log('$ ' + a.join(' ')); const p = spawnSync(a[0] === 'node' ? process.execPath : a[0], a.slice(1), { stdio: 'inherit' }); if (p.status) { console.error('실패: ' + a.join(' ')); process.exit(p.status); } }
-  if (cmd === 'run' && s.id === 'picture') { const c = ctx(film), f = join(FILMS, '..', 'out', `${film}-v-narr.mp4.src.json`); writeFileSync(f, JSON.stringify({ hash: srcHash(c), at: new Date().toISOString() }) + '\n'); }
+  if (cmd === 'run' && s.id === 'picture') { const c = ctx(film), h = srcHash(c);
+    for (const o of ['v', 'h']) if (existsSync(join(FILMS, '..', 'out', `${film}-${o}-narr.mp4`))) { writeFileSync(join(FILMS, '..', 'out', `${film}-${o}-narr.mp4.src.json`), JSON.stringify({ hash: h, at: new Date().toISOString() }) + '\n');
+      spawnSync(process.execPath, ['motion/films/pipeline/look-sheets.mjs', film, '--ori', o], { stdio: 'inherit' }); } }
   const r = stageStatus(ctx(film), s);
   for (const [g, x] of r.results) { console.log(`${x.ok ? '✓' : '✗'} ${g}`); for (const w of x.why) console.log('   - ' + w); if (x.info) console.log('   ' + JSON.stringify(x.info)); }
   console.log(r.done ? '단계 통과' : r.ok ? `검사 통과 · 승인 대기: ${s.approve}` : '단계 미통과');

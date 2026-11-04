@@ -17,10 +17,10 @@ const sceneList = A.scenes.map((s, i) => `${i + 1}. ${s.scene} (${s.a}–${s.b}s
    수치: 밝기 ${s.stats.luma}(${s.stats.vs_first_film.luma}) · 가장 밝은 곳 ${s.stats.p98}(${s.stats.vs_first_film.p98}) · 채도 ${s.stats.sat}(${s.stats.vs_first_film.sat}) · 움직임 ${s.stats.motion}(${s.stats.vs_first_film.motion}) · 정지 ${Math.round(s.stats.held * 100)}%`).join('\n')
 
 const BASE = `영상 「${A.film}」의 그림을 장면마다 보고 점수를 매긴다. 보고만 한다(파일을 고치지 않는다).
-세로 쇼츠(9:16, 3분 이하)가 메인이고, 대상은 성경을 잘 모르는 크리스천이다. 화면 글은 성경 인용(개역개정)과 해설 자막이다.
-기준(넘어야 할 막대)은 이 채널의 첫 영상이다: ${A.first_film_sheet ? `${A.first_film_sheet} (첫 영상 쇼츠 여덟 편의 한 장면씩)을 먼저 Read로 본다.` : ''}
+${A.ori === 'h' ? '이번에 보는 것은 가로판(16:9)이다 — 거실 TV로 보는 60대 이상이 주 시청자다(해설판 시청의 35%가 TV). 그림 한 장은 네 칸(왼쪽 위 → 오른쪽 위 → 왼쪽 아래 → 오른쪽 아래가 시간 순서). 세로판을 가로로 옮기며 생긴 문제(인물이 잘림, 빈 양옆, 너무 작은 주인공, 글자와 겹침)를 특히 본다.' : '세로 쇼츠(9:16, 3분 이하)가 메인이다.'} 대상은 성경을 잘 모르는 크리스천이다. 화면 글은 성경 인용(개역개정)과 해설 자막이다.
+기준(넘어야 할 막대)은 이 채널의 첫 영상이다: ${A.first_film_sheet ? `${A.first_film_sheet} (${A.ori === 'h' ? '첫 영상 14분 가로판의 여덟 장면' : '첫 영상 쇼츠 여덟 편의 한 장면씩'})을 먼저 Read로 본다.` : ''}
 첫 영상의 원칙: 카메라가 공간을 지나가는 영화 같은 화면, 빛이 주인공, 작은 인물, 절제, 포스터·인포그래픽·만화 금지, 그림 위에 글씨(그림의 일부로서의 글자) 금지, 휴대폰에서 무엇인지 읽혀야 함, 어두움(dim)은 괜찮지만 캄캄함(dark)은 안 됨.
-장면마다 그림 파일을 Read로 열어 네 장을 본다(왼쪽부터 시간 순서). 수치의 괄호는 첫 영상 21편과 비교한 위치다.
+장면마다 그림 파일을 Read로 열어 네 장을 본다(시간 순서). 수치의 괄호는 첫 영상 21편과 비교한 위치다.
 
 장면 목록:
 ${sceneList}
@@ -51,4 +51,4 @@ const SCHEMA = {
 phase('Review')
 const results = await parallel(REVIEWERS.map(r => () =>
   agent(`${BASE}\n\n${r.prompt}`, { label: `look:${r.key}`, phase: 'Review', schema: SCHEMA }).then(v => ({ key: r.key, who: r.who, ...v }))))
-return { film: A.film, render: A.render, at: new Date().toISOString(), reviewers: results }
+return { film: A.film, ori: A.ori || 'v', render: A.render, at: new Date().toISOString(), reviewers: results }

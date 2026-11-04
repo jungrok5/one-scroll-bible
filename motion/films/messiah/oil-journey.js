@@ -52,7 +52,11 @@ function partJourney(ctx, t) {
   const night = ss(85.5, 90.2, t);
   OIL.view(ctx, JOIL.sunArt, S, fx * S, fy * S, z);
   if (night > 0) { ctx.save(); ctx.globalAlpha = night; OIL.view(ctx, JOIL.nightArt, S, fx * S, fy * S, z); ctx.restore(); }
-  const P2 = (x, y) => [W / 2 + (x - fx) * z, H / 2 + (y - fy) * z];
+  // round 3 (look review: the half-way sky went olive-mud): dusk passes through violet — the sky's hue is pulled to dusk purple
+  // while the two plates cross, a last orange kept on the horizon
+  { const b = Math.sin(Math.PI * night); if (b > .01) { const hz = H / 2 + (JOIL.hz - fy) * z; ctx.save(); ctx.globalCompositeOperation = 'color'; const g = ctx.createLinearGradient(0, 0, 0, hz);
+    g.addColorStop(0, `rgba(58,44,104,${.55 * b})`); g.addColorStop(.75, `rgba(132,70,120,${.5 * b})`); g.addColorStop(1, `rgba(220,120,70,${.45 * b})`); ctx.fillStyle = g; ctx.fillRect(0, 0, W, hz); ctx.restore(); } }
+  const P2 =(x, y) => [W / 2 + (x - fx) * z, H / 2 + (y - fy) * z];
   // the sun's glow while it lasts; at night a few stars
   if (night < 1) { const [sx, sy] = P2(...JOIL.sun); W3.bloom(ctx, sx, sy, [255, 196, 120], .7 * (1 - night) * (1 - ss(84, 88, t) * .5), { r: (V ? 240 : 200) * z, streak: .8 }); }
   if (night > 0) { const r = rng(3); ctx.save(); ctx.fillStyle = '#e8f2ee'; for (let i = 0; i < 160; i++) { const [x, y] = P2(r() * WP, r() * JOIL.hz * .8); ctx.globalAlpha = night * (.3 + .6 * r()) * (.8 + .2 * Math.sin(t * 2 + i)); ctx.fillRect(x, y, 1.6, 1.6); } ctx.restore(); }

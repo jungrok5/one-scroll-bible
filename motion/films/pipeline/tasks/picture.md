@@ -3,5 +3,6 @@
 그리기: 장면 하나 = 화풍 하나의 모듈(`films/{film}/<화풍>-<장면>.js`), 새 화풍 엔진은 `look-*.js`(영상이 끝나면 motion-skills 키트로).
 세로(1080×1920) 먼저. 구절마다 화면 사건 하나, 3초 넘게 멈춘 화면 없음, 주인공은 폰에서 1초에 읽힘.
 만들기: `node motion/films/film.mjs run {film} picture`(렌더 + 소리 입힌 본).
-검사가 보는 것: `pipeline/targets.json` look(밝기·어두운 화면·멈춘 화면), 세로 길이, 렌더가 그림 코드보다 새것인지. 실패하면 출력된 시각(가장 어두운·멈춘 5초)의 장면부터 고친다.
-보이기: 720p 미리보기와 6초 밀착 시트를 SendUserFile로. 멈춤: `approve {film} picture "관리자: …"`.
+검사가 보는 것: `pipeline/targets.json` look(밝기·어두운 화면·멈춘 화면), 세로 길이, 렌더가 그림 코드와 같은 내용 지문인지, frame-qa(모든 프레임 — 검은 화면·얼어붙음·튐·정지 비율), 첫 영상보다 어둡고 느린 장면(`below_first_film`). 실패하면 출력된 시각의 장면부터 고친다.
+그림 리뷰: run이 만든 `motion/out/look-review/{film}/args.json`을 args로 저장된 워크플로 **`film-look-review`**를 돌린다(관리자가 이번 영상의 리뷰 워크플로를 허락했을 때). 이 세션에서 Workflow 도구가 꺼져 있으면 `node motion/films/pipeline/wf-prompts.mjs .claude/workflows/film-look-review.js motion/out/look-review/{film}/args.json motion/out/look-review/{film}/briefs`로 같은 지시문을 꺼내 리뷰어마다 하위 에이전트 하나(지시문 파일만 넘기고, 답 JSON을 `briefs/answer-<key>.json`에 Write로 저장하게 함 — 본 세션이 긴 답을 다시 옮겨 적지 않도록)로 돌리고, 답을 `{ film, render, at, reviewers: [{ key, who, …답 }] }`으로 모은다. 결과를 그대로 `motion/reviews/film-{film}-look.json`에 저장하고 `node motion/films/pipeline/look-md.mjs {film}`. "반영해야 할 것"(장면 평균 < 6, 전체 < 7, BLOCKER·MAJOR)을 고치고 다시 렌더 → 다시 리뷰. 리뷰는 렌더 지문에 묶여 있어 그림을 고치면 다시 받아야 통과한다.
+보이기: 버전 비교 페이지 `node motion/films/compare.mjs {film} <이전>=<커밋> 새=WORK --audio` → `motion/out/compare/{film}/`를 비공개 아티팩트로(index.html + files.json의 파일들), 720p 미리보기와 밀착 시트를 SendUserFile로. 멈춤: `approve {film} picture "관리자: …"`.

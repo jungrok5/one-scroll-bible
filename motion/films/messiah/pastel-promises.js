@@ -93,7 +93,7 @@
     const dx = A.TX - 30 * A.ts, dy = A.TY - 30, gd = ctx.createRadialGradient(dx, dy, 0, dx, dy, 160); gd.addColorStop(0, `rgba(240,170,100,${.45 * lamp})`); gd.addColorStop(1, 'rgba(240,160,100,0)'); ctx.fillStyle = gd; ctx.fillRect(-W, -H, 3 * W, 3 * H);
     ctx.globalCompositeOperation = 'source-over'; ctx.restore();
     // the promise: the gold thread crosses the sky among the stars
-    const pts = []; for (let i = 0; i <= 40; i++) { const u = i / 40; pts.push([-40 + u * (W + 80), A.hz * (.5 - .26 * Math.sin(u * 3.1))]); } thread2D(ctx, pts, clamp((t - 37.4) / 5.4), .85);
+    const pts = []; for (let i = 0; i <= 40; i++) { const u = i / 40; pts.push([-40 + u * (W + 80), A.hz * (.58 - .16 * Math.sin(u * 3.1))]); }   /* round 3: the arc stays under the place labels */ thread2D(ctx, pts, clamp((t - 37.4) / 5.4), .85);
     finish(ctx, t); textBand(ctx);
   };
   window.partDavid = function (ctx, t) {
@@ -101,7 +101,10 @@
     const k = clamp((t - 43.4) / 7.8), z = 1 + .06 * eio(k), px = 40 * eio(k);
     ctx.save(); ctx.translate(W / 2, H * .62); ctx.scale(z, z); ctx.translate(-W / 2 - px, -H * .62); ctx.drawImage(D.art, 0, 0);
     W3.bloom(ctx, D.sun[0], D.sun[1], [255, 214, 150], .6 * (.92 + .08 * Math.sin(t)), { r: V ? 240 : 200, streak: .7 });
-    const pts = []; for (let i = 0; i <= 40; i++) { const u = i / 40, xx = -40 + u * (W + 80); pts.push([xx, D.crest(xx) - (V ? 22 : 16)]); } thread2D(ctx, pts, clamp((t - 43.8) / 6), .9);
-    ctx.restore(); finish(ctx, t); textBand(ctx);
+    const pts = []; for (let i = 0; i <= 40; i++) { const u = i / 40, xx = -40 + u * (W + 80); pts.push([xx, D.crest(xx) - (V ? 300 : 230)]); } thread2D(ctx, pts, clamp((t - 43.8) / 6), .9);   /* round 3: along the far hills, above the boy (it ran through him) */
+    ctx.restore(); finish(ctx, t);
+    // round 3: the verse sits in the sky — the top of the sky darkens under it so the words and the reference read (not a box: the whole width)
+    { const a = ss(43.6, 44.4, t) * (1 - ss(49.4, 50.2, t)); if (a > 0) { const g = ctx.createLinearGradient(0, 0, 0, H * .4); g.addColorStop(0, `rgba(30,20,48,${.62 * a})`); g.addColorStop(.7, `rgba(30,20,48,${.4 * a})`); g.addColorStop(1, 'rgba(30,20,48,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H * .4); } }
+    textBand(ctx);
   };
 })();

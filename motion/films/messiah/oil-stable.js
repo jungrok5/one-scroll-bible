@@ -14,8 +14,9 @@ function buildStableOil() {
   Object.assign(SOIL, { lx, ly, gy, LP });
   const radial = (x, y, R, stops, op = 'source-over') => { g.save(); g.globalCompositeOperation = op; const gr = g.createRadialGradient(x, y, 0, x, y, R); stops.forEach(([k, c]) => gr.addColorStop(k, c)); g.fillStyle = gr; g.fillRect(x - R, y - R, 2 * R, 2 * R); g.restore(); };
   // the room: readable warm umber, the back wall lit by the child; near-black only in the far corners
-  g.fillStyle = '#24150b'; g.fillRect(0, 0, W, H);
-  radial(lx, ly - 30, Math.max(W, H) * .62, [[0, 'rgba(214,150,76,1)'], [.25, 'rgba(170,112,54,.92)'], [.6, 'rgba(96,60,28,.75)'], [1, 'rgba(40,24,12,0)']]);
+  g.fillStyle = '#170d06'; g.fillRect(0, 0, W, H);
+  // round 3 (look review: 'the whole wall is evenly orange — the light must come only from the child'): it falls off into the dark
+  radial(lx, ly - 30, Math.max(W, H) * .46, [[0, 'rgba(214,150,76,1)'], [.28, 'rgba(150,96,46,.86)'], [.66, 'rgba(62,38,18,.62)'], [1, 'rgba(30,18,9,0)']]);
   // boards of the back wall (values only; the strokes make the wood)
   { const r = rng(4); for (let x = W * .02; x < W; x += W * (.11 + .04 * r())) { g.fillStyle = 'rgba(28,16,8,.38)'; g.fillRect(x, H * .12, 3 + 2 * r(), gy - H * .1); } }
   // the doorway at the back, left: blue-green night and one star (the only cool colour)
@@ -29,7 +30,7 @@ function buildStableOil() {
   for (const [x0, w0, side] of [[W * .03, V ? 54 : 60, 1], [W * .95, V ? 58 : 64, -1]]) { g.fillStyle = '#1a0e07'; g.fillRect(x0 - w0 / 2, 0, w0, H); const gr = g.createLinearGradient(x0 + side * w0 / 2, 0, x0 + side * (w0 / 2 - 16), 0); gr.addColorStop(0, 'rgba(170,108,50,.6)'); gr.addColorStop(1, 'rgba(170,108,50,0)'); g.fillStyle = gr; g.fillRect(Math.min(x0 + side * w0 / 2, x0 + side * (w0 / 2 - 16)), 0, 16, H); }
   // the floor: straw, warm near the manger
   { const gr = g.createLinearGradient(0, gy - 20, 0, H); gr.addColorStop(0, '#7a5228'); gr.addColorStop(.5, '#5a381a'); gr.addColorStop(1, '#3a2410'); g.fillStyle = gr; g.fillRect(0, gy - 8, W, H); }
-  radial(lx, gy + 30, W * .7, [[0, 'rgba(226,170,96,.8)'], [.4, 'rgba(160,104,48,.4)'], [1, 'rgba(60,36,16,0)']]);
+  radial(lx, gy + 30, W * .52, [[0, 'rgba(226,170,96,.8)'], [.4, 'rgba(160,104,48,.4)'], [1, 'rgba(60,36,16,0)']]);
   { const r = rng(14); g.lineCap = 'round'; for (let i = 0; i < 900; i++) { const x = cx + (r() - .5) * W * 1.2, y = gy - 4 + r() * (H - gy), d = Math.hypot(x - lx, (y - ly) * 1.6) / (W * .62), k = clamp(1 - d); if (k <= .05) continue;
     g.strokeStyle = `rgba(${236 - 40 * r() | 0},${190 - 40 * r() | 0},${110 - 30 * r() | 0},${.75 * k})`; g.lineWidth = 1.6 + 1.4 * r(); g.beginPath(); g.moveTo(x, y); g.lineTo(x + (r() - .5) * 34, y - 3 - r() * 9); g.stroke(); } }
   // a figure: its path (metres, feet at the origin) given volume by the one light (OIL.relief) — lit where it faces the child,
@@ -40,7 +41,7 @@ function buildStableOil() {
     OIL.relief(g, p, m, box, zones.map(z => ({ w: z.at ? (u, v) => clamp(1.6 - 1.6 * Math.hypot((u - z.at[0]) / z.at[2], (v - z.at[1]) / z.at[3])) : null, base: hex(z.base), lit: hex(z.lit), k: z.k })),
       { x: LP[0] * S, y: LP[1] * S, z: 45 * S, R: H * .4 * S }, { soft: .05, height: 70 * S, amb: .22, wrap: .12 }); }  // Joseph behind the manger on the right, leaning on his staff, head bowed toward the child
   const sJ = V ? 430 : 330, jx = lx + (V ? 235 : 270), jy = gy - (V ? 20 : 20);
-  { g.save(); g.fillStyle = '#1c1209'; g.fillRect(jx - .47 * sJ, jy - 1.98 * sJ, .035 * sJ, 1.98 * sJ); g.fillStyle = 'rgba(220,156,84,.8)'; g.fillRect(jx - .47 * sJ, jy - 1.1 * sJ, .01 * sJ, 1.0 * sJ); g.restore(); }
+  /* Joseph's staff is drawn after the painting (a thin bar painted over broke into a dotted line nobody could read) */
   figure(JOSEPH_O, jx, jy, sJ, 1, [{ at: [-.16, -1.6, .07, .14], base: '#2a1a10', lit: '#f2c896' }, { at: [-.43, -1.19, .06, .06], base: '#2a1a10', lit: '#f2c896' }, { base: '#24180e', lit: '#f0b070', k: 1.5 }], [-.45, -1.85, .32, 0]);
   // the manger: rough boards, its rim lit from the straw inside
   const mw = V ? 290 : 300, mh = V ? 92 : 92;
@@ -65,12 +66,14 @@ function buildStableOil() {
     g.fillStyle = '#4a0e0a'; g.fill(p); g.clip(p); const gr = g.createLinearGradient(lx + mw * .16, 0, lx + mw * .52, 0); gr.addColorStop(0, 'rgba(206,64,44,1)'); gr.addColorStop(1, 'rgba(90,16,12,0)'); g.fillStyle = gr; g.fillRect(lx, ly - 20, mw, mh * 1.2); g.restore(); }
   // Mary near us on the left, kneeling toward the child, veiled; one red (her dress) — the only red in the film's stable
   const sM = V ? 560 : 420, mx = lx - (V ? 330 : 390), my = gy + (V ? 210 : 150);
-  figure(MARY_K, mx, my, sM, 1, [{ at: [.13, -1.03, .05, .1], base: '#2c1a12', lit: '#ffdcb0' }, { at: [.2, -.93, .06, .05], base: '#2c1a12', lit: '#ffdcb0' },
-    { base: '#17161c', lit: '#a49a8c', k: 1.1 }], [-.5, -1.2, .4, 0]);
+  figure(MARY_K, mx, my, sM, 1, [{ at: [.13, -1.03, .06, .11], base: '#3a2418', lit: '#ffe4bc', k: 1.6 }, { at: [.2, -.93, .07, .06], base: '#3a2418', lit: '#ffe4bc', k: 1.6 },
+    { base: '#17161c', lit: '#d6c2a2', k: 1.45 }], [-.5, -1.2, .4, 0]);
   // the light itself, laid on as glaze over everything near the child
   radial(LP[0], LP[1], Math.max(W, H) * .4, [[0, 'rgba(255,236,190,.55)'], [.2, 'rgba(240,180,100,.25)'], [1, 'rgba(200,130,60,0)']], 'screen');
   SOIL.art = OIL.paint(plate, { key: 'rembrandt', S, seed: 11 });
-  { const a = SOIL.art.getContext('2d'); a.save(); a.scale(S, S); a.globalAlpha = .9; child(a); a.restore(); }   // the focus stays crisp, as in the painting
+  { const a = SOIL.art.getContext('2d'); a.save(); a.scale(S, S); a.globalAlpha = .9; child(a); a.globalAlpha = 1;
+    a.lineCap = 'round'; a.strokeStyle = '#1a1008'; a.lineWidth = .03 * sJ; a.beginPath(); a.moveTo(jx - .455 * sJ, jy - 1.96 * sJ); a.lineTo(jx - .46 * sJ, jy); a.stroke();
+    a.strokeStyle = 'rgba(214,150,80,.55)'; a.lineWidth = 2.2; a.beginPath(); a.moveTo(jx - .468 * sJ, jy - 1.4 * sJ); a.lineTo(jx - .472 * sJ, jy - .1 * sJ); a.stroke(); a.restore(); }   // the focus stays crisp, as in the painting
 }
 // the camera over the painting: (fx, fy) in frame units of the plate, zoom z
 function stableOil(ctx, t, fx, fy, z, o = {}) {
@@ -84,9 +87,32 @@ function stableOil(ctx, t, fx, fy, z, o = {}) {
 }
 // 2:7 — the pull-back: from the child to the whole room (95.0–104.8)
 function partStable(ctx, t) { const k = eio(clamp((t - 95) / 9.6)); stableOil(ctx, t, lerp(SOIL.lx, W / 2, k), lerp(SOIL.ly - 10, H * .5, k), lerp(1.55, 1.0, k)); textBand(ctx); }
-// the two verses joined in the stable, then W3: the light comes back onto the manger (113.6–137.2)
+// the two verses joined (113.6–137.2), round 3 after the look review (all four: "23 s of the same stable, nearly black"):
+// W0–W1 (Gen 3:15) back in the garden — the charcoal tree and its one point of light, the camera pushing toward it;
+// as the words cross to Gal 4:4 the point comes down and becomes the light of the child (the promise kept), the stable close
+// on the child and Mary; W3: the light fuller, the camera on in, and behind the manger the post and beam throw a cross on the wall.
+let PAIR_EDEN = null;
 function partPair(ctx, t) {
-  const k = eio(clamp((t - 113.6) / 23.6)), back = ss(128.4, 131.4, t); stableOil(ctx, t, lerp(W / 2, SOIL.lx - 30, k), lerp(H * .5, SOIL.ly - 60, k), lerp(1.0, 1.28, k), { glow: 1 + .6 * back });
-  const dim = ss(114.6, 116.2, t) * (1 - .6 * ss(128.4, 131.4, t)); ctx.fillStyle = `rgba(14,8,4,${.72 * dim})`; ctx.fillRect(0, 0, W, H);
+  const eden = 1 - ss(121.0, 123.4, t), dsc = ss(120.6, 123.6, t);
+  // the stable, close: from the child toward Mary's lit face, always pushing
+  const k = eio(clamp((t - 121) / 16.2)), back = ss(128.4, 131.4, t), fx = lerp(SOIL.lx - 90, SOIL.lx - 135, k), fy = lerp(SOIL.ly - 60, SOIL.ly - 90, k), z = lerp(1.5, 1.85, k);   // Mary's face and the child both in frame, the words below them
+  if (eden < 1) {
+    stableOil(ctx, t, fx, fy, z, { glow: 1.25 + .55 * back });
+    // W3: "우리 죄를 대신" — the cross the post and beam throw on the back wall, faint, warm-dark (the light is the child)
+    const cr = ss(132.4, 135.4, t); if (cr > 0) { const cx = W / 2 + (SOIL.lx + 150 - fx) * z, cy = H / 2 + (SOIL.ly - 330 - fy) * z, s = z;
+      ctx.save(); ctx.globalCompositeOperation = 'multiply'; ctx.filter = `blur(${10 * s}px)`; ctx.fillStyle = `rgba(70,40,20,${.5 * cr})`;
+      ctx.fillRect(cx - 9 * s, cy - 150 * s, 18 * s, 330 * s); ctx.fillRect(cx - 82 * s, cy - 70 * s, 164 * s, 16 * s); ctx.restore(); }
+  }
+  if (eden > 0) {
+    // the garden, remembered: the charcoal frame with the point lit, pushed in toward the point
+    if (!PAIR_EDEN) PAIR_EDEN = canvas(W, H); const g = PAIR_EDEN.getContext('2d'); g.setTransform(1, 0, 0, 1, 0, 0); g.clearRect(0, 0, W, H);
+    window.partEden(g, lerp(30.8, 32.4, clamp((t - 113.6) / 9.8))); const [px, py] = window.partEden.point(), ze = lerp(1.0, 1.45, eio(clamp((t - 113.6) / 9.8)));
+    ctx.save(); ctx.globalAlpha = eden; ctx.translate(px, py); ctx.scale(ze, ze); ctx.translate(-px, -py); ctx.drawImage(PAIR_EDEN, 0, 0); ctx.restore();
+    PAIR_EDEN.px = px; PAIR_EDEN.py = py;
+  }
+  // the point of light coming down from the garden into the manger
+  if (dsc > 0 && dsc < 1 && PAIR_EDEN) { const cx = W / 2 + (SOIL.LP[0] - fx) * z, cy = H / 2 + (SOIL.LP[1] - fy) * z, u = eio(dsc);
+    const x = lerp(PAIR_EDEN.px, cx, u), y = lerp(PAIR_EDEN.py, cy, u) - Math.sin(u * Math.PI) * H * .06, a = Math.sin(u * Math.PI);
+    W3.bloom(ctx, x, y, [255, 214, 150], .8 * a, { r: V ? 150 : 130, streak: .2 }); ctx.fillStyle = `rgba(255,244,214,${a})`; ctx.beginPath(); ctx.arc(x, y, 5, 0, 6.283); ctx.fill(); }
   textBand(ctx);
 }

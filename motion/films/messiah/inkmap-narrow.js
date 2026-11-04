@@ -42,16 +42,18 @@
       M.cityLamp(ctx, 'bethlehem', ss(57.6, 58.4, t) * (1 + .3 * ss(58, 59, t)), z, t, 1);
       M.cityLamp(ctx, 'nazareth', ss(64.0, 64.8, t), z, t, 2); M.cityLamp(ctx, [35.24, 32.73], ss(65.4, 66.2, t) * .7, z, t, 3); M.cityLamp(ctx, [35.34, 32.69], ss(66.8, 67.6, t) * .6, z, t, 4);
       { const k = ss(66.4, 69.6, t); if (k > 0) { ctx.save(); ctx.globalAlpha = .55 * land; ctx.strokeStyle = M.INK; ctx.lineWidth = 2.4 / z; ctx.setLineDash([3 / z, 9 / z]); M.partial(ctx, way, k); ctx.restore(); } }
-      const L = id => Film.text(id), S = V ? 1.2 : 1;
+      const L = id => Film.text(id), S = V ? 1.5 : 1.25;   /* round 3: names read on a phone (look review: too small) */
       const region = (s, p, a, size) => { if (a <= 0) return; const [px, py] = M.P(p); ctx.save(); ctx.globalAlpha = a * land; ctx.font = `600 ${size}px ${M.FONT}`; ctx.letterSpacing = (size * .3) + 'px'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
         ctx.lineJoin = 'round'; ctx.lineWidth = size * .22; ctx.strokeStyle = 'rgba(236,224,198,.85)'; ctx.strokeText(s, px, py); ctx.fillStyle = M.INK; ctx.fillText(s, px, py); ctx.restore(); };   // a region: no dot
       region(L('M5'), [34.92, 31.98], ss(57.0, 58.0, t) * (1 - ss(62.8, 63.8, t)), 56 * S / z);
-      M.label(ctx, L('M2'), 'bethlehem', ss(57.8, 58.8, t) * land, { size: 42 * S / z, dx: 18 / z, dy: 34 / z, al: 'left' });
-      M.label(ctx, L('M3'), 'jerusalem', ss(59.4, 60.4, t) * .8 * land, { size: 34 * S / z, dx: 18 / z, dy: -28 / z, al: 'left' });
+      M.label(ctx, L('M2'), 'bethlehem', ss(57.8, 58.8, t) * (1 - .75 * ss(63.8, 64.8, t)) * land, { size: 42 * S / z, dx: 30 / z, dy: 40 / z, al: 'left' });
+      M.label(ctx, L('M3'), 'jerusalem', ss(59.4, 60.4, t) * .8 * (1 - ss(63.8, 64.8, t)) * land, { size: 36 * S / z, dx: 30 / z, dy: -34 / z, al: 'left' });
       region(L('M4'), [35.55, 33.05], ss(63.8, 64.8, t), 56 * S / z);
-      M.label(ctx, L('M1'), 'nazareth', ss(64.4, 65.4, t) * land, { size: 42 * S / z, dx: -18 / z, dy: 34 / z, al: 'right' });
+      M.label(ctx, L('M1'), 'nazareth', ss(64.4, 65.4, t) * land, { size: 42 * S / z, dx: -30 / z, dy: 40 / z, al: 'right' });
       ctx.restore(); }
-    M.bands(ctx, V ? 300 : 170, Film.SAFE() - (V ? 170 : 80));
+    M.bands(ctx, V ? 300 : 170);
+    // round 3 (look review: "the lower 40 % is a dark band with a hard top edge"): a long, soft ramp — the map shows through to the words
+    { const y0 = Film.SAFE() - (V ? 300 : 140), g = ctx.createLinearGradient(0, y0, 0, H); g.addColorStop(0, 'rgba(10,6,3,0)'); g.addColorStop(.3, 'rgba(10,6,3,.46)'); g.addColorStop(.55, 'rgba(10,6,3,.78)'); g.addColorStop(1, 'rgba(10,6,3,.9)'); ctx.fillStyle = g; ctx.fillRect(0, y0, W, H - y0); }
     W3.finish(ctx, t, { vignette: .4, grain: .05 });
   };
 })();

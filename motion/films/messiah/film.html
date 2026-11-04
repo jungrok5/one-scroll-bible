@@ -102,7 +102,7 @@ let FLY = null;
 function buildFly() {
   const tw = RD.xr(RD.BZ) + 30, th = rdH(tw, RD.BZ);
   const K = (t, z, up, side) => { const x = RD.xr(z) + side; return [t, x, rdH(x, z) + up, z, tw, th + 14, RD.BZ, 1300, 1800]; };
-  FLY = { cam: W3.cam([K(0, 520, 170, -60), K(8, 860, 120, -40), K(16, 1200, 60, -20), K(21, 1280, 46, -16)]),
+  FLY = { cam: W3.cam([K(0, 330, 230, -80), K(8, 860, 120, -40), K(16, 1200, 60, -20), K(21, 1280, 46, -16)]),
     light: W3.light([[0, 40, -40, .5, [150, 170, 226], [24, 30, 56], [6, 10, 30], [44, 56, 102], [120, 140, 204], [26, 32, 60], 1300, 1], [21, 40, -40, .5, [150, 170, 226], [24, 30, 56], [6, 10, 30], [44, 56, 102], [120, 140, 204], [26, 32, 60], 1300, 1]]),
     town: [tw, th + 6, RD.BZ] };
 }
@@ -190,14 +190,29 @@ function stableScene(ctx, t, o = {}) {
 // =====================================================================================================================
 // 5 · 2:08–2:59  the camera leaves the stable and rises over the town at night (1 · reversed); dawn on a hill with a cross —
 // the sun rises behind it ("성경대로 … 다시 살아나사"); back to the night over Bethlehem, the first frame, the reading card.
-function partRise(ctx, t) { partFlight(ctx, t, lerp(21, 4, eio(clamp((t - 137) / 9))), { warm: .6 }); const k = .5 * (1 - ss(137, 138.4, t));   /* a dip, never to black (frame-qa: 137.2 s went black, 2026-11-04) */ if (k > 0) { ctx.fillStyle = `rgba(8,6,8,${k})`; ctx.fillRect(0, 0, W, H); } }
+function partRise(ctx, t) { partFlight(ctx, t, lerp(21, 4, eio(clamp((t - 137) / 9))), { warm: .3 });
+  // round 3 (look review: "the same night town again — and no child for 'his name Jesus'"): over the town one place answers —
+  // a column of starlight comes down onto the stable at its edge and the gold gathers there; the rest of the town stays blue
+  const c = FLY.cam(lerp(21, 4, eio(clamp((t - 137) / 9)))), sp = W3.P(c, FLY.town[0] + 26, FLY.town[1] - 2, FLY.town[2] - 30), k = ss(137.6, 140.2, t);
+  if (sp && k > 0) { const bw = (V ? 70 : 60) * (.8 + .2 * Math.sin(t * 1.7)); ctx.save(); ctx.globalCompositeOperation = 'screen';
+    const g = ctx.createLinearGradient(sp[0] - bw, 0, sp[0] + bw, 0); g.addColorStop(0, 'rgba(255,224,170,0)'); g.addColorStop(.5, `rgba(255,224,170,${.34 * k})`); g.addColorStop(1, 'rgba(255,224,170,0)');
+    const fall = ctx.createLinearGradient(0, 0, 0, sp[1]); fall.addColorStop(0, 'rgba(0,0,0,0)'); fall.addColorStop(1, '#fff'); ctx.fillStyle = g; ctx.fillRect(sp[0] - bw, 0, bw * 2, sp[1]);
+    ctx.restore(); W3.bloom(ctx, sp[0], sp[1], [255, 206, 130], .75 * k, { r: V ? 170 : 150, streak: .3 }); ctx.fillStyle = `rgba(255,246,220,${k})`; ctx.beginPath(); ctx.arc(sp[0], sp[1], 5, 0, 6.283); ctx.fill();
+    W3.bloom(ctx, sp[0], V ? 120 : 80, [230, 236, 255], .6 * k, { r: 90, streak: .3 }); }
+  const d = .5 * (1 - ss(137, 138.4, t));   /* a dip, never to black (frame-qa: 137.2 s went black, 2026-11-04) */ if (d > 0) { ctx.fillStyle = `rgba(8,6,8,${d})`; ctx.fillRect(0, 0, W, H); } }
 // partDawn: impasto-dawn.js (black-and-white film → palette-knife colour, 2026-11-03 round 2)
-function partEnd(ctx, t) { const zE = 1 + .12 * eio(clamp((t - 159) / 20.4)); ctx.save(); ctx.translate(W / 2, H * .45); ctx.scale(zE, zE); ctx.translate(-W / 2, -H * .45); partFlight(ctx, t, lerp(4, 0, eio(clamp((t - 159) / 20.4))), { warm: .5, noBand: true }); ctx.restore(); if (t <= 168.6) textBand(ctx);   /* the camera keeps moving under the end card (frame-qa: held 89 %) */ const k = ss(168.6, 170, t); if (k > 0) { ctx.fillStyle = `rgba(6,6,12,${.62 * k})`; ctx.fillRect(0, 0, W, H); } }
-function endCard(ctx, t, a, b) { const k = win(t, a, b, 1, .8); if (k <= 0) return; const segs = Film.text('E1').split(/\s*→\s*/), size = V ? 46 : 42, y0 = H * (V ? .4 : .38);
+function partEnd(ctx, t) { const zE = 1 + .12 * eio(clamp((t - 159) / 20.4)); ctx.save(); ctx.translate(W / 2, H * .45); ctx.scale(zE, zE); ctx.translate(-W / 2, -H * .45); partFlight(ctx, t, lerp(4, 0, eio(clamp((t - 159) / 20.4))), { warm: .5, noBand: true }); ctx.restore();
+  // round 3 (look review: "the last 12 s are a switched-off screen"): dawn comes up behind the hills — the night of the opening
+  // turns toward morning (the promise kept, the day after the cross); the town's lamps stay on; the card sits in the brightening sky
+  { const k = ss(160, 176, t), hy = H * (V ? .44 : .5); ctx.save(); ctx.globalCompositeOperation = 'screen';
+    const g = ctx.createLinearGradient(0, hy - H * .34, 0, hy + H * .06); g.addColorStop(0, 'rgba(40,56,110,0)'); g.addColorStop(.3, `rgba(40,56,110,${.3 * k})`); g.addColorStop(.62, `rgba(150,96,110,${.4 * k})`); g.addColorStop(.9, `rgba(255,170,96,${.55 * k})`); g.addColorStop(1, 'rgba(255,170,96,0)');
+    ctx.fillStyle = g; ctx.fillRect(0, hy - H * .34, W, H * .4); ctx.restore(); W3.bloom(ctx, W * .72, hy, [255, 190, 120], .4 * k, { r: V ? 420 : 380, streak: .15 }); }
+  if (t <= 168.6) textBand(ctx);   /* the camera keeps moving under the end card (frame-qa: held 89 %) */ const k = ss(168.6, 170, t); if (k > 0) { ctx.fillStyle = `rgba(6,6,12,${.22 * k})`; ctx.fillRect(0, 0, W, H); } }
+function endCard(ctx, t, a, b) { const k = win(t, a, b, 1, .8); if (k <= 0) return; const segs = Film.text('E1').split(/\s*→\s*/), size = V ? 50 : 44, y0 = H * (V ? .17 : .2);   /* round 3: in the dawn sky, above the town's lamps, larger */
   Pilot.text(ctx, segs[0], W / 2, y0, { size, weight: 600, font: "'Noto Serif KR',serif", color: '#f6ead0', alpha: k, shadow: 'rgba(0,0,0,.9)', shadowBlur: 18 });
   Pilot.text(ctx, segs[1] || '', W / 2, y0 + size * 1.9, { size: size * .9, weight: 600, font: "'Noto Serif KR',serif", color: '#e9c77a', alpha: k * ss(a + .6, a + 1.4, t), shadow: 'rgba(0,0,0,.9)', shadowBlur: 18 });
-  Pilot.text(ctx, segs[2] || '', W / 2, y0 + size * 4.0, { size: size * .8, font: "'Noto Sans KR',sans-serif", color: '#f0e6d2', alpha: k * ss(a + 1.2, a + 2, t), shadow: 'rgba(0,0,0,.9)', shadowBlur: 14 });
-  Pilot.text(ctx, Film.text('B1'), W / 2, y0 + size * 5.1, { size: size * .56, font: "'Noto Sans KR',sans-serif", color: '#c9b78e', alpha: k * ss(a + 1.6, a + 2.4, t), ls: 3 }); }
+  Pilot.text(ctx, segs[2] || '', W / 2, y0 + size * 4.0, { size: size * .9, font: "'Noto Sans KR',sans-serif", color: '#f0e6d2', alpha: k * ss(a + 1.2, a + 2, t), shadow: 'rgba(0,0,0,.9)', shadowBlur: 14 });
+  Pilot.text(ctx, Film.text('B1'), W / 2, y0 + size * 5.1, { size: size * .74, font: "'Noto Sans KR',sans-serif", color: '#e2d2a8', shadow: 'rgba(0,0,0,.9)', shadowBlur: 14, alpha: k * ss(a + 1.6, a + 2.4, t), ls: 3 }); }
 
 // =====================================================================================================================
 // 3 · 1:01–1:35  the emperor's decree, the road (see parts above for the shared land)
@@ -258,7 +273,10 @@ function partRoad(ctx, t) {
 
 // ---- 3C-1 · silhouettes on a ridge against the dusk (a side track): Mary on a donkey, Joseph walking ahead with a staff ----
 function profileTravellers(ctx, x, y, s, ph, rim) {   // facing right, units ≈ cm/100 at s = px per metre; backlit: dark body, a thin warm rim on the top edges
-  ctx.save(); ctx.translate(x, y); ctx.scale(s, s); const p = new Path2D(), leg = (bx, by, len, a) => { p.moveTo(bx - .045, by); p.lineTo(bx + .045, by); p.lineTo(bx + .03 + Math.sin(a) * len * .35, by + len); p.lineTo(bx - .03 + Math.sin(a) * len * .35, by + len); p.closePath(); };
+  ctx.save(); ctx.translate(x, y); ctx.scale(s, s); const p = new Path2D(), leg = (bx, by, len, a) => {   // round 3 (look review: "stick legs — a wooden trestle"): thigh, knee, a thinner cannon, a hoof
+    const kx = bx + Math.sin(a) * len * .2, ky = by + len * .46, fx = kx + Math.sin(a - .6) * len * .16 - .02 * Math.max(0, -Math.sin(a)), fy = by + len - .05;
+    p.moveTo(bx - .075, by - .04); p.quadraticCurveTo(bx - .08, by + len * .2, kx - .045, ky); p.lineTo(fx - .03, fy); p.lineTo(fx - .05, fy + .05); p.lineTo(fx + .06, fy + .05); p.lineTo(fx + .035, fy);
+    p.lineTo(kx + .04, ky); p.quadraticCurveTo(bx + .08, by + len * .2, bx + .075, by - .04); p.closePath(); };
   const step = ph * 6.283;
   // the donkey (body ~1.2 m), head low and forward, long ears, short mane, tail
   p.moveTo(-1.55, -1.02); p.bezierCurveTo(-1.6, -1.22, -1.2, -1.3, -.8, -1.26); p.bezierCurveTo(-.45, -1.24, -.25, -1.24, -.12, -1.3);
@@ -369,9 +387,21 @@ function partRome(ctx, t) {
   { ctx.save(); ctx.fillStyle = 'rgba(40,46,70,.22)'; for (let z = 0; z <= 66; z += 6) for (const x of [-11, 11]) { const sx = -L.sd[0] / L.sd[1] * 9, sz = -L.sd[2] / L.sd[1] * 9; if (W3.poly(ctx, c, [[x - .8, .02, z], [x + .8, .02, z], [x + .8 + sx, .02, z + sz], [x - .8 + sx, .02, z + sz]])) ctx.fill(); } ctx.restore(); }
   W3.faces(ctx, c, L, ROME.F);
   const s = W3.P(c, c.x + L.sd[0] * 1e5, c.y + L.sd[1] * 1e5, c.z + L.sd[2] * 1e5);
-  if (s) { rays(ctx, s[0], s[1], t, [255, 236, 200], .07); W3.bloom(ctx, s[0], s[1], [255, 236, 200], .9, { r: V ? 260 : 220, streak: .8 }); }
+  if (s) { rays(ctx, s[0], s[1], t, [255, 236, 200], .07); W3.bloom(ctx, s[0], s[1], [255, 236, 200], .7, { r: V ? 260 : 220, streak: .5 }); }   // round 3: less glare (TV)
   { const g = W3.P(c, 0, 24.2, 79); if (g) aquila(ctx, g[0], g[1], g[2], t); }   // the eagle standard on the apex, gold against the light
+  // round 3 (look review: "no one is there — an architecture render"): on the podium a herald unrolls the decree between two
+  // soldiers with spears, small and backlit; the scroll catches the light (the order that will move a carpenter from Nazareth)
+  for (const [x, kind] of [[-3.2, 'spear'], [0, 'herald'], [3.2, 'spear']]) { const p = W3.P(c, x, 4.5, 77.2); if (!p) continue; const m = p[2];
+    ctx.save(); ctx.translate(p[0], p[1]); ctx.scale(m, m); const f = new Path2D();
+    f.ellipse(0, -1.62, .12, .14, 0, 0, 6.283); f.moveTo(-.18, -1.45); f.lineTo(.18, -1.45); f.lineTo(.3, 0); f.lineTo(-.3, 0); f.closePath();
+    if (kind === 'spear') { f.rect(.26, -2.3, .04, 2.3); f.moveTo(.28, -2.5); f.lineTo(.34, -2.3); f.lineTo(.22, -2.3); f.closePath(); f.ellipse(-.22, -.95, .16, .36, 0, 0, 6.283); }
+    else { f.moveTo(-.16, -1.32); f.lineTo(-.46, -1.12); f.lineTo(-.44, -1.06); f.lineTo(-.14, -1.2); f.moveTo(.16, -1.32); f.lineTo(.46, -1.12); f.lineTo(.44, -1.06); f.lineTo(.14, -1.2); }
+    ctx.fillStyle = 'rgb(56,44,34)'; ctx.fill(f); ctx.strokeStyle = 'rgba(255,214,140,.85)'; ctx.lineWidth = .035; ctx.stroke(f);
+    if (kind === 'herald') { ctx.fillStyle = 'rgb(244,226,186)'; ctx.fillRect(-.46, -1.2, .92, .5); ctx.fillStyle = 'rgb(200,170,120)'; ctx.fillRect(-.5, -1.24, .08, .58); ctx.fillRect(.42, -1.24, .08, .58); }
+    ctx.restore(); }
   W3.finish(ctx, t, { vignette: .5, grain: .08 });
+  // the place label sits on the glare: the top of the sky deepens under it (the whole width, no box)
+  { const a = ss(70.6, 71.2, t) * (1 - ss(75.6, 76.2, t)); if (a > 0) { const g = ctx.createLinearGradient(0, 0, 0, H * .22); g.addColorStop(0, `rgba(30,32,48,${.6 * a})`); g.addColorStop(1, 'rgba(30,32,48,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H * .22); } }
   textBand(ctx);
 }
 
@@ -389,12 +419,12 @@ const TEXT = [
   ['sub', '01', 0.4, 6.6], ['label', 'P0', 4.0, 15.2], ['quote', '02', 7.0, 15.4, { ...QB(), hlAt: 7.05 }], ['title', 'T1', 16.6, 19.0], ['sub', 'Q1', 19.0, 21.8],
   ['sub', '03', 21.9, 24.9], ['label', 'G0', 22.0, 31.0], ['quote', '04', 25.2, 31.2, { ...QB(), hlAt: 25.29 }], ['sub', '05', 31.4, 38.1],
   ['label', 'G1', 37.2, 41.0], ['quote', '06', 38.4, 43.2, { ...QB(), hlAt: 39.4 }], ['label', 'G3', 41.2, 43.4],
-  ['label', 'G2', 43.6, 50.6], ['quote', '07', 44.0, 49.6, { y: V ? H * .22 : H * .2, size: V ? 44 : 40, hlAt: 45 }], ['sub', 'D1', 44.4, 51.1],
+  ['label', 'G2', 43.6, 46.4], ['quote', '07', 44.0, 49.6, { y: V ? H * .22 : H * .2, size: V ? 44 : 40, hlAt: 45 }], ['sub', 'D1', 44.4, 51.1],
   ['sub', '08', 51.3, 56.9], ['sub', '09', 57.1, 63.5],
   ['sub', '13', 63.7, 70.3], ['label', 'A1', 70.8, 76.0], ['quote', '14', 70.6, 75.8, QB()],
   ['quote', '15', 77.0, 84.6, { ...QB(), hlAt: 83.47 }], ['sub', '16', 84.9, 90.8], ['micah', '02', 91.0, 95.0],
   ['quote', '17', 95.8, 104.4, { ...QB(), hlAt: 99.81 }], ['label', 'P5', 105.0, 112.4], ['quote', '18', 105.6, 113.2, { ...QB(), hlAt: 106.11 }],
-  ['sub', 'W0', 114.0, 116.6], ['link', 'W1', 116.4, 128.2, { to: 'W2', style: 'ember' }],
+  ['sub', 'W0', 114.0, 116.6], ['link', 'W1', 116.4, 128.2, { to: 'W2', style: 'ember', y: H * (V ? .66 : .62) }],
   ['sub', 'W3', 128.6, 136.9],
   ['quote', '22', 137.6, 145.6, { ...QB(), hlAt: 140.45 }], ['quote', '23', 146.6, 158.4, { ...QB(), hlAt: 146.77 }], ['sub', '25', 159.4, 168.4], ['end', 'E1', 169.4, 179.0],
 ];
@@ -418,7 +448,7 @@ function draw(ctx, t) {
   for (const [kind, id, a, b, o = {}] of TEXT) { if (t < a - .1 || t > b + .1) continue;
     if (kind === 'sub') Film.sub(ctx, id, t, a, b, o); else if (kind === 'label') Film.label(ctx, id, t, a, b); else if (kind === 'title') title(ctx, id, t, a, b);
     else if (kind === 'end') endCard(ctx, t, a, b);
-    else if (kind === 'link') { Film.link(ctx, t, id, o.to, a, b, { style: LINKQ || o.style }); if (LAB && t > a - .1 && t < b + .1) Pilot.text(ctx, LAB, W / 2, V ? 150 : 60, { size: V ? 34 : 30, font: "'Noto Sans KR',sans-serif", color: '#9fb4d8', alpha: .9, ls: 2 }); }
+    else if (kind === 'link') { Film.link(ctx, t, id, o.to, a, b, { style: LINKQ || o.style, y: o.y }); if (LAB && t > a - .1 && t < b + .1) Pilot.text(ctx, LAB, W / 2, V ? 150 : 60, { size: V ? 34 : 30, font: "'Noto Sans KR',sans-serif", color: '#9fb4d8', alpha: .9, ls: 2 }); }
     else if (kind === 'micah') { const seg = Film.text(id).split(/\s*\/\s*/)[0]; Film.quote(ctx, id, t, a, b, { text: seg, ...QB(), hl: Film.lines[id].hl, hlk: ss(a + .4, a + 1.4, t), color: '#fff3d6', shadow: 'rgba(255,190,90,.45)' }); }
     else if (kind === 'quote') Film.quote(ctx, id, t, a, b, { ...o, hl: Film.lines[id].hl, hlk: o.hlAt ? ss(o.hlAt, o.hlAt + 1.2, t) : 0 }); }
 }

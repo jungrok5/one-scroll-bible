@@ -25,9 +25,16 @@
       const sx = W * (V ? .6 : .62), sy = hz - (V ? 80 : 60), R = Math.max(W, H), gr = g.createRadialGradient(sx, sy, 0, sx, sy, R); gr.addColorStop(0, 'rgba(255,240,200,.95)'); gr.addColorStop(.15, 'rgba(255,206,140,.55)'); gr.addColorStop(1, 'rgba(255,200,140,0)'); g.fillStyle = gr; g.fillRect(0, 0, W, H);
       g.fillStyle = '#fff6dc'; g.beginPath(); g.arc(sx, sy, V ? 44 : 38, 0, 6.283); g.fill(); art = { sun: [sx, sy] };
       hillLayer(g, hz + 10, V ? 50 : 40, .005, 5, 'rgb(150,112,120)');
-      { const gr2 = g.createLinearGradient(0, hz, 0, H); gr2.addColorStop(0, 'rgb(170,150,80)'); gr2.addColorStop(.25, 'rgb(110,150,64)'); gr2.addColorStop(1, 'rgb(48,90,40)'); g.fillStyle = gr2; g.beginPath(); g.moveTo(-60, H + 60); for (let x = -60; x <= W + 60; x += 6) g.lineTo(x, crest(x)); g.lineTo(W + 60, H + 60); g.closePath(); g.fill();
+      { const gr2 = g.createLinearGradient(0, hz, 0, H); gr2.addColorStop(0, 'rgb(196,166,92)'); gr2.addColorStop(.25, 'rgb(140,138,70)'); gr2.addColorStop(1, 'rgb(70,78,44)');   /* round 3: olive and morning gold, not a golf-course green */ g.fillStyle = gr2; g.beginPath(); g.moveTo(-60, H + 60); for (let x = -60; x <= W + 60; x += 6) g.lineTo(x, crest(x)); g.lineTo(W + 60, H + 60); g.closePath(); g.fill();
         const cxp = hx, cyp = crest(hx), s = V ? 2.4 : 2; g.fillStyle = 'rgb(60,40,32)'; g.fillRect(cxp - 6 * s, cyp - 120 * s, 12 * s, 122 * s); g.fillRect(cxp - 38 * s, cyp - 96 * s, 76 * s, 10 * s);
         g.strokeStyle = 'rgba(255,214,150,.85)'; g.lineWidth = 3; g.strokeRect(cxp - 6 * s, cyp - 120 * s, 12 * s, 122 * s); g.strokeRect(cxp - 38 * s, cyp - 96 * s, 76 * s, 10 * s); }
+      // round 3 (look review: "장사 지낸 바 되셨다가 … 다시 살아나사 — no tomb"): in the slope right of the cross the tomb, its stone
+      // rolled aside, light coming out of the opening (the first film's resurrection tomb)
+      { const tx = hx + W * (V ? .3 : .26), ty = crest(tx) + (V ? 70 : 54), s = V ? 1.3 : 1.1;
+        g.fillStyle = 'rgb(120,98,80)'; g.beginPath(); g.ellipse(tx, ty - 10 * s, 120 * s, 70 * s, 0, Math.PI, 0); g.fill();
+        g.fillStyle = 'rgb(255,232,180)'; g.beginPath(); g.moveTo(tx - 34 * s, ty); g.lineTo(tx - 34 * s, ty - 40 * s); g.arc(tx, ty - 40 * s, 34 * s, Math.PI, 0); g.lineTo(tx + 34 * s, ty); g.closePath(); g.fill();
+        const gl = g.createRadialGradient(tx, ty - 30 * s, 0, tx, ty - 30 * s, 150 * s); gl.addColorStop(0, 'rgba(255,236,190,.7)'); gl.addColorStop(1, 'rgba(255,220,160,0)'); g.fillStyle = gl; g.fillRect(tx - 150 * s, ty - 180 * s, 300 * s, 300 * s);
+        g.fillStyle = 'rgb(104,86,72)'; g.beginPath(); g.ellipse(tx + 74 * s, ty - 26 * s, 26 * s, 30 * s, 0, 0, 6.283); g.fill(); g.fillStyle = 'rgba(255,214,150,.5)'; g.beginPath(); g.ellipse(tx + 66 * s, ty - 34 * s, 10 * s, 18 * s, 0, 0, 6.283); g.fill(); }
       { const r = rng(8); for (let i = 0; i < 260; i++) { const x = r() * W, y = crest(x) + 20 + r() ** 1.5 * (H - crest(x)); g.fillStyle = ['#e8c050', '#d8a040', '#f0e0a0', '#c84030', '#f4f0e0'][(r() * 5) | 0]; g.beginPath(); g.arc(x, y, 3 + r() * 5, 0, 6.283); g.fill(); } } }   // flowers on the hill
     art.c = OIL.paint(plate, { key: 'impasto', S: 1, seed: 29 });
     { const g = art.c.getContext('2d'), cxp = hx, cyp = crest(hx), s = V ? 2.4 : 2; g.fillStyle = 'rgb(54,34,28)'; g.fillRect(cxp - 6 * s, cyp - 120 * s, 12 * s, 122 * s); g.fillRect(cxp - 38 * s, cyp - 96 * s, 76 * s, 10 * s);   // the cross stays whole

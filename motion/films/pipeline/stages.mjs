@@ -67,8 +67,22 @@ const G = {
       if (F.pops.length > TF.pops_max) why.push(`튀는 프레임 ${F.pops.length}개 — ${F.pops.slice(0, 8).join(' ')}s (의도한 효과면 film.html QA_PLANNED에)`);
       if (F.held > TF.held_max) why.push(`정지 프레임 ${(F.held * 100).toFixed(0)}% > ${TF.held_max * 100}%`);
       for (const s of F.perScene) if (s.held > TF.scene_held_max) why.push(`${s.scene}(${s.a}–${s.b}s) 정지 ${(s.held * 100).toFixed(0)}% > ${TF.scene_held_max * 100}% — 멈춘 장면도 카메라가 천천히 밀려 들어가야 한다`);
-      j.frames = { black: F.black, frozen: F.frozen.length, pops: F.pops.length, held: F.held }; }
+      j.frames = { black: F.black, frozen: F.frozen.length, pops: F.pops.length, held: F.held };
+      // darker-and-slower than anything in the first film (below its p10 on both the brightest tone and motion): named, judged by the look review
+      const FF = TF.first_film; if (FF) j.below_first_film = F.perScene.filter(s => s.p98 < FF.p98[0] && s.motion < FF.motion[0]).map(s => `${s.scene}(${s.a}–${s.b}s)`); }
     return why.length ? { ok: false, why, info: j } : { ok: true, why: [], info: j }; },
+  // the picture scored scene by scene (.claude/workflows/film-look-review.js) — for this render, not an older one
+  lookreview: c => {
+    const f = join(ROOT, 'motion/reviews', `film-${c.film}-look.json`), R = J(f), TL = T.look_review;
+    if (!R) return fail(`motion/reviews/film-${c.film}-look.json 없음 — look-sheets.mjs ${c.film} → 워크플로 film-look-review`);
+    const stamp = J(join(OUT, `${c.film}-v-narr.mp4.src.json`)), why = [];
+    if (!stamp || R.render !== stamp.hash) why.push(`그림 리뷰가 지금 렌더(${stamp?.hash})가 아니라 ${R.render}에 대한 것이다 — 다시 리뷰`);
+    const m = new Map(); for (const r of R.reviewers) for (const s of r.scenes) m.set(s.scene, [...(m.get(s.scene) || []), s.score]);
+    const means = [...m].map(([k, v]) => [k, v.reduce((a, b) => a + b, 0) / v.length]), all = means.reduce((a, [, v]) => a + v, 0) / Math.max(1, means.length);
+    for (const [k, v] of means) if (v < TL.scene_min) why.push(`${k} 그림 평균 ${v.toFixed(1)} < ${TL.scene_min}`);
+    if (all < TL.mean_min) why.push(`그림 전체 평균 ${all.toFixed(2)} < ${TL.mean_min}`);
+    for (const r of R.reviewers) for (const x of r.fixes) if (x.severity === 'BLOCKER') why.push(`BLOCKER(${r.key}) ${x.scene}${x.at != null ? ' ' + x.at + 's' : ''}: ${x.what}`);
+    return why.length ? { ok: false, why } : { ok: true, why: [], info: { mean: +all.toFixed(2) } }; },
   sound: c => {
     if (!c.place || !c.cues) return fail('sound/place.json · cues.json 없음');
     const why = [], sd = join(c.d, 'sound');
@@ -122,7 +136,7 @@ export const STAGES = [
   { id: 'topic', n: 1, name: '주제', task: 'topic', gates: ['topic'], approve: '관리자가 주제를 고름' },
   { id: 'script', n: 2, name: '원고·장면별 화풍·메시지 점검', task: 'script', gates: ['script', 'looks'] },
   { id: 'review', n: 3, name: '관점 검수·시청자 리뷰·초안 페이지', task: 'review', run: [['node', 'motion/films/review-page.mjs', '{film}']], gates: ['reviews'], approve: '관리자·아내가 초안을 컨펌' },
-  { id: 'picture', n: 4, name: '그리기·렌더', task: 'picture', run: [['node', 'motion/render.mjs', 'v', '--page', 'films/{film}/film.html', '--workers', '6'], ['node', 'motion/films/sound.mjs', '{film}', 'v']], gates: ['picture'], approve: '관리자·가족이 시안 확인' },
+  { id: 'picture', n: 4, name: '그리기·렌더', task: 'picture', run: [['node', 'motion/render.mjs', 'v', '--page', 'films/{film}/film.html', '--workers', '6'], ['node', 'motion/films/sound.mjs', '{film}', 'v'], ['node', 'motion/films/pipeline/look-sheets.mjs', '{film}']], gates: ['picture', 'lookreview'], approve: '관리자·가족이 시안 확인' },
   { id: 'kits', n: 4.5, name: '새 화풍을 canvas-film 키트로', task: 'kits', gates: ['kits'] },
   { id: 'sound', n: 5, name: '해설·음악·효과음·섞기', task: 'sound', run: [['node', 'motion/films/sound.mjs', '{film}', 'v'], ['node', 'motion/films/sound-prompts.mjs', 'md', 'motion/films/{film}/sound/prompts.json']], gates: ['sound'] },
   { id: 'sheet', n: 6, name: '올릴 글·썸네일', task: 'sheet', gates: ['sheet'] },

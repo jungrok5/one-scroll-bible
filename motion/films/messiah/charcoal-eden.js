@@ -81,7 +81,7 @@
       for (let i = 0; i <= 48; i++) { const y = lerp(H * .12, H * 1.02, i / 48), k = Math.sin(i / 48 * Math.PI);
         const d = reach * (.5 + .5 * k) + (Pilot.fbm(i * .22, sd * 3 + t * .25, 3) - .5) * 260 * SC * s.threat + (jr() - .5) * 8 * SC; pts.push([sd < 0 ? d : W - d, y]); }
       C.poly(l, pts.concat(sd < 0 ? [[-80, H + 80], [-80, -80]] : [[W + 80, H + 80], [W + 80, -80]])); l.fillStyle = '#000'; l.fill();
-      for (let i = 0; i < 16; i++) { const p = pts[1 + i * 3]; C.blob(l, p[0] + sd * -30 * SC, p[1], (90 + 60 * jr()) * SC, (60 + 40 * jr()) * SC, .55, i, C.smudge); } } }, { blur: 7, alpha: .94 });
+      for (let i = 0; i < 16; i++) { const p = pts[1 + i * 3]; C.blob(l, p[0] + sd * -30 * SC, p[1], (90 + 60 * jr()) * SC, (60 + 40 * jr()) * SC, .55, i, C.smudge); } } }, { blur: 20, alpha: .84 });   /* round 3: a rubbed charcoal edge (blur 7 read as a broken frame) */
   }
   function drawGhost(x, s, t) {   // where the dark reached stays as a faint smear (Kentridge's palimpsest)
     const a = .2 * ss(B.recoil + .3, B.recoil + 1.4, t); if (a <= 0) return;
@@ -122,4 +122,5 @@
     plate = buildPlate(); subj = buildSubject(); fg = buildFG();
   }
   window.partEden = partEdenCharcoal;
+  partEdenCharcoal.point = () => C.toScr(PT);   // where the point of light is on screen after the last draw (partPair remembers the garden)
 })();

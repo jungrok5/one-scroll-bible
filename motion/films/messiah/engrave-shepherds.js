@@ -11,7 +11,7 @@ const SHEP_B = [['M', -.21, 0], ['C', -.25, -.5, -.25, -1.0, -.18, -1.36], ['C',
 const crook = (p, x) => { p.rect(x, -1.86, .035, 1.86); p.moveTo(x, -1.86); p.arc(x + .1, -1.86, .1, Math.PI, 0); p.lineTo(x + .165, -1.86); p.arc(x + .1, -1.86, .065, 0, Math.PI, true); p.closePath(); };
 function partShepherds(ctx, t) {
   if (!EPL) { EPL = canvas(W, H); EPL.g = EPL.getContext('2d'); }
-  const g = EPL.g, k = clamp((t - 104.6) / 9.2), open = ss(105.6, 111.0, t), hz = H * (V ? .5 : .6), z = 1 + .14 * eio(k);   // round 3: the light keeps opening and the camera keeps moving (held 71 %)
+  const g = EPL.g, k = clamp((t - 104.6) / 9.2), open = ss(105.6, 111.0, t), hz = H * (V ? .5 : .46), z = 1 + .14 * eio(k);   /* round 4: TV horizon higher — the shepherds' feet above the words */   // round 3: the light keeps opening and the camera keeps moving (held 71 %)
   const crest = x => hz + (V ? 120 : 90) - (V ? 40 : 30) * Math.sin(x * .003 + 1), G = [W * .5, H * (V ? .27 : .22)];
   g.setTransform(1, 0, 0, 1, 0, 0); g.globalCompositeOperation = 'source-over'; g.globalAlpha = 1;
   g.save(); g.translate(W / 2, H * .55); g.scale(z, z); g.translate(-W / 2, -H * .55 + (V ? 80 : 56) * eio(k));   /* and tilts up toward the glory */
@@ -44,7 +44,7 @@ function partShepherds(ctx, t) {
   g.restore();
   // cut it: lines follow the sky in slow swells and the hill's contour below
   const mean = crest(W / 2);
-  ENG.engrave(ctx, EPL, { spacing: V ? 14 : 12,   /* wider than round 2 (7): fine lines shimmered (moiré) on a phone and on TV */ ink: [34, 24, 16], paper: [238, 226, 200], tint: [255, 214, 140, .25 * open], cross: .6,
+  ENG.engrave(ctx, EPL, { spacing: V ? 14 : 15,   /* wider than round 2 (7): fine lines shimmered (moiré) on a phone and on TV */ ink: [34, 24, 16], paper: [238, 226, 200], tint: [255, 214, 140, .25 * open], cross: .6,
     field: (x, y) => y + 5 * Math.sin(x * .011) - .9 * (crest(x) - mean) * ss(hz - 60, hz + 80, y) });
   // the glory's warmth on the paper
   if (open > 0) W3.bloom(ctx, G[0], G[1] + (V ? 160 : 120), [255, 220, 150], .45 * open, { r: V ? 520 : 440, streak: .5 });

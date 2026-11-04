@@ -10,7 +10,7 @@
   function hill(g, col) { g.fillStyle = col; g.beginPath(); g.moveTo(-60, H + 60); for (let x = -60; x <= W + 60; x += 6) g.lineTo(x, crest(x)); g.lineTo(W + 60, H + 60); g.closePath(); g.fill();
     const cxp = hx, cyp = crest(hx), s = V ? 2.4 : 2; g.fillRect(cxp - 6 * s, cyp - 120 * s, 12 * s, 122 * s); g.fillRect(cxp - 38 * s, cyp - 96 * s, 76 * s, 10 * s); }
   function build() {
-    W = Pilot.W; H = Pilot.H; V = Pilot.ori === 'v'; hz = H * (V ? .56 : .62); hx = W * (V ? .44 : .42);
+    W = Pilot.W; H = Pilot.H; V = Pilot.ori === 'v'; hz = H * (V ? .56 : .5);   /* round 4: TV horizon higher (the tomb was under the words) */ hx = W * (V ? .44 : .42);
     crest = x => hz + (V ? 120 : 90) - (V ? 130 : 96) * Math.exp(-((x - hx) ** 2) / ((V ? 280 : 360) ** 2));
     // the grey world: an overcast sky in values, the far land, the hill and the cross black
     grey = canvas(W, H); { const g = grey.getContext('2d'), gr = g.createLinearGradient(0, 0, 0, hz); gr.addColorStop(0, '#2a2a2a'); gr.addColorStop(.7, '#6a6a6a'); gr.addColorStop(1, '#8a8a8a'); g.fillStyle = gr; g.fillRect(0, 0, W, H);
@@ -30,7 +30,7 @@
         g.strokeStyle = 'rgba(255,214,150,.85)'; g.lineWidth = 3; g.strokeRect(cxp - 6 * s, cyp - 120 * s, 12 * s, 122 * s); g.strokeRect(cxp - 38 * s, cyp - 96 * s, 76 * s, 10 * s); }
       // round 3 (look review: "장사 지낸 바 되셨다가 … 다시 살아나사 — no tomb"): in the slope right of the cross the tomb, its stone
       // rolled aside, light coming out of the opening (the first film's resurrection tomb)
-      { const tx = hx + W * (V ? .3 : .26), ty = crest(tx) + (V ? 90 : 70), s = V ? 1.9 : 1.6;   /* larger: it must read as the empty tomb */
+      { const tx = hx + W * (V ? .3 : .24), ty = crest(tx) + (V ? 60 : 40), s = V ? 2.4 : 2.0;   /* round 4: larger, higher — the empty tomb must read */   /* larger: it must read as the empty tomb */
         g.fillStyle = 'rgb(120,98,80)'; g.beginPath(); g.ellipse(tx, ty - 10 * s, 120 * s, 70 * s, 0, Math.PI, 0); g.fill();
         g.fillStyle = 'rgb(255,232,180)'; g.beginPath(); g.moveTo(tx - 34 * s, ty); g.lineTo(tx - 34 * s, ty - 40 * s); g.arc(tx, ty - 40 * s, 34 * s, Math.PI, 0); g.lineTo(tx + 34 * s, ty); g.closePath(); g.fill();
         const gl = g.createRadialGradient(tx, ty - 30 * s, 0, tx, ty - 30 * s, 150 * s); gl.addColorStop(0, 'rgba(255,236,190,.7)'); gl.addColorStop(1, 'rgba(255,220,160,0)'); g.fillStyle = gl; g.fillRect(tx - 150 * s, ty - 180 * s, 300 * s, 300 * s);
@@ -55,7 +55,7 @@
     // the repainting: knife strokes outward from the sun reveal the colour painting
     if (rep > 0) { const m = mask.getContext('2d'); m.setTransform(1, 0, 0, 1, 0, 0); m.globalCompositeOperation = 'source-over'; m.clearRect(0, 0, W, H); m.fillStyle = '#fff'; m.lineCap = 'round';
       const n = Math.floor(strokes.length * eo(rep)); for (let i = 0; i < n; i++) { const s = strokes[i]; m.save(); m.translate(s.x, s.y); m.rotate(s.a); m.beginPath(); m.ellipse(0, 0, s.l / 2, s.w / 2, 0, 0, 6.283); m.fill(); m.restore(); }
-      if (rep >= 1) m.fillRect(0, 0, W, H);
+      if (rep > .72) { m.globalAlpha = Math.min(1, (rep - .72) / .28); m.fillRect(0, 0, W, H); m.globalAlpha = 1; }   /* round 4: the corners fill in before the end — no torn black edge left */
       m.globalCompositeOperation = 'source-in'; m.drawImage(art.c, 0, 0); ctx.drawImage(mask, 0, 0); }
     ctx.restore();
     // black-and-white film until the colour comes (grain, flicker); the gold thread is the one colour

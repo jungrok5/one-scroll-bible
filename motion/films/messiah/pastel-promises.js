@@ -64,12 +64,12 @@
       chalkBands(x, hz * .35, hz * .85, '#ffe4d0', 4, r);
       const h1 = poly(ridgePts(hz + 10, V ? 80 : 60, .0035, 1)); x.fillStyle = '#9a6a8a'; x.fill(h1); hatch(x, h1, '#b8849a', r, 1800, -.45, 18, 3, .3); hatch(x, h1, '#7a5a7a', r, 700, 2.5, 14, 3, .25);
       const h2 = poly(ridgePts(hz + (V ? 90 : 70), V ? 70 : 50, .005, 3)); x.fillStyle = '#7a7a5a'; x.fill(h2); hatch(x, h2, '#9a9a6a', r, 2000, -.4, 18, 3, .35); hatch(x, h2, '#5a5a42', r, 800, 2.6, 14, 3, .3); hatch(x, h2, '#f4b77a', r, 400, -.4, 12, 2, .25);
-      const crest = xx => hz + (V ? 200 : 160) - (V ? 50 : 36) * Math.sin(xx * .003 + 1) - 14 * fbm(xx * .01, 2, 2), h3pts = [[-40, H + 40]]; for (let xx = -40; xx <= W + 40; xx += 12) h3pts.push([xx, crest(xx)]); h3pts.push([W + 40, H + 40]);
+      const crest = xx => hz + (V ? 90 : 60) - (V ? 50 : 36) * Math.sin(xx * .003 + 1) - 14 * fbm(xx * .01, 2, 2)   /* round 4: the hill higher — the boy and the sheep above the words */, h3pts = [[-40, H + 40]]; for (let xx = -40; xx <= W + 40; xx += 12) h3pts.push([xx, crest(xx)]); h3pts.push([W + 40, H + 40]);
       const h3 = poly(h3pts); const g3 = x.createLinearGradient(0, crest(W / 2) - 60, 0, H); g3.addColorStop(0, '#a88a5e'); g3.addColorStop(1, '#5a4a38'); x.fillStyle = g3; x.fill(h3);
       x.save(); x.clip(h3); grass(x, crest(W / 2) - 70, H, ['#c9a56a', '#b8955e', '#9c7a4c', '#d8b97c', '#c08a6e', '#7d6448', '#e3c48a', '#efd29a', '#6e5440', '#c9738a'], 24000, r, V ? 1.4 : 1.1); x.restore();
       const rr = rng(31); const flock = []; for (let i = 0; i < 9; i++) { const xx = W * (.08 + .84 * rr()), yy = crest(xx) + 30 + rr() * 110; flock.push([xx, yy, rr() < .5 ? 1 : -1]); } flock.sort((a, b) => a[1] - b[1]);
       for (const [xx, yy, d] of flock) sheep(x, xx, yy, V ? 1.6 : 1.3, d, rr);
-      shepherdBoy(x, W * (V ? .66 : .62), crest(W * (V ? .66 : .62)) + (V ? 60 : 50), V ? 1.9 : 1.5);
+      shepherdBoy(x, W * (V ? .66 : .64), crest(W * (V ? .66 : .64)) + (V ? 60 : 70), V ? 1.9 : 2.6);   /* TV: the boy larger */
       Object.assign(D, { hz, art: c, crest });
     }
   }

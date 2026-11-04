@@ -10,7 +10,7 @@ const SOIL = { S: 1.5, art: null };
 const JOSEPH_O = [['M', .3, 0], ['C', .3, -.5, .29, -.95, .26, -1.3], ['C', .24, -1.5, .2, -1.62, .12, -1.7], ['C', .04, -1.78, -.08, -1.78, -.14, -1.7], ['C', -.19, -1.64, -.2, -1.56, -.18, -1.5],
   ['C', -.17, -1.46, -.15, -1.43, -.13, -1.42], ['C', -.2, -1.38, -.28, -1.3, -.32, -1.2], ['C', -.34, -1.14, -.3, -1.1, -.25, -1.12], ['C', -.24, -.8, -.27, -.4, -.3, 0]];function buildStableOil() {
   const S = SOIL.S, PW = Math.round(W * S), PH = Math.round(H * S), plate = canvas(PW, PH), g = plate.getContext('2d'); g.scale(S, S);
-  const cx = W / 2, gy = H * (V ? .56 : .68), lx = cx + (V ? 10 : 40), ly = gy - (V ? 44 : 36), LP = [lx, ly - 16];
+  const cx = W / 2, gy = H * (V ? .56 : .58),   /* round 4: the TV cut's floor higher — Mary and the manger above the words */ lx = cx + (V ? 10 : 40), ly = gy - (V ? 44 : 36), LP = [lx, ly - 16];
   Object.assign(SOIL, { lx, ly, gy, LP });
   const radial = (x, y, R, stops, op = 'source-over') => { g.save(); g.globalCompositeOperation = op; const gr = g.createRadialGradient(x, y, 0, x, y, R); stops.forEach(([k, c]) => gr.addColorStop(k, c)); g.fillStyle = gr; g.fillRect(x - R, y - R, 2 * R, 2 * R); g.restore(); };
   // the room: readable warm umber, the back wall lit by the child; near-black only in the far corners
@@ -68,6 +68,12 @@ const JOSEPH_O = [['M', .3, 0], ['C', .3, -.5, .29, -.95, .26, -1.3], ['C', .24,
   const sM = V ? 560 : 420, mx = lx - (V ? 330 : 390), my = gy + (V ? 210 : 150);
   figure(MARY_K, mx, my, sM, 1, [{ at: [.13, -1.03, .06, .11], base: '#3a2418', lit: '#ffe4bc', k: 1.6 }, { at: [.2, -.93, .07, .06], base: '#3a2418', lit: '#ffe4bc', k: 1.6 },
     { base: '#17161c', lit: '#d6c2a2', k: 1.45 }], [-.5, -1.2, .4, 0]);
+  // round 4 (look review: 'Mary and Joseph end in a straight cut — paper cut-outs floating'): where they meet the floor, a soft
+  // contact shadow and straw laid over the base line, so they kneel and stand IN the straw
+  for (const [bx, by, bw] of [[mx, my, .62 * sM], [jx, jy, .5 * sJ]]) {
+    g.save(); g.filter = 'blur(10px)'; g.fillStyle = 'rgba(26,15,7,.75)'; g.beginPath(); g.ellipse(bx, by + 4, bw * .62, bw * .09, 0, 0, 6.283); g.fill(); g.restore();
+    const r = rng(Math.round(bx)); g.lineCap = 'round'; for (let i = 0; i < 140; i++) { const x = bx + (r() - .5) * bw * 1.3, y = by - 10 + r() * 28, d = Math.hypot(x - lx, (y - ly) * 1.6) / (W * .62), kk = clamp(1 - d);
+      g.strokeStyle = `rgba(${150 + 70 * kk | 0},${104 + 60 * kk | 0},${50 + 30 * kk | 0},${.55 + .35 * r()})`; g.lineWidth = 1.8 + 1.6 * r(); g.beginPath(); g.moveTo(x, y); g.lineTo(x + (r() - .5) * 40, y - 6 - r() * 14); g.stroke(); } }
   // the light itself, laid on as glaze over everything near the child
   radial(LP[0], LP[1], Math.max(W, H) * .4, [[0, 'rgba(255,236,190,.55)'], [.2, 'rgba(240,180,100,.25)'], [1, 'rgba(200,130,60,0)']], 'screen');
   SOIL.art = OIL.paint(plate, { key: 'rembrandt', S, seed: 11 });

@@ -49,9 +49,9 @@
     // round 3 (look review: "a tree alone — no serpent, no woman: what is Genesis 3 here?"): the serpent coiled up the trunk, and
     // small on the hill to the left the man and the woman walking out of the garden, their backs to us (no faces, no detail)
     { const tw = TREE[0].w * .62, pts = []; for (let i = 0; i <= 44; i++) { const u = i / 44; pts.push([TX + Math.sin(u * Math.PI * 3.4 + .4) * tw * (1 - .25 * u), TY - 6 * SC - u * 300 * SC]); }
-      C.sweep(x, pts, 11 * SC, .92, 777); C.vine(x, pts.map(([a, b]) => [a - 2 * SC, b - 2 * SC]), 2, .5, 778, '#fff', .2);
-      const [hx, hy] = pts[pts.length - 1]; C.blob(x, hx + 12 * SC, hy - 6 * SC, 16 * SC, 10 * SC, .95, .3); }
-    for (const [fx, h, lean] of [[.17, 104, -.06], [.215, 96, -.03]]) { const cx = W * fx, base = ridgeY(cx, ...HILL) + 4 * SC, hh = h * SC, pts = [[cx - .2 * hh, base], [cx - .13 * hh + lean * hh, base - .6 * hh], [cx - .1 * hh + lean * hh, base - .8 * hh]];
+      C.sweep(x, pts, 18 * SC, .95, 777); C.vine(x, pts.map(([a, b]) => [a - 2 * SC, b - 2 * SC]), 2, .5, 778, '#fff', .2);
+      const [hx, hy] = pts[pts.length - 1]; C.blob(x, hx + 16 * SC, hy - 8 * SC, 30 * SC, 18 * SC, .97, .3); }
+    for (const [fx, h, lean] of [[.16, 200, -.06], [.235, 186, -.03]])   /* round 4: twice as large — people, not posts */ { const cx = W * fx, base = ridgeY(cx, ...HILL) + 4 * SC, hh = h * SC, pts = [[cx - .2 * hh, base], [cx - .13 * hh + lean * hh, base - .6 * hh], [cx - .1 * hh + lean * hh, base - .8 * hh]];
       for (let i = 0; i <= 10; i++) { const a = Math.PI + i / 10 * Math.PI; pts.push([cx + lean * hh * 1.2 + Math.cos(a) * .1 * hh, base - .9 * hh + Math.sin(a) * .1 * hh]); }
       pts.push([cx + .1 * hh + lean * hh, base - .8 * hh], [cx + .14 * hh + lean * hh, base - .6 * hh], [cx + .2 * hh, base]); C.tone(x, pts, .9); }
     return c;
@@ -85,7 +85,7 @@
   function drawThreat(x, s, t) {   // the dark comes in from both sides like smoke, its edge boiling on twos
     if (s.threat <= .002) return;
     const bo = C.boil(t), jr = rng(bo * 7 + 3);
-    C.layer(x, l => { for (const sd of [-1, 1]) { const reach = s.threat * (W * .5 - 150 * SC), pts = [];
+    C.layer(x, l => { for (const sd of [-1, 1]) { const reach = s.threat * Math.min(W * .5 - 150 * SC, W * (Pilot.ori === 'v' ? .3 : .2)), pts = [];   /* round 4: the dark comes in from the edges only (it read as a stain) */
       for (let i = 0; i <= 48; i++) { const y = lerp(H * .12, H * 1.02, i / 48), k = Math.sin(i / 48 * Math.PI);
         const d = reach * (.35 + .65 * k) + (Pilot.fbm(i * .45, sd * 3 + t * .25, 3) - .5) * 460 * SC * s.threat + Math.sin(i * .7 + sd + t * .8) * 70 * SC * s.threat + (jr() - .5) * 8 * SC;   /* round 3: a ragged, rubbed edge — no straight vertical (look review r2) */ pts.push([sd < 0 ? d : W - d, y]); }
       C.poly(l, pts.concat(sd < 0 ? [[-80, H + 80], [-80, -80]] : [[W + 80, H + 80], [W + 80, -80]])); l.fillStyle = '#000'; l.fill();

@@ -120,7 +120,7 @@ function partFlight(ctx, t, camT = t, o = {}) {
 function house(ctx, c, L, h, t, lampK) {   // a flat-roofed stone house; its lamp: lampK (0..1) if given, else on after sunset in part 3
   const y0 = rdH(h.x, h.z) - .5, x0 = h.x - h.w / 2, x1 = h.x + h.w / 2, z0 = h.z - h.d / 2, z1 = h.z + h.d / 2, y1 = y0 + h.h, dist = h.z - c.z, alb = [.92, .84, .7];
   for (const [pts, n] of [[[[x0, y0, z0], [x1, y0, z0], [x1, y1, z0], [x0, y1, z0]], [0, 0, -1]], [[[x1, y0, z0], [x1, y0, z1], [x1, y1, z1], [x1, y1, z0]], [1, 0, 0]], [[[x0, y0, z0], [x0, y0, z1], [x0, y1, z1], [x0, y1, z0]], [-1, 0, 0]], [[[x0, y1, z0], [x1, y1, z0], [x1, y1, z1], [x0, y1, z1]], [0, 1, 0]]])
-    if (W3.poly(ctx, c, pts)) { ctx.fillStyle = W3.css(W3.shade(alb, n, dist, L)); ctx.fill(); }
+    if (W3.poly(ctx, c, pts)) { ctx.fillStyle = W3.css(W3.shade(alb, n, dist, L)); ctx.fill(); if (n[1] === 1 && L.night > .3) { ctx.strokeStyle = `rgba(176,196,236,${.45 * L.night})`; ctx.lineWidth = 1.4; ctx.stroke(); } }   /* round 4: the roof catches the moon (houses read as boxes/boards) */
   if (h.lamp >= 0) { const on = lampK != null ? lampK * (.85 + .15 * Math.sin(t * 2 + h.k * 9)) : ss(89.6 + h.lamp, 90.2 + h.lamp, t) * Math.min(1, L.night * 1.6); if (on > 0) { const p = W3.P(c, h.x, y0 + h.h * .45, z0 - .1); if (p) { ctx.save(); ctx.globalCompositeOperation = 'screen'; const R = Math.max(5, p[2] * 4); const g = ctx.createRadialGradient(p[0], p[1], 0, p[0], p[1], R * 3); g.addColorStop(0, `rgba(255,214,140,${on})`); g.addColorStop(.25, `rgba(255,180,90,${.55 * on})`); g.addColorStop(1, 'rgba(255,170,80,0)'); ctx.fillStyle = g; ctx.fillRect(p[0] - R * 3, p[1] - R * 3, R * 6, R * 6); ctx.restore(); } } }
 }
 
@@ -194,10 +194,14 @@ function partRise(ctx, t) { partFlight(ctx, t, lerp(21, 4, eio(clamp((t - 137) /
   // round 3 (look review: "the same night town again — and no child for 'his name Jesus'"): over the town one place answers —
   // a column of starlight comes down onto the stable at its edge and the gold gathers there; the rest of the town stays blue
   const c = FLY.cam(lerp(21, 4, eio(clamp((t - 137) / 9)))), sp = W3.P(c, FLY.town[0] + 26, FLY.town[1] - 2, FLY.town[2] - 30), k = ss(137.6, 140.2, t);
-  if (sp && k > 0) { const bw = (V ? 70 : 60) * (.8 + .2 * Math.sin(t * 1.7)); ctx.save(); ctx.globalCompositeOperation = 'screen';
-    const g = ctx.createLinearGradient(sp[0] - bw, 0, sp[0] + bw, 0); g.addColorStop(0, 'rgba(255,224,170,0)'); g.addColorStop(.5, `rgba(255,224,170,${.34 * k})`); g.addColorStop(1, 'rgba(255,224,170,0)');
-    const fall = ctx.createLinearGradient(0, 0, 0, sp[1]); fall.addColorStop(0, 'rgba(0,0,0,0)'); fall.addColorStop(1, '#fff'); ctx.fillStyle = g; ctx.fillRect(sp[0] - bw, 0, bw * 2, sp[1]);
-    ctx.restore(); W3.bloom(ctx, sp[0], sp[1], [255, 206, 130], .75 * k, { r: V ? 170 : 150, streak: .3 }); ctx.fillStyle = `rgba(255,246,220,${k})`; ctx.beginPath(); ctx.arc(sp[0], sp[1], 5, 0, 6.283); ctx.fill();
+  if (sp && k > 0) { const bw = (V ? 70 : 60) * (.85 + .15 * Math.sin(t * 1.7)); ctx.save(); ctx.globalCompositeOperation = 'screen'; ctx.filter = `blur(${V ? 22 : 18}px)`;
+    // round 4 (look review: "a uniform cylinder reads as a searchlight / UFO beam"): a soft ray — thin at the star, spreading as it
+    // comes down, fading toward the ground; where it lands, a wide pool of light over the roofs, not the end of a tube
+    const g = ctx.createLinearGradient(0, 0, 0, sp[1]); g.addColorStop(0, `rgba(255,232,190,${.32 * k})`); g.addColorStop(1, `rgba(255,224,170,${.12 * k})`); ctx.fillStyle = g;
+    ctx.beginPath(); ctx.moveTo(sp[0] - bw * .2, 0); ctx.lineTo(sp[0] + bw * .2, 0); ctx.lineTo(sp[0] + bw * 2.4, sp[1]); ctx.lineTo(sp[0] - bw * 2.4, sp[1]); ctx.closePath(); ctx.fill();
+    ctx.filter = 'none'; const pool = ctx.createRadialGradient(sp[0], sp[1], 0, sp[0], sp[1], bw * 4); pool.addColorStop(0, `rgba(255,214,150,${.45 * k})`); pool.addColorStop(1, 'rgba(255,214,150,0)');
+    ctx.save(); ctx.translate(sp[0], sp[1]); ctx.scale(1, .32); ctx.translate(-sp[0], -sp[1]); ctx.fillStyle = pool; ctx.fillRect(sp[0] - bw * 4, sp[1] - bw * 4, bw * 8, bw * 8); ctx.restore();
+    ctx.restore(); W3.bloom(ctx, sp[0], sp[1], [255, 206, 130], .55 * k, { r: V ? 150 : 130, streak: .2 }); ctx.fillStyle = `rgba(255,246,220,${k})`; ctx.beginPath(); ctx.arc(sp[0], sp[1], 5, 0, 6.283); ctx.fill();
     W3.bloom(ctx, sp[0], V ? 120 : 80, [230, 236, 255], .6 * k, { r: 90, streak: .3 }); }
   const d = .5 * (1 - ss(137, 138.4, t));   /* a dip, never to black (frame-qa: 137.2 s went black, 2026-11-04) */ if (d > 0) { ctx.fillStyle = `rgba(8,6,8,${d})`; ctx.fillRect(0, 0, W, H); } }
 // partDawn: impasto-dawn.js (black-and-white film → palette-knife colour, 2026-11-03 round 2)
@@ -419,7 +423,7 @@ const TEXT = [
   ['sub', '01', 0.4, 6.6], ['label', 'P0', 10.0, 18.4], ['quote', '02', 10.4, 18.8, { ...QB(), hlAt: 10.45 }], ['title', 'T1', 19.0, 21.4], ['sub', 'Q1', 6.8, 9.9],   /* 2026-11-04 insight first-26s: the question by 10 s, the title after the hook */
   ['sub', '03', 21.9, 24.9], ['label', 'G0', 22.0, 31.0], ['quote', '04', 25.2, 31.2, { ...QB(), hlAt: 25.29 }], ['sub', '05', 31.4, 38.1],
   ['label', 'G1', 37.2, 41.0], ['quote', '06', 38.4, 43.2, { ...QB(), hlAt: 39.4 }], ['label', 'G3', 41.2, 43.4],
-  ['label', 'G2', 43.6, 46.4], ['quote', '07', 44.0, 49.6, { y: V ? H * .22 : H * .2, size: V ? 44 : 40, hlAt: 45 }], ['sub', 'D1', 44.4, 51.1],
+  ['label', 'G2', 43.6, 46.4], ['quote', '07', 44.0, 50.8, { ...QB(), hlAt: 45 }],   /* round 4 (look review, every round: 'five lines of words at once'): the verse alone on screen; D1 is heard (and in the captions) */
   ['sub', '08', 51.3, 56.9], ['sub', '09', 57.1, 63.5],
   ['sub', '13', 63.7, 70.3], ['label', 'A1', 70.8, 76.0], ['quote', '14', 70.6, 75.8, QB()],
   ['quote', '15', 77.0, 84.6, { ...QB(), hlAt: 83.47 }], ['sub', '16', 84.9, 90.8], ['micah', '02', 91.0, 95.0],

@@ -34,6 +34,25 @@ Videos: release **youtube-v1** (`gh release download youtube-v1 -R jungrok5/one-
 12:25 착하게 살면?
 13:23 초대
 
+📖 장면마다 나온 말씀, 개역개정으로 바로 읽기
+창세기 1:3  https://bible.bskorea.or.kr/bible/NKRV/GEN.1.3
+창세기 3:9  https://bible.bskorea.or.kr/bible/NKRV/GEN.3.9
+창세기 15:5  https://bible.bskorea.or.kr/bible/NKRV/GEN.15.5
+출애굽기 5:1  https://bible.bskorea.or.kr/bible/NKRV/EXO.5.1
+신명기 1:31  https://bible.bskorea.or.kr/bible/NKRV/DEU.1.31
+사사기 21:25  https://bible.bskorea.or.kr/bible/NKRV/JDG.21.25
+사무엘상 16:7  https://bible.bskorea.or.kr/bible/NKRV/1SA.16.7
+시편 137:1  https://bible.bskorea.or.kr/bible/NKRV/PSA.137.1
+느헤미야 8:10  https://bible.bskorea.or.kr/bible/NKRV/NEH.8.10
+갈라디아서 4:4  https://bible.bskorea.or.kr/bible/NKRV/GAL.4.4
+요한복음 1:14  https://bible.bskorea.or.kr/bible/NKRV/JHN.1.14
+이사야 53:5  https://bible.bskorea.or.kr/bible/NKRV/ISA.53.5
+마태복음 28:6  https://bible.bskorea.or.kr/bible/NKRV/MAT.28.6
+사도행전 1:8  https://bible.bskorea.or.kr/bible/NKRV/ACT.1.8
+요한계시록 21:4  https://bible.bskorea.or.kr/bible/NKRV/REV.21.4
+에베소서 2:8–9  https://bible.bskorea.or.kr/bible/NKRV/EPH.2.8-9
+요한복음 1:12  https://bible.bskorea.or.kr/bible/NKRV/JHN.1.12
+
 성경 인용: 「성경전서 개역개정판」 © 대한성서공회. 저작권은 대한성서공회에 있으며, 출처를 밝혀 인용했습니다.
 
 #성경 #성경이야기 #성경개관

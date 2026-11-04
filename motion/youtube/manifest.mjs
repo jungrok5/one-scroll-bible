@@ -13,6 +13,11 @@ import { readFileSync, writeFileSync, existsSync, readdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { dropCredit } from './credit.mjs';   // no tools credit in descriptions (owner 2026-11-05)
+import { bibleLines } from './bible-links.mjs';
+// Korean film: each scene's verse, to read in 개역개정 right after watching (bible.bskorea.or.kr, opens on the phone).
+// One per scene in film order — the verse the scene quotes (motion/pilot/i18n/_ko/<scene>.json).
+const KO_READ = '창세기 1:3 → 창세기 3:9 → 창세기 15:5 → 출애굽기 5:1 → 신명기 1:31 → 사사기 21:25 → 사무엘상 16:7 → 시편 137:1 → 느헤미야 8:10 → 갈라디아서 4:4 → 요한복음 1:14 → 이사야 53:5 → 마태복음 28:6 → 사도행전 1:8 → 요한계시록 21:4 → 에베소서 2:8–9 → 요한복음 1:12';
+export const KO_READ_HEAD = '📖 장면마다 나온 말씀, 개역개정으로 바로 읽기';
 const HERE = dirname(fileURLToPath(import.meta.url)), M = join(HERE, '..');
 const ORDER = ['opening', 'creation', 'fall', 'patriarch', 'exodus', 'wilderness', 'judges', 'kingdom', 'exile', 'return', 'silence',
   'advent', 'cross', 'rise', 'church', 'renewal', 'mirror', 'gospel', 'evidence', 'ship', 'invite'];
@@ -79,7 +84,8 @@ for (const L of LANGS) {
   const link = home + utm('video', `film_${L}`);
   // the Korean film and its narrated cut point at each other (ids from uploaded.json once both are up)
   const UPL = read(join(HERE, 'uploaded.json')).film || {}, cross = L === 'ko' && UPL['ko-narr']?.id ? [`🔊 목소리로 듣는 해설판: https://youtu.be/${UPL['ko-narr'].id}`] : [];
-  const description = [X.blurb || blurb(ui.sub), '', `${X.watch}: ${link}`, ...cross, '', ...chapters.map(c => `${c.time} ${c.title}`), '', dropCredit(strip(ui.legal)), '', hashtags(3)].join('\n');
+  const readKo = L === 'ko' ? [KO_READ_HEAD, ...bibleLines(KO_READ).map(r => `${r.ref}  ${r.url}`), ''] : [];
+  const description = [X.blurb || blurb(ui.sub), '', `${X.watch}: ${link}`, ...cross, '', ...chapters.map(c => `${c.time} ${c.title}`), '', ...readKo, dropCredit(strip(ui.legal)), '', hashtags(3)].join('\n');
   const tags = [ui.brand, ...(X.tags || []), ...ch]; while (tags.join(',').length > 480) tags.pop();   // YouTube: 500 characters in all
   const film = { file: `film-${L}.mp4`, local: `motion/out/release/film-${L}.mp4`, title: ui.shareText.slice(0, 100), description, link, tags, language: L,
     thumbnail: `motion/youtube/thumbs/${L}/A-exodus.jpg`, thumbnail_alternatives: ['B-cross', 'C-split', 'D-earth'].map(v => `motion/youtube/thumbs/${L}/${v}.jpg`),
@@ -97,7 +103,7 @@ for (const L of LANGS) {
       // A/B test = the film's A·B·D with a "🔊 목소리 해설판" badge (scratch filter: drawbox + drawtext, both vertically centred)
       thumbnail: 'motion/youtube/thumbs/ko/narr-A-exodus.jpg', thumbnail_alternatives: ['B-cross', 'D-earth'].map(v => `motion/youtube/thumbs/ko/narr-${v}.jpg`),
       description: ['화면의 말씀과 설명을 목소리로 읽어 드리는 해설판입니다. 글씨가 작거나 읽기 어려우신 분도 편안히 들으실 수 있습니다.', '',
-        `${X.watch}: ${nlink}`, ...(UPL.ko?.id ? [`🎵 해설 없이 음악으로만 보기: https://youtu.be/${UPL.ko.id}`] : []), '', ...chapters.map(c => `${c.time} ${c.title}`), '', dropCredit(strip(ui.legal)), '', hashtags(3)].join('\n'),
+        `${X.watch}: ${nlink}`, ...(UPL.ko?.id ? [`🎵 해설 없이 음악으로만 보기: https://youtu.be/${UPL.ko.id}`] : []), '', ...chapters.map(c => `${c.time} ${c.title}`), '', ...readKo, dropCredit(strip(ui.legal)), '', hashtags(3)].join('\n'),
       tags: (() => { const t = [ui.brand, '내레이션', '성경 해설', ...(X.tags || []), ...ch]; while (t.join(',').length > 480) t.pop(); return t; })(),
       captions: {}, pinned: { ...film.pinned, link: home + utm('video', 'film_ko_narr', 'pinned') + '#faq' } };
   })();

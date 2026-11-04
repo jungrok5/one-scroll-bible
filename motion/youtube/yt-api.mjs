@@ -303,6 +303,20 @@ if (cmd === 'whoami') {
   console.log(`${film} ${key} ${id}: "${cur.snippet.title}" → "${f.title}" · description ${cur.snippet.description.length} → ${f.description.length} chars`); if (rest.includes('--dry')) { writeFileSync(join(M, 'out', `desc-live-${id}.txt`), cur.snippet.description); console.log('  live description → motion/out/desc-live-' + id + '.txt'); process.exit(0); }
   await api('videos?part=snippet', { method: 'PUT', body: JSON.stringify({ id, snippet: { ...cur.snippet, title: f.title, description: f.description, tags: f.tags || cur.snippet.tags, categoryId: cur.snippet.categoryId || '27' } }) });
   console.log('  saved');
+} else if (cmd === 'read-links') {
+  // read-links <videoId…> [--dry]: put the Korean film's 개역개정 reading list (manifest.json languages.ko.film, the block from
+  // "📖 장면마다 나온 말씀…" to the blank line) into live descriptions, just above the "성경 인용" line — everything else in the
+  // live text (edited over time in Studio) stays. Skips a video that already has a bible.bskorea link. 50 units each.
+  const ids = rest.filter(a => !a.startsWith('--')), dry = rest.includes('--dry');
+  const md = JSON.parse(readFileSync(join(HERE, 'manifest.json'), 'utf8')).languages.ko.film.description.split('\n'), a = md.findIndex(l => l.startsWith('📖'));
+  const block = md.slice(a, md.indexOf('', a) + 1); if (a < 0 || block.length < 3) { console.log('no reading list in manifest.json — run node motion/youtube/manifest.mjs'); process.exit(1); }
+  for (const id of ids) { const cur = (await api(`videos?part=snippet&id=${id}`)).items?.[0]; if (!cur) { console.log(id, 'not found'); continue; }
+    const d = cur.snippet.description; if (d.includes('bible.bskorea.or.kr')) { console.log(id, 'already has the links'); continue; }
+    const L = d.split('\n'), at = L.findIndex(l => l.startsWith('성경 인용')), nd = (at < 0 ? [...L, '', ...block.slice(0, -1)] : [...L.slice(0, at), ...block, ...L.slice(at)]).join('\n');
+    if (nd.length > 5000) { console.log(id, 'too long', nd.length); continue; }
+    console.log(`${id} "${cur.snippet.title}": ${d.length} → ${nd.length} chars${at < 0 ? ' (no 성경 인용 line — appended)' : ''}`);
+    if (dry) { writeFileSync(join(M, 'out', `desc-read-${id}.txt`), nd); continue; }
+    await api('videos?part=snippet', { method: 'PUT', body: JSON.stringify({ id, snippet: { ...cur.snippet, description: nd, categoryId: cur.snippet.categoryId || '27' } }) }); console.log('  saved'); }
 } else if (cmd === 'strip-credit') {
   // strip-credit [--dry] [--max N]: drop the tools credit line (credit.mjs) from every video on this channel (YT_AS=GLOBAL for
   // the international one) — its description and every localized description; title, tags, privacy and schedule stay.

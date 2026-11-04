@@ -145,7 +145,25 @@ export const STAGES = [
   { id: 'after', n: 9, name: '공개 직후(고정 댓글·최종 화면·관련 동영상)', task: 'after', gates: ['after'] },
   { id: 'captions', n: 11, name: '외국어 자막 27개', task: 'captions', gates: ['captions'] },
 ];
+// ---------------------------------------------------------------------------------------------------- insights
+// pipeline/insights.json: what the numbers taught (the periodic analysis writes it). Active rules with a `check` are gates of
+// their stages; the rest are printed with the stage's brief (film.mjs task).
+export const INSIGHTS = (J(join(FILMS, 'pipeline/insights.json')) || { insights: [] }).insights;
+const spoken = l => (l.kind === 'narr' || l.kind === 'quote') && l.voice !== null;
+const IC = {
+  narr_voiced: c => { const silent = c.lines.filter(l => l.kind === 'narr' && l.voice === null); return silent.length ? fail(`해설 ${silent.map(l => l.id).join(' ')}에 목소리가 없다(voice: null)`) : pass(); },
+  hook: c => { const L = c.lines.filter(l => l.at != null).sort((a, b) => a.at - b.at), first = L.find(spoken), q = L.find(l => l.kind === 'narr' && /\?\s*$/.test(l.text.trim()));
+    const why = []; if (!first || first.at > 1.0) why.push(`첫 해설이 ${first ? first.at + '초' : '없음'} — 1초 안에 시작`);
+    if (!q || q.at > 10) why.push(`영상을 붙잡는 질문(물음표 해설)이 ${q ? q.at + '초(' + q.id + ')' : '없음'} — 10초 안에`); return why.length ? fail(...why) : pass(); },
+};
+export function insightGate(c, stageId) {
+  const act = INSIGHTS.filter(x => x.status === 'active' && x.check && (x.stages || []).includes(stageId) && IC[x.check]);
+  if (!act.length) return null;
+  const why = act.flatMap(x => { const r = IC[x.check](c); return r.ok ? [] : r.why.map(w => `[인사이트 ${x.id}] ${w}`); });
+  return why.length ? { ok: false, why } : pass();
+}
 export function stageStatus(c, st) {
-  const results = st.gates.map(g => [g, G[g](c)]), ok = results.every(([, r]) => r.ok), ap = st.approve ? approved(c, st.id) : true;
+  const results = st.gates.map(g => [g, G[g](c)]), ig = insightGate(c, st.id); if (ig) results.push(['insights', ig]);
+  const ok = results.every(([, r]) => r.ok), ap = st.approve ? approved(c, st.id) : true;
   return { ok, approved: !!ap, done: ok && !!ap, results };
 }

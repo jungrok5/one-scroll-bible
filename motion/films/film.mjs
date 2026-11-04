@@ -9,7 +9,7 @@
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import { join } from 'node:path';
-import { STAGES, ctx, stageStatus, FILMS, srcHash } from './pipeline/stages.mjs';
+import { STAGES, ctx, stageStatus, FILMS, srcHash, INSIGHTS } from './pipeline/stages.mjs';
 
 const [cmd, film, stage, ...rest] = process.argv.slice(2);
 if (!cmd || !film) { console.log('usage: node motion/films/film.mjs status|check|run|approve|task <film> [stage]'); process.exit(1); }
@@ -48,6 +48,11 @@ if (cmd === 'approve') {
 }
 if (cmd === 'task') {
   const s = st(stage), f = join(FILMS, 'pipeline/tasks', s.task + '.md'); if (!existsSync(f)) { console.error('작업 지시 없음: ' + f); process.exit(1); }
-  console.log(readFileSync(f, 'utf8').replaceAll('{film}', film)); process.exit(0);
+  console.log(readFileSync(f, 'utf8').replaceAll('{film}', film));
+  // what the numbers taught (pipeline/insights.json — the periodic analysis keeps it): this stage's rules, under the brief
+  const ins = INSIGHTS.filter(x => x.status !== 'retired' && (x.stages || []).includes(s.id));
+  if (ins.length) { console.log(`\n## 분석에서 배운 것 — 이 단계에 반영 (pipeline/insights.json)`);
+    for (const x of ins) console.log(`- ${x.status === 'watch' ? '(관찰 중) ' : ''}**${x.rule}**${x.check ? ' [검사: ' + x.check + ']' : ''}\n  근거: ${x.evidence}`); }
+  process.exit(0);
 }
 console.error('unknown command ' + cmd); process.exit(1);

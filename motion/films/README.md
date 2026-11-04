@@ -10,6 +10,8 @@
 > **이 순서는 코드가 쥔다**(관리자 2026-11-04: "전체 절차가 스킬과 md라면 AI는 그대로 따르진 않잖아"). `node motion/films/film.mjs status <이름>`이
 > 단계마다 통과 검사(`pipeline/stages.mjs`)를 돌려 ✓/✗와 **다음에 할 한 가지**를 출력한다. 검사 기준 숫자는 `pipeline/targets.json`(분석이 갱신),
 > 창작 단계의 고정 지시는 `pipeline/tasks/<단계>.md`, 관리자 승인은 `film.mjs approve`로 review.json `pipeline.approvals`에 남는다.
+> **분석에서 배운 것은 `pipeline/insights.json`**(관리자 2026-11-04: "인사이트는 계속해서 다음 영상 제작 시 참고하고 반영될 수 있게"): 정기 분석이 규칙(근거 숫자·날짜와 함께)을
+> 더하고 고치며, `film.mjs task`가 단계마다 작업 지시 아래에 찍고, `check`가 있는 규칙은 그 단계의 통과 검사가 된다(예: 첫 질문 10초 안).
 > 아래 표는 사람이 읽는 요약이고, 규칙을 바꾸면 검사(코드)를 먼저 바꾼다.
 
 | # | 단계 | 무엇으로 | 멈춤 지점 |

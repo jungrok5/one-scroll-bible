@@ -31,7 +31,10 @@ B. node motion/films/analytics/collect.mjs check  → 빠진 것이 없을 때�
 C. node motion/films/analytics/collect.mjs report → report.md의 표를 motion/films/ANALYTICS.md에 날짜 절로 붙인다.
 D. "읽은 것": ANALYTICS.md "요소 분석" 8항목(이탈 구간↔장면, 화풍, 첫 1초, 썸네일·제목·첫 줄, 소리, 형식, 플랫폼 차이, 댓글)으로 읽고,
    여러 영상이 같은 방향이면 motion/films/pipeline/targets.json의 해당 숫자를 바꾸자고 제안한다(출처·날짜와 함께 — 바꾸는 것은 관리자 OK 뒤).
+D2. 배운 것을 규칙으로: motion/films/pipeline/insights.json을 갱신한다 — 새 발견은 항목으로 추가(id·since·evidence(숫자+원자료 파일)·finding·rule·stages, 처음엔 status "watch"),
+   두 번 이상 같은 방향으로 확인되면 "active"로 올리고, 반대 근거가 나오면 evidence를 고치거나 "retired". 검사로 만들 수 있으면 check를 붙이자고 제안한다.
+   (이 파일은 film.mjs task가 단계마다 작업 지시 아래에 찍어 주고, check가 있는 규칙은 단계 검사가 된다 — 다음 영상에 저절로 들어간다.)
 E. 다음 추천 제작 주제 2~3개(README 10절 근거 형식), README 10절 후보 목록 갱신.
-F. 커밋·푸시(작업 브랜치). 한국어로 짧게 보고: 바뀐 숫자 핵심, 그림·소리·형식에서 읽은 것과 다음 영상에 바꿀 것, targets 변경 제안, 추천 주제, 사용자가 정할 것.
+F. 커밋·푸시(작업 브랜치). 한국어로 짧게 보고: 바뀐 숫자 핵심, 그림·소리·형식에서 읽은 것과 다음 영상에 바꿀 것, insights.json에 더하거나 바꾼 규칙, targets 변경 제안, 추천 주제, 사용자가 정할 것.
 공개·삭제·영상 수정·게시는 하지 않는다. 다른 게시·삭제·수정은 하지 말 것.`);
 } else { console.log('usage: node motion/youtube/routine.mjs daily | analysis'); process.exit(1); }

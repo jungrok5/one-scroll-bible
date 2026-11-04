@@ -1,0 +1,97 @@
+{
+ "_about": "What the numbers taught, as rules for the next film (관리자 2026-11-04: \"인사이트는 계속해서 다음 영상 제작 시 참고하고 반영될 수 있게 구조 잡고\"). Every periodic analysis adds, sharpens or retires entries here — with its evidence and date — instead of leaving the lesson only in ANALYTICS.md. `film.mjs task <film> <stage>` prints the active rules for that stage under the fixed brief; rules with a `check` are also gates (stages.mjs insight checks), so a film cannot pass the stage while breaking them. status: active | watch (a hunch, not yet a rule — printed, never gated) | retired (kept for history).",
+ "insights": [
+  {
+   "id": "engine-narrated-long",
+   "since": "2026-11-04",
+   "status": "active",
+   "evidence": "14분 해설판 = 28일 조회의 86%, 구독 +234(82%), 노출 18.9만·CTR 3.7%, 홈(탐색) 82% (analytics/2026-11-04 studio-videos, api-ko)",
+   "finding": "채널은 해설 있는 긴 영상 한 편이 홈 피드로 끌고 간다.",
+   "rule": "새 영상은 해설판 시청자가 다음에 볼 영상으로 설계한다: 해설판과 같은 '연결' 결(약속 → 성취), 해설판 최종 화면·고정 댓글·설명 첫 줄에서 이어지게 한다.",
+   "stages": ["topic", "sheet", "after"]
+  },
+  {
+   "id": "narration-doubles",
+   "since": "2026-11-04",
+   "status": "active",
+   "evidence": "해설판 평균 시청 31.5% vs 같은 그림의 음악판 15.9% (api-ko 10/20–11/4)",
+   "finding": "같은 그림이라도 해설이 있으면 시청 유지가 두 배다.",
+   "rule": "모든 영상은 목소리 해설판이 기본이다. 음악만 있는 판은 만들지 않거나 부록으로만.",
+   "stages": ["script", "sound"],
+   "check": "narr_voiced"
+  },
+  {
+   "id": "first-26s",
+   "since": "2026-11-04",
+   "status": "active",
+   "evidence": "해설판 이탈: 0:17 88% → 0:26 73% → 0:52 54% (api-ko retention). 첫 30초에 넷 중 하나가 나간다",
+   "finding": "첫 30초 안에 '왜 끝까지 봐야 하는지'를 못 주면 나간다.",
+   "rule": "첫 해설은 1초 안에 시작하고, 영상 전체를 붙잡는 질문(물음표로 끝나는 해설)은 10초 안에 나온다. 제목 카드·긴 풍경 도입은 질문 뒤로.",
+   "stages": ["script", "picture"],
+   "check": "hook"
+  },
+  {
+   "id": "older-tv",
+   "since": "2026-11-01",
+   "status": "active",
+   "evidence": "해설판 시청자 55세 이상 약 77%(65세 이상 42%), 남성 65%, TV 35%, 한국어 자막 켬 22% (studio-videos build_audience 11/4)",
+   "finding": "주 시청자는 60대 이상이고 셋 중 하나는 거실 TV로 본다.",
+   "rule": "가로판(TV)은 세로판과 같은 완성도로 만든다. 글자는 크게, 해설은 천천히, 화면 글은 한 번에 한 덩어리. 한국어 자막 파일은 늘 올린다.",
+   "stages": ["script", "picture", "publish", "captions"]
+  },
+  {
+   "id": "rewatch",
+   "since": "2026-11-04",
+   "status": "watch",
+   "evidence": "해설판 조회 3.5만 ÷ 순 시청자 9,100 = 1인 3.8회. 다시 본 지점 3:35·6:10(침묵의 400년)·9:37·11:29 (studio reach_viewers, api retention bumps)",
+   "finding": "이 시청자들은 한 번에 끝까지 보기보다 여러 번 나눠, 다시 본다. 다시 본 곳은 '연결'이 보이는 장면이다.",
+   "rule": "한 장면 한 연결(구절 A → 구절 B)을 또렷하게: 다시 보고 싶은 장면이 영상마다 하나는 있게. 재생목록·챕터로 나눠 보기 쉽게.",
+   "stages": ["script", "sheet"]
+  },
+  {
+   "id": "shorts-loop",
+   "since": "2026-11-04",
+   "status": "active",
+   "evidence": "매일 쇼츠: Shorts 피드가 계속 밀어 준 편 = 평균 시청률 100% 넘는 편(광야 6/21 110%·986회, 포로 귀환 10/21 228%·첫날 246회). 50–60%인 7·8편은 피드가 곧 멈춤 (studio-content, api-ko)",
+   "finding": "쇼츠는 길이보다 '다시 보게 되는가'(반복 시청률)가 피드를 연다.",
+   "rule": "60초 이하 쇼츠는 끝이 처음으로 이어지게(마지막 장면 → 첫 장면이 자연스러운 한 흐름) 만들고 40초 안팎. 화면은 밝고 멈추지 않게(첫 영상 쇼츠 중 피드가 민 두 편은 가장 밝거나 정지 0%).",
+   "stages": ["script", "picture"]
+  },
+  {
+   "id": "shorts-vertical-cut-retains",
+   "since": "2026-11-04",
+   "status": "active",
+   "evidence": "침묵의 400년 세로 3:00 — 계속 시청 53%, 30초 86%, 평균 76.5%, Shorts 피드 82%; 같은 내용 가로는 평균 49.8% (studio-videos)",
+   "finding": "3분 세로 해설 영상은 Shorts 피드에서 잘 붙잡힌다.",
+   "rule": "세로 3:00 해설판을 주 형식으로 유지(README 2절). 가로판은 같은 원고로.",
+   "stages": ["picture", "publish"]
+  },
+  {
+   "id": "kakao-share",
+   "since": "2026-11-04",
+   "status": "active",
+   "evidence": "해설판 외부 유입: 카카오톡 25% · 텔레그램 13% · 네이버 9% · 삼성 메시지 7% (studio reach_viewers)",
+   "finding": "단톡방으로 공유된다 — 미리보기에 보이는 제목·썸네일·설명 첫 줄이 곧 초대장이다.",
+   "rule": "제목은 무엇에 대한 영상인지 한눈에(예언·성취처럼 이 시청자가 찾는 말), 설명 첫 줄 60자 안에 핵심, 썸네일 글자는 크게.",
+   "stages": ["sheet"]
+  },
+  {
+   "id": "prophecy-neighbours",
+   "since": "2026-11-04",
+   "status": "watch",
+   "evidence": "해설판을 추천하는 옆 영상: 곡마곡 전쟁·재림·사탄 숭배·성경 편집 이야기 (studio related 11/4)",
+   "finding": "알고리즘은 우리를 예언·종말·성경 배경 영상을 보는 사람들과 묶는다.",
+   "rule": "'예언과 성취' 같은 말은 제목·설명에 쓰되, 종말 시나리오나 공포 마케팅은 쓰지 않는다(관점 원칙).",
+   "stages": ["topic", "sheet"]
+  },
+  {
+   "id": "new-channel-no-history",
+   "since": "2026-11-04",
+   "status": "watch",
+   "evidence": "출애굽 5/21 영어·포르투갈어는 초기에 한국어 채널에 올려 610·521회; 국제 채널의 같은 언어 쇼츠는 합계 17·22회 (studio-content, api-global)",
+   "finding": "같은 쇼츠라도 이력 있는 채널에서 더 멀리 간다 — 국제 채널은 내용보다 채널 이력이 문제일 수 있다.",
+   "rule": "국제 채널의 성과는 언어별 비교 전에 '채널 나이'를 같이 본다. 스페인어처럼 움직이는 언어부터 꾸준히.",
+   "stages": ["publish"]
+  }
+ ]
+}

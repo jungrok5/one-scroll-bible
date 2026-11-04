@@ -27,16 +27,16 @@
     x.strokeStyle = '#2b2840'; x.lineWidth = 10; x.beginPath(); x.moveTo(12, -138); x.quadraticCurveTo(30, -128, 41, -116); x.stroke();   // the arm to the staff
     x.save(); x.translate(0, -160); x.rotate(-.5);
     x.fillStyle = '#5a4038'; x.beginPath(); x.ellipse(4, 0, 10, 12, 0, 0, 6.283); x.fill();
-    x.fillStyle = '#d8d0c4'; x.beginPath(); x.moveTo(7, 4); x.quadraticCurveTo(16, 20, 5, 30); x.quadraticCurveTo(0, 18, 2, 6); x.fill();
+    x.fillStyle = 'rgba(150,134,124,.9)'; x.beginPath(); x.ellipse(7, 13, 6, 9, -.2, 0, 6.283); x.fill();   /* round 3: a grey beard under the chin (the white wedge read as a beak) */
     x.fillStyle = '#3e3a58'; x.beginPath(); x.moveTo(-13, -7); x.quadraticCurveTo(0, -22, 13, -7); x.lineTo(11, 2); x.lineTo(-16, 30); x.lineTo(-18, 0); x.closePath(); x.fill();
     x.restore(); x.restore(); }  function shepherdBoy(x, sx, sy, s) {   // David: a boy with a staff and a sling at his belt, facing left toward the sheep
     x.save(); x.translate(sx, sy); x.scale(s, s); const r = rng(8);
     x.strokeStyle = '#3a2a26'; x.lineWidth = 3.6; x.lineCap = 'round'; x.beginPath(); x.moveTo(-26, -150); x.quadraticCurveTo(-40, -168, -30, -176); x.moveTo(-26, -150); x.lineTo(-22, 0); x.stroke();
-    const tunic = poly([[-12, -112], [12, -112], [20, -58], [18, -40], [-18, -40], [-20, -58]]); x.fillStyle = '#7a3a2e'; x.fill(tunic); hatch(x, tunic, '#a65a3a', r, 120, -1.2, 12, 2, .5); hatch(x, tunic, '#f0c08a', r, 40, -1.2, 10, 1.6, .35);
+    const tunic = poly([[-12, -112], [12, -112], [20, -58], [18, -40], [-18, -40], [-20, -58]]); x.fillStyle = '#8a7656'; x.fill(tunic); hatch(x, tunic, '#b29a74', r, 120, -1.2, 12, 2, .5);   /* round 3: undyed wool, a Bethlehem shepherd (the red read as a Maasai cloak) */ hatch(x, tunic, '#f0c08a', r, 40, -1.2, 10, 1.6, .35);
     x.fillStyle = '#5a3a2a'; x.fillRect(-10, -40, 7, 40); x.fillRect(3, -40, 7, 40);
     x.strokeStyle = '#d9b97c'; x.lineWidth = 2; x.beginPath(); x.moveTo(-16, -62); x.quadraticCurveTo(0, -56, 16, -62); x.stroke();
-    x.fillStyle = '#6a4636'; x.beginPath(); x.ellipse(0, -124, 10, 12, 0, 0, 6.283); x.fill(); x.fillStyle = '#3a2a26'; x.beginPath(); x.ellipse(2, -132, 11, 7, 0, 0, 6.283); x.fill();
-    x.strokeStyle = '#6a4636'; x.lineWidth = 5; x.beginPath(); x.moveTo(-10, -104); x.lineTo(-24, -86); x.lineTo(-26, -140); x.stroke();
+    x.fillStyle = '#a8785a'; x.beginPath(); x.ellipse(0, -124, 10, 12, 0, 0, 6.283); x.fill(); x.fillStyle = '#6e5a42'; x.beginPath(); x.moveTo(-12, -122); x.quadraticCurveTo(-12, -140, 2, -140); x.quadraticCurveTo(14, -140, 13, -126); x.lineTo(15, -108); x.lineTo(8, -112); x.lineTo(8, -128); x.lineTo(-6, -130); x.closePath(); x.fill();   /* olive skin, a head cloth */
+    x.strokeStyle = '#8a7656'; x.lineWidth = 5; x.beginPath(); x.moveTo(-10, -104); x.lineTo(-24, -86); x.lineTo(-26, -140); x.stroke();
     x.restore(); }
   function sheep(x, sx, sy, s, d, r) { x.fillStyle = '#d9cbb2'; x.beginPath(); x.ellipse(sx, sy, 26 * s, 15 * s, 0, 0, 6.283); x.fill(); x.fillStyle = '#3a3248'; x.beginPath(); x.ellipse(sx + d * 26 * s, sy - 4 * s, 8 * s, 7 * s, 0, 0, 6.283); x.fill();
     x.fillRect(sx - 14 * s, sy + 10 * s, 3 * s, 12 * s); x.fillRect(sx + 10 * s, sy + 10 * s, 3 * s, 12 * s); const p = poly([[sx - 26 * s, sy - 15 * s], [sx + 26 * s, sy - 15 * s], [sx + 26 * s, sy + 15 * s], [sx - 26 * s, sy + 15 * s]]); hatch(x, p, '#f3e6c8', r, 40, -1, 8 * s, 2, .5); }
@@ -98,7 +98,7 @@
   };
   window.partDavid = function (ctx, t) {
     if (!A) init();
-    const k = clamp((t - 43.4) / 7.8), z = 1 + .06 * eio(k), px = 40 * eio(k);
+    const k = clamp((t - 43.4) / 7.8), z = 1 + .08 * eio(k), px = 22 * eio(k);   /* round 3: the pan stays inside the zoom's margin (the edges showed) */
     ctx.save(); ctx.translate(W / 2, H * .62); ctx.scale(z, z); ctx.translate(-W / 2 - px, -H * .62); ctx.drawImage(D.art, 0, 0);
     W3.bloom(ctx, D.sun[0], D.sun[1], [255, 214, 150], .6 * (.92 + .08 * Math.sin(t)), { r: V ? 240 : 200, streak: .7 });
     const pts = []; for (let i = 0; i <= 40; i++) { const u = i / 40, xx = -40 + u * (W + 80); pts.push([xx, D.crest(xx) - (V ? 300 : 230)]); } thread2D(ctx, pts, clamp((t - 43.8) / 6), .9);   /* round 3: along the far hills, above the boy (it ran through him) */

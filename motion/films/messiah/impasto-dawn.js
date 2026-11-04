@@ -14,7 +14,7 @@
     crest = x => hz + (V ? 120 : 90) - (V ? 130 : 96) * Math.exp(-((x - hx) ** 2) / ((V ? 280 : 360) ** 2));
     // the grey world: an overcast sky in values, the far land, the hill and the cross black
     grey = canvas(W, H); { const g = grey.getContext('2d'), gr = g.createLinearGradient(0, 0, 0, hz); gr.addColorStop(0, '#2a2a2a'); gr.addColorStop(.7, '#6a6a6a'); gr.addColorStop(1, '#8a8a8a'); g.fillStyle = gr; g.fillRect(0, 0, W, H);
-      hillLayer(g, hz + 10, V ? 50 : 40, .005, 5, '#3a3a3a'); hill(g, '#0e0e0e'); }
+      hillLayer(g, hz + 10, V ? 50 : 40, .005, 5, '#3a3a3a'); hill(g, '#232323'); }   /* round 3: dim, not black */
     // clouds: a tileable band of fbm, drifting (values only)
     clouds = canvas(W >> 1, H >> 2); { const g = clouds.getContext('2d'), im = g.createImageData(clouds.width, clouds.height), cw = clouds.width, ch = clouds.height;
       for (let y = 0; y < ch; y++) for (let x = 0; x < cw; x++) { const u = x / cw, v = y / ch, n = lerp(fbm(u * 5, v * 2.2 + 3, 5), fbm(u * 5 - 5, v * 2.2 + 3, 5), u), a = clamp((n - .44) * 2.4) * (1 - v * .35), i = (y * cw + x) * 4;   // horizontal masses, tileable across x
@@ -30,7 +30,7 @@
         g.strokeStyle = 'rgba(255,214,150,.85)'; g.lineWidth = 3; g.strokeRect(cxp - 6 * s, cyp - 120 * s, 12 * s, 122 * s); g.strokeRect(cxp - 38 * s, cyp - 96 * s, 76 * s, 10 * s); }
       // round 3 (look review: "장사 지낸 바 되셨다가 … 다시 살아나사 — no tomb"): in the slope right of the cross the tomb, its stone
       // rolled aside, light coming out of the opening (the first film's resurrection tomb)
-      { const tx = hx + W * (V ? .3 : .26), ty = crest(tx) + (V ? 70 : 54), s = V ? 1.3 : 1.1;
+      { const tx = hx + W * (V ? .3 : .26), ty = crest(tx) + (V ? 90 : 70), s = V ? 1.9 : 1.6;   /* larger: it must read as the empty tomb */
         g.fillStyle = 'rgb(120,98,80)'; g.beginPath(); g.ellipse(tx, ty - 10 * s, 120 * s, 70 * s, 0, Math.PI, 0); g.fill();
         g.fillStyle = 'rgb(255,232,180)'; g.beginPath(); g.moveTo(tx - 34 * s, ty); g.lineTo(tx - 34 * s, ty - 40 * s); g.arc(tx, ty - 40 * s, 34 * s, Math.PI, 0); g.lineTo(tx + 34 * s, ty); g.closePath(); g.fill();
         const gl = g.createRadialGradient(tx, ty - 30 * s, 0, tx, ty - 30 * s, 150 * s); gl.addColorStop(0, 'rgba(255,236,190,.7)'); gl.addColorStop(1, 'rgba(255,220,160,0)'); g.fillStyle = gl; g.fillRect(tx - 150 * s, ty - 180 * s, 300 * s, 300 * s);
@@ -51,7 +51,7 @@
     // the grey world, moving: clouds drift over the sky, the gate flickers
     ctx.drawImage(grey, 0, 0);
     { const off = (t * 22) % W; ctx.save(); ctx.globalAlpha = .85; ctx.beginPath(); ctx.rect(0, 0, W, hz + 20); ctx.clip(); for (const o of [-W, 0]) ctx.drawImage(clouds, o + off, -H * .04, W, hz * 1.0); ctx.restore(); }
-    hill(ctx, '#0e0e0e');
+    hill(ctx, '#232323');
     // the repainting: knife strokes outward from the sun reveal the colour painting
     if (rep > 0) { const m = mask.getContext('2d'); m.setTransform(1, 0, 0, 1, 0, 0); m.globalCompositeOperation = 'source-over'; m.clearRect(0, 0, W, H); m.fillStyle = '#fff'; m.lineCap = 'round';
       const n = Math.floor(strokes.length * eo(rep)); for (let i = 0; i < n; i++) { const s = strokes[i]; m.save(); m.translate(s.x, s.y); m.rotate(s.a); m.beginPath(); m.ellipse(0, 0, s.l / 2, s.w / 2, 0, 0, 6.283); m.fill(); m.restore(); }

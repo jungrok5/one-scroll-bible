@@ -102,7 +102,7 @@ let FLY = null;
 function buildFly() {
   const tw = RD.xr(RD.BZ) + 30, th = rdH(tw, RD.BZ);
   const K = (t, z, up, side) => { const x = RD.xr(z) + side; return [t, x, rdH(x, z) + up, z, tw, th + 14, RD.BZ, 1300, 1800]; };
-  FLY = { cam: W3.cam([K(0, 330, 230, -80), K(8, 860, 120, -40), K(16, 1200, 60, -20), K(21, 1280, 46, -16)]),
+  FLY = { cam: W3.cam([K(0, 260, 240, -84), K(3, 520, 180, -64), K(8, 860, 120, -40), K(16, 1200, 60, -20), K(21, 1280, 46, -16)]),
     light: W3.light([[0, 40, -40, .5, [150, 170, 226], [24, 30, 56], [6, 10, 30], [44, 56, 102], [120, 140, 204], [26, 32, 60], 1300, 1], [21, 40, -40, .5, [150, 170, 226], [24, 30, 56], [6, 10, 30], [44, 56, 102], [120, 140, 204], [26, 32, 60], 1300, 1]]),
     town: [tw, th + 6, RD.BZ] };
 }
@@ -408,7 +408,7 @@ function partRome(ctx, t) {
 // =====================================================================================================================
 // the timeline (film seconds = the script's clock); scenes dissolve into each other over their overlap
 const SCENES = [
-  [0, 21.2, (c, t) => { partFlight(c, t); const k = ss(15.8, 17, t); if (k > 0) { c.fillStyle = `rgba(6,6,12,${.74 * k})`; c.fillRect(0, 0, W, H); } }],
+  [0, 21.2, (c, t) => { partFlight(c, t); const k = ss(15.8, 17, t); if (k > 0) { c.fillStyle = `rgba(6,6,12,${.4 * k})`; c.fillRect(0, 0, W, H); } }],
   [21.0, 37.2, partEden], [37.0, 43.6, partAbraham], [43.4, 51.2, partDavid], [51.0, 70.6, partNarrow],
   [70.4, 76.8, partRome], [76.6, 95.2, partJourney],
   [95.0, 104.8, partStable], [104.6, 113.8, partShepherds], [113.6, 137.2, partPair],

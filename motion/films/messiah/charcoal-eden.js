@@ -46,6 +46,14 @@
     // leaves: rubbed clusters at the twig ends (a garden tree, not a bare one)
     const r = rng(23); TREE.filter(b => b.d >= 4).forEach(b => { const [ex, ey] = b.pts[b.pts.length - 1]; C.blob(x, ex, ey, (30 + 30 * r()) * SC, (18 + 16 * r()) * SC, .55, r() * 3); });
     C.blob(x, TX + 24 * SC, TY + 8 * SC, 110 * SC, 18 * SC, .7);
+    // round 3 (look review: "a tree alone — no serpent, no woman: what is Genesis 3 here?"): the serpent coiled up the trunk, and
+    // small on the hill to the left the man and the woman walking out of the garden, their backs to us (no faces, no detail)
+    { const tw = TREE[0].w * .62, pts = []; for (let i = 0; i <= 44; i++) { const u = i / 44; pts.push([TX + Math.sin(u * Math.PI * 3.4 + .4) * tw * (1 - .25 * u), TY - 6 * SC - u * 300 * SC]); }
+      C.sweep(x, pts, 11 * SC, .92, 777); C.vine(x, pts.map(([a, b]) => [a - 2 * SC, b - 2 * SC]), 2, .5, 778, '#fff', .2);
+      const [hx, hy] = pts[pts.length - 1]; C.blob(x, hx + 12 * SC, hy - 6 * SC, 16 * SC, 10 * SC, .95, .3); }
+    for (const [fx, h, lean] of [[.17, 104, -.06], [.215, 96, -.03]]) { const cx = W * fx, base = ridgeY(cx, ...HILL) + 4 * SC, hh = h * SC, pts = [[cx - .2 * hh, base], [cx - .13 * hh + lean * hh, base - .6 * hh], [cx - .1 * hh + lean * hh, base - .8 * hh]];
+      for (let i = 0; i <= 10; i++) { const a = Math.PI + i / 10 * Math.PI; pts.push([cx + lean * hh * 1.2 + Math.cos(a) * .1 * hh, base - .9 * hh + Math.sin(a) * .1 * hh]); }
+      pts.push([cx + .1 * hh + lean * hh, base - .8 * hh], [cx + .14 * hh + lean * hh, base - .6 * hh], [cx + .2 * hh, base]); C.tone(x, pts, .9); }
     return c;
   }
   function buildFG() {
@@ -79,7 +87,7 @@
     const bo = C.boil(t), jr = rng(bo * 7 + 3);
     C.layer(x, l => { for (const sd of [-1, 1]) { const reach = s.threat * (W * .5 - 150 * SC), pts = [];
       for (let i = 0; i <= 48; i++) { const y = lerp(H * .12, H * 1.02, i / 48), k = Math.sin(i / 48 * Math.PI);
-        const d = reach * (.5 + .5 * k) + (Pilot.fbm(i * .22, sd * 3 + t * .25, 3) - .5) * 260 * SC * s.threat + (jr() - .5) * 8 * SC; pts.push([sd < 0 ? d : W - d, y]); }
+        const d = reach * (.35 + .65 * k) + (Pilot.fbm(i * .45, sd * 3 + t * .25, 3) - .5) * 460 * SC * s.threat + Math.sin(i * .7 + sd + t * .8) * 70 * SC * s.threat + (jr() - .5) * 8 * SC;   /* round 3: a ragged, rubbed edge — no straight vertical (look review r2) */ pts.push([sd < 0 ? d : W - d, y]); }
       C.poly(l, pts.concat(sd < 0 ? [[-80, H + 80], [-80, -80]] : [[W + 80, H + 80], [W + 80, -80]])); l.fillStyle = '#000'; l.fill();
       for (let i = 0; i < 16; i++) { const p = pts[1 + i * 3]; C.blob(l, p[0] + sd * -30 * SC, p[1], (90 + 60 * jr()) * SC, (60 + 40 * jr()) * SC, .55, i, C.smudge); } } }, { blur: 20, alpha: .84 });   /* round 3: a rubbed charcoal edge (blur 7 read as a broken frame) */
   }
@@ -97,7 +105,7 @@
     C.applyCam(x); C.drawSheet(x, plate);
     C.toneAll(x, s.night);
     C.applyCam(x); drawLight(x, s);
-    if (s.point > 0) { C.applyCam(x); C.blob(x, PT[0], PT[1], 90 * SC * (.6 + .4 * s.point), 50 * SC * (.6 + .4 * s.point), .8 * s.point, 0, C.smudgeW); }   // lifted out of the dark
+    if (s.point > 0) { C.applyCam(x); C.blob(x, PT[0], PT[1], 150 * SC * (.6 + .4 * s.point), 80 * SC * (.6 + .4 * s.point), .85 * s.point, 0, C.smudgeW); }   /* round 3: the point larger */   // lifted out of the dark
     C.applyCam(x); C.drawSheet(x, subj);
     drawThreat(x, s, t);
     C.applyCam(x); drawGhost(x, s, t);
@@ -107,7 +115,7 @@
     C.develop(ctx);
     // after develop: the warm point and the thread of the promise (the film's gold)
     ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0);
-    if (s.point > 0) { const [px, py] = C.toScr(PT); W3.bloom(ctx, px, py, [255, 210, 130], .55 * s.point * (.88 + .12 * Math.sin(t * 2)), { r: 80, streak: .12 }); ctx.fillStyle = `rgba(255,236,190,${s.point})`; ctx.beginPath(); ctx.arc(px, py, 4, 0, 6.283); ctx.fill(); }
+    if (s.point > 0) { const [px, py] = C.toScr(PT); W3.bloom(ctx, px, py, [255, 210, 130], .75 * s.point * (.88 + .12 * Math.sin(t * 2)), { r: 130, streak: .12 }); ctx.fillStyle = `rgba(255,236,190,${s.point})`; ctx.beginPath(); ctx.arc(px, py, 6, 0, 6.283); ctx.fill(); }
     if (s.rise > 0) { const n = Math.max(2, Math.round(THREAD.length * s.rise)), pts = THREAD.slice(0, n).map(C.toScr);
       C.glowLine(ctx, pts, 1, 950, { w: [12, 5, 2], al: [.12, .35, .95], col: C.WARM, off: [0, 1, 2] });
       const [hx, hy] = pts[pts.length - 1]; if (s.rise < 1) W3.bloom(ctx, hx, hy, [255, 214, 140], .7, { r: 60, streak: .12 }); }

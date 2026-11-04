@@ -10,12 +10,15 @@
 //   node motion/youtube/yt-api.mjs privacy public|private|unlisted <id…>  (owner's OK first) · delete <id…> [--yes] (owner's OK, irreversible)
 //   node motion/youtube/yt-api.mjs upload <lang> film|<n…> [--publish-at ISO] [--dry] → videos.insert from the upload sheet
 //        (locked private until the API audit passes — motion/youtube/API-AUDIT.md)
+//   node motion/youtube/yt-api.mjs film-desc <film> <key> <videoId> [--dry] → rewrite one video's title/description/tags
+//   node motion/youtube/yt-api.mjs strip-credit [--dry] [--max N] → drop the tools credit line from every video (credit.mjs)
 // Why captions: the film has no speech, so YouTube makes no captions; its text is burned into the picture, which search
 // cannot read. A caption track in the film's language makes those lines searchable (and lets viewers turn on auto-translate).
 import { readFileSync, existsSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { homedir } from 'node:os';
 import { fileURLToPath } from 'node:url';
+import { dropCredit } from './credit.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url)), M = join(HERE, '..');
 // an API error (quota, permission) is one readable line, not a stack trace
@@ -300,4 +303,27 @@ if (cmd === 'whoami') {
   console.log(`${film} ${key} ${id}: "${cur.snippet.title}" → "${f.title}" · description ${cur.snippet.description.length} → ${f.description.length} chars`); if (rest.includes('--dry')) { writeFileSync(join(M, 'out', `desc-live-${id}.txt`), cur.snippet.description); console.log('  live description → motion/out/desc-live-' + id + '.txt'); process.exit(0); }
   await api('videos?part=snippet', { method: 'PUT', body: JSON.stringify({ id, snippet: { ...cur.snippet, title: f.title, description: f.description, tags: f.tags || cur.snippet.tags, categoryId: cur.snippet.categoryId || '27' } }) });
   console.log('  saved');
+} else if (cmd === 'strip-credit') {
+  // strip-credit [--dry] [--max N]: drop the tools credit line (credit.mjs) from every video on this channel (YT_AS=GLOBAL for
+  // the international one) — its description and every localized description; title, tags, privacy and schedule stay.
+  // Listing costs ~1 unit per 50 videos, each changed video 50 → at most --max updates a run (default 120; 10k/day shared
+  // with the daily routine). Run again the next day: videos already clean are skipped. --dry writes every removed sentence
+  // to motion/out/strip-credit-<channel>.txt to read before the real run.
+  const dry = rest.includes('--dry'), mi = rest.indexOf('--max'), max = mi >= 0 ? +rest[mi + 1] : 120;
+  const chn = (await api('channels?part=contentDetails,snippet&mine=true')).items[0], ids = []; let pt = '';
+  do { const p = await api(`playlistItems?part=contentDetails&maxResults=50&playlistId=${chn.contentDetails.relatedPlaylists.uploads}${pt ? '&pageToken=' + pt : ''}`);
+    ids.push(...p.items.map(i => i.contentDetails.videoId)); pt = p.nextPageToken; } while (pt);
+  const todo = [], log = [];
+  for (let i = 0; i < ids.length; i += 50) for (const x of (await api(`videos?part=snippet,localizations&id=${ids.slice(i, i + 50).join(',')}`)).items) {
+    const d = dropCredit(x.snippet.description), loc = x.localizations || {}, nl = {}; let lc = false;
+    for (const [k, o] of Object.entries(loc)) { const ld = dropCredit(o.description || ''); nl[k] = { ...o, description: ld }; if (ld !== (o.description || '')) lc = true; }
+    if (d === x.snippet.description && !lc) continue; todo.push({ x, d, nl, lc });
+    const cut = (a, b) => a.split('\n').filter(l => /ElevenLabs/.test(l)).map(l => '  - ' + l.slice(-160)).concat(b.split('\n').filter(l => /ElevenLabs/.test(l)).map(l => '  ! still: ' + l));
+    log.push(`${x.id} ${x.snippet.title}`, ...cut(x.snippet.description, d), ...Object.keys(loc).filter(k => nl[k].description !== (loc[k].description || '')).map(k => `  [${k}] ${(loc[k].description.match(/[^\n]*ElevenLabs[^\n]*/) || [''])[0].slice(-120)}`)); }
+  console.log(`${chn.snippet.title}: ${ids.length} videos, ${todo.length} still carry the credit line`);
+  if (dry) { const f = join(M, 'out', `strip-credit-${chn.id}.txt`); writeFileSync(f, log.join('\n') + '\n'); console.log('  removed sentences → ' + f); process.exit(0); }
+  let n = 0; for (const { x, d, nl, lc } of todo.slice(0, max)) {
+    await api(`videos?part=snippet${lc ? ',localizations' : ''}`, { method: 'PUT', body: JSON.stringify({ id: x.id, snippet: { ...x.snippet, description: d, categoryId: x.snippet.categoryId || '27' }, ...(lc ? { localizations: nl } : {}) }) });
+    n++; }
+  console.log(`  updated ${n}${todo.length > n ? ` — ${todo.length - n} left, run again (tomorrow if the quota is spent)` : ''}`);
 } else console.log('usage: node motion/youtube/yt-api.mjs whoami | captions [<lang…>] [--dry] | caption-file <videoId> <file> [lang] | film-schedule <film> <v|h> <videoId> <ISO> | film-desc <film> <key> <videoId> | status [<lang…>] | stats [<lang…>] [--from D] [--to D] | playlist-add <playlistId> <videoId…> | upload <lang> film|<n…> [--publish-at ISO] [--dry]');

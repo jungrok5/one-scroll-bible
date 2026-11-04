@@ -1,5 +1,5 @@
 {
- "note": "International channel (@bibleinonescroll), films README §4: ONE English-text video per orientation; Spanish and Brazilian Portuguese ride on it as audio tracks (Studio → Languages → Audio) + captions + localized title/description. Every sentence here is a reviewed one — the title (T1), narration lines 03 + 07b, the end card (E1), on-screen labels as chapters, the book names of each language pack, the Scripture notice of each pack's legal line — except the AI line, which adds 'the narration voice' to the reviewed 'scenes drawn in code; music and sound effects were made with ElevenLabs' (native review: motion/reviews/film-silence400-yt.md).",
+ "note": "International channel (@bibleinonescroll), films README §4: ONE English-text video per orientation; Spanish and Brazilian Portuguese ride on it as audio tracks (Studio → Languages → Audio) + captions + localized title/description. Every sentence here is a reviewed one — the title (T1), narration lines 03 + 07b, the end card (E1), on-screen labels as chapters, the book names of each language pack, the Scripture notice of each pack's legal line (native review: motion/reviews/film-silence400-yt.md). No tools credit line (dropped 2026-11-05, motion/youtube/credit.mjs).",
  "default_language": "en",
  "audio_tracks": {
   "es": "out/silence400-es-narr.mp3",
@@ -60,7 +60,6 @@
    "read": "📖 Read this story in your Bible\nMalachi 4:5–6 · Habakkuk 2:3 · Daniel 2 · Luke 1:5–17 · Galatians 4:4 · Luke 19:10 · Luke 4:16–21 · 1 Corinthians 15:3–4 · Acts 13:14–17",
    "site": "one-scroll-bible.com",
    "legal": "Scripture quotations are from the ESV® Bible (The Holy Bible, English Standard Version®), © 2001 by Crossway, a publishing ministry of Good News Publishers. ESV Text Edition: 2025. The ESV text may not be quoted in any publication made available to the public by a Creative Commons license. The ESV may not be translated in whole or in part into any other language. Used by permission. All rights reserved.",
-   "ai": "The scenes are animated in code; the narration voice, music and sound effects were generated with ElevenLabs (AI).",
    "chapters": [
     "0:00 The last book of the Old Testament · Malachi",
     "0:30 Daniel 2 · King Nebuchadnezzar’s dream",
@@ -78,7 +77,6 @@
    "read": "📖 Lee esta historia en tu Biblia\nMalaquías 4:5–6 · Habacuc 2:3 · Daniel 2 · Lucas 1:5–17 · Gálatas 4:4 · Lucas 19:10 · Lucas 4:16–21 · 1 Corintios 15:3–4 · Hechos 13:14–17",
    "site": "one-scroll-bible.com",
    "legal": "El texto bíblico ha sido tomado de la versión Reina-Valera © 1960 Sociedades Bíblicas en América Latina; © renovado 1988 Sociedades Bíblicas Unidas. Utilizado con permiso. Reina-Valera 1960® es una marca registrada de Sociedades Bíblicas Unidas, y se puede usar solamente bajo licencia.",
-   "ai": "Las escenas están dibujadas con código; la voz de la narración, la música y los efectos de sonido se crearon con ElevenLabs (IA).",
    "chapters": [
     "0:00 El último libro del Antiguo Testamento · Malaquías",
     "0:30 Daniel 2 · El sueño del rey Nabucodonosor",
@@ -96,7 +94,6 @@
    "read": "📖 Leia esta história na sua Bíblia\nMalaquias 4:5–6 · Habacuque 2:3 · Daniel 2 · Lucas 1:5–17 · Gálatas 4:4 · Lucas 19:10 · Lucas 4:16–21 · 1 Coríntios 15:3–4 · Atos 13:14–17",
    "site": "one-scroll-bible.com",
    "legal": "Citações bíblicas: Almeida Revista e Corrigida (ARC) — citadas com indicação da fonte; quaisquer direitos sobre essa tradução permanecem com a editora dessa tradução.",
-   "ai": "As cenas são desenhadas com código; a voz da narração, a música e os efeitos sonoros foram criados com o ElevenLabs (IA).",
    "chapters": [
     "0:00 O último livro do Antigo Testamento · Malaquias",
     "0:30 Daniel 2 · O sonho do rei Nabucodonosor",

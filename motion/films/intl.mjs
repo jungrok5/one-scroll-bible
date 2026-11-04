@@ -10,12 +10,13 @@ import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { homedir } from 'node:os';
+import { dropCredit } from '../youtube/credit.mjs';   // no tools credit in descriptions (owner 2026-11-05)
 const HERE = dirname(fileURLToPath(import.meta.url)), M = join(HERE, '..'), args = process.argv.slice(2), dry = args.includes('--dry');
 const [cmd, film, ori, vid] = args.filter(a => !a.startsWith('--'));
 const Y = JSON.parse(readFileSync(join(HERE, film, 'youtube-intl.json'), 'utf8')), D = Y.default_language;
 const SITE = 'https://one-scroll-bible.com/';
 const desc = (L, o) => { const t = Y.text[L], link = `${SITE}?lang=${L}&utm_source=youtube&utm_medium=${o === 'v' ? 'shorts' : 'video'}&utm_campaign=film_${film}`;
-  return [t.intro, t.read, `${t.site}\n${link}`, `${t.legal}\n${t.ai}`, ...(o === 'h' ? [t.chapters.join('\n')] : [])].join('\n\n'); };
+  return [t.intro, t.read, `${t.site}\n${link}`, dropCredit(t.legal), ...(o === 'h' ? [t.chapters.join('\n')] : [])].join('\n\n'); };
 
 if (cmd === 'entry') {
   const e = { path: Y[ori].path, file: Y[ori].file, title: Y.text[D].title, description: desc(D, ori), tags: Y.tags[D] };

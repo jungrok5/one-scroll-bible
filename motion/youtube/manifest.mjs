@@ -12,13 +12,14 @@
 import { readFileSync, writeFileSync, existsSync, readdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { dropCredit } from './credit.mjs';   // no tools credit in descriptions (owner 2026-11-05)
 const HERE = dirname(fileURLToPath(import.meta.url)), M = join(HERE, '..');
 const ORDER = ['opening', 'creation', 'fall', 'patriarch', 'exodus', 'wilderness', 'judges', 'kingdom', 'exile', 'return', 'silence',
   'advent', 'cross', 'rise', 'church', 'renewal', 'mirror', 'gospel', 'evidence', 'ship', 'invite'];
 const SITE = 'https://one-scroll-bible.com', RELEASE = process.env.RELEASE || 'youtube-v1', REPO = 'jungrok5/one-scroll-bible';
 const KO_UI = { brand: '한눈에 보는 성경 이야기', sub: '창조에서 새 하늘과 새 땅까지 — 장면마다 다른 화풍으로 그린 21개 장면이 하나의 줄거리로 이어집니다.',
   shareText: '창조에서 새 하늘과 새 땅까지, 성경 이야기를 14분 영상으로',
-  legal: '성경 인용: 「성경전서 개역개정판」 © 대한성서공회. 저작권은 대한성서공회에 있으며, 출처를 밝혀 인용했습니다. 장면의 그림은 모두 코드로 그렸고, 음악·효과음은 ElevenLabs로 만들었습니다.' };
+  legal: '성경 인용: 「성경전서 개역개정판」 © 대한성서공회. 저작권은 대한성서공회에 있으며, 출처를 밝혀 인용했습니다.' };
 const HOOK = {   // scene → Korean key(s), exactly as in motion/pilot/i18n/_ko/<scene>.json
   opening: ['성경은 결국 한 편의 이야기입니다'], creation: ['“하나님이 이르시되 빛이 있으라”'], fall: ['“네가 어디 있느냐”'],
   patriarch: ['“하늘을 우러러 뭇별을 셀 수 있나 보라”'], exodus: ['“내 백성을 보내라”'], wilderness: ['약속의 땅 문 앞에 선 백성, 이제 들어갑니다…'],
@@ -78,7 +79,7 @@ for (const L of LANGS) {
   const link = home + utm('video', `film_${L}`);
   // the Korean film and its narrated cut point at each other (ids from uploaded.json once both are up)
   const UPL = read(join(HERE, 'uploaded.json')).film || {}, cross = L === 'ko' && UPL['ko-narr']?.id ? [`🔊 목소리로 듣는 해설판: https://youtu.be/${UPL['ko-narr'].id}`] : [];
-  const description = [X.blurb || blurb(ui.sub), '', `${X.watch}: ${link}`, ...cross, '', ...chapters.map(c => `${c.time} ${c.title}`), '', strip(ui.legal), '', hashtags(3)].join('\n');
+  const description = [X.blurb || blurb(ui.sub), '', `${X.watch}: ${link}`, ...cross, '', ...chapters.map(c => `${c.time} ${c.title}`), '', dropCredit(strip(ui.legal)), '', hashtags(3)].join('\n');
   const tags = [ui.brand, ...(X.tags || []), ...ch]; while (tags.join(',').length > 480) tags.pop();   // YouTube: 500 characters in all
   const film = { file: `film-${L}.mp4`, local: `motion/out/release/film-${L}.mp4`, title: ui.shareText.slice(0, 100), description, link, tags, language: L,
     thumbnail: `motion/youtube/thumbs/${L}/A-exodus.jpg`, thumbnail_alternatives: ['B-cross', 'C-split', 'D-earth'].map(v => `motion/youtube/thumbs/${L}/${v}.jpg`),
@@ -89,14 +90,14 @@ for (const L of LANGS) {
     pinned: { text: faqHeading(L), link: home + utm('video', `film_${L}`, 'pinned') + '#faq' } };
   if (!film.pinned.text) problems.push(`${L}: no faq.h in the site pack`);
   // Korean narrated cut (motion/narration: every on-screen line read aloud, for viewers who find the text hard to read) —
-  // same picture, chapters and thumbnail; its own title, link tag and an AI-voice note
+  // same picture, chapters and thumbnail; its own title and link tag
   const narr = L === 'ko' && (() => {
     const nlink = home + utm('video', 'film_ko_narr');
     return { ...film, file: 'film-ko-narr.mp4', local: 'motion/out/release/film-ko-narr.mp4', title: `${ui.shareText} (목소리 해설판)`, link: nlink,
       // A/B test = the film's A·B·D with a "🔊 목소리 해설판" badge (scratch filter: drawbox + drawtext, both vertically centred)
       thumbnail: 'motion/youtube/thumbs/ko/narr-A-exodus.jpg', thumbnail_alternatives: ['B-cross', 'D-earth'].map(v => `motion/youtube/thumbs/ko/narr-${v}.jpg`),
       description: ['화면의 말씀과 설명을 목소리로 읽어 드리는 해설판입니다. 글씨가 작거나 읽기 어려우신 분도 편안히 들으실 수 있습니다.', '',
-        `${X.watch}: ${nlink}`, ...(UPL.ko?.id ? [`🎵 해설 없이 음악으로만 보기: https://youtu.be/${UPL.ko.id}`] : []), '', ...chapters.map(c => `${c.time} ${c.title}`), '', strip(ui.legal) + ' 목소리는 AI(ElevenLabs)로 만들었습니다.', '', hashtags(3)].join('\n'),
+        `${X.watch}: ${nlink}`, ...(UPL.ko?.id ? [`🎵 해설 없이 음악으로만 보기: https://youtu.be/${UPL.ko.id}`] : []), '', ...chapters.map(c => `${c.time} ${c.title}`), '', dropCredit(strip(ui.legal)), '', hashtags(3)].join('\n'),
       tags: (() => { const t = [ui.brand, '내레이션', '성경 해설', ...(X.tags || []), ...ch]; while (t.join(',').length > 480) t.pop(); return t; })(),
       captions: {}, pinned: { ...film.pinned, link: home + utm('video', 'film_ko_narr', 'pinned') + '#faq' } };
   })();

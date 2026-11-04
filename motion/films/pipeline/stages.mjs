@@ -128,7 +128,8 @@ const G = {
     const t = readFileSync(f, 'utf8'), why = []; for (const k of ['제목', '설명', '태그', '고정 댓글']) if (!t.includes(k)) why.push(`upload.md에 '${k}' 칸이 없다`);
     const y = J(join(c.d, 'youtube.json')) || {}, items = Array.isArray(y) ? y : (y.videos || Object.values(y).filter(v => v && typeof v === 'object'));
     for (const v of items) { if (v.title && v.title.length > T.upload.title_max) why.push(`제목 ${v.title.length}자 > ${T.upload.title_max}`);
-      const first = (v.description || '').split('\n')[0]; if (first && first.length > T.upload.first_line_max) why.push(`설명 첫 줄 ${first.length}자 > ${T.upload.first_line_max}(단톡방 미리보기)`); }
+      const first = (v.description || '').split('\n')[0]; if (first && first.length > T.upload.first_line_max) why.push(`설명 첫 줄 ${first.length}자 > ${T.upload.first_line_max}(단톡방 미리보기)`);
+      if (/ElevenLabs/.test(v.description || '')) why.push(`${v.title || ''}: 설명에 도구 크레딧 줄 — 빼기로 함(motion/youtube/credit.mjs)`); }
     return why.length ? { ok: false, why } : pass(); },
   publish: c => { const u = c.up; if (!u?.h?.id || !u?.v?.id) return fail('uploaded.json에 가로·세로 id 없음');
     const why = []; for (const k of ['h', 'v']) { const at = u[k].publish_at; if (!at) { why.push(`${k}: publish_at 없음`); continue; }

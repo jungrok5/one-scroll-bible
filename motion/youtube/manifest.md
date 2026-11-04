@@ -34,7 +34,7 @@ Videos: release **youtube-v1** (`gh release download youtube-v1 -R jungrok5/one-
 12:25 착하게 살면?
 13:23 초대
 
-성경 인용: 「성경전서 개역개정판」 © 대한성서공회. 저작권은 대한성서공회에 있으며, 출처를 밝혀 인용했습니다. 장면의 그림은 모두 코드로 그렸고, 음악·효과음은 ElevenLabs로 만들었습니다.
+성경 인용: 「성경전서 개역개정판」 © 대한성서공회. 저작권은 대한성서공회에 있으며, 출처를 밝혀 인용했습니다.
 
 #성경 #성경이야기 #성경개관
 ```
@@ -94,7 +94,7 @@ Read the whole story slowly: https://one-scroll-bible.com/en/?utm_source=youtube
 12:25 Just Live a Good Life?
 13:23 The Invitation
 
-Scripture quotations are from the ESV® Bible (The Holy Bible, English Standard Version®), © 2001 by Crossway, a publishing ministry of Good News Publishers. ESV Text Edition: 2025. The ESV text may not be quoted in any publication made available to the public by a Creative Commons license. The ESV may not be translated in whole or in part into any other language. Used by permission. All rights reserved. Accordingly, these English pages are not offered under any Creative Commons licence — neither the ESV quotations nor our own English text. (Our own writing in the site’s other languages remains CC BY 4.0; Scripture quotations there are likewise excluded.) The scenes are drawn in code; music and sound effects were made with ElevenLabs.
+Scripture quotations are from the ESV® Bible (The Holy Bible, English Standard Version®), © 2001 by Crossway, a publishing ministry of Good News Publishers. ESV Text Edition: 2025. The ESV text may not be quoted in any publication made available to the public by a Creative Commons license. The ESV may not be translated in whole or in part into any other language. Used by permission. All rights reserved. Accordingly, these English pages are not offered under any Creative Commons licence — neither the ESV quotations nor our own English text. (Our own writing in the site’s other languages remains CC BY 4.0; Scripture quotations there are likewise excluded.)
 
 #Bible #Biblestory #Bibleoverview
 ```
@@ -154,7 +154,7 @@ Scripture quotations are from the ESV® Bible (The Holy Bible, English Standard 
 12:25 做好人就够了吗？
 13:23 邀请
 
-经文引自《和合本》，已注明出处；该译本的一切权利仍归其出版者所有。本站的 CC BY 4.0 许可仅适用于本站自己的文字，不包括所引用的经文。画面全部以代码绘制；音乐与音效由 ElevenLabs 制作。
+经文引自《和合本》，已注明出处；该译本的一切权利仍归其出版者所有。本站的 CC BY 4.0 许可仅适用于本站自己的文字，不包括所引用的经文。
 
 #圣经 #圣经故事 #圣经概览
 ```
@@ -214,7 +214,7 @@ Scripture quotations are from the ESV® Bible (The Holy Bible, English Standard 
 12:25 做好人就夠了嗎？
 13:23 邀請
 
-經文引自《和合本》，已註明出處；該譯本的一切權利仍歸其出版者所有。本站的 CC BY 4.0 授權僅適用於本站自己撰寫的文字，不包括所引用的經文。畫面全部以程式碼繪製；音樂與音效由 ElevenLabs 製作。
+經文引自《和合本》，已註明出處；該譯本的一切權利仍歸其出版者所有。本站的 CC BY 4.0 授權僅適用於本站自己撰寫的文字，不包括所引用的經文。
 
 #聖經 #聖經故事 #聖經概覽
 ```
@@ -274,7 +274,7 @@ Scripture quotations are from the ESV® Bible (The Holy Bible, English Standard 
 12:25 善く生きれば？
 13:23 招き
 
-聖書の引用は「新共同訳」によります（出典を明記して引用しており、この翻訳の権利は発行元に帰属します）。このサイトの CC BY 4.0 ライセンスはサイト独自の文章にのみ適用され、引用した聖書本文には適用されません。場面の絵はすべてコードで描き、音楽と効果音は ElevenLabs で制作しました。
+聖書の引用は「新共同訳」によります（出典を明記して引用しており、この翻訳の権利は発行元に帰属します）。このサイトの CC BY 4.0 ライセンスはサイト独自の文章にのみ適用され、引用した聖書本文には適用されません。
 
 #聖書 #聖書の物語 #聖書概観
 ```
@@ -334,7 +334,7 @@ Lee toda la historia con calma: https://one-scroll-bible.com/es/?utm_source=yout
 12:25 ¿No basta con ser bueno?
 13:23 La invitación
 
-El texto bíblico ha sido tomado de la versión Reina-Valera © 1960 Sociedades Bíblicas en América Latina; © renovado 1988 Sociedades Bíblicas Unidas. Utilizado con permiso. Reina-Valera 1960® es una marca registrada de Sociedades Bíblicas Unidas, y se puede usar solamente bajo licencia. La licencia CC BY 4.0 del sitio se aplica únicamente a los textos escritos por este sitio — no cubre las citas bíblicas. Las escenas están dibujadas con código; la música y los efectos de sonido se crearon con ElevenLabs.
+El texto bíblico ha sido tomado de la versión Reina-Valera © 1960 Sociedades Bíblicas en América Latina; © renovado 1988 Sociedades Bíblicas Unidas. Utilizado con permiso. Reina-Valera 1960® es una marca registrada de Sociedades Bíblicas Unidas, y se puede usar solamente bajo licencia. La licencia CC BY 4.0 del sitio se aplica únicamente a los textos escritos por este sitio — no cubre las citas bíblicas.
 
 #Biblia #historiadelaBiblia #resumendelaBiblia
 ```
@@ -394,7 +394,7 @@ Leia toda a história com calma: https://one-scroll-bible.com/pt-BR/?utm_source=
 12:25 Não basta ser bom?
 13:23 O convite
 
-Citações bíblicas: Almeida — citadas com indicação da fonte; quaisquer direitos sobre essa tradução permanecem com a sua editora. A licença CC BY 4.0 do site aplica-se apenas aos textos escritos pelo próprio site — não abrange as citações bíblicas. As cenas são desenhadas com código; a música e os efeitos sonoros foram criados com o ElevenLabs.
+Citações bíblicas: Almeida — citadas com indicação da fonte; quaisquer direitos sobre essa tradução permanecem com a sua editora. A licença CC BY 4.0 do site aplica-se apenas aos textos escritos pelo próprio site — não abrange as citações bíblicas.
 
 #Bíblia #históriadaBíblia #resumodaBíblia
 ```
@@ -454,7 +454,7 @@ Lisez toute l’histoire à votre rythme: https://one-scroll-bible.com/fr/?utm_s
 12:25 Suffit-il d’être quelqu’un de bien ?
 13:23 L’invitation
 
-Citations bibliques : Louis Segond (LSG), citées avec mention de la source ; les droits éventuels sur cette traduction restent à son éditeur. La licence CC BY 4.0 du site ne s’applique qu’aux textes rédigés par ce site — elle ne couvre pas les citations bibliques. Les scènes sont dessinées par du code ; la musique et les effets sonores ont été créés avec ElevenLabs.
+Citations bibliques : Louis Segond (LSG), citées avec mention de la source ; les droits éventuels sur cette traduction restent à son éditeur. La licence CC BY 4.0 du site ne s’applique qu’aux textes rédigés par ce site — elle ne couvre pas les citations bibliques.
 
 #Bible #histoiredelaBible #résumédelaBible
 ```
@@ -514,7 +514,7 @@ Die ganze Geschichte in Ruhe lesen: https://one-scroll-bible.com/de/?utm_source=
 12:25 Genügt es, gut zu sein?
 13:23 Die Einladung
 
-Bibelzitate nach der Lutherbibel (1912), mit Quellenangabe zitiert; etwaige Rechte an dieser Übersetzung verbleiben bei ihrem Herausgeber. Die Lizenz CC BY 4.0 dieser Website gilt nur für die eigenen Texte der Website – nicht für die Bibelzitate. Die Szenen sind mit Code gezeichnet; Musik und Klangeffekte wurden mit ElevenLabs erstellt.
+Bibelzitate nach der Lutherbibel (1912), mit Quellenangabe zitiert; etwaige Rechte an dieser Übersetzung verbleiben bei ihrem Herausgeber. Die Lizenz CC BY 4.0 dieser Website gilt nur für die eigenen Texte der Website – nicht für die Bibelzitate.
 
 #Bibel #GeschichtederBibel #BibelÜberblick
 ```
@@ -574,7 +574,7 @@ Bibelzitate nach der Lutherbibel (1912), mit Quellenangabe zitiert; etwaige Rech
 12:25 Просто быть хорошим?
 13:23 Приглашение
 
-Цитаты из Священного Писания приводятся по Синодальному переводу с указанием источника; все права на этот перевод остаются за его издателем. Лицензия CC BY 4.0 этого сайта распространяется только на собственные тексты сайта и не охватывает цитаты из Писания. Сцены нарисованы программным кодом; музыка и звуковые эффекты созданы с помощью ElevenLabs.
+Цитаты из Священного Писания приводятся по Синодальному переводу с указанием источника; все права на этот перевод остаются за его издателем. Лицензия CC BY 4.0 этого сайта распространяется только на собственные тексты сайта и не охватывает цитаты из Писания.
 
 #Библия #историяБиблии #обзорБиблии
 ```
@@ -634,7 +634,7 @@ Bibelzitate nach der Lutherbibel (1912), mit Quellenangabe zitiert; etwaige Rech
 12:25 ألا يكفي أن أكون صالحاً؟
 13:23 الدعوة
 
-الاقتباسات الكتابية من ترجمة فان دايك، مع ذكر المصدر؛ وأي حقوق في هذه الترجمة تبقى لناشرها. ترخيص CC BY 4.0 الخاص بالموقع يشمل كتابات هذا الموقع فقط ولا يشمل الاقتباسات الكتابية. رُسمت المشاهد بالبرمجة، وصُنعت الموسيقى والمؤثرات الصوتية باستخدام ElevenLabs.
+الاقتباسات الكتابية من ترجمة فان دايك، مع ذكر المصدر؛ وأي حقوق في هذه الترجمة تبقى لناشرها. ترخيص CC BY 4.0 الخاص بالموقع يشمل كتابات هذا الموقع فقط ولا يشمل الاقتباسات الكتابية.
 
 #الكتابالمقدس #قصةالكتابالمقدس #نظرةعامةعلىالكتابالمقدس
 ```
@@ -694,7 +694,7 @@ Bibelzitate nach der Lutherbibel (1912), mit Quellenangabe zitiert; etwaige Rech
 12:25 भला जीवन काफ़ी है?
 13:23 निमंत्रण
 
-बाइबल के उद्धरण हिन्दी बाइबल से हैं — स्रोत बताकर उद्धृत; उस अनुवाद पर जो भी अधिकार हैं, वे उसके प्रकाशक के ही पास रहते हैं। इस साइट का CC BY 4.0 लाइसेंस केवल साइट के अपने लेखन पर लागू होता है — बाइबल के उद्धरणों पर नहीं। दृश्य कोड से बनाए गए हैं; संगीत और ध्वनि-प्रभाव ElevenLabs से बनाए गए हैं।
+बाइबल के उद्धरण हिन्दी बाइबल से हैं — स्रोत बताकर उद्धृत; उस अनुवाद पर जो भी अधिकार हैं, वे उसके प्रकाशक के ही पास रहते हैं। इस साइट का CC BY 4.0 लाइसेंस केवल साइट के अपने लेखन पर लागू होता है — बाइबल के उद्धरणों पर नहीं।
 
 #बाइबल #बाइबलकीकहानी #बाइबलसारांश
 ```
@@ -754,7 +754,7 @@ Baca seluruh kisah perlahan: https://one-scroll-bible.com/id/?utm_source=youtube
 12:25 Cukup Menjadi Orang Baik?
 13:23 Undangan
 
-Kutipan Alkitab: Terjemahan Baru (TB) — dikutip dengan menyebutkan sumbernya; segala hak atas terjemahan tersebut tetap pada penerbitnya. Lisensi CC BY 4.0 situs ini hanya berlaku untuk tulisan situs ini sendiri — tidak mencakup kutipan Alkitab. Adegan-adegan digambar dengan kode; musik dan efek suara dibuat dengan ElevenLabs.
+Kutipan Alkitab: Terjemahan Baru (TB) — dikutip dengan menyebutkan sumbernya; segala hak atas terjemahan tersebut tetap pada penerbitnya. Lisensi CC BY 4.0 situs ini hanya berlaku untuk tulisan situs ini sendiri — tidak mencakup kutipan Alkitab.
 
 #Alkitab #kisahAlkitab #ringkasanAlkitab
 ```
@@ -814,7 +814,7 @@ Từ sáng tạo đến trời mới đất mới — 21 cảnh, mỗi cảnh đ
 12:25 Chỉ cần sống tử tế?
 13:23 Lời mời
 
-Trích dẫn Kinh Thánh: bản Truyền Thống — được trích dẫn có ghi rõ nguồn; mọi quyền (nếu có) đối với bản dịch này thuộc về nhà xuất bản. Giấy phép CC BY 4.0 của trang này chỉ áp dụng cho phần nội dung do trang tự viết — không bao gồm các câu Kinh Thánh được trích dẫn. Các cảnh được vẽ bằng mã lập trình; nhạc và hiệu ứng âm thanh được tạo bằng ElevenLabs.
+Trích dẫn Kinh Thánh: bản Truyền Thống — được trích dẫn có ghi rõ nguồn; mọi quyền (nếu có) đối với bản dịch này thuộc về nhà xuất bản. Giấy phép CC BY 4.0 của trang này chỉ áp dụng cho phần nội dung do trang tự viết — không bao gồm các câu Kinh Thánh được trích dẫn.
 
 #KinhThánh #câuchuyệnKinhThánh #tómtắtKinhThánh
 ```
@@ -874,7 +874,7 @@ Trích dẫn Kinh Thánh: bản Truyền Thống — được trích dẫn có g
 12:25 แค่เป็นคนดีก็พอ?
 13:23 คำเชิญ
 
-ข้อพระคัมภีร์ที่อ้างอิงมาจากพระคัมภีร์ฉบับไทย (อ้างอิงโดยระบุที่มา สิทธิ์ในฉบับแปลนั้นเป็นของผู้จัดพิมพ์) สัญญาอนุญาต CC BY 4.0 ของเว็บไซต์นี้ใช้กับงานเขียนของเว็บไซต์เองเท่านั้น ไม่ครอบคลุมข้อพระคัมภีร์ที่อ้างอิง ภาพในทุกฉากวาดขึ้นด้วยโค้ด ส่วนดนตรีและเสียงประกอบสร้างด้วย ElevenLabs
+ข้อพระคัมภีร์ที่อ้างอิงมาจากพระคัมภีร์ฉบับไทย (อ้างอิงโดยระบุที่มา สิทธิ์ในฉบับแปลนั้นเป็นของผู้จัดพิมพ์) สัญญาอนุญาต CC BY 4.0 ของเว็บไซต์นี้ใช้กับงานเขียนของเว็บไซต์เองเท่านั้น ไม่ครอบคลุมข้อพระคัมภีร์ที่อ้างอิง
 
 #พระคัมภีร์ #พระคัมภีร์ไบเบิล #เรื่องราวพระคัมภีร์
 ```
@@ -934,7 +934,7 @@ Basahin nang dahan-dahan ang buong kuwento: https://one-scroll-bible.com/tl/?utm
 12:25 Sapat na bang Maging Mabuti?
 13:23 Ang Paanyaya
 
-Mga sipi mula sa Bibliya: Magandang Balita Biblia (MBB) — sinipi nang may pagbanggit sa pinagmulan; ang anumang karapatan sa saling iyon ay nananatili sa tagapaglathala nito. Ang lisensyang CC BY 4.0 ng site na ito ay para lamang sa sariling mga sulat ng site — hindi nito saklaw ang mga sipi mula sa Bibliya. Ang mga eksena ay iginuhit sa pamamagitan ng code; ang musika at mga sound effect ay ginawa gamit ang ElevenLabs.
+Mga sipi mula sa Bibliya: Magandang Balita Biblia (MBB) — sinipi nang may pagbanggit sa pinagmulan; ang anumang karapatan sa saling iyon ay nananatili sa tagapaglathala nito. Ang lisensyang CC BY 4.0 ng site na ito ay para lamang sa sariling mga sulat ng site — hindi nito saklaw ang mga sipi mula sa Bibliya.
 
 #Bibliya #kuwentongBibliya #buodngBibliya
 ```
@@ -994,7 +994,7 @@ Mga sipi mula sa Bibliya: Magandang Balita Biblia (MBB) — sinipi nang may pagb
 12:25 ভালো মানুষ হলেই কি যথেষ্ট?
 13:23 আমন্ত্রণ
 
-শাস্ত্রের উদ্ধৃতি O.V. বাইবেল থেকে — উৎস উল্লেখ করে উদ্ধৃত; সেই অনুবাদের উপর যে কোনো স্বত্ব তার প্রকাশকেরই থাকে। এই সাইটের CC BY 4.0 লাইসেন্স কেবল সাইটের নিজস্ব লেখার উপর প্রযোজ্য — শাস্ত্রের উদ্ধৃতির উপর নয়। দৃশ্যগুলি কোড দিয়ে আঁকা; সংগীত ও শব্দ ElevenLabs দিয়ে তৈরি।
+শাস্ত্রের উদ্ধৃতি O.V. বাইবেল থেকে — উৎস উল্লেখ করে উদ্ধৃত; সেই অনুবাদের উপর যে কোনো স্বত্ব তার প্রকাশকেরই থাকে। এই সাইটের CC BY 4.0 লাইসেন্স কেবল সাইটের নিজস্ব লেখার উপর প্রযোজ্য — শাস্ত্রের উদ্ধৃতির উপর নয়।
 
 #বাইবেল #বাইবেলেরকাহিনি #বাইবেলেরসারসংক্ষেপ
 ```
@@ -1054,7 +1054,7 @@ Soma hadithi yote polepole: https://one-scroll-bible.com/sw/?utm_source=youtube&
 12:25 Inatosha Kuwa Mwema?
 13:23 Mwaliko
 
-Manukuu ya Maandiko: Swahili Revised Union Version Bible © Bible Society of Kenya, and Bible Society of Tanzania, 2005. Leseni ya CC BY 4.0 ya tovuti hii inahusu maandishi ya tovuti hii pekee — haihusu manukuu ya Maandiko. Matukio yamechorwa kwa msimbo; muziki na madoido ya sauti yametengenezwa kwa ElevenLabs.
+Manukuu ya Maandiko: Swahili Revised Union Version Bible © Bible Society of Kenya, and Bible Society of Tanzania, 2005. Leseni ya CC BY 4.0 ya tovuti hii inahusu maandishi ya tovuti hii pekee — haihusu manukuu ya Maandiko.
 
 #Biblia #hadithiyaBiblia #muhtasariwaBiblia
 ```
@@ -1114,7 +1114,7 @@ Manukuu ya Maandiko: Swahili Revised Union Version Bible © Bible Society of Ken
 12:25 خوب بودن کافی نیست؟
 13:23 دعوت
 
-نقل‌قول‌های کتاب‌مقدس از ترجمه قدیم است و با ذکر منبع آورده شده‌اند؛ هرگونه حقوق این ترجمه از آنِ ناشر آن است. مجوز CC BY 4.0 این سایت فقط نوشته‌های خودِ این سایت را در بر می‌گیرد و شامل نقل‌قول‌های کتاب‌مقدس نمی‌شود. صحنه‌ها با کد کشیده شده‌اند، و موسیقی و جلوه‌های صوتی با ElevenLabs ساخته شده‌اند.
+نقل‌قول‌های کتاب‌مقدس از ترجمه قدیم است و با ذکر منبع آورده شده‌اند؛ هرگونه حقوق این ترجمه از آنِ ناشر آن است. مجوز CC BY 4.0 این سایت فقط نوشته‌های خودِ این سایت را در بر می‌گیرد و شامل نقل‌قول‌های کتاب‌مقدس نمی‌شود.
 
 #کتابمقدس #داستانکتابمقدس #مرورکتابمقدس
 ```
@@ -1174,7 +1174,7 @@ Manukuu ya Maandiko: Swahili Revised Union Version Bible © Bible Society of Ken
 12:25 நல்லவராய் வாழ்ந்தால் போதாதா?
 13:23 அழைப்பு
 
-வேத மேற்கோள்கள் பரிசுத்த வேதாகமம் (O.V. BSI) இலிருந்து எடுக்கப்பட்டவை — மூலத்தைக் குறிப்பிட்டு மேற்கோள் காட்டப்பட்டுள்ளன; அந்த மொழிபெயர்ப்பின் மீதான உரிமைகள் எதுவாயினும் அதன் பதிப்பாளரிடமே உள்ளன. இந்தத் தளத்தின் CC BY 4.0 உரிமம் தளத்தின் சொந்த எழுத்துக்களுக்கு மட்டுமே பொருந்தும் — வேத மேற்கோள்களுக்கு அல்ல. காட்சிகள் நிரல் குறியீட்டால் வரையப்பட்டவை; இசையும் ஒலி விளைவுகளும் ElevenLabs மூலம் உருவாக்கப்பட்டவை.
+வேத மேற்கோள்கள் பரிசுத்த வேதாகமம் (O.V. BSI) இலிருந்து எடுக்கப்பட்டவை — மூலத்தைக் குறிப்பிட்டு மேற்கோள் காட்டப்பட்டுள்ளன; அந்த மொழிபெயர்ப்பின் மீதான உரிமைகள் எதுவாயினும் அதன் பதிப்பாளரிடமே உள்ளன. இந்தத் தளத்தின் CC BY 4.0 உரிமம் தளத்தின் சொந்த எழுத்துக்களுக்கு மட்டுமே பொருந்தும் — வேத மேற்கோள்களுக்கு அல்ல.
 
 #பைபிள் #பைபிள்கதை #பைபிள்சுருக்கம்
 ```

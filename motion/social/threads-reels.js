@@ -37,7 +37,7 @@
     el.dispatchEvent(new PointerEvent('pointerdown', o)); el.dispatchEvent(new MouseEvent('mousedown', o)); el.dispatchEvent(new PointerEvent('pointerup', o)); el.dispatchEvent(new MouseEvent('mouseup', o)); el.dispatchEvent(new MouseEvent('click', o)); };
   window.__menuItem = () => { const it = [...document.querySelectorAll('[role=button],[role=menuitem],div')].filter(e => e.offsetParent !== null && /^예약…?\.*$/.test(e.textContent.trim())); return it[it.length - 1]; };
   window.__attach = async n => { const i = [...document.querySelectorAll('input[type=file]')].find(x => x.accept.includes('video')); if (!i) return 'no input';
-    return await window.__putR(P(n).video.replace(/\\/g, '/').replace(/^.*?\/motion\//, ''), i); };
+    return await window.__putR(P(n).video.replace(/\\/g, '/').replace(/^(.*?\/)?motion\//, ''), i); };
   window.__capOk = n => { const ed = document.querySelector('[contenteditable=true]'), t = ed ? ed.innerText.replace(/\n\n\n/g, '\n\n').trim() : '';
     return t === P(n).caption ? 'caption ok' : 'MISMATCH ' + JSON.stringify(t); };
   window.__waitCal = async () => { for (let i = 0; i < 15; i++) { if (document.querySelector('[role=gridcell]')) return 'calendar open'; await sleep(200); } throw new Error('calendar not open'); };

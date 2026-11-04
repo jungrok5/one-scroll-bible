@@ -32,10 +32,11 @@
   window.__ct = t => { const e = vis(t)[0]; if (!e) return 'not found: ' + t; e.click(); return 'clicked ' + t; };
   window.__ctLast = t => { const l = vis(t), e = l[l.length - 1]; if (!e) return 'not found: ' + t; e.click(); return 'clicked last ' + t; };
   window.__loadPlan = async () => { const d = await window.__get(`out/insta/reels-${LANG}/plan.json`); return (window.__plan = JSON.parse(new TextDecoder().decode(d.buf))).length; };
-  const P = n => window.__plan.find(p => p.n === n), rel = f => f.replace(/\\/g, '/').replace(/^.*?\/motion\//, '');
+  const P = n => window.__plan.find(p => p.n === n), rel = f => f.replace(/\\/g, '/').replace(/^(.*?\/)?motion\//, '');
   window.__media = async n => { const p = P(n), out = [];
     window.__fi = null; window.__ct('Add Video'); await sleep(500); if (!window.__fi) return 'no video input';
-    out.push(await window.__putR(rel(p.video), window.__fi)); await sleep(8000);
+    out.push(await window.__putR(rel(p.video), window.__fi));
+    for (let i = 0; i < 30 && !vis('Upload image').length; i++) await sleep(1000);   // the thumbnail panel shows once the video is processed
     window.__fi = null; window.__ct('Upload image'); await sleep(800); window.__ctLast('Upload image'); await sleep(500); if (!window.__fi) return out.concat('no image input').join(' | ');
     out.push(await window.__putR(rel(p.cover), window.__fi)); return out.join(' | '); };
   window.__capOk = n => { const t = (document.querySelector('[contenteditable=true]')?.innerText || '').replace(/\n\n\n/g, '\n\n'); return t === P(n).caption ? 'caption ok' : 'CAPTION MISMATCH ' + JSON.stringify(t); };

@@ -12,7 +12,7 @@
 //        (locked private until the API audit passes — motion/youtube/API-AUDIT.md)
 // Why captions: the film has no speech, so YouTube makes no captions; its text is burned into the picture, which search
 // cannot read. A caption track in the film's language makes those lines searchable (and lets viewers turn on auto-translate).
-import { readFileSync, existsSync } from 'node:fs';
+import { readFileSync, existsSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { homedir } from 'node:os';
 import { fileURLToPath } from 'node:url';
@@ -291,4 +291,13 @@ if (cmd === 'whoami') {
   await api('videos?part=snippet,status', { method: 'PUT', body: JSON.stringify({ id, snippet: { title: f.title, description: f.description, tags: f.tags, categoryId: '27', defaultLanguage: 'ko', defaultAudioLanguage: 'ko' },
     status: { privacyStatus: 'private', publishAt: when, selfDeclaredMadeForKids: false, containsSyntheticMedia: false } }) });
   console.log('  saved — confirm with: check ' + id + ' (a read right after the write can still show the old values)');
-} else console.log('usage: node motion/youtube/yt-api.mjs whoami | captions [<lang…>] [--dry] | caption-file <videoId> <file> [lang] | film-schedule <film> <v|h> <videoId> <ISO> | status [<lang…>] | stats [<lang…>] [--from D] [--to D] | playlist-add <playlistId> <videoId…> | upload <lang> film|<n…> [--publish-at ISO] [--dry]');
+} else if (cmd === 'film-desc') {
+  // film-desc <film> <key> <videoId> [--dry]: rewrite an existing video's description (and title, tags) from
+  // motion/films/<film>/youtube.json[key] — privacy and schedule are left as they are (a public video stays public). 50 units.
+  const [film, key, id] = rest.filter(a => !a.startsWith('--')), f = JSON.parse(readFileSync(join(M, 'films', film, 'youtube.json'), 'utf8'))[key];
+  if (!f || !id) { console.log('usage: film-desc <film> <key> <videoId> [--dry]'); process.exit(1); }
+  const cur = (await api(`videos?part=snippet&id=${id}`)).items?.[0]; if (!cur) { console.log('no such video ' + id); process.exit(1); }
+  console.log(`${film} ${key} ${id}: "${cur.snippet.title}" → "${f.title}" · description ${cur.snippet.description.length} → ${f.description.length} chars`); if (rest.includes('--dry')) { writeFileSync(join(M, 'out', `desc-live-${id}.txt`), cur.snippet.description); console.log('  live description → motion/out/desc-live-' + id + '.txt'); process.exit(0); }
+  await api('videos?part=snippet', { method: 'PUT', body: JSON.stringify({ id, snippet: { ...cur.snippet, title: f.title, description: f.description, tags: f.tags || cur.snippet.tags, categoryId: cur.snippet.categoryId || '27' } }) });
+  console.log('  saved');
+} else console.log('usage: node motion/youtube/yt-api.mjs whoami | captions [<lang…>] [--dry] | caption-file <videoId> <file> [lang] | film-schedule <film> <v|h> <videoId> <ISO> | film-desc <film> <key> <videoId> | status [<lang…>] | stats [<lang…>] [--from D] [--to D] | playlist-add <playlistId> <videoId…> | upload <lang> film|<n…> [--publish-at ISO] [--dry]');

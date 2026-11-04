@@ -193,13 +193,13 @@ function stableScene(ctx, t, o = {}) {
 function partRise(ctx, t) { partFlight(ctx, t, lerp(21, 4, eio(clamp((t - 137) / 9))), { warm: .3 });
   // round 3 (look review: "the same night town again — and no child for 'his name Jesus'"): over the town one place answers —
   // a column of starlight comes down onto the stable at its edge and the gold gathers there; the rest of the town stays blue
-  const c = FLY.cam(lerp(21, 4, eio(clamp((t - 137) / 9)))), sp = W3.P(c, FLY.town[0] + 26, FLY.town[1] - 2, FLY.town[2] - 30), k = ss(137.6, 140.2, t);
+  const c = FLY.cam(lerp(21, 4, eio(clamp((t - 137) / 9)))), sp = W3.P(c, FLY.town[0], FLY.town[1] + 2, FLY.town[2])   /* round 5: the light lands IN the town, on one roof */, k = ss(137.6, 140.2, t);
   if (sp && k > 0) { const bw = (V ? 70 : 60) * (.85 + .15 * Math.sin(t * 1.7)); ctx.save(); ctx.globalCompositeOperation = 'screen'; ctx.filter = `blur(${V ? 22 : 18}px)`;
-    // round 4 (look review: "a uniform cylinder reads as a searchlight / UFO beam"): a soft ray — thin at the star, spreading as it
-    // comes down, fading toward the ground; where it lands, a wide pool of light over the roofs, not the end of a tube
-    const g = ctx.createLinearGradient(0, 0, 0, sp[1]); g.addColorStop(0, `rgba(255,232,190,${.32 * k})`); g.addColorStop(1, `rgba(255,224,170,${.12 * k})`); ctx.fillStyle = g;
-    ctx.beginPath(); ctx.moveTo(sp[0] - bw * .2, 0); ctx.lineTo(sp[0] + bw * .2, 0); ctx.lineTo(sp[0] + bw * 2.4, sp[1]); ctx.lineTo(sp[0] - bw * 2.4, sp[1]); ctx.closePath(); ctx.fill();
-    ctx.filter = 'none'; const pool = ctx.createRadialGradient(sp[0], sp[1], 0, sp[0], sp[1], bw * 4); pool.addColorStop(0, `rgba(255,214,150,${.45 * k})`); pool.addColorStop(1, 'rgba(255,214,150,0)');
+    // round 5 (look review: "a hard-edged cone reads as a spotlight / UFO beam"): no edges — a faint haze of light under the star,
+    // gone before it reaches the ground, and a warm pool on the roofs where it falls (the star over the place, Ben-Hur's nativity)
+    { const hz = ctx.createLinearGradient(0, 0, 0, sp[1]); hz.addColorStop(0, `rgba(255,236,200,${.22 * k})`); hz.addColorStop(.7, `rgba(255,230,190,${.05 * k})`); hz.addColorStop(1, 'rgba(255,230,190,0)');
+      ctx.filter = `blur(${V ? 40 : 34}px)`; ctx.fillStyle = hz; ctx.fillRect(sp[0] - bw * .9, 0, bw * 1.8, sp[1]); }
+    ctx.filter = 'none'; const pool = ctx.createRadialGradient(sp[0], sp[1], 0, sp[0], sp[1], bw * 4); pool.addColorStop(0, `rgba(255,214,150,${.5 * k})`); pool.addColorStop(1, 'rgba(255,214,150,0)');
     ctx.save(); ctx.translate(sp[0], sp[1]); ctx.scale(1, .32); ctx.translate(-sp[0], -sp[1]); ctx.fillStyle = pool; ctx.fillRect(sp[0] - bw * 4, sp[1] - bw * 4, bw * 8, bw * 8); ctx.restore();
     ctx.restore(); W3.bloom(ctx, sp[0], sp[1], [255, 206, 130], .55 * k, { r: V ? 150 : 130, streak: .2 }); ctx.fillStyle = `rgba(255,246,220,${k})`; ctx.beginPath(); ctx.arc(sp[0], sp[1], 5, 0, 6.283); ctx.fill();
     W3.bloom(ctx, sp[0], V ? 120 : 80, [230, 236, 255], .6 * k, { r: 90, streak: .3 }); }

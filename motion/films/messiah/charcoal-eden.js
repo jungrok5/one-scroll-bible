@@ -26,14 +26,14 @@
   function buildPlate() {   // sky at dusk, far hills, the garden's hill — built once at 1.3× for the push
     const c = C.sheet(1.3), x = c.getContext('2d'), R = rng(11); let sd = 100;
     x.fillStyle = `rgba(${C.TONE},.3)`; x.fillRect(0, 0, W, H);
-    for (let k = 0; k < 50; k++) { const y = R() * H * .6, x0 = -100 + R() * W * .5; C.sweep(x, C.seg([x0, y], [x0 + (300 + R() * 700) * SC, y + (R() - .5) * 30], 8), (24 + R() * 40) * SC, .12 + R() * .16, sd++); }
+    for (let k = 0; k < 50; k++) { const y = R() * H * .6, x0 = -100 + R() * W * .5; C.sweep(x, C.seg([x0, y], [x0 + (300 + R() * 700) * SC, y + (R() - .5) * 140], 8), (24 + R() * 40) * SC, .05 + R() * .08, sd++); }   /* round 5: the sky's strokes half as strong and not all level (they read as video noise) */
     C.blob(x, W * .5, -60 * SC, 760 * SC, 420 * SC, .4);
-    const far = ridge(H * .6, H * .58, 70 * SC, 3, 2); C.smudgeFill(x, far.concat([[W + 60, H], [-60, H]]), .28, sd++);
+    const far = Pilot.ori === 'v' ? ridge(H * .52, H * .5, 70 * SC, 3, 2) : ridge(H * .6, H * .58, 70 * SC, 3, 2); C.smudgeFill(x, far.concat([[W + 60, H], [-60, H]]), .28, sd++);
     for (let k = 0; k < 4; k++) C.sweep(x, far.map(p => [p[0], p[1] + (10 + k * 14) * SC]), 22 * SC, .22, sd++);
     const near = ridge(...HILL); C.smudgeFill(x, near.concat([[W + 60, H], [-60, H]]), .5, sd++, 12);
     for (let k = 0; k < 9; k++) C.sweep(x, near.map(p => [p[0], p[1] + (8 + k * 26) * SC]), (26 + k * 3) * SC, .2 + R() * .14, sd++);
     C.vine(x, near, 2.6, .85, sd++); C.vine(x, near.map(p => [p[0], p[1] + 4]), 1.4, .3, sd++, '#fff', .3);
-    for (let k = 0; k < 14; k++) { const side = k % 2 ? 1 : -1; C.blob(x, W / 2 + side * (W * .5 + R() * 60), lerp(0, H, R()), 230 * SC, 380 * SC, .28); }
+    for (let k = 0; k < 14; k++) { const side = k % 2 ? 1 : -1; C.blob(x, W / 2 + side * (W * .5 + R() * 60), lerp(0, H, R()), 230 * SC, 380 * SC, .14); }
     return c;
   }
   function buildSubject() {   // the tree, the side toward the setting light lifted
@@ -46,14 +46,20 @@
     // leaves: rubbed clusters at the twig ends (a garden tree, not a bare one)
     const r = rng(23); TREE.filter(b => b.d >= 4).forEach(b => { const [ex, ey] = b.pts[b.pts.length - 1]; C.blob(x, ex, ey, (30 + 30 * r()) * SC, (18 + 16 * r()) * SC, .55, r() * 3); });
     C.blob(x, TX + 24 * SC, TY + 8 * SC, 110 * SC, 18 * SC, .7);
-    // round 3 (look review: "a tree alone — no serpent, no woman: what is Genesis 3 here?"): the serpent coiled up the trunk, and
-    // small on the hill to the left the man and the woman walking out of the garden, their backs to us (no faces, no detail)
-    { const tw = TREE[0].w * .62, pts = []; for (let i = 0; i <= 44; i++) { const u = i / 44; pts.push([TX + Math.sin(u * Math.PI * 3.4 + .4) * tw * (1 - .25 * u), TY - 6 * SC - u * 300 * SC]); }
-      C.sweep(x, pts, 18 * SC, .95, 777); C.vine(x, pts.map(([a, b]) => [a - 2 * SC, b - 2 * SC]), 2, .5, 778, '#fff', .2);
-      const [hx, hy] = pts[pts.length - 1]; C.blob(x, hx + 16 * SC, hy - 8 * SC, 30 * SC, 18 * SC, .97, .3); }
-    for (const [fx, h, lean] of [[.16, 200, -.06], [.235, 186, -.03]])   /* round 4: twice as large — people, not posts */ { const cx = W * fx, base = ridgeY(cx, ...HILL) + 4 * SC, hh = h * SC, pts = [[cx - .2 * hh, base], [cx - .13 * hh + lean * hh, base - .6 * hh], [cx - .1 * hh + lean * hh, base - .8 * hh]];
-      for (let i = 0; i <= 10; i++) { const a = Math.PI + i / 10 * Math.PI; pts.push([cx + lean * hh * 1.2 + Math.cos(a) * .1 * hh, base - .9 * hh + Math.sin(a) * .1 * hh]); }
-      pts.push([cx + .1 * hh + lean * hh, base - .8 * hh], [cx + .14 * hh + lean * hh, base - .6 * hh], [cx + .2 * hh, base]); C.tone(x, pts, .9); }
+    // round 5 (look review, all four: "two posts, no serpent"): on the ground the serpent, thick charcoal in an S, its head turned
+    // toward the point of light (Gen 3:15 — the woman's seed and the serpent's head face each other); on the hill to the left the
+    // man and the woman, heads and shoulders drawn, one head bowed, one looking back, walking out of the garden
+    { // a coiled body on the ground beside the trunk, then the neck rising, the head lifted toward the point of light
+      const bx = TX - 70 * SC, by = TY + 18 * SC, len = 300 * SC, pts = [];
+      for (let i = 0; i <= 48; i++) { const u = i / 48; pts.push([bx - u * len, by + Math.sin(u * Math.PI * 3) * 34 * SC * (1 - .3 * u)]); }
+      for (let i = 1; i <= 12; i++) { const u = i / 12; pts.push([bx - len - u * 46 * SC, by - u * u * 96 * SC]); }
+      C.sweep(x, pts, 34 * SC, .98, 777); C.sweep(x, pts, 20 * SC, .9, 779); C.vine(x, pts.map(([p, q]) => [p + 2 * SC, q - 9 * SC]), 3.2, .6, 778, '#fff', .4);
+      const [hx, hy] = pts[pts.length - 1]; C.tone(x, [[hx + 14 * SC, hy - 16 * SC], [hx - 44 * SC, hy - 6 * SC], [hx - 46 * SC, hy + 4 * SC], [hx + 14 * SC, hy + 18 * SC]], .98); }
+    const person = (cx, base, h, bow) => { const hy = base - .86 * h, hx = cx + bow * .07 * h;
+      C.tone(x, [[cx - .17 * h, base], [cx - .13 * h, base - .5 * h], [cx - .14 * h, base - .72 * h], [cx - .08 * h, base - .78 * h], [hx - .03 * h, base - .79 * h], [hx + .03 * h, base - .79 * h], [cx + .08 * h, base - .78 * h], [cx + .14 * h, base - .7 * h], [cx + .12 * h, base - .5 * h], [cx + .16 * h, base]], .92);
+      const head = []; for (let i = 0; i < 16; i++) { const t = i / 16 * 6.283; head.push([hx + Math.cos(t) * .075 * h, hy + Math.sin(t) * .085 * h]); } C.tone(x, head, .94); };
+    const V = Pilot.ori === 'v', hgt = 300 * SC;
+    for (const [fx, bow] of [[V ? .13 : .17, .9], [V ? .21 : .23, -.5]]) { const cx = W * fx; person(cx, ridgeY(cx, ...HILL) + 6 * SC, hgt * (bow > 0 ? .96 : 1), bow); }
     return c;
   }
   function buildFG() {
@@ -85,7 +91,7 @@
   function drawThreat(x, s, t) {   // the dark comes in from both sides like smoke, its edge boiling on twos
     if (s.threat <= .002) return;
     const bo = C.boil(t), jr = rng(bo * 7 + 3);
-    C.layer(x, l => { for (const sd of [-1, 1]) { const reach = s.threat * Math.min(W * .5 - 150 * SC, W * (Pilot.ori === 'v' ? .3 : .2)), pts = [];   /* round 4: the dark comes in from the edges only (it read as a stain) */
+    C.layer(x, l => { for (const sd of [-1, 1]) { const reach = s.threat * Math.min(W * .5 - 150 * SC, W * (Pilot.ori === 'v' ? .1 : .12)), pts = [];   /* round 4: the dark comes in from the edges only (it read as a stain) */
       for (let i = 0; i <= 48; i++) { const y = lerp(H * .12, H * 1.02, i / 48), k = Math.sin(i / 48 * Math.PI);
         const d = reach * (.35 + .65 * k) + (Pilot.fbm(i * .45, sd * 3 + t * .25, 3) - .5) * 460 * SC * s.threat + Math.sin(i * .7 + sd + t * .8) * 70 * SC * s.threat + (jr() - .5) * 8 * SC;   /* round 3: a ragged, rubbed edge — no straight vertical (look review r2) */ pts.push([sd < 0 ? d : W - d, y]); }
       C.poly(l, pts.concat(sd < 0 ? [[-80, H + 80], [-80, -80]] : [[W + 80, H + 80], [W + 80, -80]])); l.fillStyle = '#000'; l.fill();
@@ -123,7 +129,7 @@
   }
   function init() {
     C.init(); W = Pilot.W; H = Pilot.H; SC = H / 1920; TX = W * (Pilot.ori === 'v' ? .56 : .6);
-    HILL = [H * .71, H * .7, 40 * SC, 2, 5, 34 * SC]; TY = ridgeY(TX, ...HILL) + 6 * SC; ZC = [TX, TY - 260 * SC];
+    HILL = Pilot.ori === 'v' ? [H * .62, H * .61, 40 * SC, 2, 5, 34 * SC] : [H * .71, H * .7, 40 * SC, 2, 5, 34 * SC];   /* round 5: portrait — the light and the serpent above the words */ TY = ridgeY(TX, ...HILL) + 6 * SC; ZC = [TX, TY - 260 * SC];
     TREE = growTree(); TRUNK = offset(TREE[0].pts, i => -halfW(TREE[0], i) * .72);
     PT = [W * (Pilot.ori === 'v' ? .3 : .32), ridgeY(W * .3, ...HILL) + 22 * SC];
     THREAD = []; for (let i = 0; i <= 50; i++) { const u = i / 50; THREAD.push([lerp(PT[0], W + 80, u), PT[1] - Math.sin(u * 2.6) * H * .2 - u * H * .1]); }

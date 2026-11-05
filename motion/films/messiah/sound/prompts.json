@@ -1338,8 +1338,76 @@
     "aP8JqDzeFE2uR2CkVjMX"
    ],
    "name": "E8e"
+  },
+  {
+   "time": "2026-11-05T13:23:47Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_add_flow_node:music",
+   "model": "eleven_music_v2_5",
+   "label": "MV1 1악장 약속 (52s)",
+   "prompt": "One continuous movement, 52 seconds, never stopping or restarting: a cinematic chamber-orchestra nocturne that tells the first promise. Solo cello carries a slow, noble five-note promise theme in D dorian through the whole piece; every change grows out of what is already playing. 0–3 s: near-silent low string pedal on D with faint glassy high harmonics like stars. At 3 s the solo cello begins the theme, intimate and long-breathed. At about 9 s soft French horns and a wordless choir bloom warmly beneath it, then settle. At about 19 s one warm full chord swells for two seconds and thins to a single suspended high string note, like a question. At 21 s a harp and a soft oud take up the theme over the held note, tender, as dusk falls in a garden; at about 27 s the harmony darkens into minor and the cello sighs low; at about 32 s everything thins to one sustained high violin note with a faint celesta glint, one small light left in the dark. At 37 s the cello lifts the theme again, slowly rising, the star harmonics returning and multiplying, wide and hopeful. At about 44 s a soft wooden shepherd's flute joins the cello in warm evening light, pastoral and tender. From 49 s the theme gathers on a held major chord that leans forward, unresolved, carrying on. Quiet enough under a spoken voice throughout, no drums, no percussion, no piano, wide natural reverb.",
+   "params": {
+    "duration_seconds": 52,
+    "instrumental": true,
+    "lyrics_type": "instrumental"
+   },
+   "why": "round 8b: four continuous movements instead of 16 per-scene cues (관리자: \"씬별 단절된 느낌\")",
+   "node": "D1JWMGvTjjtm2YpfsTa8",
+   "takes": "4 variations a–d in sound/audio/takes/, used: MV1c",
+   "name": "MV1"
+  },
+  {
+   "time": "2026-11-05T13:23:47Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_add_flow_node:music",
+   "model": "eleven_music_v2_5",
+   "label": "MV2 2악장 좁혀지는 길 (45s)",
+   "prompt": "One continuous movement, 45 seconds, never stopping or restarting, continuing a piece already in progress: it opens on a held D major string chord with solo cello, as if mid-phrase. The same slow five-note promise theme in D dorian runs through all of it. At about 1 s a soft pizzicato pulse and a celesta begin, like gold ink spreading across an old map; the theme passes between violas and cello, narrowing and focusing, purposeful. At about 13 s high violins lift the theme upward and northward, gently. At about 19 s the color turns cold and grand: low brass and low strings in minor, stern and imperial, slow, for six seconds. At 26 s warmth returns: solo cello sings the theme over a slow walking low-string ostinato, a long road at golden sunset, steady footsteps in the rhythm. At about 34 s the light fades toward night, the strings soften and thin. At about 38 s a single French horn plays the first notes of the theme, distant, like lamps of a small town seen from afar, over a hushed string pad that fades almost to silence by 45 s. Quiet enough under a spoken voice, no drums, no percussion, no piano, wide natural reverb.",
+   "params": {
+    "duration_seconds": 45,
+    "instrumental": true,
+    "lyrics_type": "instrumental"
+   },
+   "why": "round 8b: four continuous movements instead of 16 per-scene cues (관리자: \"씬별 단절된 느낌\")",
+   "node": "wHLhrhElR1c1mh2MK84E",
+   "takes": "4 variations a–d in sound/audio/takes/, used: MV2b",
+   "name": "MV2"
+  },
+  {
+   "time": "2026-11-05T13:23:47Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_add_flow_node:music",
+   "model": "eleven_music_v2_5",
+   "label": "MV3 3악장 구유 (43s)",
+   "prompt": "One continuous movement, 43 seconds, never stopping or restarting, continuing a piece already in progress: it begins from a hushed string pad, and a solo violin with harp sings the five-note promise theme in D dorian as a gentle lullaby, warm candlelight, a newborn child. At about 10 s a sudden radiant bloom: full strings, wordless choir and horns in D major, glorious and bright for four seconds, then sustained shimmering high strings and celesta for five seconds. At about 19 s it falls back to harp and soft oud playing the theme in minor, a memory of a garden at dusk, sorrowful. At about 26 s the harmony turns warmly to major and the solo cello takes the theme back, the promise kept, tender and full. At about 33 s it slows and deepens: low strings and a soft wordless choir, solemn and reverent. At about 38 s it settles on one dark, low, held chord, tender rather than tragic, sustained to the end. Quiet enough under a spoken voice, no drums, no percussion, no piano, wide natural reverb.",
+   "params": {
+    "duration_seconds": 43,
+    "instrumental": true,
+    "lyrics_type": "instrumental"
+   },
+   "why": "round 8b: four continuous movements instead of 16 per-scene cues (관리자: \"씬별 단절된 느낌\")",
+   "node": "hPKooiF5rcshc0y4Y1Nv",
+   "takes": "4 variations a–d in sound/audio/takes/, used: MV3c",
+   "name": "MV3"
+  },
+  {
+   "time": "2026-11-05T13:23:47Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_add_flow_node:music",
+   "model": "eleven_music_v2_5",
+   "label": "MV4 4악장 이름과 새벽 (43s)",
+   "prompt": "One continuous movement, 43 seconds, never stopping or restarting, continuing a piece already in progress: it rises out of a low held string chord as a solo cello sings the five-note promise theme in D dorian clearly and warmly, with faint glassy high harmonics like a single star; hopeful, intimate. At about 9 s it empties into stillness: one grave low string drone and a single quiet viola line, solemn and bare, for six seconds. At about 15 s dawn breaks: strings swell into D major, French horns and a wordless choir rise like the sun, triumphant but gentle, the fullest moment of the piece around 18 s. At about 22 s it settles into peace: the theme on cello and harp over warm sustained strings, morning light. At about 32 s the full strings state the theme one last time, softly, and end on a long, open D major chord that decays slowly into silence by 43 s. Quiet enough under a spoken voice, no drums, no percussion, no piano, wide natural reverb.",
+   "params": {
+    "duration_seconds": 43,
+    "instrumental": true,
+    "lyrics_type": "instrumental"
+   },
+   "why": "round 8b: four continuous movements instead of 16 per-scene cues (관리자: \"씬별 단절된 느낌\")",
+   "node": "TLiw2EfGacJB8EM33WMh",
+   "takes": "4 variations a–d in sound/audio/takes/, used: MV4b",
+   "name": "MV4"
   }
  ],
  "title": "메시아 예언과 성탄",
- "about": "2026-11-03, flow BcQHTd61fLqr0A3kjcfa (메시아 예언과 성탄 — 해설·음악·효과음). 해설: 첫 영상과 같은 목소리 HYALOqtTLlRjxo4uBKeg(Jaeil Warm Male Narrator) · eleven_v4, 줄당 한 번, 숫자는 한글로(칠백여). 음악: eleven_music_v2_5 instrumental, 큐당 한 번 — 첫 영상 프롬프트 방식(악기·선법·박자·몇 초에 무엇이 오는지·목소리 밑에 조용히·no drums), 다섯 부를 꿰는 하나의 「약속의 주제」(D 도리안, 다섯 음). 효과음: eleven_text_to_sound_v2. name = sound/voice/<id>.mp3 · sound/audio/<id>.mp3. 약 7,100 크레딧."
+ "about": "2026-11-03, flow BcQHTd61fLqr0A3kjcfa (메시아 예언과 성탄 — 해설·음악·효과음). 해설: 첫 영상과 같은 목소리 HYALOqtTLlRjxo4uBKeg(Jaeil Warm Male Narrator) · eleven_v4, 줄당 한 번, 숫자는 한글로(칠백여). 음악: eleven_music_v2_5 instrumental, 큐당 한 번 — 첫 영상 프롬프트 방식(악기·선법·박자·몇 초에 무엇이 오는지·목소리 밑에 조용히·no drums), 다섯 부를 꿰는 하나의 「약속의 주제」(D 도리안, 다섯 음). 효과음: eleven_text_to_sound_v2. name = sound/voice/<id>.mp3 · sound/audio/<id>.mp3. 약 7,100 크레딧. · 2026-11-05 8b: 음악을 장면별 16큐 → 4악장(MV1–MV4, 악장마다 4가지 중 하나, 약 11,000 크레딧)."
 }

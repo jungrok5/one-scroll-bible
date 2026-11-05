@@ -22,7 +22,10 @@ for (const v of versions) {
   const base = `motion/films/${film}`, root = join(outDir, 'v', v.dir);
   const own = list(v.rev, base).filter(p => /\.(html|js|json)$/.test(p) && !/review\.json$/.test(p));   // notes and feedback stay out
   const html = read(v.rev, `${base}/film.html`).toString(), libs = [...html.matchAll(/<script src="([^"]+)"/g)].map(m => posix.normalize(posix.join(base, m[1]))).filter(p => !p.startsWith(base + '/'));
-  for (const p of [...own, ...libs]) { const rel = p.replace(/^motion\//, ''), dst = join(root, rel); mkdirSync(dirname(dst), { recursive: true });
+  // module libraries come through the import map (cinematic-3d: "three" → ../lib3d/three.module.min.js): copy that whole folder
+  const im = (html.match(/<script type="importmap">([\s\S]*?)<\/script>/) || [])[1];
+  if (im) for (const u of Object.values(JSON.parse(im).imports || {})) { const d = posix.dirname(posix.normalize(posix.join(base, u))); if (!d.startsWith(base)) libs.push(...list(v.rev, d)); }
+  for (const p of [...new Set([...own, ...libs])]) { const rel = p.replace(/^motion\//, ''), dst = join(root, rel); mkdirSync(dirname(dst), { recursive: true });
     let b = read(v.rev, p); if (p === `${base}/film.html`) b = Buffer.from(b.toString().replace('</body>', BRIDGE + '\n</body>')); writeFileSync(dst, b); files.push(posix.join('v', v.dir, rel)); }
 }
 if (AUDIO) { const wav = `motion/out/${film}-narr.wav`; if (existsSync(wav)) { execFileSync('ffmpeg', ['-v', 'error', '-y', '-i', wav, '-c:a', 'libmp3lame', '-b:a', '96k', join(outDir, 'sound.mp3')]); files.push('sound.mp3'); } }

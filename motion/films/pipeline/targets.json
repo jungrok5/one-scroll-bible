@@ -37,6 +37,8 @@
   "_source": "motion/films/SOUND.md (first film: ~10 effects a minute, ducks in 19 of 21 scenes); YouTube loudness",
   "lufs": -14,
   "lufs_tol": 1.5,
+  "music_cues_per_min_max": 2,
+  "music_cues_note": "「메시아」 8a: 16큐/3분(5.4/분) → 관리자 \"씬별 단절된 느낌\" · 8b: 4악장(1.3/분)",
   "peak_max": -1.0,
   "sfx_per_min_min": 8,
   "ducks_min": 3,

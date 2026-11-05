@@ -482,9 +482,12 @@
   },
   {
    "at": "2:39–2:59",
-   "scene": "끝",
-   "look": "영화 3D 밤 (유지)",
-   "source": "1차 그대로"
+   "scene": "끝 · 오늘, 당신을 위한 약속 → 읽기 카드",
+   "look": "시네마틱 3D 실내 (새벽 창가, 펼친 성경, 밤새 켜 둔 등잔 — 아침 빛이 들어옴)",
+   "source": "motion-skills cinematic-3d — 2026-11-05 8b: 오프닝 마을을 세 번째로 다시 쓰던 끝 대신(관리자: \"오일 느낌이랑 3D 맵이 제법 많이 나오네\")",
+   "style_new": true,
+   "skill": "cinematic-3d",
+   "example": "cinematic-3d/examples/bethlehem-lane"
   }
  ],
  "pipeline": {

@@ -107,6 +107,10 @@ const G = {
     for (const l of c.lines) if (l.kind === 'narr' && !existsSync(join(sd, 'voice', l.id + '.mp3'))) why.push(`해설 ${l.id}: voice/${l.id}.mp3 없음`);
     for (const l of c.lines) if (l.kind === 'narr' && existsSync(join(sd, 'voice', l.id + '.mp3')) && c.place.at[l.id] == null && !(c.place.subs_extra || {})[l.id]) why.push(`해설 ${l.id}: place.json at 없음`);
     const sfx = c.cues.sfx || [], dur = c.place.dur || 180, perMin = sfx.length / (dur / 60); if (perMin < T.sound.sfx_per_min_min) why.push(`효과음 분당 ${perMin.toFixed(1)}개 < ${T.sound.sfx_per_min_min} (SOUND.md — 화면 동작마다 소리)`);
+    // music as movements, not one cue per scene (SOUND.md 「메시아」에서 배운 것, 2026-11-05): few long cues that overlap ≥ 1 s, no duck on a joint
+    { const M = [...(c.cues.music || [])].sort((p, q) => p.at - q.at), mpm = M.length / (dur / 60); if (mpm > T.sound.music_cues_per_min_max) why.push(`음악 큐 분당 ${mpm.toFixed(1)}개 > ${T.sound.music_cues_per_min_max} — 장면마다 새 큐는 컷이 된다(SOUND.md: 악장 3~4개)`);
+      for (let i = 1; i < M.length; i++) { const end = M[i - 1].at + M[i - 1].len, ov = end - M[i].at; if (ov > -.01 && ov < 1) why.push(`음악 ${M[i - 1].id} → ${M[i].id}: 겹침 ${ov.toFixed(1)}초 < 1초`);
+        for (const d of c.cues.ducks || []) if (d.from >= M[i].at - 1 && d.from <= M[i].at + 1) why.push(`음악 이음매 ${M[i].at}초에 숨 멈춤(ducks) — 이음매가 컷으로 들린다`); } }
     if ((c.cues.ducks || []).length < T.sound.ducks_min) why.push(`숨 멈춤(ducks) ${(c.cues.ducks || []).length}개 < ${T.sound.ducks_min}`);
     for (const q of [...(c.cues.music || []), ...sfx]) { const f = q.file ? join(ROOT, q.file) : join(sd, 'audio', q.id + '.mp3'); if (!existsSync(f)) why.push(`소리 ${q.id}: 파일 없음`); }
     const pr = J(join(sd, 'prompts.json')), names = new Set((pr?.entries || []).map(e => e.name));

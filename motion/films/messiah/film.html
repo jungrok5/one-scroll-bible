@@ -196,13 +196,11 @@ function stableScene(ctx, t, o = {}) {
 let RISE = null;
 function partRise(ctx, t) { RISE.draw(ctx, t - 137); textBand(ctx); }
 // partDawn: impasto-dawn.js (black-and-white film → palette-knife colour, 2026-11-03 round 2)
-function partEnd(ctx, t) { const zE = 1 + .12 * eio(clamp((t - 159) / 20.4)); ctx.save(); ctx.translate(W / 2, H * .45); ctx.scale(zE, zE); ctx.translate(-W / 2, -H * .45); partFlight(ctx, t, lerp(4, 0, eio(clamp((t - 159) / 20.4))), { warm: .5, noBand: true }); ctx.restore();
-  // round 3 (look review: "the last 12 s are a switched-off screen"): dawn comes up behind the hills — the night of the opening
-  // turns toward morning (the promise kept, the day after the cross); the town's lamps stay on; the card sits in the brightening sky
-  { const k = ss(160, 176, t), hy = H * (V ? .44 : .5); ctx.save(); ctx.globalCompositeOperation = 'screen';
-    const g = ctx.createLinearGradient(0, hy - H * .34, 0, hy + H * .06); g.addColorStop(0, 'rgba(40,56,110,0)'); g.addColorStop(.3, `rgba(40,56,110,${.3 * k})`); g.addColorStop(.62, `rgba(150,96,110,${.4 * k})`); g.addColorStop(.9, `rgba(255,170,96,${.55 * k})`); g.addColorStop(1, 'rgba(255,170,96,0)');
-    ctx.fillStyle = g; ctx.fillRect(0, hy - H * .34, W, H * .4); ctx.restore(); W3.bloom(ctx, W * .72, hy, [255, 190, 120], .4 * k, { r: V ? 420 : 380, streak: .15 }); }
-  if (t <= 168.6) textBand(ctx);   /* the camera keeps moving under the end card (frame-qa: held 89 %) */ const k = ss(168.6, 170, t); if (k > 0) { ctx.fillStyle = `rgba(6,6,12,${.22 * k})`; ctx.fillRect(0, 0, W, H); } }
+// partEnd: cine-end.js (cinematic-3d — today: a room at first light, an open Bible under the window, the lamp from the night still
+// burning, 2026-11-05 round 8b; it replaced the third flight over the opening's town)
+let END = null;
+function partEnd(ctx, t) { END.draw(ctx, t - 159);
+  if (t <= 168.6) textBand(ctx); const k = ss(168.6, 170, t); if (k > 0) { ctx.fillStyle = `rgba(6,6,12,${.3 * k})`; ctx.fillRect(0, 0, W, H); } }
 function endCard(ctx, t, a, b) { const k = win(t, a, b, 1, .8); if (k <= 0) return; const segs = Film.text('E1').split(/\s*→\s*/), size = V ? 50 : 44, y0 = H * (V ? .17 : .2);   /* round 3: in the dawn sky, above the town's lamps, larger */
   Pilot.text(ctx, segs[0], W / 2, y0, { size, weight: 600, font: "'Noto Serif KR',serif", color: '#f6ead0', alpha: k, shadow: 'rgba(0,0,0,.9)', shadowBlur: 18 });
   Pilot.text(ctx, segs[1] || '', W / 2, y0 + size * 1.9, { size: size * .9, weight: 600, font: "'Noto Serif KR',serif", color: '#e9c77a', alpha: k * ss(a + .6, a + 1.4, t), shadow: 'rgba(0,0,0,.9)', shadowBlur: 18 });
@@ -402,12 +400,14 @@ function partRome(ctx, t) {
 
 // =====================================================================================================================
 // the timeline (film seconds = the script's clock); scenes dissolve into each other over their overlap
+// round 8b (관리자 2026-11-05: "씬별 단절된 느낌 — 급하게 중간 잘라서 편집한 느낌"): the dissolves were 0.2 s, a cut. Now each scene
+// runs on 0.8 s into the next, 1.4 s where the music's movement changes (51 · 95 · 137 s) — the picture breathes with the score
 const SCENES = [
-  [0, 21.2, (c, t) => { partFlight(c, t); const k = ss(18.4, 19.4, t); if (k > 0) { c.fillStyle = `rgba(6,6,12,${.4 * k})`; c.fillRect(0, 0, W, H); } }],
-  [21.0, 37.2, partEden], [37.0, 43.6, partAbraham], [43.4, 51.2, partDavid], [51.0, 70.6, partNarrow],
-  [70.4, 76.8, partRome], [76.6, 95.2, partJourney],
-  [95.0, 104.8, partStable], [104.6, 113.8, partShepherds], [113.6, 137.2, partPair],
-  [137.0, 146.2, partRise], [146.0, 159.2, partDawn], [159.0, 179.4, partEnd],
+  [0, 21.8, (c, t) => { partFlight(c, t); const k = ss(18.4, 19.4, t); if (k > 0) { c.fillStyle = `rgba(6,6,12,${.4 * k})`; c.fillRect(0, 0, W, H); } }],
+  [21.0, 37.8, partEden], [37.0, 44.2, partAbraham], [43.4, 52.4, partDavid], [51.0, 71.2, partNarrow],
+  [70.4, 77.4, partRome], [76.6, 96.4, partJourney],
+  [95.0, 105.4, partStable], [104.6, 114.4, partShepherds], [113.6, 138.4, partPair],
+  [137.0, 146.8, partRise], [146.0, 159.8, partDawn], [159.0, 179.4, partEnd],
 ];
 const QB = () => ({ bottom: Film.subBottom() + 40 });
 const TEXT = [
@@ -448,7 +448,7 @@ function draw(ctx, t) {
     else if (kind === 'quote') Film.quote(ctx, id, t, a, b, { ...o, hl: Film.lines[id].hl, hlk: o.hlAt ? ss(o.hlAt, o.hlAt + 1.2, t) : 0 }); }
 }
 Pilot.run({ W, H, dur: FILM_DUR, fonts: ["600 40px 'Noto Serif KR'", "400 40px 'Noto Serif KR'", "400 20px 'Noto Sans KR'"],
-  init: async () => { await Film.load(); RISE = (await import('./cine-rise.js')).build(W, H); buildRoad(); buildRome(); buildFly(); buildNarrow(); buildStableOil(); buildJourneyOil(); }, draw });
+  init: async () => { await Film.load(); RISE = (await import('./cine-rise.js')).build(W, H); END = (await import('./cine-end.js')).build(W, H); buildRoad(); buildRome(); buildFly(); buildNarrow(); buildStableOil(); buildJourneyOil(); }, draw });
 </script>
 </body>
 </html>

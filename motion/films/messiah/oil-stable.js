@@ -96,7 +96,16 @@ function stableOil(ctx, t, fx, fy, z, o = {}) {
 function tvView(fx, fy, z, k = .74) { if (V) return [fx, fy, z]; const z2 = Math.max(1.04, z * k), lx = W / 2 * (1 - 1 / z2), ly = H / 2 * (1 - 1 / z2);
   const fy2 = Math.min(fy, SOIL.top + (H / 2 - H * .06) / z2); return [clamp(fx, W / 2 - lx, W / 2 + lx), clamp(fy2, H / 2 - ly, H / 2 + ly), z2]; }
 // 2:7 — the pull-back: from the child to the whole room (95.0–104.8)
-function partStable(ctx, t) { const k = eio(clamp((t - 95) / 9.6)); stableOil(ctx, t, ...tvView(lerp(SOIL.lx, W / 2, k), lerp(SOIL.ly - 10, H * .5, k), lerp(1.55, 1.0, k))); textBand(ctx); }
+function partStable(ctx, t) { const k = eio(clamp((t - 95) / 9.6));
+  if (V) { stableOil(ctx, t, lerp(SOIL.lx, W / 2, k), lerp(SOIL.ly - 10, H * .5, k), lerp(1.55, 1.0, k)); textBand(ctx); return; }
+  // the TV cut (round 8b, look review h r8 — tv48 BLOCKER "10 s that stand still"): the round-8 framing (room above the heads, the child
+  // above the words) now drifts right along the manger, and a dark wooden post in the near foreground passes faster than the room
+  // (depth, and the frame never stands still). A push-in was tried: it dropped the manger under the verse.
+  stableOil(ctx, t, ...tvView(lerp(SOIL.lx - 120, SOIL.lx + 60, k), lerp(SOIL.ly - 10, H * .5, k), lerp(1.55, 1.0, k)));
+  { const x = lerp(W * .16, W * -.04, eio(clamp((t - 95) / 9.8))); ctx.save(); ctx.filter = 'blur(14px)'; const g = ctx.createLinearGradient(x - 70, 0, x + 70, 0);
+    g.addColorStop(0, 'rgba(14,8,4,0)'); g.addColorStop(.25, 'rgba(14,8,4,.92)'); g.addColorStop(.7, 'rgba(26,14,6,.92)'); g.addColorStop(.85, 'rgba(120,72,30,.5)'); g.addColorStop(1, 'rgba(14,8,4,0)');
+    ctx.fillStyle = g; ctx.fillRect(x - 70, -40, 140, H + 80); ctx.restore(); }
+  textBand(ctx); }
 // the two verses joined (113.6–137.2), round 3 after the look review (all four: "23 s of the same stable, nearly black"):
 // W0–W1 (Gen 3:15) back in the garden — the charcoal tree and its one point of light, the camera pushing toward it;
 // as the words cross to Gal 4:4 the point comes down and becomes the light of the child (the promise kept), the stable close

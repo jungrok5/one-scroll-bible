@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>메시아 예언과 성탄</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;900&family=Noto+Sans+KR:wght@300;400;700&display=swap">
+<script type="importmap">{ "imports": { "three": "../lib3d/three.module.min.js" } }</script>
 </head>
 <body>
 <script src="../../pilot/lib.js"></script>
@@ -190,20 +191,10 @@ function stableScene(ctx, t, o = {}) {
 // =====================================================================================================================
 // 5 · 2:08–2:59  the camera leaves the stable and rises over the town at night (1 · reversed); dawn on a hill with a cross —
 // the sun rises behind it ("성경대로 … 다시 살아나사"); back to the night over Bethlehem, the first frame, the reading card.
-function partRise(ctx, t) { partFlight(ctx, t, lerp(21, 4, eio(clamp((t - 137) / 9))), { warm: .3 });
-  // round 3 (look review: "the same night town again — and no child for 'his name Jesus'"): over the town one place answers —
-  // a column of starlight comes down onto the stable at its edge and the gold gathers there; the rest of the town stays blue
-  const c = FLY.cam(lerp(21, 4, eio(clamp((t - 137) / 9)))), sp = W3.P(c, FLY.town[0], FLY.town[1] + 2, FLY.town[2])   /* round 5: the light lands IN the town, on one roof */, k = ss(137.6, 140.2, t);
-  if (sp && k > 0) { const bw = (V ? 70 : 60) * (.85 + .15 * Math.sin(t * 1.7)); ctx.save(); ctx.globalCompositeOperation = 'screen'; ctx.filter = `blur(${V ? 22 : 18}px)`;
-    // round 5 (look review: "a hard-edged cone reads as a spotlight / UFO beam"): no edges — a faint haze of light under the star,
-    // gone before it reaches the ground, and a warm pool on the roofs where it falls (the star over the place, Ben-Hur's nativity)
-    { const hz = ctx.createLinearGradient(0, 0, 0, sp[1]); hz.addColorStop(0, `rgba(255,236,200,${.22 * k})`); hz.addColorStop(.7, `rgba(255,230,190,${.05 * k})`); hz.addColorStop(1, 'rgba(255,230,190,0)');
-      ctx.filter = `blur(${V ? 40 : 34}px)`; ctx.fillStyle = hz; ctx.fillRect(sp[0] - bw * .9, 0, bw * 1.8, sp[1]); }
-    ctx.filter = 'none'; const pool = ctx.createRadialGradient(sp[0], sp[1], 0, sp[0], sp[1], bw * 4); pool.addColorStop(0, `rgba(255,214,150,${.5 * k})`); pool.addColorStop(1, 'rgba(255,214,150,0)');
-    ctx.save(); ctx.translate(sp[0], sp[1]); ctx.scale(1, .32); ctx.translate(-sp[0], -sp[1]); ctx.fillStyle = pool; ctx.fillRect(sp[0] - bw * 4, sp[1] - bw * 4, bw * 8, bw * 8); ctx.restore();
-    ctx.restore(); W3.bloom(ctx, sp[0], sp[1], [255, 206, 130], .55 * k, { r: V ? 150 : 130, streak: .2 }); ctx.fillStyle = `rgba(255,246,220,${k})`; ctx.beginPath(); ctx.arc(sp[0], sp[1], 5, 0, 6.283); ctx.fill();
-    W3.bloom(ctx, sp[0], V ? 120 : 80, [230, 236, 255], .6 * k, { r: 90, streak: .3 }); }
-  const d = .5 * (1 - ss(137, 138.4, t));   /* a dip, never to black (frame-qa: 137.2 s went black, 2026-11-04) */ if (d > 0) { ctx.fillStyle = `rgba(8,6,8,${d})`; ctx.fillRect(0, 0, W, H); } }
+// partRise: cine-rise.js (cinematic-3d — the walk up a lane of Bethlehem to one lit doorway under the star, 2026-11-05 round 8;
+// it replaced the third flight over the opening's town, which every reviewer read as a repeat)
+let RISE = null;
+function partRise(ctx, t) { RISE.draw(ctx, t - 137); textBand(ctx); }
 // partDawn: impasto-dawn.js (black-and-white film → palette-knife colour, 2026-11-03 round 2)
 function partEnd(ctx, t) { const zE = 1 + .12 * eio(clamp((t - 159) / 20.4)); ctx.save(); ctx.translate(W / 2, H * .45); ctx.scale(zE, zE); ctx.translate(-W / 2, -H * .45); partFlight(ctx, t, lerp(4, 0, eio(clamp((t - 159) / 20.4))), { warm: .5, noBand: true }); ctx.restore();
   // round 3 (look review: "the last 12 s are a switched-off screen"): dawn comes up behind the hills — the night of the opening
@@ -428,7 +419,7 @@ const TEXT = [
   ['sub', '13', 63.7, 70.3], ['label', 'A1', 70.8, 76.0], ['quote', '14', 70.6, 75.8, QB()],
   ['quote', '15', 77.0, 84.6, { ...QB(), hlAt: 83.47 }], ['sub', '16', 84.9, 90.8], ['micah', '02', 91.0, 95.0],
   ['quote', '17', 95.8, 104.4, { ...QB(), hlAt: 99.81 }], ['label', 'P5', 105.0, 112.4], ['quote', '18', 105.6, 113.2, { ...QB(), hlAt: 106.11 }],
-  ['sub', 'W0', 114.0, 116.6], ['link', 'W1', 116.4, 128.2, { to: 'W2', style: 'ember', y: H * (V ? .66 : .62) }],
+  ['sub', 'W0', 114.0, 116.6], ['link', 'W1', 116.4, 128.2, { to: 'W2', style: 'ember', y: H * (V ? .66 : .79) }]   /* TV: the lower band, under the garden's point (look review h r7) */,
   ['sub', 'W3', 128.6, 136.9],
   ['quote', '22', 137.6, 145.6, { ...QB(), hlAt: 140.45 }], ['quote', '23', 146.6, 158.4, { ...QB(), hlAt: 146.77 }], ['sub', '25', 159.4, 168.4], ['end', 'E1', 169.4, 179.0],
 ];
@@ -457,7 +448,7 @@ function draw(ctx, t) {
     else if (kind === 'quote') Film.quote(ctx, id, t, a, b, { ...o, hl: Film.lines[id].hl, hlk: o.hlAt ? ss(o.hlAt, o.hlAt + 1.2, t) : 0 }); }
 }
 Pilot.run({ W, H, dur: FILM_DUR, fonts: ["600 40px 'Noto Serif KR'", "400 40px 'Noto Serif KR'", "400 20px 'Noto Sans KR'"],
-  init: async () => { await Film.load(); buildRoad(); buildRome(); buildFly(); buildNarrow(); buildStableOil(); buildJourneyOil(); }, draw });
+  init: async () => { await Film.load(); RISE = (await import('./cine-rise.js')).build(W, H); buildRoad(); buildRome(); buildFly(); buildNarrow(); buildStableOil(); buildJourneyOil(); }, draw });
 </script>
 </body>
 </html>

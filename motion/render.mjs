@@ -76,7 +76,9 @@ async function openPage(browser) {
   return page;
 }
 
-const browser = await chromium.launch({ args: ['--font-render-hinting=none', '--disable-lcd-text', '--allow-file-access-from-files'] });
+// WebGL scenes (creation's cosmos, cinematic-3d shots): ANGLE on Direct3D 11 = the GPU on Windows (without it headless Chromium
+// draws WebGL on the CPU in SwiftShader — 「메시아」 partRise 9 s took 8 min); elsewhere the flag is ignored and SwiftShader is the fallback
+const browser = await chromium.launch({ args: ['--font-render-hinting=none', '--disable-lcd-text', '--allow-file-access-from-files', '--ignore-gpu-blocklist', '--enable-unsafe-swiftshader', '--enable-gpu-rasterization', ...(process.platform === 'win32' ? ['--use-angle=d3d11'] : [])] });
 const probe = await openPage(browser);
 const DUR = await probe.evaluate(() => window.DURATION);
 if (glAble) {

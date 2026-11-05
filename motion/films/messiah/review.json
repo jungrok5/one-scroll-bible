@@ -467,9 +467,12 @@
   },
   {
    "at": "2:17–2:26",
-   "scene": "마 1:21 마을 위로",
-   "look": "영화 3D (유지)",
-   "source": "1차 그대로"
+   "scene": "마 1:21 베들레헴 골목 → 등불 켜진 문과 별",
+   "look": "시네마틱 3D 골목 (안개 속 등불 하나하나, 문간에 선 작은 사람, 별빛이 그 집 하나에)",
+   "source": "motion-skills cinematic-3d — 새 화풍 (2026-11-05 8차: 오프닝 마을을 세 번째로 다시 쓴 장면 대신 — 그림 리뷰 최저 5.8, 관리자: \"응 제안대로 해\")",
+   "style_new": true,
+   "skill": "cinematic-3d",
+   "example": "cinematic-3d/examples/bethlehem-lane"
   },
   {
    "at": "2:26–2:39",

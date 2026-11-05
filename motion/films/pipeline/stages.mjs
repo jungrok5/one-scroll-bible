@@ -141,11 +141,13 @@ const G = {
     return why.length ? { ok: false, why } : pass(); },
   // every new look of this film is packaged as a motion-skills canvas-film kit (관리자 2026-11-04: "화풍 추가되면 재사용할 수 있게 캔버스필름에 추가")
   kits: c => { const L = (c.review.looks || []).filter(x => x.style_new), why = [];
-    for (const x of L) { if (!x.kit) { why.push(`새 화풍 "${x.look}"(${x.scene}): looks[].kit(키트 이름)이 없다`); continue; }
+    for (const x of L) { if (x.skill) {   // a look that is its own motion-skills skill (three.js, not a canvas-film kit): the shot goes back as that skill's example
+        if (!x.example || !existsSync(join(T.looks.skills_kits, '..', '..', x.example, 'README.md'))) why.push(`새 화풍 "${x.look}"(${x.scene}): motion-skills ${x.skill}에 이 샷의 견본(looks[].example/README.md)이 없다`); continue; }
+      if (!x.kit) { why.push(`새 화풍 "${x.look}"(${x.scene}): looks[].kit(키트 이름)이 없다`); continue; }
       const k = join(T.looks.skills_kits, x.kit); for (const f of ['kit.js', 'STYLE.md', 'template.html', 'script.example.js']) if (!existsSync(join(k, f))) why.push(`키트 ${x.kit}: ${f} 없음`);
       const v = join(c.d, `kit-${x.kit}.js`); if (!existsSync(v)) why.push(`영상이 키트를 쓰지 않는다: ${c.film}/kit-${x.kit}.js 없음`);
       else if (existsSync(join(k, 'kit.js')) && readFileSync(v, 'utf8').replace(/\r/g, '') !== readFileSync(join(k, 'kit.js'), 'utf8').replace(/\r/g, '')) why.push(`kit-${x.kit}.js가 키트 원본과 다르다(키트를 고쳤으면 다시 복사하거나 원본에 반영)`); }
-    const idx = join(T.looks.skills_kits, '..', 'references', 'STYLE-INDEX.md'); if (existsSync(idx)) { const s = readFileSync(idx, 'utf8'); for (const x of L) if (x.kit && !s.includes('`' + x.kit + '`')) why.push(`STYLE-INDEX에 ${x.kit}가 없다(scripts/style-index.py)`); }
+    const idx = join(T.looks.skills_kits, '..', 'references', 'STYLE-INDEX.md'); if (existsSync(idx)) { const s = readFileSync(idx, 'utf8'); for (const x of L) if (x.kit && !x.skill && !s.includes('`' + x.kit + '`')) why.push(`STYLE-INDEX에 ${x.kit}가 없다(scripts/style-index.py)`); }
     return why.length ? { ok: false, why } : pass(); },
   captions: c => { const have = new Set(c.up?.captions || []), miss = T.captions.langs.filter(l => !have.has(l)); return miss.length ? fail(`자막 없는 언어 ${miss.length}개: ${miss.join(' ')}`) : pass(); },
 };

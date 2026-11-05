@@ -74,6 +74,7 @@ const JOSEPH_O = [['M', .3, 0], ['C', .3, -.5, .29, -.95, .26, -1.3], ['C', .24,
     g.save(); g.filter = 'blur(10px)'; g.fillStyle = 'rgba(26,15,7,.75)'; g.beginPath(); g.ellipse(bx, by + 4, bw * .62, bw * .09, 0, 0, 6.283); g.fill(); g.restore();
     const r = rng(Math.round(bx)); g.lineCap = 'round'; for (let i = 0; i < 140; i++) { const x = bx + (r() - .5) * bw * 1.3, y = by - 10 + r() * 28, d = Math.hypot(x - lx, (y - ly) * 1.6) / (W * .62), kk = clamp(1 - d);
       g.strokeStyle = `rgba(${150 + 70 * kk | 0},${104 + 60 * kk | 0},${50 + 30 * kk | 0},${.55 + .35 * r()})`; g.lineWidth = 1.8 + 1.6 * r(); g.beginPath(); g.moveTo(x, y); g.lineTo(x + (r() - .5) * 40, y - 6 - r() * 14); g.stroke(); } }
+  SOIL.top = Math.min(my - 1.2 * sM, jy - 1.8 * sJ);   // the highest head in the plate (Joseph's): the TV cut keeps room above it
   // the light itself, laid on as glaze over everything near the child
   radial(LP[0], LP[1], Math.max(W, H) * .4, [[0, 'rgba(255,236,190,.55)'], [.2, 'rgba(240,180,100,.25)'], [1, 'rgba(200,130,60,0)']], 'screen');
   SOIL.art = OIL.paint(plate, { key: 'rembrandt', S, seed: 11 });
@@ -89,8 +90,13 @@ function stableOil(ctx, t, fx, fy, z, o = {}) {
     const d = Math.hypot(x - sx, y - sy) / (W * .5), a = clamp(1 - d) * .5 * (o.glow ?? 1); if (a <= 0) continue; ctx.fillStyle = `rgba(255,228,180,${a})`; ctx.beginPath(); ctx.arc(x, y, 1.2 + r() * 1.6, 0, 6.283); ctx.fill(); } ctx.restore(); }
   OIL.varnish(ctx, 1); W3.finish(ctx, t, { vignette: .38, grain: .06 });
 }
+// the TV cut (round 8, look review h r7 — all four: "Mary's and Joseph's heads cut by the top of the frame"): the portrait framings
+// pushed in to 1.55–1.75×, which on a 16:9 frame crops the standing figures. Landscape pulls back (×k), keeps 6 % of the
+// frame clear above the highest head, and never lets the edge of the painting into the frame.
+function tvView(fx, fy, z, k = .74) { if (V) return [fx, fy, z]; const z2 = Math.max(1.04, z * k), lx = W / 2 * (1 - 1 / z2), ly = H / 2 * (1 - 1 / z2);
+  const fy2 = Math.min(fy, SOIL.top + (H / 2 - H * .06) / z2); return [clamp(fx, W / 2 - lx, W / 2 + lx), clamp(fy2, H / 2 - ly, H / 2 + ly), z2]; }
 // 2:7 — the pull-back: from the child to the whole room (95.0–104.8)
-function partStable(ctx, t) { const k = eio(clamp((t - 95) / 9.6)); stableOil(ctx, t, lerp(SOIL.lx, W / 2, k), lerp(SOIL.ly - 10, H * .5, k), lerp(1.55, 1.0, k)); textBand(ctx); }
+function partStable(ctx, t) { const k = eio(clamp((t - 95) / 9.6)); stableOil(ctx, t, ...tvView(lerp(SOIL.lx, W / 2, k), lerp(SOIL.ly - 10, H * .5, k), lerp(1.55, 1.0, k))); textBand(ctx); }
 // the two verses joined (113.6–137.2), round 3 after the look review (all four: "23 s of the same stable, nearly black"):
 // W0–W1 (Gen 3:15) back in the garden — the charcoal tree and its one point of light, the camera pushing toward it;
 // as the words cross to Gal 4:4 the point comes down and becomes the light of the child (the promise kept), the stable close
@@ -103,7 +109,7 @@ function partPair(ctx, t) {
   // (Gal 4:4) → Mary's face and hands with the child (W3, "동정녀에게서") → back and up to the doorway's star ("우리 죄를 대신")
   const { lx, ly } = SOIL, back = ss(128.4, 131.4, t), KEYS = [[121, lx - 60, ly + 120, 1.55], [126.2, lx - 70, ly + 100, 1.72], [127.8, lx - 150, ly - 60, 1.6], [131.2, lx - 160, ly - 70, 1.75], [133, lx - 160, ly - 110, 1.5], [137.2, lx - 180, ly - 130, 1.3]];   /* round 3b: medium shots, the child always above the words */
   let i = 0; while (i < KEYS.length - 2 && t > KEYS[i + 1][0]) i++; const [ta, xa, ya, za] = KEYS[i], [tb, xb, yb, zb] = KEYS[i + 1], u = eio(clamp((t - ta) / (tb - ta)));
-  const fx = lerp(xa, xb, u), fy = lerp(ya, yb, u), z = lerp(za, zb, u);
+  const [fx, fy, z] = tvView(lerp(xa, xb, u), lerp(ya, yb, u), lerp(za, zb, u), .7);
   if (eden < 1) {
     stableOil(ctx, t, fx, fy, z, { glow: 1.25 + .55 * back });
     // W3: "우리 죄를 대신" — the cross the post and beam throw on the back wall, faint, warm-dark (the light is the child)
@@ -115,8 +121,11 @@ function partPair(ctx, t) {
     // the garden, remembered: the charcoal frame with the point lit, pushed in toward the point
     if (!PAIR_EDEN) PAIR_EDEN = canvas(W, H); const g = PAIR_EDEN.getContext('2d'); g.setTransform(1, 0, 0, 1, 0, 0); g.clearRect(0, 0, W, H);
     window.partEden(g, lerp(30.8, 32.4, clamp((t - 113.6) / 9.8))); const [px, py] = window.partEden.point(), ze = lerp(1.0, 1.45, eio(clamp((t - 113.6) / 9.8)));
-    ctx.save(); ctx.globalAlpha = eden; ctx.translate(px, py); ctx.scale(ze, ze); ctx.translate(-px, -py); ctx.drawImage(PAIR_EDEN, 0, 0); ctx.restore();
-    PAIR_EDEN.px = px; PAIR_EDEN.py = py;
+    // the TV cut (look review h r7: "the verse lies over the two and the point"): the garden rides 10 % higher, the verse sits
+    // in the lower band (TEXT W1 y), and the dark ground of the ink picture fills in under it
+    const dy = V ? 0 : H * .1; if (dy) { ctx.fillStyle = `rgba(12,11,10,${eden})`; ctx.fillRect(0, 0, W, H); }
+    ctx.save(); ctx.globalAlpha = eden; ctx.translate(px, py - dy); ctx.scale(ze, ze); ctx.translate(-px, -py); ctx.drawImage(PAIR_EDEN, 0, 0); ctx.restore();
+    PAIR_EDEN.px = px; PAIR_EDEN.py = py - dy;
   }
   // the point of light coming down from the garden into the manger
   if (dsc > 0 && dsc < 1 && PAIR_EDEN) { const cx = W / 2 + (SOIL.LP[0] - fx) * z, cy = H / 2 + (SOIL.LP[1] - fy) * z, u = eio(dsc);

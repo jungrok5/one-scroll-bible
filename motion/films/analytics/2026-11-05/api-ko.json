@@ -1,0 +1,120 @@
+{
+ "from": "2026-11-04",
+ "to": "2026-11-05",
+ "keys": {
+  "wrEYqvOU1O8": "film-narr",
+  "66VfBSXxAs8": "film-music",
+  "BWzpW2MVkCI": "silence400-h",
+  "smt-UIB_qss": "silence400-v",
+  "0rdPczV5gqA": "short-10",
+  "mosfXiuZ6pA": "short-11",
+  "w-9I7bIYKc4": "short-12",
+  "jr3PxWQY7Nk": "short-01",
+  "Ub6aw-WBNco": "short-02",
+  "Idr2IkdsA-o": "short-03",
+  "9E5U3jX2ndY": "short-04",
+  "t6SHBm6dPVw": "short-05",
+  "gopZZma-qdU": "short-06",
+  "3Qiy-2d1REU": "short-07",
+  "aHDniuv9JZ8": "short-08",
+  "0m0KL7Hcakk": "short-09"
+ },
+ "videos": {
+  "wrEYqvOU1O8": {
+   "title": "창조에서 새 하늘과 새 땅까지, 성경 이야기를 14분 영상으로 (목소리 해설판)",
+   "duration": "PT14M21S",
+   "from": "2026-11-04",
+   "to": "2026-11-05"
+  },
+  "66VfBSXxAs8": {
+   "title": "한눈에 보는 성경 이야기 — Bible in One Scroll",
+   "duration": "PT14M21S",
+   "from": "2026-11-04",
+   "to": "2026-11-05"
+  },
+  "BWzpW2MVkCI": {
+   "title": "침묵의 400년 | 구약과 신약 사이, 하나님은 무엇을 준비하셨나",
+   "duration": "PT3M",
+   "from": "2026-11-04",
+   "to": "2026-11-05"
+  },
+  "smt-UIB_qss": {
+   "title": "성경에서는 한 장 차이, 그 사이 400년 — 침묵의 400년",
+   "duration": "PT3M",
+   "from": "2026-11-04",
+   "to": "2026-11-05"
+  },
+  "0rdPczV5gqA": {
+   "title": "여호와로 인하여 기뻐하는 것이 너희의 힘이니라 — 포로 귀환 10/21",
+   "duration": "PT38S",
+   "from": "2026-11-04",
+   "to": "2026-11-05"
+  },
+  "mosfXiuZ6pA": {
+   "title": "선지자의 음성이 멈춘 400년 — 400년 침묵 11/21",
+   "duration": "PT34S",
+   "from": "2026-11-04",
+   "to": "2026-11-05"
+  },
+  "w-9I7bIYKc4": {
+   "title": "“말씀이 육신이 되어 우리 가운데 거하시매” — 예수님의 오심 12/21",
+   "duration": "PT36S",
+   "from": "2026-11-04",
+   "to": "2026-11-05"
+  },
+  "jr3PxWQY7Nk": {
+   "title": "성경은 결국 한 편의 이야기입니다 1/21",
+   "duration": "PT37S",
+   "from": "2026-11-04",
+   "to": "2026-11-05"
+  },
+  "Ub6aw-WBNco": {
+   "title": "“하나님이 이르시되 빛이 있으라” — 창조 2/21",
+   "duration": "PT36S",
+   "from": "2026-11-04",
+   "to": "2026-11-05"
+  },
+  "Idr2IkdsA-o": {
+   "title": "“네가 어디 있느냐” — 타락 3/21",
+   "duration": "PT35S",
+   "from": "2026-11-04",
+   "to": "2026-11-05"
+  },
+  "9E5U3jX2ndY": {
+   "title": "“하늘을 우러러 뭇별을 셀 수 있나 보라” — 족장 시대 4/21",
+   "duration": "PT27S",
+   "from": "2026-11-04",
+   "to": "2026-11-05"
+  },
+  "t6SHBm6dPVw": {
+   "title": "“내 백성을 보내라” — 출애굽 5/21",
+   "duration": "PT45S",
+   "from": "2026-11-04",
+   "to": "2026-11-05"
+  },
+  "gopZZma-qdU": {
+   "title": "약속의 땅 문 앞에 선 백성, 이제 들어갑니다… — 광야 여정 6/21",
+   "duration": "PT40S",
+   "from": "2026-11-04",
+   "to": "2026-11-05"
+  },
+  "3Qiy-2d1REU": {
+   "title": "왕이 없어 제멋대로 행하다. — 사사 시대 7/21",
+   "duration": "PT40S",
+   "from": "2026-11-04",
+   "to": "2026-11-05"
+  },
+  "aHDniuv9JZ8": {
+   "title": "사람은 외모를 보거니와 나 여호와는 중심을 보느니라 — 통일 왕국 8/21",
+   "duration": "PT39S",
+   "from": "2026-11-04",
+   "to": "2026-11-05"
+  },
+  "0m0KL7Hcakk": {
+   "title": "성전이 불타고, 백성은 바벨론으로 끌려갑니다. — 분열 왕국 · 포로 9/21",
+   "duration": "PT36S",
+   "from": "2026-11-04",
+   "to": "2026-11-05"
+  }
+ }
+}

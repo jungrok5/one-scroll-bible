@@ -3,7 +3,9 @@
 // motion/films/analytics/<date>/, and `report` turns them into the same tables every time (the agent adds only the reading).
 //   node motion/films/analytics/collect.mjs plan [date]        — the fixed list: API step + every page (URL · extractor · output file)
 //   node motion/films/analytics/collect.mjs api [date]         — YouTube Analytics (Korean channel videos) + international status → JSON/text
-//   node motion/films/analytics/collect.mjs script <extractor>  — the code to run in the page (javascript_tool); save its result to the plan's file
+//   node motion/films/analytics/collect.mjs script <extractor> [page]  — the code to run in the page (javascript_tool); with a page
+//                                                                       name it POSTs the result to `recv`, which saves the plan's file
+//   node motion/films/analytics/collect.mjs recv [date]        — local receiver (127.0.0.1:8766) for those POSTs; leave it running
 //   node motion/films/analytics/collect.mjs check [date]       — which sources are still missing
 //   node motion/films/analytics/collect.mjs report [date]      — analytics/<date>/report.md: tables + change since the last analysis + flags
 import { readFileSync, writeFileSync, existsSync, mkdirSync, readdirSync } from 'node:fs';
@@ -33,16 +35,36 @@ function pages() {
     { name: 'ga4', url: 'https://analytics.google.com/analytics/web/?authuser=1#/a52565752p541891245/reports/explorer?r=lifecycle-traffic-acquisition-v2', ex: 'ga4' });
   return P;
 }
-const out = n => join(D, n + '.json');
+const out = n => join(D, n + '.json'), RECV = 8766;
 
 if (cmd === 'plan') {
-  console.log(`정기 분석 수집 ${date} → motion/films/analytics/${date}/\n1) node motion/films/analytics/collect.mjs api ${date}\n2) 브라우저(한국어 채널 신원 · 각 페이지 8–10초 기다린 뒤): 페이지를 열고 \`collect.mjs script <추출기>\`의 코드를 javascript_tool로 실행, 돌려받은 JSON을 그대로 파일에 저장`);
+  console.log(`정기 분석 수집 ${date} → motion/films/analytics/${date}/\n1) node motion/films/analytics/collect.mjs api ${date}\n2) 브라우저(한국어 채널 신원 · 각 페이지 8–10초 기다린 뒤): \`collect.mjs recv ${date}\`를 켜 두고, 페이지를 열고 \`collect.mjs script <추출기> <이름>\`의 코드를 javascript_tool로 실행 — 결과가 recv로 가서 그 파일로 저장된다`);
   for (const p of pages()) console.log(`   - ${p.name}${existsSync(out(p.name)) ? ' ✓' : ''}\n     ${p.url}\n     추출기 ${p.ex} → motion/films/analytics/${date}/${p.name}.json`);
   console.log(`3) node motion/films/analytics/collect.mjs check ${date}  →  4) node motion/films/analytics/collect.mjs report ${date}`);
 } else if (cmd === 'script') {
   const f = join(A, 'extract', arg + '.js'); if (!existsSync(f)) { console.error('추출기 없음: ' + arg); process.exit(1); }
-  // wrapped in one function so it can run again in the same page (no "already declared"); it returns the JSON string
-  console.log('(() => {\n' + readFileSync(join(A, 'extract/_lib.js'), 'utf8') + '\nreturn JSON.stringify(' + readFileSync(f, 'utf8').replace(/^\s*\/\/.*$/gm, '').trim() + ');\n})()');
+  // wrapped in one function so it can run again in the same page (no "already declared"); it returns the JSON string.
+  // With a page name (`script studio-video video-film-narr-reach_viewers`) it also POSTs the result to `recv` — the tool's
+  // output is cut at ~1,000 characters, so long tables (studio-content, 44 rows) cannot be copied back by hand (2026-11-05).
+  // `auto` names a video page from its own URL (id → plan key, tab), so one script serves every video page; the POST form
+  // first waits 9 s for the page's charts, so a batch can go navigate → script with no separate wait.
+  const name = process.argv[4], body = readFileSync(join(A, 'extract/_lib.js'), 'utf8') + '\nconst __r = JSON.stringify(' + readFileSync(f, 'utf8').replace(/^\s*\/\/.*$/gm, '').trim() + ');\n';
+  const K = Object.fromEntries(watched().map(w => [w.id, w.key]));
+  const N = name === 'auto' ? `'video-' + ${JSON.stringify(K)}[(location.pathname.match(/video\\/([\\w-]{11})/) || [])[1]] + '-' + (location.pathname.match(/tab-(\\w+)/) || [])[1]` : JSON.stringify(name || '');
+  console.log(name ? `await (async () => {\nawait new Promise(r => setTimeout(r, 9000));\n${body}const n = ${N};\nconst r = await fetch('http://127.0.0.1:${RECV}/' + n, { method: 'POST', body: __r }).then(r => r.text(), e => 'recv 없음: ' + e);\nreturn r + ' · ' + __r.slice(0, 300);\n})()`
+    : `(() => {\n${body}return __r;\n})()`);
+} else if (cmd === 'recv') {
+  // receives the page extractors' JSON (POST /<page name>) and writes it to the plan's file; only plan names, only these sites
+  const { createServer } = await import('node:http'), names = new Set(pages().map(p => p.name)); mkdirSync(D, { recursive: true });
+  const ORIGINS = /^https:\/\/(studio\.youtube\.com|www\.instagram\.com|www\.threads\.com|analytics\.google\.com)$/;
+  createServer((req, res) => {
+    const o = req.headers.origin || ''; if (ORIGINS.test(o)) res.setHeader('Access-Control-Allow-Origin', o);
+    res.setHeader('Access-Control-Allow-Private-Network', 'true'); res.setHeader('Access-Control-Allow-Headers', '*');
+    if (req.method === 'OPTIONS') { res.writeHead(204); return res.end(); }
+    const n = decodeURIComponent(req.url.slice(1)); if (req.method !== 'POST' || !ORIGINS.test(o) || !names.has(n)) { res.writeHead(403); return res.end('no'); }
+    let b = ''; req.on('data', c => { b += c; if (b.length > 2e6) req.destroy(); });
+    req.on('end', () => { try { JSON.parse(b); } catch { res.writeHead(400); return res.end('JSON 아님'); } writeFileSync(out(n), b + '\n'); console.log(`✓ ${n} (${b.length}자)`); res.end(`저장 ${n}`); });
+  }).listen(RECV, '127.0.0.1', () => console.log(`recv ${date} → motion/films/analytics/${date}/  (127.0.0.1:${RECV}, Ctrl+C로 끔)`));
 } else if (cmd === 'api') {
   mkdirSync(D, { recursive: true }); const from = prevDate() || '2026-10-20', env = { ...process.env };
   for (const k of ['YT_CLIENT_ID', 'YT_CLIENT_SECRET', 'YT_REFRESH_TOKEN', 'YT_REFRESH_TOKEN_GLOBAL']) if (!env[k]) { console.error(`${k}가 없다 — 사용자 환경 변수에서 불러온 뒤 다시`); process.exit(1); }
@@ -75,4 +97,4 @@ if (cmd === 'plan') {
   const gt = existsSync(join(D, 'api-global.txt')) ? readFileSync(join(D, 'api-global.txt'), 'utf8') : ''; if (gt) R.push('', '**국제 채널**: ' + gt.split('\n').filter(l => /shorts|film/.test(l)).map(l => l.replace(/\s+/g, ' ').replace(/ videos.*views/, ' 조회')).join(' · '));
   R.push('', '**읽은 것** (에이전트가 쓴다: 숫자 → 그림·소리·형식 요소 → 다음 영상에 바꿀 것)', '', '**다음 추천 제작 주제** (README 10절 근거 형식)', '');
   writeFileSync(join(D, 'report.md'), R.join('\n') + '\n'); console.log(`analytics/${date}/report.md`); console.log(R.join('\n'));
-} else { console.log('plan | api | script <extractor> | check | report  [date]'); process.exit(1); }
+} else { console.log('plan | api | script <extractor> [page] | recv | check | report  [date]'); process.exit(1); }

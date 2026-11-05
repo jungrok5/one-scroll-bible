@@ -26,7 +26,9 @@ if (which === 'daily') {
   console.log(run(['motion/films/analytics/collect.mjs', 'plan']).trim());
   console.log(`
 === 그다음 (이 순서로) ===
-A. 위 페이지를 하나씩 열어 \`node motion/films/analytics/collect.mjs script <추출기>\` 코드를 javascript_tool로 실행하고, 돌려받은 JSON을 그 파일에 저장.
+A. \`node motion/films/analytics/collect.mjs recv\`를 백그라운드로 켜고, 위 페이지를 하나씩 열어 \`collect.mjs script <추출기> <이름>\`(영상 페이지는 \`script studio-video auto\`)
+   코드를 javascript_tool로 실행 — 결과가 recv로 가서 그 파일로 저장된다(도구 출력은 약 1,000자에서 잘려 손으로 옮길 수 없다). 다 모이면 recv를 끈다.
+   크롬 창이 0×0(innerWidth 0)이면 스튜디오 그래프가 안 그려진다 — 크기가 정상인 다른 창의 탭(예: GA4 탭)에서 연다.
 B. node motion/films/analytics/collect.mjs check  → 빠진 것이 없을 때까지.
 C. node motion/films/analytics/collect.mjs report → report.md의 표를 motion/films/ANALYTICS.md에 날짜 절로 붙인다.
 D. "읽은 것": ANALYTICS.md "요소 분석" 8항목(이탈 구간↔장면, 화풍, 첫 1초, 썸네일·제목·첫 줄, 소리, 형식, 플랫폼 차이, 댓글)으로 읽고,

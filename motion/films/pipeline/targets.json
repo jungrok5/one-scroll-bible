@@ -38,6 +38,8 @@
   "lufs": -14,
   "lufs_tol": 1.5,
   "music_cues_per_min_max": 2,
+  "harsh_hf_max": -38,
+  "harsh_hf_note": "효과음 하나의 3.5 kHz 위 평균(파일 + db) — 「메시아」 S9 제비 −19.8−13 = −32.8 → 관리자 \"칠판 긁는 소리\"; 첫 영상 효과음은 대개 −40 아래",
   "music_cues_note": "「메시아」 8a: 16큐/3분(5.4/분) → 관리자 \"씬별 단절된 느낌\" · 8b: 4악장(1.3/분)",
   "peak_max": -1.0,
   "sfx_per_min_min": 8,

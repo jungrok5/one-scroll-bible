@@ -31,7 +31,7 @@ if (cmd === 'status') {
   process.exit(r.ok ? 0 : 2);
 }
 if (cmd === 'check' || cmd === 'run') {
-  const s = st(stage);
+  const s0 = st(stage), s = process.argv.includes('--review') ? { ...s0, gates: [...s0.gates, ...(s0.optional || [])] } : s0;   // --review: also the on-request gates (the look review)
   if (cmd === 'run') for (const c of s.run || []) { const a = cmdline(c, film); console.log('$ ' + a.join(' ')); const p = spawnSync(a[0] === 'node' ? process.execPath : a[0], a.slice(1), { stdio: 'inherit' }); if (p.status) { console.error('실패: ' + a.join(' ')); process.exit(p.status); } }
   if (cmd === 'run' && s.id === 'picture') { const c = ctx(film), h = srcHash(c);
     for (const o of ['v', 'h']) if (existsSync(join(FILMS, '..', 'out', `${film}-${o}-narr.mp4`))) { writeFileSync(join(FILMS, '..', 'out', `${film}-${o}-narr.mp4.src.json`), JSON.stringify({ hash: h, at: new Date().toISOString() }) + '\n');

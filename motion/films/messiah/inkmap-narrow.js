@@ -14,7 +14,7 @@
   function build() {
     M.projection(WIDE); wideMap = M.build(M.MED, { labels: [], cityDots: false });
     const r = rng(17), gate = [36.0, 33.3], judah = [35.15, 31.95];
-    threads = []; for (let i = 0; i < 26; i++) { const s = [lerp(2, 56, r()), lerp(27, 44, r())], g = [gate[0] + (r() - .5) * .9, gate[1] + (r() - .5) * .9];
+    threads = []; for (let i = 0; i < 12; i++)   /* 8c: 26 → 12 (look review: 'threads tangled everywhere') */ { const s = [lerp(2, 56, r()), lerp(27, 44, r())], g = [gate[0] + (r() - .5) * .9, gate[1] + (r() - .5) * .9];
       threads.push(M.arcPts(s, g, (r() - .5) * .5).concat(M.arcPts(g, judah, (r() - .5) * .2).slice(1))); }
     M.projection(LAND);
     const D = Object.assign({}, M.MED, { extent: [39.5, 28.5], seed: 31, compass: [38.6, 29.4], grid: { lon: [31, 40], lat: [28, 36], step: 1 },
@@ -35,9 +35,13 @@
     ctx.fillStyle = M.BG; ctx.fillRect(0, 0, Pilot.W, Pilot.H); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
     // the whole world, and the many threads gathering into the land (51.6 → 55.6)
     if (land < 1) { M.projection(WIDE); const z = zoomFor(span, WIDE.scale); sheet(ctx, wideMap, lon, lat, z, 1);
-      const p = ss(51.6, 55.6, t); ctx.globalAlpha = .85; for (const th of threads) { ctx.shadowColor = 'rgba(255,200,90,.95)'; ctx.shadowBlur = 14; ctx.strokeStyle = '#f6d27a'; ctx.lineWidth = 5 / z; M.partial(ctx, th, p); } ctx.restore(); }
+      const p = ss(51.6, 55.6, t); ctx.globalAlpha = .9;
+      // 8c (관리자: "지도 색이랑 노란 줄이 색 구분이 힘들어"): each thread first as a dark sepia ink line, then a deeper gold on top — gold on parchment needs a dark edge
+      for (const th of threads) { ctx.shadowBlur = 0; ctx.strokeStyle = 'rgba(58,30,10,.8)'; ctx.lineWidth = 10 / z; M.partial(ctx, th, p); }
+      for (const th of threads) { ctx.shadowColor = 'rgba(255,170,40,.9)'; ctx.shadowBlur = 12; ctx.strokeStyle = '#f2ad2e'; ctx.lineWidth = 4.5 / z; M.partial(ctx, th, p); } ctx.restore(); }
     // the land: one strand left, to Bethlehem; the lamps; the names
     if (land > 0) { M.projection(LAND); const z = zoomFor(span, LAND.scale); sheet(ctx, landMap, lon, lat, z, land); ctx.globalAlpha = land;
+      { ctx.save(); ctx.strokeStyle = 'rgba(58,30,10,.8)'; ctx.lineWidth = 11 / z; M.partial(ctx, strand, ss(56.4, 58.0, t)); ctx.restore(); }   // the same dark ink edge under the last strand
       M.goldRoute(ctx, strand, ss(56.4, 58.0, t), z);
       M.cityLamp(ctx, 'bethlehem', ss(57.6, 58.4, t) * (1 + .3 * ss(58, 59, t)), z, t, 1);
       M.cityLamp(ctx, 'nazareth', ss(64.0, 64.8, t), z, t, 2); M.cityLamp(ctx, [35.24, 32.73], ss(65.4, 66.2, t) * .7, z, t, 3); M.cityLamp(ctx, [35.34, 32.69], ss(66.8, 67.6, t) * .6, z, t, 4);

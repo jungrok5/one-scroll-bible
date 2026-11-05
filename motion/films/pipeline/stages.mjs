@@ -107,6 +107,11 @@ const G = {
     for (const l of c.lines) if (l.kind === 'narr' && !existsSync(join(sd, 'voice', l.id + '.mp3'))) why.push(`해설 ${l.id}: voice/${l.id}.mp3 없음`);
     for (const l of c.lines) if (l.kind === 'narr' && existsSync(join(sd, 'voice', l.id + '.mp3')) && c.place.at[l.id] == null && !(c.place.subs_extra || {})[l.id]) why.push(`해설 ${l.id}: place.json at 없음`);
     const sfx = c.cues.sfx || [], dur = c.place.dur || 180, perMin = sfx.length / (dur / 60); if (perMin < T.sound.sfx_per_min_min) why.push(`효과음 분당 ${perMin.toFixed(1)}개 < ${T.sound.sfx_per_min_min} (SOUND.md — 화면 동작마다 소리)`);
+    // harsh highs (관리자 2026-11-05 「메시아」 S9 제비 소리: "끼긱끼긱 날카로운 불편한 소리, 칠판 긁는 소리 같은"): an effect whose energy above
+    // 3.5 kHz is high reads as a screech on a phone speaker — the first film's effects sit under −30 dB there
+    for (const q of sfx) { const fp = q.file ? join(ROOT, q.file) : join(sd, 'audio', q.id + '.mp3'); if (!existsSync(fp)) continue;
+      const r = spawnSync('ffmpeg', ['-hide_banner', '-nostats', '-i', fp, '-af', 'highpass=f=3500,volumedetect', '-f', 'null', '-'], { encoding: 'utf8' }), m = (r.stderr || '').match(/mean_volume: (-?[d.]+)/);
+      if (m && +m[1] + (q.db || 0) > T.sound.harsh_hf_max) why.push(`효과음 ${q.id}: 3.5 kHz 위 ${(+m[1] + (q.db || 0)).toFixed(1)} dB > ${T.sound.harsh_hf_max} — 휴대폰에서 날카롭게 들린다(새소리·긁는 소리를 로우패스하거나 바꾼다)`); }
     // music as movements, not one cue per scene (SOUND.md 「메시아」에서 배운 것, 2026-11-05): few long cues that overlap ≥ 1 s, no duck on a joint
     { const M = [...(c.cues.music || [])].sort((p, q) => p.at - q.at), mpm = M.length / (dur / 60); if (mpm > T.sound.music_cues_per_min_max) why.push(`음악 큐 분당 ${mpm.toFixed(1)}개 > ${T.sound.music_cues_per_min_max} — 장면마다 새 큐는 컷이 된다(SOUND.md: 악장 3~4개)`);
       for (let i = 1; i < M.length; i++) { const end = M[i - 1].at + M[i - 1].len, ov = end - M[i].at; if (ov > -.01 && ov < 1) why.push(`음악 ${M[i - 1].id} → ${M[i].id}: 겹침 ${ov.toFixed(1)}초 < 1초`);
@@ -161,7 +166,7 @@ export const STAGES = [
   { id: 'topic', n: 1, name: '주제', task: 'topic', gates: ['topic'], approve: '관리자가 주제를 고름' },
   { id: 'script', n: 2, name: '원고·장면별 화풍·메시지 점검', task: 'script', gates: ['script', 'looks'] },
   { id: 'review', n: 3, name: '관점 검수·시청자 리뷰·초안 페이지', task: 'review', run: [['node', 'motion/films/review-page.mjs', '{film}']], gates: ['reviews'], approve: '관리자·아내가 초안을 컨펌' },
-  { id: 'picture', n: 4, name: '그리기·렌더', task: 'picture', run: [['node', 'motion/render.mjs', 'v', '--page', 'films/{film}/film.html', '--workers', '6'], ['node', 'motion/films/sound.mjs', '{film}', 'v'], ['node', 'motion/render.mjs', 'h', '--page', 'films/{film}/film.html', '--workers', '6'], ['node', 'motion/films/sound.mjs', '{film}', 'h']], gates: ['picture', 'lookreview'], approve: '관리자·가족이 시안 확인' },
+  { id: 'picture', n: 4, name: '그리기·렌더', task: 'picture', run: [['node', 'motion/render.mjs', 'v', '--page', 'films/{film}/film.html', '--workers', '6'], ['node', 'motion/films/sound.mjs', '{film}', 'v'], ['node', 'motion/render.mjs', 'h', '--page', 'films/{film}/film.html', '--workers', '6'], ['node', 'motion/films/sound.mjs', '{film}', 'h']], gates: ['picture'], approve: '관리자·가족이 시안 확인', optional: ['lookreview'] }   /* 관리자 2026-11-05: "점수 뽑는 리뷰는 빼자, 내가 요청할 때 해" — the look review runs only on request (film.mjs check <film> picture --review) */,
   { id: 'kits', n: 4.5, name: '새 화풍을 canvas-film 키트로', task: 'kits', gates: ['kits'] },
   { id: 'sound', n: 5, name: '해설·음악·효과음·섞기', task: 'sound', run: [['node', 'motion/films/sound.mjs', '{film}', 'v'], ['node', 'motion/films/sound-prompts.mjs', 'md', 'motion/films/{film}/sound/prompts.json']], gates: ['sound'] },
   { id: 'clips', n: 5.5, name: '반복용 짧은 쇼츠(끝이 처음으로)', task: 'clips', run: [['node', 'motion/films/clips.mjs', '{film}']], gates: ['clips'] },

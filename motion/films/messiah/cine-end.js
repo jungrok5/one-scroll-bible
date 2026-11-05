@@ -60,8 +60,7 @@ export function build(W, H) {
     for (let i = 0; i < p.count; i++) { const x = p.getX(i) + .17; p.setX(i, side * x); p.setZ(i, Math.sin(x / .34 * Math.PI) * .03 + x * .09); } g.computeVertexNormals();
     const m = new THREE.Mesh(g, side < 0 ? (() => { const t = pageTex.clone(); t.repeat.x = -1; t.offset.x = 1; t.needsUpdate = true; return new THREE.MeshStandardMaterial({ map: t, roughness: .9, side: THREE.DoubleSide }); })() : pageMat); m.rotation.x = -Math.PI / 2; m.position.set(0, ty + .066, tz + .08); m.receiveShadow = true; S.add(m); };   // above the cover
   page(-1); page(1);
-  { const gut = new THREE.Mesh(new THREE.BoxGeometry(.02, .004, .46), K.std('#7a6a52', { roughness: 1 })); gut.position.set(0, ty + .068, tz + .08); S.add(gut);   // the gutter's shadow
-    for (const sd of [-1, 1]) { const ed = new THREE.Mesh(new THREE.BoxGeometry(.34, .018, .46), K.std('#e2d6bc', { roughness: 1 })); ed.position.set(sd * .17, ty + .068, tz + .08); ed.scale.y = .01; S.add(ed); } }
+  { const gut = new THREE.Mesh(new THREE.BoxGeometry(.02, .004, .46), K.std('#7a6a52', { roughness: 1 })); gut.position.set(0, ty + .068, tz + .08); S.add(gut); }   // the gutter's shadow · 8c: the thin page-edge boxes went — they sat inside the curved page and flickered (z-fighting, 관리자 2026-11-05)
   { const cover = new THREE.Mesh(new THREE.BoxGeometry(.72, .03, .49), K.std('#3a1a14', { roughness: .7 })); cover.position.set(0, ty + .045, tz + .08); S.add(cover); }
   // the oil lamp (the same clay lamp as Bethlehem's windows), its flame small and alive
   const clay = K.std('#8a5a38', { roughness: .9 });
@@ -73,7 +72,7 @@ export function build(W, H) {
 
   // the morning: sun through the window — a warm low key light with shadows of the frame, its glow in the air of the room
   const sun = new THREE.DirectionalLight(col('#ffd8a8'), 0); sun.position.set(.6, wy + 1.2, wz - 4); sun.target.position.set(0, ty, tz + .2);
-  sun.castShadow = true; sun.shadow.mapSize.set(2048, 2048); sun.shadow.camera.left = -2; sun.shadow.camera.right = 2; sun.shadow.camera.top = 2; sun.shadow.camera.bottom = -2; sun.shadow.bias = -.0005;
+  sun.castShadow = true; sun.shadow.mapSize.set(2048, 2048); sun.shadow.camera.left = -2; sun.shadow.camera.right = 2; sun.shadow.camera.top = 2; sun.shadow.camera.bottom = -2; sun.shadow.bias = -.0002; sun.shadow.normalBias = .02; sun.shadow.radius = 2;   // no shadow acne on the curved pages
   S.add(sun, sun.target);
   const glowWin = film.lamp(V(0, wy, wz - .6), '#ffd8a8', { power: 0, size: .6, fog: 2.5 });   // the light hanging in the window
   const glowBeam = film.lamp(V(.1, ty + .45, tz + .1), '#ffe2b8', { power: 0, size: .5, fog: 2 });   // dust lit over the pages

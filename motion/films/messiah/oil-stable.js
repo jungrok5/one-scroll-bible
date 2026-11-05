@@ -116,14 +116,16 @@ function partPair(ctx, t) {
   // the stable, close: from the child toward Mary's lit face, always pushing
   // the camera in three framings (look review r2: "the same stable for 18 s"), one continuous move: the child from close above
   // (Gal 4:4) → Mary's face and hands with the child (W3, "동정녀에게서") → back and up to the doorway's star ("우리 죄를 대신")
-  const { lx, ly } = SOIL, back = ss(128.4, 131.4, t), KEYS = [[121, lx - 60, ly + 120, 1.55], [126.2, lx - 70, ly + 100, 1.72], [127.8, lx - 150, ly - 60, 1.6], [131.2, lx - 160, ly - 70, 1.75], [133, lx - 160, ly - 110, 1.5], [137.2, lx - 180, ly - 130, 1.3]];   /* round 3b: medium shots, the child always above the words */
+  const { lx, ly } = SOIL, back = ss(128.4, 131.4, t), KEYS = [[121, lx - 60, ly + 120, 1.55], [126.2, lx - 70, ly + 100, 1.72], [127.8, lx - 150, ly - 60, 1.6], [129.0, lx - 140, ly - 80, 1.62], [132.6, lx - 60, ly - 290, 1.48], [135.6, lx - 90, ly - 230, 1.4], [137.2, lx - 180, ly - 130, 1.3]];   /* 8d: 128.6–133.3 has no words now — the camera rises from the child to the back wall as the cross forms there */   /* round 3b: medium shots, the child always above the words */
   let i = 0; while (i < KEYS.length - 2 && t > KEYS[i + 1][0]) i++; const [ta, xa, ya, za] = KEYS[i], [tb, xb, yb, zb] = KEYS[i + 1], u = eio(clamp((t - ta) / (tb - ta)));
   const [fx, fy, z] = tvView(lerp(xa, xb, u), lerp(ya, yb, u), lerp(za, zb, u), .7);
   if (eden < 1) {
     stableOil(ctx, t, fx, fy, z, { glow: 1.25 + .55 * back });
     // W3: "우리 죄를 대신" — the cross the post and beam throw on the back wall, faint, warm-dark (the light is the child)
-    const cr = ss(132.4, 135.4, t); if (cr > 0) { const cx = W / 2 + (SOIL.lx - 40 - fx) * z, cy = H / 2 + (SOIL.ly - 380 - fy) * z, s = z;   /* on the back wall above the child */
-      ctx.save(); ctx.globalCompositeOperation = 'multiply'; ctx.filter = `blur(${10 * s}px)`; ctx.fillStyle = `rgba(70,40,20,${.5 * cr})`;
+    // 8d (관리자: "아까 뺀 문장 때문에 아무것도 없이 시간만 지나가는데"): the shadow is this stretch's event — it forms 129.2–132.6 as the
+    // child's light swells, darker and larger than before; the words "우리 죄를 대신" (133.3) arrive over the finished cross
+    const cr = ss(129.2, 132.6, t); if (cr > 0) { const cx = W / 2 + (SOIL.lx - 40 - fx) * z, cy = H / 2 + (SOIL.ly - 380 - fy) * z, s = z;   /* on the back wall above the child */
+      ctx.save(); ctx.globalCompositeOperation = 'multiply'; ctx.filter = `blur(${10 * s}px)`; ctx.fillStyle = `rgba(62,34,16,${.62 * cr})`;
       ctx.fillRect(cx - 9 * s, cy - 150 * s, 18 * s, 330 * s); ctx.fillRect(cx - 82 * s, cy - 70 * s, 164 * s, 16 * s); ctx.restore(); }
   }
   if (eden > 0) {

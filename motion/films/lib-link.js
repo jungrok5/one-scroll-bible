@@ -8,7 +8,8 @@
                the two shared phrases breathe in the same light
      horizon — one horizon of gold light; the camera trucks along it: A passes out to the left, B arrives from the right
                (time runs the way the film's thread runs)
-     ember   — A's shared words break into gold embers that drift and settle into B's shared words
+     ember   — A's shared words break into gold embers that drift and settle into B's shared words;
+               with o.word (one word both verses share, e.g. '여자') that word itself flies from A to B and the verses overlap
    All four stay available: the maintainer picks one for each link in each film (README 7절; 「메시아」 = ember).
    Timing inside [a, b]: A in (0–.8 s), its words lit (1.4 s), the passage (4.2–6.8 s), B's words lit, out at b. */
 (function () {
@@ -81,6 +82,30 @@
       draw(ctx, A, { a: inA * out * (1 - ss(.55, .9, p)), dx: -span * p, hlk: hlA });
       draw(ctx, B, { a: out * ss(.1, .45, p), dx: span * (1 - p), hlk: hlB });
       if (p > 0 && p < 1) B3(ctx, W / 2, S.line, .5 * Math.sin(p * Math.PI) * out, V ? 140 : 120);
+    } else if (style === 'ember' && o.word) {
+      // ember + word (「메시아」 8d, 관리자: "두 문장이 자연스럽게 오버랩되지 않다 보니 그 글자에서 이 글자로 간다는 느낌이 덜하다"): the one shared word
+      // itself lifts out of A as lit gold, trailing embers, and lands on the same word in B; A dims and drifts up while B rises in under
+      // it, so for a moment both verses are on screen and the eye follows the word from one to the other
+      if (!S.w) { const wp = v => { ctx.save(); ctx.font = F.font(v.size, 600); let p = null; for (const r of v.L) { const j = r.l.indexOf(o.word); if (j >= 0) { p = { x: r.x0 + ctx.measureText(r.l.slice(0, j)).width, y: r.y, w: ctx.measureText(o.word).width }; break; } } ctx.restore(); return p || { x: v.cx, y: v.cy, w: 0 }; };
+        S.w = { a: wp(A), b: wp(B) }; }
+      const { a: wa, b: wb } = S.w, lift = H * (V ? .1 : .11), dimA = ss(T0 - .4, T0 + .5, t), goneA = ss(T1 - .6, T1 + .5, t), inB = ss(T0 + .6, T1 + .1, t);
+      const dyA = -lift * eio(dimA), dyB = lift * .7 * (1 - eio(inB)), go = eio(clamp((t - T0) / (T1 - T0)));
+      draw(ctx, A, { a: inA * out * (1 - goneA), rest: 1 - .65 * dimA, hla: 1 - .75 * ss(T0 - .1, T0 + .3, t), hlk: hlA, cite: 1 - dimA, dy: dyA });
+      const land = ss(T1 - .15, T1 + .45, t);
+      draw(ctx, B, { a: out * inB, dy: dyB, rest: 1, hla: land, hlk: Math.max(hlB, land), cite: ss(T1 + .5, T1 + 1.3, t) });
+      const wA = ss(T0 - .15, T0 + .2, t) * (1 - land);
+      if (wA > 0) { const arc = Math.sin(go * Math.PI) * H * .045, x = lerp(wa.x, wb.x, go), y = lerp(wa.y + dyA, wb.y + dyB, go) - arc, sc = 1 + .12 * Math.sin(go * Math.PI);
+        // the trail: embers shed along the path just travelled
+        ctx.save(); ctx.globalCompositeOperation = 'screen'; const r = P.rng(11);
+        for (let i = 0; i < 46; i++) { const lag = (i + 1) * .018, g2 = eio(clamp((t - lag - T0) / (T1 - T0))); if (g2 <= 0 || g2 >= go) continue;
+          const ex = lerp(wa.x, wb.x, g2) + wa.w / 2 + (r() - .5) * 60 * (i / 46), ey = lerp(wa.y + dyA, wb.y + dyB, g2) - Math.sin(g2 * Math.PI) * H * .045 - A.size * .35 + (r() - .5) * 40 * (i / 46) + i * .6;
+          ctx.fillStyle = `rgba(255,${205 + 35 * r() | 0},140,${.8 * (1 - i / 46) * wA * out})`; ctx.fillRect(ex - 1.3, ey - 1.3, 2.6, 2.6); }
+        ctx.restore();
+        B3(ctx, x + wa.w / 2, y - A.size * .35, .45 * wA * out, V ? 150 : 130);
+        ctx.save(); ctx.globalAlpha = wA * out; ctx.font = F.font(A.size, 600); ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
+        ctx.translate(x + wa.w / 2, y - A.size * .35); ctx.scale(sc, sc); ctx.translate(-(x + wa.w / 2), -(y - A.size * .35));
+        ctx.shadowColor = 'rgba(255,190,90,.9)'; ctx.shadowBlur = 30; ctx.fillStyle = '#ffe2a0'; ctx.fillText(o.word, x, y); ctx.restore(); }
+      const flash = land * (1 - ss(T1 + .45, T1 + 1.4, t)); if (flash > 0) B3(ctx, wb.x + wb.w / 2, wb.y - B.size * .35, .6 * flash * out, V ? 190 : 170);
     } else if (style === 'ember') {
       const u = clamp((t - T0 - .4) / 2.4);
       draw(ctx, A, { a: inA * out, rest: 1 - ss(T0 - .4, T0 + .6, t), hla: 1 - ss(T0 + .2, T0 + .7, t), hlk: hlA, cite: 1 - ss(T0 - .4, T0 + .6, t) });

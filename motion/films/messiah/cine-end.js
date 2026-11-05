@@ -37,7 +37,7 @@ export function build(W, H) {
   const floor = new THREE.Mesh(new THREE.PlaneGeometry(6, 6), K.std('#4a3424', { roughness: .85 })); floor.rotation.x = -Math.PI / 2; floor.receiveShadow = true; S.add(floor);
   for (let i = 0; i < 4; i++) { const b = new THREE.Mesh(new THREE.BoxGeometry(4, .16, .14), woodDark); b.position.set(0, 3.1, wz + .5 + i * .9); S.add(b); }
   // the window frame and its mullions (four panes), a deep sill
-  const frame = (w, h, x, y) => { const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, .16), woodDark); m.position.set(x, y, wz + .02); m.castShadow = true; S.add(m); };
+  const frame = (w, h, x, y) => { const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, .26), woodDark); m.position.set(x, y, wz + .05);   /* 8d: the frame stands 4 cm proud of the wall — its face sat exactly on the wall's face and the two flickered (z-fighting, 관리자: '창문 좌우') */ m.castShadow = true; S.add(m); };
   frame(ww + .1, .06, 0, wy + wh / 2); frame(ww + .1, .06, 0, wy - wh / 2); frame(.06, wh, -ww / 2, wy); frame(.06, wh, ww / 2, wy);
   frame(.04, wh, 0, wy); frame(ww, .04, 0, wy + .1);
   { const sill = new THREE.Mesh(new THREE.BoxGeometry(ww + .3, .06, .34), wood); sill.position.set(0, wy - wh / 2 - .03, wz + .14); S.add(sill); }

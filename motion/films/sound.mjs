@@ -14,7 +14,7 @@
 // band the voice lives in (1.2–4.5 kHz) is ducked by the voice, by up to ~6 dB; lows and highs dip ~2 dB at most. Levels are
 // set per cue in cues.json so that under speech the voice sits ~6–7 LU above the music. Both mixes: −14 LUFS, −1.5 dBTP.
 // Find where a generated cue actually swells (to place it on a picture beat): node motion/films/sound.mjs --envelope <file…>
-import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
+import { readFileSync, writeFileSync, existsSync, mkdirSync, statSync } from 'node:fs';
 import { execFileSync, spawnSync } from 'node:child_process';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -46,7 +46,8 @@ for (const id of ids) {
   const out = join(T, id + '.wav');
   const src = lang ? join(S, 'takes-' + lang, `${id}-${place.take[id]}.mp3`) : join(S, 'voice', id + '.mp3');
   const af = [TRIM, lang && place.squeeze?.[id] && SQUEEZE, lang && place.tempo?.[id] && `atempo=${place.tempo[id]}`, 'aresample=48000'].filter(Boolean).join(',');
-  if (!existsSync(out)) ff(['-i', src, '-af', af, '-ac', '2', '-ar', '48000', out]);
+  // rebuild when the take is newer than its trimmed copy (「메시아」 8c: a re-cut W3 kept playing the old take from this cache)
+  if (!existsSync(out) || statSync(src).mtimeMs > statSync(out).mtimeMs) ff(['-i', src, '-af', af, '-ac', '2', '-ar', '48000', out]);
   const dur = +execFileSync('ffprobe', ['-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', out], { encoding: 'utf8' }).trim();
   const e = spawnSync('ffmpeg', ['-hide_banner', '-nostats', '-i', out, '-af', 'ebur128=framelog=quiet', '-f', 'null', '-'], { encoding: 'utf8' }).stderr;
   const I = +e.slice(e.lastIndexOf('Summary')).match(/I:\s+(-?[\d.]+) LUFS/)[1];

@@ -17,6 +17,7 @@
 <script src="oil-journey.js"></script>
 <script src="kit-doreline.js"></script>
 <script src="engrave-shepherds.js"></script>
+<script src="glass-shepherds.js"></script>
 <script src="ink-eden.js"></script>
 <script src="pastel-promises.js"></script>
 <script src="kit-inkmap.js"></script>
@@ -194,6 +195,9 @@ function stableScene(ctx, t, o = {}) {
 // partRise: cine-rise.js (cinematic-3d — the walk up a lane of Bethlehem to one lit doorway under the star, 2026-11-05 round 8;
 // it replaced the third flight over the opening's town, which every reviewer read as a repeat)
 let RISE = null;
+// the shepherds (8d, 관리자 "성탄 느낌 뿜뿜"): ?shep=glass (stained glass, glass-shepherds.js) · ?shep=cine (cinematic-3d field, cine-shep.js) · default the Doré engraving
+const SHEP = (location.search.match(/[?&]shep=(\w+)/) || [])[1] || 'engrave'; let SHEP3D = null;
+function shepScene(ctx, t) { if (SHEP === 'glass') { GlassShep.draw(ctx, t - 104.6); textBand(ctx); } else if (SHEP === 'cine') { SHEP3D.draw(ctx, t - 104.6); textBand(ctx); } else partShepherds(ctx, t); }
 function partRise(ctx, t) { RISE.draw(ctx, t - 137); textBand(ctx); }
 // partDawn: impasto-dawn.js (black-and-white film → palette-knife colour, 2026-11-03 round 2)
 // partEnd: cine-end.js (cinematic-3d — today: a room at first light, an open Bible under the window, the lamp from the night still
@@ -406,7 +410,7 @@ const SCENES = [
   [0, 21.8, (c, t) => { partFlight(c, t); const k = ss(18.4, 19.4, t); if (k > 0) { c.fillStyle = `rgba(6,6,12,${.4 * k})`; c.fillRect(0, 0, W, H); } }],
   [21.0, 37.8, partEden], [37.0, 44.2, partAbraham], [43.4, 52.4, partDavid], [51.0, 71.2, partNarrow],
   [70.4, 77.4, partRome], [76.6, 96.4, partJourney],
-  [95.0, 105.4, partStable], [104.6, 114.4, partShepherds], [113.6, 138.4, partPair],
+  [95.0, 105.4, partStable], [104.6, 114.4, shepScene], [113.6, 138.4, partPair],
   [137.0, 146.8, partRise], [146.0, 159.8, partDawn], [159.0, 179.4, partEnd],
 ];
 const QB = () => ({ bottom: Film.subBottom() + 40 });
@@ -448,7 +452,7 @@ function draw(ctx, t) {
     else if (kind === 'quote') Film.quote(ctx, id, t, a, b, { ...o, hl: Film.lines[id].hl, hlk: o.hlAt ? ss(o.hlAt, o.hlAt + 1.2, t) : 0 }); }
 }
 Pilot.run({ W, H, dur: FILM_DUR, fonts: ["600 40px 'Noto Serif KR'", "400 40px 'Noto Serif KR'", "400 20px 'Noto Sans KR'"],
-  init: async () => { await Film.load(); RISE = (await import('./cine-rise.js')).build(W, H); END = (await import('./cine-end.js')).build(W, H); buildRoad(); buildRome(); buildFly(); buildNarrow(); buildStableOil(); buildJourneyOil(); }, draw });
+  init: async () => { await Film.load(); RISE = (await import('./cine-rise.js')).build(W, H); END = (await import('./cine-end.js')).build(W, H); if (SHEP === 'cine') SHEP3D = (await import('./cine-shep.js')).build(W, H); if (SHEP === 'glass') await GlassShep.init(); buildRoad(); buildRome(); buildFly(); buildNarrow(); buildStableOil(); buildJourneyOil(); }, draw });
 </script>
 </body>
 </html>

@@ -64,6 +64,7 @@ const G = {
     // every frame (frame-qa.mjs): black, frozen, pops outside the film's planned effects, held share overall and per scene
     const q = node([join(FILMS, 'frame-qa.mjs'), vid, '--film', c.film, '--json']), F = JSON.parse((q.stdout || '{}').trim().split('\n').pop() || '{}'), TF = T.frames;
     if (F.frames) { if (F.black > TF.black_max) why.push(`검은 프레임 ${F.black}장 — ${F.blackAt.join(' ')}s`); if (F.frozen.length > TF.frozen_max) why.push(`얼어붙은 구간 ${F.frozen.map(([a, b]) => a + '–' + b + 's').join(' ')}`);
+      for (const q of F.flickers || []) why.push(`깜빡임 ${q.scene}: 프레임의 ${(q.rate * 100).toFixed(0)}%에서 한 자리(가로 ${q.x}·세로 ${q.y})가 밝아졌다 어두워졌다 — z-fighting(두 면이 같은 평면) 등을 고친다(의도한 깜빡임이면 QA_PLANNED)`);
       if (F.pops.length > TF.pops_max) why.push(`튀는 프레임 ${F.pops.length}개 — ${F.pops.slice(0, 8).join(' ')}s (의도한 효과면 film.html QA_PLANNED에)`);
       if (F.held > TF.held_max) why.push(`정지 프레임 ${(F.held * 100).toFixed(0)}% > ${TF.held_max * 100}%`);
       for (const s of F.perScene) if (s.held > TF.scene_held_max) why.push(`${s.scene}(${s.a}–${s.b}s) 정지 ${(s.held * 100).toFixed(0)}% > ${TF.scene_held_max * 100}% — 멈춘 장면도 카메라가 천천히 밀려 들어가야 한다`);
@@ -75,7 +76,7 @@ const G = {
       if (!existsSync(hv)) why.push(`가로판(TV) motion/out/${c.film}-h-narr.mp4 없음`);
       else { if (!hs || hs.hash !== srcHash(c)) why.push('가로판 렌더가 지금 그림 코드가 아니다 — film.mjs run ' + c.film + ' picture');
         const qh = node([join(FILMS, 'frame-qa.mjs'), hv, '--film', c.film, '--json']), FH = JSON.parse((qh.stdout || '{}').trim().split('\n').pop() || '{}');
-        if (FH.frames) { if (FH.black > TF.black_max) why.push(`가로판 검은 프레임 ${FH.black}장 — ${FH.blackAt.join(' ')}s`); if (FH.frozen.length > TF.frozen_max) why.push(`가로판 얼어붙은 구간 ${FH.frozen.map(([a, b]) => a + '–' + b + 's').join(' ')}`); j.frames_h = { black: FH.black, frozen: FH.frozen.length, held: FH.held }; } } }
+        if (FH.frames) { for (const q of FH.flickers || []) why.push(`가로판 깜빡임 ${q.scene}: 프레임의 ${(q.rate * 100).toFixed(0)}% (가로 ${q.x}·세로 ${q.y})`); if (FH.black > TF.black_max) why.push(`가로판 검은 프레임 ${FH.black}장 — ${FH.blackAt.join(' ')}s`); if (FH.frozen.length > TF.frozen_max) why.push(`가로판 얼어붙은 구간 ${FH.frozen.map(([a, b]) => a + '–' + b + 's').join(' ')}`); j.frames_h = { black: FH.black, frozen: FH.frozen.length, held: FH.held }; } } }
     return why.length ? { ok: false, why, info: j } : { ok: true, why: [], info: j }; },
   // the picture scored scene by scene (.claude/workflows/film-look-review.js) — for this render, not an older one
   lookreview: c => { const why = [], TL = T.look_review;

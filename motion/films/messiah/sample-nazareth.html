@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>나사렛의 방 시안</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600&display=swap">
+</head>
+<body>
+<script src="../../pilot/lib.js"></script>
+<script src="kit-oilpaint.js"></script>
+<script src="oil-nazareth.js"></script>
+<script>
+/* 시안: 「메시아」 3차 3부 나사렛의 방 (페르메이르풍 창가 빛 유화) — node motion/render.mjs v --page films/messiah/sample-nazareth.html --stills 1,5 */
+const { clamp, lerp, ss, eio, rng, canvas } = Pilot;
+const W = Pilot.W, H = Pilot.H, V = Pilot.ori === 'v';
+function bez(p, cmds) { for (const c of cmds) { if (c[0] === 'M') p.moveTo(c[1], c[2]); else if (c[0] === 'L') p.lineTo(c[1], c[2]); else if (c[0] === 'C') p.bezierCurveTo(c[1], c[2], c[3], c[4], c[5], c[6]); else if (c[0] === 'Z') p.closePath(); } }
+function draw(ctx, t) { const k = eio(clamp(t / 8));
+  nazarethOil(ctx, t, lerp(W * .5, W * .54, k), lerp(H * .5, H * .48, k), lerp(1.08, 1.16, k)); }
+Pilot.run({ W, H, dur: 8, fonts: ["600 40px 'Noto Serif KR'"], init: async () => buildNazarethOil(), draw });
+</script>
+</body>
+</html>

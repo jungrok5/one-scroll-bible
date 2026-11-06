@@ -19,6 +19,9 @@
     rembrandt: { cell: 7, wid: 1 / 115, len: [3.5, 7], dark: .2, darkKeep: .12, jit: .05, dir: 'form', ridge: .5, ridgeMin: .45, edge: .09, probe: 2.5 },
     // impasto: the palette knife (the first film's 「부활」) — broad, short, thick slabs, ridges on everything lit
     impasto: { cell: 10, wid: 1 / 55, len: [2, 3.6], dark: .08, darkKeep: .6, jit: .08, dir: 'form', ridge: .7, ridgeMin: .35, edge: .16, probe: 1.2 },
+    // vermeer: daylight from one window (after *Woman in Blue Reading a Letter*): small, soft, blended strokes, almost no ridges,
+    // a cool-warm plaster wall, highlights as tiny pearly dots (pointillé) where the light catches
+    vermeer: { cell: 6, wid: 1 / 160, len: [2.2, 4.5], dark: .1, darkKeep: .55, jit: .03, dir: 'form', ridge: .22, ridgeMin: .78, edge: .07, probe: 2 },
     remington: { cell: 7, wid: 1 / 110, len: [3, 6], dark: .1, darkKeep: .55, jit: .06, dir: 0, ridge: .25, ridgeMin: .6, bend: .15, edge: .08 },
   };
   function paint(plate, o = {}) {

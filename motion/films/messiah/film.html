@@ -195,8 +195,8 @@ function stableScene(ctx, t, o = {}) {
 // partRise: cine-rise.js (cinematic-3d — the walk up a lane of Bethlehem to one lit doorway under the star, 2026-11-05 round 8;
 // it replaced the third flight over the opening's town, which every reviewer read as a repeat)
 let RISE = null;
-// the shepherds (8d, 관리자 "성탄 느낌 뿜뿜"): ?shep=glass (stained glass, glass-shepherds.js) · ?shep=cine (cinematic-3d field, cine-shep.js) · default the Doré engraving
-const SHEP = (location.search.match(/[?&]shep=(\w+)/) || [])[1] || 'engrave'; let SHEP3D = null;
+// the shepherds (8d, 관리자 "성탄 느낌 뿜뿜" → "스테인드하자"): default the stained glass (glass-shepherds.js, the first film's glass engine) · ?shep=cine (cinematic-3d field, cine-shep.js — read as toys, not film) · ?shep=engrave (the Doré engraving)
+const SHEP = (location.search.match(/[?&]shep=(\w+)/) || [])[1] || 'glass'; let SHEP3D = null;
 function shepScene(ctx, t) { if (SHEP === 'glass') { GlassShep.draw(ctx, t - 104.6); textBand(ctx); } else if (SHEP === 'cine') { SHEP3D.draw(ctx, t - 104.6); textBand(ctx); } else partShepherds(ctx, t); }
 function partRise(ctx, t) { RISE.draw(ctx, t - 137); textBand(ctx); }
 // partDawn: impasto-dawn.js (black-and-white film → palette-knife colour, 2026-11-03 round 2)

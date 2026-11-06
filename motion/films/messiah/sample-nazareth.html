@@ -15,8 +15,9 @@
 const { clamp, lerp, ss, eio, rng, canvas } = Pilot;
 const W = Pilot.W, H = Pilot.H, V = Pilot.ori === 'v';
 function bez(p, cmds) { for (const c of cmds) { if (c[0] === 'M') p.moveTo(c[1], c[2]); else if (c[0] === 'L') p.lineTo(c[1], c[2]); else if (c[0] === 'C') p.bezierCurveTo(c[1], c[2], c[3], c[4], c[5], c[6]); else if (c[0] === 'Z') p.closePath(); } }
-function draw(ctx, t) { const k = eio(clamp(t / 8));
-  nazarethOil(ctx, t, lerp(W * .5, W * .54, k), lerp(H * .5, H * .48, k), lerp(1.08, 1.16, k)); }
+// the camera drifts from the room to her face; at 2.4 s she lifts her eyes to the empty road, at 6.4 back to her child
+function draw(ctx, t) { const k = eio(clamp(t / 8)), [hx, hy] = NOIL.mary;
+  nazarethOil(ctx, t, lerp(W * .5, lerp(W * .5, hx - (V ? 40 : 120), .8), k), lerp(H * .5, lerp(H * .5, hy + (V ? 180 : 60), .8), k), lerp(1.08, 1.42, k)); }
 Pilot.run({ W, H, dur: 8, fonts: ["600 40px 'Noto Serif KR'"], init: async () => buildNazarethOil(), draw });
 </script>
 </body>

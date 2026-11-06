@@ -5,7 +5,7 @@
 //        landscape film (ids in motion/youtube/uploaded.json) as a caption track in the film's own language; skips a film
 //        that already has a track in that language. Default: every language with a film id. Quota: 400 units per upload.
 //   node motion/youtube/yt-api.mjs status [<lang…>]           → public / scheduled / private + views per language (film, Shorts)
-//   node motion/youtube/yt-api.mjs stats [<lang…>] [--from D]  → YouTube Analytics per language: views, minutes, avg % viewed
+//   node motion/youtube/yt-api.mjs stats [<lang…>] [--from D] [--each]  → YouTube Analytics per language: views, minutes, avg % viewed (--each: per video)
 //   node motion/youtube/yt-api.mjs playlist-add <playlistId> <videoId…> → append (playlist ids in uploaded.json "playlists")
 //   node motion/youtube/yt-api.mjs privacy public|private|unlisted <id…>  (owner's OK first) · delete <id…> [--yes] (owner's OK, irreversible)
 //   node motion/youtube/yt-api.mjs upload <lang> film|<n…> [--publish-at ISO] [--dry] → videos.insert from the upload sheet
@@ -71,7 +71,7 @@ if (cmd === 'whoami') {
   // status: privacy / scheduled time / views of every uploaded film and Short (videos.list, 1 unit per 50 ids)
   // stats [--from YYYY-MM-DD] [--to YYYY-MM-DD]: YouTube Analytics per language (views, minutes watched, average % viewed,
   //   subscribers gained), film and Shorts apart — the numbers the 7-day wave check needs
-  const up = records(), langs = rest.filter(a => !a.startsWith('--'));
+  const up = records(), langs = rest.filter((a, i) => !a.startsWith('--') && !['--from', '--to'].includes(rest[i - 1]));   // a flag's value is not a language
   const val =(n, d) => (rest.includes('--' + n) ? rest[rest.indexOf('--' + n) + 1] : d);
   const vids = [];   // {lang, kind, n, id}
   for (const [L, f] of Object.entries(up.film)) if (f?.id && L !== 'ko-vertical') vids.push({ lang: L, kind: 'film', n: 0, id: f.id });
@@ -102,6 +102,7 @@ if (cmd === 'whoami') {
     for (const v of pick) { const r = rows[v.id], k = `${v.lang} ${v.kind}`, b = by[k] ||= { views: 0, min: 0, pctW: 0, subs: 0 };
       if (!r) continue; b.views += r[1]; b.min += r[2]; b.pctW += r[3] * r[1]; b.subs += r[4]; }
     console.log(`YouTube Analytics ${from} … ${to} (the last ~2 days are incomplete)`);
+    if (rest.includes('--each')) { for (const v of pick) { const r = rows[v.id]; console.log(`  ${v.lang.padEnd(6)} ${v.kind.padEnd(6)} ${String(v.n).padStart(2)} ${v.id}  views ${r ? r[1] : 0} · avg viewed ${r ? r[3].toFixed(1) : '-'}% · subs +${r ? r[4] : 0}`); } }   // --each: one row per video (which scene did well)
     for (const [k, b] of Object.entries(by)) console.log(`${k.padEnd(14)} views ${b.views} · minutes ${Math.round(b.min)} · avg viewed ${b.views ? (b.pctW / b.views).toFixed(1) : '-'}% · subs +${b.subs}`);
   }
 } else if (cmd === 'playlist-add') {

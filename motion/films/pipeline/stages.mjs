@@ -38,6 +38,12 @@ const G = {
     const r = node([join(FILMS, 'check-quotes.mjs'), c.film]); const bad = (r.stdout || '').split('\n').filter(x => /MISMATCH|MISSING/.test(x));
     if (r.status !== 0 || bad.length) why.push(...(bad.length ? bad.map(b => '인용 원문 불일치: ' + b) : ['check-quotes 실패: ' + (r.stderr || '').slice(0, 200)]));
     const mc = c.review.message_check; if (!mc || (Array.isArray(mc) ? mc.length : Object.keys(mc).length) < 12) why.push('message_check 12문항이 다 채워지지 않았다');
+    // a story, not a list of verses (README 3): question → stakes → person → reversal → payoff, each tied to a script line
+    const sp = c.review.story_spine || {}, at = id => c.lines.find(l => l.id === id)?.at;
+    for (const k of ['question', 'stakes', 'person', 'reversal', 'payoff']) {
+      const v = sp[k]; if (!v?.how || !v?.id) { why.push(`story_spine.${k}이 없다 — 이야기 뼈대(README 3절)부터`); continue; }
+      if (at(v.id) == null) why.push(`story_spine.${k}: script.json에 줄 ${v.id}이 없다`); }
+    if (at(sp.question?.id) != null && at(sp.payoff?.id) != null && at(sp.payoff.id) <= at(sp.question.id)) why.push('story_spine: payoff(답)가 question(질문)보다 뒤에 와야 한다');
     return why.length ? { ok: false, why } : pass(); },
   looks: c => {
     const L = c.review.looks; if (!Array.isArray(L) || !L.length) return fail('review.json looks(장면마다 화풍 표)가 없다');

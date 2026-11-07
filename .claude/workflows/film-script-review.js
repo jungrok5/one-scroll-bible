@@ -6,7 +6,7 @@ export const meta = {
 // Stage 3 of the film pipeline (motion/films/film.mjs task <film> review). Same reviewers, same brief, same output every time.
 // args: { film: '<folder under motion/films>' }. The result is saved by the main session as motion/reviews/film-<film>-script.json
 // and rendered with `node motion/films/pipeline/review-md.mjs <film>` (the gate reads that .md).
-const film = (args && args.film) || args
+const film = (args && args.film) || args, AT = (args && args.at) || ''  // Date is unavailable in workflow scripts: pass args.at
 if (!film || typeof film !== 'string') throw new Error('args.film is required')
 
 const BASE = `영상 「${film}」의 원고를 읽고 보고만 한다(파일을 고치지 않는다).
@@ -39,4 +39,4 @@ const SCHEMA = {
 phase('Review')
 const results = await parallel(REVIEWERS.map(r => () =>
   agent(`${BASE}\n\n${r.prompt}`, { label: `review:${r.key}`, phase: 'Review', schema: SCHEMA }).then(v => ({ key: r.key, who: r.who, ...v }))))
-return { film, at: new Date().toISOString(), reviewers: results }
+return { film, at: AT, reviewers: results }

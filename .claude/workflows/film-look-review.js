@@ -51,4 +51,4 @@ const SCHEMA = {
 phase('Review')
 const results = await parallel(REVIEWERS.map(r => () =>
   agent(`${BASE}\n\n${r.prompt}`, { label: `look:${r.key}`, phase: 'Review', schema: SCHEMA }).then(v => ({ key: r.key, who: r.who, ...v }))))
-return { film: A.film, ori: A.ori || 'v', render: A.render, at: new Date().toISOString(), reviewers: results }
+return { film: A.film, ori: A.ori || 'v', render: A.render, at: A.at || '', reviewers: results }

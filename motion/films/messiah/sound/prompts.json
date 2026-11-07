@@ -1650,7 +1650,7 @@
     "DlnFlOdExUK6Ykb8KAhx",
     "XJZ5Q8RJyoorUVtz5O1S"
    ],
-   "name": "N07"
+   "name": "N07@3차"
   },
   {
    "use": "toolu_01Tugcb9YpfBSiM4YLLWgKKd",
@@ -1859,7 +1859,7 @@
     "0XQbV92P13EAWvZwRINY",
     "YKenOuIegms9WJz535a6"
    ],
-   "name": "H1"
+   "name": "H1@3차"
   },
   {
    "use": "toolu_01XHdw2N4gFaSsjMvUAyTbyq",
@@ -1897,7 +1897,7 @@
     "7gR5Ka0duRnedkmCTU0m",
     "NrMQy7YJs6CAGGCUgH7v"
    ],
-   "name": "H2"
+   "name": "H2@3차"
   },
   {
    "use": "toolu_01N3Kf1U6yQ8csSSJmKz1xjs",
@@ -1916,7 +1916,7 @@
     "wvoiZJU0RV8oj0CRSai3",
     "GRZ6t0MWiAQZpmnAfk77"
    ],
-   "name": "N26"
+   "name": "N26@3차"
   },
   {
    "use": "toolu_01R5HiAmapN1TrdjZrSCiM1c",
@@ -2107,6 +2107,82 @@
     "3pcIp9spI6CBQ38peKmI"
    ],
    "name": "X9"
+  },
+  {
+   "use": "toolu_01MejJ4VkSvZzCZu3XmcnAcU",
+   "time": "2026-11-07T13:31:46.398Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "유대인의 왕으로 나신 이가 어디 계시냐. 우리가 동방에서 그의 별을 보고, 그에게 경배하러 왔노라.",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Re-record Korean narration H1 (Matthew 2:2, 개역개정 verbatim, full verse) for the 「메시아」 film in the same calm narrator tone as the rest — 4차: 구절 전체 낭독",
+   "node": "TLg1nq3iGEIcMQOAPtxw",
+   "sessions": [
+    "Nu7Qgd3SDuCSxCCk3zqX",
+    "TWajH838SxHqcbaYmqJC"
+   ],
+   "name": "H1"
+  },
+  {
+   "use": "toolu_01HvqFqLoJn7qNUYfLqUDgkx",
+   "time": "2026-11-07T13:31:48.548Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "가서 아기에 대하여 자세히 알아보고, 찾거든 내게 고하여, 나도 가서 그에게 경배하게 하라.",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Re-record Korean narration H2 (Matthew 2:8, 개역개정 verbatim, full verse) without whisper direction, same narrator tone as the rest of the film — 4차: 속삭임 지시 없이 같은 해설 톤, 구절 전체",
+   "node": "ldTdZstKRMkmnI6CHs72",
+   "sessions": [
+    "KpHpCAJ0afjEtBcWSgXM",
+    "JvE578w2PWiuNa3FthJg"
+   ],
+   "name": "H2"
+  },
+  {
+   "use": "toolu_01G7fA4kGyDnYenxi3K9eaRQ",
+   "time": "2026-11-07T13:31:50.599Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "왕은 정말, 경배하러 가려 했을까요?",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Re-record the closing question N26 of the 「메시아」 film in the plain narrator tone (no whisper), so it doesn't jump in tone — 4차: 속삭임 지시 없이 같은 해설 톤",
+   "node": "u7pwYgkED1pkrTsRQlEQ",
+   "sessions": [
+    "D6WFG4TseNcOTdLvYt6G",
+    "ouiIOrU1R9tnSDFZEiph"
+   ],
+   "name": "N26"
+  },
+  {
+   "use": "toolu_01MsUwNxWdKyLiUaAXaCioDk",
+   "time": "2026-11-07T13:31:52.277Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "나사렛에서 베들레헴까지는, 걸어서 며칠 길.",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Re-record narration N07 of the 「메시아」 film with its new shorter text (the John 7:42 aside was cut) — 4차: 새 문장(요 7:42 곁가지를 빼서)",
+   "node": "UtGqmbhVdJ0o1Pc9GyWR",
+   "sessions": [
+    "RSAz6rK8xY5H7sTBmcpP",
+    "OJAtIaRW2yLoP9om4d0a"
+   ],
+   "name": "N07"
   }
  ],
  "title": "메시아 예언과 성탄",

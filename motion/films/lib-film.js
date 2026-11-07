@@ -95,7 +95,9 @@
   // a verse on screen: the text (that language's Bible, verbatim) with its reference under it
   F.quote = (ctx, id, t, a, b, o = {}) => {
     const txt0 = o.text != null ? o.text : F.text(id);
-    if (P.ori === 'v' && o.bottom != null && !o.whole && /\//.test(txt0)) { for (const [s, a1, b1, i, n] of F.pieces(txt0, a, b)) if (t >= a1 - .1 && t <= b1 + .1)   // portrait: piece by piece
+    // o.cuts: the times each later piece takes over (from the voice — a piece turns when its words are spoken), else shared by length
+    const byCuts = (segs => o.cuts ? segs.map((s, i) => [s, i ? o.cuts[i - 1] : a, i < segs.length - 1 ? o.cuts[i] : b, i, segs.length]) : null)(String(txt0).split(/\s*\/\s*/).filter(Boolean));
+    if (P.ori === 'v' && o.bottom != null && !o.whole && /\//.test(txt0)) { for (const [s, a1, b1, i, n] of byCuts || F.pieces(txt0, a, b)) if (t >= a1 - .1 && t <= b1 + .1)   // portrait: piece by piece
       F.quote(ctx, id, t, a1, b1, { ...o, text: s, whole: true, fi: i ? .35 : o.fi, fo: i < n - 1 ? .35 : o.fo, still: i > 0 }); return; }
     const k = P.win(t, a, b, o.fi || .8, o.fo || .7); if (k <= 0) return;
     const size = o.size || (P.ori === 'v' ? 58 : 54); ctx.save(); ctx.font = F.font(size, 600);

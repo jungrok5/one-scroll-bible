@@ -86,7 +86,7 @@
 | N04 | speech | eleven_v4 |  | 베들레헴은 다윗 왕의 고향, 메시아가 나올 집안의 마을입니다. |
 | N05 | speech | eleven_v4 |  | 또 다윗이 살던 마을 베들레헴에서 나오리라 하지 아니하였느냐 |
 | N06 | speech | eleven_v4 |  | 어떤 사람들은 성경의 그 약속을 알았기에, 갈릴리 사람이 메시아일 리 없다고 했습니다. |
-| N07 | speech | eleven_v4 |  | 다시, 그분이 태어나기 전. 나사렛에서 베들레헴까지는 걸어서 며칠 길. |
+| N07@3차 | speech | eleven_v4 |  | 다시, 그분이 태어나기 전. 나사렛에서 베들레헴까지는 걸어서 며칠 길. |
 | N09 | speech | eleven_v4 |  | 해산이 멀지 않은 몸으로, 그 먼 길을 떠날 이유는… 아무것도 없었습니다. |
 | N10 | speech | eleven_v4 |  | 그때, 바다 건너 먼 로마에서. |
 | N22 | speech | eleven_v4 |  | 떠날 이유가 없던 두 사람을, 황제의 도장 하나가 다윗의 마을로 데려갔습니다. |
@@ -97,10 +97,10 @@
 | N20 | speech | eleven_v4 |  | 이 구주는, 우리 죄를 대신 지고 십자가에서 죽으시고, 사흘 만에 다시 살아나실 분이었습니다. |
 | N19 | speech | eleven_v4 |  | 칠백여 년 전 그 한 줄은, 빗나가지 않았습니다. |
 | N23 | speech | eleven_v4 |  | 얼마 뒤, 동방의 박사들이 예루살렘 왕궁에 와서 물었습니다. |
-| H1 | speech | eleven_v4 |  | 유대인의 왕으로 나신 이가 어디 계시냐 |
+| H1@3차 | speech | eleven_v4 |  | 유대인의 왕으로 나신 이가 어디 계시냐 |
 | N24 | speech | eleven_v4 |  | 왕이 묻자, 대제사장과 서기관들은 미가의 그 한 줄로 답했습니다. 베들레헴. 걸어서 두어 시간. |
-| H2 | speech | eleven_v4 |  | [low, soft, slow, almost a whisper] 찾거든 내게 고하여… 나도 가서 그에게 경배하게 하라 |
-| N26 | speech | eleven_v4 |  | [quietly, slowly] 왕은 정말… 경배하러 가려 했을까요? |
+| H2@3차 | speech | eleven_v4 |  | [low, soft, slow, almost a whisper] 찾거든 내게 고하여… 나도 가서 그에게 경배하게 하라 |
+| N26@3차 | speech | eleven_v4 |  | [quietly, slowly] 왕은 정말… 경배하러 가려 했을까요? |
 | MW1a | in_flow:music | eleven_music_v2_5 |  | Instrumental only. One continuous movement, 60 seconds, never stopping or restarting: a cinematic chamber-orchestra nocturne. A slow, noble five-note promise theme in D dorian runs through all of it; every change grows out of what is already playing. 0–1 s: near-silent low string pedal on D with faint glassy high harmonics like stars. At 1 s a solo cello begins the theme, intimate, a question hanging in the night. At about 9.8 s everything thins to one suspended high violin note, like a question, then almost silence for a breath. At 13.9 s a warm bloom of wonder: French horns and a soft wordless choir rise under the cello, the theme answered, for eight seconds; at about 21 s one full warm chord swells and holds two seconds. At 23.5 s a soft wooden shepherd's flute takes the theme over warm strings, evening on a hillside. At about 29 s a soft pizzicato pulse and celesta begin, like gold ink spreading across an old map, purposeful, narrowing. At about 34 s the harmony darkens into minor, low strings, a shadow of doubt. At about 41 s a slow walking viola ostinato, a long road ahead. At about 47.5 s it hushes to an intimate harp and solo cello, morning light in a small quiet room, tender and fragile. From 54 s nearly silent: one held high violin note, a held breath, to the end. Quiet enough under a spoken voice throughout, no drums, no piano, no synths, wide natural reverb. |
 | MW2a | in_flow:music | eleven_music_v2_5 |  | Instrumental only. One continuous movement, 47 seconds, never stopping or restarting, continuing a piece already in progress (the same slow five-note promise theme in D dorian). 0–0.3 s a held low note mid-phrase. At 0.3 s the color turns cold and grand: low brass and low strings in minor with a deep soft frame-drum pulse, stern and imperial, an emperor's decree, for nine seconds. At about 9.5 s a steady walking low-string ostinato with a distant soft frame drum like footsteps, a long road at golden sunset, determined; the solo cello sings the theme above it. At about 19.5 s night falls: everything softens and thins. At 23 s suddenly intimate: a solo violin and harp sing the theme as a lullaby, warm candlelight, a newborn in a manger. At about 30 s the imperial low brass returns, quieter, majestic but hollow, ironic. At about 40 s the brass drops away completely and one high solo violin note sings over the lullaby, tender and small. From 44 s it fades almost to silence by 47 s. Quiet enough under a spoken voice, no piano, no synths, wide natural reverb. |
 | MW3 | in_flow:music | eleven_music_v2_5 |  | Instrumental only. One continuous movement, 31 seconds, never stopping or restarting, continuing a piece already in progress (the same slow five-note promise theme in D dorian). 0–4 s from near silence: a celesta and a soft wordless choir hum, shepherds in a field at night, expectant. At 4 s a sudden radiant bloom: full strings, choir and French horns in D major, glorious and awe-filled, the fullest moment of the whole score, then from about 9 s sustained shimmering high strings and celesta, quieter, under a voice, until 15.8 s. At 15.8 s it suddenly empties: one grave low cello line, solemn and bare, for four seconds. At about 20 s dawn: strings rise gently into D major. At 23.4 s the full theme on warm strings, the promise kept, tender and full, resolving at about 27 s on a long open D major chord that decays slowly to near silence by 31 s. Quiet enough under a spoken voice except the bloom at 4 s, no drums, no piano, no synths, wide natural reverb. |
@@ -111,3 +111,7 @@
 | X5 | in_flow:sfx | eleven_text_to_sound_v2 |  | One torch burning close against a plaster wall at night, 8 seconds: a slow breathing flame with soft crackles in deep silence; in the last two seconds the flame gutters and dims with a low wavering flutter |
 | X6 | in_flow:sfx | eleven_text_to_sound_v2 |  | A hand slowly closing on the leather-wrapped hilt of a dagger in its sheath, 2 seconds: a soft leather creak and the faintest metal tick, very close and quiet, menacing |
 | X9 | in_flow:sfx | eleven_text_to_sound_v2 |  | A deep soft low whoosh like a huge shadow sliding across a stone wall, 2.5 seconds, dark and quiet with a faint low rumble, no impact |
+| H1 | speech | eleven_v4 |  | 유대인의 왕으로 나신 이가 어디 계시냐. 우리가 동방에서 그의 별을 보고, 그에게 경배하러 왔노라. |
+| H2 | speech | eleven_v4 |  | 가서 아기에 대하여 자세히 알아보고, 찾거든 내게 고하여, 나도 가서 그에게 경배하게 하라. |
+| N26 | speech | eleven_v4 |  | 왕은 정말, 경배하러 가려 했을까요? |
+| N07 | speech | eleven_v4 |  | 나사렛에서 베들레헴까지는, 걸어서 며칠 길. |

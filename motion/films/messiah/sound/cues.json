@@ -1,73 +1,437 @@
 {
- "dur": 171.5,
- "note": "3차(2026-11-07, 뒷이야기 결말). 음악 4악장 MW1–MW4(takes-music3/에 악장마다 4가지; 구간 크기를 재서 그림 박자에 맞는 것을 고름 — MW3은 d의 12초부터(목자들의 영광이 크게) + c의 17초부터(답)). 2차 판 효과음은 장면을 옮긴 만큼 시각을 옮겨 다시 씀(장면 remap과 같은 식), 새 효과음 X4 왕궁·X5 횃불·X6 칼자루·X9 그림자. 숨 멈춤: 질문 뒤(12.9), 구유 뒤(102.6), 영광 직전(107.5), 십자가 직전(118.9), 헤롯의 말 아래(151.2) + 말 뒤 정적(156.8), 끝 화면 앞(162.6). 2차 판은 cues-v1.json",
+ "dur": 176,
+ "note": "4차(2026-11-07): 3차 판 큐(cues-v3.json)를 새 시간표로 옮김(장면 remap과 같은 꺾은선). 뺀 것: 제목 카드 펜 소리 E2(어두운 화면의 쉭 소리 — 관리자 \"초반 사운드 비정상\"), 다윗 언덕의 금빛 선 E1c(그어지는 선이 없음), 실타래 지도 E8c·E1d·E3b·S3b·E4, 눅 2:4-5 E3c. E5(밤공기 휙)는 15.6 kHz 고음이 섞여 있어 12 kHz 저역 통과본 E5lp로 바꾸고 −19 dB. 밤바람 S1도 같은 고음이 있어 S1lp. E1a는 새 나사렛→베들레헴 점선 길에. 음악: MW1은 한 덩어리 그대로(41초의 쉼이 마리아의 방 입구에 옴), MW4는 7부가 길어진 만큼 atempo 0.84로 늘린 MW4s(46.4초 — 째깍대는 현이 조금 느려지고 첼로의 끝이 끝 화면에). 숨 멈춤: 질문 뒤, 구유 뒤, 영광 직전, 십자가 직전, 헤롯의 말 아래 + 말 뒤 정적, 끝 화면 앞. ",
  "music": [
-  { "id": "MW1a", "at": 0, "len": 60, "db": -5, "fin": 0.5, "fout": 3 },
-  { "id": "MW2a", "at": 58.6, "len": 47, "db": -7.5, "fin": 2, "fout": 3 },
-  { "id": "MW3d", "at": 103.8, "off": 12, "len": 19, "db": -3, "fin": 1, "fout": 2.5, "file": "motion/films/messiah/sound/audio/MW3d.mp3" },
-  { "id": "MW3c", "at": 121.6, "off": 17, "len": 14, "db": -9, "fin": 2.5, "fout": 3, "file": "motion/films/messiah/sound/audio/MW3c.mp3" },
-  { "id": "MW4a", "at": 132.6, "len": 39, "db": -4, "fin": 2, "fout": 4 }
+  {
+   "id": "MW1a",
+   "at": 0,
+   "len": 52.2,
+   "db": -5,
+   "fin": 0.5,
+   "fout": 2.5
+  },
+  {
+   "id": "MW2a",
+   "at": 51,
+   "len": 47,
+   "db": -7.5,
+   "fin": 2,
+   "fout": 3
+  },
+  {
+   "id": "MW3d",
+   "at": 99.3,
+   "off": 12,
+   "len": 19,
+   "db": -3,
+   "fin": 1,
+   "fout": 2.5,
+   "file": "motion/films/messiah/sound/audio/MW3d.mp3"
+  },
+  {
+   "id": "MW3c",
+   "at": 115.9,
+   "off": 17,
+   "len": 14,
+   "db": -9,
+   "fin": 2.5,
+   "fout": 3,
+   "file": "motion/films/messiah/sound/audio/MW3c.mp3"
+  },
+  {
+   "id": "MW4a",
+   "at": 128.6,
+   "len": 46.4,
+   "db": -4,
+   "fin": 2,
+   "fout": 4,
+   "file": "motion/films/messiah/sound/audio/MW4s.mp3"
+  }
  ],
  "sfx": [
-  { "id": "S1", "at": 0, "len": 22, "db": -14, "fin": 2, "fout": 3 },
-  { "id": "E5", "at": 0.5, "len": 16, "db": -14, "fin": 1, "fout": 1.5 },
-  { "id": "S2", "at": 5, "len": 8, "db": -15, "fin": 0.5, "fout": 1 },
-  { "id": "S3", "at": 13.9, "len": 3, "db": -10 },
-  { "id": "E3a", "file": "motion/films/messiah/sound/audio/E3.mp3", "at": 13.95, "len": 1.8, "db": -9 },
-  { "id": "E2", "at": 22.2, "len": 1.6, "db": -9 },
-  { "id": "S8", "at": 23.4, "len": 6.6, "db": -13, "fin": 0.5, "fout": 1.5 },
-  { "id": "E1c", "at": 23.8, "len": 6, "db": -9 },
-  { "id": "E8c", "at": 29, "off": 2.4, "len": 1.6, "db": -9, "fin": 0.2, "fout": 0.5 },
-  { "id": "E3b", "file": "motion/films/messiah/sound/audio/E3.mp3", "at": 30.95, "len": 1.8, "db": -11 },
-  { "id": "E1d", "at": 31.4, "len": 1.6, "db": -8, "fout": 0.4 },
-  { "id": "S3b", "file": "motion/films/messiah/sound/audio/S3.mp3", "at": 32.6, "len": 3, "db": -9 },
-  { "id": "E4", "at": 39, "len": 4.6, "db": -9 },
-  { "id": "E1a", "at": 41.4, "len": 3.5, "db": -14 },
-  { "id": "S9", "at": 47.6, "len": 8, "db": -16, "fin": 1, "fout": 2 },
-  { "id": "S10", "at": 58.8, "len": 9.6, "db": -14, "fin": 0.5, "fout": 1.5 },
-  { "id": "S11", "at": 67.8, "len": 12, "db": -14, "fin": 1, "fout": 1 },
-  { "id": "E3c", "file": "motion/films/messiah/sound/audio/E3.mp3", "at": 70.2, "len": 1.8, "db": -11 },
-  { "id": "S12", "at": 78.6, "len": 3, "db": -10 },
-  { "id": "S13", "at": 81.8, "len": 7, "db": -12, "fin": 0.8, "fout": 1.2 },
-  { "id": "E7", "at": 82, "len": 3, "db": -10 },
-  { "id": "E3d", "file": "motion/films/messiah/sound/audio/E3.mp3", "at": 85.61, "len": 1.8, "db": -11 },
-  { "id": "S10b", "file": "motion/films/messiah/sound/audio/S10.mp3", "at": 88.6, "off": 2, "len": 10.6, "db": -17, "fin": 1, "fout": 2 },
-  { "id": "S13b", "file": "motion/films/messiah/sound/audio/S13.mp3", "at": 99.2, "off": 7, "len": 6, "db": -13, "fin": 0.8, "fout": 1.5 },
-  { "id": "S5", "at": 100.2, "len": 2.5, "db": -9 },
-  { "id": "S14", "at": 107.9, "len": 4, "db": -6 },
-  { "id": "E3e", "file": "motion/films/messiah/sound/audio/E3.mp3", "at": 115.15, "len": 1.8, "db": -11 },
-  { "id": "E8d", "at": 119.6, "len": 5, "db": -16, "fin": 0.4, "fout": 1 },
-  { "id": "E8e", "at": 124.3, "len": 3.4, "db": -8, "fin": 0.1, "fout": 0.6 },
-  { "id": "S16", "at": 124.6, "len": 3.5, "db": -14, "fin": 0.5, "fout": 1 },
-  { "id": "E6", "at": 127.4, "len": 5.5, "db": -15, "fin": 0.8, "fout": 1.5 },
-  { "id": "S3c", "file": "motion/films/messiah/sound/audio/S3.mp3", "at": 131, "len": 3, "db": -9 },
-  { "id": "E3f", "file": "motion/films/messiah/sound/audio/E3.mp3", "at": 131.4, "len": 1.8, "db": -10 },
-  { "id": "S1b", "file": "motion/films/messiah/sound/audio/S1.mp3", "at": 133, "off": 3, "len": 6.4, "db": -12, "fin": 0.8, "fout": 1 },
-  { "id": "S11b", "file": "motion/films/messiah/sound/audio/S11.mp3", "at": 133.4, "off": 2, "len": 5, "db": -19, "fin": 0.5, "fout": 1 },
-  { "id": "S7", "at": 136.8, "len": 6, "db": -14, "fin": 1, "fout": 1.5 },
-  { "id": "E3H1", "file": "motion/films/messiah/sound/audio/E3.mp3", "at": 138.79, "len": 1.8, "db": -11 },
-  { "id": "X4", "at": 138.8, "len": 2, "db": -10 },
-  { "id": "E3g", "file": "motion/films/messiah/sound/audio/E3.mp3", "at": 142.8, "len": 1.8, "db": -9 },
-  { "id": "S12b", "file": "motion/films/messiah/sound/audio/S12.mp3", "at": 146.6, "len": 2, "db": -11 },
-  { "id": "S5b", "file": "motion/films/messiah/sound/audio/S5.mp3", "at": 148, "len": 2.5, "db": -10 },
-  { "id": "E1e", "at": 149, "len": 2, "db": -12, "fout": 0.4 },
-  { "id": "X9", "at": 151, "len": 2, "db": -9 },
-  { "id": "S7b", "file": "motion/films/messiah/sound/audio/S7.mp3", "at": 151.2, "len": 2.8, "db": -16, "fin": 0.3, "fout": 1 },
-  { "id": "X5", "at": 153.6, "len": 5, "db": -12, "fin": 0.4 },
-  { "id": "X6", "at": 154, "len": 2, "db": -8 },
-  { "id": "E3H2", "file": "motion/films/messiah/sound/audio/E3.mp3", "at": 154.21, "len": 1.8, "db": -11 },
-  { "id": "S2b", "file": "motion/films/messiah/sound/audio/S2.mp3", "at": 158.8, "len": 5, "db": -17, "fin": 0.5, "fout": 1 },
-  { "id": "S1c", "file": "motion/films/messiah/sound/audio/S1.mp3", "at": 164.4, "off": 10, "len": 7, "db": -18, "fin": 1, "fout": 3 },
-  { "id": "S5c", "file": "motion/films/messiah/sound/audio/S5.mp3", "at": 165, "len": 2.5, "db": -10 },
-  { "id": "E2b", "file": "motion/films/messiah/sound/audio/E2.mp3", "at": 165.5, "len": 1.6, "db": -10 }
+  {
+   "id": "S1",
+   "at": 0,
+   "len": 25,
+   "db": -14,
+   "fin": 2,
+   "fout": 3,
+   "file": "motion/films/messiah/sound/audio/S1lp.mp3"
+  },
+  {
+   "id": "E5",
+   "at": 0.5,
+   "len": 16,
+   "db": -19,
+   "fin": 1,
+   "fout": 1.5,
+   "file": "motion/films/messiah/sound/audio/E5lp.mp3"
+  },
+  {
+   "id": "S2",
+   "at": 5,
+   "len": 8,
+   "db": -15,
+   "fin": 0.5,
+   "fout": 1
+  },
+  {
+   "id": "S3",
+   "at": 14,
+   "len": 3,
+   "db": -10
+  },
+  {
+   "id": "E3a",
+   "file": "motion/films/messiah/sound/audio/E3.mp3",
+   "at": 14.35,
+   "len": 1.8,
+   "db": -9
+  },
+  {
+   "id": "S8",
+   "at": 27.19,
+   "len": 6.6,
+   "db": -13,
+   "fin": 0.5,
+   "fout": 1.5
+  },
+  {
+   "id": "E1a",
+   "at": 34,
+   "len": 3.4,
+   "db": -16
+  },
+  {
+   "id": "S9",
+   "at": 39.4,
+   "len": 8,
+   "db": -16,
+   "fin": 1,
+   "fout": 2
+  },
+  {
+   "id": "S10",
+   "at": 51.88,
+   "len": 9.6,
+   "db": -14,
+   "fin": 0.5,
+   "fout": 1.5
+  },
+  {
+   "id": "S11",
+   "at": 61.63,
+   "len": 12,
+   "db": -14,
+   "fin": 1,
+   "fout": 1
+  },
+  {
+   "id": "S12",
+   "at": 69.2,
+   "len": 3,
+   "db": -10
+  },
+  {
+   "id": "S13",
+   "at": 72,
+   "len": 11,
+   "db": -12,
+   "fin": 0.8,
+   "fout": 1.2
+  },
+  {
+   "id": "E7",
+   "at": 72.2,
+   "len": 3,
+   "db": -10
+  },
+  {
+   "id": "E3N14",
+   "file": "motion/films/messiah/sound/audio/E3.mp3",
+   "at": 79.67,
+   "len": 1.8,
+   "db": -11
+  },
+  {
+   "id": "E3d",
+   "file": "motion/films/messiah/sound/audio/E3.mp3",
+   "at": 80.01,
+   "len": 1.8,
+   "db": -11
+  },
+  {
+   "id": "S10b",
+   "file": "motion/films/messiah/sound/audio/S10.mp3",
+   "at": 83.5,
+   "off": 2,
+   "len": 10.6,
+   "db": -17,
+   "fin": 1,
+   "fout": 2
+  },
+  {
+   "id": "S13b",
+   "file": "motion/films/messiah/sound/audio/S13.mp3",
+   "at": 94.2,
+   "off": 7,
+   "len": 6,
+   "db": -13,
+   "fin": 0.8,
+   "fout": 1.5
+  },
+  {
+   "id": "S5",
+   "at": 95.17,
+   "len": 2.5,
+   "db": -9
+  },
+  {
+   "id": "S14",
+   "at": 103.4,
+   "len": 4,
+   "db": -6
+  },
+  {
+   "id": "E318",
+   "file": "motion/films/messiah/sound/audio/E3.mp3",
+   "at": 108.55,
+   "len": 1.8,
+   "db": -11
+  },
+  {
+   "id": "E3e",
+   "file": "motion/films/messiah/sound/audio/E3.mp3",
+   "at": 108.68,
+   "len": 1.8,
+   "db": -11
+  },
+  {
+   "id": "E8d",
+   "at": 113.9,
+   "len": 5,
+   "db": -16,
+   "fin": 0.4,
+   "fout": 1
+  },
+  {
+   "id": "E8e",
+   "at": 118.72,
+   "len": 3.4,
+   "db": -8,
+   "fin": 0.1,
+   "fout": 0.6
+  },
+  {
+   "id": "S16",
+   "at": 119.03,
+   "len": 3.5,
+   "db": -14,
+   "fin": 0.5,
+   "fout": 1
+  },
+  {
+   "id": "E6",
+   "at": 121.91,
+   "len": 5.5,
+   "db": -15,
+   "fin": 0.8,
+   "fout": 1.5
+  },
+  {
+   "id": "S3c",
+   "file": "motion/films/messiah/sound/audio/S3.mp3",
+   "at": 125.6,
+   "len": 3,
+   "db": -9
+  },
+  {
+   "id": "E3f",
+   "file": "motion/films/messiah/sound/audio/E3.mp3",
+   "at": 126.37,
+   "len": 1.8,
+   "db": -10
+  },
+  {
+   "id": "S1b",
+   "file": "motion/films/messiah/sound/audio/S1lp.mp3",
+   "at": 129.43,
+   "off": 3,
+   "len": 6.4,
+   "db": -12,
+   "fin": 0.8,
+   "fout": 1
+  },
+  {
+   "id": "S11b",
+   "file": "motion/films/messiah/sound/audio/S11.mp3",
+   "at": 130.2,
+   "off": 2,
+   "len": 5,
+   "db": -19,
+   "fin": 0.5,
+   "fout": 1
+  },
+  {
+   "id": "S7",
+   "at": 133.66,
+   "len": 6,
+   "db": -14,
+   "fin": 1,
+   "fout": 1.5
+  },
+  {
+   "id": "X4",
+   "at": 135.5,
+   "len": 2,
+   "db": -10
+  },
+  {
+   "id": "E3H1",
+   "file": "motion/films/messiah/sound/audio/E3.mp3",
+   "at": 135.71,
+   "len": 1.8,
+   "db": -11
+  },
+  {
+   "id": "E3g",
+   "file": "motion/films/messiah/sound/audio/E3.mp3",
+   "at": 145.11,
+   "len": 1.8,
+   "db": -9
+  },
+  {
+   "id": "S12b",
+   "file": "motion/films/messiah/sound/audio/S12.mp3",
+   "at": 148.7,
+   "len": 2,
+   "db": -11
+  },
+  {
+   "id": "S5b",
+   "file": "motion/films/messiah/sound/audio/S5.mp3",
+   "at": 150,
+   "len": 2.5,
+   "db": -10
+  },
+  {
+   "id": "E1e",
+   "at": 151,
+   "len": 2,
+   "db": -12,
+   "fout": 0.4
+  },
+  {
+   "id": "X9",
+   "at": 153.4,
+   "len": 2,
+   "db": -9
+  },
+  {
+   "id": "S7b",
+   "file": "motion/films/messiah/sound/audio/S7.mp3",
+   "at": 153.8,
+   "len": 2.8,
+   "db": -16,
+   "fin": 0.3,
+   "fout": 1
+  },
+  {
+   "id": "X5",
+   "at": 158.6,
+   "len": 5,
+   "db": -12,
+   "fin": 0.4
+  },
+  {
+   "id": "E3H2",
+   "file": "motion/films/messiah/sound/audio/E3.mp3",
+   "at": 159.35,
+   "len": 1.8,
+   "db": -11
+  },
+  {
+   "id": "X6",
+   "at": 159.4,
+   "len": 2,
+   "db": -8
+  },
+  {
+   "id": "S2b",
+   "file": "motion/films/messiah/sound/audio/S2.mp3",
+   "at": 163.97,
+   "len": 5,
+   "db": -17,
+   "fin": 0.5,
+   "fout": 1
+  },
+  {
+   "id": "S1c",
+   "file": "motion/films/messiah/sound/audio/S1lp.mp3",
+   "at": 168.72,
+   "off": 10,
+   "len": 7,
+   "db": -18,
+   "fin": 1,
+   "fout": 3
+  },
+  {
+   "id": "S5c",
+   "file": "motion/films/messiah/sound/audio/S5.mp3",
+   "at": 169.31,
+   "len": 2.5,
+   "db": -10
+  },
+  {
+   "id": "E2b",
+   "file": "motion/films/messiah/sound/audio/E2.mp3",
+   "at": 169.83,
+   "len": 1.6,
+   "db": -10
+  }
  ],
  "ducks": [
-  { "from": 12.9, "to": 13.85, "db": -30, "ramp": 0.3 },
-  { "from": 102.6, "to": 104.3, "db": -35, "ramp": 0.5 },
-  { "from": 107.4, "to": 107.85, "db": -40, "ramp": 0.25 },
-  { "from": 118.9, "to": 119.5, "db": -30, "ramp": 0.3 },
-  { "from": 151.2, "to": 156.8, "db": -9, "ramp": 0.6 },
-  { "from": 156.8, "to": 158.5, "db": -45, "ramp": 0.4 },
-  { "from": 162.6, "to": 164.3, "db": -30, "ramp": 0.5 }
+  {
+   "from": 12.9,
+   "to": 14,
+   "db": -30,
+   "ramp": 0.3
+  },
+  {
+   "from": 97.7,
+   "to": 99.4,
+   "db": -35,
+   "ramp": 0.5
+  },
+  {
+   "from": 102.9,
+   "to": 103.35,
+   "db": -40,
+   "ramp": 0.25
+  },
+  {
+   "from": 113.2,
+   "to": 113.8,
+   "db": -30,
+   "ramp": 0.3
+  },
+  {
+   "from": 153.6,
+   "to": 161.6,
+   "db": -9,
+   "ramp": 0.6
+  },
+  {
+   "from": 161.6,
+   "to": 163.5,
+   "db": -45,
+   "ramp": 0.4
+  },
+  {
+   "from": 166.9,
+   "to": 168.6,
+   "db": -30,
+   "ramp": 0.5
+  }
  ]
 }

@@ -418,53 +418,66 @@ function partRome(ctx, t) {
 const remap = (f, a, sa, rate = 1) => (c, t) => f(c, sa + (t - a) * rate);
 const hasF = n => typeof window[n] === 'function';
 const dark = (c, a) => { c.fillStyle = `rgba(6,5,8,${a})`; c.fillRect(0, 0, W, H); };
-function partNaz(ctx, t) { const u = t - 47.6, k = eio(clamp(u / 11)), [hx, hy] = NOIL.mary;
-  nazarethOil(ctx, u, lerp(W * .5, lerp(W * .5, hx - (V ? 40 : 120), .8), k), lerp(H * .5, lerp(H * .5, hy + (V ? 180 : 60), .8), k), lerp(1.06, 1.36, k), [[5.8, 10.2]]); textBand(ctx); }
-function partMagi(ctx, t) { if (hasF('magiScene')) magiScene(ctx, t - 133.2); else dark(ctx, 1); textBand(ctx); }
-function partHall(ctx, t) { if (hasF('herodOil')) herodOil(ctx, 'hall', t - 138.8); else dark(ctx, 1); textBand(ctx); }
-function partShadow(ctx, t) { if (hasF('herodOil')) herodOil(ctx, 'shadow', Math.min(t - 151.0, 7.1)); else dark(ctx, 1); textBand(ctx); }
-const sDavid = remap(partDavid, 23.4, 43.4);
-const sNarrow = remap(partNarrow, 29.0, 54.0);
-const sRome = remap(partRome, 58.8, 70.4, .62);
-const sJourney = remap(partJourney, 67.6, 76.6, 1.1);
-const sStable = remap(partStable, 81.8, 95.2);
-const sRome2 = remap(partRome, 88.6, 72.2, .48);
-const sStable2 = remap(partStable, 98.8, 99.4);
-const sDawn = remap(partDawn, 119.6, 146.4, 1.3);
-function sRise(c, t) { RISE.draw(c, 1.2 + (t - 158.6) * 1.2); textBand(c); }   /* starts 1.2 s in: the lane is black at u = 0 */
+// 4차 (2026-11-07, 관리자: "너무 급하게 지나가 — 특히 성경구절", "초반 영상도 사운드도 비정상", "노란 선 지도는 무슨 의미인지", "속삭임은
+// 톤이 급격히 바뀌어 어색"): 요 7:42 곁가지와 화면 전용 구절 둘·제목 카드를 빼고 그 시간을 구절에 — 구절 줄은 목소리의 그 줄이 시작할 때
+// 넘어가고(cuts, sound/pieces.json), 낭독 줄 사이 0.8초 쉼, 끝에 1.2~1.5초 머묾. 2부 실타래 지도 대신 나사렛 → 베들레헴 점선 길 하나
+// (partWay). 마을로 날아드는 카메라는 집 앞면이 검은 판으로 보이기 전(camT ≈ 12.5)에서 멈춤.
+function partNaz(ctx, t) { const u = t - 39.2, k = eio(clamp(u / 13.6)), [hx, hy] = NOIL.mary;
+  nazarethOil(ctx, u, lerp(W * .5, lerp(W * .5, hx - (V ? 40 : 120), .8), k), lerp(H * .5, lerp(H * .5, hy + (V ? 180 : 60), .8), k), lerp(1.06, 1.36, k), [[6.9, 11.3]]); textBand(ctx); }
+function partMagi(ctx, t) { if (hasF('magiScene')) magiScene(ctx, t - 130.0); else dark(ctx, 1); textBand(ctx); }
+function partHall(ctx, t) { if (hasF('herodOil')) herodOil(ctx, 'hall', t < 137 ? t - 135.3 : 1.7 + (t - 137) * .4); else dark(ctx, 1); textBand(ctx); }   /* the king flinches on "유대인의 왕"; the dolly then creeps for the rest of the verse */
+function partShadow(ctx, t) { if (hasF('herodOil')) herodOil(ctx, 'shadow', Math.min(t < 159.4 ? (t - 153.4) * .5 : 3 + (t - 159.4), 7.1)); else dark(ctx, 1); textBand(ctx); }   /* the hand finds the hilt on "나도 가서 그에게 경배하게 하라" */
+const flightIn = t => t < 9 ? t * .9 : 8.1 + 4.4 * eo(clamp((t - 9) / 18));   // stops short of the houses (their walls read as black boards close up)
+const sDavid = remap(partDavid, 26.2, 43.4, .84);
+const sRome = remap(partRome, 52.2, 70.4, .56);
+const sJourney = remap(partJourney, 61.8, 80.6, 1.08);
+const sStable = remap(partStable, 72.0, 95.2, .66);
+const sRome2 = remap(partRome, 83.6, 72.2, .48);
+const sStable2 = remap(partStable, 93.8, 99.4);
+const sDawn = remap(partDawn, 113.2, 145.49, 1.3);
+let GL = null;
+function sGlass(c, t) { const u = t - 103.3;   /* before the glory the glass is still (its camera holds at u < 0, and draw() sets its own transform): drawn off-screen and pushed in slowly, so it is not a frozen frame */
+  if (u >= 0) GlassShep.draw(c, u < 2.2 ? u : 2.2 + (u - 2.2) * .7);
+  else { if (!GL) { GL = canvas(W, H); GL.g = GL.getContext('2d'); } GL.g.setTransform(1, 0, 0, 1, 0, 0); GlassShep.draw(GL.g, u); const s = 1 + .06 * clamp(-u / 3.7); c.drawImage(GL, W / 2 - W * s / 2, H * .4 - H * .4 * s, W * s, H * s); }
+  textBand(c); }
+function sWay(c, t) { partWay(c, t - 32.6); }
+function sJeru(c, t) { partJeru(c, t - 144.4); }
+function sRise(c, t) { RISE.draw(c, 1.2 + (t - 163.6) * 1.2); textBand(c); }   /* starts 1.2 s in: the lane is black at u = 0 */
 const SCENES = [
-  [0, 24.2, (c, t) => { partFlight(c, t, t * .9, { warm: ss(13.9, 15.6, t) }); const k = ss(22.0, 23.6, t); if (k > 0) dark(c, .5 * k); }],
-  [23.4, 29.8, sDavid], [29.0, 48.4, sNarrow],
-  [47.6, 59.6, partNaz], [58.8, 68.4, sRome], [67.6, 82.6, sJourney],
-  [81.8, 89.4, sStable], [88.6, 99.6, sRome2], [98.8, 106.0, sStable2],
-  [105.2, 120.4, (c, t) => { const u = t - 107.8; GlassShep.draw(c, u < 2.2 ? u : 2.2 + (u - 2.2) * .8); textBand(c); }]   /* the camera keeps drifting to the cut (its keys end at 10) */, [119.6, 128.0, sDawn],
-  [127.2, 133.8, (c, t) => partFlight(c, t, 14 + (t - 127.2) * .6, { warm: 1 })],
-  [133.0, 139.6, partMagi], [138.8, 143.2, partHall], [142.4, 151.8, (c, t) => partJeru(c, t - 142.4)], [151.0, 159.4, partShadow],
-  [158.6, 165.2, sRise],
-  [164.4, 171.5, (c, t) => { END.draw(c, 12 + (t - 164.4)); dark(c, .35); }],
+  [0, 27.0, (c, t) => { partFlight(c, t, flightIn(t), { warm: ss(14.0, 15.7, t) }); const k = ss(25.2, 26.8, t); if (k > 0) dark(c, .5 * k); }],
+  [26.2, 33.4, sDavid], [32.6, 40.2, sWay],
+  [39.4, 53.0, partNaz], [52.2, 62.6, sRome], [61.8, 72.8, sJourney],
+  [72.0, 84.4, sStable], [83.6, 94.6, sRome2], [93.8, 100.6, sStable2],
+  [99.6, 114.2, sGlass], [113.2, 122.2, sDawn],
+  [121.4, 130.6, (c, t) => partFlight(c, t, 12.4 - (t - 121.4) * .35, { warm: 1 })],   /* the camera draws back from the town (never closer than flightIn) */
+  [129.8, 136.2, partMagi], [135.4, 145.0, partHall], [144.2, 153.8, sJeru], [153.2, 164.4, partShadow],
+  [163.4, 170.0, sRise],
+  [168.4, 176.0, (c, t) => { END.draw(c, 12 + (t - 168.4)); dark(c, .35); }],
 ];
 const QB = () => ({ bottom: Film.subBottom() + 40 });
+// when each later verse piece takes over (= its first word in sound/words-ko.json, a beat early) — the screen turns with the voice
+const CUTS = {'14': [59], '18': [108.25], '02': [19.03,22.95], 'N14': [75,78.81], 'H1': [138.52,141.48], 'H2': [156.71,158.94]};
 const TEXT = [
   ['sub', 'N01', 0.3, 5.5], ['sub', 'N02', 5.6, 9.8], ['sub', 'N03', 9.85, 13.2],
-  ['label', 'P0', 13.6, 17.0], ['quote', '02', 13.9, 21.9, { ...QB(), hlAt: 13.95 }], ['label', 'P1', 17.2, 21.7], ['title', 'T1', 21.9, 23.9],
-  ['label', 'G2', 23.3, 28.6], ['sub', 'N04', 23.6, 28.6], ['label', 'J1', 28.9, 33.9], ['quote', 'N05', 29.2, 34.0, { ...QB(), hlAt: 30.95 }],
-  ['sub', 'N06', 34.4, 40.6], ['sub', 'N07', 41.5, 47.8], ['quote', 'N08', 48.0, 50.9, QB()], ['sub', 'N09', 51.0, 57.0],
-  ['sub', 'N10', 58.9, 62.0], ['label', 'A1', 59.5, 67.6], ['quote', '14', 62.6, 67.9, QB()], ['quote', '15', 68.0, 72.1, { ...QB(), hlAt: 70.2 }],
-  ['sub', 'N22', 72.3, 77.7], ['sub', 'N13', 78.3, 81.0], ['quote', 'N14', 81.6, 87.7, { ...QB(), hlAt: 85.61 }],
-  ['sub', 'N15', 88.5, 95.4], ['sub', 'N16', 96.0, 102.7],
-  ['label', 'P5', 104.2, 109.4], ['sub', 'N17', 104.5, 109.5], ['quote', 'N18', 109.6, 112.3, QB()], ['label', 'J3', 111.8, 118.2], ['quote', '18', 112.6, 118.4, { ...QB(), hlAt: 115.15 }],
-  ['sub', 'N20', 119.6, 126.5], ['sub', 'N19', 127.2, 131.1], ['micah', '02', 131.0, 133.6],
-  ['label', 'J5', 133.1, 138.1], ['sub', 'N23', 133.4, 138.2], ['quote', 'H1', 138.7, 142.2, { ...QB(), hlAt: 138.79 }],
-  ['micah', '02', 142.6, 145.8, { y: H * (V ? .34 : .3) }], ['sub', 'N24', 142.3, 150.6], ['label', 'J6', 150.9, 156.8], ['quote', 'H2', 151.4, 157.0, { ...QB(), hlAt: 154.21 }],
-  ['sub', 'N26', 158.6, 162.8], ['end', 'E1', 164.5, 171.2],
+  ['label', 'P0', 13.4, 17.6], ['quote', '02', 14.0, 26.6, { ...QB(), hlAt: 14.35 }], ['label', 'P1', 17.8, 24.6],
+  ['label', 'G2', 26.4, 32.0], ['sub', 'N04', 27.4, 32.4],
+  ['sub', 'N07', 33.3, 37.4], ['quote', 'N08', 39.8, 43.6, QB()], ['sub', 'N09', 43.8, 49.9],
+  ['sub', 'N10', 52.0, 55.2], ['label', 'A1', 52.6, 61.0], ['quote', '14', 55.5, 62.6, QB()],
+  ['sub', 'N22', 62.8, 68.3], ['sub', 'N13', 68.9, 71.7], ['quote', 'N14', 72.3, 82.9, { ...QB(), hlAt: 79.67 }],
+  ['sub', 'N15', 83.4, 90.4], ['sub', 'N16', 91.1, 97.8],
+  ['label', 'P5', 99.6, 104.8], ['sub', 'N17', 100.0, 105.0], ['label', 'J3', 105.2, 112.0], ['quote', '18', 105.7, 113.6, { ...QB(), hlAt: 108.55 }],
+  ['sub', 'N20', 113.9, 120.9], ['sub', 'N19', 121.7, 125.5], ['micah', '02', 125.6, 129.8],
+  ['label', 'J5', 129.9, 135.0], ['sub', 'N23', 130.2, 135.0], ['quote', 'H1', 135.4, 144.4, { ...QB(), hlAt: 135.71 }],
+  ['micah', '02', 144.9, 149.0, { y: H * (V ? .34 : .3) }], ['sub', 'N24', 144.6, 153.0], ['label', 'J6', 153.0, 160.6], ['quote', 'H2', 153.6, 162.4, { ...QB(), hlAt: 159.35 }],
+  ['sub', 'N26', 163.8, 167.0], ['end', 'E1', 168.8, 175.7],
 ];
 function title(ctx, id, t, a, b) { const ta = win(t, a, b, .9, .6); if (ta <= 0) return; const sz = V ? 100 : 108, ty = V ? H * .45 : H * .48;
   Pilot.text(ctx, Film.text(id), W / 2, ty, { size: sz, weight: 600, color: '#e9c77a', alpha: ta, shadow: 'rgba(233,185,73,.35)', shadowBlur: 40, ls: 6 });
   const lw = (V ? 420 : 520) * eo(clamp((t - a - .3) / 1.6)); ctx.fillStyle = `rgba(233,199,122,${ta * .8})`; ctx.fillRect(W / 2 - lw / 2, ty + (V ? 50 : 54), lw, 2); }
-const FILM_DUR = 171.5;
+const FILM_DUR = 176;
 // planned effects frame-qa.mjs must not count as faults: [from, to, why]
-const QA_HOLD = [[164.5, 171.5, 'the end card (뒷이야기 · 마태복음 2장)'], [158.0, 159.4, 'the torch gutters before the last question']];
-const QA_PLANNED = [[107.9, 108.7, 'the glory opens over the shepherds'], [119.6, 128.0, 'black-and-white film: gate flicker, then the palette knife repaints it stroke by stroke'], [163.6, 164.8, 'the end card darkens']];
+const QA_HOLD = [[168.8, 176.0, 'the end card (뒷이야기 · 마태복음 2장)'], [163.0, 164.4, 'the torch gutters before the last question']];
+const QA_PLANNED = [[103.4, 104.2, 'the glory opens over the shepherds'], [113.2, 122.2, 'black-and-white film: gate flicker, then the palette knife repaints it stroke by stroke'], [167.8, 169.2, 'the end card darkens']];
 // how two verses are joined (motion/films/lib-link.js); ?link=carry|depth|horizon|ember (this film: ember — 관리자 2026-11-03), ?lab=1 names it on screen (drafts)
 const LINKQ = (location.search.match(/[?&]link=(\w+)/) || [])[1], LINK = LINKQ || 'ember', LAB = /[?&]lab=1/.test(location.search) ? { carry: '시안 A · 빛이 건너감', depth: '시안 B · 시간의 깊이', horizon: '시안 C · 빛의 지평선', ember: '시안 D · 불씨' }[LINK] : '';
 let XL = null;
@@ -480,10 +493,10 @@ function draw(ctx, t) {
     else if (kind === 'end') endCard(ctx, t, a, b);
     else if (kind === 'link') { Film.link(ctx, t, id, o.to, a, b, { style: LINKQ || o.style, y: o.y, word: o.word }); if (LAB && t > a - .1 && t < b + .1) Pilot.text(ctx, LAB, W / 2, V ? 150 : 60, { size: V ? 34 : 30, font: "'Noto Sans KR',sans-serif", color: '#9fb4d8', alpha: .9, ls: 2 }); }
     else if (kind === 'micah') { const seg = Film.text(id).split(/\s*\/\s*/)[0]; Film.quote(ctx, id, t, a, b, { text: seg, ...(o.y ? { y: o.y } : QB()), hl: Film.lines[id].hl, hlk: ss(a + .4, a + 1.4, t), color: '#fff3d6', shadow: 'rgba(255,190,90,.45)' }); }
-    else if (kind === 'quote') Film.quote(ctx, id, t, a, b, { ...o, hl: Film.lines[id].hl, hlk: o.hlAt ? ss(o.hlAt, o.hlAt + 1.2, t) : 0 }); }
+    else if (kind === 'quote') Film.quote(ctx, id, t, a, b, { cuts: CUTS[id], ...o, hl: Film.lines[id].hl, hlk: o.hlAt ? ss(o.hlAt, o.hlAt + 1.2, t) : 0 }); }
 }
 Pilot.run({ W, H, dur: FILM_DUR, fonts: ["600 40px 'Noto Serif KR'", "400 40px 'Noto Serif KR'", "400 20px 'Noto Sans KR'"],
-  init: async () => { await Film.load(); RISE = (await import('./cine-rise.js')).build(W, H); END = (await import('./cine-end.js')).build(W, H); if (SHEP === 'cine') SHEP3D = (await import('./cine-shep.js')).build(W, H); if (SHEP === 'glass') await GlassShep.init(); buildRoad(); buildRome(); buildFly(); buildNarrow(); buildStableOil(); buildJourneyOil(); buildNazarethOil(); if (hasF('buildMagi')) await buildMagi(); if (hasF('buildHerodOil')) await buildHerodOil(); }, draw });
+  init: async () => { await Film.load(); RISE = (await import('./cine-rise.js')).build(W, H); END = (await import('./cine-end.js')).build(W, H); if (SHEP === 'cine') SHEP3D = (await import('./cine-shep.js')).build(W, H); if (SHEP === 'glass') await GlassShep.init(); buildRoad(); buildRome(); buildFly(); buildStableOil(); buildJourneyOil(); buildNazarethOil(); if (hasF('buildMagi')) await buildMagi(); if (hasF('buildHerodOil')) await buildHerodOil(); }, draw });
 </script>
 </body>
 </html>

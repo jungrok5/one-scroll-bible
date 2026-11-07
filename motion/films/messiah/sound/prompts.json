@@ -1340,6 +1340,94 @@
    "name": "E8e"
   },
   {
+   "use": "toolu_01R8b1RiKhmnbDhsbLTyHbeQ",
+   "time": "2026-11-05T13:23:15.714Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_add_flow_node:music",
+   "model": "eleven_music_v2_5",
+   "label": "MV1 1악장 약속 (52s)",
+   "prompt": "One continuous movement, 52 seconds, never stopping or restarting: a cinematic chamber-orchestra nocturne that tells the first promise. Solo cello carries a slow, noble five-note promise theme in D dorian through the whole piece; every change grows out of what is already playing. 0–3 s: near-silent low string pedal on D with faint glassy high harmonics like stars. At 3 s the solo cello begins the theme, intimate and long-breathed. At about 9 s soft French horns and a wordless choir bloom warmly beneath it, then settle. At about 19 s one warm full chord swells for two seconds and thins to a single suspended high string note, like a question. At 21 s a harp and a soft oud take up the theme over the held note, tender, as dusk falls in a garden; at about 27 s the harmony darkens into minor and the cello sighs low; at about 32 s everything thins to one sustained high violin note with a faint celesta glint, one small light left in the dark. At 37 s the cello lifts the theme again, slowly rising, the star harmonics returning and multiplying, wide and hopeful. At about 44 s a soft wooden shepherd's flute joins the cello in warm evening light, pastoral and tender. From 49 s the theme gathers on a held major chord that leans forward, unresolved, carrying on. Quiet enough under a spoken voice throughout, no drums, no percussion, no piano, wide natural reverb.",
+   "params": {
+    "duration_seconds": 52,
+    "instrumental": true,
+    "lyrics_type": "instrumental"
+   },
+   "why": "Re-scoring the Messiah film's music as four continuous movements so scenes no longer feel cut apart (user approved)",
+   "node": "D1JWMGvTjjtm2YpfsTa8",
+   "sessions": [
+    "S64HQPfJ1xjwH6u6p6so",
+    "x7HFWEBkvquG79rUtypr",
+    "NP2XuM115zxMXoFv50my",
+    "epAWJ21yXwWy5f3BlHum"
+   ]
+  },
+  {
+   "use": "toolu_01MVyrpMT9MV5vTMZB2bJLdY",
+   "time": "2026-11-05T13:23:45.459Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_add_flow_node:music",
+   "model": "eleven_music_v2_5",
+   "label": "MV2 2악장 좁혀지는 길 (45s)",
+   "prompt": "One continuous movement, 45 seconds, never stopping or restarting, continuing a piece already in progress: it opens on a held D major string chord with solo cello, as if mid-phrase. The same slow five-note promise theme in D dorian runs through all of it. At about 1 s a soft pizzicato pulse and a celesta begin, like gold ink spreading across an old map; the theme passes between violas and cello, narrowing and focusing, purposeful. At about 13 s high violins lift the theme upward and northward, gently. At about 19 s the color turns cold and grand: low brass and low strings in minor, stern and imperial, slow, for six seconds. At 26 s warmth returns: solo cello sings the theme over a slow walking low-string ostinato, a long road at golden sunset, steady footsteps in the rhythm. At about 34 s the light fades toward night, the strings soften and thin. At about 38 s a single French horn plays the first notes of the theme, distant, like lamps of a small town seen from afar, over a hushed string pad that fades almost to silence by 45 s. Quiet enough under a spoken voice, no drums, no percussion, no piano, wide natural reverb.",
+   "params": {
+    "duration_seconds": 45,
+    "instrumental": true,
+    "lyrics_type": "instrumental"
+   },
+   "why": "Re-scoring the Messiah film's music as four continuous movements (movement 2)",
+   "node": "wHLhrhElR1c1mh2MK84E",
+   "sessions": [
+    "EkB0EnYQ1TSO8QmlKZYz",
+    "X9Q2fkJ3d39ni4F4FlDO",
+    "69d7kOcPaz2ns8htXPnP",
+    "YrAx8PVp4pWds3ZtpQKx"
+   ]
+  },
+  {
+   "use": "toolu_015AHxHPFGSkipbDoJ5hvs6V",
+   "time": "2026-11-05T13:23:45.473Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_add_flow_node:music",
+   "model": "eleven_music_v2_5",
+   "label": "MV3 3악장 구유 (43s)",
+   "prompt": "One continuous movement, 43 seconds, never stopping or restarting, continuing a piece already in progress: it begins from a hushed string pad, and a solo violin with harp sings the five-note promise theme in D dorian as a gentle lullaby, warm candlelight, a newborn child. At about 10 s a sudden radiant bloom: full strings, wordless choir and horns in D major, glorious and bright for four seconds, then sustained shimmering high strings and celesta for five seconds. At about 19 s it falls back to harp and soft oud playing the theme in minor, a memory of a garden at dusk, sorrowful. At about 26 s the harmony turns warmly to major and the solo cello takes the theme back, the promise kept, tender and full. At about 33 s it slows and deepens: low strings and a soft wordless choir, solemn and reverent. At about 38 s it settles on one dark, low, held chord, tender rather than tragic, sustained to the end. Quiet enough under a spoken voice, no drums, no percussion, no piano, wide natural reverb.",
+   "params": {
+    "duration_seconds": 43,
+    "instrumental": true,
+    "lyrics_type": "instrumental"
+   },
+   "why": "Re-scoring the Messiah film's music as four continuous movements (movement 3)",
+   "node": "hPKooiF5rcshc0y4Y1Nv",
+   "sessions": [
+    "tB0nt15ladenXnX6DG3G",
+    "tmDUaioXbWnn09DmtOeW",
+    "DBo7GzG4Yh4ltQ4TDNj2",
+    "xI2GYGBaqIAlyBxju45H"
+   ]
+  },
+  {
+   "use": "toolu_01UM1EG5FbRwJMtpvckQC92S",
+   "time": "2026-11-05T13:23:45.815Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_add_flow_node:music",
+   "model": "eleven_music_v2_5",
+   "label": "MV4 4악장 이름과 새벽 (43s)",
+   "prompt": "One continuous movement, 43 seconds, never stopping or restarting, continuing a piece already in progress: it rises out of a low held string chord as a solo cello sings the five-note promise theme in D dorian clearly and warmly, with faint glassy high harmonics like a single star; hopeful, intimate. At about 9 s it empties into stillness: one grave low string drone and a single quiet viola line, solemn and bare, for six seconds. At about 15 s dawn breaks: strings swell into D major, French horns and a wordless choir rise like the sun, triumphant but gentle, the fullest moment of the piece around 18 s. At about 22 s it settles into peace: the theme on cello and harp over warm sustained strings, morning light. At about 32 s the full strings state the theme one last time, softly, and end on a long, open D major chord that decays slowly into silence by 43 s. Quiet enough under a spoken voice, no drums, no percussion, no piano, wide natural reverb.",
+   "params": {
+    "duration_seconds": 43,
+    "instrumental": true,
+    "lyrics_type": "instrumental"
+   },
+   "why": "Re-scoring the Messiah film's music as four continuous movements (movement 4)",
+   "node": "TLiw2EfGacJB8EM33WMh",
+   "sessions": [
+    "x7O2woTVhApAsFpuKH6d",
+    "DF2QMF7HzRqEFCBa6PNu",
+    "JZDMqCpQoBv7iWABczyk",
+    "aniMzDtfdN2Z95aRVw2Q"
+   ]
+  },
+  {
    "time": "2026-11-05T13:23:47Z",
    "flow": "BcQHTd61fLqr0A3kjcfa",
    "tool": "creative_add_flow_node:music",
@@ -1354,7 +1442,13 @@
    "why": "round 8b: four continuous movements instead of 16 per-scene cues (관리자: \"씬별 단절된 느낌\")",
    "node": "D1JWMGvTjjtm2YpfsTa8",
    "takes": "4 variations a–d in sound/audio/takes/, used: MV1c",
-   "name": "MV1"
+   "name": "MV1",
+   "sessions": [
+    "S64HQPfJ1xjwH6u6p6so",
+    "x7HFWEBkvquG79rUtypr",
+    "NP2XuM115zxMXoFv50my",
+    "epAWJ21yXwWy5f3BlHum"
+   ]
   },
   {
    "time": "2026-11-05T13:23:47Z",
@@ -1371,7 +1465,13 @@
    "why": "round 8b: four continuous movements instead of 16 per-scene cues (관리자: \"씬별 단절된 느낌\")",
    "node": "wHLhrhElR1c1mh2MK84E",
    "takes": "4 variations a–d in sound/audio/takes/, used: MV2b",
-   "name": "MV2"
+   "name": "MV2",
+   "sessions": [
+    "EkB0EnYQ1TSO8QmlKZYz",
+    "X9Q2fkJ3d39ni4F4FlDO",
+    "69d7kOcPaz2ns8htXPnP",
+    "YrAx8PVp4pWds3ZtpQKx"
+   ]
   },
   {
    "time": "2026-11-05T13:23:47Z",
@@ -1388,7 +1488,13 @@
    "why": "round 8b: four continuous movements instead of 16 per-scene cues (관리자: \"씬별 단절된 느낌\")",
    "node": "hPKooiF5rcshc0y4Y1Nv",
    "takes": "4 variations a–d in sound/audio/takes/, used: MV3c",
-   "name": "MV3"
+   "name": "MV3",
+   "sessions": [
+    "tB0nt15ladenXnX6DG3G",
+    "tmDUaioXbWnn09DmtOeW",
+    "DBo7GzG4Yh4ltQ4TDNj2",
+    "xI2GYGBaqIAlyBxju45H"
+   ]
   },
   {
    "time": "2026-11-05T13:23:47Z",
@@ -1405,7 +1511,602 @@
    "why": "round 8b: four continuous movements instead of 16 per-scene cues (관리자: \"씬별 단절된 느낌\")",
    "node": "TLiw2EfGacJB8EM33WMh",
    "takes": "4 variations a–d in sound/audio/takes/, used: MV4b",
-   "name": "MV4"
+   "name": "MV4",
+   "sessions": [
+    "x7O2woTVhApAsFpuKH6d",
+    "DF2QMF7HzRqEFCBa6PNu",
+    "JZDMqCpQoBv7iWABczyk",
+    "aniMzDtfdN2Z95aRVw2Q"
+   ]
+  },
+  {
+   "use": "toolu_012ad2aDof2a1roknA7Mzmzx",
+   "time": "2026-11-07T07:29:40.061Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "칠백여 년 전, 성경은 이미 메시아가 태어날 마을의 이름을 적어 두었습니다.",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line N01 of the film 「메시아」 3rd script",
+   "node": "Pj5G1SsATvoTTozS4lc4",
+   "sessions": [
+    "2jOdpkBybzLkdx1aPgpm",
+    "UmY1qraHmWTLVv4EMfoO"
+   ],
+   "name": "N01"
+  },
+  {
+   "use": "toolu_01XmEcLKfFs3M7rVK87LXHDd",
+   "time": "2026-11-07T07:29:41.676Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "그런데 정작 마리아와 요셉은 그 마을에 살지 않았습니다.",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line N02 of the film 「메시아」 3rd script",
+   "node": "04IiO8lWCZQKvLOmhXWe",
+   "sessions": [
+    "fLBI9YEklE0T30cEq7F1",
+    "8BCq6RnJPMMPEJBKL62P"
+   ],
+   "name": "N02"
+  },
+  {
+   "use": "toolu_01RqcXHrejvoDnswJxWGf8Xt",
+   "time": "2026-11-07T07:29:43.418Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "그 한 줄은… 빗나가는 걸까요?",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line N03 (the opening question) of the film 「메시아」",
+   "node": "cih1rQH24qpZFBHMHW9A",
+   "sessions": [
+    "qgw0S2puTtB7zsAXJGd2",
+    "9KbairShSZcrH6fznXwJ"
+   ],
+   "name": "N03"
+  },
+  {
+   "use": "toolu_01TrV3S9ANf5xCHzuQyctM7z",
+   "time": "2026-11-07T07:29:45.070Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "베들레헴은 다윗 왕의 고향, 메시아가 나올 집안의 마을입니다.",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line N04 of the film 「메시아」",
+   "node": "Kx3VIOaQ0jKFW0T87fZe",
+   "sessions": [
+    "VUhb1kBTNZBl3Sohg9Ww",
+    "4APd0PvBGyzlwQji9l9O"
+   ],
+   "name": "N04"
+  },
+  {
+   "use": "toolu_011krfhdxYR9ymDN47dEkMZt",
+   "time": "2026-11-07T07:30:19.311Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "또 다윗이 살던 마을 베들레헴에서 나오리라 하지 아니하였느냐",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration N05 of 「메시아」 (John 7:42 latter half, 개역개정 verbatim)",
+   "node": "FizucSUv08zgDdIHzoYh",
+   "sessions": [
+    "DG8WvB2wBJXDAhNaan4u",
+    "YY9he3H975uBPuTN7uiG"
+   ],
+   "name": "N05"
+  },
+  {
+   "use": "toolu_01KrtfqJMvDwHfccu5KYKQbq",
+   "time": "2026-11-07T07:30:19.319Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "어떤 사람들은 성경의 그 약속을 알았기에, 갈릴리 사람이 메시아일 리 없다고 했습니다.",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line N06 of 「메시아」",
+   "node": "rmy8636F6OtiMEAhyJtL",
+   "sessions": [
+    "Thq0hZPDMXVmXuwn1Cxy",
+    "xwcmTsm86EfTs46xhcpG"
+   ],
+   "name": "N06"
+  },
+  {
+   "use": "toolu_01UQdfaxXZBQi1BqBqmAe9gM",
+   "time": "2026-11-07T07:30:19.322Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "다시, 그분이 태어나기 전. 나사렛에서 베들레헴까지는 걸어서 며칠 길.",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line N07 of 「메시아」",
+   "node": "Y4focqkJISoGMdMDSa3w",
+   "sessions": [
+    "DlnFlOdExUK6Ykb8KAhx",
+    "XJZ5Q8RJyoorUVtz5O1S"
+   ],
+   "name": "N07"
+  },
+  {
+   "use": "toolu_01Tugcb9YpfBSiM4YLLWgKKd",
+   "time": "2026-11-07T07:30:19.326Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "해산이 멀지 않은 몸으로, 그 먼 길을 떠날 이유는… 아무것도 없었습니다.",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line N09 (stakes) of 「메시아」",
+   "node": "FqD42geJBX4L2HePB3Ln",
+   "sessions": [
+    "ShTHFHW4ScpjgKZ6Se9S",
+    "nAkOM9PdvAp9dsHTA1z0"
+   ],
+   "name": "N09"
+  },
+  {
+   "use": "toolu_011j2RSb9FdKJWsizZJateDJ",
+   "time": "2026-11-07T07:30:19.328Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "그때, 바다 건너 먼 로마에서.",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line N10 of 「메시아」",
+   "node": "eqX1zd8n19hJtGhZS0BL",
+   "sessions": [
+    "EWEyBQuoTOjrQclmHJ0t",
+    "jyZNFUnXQxke3d5Abu3C"
+   ],
+   "name": "N10"
+  },
+  {
+   "use": "toolu_01W4YbYxAAEAkQGWbam5kZFJ",
+   "time": "2026-11-07T07:30:19.331Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "떠날 이유가 없던 두 사람을, 황제의 도장 하나가 다윗의 마을로 데려갔습니다.",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line N22 of 「메시아」",
+   "node": "qqyDWPCOE1VMBA868t3J",
+   "sessions": [
+    "shyEm0lUjgsQL0fMhEPZ",
+    "s76mpaJpfMb4yhhXlFuX"
+   ],
+   "name": "N22"
+  },
+  {
+   "use": "toolu_01DUxXqqNwai2mYp4vGewHWw",
+   "time": "2026-11-07T07:30:19.335Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "며칠을 걸어 조상의 마을에 닿았습니다.",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line N13 of 「메시아」",
+   "node": "cAyzPCCLY80LBpAeaJeV",
+   "sessions": [
+    "SkTfZgPEYReJGM1sgCjQ",
+    "cEGe1338GVfKlEpzXy0H"
+   ],
+   "name": "N13"
+  },
+  {
+   "use": "toolu_01CaT5AJmVLcDe5NSNNnXsN9",
+   "time": "2026-11-07T07:30:19.459Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "그 시대 로마 제국의 도시들은, 황제를 '구주'라, 그의 생일을 '좋은 소식'이라 새겼습니다.",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line N15 of 「메시아」",
+   "node": "DBi5nSGJmhOfdCItt4Eo",
+   "sessions": [
+    "uoKTcrhANGjPD79rmTy2",
+    "j4Ve7J5tgplvPkgmhGzr"
+   ],
+   "name": "N15"
+  },
+  {
+   "use": "toolu_01MwMVHkMLELAqPoY4UUijGY",
+   "time": "2026-11-07T07:30:19.462Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "'구주'라 불린 황제는 궁전에. 약속된 왕은… 구유, 짐승의 먹이통에.",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line N16 (the reversal) of 「메시아」",
+   "node": "6J3LaSrDLWmdDUvx6Yde",
+   "sessions": [
+    "S3NHCJJN2n63sw9Y48E4",
+    "xGCIFEcexCjkuD54xM6U"
+   ],
+   "name": "N16"
+  },
+  {
+   "use": "toolu_01BGam2qQZd6qCEaX83uB9eJ",
+   "time": "2026-11-07T07:30:19.465Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "그 밤, 첫 소식은 왕궁이 아니라 들판의 목자들에게 갔습니다.",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line N17 of 「메시아」",
+   "node": "tK5DQSmQNVhJ6B1RouiG",
+   "sessions": [
+    "Xb97iLUEjvj33rp4H67Q",
+    "fFzHPmliKbyZqRPylewz"
+   ],
+   "name": "N17"
+  },
+  {
+   "use": "toolu_01UQ7dJedvwcrVQkFjow4EjQ",
+   "time": "2026-11-07T07:30:19.469Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "이 구주는, 우리 죄를 대신 지고 십자가에서 죽으시고, 사흘 만에 다시 살아나실 분이었습니다.",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line N20 (the gospel) of 「메시아」",
+   "node": "2wFzrD6fr39i8LS8trDR",
+   "sessions": [
+    "lKmuxx3eNYMKUgC5zIoy",
+    "MeIWn9hieWSubSnaQB0A"
+   ],
+   "name": "N20"
+  },
+  {
+   "use": "toolu_01RwjvqywFjFbYiGAyKcfGKV",
+   "time": "2026-11-07T07:30:19.472Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "칠백여 년 전 그 한 줄은, 빗나가지 않았습니다.",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line N19 (the answer) of 「메시아」",
+   "node": "m9f96B2eVLFkZg1VZgTI",
+   "sessions": [
+    "qVkSXQ3jxifjrvftjXEi",
+    "UseKCDvIv8MW4L9u2fvQ"
+   ],
+   "name": "N19"
+  },
+  {
+   "use": "toolu_01Rs2CX3VBFfGZjBqxNHGhki",
+   "time": "2026-11-07T07:30:19.475Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "얼마 뒤, 동방의 박사들이 예루살렘 왕궁에 와서 물었습니다.",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line N23 (start of the after-story) of 「메시아」",
+   "node": "4AvhHnwUv2Tnn1QLeF71",
+   "sessions": [
+    "UhqaXNl4xHKKJj8fv2qo",
+    "MBnQKhLfFgpy7zt9L59H"
+   ],
+   "name": "N23"
+  },
+  {
+   "use": "toolu_01RVas41puMSeMCnhBjWenNN",
+   "time": "2026-11-07T07:30:19.478Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "유대인의 왕으로 나신 이가 어디 계시냐",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration H1 of 「메시아」 (Matthew 2:2, 개역개정 verbatim)",
+   "node": "OWN7J0O6DR1WKdtBL3Wt",
+   "sessions": [
+    "0XQbV92P13EAWvZwRINY",
+    "YKenOuIegms9WJz535a6"
+   ],
+   "name": "H1"
+  },
+  {
+   "use": "toolu_01XHdw2N4gFaSsjMvUAyTbyq",
+   "time": "2026-11-07T07:30:20.017Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "왕이 묻자, 대제사장과 서기관들은 미가의 그 한 줄로 답했습니다. 베들레헴. 걸어서 두어 시간.",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line N24 of 「메시아」",
+   "node": "jqd9GeqnlWYGNAMg66Yj",
+   "sessions": [
+    "kAaJI0c91NfRNJOafrOp",
+    "d8DuWmBATsBY4QktGtY2"
+   ],
+   "name": "N24"
+  },
+  {
+   "use": "toolu_01SLsHBuEqWGwcysF94kLDtx",
+   "time": "2026-11-07T07:30:20.021Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "[low, soft, slow, almost a whisper] 찾거든 내게 고하여… 나도 가서 그에게 경배하게 하라",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration H2 of 「메시아」 (Matthew 2:8 latter half, verbatim; King Herod's sinister soft words)",
+   "node": "pdvGhJRXXnd2T3FV72Xe",
+   "sessions": [
+    "7gR5Ka0duRnedkmCTU0m",
+    "NrMQy7YJs6CAGGCUgH7v"
+   ],
+   "name": "H2"
+  },
+  {
+   "use": "toolu_01N3Kf1U6yQ8csSSJmKz1xjs",
+   "time": "2026-11-07T07:30:20.024Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "[quietly, slowly] 왕은 정말… 경배하러 가려 했을까요?",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "Korean narration line N26 (the closing open question) of 「메시아」",
+   "node": "sM1RwR19Ktf4EYNDnaJU",
+   "sessions": [
+    "wvoiZJU0RV8oj0CRSai3",
+    "GRZ6t0MWiAQZpmnAfk77"
+   ],
+   "name": "N26"
+  },
+  {
+   "use": "toolu_01R5HiAmapN1TrdjZrSCiM1c",
+   "time": "2026-11-07T08:00:08.600Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_generate_in_flow:music",
+   "model": "eleven_music_v2_5",
+   "label": "",
+   "prompt": "Instrumental only. One continuous movement, 60 seconds, never stopping or restarting: a cinematic chamber-orchestra nocturne. A slow, noble five-note promise theme in D dorian runs through all of it; every change grows out of what is already playing. 0–1 s: near-silent low string pedal on D with faint glassy high harmonics like stars. At 1 s a solo cello begins the theme, intimate, a question hanging in the night. At about 9.8 s everything thins to one suspended high violin note, like a question, then almost silence for a breath. At 13.9 s a warm bloom of wonder: French horns and a soft wordless choir rise under the cello, the theme answered, for eight seconds; at about 21 s one full warm chord swells and holds two seconds. At 23.5 s a soft wooden shepherd's flute takes the theme over warm strings, evening on a hillside. At about 29 s a soft pizzicato pulse and celesta begin, like gold ink spreading across an old map, purposeful, narrowing. At about 34 s the harmony darkens into minor, low strings, a shadow of doubt. At about 41 s a slow walking viola ostinato, a long road ahead. At about 47.5 s it hushes to an intimate harp and solo cello, morning light in a small quiet room, tender and fragile. From 54 s nearly silent: one held high violin note, a held breath, to the end. Quiet enough under a spoken voice throughout, no drums, no piano, no synths, wide natural reverb.",
+   "params": {},
+   "why": "Movement 1 of 4 of the score for the 3rd cut of the short film 「메시아」 (instrumental under narration)",
+   "node": "xT4oOCLbx15m4EHPtBiv",
+   "sessions": [
+    "ww4GMQhLqiOTnVAU3q0x",
+    "Lugvorth58hK45OQTQIa",
+    "GMm4qktnAG6Vio8PPsUg",
+    "C0M2WGMOemOAENX1KvUJ"
+   ],
+   "name": "MW1a"
+  },
+  {
+   "use": "toolu_01GbeY4Qbz8Y6q47YsW5Dvqv",
+   "time": "2026-11-07T08:00:08.616Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_generate_in_flow:music",
+   "model": "eleven_music_v2_5",
+   "label": "",
+   "prompt": "Instrumental only. One continuous movement, 47 seconds, never stopping or restarting, continuing a piece already in progress (the same slow five-note promise theme in D dorian). 0–0.3 s a held low note mid-phrase. At 0.3 s the color turns cold and grand: low brass and low strings in minor with a deep soft frame-drum pulse, stern and imperial, an emperor's decree, for nine seconds. At about 9.5 s a steady walking low-string ostinato with a distant soft frame drum like footsteps, a long road at golden sunset, determined; the solo cello sings the theme above it. At about 19.5 s night falls: everything softens and thins. At 23 s suddenly intimate: a solo violin and harp sing the theme as a lullaby, warm candlelight, a newborn in a manger. At about 30 s the imperial low brass returns, quieter, majestic but hollow, ironic. At about 40 s the brass drops away completely and one high solo violin note sings over the lullaby, tender and small. From 44 s it fades almost to silence by 47 s. Quiet enough under a spoken voice, no piano, no synths, wide natural reverb.",
+   "params": {},
+   "why": "Movement 2 of 4 of the score for the 3rd cut of the short film 「메시아」 (instrumental under narration)",
+   "node": "ehWLQqPsuFws1Fk3iosI",
+   "sessions": [
+    "NEpG4AbBXB0QvCo6jYG8",
+    "abnhj8vdQLarOGtnmE07",
+    "tT8IuKqnvUDLzG9WGm2Z",
+    "Eb84dco6qClyow5tBNTo"
+   ],
+   "name": "MW2a"
+  },
+  {
+   "use": "toolu_01Dedr3aqkd9svcjoyLFKNKd",
+   "time": "2026-11-07T08:00:08.625Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_generate_in_flow:music",
+   "model": "eleven_music_v2_5",
+   "label": "",
+   "prompt": "Instrumental only. One continuous movement, 31 seconds, never stopping or restarting, continuing a piece already in progress (the same slow five-note promise theme in D dorian). 0–4 s from near silence: a celesta and a soft wordless choir hum, shepherds in a field at night, expectant. At 4 s a sudden radiant bloom: full strings, choir and French horns in D major, glorious and awe-filled, the fullest moment of the whole score, then from about 9 s sustained shimmering high strings and celesta, quieter, under a voice, until 15.8 s. At 15.8 s it suddenly empties: one grave low cello line, solemn and bare, for four seconds. At about 20 s dawn: strings rise gently into D major. At 23.4 s the full theme on warm strings, the promise kept, tender and full, resolving at about 27 s on a long open D major chord that decays slowly to near silence by 31 s. Quiet enough under a spoken voice except the bloom at 4 s, no drums, no piano, no synths, wide natural reverb.",
+   "params": {},
+   "why": "Movement 3 of 4 of the score for the 3rd cut of the short film 「메시아」 (instrumental under narration) — 쓴 것: MW3d(12초부터) + MW3c(17초부터)",
+   "node": "n8eA7V9Lw2zEPBHRygQ4",
+   "sessions": [
+    "xlERR8BgCKaEn7VFedP8",
+    "sXRMsMuisuWMwThtylfS",
+    "x36jhXYr4ErmZX5gICzU",
+    "UshTR1SYoSBwcjnmrnPL"
+   ],
+   "name": "MW3"
+  },
+  {
+   "use": "toolu_01Reg2xSfRrAzZca2xFr81RF",
+   "time": "2026-11-07T08:00:08.714Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_generate_in_flow:music",
+   "model": "eleven_music_v2_5",
+   "label": "",
+   "prompt": "Instrumental only. One continuous movement, 39 seconds, never stopping or restarting, continuing a piece already in progress: a darker color of the same five-note promise theme in D dorian, suspense. 0–6 s: a distant ney flute plays the theme's first notes over a low desert drone, a soft hand drum like slow camel steps, mysterious, wonder edged with unease. At 6 s cold low brass cluster and quiet string tremolo, a palace at night, torchlight, suspense. At about 9.8 s a ticking col legno string pulse like a clock begins, tension slowly rising and accelerating. At 18.8 s it drops to almost nothing: a very low sub drone and one faint high string harmonic, menace, whisper-quiet under a soft voice. From 24 s near silence for two seconds. At 26 s a single solo cello plays only the first three notes of the promise theme and stops, unresolved. At about 32 s one soft harp note and a suspended, unresolved chord hold quietly and fade to silence by 39 s. Quiet enough under a spoken voice, no piano, no synths, no big hits, wide natural reverb.",
+   "params": {},
+   "why": "Movement 4 of 4 of the score for the 3rd cut of the short film 「메시아」 (instrumental under narration, suspense ending)",
+   "node": "MC0JKdHCDxeM4SDzKYYI",
+   "sessions": [
+    "HxP4Gkbym6NQaycLVD8C",
+    "e6otHocGRxjRGJjGnP2r",
+    "DKFCgCVlzNkDu49G4OQS",
+    "uWDEsMxaRZU9Y4lcU2Qb"
+   ],
+   "name": "MW4a"
+  },
+  {
+   "use": "toolu_01Uhi8WS9mf9XLf8SWra7wvy",
+   "time": "2026-11-07T08:00:26.779Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_generate_in_flow:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "",
+   "prompt": "A quiet small stone room in the morning, 11 seconds: very soft room tone, a few distant birds outside an open window, a faint breeze, a woman's slow gentle breathing close by, very still and intimate",
+   "params": {
+    "generations_count": 2
+   },
+   "why": "SFX X1 for 「메시아」: Nazareth room, 11 seconds",
+   "node": "1z2CY1mm6TFmVNFpXvoj",
+   "sessions": [
+    "XYcBjn4FvbnlPbK1M3iz",
+    "9NJyfYl5tde8eUuJxR71"
+   ],
+   "name": "X1"
+  },
+  {
+   "use": "toolu_01VPDYhifTp6vPU3vQiQMjoT",
+   "time": "2026-11-07T08:01:00.791Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_generate_in_flow:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "",
+   "prompt": "Night desert, 7 seconds: cold wind over sand dunes, soft camel footsteps padding slowly in sand, small camel bells tinkling faintly in the distance; in the last three seconds two large torches crackling at a stone city gate fade in",
+   "params": {
+    "generations_count": 2
+   },
+   "why": "SFX X3 for 「메시아」: magi caravan in the night desert, 7 seconds",
+   "node": "TUBdprVyQB1JVATRwq9p",
+   "sessions": [
+    "bMy63fibbW7V6e4cj6E7",
+    "Obc73Zh748VBTHV7T2TE"
+   ],
+   "name": "X3"
+  },
+  {
+   "use": "toolu_01NELm3QLzmBehwnaK7tdRbG",
+   "time": "2026-11-07T08:01:00.801Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_generate_in_flow:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "",
+   "prompt": "A large stone throne hall at night, 5 seconds: deep reverberant silence, iron braziers crackling softly, a heavy robe rustling, one slow echoing footstep on stone, tense",
+   "params": {
+    "generations_count": 2
+   },
+   "why": "SFX X4 for 「메시아」: Herod's throne hall, 5 seconds",
+   "node": "GXnk2onDNE4eFDvprRGb",
+   "sessions": [
+    "rdPG6AbWJr4hw2face1d",
+    "KzLXPgaQlYKh7CYNaKv4"
+   ],
+   "name": "X4"
+  },
+  {
+   "use": "toolu_01B1uTUNgD9hJcKsPGFy6WiW",
+   "time": "2026-11-07T08:01:00.806Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_generate_in_flow:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "",
+   "prompt": "One torch burning close against a plaster wall at night, 8 seconds: a slow breathing flame with soft crackles in deep silence; in the last two seconds the flame gutters and dims with a low wavering flutter",
+   "params": {
+    "generations_count": 2
+   },
+   "why": "SFX X5 for 「메시아」: one torch against a wall in Herod's palace, 8 seconds, gutters at the end",
+   "node": "fifKFj8dBOQYAgHviwpw",
+   "sessions": [
+    "g69490VrSRKh4DP0lY2j",
+    "7XSO02LYSLy8m8dIBWln"
+   ],
+   "name": "X5"
+  },
+  {
+   "use": "toolu_015hKSv9XTBTyLq2WV2qEQp6",
+   "time": "2026-11-07T08:01:00.810Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_generate_in_flow:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "",
+   "prompt": "A hand slowly closing on the leather-wrapped hilt of a dagger in its sheath, 2 seconds: a soft leather creak and the faintest metal tick, very close and quiet, menacing",
+   "params": {
+    "generations_count": 2
+   },
+   "why": "SFX X6 for 「메시아」: a hand settles on a dagger hilt, 2 seconds",
+   "node": "f866wVnzRZPUPwaNJIgj",
+   "sessions": [
+    "gdEYM93BWOvhjmxXd2b5",
+    "L78OrBExTDDObr4hpqs1"
+   ],
+   "name": "X6"
+  },
+  {
+   "use": "toolu_01QQrNvppYywp85EoYo4BW9a",
+   "time": "2026-11-07T08:01:00.814Z",
+   "flow": "BcQHTd61fLqr0A3kjcfa",
+   "tool": "creative_generate_in_flow:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "",
+   "prompt": "A deep soft low whoosh like a huge shadow sliding across a stone wall, 2.5 seconds, dark and quiet with a faint low rumble, no impact",
+   "params": {
+    "generations_count": 2
+   },
+   "why": "SFX X9 for 「메시아」: a shadow sweeps across a wall, 2.5 seconds",
+   "node": "AvJCd6IQRr0gM1YNIYeu",
+   "sessions": [
+    "nL6UxzDAiggSiKRLIhNg",
+    "3pcIp9spI6CBQ38peKmI"
+   ],
+   "name": "X9"
   }
  ],
  "title": "메시아 예언과 성탄",

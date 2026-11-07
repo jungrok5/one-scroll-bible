@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>헤롯의 궁 시안</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600&display=swap">
+</head>
+<body>
+<script src="../../pilot/lib.js"></script>
+<script src="kit-oilpaint.js"></script>
+<script src="oil-herod.js"></script>
+<script>
+/* 시안: 「메시아」 3차 헤롯의 궁 (카라바조풍 테네브리즘 유화) — 홀 4.5초 → 벽의 그림자 8초.
+   node motion/render.mjs v --page films/messiah/sample-herod.html --stills 1,3.5,6,9,12 */
+const { clamp, lerp, ss, eio, rng, canvas } = Pilot;
+const W = Pilot.W, H = Pilot.H, V = Pilot.ori === 'v';
+function draw(ctx, t) { if (t < 4.5) herodOil(ctx, 'hall', t); else herodOil(ctx, 'shadow', t - 4.5); }
+Pilot.run({ W, H, dur: 12.5, fonts: ["600 40px 'Noto Serif KR'"], init: async () => buildHerodOil(), draw });
+</script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>동방 박사들 시안</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600&display=swap">
+</head>
+<body>
+<script src="../../pilot/lib.js"></script>
+<script src="magi-desert.js"></script>
+<script>
+/* 시안: 「메시아」 동방 박사들 (마 2:1–2, 밤의 사막 → 예루살렘 성문) — node motion/render.mjs v --page films/messiah/sample-magi.html --stills 0.5,2,3.5,5,6.5 */
+Pilot.run({ W: Pilot.W, H: Pilot.H, dur: 7, init: async () => buildMagi(), draw: (ctx, t) => magiScene(ctx, t) });
+</script>
+</body>
+</html>

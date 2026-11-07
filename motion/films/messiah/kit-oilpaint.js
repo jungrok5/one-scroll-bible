@@ -4,6 +4,8 @@
                  darks in thin smooth glazes, one light, thick ridged impasto only on the lit planes, amber varnish, canvas grain
      remington — Remington's Western oils (OPUSCAR 65): a red-gold sunset in long horizontal strokes, dark warm silhouettes with a
                  thin warm rim, and after dark a blue-green nocturne with warm windows
+     caravaggio — tenebrism (「메시아」 헤롯의 궁, 2026-11-07, oil-herod.js): fire-lit night, black-brown glazed darks over half the
+                 frame, loaded strokes and ridges only where the fire touches; pass { dir: angle } for a flat wall (no swirl round a lamp)
    The picture is first drawn as a value-planned plate (shapes, gradients, light — no texture), then OIL.paint() lays loaded
    strokes over it: each stroke takes the plate's colour where it lands (±jitter in brightness), runs along the form (the
    iso-line of the plate's brightness) or along a given direction, and is thick where it is light and thin or absent in the darks.
@@ -23,6 +25,10 @@
     // a cool-warm plaster wall, highlights as tiny pearly dots (pointillé) where the light catches
     vermeer: { cell: 6, wid: 1 / 160, len: [2.2, 4.5], dark: .1, darkKeep: .55, jit: .03, dir: 'form', ridge: .22, ridgeMin: .78, edge: .07, probe: 2 },
     remington: { cell: 7, wid: 1 / 110, len: [3, 6], dark: .1, darkKeep: .55, jit: .06, dir: 0, ridge: .25, ridgeMin: .6, bend: .15, edge: .08 },
+    // caravaggio: tenebrism (after *The Calling of Saint Matthew*, *Judith*): one warm light raking in, black-brown darks laid as
+    // smooth thin glazes (strokes almost all dropped below the threshold), loaded mid-size strokes along the form on everything
+    // the fire touches, ridged impasto on the ochre/vermilion highlights, a little curve in each stroke (the wrist)
+    caravaggio: { cell: 7, wid: 1 / 112, len: [2.4, 5.2], dark: .26, darkKeep: .07, jit: .045, dir: 'form', ridge: .55, ridgeMin: .42, bend: .12, edge: .1, probe: 2.2 },
   };
   function paint(plate, o = {}) {
     const k = { ...KEYS[o.key || 'rembrandt'], ...o }, w = plate.width, h = plate.height, r = rng(k.seed || 7);

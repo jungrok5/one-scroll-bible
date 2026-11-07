@@ -12,7 +12,11 @@ for (const p of parts) out.push(`| ${p} | ${R.map(r => { const x = r.parts.find(
 const order = ['BLOCKER', 'MAJOR', 'MINOR', 'NOTE'];
 for (const r of R) { out.push('', `## ${r.key === 'theology' ? '관점 검수' : r.who}`, '', r.summary || '');
   for (const s of order) for (const i of r.issues.filter(x => x.severity === s)) out.push(`- ${s}${i.line ? ' ' + i.line : ''}: ${i.text}${i.fix ? ' → ' + i.fix : ''}`); }
-const block = R.flatMap(r => r.issues.filter(i => i.severity === 'BLOCKER' || (r.key === 'theology' && i.severity === 'MAJOR')));
-out.push('', '## 반영해야 할 것', '', block.length ? block.map(i => `- [ ] ${i.severity} ${i.line || ''} ${i.text}`).join('\n') : '- 없음');
+// j.resolved = { "<reviewer key>:<line>": "how it was applied" } — the main session records a must-fix it applied without another
+// review run (관리자 "리뷰 끝도없네" → apply and freeze); j.deferred = ["…"] — what was read and left for later, on purpose
+const done = j.resolved || {}, all = R.flatMap(r => r.issues.filter(i => i.severity === 'BLOCKER' || (r.key === 'theology' && i.severity === 'MAJOR')).map(i => ({ ...i, k: `${r.key}:${i.line || ''}` })));
+const block = all.filter(i => !done[i.k]);
+out.push('', '## 반영해야 할 것', '', all.length ? all.map(i => done[i.k] ? `- [x] ${i.severity} ${i.line || ''} → ${done[i.k]}` : `- [ ] ${i.severity} ${i.line || ''} ${i.text}`).join('\n') : '- 없음');
+if ((j.deferred || []).length) out.push('', '## 보류(읽고 일부러 남김)', '', j.deferred.map(d => `- ${d}`).join('\n'));
 writeFileSync(dst, out.join('\n') + '\n'); console.log(dst + (block.length ? ` — 반영할 것 ${block.length}개` : ''));
 process.exit(block.length ? 2 : 0);

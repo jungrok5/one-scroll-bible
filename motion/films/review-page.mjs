@@ -110,7 +110,17 @@ facts.forEach(f => console.log(`  ${f.b} — ${f.s}`));   // the checks are for 
 const IMG = join(ROOT, 'motion', 'out', 'review', 'img'); mkdirSync(IMG, { recursive: true });
 const REF = join(ROOT, 'motion', 'out', 'ref', 'lemo-opuscar');
 const need = {};
+//   {img, crop?, cap}         any image file (repo-relative or absolute), e.g. a sample page's still or a kit's poster
+//   {video, t, crop?, cap}    a frame of a kept video at t seconds — e.g. the held 2nd cut (motion/out/keep/…), when film.html has moved on
 for (const p of parts) for (const s of p.samples || []) {
+  if (s.img || s.video) {
+    const src = s.img || s.video, abs = /^[A-Za-z]:|^\//.test(src) ? src : join(ROOT, src);
+    s.file = join(IMG, 'img-' + src.replace(/[^\w]+/g, '_') + (s.video ? '-' + s.t : '') + (s.crop ? '-' + s.crop.join('_') : '') + '.jpg');
+    if (existsSync(s.file)) continue;
+    const vf = (s.crop ? `crop=iw*${s.crop[2]}:ih*${s.crop[3]}:iw*${s.crop[0]}:ih*${s.crop[1]},` : '') + 'scale=540:-2';
+    execFileSync('ffmpeg', ['-y', '-loglevel', 'error', ...(s.video ? ['-ss', String(s.t)] : []), '-i', abs, '-frames:v', '1', '-vf', vf, '-q:v', '4', s.file]);
+    continue;
+  }
   if (s.ref) {
     s.file = join(IMG, 'ref-' + s.ref.replace(/[^\w]+/g, '_') + (s.crop ? '-' + s.crop.join('_') : '') + '.jpg');
     if (existsSync(s.file)) continue;

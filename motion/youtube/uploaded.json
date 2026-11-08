@@ -610,20 +610,148 @@
    },
    "zh-Hans": {
     "ids": {
+     "10": "sT8ycEhci50",
+     "11": "_nrM98NMBdg",
+     "12": "9md_aG0gegU",
+     "13": "VHiYG0LIMgg",
+     "14": "7sTnWv0JKmk",
+     "15": "LXyatXU_s5s",
+     "16": "2kgB_JfJuvU",
+     "17": "FD5oO2HKqK4",
+     "18": "xKTO8xRiErs",
+     "19": "EFH6dj2Liak",
+     "20": "SYXuaYMqlzc",
+     "21": "L1hiBXhemzk",
      "03": "bMa-UAYFxt8",
      "02": "k1bT5tYwOtY",
-     "01": "mwEKRgBBuQA"
-    }
+     "01": "mwEKRgBBuQA",
+     "09": "Sc5t8aQYZ-A",
+     "08": "F2XAiGgAgKg",
+     "07": "h_0RBzxNvHM",
+     "06": "SwmN0P7tAu4",
+     "05": "iDmQgpO2PSQ",
+     "04": "uFmYb50Dgq0"
+    },
+    "first_day": "2026-11-14",
+    "time_local": "19:00",
+    "utc_offset": "+08:00",
+    "note": "wave 3 (2026-11-08): uploaded to this channel via Studio (file only, studio-fileonly.js), filled + scheduled by API (schedule-shorts); related video = global.film[L] (set in Studio)"
    },
    "zh-Hant": {
-    "ids": {}
+    "ids": {
+     "10": "qD6PWnFmLVw",
+     "11": "xeHeYrJiO5w",
+     "12": "1Z2Mcl3cx84",
+     "13": "TT-y6FuZwF0",
+     "14": "MEKhEDMCJjc",
+     "15": "M6weRGxJY-U",
+     "16": "3BlDdf8r8Ro",
+     "17": "YY7VV_DVFS8",
+     "18": "SQZcutGzKOk",
+     "19": "2WzIoXSC36s",
+     "20": "d2WuXPrq5p4",
+     "21": "2zqEgltUIRs",
+     "09": "CnQ2kRhgybA",
+     "08": "aw7GYyXFG6M",
+     "07": "9KwF8-jTWOg",
+     "06": "P2sNXHpbP_U",
+     "05": "8wYzMR83FUE",
+     "04": "qocwCaSOjQg",
+     "03": "ieQ2pU-vB2E",
+     "02": "IltQGnIc9HE",
+     "01": "YXvqd7wYRNo"
+    },
+    "first_day": "2026-11-14",
+    "time_local": "19:00",
+    "utc_offset": "+08:00",
+    "note": "wave 3 (2026-11-08): uploaded to this channel via Studio (file only, studio-fileonly.js), filled + scheduled by API (schedule-shorts); related video = global.film[L] (set in Studio)"
    },
    "ja": {
     "ids": {
-     "16": "mzohOIiFKCw"
-    }
+     "10": "BkLhEGfZxz4",
+     "11": "RcIiqw4FX-w",
+     "12": "cOIE5Is6Gu0",
+     "13": "UF-AigOLwgk",
+     "14": "nzjaRHs7Bm0",
+     "15": "gfDcUZgmtJA",
+     "16": "mzohOIiFKCw",
+     "17": "RPBnD_7PheI",
+     "18": "eUv5w6qMGDM",
+     "19": "qq1FNqPYDws",
+     "20": "BhwHfzAFt9o",
+     "21": "SnQ1wZb0fzw",
+     "09": "Uea7prjAKMw",
+     "08": "Uxr_wLKPKo8",
+     "07": "LzscRGzYXJI",
+     "06": "8lqxg9e0Ck0",
+     "05": "nSORT8TbGus",
+     "04": "JTOFGiC5Iqg",
+     "03": "0V3vHpRZym4",
+     "02": "bBzv55jQAFU",
+     "01": "Y0cxcOTU7rU"
+    },
+    "first_day": "2026-11-14",
+    "time_local": "19:00",
+    "utc_offset": "+09:00",
+    "note": "wave 3 (2026-11-08): uploaded to this channel via Studio (file only, studio-fileonly.js), filled + scheduled by API (schedule-shorts); related video = global.film[L] (set in Studio)"
    },
    "ar": {
+    "ids": {
+     "10": "ZsL5nop4l08",
+     "11": "O_JqVqYBnRs",
+     "12": "2uZB5Sb7EaY",
+     "13": "DhfiOuVY5pg",
+     "14": "eFYMBY0SbMg",
+     "15": "rRGSgvjO4t4",
+     "16": "_o3cRWp2OVQ",
+     "17": "W3Io-55x7ZU",
+     "18": "QfuAcIepBFo",
+     "19": "Z3EQLyJqu-k",
+     "20": "08p_j3hvtdQ",
+     "21": "tWRbB-UmbiA",
+     "09": "BQJuJ8s6bSI",
+     "08": "ex6EKWt5Ur8",
+     "07": "kf6SKhD1EBk",
+     "06": "qRi-jEcLefY",
+     "05": "lxzZrohkjeA",
+     "04": "YFIHnRk_8hE",
+     "03": "KqgOEz7Cx7M",
+     "02": "hrzzRpuOC5U",
+     "01": "iZabLJyUTBk"
+    },
+    "first_day": "2026-11-14",
+    "time_local": "19:00",
+    "utc_offset": "+03:00",
+    "note": "wave 3 (2026-11-08): uploaded to this channel via Studio (file only, studio-fileonly.js), filled + scheduled by API (schedule-shorts); related video = global.film[L] (set in Studio)"
+   },
+   "hi": {
+    "ids": {
+     "10": "y0EwHFtUghg",
+     "11": "XqMV2FsNS_w",
+     "12": "pUx1XU15U3c",
+     "13": "2lKNY1SZtUI",
+     "14": "9xZOUGVge7Y",
+     "15": "plKtsHeyZhg",
+     "16": "1wnQIgE-qms",
+     "17": "SgKxabRu5YM",
+     "09": "kR2FwpkE73g",
+     "08": "4ys1kz3b2xc",
+     "07": "hME88lVZS30",
+     "06": "azPtGsofBjU",
+     "05": "9OVfAVNQRu8",
+     "04": "9B5gwC2HP6s",
+     "03": "za_HepuqHOs",
+     "02": "C2VeOj4xj0Q",
+     "01": "fvDhq4YkSEs"
+    }
+   },
+   "vi": {
+    "ids": {}
+   },
+   "th": {
+    "ids": {}
+   },
+   "tl": {
     "ids": {}
    }
   },

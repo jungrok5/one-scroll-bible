@@ -18,6 +18,8 @@
 //   in 2 s. Each Short now starts from a closed dialog, and the title box must show THIS file's name (Studio fills it from
 //   the file name, "-" → " ") before it counts.
 // - The dialog's youtu.be link is often missing or the previous one; ids come from record-from-files, not from here.
+// - Keep the Studio tab IN FRONT: a background tab's timers are throttled (one Short per ~3 min instead of ~15 s). A
+//   screenshot of the tab brings it forward.
 // - Never reload mid-chain (it drops these functions). To stop a chain: window.__foStop = true.
 window.__osbFileOnly = async (L, n) => {
   const S = 'http://127.0.0.1:8765/', sleep = ms => new Promise(r => setTimeout(r, ms));
@@ -52,7 +54,9 @@ window.__osbFileOnlyWave = async (langs, only = null) => {
   window.__foLog ||= []; window.__foStop = false;
   const jobs = only || langs.flatMap(L => Array.from({ length: 21 }, (_, i) => [L, i + 1]));
   for (const [L, n] of jobs) { if (window.__foStop) { window.__foLog.push('STOPPED'); return; }
-    let r; try { r = await window.__osbFileOnly(L, n); } catch (e) { r = { L, n, error: e.message }; }
+    let r; for (let a = 0; a < 4; a++) {   // the local file server can drop a request (or die — restart serve.mjs): retry
+      try { r = await window.__osbFileOnly(L, n); } catch (e) { r = { L, n, error: e.message }; }
+      if (!/fetch/i.test(r.error || '')) break; await new Promise(x => setTimeout(x, 15000)); }
     window.__foLog.push(r); if (r.error) break; await new Promise(x => setTimeout(x, 1500)); }
   window.__foLog.push('END');
 };

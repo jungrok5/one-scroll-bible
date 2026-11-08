@@ -876,6 +876,20 @@
     "captions_note": "2026-11-01: 19 caption languages (16 added through Studio — motion/youtube/studio-caption.js, no API quota), English-narration timing (sound/<lang>.en-timing.vtt); automatic en captions removed (yt-api asr-off). 2026-11-01 later: it, pl, tr added (owner's fixed caption list, films README §4 step 9) — Studio, all four videos. Then uz, ne, km, mn, my (migrant languages in Korea) — Studio, all four videos. 2026-11-02: tr and fa tracks replaced on all four via API caption-file --replace (line 01 now shows only the voiced clause — first upload began with a lone verb).",
     "published": "2026-11-01 21:42 KST: both made public by the owner's OK (videos.update status, API); horizontal end screen saved in Studio — last 5 s (2:54.12–2:59.12) = English 14-min film MFH3Hj4V6KA bottom-left + subscribe bottom-right, below the end-card text (found via the picker's other-channel box with the video URL — the my-videos search returned nothing for this channel)"
    }
+  },
+  "wave4_pending": {
+   "note": "2026-11-08: wave 3 (zh-Hans zh-Hant ja ar) all 84 scheduled 11-14..12-04, local 19:00; wave 4 hi 01-17 scheduled from 11-21 19:00 +05:30. The daily upload limit (~100) dropped the rest silently. TODO from 2026-11-09 after ~20:00 KST (24 h after the first uploads): upload hi 18-21 + vi/th/tl 1-21 (67) with studio-fileonly.js; record-from-files hi vi th tl; schedule-shorts hi 2026-11-21 19:00 +05:30 (fills 18-21), vi and th 2026-11-21 19:00 +07:00, tl 2026-11-21 19:00 +08:00, all --wave=\"wave 4\"; then playlist-shorts for all 8 languages (50 units each, spread over days by quota) and related videos (studio-related.js). Delete this key when done.",
+   "todo": {
+    "hi": [
+     18,
+     19,
+     20,
+     21
+    ],
+    "vi": "1-21",
+    "th": "1-21",
+    "tl": "1-21"
+   }
   }
  },
  "silence400": {

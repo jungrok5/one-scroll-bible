@@ -30,8 +30,9 @@ Talk to the maintainer in Korean. Never publish, make public, merge to main or d
 6. New film: `topic.mjs evidence` → `cite` → `recommend` → (maintainer picks) → `film.mjs new <film> --topic <id>` → `film.mjs status`.
 
 ## 0 · Where are we? (every session, first)
-1. Read README **0절** (the 14 steps) and the film's **`motion/films/<name>/review.json`**: `stage`, `round`, `status`,
-   open `decisions`, `artifact_url`, `rounds`, `feedback_log`, `process_changes`. No folder yet → stage 1 (topic from README 10절).
+1. Run `node motion/films/film.mjs status <name>`, then `film.mjs task <name> <next stage>` — that is the starting point, not
+   this file or memory. Then glance at the film's **`motion/films/<name>/review.json`** for open `decisions`, `artifact_url`
+   and `process_changes`. No folder yet → stage 1: `topic.mjs evidence` / `list` (topics live in `pipeline/topics.json`).
 2. Read README 1–3절 and 8–9절 before writing or changing script text; 7절 before drawing.
 3. If `artifact_url` is set, `Artifact read` it once (a publish to it from a new session is refused otherwise).
 
@@ -105,8 +106,10 @@ script.json `hl`. For each link in a new film, render the four as 12 s portrait 
 
 ## 2 · Review loop (stages 2–4)
 1. Feedback comes in chat (the maintainer and their wife read the draft page).
-2. Apply. Decided items move out of `decisions` into `feedback_log` (who said what → what changed). Anything unclear → ask.
-3. Bump `round`, add `rounds[]` with `summary` and `changed` (line ids), set `status`, regenerate, republish the same URL.
+2. Log each remark at once: `film.mjs feedback <name> "<누가>" "<한 말>"`. Apply, then `film.mjs applied <name> <n> "<무엇을>"`;
+   decided items leave `decisions`. Anything unclear → ask.
+3. `film.mjs round <name> "<요약>"` (it bumps `round` and computes `changed` — never write `rounds`/`feedback_log` by hand),
+   set `status`, regenerate, republish the same URL.
 4. When the script changes a lot after feedback, run the reviewers again before republishing.
 5. Only after explicit 컨펌 move `stage` forward and start drawing.
 

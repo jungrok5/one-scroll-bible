@@ -36,7 +36,8 @@ D. "읽은 것": ANALYTICS.md "요소 분석" 8항목(이탈 구간↔장면, �
 D2. 배운 것을 규칙으로: motion/films/pipeline/insights.json을 갱신한다 — 새 발견은 항목으로 추가(id·since·evidence(숫자+원자료 파일)·finding·rule·stages, 처음엔 status "watch"),
    두 번 이상 같은 방향으로 확인되면 "active"로 올리고, 반대 근거가 나오면 evidence를 고치거나 "retired". 검사로 만들 수 있으면 check를 붙이자고 제안한다.
    (이 파일은 film.mjs task가 단계마다 작업 지시 아래에 찍어 주고, check가 있는 규칙은 단계 검사가 된다 — 다음 영상에 저절로 들어간다.)
-E. 다음 추천 제작 주제 2~3개(README 10절 근거 형식), README 10절 후보 목록 갱신.
+E. 다음 추천 제작 주제 2~3개 — 도구로(README 10절): node motion/films/topic.mjs evidence 로 숫자를 보고, 근거마다 topic.mjs cite <id> "<숫자가 든 사실>" --source <원자료 파일>
+   (새 주제는 topic.mjs add), 그다음 topic.mjs recommend <id> <id> [<id>] (근거 2개 미만이면 거절) — 출력된 글을 ANALYTICS.md 날짜 절과 보고에 쓴다. 후보 목록은 motion/films/pipeline/topics.json 하나다.
 F. 커밋·푸시(작업 브랜치). 한국어로 짧게 보고: 바뀐 숫자 핵심, 그림·소리·형식에서 읽은 것과 다음 영상에 바꿀 것, insights.json에 더하거나 바꾼 규칙, targets 변경 제안, 추천 주제, 사용자가 정할 것.
 공개·삭제·영상 수정·게시는 하지 않는다. 다른 게시·삭제·수정은 하지 말 것.`);
 } else { console.log('usage: node motion/youtube/routine.mjs daily | analysis'); process.exit(1); }

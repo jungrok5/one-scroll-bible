@@ -5,6 +5,7 @@
 성경 인용은 원문 그대로입니다(한국어 개역개정, 각 언어는 사이트 팩과 같은 성경).
 
 > **다음 영상부터**(3분 세로 한 편 — 「침묵의 400년」 등)의 제작 전략·다국어·채널·/film 개편·배운 점은 [films/README.md](films/README.md)에 있습니다.
+> 새 영상 작업은 언제나 `node motion/films/film.mjs status <이름>` → `film.mjs task <이름> <단계>`로 시작합니다(규칙은 `films/pipeline/rules.json`).
 
 | 위치 | 무엇 |
 |---|---|

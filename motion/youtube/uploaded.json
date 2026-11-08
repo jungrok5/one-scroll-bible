@@ -743,7 +743,11 @@
      "03": "za_HepuqHOs",
      "02": "C2VeOj4xj0Q",
      "01": "fvDhq4YkSEs"
-    }
+    },
+    "first_day": "2026-11-21",
+    "time_local": "19:00",
+    "utc_offset": "+05:30",
+    "note": "wave 4 (2026-11-08): uploaded to this channel via Studio (file only, studio-fileonly.js), filled + scheduled by API (schedule-shorts); related video = global.film[L] (set in Studio)"
    },
    "vi": {
     "ids": {}

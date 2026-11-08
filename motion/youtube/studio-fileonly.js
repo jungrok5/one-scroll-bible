@@ -18,6 +18,9 @@
 //   in 2 s. Each Short now starts from a closed dialog, and the title box must show THIS file's name (Studio fills it from
 //   the file name, "-" → " ") before it counts.
 // - The dialog's youtu.be link is often missing or the previous one; ids come from record-from-files, not from here.
+// - DAILY UPLOAD LIMIT ≈ 100 per channel per 24 h (2026-11-08: after 101 uploads the dialog still said 업로드 완료, but
+//   nothing more was saved — 67 Shorts lost silently). Upload at most ~4 languages (84) a day, and run
+//   record-from-files after each language: a language that records fewer than 21 = stop and continue tomorrow.
 // - Keep the Studio tab IN FRONT: a background tab's timers are throttled (one Short per ~3 min instead of ~15 s). A
 //   screenshot of the tab brings it forward.
 // - Never reload mid-chain (it drops these functions). To stop a chain: window.__foStop = true.

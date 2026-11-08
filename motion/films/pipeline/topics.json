@@ -1,0 +1,152 @@
+{
+ "_about": "Film topic backlog (README 10절). Every periodic analysis attaches evidence here (topic.mjs cite) and recommends 2–3 (topic.mjs recommend) instead of writing new candidates only into ANALYTICS.md; the maintainer picks one (film.mjs approve <film> topic), then topic.mjs pick <id> <film>. status: candidate | recommended | picked | made. `connection` = the link of God's plan the film follows (README 10절 — pick topics where it is clear).",
+ "topics": [
+  {
+   "id": "silence400",
+   "title": "침묵의 400년 — 구약과 신약 사이",
+   "refs": "말 4:5–6 → 눅 1:17 · 사 61 → 눅 4:21",
+   "connection": "말라기의 마지막 약속이 400년 뒤 세례 요한으로",
+   "status": "made",
+   "film": "silence400",
+   "evidence": []
+  },
+  {
+   "id": "messiah",
+   "title": "메시아 예언과 성탄",
+   "refs": "미 5:2 → 눅 2 · 창 3:15 → 갈 4:4 → 마 2",
+   "connection": "700년 전 적힌 마을 이름이 황제의 호적 명령으로 이루어짐",
+   "status": "picked",
+   "film": "messiah",
+   "evidence": [
+    {
+     "at": "2026-11-02",
+     "fact": "11/2 추천 1번(성탄 절기 · 해설판 다음 칸)",
+     "source": "motion/films/ANALYTICS.md"
+    }
+   ]
+  },
+  {
+   "id": "manna",
+   "title": "광야 40년 — 만나로 먹이신 하나님",
+   "refs": "출 16 · 신 8:2–4 → 요 6:35",
+   "connection": "광야의 만나가 '생명의 떡'으로",
+   "status": "picked",
+   "film": "manna",
+   "evidence": [
+    {
+     "at": "2026-11-05",
+     "fact": "광야 6/21 쇼츠 991회 · 평균 시청 110.1%로 한국어 쇼츠 1위",
+     "source": "motion/films/analytics/2026-11-04/api-ko.json"
+    },
+    {
+     "at": "2026-11-05",
+     "fact": "같은 「광야」 스페인어 쇼츠 1,158회 — 두 언어에서 같이 터진 유일한 주제",
+     "source": "motion/films/ANALYTICS.md 2026-11-05"
+    }
+   ]
+  },
+  {
+   "id": "bible-transmission",
+   "title": "성경은 어떻게 우리 손에 왔나 — 두루마리에서 한국어 성경까지",
+   "refs": "(사본·번역의 역사, 사 40:8 · 벧전 1:24–25)",
+   "connection": "말씀이 사라지지 않고 전해짐",
+   "status": "recommended",
+   "evidence": [
+    {
+     "at": "2026-11-05",
+     "fact": "해설판 옆자리 '성경은 누가, 언제, 어떻게 편집했나'가 다시 2위(0.9%)",
+     "source": "motion/films/ANALYTICS.md 2026-11-05"
+    }
+   ]
+  },
+  {
+   "id": "acts",
+   "title": "사도행전 — 예루살렘에서 로마까지, 복음이 간 길",
+   "refs": "행 1:8 → 28:30–31",
+   "connection": "땅끝까지 증인이 되리라는 약속이 바울의 여정으로",
+   "status": "recommended",
+   "evidence": [
+    {
+     "at": "2026-11-05",
+     "fact": "음악판 옆자리 '신약성경 전체 흐름 한 번에 이해하기' — 해설판의 다음 칸이 비어 있음",
+     "source": "motion/films/ANALYTICS.md 2026-11-05"
+    }
+   ]
+  },
+  {
+   "id": "ruth",
+   "title": "룻기 — 이방 여인에서 다윗과 예수님의 족보로",
+   "refs": "룻 4:17 → 마 1:5",
+   "connection": "모압 과부 룻 → 오벳 → 이새 → 다윗 → 예수님",
+   "status": "candidate",
+   "evidence": []
+  },
+  {
+   "id": "joseph",
+   "title": "요셉 — 악을 선으로 바꾸신 하나님",
+   "refs": "창 37–50 · 창 50:20",
+   "connection": "팔려 간 형제가 가족을 살림",
+   "status": "candidate",
+   "evidence": []
+  },
+  {
+   "id": "moriah",
+   "title": "모리아 산 — 이삭에서 솔로몬 성전까지",
+   "refs": "창 22 → 대하 3:1",
+   "connection": "아브라함이 이삭을 바친 산에 성전이",
+   "status": "candidate",
+   "evidence": []
+  },
+  {
+   "id": "passover-lamb",
+   "title": "유월절 어린 양 → 하나님의 어린 양",
+   "refs": "출 12 → 요 1:29 · 고전 5:7",
+   "connection": "문설주의 피가 십자가로",
+   "status": "candidate",
+   "evidence": []
+  },
+  {
+   "id": "esther",
+   "title": "에스더 — 하나님의 이름이 한 번도 안 나오는 책의 섭리",
+   "refs": "에 4:14",
+   "connection": "이름 없이 일하시는 하나님",
+   "status": "candidate",
+   "evidence": []
+  },
+  {
+   "id": "four-women",
+   "title": "마태복음 1장 족보의 네 여인",
+   "refs": "마 1:3–6",
+   "connection": "다말·라합·룻·우리아의 아내가 메시아의 족보에",
+   "status": "candidate",
+   "evidence": []
+  },
+  {
+   "id": "exile70",
+   "title": "바벨론 포로 70년",
+   "refs": "렘 29:10 → 스 1:1 · 단 9:2",
+   "connection": "예레미야의 70년이 고레스의 조서로",
+   "status": "candidate",
+   "evidence": []
+  },
+  {
+   "id": "revelation",
+   "title": "계시록 한눈에",
+   "refs": "계 1 · 21–22",
+   "connection": "창세기의 에덴이 새 하늘과 새 땅으로(해석이 갈리는 부분은 편들지 않음)",
+   "status": "candidate",
+   "evidence": []
+  }
+ ],
+ "recommendations": [
+  {
+   "at": "2026-11-05",
+   "ids": [
+    "bible-transmission",
+    "manna",
+    "acts"
+   ],
+   "source": "motion/films/ANALYTICS.md 2026-11-05"
+  }
+ ]
+}

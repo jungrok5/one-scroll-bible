@@ -27,10 +27,21 @@ export function srcHash(c) { const h = createHash('sha256');
 const pass = () => ({ ok: true, why: [] }), fail = (...why) => ({ ok: false, why });
 const all = (...rs) => { const why = rs.flatMap(r => r.ok ? [] : r.why); return why.length ? { ok: false, why } : pass(); };
 const approved = (c, k) => (c.review.pipeline?.approvals || {})[k];
+const intlRec = c => (J(join(ROOT, 'motion/youtube/uploaded.json')) || {}).global?.films?.[c.film];   // the international cut's record
+// script-stats.mjs once per check (syllables, quote pace and holds, take loudness, end card) — memoized on the context
+function stats(c, o = {}) { const k = o.noAudio ? '_statsText' : '_stats'; if (c[k] !== undefined) return c[k]; if (o.noAudio && c._stats) return c._stats;
+  const r = node([join(FILMS, 'script-stats.mjs'), c.film, '--json', ...(o.noAudio ? ['--no-audio'] : [])]);
+  try { c[k] = JSON.parse((r.stdout || '').trim().split('\n').pop()); } catch { c[k] = null; } return c[k]; }
 
 // ---------------------------------------------------------------------------------------------------- gates
 const G = {
-  topic: c => c.review.logline ? pass() : fail('review.json에 logline(한 줄 요약)이 없다'),
+  // the topic comes from the backlog with its numbers (topic.mjs; README 10절), not from a session
+  topic: c => { const why = []; if (!c.review.logline) why.push('review.json에 logline(한 줄 요약)이 없다');
+    const B = J(join(FILMS, 'pipeline/topics.json')) || { topics: [] }, t = B.topics.find(x => x.id === c.review.topic_id);
+    if (!t) why.push(`review.json topic_id가 pipeline/topics.json에 없다 — node motion/films/topic.mjs pick <id> ${c.film}`);
+    else if (t.film !== c.film) why.push(`topics.json ${t.id}.film이 ${c.film}이 아니다 — topic.mjs pick`);
+    const ev = c.review.topic_evidence || []; if (ev.filter(e => e.fact && e.source && /\d/.test(e.fact)).length < 2) why.push('topic_evidence: 출처가 있는 숫자 근거 2개 이상(topic.mjs cite → pick)');
+    return why.length ? { ok: false, why } : pass(); },
   script: c => {
     if (!c.s) return fail('script.json이 없다');
     const why = [], quotes = c.lines.filter(l => l.kind === 'quote');
@@ -40,10 +51,71 @@ const G = {
     const mc = c.review.message_check; if (!mc || (Array.isArray(mc) ? mc.length : Object.keys(mc).length) < 12) why.push('message_check 12문항이 다 채워지지 않았다');
     // a story, not a list of verses (README 3): question → stakes → person → reversal → payoff, each tied to a script line
     const sp = c.review.story_spine || {}, at = id => c.lines.find(l => l.id === id)?.at;
-    for (const k of ['question', 'stakes', 'person', 'reversal', 'payoff']) {
+    // + surprise: what someone who never read it did not know (관리자 2026-11-06 "이 영상에 사람들이 몰랐던 사실이 뭐지?")
+    for (const k of ['question', 'stakes', 'person', 'reversal', 'payoff', 'surprise']) {
       const v = sp[k]; if (!v?.how || !v?.id) { why.push(`story_spine.${k}이 없다 — 이야기 뼈대(README 3절)부터`); continue; }
       if (at(v.id) == null) why.push(`story_spine.${k}: script.json에 줄 ${v.id}이 없다`); }
     if (at(sp.question?.id) != null && at(sp.payoff?.id) != null && at(sp.payoff.id) <= at(sp.question.id)) why.push('story_spine: payoff(답)가 question(질문)보다 뒤에 와야 한다');
+    // the shot list: every line says what is seen while it plays (관리자 2026-11-07 "그림과 내용이 따로 노는지") — shots-sheet.py checks the render against it
+    const noShot = c.lines.filter(l => l.at != null && ['narr', 'quote', 'label', 'title'].includes(l.kind) && !(l.screen || '').trim()).map(l => l.id);
+    if (noShot.length) why.push(`장면표: screen(그 줄 동안 보이는 것)이 없는 줄 ${noShot.join(' ')}`);
+    return why.length ? { ok: false, why } : pass(); },
+  // the 3-minute budget in spoken syllables (script-stats.mjs; 관리자 2026-11-07 "640음절로 줄임")
+  budget: c => { if (!c.s) return fail('script.json이 없다'); const s = stats(c, { noAudio: true }); if (!s) return fail('script-stats 실패');
+    return s.syllables > T.script.syllables_max ? fail(`해설 ${s.syllables}음절 > ${T.script.syllables_max}(≈${s.est_sec}초, 「침묵의 400년」 속도) — 목소리 줄을 줄이거나 화면 전용으로`) : { ok: true, why: [], info: { syllables: s.syllables, est_sec: s.est_sec, quote_share: s.quote_share } }; },
+  // the ending is one reading hook (관리자·아내 2026-11-07): an open question in the last seconds, an end card with ONE passage, no "읽어 보세요" list
+  ending: c => { if (!c.s) return fail('script.json이 없다'); const e = c.review.ending || {}, why = [], s = stats(c, { noAudio: true });
+    if (!e.question || !e.passage) return fail('review.json ending = { question: <끝의 열린 질문 줄 id>, passage: "<읽을 곳 하나, 예: 마태복음 2장>", answer: "<그 본문에서 풀리는 것 한 줄>" } 없음');
+    const q = c.lines.find(l => l.id === e.question), card = s?.end_card || [], cardAt = Math.max(...c.lines.map(l => l.at ?? 0));
+    if (!q) why.push(`ending.question ${e.question}이 script.json에 없다`);
+    else { if (!/\?\s*$/.test((q.voice ?? q.text).trim())) why.push(`ending.question ${q.id}이 물음표로 끝나지 않는다`);
+      if (cardAt - q.at > T.script.ending_window_s) why.push(`열린 질문 ${q.id}(${q.at}초)이 끝 화면(${cardAt}초)보다 ${(cardAt - q.at).toFixed(1)}초 앞 — 마지막 ${T.script.ending_window_s}초 안에`); }
+    const txt = card.map(x => x.text).join(' / '), refs = txt.match(/[가-힣]+\s*\d+\s*(장|:\s*\d+)/g) || [];
+    if (!txt.includes(e.passage)) why.push(`끝 화면에 읽을 곳 "${e.passage}"이 없다 (지금: ${txt || '끝 화면 글자 없음'})`);
+    if (refs.length > 1) why.push(`끝 화면에 읽을 곳이 ${refs.length}개(${refs.join(', ')}) — 하나만, 나머지는 설명란·고정 댓글`);
+    if (/읽어\s*보세요|읽어보세요|관련\s*성경/.test(txt)) why.push('끝 화면이 "읽어 보세요"류 — 뒷이야기가 궁금하게 끝내고 본문 하나만 가리킨다');
+    if (!e.answer) why.push('ending.answer(그 본문에서 무엇이 풀리는지) 없음');
+    return why.length ? { ok: false, why } : pass(); },
+  // feedback and rounds are written by film.mjs feedback/applied/round, in one shape (관리자 2026-11-09)
+  record: c => { const r = c.review, why = [], FB = r.feedback_log || [], R = r.rounds || [];
+    FB.forEach((f, i) => { if (!f.at || !f.who || !f.said) why.push(`feedback_log[${i}]: at·who·said 형식이 아니다 — film.mjs feedback`);
+      else if (!f.applied && f.status !== 'open' && f.status !== 'declined') why.push(`feedback_log[${i}] (${f.who}: ${String(f.said).slice(0, 30)}…): 처리(applied)가 없다 — film.mjs applied`); });
+    if (R.length && R[R.length - 1].n !== r.round) why.push(`round ${r.round}인데 rounds[] 마지막이 ${R[R.length - 1]?.n} — film.mjs round로 차수를 닫는다`);
+    R.forEach(x => { if (x.n > 1 && !Array.isArray(x.changed)) why.push(`rounds ${x.n}: changed(바뀐 줄 id) 없음`); });
+    const open = FB.filter(f => f.status === 'open'); if (open.length) why.push(`아직 처리 안 한 피드백 ${open.length}개: ` + open.map(f => `${f.who}: ${String(f.said).slice(0, 24)}…`).join(' / '));
+    return why.length ? { ok: false, why } : pass(); },
+  // nothing drifts from what the maintainer approved without a round saying so (관리자 2026-11-07 "초안에서 너무 벗어난건 아니야?")
+  drift: c => { const ap = approved(c, 'review'); if (!ap) return pass();
+    const snap = J(join(c.d, 'rounds', 'script-approved-review.json')); if (!snap) return fail('승인 시점 원고 rounds/script-approved-review.json 없음 — film.mjs approve가 남긴다(옛 승인: film.mjs snapshot ' + c.film + ' review)');
+    const old = new Map((snap.lines || snap).map(l => [l.id, l])), changed = [];
+    for (const l of c.lines) { const o = old.get(l.id); if (!o || o.text !== l.text || (o.voice ?? null) !== (l.voice ?? null) || o.usfm !== l.usfm) changed.push(l.id); }
+    for (const id of old.keys()) if (!c.lines.some(l => l.id === id)) changed.push(id + '(뺌)');
+    const since = new Date(ap.at).getTime(), told = new Set((c.review.rounds || []).filter(x => new Date(x.date || x.at || 0).getTime() >= since - 864e5).flatMap(x => x.changed || []));
+    const silent = changed.filter(id => !told.has(id.replace('(뺌)', '')));
+    return silent.length ? fail(`승인 뒤 바뀌었는데 차수 기록에 없는 줄: ${silent.join(' ')} — film.mjs round로 남기고 관리자에게 알린다(film.mjs diff ${c.film})`) : { ok: true, why: [], info: { changed_since_approval: changed.length } }; },
+  // verses are not rushed (관리자 2026-11-07 "특히 성경구절은 훅훅"): pace incl. the hold after, and the hold itself
+  pace: c => { if (!c.s) return fail('script.json이 없다'); const s = stats(c); if (!s) return fail('script-stats 실패'); const why = [];
+    for (const q of s.quotes) { if (q.sec == null) { why.push(`구절 ${q.id}: 목소리 파일 없음`); continue; }
+      const eff = q.hold != null ? q.syl / (q.sec + Math.max(0, q.hold)) : q.syl / q.sec;
+      if (eff > T.script.quote_pace_max) why.push(`구절 ${q.id}(${q.cite}): ${eff.toFixed(2)}음절/초 > ${T.script.quote_pace_max} — 조각 사이 쉼(sound-edit gaps)·끝 머묾`);
+      if (q.hold != null && q.hold < T.script.quote_hold_min) why.push(`구절 ${q.id}(${q.cite}) 뒤 머묾 ${q.hold}초 < ${T.script.quote_hold_min} — 다음 말(${q.next})을 늦춘다`); }
+    return why.length ? { ok: false, why } : pass(); },
+  // one voice, one tone (관리자 2026-11-07 "속삭이는 목소리 톤 변화가 급격해 어색")
+  tone: c => { if (!c.s) return fail('script.json이 없다'); const s = stats(c); if (!s) return fail('script-stats 실패'); const why = [];
+    for (const t of s.tone) { if (Math.abs(t.dev) > T.sound.tone_dev_max) why.push(`해설 ${t.id}: 크기 ${t.lufs} LUFS — 가운데값과 ${t.dev > 0 ? '+' : ''}${t.dev} > ±${T.sound.tone_dev_max}(톤이 다른 테이크 — 같은 지시로 다시 녹음)`);
+      else if (Math.abs(t.jump) > T.sound.tone_jump_max) why.push(`해설 ${t.id}: 앞줄과 ${t.jump > 0 ? '+' : ''}${t.jump} LU > ±${T.sound.tone_jump_max}`); }
+    return why.length ? { ok: false, why } : pass(); },
+  // the action sheet (actions.mjs): moments that must have their own effect, for the current code and cues
+  actions: c => { const f = join(c.d, 'sound', 'actions.json'), A = J(f); if (!A) return fail(`sound/actions.json 없음 — node motion/films/actions.mjs ${c.film}`);
+    const why = [], src = [join(c.d, 'film.html'), join(c.d, 'sound', 'cues.json'), join(OUT, `${c.film}-v-narr.mp4`)]; if (src.some(x => mt(x) > mt(f))) why.push('동작표가 그림·cues보다 오래됐다 — actions.mjs 다시');
+    if (A.cover < T.sound.action_cover_min) why.push(`소리가 꼭 있어야 하는 동작 중 효과음 ${Math.round(A.cover * 100)}% < ${T.sound.action_cover_min * 100}% — ` + A.actions.filter(x => ['gold', 'link', 'flash', 'end'].includes(x.kind) && !x.covered).slice(0, 8).map(x => `${x.t}s ${x.kind}`).join(' '));
+    return why.length ? { ok: false, why } : { ok: true, why: [], info: { cover: A.cover, need: A.need } }; },
+  // the render matches the shot list (shots-sheet.py → look → review.json shots_check)
+  shotsheet: c => { const why = [], stamp = J(join(OUT, `${c.film}-v-narr.mp4.src.json`)), M = J(join(OUT, 'shots', c.film, 'manifest.json')), sc = c.review.shots_check;
+    if (!M) return fail(`장면표 시트 없음 — py motion/films/shots-sheet.py ${c.film}`);
+    if (stamp && M.render !== stamp.hash) why.push('장면표 시트가 지금 렌더가 아니다 — shots-sheet.py 다시');
+    if (!sc || sc.render !== M.render) why.push(`시트를 보고 review.json shots_check = { render: "${M.render}", at, misses: [{id, what}] }를 적는다(그림이 screen 문장과 다른 줄)`);
+    else if ((sc.misses || []).length) why.push('장면표와 다른 화면: ' + sc.misses.map(m => `${m.id} ${m.what}`).join(' / '));
     return why.length ? { ok: false, why } : pass(); },
   looks: c => {
     const L = c.review.looks; if (!Array.isArray(L) || !L.length) return fail('review.json looks(장면마다 화풍 표)가 없다');
@@ -55,7 +127,16 @@ const G = {
     return why.length ? { ok: false, why } : pass(); },
   reviews: c => { const f = join(ROOT, 'motion/reviews', `film-${c.film}-script.md`); if (!existsSync(f)) return fail(`motion/reviews/film-${c.film}-script.md 없음`);
     const t = readFileSync(f, 'utf8'), why = []; if (!/관점 검수/.test(t)) why.push('리뷰 기록에 관점 검수가 없다'); if (!/성경 잘 모르는/.test(t)) why.push('리뷰 기록에 1번 대상(성경 잘 모르는 크리스천) 리뷰가 없다');
-    if (!c.review.artifact_url) why.push('초안 페이지 artifact_url 없음'); return why.length ? { ok: false, why } : pass(); },
+    if (!c.review.artifact_url) why.push('초안 페이지 artifact_url 없음');
+    // the primary audience's scores carry a bar (targets.json script.novice_*) unless the maintainer froze the review (tasks/review.md)
+    const R = J(join(ROOT, 'motion/reviews', `film-${c.film}-script.json`)), nov = R?.reviewers?.find(r => /novice/.test(r.key));
+    if (!nov) why.push(`motion/reviews/film-${c.film}-script.json에 1번 대상(novice) 점수가 없다`);
+    else if (!R.frozen) { const g = nov.parts.map(p => ({ p: p.part, v: (p.gamdong + p.jeonyul) / 2 })), mean = g.reduce((a, x) => a + x.v, 0) / g.length;
+      if (mean < T.script.novice_mean_min) why.push(`1번 대상 평균 ${mean.toFixed(2)} < ${T.script.novice_mean_min} — 낮은 부를 고쳐 다시 리뷰(또는 관리자가 굳히기로 하면 frozen)`);
+      for (const x of g) if (x.v < T.script.novice_part_min) why.push(`1번 대상 ${x.p}: ${x.v} < ${T.script.novice_part_min}`); }
+    else if (!/관리자/.test(R.frozen.by || '')) why.push('리뷰 frozen에 관리자의 말(by)이 없다');
+    const st = stats(c, { noAudio: true }); if (st && R?.syllables != null && Math.abs(st.syllables - R.syllables) > 40) why.push(`리뷰한 원고(${R.syllables}음절)와 지금 원고(${st.syllables}음절)가 크게 다르다 — 다시 리뷰`);
+    return why.length ? { ok: false, why } : pass(); },
   picture: c => {
     const vid = join(OUT, `${c.film}-v-narr.mp4`); if (!existsSync(vid)) return fail(`렌더+소리본 motion/out/${c.film}-v-narr.mp4 없음`);
     const why = [], stamp = J(vid + '.src.json');
@@ -165,23 +246,48 @@ const G = {
       else if (existsSync(join(k, 'kit.js')) && readFileSync(v, 'utf8').replace(/\r/g, '') !== readFileSync(join(k, 'kit.js'), 'utf8').replace(/\r/g, '')) why.push(`kit-${x.kit}.js가 키트 원본과 다르다(키트를 고쳤으면 다시 복사하거나 원본에 반영)`); }
     const idx = join(T.looks.skills_kits, '..', 'references', 'STYLE-INDEX.md'); if (existsSync(idx)) { const s = readFileSync(idx, 'utf8'); for (const x of L) if (x.kit && !x.skill && !s.includes('`' + x.kit + '`')) why.push(`STYLE-INDEX에 ${x.kit}가 없다(scripts/style-index.py)`); }
     return why.length ? { ok: false, why } : pass(); },
-  captions: c => { const have = new Set(c.up?.captions || []), miss = T.captions.langs.filter(l => !have.has(l)); return miss.length ? fail(`자막 없는 언어 ${miss.length}개: ${miss.join(' ')}`) : pass(); },
+  captions: c => { const have = new Set(c.up?.captions || []), miss = T.captions.langs.filter(l => !have.has(l)), why = []; if (miss.length) why.push(`한국어판 자막 없는 언어 ${miss.length}개: ${miss.join(' ')}`);
+    const g = intlRec(c); if (g) for (const k of ['h', 'v']) { const hv = new Set(g[k]?.captions || []), m = T.captions.langs.filter(l => l !== 'ko' && !hv.has(l)); if (m.length) why.push(`국제판 ${k} 자막 없는 언어 ${m.length}개: ${m.join(' ')}`); }
+    return why.length ? { ok: false, why } : pass(); },
+  // 10. the English-text master on the international channel with the voice tracks (README 4절 순서와 도구 1–7)
+  intl: c => { const why = [], sd = join(c.d, 'sound');
+    for (const l of T.intl.voice_langs) { if (!existsSync(join(sd, `place-${l}.json`))) why.push(`${l}: sound/place-${l}.json 없음 — voice-lines → ElevenLabs → fetch-takes → fit-voice`);
+      if (l !== 'en' && !existsSync(join(OUT, `${c.film}-${l}-narr.mp3`))) why.push(`${l}: 오디오 트랙 motion/out/${c.film}-${l}-narr.mp3 없음 — sound.mjs ${c.film} v --lang ${l}`); }
+    for (const o of ['v', 'h']) if (!existsSync(join(OUT, `${c.film}-en-${o}-narr.mp4`))) why.push(`영어판 ${o} motion/out/${c.film}-en-${o}-narr.mp4 없음 — render.mjs ${o} --lang en → sound.mjs --lang en`);
+    if (!existsSync(join(c.d, 'youtube-intl.json'))) why.push('youtube-intl.json(언어별 제목·설명) 없음');
+    if (!existsSync(join(ROOT, 'motion/reviews', `film-${c.film}-yt.md`))) why.push(`motion/reviews/film-${c.film}-yt.md(제목·설명 원어민 검수) 없음`);
+    const g = intlRec(c); if (!g?.h?.id || !g?.v?.id) why.push(`uploaded.json global.films.${c.film} h·v id 없음 — intl.mjs entry → 스튜디오 → intl.mjs api`);
+    else for (const k of ['h', 'v']) { const a = new Set(g[k].audio || []), m = T.intl.voice_langs.filter(l => l !== 'en' && !a.has(l)); if (m.length) why.push(`국제판 ${k} 오디오 트랙 없음: ${m.join(' ')} (스튜디오 언어 탭)`); }
+    return why.length ? { ok: false, why } : pass(); },
+  // 12. the international cut public (maintainer OK) with its related video / end screen
+  intlpub: c => { const g = intlRec(c), why = []; if (!g?.h?.id) return fail('국제판이 아직 없다');
+    for (const k of ['h', 'v']) if (g[k]?.privacy !== 'public') why.push(`국제판 ${k} privacy ${g[k]?.privacy} — 관리자 OK 뒤 yt-api privacy public`);
+    if (!g.related_video) why.push('국제판 쇼츠 관련 동영상 기록 없음'); if (!/end screen|최종 화면/i.test(JSON.stringify(g))) why.push('국제판 가로 최종 화면 기록 없음');
+    return why.length ? { ok: false, why } : pass(); },
+  // 13. the site /film page (README 6절): publish.py → film/<slug>/ + films.json line
+  site: c => { const F = J(join(ROOT, 'film/films.json')) || [], slug = c.review.site_slug, why = [];
+    if (!slug) return fail(`review.json site_slug(사이트 주소 /film/<slug>/) 없음`);
+    if (!F.some(x => x.id === slug)) why.push(`film/films.json에 ${slug} 줄 없음`); if (!existsSync(join(ROOT, 'film', slug, 'index.html'))) why.push(`film/${slug}/index.html 없음 — py motion/films/publish.py ${c.film} ${slug}`);
+    return why.length ? { ok: false, why } : pass(); },
 };
 
 // ---------------------------------------------------------------------------------------------------- stages
 export const STAGES = [
   { id: 'topic', n: 1, name: '주제', task: 'topic', gates: ['topic'], approve: '관리자가 주제를 고름' },
-  { id: 'script', n: 2, name: '원고·장면별 화풍·메시지 점검', task: 'script', gates: ['script', 'looks'] },
-  { id: 'review', n: 3, name: '관점 검수·시청자 리뷰·초안 페이지', task: 'review', run: [['node', 'motion/films/review-page.mjs', '{film}']], gates: ['reviews'], approve: '관리자·아내가 초안을 컨펌' },
-  { id: 'picture', n: 4, name: '그리기·렌더', task: 'picture', run: [['node', 'motion/render.mjs', 'v', '--page', 'films/{film}/film.html', '--workers', '6'], ['node', 'motion/films/sound.mjs', '{film}', 'v'], ['node', 'motion/render.mjs', 'h', '--page', 'films/{film}/film.html', '--workers', '6'], ['node', 'motion/films/sound.mjs', '{film}', 'h']], gates: ['picture'], approve: '관리자·가족이 시안 확인', optional: ['lookreview'] }   /* 관리자 2026-11-05: "점수 뽑는 리뷰는 빼자, 내가 요청할 때 해" — the look review runs only on request (film.mjs check <film> picture --review) */,
+  { id: 'script', n: 2, name: '원고·장면별 화풍·메시지 점검', task: 'script', gates: ['script', 'looks', 'budget', 'ending'] },
+  { id: 'review', n: 3, name: '관점 검수·시청자 리뷰·초안 페이지', task: 'review', run: [['node', 'motion/films/review-page.mjs', '{film}']], gates: ['reviews', 'budget', 'ending', 'record'], approve: '관리자·아내가 초안을 컨펌' },
+  { id: 'picture', n: 4, name: '그리기·렌더', task: 'picture', run: [['node', 'motion/render.mjs', 'v', '--page', 'films/{film}/film.html', '--workers', '6'], ['node', 'motion/films/sound.mjs', '{film}', 'v'], ['node', 'motion/render.mjs', 'h', '--page', 'films/{film}/film.html', '--workers', '6'], ['node', 'motion/films/sound.mjs', '{film}', 'h'], ['py', 'motion/films/shots-sheet.py', '{film}']], gates: ['picture', 'shotsheet', 'drift', 'record'], approve: '관리자·가족이 시안 확인', optional: ['lookreview'] }   /* 관리자 2026-11-05: "점수 뽑는 리뷰는 빼자, 내가 요청할 때 해" — the look review runs only on request (film.mjs check <film> picture --review) */,
   { id: 'kits', n: 4.5, name: '새 화풍을 canvas-film 키트로', task: 'kits', gates: ['kits'] },
-  { id: 'sound', n: 5, name: '해설·음악·효과음·섞기', task: 'sound', run: [['node', 'motion/films/sound.mjs', '{film}', 'v'], ['node', 'motion/films/sound-prompts.mjs', 'md', 'motion/films/{film}/sound/prompts.json']], gates: ['sound'] },
+  { id: 'sound', n: 5, name: '해설·음악·효과음·섞기', task: 'sound', run: [['node', 'motion/films/sound.mjs', '{film}', 'v'], ['node', 'motion/films/sound-prompts.mjs', 'md', 'motion/films/{film}/sound/prompts.json'], ['node', 'motion/films/actions.mjs', '{film}']], gates: ['sound', 'pace', 'tone', 'actions'] },
   { id: 'clips', n: 5.5, name: '반복용 짧은 쇼츠(끝이 처음으로)', task: 'clips', run: [['node', 'motion/films/clips.mjs', '{film}']], gates: ['clips'] },
   { id: 'sheet', n: 6, name: '올릴 글·썸네일', task: 'sheet', gates: ['sheet'] },
   { id: 'publish', n: 7, name: '한국어 채널 올리기·예약', task: 'publish', gates: ['publish'], approve: '관리자가 공개 시각 OK' },
   { id: 'social', n: 8, name: '인스타·스레드', task: 'social', gates: ['social'] },
   { id: 'after', n: 9, name: '공개 직후(고정 댓글·최종 화면·관련 동영상)', task: 'after', gates: ['after'] },
-  { id: 'captions', n: 11, name: '외국어 자막 27개', task: 'captions', gates: ['captions'] },
+  { id: 'intl', n: 10, name: '국제판(영어 글자판 + 해설 트랙)', task: 'intl', gates: ['intl'] },
+  { id: 'captions', n: 11, name: '외국어 자막 27개(한국어판·국제판)', task: 'captions', gates: ['captions'] },
+  { id: 'intlpub', n: 12, name: '국제판 공개', task: 'intlpub', gates: ['intlpub'], approve: '관리자가 국제판 공개 OK' },
+  { id: 'site', n: 13, name: '사이트 /film', task: 'site', gates: ['site'] },
 ];
 // ---------------------------------------------------------------------------------------------------- insights
 // pipeline/insights.json: what the numbers taught (the periodic analysis writes it). Active rules with a `check` are gates of

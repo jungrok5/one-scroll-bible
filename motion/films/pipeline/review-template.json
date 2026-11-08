@@ -1,0 +1,31 @@
+{
+ "_about": "A film's state and decisions — every field a gate reads (film.mjs new copies this). Fill by stage: topic → logline·topic_*; script → story_spine·ending·parts·looks·message_check; review → artifact_url; picture → shots_check; clips → clips; site → site_slug. Feedback and rounds only through film.mjs feedback/applied/round.",
+ "stage": 1,
+ "round": 0,
+ "status": "",
+ "logline": "",
+ "topic_id": "",
+ "topic_evidence": [],
+ "ref_film": "silence400",
+ "story_spine": {
+  "question": { "id": "", "how": "풀어야 할 문제·빈칸 — 답(구절)보다 먼저" },
+  "stakes": { "id": "", "how": "빗나갈 것 같은 순간" },
+  "person": { "id": "", "how": "그 사람의 자리에서" },
+  "reversal": { "id": "", "how": "예상과 반대로" },
+  "payoff": { "id": "", "how": "처음 질문의 답 — question보다 뒤" },
+  "surprise": { "id": "", "how": "성경을 안 읽은 사람이 몰랐을 사실('와 그랬구나')" }
+ },
+ "ending": { "question": "", "passage": "", "answer": "" },
+ "parts": [],
+ "looks": [],
+ "message_check": {},
+ "decisions": [],
+ "artifact_url": null,
+ "shots_check": null,
+ "clips": [],
+ "site_slug": "",
+ "rounds": [],
+ "feedback_log": [],
+ "process_changes": [],
+ "pipeline": { "approvals": {} }
+}

@@ -45,6 +45,11 @@
   "sfx_per_min_min": 8,
   "ducks_min": 3,
   "word_tol_s": 0.12,
+  "_tone_source": "script-stats.mjs 2026-11-09 — 줄마다 원본 테이크 크기(LUFS)와 영상 가운데값의 차: 「메시아」 3차 속삭임 H2 −5.8(앞줄과 −5.4) → 관리자 \"톤 변화가 급격해 어색\"; 4차 최대 1.8·2.6, 「침묵의 400년」 2.0·2.8",
+  "tone_dev_max": 2.5,
+  "tone_jump_max": 3.5,
+  "_action_source": "actions.mjs 2026-11-09 — 금빛 말·말씀 잇기·큰 변화·끝 화면은 효과음이 꼭 있어야 한다(SOUND.md, 관리자 2026-11-03 \"선이 지나갈 땐 사각사각\"). 「메시아」 4차 6/6",
+  "action_cover_min": 0.9,
   "_word_source": "word-sync.mjs 2026-11-04 (after claude-animated-shorts: reactions 0–3 frames before the word) — 「메시아」 had gold words 0.45–2.35 s off their spoken word"
  },
  "format": {
@@ -66,6 +71,21 @@
   "title_max": 100,
   "first_line_max": 60,
   "no_sunday_kst": true
+ },
+ "script": {
+  "_source": "script-stats.mjs 2026-11-09 — 「침묵의 400년」 640음절 = 2:59(3.66음절/초, 쉼 포함), 관리자 2026-11-07 \"640음절로 줄임\"(「메시아」가 리뷰 반영으로 853음절까지 늘어난 뒤)",
+  "syllables_max": 640,
+  "_pace_source": "관리자 2026-11-07 「메시아」 3차 \"너무 급하게 지나감, 특히 성경구절은 훅훅\" → 4차(조각 사이 0.8초, 끝 1.2–1.5초 머묾). 잰 값: 3차 음절÷(읽는 시간+머묾) 최고 4.64·머묾 최저 0.95초, 4차 최고 4.33·최저 1.29초(「침묵의 400년」은 5.15·0.29초까지 — 그때는 지적 없었지만 기준은 4차). 4차에 대한 관리자 의견이 오면 다시 맞춘다",
+  "quote_pace_max": 4.4,
+  "quote_hold_min": 1.0,
+  "_review_source": "film-script-review 1번 대상(성경 잘 모르는 크리스천 63세) 부마다 (감동+전율)/2. 「메시아」 3차 원고 3.07·최저 2(2부) — 관리자 11/6 \"감흥·흥미·놀라움이 없다\"는 2차 원고에서. 첫 보정이라 「만나」 뒤 다시 본다. 리뷰를 굳힐 때(관리자 OK)는 review JSON frozen으로 넘어간다",
+  "novice_mean_min": 3.2,
+  "novice_part_min": 2.5,
+  "ending_window_s": 25
+ },
+ "intl": {
+  "_source": "README 4절 — 해설 트랙은 반응이 확인된 언어부터(ANALYTICS: 국제 채널 스페인어 쇼츠 · 한국어 채널 포르투갈어 쇼츠 868회), 2026-11-01",
+  "voice_langs": ["en", "es", "pt-BR"]
  },
  "captions": {
   "_source": "관리자 2026-11-01 — fixed 27 + ko",

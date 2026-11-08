@@ -20,6 +20,14 @@ Talk to the maintainer in Korean. Never publish, make public, merge to main or d
 2. Approvals: record one only when the maintainer said it, with their words: `film.mjs approve <film> <stage> "관리자: …"`.
 3. A rule that matters for quality belongs in a gate, not only in prose. When a lesson is learned, add or tighten the gate in
    `stages.mjs` or the bar in `targets.json` (with source and date), then mention it in one line. The sections below are background for the briefs.
+4. **The rules are `pipeline/rules.json`** (maintainer, 2026-11-09: "매번 같은 퀄리티로 고정 — 컴팩트하면 또 달라지고 하지 않게"). `film.mjs task`
+   prints the brief + every rule of the stage + the insights — after a compaction, run it again instead of working from memory. A rule
+   only in a memory file or a chat is not a rule until it is in rules.json (+ a gate when it can be measured). New rule → rules.json first.
+5. **Feedback and rounds only through the CLI**: every remark from the maintainer or their wife → `film.mjs feedback <film> "<누가>" "<한 말>"`
+   right away; when handled → `film.mjs applied <film> <n> "<무엇을>"`; before showing the next version → `film.mjs round <film> "<요약>"`
+   (refuses while feedback is open or an earlier stage fails — a stale mix or old clips; `--force "<이유>"` only with a reason).
+   `film.mjs diff <film>` shows what moved since the approved script; tell the maintainer when it is more than wording.
+6. New film: `topic.mjs evidence` → `cite` → `recommend` → (maintainer picks) → `film.mjs new <film> --topic <id>` → `film.mjs status`.
 
 ## 0 · Where are we? (every session, first)
 1. Read README **0절** (the 14 steps) and the film's **`motion/films/<name>/review.json`**: `stage`, `round`, `status`,

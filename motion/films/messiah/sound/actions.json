@@ -1,0 +1,954 @@
+{
+ "film": "messiah",
+ "dur": 176,
+ "made": "2026-11-08T21:53",
+ "cover": 1,
+ "need": 6,
+ "actions": [
+  {
+   "t": 0,
+   "len": 0.8,
+   "kind": "code",
+   "what": "glass-shepherds.art.js:87 ctx.globalAlpha = .55 + .45 * ss(0, .8, t); regions.forEach((rg, i) =>",
+   "covered": true,
+   "sfx": [
+    "S1",
+    "E5"
+   ]
+  },
+  {
+   "t": 0.3,
+   "len": 5.2,
+   "kind": "sub",
+   "what": "sub N01",
+   "covered": true,
+   "sfx": [
+    "S1",
+    "E5"
+   ]
+  },
+  {
+   "t": 0.5,
+   "len": 0.4,
+   "kind": "code",
+   "what": "glass-shepherds.art.js:89 const gb = ss(.5, .9, t) * (1 - .6 * ss(1.4, 3.4, t));",
+   "covered": true,
+   "sfx": [
+    "S1",
+    "E5"
+   ]
+  },
+  {
+   "t": 1.4,
+   "len": 2,
+   "kind": "code",
+   "what": "glass-shepherds.art.js:89 const gb = ss(.5, .9, t) * (1 - .6 * ss(1.4, 3.4, t));",
+   "covered": false,
+   "sfx": []
+  },
+  {
+   "t": 5.6,
+   "len": 4.2,
+   "kind": "sub",
+   "what": "sub N02",
+   "covered": false,
+   "sfx": []
+  },
+  {
+   "t": 9,
+   "len": 18,
+   "kind": "code",
+   "what": "film.html:430 const flightIn = t => t < 9 ? t * .9 : 8.1 + 4.4 * eo(clamp((t - 9) / ",
+   "covered": false,
+   "sfx": []
+  },
+  {
+   "t": 9.85,
+   "len": 3.35,
+   "kind": "sub",
+   "what": "sub N03",
+   "covered": false,
+   "sfx": []
+  },
+  {
+   "t": 10.2,
+   "len": 2.2,
+   "kind": "code",
+   "what": "film.html:115 const c = FLY.cam(camT), L = FLY.light(0), warm = o.warm ?? ss(10.2, 1",
+   "covered": false,
+   "sfx": []
+  },
+  {
+   "t": 13.4,
+   "len": 4.2,
+   "kind": "sub",
+   "what": "label P0",
+   "covered": false,
+   "sfx": []
+  },
+  {
+   "t": 14,
+   "len": 1.7,
+   "kind": "code",
+   "what": "film.html:447 [0, 27.0, (c, t) => { partFlight(c, t, flightIn(t), { warm: ss(14.0, 1",
+   "covered": true,
+   "sfx": [
+    "S3",
+    "E3a"
+   ]
+  },
+  {
+   "t": 14,
+   "len": 12.6,
+   "kind": "quote",
+   "what": "quote 02",
+   "covered": true,
+   "sfx": [
+    "S3",
+    "E3a"
+   ]
+  },
+  {
+   "t": 14.35,
+   "len": 1.2,
+   "kind": "gold",
+   "what": "gold word of 02",
+   "covered": true,
+   "sfx": [
+    "S3",
+    "E3a"
+   ]
+  },
+  {
+   "t": 17.8,
+   "len": 6.8,
+   "kind": "sub",
+   "what": "label P1",
+   "covered": false,
+   "sfx": []
+  },
+  {
+   "t": 25.2,
+   "len": 1.6,
+   "kind": "code",
+   "what": "film.html:447 [0, 27.0, (c, t) => { partFlight(c, t, flightIn(t), { warm: ss(14.0, 1",
+   "covered": false,
+   "sfx": []
+  },
+  {
+   "t": 26.2,
+   "len": 0.7,
+   "kind": "scene",
+   "what": "scene from 26.2 to 33.4",
+   "covered": false,
+   "sfx": []
+  },
+  {
+   "t": 26.4,
+   "len": 5.6,
+   "kind": "sub",
+   "what": "label G2",
+   "covered": false,
+   "sfx": []
+  },
+  {
+   "t": 27.4,
+   "len": 5,
+   "kind": "sub",
+   "what": "sub N04",
+   "covered": true,
+   "sfx": [
+    "S8"
+   ]
+  },
+  {
+   "t": 32.6,
+   "len": 0.7,
+   "kind": "scene",
+   "what": "scene from 32.6 to 40.2",
+   "covered": false,
+   "sfx": []
+  },
+  {
+   "t": 33.3,
+   "len": 4.1,
+   "kind": "sub",
+   "what": "sub N07",
+   "covered": false,
+   "sfx": []
+  },
+  {
+   "t": 37,
+   "len": 6.6,
+   "kind": "code",
+   "what": "pastel-promises.js:80 const k = clamp((t - 37) / 6.6), tilt = (V ? 90 : 60) * eio(k), z = 1 ",
+   "covered": false,
+   "sfx": []
+  },
+  {
+   "t": 37.4,
+   "len": 5.4,
+   "kind": "code",
+   "what": "pastel-promises.js:96 const pts = []; for (let i = 0; i <= 40; i++) { const u = i / 40; pts.",
+   "covered": false,
+   "sfx": []
+  },
+  {
+   "t": 39.4,
+   "len": 0.7,
+   "kind": "scene",
+   "what": "scene from 39.4 to 53.0",
+   "covered": true,
+   "sfx": [
+    "S9"
+   ]
+  },
+  {
+   "t": 39.8,
+   "len": 3.8,
+   "kind": "quote",
+   "what": "quote N08",
+   "covered": true,
+   "sfx": [
+    "S9"
+   ]
+  },
+  {
+   "t": 43.4,
+   "len": 7.8,
+   "kind": "code",
+   "what": "pastel-promises.js:101 const k = clamp((t - 43.4) / 7.8), z = 1 + .08 * eio(k), px = 22 * eio",
+   "covered": false,
+   "sfx": []
+  },
+  {
+   "t": 43.6,
+   "len": 0.8,
+   "kind": "code",
+   "what": "pastel-promises.js:107 { const a = ss(43.6, 44.4, t) * (1 - ss(49.4, 50.2, t)); if (a > 0) { ",
+   "covered": false,
+   "sfx": []
+  },
+  {
+   "t": 43.8,
+   "len": 6.1,
+   "kind": "sub",
+   "what": "sub N09",
+   "covered": false,
+   "sfx": []
+  },
+  {
+   "t": 49.4,
+   "len": 0.8,
+   "kind": "code",
+   "what": "pastel-promises.js:107 { const a = ss(43.6, 44.4, t) * (1 - ss(49.4, 50.2, t)); if (a > 0) { ",
+   "covered": false,
+   "sfx": []
+  },
+  {
+   "t": 51.6,
+   "len": 4,
+   "kind": "code",
+   "what": "inkmap-narrow.js:38 const p = ss(51.6, 55.6, t); ctx.globalAlpha = .9;",
+   "covered": true,
+   "sfx": [
+    "S10"
+   ]
+  },
+  {
+   "t": 52,
+   "len": 3.2,
+   "kind": "sub",
+   "what": "sub N10",
+   "covered": true,
+   "sfx": [
+    "S10"
+   ]
+  },
+  {
+   "t": 52.2,
+   "len": 0.7,
+   "kind": "scene",
+   "what": "scene from 52.2 to 62.6",
+   "covered": true,
+   "sfx": [
+    "S10"
+   ]
+  },
+  {
+   "t": 52.6,
+   "len": 8.4,
+   "kind": "sub",
+   "what": "label A1",
+   "covered": false,
+   "sfx": []
+  },
+  {
+   "t": 55.5,
+   "len": 7.1,
+   "kind": "quote",
+   "what": "quote 14",
+   "covered": false,
+   "sfx": []
+  },
+  {
+   "t": 56,
+   "len": 1.2,
+   "kind": "code",
+   "what": "inkmap-narrow.js:34 const [lon, lat, span] = M.camAt(KEYS, t), V = Pilot.ori === 'v', land",
+   "covered": false,
+   "sfx": []
+  },
+  {
+   "t": 56.4,
+   "len": 1.6,
+   "kind": "code",
+   "what": "inkmap-narrow.js:44 { ctx.save(); ctx.strokeStyle = 'rgba(58,30,10,.8)'; ctx.lineWidth = 1",
+   "covered": false,
+   "sfx": []
+  },
+  {
+   "t": 57,
+   "len": 1,
+   "kind": "code",
+   "what": "inkmap-narrow.js:52 region(L('M5'), [34.92, 31.98], ss(57.0, 58.0, t) * (1 - ss(62.8, 63.8",
+   "covered": false,
+   "sfx": []
+  },
+  {
+   "t": 57.6,
+   "len": 0.8,
+   "kind": "code",
+   "what": "inkmap-narrow.js:46 M.cityLamp(ctx, 'bethlehem', ss(57.6, 58.4, t) * (1 + .3 * ss(58, 59, ",
+   "covered": false,
+   "sfx": []
+  },
+  {
+   "t": 58,
+   "len": 1,
+   "kind": "code",
+   "what": "inkmap-narrow.js:46 M.cityLamp(ctx, 'bethlehem', ss(57.6, 58.4, t) * (1 + .3 * ss(58, 59, ",
+   "covered": false,
+   "sfx": []
+  },
+  {
+   "t": 59.4,
+   "len": 1,
+   "kind": "code",
+   "what": "inkmap-narrow.js:54 M.label(ctx, L('M3'), 'jerusalem', ss(59.4, 60.4, t) * .8 * (1 - ss(63",
+   "covered": false,
+   "sfx": []
+  },
+  {
+   "t": 61.8,
+   "len": 0.7,
+   "kind": "scene",
+   "what": "scene from 61.8 to 72.8",
+   "covered": true,
+   "sfx": [
+    "S11"
+   ]
+  },
+  {
+   "t": 62.8,
+   "len": 1,
+   "kind": "code",
+   "what": "inkmap-narrow.js:52 region(L('M5'), [34.92, 31.98], ss(57.0, 58.0, t) * (1 - ss(62.8, 63.8",
+   "covered": false,
+   "sfx": []
+  },
+  {
+   "t": 62.8,
+   "len": 5.5,
+   "kind": "sub",
+   "what": "sub N22",
+   "covered": false,
+   "sfx": []
+  },
+  {
+   "t": 63.6,
+   "len": 7,
+   "kind": "code",
+   "what": "film.html:331 const k = clamp((t - 63.6) / 7), z = 1 + .06 * k, hz = H * (V ? .5 : .",
+   "covered": false,
+   "sfx": []
+  },
+  {
+   "t": 64,
+   "len": 0.8,
+   "kind": "code",
+   "what": "inkmap-narrow.js:47 M.cityLamp(ctx, 'nazareth', ss(64.0, 64.8, t), z, t, 2); M.cityLamp(ct",
+   "covered": false,
+   "sfx": []
+  },
+  {
+   "t": 64.4,
+   "len": 1,
+   "kind": "code",
+   "what": "inkmap-narrow.js:56 M.label(ctx, L('M1'), 'nazareth', ss(64.4, 65.4, t) * land, { size: 42",
+   "covered": false,
+   "sfx": []
+  },
+  {
+   "t": 65.4,
+   "len": 0.8,
+   "kind": "code",
+   "what": "inkmap-narrow.js:47 M.cityLamp(ctx, 'nazareth', ss(64.0, 64.8, t), z, t, 2); M.cityLamp(ct",
+   "covered": false,
+   "sfx": []
+  },
+  {
+   "t": 66.4,
+   "len": 3.2,
+   "kind": "code",
+   "what": "inkmap-narrow.js:48 { const k = ss(66.4, 69.6, t); if (k > 0) { ctx.save(); ctx.globalAlph",
+   "covered": false,
+   "sfx": []
+  },
+  {
+   "t": 66.8,
+   "len": 0.8,
+   "kind": "code",
+   "what": "inkmap-narrow.js:47 M.cityLamp(ctx, 'nazareth', ss(64.0, 64.8, t), z, t, 2); M.cityLamp(ct",
+   "covered": false,
+   "sfx": []
+  },
+  {
+   "t": 68.9,
+   "len": 2.8,
+   "kind": "sub",
+   "what": "sub N13",
+   "covered": true,
+   "sfx": [
+    "S12"
+   ]
+  },
+  {
+   "t": 70.6,
+   "len": 0.6,
+   "kind": "code",
+   "what": "film.html:406 { const a = ss(70.6, 71.2, t) * (1 - ss(75.6, 76.2, t)); if (a > 0) { ",
+   "covered": false,
+   "sfx": []
+  },
+  {
+   "t": 72,
+   "len": 0.7,
+   "kind": "scene",
+   "what": "scene from 72.0 to 84.4",
+   "covered": true,
+   "sfx": [
+    "S13",
+    "E7"
+   ]
+  },
+  {
+   "t": 72.3,
+   "len": 10.6,
+   "kind": "quote",
+   "what": "quote N14",
+   "covered": true,
+   "sfx": [
+    "S13",
+    "E7"
+   ]
+  },
+  {
+   "t": 75.6,
+   "len": 0.6,
+   "kind": "code",
+   "what": "film.html:406 { const a = ss(70.6, 71.2, t) * (1 - ss(75.6, 76.2, t)); if (a > 0) { ",
+   "covered": false,
+   "sfx": []
+  },
+  {
+   "t": 76.6,
+   "len": 7,
+   "kind": "code",
+   "what": "film.html:306 const L = ROAD.light(t), k = clamp((t - 76.6) / 7), truck = (V ? 120 :",
+   "covered": false,
+   "sfx": []
+  },
+  {
+   "t": 79.67,
+   "len": 1.2,
+   "kind": "gold",
+   "what": "gold word of N14",
+   "covered": true,
+   "sfx": [
+    "E3N14",
+    "E3d"
+   ]
+  },
+  {
+   "t": 83.4,
+   "len": 7,
+   "kind": "sub",
+   "what": "sub N15",
+   "covered": true,
+   "sfx": [
+    "S10b"
+   ]
+  },
+  {
+   "t": 83.6,
+   "len": 0.7,
+   "kind": "scene",
+   "what": "scene from 83.6 to 94.6",
+   "covered": true,
+   "sfx": [
+    "S10b"
+   ]
+  },
+  {
+   "t": 84,
+   "len": 4,
+   "kind": "code",
+   "what": "oil-journey.js:61 if (night < 1) { const [sx, sy] = P2(...JOIL.sun); W3.bloom(ctx, sx, s",
+   "covered": true,
+   "sfx": [
+    "S10b"
+   ]
+  },
+  {
+   "t": 85,
+   "len": 4.6,
+   "kind": "code",
+   "what": "film.html:269 if (sk.sun && L.sunI > 0) W3.bloom(ctx, sk.sun[0], sk.sun[1], L.glow, ",
+   "covered": false,
+   "sfx": []
+  },
+  {
+   "t": 85.5,
+   "len": 4.7,
+   "kind": "code",
+   "what": "oil-journey.js:52 const night = ss(85.5, 90.2, t);",
+   "covered": false,
+   "sfx": []
+  },
+  {
+   "t": 87.5,
+   "len": 4.5,
+   "kind": "code",
+   "what": "oil-journey.js:51 const fx = Math.min(WP - W / 2 / z, lerp(me.x + (V ? 150 : 260) / z, J",
+   "covered": false,
+   "sfx": []
+  },
+  {
+   "t": 91.1,
+   "len": 6.7,
+   "kind": "sub",
+   "what": "sub N16",
+   "covered": false,
+   "sfx": []
+  },
+  {
+   "t": 93.8,
+   "len": 0.7,
+   "kind": "scene",
+   "what": "scene from 93.8 to 100.6",
+   "covered": true,
+   "sfx": [
+    "S13b"
+   ]
+  },
+  {
+   "t": 95,
+   "len": 9.6,
+   "kind": "code",
+   "what": "oil-stable.js:99 function partStable(ctx, t) { const k = eio(clamp((t - 95) / 9.6));",
+   "covered": true,
+   "sfx": [
+    "S5"
+   ]
+  },
+  {
+   "t": 99.6,
+   "len": 5.2,
+   "kind": "sub",
+   "what": "label P5",
+   "covered": false,
+   "sfx": []
+  },
+  {
+   "t": 99.6,
+   "len": 0.7,
+   "kind": "scene",
+   "what": "scene from 99.6 to 114.2",
+   "covered": true,
+   "sfx": []
+  },
+  {
+   "t": 100,
+   "len": 5,
+   "kind": "sub",
+   "what": "sub N17",
+   "covered": false,
+   "sfx": []
+  },
+  {
+   "t": 104.6,
+   "len": 9.2,
+   "kind": "code",
+   "what": "engrave-shepherds.js:14 const g = EPL.g, k = clamp((t - 104.6) / 9.2), open = ss(105.6, 111.0,",
+   "covered": false,
+   "sfx": []
+  },
+  {
+   "t": 104.8,
+   "len": 0.6,
+   "kind": "code",
+   "what": "engrave-shepherds.js:53 { const a = ss(104.8, 105.4, t) * (1 - ss(112.2, 112.8, t)); if (a > 0",
+   "covered": false,
+   "sfx": []
+  },
+  {
+   "t": 105.2,
+   "len": 6.8,
+   "kind": "sub",
+   "what": "label J3",
+   "covered": false,
+   "sfx": []
+  },
+  {
+   "t": 105.6,
+   "len": 5.4,
+   "kind": "code",
+   "what": "engrave-shepherds.js:14 const g = EPL.g, k = clamp((t - 104.6) / 9.2), open = ss(105.6, 111.0,",
+   "covered": false,
+   "sfx": []
+  },
+  {
+   "t": 105.7,
+   "len": 7.9,
+   "kind": "quote",
+   "what": "quote 18",
+   "covered": false,
+   "sfx": []
+  },
+  {
+   "t": 106.2,
+   "len": 4,
+   "kind": "code",
+   "what": "engrave-shepherds.js:28 { const a = ss(106.2, 110.2, t); if (a > 0) { const cx = G[0], top = G",
+   "covered": false,
+   "sfx": []
+  },
+  {
+   "t": 108.55,
+   "len": 1.2,
+   "kind": "gold",
+   "what": "gold word of 18",
+   "covered": true,
+   "sfx": [
+    "E318",
+    "E3e"
+   ]
+  },
+  {
+   "t": 112.2,
+   "len": 0.6,
+   "kind": "code",
+   "what": "engrave-shepherds.js:53 { const a = ss(104.8, 105.4, t) * (1 - ss(112.2, 112.8, t)); if (a > 0",
+   "covered": false,
+   "sfx": []
+  },
+  {
+   "t": 113.2,
+   "len": 0.7,
+   "kind": "scene",
+   "what": "scene from 113.2 to 122.2",
+   "covered": false,
+   "sfx": []
+  },
+  {
+   "t": 113.6,
+   "len": 9.8,
+   "kind": "code",
+   "what": "oil-stable.js:134 window.partEden(g, lerp(30.8, 32.4, clamp((t - 113.6) / 9.8))); const ",
+   "covered": true,
+   "sfx": [
+    "E8d"
+   ]
+  },
+  {
+   "t": 113.9,
+   "len": 7,
+   "kind": "sub",
+   "what": "sub N20",
+   "covered": true,
+   "sfx": [
+    "E8d"
+   ]
+  },
+  {
+   "t": 120.6,
+   "len": 3,
+   "kind": "code",
+   "what": "oil-stable.js:115 const eden = 1 - ss(121.0, 123.4, t), dsc = ss(120.6, 123.6, t);",
+   "covered": false,
+   "sfx": []
+  },
+  {
+   "t": 121,
+   "len": 2.4,
+   "kind": "code",
+   "what": "oil-stable.js:115 const eden = 1 - ss(121.0, 123.4, t), dsc = ss(120.6, 123.6, t);",
+   "covered": false,
+   "sfx": []
+  },
+  {
+   "t": 121.4,
+   "len": 0.7,
+   "kind": "scene",
+   "what": "scene from 121.4 to 130.6",
+   "covered": false,
+   "sfx": []
+  },
+  {
+   "t": 121.7,
+   "len": 3.8,
+   "kind": "sub",
+   "what": "sub N19",
+   "covered": true,
+   "sfx": [
+    "E6"
+   ]
+  },
+  {
+   "t": 125.6,
+   "len": 4.2,
+   "kind": "quote",
+   "what": "micah 02",
+   "covered": true,
+   "sfx": [
+    "S3c"
+   ]
+  },
+  {
+   "t": 128.4,
+   "len": 3,
+   "kind": "code",
+   "what": "oil-stable.js:119 const { lx, ly } = SOIL, back = ss(128.4, 131.4, t), KEYS = [[121, lx ",
+   "covered": false,
+   "sfx": []
+  },
+  {
+   "t": 129.2,
+   "len": 3.4,
+   "kind": "code",
+   "what": "oil-stable.js:127 const cr = ss(129.2, 132.6, t); if (cr > 0) { const cx = W / 2 + (SOIL",
+   "covered": true,
+   "sfx": [
+    "S1b"
+   ]
+  },
+  {
+   "t": 129.8,
+   "len": 0.7,
+   "kind": "scene",
+   "what": "scene from 129.8 to 136.2",
+   "covered": true,
+   "sfx": [
+    "S1b",
+    "S11b"
+   ]
+  },
+  {
+   "t": 129.9,
+   "len": 5.1,
+   "kind": "sub",
+   "what": "label J5",
+   "covered": true,
+   "sfx": [
+    "S1b",
+    "S11b"
+   ]
+  },
+  {
+   "t": 130.2,
+   "len": 4.8,
+   "kind": "sub",
+   "what": "sub N23",
+   "covered": true,
+   "sfx": [
+    "S11b"
+   ]
+  },
+  {
+   "t": 135.4,
+   "len": 9,
+   "kind": "quote",
+   "what": "quote H1",
+   "covered": true,
+   "sfx": [
+    "X4",
+    "E3H1"
+   ]
+  },
+  {
+   "t": 135.4,
+   "len": 0.7,
+   "kind": "scene",
+   "what": "scene from 135.4 to 145.0",
+   "covered": true,
+   "sfx": [
+    "X4",
+    "E3H1"
+   ]
+  },
+  {
+   "t": 135.71,
+   "len": 1.2,
+   "kind": "gold",
+   "what": "gold word of H1",
+   "covered": true,
+   "sfx": [
+    "X4",
+    "E3H1"
+   ]
+  },
+  {
+   "t": 144.2,
+   "len": 0.7,
+   "kind": "scene",
+   "what": "scene from 144.2 to 153.8",
+   "covered": false,
+   "sfx": []
+  },
+  {
+   "t": 144.6,
+   "len": 8.4,
+   "kind": "sub",
+   "what": "sub N24",
+   "covered": false,
+   "sfx": []
+  },
+  {
+   "t": 144.9,
+   "len": 4.1,
+   "kind": "quote",
+   "what": "micah 02",
+   "covered": true,
+   "sfx": [
+    "E3g"
+   ]
+  },
+  {
+   "t": 146,
+   "len": 13.2,
+   "kind": "code",
+   "what": "impasto-dawn.js:49 const k = clamp((t - 146) / 13.2), z = 1 + .06 * eio(k), rep = clamp((",
+   "covered": false,
+   "sfx": []
+  },
+  {
+   "t": 149,
+   "len": 4.4,
+   "kind": "code",
+   "what": "impasto-dawn.js:66 { const pts = []; for (let i = 0; i <= 40; i++) { const u = i / 40, x ",
+   "covered": true,
+   "sfx": [
+    "S12b"
+   ]
+  },
+  {
+   "t": 152.4,
+   "len": 4.4,
+   "kind": "code",
+   "what": "impasto-dawn.js:49 const k = clamp((t - 146) / 13.2), z = 1 + .06 * eio(k), rep = clamp((",
+   "covered": false,
+   "sfx": []
+  },
+  {
+   "t": 153,
+   "len": 7.6,
+   "kind": "sub",
+   "what": "label J6",
+   "covered": true,
+   "sfx": [
+    "X9"
+   ]
+  },
+  {
+   "t": 153.2,
+   "len": 0.7,
+   "kind": "scene",
+   "what": "scene from 153.2 to 164.4",
+   "covered": true,
+   "sfx": [
+    "X9"
+   ]
+  },
+  {
+   "t": 153.6,
+   "len": 8.8,
+   "kind": "quote",
+   "what": "quote H2",
+   "covered": true,
+   "sfx": [
+    "X9",
+    "S7b"
+   ]
+  },
+  {
+   "t": 159.35,
+   "len": 1.2,
+   "kind": "gold",
+   "what": "gold word of H2",
+   "covered": true,
+   "sfx": [
+    "E3H2",
+    "X6"
+   ]
+  },
+  {
+   "t": 163.4,
+   "len": 0.7,
+   "kind": "scene",
+   "what": "scene from 163.4 to 170.0",
+   "covered": false,
+   "sfx": []
+  },
+  {
+   "t": 163.8,
+   "len": 3.2,
+   "kind": "sub",
+   "what": "sub N26",
+   "covered": true,
+   "sfx": [
+    "S2b"
+   ]
+  },
+  {
+   "t": 168.4,
+   "len": 0.7,
+   "kind": "scene",
+   "what": "scene from 168.4 to 176.0",
+   "covered": true,
+   "sfx": [
+    "S1c"
+   ]
+  },
+  {
+   "t": 168.6,
+   "len": 1.4,
+   "kind": "code",
+   "what": "film.html:211 if (t <= 168.6) textBand(ctx); const k = ss(168.6, 170, t); if (k > 0)",
+   "covered": true,
+   "sfx": [
+    "S1c"
+   ]
+  },
+  {
+   "t": 168.8,
+   "len": 6.9,
+   "kind": "end",
+   "what": "end E1",
+   "covered": true,
+   "sfx": [
+    "S1c"
+   ]
+  }
+ ]
+}

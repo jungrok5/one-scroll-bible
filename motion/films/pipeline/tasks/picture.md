@@ -1,10 +1,12 @@
 # 4. 그리기 · 렌더 — {film}
-읽기: README 7절 전부, canvas-film `SCENE-RULES.md`·`BODY-CHECK.md`(인물이 움직이면)·`LESSONS.md`, review.json `looks`(이 표대로 장면마다 그 화풍).
+참고로 읽기: canvas-film `SCENE-RULES.md`·`BODY-CHECK.md`(인물이 움직이면)·`LESSONS.md`, review.json `looks`(이 표대로 장면마다 그 화풍).
 그리기: 장면 하나 = 화풍 하나의 모듈(`films/{film}/<화풍>-<장면>.js`), 새 화풍 엔진은 `look-*.js`(영상이 끝나면 motion-skills 키트로).
 세로(1080×1920) 먼저. 구절마다 화면 사건 하나, 3초 넘게 멈춘 화면 없음, 주인공은 폰에서 1초에 읽힘.
-만들기: `node motion/films/film.mjs run {film} picture`(렌더 + 소리 입힌 본).
+만들기: `node motion/films/film.mjs run {film} picture`(렌더 세로·가로 + 소리 입힌 본 + 장면표 시트 `motion/out/shots/{film}/sheet-*.jpg`).
+**장면표 확인**(관리자 2026-11-07 "그림과 내용이 따로 노는지"): 시트를 한 장씩 보고 줄마다 화면이 `screen` 문장과 같은지 본다. 다른 줄은 `review.json` `shots_check = { render: <manifest의 render>, at, misses: [{id, what}] }`에 적고, 그림을 고치거나(대개) screen을 실제로 맞는 말로 고친다(원고 승인 뒤면 차수 기록). misses가 빌 때 통과.
 검사가 보는 것: `pipeline/targets.json` look(밝기·어두운 화면·멈춘 화면), 세로 길이, 렌더가 그림 코드와 같은 내용 지문인지, frame-qa(모든 프레임 — 검은 화면·얼어붙음·튐·정지 비율), 첫 영상보다 어둡고 느린 장면(`below_first_film`). 실패하면 출력된 시각의 장면부터 고친다.
 그림 리뷰 (**관리자가 요청할 때만** — 2026-11-05 "점수 뽑는 리뷰는 빼자, 내가 요청할 때 해". 평소 기준은 첫 영상: 첫 영상 기준 시트 `look-review/<film>/first-film.png`와 나란히 보고 판단한다. 요청받으면 `film.mjs check {film} picture --review`): run이 만든 `motion/out/look-review/{film}/args.json`을 args로 저장된 워크플로 **`film-look-review`**를 돌린다(관리자가 이번 영상의 리뷰 워크플로를 허락했을 때). 이 세션에서 Workflow 도구가 꺼져 있으면 `node motion/films/pipeline/wf-prompts.mjs .claude/workflows/film-look-review.js motion/out/look-review/{film}/args.json motion/out/look-review/{film}/briefs`로 같은 지시문을 꺼내 리뷰어마다 하위 에이전트 하나(지시문 파일만 넘기고, 답 JSON을 `briefs/answer-<key>.json`에 Write로 저장하게 함 — 본 세션이 긴 답을 다시 옮겨 적지 않도록)로 돌리고, 답을 `node motion/films/pipeline/look-collect.mjs {film}`으로 모은다(`motion/reviews/film-{film}-look.json` + .md). 워크플로로 돌렸으면 결과를 그대로 그 파일에 저장하고 `node motion/films/pipeline/look-md.mjs {film}`.
 막대(`targets.json` look_review.mean_min)는 같은 리뷰어가 첫 영상을 채점한 보정값에서 온다(`look-calibrate.mjs sheets` → 리뷰 → `collect`). 리뷰어·지시문을 바꾸면 보정을 다시 하고 막대를 고친다. 같은 그림도 평균이 ±0.2–0.3 흔들리니, 0.2 안쪽 차이로 한 장면을 다시 그리지 않는다.
 가로판(TV, `targets.json` format.tv_cut)도 똑같이: `motion/out/look-review/{film}-h/args.json` → 리뷰 → `look-collect.mjs {film} --ori h` (`film-{film}-look-h.json`). 한 리뷰어가 세로·가로를 차례로 봐도 된다. "반영해야 할 것"(장면 평균 < 6, 전체 < 7, BLOCKER·MAJOR)을 고치고 다시 렌더 → 다시 리뷰. 리뷰는 렌더 지문에 묶여 있어 그림을 고치면 다시 받아야 통과한다.
-보이기: 버전 비교 페이지 `node motion/films/compare.mjs {film} <이전>=<커밋> 새=WORK --audio` → `motion/out/compare/{film}/`를 비공개 아티팩트로(index.html + files.json의 파일들), 720p 미리보기와 밀착 시트를 SendUserFile로. 멈춤: `approve {film} picture "관리자: …"`.
+보이기: 버전 비교 페이지 `node motion/films/compare.mjs {film} <이전>=<커밋> 새=WORK --audio` → `motion/out/compare/{film}/`를 비공개 아티팩트로(index.html + files.json의 파일들), 720p 미리보기와 밀착 시트를 SendUserFile로. 시안을 보이기 전에 피드백·차수: 관리자·가족 의견은 `film.mjs feedback`, 반영은 `applied`, 다시 보낼 때 `film.mjs round {film} "<요약>"`(지금 단계까지 검사가 통과해야 닫힌다 — 섞기·짧은 쇼츠가 오래됐으면 run부터).
+멈춤: `approve {film} picture "관리자: …"`.

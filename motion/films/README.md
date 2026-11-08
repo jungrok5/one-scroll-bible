@@ -279,6 +279,11 @@ main 배포는 관리자 허락을 받고 한다.
   ElevenLabs 플로에서 꺼냄)와 앞 영상의 `prompts.md`를 읽고 같은 방식으로 쓴다: 악기·선법·박자를 이름으로, "몇 초에 무엇이 오는지",
   "quiet under a spoken voice", "no drums, no synths", 한 영상을 꿰는 하나의 주제가 부마다 다른 악기로 돌아옴. 해설은 같은 목소리
   (`HYALOqtTLlRjxo4uBKeg` · eleven_v4, 줄당 한 번, 숫자는 한글로). 큐마다 소리 크기가 크게 달라 `sound.mjs --envelope`로 재고 `cues.json` db로 맞춘다.
+- **세션에만 남는 작업은 없게 — 되풀이할 일은 도구로, 입력은 파일로**(관리자 2026-11-08: "도구화 가능한 건 도구화, 세션에만 남지 않도록").
+  즉석 명령·붙여 넣은 브라우저 코드가 두 번째로 필요해지면 그 자리에서 `motion/films/*.mjs`나 `motion/youtube/studio-*.js`로 옮기고
+  그 차수의 값은 스펙 파일로 커밋한다. 다시 자르기의 소리 편집은 `sound-edit.mjs`(silences·gaps·remap·dewhine·stretch, 입력
+  `sound/edit-<차수>.json`), 국제 채널 쇼츠 묶음은 `studio-fileonly.js` → `global-move.mjs record-from-files · schedule-shorts · playlist-shorts`
+  → `studio-related.js`. 프롬프트(ElevenLabs)는 위의 `sound-prompts.mjs`, 원고·그림 리뷰는 `motion/reviews/`.
 - 한 파일짜리 캔버스 영상: `motion/films/<이름>/film.html` + `script.json` + 장면별 그림 모듈. 공용은 `../pilot/lib.js`, `lib-film.js`.
 - **화풍은 motion-skills에서 고른다**(관리자 결정 2026-10-31). 로컬 사본은 `C:\Project\motion-skills`(github.com/jungrok5/motion-skills)이고, 목록은 `canvas-film/references/STYLE-INDEX.md`입니다.
   **지금은 재활용보다 발굴이 먼저다**(관리자 2026-11-02: "매번 같은 화풍만 쓰면 질릴 수 있으니 재활용을 우선하지 말고 아직은 스타일 발굴을 더"):

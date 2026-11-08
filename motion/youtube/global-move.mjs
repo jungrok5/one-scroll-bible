@@ -105,7 +105,7 @@ if (cmd === 'playlists') {
     await api('videos?part=snippet,status', { method: 'PUT', body: JSON.stringify({ id, snippet: { title: f.title, description: f.description, tags, categoryId: '27', defaultLanguage: lang, defaultAudioLanguage: lang },
       status: { privacyStatus: 'private', publishAt: when.toISOString(), selfDeclaredMadeForKids: false, containsSyntheticMedia: false } }) });
   }
-  if (!dry) { Object.assign(s, { first_day: day, time_local: hm, utc_offset: off, note: `wave 2 (${new Date().toISOString().slice(0, 10)}): uploaded to this channel via Studio (file only), filled + scheduled by API (schedule-shorts); related video = global.film[L] (set in Studio)` }); save(); }
+  if (!dry) { Object.assign(s, { first_day: day, time_local: hm, utc_offset: off, note: `${(rest.find(a => a.startsWith('--wave=')) || '--wave=new wave').slice(7)} (${new Date().toISOString().slice(0, 10)}): uploaded to this channel via Studio (file only, studio-fileonly.js), filled + scheduled by API (schedule-shorts); related video = global.film[L] (set in Studio)` }); save(); }
 } else if (cmd === 'recent') {
   // recent [n]: the channel's newest uploads (any privacy) — to see what a Studio upload run really created
   await me(); const up_ = (await api('channels?part=contentDetails&mine=true')).items[0].contentDetails.relatedPlaylists.uploads;

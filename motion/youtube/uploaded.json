@@ -153,7 +153,9 @@
     "9": "Ugy5BX9qItvHNC40LEl4AaABAg",
     "10": "UgzGxb1kSMCCapqSzud4AaABAg",
     "11": "Ugxzn7FIsMvHMyhE_hh4AaABAg",
-    "12": "UgzuGulOD3eS2ZBR0854AaABAg"
+    "12": "UgzuGulOD3eS2ZBR0854AaABAg",
+    "13": "UgxfHzb8iogmKD4hJel4AaABAg",
+    "14": "Ugw1Tz1vMuTtDwzNfgp4AaABAg"
    },
    "music_ids": {
     "10": "DkMfG7PzRHk",
@@ -605,6 +607,24 @@
     "time_local": "19:00",
     "utc_offset": "+03:00",
     "note": "wave 2 (2026-10-30): uploaded to this channel via Studio (file only), filled + scheduled by API (schedule-shorts); related video = global.film[L] (set in Studio); playlist added by API, related video = global.film[L] set in Studio for all 21 (2026-10-30)"
+   },
+   "zh-Hans": {
+    "ids": {
+     "03": "bMa-UAYFxt8",
+     "02": "k1bT5tYwOtY",
+     "01": "mwEKRgBBuQA"
+    }
+   },
+   "zh-Hant": {
+    "ids": {}
+   },
+   "ja": {
+    "ids": {
+     "16": "mzohOIiFKCw"
+    }
+   },
+   "ar": {
+    "ids": {}
    }
   },
   "playlists": {

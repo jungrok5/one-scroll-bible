@@ -15,7 +15,7 @@
    "title": "메시아 예언과 성탄",
    "refs": "미 5:2 → 눅 2 · 창 3:15 → 갈 4:4 → 마 2",
    "connection": "700년 전 적힌 마을 이름이 황제의 호적 명령으로 이루어짐",
-   "status": "picked",
+   "status": "candidate",
    "film": "messiah",
    "evidence": [
     {
@@ -23,7 +23,8 @@
      "fact": "11/2 추천 1번(성탄 절기 · 해설판 다음 칸)",
      "source": "motion/films/ANALYTICS.md"
     }
-   ]
+   ],
+   "note": "2026-11-09 보류 — 관리자: \"지금 만들던 메시아 대체하자\" → christ. 4차 판은 git 태그 messiah-v4-shelved, 새 화풍은 키트로 보관."
   },
   {
    "id": "manna",
@@ -157,6 +158,26 @@
    "connection": "창세기의 에덴이 새 하늘과 새 땅으로(해석이 갈리는 부분은 편들지 않음)",
    "status": "candidate",
    "evidence": []
+  },
+  {
+   "id": "christ",
+   "title": "그리스도 — 예수님의 성이 아니라 고백입니다",
+   "refs": "요 1:41 · 삼상 16:13 · 마 16:16–22 · 사 53 · 시 22 → 눅 24:27",
+   "connection": "기름 부음 받은 왕·제사장·선지자가 한 분에게서 만나고, 기다리던 사람들도 몰랐던 고난받는 메시아를 모든 성경이 가리켰다",
+   "status": "picked",
+   "evidence": [
+    {
+     "at": "2026-11-09",
+     "fact": "해설판 추천 옆자리 1위가 '예언과 성취' 영상(1.7%), 4위도 같은 시리즈(0.5%) — 이 시청자는 약속 → 성취를 찾는다",
+     "source": "motion/films/analytics/2026-11-09/video-film-narr-reach_viewers.json"
+    },
+    {
+     "at": "2026-11-09",
+     "fact": "고난·부활의 메시아 장면이 이번 주 두 플랫폼 1위: 부활 14/21 쇼츠 처음 1일 15시간 856회(유튜브), 십자가 13/21 릴스 1,325회(인스타)",
+     "source": "motion/films/analytics/2026-11-09/studio-channel.json"
+    }
+   ],
+   "film": "christ"
   }
  ],
  "recommendations": [

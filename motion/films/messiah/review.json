@@ -2,7 +2,7 @@
  "_about": "이 영상의 진행 상태와 검토 기록 — 새 세션은 여기부터 읽는다(지금 몇 단계인지, 무엇을 정해야 하는지, 검토 페이지 주소). 검토 페이지는 `node motion/films/review-page.mjs messiah`로 만들어 아래 artifact_url에 다시 올린다(필름 README 8절). 단계 번호는 README 0절 표.",
  "stage": 2,
  "round": 7,
- "status": "4단계 — 4차 영상(관리자 피드백: 속도·초반 이상·지도·톤): 승인 대기 — 관리자·가족이 시안 확인",
+ "status": "보류(2026-11-09) — 관리자가 「그리스도」(motion/films/christ)로 대체하기로. 4차 판 = 태그 messiah-v4-shelved",
  "artifact_url": "https://claude.ai/artifact/A6a73tmrguTKJXWAaTFeCa",
  "ref_film": "silence400",
  "parts": [
@@ -496,6 +496,10 @@
   {
    "at": "2026-11-09",
    "what": "이 영상에서 새로 만든 화풍을 전부 motion-skills canvas-film 키트로: world3d(3D 밤 비행·역광 로마) · nightdunes(별빛 사막) + 1차에서 만들고 뺀 mosaic · silkposter · woodcut. 유화 5키(vermeer·caravaggio 포함)와 doreline은 이미 키트. 관리자: \"메시아에서 새로 만들어진 그거 전부 키트 넣어줘\". looks[]가 3차 원고 계획(모자이크·그림자 극)에 머물러 있어 4차 판에 맞춰 고침."
+  },
+  {
+   "at": "2026-11-09",
+   "what": "관리자: \"지금 만들던 메시아 대체하자\" — 주제를 \"그리스도의 뜻 + 고난받는 메시아\"(films/christ)로 바꿈. 이 영상은 보류."
   }
  ],
  "feedback_log": [

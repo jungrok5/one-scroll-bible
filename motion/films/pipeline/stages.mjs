@@ -125,6 +125,17 @@ const G = {
     if (!sc || sc.render !== M.render) why.push(`시트를 보고 review.json shots_check = { render: "${M.render}", at, misses: [{id, what}] }를 적는다(그림이 screen 문장과 다른 줄)`);
     else if ((sc.misses || []).length) why.push('장면표와 다른 화면: ' + sc.misses.map(m => `${m.id} ${m.what}`).join(' / '));
     return why.length ? { ok: false, why } : pass(); },
+  // eyes on every 0.5 s of the render (관리자 2026-11-10 "만든 영상을 확인해서 이상유무 판단하는 스텝" → "ㅇㅇ"): frame-sheets.py → tasks/anomaly.md → review.json anomaly_check
+  anomaly: c => { const why = [], stamp = J(join(OUT, `${c.film}-v-narr.mp4.src.json`)), M = J(join(OUT, 'frames', c.film, 'manifest.json')), ac = c.review.anomaly_check;
+    if (!M) return fail(`이상 확인 시트 없음 — py motion/films/frame-sheets.py ${c.film} → motion/films/pipeline/tasks/anomaly.md`);
+    if (stamp && M.render !== stamp.hash) why.push('이상 확인 시트가 지금 렌더가 아니다 — frame-sheets.py 다시');
+    if (!ac || ac.render !== M.render) why.push(`시트를 보고(tasks/anomaly.md) review.json anomaly_check = { render: "${M.render}", at, issues: [{t, what, severity, status}] }를 적는다`);
+    else { const open = (ac.issues || []).filter(i => !i.status || i.status === 'open'); if (open.length) why.push('이상한 프레임(고칠 것): ' + open.map(i => `${i.t}초 ${i.what}`).join(' / ')); }
+    const H = J(join(OUT, 'frames', c.film + '-h', 'manifest.json')), hs = J(join(OUT, `${c.film}-h-narr.mp4.src.json`));
+    if (hs && (!H || H.render !== hs.hash)) why.push(`가로판 이상 확인 시트 없음/오래됨 — py motion/films/frame-sheets.py ${c.film} --ori h`);
+    else if (H && (!c.review.anomaly_check_h || c.review.anomaly_check_h.render !== H.render)) why.push('가로판 시트를 보고 review.json anomaly_check_h를 적는다');
+    else if (H) { const o = (c.review.anomaly_check_h.issues || []).filter(i => !i.status || i.status === 'open'); if (o.length) why.push('가로판 이상한 프레임: ' + o.map(i => `${i.t}초 ${i.what}`).join(' / ')); }
+    return why.length ? { ok: false, why } : pass(); },
   looks: c => {
     const L = c.review.looks; if (!Array.isArray(L) || !L.length) return fail('review.json looks(장면마다 화풍 표)가 없다');
     const why = [], nw = L.filter(x => x.style_new).length, distinct = new Set(L.map(x => x.look.split(/[ (]/)[0])).size;
@@ -287,7 +298,7 @@ export const STAGES = [
   { id: 'topic', n: 1, name: '주제', task: 'topic', gates: ['topic'], approve: '관리자가 주제를 고름' },
   { id: 'script', n: 2, name: '원고·장면별 화풍·메시지 점검', task: 'script', gates: ['script', 'looks', 'budget', 'ending'] },
   { id: 'review', n: 3, name: '관점 검수·시청자 리뷰·초안 페이지', task: 'review', run: [['node', 'motion/films/review-page.mjs', '{film}']], gates: ['reviews', 'budget', 'ending', 'record'], approve: '관리자·아내가 초안을 컨펌' },
-  { id: 'picture', n: 4, name: '그리기·렌더', task: 'picture', run: [['node', 'motion/render.mjs', 'v', '--page', 'films/{film}/film.html', '--workers', '6'], ['node', 'motion/films/sound.mjs', '{film}', 'v'], ['node', 'motion/render.mjs', 'h', '--page', 'films/{film}/film.html', '--workers', '6'], ['node', 'motion/films/sound.mjs', '{film}', 'h'], ['py', 'motion/films/shots-sheet.py', '{film}']], gates: ['picture', 'shotsheet', 'drift', 'record'], approve: '관리자·가족이 시안 확인', optional: ['lookreview'] }   /* 관리자 2026-11-05: "점수 뽑는 리뷰는 빼자, 내가 요청할 때 해" — the look review runs only on request (film.mjs check <film> picture --review) */,
+  { id: 'picture', n: 4, name: '그리기·렌더', task: 'picture', run: [['node', 'motion/render.mjs', 'v', '--page', 'films/{film}/film.html', '--workers', '6'], ['node', 'motion/films/sound.mjs', '{film}', 'v'], ['node', 'motion/render.mjs', 'h', '--page', 'films/{film}/film.html', '--workers', '6'], ['node', 'motion/films/sound.mjs', '{film}', 'h'], ['py', 'motion/films/shots-sheet.py', '{film}'], ['py', 'motion/films/frame-sheets.py', '{film}'], ['py', 'motion/films/frame-sheets.py', '{film}', '--ori', 'h']], gates: ['picture', 'shotsheet', 'anomaly', 'drift', 'record'], approve: '관리자·가족이 시안 확인', optional: ['lookreview'] }   /* 관리자 2026-11-05: "점수 뽑는 리뷰는 빼자, 내가 요청할 때 해" — the look review runs only on request (film.mjs check <film> picture --review) */,
   { id: 'kits', n: 4.5, name: '새 화풍을 canvas-film 키트로', task: 'kits', gates: ['kits'] },
   { id: 'sound', n: 5, name: '해설·음악·효과음·섞기', task: 'sound', run: [['node', 'motion/films/sound.mjs', '{film}', 'v'], ['node', 'motion/films/sound-prompts.mjs', 'md', 'motion/films/{film}/sound/prompts.json'], ['node', 'motion/films/actions.mjs', '{film}']], gates: ['sound', 'pace', 'tone', 'actions'] },
   { id: 'clips', n: 5.5, name: '반복용 짧은 쇼츠(끝이 처음으로)', task: 'clips', run: [['node', 'motion/films/clips.mjs', '{film}']], gates: ['clips'] },

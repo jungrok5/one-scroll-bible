@@ -412,6 +412,13 @@
    "round": 1,
    "applied": "제목·썸네일 3안 확정 → review.json publish_plan(title, thumbs A/B/C, 쇼츠 표지 A), decisions에서 뺌",
    "applied_at": "2026-11-10 00:26 KST"
+  },
+  {
+   "at": "2026-11-10 08:50 KST",
+   "who": "관리자",
+   "said": "그냥 화풍만 보면 되나? 프레임으로 보면 이상한데 그런건 피드백 안해도됨? 만든 영상을 확인해서 이상유무 판단하는 스텝이 제작공정에 있어? → (이상 확인 단계 제안에) ㅇㅇ",
+   "status": "open",
+   "round": 1
   }
  ],
  "process_changes": [

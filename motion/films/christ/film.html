@@ -46,8 +46,8 @@ const SCENES = [
   [14.1, 24.0, sc('goldTitle', 14.1)],             // N03 T1 — one drop of gold oil, the title
   [23.2, 79.9, todo],                              // parts 2–3 (next round)
   [79.1, 88.4, sc('scrollScene', 79.8, 'isaiah')], // P4 Q4 — 700 years before: the lamp, the scroll
-  [87.4, 98.6, sc('bwCross', 87.6)],               // N11 Q5 — the cry from the cross (black-and-white film)
-  [97.4, 114.8, sc('scrollScene', 97.7, 'psalm')], // N12 P5 Q6 Q7 — the ember crosses to the psalm of David
+  [87.4, 98.3, sc('bwCross', 87.6)],               // N11 Q5 — the cry from the cross (black-and-white film)
+  [96.9, 114.8, sc('scrollScene', 96.9, 'psalm')], // N12 P5 Q6 Q7 — the ember crosses to the psalm of David (in before the cross has sunk to one point: no black dip)
   [113.8, 120.9, sc('bwSoldiers', 114.0)],         // L4 N14 — at the foot of the cross, the lots
   [120.1, 177, todo],                              // parts 5–6 (next round)
 ];
@@ -80,7 +80,7 @@ function endCard(ctx, t, a, b) {   /* one place to read: a small gold 뒷이야�
   Pilot.text(ctx, Film.text('B1'), W / 2, y0 + size * 4.4, { size: size * .66, font: "'Noto Sans KR',sans-serif", color: '#e2d2a8', shadow: 'rgba(0,0,0,.9)', shadowBlur: 14, alpha: k * ss(a + 1.8, a + 2.6, t), ls: 2 }); }
 const FILM_DUR = 176;
 const QA_HOLD = [[170.7, 176.0, 'the end card (뒷이야기 · 누가복음 24장)']];
-const QA_PLANNED = [[87.4, 88.4, 'black-and-white film starts: gate flicker']];
+const QA_PLANNED = [[87.4, 88.4, 'black-and-white film starts: gate flicker'], [97.6, 98.2, 'the ember lights the lamp on the psalm scroll']];
 let XL = null;
 function draw(ctx, t) {
   const act = SCENES.filter(([a, b]) => t >= a && t < b);

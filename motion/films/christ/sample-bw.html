@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>흑백 필름 시안</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600&display=swap">
+</head>
+<body>
+<script src="../../pilot/lib.js"></script>
+<script src="bw-cross.js"></script>
+<script>
+/* 시안: 「그리스도」 4부 흑백 필름 — 십자가 위의 외침 10.2초(bwCross, 영상 87.6–97.8) → 제비 뽑는 군인들 6.2초(bwSoldiers, 영상 114–120.2).
+   node motion/render.mjs v --page films/christ/sample-bw.html --stills 1,3.5,5,7,9.6,11.5,12.8,14.5,16 */
+const W = Pilot.W, H = Pilot.H;
+function draw(ctx, t) { if (t < 10.2) bwCross(ctx, t); else bwSoldiers(ctx, t - 10.2); }
+Pilot.run({ W, H, dur: 16.4, init: async () => buildBW(), draw });
+</script>
+</body>
+</html>

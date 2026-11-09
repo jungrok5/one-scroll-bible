@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>요단 강가 시안</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600&family=Noto+Sans+KR:wght@400;600&display=swap">
+</head>
+<body>
+<script src="../../pilot/lib.js"></script>
+<script src="../lib-film.js"></script>
+<script src="kit-world3d.js"></script>
+<script src="jordan3d.js"></script>
+<script>
+/* 시안: 「그리스도」 요단 강가 (칠한 3D 세계) — 1부 Q1 늦은 오후 7초 → 5부 Q9 성령(spirit) 6.5초.
+   글자(표기·인용)는 본 영상이 얹는 자리를 보려고 시안에서만 얹음 (?txt=0 이면 끔).
+   node motion/render.mjs v --page films/christ/sample-jordan.html --stills 0.5,2,3.5,5.5,6.8,8,10,12.5 */
+const { clamp, ss } = Pilot;
+const W = Pilot.W, H = Pilot.H, V = Pilot.ori === 'v', TXT = new URLSearchParams(location.search).get('txt') !== '0';
+function band(ctx) { const y0 = Film.SAFE() - (V ? 150 : 70), g = ctx.createLinearGradient(0, y0, 0, H); g.addColorStop(0, 'rgba(10,8,10,0)'); g.addColorStop(.45, 'rgba(10,8,10,.42)'); g.addColorStop(1, 'rgba(10,8,10,.55)'); ctx.fillStyle = g; ctx.fillRect(0, y0, W, H - y0); }
+function draw(ctx, t) {
+  if (t < 7) { jordanScene(ctx, t); band(ctx); if (TXT) { Film.label(ctx, 'P1', t, -.2, 7); Film.quote(ctx, 'Q1', t, .2, 7, { bottom: Film.subBottom(), hl: '그리스도', hlk: ss(3, 4, t) }); } }
+  else { const u = t - 7; jordanScene(ctx, u, { mode: 'spirit' }); band(ctx); if (TXT) { Film.label(ctx, 'P7', u, -.2, 6.5); Film.quote(ctx, 'Q9', u, 0, 6.5, { bottom: Film.subBottom(), hl: '기름 붓듯', hlk: ss(3, 4, u) }); } }
+}
+Pilot.run({ W, H, dur: 13.5, fonts: ["600 40px 'Noto Serif KR'", "400 28px 'Noto Sans KR'"], init: async () => { await Film.load(); buildJordan(); }, draw });
+</script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>새벽의 방 시안</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600&display=swap">
+</head>
+<body>
+<script src="../../pilot/lib.js"></script>
+<script src="kit-oilpaint.js"></script>
+<script src="oil-room.js"></script>
+<script>
+/* 시안: 「그리스도」 처음과 끝의 방 (렘브란트 톱라이트 유화) — 'open' 8.2초 → 'dawn' 6.5초.
+   node motion/render.mjs v --page films/christ/sample-room.html --stills 0,1,4,6.5,8,9,12,14.5 */
+const W = Pilot.W, H = Pilot.H;
+function draw(ctx, t) { if (t < 8.2) roomOil(ctx, t, 'open'); else roomOil(ctx, t - 8.2, 'dawn'); }
+Pilot.run({ W, H, dur: 14.7, fonts: ["600 40px 'Noto Serif KR'"], init: async () => buildRoomOil(), draw });
+</script>
+</body>
+</html>

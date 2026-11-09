@@ -3,6 +3,8 @@
    changes over time (sun, ambient, sky, haze), every face shaded and fogged by distance, drawn far to near. What makes it
    read as film, not as CG: low sun and long light, haze that eats the distance, small people in a large land, a lens bloom
    from the light's own position, grain and a vignette over everything.
+   Kits: canvas-film kits/world3d (STYLE.md). From one-scroll-bible 「메시아 예언과 성탄」 (2026-11-02: the night flight over Bethlehem,
+   the road at dusk, backlit Rome).
    API: W3.cam(keys, ori) → camAt(t)   keys [[t, x, y, z, tx, ty, tz, Fh, Fv], …]
         W3.light(keys) → lightAt(t)     keys [[t, elev, az, sunI, sunC, amb, skyT, skyH, glow, fog, fogD, night], …]
         W3.P(c, X, Y, Z) → [sx, sy, scale, depth] | null     W3.poly(ctx, c, pts) → bool (path set)

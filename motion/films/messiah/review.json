@@ -492,6 +492,10 @@
   {
    "date": "2026-11-04",
    "what": "그림 단계에 그림 리뷰를 코드로: pipeline/look-sheets.mjs(장면마다 네 장 + 첫 영상 기준 시트 + frame-qa 수치를 첫 영상 21편 범위와 비교) → 저장된 워크플로 film-look-review(4명 고정 지시·스키마) → look-md.mjs(점수표·반영할 것) → stages lookreview 게이트(장면 평균 ≥ 6, 전체 ≥ 7, BLOCKER 없음, 리뷰가 지금 렌더의 지문에 묶임). Workflow 도구가 꺼진 세션은 wf-prompts.mjs로 같은 지시문을 하위 에이전트에."
+  },
+  {
+   "at": "2026-11-09",
+   "what": "이 영상에서 새로 만든 화풍을 전부 motion-skills canvas-film 키트로: world3d(3D 밤 비행·역광 로마) · nightdunes(별빛 사막) + 1차에서 만들고 뺀 mosaic · silkposter · woodcut. 유화 5키(vermeer·caravaggio 포함)와 doreline은 이미 키트. 관리자: \"메시아에서 새로 만들어진 그거 전부 키트 넣어줘\". looks[]가 3차 원고 계획(모자이크·그림자 극)에 머물러 있어 4차 판에 맞춰 고침."
   }
  ],
  "feedback_log": [
@@ -598,116 +602,124 @@
  "pilot": null,
  "looks": [
   {
-   "at": "0:00–0:21",
-   "scene": "밤 비행 → 베들레헴 → 북쪽의 작은 등불(나사렛)",
-   "look": "영화 3D 밤 비행 (끝에 북쪽으로 돌아봄)",
-   "source": "2차 그대로 + 돌아보는 카메라"
+   "at": "0:00–0:27",
+   "scene": "밤 비행 → 베들레헴 → 북쪽의 작은 등불(나사렛) · 미가 5:2",
+   "look": "영화 3D 밤 비행",
+   "source": "kit-world3d.js — 이 영상에서 새로 만든 엔진(2026-11-02, 첫 영상 「포로 귀환」 방식)",
+   "style_new": true,
+   "kit": "world3d"
   },
   {
-   "at": "0:21–0:29",
+   "at": "0:26–0:33",
    "scene": "다윗의 언덕",
    "look": "소프트 파스텔 (노을 언덕의 목동)",
-   "source": "첫 영상 「족장」 patriarch (2차 pastel-promises의 다윗)"
+   "source": "첫 영상 「족장」 patriarch (pastel-promises.js)"
   },
   {
-   "at": "0:29–0:46",
-   "scene": "요 7:42 — 30년 뒤 고개를 젓는 사람들, 금실이 베들레헴으로",
+   "at": "0:33–0:40",
+   "scene": "나사렛 → 베들레헴 길",
    "look": "양피지 잉크 지도",
-   "source": "kits/inkmap (2차 inkmap-narrow)"
+   "source": "kits/inkmap (inkmap-narrow.js)",
+   "kit": "inkmap"
   },
   {
-   "at": "0:46–0:54",
-   "scene": "나사렛–베들레헴 거리",
-   "look": "로마 바닥 모자이크 지도",
-   "source": "2차 kit-mosaic"
-  },
-  {
-   "at": "0:54–1:03",
+   "at": "0:39–0:53",
    "scene": "나사렛의 방 — 만삭의 마리아",
-   "look": "페르메이르풍 창가 빛 유화 (창 하나의 아침 빛, 회벽, 창밖 빈 길) — 마리아가 살아 있음: 숨, 눈 깜빡임, 창밖 길로 눈이 먼저 가고 고개가 따라감, 배 위의 손",
-   "source": "oil-nazareth.js — 유화 키트 vermeer 키(새로 만듦, motion-skills에도 넣음) + live-character 움직임 방식. 호퍼풍은 관리자 \"약간 호러틱해\"로 뺌",
+   "look": "페르메이르풍 창가 빛 유화",
+   "source": "oil-nazareth.js — 유화 키트 vermeer 키(이 영상에서 새로 만듦)",
    "style_new": true,
    "kit": "oilpaint"
   },
   {
-   "at": "1:03–1:12",
-   "scene": "로마 · 황제의 명령",
+   "at": "0:52–1:03",
+   "scene": "로마 · 황제의 명령과 호적",
    "look": "역광의 3D 로마",
-   "source": "2차 그대로"
+   "source": "kit-world3d.js (밤 비행과 같은 엔진, 낮 역광)",
+   "kit": "world3d"
   },
   {
-   "at": "1:12–1:21",
-   "scene": "호적 — 제국으로 퍼지는 명령, 저마다 고향으로",
-   "look": "로마 바닥 모자이크 지도 (붉은 돌이 뒤집히며 퍼짐)",
-   "source": "2차 kit-mosaic"
-  },
-  {
-   "at": "1:21–1:35",
+   "at": "1:02–1:13",
    "scene": "여정 — 노을 능선의 두 사람",
    "look": "레밍턴 서부 유화",
-   "source": "2차 oil-journey"
+   "source": "oil-journey.js — 유화 키트 remington 키",
+   "kit": "oilpaint"
   },
   {
-   "at": "1:35–1:41",
-   "scene": "방이 없다 — 꽉 찬 마을 앞을 지나는 두 사람",
-   "look": "그림자 극 (종이 오린 마을, 창마다 불, 사람과 짐으로 꽉 찬 집들 앞을 지나는 두 사람 — 문전박대는 그리지 않음)",
-   "source": "motion-skills STYLE-INDEX shadowstage (examples/jjukkumi) — 새 화풍",
-   "style_new": true,
-   "kit": "shadowstage"
-  },
-  {
-   "at": "1:41–1:50",
+   "at": "1:12–1:24",
    "scene": "구유",
    "look": "렘브란트 톱라이트 유화 (빛은 아기에게서만)",
-   "source": "2차 oil-stable"
+   "source": "oil-stable.js — 유화 키트 rembrandt 키",
+   "kit": "oilpaint"
   },
   {
-   "at": "1:50–2:01",
+   "at": "1:24–1:41",
    "scene": "\"구주\"라 새긴 대리석 → 궁전과 먹이통",
-   "look": "역광의 3D 로마 → 렘브란트 유화로 디졸브 (같은 구도)",
-   "source": "2차 로마 + oil-stable — 대비를 위해 같은 두 그림을 맞붙임"
+   "look": "역광의 3D 로마 → 렘브란트 유화 (같은 구도)",
+   "source": "world3d + oilpaint — 대비를 위해 같은 두 그림을 맞붙임"
   },
   {
-   "at": "2:01–2:20",
+   "at": "1:40–1:54",
    "scene": "목자 · 영광 · 눅 2:11",
    "look": "스테인드글라스",
-   "source": "첫 영상 「예수님의 오심」 유리 엔진 (관리자 \"스테인드하자\")"
+   "source": "첫 영상 「예수님의 오심」 유리 엔진 (glass-shepherds.js, kits/glass)"
   },
   {
-   "at": "2:20–2:26",
+   "at": "1:53–2:02",
+   "scene": "이 구주가 하실 일 — 십자가 → 부활의 빛 → 다시 구유",
+   "look": "흑백 필름(금실만 색) → 임파스토 새벽",
+   "source": "첫 영상 「십자가」·「부활」 (impasto-dawn.js, 유화 키트 impasto 키)",
+   "kit": "oilpaint"
+  },
+  {
+   "at": "2:01–2:11",
    "scene": "답 — 베들레헴 위 미가 5:2",
    "look": "영화 3D 밤 비행 (첫 장면의 마을로 돌아옴)",
-   "source": "1부 장면 — 반복 재생 고리"
+   "source": "kit-world3d.js — 반복 재생 고리",
+   "kit": "world3d"
   },
   {
-   "at": "2:34–2:42",
-   "scene": "이 구주가 하실 일 — 구유 위로 십자가 → 부활의 빛 → 다시 구유",
-   "look": "흑백 필름(금실만 색) → 임파스토 새벽, 짧은 삽입 컷",
-   "source": "첫 영상 「십자가」·「부활」"
-  },
-  {
-   "at": "2:16–2:25",
+   "at": "2:10–2:16",
    "scene": "별빛 사막의 박사들 → 왕궁 문",
-   "look": "영화 3D 밤 — 큰 별 아래 작은 낙타 실루엣, 카메라가 낮게 따라감",
-   "source": "1부 밤 비행 엔진(같은 별) — 새 장면"
+   "look": "별빛 사막 — 큰 별 아래 작은 낙타 행렬, 낮게 따라가다 물러나며 성이 드러남",
+   "source": "magi-desert.js — 이 영상에서 새로 만든 엔진(2026-11-07, 모래 언덕 높이장 + 열마다 광선 추적)",
+   "style_new": true,
+   "kit": "nightdunes"
   },
   {
-   "at": "2:25–2:33",
+   "at": "2:15–2:25",
+   "scene": "헤롯의 궁 — 박사들의 물음",
+   "look": "카라바조풍 테네브리즘 (횃불 하나)",
+   "source": "oil-herod.js — 유화 키트 caravaggio 키(이 영상에서 새로 만듦)",
+   "style_new": true,
+   "kit": "oilpaint"
+  },
+  {
+   "at": "2:24–2:34",
    "scene": "미가의 그 한 줄 → 예루살렘과 베들레헴, 가까운 두 점",
    "look": "양피지 잉크 지도",
-   "source": "2·3부 잉크 지도 — 1부 두루마리 구절이 다시 금빛으로"
+   "source": "kits/inkmap (inkmap-jeru.js)",
+   "kit": "inkmap"
   },
   {
-   "at": "2:33–2:45",
+   "at": "2:33–2:44",
    "scene": "헤롯의 그림자 · 열린 질문",
-   "look": "카라바조풍 테네브리즘 — 횃불 하나, 벽에 길게 드리운 그림자(얼굴은 보이지 않음)",
-   "source": "유화 키트 새 키(caravaggio) — 이 영상의 새 화풍 둘째"
+   "look": "카라바조풍 테네브리즘 — 벽에 길게 드리운 그림자",
+   "source": "oil-herod.js (같은 키)",
+   "kit": "oilpaint"
   },
   {
-   "at": "2:45–2:52",
+   "at": "2:43–2:50",
+   "scene": "이름을 예수라 하라 — 베들레헴 골목",
+   "look": "영화 3D (three.js)",
+   "source": "cine-rise.js — motion-skills cinematic-3d examples/bethlehem-lane",
+   "skill": "cinematic-3d",
+   "example": "cinematic-3d/examples/bethlehem-lane"
+  },
+  {
+   "at": "2:48–2:56",
    "scene": "끝 화면 — 뒷이야기 · 마태복음 2장",
-   "look": "첫 장면의 마을, 멀리 작은 불빛 하나와 별 → 펼친 성경 한 장",
-   "source": "1부 밤 마을 + 2차 cine-end"
+   "look": "영화 3D 끝 화면 → 펼친 성경 한 장",
+   "source": "cine-end.js (cinematic-3d)"
   }
  ],
  "pipeline": {
@@ -1094,5 +1106,6 @@
   "passage": "마태복음 2장",
   "answer": "헤롯은 경배하러 가지 않았다 — 아기를 찾아 죽이려 했고(2:13·16), 박사들은 다른 길로 돌아갔다. 2:6은 영상 처음의 미가 5:2, 2:23은 나사렛"
  },
- "site_slug": "messiah"
+ "site_slug": "messiah",
+ "looks_note": "2026-11-09: 4차 판(지금 film.html의 SCENES)에 맞춰 다시 씀. 3차 원고 때의 계획(로마 모자이크 지도·그림자 극)은 4차 판에 그려지지 않아 뺐다. 1차에서 만들고 뺀 모자이크·실크스크린·목판화는 키트로만 보관(process_changes)."
 }

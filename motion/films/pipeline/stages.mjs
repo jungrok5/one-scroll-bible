@@ -231,6 +231,9 @@ const G = {
   sheet: c => {
     const f = join(c.d, 'upload.md'); if (!existsSync(f)) return fail('upload.md 없음'); if (!existsSync(join(c.d, 'youtube.json'))) return fail('youtube.json 없음');
     const t = readFileSync(f, 'utf8'), why = []; for (const k of ['제목', '설명', '태그', '고정 댓글']) if (!t.includes(k)) why.push(`upload.md에 '${k}' 칸이 없다`);
+    // title/thumbnail from evidence (관리자 2026-11-10 "데이터는 없어? 공정에도 반영해") — same-topic market + our own CTR/A/B
+    if (!existsSync(join(c.d, 'research', 'titles.json'))) why.push(`research/titles.json 없음 — node motion/youtube/title-research.mjs "<주제 검색어>" … --json motion/films/${c.film}/research/titles.json`);
+    if (!/근거/.test(t)) why.push("upload.md에 제목·썸네일 '근거' 줄이 없다(같은 주제 시장 · 우리 CTR/A/B 중 무엇을 보고 골랐나)");
     const y = J(join(c.d, 'youtube.json')) || {}, items = Array.isArray(y) ? y : (y.videos || Object.values(y).filter(v => v && typeof v === 'object'));
     for (const v of items) { if (v.title && v.title.length > T.upload.title_max) why.push(`제목 ${v.title.length}자 > ${T.upload.title_max}`);
       const first = (v.description || '').split('\n')[0]; if (first && first.length > T.upload.first_line_max) why.push(`설명 첫 줄 ${first.length}자 > ${T.upload.first_line_max}(단톡방 미리보기)`);

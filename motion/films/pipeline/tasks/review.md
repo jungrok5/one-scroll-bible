@@ -1,6 +1,6 @@
 # 3. 관점 검수 · 시청자 리뷰 · 초안 페이지 — {film}
 리뷰는 저장된 워크플로 **`film-script-review`**(`.claude/workflows/film-script-review.js`, args `{ "film": "{film}" }`) — 리뷰어 넷(관점 검수 · 성경 잘 모르는 크리스천 63세(1번 대상) · 성경 잘 아는 신자 48세 · 비신자 34세)의 지시문과 결과 형식이 코드로 고정돼 있다.
-워크플로는 관리자가 허락해야 돈다("리뷰 워크플로 돌려"). 허락이 없거나 Workflow 도구가 꺼져 있으면 `node motion/films/pipeline/wf-prompts.mjs .claude/workflows/film-script-review.js <args.json> <briefs 폴더>`로 같은 지시문을 꺼내 리뷰어마다 하위 에이전트 하나로 돌린다(답은 파일로 저장하게).
+워크플로는 관리자가 허락해야 돈다("리뷰 워크플로 돌려"). 허락이 없거나 Workflow 도구가 꺼져 있으면 `node motion/films/pipeline/wf-prompts.mjs .claude/workflows/film-script-review.js <args.json> <briefs 폴더>`로 같은 지시문을 꺼내 리뷰어마다 하위 에이전트 하나로 돌린다(답은 `<답 폴더>/out-<key>.json`으로 저장하게). 다 오면 `node motion/films/pipeline/wf-assemble.mjs .claude/workflows/film-script-review.js <args.json> <답 폴더> motion/reviews/film-{film}-script.json --syllables <음절>`로 워크플로와 같은 모양으로 합친다(손으로 합치지 않는다).
 1. 결과 JSON을 그대로 `motion/reviews/film-{film}-script.json`에 저장하고, 그 원고의 음절 수를 `syllables`로 적는다(`script-stats.mjs {film} --json`의 syllables).
 2. `node motion/films/pipeline/review-md.mjs {film}` → `.md`. 반영할 것이 남으면 종료 코드 2.
 3. 매 차수: 반영할 것 · 반영 안 할 것을 정리해 관리자에게 컨펌받는다. 고친 뒤 `script-stats`로 음절을 다시 센다(640 넘으면 줄인다).

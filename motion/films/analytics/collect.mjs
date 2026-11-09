@@ -6,6 +6,7 @@
 //   node motion/films/analytics/collect.mjs script <extractor> [page]  — the code to run in the page (javascript_tool); with a page
 //                                                                       name it POSTs the result to `recv`, which saves the plan's file
 //   node motion/films/analytics/collect.mjs recv [date]        — local receiver (127.0.0.1:8766) for those POSTs; leave it running
+//   node motion/films/analytics/collect.mjs save <page> [date] < page.json — store a page's JSON by hand (Instagram/Threads cannot POST to recv)
 //   node motion/films/analytics/collect.mjs check [date]       — which sources are still missing
 //   node motion/films/analytics/collect.mjs report [date]      — analytics/<date>/report.md: tables + change since the last analysis + flags
 import { readFileSync, writeFileSync, existsSync, mkdirSync, readdirSync } from 'node:fs';
@@ -13,7 +14,7 @@ import { spawnSync } from 'node:child_process';
 import { join } from 'node:path';
 
 const ROOT = process.cwd(), A = join(ROOT, 'motion/films/analytics'), KO = 'UCtCcbrM2mCgfhSryo4SWxzg';
-const [cmd, arg] = process.argv.slice(2), today = new Date(Date.now() + 9 * 3600e3).toISOString().slice(0, 10), date = (cmd === 'script' ? null : arg) || today, D = join(A, date);
+const [cmd, arg] = process.argv.slice(2), today = new Date(Date.now() + 9 * 3600e3).toISOString().slice(0, 10), date = (cmd === 'script' ? null : cmd === 'save' ? process.argv[4] : arg) || today, D = join(A, date);
 const J = f => { try { return JSON.parse(readFileSync(f, 'utf8')); } catch { return null; } };
 const U = J(join(ROOT, 'motion/youtube/uploaded.json')) || {};
 const prevDate = () => readdirSync(A).filter(d => /^\d{4}-\d\d-\d\d$/.test(d) && d < date).sort().pop();
@@ -51,7 +52,7 @@ if (cmd === 'plan') {
   const name = process.argv[4], body = readFileSync(join(A, 'extract/_lib.js'), 'utf8') + '\nconst __r = JSON.stringify(' + readFileSync(f, 'utf8').replace(/^\s*\/\/.*$/gm, '').trim() + ');\n';
   const K = Object.fromEntries(watched().map(w => [w.id, w.key]));
   const N = name === 'auto' ? `'video-' + ${JSON.stringify(K)}[(location.pathname.match(/video\\/([\\w-]{11})/) || [])[1]] + '-' + (location.pathname.match(/tab-(\\w+)/) || [])[1]` : JSON.stringify(name || '');
-  console.log(name ? `await (async () => {\nawait new Promise(r => setTimeout(r, 9000));\n${body}const n = ${N};\nconst r = await fetch('http://127.0.0.1:${RECV}/' + n, { method: 'POST', body: __r }).then(r => r.text(), e => 'recv 없음: ' + e);\nreturn r + ' · ' + __r.slice(0, 300);\n})()`
+  console.log(name ? `await (async () => {\nawait new Promise(r => setTimeout(r, 9000));\n${body}const n = ${N};\nconst r = await fetch('http://127.0.0.1:${RECV}/' + n, { method: 'POST', body: __r }).then(r => r.text(), e => null);\n/* Instagram and Threads block requests to 127.0.0.1 (their security policy): then the whole JSON comes back — save it with collect.mjs save <name> (2026-11-09) */\nreturn r ? r + ' · ' + __r.slice(0, 300) : 'recv 못 보냄 — 아래 JSON을 collect.mjs save ' + n + ' 로 저장: ' + __r;\n})()`
     : `(() => {\n${body}return __r;\n})()`);
 } else if (cmd === 'recv') {
   // receives the page extractors' JSON (POST /<page name>) and writes it to the plan's file; only plan names, only these sites
@@ -65,6 +66,11 @@ if (cmd === 'plan') {
     let b = ''; req.on('data', c => { b += c; if (b.length > 2e6) req.destroy(); });
     req.on('end', () => { try { JSON.parse(b); } catch { res.writeHead(400); return res.end('JSON 아님'); } writeFileSync(out(n), b + '\n'); console.log(`✓ ${n} (${b.length}자)`); res.end(`저장 ${n}`); });
   }).listen(RECV, '127.0.0.1', () => console.log(`recv ${date} → motion/films/analytics/${date}/  (127.0.0.1:${RECV}, Ctrl+C로 끔)`));
+} else if (cmd === 'save') {
+  // when a page cannot reach recv (Instagram/Threads block 127.0.0.1): paste the JSON the script returned into stdin
+  const n = arg, names = new Set(pages().map(p => p.name)); if (!names.has(n)) { console.error(`계획에 없는 이름: ${n}`); process.exit(1); }
+  const b = readFileSync(0, 'utf8').trim(); try { JSON.parse(b); } catch { console.error('JSON 아님'); process.exit(1); }
+  mkdirSync(D, { recursive: true }); writeFileSync(out(n), b + '\n'); console.log(`✓ ${n} (${b.length}자) → ${date}`);
 } else if (cmd === 'api') {
   mkdirSync(D, { recursive: true }); const from = prevDate() || '2026-10-20', env = { ...process.env };
   for (const k of ['YT_CLIENT_ID', 'YT_CLIENT_SECRET', 'YT_REFRESH_TOKEN', 'YT_REFRESH_TOKEN_GLOBAL']) if (!env[k]) { console.error(`${k}가 없다 — 사용자 환경 변수에서 불러온 뒤 다시`); process.exit(1); }

@@ -56,6 +56,11 @@
      "at": "2026-11-05",
      "fact": "해설판 옆자리 '성경은 누가, 언제, 어떻게 편집했나'가 다시 2위(0.9%)",
      "source": "motion/films/ANALYTICS.md 2026-11-05"
+    },
+    {
+     "at": "2026-11-09",
+     "fact": "11/9에도 해설판 옆자리 2위가 '성경은 누가, 언제, 어떻게 편집했나'(0.6%) — 세 번 연속",
+     "source": "motion/films/analytics/2026-11-09/video-film-narr-reach_viewers.json"
     }
    ]
   },
@@ -70,6 +75,11 @@
      "at": "2026-11-05",
      "fact": "음악판 옆자리 '신약성경 전체 흐름 한 번에 이해하기' — 해설판의 다음 칸이 비어 있음",
      "source": "motion/films/ANALYTICS.md 2026-11-05"
+    },
+    {
+     "at": "2026-11-09",
+     "fact": "음악판 옆자리에 '신약성경 전체 흐름 한 번에 이해하기' 1.4% — 해설판 다음 칸(신약 이후 이야기)이 비어 있음, 두 번째 확인",
+     "source": "motion/films/analytics/2026-11-09/video-film-music-reach_viewers.json"
     }
    ]
   },
@@ -102,8 +112,19 @@
    "title": "유월절 어린 양 → 하나님의 어린 양",
    "refs": "출 12 → 요 1:29 · 고전 5:7",
    "connection": "문설주의 피가 십자가로",
-   "status": "candidate",
-   "evidence": []
+   "status": "recommended",
+   "evidence": [
+    {
+     "at": "2026-11-09",
+     "fact": "십자가 13/21 인스타 릴스(11/6 공개) 7일 1,325회 — 인스타 최고 기록(사사 997을 넘음), 같은 편 유튜브 쇼츠는 274회",
+     "source": "motion/films/analytics/2026-11-09/instagram.json"
+    },
+    {
+     "at": "2026-11-09",
+     "fact": "부활 14/21 쇼츠 처음 1일 15시간 856회 · 좋아요 19 — 한국어 쇼츠 중 첫날이 가장 빠름(광야 6/21도 28일 993회)",
+     "source": "motion/films/analytics/2026-11-09/studio-channel.json"
+    }
+   ]
   },
   {
    "id": "esther",
@@ -147,6 +168,15 @@
     "acts"
    ],
    "source": "motion/films/ANALYTICS.md 2026-11-05"
+  },
+  {
+   "at": "2026-11-09",
+   "ids": [
+    "passover-lamb",
+    "bible-transmission",
+    "acts"
+   ],
+   "source": "motion/films/ANALYTICS.md 2026-11-09"
   }
  ]
 }

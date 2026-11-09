@@ -62,7 +62,15 @@ const G = {
     return why.length ? { ok: false, why } : pass(); },
   // the 3-minute budget in spoken syllables (script-stats.mjs; 관리자 2026-11-07 "640음절로 줄임")
   budget: c => { if (!c.s) return fail('script.json이 없다'); const s = stats(c, { noAudio: true }); if (!s) return fail('script-stats 실패');
-    return s.syllables > T.script.syllables_max ? fail(`해설 ${s.syllables}음절 > ${T.script.syllables_max}(≈${s.est_sec}초, 「침묵의 400년」 속도) — 목소리 줄을 줄이거나 화면 전용으로`) : { ok: true, why: [], info: { syllables: s.syllables, est_sec: s.est_sec, quote_share: s.quote_share } }; },
+    if (s.syllables > T.script.syllables_max) return fail(`해설 ${s.syllables}음절 > ${T.script.syllables_max}(≈${s.est_sec}초, 「침묵의 400년」 속도) — 목소리 줄을 줄이거나 화면 전용으로`);
+    // draft timing (before the voice exists): a line's syllables over the time until the next voiced line, and the end card's hold
+    const why = [], sp = l => (l.kind === 'narr' || l.kind === 'quote') && l.voice !== null ? (l.voice ?? l.text) : null, n = t => (t.match(/[가-힣]/g) || []).length;
+    const V = c.lines.filter(l => sp(l) != null && l.at != null).sort((a, b) => a.at - b.at), cardAt = Math.max(...c.lines.map(l => l.at ?? 0)), dur = c.s.dur ?? cardAt;
+    if (!c.place) {
+      const crowd = V.map((l, i) => ({ id: l.id, r: n(sp(l)) / ((V[i + 1]?.at ?? cardAt) - l.at) })).filter(x => x.r > T.script.draft_line_pace_max);
+      if (crowd.length) why.push(`말이 몰린 줄 ${crowd.map(x => `${x.id} ${x.r.toFixed(1)}음절/초`).join(' · ')} > ${T.script.draft_line_pace_max} — node motion/films/script-retime.mjs ${c.film} --write`);
+      if (dur - cardAt < T.script.end_card_min_s) why.push(`끝 화면 ${(dur - cardAt).toFixed(1)}초 < ${T.script.end_card_min_s}초 — script-retime.mjs로 다시 맞추기`); }
+    return why.length ? { ok: false, why } : { ok: true, why: [], info: { syllables: s.syllables, est_sec: s.est_sec, quote_share: s.quote_share } }; },
   // the ending is one reading hook (관리자·아내 2026-11-07): an open question in the last seconds, an end card with ONE passage, no "읽어 보세요" list
   ending: c => { if (!c.s) return fail('script.json이 없다'); const e = c.review.ending || {}, why = [], s = stats(c, { noAudio: true });
     if (!e.question || !e.passage) return fail('review.json ending = { question: <끝의 열린 질문 줄 id>, passage: "<읽을 곳 하나, 예: 마태복음 2장>", answer: "<그 본문에서 풀리는 것 한 줄>" } 없음');

@@ -81,7 +81,10 @@
   "_review_source": "film-script-review 1번 대상(성경 잘 모르는 크리스천 63세) 부마다 (감동+전율)/2. 「메시아」 3차 원고 3.07·최저 2(2부) — 관리자 11/6 \"감흥·흥미·놀라움이 없다\"는 2차 원고에서. 첫 보정이라 「만나」 뒤 다시 본다. 리뷰를 굳힐 때(관리자 OK)는 review JSON frozen으로 넘어간다",
   "novice_mean_min": 3.2,
   "novice_part_min": 2.5,
-  "ending_window_s": 25
+  "ending_window_s": 25,
+  "_draft_time_source": "「그리스도」 2차 리뷰 2026-11-09 — 글을 고친 뒤 at을 그대로 두어 N16이 4.8초에 37음절(7.7음절/초), 끝 화면 1.6초 → 1번 대상 MAJOR. 목소리 전 원고는 script-retime.mjs로 다시 맞춘다(목소리 4.9음절/초 = 「메시아」 잰 값)",
+  "draft_line_pace_max": 5.5,
+  "end_card_min_s": 4
  },
  "intl": {
   "_source": "README 4절 — 해설 트랙은 반응이 확인된 언어부터(ANALYTICS: 국제 채널 스페인어 쇼츠 · 한국어 채널 포르투갈어 쇼츠 868회), 2026-11-01",

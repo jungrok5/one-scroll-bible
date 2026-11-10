@@ -85,7 +85,7 @@ async function buildRoomOil() {
       if (dawn) { radial(wx0 + ww / 2, wy0 + wh / 2, 1.0 * R0, [[0, 'rgba(230,220,206,.45)'], [.35, 'rgba(170,170,180,.18)'], [1, 'rgba(120,120,130,0)']], 'screen'); } }
     // the low table: its top lit round the candle and from the pages, a dark front edge, short legs; beyond and below, the oiled
     // paper floor (장판) warm in the candle light, falling into dark toward us
-    { const y0 = L.tableY, yf = L.tableF, yF = L.floorY, x0 = W * (V ? .12 : .3), x1 = W * (V ? 1.05 : .92);
+    { const y0 = L.tableY, yf = L.tableF, yF = L.floorY, x0 = -W * .15, x1 = W * 1.15;
       g.fillStyle = lin(0, yF, 0, H, [[0, '#6a4622'], [.35, '#4e3218'], [1, '#1a0f07']]); g.fillRect(0, y0, W, H - y0);
       radial(L.cand.x - .15 * R0, yF + .08 * R0, 1.05 * R0, [[0, 'rgba(226,164,90,.75)'], [.4, 'rgba(160,104,52,.42)'], [1, 'rgba(40,24,12,0)']]);
       { const r = rng(5); g.strokeStyle = 'rgba(20,12,6,.18)'; g.lineWidth = .002 * R0; for (let i = -6; i < 12; i++) { const y = yF + (H - yF) * (i / 10) ** 1.4; if (y < yF) continue; g.beginPath(); g.moveTo(0, y); g.lineTo(W, y); g.stroke(); }

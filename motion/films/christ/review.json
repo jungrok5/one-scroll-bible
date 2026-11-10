@@ -437,6 +437,15 @@
    "round": 1,
    "applied": "두루마리 감긴 부분: 금속 광택 띠 → 무광 양피지 원통 + 끝의 나선 단면(lamp-scrolls.js), 글씨 그대로",
    "applied_at": "2026-11-10 13:47 KST"
+  },
+  {
+   "at": "2026-11-10 21:58 KST",
+   "who": "관리자",
+   "said": "아니야 감긴 부분이 지난번이 더 양피지 두루마리처럼 보였고, 그런데 너무 빤딱거리는 철판이고 평면처럼 보여. 두루마리는 원통형에 가깝잖아. 나온 것들 반영해줘",
+   "status": "applied",
+   "round": 1,
+   "applied": "두루마리 감긴 부분을 둥근 양피지 원통으로(3D 단면 명암·둥근 마구리·나선 끝·접촉 그림자) + 이상 확인 항목 반영: 군인 그림자 웅크림·빛 하나·손 하나·뼈가 떨어져 나감, 여인들 알파 제거, 첫 장면 상 넓힘, 안드레 손짓, 원고 screen 3곳",
+   "applied_at": "2026-11-10 22:20 KST"
   }
  ],
  "process_changes": [
@@ -565,54 +574,48 @@
   ]
  },
  "anomaly_check": {
-  "render": "21237669-a6c4d4a64330",
+  "render": "20729989-2d99099a828d",
   "at": "2026-11-10",
-  "sheets": "motion/out/frames/christ (시험본 5차 — 두루마리 감긴 부분 고친 뒤)",
+  "sheets": "motion/out/frames/christ (시험본 6차 — 관리자 \"나온 것들 반영해줘\" 뒤)",
   "by": "이상 확인 에이전트 — tasks/anomaly.md",
-  "previous": "4차 MAJOR 0 · 작은 것 8(관리자 \"다 마음에 들어\")",
+  "previous": "5차 MAJOR 1(군인 그림자 거꾸로·빛 반대) → 풀림",
   "issues": [
    {
-    "t": 114.5,
-    "what": "군인 그림자가 거꾸로 매달린 사람처럼 보이고 십자가 그림자와 빛 방향이 반대",
-    "severity": "MAJOR",
-    "status": "open",
-    "note": "관리자 확인 대기(confirm-agent-fixes)"
-   },
-   {
-    "t": 118,
-    "what": "오른쪽 그림자 손이 천 주름과 섞여 두 쌍처럼 보임",
+    "t": 115,
+    "what": "군인 그림자 둘이 거의 똑같아 복사해 붙인 것처럼",
     "severity": "MINOR",
     "status": "open",
     "note": "관리자 확인 대기(confirm-agent-fixes)"
    },
    {
-    "t": 81,
-    "what": "두루마리 감긴 부분이 둥근 원통이 아니라 평판 띠처럼, 위 끝이 각짐",
+    "t": 115.5,
+    "what": "그림자 팔이 가늘고 긴 막대처럼",
     "severity": "MINOR",
     "status": "open",
     "note": "관리자 확인 대기(confirm-agent-fixes)"
    },
    {
-    "t": 93.5,
-    "what": "다가갈 때 여인들이 반투명하게 흐려져 남음",
-    "severity": "MINOR",
-    "status": "open",
-    "note": "관리자 확인 대기(confirm-agent-fixes)"
-   },
-   {
-    "t": 97.2,
-    "what": "십자가→두루마리 사이 0.5–0.8초 거의 검은 화면",
+    "t": 118.5,
+    "what": "투구 그림자가 뒤집힌 모자·거꾸로 된 얼굴처럼 읽힐 수 있음",
     "severity": "MINOR",
     "status": "open",
     "note": "관리자 확인 대기(confirm-agent-fixes)"
    },
    {
     "t": 4,
-    "what": "노인 뒤 벽이 어두운 사각 판처럼, 왼쪽 모서리 드러남",
+    "what": "상 가장자리가 끝도 다리도 없는 검은 띠라 벽 턱·계단처럼",
+    "severity": "MINOR",
+    "status": "open",
+    "note": "관리자 확인 대기(confirm-agent-fixes)"
+   },
+   {
+    "t": 11,
+    "what": "안드레 가리키는 팔이 아직 뻣뻣",
     "severity": "MINOR",
     "status": "open",
     "note": "관리자 확인 대기(confirm-agent-fixes)"
    }
-  ]
+  ],
+  "note": "MAJOR 0"
  }
 }

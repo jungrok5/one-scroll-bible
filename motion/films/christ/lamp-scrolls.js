@@ -28,6 +28,7 @@
   const tx = X => (X - XMIN) * TS, ty = Z => (SD - Z) * TS;
   const rowZ = i => ROW0 - i * LH;
   // key lines (psalm): A = first line of Ps 22 (right column, after a blank row), B = a lower line in the next column left
+  const ROLL_R = 50;   // the wound rolls' radius (diameter ≈ 1/5.6 of the sheet's height)
   const KEY = { A: { col: 4, row: 4 }, B: { col: 2, row: 15 } };
 
   // ---------------- camera ----------------
@@ -212,6 +213,7 @@
     const X = x => (x - TX0) * TT, Z = z => (TZ1 - z) * TT;
     // shadows on the table: the sheet (its rolls), the jar, the lamp's foot (cast away from the flame)
     c.globalAlpha = .8; c.drawImage(S.shadow, X(xl - 90) , Z(SD + 40), (xr - xl + 180) * TT, (SD + 120) * TT);
+    c.globalAlpha = .9; for (const x of [xl, xr]) c.drawImage(S.shadow, X(x - ROLL_R * 2.1), Z(SD + 110), ROLL_R * 4.2 * TT, (SD + 230) * TT);
     c.globalAlpha = .7; c.drawImage(S.shadow, X(JAR.x - JAR.r * 2.4), Z(JAR.z + JAR.r * 1.6), JAR.r * 4 * TT, JAR.r * 3.4 * TT);
     c.globalAlpha = .6; c.drawImage(S.shadow, X(LAMP.x - 60), Z(LAMP.z + 60), 200 * TT, 120 * TT); c.globalAlpha = 1;
     const fx = X(FLAME.x), fz = Z(FLAME.z), g = c.createRadialGradient(fx, fz, 0, fx, fz, 2300 * TT);
@@ -278,7 +280,7 @@
     lightStops(g, 1, lampI * 1.15, amb, [70, 74, 92], [255, 226, 180], .42);
     c.globalCompositeOperation = 'multiply'; c.fillStyle = g; c.fillRect(0, 0, w, h);
     // the sheet curls into its rolls: shade toward both
-    for (const [x, d] of [[xl, 1], [xr, -1]]) { const a = tx(x), lg = c.createLinearGradient(a, 0, a + d * 70 * TS, 0); lg.addColorStop(0, 'rgba(40,25,14,1)'); lg.addColorStop(1, 'rgba(255,255,255,1)'); c.fillStyle = lg; c.fillRect(Math.min(a, a + d * 70 * TS), 0, 70 * TS, h); }
+    for (const [x, d] of [[xl, 1], [xr, -1]]) { const a = tx(x + d * ROLL_R * .7), lg = c.createLinearGradient(a, 0, a + d * 46 * TS, 0); lg.addColorStop(0, 'rgba(120,96,76,1)'); lg.addColorStop(1, 'rgba(255,255,255,1)'); c.fillStyle = lg; c.fillRect(Math.min(a, a + d * 46 * TS), 0, 46 * TS, h); }
     c.globalCompositeOperation = 'source-over';
     for (const G of golds) drawGold(c, G);
     c.globalCompositeOperation = 'destination-in'; c.drawImage(sheet.cv, 0, 0); c.globalCompositeOperation = 'source-over';
@@ -299,47 +301,51 @@
         const y = G.y0 + G.yt + GS * TS * .45, rg = c.createRadialGradient(xh, y, 0, xh, y, 60); rg.addColorStop(0, 'rgba(255,250,225,.95)'); rg.addColorStop(.25, 'rgba(255,200,110,.5)'); rg.addColorStop(1, 'rgba(255,160,60,0)');
         c.globalCompositeOperation = 'lighter'; c.fillStyle = rg; c.fillRect(xh - 60, y - 60, 120, 120); } }
     c.globalCompositeOperation = 'source-over'; c.globalAlpha = 1; }
-  function roll(ctx, X, lampI, side) {   // the parchment wound on its wooden roller (matte paper, soft shading, layers), lying along Z
-    const r = 32, N = 12, z0 = -14, z1 = SD + 14, L = [], Rr = [], lit = .3 + .75 * lampI, P0 = [206, 178, 134];   // the sheet's parchment, a touch darker
-    for (let i = 0; i <= N; i++) { const z = lerp(z1, z0, i / N); L.push(proj(X - r, r, z)); Rr.push(proj(X + r, r, z)); }
-    const zm = (z0 + z1) / 2, ml = proj(X - r, r, zm), mr = proj(X + r, r, zm);
-    lathe(ctx, X, r, z1, 1, lit);   // far handle (mostly behind the roll)
-    const body = () => { ctx.beginPath(); ctx.moveTo(L[0][0], L[0][1]); for (const p of L) ctx.lineTo(p[0], p[1]); for (let i = N; i >= 0; i--) ctx.lineTo(Rr[i][0], Rr[i][1]); ctx.closePath(); };
-    // matte cylinder: light side → shadow side slowly (no specular band); the lamp-facing side is lit
-    const g = ctx.createLinearGradient(ml[0], ml[1], mr[0], mr[1]), sh = (k, f) => rgb(P0.map(v => v * f * lit * .78));
-    const stops = [[0, .34], [.18, .52], [.42, .78], [.62, .9], [.8, .84], [1, .58]];
-    for (const [k, f] of stops) g.addColorStop(side > 0 ? k : 1 - k, sh(k, f));
-    body(); ctx.fillStyle = g; ctx.fill();
-    ctx.save(); body(); ctx.clip();
-    // the paper's grain (the sheet's own texture, stretched along the roll) and the wound layers' edges + fine creases
-    const bx = Math.min(...L.map(p => p[0]), ...Rr.map(p => p[0])), by = Math.min(L[0][1], Rr[0][1]), bw = Math.max(...L.map(p => p[0]), ...Rr.map(p => p[0])) - bx, bh = Math.max(L[N][1], Rr[N][1]) - by;
-    ctx.globalCompositeOperation = 'multiply'; ctx.globalAlpha = .55; ctx.drawImage(S.plain, 0, 0, 400, 600, bx, by, bw, bh); ctx.globalCompositeOperation = 'source-over';
+  // the parchment wound on its roller: a round cylinder (axis along Z, lying on the table) drawn as many cross-sections, each
+  // shaded across by a matte diffuse light from the lamp (lit face → mid → core shadow → a little bounce from the table at the
+  // far edge); paper grain, faint layer edges and creases on top; the near end shows the wound paper's spiral; wooden rods.
+  function roll(ctx, X, lampI, side) {
+    const r = ROLL_R, z0 = -16, z1 = SD + 16, P0 = [212, 184, 140], n = 64, lit = .3 + .75 * lampI, secs = [];
+    const lx = FLAME.x - X, la = Math.atan2(lx, 140) ;   // light's angle round the roll (0 = straight up, + toward +X)
+    for (let i = 0; i <= n; i++) { const z = lerp(z1, z0, i / n), c = proj(X, r, z), top = proj(X, 2 * r, z), bot = proj(X, 0, z), rx = r * cam.f / c[2];
+      secs.push({ z, c, rx, ry: Math.max(rx * .3, Math.abs(bot[1] - top[1]) / 2), cy: (top[1] + bot[1]) / 2 }); }
+    lathe(ctx, X, r, z1, 1, lit);   // far rod (mostly hidden behind the roll)
+    const shade = (z) => { const d = Math.hypot(FLAME.x - X, FLAME.z - z) / 900; return Math.min(1.25, .32 + lampI * 1.05 / (1 + d * d)); };
+    for (const q of secs) { const I = shade(q.z), g = ctx.createLinearGradient(q.c[0] - q.rx, 0, q.c[0] + q.rx, 0);
+      for (let k = 0; k <= 10; k++) { const sx = -1 + k / 5, th = Math.asin(Math.max(-1, Math.min(1, sx))), dif = Math.max(0, Math.cos(th - la)),
+          bounce = .24 * Math.max(0, Math.abs(sx) - .6) / .4 * (Math.sign(sx) !== Math.sign(la) ? 1 : .3), v = .12 + .98 * Math.pow(dif, .8) + bounce;
+        g.addColorStop(k / 10, rgb(P0.map(c => Math.min(255, c * v * I * .82)))); }
+      ctx.fillStyle = g; ctx.beginPath(); ctx.ellipse(q.c[0], q.cy, q.rx, q.ry, 0, 0, 6.283); ctx.fill(); }
+    // surface: grain, wound layers' edges (along the roll), soft creases (across) — clipped to the roll
+    const clip = () => { ctx.beginPath(); for (const q of secs) { ctx.moveTo(q.c[0] + q.rx, q.cy); ctx.ellipse(q.c[0], q.cy, q.rx, q.ry, 0, 0, 6.283); } };
+    ctx.save(); clip(); ctx.clip();
+    let bx = 1e9, by = 1e9, ex = -1e9, ey = -1e9; for (const q of secs) { bx = Math.min(bx, q.c[0] - q.rx); ex = Math.max(ex, q.c[0] + q.rx); by = Math.min(by, q.cy - q.ry); ey = Math.max(ey, q.cy + q.ry); }
+    ctx.globalCompositeOperation = 'multiply'; ctx.globalAlpha = .5; ctx.drawImage(S.plain, 0, 0, 400, 600, bx, by, ex - bx, ey - by); ctx.globalCompositeOperation = 'source-over'; ctx.globalAlpha = 1;
     const rr = rng(side > 0 ? 71 : 37); ctx.lineCap = 'round';
-    for (let k = 0; k < 6; k++) { const o = (-.75 + k * .3 + (rr() - .5) * .08) * r, yS = r + Math.sqrt(Math.max(0, r * r - o * o)) * .98; ctx.beginPath();
-      for (let i = 0; i <= 16; i++) { const z = lerp(z1, z0, i / 16), w = Math.sin(i * 1.7 + k) * 1.2, p = proj(X + o + w, yS, z); i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1]); }
-      ctx.strokeStyle = `rgba(70,48,28,${(.1 + rr() * .12) * lit})`; ctx.lineWidth = .9 + rr() * .6; ctx.stroke(); }
-    for (let k = 0; k < 22; k++) { const z = lerp(z0 + 20, z1 - 20, rr()), a0 = -1.2 + rr() * .6, a1 = a0 + .7 + rr() * 1.1, dz = (rr() - .5) * 26; ctx.beginPath();
-      for (let i = 0; i <= 6; i++) { const t = lerp(a0, a1, i / 6), p = proj(X + Math.sin(t) * r, r + Math.cos(t) * r, z + dz * i / 6); i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1]); }
-      ctx.strokeStyle = `rgba(80,56,32,${(.06 + rr() * .08) * lit})`; ctx.lineWidth = .8; ctx.stroke(); }
+    for (let k = 0; k < 5; k++) { const th = -1.1 + k * .55 + (rr() - .5) * .2; ctx.beginPath();
+      for (let i = 0; i <= 18; i++) { const z = lerp(z1, z0, i / 18), t2 = th + Math.sin(i * 1.3 + k) * .03, p = proj(X + Math.sin(t2) * r, r + Math.cos(t2) * r, z); i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1]); }
+      ctx.strokeStyle = `rgba(90,64,38,${(.07 + rr() * .07) * lit})`; ctx.lineWidth = 1; ctx.stroke(); }
+    for (let k = 0; k < 26; k++) { const z = lerp(z0 + 24, z1 - 24, rr()), a0 = -1.3 + rr() * .7, a1 = a0 + .8 + rr() * 1.2, dz = (rr() - .5) * 30; ctx.beginPath();
+      for (let i = 0; i <= 8; i++) { const t = lerp(a0, a1, i / 8), p = proj(X + Math.sin(t) * r, r + Math.cos(t) * r, z + dz * i / 8); i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1]); }
+      ctx.strokeStyle = `rgba(90,62,36,${(.05 + rr() * .07) * lit})`; ctx.lineWidth = .9; ctx.stroke(); }
     ctx.restore();
-    // the near end: the paper wound in a spiral of thin layers (one continuous line — not rings), the rod in its centre
-    { const c = proj(X, r, z0), t = proj(X, r * 2, z0), sc = cam.f / c[2], rx = r * .99 * sc, ry = Math.max(rx * .45, Math.abs(c[1] - t[1]) * .99);
-      const g2 = ctx.createRadialGradient(c[0] - rx * .25 * side, c[1] - ry * .3, 0, c[0], c[1], rx); g2.addColorStop(0, sh(0, .86)); g2.addColorStop(1, sh(0, .6));
-      ctx.fillStyle = g2; ctx.beginPath(); ctx.ellipse(c[0], c[1], rx, ry, 0, 0, 6.283); ctx.fill();
-      ctx.save(); ctx.beginPath(); ctx.ellipse(c[0], c[1], rx, ry, 0, 0, 6.283); ctx.clip(); const turns = 6.5, a0 = side * 1.3; ctx.beginPath();
-      for (let i = 0; i <= 260; i++) { const k = i / 260, ang = a0 + k * turns * 6.283 * side, rad = .3 + .7 * k + .012 * Math.sin(ang * 3 + k * 9); const x = c[0] + Math.cos(ang) * rx * rad, y = c[1] + Math.sin(ang) * ry * rad; i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }
-      ctx.strokeStyle = `rgba(92,66,40,${.42 * lit})`; ctx.lineWidth = Math.max(.7, 1.1 * sc); ctx.stroke();
-      ctx.fillStyle = `rgba(40,26,14,${.5 * lit})`; ctx.beginPath(); ctx.ellipse(c[0], c[1], rx * .3, ry * .3, 0, 0, 6.283); ctx.fill(); ctx.restore();
-      ctx.strokeStyle = `rgba(70,48,28,${.35 * lit})`; ctx.lineWidth = 1; ctx.beginPath(); ctx.ellipse(c[0], c[1], rx, ry, 0, 0, 6.283); ctx.stroke(); }
+    // the near end (round, in perspective): the paper wound in a spiral of thin layers, the rod's hole in the middle
+    { const q = secs[n], I = shade(q.z), rx = q.rx, ry = q.ry, cx = q.c[0], cy = q.cy;
+      const g2 = ctx.createLinearGradient(cx - rx, cy - ry, cx + rx, cy + ry); g2.addColorStop(side > 0 ? 1 : 0, rgb(P0.map(c => c * .78 * I * .82))); g2.addColorStop(side > 0 ? 0 : 1, rgb(P0.map(c => c * .5 * I * .82)));
+      ctx.fillStyle = g2; ctx.beginPath(); ctx.ellipse(cx, cy, rx, ry, 0, 0, 6.283); ctx.fill();
+      ctx.save(); ctx.beginPath(); ctx.ellipse(cx, cy, rx, ry, 0, 0, 6.283); ctx.clip(); const turns = 4.2, a0 = side * 1.3; ctx.beginPath();
+      for (let i = 0; i <= 320; i++) { const k = i / 320, ang = a0 + k * turns * 6.283 * side, rad = .26 + .74 * k + .025 * Math.sin(ang * 2.3 + k * 7); const x = cx + Math.cos(ang) * rx * rad, y = cy + Math.sin(ang) * ry * rad; i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }
+      ctx.strokeStyle = `rgba(96,70,42,${.4 * lit})`; ctx.lineWidth = Math.max(.7, rx / 40); ctx.stroke();
+      ctx.fillStyle = `rgba(40,26,14,${.55 * lit})`; ctx.beginPath(); ctx.ellipse(cx, cy, rx * .22, ry * .22, 0, 0, 6.283); ctx.fill(); ctx.restore(); }
     lathe(ctx, X, r, z0, -1, lit);
   }
   // a turned wooden handle (etz chayim) on the roller axis, from the roll's end at z outward (dir −1 toward the camera,
   // +1 away), coming straight out of the paper roll: a neck, a carved bulb, then a short round knob (no point). Drawn as stacked cross-sections.
   const PROFILE = [[0, .3], [12, .3], [16, .44], [23, .54], [30, .44], [34, .33], [38, .35], [43, .45], [48, .47], [53, .42], [57, .3], [59.5, .14], [60, 0]];
   const profR = d => { for (let i = 0; i < PROFILE.length - 1; i++) { const [a, ra] = PROFILE[i], [b, rb] = PROFILE[i + 1]; if (d <= b) return lerp(ra, rb, (d - a) / (b - a)); } return 0; };
-  function lathe(ctx, X, r, z, dir, lit) {
+  function lathe(ctx, X, ay, z, dir, lit, k = 34) {
     const n = 34, ds = []; for (let i = 0; i <= n; i++) ds.push(i / n * 80); if (dir > 0) ds.reverse();
-    for (const dd of ds) { const rad = profR(dd) * r, zz = z + dir * (dd + 2); if (rad <= 0) continue; const c = proj(X, r, zz), tp = proj(X, r + rad, zz), sc = cam.f / c[2], rx = rad * sc, ry = Math.max(rx * .4, Math.abs(c[1] - tp[1]));
+    for (const dd of ds) { const rad = profR(dd) * k, zz = z + dir * (dd + 2); if (rad <= 0) continue; const c = proj(X, ay, zz), tp = proj(X, ay + rad, zz), sc = cam.f / c[2], rx = rad * sc, ry = Math.max(rx * .4, Math.abs(c[1] - tp[1]));
       const flange = false, g = ctx.createLinearGradient(c[0] - rx, 0, c[0] + rx, 0), base = flange ? [84, 54, 30] : [96, 62, 34];
       g.addColorStop(0, rgb(base.map(v => v * lit * .35))); g.addColorStop(.62, rgb(base.map(v => v * lit * 1.25))); g.addColorStop(.8, rgb([210, 160, 104].map(v => v * lit * .75))); g.addColorStop(1, rgb(base.map(v => v * lit * .4)));
       ctx.fillStyle = g; ctx.beginPath(); ctx.ellipse(c[0], c[1], rx, ry, 0, 0, 6.283); ctx.fill(); }
@@ -384,7 +390,7 @@
 
   function isaiah(ctx, u) {
     setCam(camAt(CAM.isaiah, u));
-    const open = eio(clamp((u + 3.8) / 5.3)), xc = V ? 400 : 230, xl = lerp(xc - 30, V ? 20 : -330, open), xr = lerp(xc + 30, 780, open);
+    const open = eio(clamp((u + 3.8) / 5.3)), xc = V ? 400 : 230, xl = lerp(xc - 30, V ? 70 : -330, open), xr = lerp(xc + 30, V ? 740 : 780, open);
     const gust = ss(1.7, 2.1, u) * (1 - ss(2.5, 3.5, u)), flare = ss(2.9, 3.3, u) * (1 - ss(3.4, 4.6, u));
     const lampI = (1.4 - .22 * gust + .18 * flare) * flick(u), amb = .52, focus = ss(2.2, 4.8, u), hillK = ss(2.6, 5.2, u);
     drawWall(ctx, lampI, amb); drawWindow(ctx, u, lampI, focus, hillK);

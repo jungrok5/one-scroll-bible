@@ -243,12 +243,12 @@
   function brotherList(u) {
     const wk = clamp(u / 3.0), walkK = 1.5 * wk - .5 * wk * wk * wk, ax = lerp(A_FROM, A_TO, walkK), ph = (ax - A_FROM) / .7 * Math.PI, moving = 1 - ss(2.6, 3.1, u);
     const step = ss(4.2, 5.4, u), sx = SIMON[0] - .2 * step, sph = .2 * step / .7 * Math.PI;
-    const pt = ss(2.9, 3.5, u), bk = ss(3.3, 3.8, u), beck = bk * Math.max(0, Math.sin((u - 3.5) * 4.4)) * (1 - ss(5.8, 6.6, u) * .6);
+    const pt = ss(2.9, 3.5, u), bk = ss(3.3, 3.8, u), beck = u > 3.7 && u < 5.7 ? Math.pow(Math.sin((u - 3.7) * Math.PI), 2) : 0;   // two lifts of the calling hand
     const tk = ss(2.3, 3.1, u), cf = Math.cos(Math.PI * tk);
     return [
       { x: ax, z: SIMON[1] - .25, face: 1, ps: { stride: Math.sin(ph) * moving, flutter: (.7 + .3 * Math.sin(ph * 2)) * moving + .15 * (1 - moving) * Math.max(0, Math.sin(u * 1.6)), sway: .06 * Math.abs(Math.sin(ph)) * moving + .03 * Math.sin(u * 2), lean: .08 * moving + .03 * pt, head: -.04 * moving + .08 * pt,
-        armN: [lerp(.35 * Math.sin(ph) * moving, 1.05, bk), lerp(.25, .45 + .75 * beck, bk)],      // the near hand reaches toward Simon and beckons
-        armF: [lerp(-.35 * Math.sin(ph) * moving, -2.1, pt), lerp(.25, .12, pt)], pointF: ss(3.2, 3.6, u) } },   // the far arm points back the way he came
+        armN: [lerp(.35 * Math.sin(ph) * moving, .38, bk), lerp(.25, 1.0 + .6 * beck, bk)],      // calling: upper arm near the body, the forearm lifts toward Simon, palm up
+        armF: [lerp(-.35 * Math.sin(ph) * moving, -1.62 - .04 * Math.sin(u * 1.3), pt), lerp(.25, .28, pt)], pointF: ss(3.2, 3.6, u) } },   // pointing back the way he came: a little below the shoulder, elbow soft
       { x: sx, z: SIMON[1], face: 1, ps: { xs: Math.sign(cf || 1) * (.6 + .4 * Math.abs(cf)), stride: tk >= 1 ? Math.sin(sph) * (1 - ss(5.1, 5.6, u)) * .8 : 0, flutter: .3 * step * (1 - ss(5.2, 6, u)), sway: .02 * Math.sin(u * 1.7), lean: -.03 * step,
         head: .1 * ss(3.2, 4.2, u) - .06 * (1 - tk), armN: [.12 + .12 * ss(3.4, 4.4, u), .3 + .3 * ss(3.4, 4.4, u)], armF: [-.08, .22] } }];
   }

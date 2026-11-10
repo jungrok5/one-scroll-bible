@@ -15,9 +15,10 @@ const ROIL = {};
 
 function roomLayout() {
   const W = Pilot.W, H = Pilot.H, V = Pilot.ori === 'v';
-  const L = V ? { person: { cx: W * .34, top: H * .27, P: H * .3 }, win: [W * .1, H * .05, W * .32, H * .19], cand: { x: W * .66, top: H * .208, base: H * .305, r: 20 }, book: { cx: W * .6, cy: H * .372, w: W * .7, d: H * .105 }, tableY: H * .29, tableF: H * .44, floorY: H * .462 }
-              : { person: { cx: W * .36, top: H * .3, P: H * .36 }, win: [W * .18, H * .05, W * .32, H * .3], cand: { x: W * .6, top: H * .265, base: H * .41, r: 16 }, book: { cx: W * .58, cy: H * .5, w: W * .42, d: H * .14 }, tableY: H * .4, tableF: H * .585, floorY: H * .61 };
-  L.flame = [L.cand.x, L.cand.top - 3]; L.LP = [L.flame[0], L.flame[1] - (V ? 14 : 10)];
+  const L = V ? { person: { cx: W * .37, top: H * .262, P: H * .3 }, win: [W * .1, H * .05, W * .32, H * .19], cand: { x: W * .74, top: H * .228, base: H * .3, r: 11 }, book: { cx: W * .63, cy: H * .385, w: W * .28, d: H * .06 }, tableY: H * .255, tableF: H * .47, floorY: H * .49 }
+              : { person: { cx: W * .36, top: H * .3, P: H * .36 }, win: [W * .18, H * .05, W * .32, H * .3], cand: { x: W * .6, top: H * .33, base: H * .43, r: 8 }, book: { cx: W * .53, cy: H * .5, w: W * .105, d: H * .07 }, tableY: H * .36, tableF: H * .6, floorY: H * .625 };
+  L.flame = [L.cand.x, L.cand.top - 2]; L.LP = [L.flame[0], L.flame[1] - (V ? 9 : 6)];
+  L.zEnd = V ? 4.7 : 6.5;   // the close-up on the pages after the camera passes over her shoulder
   return Object.assign(L, { W, H, V, S: V ? 2 : 1.6 });
 }
 
@@ -40,14 +41,19 @@ function roomCandle(g, L, a = 1) {
 function roomPersonPaths() {
   const smooth = pts => { const p = new Path2D(), n = pts.length, m = i => [(pts[i][0] + pts[(i + 1) % n][0]) / 2, (pts[i][1] + pts[(i + 1) % n][1]) / 2];
     p.moveTo(...m(n - 1)); for (let i = 0; i < n; i++) p.quadraticCurveTo(pts[i][0], pts[i][1], ...m(i)); p.closePath(); return p; };
-  const head = (() => { const pts = []; for (let i = 0; i < 44; i++) { const a = i / 44 * 6.283, R = 1 + .05 * Math.sin(i * 2.7 + 1) * (a > 3.3 || a < .2 ? 1 : .3) + .022 * Math.sin(i * 5.1);
-      pts.push([.006 + Math.cos(a) * .1 * R, .135 + Math.sin(a) * .11 * R]); } return smooth(pts); })();
-  const fuzz = pts => { const out = [], r = Pilot.rng(29); for (let i = 0; i < pts.length; i++) { const a = pts[i], b = pts[(i + 1) % pts.length]; for (let k = 0; k < 4; k++) { const t = k / 4; out.push([a[0] + (b[0] - a[0]) * t + (r() - .5) * .007, a[1] + (b[1] - a[1]) * t + (r() - .5) * .007]); } } return out; };
-  const body = smooth(fuzz([[-.36, .985], [-.385, .9], [-.36, .78], [-.3, .66], [-.31, .55], [-.3, .44], [-.28, .37], [-.225, .31], [-.15, .272], [-.08, .245], [.0, .238], [.08, .245], [.15, .272],
-    [.225, .31], [.285, .37], [.305, .44], [.315, .55], [.305, .66], [.37, .78], [.395, .9], [.37, .985], [.0, 1.0]]));
-  const collar = smooth([[-.11, .25], [-.06, .225], [.0, .218], [.065, .225], [.115, .25], [.065, .27], [.0, .277], [-.065, .27]]);
-  const soles = [smooth([[-.15, .93], [-.09, .9], [-.04, .93], [-.05, .99], [-.13, .995]]), smooth([[.05, .93], [.1, .9], [.16, .93], [.14, .995], [.06, .99]])];
-  return { head, body, collar, soles };
+  const fuzz = (pts, a0 = .007) => { const out = [], r = Pilot.rng(29); for (let i = 0; i < pts.length; i++) { const a = pts[i], b = pts[(i + 1) % pts.length]; for (let k = 0; k < 4; k++) { const t = k / 4; out.push([a[0] + (b[0] - a[0]) * t + (r() - .5) * a0, a[1] + (b[1] - a[1]) * t + (r() - .5) * a0]); } } return out; };
+  // the head: a core and a crown of curls of different sizes round its top and sides (no ball)
+  const hc = [.004, .14], curls = [], rc = Pilot.rng(37);   // bowed: the head sunk toward the collar
+  for (let i = 0; i < 17; i++) { const a = Math.PI * (.92 + 1.16 * i / 16) + (rc() - .5) * .12, R = .026 + rc() * .016, d = .07 + rc() * .01; curls.push([Math.cos(a) * d, Math.sin(a) * d * 1.05, R]); }
+  const head = smooth(Array.from({ length: 120 }, (_, i) => { const a = i / 120 * 6.283, dx = Math.cos(a), dy = Math.sin(a);
+    let t = 1 / Math.hypot(dx / .082, dy / .088);                                        // the core ellipse
+    for (const [cx, cy, R] of curls) { const b = dx * cx + dy * cy, q = b * b - (cx * cx + cy * cy - R * R); if (q >= 0) t = Math.max(t, b + Math.sqrt(q)); }
+    return [hc[0] + dx * t, hc[1] + .008 + dy * t]; }));
+  const neck = smooth([[-.05, .2], [.05, .2], [.06, .255], [-.06, .255]]);
+  const body = smooth(fuzz([[-.4, .985], [-.415, .9], [-.39, .8], [-.31, .705], [-.33, .66], [-.37, .6], [-.375, .54], [-.345, .46], [-.3, .385], [-.255, .325], [-.18, .282], [-.1, .256], [-.05, .245], [.0, .242],
+    [.05, .245], [.1, .256], [.18, .282], [.255, .325], [.3, .385], [.345, .46], [.38, .54], [.375, .6], [.335, .66], [.315, .705], [.395, .8], [.42, .9], [.405, .985], [.0, 1.0]]));
+  const collar = smooth([[-.115, .262], [-.06, .232], [.0, .225], [.065, .232], [.12, .262], [.065, .284], [.0, .29], [-.065, .284]]);
+  return { head, neck, body, collar };
 }
 
 async function buildRoomOil() {
@@ -55,11 +61,11 @@ async function buildRoomOil() {
   ROIL.L = L; ROIL.S = S;
   const R0 = V ? W : H;   // a radius unit
   // a page's row k (0 back … 1 front) as a quadratic gutter → outer edge; side -1 left, +1 right
-  const pageRow = (side, k) => { const y = B.cy - B.d / 2 + B.d * k, lift = lerp(.11, .06, k) * B.d; return [B.cx, y + .02 * B.d, B.cx + side * B.w * .18, y - lift, B.cx + side * B.w / 2 * lerp(.985, 1, k), y - lerp(.02, 0, k) * B.d]; };
+  const pageRow = (side, k) => { const y = B.cy - B.d / 2 + B.d * k, f = lerp(.8, 1, k), lift = lerp(.07, .05, k) * B.d; return [B.cx, y + .015 * B.d, B.cx + side * B.w * .17 * f, y - lift, B.cx + side * B.w / 2 * f, y - lerp(.015, 0, k) * B.d]; };   // the far edge narrower (it lies on the table)
   ROIL.pageRow = pageRow;
 
-  function plate(dawn) {
-    const c = canvas(PW, PH), g = c.getContext('2d'); g.save(); g.scale(S, S);
+  function plate(dawn, S = ROIL.S, rect = [0, 0, W, H]) {
+    const c = canvas(Math.round(rect[2] * S), Math.round(rect[3] * S)), g = c.getContext('2d'); g.save(); g.scale(S, S); g.translate(-rect[0], -rect[1]);
     const radial = (x, y, R, stops, op = 'source-over') => { g.save(); g.globalCompositeOperation = op; const gr = g.createRadialGradient(x, y, 0, x, y, R); stops.forEach(([k, col]) => gr.addColorStop(k, col)); g.fillStyle = gr; g.fillRect(x - R, y - R, 2 * R, 2 * R); g.restore(); };
     const lin = (x0, y0, x1, y1, stops) => { const gr = g.createLinearGradient(x0, y0, x1, y1); stops.forEach(([k, col]) => gr.addColorStop(k, col)); return gr; };
     const LP = L.LP, [wx0, wy0, wx1, wy1] = L.win, ww = wx1 - wx0, wh = wy1 - wy0;
@@ -94,11 +100,12 @@ async function buildRoomOil() {
       g.restore();
       g.fillStyle = 'rgba(230,150,80,.5)'; g.fillRect(x0, yf - .003 * R0, x1 - x0, .003 * R0);   // the front edge catches the flame
       g.fillStyle = lin(0, y0, 0, y0 + .03 * H, [[0, 'rgba(10,6,4,.7)'], [1, 'rgba(10,6,4,0)']]); g.fillRect(x0, y0, x1 - x0, .03 * H); }
-    { const p = L.person; g.save(); g.filter = `blur(${(.03 * p.P * S).toFixed(1)}px)`; g.fillStyle = 'rgba(8,4,2,.7)'; g.beginPath(); g.ellipse(p.cx, p.top + .99 * p.P, .45 * p.P, .05 * p.P, 0, 0, 6.283); g.fill(); g.restore(); }
+    { g.save(); g.filter = `blur(${(.006 * R0 * S).toFixed(1)}px)`; g.fillStyle = 'rgba(10,5,2,.75)'; g.beginPath(); g.ellipse(L.cand.x + .004 * R0, L.cand.base + L.cand.r * .4, L.cand.r * 2.6, L.cand.r * .75, 0, 0, 6.283); g.fill(); g.restore(); }   // the holder's shadow on the table
     roomCandle(g, L);
     // the open Bible: dark cover, two pages bowed up from the gutter, the gilt page block toward us, a red ribbon
     { const x0 = B.cx - B.w / 2, x1 = B.cx + B.w / 2, yb = B.cy - B.d / 2, yf = B.cy + B.d / 2;
-      g.fillStyle = '#0c0705'; g.beginPath(); g.moveTo(x0 - 8, yb + 4); g.lineTo(x1 + 8, yb + 4); g.lineTo(x1 + 12, yf + .1 * B.d); g.lineTo(x0 - 12, yf + .1 * B.d); g.closePath(); g.fill();
+      g.save(); g.filter = `blur(${(.012 * R0 * S).toFixed(1)}px)`; g.fillStyle = 'rgba(8,4,2,.6)'; g.beginPath(); g.moveTo(B.cx - B.w * .42, yb + .08 * B.d); g.lineTo(B.cx + B.w * .42, yb + .08 * B.d); g.lineTo(x1 + .02 * R0, yf + .2 * B.d); g.lineTo(x0 - .02 * R0, yf + .2 * B.d); g.closePath(); g.fill(); g.restore();   // its shadow on the table
+      g.fillStyle = '#0c0705'; g.beginPath(); g.moveTo(B.cx - B.w * .41 - 6, yb + 4); g.lineTo(B.cx + B.w * .41 + 6, yb + 4); g.lineTo(x1 + 12, yf + .1 * B.d); g.lineTo(x0 - 12, yf + .1 * B.d); g.closePath(); g.fill();
       for (const side of [-1, 1]) { const a = pageRow(side, 0), b = pageRow(side, 1), t = .07 * B.d;
         g.fillStyle = lin(0, b[1], 0, b[1] + t, [[0, '#c89a50'], [1, '#6a4a20']]); g.beginPath(); g.moveTo(b[0], b[1]); g.quadraticCurveTo(b[2], b[3], b[4], b[5]); g.lineTo(b[4], b[5] + t); g.quadraticCurveTo(b[2], b[3] + t * 1.1, b[0], b[1] + t); g.closePath(); g.fill();
         const pg = new Path2D(); pg.moveTo(a[0], a[1]); pg.quadraticCurveTo(a[2], a[3], a[4], a[5]); pg.lineTo(b[4], b[5]); pg.quadraticCurveTo(b[2], b[3], b[0], b[1]); pg.closePath();
@@ -119,37 +126,44 @@ async function buildRoomOil() {
     g.restore(); return c;
   }
   // over the painting: the print (no letters), the candle crisp; then the near table out of focus
-  function crisp(art) {
-    const a = art.getContext('2d');
-    { const tc = canvas(PW, PH), t = tc.getContext('2d'); t.scale(S, S); const r = rng(35);
+  function crisp(art, S = ROIL.S, rect = [0, 0, W, H]) {
+    const a = art.getContext('2d'), CW = art.width, CH = art.height;
+    { const tc = canvas(CW, CH), t = tc.getContext('2d'); t.scale(S, S); t.translate(-rect[0], -rect[1]); const r = rng(35);
       for (const side of [-1, 1]) for (let k = .07; k < .95; k += .036) { const [x0, y0, qx, qy, x1, y1] = pageRow(side, k);
         for (const [c0, c1] of [[.08, .47], [.53, .92]]) { let t0 = c0; while (t0 < c1) { const t1 = Math.min(c1, t0 + .08 + r() * .2), pt = u => { const m = 1 - u; return [m * m * x0 + 2 * m * u * qx + u * u * x1, m * m * y0 + 2 * m * u * qy + u * u * y1]; };
-            const A = pt(t0), Bq = pt(t1); t.strokeStyle = `rgba(80,52,30,${.3 + .14 * r()})`; t.lineWidth = V ? 1.7 : 1.3; t.beginPath(); t.moveTo(...A); t.lineTo(...Bq); t.stroke(); t0 = t1 + .006 + r() * .008; } } }
+            const A = pt(t0), Bq = pt(t1); t.strokeStyle = `rgba(90,60,36,${.15 + .08 * r()})`; t.lineWidth = (V ? .9 : .7) * Math.max(1, 2 / S * 1.6); t.beginPath(); t.moveTo(...A); t.lineTo(...Bq); t.stroke(); t0 = t1 + .006 + r() * .008; } } }
       a.drawImage(tc, 0, 0); }
-    a.save(); a.scale(S, S); roomCandle(a, L, .55); a.restore();
-    { const y0 = Math.round((V ? H * .66 : H * .8) * S), tc = canvas(PW, PH - y0), t = tc.getContext('2d');
-      t.filter = `blur(${(V ? 9 : 7) * S}px)`; t.drawImage(art, 0, -y0); t.filter = 'none';
-      t.globalCompositeOperation = 'destination-in'; const gr = t.createLinearGradient(0, 0, 0, (PH - y0) * .6); gr.addColorStop(0, 'rgba(0,0,0,0)'); gr.addColorStop(1, 'rgba(0,0,0,1)'); t.fillStyle = gr; t.fillRect(0, 0, PW, PH - y0);
-      a.drawImage(tc, 0, y0); }
+    a.save(); a.scale(S, S); a.translate(-rect[0], -rect[1]); roomCandle(a, L, .55); a.restore();
+    { const y0 = Math.round(((V ? H * .66 : H * .8) - rect[1]) * S); if (y0 < CH) { const yy = Math.max(0, y0), tc = canvas(CW, CH - yy), t = tc.getContext('2d');
+      t.filter = `blur(${(V ? 9 : 7) * S}px)`; t.drawImage(art, 0, -yy); t.filter = 'none';
+      t.globalCompositeOperation = 'destination-in'; const gr = t.createLinearGradient(0, y0 - yy, 0, y0 - yy + (V ? H * .34 : H * .2) * S * .6); gr.addColorStop(0, 'rgba(0,0,0,0)'); gr.addColorStop(1, 'rgba(0,0,0,1)'); t.fillStyle = gr; t.fillRect(0, 0, CW, CH - yy);
+      a.drawImage(tc, 0, yy); } }
   }
   const paintOpt = { key: 'rembrandt', S, seed: 17, len: [4, 7.5], jit: .04, wid: V ? 1 / 150 : 1 / 200, cell: V ? 6 : 5.5, dirAt: (x, y) => -1.25 + 1.1 * (Pilot.noise(x / 420, y / 420) - .5) };
   for (const dawn of [false, true]) { const art = OIL.paint(plate(dawn), paintOpt); crisp(art); ROIL[dawn ? 'dawn' : 'night'] = art; }
+  // the page close-up: the same room repainted for a rectangle round the right-hand page, finer (the camera ends L.zEnd times in)
+  { const page = [B.cx + B.w * .24, B.cy - B.d * .05], mid = [(L.person.cx + L.flame[0]) / 2 + .02 * W, L.person.top + .3 * L.person.P], ze = L.zEnd;
+    const rw = W / ze * 3.2, rh = H / ze * 2.6, cx = page[0] + .25 * (mid[0] - page[0]), cy = page[1] + .25 * (mid[1] - page[1]), rect = [cx - rw / 2, cy - rh / 2, rw, rh], Sc = ze * .85;
+    const art = OIL.paint(plate(false, Sc, rect), { ...paintOpt, S: Sc, wid: paintOpt.wid * 2.2 / ze, cell: paintOpt.cell * 2.2 / ze }); crisp(art, Sc, rect);
+    ROIL.close = { art, rect, Sc }; }
 
   // the figure: a canvas of its own (plate scale), body almost black with a faint warm turn at the edges; its rim on a second
   // canvas (gold from the candle, silver on the grey hair; at dawn a cool rim from the window as well), so the rim can flicker
   { const Pp = L.person.P, Pa = roomPersonPaths(), pad = .25, bw = Math.ceil((1 + 2 * pad) * Pp * S), bh = Math.ceil((1 + 2 * pad) * Pp * S);
     const toP = g => { g.setTransform(Pp * S, 0, 0, Pp * S, (.5 + pad) * Pp * S, pad * Pp * S); };   // P units → layer px (head top-centre at (.5+pad, pad)·P)
-    const mask = canvas(bw, bh), mg = mask.getContext('2d'); toP(mg); mg.fillStyle = '#fff'; mg.fill(Pa.body); mg.fill(Pa.head);
+    const mask = canvas(bw, bh), mg = mask.getContext('2d'); toP(mg); mg.fillStyle = '#fff'; mg.fill(Pa.body); mg.fill(Pa.neck); mg.fill(Pa.head);
     const body = canvas(bw, bh), bg = body.getContext('2d'); toP(bg);
+    bg.save(); bg.filter = `blur(${(.03 * Pp * S).toFixed(1)}px)`; bg.fillStyle = 'rgba(8,4,2,.7)'; bg.beginPath(); bg.ellipse(0, .99, .47, .05, 0, 0, 6.283); bg.fill(); bg.restore();   // its shadow on the floor
     { const gr = bg.createLinearGradient(0, 0, 0, 1); gr.addColorStop(0, '#1a110b'); gr.addColorStop(.4, '#120b07'); gr.addColorStop(1, '#0a0604'); bg.fillStyle = gr; bg.fill(Pa.body); }
-    bg.fillStyle = '#17110c'; bg.fill(Pa.head);
+    bg.fillStyle = '#100a07'; bg.fill(Pa.neck); bg.fillStyle = '#17110c'; bg.fill(Pa.head);
     // inside the dark: the hair's mass a touch lighter (grey), the collar's fold, the shoulder blades under the wool — barely there
     bg.save(); bg.clip(Pa.head); bg.filter = `blur(${(.008 * Pp * S).toFixed(1)}px)`; const r = rng(23);
     for (let i = 0; i < 70; i++) { const a = r() * 6.283, rr = r() * .1, x = .012 + Math.cos(a) * rr, y = .118 + Math.sin(a) * rr * 1.1; bg.fillStyle = `rgba(${70 + 40 * r() | 0},${64 + 34 * r() | 0},${58 + 30 * r() | 0},.06)`; bg.beginPath(); bg.ellipse(x, y, .012 + r() * .012, .008 + r() * .008, r() * 3, 0, 6.283); bg.fill(); }
     bg.restore();
     bg.save(); bg.filter = `blur(${(.006 * Pp * S).toFixed(1)}px)`; bg.fillStyle = 'rgba(48,32,22,.6)'; bg.fill(Pa.collar); bg.fillStyle = 'rgba(4,2,1,.7)'; bg.beginPath(); bg.ellipse(.0, .29, .12, .02, 0, 0, 6.283); bg.fill();
-    bg.strokeStyle = 'rgba(2,1,0,.8)'; bg.lineWidth = .014; for (const s of [-1, 1]) { bg.beginPath(); bg.moveTo(s * .22, .36); bg.quadraticCurveTo(s * .25, .52, s * .245, .66); bg.stroke(); }
-    bg.strokeStyle = 'rgba(46,32,22,.35)'; bg.lineWidth = .012; for (const s of [-1, 1]) { bg.beginPath(); bg.moveTo(s * .2, .36); bg.quadraticCurveTo(s * .23, .52, s * .225, .66); bg.stroke(); }
+    bg.strokeStyle = 'rgba(2,1,0,.85)'; bg.lineWidth = .016; for (const s of [-1, 1]) { bg.beginPath(); bg.moveTo(s * .24, .37); bg.quadraticCurveTo(s * .29, .52, s * .29, .69); bg.stroke(); }   // the arm parting from the back
+    bg.strokeStyle = 'rgba(70,48,32,.18)'; bg.lineWidth = .008; for (const s of [-1, 1]) { bg.beginPath(); bg.moveTo(s * .225, .375); bg.quadraticCurveTo(s * .27, .52, s * .272, .68); bg.stroke(); }
+    bg.strokeStyle = 'rgba(90,62,40,.45)'; bg.lineWidth = .008; bg.beginPath(); bg.moveTo(-.11, .258); bg.quadraticCurveTo(0, .218, .115, .258); bg.stroke();   // the collar's top edge
     bg.restore();
     // a rim: the shape minus itself shifted away from the light (so the band sits on the edges that face it), blurred, coloured
     const rimOf = (lx, ly, k, col, hairCol) => { const c = canvas(bw, bh), g = c.getContext('2d'), d = k * Pp * S;
@@ -163,7 +177,7 @@ async function buildRoomOil() {
       return out; };
     // the candle is beyond the figure, up and to the right of its head: the light comes from there
     const [hx, hy] = [L.person.cx, L.person.top + .12 * Pp], ldx = L.LP[0] - hx, ldy = L.LP[1] - hy - .9 * Pp, ll = Math.hypot(ldx, ldy), lx = ldx / ll, ly = ldy / ll;
-    ROIL.fig = { body, bw, bh, pad, Pp, rimN: rimOf(lx, ly, .014, '#ffc070', '#f4ece0'),
+    ROIL.fig = { body, bw, bh, pad, Pp, rimN: rimOf(lx, ly, .011, '#ffc070', '#f4ece0'),
       rimD: rimOf(-.7, -.7, .02, '#cfdcf0', '#eef4ff') };   // dawn: the window is up and to the left
   }
   { const g = canvas(256, 256), x = g.getContext('2d'), im = x.createImageData(256, 256), r = rng(91); for (let i = 0; i < 65536; i++) { const v = 128 + (r() - .5) * 120; im.data[i * 4] = im.data[i * 4 + 1] = im.data[i * 4 + 2] = v; im.data[i * 4 + 3] = 255; }
@@ -203,14 +217,15 @@ function roomOil(ctx, u, mode = 'open') {
   const page = [B.cx + B.w * .24, B.cy - B.d * .05], mid = [(L.person.cx + L.flame[0]) / 2 + .02 * W, L.person.top + .3 * L.person.P];
   const KEYS = dawnM
     ? [[0, mid[0], mid[1] - .02 * H, 1.18], [3.2, mid[0] - .02 * W, mid[1] - .04 * H, 1.26], [6.5, mid[0] - .05 * W, mid[1] - .07 * H, 1.36]]
-    : [[0, L.flame[0] - .02 * W, L.flame[1] + .035 * H, 2.8], [.9, L.flame[0] - .035 * W, L.flame[1] + .045 * H, 2.55], [3.1, mid[0] + .02 * W, mid[1] - .01 * H, 1.42], [4.9, mid[0], mid[1] + .01 * H, 1.22],
-       [8.2, page[0], page[1], V ? 1.95 : 1.9]];
+    : [[0, L.flame[0] - .015 * W, L.flame[1] + .025 * H, 3.6], [.9, L.flame[0] - .025 * W, L.flame[1] + .035 * H, 3.25], [3.1, mid[0] + .02 * W, mid[1] - .01 * H, 1.42], [4.9, mid[0], mid[1] + .01 * H, 1.22],
+       [8.2, page[0], page[1], L.zEnd]];
   let [fx, fy, z] = roomCam(KEYS, u); z = Math.max(1.0, z);
   fx = clamp(fx, W / 2 / z, W - W / 2 / z); fy = clamp(fy, H / 2 / z, H - H / 2 / z);
   const k = dawnM ? ss(.2, 5.2, u) : 0;                                                // how far the dawn has come
   const T = dawnM ? 146.5 + u : u, fl = roomFlick(T);                                  // the candle runs on film time
   const sc = (px, py) => [W / 2 + (px - fx) * z, H / 2 + (py - fy) * z];
   OIL.view(ctx, ROIL.night, S, fx * S, fy * S, z); if (k > 0) { ctx.save(); ctx.globalAlpha = k; OIL.view(ctx, ROIL.dawn, S, fx * S, fy * S, z); ctx.restore(); }
+  if (!dawnM) { const a = ss(L.zEnd * .6, L.zEnd * .78, z); if (a > 0) { const C = ROIL.close, [rx, ry, rw, rh] = C.rect; ctx.save(); ctx.globalAlpha = a; ctx.drawImage(C.art, W / 2 + (rx - fx) * z, H / 2 + (ry - fy) * z, rw * z, rh * z); ctx.restore(); } }   // the fine page close-up
   // the candle's light breathes over the room
   const [lx, ly] = sc(L.LP[0], L.LP[1]);
   { ctx.save(); ctx.globalCompositeOperation = 'multiply'; const dim = Math.min(1, 1 - .3 * (1.04 - fl) * (1 - .5 * k)), v = 255 * Math.max(0, dim) | 0, R = 1.4 * R0 * z;
@@ -222,13 +237,13 @@ function roomOil(ctx, u, mode = 'open') {
     if (g2 > 0) { const [bx, by] = sc(page[0], page[1]); ctx.save(); ctx.globalCompositeOperation = 'screen';
       const gr = ctx.createRadialGradient(bx + .04 * R0 * z, by - .02 * R0 * z, 0, bx, by, .45 * R0 * z); gr.addColorStop(0, `rgba(255,226,170,${.32 * g2})`); gr.addColorStop(.5, `rgba(240,180,110,${.12 * g2})`); gr.addColorStop(1, 'rgba(200,130,70,0)');
       ctx.fillStyle = gr; ctx.fillRect(0, 0, W, H); ctx.restore(); }
-    const lift = ss(5.0, 7.0, u) * (.75 + .25 * Math.sin(u * 2.1)); if (lift > 0) { const [, , , , ox, oy] = ROIL.pageRow(1, .02), Lc = .016 * R0 * lift;
+    const lift = ss(5.0, 7.0, u) * (.75 + .25 * Math.sin(u * 2.1)); if (lift > 0) { const [, , , , ox, oy] = ROIL.pageRow(1, .02), Lc = .05 * B.w * lift;
       const A = [ox - .07 * B.w, oy], Bp = [ox - .002 * B.w, oy + .16 * B.d], Cp = [ox, oy], C2 = [ox - Lc * .7, oy - Lc * .45], m = q => sc(q[0], q[1]);
       ctx.save(); ctx.filter = `blur(${(3 * z).toFixed(1)}px)`; ctx.fillStyle = `rgba(40,22,10,${.45 * lift})`; ctx.beginPath(); ctx.moveTo(...m(A)); ctx.lineTo(...m([Cp[0] + 4, Cp[1] + 6])); ctx.lineTo(...m(Bp)); ctx.closePath(); ctx.fill(); ctx.restore();
       ctx.save(); const gA = m(A), gC = m(C2), gr = ctx.createLinearGradient(gA[0], gA[1], gC[0], gC[1]); gr.addColorStop(0, 'rgba(232,206,160,.85)'); gr.addColorStop(1, 'rgba(255,240,208,.95)'); ctx.filter = `blur(${(.8 * z).toFixed(1)}px)`;
       ctx.fillStyle = gr; ctx.beginPath(); ctx.moveTo(...m(A)); ctx.quadraticCurveTo(...m([(A[0] + C2[0]) / 2, (A[1] + C2[1]) / 2 - Lc * .2]), ...m(C2)); ctx.quadraticCurveTo(...m([(Bp[0] + C2[0]) / 2 + Lc * .1, (Bp[1] + C2[1]) / 2]), ...m(Bp)); ctx.closePath(); ctx.fill(); ctx.restore(); } }
   // the flame and its lens bloom (a soft horizontal streak) — behind the figure, which stands nearer
-  { const [fx2, fy2] = sc(L.flame[0], L.flame[1]), h = (V ? 44 : 34) * z;
+  { const [fx2, fy2] = sc(L.flame[0], L.flame[1]), h = L.cand.r * 2.3 * z;
     roomFlame(ctx, fx2, fy2, h, T, 1);
     ctx.save(); ctx.globalCompositeOperation = 'lighter'; const bl = .16 * (fl - .2) * (1 - .4 * k), st = ctx.createLinearGradient(fx2 - W * .4, 0, fx2 + W * .4, 0);
     st.addColorStop(0, 'rgba(255,170,90,0)'); st.addColorStop(.5, `rgba(255,200,140,${bl})`); st.addColorStop(1, 'rgba(255,170,90,0)'); ctx.fillStyle = st; ctx.fillRect(fx2 - W * .4, fy2 - h * .5 - 2 * z, W * .8, 4 * z);

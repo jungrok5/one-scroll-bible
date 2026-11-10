@@ -183,7 +183,7 @@
     const s = Math.max(W, H) * .6; for (let y = 0; y < base; y += s) for (let x = 0; x < W; x += s) ctx.drawImage(S.wall, x, y, s, s); ctx.restore();
     // multiply: lamp light on the wall (round the lamp's projection on the wall) + a cool ambient
     const lp = proj(FLAME.x, 140, ZW), sc = cam.f / lp[2], g = ctx.createRadialGradient(lp[0], lp[1], 0, lp[0], lp[1], 1500 * sc);
-    lightStops(g, 1, lampI * 1.7, amb * .6, [60, 66, 90], [255, 200, 140], .26);
+    lightStops(g, 1, lampI * 1.9, amb * .7, [60, 66, 90], [255, 200, 140], .3);
     ctx.save(); ctx.globalCompositeOperation = 'multiply'; ctx.fillStyle = g; ctx.fillRect(0, 0, W, base + 4); ctx.restore();
   }
   function winPath(ctx, z, inset = 0) {   // the arched window outline on the plane Z = z
@@ -214,7 +214,7 @@
     c.globalAlpha = .7; c.drawImage(S.shadow, X(JAR.x - JAR.r * 2.4), Z(JAR.z + JAR.r * 1.6), JAR.r * 4 * TT, JAR.r * 3.4 * TT);
     c.globalAlpha = .6; c.drawImage(S.shadow, X(LAMP.x - 60), Z(LAMP.z + 60), 200 * TT, 120 * TT); c.globalAlpha = 1;
     const fx = X(FLAME.x), fz = Z(FLAME.z), g = c.createRadialGradient(fx, fz, 0, fx, fz, 2300 * TT);
-    lightStops(g, 1, lampI * 1.55, amb * 1.2, [60, 64, 82], [255, 214, 160], .62);
+    lightStops(g, 1, lampI * 1.75, amb * 1.3, [60, 64, 82], [255, 214, 160], .72);
     c.globalCompositeOperation = 'multiply'; c.fillStyle = g; c.fillRect(0, 0, tw, th); c.globalCompositeOperation = 'source-over';
     warp(ctx, S.twork, TX0, TZ1, TT, TX0, TX1, TZ0, TZ1);
     // the table's near edge and front face
@@ -314,8 +314,8 @@
     lathe(ctx, X, r, z0, -1, lit);
   }
   // a turned wooden handle (etz chayim) on the roller axis, from the roll's end at z outward (dir −1 toward the camera,
-  // +1 away): a thin flange disc, a neck, a carved bulb, then a horn-like tapered tip. Drawn as stacked cross-sections.
-  const PROFILE = [[0, 1.2], [4, 1.24], [7, 1.18], [8, .3], [20, .3], [24, .44], [31, .54], [38, .44], [42, .36], [48, .4], [56, .32], [66, .2], [76, .1], [80, .05]];
+  // +1 away): a thin flange disc, a neck, a carved bulb, then a short round knob (no point). Drawn as stacked cross-sections.
+  const PROFILE = [[0, 1.2], [4, 1.24], [7, 1.18], [8, .3], [18, .3], [22, .44], [29, .54], [36, .44], [40, .33], [44, .35], [49, .45], [54, .47], [59, .42], [63, .3], [65.5, .14], [66, 0]];
   const profR = d => { for (let i = 0; i < PROFILE.length - 1; i++) { const [a, ra] = PROFILE[i], [b, rb] = PROFILE[i + 1]; if (d <= b) return lerp(ra, rb, (d - a) / (b - a)); } return 0; };
   function lathe(ctx, X, r, z, dir, lit) {
     const n = 34, ds = []; for (let i = 0; i <= n; i++) ds.push(i / n * 80); if (dir > 0) ds.reverse();
@@ -354,7 +354,7 @@
 
   // ---------------- the two scenes ----------------
   const CAM = {
-    isaiah: V ? [[-3.8, { x: 230, z: -560, h: 680, p: 34, cy: .33, f: 1200 }], [1.5, { x: 270, z: -600, h: 560, p: 24, cy: .35, f: 1200 }], [7.6, { x: 330, z: -620, h: 470, p: 16, cy: .36, f: 1250 }]]
+    isaiah: V ? [[-3.8, { x: 380, z: -700, h: 680, p: 31, cy: .34, f: 1200 }], [1.5, { x: 390, z: -780, h: 600, p: 23, cy: .37, f: 1200 }], [7.6, { x: 400, z: -820, h: 560, p: 16, cy: .385, f: 1250 }]]
               : [[-3.8, { x: 120, z: -920, h: 880, p: 38, cy: .38, f: 1150 }], [1.5, { x: 170, z: -980, h: 730, p: 26, cy: .38, f: 1150 }], [7.6, { x: 260, z: -960, h: 560, p: 14, cy: .395, f: 1150 }]],
     psalm: V ? [[0, { x: 420, z: -520, h: 620, p: 30, cy: .33, f: 1200 }], [4, { x: 500, z: -450, h: 560, p: 31, cy: .33, f: 1200 }], [9.5, { x: 550, z: -380, h: 510, p: 32, cy: .335, f: 1200 }],
                [11.6, { x: 470, z: -400, h: 520, p: 33, cy: .335, f: 1200 }], [13.4, { x: 40, z: -430, h: 520, p: 33, cy: .34, f: 1200 }], [16.5, { x: 10, z: -500, h: 560, p: 32, cy: .345, f: 1200 }]]
@@ -364,9 +364,9 @@
 
   function isaiah(ctx, u) {
     setCam(camAt(CAM.isaiah, u));
-    const open = eio(clamp((u + 3.8) / 5.3)), xc = V ? 170 : 80, xl = lerp(xc - 30, V ? -380 : -650, open), xr = lerp(xc + 30, 800, open);
+    const open = eio(clamp((u + 3.8) / 5.3)), xc = V ? 400 : 230, xl = lerp(xc - 30, V ? 20 : -330, open), xr = lerp(xc + 30, 780, open);
     const gust = ss(1.7, 2.1, u) * (1 - ss(2.5, 3.5, u)), flare = ss(2.9, 3.3, u) * (1 - ss(3.4, 4.6, u));
-    const lampI = (1.12 - .22 * gust + .18 * flare) * flick(u), amb = .34, focus = ss(2.2, 4.8, u), hillK = ss(2.6, 5.2, u);
+    const lampI = (1.4 - .22 * gust + .18 * flare) * flick(u), amb = .52, focus = ss(2.2, 4.8, u), hillK = ss(2.6, 5.2, u);
     drawWall(ctx, lampI, amb); drawWindow(ctx, u, lampI, focus, hillK);
     drawTable(ctx, lampI, amb, xl, xr); drawJar(ctx, lampI);
     drawLamp(ctx, u, 1, gust, lampI);
@@ -379,7 +379,7 @@
   function psalm(ctx, u) {
     setCam(camAt(CAM.psalm, u));
     const color = ss(.6, 3.2, u), ign = ss(.95, 1.7, u), lampI = (ign * 1.12 + (u > .95 ? .25 * Math.exp(-(u - .95) * 3) : 0)) * flick(u), amb = .3 + .62 * (1 - ign);
-    const xr = 800, xl = lerp(90, V ? -330 : -420, eio(clamp((u - 11.6) / 1.4)));
+    const xr = 780, xl = lerp(90, V ? -330 : -420, eio(clamp((u - 11.6) / 1.4)));
     // line A: embers settle (dots), the line warms, then at 6.0 it wakes to gold right → left; line B wakes at 12.2
     const dots = S.embers.filter(e => e.land).map(e => [e.land, u < e.t1 ? 0 : (Math.exp(-(u - e.t1) * 1.4) * .9 + .25) * (1 - ss(6, 7, u))]);
     const A = { G: S.goldA, warm: ss(1.8, 3.3, u) * (.85 + .15 * Math.sin(u * 5)), dots, reveal: clamp((u - 6.0) / .9), lit: ss(6.0, 6.9, u), pulse: Math.exp(-Math.max(0, u - 6.9) * .8) };

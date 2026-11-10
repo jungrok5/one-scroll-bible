@@ -78,7 +78,7 @@
     J = {
       clumps, tufts, crowns, noise: nz, dur: { day: 7, spirit: 6.5 },
       // default: a slow truck right along the bank, closing in on the brothers (eye ≈ 1.2 m, a little below their heads)
-      cam: W3.cam([[0, -2.4, 1.22, -.8, .1, .5, 13, 1300, 1820], [3.5, -1.2, 1.2, .1, .8, .48, 13, 1330, 1860], [7, -.2, 1.18, 1.0, 1.2, .46, 13, 1380, 1940]]),
+      cam: W3.cam([[0, -2.4, 1.22, -.4, -.45, .5, 13, 1360, 1900], [3.5, -1.0, 1.2, .5, .55, .48, 13, 1420, 2100], [7, -.1, 1.18, 1.5, 1.05, .46, 13, 1500, 2280]]),
       // late afternoon in the Jordan valley: low sun in the west (ahead, a little left), golden haze; fog deep enough that
       // each fold of the hills stands one value apart
       light: W3.light([[0, 11, 2.5, 1.15, [255, 198, 132], [76, 64, 78], [70, 80, 122], [248, 196, 140], [255, 196, 128], [226, 180, 146], 5200, 0],
@@ -175,27 +175,34 @@
   const UA = .29, FA = .26;
   function armShape(o, sx, sy, a, e, col, point = 0) {
     const ex = sx + Math.sin(a) * UA, ey = sy + Math.cos(a) * UA, fa = a + e, hx = ex + Math.sin(fa) * FA, hy = ey + Math.cos(fa) * FA;
-    const n1 = [Math.cos(a), -Math.sin(a)], n2 = [Math.cos(fa), -Math.sin(fa)], w0 = .052, w1 = .044, w2 = .058;
-    o.push({ k: 'poly', col, pts: [[sx + n1[0] * w0, sy + n1[1] * w0], [ex + n1[0] * w1, ey + n1[1] * w1], [hx + n2[0] * w2, hy + n2[1] * w2], [hx - n2[0] * w2 * 1.15, hy - n2[1] * w2 * 1.15], [ex - n1[0] * w1, ey - n1[1] * w1], [sx - n1[0] * w0, sy - n1[1] * w0]] });
-    o.push({ k: 'ell', col, x: ex, y: ey, rx: .048, ry: .048, r: 0 });                                         // the elbow, rounded
-    // the hand beyond the sleeve: a mitten and a thumb (or a pointing finger)
-    const hx2 = hx + Math.sin(fa) * .045, hy2 = hy + Math.cos(fa) * .045;
-    o.push({ k: 'ell', col, x: hx2, y: hy2, rx: .042, ry: .03, r: Math.PI / 2 - fa });
-    o.push({ k: 'line', col, w: .018, pts: [[hx2, hy2], [hx2 + Math.sin(fa + .9) * .05, hy2 + Math.cos(fa + .9) * .05]] });
-    if (point > 0) o.push({ k: 'line', col, w: .02, pts: [[hx2, hy2], [hx2 + Math.sin(fa) * .1 * point, hy2 + Math.cos(fa) * .1 * point]] });
+    const n1 = [Math.cos(a), -Math.sin(a)], n2 = [Math.cos(fa), -Math.sin(fa)];
+    o.push({ k: 'ell', col, x: sx, y: sy + .01, rx: .075, ry: .07, r: 0 });                                        // the shoulder cap
+    o.push({ k: 'poly', col, pts: [[sx + n1[0] * .064, sy + n1[1] * .064], [ex + n1[0] * .05, ey + n1[1] * .05], [ex - n1[0] * .05, ey - n1[1] * .05], [sx - n1[0] * .064, sy - n1[1] * .064]] });   // upper arm
+    o.push({ k: 'ell', col, x: ex, y: ey, rx: .052, ry: .052, r: 0 });                                         // the elbow, rounded
+    // the sleeve widens toward the wrist; its loose underside hangs down a little (gravity, not the arm's own axis)
+    const wo = .1, hang = .07 * Math.abs(Math.sin(fa));
+    o.push({ k: 'poly', col, pts: [[ex + n2[0] * .048, ey + n2[1] * .048], [hx + n2[0] * wo * .8, hy + n2[1] * wo * .8], [hx - n2[0] * wo, hy - n2[1] * wo + hang], [lerp(ex, hx, .55) - n2[0] * .075, lerp(ey, hy, .55) - n2[1] * .075 + hang * .5], [ex - n2[0] * .048, ey - n2[1] * .048]] });
+    // the hand out of the sleeve: a mitten and a thumb (or a pointing finger)
+    const hx2 = hx + Math.sin(fa) * .05, hy2 = hy + Math.cos(fa) * .05;
+    o.push({ k: 'ell', col, x: hx2, y: hy2, rx: .046, ry: .032, r: Math.PI / 2 - fa });
+    o.push({ k: 'line', col, w: .02, pts: [[hx2, hy2], [hx2 + Math.sin(fa + .9) * .055, hy2 + Math.cos(fa + .9) * .055]] });
+    if (point > 0) o.push({ k: 'line', col, w: .022, pts: [[hx2, hy2], [hx2 + Math.sin(fa) * .11 * point, hy2 + Math.cos(fa) * .11 * point]] });
   }
   function bodyParts(ps, tunic, mantle) {
-    const o = [], s = ps.stride || 0, sway = ps.sway || 0, hd = ps.head || 0;
+    const o = [], s = ps.stride || 0, sway = ps.sway || 0, hd = ps.head || 0, fl = ps.flutter || 0;
     const f = ps.armF || [-.1, .25], n = ps.armN || [.1, .25];
-    armShape(o, -.04, -1.36, f[0], f[1], mantle, ps.pointF || 0);                                            // far arm, behind
-    // feet in sandals under the hem
-    o.push({ k: 'ell', col: tunic, x: .2 * s + .07, y: -.03, rx: .11, ry: .035, r: 0 }, { k: 'ell', col: tunic, x: -.2 * s + .03, y: -.03, rx: .11, ry: .035, r: 0 });
-    // tunic: shoulders → chest → belted waist → hem that swings with the stride
-    o.push({ k: 'poly', col: tunic, pts: [[-.15, -1.42], [.1, -1.44], [.15, -1.3], [.15, -1.06], [.13, -.98], [.16, -.92], [.23 + .1 * Math.max(0, s), -.07], [.05, -.04], [-.24 - .08 * Math.max(0, -s), -.07], [-.17, -.92], [-.15, -.98], [-.17, -1.08], [-.19, -1.3]] });
-    // mantle (겉옷) over the shoulders and back, its front edge falling diagonally to the calf
-    o.push({ k: 'poly', col: mantle, pts: [[-.19, -1.43], [.07, -1.46], [.13, -1.33], [.06, -1.0], [.02, -.42], [-.12, -.36], [-.3 - .05 * Math.max(0, -s), -.34], [-.25, -.9], [-.21, -1.2]] });
-    o.push({ k: 'fold', pts: [[-.02, -1.38], [-.08, -.9], [-.1, -.44]] }, { k: 'fold', pts: [[-.12, -1.36], [-.18, -.95], [-.23, -.4]] }, { k: 'fold', pts: [[.06, -1.2], [.03, -.8], [.01, -.48]] });
-    // the head: skull, a nose, a beard; the head cloth over the crown and down the back, its loose end swinging
+    armShape(o, -.05, -1.37, f[0], f[1], mantle, ps.pointF || 0);                                            // far arm, behind
+    // legs: when he strides, the front leg pushes the robe forward and the back leg trails — the hem opens into an inverted V
+    const fx = .26 * s, bx = -.26 * s, lead = Math.max(fx, bx), trail = Math.min(fx, bx), open = Math.abs(s);
+    for (const lx of [fx, bx]) { o.push({ k: 'poly', col: tunic, pts: [[lx - .04, -.2], [lx + .04, -.2], [lx + .035, -.03], [lx - .035, -.03]] }); o.push({ k: 'ell', col: tunic, x: lx + .05, y: -.025, rx: .1, ry: .03, r: 0 }); }   // shins and sandalled feet
+    // tunic: sloped shoulders → chest → a belt cinching the waist → the skirt flaring to the hem over the legs
+    o.push({ k: 'poly', col: tunic, pts: [[-.03, -1.47], [.08, -1.45], [.15, -1.36], [.16, -1.22], [.13, -1.06], [.105, -.99], [.105, -.95], [.14, -.86],
+      [lead + .16, -.12], [lead + .12, -.08], [(lead + trail) / 2 + .02, -.08 - .2 * open], [trail - .12, -.08], [trail - .17, -.14],
+      [-.17, -.86], [-.13, -.95], [-.13, -.99], [-.16, -1.08], [-.19, -1.24], [-.16, -1.38]] });
+    o.push({ k: 'poly', col: mantle, pts: [[.1, -.99], [.15, -.97], [.16, -.78], [.13, -.76], [.12, -.94]] });   // the sash end hanging from the belt
+    // mantle (겉옷) from the shoulders down the back, open in front; its skirt flares behind and lifts back as he walks
+    o.push({ k: 'poly', col: mantle, pts: [[-.18, -1.42], [.02, -1.47], [.1, -1.4], [.06, -1.15], [.0, -.75], [-.04, -.36], [-.18, -.3 + fl * .05], [-.36 - fl * .2, -.3 - fl * .12], [-.3 - fl * .08, -.8], [-.22, -1.15]] });
+    o.push({ k: 'fold', pts: [[-.04, -1.36], [-.1, -.9], [-.14, -.4]] }, { k: 'fold', pts: [[-.13, -1.32], [-.2, -.85], [-.28 - fl * .1, -.36]] }, { k: 'fold', pts: [[.04, -1.2], [.0, -.8], [-.04, -.42]] });
     o.push({ k: 'head', col: mantle, hd, sway });
     armShape(o, .05, -1.37, n[0], n[1], mantle, 0);                                                            // near arm, in front
     return o;
@@ -230,19 +237,19 @@
     if (rimA < 1) { g.globalAlpha = 1 - rimA; paint(0, 0, null, true); g.globalAlpha = 1; }
     ctx.drawImage(oc, x - S / 2 / k, y - S * .78 / k, S / k, S / k);
   }
-  // the beats (u seconds): Andrew hurries in from the left (0–2.4), stops; Simon turns to him (1.9–2.7); Andrew points back the
-  // way he came and beckons (2.4–7); Simon's head lifts and he takes a first step toward him (5.2–6.6)
-  const SIMON = [2.2, 11.55], A_FROM = -3.6, A_TO = .95;
+  // the beats (u seconds): Andrew hurries in from the left in clear strides (0–3.0), stops; Simon turns to him (2.3–3.1); Andrew
+  // points back the way he came and beckons (2.9–7); Simon takes half a step toward him (4.2–5.4)
+  const SIMON = [1.8, 11.55], A_FROM = -3.0, A_TO = .75;
   function brotherList(u) {
-    const walkK = eo(clamp(u / 2.4)), ax = lerp(A_FROM, A_TO, walkK), ph = (ax - A_FROM) / .62 * Math.PI, moving = 1 - ss(1.9, 2.5, u);
-    const step = ss(5.2, 6.6, u), sx = SIMON[0] - .2 * step, sph = .2 * step / .62 * Math.PI;
-    const pt = ss(2.4, 3.1, u), bk = ss(3.0, 3.5, u), beck = bk * Math.max(0, Math.sin((u - 3.2) * 4.4)) * (1 - ss(5.6, 6.4, u) * .6);
-    const tk = ss(1.9, 2.7, u), cf = Math.cos(Math.PI * tk);
+    const wk = clamp(u / 3.0), walkK = 1.5 * wk - .5 * wk * wk * wk, ax = lerp(A_FROM, A_TO, walkK), ph = (ax - A_FROM) / .7 * Math.PI, moving = 1 - ss(2.6, 3.1, u);
+    const step = ss(4.2, 5.4, u), sx = SIMON[0] - .2 * step, sph = .2 * step / .7 * Math.PI;
+    const pt = ss(2.9, 3.5, u), bk = ss(3.3, 3.8, u), beck = bk * Math.max(0, Math.sin((u - 3.5) * 4.4)) * (1 - ss(5.8, 6.6, u) * .6);
+    const tk = ss(2.3, 3.1, u), cf = Math.cos(Math.PI * tk);
     return [
-      { x: ax, z: SIMON[1] - .25, face: 1, ps: { stride: Math.sin(ph) * moving, sway: .05 * Math.sin(ph * 1) * moving + .03 * Math.sin(u * 2), lean: .07 * moving + .03 * pt, head: -.04 * moving + .08 * pt,
-        armN: [lerp(.35 * Math.sin(ph) * moving, 1.25, bk), lerp(.25, .35 + .75 * beck, bk)],      // the near hand reaches toward Simon and beckons
-        armF: [lerp(-.35 * Math.sin(ph) * moving, -2.1, pt), lerp(.25, .12, pt)], pointF: ss(2.8, 3.2, u) } },   // the far arm points back the way he came
-      { x: sx, z: SIMON[1], face: 1, ps: { xs: Math.sign(cf || 1) * (.6 + .4 * Math.abs(cf)), stride: tk >= 1 ? Math.sin(sph) * step * (1 - ss(6.4, 7, u)) : 0, sway: .02 * Math.sin(u * 1.7), lean: -.03 * step,
+      { x: ax, z: SIMON[1] - .25, face: 1, ps: { stride: Math.sin(ph) * moving, flutter: (.7 + .3 * Math.sin(ph * 2)) * moving + .15 * (1 - moving) * Math.max(0, Math.sin(u * 1.6)), sway: .06 * Math.abs(Math.sin(ph)) * moving + .03 * Math.sin(u * 2), lean: .08 * moving + .03 * pt, head: -.04 * moving + .08 * pt,
+        armN: [lerp(.35 * Math.sin(ph) * moving, 1.05, bk), lerp(.25, .45 + .75 * beck, bk)],      // the near hand reaches toward Simon and beckons
+        armF: [lerp(-.35 * Math.sin(ph) * moving, -2.1, pt), lerp(.25, .12, pt)], pointF: ss(3.2, 3.6, u) } },   // the far arm points back the way he came
+      { x: sx, z: SIMON[1], face: 1, ps: { xs: Math.sign(cf || 1) * (.6 + .4 * Math.abs(cf)), stride: tk >= 1 ? Math.sin(sph) * (1 - ss(5.1, 5.6, u)) * .8 : 0, flutter: .3 * step * (1 - ss(5.2, 6, u)), sway: .02 * Math.sin(u * 1.7), lean: -.03 * step,
         head: .1 * ss(3.2, 4.2, u) - .06 * (1 - tk), armN: [.12 + .12 * ss(3.4, 4.4, u), .3 + .3 * ss(3.4, 4.4, u)], armF: [-.08, .22] } }];
   }
   function shadows(ctx, c, L, list) {
@@ -289,8 +296,10 @@
     g.beginPath(); g.moveTo(-.07, -.8); g.quadraticCurveTo(-.2, -.79, -.25, -.72); g.quadraticCurveTo(-.29, -.64, -.25, -.5); g.quadraticCurveTo(-.2, -.25, -.2, .02); g.lineTo(.2, .02); g.quadraticCurveTo(.2, -.25, .25, -.5); g.quadraticCurveTo(.29, -.64, .25, -.72); g.quadraticCurveTo(.2, -.79, .07, -.8); g.closePath(); g.fill();   // shoulders, torso
     for (const sd of [-1, 1]) { const sx = sd * .235, sy = -.69, a = .1, e = lerp(.42, .8, rise), ex = sx + sd * Math.sin(a) * .29, ey = sy + Math.cos(a) * .29, hx = ex + sd * Math.sin(a + e) * .26, hy = ey + Math.cos(a + e) * .26;
       const n1 = [Math.cos(a), -sd * Math.sin(a)], fa = a + e, n2 = [Math.cos(fa), -sd * Math.sin(fa)];
-      g.beginPath(); g.moveTo(sx - n1[0] * .055, sy - n1[1] * .055); g.lineTo(ex - n1[0] * .045, ey - n1[1] * .045); g.lineTo(hx - n2[0] * .05, hy - n2[1] * .05); g.lineTo(hx + n2[0] * .05, hy + n2[1] * .05); g.lineTo(ex + n1[0] * .045, ey + n1[1] * .045); g.lineTo(sx + n1[0] * .06, sy + n1[1] * .06); g.closePath(); g.fill();
-      g.beginPath(); g.arc(ex, ey, .045, 0, 6.283); g.fill();
+      g.beginPath(); g.ellipse(sx - sd * .01, sy + .01, .075, .07, 0, 0, 6.283); g.fill();                                                          // the shoulder cap
+      g.beginPath(); g.moveTo(sx - n1[0] * .066, sy - n1[1] * .066); g.lineTo(ex - n1[0] * .052, ey - n1[1] * .052); g.lineTo(ex + n1[0] * .052, ey + n1[1] * .052); g.lineTo(sx + n1[0] * .066, sy + n1[1] * .066); g.closePath(); g.fill();   // upper arm in the wet sleeve
+      g.beginPath(); g.arc(ex, ey, .054, 0, 6.283); g.fill();                                                                                       // elbow
+      { const wo = .085, hang = .05; g.beginPath(); g.moveTo(ex - n2[0] * .05, ey - n2[1] * .05); g.lineTo(hx - n2[0] * wo * .8, hy - n2[1] * wo * .8); g.lineTo(hx + n2[0] * wo, hy + n2[1] * wo + hang); g.lineTo(lerp(ex, hx, .55) + n2[0] * .07, lerp(ey, hy, .55) + n2[1] * .07 + hang * .5); g.lineTo(ex + n2[0] * .05, ey + n2[1] * .05); g.closePath(); g.fill(); }   // the sleeve widening to the wrist, its wet hem hanging
       const hx2 = hx + sd * Math.sin(fa) * .04, hy2 = hy + Math.cos(fa) * .04; g.beginPath(); g.ellipse(hx2, hy2, .045, .028, sd * (Math.PI / 2 - fa) * -1, 0, 6.283); g.fill(); }
     if (folds) { g.strokeStyle = foldCol; g.lineWidth = .012; for (const [a, b, cc] of [[[-.14, -.7], [-.05, -.45], [.02, -.15]], [[.12, -.66], [.1, -.4], [.14, -.12]]]) { g.beginPath(); g.moveTo(...a); g.quadraticCurveTo(...b, ...cc); g.stroke(); } }
   }

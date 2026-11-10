@@ -1,7 +1,7 @@
 /* 「그리스도」 2부 세 기름 부음 + 5부 세 빛 — 화풍 goldoil (kit-goldoil.js). 사람은 작은 역광 실루엣(얼굴·손 세부 없음), 주인공은 기름과 빛.
      goldAnoint(ctx, u, which)
-       'horn'   u 0..6.0  (영상 22.9–28.9, N04)  등잔 빛 속에서 천천히 돌아가는 기름 뿔병, 끝에 금빛 방울이 맺힘 → 끝에서 기울기 시작
-       'david'  u 0..6.9  (28.9–35.8, K1 삼상 16:13)  노을의 베들레헴 언덕 — 형들 사이의 어린 목동, 사무엘이 뿔병을 기울여 기름이 머리 위로
+       'horn'   u 0..2.2  (영상 22.9–25.1, N04)  화면 밖 등잔 빛 속에서 돌아가는 기름 뿔병, 끝에 금빛 방울이 맺힘 → 끝에서 기울기 시작
+       'david'  u 0..10.7 (25.1–35.8, K1 삼상 16:13)  노을의 베들레헴 언덕 — 0–3.8 사무엘이 뿔병을 들고 다가와 들어 올림, 3.8부터(영상 28.9) 기울여 기름이 어린 목동 머리 위로
        'aaron'  u 0..4.1  (35.8–39.9, K2 레 8:12)  회막 문 앞, 성막 휘장 뒤 등불 — 관(금 패)·흉패의 아론 머리 위로 모세가 관유를 부음(작은 병)
        'elisha' u 0..4.4  (39.9–44.3, K3 왕상 19:16·19)  기름은 붓지 않음 — 겨릿소로 밭 가는 엘리사에게 엘리야가 겉옷을 던짐, 겉옷 가장자리에 금빛
      goldThree(ctx, u)   u 0..3.8  (142.7–146.5, N16)  세 기름 줄기의 금빛이 어둠에서 한 사람 위로 모여 하나의 빛
@@ -103,7 +103,7 @@
   // ---------------- 'horn' : a horn flask turning in lamplight ----------------
   function hornScene(ctx, u) {
     const W = P.W, H = P.H, V = P.ori === 'v';
-    const ex = ss(0, .4, u), z = 1 + .10 * u / 6;
+    const ex = ss(0, .25, u), z = 1 + .06 * u / 2.2;
     ctx.fillStyle = '#100906'; ctx.fillRect(0, 0, W, H);
     // the lamp is outside the frame (low left): only its warm light and haze come in — no floor, nothing for the horn to stand on
     const LX = -W * .12, LY = H * (V ? .62 : .80), fl = 1 + .06 * Math.sin(u * 11) + .04 * Math.sin(u * 23 + 1) + .05 * (P.noise(u * 3, 1) - .5);
@@ -120,7 +120,7 @@
 
     // the horn in 3D: a sphere-swept tube turning about the vertical axis, lit by the flame
     const hcx = W * (V ? .54 : .56), hcy = H * (V ? .40 : .44), L = V ? W * .70 : H * .70;
-    const yaw = -1.1 + u * .36, tilt = -.18 + .32 * eio(clamp((u - 4.3) / 1.7));            // turns; at the end its tip starts to dip (next cut pours)
+    const yaw = -.75 + u * .45, tilt = -.18 + .32 * eio(clamp((u - 1.3) / .9));            // turns; at the end its tip starts to dip (next cut pours)
     const N = 150, pts = [];
     let px = 0, py = 0, a = 0;
     const raw = [];
@@ -158,7 +158,7 @@
     ctx.strokeStyle = 'rgba(255,196,120,.45)'; ctx.lineWidth = 2; ctx.beginPath(); ctx.ellipse(0, 0, bp[3] * tz, bp[3] * .98, 0, Math.PI * .6, Math.PI * 1.4); ctx.stroke(); ctx.restore();
     ctx.restore();
     // a golden bead gathering at the tip
-    const bead = ss(.8, 4.2, u);
+    const bead = ss(.15, 1.5, u);
     if (bead > 0) {
       const br = (V ? W : H) * .022 * (.35 + .65 * bead), bg = GOLD.grab(ctx);
       GOLD.drop(ctx, tipP[0], tipP[1] + br * (.6 + .5 * bead), br, u, { bg, s: 1 + .25 * bead, tp: .3, neck: { top: tipP[1] - 2, hw: t => br * (.35 + .4 * t * t) }, caus: .6 });
@@ -175,7 +175,7 @@
   function pourScene(ctx, u, o) {
     const W = P.W, H = P.H, V = P.ori === 'v', dur = o.dur;
     const U = V ? .25 * H : .42 * H, gy = H * (V ? .60 : .76), cx = W * .5 + U * .05;
-    const ex = ss(0, .35, u), z = 1 + .14 * u / dur, pan = (u / dur - .5) * U * .10;
+    const ex = ss(0, .35, u), z = 1 + (o.lead ? .24 : .14) * u / dur, pan = (u / dur - .5) * U * (o.lead ? .18 : .10);
     // the anointed
     const ah = U * o.aH, ax = cx + U * .16;
     const aTop0 = gy - ah * (o.aKind === 'priest' ? 1.04 : .99);
@@ -187,17 +187,21 @@
     o.back(ctx, W, H, gy, sun, u, U, ex);
     groundLight(ctx, W, H, gy, ex);
     // the pour: vessel tilts in (0–1.2), oil starts (1.0–1.7) and keeps flowing
-    const tiltIn = eio(clamp(u / 1.2)), flow = ss(.9, 1.6, u);
-    const sx = tip[0] - U * (o.vessel === 'jar' ? .37 : .42);
-    const vang = o.vessel === 'jar' ? -2.45 - .4 * (1 - tiltIn) : -2.6 - .3 * (1 - tiltIn);
-    const vtip = [tip[0] - U * .05 * (1 - tiltIn), tip[1] - U * .03 * (1 - tiltIn)];
+    const lead = o.lead || 0, ui = u - lead;
+    const walkK = lead ? eio(clamp(u / (lead - .9))) : 1, liftK = lead ? eio(clamp((u - (lead - 1.5)) / 1.5)) : 1;
+    const tiltIn = eio(clamp(ui / 1.2)), flow = ss(.9, 1.6, ui);
+    const sx = tip[0] - U * (o.vessel === 'jar' ? .37 : .42) - U * .55 * (1 - walkK);
+    const vangP = o.vessel === 'jar' ? -2.45 - .4 * (1 - tiltIn) : -2.6 - .3 * (1 - tiltIn);
+    const vtipP = [tip[0] - U * .05 * (1 - tiltIn), tip[1] - U * .03 * (1 - tiltIn)];
+    // carried in front of the chest, tip up so nothing spills; then lifted and turned over the young man's head
+    const vang = lerp(1.25, vangP + 6.2832, liftK), vtip = [lerp(sx + U * .15, vtipP[0], liftK), lerp(gy - U * .84, vtipP[1], liftK)];
     // vessel first into a scratch path to know where the hands go: draw it after the bodies (it is in front)
     const ghost = GH || (GH = P.canvas(2, 2).getContext('2d'));
     const vs = o.vessel === 'jar' ? GOLD.jar(ghost, vtip[0], vtip[1], U * .16, vang) : GOLD.horn(ghost, vtip[0], vtip[1], U * .34, vang, { curl: .7, wide: .11 });
     const gi = o.vessel === 'jar' ? [Math.round((vs.C.length - 1) * .42), Math.round((vs.C.length - 1) * .9)] : [Math.round((vs.C.length - 1) * .35), Math.round((vs.C.length - 1) * .75)];
     const grip = i => { const [x, y, a, w] = vs.C[i]; return [x + Math.sin(a) * w * .2, y - Math.cos(a) * w * .2]; };
-    const pourer = figure(ctx, { x: sx, y: gy, h: U, d: 1, kind: 'elder', stoop: .5, bow: .3, hands: [grip(gi[0]), grip(gi[1])], light: sun, rim: o.rim, glow: .6 });
-    const anointed = figure(ctx, { x: ax, y: gy, h: ah, d: -1, kind: o.aKind, bow: .55, light: sun, rim: o.rim, glow: .6 });
+    const pourer = figure(ctx, { x: sx, y: gy, h: U, d: 1, kind: 'elder', stoop: .5, bow: .3, walk: walkK < 1 ? u * 4.5 : null, hands: [grip(gi[0]), grip(gi[1])], light: sun, rim: o.rim, glow: .6 });
+    const anointed = figure(ctx, { x: ax, y: gy, h: ah, d: -1, kind: o.aKind, bow: lead ? lerp(.05, .55, ss(lead - 1.2, lead + .2, u)) : .55, light: sun, rim: o.rim, glow: .6 });
     if (o.aKind === 'priest') o.priestGold(ctx, anointed, ah, u);
     // the vessel in their hands, then the oil: a stream to the crown and running down the head
     if (o.vessel === 'jar') GOLD.jar(ctx, vtip[0], vtip[1], U * .16, vang, { rim: o.rim, light: Math.atan2(sun[1] - vtip[1], sun[0] - vtip[0]) });
@@ -207,7 +211,7 @@
     if (flow > 0) {
       const crown = anointed.crown;
       GOLD.stream(ctx, GOLD.path(vtip[0], vtip[1], crown[0], crown[1] + U * .005), flow, { w: U * .011, t: u, back: true, glints: 3, speed: U * .5 });
-      headOil(ctx, anointed, -1, ss(1.5, dur, u) * .9, u, U * .007);
+      headOil(ctx, anointed, -1, ss(1.5, dur - lead, ui) * .9, u, U * .007);
       GOLD.bloom(ctx, crown[0], crown[1], [255, 196, 110], .45 * flow, { r: U * .22, streak: .2, ghosts: false });
     }
     ctx.restore();
@@ -223,7 +227,7 @@
 
   // David: Bethlehem hills at sunset, his brothers on the slope behind
   const DAVID = {
-    dur: 6.9, aKind: 'youth', aH: .63, vessel: 'horn', rim: [255, 184, 100], seed: 4,
+    dur: 10.7, lead: 3.8, aKind: 'youth', aH: .63, vessel: 'horn', rim: [255, 184, 100], seed: 4,
     sun: (W, H, gy, ax, U) => [ax + U * .02, gy - U * .30],
     back(ctx, W, H, gy, sun, u, U, ex) {
       dusk(ctx, W, H, gy - U * .2, sun, { top: '#2c1812', mid: '#8a4420', low: '#eea050' });

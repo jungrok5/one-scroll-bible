@@ -23,6 +23,12 @@
 <script src="goldoil-anoint.js"></script>
 <script src="jerusalem3d.js"></script>
 <script src="oil-rock.js"></script>
+<script src="kit-doreline.js"></script>
+<script src="engrave-rock.js"></script>
+<script src="kit-hopper.js"></script>
+<script src="hopper-cornelius.js"></script>
+<script src="kit-shadowstage.js"></script>
+<script src="shadow-emmaus.js"></script>
 <script src="dawn-impasto.js"></script>
 <script src="oil-emmaus.js"></script>
 <script>
@@ -50,28 +56,28 @@ const SCENES = [
   [0, 8.6, (c, t) => { sc('roomOil', 0, 'open')(c, t); textBand(c); }],   // N01 N02 — the candle, the old man from behind, the open Bible (the bright pages sit under the words: a double band)
   [7.6, 15.0, sc('jordanScene', 7.6)],             // P1 Q1 — the Jordan, late afternoon: Andrew to his brother
   [14.1, 24.0, sc('goldTitle', 14.1)],             // N03 T1 — one drop of gold oil, the title
-  [23.2, 29.6, scz('goldAnoint', 22.9, 'horn')],   // N04 — the horn of oil turns in the dark
-  [28.8, 36.5, scz('goldAnoint', 28.9, 'david')],  // L1 K1 — Samuel pours on the shepherd boy (1 Sam 16:13)
+  [23.2, 25.6, scz('goldAnoint', 22.9, 'horn')],   // N04 — the horn of oil turns in the dark (2 s: 관리자 2026-11-11 "뿔에 너무 시간 쓰는 것 같아")
+  [24.8, 36.5, scz('goldAnoint', 25.1, 'david')],  // N04 (cont.) L1 K1 — the hill at sunset, Samuel comes; he pours on the shepherd boy (1 Sam 16:13) at 28.9
   [35.7, 40.6, scz('goldAnoint', 35.8, 'aaron')],  // L2 K2 — Moses pours on Aaron at the tent door (Lev 8:12)
   [39.6, 45.0, scz('goldAnoint', 39.9, 'elisha')], // L3 K3 — Elijah's cloak over Elisha (no oil: the anointing is God's command, 1 Ki 19:16)
   [44.0, 52.2, scz('jerusalemScene', 44.3)],       // N06 — the Roman standard over the gate of Jerusalem
-  [51.2, 59.6, scz('rockOil', 51.4, 'confess')],   // P3 N07 Q2 — Caesarea Philippi at sunset: "주는 그리스도시요"
-  [58.8, 67.6, scz('rockOil', 59.1, 'foretell')],  // N08 — the sun goes down: he must suffer, die and rise
-  [66.8, 71.9, scz('rockOil', 67.1, 'protest')],   // Q3 — Peter holds his arm: "주여 그리 마옵소서"
-  [71.1, 76.5, scz('rockOil', 71.4, 'alone')],     // N09 — Peter alone under the dark rock
+  [51.2, 59.6, scz('rockEngrave', 51.4, 'confess')],   // P3 N07 Q2 — Caesarea Philippi at sunset: "주는 그리스도시요"
+  [58.8, 67.6, scz('rockEngrave', 59.1, 'foretell')],  // N08 — the sun goes down: he must suffer, die and rise
+  [66.8, 71.9, scz('rockEngrave', 67.1, 'protest')],   // Q3 — Peter holds his arm: "주여 그리 마옵소서"
+  [71.1, 76.5, scz('rockEngrave', 71.4, 'alone')],     // N09 — Peter alone under the dark rock
   [75.7, 88.4, sc('scrollScene', 79.8, 'isaiah')], // N10 P4 Q4 — the scroll unrolls (u < 0), 700 years before: Isaiah 53
   [87.4, 98.3, sc('bwCross', 87.6)],               // N11 Q5 — the cry from the cross (black-and-white film)
   [96.9, 114.8, sc('scrollScene', 96.9, 'psalm')], // N12 P5 Q6 Q7 — the ember crosses to the psalm of David (in before the cross has sunk to one point: no black dip)
   [113.8, 120.9, sc('bwSoldiers', 114.0)],         // L4 N14 — at the foot of the cross, the lots
   [119.8, 125.7, scz('dawnOil', 120.1, 'tomb')],   // N15 — the black-and-white is repainted with dawn: the empty tomb
-  [125.0, 130.0, scz('dawnOil', 125.3, 'peter')],  // N20 — Peter stands again under the rock at dawn
+  [125.0, 130.0, scz('corneliusScene', 125.0)],    // N20 — Peter speaks in Cornelius' house at Caesarea (Acts 10), Hopper-style (관리자 2026-11-11: 바위 아래 베드로가 3부와 반복)
   [129.4, 136.4, scz('jordanScene', 129.5, { mode: 'spirit' })],   // P7 Q9 — the light like a dove on the Jordan (Acts 10:38)
   [135.7, 143.1, scz('dawnOil', 136.0, 'tree')],   // Q10 — the shadow of the tree, then the dawn fills the tomb (Acts 10:39–40)
   [142.4, 146.9, scz('goldThree', 142.7)],         // N16 — the three lights meet on one
   [146.2, 153.6, scz('roomOil', 146.5, 'dawn')],   // N17 — the first room: dawn comes through the window
-  [153.0, 159.9, scz('emmausOil', 153.4, 'walk')], // P6 N18 — the road to Emmaus at sunset
-  [159.3, 166.8, scz('emmausOil', 159.6, 'speak')],// Q8 — the middle one turns: "그리스도가 이런 고난을 받고…"
-  [166.2, 177, scz('emmausOil', 166.5, 'lamp')],   // N19 E1 — a lamp lit in the village; the end card
+  [153.0, 159.9, scz('emmausShadow', 153.4, 'walk')], // P6 N18 — the road to Emmaus at sunset
+  [159.3, 166.8, scz('emmausShadow', 159.6, 'speak')],// Q8 — the middle one turns: "그리스도가 이런 고난을 받고…"
+  [166.2, 177, scz('emmausShadow', 166.5, 'lamp')],   // N19 E1 — a lamp lit in the village; the end card
 ];
 // text: every line from its `at` to the next voiced line (quotes hold until then; a caption label rides with its quote)
 let TEXT = [];
@@ -80,7 +86,7 @@ function buildText() {
   const V2 = L.filter(spoken).sort((a, b) => a.at - b.at), next = l => V2.find(x => x.at > l.at + .01), endAt = Math.max(...L.map(l => l.at));
   for (const l of L) {
     if (l.id === 'B1') continue;
-    if (l.id === 'E1') { TEXT.push(['end', 'E1', l.at, Film.script.dur]); continue; }
+    if (l.id === 'E1') { TEXT.push(['end', 'E1', l.at, Film.script.dur + 2]);   /* past the last frame: the card never fades out (it did in the 2nd render) */ continue; }
     if (l.id === 'T1') { TEXT.push(['title', 'T1', l.at, (next(l)?.at ?? l.at + 3) - .2]); continue; }
     if (l.kind === 'label') { const q = V2.find(x => x.at >= l.at - .01), qn = q && next(q);
       // a label whose screen says "인용 아래" is a small note under the quote, not a second caption on the caption's place (L2N 관유)
@@ -120,8 +126,8 @@ function draw(ctx, t) {
     else if (kind === 'quote') Film.quote(ctx, id, t, a, b, { ...QB(), hl: Film.lines[id].hl, hlk: ss(a + .4, a + 1.6, t) }); }
 }
 Pilot.run({ W, H, dur: FILM_DUR, fonts: ["600 40px 'Noto Serif KR'", "400 40px 'Noto Serif KR'", "400 20px 'Noto Sans KR'"],
-  init: async () => { await Film.load(); buildText();
-    for (const b of ['buildRoomOil', 'buildJordan', 'buildGoldoil', 'buildScrolls', 'buildBW', 'buildJerusalem', 'buildRockOil', 'buildDawn', 'buildEmmausOil']) if (hasF(b)) await window[b](); }, draw });
+  init: async () => { await Film.load(); buildText(); if (window.Hopper?.init) await Hopper.init();   /* hopper-cornelius.js needs the kit's texture first */
+    for (const b of ['buildRoomOil', 'buildJordan', 'buildGoldoil', 'buildScrolls', 'buildBW', 'buildJerusalem', 'buildRockOil', 'buildDawn', 'buildEmmausOil', 'buildRockEngrave', 'buildCornelius', 'buildEmmausShadow']) if (hasF(b)) await window[b](); }, draw });
 </script>
 </body>
 </html>

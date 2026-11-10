@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>고넬료의 집 시안</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600&family=Noto+Sans+KR:wght@400;600&display=swap">
+</head>
+<body>
+<script src="../../pilot/lib.js"></script>
+<script src="../lib-film.js"></script>
+<script src="kit-hopper.js"></script>
+<script src="hopper-cornelius.js"></script>
+<script>
+/* 시안: 「그리스도」 N20 — 가이사랴 고넬료의 집, 아침 (호퍼풍 사실주의) 4.7초. 자막은 시안에서만 얹음.
+   node motion/render.mjs v --page films/christ/sample-cornelius.html --stills 0.5,3.6 */
+const W = Pilot.W, H = Pilot.H, V = Pilot.ori === 'v';
+function band(ctx) { const y0 = Film.SAFE() - (V ? 150 : 70), g = ctx.createLinearGradient(0, y0, 0, H); g.addColorStop(0, 'rgba(10,8,10,0)'); g.addColorStop(.45, 'rgba(10,8,10,.42)'); g.addColorStop(1, 'rgba(10,8,10,.55)'); ctx.fillStyle = g; ctx.fillRect(0, y0, W, H - y0); }
+function draw(ctx, t) { corneliusScene(ctx, t); band(ctx); Film.sub(ctx, 'N20', t, .1, 4.6); }
+Pilot.run({ W, H, dur: 4.7, fonts: ["600 40px 'Noto Serif KR'", "400 28px 'Noto Sans KR'"], init: async () => { await Film.load(); Hopper.init(); buildCornelius(); }, draw });
+</script>
+</body>
+</html>

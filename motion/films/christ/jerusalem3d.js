@@ -59,10 +59,11 @@
     G = { F, P2, merl, stains, crowd, fig: P.canvas(700, 700),
       // the camera starts low under the gate and cranes up until the gate's top, the soldiers and the eagle stand in the sky
       // (portrait and landscape frame differently: the feet stay above the words, the eagle comes in at the top by the end)
-      cam: P.ori === 'v' ? W3.cam([[0, .25, 1.0, 13.5, .1, 1.0, 30, 1800, 1800], [3.6, .2, 2.7, 5.5, .1, 1.7, 30, 1780, 1780], [7.1, .2, 4.5, -4, .1, 2.5, 30, 1765, 1765]])
-        : W3.cam([[0, .25, 1.0, 13.5, .1, 2.65, 30, 1300, 1300], [3.6, .2, 2.7, 5.5, .1, 4.0, 30, 1300, 1300], [7.1, .2, 4.5, -4, .1, 5.6, 30, 1310, 1310]]),
-      light: W3.light([[0, 3.2, 2, 1.2, [255, 170, 100], [112, 88, 92], [84, 70, 104], [255, 172, 108], [255, 164, 96], [204, 136, 112], 2600, 0],
-        [7.1, 2.6, 2, 1.15, [255, 160, 92], [106, 82, 88], [80, 66, 100], [252, 162, 100], [255, 154, 90], [198, 128, 106], 2500, 0]]) };
+      // round 2 (관리자: the eagle must read during the first words): the standard and the soldiers are in the frame from u = 0
+      cam: P.ori === 'v' ? W3.cam([[0, .25, 1.2, -1, .1, 2.83, 30, 1660, 1660], [3.6, .2, 2.8, -2.5, .1, 2.7, 30, 1690, 1690], [7.1, .2, 4.5, -4, .1, 2.5, 30, 1720, 1720]])
+        : W3.cam([[0, .25, 1.2, -1, .1, 5.4, 30, 1225, 1225], [3.6, .2, 2.8, -2.5, .1, 5.5, 30, 1265, 1265], [7.1, .2, 4.5, -4, .1, 5.6, 30, 1310, 1310]]),
+      light: W3.light([[0, 3.2, 2, 1.2, [255, 170, 100], [146, 114, 112], [104, 86, 118], [255, 172, 108], [255, 164, 96], [204, 136, 112], 2600, 0],
+        [7.1, 2.6, 2, 1.15, [255, 160, 92], [140, 108, 108], [100, 82, 114], [252, 162, 100], [255, 154, 90], [198, 128, 106], 2500, 0]]) };
   }
 
   // the front of the gate block: one face with the arch cut out (even-odd), painted with a soft vertical gradient and its stains
@@ -182,7 +183,7 @@
     crowd(ctx, c, L, u, sunP);
     // the sun only flares where it is seen (through the arch); behind stone it only warms the sky
     let seen = 0; if (sunP) { const ap = archPts(27.5, 16).map(p => W3.P(c, ...p)); if (ap.every(Boolean)) { const pa = new Path2D(); ap.forEach((p, i) => i ? pa.lineTo(p[0], p[1]) : pa.moveTo(p[0], p[1])); pa.closePath(); seen = ctx.isPointInPath(pa, sunP[0], sunP[1]) ? 1 : .2; } }
-    if (sunP) { W3.bloom(ctx, sunP[0], sunP[1], L.glow, .85 * seen, { r: V ? 200 : 170, streak: .55 }); ctx.save(); ctx.globalCompositeOperation = 'screen'; const R = Math.max(W, H) * .8, g = ctx.createRadialGradient(sunP[0], sunP[1], 0, sunP[0], sunP[1], R); g.addColorStop(0, css(L.glow, .34)); g.addColorStop(.4, css(L.glow, .12)); g.addColorStop(1, css(L.glow, .03)); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H); ctx.restore(); }
+    if (sunP) { W3.bloom(ctx, sunP[0], sunP[1], L.glow, .85 * seen, { r: V ? 200 : 170, streak: .55 }); ctx.save(); ctx.globalCompositeOperation = 'screen'; const R = Math.max(W, H) * .8, g = ctx.createRadialGradient(sunP[0], sunP[1], 0, sunP[0], sunP[1], R); g.addColorStop(0, css(L.glow, .38)); g.addColorStop(.4, css(L.glow, .15)); g.addColorStop(1, css(L.glow, .05)); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H); ctx.restore(); }
     W3.finish(ctx, u, { vignette: .6 });
   }
   window.buildJerusalem = buildJerusalem; window.jerusalemScene = jerusalemScene;

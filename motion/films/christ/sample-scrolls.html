@@ -11,13 +11,15 @@
 <script src="kit-lamplit.js"></script>
 <script src="lamp-scrolls.js"></script>
 <script>
-/* 시안: 「그리스도」 등잔 아래 두루마리 — 이사야 53장 7.6초(79.8–87.6) → 시편 22편 16.5초(97.7–114.2).
+/* 시안: 「그리스도」 등잔 아래 두루마리 — (N10 76–79.8 펼쳐짐 3.8초) → 이사야 53장 7.6초(79.8–87.6) → 시편 22편 16.5초(97.7–114.2).
    글자는 본 세션이 얹는다 — 여기 글자는 자리 확인용 가짜 층(시안에만).
    node motion/render.mjs v --page films/christ/sample-scrolls.html --stills 0.5,2,4,6,9,12,15,18,21,23 */
 const { clamp, ss, win } = Pilot;
 const W = Pilot.W, H = Pilot.H, V = Pilot.ori === 'v';
 const ghost = (ctx, s, t, a, b, y, o = {}) => { const k = win(t, a, b, .5, .5); if (k > 0) Pilot.text(ctx, s, W / 2, y, Object.assign({ size: V ? 50 : 52, weight: 600, alpha: k, shadow: 'rgba(0,0,0,.9)', shadowBlur: 20 }, o)); };
-function draw(ctx, t) {
+function draw(ctx, t0) {   // t0 0–3.8 = isaiah u −3.8..0 (N10, 76 s: the closed scroll opens), then as before
+  if (t0 < 3.8) { scrollScene(ctx, t0 - 3.8, 'isaiah'); ghost(ctx, '그런데 그 길은 이미 적혀 있었습니다.', t0, .3, 3.8, V ? H * .70 : H * .86, { size: 44, weight: 400 }); return; }
+  const t = t0 - 3.8;
   const yq = V ? H * .655 : H * .8, ys = V ? H * .70 : H * .86;
   if (t < 7.6) { scrollScene(ctx, t, 'isaiah');
     ghost(ctx, '예수님보다 약 700년 전 · 이사야 53장', t, .7, 7.6, yq - (V ? 90 : 76), { size: V ? 30 : 28, weight: 400, color: '#d9c9a8', font: "'Noto Sans KR',sans-serif" });
@@ -28,7 +30,7 @@ function draw(ctx, t) {
     ghost(ctx, '“내 하나님이여 내 하나님이여\n어찌 나를 버리셨나이까”', u, 6.2, 11.9, yq);
     ghost(ctx, '“내 겉옷을 나누며\n속옷을 제비 뽑나이다”', u, 11.9, 16.5, yq); }
 }
-Pilot.run({ W, H, dur: 24.1, fonts: ["600 40px 'Noto Serif KR'", "400 40px 'Noto Serif KR'", "400 28px 'Noto Sans KR'"], init: () => buildScrolls(), draw });
+Pilot.run({ W, H, dur: 27.9, fonts: ["600 40px 'Noto Serif KR'", "400 40px 'Noto Serif KR'", "400 28px 'Noto Sans KR'"], init: () => buildScrolls(), draw });
 </script>
 </body>
 </html>

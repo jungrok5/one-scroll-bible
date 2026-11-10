@@ -82,7 +82,9 @@ function buildText() {
     if (l.id === 'B1') continue;
     if (l.id === 'E1') { TEXT.push(['end', 'E1', l.at, Film.script.dur]); continue; }
     if (l.id === 'T1') { TEXT.push(['title', 'T1', l.at, (next(l)?.at ?? l.at + 3) - .2]); continue; }
-    if (l.kind === 'label') { const q = V2.find(x => x.at >= l.at - .01), qn = q && next(q); TEXT.push(['label', l.id, l.at, (qn?.at ?? endAt) - .2]); continue; }
+    if (l.kind === 'label') { const q = V2.find(x => x.at >= l.at - .01), qn = q && next(q);
+      // a label whose screen says "인용 아래" is a small note under the quote, not a second caption on the caption's place (L2N 관유)
+      TEXT.push([/아래/.test(l.screen || '') ? 'note' : 'label', l.id, l.at, (qn?.at ?? endAt) - .2]); continue; }
     if (!spoken(l)) continue;
     const n = next(l), b = (n?.at ?? endAt) - (l.kind === 'quote' ? .1 : .25);
     TEXT.push([l.kind === 'quote' ? 'quote' : 'sub', l.id, l.at, b]);
@@ -114,6 +116,7 @@ function draw(ctx, t) {
   for (const [kind, id, a, b] of TEXT) { if (t < a - .1 || t > b + .1) continue;
     if (kind === 'sub') Film.sub(ctx, id, t, a, b); else if (kind === 'label') Film.label(ctx, id, t, a, b); else if (kind === 'title') title(ctx, id, t, a, b);
     else if (kind === 'end') endCard(ctx, t, a, b);
+    else if (kind === 'note') { const k = win(t, a, b, .8, .8); if (k > 0) Pilot.text(ctx, Film.text(id), W / 2, V ? H * .8 : H - 40, { size: V ? 30 : 26, font: "'Noto Sans KR',sans-serif", color: '#d9c79a', alpha: k * .9, shadow: 'rgba(0,0,0,.9)', shadowBlur: 12, ls: 1 }); }
     else if (kind === 'quote') Film.quote(ctx, id, t, a, b, { ...QB(), hl: Film.lines[id].hl, hlk: ss(a + .4, a + 1.6, t) }); }
 }
 Pilot.run({ W, H, dur: FILM_DUR, fonts: ["600 40px 'Noto Serif KR'", "400 40px 'Noto Serif KR'", "400 20px 'Noto Sans KR'"],

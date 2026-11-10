@@ -65,7 +65,7 @@
       const sh = [S[0] + (a ? -1 : 1) * d * .01 * h, S[1]];
       parts.push(limb([sh, r.E, r.Hd], [.05 * h, .04 * h, .05 * h]));
       const hn = new Path2D(); hn.arc(r.Hd[0], r.Hd[1], .024 * h, 0, 6.2832); parts.push(hn);
-      hands.push(r.Hd); elbows.push(r.E); if (!r.reach && f.hands && f.hands[a]) console.warn('reach', k);
+      hands.push(r.Hd); elbows.push(r.E); if (!r.reach && f.hands && f.hands[a]) console.warn('reach', k, a, (Math.hypot(tgt[0] - S[0], tgt[1] - S[1]) / (L1 + L2)).toFixed(2));
     }
     // draw: light wrapping the edge (offset towards the light, with a halo), then the silhouette
     const lx = f.light ? f.light[0] - f.x : 0, ly = f.light ? f.light[1] - (f.y - h * .5) : -1, ll = Math.hypot(lx, ly) || 1, o = Math.max(1.5, h * .006);
@@ -96,39 +96,30 @@
     ctx.lineTo(W + 20, H + 10); ctx.fill();
   }
   // warm light lying on the near ground (the subtitle band stays calm, but is not black)
-  function groundLight(ctx, W, H, gy, k = 1) { const g = ctx.createLinearGradient(0, gy, 0, H); g.addColorStop(0, `rgba(170,100,44,${.42 * k})`); g.addColorStop(.35, `rgba(110,64,28,${.30 * k})`); g.addColorStop(1, `rgba(60,34,16,${.22 * k})`);
+  function groundLight(ctx, W, H, gy, k = 1) { const g = ctx.createLinearGradient(0, gy, 0, H); g.addColorStop(0, `rgba(176,104,46,${.56 * k})`); g.addColorStop(.35, `rgba(120,70,30,${.42 * k})`); g.addColorStop(1, `rgba(72,42,20,${.32 * k})`);
     ctx.save(); ctx.globalCompositeOperation = 'screen'; ctx.fillStyle = g; ctx.fillRect(-W, gy, W * 3, H * 2); ctx.restore(); }
   function camera(ctx, W, H, z, fx, fy) { ctx.setTransform(z, 0, 0, z, fx * (1 - z), fy * (1 - z)); }
 
   // ---------------- 'horn' : a horn flask turning in lamplight ----------------
   function hornScene(ctx, u) {
     const W = P.W, H = P.H, V = P.ori === 'v';
-    const ex = ss(0, .4, u), z = 1 + .06 * u / 6;
-    ctx.fillStyle = '#0d0805'; ctx.fillRect(0, 0, W, H);
-    // the lamp (a clay oil lamp) low left, its flame the only light
-    const LX = W * (V ? .26 : .30), LY = H * (V ? .58 : .70), fl = 1 + .06 * Math.sin(u * 11) + .04 * Math.sin(u * 23 + 1) + .05 * (P.noise(u * 3, 1) - .5);
-    let g = ctx.createRadialGradient(LX, LY - H * .02, 0, LX, LY, Math.max(W, H) * .75);
-    g.addColorStop(0, `rgba(255,200,124,${ex})`); g.addColorStop(.12, `rgba(226,142,64,${.9 * ex * fl})`); g.addColorStop(.45, `rgba(140,82,36,${.8 * ex})`); g.addColorStop(1, `rgba(56,34,16,${.75 * ex})`);
+    const ex = ss(0, .4, u), z = 1 + .10 * u / 6;
+    ctx.fillStyle = '#100906'; ctx.fillRect(0, 0, W, H);
+    // the lamp is outside the frame (low left): only its warm light and haze come in — no floor, nothing for the horn to stand on
+    const LX = -W * .12, LY = H * (V ? .62 : .80), fl = 1 + .06 * Math.sin(u * 11) + .04 * Math.sin(u * 23 + 1) + .05 * (P.noise(u * 3, 1) - .5);
+    let g = ctx.createRadialGradient(LX, LY, 0, LX, LY, Math.max(W, H) * 1.05);
+    g.addColorStop(0, `rgba(255,190,110,${ex * fl})`); g.addColorStop(.18, `rgba(214,130,58,${.85 * ex * fl})`); g.addColorStop(.5, `rgba(126,72,32,${.75 * ex})`); g.addColorStop(1, `rgba(44,26,13,${.7 * ex})`);
     ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
-    GOLD.bokeh(ctx, { n: 8, seed: 31, x: W * .3, y: 0, w: W * .8, h: H * .5, r: W * .06, a: .07 * ex, t: u });
-    // the table: dark wood, catching the lamp
-    const ty = LY + H * .015;
-    g = ctx.createLinearGradient(0, ty - H * .01, 0, H); g.addColorStop(0, `rgba(70,40,18,${ex})`); g.addColorStop(.12, `rgba(40,24,11,${ex})`); g.addColorStop(1, `rgba(14,8,4,${ex})`);
-    ctx.fillStyle = g; ctx.fillRect(0, ty, W, H - ty);
-    ctx.save(); ctx.globalCompositeOperation = 'screen'; ctx.translate(LX, ty + H * .01); ctx.scale(1, .18); g = ctx.createRadialGradient(0, 0, 0, 0, 0, W * .5); g.addColorStop(0, `rgba(200,120,50,${.5 * ex})`); g.addColorStop(1, 'rgba(0,0,0,0)'); ctx.fillStyle = g; ctx.fillRect(-W, -W, 2 * W, 2 * W); ctx.restore();
-    groundLight(ctx, W, H, ty, ex * .8);
-    // lamp body + flame
-    const ls = V ? W * .11 : H * .11;
-    ctx.fillStyle = '#1a0f08'; ctx.beginPath(); ctx.ellipse(LX, ty - ls * .18, ls * .55, ls * .2, 0, 0, 6.2832); ctx.fill();
-    ctx.beginPath(); ctx.moveTo(LX + ls * .4, ty - ls * .28); ctx.quadraticCurveTo(LX + ls * .75, ty - ls * .34, LX + ls * .8, ty - ls * .3); ctx.lineTo(LX + ls * .45, ty - ls * .14); ctx.fill();
-    ctx.strokeStyle = 'rgba(255,170,80,.6)'; ctx.lineWidth = 2; ctx.beginPath(); ctx.ellipse(LX, ty - ls * .2, ls * .55, ls * .2, 0, Math.PI * 1.05, Math.PI * 1.95); ctx.stroke();
-    const fx = LX + ls * .78, fy = ty - ls * .33, fh = ls * .5 * fl;
-    g = ctx.createRadialGradient(fx, fy - fh * .35, 0, fx, fy - fh * .35, fh * .6); g.addColorStop(0, 'rgba(255,250,225,1)'); g.addColorStop(.35, 'rgba(255,200,100,.95)'); g.addColorStop(1, 'rgba(255,120,30,0)');
-    ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(fx, fy - fh); ctx.quadraticCurveTo(fx + fh * .28, fy - fh * .3, fx, fy); ctx.quadraticCurveTo(fx - fh * .28, fy - fh * .3, fx, fy - fh); ctx.fill();
-    GOLD.bloom(ctx, fx, fy - fh * .4, [255, 170, 80], .55 * ex, { r: ls * 1.6, streak: .25 });
+    // haze in the lamp's light, drifting
+    ctx.save(); ctx.globalCompositeOperation = 'screen';
+    for (let i = 0; i < 5; i++) { const hx = W * (.15 + .18 * i) + Math.sin(u * .3 + i) * W * .05, hy = H * (.30 + .1 * Math.sin(i * 1.7)) - u * H * .006, hr = W * (.35 + .1 * (i % 2));
+      g = ctx.createRadialGradient(hx, hy, 0, hx, hy, hr); g.addColorStop(0, `rgba(170,100,44,${.10 * ex})`); g.addColorStop(1, 'rgba(0,0,0,0)'); ctx.fillStyle = g; ctx.fillRect(hx - hr, hy - hr, 2 * hr, 2 * hr); }
+    ctx.restore();
+    GOLD.bokeh(ctx, { n: 9, seed: 31, x: 0, y: 0, w: W, h: H * .8, r: W * .06, a: .08 * ex, t: u });
+    GOLD.bloom(ctx, 0, LY, [255, 170, 80], .45 * ex * fl, { r: Math.max(W, H) * .35, streak: 0, ghosts: false });
 
     // the horn in 3D: a sphere-swept tube turning about the vertical axis, lit by the flame
-    const hcx = W * (V ? .55 : .58), hcy = H * (V ? .37 : .40), L = V ? W * .66 : H * .66;
+    const hcx = W * (V ? .54 : .56), hcy = H * (V ? .40 : .44), L = V ? W * .70 : H * .70;
     const yaw = -1.1 + u * .36, tilt = -.18 + .32 * eio(clamp((u - 4.3) / 1.7));            // turns; at the end its tip starts to dip (next cut pours)
     const N = 150, pts = [];
     let px = 0, py = 0, a = 0;
@@ -184,7 +175,7 @@
   function pourScene(ctx, u, o) {
     const W = P.W, H = P.H, V = P.ori === 'v', dur = o.dur;
     const U = V ? .25 * H : .42 * H, gy = H * (V ? .60 : .76), cx = W * .5 + U * .05;
-    const ex = ss(0, .35, u), z = 1 + .06 * u / dur;
+    const ex = ss(0, .35, u), z = 1 + .14 * u / dur, pan = (u / dur - .5) * U * .10;
     // the anointed
     const ah = U * o.aH, ax = cx + U * .16;
     const aTop0 = gy - ah * (o.aKind === 'priest' ? 1.04 : .99);
@@ -192,7 +183,7 @@
     const sun = o.sun(W, H, gy, ax, U);
     const fyFocus = tip[1] + U * .1;
     // world
-    ctx.save(); camera(ctx, W, H, z, ax, fyFocus);
+    ctx.save(); camera(ctx, W, H, z, ax, fyFocus); ctx.translate(-pan, 0);
     o.back(ctx, W, H, gy, sun, u, U, ex);
     groundLight(ctx, W, H, gy, ex);
     // the pour: vessel tilts in (0–1.2), oil starts (1.0–1.7) and keeps flowing
@@ -221,13 +212,13 @@
     }
     ctx.restore();
     GOLD.bloom(ctx, ...toScr(sun, z, ax, fyFocus), [255, 170, 80], .35 * ex, { r: U * .5, streak: 0 });
-    GOLD.motes(ctx, u, { n: 70, seed: o.seed || 3, light: [...toScr(sun, z, ax, fyFocus), W * .7], a: ex });
+    GOLD.motes(ctx, u * 2.2, { n: 130, seed: o.seed || 3, light: [...toScr(sun, z, ax, fyFocus), W * .8], a: ex, size: 1.2 });
     GOLD.glow(ctx, .5, { wide: .5 });
     GOLD.finish(ctx, u, { vignette: .5 });
     if (ex < 1) { ctx.fillStyle = `rgba(0,0,0,${1 - ex})`; ctx.fillRect(0, 0, W, H); }
     return { pourer, anointed };
   }
-  let GH = null;
+  let GH = null, BEAM = null;
   const toScr = (p, z, fx, fy) => [fx + (p[0] - fx) * z, fy + (p[1] - fy) * z];
 
   // David: Bethlehem hills at sunset, his brothers on the slope behind
@@ -287,6 +278,92 @@
     },
   };
 
+  function priestFront(ctx, f, u) {       // Aaron facing the viewer, head bowed; the gold of his garments catches the lamplight
+    const h = f.h, x = f.x, y = f.y, bw = f.bow || 0, T = (lx, ly) => [x + lx * h, y + ly * h];
+    const parts = [];
+    const R = [[-.06, -.86], [-.15, -.81], [-.185, -.75], [-.195, -.52], [-.18, -.30], [-.215, -.03], [-.20, 0], [.20, 0], [.215, -.03], [.18, -.30], [.195, -.52], [.185, -.75], [.15, -.81], [.06, -.86]];
+    const rp = new Path2D(), q = R.map(([a, b]) => T(a, b)); rp.moveTo((q[0][0] + q[q.length - 1][0]) / 2, (q[0][1] + q[q.length - 1][1]) / 2);
+    for (let i = 0; i < q.length; i++) { const n = q[(i + 1) % q.length]; rp.quadraticCurveTo(q[i][0], q[i][1], (q[i][0] + n[0]) / 2, (q[i][1] + n[1]) / 2); } rp.closePath(); parts.push(rp);
+    const hr = .064 * h, hc = T(0, -.912 + bw * .035), nk = new Path2D(); nk.rect(x - .035 * h, hc[1], .07 * h, T(0, -.85)[1] - hc[1]); parts.push(nk);
+    const hp = new Path2D(); hp.arc(hc[0], hc[1], hr, 0, 6.2832); parts.push(hp);
+    // the turban of fine linen, tall and wound
+    const mw = hr * 1.12, mt = hc[1] - hr * .4 - .13 * h, m = new Path2D();
+    m.moveTo(hc[0] - mw, hc[1] - hr * .35); m.bezierCurveTo(hc[0] - mw * 1.12, mt + hr * .9, hc[0] - mw * .9, mt, hc[0], mt); m.bezierCurveTo(hc[0] + mw * .9, mt, hc[0] + mw * 1.12, mt + hr * .9, hc[0] + mw, hc[1] - hr * .35); m.closePath(); parts.push(m);
+    const lx = f.light[0] - x, ly = f.light[1] - (y - h * .5), ll = Math.hypot(lx, ly) || 1, o = Math.max(1.5, h * .006);
+    ctx.save(); ctx.translate(lx / ll * o, ly / ll * o); ctx.fillStyle = css(f.rim, .95); ctx.shadowColor = css(f.rim, .7); ctx.shadowBlur = h * .06; parts.forEach(p => ctx.fill(p)); ctx.restore();
+    ctx.fillStyle = '#120a05'; parts.forEach(p => ctx.fill(p));
+    // wound bands of the turban, faintly lit
+    ctx.strokeStyle = 'rgba(255,200,130,.16)'; ctx.lineWidth = Math.max(1, h * .003);
+    for (let i = 1; i < 5; i++) { const yy = lerp(hc[1] - hr * .5, mt + hr * .5, i / 5); ctx.beginPath(); ctx.moveTo(hc[0] - mw * 1.02, yy + hr * .1); ctx.quadraticCurveTo(hc[0], yy - hr * .25, hc[0] + mw * 1.02, yy + hr * .1); ctx.stroke(); }
+    const gold = (a) => `rgba(255,${200},${120},${a})`, glint = (gx, gy, r, a) => { const g = ctx.createRadialGradient(gx, gy, 0, gx, gy, r); g.addColorStop(0, `rgba(255,236,170,${a})`); g.addColorStop(.4, `rgba(255,190,90,${a * .5})`); g.addColorStop(1, 'rgba(255,180,80,0)'); ctx.save(); ctx.globalCompositeOperation = 'screen'; ctx.fillStyle = g; ctx.fillRect(gx - r, gy - r, 2 * r, 2 * r); ctx.restore(); };
+    const lw = Math.max(1.5, h * .006), sh = .0;
+    // the ephod: shoulder pieces down to the breastpiece, onyx stones on the shoulders, the woven band at the waist
+    ctx.strokeStyle = gold(.75); ctx.lineWidth = lw * 1.4; ctx.lineCap = 'round';
+    for (const sd of [-1, 1]) { ctx.beginPath(); ctx.moveTo(...T(sd * .105, -.815)); ctx.lineTo(...T(sd * .06, -.735)); ctx.stroke(); glint(...T(sd * .11, -.81), h * .03, .7); }
+    ctx.beginPath(); ctx.moveTo(...T(-.185, -.555)); ctx.quadraticCurveTo(...T(0, -.545), ...T(.185, -.555)); ctx.stroke();
+    ctx.globalAlpha = .55; ctx.beginPath(); ctx.moveTo(...T(-.18, -.535)); ctx.quadraticCurveTo(...T(0, -.525), ...T(.18, -.535)); ctx.stroke(); ctx.globalAlpha = 1;
+    // the breastpiece: a square of gold settings, twelve stones in four rows of three (Ex 28:15–21)
+    const b0 = T(-.06, -.735), bs = .12 * h; ctx.strokeStyle = gold(.9); ctx.lineWidth = lw; ctx.strokeRect(b0[0], b0[1], bs, bs);
+    const stones = [[255, 120, 90], [255, 214, 140], [140, 220, 170], [255, 160, 100], [150, 170, 255], [255, 240, 220], [255, 170, 110], [210, 255, 200], [200, 140, 255], [255, 220, 120], [255, 190, 150], [170, 255, 230]];
+    for (let r = 0; r < 4; r++) for (let c = 0; c < 3; c++) { const sx = b0[0] + bs * (.2 + c * .3), sy = b0[1] + bs * (.14 + r * .24), st = stones[r * 3 + c], tw = .55 + .35 * Math.sin(u * 2.5 + r * 1.3 + c * 2.1);
+      ctx.fillStyle = `rgba(${st[0]},${st[1]},${st[2]},${.55 * tw + .2})`; ctx.fillRect(sx - bs * .07, sy - bs * .07, bs * .14, bs * .12); }
+    glint(b0[0] + bs * .5, b0[1] + bs * .4, bs * 1.1, .35);
+    // the gold plate on the front of the turban
+    ctx.fillStyle = 'rgba(230,170,90,.85)'; ctx.fillRect(hc[0] - hr * .32, hc[1] - hr * .95, hr * .64, hr * .16); glint(hc[0], hc[1] - hr * .9, hr * .7, .35);
+    return { head: [hc[0], hc[1], hr], crown: [hc[0], mt], top: mt };
+  }
+  function aaronScene(ctx, u) {
+    const W = P.W, H = P.H, V = P.ori === 'v', dur = 4.1;
+    const U = V ? .30 * H : .48 * H, gy = H * (V ? .62 : .80);
+    const ex = ss(0, .35, u), z = 1 + .12 * u / dur, pan = (u / dur - .5) * U * .08;
+    const ax = W * .5 + U * .14, ah = U * .96, bow = .6;
+    const lamp = [ax - U * .1, gy - U * .75];                         // the lampstand's glow, behind the screen
+    // where Aaron's turban ends, and the jug above it
+    const hc = gy + (-.912 + bow * .035) * ah, mtop = hc - .064 * ah * .4 - .13 * ah, tip = [ax - U * .01, mtop - U * .07];
+    const fy = tip[1] + U * .2;
+    ctx.save(); camera(ctx, W, H, z, ax, fy); ctx.translate(-pan, 0);
+    ctx.fillStyle = '#1c100a'; ctx.fillRect(-W, -H, W * 3, H * 3);
+    // the screen of the door fills the frame: woven, lit from within, hanging in folds
+    const x0 = -W * .2, x1 = W * 1.2, y0 = gy - U * 1.9;
+    let g = ctx.createRadialGradient(lamp[0], lamp[1], 0, lamp[0], lamp[1], U * 1.7); g.addColorStop(0, 'rgba(255,224,160,1)'); g.addColorStop(.3, 'rgba(240,160,80,1)'); g.addColorStop(.75, 'rgba(170,90,44,1)'); g.addColorStop(1, 'rgba(110,56,28,1)');
+    ctx.fillStyle = g; ctx.fillRect(x0, y0, x1 - x0, gy - y0);
+    ctx.save(); ctx.globalCompositeOperation = 'multiply';
+    for (let x = x0; x < x1; x += 3) { const v = .80 + .20 * Math.sin((x - x0) / U * 30 + Math.sin(u * .9 + x * .002) * .4) * (.6 + .4 * P.noise(x * .01, 2)); ctx.fillStyle = `rgb(${255 * v | 0},${238 * v | 0},${224 * v | 0})`; ctx.fillRect(x, y0, 3, gy - y0); }
+    [[.16, 'rgba(110,90,160,.5)'], [.21, 'rgba(170,60,70,.45)'], [.26, 'rgba(90,100,170,.45)'], [.74, 'rgba(110,90,160,.35)'], [.78, 'rgba(170,60,70,.32)']].forEach(([f, c]) => { ctx.fillStyle = c; ctx.fillRect(x0, y0 + (gy - y0) * f, x1 - x0, (gy - y0) * .02); });
+    ctx.restore();
+    // two pillars (gold-covered, bronze bases) framing the door, the tent's covering above
+    [ax - U * 1.05, ax + U * .95].forEach(px => { ctx.fillStyle = '#140b06'; ctx.fillRect(px - U * .05, y0 - U * .1, U * .1, gy - y0 + U * .1); ctx.fillStyle = 'rgba(255,196,110,.6)'; ctx.fillRect(px + (px < lamp[0] ? U * .04 : -U * .05), y0 - U * .1, U * .008, gy - y0 + U * .1);
+      ctx.fillStyle = 'rgba(210,150,80,.7)'; ctx.fillRect(px - U * .065, y0 - U * .13, U * .13, U * .04); ctx.fillStyle = 'rgba(150,100,50,.8)'; ctx.fillRect(px - U * .065, gy - U * .05, U * .13, U * .05); });
+    g = ctx.createLinearGradient(0, -H, 0, y0); g.addColorStop(0, '#120a06'); g.addColorStop(1, '#5a3218'); ctx.fillStyle = g; ctx.fillRect(-W, -H, W * 3, y0 - U * .1 + H);
+    // the court's sand, warm in the light from the door
+    g = ctx.createLinearGradient(0, gy, 0, H * 1.2); g.addColorStop(0, 'rgba(150,90,44,1)'); g.addColorStop(.25, 'rgba(90,54,26,1)'); g.addColorStop(1, 'rgba(40,24,12,1)'); ctx.fillStyle = g; ctx.fillRect(-W, gy, W * 3, H);
+    groundLight(ctx, W, H, gy, ex);
+    // Moses (as tall as Aaron, side view) pours from the jug; Aaron faces us, head bowed
+    const tiltIn = eio(clamp(u / 1.0)), flow = ss(.7, 1.3, u), vang = -2.8 - .35 * (1 - tiltIn);
+    const vtip = [tip[0] - U * .04 * (1 - tiltIn), tip[1] - U * .02 * (1 - tiltIn)];
+    const ghost = GH || (GH = P.canvas(2, 2).getContext('2d'));
+    const vs = GOLD.jar(ghost, vtip[0], vtip[1], U * .15, vang), n = vs.C.length - 1;
+    const grip = i => { const [x, y, a, w] = vs.C[i]; return [x + Math.sin(a) * w * .25, y - Math.cos(a) * w * .25]; };
+    const mh = U * 1.07, mx = ax - U * .33;
+    const moses = figure(ctx, { x: mx, y: gy, h: mh, d: 1, kind: 'elder', stoop: .25, bow: .2, hands: [grip(Math.round(n * .42)), grip(Math.round(n * .9))], light: lamp, rim: [255, 200, 130], glow: .6 });
+    const aaron = priestFront(ctx, { x: ax, y: gy, h: ah, bow, light: lamp, rim: [255, 200, 130] }, u);
+    GOLD.jar(ctx, vtip[0], vtip[1], U * .15, vang, { rim: [255, 200, 130], light: Math.atan2(lamp[1] - vtip[1], lamp[0] - vtip[0]) });
+    ctx.fillStyle = '#0d0704'; moses.hands.forEach(([x, y]) => { ctx.beginPath(); ctx.arc(x, y, mh * .024, 0, 6.2832); ctx.fill(); });
+    if (flow > 0) {
+      GOLD.stream(ctx, GOLD.path(vtip[0], vtip[1], aaron.crown[0], aaron.crown[1] + U * .004), flow, { w: U * .010, t: u, back: true, glints: 3, speed: U * .5 });
+      // the oil runs over the turban's side
+      const [hx, hy, hr] = aaron.head, run = [[hx, aaron.top], [hx + hr * .6, aaron.top + hr * .25], [hx + hr * 1.1, aaron.top + hr * .9], [hx + hr * 1.18, hy - hr * .3], [hx + hr * 1.05, hy + hr * .6]];
+      GOLD.stream(ctx, run, ss(1.1, dur, u) * .85, { w: U * .006, t: u, back: true, glints: 2, speed: hr * 2, taper: .4 });
+      GOLD.bloom(ctx, aaron.crown[0], aaron.crown[1], [255, 200, 120], .45 * flow, { r: U * .2, streak: .2, ghosts: false });
+    }
+    ctx.restore();
+    GOLD.bloom(ctx, ...toScr([lamp[0] - pan, lamp[1]], z, ax, fy), [255, 190, 110], .35 * ex, { r: U * .6, streak: 0 });
+    GOLD.motes(ctx, u * 2, { n: 120, seed: 6, light: [...toScr([lamp[0] - pan, lamp[1]], z, ax, fy), W * .8], a: ex, size: 1.2 });
+    GOLD.glow(ctx, .5, { wide: .5 });
+    GOLD.finish(ctx, u, { vignette: .45 });
+    if (ex < 1) { ctx.fillStyle = `rgba(0,0,0,${1 - ex})`; ctx.fillRect(0, 0, W, H); }
+  }
+
   // ---------------- 'elisha' : no oil — Elijah casts his mantle over the young man at the plough ----------------
   function ox(ctx, x, y, s, ph, rim, light) {        // a side-view ox facing right; ph = gait phase
     const B = [[-.50, -.50], [-.44, -.60], [-.10, -.60], [.18, -.70], [.30, -.68], [.44, -.58], [.56, -.52], [.66, -.40], [.64, -.33], [.56, -.33], [.48, -.36], [.40, -.27], [.30, -.24], [.0, -.22], [-.30, -.25], [-.46, -.30], [-.53, -.40]];
@@ -306,7 +383,7 @@
   function elishaScene(ctx, u) {
     const W = P.W, H = P.H, V = P.ori === 'v', dur = 4.4;
     const U = V ? .24 * H : .40 * H, gy = H * (V ? .60 : .76);
-    const ex = ss(0, .35, u), z = 1 + .06 * u / dur;
+    const ex = ss(0, .35, u), z = 1 + .10 * u / dur;
     const walk = u * .045 * U;                                                 // oxen plod slowly to the right
     const left = V ? W * .14 : W * .26, oxS = U * .48, ex2 = left + U * 1.33 + walk;
     const sun = [W * .5 + U * .10, gy - U * .22];
@@ -329,7 +406,7 @@
     ctx.lineWidth = U * .02; ctx.beginPath(); ctx.moveTo(...beam0); ctx.quadraticCurveTo(ex2 - oxS * .3, gy - oxS * .2, plX, gy - U * .01); ctx.stroke();          // plough beam to the share
     const handle = [plX - U * .08, gy - U * .43]; ctx.beginPath(); ctx.moveTo(plX, gy); ctx.lineTo(...handle); ctx.stroke();
     ctx.fillStyle = '#0d0704'; ctx.beginPath(); ctx.moveTo(plX - U * .03, gy - U * .02); ctx.lineTo(plX + U * .07, gy + U * .005); ctx.lineTo(plX - U * .02, gy + U * .01); ctx.closePath(); ctx.fill();   // the share                                         // handle
-    const elX = handle[0] - U * .25;
+    const elX = handle[0] - U * .21;
     const t0 = .35, t1 = 3.0;
     // light from above on Elisha (a single beam) — grows as the mantle comes down
     const bm = ss(2.2, 3.4, u);
@@ -340,29 +417,40 @@
     const sw = eo(clamp(u / .55)), down = eio(clamp((u - 1.1) / 1.2)), ang = lerp(lerp(2.4, -.55, sw), .9, down), reach = U * lerp(.33, .30, down);
     const hand = [sh[0] + Math.cos(ang) * reach, sh[1] + Math.sin(ang) * reach];
     const elijah = figure(ctx, { x: ejX, y: gy, h: U, d: 1, kind: 'elder', stoop: .3, hands: [hand, null], light: sun, rim: [255, 180, 100] });
-    // the mantle in flight: from Elijah's hand (0.35 s) over to Elisha's shoulders (3.0 s), unfolding, its edge catching the light
+    // the mantle in flight: from Elijah's hand (0.35 s) to Elisha's shoulders (3.0 s) — a wide square cloth, its edges rippling,
+    // then it lies over his shoulders and down his back, and stays
     const fk = clamp((u - t0) / (t1 - t0)), fe = eio(fk);
-    const from = elijah.hands[0], to = [elisha.sh[0] - U * .01, elisha.sh[1] - U * .02];
-    const mxp = lerp(from[0], to[0], fe), myp = lerp(from[1], to[1], fe) - Math.sin(fe * Math.PI) * U * .32;
-    // a cloth: four corners (spread in flight, draped over his back when it lands), edges rippling
-    const settle = ss(t1 - .25, t1 + .45, u), spread = u < t0 ? .2 : .35 + .65 * Math.sin(Math.min(1, fk * 1.15) * Math.PI * .5);
-    const rot = lerp(-.5, .15, fe) + .15 * Math.sin(u * 5);
-    const cw = U * lerp(.06, .17, spread), ch = U * lerp(.03, .07, spread), cr = Math.cos(rot), sr = Math.sin(rot);
-    const fly = [[-cw, -ch * .6], [cw, -ch], [cw * .85, ch], [-cw * .9, ch * .8]].map(([a, b]) => [mxp + a * cr - b * sr, myp + a * sr + b * cr]);
-    const sh2 = elisha.sh, cape = [[sh2[0] + U * .02, sh2[1] - U * .03], [sh2[0] - U * .085, sh2[1] - U * .01], [sh2[0] - U * .12, sh2[1] + U * .31], [sh2[0] - U * .02, sh2[1] + U * .27]];
-    const C4 = fly.map((p, i) => [lerp(p[0], cape[i][0], settle), lerp(p[1], cape[i][1], settle)]);
-    const pts = [];
-    for (let e = 0; e < 4; e++) { const A = C4[e], Bq = C4[(e + 1) % 4], nx = -(Bq[1] - A[1]), ny = Bq[0] - A[0], nl = Math.hypot(nx, ny) || 1;
-      for (let j = 0; j < 8; j++) { const t = j / 8, w = Math.sin(t * Math.PI) * (Math.sin(t * 9 + u * 10 + e) * U * .012 + Math.sin(t * 4 - u * 7 + e * 2) * U * .016) * (1 - .75 * settle);
-        pts.push([lerp(A[0], Bq[0], t) + nx / nl * w, lerp(A[1], Bq[1], t) + ny / nl * w]); } }
+    const from = elijah.hands[0], sh2 = elisha.sh, to = [sh2[0] - U * .05, sh2[1] + U * .12];
+    const mxp = lerp(from[0], to[0], fe), myp = lerp(from[1], to[1], fe) - Math.sin(fe * Math.PI) * U * .30;
+    const settle = ss(t1 - .3, t1 + .5, u), spread = u < t0 ? .25 : .25 + .75 * ss(0, .4, fk);
+    const rot = lerp(-.35, .1, fe) + .18 * Math.sin(u * 3.4), tiltY = .75 + .25 * Math.sin(u * 2.3 + 1);    // the cloth plane turns as it flies
+    const cw = U * .20 * spread, chh = U * .16 * spread * tiltY, cr = Math.cos(rot), sr = Math.sin(rot);
+    // where it lies at the end: top edge along the shoulders, the rest hanging down his back, standing a little off it
+    const capeAt = (a, b) => { const ta = (a + 1) / 2, tb = (b + 1) / 2;
+      const top = [lerp(sh2[0] + U * .05, sh2[0] - U * .10, ta), lerp(sh2[1] - U * .03, sh2[1] - U * .012, ta)], bot = [lerp(sh2[0] + U * .0, sh2[0] - U * .2, ta), lerp(sh2[1] + U * .40, sh2[1] + U * .45, ta)];
+      return [lerp(top[0], bot[0], tb) - Math.sin(tb * Math.PI) * U * .02, lerp(top[1], bot[1], tb)]; };
+    const GA = 11, GB = 7, grid = [];
+    for (let j = 0; j < GB; j++) { const row = []; for (let i = 0; i < GA; i++) { const a = i / (GA - 1) * 2 - 1, b = j / (GB - 1) * 2 - 1;
+      const trail = (1 - a) / 2, bil = Math.sin(a * 3.2 - u * 10 + b * .8) * (.35 + .65 * trail) + .35 * Math.sin(b * 3 + u * 6), free = 1 - .85 * settle;
+      const wv = U * .07 * bil * free, sag = U * .05 * (1 - a * a) * free, lag = trail * (b + 1) / 2 * U * .06 * free;
+      const fx = mxp + a * cw * cr - b * chh * sr - lag, fy = myp + a * cw * sr + b * chh * cr + wv + sag - lag * .5;
+      const c = capeAt(a, b); row.push([lerp(fx, c[0], settle) + Math.sin(u * 3 + b * 2) * U * .004 * settle * (b + 1), lerp(fy, c[1], settle)]); } grid.push(row); }
+    const per = [...grid[0], ...grid.slice(1, -1).map(r => r[GA - 1]), ...grid[GB - 1].slice().reverse(), ...grid.slice(1, -1).reverse().map(r => r[0])];
     if (u >= t0 - .05) {
-      ctx.fillStyle = '#100805'; ctx.beginPath(); pts.forEach(p => ctx.lineTo(...p)); ctx.closePath(); ctx.fill();
+      const path = new Path2D(); per.forEach((q, i) => i ? path.lineTo(...q) : path.moveTo(...q)); path.closePath();
+      ctx.fillStyle = 'rgba(30,15,6,.97)'; ctx.fill(path);
+      ctx.save(); ctx.clip(path); ctx.globalCompositeOperation = 'screen';                                       // thin wool lets the low sun through: warm where it is single
+      const gcx = (grid[0][0][0] + grid[GB - 1][GA - 1][0]) / 2, gcy = (grid[0][0][1] + grid[GB - 1][GA - 1][1]) / 2, gr = ctx.createRadialGradient(gcx, gcy, 0, gcx, gcy, U * .25);
+      gr.addColorStop(0, `rgba(150,80,30,${.45 * (1 - .5 * settle)})`); gr.addColorStop(1, 'rgba(90,45,18,.12)'); ctx.fillStyle = gr; ctx.fillRect(gcx - U, gcy - U, 2 * U, 2 * U);
+      ctx.strokeStyle = 'rgba(180,100,40,.22)'; ctx.lineWidth = Math.max(1.5, U * .004);                       // folds
+      for (let i = 2; i < GA - 1; i += 3) { ctx.beginPath(); grid.forEach(r => ctx.lineTo(...r[i])); ctx.stroke(); }
+      ctx.restore();
       ctx.save(); ctx.globalCompositeOperation = 'screen'; ctx.strokeStyle = 'rgba(255,200,110,.95)'; ctx.lineWidth = Math.max(2, U * .006); ctx.shadowColor = 'rgba(255,180,80,.9)'; ctx.shadowBlur = U * .04;
-      ctx.beginPath(); pts.slice(0, 17).forEach(p => ctx.lineTo(...p)); ctx.stroke(); ctx.restore();
+      ctx.lineJoin = 'round'; ctx.stroke(path); ctx.restore();
     }
     ctx.restore();
     GOLD.bloom(ctx, ...toScr(sun, z, W * .5 + U * .1, gy - U * .6), [255, 170, 80], .3 * ex, { r: U * .45, streak: 0 });
-    GOLD.motes(ctx, u, { n: 60, seed: 17, light: [W * .5, gy - U * .4, W * .7], a: ex });
+    GOLD.motes(ctx, u * 2, { n: 110, seed: 17, light: [W * .5, gy - U * .4, W * .8], a: ex, size: 1.2 });
     GOLD.glow(ctx, .5, { wide: .5 });
     GOLD.finish(ctx, u, { vignette: .5 });
     if (ex < 1) { ctx.fillStyle = `rgba(0,0,0,${1 - ex})`; ctx.fillRect(0, 0, W, H); }
@@ -371,7 +459,7 @@
   function goldAnoint(ctx, u, which) {
     if (which === 'horn') return hornScene(ctx, u);
     if (which === 'david') return pourScene(ctx, u, DAVID);
-    if (which === 'aaron') return pourScene(ctx, u, AARON);
+    if (which === 'aaron') return aaronScene(ctx, u);
     if (which === 'elisha') return elishaScene(ctx, u);
   }
 
@@ -382,31 +470,41 @@
     const ex = ss(0, .35, u), z = 1 + .07 * u / 3.8, one = ss(2.3, 3.4, u);
     ctx.save(); camera(ctx, W, H, z, cx, gy - U * .6);
     ctx.fillStyle = '#0c0705'; ctx.fillRect(0, 0, W, H);
-    let g = ctx.createRadialGradient(cx, gy - U * .2, 0, cx, gy - U * .2, Math.max(W, H) * .7); g.addColorStop(0, `rgba(226,146,70,${.92 * ex})`); g.addColorStop(.32, `rgba(140,84,36,${.82 * ex})`); g.addColorStop(1, `rgba(50,30,14,${.72 * ex})`);
+    let g = ctx.createRadialGradient(cx, gy - U * .2, 0, cx, gy - U * .2, Math.max(W, H) * .7); g.addColorStop(0, `rgba(236,160,80,${.95 * ex})`); g.addColorStop(.35, `rgba(160,98,44,${.88 * ex})`); g.addColorStop(1, `rgba(70,42,20,${.8 * ex})`);
     ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
     ridge(ctx, W, H, gy - U * .05, U * .06, .002, 41, 'rgba(40,22,11,.95)');
     g = ctx.createLinearGradient(0, gy, 0, H); g.addColorStop(0, `rgba(80,48,22,${ex})`); g.addColorStop(.3, `rgba(36,22,11,${ex})`); g.addColorStop(1, `rgba(16,10,5,${ex})`); ctx.fillStyle = g; ctx.fillRect(0, gy, W, H);
     groundLight(ctx, W, H, gy, ex * (.7 + .5 * one));
-    const man = figure(ctx, { x: cx, y: gy, h: U * .78, d: 1, kind: 'man', light: [cx, gy - U * 2], rim: [255, 200, 120], glow: .3 + .7 * one, fill: '#0b0603' });
-    // three streams of gold light from the dark above (left, top, right) — the king's, the priest's, the prophet's — bending to him
-    const tgt = [man.crown[0], man.crown[1] - U * .02];
-    const src = [[cx - W * .55, -H * .05], [cx + W * .02, -H * .12], [cx + W * .55, -H * .05]];
-    src.forEach((s, i) => { const k = ss(.15 + i * .25, 1.9 + i * .2, u), pts = [];
-      const c1 = [lerp(s[0], tgt[0], .15) + (i - 1) * W * .1, lerp(s[1], tgt[1], .75)];
-      for (let j = 0; j <= 40; j++) { const t = j / 40, a = (1 - t) * (1 - t), b = 2 * (1 - t) * t, c = t * t; pts.push([a * s[0] + b * c1[0] + c * tgt[0], a * s[1] + b * c1[1] + c * tgt[1]]); }
-      const n = Math.max(2, Math.round(pts.length * k)); ctx.save(); ctx.globalCompositeOperation = 'screen'; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
-      ctx.beginPath(); pts.slice(0, n).forEach(p => ctx.lineTo(...p)); for (const [lw, a] of [[U * .16, .06], [U * .07, .10]]) { ctx.lineWidth = lw; ctx.strokeStyle = `rgba(255,180,90,${a * (1 - .5 * one)})`; ctx.stroke(); } ctx.restore();
-      GOLD.stream(ctx, pts, k, { w: U * .014 * (1 - .5 * one), t: u, back: true, glints: 3, speed: U * 1.2, alpha: 1 - .6 * one, taper: .5 }); });
-    // one light
-    if (one > 0) {
-      ctx.save(); ctx.globalCompositeOperation = 'screen';
-      g = ctx.createLinearGradient(tgt[0] - U * .16, 0, tgt[0] + U * .16, 0); g.addColorStop(0, 'rgba(255,200,110,0)'); g.addColorStop(.5, `rgba(255,214,140,${.45 * one})`); g.addColorStop(1, 'rgba(255,200,110,0)');
-      ctx.fillStyle = g; ctx.fillRect(tgt[0] - U * .16, -H, U * .32, tgt[1] + H);
-      ctx.restore();
+    const mf = { x: cx, y: gy, h: U * .78, d: 1, kind: 'man', light: [cx, gy - U * 2], rim: [255, 200, 120], glow: .3 + .7 * one, fill: '#0b0603' }, man = figure(ctx, mf); man.redraw = () => figure(ctx, mf);   // drawn again over the light
+    // three shafts of light through haze — the king's, the priest's, the prophet's — from different heights and angles,
+    // leaning slowly until they meet on him; then one pillar wraps him. Drawn soft (low resolution, blurred), never as lines.
+    const tgt = [man.crown[0], man.crown[1] + U * .1];
+    const q = .25, bw = Math.round(W * q), bh = Math.round(H * q);
+    if (!BEAM || BEAM.c.width !== bw || BEAM.c.height !== bh) { const c = P.canvas(bw, bh), c2 = P.canvas(bw, bh); BEAM = { c, x: c.getContext('2d'), c2, x2: c2.getContext('2d') }; }
+    const bx = BEAM.x; bx.setTransform(1, 0, 0, 1, 0, 0); bx.clearRect(0, 0, bw, bh); bx.globalCompositeOperation = 'lighter';
+    const conv = eio(clamp((u - .2) / 2.6));
+    const shafts = [[-W * .45, -H * .30, .26, .55, .10, [255, 196, 120]], [W * 1.35, H * .02, -.30, .40, .55, [255, 180, 100]], [W * .78, -H * .60, .14, .45, .95, [255, 210, 140]]];
+    for (const [sxw, syw, off, wd, t0, col] of shafts) {
+      const a = ss(t0, t0 + 1.3, u) * (1 - .55 * one), ang = Math.atan2(tgt[1] - syw, tgt[0] - sxw) + off * (1 - conv) + .02 * Math.sin(u * .9 + t0 * 5), len = Math.hypot(tgt[0] - sxw, tgt[1] - syw) * 1.2;
+      if (a <= 0) continue;
+      bx.save(); bx.scale(q, q); bx.translate(sxw, syw); bx.rotate(ang);
+      const w0 = U * wd * .25, w1 = U * wd, g2 = bx.createLinearGradient(0, -w1, 0, w1);
+      g2.addColorStop(0, css(col, 0)); g2.addColorStop(.5, css(col, .42 * a)); g2.addColorStop(1, css(col, 0));
+      bx.fillStyle = g2; bx.beginPath(); bx.moveTo(0, -w0); bx.lineTo(len, -w1); bx.lineTo(len, w1); bx.lineTo(0, w0); bx.closePath(); bx.fill();
+      // fade along its length into the haze past him
+      bx.globalCompositeOperation = 'destination-out'; const g3 = bx.createLinearGradient(0, 0, len, 0); g3.addColorStop(0, 'rgba(0,0,0,.35)'); g3.addColorStop(.75, 'rgba(0,0,0,0)'); g3.addColorStop(1, 'rgba(0,0,0,.9)'); bx.fillStyle = g3; bx.fillRect(0, -w1, len, 2 * w1);
+      bx.restore(); bx.globalCompositeOperation = 'lighter';
     }
+    if (one > 0) { bx.save(); bx.scale(q, q); const g4 = bx.createLinearGradient(tgt[0] - U * .45, 0, tgt[0] + U * .45, 0); g4.addColorStop(0, 'rgba(255,200,120,0)'); g4.addColorStop(.5, `rgba(255,214,150,${.6 * one})`); g4.addColorStop(1, 'rgba(255,200,120,0)');
+      bx.fillStyle = g4; bx.fillRect(tgt[0] - U * .45, -H, U * .9, gy + U * .02 + H); bx.restore(); }
+    // haze: the shafts are uneven where the air is thicker
+    bx.globalCompositeOperation = 'destination-out'; for (let i = 0; i < 9; i++) { const hx = (W * ((i * .37 + u * .02) % 1)) * q, hy = H * (.1 + .08 * i) * q, hr = W * .12 * q; const g5 = bx.createRadialGradient(hx, hy, 0, hx, hy, hr); g5.addColorStop(0, 'rgba(0,0,0,.35)'); g5.addColorStop(1, 'rgba(0,0,0,0)'); bx.fillStyle = g5; bx.fillRect(hx - hr, hy - hr, 2 * hr, 2 * hr); }
+    BEAM.x2.setTransform(1, 0, 0, 1, 0, 0); BEAM.x2.clearRect(0, 0, bw, bh); BEAM.x2.filter = `blur(${Math.round(U * q * .05)}px)`; BEAM.x2.drawImage(BEAM.c, 0, 0); BEAM.x2.filter = 'none';
+    ctx.save(); ctx.globalCompositeOperation = 'screen'; ctx.imageSmoothingEnabled = true; ctx.drawImage(BEAM.c2, 0, 0, W, H); ctx.restore();
+    man.redraw();
     ctx.restore();
-    const ts = toScr(tgt, z, cx, gy - U * .6);
-    GOLD.bloom(ctx, ts[0], ts[1], [255, 196, 110], .25 + .6 * one, { r: U * (.3 + .4 * one), streak: .35 * one });
+    const ts = toScr([tgt[0], tgt[1] - U * .1], z, cx, gy - U * .6);
+    GOLD.bloom(ctx, ts[0], ts[1], [255, 196, 110], .15 + .45 * one, { r: U * (.3 + .4 * one), streak: .2 * one, ghosts: false });
     GOLD.motes(ctx, u, { n: 80, seed: 51, light: [ts[0], ts[1], W * .6], pull: one > 0 ? [ts[0], ts[1], one * .6, U * .5, U * .3] : null, a: ex });
     GOLD.glow(ctx, .6, { wide: .5 });
     GOLD.finish(ctx, u, { vignette: .55 });

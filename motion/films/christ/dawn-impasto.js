@@ -17,7 +17,7 @@
     if (D) return D;
     const W = Pilot.W, H = Pilot.H, V = Pilot.ori === 'v';
     const PW = Math.ceil(W * 1.12), PH = Math.ceil(H * 1.12), ox = (PW - W) / 2, oy = (PH - H) / 2;
-    const L = V ? { hz: .42, gl: .6, tomb: [.37, .555], tw: .15, th: .09, stone: [.555, .532], sr: .068, sun: [.9, .4], peter: [.585, .6], ph: .1, cliff: .52, pgl: .5,
+    const L = V ? { hz: .4, gl: .55, tomb: [.37, .505], tw: .15, th: .09, stone: [.555, .482], sr: .068, sun: [.9, .4], peter: [.585, .6], ph: .1, cliff: .52, pgl: .5,
                     olive: [[.12, .9, .1, .72, .2], [.93, .72, .92, .6, .12]], wallR: .78 }
                 : { hz: .45, gl: .68, tomb: [.36, .605], tw: .12, th: .15, stone: [.53, .57], sr: .11, sun: [.88, .42], peter: [.55, .66], ph: .16, cliff: .44, pgl: .52,
                     olive: [[.1, .98, .1, .78, .12], [.88, .8, .88, .66, .075]], wallR: .72 };
@@ -36,7 +36,7 @@
         g.fillStyle = sg; g.fillRect(-ox, -oy, PW, PH); g.fillStyle = '#fff6dc'; g.beginPath(); g.arc(sx, sy, X(.034), 0, 6.283); g.fill(); }
       g.fillStyle = dawn ? 'rgb(156,112,116)' : 'rgb(96,92,116)'; g.beginPath(); g.moveTo(-ox, Y(hz) + 6); for (let x = -ox; x <= W + ox; x += 10) g.lineTo(x, Y(hz) - Y(.012) - Y(.018) * (Pilot.fbm(x * .004, 2.2, 3) - .35)); g.lineTo(W + ox, Y(hz) + 6); g.fill(); };
     const ground = (g, dawn, top) => { const gr = g.createLinearGradient(0, Y(top), 0, H + oy);
-      (dawn ? [[0, 'rgb(176,142,92)'], [.35, 'rgb(140,108,66)'], [1, 'rgb(82,60,38)']] : [[0, 'rgb(134,126,140)'], [1, 'rgb(86,82,98)']]).forEach(([a, c]) => gr.addColorStop(a, c));
+      (dawn ? [[0, 'rgb(170,136,88)'], [.25, 'rgb(112,84,54)'], [.5, 'rgb(78,56,36)'], [1, 'rgb(58,40,26)']] : [[0, 'rgb(134,126,140)'], [1, 'rgb(86,82,98)']]).forEach(([a, c]) => gr.addColorStop(a, c));
       g.fillStyle = gr; g.fillRect(-ox, Y(top), PW, H - Y(top) + oy); };
     // an olive tree: a twisted trunk, silver-green leaves laid in small strokes, only their edges lit against the low sun
     const olive = (g, dawn, [bx, by, cx, cy, cr], seed) => { const r = rng(seed), R = X(cr);
@@ -50,7 +50,7 @@
         g.save(); g.translate(lx, ly); g.rotate(r() * 3); g.beginPath(); g.ellipse(0, 0, R * .07, R * .022, 0, 0, 6.283); g.fill(); g.restore(); } };
     // the tomb hewn in the rock: a near-vertical limestone face with its beds and cracks, a low square doorway at its foot, a groove
     // along the foot of the face and the round, flat stone rolled along it; inside, the shelf and the folded cloth in the light
-    const tombPlate = dawn => { const c = canvas(PW, PH), g = c.getContext('2d'); g.translate(ox, oy); sky(g, dawn, L.hz); ground(g, dawn, L.hz);
+    const tombPlate = (dawn, closed) => { const c = canvas(PW, PH), g = c.getContext('2d'); g.translate(ox, oy); sky(g, dawn, L.hz); ground(g, dawn, L.hz);
       const r = rng(11), gl = Y(L.gl), wr = X(L.wallR);
       const topY = x => Y(V ? .19 : .15) + Y(.03) * Math.sin(x / W * 4 + 1) + Y(.025) * (Pilot.fbm(x * .008, 5, 3) - .5) + Y(.012) * Math.abs(noise(x * .03, 2) - .5) * 2;
       const wall = new Path2D(); wall.moveTo(-ox, gl + 4); for (let x = -ox; x <= wr; x += 6) wall.lineTo(x, topY(x));
@@ -79,7 +79,7 @@
       g.restore();
       // the groove along the foot of the face, and the round flat stone rolled along it
       g.fillStyle = dawn ? 'rgba(40,26,18,.7)' : 'rgba(30,30,40,.7)'; g.fillRect(x0 + tw, gl - Y(.006), X(.32), Y(.014));
-      const [sx2, sy2] = [X(L.stone[0]), Y(L.stone[1])], sr = Y(L.sr);
+      const sr = Y(L.sr) * (closed ? Math.max(1, X(L.tw) * .58 / Y(L.sr)) : 1), [sx2, sy2] = closed ? [tx, gl - sr] : [X(L.stone[0]), Y(L.stone[1])];   // sealed: the stone covers the whole doorway
       g.fillStyle = 'rgba(30,20,14,.5)'; g.beginPath(); g.ellipse(sx2 - sr * .4, gl + Y(.004), sr * 1.1, sr * .14, 0, 0, 6.283); g.fill();
       g.fillStyle = dawn ? 'rgb(84,64,50)' : 'rgb(58,56,70)'; g.beginPath(); g.ellipse(sx2 - sr * .16, sy2, sr * .96, sr, 0, 0, 6.283); g.fill();          // its thickness
       const sgd = g.createLinearGradient(sx2 - sr, sy2 - sr, sx2 + sr, sy2 + sr * .3); (dawn ? [[0, 'rgb(92,72,58)'], [.6, 'rgb(146,120,92)'], [1, 'rgb(198,166,122)']] : [[0, 'rgb(72,70,86)'], [1, 'rgb(118,114,130)']]).forEach(([a, cc]) => sgd.addColorStop(a, cc));
@@ -87,10 +87,10 @@
       g.strokeStyle = dawn ? 'rgba(80,58,44,.55)' : 'rgba(44,44,56,.55)'; g.lineWidth = sr * .05; g.beginPath(); g.ellipse(sx2, sy2, sr * .3, sr * .32, 0, 0, 6.283); g.stroke();   // the hub
       if (dawn) { g.strokeStyle = 'rgba(255,232,180,1)'; g.lineWidth = sr * .12; g.beginPath(); g.ellipse(sx2, sy2, sr * .93, sr * .97, 0, -1.25, 1.0); g.stroke(); }   // the rim of light on its edge
       // a narrow earth path coming in slantwise from the lower corner between rocks
-      g.fillStyle = dawn ? 'rgb(168,132,86)' : 'rgb(122,116,130)'; g.beginPath(); g.moveTo(x0 + tw * .2, gl); g.quadraticCurveTo(X(.28), Y(.75), X(V ? .02 : .2), H + oy); g.lineTo(X(V ? .14 : .28), H + oy); g.quadraticCurveTo(X(.36), Y(.76), x0 + tw * .65, gl); g.fill();
+      g.fillStyle = dawn ? 'rgb(122,94,62)' : 'rgb(112,106,120)'; g.beginPath(); g.moveTo(x0 + tw * .2, gl); g.quadraticCurveTo(X(.28), Y(.75), X(V ? .02 : .2), H + oy); g.lineTo(X(V ? .14 : .28), H + oy); g.quadraticCurveTo(X(.36), Y(.76), x0 + tw * .65, gl); g.fill();
       for (let i = 0; i < 26; i++) { const side = i % 2 ? 1 : -1, v = r(), px = lerp(x0 + tw * .4, X(V ? .08 : .24), v) + side * X(.06 + r() * .1), py = lerp(gl + Y(.02), H + oy, v), rr = X(.02 + r() * .04) * (.6 + v) * (V ? 1 : .5);   // rocks either side
         g.fillStyle = dawn ? 'rgba(30,22,16,.4)' : 'rgba(30,30,40,.4)'; g.beginPath(); g.ellipse(px - rr * .3, py + rr * .4, rr * 1.1, rr * .3, 0, 0, 6.283); g.fill();
-        const rg2 = g.createLinearGradient(px - rr, py - rr, px + rr, py + rr * .4); (dawn ? [[0, 'rgb(110,88,68)'], [1, 'rgb(210,176,128)']] : [[0, 'rgb(70,68,84)'], [1, 'rgb(120,116,132)']]).forEach(([a, cc]) => rg2.addColorStop(a, cc));
+        const rg2 = g.createLinearGradient(px - rr, py - rr, px + rr, py + rr * .4); (dawn ? [[0, 'rgb(78,60,46)'], [1, 'rgb(164,132,94)']] : [[0, 'rgb(70,68,84)'], [1, 'rgb(120,116,132)']]).forEach(([a, cc]) => rg2.addColorStop(a, cc));
         g.fillStyle = rg2; g.beginPath(); for (let j = 0; j < 7; j++) { const a = j / 7 * 6.283 + r() * .3, q = .75 + r() * .35; g.lineTo(px + Math.cos(a) * rr * q, py + Math.sin(a) * rr * q * .62); } g.closePath(); g.fill(); }
       L.olive.forEach((o, i) => olive(g, dawn, o, 70 + i));
       if (dawn) for (let i = 0; i < 160; i++) { const fx = X(r()), fy = Y(L.gl + .03 + Math.pow(r(), 1.3) * (1 - L.gl)); g.fillStyle = ['#f0d070', '#e8b060', '#f6ecd0', '#d06048'][r() * 4 | 0]; g.beginPath(); g.arc(fx, fy, 2 + r() * 3, 0, 6.283); g.fill(); }   // flowers
@@ -112,7 +112,7 @@
       for (let i = 0; i < 160; i++) { const fx = X(L.cliff + r() * .6), fy = Y(L.pgl + .05 + Math.pow(r(), 1.3) * .45); g.fillStyle = ['#f0d070', '#e8b060', '#f6ecd0'][r() * 3 | 0]; g.beginPath(); g.arc(fx, fy, 2 + r() * 3, 0, 6.283); g.fill(); }
       return c; };
     D.dawn = OIL.paint(tombPlate(true), { key: 'impasto', S: 1, seed: 29, cell: 8, wid: V ? 1 / 55 : 1 / 95 });
-    D.pre = OIL.paint(tombPlate(false), { key: 'impasto', S: 1, seed: 31, cell: 8, wid: V ? 1 / 55 : 1 / 95 });
+    D.pre = OIL.paint(tombPlate(false, true), { key: 'impasto', S: 1, seed: 31, cell: 8, wid: V ? 1 / 55 : 1 / 95 });
     D.peter = OIL.paint(peterPlate(), { key: 'impasto', S: 1, seed: 33, cell: 8, wid: V ? 1 / 55 : 1 / 95 });
     D.grey = canvas(PW, PH); { const g = D.grey.getContext('2d'); g.filter = 'grayscale(1) contrast(1.2) brightness(.82)'; g.drawImage(D.dawn, 0, 0); }
     // the knife strokes that repaint: ordered outward from the sun (tomb), from the tomb's doorway (tree)
@@ -148,7 +148,7 @@
   }
   function finishDawn(ctx, k) {
     const { W, H, V } = D; ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); OIL.varnish(ctx, .55 * k);
-    const bg = ctx.createLinearGradient(0, H * (V ? .6 : .72), 0, H); bg.addColorStop(0, 'rgba(20,12,6,0)'); bg.addColorStop(.35, 'rgba(20,12,6,.3)'); bg.addColorStop(1, 'rgba(20,12,6,.5)'); ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);   // calm under the words
+    const bg = ctx.createLinearGradient(0, H * (V ? .55 : .7), 0, H); bg.addColorStop(0, 'rgba(20,12,6,0)'); bg.addColorStop(.18, 'rgba(20,12,6,.38)'); bg.addColorStop(1, 'rgba(20,12,6,.55)'); ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);   // calm under the words
     const R = Math.hypot(W, H) / 2, gv = ctx.createRadialGradient(W / 2, H * .45, R * .45, W / 2, H * .5, R * 1.05); gv.addColorStop(0, 'rgba(20,10,4,0)'); gv.addColorStop(1, 'rgba(20,10,4,.5)'); ctx.fillStyle = gv; ctx.fillRect(0, 0, W, H);
     ctx.restore();
   }
@@ -191,16 +191,18 @@
       const z = 1 + .1 * eio(u / 6.7), fx = X(L.tomb[0]), fy = Y(L.tomb[1]), cam = camAt(z, fx, fy), rep = clamp((u - 3.4) / 2.6);
       cam(); ctx.drawImage(D.pre, -ox, -oy);
       // the tree's shadow lying across the ground towards us; at «다시 살리사» it draws back as the sun comes up
-      { const back = eio(clamp((u - 3.4) / 2.2)), len = lerp(1, .05, back), a = .62 * (1 - back * .85), bx = X(V ? 1.05 : .9), by = Y(L.gl + .02);
-        const tip = [lerp(bx, X(V ? .1 : .22), len), lerp(by, Y(1.08), len)], dx = tip[0] - bx, dy = tip[1] - by, l = Math.hypot(dx, dy) || 1, nx = -dy / l, ny = dx / l, w0 = X(.02), w1 = X(.07);
-        const at = f => [bx + dx * f, by + dy * f];
-        ctx.save(); ctx.fillStyle = `rgba(14,10,24,${a})`; ctx.filter = 'blur(4px)'; ctx.beginPath(); ctx.moveTo(bx + nx * w0, by + ny * w0); ctx.lineTo(tip[0] + nx * w1, tip[1] + ny * w1); ctx.lineTo(tip[0] - nx * w1, tip[1] - ny * w1); ctx.lineTo(bx - nx * w0, by - ny * w0); ctx.fill();
-        if (len > .8) { const [cx, cy] = at(.8 / len), cw = X(.045), cl = X(.22); ctx.beginPath(); ctx.moveTo(cx - (dx / l) * cw + nx * cl, cy - (dy / l) * cw + ny * cl); ctx.lineTo(cx + (dx / l) * cw + nx * cl, cy + (dy / l) * cw + ny * cl); ctx.lineTo(cx + (dx / l) * cw - nx * cl, cy + (dy / l) * cw - ny * cl); ctx.lineTo(cx - (dx / l) * cw - nx * cl, cy - (dy / l) * cw - ny * cl); ctx.fill(); }   // the beam
+      { const back = eio(clamp((u - 3.4) / 2.2)), a = .66 * (1 - back * .9), len = lerp(1, .15, back);
+        const foot = [X(V ? .5 : .52), Y(1.12)], head = [X(V ? .4 : .44), Y(V ? .615 : .73)], hd = [lerp(foot[0], head[0], len), lerp(foot[1], head[1], len)];
+        const wAt = y => lerp(X(V ? .085 : .05), X(V ? .03 : .018), clamp((foot[1] - y) / (foot[1] - head[1])));   // nearer is wider
+        ctx.save(); ctx.fillStyle = `rgba(16,12,28,${a})`; ctx.filter = 'blur(3px)';
+        ctx.beginPath(); ctx.moveTo(foot[0] - wAt(foot[1]) / 2, foot[1]); ctx.lineTo(hd[0] - wAt(hd[1]) / 2, hd[1]); ctx.lineTo(hd[0] + wAt(hd[1]) / 2, hd[1]); ctx.lineTo(foot[0] + wAt(foot[1]) / 2, foot[1]); ctx.fill();
+        const fb = .7; if (len > fb + .04) { const cy = lerp(foot[1], head[1], fb), cx = lerp(foot[0], head[0], fb), half = X(V ? .26 : .15) * lerp(1, .55, fb), th = wAt(cy) * .8;   // the beam, square across
+          ctx.beginPath(); ctx.moveTo(cx - half, cy - th * .5); ctx.lineTo(cx + half, cy - th * .42); ctx.lineTo(cx + half, cy + th * .42); ctx.lineTo(cx - half, cy + th * .5); ctx.fill(); }
         ctx.restore(); }
       reveal(ctx, D.dawn, D.kDoor, eo(rep), cam);
       ctx.setTransform(1, 0, 0, 1, 0, 0);
       bloom(ctx, X(L.tomb[0]), Y(L.tomb[1]) + Y(L.th) * .15, X(.42), .95 * ss(3.4, 4.6, u), [255, 230, 176]);   // the doorway floods with light
-      { const dv = 1 - ss(0, 1.1, u); if (dv > 0) { ctx.save(); ctx.globalCompositeOperation = 'screen'; const g = ctx.createRadialGradient(W / 2, H * .3, 0, W / 2, H * .3, Math.max(W, H) * .8); g.addColorStop(0, `rgba(255,248,226,${dv})`); g.addColorStop(.4, `rgba(255,236,200,${.7 * dv})`); g.addColorStop(1, `rgba(255,230,190,${.25 * dv})`); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H); ctx.restore(); } }   // the dove's light of the scene before, withdrawing
+      { const dv = 1 - ss(0, 1.1, u); if (dv > 0) { ctx.save(); ctx.globalCompositeOperation = 'screen'; const g = ctx.createRadialGradient(W / 2, H * .3, 0, W / 2, H * .3, Math.max(W, H) * .8); g.addColorStop(0, `rgba(255,244,214,${.42 * dv})`); g.addColorStop(.45, `rgba(255,234,196,${.2 * dv})`); g.addColorStop(1, 'rgba(255,230,190,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H); ctx.restore(); } }   // the dove's light of the scene before, withdrawing
       film(ctx, t, 0); finishDawn(ctx, .5 + .5 * ss(3.4, 5, u));
     }
     ctx.restore();

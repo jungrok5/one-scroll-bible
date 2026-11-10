@@ -380,7 +380,7 @@
 
   // ---------------- the two scenes ----------------
   const CAM = {
-    isaiah: V ? [[-3.8, { x: 380, z: -700, h: 680, p: 31, cy: .34, f: 1200 }], [1.5, { x: 390, z: -780, h: 600, p: 23, cy: .37, f: 1200 }], [7.6, { x: 400, z: -820, h: 560, p: 16, cy: .385, f: 1250 }]]
+    isaiah: V ? [[-3.8, { x: 300, z: -700, h: 680, p: 31, cy: .34, f: 1200 }], [1.5, { x: 390, z: -780, h: 600, p: 23, cy: .37, f: 1200 }], [7.6, { x: 400, z: -820, h: 560, p: 16, cy: .385, f: 1250 }]]
               : [[-3.8, { x: 120, z: -920, h: 880, p: 38, cy: .38, f: 1150 }], [1.5, { x: 170, z: -980, h: 730, p: 26, cy: .38, f: 1150 }], [7.6, { x: 260, z: -960, h: 560, p: 14, cy: .395, f: 1150 }]],
     psalm: V ? [[0, { x: 420, z: -520, h: 620, p: 30, cy: .33, f: 1200 }], [4, { x: 500, z: -450, h: 560, p: 31, cy: .33, f: 1200 }], [9.5, { x: 550, z: -380, h: 510, p: 32, cy: .335, f: 1200 }],
                [11.6, { x: 470, z: -400, h: 520, p: 33, cy: .335, f: 1200 }], [13.4, { x: 40, z: -430, h: 520, p: 33, cy: .34, f: 1200 }], [16.5, { x: 10, z: -500, h: 560, p: 32, cy: .345, f: 1200 }]]
@@ -390,7 +390,7 @@
 
   function isaiah(ctx, u) {
     setCam(camAt(CAM.isaiah, u));
-    const open = eio(clamp((u + 3.8) / 5.3)), xc = V ? 400 : 230, xl = lerp(xc - 30, V ? 70 : -330, open), xr = lerp(xc + 30, V ? 740 : 780, open);
+    const open = eio(clamp((u + 3.8) / 5.3)), xc = V ? 110 : -250, xl = lerp(xc - 30, V ? 70 : -330, open), xr = lerp(xc + 30, V ? 740 : 780, open);   // closed, it lies left of the lamp (never under the flame); the right roll unrolls toward it
     const gust = ss(1.7, 2.1, u) * (1 - ss(2.5, 3.5, u)), flare = ss(2.9, 3.3, u) * (1 - ss(3.4, 4.6, u));
     const lampI = (1.4 - .22 * gust + .18 * flare) * flick(u), amb = .52, focus = ss(2.2, 4.8, u), hillK = ss(2.6, 5.2, u);
     drawWall(ctx, lampI, amb); drawWindow(ctx, u, lampI, focus, hillK);

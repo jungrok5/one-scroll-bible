@@ -6,6 +6,7 @@
 1. 시트 만들기: `py motion/films/frame-sheets.py {film}` (가로 `--ori h`, 시험본·부분 렌더는 `--video <mp4>`) → `motion/out/frames/{film}/sheet-*.jpg`(0.5초마다, 시각 표시).
 2. 확인 에이전트 하나(하위 에이전트, 지시문 = 아래 '확인 지시문' 그대로)에게 시트 폴더와 원고(script.json — 줄마다 at·screen)를 넘긴다. 같은 세션의 본 작업자가 직접 봐도 되지만, 그린 사람이 아닌 눈이 낫다.
 3. 답을 `review.json` `anomaly_check`에 그대로: `{ render: <manifest render>, at, sheets: "<폴더>", issues: [{ t, what, severity: "MAJOR|MINOR", status: "open" }] }`.
+   **고치기 전에 관리자 확인**(2026-11-10 "에이전트 리뷰받아서 피드백받아서 수정할 땐 확인받고 수정해"): 반영할 것 · 반영 안 할 것을 정리해 보이고, 확인받은 것만 고친다.
    고친 것은 `status: "fixed"`(어떻게를 `fix`에), 고치지 않기로 한 것은 `status: "ok"` + `why`. 그림을 고치면 다시 렌더 → 시트 → 확인(렌더 지문이 바뀌면 검사가 다시 요구한다).
 4. 관리자·가족이 본 이상한 프레임은 `film.mjs feedback`으로 남기고 같은 목록에도 넣는다(다음 확인에서 같은 종류를 먼저 본다).
 

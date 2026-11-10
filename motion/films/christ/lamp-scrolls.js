@@ -101,6 +101,7 @@
     // fibre grain
     c.save(); c.globalCompositeOperation = 'source-atop'; c.globalAlpha = .22; const sp = P.speckle(512, 256, 40, seed + 5, .6);
     for (let y = 0; y < h; y += 256) for (let x = 0; x < w; x += 512) c.drawImage(sp, x, y, 512, 256); c.restore();
+    if (!S.plain) { S.plain = canvas(400, 600); S.plain.getContext('2d').drawImage(cv, w * .3, h * .1, 400, h * .8, 0, 0, 400, 600); }   // un-inked parchment for the rolls
     // dry-point ruling (faint) and the ink
     c.save(); c.globalCompositeOperation = 'source-atop';
     const rows = makeRows(seed);
@@ -298,29 +299,48 @@
         const y = G.y0 + G.yt + GS * TS * .45, rg = c.createRadialGradient(xh, y, 0, xh, y, 60); rg.addColorStop(0, 'rgba(255,250,225,.95)'); rg.addColorStop(.25, 'rgba(255,200,110,.5)'); rg.addColorStop(1, 'rgba(255,160,60,0)');
         c.globalCompositeOperation = 'lighter'; c.fillStyle = rg; c.fillRect(xh - 60, y - 60, 120, 120); } }
     c.globalCompositeOperation = 'source-over'; c.globalAlpha = 1; }
-  function roll(ctx, X, lampI, side) {   // the parchment wound on its wooden roller, lying along Z; handles at both ends
-    const r = 32, N = 9, z0 = -14, z1 = SD + 14, L = [], Rr = [];
+  function roll(ctx, X, lampI, side) {   // the parchment wound on its wooden roller (matte paper, soft shading, layers), lying along Z
+    const r = 32, N = 12, z0 = -14, z1 = SD + 14, L = [], Rr = [], lit = .3 + .75 * lampI, P0 = [206, 178, 134];   // the sheet's parchment, a touch darker
     for (let i = 0; i <= N; i++) { const z = lerp(z1, z0, i / N); L.push(proj(X - r, r, z)); Rr.push(proj(X + r, r, z)); }
-    const m = proj(X, r, (z0 + z1) / 2), ml = proj(X - r, r, (z0 + z1) / 2), mr = proj(X + r, r, (z0 + z1) / 2), lit = .3 + .75 * lampI;
+    const zm = (z0 + z1) / 2, ml = proj(X - r, r, zm), mr = proj(X + r, r, zm);
     lathe(ctx, X, r, z1, 1, lit);   // far handle (mostly behind the roll)
-    ctx.beginPath(); ctx.moveTo(L[0][0], L[0][1]); for (const p of L) ctx.lineTo(p[0], p[1]); for (let i = N; i >= 0; i--) ctx.lineTo(Rr[i][0], Rr[i][1]); ctx.closePath();
-    const g = ctx.createLinearGradient(ml[0], ml[1], mr[0], mr[1]), hi = side < 0 ? .35 : .65;
-    g.addColorStop(0, rgb([30, 20, 12].map(v => v * lit))); g.addColorStop(hi, rgb([196, 160, 112].map(v => v * lit * .8))); g.addColorStop(1, rgb([24, 16, 10].map(v => v * lit)));
-    ctx.fillStyle = g; ctx.fill();
-    // the near end of the wound sheet (plain parchment, softly shaded), then the carved wooden handle
-    { const c = proj(X, r, z0), t = proj(X, r * 2, z0), sc = cam.f / c[2], rr = r * .98 * sc, ry = Math.max(rr * .45, Math.abs(c[1] - t[1]) * .98);
-      const g2 = ctx.createRadialGradient(c[0] + rr * .3 * -side, c[1] - ry * .3, 0, c[0], c[1], rr); g2.addColorStop(0, rgb([176, 142, 100].map(v => v * lit * .8))); g2.addColorStop(1, rgb([90, 66, 42].map(v => v * lit * .8)));
-      ctx.fillStyle = g2; ctx.beginPath(); ctx.ellipse(c[0], c[1], rr, ry, 0, 0, 6.283); ctx.fill(); }
+    const body = () => { ctx.beginPath(); ctx.moveTo(L[0][0], L[0][1]); for (const p of L) ctx.lineTo(p[0], p[1]); for (let i = N; i >= 0; i--) ctx.lineTo(Rr[i][0], Rr[i][1]); ctx.closePath(); };
+    // matte cylinder: light side → shadow side slowly (no specular band); the lamp-facing side is lit
+    const g = ctx.createLinearGradient(ml[0], ml[1], mr[0], mr[1]), sh = (k, f) => rgb(P0.map(v => v * f * lit * .78));
+    const stops = [[0, .34], [.18, .52], [.42, .78], [.62, .9], [.8, .84], [1, .58]];
+    for (const [k, f] of stops) g.addColorStop(side > 0 ? k : 1 - k, sh(k, f));
+    body(); ctx.fillStyle = g; ctx.fill();
+    ctx.save(); body(); ctx.clip();
+    // the paper's grain (the sheet's own texture, stretched along the roll) and the wound layers' edges + fine creases
+    const bx = Math.min(...L.map(p => p[0]), ...Rr.map(p => p[0])), by = Math.min(L[0][1], Rr[0][1]), bw = Math.max(...L.map(p => p[0]), ...Rr.map(p => p[0])) - bx, bh = Math.max(L[N][1], Rr[N][1]) - by;
+    ctx.globalCompositeOperation = 'multiply'; ctx.globalAlpha = .55; ctx.drawImage(S.plain, 0, 0, 400, 600, bx, by, bw, bh); ctx.globalCompositeOperation = 'source-over';
+    const rr = rng(side > 0 ? 71 : 37); ctx.lineCap = 'round';
+    for (let k = 0; k < 6; k++) { const o = (-.75 + k * .3 + (rr() - .5) * .08) * r, yS = r + Math.sqrt(Math.max(0, r * r - o * o)) * .98; ctx.beginPath();
+      for (let i = 0; i <= 16; i++) { const z = lerp(z1, z0, i / 16), w = Math.sin(i * 1.7 + k) * 1.2, p = proj(X + o + w, yS, z); i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1]); }
+      ctx.strokeStyle = `rgba(70,48,28,${(.1 + rr() * .12) * lit})`; ctx.lineWidth = .9 + rr() * .6; ctx.stroke(); }
+    for (let k = 0; k < 22; k++) { const z = lerp(z0 + 20, z1 - 20, rr()), a0 = -1.2 + rr() * .6, a1 = a0 + .7 + rr() * 1.1, dz = (rr() - .5) * 26; ctx.beginPath();
+      for (let i = 0; i <= 6; i++) { const t = lerp(a0, a1, i / 6), p = proj(X + Math.sin(t) * r, r + Math.cos(t) * r, z + dz * i / 6); i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1]); }
+      ctx.strokeStyle = `rgba(80,56,32,${(.06 + rr() * .08) * lit})`; ctx.lineWidth = .8; ctx.stroke(); }
+    ctx.restore();
+    // the near end: the paper wound in a spiral of thin layers (one continuous line — not rings), the rod in its centre
+    { const c = proj(X, r, z0), t = proj(X, r * 2, z0), sc = cam.f / c[2], rx = r * .99 * sc, ry = Math.max(rx * .45, Math.abs(c[1] - t[1]) * .99);
+      const g2 = ctx.createRadialGradient(c[0] - rx * .25 * side, c[1] - ry * .3, 0, c[0], c[1], rx); g2.addColorStop(0, sh(0, .86)); g2.addColorStop(1, sh(0, .6));
+      ctx.fillStyle = g2; ctx.beginPath(); ctx.ellipse(c[0], c[1], rx, ry, 0, 0, 6.283); ctx.fill();
+      ctx.save(); ctx.beginPath(); ctx.ellipse(c[0], c[1], rx, ry, 0, 0, 6.283); ctx.clip(); const turns = 6.5, a0 = side * 1.3; ctx.beginPath();
+      for (let i = 0; i <= 260; i++) { const k = i / 260, ang = a0 + k * turns * 6.283 * side, rad = .3 + .7 * k + .012 * Math.sin(ang * 3 + k * 9); const x = c[0] + Math.cos(ang) * rx * rad, y = c[1] + Math.sin(ang) * ry * rad; i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }
+      ctx.strokeStyle = `rgba(92,66,40,${.42 * lit})`; ctx.lineWidth = Math.max(.7, 1.1 * sc); ctx.stroke();
+      ctx.fillStyle = `rgba(40,26,14,${.5 * lit})`; ctx.beginPath(); ctx.ellipse(c[0], c[1], rx * .3, ry * .3, 0, 0, 6.283); ctx.fill(); ctx.restore();
+      ctx.strokeStyle = `rgba(70,48,28,${.35 * lit})`; ctx.lineWidth = 1; ctx.beginPath(); ctx.ellipse(c[0], c[1], rx, ry, 0, 0, 6.283); ctx.stroke(); }
     lathe(ctx, X, r, z0, -1, lit);
   }
   // a turned wooden handle (etz chayim) on the roller axis, from the roll's end at z outward (dir −1 toward the camera,
-  // +1 away): a thin flange disc, a neck, a carved bulb, then a short round knob (no point). Drawn as stacked cross-sections.
-  const PROFILE = [[0, 1.2], [4, 1.24], [7, 1.18], [8, .3], [18, .3], [22, .44], [29, .54], [36, .44], [40, .33], [44, .35], [49, .45], [54, .47], [59, .42], [63, .3], [65.5, .14], [66, 0]];
+  // +1 away), coming straight out of the paper roll: a neck, a carved bulb, then a short round knob (no point). Drawn as stacked cross-sections.
+  const PROFILE = [[0, .3], [12, .3], [16, .44], [23, .54], [30, .44], [34, .33], [38, .35], [43, .45], [48, .47], [53, .42], [57, .3], [59.5, .14], [60, 0]];
   const profR = d => { for (let i = 0; i < PROFILE.length - 1; i++) { const [a, ra] = PROFILE[i], [b, rb] = PROFILE[i + 1]; if (d <= b) return lerp(ra, rb, (d - a) / (b - a)); } return 0; };
   function lathe(ctx, X, r, z, dir, lit) {
     const n = 34, ds = []; for (let i = 0; i <= n; i++) ds.push(i / n * 80); if (dir > 0) ds.reverse();
     for (const dd of ds) { const rad = profR(dd) * r, zz = z + dir * (dd + 2); if (rad <= 0) continue; const c = proj(X, r, zz), tp = proj(X, r + rad, zz), sc = cam.f / c[2], rx = rad * sc, ry = Math.max(rx * .4, Math.abs(c[1] - tp[1]));
-      const flange = dd < 8, g = ctx.createLinearGradient(c[0] - rx, 0, c[0] + rx, 0), base = flange ? [84, 54, 30] : [96, 62, 34];
+      const flange = false, g = ctx.createLinearGradient(c[0] - rx, 0, c[0] + rx, 0), base = flange ? [84, 54, 30] : [96, 62, 34];
       g.addColorStop(0, rgb(base.map(v => v * lit * .35))); g.addColorStop(.62, rgb(base.map(v => v * lit * 1.25))); g.addColorStop(.8, rgb([210, 160, 104].map(v => v * lit * .75))); g.addColorStop(1, rgb(base.map(v => v * lit * .4)));
       ctx.fillStyle = g; ctx.beginPath(); ctx.ellipse(c[0], c[1], rx, ry, 0, 0, 6.283); ctx.fill(); }
   }

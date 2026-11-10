@@ -20,6 +20,11 @@
 <script src="goldoil-title.js"></script>
 <script src="lamp-scrolls.js"></script>
 <script src="bw-cross.js"></script>
+<script src="goldoil-anoint.js"></script>
+<script src="jerusalem3d.js"></script>
+<script src="oil-rock.js"></script>
+<script src="dawn-impasto.js"></script>
+<script src="oil-emmaus.js"></script>
 <script>
 /* 그리스도 — '그리스도'는 성이 아니라 '기름 부음 받은 자', 그리고 고난받는 그리스도는 처음부터 성경이 가리킨 길이었다 (~2:56).
    Made like the first film (motion/films/README 7절): a camera moving through space, light as the main character, small people,
@@ -39,17 +44,34 @@ function textBand(ctx) { const y0 = Film.SAFE() - (V ? 150 : 70), g = ctx.create
 function todo(ctx, t) { const g = ctx.createRadialGradient(W * (.5 + .1 * Math.sin(t * .3)), H * .35, 0, W * .5, H * .35, Math.max(W, H) * .8);
   g.addColorStop(0, 'rgb(70,52,34)'); g.addColorStop(1, 'rgb(10,8,8)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H); }
 const sc = (fn, t0, ...a) => (c, t) => { if (hasF(fn)) window[fn](c, t - t0, ...a); else todo(c, t); textBand(c); };
+const scz = (fn, t0, ...a) => (c, t) => { if (hasF(fn)) window[fn](c, Math.max(0, t - t0), ...a); else todo(c, t); textBand(c); };   // a module that starts at u = 0 (holds its first frame through the dissolve in)
 // the timeline (film seconds = script.json `at`); scenes dissolve over their overlap (0.8 s, longer where the music turns)
 const SCENES = [
   [0, 8.6, (c, t) => { sc('roomOil', 0, 'open')(c, t); textBand(c); }],   // N01 N02 — the candle, the old man from behind, the open Bible (the bright pages sit under the words: a double band)
   [7.6, 15.0, sc('jordanScene', 7.6)],             // P1 Q1 — the Jordan, late afternoon: Andrew to his brother
   [14.1, 24.0, sc('goldTitle', 14.1)],             // N03 T1 — one drop of gold oil, the title
-  [23.2, 79.9, todo],                              // parts 2–3 (next round)
-  [79.1, 88.4, sc('scrollScene', 79.8, 'isaiah')], // P4 Q4 — 700 years before: the lamp, the scroll
+  [23.2, 29.6, scz('goldAnoint', 22.9, 'horn')],   // N04 — the horn of oil turns in the dark
+  [28.8, 36.5, scz('goldAnoint', 28.9, 'david')],  // L1 K1 — Samuel pours on the shepherd boy (1 Sam 16:13)
+  [35.7, 40.6, scz('goldAnoint', 35.8, 'aaron')],  // L2 K2 — Moses pours on Aaron at the tent door (Lev 8:12)
+  [39.6, 45.0, scz('goldAnoint', 39.9, 'elisha')], // L3 K3 — Elijah's cloak over Elisha (no oil: the anointing is God's command, 1 Ki 19:16)
+  [44.0, 52.2, scz('jerusalemScene', 44.3)],       // N06 — the Roman standard over the gate of Jerusalem
+  [51.2, 59.6, scz('rockOil', 51.4, 'confess')],   // P3 N07 Q2 — Caesarea Philippi at sunset: "주는 그리스도시요"
+  [58.8, 67.6, scz('rockOil', 59.1, 'foretell')],  // N08 — the sun goes down: he must suffer, die and rise
+  [66.8, 71.9, scz('rockOil', 67.1, 'protest')],   // Q3 — Peter holds his arm: "주여 그리 마옵소서"
+  [71.1, 76.5, scz('rockOil', 71.4, 'alone')],     // N09 — Peter alone under the dark rock
+  [75.7, 88.4, sc('scrollScene', 79.8, 'isaiah')], // N10 P4 Q4 — the scroll unrolls (u < 0), 700 years before: Isaiah 53
   [87.4, 98.3, sc('bwCross', 87.6)],               // N11 Q5 — the cry from the cross (black-and-white film)
   [96.9, 114.8, sc('scrollScene', 96.9, 'psalm')], // N12 P5 Q6 Q7 — the ember crosses to the psalm of David (in before the cross has sunk to one point: no black dip)
   [113.8, 120.9, sc('bwSoldiers', 114.0)],         // L4 N14 — at the foot of the cross, the lots
-  [120.1, 177, todo],                              // parts 5–6 (next round)
+  [119.8, 125.7, scz('dawnOil', 120.1, 'tomb')],   // N15 — the black-and-white is repainted with dawn: the empty tomb
+  [125.0, 130.0, scz('dawnOil', 125.3, 'peter')],  // N20 — Peter stands again under the rock at dawn
+  [129.4, 136.4, scz('jordanScene', 129.5, { mode: 'spirit' })],   // P7 Q9 — the light like a dove on the Jordan (Acts 10:38)
+  [135.7, 143.1, scz('dawnOil', 136.0, 'tree')],   // Q10 — the shadow of the tree, then the dawn fills the tomb (Acts 10:39–40)
+  [142.4, 146.9, scz('goldThree', 142.7)],         // N16 — the three lights meet on one
+  [146.2, 153.6, scz('roomOil', 146.5, 'dawn')],   // N17 — the first room: dawn comes through the window
+  [153.0, 159.9, scz('emmausOil', 153.4, 'walk')], // P6 N18 — the road to Emmaus at sunset
+  [159.3, 166.8, scz('emmausOil', 159.6, 'speak')],// Q8 — the middle one turns: "그리스도가 이런 고난을 받고…"
+  [166.2, 177, scz('emmausOil', 166.5, 'lamp')],   // N19 E1 — a lamp lit in the village; the end card
 ];
 // text: every line from its `at` to the next voiced line (quotes hold until then; a caption label rides with its quote)
 let TEXT = [];
@@ -96,7 +118,7 @@ function draw(ctx, t) {
 }
 Pilot.run({ W, H, dur: FILM_DUR, fonts: ["600 40px 'Noto Serif KR'", "400 40px 'Noto Serif KR'", "400 20px 'Noto Sans KR'"],
   init: async () => { await Film.load(); buildText();
-    for (const b of ['buildRoomOil', 'buildJordan', 'buildGoldoil', 'buildScrolls', 'buildBW']) if (hasF(b)) await window[b](); }, draw });
+    for (const b of ['buildRoomOil', 'buildJordan', 'buildGoldoil', 'buildScrolls', 'buildBW', 'buildJerusalem', 'buildRockOil', 'buildDawn', 'buildEmmausOil']) if (hasF(b)) await window[b](); }, draw });
 </script>
 </body>
 </html>

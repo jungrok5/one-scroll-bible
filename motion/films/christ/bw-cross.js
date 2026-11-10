@@ -394,10 +394,9 @@
   function soldierShadow(g, o) {
     const { W, H } = B, X = f => f * W, Y = f => f * H, bx = o.bx + o.sway * .01, Xo = d => X(bx + d * (B.V ? 1 : .62)), k = S.k, u = W / 1080 * (B.V ? 1 : .62);
     // the hunched back and shoulders, from beyond the top of the frame
-    smooth(g, [[Xo(-.1), Y(.015)], [Xo(.1), Y(.015)], [Xo(.165), Y(.055)], [Xo(.2), Y(.095)], [Xo(.17), Y(.125)], [Xo(.19), Y(.155)], [Xo(.165), Y(.195)], [Xo(.085), Y(.212)], [Xo(.04), Y(.228)],
-               [Xo(-.04), Y(.228)], [Xo(-.085), Y(.212)], [Xo(-.165), Y(.195)], [Xo(-.19), Y(.155)], [Xo(-.17), Y(.125)], [Xo(-.2), Y(.095)], [Xo(-.165), Y(.055)]]);
+    smooth(g, [[Xo(-.12), Y(-.08)], [Xo(.12), Y(-.08)], [Xo(.15), Y(.07)], [Xo(.185), Y(.18)], [Xo(.19), Y(.245)], [Xo(.15), Y(.285)], [Xo(.075), Y(.3)], [Xo(.04), Y(.33)], [Xo(-.04), Y(.33)], [Xo(-.075), Y(.3)], [Xo(-.15), Y(.285)], [Xo(-.19), Y(.245)], [Xo(-.185), Y(.18)], [Xo(-.15), Y(.07)]]);
     // the helmeted head: round crown, the neck guard flaring behind it, cheek guards, the crest's brush reaching towards us
-    const hx = X(bx + o.sway * .006), hy = Y(.255 + o.nod * .01);
+    const hx = X(bx + o.sway * .006), hy = Y(.345 + o.nod * .01);
     g.beginPath(); g.ellipse(hx, hy, 58 * u, 50 * u, 0, 0, 6.283); g.fill();
     g.beginPath(); g.moveTo(hx - 64 * u, hy - 24 * u); g.quadraticCurveTo(hx, hy - 44 * u, hx + 64 * u, hy - 24 * u); g.lineTo(hx + 82 * u, hy - 46 * u); g.quadraticCurveTo(hx, hy - 76 * u, hx - 82 * u, hy - 46 * u); g.closePath(); g.fill();   // neck guard
     for (const m of [-1, 1]) { g.beginPath(); g.moveTo(hx + m * 46 * u, hy + 4 * u); g.lineTo(hx + m * 60 * u, hy + 34 * u); g.lineTo(hx + m * 40 * u, hy + 42 * u); g.closePath(); g.fill(); }        // cheek guards
@@ -454,11 +453,11 @@
     const M = p => V ? p : [.5 + (p[0] - .5) * .62, p[1] * 1.04], swA = Math.sin(t * 1.3) * .5 + noise(t * .7, 3) - .5, swB = Math.sin(t * 1.1 + 2) * .5 + noise(t * .6, 9) - .5;
     // the left soldier's hand: shaking, the throw at 1.9 (reaching down and opening), then it hangs open
     const wind = ss(1.35, 1.72, u) * (1 - ss(1.72, 1.92, u)), swing = ss(1.72, 1.95, u), rat = u < 1.45 ? Math.sin(u * 38) * .006 * (1 - u / 1.7) : 0, back = ss(3.4, 4.8, u);
-    const draw = ss(2.05, 2.9, u), Lwr = [.41 + rat + swing * .015 - wind * .02 - draw * .025, .43 - wind * .02 + swing * .02 - draw * .055], Lopen = clamp(ss(1.8, 1.95, u) - back * .4);
+    const draw = ss(2.05, 2.9, u), Lwr = [.41 + rat + swing * .015 - wind * .02 - draw * .025, .455 - wind * .02 + swing * .02 - draw * .055], Lopen = clamp(ss(1.8, 1.95, u) - back * .4);
     // the right soldier's hand: resting, then from 3.3 it reaches over the cloth's end and settles on it
-    const reach = ss(3.3, 4.7, u), Rwr = [lerp(.63, .7, reach), lerp(.325, .45, reach)];
+    const reach = ss(3.3, 4.7, u), Rwr = [lerp(.66, .7, reach), lerp(.37, .47, reach)];
     // the knucklebones: they drop out of the shadow hand, bounce, roll and stop (real bones, with their own shadows)
-    const rel = [(.425 + .03) * W, (.45 + .03) * H], land = [[.45, .58], [.515, .6], [.56, .565]].map(p => [M(p)[0] * W + cam, M(p)[1] * H]);
+    const rel = [(.425 + .03) * W, (.475 + .03) * H], land = [[.45, .58], [.515, .6], [.56, .565]].map(p => [M(p)[0] * W + cam, M(p)[1] * H]);
     const BN = [[1.9, 2.62, 1, 0], [1.93, 2.84, 2, 2], [1.96, 2.72, 3, 1]].map(([t0, t1, sd, last], i) => [V ? rel : [M([.455, 0])[0] * W, rel[1]], land[i], t0, t1, sd, last]);
     if (u > 1.88) for (const a of BN) { const d = bonePos(u, ...a), sz = 64 * k * (1 + d.hgt / H * 2.2);
       if (d.p < .5) { const dp = bonePos(u - .03, ...a); ctx.globalAlpha = .28; bone(ctx, dp.x, dp.y, sz, dp.rot, dp.face, dp.hgt, dp.roll); ctx.globalAlpha = 1; }
@@ -468,8 +467,8 @@
     // the two shadows, one light: drawn together (no double darkness where they cross), soft at the edges
     { const sc = S.shc || (S.shc = canvas(W >> 1, H >> 1)), g = sc.getContext('2d'); g.setTransform(1, 0, 0, 1, 0, 0); g.clearRect(0, 0, W, H); g.setTransform(.5, 0, 0, .5, cam * .5 * .7, 0); g.fillStyle = '#000';
       const A = (sh, el, wr, open, w0) => { const a = Math.atan2(wr[1] - el[1], (wr[0] - el[0]) * W / H); return [M(sh), M(el), M(wr), open, a, w0]; };
-      soldierShadow(g, { bx: M([.3, 0])[0], sway: swA, nod: wind - swing * .5, arms: [A([.17, .195], [.15, .275], [.18, .32], .15, 80), A([.43, .195], [.46, .29], Lwr, Lopen, 82)] });
-      soldierShadow(g, { bx: M([.74, 0])[0], sway: swB, nod: reach * .8, arms: [A([.86, .195], [.89, .235], [.87, .26], .1, 76), A([.61, .195], [.58, .29], Rwr, .55 + reach * .4, 82)] });
+      soldierShadow(g, { bx: M([.3, 0])[0], sway: swA, nod: wind - swing * .5, arms: [A([.17, .27], [.16, .38], [.19, .45], .15, 80), A([.43, .28], [.46, .37], Lwr, Lopen, 82)] });
+      soldierShadow(g, { bx: M([.74, 0])[0], sway: swB, nod: reach * .8, arms: [A([.61, .28], [.59, .36], Rwr, .55 + reach * .4, 82)] });
       ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.filter = 'blur(1.6px)'; ctx.globalCompositeOperation = 'multiply'; ctx.globalAlpha = .74; ctx.drawImage(sc, 0, 0, W, H); ctx.restore(); }
     ctx.restore();
     // the sun high behind them: the far ground brighter, dust in the air

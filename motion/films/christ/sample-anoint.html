@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>세 기름 부음 시안</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600&display=swap">
+</head>
+<body>
+<script src="../../pilot/lib.js"></script>
+<script src="kit-goldoil.js"></script>
+<script src="goldoil-anoint.js"></script>
+<script>
+/* 시안: 「그리스도」 2부(뿔병 6.0 · 다윗 6.9 · 아론 4.1 · 엘리사 4.4) + 5부 세 빛(3.8) — 화풍 goldoil.
+   node motion/render.mjs v --page films/christ/sample-anoint.html --stills 3,9,14,19,23.5 */
+const W = Pilot.W, H = Pilot.H;
+const SEQ = [['horn', 6.0], ['david', 6.9], ['aaron', 4.1], ['elisha', 4.4], ['three', 3.8]];
+function draw(ctx, t) { let a = 0; for (const [k, d] of SEQ) { if (t < a + d || k === 'three') { const u = Math.min(t - a, d - 1e-3); return k === 'three' ? goldThree(ctx, u) : goldAnoint(ctx, u, k); } a += d; } }
+Pilot.run({ W, H, dur: 25.2, fonts: ["600 40px 'Noto Serif KR'"], draw });
+</script>
+</body>
+</html>

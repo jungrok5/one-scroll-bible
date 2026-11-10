@@ -446,6 +446,27 @@
    "round": 1,
    "applied": "두루마리 감긴 부분을 둥근 양피지 원통으로(3D 단면 명암·둥근 마구리·나선 끝·접촉 그림자) + 이상 확인 항목 반영: 군인 그림자 웅크림·빛 하나·손 하나·뼈가 떨어져 나감, 여인들 알파 제거, 첫 장면 상 넓힘, 안드레 손짓, 원고 screen 3곳",
    "applied_at": "2026-11-10 22:20 KST"
+  },
+  {
+   "at": "2026-11-10 22:26 KST",
+   "who": "관리자",
+   "said": "다 괜찮아. 군인들의 모습과 자세 그 장면은 이전이 더 나은 것 같아",
+   "status": "open",
+   "round": 1
+  },
+  {
+   "at": "2026-11-10 22:30 KST",
+   "who": "관리자",
+   "said": "(군인 장면 세 판 중) B",
+   "status": "open",
+   "round": 1
+  },
+  {
+   "at": "2026-11-10 22:31 KST",
+   "who": "관리자",
+   "said": "이어서 2 3 5 6 가자",
+   "status": "open",
+   "round": 1
   }
  ],
  "process_changes": [
@@ -584,36 +605,36 @@
     "t": 115,
     "what": "군인 그림자 둘이 거의 똑같아 복사해 붙인 것처럼",
     "severity": "MINOR",
-    "status": "open",
-    "note": "관리자 확인 대기(confirm-agent-fixes)"
+    "status": "ok",
+    "why": "관리자: 군인 장면은 이전(B, 서 있는 그림자)으로 되돌림"
    },
    {
     "t": 115.5,
     "what": "그림자 팔이 가늘고 긴 막대처럼",
     "severity": "MINOR",
-    "status": "open",
-    "note": "관리자 확인 대기(confirm-agent-fixes)"
+    "status": "ok",
+    "why": "관리자: 군인 장면은 이전(B, 서 있는 그림자)으로 되돌림"
    },
    {
     "t": 118.5,
     "what": "투구 그림자가 뒤집힌 모자·거꾸로 된 얼굴처럼 읽힐 수 있음",
     "severity": "MINOR",
-    "status": "open",
-    "note": "관리자 확인 대기(confirm-agent-fixes)"
+    "status": "ok",
+    "why": "관리자: 군인 장면은 이전(B, 서 있는 그림자)으로 되돌림"
    },
    {
     "t": 4,
     "what": "상 가장자리가 끝도 다리도 없는 검은 띠라 벽 턱·계단처럼",
     "severity": "MINOR",
-    "status": "open",
-    "note": "관리자 확인 대기(confirm-agent-fixes)"
+    "status": "ok",
+    "why": "관리자: \"다 괜찮아\""
    },
    {
     "t": 11,
     "what": "안드레 가리키는 팔이 아직 뻣뻣",
     "severity": "MINOR",
-    "status": "open",
-    "note": "관리자 확인 대기(confirm-agent-fixes)"
+    "status": "ok",
+    "why": "관리자: \"다 괜찮아\""
    }
   ],
   "note": "MAJOR 0"

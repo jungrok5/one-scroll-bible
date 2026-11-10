@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>엠마오 길 시안</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600&family=Noto+Sans+KR:wght@400;600&display=swap">
+</head>
+<body>
+<script src="../../pilot/lib.js"></script>
+<script src="kit-oilpaint.js"></script>
+<script src="oil-emmaus.js"></script>
+<script>
+/* 시안: 「그리스도」 6부 엠마오 길 (레밍턴 유화) — 'walk' 6.2초 → 'speak' 6.9초 → 'lamp' 9.5초.
+   글자는 본 세션이 얹는다 — 여기 글자는 자리 확인용 가짜 층(시안에만).
+   node motion/render.mjs v --page films/christ/sample-emmaus.html --stills 1,4,7,9,11.5,14,17,20,22 */
+const { win } = Pilot;
+const W = Pilot.W, H = Pilot.H, V = Pilot.ori === 'v';
+const ghost = (ctx, s, t, a, b, y, o = {}) => { const k = win(t, a, b, .5, .5); if (k > 0) Pilot.text(ctx, s, W / 2, y, Object.assign({ size: V ? 46 : 46, weight: 600, alpha: k, shadow: 'rgba(0,0,0,.9)', shadowBlur: 20 }, o)); };
+function draw(ctx, t) {
+  const yq = V ? H * .665 : H * .8, ys = V ? H * .70 : H * .86;
+  if (t < 6.2) { emmausOil(ctx, t, 'walk');
+    ghost(ctx, '누가복음 24장 · 엠마오로 가는 길', t, 0, 6.2, yq - (V ? 90 : 76), { size: V ? 30 : 28, weight: 400, color: '#e8d6b4', font: "'Noto Sans KR',sans-serif" });
+    ghost(ctx, '부활하신 그날, 예수님은 알아보지 못하는\n두 제자와 걸으셨습니다.', t, .3, 6.2, ys, { size: 42, weight: 400 });
+  } else if (t < 13.1) { const u = t - 6.2; emmausOil(ctx, u, 'speak');
+    ghost(ctx, '“그리스도가 이런 고난을 받고\n자기의 영광에 들어가야 할 것이 아니냐”', u, .2, 6.9, yq);
+  } else { const u = t - 13.1; emmausOil(ctx, u, 'lamp');
+    ghost(ctx, '그 두 사람은 언제\n그분을 알아보았을까요?', u, 0, 4.2, ys, { size: 42, weight: 400 });
+    ghost(ctx, '뒷이야기 · 누가복음 24장', u, 4.6, 9.5, H * .4, { size: V ? 56 : 54, color: '#f0e2c4' }); }
+}
+Pilot.run({ W, H, dur: 22.6, fonts: ["600 40px 'Noto Serif KR'", "400 40px 'Noto Serif KR'", "400 28px 'Noto Sans KR'"], init: async () => buildEmmausOil(), draw });
+</script>
+</body>
+</html>

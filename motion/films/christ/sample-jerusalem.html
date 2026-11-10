@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>예루살렘 성문 시안</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600&family=Noto+Sans+KR:wght@400;600&display=swap">
+</head>
+<body>
+<script src="../../pilot/lib.js"></script>
+<script src="../lib-film.js"></script>
+<script src="kit-world3d.js"></script>
+<script src="jerusalem3d.js"></script>
+<script>
+/* 시안: 「그리스도」 N06 — 로마 군기 아래 예루살렘 성문, 노을 역광 (칠한 3D) 7.1초.
+   자막은 본 영상이 얹는 자리를 보려고 시안에서만 얹음.
+   node motion/render.mjs v --page films/christ/sample-jerusalem.html --stills 0.5,3.5,6.8 */
+const W = Pilot.W, H = Pilot.H, V = Pilot.ori === 'v';
+function band(ctx) { const y0 = Film.SAFE() - (V ? 150 : 70), g = ctx.createLinearGradient(0, y0, 0, H); g.addColorStop(0, 'rgba(10,8,10,0)'); g.addColorStop(.45, 'rgba(10,8,10,.42)'); g.addColorStop(1, 'rgba(10,8,10,.55)'); ctx.fillStyle = g; ctx.fillRect(0, y0, W, H - y0); }
+function draw(ctx, t) { jerusalemScene(ctx, t); band(ctx); Film.sub(ctx, 'N06', t, .1, 7.0); }
+Pilot.run({ W, H, dur: 7.1, fonts: ["600 40px 'Noto Serif KR'", "400 28px 'Noto Sans KR'"], init: async () => { await Film.load(); buildJerusalem(); }, draw });
+</script>
+</body>
+</html>

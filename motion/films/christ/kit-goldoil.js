@@ -22,6 +22,7 @@
          (oil running down a head) — k = how far it has reached 0..1; o: { w (px at the source), t, back (backlit), alpha, glints, taper }
      GOLD.horn(ctx, x, y, L, ang, o) → {x, y}       a ram's horn flask: oil leaves its narrow tip at (x,y); it widens towards angle ang (rad)
          and curls (curl .9), its wide end usually off frame; o: { curl, rim [r,g,b], rimA, light (rad: where the rim light comes from), fill }
+     GOLD.jar(ctx, x, y, L, ang, o) → {x, y, C}     a small jug pouring from its mouth at (x,y), body towards ang; C = centre line for the hands
      GOLD.motes(ctx, t, o)                          dust in the beam; o: { n, seed, x, y, w, h, light: [x,y,R], pull: [x,y,k, spreadX, spreadY], size, a }
      GOLD.bokeh(ctx, o)                             out-of-focus discs; o: { n, seed, x, y, w, h, r, col, a, t }
      GOLD.bloom(ctx, x, y, col, k, o)               lens bloom from a bright point (exposure falloff, soft streak, ghosts) — after W3.bloom
@@ -261,7 +262,7 @@
     const curl = o.curl == null ? .9 : o.curl, rim = o.rim || [255, 186, 96], rimA = o.rimA == null ? .85 : o.rimA, la = o.light == null ? ang + Math.PI / 2 : o.light;
     const N = 48, C = [];
     let px = x, py = y, a = ang;
-    for (let i = 0; i <= N; i++) { const s = i / N; C.push([px, py, a, L * (.014 + .19 * Math.pow(s, 1.1))]); a += curl * 1.6 / N * (1 - .5 * s); px += Math.cos(a) * L / N; py += Math.sin(a) * L / N; }
+    for (let i = 0; i <= N; i++) { const s = i / N; C.push([px, py, a, L * (.014 + (o.wide || .19) * Math.pow(s, 1.1)) * (1 - .25 * Math.pow(ss(.9, 1, s), 2))]); a += curl * 1.6 / N * (1 - .5 * s); px += Math.cos(a) * L / N; py += Math.sin(a) * L / N; }
     const lx = Math.cos(la), ly = Math.sin(la);
     const outline = (dx, dy, k = 1) => { ctx.beginPath(); C.forEach(([cx, cy, a, w]) => ctx.lineTo(cx + Math.cos(a + Math.PI / 2) * w * k + dx, cy + Math.sin(a + Math.PI / 2) * w * k + dy));
       for (let i = C.length - 1; i >= 0; i--) { const [cx, cy, a, w] = C[i]; ctx.lineTo(cx - Math.cos(a + Math.PI / 2) * w * k + dx, cy - Math.sin(a + Math.PI / 2) * w * k + dy); } ctx.closePath(); };
@@ -280,7 +281,22 @@
     const gg = ctx.createRadialGradient(x, y, 0, x, y, L * .03); gg.addColorStop(0, 'rgba(255,240,200,.95)'); gg.addColorStop(.4, 'rgba(255,190,90,.6)'); gg.addColorStop(1, 'rgba(255,170,70,0)');
     ctx.globalCompositeOperation = 'screen'; ctx.fillStyle = gg; ctx.fillRect(x - L * .03, y - L * .03, L * .06, L * .06);
     ctx.restore();
-    return { x, y, w: C[0][3] };
+    return { x, y, w: C[0][3], C };            // C: centre line [x, y, angle, half-width] from the tip — hands grip at C[i]
+  }
+
+  // ---------------- a small jug (the anointing oil of the tabernacle, Ex 30 / Lev 8) ----------------
+  // mouth at (x,y); the body lies along angle ang from the mouth; L = length. Returns { x, y, C } like horn (C from the mouth).
+  function jar(ctx, x, y, L, ang, o = {}) {
+    const rim = o.rim || [255, 186, 96], rimA = o.rimA == null ? .85 : o.rimA, la = o.light == null ? ang + Math.PI / 2 : o.light;
+    const prof = s => s < .18 ? .10 + .03 * ss(0, .05, s) - .02 * ss(.05, .18, s) : s < .3 ? lerp(.11, .30, ss(.18, .3, s)) : .30 + .07 * Math.sin((s - .3) / .7 * Math.PI) - .12 * ss(.85, 1, s);
+    const N = 36, C = [], ca = Math.cos(ang), sa = Math.sin(ang);
+    for (let i = 0; i <= N; i++) { const s = i / N; C.push([x + ca * s * L, y + sa * s * L, ang, L * prof(s)]); }
+    const outline = (dx, dy) => { ctx.beginPath(); C.forEach(([cx, cy, a, w]) => ctx.lineTo(cx - sa * w + dx, cy + ca * w + dy)); for (let i = C.length - 1; i >= 0; i--) { const [cx, cy, a, w] = C[i]; ctx.lineTo(cx + sa * w + dx, cy - ca * w + dy); } ctx.closePath(); };
+    const lx = Math.cos(la), ly = Math.sin(la), off = L * .02;
+    ctx.save(); outline(lx * off, ly * off); ctx.fillStyle = css(rim, rimA); ctx.fill(); outline(-lx * off * .3, -ly * off * .3); ctx.fillStyle = o.fill || '#120a05'; ctx.fill();
+    const gg = ctx.createRadialGradient(x, y, 0, x, y, L * .12); gg.addColorStop(0, 'rgba(255,240,200,.9)'); gg.addColorStop(.4, 'rgba(255,190,90,.5)'); gg.addColorStop(1, 'rgba(255,170,70,0)');
+    ctx.globalCompositeOperation = 'screen'; ctx.fillStyle = gg; ctx.fillRect(x - L * .12, y - L * .12, L * .24, L * .24); ctx.restore();
+    return { x, y, C };
   }
 
   // ---------------- motes and bokeh ----------------
@@ -337,5 +353,5 @@
     const vg = ctx.createRadialGradient(W() / 2, H() * (o.vy || .46), Math.min(W(), H()) * .32, W() / 2, H() / 2, Math.max(W(), H()) * .78); vg.addColorStop(0, 'rgba(6,4,2,0)'); vg.addColorStop(1, `rgba(6,4,2,${o.vignette == null ? .6 : o.vignette})`); ctx.fillStyle = vg; ctx.fillRect(0, 0, W(), H());
   }
 
-  window.GOLD = { grab, drop, pool, floor, stream, path: pathOf, horn, motes, bokeh, bloom, glow, finish, css, GOLD: GOLD_C };
+  window.GOLD = { grab, drop, pool, floor, jar, stream, path: pathOf, horn, motes, bokeh, bloom, glow, finish, css, GOLD: GOLD_C };
 })();

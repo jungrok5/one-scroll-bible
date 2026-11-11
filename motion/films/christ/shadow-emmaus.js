@@ -85,6 +85,7 @@
   }
 
   // ---------------- people: the kit's jointed rig in robes and head cloths ----------------
+  const STOPD = VEL * (WALK_T + SLOW / 2);   // where they stop (speak): each walker's phase is offset so it stops with both feet down
   const KIND = [   // the three: [rear disciple, Jesus, front disciple]
     { s: SC * .98, cloth: 0, x: V ? .24 : .33 },
     { s: SC * 1.02, cloth: 1, x: V ? .5 : .5 },
@@ -120,7 +121,7 @@
 
   // a walker in place at screen x, walking right, the ground sliding under it at VEL (feet planted on the moving ground)
   function walker(i, u, dist, f = 1) {
-    const kd = KIND[i], ph = (dist + i * 37) / STRIDE, F = K().walk(W * kd.x, G, kd.s, f, ph, STRIDE * kd.s / SC, { lean: .06 });
+    const kd = KIND[i], st = STRIDE * kd.s / SC, want = i === 1 ? .55 : .05, off = ((want - (STOPD / st) % 1) % 1 + 1) % 1, ph = dist / st + off, F = K().walk(W * kd.x, G, kd.s, f, ph, st, { lean: .06 });
     return dressRobe(F, kd.cloth); }
 
   // ---------------- scenes ----------------
@@ -176,7 +177,7 @@
     const k = K(), rise = eio(clamp((u - 3.6) / 3.2)), shift = rise * (HS.win.y - H * (V ? .24 : .22)), dim = 1 - .82 * ss(4.2, 6.2, u);
     evening(ctx, u, shift, .95 * dim);
     ctx.save(); ctx.translate(0, -shift);
-    const { door: D, win: Wn } = HS, wl = k.lightOn(u, 1.45, .45), open = eio(clamp((u - 2.4) / .9)) * (1 - eio(clamp((u - 5.2) / .6)));
+    const { door: D, win: Wn } = HS, wl = k.lightOn(u, 1.45, .45), open = eio(clamp((u - 2.4) / .9)) * (1 - eio(clamp((u - 5.3) / .6)));
     // the window: warm paper behind a cross of bars, its glow on the screen
     if (wl > 0) { ctx.save(); ctx.globalCompositeOperation = 'screen'; const g = ctx.createRadialGradient(Wn.x + Wn.w / 2, Wn.y + Wn.h / 2, 0, Wn.x + Wn.w / 2, Wn.y + Wn.h / 2, V ? 260 : 220); g.addColorStop(0, `rgba(255,190,100,${.55 * wl})`); g.addColorStop(1, 'rgba(255,160,70,0)'); ctx.fillStyle = g; ctx.fillRect(Wn.x - 260, Wn.y - 260, 520 + Wn.w, 520 + Wn.h); ctx.restore();
       ctx.fillStyle = rgb(mix([40, 24, 12], [255, 204, 120], wl)); ctx.fillRect(Wn.x, Wn.y, Wn.w, Wn.h); ctx.fillStyle = '#100a08'; ctx.fillRect(Wn.x + Wn.w / 2 - 3, Wn.y, 6, Wn.h); ctx.fillRect(Wn.x, Wn.y + Wn.h * .45 - 3, Wn.w, 6); }
@@ -185,8 +186,8 @@
       ctx.save(); ctx.globalCompositeOperation = 'screen'; const g = ctx.createRadialGradient(D.x + dw / 2, G - D.h * .4, 0, D.x + dw / 2, G - D.h * .4, V ? 380 : 320); g.addColorStop(0, `rgba(255,180,90,${.45 * open})`); g.addColorStop(1, 'rgba(255,150,60,0)'); ctx.fillStyle = g; ctx.fillRect(D.x - 400, G - D.h - 400, 800 + D.w, 800 + D.h); ctx.restore(); }
     // the three walk in from the left and through the door, one after another (the house hides them as they pass inside)
     const order = [[2, 0], [1, .55], [0, 1.1]];   // front disciple first, then Jesus, then the other
-    for (const [i, lag] of order) { const kd = KIND[i], x0 = W * (V ? -.08 : -.05) - lag * 150, x1 = D.x + D.w * .5 + 60, tp = k.on2(u - lag);
-      if (tp <= 0) continue; const stride = k.stopStride(x1 - x0, 122 * kd.s), wv = k.walkAlong(tp, 0, 4.6, x0, x1, stride, .05);
+    for (const [i, lag] of order) { const kd = KIND[i], x0 = W * .05 - lag * 150, x1 = D.x + D.w * .5 + 60, tp = k.on2(u - lag);
+      if (tp <= 0) continue; const stride = k.stopStride(x1 - x0, 122 * kd.s), wv = k.walkAlong(tp, 0, 4.0, x0, x1, stride, .05);
       const F = dressRobe(k.walk(wv.x, G, kd.s, 1, wv.ph, stride, { lean: .06 }), kd.cloth);
       ctx.save(); ctx.beginPath(); ctx.rect(-50, 0, D.x + D.w * .55 + 50, H + 1000); ctx.clip();   // past the door's middle they are inside
       shadow(ctx, F, { rim: { x: D.x + D.w / 2, y: G - D.h * .5, a: open * .9, reach: 420 } }); ctx.restore(); }

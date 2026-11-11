@@ -136,6 +136,10 @@ const G = {
     else if (H && (!c.review.anomaly_check_h || c.review.anomaly_check_h.render !== H.render)) why.push('가로판 시트를 보고 review.json anomaly_check_h를 적는다');
     else if (H) { const o = (c.review.anomaly_check_h.issues || []).filter(i => !i.status || i.status === 'open'); if (o.length) why.push('가로판 이상한 프레임: ' + o.map(i => `${i.t}초 ${i.what}`).join(' / ')); }
     return why.length ? { ok: false, why } : pass(); },
+  // the last step (관리자 2026-11-11 "공정에 마지막엔 대화에만 남은 피드백 같은 거 확인해서 공정에 반영하는 스텝"): every remark of the film checked for what belongs to every film
+  sweep: c => { const fs = c.review.feedback_sweep, log = c.review.feedback_log || [];
+    if (!fs) return fail(`대화 피드백 정리 없음 — feedback_log ${log.length}건 + 대화 기록을 훑어 앞으로의 영상에 적용할 것을 rules.json·tasks·README로 옮기고 review.json feedback_sweep = { at, items: [{ said, to, status: 'moved'|'film-only' }] }`);
+    const open = (fs.items || []).filter(i => !['moved', 'film-only'].includes(i.status)); return open.length ? fail('정리 안 된 피드백: ' + open.map(i => i.said).join(' / ')) : pass(); },
   looks: c => {
     const L = c.review.looks; if (!Array.isArray(L) || !L.length) return fail('review.json looks(장면마다 화풍 표)가 없다');
     const why = [], nw = L.filter(x => x.style_new).length, distinct = new Set(L.map(x => x.look.split(/[ (]/)[0])).size;
@@ -309,7 +313,7 @@ export const STAGES = [
   { id: 'intl', n: 10, name: '국제판(영어 글자판 + 해설 트랙)', task: 'intl', gates: ['intl'] },
   { id: 'captions', n: 11, name: '외국어 자막 27개(한국어판·국제판)', task: 'captions', gates: ['captions'] },
   { id: 'intlpub', n: 12, name: '국제판 공개', task: 'intlpub', gates: ['intlpub'], approve: '관리자가 국제판 공개 OK' },
-  { id: 'site', n: 13, name: '사이트 /film', task: 'site', gates: ['site'] },
+  { id: 'site', n: 13, name: '사이트 /film · 대화 피드백 정리', task: 'site', gates: ['site', 'sweep'] },
 ];
 // ---------------------------------------------------------------------------------------------------- insights
 // pipeline/insights.json: what the numbers taught (the periodic analysis writes it). Active rules with a `check` are gates of

@@ -80,7 +80,7 @@ After each render, run `node motion/films/look-check.mjs <film.mp4>` and compare
 
 **Drawing (stage 4) — portrait first, legibility first** (maintainer, 2026-11-02): compose every scene for 1080×1920
 (Shorts) and adapt landscape for TV; pilots, stills and preview videos are portrait first. Search STYLE-INDEX, the
-Lemo-Opuscar repo AND the word-log kits (`kits/templates.jpg` — portrait-native, figures that read); reject a look whose
+Lemo-Opuscar repo, the word-log kits (`kits/templates.jpg` — portrait-native, figures that read) AND the claude-drawing-skill gallery (https://github.com/cloveric/claude-drawing-skill/blob/main/docs/GIFS.md · STYLES.md — 91 draw-on styles; 관리자 2026-11-11). Compose each scene for what it must convey first (colour, composition, light), then pick the look that does that best — a repeated look is fine when the scene reads differently (관리자 2026-11-11); reject a look whose
 texture buries the map, the words or the people on a phone (the mosaic pilot did). Pilot 2–3 parts → `review.json`
 `pilot` → draft page + a portrait preview video (SendUserFile) before building the rest.
 

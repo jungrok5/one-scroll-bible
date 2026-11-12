@@ -212,3 +212,5 @@
 14. 작성 시점에 `uploaded.json`에는 커밋하지 않은 변경이 있었다(한국어 쇼츠 15~18편 댓글 id 추가).
 
 **11/13 문서 정리**(위 2·3·6·7, 1·11의 문서 부분): `motion/README.md`(업로드 자료 표·쇼츠 자막 문단·9단계·공개 일정), `motion/films/README.md`(4절 표 — 해설 en·es·pt-BR, 자막 27+ko, 두 방향 · 3절·7절·9b 자막·가로판 · 남은 일), `pipeline/tasks/publish.md`·`captions.md`(한국어 가로판도 올림, 자막 4편 모두), `motion/films/ANALYTICS.md`(볼 영상 — 한국어 쇼츠 날짜, 400년 짧은 쇼츠), `motion/social/instagram.json`(날짜·상태), 메모리 asr-off. 유튜브·인스타·스레드는 건드리지 않았다.
+
+**11/13 4물결 업로드**: hi 18–21 + vi·th·tl 1–21(67편) 올리고 11/21~12/11 현지 19:00 예약 — 4물결 84편 모두 예약. 3·4물결 168편 관련 영상 연결. 재생목록은 zh-Hans·zh-Hant·ja·ar·hi 끝, **vi·th·tl만 남음**(할당량 — 17:00 KST 뒤 `YT_AS=GLOBAL node motion/youtube/global-move.mjs playlist-shorts vi th tl`). 400년 짧은 쇼츠 3편을 uploaded.json `silence400.clips`에 넣음(7-4 정리).

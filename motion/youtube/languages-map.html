@@ -139,7 +139,7 @@ footer{color:var(--mute);font-size:12.5px;margin-top:20px}
 
     <h2 style="margin-top:20px">순서</h2>
     <ol class="steps">
-      <li>미업로드 쇼츠 67편 올리기(진행 중) · 어긋난 문서 정리(진행 중)</li>
+      <li>미업로드 쇼츠 67편 올리기 · 어긋난 문서 정리 — 11/13 끝남 (vi·th·tl 재생목록만 할당량 초기화 뒤)</li>
       <li>국제 14분 19편에 나머지 18개 언어 + ko 자막 넣기 (한국어 음악판에 이미 있는 같은 파일, 시각도 같음)</li>
       <li>쇼츠 자막: 한국어 1–6편, 국제 쇼츠에 다른 언어 자막(위쪽) — 언어 묶음별로 나눠서</li>
       <li>한국어 해설판 해설 원고 번역(19개 언어) → 해설판 14분·쇼츠 7–21편 외국어 자막</li>
@@ -173,7 +173,7 @@ const rows = [
     L => FILM.includes(L) ? {b:1,t:1,n:2,add:1} : L==='ko' ? {t:1,add:1} : L==='+' ? {e:1,add:1} : null],
   ['한국어 쇼츠 1–6', '음악판', L => L==='ko' ? {b:1} : null, L => L==='ko' ? {b:1} : FILM.includes(L) ? {t:1,add:1} : null],
   ['한국어 쇼츠 7–21', '한국어 해설판', L => L==='ko' ? {b:1,n:1,t:1} : null, L => L==='ko' ? {b:1,n:1,t:1} : FILM.includes(L) ? {t:2,add:1} : null],
-  ['국제 쇼츠 21편 (언어마다)', '국제 채널 · 음악 · 물결로 공개', L => W[L] ? (['vi','th','tl'].includes(L) ? {p:1} : {b:1}) : null,
+  ['국제 쇼츠 21편 (언어마다)', '국제 채널 · 음악 · 물결로 공개', L => W[L] ? {b:1} : null,
     L => W[L] ? {b:1,t:1,add:1} : (FILM.includes(L) || L==='ko') ? {t:1,add:1} : L==='+' ? {e:1,add:1} : null],
   ['band','「침묵의 400년」 (3분)'],
   ['한국어판 가로·쇼츠', '한국어 채널 · 한국어 해설', L => L==='ko' ? {b:1,n:1,t:1} : CAP27.includes(L) ? {t:1} : null, null],
@@ -210,8 +210,7 @@ draw(false);
     ['① en · es · pt-BR', '06–10시 KST', [['10-24','11-14','gl','21편']]],
     ['② id · fr · de · ru', '현지 19:00', [['10-31','11-21','gl','21편']]],
     ['③ zh-Hans · zh-Hant · ja · ar', '현지 19:00', [['11-14','12-05','gl','21편']]],
-    ['④ hi', '현지 19:00', [['11-21','12-08','gl','1–17'], ['12-08','12-12','pend','18–21']]],
-    ['④ vi · th · tl', '현지 19:00', [['11-21','12-12','pend','올리는 중']]],
+    ['④ hi · vi · th · tl', '현지 19:00', [['11-21','12-12','gl','21편 · 예약']]],
   ];
   const el = document.getElementById('tl');
   const ax = document.createElement('div'); ax.className = 'axis';

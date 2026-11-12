@@ -738,6 +738,10 @@
      "15": "plKtsHeyZhg",
      "16": "1wnQIgE-qms",
      "17": "SgKxabRu5YM",
+     "18": "arS82ZZQ2is",
+     "19": "AE6j42Fcbw8",
+     "20": "mVCYSjiwjCk",
+     "21": "fLJZOj_MTYg",
      "09": "kR2FwpkE73g",
      "08": "4ys1kz3b2xc",
      "07": "hME88lVZS30",
@@ -751,16 +755,94 @@
     "first_day": "2026-11-21",
     "time_local": "19:00",
     "utc_offset": "+05:30",
-    "note": "wave 4 (2026-11-08): uploaded to this channel via Studio (file only, studio-fileonly.js), filled + scheduled by API (schedule-shorts); related video = global.film[L] (set in Studio)"
+    "note": "wave 4 (2026-11-12): uploaded to this channel via Studio (file only, studio-fileonly.js), filled + scheduled by API (schedule-shorts); related video = global.film[L] (set in Studio)"
    },
    "vi": {
-    "ids": {}
+    "ids": {
+     "10": "MOtXYchNwgk",
+     "11": "ls4sTTSTaOU",
+     "12": "sfM-gx_mylk",
+     "13": "VrMErpp6Y5E",
+     "14": "h-s3cLN1los",
+     "15": "RyGjE_TLbUw",
+     "16": "duQmPEgZV54",
+     "17": "PVJopJ5-_UA",
+     "18": "PCTKk76WZBg",
+     "19": "dv99gdDFQIs",
+     "20": "GzTgY232uDI",
+     "21": "edWH_AK1fr4",
+     "09": "veQt4DTNitQ",
+     "08": "c7xEgl51UA8",
+     "07": "OBFqUcKAifQ",
+     "06": "HDeeQODz3gY",
+     "05": "_VGvBv6R6MU",
+     "04": "6Qex3RXiK5E",
+     "03": "dlRJMkOv82k",
+     "02": "bmQ-nzyhyXM",
+     "01": "co-COwJCu5o"
+    },
+    "first_day": "2026-11-21",
+    "time_local": "19:00",
+    "utc_offset": "+07:00",
+    "note": "wave 4 (2026-11-12): uploaded to this channel via Studio (file only, studio-fileonly.js), filled + scheduled by API (schedule-shorts); related video = global.film[L] (set in Studio)"
    },
    "th": {
-    "ids": {}
+    "ids": {
+     "10": "uvpzR9HKpp4",
+     "11": "l9wJqTNyBoQ",
+     "12": "QvyV9UoyaGk",
+     "13": "eouCdyToXws",
+     "14": "P6MbKuwILgw",
+     "15": "fIuzOI2OY7w",
+     "16": "adXQD6y1p3I",
+     "17": "2gco-hImR70",
+     "18": "qHrPsQwQVU4",
+     "19": "LcMrT6AsxwM",
+     "20": "lJ3PeIQ285w",
+     "21": "BOQMcNWl1W8",
+     "09": "WBqHrZTJFXs",
+     "08": "rJgDTpyTX1Y",
+     "07": "r-VTVH0dtrk",
+     "06": "At1U1huFEXQ",
+     "05": "aHON_fZIcsw",
+     "04": "J8SJ-yp--uE",
+     "03": "Ku8fRTnqVrg",
+     "02": "q4Q66zGO9Zg",
+     "01": "1ebacwxYmT4"
+    },
+    "first_day": "2026-11-21",
+    "time_local": "19:00",
+    "utc_offset": "+07:00",
+    "note": "wave 4 (2026-11-12): uploaded to this channel via Studio (file only, studio-fileonly.js), filled + scheduled by API (schedule-shorts); related video = global.film[L] (set in Studio)"
    },
    "tl": {
-    "ids": {}
+    "ids": {
+     "10": "F2dDkiegrDY",
+     "11": "D0twvttW7V0",
+     "12": "fhTTqLmjP4E",
+     "13": "MoIctHu9cD8",
+     "14": "iXDhotZqwVg",
+     "15": "DGCmrgt4S2o",
+     "16": "Jlok3ZfG3tk",
+     "17": "puQP1x0wozA",
+     "18": "nTSfZLkkGRc",
+     "19": "QqPefOr-9Xk",
+     "20": "W09OGa1eyP8",
+     "21": "8GvRX8wy2l4",
+     "09": "Ra0IDY1bp04",
+     "08": "P5B38FyhbKY",
+     "07": "IMSvS-8m_ko",
+     "06": "62PuFwV4KD8",
+     "05": "2ajkcBq-YRI",
+     "04": "2Adtrq61sHs",
+     "03": "_xOLAAou2FM",
+     "02": "gdEySJN_9dk",
+     "01": "Gz6C1RDwvDk"
+    },
+    "first_day": "2026-11-21",
+    "time_local": "19:00",
+    "utc_offset": "+08:00",
+    "note": "wave 4 (2026-11-12): uploaded to this channel via Studio (file only, studio-fileonly.js), filled + scheduled by API (schedule-shorts); related video = global.film[L] (set in Studio)"
    }
   },
   "playlists": {
@@ -882,17 +964,13 @@
    }
   },
   "wave4_pending": {
-   "note": "2026-11-08: wave 3 (zh-Hans zh-Hant ja ar) all 84 scheduled 11-14..12-04, local 19:00; wave 4 hi 01-17 scheduled from 11-21 19:00 +05:30. The daily upload limit (~100) dropped the rest silently. TODO from 2026-11-09 after ~20:00 KST (24 h after the first uploads): upload hi 18-21 + vi/th/tl 1-21 (67) with studio-fileonly.js; record-from-files hi vi th tl; schedule-shorts hi 2026-11-21 19:00 +05:30 (fills 18-21), vi and th 2026-11-21 19:00 +07:00, tl 2026-11-21 19:00 +08:00, all --wave=\"wave 4\"; then playlist-shorts for all 8 languages (50 units each, spread over days by quota) and related videos (studio-related.js). Delete this key when done.",
+   "note": "2026-11-13: done — hi 18-21 + vi/th/tl 1-21 (67) uploaded (studio-fileonly.js), recorded (record-from-files: 21/21 each), scheduled (schedule-shorts, wave 4: hi from 11-21 19:00 +05:30, vi/th 19:00 +07:00, tl 19:00 +08:00, last 12-11); playlist-shorts done for zh-Hans zh-Hant ja ar hi; related video set in Studio for all 168 wave-3/4 Shorts (studio-related.js, now with a picker-search fallback). LEFT (daily API quota): after the reset (17:00 KST) run playlist-shorts vi th tl (21 each, 50 units each = 3,150; reruns skip what is in the playlist), then delete this key.",
    "todo": {
-    "hi": [
-     18,
-     19,
-     20,
-     21
-    ],
-    "vi": "1-21",
-    "th": "1-21",
-    "tl": "1-21"
+    "playlist_shorts": [
+     "vi",
+     "th",
+     "tl"
+    ]
    }
   }
  },
@@ -946,6 +1024,38 @@
    "my"
   ],
   "captions_note": "2026-11-01: the Korean video and Short carry every reviewed caption language on the Korean narration timing (sound/<lang>.ko-timing.vtt; en/es/pt-BR via the API, the other 16 through Studio); automatic ko captions removed. it, pl, tr added the same evening (Studio). Then uz, ne, km, mn, my (Studio). 2026-11-02: tr and fa replaced (line 01 fix, API caption-file --replace).",
-  "old_ids_deleted": "SiSsE3W61eM / vJh-gAZl4UU deleted 2026-11-01 (API videos.delete, owner's OK; both private, 0–1 views)"
+  "old_ids_deleted": "SiSsE3W61eM / vJh-gAZl4UU deleted 2026-11-01 (API videos.delete, owner's OK; both private, 0–1 views)",
+  "clips": {
+   "a": {
+    "id": "Gs5UC6xfE20",
+    "title": "구약의 마지막 말씀, 그리고 400년",
+    "from": 2.6,
+    "to": 28.6,
+    "publish_at": "2026-11-17T10:00:00Z",
+    "privacy": "private (scheduled)",
+    "captions": [
+     "ko"
+    ],
+    "note": "ko(auto) still present (API 11/12) — asr-off before 11/17 needs the owner OK; instagram + threads scheduled same time"
+   },
+   "b": {
+    "id": "gDXUB9kxUTo",
+    "title": "하나님은 400년 동안 길을 준비하셨다",
+    "from": 44.2,
+    "to": 77.9,
+    "publish_at": "2026-11-18T10:00:00Z",
+    "privacy": "private (scheduled)",
+    "note": "captions not checked; instagram + threads scheduled same time"
+   },
+   "c": {
+    "id": "8FMHpO6-Umo",
+    "title": "400년 만에 다시 말씀하셨다",
+    "from": 78.3,
+    "to": 105.6,
+    "publish_at": "2026-11-19T10:00:00Z",
+    "privacy": "private (scheduled)",
+    "note": "captions not checked; instagram + threads scheduled same time"
+   }
+  }
  }
 }

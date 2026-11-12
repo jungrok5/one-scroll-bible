@@ -22,10 +22,16 @@ window.__osbRelated = async (L, id) => {
   const side = () => document.querySelector('ytcp-video-metadata-editor-sidepanel, #side-panel')?.innerText || '';
   const r = { L, id }, already = side().includes(title);
   const rel = [...document.querySelectorAll('button, ytcp-button, [role=button]')].find(b => b.offsetParent && (b.getAttribute('aria-label') || b.innerText || '').trim().startsWith('관련 동영상'));
+  // 2026-11-13: the picker lists the newest public videos first, so once a few waves of Shorts are public the films are no
+  // longer on its first page (every wave-3 Short came back related = false). Not found in 4 s → type the title into the
+  // picker's "내 동영상 검색" box and look again.
+  const findCard = () => [...document.querySelectorAll('ytcp-dialog *, tp-yt-paper-dialog *')].filter(e => e.offsetParent && e.children.length === 0).find(e => e.textContent.trim().startsWith(title));
   if (!already && rel) { rel.click();
-    const card = await wait(() => [...document.querySelectorAll('ytcp-dialog *, tp-yt-paper-dialog *')].filter(e => e.offsetParent && e.children.length === 0).find(e => e.textContent.trim().startsWith(title)), 10000);
+    let card = await wait(findCard, 4000);
+    if (!card) { const q = await wait(() => [...document.querySelectorAll('ytcp-dialog input')].find(i => i.offsetParent && i.placeholder === '내 동영상 검색'), 5000);
+      if (q) { q.focus(); document.execCommand('insertText', false, title.slice(0, 10)); q.dispatchEvent(new Event('input', { bubbles: true })); card = await wait(findCard, 10000); r.searched = true; } }
     if (card) { card.click(); await sleep(1500); } else [...document.querySelectorAll('ytcp-dialog #close-button, tp-yt-paper-dialog [aria-label=닫기]')].forEach(x => x.click());
-    r.related = !!card; } else r.related = already ? 'already' : 'no button';
+    r.related = !!card && side().includes(title); } else r.related = already ? 'already' : 'no button';
   const s = document.querySelector('ytcp-button#save'); if (s && !s.hasAttribute('disabled')) { s.click(); r.saved = !!(await wait(() => s.hasAttribute('disabled'), 20000)); } else r.saved = 'nothing to save';
   await sleep(1200); return r;
 };

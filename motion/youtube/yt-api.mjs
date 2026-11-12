@@ -341,4 +341,24 @@ if (cmd === 'whoami') {
     await api(`videos?part=snippet${lc ? ',localizations' : ''}`, { method: 'PUT', body: JSON.stringify({ id: x.id, snippet: { ...x.snippet, description: d, categoryId: x.snippet.categoryId || '27' }, ...(lc ? { localizations: nl } : {}) }) });
     n++; }
   console.log(`  updated ${n}${todo.length > n ? ` — ${todo.length - n} left, run again (tomorrow if the quota is spent)` : ''}`);
+} else if (cmd === 'text-edit') {
+  // text-edit <spec.json> [--dry]: line edits on live text, everything else kept. spec = { videos: [ids], channel: true,
+  //   playlists: [ids], drop: [regex…], replace: [[regex, to]…], append: [line…], title: "<playlist title>" }.
+  // A line matching a drop regex is removed; replace runs per line; append lines are added after the last "▶" line
+  // (or at the end) unless already present. --dry writes before/after to motion/out/text-edit-<id>.txt. Video 50 units,
+  // channel 50, playlist 50. (관리자 2026-11-13: 채널·14분 설명 문구 정리)
+  const s = JSON.parse(readFileSync(rest.find(a => !a.startsWith('--')), 'utf8').replace(/^﻿/, '')), dry = rest.includes('--dry');
+  const edit = d => { let L = d.split('\n').filter(l => !(s.drop || []).some(r => new RegExp(r).test(l)));
+    L = L.map(l => (s.replace || []).reduce((a, [r, to]) => a.replace(new RegExp(r), to), l));
+    const add = (s.append || []).filter(a => !L.includes(a)); if (add.length) { const at = L.map(l => l.startsWith('▶')).lastIndexOf(true); at < 0 ? L.push('', ...add) : L.splice(at + 1, 0, ...add); }
+    return L.join('\n'); };
+  const show = (id, a, b) => { console.log(`${id}: ${a === b ? 'no change' : `${a.length} → ${b.length} chars`}`); if (dry) writeFileSync(join(M, 'out', `text-edit-${id}.txt`), `--- before\n${a}\n\n--- after\n${b}\n`); return a !== b && !dry; };
+  for (const id of s.videos || []) { const cur = (await api(`videos?part=snippet&id=${id}`)).items?.[0]; if (!cur) { console.log(id, 'not found'); continue; }
+    const nd = edit(cur.snippet.description); if (show(id, cur.snippet.description, nd)) { await api('videos?part=snippet', { method: 'PUT', body: JSON.stringify({ id, snippet: { ...cur.snippet, description: nd, categoryId: cur.snippet.categoryId || '27' } }) }); console.log('  saved'); } }
+  if (s.channel) { const c = (await api('channels?part=brandingSettings&mine=true')).items[0], d = c.brandingSettings.channel.description || '', nd = edit(d);
+    if (show('channel-' + c.id, d, nd)) { await api('channels?part=brandingSettings', { method: 'PUT', body: JSON.stringify({ id: c.id, brandingSettings: { ...c.brandingSettings, channel: { ...c.brandingSettings.channel, description: nd } } }) }); console.log('  saved'); } }
+  for (const id of s.playlists || []) { const p = (await api(`playlists?part=snippet&id=${id}`)).items?.[0]; if (!p) { console.log(id, 'not found'); continue; }
+    const nt = s.title || p.snippet.title, nd = edit(p.snippet.description || '');
+    console.log(`playlist ${id}: "${p.snippet.title}" → "${nt}"`); if (show('playlist-' + id, p.snippet.description || '', nd) || (nt !== p.snippet.title && !dry)) {
+      await api('playlists?part=snippet', { method: 'PUT', body: JSON.stringify({ id, snippet: { ...p.snippet, title: nt, description: nd } }) }); console.log('  saved'); } }
 } else console.log('usage: node motion/youtube/yt-api.mjs whoami | captions [<lang…>] [--dry] | caption-file <videoId> <file> [lang] | film-schedule <film> <v|h> <videoId> <ISO> | film-desc <film> <key> <videoId> | status [<lang…>] | stats [<lang…>] [--from D] [--to D] | playlist-add <playlistId> <videoId…> | upload <lang> film|<n…> [--publish-at ISO] [--dry]');

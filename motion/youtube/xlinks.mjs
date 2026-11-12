@@ -37,7 +37,12 @@ function targets() {
   const s4 = U.silence400; for (const [k, v] of [['h', s4.h], ['v', s4.v], ...Object.entries(s4.clips || {})]) if (v?.id) T.push({ kind: 'ko-silence400', ch: 'ko', id: v.id, label: `400년 ${k}`, need: { default: ko } });
   for (const [L, t] of Object.entries(X.film14)) { const id = G.film[L]?.id; if (!id) continue;
     T.push({ kind: 'gl-film', ch: 'gl', id, label: `14min ${L}`, need: { default: [['/@bibleinonescroll/playlists', line(t.langs, url('intl_playlists'))],
-      [url('ko_film_music'), line(t.korean, url('ko_film_music'))], [url('gl_silence400'), line(t.silence400, url('gl_silence400'))]] } }); }
+      [url('ko_film_music'), line(t.korean, url('ko_film_music'))], [url('gl_silence400'), line(t.silence400, url('gl_silence400'))]] } });
+    // a language with a narrated version: music ↔ narrated link each other (관리자 2026-11-13). Lines need film14.<L>.narr / .music.
+    const nid = G.film[`${L}-narr`]?.id; if (nid) { const T0 = T[T.length - 1];
+      T0.need.default.push([yt(nid), t.narr ? line(t.narr, yt(nid)) : null]);
+      T.push({ kind: 'gl-film', ch: 'gl', id: nid, label: `14min ${L}-narr`, need: { default: [['/@bibleinonescroll/playlists', line(t.langs, url('intl_playlists'))],
+        [yt(id), t.music ? line(t.music, yt(id)) : null], [url('gl_silence400'), line(t.silence400, url('gl_silence400'))]] } }); } }
   const g4 = G.films?.silence400; for (const k of ['h', 'v']) { const id = g4?.[k]?.id; if (!id) continue; const need = {};
     for (const [L, t] of Object.entries(X.silence400)) need[L === 'en' ? 'default' : L] = [[yt(G.film[L].id), line(t.film14, yt(G.film[L].id))],
       ['/@bibleinonescroll/playlists', line(t.langs, url('intl_playlists'))], [url('ko_silence400'), line(t.korean, url('ko_silence400'))]];
@@ -57,7 +62,7 @@ async function fetchAll(T) {
   return got;
 }
 const missing = (t, v) => Object.entries(t.need).flatMap(([L, rules]) => { const d = L === 'default' ? v.snippet.description : v.localizations?.[L]?.description;
-  return d == null ? [[L, '(no localization)', null]] : rules.filter(([must]) => !d.includes(must)).map(([, ln]) => [L, ln, d]); });
+  return d == null ? [[L, '(no localization)', null]] : rules.filter(([must]) => !d.includes(must)).map(([, ln]) => ln ? [L, ln, d] : [L, '(line text missing in xlinks.json)', null]); });
 
 const [cmd, ...rest] = process.argv.slice(2), flag = n => { const i = rest.indexOf(n); return i < 0 ? null : rest[i + 1]; };
 if (cmd === 'audit' || cmd === 'apply') {
@@ -69,8 +74,8 @@ if (cmd === 'audit' || cmd === 'apply') {
     if (cmd !== 'apply') continue;
     for (const { t, v, m } of bad) { if (!v || done >= max) continue; if (m.some(([, , d]) => d == null)) { console.log(`  ${t.label}: skip (${m.find(x => x[2] == null)[1]})`); continue; }
       const sn = { ...v.snippet, categoryId: v.snippet.categoryId || '27' }, loc = v.localizations ? JSON.parse(JSON.stringify(v.localizations)) : null;
-      sn.description = insert(sn.description, t.need.default ? t.need.default.map(r => r[1]) : []);
-      if (loc) for (const L of Object.keys(t.need).filter(L => L !== 'default')) loc[L].description = insert(loc[L].description, t.need[L].map(r => r[1]));
+      sn.description = insert(sn.description, t.need.default ? t.need.default.map(r => r[1]).filter(Boolean) : []);
+      if (loc) for (const L of Object.keys(t.need).filter(L => L !== 'default')) loc[L].description = insert(loc[L].description, t.need[L].map(r => r[1]).filter(Boolean));
       if (loc && sn.defaultLanguage && loc[sn.defaultLanguage]) loc[sn.defaultLanguage].description = sn.description;
       if (dry) { mkdirSync(OUT, { recursive: true }); writeFileSync(join(OUT, `${t.id}.txt`), `--- ${t.label}\n${sn.description}\n` + (loc ? Object.entries(loc).map(([L, x]) => `\n--- ${L}\n${x.description}\n`).join('') : '')); console.log(`  ${t.label}: dry → out/xlinks/${t.id}.txt`); }
       else { await api(t.ch, `videos?part=snippet${loc ? ',localizations' : ''}`, { method: 'PUT', body: JSON.stringify({ id: t.id, snippet: sn, ...(loc ? { localizations: loc } : {}) }) }); console.log(`  ${t.label}: saved`); }

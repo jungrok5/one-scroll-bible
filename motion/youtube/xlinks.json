@@ -11,30 +11,119 @@
   "intl": "다른 언어로 보기(영어·스페인어 등)"
  },
  "film14": {
-  "en": { "langs": "Same film in other languages", "korean": "Korean original (English captions)", "silence400": "The Silent 400 Years — 3 min, English captions" },
-  "es": { "langs": "La misma película en otros idiomas", "korean": "Original en coreano (subtítulos en español)", "silence400": "Los 400 años de silencio — 3 min, subtítulos en español" },
-  "pt-BR": { "langs": "O mesmo filme em outros idiomas", "korean": "Original em coreano (legendas em português)", "silence400": "Os 400 anos de silêncio — 3 min, legendas em português" },
-  "fr": { "langs": "Le même film dans d'autres langues", "korean": "Version originale coréenne (sous-titres en français)", "silence400": "Les 400 ans de silence — 3 min, sous-titres en français" },
-  "de": { "langs": "Derselbe Film in anderen Sprachen", "korean": "Koreanisches Original (deutsche Untertitel)", "silence400": "Die 400 Jahre des Schweigens — 3 Min., deutsche Untertitel" },
-  "ru": { "langs": "Этот же фильм на других языках", "korean": "Корейский оригинал (русские субтитры)", "silence400": "400 лет молчания — 3 мин, русские субтитры" },
-  "id": { "langs": "Film yang sama dalam bahasa lain", "korean": "Versi asli bahasa Korea (subtitel bahasa Indonesia)", "silence400": "400 Tahun Keheningan — 3 menit, subtitel bahasa Indonesia" },
-  "zh-Hans": { "langs": "同一部影片的其他语言版本", "korean": "韩语原版（中文字幕）", "silence400": "沉默的四百年 — 3分钟，中文字幕" },
-  "zh-Hant": { "langs": "同一部影片的其他語言版本", "korean": "韓語原版（中文字幕）", "silence400": "沉默的四百年 — 3分鐘，中文字幕" },
-  "ja": { "langs": "同じ映像のほかの言語版", "korean": "韓国語オリジナル版（日本語字幕）", "silence400": "沈黙の400年 — 3分・日本語字幕" },
-  "ar": { "langs": "الفيلم نفسه بلغات أخرى", "korean": "النسخة الكورية الأصلية (مع ترجمة عربية)", "silence400": "أربعمئة سنة من الصمت — 3 دقائق، مع ترجمة عربية" },
-  "hi": { "langs": "यही फ़िल्म दूसरी भाषाओं में", "korean": "मूल कोरियाई संस्करण (हिंदी सबटाइटल)", "silence400": "चुप्पी के 400 वर्ष — 3 मिनट, हिंदी सबटाइटल" },
-  "vi": { "langs": "Cùng bộ phim bằng các ngôn ngữ khác", "korean": "Bản gốc tiếng Hàn (phụ đề tiếng Việt)", "silence400": "400 năm im lặng — 3 phút, phụ đề tiếng Việt" },
-  "th": { "langs": "ภาพยนตร์เรื่องเดียวกันในภาษาอื่น", "korean": "ต้นฉบับภาษาเกาหลี (คำบรรยายภาษาไทย)", "silence400": "400 ปีแห่งความเงียบ — 3 นาที คำบรรยายภาษาไทย" },
-  "tl": { "langs": "Ang parehong pelikula sa ibang wika", "korean": "Orihinal na bersyong Korean (may Filipino na subtitle)", "silence400": "Ang 400 Taon ng Katahimikan — 3 minuto, may Filipino na subtitle" },
-  "bn": { "langs": "একই চলচ্চিত্র অন্যান্য ভাষায়", "korean": "মূল কোরীয় সংস্করণ (বাংলা সাবটাইটেল)", "silence400": "নীরবতার ৪০০ বছর — ৩ মিনিট, বাংলা সাবটাইটেল" },
-  "sw": { "langs": "Filamu hii hii kwa lugha nyingine", "korean": "Toleo asili la Kikorea (manukuu ya Kiswahili)", "silence400": "Miaka 400 ya Ukimya — dakika 3, manukuu ya Kiswahili" },
-  "fa": { "langs": "همین فیلم به زبان‌های دیگر", "korean": "نسخهٔ اصلی کره‌ای (با زیرنویس فارسی)", "silence400": "۴۰۰ سال سکوت — ۳ دقیقه، با زیرنویس فارسی" },
-  "ta": { "langs": "இதே திரைப்படம் மற்ற மொழிகளில்", "korean": "கொரிய மூலப் பதிப்பு (தமிழ் வசனங்களுடன்)", "silence400": "மௌனத்தின் 400 ஆண்டுகள் — 3 நிமிடம், தமிழ் வசனங்களுடன்" }
+  "en": {
+   "langs": "Same film in other languages",
+   "korean": "Korean original (English captions)",
+   "silence400": "The Silent 400 Years — 3 min"
+  },
+  "es": {
+   "langs": "La misma película en otros idiomas",
+   "korean": "Original en coreano (subtítulos en español)",
+   "silence400": "Los 400 años de silencio — 3 min, narrado en español"
+  },
+  "pt-BR": {
+   "langs": "O mesmo filme em outros idiomas",
+   "korean": "Original em coreano (legendas em português)",
+   "silence400": "Os 400 anos de silêncio — 3 min, narrado em português"
+  },
+  "fr": {
+   "langs": "Le même film dans d'autres langues",
+   "korean": "Version originale coréenne (sous-titres en français)",
+   "silence400": "Les 400 ans de silence — 3 min, sous-titres en français"
+  },
+  "de": {
+   "langs": "Derselbe Film in anderen Sprachen",
+   "korean": "Koreanisches Original (deutsche Untertitel)",
+   "silence400": "Die 400 Jahre des Schweigens — 3 Min., deutsche Untertitel"
+  },
+  "ru": {
+   "langs": "Этот же фильм на других языках",
+   "korean": "Корейский оригинал (русские субтитры)",
+   "silence400": "400 лет молчания — 3 мин, русские субтитры"
+  },
+  "id": {
+   "langs": "Film yang sama dalam bahasa lain",
+   "korean": "Versi asli bahasa Korea (subtitel bahasa Indonesia)",
+   "silence400": "400 Tahun Keheningan — 3 menit, subtitel bahasa Indonesia"
+  },
+  "zh-Hans": {
+   "langs": "同一部影片的其他语言版本",
+   "korean": "韩语原版（简体中文字幕）",
+   "silence400": "沉默的400年 — 3分钟，简体中文字幕"
+  },
+  "zh-Hant": {
+   "langs": "同一部影片的其他語言版本",
+   "korean": "韓語原版（繁體中文字幕）",
+   "silence400": "沉默的400年 — 3分鐘，繁體中文字幕"
+  },
+  "ja": {
+   "langs": "同じ映像のほかの言語版",
+   "korean": "韓国語オリジナル版（日本語字幕）",
+   "silence400": "沈黙の四百年 — 3分・日本語字幕"
+  },
+  "ar": {
+   "langs": "الفيلم نفسه بلغات أخرى",
+   "korean": "النسخة الكورية الأصلية (مع ترجمة عربية)",
+   "silence400": "400 سنة من الصمت — 3 دقائق، مع ترجمة عربية"
+  },
+  "hi": {
+   "langs": "यही फ़िल्म दूसरी भाषाओं में",
+   "korean": "मूल कोरियाई संस्करण (हिंदी सबटाइटल)",
+   "silence400": "मौन के 400 वर्ष — 3 मिनट, हिंदी सबटाइटल"
+  },
+  "vi": {
+   "langs": "Cùng bộ phim bằng các ngôn ngữ khác",
+   "korean": "Bản gốc tiếng Hàn (phụ đề tiếng Việt)",
+   "silence400": "400 năm im lặng — 3 phút, phụ đề tiếng Việt"
+  },
+  "th": {
+   "langs": "ภาพยนตร์เรื่องเดียวกันในภาษาอื่น",
+   "korean": "ต้นฉบับภาษาเกาหลี (คำบรรยายภาษาไทย)",
+   "silence400": "400 ปีแห่งความเงียบ — 3 นาที คำบรรยายภาษาไทย"
+  },
+  "tl": {
+   "langs": "Ang parehong pelikula sa ibang wika",
+   "korean": "Orihinal na bersyong Korean (may subtitle sa Filipino)",
+   "silence400": "Ang 400 Taon ng Katahimikan — 3 minuto, may subtitle sa Filipino"
+  },
+  "bn": {
+   "langs": "একই চলচ্চিত্র অন্যান্য ভাষায়",
+   "korean": "মূল কোরীয় সংস্করণ (বাংলা সাবটাইটেল)",
+   "silence400": "নীরবতার ৪০০ বছর — ৩ মিনিট, বাংলা সাবটাইটেল"
+  },
+  "sw": {
+   "langs": "Filamu hii hii kwa lugha nyingine",
+   "korean": "Toleo asili la Kikorea (manukuu ya Kiswahili)",
+   "silence400": "Miaka 400 ya Ukimya — dakika 3, manukuu ya Kiswahili"
+  },
+  "fa": {
+   "langs": "همین فیلم به زبان‌های دیگر",
+   "korean": "نسخهٔ اصلی کره‌ای (با زیرنویس فارسی)",
+   "silence400": "۴۰۰ سال خاموشی — ۳ دقیقه، با زیرنویس فارسی"
+  },
+  "ta": {
+   "langs": "இதே திரைப்படம் மற்ற மொழிகளில்",
+   "korean": "கொரிய மூலப் பதிப்பு (தமிழ் வசன வரிகளுடன்)",
+   "silence400": "மௌனத்தின் 400 ஆண்டுகள் — 3 நிமிடம், தமிழ் வசன வரிகளுடன்"
+  }
  },
  "silence400": {
-  "en": { "film14": "The whole Bible story in 14 minutes", "langs": "The 14-minute film in other languages", "korean": "Korean original" },
-  "es": { "film14": "Toda la historia de la Biblia en 14 minutos", "langs": "La película de 14 minutos en otros idiomas", "korean": "Original en coreano" },
-  "pt-BR": { "film14": "Toda a história da Bíblia em 14 minutos", "langs": "O filme de 14 minutos em outros idiomas", "korean": "Original em coreano" }
+  "en": {
+   "film14": "The whole Bible story in 14 minutes",
+   "langs": "The 14-minute film in other languages",
+   "korean": "Korean original"
+  },
+  "es": {
+   "film14": "Toda la historia de la Biblia en 14 minutos",
+   "langs": "La película de 14 minutos en otros idiomas",
+   "korean": "Original en coreano"
+  },
+  "pt-BR": {
+   "film14": "Toda a história da Bíblia em 14 minutos",
+   "langs": "O filme de 14 minutos em outros idiomas",
+   "korean": "Original em coreano"
+  }
  },
- "silence400_comment": "📖 Read it today\n① Malachi 4 — the last promise of the Old Testament\n② Luke 1 — 400 years later, an angel brings that promise back\n③ Luke 4 — in the synagogue at Nazareth, Jesus reads from Isaiah\nThe whole Bible story in 14 minutes, in many languages: https://www.youtube.com/@bibleinonescroll/playlists"
+ "silence400_comment": "📖 Read it today\n① Malachi 4 — the last promise of the Old Testament\n② Luke 1 — 400 years later, an angel takes up that very promise\n③ Luke 4 — in the synagogue at Nazareth, Jesus reads from Isaiah\nThe whole Bible story in 14 minutes, in many languages: https://www.youtube.com/@bibleinonescroll/playlists",
+ "_note_narr": "When a language gets a narrated 14-min version (uploaded.json global.film[\"<lang>-narr\"]), its music version must link to it and back (관리자 2026-11-13). Add film14.<lang>.narr (= \"Narrated version\" in that language) and film14.<lang>.music (= \"Music only, no narration\") before applying; the audit flags a narrated language whose lines are missing."
 }

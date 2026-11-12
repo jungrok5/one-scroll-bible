@@ -31,7 +31,6 @@ async function buildCorneliusFresco() {
   g.fillStyle = C.black; g.fillRect(PX0 - 40, 330, 40, PY1 - 290); g.fillRect(PX1, 330, 40, PY1 - 290);           // black bands round the picture
   g.fillStyle = C.black; g.fillRect(0, PY1 + 40, PW, PH - PY1 - 40);                                                // the dado
   g.fillStyle = C.red; g.fillRect(0, PY1 + 40, PW, 16); g.strokeStyle = C.ochre; g.lineWidth = 4;
-  for (let x = 150; x < PW; x += 420) { g.beginPath(); g.moveTo(x, PH - 120); g.quadraticCurveTo(x - 40, PH - 300, x + 10, PH - 420); g.moveTo(x, PH - 220); g.quadraticCurveTo(x + 60, PH - 280, x + 80, PH - 360); g.stroke(); }   // painted plants on the dado
   g.strokeStyle = C.ochreL; g.lineWidth = 6; g.strokeRect(PX0 - 6, PY0 - 6, PX1 - PX0 + 12, PY1 - PY0 + 12); g.strokeStyle = C.ivory; g.lineWidth = 3; g.strokeRect(PX0 + 8, PY0 + 8, PX1 - PX0 - 16, PY1 - PY0 - 16);
 
   // ---- the picture: a room in Cornelius' house, painted ----
@@ -60,7 +59,7 @@ async function buildCorneliusFresco() {
     g.strokeStyle = '#f4e6c8'; g.lineWidth = 6; g.beginPath(); g.arc(jx - jr * .2, jb - jh * .5, jr * .6, Math.PI * .9, Math.PI * 1.35); g.stroke();   // a white highlight stroke
     g.fillStyle = '#d8a060'; g.beginPath(); g.ellipse(PXs(.13), ty - 14, 54, 18, 0, 0, Math.PI); g.fill(); g.strokeStyle = C.out; g.lineWidth = 5; g.stroke(); }
 
-  { const rb = rng(3); g.lineCap = 'round'; for (let i = 0; i < 900; i++) { const x = rb() * PW, y = rb() * PH, a = (rb() - .5) * .8 + (rb() < .5 ? 0 : Math.PI / 2), l = 30 + 90 * rb();
+  { const rb = rng(3); g.lineCap = 'round'; for (let i = 0; i < 900; i++) { const x = rb() * PW, y = 340 + rb() * 1610, a = (rb() - .5) * .8 + (rb() < .5 ? 0 : Math.PI / 2), l = 30 + 90 * rb();
       g.strokeStyle = rb() < .5 ? `rgba(255,248,232,${.04 + .05 * rb()})` : `rgba(40,20,10,${.03 + .05 * rb()})`; g.lineWidth = 6 + 16 * rb(); g.beginPath(); g.moveTo(x, y); g.lineTo(x + Math.cos(a) * l, y + Math.sin(a) * l); g.stroke(); } }   // the fresco painter's broad strokes
   // ---- the people (the Vermeer version's figures, painted flat: outline → colour field → white highlight strokes → eyes) ----
   const poly = (p, pts) => { let a = 0; for (let i = 0; i < pts.length; i++) { const [x0, y0] = pts[i], [x1, y1] = pts[(i + 1) % pts.length]; a += x0 * y1 - x1 * y0; } if (a < 0) pts = pts.slice().reverse(); p.moveTo(pts[0][0], pts[0][1]); for (let i = 1; i < pts.length; i++) p.lineTo(pts[i][0], pts[i][1]); p.closePath(); };
@@ -161,7 +160,7 @@ async function buildCorneliusFresco() {
     g.strokeStyle = 'rgba(52,36,26,.55)'; g.lineWidth = 2.2; g.beginPath(); pts.forEach((q, i) => i ? g.lineTo(...q) : g.moveTo(...q)); g.stroke();
     hg.save(); hg.scale(1 / SC, 1 / SC); hg.strokeStyle = 'rgba(80,80,80,.6)'; hg.lineWidth = 4; hg.beginPath(); pts.forEach((q, i) => i ? hg.lineTo(...q) : hg.moveTo(...q)); hg.stroke(); hg.restore(); }
   // pigment worn: soft pale patches, and the colours fade toward the edges of the wall
-  for (let i = 0; i < 150; i++) { const x = r() * PW, y = r() * 1980, R = 30 + 150 * r(), gr = g.createRadialGradient(x, y, 0, x, y, R); gr.addColorStop(0, `rgba(236,226,204,${.08 + .16 * r()})`); gr.addColorStop(1, 'rgba(236,226,204,0)'); g.fillStyle = gr; g.fillRect(x - R, y - R, 2 * R, 2 * R); }
+  for (let i = 0; i < 150; i++) { const x = r() * PW, y = 360 + r() * 1600, R = 30 + 150 * r(), gr = g.createRadialGradient(x, y, 0, x, y, R); gr.addColorStop(0, `rgba(236,226,204,${.08 + .16 * r()})`); gr.addColorStop(1, 'rgba(236,226,204,0)'); g.fillStyle = gr; g.fillRect(x - R, y - R, 2 * R, 2 * R); }
   { const gr = g.createRadialGradient(PW * .5, PH * .48, PW * .3, PW * .5, PH * .5, PW * .78); gr.addColorStop(0, 'rgba(232,222,200,0)'); gr.addColorStop(1, 'rgba(232,222,200,.55)'); g.fillStyle = gr; g.fillRect(0, 0, PW, PH); }
   // the raking-light shading of the height field (light from the left, low over the surface)
   const shadeC = canvas(HW, HH); { const sg = shadeC.getContext('2d'), hd = hg.getImageData(0, 0, HW, HH).data, im = sg.createImageData(HW, HH), d = im.data;

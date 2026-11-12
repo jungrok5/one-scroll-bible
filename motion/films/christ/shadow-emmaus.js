@@ -207,7 +207,13 @@
       ctx.save(); ctx.beginPath(); ctx.rect(-50, 0, D.x + D.w * .55 + 50, H + 1000); ctx.clip();   // past the door's middle they are inside
       shadow(ctx, F, { rim: { x: D.x + D.w / 2, y: G - D.h * .5, a: open * .9, reach: 420 } }); ctx.restore(); }
     ctx.restore();
-    // the frame under the lifted world stays dark
+    // end card: below the house the stage melts into darkness over a long gradient (no cut band, no ground line or roof edge
+    // through the title's place at ~0.33 H); the lit window stays, redrawn on top
+    // (the gradient rides with the ground — world space — so the ground line itself is never a sharp edge while the view rises;
+    //  one fill whose gradient holds its last stop below the ground: no seam)
+    { const k = ss(3.8, 5.6, u); if (k > 0) { const gs = G - shift, y0 = gs - H * (.04 + (V ? .17 : .21) * k), kb = Math.min(1, k * 3), g = ctx.createLinearGradient(0, y0, 0, gs + 2);   // fully dark AT the ground from the start (no edge), the soft band growing upward
+      g.addColorStop(0, 'rgba(7,9,9,0)'); g.addColorStop(.55, `rgba(7,9,9,${.7 * kb})`); g.addColorStop(1, `rgba(7,9,9,${kb})`); ctx.fillStyle = g; ctx.fillRect(0, y0, W, H - y0 + 4);
+      if (wl > 0) { ctx.save(); ctx.translate(0, -shift); ctx.globalAlpha = k; ctx.fillStyle = rgb(mix([40, 24, 12], [255, 204, 120], wl)); ctx.fillRect(Wn.x, Wn.y, Wn.w, Wn.h); ctx.fillStyle = '#100a08'; ctx.fillRect(Wn.x + Wn.w / 2 - 3, Wn.y, 6, Wn.h); ctx.fillRect(Wn.x, Wn.y + Wn.h * .45 - 3, Wn.w, 6); ctx.restore(); } } }
     post(ctx, u, .75); }
 
   function build() { const t0 = performance.now();

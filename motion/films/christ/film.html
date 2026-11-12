@@ -50,11 +50,11 @@ const scz = (fn, t0, ...a) => (c, t) => { if (hasF(fn)) window[fn](c, Math.max(0
 // the timeline (film seconds = script.json `at`); scenes dissolve over their overlap (0.8 s, longer where the music turns)
 const SCENES = [
   [0, 8.6, (c, t) => { sc('roomOil', 0, 'open')(c, t); textBand(c); }],   // N01 N02 — the candle, the old man from behind, the open Bible (the bright pages sit under the words: a double band)
-  [7.6, 15.0, sc('jordanScene', 7.6)],             // P1 Q1 — the Jordan, late afternoon: Andrew to his brother
+  [8.0, 15.0, sc('jordanScene', 7.6)],             // P1 Q1 — the Jordan, late afternoon: Andrew to his brother
   [14.1, 24.0, sc('goldTitle', 14.1)],             // N03 T1 — one drop of gold oil, the title
   [23.2, 25.6, scz('goldAnoint', 22.9, 'horn')],   // N04 — the horn of oil turns in the dark (2 s: 관리자 2026-11-11 "뿔에 너무 시간 쓰는 것 같아")
-  [24.8, 36.5, scz('goldAnoint', 25.1, 'david')],  // N04 (cont.) L1 K1 — the hill at sunset, Samuel comes; he pours on the shepherd boy (1 Sam 16:13) at 28.9
-  [35.7, 40.6, scz('goldAnoint', 35.8, 'aaron')],  // L2 K2 — Moses pours on Aaron at the tent door (Lev 8:12)
+  [25.1, 36.5, scz('goldAnoint', 25.1, 'david')],  // N04 (cont.) L1 K1 — the hill at sunset, Samuel comes; he pours on the shepherd boy (1 Sam 16:13) at 28.9
+  [36.0, 40.6, scz('goldAnoint', 35.8, 'aaron')],  // L2 K2 — Moses pours on Aaron at the tent door (Lev 8:12)
   [39.6, 45.0, scz('goldAnoint', 39.9, 'elisha')], // L3 K3 — Elijah's cloak over Elisha (no oil: the anointing is God's command, 1 Ki 19:16)
   [44.0, 52.2, scz('jerusalemScene', 44.3)],       // N06 — the Roman standard over the gate of Jerusalem
   [51.2, 59.6, scz('roadPastel', 51.4, 'confess')], // P3 N07 Q2 — on the road near Caesarea Philippi (Mk 8:27), magic-hour pastel: "주는 그리스도시요" (관리자 2026-11-11: 바위·동굴 구성이 이해 안 됨)
@@ -106,7 +106,7 @@ function endCard(ctx, t, a, b) {   /* one place to read: a small gold 뒷이야�
   Pilot.text(ctx, Film.text('B1'), W / 2, y0 + size * 4.4, { size: size * .66, font: "'Noto Sans KR',sans-serif", color: '#e2d2a8', shadow: 'rgba(0,0,0,.9)', shadowBlur: 14, alpha: k * ss(a + 1.8, a + 2.6, t), ls: 2 }); }
 const FILM_DUR = 176;
 const QA_HOLD = [[170.7, 176.0, 'the end card (뒷이야기 · 누가복음 24장)']];
-const QA_PLANNED = [[87.4, 88.4, 'black-and-white film starts: gate flicker'], [97.6, 98.2, 'the ember lights the lamp on the psalm scroll']];
+const QA_PLANNED = [[87.4, 88.4, 'black-and-white film starts: gate flicker'], [97.6, 98.2, 'the ember lights the lamp on the psalm scroll'], [25.1, 25.6, 'horn → David: short 0.5 s dissolve so the horn does not linger over the hill (관리자 승인 수정 2026-11-12)']];
 let XL = null;
 function draw(ctx, t) {
   const act = SCENES.filter(([a, b]) => t >= a && t < b);

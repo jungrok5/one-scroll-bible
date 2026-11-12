@@ -185,8 +185,8 @@
       ctx.restore(); } }
     crowd(ctx, c, L, u, sunP);
     // the sun only flares where it is seen (through the arch); behind stone it only warms the sky
-    let seen = 0; if (sunP) { const ap = archPts(27.5, 16).map(p => W3.P(c, ...p)); if (ap.every(Boolean)) { const pa = new Path2D(); ap.forEach((p, i) => i ? pa.lineTo(p[0], p[1]) : pa.moveTo(p[0], p[1])); pa.closePath(); seen = ctx.isPointInPath(pa, sunP[0], sunP[1]) ? 1 : .2; } }
-    if (sunP) { W3.bloom(ctx, sunP[0], sunP[1], L.glow, .85 * seen, { r: V ? 200 : 170, streak: .55 }); ctx.save(); ctx.globalCompositeOperation = 'screen'; const R = Math.max(W, H) * .8, g = ctx.createRadialGradient(sunP[0], sunP[1], 0, sunP[0], sunP[1], R); g.addColorStop(0, css(L.glow, .38)); g.addColorStop(.4, css(L.glow, .15)); g.addColorStop(1, css(L.glow, .05)); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H); ctx.restore(); }
+    let seen = 0, pa = null; if (sunP) { const ap = archPts(27.5, 16).map(p => W3.P(c, ...p)); if (ap.every(Boolean)) { pa = new Path2D(); ap.forEach((p, i) => i ? pa.lineTo(p[0], p[1]) : pa.moveTo(p[0], p[1])); pa.closePath(); seen = ctx.isPointInPath(pa, sunP[0], sunP[1]) ? 1 : .2; } }
+    if (sunP) { if (pa) { ctx.save(); ctx.clip(pa); W3.bloom(ctx, sunP[0], sunP[1], L.glow, .85 * seen, { r: V ? 200 : 170, streak: .55 }); ctx.restore(); } ctx.save(); ctx.globalCompositeOperation = 'screen'; const R = Math.max(W, H) * .8, g = ctx.createRadialGradient(sunP[0], sunP[1], 0, sunP[0], sunP[1], R); g.addColorStop(0, css(L.glow, .38)); g.addColorStop(.4, css(L.glow, .15)); g.addColorStop(1, css(L.glow, .05)); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H); ctx.restore(); }
     W3.finish(ctx, u, { vignette: .6 });
   }
   window.buildJerusalem = buildJerusalem; window.jerusalemScene = jerusalemScene;

@@ -352,7 +352,6 @@
         ctx.save(); ctx.globalCompositeOperation = 'screen'; ctx.filter = 'blur(4px)'; ctx.drawImage(J.soft, 0, 0, W, H); ctx.filter = 'none'; ctx.restore();
         W3.bloom(ctx, p[0], p[1], [255, 190, 100], a * (.55 + .25 * ss(3.8, 4.8, u)), { r: V ? 170 : 140, streak: .16 }); } }
     terrain(ctx, c, L, c.z - 1, 16.5);
-    lip(ctx, c, L, u, .3);
     const body = [30, 31, 36];
     const objs = []; for (const cl of J.clumps) if (!cl.near) objs.push(cl); objs.sort((a, b) => b.z - a.z); for (const cl of objs) reedClump(ctx, c, L, u, cl, null, body, body);
     grass(ctx, c, L, u, null, [32, 32, 36]);

@@ -19,8 +19,8 @@ const RDP = {};
 
 function rdLayout() {
   const W = Pilot.W, H = Pilot.H, V = Pilot.ori === 'v';
-  const L = V ? { hz: H * .36, road: [[.12, 1.16], [.26, .88], [.38, .7], [.46, .61], [.55, .535], [.65, .482], [.76, .443], [.87, .405], [.96, .379]], fh: H * .052, lead: .45, herm: [-.3, .78, .26, .283], band: .585, crest: .379, sy: .17 }
-              : { hz: H * .4, road: [[.06, 1.2], [.2, .93], [.32, .77], [.41, .68], [.5, .615], [.6, .565], [.72, .515], [.84, .47], [.95, .425]], fh: H * .088, lead: .54, herm: [-.2, .62, .24, .29], band: .72, crest: .425, sy: .19 };
+  const L = V ? { hz: H * .36, road: [[.12, 1.16], [.26, .88], [.38, .7], [.46, .61], [.55, .535], [.65, .482], [.76, .443], [.87, .405], [.96, .379]], fh: H * .052, lead: .435, herm: [-.3, .78, .26, .283], band: .585, crest: .379, sy: .17 }
+              : { hz: H * .4, road: [[.06, 1.2], [.2, .93], [.32, .77], [.41, .68], [.5, .615], [.6, .565], [.72, .515], [.84, .47], [.95, .425]], fh: H * .088, lead: .525, herm: [-.2, .62, .24, .29], band: .72, crest: .425, sy: .19 };
   return Object.assign(L, { W, H, V, S: 1.25, X0: -.2 * W, X1: 1.2 * W, Y1: 1.15 * H });
 }
 // colours of the light by time of day T (0 gold · .45 rose · .7 violet · 1 dusk)
@@ -48,6 +48,15 @@ function rdPerson(P, o) {
   for (const [s, side] of [[sl, -1], [-sl, 1]]) { const H0 = P(side * .035 + l * .3, hip), F = P(side * .035 + l * .3 + Math.sin(s) * LL * f, hip + Math.cos(s) * LL);
     const lift = Math.max(0, Math.sin(ph + (side < 0 ? 0 : Math.PI))) * walk * .03, Fl = [F[0], F[1] - lift * s1];
     rdLimb(q, H0, Fl, .034 * s1, .028 * s1); q.moveTo(Fl[0] + .05 * s1 * f, Fl[1]); q.ellipse(Fl[0] + .025 * s1 * f, Fl[1], .05 * s1, .022 * s1, 0, 0, 6.283); }
+  if (o.profile) {   // seen from the side: front (chest, a little belly) toward f, a straight back, the head cloth only behind
+    const X = (x, y) => (x * f) + l * (-y) * 1.05;
+    add([[X(.17 * hem, hy) + sw, hy], [X(.15, -.3), -.3 + bob], [X(.135, -.5), -.5 + bob], [X(.125, -.62), -.62 + bob], [X(.1, -.72), -.72 + bob], [X(.06, -.785), -.785 + bob], [X(.03, -.82), -.82 + bob],
+      [X(-.035, -.83), -.83 + bob], [X(-.095, -.785), -.785 + bob], [X(-.125, -.7), -.7 + bob], [X(-.135, -.5), -.5 + bob], [X(-.155, -.3), -.3 + bob], [X(-.185 * hem, hy) + sw, hy]]);
+    const px = l * .9 + .025 * f, py = -.905 + bob;
+    add(circ(px, py, .066, .074), hd); add([[px + .056 * f, py - .02], [px + .09 * f, py + .014], [px + .062 * f, py + .03]], hd); add([[px + .03 * f, py + .05], [px + .06 * f, py + .045], [px + .03 * f, py + .085], [px - .01 * f, py + .08]], hd);   // nose, chin
+    add(circ(px - .05 * f, py - .026, .068, .07), hc);
+    add([[px + .02 * f, py - .09 - peak], [px - .08 * f, py - .055], [px - .11 * f, py + .04], [X(-.13, -.72), -.72 + bob], [X(-.06, -.79), -.79 + bob], [px - .04 * f, py + .06]], hc);
+    q.hc = hc; q.hd = hd; return q; }
   add([[sw, hy + .01], [-.19 * w * hem + sw, hy], [-.2 * w * hem + sw * .6, hy - .06], [-.185 * w + l * .4, -.42 + bob], [-.15 * w + l * .72, -.735 + bob], [-.1 * w + l * .8, -.79 + bob], [-.042 + hx, -.825 + bob], [.042 + hx, -.825 + bob],
     [.1 * w + l * .8, -.79 + bob], [.15 * w + l * .72, -.735 + bob], [.185 * w + l * .4, -.42 + bob], [.2 * w * hem + sw * .6, hy - .06], [.2 * w * hem + sw, hy]]);
   // the head: the face (skin) shows on the side it looks to; the head cloth covers the top and the back (a circle set back and up),
@@ -82,7 +91,7 @@ function rdFigure(g, path, P, o, body, light, Lt, d, rimA = 1) {
     for (const [x0, x1, y0, wd] of [[-.06, -.11, -.55, .012], [.06, .11, -.6, .011], [.14, .17, -.44, .009]]) {
       const A = P(x0 * w + l * .5, y0), B = P(x1 * w, -.16), C = P((x0 + x1) / 2 * w + .025 * f + l * .25, (y0 - .16) / 2); g.lineWidth = Math.max(1, wd * s); g.beginPath(); g.moveTo(...A); g.quadraticCurveTo(...C, ...B); g.stroke(); } }
   g.restore();
-  if (rimA > 0 && d < 8) {   // a small figure: the cheap rim (light, then the shape again shifted with the light), faded down the body
+  if (rimA > 0 && d < 14 && !o.softRim) {   // a small figure: the cheap rim (light, then the shape again shifted with the light), faded down the body
     const top = Math.min(...ys); g.save(); g.clip(path); g.globalAlpha = rimA; g.fillStyle = light; g.fill(path); g.globalAlpha = 1; g.translate(Lt[0] * d, Lt[1] * d); g.fillStyle = body; g.fill(path);
     if (path.hd) { g.fillStyle = o.skin || '#9a7a68'; g.fill(path.hd); } if (path.hc) { g.fillStyle = o.hcCol || body; g.fill(path.hc); } g.translate(-Lt[0] * d, -Lt[1] * d);
     const fg = g.createLinearGradient(0, top + .3 * s, 0, top + .8 * s); fg.addColorStop(0, 'rgba(0,0,0,0)'); fg.addColorStop(1, body); g.fillStyle = fg; g.fillRect(Math.min(...xs), top + .3 * s, Math.abs(xs[1] - xs[0]), 1.2 * s); g.restore(); return; }
@@ -154,7 +163,15 @@ async function buildRoadPastel() {
       // the edges: grass tufts leaning over
       for (const side of [left, right]) for (let i = 0; i < side.length; i += 2) { const [px, py] = side[i], d = clamp((py - hz) / (H - hz)); for (let k = 0; k < 3; k++) { x.globalAlpha = .5; x.strokeStyle = ['#8a7048', '#a8905c', '#6e5a48'][(r() * 3) | 0]; x.lineWidth = .6 + 3 * d;
         const l = (2 + 26 * d) * (.5 + r()); x.beginPath(); x.moveTo(px + (r() - .5) * 6 * d, py); x.lineTo(px + (r() - .5) * l * .6, py - l); x.stroke(); } } }
-    RDP.landC = c; }
+    RDP.landC = c;
+    const bx0 = (V ? .4 : .36) * W, by0 = (V ? .37 : .44) * H, bw = (V ? .5 : .5) * W, bh = (V ? .28 : .34) * H, SH = 3.6, hc = canvas(Math.round(bw * SH), Math.round(bh * SH)), hx = hc.getContext('2d'), r2 = rng(97);
+    hx.imageSmoothingQuality = 'high'; hx.drawImage(c, (bx0 - ox) * S, (by0 - oy) * S, bw * S, bh * S, 0, 0, hc.width, hc.height); hx.scale(SH, SH); hx.translate(-bx0, -by0); hx.lineCap = 'round';
+    for (let i = 0; i < 26000; i++) { const y = by0 + r2() * bh, d = Math.max(0, (y - hz) / hgt), px = bx0 + r2() * bw, len = 2 + d * 60 * (.6 + r2() * .8), wd = .5 + d * 3 * (.6 + r2() * .6);
+      hx.globalAlpha = .3 + .4 * r2(); hx.strokeStyle = pick(); hx.lineWidth = wd; const lean = (r2() - .5) * .5; hx.beginPath(); hx.moveTo(px, y); hx.lineTo(px + lean * len, y - len); hx.stroke(); }
+    hx.save(); hx.clip(RDP.roadPath); hx.fillStyle = 'rgba(212,184,138,.55)'; hx.fillRect(bx0, by0, bw, bh); const sR = RDP.rs;
+    for (let i = 0; i < 14000; i++) { const k = r2() * (sR.length - 2) | 0, a = sR[k]; if (a[1] < by0 - 10 || a[1] > by0 + bh + 10) continue; const b = sR[k + 1], ang = Math.atan2(b[1] - a[1], b[0] - a[0]) + (r2() - .5) * .9, hw = RDP.wd(a[1]) / 2, off = (r2() - .5) * 2.1 * hw, d = clamp((a[1] - hz) / (H - hz));
+      const px = a[0] - Math.sin(ang) * off, py = a[1] + Math.cos(ang) * off, l = (1 + 8 * d) * (.4 + r2()); hx.globalAlpha = .3 + .4 * r2(); hx.strokeStyle = ['#e8d0a0', '#f0dcb0', '#c4a478', '#b09070', '#dcc090', '#c8a0a0'][(r2() * 6) | 0]; hx.lineWidth = .4 + 2 * d * r2(); hx.beginPath(); hx.moveTo(px, py); hx.lineTo(px + Math.cos(ang) * l, py + Math.sin(ang) * l); hx.stroke(); }
+    hx.restore(); RDP.landHi = { c: hc, x: bx0, y: by0, w: bw, h: bh }; }
   // the far hills along the horizon (violet), and Mount Hermon far to the north with snow (body and snow apart: the snow takes the
   // alpenglow); drawn at a slower parallax
   { const c = canvas(LW, Math.round(.22 * H * S)), x = c.getContext('2d'), r = rng(11); x.scale(S, S); x.translate(-ox, -(hz - .2 * H));
@@ -184,21 +201,21 @@ async function buildRoadPastel() {
   { const c = canvas(256, 256), x = c.getContext('2d'), r = rng(51); for (let i = 0; i < 2200; i++) { x.globalAlpha = .25 + .6 * r(); x.fillStyle = '#000'; x.fillRect(r() * 256, r() * 256, 1 + r() * 2, 1 + r() * 1.5); } RDP.grain = c; }
   RDP.fl = canvas(W, H); RDP.rimC = canvas(W, H); RDP.rimS = canvas(Math.ceil(W * .9), Math.ceil(H * .45)); RDP.shC = canvas(Math.ceil(W / 2), Math.ceil(H / 2));
   // the band: [rank behind Jesus (arc px), side offset (× road width), options]; Jesus first, Peter in the first row
-  { const fh = L.fh, rows = [[1.0, -.32], [1.05, .02], [1.0, .34], [1.9, -.3], [1.95, .04], [1.9, .36], [2.8, -.28], [2.85, .05], [2.8, .36], [3.7, -.3], [3.75, .02], [3.7, .34]];   // four rows of three
+  { const fh = L.fh, rows = [[1.75, -.34], [1.6, .0], [2.15, .42], [2.45, -.3], [2.5, .04], [1.9, .36], [3.3, -.28], [3.35, .05], [3.3, .36], [4.1, -.3], [4.15, .02], [4.1, .34]];   // four rows of three
     const r = rng(13);
     const hl = RDP.hs(L.lead * H); RDP.hl = hl;
     RDP.band = [{ back: 0, side: 0, o: { w: .95, cloth: 1.1 }, jesus: true }].concat(rows.map(([b, sd], i) => ({ back: b * hl * 1.1, side: sd, o: { w: .9 + .2 * r(), cloth: .9 + .35 * r(), hem: .95 + .2 * r(), peak: r() * .025, staff: r() < .3, lean: .01 + .03 * r() }, peter: i === 1 })));
     RDP.band.forEach((b, i) => { b.body = i ? ['#6a564e', '#5a4c62', '#74604a', '#564a5c', '#6c5052', '#625a5a'][i % 6] : '#7a6a68'; b.ph0 = r() * 6.283; b.hc = i === 0 ? '#e0d4c0' : r() < .55 ? ['#d8c8a8', '#cdbb9c', '#e2d6c2', '#b8a890'][(r() * 4) | 0] : null; }); RDP.band[0].body = '#a49688'; RDP.band[0].hc = '#ebe2d2'; RDP.band[2].body = '#7e4c44'; RDP.band[2].hc = '#d6c6a6'; RDP.aLead = RDP.aAtY(L.lead * H); }   // muted robes (earth, dusty blue, madder), not black
   // 'protest' — its own nearer view from the side: a low horizon at shoulder height, far hills with a dip where the last light is,
   // the fields, and the road crossing the frame left to right under their feet (right = on toward Jerusalem)
-  { const c = canvas(Math.round(W * 1.12), Math.round(H * 1.12)), x = c.getContext('2d'), r = rng(61), ph0 = V ? H * .2 : H * .3, pfy = V ? H * .58 : H * .705, hp = pfy - .68 * ph0, Wd = c.width, Hd = c.height; x.translate((Wd - W) / 2, (Hd - H) / 2);
+  { const c = canvas(Math.round(W * 1.12), Math.round(H * 1.12)), x = c.getContext('2d'), r = rng(61), ph0 = V ? H * .2 : H * .3, pfy = V ? H * .58 : H * .705, hp = pfy - .9 * ph0, Wd = c.width, Hd = c.height; x.translate((Wd - W) / 2, (Hd - H) / 2);
     RDP.php = hp; RDP.pfy = pfy; RDP.ph = ph0;
     const ridge = new Path2D(); ridge.moveTo(-.1 * W, hp + 4); for (let px = -.1 * W; px <= 1.1 * W; px += 8) { const notch = Math.exp(-(((px - .5 * W) / (.1 * W)) ** 2)); ridge.lineTo(px, hp - (.03 * H * fbm(px * .004, 3, 4) + .01 * H) * (1 - .75 * notch)); } ridge.lineTo(1.1 * W, hp + 4); ridge.closePath();
     x.fillStyle = '#7a6c9e'; x.fill(ridge); rdHatch(x, r, [-.1 * W, hp - .07 * H, 1.1 * W, hp + 4], 2400, ['#8a7cae', '#5e5288', '#b08aa8'], -.45, 16, 3, .35, ridge);
     const gr = x.createLinearGradient(0, hp, 0, H * 1.06); gr.addColorStop(0, '#a89070'); gr.addColorStop(.25, '#b8955e'); gr.addColorStop(1, '#7a5a3a'); x.fillStyle = gr; x.fillRect(-.1 * W, hp, 1.2 * W, H);
     const cols = ['#c9a56a', '#b8955e', '#9c7a4c', '#d8b97c', '#c08a6e', '#7d6448', '#e3c48a', '#6e5440', '#c9738a', '#4a4470'];
-    for (let i = 0; i < 30000; i++) { const y = hp + Math.pow(r(), .55) * (H * 1.06 - hp), d = (y - hp) / (H - hp), px = -.1 * W + r() * 1.2 * W, len = 3 + d * 80 * (.6 + r() * .8), wd = .8 + d * 6 * (.6 + r() * .6);
-      x.globalAlpha = (.45 + r() * .5); x.strokeStyle = cols[(r() * cols.length) | 0]; x.lineWidth = wd; x.lineCap = 'round'; x.beginPath(); x.moveTo(px, y); x.lineTo(px + (r() - .5) * .5 * len, y - len); x.stroke(); }
+    for (let i = 0; i < 30000; i++) { const y = hp + Math.pow(r(), .55) * (H * 1.06 - hp), d = (y - hp) / (H - hp), px = -.1 * W + r() * 1.2 * W, len = 3 + d * 55 * (.6 + r() * .8), wd = .6 + d * 3.2 * (.6 + r() * .6);
+      x.globalAlpha = (.28 + r() * .32); x.strokeStyle = cols[(r() * cols.length) | 0]; x.lineWidth = wd; x.lineCap = 'round'; x.beginPath(); x.moveTo(px, y); x.lineTo(px + (r() - .5) * .5 * len, y - len); x.stroke(); }
     // the road, seen from the side: a band across the frame under their feet, its far edge a little higher to the right
     const top = X => pfy - .07 * ph0 - .02 * ph0 * (X / W), bot = X => pfy + .12 * ph0 + .01 * ph0 * Math.sin(X / W * 3);
     const rp = new Path2D(); rp.moveTo(-.1 * W, top(-.1 * W)); for (let X = -.1 * W; X <= 1.1 * W; X += 12) rp.lineTo(X, top(X)); for (let X = 1.1 * W; X >= -.1 * W; X -= 12) rp.lineTo(X, bot(X)); rp.closePath();
@@ -213,10 +230,11 @@ function roadPastel(ctx, u, mode = 'confess') {
   const C = k => ramp(RD_C[k], T);
   if (mode === 'protest') return rdProtest(ctx, u, T, C);
   // camera (world → screen) with parallax per layer
-  const K = V ? { confess: [[-.8, .55 * W, .5 * H, 1.22], [4, .58 * W, .512 * H, 1.32], [8.5, .6 * W, .518 * H, 1.42]], foretell: [[-.8, .6 * W, .518 * H, 1.42], [4, .63 * W, .51 * H, 1.32], [8.8, .66 * W, .5 * H, 1.22]], alone: [[-.8, .62 * W, .5 * H, 1.22], [5.4, .6 * W, .512 * H, 1.36]] }
-              : { confess: [[-.8, .5 * W, .56 * H, 1.22], [4, .53 * W, .57 * H, 1.32], [8.5, .55 * W, .575 * H, 1.42]], foretell: [[-.8, .55 * W, .575 * H, 1.42], [4, .58 * W, .57 * H, 1.32], [8.8, .61 * W, .56 * H, 1.22]], alone: [[-.8, .58 * W, .56 * H, 1.22], [5.4, .56 * W, .57 * H, 1.36]] };   // nearer than before (the people 1.3–1.4×), always moving: a slow push in, a slow pull back
+  const K = V ? { confess: [[-.8, .55 * W, .5 * H, 1.22], [2.2, .6 * W, .505 * H, 1.4], [3.4, .755 * W, .438 * H, 4.0], [6.5, .75 * W, .442 * H, 4.2], [8.5, .6 * W, .518 * H, 1.42]], foretell: [[-.8, .6 * W, .518 * H, 1.42], [4, .63 * W, .51 * H, 1.32], [8.8, .66 * W, .5 * H, 1.22]], alone: [[-.8, .62 * W, .5 * H, 1.22], [5.4, .6 * W, .512 * H, 1.36]] }
+              : { confess: [[-.8, .5 * W, .56 * H, 1.22], [2.2, .54 * W, .565 * H, 1.4], [3.4, .69 * W, .522 * H, 3.1], [6.5, .685 * W, .525 * H, 3.25], [8.5, .55 * W, .575 * H, 1.42]], foretell: [[-.8, .55 * W, .575 * H, 1.42], [4, .58 * W, .57 * H, 1.32], [8.8, .61 * W, .56 * H, 1.22]], alone: [[-.8, .58 * W, .56 * H, 1.22], [5.4, .56 * W, .57 * H, 1.36]] };   // nearer than before (the people 1.3–1.4×), always moving: a slow push in, a slow pull back
   let [fx, fy, z] = rdCam(K[mode], u); fx = clamp(fx, L.X0 + W / 2 / z, L.X1 - W / 2 / z); fy = clamp(fy, H / 2 / z, L.Y1 - H / 2 / z);
-  const camP = (g, p) => { const zp = 1 + (z - 1) * p; g.translate(W / 2, H / 2); g.scale(zp, zp); g.translate(-(W / 2 + (fx - W / 2) * p), -(H / 2 + (fy - H / 2) * p)); };
+  const camP = (g, p) => { const zp = 1 + (z - 1) * p; if (p < 1) { g.translate(W / 2, H / 2 + (hz - fy) * z); g.scale(zp, zp); g.translate(-(W / 2 + (fx - W / 2) * p), -hz); return; }   // far layers: zoom less, but stay standing on the land's horizon
+    g.translate(W / 2, H / 2); g.scale(zp, zp); g.translate(-(W / 2 + (fx - W / 2) * p), -(H / 2 + (fy - H / 2) * p)); };
   const sc = (x, y) => [W / 2 + (x - fx) * z, H / 2 + (y - fy) * z];
   ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over'; ctx.filter = 'none';
   // the sky (gold → rose → violet; looking away from the sun: the rose band and the earth's blue shadow rise on the horizon at dusk)
@@ -239,6 +257,7 @@ function roadPastel(ctx, u, mode = 'confess') {
     ctx.globalAlpha = .75; ctx.drawImage(RDP.snowT, RDP.land.ox, hm.y0, lw, lh); ctx.globalAlpha = 1; ctx.restore(); }
   { const hl = RDP.hills; ctx.save(); camP(ctx, .55); ctx.drawImage(hl.c, RDP.land.ox, hl.y0, RDP.land.w, hl.c.height / L.S); ctx.restore(); }
   ctx.save(); camP(ctx, 1); ctx.drawImage(RDP.landC, RDP.land.ox, RDP.land.oy, RDP.land.w, RDP.land.h);
+  { const a = ss(1.5, 2.3, z); if (a > 0) { const lh = RDP.landHi; ctx.globalAlpha = a; ctx.drawImage(lh.c, lh.x, lh.y, lh.w, lh.h); ctx.globalAlpha = 1; } }   // the sharp patch in the close-up
   // moving cloud shadows over the fields (cool), the band's spot kept in the sun
   { const tt = u + { confess: 0, foretell: 8, alone: 20 }[mode], r = Pilot.rng(71); ctx.globalCompositeOperation = 'multiply';
     for (let i = 0; i < 5; i++) { const px = L.X0 + ((r() * 1.6 + tt * .012) % 1.6) * W, py = hz + (.06 + .5 * r()) * (H - hz), rr = (.18 + .2 * r()) * R0;
@@ -267,7 +286,7 @@ function roadPastel(ctx, u, mode = 'confess') {
       if (b.jesus) { face = lerp(-1, 1, ss(.2, 1.5, u)); const st = ss(1.3, 3.2, u); a += RDP.hl * .5 * st; walk = Math.sin(Math.PI * st) * .9; ph = b.ph0 + (a / (RDP.hl * .55)) * Math.PI; } }
     else { const rest = RDP.aLead - b.back * .94 + RDP.hl * 1.6; if (b.peter) { a = RDP.aLead - RDP.hl * 3; ph = b.ph0; walk = 0; }   // the band has walked on; Peter stays a few steps behind the last of them
       else { a = rest + RDP.hl * .6 + vel * .95 * (u + .8); walk = 1; ph = b.ph0 + (a / (RDP.hl * .55)) * Math.PI; } }
-    const { p, n } = at(a), hw = RDP.wd(p[1]) / 2, side = b.peter && mode !== 'confess' ? -.16 : b.peter ? lerp(b.side, -.16, peterStep) : b.side;
+    const { p, n } = at(a), hw = RDP.wd(p[1]) / 2, side = b.peter && mode !== 'confess' ? -.1 : b.peter ? lerp(b.side, -.1, peterStep) : b.side;
     const lat = side * Math.max(hw * 1.6, RDP.hl * 1.6), X = p[0] + n[0] * lat, Y = p[1] + n[1] * lat;
     return { b, i, X, Y, h: RDP.hs(Y), walk, face, ph }; }).sort((a, b) => a.Y - b.Y);
   // shadows: long and running up the road ahead of each (from the low sun behind us)
@@ -293,7 +312,7 @@ function roadPastel(ctx, u, mode = 'confess') {
   ctx.drawImage(fl, 0, 0);
   if (glow > 0 && P0) { const [px, py] = sc(P0.X, P0.Y - P0.h * .5), rr = .55 * R0, g = ctx.createRadialGradient(px, py, .04 * R0, px, py, rr); g.addColorStop(0, 'rgb(255,255,255)'); g.addColorStop(1, `rgb(${255 - 28 * glow | 0},${255 - 28 * glow | 0},${255 - 18 * glow | 0})`);   // the rest a shade under: he is the brightest
     ctx.globalCompositeOperation = 'multiply'; ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
-    const g4 = ctx.createRadialGradient(px, py, 0, px, py, .7 * R0); g4.addColorStop(0, `rgba(255,210,140,${.3 * glow})`); g4.addColorStop(1, 'rgba(255,200,130,0)'); ctx.globalCompositeOperation = 'screen'; ctx.fillStyle = g4; ctx.fillRect(0, 0, W, H); ctx.globalCompositeOperation = 'source-over'; }
+    const g4 = ctx.createRadialGradient(px, py, 0, px, py, .7 * R0); g4.addColorStop(0, `rgba(255,210,140,${.18 * glow})`); g4.addColorStop(1, 'rgba(255,200,130,0)'); ctx.globalCompositeOperation = 'screen'; ctx.fillStyle = g4; ctx.fillRect(0, 0, W, H); ctx.globalCompositeOperation = 'source-over'; }
   rdExpose(ctx, T);
   rdFinish(ctx, T, L.band);
   ctx.restore();
@@ -327,48 +346,48 @@ function rdProtest(ctx, u, T, C) {
   { ctx.globalCompositeOperation = 'screen'; const R = .35 * W, g = ctx.createRadialGradient(gx, gy, 0, gx, gy, R); g.addColorStop(0, `rgba(255,204,150,${.65 * lastA})`); g.addColorStop(.3, `rgba(240,150,130,${.25 * lastA})`); g.addColorStop(1, 'rgba(200,120,140,0)');
     ctx.fillStyle = g; ctx.fillRect(gx - R, gy - R, 2 * R, 2 * R); ctx.globalCompositeOperation = 'source-over'; }
   { const pl = RDP.pland, [x0, y0] = S(-(pl.width - W) / 2, -(pl.height - H) / 2); ctx.drawImage(pl, x0, y0, pl.width * z, pl.height * z); }
-  // the last line of sunlight in the dip, between their heads
-  { ctx.globalCompositeOperation = 'screen'; const g = ctx.createLinearGradient(gx - .1 * W, 0, gx + .1 * W, 0); g.addColorStop(0, 'rgba(255,220,170,0)'); g.addColorStop(.5, `rgba(255,238,196,${lastA})`); g.addColorStop(1, 'rgba(255,220,170,0)');
-    ctx.fillStyle = g; ctx.fillRect(gx - .1 * W, gy - 2.4, .2 * W, 4); ctx.globalCompositeOperation = 'source-over'; }
+  // (no bright seam on the horizon here: at face height it read as a line joining their heads; the glow in the dip carries the last light)
   ctx.globalCompositeOperation = 'multiply'; { const g = ctx.createLinearGradient(0, gy - .01 * H, 0, gy + .08 * H); g.addColorStop(0, 'rgba(255,255,255,1)'); g.addColorStop(1, rgb(C('land'))); ctx.fillStyle = g; ctx.fillRect(0, gy - .01 * H, W, H); } ctx.globalCompositeOperation = 'source-over';
-  // the two, in units of their height; x from the frame centre
+  // the two, in true profile (the camera square to the road), in units of their height; x from the frame centre
   const B0 = (x, y) => S(cx0 + x * h0, fy + y * h0);
-  const jwalk = 1 - ss(.2, 1.0, u), jx = -.3 + .05 * ss(-.8, .9, u), pull = ss(1.3, 3.1, u) * (1 - .3 * ss(3.6, 4.3, u)), jl = .035 - .045 * pull;
-  const jo = { w: .92, lean: jl, face: 1, cloth: 1.05, hem: 1.05, ph: 2.2 * ss(-.8, 1, u) * 3, walk: jwalk };
+  const jwalk = 1 - ss(.1, .9, u), jx = -.33 + .05 * ss(-.8, .8, u), pull = ss(1.3, 3.1, u) * (1 - .3 * ss(3.6, 4.3, u)), jl = .03 - .04 * pull;
+  const jo = { w: .92, lean: jl, face: 1, cloth: 1.05, hem: 1.05, ph: 2.6 * ss(-.8, .9, u) * 3, walk: jwalk, profile: 1 };
   const Pj = (x, y) => B0(jx + x, y), jesus = rdPerson(Pj, jo);
-  const arrive = ss(-.6, 1.0, u), px = lerp(.75, .27, arrive), pwalk = Math.sin(Math.PI * clamp(arrive)) * 1.0 + (arrive < .5 ? .3 : 0) * (1 - arrive), pl = -.035 - .03 * pull;
-  const po = { w: .96, lean: pl, face: -1, cloth: .9, hem: 1.0, peak: .015, ph: 3.14 * 3 * arrive, walk: clamp(pwalk) };
+  const arrive = ss(-.7, .9, u), px = lerp(.8, .235, arrive), pl = -.05 - .04 * pull;
+  const po = { w: .96, lean: pl, face: -1, cloth: .9, hem: 1.0, peak: .015, ph: 3.14 * 3 * arrive, walk: clamp(Math.sin(Math.PI * arrive) * 1.2), profile: 1 };
   const Pp = (x, y) => B0(px + x, y + .005), peter = rdPerson(Pp, po);
-  // Jesus's near arm: forearm forward and a little raised (he was walking, now held)
-  const sJ = Pj(.05 + jl * .72, -.745), wJ = Pj(.2 + .02 * pull, -.5 + .02 * pull), aJ = rdIK(sJ, wJ, .19 * h, .17 * h, 1);
-  // Peter: the near hand on Jesus's forearm, the elbow bent below; the far hand up before him, palm toward Jesus
-  const grip = ss(.6, 1.25, u), block = ss(.8, 1.5, u), G = [lerp(aJ.el[0], aJ.wr[0], .55), lerp(aJ.el[1], aJ.wr[1], .55) - .01 * h];
-  const sP1 = Pp(-.05 + pl * .72, -.74), rest1 = Pp(-.08 + pl * .4, -.46), aP1 = rdIK(sP1, [lerp(rest1[0], G[0], grip), lerp(rest1[1], G[1], grip)], .19 * h, .17 * h, -1);
-  const sP2 = Pp(-.02 + pl * .72, -.76), rest2 = Pp(-.05 + pl * .4, -.45), up2 = Pp(-.21 + pl * .9, -.66), aP2 = rdIK(sP2, [lerp(rest2[0], up2[0], block), lerp(rest2[1], up2[1], block)], .19 * h, .17 * h, -1);
+  // Jesus's near arm: forearm forward and a little down — the arm Peter takes hold of
+  const sJ = Pj(.0 + jl * .75, -.76), wJ = Pj(.2 + .015 * pull, -.44), aJ = rdIK(sJ, wJ, .2 * h, .17 * h, 1);
+  // Peter (마 16:22 "붙들고"): both hands on Jesus's forearm, side by side between wrist and elbow; both arms shoulder → elbow → hand,
+  // the far one coming forward in front of his chest; he leans toward Jesus, pleading. No palms, no hand-in-hand.
+  const grip1 = ss(.5, 1.15, u), grip2 = ss(.7, 1.35, u), F = t => [lerp(aJ.el[0], aJ.wr[0], t), lerp(aJ.el[1], aJ.wr[1], t) - .014 * h];
+  const G1 = F(.42), G2 = F(.72);
+  const sP1 = Pp(.0 + pl * .75, -.76), rest1 = Pp(.03 + pl * .3 + .07 * Math.sin(po.ph) * po.walk, -.42), aP1 = rdIK(sP1, [lerp(rest1[0], G1[0], grip1), lerp(rest1[1], G1[1], grip1)], .2 * h, .17 * h, -1);
+  const sP2 = Pp(.045 + pl * .75, -.775), rest2 = Pp(.05 + pl * .3 - .07 * Math.sin(po.ph) * po.walk, -.43), aP2 = rdIK(sP2, [lerp(rest2[0], G2[0], grip2), lerp(rest2[1], G2[1], grip2)], .2 * h, .17 * h, -1);
   const arm = (p, s, a, w0) => { rdLimb(p, s, a.el, w0 * h, w0 * .88 * h); rdLimb(p, a.el, a.wr, w0 * .85 * h, w0 * .62 * h); };
-  const jArm = new Path2D(); arm(jArm, sJ, aJ, .05);
-  const pArm1 = new Path2D(); arm(pArm1, sP1, aP1, .048);
-  const pArm2 = new Path2D(); arm(pArm2, sP2, aP2, .046);
-  // hands (skin): Jesus's loose hand; Peter's hand closed round the forearm; Peter's open hand, fingers up, palm toward Jesus, thumb
-  const hJ = new Path2D(), [jhx, jhy] = aJ.wr; hJ.ellipse(jhx + .018 * h, jhy + .012 * h, .026 * h, .034 * h, .4, 0, 6.283);
-  const hP1 = new Path2D(), [g1x, g1y] = aP1.wr; hP1.ellipse(g1x, g1y, .034 * h, .028 * h, .5, 0, 6.283); hP1.moveTo(g1x - .02 * h, g1y - .03 * h); hP1.ellipse(g1x - .026 * h, g1y - .016 * h, .012 * h, .02 * h, .3, 0, 6.283);
-  const hP2 = new Path2D(), [b2x, b2y] = aP2.wr; hP2.ellipse(b2x - .006 * h, b2y - .034 * h, .024 * h, .046 * h, -.08, 0, 6.283);
-  for (let k = 0; k < 4; k++) { const fx = b2x - .02 * h + k * .012 * h; hP2.moveTo(fx + .006 * h, b2y - .07 * h); hP2.ellipse(fx, b2y - .072 * h - (k === 1 || k === 2 ? .008 * h : 0), .0065 * h, .018 * h, 0, 0, 6.283); }
-  hP2.moveTo(b2x + .03 * h, b2y - .02 * h); hP2.ellipse(b2x + .022 * h, b2y - .024 * h, .01 * h, .02 * h, .7, 0, 6.283);
+  const jArm = new Path2D(); arm(jArm, sJ, aJ, .052);
+  const pArm1 = new Path2D(); arm(pArm1, sP1, aP1, .05);
+  const pArm2 = new Path2D(); arm(pArm2, sP2, aP2, .048);
+  // hands only at the ends of the arms, as short tapered shapes along the forearm (no round discs); a hand shows once it reaches out
+  const hand = (a, len, w0) => { const p = new Path2D(), [ex, ey] = a.el, [wx, wy] = a.wr, d = Math.hypot(wx - ex, wy - ey) || 1, ux = (wx - ex) / d, uy = (wy - ey) / d;
+    rdLimb(p, [wx - ux * .01 * h, wy - uy * .01 * h], [wx + ux * len * h, wy + uy * len * h], w0 * h, w0 * .78 * h); return p; };
+  const hJ = hand(aJ, .07, .024), showP1 = grip1 > .3, showP2 = grip2 > .3, hP1 = hand(aP1, .065 * Math.min(1, grip1 * 1.4), .025), hP2 = hand(aP2, .065 * Math.min(1, grip2 * 1.4), .024);
   const fl = RDP.fl, g = fl.getContext('2d'); g.setTransform(1, 0, 0, 1, 0, 0); g.globalCompositeOperation = 'source-over'; g.globalAlpha = 1; g.clearRect(0, 0, W, H);
   // short shadows toward us (the light is behind them)
   g.save(); g.fillStyle = 'rgba(40,30,60,.3)'; for (const xx of [jx, px]) { const [ex, ey] = B0(xx, .012); g.beginPath(); g.ellipse(ex, ey, .22 * h, .03 * h, 0, 0, 6.283); g.fill(); } g.restore();
   const land = C('land'), tint = c => rgb(Pilot.hex(c).map((v, k) => v * land[k] / 255)), light = rgb(mix(C('light'), [255, 224, 186], .45)), rimA = clamp(1.1 - .35 * ss(2.6, 4.6, u));
   const join = (...ps) => { const p = new Path2D(); ps.forEach(q => p.addPath(q)); return p; };
-  const wj = join(jesus, jArm, hJ); wj.hd = jesus.hd; wj.hc = jesus.hc; wj.hands = hJ;
-  const wp = join(peter, pArm2, pArm1, hP1, hP2); wp.hd = peter.hd; wp.hc = peter.hc; wp.hands = join(hP1, hP2);
-  jo.hcCol = tint('#ebe2d2'); po.hcCol = tint('#d6c6a6'); jo.skin = po.skin = tint('#b48a6e');
-  rdFigure(g, wj, Pj, jo, tint('#a49688'), light, [-1, .1], .02 * h, rimA);
-  // Peter's arms over Jesus's: drawn after, so his grip sits on the forearm
-  rdFigure(g, wp, Pp, po, tint('#7e4c44'), light, [1, .1], .02 * h, rimA);
+  const wj = join(jesus, jArm, hJ); wj.hd = jesus.hd; wj.hc = jesus.hc;
+  const wp = join(peter, pArm2, pArm1, ...(showP1 ? [hP1] : []), ...(showP2 ? [hP2] : [])); wp.hd = peter.hd; wp.hc = peter.hc;
+  jo.hcCol = tint('#ebe2d2'); po.hcCol = tint('#d6c6a6'); jo.skin = po.skin = tint('#b48a6e'); jo.softRim = po.softRim = true;
+  rdFigure(g, wj, Pj, jo, tint('#a49688'), light, [-1, .05], .02 * h, rimA);
+  rdFigure(g, wp, Pp, po, tint('#7e4c44'), light, [1, .05], .02 * h, rimA);
+  // the sleeves a shade darker than the robe (the far arm darker still), then the hands in skin, all at the arms' ends
+  g.save(); g.fillStyle = 'rgba(28,16,30,.22)'; g.fill(jArm); g.fill(pArm1); g.fillStyle = 'rgba(28,16,30,.34)'; g.fill(pArm2); g.fillStyle = 'rgba(28,16,30,.22)'; g.fill(pArm1);
+  g.fillStyle = jo.skin; g.fill(hJ); if (showP2) g.fill(hP2); if (showP1) g.fill(hP1); g.restore();
   g.globalCompositeOperation = 'destination-out'; g.globalAlpha = .1; g.fillStyle = g.createPattern(RDP.grain, 'repeat'); g.fillRect(0, 0, W, H); g.globalCompositeOperation = 'source-over'; g.globalAlpha = 1;
   ctx.drawImage(fl, 0, 0);
-  RDP.lastPose = { grip: G, gripHand: aP1.wr, stopHand: aP2.wr, elbows: [aP1.el, aP2.el, aJ.el], shoulders: [sP1, sP2, sJ], jesusX: jx, peterX: px };
+  RDP.lastPose = { grips: [G1, G2], hands: [aP1.wr, aP2.wr], elbows: [aP1.el, aP2.el, aJ.el], shoulders: [sP1, sP2, sJ], jesusX: jx, peterX: px };
   rdExpose(ctx, T);
   rdFinish(ctx, T, RDP.L.band);
   ctx.restore();

@@ -61,14 +61,27 @@
       for (let i = 0; i < 11; i++) { const y0 = lerp(Y(.17), gl, i / 11) + Y(.01) * (r() - .5), hb = Y(.012 + r() * .022);   // bedding planes
         g.fillStyle = (i % 2) ? (dawn ? `rgba(80,58,44,${.1 + r() * .12})` : `rgba(50,50,64,${.2 + r() * .15})`) : (dawn ? `rgba(255,232,190,${.1 + r() * .12})` : `rgba(170,166,184,${.1 + r() * .1})`);
         g.beginPath(); g.moveTo(-ox, y0); for (let x = -ox; x <= W; x += 30) g.lineTo(x, y0 + Y(.006) * Math.sin(x * .01 + i)); for (let x = W; x >= -ox; x -= 30) g.lineTo(x, y0 + hb + Y(.006) * Math.sin(x * .012 + i * 2)); g.fill(); }
-      g.strokeStyle = dawn ? 'rgba(52,36,28,.65)' : 'rgba(36,36,48,.6)'; g.lineCap = 'round';   // cracks
-      for (let i = 0; i < 16; i++) { let x = X(r() * L.wallR), y = topY(x) + Y(.01); g.lineWidth = X(.003 + r() * .005); g.beginPath(); g.moveTo(x, y); const n = 5 + (r() * 6 | 0); for (let j = 0; j < n; j++) { x += X(.012) * (r() - .5); y += Y(.02 + r() * .025); g.lineTo(x, y); } g.stroke(); }
+      g.save(); g.filter = 'blur(5px)'; g.lineCap = 'round';   // weathering: soft streaks where water ran down the face
+      for (let i = 0; i < 9; i++) { const x = X(.04 + r() * (L.wallR - .08)), y = topY(x) + Y(.03 + r() * .05), l = Y(.06 + r() * .1); g.strokeStyle = dawn ? `rgba(70,50,38,${.12 + r() * .1})` : `rgba(40,40,56,${.12 + r() * .1})`; g.lineWidth = X(.012 + r() * .014);
+        g.beginPath(); g.moveTo(x, y); g.quadraticCurveTo(x + X(.006) * (r() - .5), y + l * .5, x + X(.01) * (r() - .5), y + l); g.stroke(); }
+      g.restore();
       const lip = g.createLinearGradient(0, Y(.17), 0, Y(.27)); lip.addColorStop(0, 'rgba(30,20,14,0)'); lip.addColorStop(.35, dawn ? 'rgba(40,26,18,.4)' : 'rgba(30,30,42,.4)'); lip.addColorStop(1, 'rgba(30,20,14,0)'); g.fillStyle = lip; g.fillRect(-ox, Y(.15), wr + X(.1), Y(.14));   // under the overhanging top
       g.restore();
       if (dawn) { g.strokeStyle = 'rgba(255,224,170,.85)'; g.lineWidth = X(.007); g.beginPath(); for (let x = X(.2); x <= wr; x += 6) { const y = topY(x) + 2; x === X(.2) ? g.moveTo(x, y) : g.lineTo(x, y); } g.stroke(); }   // the sun along the top edge
       for (let i = 0; i < 40; i++) { const x = X(r() * L.wallR), y = topY(x); g.strokeStyle = dawn ? 'rgb(84,82,52)' : 'rgb(60,62,70)'; g.lineWidth = 2; for (let j = 0; j < 4; j++) { const a = -Math.PI / 2 + (r() - .5) * 1.4, l = Y(.008 + r() * .014); g.beginPath(); g.moveTo(x, y + 2); g.lineTo(x + Math.cos(a) * l, y + Math.sin(a) * l); g.stroke(); } }   // dry grass on the top
       // the doorway: low, squared, cut into the foot of the face
       const [tx, ty] = [X(L.tomb[0]), Y(L.tomb[1])], tw = X(L.tw), th = Y(L.th), x0 = tx - tw / 2, y0 = gl - th;
+      if (closed) {
+        const mouth = new Path2D(); mouth.moveTo(x0, gl + 2); mouth.lineTo(x0, y0 + th * .35); mouth.ellipse(tx, y0 + th * .35, tw / 2, th * .45, 0, Math.PI, 0); mouth.lineTo(x0 + tw, gl + 2); mouth.closePath();
+        g.save(); g.clip(mouth); g.fillStyle = 'rgb(18,16,26)'; g.beginPath(); g.ellipse(tx, gl - Math.max(tw * .66, th * .78) * .97, Math.max(tw * .66, th * .78) * .9, Math.max(tw * .66, th * .78) * .95, 0, 0, 6.283); g.fill(); g.restore();   // the mouth only where the stone will cover it — no dark corners peeking out
+        const R = Math.max(tw * .66, th * .78), cx = tx, cy = gl - R * .97;   // rolled across the mouth: it covers the doorway whole
+        g.fillStyle = 'rgba(24,22,34,.45)'; g.fillRect(cx - R * .8, gl - Y(.005), R * 1.5, Y(.01));                                                  // the groove the stone sits in (hidden under it)
+        g.fillStyle = 'rgba(16,14,24,.55)'; g.beginPath(); g.ellipse(cx - R * .25, gl + Y(.004), R * 1.05, R * .12, 0, 0, 6.283); g.fill();
+        g.fillStyle = 'rgb(54,50,68)'; g.beginPath(); g.ellipse(cx + R * .1, cy, R * .95, R, 0, 0, 6.283); g.fill();                                // its thickness
+        const sg2 = g.createLinearGradient(cx - R, cy, cx + R, cy); sg2.addColorStop(0, 'rgb(96,92,114)'); sg2.addColorStop(.3, 'rgb(80,76,98)'); sg2.addColorStop(1, 'rgb(62,58,78)');
+        g.fillStyle = sg2; g.beginPath(); g.ellipse(cx, cy, R * .95, R, 0, 0, 6.283); g.fill();
+        g.strokeStyle = 'rgba(168,166,196,.38)'; g.lineWidth = R * .05; g.beginPath(); g.ellipse(cx, cy, R * .92, R * .97, 0, Math.PI * .62, Math.PI * 1.32); g.stroke();   // faint light on its left edge
+      } else {
       g.fillStyle = dawn ? 'rgba(70,50,38,.75)' : 'rgba(44,42,56,.75)'; g.fillRect(x0 - tw * .1, y0 - th * .14, tw * 1.2, th * 1.14 + 2);   // the cut recess
       if (dawn) { g.fillStyle = 'rgba(255,220,166,.8)'; g.fillRect(x0 + tw * 1.06, y0 - th * .1, tw * .05, th * 1.1); }                   // its lit jamb
       g.fillStyle = dawn ? 'rgb(30,20,14)' : 'rgb(20,20,28)'; g.fillRect(x0, y0, tw, th + 2);
@@ -78,14 +91,15 @@
       if (dawn) { g.fillStyle = 'rgba(255,214,150,.75)'; g.beginPath(); g.moveTo(x0 + tw, y0); g.lineTo(x0 + tw, y0 + th + 2); g.lineTo(x0 + tw * .15, y0 + th + 2); g.lineTo(x0 + tw * .45, y0 + th * .3); g.fill(); }   // the sun reaching in
       g.restore();
       // the groove along the foot of the face, and the round flat stone rolled along it
-      if (!closed) { g.fillStyle = dawn ? 'rgba(40,26,18,.7)' : 'rgba(30,30,40,.7)'; g.fillRect(x0 + tw, gl - Y(.006), X(.32), Y(.014)); }
-      const sr = closed ? Math.min(X(L.tw) * .42, Y(L.th) * .5) : Y(L.sr), [sx2, sy2] = closed ? [tx + X(L.tw) * .06, gl - sr * 1.02] : [X(L.stone[0]), Y(L.stone[1])];   // sealed: the stone covers the whole doorway
+      g.fillStyle = dawn ? 'rgba(40,26,18,.7)' : 'rgba(30,30,40,.7)'; g.fillRect(x0 + tw, gl - Y(.006), X(.32), Y(.014));
+      const sr = Y(L.sr), [sx2, sy2] = [X(L.stone[0]), Y(L.stone[1])];
       g.fillStyle = 'rgba(30,20,14,.5)'; g.beginPath(); g.ellipse(sx2 - sr * .4, gl + Y(.004), sr * 1.1, sr * .14, 0, 0, 6.283); g.fill();
       g.fillStyle = dawn ? 'rgb(84,64,50)' : 'rgb(58,56,70)'; g.beginPath(); g.ellipse(sx2 - sr * .16, sy2, sr * .96, sr, 0, 0, 6.283); g.fill();          // its thickness
       const sgd = g.createLinearGradient(sx2 - sr, sy2 - sr, sx2 + sr, sy2 + sr * .3); (dawn ? [[0, 'rgb(92,72,58)'], [.6, 'rgb(146,120,92)'], [1, 'rgb(198,166,122)']] : [[0, 'rgb(72,70,86)'], [1, 'rgb(118,114,130)']]).forEach(([a, cc]) => sgd.addColorStop(a, cc));
       g.fillStyle = sgd; g.beginPath(); g.ellipse(sx2, sy2, sr * .96, sr, 0, 0, 6.283); g.fill();
       g.strokeStyle = dawn ? 'rgba(80,58,44,.55)' : 'rgba(44,44,56,.55)'; g.lineWidth = sr * .05; g.beginPath(); g.ellipse(sx2, sy2, sr * .3, sr * .32, 0, 0, 6.283); g.stroke();   // the hub
       if (dawn) { g.strokeStyle = 'rgba(255,232,180,1)'; g.lineWidth = sr * .12; g.beginPath(); g.ellipse(sx2, sy2, sr * .93, sr * .97, 0, -1.25, 1.0); g.stroke(); }   // the rim of light on its edge
+      }
       // a narrow earth path coming in slantwise from the lower corner between rocks
       g.fillStyle = dawn ? 'rgb(122,94,62)' : 'rgb(112,106,120)'; g.beginPath(); g.moveTo(x0 + tw * .2, gl); g.quadraticCurveTo(X(.28), Y(.75), X(V ? .02 : .2), H + oy); g.lineTo(X(V ? .14 : .28), H + oy); g.quadraticCurveTo(X(.36), Y(.76), x0 + tw * .65, gl); g.fill();
       for (let i = 0; i < 26; i++) { const side = i % 2 ? 1 : -1, v = r(), px = lerp(x0 + tw * .4, X(V ? .08 : .24), v) + side * X(.06 + r() * .1), py = lerp(gl + Y(.02), H + oy, v), rr = X(.02 + r() * .04) * (.6 + v) * (V ? 1 : .5);   // rocks either side
@@ -191,12 +205,12 @@
       const z = 1 + .1 * eio(u / 6.7), fx = X(L.tomb[0]), fy = Y(L.tomb[1]), cam = camAt(z, fx, fy), rep = clamp((u - 3.4) / 2.6);
       cam(); ctx.drawImage(D.pre, -ox, -oy);
       // the tree's shadow lying across the ground towards us; at «다시 살리사» it draws back as the sun comes up
-      { const back = eio(clamp((u - 3.4) / 2.2)), a = .66 * (1 - back * .9), len = lerp(1, .15, back);
-        const foot = [X(V ? .5 : .52), Y(V ? 1.12 : 1.05)], head = [X(V ? .4 : .42), Y(V ? .56 : .69)], hd = [lerp(foot[0], head[0], len), lerp(foot[1], head[1], len)];
-        const wAt = y => lerp(X(V ? .085 : .05), X(V ? .03 : .018), clamp((foot[1] - y) / (foot[1] - head[1])));   // nearer is wider
+      { const back = eio(clamp((u - 3.4) / 2.2)), a = .74 * (1 - back * .9), len = lerp(1, .15, back);
+        const foot = [X(V ? .56 : .54), Y(V ? 1.12 : 1.05)], head = [X(V ? .7 : .6), Y(V ? .528 : .72)], hd = [lerp(foot[0], head[0], len), lerp(foot[1], head[1], len)];
+        const wAt = y => lerp(X(V ? .09 : .052), X(V ? .022 : .014), clamp((foot[1] - y) / (foot[1] - head[1])));   // nearer is wider
         ctx.save(); ctx.fillStyle = `rgba(16,12,28,${a})`; ctx.filter = 'blur(3px)';
         ctx.beginPath(); ctx.moveTo(foot[0] - wAt(foot[1]) / 2, foot[1]); ctx.lineTo(hd[0] - wAt(hd[1]) / 2, hd[1]); ctx.lineTo(hd[0] + wAt(hd[1]) / 2, hd[1]); ctx.lineTo(foot[0] + wAt(foot[1]) / 2, foot[1]); ctx.fill();
-        const fb = .9; if (len > fb + .04) { const cy = lerp(foot[1], head[1], fb), cx = lerp(foot[0], head[0], fb), half = X(V ? .26 : .15) * lerp(1, .55, fb), th = wAt(cy) * .8;   // the beam, square across
+        const fb = V ? (1.12 - .58) / (1.12 - .528) : .82; if (len > fb + .02)   /* portrait: the beam at 0.58 H, above the quote lines (0.68–0.80 H) */ { const cy = lerp(foot[1], head[1], fb), cx = lerp(foot[0], head[0], fb), half = Math.max(X(V ? .1 : .065), X(V ? .3 : .17) * lerp(1, .5, fb)), th = Math.max(wAt(cy) * 1.05, X(V ? .036 : .022));   // the beam, square across
           ctx.beginPath(); ctx.moveTo(cx - half, cy - th * .5); ctx.lineTo(cx + half, cy - th * .42); ctx.lineTo(cx + half, cy + th * .42); ctx.lineTo(cx - half, cy + th * .5); ctx.fill(); }
         ctx.restore(); }
       reveal(ctx, D.dawn, D.kDoor, eo(rep), cam);

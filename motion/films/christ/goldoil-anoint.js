@@ -481,6 +481,51 @@
     if (which === 'elisha') return elishaScene(ctx, u);
   }
 
+  // ---------------- a man facing us, arms a little open, palms forward (goldThree) ----------------
+  // drawn as one union mask so the light wraps the whole outline unbroken (head, neck, shoulders, arms): halo, rim, then the dark
+  let OM = null;
+  function openFigure(ctx, f) {
+    const h = f.h, x = f.x, y = f.y, T = (lx, ly) => [x + lx * h, y + ly * h];
+    // work in a canvas just around the figure (its screen box + room for the halo)
+    const tr = ctx.getTransform(), sc = Math.hypot(tr.a, tr.b), pad = Math.ceil(h * .2 * sc);
+    const corners = [[-.36, -1.05], [.36, -1.05], [-.36, .02], [.36, .02]].map(([a, b]) => { const p = T(a, b); return [tr.a * p[0] + tr.c * p[1] + tr.e, tr.b * p[0] + tr.d * p[1] + tr.f]; });
+    const bx = Math.floor(Math.min(...corners.map(c => c[0]))) - pad, by = Math.floor(Math.min(...corners.map(c => c[1]))) - pad;
+    const cw = Math.ceil(Math.max(...corners.map(c => c[0]))) + pad - bx, ch = Math.ceil(Math.max(...corners.map(c => c[1]))) + pad - by;
+    if (!OM || OM.m.width !== cw || OM.m.height !== ch) { const m = P.canvas(cw, ch), t = P.canvas(cw, ch); OM = { m, mx: m.getContext('2d'), t, tx: t.getContext('2d') }; }
+    const mx = OM.mx; mx.setTransform(1, 0, 0, 1, 0, 0); mx.clearRect(0, 0, cw, ch); mx.setTransform(tr.a, tr.b, tr.c, tr.d, tr.e - bx, tr.f - by); mx.fillStyle = f.fill || '#0b0603';
+    const fillPts = (pts) => { const q = pts.map(([a, b]) => T(a, b)); mx.beginPath(); mx.moveTo((q[0][0] + q[q.length - 1][0]) / 2, (q[0][1] + q[q.length - 1][1]) / 2);
+      for (let i = 0; i < q.length; i++) { const n = q[(i + 1) % q.length]; mx.quadraticCurveTo(q[i][0], q[i][1], (q[i][0] + n[0]) / 2, (q[i][1] + n[1]) / 2); } mx.closePath(); mx.fill(); };
+    // mantle: from the shoulders, gathered a little at the waist, falling to the feet
+    fillPts([[-.05, -.848], [-.12, -.812], [-.138, -.765], [-.122, -.64], [-.098, -.535], [-.118, -.40], [-.15, -.15], [-.168, -.02], [-.16, 0], [.16, 0], [.168, -.02], [.15, -.15], [.118, -.40], [.098, -.535], [.122, -.64], [.138, -.765], [.12, -.812], [.05, -.848]]);
+    // neck and head (head width ≈ 0.4 of the shoulders)
+    const hc = T(0, -.915), hrx = .05 * h, hry = .06 * h;
+    mx.beginPath(); mx.moveTo(...T(-.03, -.84)); mx.lineTo(...T(-.026, -.885)); mx.lineTo(...T(.026, -.885)); mx.lineTo(...T(.03, -.84)); mx.closePath(); mx.fill();
+    mx.beginPath(); mx.ellipse(hc[0], hc[1], hrx, hry, 0, 0, 6.2832); mx.fill();
+    // arms: shoulder → elbow → hand, a little away from the body, elbows slightly bent, palms open forward; wide sleeves hang from the forearms
+    const hands = [];
+    for (const sd of [-1, 1]) {
+      const S = T(sd * .108, -.782), E = T(sd * .185, -.648), Hd = T(sd * .24, -.545);
+      const lb = limb([S, E, Hd], [.044 * h, .037 * h, .03 * h]); mx.fill(lb);
+      mx.beginPath(); mx.arc(S[0], S[1], .036 * h, 0, 6.2832); mx.fill(); mx.beginPath(); mx.arc(E[0], E[1], .036 * h, 0, 6.2832); mx.fill();
+      const W2 = [lerp(E[0], Hd[0], .8), lerp(E[1], Hd[1], .8)];                                    // sleeve: opening at the wrist, hanging
+      mx.beginPath(); mx.moveTo(E[0] - sd * .02 * h, E[1]); mx.lineTo(W2[0] + sd * .01 * h, W2[1] - .02 * h); mx.lineTo(W2[0] + sd * .005 * h, W2[1] + .05 * h); mx.quadraticCurveTo(lerp(E[0], W2[0], .5) - sd * .01 * h, lerp(E[1], W2[1], .5) + .07 * h, E[0] - sd * .03 * h, E[1] + .03 * h); mx.closePath(); mx.fill();
+      // the open hand, palm forward: a palm, four fingers together, the thumb towards the body
+      const pc = T(sd * .247, -.522); mx.beginPath(); mx.ellipse(pc[0], pc[1], .019 * h, .026 * h, sd * .25, 0, 6.2832); mx.fill();
+      mx.beginPath(); mx.ellipse(pc[0] + sd * .004 * h, pc[1] + .03 * h, .015 * h, .02 * h, sd * .2, 0, 6.2832); mx.fill();
+      mx.beginPath(); mx.ellipse(pc[0] - sd * .02 * h, pc[1] - .002 * h, .007 * h, .014 * h, -sd * .6, 0, 6.2832); mx.fill();
+      hands.push(pc);
+    }
+    // tinted copy for the light
+    const tx = OM.tx; tx.setTransform(1, 0, 0, 1, 0, 0); tx.globalCompositeOperation = 'copy'; tx.drawImage(OM.m, 0, 0); tx.globalCompositeOperation = 'source-in'; tx.fillStyle = css(f.rim || [255, 200, 120], 1); tx.fillRect(0, 0, cw, ch); tx.globalCompositeOperation = 'source-over';
+    const o = Math.max(1.5, h * .0055 * sc);
+    ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0);
+    if (f.glow) { ctx.save(); ctx.shadowColor = css(f.rim || [255, 200, 120], .75 * f.glow); ctx.shadowBlur = h * .07 * sc; ctx.globalAlpha = .9; ctx.drawImage(OM.t, bx, by); ctx.restore(); }
+    for (const [dx, dy] of [[o, 0], [-o, 0], [0, o], [0, -o], [o * .7, o * .7], [-o * .7, o * .7], [o * .7, -o * .7], [-o * .7, -o * .7], [0, -o * 1.7]]) ctx.drawImage(OM.t, bx + dx, by + dy);
+    ctx.drawImage(OM.m, bx, by);
+    ctx.restore();
+    return { head: [hc[0], hc[1], hrx], crown: [hc[0], hc[1] - hry], top: hc[1] - hry, hands };
+  }
+
   // ---------------- 5부: three golden lights come down on one man and become one ----------------
   function goldThree(ctx, u) {
     const W = P.W, H = P.H, V = P.ori === 'v';
@@ -493,7 +538,7 @@
     ridge(ctx, W, H, gy - U * .05, U * .06, .002, 41, 'rgba(40,22,11,.95)');
     g = ctx.createLinearGradient(0, gy, 0, H); g.addColorStop(0, `rgba(80,48,22,${ex})`); g.addColorStop(.3, `rgba(36,22,11,${ex})`); g.addColorStop(1, `rgba(16,10,5,${ex})`); ctx.fillStyle = g; ctx.fillRect(0, gy, W, H);
     groundLight(ctx, W, H, gy, ex * (.7 + .5 * one));
-    const mf = { x: cx, y: gy, h: U * .78, d: 1, kind: 'man', light: [cx, gy - U * 2], rim: [255, 200, 120], glow: .3 + .7 * one, fill: '#0b0603' }, man = figure(ctx, mf); man.redraw = () => figure(ctx, mf);   // drawn again over the light
+    const mf = { x: cx, y: gy, h: U * .78, rim: [255, 200, 120], glow: .3 + .7 * one, fill: '#0b0603' }, man = openFigure(ctx, mf); man.redraw = () => openFigure(ctx, mf);   // drawn again over the light
     // three shafts of light through haze — the king's, the priest's, the prophet's — from different heights and angles,
     // leaning slowly until they meet on him; then one pillar wraps him. Drawn soft (low resolution, blurred), never as lines.
     const tgt = [man.crown[0], man.crown[1] + U * .1];

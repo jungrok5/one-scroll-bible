@@ -18,7 +18,7 @@
   const P = Pilot, { clamp, lerp, ss, eio, rng, fbm, noise, canvas, mix, rgb } = P;
   const W = P.W, H = P.H, V = P.ori === 'v', TAU = Math.PI * 2;
   const K = () => window.ShadowStage;
-  const G = Math.round(H * (V ? .585 : .7)), SC = V ? 1.3 : 1.0;          // ground line; figure scale (≈ 205·s px tall)
+  const G = Math.round(H * (V ? .585 : .7)), SC = V ? 1.45 : 1.05;          // ground line; figure scale (≈ 205·s px tall)
   const STRIDE = 122 * SC, CAD = .92;                                      // px per walk cycle, cycles per second
   const VEL = STRIDE * CAD;                                                // ground speed (px/s) under the walkers
   const WALK_T = 6.2, SLOW = 1.2;                                          // speak: they ease to a stop over 1.2 s
@@ -37,7 +37,7 @@
     const full = canvas(W, H); full.getContext('2d').drawImage(c, 0, 0, W, H); return full; }
   // screen(ctx, u, col, k): the lit paper in palette col = { hi, lo } (rgb), brightness k; the lamp behind breathes
   function screen(ctx, u, col, k = 1, shift = 0) {
-    const fl = 1 + .035 * Math.sin(u * 6.1) * Math.sin(u * 2.3 + 1) + .02 * Math.sin(u * 13.7);
+    const fl = 1 + .055 * Math.sin(u * 6.1) * Math.sin(u * 2.3 + 1) + .03 * Math.sin(u * 13.7) + .02 * Math.sin(u * 2.9);
     const cx = W * .5 + 14 * Math.sin(u * 1.7), cy = G - (V ? 420 : 300) - shift, R = Math.max(W, H) * (V ? .62 : .7);
     const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, R); g.addColorStop(0, rgb(col.hi.map(v => v * k * fl))); g.addColorStop(.55, rgb(mix(col.hi, col.lo, .55).map(v => v * k * fl))); g.addColorStop(1, rgb(col.lo.map(v => v * k * fl * .7)));
     ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
@@ -97,8 +97,8 @@
     F.hold = (c, col) => {
       const k = K(), { P } = k.frame(F), s = F.s, f = F.f;
       const fx = F.feet.map(q => q[0]), fwd = f > 0 ? Math.max(...fx) : Math.min(...fx), back = f > 0 ? Math.min(...fx) : Math.max(...fx), hemY = F.gy - 9 * s, trail = (F.sway || 0) * .6 * s;
-      const w1 = P(16, 8), w0 = P(-16, 8), kf = P(20, -40), kb = P(-21, -40);
-      c.fillStyle = col; c.beginPath(); c.moveTo(...P(14, 40)); c.lineTo(...w1); c.quadraticCurveTo(kf[0], kf[1], fwd + f * 8 * s, hemY);
+      const w1 = P(17, 8), w0 = P(-16, 8), kf = P(36, -36), kb = P(-22, -40);   // the front falls over the stepping knee
+      c.fillStyle = col; c.beginPath(); c.moveTo(...P(14, 40)); c.lineTo(...w1); c.quadraticCurveTo(kf[0], kf[1], fwd + f * 12 * s, hemY);
       c.quadraticCurveTo((fwd + back) / 2, hemY + 3 * s, back - f * (10 * s + Math.abs(trail)), hemY - 2 * s); c.quadraticCurveTo(kb[0] - f * 4 * s, kb[1], w0[0], w0[1]); c.lineTo(...P(-15, 40)); c.closePath(); c.fill();
       // the head cloth: over the crown, falling behind the neck to the shoulders (it trails a little in the walk)
       const tilt = F.ang + (F.tilt || 0), N = P(3, 64), hu = [Math.sin(tilt), -Math.cos(tilt)], hff = F.hf || f, hfv = [hff * Math.cos(tilt), hff * Math.sin(tilt)];
@@ -119,29 +119,41 @@
     const k = K(); ctx.save(); ctx.filter = `blur(${(V ? 5 : 4)}px)`; ctx.globalAlpha = .35; k.body(ctx, F, 'rgb(20,8,4)', 'rgb(20,8,4)'); ctx.restore();
     k.person(ctx, F, { col: INK, rim: o.rim }); }
 
+  // an open hand at F's near hand: palm turned out, fingers together pointing up, the thumb apart (a shadow shape)
+  function openHand(ctx, F, k) { return palmUp(ctx, F, k); }
+  function palmUp(ctx, F, k) {   // the near hand open, palm up, fingers forward and a little curled up, the thumb raised
+    const h = F.hands[1], s = F.s, f = F.f; if (!h) return; ctx.save(); ctx.translate(h[0], h[1]); ctx.scale(f * s, s); ctx.globalAlpha = clamp((k - .3) / .4); ctx.fillStyle = INK;
+    ctx.beginPath(); ctx.moveTo(-4, -2.5); ctx.lineTo(10, -3.5); ctx.quadraticCurveTo(15, -4, 17, -8); ctx.lineTo(18.5, -6.5); ctx.quadraticCurveTo(17, -1, 12, 1.5); ctx.lineTo(-4, 3.5); ctx.closePath(); ctx.fill();
+    ctx.beginPath(); ctx.moveTo(1, -2.5); ctx.quadraticCurveTo(2, -8, 5, -11); ctx.lineTo(7, -10); ctx.quadraticCurveTo(5, -7, 5, -2.5); ctx.closePath(); ctx.fill(); ctx.restore(); }
+  function openHandOld(ctx, F, k) {
+    const h = F.hands[1], s = F.s, f = F.f; if (!h) return; ctx.save(); ctx.translate(h[0] + f * 3 * s, h[1] - 3 * s); ctx.rotate(f * .25); ctx.scale(f * s, s); ctx.globalAlpha = clamp((k - .3) / .4); ctx.fillStyle = INK;
+    ctx.beginPath(); ctx.moveTo(-5, 4); ctx.quadraticCurveTo(-6, -8, -4, -16); ctx.quadraticCurveTo(0, -19, 4, -16); ctx.quadraticCurveTo(6, -8, 5, 4); ctx.closePath(); ctx.fill();
+    ctx.beginPath(); ctx.moveTo(4, 0); ctx.quadraticCurveTo(10, -4, 11, -9); ctx.lineTo(8.5, -10); ctx.quadraticCurveTo(7, -6, 3, -4); ctx.closePath(); ctx.fill(); ctx.restore(); }
   // a walker in place at screen x, walking right, the ground sliding under it at VEL (feet planted on the moving ground)
   function walker(i, u, dist, f = 1) {
     const kd = KIND[i], st = STRIDE * kd.s / SC, want = i === 1 ? .55 : .05, off = ((want - (STOPD / st) % 1) % 1 + 1) % 1, ph = dist / st + off, F = K().walk(W * kd.x, G, kd.s, f, ph, st, { lean: .06 });
     return dressRobe(F, kd.cloth); }
 
   // ---------------- scenes ----------------
-  const SUNSET = { hi: [255, 196, 120], lo: [190, 84, 38] }, DEEP = { hi: [250, 168, 96], lo: [160, 62, 34] }, TEAL = { hi: [120, 178, 168], lo: [24, 60, 62] };
+  const SUNSET = { hi: [255, 196, 120], lo: [190, 84, 38] }, DEEP = { hi: [255, 176, 100], lo: [176, 72, 38] }, TEAL = { hi: [120, 178, 168], lo: [24, 60, 62] };
   function road(ctx, u, d, pal, k) {   // the scenery strips at ground distance d (px): far / sun / mid / near
     screen(ctx, u, pal, k);
     // the paper sun: a disc of thin yellow paper behind the screen, low on the right (where they walk)
     const sx = W * (V ? .8 : .78) - d * .06, sy = G - (V ? 300 : 230); ctx.save(); ctx.globalCompositeOperation = 'screen';
     const g = ctx.createRadialGradient(sx, sy, 0, sx, sy, V ? 420 : 340); g.addColorStop(0, `rgba(255,236,170,${.9 * k})`); g.addColorStop(.16, `rgba(255,214,130,${.7 * k})`); g.addColorStop(.17, `rgba(255,190,100,${.28 * k})`); g.addColorStop(1, 'rgba(255,150,70,0)'); ctx.fillStyle = g; ctx.fillRect(sx - 420, sy - 420, 840, 840); ctx.restore();
     ctx.drawImage(S.road.far, -d * .15, 0); ctx.drawImage(S.road.mid, -d * .45, 0); ctx.drawImage(S.road.near, -d, 0); }
+  // stageCam(ctx, z, dx): the camera on the screen — zoom z about the walkers' middle, drift dx (px); pairs with a ctx.restore()
+  function stageCam(ctx, z, dx) { ctx.save(); const cx = W / 2, cy = G - (V ? 200 : 150); ctx.translate(cx + dx, cy); ctx.scale(z, z); ctx.translate(-cx, -cy); }
   const dAt = u => VEL * u;   // walk: ground distance
   function walk(ctx, u) {
-    const d = dAt(u); road(ctx, u, d, SUNSET, 1);
+    const d = dAt(u); stageCam(ctx, 1 + .03 * u / 6.2, 10 * Math.sin(u * .5)); road(ctx, u, d, SUNSET, 1);
     const people = [2, 1, 0].map(i => walker(i, u, d));   // front first so the rear one's arm… (they never overlap: 1/3 body apart)
     for (const F of people) shadow(ctx, F);
-    post(ctx, u, .6); }
+    ctx.restore(); post(ctx, u, .6); }
   function speak(ctx, u) {
     // ground distance continues from 'walk' and eases to a stop by u = SLOW
     const tp = K().on2(u), dS = dAt(WALK_T) + VEL * (tp < SLOW ? tp - tp * tp / (2 * SLOW) : SLOW / 2), pal = { hi: mix(SUNSET.hi, DEEP.hi, ss(0, 6, u)), lo: mix(SUNSET.lo, DEEP.lo, ss(0, 6, u)) };
-    road(ctx, u, dS, pal, 1);
+    stageCam(ctx, 1.03 + .05 * eio(u / 6.9), 10 * Math.sin((u + 6.2) * .5) - 18 * eio(u / 6.9)); road(ctx, u, dS, pal, 1);
     const k = K(), stopped = tp >= SLOW;
     const pose = i => { const W0 = walker(i, u, dS); if (!stopped) return W0; const F = k.closeStep(W0, clamp((tp - SLOW) / .4)); return dressRobe(F, KIND[i].cloth); };
     // rear disciple: stops and listens, head a little lowered
@@ -150,15 +162,17 @@
     const C = pose(2); if (u > 1.8) { C.hf = -1; C.tilt = -.08 + .05 * Math.sin(u * 2.1); }
     // Jesus: stops, turns round to the man behind him (a cut-out flip, 1.25–1.55), raises an open hand and explains
     const Jb = pose(1), turn = clamp((tp - 1.25) / .3), arm = ss(1.5, 2.1, u) * (1 - .25 * ss(6.3, 6.9, u)), beat = .14 * Math.sin((u - 2.1) * 3.4) * ss(2.1, 2.5, u);
-    if (arm > 0) k.armTo(Jb, 1, arm * (1.75 + beat), 70);
+    if (arm > 0) { const sh = k.shoulder(Jb, 1), s = Jb.s, f = Jb.f, hang = [sh[0] - f * 4 * s, sh[1] + 70 * s], chest = [sh[0] + f * (40 + 6 * beat / .14) * s, sh[1] + (26 - 5 * Math.abs(beat) / .14) * s];   // open hand at chest height, elbow bent, rocking with the words
+      k.reach(Jb, 1, [lerp(hang[0], chest[0], eio(arm)), lerp(hang[1], chest[1], eio(arm))]); }
+    if (u > 3.7 && u < 4.9) Jb.hf = -1;   // a glance round to the other disciple, then back
     Jb.tilt = .06 * Math.sin(u * 1.7) * ss(2, 2.5, u);
     for (const F of [C, A]) shadow(ctx, F);
-    { const sxk = Math.cos(Math.PI * turn), hx = Jb.hip[0]; ctx.save(); ctx.translate(hx, 0); ctx.scale(Math.abs(sxk) < .08 ? .08 * Math.sign(sxk || -1) : sxk, 1); ctx.translate(-hx, 0); shadow(ctx, Jb); ctx.restore(); }
-    post(ctx, u, .6); }
+    { const sxk = Math.cos(Math.PI * turn), hx = Jb.hip[0]; ctx.save(); ctx.translate(hx, 0); ctx.scale(Math.abs(sxk) < .08 ? .08 * Math.sign(sxk || -1) : sxk, 1); ctx.translate(-hx, 0); shadow(ctx, Jb); if (arm > .3) openHand(ctx, Jb, arm); ctx.restore(); }
+    ctx.restore(); post(ctx, u, .6); }
 
   // the evening house (lamp): flat roof, a window, a door that opens; positions in frame px (world before the rise)
-  const HS = { x: W * (V ? .63 : .66), w: V ? 330 : 360, h: V ? 360 : 300 };
-  HS.door = { x: HS.x + (V ? 40 : 46), w: V ? 92 : 80, h: V ? 300 : 238 }; HS.win = { x: HS.x + HS.w * .58, y: G - HS.h * .72, w: V ? 64 : 58, h: V ? 70 : 60 };
+  const HS = { x: W * (V ? .7 : .72), w: V ? 330 : 360, h: V ? 360 : 300 };
+  HS.door = { x: HS.x + (V ? 40 : 46), w: V ? 92 : 80, h: V ? 300 : 238 }; HS.win = { x: HS.x + HS.w * .64, y: G - HS.h * .72, w: V ? 64 : 58, h: V ? 70 : 60 };
   function buildEvening() {
     return strip(W, g => {
       g.fillStyle = 'rgba(10,24,24,.38)'; g.beginPath(); g.moveTo(0, H); for (let x = 0; x <= W; x += 10) g.lineTo(x, G - (V ? 230 : 170) - (V ? 60 : 44) * (fbm(x * .003, 21, 3) - .2)); g.lineTo(W, H); g.fill();
@@ -168,26 +182,27 @@
     screen(ctx, u, TEAL, lightK, shift);
     ctx.save(); ctx.translate(0, -shift);
     ctx.drawImage(S.evening, 0, 0);
-    ctx.fillStyle = 'rgba(8,18,18,.62)'; olive(ctx, W * (V ? .12 : .16), G - 4, (V ? 210 : 160), 77);   // a near olive at the left, a little soft
+    ctx.fillStyle = 'rgb(20,42,42)'; olive(ctx, W * (V ? .02 : .05), G - 4, (V ? 210 : 160), 77);   // an olive at the left edge, an opaque cut-out a shade lighter than the walkers (they pass in front of it)
     ctx.fillStyle = INK; ctx.fillRect(-10, G, W + 20, H + shift);
-    // the house
-    const { x, w, h, door: D, win: Wn } = HS; ctx.fillStyle = '#100a08'; flatHouse(ctx, x, G + 1, w, h);
     ctx.restore(); }
   function lamp(ctx, u) {
-    const k = K(), rise = eio(clamp((u - 3.6) / 3.2)), shift = rise * (HS.win.y - H * (V ? .24 : .22)), dim = 1 - .82 * ss(4.2, 6.2, u);
-    evening(ctx, u, shift, .95 * dim);
+    const k = K(), rise = eio(clamp((u - 3.6) / 3.2)), shift = rise * (HS.win.y - H * (V ? .24 : .22)), dim = 1 - .66 * ss(4.2, 6.2, u);
+    evening(ctx, u, shift, 1.12 * dim);
     ctx.save(); ctx.translate(0, -shift);
-    const { door: D, win: Wn } = HS, wl = k.lightOn(u, 1.45, .45), open = eio(clamp((u - 2.4) / .9)) * (1 - eio(clamp((u - 5.3) / .6)));
-    // the window: warm paper behind a cross of bars, its glow on the screen
-    if (wl > 0) { ctx.save(); ctx.globalCompositeOperation = 'screen'; const g = ctx.createRadialGradient(Wn.x + Wn.w / 2, Wn.y + Wn.h / 2, 0, Wn.x + Wn.w / 2, Wn.y + Wn.h / 2, V ? 260 : 220); g.addColorStop(0, `rgba(255,190,100,${.55 * wl})`); g.addColorStop(1, 'rgba(255,160,70,0)'); ctx.fillStyle = g; ctx.fillRect(Wn.x - 260, Wn.y - 260, 520 + Wn.w, 520 + Wn.h); ctx.restore();
-      ctx.fillStyle = rgb(mix([40, 24, 12], [255, 204, 120], wl)); ctx.fillRect(Wn.x, Wn.y, Wn.w, Wn.h); ctx.fillStyle = '#100a08'; ctx.fillRect(Wn.x + Wn.w / 2 - 3, Wn.y, 6, Wn.h); ctx.fillRect(Wn.x, Wn.y + Wn.h * .45 - 3, Wn.w, 6); }
-    // the doorway: warm light as the leaf swings in; a wedge of it on the ground
-    if (open > 0) { const dw = D.w * open; ctx.fillStyle = rgb([255, 196, 112].map(v => v * (.85 + .15 * Math.sin(u * 7)))); ctx.fillRect(D.x, G - D.h, dw, D.h);
-      ctx.save(); ctx.globalCompositeOperation = 'screen'; const g = ctx.createRadialGradient(D.x + dw / 2, G - D.h * .4, 0, D.x + dw / 2, G - D.h * .4, V ? 380 : 320); g.addColorStop(0, `rgba(255,180,90,${.45 * open})`); g.addColorStop(1, 'rgba(255,150,60,0)'); ctx.fillStyle = g; ctx.fillRect(D.x - 400, G - D.h - 400, 800 + D.w, 800 + D.h); ctx.restore(); }
+    const { door: D, win: Wn } = HS, wl = k.lightOn(u, 1.45, .45), open = eio(clamp((u - 1.9) / .8)) * (1 - eio(clamp((u - 3.95) / .45)));
+    // light through the window and the doorway glows on the paper AROUND the house (the screen, above the ground) — never on the cut-outs
+    ctx.save(); ctx.beginPath(); ctx.rect(-50, -H, W + 100, G + H); ctx.clip(); ctx.globalCompositeOperation = 'screen';
+    if (wl > 0) { const cx = Wn.x + Wn.w / 2, cy = Wn.y + Wn.h / 2, R = (V ? 300 : 250) * (1 - .4 * ss(3.8, 5.6, u)), g = ctx.createRadialGradient(cx, cy, 0, cx, cy, R); g.addColorStop(0, `rgba(255,190,100,${.6 * wl})`); g.addColorStop(1, 'rgba(255,160,70,0)'); ctx.fillStyle = g; ctx.fillRect(cx - R, cy - R, R * 2, R * 2); }
+    if (open > 0) { const cx = D.x + D.w * open / 2, cy = G - D.h * .45, R = V ? 420 : 340, g = ctx.createRadialGradient(cx, cy, 0, cx, cy, R); g.addColorStop(0, `rgba(255,180,90,${.5 * open})`); g.addColorStop(1, 'rgba(255,150,60,0)'); ctx.fillStyle = g; ctx.fillRect(cx - R, cy - R, R * 2, R * 2); }
+    ctx.restore();
+    // the house cut-out, then its window (warm paper behind a cross of bars) and the doorway as the leaf swings in
+    ctx.fillStyle = '#100a08'; flatHouse(ctx, HS.x, G + 1, HS.w, HS.h);
+    if (wl > 0) { ctx.fillStyle = rgb(mix([40, 24, 12], [255, 204, 120], wl)); ctx.fillRect(Wn.x, Wn.y, Wn.w, Wn.h); ctx.fillStyle = '#100a08'; ctx.fillRect(Wn.x + Wn.w / 2 - 3, Wn.y, 6, Wn.h); ctx.fillRect(Wn.x, Wn.y + Wn.h * .45 - 3, Wn.w, 6); }
+    if (open > 0) { ctx.fillStyle = rgb([255, 196, 112].map(v => v * (.85 + .15 * Math.sin(u * 7)))); ctx.fillRect(D.x, G - D.h, D.w * open, D.h); }
     // the three walk in from the left and through the door, one after another (the house hides them as they pass inside)
-    const order = [[2, 0], [1, .55], [0, 1.1]];   // front disciple first, then Jesus, then the other
-    for (const [i, lag] of order) { const kd = KIND[i], x0 = W * .05 - lag * 150, x1 = D.x + D.w * .5 + 60, tp = k.on2(u - lag);
-      if (tp <= 0) continue; const stride = k.stopStride(x1 - x0, 122 * kd.s), wv = k.walkAlong(tp, 0, 4.0, x0, x1, stride, .05);
+    const order = [[2, 0], [1, .42], [0, .84]];   // front disciple first, then Jesus, then the other
+    for (const [i, lag] of order) { const kd = KIND[i], x0 = W * .18 - lag * 170, x1 = D.x + D.w * .5 + 60, tp = k.on2(u - lag);
+      if (tp <= 0) continue; const stride = k.stopStride(x1 - x0, 122 * kd.s), wv = k.walkAlong(tp, 0, 3.05, x0, x1, stride, .05);
       const F = dressRobe(k.walk(wv.x, G, kd.s, 1, wv.ph, stride, { lean: .06 }), kd.cloth);
       ctx.save(); ctx.beginPath(); ctx.rect(-50, 0, D.x + D.w * .55 + 50, H + 1000); ctx.clip();   // past the door's middle they are inside
       shadow(ctx, F, { rim: { x: D.x + D.w / 2, y: G - D.h * .5, a: open * .9, reach: 420 } }); ctx.restore(); }

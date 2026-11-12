@@ -56,12 +56,14 @@
     const r = rng(7), stains = []; for (let i = 0; i < 70; i++) { const tower = r() < .55, x = tower ? (r() < .5 ? -1 : 1) * (3.4 + r() * 6) : (r() - .5) * 6.2, y = tower ? r() * 15 : 7.6 + r() * 5.2; stains.push({ x, y, z: tower ? 25.48 : 27.48, r: .8 + r() * 2.6, d: r() < .6 ? -1 : 1, a: .06 + .09 * r() }); }
     // the crowd in the gate, seen from behind (they look out at the hills): [x, z, height, kind]
     const crowd = [[-1.6, 29.6, 1.74, 'shade'], [-.5, 30.6, 1.68, 'stand'], [.7, 29.0, 1.78, 'point'], [1.7, 30.2, 1.62, 'veil'], [1.25, 30.25, 1.08, 'child'], [-2.2, 27.4, 1.7, 'staff'], [2.3, 27.0, 1.72, 'stand'], [-.2, 26.4, 1.76, 'walk']];
-    G = { F, P2, merl, stains, crowd, fig: P.canvas(700, 700),
+    // the curtain wall (behind the towers) is painted, and its tops burn, before the towers and the gate: nothing of it shows through them
+    const back = f => f.pts.every(q => Math.abs(q[0]) >= 9.59), FB = F.filter(back), FF = F.filter(f => !back(f)), MB = merl.filter(m => Math.abs(m[0]) >= 9.59), MF = merl.filter(m => Math.abs(m[0]) < 9.59);
+    G = { F, FB, FF, MB, MF, P2, merl, stains, crowd, fig: P.canvas(700, 700),
       // the camera starts low under the gate and cranes up until the gate's top, the soldiers and the eagle stand in the sky
       // (portrait and landscape frame differently: the feet stay above the words, the eagle comes in at the top by the end)
       // round 2 (관리자: the eagle must read during the first words): the standard and the soldiers are in the frame from u = 0
-      cam: P.ori === 'v' ? W3.cam([[0, .25, 1.2, -1, .1, 2.83, 30, 1660, 1660], [3.6, .2, 2.8, -2.5, .1, 2.7, 30, 1690, 1690], [7.1, .2, 4.5, -4, .1, 2.5, 30, 1720, 1720]])
-        : W3.cam([[0, .25, 1.2, -1, .1, 5.4, 30, 1225, 1225], [3.6, .2, 2.8, -2.5, .1, 5.5, 30, 1265, 1265], [7.1, .2, 4.5, -4, .1, 5.6, 30, 1310, 1310]]),
+      cam: P.ori === 'v' ? W3.cam([[-2, -2.6, .6, -.2, .1, 2.9, 30, 1645, 1645], [0, -1.8, 1.2, -1, .1, 2.83, 30, 1660, 1660], [3.6, .1, 2.8, -2.5, .1, 2.7, 30, 1690, 1690], [7.1, 1.9, 4.5, -4, .1, 2.5, 30, 1720, 1720], [9.2, 2.8, 5.6, -5, .1, 2.4, 30, 1740, 1740]])   /* keys beyond both ends: the crane never stops inside the shot */
+        : W3.cam([[-2, -3, .6, -.2, .1, 5.35, 30, 1205, 1205], [0, -2.1, 1.2, -1, .1, 5.4, 30, 1225, 1225], [3.6, .1, 2.8, -2.5, .1, 5.5, 30, 1265, 1265], [7.1, 2.2, 4.5, -4, .1, 5.6, 30, 1310, 1310], [9.2, 3.2, 5.6, -5, .1, 5.7, 30, 1335, 1335]]),
       light: W3.light([[0, 3.2, 2, 1.2, [255, 170, 100], [146, 114, 112], [104, 86, 118], [255, 172, 108], [255, 164, 96], [204, 136, 112], 2600, 0],
         [7.1, 2.6, 2, 1.15, [255, 160, 92], [140, 108, 108], [100, 82, 114], [252, 162, 100], [255, 154, 90], [198, 128, 106], 2500, 0]]) };
   }
@@ -86,10 +88,10 @@
       g.addColorStop(0, css(cc, s.a)); g.addColorStop(1, css(cc, 0)); ctx.save(); ctx.translate(p[0], p[1]); ctx.scale(1, 1.4); ctx.translate(-p[0], -p[1]); ctx.fillStyle = g; ctx.fillRect(p[0] - R, p[1] - R, 2 * R, 2 * R); ctx.restore(); }
   }
   // every top edge burns: a thin line of sun along the merlons and wall tops
-  function burn(ctx, c, L) {
+  function burn(ctx, c, L, list = G.merl) {
     ctx.save(); ctx.globalCompositeOperation = 'screen'; ctx.strokeStyle = css(mix(L.glow, [255, 230, 190], .3), .75); ctx.lineCap = 'round';
     const seg = (a, b) => { const p = W3.P(c, ...a), q = W3.P(c, ...b); if (!p || !q) return; ctx.lineWidth = Math.max(1.2, p[2] * .07); ctx.beginPath(); ctx.moveTo(p[0], p[1]); ctx.lineTo(q[0], q[1]); ctx.stroke(); };
-    for (const [x0, x1, y, z] of G.merl) seg([x0, y, z], [x1, y, z]);
+    for (const [x0, x1, y, z] of list) seg([x0, y, z], [x1, y, z]);
     ctx.restore();
   }
   // the eagle standard (after messiah film.html aquila(), smaller): pole, crossbar, eagle with spread wings, a red vexillum
@@ -168,10 +170,11 @@
       const sp = out.map(p => W3.P(c, ...p)).filter(Boolean); if (sp.length > 3) { ctx.save(); ctx.globalCompositeOperation = 'screen'; const n = W3.P(c, 0, 0, 34), f = W3.P(c, 0, 0, Math.max(c.z + .8, 6)), g = ctx.createLinearGradient(0, n ? n[1] : 0, 0, f ? f[1] : H);
         g.addColorStop(0, css(L.glow, .7)); g.addColorStop(.5, css(L.glow, .32)); g.addColorStop(1, css(L.glow, .08)); ctx.fillStyle = g; ctx.filter = 'blur(3px)'; ctx.beginPath(); sp.forEach((p, i) => i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1])); ctx.closePath(); ctx.fill(); ctx.filter = 'none'; ctx.restore(); } }
     W3.faces(ctx, c, L, G.P2);
-    W3.faces(ctx, c, L, G.F);
+    W3.faces(ctx, c, L, G.FB); burn(ctx, c, L, G.MB);
+    W3.faces(ctx, c, L, G.FF);
     gateFace(ctx, c, L);
     towerGlaze(ctx, c, L);
-    burn(ctx, c, L);
+    burn(ctx, c, L, G.MF);
     // on the gate top: the eagle standard between two legionaries, dark against the sky
     const rimC = mix(L.glow, [255, 226, 180], .3);
     for (const sd of [-1, 1]) { const p = W3.P(c, sd * 2.1, 13, 28.8); if (p) soldier(ctx, p[0], p[1], p[2], sd, u, rimC); }

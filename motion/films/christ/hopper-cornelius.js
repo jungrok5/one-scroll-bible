@@ -37,7 +37,11 @@
     const right = arms.find(p => p.poly[0][0] > 0);
     if (right) { right.poly = [[.17, 1.42], [.24, 1.36], [.26, 1.2], [.27, 1.1], [.34, 1.16], [.39, 1.3], [.33, 1.34], [.29, 1.24], [.25, 1.28], [.16, 1.32]].map(([u, v]) => [u * s, v * s]); }
     const hand = F.parts.filter(p => p.c === 'skin' && Math.abs(p.poly[0][1] - .76 * s) < .2 * s).find(p => p.poly.some(q => q[0] > 0));
-    if (hand) hand.poly = Array.from({ length: 12 }, (_, i) => { const a = i / 12 * 6.283; return [(.36 + Math.sin(a) * .03) * s, (1.38 + Math.cos(a) * .045) * s]; });
+    // the raised hand: an open palm turned to the listeners, four fingers and a thumb (reads as a silhouette)
+    if (hand) { const hx = .37, hy = 1.37, pts = [[hx - .045, hy - .05], [hx + .04, hy - .05], [hx + .05, hy + .02], [hx + .085, hy + .045], [hx + .09, hy + .06], [hx + .045, hy + .05],
+        [hx + .042, hy + .12], [hx + .03, hy + .125], [hx + .022, hy + .07], [hx + .018, hy + .14], [hx + .005, hy + .145], [hx - .002, hy + .075], [hx - .008, hy + .14], [hx - .021, hy + .14], [hx - .024, hy + .07],
+        [hx - .032, hy + .12], [hx - .045, hy + .118], [hx - .048, hy + .03]]; hand.poly = pts.map(([u, v]) => [u * s, v * s]); }
+    F.parts.push({ poly: [[-.062, 1.53], [.062, 1.53], [.05, 1.47], [0, 1.445], [-.05, 1.47]].map(([u, v]) => [u * s, v * s]), c: 'hair' });   // beard
     return F;
   }
   function buildCornelius() {
@@ -74,7 +78,25 @@
     C = { cam, R, base, lit, door: [[[DOOR.u0, 0, ZB], [DOOR.u1, 0, ZB], [DOOR.u1, DOOR.v1, ZB], [DOOR.u0, DOOR.v1, ZB]]], peter: speaker(), pts,
       sitters: [{ F: seatedBack(1.24, true), x: -.72, z: 3.5, colors: { body: Hopper.shade(ACC, .78), legs: '#4a3f33', skin: '#3e3128', hair: '#2c2420' }, litColors: { body: ACC } },
         { F: seatedBack(1.2, false), x: 1.3, z: 3.7, colors: { body: '#6d6656', legs: '#4a3f33', skin: '#3e3128', hair: '#3a3029' } }],
-      kin: { F: (() => { const F = Hopper.figureParts({ h: 1.66, skirt: true }); F.parts.forEach(p => { if (p.c === 'skin' && p.poly.length > 20) p.c = 'hair'; }); return F; })(), x: -1.15, z: 5.4, colors: { body: '#77705e', legs: '#5a5144', skin: '#6b5646', hair: '#3a3029' } } };
+      kin: { F: (() => { const F = Hopper.figureParts({ h: 1.66, skirt: true }); F.parts.forEach(p => { if (p.c === 'skin' && p.poly.length > 20) p.c = 'hair'; }); return F; })(), x: -1.15, z: 5.4, colors: { body: '#77705e', legs: '#5a5144', skin: '#3e3229', hair: '#2e2620' } } };
+  }
+  // a figure standing against the doorway's light: one value darker than the room, a thin warm rim where the light wraps
+  // its edges (shoulders, head, the raised hand) — the rim = the shape minus its own copy shifted both ways (left ∩ right ∩ down)
+  const BL = {};
+  function backlit(ctx, cam, F, x, z, colors, rimK) {
+    const k = cam.ppm(z), foot = cam.P(x, 0, z), pad = 16, hw = .5 * k, hh = F.h * 1.12 * k, w = Math.ceil(hw * 2 + pad * 2), h = Math.ceil(hh + pad * 2), ox = pad + hw, oy = pad + hh;
+    if (!BL.a || BL.a.width !== w || BL.a.height !== h) { BL.a = P.canvas(w, h); BL.m = P.canvas(w, h); BL.b = P.canvas(w, h); }
+    const draw = (g, dx, dy, colOf) => { for (const p of F.parts) { g.beginPath(); p.poly.forEach(([u, v], i) => { const X = ox + dx + u * k, Y = oy + dy - v * k; i ? g.lineTo(X, Y) : g.moveTo(X, Y); }); g.closePath(); g.fillStyle = colOf(p.c); g.fill(); } };
+    const r = Math.max(1.5, k * .014), a = BL.a.getContext('2d'), m = BL.m.getContext('2d'), b = BL.b.getContext('2d');
+    for (const g of [a, m, b]) { g.setTransform(1, 0, 0, 1, 0, 0); g.globalCompositeOperation = 'source-over'; g.clearRect(0, 0, w, h); }
+    draw(a, 0, 0, () => 'rgb(255,222,170)');                                   // the whole shape in the light's colour
+    draw(m, r, r * .6, () => '#000'); draw(b, -r, r * .6, () => '#000'); m.globalCompositeOperation = 'destination-in'; m.drawImage(BL.b, 0, 0);   // where both shifted copies cover (one destination-in draw: each such draw clears all outside itself)
+    b.clearRect(0, 0, w, h); draw(b, 0, 0, c => colors[c]); b.globalCompositeOperation = 'destination-in'; b.drawImage(BL.m, 0, 0);
+    a.globalCompositeOperation = 'source-atop'; a.globalAlpha = 1; a.drawImage(BL.b, 0, 0);
+    if (rimK < 1) { a.globalAlpha = 1 - rimK; draw(a, 0, 0, c => colors[c]); a.globalAlpha = 1; }
+    // darker toward the feet, as the kit's figures; then soften the edges a little
+    a.globalCompositeOperation = 'source-atop'; const gr = a.createLinearGradient(0, oy - .6 * k, 0, oy); gr.addColorStop(0, 'rgba(0,0,0,0)'); gr.addColorStop(1, 'rgba(0,0,0,.25)'); a.fillStyle = gr; a.fillRect(0, 0, w, h); a.globalCompositeOperation = 'source-over';
+    ctx.save(); ctx.filter = 'blur(1.2px)'; ctx.drawImage(BL.a, foot[0] - ox, foot[1] - oy); ctx.restore();
   }
   function corneliusScene(ctx, u) {
     if (!C) buildCornelius(); u = clamp(u, 0, 4.7);
@@ -95,7 +117,7 @@
     // the people: the kinsman by the wall, Peter at the back, the two seated listeners nearer us (far → near)
     Hopper.figure(ctx, cam, C.kin.F, { x: C.kin.x, z: C.kin.z, lit: .12, side: 1, colors: C.kin.colors, sun: SUN });
     const pl = Hopper.litFraction(L, C.pts, C.door, Hopper.wallZ(ZB));
-    Hopper.figure(ctx, cam, C.peter, { x: PETER[0], z: PETER[1], lit: .15 + .75 * pl, side: -1, colors: { body: '#6f5f4a', legs: '#5a4c3c', skin: '#8a7060', hair: '#4a4038' }, litColors: { body: '#c9a878', skin: '#e2c4a0', legs: '#a8916e', hair: '#8a7a6a' }, sun: SUN });
+    backlit(ctx, cam, C.peter, PETER[0], PETER[1], { body: '#3e3428', legs: '#30281f', skin: '#33291f', hair: '#211b16' }, .35 + .65 * pl);
     for (const s of C.sitters) Hopper.figure(ctx, cam, s.F, { x: s.x, z: s.z, lit: .25, side: s.x < 0 ? 1 : -1, colors: s.colors, litColors: s.litColors, sun: SUN });
     // the beat: as the light reaches his feet, a breath of warmth over the room
     const hit = 3.3, b = u < hit ? 0 : Math.exp(-(u - hit) * 3.5) * ss(hit, hit + .1, u);

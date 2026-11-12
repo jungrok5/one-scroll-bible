@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>길 위의 장면 시안 (파스텔)</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600&display=swap">
+</head>
+<body>
+<script src="../../pilot/lib.js"></script>
+<script src="road-pastel.js"></script>
+<script>
+/* 시안: 「그리스도」 3부 가이사랴 빌립보로 가는 길 (매직 아워 소프트 파스텔) — confess 7.7 → foretell 8.0 → protest 4.3 → alone 4.6 (24.6초).
+   node motion/render.mjs v --page films/christ/sample-road-pastel.html --stills 1,4.5,10,14.5,17.5,19,22,24 */
+const W = Pilot.W, H = Pilot.H, CUTS = [['confess', 7.7], ['foretell', 8.0], ['protest', 4.3], ['alone', 4.6]];
+function draw(ctx, t) { let a = 0; for (const [m, d] of CUTS) { if (t < a + d || m === 'alone') { roadPastel(ctx, Math.min(d, t - a), m); return; } a += d; } }
+Pilot.run({ W, H, dur: 24.6, fonts: ["600 40px 'Noto Serif KR'"], init: async () => buildRoadPastel(), draw });
+</script>
+</body>
+</html>

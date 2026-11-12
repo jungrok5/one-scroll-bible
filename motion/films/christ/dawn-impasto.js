@@ -78,8 +78,8 @@
       if (dawn) { g.fillStyle = 'rgba(255,214,150,.75)'; g.beginPath(); g.moveTo(x0 + tw, y0); g.lineTo(x0 + tw, y0 + th + 2); g.lineTo(x0 + tw * .15, y0 + th + 2); g.lineTo(x0 + tw * .45, y0 + th * .3); g.fill(); }   // the sun reaching in
       g.restore();
       // the groove along the foot of the face, and the round flat stone rolled along it
-      g.fillStyle = dawn ? 'rgba(40,26,18,.7)' : 'rgba(30,30,40,.7)'; g.fillRect(x0 + tw, gl - Y(.006), X(.32), Y(.014));
-      const sr = Y(L.sr) * (closed ? Math.max(1, X(L.tw) * .58 / Y(L.sr)) : 1), [sx2, sy2] = closed ? [tx, gl - sr] : [X(L.stone[0]), Y(L.stone[1])];   // sealed: the stone covers the whole doorway
+      if (!closed) { g.fillStyle = dawn ? 'rgba(40,26,18,.7)' : 'rgba(30,30,40,.7)'; g.fillRect(x0 + tw, gl - Y(.006), X(.32), Y(.014)); }
+      const sr = closed ? Math.min(X(L.tw) * .42, Y(L.th) * .5) : Y(L.sr), [sx2, sy2] = closed ? [tx + X(L.tw) * .06, gl - sr * 1.02] : [X(L.stone[0]), Y(L.stone[1])];   // sealed: the stone covers the whole doorway
       g.fillStyle = 'rgba(30,20,14,.5)'; g.beginPath(); g.ellipse(sx2 - sr * .4, gl + Y(.004), sr * 1.1, sr * .14, 0, 0, 6.283); g.fill();
       g.fillStyle = dawn ? 'rgb(84,64,50)' : 'rgb(58,56,70)'; g.beginPath(); g.ellipse(sx2 - sr * .16, sy2, sr * .96, sr, 0, 0, 6.283); g.fill();          // its thickness
       const sgd = g.createLinearGradient(sx2 - sr, sy2 - sr, sx2 + sr, sy2 + sr * .3); (dawn ? [[0, 'rgb(92,72,58)'], [.6, 'rgb(146,120,92)'], [1, 'rgb(198,166,122)']] : [[0, 'rgb(72,70,86)'], [1, 'rgb(118,114,130)']]).forEach(([a, cc]) => sgd.addColorStop(a, cc));
@@ -192,11 +192,11 @@
       cam(); ctx.drawImage(D.pre, -ox, -oy);
       // the tree's shadow lying across the ground towards us; at «다시 살리사» it draws back as the sun comes up
       { const back = eio(clamp((u - 3.4) / 2.2)), a = .66 * (1 - back * .9), len = lerp(1, .15, back);
-        const foot = [X(V ? .5 : .52), Y(1.12)], head = [X(V ? .4 : .44), Y(V ? .615 : .73)], hd = [lerp(foot[0], head[0], len), lerp(foot[1], head[1], len)];
+        const foot = [X(V ? .5 : .52), Y(V ? 1.12 : 1.05)], head = [X(V ? .4 : .42), Y(V ? .56 : .69)], hd = [lerp(foot[0], head[0], len), lerp(foot[1], head[1], len)];
         const wAt = y => lerp(X(V ? .085 : .05), X(V ? .03 : .018), clamp((foot[1] - y) / (foot[1] - head[1])));   // nearer is wider
         ctx.save(); ctx.fillStyle = `rgba(16,12,28,${a})`; ctx.filter = 'blur(3px)';
         ctx.beginPath(); ctx.moveTo(foot[0] - wAt(foot[1]) / 2, foot[1]); ctx.lineTo(hd[0] - wAt(hd[1]) / 2, hd[1]); ctx.lineTo(hd[0] + wAt(hd[1]) / 2, hd[1]); ctx.lineTo(foot[0] + wAt(foot[1]) / 2, foot[1]); ctx.fill();
-        const fb = .7; if (len > fb + .04) { const cy = lerp(foot[1], head[1], fb), cx = lerp(foot[0], head[0], fb), half = X(V ? .26 : .15) * lerp(1, .55, fb), th = wAt(cy) * .8;   // the beam, square across
+        const fb = .9; if (len > fb + .04) { const cy = lerp(foot[1], head[1], fb), cx = lerp(foot[0], head[0], fb), half = X(V ? .26 : .15) * lerp(1, .55, fb), th = wAt(cy) * .8;   // the beam, square across
           ctx.beginPath(); ctx.moveTo(cx - half, cy - th * .5); ctx.lineTo(cx + half, cy - th * .42); ctx.lineTo(cx + half, cy + th * .42); ctx.lineTo(cx - half, cy + th * .5); ctx.fill(); }
         ctx.restore(); }
       reveal(ctx, D.dawn, D.kDoor, eo(rep), cam);

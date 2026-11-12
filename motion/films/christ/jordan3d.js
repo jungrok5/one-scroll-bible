@@ -319,7 +319,7 @@
       const cone = (wk, a, col) => { const p0 = W3.P(c, mx - wk * rTop, beamTop, mz), p1 = W3.P(c, mx + wk * rTop, beamTop, mz), p2 = W3.P(c, mx + wk * rBot, WY, mz), p3 = W3.P(c, mx - wk * rBot, WY, mz); if (!p0 || !p1 || !p2 || !p3) return;
         const g = bg.createLinearGradient(0, Math.min(p0[1], 0), 0, p2[1]); g.addColorStop(0, css(col, a * .35)); g.addColorStop(.6, css(col, a * .8)); g.addColorStop(.92, css(col, a)); g.addColorStop(1, css(col, a * .4));
         bg.fillStyle = g; bg.beginPath(); bg.moveTo(p0[0], p0[1]); bg.lineTo(p1[0], p1[1]); bg.lineTo(p2[0], p2[1]); bg.lineTo(p3[0], p3[1]); bg.closePath(); bg.fill(); };
-      for (let i = 0; i < 8; i++) cone(1.6 - i * .18, .1 * pk, [255, 228, 182]);
+      for (let i = 0; i < 8; i++) cone(1.6 - i * .18, .1 * pk, [255, 210, 140]);
       bg.setTransform(1, 0, 0, 1, 0, 0); bg.globalCompositeOperation = 'destination-in'; const nh = bc.height * 1.6, off = (u * bc.height * .05) % nh;   // the haze drifts down
       if (!J.ntmp) J.ntmp = P.canvas(bc.width, bc.height); const ng = J.ntmp.getContext('2d'); ng.clearRect(0, 0, bc.width, bc.height); ng.drawImage(J.noise, -bc.width * .2, off - nh, bc.width * 1.4, nh); ng.drawImage(J.noise, -bc.width * .2, off, bc.width * 1.4, nh);
       bg.drawImage(J.ntmp, 0, 0);   // one destination-in pass (each such draw clears everything outside itself)
@@ -346,11 +346,11 @@
     { const dk = eio(clamp((u - .5) / 3.9)), dy = lerp(11.5, 1.45, dk) + .04 * Math.sin(u * 2.2) * ss(4.4, 5.2, u), p = W3.P(c, mx, dy, mz);
       if (p && u > .4) { const s = p[2], a = ss(.4, 1.3, u), beat = (1 - ss(3.6, 4.8, u)) * Math.sin(u * 3.0), spread = lerp(.2, .48, .5 + .5 * beat) * (1 - .25 * ss(3.8, 5, u)), sc = J.soft.width / W, g = J.soft.getContext('2d');
         g.setTransform(1, 0, 0, 1, 0, 0); g.clearRect(0, 0, J.soft.width, J.soft.height); g.setTransform(sc, 0, 0, sc, 0, 0); g.globalCompositeOperation = 'lighter';
-        const glow = (x, y, rx, ry, rot, al) => { g.save(); g.translate(x, y); g.rotate(rot); g.scale(1, ry / rx); const gr = g.createRadialGradient(0, 0, 0, 0, 0, rx); gr.addColorStop(0, `rgba(255,248,230,${al})`); gr.addColorStop(.45, `rgba(255,236,200,${al * .45})`); gr.addColorStop(1, 'rgba(255,230,190,0)'); g.fillStyle = gr; g.fillRect(-rx, -rx, 2 * rx, 2 * rx); g.restore(); };
+        const glow = (x, y, rx, ry, rot, al) => { g.save(); g.translate(x, y); g.rotate(rot); g.scale(1, ry / rx); const gr = g.createRadialGradient(0, 0, 0, 0, 0, rx); gr.addColorStop(0, `rgba(255,228,150,${al})`); gr.addColorStop(.45, `rgba(255,190,92,${al * .5})`); gr.addColorStop(1, 'rgba(240,160,60,0)'); g.fillStyle = gr; g.fillRect(-rx, -rx, 2 * rx, 2 * rx); g.restore(); };
         const L0 = .62 * s; for (const sd of [-1, 1]) glow(p[0] + sd * L0 * .55, p[1] - L0 * spread * .55, L0 * .62, L0 * .16, sd * (-spread * .9), .75 * a);
         glow(p[0], p[1], L0 * .22, L0 * .3, 0, a); glow(p[0], p[1] + L0 * .32, L0 * .14, L0 * .2, 0, .5 * a);
         ctx.save(); ctx.globalCompositeOperation = 'screen'; ctx.filter = 'blur(4px)'; ctx.drawImage(J.soft, 0, 0, W, H); ctx.filter = 'none'; ctx.restore();
-        W3.bloom(ctx, p[0], p[1], [255, 234, 196], a * (.5 + .25 * ss(3.8, 4.8, u)), { r: V ? 170 : 140, streak: .16 }); } }
+        W3.bloom(ctx, p[0], p[1], [255, 190, 100], a * (.55 + .25 * ss(3.8, 4.8, u)), { r: V ? 170 : 140, streak: .16 }); } }
     terrain(ctx, c, L, c.z - 1, 16.5);
     lip(ctx, c, L, u, .3);
     const body = [30, 31, 36];

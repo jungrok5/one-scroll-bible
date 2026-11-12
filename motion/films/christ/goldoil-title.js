@@ -17,8 +17,9 @@
       ? { surf: .50, hor: .42, hang: .155, r: .085 * W, R: .38 * W, tilt: .28, title: .45 }
       : { surf: .60, hor: .45, hang: .15, r: .074 * H, R: .30 * W, tilt: .24, title: .45 };
     // camera: always pushing in, around the landing point (which stays put on screen)
-    const z = 1 + .24 * (.55 * u / 9.5 + .45 * ss(0, 9.5, u)), S = C.surf * H, cx = W / 2;
-    const sx = wx => cx + (wx - cx) * z, sy = wy => S + (wy - S) * z;
+    const z = 1.05 + .22 * (.55 * u / 9.5 + .45 * ss(0, 9.5, u)), S = C.surf * H, cx = W / 2;
+    const D = W * .022 * (1 - eio(clamp(u / 5))), cxD = cx + D;            // a slow drift sideways while the drop hangs (inside the zoom margin)
+    const sx = wx => cxD + (wx - cx) * z, sy = wy => S + (wy - S) * z;
     const ex = ss(0, .5, u);                                                 // opens from the dark
     const gl = ss(3.5, 5.3, u) * (1 - .3 * ss(6.4, 9, u));                   // light the film carries
     const ga = eio(clamp((u - 5.8) / 3.4));                                  // light gathering to the title
@@ -34,7 +35,7 @@
     GOLD.bokeh(ctx, { n: V ? 10 : 12, seed: 23, x: -W * .1, y: -H * .04, w: W * 1.2, h: H * (C.hor - .02), r: (V ? .075 : .05) * W * pz, a: .12 * bgK, t: u, col: [255, 200, 120] });
 
     // ---- the floor, its far edge melting into the lamp's haze; lit warm by the lamp, glossy under it
-    ctx.save(); ctx.globalAlpha = ex; ctx.setTransform(z, 0, 0, z, cx * (1 - z), S * (1 - z)); ctx.drawImage(floorFor(W, H, C), 0, 0); ctx.restore();
+    ctx.save(); ctx.globalAlpha = ex; ctx.setTransform(z, 0, 0, z, cx * (1 - z) + D, S * (1 - z)); ctx.drawImage(floorFor(W, H, C), 0, 0); ctx.restore();
     ctx.save(); ctx.globalCompositeOperation = 'screen';
     g = ctx.createLinearGradient(0, horS - H * .03, 0, horS + H * .10); g.addColorStop(0, 'rgba(150,92,40,0)'); g.addColorStop(.25, `rgba(150,92,40,${.55 * bgK})`); g.addColorStop(1, 'rgba(150,92,40,0)'); ctx.fillStyle = g; ctx.fillRect(0, horS - H * .03, W, H * .13);
     ctx.translate(LX, horS + H * .02); ctx.scale(1, V ? 1.6 : 1.0);                                           // the lamp mirrored in the waxed boards
@@ -42,7 +43,7 @@
     ctx.restore();
     g = ctx.createLinearGradient(0, horS - H * .05, 0, horS + H * .07); g.addColorStop(0, 'rgba(120,74,32,0)'); g.addColorStop(.42, `rgba(132,82,36,${.75 * bgK})`); g.addColorStop(1, 'rgba(120,74,32,0)');
     ctx.fillStyle = g; ctx.fillRect(0, horS - H * .05, W, H * .12);
-    ctx.save(); ctx.globalCompositeOperation = 'screen'; ctx.translate(cx, surfS); ctx.scale(1, C.tilt * 2.2);   // warm light on the boards around the spot
+    ctx.save(); ctx.globalCompositeOperation = 'screen'; ctx.translate(cxD, surfS); ctx.scale(1, C.tilt * 2.2);   // warm light on the boards around the spot
     g = ctx.createRadialGradient(0, 0, 0, 0, 0, W * .75); g.addColorStop(0, `rgba(110,66,26,${.40 * ex})`); g.addColorStop(1, 'rgba(0,0,0,0)'); ctx.fillStyle = g; ctx.fillRect(-W, -W * 3, 2 * W, W * 6); ctx.restore();
 
     // ---- the drop's path (world y in px)
@@ -57,15 +58,15 @@
     const k0 = 1.05 * rw / C.R, kp = u > TL ? k0 + (1 - k0) * (1 - Math.exp(-(u - TL) * .75)) : 0;
     if (kp > 0) {
       const tt = u - TL, Rp = C.R * z;
-      ctx.save(); ctx.globalCompositeOperation = 'screen'; ctx.translate(cx, surfS); ctx.scale(1, C.tilt * 1.4);
+      ctx.save(); ctx.globalCompositeOperation = 'screen'; ctx.translate(cxD, surfS); ctx.scale(1, C.tilt * 1.4);
       g = ctx.createRadialGradient(0, 0, 0, 0, 0, Rp * kp * 1.8); g.addColorStop(0, `rgba(200,124,48,${.30 * gl})`); g.addColorStop(.5, `rgba(120,70,24,${.18 * gl})`); g.addColorStop(1, 'rgba(0,0,0,0)');
       ctx.fillStyle = g; ctx.fillRect(-Rp * 2, -Rp * 2, Rp * 4, Rp * 4); ctx.restore();
       const under = GOLD.grab(ctx, .5);
-      GOLD.pool(ctx, cx, surfS, Rp, kp, { bg: under, tilt: C.tilt, t: tt, caus: 0, glow: gl * (1 - .25 * ga), seed: 7,
+      GOLD.pool(ctx, cxD, surfS, Rp, kp, { bg: under, tilt: C.tilt, t: tt, caus: 0, glow: gl * (1 - .25 * ga), seed: 7,
         dome: Math.exp(-tt * 2.6), domeR: lerp(.9, .5, ss(0, .7, tt)), rings: [[.05, .9, .26], [.92, .5, .24], [2.3, .35, .2]] });
       const fl = ss(TL - .04, TL + .1, u) * (1 - ss(TL + .1, 5.2, u));
-      GOLD.bloom(ctx, cx, surfS, [255, 176, 80], .55 * fl, { r: W * (V ? .22 : .15), streak: .2 });
-      GOLD.bloom(ctx, cx, surfS, [255, 176, 80], .2 * gl * (1 - ga), { r: W * (V ? .24 : .16), streak: 0, ghosts: false });
+      GOLD.bloom(ctx, cxD, surfS, [255, 176, 80], .55 * fl, { r: W * (V ? .22 : .15), streak: .2 });
+      GOLD.bloom(ctx, cxD, surfS, [255, 176, 80], .2 * gl * (1 - ga), { r: W * (V ? .24 : .16), streak: 0, ghosts: false });
     }
     const bg = GOLD.grab(ctx);
 
@@ -105,7 +106,7 @@
       ctx.fillStyle = g; ctx.fillRect(-RR, -RR, 2 * RR, 2 * RR); ctx.restore();
       GOLD.bloom(ctx, cx, ty, [255, 180, 90], .28 * ga, { r: W * (V ? .22 : .14), streak: .5, ghosts: false });
     }
-    GOLD.motes(ctx, u, { n: V ? 90 : 110, seed: 41, light: [cx, lerp(H * .25, surfS, ss(2, 5, u)), W * (V ? .75 : .5)], pull: ga > 0 ? [cx, C.title * H, ga, W * (V ? .30 : .18), H * .018] : null, a: ex, size: V ? 1 : .9 });
+    GOLD.motes(ctx, u * 1.6, { n: V ? 110 : 130, seed: 41, light: [cx, lerp(H * .25, surfS, ss(2, 5, u)), W * (V ? .75 : .5)], pull: ga > 0 ? [cx, C.title * H, ga, W * (V ? .30 : .18), H * .018] : null, a: ex, size: V ? 1 : .9 });
     GOLD.glow(ctx, .5 + .25 * gl, { wide: .5 });
     GOLD.finish(ctx, u, { vignette: .45 + .1 * ga, vy: V ? .46 : .5 });
     if (ex < 1) { ctx.fillStyle = `rgba(0,0,0,${1 - ex})`; ctx.fillRect(0, 0, W, H); }

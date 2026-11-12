@@ -208,17 +208,17 @@
       const d = .04 + .26 * dk + .16 * q; gd.addColorStop(0, `rgba(0,0,0,${d * .1})`); gd.addColorStop(1, `rgba(0,0,0,${d})`); ctx.fillStyle = gd; ctx.fillRect(0, 0, W, H * .75); }
     // the gap: before the cry a hidden sun's dull glow; at the cry the clouds part around it and their edges catch the light
     const gapA = (.06 * (1 - dk) + q) * (1 - endk * .35), gr = (V ? W * .2 : H * .3) * lerp(.85, 1.2, q) * lerp(1, .18, endk);
-    { ctx.globalCompositeOperation = 'screen'; const gg = ctx.createRadialGradient(gp[0], gp[1], 0, gp[0], gp[1], gr * 2.8);
+    { ctx.globalCompositeOperation = 'screen'; const gg = ctx.createRadialGradient(gp[0], gp[1], 0, gp[0], gp[1], gr * 3.8);
       gg.addColorStop(0, `rgba(255,250,240,${gapA})`); gg.addColorStop(.12, `rgba(240,236,228,${.62 * gapA})`); gg.addColorStop(.4, `rgba(180,178,172,${.22 * gapA})`); gg.addColorStop(1, 'rgba(120,120,120,0)');
       ctx.fillStyle = gg; ctx.fillRect(0, 0, W, H); ctx.globalCompositeOperation = 'source-over'; }
     if (q > .01 && endk < .99) { const lc = X.lit.getContext('2d'); lc.setTransform(1, 0, 0, 1, 0, 0); lc.globalCompositeOperation = 'source-over'; lc.clearRect(0, 0, W, H); drawClouds(lc, .5);
-      lc.globalCompositeOperation = 'destination-in'; const R2 = gr * 3.2 * .5, mg = lc.createRadialGradient(gp[0] * .5, gp[1] * .5, R2 * .1, gp[0] * .5, gp[1] * .5, R2); mg.addColorStop(0, 'rgba(0,0,0,1)'); mg.addColorStop(1, 'rgba(0,0,0,0)');
+      lc.globalCompositeOperation = 'destination-in'; const R2 = gr * 4.3 * .5, mg = lc.createRadialGradient(gp[0] * .5, gp[1] * .5, R2 * .1, gp[0] * .5, gp[1] * .5, R2); mg.addColorStop(0, 'rgba(0,0,0,1)'); mg.addColorStop(1, 'rgba(0,0,0,0)');
       lc.fillStyle = mg; lc.fillRect(0, 0, W, H); ctx.globalCompositeOperation = 'screen'; ctx.globalAlpha = .9 * q * (1 - endk); ctx.drawImage(X.lit, 0, 0, W, H); ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over'; }   // silver edges
     // the shaft: from the gap down behind the middle cross
     const [ctx0, cty0] = scr(1, X.cx, X.cy - X.hc * .9);
     const sa = q * (1 - ss(9.0, 10.0, u)), retreat = ss(8.9, 10.1, u);
     if (sa > .003) {
-      const dx = ctx0 - gp[0], dy = cty0 - gp[1], ang = Math.atan2(dy, dx) - Math.PI / 2, len = Math.hypot(dx, dy) * lerp(2.1, .2, retreat), wd = (V ? W * .55 : W * .28) * (1 + push * .25) * lerp(1, .15, retreat);
+      const dx = ctx0 - gp[0], dy = cty0 - gp[1], ang = Math.atan2(dy, dx) - Math.PI / 2, len = Math.hypot(dx, dy) * lerp(2.1, .2, retreat), wd = (V ? W * .68 : W * .34) * (1 + push * .25) * lerp(1, .15, retreat);
       ctx.save(); ctx.translate(gp[0], gp[1]); ctx.rotate(ang); ctx.globalCompositeOperation = 'screen';
       ctx.globalAlpha = sa; ctx.drawImage(B.shaft, -wd / 2, 0, wd, len);
       ctx.globalAlpha = .6 * sa * (.8 + .2 * Math.sin(t * 1.3)); ctx.drawImage(B.shaft, -wd * .3 + Math.sin(t * .7) * wd * .03, 0, wd * .6, len * .9);
@@ -287,7 +287,7 @@
     }
     ctx.restore();
     const wr = (V ? W * .55 : H * .7) * lerp(.6, 1.1, q) * lerp(1, .4, endk);
-    finish(ctx, t, { halo: .38 + .14 * q, warm: [gp[0], gp[1] + (V ? H * .12 : H * .15) * (1 - endk), wr, .35 * (.4 + .6 * q)], vig: .6 });
+    finish(ctx, t, { halo: .38 + .2 * q, warm: [gp[0], gp[1] + (V ? H * .12 : H * .15) * (1 - endk), wr, .35 * (.4 + .6 * q)], vig: .6 });
   }
   bwCross.point = u => { buildBW(); const push = u < 3.9 ? .15 * (u / 3.9) : .15 + 1.37 * eio((u - 3.9) / 6.3) + .026 * (u - 3.9), pr = clamp(push / 1.6);
     return [lerp(X.gap0[0], X.gap1[0], eio(pr)), lerp(X.gap0[1], X.gap1[1], eio(pr))]; };

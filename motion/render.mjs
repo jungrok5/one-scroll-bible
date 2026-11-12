@@ -64,7 +64,7 @@ async function openPage(browser) {
   await page.route(/fonts\.googleapis\.com/, r => FONT_CSS ? r.fulfill({ status: 200, contentType: 'text/css', body: FONT_CSS }) : r.abort());
   await page.route(/fonts\.gstatic\.com/, r => r.abort());
   await page.goto(url);
-  await page.waitForFunction(() => window.__ready === true);
+  await page.waitForFunction(() => window.__ready === true, null, { timeout: 180000 });   // heavy scene builds (fresco plates, pastel) can take > 30 s per worker
   // load every weight before the first frame is drawn (a canvas does not wait for a font)
   const fonts = await page.evaluate(async () => { const want = ["400 40px 'Noto Serif KR'", "600 40px 'Noto Serif KR'", "900 40px 'Noto Serif KR'", "300 40px 'Noto Sans KR'", "400 40px 'Noto Sans KR'", "700 40px 'Noto Sans KR'"];
     await Promise.all(want.map(f => document.fonts.load(f, '가나다 ABC 123')));

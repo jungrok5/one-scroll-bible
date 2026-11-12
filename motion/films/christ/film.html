@@ -22,15 +22,11 @@
 <script src="bw-cross.js"></script>
 <script src="goldoil-anoint.js"></script>
 <script src="jerusalem3d.js"></script>
-<script src="oil-rock.js"></script>
-<script src="kit-doreline.js"></script>
-<script src="engrave-rock.js"></script>
-<script src="kit-hopper.js"></script>
-<script src="hopper-cornelius.js"></script>
+<script src="road-pastel.js"></script>
+<script src="fresco-cornelius.js"></script>
 <script src="kit-shadowstage.js"></script>
 <script src="shadow-emmaus.js"></script>
 <script src="dawn-impasto.js"></script>
-<script src="oil-emmaus.js"></script>
 <script>
 /* 그리스도 — '그리스도'는 성이 아니라 '기름 부음 받은 자', 그리고 고난받는 그리스도는 처음부터 성경이 가리킨 길이었다 (~2:56).
    Made like the first film (motion/films/README 7절): a camera moving through space, light as the main character, small people,
@@ -61,16 +57,16 @@ const SCENES = [
   [35.7, 40.6, scz('goldAnoint', 35.8, 'aaron')],  // L2 K2 — Moses pours on Aaron at the tent door (Lev 8:12)
   [39.6, 45.0, scz('goldAnoint', 39.9, 'elisha')], // L3 K3 — Elijah's cloak over Elisha (no oil: the anointing is God's command, 1 Ki 19:16)
   [44.0, 52.2, scz('jerusalemScene', 44.3)],       // N06 — the Roman standard over the gate of Jerusalem
-  [51.2, 59.6, scz('rockEngrave', 51.4, 'confess')],   // P3 N07 Q2 — Caesarea Philippi at sunset: "주는 그리스도시요"
-  [58.8, 67.6, scz('rockEngrave', 59.1, 'foretell')],  // N08 — the sun goes down: he must suffer, die and rise
-  [66.8, 71.9, scz('rockEngrave', 67.1, 'protest')],   // Q3 — Peter holds his arm: "주여 그리 마옵소서"
-  [71.1, 76.5, scz('rockEngrave', 71.4, 'alone')],     // N09 — Peter alone under the dark rock
+  [51.2, 59.6, scz('roadPastel', 51.4, 'confess')], // P3 N07 Q2 — on the road near Caesarea Philippi (Mk 8:27), magic-hour pastel: "주는 그리스도시요" (관리자 2026-11-11: 바위·동굴 구성이 이해 안 됨)
+  [58.8, 67.6, scz('roadPastel', 59.1, 'foretell')], // N08 — he looks down the road toward Jerusalem; the sun goes down, shadows lengthen
+  [66.8, 71.9, scz('roadPastel', 67.1, 'protest')], // Q3 — Peter steps into the road and holds his arm: "주여 그리 마옵소서"
+  [71.1, 76.5, scz('roadPastel', 71.4, 'alone')],   // N09 — the others walk on; Peter alone on the road, first star
   [75.7, 88.4, sc('scrollScene', 79.8, 'isaiah')], // N10 P4 Q4 — the scroll unrolls (u < 0), 700 years before: Isaiah 53
   [87.4, 98.3, sc('bwCross', 87.6)],               // N11 Q5 — the cry from the cross (black-and-white film)
   [96.9, 114.8, sc('scrollScene', 96.9, 'psalm')], // N12 P5 Q6 Q7 — the ember crosses to the psalm of David (in before the cross has sunk to one point: no black dip)
   [113.8, 120.9, sc('bwSoldiers', 114.0)],         // L4 N14 — at the foot of the cross, the lots
   [119.8, 125.7, scz('dawnOil', 120.1, 'tomb')],   // N15 — the black-and-white is repainted with dawn: the empty tomb
-  [125.0, 130.0, scz('corneliusScene', 125.0)],    // N20 — Peter speaks in Cornelius' house at Caesarea (Acts 10), Hopper-style (관리자 2026-11-11: 바위 아래 베드로가 3부와 반복)
+  [125.0, 130.0, scz('corneliusFresco', 125.0)],   // N20 — Peter speaks in Cornelius' house at Caesarea (Acts 10), Pompeian fresco (Hopper = horror, Vermeer = oil again — 관리자 2026-11-11) (관리자 2026-11-11: 바위 아래 베드로가 3부와 반복)
   [129.4, 136.4, scz('jordanScene', 129.5, { mode: 'spirit' })],   // P7 Q9 — the light like a dove on the Jordan (Acts 10:38)
   [135.7, 143.1, scz('dawnOil', 136.0, 'tree')],   // Q10 — the shadow of the tree, then the dawn fills the tomb (Acts 10:39–40)
   [142.4, 146.9, scz('goldThree', 142.7)],         // N16 — the three lights meet on one
@@ -126,8 +122,8 @@ function draw(ctx, t) {
     else if (kind === 'quote') Film.quote(ctx, id, t, a, b, { ...QB(), hl: Film.lines[id].hl, hlk: ss(a + .4, a + 1.6, t) }); }
 }
 Pilot.run({ W, H, dur: FILM_DUR, fonts: ["600 40px 'Noto Serif KR'", "400 40px 'Noto Serif KR'", "400 20px 'Noto Sans KR'"],
-  init: async () => { await Film.load(); buildText(); if (window.Hopper?.init) await Hopper.init();   /* hopper-cornelius.js needs the kit's texture first */
-    for (const b of ['buildRoomOil', 'buildJordan', 'buildGoldoil', 'buildScrolls', 'buildBW', 'buildJerusalem', 'buildRockOil', 'buildDawn', 'buildEmmausOil', 'buildRockEngrave', 'buildCornelius', 'buildEmmausShadow']) if (hasF(b)) await window[b](); }, draw });
+  init: async () => { await Film.load(); buildText();
+    for (const b of ['buildRoomOil', 'buildJordan', 'buildGoldoil', 'buildScrolls', 'buildBW', 'buildJerusalem', 'buildDawn', 'buildRoadPastel', 'buildCorneliusFresco', 'buildEmmausShadow']) if (hasF(b)) await window[b](); }, draw });
 </script>
 </body>
 </html>

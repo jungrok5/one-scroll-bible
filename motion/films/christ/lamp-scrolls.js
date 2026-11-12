@@ -375,7 +375,7 @@
   // ---------------- grade ----------------
   function finish(ctx, u, lx, ly, light) {
     Lamplit.dust(ctx, u, [lx, ly], clamp(light), .9);
-    ctx.save(); ctx.globalCompositeOperation = 'screen'; ctx.fillStyle = 'rgb(26,19,13)'; ctx.fillRect(0, 0, W, H); ctx.restore();   // lifted film blacks
+    ctx.save(); ctx.globalCompositeOperation = 'screen'; ctx.fillStyle = 'rgb(32,23,16)'; ctx.fillRect(0, 0, W, H); ctx.restore();   // lifted film blacks
     Lamplit.vignette(ctx, .55); Lamplit.filmGrain(ctx, u, .07); }
 
   // ---------------- the two scenes ----------------
@@ -392,7 +392,7 @@
     setCam(camAt(CAM.isaiah, u));
     const open = eio(clamp((u + 3.8) / 5.3)), xc = V ? 110 : -250, xl = lerp(xc - 30, V ? 70 : -330, open), xr = lerp(xc + 30, V ? 740 : 780, open);   // closed, it lies left of the lamp (never under the flame); the right roll unrolls toward it
     const gust = ss(1.7, 2.1, u) * (1 - ss(2.5, 3.5, u)), flare = ss(2.9, 3.3, u) * (1 - ss(3.4, 4.6, u));
-    const lampI = (1.4 - .22 * gust + .18 * flare) * flick(u), amb = .52, focus = ss(2.2, 4.8, u), hillK = ss(2.6, 5.2, u);
+    const lampI = (1.76 - .22 * gust + .18 * flare) * flick(u), amb = .66, focus = ss(2.2, 4.8, u), hillK = ss(2.6, 5.2, u);
     drawWall(ctx, lampI, amb); drawWindow(ctx, u, lampI, focus, hillK);
     drawTable(ctx, lampI, amb, xl, xr); drawJar(ctx, lampI);
     drawLamp(ctx, u, 1, gust, lampI);
@@ -404,14 +404,14 @@
 
   function psalm(ctx, u) {
     setCam(camAt(CAM.psalm, u));
-    const color = ss(.6, 3.2, u), ign = ss(.95, 1.7, u), lampI = (ign * 1.12 + (u > .95 ? .25 * Math.exp(-(u - .95) * 3) : 0)) * flick(u), amb = .3 + .62 * (1 - ign);
+    const color = ss(.6, 3.2, u), ign = ss(.95, 1.7, u), lampI = (ign * 1.26 + (u > .95 ? .25 * Math.exp(-(u - .95) * 3) : 0)) * flick(u), amb = .34 + .7 * (1 - ign);
     const xr = 780, xl = lerp(90, V ? -330 : -420, eio(clamp((u - 11.6) / 1.4)));
     // line A: embers settle (dots), the line warms, then at 6.0 it wakes to gold right → left; line B wakes at 12.2
     const dots = S.embers.filter(e => e.land).map(e => [e.land, u < e.t1 ? 0 : (Math.exp(-(u - e.t1) * 1.4) * .9 + .25) * (1 - ss(6, 7, u))]);
     const A = { G: S.goldA, warm: ss(1.8, 3.3, u) * (.85 + .15 * Math.sin(u * 5)), dots, reveal: clamp((u - 6.0) / .9), lit: ss(6.0, 6.9, u), pulse: Math.exp(-Math.max(0, u - 6.9) * .8) };
     const B = { G: S.goldB, warm: ss(11.9, 12.3, u), reveal: clamp((u - 12.2) / 1.0), lit: ss(12.2, 13.2, u), pulse: Math.exp(-Math.max(0, u - 13.2) * .8) };
     drawWall(ctx, lampI, amb);
-    drawTable(ctx, lampI, amb, xl, xr); drawJar(ctx, lampI);
+    drawTable(ctx, lampI, amb, xl, xr);   // (no jar here: the camera pans along the scroll and the jar showed cut off at the edge)
     drawLamp(ctx, u, ign, 0, lampI);
     drawSheet(ctx, S.psa, xl, xr, lampI, amb, 0, [A, B]);
     const f = flame(ctx, u, ign, 0); smoke(ctx, u, f, u < 1 ? .9 : .7);

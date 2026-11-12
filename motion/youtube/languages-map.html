@@ -1,0 +1,231 @@
+<title>영상 언어·자막 지도</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@700;800&family=Noto+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one big coverage matrix (videos × languages) with a 지금/제안 switch, then the Shorts timeline, then the plan.
+   Source of truth: motion/youtube/LANGUAGES.md — this page is its picture (repo: motion/youtube/languages-map.html). */
+:root{
+  --bg:#f6f3ec; --panel:#fffdf8; --ink:#1f1c17; --mute:#6c655a; --line:#ddd5c6; --cellbg:#efe9de;
+  --gold:#b07a1e; --gold-soft:#f3e4c4; --blue:#2f63a0; --blue-soft:#dbe6f3; --green:#3d7a4f; --green-soft:#dcefe1;
+  --red:#b0472f; --red-soft:#f6dfd8; --plus:#2f8a55;
+  --display:"Nanum Myeongjo","Noto Serif KR",serif; --body:"Noto Sans KR",system-ui,sans-serif; --mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#14120f; --panel:#1d1a16; --ink:#efe8dc; --mute:#a59c8e; --line:#38322a; --cellbg:#27231d;
+  --gold:#e0b45e; --gold-soft:#3a2e18; --blue:#8db6e0; --blue-soft:#1d2a38; --green:#86c79a; --green-soft:#1d3024;
+  --red:#e59880; --red-soft:#3a221b; --plus:#7fd3a0; color-scheme:dark } }
+:root[data-theme="dark"]{
+  --bg:#14120f; --panel:#1d1a16; --ink:#efe8dc; --mute:#a59c8e; --line:#38322a; --cellbg:#27231d;
+  --gold:#e0b45e; --gold-soft:#3a2e18; --blue:#8db6e0; --blue-soft:#1d2a38; --green:#86c79a; --green-soft:#1d3024;
+  --red:#e59880; --red-soft:#3a221b; --plus:#7fd3a0; color-scheme:dark }
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:15px/1.6 var(--body);margin:0}
+.wrap{max-width:1240px;margin:0 auto;padding-block:26px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1{font:800 clamp(26px,4.6vw,38px)/1.2 var(--display);margin:0 0 6px;text-wrap:balance}
+h2{font:800 21px/1.3 var(--display);margin:0 0 4px;text-wrap:balance}
+.lede{color:var(--mute);font-size:14px;margin:0 0 12px;max-width:70ch}
+section{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:20px clamp(12px,2.6vw,24px);margin-top:20px}
+.mono{font-family:var(--mono);font-size:12.5px}
+/* switch */
+.sw{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;margin:4px 0 10px}
+.sw button{font:500 14px var(--body);padding:6px 16px;border:0;background:transparent;color:var(--mute);cursor:pointer}
+.sw button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.sw button:focus-visible{outline:2px solid var(--blue);outline-offset:-2px}
+/* legend */
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;color:var(--mute);margin-bottom:10px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+/* matrix */
+.mx{overflow-x:auto;border:1px solid var(--line);border-radius:8px}
+table{border-collapse:separate;border-spacing:0;font-size:12px;min-width:100%}
+th,td{padding:0}
+thead th{font:500 11px var(--mono);color:var(--mute);height:62px;vertical-align:bottom;padding:0 0 6px;background:var(--panel);position:sticky;top:0}
+thead th span{display:inline-block;writing-mode:vertical-rl;transform:rotate(180deg);white-space:nowrap}
+thead th.grp{border-left:2px solid var(--line)}
+tbody th{position:sticky;left:0;z-index:1;background:var(--panel);text-align:left;font:500 12.5px/1.3 var(--body);padding:6px 10px 6px 8px;min-width:200px;max-width:230px;border-top:1px solid var(--line)}
+tbody th small{display:block;color:var(--mute);font-weight:400;font-size:11px}
+tbody tr.band th{background:var(--cellbg);font:700 12px var(--body);color:var(--mute);padding:4px 8px}
+tbody tr.band td{background:var(--cellbg)}
+td.c{width:30px;min-width:30px;height:34px;border-top:1px solid var(--line);text-align:center;vertical-align:middle}
+td.c.grp{border-left:2px solid var(--line)}
+.g{position:relative;display:inline-block;width:22px;height:22px;border-radius:4px;background:var(--cellbg)}
+.g.burn{box-shadow:inset 0 0 0 2px var(--ink)}
+.g .n{position:absolute;left:3px;top:3px;width:8px;height:8px;border-radius:50%;background:var(--gold)}
+.g .n.todo{background:transparent;box-shadow:inset 0 0 0 1.5px var(--gold)}
+.g .t{position:absolute;left:3px;right:3px;bottom:3px;height:4px;border-radius:2px;background:var(--blue)}
+.g .t.todo{background:transparent;box-shadow:inset 0 0 0 1.2px var(--blue)}
+.g.pend{background:repeating-linear-gradient(45deg,var(--red-soft) 0 4px,transparent 4px 8px);box-shadow:inset 0 0 0 1px var(--red)}
+.g.new::after{content:"+";position:absolute;right:-4px;top:-7px;font:700 12px var(--body);color:var(--plus)}
+.g.exp{background:var(--green-soft);box-shadow:inset 0 0 0 1px var(--green)}
+.cnt{font:500 11px var(--mono);color:var(--mute);padding-left:8px;white-space:nowrap}
+/* timeline */
+.tl{overflow-x:auto;margin-top:10px}
+.tlin{min-width:720px;position:relative}
+.trow{display:grid;grid-template-columns:160px 1fr;align-items:center;height:32px}
+.trow .lab{font-size:12.5px;font-weight:500;padding-right:8px;line-height:1.2}
+.trow .lab small{display:block;font-weight:400;color:var(--mute);font-size:11px}
+.track{position:relative;height:16px;background:var(--cellbg);border-radius:4px}
+.seg{position:absolute;top:0;bottom:0;border-radius:4px;font-size:10.5px;line-height:16px;color:#fff;padding:0 5px;white-space:nowrap;overflow:hidden}
+.seg.ko{background:var(--gold)} .seg.gl{background:var(--blue)} .seg.clip{background:var(--green)}
+.seg.pend{background:repeating-linear-gradient(45deg,var(--red-soft) 0 5px,transparent 5px 10px);border:1px dashed var(--red);color:var(--red)}
+.axis{display:grid;grid-template-columns:160px 1fr;height:20px}
+.ticks{position:relative;font:10.5px var(--mono);color:var(--mute)}
+.ticks span{position:absolute;transform:translateX(-50%)}
+.today{position:absolute;top:20px;bottom:0;width:2px;background:var(--red)}
+.today::after{content:"11/13";position:absolute;top:-18px;left:4px;font:10.5px var(--mono);color:var(--red)}
+/* plan */
+.lanes{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-top:10px}
+.lane{border:1px solid var(--line);border-top:4px solid var(--gold);border-radius:8px;padding:12px 14px;font-size:13.5px;min-width:0}
+.lane.b{border-top-color:var(--blue)} .lane.c{border-top-color:var(--green)}
+.lane h3{margin:0 0 6px;font:800 16px/1.3 var(--display)}
+.lane ul{margin:0;padding-left:18px} .lane li{margin:4px 0}
+.steps{counter-reset:s;list-style:none;padding:0;margin:10px 0 0;display:grid;gap:8px}
+.steps li{counter-increment:s;display:grid;grid-template-columns:28px 1fr;gap:8px;font-size:14px}
+.steps li::before{content:counter(s);font:700 13px var(--mono);color:var(--bg);background:var(--ink);border-radius:50%;width:22px;height:22px;display:grid;place-items:center;margin-top:1px}
+.warn{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px;margin-top:10px;font-size:13.5px}
+.warn div{background:var(--red-soft);border-radius:8px;padding:10px 12px}
+.warn b{display:block;color:var(--red)}
+.ask{margin:10px 0 0;padding-left:20px;font-size:14px} .ask li{margin:5px 0}
+footer{color:var(--mute);font-size:12.5px;margin-top:20px}
+</style>
+
+<div class="wrap">
+  <h1>영상 언어·자막 지도</h1>
+  <p class="lede">가로 = 언어, 세로 = 영상. 칸 하나에 그 언어로 무엇이 있는지 보입니다. 위 단추로 <b>지금</b>과 <b>제안대로 했을 때</b>를 바꿔 보세요. 2026-11-13 기준, 글 원본은 motion/youtube/LANGUAGES.md.</p>
+
+  <section>
+    <h2>1. 영상 × 언어</h2>
+    <div class="sw" role="group" aria-label="보기"><button id="b-now" aria-pressed="true">지금</button><button id="b-plan" aria-pressed="false">제안대로 했을 때</button></div>
+    <div class="legend">
+      <span><i class="g" style="box-shadow:inset 0 0 0 2px var(--ink)"></i>화면에 그 언어 글자</span>
+      <span><i class="g"><i class="n"></i></i>해설(목소리)</span>
+      <span><i class="g"><i class="t"></i></i>자막 트랙</span>
+      <span><i class="g"><i class="t todo"></i></i>자막 — 번역이 더 필요</span>
+      <span><i class="g pend"></i>아직 안 올림</span>
+      <span><i class="g exp"></i>새 언어로 영상 추가</span>
+      <span><b style="color:var(--plus)">+</b> 제안으로 새로 생김</span>
+    </div>
+    <div class="mx"><table id="mx"></table></div>
+  </section>
+
+  <section>
+    <h2>2. 쇼츠 공개 일정</h2>
+    <p class="lede">하루 한 편씩 장면 순서대로. 빗금 = 아직 안 올림(지금 올리는 중).</p>
+    <div class="tl"><div class="tlin" id="tl"></div></div>
+  </section>
+
+  <section>
+    <h2>3. 제안 — 세 갈래로 나눠 관리</h2>
+    <div class="lanes">
+      <div class="lane"><h3>첫 영상 = 다국어로 계속 넓힘</h3><ul>
+        <li>사이트(214개 언어)처럼 틈날 때마다 언어를 하나씩 더함: 그 언어로 그린 14분 + 쇼츠 21편, 국제 채널.</li>
+        <li>해설은 따로 영상을 만들지 않고 그 언어 영상에 <b>음성 트랙</b>으로 붙임 — ElevenLabs가 되는 언어만.</li>
+        <li>번역 품질 관문(역번역 + 원어민 검수)은 사이트와 같음.</li></ul></div>
+      <div class="lane b"><h3>새 영상 = 지금 기준 그대로</h3><ul>
+        <li>두 벌: 한국어판 + 영어판. 둘 다 <b>세로(쇼츠)와 가로(TV)</b>를 만듦.</li>
+        <li>해설 음성 en · es · pt-BR, 반응 보고 늘림.</li>
+        <li>자막 27개 언어 + ko, 화면 위쪽.</li></ul></div>
+      <div class="lane c"><h3>자막 = 번역한 건 어디든 넣음</h3><ul>
+        <li>번역이 있으면 그 문장이 나오는 <b>모든 영상</b>(한국어 채널·국제 채널, 긴 영상·쇼츠)에 넣음.</li>
+        <li>자막은 화면 위쪽(.vtt) — 화면 글자와 안 겹침.</li>
+        <li>화면에 이미 그 언어 글자가 있는 쇼츠에는 같은 언어 자막은 넣지 않음(자막 켠 25%에게 두 번 보임).</li></ul></div>
+    </div>
+
+    <h2 style="margin-top:20px">걱정되는 점</h2>
+    <div class="warn">
+      <div><b>해설판은 문장이 다름</b>한국어 해설판(14분·쇼츠 7–21편)의 말은 화면 글자와 다른 문장입니다. 외국어 자막을 넣으려면 해설 원고를 따로 번역·검수해야 합니다(표의 빈 테두리 칸).</div>
+      <div><b>양이 많음</b>쇼츠 자막까지 다 넣으면 수천 트랙. API로는 하루 25개 정도(할당량), 스튜디오 도구로는 할당량 없이 되지만 시간이 듭니다 → 14분 먼저, 쇼츠는 언어 묶음 단위로.</div>
+      <div><b>우리 번역만</b>유튜브 자동 번역은 쓰지 않습니다. 첫 영상 19개 언어는 이미 검수된 번역이라 바로 쓸 수 있습니다.</div>
+    </div>
+
+    <h2 style="margin-top:20px">순서</h2>
+    <ol class="steps">
+      <li>미업로드 쇼츠 67편 올리기(진행 중) · 어긋난 문서 정리(진행 중)</li>
+      <li>국제 14분 19편에 나머지 18개 언어 + ko 자막 넣기 (한국어 음악판에 이미 있는 같은 파일, 시각도 같음)</li>
+      <li>쇼츠 자막: 한국어 1–6편, 국제 쇼츠에 다른 언어 자막(위쪽) — 언어 묶음별로 나눠서</li>
+      <li>한국어 해설판 해설 원고 번역(19개 언어) → 해설판 14분·쇼츠 7–21편 외국어 자막</li>
+      <li>첫 영상 새 언어 추가를 정기 작업으로 + ElevenLabs 언어는 음성 트랙</li>
+    </ol>
+
+    <h2 style="margin-top:20px">정하실 것</h2>
+    <ol class="ask">
+      <li>위 순서 2·3번으로 시작해도 될지</li>
+      <li>4번(해설 원고 번역)을 할지 — 번역·검수 비용이 큼</li>
+      <li>국제 영어 14분과 400년 짧은 쇼츠 1편의 자동 자막 지우기(되돌릴 수 없음)</li>
+      <li>첫 영상 새 언어는 어떤 순서로(사용자 수 순 / 쇼츠 반응 순)</li>
+    </ol>
+  </section>
+
+  <footer>그림의 정답은 motion/youtube/LANGUAGES.md와 uploaded.json입니다. 바뀌면 그 문서를 먼저 고치고 이 페이지(motion/youtube/languages-map.html)를 다시 올립니다.</footer>
+</div>
+
+<script>
+const FILM = ['en','es','pt-BR','fr','de','ru','id','zh-Hans','zh-Hant','ja','ar','hi','vi','th','tl','bn','sw','fa','ta'];
+const EXTRA = ['it','pl','tr','uz','ne','km','mn','my'];
+const COLS = ['ko', ...FILM, ...EXTRA, '+'];
+const CAP27 = ['en','es','pt-BR','de','fr','it','pl','ru','tr','zh-Hans','zh-Hant','ja','ar','fa','hi','bn','ta','id','vi','th','tl','sw','uz','ne','km','mn','my'];
+const W = {en:1,es:1,'pt-BR':1,id:2,fr:2,de:2,ru:2,'zh-Hans':3,'zh-Hant':3,ja:3,ar:3,hi:4,vi:4,th:4,tl:4};
+// cell spec: b = burned-in text, n = narration (1 has, 2 todo), t = caption track (1 has, 2 needs translation), p = pending upload, e = expansion, add = new in plan
+const rows = [
+  ['band','첫 영상 (14분 · 21장면)'],
+  ['한국어 해설판 14분', '한국어 채널 · wrEYqvOU1O8', L => L==='ko' ? {b:1,n:1,t:1} : null, L => L==='ko' ? {b:1,n:1,t:1} : FILM.includes(L) ? {t:2,add:1} : null],
+  ['한국어 음악판 14분', '한국어 채널 · 66VfBSXxAs8', L => L==='ko' ? {b:1,t:1} : FILM.includes(L) ? {t:1} : null, L => L==='ko' ? {b:1,t:1} : FILM.includes(L) ? {t:1} : null],
+  ['국제 14분 (언어마다 1편)', '국제 채널 · 19편, 음악', L => FILM.includes(L) ? {b:1,t:1} : null,
+    L => FILM.includes(L) ? {b:1,t:1,n:2,add:1} : L==='ko' ? {t:1,add:1} : L==='+' ? {e:1,add:1} : null],
+  ['한국어 쇼츠 1–6', '음악판', L => L==='ko' ? {b:1} : null, L => L==='ko' ? {b:1} : FILM.includes(L) ? {t:1,add:1} : null],
+  ['한국어 쇼츠 7–21', '한국어 해설판', L => L==='ko' ? {b:1,n:1,t:1} : null, L => L==='ko' ? {b:1,n:1,t:1} : FILM.includes(L) ? {t:2,add:1} : null],
+  ['국제 쇼츠 21편 (언어마다)', '국제 채널 · 음악 · 물결로 공개', L => W[L] ? (['vi','th','tl'].includes(L) ? {p:1} : {b:1}) : null,
+    L => W[L] ? {b:1,t:1,add:1} : (FILM.includes(L) || L==='ko') ? {t:1,add:1} : L==='+' ? {e:1,add:1} : null],
+  ['band','「침묵의 400년」 (3분)'],
+  ['한국어판 가로·쇼츠', '한국어 채널 · 한국어 해설', L => L==='ko' ? {b:1,n:1,t:1} : CAP27.includes(L) ? {t:1} : null, null],
+  ['영어판 가로·쇼츠', '국제 채널 · 영어 해설 + 음성 트랙', L => L==='en' ? {b:1,n:1,t:1} : ['es','pt-BR'].includes(L) ? {n:1,t:1} : CAP27.includes(L) ? {t:1} : null, null],
+  ['band','새 영상 (「그리스도」부터 — 정책)'],
+  ['한국어판 세로·가로', '한국어 채널 · 인스타 · 스레드', L => L==='ko' ? {b:1,n:1,t:1} : CAP27.includes(L) ? {t:1} : null, null],
+  ['영어판 세로·가로', '국제 채널', L => L==='en' ? {b:1,n:1,t:1} : ['es','pt-BR'].includes(L) ? {n:1,t:1} : CAP27.includes(L) ? {t:1} : null, null],
+];
+function glyph(s){ if(!s) return ''; if(s.e) return '<i class="g exp'+(s.add?' new':'')+'" title="새 언어로 영상 추가"></i>';
+  if(s.p) return '<i class="g pend" title="아직 안 올림"></i>';
+  return '<i class="g'+(s.b?' burn':'')+(s.add?' new':'')+'">'+(s.n?'<i class="n'+(s.n===2?' todo':'')+'"></i>':'')+(s.t?'<i class="t'+(s.t===2?' todo':'')+'"></i>':'')+'</i>'; }
+function draw(plan){
+  const grpStart = c => c==='en' || c==='it' || c==='+';
+  let h = '<thead><tr><th></th>' + COLS.map(c => '<th class="'+(grpStart(c)?'grp':'')+'"><span>'+(c==='+'?'+ 사이트 언어':c)+'</span></th>').join('') + '<th></th></tr></thead><tbody>';
+  for (const r of rows) {
+    if (r[0]==='band') { h += '<tr class="band"><th>'+r[1]+'</th>'+COLS.map(c=>'<td class="'+(grpStart(c)?'grp':'')+'"></td>').join('')+'<td></td></tr>'; continue; }
+    const f = plan && r[3] ? r[3] : r[2]; let n = 0;
+    const cells = COLS.map(c => { const s = f(c); if (s && (s.t===1||s.b||s.n===1)) n++; return '<td class="c'+(grpStart(c)?' grp':'')+'">'+glyph(s)+'</td>'; }).join('');
+    h += '<tr><th>'+r[0]+'<small>'+r[1]+'</small></th>'+cells+'<td class="cnt">'+n+'개 언어</td></tr>';
+  }
+  document.getElementById('mx').innerHTML = h + '</tbody>';
+  document.getElementById('b-now').setAttribute('aria-pressed', !plan); document.getElementById('b-plan').setAttribute('aria-pressed', !!plan);
+}
+document.getElementById('b-now').onclick = () => draw(false);
+document.getElementById('b-plan').onclick = () => draw(true);
+draw(false);
+// timeline
+(function(){
+  const start = new Date('2026-10-24'), end = new Date('2026-12-12'), span = (end - start) / 864e5;
+  const x = d => ((new Date('2026-' + d) - start) / 864e5 / span * 100);
+  const rowsT = [
+    ['한국어 첫 영상 쇼츠', '19:00 · 주일 건너뜀', [['10-24','11-17','ko','1–21편']]],
+    ['한국어 400년 짧은 쇼츠', '19:00', [['11-17','11-20','clip','3편']]],
+    ['① en · es · pt-BR', '06–10시 KST', [['10-24','11-14','gl','21편']]],
+    ['② id · fr · de · ru', '현지 19:00', [['10-31','11-21','gl','21편']]],
+    ['③ zh-Hans · zh-Hant · ja · ar', '현지 19:00', [['11-14','12-05','gl','21편']]],
+    ['④ hi', '현지 19:00', [['11-21','12-08','gl','1–17'], ['12-08','12-12','pend','18–21']]],
+    ['④ vi · th · tl', '현지 19:00', [['11-21','12-12','pend','올리는 중']]],
+  ];
+  const el = document.getElementById('tl');
+  const ax = document.createElement('div'); ax.className = 'axis';
+  const tk = document.createElement('div'); tk.className = 'ticks';
+  ['10-24','11-01','11-08','11-15','11-22','11-29','12-06'].forEach(d => { const s = document.createElement('span'); s.style.left = x(d) + '%'; s.textContent = d.replace('-', '/').replace(/^0/, ''); tk.appendChild(s); });
+  ax.append(document.createElement('div'), tk); el.appendChild(ax);
+  for (const [lab, sub, segs] of rowsT) {
+    const r = document.createElement('div'); r.className = 'trow';
+    const l = document.createElement('div'); l.className = 'lab'; l.innerHTML = lab + '<small>' + sub + '</small>';
+    const t = document.createElement('div'); t.className = 'track';
+    for (const [a, b, k, txt] of segs) { const s = document.createElement('div'); s.className = 'seg ' + k; s.style.left = x(a) + '%'; s.style.width = (x(b) - x(a)) + '%'; s.textContent = txt; t.appendChild(s); }
+    r.append(l, t); el.appendChild(r);
+  }
+  const today = document.createElement('div'); today.className = 'today';
+  today.style.left = 'calc(160px + (100% - 160px) * ' + (x('11-13') / 100) + ')'; el.appendChild(today);
+})();
+</script>

@@ -117,7 +117,7 @@ render-film → Run workflow(작업 브랜치 선택)에서 언어와 단계(`sh
 | 영상 (언어별 가로 전체 + 쇼츠 21개) | **GitHub 릴리즈 `youtube-v1`** — `film-<lang>.mp4`, `shorts-<lang>-NN-<scene>.mp4` | `node motion/film-lang.mjs ci <lang> --steps "h v release"` (예전 실행의 아티팩트를 옮기려면 Actions → **publish-release**에 run id) |
 | 업로드 시트 (언어별 제목·설명+챕터·태그·썸네일·자막 경로, 영상+쇼츠 21개, 쇼츠 제목 = 장면 속 문장 훅) | `motion/youtube/manifest.json` (읽기용 `manifest.md`, `shorts-titles.md`) | `node motion/youtube/manifest.mjs` — 영상 번역(`_ui`, 장면 문장)·장면 타이밍·`motion/youtube/lang/<code>.json`에서 만듦 |
 | 썸네일 (언어별 4안 + 생성기) | `motion/youtube/thumbs/<lang>/{A-exodus,B-cross,C-split,D-earth}.jpg` | `python3 motion/youtube/thumbs/make.py [lang…]` 또는 `ci … --steps kit` (문구·글꼴은 `motion/youtube/lang/<code>.json`의 `thumb`) |
-| 자막 (언어별 전체 영상 + 쇼츠별 SRT) | `motion/subs/<lang>/film-h.srt`, `motion/subs/<lang>/{h,v}/NN-<scene>.srt` | `node motion/subtitles.mjs srt <lang> h` (타임라인은 `motion/subs/timeline-<h\|v>.json`, 장면 타이밍이 바뀐 뒤에만 `scan`) |
+| 자막 (언어별 전체 영상 + 쇼츠별 SRT — 쇼츠 SRT는 만들어만 두고 올리지 않음, 아래) | `motion/subs/<lang>/film-h.srt`, `motion/subs/<lang>/{h,v}/NN-<scene>.srt` | `node motion/subtitles.mjs srt <lang> h` (타임라인은 `motion/subs/timeline-<h\|v>.json`, 장면 타이밍이 바뀐 뒤에만 `scan`) |
 | 소리 | 원본 클립 `motion/pilot/audio/*.mp3`(git) + 큐 `pilot/<scene>.sound.json` → 믹스 `pilot/<scene>.wav` | `python3 motion/pilot/mix.py` (wav가 없으면 assemble은 사이트의 `film/s/<scene>.m4a`를 씀 — CI가 만든 영상이 그것) |
 
 ```
@@ -135,7 +135,11 @@ curl -LO https://github.com/jungrok5/one-scroll-bible/releases/download/youtube-
   그 유튜브 영상으로 간다(없는 언어는 `/film/?lang=`). 비공개 id는 넣지 않는다('비공개 동영상'이 뜸).
 - 쇼츠 썸네일: 이 21편을 올릴 때(2026-10)는 영상 프레임 중에서만 골랐습니다. 2026-07부터 유튜브가 쇼츠에도 직접 만든 썸네일 업로드를
   열고 있으나(데스크톱 스튜디오, 파트너 프로그램 채널부터 차례로, 쇼츠는 A/B 테스트 없음, 9:16 1080×1920 권장) 우리 채널에 버튼이 있는지는
-  스튜디오에서 확인해야 합니다. 썸네일은 피드에서 넘길 때가 아니라 채널 쇼츠 탭·검색·관련 영상에서 보입니다. 자막은 쇼츠별 SRT(`v/NN-*.srt`)를 올립니다.
+  스튜디오에서 확인해야 합니다. 썸네일은 피드에서 넘길 때가 아니라 채널 쇼츠 탭·검색·관련 영상에서 보입니다.
+- **쇼츠 자막(2026-11-13 현재)**: 첫 영상 쇼츠에는 자막 트랙을 올리지 않았다 — 쇼츠별 SRT(`v/NN-*.srt`)는 만들어 두었지만 한국어 음악판 1~6편과
+  외국어 쇼츠(1~4물결)에는 트랙이 없다(API 11/12 확인: 한국어 1편, 스페인어 6편). 예외는 한국어 해설 쇼츠 7~21편(위쪽 한국어 자막
+  `narration/shorts/NN.vtt`)과 「침묵의 400년」 쇼츠(ko + 27개, 위쪽). 쇼츠에 자막을 넓힐지는 **관리자 결정 대기(2026-11-13)**.
+  현황표는 `motion/youtube/LANGUAGES.md` 3절.
 
 ## 유튜브에 올리기 — 스튜디오 도우미 (6단계 다음)
 브라우저(Claude in Chrome 등)로 채널 **@one-scroll-bible**에 로그인한 스튜디오/시청 페이지에 붙여 넣어 쓰는 도우미들입니다. API 키는 쓰지
@@ -158,7 +162,7 @@ curl -LO https://github.com/jungrok5/one-scroll-bible/releases/download/youtube-
 | 12 | 자막 여러 언어(할당량 없이) | 스튜디오 `…/video/<id>/translations`에 `motion/youtube/studio-caption.js`를 넣고(10번과 같은 방법) `__osbCaptions([[lang, '로컬 서버 경로'], …])` — 시작만 하고 결과(`window.__osbCapResult`)는 다음 호출에서 기다린다 | 브라우저 도구의 자바스크립트 호출은 45초에 끊긴다(한 언어 약 15초). 이미 게시된 언어는 건너뛴다 — **고친 파일로 바꾸려면** API `caption-file … --replace`(450점) |
 | 13 | 공개 전환 · 영상 삭제 | `yt-api.mjs privacy public <id…>` · `yt-api.mjs delete <id…>`(먼저 목록만 보여 주고 `--yes`로 지움) | 둘 다 관리자 OK가 있어야 한다. 삭제는 되돌릴 수 없다 |
 | 14 | 스튜디오 채널 바꾸기 · 영상 고르기 | 채널: `studio.youtube.com/channel/<채널 id>`로 가면 그 채널로 바뀐다(국제 UCOI5LbYpQGgHkcbMEStvnlw, 한국어 UCtCcbrM2mCgfhSryo4SWxzg) — 일이 끝나면 한국어 채널로 되돌린다. 최종 화면의 '특정 동영상 선택'에서 '내 동영상 검색'이 아무것도 못 찾으면 **'다른 채널의 동영상 검색' 칸에 영상 주소**를 넣으면 나온다 | 2026-11-01 국제 채널은 '내 동영상 검색'이 영상을 하나도 못 찾았다(색인 지연). 쇼츠 '관련 동영상' 창에는 주소 칸이 없어 기다려야 한다. 이 화면들은 글자 입력(type)이 안 먹을 때가 있다 — `input.value` + `input` 이벤트로 넣는다 |
-| 9 | 자막(검색용) | `node motion/youtube/yt-api.mjs captions [<code>…]` (YouTube Data API) | 영상에 말소리가 없어 자동 자막이 없고, 화면에 박힌 글자는 검색이 못 읽음 → 그 언어 `film-h.srt`를 그 언어 영상에. 스튜디오 화면의 수동 업로드는 스크립트로 넣은 파일을 거부함(2026-10-23) |
+| 9 | 자막(검색용) | `node motion/youtube/yt-api.mjs captions [<code>…]` (YouTube Data API) | 화면에 박힌 글자는 검색이 못 읽음 → 그 언어 `film-h.srt`를 그 언어 영상에. 말소리가 없는 음악판에도 자동 자막이 생길 수 있다(국제 영어 14분 MFH3Hj4V6KA에 en(auto), API 11/12 — 지울지는 관리자 확인 대기, `LANGUAGES.md` 7절 1). 올린 뒤 11단계(`asr-off`) 대상인지 본다. 스튜디오 화면의 수동 업로드는 스크립트로 넣은 파일을 거부함(2026-10-23) |
 
 **YouTube Data API (한 번만)**: Google Cloud 프로젝트 **`one-scroll-bible`**(jungrok5 계정, 2026-10-23 생성 — YouTube Data API v3·
 YouTube Analytics API 사용, OAuth 앱 "one-scroll-bible tools" 외부·**프로덕션**(테스트 중이면 인증이 7일마다 만료), 홈페이지·
@@ -189,8 +193,11 @@ YouTube Analytics API 사용, OAuth 앱 "one-scroll-bible tools" 외부·**프�
   Business Suite → 콘텐츠 → 예약됨 → 행의 ⋯ → Manage post → Reschedule post, 스레드는 만들기 → 임시 저장본 → 글의 ⋯ → 일정 수정 → 날짜 → 업데이트.
 - **A/B 결과**: 2주 뒤 이긴 썸네일 그림을 다음 물결부터 기본(A)으로.
 - **순서**: 화자 수 × 유튜브 사용률 × 기독교 인구로 정하되, 원어민 검토 통과가 먼저.
-- **일정(10-23 기준)**: 1물결 ko·en·es·pt-BR 쇼츠 10-24~11-13 · 2물결 id·fr·de·ru ≈10-31 · 3물결 zh-Hans·zh-Hant·ja·ar ≈11-14 ·
-  4물결 hi·vi·th·tl ≈11-21 (가로 영상은 16개 모두 공개됨). 실제 시작일은 `uploaded.json`의 `shorts.<code>.first_day`.
+- **일정(2026-11-13 기준, 처음 계획은 10-23)**: 1물결 ko·en·es·pt-BR 10-24 시작 — en·es·pt-BR은 11-13에 끝, **한국어는 주일
+  건너뛰기로 11-16에 끝**(9 = 11/2 … 21 = 11/16, `shorts.ko.dates`) · 2물결 id·fr·de·ru 10-31 → 11-20(84편 예약) · 3물결 zh-Hans·zh-Hant·ja·ar
+  11-14 → 12-04(84편 예약, 재생목록·관련 영상은 기록이 엇갈림) · 4물결 hi·vi·th·tl 11-21 → 12-11(11/12 확인 때 hi 1~17편만 예약 — 나머지는
+  하루 업로드 한도로 밀림, 진행은 `global.shorts.<L>.ids`·`global.wave4_pending`) · bn·sw·fa·ta는 14분 영상만 있고 쇼츠 물결에 없음. 14분 가로 영상은 19개 언어 모두 공개됨.
+  실제 시작일·시각은 `uploaded.json`의 `global.shorts.<code>.first_day`(한국어는 `shorts.ko.dates`), 현황은 `motion/youtube/LANGUAGES.md` 2절.
 
 ### 브라우저와 API 나눠 쓰기 (2026-10-30 확정)
 API 심사는 보류(`youtube/API-AUDIT.md`)라서 기본 할당량(하루 10,000점)만 쓴다. 초기화는 미국 태평양 자정 =

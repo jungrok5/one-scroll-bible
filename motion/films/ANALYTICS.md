@@ -14,7 +14,8 @@
 |---|---|---|
 | 14분 해설판(가로) | wrEYqvOU1O8 | 2026-10-29 |
 | 14분 음악판(가로) | 66VfBSXxAs8 | 2026-10-20 |
-| 한국어 쇼츠 1~21 | `motion/youtube/uploaded.json` `shorts.ko` | 10-24 ~ 11-13 매일 19:00 |
+| 한국어 쇼츠 1~21 (7~21 해설판) | `motion/youtube/uploaded.json` `shorts.ko` | 10-24 ~ 11-16 매일 19:00, 주일(11/1·11/8·11/15) 건너뜀 (`shorts.ko.dates`) |
+| 침묵의 400년 짧은 쇼츠 3편 | Gs5UC6xfE20 · gDXUB9kxUTo · 8FMHpO6-Umo (`silence400/review.json` `clips`) | 11-17 · 11-18 · 11-19 19:00 예약 |
 | 침묵의 400년 가로 | BWzpW2MVkCI | 2026-10-31 20:30 |
 | 침묵의 400년 세로(쇼츠) | smt-UIB_qss | 2026-10-31 20:30 |
 | 침묵의 400년 국제판 가로 · 쇼츠 (국제 채널) | oYKz_HHI8yw · cbg5Z5xg65I | 2026-11-01 21:42 |

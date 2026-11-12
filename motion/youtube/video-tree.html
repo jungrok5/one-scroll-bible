@@ -1,0 +1,173 @@
+<title>영상 계보</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@800&family=Noto+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a pan/zoom canvas holding one left-to-right tree — root → each film → version → channel/format → languages, captions, audio.
+   Plans are dashed. Source: motion/youtube/LANGUAGES.md (repo copy of this page: motion/youtube/video-tree.html). */
+:root{
+  --bg:#f4f1ea; --grid:#e6e0d4; --panel:#fffdf8; --ink:#1f1c17; --mute:#6c655a; --line:#cfc6b5;
+  --done:#3d7a4f; --done-soft:#e1f0e5; --sched:#2f63a0; --sched-soft:#dde7f3; --run:#b8661c; --run-soft:#f7e6d2;
+  --plan:#7b6aa8; --plan-soft:#ece7f6; --ask:#b0472f; --gold:#b07a1e;
+  --display:"Nanum Myeongjo","Noto Serif KR",serif; --body:"Noto Sans KR",system-ui,sans-serif; --mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#13110e; --grid:#1f1c18; --panel:#1d1a16; --ink:#efe8dc; --mute:#a59c8e; --line:#4a4236;
+  --done:#86c79a; --done-soft:#1c2e22; --sched:#8db6e0; --sched-soft:#1b2836; --run:#f0a65e; --run-soft:#3a2816;
+  --plan:#b9a8e8; --plan-soft:#2a2438; --ask:#e59880; --gold:#e0b45e; color-scheme:dark } }
+:root[data-theme="dark"]{
+  --bg:#13110e; --grid:#1f1c18; --panel:#1d1a16; --ink:#efe8dc; --mute:#a59c8e; --line:#4a4236;
+  --done:#86c79a; --done-soft:#1c2e22; --sched:#8db6e0; --sched-soft:#1b2836; --run:#f0a65e; --run-soft:#3a2816;
+  --plan:#b9a8e8; --plan-soft:#2a2438; --ask:#e59880; --gold:#e0b45e; color-scheme:dark }
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:13px/1.45 var(--body);overflow:hidden}
+#stage{position:fixed;inset:0;cursor:grab;touch-action:none;
+  background-image:radial-gradient(var(--grid) 1.2px,transparent 1.2px);background-size:24px 24px}
+#stage.drag{cursor:grabbing}
+#world{position:absolute;left:0;top:0;transform-origin:0 0}
+svg#edges{position:absolute;left:0;top:0;overflow:visible;pointer-events:none}
+svg#edges path{fill:none;stroke:var(--line);stroke-width:1.6}
+svg#edges path.plan{stroke:var(--plan);stroke-dasharray:6 5}
+.node{position:absolute;width:250px;background:var(--panel);border:1.5px solid var(--line);border-radius:9px;padding:8px 10px 9px;box-shadow:0 1px 0 rgba(0,0,0,.04)}
+.node .h{font-weight:700;font-size:13.5px;line-height:1.3}
+.node .d{color:var(--mute);font-size:12px;margin-top:2px}
+.node .id{font:500 11px var(--mono);color:var(--mute)}
+.node .chips{display:flex;flex-wrap:wrap;gap:4px;margin-top:5px}
+.chip{font-size:11px;padding:0 7px;border-radius:999px;background:var(--bg);color:var(--mute);white-space:nowrap}
+.node.k-root{width:230px;background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.node.k-root .h{font:800 18px/1.3 var(--display)} .node.k-root .d{color:var(--bg);opacity:.75}
+.node.k-film{border-width:2px;border-color:var(--gold)} .node.k-film .h{font:800 16px/1.3 var(--display)}
+.node.s-done{border-left:5px solid var(--done)}
+.node.s-sched{border-left:5px solid var(--sched)}
+.node.s-run{border-left:5px solid var(--run);background:linear-gradient(90deg,var(--run-soft),var(--panel) 60%)}
+.node.s-plan{border-style:dashed;border-color:var(--plan);background:var(--plan-soft)}
+.badge{display:inline-block;font-size:10.5px;font-weight:700;padding:0 6px;border-radius:4px;margin-right:4px;vertical-align:1px}
+.b-done{background:var(--done-soft);color:var(--done)} .b-sched{background:var(--sched-soft);color:var(--sched)}
+.b-run{background:var(--run-soft);color:var(--run)} .b-plan{background:var(--panel);color:var(--plan)} .b-ask{background:var(--ask);color:var(--panel)}
+.fold{position:absolute;right:-11px;top:50%;margin-top:-10px;width:20px;height:20px;border-radius:50%;border:1.5px solid var(--line);background:var(--panel);color:var(--mute);font:700 12px/16px var(--mono);text-align:center;cursor:pointer;padding:0}
+.fold:focus-visible{outline:2px solid var(--sched)}
+/* chrome */
+.top{position:fixed;left:0;right:0;top:env(safe-area-inset-top,0px);display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;
+  padding:10px max(16px,env(safe-area-inset-right,0px)) 10px max(16px,env(safe-area-inset-left,0px));background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(6px);border-bottom:1px solid var(--line);z-index:5}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.top h1{margin:0;font:800 20px/1.2 var(--display)}
+.top .legend{display:flex;flex-wrap:wrap;gap:6px 12px;font-size:12px;color:var(--mute)}
+.top .legend span{display:inline-flex;align-items:center;gap:4px}
+.sw{width:14px;height:10px;border-radius:2px;display:inline-block}
+.zoom{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));display:flex;gap:6px;z-index:5}
+.zoom button{width:40px;height:40px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--ink);font:700 18px var(--body);cursor:pointer}
+.zoom button.wide{width:auto;padding:0 12px;font-size:13px}
+.zoom button:focus-visible{outline:2px solid var(--sched)}
+.hint{position:fixed;left:max(16px,env(safe-area-inset-left,0px));bottom:calc(18px + env(safe-area-inset-bottom,0px));font-size:12px;color:var(--mute);z-index:5;max-width:60vw}
+@media (max-width:600px){ .top .legend{display:none} .hint{display:none} }
+</style>
+
+<div id="stage"><div id="world"><svg id="edges"></svg></div></div>
+<div class="top">
+  <h1>영상 계보</h1>
+  <div class="legend">
+    <span><i class="sw" style="background:var(--done)"></i>공개됨</span>
+    <span><i class="sw" style="background:var(--sched)"></i>예약됨</span>
+    <span><i class="sw" style="background:var(--run)"></i>진행 중</span>
+    <span><i class="sw" style="background:var(--plan-soft);outline:1.5px dashed var(--plan)"></i>계획</span>
+    <span><span class="badge b-ask">정할 것</span>관리자 결정</span>
+  </div>
+</div>
+<div class="hint">드래그로 이동 · 휠/두 손가락으로 확대 · 원(−/+) 눌러 접기. 2026-11-13 기준, 글 원본 motion/youtube/LANGUAGES.md</div>
+<div class="zoom"><button id="zo" aria-label="축소">−</button><button id="zi" aria-label="확대">+</button><button id="zf" class="wide">전체 보기</button></div>
+
+<script>
+// s: done | sched | run | plan ; ask: decision needed ; k: root | film
+const T = {h:'한눈에 보는 성경 이야기', d:'모든 영상의 뿌리', k:'root', c:[
+  {h:'첫 영상 · 14분 · 21장면', d:'성경 전체를 압축 — 다국어로 계속 넓힘', k:'film', c:[
+    {h:'한국어', d:'한국어 채널 @one-scroll-bible', s:'done', c:[
+      {h:'14분 해설판', id:'wrEYqvOU1O8', d:'한국어 AI 해설 · 10/29', chips:['ko 자막 · 위쪽','자동 자막 지움'], s:'done', c:[
+        {h:'19개 언어 자막', d:'해설 원고는 화면 글자와 다른 문장 → 원고 번역·검수가 먼저 필요', s:'plan', ask:1}]},
+      {h:'14분 음악판', id:'66VfBSXxAs8', d:'음악 · 화면 글자 한국어', chips:['ko + 19개 언어 자막 · 아래쪽'], s:'done'},
+      {h:'쇼츠 1–6편', d:'음악판 · 10/24–10/29 19:00', chips:['자막 트랙 없음'], s:'done', c:[
+        {h:'19개 언어 자막 넣기', d:'장면별 번역 파일 있음 · 위쪽 · 한국어는 화면 글자와 겹쳐 빼기', s:'plan'}]},
+      {h:'쇼츠 7–21편', d:'한국어 해설판 · 매일 19:00, 주일 건너뜀 → 11/16 끝', chips:['ko 자막 · 위쪽'], s:'sched', c:[
+        {h:'외국어 자막', d:'해설 원고 번역 뒤', s:'plan', ask:1}]},
+      {h:'인스타 릴스 · 스레드', d:'같은 21편 · 같은 시각 · 한국어만', s:'sched'}]},
+    {h:'국제', d:'국제 채널 @bibleinonescroll · 언어마다 따로 그린 영상', s:'done', c:[
+      {h:'14분 · 19개 언어', d:'en es pt-BR fr de ru id zh-Hans zh-Hant ja ar hi vi th tl bn sw fa ta', chips:['음악','그 언어 자막 1개 · 아래쪽'], s:'done', c:[
+        {h:'나머지 18개 언어 + ko 자막', d:'한국어 음악판에 넣은 같은 파일 · 시각 같음', s:'plan', ask:1},
+        {h:'해설 음성 트랙', d:'그 언어 영상에 음성으로 추가 · ElevenLabs 되는 언어만', s:'plan'},
+        {h:'en 자동 자막 지우기', d:'MFH3Hj4V6KA · 되돌릴 수 없음', s:'plan', ask:1}]},
+      {h:'쇼츠 21편 · 15개 언어', d:'음악 · 4개 언어씩 물결 · 현지 저녁', chips:['자막 트랙 없음'], s:'sched', c:[
+        {h:'① en · es · pt-BR', d:'10/24 → 11/13', s:'done'},
+        {h:'② id · fr · de · ru', d:'10/31 → 11/20', s:'sched'},
+        {h:'③ zh-Hans · zh-Hant · ja · ar', d:'11/14 → 12/04 예약', s:'sched'},
+        {h:'④ hi · vi · th · tl', d:'11/21 → 12/11 · hi 18–21, vi·th·tl 67편 올리는 중', s:'run'},
+        {h:'bn · sw · fa · ta', d:'14분만 있음 · 쇼츠 계획 없음', s:'plan', ask:1},
+        {h:'다른 언어 자막 넣기', d:'언어 묶음별로 나눠서 · 위쪽', s:'plan'}]},
+      {h:'새 언어 추가', d:'사이트 214개 언어 중 · 언어마다 14분 + 쇼츠 21 · 번역 관문 통과한 것만', s:'plan', ask:1}]}]},
+  {h:'「침묵의 400년」 · 3분', d:'새 방식 첫 영상 — 두 벌 + 트랙', k:'film', c:[
+    {h:'한국어판', d:'한국어 해설 · 한국어 채널', s:'done', c:[
+      {h:'가로', id:'BWzpW2MVkCI', d:'10/31 20:30', chips:['ko + 27개 자막 · 위쪽'], s:'done'},
+      {h:'쇼츠', id:'smt-UIB_qss', d:'10/31 20:30', chips:['ko + 27개 자막 · 위쪽'], s:'done'},
+      {h:'짧은 쇼츠 3편', d:'11/17 · 11/18 · 11/19 19:00', chips:['1편 자동 자막 남음'], s:'sched'},
+      {h:'인스타 릴스 · 스레드', d:'10/31 · 짧은 쇼츠도 예약', s:'done'}]},
+    {h:'영어판', d:'국제 채널 · 화면 글자 ESV', s:'done', c:[
+      {h:'가로', id:'oYKz_HHI8yw', d:'11/1 21:42', chips:['음성 en · es · pt-BR','27개 자막 · 위쪽'], s:'done'},
+      {h:'쇼츠', id:'cbg5Z5xg65I', d:'11/1 21:42', chips:['음성 en · es · pt-BR','27개 자막'], s:'done'}]}]},
+  {h:'「그리스도」', d:'제작 중 — 그림 단계(8차 렌더) · 공개일 정할 것', k:'film', s:'run', c:[
+    {h:'한국어판', d:'한국어 해설 · 개역개정', s:'plan', c:[
+      {h:'세로 (쇼츠)', d:'메인', chips:['ko + 27개 자막 · 위쪽'], s:'plan'},
+      {h:'가로 (TV)', d:'같은 완성도', chips:['ko + 27개 자막 · 위쪽'], s:'plan'},
+      {h:'짧은 쇼츠 2편 이상', d:'20–60초', s:'plan'},
+      {h:'인스타 · 스레드', d:'주일 공개 안 함', s:'plan'}]},
+    {h:'영어판', d:'국제 채널 · ESV', s:'plan', c:[
+      {h:'세로 · 가로', d:'영어 해설 + 음성 es · pt-BR', chips:['27개 자막 · 위쪽'], s:'plan'}]}]},
+  {h:'「만나」 · 그다음 영상들', d:'주제만 고름 — 같은 틀(두 벌 · 세로+가로 · 27개 자막)', k:'film', s:'plan'}]};
+
+const world = document.getElementById('world'), svg = document.getElementById('edges');
+const GX = 70, GY = 14;
+let id = 0; (function tag(n, p){ n.id = id++; n.p = p; n.open = true; (n.c||[]).forEach(c => tag(c, n)); })(T, null);
+function el(n){
+  const d = document.createElement('div'); d.className = 'node' + (n.k ? ' k-'+n.k : '') + (n.s ? ' s-'+n.s : '');
+  const badge = n.s && !n.k ? '<span class="badge b-'+n.s+'">'+{done:'공개',sched:'예약',run:'진행 중',plan:'계획'}[n.s]+'</span>' : '';
+  d.innerHTML = '<div class="h">'+badge+(n.ask?'<span class="badge b-ask">정할 것</span>':'')+n.h+'</div>'+(n.id?'<div class="id">'+n.id+'</div>':'')+(n.d?'<div class="d">'+n.d+'</div>':'')
+    +(n.chips?'<div class="chips">'+n.chips.map(c=>'<span class="chip">'+c+'</span>').join('')+'</div>':'');
+  if (n.c && n.c.length) { const b = document.createElement('button'); b.className = 'fold'; b.type = 'button';
+    b.onpointerdown = e => e.stopPropagation(); b.onclick = e => { e.stopPropagation(); n.open = !n.open; layout(); }; d.appendChild(b); n.btn = b; }
+  world.appendChild(d); n.el = d; (n.c||[]).forEach(el);
+}
+el(T);
+function layout(){
+  let y = 0; const W = n => n.el.offsetWidth, H = n => n.el.offsetHeight;
+  const vis = []; (function walk(n, depth, x){ n.x = x; vis.push(n); n.el.hidden = false;
+    const kids = n.open ? (n.c||[]) : [];
+    if (n.btn) n.btn.textContent = n.open ? '−' : '+';
+    (n.c||[]).forEach(c => hide(c, !n.open));
+    if (!kids.length) { n.y = y; y += H(n) + GY; return; }
+    kids.forEach(c => walk(c, depth+1, x + W(n) + GX));
+    const a = kids[0], b = kids[kids.length-1]; n.y = (a.y + H(a)/2 + b.y + H(b)/2)/2 - H(n)/2;
+    if (n.y + H(n) + GY > y) y = n.y + H(n) + GY; })(T, 0, 0);
+  function hide(n, h){ if (h) { n.el.hidden = true; (n.c||[]).forEach(c => hide(c, true)); } }
+  let maxX = 0, maxY = 0, paths = '';
+  for (const n of vis) { n.el.style.left = n.x+'px'; n.el.style.top = n.y+'px'; maxX = Math.max(maxX, n.x + W(n)); maxY = Math.max(maxY, n.y + H(n));
+    if (n.p) { const p = n.p, x1 = p.x + W(p), y1 = p.y + H(p)/2, x2 = n.x, y2 = n.y + H(n)/2, mx = (x1 + x2)/2;
+      paths += '<path class="'+(n.s==='plan'?'plan':'')+'" d="M'+x1+' '+y1+' C'+mx+' '+y1+' '+mx+' '+y2+' '+x2+' '+y2+'"/>'; } }
+  svg.setAttribute('width', maxX); svg.setAttribute('height', maxY); svg.innerHTML = paths; world.size = [maxX, maxY];
+}
+layout();
+// pan / zoom
+const stage = document.getElementById('stage'); let s = 1, tx = 0, ty = 0;
+const apply = () => world.style.transform = 'translate('+tx+'px,'+ty+'px) scale('+s+')';
+function zoomAt(f, cx, cy){ const ns = Math.min(2.5, Math.max(0.15, s * f)); tx = cx - (cx - tx) * ns / s; ty = cy - (cy - ty) * ns / s; s = ns; apply(); }
+function fit(){ const [w, h] = world.size, top = document.querySelector('.top').offsetHeight + 16, vw = innerWidth - 32, vh = innerHeight - top - 70;
+  s = Math.min(1, vw / w, vh / h); tx = 16 + (vw - w * s) / 2; ty = top; apply(); }
+stage.addEventListener('wheel', e => { e.preventDefault(); zoomAt(Math.exp(-e.deltaY * 0.0015), e.clientX, e.clientY); }, { passive: false });
+const pts = new Map(); let last = null, pinch = null;
+stage.addEventListener('pointerdown', e => { stage.setPointerCapture(e.pointerId); pts.set(e.pointerId, [e.clientX, e.clientY]); stage.classList.add('drag');
+  if (pts.size === 2) { const [a, b] = [...pts.values()]; pinch = Math.hypot(a[0]-b[0], a[1]-b[1]); } else last = [e.clientX, e.clientY]; });
+stage.addEventListener('pointermove', e => { if (!pts.has(e.pointerId)) return; pts.set(e.pointerId, [e.clientX, e.clientY]);
+  if (pts.size === 2 && pinch) { const [a, b] = [...pts.values()], d = Math.hypot(a[0]-b[0], a[1]-b[1]); zoomAt(d / pinch, (a[0]+b[0])/2, (a[1]+b[1])/2); pinch = d; }
+  else if (last) { tx += e.clientX - last[0]; ty += e.clientY - last[1]; last = [e.clientX, e.clientY]; apply(); } });
+const up = e => { pts.delete(e.pointerId); if (pts.size < 2) pinch = null; last = pts.size === 1 ? [...pts.values()][0] : null; if (!pts.size) stage.classList.remove('drag'); };
+stage.addEventListener('pointerup', up); stage.addEventListener('pointercancel', up);
+document.getElementById('zi').onclick = () => zoomAt(1.25, innerWidth/2, innerHeight/2);
+document.getElementById('zo').onclick = () => zoomAt(0.8, innerWidth/2, innerHeight/2);
+document.getElementById('zf').onclick = fit;
+document.fonts && document.fonts.ready.then(() => { layout(); fit(); }); fit();
+</script>

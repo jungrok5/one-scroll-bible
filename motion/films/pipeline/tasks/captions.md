@@ -1,3 +1,3 @@
 # 11. 외국어 자막 27개 — {film}
 README 4절 8·9: 번역 → 원문 대조 → 원어민 검수 → MED 고치면 재검수 → .vtt 눈 확인 → 업로드. HIGH/MED 남으면 그 언어는 올리지 않는다(번역 품질 관문).
-목록은 `pipeline/targets.json` captions.langs. 기록: 한국어판 uploaded.json `{film}.captions`, 국제판 `global.films.{film}.h|v.captions`(국제판 자막 = 영어 해설 시각, `captions-on-ko.mjs {film} <lang…> --timing en`). 올리기는 스튜디오 `motion/youtube/studio-caption.js`(할당량 없음), 그 뒤 우리 자막이 있는 언어의 자동 자막 지우기(`yt-api.mjs asr-off`).
+목록은 `pipeline/targets.json` captions.langs(고정 27개 + ko, 바꾸려면 관리자 결정). 한국어판·국제판의 **세로·가로 모두(4편)**에, 화면 위쪽 .vtt로 올린다(한국어판 = 한국어 해설 시각). 기록: 한국어판 uploaded.json `{film}.captions`, 국제판 `global.films.{film}.h|v.captions`(국제판 자막 = 영어 해설 시각, `captions-on-ko.mjs {film} <lang…> --timing en`). 올리기는 스튜디오 `motion/youtube/studio-caption.js`(할당량 없음), 그 뒤 우리 자막이 있는 언어의 자동 자막 지우기(`yt-api.mjs asr-off`).

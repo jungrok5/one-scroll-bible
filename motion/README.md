@@ -6,6 +6,7 @@
 
 > **다음 영상부터**(3분 세로 한 편 — 「침묵의 400년」 등)의 제작 전략·다국어·채널·/film 개편·배운 점은 [films/README.md](films/README.md)에 있습니다.
 > 새 영상 작업은 언제나 `node motion/films/film.mjs status <이름>` → `film.mjs task <이름> <단계>`로 시작합니다(규칙은 `films/pipeline/rules.json`).
+> **영상별 언어·해설판·자막·공개 일정(현재 상태와 정책)은 [youtube/LANGUAGES.md](youtube/LANGUAGES.md) 한 곳에** 있습니다(관리자 2026-11-12 "자꾸 까먹어서 문서로 관리해줘"). 영상을 올리거나 자막·트랙·일정을 바꾸면 같은 날 그 문서도 고칩니다.
 
 | 위치 | 무엇 |
 |---|---|

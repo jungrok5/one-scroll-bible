@@ -341,6 +341,15 @@ if (cmd === 'whoami') {
     await api(`videos?part=snippet${lc ? ',localizations' : ''}`, { method: 'PUT', body: JSON.stringify({ id: x.id, snippet: { ...x.snippet, description: d, categoryId: x.snippet.categoryId || '27' }, ...(lc ? { localizations: nl } : {}) }) });
     n++; }
   console.log(`  updated ${n}${todo.length > n ? ` — ${todo.length - n} left, run again (tomorrow if the quota is spent)` : ''}`);
+} else if (cmd === 'playlist-privacy') {
+  // playlist-privacy private|public|unlisted <playlistId…> [--dry]: change who can see a playlist (nothing removed, reversible). 50 units each.
+  // (관리자 2026-11-13: 한국어 채널에 남은 외국어 재생목록 15개를 비공개로)
+  const [to, ...ids] = rest.filter(a => !a.startsWith('--')), dry = rest.includes('--dry');
+  if (!['private', 'public', 'unlisted'].includes(to) || !ids.length) { console.log('usage: playlist-privacy private|public|unlisted <playlistId…> [--dry]'); process.exit(1); }
+  for (const id of ids) { const p = (await api(`playlists?part=snippet,status&id=${id}`)).items?.[0]; if (!p) { console.log(`${id}: not found`); continue; }
+    if (p.status.privacyStatus === to) { console.log(`${id}: already ${to} — ${p.snippet.title}`); continue; }
+    console.log(`${id}: ${p.status.privacyStatus} → ${to} — ${p.snippet.title}`); if (dry) continue;
+    await api('playlists?part=snippet,status', { method: 'PUT', body: JSON.stringify({ id, snippet: { title: p.snippet.title, description: p.snippet.description, defaultLanguage: p.snippet.defaultLanguage }, status: { privacyStatus: to } }) }); }
 } else if (cmd === 'text-edit') {
   // text-edit <spec.json> [--dry]: line edits on live text, everything else kept. spec = { videos: [ids], channel: true,
   //   playlists: [ids], drop: [regex…], replace: [[regex, to]…], append: [line…], title: "<playlist title>" }.

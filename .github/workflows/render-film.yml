@@ -5,8 +5,12 @@
 #   site     the site's film files: poster + film/s (fonts, language files)     → artifact site   (commit it, then deploy)
 #   h        the whole film, YouTube upload format                              → artifact film-<lang>-h
 #   v        the 21 Shorts                                                      → artifact shorts-<lang>
+#   vfull    the whole film in portrait (1080×1920, same timeline/sound as h)    → artifact film-<lang>-v
+#            (v and vfull share one job and one render of the vertical scenes; the Shorts' opening skip is not applied)
 #   kit      thumbnails, upload sheet (manifest), subtitles                     → artifact kit    (commit it)
 #   release  copy this run's films/Shorts into the GitHub release (no expiry)   → release <tag>
+#            (film-<lang>.mp4 = h, film-<lang>-v.mp4 = vfull, shorts-<lang>-NN-<scene>.mp4 = v)
+# A new film language (no Shorts, LANGUAGES.md §4-1): --steps "h vfull kit release".
 # Artifacts are kept 3 days. The creation scene's cosmos (WebGL, ~0.5 s a frame without a GPU) is the same in every
 # language: it is built once and kept in the Actions cache, so later runs skip it until the scene's code changes.
 name: render-film
@@ -17,7 +21,7 @@ on:
         description: "film language codes (space-separated; ko = Korean source)"
         default: "en"
       steps:
-        description: "steps: sheets site h v kit release"
+        description: "steps: sheets site h v vfull kit release"
         default: "h v"
       scenes:
         description: "scenes to render (empty = all 21; e.g. 'rise church' for a quick test)"
@@ -37,7 +41,7 @@ jobs:
         run: |
           j() { printf '['; sep=''; for x in $1; do printf '%s"%s"' "$sep" "$x"; sep=','; done; printf ']'; }
           echo "langs=$(j "${{ inputs.languages }}")" >> "$GITHUB_OUTPUT"
-          o=""; for s in ${{ inputs.steps }}; do case $s in h|v) o="$o $s";; esac; done
+          o=""; for s in ${{ inputs.steps }}; do case $s in h) x=h;; v|vfull) x=v;; *) continue;; esac; case " $o " in *" $x "*) ;; *) o="$o $x";; esac; done   # vfull needs the vertical scenes too (one job with v)
           echo "oris=$(j "$o")" >> "$GITHUB_OUTPUT"
           s="${{ inputs.scenes }}"
           if [ -n "$o" ] && { [ -z "$s" ] || echo " $s " | grep -q " creation "; }; then echo "cache=true" >> "$GITHUB_OUTPUT"; else echo "cache=false" >> "$GITHUB_OUTPUT"; fi
@@ -172,9 +176,12 @@ jobs:
       - name: render
         env:
           SCENES: ${{ inputs.scenes }}
+          STEPS: ${{ inputs.steps }}
         run: |
           if [ -z "$SCENES" ]; then unset SCENES; fi
-          bash motion/render-lang.sh ${{ matrix.lang }} ${{ matrix.o }}
+          w=${{ matrix.o }}   # the vertical job makes the Shorts (v) and/or the whole vertical film (vfull)
+          if [ "$w" = v ]; then w=""; for s in $STEPS; do case $s in v|vfull) w="$w $s";; esac; done; fi
+          bash motion/render-lang.sh ${{ matrix.lang }} $w
       - uses: actions/upload-artifact@v4
         if: matrix.o == 'h'
         with:
@@ -183,7 +190,14 @@ jobs:
           retention-days: 3
           compression-level: 0
       - uses: actions/upload-artifact@v4
-        if: matrix.o == 'v'
+        if: matrix.o == 'v' && contains(format(' {0} ', inputs.steps), ' vfull ')
+        with:
+          name: film-${{ matrix.lang }}-v
+          path: motion/out/film-${{ matrix.lang }}-v-upload.mp4
+          retention-days: 3
+          compression-level: 0
+      - uses: actions/upload-artifact@v4
+        if: matrix.o == 'v' && contains(format(' {0} ', inputs.steps), ' v ')
         with:
           name: shorts-${{ matrix.lang }}
           path: motion/out/shorts/${{ matrix.lang }}
@@ -237,11 +251,12 @@ jobs:
           mkdir -p up
           for L in ${{ inputs.languages }}; do
             f=$(find "dl/film-$L-h" -name '*.mp4' 2>/dev/null | head -1); [ -n "$f" ] && mv "$f" "up/film-$L.mp4"
+            f=$(find "dl/film-$L-v" -name '*.mp4' 2>/dev/null | head -1); [ -n "$f" ] && mv "$f" "up/film-$L-v.mp4"
             for f in $(find "dl/shorts-$L" -name '*.mp4' 2>/dev/null | sort); do mv "$f" "up/shorts-$L-$(basename "$f")"; done
           done
           ls -la up
       - name: upload
         run: |
           gh release view "$TAG" -R "${{ github.repository }}" >/dev/null 2>&1 || gh release create "$TAG" -R "${{ github.repository }}" --title "YouTube files ($TAG)" \
-            --notes "Rendered films and Shorts in the YouTube upload format. film-<lang>.mp4 = the whole film, shorts-<lang>-NN-<scene>.mp4 = the 21 Shorts."
+            --notes "Rendered films and Shorts in the YouTube upload format. film-<lang>.mp4 = the whole film, film-<lang>-v.mp4 = the whole film in portrait, shorts-<lang>-NN-<scene>.mp4 = the 21 Shorts."
           gh release upload "$TAG" -R "${{ github.repository }}" --clobber up/*

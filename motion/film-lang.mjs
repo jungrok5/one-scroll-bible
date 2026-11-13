@@ -6,7 +6,9 @@
 //   node motion/film-lang.mjs check  <lang…>          merge the translation files + scan every scene (missing lines, Korean left)
 //   node motion/film-lang.mjs review <lang…>          write the native-review prompt → motion/out/review-<lang>.md
 //   node motion/film-lang.mjs site   <lang…>          add the language's film button (FILM_CTA ← _ui.json "cta") + build the pages
-//   node motion/film-lang.mjs ci     <lang…> --steps "sheets site h v kit release" [--scenes "rise church"] [--release youtube-v1] [--wait]
+//   node motion/film-lang.mjs ci     <lang…> --steps "sheets site h v vfull kit release" [--scenes "rise church"] [--release youtube-v1] [--wait]
+//                                                      h = whole film, v = the 21 Shorts, vfull = whole film in portrait (1080×1920);
+//                                                      a new language (no Shorts, LANGUAGES.md §4-1): --steps "h vfull kit release"
 //                                                      run the pipeline on GitHub for the current (pushed) branch; with --wait,
 //                                                      bring the results into the working tree (sheets → motion/out/sheets/<lang>/,
 //                                                      site → film/, kit → motion/youtube/ + motion/subs/)
@@ -54,7 +56,7 @@ function status(list) {
       button: cta[L] ? 'yes' : '-', siteFiles: has(`film/s/i18n/${L}.json`) && has(`film/poster-h-${L}.jpg`) ? 'yes' : '-',
       thumbs: has(`motion/youtube/thumbs/${L}/A-exodus.jpg`) ? 'yes' : '-', sheet: manifest[L] ? 'yes' : '-',
       subs: has(`motion/subs/${L}/film-h.srt`) ? 'yes' : '-',
-      release: assets ? `${assets.includes(`film-${L}.mp4`) ? 'film' : '-'}/${assets.filter(a => a.startsWith(`shorts-${L}-`)).length}` : '?',
+      release: assets ? `${assets.includes(`film-${L}.mp4`) ? 'film' : '-'}${assets.includes(`film-${L}-v.mp4`) ? '+v' : ''}/${assets.filter(a => a.startsWith(`shorts-${L}-`)).length}` : '?',
       // YouTube side (motion/youtube/uploaded.json, kept by hand from Studio) and the site's button target (FILM_YT)
       youtube: up.film?.[L] ? up.film[L].status : '-', ab: /thumbnail test/.test(up.film?.[L]?.note || '') ? 'yes' : '-',
       pinned: /pinned comment faq/.test(up.film?.[L]?.note || '') ? 'faq' : /pinned comment/.test(up.film?.[L]?.note || '') ? 'old' : '-',
@@ -64,7 +66,7 @@ function status(list) {
   console.table(rows);
   console.log('translated = scene files/21 (+ui = _ui.json) · merged = pilot/i18n/<lang>.json up to date · ytText = motion/youtube/lang/<lang>.json');
   console.log('review = motion/reviews/<lang>.md (native review, no open HIGH/MED) · button = FILM_CTA in index.html · siteFiles = film/s + poster');
-  console.log('thumbs/sheet/subs = YouTube kit · release = film / Shorts count in the youtube-v1 release');
+  console.log('thumbs/sheet/subs = YouTube kit · release = film (+v = the whole vertical film) / Shorts count in the youtube-v1 release');
   console.log('youtube/ab/pinned/shorts = motion/youtube/uploaded.json (film status, thumbnail A/B test, pinned FAQ comment, Shorts ids) · ytButton = FILM_YT in index.html');
 }
 
@@ -109,7 +111,7 @@ function site(list) {
 }
 
 function ci(list) {
-  const steps = flag('steps'); need(typeof steps === 'string', '--steps "sheets site h v kit release" is required');
+  const steps = flag('steps'); need(typeof steps === 'string', '--steps "sheets site h v vfull kit release" is required');
   const branch = out('git', ['rev-parse', '--abbrev-ref', 'HEAD']);
   run('git', ['fetch', '-q', 'origin', branch]);
   const ahead = out('git', ['rev-list', '--count', `origin/${branch}..HEAD`]);

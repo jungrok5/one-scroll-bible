@@ -73,19 +73,19 @@ node motion/film-lang.mjs live <code>                       # film/s/i18n/<code>
 
 ## 4b · 14-min expansion rules (관리자 2026-11-13 — read before 5 and 6)
 - Run `node motion/youtube/film14.mjs status <code>` first and after every step; rules: `motion/youtube/film14.json` "rules", words: LANGUAGES.md §4-1.
-- Every language gets the music version **horizontal + vertical 14 min AND the 21 scene Shorts** (관리자 2026-11-13, reversing the morning's "no Shorts":
-  abroad the Shorts feed is the only door — intl channel 10/26–11/13: Shorts 1,084 views from the feed, 14-min films 0–4 each). CI steps `h v vfull`
-  (`v` = the 21 Shorts, `vfull` = the whole film in portrait, one render of the vertical scenes serves both). Languages missing only the vertical film: `--steps "vfull release"`.
+- Every language gets the music version **horizontal 14 min + the 21 scene Shorts** — **no vertical 14-min upload** (관리자 2026-11-13: Shorts always, the
+  horizontal film exists, so the portrait 14-min is not needed; abroad the Shorts feed is the only door — intl channel 10/26–11/13: Shorts 1,084 views
+  from the feed, 14-min films 0–4 each). CI steps `h v` (`v` = the 21 Shorts). The `vfull` step (whole film in portrait) stays available, unused.
 - After the upload: `film14.mjs site --write` (site button), `film14.mjs captions` (its on-screen captions onto the Korean music version and its own
   music version), xlinks.json `film14.<code>` lines (reviewed) + `xlinks.mjs apply`, and the language playlist (`film14.mjs intl-layout` adds 400).
 - A narrated version only after `film14.mjs narr-check <code>` passes; then it is the language's main video and the music version links to it (one way).
-  Narrated = 14-min h + v + 21 narrated Shorts: they replace the language's music Shorts still unpublished, or run as a second series ~1 month
+  Narrated = 14-min h + 21 narrated Shorts (no vertical 14-min): they replace the language's music Shorts still unpublished, or run as a second series ~1 month
   after the music Shorts finished (never delete music Shorts); narration captions on top (film14.json rule narr-layer).
 - No language counts in any description or comment.
 
 ## 5 · YouTube files (everything up to the upload itself)
 ```
-node motion/film-lang.mjs ci <code> --steps "h v vfull kit release" --wait
+node motion/film-lang.mjs ci <code> --steps "h v kit release" --wait
 ```
 `h` = the whole film (1920×1080) and `vfull` = the whole film in portrait (1080×1920, same timeline and sound, the vertical scene
 layouts; a normal video, not a Short) in the upload format → release `youtube-v1` as `film-<code>.mp4` / `film-<code>-v.mp4` (`release`; no expiry).

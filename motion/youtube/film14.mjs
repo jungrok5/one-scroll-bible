@@ -46,13 +46,11 @@ if (cmd === 'status' || !cmd) {
       site: yt[L] === wantYt(L) ? 'ok' : yt[L] ? `틀림(${yt[L]}≠${wantYt(L)})` : wantYt(L) ? `없음(${wantYt(L)})` : '-' };
     const next = [];
     if (!vid(L, 'music')) next.push('음악판 가로 올리기 (/add-film-language 5–6단계)');
-    if (!vid(L, 'music-v')) next.push('음악판 세로 14분' + (P.todo.some(t => /vfull/.test(t)) ? ' — CI vfull 단계부터 만들 것(film14.json todo)' : ` (film-lang.mjs ci ${L} --steps "vfull release" → 릴리즈 film-${L}-v.mp4)`));
     // every language: the 21 scene Shorts are the base (rule music-base, 관리자 2026-11-13 오후)
     const nShorts = Object.keys((L === 'ko' ? U.shorts.ko : G.shorts?.[L])?.ids || {}).length;
     if (nShorts < 21) next.push(`장면 쇼츠 ${nShorts}/21 (film-lang.mjs ci ${L} --steps "v release" → 물결로 올리기 global-move.mjs)`);
     if (r.site !== 'ok' && wantYt(L)) next.push('사이트 버튼: film14.mjs site --write');
     if (P.narr[L] && !vid(L, 'narr')) { const g = gates(L); next.push(g.length ? '해설판 관문: ' + g.join(' · ') : '해설판 만들기(관문 통과)'); }
-    if (vid(L, 'narr') && !vid(L, 'narr-v')) next.push('해설판 세로');
     // narrated Shorts (rule narr-layer): replace unpublished music Shorts, or a second run ~1 month after the music run (ids: global.shorts['<L>-narr'])
     if (vid(L, 'narr') && L !== 'ko' && Object.keys(G.shorts?.[`${L}-narr`]?.ids || {}).length < 21) next.push('해설 쇼츠 21편 (공개 전 음악 쇼츠는 바꿔 넣고, 이미 나갔으면 약 한 달 뒤 두 번째 연재)');
     rows.push({ ...r, next: next.join(' / ') || '—' });

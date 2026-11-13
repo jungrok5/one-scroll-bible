@@ -7,7 +7,7 @@
   },
   {
    "id": "narr-layer",
-   "rule": "Languages ElevenLabs speaks well get a NARRATED version, both orientations, no Shorts. It becomes the language's main video: the site's film button (FILM_YT), first item of the language playlist, end screens."
+   "rule": "Languages ElevenLabs speaks well get a NARRATED version: 14-min horizontal + vertical AND 21 narrated scene Shorts. It becomes the language's main video: the site's film button (FILM_YT), first item of the language playlist, the related video of that language's Shorts, end screens. Shorts (관리자 2026-11-13 \"응 그렇게해줘\"): if the language's music Shorts are not yet public, the narrated Shorts replace the unpublished ones (as Korean 7–21 did); if the music Shorts have already run, the narrated Shorts go out as a second run about a month after the music run ended (the same picture re-posted at once can be treated as repetitive content). Music Shorts are never deleted. Narrated Shorts carry that language's narration captions at the top of the picture (as the Korean narrated Shorts)."
   },
   {
    "id": "narr-gates",

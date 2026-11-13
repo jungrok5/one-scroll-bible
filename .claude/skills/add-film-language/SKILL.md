@@ -79,6 +79,8 @@ node motion/film-lang.mjs live <code>                       # film/s/i18n/<code>
 - After the upload: `film14.mjs site --write` (site button), `film14.mjs captions` (its on-screen captions onto the Korean music version and its own
   music version), xlinks.json `film14.<code>` lines (reviewed) + `xlinks.mjs apply`, and the language playlist (`film14.mjs intl-layout` adds 400).
 - A narrated version only after `film14.mjs narr-check <code>` passes; then it is the language's main video and the music version links to it (one way).
+  Narrated = 14-min h + v + 21 narrated Shorts: they replace the language's music Shorts still unpublished, or run as a second series ~1 month
+  after the music Shorts finished (never delete music Shorts); narration captions on top (film14.json rule narr-layer).
 - No language counts in any description or comment.
 
 ## 5 · YouTube files (everything up to the upload itself)

@@ -53,6 +53,8 @@ if (cmd === 'status' || !cmd) {
     if (r.site !== 'ok' && wantYt(L)) next.push('사이트 버튼: film14.mjs site --write');
     if (P.narr[L] && !vid(L, 'narr')) { const g = gates(L); next.push(g.length ? '해설판 관문: ' + g.join(' · ') : '해설판 만들기(관문 통과)'); }
     if (vid(L, 'narr') && !vid(L, 'narr-v')) next.push('해설판 세로');
+    // narrated Shorts (rule narr-layer): replace unpublished music Shorts, or a second run ~1 month after the music run (ids: global.shorts['<L>-narr'])
+    if (vid(L, 'narr') && L !== 'ko' && Object.keys(G.shorts?.[`${L}-narr`]?.ids || {}).length < 21) next.push('해설 쇼츠 21편 (공개 전 음악 쇼츠는 바꿔 넣고, 이미 나갔으면 약 한 달 뒤 두 번째 연재)');
     rows.push({ ...r, next: next.join(' / ') || '—' });
   }
   console.log('lang     music h v | narr h v | subs  narrVtt | site button | NEXT');

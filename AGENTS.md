@@ -85,6 +85,8 @@ Protestant church; Korean Revised Version (개역개정) as the Korean baseline.
   copies in `film/s/` (`python3 motion/publish-film.py`). Korean scene strings are translation keys shared by every language —
   change looks/timing freely, but changing a Korean string drops that line in every language until re-translated.
   New film language → the **/add-film-language skill** (`.claude/skills/add-film-language/`).
+  The 14-min film's language expansion (music/narrated, captions, site button, cross-links) is code: start with
+  `node motion/youtube/film14.mjs status` (rules `motion/youtube/film14.json`, policy `motion/youtube/LANGUAGES.md` §4-1).
 - **Film series** (new films, `motion/films/<name>/`): the pipeline is code — start every session (and after a compaction) with
   `node motion/films/film.mjs status <name>` → `film.mjs task <name> <stage>`; rules in `motion/films/pipeline/rules.json`, topics via
   `motion/films/topic.mjs`. Procedure: the **/make-film skill**; background: `motion/films/README.md`.

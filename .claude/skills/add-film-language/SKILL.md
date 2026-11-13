@@ -71,6 +71,15 @@ node motion/film-lang.mjs live <code>                       # film/s/i18n/<code>
   in `_fonts.json` there (`NotoSerifThai.ttf` or the variable `NotoSerifThaiwdthwght.ttf`).
 - A deploy can show "success" on GitHub and still not be the one serving — that is why `live` checks the real site.
 
+## 4b · 14-min expansion rules (관리자 2026-11-13 — read before 5 and 6)
+- Run `node motion/youtube/film14.mjs status <code>` first and after every step; rules: `motion/youtube/film14.json` "rules", words: LANGUAGES.md §4-1.
+- A NEW language gets the music version **horizontal + vertical 14 min** — **no 21 Shorts** (skip `v` in the CI steps; the vertical whole film needs the
+  'vfull' step listed in film14.json "todo"). Languages that already have Shorts keep them.
+- After the upload: `film14.mjs site --write` (site button), `film14.mjs captions` (its on-screen captions onto the Korean music version and its own
+  music version), xlinks.json `film14.<code>` lines (reviewed) + `xlinks.mjs apply`, and the language playlist (`film14.mjs intl-layout` adds 400).
+- A narrated version only after `film14.mjs narr-check <code>` passes; then it is the language's main video and the music version links to it (one way).
+- No language counts in any description or comment.
+
 ## 5 · YouTube files (everything up to the upload itself)
 ```
 node motion/film-lang.mjs ci <code> --steps "h v kit release" --wait
@@ -83,7 +92,7 @@ and subtitles (`motion/subs/<code>/`). Commit the kit. The creation scene's WebG
 ## 6 · On YouTube (browser session signed in as @one-scroll-bible; public steps need the maintainer's OK)
 Follow `motion/README.md` → "유튜브에 올리기": `node motion/youtube/serve.mjs` → download `film-<code>.mp4` →
 `studio-upload.js` (private; add the language's Studio name to `LANG_LABEL` first) → after processing `studio-publish.js`
-(thumbnail A/B A·B·D + public) → `studio-comment.js` (pinned FAQ comment) → `FILM_YT` in `index.html` (site button → YouTube) →
+(thumbnail A/B A·B·D + public) → `studio-comment.js` (pinned FAQ comment) → `node motion/youtube/film14.mjs site --write` (FILM_YT, site button → YouTube) →
 record ids/status in `motion/youtube/uploaded.json`. `node motion/film-lang.mjs status <code>` shows youtube / ab / pinned /
 ytButton per language, so a language that is on the site but not on YouTube is visible at a glance.
 A new lesson → that README's "함정" list (and the tool), never only the chat — a helper that lived only in a chat or a

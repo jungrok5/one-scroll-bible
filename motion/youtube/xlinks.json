@@ -125,5 +125,5 @@
   }
  },
  "silence400_comment": "📖 Read it today\n① Malachi 4 — the last promise of the Old Testament\n② Luke 1 — 400 years later, an angel takes up that very promise\n③ Luke 4 — in the synagogue at Nazareth, Jesus reads from Isaiah\nThe whole Bible story in 14 minutes, in many languages: https://www.youtube.com/@bibleinonescroll/playlists",
- "_note_narr": "When a language gets a narrated 14-min version (uploaded.json global.film[\"<lang>-narr\"]), its music version must link to it and back (관리자 2026-11-13). Add film14.<lang>.narr (= \"Narrated version\" in that language) and film14.<lang>.music (= \"Music only, no narration\") before applying; the audit flags a narrated language whose lines are missing."
+ "_note_narr": "When a language gets a narrated 14-min version (uploaded.json global.film[\"<lang>-narr\"]), its music version links to it; the narrated version does NOT link back to the music version (관리자 2026-11-13 — the narrated one is the language's main video). Add film14.<lang>.narr (= \"Narrated version\" in that language, reviewed) before applying; the audit flags a narrated language whose line is missing. Korean: 14분 음악판 → 해설판 링크, 해설판에는 음악판 링크 없음."
 }

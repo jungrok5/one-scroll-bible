@@ -32,17 +32,19 @@ const url = k => X.urls[k], line = (text, u) => `▶ ${text}: ${u}`, yt = id => 
 // each target: { kind, ch, id, label, need: { <lang|default>: [[mustContain, lineToInsert]…] } }
 function targets() {
   const T = [], ko = [['@bibleinonescroll', line(X.ko.intl, url('intl_channel'))]];
-  for (const k of ['ko', 'ko-narr']) if (U.film[k]?.id) T.push({ kind: 'ko-film', ch: 'ko', id: U.film[k].id, label: `14분 ${k}`, need: { default: ko } });
+  // music → narrated only; a narrated version never links back to the music version (관리자 2026-11-13)
+  if (U.film.ko?.id) T.push({ kind: 'ko-film', ch: 'ko', id: U.film.ko.id, label: '14분 ko', need: { default: [...ko, ...(U.film['ko-narr']?.id ? [[yt(U.film['ko-narr'].id), null]] : [])] } });
+  if (U.film['ko-narr']?.id) T.push({ kind: 'ko-film', ch: 'ko', id: U.film['ko-narr'].id, label: '14분 ko-narr', need: { default: ko }, forbid: [U.film.ko.id] });
   for (const [n, id] of Object.entries(U.shorts.ko.ids)) T.push({ kind: 'ko-shorts', ch: 'ko', id, label: `쇼츠 ${n}`, need: { default: ko } });
   const s4 = U.silence400; for (const [k, v] of [['h', s4.h], ['v', s4.v], ...Object.entries(s4.clips || {})]) if (v?.id) T.push({ kind: 'ko-silence400', ch: 'ko', id: v.id, label: `400년 ${k}`, need: { default: ko } });
   for (const [L, t] of Object.entries(X.film14)) { const id = G.film[L]?.id; if (!id) continue;
     T.push({ kind: 'gl-film', ch: 'gl', id, label: `14min ${L}`, need: { default: [['/@bibleinonescroll/playlists', line(t.langs, url('intl_playlists'))],
       [url('ko_film_music'), line(t.korean, url('ko_film_music'))], [url('gl_silence400'), line(t.silence400, url('gl_silence400'))]] } });
-    // a language with a narrated version: music ↔ narrated link each other (관리자 2026-11-13). Lines need film14.<L>.narr / .music.
+    // a language with a narrated version: the music version links to it; the narrated one never links back (관리자 2026-11-13). Needs film14.<L>.narr.
     const nid = G.film[`${L}-narr`]?.id; if (nid) { const T0 = T[T.length - 1];
       T0.need.default.push([yt(nid), t.narr ? line(t.narr, yt(nid)) : null]);
-      T.push({ kind: 'gl-film', ch: 'gl', id: nid, label: `14min ${L}-narr`, need: { default: [['/@bibleinonescroll/playlists', line(t.langs, url('intl_playlists'))],
-        [yt(id), t.music ? line(t.music, yt(id)) : null], [url('gl_silence400'), line(t.silence400, url('gl_silence400'))]] } }); } }
+      T.push({ kind: 'gl-film', ch: 'gl', id: nid, label: `14min ${L}-narr`, forbid: [id], need: { default: [['/@bibleinonescroll/playlists', line(t.langs, url('intl_playlists'))],
+        [url('ko_film_music'), line(t.korean, url('ko_film_music'))], [url('gl_silence400'), line(t.silence400, url('gl_silence400'))]] } }); } }
   const g4 = G.films?.silence400; for (const k of ['h', 'v']) { const id = g4?.[k]?.id; if (!id) continue; const need = {};
     for (const [L, t] of Object.entries(X.silence400)) need[L === 'en' ? 'default' : L] = [[yt(G.film[L].id), line(t.film14, yt(G.film[L].id))],
       ['/@bibleinonescroll/playlists', line(t.langs, url('intl_playlists'))], [url('ko_silence400'), line(t.korean, url('ko_silence400'))]];
@@ -61,8 +63,9 @@ async function fetchAll(T) {
     for (let i = 0; i < ids.length; i += 50) for (const v of (await api(ch, `videos?part=snippet,localizations&id=${ids.slice(i, i + 50).join(',')}`)).items || []) got[v.id] = v; }
   return got;
 }
-const missing = (t, v) => Object.entries(t.need).flatMap(([L, rules]) => { const d = L === 'default' ? v.snippet.description : v.localizations?.[L]?.description;
-  return d == null ? [[L, '(no localization)', null]] : rules.filter(([must]) => !d.includes(must)).map(([, ln]) => ln ? [L, ln, d] : [L, '(line text missing in xlinks.json)', null]); });
+const forbidden = (t, v) => (t.forbid || []).filter(s => v.snippet.description.includes(s));
+const missing = (t, v) => [...forbidden(t, v).map(s => ['default', `(must not link ${s})`, v.snippet.description])].concat(Object.entries(t.need).flatMap(([L, rules]) => { const d = L === 'default' ? v.snippet.description : v.localizations?.[L]?.description;
+  return d == null ? [[L, '(no localization)', null]] : rules.filter(([must]) => !d.includes(must)).map(([, ln]) => ln ? [L, ln, d] : [L, '(line text missing in xlinks.json)', null]); }));
 
 const [cmd, ...rest] = process.argv.slice(2), flag = n => { const i = rest.indexOf(n); return i < 0 ? null : rest[i + 1]; };
 if (cmd === 'audit' || cmd === 'apply') {
@@ -74,8 +77,10 @@ if (cmd === 'audit' || cmd === 'apply') {
     if (cmd !== 'apply') continue;
     for (const { t, v, m } of bad) { if (!v || done >= max) continue; if (m.some(([, , d]) => d == null)) { console.log(`  ${t.label}: skip (${m.find(x => x[2] == null)[1]})`); continue; }
       const sn = { ...v.snippet, categoryId: v.snippet.categoryId || '27' }, loc = v.localizations ? JSON.parse(JSON.stringify(v.localizations)) : null;
-      sn.description = insert(sn.description, t.need.default ? t.need.default.map(r => r[1]).filter(Boolean) : []);
-      if (loc) for (const L of Object.keys(t.need).filter(L => L !== 'default')) loc[L].description = insert(loc[L].description, t.need[L].map(r => r[1]).filter(Boolean));
+      if (t.forbid) sn.description = sn.description.split('\n').filter(l => !t.forbid.some(s => l.includes(s))).join('\n');
+      const want = (d, rules) => (rules || []).filter(([must, ln]) => ln && !d.includes(must)).map(r => r[1]);
+      sn.description = insert(sn.description, want(sn.description, t.need.default));
+      if (loc) for (const L of Object.keys(t.need).filter(L => L !== 'default')) loc[L].description = insert(loc[L].description, want(loc[L].description, t.need[L]));
       if (loc && sn.defaultLanguage && loc[sn.defaultLanguage]) loc[sn.defaultLanguage].description = sn.description;
       if (dry) { mkdirSync(OUT, { recursive: true }); writeFileSync(join(OUT, `${t.id}.txt`), `--- ${t.label}\n${sn.description}\n` + (loc ? Object.entries(loc).map(([L, x]) => `\n--- ${L}\n${x.description}\n`).join('') : '')); console.log(`  ${t.label}: dry → out/xlinks/${t.id}.txt`); }
       else { await api(t.ch, `videos?part=snippet${loc ? ',localizations' : ''}`, { method: 'PUT', body: JSON.stringify({ id: t.id, snippet: sn, ...(loc ? { localizations: loc } : {}) }) }); console.log(`  ${t.label}: saved`); }

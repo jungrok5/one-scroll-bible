@@ -145,6 +145,27 @@
     const k = K(); ctx.save(); ctx.filter = `blur(${(V ? 5 : 4)}px)`; ctx.globalAlpha = .35; k.body(ctx, F, 'rgb(20,8,4)', 'rgb(20,8,4)'); ctx.restore();
     k.person(ctx, F, { col: INK, rim: o.rim }); }
 
+  // backView(ctx, F, b, cloth): F's man seen from behind (for the turn): square shoulders and the mantle with the sleeves at the
+  // sides, the hands just showing, the robe to mid-calf, the shins and heels, and the head cloth from behind — a rounded crown,
+  // its back standing off the neck and cut across on the shoulders, the double band round it. No face or profile can show.
+  // b = width (0–1, his shoulders turned that much toward the screen); heights follow F (hip, ground) so it sits on the side view.
+  function backView(ctx, F, b, cloth, sx) {
+    const s = F.s, hx = F.hip[0], hy = F.hip[1], vG = -(F.gy - hy) / s, vH = vG + 34, cv = CLOTH[cloth], cr = cv.crown, bk = cv.back * .5;
+    const X = x => hx + x * b * s, Y = v => hy - v * s, path = new Path2D();
+    const half = pts => { const all = [...pts, ...pts.slice().reverse().map(([x, v]) => [-x, v])].reverse(); all.forEach(([x, v], i) => i ? path.lineTo(X(x), Y(v)) : path.moveTo(X(x), Y(v))); path.closePath(); };
+    half([[0, vH + 1], [6, vH + .5], [17, vH - 1], [22.5, vH + 1], [20, vH + 16], [19.5, -16], [23.5, -10], [27, 4], [28.5, 30], [29.5, 52], [28.5, 60], [24, 65.5], [16, 69.5], [5, 72.5], [0, 73]]);   // the robe narrowing up to the hands, the sleeves widening to broad square shoulders (a man's taper)
+    half([[0, 63], [18.5 + bk, 63], [18 + bk, 67], [17.5 + bk * .6, 80], [17, 90], [16.5, 100], [14.5, 108 + cr * .5], [8.5, 112.5 + cr], [0, 113.5 + cr]]);           // the head cloth from behind (narrower than the shoulders, so they read beside it)
+    // the shins and heels start where the narrowing side view's feet are and only part to the back view's stance as he comes
+    // square to us (so there are never four legs at once)
+    const fx = F.feet.map(q => hx + (q[0] - hx) * sx).sort((a, c) => a - c), wl = ss(.55, 1, b), ws = ss(.45, .85, b);
+    for (const sd of [-1, 1]) { path.moveTo(X(sd * 24) + 5 * s, Y(-11)); path.ellipse(X(sd * 24), Y(-11), 5 * s, 6.5 * s, 0, 0, TAU);                            // hands
+      const lx = lerp(fx[sd < 0 ? 0 : 1], X(sd * 7.5), wl);
+      if (ws > .02) { path.moveTo(lx + 5 * ws * s, Y(vH + 2)); path.rect(lx - 5 * ws * s, Y(vH + 2), 10 * ws * s, (vH + 2 - (vG + 6)) * s);                                                         // shins
+      path.moveTo(lx + 7 * ws * s, Y(vG + 3.5)); path.ellipse(lx, Y(vG + 3.5), 7 * ws * s, 4.5 * s, 0, 0, TAU); } }                                                              // heels
+    for (const [v, lw] of [[104.5, 4], [100.5, 3]]) { const w = 19 + (v - 100) * -.1; path.moveTo(X(-w), Y(v) - lw * s / 2); path.rect(X(-w), Y(v) - lw * s / 2, (X(w) - X(-w)), lw * s); }   // the band, a little wider than the cloth
+    ctx.save(); ctx.filter = `blur(${(V ? 5 : 4)}px)`; ctx.globalAlpha = .35; ctx.fillStyle = 'rgb(20,8,4)'; ctx.fill(path, 'nonzero'); ctx.restore();
+    ctx.fillStyle = INK; ctx.fill(path, 'nonzero'); }
+
   // an open hand at F's near hand: palm turned out, fingers together pointing up, the thumb apart (a shadow shape)
   function openHand(ctx, F, k) { return palmUp(ctx, F, k); }
   function palmUp(ctx, F, k) {   // the near hand open, palm up, fingers forward and a little curled up, the thumb raised
@@ -187,13 +208,18 @@
     // front disciple: stops, turns his head back to listen (F.hf), a slight nod
     const C = pose(2); if (u > 1.8) { C.hf = -1; C.tilt = -.08 + .05 * Math.sin(u * 2.1); }
     // Jesus: stops, turns round to the man behind him (a cut-out flip, 1.25–1.55), raises an open hand and explains
-    const Jb = pose(1), turn = clamp((tp - 1.25) / .3), arm = ss(1.5, 2.1, u) * (1 - .25 * ss(6.3, 6.9, u)), beat = .14 * Math.sin((u - 2.1) * 3.4) * ss(2.1, 2.5, u);
+    const Jb = pose(1), turn = clamp((tp - 1.25) / .4), arm = ss(1.5, 2.1, u) * (1 - .25 * ss(6.3, 6.9, u)), beat = .14 * Math.sin((u - 2.1) * 3.4) * ss(2.1, 2.5, u);
     if (arm > 0) { const sh = k.shoulder(Jb, 1), s = Jb.s, f = Jb.f, hang = [sh[0] - f * 4 * s, sh[1] + 70 * s], chest = [sh[0] + f * (40 + 6 * beat / .14) * s, sh[1] + (26 - 5 * Math.abs(beat) / .14) * s];   // open hand at chest height, elbow bent, rocking with the words
       k.reach(Jb, 1, [lerp(hang[0], chest[0], eio(arm)), lerp(hang[1], chest[1], eio(arm))]); }
     if (u > 3.7 && u < 4.9) Jb.hf = -1;   // a glance round to the other disciple, then back
     Jb.tilt = .06 * Math.sin(u * 1.7) * ss(2, 2.5, u);
     for (const F of [C, A]) shadow(ctx, F);
-    { const sxk = Math.cos(Math.PI * turn), hx = Jb.hip[0]; ctx.save(); ctx.translate(hx, 0); ctx.scale(Math.abs(sxk) < .08 ? .08 * Math.sign(sxk || -1) : sxk, 1); ctx.translate(-hx, 0); shadow(ctx, Jb); if (arm > .3) openHand(ctx, Jb, arm); ctx.restore(); }
+    // the turn (round 6, 관리자: the body flattened to a line, only the staff left): the side view narrows with cos and, over it,
+    // the same man seen from BEHIND widens with sin — so halfway round we see his back (shoulders, head cloth from behind, never
+    // a face) and the silhouette never gets thinner than ~70 % of its side width; the side view's mirror flip happens hidden
+    // inside the back view
+    { const sxk = Math.cos(Math.PI * turn), hx = Jb.hip[0]; ctx.save(); ctx.translate(hx, 0); ctx.scale(Math.abs(sxk) < .08 ? .08 * Math.sign(sxk || -1) : sxk, 1); ctx.translate(-hx, 0); shadow(ctx, Jb); if (arm > .3) openHand(ctx, Jb, arm); ctx.restore();
+      const bw = Math.sin(Math.PI * turn); if (bw > .02) backView(ctx, Jb, bw, KIND[1].cloth, sxk); }
     ctx.restore(); post(ctx, u, .6); }
 
   // the evening house (lamp): flat roof, a window, a door that opens; positions in frame px (world before the rise)
@@ -214,10 +240,14 @@
   function lamp(ctx, u) {
     const k = K(), rise = eio(clamp((u - 3.6) / 3.2)), shift = rise * (HS.win.y - H * (V ? .24 : .22)), dim = 1 - .66 * ss(4.2, 6.2, u);
     evening(ctx, u, shift, 1.12 * dim);
-    ctx.save(); ctx.translate(0, -shift);
+    // round 6 (end card from 175.4 s = u 4.2 is centred in x 0.22–0.78 W, portrait): once they are in, the house (with everything
+    // drawn on it) draws back toward its bottom-right corner on the ground, 3.5–4.2, so its wall and roof end right of 0.78 W and
+    // the lit window stays in the frame's top-right corner. Landscape: the house is already right of the card.
+    const hz = V ? 1 - .3 * eio(clamp((u - 3.5) / .7)) : 1, hT = c => { if (hz === 1) return; const px = HS.x + HS.w, py = G + 1; c.translate(px, py); c.scale(hz, hz); c.translate(-px, -py); };
+    ctx.save(); ctx.translate(0, -shift); hT(ctx);
     const { door: D, win: Wn } = HS, wl = k.lightOn(u, 1.45, .45), open = eio(clamp((u - 1.9) / .8)) * (1 - eio(clamp((u - 3.95) / .45)));
     // light through the window and the doorway glows on the paper AROUND the house (the screen, above the ground) — never on the cut-outs
-    ctx.save(); ctx.beginPath(); ctx.rect(-50, -H, W + 100, G + H); ctx.clip(); ctx.globalCompositeOperation = 'screen';
+    ctx.save(); ctx.beginPath(); ctx.rect(-2 * W, -2 * H, 5 * W, G + 2 * H); ctx.clip(); ctx.globalCompositeOperation = 'screen';
     if (wl > 0) { const cx = Wn.x + Wn.w / 2, cy = Wn.y + Wn.h / 2, R = (V ? 300 : 250) * (1 - .4 * ss(3.8, 5.6, u)), g = ctx.createRadialGradient(cx, cy, 0, cx, cy, R); g.addColorStop(0, `rgba(255,190,100,${.6 * wl})`); g.addColorStop(1, 'rgba(255,160,70,0)'); ctx.fillStyle = g; ctx.fillRect(cx - R, cy - R, R * 2, R * 2); }
     if (open > 0) { const cx = D.x + D.w * open / 2, cy = G - D.h * .45, R = V ? 420 : 340, g = ctx.createRadialGradient(cx, cy, 0, cx, cy, R); g.addColorStop(0, `rgba(255,180,90,${.5 * open})`); g.addColorStop(1, 'rgba(255,150,60,0)'); ctx.fillStyle = g; ctx.fillRect(cx - R, cy - R, R * 2, R * 2); }
     ctx.restore();
@@ -230,7 +260,7 @@
     for (const [i, lag] of order) { const kd = KIND[i], x0 = W * .18 - lag * 170, x1 = D.x + D.w * .5 + 60, tp = k.on2(u - lag);
       if (tp <= 0) continue; const stride = k.stopStride(x1 - x0, 122 * kd.s), wv = k.walkAlong(tp, 0, 3.05, x0, x1, stride, .05);
       const F = dressRobe(k.walk(wv.x, G, kd.s, 1, wv.ph, stride, { lean: .06 }), kd.cloth);
-      ctx.save(); ctx.beginPath(); ctx.rect(-50, 0, D.x + D.w * .55 + 50, H + 1000); ctx.clip();   // past the door's middle they are inside
+      ctx.save(); ctx.beginPath(); ctx.rect(-2 * W, -2 * H, D.x + D.w * .55 + 2 * W, 3 * H + 1000); ctx.clip();   // past the door's middle they are inside
       shadow(ctx, F, { rim: { x: D.x + D.w / 2, y: G - D.h * .5, a: open * .9, reach: 420 } }); ctx.restore(); }
     ctx.restore();
     // end card: below the house the stage melts into darkness over a long gradient (no cut band, no ground line or roof edge
@@ -239,7 +269,7 @@
     //  one fill whose gradient holds its last stop below the ground: no seam)
     { const k = ss(3.8, 5.6, u); if (k > 0) { const gs = G - shift, y0 = gs - H * (.04 + (V ? .17 : .21) * k), kb = Math.min(1, k * 3), g = ctx.createLinearGradient(0, y0, 0, gs + 2);   // fully dark AT the ground from the start (no edge), the soft band growing upward
       g.addColorStop(0, 'rgba(7,9,9,0)'); g.addColorStop(.55, `rgba(7,9,9,${.7 * kb})`); g.addColorStop(1, `rgba(7,9,9,${kb})`); ctx.fillStyle = g; ctx.fillRect(0, y0, W, H - y0 + 4);
-      if (wl > 0) { ctx.save(); ctx.translate(0, -shift); ctx.globalAlpha = k; ctx.fillStyle = rgb(mix([40, 24, 12], [255, 204, 120], wl)); ctx.fillRect(Wn.x, Wn.y, Wn.w, Wn.h); ctx.fillStyle = '#100a08'; ctx.fillRect(Wn.x + Wn.w / 2 - 3, Wn.y, 6, Wn.h); ctx.fillRect(Wn.x, Wn.y + Wn.h * .45 - 3, Wn.w, 6); ctx.restore(); } } }
+      if (wl > 0) { ctx.save(); ctx.translate(0, -shift); hT(ctx); ctx.globalAlpha = k; ctx.fillStyle = rgb(mix([40, 24, 12], [255, 204, 120], wl)); ctx.fillRect(Wn.x, Wn.y, Wn.w, Wn.h); ctx.fillStyle = '#100a08'; ctx.fillRect(Wn.x + Wn.w / 2 - 3, Wn.y, 6, Wn.h); ctx.fillRect(Wn.x, Wn.y + Wn.h * .45 - 3, Wn.w, 6); ctx.restore(); } } }
     post(ctx, u, .75); }
 
   function build() { const t0 = performance.now();

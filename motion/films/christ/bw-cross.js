@@ -4,7 +4,8 @@
      N11 "십자가 위에서 예수님은 외치셨습니다." — darkness over the land at noon (Mt 27:45): a heavy grey sky, the hill and three
      crosses in silhouette, a few women standing far off (Mt 27:55), the camera slowly pushing in.
      Q5 (u 3.9 = 91.5) "나의 하나님, 나의 하나님, 어찌하여 나를 버리셨나이까" — the sky closes and darkens; one shaft of light is all
-     that is left, falling behind the middle cross; the camera dollies to the middle cross (near things pass out of frame).
+     that is left, slanting from a gap aside (upper right) onto the far plain; the camera stays far, the crosses small silhouettes
+     the whole scene (6차: no dolly to the middle cross, no light behind its head — depict-christ-restraint).
      u 9–10.2: the shaft draws back up into its gap in the clouds and the gap closes to one point of light (bwCross.point(u)).
    bwSoldiers(ctx, u) u 0..6.2   (film 114–120.2)
      N14 "십자가 아래 군인들은 그 옷을 두고 제비를 뽑았습니다." — daylight, the third hour (Mk 15:24–25): close on the ground at the
@@ -48,7 +49,7 @@
     for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
       const xn = (x - w / 2) / (w / 2), yn = y / h, wid = lerp(.35, 1, yn);
       const edge = Math.exp(-Math.pow(xn / wid, 2) * 2.6), str = .55 + .45 * fbm(x * .045 / wid + 3, yn * 1.2, 3);
-      const along = ss(0, .06, yn) * (1 - ss(.55, 1, yn) * .92);
+      const along = ss(0, .24, yn) * (1 - ss(.55, 1, yn) * .92);   // its top melts into the cloud it comes from
       const a = clamp(edge * str * along), i = (y * w + x) * 4;
       im.data[i] = 255; im.data[i + 1] = 246; im.data[i + 2] = 230; im.data[i + 3] = a * 255;
     }
@@ -93,9 +94,9 @@
     const { W, H, V } = B;
     // wom: [x, height, lean] — the women stand close together, leaning on one another
     X = V ? { cx: W * .5, cy: H * .47, A: H * .135, sig: W * .29, hc: H * .122, sp: W * .145, hor: H * .535, ridge: H * .615, wh: H * .078,
-              wom: [[.04, 1, -.02], [.07, .93, .1], [.098, .97, -.04], [.128, .9, .07], [.152, .86, .02]], end: [W * .5, H * .36], gap0: [W * .58, H * .155], gap1: [W * .52, H * .14] }
+              wom: [[.04, 1, -.02], [.07, .93, .1], [.098, .97, -.04], [.128, .9, .07], [.152, .86, .02]], end: [W * .5, H * .36], gap0: [W * .82, H * .12], gap1: [W * .8, H * .115] }
           : { cx: W * .56, cy: H * .43, A: H * .2, sig: W * .27, hc: H * .21, sp: W * .085, hor: H * .5, ridge: H * .735, wh: H * .12,
-              wom: [[.15, 1, -.02], [.168, .93, .1], [.185, .97, -.04], [.204, .9, .07], [.219, .86, .02]], end: [W * .5, H * .4], gap0: [W * .64, H * .12], gap1: [W * .57, H * .11] };
+              wom: [[.15, 1, -.02], [.168, .93, .1], [.185, .97, -.04], [.204, .9, .07], [.219, .86, .02]], end: [W * .5, H * .4], gap0: [W * .86, H * .11], gap1: [W * .84, H * .1] };
     const r = rng(77);
     // a rough crest: rock and scree, not a smooth dome
     X.boul = []; for (let i = 0; i < 18; i++) X.boul.push([X.cx + (r() * 2 - 1) * X.sig * 2, (V ? W : H) * (.012 + r() * .03), H * (.003 + r() * .011) * (r() < .8 ? 1 : -.6)]);
@@ -184,8 +185,9 @@
   function bwCross(ctx, u) {
     buildBW(); const { W, H, V } = B, t = 87.6 + u;
     const q = ss(3.9, 5.3, u), endk = ss(8.9, 10.2, u);                                // q: the cry — the sky closes; endk: down to one point
-    // camera: a slow push, then (from the cry) a dolly to the middle cross; near layers grow faster
-    const push = u < 3.9 ? .15 * (u / 3.9) : .15 + 1.37 * eio((u - 3.9) / 6.3) + .026 * (u - 3.9);
+    // camera: stays far — only a slow, slight push the whole scene (6차: the dolly to the middle cross made a large hanging body
+    // with the light right behind its head, a crucifix / icon; depict-christ-restraint) — the crosses stay small silhouettes
+    const push = .3 * (1 - Math.exp(-u / 5));
     const pr = clamp(push / 1.6), Tx = lerp(X.F[0], X.end[0], eio(pr)) + (V ? W : H) * .02 * Math.sin(u * .35 + .4), Ty = lerp(X.F[1], X.end[1], eio(pr));
     const wv = rng(Math.floor(t * 24) + 1), jx = (wv() - .5) * 1.6, jy = (wv() - .5) * 1.6;   // gate weave
     const camT = k => { const s = 1 + push * k; return [s, Tx + jx - X.F[0] * s, Ty + jy - X.F[1] * s]; };
@@ -205,24 +207,28 @@
     drawClouds(ctx, 1);
     // darkness over the land (Mt 27:45) — heavier from the cry, the gap left open
     { const R = Math.max(W, H) * lerp(.95, .6, q), gd = ctx.createRadialGradient(gp[0], gp[1], R * .14, gp[0], gp[1], R);
-      const d = .04 + .26 * dk + .16 * q; gd.addColorStop(0, `rgba(0,0,0,${d * .1})`); gd.addColorStop(1, `rgba(0,0,0,${d})`); ctx.fillStyle = gd; ctx.fillRect(0, 0, W, H * .75); }
+      const d = .04 + .23 * dk + .12 * q; gd.addColorStop(0, `rgba(0,0,0,${d * .1})`); gd.addColorStop(1, `rgba(0,0,0,${d})`); ctx.fillStyle = gd; ctx.fillRect(0, 0, W, H * .75); }
     // the gap: before the cry a hidden sun's dull glow; at the cry the clouds part around it and their edges catch the light
+    // (6차: the gap sits aside, upper right, and is an overcast glow — no bright disc, never behind the middle cross's head)
     const gapA = (.06 * (1 - dk) + q) * (1 - endk * .35), gr = (V ? W * .2 : H * .3) * lerp(.85, 1.2, q) * lerp(1, .18, endk);
     { ctx.globalCompositeOperation = 'screen'; const gg = ctx.createRadialGradient(gp[0], gp[1], 0, gp[0], gp[1], gr * 3.8);
-      gg.addColorStop(0, `rgba(255,250,240,${gapA})`); gg.addColorStop(.12, `rgba(240,236,228,${.62 * gapA})`); gg.addColorStop(.4, `rgba(180,178,172,${.22 * gapA})`); gg.addColorStop(1, 'rgba(120,120,120,0)');
-      ctx.fillStyle = gg; ctx.fillRect(0, 0, W, H); ctx.globalCompositeOperation = 'source-over'; }
+      gg.addColorStop(0, `rgba(236,232,224,${.5 * gapA})`); gg.addColorStop(.2, `rgba(214,210,202,${.32 * gapA})`); gg.addColorStop(.5, `rgba(170,168,162,${.14 * gapA})`); gg.addColorStop(1, 'rgba(120,120,120,0)');
+      ctx.fillStyle = gg; ctx.fillRect(0, 0, W, H);
+      const go = ctx.createLinearGradient(0, 0, 0, H * .62);   // the overcast itself holds a dull, even light (the sky is not black at the cry)
+      go.addColorStop(0, 'rgba(150,148,144,0)'); go.addColorStop(.7, `rgba(150,148,144,${(.06 + .14 * q) * (1 - endk)})`); go.addColorStop(1, 'rgba(150,148,144,0)');
+      ctx.fillStyle = go; ctx.fillRect(0, 0, W, H * .62); ctx.globalCompositeOperation = 'source-over'; }
     if (q > .01 && endk < .99) { const lc = X.lit.getContext('2d'); lc.setTransform(1, 0, 0, 1, 0, 0); lc.globalCompositeOperation = 'source-over'; lc.clearRect(0, 0, W, H); drawClouds(lc, .5);
       lc.globalCompositeOperation = 'destination-in'; const R2 = gr * 4.3 * .5, mg = lc.createRadialGradient(gp[0] * .5, gp[1] * .5, R2 * .1, gp[0] * .5, gp[1] * .5, R2); mg.addColorStop(0, 'rgba(0,0,0,1)'); mg.addColorStop(1, 'rgba(0,0,0,0)');
       lc.fillStyle = mg; lc.fillRect(0, 0, W, H); ctx.globalCompositeOperation = 'screen'; ctx.globalAlpha = .9 * q * (1 - endk); ctx.drawImage(X.lit, 0, 0, W, H); ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over'; }   // silver edges
-    // the shaft: from the gap down behind the middle cross
-    const [ctx0, cty0] = scr(1, X.cx, X.cy - X.hc * .9);
-    const sa = q * (1 - ss(9.0, 10.0, u)), retreat = ss(8.9, 10.1, u);
+    // the shaft: from the gap aside, slanting down past the crosses onto the far land beyond the right of the hill (not behind a cross)
+    const [ctx0, cty0] = scr(.6, X.cx + X.sp * (V ? 2.9 : 3.6), X.hor + H * .02);
+    const sa = .85 * q * (1 - ss(8.2, 9.9, u)), retreat = ss(8.0, 10.1, u);   // drawn back slowly: the big shaft collapsing in 1 s popped at 97.13 (6차 render)
     if (sa > .003) {
-      const dx = ctx0 - gp[0], dy = cty0 - gp[1], ang = Math.atan2(dy, dx) - Math.PI / 2, len = Math.hypot(dx, dy) * lerp(2.1, .2, retreat), wd = (V ? W * .68 : W * .34) * (1 + push * .25) * lerp(1, .15, retreat);
+      const dx = ctx0 - gp[0], dy = cty0 - gp[1], ang = Math.atan2(dy, dx) - Math.PI / 2, len = Math.hypot(dx, dy) * lerp(1.75, .2, retreat), wd = (V ? W * .34 : W * .2) * (1 + push * .25) * lerp(1, .15, retreat);
       ctx.save(); ctx.translate(gp[0], gp[1]); ctx.rotate(ang); ctx.globalCompositeOperation = 'screen';
-      ctx.globalAlpha = sa; ctx.drawImage(B.shaft, -wd / 2, 0, wd, len);
-      ctx.globalAlpha = .6 * sa * (.8 + .2 * Math.sin(t * 1.3)); ctx.drawImage(B.shaft, -wd * .3 + Math.sin(t * .7) * wd * .03, 0, wd * .6, len * .9);
-      ctx.globalAlpha = .5 * sa; ctx.drawImage(B.shaft, -wd * .12, 0, wd * .24, len * .8);
+      const o0 = -len * .2; ctx.globalAlpha = sa; ctx.drawImage(B.shaft, -wd / 2, o0, wd, len);
+      ctx.globalAlpha = .6 * sa * (.8 + .2 * Math.sin(t * 1.3)); ctx.drawImage(B.shaft, -wd * .3 + Math.sin(t * .7) * wd * .03, o0, wd * .6, len * .9);
+      ctx.globalAlpha = .5 * sa; ctx.drawImage(B.shaft, -wd * .12, o0, wd * .24, len * .8);
       ctx.fillStyle = '#fff';
       for (const m of X.motes) { const along = (m.a + t * m.v) % 1, yy = along * len * .8, xx = m.s * wd * .28 * lerp(.4, 1, along) + Math.sin(t * .8 + m.p) * 8;
         ctx.globalAlpha = sa * .5 * Math.exp(-Math.pow(m.s, 2) * 2) * Math.sin(along * Math.PI); ctx.beginPath(); ctx.arc(xx, yy, m.z, 0, 6.283); ctx.fill(); }
@@ -235,6 +241,9 @@
     { const wx0 = V ? W * .02 : W * .06, wx1 = V ? W * .3 : W * .34, wy = X.hor - H * .004; ctx.fillStyle = `rgb(${64 * sb | 0},${64 * sb | 0},${66 * sb | 0})`; ctx.beginPath(); ctx.moveTo(wx0, wy + H * .02);
       for (let x = wx0; x < wx1; x += H * .008) { const tw = Math.abs(x - (wx0 + (wx1 - wx0) * .62)) < H * .012 ? H * .022 : 0; ctx.lineTo(x, wy - H * .014 - tw); ctx.lineTo(x + H * .005, wy - H * .014 - tw); ctx.lineTo(x + H * .005, wy - H * .011 - tw); ctx.lineTo(x + H * .008, wy - H * .011 - tw); }
       ctx.lineTo(wx1, wy + H * .02); ctx.fill(); }
+    if (sa > .003) { const lx = X.cx + X.sp * (V ? 2.9 : 3.6), ly = X.hor + H * .02, lr = (V ? W * .22 : W * .12) * lerp(1, .3, retreat);   // where the shaft lands: a pale patch on the plain
+      ctx.save(); ctx.globalCompositeOperation = 'screen'; ctx.translate(lx, ly); ctx.scale(1, .16); const lg = ctx.createRadialGradient(0, 0, 0, 0, 0, lr);
+      lg.addColorStop(0, `rgba(220,214,204,${.4 * sa})`); lg.addColorStop(1, 'rgba(220,214,204,0)'); ctx.fillStyle = lg; ctx.fillRect(-lr, -lr, lr * 2, lr * 2); ctx.restore(); }
     layer(1);
     // three crosses
     ctx.fillStyle = '#090909'; ctx.strokeStyle = '#090909';
@@ -251,9 +260,9 @@
       ctx.restore();
       ctx.strokeStyle = `rgb(${18 * hv | 0},${18 * hv | 0},${19 * hv | 0})`; ctx.lineCap = 'round'; ctx.lineWidth = 1.6;
       for (const tf of X.tufts) { const y = X.crest(tf.x) + 1 + tf.d, sw = Math.sin(t * 1.5 + tf.b) * .15 + .1; for (let j = -tf.n; j <= tf.n; j++) { ctx.beginPath(); ctx.moveTo(tf.x + j * 1.5, y); ctx.quadraticCurveTo(tf.x + j * 2.5, y - tf.h * .5, tf.x + j * tf.h * .3 + tf.h * sw, y - tf.h * (1 - Math.abs(j) * .15)); ctx.stroke(); } }
-      if (q > 0) { ctx.save(); ctx.globalCompositeOperation = 'screen'; ctx.lineWidth = 3; ctx.filter = 'blur(2px)'; const rg = ctx.createLinearGradient(X.cx - X.sig * .9, 0, X.cx + X.sig * .9, 0);
-        rg.addColorStop(0, 'rgba(200,198,194,0)'); rg.addColorStop(.5, `rgba(235,230,222,${.45 * sa})`); rg.addColorStop(1, 'rgba(200,198,194,0)'); ctx.strokeStyle = rg;
-        ctx.beginPath(); for (let x = X.cx - X.sig; x <= X.cx + X.sig; x += 4) { const y = X.crest(x) + 1.2; x === X.cx - X.sig ? ctx.moveTo(x, y) : ctx.lineTo(x, y); } ctx.stroke(); ctx.restore(); } }
+      if (q > 0) { ctx.save(); ctx.globalCompositeOperation = 'screen'; ctx.lineWidth = 3; ctx.filter = 'blur(2px)'; const rg = ctx.createLinearGradient(X.cx - X.sig * .2, 0, X.cx + X.sig * 1.6, 0);   // the crest's lip on the side toward the gap
+        rg.addColorStop(0, 'rgba(200,198,194,0)'); rg.addColorStop(.6, `rgba(235,230,222,${.4 * sa})`); rg.addColorStop(1, 'rgba(200,198,194,0)'); ctx.strokeStyle = rg;
+        ctx.beginPath(); for (let x = X.cx - X.sig * .2; x <= X.cx + X.sig * 1.6; x += 4) { const y = X.crest(x) + 1.2; x === X.cx - X.sig * .2 ? ctx.moveTo(x, y) : ctx.lineTo(x, y); } ctx.stroke(); ctx.restore(); } }
     // soldiers keeping watch at the foot
     { const sh = X.hc * .24; [[-1.5, 1, 1, 0, .06], [1.52, 1, -1, 2.1, .08]].forEach(([dx, sp, fc, ph, dn]) => { const x = X.cx + X.sp * dx; sentry(ctx, x, X.crest(x) + X.hc * dn, sh * (1 + dn * .4), sp, fc, t, ph); }); }
     // --- mist lying in the valley between the hill and the near ridge
@@ -267,7 +276,7 @@
     { const fv = lerp(1, .78, q), ridge = new Path2D(); ridge.moveTo(-W, H * 2); for (let x = -W; x <= W * 2; x += 8) ridge.lineTo(x, ridgeY(x)); ridge.lineTo(W * 2, H * 2); ridge.closePath();
       const fg = ctx.createLinearGradient(0, X.ridge - H * .01, 0, X.ridge + H * .32); fg.addColorStop(0, `rgb(${50 * fv | 0},${50 * fv | 0},${51 * fv | 0})`); fg.addColorStop(.4, `rgb(${38 * fv | 0},${38 * fv | 0},${39 * fv | 0})`); fg.addColorStop(1, `rgb(${28 * fv | 0},${28 * fv | 0},${29 * fv | 0})`);
       ctx.fillStyle = fg; ctx.fill(ridge); ctx.save(); ctx.clip(ridge); ctx.globalAlpha = .4 * fv; ctx.drawImage(X.tex, -W * .2, X.ridge - H * .01, W * 1.4, H * .4); ctx.restore(); ctx.globalAlpha = 1;
-      if (u < 5.4) { ctx.fillStyle = '#0d0d0e';   // they pass out of frame as the camera moves in; after that they are not drawn
+      { ctx.fillStyle = '#0d0d0e'; ctx.globalAlpha = 1 - ss(4.2, 5.8, u);   // the push carries them to the left edge; as the sky closes the dark takes them (no cut sliver at the frame edge)
         X.wom.forEach(([fx, hk, ln], i) => { const x = W * fx; woman(ctx, x, ridgeY(x) + 2, X.wh * hk, ln, i * 1.9, t, i === 1 || i === 3 ? 1 : 0); });
         { const [a, b] = [X.wom[1], X.wom[2]].map(([fx, hk]) => [W * fx, ridgeY(W * fx) + 2 - X.wh * hk * .72]); ctx.lineWidth = X.wh * .07; ctx.strokeStyle = '#0d0d0e'; ctx.lineCap = 'round';   // an arm round another's shoulders
           ctx.beginPath(); ctx.moveTo(b[0] - X.wh * .1, b[1] + X.wh * .04); ctx.quadraticCurveTo((a[0] + b[0]) / 2, Math.min(a[1], b[1]) - X.wh * .03, a[0] + X.wh * .06, a[1] + X.wh * .02); ctx.stroke(); }
@@ -287,9 +296,9 @@
     }
     ctx.restore();
     const wr = (V ? W * .55 : H * .7) * lerp(.6, 1.1, q) * lerp(1, .4, endk);
-    finish(ctx, t, { halo: .38 + .2 * q, warm: [gp[0], gp[1] + (V ? H * .12 : H * .15) * (1 - endk), wr, .35 * (.4 + .6 * q)], vig: .6 });
+    finish(ctx, t, { halo: .38 + .2 * q, warm: [lerp(gp[0], ctx0, .35), lerp(gp[1], cty0, .35 * (1 - endk)), wr, .3 * (.4 + .6 * q)], vig: .6 });
   }
-  bwCross.point = u => { buildBW(); const push = u < 3.9 ? .15 * (u / 3.9) : .15 + 1.37 * eio((u - 3.9) / 6.3) + .026 * (u - 3.9), pr = clamp(push / 1.6);
+  bwCross.point = u => { buildBW(); const push = .3 * (1 - Math.exp(-u / 5)), pr = clamp(push / 1.6);
     return [lerp(X.gap0[0], X.gap1[0], eio(pr)), lerp(X.gap0[1], X.gap1[1], eio(pr))]; };
   window.bwCross = bwCross;
 

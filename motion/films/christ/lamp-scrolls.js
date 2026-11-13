@@ -398,7 +398,8 @@
     drawLamp(ctx, u, 1, gust, lampI);
     drawSheet(ctx, S.isa, xl, xr, lampI, amb, gust, []);
     const f = flame(ctx, u, 1, gust); smoke(ctx, u, f, .8 - .5 * gust);
-    bloom(ctx, f, 1 - .5 * focus * .4, lampI);
+    // the bloom dims before the dissolve into the cross (87.4): it sat right behind the middle cross like a halo (6차, 2026-11-14)
+    bloom(ctx, f, (1 - .5 * focus * .4) * (1 - .85 * ss(6.9, 7.7, u)), lampI);
     finish(ctx, u, f[0], f[1] + 200, lampI);
   }
 

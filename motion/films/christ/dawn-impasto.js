@@ -4,7 +4,7 @@
    await buildDawn() once, then dawnOil(ctx, u, mode):
      'tree'  u 0..5.1  (film 135.0–140.1, Q11 Acts 10:39 «나무에 달아 죽였으나»): the dove's light of the Jordan scene withdraws into
              darkness; on dark stony ground lies ONE shadow — the cross of part 4 (bw-cross.js crucified(): upright, beam 0.13 h
-             below its top, half-length 0.31 h, the title board, the body hanging from the beam), long, laid away from us by a cold
+             below its top, half-length 0.31 h, the title board — the EMPTY cross, no body: 6차), long, laid away from us by a cold
              light behind the camera. No people, no faces. The camera drifts; the cold light breathes as clouds pass, then dims to
              near dark — so the tomb's dawn is the first warm light of the part.
      'tomb'  u 0..9.4  (film 139.5–148.9, Q12 Acts 10:40 «하나님이 사흘 만에 다시 살리사» + N15): inside the rock-hewn tomb looking
@@ -45,21 +45,14 @@
     const st = Math.sin(C.th), ct = Math.cos(C.th);
     const Lt = nrm(.18, .62, -.76);   // toward the cold light: up and behind the camera, a little to the right
     const amb = new Uint8ClampedArray(PW * PH * 4), lit = new Uint8ClampedArray(PW * PH * 4);
-    // the cross and the body on it, in its own units (h = height above ground .89 h for the upright: crucified() of bw-cross.js)
+    // the cross (empty: wood only), in its own units (h = height above ground .89 h for the upright: crucified() of bw-cross.js)
     // X across (h), s = height above ground (h). Signed distance (negative inside), union by min.
     const box = (x, s, x0, x1, s0, s1) => { const dx = Math.max(x0 - x, x - x1), ds = Math.max(s0 - s, s - s1); return dx > 0 && ds > 0 ? Math.hypot(dx, ds) : Math.max(dx, ds); };
-    const cap = (x, s, ax, as, bx, bs, r0, r1) => { const vx = bx - ax, vs = bs - as, k = clamp(((x - ax) * vx + (s - as) * vs) / (vx * vx + vs * vs)); return Math.hypot(x - ax - vx * k, s - as - vs * k) - lerp(r0, r1, k); };
     const crossD = (x, s) => {
       let d = box(x, s, -.022, .022, -.2, .89);                       // the upright (tapering a little: as drawn in part 4)
       d = Math.min(d, box(x, s, -.31, .31, .742, .782));              // the beam
-      d = Math.min(d, box(x, s, -.075, .075, .846, .9));              // the title over his head (Jn 19:19)
-      // the body: head fallen to one side, arms drawn along the beam sagging, chest, the cloth at the waist, knees bent and turned
-      d = Math.min(d, Math.hypot((x - .036) / 1, (s - .694) / 1.2) - .034);
-      for (const m of [1, -1]) { d = Math.min(d, cap(x, s, m * .27, .766, m * .15, .742, .014, .017), cap(x, s, m * .15, .742, m * .06, .69, .017, .024)); }
-      d = Math.min(d, cap(x, s, 0, .675, -.004, .47, .056, .046));
-      d = Math.min(d, cap(x, s, -.004, .45, .012, .4, .055, .05));
-      d = Math.min(d, cap(x, s, -.015, .39, .03, .29, .045, .036), cap(x, s, .03, .29, .004, .16, .034, .022));
-      d = Math.min(d, cap(x, s, .015, .39, .052, .3, .042, .034), cap(x, s, .052, .3, .018, .165, .032, .021));
+      d = Math.min(d, box(x, s, -.075, .075, .846, .9));              // the title board (Jn 19:19)
+      // 6차: the shadow of the empty cross only — no body on it (depict-christ-restraint: never the suffering body)
       return d; };
     // the ground: dry, stony earth as a height field (clods, half-buried stones, grit) lit by the cold light — no round pebbles
     const rot = (x, z) => [x * .8 - z * .6, x * .6 + z * .8];
@@ -95,25 +88,40 @@
     const Ls = nrm(-.9, .5, 1);   // toward the sun: outside, up, to the left — its light runs in across the floor onto the bench
     const jag = (v, s) => .014 * (noise(v * 6 + s, s * 3) - .5) + .004 * (noise(v * 19 + s, 2) - .5);   // the door's hewn, uneven edges
     // the linen cloths lying on the bench (Jn 20:6), the head cloth folded up in a place by itself (Jn 20:7)
-    const LIN = [.8, 1.4, 1.45, 2.3], HC = [1.0, 1.28, 2.44, 2.66], HCc = [(HC[0] + HC[1]) / 2, (HC[2] + HC[3]) / 2], DRP = [0, 0];
+    const LIN = [.8, 1.4, 1.45, 2.3], HC = [1.0, 1.26, 2.46, 2.66], HCc = [(HC[0] + HC[1]) / 2, (HC[2] + HC[3]) / 2], DRP = [1.62, 2.0];
     const hf = (x, z) => {
       let h = 0;
-      // the linen cloths: two long strips lying flat, side by side (the body is not in them), uneven edges, soft folds along them,
-      // a few creases across; one end of the near strip falls over the bench's edge (drawn on the bench front, below)
-      { const j0 = .035 * (noise(z * 5 + 1, 7) - .5), j1 = .04 * (noise(z * 5 + 9, 3) - .5), k0 = .04 * (noise(x * 6, 5) - .5), k1 = .04 * (noise(x * 6 + 4, 8) - .5);
-        const x0 = (z > DRP[0] && z < DRP[1]) ? LIN[0] - .02 : LIN[0] + .03 + j0;
-        const ex = Math.min(x - x0, LIN[1] + j1 - x), ez = Math.min(z - LIN[2] - k0, LIN[3] + k1 - z);
-        if (ex > 0 && ez > 0) { const edge = ss(0, .03, ex) * ss(0, .03, ez), seam = 1.1 + .025 * Math.sin(z * 4 + 1);
-          h = Math.max(h, edge * (.022 + .01 * ss(seam - .012, seam + .012, x) + .004 * Math.sin(x * 34 + 2 * Math.sin(z * 4)) * (.4 + .6 * noise(z * 3, x * 3))
-            + .0025 * Math.sin(z * 24 + x * 6) * noise(x * 4 + 2, z * 4) - .006 * Math.exp(-((x - 1.1) ** 2) / .03 - ((z - 1.9) ** 2) / .12))); } }
-      // the head cloth, folded up and lying apart: a folded square, its upper fold a step smaller, turned a little
-      { const ca = Math.cos(.14), sa = Math.sin(.14), lx = (x - HCc[0]) * ca - (z - HCc[1]) * sa, lz = (x - HCc[0]) * sa + (z - HCc[1]) * ca, hw = (HC[1] - HC[0]) / 2, hd = (HC[3] - HC[2]) / 2;
-        const ex = hw - Math.abs(lx), ez = hd - Math.abs(lz);
-        if (ex > 0 && ez > 0) { const edge = ss(0, .03, ex) * ss(0, .03, ez), top = ss(.04, .06, ex) * ss(.03, .05, ez) * (lz > -hd + .04 ? 1 : 0) * (.8 + .2 * noise(lx * 30, lz * 30));
-          h = Math.max(h, edge * .032 + top * .018 + .003 * Math.sin(lz * 70) * edge); } }
+      // the linen cloths (6차: the flat board folded in the middle read as an open book): one long sheet of thin cloth lying slack on
+      // the slab, the body gone from it — ragged, wandering edges that thin out to nothing, soft folds running along the slab and
+      // meandering, a few creases slanting across, the cloth gathered in low rolls along its sides and sunk flat down the middle
+      // where the body lay; one end of the near side slips over the bench's edge (drawn on the bench front, below)
+      { const dk = ss(DRP[0], DRP[0] + .06, z) * (1 - ss(DRP[1] - .06, DRP[1], z));
+        const x0 = lerp(LIN[0] + .035 + .06 * (fbm(z * 3.2 + 1, 7, 3) - .5), BX - .03, dk), x1 = LIN[1] - .01 + .06 * (fbm(z * 3.4 + 9, 3, 3) - .5);
+        const z0 = LIN[2] + .06 * (fbm(x * 3.6, 5, 3) - .5), z1 = LIN[3] - .03 + .22 * (fbm(x * 4.2 + 4, 8, 3) - .5) + .04 * (noise(x * 14 + 2, 6) - .5) + .08 * ss(1.15, 1.35, x);   // the far edge ragged, not ruled
+        const ex = Math.min(x - x0, x1 - x), ez = Math.min(z - z0, z1 - z);
+        if (ex > 0 && ez > 0) {
+          const edge = ss(0, .022, ex) * ss(0, .022, ez), hem = .0035 * Math.exp(-Math.pow((Math.min(ex, ez) - .012) / .008, 2));   // the hem: a thin lip, not a slab wall
+          const wx = x + .05 * (noise(z * 3.5 + 2, x * 3.5) - .5), wz = z + .05 * (noise(x * 3.5 + 7, z * 3.5) - .5);
+          const r1 = .5 + .5 * Math.sin(wx * 48 + 2.6 * Math.sin(wz * 4.5 + 1) + 1.7 * noise(wz * 2, 3));   // folds along the slab, wandering
+          const r2 = .5 + .5 * Math.sin((wx * .55 + wz * .83) * 36 + 2 * noise(wx * 2, wz * 2 + 5));            // creases slanting across
+          const r3 = .5 + .5 * Math.sin((wx * .9 - wz * .45) * 29 + 1.1);
+          const xn = (x - (x0 + x1) / 2) / ((x1 - x0) / 2);
+          const roll = .011 * Math.exp(-Math.pow(Math.abs(xn) - .72, 2) / .028) * (.6 + .8 * noise(z * 4 + 3, 2));   // gathered along the sides
+          const sunk = 1 - .65 * Math.exp(-xn * xn / .16) * ss(LIN[2] + .1, LIN[2] + .3, z) * (1 - ss(LIN[3] - .3, LIN[3] - .1, z));    // flat down the middle
+          const heap = .016 * Math.max(0, fbm(x * 2.6 + 1, z * 2.6, 3) - .48);
+          h = Math.max(h, edge * (.004 + hem + (.009 * r1 * r1 * (.45 + .55 * noise(wx * 3, wz * 3)) + .006 * r2 * r2 * r2 * noise(wx * 2.5 + 4, wz * 2.5) + .004 * r3 * r3 * r3 * ss(.5, .8, noise(wx * 2 + 9, wz * 2))) * sunk + roll + heap)); } }
+      // the head cloth, folded up and lying apart (a little away from the linen, turned): a soft folded bundle — rounded, its folds
+      // stepping up unevenly, a crease or two, not a block
+      { const ca = Math.cos(.22), sa = Math.sin(.22), lx = (x - HCc[0]) * ca - (z - HCc[1]) * sa, lz = (x - HCc[0]) * sa + (z - HCc[1]) * ca, hw = (HC[1] - HC[0]) / 2, hd = (HC[3] - HC[2]) / 2;
+        const rr = (px, pz, ax, az, r) => { const qx = Math.abs(px) - ax + r, qz = Math.abs(pz) - az + r; return Math.hypot(Math.max(qx, 0), Math.max(qz, 0)) + Math.min(Math.max(qx, qz), 0) - r; };
+        const wob = .016 * (noise(lx * 7 + 3, lz * 7) - .5) + .005 * (noise(lx * 23, lz * 23 + 4) - .5), d0 = rr(lx, lz, hw, hd, .025) + wob;
+        if (d0 < 0) { const c2 = Math.cos(.12), s2 = Math.sin(.12), mx = lx * c2 - lz * s2, mz = lx * s2 + lz * c2;   // folds turned a little against each other
+          const d1 = rr(mx + .012, mz - .03, hw * .9, hd * .62, .02) + wob * .7, d2 = rr(lx - .01, lz - .05, hw * .78, hd * .34, .016) + wob * .5;
+          const lay = d => Math.sqrt(clamp(-d / .009));   // a thin folded layer: a rounded fold edge, then flat
+          h = Math.max(h, .006 * lay(d0) + .006 * lay(d1) + .006 * lay(d2) + .0015 * Math.sin(lz * 50 + lx * 22 + 4 * noise(lx * 8, lz * 8)) * lay(d0)); } }
       return h; };
-    const inLin = (x, z) => x > BX && x < LIN[1] + .04 && z > LIN[2] - .04 && z < LIN[3] + .04;
-    const inHC = (x, z) => x > HC[0] - .04 && x < HC[1] + .04 && z > HC[2] - .04 && z < HC[3] + .04;
+    const inLin = (x, z) => x > BX && x < LIN[1] + .05 && z > LIN[2] - .05 && z < LIN[3] + .14;
+    const inHC = (x, z) => x > HC[0] - .06 && x < HC[1] + .06 && z > HC[2] - .06 && z < HC[3] + .06;
     // geometry: the first surface a ray from the eye meets. returns [t, kind, nx, ny, nz] (kind: 0 rock, 1 cloth, 2 outside)
     const O = [C.cam, 0, 0];
     function hit(rx, ry) {   // ray direction (rx, ry, 1)
@@ -202,7 +210,7 @@
       // albedo: limestone hewn with the chisel (its marks catch the raking light as relief); the cloths linen-white with a weave
       let al, n = n0;
       const drape = k === 0 && n0[0] === -1 && Math.abs(x - BX) < 1e-4 && z > DRP[0] && z < DRP[1] && y > BY - (.1 + .035 * Math.sin((z - DRP[0]) * 15) + .02 * noise(z * 30, 1)) * Math.sin(Math.PI * (z - DRP[0]) / (DRP[1] - DRP[0])) ** .3;
-      if (drape) { const fold = .5 + .5 * Math.sin(z * 70 + 3 * noise(z * 8, 2)); n = nrm(-1, 0, (fold - .5) * .6); al = [.9, .87, .81]; }   // the end of the linen hanging over the edge
+      if (drape) { const fold = .5 + .5 * Math.sin(z * 24 + 2.4 * noise(z * 5, y * 8 + 2) + y * 9), dep = clamp((BY - y) / .1); n = nrm(-1, -.1, (fold - .5) * .9); al = [.9, .87, .81].map(v => v * (.72 + .28 * fold) * (1 - .25 * dep)); }   // the end of the linen hanging over the edge
       else if (k === 1) { const wv = .95 + .05 * Math.sin(x * 900) * Math.sin(z * 900); al = [.94 * wv, .91 * wv, .85 * wv]; }
       else { const [u1, v1] = Math.abs(n[1]) > .5 ? [x, z] : Math.abs(n[0]) > .5 ? [z, y] : [x, y];
         const tx = fbm(u1 * 1.8 + 5, v1 * 1.8, 4), pit = noise(u1 * 40, v1 * 40);

@@ -9,7 +9,9 @@
    세 기름 부음은 같은 구도(붓는 이 왼쪽·받는 이 오른쪽, 빛은 뒤에서). 글자는 그리지 않는다.
    사람은 모두 남자로 읽혀야 한다(관리자 2026-11-14): 넓고 각진 어깨, 곧은 겉옷(A자 드레스 윤곽 금지), 어른은 머릿수건(끈 두름, 목덜미까지만)이나
    짧은 머리 + 수염(역광에 수염 가장자리가 빛남), 소년 다윗은 짧은 곱슬머리·무릎 길이 속옷·다리·목자 지팡이. 긴 머리처럼 흘러내리는 선은 그리지 않는다.
-   엘리야의 겉옷은 무거운 직물 메시(접힘 음영·두꺼운 단·술·가장자리 역광) — 날아와 어깨에 먼저 얹히고 나머지가 떨어져 한 번 흔들린 뒤 늘어진다. */
+   엘리야의 겉옷은 무거운 직물 메시(접힘 음영·두꺼운 단·술·가장자리 역광) — 엘리야가 깃을 쥐고 뒤로 젖혔다 앞으로 휘둘러 스윙 꼭대기에서 손을 놓고
+   (팔은 따라 나갔다 내려감), 겉옷은 혼자 짧은 호를 날아 — 부드러운 양모처럼 펄럭이며(흐르는 물결·뒤처지는 모서리·바뀌는 주름, 판처럼 굳지 않음)
+   엘리사의 뒤에서 어깨와 등 위로 내려앉고, 먼저 얹힌 깃 뒤로 나머지가 떨어져 한 번 흔들린 뒤 늘어진다. 머리는 절대 덮지 않는다(머리를 겉옷 위에 다시 그림). */
 (function () {
   const P = Pilot, { clamp, lerp, ss, eio, eo } = P;
   const css = GOLD.css;
@@ -433,7 +435,7 @@
     ctx.fillStyle = '#0d0704'; parts.forEach(p => ctx.fill(p));
   }
   // a heavy woven mantle as a mesh G[row][col] = [x, y, z] (rows: top edge → hem), backlit by the sun behind it
-  function mantle(ctx, G, sun, U, u) {
+  function mantle(ctx, G, sun, U, u, fk = 1) {
     const NB = G.length, NA = G[0].length, hem = G[NB - 1];
     const per = [...G[0], ...G.slice(1, -1).map(r => r[NA - 1]), ...hem.slice().reverse(), ...G.slice(1, -1).reverse().map(r => r[0])];
     const path = new Path2D(); per.forEach((q, i) => i ? path.lineTo(q[0], q[1]) : path.moveTo(q[0], q[1])); path.closePath();
@@ -443,7 +445,7 @@
     const fr = [];
     for (let i = 0; i < NA - 1; i++) for (let k = 0; k < 3; k++) { const t = k / 3, A = hem[i], B = hem[i + 1], A2 = G[NB - 2][i], B2 = G[NB - 2][i + 1];
       const x = lerp(A[0], B[0], t), y = lerp(A[1], B[1], t), dx = x - lerp(A2[0], B2[0], t), dy = y - lerp(A2[1], B2[1], t), dl = Math.hypot(dx, dy) || 1;
-      const L = U * (.012 + .006 * P.noise(i * 3 + k, 5)), ra = .25 * Math.sin(u * 3.5 + i * .7 + k);
+      const L = U * (.012 + .006 * P.noise(i * 3 + k, 5)) * fk, ra = .25 * Math.sin(u * 3.5 + i * .7 + k);
       const ux = (dx / dl) * Math.cos(ra) - (dy / dl) * Math.sin(ra), uy = (dx / dl) * Math.sin(ra) + (dy / dl) * Math.cos(ra); fr.push([x, y, x + ux * L, y + uy * L]); }
     ctx.strokeStyle = '#120904'; ctx.lineWidth = Math.max(1.2, U * .003); ctx.beginPath(); fr.forEach(([a, b, c, d]) => { ctx.moveTo(a, b); ctx.lineTo(c, d); }); ctx.stroke();
     ctx.globalCompositeOperation = 'screen'; ctx.strokeStyle = 'rgba(255,186,96,.22)'; ctx.lineWidth = Math.max(.8, U * .0013); ctx.beginPath();
@@ -516,17 +518,12 @@
     const bm = ss(2.2, 3.4, u);
     if (bm > 0) { ctx.save(); ctx.globalCompositeOperation = 'screen'; const bxx = elX + U * .78 * .03; const g = ctx.createLinearGradient(bxx - U * .12, 0, bxx + U * .12, 0); g.addColorStop(0, 'rgba(255,200,110,0)'); g.addColorStop(.5, `rgba(255,206,120,${.32 * bm})`); g.addColorStop(1, 'rgba(255,200,110,0)'); ctx.fillStyle = g; ctx.fillRect(bxx - U * .12, -H, U * .24, gy - U * .78 * .9 + H); ctx.restore(); }
     const eh = U * .78, est = .35;
-    const elisha = figure(ctx, { x: elX, y: gy, h: eh, d: 1, kind: 'man', tunic: true, bow: .25, stoop: est, walk: u * 3, hands: [handle, [handle[0] - U * .012, handle[1] + U * .025]], light: sun, rim: [255, 180, 100], glow: .4 + .5 * ss(2.0, 3.2, u) });
-    // Elijah at the left, casting his mantle: arm swings from behind to forward over 0–.5 s, then comes down
-    const ejX = elX - U * .55, sh = [ejX + U * .03, gy - U * .785];
-    const sw = eo(clamp(u / .55)), down = eio(clamp((u - 1.1) / 1.2)), ang = lerp(lerp(2.4, -.55, sw), .9, down), reach = U * lerp(.33, .30, down);
-    const hand = [sh[0] + Math.cos(ang) * reach, sh[1] + Math.sin(ang) * reach];
-    const elijah = figure(ctx, { x: ejX, y: gy, h: U, d: 1, kind: 'elder', stoop: .3, hands: [hand, null], light: sun, rim: [255, 180, 100] });
-    // Elijah's mantle (1 Ki 19:19): a heavy woven cloth, not a sheet. Thrown from his hand (t0), it opens and drops in a low arc,
-    // lands on Elisha's shoulders (t1) top edge first, the rest falls after it and swings once, then hangs in folds over his
-    // shoulder and arm and down his back. A mesh: each cell shaded by how it turns to the low sun behind (fold crests catch it),
-    // a thick hem with a short fringe, the backlight burning along the edge where the wool is thin.
-    const t0 = .35, t1 = 2.5, NA = 33, NB = 21;
+    const elFig = { x: elX, y: gy, h: eh, d: 1, kind: 'man', tunic: true, bow: .25, stoop: est, walk: u * 3, hands: [handle, [handle[0] - U * .012, handle[1] + U * .025]], light: sun, rim: [255, 180, 100], glow: .4 + .5 * ss(2.0, 3.2, u) };
+    const elisha = figure(ctx, elFig);
+    // Elijah's mantle (1 Ki 19:19): a heavy woven cloth, not a sheet or a board. At rest (after t1) it lies over Elisha's shoulders —
+    // top edge round the neck and over the shoulder, then hanging in deep folds, longer behind than in front, the hem scalloped.
+    // A mesh: each cell shaded by how it turns to the low sun behind (fold crests catch it), a thick hem with a short fringe.
+    const t1 = 2.5, NA = 33, NB = 21;
     const Te = (lx, ly) => { if (ly < -.5) lx += est * Math.pow((-ly - .5) / .45, 2) * .08; return [elX + lx * eh, gy + ly * eh]; };
     const bez = (p0, c, p1, s) => [(1 - s) * (1 - s) * p0[0] + 2 * (1 - s) * s * c[0] + s * s * p1[0], (1 - s) * (1 - s) * p0[1] + 2 * (1 - s) * s * c[1] + s * s * p1[1]];
     // at rest: the top edge round the neck and over the shoulder, the cloth falling over the round of the shoulder and the upper arm,
@@ -542,21 +539,60 @@
       return [p[0] + fold * eh * .016 * fb + swing * eh * .045 * Math.pow(b, 1.5) + Math.sin(u * 1.7 + b * 2) * eh * .003 * b,
         p[1] + fold * eh * .012 * b * b + (P.noise(s * 6, 3) - .5) * eh * .03 * b * b - Math.abs(swing) * eh * .012 * b * b, z];
     };
-    const fk = clamp((u - t0) / (t1 - t0)), fe = ss(0, 1, fk);
-    const from = elijah.hands[0], rc = rest(.5, .5), cx0 = lerp(from[0], rc[0], fe), cy0 = lerp(from[1], rc[1], fe) - Math.sin(fe * Math.PI) * U * .22;
-    const spread = .3 + .7 * ss(0, .45, fk), rot = lerp(-.4, .05, fe) + .12 * Math.sin(u * 2.6), cr = Math.cos(rot), sr = Math.sin(rot);
-    const cw = U * .15 * spread, chh = U * .17 * spread * (.78 + .22 * Math.sin(u * 2.3 + 1));
-    const flight = (s, b) => {
-      const a = 1 - 2 * s, bb = 2 * b - 1, trail = s, ph = a * 2.2 - u * 5 + bb * .9;
-      const bil = Math.sin(ph) * (.35 + .65 * trail) + .3 * Math.sin(bb * 2.4 + u * 3.6), sag = U * .055 * (1 - a * a), lag = trail * b * U * .05;
-      return [cx0 + a * cw * cr - bb * chh * sr - lag, cy0 + a * cw * sr + bb * chh * cr + U * .045 * bil + sag - lag * .5,
-        U * .05 * Math.cos(ph) * (.35 + .65 * trail) + bb * chh * .4 * Math.sin(u * 2.3)];
+    // Elijah at the left CASTS it. He holds it gathered by the collar, hanging from his near hand (0–tw); swings it back (tw–tsw); swings
+    // forward and up underhand and lets go near the top of the swing (tr) — the arm follows through and drops while the cloak flies on by itself.
+    const ejX = elX - U * .55, sh = [ejX + U * .03, gy - U * .785];
+    const tw = .85, tsw = 1.47, tsd = .5, tr = 1.85, tdn = tsw + tsd, Tf = .6;
+    const armAng = t => t < tw ? 1.2 : t < tsw ? lerp(1.2, 2.35, eio((t - tw) / (tsw - tw))) : t < tdn ? lerp(2.35, -.45, eio((t - tsw) / tsd)) : lerp(-.45, 1.25, eio((t - tdn) / .4));
+    const HD = t => { const a = armAng(t), r = U * (.27 + .05 * ss(tw, tsw + .2, t) - .03 * ss(tdn, tdn + .4, t)); return [sh[0] + Math.cos(a) * r, sh[1] + Math.sin(a) * r]; };
+    const elijah = figure(ctx, { x: ejX, y: gy, h: U, d: 1, kind: 'elder', stoop: .3, hands: [HD(u), null], light: sun, rim: [255, 180, 100] });
+    // the flight: its gathered top edge (the part he held) leads along a short arc — up and over, then down from behind onto Elisha's
+    // shoulders, slowing in the air; the rest of the wool streams behind it (relative wind), opening, rippling with a travelling wave,
+    // its corners lagging and the whole sheet twisting a little, so it never reads as a stiff plane.
+    const Pr = HD(tr), rc0 = rest(.5, 0), C1 = [Pr[0] + U * .12, Pr[1] - U * .17], C2 = [rc0[0] - U * .20, rc0[1] - U * .07];
+    const fx = t => { const x = clamp((t - tr) / Tf); return x * (1.6 - .6 * x); };
+    const cub = p => { const q = 1 - p, a = q * q * q, b2 = 3 * q * q * p, c = 3 * q * p * p, d = p * p * p; return [a * Pr[0] + b2 * C1[0] + c * C2[0] + d * rc0[0], a * Pr[1] + b2 * C1[1] + c * C2[1] + d * rc0[1]]; };
+    const lead = t => t <= tr ? HD(t) : cub(fx(t));
+    const vel = t => { const a = lead(t), b = lead(t - .04); return [(a[0] - b[0]) / .04, (a[1] - b[1]) / .04]; };
+    const flyK = t => ss(tr, tr + .3, t) * (1 - ss(tr + Tf - .1, tr + Tf + .35, t));          // 1 while free in the air
+    const alpha = t => {             // the leading edge's direction on screen: square to the arc, flattening as it comes down to lie on the shoulders
+      if (t <= tr) return -2.78;
+      const p = fx(t), q = 1 - p, T = [3 * q * q * (C1[0] - Pr[0]) + 6 * q * p * (C2[0] - C1[0]) + 3 * p * p * (rc0[0] - C2[0]), 3 * q * q * (C1[1] - Pr[1]) + 6 * q * p * (C2[1] - C1[1]) + 3 * p * p * (rc0[1] - C2[1])];
+      return lerp(Math.atan2(-T[0], T[1]), -.1, ss(.4, 1, clamp((t - tr) / Tf)));
     };
+    const Vs = U * .45, cD = .2, F = [], L0 = lead(u);
+    let cx = L0[0], cy = L0[1];
+    for (let j = 0; j < NB; j++) {
+      const b = j / (NB - 1), t = u - cD * b, fl = ss(tr, tr + .35, t - .1 * b), fk = flyK(t), v = vel(t);
+      const gw = 1 - .8 * fk;                                                                // in the air the drag, not the weight, shapes it
+      let dx = -v[0] / Vs, dy = gw - v[1] / Vs; const dl = Math.hypot(dx, dy) || 1; dx /= dl; dy /= dl;
+      const del = (.18 + .22 * fl) * Math.sin(Math.PI * 2 * 1.2 * b - 8 * u) * (.1 + .9 * b), cd = Math.cos(del), sd = Math.sin(del);
+      const ddx = dx * cd - dy * sd, ddy = dx * sd + dy * cd;
+      if (j) { const seg = U * lerp(.40, .34, fl) / (NB - 1); cx += ddx * seg; cy += ddy * seg; }
+      const al = alpha(t), w = lerp(U * (.02 + .06 * ss(0, .35, b) + .015 * b) * (1 + .1 * Math.sin(b * 7 - u * 4)), U * lerp(.02, .105, eo(clamp((t - tr) / .45))) * (1 + .12 * b) * (1 + .14 * Math.sin(Math.PI * 2 * .9 * b - 7 * u + 1)), fl);
+      // held, the cloth hangs/streams square to its own fall (never edge-on to the eye); free, the leading edge follows alpha
+      let ecx = lerp(-ddy, Math.cos(al), fl), ecy = lerp(ddx, Math.sin(al), fl); const el = Math.hypot(ecx, ecy) || 1; ecx /= el; ecy /= el;
+      const gam = fk * .5 * Math.sin(2.2 * (t - tr) + .3), exc = ecx * w * Math.cos(gam), eyc = ecy * w * Math.cos(gam);
+      const row = [];
+      for (let i = 0; i < NA; i++) {
+        const s = i / (NA - 1), a = 1 - 2 * s;
+        const fo = Math.sin(s * Math.PI * 3.3 + .5), lag = -U * .05 * a * a * fl * (.5 + .5 * b) + U * .022 * b * fl * Math.sin(Math.PI * 2 * 1.6 * s - 6.5 * u + 3 * b)   // corners trail, the hem flutters
+          + (1 - fl) * U * .03 * b * b * fo, side = (1 - fl) * U * .012 * b * Math.sin(s * Math.PI * 4.4 + 1.7 + u * 2);              // held: the hem scalloped by its folds, the sides not straight
+        const z = Math.sin(gam) * a * w + U * .03 * fl * Math.cos(Math.PI * 2 * 1.2 * b - 8 * u + 2.4 * s) * (.25 + .75 * b) + U * .04 * fl * Math.sin(Math.PI * s) * Math.sin(Math.PI * b)
+          + (1 - fl) * U * .04 * fo * Math.min(1, b * 3);
+        row.push([cx + a * exc + ddx * lag + ecx * side, cy + a * eyc + ddy * lag + ecy * side, z]);
+      }
+      F.push(row);
+    }
     const G = [];
     for (let j = 0; j < NB; j++) { const b = j / (NB - 1), land = ss(t1 - .3 + .1 * b, t1 + .25 + .4 * b, u), row = [];
-      for (let i = 0; i < NA; i++) { const s = i / (NA - 1), F = flight(s, b), R = rest(s, b); row.push([lerp(F[0], R[0], land), lerp(F[1], R[1], land), lerp(F[2], R[2], land)]); }
+      for (let i = 0; i < NA; i++) { const s = i / (NA - 1), Fp = F[j][i], R = rest(s, b); row.push([lerp(Fp[0], R[0], land), lerp(Fp[1], R[1], land), lerp(Fp[2], R[2], land)]); }
       G.push(row); }
-    mantle(ctx, G, sun, U, u);
+    mantle(ctx, G, sun, U, u, .3 + .7 * ss(t1 - .1, t1 + .6, u));
+    // while he still holds it, his hand closes over the gathered collar
+    if (u < tr) { ctx.fillStyle = '#0d0704'; ctx.beginPath(); ctx.arc(elijah.hands[0][0], elijah.hands[0][1], U * .026, 0, 6.2832); ctx.fill(); }
+    // the cloak comes down from behind him: it passes behind his head, never over it (his head drawn again over the cloth, above the jaw)
+    { const [hx, hy, hr] = elisha.head; ctx.save(); ctx.beginPath(); ctx.rect(hx - hr * 3, hy - hr * 3, hr * 6, hr * 3.5); ctx.clip(); figure(ctx, { ...elFig, glow: 0 }); ctx.restore(); }
     ctx.restore();
     GOLD.bloom(ctx, ...toScr(sun, z, W * .5 + U * .1, gy - U * .6), [255, 170, 80], .3 * ex, { r: U * .45, streak: 0 });
     GOLD.motes(ctx, u * 2, { n: 110, seed: 17, light: [W * .5, gy - U * .4, W * .8], a: ex, size: 1.2 });

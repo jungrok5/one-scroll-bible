@@ -51,7 +51,13 @@
     B(-3.2, 9.6, 27.5, 3.2, 13, 34, 1);                                         // over the gate
     // battlements: merlons along every top (they burn at the edges with the backlight)
     const merl = []; const row = (x0, x1, y, z0, z1) => { for (let x = x0; x < x1 - .6; x += 1.8) { B(x, y, z0, x + 1.0, y + 1.1, z1, .97); merl.push([x, x + 1.0, y + 1.1, z0]); } };
-    row(-9.6, -3.2, 16, 25.5, 26.4); row(3.2, 9.6, 16, 25.5, 26.4); row(-3.2, 3.2, 13, 27.5, 28.3); row(-70, -9.6, 11, 30, 30.8); row(9.6, 70, 11, 30, 30.8);
+    row(-9.6, -3.2, 16, 25.5, 26.4); row(3.2, 9.6, 16, 25.5, 26.4); row(-70, -9.6, 11, 30, 30.8); row(9.6, 70, 11, 30, 30.8);
+    // the gate top (round 6, 관리자 "병사랑 깃발이 성벽 밖에 … 벽에 붙어 공중에"): a wall walk 6.5 m deep behind a parapet on its
+    // city edge. The merlons are kept apart from the other faces so they are painted AFTER the soldiers and the standard, who
+    // stand on the walk set back behind them: the parapet and the block's top edge hide their feet and lower legs. Three wider
+    // embrasures (≈1.1 m) are left where the two legionaries and the eagle stand, so they read through the gaps.
+    const PP = []; for (const [x0, x1] of [[-3.2, -2.45], [-1.35, -.45], [.45, 1.35], [2.45, 3.2]]) { PP.push(...W3.box(x0, 13, 27.5, x1, 14.1, 28.3, stone, .97)); merl.push([x0, x1, 14.1, 27.5]); }
+    for (const [x0, x1] of [[-2.45, -1.35], [-.45, .45], [1.35, 2.45]]) merl.push([x0, x1, 13, 27.5]);   // the walk's edge in each embrasure burns too
     // the passage: its two side walls and the barrel vault (inside faces, seen from the city)
     const P2 = []; for (const sd of [-1, 1]) P2.push({ pts: sd < 0 ? [[-AW, 0, 27.5], [-AW, 0, 34], [-AW, AS, 34], [-AW, AS, 27.5]] : [[AW, 0, 34], [AW, 0, 27.5], [AW, AS, 27.5], [AW, AS, 34]], alb: stone, k: .8, two: true });
     for (let i = 0; i < 16; i++) { const a0 = Math.PI - i / 16 * Math.PI, a1 = Math.PI - (i + 1) / 16 * Math.PI, y0 = AS + Math.sin(a0) * (AT - AS), y1 = AS + Math.sin(a1) * (AT - AS);
@@ -62,7 +68,7 @@
     const crowd = [[-1.6, 29.6, 1.74, 'shade'], [-.5, 30.6, 1.68, 'stand'], [.7, 29.0, 1.78, 'point'], [1.7, 30.2, 1.62, 'veil'], [1.25, 30.25, 1.08, 'child'], [-2.2, 27.4, 1.7, 'staff'], [2.3, 27.0, 1.72, 'stand'], [-.2, 26.4, 1.76, 'walk']];
     // the curtain wall (behind the towers) is painted, and its tops burn, before the towers and the gate: nothing of it shows through them
     const back = f => f.pts.every(q => Math.abs(q[0]) >= 9.59), FB = F.filter(back), FF = F.filter(f => !back(f)), MB = merl.filter(m => Math.abs(m[0]) >= 9.59), MF = merl.filter(m => Math.abs(m[0]) < 9.59);
-    G = { F, FB, FF, MB, MF, P2, merl, stains, crowd, fig: P.canvas(700, 700), top: P.canvas(420, 420),
+    G = { F, FB, FF, PP, MB, MF, P2, merl, stains, crowd, fig: P.canvas(700, 700), top: P.canvas(420, 420),
       // the camera starts low under the gate and cranes up until the gate's top, the soldiers and the eagle stand in the sky
       // (portrait and landscape frame differently: the feet stay above the words, the eagle comes in at the top by the end)
       // round 2 (관리자: the eagle must read during the first words): the standard and the soldiers are in the frame from u = 0
@@ -88,8 +94,11 @@
     for (const [x0, x1] of [[-9.6, -3.2], [3.2, 9.6]]) { const q = [[x0, 0, 25.5], [x1, 0, 25.5], [x1, 16, 25.5], [x0, 16, 25.5]].map(p => W3.P(c, ...p)); if (q.some(p => !p)) continue;
       const g = ctx.createLinearGradient(0, q[0][1], 0, q[3][1]); g.addColorStop(0, 'rgba(14,10,12,.4)'); g.addColorStop(.6, 'rgba(14,10,12,0)'); g.addColorStop(1, css(L.glow, .1));
       ctx.fillStyle = g; ctx.beginPath(); q.forEach((p, i) => i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1])); ctx.closePath(); ctx.fill(); }
+    // the gate's stains stay on the gate's face (they used to spill over its top edge onto the sky and now the soldiers there)
+    const gq = [[-3.2, 0, 27.5], [3.2, 0, 27.5], [3.2, 13, 27.5], [-3.2, 13, 27.5]].map(p => W3.P(c, ...p)), gclip = gq.every(Boolean) ? new Path2D() : null;
+    if (gclip) { gq.forEach((p, i) => i ? gclip.lineTo(p[0], p[1]) : gclip.moveTo(p[0], p[1])); gclip.closePath(); }
     for (const s of G.stains) { const p = W3.P(c, s.x, s.y, s.z); if (!p) continue; const R = s.r * p[2], g = ctx.createRadialGradient(p[0], p[1], 0, p[0], p[1], R), cc = s.d < 0 ? [12, 8, 10] : mix(L.glow, [120, 90, 80], .5);
-      g.addColorStop(0, css(cc, s.a)); g.addColorStop(1, css(cc, 0)); ctx.save(); ctx.translate(p[0], p[1]); ctx.scale(1, 1.4); ctx.translate(-p[0], -p[1]); ctx.fillStyle = g; ctx.fillRect(p[0] - R, p[1] - R, 2 * R, 2 * R); ctx.restore(); }
+      g.addColorStop(0, css(cc, s.a)); g.addColorStop(1, css(cc, 0)); ctx.save(); if (s.z > 27 && gclip) ctx.clip(gclip); ctx.translate(p[0], p[1]); ctx.scale(1, 1.4); ctx.translate(-p[0], -p[1]); ctx.fillStyle = g; ctx.fillRect(p[0] - R, p[1] - R, 2 * R, 2 * R); ctx.restore(); }
   }
   // every top edge burns: a thin line of sun along the merlons and wall tops
   function burn(ctx, c, L, list = G.merl) {
@@ -225,12 +234,15 @@
     W3.faces(ctx, c, L, G.P2);
     W3.faces(ctx, c, L, G.FB); burn(ctx, c, L, G.MB);
     W3.faces(ctx, c, L, G.FF);
+    // on the gate top: the eagle standard between two legionaries, dark against the sky. They stand on the wall walk set back
+    // behind the parapet (z 28.3), so they are painted before the gate's face and its merlons, which then cover their feet and
+    // lower legs exactly where the 3D edges fall (the eagle a little further back, behind them)
+    aquila(ctx, c, L, 0, 13, 29.4, u, sunP);
+    for (const sd of [-1, 1]) soldier(ctx, c, L, sd * 1.9, 13, 28.95, sd, u, sunP);
     gateFace(ctx, c, L);
+    W3.faces(ctx, c, L, G.PP);
     towerGlaze(ctx, c, L);
     burn(ctx, c, L, G.MF);
-    // on the gate top: the eagle standard between two legionaries, dark against the sky
-    for (const sd of [-1, 1]) soldier(ctx, c, L, sd * 2.1, 13, 28.8, sd, u, sunP);
-    aquila(ctx, c, L, 0, 13, 29.2, u, sunP);
     // light in the air of the passage: soft shafts from the sun through the arch toward us
     if (sunP) { const ap = archPts(27.5, 16).map(p => W3.P(c, ...p)); if (ap.every(Boolean)) { ctx.save(); ctx.beginPath(); ap.forEach((p, i) => i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1])); ctx.closePath(); ctx.clip(); ctx.globalCompositeOperation = 'screen';
       ctx.filter = `blur(${V ? 6 : 5}px)`; const R = Math.max(W, H); for (let i = 0; i < 14; i++) { const ang = Math.PI * .5 + (i / 14 - .5) * 2.8 + u * .02, w = .02 + .03 * noise(i * 1.7, 2), g = ctx.createRadialGradient(sunP[0], sunP[1], 0, sunP[0], sunP[1], R); g.addColorStop(0, css(L.glow, .16 * noise(i * 2.3, u * .3))); g.addColorStop(1, css(L.glow, 0)); ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(sunP[0], sunP[1]); ctx.arc(sunP[0], sunP[1], R, ang - w, ang + w); ctx.closePath(); ctx.fill(); } ctx.filter = 'none';

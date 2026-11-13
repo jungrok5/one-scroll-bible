@@ -1,214 +1,291 @@
-/* fresco-cornelius.js — 「그리스도」 N20 (film 125.0–129.7 s, u = 0..4.7): "'그리 마옵소서' 하던 베드로가 / 훗날 전한 말."
-   Acts 10:24–27, the house of Cornelius at Caesarea — told as a first-century Roman wall painting (Pompeii, Herculaneum: the Villa
-   of the Mysteries, the portrait of Terentius Neo and his wife), and filmed like an object: a real plastered wall seen at an angle.
-   The composition is the one fixed in the Vermeer version: Peter stands front left by the window, his near hand open, palm up;
-   on the right five listeners lean toward him — Cornelius in cinnabar red on a stool, an older friend with his elbows on his
-   knees, a woman in a pale veil and Egyptian blue, a kinsman and a young man in ochre standing. The painting: dark outlines,
-   flat colour fields, a few white highlight strokes, large eyes of a few strokes, no realism; framed Pompeian-style by cinnabar
-   panels, black bands and a black dado with ochre lines. The wall: lime plaster with a fine grain, hairline cracks, a few places
-   where the paint has flaked off to the bare plaster, colours faded toward the edges.
-   The camera slides slowly along the wall at an angle and closes in (each column of the wall drawn at its own depth, so the
-   bands converge). Morning sunlight rakes across the surface from the left — the grain and the cracks throw tiny shadows inside
-   it; from u ≈ 1.2 the band of sun moves over the wall and comes to rest on the faces of Peter and his listeners, dust in it.
-   No words are drawn (portrait: every head and upper body sits above 0.70 H; the words at 0.74 H fall on legs and floor).
-   API: await buildCorneliusFresco() · corneliusFresco(ctx, u) */
+/* fresco-cornelius.js — 「그리스도」 N20 (film 119.9–125.0 s, u = 0..5.1): "'그리 마옵소서' 하던 베드로가 / 훗날 전한 말."
+   Acts 10:24–27, the house of Cornelius at Caesarea. 6차 (관리자 이상 확인 5차 MINOR "테두리 선 있는 벽화풍 평면 그림이라 일러스트에
+   가깝다 · 문으로 든 아침빛이 거의 안 보인다 · 베드로가 흰 옷·수염 없음"): no longer a painting of the scene — we are IN the room, and the
+   room is a Roman one, its walls painted in the Pompeian manner (black dado, cinnabar panels with thin ochre frames, ivory intervals with
+   slender painted candelabra, an ivory upper zone; a beamed ceiling; an opus signinum floor of red mortar set with white tesserae).
+   The light is the main character: low morning sun comes through the open door in the back wall (left), lays a long warm pool across
+   the floor toward us, a shaft of it hangs in the air with dust turning in it. Peter stands in the light at its edge, speaking, his
+   open hand toward the listeners; they sit and stand in the half-dark beside it, their faces turned to him and lit from the pool.
+   Peter is the Peter of part 3 (RD_PETER in road-pastel.js: the broadest, madder robe, ochre head cloth tied with a dark band ending
+   at the shoulders, black beard). All are men: Cornelius a Roman (short hair, clean-shaven, a cinnabar cloak over a short tunic, bare
+   shins and sandals), the others with head cloths or short hair and beards. No outlines: every figure is a shape lit by the light
+   (a key from the light's side, a soft rim on the edges that face it, bounce from the floor), volume from shading, grain over all.
+   The light grows a little from u ≈ 0.3 (as if a cloud moved off the sun); the camera creeps in and slides right (parallax: the room
+   a little slower than the people). Portrait: heads and upper bodies above F.SAFE (0.64 H); legs and floor under the words.
+   No words are drawn. Closed form: corneliusFresco(ctx, u) depends only on u. API: await buildCorneliusFresco() · corneliusFresco(ctx, u) */
 const CFR = {};
+// the room in metres, seen by a camera 1.5 m above the floor: X right, Y up, D depth; world px = portrait screen px at zoom 1
+const CF = { F: 1000, E: 1.5, YH: 700, CX: 540, DW: 6, XL: -4.6, XR: 5.2, DX0: -3.3, DX1: -1.4, DH: 2.8, tanE: .66, hx: .42, hz: .91, OX: 700, OY: 100, RW: 2500, RH: 2400,
+  PX: -260, PY: 380, PWW: 1980, PHH: 1640 };   // the people's plate: world x -260.., y 380..
+const cfP = (X, Y, D) => [CF.CX + CF.F * X / D, CF.YH + CF.F * (CF.E - Y) / D];
+const cfSun = (X, Y, D) => { const t = Y / CF.tanE; return [X + t * CF.hx, Math.max(.35, D - t * CF.hz)]; };   // where the sun through (X, Y, D) lands on the floor
+const cfCirc = (cx, cy, rx, ry, n = 14, rot = 0) => Array.from({ length: n }, (_, i) => { const a = i / n * 6.283, x = Math.cos(a) * rx, y = Math.sin(a) * ry; return [cx + x * Math.cos(rot) - y * Math.sin(rot), cy + x * Math.sin(rot) + y * Math.cos(rot)]; });
+function cfCaps(a, b, w0, w1, n = 5) {   // a capsule from a to b as a polygon (so any map P can take it)
+  const ang = Math.atan2(b[1] - a[1], b[0] - a[0]), pts = [];
+  for (let i = 0; i <= n; i++) { const t = ang - Math.PI / 2 + Math.PI * i / n; pts.push([b[0] + Math.cos(t) * w1, b[1] + Math.sin(t) * w1]); }
+  for (let i = 0; i <= n; i++) { const t = ang + Math.PI / 2 + Math.PI * i / n; pts.push([a[0] + Math.cos(t) * w0, a[1] + Math.sin(t) * w0]); }
+  return pts;
+}
+function cfIK(s, t, a, b, bend) {
+  const dx = t[0] - s[0], dy = t[1] - s[1], dd = Math.hypot(dx, dy), d = Math.min(a + b - 1e-4, Math.max(Math.abs(a - b) + 1e-4, dd)), ang = Math.atan2(dy, dx);
+  const c = (a * a + d * d - b * b) / (2 * a * d), e = ang + bend * Math.acos(Math.max(-1, Math.min(1, c)));
+  const el = [s[0] + Math.cos(e) * a, s[1] + Math.sin(e) * a], k = d / (dd || 1); return { el, wr: [s[0] + dx * k, s[1] + dy * k] };
+}
+// a man in units of his height (feet at the origin, y up negative), drawn through a map P(x, y) → px; the same build as rdPerson in
+// road-pastel.js (square shoulders, a belted robe falling straight, a head cloth ending at the shoulders with a dark band round the brow,
+// or short hair; a beard), seen three-quarter toward f (+1 right, -1 left). pose 'sit': the upper body comes down onto a bench, the thighs
+// forward, the shins down. arms: [back, front] each 'hang' · 'knee' (hand on the knee) · 'clasp' (elbows on the knees) · 'open' (the
+// hand held out, palm up). Parts: q = the whole silhouette; band (belt), cloak, arm (sleeves), skin, face, hair (and beard), hc (head
+// cloth), hband (its band).
+function cfMan(P, o) {
+  const { w = 1, f = 1, lean: l = 0, pose = 'stand', head = 'cloth', beard = true, arms = ['hang', 'hang'], tunic = 'long', cloak = false } = o;
+  const sit = pose === 'sit', dz = sit ? .2 : 0, piv = sit ? -.5 : 0;
+  const q = new Path2D(), pt = {}; for (const k of ['band', 'cloak', 'arm', 'skin', 'face', 'hair', 'hc', 'hband']) pt[k] = new Path2D();
+  const add = (pts, ...to) => { pts = pts.map(([x, y]) => P(x * f, y)); let a = 0; for (let i = 0; i < pts.length; i++) { const [x0, y0] = pts[i], [x1, y1] = pts[(i + 1) % pts.length]; a += x0 * y1 - x1 * y0; } if (a < 0) pts.reverse();
+    const n = pts.length, m = i => [(pts[i][0] + pts[(i + 1) % n][0]) / 2, (pts[i][1] + pts[(i + 1) % n][1]) / 2];
+    for (const t of [q, ...to]) { t.moveTo(...m(n - 1)); for (let i = 0; i < n; i++) t.quadraticCurveTo(pts[i][0], pts[i][1], ...m(i)); t.closePath(); } };
+  const U = (x, y) => [x + l * (piv - y), y + dz];
+  // legs, feet and the robe
+  if (!sit) {
+    for (const sd of [-1, 1]) { add(cfCaps([sd * .04, -.36], [sd * .04, -.02], .036, .03)); add(cfCirc(sd * .04 + .02, -.012, .05, .022, 10)); }
+    add([[0, -.035], [-.168 * w, -.045], U(-.162 * w, -.26), U(-.145 * w, -.5), U(-.162 * w, -.62), U(-.178 * w, -.715), U(-.182 * w, -.752), U(-.165 * w, -.788), U(-.115 * w, -.808), U(-.05, -.83),
+      U(.05, -.83), U(.115 * w, -.808), U(.165 * w, -.788), U(.182 * w, -.752), U(.178 * w, -.715), U(.162 * w, -.62), U(.145 * w, -.5), U(.162 * w, -.26), [.168 * w, -.045]]);
+  } else {
+    const up = [U(-.145 * w, -.5), U(-.162 * w, -.62), U(-.178 * w, -.715), U(-.182 * w, -.752), U(-.165 * w, -.788), U(-.115 * w, -.808), U(-.05, -.83), U(.05, -.83), U(.115 * w, -.808), U(.165 * w, -.788), U(.182 * w, -.752), U(.178 * w, -.715), U(.162 * w, -.62), U(.145 * w, -.52)];
+    if (tunic === 'short') {   // a soldier's tunic to the knee: bare shins, sandals
+      for (const kx of [.28, .33]) add(cfCaps([kx, -.27], [kx - .01, -.035], .026, .022), pt.skin);
+      add(cfCirc(.29, -.016, .05, .02, 10), pt.band); add(cfCirc(.345, -.014, .055, .021, 10), pt.band);
+      add([...up, [.24, -.335], [.33, -.322], [.365, -.27], [.3, -.232], [.12, -.236], [-.1, -.236], [-.16 * w, -.25]]);
+    } else {
+      add(cfCirc(.29, -.016, .05, .02, 10)); add(cfCirc(.345, -.014, .055, .021, 10));
+      add([...up, [.24, -.335], [.33, -.322], [.352, -.27], [.335, -.1], [.36, -.035], [.19, -.035], [.205, -.2], [.12, -.236], [-.1, -.236], [-.16 * w, -.25]]);
+    }
+  }
+  add([U(-.15 * w, -.54), U(.15 * w, -.54), U(.152 * w, -.497), U(-.152 * w, -.497)], pt.band);   // the belt
+  if (!sit) add([U(.05 * w, -.505), U(.085 * w, -.5), U(.08 * w, -.39), U(.058 * w, -.39)], pt.band);   // its end hanging
+  if (cloak) {   // the cloak: from the shoulders down the back to the bench, a fold over the near shoulder, a fall over the lap
+    add([U(-.175 * w, -.8), U(-.05, -.838), U(.05, -.81), U(-.04, -.66), U(-.09, -.52), [-.11, -.25], [-.215 * w, -.245], U(-.21 * w, -.5), U(-.205 * w, -.7)], pt.cloak);
+    add([U(.03, -.835), U(.168 * w, -.792), U(.19 * w, -.69), U(.1, -.73)], pt.cloak);
+  }
+  // arms (sleeves) and hands
+  for (const [i, sd] of [[0, -1], [1, 1]]) { const mode = arms[i], sh = U(sd * .148 * w, -.745);
+    let tg, bend = -sd;
+    if (mode === 'knee') { tg = [sd > 0 ? .22 : .16, -.36]; bend = 1; }
+    else if (mode === 'clasp') { tg = [.25, -.43 + (sd > 0 ? 0 : .01)]; bend = 1; }
+    else if (mode === 'open') { tg = U(.29 * w, -.57); bend = 1; }
+    else tg = U(sd * .18 * w, -.405);
+    const a = cfIK(sh, tg, .18, .172, bend); add(cfCaps(sh, a.el, .052, .046), pt.arm); add(cfCaps(a.el, a.wr, .046, .038), pt.arm);
+    if (mode === 'open') { const d = Math.atan2(a.wr[1] - a.el[1], a.wr[0] - a.el[0]), c = [a.wr[0] + Math.cos(d) * .04, a.wr[1] + Math.sin(d) * .04 - .006];
+      add(cfCirc(c[0], c[1], .05, .019, 12, d - .12), pt.skin); add(cfCaps([a.wr[0] + .012, a.wr[1] - .012], [a.wr[0] + .036, a.wr[1] - .046], .011, .009), pt.skin); }   // the open hand, palm up, the thumb raised
+    else add(cfCirc(a.wr[0], a.wr[1] + .012, .028, .034, 10), pt.skin); }
+  // the head: neck, face (on the side he looks to), short hair or the head cloth and its band, the beard
+  const [hx, hy0] = U(.012, -.9), fcx = hx + .026;
+  add([[hx - .034, hy0 + .045], [hx + .034, hy0 + .045], [hx + .036, hy0 + .085], [hx - .036, hy0 + .085]], pt.skin);
+  add(cfCirc(fcx, hy0 + .006, .052, .064), pt.face); add([[fcx + .044, hy0 - .008], [fcx + .068, hy0 + .016], [fcx + .046, hy0 + .03]], pt.face);
+  if (head === 'cloth') {
+    add(cfCirc(hx - .01, hy0 - .014, .076, .07), pt.hc);
+    for (const sd of [-1, 1]) add([[hx + sd * .08, hy0 - .03], [fcx + sd * .043, hy0 - .032], [fcx + sd * .048, hy0 + .07], [fcx + sd * .062, hy0 + .108], [hx + sd * .122, hy0 + .114], [hx + sd * .098, hy0 + .03]], pt.hc);
+    add([[hx - .08, hy0 - .05], [hx, hy0 - .062], [hx + .08, hy0 - .05], [hx + .081, hy0 - .028], [hx, hy0 - .04], [hx - .081, hy0 - .028]], pt.hband);
+  } else {   // short hair: a cap over the top and back of the head, the back ear
+    add(cfCirc(hx - .06, hy0 + .01, .014, .022, 8), pt.skin);
+    add([[hx - .062, hy0 - .02], [hx - .066, hy0 - .03], [hx - .04, hy0 - .066], [hx, hy0 - .074], [hx + .04, hy0 - .066], [hx + .066, hy0 - .03], [hx + .062, hy0 + .01], [fcx + .04, hy0 - .03], [fcx - .04, hy0 - .03]], pt.hair);
+  }
+  if (beard) add([[fcx - .05, hy0 + .004], [fcx - .046, hy0 + .058], [fcx + .02, hy0 + .102], [fcx + .046, hy0 + .058], [fcx + .05, hy0 + .004], [fcx + .024, hy0 + .032], [fcx - .024, hy0 + .032]], pt.hair);
+  return Object.assign(q, pt);
+}
+
 async function buildCorneliusFresco() {
-  const { clamp, lerp, rng, canvas, noise, fbm } = Pilot, PW = 3000, PH = 2700;
-  const fr = canvas(PW, PH), g = fr.getContext('2d');
-  const lin = (x0, y0, x1, y1, stops) => { const gr = g.createLinearGradient(x0, y0, x1, y1); stops.forEach(([k, c]) => gr.addColorStop(k, c)); return gr; };
-  const C = { red: '#a3271c', redD: '#7c1c14', ochre: '#c8923e', ochreL: '#e2b866', green: '#5f7350', greenD: '#3e4e36', black: '#1c1714', ivory: '#ece0c4', ivoryD: '#d6c6a2', blue: '#3f6f9a', out: '#2a1810' };
-  // ---- the wall's decoration (Pompeian Fourth Style, simplified): frieze, cinnabar fields, the central picture, the black dado ----
-  const PX0 = 520, PX1 = 2480, PY0 = 360, PY1 = 1960;                                   // the central picture
-  g.fillStyle = C.ivory; g.fillRect(0, 0, PW, PH);
-  g.fillStyle = C.black; g.fillRect(0, 0, PW, 300);                                      // the upper frieze
-  g.fillStyle = C.ochre; g.fillRect(0, 300, PW, 14); g.fillStyle = C.ivory; g.fillRect(0, 318, PW, 6);
-  { g.strokeStyle = '#9a7a3c'; g.lineWidth = 4; g.beginPath(); g.moveTo(0, 165); g.lineTo(PW, 165); g.stroke();   // a laurel band: one straight stem, paired leaves, ochre and olive only
-    for (let x = 20; x < PW; x += 46) for (const sd of [-1, 1]) { g.save(); g.translate(x, 165); g.rotate(sd * .55 - .25); g.fillStyle = sd < 0 ? '#8a7a42' : '#a88a48'; g.beginPath(); g.ellipse(18, 0, 22, 7, 0, 0, 6.283); g.fill(); g.restore(); } }
-  g.fillStyle = C.red; g.fillRect(0, 330, PX0 - 40, PY1 - 330 + 40); g.fillRect(PX1 + 40, 330, PW - PX1 - 40, PY1 - 330 + 40);   // the cinnabar fields
-  for (const [x0, x1] of [[60, PX0 - 100], [PX1 + 100, PW - 60]]) { g.strokeStyle = C.ochreL; g.lineWidth = 5; g.strokeRect(x0, 420, x1 - x0, PY1 - 520); g.strokeStyle = C.ivory; g.lineWidth = 2; g.strokeRect(x0 + 18, 438, x1 - x0 - 36, PY1 - 556);
-    const cx = (x0 + x1) / 2; g.fillStyle = C.ochreL; g.beginPath(); g.ellipse(cx, 1150, 26, 60, 0, 0, 6.283); g.fill(); g.strokeStyle = C.ochre; g.lineWidth = 4; g.beginPath(); g.moveTo(cx, 1050); g.lineTo(cx, 1250); g.stroke(); }   // a small floating emblem
-  g.fillStyle = C.black; g.fillRect(PX0 - 40, 330, 40, PY1 - 290); g.fillRect(PX1, 330, 40, PY1 - 290);           // black bands round the picture
-  g.fillStyle = C.black; g.fillRect(0, PY1 + 40, PW, PH - PY1 - 40);                                                // the dado
-  g.fillStyle = C.red; g.fillRect(0, PY1 + 40, PW, 16); g.strokeStyle = C.ochre; g.lineWidth = 4;
-  g.strokeStyle = C.ochreL; g.lineWidth = 6; g.strokeRect(PX0 - 6, PY0 - 6, PX1 - PX0 + 12, PY1 - PY0 + 12); g.strokeStyle = C.ivory; g.lineWidth = 3; g.strokeRect(PX0 + 8, PY0 + 8, PX1 - PX0 - 16, PY1 - PY0 - 16);
-
-  // ---- the picture: a room in Cornelius' house, painted ----
-  const PXs = x => 1450 + x * 1700, PYs = y => 1650 + (y - .68) * 1700, K = 1700;   // the Vermeer layout's stage → plate px
-  g.save(); g.beginPath(); g.rect(PX0 + 12, PY0 + 12, PX1 - PX0 - 24, PY1 - PY0 - 24); g.clip();
-  { const floorY = PYs(.6);
-    g.fillStyle = lin(PX0, 0, PX1, 0, [[0, '#efe2c2'], [.6, '#e2d2ae'], [1, '#cdbb94']]); g.fillRect(PX0, PY0, PX1 - PX0, floorY - PY0);       // the room's ivory wall
-    g.fillStyle = C.ochre; g.fillRect(PX0, floorY - 70, PX1 - PX0, 70); g.fillStyle = C.redD; g.fillRect(PX0, floorY - 74, PX1 - PX0, 6);      // a low ochre socle
-    g.fillStyle = lin(0, floorY, 0, PY1, [[0, '#b88a50'], [1, '#8a6436']]); g.fillRect(PX0, floorY, PX1 - PX0, PY1 - floorY);                  // the floor
-    g.strokeStyle = 'rgba(70,44,22,.35)'; g.lineWidth = 3; for (let k = 1; k < 5; k++) { const y = floorY + (PY1 - floorY) * k / 5; g.beginPath(); g.moveTo(PX0, y); g.lineTo(PX1, y); g.stroke(); }
-    g.fillStyle = C.black; g.fillRect(PX0, PY0 + 12, PX1 - PX0, 40);                                                                            // the ceiling beam line
-    for (let x = PX0 + 40; x < PX1; x += 150) { g.fillStyle = '#4a3020'; g.fillRect(x, PY0 + 12, 50, 70); }
-    // the window: deep ochre frame, blue-green sea and sky in a few flat bands, a red roof, the open shutter
-    const wx0 = PXs(-.31), wx1 = PXs(-.16), wy0 = PYs(.12), wy1 = PYs(.41);
-    g.fillStyle = '#b8cac6'; g.fillRect(wx0, wy0, wx1 - wx0, wy1 - wy0); g.fillStyle = '#dfe4d8'; g.fillRect(wx0, wy0, wx1 - wx0, (wy1 - wy0) * .45);
-    g.fillStyle = '#7a9a9a'; g.fillRect(wx0, wy0 + (wy1 - wy0) * .62, wx1 - wx0, (wy1 - wy0) * .38); g.strokeStyle = '#eef2ea'; g.lineWidth = 4; for (let k = 0; k < 3; k++) { const y = wy0 + (wy1 - wy0) * (.68 + k * .1); g.beginPath(); g.moveTo(wx0 + 20 + k * 30, y); g.lineTo(wx0 + 120 + k * 30, y); g.stroke(); }
-    g.fillStyle = '#b05a44'; g.beginPath(); g.moveTo(wx0, wy1 - 60); g.lineTo(wx0 + 140, wy1 - 90); g.lineTo(wx0 + 190, wy1); g.lineTo(wx0, wy1); g.fill();
-    g.strokeStyle = '#6a3a22'; g.lineWidth = 8; g.strokeRect(wx0, wy0, wx1 - wx0, wy1 - wy0); g.lineWidth = 5; g.beginPath(); g.moveTo((wx0 + wx1) / 2, wy0); g.lineTo((wx0 + wx1) / 2, wy1); g.stroke();
-    g.fillStyle = '#8a5a30'; g.beginPath(); g.moveTo(wx1 + 24, wy0 - 12); g.lineTo(wx1 + 150, wy0 + 10); g.lineTo(wx1 + 150, wy1 - 10); g.lineTo(wx1 + 24, wy1 + 12); g.closePath(); g.fill(); g.strokeStyle = C.out; g.lineWidth = 7; g.stroke();
-    g.strokeStyle = 'rgba(42,24,16,.6)'; g.lineWidth = 4; for (let k = 1; k < 4; k++) { const x = wx1 + 24 + 126 * k / 4; g.beginPath(); g.moveTo(x, wy0 + 5); g.lineTo(x, wy1 - 5); g.stroke(); }
-    // the table, the jar, a bowl
-    const tx0 = PXs(.07), tx1 = PXs(.27), ty = PYs(.5);
-    g.fillStyle = '#7a4c28'; g.fillRect(tx0, ty, tx1 - tx0, 24); g.fillRect(tx0 + 20, ty + 24, 18, PYs(.592) - ty - 24); g.fillRect(tx1 - 40, ty + 24, 18, PYs(.592) - ty - 24);
-    g.strokeStyle = C.out; g.lineWidth = 6; g.strokeRect(tx0, ty, tx1 - tx0, 24);
-    const jx = PXs(.22), jb = ty, jr = 52, jh = 150; g.fillStyle = '#b8643a'; g.beginPath(); g.moveTo(jx - jr * .45, jb); g.bezierCurveTo(jx - jr * 1.15, jb - jh * .2, jx - jr * 1.05, jb - jh * .7, jx - jr * .38, jb - jh * .82); g.lineTo(jx - jr * .32, jb - jh); g.lineTo(jx + jr * .32, jb - jh); g.lineTo(jx + jr * .38, jb - jh * .82); g.bezierCurveTo(jx + jr * 1.05, jb - jh * .7, jx + jr * 1.15, jb - jh * .2, jx + jr * .45, jb); g.closePath(); g.fill(); g.lineWidth = 6; g.stroke();
-    g.strokeStyle = '#f4e6c8'; g.lineWidth = 6; g.beginPath(); g.arc(jx - jr * .2, jb - jh * .5, jr * .6, Math.PI * .9, Math.PI * 1.35); g.stroke();   // a white highlight stroke
-    g.fillStyle = '#d8a060'; g.beginPath(); g.ellipse(PXs(.13), ty - 14, 54, 18, 0, 0, Math.PI); g.fill(); g.strokeStyle = C.out; g.lineWidth = 5; g.stroke(); }
-
-  { const rb = rng(3); g.lineCap = 'round'; for (let i = 0; i < 900; i++) { const x = rb() * PW, y = 340 + rb() * 1610, a = (rb() - .5) * .8 + (rb() < .5 ? 0 : Math.PI / 2), l = 30 + 90 * rb();
-      g.strokeStyle = rb() < .5 ? `rgba(255,248,232,${.04 + .05 * rb()})` : `rgba(40,20,10,${.03 + .05 * rb()})`; g.lineWidth = 6 + 16 * rb(); g.beginPath(); g.moveTo(x, y); g.lineTo(x + Math.cos(a) * l, y + Math.sin(a) * l); g.stroke(); } }   // the fresco painter's broad strokes
-  // ---- the people (the Vermeer version's figures, painted flat: outline → colour field → white highlight strokes → eyes) ----
-  const poly = (p, pts) => { let a = 0; for (let i = 0; i < pts.length; i++) { const [x0, y0] = pts[i], [x1, y1] = pts[(i + 1) % pts.length]; a += x0 * y1 - x1 * y0; } if (a < 0) pts = pts.slice().reverse(); p.moveTo(pts[0][0], pts[0][1]); for (let i = 1; i < pts.length; i++) p.lineTo(pts[i][0], pts[i][1]); p.closePath(); };
-  const ell = (p, x, y, rx, ry, rot = 0) => { p.moveTo(x + rx * Math.cos(rot), y + rx * Math.sin(rot)); p.ellipse(x, y, rx, ry, rot, 0, 6.283); };
-  const limb = (p, a, b, w0, w1) => { const dx = b[0] - a[0], dy = b[1] - a[1], l = Math.hypot(dx, dy) || 1, nx = -dy / l, ny = dx / l; poly(p, [[a[0] + nx * w0, a[1] + ny * w0], [b[0] + nx * w1, b[1] + ny * w1], [b[0] - nx * w1, b[1] - ny * w1], [a[0] - nx * w0, a[1] - ny * w0]]); ell(p, b[0], b[1], w1, w1); };
-  const arm2 = (sh, aU, aF) => { const el = [sh[0] + Math.sin(aU) * .19, sh[1] + Math.cos(aU) * .19], hd = [el[0] + Math.sin(aF) * .16, el[1] + Math.cos(aF) * .16]; return [el, hd]; };   // bones .19 + .16, angles from straight down, + = forward
-  function person(o) {
-    const p = new Path2D(), ph = new Path2D(), hair = new Path2D(), pa = [new Path2D(), new Path2D()], lean = o.lean || 0, sit = o.pose === 'sit';
-    const hip = sit ? [0, -.27] : [0, -.5], rot = (pt, c) => { const dx = pt[0] - c[0], dy = pt[1] - c[1], s = Math.sin(lean), co = Math.cos(lean); return [c[0] + dx * co - dy * s, c[1] + dx * s + dy * co]; };
-    const up = (u, v) => rot([hip[0] + u, hip[1] + v], hip);
-    if (sit) { poly(p, [[-.13, -.36], [.06, -.36], [.27, -.33], [.29, -.25], [.3, -.02], [.18, -.02], [.17, -.22], [-.1, -.2]]); ell(p, .28, -.015, .06, .022); }
-    else { poly(p, [[-.12, -.52], [.1, -.52], [.14, -.03], [-.15, -.03]]); ell(p, .05, -.015, .06, .02); ell(p, -.06, -.015, .06, .02); }
-    poly(p, [up(-.12, .02), up(.11, .02), up(.115, -.12), up(.11, -.27), up(.06, -.33), up(-.08, -.335), up(-.13, -.26), up(-.135, -.1)]);
-    if (o.cloak) poly(p, [up(-.09, -.34), up(.07, -.33), up(.03, -.2), up(-.16, -.02), up(-.2, sit ? .2 : .25), up(-.15, -.2)]);
-    const hc = up(.015, -.43); ell(ph, hc[0], hc[1], .048, .06, lean);
-    const sh8 = q => [hc[0] + (q[0] - hc[0]) * .82, hc[1] + (q[1] - hc[1]) * .82], polyH = (path, pts) => poly(path, pts.map(sh8));
-    const nk = up(.0, -.34); poly(ph, [[nk[0] - .032, nk[1] + .01], [nk[0] + .032, nk[1] + .01], [nk[0] + .028, nk[1] - .06], [nk[0] - .028, nk[1] - .06]]);
-    // hair / head cloth / veil: a cap over the back and top of the head (the face stays open toward where they look)
-    if (o.head === 'cloth' || o.head === 'veil') { const b1 = up(-.065, -.46), b2 = up(-.11, o.head === 'veil' ? -.1 : -.3), b3 = up(-.02, o.head === 'veil' ? -.12 : -.3); polyH(hair, [up(.045, -.495), up(-.03, -.505), b1, b2, b3, up(.0, -.4)]); }
-    else { polyH(hair, [up(.05, -.475), up(.0, -.5), up(-.05, -.49), up(-.065, -.44), up(-.055, -.39), up(-.02, -.4), up(-.01, -.45), up(.04, -.455)]); }
-    const arms = o.arms || [[.3, .9], [.2, 1.1]], hands = [];
-    arms.forEach(([aU, aF], i) => { const q = pa[i], s0 = up(i ? -.02 : .02, -.31), [el, hd] = arm2(s0, aU + lean, aF + lean); ell(q, s0[0], s0[1], .05, .05); limb(q, s0, el, .046, .04); limb(q, el, hd, .04, .05); hands.push([hd[0] + Math.sin(aF + lean) * .035, hd[1] + Math.cos(aF + lean) * .035]); });
-    return { body: p, head: ph, hair, pa, hc, hands, lean };
+  const { clamp, lerp, rng, canvas, noise, hex } = Pilot, { OX, OY, RW, RH, XL, XR, DX0, DX1, DH } = CF;
+  const px = (X, D = CF.DW) => cfP(X, 0, D)[0], py = (Y, D = CF.DW) => cfP(0, Y, D)[1];
+  const poly = (g, pts) => { g.beginPath(); pts.forEach((p, i) => i ? g.lineTo(p[0], p[1]) : g.moveTo(p[0], p[1])); g.closePath(); };
+  // ---------------- the room's colours (albedo), then its light ----------------
+  const room = canvas(RW, RH), g = room.getContext('2d'); g.translate(OX, OY);
+  const wallL = px(XL), wallR = px(XR), wTop = py(4.2), wBot = py(0);
+  g.fillStyle = '#7e6c58'; g.fillRect(-OX, -OY, RW, wTop + OY);                       // the ceiling plaster
+  g.fillStyle = '#86503a'; g.fillRect(-OX, wBot, RW, RH - wBot - OY);                  // the floor
+  const floorPoly = [cfP(XL, 0, CF.DW), cfP(XR, 0, CF.DW), cfP(XR, 0, .6), cfP(XL, 0, .6)];
+  const drawFloor = (x) => {   // opus signinum: red mortar, white tesserae in a lattice, mottled
+    x.save(); poly(x, floorPoly); x.clip(); x.fillStyle = '#86503a'; x.fill();
+    const r = rng(12); for (let i = 0; i < 70; i++) { const X = lerp(XL, XR, r()), D = lerp(1, CF.DW, r()), [cx, cy] = cfP(X, 0, D), R = 900 * (.3 + r() * .7) / D;
+      const gr = x.createRadialGradient(cx, cy, 0, cx, cy, R); gr.addColorStop(0, r() < .5 ? 'rgba(160,96,64,.35)' : 'rgba(90,48,32,.3)'); gr.addColorStop(1, 'rgba(0,0,0,0)'); x.fillStyle = gr; x.save(); x.translate(cx, cy); x.scale(1, 1.5 / D + .15); x.translate(-cx, -cy); x.fillRect(cx - R, cy - R, 2 * R, 2 * R); x.restore(); }
+    const rt = rng(21), st = .3; let row = 0;
+    for (let D = CF.DW - .05; D > .9; D -= st * .5, row++) for (let X = XL + (row % 2) * st / 2; X < XR; X += st) {   // set by hand: not quite in line, not all the same
+      const [cx, cy] = cfP(X + (rt() - .5) * .05, 0, D + (rt() - .5) * .04), rx = 1000 * (.009 + .006 * rt()) / D, ry = rx * CF.E / Math.hypot(D, CF.E);
+      x.fillStyle = `rgba(222,208,182,${.28 + .3 * rt()})`; x.beginPath(); x.ellipse(cx, cy, rx, ry, (rt() - .5) * .6, 0, 6.283); x.fill(); }
+    // a meander band of tesserae along the back wall
+    for (let X = XL; X < XR; X += .12) for (const D of [CF.DW - .28, CF.DW - .22]) { const [cx, cy] = cfP(X, 0, D), rx = 1000 * .016 / D; x.fillStyle = 'rgba(222,208,182,.4)'; x.beginPath(); x.ellipse(cx, cy, rx, rx * .3, 0, 0, 6.283); x.fill(); }
+    x.restore(); };
+  drawFloor(g);
+  // the side walls (landscape sees their near corners)
+  for (const X of [XL, XR]) { g.fillStyle = '#7e2a1e'; poly(g, [cfP(X, 0, CF.DW), cfP(X, 4.2, CF.DW), cfP(X, 4.2, 1.2), cfP(X, 0, 1.2)]); g.fill();
+    g.fillStyle = '#1e1814'; poly(g, [cfP(X, 0, CF.DW), cfP(X, .95, CF.DW), cfP(X, .95, 1.2), cfP(X, 0, 1.2)]); g.fill();
+    g.fillStyle = '#c4ae84'; poly(g, [cfP(X, 3.4, CF.DW), cfP(X, 4.2, CF.DW), cfP(X, 4.2, 1.2), cfP(X, 3.4, 1.2)]); g.fill(); }
+  // the back wall: dado · main zone (cinnabar panels, ivory intervals) · cornice · upper zone
+  g.fillStyle = '#cdb488'; g.fillRect(wallL, wTop, wallR - wallL, py(3.4) - wTop);                      // the upper zone
+  g.fillStyle = '#e2d4b4'; g.fillRect(wallL, py(3.4), wallR - wallL, py(3.25) - py(3.4));               // the stucco cornice
+  g.fillStyle = '#a08458'; g.fillRect(wallL, py(3.25) - 3, wallR - wallL, 3);
+  g.fillStyle = '#1f1915'; g.fillRect(wallL, py(.95), wallR - wallL, wBot - py(.95));                    // the black dado
+  g.fillStyle = '#8c2a1c'; g.fillRect(wallL, py(.95), wallR - wallL, 5);
+  const zone = [py(3.25), py(.95)], panel = (X0, X1) => { const x0 = px(X0), x1 = px(X1), [y0, y1] = zone;
+      g.fillStyle = '#9a3022'; g.fillRect(x0, y0, x1 - x0, y1 - y0);
+      g.strokeStyle = 'rgba(222,190,124,.75)'; g.lineWidth = 3; g.strokeRect(x0 + 16, y0 + 16, x1 - x0 - 32, y1 - y0 - 32);   // painted frame lines on the plaster
+      g.strokeStyle = 'rgba(236,224,196,.35)'; g.lineWidth = 1.5; g.strokeRect(x0 + 24, y0 + 24, x1 - x0 - 48, y1 - y0 - 48);
+      const cx = (x0 + x1) / 2, cy = (y0 + y1) / 2; g.fillStyle = 'rgba(214,176,108,.55)'; g.beginPath(); g.ellipse(cx, cy, 13, 22, 0, 0, 6.283); g.fill();
+      g.fillStyle = 'rgba(232,212,170,.4)'; g.beginPath(); g.ellipse(cx - 3, cy - 6, 5, 8, 0, 0, 6.283); g.fill();
+      g.strokeStyle = 'rgba(214,176,108,.6)'; g.lineWidth = 2; g.beginPath(); g.moveTo(x0 + 16, y1 + 2); g.lineTo(x0 + 16, wBot - 8); g.moveTo(x1 - 16, y1 + 2); g.lineTo(x1 - 16, wBot - 8); g.stroke(); },
+    interval = (X0, X1) => { const x0 = px(X0), x1 = px(X1), [y0, y1] = zone, cx = (x0 + x1) / 2;
+      g.fillStyle = '#d6c49c'; g.fillRect(x0, y0, x1 - x0, y1 - y0);
+      g.strokeStyle = 'rgba(176,128,66,.7)'; g.lineWidth = 3; g.beginPath(); g.moveTo(cx, y0 + 30); g.lineTo(cx, y1 - 10); g.stroke();   // a slender painted candelabrum
+      g.fillStyle = 'rgba(176,128,66,.7)'; for (const k of [.18, .42, .66]) { g.beginPath(); g.ellipse(cx, lerp(y0, y1, k), 12, 3.5, 0, 0, 6.283); g.fill(); }
+      g.fillStyle = 'rgba(120,140,96,.55)'; for (const sd of [-1, 1]) { g.beginPath(); g.ellipse(cx + sd * 12, lerp(y0, y1, .3), 9, 4, sd * .5, 0, 6.283); g.fill(); }
+      g.strokeStyle = 'rgba(150,60,40,.45)'; g.lineWidth = 2; g.strokeRect(x0 + 8, y0 + 8, x1 - x0 - 16, y1 - y0 - 16); };
+  panel(XL, DX0 - .12);
+  [[DX1 + .12, -.9, 0], [-.9, .4, 1], [.4, .9, 0], [.9, 2.2, 1], [2.2, 2.7, 0], [2.7, 4.0, 1], [4.0, 4.5, 0], [4.5, XR, 1]].forEach(([a, b, p]) => p ? panel(a, b) : interval(a, b));
+  { g.strokeStyle = 'rgba(150,96,52,.5)'; g.lineWidth = 2; for (let X = XL + .3; X < XR; X += .55) { const x = px(X); g.beginPath(); g.moveTo(x, wTop + 10); g.lineTo(x, py(3.4) - 8); g.stroke(); }   // the upper zone's thin painted architecture
+    g.beginPath(); g.moveTo(wallL, wTop + 30); g.lineTo(wallR, wTop + 30); g.stroke(); }
+  // the beamed ceiling: a wall plate along the top, beams running toward us
+  g.fillStyle = '#3e2a1c'; g.fillRect(wallL, py(4.5), wallR - wallL, wTop - py(4.5));
+  for (let X = -4.1; X < 5; X += 1.0) { g.fillStyle = '#3a2a1e'; poly(g, [cfP(X - .11, 4.5, CF.DW), cfP(X - .11, 4.5, 1), cfP(X - .11, 4.22, 1), cfP(X - .11, 4.22, CF.DW)]); g.fill();
+    g.fillStyle = '#4e3a2a'; poly(g, [cfP(X - .11, 4.22, CF.DW), cfP(X + .11, 4.22, CF.DW), cfP(X + .11, 4.22, 1), cfP(X - .11, 4.22, 1)]); g.fill(); }
+  g.fillStyle = '#3e2a1c'; g.fillRect(wallL, py(4.2), wallR - wallL, 6);
+  // the door: a dark wooden frame round the opening (the opening itself is painted after the light)
+  const dx0 = px(DX0), dx1 = px(DX1), dy0 = py(DH);
+  g.fillStyle = '#34241a'; g.fillRect(dx0 - 24, dy0 - 26, dx1 - dx0 + 48, wBot - dy0 + 26); g.fillStyle = '#4a3222'; g.fillRect(dx0 - 24, dy0 - 26, dx1 - dx0 + 48, 8);
+  // plaster: grain and blotches over walls and floor, a few hairline cracks, worn patches
+  { const NW = RW >> 1, NH = RH >> 1, nc = canvas(NW, NH), nx = nc.getContext('2d'), im = nx.createImageData(NW, NH), d = im.data, r = rng(5);
+    for (let y = 0; y < NH; y++) for (let x = 0; x < NW; x++) { const v = 128 + 34 * (noise(x * .02, y * .02) - .5) + 18 * (noise(x * .09, y * .09) - .5) + 16 * (r() - .5), i = (y * NW + x) * 4; d[i] = d[i + 1] = d[i + 2] = v; d[i + 3] = 255; }
+    nx.putImageData(im, 0, 0); g.save(); g.setTransform(1, 0, 0, 1, 0, 0); g.globalCompositeOperation = 'overlay'; g.globalAlpha = .5; g.drawImage(nc, 0, 0, RW, RH); g.restore(); }
+  { const r = rng(77); g.lineCap = 'round';
+    for (let k = 0; k < 9; k++) { let x = lerp(wallL, wallR, r()), y = lerp(wTop + 20, py(1), r()), a = r() * 6.283; if (x > dx0 - 40 && x < dx1 + 40) continue; g.strokeStyle = 'rgba(46,30,22,.32)'; g.lineWidth = 1.2; g.beginPath(); g.moveTo(x, y);
+      for (let i = 0; i < 40; i++) { a += (r() - .5) * .8; x += Math.cos(a) * 6; y += Math.sin(a) * 6; g.lineTo(x, y); } g.stroke(); }
+    for (let i = 0; i < 70; i++) { const x = lerp(wallL, wallR, r()), y = lerp(wTop, wBot, r()), R = 20 + 70 * r(), gr = g.createRadialGradient(x, y, 0, x, y, R); gr.addColorStop(0, `rgba(230,214,186,${.06 + .1 * r()})`); gr.addColorStop(1, 'rgba(230,214,186,0)'); g.fillStyle = gr; g.fillRect(x - R, y - R, 2 * R, 2 * R); } }
+  // the room's own light (no sun yet): dim, warmer and brighter near the door and the floor it lights, darker toward the far right
+  { const lm = canvas(RW, RH), lx = lm.getContext('2d'); lx.translate(OX, OY); lx.fillStyle = 'rgb(162,146,132)'; lx.fillRect(-OX, -OY, RW, RH);
+    lx.globalCompositeOperation = 'lighter';
+    for (const [cx, cy, R, c] of [[300, 1090, 1050, 'rgba(110,80,50,1)'], [165, 720, 560, 'rgba(84,60,36,1)'], [380, 950, 460, 'rgba(70,48,28,1)']]) { const gr = lx.createRadialGradient(cx, cy, 0, cx, cy, R); gr.addColorStop(0, c); gr.addColorStop(1, 'rgba(0,0,0,0)'); lx.fillStyle = gr; lx.fillRect(cx - R, cy - R, 2 * R, 2 * R); }
+    lx.globalCompositeOperation = 'multiply'; const gr = lx.createLinearGradient(-OX, 0, RW - OX, 0); gr.addColorStop(0, '#fff'); gr.addColorStop(.45, '#fff'); gr.addColorStop(1, 'rgb(170,160,156)'); lx.fillStyle = gr; lx.fillRect(-OX, -OY, RW, RH);
+    const gv = lx.createLinearGradient(0, -OY, 0, 400); gv.addColorStop(0, 'rgb(150,140,136)'); gv.addColorStop(1, '#fff'); lx.fillStyle = gv; lx.fillRect(-OX, -OY, RW, 500);
+    g.save(); g.setTransform(1, 0, 0, 1, 0, 0); g.globalCompositeOperation = 'multiply'; g.drawImage(lm, 0, 0); g.restore(); }
+  // the opening: the bright morning outside — a portico's pale columns, the garden beyond, all burnt out by the sun
+  { g.save(); g.beginPath(); g.rect(dx0, dy0, dx1 - dx0, wBot - dy0); g.clip();
+    let gr = g.createLinearGradient(0, dy0, 0, wBot); gr.addColorStop(0, '#fffaf0'); gr.addColorStop(.7, '#fff3da'); gr.addColorStop(1, '#ffe8c0'); g.fillStyle = gr; g.fillRect(dx0, dy0, dx1 - dx0, wBot - dy0);
+    g.fillStyle = 'rgba(214,196,150,.45)'; g.fillRect(dx0, wBot - 70, dx1 - dx0, 70);                         // the garden, a pale band
+    for (let x = dx0 + 22; x < dx1; x += 78) { gr = g.createLinearGradient(x, 0, x + 18, 0); gr.addColorStop(0, 'rgba(226,206,168,.75)'); gr.addColorStop(1, 'rgba(246,232,206,.5)'); g.fillStyle = gr; g.fillRect(x, dy0 + 34, 18, wBot - dy0 - 70); }   // the portico's columns
+    g.fillStyle = 'rgba(232,214,178,.6)'; g.fillRect(dx0, dy0 + 22, dx1 - dx0, 16);
+    g.fillStyle = 'rgba(176,150,112,.85)'; poly(g, [[dx0, dy0], [px(DX0, CF.DW + .4), py(DH, CF.DW + .4)], [px(DX0, CF.DW + .4), py(0, CF.DW + .4)], [dx0, wBot]]); g.fill();   // the left jamb's inner face, in shade
+    g.fillStyle = 'rgba(150,126,92,.85)'; poly(g, [[dx0, dy0], [dx1, dy0], [px(DX1, CF.DW + .4), py(DH, CF.DW + .4)], [px(DX0, CF.DW + .4), py(DH, CF.DW + .4)]]); g.fill();   // the lintel's underside
+    g.fillStyle = 'rgba(255,236,200,.9)'; poly(g, [[px(DX0, CF.DW + .4), py(0, CF.DW + .4)], [px(DX1, CF.DW + .4), py(0, CF.DW + .4)], [dx1, wBot], [dx0, wBot]]); g.fill();   // the sunlit threshold
+    g.fillStyle = 'rgba(255,250,240,.35)'; g.fillRect(dx0, dy0, dx1 - dx0, wBot - dy0); g.restore(); }
+  { g.save(); g.globalCompositeOperation = 'screen'; g.filter = 'blur(18px)'; const gr = g.createLinearGradient(0, wBot, 0, wBot + 420); gr.addColorStop(0, 'rgba(255,214,160,.32)'); gr.addColorStop(1, 'rgba(255,214,160,0)'); g.fillStyle = gr;   // the door's sheen on the polished floor
+    poly(g, [[dx0 + 10, wBot], [dx1 - 10, wBot], [dx1 + 40, wBot + 420], [dx0 - 40, wBot + 420]]); g.fill(); g.restore(); }
+  { const rb = canvas(RW, RH), x = rb.getContext('2d'); x.filter = 'blur(1.3px)'; x.drawImage(room, 0, 0); CFR.room = rb; }   // the room a touch out of focus behind the people
+  // ---------------- the people ----------------
+  const PP = { X: CF.PX, Y: CF.PY }, peo = canvas(CF.PWW, CF.PHH), lit = canvas(CF.PWW, CF.PHH), tmp = canvas(CF.PWW, CF.PHH);
+  const gB = peo.getContext('2d'), gL = lit.getContext('2d'), gT = tmp.getContext('2d'); for (const x of [gB, gL, gT]) x.translate(-PP.X, -PP.Y);
+  let AMB = [.6, .52, .47]; const tone = (c, k = 1) => { const a = hex(c); return `rgb(${a[0] * AMB[0] * k | 0},${a[1] * AMB[1] * k | 0},${a[2] * AMB[2] * k | 0})`; };
+  const PE = (typeof RD_PETER !== 'undefined') ? RD_PETER : { body: '#7e4c44', hc: '#c9a06a', band: '#4a3426', hair: '#3a302c', w: 1.1 };   // part 3's Peter
+  const MEN = [   // back to front. lt: [light travel x, y], rim, key, bounce from the floor
+    { X: 2.7, D: 4.9, Hm: 1.74, o: { f: -1, w: 1, head: 'cloth', lean: .02 }, c: { body: '#5c4a3c', hc: '#b8a888', band: '#3e2e2c', hair: '#2e2420', skin: '#a07a60' }, lt: [[1, -.1], .22, .08, .03] },
+    { X: 1.75, D: 4.6, Hm: 1.72, o: { f: -1, w: .98, head: 'hair', lean: .03 }, c: { body: '#4c5866', band: '#2e2a2a', hair: '#2a201c', skin: '#a8806a' }, lt: [[1, -.1], .26, .1, .04] },
+    { X: .95, D: 4.3, Hm: 1.75, o: { f: -1, w: 1.02, head: 'cloth', lean: .04 }, c: { body: '#6e5238', hc: '#a6643e', band: '#3e2e2c', hair: '#2e2420', skin: '#a8806a' }, lt: [[1, -.12], .3, .12, .05] },
+    { X: 1.55, D: 3.9, Hm: 1.75, o: { f: -1, w: 1, head: 'cloth', pose: 'sit', lean: .12, arms: ['clasp', 'clasp'] }, c: { body: '#5e6a4c', hc: '#b4a68a', band: '#4a3c30', hair: '#8e847a', skin: '#a8806a' }, lt: [[1, -.15], .32, .14, .05], bench: true },
+    { X: .98, D: 3.6, Hm: 1.8, o: { f: -1, w: 1.04, head: 'hair', beard: false, pose: 'sit', lean: .06, arms: ['knee', 'knee'], tunic: 'short', cloak: true }, c: { body: '#6e5c44', cloak: '#9c2c20', band: '#3a2618', hair: '#2a1e18', skin: '#9c7258' }, lt: [[1, -.15], .36, .17, .06], bench: true },
+    { X: -.3, D: 3.2, Hm: 1.8, peter: true, o: { f: 1, w: PE.w || 1.1, head: 'cloth', lean: .02, arms: ['hang', 'open'] }, c: { body: PE.body, hc: PE.hc, band: PE.band, hair: PE.hair, skin: '#b48a6e' }, lt: [[1, .42], .9, .2, .1] },
+  ];
+  const fill = (x, p, c) => {
+    x.fillStyle = tone(c.body); x.fill(p); x.fillStyle = tone(c.band); x.fill(p.band);
+    if (c.cloak) { x.fillStyle = tone(c.cloak); x.fill(p.cloak); }
+    x.fillStyle = tone(c.body, .86); x.fill(p.arm);
+    x.fillStyle = tone(c.skin); x.fill(p.skin); x.fillStyle = tone(c.skin, .74); x.fill(p.face);
+    x.fillStyle = tone(c.hair); x.fill(p.hair);
+    if (c.hc) { x.fillStyle = tone(c.hc); x.fill(p.hc); x.fillStyle = tone(c.band); x.fill(p.hband); } };
+  for (const m of MEN) {
+    const [fx, fy] = cfP(m.X, 0, m.D), S = CF.F * m.Hm / m.D, f = m.o.f, P = (x, y) => [fx + x * S, fy + y * S];
+    const path = cfMan(P, m.o), box = [fx - .5 * S, fy - 1.02 * S, S, 1.06 * S];
+    m.fx = fx; m.fy = fy; m.S = S;
+    // its shadow on the floor (soft, a little toward us and right: the light comes from the door)
+    gB.save(); gB.filter = `blur(${(.012 * S).toFixed(1)}px)`; gB.fillStyle = 'rgba(14,7,4,.5)'; gB.beginPath(); gB.ellipse(fx + f * (m.o.pose === 'sit' ? .14 : .02) * S + .03 * S, fy + .004 * S, .25 * S, .03 * S, 0, 0, 6.283); gB.fill(); gB.restore();
+    let bench = null;
+    if (m.bench) { bench = new Path2D(); const bx = (x, y) => P(x * f, y);
+      for (const pts of [[[-.21, -.272], [.2, -.272], [.2, -.238], [-.21, -.238]], [[-.18, -.24], [-.15, -.24], [-.15, -.004], [-.18, -.004]], [[.15, -.24], [.18, -.24], [.18, -.004], [.15, -.004]]]) { const q = pts.map(p => bx(...p)); bench.moveTo(...q[0]); q.slice(1).forEach(p => bench.lineTo(...p)); bench.closePath(); }
+      gB.fillStyle = tone('#5a3a24'); gB.fill(bench); }
+    { const a = m.peter ? .56 : .46; AMB = [a, a * .87, a * .79]; } fill(gB, path, m.c);
+    // volume: darker down the body and on the side away from the light
+    { const [Lx, Ly] = m.lt[0], top = fy - S, cx = fx, cy = fy - .55 * S; gB.save(); gB.clip(path);
+      let gr = gB.createLinearGradient(0, fy - .55 * S, 0, fy); gr.addColorStop(0, 'rgba(12,6,4,0)'); gr.addColorStop(1, 'rgba(12,6,4,.42)'); gB.fillStyle = gr; gB.fillRect(...box);
+      gr = gB.createLinearGradient(cx - Lx * .22 * S, cy - Ly * .22 * S, cx + Lx * .22 * S, cy + Ly * .22 * S); gr.addColorStop(0, 'rgba(10,5,4,0)'); gr.addColorStop(1, 'rgba(10,5,4,.34)'); gB.fillStyle = gr; gB.fillRect(...box);
+      { const rf = rng(Math.round(fx * 7)); for (let i = 0; i < 6; i++) { const xx = fx + (rf() - .5) * .28 * S, wd = (.012 + .022 * rf()) * S, g2 = gB.createLinearGradient(xx - wd, 0, xx + wd, 0);   // soft folds
+        g2.addColorStop(0, 'rgba(10,5,4,0)'); g2.addColorStop(.5, `rgba(10,5,4,${.1 + .12 * rf()})`); g2.addColorStop(1, 'rgba(10,5,4,0)'); gB.fillStyle = g2; gB.fillRect(xx - wd, fy - (m.o.pose === 'sit' ? .5 : .74) * S, 2 * wd, (m.o.pose === 'sit' ? .48 : .72) * S); } }
+      gr = gB.createLinearGradient(0, top, 0, top + .2 * S); gr.addColorStop(0, 'rgba(255,240,220,.05)'); gr.addColorStop(1, 'rgba(255,240,220,0)'); gB.fillStyle = gr; gB.fillRect(...box); gB.restore(); }
+    // the light it catches (drawn later with the light's strength): first hide what is behind it
+    gL.save(); gL.globalCompositeOperation = 'destination-out'; gL.fill(path); if (bench) gL.fill(bench); gL.restore();
+    { const [Lx, Ly] = m.lt[0], [, rimA, keyA, bA] = m.lt, cx = fx, cy = fy - .55 * S; gL.save(); gL.clip(path);
+      let gr = gL.createLinearGradient(cx - Lx * .26 * S, cy - Ly * .26 * S, cx + Lx * .12 * S, cy + Ly * .12 * S); gr.addColorStop(0, `rgba(255,206,150,${keyA})`); gr.addColorStop(.55, `rgba(255,196,140,${keyA * .3})`); gr.addColorStop(1, 'rgba(255,196,140,0)'); gL.fillStyle = gr; gL.fillRect(...box);   // the key, from the light's side
+      gr = gL.createLinearGradient(0, fy, 0, fy - .75 * S); gr.addColorStop(0, `rgba(255,180,120,${bA})`); gr.addColorStop(1, 'rgba(255,180,120,0)'); gL.fillStyle = gr; gL.fillRect(...box); gL.restore();   // bounce from the floor
+      // the soft rim: the shape minus itself moved along the light, blurred, kept inside the shape (an edge of light, never a line round it)
+      const d = (m.peter ? .013 : .011) * S, [bx, by, bw, bh] = box.map(Math.round);
+      gT.save(); gT.clearRect(bx - 4, by - 4, bw + 8, bh + 8); gT.fillStyle = '#fff'; gT.fill(path); gT.globalCompositeOperation = 'destination-out'; gT.translate(Lx * d, Ly * d); gT.fill(path); gT.restore();
+      gT.save(); gT.globalCompositeOperation = 'source-in'; gr = gT.createLinearGradient(0, by, 0, by + bh); gr.addColorStop(0, `rgba(255,212,156,${rimA})`); gr.addColorStop(.5, `rgba(255,200,140,${rimA * .7})`); gr.addColorStop(1, `rgba(255,200,140,${rimA * .15})`); gT.fillStyle = gr; gT.fillRect(bx - 4, by - 4, bw + 8, bh + 8); gT.restore();
+      gL.save(); gL.clip(path); gL.setTransform(1, 0, 0, 1, 0, 0); gL.filter = `blur(${(d * .35).toFixed(1)}px)`; gL.drawImage(tmp, bx - 4 - PP.X, by - 4 - PP.Y, bw + 8, bh + 8, bx - 4 - PP.X, by - 4 - PP.Y, bw + 8, bh + 8); gL.filter = 'none'; gL.globalAlpha = .6; gL.drawImage(tmp, bx - 4 - PP.X, by - 4 - PP.Y, bw + 8, bh + 8, bx - 4 - PP.X, by - 4 - PP.Y, bw + 8, bh + 8); gL.restore(); }
+    if (m.peter) CFR.peterShadow = cfMan((x, y) => { const [Xs, Ds] = cfSun(m.X + x * m.Hm, -y * m.Hm, m.D); return cfP(Xs, 0, Ds); }, m.o);   // his shadow on the sunlit floor
   }
-  const chalk = (c, k = .3) => { const a = Pilot.hex(c), b = [232, 222, 200], m = (a[0] + a[1] + a[2]) / 3; return '#' + a.map((v, i) => { const d = v + (m - v) * .25; return Math.round(d + (b[i] - d) * k).toString(16).padStart(2, '0'); }).join(''); };
-  function paintPerson(o) {
-    for (const key of ['col', 'colD', 'skin', 'hairC']) o[key] = chalk(o[key], key === 'skin' ? .18 : o.accent ? .1 : .28);   // the cinnabar keeps its strength
-    const pr = person(o), s = o.h * K, f = o.f, X = PXs(o.x), Y = PYs(o.y), lw = 2.2 / s * 3;   // outline ≈ 6–7 px
-    const drawPart = (path, fill, hi = true) => { g.save(); g.translate(X, Y); g.scale(f * s, s); g.lineJoin = 'round'; g.lineCap = 'round'; const rd = rng(Math.round(X * 3 + Y) % 991);
-      g.strokeStyle = 'rgba(122,58,32,.8)'; g.lineWidth = lw * 1.1; g.setLineDash([.06 + .1 * rd(), .015 + .03 * rd(), .03 + .08 * rd(), .02 + .04 * rd()]); g.lineDashOffset = rd(); g.stroke(path);   // the sinopia: a red-brown underdrawing, broken
-      g.lineWidth = lw * .6; g.setLineDash([.12 + .1 * rd(), .05 * rd() + .01]); g.lineDashOffset = rd(); g.stroke(path); g.setLineDash([]);
-      g.globalAlpha = .9; g.fillStyle = fill; g.fill(path); g.globalAlpha = 1;
-      if (hi) { g.save(); g.clip(path); g.fillStyle = 'rgba(250,242,222,.3)'; g.fill(path); g.translate(.014 * f, .006); g.fillStyle = fill; g.fill(path); g.restore(); }
-      { g.save(); g.clip(path); const rb = rng(Math.round(X + Y) % 997); g.lineCap = 'round'; for (let i = 0; i < 26; i++) { const x0 = (rb() - .5) * .6, y0 = -rb() * 1.0, a = Math.PI / 2 + (rb() - .5) * .5, l = .05 + .12 * rb();   // the painter's brush inside each colour field
-        g.strokeStyle = rb() < .55 ? 'rgba(250,244,228,.16)' : 'rgba(60,30,14,.1)'; g.lineWidth = .015 + .025 * rb(); g.beginPath(); g.moveTo(x0, y0); g.lineTo(x0 + Math.cos(a) * l, y0 + Math.sin(a) * l); g.stroke(); } g.restore(); }   // a thin white highlight along the edge toward the window (the shape minus itself shifted)
-      g.restore(); };
-    // its shadow on the floor: a flat dark ellipse (wall painters drew them so)
-    g.fillStyle = 'rgba(60,36,18,.35)'; g.beginPath(); g.ellipse(X + f * .05 * s, Y, .17 * s, .022 * s, 0, 0, 6.283); g.fill();
-    if (o.stool) { const sx = X + f * .02 * s, sw = .09 * s, st = Y - .27 * s; g.fillStyle = '#6a3e1e'; g.strokeStyle = C.out; g.lineWidth = 5; g.fillRect(sx - sw, st, sw * 2, .025 * s); g.strokeRect(sx - sw, st, sw * 2, .025 * s);
-      for (const k of [-.85, .78]) { g.beginPath(); g.moveTo(sx + k * sw, st + .02 * s); g.lineTo(sx + k * sw * 1.08, Y); g.lineWidth = .028 * s; g.strokeStyle = C.out; g.stroke(); g.lineWidth = .016 * s; g.strokeStyle = '#7a4a24'; g.stroke(); } }
-    // hands in the skin colour (the sleeves end at the wrist); the open hand: a palm turned up, four fingers and a thumb
-    const hand = (i, open) => { const hp = new Path2D(), [hx, hy] = pr.hands[i];
-      if (open) { ell(hp, hx + .012, hy - .004, .03, .02); for (let k = 0; k < 4; k++) { const ang = -.5 + k * .17; limb(hp, [hx + .025, hy - .006 + k * .002], [hx + .025 + Math.cos(ang) * .055, hy - .006 + Math.sin(ang) * .055], .009, .008); } limb(hp, [hx, hy - .01], [hx + .012, hy - .05], .01, .009); }
-      else ell(hp, hx, hy, .026, .03);
-      drawPart(hp, o.skin, false); };
-    drawPart(pr.pa[1], o.colD);
-    hand(1, false);   // the far hand stays behind the body
-    drawPart(pr.body, o.col);
-    // garment folds: a few dark strokes
-    g.save(); g.translate(X, Y); g.scale(f * s, s); g.strokeStyle = 'rgba(40,22,14,.55)'; g.lineWidth = lw * .9; g.lineCap = 'round'; const sit = o.pose === 'sit', lean = o.lean || 0;
-    for (const [a, b, c] of sit ? [[[-.02, -.6], [.0, -.45], [.03, -.33]], [[.08, -.32], [.18, -.3], [.26, -.26]], [[.22, -.2], [.24, -.1], [.25, -.03]]] : [[[-.04, -.8], [-.05, -.6], [-.07, -.1]], [[.05, -.75], [.06, -.5], [.08, -.08]]]) {
-      g.beginPath(); g.moveTo(...a); g.quadraticCurveTo(...b, ...c); g.stroke(); }
-    g.restore();
-    drawPart(pr.head, o.skin);
-    drawPart(pr.hair, o.hairC, o.head === 'veil');
-    // the face: one large almond eye looking where they look, a brow, the line of the nose and mouth (a few strokes)
-    { g.save(); g.translate(X, Y); g.scale(f * s, s); const [hx, hy] = pr.hc; g.translate(hx, hy); g.rotate(pr.lean);
-      const fc = new Path2D(); ell(fc, 0, 0, .048, .06); g.save(); g.clip(fc);
-      g.fillStyle = 'rgba(70,36,20,.38)'; g.beginPath(); g.ellipse(-.03, .006, .036, .07, 0, 0, 6.283); g.fill();          // the far side of the face in shade
-      g.fillStyle = 'rgba(250,226,196,.22)'; g.beginPath(); g.ellipse(.026, -.022, .02, .014, -.3, 0, 6.283); g.fill();     // light on the brow and cheek
-      g.fillStyle = 'rgba(60,30,16,.5)'; g.beginPath(); g.ellipse(.022, -.008, .012, .006, 0, 0, 6.283); g.fill();      // the eye: a small shadow under the brow
-      g.strokeStyle = 'rgba(90,44,24,.55)'; g.lineWidth = lw * .5; g.beginPath(); g.moveTo(.006, -.022); g.quadraticCurveTo(.024, -.03, .04, -.024); g.stroke();
-      g.beginPath(); g.moveTo(.044, -.012); g.lineTo(.05, .014); g.stroke(); g.restore();
-      g.restore(); }
-    drawPart(pr.pa[0], o.col);
-    hand(0, !!o.open);
-    return { pr, X, Y, s, f };
-  }
-  const M = '#9a5a36', Wm = '#e2b48a';   // skin: men reddish brown, the woman pale (the painters' convention)
-  paintPerson({ x: .175, y: .595, h: .23, f: -1, pose: 'stand', lean: .1, head: 'cloth', arms: [[.08, .3], [-.02, .2]], col: '#8a5a34', colD: '#6a4226', skin: M, hairC: '#d8c8a0' });          // a kinsman
-  paintPerson({ x: .1, y: .597, h: .23, f: -1, pose: 'stand', lean: .14, head: 'hair', arms: [[.1, .35], [-.06, .22]], col: C.ochre, colD: '#9a6a28', skin: M, hairC: '#2a1a10' });                // a young man in ochre
-  paintPerson({ x: .19, y: .615, h: .21, f: -1, pose: 'sit', lean: .22, head: 'veil', stool: true, arms: [[.35, 1.4], [.25, 1.25]], col: C.blue, colD: '#2c5070', skin: Wm, hairC: '#ece4d0' });      // a woman, veiled, in Egyptian blue
-  paintPerson({ x: .135, y: .645, h: .24, f: -1, pose: 'sit', lean: .28, head: 'cloth', stool: true, arms: [[.6, 1.45], [.5, 1.3]], col: C.green, colD: C.greenD, skin: M, hairC: '#c8b890' });        // an older friend
-  paintPerson({ x: .04, y: .665, h: .25, f: -1, pose: 'sit', lean: .2, head: 'hair', stool: true, cloak: true, accent: true, arms: [[.45, 1.35], [.4, 1.2]], col: C.red, colD: C.redD, skin: M, hairC: '#2a1a10' });   // Cornelius in cinnabar
-  const PETER = paintPerson({ x: -.165, y: .68, h: .28, f: 1, pose: 'stand', lean: .03, head: 'hair', open: true, arms: [[.36, 1.32], [-.3, .5]], col: '#efe4cc', colD: '#c8b894', skin: M, hairC: '#5a4a3c' });   // Peter in a white tunic
-  { const s = PETER.s; g.save(); g.translate(PETER.X, PETER.Y); g.scale(s, s); g.fillStyle = C.ochre; g.strokeStyle = C.out; g.lineWidth = 2.2 / s * 6; const p = new Path2D();   // the clavi of his tunic
-    g.fillStyle = C.redD; for (const x of [.035, .075]) g.fillRect(x, -.8, .014, .74);   // the clavi: two narrow stripes down the tunic
-    g.restore(); }
-  { const rb = rng(8); for (let i = 0; i < 2500; i++) { g.fillStyle = `rgba(246,238,220,${.05 + .12 * rb()})`; g.fillRect(PX0 + rb() * (PX1 - PX0), PY0 + rb() * (PY1 - PY0), 2 + rb() * 5, 1 + rb() * 3); } }   // chalky bloom of the lime
-  g.restore();   // end of the picture's clip
-  { const t = canvas(PW, PH), tg = t.getContext('2d'); tg.filter = 'blur(1.2px)'; tg.drawImage(fr, 0, 0); g.globalAlpha = .7; g.drawImage(t, 0, 0); g.globalAlpha = 1; }   // the paint sinks into the wet lime: edges a little soft
-
-  // ---- the wall as an object: plaster grain, faded edges, hairline cracks, flaked places; a height field for the raking light ----
-  const SC = 3, HW = Math.ceil(PW / SC), HH = Math.ceil(PH / SC), hc = canvas(HW, HH), hg = hc.getContext('2d');   // the height field at one third
-  { const im = hg.createImageData(HW, HH), d = im.data, r = rng(5);
-    for (let y = 0; y < HH; y++) for (let x = 0; x < HW; x++) { const v = 128 + 26 * (noise(x * .05, y * .05) - .5) + 14 * (noise(x * .2, y * .2) - .5) + 18 * (r() - .5), i = (y * HW + x) * 4; d[i] = d[i + 1] = d[i + 2] = v; d[i + 3] = 255; }
-    hg.putImageData(im, 0, 0); }
-  const r = rng(77);
-  // flaked places: the paint gone to bare grey-beige plaster, a raised rim of paint round each
-  const flakes = [[380, 1500, 40], [1760, 1600, 15], [2200, 1300, 24], [1735, 1545, 11], [2700, 1200, 26]];   // none on the black dado (the words pass over it)
-  for (const [fx, fy, R] of flakes) { const pts = []; for (let i = 0; i < 30; i++) { const a = i / 30 * 6.283, rr = R * (.7 + .3 * Math.sin(a * 2 + fx) + .25 * r()); pts.push([fx + Math.cos(a) * rr * 1.25, fy + Math.sin(a) * rr]); }
-    const p = new Path2D(); pts.forEach((q, i) => i ? p.lineTo(...q) : p.moveTo(...q)); p.closePath();
-    g.save(); g.filter = 'blur(2.5px)'; g.fillStyle = 'rgba(166,150,128,.85)'; g.fill(p); g.filter = 'none'; g.clip(p); for (let i = 0; i < 24; i++) { g.fillStyle = `rgba(${r() < .5 ? '128,114,96' : '190,178,158'},${.15 + .15 * r()})`; g.beginPath(); g.arc(fx + (r() - .5) * R * 2.2, fy + (r() - .5) * R * 1.6, 2 + r() * 5, 0, 6.283); g.fill(); } g.restore();
-    hg.save(); hg.scale(1 / SC, 1 / SC); hg.filter = 'blur(2px)'; hg.fillStyle = 'rgba(100,100,100,.5)'; hg.fill(p); hg.restore(); }
-  // hairline cracks: wandering lines, dark in the paint and low in the height field
-  const keep = (x, y) => y > 1985 || (x > 1120 && x < 1720 && y > 1080 && y < 1700) || (x > 1560 && x < 2000 && y > 1000 && y < 1500);   // the dado stays clean too   // Peter, his hand, Cornelius and the faces stay whole
-  for (let k = 0, tries = 0; k < 18 && tries < 200; k++, tries++) { let x = r() * PW, y = r() * PH, a = r() * 6.283; if (keep(x, y)) { k--; continue; } const pts = [[x, y]]; for (let i = 0; i < 60; i++) { a += (r() - .5) * .7; const nx = x + Math.cos(a) * 14, ny = y + Math.sin(a) * 14; if (keep(nx, ny)) break; x = nx; y = ny; pts.push([x, y]); if (r() < .04) { const b = a + (r() < .5 ? 1 : -1) * 1.1; let bx = x, by = y; g.beginPath(); g.moveTo(bx, by); for (let j = 0; j < 12; j++) { bx += Math.cos(b) * 12; by += Math.sin(b) * 12; g.lineTo(bx, by); } g.strokeStyle = 'rgba(52,36,26,.4)'; g.lineWidth = 1.5; g.stroke(); } }
-    g.strokeStyle = 'rgba(52,36,26,.55)'; g.lineWidth = 2.2; g.beginPath(); pts.forEach((q, i) => i ? g.lineTo(...q) : g.moveTo(...q)); g.stroke();
-    hg.save(); hg.scale(1 / SC, 1 / SC); hg.strokeStyle = 'rgba(80,80,80,.6)'; hg.lineWidth = 4; hg.beginPath(); pts.forEach((q, i) => i ? hg.lineTo(...q) : hg.moveTo(...q)); hg.stroke(); hg.restore(); }
-  // pigment worn: soft pale patches, and the colours fade toward the edges of the wall
-  for (let i = 0; i < 150; i++) { const x = r() * PW, y = 360 + r() * 1600, R = 30 + 150 * r(), gr = g.createRadialGradient(x, y, 0, x, y, R); gr.addColorStop(0, `rgba(236,226,204,${.08 + .16 * r()})`); gr.addColorStop(1, 'rgba(236,226,204,0)'); g.fillStyle = gr; g.fillRect(x - R, y - R, 2 * R, 2 * R); }
-  { const gr = g.createRadialGradient(PW * .5, PH * .48, PW * .3, PW * .5, PH * .5, PW * .78); gr.addColorStop(0, 'rgba(232,222,200,0)'); gr.addColorStop(1, 'rgba(232,222,200,.55)'); g.fillStyle = gr; g.fillRect(0, 0, PW, PH); }
-  // the raking-light shading of the height field (light from the left, low over the surface)
-  const shadeC = canvas(HW, HH); { const sg = shadeC.getContext('2d'), hd = hg.getImageData(0, 0, HW, HH).data, im = sg.createImageData(HW, HH), d = im.data;
-    const h = (x, y) => hd[((Math.max(0, Math.min(HH - 1, y)) * HW + Math.max(0, Math.min(HW - 1, x))) << 2)];
-    for (let y = 0; y < HH; y++) for (let x = 0; x < HW; x++) { const sx = h(x - 1, y) - h(x + 1, y), sy = h(x, y - 1) - h(x, y + 1), v = 128 + (sx * 1.0 + sy * .35) * 2.2, i = (y * HW + x) * 4; d[i] = d[i + 1] = d[i + 2] = Math.max(0, Math.min(255, v)); d[i + 3] = 255; }
-    sg.putImageData(im, 0, 0); }
-  // two lightings of the same wall: in the room's shade, and in the raking morning sun
-  const mk = (tint, rake, lift) => { const c = canvas(PW, PH), x = c.getContext('2d'); x.drawImage(fr, 0, 0); x.globalCompositeOperation = 'multiply'; x.fillStyle = tint; x.fillRect(0, 0, PW, PH);
-    x.globalCompositeOperation = 'overlay'; x.globalAlpha = rake; x.imageSmoothingEnabled = true; x.drawImage(shadeC, 0, 0, PW, PH); x.globalAlpha = 1;
-    if (lift) { x.globalCompositeOperation = 'screen'; x.fillStyle = lift; x.fillRect(0, 0, PW, PH); } x.globalCompositeOperation = 'source-over'; return c; };
-  CFR.shade = mk('rgb(158,152,150)', .4, null);
-  CFR.sun = mk('rgb(222,200,170)', .9, null);
-  CFR.PW = PW; CFR.PH = PH; CFR.faces = [PETER.X, PETER.Y - .42 * PETER.s];
+  for (const c of [peo, lit]) { const t = canvas(c.width, c.height), x = t.getContext('2d'); x.filter = 'blur(.8px)'; x.drawImage(c, 0, 0); const cx = c.getContext('2d'); cx.setTransform(1, 0, 0, 1, 0, 0); cx.clearRect(0, 0, c.width, c.height); cx.drawImage(t, 0, 0); }   // a lens, not a vector edge
+  CFR.peo = peo; CFR.lit = lit;
+  // ---------------- the sun: the pool on the floor, the shaft in the air, the glow of the door ----------------
+  const ap = [[DX0, DH], [DX1, DH], [DX1, 0], [DX0, 0]], landing = ap.map(([X, Y]) => cfSun(X, Y, CF.DW)), poolW = landing.map(([X, D]) => cfP(X, 0, D));   // the opening's corners where the sun lands
+  const doorW = ap.map(([X, Y]) => cfP(X, Y, CF.DW));
+  CFR.poolW = poolW; CFR.doorW = doorW;
+  { const PB = { x: -300, y: 900, w: 1200, h: 500 }, pc = canvas(PB.w, PB.h), x = pc.getContext('2d'); x.translate(-PB.x, -PB.y);
+    drawFloor(x); x.globalCompositeOperation = 'multiply'; x.fillStyle = 'rgb(255,222,176)'; x.fillRect(PB.x, PB.y, PB.w, PB.h);
+    x.globalCompositeOperation = 'screen'; x.fillStyle = 'rgb(178,128,72)'; x.fillRect(PB.x, PB.y, PB.w, PB.h);
+    const mk = canvas(PB.w, PB.h), mx = mk.getContext('2d'); mx.translate(-PB.x, -PB.y); mx.filter = 'blur(3px)'; mx.fillStyle = '#fff'; poly(mx, [poolW[3], poolW[2], poolW[1], poolW[0]]); mx.fill();   // the pool: the opening's shape laid on the floor
+    mx.filter = 'blur(2.5px)'; mx.globalCompositeOperation = 'destination-out'; mx.fill(CFR.peterShadow); mx.filter = 'none';   // Peter's shadow across it
+    { const gr = mx.createLinearGradient(0, poolW[3][1], 0, poolW[0][1]); gr.addColorStop(0, 'rgba(0,0,0,0)'); gr.addColorStop(1, 'rgba(0,0,0,.35)'); mx.globalCompositeOperation = 'destination-out'; mx.fillStyle = gr; mx.fillRect(PB.x, PB.y, PB.w, PB.h); }   // weaker toward us
+    x.setTransform(1, 0, 0, 1, 0, 0); x.globalCompositeOperation = 'destination-in'; x.drawImage(mk, 0, 0);
+    CFR.pool = pc; CFR.PB = PB; }
+  { const SB = { x: -400, y: 300, w: 1300, h: 1400 }, sc = canvas(SB.w, SB.h), x = sc.getContext('2d'); x.translate(-SB.x, -SB.y);
+    const H4 = [doorW[0], doorW[1], poolW[1], poolW[0]];   // the hull: the opening's top edge to the pool's near edge
+    x.filter = 'blur(26px)'; let gr = x.createLinearGradient(doorW[0][0], doorW[0][1] + 200, poolW[1][0], poolW[1][1]); gr.addColorStop(0, 'rgba(255,226,170,.8)'); gr.addColorStop(.5, 'rgba(255,214,150,.5)'); gr.addColorStop(1, 'rgba(255,200,140,.14)'); x.fillStyle = gr; poly(x, H4); x.fill();
+    x.filter = 'blur(10px)'; x.globalCompositeOperation = 'lighter'; const r = rng(33);   // rays: from points of the opening to where they land
+    for (let i = 0; i < 16; i++) { const X = lerp(DX0, DX1, r()), Y0 = lerp(.2, DH, r()), a = cfP(X, Y0, CF.DW), [Xs, Ds] = cfSun(X, Y0, CF.DW), b = cfP(Xs, 0, Ds), wd = 6 + 22 * r(), al = .1 + .22 * r();
+      gr = x.createLinearGradient(a[0], a[1], b[0], b[1]); gr.addColorStop(0, `rgba(255,232,190,${al})`); gr.addColorStop(1, 'rgba(255,232,190,0)'); x.strokeStyle = gr; x.lineWidth = wd; x.beginPath(); x.moveTo(...a); x.lineTo(...b); x.stroke(); }
+    CFR.shaft = sc; CFR.SB = SB; }
+  { const BB = { x: -300, y: 260, w: 900, h: 1000 }, bc = canvas(BB.w, BB.h), x = bc.getContext('2d'); x.translate(-BB.x, -BB.y); x.filter = 'blur(46px)'; x.fillStyle = 'rgba(255,226,170,.9)'; poly(x, doorW); x.fill();
+    x.filter = 'blur(14px)'; x.fillStyle = 'rgba(255,240,210,.6)'; poly(x, doorW); x.fill(); CFR.bloom = bc; CFR.BB = BB; }
+  // dust motes: points on rays from the opening (closed form: each mote's place is a function of u)
+  { const r = rng(41); CFR.dust = Array.from({ length: 240 }, () => { const X = lerp(DX0 + .05, DX1 - .05, r()), Y = lerp(.15, DH - .05, r()), lam = r(); return { X, Y, lam, p1: r() * 6.283, p2: r() * 6.283, s: r(), a: r() }; }); }
   { const gc = canvas(256, 256), x = gc.getContext('2d'), im = x.createImageData(256, 256), rr = rng(91); for (let i = 0; i < 65536; i++) { const v = 128 + (rr() - .5) * 110; im.data[i * 4] = im.data[i * 4 + 1] = im.data[i * 4 + 2] = v; im.data[i * 4 + 3] = 255; } x.putImageData(im, 0, 0); CFR.grain = gc; }
 }
 
-// the wall seen at an angle: each vertical strip of the plate drawn at its own depth (so its bands converge toward the far end)
-function frescoWall(ctx, src, cam, N = 720) {
-  const W = Pilot.W, H = Pilot.H, { PW, PH } = CFR, ct = Math.cos(cam.th), st = Math.sin(cam.th), edge = [];
-  for (let i = 0; i < N; i++) { const p0 = i * PW / N, p1 = (i + 1) * PW / N, x0 = (p0 - cam.pc) * ct, z0 = cam.D + (p0 - cam.pc) * st, x1 = (p1 - cam.pc) * ct, z1 = cam.D + (p1 - cam.pc) * st;
-    if (z0 <= 50 || z1 <= 50) continue; const s0 = W / 2 + cam.F * x0 / z0, s1 = W / 2 + cam.F * x1 / z1; if (s1 < -4 || s0 > W + 4) continue;
-    const sc = cam.F / ((z0 + z1) / 2), top = H / 2 - cam.pyc * sc, bot = top + PH * sc; ctx.drawImage(src, p0, 0, p1 - p0, PH, s0, top, s1 - s0 + .8, PH * sc);
-    edge.push([s0, top, bot, sc]); if (i === N - 1 || s1 > W + 4) edge.push([s1, top, bot, sc]); }
-  // the plain plaster and its cornice above the frieze, the floor below the dado: whole polygons (no seams between strips)
-  if (edge.length > 1) { const fillPoly = (yA, yB, col) => { ctx.fillStyle = col; ctx.beginPath(); edge.forEach(([x, t, b2, k], j) => { const y = yA(t, b2, k); j ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }); for (let j = edge.length - 1; j >= 0; j--) { const [x, t, b2, k] = edge[j]; ctx.lineTo(x, yB(t, b2, k)); } ctx.closePath(); ctx.fill(); };
-    fillPoly(() => -10, (t) => t + .5, cam.lit ? '#cdbd9c' : '#8a7e6a'); fillPoly((t, b2, k) => t - 26 * k, (t) => t + .5, cam.lit ? '#a8987a' : '#4e463c');
-    if (!cam.lit) { fillPoly((t, b2) => b2 - .5, () => H + 10, '#4a3c2e'); fillPoly((t, b2) => b2 - .5, (t, b2, k) => b2 + 14 * k, 'rgba(0,0,0,.4)'); } }
-}
 function corneliusFresco(ctx, u) {
-  const { clamp, ss, rng, lerp } = Pilot, W = Pilot.W, H = Pilot.H, V = Pilot.ori === 'v'; u = clamp(u, 0, 4.7);
-  // the camera slides along the wall and closes in a little (portrait: the people large, heads above 0.70 H)
-  const k = Pilot.eio(clamp(u / 4.7)), F = 2400, sV = lerp(.5, 1.15, k), sH = lerp(.4, .6, k), cam = { th: lerp(.62, .5, k) * (V ? 1 : .85), pc: lerp(1500, V ? 1475 : 1450, k), D: F / (V ? sV : sH), F, pyc: V ? lerp(1180, 1262, k) : lerp(1120, 1150, k) };
-  ctx.fillStyle = '#120d0a'; ctx.fillRect(0, 0, W, H);
-  frescoWall(ctx, CFR.shade, cam);
-  // the morning sun: a soft band raking across the wall from the left; from u ≈ 1.2 it moves on and comes to rest on the faces
-  const m = ss(.9, 2.6, u), bx = lerp(.05, .52, m) * W, by = H * .44, ang = -1.05, nx = Math.cos(ang), ny = Math.sin(ang), wid = (V ? .55 : .42) * W;
-  if (!CFR.lc || CFR.lc.width !== W) CFR.lc = Pilot.canvas(W, H); const lc = CFR.lc, lg = lc.getContext('2d');
-  lg.globalCompositeOperation = 'source-over'; lg.clearRect(0, 0, W, H); frescoWall(lg, CFR.sun, { ...cam, lit: true });
-  lg.globalCompositeOperation = 'destination-in'; { const gr = lg.createLinearGradient(bx - nx * wid, by - ny * wid, bx + nx * wid, by + ny * wid); gr.addColorStop(0, 'rgba(0,0,0,0)'); gr.addColorStop(.3, 'rgba(0,0,0,.95)'); gr.addColorStop(.7, 'rgba(0,0,0,.95)'); gr.addColorStop(1, 'rgba(0,0,0,0)'); lg.fillStyle = gr; lg.fillRect(0, 0, W, H); }
-  ctx.drawImage(lc, 0, 0);
-  // dust turning in the sunlight
-  { ctx.save(); ctx.globalCompositeOperation = 'screen'; const r = rng(41); for (let i = 0; i < 90; i++) { const x0 = r() * W, y0 = r() * H, x = x0 + Math.sin(u * .5 + i) * 14, y = y0 - u * 12 * (r() + .2), d = Math.abs((x - bx) * nx + (y - by) * ny) / wid, a = clamp(1 - d * 1.4) * (.15 + .35 * r());
-      if (a <= .01) continue; ctx.fillStyle = `rgba(255,238,210,${a})`; ctx.beginPath(); ctx.arc(x, y, .8 + r() * 1.6, 0, 6.283); ctx.fill(); } ctx.restore(); }
-  // the far end of the wall falls into the room's dark; a soft vignette; grain
-  ctx.save(); ctx.globalCompositeOperation = 'multiply';
-  { const y0 = H * (V ? .6 : .66), y1 = H * (V ? .9 : 1), gr = ctx.createLinearGradient(0, y0, 0, y1); const dk = .45 + .55 * k, v1 = 255 - (255 - 150) * dk | 0, v2 = 255 - (255 - 130) * dk | 0; gr.addColorStop(0, '#fff'); gr.addColorStop(.45, `rgb(${v1},${v1 - 10},${v1 - 18})`); gr.addColorStop(1, `rgb(${v2},${v2 - 10},${v2 - 18})`); ctx.fillStyle = gr; ctx.fillRect(0, y0, W, H - y0); }   // the floor under the words in shade (more as the camera comes onto the painted floor)
-  { const gr = ctx.createLinearGradient(0, 0, W, 0); gr.addColorStop(0, 'rgb(230,224,220)'); gr.addColorStop(.6, '#fff'); gr.addColorStop(1, 'rgb(150,140,134)'); ctx.fillStyle = gr; ctx.fillRect(0, 0, W, H); }
-  { const R = Math.hypot(W, H) * .62, gr = ctx.createRadialGradient(W * .5, H * .45, R * .38, W / 2, H * .46, R); gr.addColorStop(0, '#fff'); gr.addColorStop(1, 'rgb(150,136,124)'); ctx.fillStyle = gr; ctx.fillRect(0, 0, W, H); }
-  ctx.globalCompositeOperation = 'overlay'; ctx.globalAlpha = .06; const o = Math.floor(u * 24); ctx.translate(-((o * 73) % 256), -((o * 151) % 256)); ctx.fillStyle = ctx.createPattern(CFR.grain, 'repeat'); ctx.fillRect(0, 0, W + 256, H + 256);
+  const { clamp, ss, lerp } = Pilot, W = Pilot.W, H = Pilot.H, V = Pilot.ori === 'v'; u = clamp(u, 0, 5.2);
+  const k = Pilot.eio(clamp(u / 5.1)), I = .6 + .4 * ss(.3, 2.6, u);   // the camera's creep; the sun's strength (a cloud moving off)
+  // the camera: portrait close on Peter and the listeners, landscape the whole room; creeps in and slides right
+  const C = V ? { z0: 1.07, z: lerp(1.07, 1.16, k), x0: 565, x: lerp(565, 592, k), y0: 1040, y: lerp(1040, 1012, k) }
+              : { z0: .9, z: .9 * lerp(1, 1.06, k), x0: 560, x: lerp(560, 592, k), y0: 880, y: lerp(880, 868, k) };
+  const layer = p => { const s = C.z0 * (1 + (C.z / C.z0 - 1) * p), cx = C.x0 + (C.x - C.x0) * p, cy = C.y0 + (C.y - C.y0) * p; ctx.setTransform(s, 0, 0, s, W / 2 - cx * s, H / 2 - cy * s); return s; };
+  ctx.save(); ctx.fillStyle = '#140e0a'; ctx.fillRect(0, 0, W, H);
+  // the room, its warmth from the sun, the door's glow, the pool of light on the floor
+  layer(.82); ctx.drawImage(CFR.room, -CF.OX, -CF.OY);
+  ctx.globalCompositeOperation = 'screen';
+  { const gr = ctx.createRadialGradient(300, 1100, 0, 300, 1100, 1000); gr.addColorStop(0, `rgba(255,170,100,${.2 * I})`); gr.addColorStop(1, 'rgba(255,170,100,0)'); ctx.fillStyle = gr; ctx.fillRect(-840, 160, 2200, 2200); }
+  ctx.globalAlpha = .5 + .5 * I; ctx.drawImage(CFR.bloom, CFR.BB.x, CFR.BB.y);
+  ctx.globalCompositeOperation = 'source-over'; ctx.globalAlpha = clamp(I * 1.05); ctx.drawImage(CFR.pool, CFR.PB.x, CFR.PB.y); ctx.globalAlpha = 1;
+  // the shaft of sun in the air behind the people; the people, then the light they catch
+  ctx.globalCompositeOperation = 'screen'; layer(.9); ctx.globalAlpha = .7 * I; ctx.drawImage(CFR.shaft, CFR.SB.x, CFR.SB.y); ctx.globalCompositeOperation = 'source-over'; ctx.globalAlpha = 1;
+  layer(1); ctx.drawImage(CFR.peo, CF.PX, CF.PY);
+  ctx.globalCompositeOperation = 'screen'; ctx.globalAlpha = I; ctx.drawImage(CFR.lit, CF.PX, CF.PY);
+  // a thinner veil of the shaft in front of Peter too, and the dust turning in it
+  layer(.9); ctx.globalAlpha = .28 * I; ctx.drawImage(CFR.shaft, CFR.SB.x, CFR.SB.y);
+  { const s = layer(1), ce = Math.cos(Math.atan(CF.tanE)), se = Math.sin(Math.atan(CF.tanE)); ctx.globalAlpha = 1;
+    for (const m of CFR.dust) { const lam = m.lam * m.Y / se, X = m.X + lam * ce * CF.hx + .05 * Math.sin(u * .35 + m.p1), Y = m.Y - lam * se + .04 * Math.sin(u * .27 + m.p2) + .02 * u, D = CF.DW - lam * ce * CF.hz + .04 * Math.cos(u * .3 + m.p1);
+      if (Y < .03 || D < .9) continue; const [x, y] = cfP(X, Y, D), tw = .55 + .45 * Math.sin(u * 1.7 + m.p2 * 3), near = D < 1.7, R = (near ? 5 + 6 * m.s : 1.5 + 2.2 * m.s) * 3.2 / D * (V ? 1 : 1.1), a = (near ? .14 : .4 + .5 * m.a) * tw * I;
+      if (a < .01) continue; if (near) { const gr = ctx.createRadialGradient(x, y, 0, x, y, R); gr.addColorStop(0, `rgba(255,236,200,${a})`); gr.addColorStop(1, 'rgba(255,236,200,0)'); ctx.fillStyle = gr; ctx.fillRect(x - R, y - R, 2 * R, 2 * R); }
+      else { ctx.fillStyle = `rgba(255,238,206,${a})`; ctx.beginPath(); ctx.arc(x, y, R, 0, 6.283); ctx.fill(); } } }
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1;
+  // grade: a warm lift in the light's half, a soft vignette, grain
+  ctx.globalCompositeOperation = 'multiply';
+  { const R = Math.hypot(W, H) * .62, gr = ctx.createRadialGradient(W * .42, H * .4, R * .3, W / 2, H * .45, R); gr.addColorStop(0, '#fff'); gr.addColorStop(1, 'rgb(168,152,140)'); ctx.fillStyle = gr; ctx.fillRect(0, 0, W, H); }
+  ctx.globalCompositeOperation = 'overlay'; ctx.globalAlpha = .07; const o = Math.floor(u * 24); ctx.translate(-((o * 73) % 256), -((o * 151) % 256)); ctx.fillStyle = ctx.createPattern(CFR.grain, 'repeat'); ctx.fillRect(0, 0, W + 256, H + 256);
   ctx.restore();
 }

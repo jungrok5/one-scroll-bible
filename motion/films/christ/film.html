@@ -68,8 +68,9 @@ const SCENES = [
   // 5차(관점 검수 4차, 관리자 2026-11-14 "고고"): the empty tomb no longer comes before the preaching — Acts 10:38 / 39 / 40 on three
   // screens, the dawn first at "다시 살리사", then N15 reads it ("실패가 아니라, 성경이 가리킨 길")
   [119.9, 125.0, scz('corneliusFresco', 119.9)],   // N20 — Peter speaks in Cornelius' house at Caesarea (Acts 10), Pompeian fresco
-  [124.3, 135.3, scz('jordanScene', 124.4, { mode: 'spirit' })],   // P7 Q9 — the light like a dove on the Jordan (Acts 10:38, to "선한 일을 행하시고"), then 1 s of stillness
-  [134.8, 139.9, scz('dawnOil', 135.0, 'tree')],   // Q11 — dark ground, one cross-shaped shadow (Acts 10:39 "나무에 달아"): no tree, no crowd, held
+  // the spirit mode is written for 6.5 s; Q9 now holds 11 s (10:38 to "선한 일을 행하시고") → its clock runs at 0.6 (5차 render: frozen 132–134 s)
+  [124.3, 135.7, (c, t) => { if (hasF('jordanScene')) jordanScene(c, Math.max(0, t - 124.4) * .6, { mode: 'spirit' }); else todo(c, t); textBand(c); }],   // P7 Q9 — the light like a dove on the Jordan (Acts 10:38)
+  [134.5, 139.9, scz('dawnOil', 134.6, 'tree')],   // Q11 — the dove's light withdraws (1.2 s dissolve: 5차 render popped at 135.07), dark ground, one cross-shaped shadow (Acts 10:39 "나무에 달아"): no tree, no crowd, held
   [139.3, 148.7, scz('dawnOil', 139.5, 'tomb')],   // Q12 N15 — the first dawn: inside the tomb looking out, light on the linen (Acts 10:40, Jn 20:5–7)
   [148.0, 152.6, scz('goldThree', 148.3)],         // N16 — the three lights meet on one
   [151.7, 158.3, scz('roomOil', 152.0, 'dawn')],   // N17 — the first room: dawn comes through the window

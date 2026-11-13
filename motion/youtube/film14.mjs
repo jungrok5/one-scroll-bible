@@ -83,7 +83,7 @@ if (cmd === 'status' || !cmd) {
   let up = 0; for (const [ch, id, file, lang, why] of want) { if ((await tracks(ch, id)).includes(lang)) continue;
     console.log(`missing: ${why} (${id}, ${lang})`); if (dry) continue;
     const r = spawnSync(process.execPath, [join(HERE, 'yt-api.mjs'), 'caption-file', id, file, lang], { encoding: 'utf8', env: env(ch) }); console.log((r.stdout + r.stderr).trim()); up++; }
-  console.log(`${want.length} wanted, ${dry ? 'dry run' : up + ' uploaded'} — then delete the matching automatic tracks only with the owner's OK (yt-api asr-off)`);
+  console.log(`${want.length} wanted, ${dry ? 'dry run' : up + ' uploaded'} — then remove the matching automatic tracks: yt-api asr-off <id…> (standing OK 2026-11-13)`);
 } else if (cmd === 'narr-check') {
   const L = rest[0]; if (!L) { console.log('usage: narr-check <lang>'); process.exit(1); }
   const g = gates(L); if (!g.length) console.log(`${L}: 관문 모두 통과 — 해설판을 만들어도 된다`); else { console.log(`${L}: 열린 관문\n` + g.map(x => '  - ' + x).join('\n')); process.exit(1); }

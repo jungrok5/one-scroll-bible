@@ -289,7 +289,7 @@
  },
  "_shorts_note": "Shorts are scheduled one scene a day in story order (scene n on first_day + n-1 days), at the language's evening, given in KST (GMT+9); every Short links its language's film as the related video. Waves of 4 languages (policy approved 2026-10-23, motion/README.md \"공개 정책\"): max two waves overlapping (8 Shorts a day); a new wave starts after the previous one has 7 days of data. 1 = ko en es pt-BR (from 2026-10-24), 2 = id fr de ru (~10-31), 3 = zh-Hans zh-Hant ja ar (~11-14), 4 = hi vi th tl (~11-21). Waves 2-4 Shorts use the new opening (motion/youtube/shorts-open.json: start 1 s in, rise 4 s, cross 0; peak limiter) — wave 1 keeps the old one, compare.",
  "playlists": {
-  "_note": "one public playlist per language (title = the site brand, description = the film blurb, order = published date oldest first → film, then Shorts 1–21). Created 2026-10-23 with studio-playlist.js; the channel Home tab (turned on) shows them in its Created playlists section. 2026-10-29: the non-Korean playlists on this (Korean) channel set to private (15: en zh-Hans zh-Hant ja es pt-BR fr de ru ar hi id vi th tl) — their videos moved to the international channel (global.playlists); not deleted. 2026-10-31: \"ko-films\" = 「해설 영상 모아 보기」(2026-11-13 이름 바꿈) (public) — the Korean narrated landscape films, oldest first (14-min narrated wrEYqvOU1O8, then each new film's landscape cut); add every new film here with playlist-add. \"ko\" stays the Shorts 1–21 list (its link is in the daily next-episode comments).",
+  "_note": "one public playlist per language (title = the site brand, description = the film blurb, order = published date oldest first → film, then Shorts 1–21). Created 2026-10-23 with studio-playlist.js; the channel Home tab (turned on) shows them in its Created playlists section. 2026-10-29: the non-Korean playlists on this (Korean) channel set to private (15: en zh-Hans zh-Hant ja es pt-BR fr de ru ar hi id vi th tl) — their videos moved to the international channel (global.playlists); not deleted. 2026-10-31: \"ko-films\" = 「해설 영상 모아 보기」(2026-11-13 이름 바꿈) (public) — the Korean narrated landscape films, oldest first (14-min narrated wrEYqvOU1O8, then each new film's landscape cut); add every new film here with playlist-add. \"ko\" stays the Shorts 1–21 list (its link is in the daily next-episode comments). 2026-11-13: the 15 foreign-language playlists here are private (관리자 OK — they live on the international channel); ko and ko-films stay public.",
   "ko": "PLWbLhnVLU-Gg",
   "en": "PLHnGBKKZ8kg8",
   "zh-Hans": "PLJnN8ibs4E0Y",
@@ -551,7 +551,7 @@
     "utc_offset": "+01:00",
     "note": "wave 2 (2026-10-30): uploaded to this channel via Studio (file only), filled + scheduled by API (schedule-shorts); related video = global.film[L] (set in Studio); playlist added by API, related video = global.film[L] set in Studio for all 21 (2026-10-30)",
     "duplicates": {
-     "14": "vPFDn0R0sQg (re-uploaded 2026-10-30 by mistake: the uploads list had not shown m9osRHpzFBQ yet) — private, unscheduled; owner to delete"
+     "14": "vPFDn0R0sQg (re-uploaded 2026-10-30 by mistake: the uploads list had not shown m9osRHpzFBQ yet) — private, unscheduled; owner to delete — deleted 2026-11-13 (API, 관리자 OK)"
     }
    },
    "de": {
@@ -867,7 +867,7 @@
    "ta": "PLf3dkdTC9GjA"
   },
   "duplicates_to_delete": {
-   "_note": "extra Traditional Chinese uploads made while two Studio scripts overlapped (private) — the maintainer deletes them in Studio",
+   "_note": "extra Traditional Chinese uploads made while two Studio scripts overlapped (private) — the maintainer deletes them in Studio — both deleted 2026-11-13 (API, 관리자 OK)",
    "ids": [
     "wU_58Q6TCag",
     "2dlq-5_x6v4"

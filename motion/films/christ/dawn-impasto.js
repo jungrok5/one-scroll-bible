@@ -204,13 +204,21 @@
     } else {   // 'tree'
       const z = 1 + .1 * eio(u / 6.7), fx = X(L.tomb[0]), fy = Y(L.tomb[1]), cam = camAt(z, fx, fy), rep = clamp((u - 3.4) / 2.6);
       cam(); ctx.drawImage(D.pre, -ox, -oy);
-      // the tree's shadow lying across the ground towards us; at «다시 살리사» it draws back as the sun comes up
-      { const back = eio(clamp((u - 3.4) / 2.2)), a = .74 * (1 - back * .9), len = lerp(1, .15, back);
-        const foot = [X(V ? .56 : .54), Y(V ? 1.12 : 1.05)], head = [X(V ? .7 : .6), Y(V ? .528 : .72)], hd = [lerp(foot[0], head[0], len), lerp(foot[1], head[1], len)];
-        const wAt = y => lerp(X(V ? .09 : .052), X(V ? .022 : .014), clamp((foot[1] - y) / (foot[1] - head[1])));   // nearer is wider
-        ctx.save(); ctx.fillStyle = `rgba(16,12,28,${a})`; ctx.filter = 'blur(3px)';
+      // the tree's shadow lying across the ground towards us; at «다시 살리사» it draws back as the sun comes up.
+      // It never runs behind the quote (8th render: the upright crossed the words): it fades out above the band the words use
+      // (Film.SAFE — 0.64 H portrait, H − 270 landscape; the fade is set in screen space, so it holds through the zoom) and the cross is
+      // read whole above it — head, beam, a longer foot dissolving towards us. Portrait: on the ground right of the stone and below it
+      // (under the stone the two read as a signpost — 6th render); landscape (little ground above the words): on the rock face right
+      // of the stone, coming down to the ground.
+      { const back = eio(clamp((u - 3.4) / 2.2)), G = V ? { foot: [.6, 1.12], head: [.74, .548], w: [.11, .024], beam: .577, half: .11, th: .034, fade: [.6, .645], a: .86 }
+                                                          : { foot: [.64, 1.05], head: [.665, .54], w: [.04, .013], beam: .595, half: .055, th: .016, fade: [.7, .748], a: .74 };
+        const a = G.a * (1 - back * .9), len = lerp(1, .15, back), foot = [X(G.foot[0]), Y(G.foot[1])], head = [X(G.head[0]), Y(G.head[1])], hd = [lerp(foot[0], head[0], len), lerp(foot[1], head[1], len)];
+        const wAt = y => lerp(X(G.w[0]), X(G.w[1]), clamp((foot[1] - y) / (foot[1] - head[1])));   // nearer is wider
+        const sy = v => fy + (Y(v) - fy) / z, sh = ctx.createLinearGradient(0, sy(G.fade[0]), 0, sy(G.fade[1]));   // screen → world (the camera zooms on the tomb)
+        sh.addColorStop(0, 'rgba(16,12,28,' + a + ')'); sh.addColorStop(1, 'rgba(16,12,28,0)');
+        ctx.save(); ctx.fillStyle = sh; ctx.filter = 'blur(3px)';
         ctx.beginPath(); ctx.moveTo(foot[0] - wAt(foot[1]) / 2, foot[1]); ctx.lineTo(hd[0] - wAt(hd[1]) / 2, hd[1]); ctx.lineTo(hd[0] + wAt(hd[1]) / 2, hd[1]); ctx.lineTo(foot[0] + wAt(foot[1]) / 2, foot[1]); ctx.fill();
-        const fb = V ? (1.12 - .58) / (1.12 - .528) : .82; if (len > fb + .02)   /* portrait: the beam at 0.58 H, above the quote lines (0.68–0.80 H) */ { const cy = lerp(foot[1], head[1], fb), cx = lerp(foot[0], head[0], fb), half = Math.max(X(V ? .1 : .065), X(V ? .3 : .17) * lerp(1, .5, fb)), th = Math.max(wAt(cy) * 1.05, X(V ? .036 : .022));   // the beam, square across
+        const fb = (foot[1] - Y(G.beam)) / (foot[1] - head[1]); if (len > fb + .02) { const cy = lerp(foot[1], head[1], fb), cx = lerp(foot[0], head[0], fb), half = X(G.half), th = Math.max(wAt(cy) * 1.05, X(G.th));   // the beam, square across
           ctx.beginPath(); ctx.moveTo(cx - half, cy - th * .5); ctx.lineTo(cx + half, cy - th * .42); ctx.lineTo(cx + half, cy + th * .42); ctx.lineTo(cx - half, cy + th * .5); ctx.fill(); }
         ctx.restore(); }
       reveal(ctx, D.dawn, D.kDoor, eo(rep), cam);

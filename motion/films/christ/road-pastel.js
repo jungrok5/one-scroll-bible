@@ -362,16 +362,42 @@ function rdProtest(ctx, u, T, C) {
   // the far one coming forward in front of his chest; he leans toward Jesus, pleading. No palms, no hand-in-hand.
   const grip1 = ss(.5, 1.15, u), grip2 = ss(.7, 1.35, u), F = t => [lerp(aJ.el[0], aJ.wr[0], t), lerp(aJ.el[1], aJ.wr[1], t) - .014 * h];
   const G1 = F(.42), G2 = F(.72);
+  const aD = (() => { const dx = aJ.wr[0] - aJ.el[0], dy = aJ.wr[1] - aJ.el[1], d = Math.hypot(dx, dy) || 1; return [dx / d, dy / d]; })(), nA = aD[1] > 0 ? [-aD[1], aD[0]] : [aD[1], -aD[0]];   // across his forearm, away from Peter
   const sP1 = Pp(.0 + pl * .75, -.76), rest1 = Pp(.03 + pl * .3 + .07 * Math.sin(po.ph) * po.walk, -.42), aP1 = rdIK(sP1, [lerp(rest1[0], G1[0], grip1), lerp(rest1[1], G1[1], grip1)], .2 * h, .17 * h, -1);
   const sP2 = Pp(.045 + pl * .75, -.775), rest2 = Pp(.05 + pl * .3 - .07 * Math.sin(po.ph) * po.walk, -.43), aP2 = rdIK(sP2, [lerp(rest2[0], G2[0], grip2), lerp(rest2[1], G2[1], grip2)], .2 * h, .17 * h, -1);
-  const arm = (p, s, a, w0) => { rdLimb(p, s, a.el, w0 * h, w0 * .88 * h); rdLimb(p, a.el, a.wr, w0 * .85 * h, w0 * .62 * h); };
+  // back: Peter's sleeve ends a little short of the wrist once his hand comes out (the joints stay where they are), so the cuff does not
+  // cover the grip and the hand has room to reach across Jesus's forearm
+  const arm = (p, s, a, w0, back = 0) => { rdLimb(p, s, a.el, w0 * h, w0 * .88 * h); const d = Math.hypot(a.wr[0] - a.el[0], a.wr[1] - a.el[1]) || 1, e = Math.max(.3, 1 - back / d);
+    rdLimb(p, a.el, [lerp(a.el[0], a.wr[0], e), lerp(a.el[1], a.wr[1], e)], w0 * .85 * h, w0 * .62 * h); };
+  const back1 = .05 * h * clamp((grip1 - .3) / .4), back2 = .05 * h * clamp((grip2 - .3) / .4);
   const jArm = new Path2D(); arm(jArm, sJ, aJ, .052);
-  const pArm1 = new Path2D(); arm(pArm1, sP1, aP1, .05);
-  const pArm2 = new Path2D(); arm(pArm2, sP2, aP2, .048);
+  const pArm1 = new Path2D(); arm(pArm1, sP1, aP1, .05, back1);
+  const pArm2 = new Path2D(); arm(pArm2, sP2, aP2, .048, back2);
   // hands only at the ends of the arms, as short tapered shapes along the forearm (no round discs); a hand shows once it reaches out
   const hand = (a, len, w0) => { const p = new Path2D(), [ex, ey] = a.el, [wx, wy] = a.wr, d = Math.hypot(wx - ex, wy - ey) || 1, ux = (wx - ex) / d, uy = (wy - ey) / d;
     rdLimb(p, [wx - ux * .01 * h, wy - uy * .01 * h], [wx + ux * len * h, wy + uy * len * h], w0 * h, w0 * .78 * h); return p; };
-  const hJ = hand(aJ, .07, .024), showP1 = grip1 > .3, showP2 = grip2 > .3, hP1 = hand(aP1, .065 * Math.min(1, grip1 * 1.4), .025), hP2 = hand(aP2, .065 * Math.min(1, grip2 * 1.4), .024);
+  // Peter's hands hold (8th render: the tapered shapes read as mittens): out of the cuff (the IK end) the back of the hand, then four
+  // fingers with dark gaps between them laid across Jesus's forearm to its far edge, the thumb out along the near side (pointing away from
+  // the other hand); while reaching, the same hand open along his own forearm. sil = the outline (robe colour + rim, and the finger gaps).
+  const poly = (p, pts) => { let s = 0; for (let i = 0; i < pts.length; i++) { const [x0, y0] = pts[i], [x1, y1] = pts[(i + 1) % pts.length]; s += x0 * y1 - x1 * y0; } if (s < 0) pts = pts.slice().reverse();
+    const n = pts.length, m = i => [(pts[i][0] + pts[(i + 1) % n][0]) / 2, (pts[i][1] + pts[(i + 1) % n][1]) / 2]; p.moveTo(...m(n - 1)); for (let i = 0; i < n; i++) p.quadraticCurveTo(pts[i][0], pts[i][1], ...m(i)); p.closePath(); };
+  const holdHand = (a, G, grip, cuff, back, thumbTo) => {
+    const [wx, wy] = a.wr, [ex, ey] = a.el, d0 = Math.hypot(wx - ex, wy - ey) || 1, up = [(wx - ex) / d0, (wy - ey) / d0], k = ss(.55, 1, grip), sc = Math.min(1, grip * 1.4);
+    const tax = [G[0], G[1] + .014 * h], far = [tax[0] + nA[0] * .016 * h, tax[1] + nA[1] * .016 * h], fd = Math.hypot(far[0] - wx, far[1] - wy) || 1;
+    let c = [lerp(up[0], (far[0] - wx) / fd, k), lerp(up[1], (far[1] - wy) / fd, k)]; { const cl = Math.hypot(...c) || 1; c = [c[0] / cl, c[1] / cl]; }
+    const p = [-c[1], c[0]], xs = cuff * .8 - back, L = xs + sc * lerp(.05 * h, Math.max(.034 * h, fd + .003 * h - xs), k), Q = (x, y) => [wx + c[0] * x + p[0] * y, wy + c[1] * x + p[1] * y];
+    const fl = Math.min(.034 * h, (L - xs) * .72) , xk = L - fl, sp = .0112 * h * sc, fw = .0041 * h * sc, hw0 = .0165 * h * sc, hw1 = .021 * h * sc;
+    const side = (Math.sign(p[0] * aD[0] + p[1] * aD[1]) || 1) * thumbTo;   // the thumb toward Jesus's elbow (-1) or wrist (+1)
+    const palm = new Path2D(); poly(palm, [Q(xs - .014 * h, -hw0), Q(lerp(xs, xk, .5), -hw1 * .95), Q(xk + .003 * h, -hw1), Q(xk + .003 * h, hw1), Q(lerp(xs, xk, .5), hw1 * .95), Q(xs - .014 * h, hw0)]);
+    const fingers = [-1.5, -.5, .5, 1.5].map(i => { const f = new Path2D(), y = i * sp, len = fl - (Math.abs(i) > 1 ? .005 : i < 0 ? 0 : .0015) * h * sc;   // the middle finger longest, the outer two shorter
+      rdLimb(f, Q(xk - .005 * h, y), Q(xk + len - fw, y * 1.05), fw * 1.1, fw * .9); return f; });
+    const t0 = Q(xs + .001 * h, side * hw0 * .85), td = [side * p[0] * .8 + c[0] * .55, side * p[1] * .8 + c[1] * .55], tl = .022 * h * sc * (.6 + .4 * k);
+    const thumb = new Path2D(); rdLimb(thumb, t0, [t0[0] + td[0] * tl, t0[1] + td[1] * tl], .0058 * h * sc, .0042 * h * sc);
+    const sil = new Path2D(); sil.addPath(palm); sil.addPath(thumb); fingers.forEach(f => sil.addPath(f));
+    const gap = new Path2D(); poly(gap, [Q(xk - .004 * h, -1.5 * sp), Q(xk + fl * .7, -1.5 * sp), Q(xk + fl * .7, 1.5 * sp), Q(xk - .004 * h, 1.5 * sp)]);   // dark between the fingers
+    sil.addPath(gap); return { sil, palm, fingers, thumb };
+  };
+  const hJ = hand(aJ, .07, .024), showP1 = grip1 > .3, showP2 = grip2 > .3, H1 = holdHand(aP1, G1, grip1, .05 * .62 * h, back1, -1), H2 = holdHand(aP2, G2, grip2, .048 * .62 * h, back2, 1), hP1 = H1.sil, hP2 = H2.sil;
   const fl = RDP.fl, g = fl.getContext('2d'); g.setTransform(1, 0, 0, 1, 0, 0); g.globalCompositeOperation = 'source-over'; g.globalAlpha = 1; g.clearRect(0, 0, W, H);
   // short shadows toward us (the light is behind them)
   g.save(); g.fillStyle = 'rgba(40,30,60,.3)'; for (const xx of [jx, px]) { const [ex, ey] = B0(xx, .012); g.beginPath(); g.ellipse(ex, ey, .22 * h, .03 * h, 0, 0, 6.283); g.fill(); } g.restore();
@@ -383,8 +409,13 @@ function rdProtest(ctx, u, T, C) {
   rdFigure(g, wj, Pj, jo, tint('#a49688'), light, [-1, .05], .02 * h, rimA);
   rdFigure(g, wp, Pp, po, tint('#7e4c44'), light, [1, .05], .02 * h, rimA);
   // the sleeves a shade darker than the robe (the far arm darker still), then the hands in skin, all at the arms' ends
-  g.save(); g.fillStyle = 'rgba(28,16,30,.22)'; g.fill(jArm); g.fill(pArm1); g.fillStyle = 'rgba(28,16,30,.34)'; g.fill(pArm2); g.fillStyle = 'rgba(28,16,30,.22)'; g.fill(pArm1);
-  g.fillStyle = jo.skin; g.fill(hJ); if (showP2) g.fill(hP2); if (showP1) g.fill(hP1); g.restore();
+  // (not over the head cloths: the cloth hangs over the shoulder, a sleeve shade on it read as a see-through sleeve — 8th render)
+  g.save(); { const ex = new Path2D(); ex.rect(0, 0, W, H); ex.addPath(jesus.hc); ex.addPath(peter.hc); g.clip(ex, 'evenodd'); }
+  g.fillStyle = 'rgba(28,16,30,.22)'; g.fill(jArm); g.fill(pArm1); g.fillStyle = 'rgba(28,16,30,.34)'; g.fill(pArm2); g.fillStyle = 'rgba(28,16,30,.22)'; g.fill(pArm1);
+  g.fillStyle = jo.skin; g.fill(hJ); g.fillStyle = 'rgba(28,16,30,.24)'; g.fill(hJ);   // his hand in the shade of his body (the light is behind): plain skin on the gold field read as see-through
+  const skinHand = (Hh, shade) => { g.fillStyle = tint('#6a4436'); g.fill(Hh.sil); g.fillStyle = jo.skin; g.fill(Hh.palm); g.fill(Hh.thumb); Hh.fingers.forEach(f => g.fill(f));
+    if (shade) { g.fillStyle = 'rgba(28,16,30,' + shade + ')'; g.fill(Hh.palm); g.fill(Hh.thumb); Hh.fingers.forEach(f => g.fill(f)); } };
+  if (showP2) skinHand(H2, .2); if (showP1) skinHand(H1, 0); g.restore();
   g.globalCompositeOperation = 'destination-out'; g.globalAlpha = .1; g.fillStyle = g.createPattern(RDP.grain, 'repeat'); g.fillRect(0, 0, W, H); g.globalCompositeOperation = 'source-over'; g.globalAlpha = 1;
   ctx.drawImage(fl, 0, 0);
   RDP.lastPose = { grips: [G1, G2], hands: [aP1.wr, aP2.wr], elbows: [aP1.el, aP2.el, aJ.el], shoulders: [sP1, sP2, sJ], jesusX: jx, peterX: px };

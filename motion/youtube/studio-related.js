@@ -6,12 +6,14 @@
 // The film is found in the picker by the first 18 characters of manifest.languages[L].film.title (the international
 // channel's film has that title). A brand-new upload may not be in the picker for a day (index lag, 2026-11-01):
 // then related = false — run it again the next day; 'already' entries are skipped quickly.
-window.__osbRelated = async (L, id) => {
+// Another target than the language's music film (e.g. the Korean narrated film): __osbRelated('ko', id, '창조에서 새 하늘과 새 땅까지, 성경')
+// — the third argument is the target's title start (2026-11-13: Korean Shorts 1–6 → wrEYqvOU1O8).
+window.__osbRelated = async (L, id, want) => {
   const S = 'http://127.0.0.1:8765/', sleep = ms => new Promise(r => setTimeout(r, ms));
   const wait = async (fn, ms = 20000) => { for (let t = 0; t < ms; t += 250) { const v = fn(); if (v) return v; await sleep(250); } return null; };
   const CH = location.pathname.match(/\/channel\/([\w-]+)/)?.[1] || window.__osbCh; if (CH) window.__osbCh = CH;
-  const m = window.__man || (window.__man = await (await fetch(S + 'youtube/manifest.json', { cache: 'no-store' })).json());
-  const title = m.languages[L].film.title.slice(0, 18);
+  const m = want ? null : window.__man || (window.__man = await (await fetch(S + 'youtube/manifest.json', { cache: 'no-store' })).json());
+  const title = want ? want.slice(0, 18) : m.languages[L].film.title.slice(0, 18);
   const ready = () => location.pathname.includes(id) && document.querySelector('ytcp-button#save') && document.querySelector('#textbox');
   for (let a = 0; a < 3 && !ready(); a++) {
     [...document.querySelectorAll('ytcp-button, button')].filter(x => x.offsetParent && x.innerText?.trim() === '닫기').forEach(x => x.click());

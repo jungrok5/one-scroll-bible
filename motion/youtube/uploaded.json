@@ -917,6 +917,11 @@
       "en": "A-glass-en",
       "es": "A-glass-es",
       "pt-BR": "A-glass-pt-BR"
+     },
+     "pinned_comment": {
+      "id": "UgxJh9bPHCQ1zZ0ompB4AaABAg",
+      "key": "silence400_comment",
+      "pinned": "2026-11-13"
      }
     },
     "v": {
@@ -956,7 +961,12 @@
       "mn",
       "my"
      ],
-     "thumbnail": "V-A-glass-en (API)"
+     "thumbnail": "V-A-glass-en (API)",
+     "pinned_comment": {
+      "id": "UgxkvhIzSczehGuGUHB4AaABAg",
+      "key": "silence400_comment",
+      "pinned": "2026-11-13"
+     }
     },
     "related_video": "Short → horizontal oYKz_HHI8yw, set in Studio 2026-11-02 (on 11/1 the picker found no video of this channel — index lag; a day later it listed them). Pinned comment only if a reviewed text exists",
     "captions_note": "2026-11-01: 19 caption languages (16 added through Studio — motion/youtube/studio-caption.js, no API quota), English-narration timing (sound/<lang>.en-timing.vtt); automatic en captions removed (yt-api asr-off). 2026-11-01 later: it, pl, tr added (owner's fixed caption list, films README §4 step 9) — Studio, all four videos. Then uz, ne, km, mn, my (migrant languages in Korea) — Studio, all four videos. 2026-11-02: tr and fa tracks replaced on all four via API caption-file --replace (line 01 now shows only the voiced clause — first upload began with a lone verb).",

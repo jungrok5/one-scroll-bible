@@ -252,11 +252,13 @@
 
 **11/13 문서 정리**(위 2·3·6·7, 1·11의 문서 부분): `motion/README.md`(업로드 자료 표·쇼츠 자막 문단·9단계·공개 일정), `motion/films/README.md`(4절 표 — 해설 en·es·pt-BR, 자막 27+ko, 두 방향 · 3절·7절·9b 자막·가로판 · 남은 일), `pipeline/tasks/publish.md`·`captions.md`(한국어 가로판도 올림, 자막 4편 모두), `motion/films/ANALYTICS.md`(볼 영상 — 한국어 쇼츠 날짜, 400년 짧은 쇼츠), `motion/social/instagram.json`(날짜·상태), 메모리 asr-off. 유튜브·인스타·스레드는 건드리지 않았다.
 
+**11/13 연결 작업**(17시 뒤, 관리자 OK): `xlinks.mjs apply` — 한국어 14분 해설판·쇼츠 21·400년 짧은 쇼츠 3, 해외 14분 19·400년 2에 한국어↔해외 연결 줄(`audit` 모두 linked). 한국어 채널 소개·14분 두 편·400년 두 편에서 언어 수를 뺌(`text-edit`). 해외 400년 가로(oYKz_HHI8yw)·세로(cbg5Z5xg65I)에 "오늘 읽기" 댓글을 달고 고정(uploaded.json `global.films.silence400.h/v.pinned_comment`).
+
 **11/13 4물결 업로드**: hi 18–21 + vi·th·tl 1–21(67편) 올리고 11/21~12/11 현지 19:00 예약 — 4물결 84편 모두 예약. 3·4물결 168편 관련 영상 연결. 재생목록은 8개 언어 모두 끝(vi·th·tl은 17시 뒤 `playlist-shorts vi th tl`, 각 21편). 400년 짧은 쇼츠 3편을 uploaded.json `silence400.clips`에 넣음(7-4 정리).
 
 15. **11/13 이 세션에 걸어 둔 1회성 예약**(세션이 끝나면 사라짐 — 다른 세션에서는 결과만 확인):
     - ~~17:13 vi·th·tl 쇼츠 재생목록~~ — 끝남(각 21편), `global.wave4_pending` 지움.
-    - 17:37 연결 줄 올리기·언어 수 빼기·400년 고정 댓글 → `node motion/youtube/xlinks.mjs audit`가 모두 linked여야 하고, 400년 h/v에 `pinned_comment`가 기록되어 있어야 한다.
+    - ~~17:37 연결 줄 올리기·언어 수 빼기·400년 고정 댓글~~ — 끝남(아래 "11/13 연결 작업").
     - 11/14 17:23 `film14.mjs captions --dry`·`intl-layout`(재생목록에 400년, 첫 화면 섹션).
     - 11/19 19:47 매일·월목 예약 갱신.
 

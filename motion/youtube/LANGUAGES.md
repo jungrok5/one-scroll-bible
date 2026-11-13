@@ -265,3 +265,4 @@
     남아 있지 않으면 위 명령으로 다시 하면 된다.
 16. **첫 영상 새 언어를 어떤 순서로 더할지**는 정하지 않았다. **남음** — 관리자 결정. `film14.mjs status`에 사이트에는 있는데 영상이 없는 언어가 보이게 하려면, 후보 언어를 film/s/i18n에 넣는 순서가 곧 그 순서다.
 17. ~~한국어 채널에 외국어 재생목록 15개가 공개로 남아 있다~~ — **처리함(11/13, 관리자 OK "외국어 재생목록은 비공개로")**: 15개 모두 비공개(지우지 않음, `yt-api.mjs playlist-privacy public …`로 되돌릴 수 있음). ko·ko-films는 공개 유지.
+18. **영상 언어 설정**(11/13 17시 뒤 `yt-langs.mjs audit`): 두 채널 364편 중 295 맞음 · 69 틀림 — 한국어 쇼츠 3(제목·설명 언어 비어 있음), 해외 14분 pt-BR(pt-PT로 되어 있음) · zh-Hans · zh-Hant 각 1, 해외 쇼츠 pt-BR · zh-Hans · zh-Hant 각 21(YouTube 공식 코드가 아닌 pt-BR/zh-Hans/zh-Hant → pt/zh-CN/zh-TW). 40편 고침(`fix --max 40`), **29편 남음**(중국어 쇼츠) → 11/14 17시 뒤 `node motion/youtube/yt-langs.mjs fix --max 40`.

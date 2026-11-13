@@ -9,8 +9,7 @@
 //   node motion/youtube/film14.mjs narr-check <lang>     → the narrated-version gates (rules "narr-gates"); exit 1 while one is open.
 //   node motion/youtube/film14.mjs narr-verify <lang> <transcript.txt> → generated voice vs script (motion/narration/<lang>.json):
 //        each line's best match in the transcript, lines under 0.85 similarity listed. Transcript = ElevenLabs transcribe output text.
-//   node motion/youtube/film14.mjs intl-layout [--dry]   → international channel: 「The Silent 400 Years」 in every language playlist
-//        (end of list) + one home-page section with every language playlist. ~50 units per change.
+//   node motion/youtube/film14.mjs intl-layout [--dry]   → = intl-layout.mjs plan|apply (international channel layout, intl-layout.json)
 import { readFileSync, writeFileSync, existsSync, readdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -97,14 +96,6 @@ if (cmd === 'status' || !cmd) {
   for (const [i, l] of lines.entries()) { const s = sim(norm(l.text || l.say || ''), T); if (s < 0.85) { bad++; console.log(`#${i} ${s.toFixed(2)}  ${l.text || l.say}`); } }
   console.log(`${lines.length - bad}/${lines.length} lines match (≥0.85)${bad ? ' — listen to the flagged lines; Scripture lines must be exact' : ''}`); process.exit(bad ? 1 : 0);
 } else if (cmd === 'intl-layout') {
-  const dry = rest.includes('--dry'), e = process.env, s4 = G.films?.silence400?.h?.id;
-  const t = (await (await fetch('https://oauth2.googleapis.com/token', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: new URLSearchParams({ client_id: e.YT_CLIENT_ID, client_secret: e.YT_CLIENT_SECRET, refresh_token: e.YT_REFRESH_TOKEN_GLOBAL, grant_type: 'refresh_token' }) })).json()).access_token;
-  const api = async (p, o = {}) => { const r = await fetch('https://www.googleapis.com/youtube/v3/' + p, { ...o, headers: { Authorization: 'Bearer ' + t, 'Content-Type': 'application/json' } }); const j = await r.json(); if (!r.ok) throw new Error(`${r.status} ${j.error?.message}`); return j; };
-  for (const [L, pl] of Object.entries(G.playlists || {})) { let ids = [], pt = '';
-    do { const j = await api(`playlistItems?part=contentDetails&maxResults=50&playlistId=${pl}${pt ? '&pageToken=' + pt : ''}`); ids.push(...j.items.map(i => i.contentDetails.videoId)); pt = j.nextPageToken; } while (pt);
-    if (s4 && !ids.includes(s4)) { console.log(`${L}: add 400 → ${pl}`); if (!dry) await api('playlistItems?part=snippet', { method: 'POST', body: JSON.stringify({ snippet: { playlistId: pl, resourceId: { kind: 'youtube#video', videoId: s4 } } }) }); } }
-  const sec = await api('channelSections?part=snippet,contentDetails&mine=true'), all = Object.values(G.playlists || {});
-  if (!(sec.items || []).some(x => x.snippet.type === 'multiplePlaylists')) { console.log(`home: add a section with ${all.length} language playlists`);
-    if (!dry) await api('channelSections?part=snippet,contentDetails', { method: 'POST', body: JSON.stringify({ snippet: { type: 'multiplePlaylists', title: 'Watch in your language', position: 0 }, contentDetails: { playlists: all } }) }); }
-  console.log(dry ? 'dry run' : 'done');
+  // moved to intl-layout.mjs (rules intl-layout.json — playlists, series playlist, home, channel description per language)
+  const r = spawnSync(process.execPath, [join(HERE, 'intl-layout.mjs'), rest.includes('--dry') ? 'plan' : 'apply'], { stdio: 'inherit' }); process.exit(r.status ?? 1);
 } else console.log('usage: node motion/youtube/film14.mjs status [lang…] | site [--write] | captions [--dry] | narr-check <lang> | narr-verify <lang> <transcript> | intl-layout [--dry]');

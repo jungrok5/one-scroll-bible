@@ -962,16 +962,6 @@
     "captions_note": "2026-11-01: 19 caption languages (16 added through Studio — motion/youtube/studio-caption.js, no API quota), English-narration timing (sound/<lang>.en-timing.vtt); automatic en captions removed (yt-api asr-off). 2026-11-01 later: it, pl, tr added (owner's fixed caption list, films README §4 step 9) — Studio, all four videos. Then uz, ne, km, mn, my (migrant languages in Korea) — Studio, all four videos. 2026-11-02: tr and fa tracks replaced on all four via API caption-file --replace (line 01 now shows only the voiced clause — first upload began with a lone verb).",
     "published": "2026-11-01 21:42 KST: both made public by the owner's OK (videos.update status, API); horizontal end screen saved in Studio — last 5 s (2:54.12–2:59.12) = English 14-min film MFH3Hj4V6KA bottom-left + subscribe bottom-right, below the end-card text (found via the picker's other-channel box with the video URL — the my-videos search returned nothing for this channel)"
    }
-  },
-  "wave4_pending": {
-   "note": "2026-11-13: done — hi 18-21 + vi/th/tl 1-21 (67) uploaded (studio-fileonly.js), recorded (record-from-files: 21/21 each), scheduled (schedule-shorts, wave 4: hi from 11-21 19:00 +05:30, vi/th 19:00 +07:00, tl 19:00 +08:00, last 12-11); playlist-shorts done for zh-Hans zh-Hant ja ar hi; related video set in Studio for all 168 wave-3/4 Shorts (studio-related.js, now with a picker-search fallback). LEFT (daily API quota): after the reset (17:00 KST) run playlist-shorts vi th tl (21 each, 50 units each = 3,150; reruns skip what is in the playlist), then delete this key.",
-   "todo": {
-    "playlist_shorts": [
-     "vi",
-     "th",
-     "tl"
-    ]
-   }
   }
  },
  "silence400": {

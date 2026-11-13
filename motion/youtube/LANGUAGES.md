@@ -76,7 +76,7 @@
 | 1 | en · es · pt-BR | 10/24 → 11/13 | en 08:00 · es 10:00 · pt-BR 06:00 (KST) | 21편 모두 예약됨. 10/26 한국어 채널에서 옮겨 와 같은 일정으로 진행 중 |
 | 2 | id · fr · de · ru | 10/31 → 11/20 | 현지 19:00 (id +07 = 21:00 KST, fr·de +01 = 다음 날 03:00 KST, ru +03 = 다음 날 01:00 KST) | 84편 예약됨, 재생목록 넣음, 관련 영상 연결함 |
 | 3 | zh-Hans · zh-Hant · ja · ar | 11/14 → 12/04 | 현지 19:00 (zh +08 = 20:00 KST, ja 19:00 KST, ar +03 = 다음 날 01:00 KST) | 84편 예약됨. **재생목록·관련 영상은 아직 할 일로 남아 있음**(아래 7절 5번) |
-| 4 | hi · vi · th · tl | 11/21 → 12/11 | 현지 19:00 (hi +05:30 = 22:30 KST, vi·th +07, tl +08) | **hi 1~17편만 예약됨.** hi 18~21편과 vi·th·tl 1~21편(67편)은 하루 업로드 한도에 걸려 올라가지 않았음 → `global.wave4_pending` |
+| 4 | hi · vi · th · tl | 11/21 → 12/11 | 현지 19:00 (hi +05:30 = 22:30 KST, vi·th +07, tl +08) | 84편 모두 예약(11/13), 재생목록 8개 언어 모두 끝(vi·th·tl은 11/13 17시 뒤) |
 | — | bn · sw · fa · ta | — | — | 14분 영상만 있고 쇼츠 계획은 없음(물결 목록에 없음) |
 
 - 관련 영상은 그 언어의 국제 채널 14분 영상(`global.film[L]`)이다. 스튜디오에서 설정한다.
@@ -85,7 +85,7 @@
 - 스페인어 쇼츠는 국제 채널에서 반응이 있는 쇼츠다. 「광야」 6/21이 48시간에 1,111회였다(films/README §4b).
 - 주일에 공개하지 않는 규칙은 **국제 채널에 적용하지 않는다.**
 
-출처: `uploaded.json` `shorts.ko`, `global.shorts`, `_shorts_note`, `global.wave4_pending` · `motion/README.md` "공개 정책" · `motion/youtube/shorts-open.json` · `motion/social/instagram.json`
+출처: `uploaded.json` `shorts.ko`, `global.shorts`, `_shorts_note` · `motion/README.md` "공개 정책" · `motion/youtube/shorts-open.json` · `motion/social/instagram.json`
 
 ## 3. 자막 — 어디에, 어떻게
 
@@ -235,7 +235,7 @@
 3. ~~**메모리가 낡았다.** asr-off 메모에는 "한국어 채널 일괄 실행이 11/1에 막힘"이라고 되어 있다.~~ — **정리함(11/13)**: 메모리를 "한국어 채널은 11/1에 처리됨(c747dfe, API 11/12 확인), 남은 것은 국제 영어 14분 en(auto)와 400년 짧은 쇼츠 1편 ko(auto)"로 고쳤다.
 4. **400년 짧은 쇼츠 3편(Gs5UC6xfE20 · gDXUB9kxUTo · 8FMHpO6-Umo)이 uploaded.json에 없다.** `silence400/review.json` `clips`에만 있다. 1편은 ko(auto)가 남아 있다(비공개 예약 중이라 공개 전에 `asr-off`를 해야 할 것). 2·3편의 자막은 확인하지 않았다.
    - **기록함(11/13)**: uploaded.json `silence400.clips` a·b·c. **처리함(11/13)**: 세 편 모두 우리 ko 트랙이 있어 ko(auto)를 지웠다. ANALYTICS.md "볼 영상" 표에는 세 id와 예약일을 넣었다. 1편 `asr-off`와 2·3편 자막 확인은 유튜브 작업.
-5. **4물결 할 일이 남아 있다.** (**남음** — 11/13 다른 작업이 uploaded.json `global.shorts` vi·th 등에 id를 넣는 중. 끝나면 이 줄과 2절 표를 다시 맞춘다.) `global.wave4_pending`에는 "11/9 이후 hi 18–21 + vi/th/tl 1–21 업로드·예약, 8개 언어 재생목록·관련 영상"이 끝나지 않은 채 그대로 있다.
+5. ~~4물결 할 일이 남아 있다~~ — **처리함(11/13)**: 84편 업로드·예약·관련 영상, 8개 언어 재생목록 모두 끝(vi·th·tl 각 21편은 17시 할당량 초기화 뒤). `global.wave4_pending` 지움.
    - 국제 채널 최근 업로드 목록(API, 8편)에도 vi·th·tl 파일은 없었다. 다만 그 목록은 공개 순이라 확정은 못 한다.
    - 3물결 메모에는 "관련 영상 = global.film[L] (set in Studio)"라고 되어 있다. 그런데 같은 TODO가 "8개 언어(3·4물결) 재생목록·관련 영상"을 할 일로 적고 있다. **3물결의 재생목록·관련 영상이 끝났는지 기록끼리 맞지 않는다**(관련 영상은 API로 볼 수 없음).
 6. ~~**instagram.json 날짜가 예전 그대로다.** `reels_ko`는 9~21편이 11/1~11/13로, 7~21편이 '예약됨'으로 남아 있다.~~ — **정리함(11/13)**: `reels_ko` `at`을 `shorts.ko.dates`에 맞춤(9 = 11/2 … 21 = 11/16, 19:00 KST), 7~18편은 공개 시각이 지나 `published`, 19~21편은 `scheduled`(일정 기준, 브라우저로 다시 보지는 않음). `threads_note` 날짜와 `reels_ko_note`도 더함.
@@ -252,10 +252,10 @@
 
 **11/13 문서 정리**(위 2·3·6·7, 1·11의 문서 부분): `motion/README.md`(업로드 자료 표·쇼츠 자막 문단·9단계·공개 일정), `motion/films/README.md`(4절 표 — 해설 en·es·pt-BR, 자막 27+ko, 두 방향 · 3절·7절·9b 자막·가로판 · 남은 일), `pipeline/tasks/publish.md`·`captions.md`(한국어 가로판도 올림, 자막 4편 모두), `motion/films/ANALYTICS.md`(볼 영상 — 한국어 쇼츠 날짜, 400년 짧은 쇼츠), `motion/social/instagram.json`(날짜·상태), 메모리 asr-off. 유튜브·인스타·스레드는 건드리지 않았다.
 
-**11/13 4물결 업로드**: hi 18–21 + vi·th·tl 1–21(67편) 올리고 11/21~12/11 현지 19:00 예약 — 4물결 84편 모두 예약. 3·4물결 168편 관련 영상 연결. 재생목록은 zh-Hans·zh-Hant·ja·ar·hi 끝, **vi·th·tl만 남음**(할당량 — 17:00 KST 뒤 `YT_AS=GLOBAL node motion/youtube/global-move.mjs playlist-shorts vi th tl`). 400년 짧은 쇼츠 3편을 uploaded.json `silence400.clips`에 넣음(7-4 정리).
+**11/13 4물결 업로드**: hi 18–21 + vi·th·tl 1–21(67편) 올리고 11/21~12/11 현지 19:00 예약 — 4물결 84편 모두 예약. 3·4물결 168편 관련 영상 연결. 재생목록은 8개 언어 모두 끝(vi·th·tl은 17시 뒤 `playlist-shorts vi th tl`, 각 21편). 400년 짧은 쇼츠 3편을 uploaded.json `silence400.clips`에 넣음(7-4 정리).
 
 15. **11/13 이 세션에 걸어 둔 1회성 예약**(세션이 끝나면 사라짐 — 다른 세션에서는 결과만 확인):
-    - 17:13 vi·th·tl 쇼츠 재생목록 → 끝나면 uploaded.json `global.wave4_pending`이 지워져 있어야 한다.
+    - ~~17:13 vi·th·tl 쇼츠 재생목록~~ — 끝남(각 21편), `global.wave4_pending` 지움.
     - 17:37 연결 줄 올리기·언어 수 빼기·400년 고정 댓글 → `node motion/youtube/xlinks.mjs audit`가 모두 linked여야 하고, 400년 h/v에 `pinned_comment`가 기록되어 있어야 한다.
     - 11/14 17:23 `film14.mjs captions --dry`·`intl-layout`(재생목록에 400년, 첫 화면 섹션).
     - 11/19 19:47 매일·월목 예약 갱신.

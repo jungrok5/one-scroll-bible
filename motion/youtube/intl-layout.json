@@ -2,28 +2,55 @@
  "_note": "International channel (@bibleinonescroll) layout as rules (관리자 2026-11-13 '앞으로 영상들 생성될 것 고려해서'). `node motion/youtube/intl-layout.mjs plan` shows what differs from these rules; `apply` fixes it (API, ~50 units per change). Ids come from uploaded.json (global.*) — new films appear here by being recorded there. Foreign Shorts are what gets seen; long videos are reached from Shorts and playlists, so every rule below is about the path Short → long video.",
  "language_playlist": {
   "_note": "One public playlist per language = everything watchable in that language, in this order. A series film goes into EVERY language playlist whose language it has captions or audio for (global.films.<film>.h.captions / audio). A new language gets its playlist created (title/description = that language's site brand + film blurb, as the existing ones).",
-  "order": ["film14-main", "film14-other", "series", "shorts"]
+  "order": [
+   "film14-main",
+   "film14-other",
+   "series",
+   "shorts"
+  ]
  },
- "series_order": ["silence400", "christ", "manna"],
+ "series_order": [
+  "silence400",
+  "christ",
+  "manna"
+ ],
  "series_playlist": {
-  "_note": "The international twin of the Korean 「해설 영상 모아 보기」: the series films (horizontal) in story order. English title + localized titles (reviewed lines only).",
-  "title": "Bible stories, one by one",
-  "description": "Short films that follow the Bible story one piece at a time — each with captions in many languages.",
+  "_note": "The international twin of the Korean 「해설 영상 모아 보기」: the series films (horizontal) in story order. English title + localized titles (reviewed lines only). Wording reviewed 2026-11-13 (motion/reviews/intl-series-playlist.md), MINOR suggestions applied with the maintainer's OK. After creating it, check that a Brazilian viewer sees the Portuguese title (key pt-BR is accepted on our videos; YouTube's own code is pt).",
+  "title": "The Bible's story, one film at a time",
+  "description": "Short films that follow the Bible story one part at a time — each with captions in many languages.",
   "localizations": {
-   "es": { "title": "Historias de la Biblia, una a una", "description": "Películas cortas que siguen la historia de la Biblia paso a paso, cada una con subtítulos en muchos idiomas." },
-   "pt-BR": { "title": "Histórias da Bíblia, uma a uma", "description": "Filmes curtos que acompanham a história da Bíblia passo a passo, cada um com legendas em muitos idiomas." }
+   "es": {
+    "title": "La historia de la Biblia, paso a paso",
+    "description": "Cortometrajes que recorren la historia de la Biblia paso a paso, cada uno con subtítulos en muchos idiomas."
+   },
+   "pt-BR": {
+    "title": "A história da Bíblia, passo a passo",
+    "description": "Filmes curtos que acompanham a história da Bíblia passo a passo, cada um com legendas em muitos idiomas."
+   }
   }
  },
  "home": {
   "_note": "Channel home sections, top to bottom. The visitor trailer (unsubscribedTrailer) stays the English 14-min film until a narrated English version exists (then that). The 'featured video for returning subscribers' has no API — set it in Studio → Customization → Layout to the newest series film.",
   "sections": [
-   { "type": "multiplePlaylists", "title": "Watch in your language", "playlists": "language" },
-   { "type": "singlePlaylist", "playlists": "series" }
+   {
+    "type": "multiplePlaylists",
+    "title": "Watch in your language",
+    "playlists": "language"
+   },
+   {
+    "type": "singlePlaylist",
+    "playlists": "series"
+   }
   ]
  },
  "channel_localizations": {
   "_note": "Channel description per language so a Spanish viewer reads Spanish: the language playlist's own (already reviewed) description + the site link for that language + the Korean channel. No language counts (관리자 2026-11-13). Title stays 'Bible in One Scroll'.",
-  "lines": ["{playlist_description}", "", "▶ {site}", "▶ 한국어 · Korean: @one-scroll-bible"]
+  "lines": [
+   "{playlist_description}",
+   "",
+   "▶ {site}",
+   "▶ 한국어 · Korean: @one-scroll-bible"
+  ]
  },
  "related": {
   "_note": "A Short's related video (Studio only, no API): scene Shorts → that language's 14-min main video (narrated when it exists); series Shorts → the film's horizontal version. `plan` lists the Shorts whose related video must change when a narrated version appears."

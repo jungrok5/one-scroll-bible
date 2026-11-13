@@ -628,7 +628,10 @@
     "C"
    ]
   },
-  "decided": "관리자 2026-11-10 \"그래 이대로 진행\" — 근거 research/titles.json · decisions 기록(2026-11-10)"
+  "decided": "관리자 2026-11-10 \"그래 이대로 진행\" — 근거 research/titles.json · decisions 기록(2026-11-10)",
+  "after_publish": [
+   "운영 구조 개편 1주차 시작 — motion/studio/operations-proposal.html 6절(관리자 2026-11-13 \"다 제안대로 하고 그리스도 공개한뒤 하자\"): 결정함·studio.mjs status·작업 스케줄러 댓글 시범부터. 국제 채널 API 프로젝트는 관리자가 만듦 — 만드는 순서를 안내할 것."
+  ]
  },
  "pilot": {
   "date": "2026-11-10",

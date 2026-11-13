@@ -3,7 +3,7 @@
  "rules": [
   {
    "id": "music-base",
-   "rule": "Every film language gets the 14-min MUSIC version in both orientations (horizontal + vertical, the vertical one is a normal video, not a Short). No 21-scene Shorts for new languages — the Shorts already published stay. Made on GitHub: node motion/film-lang.mjs ci <lang> --steps \"h vfull kit release\" (vfull = the whole film in portrait, release file film-<lang>-v.mp4)."
+   "rule": "Every film language gets the 14-min MUSIC version in both orientations (horizontal + vertical — the vertical 14-min is a normal video, not a Short) AND the 21 scene Shorts cut from the vertical render (관리자 2026-11-13: \"가로세로 세로 만든 걸 쇼츠로 기본\" — abroad the Shorts feed is the only door; 10/26–11/13 the intl channel got 1,084 views from the Shorts feed, the 14-min films 0–4 each). Made on GitHub: node motion/film-lang.mjs ci <lang> --steps \"h v vfull kit release\" (v = 21 Shorts, vfull = whole film in portrait, release film-<lang>-v.mp4). Shorts go out in waves (global-move.mjs), one scene a day at local 19:00."
   },
   {
    "id": "narr-layer",

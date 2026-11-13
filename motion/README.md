@@ -48,7 +48,7 @@ python3 motion/assemble.py v --upload                                    # 세�
 | 3 | **눈으로 확인** | 커밋·푸시 후 `node motion/film-lang.mjs ci <code> --steps sheets --wait` → `motion/out/sheets/<code>/`의 그림 42장을 모두 본다(글자 깨짐·넘침·겹침) | 고칠 줄 목록 |
 | 4 | **원어민 검토** | `node motion/film-lang.mjs review <code>` → `motion/out/review-<code>.md`를 새 에이전트(또는 사람)에게. HIGH·MED 지적을 모두 반영하고 2단계를 다시, 최종 보고를 **`motion/reviews/<code>.md`**로 저장 | **품질 기준**: 이 파일이 있어야 공개 |
 | 5 | **사이트 게시** | `node motion/film-lang.mjs site <code>` (index.html `FILM_CTA`에 버튼 추가 + 페이지 빌드) → 커밋·푸시 → `ci <code> --steps site --wait`(포스터 + `film/s/` 글꼴·언어 파일) → 커밋·푸시 → **main 배포는 관리자 허락 후** → `node motion/film-lang.mjs live <code>` | one-scroll-bible.com/film/?lang=<code> |
-| 6 | **유튜브 영상·자료** | `node motion/film-lang.mjs ci <code> --steps "h vfull kit release" --wait` → 14분 가로·세로 전체 영상(새 언어는 쇼츠 21개 없음 — `youtube/LANGUAGES.md` §4-1)은 릴리즈 `youtube-v1`로, 썸네일·업로드 시트·자막은 작업 트리로 → 커밋·푸시 | 업로드 준비 끝 |
+| 6 | **유튜브 영상·자료** | `node motion/film-lang.mjs ci <code> --steps "h v vfull kit release" --wait` → 14분 가로·세로 전체 영상과 장면 쇼츠 21개(`youtube/LANGUAGES.md` §4-1)는 릴리즈 `youtube-v1`로, 썸네일·업로드 시트·자막은 작업 트리로 → 커밋·푸시 | 업로드 준비 끝 |
 
 - 진행 상황은 언제든 `node motion/film-lang.mjs status` (언어별로 번역·검사·검토·게시·자료·릴리즈가 어디까지 왔는지 표로).
 - 여러 언어를 한 번에: 모든 명령이 `<code…>` 여러 개를 받습니다(GitHub은 언어×방향마다 작업을 동시에 돌림).

@@ -5,7 +5,7 @@
      back the way he came and beckons — "우리가 메시야를 만났다". Simon takes a first step. The camera trucks right and closes in.
    · { mode: 'spirit' } (Q9, 행 10:38, film 129.7–136 s, u = 0..6.5): the same river and reeds in a paler, cooler light. A soft
      shaft of light comes down through the haze; a dove-like gathering of light descends in it and rests over one man standing
-     in the water. The camera closes in.
+     in the water (seen from behind — never a face or profile). The camera closes in.
    Round 2 (coordinator: "평면 벡터 일러스트로 읽힌다"): the land is world3d terrain (a world-locked grid, each cell shaded
    smoothly, aerial perspective by distance — after messiah film.html terrain()); the water is a rippled mirror of what stands
    above it; reeds are dark backlit masses with lit plumes, the near ones out of focus; the brothers are jointed silhouettes
@@ -196,28 +196,33 @@
     const fx = .26 * s, bx = -.26 * s, lead = Math.max(fx, bx), trail = Math.min(fx, bx), open = Math.abs(s);
     for (const lx of [fx, bx]) { o.push({ k: 'poly', col: tunic, pts: [[lx - .04, -.2], [lx + .04, -.2], [lx + .035, -.03], [lx - .035, -.03]] }); o.push({ k: 'ell', col: tunic, x: lx + .05, y: -.025, rx: .1, ry: .03, r: 0 }); }   // shins and sandalled feet
     // tunic: sloped shoulders → chest → a belt cinching the waist → the skirt flaring to the hem over the legs
-    o.push({ k: 'poly', col: tunic, pts: [[-.03, -1.47], [.08, -1.45], [.15, -1.36], [.16, -1.22], [.13, -1.06], [.105, -.99], [.105, -.95], [.14, -.86],
+    // (a man's frame: a deep chest and broad back over a narrower waist — 관리자 2026-11-14)
+    o.push({ k: 'poly', col: tunic, pts: [[-.04, -1.48], [.1, -1.46], [.185, -1.37], [.195, -1.22], [.15, -1.06], [.11, -.99], [.11, -.95], [.14, -.86],
       [lead + .16, -.12], [lead + .12, -.08], [(lead + trail) / 2 + .02, -.08 - .2 * open], [trail - .12, -.08], [trail - .17, -.14],
-      [-.17, -.86], [-.13, -.95], [-.13, -.99], [-.16, -1.08], [-.19, -1.24], [-.16, -1.38]] });
+      [-.17, -.86], [-.135, -.95], [-.135, -.99], [-.18, -1.08], [-.225, -1.25], [-.2, -1.4]] });
     o.push({ k: 'poly', col: mantle, pts: [[.1, -.99], [.15, -.97], [.16, -.78], [.13, -.76], [.12, -.94]] });   // the sash end hanging from the belt
     // mantle (겉옷) from the shoulders down the back, open in front; its skirt flares behind and lifts back as he walks
-    o.push({ k: 'poly', col: mantle, pts: [[-.18, -1.42], [.02, -1.47], [.1, -1.4], [.06, -1.15], [.0, -.75], [-.04, -.36], [-.18, -.3 + fl * .05], [-.36 - fl * .2, -.3 - fl * .12], [-.3 - fl * .08, -.8], [-.22, -1.15]] });
+    o.push({ k: 'poly', col: mantle, pts: [[-.22, -1.44], [.02, -1.49], [.12, -1.42], [.07, -1.15], [.0, -.75], [-.04, -.36], [-.18, -.3 + fl * .05], [-.36 - fl * .2, -.3 - fl * .12], [-.3 - fl * .08, -.8], [-.26, -1.15]] });
     o.push({ k: 'fold', pts: [[-.04, -1.36], [-.1, -.9], [-.14, -.4]] }, { k: 'fold', pts: [[-.13, -1.32], [-.2, -.85], [-.28 - fl * .1, -.36]] }, { k: 'fold', pts: [[.04, -1.2], [.0, -.8], [-.04, -.42]] });
     o.push({ k: 'head', col: mantle, hd, sway });
     armShape(o, .05, -1.37, n[0], n[1], mantle, 0);                                                            // near arm, in front
     return o;
   }
   function headPath(g, hd, sway) {
-    g.save(); g.translate(.02, -1.58); g.rotate(hd);
+    g.save(); g.translate(.02, -1.6); g.rotate(hd);
     g.beginPath(); g.ellipse(0, 0, .092, .112, 0, 0, 6.283); g.fill();                                          // skull
     g.beginPath(); g.moveTo(.08, -.045); g.lineTo(.124, .0); g.lineTo(.085, .028); g.closePath(); g.fill();      // nose
-    g.beginPath(); g.moveTo(.085, .04); g.quadraticCurveTo(.1, .12, .03, .16); g.quadraticCurveTo(-.03, .14, -.02, .06); g.closePath(); g.fill();   // beard
-    // head cloth: forehead → over the crown → down the back to the shoulders; the loose end hangs behind
-    g.beginPath(); g.moveTo(.085, -.075); g.quadraticCurveTo(.03, -.15, -.06, -.13); g.quadraticCurveTo(-.15, -.08, -.15, .04); g.quadraticCurveTo(-.16, .14, -.2, .22);
-    g.lineTo(-.06, .2); g.quadraticCurveTo(-.04, .06, .02, .02); g.quadraticCurveTo(.05, -.03, .085, -.075); g.closePath(); g.fill();
-    g.beginPath(); g.moveTo(-.15, .08); g.quadraticCurveTo(-.22 - sway * .5, .24, -.23 - sway, .36); g.lineTo(-.18 - sway, .37); g.quadraticCurveTo(-.15, .24, -.1, .1); g.closePath(); g.fill();
+    // 관리자 2026-11-14 (long falling cloth reads as a woman): a full beard from the ear to a point below the chin, and a head cloth
+    // wound close over the crown with a band, ending at the nape — no length hanging down the back
+    // the beard juts forward and down from the jaw to a point, and recedes under itself to the throat (so it reads as a beard)
+    g.beginPath(); g.moveTo(.094, .02); g.quadraticCurveTo(.138, .09, .108, .178); g.lineTo(.082, .19); g.quadraticCurveTo(.04, .135, .005, .095); g.quadraticCurveTo(-.045, .065, -.04, 0); g.closePath(); g.fill();   // beard
+    // the cloth: over the crown, its back edge ending at the bottom of the ear, then turning in under the skull — the nape and
+    // the neck show below it (a straight fall to the shoulders read as long hair)
+    g.beginPath(); g.moveTo(.088, -.055); g.quadraticCurveTo(.05, -.148, -.04, -.136); g.quadraticCurveTo(-.126, -.11, -.12, -.01); g.quadraticCurveTo(-.122, .05 + sway * .08, -.1, .07 + sway * .1);
+    g.quadraticCurveTo(-.06, .07, -.03, .04); g.quadraticCurveTo(-.01, .0, .0, -.02); g.quadraticCurveTo(.04, -.05, .088, -.055); g.closePath(); g.fill();   // head cloth
+    g.beginPath(); g.ellipse(-.012, -.07, .104, .03, -.22, 0, 6.283); g.fill();                                    // its band
     g.restore();
-    g.beginPath(); g.moveTo(-.03, -1.48); g.lineTo(.06, -1.48); g.lineTo(.07, -1.41); g.lineTo(-.05, -1.41); g.closePath(); g.fill();   // neck
+    g.beginPath(); g.moveTo(-.05, -1.53); g.quadraticCurveTo(-.06, -1.47, -.075, -1.42); g.lineTo(.085, -1.42); g.lineTo(.065, -1.52); g.closePath(); g.fill();   // neck (a man's, thick), the nape curving into the back
   }
   function figure(ctx, x, y, sc, face, ps, tunic, mantle, rimC, toward, rimA) {
     const oc = J.fig, g = oc.getContext('2d'), S = oc.width, k = Math.min(1, (S * .42) / (2.4 * sc)), m = sc * k;
@@ -252,9 +257,16 @@
       { x: sx, z: SIMON[1], face: 1, ps: { xs: Math.sign(cf || 1) * (.6 + .4 * Math.abs(cf)), stride: tk >= 1 ? Math.sin(sph) * (1 - ss(5.1, 5.6, u)) * .8 : 0, flutter: .3 * step * (1 - ss(5.2, 6, u)), sway: .02 * Math.sin(u * 1.7), lean: -.03 * step,
         head: .1 * ss(3.2, 4.2, u) - .06 * (1 - tk), armN: [.12 + .12 * ss(3.4, 4.4, u), .3 + .3 * ss(3.4, 4.4, u)], armF: [-.08, .22] } }];
   }
+  // the long shadows toward us. At the end of the shot the camera has come forward past where they end, so the far end is cut
+  // at the camera's near plane along the shadow's own line (and its fade cut at the same place) instead of the shadow being
+  // dropped while its man still stands there (관리자 2026-11-14 "다음 몇 프레임에 그림자만 사라져")
   function shadows(ctx, c, L, list) {
-    for (const f of list) { const gp = W3.P(c, f.x, hJ(f.x, f.z) + .02, f.z), e = L.elev * Math.PI / 180, len = 1.7 / Math.tan(e), dx = -L.sd[0], dz = -L.sd[2], dl = Math.hypot(dx, dz) || 1, ex = f.x + dx / dl * len, ez = f.z + dz / dl * len;
-      const sh = W3.P(c, ex, hJ(ex, ez) + .02, ez); if (gp && sh) { ctx.save(); const g = ctx.createLinearGradient(gp[0], gp[1], sh[0], sh[1]); g.addColorStop(0, 'rgba(12,8,10,.5)'); g.addColorStop(1, 'rgba(12,8,10,0)');
+    const NC = .62, gy = (x, z) => hJ(x, z) + .02;
+    for (const f of list) { const e = L.elev * Math.PI / 180, len = 1.7 / Math.tan(e), dx = -L.sd[0], dz = -L.sd[2], dl = Math.hypot(dx, dz) || 1;
+      const A = [f.x, gy(f.x, f.z), f.z], da = W3.toC(c, ...A)[2]; if (da < NC) continue;
+      let ex = f.x + dx / dl * len, ez = f.z + dz / dl * len, keep = 1; const db = W3.toC(c, ex, gy(ex, ez), ez)[2];
+      if (db < NC) { keep = (da - NC) / (da - db); ex = lerp(f.x, ex, keep); ez = lerp(f.z, ez, keep); }
+      const gp = W3.P(c, ...A), sh = W3.P(c, ex, gy(ex, ez), ez); if (gp && sh) { ctx.save(); const g = ctx.createLinearGradient(gp[0], gp[1], sh[0], sh[1]); g.addColorStop(0, 'rgba(12,8,10,.5)'); g.addColorStop(1, `rgba(12,8,10,${(.5 * (1 - keep)).toFixed(3)})`);
         ctx.strokeStyle = g; ctx.lineCap = 'round'; ctx.lineWidth = gp[2] * .36; ctx.filter = 'blur(2px)'; ctx.beginPath(); ctx.moveTo(gp[0], gp[1]); ctx.lineTo(sh[0], sh[1]); ctx.stroke(); ctx.filter = 'none'; ctx.restore(); } }
   }
 
@@ -285,23 +297,26 @@
   }
 
   // ---------------------------------------------------------------------------------------------------------------------
-  // spirit: the man in the water (frontal; origin at the water surface on his axis): wet hair to the shoulders, a beard, sloped
-  // shoulders, the wet tunic clinging (two folds), arms from the shoulders — upper arm, elbow, forearm out over the water, open
-  // hands just above it. rise (0..1) opens the hands a little upward as the light rests on him.
+  // spirit: the man in the water, seen from behind (we stand on the bank behind him; never a face or a profile — 관리자
+  // 2026-11-14: a man, not long hair): the back of a head with short wet hair (the ears show), the beard just past the jaw, a
+  // thick neck, broad shoulders, the wet tunic clinging to the back (spine and shoulder-blade folds), arms from the shoulders —
+  // upper arm, elbow, forearm out over the water, open hands just above it. rise (0..1) opens the hands a little upward as
+  // the light rests on him. (origin at the water surface on his axis)
   function manParts(g, rise, folds, foldCol) {
-    g.beginPath(); g.ellipse(0, -1.0, .088, .108, 0, 0, 6.283); g.fill();                                                        // head
-    g.beginPath(); g.moveTo(-.09, -1.04); g.quadraticCurveTo(-.12, -.9, -.15, -.78); g.lineTo(.15, -.78); g.quadraticCurveTo(.12, -.9, .09, -1.04); g.quadraticCurveTo(0, -1.15, -.09, -1.04); g.fill();   // wet hair
-    g.beginPath(); g.moveTo(-.05, -.93); g.quadraticCurveTo(0, -.84, .05, -.93); g.lineTo(.04, -.86); g.lineTo(-.04, -.86); g.closePath(); g.fill();   // beard
-    g.beginPath(); g.moveTo(-.045, -.9); g.lineTo(.045, -.9); g.lineTo(.05, -.8); g.lineTo(-.05, -.8); g.fill();                    // neck
-    g.beginPath(); g.moveTo(-.07, -.8); g.quadraticCurveTo(-.2, -.79, -.25, -.72); g.quadraticCurveTo(-.29, -.64, -.25, -.5); g.quadraticCurveTo(-.2, -.25, -.2, .02); g.lineTo(.2, .02); g.quadraticCurveTo(.2, -.25, .25, -.5); g.quadraticCurveTo(.29, -.64, .25, -.72); g.quadraticCurveTo(.2, -.79, .07, -.8); g.closePath(); g.fill();   // shoulders, torso
-    for (const sd of [-1, 1]) { const sx = sd * .235, sy = -.69, a = .1, e = lerp(.42, .8, rise), ex = sx + sd * Math.sin(a) * .29, ey = sy + Math.cos(a) * .29, hx = ex + sd * Math.sin(a + e) * .26, hy = ey + Math.cos(a + e) * .26;
+    g.beginPath(); g.ellipse(0, -.985, .09, .106, 0, 0, 6.283); g.fill();                                                        // the back of the head
+    g.beginPath(); g.ellipse(0, -1.015, .094, .08, 0, Math.PI, 2 * Math.PI); g.fill();                                            // short hair over the crown
+    for (const sd of [-1, 1]) { g.beginPath(); g.ellipse(sd * .088, -.975, .018, .03, 0, 0, 6.283); g.fill();                     // the ears
+      g.beginPath(); g.ellipse(sd * .062, -.913, .036, .03, 0, 0, 6.283); g.fill(); }                                            // the beard past the jaw
+    g.beginPath(); g.moveTo(-.062, -.92); g.lineTo(.062, -.92); g.lineTo(.075, -.81); g.lineTo(-.075, -.81); g.fill();                     // neck
+    g.beginPath(); g.moveTo(-.07, -.85); g.quadraticCurveTo(-.17, -.81, -.28, -.75); g.quadraticCurveTo(-.33, -.66, -.29, -.5); g.quadraticCurveTo(-.23, -.25, -.22, .02); g.lineTo(.22, .02); g.quadraticCurveTo(.23, -.25, .29, -.5); g.quadraticCurveTo(.33, -.66, .28, -.74); g.quadraticCurveTo(.17, -.81, .07, -.85); g.closePath(); g.fill();   // broad shoulders, the back
+    for (const sd of [-1, 1]) { const sx = sd * .27, sy = -.69, a = .1, e = lerp(.42, .8, rise), ex = sx + sd * Math.sin(a) * .29, ey = sy + Math.cos(a) * .29, hx = ex + sd * Math.sin(a + e) * .26, hy = ey + Math.cos(a + e) * .26;
       const n1 = [Math.cos(a), -sd * Math.sin(a)], fa = a + e, n2 = [Math.cos(fa), -sd * Math.sin(fa)];
       g.beginPath(); g.ellipse(sx - sd * .01, sy + .01, .075, .07, 0, 0, 6.283); g.fill();                                                          // the shoulder cap
       g.beginPath(); g.moveTo(sx - n1[0] * .066, sy - n1[1] * .066); g.lineTo(ex - n1[0] * .052, ey - n1[1] * .052); g.lineTo(ex + n1[0] * .052, ey + n1[1] * .052); g.lineTo(sx + n1[0] * .066, sy + n1[1] * .066); g.closePath(); g.fill();   // upper arm in the wet sleeve
       g.beginPath(); g.arc(ex, ey, .054, 0, 6.283); g.fill();                                                                                       // elbow
       { const wo = .085, hang = .05; g.beginPath(); g.moveTo(ex - n2[0] * .05, ey - n2[1] * .05); g.lineTo(hx - n2[0] * wo * .8, hy - n2[1] * wo * .8); g.lineTo(hx + n2[0] * wo, hy + n2[1] * wo + hang); g.lineTo(lerp(ex, hx, .55) + n2[0] * .07, lerp(ey, hy, .55) + n2[1] * .07 + hang * .5); g.lineTo(ex + n2[0] * .05, ey + n2[1] * .05); g.closePath(); g.fill(); }   // the sleeve widening to the wrist, its wet hem hanging
       const hx2 = hx + sd * Math.sin(fa) * .04, hy2 = hy + Math.cos(fa) * .04; g.beginPath(); g.ellipse(hx2, hy2, .045, .028, sd * (Math.PI / 2 - fa) * -1, 0, 6.283); g.fill(); }
-    if (folds) { g.strokeStyle = foldCol; g.lineWidth = .012; for (const [a, b, cc] of [[[-.14, -.7], [-.05, -.45], [.02, -.15]], [[.12, -.66], [.1, -.4], [.14, -.12]]]) { g.beginPath(); g.moveTo(...a); g.quadraticCurveTo(...b, ...cc); g.stroke(); } }
+    if (folds) { g.strokeStyle = foldCol; g.lineWidth = .012; for (const [a, b, cc] of [[[0, -.74], [.01, -.5], [0, -.2]], [[-.2, -.68], [-.14, -.6], [-.08, -.55]], [[.2, -.68], [.14, -.6], [.08, -.55]]]) { g.beginPath(); g.moveTo(...a); g.quadraticCurveTo(...b, ...cc); g.stroke(); } }   // the spine, the shoulder blades under the wet cloth
   }
   function spirit(ctx, u) {
     const W = P.W, H = P.H, V = P.ori === 'v', c = J.camS(u), L = J.lightS(u), [mx, mz] = J.man;
@@ -338,7 +353,7 @@
     // the man, lit from above (a rim on the head and shoulders), and his broken reflection
     if (bot) { const s = bot[2], g = J.fig.getContext('2d'), S = J.fig.width, k = Math.min(1, S * .3 / (1.3 * s)), m = s * k, rise = ss(4.0, 6.0, u), lit = ss(2.6, 4.4, u);
       g.setTransform(1, 0, 0, 1, 0, 0); g.clearRect(0, 0, S, S); g.save(); g.translate(S / 2, S * .6); g.scale(m, m);
-      g.fillStyle = `rgb(255,232,192)`; manParts(g, rise, false); g.globalCompositeOperation = 'source-atop'; g.translate(0, .022 + .03 * (1 - lit)); g.fillStyle = 'rgb(40,40,48)'; manParts(g, rise, true, 'rgba(120,116,116,.6)'); g.restore();
+      g.fillStyle = `rgb(255,232,192)`; manParts(g, rise, false); g.globalCompositeOperation = 'source-atop'; g.translate(0, .022 + .03 * (1 - lit)); g.fillStyle = 'rgb(40,40,48)'; manParts(g, rise, true, 'rgba(96,94,100,.3)'); g.restore();
       ctx.save(); ctx.globalAlpha = .3; ctx.filter = 'blur(2px)'; ctx.translate(bot[0], bot[1]); ctx.scale(1, -.8); ctx.drawImage(J.fig, -S / 2 / k, -S * .6 / k, S / k, S / k); ctx.restore();
       ctx.drawImage(J.fig, bot[0] - S / 2 / k, bot[1] - S * .6 / k, S / k, S / k);
       ctx.save(); ctx.globalCompositeOperation = 'screen'; ctx.strokeStyle = `rgba(255,238,210,${.45 * pk})`; ctx.lineWidth = Math.max(1.2, s * .016); ctx.beginPath(); ctx.ellipse(bot[0], bot[1], s * .3, s * .045, 0, 0, 6.283); ctx.stroke(); ctx.restore(); }   // the water at his hips

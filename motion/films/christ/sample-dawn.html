@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>새벽 임파스토 시안</title>
+<title>십자가 그림자 · 무덤 안 새벽 시안</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600&display=swap">
 </head>
 <body>
@@ -11,12 +11,13 @@
 <script src="kit-oilpaint.js"></script>
 <script src="dawn-impasto.js"></script>
 <script>
-/* 시안: 「그리스도」 5부 — 흑백이 새벽빛으로 다시 칠해짐(tomb 5.2초, 영상 120.1–125.3) → 바위 아래 다시 선 베드로(peter 4.2초, 125.3–129.5)
-   → 나무 그림자가 물러나고 빈 무덤에 새벽빛(tree 6.7초, 136.0–142.7).
-   node motion/render.mjs v --page films/christ/sample-dawn.html --stills 0.3,2.5,5,7.5,9.2,10.5,13,15.8 */
-const W = Pilot.W, H = Pilot.H;
-function draw(ctx, t) { if (t < 5.2) dawnOil(ctx, t, 'tomb'); else if (t < 9.4) dawnOil(ctx, t - 5.2, 'peter'); else dawnOil(ctx, t - 9.4, 'tree'); }
-Pilot.run({ W, H, dur: 16.1, fonts: ["600 40px 'Noto Serif KR'"], init: async () => { await buildDawn(); }, draw });
+/* 시안: 「그리스도」 5부 — 땅에 드리운 십자가 그림자 하나(tree 5.1초, 영상 135.0–140.1, Q11) → 무덤 안에서 밖을 봄, 새벽빛이 쏟아져
+   세마포를 비춤(tomb 9.4초, 영상 139.5–148.9, Q12 + N15). film.html의 글자 띠(textBand)도 흉내 냄.
+   node motion/render.mjs v --page films/christ/sample-dawn.html --stills 0.5,2.5,4.8,5.6,6.5,8,10,13.5 */
+const W = Pilot.W, H = Pilot.H, V = Pilot.ori === 'v';
+function textBand(ctx) { const y0 = (V ? H * .64 : H - 270) - (V ? 150 : 70), g = ctx.createLinearGradient(0, y0, 0, H); g.addColorStop(0, 'rgba(10,8,10,0)'); g.addColorStop(.45, 'rgba(10,8,10,.42)'); g.addColorStop(1, 'rgba(10,8,10,.55)'); ctx.fillStyle = g; ctx.fillRect(0, y0, W, H - y0); }
+function draw(ctx, t) { if (t < 5.1) dawnOil(ctx, t, 'tree'); else dawnOil(ctx, t - 5.1, 'tomb'); textBand(ctx); }
+Pilot.run({ W, H, dur: 14.5, fonts: ["600 40px 'Noto Serif KR'"], init: async () => { await buildDawn(); }, draw });
 </script>
 </body>
 </html>

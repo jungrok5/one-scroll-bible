@@ -86,32 +86,58 @@
 
   // ---------------- people: the kit's jointed rig in robes and head cloths ----------------
   const STOPD = VEL * (WALK_T + SLOW / 2);   // where they stop (speak): each walker's phase is offset so it stops with both feet down
+  // The three are MEN and look alike (Lk 24:16 — their eyes were kept from recognising him): Jesus is not the tallest, has the
+  // same head cloth, band, beard, mantle, belt and staff as the other two. cloth = small shape variant only.
   const KIND = [   // the three: [rear disciple, Jesus, front disciple]
-    { s: SC * .98, cloth: 0, x: V ? .24 : .33 },
-    { s: SC * 1.02, cloth: 1, x: V ? .5 : .5 },
-    { s: SC * .96, cloth: 2, x: V ? .76 : .67 },
+    { s: SC * 1.0, cloth: 0, x: V ? .24 : .33 },
+    { s: SC * .985, cloth: 1, x: V ? .5 : .5 },
+    { s: SC * .97, cloth: 2, x: V ? .76 : .67 },
   ];
-  // robe(c, F, col): an ankle-length robe whose hem follows the feet (drawn over the legs), and a head cloth over the head
+  // the head outline in place of the kit's profile FACE: skull + full beard as ONE smooth convex front edge — no nose, lips or
+  // chin line (a fixed rule for Jesus; the disciples share it so he looks like them). Head space: x forward, y down, skull centre 0,0.
+  // The beard is a full square mass standing forward of the face line (cheek → jaw → beard), so it reads as a beard, not a chin.
+  const NECK = 3.5;   // the head sits a little higher on a longer neck (a man's neck; the beard clears the chest)
+  const HEAD_M = [[0, -17], [7, -15.5], [11.5, -11], [13.2, -5], [13.6, 0], [15.8, 5], [18.6, 11], [20, 17.5], [19.6, 23], [17.6, 27.5], [12, 28.5], [6, 26.5], [0, 24], [-5, 20], [-9, 13], [-12, 8], [-14, 0], [-12, -9], [-7, -15]];
+  // the head cloth (keffiyeh-like): a square crown a little larger than the skull, a short brim over the brow, the back standing
+  // OFF the neck in a stiff flare and cut straight across ON the shoulders (not hanging close like hair). Variants differ slightly.
+  const CLOTH = [
+    { crown: 0, brim: 0, drop: 25, back: 0 },
+    { crown: .6, brim: .4, drop: 24, back: .8 },
+    { crown: -.4, brim: -.3, drop: 25.5, back: -.6 },
+  ];
+  // dressRobe(F, cloth): a girded tunic to mid-calf (the shins show below it), a mantle over broad shoulders, a belt, a head cloth
+  // tied with a band, a beard, and a walking staff held forward in the far hand. All drawn in F.hold (between body and near arm).
   function dressRobe(F, cloth) {
-    F.head = 'none'; F.dress = 'jacket';
+    F.head = 'none'; F.dress = 'jacket'; F.faceShape = HEAD_M; F.neckUp = NECK;
+    { const sh0 = K().shoulder(F, 0), sw = (F.sway || 0) / 5;   // the far hand grips the staff out in front, elbow bent (a small swing with the step)
+      F.hands = [[sh0[0] + F.f * (29 + 4 * sw) * F.s, sh0[1] + 47 * F.s], F.hands[1]]; }
     F.hold = (c, col) => {
-      const k = K(), { P } = k.frame(F), s = F.s, f = F.f;
-      const fx = F.feet.map(q => q[0]), fwd = f > 0 ? Math.max(...fx) : Math.min(...fx), back = f > 0 ? Math.min(...fx) : Math.max(...fx), hemY = F.gy - 9 * s, trail = (F.sway || 0) * .6 * s;
-      const w1 = P(17, 8), w0 = P(-16, 8), kf = P(36, -36), kb = P(-22, -40);   // the front falls over the stepping knee
-      c.fillStyle = col; c.beginPath(); c.moveTo(...P(14, 40)); c.lineTo(...w1); c.quadraticCurveTo(kf[0], kf[1], fwd + f * 12 * s, hemY);
-      c.quadraticCurveTo((fwd + back) / 2, hemY + 3 * s, back - f * (10 * s + Math.abs(trail)), hemY - 2 * s); c.quadraticCurveTo(kb[0] - f * 4 * s, kb[1], w0[0], w0[1]); c.lineTo(...P(-15, 40)); c.closePath(); c.fill();
-      // the head cloth: over the crown, falling behind the neck to the shoulders (it trails a little in the walk)
+      const k = K(), { P } = k.frame(F), s = F.s, f = F.f, cv = CLOTH[cloth];
+      // the staff first (the tunic and arm overlap its middle): from the ground ahead of the body up past the head cloth's band
+      const h = F.hands[0]; if (h) { const b0 = [h[0] + f * 13 * s, F.gy - 2 * s], dx = h[0] - b0[0], dy = h[1] - b0[1], l = Math.hypot(dx, dy) || 1, top = [h[0] + dx / l * 92 * s, h[1] + dy / l * 92 * s];
+        c.lineWidth = 4.2 * s; c.lineCap = 'round'; c.strokeStyle = col; c.beginPath(); c.moveTo(...b0); c.lineTo(...top); c.stroke(); }
+      const fx = F.feet.map(q => q[0]), fwd = f > 0 ? Math.max(...fx) : Math.min(...fx), back = f > 0 ? Math.min(...fx) : Math.max(...fx), trail = (F.sway || 0) * .5 * s;
+      const hemY = F.gy - 34 * s, hx = F.hip[0], fH = fwd + (hx - fwd) * .36 + f * 9 * s, bH = back + (hx - back) * .36 - f * (8 * s + Math.abs(trail));   // the hem at mid-calf over each leg
+      const w1 = P(17, 8), w0 = P(-16, 8), kf = P(27, -30), kb = P(-20, -34);
+      c.fillStyle = col; c.beginPath(); c.moveTo(...P(14, 40)); c.lineTo(...w1); c.quadraticCurveTo(kf[0], kf[1], fH, hemY);
+      c.quadraticCurveTo((fH + bH) / 2, hemY + 2.5 * s, bH, hemY - 1.5 * s); c.quadraticCurveTo(kb[0] - f * 3 * s, kb[1], w0[0], w0[1]); c.lineTo(...P(-15, 40)); c.closePath(); c.fill();
+      const poly = pts => { c.beginPath(); pts.forEach(([a, b], i) => { const q = P(a, b); i ? c.lineTo(q[0], q[1]) : c.moveTo(q[0], q[1]); }); c.closePath(); c.fill(); };
+      // the mantle: a deep chest and back, square shoulders (wider at the top than at the waist)
+      poly([[-21, 54], [-18, 64], [-7, 69], [6, 68.5], [14, 64.5], [19, 57], [21.5, 46], [21, 34], [18.5, 22], [-19, 22], [-22.5, 38]]);
+      // the belt: a sash that stands out of the robe at the waist, its knot and short ends at the front
+      poly([[-19.5, 11], [-19.5, 18], [19.5, 18.5], [19.5, 11]]);
+      poly([[18, 17.5], [22, 16.5], [22.5, 9], [19.5, 10]]);
+      // the head cloth, in head space (follows the head's tilt and F.hf)
       const tilt = F.ang + (F.tilt || 0), N = P(3, 64), hu = [Math.sin(tilt), -Math.cos(tilt)], hff = F.hf || f, hfv = [hff * Math.cos(tilt), hff * Math.sin(tilt)];
-      const Hc = [N[0] + hu[0] * 22 * s + f * Math.cos(tilt) * s, N[1] + hu[1] * 22 * s];
+      const Hc = [N[0] + hu[0] * (22 + NECK) * s + f * Math.cos(tilt) * s, N[1] + hu[1] * (22 + NECK) * s];
       const T = ([u, v]) => [Hc[0] + (hfv[0] * u - hu[0] * v) * s, Hc[1] + (hfv[1] * u - hu[1] * v) * s];
-      const tr = (F.sway || 0) * .35;
-      const CL = [
-        [[-17, 8], [-18, -6], [-13, -17], [-3, -22], [8, -21], [15, -15], [17, -8], [13, -9], [7, -11], [0, -8], [-5, -1], [-7, 10], [-10, 26], [-24 - tr, 36], [-26 - tr, 18]],
-        [[-17, 8], [-18, -7], [-12, -18], [-2, -23], [9, -21.5], [15.5, -15], [17.5, -7], [13, -8.5], [6, -10.5], [-1, -7], [-6, 2], [-8, 14], [-12, 30], [-22 - tr, 40], [-25 - tr, 22]],
-        [[-16, 6], [-17, -8], [-11, -18], [-1, -22], [9, -20], [15, -13], [16, -6], [11, -8], [4, -10], [-2, -6], [-6, 4], [-9, 18], [-20 - tr, 30], [-22 - tr, 14]],
-      ][cloth];
+      const tr = (F.sway || 0) * .3, cr = cv.crown, br = cv.brim, dr = cv.drop, bk = cv.back;
+      const CL = [[16.5 + br, -8.5], [17.5 + br, -13.5], [14 + br, -19.5 - cr], [4, -23.5 - cr], [-7, -23 - cr], [-15 - bk, -18.5 - cr], [-19.5 - bk, -10], [-23 - bk - tr * .4, 2], [-27.5 - bk - tr * .8, 14],
+        [-31 - bk - tr, dr - 1.5], [-30 - bk - tr, dr], [-14, dr + .5], [-8, 16], [-4, 6], [2, -1], [8, -6.5], [13 + br * .5, -8]];
       c.beginPath(); CL.forEach((p, i) => { const q = T(p); i ? c.lineTo(q[0], q[1]) : c.moveTo(q[0], q[1]); }); c.closePath(); c.fill();
-      if (cloth === 1) { const q = T([-15, -4]), q2 = T([16, -9]); c.lineWidth = 2.4 * s; c.strokeStyle = col; c.beginPath(); c.moveTo(...q); c.lineTo(...q2); c.stroke(); }   // a band round the cloth
+      // the band (agal) round the cloth: a thick double cord whose ends stand out of the outline at the brow and the back of the head
+      c.lineCap = 'round'; c.strokeStyle = col;
+      for (const [dv, lw] of [[0, 4], [4.2, 3]]) { const a = T([18.2 + br - dv * .2, -15 + dv]), b = T([-20.8 - bk - dv * .35, -12.5 + dv]); c.lineWidth = lw * s; c.beginPath(); c.moveTo(...a); c.lineTo(...b); c.stroke(); }
     };
     return F; }
   // draw a figure as a shadow: a soft penumbra a little larger, then the crisp shadow; optional warm rim from a light

@@ -48,10 +48,12 @@ function roomPersonPaths() {
   const head = smooth(Array.from({ length: 120 }, (_, i) => { const a = i / 120 * 6.283, dx = Math.cos(a), dy = Math.sin(a);
     let t = 1 / Math.hypot(dx / .082, dy / .088);                                        // the core ellipse
     for (const [cx, cy, R] of curls) { const b = dx * cx + dy * cy, q = b * b - (cx * cx + cy * cy - R * R); if (q >= 0) t = Math.max(t, b + Math.sqrt(q)); }
-    return [hc[0] + dx * t, hc[1] + .008 + dy * t]; }));
+    t *= 1.12; return [hc[0] + dx * t, hc[1] + .008 + dy * t]; }));   // (a touch larger than before: with the slighter body, ≈ 2.2 head widths across the shoulders)
   const neck = smooth([[-.05, .2], [.05, .2], [.06, .255], [-.06, .255]]);
-  const body = smooth(fuzz([[-.4, .985], [-.415, .9], [-.39, .8], [-.31, .705], [-.33, .66], [-.37, .6], [-.375, .54], [-.345, .46], [-.3, .385], [-.255, .325], [-.18, .282], [-.1, .256], [-.05, .245], [.0, .242],
-    [.05, .245], [.1, .256], [.18, .282], [.255, .325], [.3, .385], [.345, .46], [.38, .54], [.375, .6], [.335, .66], [.315, .705], [.395, .8], [.42, .9], [.405, .985], [.0, 1.0]]));
+  // 관리자 2026-11-14 "사람몸이 너무 덩치가 커 머리에비해": the shoulders ≈ 2.5 head widths (was ≈ 3.8), a slight old back that
+  // narrows to the waist, the folded legs on the floor only a little wider than the shoulders — a slight seated old person
+  const body = smooth(fuzz([[-.315, .985], [-.325, .93], [-.305, .86], [-.27, .79], [-.25, .72], [-.262, .64], [-.27, .56], [-.265, .47], [-.25, .395], [-.22, .335], [-.165, .29], [-.1, .262], [-.05, .248], [.0, .244],
+    [.05, .248], [.1, .262], [.165, .29], [.22, .335], [.25, .395], [.265, .47], [.27, .56], [.262, .64], [.25, .72], [.27, .79], [.305, .86], [.325, .93], [.315, .985], [.0, 1.0]]));
   const collar = smooth([[-.115, .262], [-.06, .232], [.0, .225], [.065, .232], [.12, .262], [.065, .284], [.0, .29], [-.065, .284]]);
   return { head, neck, body, collar };
 }
@@ -153,7 +155,7 @@ async function buildRoomOil() {
     const toP = g => { g.setTransform(Pp * S, 0, 0, Pp * S, (.5 + pad) * Pp * S, pad * Pp * S); };   // P units → layer px (head top-centre at (.5+pad, pad)·P)
     const mask = canvas(bw, bh), mg = mask.getContext('2d'); toP(mg); mg.fillStyle = '#fff'; mg.fill(Pa.body); mg.fill(Pa.neck); mg.fill(Pa.head);
     const body = canvas(bw, bh), bg = body.getContext('2d'); toP(bg);
-    bg.save(); bg.filter = `blur(${(.03 * Pp * S).toFixed(1)}px)`; bg.fillStyle = 'rgba(8,4,2,.7)'; bg.beginPath(); bg.ellipse(0, .99, .47, .05, 0, 0, 6.283); bg.fill(); bg.restore();   // its shadow on the floor
+    bg.save(); bg.filter = `blur(${(.03 * Pp * S).toFixed(1)}px)`; bg.fillStyle = 'rgba(8,4,2,.7)'; bg.beginPath(); bg.ellipse(0, .99, .37, .045, 0, 0, 6.283); bg.fill(); bg.restore();   // its shadow on the floor
     { const gr = bg.createLinearGradient(0, 0, 0, 1); gr.addColorStop(0, '#1a110b'); gr.addColorStop(.4, '#120b07'); gr.addColorStop(1, '#0a0604'); bg.fillStyle = gr; bg.fill(Pa.body); }
     bg.fillStyle = '#100a07'; bg.fill(Pa.neck); bg.fillStyle = '#17110c'; bg.fill(Pa.head);
     // inside the dark: the hair's mass a touch lighter (grey), the collar's fold, the shoulder blades under the wool — barely there
@@ -161,8 +163,8 @@ async function buildRoomOil() {
     for (let i = 0; i < 70; i++) { const a = r() * 6.283, rr = r() * .1, x = .012 + Math.cos(a) * rr, y = .118 + Math.sin(a) * rr * 1.1; bg.fillStyle = `rgba(${70 + 40 * r() | 0},${64 + 34 * r() | 0},${58 + 30 * r() | 0},.06)`; bg.beginPath(); bg.ellipse(x, y, .012 + r() * .012, .008 + r() * .008, r() * 3, 0, 6.283); bg.fill(); }
     bg.restore();
     bg.save(); bg.filter = `blur(${(.006 * Pp * S).toFixed(1)}px)`; bg.fillStyle = 'rgba(48,32,22,.6)'; bg.fill(Pa.collar); bg.fillStyle = 'rgba(4,2,1,.7)'; bg.beginPath(); bg.ellipse(.0, .29, .12, .02, 0, 0, 6.283); bg.fill();
-    bg.strokeStyle = 'rgba(2,1,0,.85)'; bg.lineWidth = .016; for (const s of [-1, 1]) { bg.beginPath(); bg.moveTo(s * .24, .37); bg.quadraticCurveTo(s * .29, .52, s * .29, .69); bg.stroke(); }   // the arm parting from the back
-    bg.strokeStyle = 'rgba(70,48,32,.18)'; bg.lineWidth = .008; for (const s of [-1, 1]) { bg.beginPath(); bg.moveTo(s * .225, .375); bg.quadraticCurveTo(s * .27, .52, s * .272, .68); bg.stroke(); }
+    bg.strokeStyle = 'rgba(2,1,0,.85)'; bg.lineWidth = .016; for (const s of [-1, 1]) { bg.beginPath(); bg.moveTo(s * .19, .38); bg.quadraticCurveTo(s * .215, .52, s * .212, .68); bg.stroke(); }   // the arm parting from the back
+    bg.strokeStyle = 'rgba(70,48,32,.18)'; bg.lineWidth = .008; for (const s of [-1, 1]) { bg.beginPath(); bg.moveTo(s * .178, .385); bg.quadraticCurveTo(s * .2, .52, s * .198, .67); bg.stroke(); }
     bg.strokeStyle = 'rgba(90,62,40,.45)'; bg.lineWidth = .008; bg.beginPath(); bg.moveTo(-.11, .258); bg.quadraticCurveTo(0, .218, .115, .258); bg.stroke();   // the collar's top edge
     bg.restore();
     // a rim: the shape minus itself shifted away from the light (so the band sits on the edges that face it), blurred, coloured

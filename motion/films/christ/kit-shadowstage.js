@@ -1,4 +1,6 @@
-/* vendored for 「그리스도」 (2026-11): one change — headPath honours F.hf (a head turned to look back over the shoulder). */
+/* vendored for 「그리스도」 (2026-11): two changes — headPath honours F.hf (a head turned to look back over the shoulder) and
+   F.faceShape (the figure's own head outline in place of the profile FACE: used so no one shows a nose/lips/chin line);
+   body() also takes F.neckUp (units: the head sits that much higher on a longer neck). */
 /* kit-shadowstage.js — paper cut-out shadow theatre, portrait-native.  Global: window.ShadowStage
    A little toy theatre: a dark-red velvet proscenium (side curtains with fold shading that part and close, a scalloped
    valance with a gold braid); inside, a painted sky whose palette is a time-of-day track (peach dusk → rose → violet →
@@ -517,7 +519,7 @@
     const s = F.s, hu = [Math.sin(tilt), -Math.cos(tilt)], hff = F.hf || F.f, hf = [hff * Math.cos(tilt), hff * Math.sin(tilt)];   // christ: F.hf = the head faces the other way (looks back)
     const T = ([u, v]) => [Hc[0] + (hf[0] * u - hu[0] * v) * s, Hc[1] + (hf[1] * u - hu[1] * v) * s];
     const fill = pts => { c.beginPath(); pts.forEach((p, i) => { const q = T(p); i ? c.lineTo(q[0], q[1]) : c.moveTo(q[0], q[1]); }); c.closePath(); c.fill(); };
-    fill(FACE);
+    fill(F.faceShape || FACE);   // christ: F.faceShape = an own head outline (e.g. no nose/lips/chin — a figure never shown in profile)
     const hd = F.head || 'short'; if (HAIR[hd]) fill(HAIR[hd]);
     if (hd === 'bun') { const q = T([-17, -9]); c.beginPath(); c.arc(q[0], q[1], 7.5 * s, 0, TAU); c.fill(); }
   };
@@ -568,8 +570,9 @@
     } else poly([[13, 6], [16, -14], [-17, -14], [-15, 6]]);
     // neck + head
     const tilt = F.ang + (F.tilt || 0), N = P(3, 64), hu = [Math.sin(tilt), -Math.cos(tilt)];
-    capsule(c, N, [N[0] + hu[0] * 12 * s, N[1] + hu[1] * 12 * s], 5.5 * s, 5.5 * s);
-    headPath(c, F, [N[0] + hu[0] * 22 * s + F.f * Math.cos(tilt) * 1 * s, N[1] + hu[1] * 22 * s], tilt);
+    const nu = 22 + (F.neckUp || 0);   // christ: F.neckUp lifts the head on a longer neck (units)
+    capsule(c, N, [N[0] + hu[0] * (nu - 10) * s, N[1] + hu[1] * (nu - 10) * s], 5.5 * s, 5.5 * s);
+    headPath(c, F, [N[0] + hu[0] * nu * s + F.f * Math.cos(tilt) * 1 * s, N[1] + hu[1] * nu * s], tilt);
     if (F.box) K.giftBox(c, F.box, col);
     if (F.hold) F.hold(c, col);
     arm(1, col);

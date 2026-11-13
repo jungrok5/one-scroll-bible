@@ -12,6 +12,10 @@
 (function () {
   const P = Pilot, { clamp, lerp, ss, eio, eo, rng, noise, fbm, mix } = P, css = (c, a) => W3.css(c, a);
   let G = null;
+  // a ground segment A→B cut where it passes the camera's near plane, along its own line: [A, B', t] (t = the part of the
+  // length that is kept) or null when A itself is behind the camera
+  const NEARC = .62, clipSeg = (c, A, B) => { const da = W3.toC(c, ...A)[2], db = W3.toC(c, ...B)[2]; if (da < NEARC) return null; if (db >= NEARC) return [A, B, 1];
+    const t = (da - NEARC) / (da - db); return [A, [A[0] + (B[0] - A[0]) * t, A[1] + (B[1] - A[1]) * t, A[2] + (B[2] - A[2]) * t], t]; };
   const ridged = (x, z, o = 4) => { let s = 0, a = .5, f = 1; for (let i = 0; i < o; i++) { s += a * (1 - Math.abs(2 * P.noise(x * f, z * f) - 1)); f *= 2.03; a *= .5; } return s / (1 - Math.pow(.5, o)); };
   // the land beyond the gate: the road drops into a valley, then the hill country rises in folds toward the sun
   const HC = new Map(), NC = new Map();
@@ -58,7 +62,7 @@
     const crowd = [[-1.6, 29.6, 1.74, 'shade'], [-.5, 30.6, 1.68, 'stand'], [.7, 29.0, 1.78, 'point'], [1.7, 30.2, 1.62, 'veil'], [1.25, 30.25, 1.08, 'child'], [-2.2, 27.4, 1.7, 'staff'], [2.3, 27.0, 1.72, 'stand'], [-.2, 26.4, 1.76, 'walk']];
     // the curtain wall (behind the towers) is painted, and its tops burn, before the towers and the gate: nothing of it shows through them
     const back = f => f.pts.every(q => Math.abs(q[0]) >= 9.59), FB = F.filter(back), FF = F.filter(f => !back(f)), MB = merl.filter(m => Math.abs(m[0]) >= 9.59), MF = merl.filter(m => Math.abs(m[0]) < 9.59);
-    G = { F, FB, FF, MB, MF, P2, merl, stains, crowd, fig: P.canvas(700, 700),
+    G = { F, FB, FF, MB, MF, P2, merl, stains, crowd, fig: P.canvas(700, 700), top: P.canvas(420, 420),
       // the camera starts low under the gate and cranes up until the gate's top, the soldiers and the eagle stand in the sky
       // (portrait and landscape frame differently: the feet stay above the words, the eagle comes in at the top by the end)
       // round 2 (관리자: the eagle must read during the first words): the standard and the soldiers are in the frame from u = 0
@@ -94,49 +98,93 @@
     for (const [x0, x1, y, z] of list) seg([x0, y, z], [x1, y, z]);
     ctx.restore();
   }
-  // the eagle standard (after messiah film.html aquila(), smaller): pole, crossbar, eagle with spread wings, a red vexillum
-  function aquila(ctx, x, y, s, u) {
-    const k = s * .36; ctx.save(); ctx.translate(x, y); ctx.scale(k, k); const p = new Path2D();
-    p.rect(-.09, -9, .18, 9); p.rect(-.9, -4.4, 1.8, .16);
-    p.moveTo(0, -10.2); p.bezierCurveTo(-.5, -10.4, -1.1, -11.2, -1.9, -11.4); p.bezierCurveTo(-1.5, -10.8, -1.3, -10.3, -.7, -9.9); p.bezierCurveTo(-.4, -9.6, -.2, -9.3, 0, -9.2);
-    p.bezierCurveTo(.2, -9.3, .4, -9.6, .7, -9.9); p.bezierCurveTo(1.3, -10.3, 1.5, -10.8, 1.9, -11.4); p.bezierCurveTo(1.1, -11.2, .5, -10.4, 0, -10.2); p.closePath();
-    p.ellipse(0, -10.35, .2, .24, 0, 0, 6.283); p.moveTo(.12, -10.42); p.lineTo(.42, -10.35); p.lineTo(.14, -10.28); p.closePath(); p.rect(-.6, -9.15, 1.2, .3);
-    const sw = .12 * Math.sin(u * 1.6), flag = new Path2D(); flag.moveTo(-.85, -4.25); flag.lineTo(.85, -4.25); flag.quadraticCurveTo(.95 + sw, -3.2, .8 + sw * 1.4, -2.2); flag.lineTo(-.9 + sw * 1.4, -2.2); flag.quadraticCurveTo(-.95 + sw, -3.2, -.85, -4.25); flag.closePath();
-    ctx.fillStyle = 'rgb(84,22,18)'; ctx.fill(flag); ctx.globalAlpha = .8; ctx.strokeStyle = 'rgb(255,190,110)'; ctx.lineWidth = .06; ctx.stroke(flag); ctx.globalAlpha = 1;
-    ctx.fillStyle = 'rgb(40,28,20)'; ctx.fill(p); ctx.globalAlpha = .9; ctx.strokeStyle = 'rgb(255,206,130)'; ctx.lineWidth = .08; ctx.stroke(p); ctx.restore();
+  // ---- the gate top: backlit volumes like the wall (관리자 2026-11-14 "아웃라인이 있어서 어색해" — no stroked outlines) ----
+  // Each thing is drawn in metres into a scratch canvas: its dark mass shaded like the stone (W3.shade, same fog and ambient as
+  // the merlons beside it) with a soft top-to-bottom turn, per-part tones for depth (the shield's curve, the cloth of the
+  // vexillum glowing red where the sun comes through it), and a sun rim only on the edges that face the light — the shape minus
+  // itself shifted away from the light, laid sharp and once more blurred.
+  function backlit(ctx, c, L, X, Y, Z, hM, side, sunP, parts) {
+    const p = W3.P(c, X, Y, Z); if (!p) return; const s = p[2], oc = G.top, g = oc.getContext('2d'), S = oc.width, k = Math.min(1, S * .45 / (hM * s)), m = s * k;
+    const dist = Math.hypot(X - c.x, Y - c.y, Z - c.z), dark = alb => W3.shade(alb, [0, 0, -1], dist, L);
+    // the light: the low sun beyond, and the bright sky over the tops (the merlons burn on their top edges): up and toward the sun
+    const sx = sunP ? clamp((sunP[0] - p[0]) / (P.W * .35), -1, 1) : 0, tl = Math.hypot(sx * .8, 1), tw = [sx * .8 / tl, -1 / tl], w = Math.max(1.3, m * .045);
+    const ox = S / 2, oy = S * .82, at = (gg, dx, dy) => { gg.setTransform(m * side, 0, 0, m, ox + dx, oy + dy); };
+    g.setTransform(1, 0, 0, 1, 0, 0); g.globalCompositeOperation = 'source-over'; g.filter = 'none'; g.clearRect(0, 0, S, S);
+    // the mass, part by part, then its soft turn (a little haze-lit at the top, deeper at the foot)
+    at(g, 0, 0); for (const q of parts) { g.fillStyle = q.fill ? q.fill(g, dark) : css(dark(q.alb)); g.fill(q.path); }
+    g.setTransform(1, 0, 0, 1, 0, 0); g.globalCompositeOperation = 'source-atop'; { const gr = g.createLinearGradient(0, oy - hM * m, 0, oy); gr.addColorStop(0, css(mix(L.glow, L.fog, .5), .16)); gr.addColorStop(.55, 'rgba(0,0,0,0)'); gr.addColorStop(1, 'rgba(8,5,5,.3)'); g.fillStyle = gr; g.fillRect(0, 0, S, S); }
+    // the rim band: the union in the rim colour, minus the union moved away from the light
+    if (!G.rim || G.rim.width !== S) G.rim = P.canvas(S, S); const rg = G.rim.getContext('2d'); rg.setTransform(1, 0, 0, 1, 0, 0); rg.globalCompositeOperation = 'source-over'; rg.clearRect(0, 0, S, S);
+    rg.fillStyle = css(mix(L.glow, [255, 230, 190], .35)); at(rg, 0, 0); for (const q of parts) rg.fill(q.path);
+    rg.globalCompositeOperation = 'destination-out'; rg.fillStyle = '#000'; at(rg, -tw[0] * w, -tw[1] * w); for (const q of parts) rg.fill(q.path);
+    const dx = p[0] - ox / k, dy = p[1] - oy / k, dw = S / k;
+    ctx.save(); ctx.drawImage(oc, dx, dy, dw, dw);
+    ctx.globalCompositeOperation = 'screen'; ctx.globalAlpha = .95; ctx.drawImage(G.rim, dx, dy, dw, dw);
+    ctx.globalAlpha = .7; ctx.filter = `blur(${Math.max(1.5, s * .035).toFixed(1)}px)`; ctx.drawImage(G.rim, dx, dy, dw, dw); ctx.filter = 'none'; ctx.restore();
   }
-  // a legionary on the gate top, seen from inside the city (back view, looking out): crested helmet, spear, the curve of a shield
-  function soldier(ctx, x, y, s, side, u, rimC) {
-    ctx.save(); ctx.translate(x, y); ctx.scale(s * side, s); const p = new Path2D();
-    p.ellipse(0, -1.6, .12, .13, 0, 0, 6.283); p.moveTo(-.14, -1.62); p.quadraticCurveTo(0, -1.82, .14, -1.62); p.lineTo(.15, -1.55); p.lineTo(-.15, -1.55); p.closePath();
-    p.moveTo(-.1, -1.76); p.quadraticCurveTo(0, -1.92, .1, -1.76); p.lineTo(.08, -1.72); p.lineTo(-.08, -1.72); p.closePath();   // the crest
-    p.moveTo(-.06, -1.47); p.lineTo(.06, -1.47); p.lineTo(.22, -1.4); p.lineTo(.24, -1.0); p.lineTo(.16, -.62); p.lineTo(.13, -.04); p.lineTo(.03, -.04); p.lineTo(0, -.55); p.lineTo(-.03, -.04); p.lineTo(-.13, -.04); p.lineTo(-.16, -.62); p.lineTo(-.24, -1.0); p.lineTo(-.22, -1.4); p.closePath();
-    p.moveTo(-.24, -.62); p.lineTo(.24, -.62); p.lineTo(.2, -.48); p.lineTo(-.2, -.48); p.closePath();                                     // the skirt of strips
-    p.rect(.3, -2.5, .035, 2.5); p.moveTo(.317, -2.72); p.lineTo(.36, -2.5); p.lineTo(.274, -2.5); p.closePath();                        // spear
-    p.moveTo(.22, -1.36); p.lineTo(.34, -1.1); p.lineTo(.33, -1.02); p.lineTo(.2, -1.2); p.closePath();                                  // spear arm to the shaft
-    p.moveTo(-.2, -1.32); p.quadraticCurveTo(-.46, -1.3, -.46, -.85); p.lineTo(-.44, -.38); p.quadraticCurveTo(-.3, -.4, -.24, -.5); p.lineTo(-.24, -1.2); p.closePath();   // shield edge on the left
-    ctx.fillStyle = 'rgb(30,20,18)'; ctx.fill(p); ctx.globalAlpha = .85; ctx.strokeStyle = css(rimC); ctx.lineWidth = .035; ctx.stroke(p); ctx.restore();
+  // the eagle standard (after messiah film.html aquila(), smaller; metres, foot of the pole at the origin): pole, crossbar,
+  // the eagle with spread wings on its plinth, the red vexillum hanging from the bar
+  function aquila(ctx, c, L, X, Y, Z, u, sunP) {
+    const k = .36, T = new DOMMatrix().scale(k, k), path = f => { const q = new Path2D(); f(q); const o = new Path2D(); o.addPath(q, T); return o; };
+    const pole = path(q => { q.rect(-.09, -9, .18, 9); q.rect(-.9, -4.4, 1.8, .16); q.rect(-.6, -9.15, 1.2, .3); });
+    const eagle = path(q => { q.moveTo(0, -10.2); q.bezierCurveTo(-.5, -10.4, -1.1, -11.2, -1.9, -11.4); q.bezierCurveTo(-1.5, -10.8, -1.3, -10.3, -.7, -9.9); q.bezierCurveTo(-.4, -9.6, -.2, -9.3, 0, -9.2);
+      q.bezierCurveTo(.2, -9.3, .4, -9.6, .7, -9.9); q.bezierCurveTo(1.3, -10.3, 1.5, -10.8, 1.9, -11.4); q.bezierCurveTo(1.1, -11.2, .5, -10.4, 0, -10.2); q.closePath();
+      q.ellipse(0, -10.35, .2, .24, 0, 0, 6.283); q.moveTo(.12, -10.42); q.lineTo(.42, -10.35); q.lineTo(.14, -10.28); q.closePath(); });
+    const sw = .12 * Math.sin(u * 1.6), flag = path(q => { q.moveTo(-.85, -4.25); q.lineTo(.85, -4.25); q.quadraticCurveTo(.95 + sw, -3.2, .8 + sw * 1.4, -2.2); q.lineTo(-.9 + sw * 1.4, -2.2); q.quadraticCurveTo(-.95 + sw, -3.2, -.85, -4.25); q.closePath(); });
+    backlit(ctx, c, L, X, Y, Z, 4.3, 1, sunP, [
+      { path: flag, fill: (g, dark) => { const gr = g.createLinearGradient(0, -4.25 * k, 0, -2.2 * k), d = dark([.46, .1, .08]); gr.addColorStop(0, css(mix(d, [20, 8, 8], .35))); gr.addColorStop(.6, css(mix(d, [150, 36, 22], .35))); gr.addColorStop(1, css(mix(d, [120, 30, 20], .25))); return gr; } },   // the sun through the red cloth
+      { path: pole, alb: [.2, .16, .13] },
+      { path: eagle, fill: (g, dark) => { const gr = g.createLinearGradient(-1.9 * k, 0, 1.9 * k, 0), d = dark([.26, .2, .14]); gr.addColorStop(0, css(mix(d, [10, 8, 8], .3))); gr.addColorStop(.5, css(mix(d, L.glow, .12))); gr.addColorStop(1, css(mix(d, [10, 8, 8], .3))); return gr; } }]);   // the gilt bird: its body a little lit, the wing tips darker
+  }
+  // a legionary on the gate top, seen from inside the city (back view, looking out; metres, feet at the origin): crested helmet,
+  // the cuirass and the strip skirt, legs, the spear arm to the shaft, the curved shield on the left
+  function soldier(ctx, c, L, X, Y, Z, side, u, sunP) {
+    const body = new Path2D(), shield = new Path2D(), spear = new Path2D(), helm = new Path2D();
+    helm.ellipse(0, -1.6, .12, .13, 0, 0, 6.283); helm.moveTo(-.14, -1.62); helm.quadraticCurveTo(0, -1.82, .14, -1.62); helm.lineTo(.15, -1.55); helm.lineTo(-.15, -1.55); helm.closePath();
+    helm.moveTo(-.1, -1.76); helm.quadraticCurveTo(0, -1.92, .1, -1.76); helm.lineTo(.08, -1.72); helm.lineTo(-.08, -1.72); helm.closePath();   // the crest
+    body.moveTo(-.06, -1.47); body.lineTo(.06, -1.47); body.lineTo(.22, -1.4); body.lineTo(.24, -1.0); body.lineTo(.16, -.62); body.lineTo(.13, -.04); body.lineTo(.03, -.04); body.lineTo(0, -.55); body.lineTo(-.03, -.04); body.lineTo(-.13, -.04); body.lineTo(-.16, -.62); body.lineTo(-.24, -1.0); body.lineTo(-.22, -1.4); body.closePath();
+    body.moveTo(-.24, -.62); body.lineTo(.24, -.62); body.lineTo(.2, -.48); body.lineTo(-.2, -.48); body.closePath();                                     // the skirt of strips
+    body.moveTo(.22, -1.36); body.lineTo(.34, -1.1); body.lineTo(.33, -1.02); body.lineTo(.2, -1.2); body.closePath();                                  // spear arm to the shaft
+    spear.rect(.3, -2.5, .035, 2.5); spear.moveTo(.317, -2.72); spear.lineTo(.36, -2.5); spear.lineTo(.274, -2.5); spear.closePath();
+    shield.moveTo(-.2, -1.32); shield.quadraticCurveTo(-.46, -1.3, -.46, -.85); shield.lineTo(-.44, -.38); shield.quadraticCurveTo(-.3, -.4, -.24, -.5); shield.lineTo(-.24, -1.2); shield.closePath();
+    backlit(ctx, c, L, X, Y, Z, 2.8, side, sunP, [
+      { path: spear, alb: [.2, .16, .13] },
+      { path: body, fill: (g, dark) => { const gr = g.createLinearGradient(-.24, 0, .24, 0), d = dark([.3, .22, .18]); gr.addColorStop(0, css(mix(d, [8, 6, 6], .25))); gr.addColorStop(.45, css(d)); gr.addColorStop(1, css(mix(d, [8, 6, 6], .3))); return gr; } },   // rounded: the middle of the back a touch lighter
+      { path: helm, alb: [.32, .25, .2] },
+      { path: shield, fill: (g, dark) => { const gr = g.createLinearGradient(-.46, 0, -.2, 0), d = dark([.36, .14, .11]); gr.addColorStop(0, css(mix(d, L.glow, .14))); gr.addColorStop(.35, css(d)); gr.addColorStop(1, css(mix(d, [8, 6, 6], .4))); return gr; } }]);   // the shield's curve: its outer edge catches the sky, it turns dark toward the body
   }
 
   // ---- the crowd: back-view silhouettes (metres, feet at the origin), robe and head cloth, arms from the shoulders ----
   function person(g, kind, u, ph) {
-    const sw = .015 * Math.sin(u * 1.1 + ph), veil = kind === 'veil';
+    const sw = .015 * Math.sin(u * 1.1 + ph), veil = kind === 'veil', child = kind === 'child', man = !veil && !child;
     g.save(); g.rotate(sw * .5);
     g.beginPath(); g.ellipse(0, -1.58, .098, .118, 0, 0, 6.283); g.fill();                                                                // head
-    g.beginPath(); g.moveTo(0, -1.73); g.quadraticCurveTo(.13, -1.7, .14, -1.56); g.quadraticCurveTo(.16, -1.44, veil ? .26 : .22, veil ? -.9 : -1.3); g.lineTo(veil ? -.26 : -.22, veil ? -.9 : -1.3); g.quadraticCurveTo(-.16, -1.44, -.14, -1.56); g.quadraticCurveTo(-.13, -1.7, 0, -1.73); g.fill();   // head cloth / veil
-    // shoulders sloping from the neck, a belted waist, the robe widening to the hem (its hem stirs a little)
-    g.beginPath(); g.moveTo(-.06, -1.46); g.quadraticCurveTo(-.18, -1.44, -.22, -1.36); g.quadraticCurveTo(-.25, -1.2, -.2, -1.02); g.lineTo(-.165, -.97); g.lineTo(-.19, -.9); g.lineTo(-.27 - .01 * Math.sin(u * 1.7 + ph), -.02); g.lineTo(.27 + .01 * Math.sin(u * 1.5 + ph), -.02); g.lineTo(.19, -.9); g.lineTo(.165, -.97); g.lineTo(.2, -1.02); g.quadraticCurveTo(.25, -1.2, .22, -1.36); g.quadraticCurveTo(.18, -1.44, .06, -1.46); g.closePath(); g.fill();
+    if (veil || child) { g.beginPath(); g.moveTo(0, -1.73); g.quadraticCurveTo(.13, -1.7, .14, -1.56); g.quadraticCurveTo(.16, -1.44, veil ? .26 : .2, veil ? -.9 : -1.34); g.lineTo(veil ? -.26 : -.2, veil ? -.9 : -1.34); g.quadraticCurveTo(-.16, -1.44, -.14, -1.56); g.quadraticCurveTo(-.13, -1.7, 0, -1.73); g.fill(); }   // the mother's veil down her back / the child's little cloth
+    else {
+      // the men (관리자 2026-11-14: long falling cloth reads as a woman): a cloth wound close round the head with a band, or bare
+      // short hair; a thick neck; the beard showing past the jaw on the side the head is turned to; broad square shoulders
+      const bare = [1, 6].includes(Math.round(ph / 1.7)), turn = kind === 'point' || kind === 'shade' ? 1 : kind === 'staff' ? -1 : 0;
+      if (bare) { g.beginPath(); g.ellipse(0, -1.6, .104, .11, 0, Math.PI, 2 * Math.PI); g.fill(); }                                         // short hair over the crown
+      else { g.beginPath(); g.moveTo(-.118, -1.56); g.quadraticCurveTo(-.13, -1.75, 0, -1.76); g.quadraticCurveTo(.13, -1.75, .118, -1.56); g.quadraticCurveTo(.12, -1.47, .1, -1.43); g.lineTo(-.1, -1.43); g.quadraticCurveTo(-.12, -1.47, -.118, -1.56); g.fill();   // wound cloth to the nape
+        g.beginPath(); g.ellipse(0, -1.61, .124, .03, 0, 0, 6.283); g.fill(); }                                                             // its band
+      g.beginPath(); g.moveTo(-.075, -1.5); g.lineTo(.075, -1.5); g.lineTo(.085, -1.4); g.lineTo(-.085, -1.4); g.closePath(); g.fill();      // neck
+      if (turn) { g.beginPath(); g.ellipse(turn * .085, -1.5, .05, .065, turn * .3, 0, 6.283); g.fill(); }                                    // the beard past the jaw
+    }
+    // shoulders from the neck — the men broad and square, the robe falling straight; the women and the child sloped, the robe
+    // widening to the hem (its hem stirs a little)
+    const sh = man ? .265 : .22, hem = man ? .24 : .27, wst = man ? .17 : .165;
+    g.beginPath(); g.moveTo(-.06, -1.46); g.quadraticCurveTo(-sh + .02, -1.45, -sh, -1.37); g.quadraticCurveTo(-sh - .03, -1.2, -sh + .03, -1.02); g.lineTo(-wst, -.97); g.lineTo(-wst - .025, -.9); g.lineTo(-hem - .01 * Math.sin(u * 1.7 + ph), -.02); g.lineTo(hem + .01 * Math.sin(u * 1.5 + ph), -.02); g.lineTo(wst + .025, -.9); g.lineTo(wst, -.97); g.lineTo(sh - .03, -1.02); g.quadraticCurveTo(sh + .03, -1.2, sh, -1.37); g.quadraticCurveTo(sh - .02, -1.45, .06, -1.46); g.closePath(); g.fill();
     g.beginPath(); g.ellipse(-.09, -.02, .07, .03, 0, 0, 6.283); g.ellipse(.09, -.02, .07, .03, 0, 0, 6.283); g.fill();
     // arms: shoulder → elbow → hand, with the sleeve widening; [ex, ey, hx, hy] per side
-    const arm = (sd, ex, ey, hx, hy) => { const sx = sd * .2, sy = -1.36; g.lineCap = 'round'; g.lineJoin = 'round'; g.lineWidth = .1; g.beginPath(); g.moveTo(sx, sy); g.lineTo(ex, ey); g.stroke();
+    const sa = man ? .235 : .2, ae = sa + .05, arm = (sd, ex, ey, hx, hy) => { const sx = sd * sa, sy = -1.36; g.lineCap = 'round'; g.lineJoin = 'round'; g.lineWidth = .1; g.beginPath(); g.moveTo(sx, sy); g.lineTo(ex, ey); g.stroke();
       const ax = hx - ex, ay = hy - ey, l = Math.hypot(ax, ay) || 1, nx = -ay / l, ny = ax / l; g.beginPath(); g.moveTo(ex + nx * .05, ey + ny * .05); g.lineTo(hx + nx * .08, hy + ny * .08 + .03); g.lineTo(hx - nx * .08, hy - ny * .08 + .03); g.lineTo(ex - nx * .05, ey - ny * .05); g.closePath(); g.fill();
       g.beginPath(); g.ellipse(hx + ax / l * .05, hy + ay / l * .05, .045, .04, 0, 0, 6.283); g.fill(); };
-    const down = sd => arm(sd, sd * .25, -1.08, sd * .25, -.8);
-    if (kind === 'shade') { const k = ss(.6, 1.6, u); down(-1); arm(1, lerp(.25, .36, k), lerp(-1.08, -1.42, k), lerp(.25, .12, k), lerp(-.8, -1.62, k)); }   // a hand up to shade his eyes
-    else if (kind === 'point') { const k = ss(1.8, 2.8, u), bob = .03 * Math.sin(u * 2.2) * k; down(-1); arm(1, lerp(.25, .32, k), lerp(-1.08, -1.6, k), lerp(.25, .42, k), lerp(-.8, -1.86 + bob, k)); }   // pointing to the hills
+    const down = sd => arm(sd, sd * ae, -1.08, sd * ae, -.8);
+    if (kind === 'shade') { const k = ss(.6, 1.6, u); down(-1); arm(1, lerp(ae, .38, k), lerp(-1.08, -1.42, k), lerp(ae, .12, k), lerp(-.8, -1.62, k)); }   // a hand up to shade his eyes
+    else if (kind === 'point') { const k = ss(1.8, 2.8, u), bob = .03 * Math.sin(u * 2.2) * k; down(-1); arm(1, lerp(ae, .34, k), lerp(-1.08, -1.6, k), lerp(ae, .44, k), lerp(-.8, -1.86 + bob, k)); }   // pointing to the hills
     else if (kind === 'veil') { down(1); arm(-1, -.24, -1.06, -.36, -.84); }                                                              // a hand down to the child
     else if (kind === 'child') { arm(1, .2, -1.12, .3, -.9); down(-1); }
-    else if (kind === 'staff') { down(-1); arm(1, .28, -1.12, .32, -.98); g.fillRect(.3, -1.95, .04, 1.95); }
+    else if (kind === 'staff') { down(-1); arm(1, .31, -1.12, .35, -.98); g.fillRect(.33, -1.95, .04, 1.95); }
     else { down(-1); down(1); }
     g.restore();
   }
@@ -144,9 +192,12 @@
     const rimC = mix(L.glow, [255, 226, 180], .35), list = [];
     for (let i = 0; i < G.crowd.length; i++) { const [x0, z0, h, kind] = G.crowd[i]; let x = x0, z = z0; if (kind === 'walk') { const k = ss(0, 6.5, u); z = lerp(23.6, 26.6, k); x = lerp(-.6, -.25, k); } list.push({ x, z, h, kind, i }); }
     list.sort((a, b) => b.z - a.z);
-    // long shadows down the lit paving, toward us
-    const e = Math.max(.02, L.sd[1]); for (const f of list) { const a = W3.P(c, f.x, .01, f.z), len = f.h / e * .5, b = W3.P(c, f.x - L.sd[0] / e * f.h * .5, .01, Math.max(c.z + .8, f.z - len)); if (!a || !b) continue;
-      ctx.save(); const g = ctx.createLinearGradient(a[0], a[1], b[0], b[1]); g.addColorStop(0, 'rgba(14,8,8,.55)'); g.addColorStop(1, 'rgba(14,8,8,0)'); ctx.strokeStyle = g; ctx.lineWidth = a[2] * .34; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.stroke(); ctx.restore(); }
+    // long shadows down the lit paving, toward us. The far end is a world point along the sun (x and z together); where it
+    // would pass the camera's near plane the segment is cut there along its own line, and the fade is cut at the same place,
+    // so a shadow never changes direction or drops out between frames (관리자 2026-11-14 "그림자가 덜그덕거려")
+    const e = Math.max(.02, L.sd[1]); for (const f of list) { const A = [f.x, .01, f.z], B = [f.x - L.sd[0] / e * f.h * .5, .01, f.z - L.sd[2] / e * f.h * .5], s = clipSeg(c, A, B); if (!s) continue;
+      const a = W3.P(c, ...s[0]), b = W3.P(c, ...s[1]); if (!a || !b) continue;
+      ctx.save(); const g = ctx.createLinearGradient(a[0], a[1], b[0], b[1]); g.addColorStop(0, 'rgba(14,8,8,.55)'); g.addColorStop(1, `rgba(14,8,8,${(.55 * (1 - s[2])).toFixed(3)})`); ctx.strokeStyle = g; ctx.lineWidth = a[2] * .34; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.stroke(); ctx.restore(); }
     for (const f of list) { const p = W3.P(c, f.x, 0, f.z); if (!p) continue; const s = p[2] * (f.kind === 'child' ? f.h / 1.7 : f.h / 1.72), oc = G.fig, g = oc.getContext('2d'), S = oc.width, k = Math.min(1, S * .4 / (2.2 * s)), m = s * k;
       const tw = sunP ? [sunP[0] - p[0], sunP[1] - (p[1] - 1.4 * p[2])] : [0, -1], l = Math.hypot(...tw) || 1, w = Math.max(1.2, m * .028);
       g.setTransform(1, 0, 0, 1, 0, 0); g.clearRect(0, 0, S, S);
@@ -166,9 +217,11 @@
     // the paving inside the gate: in the wall's shadow, warm bounce near the gate
     { const a = W3.P(c, -40, 0, 34), b = W3.P(c, 40, 0, 34); const y0 = a && b ? Math.min(a[1], b[1]) : H * .6; const g = ctx.createLinearGradient(0, y0, 0, H); g.addColorStop(0, css(mix(L.amb, [40, 28, 24], .4))); g.addColorStop(1, 'rgb(14,10,10)'); ctx.fillStyle = g; ctx.fillRect(0, y0, W, H - y0); }
     // the passage floor and the light lying on the paving: the arch's outline thrown along the sunlight onto the ground toward us
-    { const e = Math.max(.02, L.sd[1]), out = archPts(34, 16).map(([x, y, z]) => [x - L.sd[0] / e * y, .01, Math.max(c.z + .6, z - L.sd[2] / e * y)]);
-      const sp = out.map(p => W3.P(c, ...p)).filter(Boolean); if (sp.length > 3) { ctx.save(); ctx.globalCompositeOperation = 'screen'; const n = W3.P(c, 0, 0, 34), f = W3.P(c, 0, 0, Math.max(c.z + .8, 6)), g = ctx.createLinearGradient(0, n ? n[1] : 0, 0, f ? f[1] : H);
-        g.addColorStop(0, css(L.glow, .7)); g.addColorStop(.5, css(L.glow, .32)); g.addColorStop(1, css(L.glow, .08)); ctx.fillStyle = g; ctx.filter = 'blur(3px)'; ctx.beginPath(); sp.forEach((p, i) => i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1])); ctx.closePath(); ctx.fill(); ctx.filter = 'none'; ctx.restore(); } }
+    // (the pool is the true ground polygon, cut by W3.poly at the near plane edge by edge — no per-point clamp or dropped
+    // points, which made its left side jump from frame to frame)
+    { const e = Math.max(.02, L.sd[1]), out = archPts(34, 16).map(([x, y, z]) => [x - L.sd[0] / e * y, .01, z - L.sd[2] / e * y]);
+      ctx.save(); if (W3.poly(ctx, c, out)) { ctx.globalCompositeOperation = 'screen'; const n = W3.P(c, 0, 0, 34), f = W3.P(c, 0, 0, Math.max(c.z + .8, 6)), g = ctx.createLinearGradient(0, n ? n[1] : 0, 0, f ? f[1] : H);
+        g.addColorStop(0, css(L.glow, .7)); g.addColorStop(.5, css(L.glow, .32)); g.addColorStop(1, css(L.glow, .08)); ctx.fillStyle = g; ctx.filter = 'blur(3px)'; ctx.fill(); ctx.filter = 'none'; } ctx.restore(); }
     W3.faces(ctx, c, L, G.P2);
     W3.faces(ctx, c, L, G.FB); burn(ctx, c, L, G.MB);
     W3.faces(ctx, c, L, G.FF);
@@ -176,9 +229,8 @@
     towerGlaze(ctx, c, L);
     burn(ctx, c, L, G.MF);
     // on the gate top: the eagle standard between two legionaries, dark against the sky
-    const rimC = mix(L.glow, [255, 226, 180], .3);
-    for (const sd of [-1, 1]) { const p = W3.P(c, sd * 2.1, 13, 28.8); if (p) soldier(ctx, p[0], p[1], p[2], sd, u, rimC); }
-    { const p = W3.P(c, 0, 13, 29.2); if (p) aquila(ctx, p[0], p[1], p[2], u); }
+    for (const sd of [-1, 1]) soldier(ctx, c, L, sd * 2.1, 13, 28.8, sd, u, sunP);
+    aquila(ctx, c, L, 0, 13, 29.2, u, sunP);
     // light in the air of the passage: soft shafts from the sun through the arch toward us
     if (sunP) { const ap = archPts(27.5, 16).map(p => W3.P(c, ...p)); if (ap.every(Boolean)) { ctx.save(); ctx.beginPath(); ap.forEach((p, i) => i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1])); ctx.closePath(); ctx.clip(); ctx.globalCompositeOperation = 'screen';
       ctx.filter = `blur(${V ? 6 : 5}px)`; const R = Math.max(W, H); for (let i = 0; i < 14; i++) { const ang = Math.PI * .5 + (i / 14 - .5) * 2.8 + u * .02, w = .02 + .03 * noise(i * 1.7, 2), g = ctx.createRadialGradient(sunP[0], sunP[1], 0, sunP[0], sunP[1], R); g.addColorStop(0, css(L.glow, .16 * noise(i * 2.3, u * .3))); g.addColorStop(1, css(L.glow, 0)); ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(sunP[0], sunP[1]); ctx.arc(sunP[0], sunP[1], R, ang - w, ang + w); ctx.closePath(); ctx.fill(); } ctx.filter = 'none';

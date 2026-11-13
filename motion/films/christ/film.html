@@ -52,8 +52,8 @@ const SCENES = [
   [0, 8.6, (c, t) => { sc('roomOil', 0, 'open')(c, t); textBand(c); }],   // N01 N02 — the candle, the old man from behind, the open Bible (the bright pages sit under the words: a double band)
   [8.0, 15.0, sc('jordanScene', 7.6)],             // P1 Q1 — the Jordan, late afternoon: Andrew to his brother
   [14.1, 24.0, sc('goldTitle', 14.1)],             // N03 T1 — one drop of gold oil, the title
-  [23.2, 25.6, scz('goldAnoint', 22.9, 'horn')],   // N04 — the horn of oil turns in the dark (2 s: 관리자 2026-11-11 "뿔에 너무 시간 쓰는 것 같아")
-  [25.1, 36.5, scz('goldAnoint', 25.1, 'david')],  // N04 (cont.) L1 K1 — the hill at sunset, Samuel comes; he pours on the shepherd boy (1 Sam 16:13) at 28.9
+  // the horn of oil alone is gone (관리자 2026-11-14 "이 뿔 장면은 없어도 되지않나?" — Samuel's horn is seen pouring on David): the title dissolves into the hill
+  [23.2, 36.5, scz('goldAnoint', 23.2, 'david')],  // N04 L1 K1 — the hill at sunset from the first frame (the title dissolves into it), Samuel walks in; he pours on the shepherd boy (1 Sam 16:13) at 28.9 (lead 5.7)
   [36.0, 40.6, scz('goldAnoint', 35.8, 'aaron')],  // L2 K2 — Moses pours on Aaron at the tent door (Lev 8:12)
   [39.6, 45.0, scz('goldAnoint', 39.9, 'elisha')], // L3 K3 — Elijah's cloak over Elisha (no oil: the anointing is God's command, 1 Ki 19:16)
   [44.0, 52.2, scz('jerusalemScene', 44.3)],       // N06 — the Roman standard over the gate of Jerusalem
@@ -65,15 +65,17 @@ const SCENES = [
   [87.4, 98.3, sc('bwCross', 87.6)],               // N11 Q5 — the cry from the cross (black-and-white film)
   [96.9, 114.8, sc('scrollScene', 96.9, 'psalm')], // N12 P5 Q6 Q7 — the ember crosses to the psalm of David (in before the cross has sunk to one point: no black dip)
   [113.8, 120.9, sc('bwSoldiers', 114.0)],         // L4 N14 — at the foot of the cross, the lots
-  [119.8, 125.7, scz('dawnOil', 120.1, 'tomb')],   // N15 — the black-and-white is repainted with dawn: the empty tomb
-  [125.0, 130.0, scz('corneliusFresco', 125.0)],   // N20 — Peter speaks in Cornelius' house at Caesarea (Acts 10), Pompeian fresco (Hopper = horror, Vermeer = oil again — 관리자 2026-11-11) (관리자 2026-11-11: 바위 아래 베드로가 3부와 반복)
-  [129.4, 136.4, scz('jordanScene', 129.5, { mode: 'spirit' })],   // P7 Q9 — the light like a dove on the Jordan (Acts 10:38)
-  [135.7, 143.1, scz('dawnOil', 136.0, 'tree')],   // Q10 — the shadow of the tree, then the dawn fills the tomb (Acts 10:39–40)
-  [142.4, 146.9, scz('goldThree', 142.7)],         // N16 — the three lights meet on one
-  [146.2, 153.6, scz('roomOil', 146.5, 'dawn')],   // N17 — the first room: dawn comes through the window
-  [153.0, 159.9, scz('emmausShadow', 153.4, 'walk')], // P6 N18 — the road to Emmaus at sunset
-  [159.3, 166.8, scz('emmausShadow', 159.6, 'speak')],// Q8 — the middle one turns: "그리스도가 이런 고난을 받고…"
-  [166.2, 177, scz('emmausShadow', 166.5, 'lamp')],   // N19 E1 — a lamp lit in the village; the end card
+  // 5차(관점 검수 4차, 관리자 2026-11-14 "고고"): the empty tomb no longer comes before the preaching — Acts 10:38 / 39 / 40 on three
+  // screens, the dawn first at "다시 살리사", then N15 reads it ("실패가 아니라, 성경이 가리킨 길")
+  [119.9, 125.0, scz('corneliusFresco', 119.9)],   // N20 — Peter speaks in Cornelius' house at Caesarea (Acts 10), Pompeian fresco
+  [124.3, 135.3, scz('jordanScene', 124.4, { mode: 'spirit' })],   // P7 Q9 — the light like a dove on the Jordan (Acts 10:38, to "선한 일을 행하시고"), then 1 s of stillness
+  [134.8, 139.9, scz('dawnOil', 135.0, 'tree')],   // Q11 — dark ground, one cross-shaped shadow (Acts 10:39 "나무에 달아"): no tree, no crowd, held
+  [139.3, 148.7, scz('dawnOil', 139.5, 'tomb')],   // Q12 N15 — the first dawn: inside the tomb looking out, light on the linen (Acts 10:40, Jn 20:5–7)
+  [148.0, 152.6, scz('goldThree', 148.3)],         // N16 — the three lights meet on one
+  [151.7, 158.3, scz('roomOil', 152.0, 'dawn')],   // N17 — the first room: dawn comes through the window
+  [157.7, 164.6, scz('emmausShadow', 158.1, 'walk')], // P6 N18 — the road to Emmaus at sunset
+  [164.0, 171.5, scz('emmausShadow', 164.3, 'speak')],// Q8 Q8N — the middle one turns (never a profile): "그리스도가 이런 고난을 받고…"
+  [170.9, 181, scz('emmausShadow', 171.2, 'lamp')],   // N19 E1 — a lamp lit in the village; the end card
 ];
 // text: every line from its `at` to the next voiced line (quotes hold until then; a caption label rides with its quote)
 let TEXT = [];
@@ -104,9 +106,9 @@ function endCard(ctx, t, a, b) {   /* one place to read: a small gold 뒷이야�
   Pilot.text(ctx, where || '', W / 2, y0 + size * 2.0, { size: size * 1.7, weight: 600, font: "'Noto Serif KR',serif", color: '#f6ead0', alpha: k * ss(a + .5, a + 1.3, t), shadow: 'rgba(233,185,73,.35)', shadowBlur: 36 });
   const lw = (V ? 360 : 440) * eo(clamp((t - a - 1.0) / 1.4)); ctx.fillStyle = `rgba(233,199,122,${k * .8})`; ctx.fillRect(W / 2 - lw / 2, y0 + size * 3.3, lw, 2);
   Pilot.text(ctx, Film.text('B1'), W / 2, y0 + size * 4.4, { size: size * .66, font: "'Noto Sans KR',sans-serif", color: '#e2d2a8', shadow: 'rgba(0,0,0,.9)', shadowBlur: 14, alpha: k * ss(a + 1.8, a + 2.6, t), ls: 2 }); }
-const FILM_DUR = 176;
-const QA_HOLD = [[170.7, 176.0, 'the end card (뒷이야기 · 누가복음 24장)']];
-const QA_PLANNED = [[87.4, 88.4, 'black-and-white film starts: gate flicker'], [97.6, 98.2, 'the ember lights the lamp on the psalm scroll'], [25.1, 25.6, 'horn → David: short 0.5 s dissolve so the horn does not linger over the hill (관리자 승인 수정 2026-11-12)']];
+const FILM_DUR = 180;
+const QA_HOLD = [[175.4, 180.0, 'the end card (뒷이야기 · 누가복음 24장)'], [134.8, 139.9, 'Q11: one cross shadow held on purpose (나무에 달아)']];
+const QA_PLANNED = [[87.4, 88.4, 'black-and-white film starts: gate flicker'], [97.6, 98.2, 'the ember lights the lamp on the psalm scroll'], [23.2, 24.2, 'title → David: the title dissolves into the sunset hill (horn scene removed, 관리자 2026-11-14)']];
 let XL = null;
 function draw(ctx, t) {
   const act = SCENES.filter(([a, b]) => t >= a && t < b);
@@ -118,7 +120,9 @@ function draw(ctx, t) {
   for (const [kind, id, a, b] of TEXT) { if (t < a - .1 || t > b + .1) continue;
     if (kind === 'sub') Film.sub(ctx, id, t, a, b); else if (kind === 'label') Film.label(ctx, id, t, a, b); else if (kind === 'title') title(ctx, id, t, a, b);
     else if (kind === 'end') endCard(ctx, t, a, b);
-    else if (kind === 'note') { const k = win(t, a, b, .8, .8); if (k > 0) Pilot.text(ctx, Film.text(id), W / 2, V ? H * .8 : H - 40, { size: V ? 30 : 26, font: "'Noto Sans KR',sans-serif", color: '#d9c79a', alpha: k * .9, shadow: 'rgba(0,0,0,.9)', shadowBlur: 12, ls: 1 }); }
+    // a note may be several lines (" / " and the closing " · 출처" break: Q8N 눅 24:27 ran off both edges as one line, 2026-11-14); stacked upward from its base
+    else if (kind === 'note') { const k = win(t, a, b, .8, .8); if (k > 0) { const sz = V ? 30 : 26, lh = sz * 1.45, base = V ? H * .8 : H - 40, rows = Film.text(id).split(/\s+\/\s+|\s+·\s+(?=[^·]*\d+:\d+\s*$)/);
+      rows.forEach((r, i) => Pilot.text(ctx, r, W / 2, base + (V ? i * lh : (i - rows.length + 1) * lh), { size: i === rows.length - 1 && rows.length > 1 ? sz * .85 : sz, font: "'Noto Sans KR',sans-serif", color: '#d9c79a', alpha: k * .9, shadow: 'rgba(0,0,0,.9)', shadowBlur: 12, ls: 1 })); } }
     else if (kind === 'quote') Film.quote(ctx, id, t, a, b, { ...QB(), hl: Film.lines[id].hl, hlk: ss(a + .4, a + 1.6, t) }); }
 }
 Pilot.run({ W, H, dur: FILM_DUR, fonts: ["600 40px 'Noto Serif KR'", "400 40px 'Noto Serif KR'", "400 20px 'Noto Sans KR'"],

@@ -1,231 +1,307 @@
-/* dawn-impasto.js — 「그리스도」 5부: the black-and-white film repainted in dawn light with the palette knife (impasto, after the first
-   film's 「부활」 and 「메시아」 impasto-dawn.js). Kit: kit-oilpaint.js (OIL.paint, key 'impasto'). People are small silhouettes.
+﻿/* dawn-impasto.js — 「그리스도」 5부, the cross's shadow and the first dawn (2026-11-13 redraw: the knife-painted tomb exterior smeared
+   the forms and viewers did not read "empty tomb" — 관리자 피드백; theology review r4 asked for the inside view). The file keeps its
+   name (film.html loads it); the look is now light drawn by ray casting — clean forms, one light, restraint (README §7).
    await buildDawn() once, then dawnOil(ctx, u, mode):
-     'tomb'  u 0..5.2  (film 120.1–125.3, N15): starts in the grey grain of the black-and-white film; the knife repaints it stroke by
-             stroke outward from the rising sun; the rock tomb — its stone rolled aside, empty within — fills with the sun at the end.
-     'peter' u 0..4.2  (film 125.3–129.5, N20): the same dawn; under the great rock (the frame of part 3, «alone under the darkened
-             rock», now at sunrise) Peter's small silhouette stands again and lifts his head.
-     'tree'  u 0..6.7  (film 136.0–142.7, Q10 Acts 10:39–40): out of the dove's light of the scene before, the pre-dawn ground with the
-             shadow of the tree (the cross) lying across it; at «다시 살리사» (u ≈ 3.4) the shadow draws back and the empty tomb's
-             entrance fills with dawn, the painting spreading out from it.
-   No words drawn. Deterministic. */
+     'tree'  u 0..5.1  (film 135.0–140.1, Q11 Acts 10:39 «나무에 달아 죽였으나»): the dove's light of the Jordan scene withdraws into
+             darkness; on dark stony ground lies ONE shadow — the cross of part 4 (bw-cross.js crucified(): upright, beam 0.13 h
+             below its top, half-length 0.31 h, the title board, the body hanging from the beam), long, laid away from us by a cold
+             light behind the camera. No people, no faces. The camera drifts; the cold light breathes as clouds pass, then dims to
+             near dark — so the tomb's dawn is the first warm light of the part.
+     'tomb'  u 0..9.4  (film 139.5–148.9, Q12 Acts 10:40 «하나님이 사흘 만에 다시 살리사» + N15): inside the rock-hewn tomb looking
+             out through its low door (Jn 20:5). Dark chamber, a burial bench cut along the right wall with the linen cloths lying
+             there and the head cloth folded up by itself (Jn 20:6–7); outside, the great round stone rolled back (Mk 16:4) and a
+             garden in the sunrise (Mk 16:2 «해 돋을 때»). The sun comes up: the door turns gold, the light pours in (u 0.4–2.4,
+             on «다시 살리사») across the floor onto the bench and the linen; during N15 it keeps growing gently, the chamber fills
+             with warm bounce light, outside brightens. No person. The lower part stays dark and calm for the words.
+   No words drawn. Deterministic (seeded noise only; every frame a function of u). */
 (function () {
   const { clamp, lerp, ss, eo, eio, rng, noise, canvas } = Pilot;
+  const fbm = Pilot.fbm;
   let D = null;
+  const nrm = (x, y, z) => { const l = Math.hypot(x, y, z) || 1; return [x / l, y / l, z / l]; };
 
   async function buildDawn() {
     if (D) return D;
     const W = Pilot.W, H = Pilot.H, V = Pilot.ori === 'v';
-    const PW = Math.ceil(W * 1.12), PH = Math.ceil(H * 1.12), ox = (PW - W) / 2, oy = (PH - H) / 2;
-    const L = V ? { hz: .4, gl: .55, tomb: [.37, .505], tw: .15, th: .09, stone: [.555, .482], sr: .068, sun: [.9, .4], peter: [.585, .6], ph: .1, cliff: .52, pgl: .5,
-                    olive: [[.12, .9, .1, .72, .2], [.93, .72, .92, .6, .12]], wallR: .78 }
-                : { hz: .45, gl: .68, tomb: [.36, .605], tw: .12, th: .15, stone: [.53, .57], sr: .11, sun: [.88, .42], peter: [.55, .66], ph: .16, cliff: .44, pgl: .52,
-                    olive: [[.1, .98, .1, .78, .12], [.88, .8, .88, .66, .075]], wallR: .72 };
-    D = { W, H, V, PW, PH, ox, oy, L };
-    const X = f => f * W, Y = f => f * H;
-    // dawn sky: gold at the horizon rising through rose to blue-grey; clouds as thin bands spread with the knife
-    const sky = (g, dawn, hz) => { const gr = g.createLinearGradient(0, -oy, 0, Y(hz));
-      (dawn ? [[0, 'rgb(70,86,120)'], [.45, 'rgb(136,136,158)'], [.75, 'rgb(232,170,128)'], [1, 'rgb(255,220,158)']] : [[0, 'rgb(70,80,124)'], [.55, 'rgb(130,132,170)'], [1, 'rgb(190,176,190)']]).forEach(([a, c]) => gr.addColorStop(a, c));
-      g.fillStyle = gr; g.fillRect(-ox, -oy, PW, Y(hz) + oy + 4);
-      const r = rng(dawn ? 3 : 4); g.lineCap = 'round';
-      for (let i = 0; i < 22; i++) { const v = r(), cy = Y(.03 + v * (hz - .07)), cx = X(r() * 1.3 - .15), cw = X(.25 + r() * .55), th = Y(.003 + r() * .008), low = v > .6;
-        const col = dawn ? (low ? `rgba(255,${190 + r() * 30 | 0},${146 + r() * 30 | 0},${.4 + r() * .35})` : `rgba(${170 + r() * 30 | 0},${168 + r() * 20 | 0},${186 + r() * 20 | 0},${.35 + r() * .3})`) : `rgba(${140 + r() * 30 | 0},${138 + r() * 30 | 0},${168},${.3 + r() * .3})`;
-        g.strokeStyle = col; g.lineWidth = th; g.beginPath(); g.moveTo(cx - cw / 2, cy); g.bezierCurveTo(cx - cw / 6, cy - th * (r() * 2), cx + cw / 6, cy + th * (r() * 2), cx + cw / 2, cy - th * r()); g.stroke();
-        if (dawn && low) { g.strokeStyle = 'rgba(255,236,190,.5)'; g.lineWidth = th * .35; g.beginPath(); g.moveTo(cx - cw * .4, cy + th * .45); g.lineTo(cx + cw * .4, cy + th * .45); g.stroke(); } }   // their lit undersides
-      if (dawn) { const [sx, sy] = [X(L.sun[0]), Y(L.sun[1])], sg = g.createRadialGradient(sx, sy, 0, sx, sy, X(.75)); sg.addColorStop(0, 'rgba(255,246,214,1)'); sg.addColorStop(.1, 'rgba(255,214,150,.7)'); sg.addColorStop(1, 'rgba(255,200,140,0)');
-        g.fillStyle = sg; g.fillRect(-ox, -oy, PW, PH); g.fillStyle = '#fff6dc'; g.beginPath(); g.arc(sx, sy, X(.034), 0, 6.283); g.fill(); }
-      g.fillStyle = dawn ? 'rgb(156,112,116)' : 'rgb(96,92,116)'; g.beginPath(); g.moveTo(-ox, Y(hz) + 6); for (let x = -ox; x <= W + ox; x += 10) g.lineTo(x, Y(hz) - Y(.012) - Y(.018) * (Pilot.fbm(x * .004, 2.2, 3) - .35)); g.lineTo(W + ox, Y(hz) + 6); g.fill(); };
-    const ground = (g, dawn, top) => { const gr = g.createLinearGradient(0, Y(top), 0, H + oy);
-      (dawn ? [[0, 'rgb(170,136,88)'], [.25, 'rgb(112,84,54)'], [.5, 'rgb(78,56,36)'], [1, 'rgb(58,40,26)']] : [[0, 'rgb(134,126,140)'], [1, 'rgb(86,82,98)']]).forEach(([a, c]) => gr.addColorStop(a, c));
-      g.fillStyle = gr; g.fillRect(-ox, Y(top), PW, H - Y(top) + oy); };
-    // an olive tree: a twisted trunk, silver-green leaves laid in small strokes, only their edges lit against the low sun
-    const olive = (g, dawn, [bx, by, cx, cy, cr], seed) => { const r = rng(seed), R = X(cr);
-      g.lineCap = 'round'; for (let s = 0; s < 3; s++) { g.strokeStyle = dawn ? ['rgb(58,42,30)', 'rgb(74,56,40)', 'rgb(46,34,26)'][s] : 'rgb(50,48,58)'; g.lineWidth = R * (.2 - s * .045);   // trunk strands twisting round each other
-        g.beginPath(); g.moveTo(X(bx) + (s - 1) * R * .08, Y(by)); g.bezierCurveTo(X(bx) + R * (.35 - s * .3), lerp(Y(by), Y(cy), .3), X(cx) - R * (.3 - s * .25), lerp(Y(by), Y(cy), .65), X(cx) + (s - 1) * R * .2, Y(cy) + R * .25); g.stroke(); }
-      g.lineWidth = R * .06; for (let i = 0; i < 6; i++) { const a = -Math.PI / 2 + (r() - .5) * 2.2, l = R * (.5 + r() * .5); g.beginPath(); g.moveTo(X(cx), Y(cy) + R * .2); g.quadraticCurveTo(X(cx) + Math.cos(a) * l * .5 + R * .1 * (r() - .5), Y(cy) + Math.sin(a) * l * .5, X(cx) + Math.cos(a) * l, Y(cy) + Math.sin(a) * l * .8); g.stroke(); }
-      const blobs = []; for (let i = 0; i < 7; i++) { const a = r() * 6.283, d = R * .5 * Math.sqrt(r()); blobs.push([X(cx) + Math.cos(a) * d, Y(cy) + Math.sin(a) * d * .6 - R * .25, R * (.4 + r() * .3)]); }
-      for (let i = 0; i < 1500; i++) { const [bx2, by2, br] = blobs[i % 7], a = r() * 6.283, d = br * Math.sqrt(r()), lx = bx2 + Math.cos(a) * d, ly = by2 + Math.sin(a) * d * .75;
-        const edge = d / br, sunSide = (lx - bx2) / br * .7 - (ly - by2) / br * .5, lit = dawn && edge > .7 && sunSide > .1;
-        g.fillStyle = lit ? `rgb(${214 + r() * 30 | 0},${198 + r() * 30 | 0},${140 + r() * 30 | 0})` : dawn ? `rgb(${86 + r() * 40 | 0},${96 + r() * 34 | 0},${74 + r() * 26 | 0})` : `rgb(${70 + r() * 20 | 0},${74 + r() * 20 | 0},${86})`;
-        g.save(); g.translate(lx, ly); g.rotate(r() * 3); g.beginPath(); g.ellipse(0, 0, R * .07, R * .022, 0, 0, 6.283); g.fill(); g.restore(); } };
-    // the tomb hewn in the rock: a near-vertical limestone face with its beds and cracks, a low square doorway at its foot, a groove
-    // along the foot of the face and the round, flat stone rolled along it; inside, the shelf and the folded cloth in the light
-    const tombPlate = (dawn, closed) => { const c = canvas(PW, PH), g = c.getContext('2d'); g.translate(ox, oy); sky(g, dawn, L.hz); ground(g, dawn, L.hz);
-      const r = rng(11), gl = Y(L.gl), wr = X(L.wallR);
-      const topY = x => Y(V ? .19 : .15) + Y(.03) * Math.sin(x / W * 4 + 1) + Y(.025) * (Pilot.fbm(x * .008, 5, 3) - .5) + Y(.012) * Math.abs(noise(x * .03, 2) - .5) * 2;
-      const wall = new Path2D(); wall.moveTo(-ox, gl + 4); for (let x = -ox; x <= wr; x += 6) wall.lineTo(x, topY(x));
-      for (let i = 0; i <= 14; i++) { const v = i / 14; wall.lineTo(wr + X(.06) * v + X(.025) * Math.sin(v * 13) + X(.02) * (noise(v * 7, 3) - .5), lerp(topY(wr), gl + 4, v)); } wall.closePath();
-      const wg = g.createLinearGradient(0, 0, wr + X(.06), 0); (dawn ? [[0, 'rgb(118,94,74)'], [.55, 'rgb(176,146,108)'], [1, 'rgb(226,190,138)']] : [[0, 'rgb(88,86,104)'], [1, 'rgb(130,126,144)']]).forEach(([a, cc]) => wg.addColorStop(a, cc));
-      g.fillStyle = wg; g.fill(wall);
-      g.save(); g.clip(wall);
-      for (let i = 0; i < 11; i++) { const y0 = lerp(Y(.17), gl, i / 11) + Y(.01) * (r() - .5), hb = Y(.012 + r() * .022);   // bedding planes
-        g.fillStyle = (i % 2) ? (dawn ? `rgba(80,58,44,${.1 + r() * .12})` : `rgba(50,50,64,${.2 + r() * .15})`) : (dawn ? `rgba(255,232,190,${.1 + r() * .12})` : `rgba(170,166,184,${.1 + r() * .1})`);
-        g.beginPath(); g.moveTo(-ox, y0); for (let x = -ox; x <= W; x += 30) g.lineTo(x, y0 + Y(.006) * Math.sin(x * .01 + i)); for (let x = W; x >= -ox; x -= 30) g.lineTo(x, y0 + hb + Y(.006) * Math.sin(x * .012 + i * 2)); g.fill(); }
-      g.save(); g.filter = 'blur(5px)'; g.lineCap = 'round';   // weathering: soft streaks where water ran down the face
-      for (let i = 0; i < 9; i++) { const x = X(.04 + r() * (L.wallR - .08)), y = topY(x) + Y(.03 + r() * .05), l = Y(.06 + r() * .1); g.strokeStyle = dawn ? `rgba(70,50,38,${.12 + r() * .1})` : `rgba(40,40,56,${.12 + r() * .1})`; g.lineWidth = X(.012 + r() * .014);
-        g.beginPath(); g.moveTo(x, y); g.quadraticCurveTo(x + X(.006) * (r() - .5), y + l * .5, x + X(.01) * (r() - .5), y + l); g.stroke(); }
-      g.restore();
-      const lip = g.createLinearGradient(0, Y(.17), 0, Y(.27)); lip.addColorStop(0, 'rgba(30,20,14,0)'); lip.addColorStop(.35, dawn ? 'rgba(40,26,18,.4)' : 'rgba(30,30,42,.4)'); lip.addColorStop(1, 'rgba(30,20,14,0)'); g.fillStyle = lip; g.fillRect(-ox, Y(.15), wr + X(.1), Y(.14));   // under the overhanging top
-      g.restore();
-      if (dawn) { g.strokeStyle = 'rgba(255,224,170,.85)'; g.lineWidth = X(.007); g.beginPath(); for (let x = X(.2); x <= wr; x += 6) { const y = topY(x) + 2; x === X(.2) ? g.moveTo(x, y) : g.lineTo(x, y); } g.stroke(); }   // the sun along the top edge
-      for (let i = 0; i < 40; i++) { const x = X(r() * L.wallR), y = topY(x); g.strokeStyle = dawn ? 'rgb(84,82,52)' : 'rgb(60,62,70)'; g.lineWidth = 2; for (let j = 0; j < 4; j++) { const a = -Math.PI / 2 + (r() - .5) * 1.4, l = Y(.008 + r() * .014); g.beginPath(); g.moveTo(x, y + 2); g.lineTo(x + Math.cos(a) * l, y + Math.sin(a) * l); g.stroke(); } }   // dry grass on the top
-      // the doorway: low, squared, cut into the foot of the face
-      const [tx, ty] = [X(L.tomb[0]), Y(L.tomb[1])], tw = X(L.tw), th = Y(L.th), x0 = tx - tw / 2, y0 = gl - th;
-      if (closed) {
-        const mouth = new Path2D(); mouth.moveTo(x0, gl + 2); mouth.lineTo(x0, y0 + th * .35); mouth.ellipse(tx, y0 + th * .35, tw / 2, th * .45, 0, Math.PI, 0); mouth.lineTo(x0 + tw, gl + 2); mouth.closePath();
-        g.save(); g.clip(mouth); g.fillStyle = 'rgb(18,16,26)'; g.beginPath(); g.ellipse(tx, gl - Math.max(tw * .66, th * .78) * .97, Math.max(tw * .66, th * .78) * .9, Math.max(tw * .66, th * .78) * .95, 0, 0, 6.283); g.fill(); g.restore();   // the mouth only where the stone will cover it — no dark corners peeking out
-        const R = Math.max(tw * .66, th * .78), cx = tx, cy = gl - R * .97;   // rolled across the mouth: it covers the doorway whole
-        g.fillStyle = 'rgba(24,22,34,.45)'; g.fillRect(cx - R * .8, gl - Y(.005), R * 1.5, Y(.01));                                                  // the groove the stone sits in (hidden under it)
-        g.fillStyle = 'rgba(16,14,24,.55)'; g.beginPath(); g.ellipse(cx - R * .25, gl + Y(.004), R * 1.05, R * .12, 0, 0, 6.283); g.fill();
-        g.fillStyle = 'rgb(54,50,68)'; g.beginPath(); g.ellipse(cx + R * .1, cy, R * .95, R, 0, 0, 6.283); g.fill();                                // its thickness
-        const sg2 = g.createLinearGradient(cx - R, cy, cx + R, cy); sg2.addColorStop(0, 'rgb(96,92,114)'); sg2.addColorStop(.3, 'rgb(80,76,98)'); sg2.addColorStop(1, 'rgb(62,58,78)');
-        g.fillStyle = sg2; g.beginPath(); g.ellipse(cx, cy, R * .95, R, 0, 0, 6.283); g.fill();
-        g.strokeStyle = 'rgba(168,166,196,.38)'; g.lineWidth = R * .05; g.beginPath(); g.ellipse(cx, cy, R * .92, R * .97, 0, Math.PI * .62, Math.PI * 1.32); g.stroke();   // faint light on its left edge
-      } else {
-      g.fillStyle = dawn ? 'rgba(70,50,38,.75)' : 'rgba(44,42,56,.75)'; g.fillRect(x0 - tw * .1, y0 - th * .14, tw * 1.2, th * 1.14 + 2);   // the cut recess
-      if (dawn) { g.fillStyle = 'rgba(255,220,166,.8)'; g.fillRect(x0 + tw * 1.06, y0 - th * .1, tw * .05, th * 1.1); }                   // its lit jamb
-      g.fillStyle = dawn ? 'rgb(30,20,14)' : 'rgb(20,20,28)'; g.fillRect(x0, y0, tw, th + 2);
-      g.save(); g.beginPath(); g.rect(x0, y0, tw, th + 2); g.clip();
-      g.fillStyle = dawn ? 'rgb(118,86,60)' : 'rgb(46,44,56)'; g.fillRect(x0 + tw * .06, y0 + th * .42, tw * .5, th * .16);              // the stone shelf inside — empty
-      g.fillStyle = dawn ? 'rgb(244,234,212)' : 'rgb(128,126,136)'; g.fillRect(x0 + tw * .3, y0 + th * .34, tw * .16, th * .09);          // the cloth, folded by itself (Jn 20:7)
-      if (dawn) { g.fillStyle = 'rgba(255,214,150,.75)'; g.beginPath(); g.moveTo(x0 + tw, y0); g.lineTo(x0 + tw, y0 + th + 2); g.lineTo(x0 + tw * .15, y0 + th + 2); g.lineTo(x0 + tw * .45, y0 + th * .3); g.fill(); }   // the sun reaching in
-      g.restore();
-      // the groove along the foot of the face, and the round flat stone rolled along it
-      g.fillStyle = dawn ? 'rgba(40,26,18,.7)' : 'rgba(30,30,40,.7)'; g.fillRect(x0 + tw, gl - Y(.006), X(.32), Y(.014));
-      const sr = Y(L.sr), [sx2, sy2] = [X(L.stone[0]), Y(L.stone[1])];
-      g.fillStyle = 'rgba(30,20,14,.5)'; g.beginPath(); g.ellipse(sx2 - sr * .4, gl + Y(.004), sr * 1.1, sr * .14, 0, 0, 6.283); g.fill();
-      g.fillStyle = dawn ? 'rgb(84,64,50)' : 'rgb(58,56,70)'; g.beginPath(); g.ellipse(sx2 - sr * .16, sy2, sr * .96, sr, 0, 0, 6.283); g.fill();          // its thickness
-      const sgd = g.createLinearGradient(sx2 - sr, sy2 - sr, sx2 + sr, sy2 + sr * .3); (dawn ? [[0, 'rgb(92,72,58)'], [.6, 'rgb(146,120,92)'], [1, 'rgb(198,166,122)']] : [[0, 'rgb(72,70,86)'], [1, 'rgb(118,114,130)']]).forEach(([a, cc]) => sgd.addColorStop(a, cc));
-      g.fillStyle = sgd; g.beginPath(); g.ellipse(sx2, sy2, sr * .96, sr, 0, 0, 6.283); g.fill();
-      g.strokeStyle = dawn ? 'rgba(80,58,44,.55)' : 'rgba(44,44,56,.55)'; g.lineWidth = sr * .05; g.beginPath(); g.ellipse(sx2, sy2, sr * .3, sr * .32, 0, 0, 6.283); g.stroke();   // the hub
-      if (dawn) { g.strokeStyle = 'rgba(255,232,180,1)'; g.lineWidth = sr * .12; g.beginPath(); g.ellipse(sx2, sy2, sr * .93, sr * .97, 0, -1.25, 1.0); g.stroke(); }   // the rim of light on its edge
-      }
-      // a narrow earth path coming in slantwise from the lower corner between rocks
-      g.fillStyle = dawn ? 'rgb(122,94,62)' : 'rgb(112,106,120)'; g.beginPath(); g.moveTo(x0 + tw * .2, gl); g.quadraticCurveTo(X(.28), Y(.75), X(V ? .02 : .2), H + oy); g.lineTo(X(V ? .14 : .28), H + oy); g.quadraticCurveTo(X(.36), Y(.76), x0 + tw * .65, gl); g.fill();
-      for (let i = 0; i < 26; i++) { const side = i % 2 ? 1 : -1, v = r(), px = lerp(x0 + tw * .4, X(V ? .08 : .24), v) + side * X(.06 + r() * .1), py = lerp(gl + Y(.02), H + oy, v), rr = X(.02 + r() * .04) * (.6 + v) * (V ? 1 : .5);   // rocks either side
-        g.fillStyle = dawn ? 'rgba(30,22,16,.4)' : 'rgba(30,30,40,.4)'; g.beginPath(); g.ellipse(px - rr * .3, py + rr * .4, rr * 1.1, rr * .3, 0, 0, 6.283); g.fill();
-        const rg2 = g.createLinearGradient(px - rr, py - rr, px + rr, py + rr * .4); (dawn ? [[0, 'rgb(78,60,46)'], [1, 'rgb(164,132,94)']] : [[0, 'rgb(70,68,84)'], [1, 'rgb(120,116,132)']]).forEach(([a, cc]) => rg2.addColorStop(a, cc));
-        g.fillStyle = rg2; g.beginPath(); for (let j = 0; j < 7; j++) { const a = j / 7 * 6.283 + r() * .3, q = .75 + r() * .35; g.lineTo(px + Math.cos(a) * rr * q, py + Math.sin(a) * rr * q * .62); } g.closePath(); g.fill(); }
-      L.olive.forEach((o, i) => olive(g, dawn, o, 70 + i));
-      if (dawn) for (let i = 0; i < 160; i++) { const fx = X(r()), fy = Y(L.gl + .03 + Math.pow(r(), 1.3) * (1 - L.gl)); g.fillStyle = ['#f0d070', '#e8b060', '#f6ecd0', '#d06048'][r() * 4 | 0]; g.beginPath(); g.arc(fx, fy, 2 + r() * 3, 0, 6.283); g.fill(); }   // flowers
-      return c; };
-    // the great rock of Caesarea Philippi at sunrise (part 3's «alone under the darkened rock», answered)
-    const peterPlate = () => { const c = canvas(PW, PH), g = c.getContext('2d'); g.translate(ox, oy); sky(g, true, L.pgl); ground(g, true, L.pgl);
-      const r = rng(23), edge = []; for (let i = 0; i <= 18; i++) { const v = i / 18; edge.push([X(L.cliff - .1 + .12 * v + .06 * Math.sin(v * 9) + .04 * (Pilot.fbm(v * 4, 1.1, 3) - .5)), lerp(-oy, Y(L.pgl + .08), v)]); }
-      const cg = g.createLinearGradient(0, 0, X(L.cliff + .1), 0); cg.addColorStop(0, 'rgb(70,48,42)'); cg.addColorStop(.7, 'rgb(132,92,70)'); cg.addColorStop(1, 'rgb(214,152,100)');
-      g.fillStyle = cg; g.beginPath(); g.moveTo(-ox, -oy); edge.forEach(p => g.lineTo(...p)); g.lineTo(-ox, Y(L.pgl + .08)); g.fill();
-      g.strokeStyle = 'rgba(46,30,26,.55)'; g.lineWidth = X(.008); for (let i = 0; i < 16; i++) { const y0 = Y(r() * (L.pgl + .05)), x1 = edge[Math.min(18, Math.round(clamp(y0 / Y(L.pgl + .08)) * 18))][0]; g.beginPath(); g.moveTo(-ox, y0 + Y(.02) * (r() - .5)); g.quadraticCurveTo(x1 * .5, y0 + Y(.02) * (r() - .5), x1 - X(.02), y0); g.stroke(); }   // ledges
-      // the grottoes: a lit lip, darkness deepening inward
-      for (const [nx, ny, nw] of [[.16, .3, .09], [.3, .42, .06]]) { const cx = X(nx), cy = Y(ny), rw = X(nw), rh = Y(nw * .7);
-        const arch = new Path2D(); arch.ellipse(cx, cy, rw, rh, 0, Math.PI, 0); arch.lineTo(cx + rw, cy + Y(.02)); arch.lineTo(cx - rw, cy + Y(.02)); arch.closePath();
-        g.save(); g.clip(arch); const ig = g.createRadialGradient(cx - rw * .25, cy + rh * .1, rw * .05, cx, cy, rw * 1.1); ig.addColorStop(0, 'rgb(14,8,6)'); ig.addColorStop(.55, 'rgb(46,30,22)'); ig.addColorStop(1, 'rgb(112,78,56)');
-        g.fillStyle = ig; g.fillRect(cx - rw * 1.2, cy - rh * 1.2, rw * 2.4, rh * 1.4 + Y(.03)); g.restore();
-        g.strokeStyle = 'rgba(255,214,150,.7)'; g.lineWidth = X(.006); g.beginPath(); g.ellipse(cx, cy, rw, rh, 0, -.9, 0); g.lineTo(cx + rw, cy + Y(.02)); g.stroke();   // the sun on its right lip
-        g.strokeStyle = 'rgba(40,26,20,.6)'; g.lineWidth = X(.01); g.beginPath(); g.moveTo(cx - rw, cy + Y(.02)); g.lineTo(cx + rw, cy + Y(.02)); g.stroke(); }
-      g.strokeStyle = 'rgba(255,214,150,.75)'; g.lineWidth = X(.006); g.beginPath(); edge.forEach((p, i) => i ? g.lineTo(p[0] - X(.004), p[1]) : g.moveTo(p[0] - X(.004), p[1])); g.stroke();   // the sun on the cliff's edge
-      for (let i = 0; i < 160; i++) { const fx = X(L.cliff + r() * .6), fy = Y(L.pgl + .05 + Math.pow(r(), 1.3) * .45); g.fillStyle = ['#f0d070', '#e8b060', '#f6ecd0'][r() * 3 | 0]; g.beginPath(); g.arc(fx, fy, 2 + r() * 3, 0, 6.283); g.fill(); }
-      return c; };
-    D.dawn = OIL.paint(tombPlate(true), { key: 'impasto', S: 1, seed: 29, cell: 8, wid: V ? 1 / 55 : 1 / 95 });
-    D.pre = OIL.paint(tombPlate(false, true), { key: 'impasto', S: 1, seed: 31, cell: 8, wid: V ? 1 / 55 : 1 / 95 });
-    D.peter = OIL.paint(peterPlate(), { key: 'impasto', S: 1, seed: 33, cell: 8, wid: V ? 1 / 55 : 1 / 95 });
-    D.grey = canvas(PW, PH); { const g = D.grey.getContext('2d'); g.filter = 'grayscale(1) contrast(1.2) brightness(.82)'; g.drawImage(D.dawn, 0, 0); }
-    // the knife strokes that repaint: ordered outward from the sun (tomb), from the tomb's doorway (tree)
-    const mk = (cx, cy, seed) => { const r = rng(seed), a = []; for (let i = 0; i < 2600; i++) { const x = r() * PW, y = r() * PH, d = Math.hypot(x - cx, (y - cy) * .85) / Math.hypot(PW, PH) + r() * .07;
-        a.push({ x, y, d, a: (r() - .5) * .8 + Math.atan2(y - cy, x - cx) + Math.PI / 2, w: X(.065) * (.6 + .8 * r()), l: X(.14) * (.6 + .8 * r()) }); } return a.sort((p, q) => p.d - q.d); };
-    D.kSun = mk(X(L.sun[0]) + ox, Y(L.sun[1]) + oy, 41); D.kDoor = mk(X(L.tomb[0]) + ox, Y(L.tomb[1]) + oy, 43);
-    D.mask = canvas(PW, PH);
+    const PW = Math.ceil(W * 1.1), PH = Math.ceil(H * 1.1), ox = (PW - W) / 2, oy = (PH - H) / 2;
+    D = { W, H, V, PW, PH, ox, oy };
+    buildTree(); buildTomb();
     D.grain = []; for (let i = 0; i < 6; i++) D.grain.push(Pilot.speckle(W >> 1, H >> 1, 60, 610 + i));
+    { const c = canvas(64, 64), g = c.getContext('2d'), im = g.createImageData(64, 64);   // drifting cloud light over the cross ground
+      for (let y = 0; y < 64; y++) for (let x = 0; x < 64; x++) { const v = fbm(x / 64 * 4, y / 64 * 4, 4), i = (y * 64 + x) * 4; im.data[i] = im.data[i + 1] = im.data[i + 2] = 255 * clamp(.35 + v * .9); im.data[i + 3] = 255; }
+      g.putImageData(im, 0, 0); D.cloud = c; }
     return D;
   }
   window.buildDawn = buildDawn;
+  const toCanvas = (w, h, data) => { const c = canvas(w, h), g = c.getContext('2d'), im = g.createImageData(w, h); im.data.set(data); g.putImageData(im, 0, 0); return c; };
 
-  // the knife repainting: the first n strokes of the list, as a mask over the painting
-  function reveal(ctx, art, list, k, cam) {
-    if (k <= 0) return; const m = D.mask.getContext('2d'); m.setTransform(1, 0, 0, 1, 0, 0); m.globalCompositeOperation = 'source-over'; m.clearRect(0, 0, D.PW, D.PH); m.fillStyle = '#fff';
-    const n = Math.floor(list.length * clamp(k / .8)); for (let i = 0; i < n; i++) { const s = list[i]; m.save(); m.translate(s.x, s.y); m.rotate(s.a); m.beginPath(); m.ellipse(0, 0, s.l / 2, s.w / 2, 0, 0, 6.283); m.fill(); m.restore(); }
-    if (k > .75) { m.globalAlpha = clamp((k - .75) / .25); m.fillRect(0, 0, D.PW, D.PH); m.globalAlpha = 1; }
-    m.globalCompositeOperation = 'source-in'; m.drawImage(art, 0, 0); cam(); ctx.drawImage(D.mask, -D.ox, -D.oy);
+  // ======================================================================= 'tree': the shadow of the cross on dark ground
+  function buildTree() {
+    const { W, H, V, PW, PH, ox, oy } = D;
+    // camera above the ground looking down at it (pitch th); the cross stands behind us, a cold light low behind us lays its
+    // shadow away from us up the frame: the foot near (below the frame, under the words), the beam and the title far (upper third)
+    const C = V ? { f: W * 1.25, cx: W * .5, cy: H * .36, th: .78, hc: 3.2, zb: 2.0, hx: 2.3, ks: 1.5, x0: 0 }
+                : { f: H * 1.25, cx: W * .5, cy: H * .38, th: .74, hc: 3.2, zb: 2.3, hx: 1.6, ks: 1.5, x0: 0 };
+    const st = Math.sin(C.th), ct = Math.cos(C.th);
+    const Lt = nrm(.18, .62, -.76);   // toward the cold light: up and behind the camera, a little to the right
+    const amb = new Uint8ClampedArray(PW * PH * 4), lit = new Uint8ClampedArray(PW * PH * 4);
+    // the cross and the body on it, in its own units (h = height above ground .89 h for the upright: crucified() of bw-cross.js)
+    // X across (h), s = height above ground (h). Signed distance (negative inside), union by min.
+    const box = (x, s, x0, x1, s0, s1) => { const dx = Math.max(x0 - x, x - x1), ds = Math.max(s0 - s, s - s1); return dx > 0 && ds > 0 ? Math.hypot(dx, ds) : Math.max(dx, ds); };
+    const cap = (x, s, ax, as, bx, bs, r0, r1) => { const vx = bx - ax, vs = bs - as, k = clamp(((x - ax) * vx + (s - as) * vs) / (vx * vx + vs * vs)); return Math.hypot(x - ax - vx * k, s - as - vs * k) - lerp(r0, r1, k); };
+    const crossD = (x, s) => {
+      let d = box(x, s, -.022, .022, -.2, .89);                       // the upright (tapering a little: as drawn in part 4)
+      d = Math.min(d, box(x, s, -.31, .31, .742, .782));              // the beam
+      d = Math.min(d, box(x, s, -.075, .075, .846, .9));              // the title over his head (Jn 19:19)
+      // the body: head fallen to one side, arms drawn along the beam sagging, chest, the cloth at the waist, knees bent and turned
+      d = Math.min(d, Math.hypot((x - .036) / 1, (s - .694) / 1.2) - .034);
+      for (const m of [1, -1]) { d = Math.min(d, cap(x, s, m * .27, .766, m * .15, .742, .014, .017), cap(x, s, m * .15, .742, m * .06, .69, .017, .024)); }
+      d = Math.min(d, cap(x, s, 0, .675, -.004, .47, .056, .046));
+      d = Math.min(d, cap(x, s, -.004, .45, .012, .4, .055, .05));
+      d = Math.min(d, cap(x, s, -.015, .39, .03, .29, .045, .036), cap(x, s, .03, .29, .004, .16, .034, .022));
+      d = Math.min(d, cap(x, s, .015, .39, .052, .3, .042, .034), cap(x, s, .052, .3, .018, .165, .032, .021));
+      return d; };
+    // the ground: dry, stony earth as a height field (clods, half-buried stones, grit) lit by the cold light — no round pebbles
+    const rot = (x, z) => [x * .8 - z * .6, x * .6 + z * .8];
+    const hgt = (X, Z) => { const [a1, b1] = rot(X, Z), sA = noise(a1 * 4.3 + 3, b1 * 4.3), sB = noise(b1 * 11 + 1, a1 * 11 + 5);
+      return .06 * fbm(X * 1.4, Z * 1.4, 3) + .012 * fbm(X * 6, Z * 6, 2) + .02 * ss(.7, .9, sA) + .006 * ss(.66, .86, sB) + .003 * noise(X * 34, Z * 34); };
+    for (let py = 0; py < PH; py++) for (let px = 0; px < PW; px++) {
+      const a = (px - ox - C.cx) / C.f, b = -(py - oy - C.cy) / C.f;
+      const dy = b * ct - st, dz = b * st + ct; if (dy >= -.02) continue;
+      const t = C.hc / -dy, X = a * t, Z = dz * t, i = (py * PW + px) * 4;
+      const e = .012 * (1 + t * .15), h0 = hgt(X, Z), gx = (hgt(X + e, Z) - h0) / e, gz = (hgt(X, Z + e) - h0) / e;
+      const [a1, b1] = rot(X, Z), stone = ss(.7, .9, noise(a1 * 4.3 + 3, b1 * 4.3));
+      let al = (.26 + .12 * (fbm(X * 1.1 + 7, Z * 1.1, 3) - .5) + .1 * (noise(X * 13, Z * 13) - .5)) * (1 - stone * .5) + (.33 + .06 * noise(a1 * 9, b1 * 9)) * stone * .5;
+      const nn = nrm(-gx, 1, -gz), ndl = Math.max(0, nn[0] * Lt[0] + nn[1] * Lt[1] + nn[2] * Lt[2]);
+      // the shadow: ground → cross coords (s along Z from the foot, stretched by the low light); soft, softer further from the foot
+      const s = (Z - C.zb) / (C.hx * C.ks), xx = (X - C.x0) / C.hx, d = crossD(xx, s), pen = .006 + .018 * clamp(s);
+      const sh = 1 - .9 * (1 - ss(-pen, pen, d));
+      // the pool of light: brightest around the beam, falling off towards the frame edges and towards us (the words below)
+      const pz = (Z - (C.zb + C.hx * C.ks * .78)) / (C.hx * C.ks * .75), pxv = X / (C.hx * .9), pool = Math.exp(-(pxv * pxv * .7 + pz * pz * 1.1));
+      const lv = al * ndl * pool * sh * 560, av = al * 46 * (.55 + .45 * pool);
+      lit[i] = lv * .66; lit[i + 1] = lv * .74; lit[i + 2] = lv * .9; lit[i + 3] = 255;
+      amb[i] = av * .7; amb[i + 1] = av * .78; amb[i + 2] = av * .95; amb[i + 3] = 255;
+    }
+    D.tr = { C, amb: toCanvas(PW, PH, amb), lit: toCanvas(PW, PH, lit) };
   }
-  function bloom(ctx, x, y, r, a, col = [255, 222, 160]) {
+
+  // ======================================================================= 'tomb': inside, looking out at the dawn
+  function buildTomb() {
+    const { W, H, V, PW, PH, ox, oy } = D;
+    const C = V ? { f: W * .98, cx: W * .5, cy: H * .255, cam: .5 } : { f: H * .92, cx: W * .5, cy: H * .2, cam: .42 };
+    // the chamber (metres; eye 1 m above the floor at x = cam): floor, ceiling, side walls, the door wall with its low door
+    const FL = -1.3, CE = .75, LX = -1.35, RX = 1.65, ZF = 3.3, DX0 = -.62, DX1 = .36, DY0 = -1.2, DY1 = .22, DD = .45, BX = .78, BY = -.84;
+    const GO = FL - .12, EDGE = ZF + 7.5, VAL = -7;   // the ground outside: a terrace before the door, then the slope falls to the valley
+    const Ls = nrm(-.9, .5, 1);   // toward the sun: outside, up, to the left — its light runs in across the floor onto the bench
+    const jag = (v, s) => .014 * (noise(v * 6 + s, s * 3) - .5) + .004 * (noise(v * 19 + s, 2) - .5);   // the door's hewn, uneven edges
+    // the linen cloths lying on the bench (Jn 20:6), the head cloth folded up in a place by itself (Jn 20:7)
+    const LIN = [.8, 1.4, 1.45, 2.3], HC = [1.0, 1.28, 2.44, 2.66], HCc = [(HC[0] + HC[1]) / 2, (HC[2] + HC[3]) / 2], DRP = [0, 0];
+    const hf = (x, z) => {
+      let h = 0;
+      // the linen cloths: two long strips lying flat, side by side (the body is not in them), uneven edges, soft folds along them,
+      // a few creases across; one end of the near strip falls over the bench's edge (drawn on the bench front, below)
+      { const j0 = .035 * (noise(z * 5 + 1, 7) - .5), j1 = .04 * (noise(z * 5 + 9, 3) - .5), k0 = .04 * (noise(x * 6, 5) - .5), k1 = .04 * (noise(x * 6 + 4, 8) - .5);
+        const x0 = (z > DRP[0] && z < DRP[1]) ? LIN[0] - .02 : LIN[0] + .03 + j0;
+        const ex = Math.min(x - x0, LIN[1] + j1 - x), ez = Math.min(z - LIN[2] - k0, LIN[3] + k1 - z);
+        if (ex > 0 && ez > 0) { const edge = ss(0, .03, ex) * ss(0, .03, ez), seam = 1.1 + .025 * Math.sin(z * 4 + 1);
+          h = Math.max(h, edge * (.022 + .01 * ss(seam - .012, seam + .012, x) + .004 * Math.sin(x * 34 + 2 * Math.sin(z * 4)) * (.4 + .6 * noise(z * 3, x * 3))
+            + .0025 * Math.sin(z * 24 + x * 6) * noise(x * 4 + 2, z * 4) - .006 * Math.exp(-((x - 1.1) ** 2) / .03 - ((z - 1.9) ** 2) / .12))); } }
+      // the head cloth, folded up and lying apart: a folded square, its upper fold a step smaller, turned a little
+      { const ca = Math.cos(.14), sa = Math.sin(.14), lx = (x - HCc[0]) * ca - (z - HCc[1]) * sa, lz = (x - HCc[0]) * sa + (z - HCc[1]) * ca, hw = (HC[1] - HC[0]) / 2, hd = (HC[3] - HC[2]) / 2;
+        const ex = hw - Math.abs(lx), ez = hd - Math.abs(lz);
+        if (ex > 0 && ez > 0) { const edge = ss(0, .03, ex) * ss(0, .03, ez), top = ss(.04, .06, ex) * ss(.03, .05, ez) * (lz > -hd + .04 ? 1 : 0) * (.8 + .2 * noise(lx * 30, lz * 30));
+          h = Math.max(h, edge * .032 + top * .018 + .003 * Math.sin(lz * 70) * edge); } }
+      return h; };
+    const inLin = (x, z) => x > BX && x < LIN[1] + .04 && z > LIN[2] - .04 && z < LIN[3] + .04;
+    const inHC = (x, z) => x > HC[0] - .04 && x < HC[1] + .04 && z > HC[2] - .04 && z < HC[3] + .04;
+    // geometry: the first surface a ray from the eye meets. returns [t, kind, nx, ny, nz] (kind: 0 rock, 1 cloth, 2 outside)
+    const O = [C.cam, 0, 0];
+    function hit(rx, ry) {   // ray direction (rx, ry, 1)
+      let t = 1e9, k = 0, n = null;
+      const tryP = (tt, kk, nn) => { if (tt > .05 && tt < t) { t = tt; k = kk; n = nn; } };
+      if (ry < 0) tryP(FL / ry, 0, [0, 1, 0]);
+      if (ry > 0) tryP(CE / ry, 0, [0, -1, 0]);
+      if (rx < 0) tryP((LX - O[0]) / rx, 0, [1, 0, 0]);
+      if (rx > 0) tryP((RX - O[0]) / rx, 0, [-1, 0, 0]);
+      if (ry < 0) { const tt = BY / ry, x = O[0] + rx * tt; if (x > BX && x < RX && tt < ZF) tryP(tt, 0, [0, 1, 0]); }
+      if (rx > 0) { const tt = (BX - O[0]) / rx, y = ry * tt; if (y > FL && y < BY && tt < ZF) tryP(tt, 0, [-1, 0, 0]); }
+      if (ZF < t) { const x = O[0] + rx * ZF, y = ry * ZF;
+        if (x > DX0 + jag(y, 1) && x < DX1 + jag(y, 2) && y > DY0 && y < DY1 + jag(x, 3)) {   // through the door: its jambs, lintel and sill, or out
+          let tt = 1e9, nn = null; const zz = ZF + DD;
+          if (rx < 0) { const a = (DX0 - O[0]) / rx; if (a > ZF && a < zz && a < tt) { tt = a; nn = [1, 0, 0]; } }
+          if (rx > 0) { const a = (DX1 - O[0]) / rx; if (a > ZF && a < zz && a < tt) { tt = a; nn = [-1, 0, 0]; } }
+          if (ry > 0) { const a = DY1 / ry; if (a > ZF && a < zz && a < tt) { tt = a; nn = [0, -1, 0]; } }
+          if (ry < 0) { const a = DY0 / ry; if (a > ZF && a < zz && a < tt) { tt = a; nn = [0, 1, 0]; } }
+          if (nn) { t = tt; k = 0; n = nn; } else { t = 1e9; k = 2; n = null; }
+        } else { t = ZF; k = 0; n = [0, 0, -1]; } }
+      // the cloths: march the heightfield just above the bench top
+      if (ry < 0 && k !== 2) { const t0 = (BY + .08) / ry, t1 = BY / ry;
+        if (t0 < t) { let prev = t0, hitT = 0; const N = 48, under = tt => { const x = O[0] + rx * tt, z = tt; if (!inLin(x, z) && !inHC(x, z)) return false; const h = hf(x, z); return h > 1e-4 && ry * tt < BY + h; };
+          for (let j = 0; j <= N; j++) { const tt = lerp(t0, t1, j / N); if (tt > t) break;
+            if (under(tt)) { let lo = prev, hi = tt; for (let q = 0; q < 7; q++) { const mid = (lo + hi) / 2; if (under(mid)) hi = mid; else lo = mid; } hitT = hi; break; } prev = tt; }
+          if (hitT) { const x = O[0] + rx * hitT, z = hitT, e = .006, gx = (hf(x + e, z) - hf(x - e, z)) / (2 * e), gz = (hf(x, z + e) - hf(x, z - e)) / (2 * e);
+            t = hitT; k = 1; n = nrm(-gx, 1, -gz); } } }
+      return [t, k, n];
+    }
+    // sunlight reaching a point through the door (soft edges: the sun's disc and the scatter widen the penumbra with distance)
+    function sunAt(x, y, z) {
+      let m = 1e9; const s0 = (ZF - z) / Ls[2], s1 = (ZF + DD - z) / Ls[2];
+      for (const s of (z < ZF ? [s0, s1] : [s1])) { const qx = x + Ls[0] * s, qy = y + Ls[1] * s; m = Math.min(m, qx - DX0, DX1 - qx, qy - DY0, DY1 - qy); }
+      const w = .01 + .022 * Math.max(0, s1); return ss(-w, w, m);
+    }
+    const DC = [(DX0 + DX1) / 2, (DY0 + DY1) / 2, ZF + .1], BC = [.5, -1.0, 2.3];
+    const N = PW * PH * 4, Bs = new Uint8ClampedArray(N), Bf = new Uint8ClampedArray(N), Bb = new Uint8ClampedArray(N), Ba = new Uint8ClampedArray(N), Op = new Uint8ClampedArray(N), Or = new Uint8ClampedArray(N);
+    const SUN = [1, .8, .55], FILL = [.55, .62, .78], BOUNCE = [1, .72, .48];
+    // the stone rolled back, outside: a great disc on its edge, turned a little toward us; the garden; an olive; the hills
+    const S = [.42, GO + .82, 5.0], SR = .82, SN = nrm(.5, 0, -1), ST = .3;
+    function outside(rx, ry, i) {
+      const rl = Math.hypot(rx, ry, 1), dx = rx / rl, dy = ry / rl, dz = 1 / rl, sunDot = Math.max(0, dx * Ls[0] + dy * Ls[1] + dz * Ls[2]);
+      let pre, ris;
+      // sky: pre-dawn blue-grey / sunrise: gold at the horizon through rose to a pale blue, the sun's glow to the left
+      const e = dy;
+      { const k = clamp(e / .4); pre = [lerp(98, 58, k), lerp(106, 68, k), lerp(130, 104, k)];
+        ris = k < .35 ? [255, lerp(222, 196, k / .35), lerp(168, 170, k / .35)] : [lerp(255, 176, (k - .35) / .65), lerp(196, 186, (k - .35) / .65), lerp(170, 196, (k - .35) / .65)];
+        const g = Math.pow(sunDot, 5) * 90 + Math.pow(sunDot, 30) * 160; ris = ris.map((v, j) => Math.min(255, v + g * [1, .86, .62][j])); }
+      // the far hills across the valley: two soft ranges, hazed by the morning air
+      const az = dx / dz, h1 = .03 + .022 * fbm(az * 1.8 + 3, 1.7, 3), h2 = .012 + .016 * fbm(az * 3.1 + 8, 4.2, 3);
+      if (e < h1) { pre = [70, 74, 94]; ris = [226, 176, 150]; }
+      if (e < h2) { pre = [60, 64, 82]; ris = [196, 146, 122]; }
+      // the ground: the terrace before the tomb (earth, grass, the groove the stone ran in), its edge, then the valley far below
+      if (ry < 0) { const t = GO / ry, gx = O[0] + rx * t, gz = t;
+        const shrubH = q => .55 * Math.max(0, fbm(q * .9 + 2, 3.3, 3) - .38) + .25 * Math.max(0, noise(q * 3.1, 7) - .55);
+        const te = EDGE / 1, sxq = O[0] + rx * te, syq = ry * te;
+        if (gz >= EDGE && syq < GO + shrubH(sxq)) { const rim = noise(sxq * 9, syq * 9) > .55 && syq > GO + shrubH(sxq) - .06; ris = rim ? [236, 196, 132] : [86, 84, 52].map(v => v * (.8 + .4 * noise(sxq * 7, syq * 7))); pre = [34, 38, 42]; }
+        else if (gz < EDGE) { const g1 = fbm(gx * 1.4, gz * 1.4, 4), grass = fbm(gx * 6 + 3, gz * 6, 3), tuft = noise(gx * 14, gz * 9);
+          let c = [lerp(150, 200, g1) * (.78 + .3 * grass), lerp(116, 150, g1) * (.78 + .3 * grass), lerp(70, 86, g1) * (.8 + .2 * grass)];
+          if (Math.abs(gz - (S[2] + .02)) < .1) c = c.map(v => v * .6);   // the groove along the face, where the stone was rolled
+          { const s = (S[2] - gz) / Ls[2]; if (s > 0) { const qx = gx + Ls[0] * s - S[0], qy = GO + Ls[1] * s - S[1]; if (Math.hypot(qx, qy) < SR * .96) c = c.map(v => v * .45); } }   // the stone's shadow
+          ris = c; pre = [52, 56, 66].map(v => v * (.85 + .3 * g1)); }
+        else { const tv = VAL / ry, vx = O[0] + rx * tv, vz = tv;
+          if (e < h2) { const f = fbm(vx * .15, vz * .15, 4), haze = clamp((vz - 20) / 160);
+            ris = [lerp(150, 214, f), lerp(124, 164, f), lerp(88, 132, f)].map((v, j) => lerp(v, [232, 182, 156][j], haze)); pre = [lerp(52, 66, haze), lerp(56, 70, haze), lerp(68, 90, haze)]; } } }
+      // the stone: a great rough disc on its edge, turned a little toward us; its face is against the sun (shadowed, chiselled),
+      // its rim takes the light
+      { const den = rx * SN[0] + ry * SN[1] + SN[2], tt = ((S[0] - O[0]) * SN[0] + S[1] * SN[1] + S[2] * SN[2]) / den;
+        const bS = [S[0] - SN[0] * ST, S[1], S[2] - SN[2] * ST], tb = ((bS[0] - O[0]) * SN[0] + bS[1] * SN[1] + bS[2] * SN[2]) / den;
+        const at = (q, c0) => { const px = O[0] + rx * q - c0[0], py = ry * q - c0[1], pz = q - c0[2]; return [px, py, pz, Math.hypot(px, py, pz)]; };
+        const rough = (p) => SR * (1 + .025 * (noise(Math.atan2(p[1], p[0]) * 3 + 5, 1) - .5));
+        const fF = at(tt, S), fB = at(tb, bS);
+        if (fF[3] < rough(fF)) { const rr = fF[3] / SR, rd = [fF[0] / fF[3], fF[1] / fF[3]], side = rd[0] * Ls[0] / Math.hypot(Ls[0], Ls[1]) + rd[1] * Ls[1] / Math.hypot(Ls[0], Ls[1]), tex = fbm(fF[0] * 5 + 9, fF[1] * 5, 4);
+          const rim = ss(.88, .98, rr) * ss(.1, .6, side), bevel = ss(.8, .97, rr) * clamp(-side);
+          const face = [70, 58, 50].map(v => v * (.72 + .56 * tex) * (1 - .12 * bevel));
+          ris = face.map((v, j) => lerp(v, [255, 232, 186][j], rim)); pre = [42, 44, 54].map(v => v * (.85 + .3 * tex)); }
+        else if (fB[3] < rough(fB)) { const side = (fB[0] * Ls[0] + fB[1] * Ls[1]) / fB[3] / Math.hypot(Ls[0], Ls[1]); const tx2 = fbm(fB[1] * 9, fB[2] * 9 + 3, 2); ris = (side > -.2 ? [236, 196, 140] : [96, 78, 62]).map(v => v * (.85 + .3 * tx2)); pre = [50, 52, 62]; } }   // its thickness: the edge of the wheel, lit
+      Op[i] = pre[0]; Op[i + 1] = pre[1]; Op[i + 2] = pre[2]; Op[i + 3] = 255;
+      Or[i] = ris[0]; Or[i + 1] = ris[1]; Or[i + 2] = ris[2]; Or[i + 3] = 255;
+    }
+    for (let py = 0; py < PH; py++) for (let px = 0; px < PW; px++) {
+      const rx = (px - ox - C.cx) / C.f, ry = -(py - oy - C.cy) / C.f, i = (py * PW + px) * 4;
+      const [t, k, n0] = hit(rx, ry);
+      if (k === 2) { outside(rx, ry, i); continue; }
+      const x = O[0] + rx * t, y = ry * t, z = t;
+      // albedo: limestone hewn with the chisel (its marks catch the raking light as relief); the cloths linen-white with a weave
+      let al, n = n0;
+      const drape = k === 0 && n0[0] === -1 && Math.abs(x - BX) < 1e-4 && z > DRP[0] && z < DRP[1] && y > BY - (.1 + .035 * Math.sin((z - DRP[0]) * 15) + .02 * noise(z * 30, 1)) * Math.sin(Math.PI * (z - DRP[0]) / (DRP[1] - DRP[0])) ** .3;
+      if (drape) { const fold = .5 + .5 * Math.sin(z * 70 + 3 * noise(z * 8, 2)); n = nrm(-1, 0, (fold - .5) * .6); al = [.9, .87, .81]; }   // the end of the linen hanging over the edge
+      else if (k === 1) { const wv = .95 + .05 * Math.sin(x * 900) * Math.sin(z * 900); al = [.94 * wv, .91 * wv, .85 * wv]; }
+      else { const [u1, v1] = Math.abs(n[1]) > .5 ? [x, z] : Math.abs(n[0]) > .5 ? [z, y] : [x, y];
+        const tx = fbm(u1 * 1.8 + 5, v1 * 1.8, 4), pit = noise(u1 * 40, v1 * 40);
+        const bump = (a, b) => .5 * fbm(a * 3, b * 3, 3) + .5 * Math.sin((a + b * .7) * 26 + 9 * fbm(a * 2, b * 2, 2)) * .08 * fbm(a * 1.3 + 4, b * 1.3, 2), eb = .01;
+        const ga = (bump(u1 + eb, v1) - bump(u1 - eb, v1)) / (2 * eb) * .05, gb = (bump(u1, v1 + eb) - bump(u1, v1 - eb)) / (2 * eb) * .05;
+        n = Math.abs(n[1]) > .5 ? nrm(-ga, n[1], -gb) : Math.abs(n[0]) > .5 ? nrm(n[0], -gb, -ga) : nrm(-ga, -gb, n[2]);
+        const base = n0[1] > .5 ? .5 : .62, lv = base * (.74 + .5 * (tx - .5)) * (pit < .05 ? .86 : 1);
+        al = [lv * 1.02, lv * .9, lv * .74]; }
+      // ambient occlusion in the corners
+      const dists = [y - FL, CE - y, x - LX, RX - x, ZF - z, (x > BX ? 9 : BX - x) + Math.max(0, y - BY) * 3];
+      let ao = 1; for (const dd of dists) if (dd > .002) ao *= 1 - .4 * Math.exp(-dd / .22);
+      let ndl = Math.max(0, n[0] * Ls[0] + n[1] * Ls[1] + n[2] * Ls[2]); if (k === 1 || drape) ndl = (ndl + .35) / 1.35;   // linen: soft, translucent
+      const sun = ndl > 0 ? sunAt(x, y, z) * ndl : 0;
+      const lt = (P, wrap, fall) => { const vx = P[0] - x, vy = P[1] - y, vz = P[2] - z, dd = Math.hypot(vx, vy, vz); return clamp(((n[0] * vx + n[1] * vy + n[2] * vz) / dd + wrap) / (1 + wrap)) / (1 + dd * dd / fall); };
+      const fill = lt(DC, .35, 2.6) * ao, bnc = lt(BC, .5, 2.2) * ao, am = (.55 + .45 * lt(BC, 1, 6)) * ao;
+      for (let j = 0; j < 3; j++) { Bs[i + j] = al[j] * SUN[j] * sun * 560; Bf[i + j] = al[j] * FILL[j] * fill * 520; Bb[i + j] = al[j] * BOUNCE[j] * bnc * 760; Ba[i + j] = al[j] * am * 92; }
+      Bs[i + 3] = Bf[i + 3] = Bb[i + 3] = Ba[i + 3] = 255;
+    }
+    // the shaft of light in the air: marched at half resolution
+    const HW = PW >> 1, HH = PH >> 1, Bm = new Uint8ClampedArray(HW * HH * 4);
+    for (let py = 0; py < HH; py++) for (let px = 0; px < HW; px++) {
+      const rx = (px * 2 - ox - C.cx) / C.f, ry = -(py * 2 - oy - C.cy) / C.f, i = (py * HW + px) * 4, [t, k] = hit(rx, ry), te = Math.min(k === 2 ? ZF + DD : t, ZF + DD);
+      let acc = 0; const M = 30; for (let j = 0; j < M; j++) { const tt = .4 + (te - .4) * (j + .5) / M; if (tt > te) break; acc += sunAt(O[0] + rx * tt, ry * tt, tt) * (te - .4) / M; }
+      const v = clamp(acc / 1.6); Bm[i] = 255 * v; Bm[i + 1] = 214 * v; Bm[i + 2] = 156 * v; Bm[i + 3] = 255;
+    }
+    const proj = (x, y, z) => [C.cx + (x - O[0]) / z * C.f, C.cy - y / z * C.f];
+    D.tb = { C, sun: toCanvas(PW, PH, Bs), fill: toCanvas(PW, PH, Bf), bounce: toCanvas(PW, PH, Bb), amb: toCanvas(PW, PH, Ba), pre: toCanvas(PW, PH, Op), rise: toCanvas(PW, PH, Or), beam: toCanvas(HW, HH, Bm),
+      beamData: Bm, HW, HH, door: [proj(DX0, DY1, ZF), proj(DX1, DY0, ZF)], linen: proj((LIN[0] + LIN[1]) / 2, BY + .04, (LIN[2] + LIN[3]) / 2) };
+    D.tmp = canvas(PW, PH);
+  }
+
+  function film(ctx, t, a) {   // a little grain, the same film the whole part runs on
+    const { W, H } = D, fi = Math.floor(t * 24);
+    ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalCompositeOperation = 'overlay'; ctx.globalAlpha = a; ctx.drawImage(D.grain[fi % 6], 0, 0, W, H); ctx.restore();
+  }
+  function vignette(ctx, k, col, low = 1) {
+    const { W, H, V } = D; ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0);
+    const R = Math.hypot(W, H) / 2, gv = ctx.createRadialGradient(W / 2, H * (V ? .32 : .42), R * .3, W / 2, H * .5, R * 1.05); gv.addColorStop(0, `rgba(${col},0)`); gv.addColorStop(1, `rgba(${col},${k})`); ctx.fillStyle = gv; ctx.fillRect(0, 0, W, H);
+    const bg = ctx.createLinearGradient(0, H * (V ? .56 : .66), 0, H); bg.addColorStop(0, `rgba(${col},0)`); bg.addColorStop(.3, `rgba(${col},${.3 * low})`); bg.addColorStop(1, `rgba(${col},${.5 * low})`); ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);   // calm under the words
+    ctx.restore();
+  }
+  function bloom(ctx, x, y, r, a, col) {
     if (a <= 0) return; ctx.save(); ctx.globalCompositeOperation = 'screen'; const g = ctx.createRadialGradient(x, y, 0, x, y, r);
-    g.addColorStop(0, `rgba(${col},${a})`); g.addColorStop(.18, `rgba(${col},${a * .45})`); g.addColorStop(1, `rgba(${col},0)`); ctx.fillStyle = g; ctx.fillRect(x - r, y - r, r * 2, r * 2);
-    ctx.globalAlpha = a * .14; ctx.fillStyle = `rgba(${col},1)`; ctx.beginPath(); ctx.ellipse(x, y, r * .7, r * .01, 0, 0, 6.283); ctx.fill(); ctx.restore();   // a lens streak
-  }
-  // film: the black-and-white grain and gate flicker of the scene before, fading out as the colour comes
-  function film(ctx, t, bw) {
-    const { W, H } = D, fi = Math.floor(t * 24), r = rng(fi * 7 + 1);
-    ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0);
-    ctx.globalCompositeOperation = 'overlay'; ctx.globalAlpha = .12 + .3 * bw; ctx.drawImage(D.grain[fi % 6], 0, 0, W, H);
-    const fl = (noise(t * 9.3, 4.1) - .5) * .1 * bw; ctx.globalCompositeOperation = 'source-over'; ctx.globalAlpha = Math.abs(fl); ctx.fillStyle = fl > 0 ? '#fff' : '#000'; ctx.fillRect(0, 0, W, H);
-    if (bw > .2 && r() < .5) { ctx.globalAlpha = .12 * bw; ctx.strokeStyle = '#eee'; ctx.lineWidth = 1.4; const x = r() * W; ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x + 3, H); ctx.stroke(); }
-    ctx.restore();
-  }
-  function finishDawn(ctx, k) {
-    const { W, H, V } = D; ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); OIL.varnish(ctx, .55 * k);
-    const bg = ctx.createLinearGradient(0, H * (V ? .55 : .7), 0, H); bg.addColorStop(0, 'rgba(20,12,6,0)'); bg.addColorStop(.18, 'rgba(20,12,6,.38)'); bg.addColorStop(1, 'rgba(20,12,6,.55)'); ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);   // calm under the words
-    const R = Math.hypot(W, H) / 2, gv = ctx.createRadialGradient(W / 2, H * .45, R * .45, W / 2, H * .5, R * 1.05); gv.addColorStop(0, 'rgba(20,10,4,0)'); gv.addColorStop(1, 'rgba(20,10,4,.5)'); ctx.fillStyle = gv; ctx.fillRect(0, 0, W, H);
-    ctx.restore();
-  }
-  // Peter: a small silhouette, robe and mantle, the sun's rim on him; head bowed → lifted
-  function peter(ctx, x, y, h, lift, t) {
-    const head = lerp(.55, -.12, lift), w = Math.sin(t * 1.3) * .5 + noise(t * .7, 4) - .5;
-    const body = g => { g.beginPath(); g.moveTo(x - h * .13, y); g.quadraticCurveTo(x - h * .16, y - h * .4, x - h * .12, y - h * .7); g.quadraticCurveTo(x - h * .1, y - h * .8, x - h * .03, y - h * .82);
-      g.lineTo(x + h * .05, y - h * .82); g.quadraticCurveTo(x + h * .12, y - h * .78, x + h * .12, y - h * .66); g.quadraticCurveTo(x + h * (.15 + w * .02), y - h * .4, x + h * (.17 + w * .03), y); g.closePath(); g.fill();   // robe and mantle
-      g.save(); g.translate(x + h * .01, y - h * .84); g.rotate(head * .5); g.beginPath(); g.ellipse(h * .02 + head * h * .03, -h * .07, h * .062, h * .075, head, 0, 6.283); g.fill(); g.restore();   // head: bowed, then raised to the light
-      g.beginPath(); g.ellipse(x + h * .03, y + h * .005, h * .12, h * .02, 0, 0, 6.283); g.fill(); };
-    ctx.save(); ctx.fillStyle = 'rgba(255,214,150,.95)'; body(ctx); ctx.translate(-h * .02, h * .004); ctx.fillStyle = 'rgb(40,26,22)'; body(ctx); ctx.restore();   // the rim of sun on his right side
-    ctx.save(); ctx.globalAlpha = .45; ctx.fillStyle = 'rgb(40,26,22)'; ctx.beginPath(); ctx.moveTo(x - h * .1, y); ctx.lineTo(x - h * .9, y + h * .06); ctx.lineTo(x - h * .85, y + h * .1); ctx.lineTo(x + h * .1, y + h * .01); ctx.fill(); ctx.restore();   // his shadow, long, away from the sun
+    g.addColorStop(0, `rgba(${col},${a})`); g.addColorStop(.25, `rgba(${col},${a * .4})`); g.addColorStop(1, `rgba(${col},0)`); ctx.fillStyle = g; ctx.fillRect(x - r, y - r, r * 2, r * 2); ctx.restore();
   }
 
   function dawnOil(ctx, u, mode = 'tomb') {
-    const { W, H, V, L, ox, oy } = D, X = f => f * W, Y = f => f * H;
-    const tbase = { tomb: 120.1, peter: 125.3, tree: 136 }[mode] || 0, t = tbase + u;
+    const { W, H, V, ox, oy } = D;
+    const t = ({ tree: 135, tomb: 139.5 }[mode] || 0) + u;
     ctx.save(); ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H);
-    const camAt = (z, fx, fy, dx = 0) => () => ctx.setTransform(z, 0, 0, z, fx - fx * z + dx, fy - fy * z);
-    if (mode === 'tomb') {
-      const z = 1 + .07 * eio(u / 5.2), cam = camAt(z, X(L.tomb[0]), Y(L.tomb[1]), lerp(6, -6, u / 5.2)), rep = clamp((u - .45) / 3.7);
-      cam(); ctx.drawImage(D.grey, -ox, -oy);
-      reveal(ctx, D.dawn, D.kSun, eo(rep), cam);
+    // the camera: zoom z about (fx, fy) plus a drift, rotation rot — applied to the plate (drawn at -ox, -oy)
+    const cam = (z, fx, fy, dx, dy, rot) => { const c = Math.cos(rot) * z, s = Math.sin(rot) * z; ctx.setTransform(c, s, -s, c, fx + dx - (fx * c - fy * s), fy + dy - (fx * s + fy * c)); };
+    if (mode === 'tree') {
+      const T = D.tr, k = eio(u / 5.1);
+      cam(1.015 + .04 * k, W * .5, H * .3, lerp(10, -12, k), lerp(-6, 8, k), lerp(-.006, .004, k));
+      ctx.drawImage(T.amb, -ox, -oy);
+      // the cold light: comes up as the dove's light withdraws, breathes with the clouds passing, then dims to near dark
+      const L = (.55 + .45 * ss(.1, 1.3, u)) * (1 - .62 * ss(3.3, 5.0, u)) * (1 + .07 * Math.sin(u * 1.7 + .6));
+      ctx.globalCompositeOperation = 'lighter'; ctx.globalAlpha = clamp(L); ctx.drawImage(T.lit, -ox, -oy); ctx.globalAlpha = 1;
+      ctx.globalCompositeOperation = 'multiply'; ctx.globalAlpha = .55; ctx.imageSmoothingEnabled = true;   // cloud light drifting across
+      ctx.drawImage(D.cloud, -ox - W * .6 + u * W * .05, -oy - H * .2, D.PW * 1.8, D.PH * 1.4); ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
       ctx.setTransform(1, 0, 0, 1, 0, 0);
-      const s = [X(L.sun[0]), Y(L.sun[1])].map((v, i) => (i ? Y(L.tomb[1]) : X(L.tomb[0])) + (v - (i ? Y(L.tomb[1]) : X(L.tomb[0]))) * z);
-      bloom(ctx, s[0], s[1], X(.5), .85 * ss(.6, 2.6, u));
-      const dIn = ss(3.0, 5.0, u), dx = X(L.tomb[0]) + X(L.tw) * .05, dy = Y(L.tomb[1]) + Y(L.th) * .2;   // the sun reaches in through the doorway
-      bloom(ctx, dx, dy, X(.28), .75 * dIn, [255, 226, 170]);
-      film(ctx, t, 1 - ss(.4, 2.8, u)); finishDawn(ctx, ss(.5, 2.5, u));
-    } else if (mode === 'peter') {
-      const z = 1.03 + .06 * eio(u / 4.2), fx = X(L.peter[0]), fy = Y(L.peter[1] - L.ph * .5), cam = camAt(z, fx, fy, lerp(-8, 8, u / 4.2));
-      cam(); ctx.drawImage(D.peter, -ox, -oy);
-      peter(ctx, X(L.peter[0]), Y(L.peter[1]), Y(L.ph), eio(clamp((u - .8) / 1.9)), t);
+      { const dv = 1 - ss(0, 1.2, u); if (dv > 0) { ctx.save(); ctx.globalCompositeOperation = 'screen'; const g = ctx.createRadialGradient(W / 2, H * .2, 0, W / 2, H * .2, Math.max(W, H) * .75);
+          g.addColorStop(0, `rgba(228,234,226,${.5 * dv})`); g.addColorStop(.4, `rgba(200,210,204,${.22 * dv})`); g.addColorStop(1, 'rgba(190,200,196,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H); ctx.restore(); } }   // the dove's light of the scene before, withdrawing
+      vignette(ctx, .6, '4,5,10'); film(ctx, t, .22);
+    } else {   // 'tomb'
+      const T = D.tb, k = eio(u / 9.4), [d0, d1] = T.door, dcx = (d0[0] + d1[0]) / 2, dcy = (d0[1] + d1[1]) / 2;
+      const rise = ss(.3, 2.3, u), grow = ss(2.6, 9.4, u);
+      const camT = () => cam(1 + .055 * k, dcx, dcy, lerp(8, -6, k), lerp(4, -2, k), 0);
+      camT();
+      // outside: pre-dawn → sunrise, brightening further through N15
+      ctx.drawImage(T.pre, -ox, -oy);
+      ctx.globalAlpha = rise; ctx.drawImage(T.rise, -ox, -oy); ctx.globalAlpha = 1;
+      ctx.globalCompositeOperation = 'lighter';
+      ctx.globalAlpha = 1; ctx.drawImage(T.amb, -ox, -oy);
+      ctx.globalAlpha = clamp(.45 + .25 * rise + .3 * grow); ctx.drawImage(T.fill, -ox, -oy);
+      ctx.globalAlpha = clamp(.55 * rise + .45 * grow); ctx.drawImage(T.bounce, -ox, -oy);
+      // the sun pours in: a front running from the door down across the floor and the bench (screen space ≈ depth here)
+      { const front = lerp(d0[1] - H * .05, H * 1.05, eo(clamp((u - .45) / 2.0))), soft = H * .14, m = D.tmp.getContext('2d');
+        if (u > .45) {
+          m.setTransform(1, 0, 0, 1, 0, 0); m.globalCompositeOperation = 'source-over'; m.globalAlpha = 1; m.clearRect(0, 0, D.PW, D.PH); m.drawImage(T.sun, 0, 0);
+          m.globalCompositeOperation = 'destination-in'; const g = m.createLinearGradient(0, front - soft + oy, 0, front + oy); g.addColorStop(0, 'rgba(0,0,0,1)'); g.addColorStop(1, 'rgba(0,0,0,0)'); m.fillStyle = g; m.fillRect(0, 0, D.PW, D.PH);
+          ctx.globalAlpha = clamp(rise * (.8 + .2 * grow)); ctx.drawImage(D.tmp, -ox, -oy);
+          m.globalCompositeOperation = 'source-over'; m.clearRect(0, 0, D.PW, D.PH); m.drawImage(T.beam, 0, 0, D.PW, D.PH);
+          m.globalCompositeOperation = 'destination-in'; m.fillStyle = g; m.fillRect(0, 0, D.PW, D.PH);
+          ctx.globalAlpha = clamp(rise * (.55 + .2 * grow) * (1 + .05 * Math.sin(u * 1.3))); ctx.drawImage(D.tmp, -ox, -oy); } }
+      ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
+      // dust turning in the shaft
+      if (rise > 0) { const r = rng(17); ctx.save(); ctx.globalCompositeOperation = 'screen';
+        for (let i = 0; i < 70; i++) { const bx = r(), by = r(), sp = .006 + r() * .01, x = ((bx + u * sp + Math.sin(u * .4 + i) * .01) % 1) * D.PW, y = ((by - u * sp * .4) % 1 + 1) % 1 * D.PH;
+          const bi = ((Math.min(T.HH - 1, y / 2 | 0) * T.HW) + Math.min(T.HW - 1, x / 2 | 0)) * 4, bv = T.beamData[bi] / 255; if (bv < .05) continue;
+          const a = bv * rise * (.35 + .4 * r()), rr = 1.2 + r() * 2.2; ctx.fillStyle = `rgba(255,236,196,${a})`; ctx.beginPath(); ctx.arc(x - ox, y - oy, rr, 0, 6.283); ctx.fill(); } ctx.restore(); }
       ctx.setTransform(1, 0, 0, 1, 0, 0);
-      const sx = fx + (X(L.sun[0]) - fx) * z, sy = fy + (Y(L.sun[1]) - fy) * z; bloom(ctx, sx, sy, X(.55), .8 + .1 * Math.sin(t * .8));
-      { const r = rng(5); ctx.save(); ctx.globalCompositeOperation = 'screen'; for (let i = 0; i < 24; i++) { const x = ((r() + t * (.005 + r() * .01)) % 1) * W, y = (r() * .6 + Math.sin(t * .5 + i) * .01) * H, rr = (3 + r() * 7) * W / 1080;
-          const mg = ctx.createRadialGradient(x, y, 0, x, y, rr); mg.addColorStop(0, `rgba(255,236,190,${.25 * r()})`); mg.addColorStop(1, 'rgba(255,236,190,0)'); ctx.fillStyle = mg; ctx.fillRect(x - rr, y - rr, rr * 2, rr * 2); } ctx.restore(); }   // dust in the morning air
-      film(ctx, t, 0); finishDawn(ctx, 1);
-    } else {   // 'tree'
-      const z = 1 + .1 * eio(u / 6.7), fx = X(L.tomb[0]), fy = Y(L.tomb[1]), cam = camAt(z, fx, fy), rep = clamp((u - 3.4) / 2.6);
-      cam(); ctx.drawImage(D.pre, -ox, -oy);
-      // the tree's shadow lying across the ground towards us; at «다시 살리사» it draws back as the sun comes up.
-      // It never runs behind the quote (8th render: the upright crossed the words): it fades out above the band the words use
-      // (Film.SAFE — 0.64 H portrait, H − 270 landscape; the fade is set in screen space, so it holds through the zoom) and the cross is
-      // read whole above it — head, beam, a longer foot dissolving towards us. Portrait: on the ground right of the stone and below it
-      // (under the stone the two read as a signpost — 6th render); landscape (little ground above the words): on the rock face right
-      // of the stone, coming down to the ground.
-      { const back = eio(clamp((u - 3.4) / 2.2)), G = V ? { foot: [.6, 1.12], head: [.74, .548], w: [.11, .024], beam: .577, half: .11, th: .034, fade: [.6, .645], a: .86 }
-                                                          : { foot: [.64, 1.05], head: [.665, .54], w: [.04, .013], beam: .595, half: .055, th: .016, fade: [.7, .748], a: .74 };
-        const a = G.a * (1 - back * .9), len = lerp(1, .15, back), foot = [X(G.foot[0]), Y(G.foot[1])], head = [X(G.head[0]), Y(G.head[1])], hd = [lerp(foot[0], head[0], len), lerp(foot[1], head[1], len)];
-        const wAt = y => lerp(X(G.w[0]), X(G.w[1]), clamp((foot[1] - y) / (foot[1] - head[1])));   // nearer is wider
-        const sy = v => fy + (Y(v) - fy) / z, sh = ctx.createLinearGradient(0, sy(G.fade[0]), 0, sy(G.fade[1]));   // screen → world (the camera zooms on the tomb)
-        sh.addColorStop(0, 'rgba(16,12,28,' + a + ')'); sh.addColorStop(1, 'rgba(16,12,28,0)');
-        ctx.save(); ctx.fillStyle = sh; ctx.filter = 'blur(3px)';
-        ctx.beginPath(); ctx.moveTo(foot[0] - wAt(foot[1]) / 2, foot[1]); ctx.lineTo(hd[0] - wAt(hd[1]) / 2, hd[1]); ctx.lineTo(hd[0] + wAt(hd[1]) / 2, hd[1]); ctx.lineTo(foot[0] + wAt(foot[1]) / 2, foot[1]); ctx.fill();
-        const fb = (foot[1] - Y(G.beam)) / (foot[1] - head[1]); if (len > fb + .02) { const cy = lerp(foot[1], head[1], fb), cx = lerp(foot[0], head[0], fb), half = X(G.half), th = Math.max(wAt(cy) * 1.05, X(G.th));   // the beam, square across
-          ctx.beginPath(); ctx.moveTo(cx - half, cy - th * .5); ctx.lineTo(cx + half, cy - th * .42); ctx.lineTo(cx + half, cy + th * .42); ctx.lineTo(cx - half, cy + th * .5); ctx.fill(); }
-        ctx.restore(); }
-      reveal(ctx, D.dawn, D.kDoor, eo(rep), cam);
-      ctx.setTransform(1, 0, 0, 1, 0, 0);
-      bloom(ctx, X(L.tomb[0]), Y(L.tomb[1]) + Y(L.th) * .15, X(.42), .95 * ss(3.4, 4.6, u), [255, 230, 176]);   // the doorway floods with light
-      { const dv = 1 - ss(0, 1.1, u); if (dv > 0) { ctx.save(); ctx.globalCompositeOperation = 'screen'; const g = ctx.createRadialGradient(W / 2, H * .3, 0, W / 2, H * .3, Math.max(W, H) * .8); g.addColorStop(0, `rgba(255,244,214,${.42 * dv})`); g.addColorStop(.45, `rgba(255,234,196,${.2 * dv})`); g.addColorStop(1, 'rgba(255,230,190,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H); ctx.restore(); } }   // the dove's light of the scene before, withdrawing
-      film(ctx, t, 0); finishDawn(ctx, .5 + .5 * ss(3.4, 5, u));
+      // the door's glare: the sunrise beyond it, growing through N15
+      const z = 1 + .055 * k, sx = dcx + lerp(8, -6, k), sy = dcy + lerp(4, -2, k);
+      bloom(ctx, sx - (d1[0] - d0[0]) * .5 * z, sy - (d1[1] - d0[1]) * .3 * z, (d1[0] - d0[0]) * 1.1, .42 * rise + .22 * grow, '255,214,150');   // the sun is off to the left beyond the jamb
+      bloom(ctx, sx, sy, (d1[0] - d0[0]) * .8, .12 * (1 - rise), '150,170,210');   // before the sun: a cold glimmer at the door
+      if (window.OIL) { ctx.save(); OIL.varnish(ctx, .35); ctx.restore(); }
+      vignette(ctx, .5, '8,6,6', .45); film(ctx, t, .16);
     }
     ctx.restore();
   }

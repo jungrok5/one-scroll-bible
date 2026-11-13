@@ -1,0 +1,236 @@
+<title>스튜디오 운영 개선안</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700&family=IBM+Plex+Sans+KR:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* layout: one reading column (≈68ch) with wide tables/diagrams breaking out; a slate band for the summary, gold = the film's light */
+:root{
+  --bg:#f5f6f8; --paper:#ffffff; --ink:#1b2230; --muted:#5b6475; --line:#d9dde5;
+  --slate:#202a3a; --slate-ink:#eef1f6; --gold:#a8781c; --gold-soft:#f3e7cc;
+  --ok:#2f7a4b; --warn:#a5650b; --bad:#b03a2e;
+  --display:"Noto Serif KR","Nanum Myeongjo",Georgia,serif;
+  --body:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#12161e; --paper:#1a202b; --ink:#e7ebf2; --muted:#9aa3b4; --line:#2c3443;
+  --slate:#0c1017; --slate-ink:#e7ebf2; --gold:#e0b45a; --gold-soft:#3a3020;
+  --ok:#6cc08d; --warn:#e3a54a; --bad:#ef7d70; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#12161e; --paper:#1a202b; --ink:#e7ebf2; --muted:#9aa3b4; --line:#2c3443;
+  --slate:#0c1017; --slate-ink:#e7ebf2; --gold:#e0b45a; --gold-soft:#3a3020;
+  --ok:#6cc08d; --warn:#e3a54a; --bad:#ef7d70; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:16px/1.75 var(--body);margin:0}
+.wrap{max-width:860px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:40px 80px}
+.col{max-width:68ch}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;line-height:1.35;margin:0}
+h1{font-size:clamp(28px,4.4vw,40px);font-weight:700}
+h2{font-size:24px;margin-top:56px;padding-top:20px;border-top:1px solid var(--line)}
+h3{font-size:18px;margin-top:28px}
+p{margin:12px 0}
+.eyebrow{font:500 12px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--gold)}
+.meta{color:var(--muted);font-size:14px;margin-top:10px}
+.band{background:var(--slate);color:var(--slate-ink);border-radius:10px;padding:24px max(20px,3vw);margin:28px 0}
+.band h2{border:0;margin:0 0 8px;padding:0;color:var(--slate-ink);font-size:20px}
+.band ol{margin:8px 0 0;padding-left:1.3em}
+.band li{margin:8px 0}
+.band b{color:var(--gold)}
+code,.cmd{font-family:var(--mono);font-size:.88em}
+code{background:var(--gold-soft);padding:1px 6px;border-radius:4px}
+.scroll{overflow-x:auto;margin:14px 0}
+table{border-collapse:collapse;width:100%;min-width:620px;font-size:14.5px;background:var(--paper)}
+th,td{border-bottom:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
+th{font-weight:600;color:var(--muted);font-size:13px;letter-spacing:.02em;background:var(--bg)}
+td:first-child{font-weight:600;white-space:nowrap}
+.pill{display:inline-block;font:500 12px/1.6 var(--mono);padding:0 8px;border-radius:999px;border:1px solid currentColor;white-space:nowrap}
+.bad{color:var(--bad)} .warn{color:var(--warn)} .ok{color:var(--ok)}
+.desks{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin:16px 0}
+.desk{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:16px 18px;min-width:0}
+.desk h3{margin:0 0 4px;font-size:17px}
+.desk .who{font:500 12px/1.5 var(--mono);color:var(--gold)}
+.desk ul{margin:8px 0 0;padding-left:1.1em;font-size:14.5px}
+.desk .start{margin-top:10px;font-family:var(--mono);font-size:12.5px;color:var(--muted);word-break:break-all}
+ul.tight li{margin:6px 0}
+.note{border-left:3px solid var(--gold);padding:4px 0 4px 14px;color:var(--muted);font-size:15px;margin:16px 0}
+pre.mermaid{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:16px;overflow-x:auto}
+.phase{display:grid;grid-template-columns:120px 1fr;gap:6px 18px;margin:16px 0;align-items:baseline}
+.phase .when{font:600 13px/1.6 var(--mono);color:var(--gold)}
+.phase div{min-width:0}
+@media (max-width:560px){.phase{grid-template-columns:1fr}.phase .when{margin-top:10px}}
+a{color:var(--gold)}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+</style>
+
+<div class="wrap">
+  <div class="eyebrow">한눈에 보는 성경 이야기 · 운영 설계</div>
+  <h1>스튜디오 운영 개선안</h1>
+  <p class="meta">2026-11-13 · 대상: 관리자(혼자 운영하며 Claude 세션·에이전트로 제작·배포·분석까지 하는 구조) · 근거: 10월 20일 이후 이 프로젝트에서 실제로 있었던 일</p>
+
+  <div class="band">
+    <h2>한 장 요약</h2>
+    <ol>
+      <li><b>한 세션이 모든 일을 하는 구조를 다섯 데스크로 나눕니다.</b> 제작, 언어, 채널 운영, 시청자, 분석 데스크가 있고, 그 위에 결정과 일정을 모으는 <b>프로듀서 세션</b> 하나를 둡니다.</li>
+      <li><b>데스크끼리는 대화가 아니라 저장소 파일로 이어집니다.</b> 작업판, 결정함, 편성표, 할당량 장부, 기록부를 둡니다. 어느 세션을 새로 열어도 <code>studio status</code> 한 줄로 전체가 보입니다.</li>
+      <li><b>매일·정기 작업은 세션 밖에서 돕니다.</b> 지금 예약은 세션이 닫히거나 7일이 지나면 사라집니다. 윈도우 작업 스케줄러로 Claude를 화면 없이 돌리는 방식으로 옮깁니다.</li>
+      <li><b>결정은 결정함 하나로 모읍니다.</b> 지금은 채팅 질문으로 흩어져 있습니다. 결정함에 추천안과 함께 올리고, 주 1~2회 몰아서 정합니다. 정한 것은 곧바로 규칙 파일과 검사로 들어갑니다.</li>
+      <li><b>분석 결과가 다음 제작 기준으로 이어지는 길을 모든 데스크에 깝니다.</b> 지금은 새 영상 제작(film.mjs)에만 있습니다. 14분 확장, 채널 운영, 댓글에도 같은 고리를 둡니다.</li>
+    </ol>
+  </div>
+
+  <h2>1. 지금 하고 있는 일 — 생산 라인 지도</h2>
+  <div class="col">
+    <p>지금 이 프로젝트는 작은 영상 스튜디오와 같은 일을 혼자 하고 있습니다. 하는 일을 라인별로 나누면 다음과 같습니다.</p>
+  </div>
+  <div class="scroll"><table>
+    <tr><th>라인</th><th>하는 일</th><th>지금 도구</th><th>주기</th></tr>
+    <tr><td>새 시리즈 영상</td><td>주제 → 원고 → 검수 → 그림 → 소리 → 업로드 → 공개 → 국제판 → 자막 27개</td><td><code>film.mjs</code> + rules.json + 검수 에이전트</td><td>영상마다 2~3주</td></tr>
+    <tr><td>첫 영상 언어 확장</td><td>언어마다 14분 음악판·해설판(가로·세로), 자막, 사이트 버튼</td><td><code>film14.mjs</code>, add-film-language</td><td>틈날 때마다</td></tr>
+    <tr><td>사이트 언어</td><td>사이트 언어 팩, 검수, 배포</td><td>add-language</td><td>틈날 때마다</td></tr>
+    <tr><td>채널 운영</td><td>업로드·예약·재생목록·관련 영상·연결 줄·고정 댓글·최종 화면·자동 자막 삭제</td><td>yt-api, global-move, xlinks, intl-layout, 스튜디오 스크립트</td><td>매일·영상마다</td></tr>
+    <tr><td>시청자</td><td>두 채널·인스타·스레드 댓글에 좋아요·하트, 문제 댓글 보고, '다음 편' 고정</td><td><code>routine.mjs daily</code></td><td>매일 19:12</td></tr>
+    <tr><td>분석</td><td>스튜디오·API·GA4 수집 → 보고서 → insights·targets → 다음 주제 추천</td><td><code>routine.mjs analysis</code>, collect.mjs, topic.mjs</td><td>월·목</td></tr>
+  </table></div>
+
+  <h2>2. 무엇이 문제인가 — 실제로 있었던 일</h2>
+  <div class="col"><p>도구 하나하나는 좋아졌습니다. 문제는 도구를 잇는 운영 구조에 있습니다.</p></div>
+  <div class="scroll"><table>
+    <tr><th>문제</th><th>실제로 있었던 일</th><th>영향</th></tr>
+    <tr><td>한 세션이 전부 함</td><td>제작, 업로드, 분석, 댓글, 문서 정리를 한 대화에서 했습니다. 대화가 여러 번 압축되면서 정한 것이 대화에만 남았습니다(11/13에 몰아서 저장소로 옮김).</td><td><span class="pill bad">높음</span> 다음 세션이 모르는 결정이 생김</td></tr>
+    <tr><td>예약이 세션에 묶임</td><td>매일·월목 예약이 7일 만료로 사라졌는데 다시 만들지 않아 <b>11/12 저녁 댓글 관리가 돌지 않았습니다.</b></td><td><span class="pill bad">높음</span> 정기 작업이 조용히 빠짐</td></tr>
+    <tr><td>결정이 채팅에 흩어짐</td><td>「만나」가 기록에 '관리자가 고름, 11/21 공개'로 남아 있었지만, 실제로는 정한 적이 없었습니다. 중복 영상은 '관리자가 지움'으로만 적혀 3주 동안 남아 있었습니다.</td><td><span class="pill bad">높음</span> 잘못된 계획 위에서 일함</td></tr>
+    <tr><td>기록이 손으로 관리됨</td><td>사이트 중국어(간체) 페이지만 '14분 영상' 버튼에 유튜브 링크가 빠진 채 2주 넘게 지났습니다. LANGUAGES.md에 기록끼리 어긋난 항목이 17개 쌓였습니다.</td><td><span class="pill warn">중간</span> 오류가 늦게 발견됨</td></tr>
+    <tr><td>할당량 하나를 나눠 씀</td><td>두 채널이 유튜브 API 하루 10,000점을 함께 씁니다. 업로드 날에는 삭제·재생목록이 다음 날 17시로 밀립니다(11/13 삭제 중 멈춤).</td><td><span class="pill warn">중간</span> 작업 순서가 꼬임</td></tr>
+    <tr><td>스튜디오 수작업</td><td>관련 영상, 고정, 최종 화면, 오디오 트랙은 API가 없어 브라우저로 합니다. 크롬이 두 개라 채널 계정을 잘못 고를 위험이 있습니다.</td><td><span class="pill warn">중간</span> 느리고 깨지기 쉬움</td></tr>
+    <tr><td>관리자 확인이 병목</td><td>검수 에이전트가 찾은 수정은 하나하나 확인을 받습니다. 질문이 작업 중간에 끼어듭니다.</td><td><span class="pill warn">중간</span> 관리자 시간이 잘게 쪼개짐</td></tr>
+    <tr><td>분석이 일부 라인에만 이어짐</td><td>insights → rules → 단계 검사로 이어지는 고리는 새 영상 제작에만 있습니다. 14분 확장, 채널 정리, 댓글에서 배운 것은 보고서에서 끝납니다.</td><td><span class="pill warn">중간</span> 같은 실수 반복</td></tr>
+  </table></div>
+  <p class="note">지금 잘 되고 있는 것은 그대로 둡니다. 제작 절차를 코드로 둔 것(film.mjs·rules.json·단계 검사), 검수를 에이전트로 나눈 것, 렌더를 GitHub Actions에서 하는 것, 정책 문서 하나(LANGUAGES.md)가 그렇습니다. 이번 설계는 이 방식을 다른 라인에도 넓히는 것입니다.</p>
+
+  <h2>3. 참고할 사례</h2>
+  <div class="col">
+    <ul class="tight">
+      <li><b>예수 영화 프로젝트(JESUS Film):</b> 영화 한 편을 2,000개 넘는 언어로 옮겼습니다. 원본은 하나로 두고 언어마다 같은 절차(번역 → 현지 검수 → 녹음 → 배포)를 반복합니다. 우리 14분 확장(음악판 → 해설판)과 같은 구조라서, <b>언어 하나를 하나의 작업 단위로 보고 같은 체크리스트를 돌리는 방식</b>을 가져옵니다.</li>
+      <li><b>바이블 프로젝트(BibleProject):</b> 성경 애니메이션 스튜디오로, 원고·디자인·애니메이션·번역을 부서로 나누고 번역은 언어별 파트너와 합니다. <b>부서(데스크)마다 맡은 일과 넘기는 물건이 정해져 있는 구조</b>를 가져옵니다.</li>
+      <li><b>쿠르츠게작트(Kurzgesagt):</b> 영어 본채널 외에 언어별 채널을 현지 팀이 운영하고, 그림은 다시 쓰면서 글자와 음성만 바꿉니다. 우리의 '두 벌 + 트랙'(한국어판·영어 글자판 + 음성·자막)과 같은 방향이며, <b>재사용할 수 있는 원본 자산을 관리하는 방식</b>을 참고합니다.</li>
+      <li><b>TED·TED-Ed 자막:</b> 번역자가 옮기면 다른 사람이 검수하고 승인한 뒤 공개합니다. 우리 품질 관문(역번역 + 원어민 검수 → 공개)과 같은 구조입니다. <b>검수와 승인을 분리하고, 승인은 묶어서 하는 방식</b>을 가져옵니다.</li>
+      <li><b>방송국 편성·제작 회의:</b> 편성표(언제 무엇을 내보내나), 제작 현황판, 주간 회의로 결정을 몰아서 합니다. → <b>편성표·작업판·결정함</b>.</li>
+      <li><b>에이전트 설계 원칙(Anthropic 「Building effective agents」):</b> 처음엔 단순한 정해진 절차로 시작하고, 꼭 필요할 때만 나눕니다. 총괄 하나가 일을 나눠 주고 일꾼이 하는 형태(orchestrator-workers)와, 만들고 평가하기를 반복하는 형태(evaluator-optimizer)가 있습니다. → <b>프로듀서 세션 + 데스크</b>, <b>제작 데스크와 검수 에이전트</b>.</li>
+    </ul>
+  </div>
+
+  <h2>4. 제안 — 스튜디오 구조</h2>
+  <h3>4-1. 프로듀서 + 다섯 데스크</h3>
+  <div class="col"><p>데스크는 <b>따로 여는 Claude 세션</b>입니다. 데스크마다 시작 명령 하나, 고정 지시서 하나, 맡은 기록 파일이 있습니다. 세션을 새로 열거나 대화가 압축돼도 시작 명령만 치면 이어서 일합니다.</p></div>
+  <div class="desks">
+    <div class="desk"><div class="who">세션 · 하나</div><h3>프로듀서</h3><ul><li>결정함 정리, 편성표, 주간 계획</li><li>데스크에 일 배정(작업판)</li><li>주 1~2회 관리자와 결정 회의</li></ul><div class="start">node studio/studio.mjs status</div></div>
+    <div class="desk"><div class="who">세션 · 영상마다 하나</div><h3>제작 데스크</h3><ul><li>새 시리즈 영상: 원고 → 그림 → 소리 → 업로드 준비</li><li>검수는 에이전트(신학·시청자·이상 확인)</li><li>공개는 채널 운영 데스크로 넘김</li></ul><div class="start">node motion/films/film.mjs status christ</div></div>
+    <div class="desk"><div class="who">세션 · 하나</div><h3>언어 데스크</h3><ul><li>14분 언어 확장(음악판·해설판)</li><li>사이트 언어 추가·검수</li><li>번역은 원어민 검수 에이전트</li></ul><div class="start">node motion/youtube/film14.mjs status</div></div>
+    <div class="desk"><div class="who">세션 · 하나 · 할당량 주인</div><h3>채널 운영 데스크</h3><ul><li>업로드·예약·재생목록·연결·자막·최종 화면</li><li>할당량 장부를 보고 작업 순서를 짬(17시 이후 몰아서)</li><li>스튜디오 브라우저 작업은 이 데스크만</li></ul><div class="start">node studio/studio.mjs queue</div></div>
+    <div class="desk"><div class="who">세션 없이 · 매일</div><h3>시청자 데스크</h3><ul><li>모든 채널 댓글: 좋아요·하트, 문제 댓글 보고</li><li>시청자가 묻는 질문을 주제 백로그로</li></ul><div class="start">routine.mjs daily (작업 스케줄러)</div></div>
+    <div class="desk"><div class="who">세션 없이 · 월·목 + 매일 밤 점검</div><h3>분석 데스크</h3><ul><li>수집 → 보고 → insights → 기준 변경 제안(결정함)</li><li>영상별 7일·28일 사후 분석</li><li>매일 밤 기록 점검(링크·재생목록·자막·사이트 버튼)</li></ul><div class="start">routine.mjs analysis · studio.mjs health</div></div>
+  </div>
+
+  <pre class="mermaid">
+flowchart LR
+  P[프로듀서<br/>결정함·편성표·작업판] --> M[제작 데스크]
+  P --> L[언어 데스크]
+  M -->|완성본| C[채널 운영 데스크]
+  L -->|언어별 영상·자막| C
+  C -->|공개| V[시청자 데스크<br/>매일 댓글]
+  C --> A[분석 데스크<br/>월·목 + 매일 밤 점검]
+  V -->|질문·반응| A
+  A -->|기준 변경 제안| P
+  P -->|관리자 결정 → rules.json·검사| M
+  </pre>
+
+  <h3>4-2. 에이전트는 언제 나누나</h3>
+  <div class="scroll"><table>
+    <tr><th>형태</th><th>맡기는 일</th><th>예</th></tr>
+    <tr><td>서브에이전트</td><td>짧고, 끝이 분명하고, 보고만 하는 일. 결과는 데스크가 받아 판단</td><td>신학·시청자 검수, 원어민 역번역, 렌더 이상 확인, 문구 검수, 코드 조사</td></tr>
+    <tr><td>백그라운드 에이전트</td><td>오래 걸리지만 범위가 분명한 일. 자기 파일만 커밋</td><td>그림 수정 + 부분 렌더 확인, CI 단계 추가, 대량 업로드</td></tr>
+    <tr><td>따로 여는 세션(데스크)</td><td>계속 이어지는 일, 상태가 있는 일, 관리자와 대화가 필요한 일</td><td>영상 한 편 제작, 언어 확장, 채널 운영</td></tr>
+    <tr><td>세션 없는 정기 작업</td><td>매번 같은 절차. 결과는 보고서와 결정함으로</td><td>댓글 관리, 정기 분석, 매일 밤 점검</td></tr>
+  </table></div>
+  <p class="note">나누지 않는 것도 원칙입니다. 판단은 데스크와 프로듀서가 하고, 에이전트는 보고만 합니다. 데스크도 다섯 개를 넘기지 않습니다. 영상 제작만 영상마다 세션 하나입니다.</p>
+
+  <h3>4-3. 데스크를 잇는 파일 — 대화가 아니라 저장소</h3>
+  <div class="scroll"><table>
+    <tr><th>파일</th><th>담는 것</th><th>누가 쓰나</th></tr>
+    <tr><td><code>studio/board.json</code></td><td>작업판. 일마다 데스크·단계·다음 할 일·막힌 이유(관리자 결정 대기 등)</td><td>모든 데스크(자기 줄만)</td></tr>
+    <tr><td><code>studio/decisions.json</code></td><td>결정함. 질문·추천안·선택지·근거·마감, 답은 관리자의 말 그대로</td><td>누구나 올리고, 프로듀서가 정리</td></tr>
+    <tr><td><code>studio/calendar.json</code></td><td>편성표. 무엇을 언제 어느 채널에(주일 규칙 자동 검사)</td><td>프로듀서, 채널 운영</td></tr>
+    <tr><td><code>studio/quota.jsonl</code></td><td>할당량 장부. 도구가 쓴 점수를 자동 기록, 오늘 남은 양</td><td>yt-api·xlinks 등 도구가 자동으로</td></tr>
+    <tr><td><code>uploaded.json</code> → 기록부</td><td>영상 × 언어 × 판(음악·해설·가로·세로) × 상태. 지금 파일을 그대로 쓰되 형식 검사를 더함</td><td>채널 운영</td></tr>
+    <tr><td><code>studio/desks/*.md</code></td><td>데스크별 지시서(시작 명령, 하는 일, 넘기는 물건, 멈춤 지점)</td><td>규칙이 바뀔 때만</td></tr>
+  </table></div>
+
+  <h3>4-4. 예약 — 세션 밖으로</h3>
+  <div class="col">
+    <ul class="tight">
+      <li><b>지금</b>은 세션 안의 예약(CronCreate)을 씁니다. 세션이 끝나거나 7일이 지나면 사라져서, 갱신 예약으로 버티는 중입니다.</li>
+      <li><b>제안:</b> 윈도우 작업 스케줄러가 정해진 시각에 Claude를 화면 없이(<code>claude -p</code>) 실행해 <code>routine.mjs daily / analysis</code>를 돌리고, 결과를 보고서와 결정함에 남깁니다. PC가 켜져 있으면 세션과 상관없이 돕니다.</li>
+      <li><b>확인할 점:</b> 좋아요·하트와 스튜디오 일은 크롬 확장이 연결돼야 합니다. 화면 없이 실행할 때도 연결되는지 먼저 매일 댓글 관리로 1주 시범 운영합니다. 안 되면 API로 되는 부분(댓글 수집·분석·점검)만 옮기고, 브라우저 부분은 채널 운영 데스크가 하루 한 번 몰아서 합니다.</li>
+      <li>API만 쓰는 일(분석 수집·매일 밤 점검)은 Claude 클라우드 예약으로 돌릴 수도 있습니다. 다만 유튜브 비밀키를 클라우드 환경에 넣어야 해서, 로컬 방식이 먼저입니다.</li>
+    </ul>
+  </div>
+
+  <h3>4-5. 결정함 — 질문을 몰아서, 답은 곧바로 규칙으로</h3>
+  <div class="col">
+    <ul class="tight">
+      <li>데스크는 작업 중에 관리자에게 묻지 않고 결정함에 올립니다. 올릴 때 <b>추천안, 선택지, 근거, 그 결정이 막고 있는 일</b>을 함께 씁니다. 막는 일이 없으면 추천안대로 진행하고 나중에 확인받는 항목도 따로 표시합니다.</li>
+      <li>관리자는 주 1~2회(예: 분석 다음 날) 결정함 페이지를 보고 한 번에 답합니다. 급한 것(공개 승인, 되돌릴 수 없는 일)만 바로 묻습니다.</li>
+      <li>답은 관리자의 말 그대로 기록하고, 규칙이면 <code>rules.json</code>·검사로, 일정이면 편성표로 바로 옮깁니다. 오늘 정한 '최신 영상 가리키기'처럼 <b>한 번 정한 것은 다시 묻지 않습니다.</b></li>
+    </ul>
+  </div>
+
+  <h3>4-6. 분석 → 다음 제작 기준</h3>
+  <div class="scroll"><table>
+    <tr><th>무엇을 보고</th><th>어디로 들어가나</th></tr>
+    <tr><td>장면별 이탈·화풍·첫 1초·썸네일</td><td>insights.json → rules.json·targets.json → film.mjs 단계 검사(지금 있음)</td></tr>
+    <tr><td>언어별 반응(쇼츠 물결, 14분 언어별)</td><td>언어 데스크의 다음 언어 순서·해설판 우선순위(결정함 제안)</td></tr>
+    <tr><td>재생목록·관련 영상·연결 줄을 통해 온 조회</td><td>intl-layout.json·xlinks.json 규칙 조정</td></tr>
+    <tr><td>댓글의 질문·오해</td><td>주제 백로그(topic.mjs), 사이트 FAQ, 다음 원고의 '질문 먼저'</td></tr>
+    <tr><td>영상별 7일·28일 사후 분석</td><td>그 영상 review.json → 다음 영상 규칙(학습 기록)</td></tr>
+  </table></div>
+
+  <h3>4-7. 매일 밤 점검 — 기록이 틀어지면 바로 알림</h3>
+  <div class="col">
+    <p><code>studio.mjs health</code> 하나로 지금 있는 점검을 모두 돌리고, 문제만 결정함이나 작업판에 올립니다.</p>
+    <ul class="tight">
+      <li><code>xlinks audit</code>: 연결 줄</li>
+      <li><code>intl-layout plan</code>: 재생목록·첫 화면</li>
+      <li><code>film14 status/site</code>: 사이트 버튼</li>
+      <li><code>film14 captions --dry</code>: 자막·자동 자막</li>
+      <li>편성표와 실제 예약 비교(주일 규칙)</li>
+      <li>문서끼리 어긋남</li>
+    </ul>
+    <p>중국어 버튼 누락 같은 일이 다음 날 바로 잡힙니다.</p>
+  </div>
+
+  <h3>4-8. 할당량</h3>
+  <div class="col">
+    <ul class="tight">
+      <li>도구가 쓴 점수를 장부에 남기고, 채널 운영 데스크가 하루치 작업을 할당량 안에서 순서대로 돌립니다(17시 초기화 뒤 큐).</li>
+      <li><b>국제 채널용 Google Cloud 프로젝트를 하나 더 만들면</b> 두 채널이 할당량을 나눠 갖지 않습니다. 프로젝트를 만들고 키를 받는 것은 관리자 계정에서 하셔야 합니다.</li>
+    </ul>
+  </div>
+
+  <h2>5. 하는 순서</h2>
+  <div class="phase">
+    <div class="when">1주차</div><div>결정함(decisions.json + 보기 페이지) · <code>studio.mjs status</code>(모든 데스크의 다음 할 일, 결정 대기, 예약 상태, 오늘 할당량을 한 화면에) · 작업 스케줄러로 매일 댓글 관리 시범.</div>
+    <div class="when">2~3주차</div><div>데스크 지시서 5개와 세션 분리 운영 시작(「그리스도」 = 제작, 14분 = 언어, 업로드·재생목록 = 채널 운영) · 할당량 장부와 17시 큐 · 매일 밤 점검.</div>
+    <div class="when">4주차~</div><div>편성표(주일 규칙 검사 포함) · 영상별 7일·28일 사후 분석 · 댓글 질문 → 주제 백로그 · 분석 대시보드 페이지.</div>
+    <div class="when">필요할 때</div><div>국제 채널 API 프로젝트 분리 · 클라우드 예약(API만 쓰는 일).</div>
+  </div>
+
+  <h2>6. 정해 주실 것</h2>
+  <div class="scroll"><table>
+    <tr><th>결정</th><th>추천</th><th>대안</th></tr>
+    <tr><td>세션 분리</td><td>프로듀서 + 다섯 데스크(제작은 영상마다)</td><td>세 개로 시작: 제작 / 언어 / 운영(채널·시청자·분석 묶음)</td></tr>
+    <tr><td>예약 방식</td><td>윈도우 작업 스케줄러 + Claude 화면 없이 실행, 댓글 관리부터 1주 시범</td><td>지금처럼 세션 예약 + 갱신 예약</td></tr>
+    <tr><td>결정 방식</td><td>결정함에 모아 주 1~2회 몰아서. 급한 것만 바로 질문</td><td>지금처럼 채팅으로 바로 질문</td></tr>
+    <tr><td>할당량</td><td>국제 채널용 API 프로젝트 하나 더(관리자가 만듦)</td><td>장부와 17시 큐만</td></tr>
+    <tr><td>시작</td><td>1주차 항목부터 바로</td><td>「그리스도」 공개 뒤에</td></tr>
+  </table></div>
+  <p class="meta">이 문서는 저장소 <code>motion/studio/operations-proposal.html</code>에 있습니다. 정해지면 <code>studio/desks/*.md</code>와 도구로 옮기고 이 문서는 기록으로 남깁니다.</p>
+</div>

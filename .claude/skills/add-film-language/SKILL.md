@@ -73,8 +73,8 @@ node motion/film-lang.mjs live <code>                       # film/s/i18n/<code>
 
 ## 4b · 14-min expansion rules (관리자 2026-11-13 — read before 5 and 6)
 - Run `node motion/youtube/film14.mjs status <code>` first and after every step; rules: `motion/youtube/film14.json` "rules", words: LANGUAGES.md §4-1.
-- A NEW language gets the music version **horizontal + vertical 14 min** — **no 21 Shorts** (skip `v` in the CI steps; the vertical whole film needs the
-  'vfull' step listed in film14.json "todo"). Languages that already have Shorts keep them.
+- A NEW language gets the music version **horizontal + vertical 14 min** — **no 21 Shorts**: CI steps `h vfull` (not `v`; `vfull` = the whole film in
+  portrait, release file `film-<code>-v.mp4`). Languages that already have Shorts keep them; their vertical film alone: `--steps "vfull release"`.
 - After the upload: `film14.mjs site --write` (site button), `film14.mjs captions` (its on-screen captions onto the Korean music version and its own
   music version), xlinks.json `film14.<code>` lines (reviewed) + `xlinks.mjs apply`, and the language playlist (`film14.mjs intl-layout` adds 400).
 - A narrated version only after `film14.mjs narr-check <code>` passes; then it is the language's main video and the music version links to it (one way).
@@ -82,12 +82,14 @@ node motion/film-lang.mjs live <code>                       # film/s/i18n/<code>
 
 ## 5 · YouTube files (everything up to the upload itself)
 ```
-node motion/film-lang.mjs ci <code> --steps "h v kit release" --wait
+node motion/film-lang.mjs ci <code> --steps "h vfull kit release" --wait
 ```
-`h` = the whole film and `v` = the 21 Shorts in the upload format → release `youtube-v1` (`release`; no expiry);
+`h` = the whole film (1920×1080) and `vfull` = the whole film in portrait (1080×1920, same timeline and sound, the vertical scene
+layouts; a normal video, not a Short) in the upload format → release `youtube-v1` as `film-<code>.mp4` / `film-<code>-v.mp4` (`release`; no expiry).
+`v` (the 21 Shorts) is only for languages that already have Shorts — new languages skip it (§4b);
 `kit` = thumbnails (`motion/youtube/thumbs/<code>/`, from `motion/youtube/lang/<code>.json`), the upload sheet
 (`motion/youtube/manifest.json` / `.md`: titles, descriptions with chapters, tags, Shorts titles = a hook line from each scene)
-and subtitles (`motion/subs/<code>/`). Commit the kit. The creation scene's WebGL cosmos comes from the Actions cache.
+and subtitles (`motion/subs/<code>/`: `film-h.srt` for the horizontal film, `film-v.srt` for the vertical one — the portrait layouts break lines differently). Commit the kit. The creation scene's WebGL cosmos comes from the Actions cache.
 
 ## 6 · On YouTube (browser session signed in as @one-scroll-bible; public steps need the maintainer's OK)
 Follow `motion/README.md` → "유튜브에 올리기": `node motion/youtube/serve.mjs` → download `film-<code>.mp4` →

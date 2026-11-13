@@ -22,7 +22,7 @@ const YT_LANG = { tl: 'fil' }, ytl = L => YT_LANG[L] || L;
 const langs = () => [...new Set([...readdirSync(join(ROOT, 'film', 's', 'i18n')).filter(f => f.endsWith('.json')).map(f => f.slice(0, -5)), ...Object.keys(G.film)])].filter(L => !L.includes('-narr') && !/-v$/.test(L));
 // ids per language and kind (Korean lives at the top level of uploaded.json, every other language under global)
 const vid = (L, k) => { const key = k === 'music' ? L : k === 'music-v' ? `${L}-v` : k === 'narr' ? `${L}-narr` : `${L}-narr-v`; return (L === 'ko' ? U.film[key] : G.film[key])?.id || null; };
-const subs = L => join(M, 'subs', L, 'film-h.srt'), narrVtt = L => join(M, 'narration', `${L}-narr.vtt`), narrScript = L => join(M, 'narration', `${L}.json`);
+const subs = L => join(M, 'subs', L, 'film-h.srt'), subsV = L => join(M, 'subs', L, 'film-v.srt'), narrVtt = L => join(M, 'narration', `${L}-narr.vtt`), narrScript = L => join(M, 'narration', `${L}.json`);
 const filmYt = () => JSON.parse((readFileSync(join(ROOT, 'index.html'), 'utf8').match(/const FILM_YT=(\{[^}]*\})/) || [, '{}'])[1]);
 const wantYt = L => vid(L, 'narr') || vid(L, 'music');
 
@@ -46,7 +46,7 @@ if (cmd === 'status' || !cmd) {
       site: yt[L] === wantYt(L) ? 'ok' : yt[L] ? `틀림(${yt[L]}≠${wantYt(L)})` : wantYt(L) ? `없음(${wantYt(L)})` : '-' };
     const next = [];
     if (!vid(L, 'music')) next.push('음악판 가로 올리기 (/add-film-language 5–6단계)');
-    if (!vid(L, 'music-v')) next.push('음악판 세로 14분' + (P.todo.some(t => /vfull/.test(t)) ? ' — CI vfull 단계부터 만들 것(film14.json todo)' : ''));
+    if (!vid(L, 'music-v')) next.push('음악판 세로 14분' + (P.todo.some(t => /vfull/.test(t)) ? ' — CI vfull 단계부터 만들 것(film14.json todo)' : ` (film-lang.mjs ci ${L} --steps "vfull release" → 릴리즈 film-${L}-v.mp4)`));
     if (r.site !== 'ok' && wantYt(L)) next.push('사이트 버튼: film14.mjs site --write');
     if (P.narr[L] && !vid(L, 'narr')) { const g = gates(L); next.push(g.length ? '해설판 관문: ' + g.join(' · ') : '해설판 만들기(관문 통과)'); }
     if (vid(L, 'narr') && !vid(L, 'narr-v')) next.push('해설판 세로');
@@ -70,6 +70,7 @@ if (cmd === 'status' || !cmd) {
   const koM = vid('ko', 'music'), koN = vid('ko', 'narr');
   for (const L of langs()) {
     if (existsSync(subs(L))) { if (koM) want.push(['ko', koM, subs(L), ytl(L), `${L} 화면 글자 → 한국어 음악판`]); if (vid(L, 'music')) want.push(['gl', vid(L, 'music'), subs(L), ytl(L), `${L} 화면 글자 → ${L} 음악판`]); }
+    if (L !== 'ko' && vid(L, 'music-v') && existsSync(subsV(L))) want.push(['gl', vid(L, 'music-v'), subsV(L), ytl(L), `${L} 화면 글자(세로 배치, film-v.srt) → ${L} 음악판 세로`]);
     if (existsSync(narrVtt(L))) { if (koN) want.push(['ko', koN, narrVtt(L), ytl(L), `${L} 해설 → 한국어 해설판`]); if (vid(L, 'narr')) want.push(['gl', vid(L, 'narr'), narrVtt(L), ytl(L), `${L} 해설 → ${L} 해설판`]); }
   }
   const env = k => ({ ...process.env, ...(k === 'gl' ? { YT_AS: 'GLOBAL' } : {}) }), have = {};

@@ -3,7 +3,7 @@
  "rules": [
   {
    "id": "music-base",
-   "rule": "Every film language gets the 14-min MUSIC version in both orientations (horizontal + vertical, the vertical one is a normal video, not a Short). No 21-scene Shorts for new languages — the Shorts already published stay."
+   "rule": "Every film language gets the 14-min MUSIC version in both orientations (horizontal + vertical, the vertical one is a normal video, not a Short). No 21-scene Shorts for new languages — the Shorts already published stay. Made on GitHub: node motion/film-lang.mjs ci <lang> --steps \"h vfull kit release\" (vfull = the whole film in portrait, release file film-<lang>-v.mp4)."
   },
   {
    "id": "narr-layer",
@@ -15,7 +15,7 @@
   },
   {
    "id": "captions-byproduct",
-   "rule": "Captions are a by-product of translation: on-screen text → motion/subs/<lang>/film-h.srt, narration → motion/narration/<lang>-narr.vtt. On-screen-text captions go on the Korean MUSIC version (every language) and on that language's own music version (search). Narration captions go on the Korean NARRATED version (only languages with a translated narration — on-screen text does not match the voice) and on that language's narrated version. film14.mjs captions uploads what is missing."
+   "rule": "Captions are a by-product of translation: on-screen text → motion/subs/<lang>/film-h.srt (film-v.srt for the vertical version: same scene lengths, but the portrait layouts break lines differently, so the cue times differ), narration → motion/narration/<lang>-narr.vtt. On-screen-text captions go on the Korean MUSIC version (every language) and on that language's own music version (search). Narration captions go on the Korean NARRATED version (only languages with a translated narration — on-screen text does not match the voice) and on that language's narrated version. film14.mjs captions uploads what is missing."
   },
   {
    "id": "links",
@@ -59,7 +59,6 @@
   }
  },
  "todo": [
-  "CI step for the whole VERTICAL 14-min film (render-film.yml has h = whole horizontal film and v = 21 Shorts; a 'vfull' step must join the vertical scenes on the h timeline). The old Korean vertical upload 3X5HbQKBpRI (private) shows it was done once.",
   "motion/narration/captions.mjs --lang <code> (today Korean only) so a translated narration gives motion/narration/<code>-narr.vtt.",
   "Ask each Bible publisher about reading Scripture aloud (scripture_audio) — ko, en, es, pt-BR first, since the 400-years audio tracks already do it."
  ]

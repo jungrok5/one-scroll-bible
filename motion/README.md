@@ -26,8 +26,9 @@ node motion/render.mjs v --page pilot/cross.html --lang en --stills 3   # 세로
 python3 motion/pilot/mix.py cross                                        # 소리 믹스
 python3 motion/publish-film.py                                           # 사이트에 게시(film/s/)
 python3 motion/assemble.py h --upload                                    # 전체 영상 + 유튜브 업로드용 사본
+python3 motion/assemble.py v --upload                                    # 세로 전체 영상(14분, 1080×1920 — 세로 장면을 통째로)
 ```
-**장면 하나를 고친 뒤**: 그 장면만 다시 렌더하고 `assemble.py h --upload`를 다시 실행하면 됩니다. 장면 파일을 재압축 없이 이어 붙이고, 업로드용은 장면별로 `out/upcache/`에 저장해 두고 바뀐 장면만 다시 압축하므로 몇 분이면 끝납니다(예전에는 매번 50분). 다른 언어는 `--lang en`, 전체 언어 렌더는 `bash motion/render-lang.sh en`.
+**장면 하나를 고친 뒤**: 그 장면만 다시 렌더하고 `assemble.py h --upload`를 다시 실행하면 됩니다. 장면 파일을 재압축 없이 이어 붙이고, 업로드용은 장면별로 `out/upcache/`에 저장해 두고 바뀐 장면만 다시 압축하므로 몇 분이면 끝납니다(예전에는 매번 50분). 다른 언어는 `--lang en`, 전체 언어 렌더는 `bash motion/render-lang.sh en`(기본 `h v`; 세로 전체 영상은 `… en vfull` → `out/film-en-v-upload.mp4`).
 
 **유튜브·인스타에 올릴 때는 반드시 `--upload` 사본(`film-h-upload.mp4`)을 올리세요.** 장면이 바뀌는 곳마다 영상이 잠깐
 튀는 문제(일부 폰·일부 화질에서만 보임)를 막도록 2초마다 완전한 화면을 넣고, 앞뒤 참조를 없앤 구조입니다(형식은 아래 **렌더 속도**).
@@ -47,7 +48,7 @@ python3 motion/assemble.py h --upload                                    # 전�
 | 3 | **눈으로 확인** | 커밋·푸시 후 `node motion/film-lang.mjs ci <code> --steps sheets --wait` → `motion/out/sheets/<code>/`의 그림 42장을 모두 본다(글자 깨짐·넘침·겹침) | 고칠 줄 목록 |
 | 4 | **원어민 검토** | `node motion/film-lang.mjs review <code>` → `motion/out/review-<code>.md`를 새 에이전트(또는 사람)에게. HIGH·MED 지적을 모두 반영하고 2단계를 다시, 최종 보고를 **`motion/reviews/<code>.md`**로 저장 | **품질 기준**: 이 파일이 있어야 공개 |
 | 5 | **사이트 게시** | `node motion/film-lang.mjs site <code>` (index.html `FILM_CTA`에 버튼 추가 + 페이지 빌드) → 커밋·푸시 → `ci <code> --steps site --wait`(포스터 + `film/s/` 글꼴·언어 파일) → 커밋·푸시 → **main 배포는 관리자 허락 후** → `node motion/film-lang.mjs live <code>` | one-scroll-bible.com/film/?lang=<code> |
-| 6 | **유튜브 영상·자료** | `node motion/film-lang.mjs ci <code> --steps "h v kit release" --wait` → 가로 전체 영상·쇼츠 21개는 릴리즈 `youtube-v1`로, 썸네일·업로드 시트·자막은 작업 트리로 → 커밋·푸시 | 업로드 준비 끝 |
+| 6 | **유튜브 영상·자료** | `node motion/film-lang.mjs ci <code> --steps "h vfull kit release" --wait` → 14분 가로·세로 전체 영상(새 언어는 쇼츠 21개 없음 — `youtube/LANGUAGES.md` §4-1)은 릴리즈 `youtube-v1`로, 썸네일·업로드 시트·자막은 작업 트리로 → 커밋·푸시 | 업로드 준비 끝 |
 
 - 진행 상황은 언제든 `node motion/film-lang.mjs status` (언어별로 번역·검사·검토·게시·자료·릴리즈가 어디까지 왔는지 표로).
 - 여러 언어를 한 번에: 모든 명령이 `<code…>` 여러 개를 받습니다(GitHub은 언어×방향마다 작업을 동시에 돌림).
@@ -103,8 +104,10 @@ python3 motion/social/insta_teaser_cover.py      # 예고편 표지
 - 한 방향: 약 75분 → 약 30분. `SCENES="rise church" bash motion/render-lang.sh en h`로 일부 장면만 빠르게 시험.
 
 **GitHub Actions** (`.github/workflows/render-film.yml`, 공개 저장소라 무료·동시 20개): `film-lang.mjs ci`가 부르거나 Actions 탭 →
-render-film → Run workflow(작업 브랜치 선택)에서 언어와 단계(`sheets site h v kit release`)를 넣습니다. 결과는 아티팩트(3일 보관):
-`sheets-<lang>`, `site`, `film-<lang>-h`, `shorts-<lang>`, `kit` — `release` 단계는 영상을 릴리즈(만료 없음)로 옮깁니다.
+render-film → Run workflow(작업 브랜치 선택)에서 언어와 단계(`sheets site h v vfull kit release`)를 넣습니다. 결과는 아티팩트(3일 보관):
+`sheets-<lang>`, `site`, `film-<lang>-h`(가로 전체), `film-<lang>-v`(`vfull` = 세로 전체 14분), `shorts-<lang>`(`v` = 쇼츠 21개), `kit` — `release` 단계는 영상을 릴리즈(만료 없음)로 옮깁니다.
+`vfull`은 `v`와 같은 세로 장면을 h와 같은 타임라인·소리로 통째로 잇습니다(쇼츠의 시작 건너뛰기 `shorts-open.json`은 넣지 않음). 둘을 함께 부르면 세로 장면은 한 번만 렌더합니다.
+예전 한국어 세로 전체 영상(3X5HbQKBpRI, 2026-10-19, 지금 비공개)은 CI 전에 로컬에서 `render.mjs v` 장면 21개 → `assemble.py v --upload`로 만든 것 — `vfull`이 그 과정을 CI에 옮긴 것입니다.
 창조 장면 캐시는 **Actions 캐시에 보관**되어(키 = `creation.html`·`lib.js` 내용) 다음 실행부터는 약 27분짜리 캐시 만들기를 건너뜁니다.
 새 머신 준비는 `bash motion/ci-setup.sh`(Noto 글꼴 — 한·중·일·아랍·데바나가리·태국·미얀마·크메르 포함, ffmpeg, Playwright;
 `WITH_PYTHON=1`이면 fonttools·brotli·pillow도). 새 문자 체계를 추가하면 그 Noto 글꼴을 `ci-setup.sh` 목록에 넣으세요.
@@ -114,10 +117,10 @@ render-film → Run workflow(작업 브랜치 선택)에서 언어와 단계(`sh
 
 | 무엇 | 어디 | 다시 만들기 |
 |---|---|---|
-| 영상 (언어별 가로 전체 + 쇼츠 21개) | **GitHub 릴리즈 `youtube-v1`** — `film-<lang>.mp4`, `shorts-<lang>-NN-<scene>.mp4` | `node motion/film-lang.mjs ci <lang> --steps "h v release"` (예전 실행의 아티팩트를 옮기려면 Actions → **publish-release**에 run id) |
+| 영상 (언어별 가로 전체 + 세로 전체 + 쇼츠 21개) | **GitHub 릴리즈 `youtube-v1`** — `film-<lang>.mp4`(가로), `film-<lang>-v.mp4`(세로 14분), `shorts-<lang>-NN-<scene>.mp4` | `node motion/film-lang.mjs ci <lang> --steps "h vfull release"`(쇼츠까지면 `v`도) (예전 실행의 아티팩트를 옮기려면 Actions → **publish-release**에 run id) |
 | 업로드 시트 (언어별 제목·설명+챕터·태그·썸네일·자막 경로, 영상+쇼츠 21개, 쇼츠 제목 = 장면 속 문장 훅) | `motion/youtube/manifest.json` (읽기용 `manifest.md`, `shorts-titles.md`) | `node motion/youtube/manifest.mjs` — 영상 번역(`_ui`, 장면 문장)·장면 타이밍·`motion/youtube/lang/<code>.json`에서 만듦 |
 | 썸네일 (언어별 4안 + 생성기) | `motion/youtube/thumbs/<lang>/{A-exodus,B-cross,C-split,D-earth}.jpg` | `python3 motion/youtube/thumbs/make.py [lang…]` 또는 `ci … --steps kit` (문구·글꼴은 `motion/youtube/lang/<code>.json`의 `thumb`) |
-| 자막 (언어별 전체 영상 + 쇼츠별 SRT — 쇼츠 SRT는 만들어만 두고 올리지 않음, 아래) | `motion/subs/<lang>/film-h.srt`, `motion/subs/<lang>/{h,v}/NN-<scene>.srt` | `node motion/subtitles.mjs srt <lang> h` (타임라인은 `motion/subs/timeline-<h\|v>.json`, 장면 타이밍이 바뀐 뒤에만 `scan`) |
+| 자막 (언어별 전체 영상 + 쇼츠별 SRT — 쇼츠 SRT는 만들어만 두고 올리지 않음, 아래) | `motion/subs/<lang>/film-h.srt`, 세로 전체 영상은 `film-v.srt`(장면 길이는 같지만 세로 배치는 줄을 다르게 나눠 자막 시각이 다름), `motion/subs/<lang>/{h,v}/NN-<scene>.srt` | `node motion/subtitles.mjs srt <lang> h` · `… srt <lang> v`(kit 단계가 둘 다) (타임라인은 `motion/subs/timeline-<h\|v>.json`, 장면 타이밍이 바뀐 뒤에만 `scan`) |
 | 소리 | 원본 클립 `motion/pilot/audio/*.mp3`(git) + 큐 `pilot/<scene>.sound.json` → 믹스 `pilot/<scene>.wav` | `python3 motion/pilot/mix.py` (wav가 없으면 assemble은 사이트의 `film/s/<scene>.m4a`를 씀 — CI가 만든 영상이 그것) |
 
 ```

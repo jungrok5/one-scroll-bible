@@ -125,7 +125,7 @@ const G = {
   // the action sheet (actions.mjs): moments that must have their own effect, for the current code and cues
   actions: c => { const f = join(c.d, 'sound', 'actions.json'), A = J(f); if (!A) return fail(`sound/actions.json 없음 — node motion/films/actions.mjs ${c.film}`);
     const why = [], src = [join(c.d, 'film.html'), join(c.d, 'sound', 'cues.json'), join(OUT, `${c.film}-v-narr.mp4`)]; if (src.some(x => mt(x) > mt(f))) why.push('동작표가 그림·cues보다 오래됐다 — actions.mjs 다시');
-    if (A.cover < T.sound.action_cover_min) why.push(`소리가 꼭 있어야 하는 동작 중 효과음 ${Math.round(A.cover * 100)}% < ${T.sound.action_cover_min * 100}% — ` + A.actions.filter(x => ['gold', 'link', 'flash', 'end'].includes(x.kind) && !x.covered).slice(0, 8).map(x => `${x.t}s ${x.kind}`).join(' '));
+    if (A.cover < T.sound.action_cover_min) why.push(`소리가 꼭 있어야 하는 동작 중 효과음 ${Math.round(A.cover * 100)}% < ${T.sound.action_cover_min * 100}% — ` + A.actions.filter(x => ['gold', 'link', 'flash', 'end', 'act'].includes(x.kind) && !x.covered).slice(0, 8).map(x => `${x.t}s ${x.kind}`).join(' '));
     return why.length ? { ok: false, why } : { ok: true, why: [], info: { cover: A.cover, need: A.need } }; },
   // the render matches the shot list (shots-sheet.py → look → review.json shots_check)
   shotsheet: c => { const why = [], stamp = J(join(OUT, `${c.film}-v-narr.mp4.src.json`)), M = J(join(OUT, 'shots', c.film, 'manifest.json')), sc = c.review.shots_check;

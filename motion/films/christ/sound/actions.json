@@ -1,0 +1,1148 @@
+{
+ "film": "christ",
+ "dur": 180,
+ "made": "2026-11-14T14:47",
+ "cover": 1,
+ "need": 83,
+ "actions": [
+  {
+   "t": 0,
+   "len": 1,
+   "kind": "code",
+   "what": "jordan3d.js:31 if (z < sf - 6) { const t = clamp((sn - z) / 3.2), g = .02 + .16 * fbm",
+   "covered": true,
+   "sfx": [
+    "S01"
+   ]
+  },
+  {
+   "t": 0,
+   "len": 8.6,
+   "kind": "act",
+   "what": "candle flame breathing in the dark room; the camera draws back from the candle to the bowed old man",
+   "covered": true,
+   "sfx": [
+    "S01"
+   ]
+  },
+  {
+   "t": 0.55,
+   "len": 0.45,
+   "kind": "code",
+   "what": "goldoil-title.js:83 neck = { top: dTop - r * .9 * k, hw: t => r * .45 * Math.pow(ss(.55, 1",
+   "covered": false,
+   "sfx": []
+  },
+  {
+   "t": 1.36,
+   "len": 0.38,
+   "kind": "code",
+   "what": "goldoil-anoint.js:822 const tr = 2.0, Tf = t1 - tr, gat = t => ss(1.36, 1.74, t);",
+   "covered": false,
+   "sfx": []
+  },
+  {
+   "t": 2.4,
+   "len": 0.6,
+   "kind": "code",
+   "what": "goldoil-anoint.js:818 : t < 2.4 ? mixA(A2, A3, eo((t - 2.24) / .16)) : mixA(A3, A4, eio(clam",
+   "covered": false,
+   "sfx": []
+  },
+  {
+   "t": 5,
+   "len": 2,
+   "kind": "act",
+   "what": "a page corner of the open Bible lifts and settles",
+   "covered": true,
+   "sfx": [
+    "S02"
+   ]
+  },
+  {
+   "t": 8,
+   "len": 0.7,
+   "kind": "scene",
+   "what": "scene from 8.0 to 15.0",
+   "covered": true,
+   "sfx": [
+    "S03",
+    "S04",
+    "E3Q1"
+   ]
+  },
+  {
+   "t": 8,
+   "len": 7,
+   "kind": "act",
+   "what": "the Jordan in late afternoon: water and reeds",
+   "covered": true,
+   "sfx": [
+    "S03",
+    "S04",
+    "E3Q1"
+   ]
+  },
+  {
+   "t": 8,
+   "len": 2.6,
+   "kind": "act",
+   "what": "Andrew hurries along the bank in clear strides and stops",
+   "covered": true,
+   "sfx": [
+    "S03",
+    "S04",
+    "E3Q1"
+   ]
+  },
+  {
+   "t": 8.2,
+   "len": 1.8,
+   "kind": "gold",
+   "what": "gold word 「그리스도」 of Q1 lights (Film.quote hlk ss(a+.4, a+1.6))",
+   "covered": true,
+   "sfx": [
+    "S03",
+    "S04",
+    "E3Q1"
+   ]
+  },
+  {
+   "t": 11.8,
+   "len": 1.2,
+   "kind": "act",
+   "what": "Simon takes half a step toward him",
+   "covered": true,
+   "sfx": [
+    "S05"
+   ]
+  },
+  {
+   "t": 14.1,
+   "len": 0.7,
+   "kind": "scene",
+   "what": "scene from 14.1 to 24.0",
+   "covered": true,
+   "sfx": [
+    "S06"
+   ]
+  },
+  {
+   "t": 14.1,
+   "len": 1.15,
+   "kind": "act",
+   "what": "the gold oil drop hangs, its thread thinning",
+   "covered": true,
+   "sfx": [
+    "S06"
+   ]
+  },
+  {
+   "t": 15.25,
+   "len": 2.35,
+   "kind": "act",
+   "what": "the drop breaks free and falls slowly",
+   "covered": true,
+   "sfx": [
+    "S07"
+   ]
+  },
+  {
+   "t": 17.6,
+   "len": 2.5,
+   "kind": "act",
+   "what": "the drop touches the dark surface and spreads into light",
+   "covered": true,
+   "sfx": [
+    "S08"
+   ]
+  },
+  {
+   "t": 19.9,
+   "len": 3.4,
+   "kind": "act",
+   "what": "the spread light gathers into the title",
+   "covered": true,
+   "sfx": [
+    "S09"
+   ]
+  },
+  {
+   "t": 20.6,
+   "len": 1.6,
+   "kind": "act",
+   "what": "the title underline draws",
+   "covered": true,
+   "sfx": [
+    "S09",
+    "E2a"
+   ]
+  },
+  {
+   "t": 23.2,
+   "len": 0.7,
+   "kind": "scene",
+   "what": "scene from 23.2 to 36.5",
+   "covered": true,
+   "sfx": [
+    "S11"
+   ]
+  },
+  {
+   "t": 23.2,
+   "len": 4.8,
+   "kind": "act",
+   "what": "Samuel walks up the sunset hill",
+   "covered": true,
+   "sfx": [
+    "S11"
+   ]
+  },
+  {
+   "t": 27.5,
+   "len": 1.4,
+   "kind": "act",
+   "what": "Samuel lifts the horn above the boy",
+   "covered": true,
+   "sfx": [
+    "S12"
+   ]
+  },
+  {
+   "t": 29,
+   "len": 4.5,
+   "kind": "act",
+   "what": "the horn tips; thick oil pours onto David's head",
+   "covered": true,
+   "sfx": [
+    "S13",
+    "E3K1"
+   ]
+  },
+  {
+   "t": 29.3,
+   "len": 1.8,
+   "kind": "gold",
+   "what": "gold word 「기름」 of K1 lights (Film.quote hlk ss(a+.4, a+1.6))",
+   "covered": true,
+   "sfx": [
+    "S13",
+    "E3K1"
+   ]
+  },
+  {
+   "t": 35.8,
+   "len": 4.1,
+   "kind": "act",
+   "what": "the tent door: the lamp behind the woven screen",
+   "covered": true,
+   "sfx": [
+    "S15",
+    "S14"
+   ]
+  },
+  {
+   "t": 35.9,
+   "len": 4,
+   "kind": "act",
+   "what": "Moses tips the small jug; oil runs over Aaron's turban",
+   "covered": true,
+   "sfx": [
+    "S15",
+    "S14",
+    "E3K2"
+   ]
+  },
+  {
+   "t": 36,
+   "len": 0.7,
+   "kind": "scene",
+   "what": "scene from 36.0 to 40.6",
+   "covered": true,
+   "sfx": [
+    "S15",
+    "S14",
+    "E3K2"
+   ]
+  },
+  {
+   "t": 36.4,
+   "len": 1.8,
+   "kind": "gold",
+   "what": "gold word 「머리에 붓고」 of K2 lights (Film.quote hlk ss(a+.4, a+1.6))",
+   "covered": true,
+   "sfx": [
+    "S14",
+    "E3K2"
+   ]
+  },
+  {
+   "t": 39.6,
+   "len": 0.7,
+   "kind": "scene",
+   "what": "scene from 39.6 to 45.0",
+   "covered": true,
+   "sfx": [
+    "S16"
+   ]
+  },
+  {
+   "t": 39.9,
+   "len": 4.4,
+   "kind": "act",
+   "what": "the oxen plod, the plough cuts the furrow",
+   "covered": true,
+   "sfx": [
+    "S16",
+    "E3K3"
+   ]
+  },
+  {
+   "t": 40.3,
+   "len": 1.8,
+   "kind": "gold",
+   "what": "gold word 「기름을 부어」 of K3 lights (Film.quote hlk ss(a+.4, a+1.6))",
+   "covered": true,
+   "sfx": [
+    "S16",
+    "E3K3"
+   ]
+  },
+  {
+   "t": 41.25,
+   "len": 0.6,
+   "kind": "act",
+   "what": "the cloak slips from Elijah's forearm into his hand",
+   "covered": true,
+   "sfx": [
+    "S17"
+   ]
+  },
+  {
+   "t": 41.9,
+   "len": 0.5,
+   "kind": "act",
+   "what": "Elijah swings the cloak and lets go",
+   "covered": true,
+   "sfx": [
+    "S18",
+    "S20",
+    "S19"
+   ]
+  },
+  {
+   "t": 42.1,
+   "len": 1.3,
+   "kind": "act",
+   "what": "a beam of light grows on Elisha",
+   "covered": true,
+   "sfx": [
+    "S18",
+    "S20",
+    "S19"
+   ]
+  },
+  {
+   "t": 42.4,
+   "len": 1,
+   "kind": "act",
+   "what": "the cloak lands on Elisha's shoulders and sways",
+   "covered": true,
+   "sfx": [
+    "S18",
+    "S20",
+    "S19"
+   ]
+  },
+  {
+   "t": 44,
+   "len": 0.7,
+   "kind": "scene",
+   "what": "scene from 44.0 to 52.2",
+   "covered": true,
+   "sfx": [
+    "S21"
+   ]
+  },
+  {
+   "t": 44,
+   "len": 8.2,
+   "kind": "act",
+   "what": "evening wind through the arched gate of Jerusalem; the camera cranes up",
+   "covered": true,
+   "sfx": [
+    "S21"
+   ]
+  },
+  {
+   "t": 45,
+   "len": 3,
+   "kind": "act",
+   "what": "the Roman eagle standard and soldiers on the gate in the wind",
+   "covered": true,
+   "sfx": [
+    "S23"
+   ]
+  },
+  {
+   "t": 46.1,
+   "len": 1.6,
+   "kind": "act",
+   "what": "the crowd in the gate: one shades his eyes, one points; long shadows",
+   "covered": true,
+   "sfx": [
+    "S22"
+   ]
+  },
+  {
+   "t": 51.2,
+   "len": 0.7,
+   "kind": "scene",
+   "what": "scene from 51.2 to 59.6",
+   "covered": true,
+   "sfx": [
+    "S24"
+   ]
+  },
+  {
+   "t": 51.2,
+   "len": 1.6,
+   "kind": "act",
+   "what": "the band walks up the road; Jesus stops, they stop",
+   "covered": true,
+   "sfx": [
+    "S24"
+   ]
+  },
+  {
+   "t": 55.3,
+   "len": 1.5,
+   "kind": "act",
+   "what": "Peter steps out toward him; the warmest light falls there",
+   "covered": true,
+   "sfx": [
+    "S25",
+    "E3Q2"
+   ]
+  },
+  {
+   "t": 55.7,
+   "len": 1.8,
+   "kind": "gold",
+   "what": "gold word 「그리스도」 of Q2 lights (Film.quote hlk ss(a+.4, a+1.6))",
+   "covered": true,
+   "sfx": [
+    "S25",
+    "E3Q2"
+   ]
+  },
+  {
+   "t": 58.8,
+   "len": 0.7,
+   "kind": "scene",
+   "what": "scene from 58.8 to 67.6",
+   "covered": true,
+   "sfx": [
+    "S26"
+   ]
+  },
+  {
+   "t": 59.1,
+   "len": 5.4,
+   "kind": "act",
+   "what": "the twelve follow hesitantly down the road toward Jerusalem",
+   "covered": true,
+   "sfx": [
+    "S26"
+   ]
+  },
+  {
+   "t": 64.5,
+   "len": 2.6,
+   "kind": "act",
+   "what": "Peter breaks out of the group and hurries after him",
+   "covered": true,
+   "sfx": [
+    "S27"
+   ]
+  },
+  {
+   "t": 66.8,
+   "len": 0.7,
+   "kind": "scene",
+   "what": "scene from 66.8 to 71.9",
+   "covered": true,
+   "sfx": [
+    "S28"
+   ]
+  },
+  {
+   "t": 67.2,
+   "len": 1.2,
+   "kind": "act",
+   "what": "Peter runs past and stops in front of Jesus",
+   "covered": true,
+   "sfx": [
+    "S28",
+    "E3Q3"
+   ]
+  },
+  {
+   "t": 67.5,
+   "len": 1.8,
+   "kind": "gold",
+   "what": "gold word 「그리 마옵소서」 of Q3 lights (Film.quote hlk ss(a+.4, a+1.6))",
+   "covered": true,
+   "sfx": [
+    "S28",
+    "E3Q3"
+   ]
+  },
+  {
+   "t": 68.3,
+   "len": 0.9,
+   "kind": "act",
+   "what": "Peter spreads both arms across the road",
+   "covered": true,
+   "sfx": [
+    "S29"
+   ]
+  },
+  {
+   "t": 69.2,
+   "len": 1,
+   "kind": "act",
+   "what": "Peter steps in and takes his arm",
+   "covered": true,
+   "sfx": [
+    "S30"
+   ]
+  },
+  {
+   "t": 71.1,
+   "len": 0.7,
+   "kind": "scene",
+   "what": "scene from 71.1 to 76.5",
+   "covered": true,
+   "sfx": [
+    "S31"
+   ]
+  },
+  {
+   "t": 71.4,
+   "len": 4.6,
+   "kind": "act",
+   "what": "the others walk on into the dusk; Peter left alone",
+   "covered": true,
+   "sfx": [
+    "S31"
+   ]
+  },
+  {
+   "t": 72.8,
+   "len": 1.5,
+   "kind": "act",
+   "what": "the first star appears",
+   "covered": true,
+   "sfx": [
+    "S32"
+   ]
+  },
+  {
+   "t": 75.7,
+   "len": 0.7,
+   "kind": "scene",
+   "what": "scene from 75.7 to 88.4",
+   "covered": true,
+   "sfx": [
+    "S33"
+   ]
+  },
+  {
+   "t": 76,
+   "len": 5.3,
+   "kind": "act",
+   "what": "the scroll unrolls beside the lamp",
+   "covered": true,
+   "sfx": [
+    "S33"
+   ]
+  },
+  {
+   "t": 81.1,
+   "len": 1.8,
+   "kind": "gold",
+   "what": "gold word 「찔림」 of Q4 lights (Film.quote hlk ss(a+.4, a+1.6))",
+   "covered": true,
+   "sfx": [
+    "E3Q4",
+    "S34"
+   ]
+  },
+  {
+   "t": 81.5,
+   "len": 1,
+   "kind": "act",
+   "what": "a gust bends the lamp flame",
+   "covered": true,
+   "sfx": [
+    "E3Q4",
+    "S34"
+   ]
+  },
+  {
+   "t": 82.7,
+   "len": 1.5,
+   "kind": "act",
+   "what": "the lamp flame flares and settles",
+   "covered": true,
+   "sfx": [
+    "S35"
+   ]
+  },
+  {
+   "t": 87.4,
+   "len": 0.7,
+   "kind": "scene",
+   "what": "scene from 87.4 to 98.3",
+   "covered": true,
+   "sfx": [
+    "S36",
+    "S37"
+   ]
+  },
+  {
+   "t": 87.4,
+   "len": 10.4,
+   "kind": "act",
+   "what": "black-and-white film: gate flicker, grain, scratches",
+   "covered": true,
+   "sfx": [
+    "S36",
+    "S37"
+   ]
+  },
+  {
+   "t": 87.6,
+   "len": 8,
+   "kind": "act",
+   "what": "darkness over the hill of the three crosses, the camera pushing in",
+   "covered": true,
+   "sfx": [
+    "S36",
+    "S37"
+   ]
+  },
+  {
+   "t": 91.5,
+   "len": 3,
+   "kind": "act",
+   "what": "the darkness sinks over the whole land",
+   "covered": true,
+   "sfx": [
+    "S38",
+    "E3Q5"
+   ]
+  },
+  {
+   "t": 91.9,
+   "len": 1.8,
+   "kind": "gold",
+   "what": "gold word 「나를 버리셨나이까」 of Q5 lights (Film.quote hlk ss(a+.4, a+1.6))",
+   "covered": true,
+   "sfx": [
+    "S38",
+    "E3Q5"
+   ]
+  },
+  {
+   "t": 96,
+   "len": 1.5,
+   "kind": "act",
+   "what": "one ember is left, sparks drifting off it",
+   "covered": true,
+   "sfx": [
+    "S39"
+   ]
+  },
+  {
+   "t": 96.9,
+   "len": 0.7,
+   "kind": "scene",
+   "what": "scene from 96.9 to 114.8",
+   "covered": true,
+   "sfx": [
+    "S40"
+   ]
+  },
+  {
+   "t": 96.9,
+   "len": 0.95,
+   "kind": "act",
+   "what": "the ember flies across to the psalm scroll",
+   "covered": true,
+   "sfx": [
+    "S40"
+   ]
+  },
+  {
+   "t": 97.85,
+   "len": 0.9,
+   "kind": "act",
+   "what": "the ember lights the lamp wick",
+   "covered": true,
+   "sfx": [
+    "S41"
+   ]
+  },
+  {
+   "t": 98.6,
+   "len": 1.5,
+   "kind": "act",
+   "what": "sparks settle on the first line of the psalm",
+   "covered": true,
+   "sfx": [
+    "S42"
+   ]
+  },
+  {
+   "t": 102.9,
+   "len": 1.5,
+   "kind": "act",
+   "what": "the first psalm line wakes to gold, right to left",
+   "covered": true,
+   "sfx": [
+    "S43"
+   ]
+  },
+  {
+   "t": 104.3,
+   "len": 1.8,
+   "kind": "gold",
+   "what": "gold word 「나를 버리셨나이까」 of Q6 lights (Film.quote hlk ss(a+.4, a+1.6))",
+   "covered": true,
+   "sfx": [
+    "E3Q6"
+   ]
+  },
+  {
+   "t": 109.1,
+   "len": 1.5,
+   "kind": "act",
+   "what": "the second psalm line wakes to gold",
+   "covered": true,
+   "sfx": [
+    "S44"
+   ]
+  },
+  {
+   "t": 110,
+   "len": 1.8,
+   "kind": "gold",
+   "what": "gold word 「제비 뽑나이다」 of Q7 lights (Film.quote hlk ss(a+.4, a+1.6))",
+   "covered": true,
+   "sfx": [
+    "E3Q7"
+   ]
+  },
+  {
+   "t": 113.8,
+   "len": 0.7,
+   "kind": "scene",
+   "what": "scene from 113.8 to 120.9",
+   "covered": true,
+   "sfx": [
+    "S45"
+   ]
+  },
+  {
+   "t": 114,
+   "len": 1.9,
+   "kind": "act",
+   "what": "a soldier shakes the knucklebones in his hand",
+   "covered": true,
+   "sfx": [
+    "S45"
+   ]
+  },
+  {
+   "t": 115.9,
+   "len": 1,
+   "kind": "act",
+   "what": "the knucklebones are thrown and come to rest on the ground",
+   "covered": true,
+   "sfx": [
+    "S46"
+   ]
+  },
+  {
+   "t": 116.8,
+   "len": 1.5,
+   "kind": "act",
+   "what": "the winner's hand takes hold of the tunic's hem",
+   "covered": true,
+   "sfx": [
+    "S47"
+   ]
+  },
+  {
+   "t": 119.9,
+   "len": 0.7,
+   "kind": "scene",
+   "what": "scene from 119.9 to 125.0",
+   "covered": true,
+   "sfx": [
+    "S48",
+    "S49"
+   ]
+  },
+  {
+   "t": 119.9,
+   "len": 5.1,
+   "kind": "act",
+   "what": "the courtyard: many people seated, a hush",
+   "covered": true,
+   "sfx": [
+    "S48",
+    "S49"
+   ]
+  },
+  {
+   "t": 120.2,
+   "len": 4.5,
+   "kind": "act",
+   "what": "dust turning in the low sun through the gate",
+   "covered": true,
+   "sfx": [
+    "S48",
+    "S49"
+   ]
+  },
+  {
+   "t": 124.3,
+   "len": 0.7,
+   "kind": "scene",
+   "what": "scene from 124.3 to 135.7",
+   "covered": true,
+   "sfx": [
+    "S50"
+   ]
+  },
+  {
+   "t": 124.4,
+   "len": 3.3,
+   "kind": "act",
+   "what": "the sky opens over the river; a shaft of light forms",
+   "covered": true,
+   "sfx": [
+    "S50"
+   ]
+  },
+  {
+   "t": 125,
+   "len": 1.8,
+   "kind": "gold",
+   "what": "gold word 「기름 붓듯」 of Q9 lights (Film.quote hlk ss(a+.4, a+1.6))",
+   "covered": true,
+   "sfx": [
+    "E3Q9"
+   ]
+  },
+  {
+   "t": 126.9,
+   "len": 4.5,
+   "kind": "act",
+   "what": "the dove-like light descends onto the man in the water",
+   "covered": true,
+   "sfx": [
+    "S51"
+   ]
+  },
+  {
+   "t": 131.1,
+   "len": 2.1,
+   "kind": "act",
+   "what": "rings spread on the water as the light comes to rest",
+   "covered": true,
+   "sfx": [
+    "S52"
+   ]
+  },
+  {
+   "t": 134.5,
+   "len": 0.7,
+   "kind": "scene",
+   "what": "scene from 134.5 to 139.9",
+   "covered": false,
+   "sfx": []
+  },
+  {
+   "t": 135.4,
+   "len": 1.8,
+   "kind": "gold",
+   "what": "gold word 「나무에 달아」 of Q11 lights (Film.quote hlk ss(a+.4, a+1.6))",
+   "covered": true,
+   "sfx": [
+    "E3Q11",
+    "S53"
+   ]
+  },
+  {
+   "t": 135.75,
+   "len": 1.25,
+   "kind": "act",
+   "what": "the cold light comes up and the cross's shadow appears on the ground",
+   "covered": true,
+   "sfx": [
+    "E3Q11",
+    "S53"
+   ]
+  },
+  {
+   "t": 137.9,
+   "len": 1.7,
+   "kind": "act",
+   "what": "the cold light dims to near dark",
+   "covered": true,
+   "sfx": [
+    "S54"
+   ]
+  },
+  {
+   "t": 139.3,
+   "len": 0.7,
+   "kind": "scene",
+   "what": "scene from 139.3 to 148.7",
+   "covered": true,
+   "sfx": [
+    "S56"
+   ]
+  },
+  {
+   "t": 139.5,
+   "len": 9,
+   "kind": "act",
+   "what": "the tomb at sunrise, the garden outside",
+   "covered": true,
+   "sfx": [
+    "S56",
+    "S55",
+    "E3Q12"
+   ]
+  },
+  {
+   "t": 139.9,
+   "len": 2,
+   "kind": "act",
+   "what": "dawn light pours through the door onto the linen",
+   "covered": true,
+   "sfx": [
+    "S56",
+    "S55",
+    "E3Q12"
+   ]
+  },
+  {
+   "t": 139.9,
+   "len": 1.8,
+   "kind": "gold",
+   "what": "gold word 「다시 살리사」 of Q12 lights (Film.quote hlk ss(a+.4, a+1.6))",
+   "covered": true,
+   "sfx": [
+    "S56",
+    "S55",
+    "E3Q12"
+   ]
+  },
+  {
+   "t": 148,
+   "len": 0.7,
+   "kind": "scene",
+   "what": "scene from 148.0 to 151.0",
+   "covered": true,
+   "sfx": [
+    "S57"
+   ]
+  },
+  {
+   "t": 148.4,
+   "len": 2.6,
+   "kind": "act",
+   "what": "recall: the oil on the shepherd boy glows and rises",
+   "covered": true,
+   "sfx": [
+    "S57"
+   ]
+  },
+  {
+   "t": 150.4,
+   "len": 0.7,
+   "kind": "scene",
+   "what": "scene from 150.4 to 153.4",
+   "covered": true,
+   "sfx": [
+    "S58"
+   ]
+  },
+  {
+   "t": 150.8,
+   "len": 2.6,
+   "kind": "act",
+   "what": "recall: the oil from Aaron's head rises",
+   "covered": true,
+   "sfx": [
+    "S58"
+   ]
+  },
+  {
+   "t": 152.8,
+   "len": 0.7,
+   "kind": "scene",
+   "what": "scene from 152.8 to 155.8",
+   "covered": true,
+   "sfx": [
+    "S59"
+   ]
+  },
+  {
+   "t": 153.2,
+   "len": 2.6,
+   "kind": "act",
+   "what": "recall: light rises from the cloak on Elisha",
+   "covered": true,
+   "sfx": [
+    "S59"
+   ]
+  },
+  {
+   "t": 155.2,
+   "len": 0.7,
+   "kind": "scene",
+   "what": "scene from 155.2 to 160.8",
+   "covered": true,
+   "sfx": [
+    "S60"
+   ]
+  },
+  {
+   "t": 155.4,
+   "len": 1.4,
+   "kind": "act",
+   "what": "the three lights come in from three sides",
+   "covered": true,
+   "sfx": [
+    "S60"
+   ]
+  },
+  {
+   "t": 156.75,
+   "len": 1,
+   "kind": "act",
+   "what": "the three lights are taken into one",
+   "covered": true,
+   "sfx": [
+    "S61"
+   ]
+  },
+  {
+   "t": 157.4,
+   "len": 2.5,
+   "kind": "act",
+   "what": "the sun rises behind the empty cross",
+   "covered": true,
+   "sfx": [
+    "S62"
+   ]
+  },
+  {
+   "t": 159.4,
+   "len": 0.7,
+   "kind": "scene",
+   "what": "scene from 159.4 to 181",
+   "covered": true,
+   "sfx": [
+    "S63"
+   ]
+  },
+  {
+   "t": 159.5,
+   "len": 7,
+   "kind": "act",
+   "what": "the first room again, the candle; the slow pull back",
+   "covered": true,
+   "sfx": [
+    "S63"
+   ]
+  },
+  {
+   "t": 162.5,
+   "len": 6.5,
+   "kind": "act",
+   "what": "the window greys with dawn",
+   "covered": true,
+   "sfx": [
+    "S64"
+   ]
+  },
+  {
+   "t": 166,
+   "len": 3,
+   "kind": "act",
+   "what": "the window light reaches his folded hands",
+   "covered": true,
+   "sfx": [
+    "S65"
+   ]
+  },
+  {
+   "t": 167.2,
+   "len": 1.8,
+   "kind": "gold",
+   "what": "gold word 「그의 이름을 힘입어」 of Q14 lights (Film.quote hlk ss(a+.4, a+1.6))",
+   "covered": true,
+   "sfx": [
+    "E3Q14"
+   ]
+  },
+  {
+   "t": 170.5,
+   "len": 5,
+   "kind": "act",
+   "what": "the sun shaft fills the room",
+   "covered": true,
+   "sfx": [
+    "S66"
+   ]
+  },
+  {
+   "t": 173,
+   "len": 1.8,
+   "kind": "gold",
+   "what": "gold word 「그리스도」 of Q13 lights (Film.quote hlk ss(a+.4, a+1.6))",
+   "covered": true,
+   "sfx": [
+    "E3Q13"
+   ]
+  },
+  {
+   "t": 175.6,
+   "len": 1.8,
+   "kind": "end",
+   "what": "the end card appears (영상 속 주요 말씀)",
+   "covered": true,
+   "sfx": [
+    "E3end"
+   ]
+  },
+  {
+   "t": 177.4,
+   "len": 1.4,
+   "kind": "act",
+   "what": "the end card underline draws",
+   "covered": true,
+   "sfx": [
+    "E2b"
+   ]
+  }
+ ]
+}

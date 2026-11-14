@@ -1,0 +1,2223 @@
+{
+ "entries": [
+  {
+   "use": "toolu_01NSSfSgza3pijoSsJnBKoyW",
+   "time": "2026-11-14T13:53:25.293Z",
+   "flow": "Zbs7p9CGD1RBI4UPlT7n",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "'예수 그리스도'의 그리스도, 예수님의 성일까요?",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "",
+   "node": "0vRx42fPZSulX2gQKp2H",
+   "sessions": [
+    "dxT1DLSe50stDrvmPkUy",
+    "IDpUm8evssjogEI1TVsd"
+   ],
+   "name": "N01"
+  },
+  {
+   "use": "toolu_01FUezADrzRJyeAFTUJzX6h6",
+   "time": "2026-11-14T13:53:26.596Z",
+   "flow": "Zbs7p9CGD1RBI4UPlT7n",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "기도 끝에 늘 붙는 그 이름.",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "",
+   "node": "S8eRe5DKSxqA46w3i8by",
+   "sessions": [
+    "1iTe2U7BCnrvXT20RqmB",
+    "NwAkjxCxVbIGNrZ3M1Do"
+   ],
+   "name": "N02"
+  },
+  {
+   "use": "toolu_01EXYS3FNksJviGBAws7DjSx",
+   "time": "2026-11-14T13:53:27.947Z",
+   "flow": "Zbs7p9CGD1RBI4UPlT7n",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "우리가 메시야를 만났다 하고 메시야는 번역하면 그리스도라",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "",
+   "node": "qRy2KiLE0sGFZBgYZPFZ",
+   "sessions": [
+    "UOwnGTn12K6IR5I1rQEE",
+    "mAsJfXViMnDB1v9fIBPj"
+   ],
+   "name": "Q1"
+  },
+  {
+   "use": "toolu_01S9UsyNUTiokuYgvwezofWx",
+   "time": "2026-11-14T13:53:29.296Z",
+   "flow": "Zbs7p9CGD1RBI4UPlT7n",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "그리스도는 성이 아닙니다. '기름 부음 받은 자', 메시야라는 뜻입니다.",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "",
+   "node": "B6GhSojYcKuFjcNcEDE4",
+   "sessions": [
+    "ThfSsTR4u96Q43ckFerz",
+    "9vcWnUPXMR0zus8bsM6N"
+   ],
+   "name": "N03"
+  },
+  {
+   "use": "toolu_01Qr89sGoSL3AVFzbQn6Z1uY",
+   "time": "2026-11-14T13:53:30.696Z",
+   "flow": "Zbs7p9CGD1RBI4UPlT7n",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "하나님은 기름을 부어 왕과 제사장과 선지자를 세우셨습니다.",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "",
+   "node": "N9tqYv0kJI2tpjvECo9d",
+   "sessions": [
+    "k3Vp4iMTkn6fGx1BksRr",
+    "8lqenwHjPgLQbdM7svnh"
+   ],
+   "name": "N04"
+  },
+  {
+   "use": "toolu_01W8hjcPHnyn8ErBvN5y4XkE",
+   "time": "2026-11-14T13:53:32.098Z",
+   "flow": "Zbs7p9CGD1RBI4UPlT7n",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "사무엘이 기름 뿔병을 가져다가 그의 형제 중에서 그에게 부었더니",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "",
+   "node": "eUVbk9AVZMrtUGmK90Kq",
+   "sessions": [
+    "bLnQcRrs3tCDIB06Cjsk",
+    "SU1guyHdcu6n3rdfVaAZ"
+   ],
+   "name": "K1"
+  },
+  {
+   "use": "toolu_01MLZWzTM8oCrPxGbrvcsRZD",
+   "time": "2026-11-14T13:53:33.346Z",
+   "flow": "Zbs7p9CGD1RBI4UPlT7n",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "또 관유를 아론의 머리에 붓고",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "",
+   "node": "4w2sMlw4UB9QpQPL2mVk",
+   "sessions": [
+    "QnvH4ZO9uQ4lhM5I2Pit",
+    "q8Fc80XYj1Aa1LKpw9Xe"
+   ],
+   "name": "K2"
+  },
+  {
+   "use": "toolu_01SD3iUZ3i91JB57AirpznsJ",
+   "time": "2026-11-14T13:53:34.605Z",
+   "flow": "Zbs7p9CGD1RBI4UPlT7n",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "엘리사에게 기름을 부어",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "",
+   "node": "fd240blo5oxbdg3vqA7i",
+   "sessions": [
+    "F21wpa7zRZHX43ehfe9m",
+    "FNwE0Y2IgiLCeGPEln9V"
+   ],
+   "name": "K3"
+  },
+  {
+   "use": "toolu_01C7xmu2jmdjjrP5L5GXx9nP",
+   "time": "2026-11-14T13:53:35.996Z",
+   "flow": "Zbs7p9CGD1RBI4UPlT7n",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "많은 사람들은 메시야를 로마를 몰아낼 왕으로만 기다렸습니다.",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "",
+   "node": "Rcg1BPkl5BhP7FXuDD9l",
+   "sessions": [
+    "EQnnxMdAwyqFQkXiCcnz",
+    "55YsAOoi0jsvMNCk23Dv"
+   ],
+   "name": "N06"
+  },
+  {
+   "use": "toolu_01B2AiNBXfnvSKcGzoSGbu3o",
+   "time": "2026-11-14T13:53:37.347Z",
+   "flow": "Zbs7p9CGD1RBI4UPlT7n",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "예수님이 오신 뒤 어느 날, 베드로가 고백했습니다.",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "",
+   "node": "V9ijys0g62LezCB2MZRA",
+   "sessions": [
+    "4PrkLAfG8SU5h0eiKL3O",
+    "WVW5zTbDMtNc07j9SLhj"
+   ],
+   "name": "N07"
+  },
+  {
+   "use": "toolu_01EF6efDvYoUxbGVk8sRh8kV",
+   "time": "2026-11-14T13:53:38.600Z",
+   "flow": "Zbs7p9CGD1RBI4UPlT7n",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "주는 그리스도시요",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "",
+   "node": "nGegJTjhizsovhT4rX7y",
+   "sessions": [
+    "CHY8i2QIzZRNiQurmOZb",
+    "50B76YpxNNEAf3NclCpC"
+   ],
+   "name": "Q2"
+  },
+  {
+   "use": "toolu_01V3wxznrj8zkZ5EcvCMan3L",
+   "time": "2026-11-14T13:53:39.860Z",
+   "flow": "Zbs7p9CGD1RBI4UPlT7n",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "그때부터 예수님은 고난받고 죽임을 당하고 사흘 만에 살아나야 한다고 말씀하셨습니다.",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "",
+   "node": "Io8FpRkD16sqKhnxj8OK",
+   "sessions": [
+    "DCAkuU91kBn8Ga6SiLfC",
+    "fOJTGuBSZnzOTMsLVNP6"
+   ],
+   "name": "N08"
+  },
+  {
+   "use": "toolu_016Fmyake8fJHmX9jwiPUS4t",
+   "time": "2026-11-14T13:54:04.657Z",
+   "flow": "Zbs7p9CGD1RBI4UPlT7n",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "주여 그리 마옵소서",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "",
+   "node": "fzZxnlMo7zWUJ47wdg42",
+   "sessions": [
+    "A23T1cAJxALu4hdw9IWI",
+    "rxIaDUguWtJdsWNgGsEG"
+   ],
+   "name": "Q3"
+  },
+  {
+   "use": "toolu_016pkVyamTxSXc7JJ6AWsWHd",
+   "time": "2026-11-14T13:54:06.002Z",
+   "flow": "Zbs7p9CGD1RBI4UPlT7n",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "베드로에게 죽는 그리스도는 말이 안 됐습니다.",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "",
+   "node": "y9IBgptTVGx3XHYwdp1z",
+   "sessions": [
+    "h0vh8dI6IcW1qHYwy4ZY",
+    "OQuiprAJH3F8BVFciTVP"
+   ],
+   "name": "N09"
+  },
+  {
+   "use": "toolu_01Y414zRUKsa331ZPb37cD64",
+   "time": "2026-11-14T13:54:07.303Z",
+   "flow": "Zbs7p9CGD1RBI4UPlT7n",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "그런데 그 길은 이미 적혀 있었습니다.",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "",
+   "node": "q7srLadosrXkgCAlIydS",
+   "sessions": [
+    "rlmUKxb3HNjV1JAXFsGV",
+    "H7qH7fedTGQpeeQJbD0f"
+   ],
+   "name": "N10"
+  },
+  {
+   "use": "toolu_01RnzDp83pPffqxfJXnyAUHV",
+   "time": "2026-11-14T13:54:08.704Z",
+   "flow": "Zbs7p9CGD1RBI4UPlT7n",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "그가 찔림은 우리의 허물 때문이요 그가 상함은 우리의 죄악 때문이라",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "",
+   "node": "bRezsi5htPE4Alkhx8p4",
+   "sessions": [
+    "4G8jIQXL0BhOzPhfgDKd",
+    "D70lNnCL7qI1FZkqnBnQ"
+   ],
+   "name": "Q4"
+  },
+  {
+   "use": "toolu_01NM5EE2yhibRTtKPUQNV9Qt",
+   "time": "2026-11-14T13:54:09.960Z",
+   "flow": "Zbs7p9CGD1RBI4UPlT7n",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "십자가 위, 예수님의 외침.",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "",
+   "node": "WV8hNpqWLLnqwtC8zF3G",
+   "sessions": [
+    "YQTrUMD5amf3FQ7MKrFO",
+    "JERtZznjgkqxUEukaMrM"
+   ],
+   "name": "N11"
+  },
+  {
+   "use": "toolu_01MmEXFQEgAgHLVw1jvCdK7o",
+   "time": "2026-11-14T13:54:11.307Z",
+   "flow": "Zbs7p9CGD1RBI4UPlT7n",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "나의 하나님, 나의 하나님, 어찌하여 나를 버리셨나이까",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "",
+   "node": "Zl8BzXDHwh9W6H955LQN",
+   "sessions": [
+    "uCOh6ShsCkHc6X2ZIOoM",
+    "0feOZrHwob5VdOV5kau7"
+   ],
+   "name": "Q5"
+  },
+  {
+   "use": "toolu_01JhUDgGBDB1qHQTJyDu6CQo",
+   "time": "2026-11-14T13:54:12.759Z",
+   "flow": "Zbs7p9CGD1RBI4UPlT7n",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "이 외침은 천 년 전, 기름 부음 받은 왕 다윗이 쓴 시편의 첫 줄입니다.",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "",
+   "node": "lioYpkiiub0FSZ9gz2E7",
+   "sessions": [
+    "RueVUp4QxUehvjmdHhCm",
+    "TKcRsfl6HhahXhfazEES"
+   ],
+   "name": "N12"
+  },
+  {
+   "use": "toolu_01SJZEARLQE6LxBaDc5xP6Bc",
+   "time": "2026-11-14T13:54:14.109Z",
+   "flow": "Zbs7p9CGD1RBI4UPlT7n",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "내 하나님이여 내 하나님이여 어찌 나를 버리셨나이까",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "",
+   "node": "zTU2qU6mZoA3HaWdEnWW",
+   "sessions": [
+    "F84VCbsY4CN8Y4Fdui1U",
+    "rJjvKsMxUL8hx26bzQvh"
+   ],
+   "name": "Q6"
+  },
+  {
+   "use": "toolu_01A5A3HdGS2WTYrbMHtFRu3Z",
+   "time": "2026-11-14T13:54:15.461Z",
+   "flow": "Zbs7p9CGD1RBI4UPlT7n",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "내 겉옷을 나누며 속옷을 제비 뽑나이다",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "",
+   "node": "NxkioSZwYhreTAkBUoNw",
+   "sessions": [
+    "9yiWXl7foPS4iW0NEfy6",
+    "GoMM0Um5LULgbQHlwH9O"
+   ],
+   "name": "Q7"
+  },
+  {
+   "use": "toolu_018LbvzfEbbYAVWZphj6EQHA",
+   "time": "2026-11-14T13:54:16.810Z",
+   "flow": "Zbs7p9CGD1RBI4UPlT7n",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "십자가 아래 군인들은 그 겉옷을 나누고 속옷을 제비 뽑았습니다.",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "",
+   "node": "Nyd83CsnDG0dJNrtgOfj",
+   "sessions": [
+    "lbSduQhCOYVqanmQB0ho",
+    "IDFSyTj7rFJr4TvAx9f7"
+   ],
+   "name": "N14"
+  },
+  {
+   "use": "toolu_01WTwcKmWKVCvTB3H6SjcJnF",
+   "time": "2026-11-14T13:54:18.062Z",
+   "flow": "Zbs7p9CGD1RBI4UPlT7n",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "'그리 마옵소서' 하던 베드로가 훗날 사람들 앞에서 전한 말.",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "",
+   "node": "J7nd214ENui9qVjkVSz2",
+   "sessions": [
+    "uA88gPEefJ8j9ux9OKEY",
+    "DuULHJkVP7Y6ydERwri4"
+   ],
+   "name": "N20"
+  },
+  {
+   "use": "toolu_01WS197Kx7QJuFuBr34MULCm",
+   "time": "2026-11-14T13:54:43.842Z",
+   "flow": "Zbs7p9CGD1RBI4UPlT7n",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "하나님이 나사렛 예수에게 성령과 능력을 기름 붓듯 하셨으매 그가 두루 다니시며 선한 일을 행하시고",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "",
+   "node": "Fa5uGyRNZxj1NAxotloa",
+   "sessions": [
+    "wwHCW02c04eyBpVjRlMX",
+    "ow9Gbq4xGF91Vei8ay2q"
+   ],
+   "name": "Q9"
+  },
+  {
+   "use": "toolu_018MWGaoncPSurHSsFXEFC6J",
+   "time": "2026-11-14T13:54:45.144Z",
+   "flow": "Zbs7p9CGD1RBI4UPlT7n",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "그를 그들이 나무에 달아 죽였으나",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "",
+   "node": "QLklVo4fbB5IrrWqZ930",
+   "sessions": [
+    "u8cUABe6Wrk5yKntjV0N",
+    "qS1eYMXmumXBZPHpBYfD"
+   ],
+   "name": "Q11"
+  },
+  {
+   "use": "toolu_01LmPBh7eqBaSkJfhT46u51N",
+   "time": "2026-11-14T13:54:46.450Z",
+   "flow": "Zbs7p9CGD1RBI4UPlT7n",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "하나님이 사흘 만에 다시 살리사",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "",
+   "node": "BL669j4KwWuKTdweOEGW",
+   "sessions": [
+    "uvuQlap3yBdXXQoQNPva",
+    "WlyHNbKTYQzXvJlRrCLQ"
+   ],
+   "name": "Q12"
+  },
+  {
+   "use": "toolu_01Eze7uQdcWE1L1vQAZvsvZp",
+   "time": "2026-11-14T13:54:47.747Z",
+   "flow": "Zbs7p9CGD1RBI4UPlT7n",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "고난받는 그리스도는 실패가 아니라, 성경이 가리킨 길.",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "",
+   "node": "M6n5utIDkNsA1mjIq172",
+   "sessions": [
+    "vdXeGOyXCENZbcHFNw58",
+    "1ebMFtj7MUpgIXrxzWQa"
+   ],
+   "name": "N15"
+  },
+  {
+   "use": "toolu_01FaXai7Y6dULHRGmo4acvGc",
+   "time": "2026-11-14T13:54:48.952Z",
+   "flow": "Zbs7p9CGD1RBI4UPlT7n",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "왕,",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "",
+   "node": "xg91yaG8nGguWPt9wOzr",
+   "sessions": [
+    "BJUA8U5EQ75xAbVhUcUo",
+    "wjCKrR5olqjMb912twe5"
+   ],
+   "name": "N16K"
+  },
+  {
+   "use": "toolu_011aEGbQtuwYvLNeS5L5tn7a",
+   "time": "2026-11-14T13:54:50.149Z",
+   "flow": "Zbs7p9CGD1RBI4UPlT7n",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "제사장,",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "",
+   "node": "F7A2ZCGxMyCtoLh23vrM",
+   "sessions": [
+    "6lsHYa2S6HdWriqHJRst",
+    "aDCCqeTtjhBhyMtlMpxW"
+   ],
+   "name": "N16P"
+  },
+  {
+   "use": "toolu_01LaBbj47M3kt9xxeEAKoAnN",
+   "time": "2026-11-14T13:54:51.351Z",
+   "flow": "Zbs7p9CGD1RBI4UPlT7n",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "선지자,",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "",
+   "node": "vS47oitQiKK640HtTCKi",
+   "sessions": [
+    "MnuirmO7PwYfV5t26pNr",
+    "99XMo9n4Q6D1yPOYu2oI"
+   ],
+   "name": "N16R"
+  },
+  {
+   "use": "toolu_017P42fYyRAwMkgtW7hS2R97",
+   "time": "2026-11-14T13:54:52.602Z",
+   "flow": "Zbs7p9CGD1RBI4UPlT7n",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "세 직분이, 한 분에게.",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "",
+   "node": "jSCAhYGdeiPMK5J8uvDg",
+   "sessions": [
+    "BY4jUBsCw6K64tH6McyT",
+    "dqTY1skqonsF3nBsly3L"
+   ],
+   "name": "N16"
+  },
+  {
+   "use": "toolu_014VcC88L4ChcTvLwh5d3r1C",
+   "time": "2026-11-14T13:54:54.015Z",
+   "flow": "Zbs7p9CGD1RBI4UPlT7n",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "'그리스도'는 성이 아니라, 예수님이 바로 그 메시야라는 고백입니다.",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "",
+   "node": "xdVpoYmxPrghuDqC8dTt",
+   "sessions": [
+    "rvs45K1Ntm0ERbi7B18R",
+    "CihMk83LZXWCzm8GkE2B"
+   ],
+   "name": "N17"
+  },
+  {
+   "use": "toolu_01PC2Nf81zhEkTxucgjsPpLH",
+   "time": "2026-11-14T13:54:55.402Z",
+   "flow": "Zbs7p9CGD1RBI4UPlT7n",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "그를 믿는 사람들이 다 그의 이름을 힘입어 죄 사함을 받는다",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "",
+   "node": "jpAPQl0fq99kAGGDBTk3",
+   "sessions": [
+    "4Xv5feLk9bOADVtzqJxC",
+    "dbk46DmLkFkXq1RjM01x"
+   ],
+   "name": "Q14"
+  },
+  {
+   "use": "toolu_015rLNEcxgPkF5J7Q61SL7xe",
+   "time": "2026-11-14T13:54:56.455Z",
+   "flow": "Zbs7p9CGD1RBI4UPlT7n",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "주는 그리스도시요",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "",
+   "node": "OVb3ATElLzBQ3ORw1sPh",
+   "sessions": [
+    "V8P61JzoIXZJo5JspT4F",
+    "GAN8EQKFw2tvqWjHfDYM"
+   ],
+   "name": "Q13"
+  },
+  {
+   "use": "toolu_012dCkJBspLQ9gP89arRzodq",
+   "time": "2026-11-14T14:11:12.537Z",
+   "flow": "FEsz8qczhCIpPe85UWpV",
+   "tool": "creative_add_flow_node:music",
+   "model": "eleven_music_v2_5",
+   "label": "CM1 1악장 기름 부음 (45.5s)",
+   "prompt": "Instrumental only. One continuous movement, 45 seconds, never stopping or restarting: a cinematic chamber-orchestra piece of quiet wonder. A slow, noble four-note anointing theme in E minor runs through all of it; every change grows out of what is already playing. 0–8 s: a solo cello alone plays the theme very softly, intimate and close, like a candle in a dark room, with a faint low string pedal on E. At about 8 s a harp joins with slow rippling figures like water in late-afternoon light, the cello answering. At about 14 s everything thins to one suspended high violin note with faint glassy harmonics, still and expectant, for five seconds. At about 19.5 s near silence for one breath. At 20.3 s a radiant warm bloom: full strings, soft French horns and a wordless choir state the theme in E major, the fullest moment of the movement around 21.5 s, then easing by 23.5 s. At about 23.5 s a soft wooden shepherd's flute takes the theme over warm low strings, a hillside at sunset, quiet under a spoken voice; at about 29 s the strings rise warmly and gently for four seconds, like oil poured out, then settle. At about 36 s it turns solemn and hushed: low strings and one soft horn, reverent. At about 40 s the cello takes the theme back over the harp, a gentle lift at 42 s, and at 44 s the harmony darkens toward minor, as if continuing. Slow tempo, about 60 BPM, spacious, mid-range kept clear for a voice, no drums, no synths.",
+   "params": {
+    "duration_seconds": 45.5,
+    "instrumental": true,
+    "lyrics_type": "instrumental"
+   },
+   "why": "",
+   "node": "EROqItHJng9qhfwaWPR0",
+   "sessions": [
+    "VLtFwoGSPgLyFczetJXo",
+    "R0leGD5bvZZ3usqiV6rZ",
+    "wZnC2aR69J1q5QSXByhd",
+    "lmS5ndhCKw8uAI0nH9k6"
+   ],
+   "name": "CM1"
+  },
+  {
+   "use": "toolu_01QKeceG1CG5FT7bTJfj5ZNW",
+   "time": "2026-11-14T14:11:23.708Z",
+   "flow": "FEsz8qczhCIpPe85UWpV",
+   "tool": "creative_add_flow_node:music",
+   "model": "eleven_music_v2_5",
+   "label": "CM2 2악장 길과 십자가 (55s)",
+   "prompt": "Instrumental only. One continuous movement, 55 seconds, never stopping or restarting, continuing a piece already in progress (the same slow four-note anointing theme in E minor). 0–7 s: the color turns cold and grand: low brass and low strings in minor with a deep, soft frame-drum pulse, stern and imperial, wind on stone walls. At about 7 s warmth returns: a steady walking low-string ostinato with a softly plucked oud, a band of men on a dusty road at golden hour, and the solo cello sings the theme above it, quiet under a spoken voice. At about 11 s one warm, bright major chord blooms for two seconds, then the walk goes on. At about 15 s the harmony darkens and the walking slows and hesitates, the theme in minor, unease growing. At about 23 s tension: quick string tremolo and a dissonant viola cry, urgent, for four seconds. At about 27 s it empties to a solo cello and one faint high glassy note, alone at dusk, the first star. At about 32 s intimate and ancient: a harp and a solo viola in minor, lamplight on an old scroll, very quiet under a voice. At about 43 s grave darkness: one low string drone and a slow, sparse lament on solo cello, bare, no warmth. At about 47.5 s it sinks lower and darker, almost silent. At about 52 s only a single warm low note remains, held, like an ember, fading to the end. Slow tempo, mid-range kept clear for a voice, no synths.",
+   "params": {
+    "duration_seconds": 55,
+    "instrumental": true,
+    "lyrics_type": "instrumental"
+   },
+   "why": "",
+   "node": "x0m7cwzP5iUFdiDKa21j",
+   "sessions": [
+    "UCOdjxgLD4be0o8BfK8x",
+    "7yj9JtDbVsIokAAeiO2W",
+    "imzpHM57XoGNDvI1osk9",
+    "drdZhD0shuDfS3Z15FvE"
+   ],
+   "name": "CM2"
+  },
+  {
+   "use": "toolu_01861qdWkQM4xSSWnP2m1T69",
+   "time": "2026-11-14T14:11:34.004Z",
+   "flow": "FEsz8qczhCIpPe85UWpV",
+   "tool": "creative_add_flow_node:music",
+   "model": "eleven_music_v2_5",
+   "label": "CM3 3악장 이미 적힌 길 (52s)",
+   "prompt": "Instrumental only. One continuous movement, 52 seconds, never stopping or restarting, continuing a piece already in progress (the same slow four-note anointing theme in E minor). 0–1 s from near silence: a soft celesta spark and a harp note, like a lamp catching flame. From about 1 s a solo violin sings the theme as an ancient psalm-lament over a quiet low string pad and a plucked lyre, sorrowful, very quiet under a spoken voice. At about 5.4 s a soft glassy shimmer of high strings swells for two seconds and settles; at about 11.6 s the same shimmer once more. At about 16.5 s dry and sparse: a few low pizzicato notes, stark daylight, waiting. At about 22.4 s warmth and resolve: strings begin to move forward gently, hopeful, the cello carrying the theme. At about 27 s luminous and airy: high strings, a soft wordless choir and slow descending harp, a pale gentle light coming down, tender and still, quiet under a voice, for ten seconds. At about 37.5 s it goes cold and bare: one low drone only. At about 40 s, with no voice, one grave, aching full string chord swells alone for two seconds, the most sorrowful moment, then fades to a hush. At about 42 s dawn: the strings rise slowly and gently into E major with a soft choir hum, the first warm light, then warm and calm under a voice to the end. Slow tempo, no drums, no synths.",
+   "params": {
+    "duration_seconds": 52,
+    "instrumental": true,
+    "lyrics_type": "instrumental"
+   },
+   "why": "",
+   "node": "ONWcf1ZeXd9zIxBrez0I",
+   "sessions": [
+    "zKNEBdRi95C5sSVt2U2u",
+    "xBIbtjsgRQkorC5QMbeJ",
+    "24ZuFR1lZXtw5N3f8EPt",
+    "E6DtFQWFkfI2HnQvv7NN"
+   ],
+   "name": "CM3"
+  },
+  {
+   "use": "toolu_01KsZ4xcCnJcgr91SZLwupkz",
+   "time": "2026-11-14T14:11:38.860Z",
+   "flow": "FEsz8qczhCIpPe85UWpV",
+   "tool": "creative_add_flow_node:music",
+   "model": "eleven_music_v2_5",
+   "label": "CM4 4악장 한 분에게 (32s)",
+   "prompt": "Instrumental only. One continuous movement, 32 seconds, never stopping or restarting, continuing a piece already in progress (the same slow four-note anointing theme, now in E major). It opens on warm sustained strings. At about 0.4 s a French horn plays the first phrase of the theme, rising; at about 2.8 s the phrase again, a step higher, with more strings; at about 5.2 s a third time, higher still, with a soft choir: three rising steps. From about 7.4 s everything gathers and builds steadily. At about 9.7 s a radiant, full swell: full orchestra and wordless choir state the theme in E major, like the sun rising, the fullest and brightest moment of the whole score around 10.5 s. At about 11.6 s it settles into peace: solo cello and harp over warm sustained strings, candlelight and morning, quiet under a spoken voice. At about 18.8 s tender and close. At about 24.6 s the strings softly state the theme one last time. At about 27 s a breath of near silence, then at about 27.6 s one long, warm open E major chord that decays slowly to silence by the end. Slow tempo, no drums, no synths.",
+   "params": {
+    "duration_seconds": 32,
+    "instrumental": true,
+    "lyrics_type": "instrumental"
+   },
+   "why": "",
+   "node": "X5MlpGCKegyVe8MZOnIN",
+   "sessions": [
+    "B9k50EQmi00DVz8zklnI",
+    "AlvL5SDVaddKTpN8QqJm",
+    "P9BvzVglRAVlEBENqzI9",
+    "LpgKyOoYu398tP72XJEg"
+   ],
+   "name": "CM4"
+  },
+  {
+   "use": "toolu_01JLabkDU7BALFvV3xPv2Rsd",
+   "time": "2026-11-14T14:13:22.978Z",
+   "flow": "FEsz8qczhCIpPe85UWpV",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S01 candle room open",
+   "prompt": "A single candle burning in a quiet old wooden room at night: a soft breathing flame with tiny flutters and a faint wick crackle, still room tone, a slow gentle rush of air as if drawing back, close and intimate, very quiet",
+   "params": {
+    "duration_seconds": 8.6,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "",
+   "node": "Dz0Qai1hk7p3mcMhKptS",
+   "sessions": [
+    "70ghgL2NY03LLY7d9ICo",
+    "uKw1aXeEEafwYghruxqX",
+    "P0MPOHqiVwe4j2JUlCTR",
+    "r5c94aM4sfyyKVCzX9kH"
+   ],
+   "name": "S01"
+  },
+  {
+   "use": "toolu_01NPDYUvLzne3fhAfBVXCgeX",
+   "time": "2026-11-14T14:13:40.957Z",
+   "flow": "FEsz8qczhCIpPe85UWpV",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S02 page corner",
+   "prompt": "One page of a large old Bible lifting slightly at its corner and settling back: a soft dry paper whisper, very close and quiet",
+   "params": {
+    "duration_seconds": 2,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "",
+   "node": "8k9pMAf1de225VhWwdF3",
+   "sessions": [
+    "IfolNpoWibMlrN4JXqB9",
+    "Dhy8b7skFcx3aKSWh0iY",
+    "ZAmTvn1FgibxdaB3Qxzl",
+    "Ws1tFtimFqbkUvatkyyr"
+   ],
+   "name": "S02"
+  },
+  {
+   "use": "toolu_01MLpWNGRPqXiQ7svNhoPLmi",
+   "time": "2026-11-14T14:13:43.045Z",
+   "flow": "FEsz8qczhCIpPe85UWpV",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S03 Jordan river",
+   "prompt": "A wide river in late afternoon: slow water lapping against a reed bank, reeds rustling in a light warm breeze, one distant bird, calm and open, quiet",
+   "params": {
+    "duration_seconds": 7,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "",
+   "node": "Sua8pyon4ssNqvSPwdgi",
+   "sessions": [
+    "mU7vd91Oubo3S06ar66C",
+    "C0oAbFAK5TppOlf2aQ1f",
+    "QxlNO5zooc7BpWAldjiN",
+    "lB4cMlFnpgBSVkEMBr6Q"
+   ],
+   "name": "S03"
+  },
+  {
+   "use": "toolu_01LhKaqMd414NpN11zSxatPz",
+   "time": "2026-11-14T14:13:45.493Z",
+   "flow": "FEsz8qczhCIpPe85UWpV",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S04 Andrew hurrying",
+   "prompt": "A man hurrying along a pebbly river bank in leather sandals: quick light footsteps on wet gravel and sand, robe swishing, slowing to a stop at the end, close",
+   "params": {
+    "duration_seconds": 2.6,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "",
+   "node": "3pbSsePYy7hUqHXbGISs",
+   "sessions": [
+    "JWdLrTFloGSPCfBMtvXn",
+    "bMy4d3WSxfkp2jxkP3EB",
+    "kFPduiua4kbvthpDyCAc"
+   ],
+   "name": "S04"
+  },
+  {
+   "use": "toolu_01Neh8mibsefV2wY16uD2HW6",
+   "time": "2026-11-14T14:13:47.843Z",
+   "flow": "FEsz8qczhCIpPe85UWpV",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S05 Simon half step",
+   "prompt": "One slow half step on river sand in a leather sandal with a soft wool robe rustle, close and quiet",
+   "params": {
+    "duration_seconds": 1.2,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "",
+   "node": "2VoIaU7IQE3MGLaXEGs2",
+   "sessions": [
+    "eh3QeCnsW6BLY2shtnQp",
+    "I8Us1VMMil7MBr0J8qtS",
+    "2q1lzS6Ygz8Omtv9t8SP"
+   ],
+   "name": "S05"
+  },
+  {
+   "use": "toolu_01GxPWdgkuAfgc7UqaK7Tpfu",
+   "time": "2026-11-14T14:13:50.292Z",
+   "flow": "FEsz8qczhCIpPe85UWpV",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S06 oil drop swelling",
+   "prompt": "A single drop of thick golden oil swelling slowly at the tip of a thin stream as the stream stretches thin: a faint soft viscous creak, almost silent, very close",
+   "params": {
+    "duration_seconds": 1.15,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "",
+   "node": "o0tGTKiEc6apUStJCnUT",
+   "sessions": [
+    "848hebd3kctNrmedZCQq",
+    "ofSxVrY4aEMPtNcKLHJM",
+    "0LDms32w3AK6FR91ccPG"
+   ],
+   "name": "S06"
+  },
+  {
+   "use": "toolu_01BxmGbf3MZuvAiMkBbaUxWD",
+   "time": "2026-11-14T14:13:52.642Z",
+   "flow": "FEsz8qczhCIpPe85UWpV",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S07 oil drop falls",
+   "prompt": "A thick drop of oil breaking free with a tiny wet click and falling slowly through still air: a soft airy descending whisper, very quiet, no impact",
+   "params": {
+    "duration_seconds": 2.35,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "",
+   "node": "GuW8tpMnkafxOhmOfNQc",
+   "sessions": [
+    "Q055EAvxUswHKTC0ptjH",
+    "bFMdlkaaZcRboh7TWDM6",
+    "1qxJtYp1rgTiZ3ITEW8c"
+   ],
+   "name": "S07"
+  },
+  {
+   "use": "toolu_015jtr4S1AZAGXtE1spBfRQc",
+   "time": "2026-11-14T14:13:55.091Z",
+   "flow": "FEsz8qczhCIpPe85UWpV",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S08 oil lands spreads",
+   "prompt": "A thick drop of warm oil landing softly on old dark wood and spreading out without a splash: a gentle viscous touch, then a low warm glassy bloom swelling, quiet",
+   "params": {
+    "duration_seconds": 2.5,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "",
+   "node": "ib8Rveve95NciEwZrfIO",
+   "sessions": [
+    "jmcqnx1Gt4BY1PP5Z5Gx",
+    "KXpR1VLrqbu8pwkPPLfC",
+    "8vNBamBryWEZCrVyncHQ"
+   ],
+   "name": "S08"
+  },
+  {
+   "use": "toolu_01MYdptC8AgKcvw9cVrkN98R",
+   "time": "2026-11-14T14:13:57.542Z",
+   "flow": "FEsz8qczhCIpPe85UWpV",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S09 light gathers to title",
+   "prompt": "Golden light gathering and rising into one place: a soft warm glassy shimmer that slowly swells and brightens over a fine faint scratch, delicate, ending in a calm glow",
+   "params": {
+    "duration_seconds": 3.4,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "",
+   "node": "9IRwmgpKDaFq4oiA6ewu",
+   "sessions": [
+    "jgLvbQHOKtPrsZPs7G2A",
+    "8dgiTHCzhK6NhO28NmXe",
+    "qLQ66oK2sPFlJNO8H5gw",
+    "9bJqraORg2bUbs2RDrRo"
+   ],
+   "name": "S09"
+  },
+  {
+   "use": "toolu_01SJLGuwyDHA2SieKNpCfGYM",
+   "time": "2026-11-14T14:14:00.141Z",
+   "flow": "FEsz8qczhCIpPe85UWpV",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S11 Samuel walks up hill",
+   "prompt": "An old man walking slowly up a grassy hillside at sunset in leather sandals: unhurried footsteps on dry grass and earth, a wool robe brushing, a warm evening breeze, distant sheep, quiet",
+   "params": {
+    "duration_seconds": 4.8,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "",
+   "node": "9l0hjxWttqNBSCN7zhUO",
+   "sessions": [
+    "59R9EHA5I5VKFVaHWIvY",
+    "NfEM123H87XoyNGrOwrM",
+    "1Ie2SFqE1SnHW0YytmMR"
+   ],
+   "name": "S11"
+  },
+  {
+   "use": "toolu_01CHKVQ2UrFVAZCpHgUotN6u",
+   "time": "2026-11-14T14:14:02.591Z",
+   "flow": "FEsz8qczhCIpPe85UWpV",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S12 horn lifted",
+   "prompt": "An old ram's horn vessel lifted up high in both hands: a soft hollow horn knock, a leather strap creak and a wide wool sleeve sliding, close and quiet",
+   "params": {
+    "duration_seconds": 1.4,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "",
+   "node": "EFrtOjF2AV5ILX6icSCm",
+   "sessions": [
+    "mfYtuEukOeGmXyiIhAv8",
+    "1as7Q7DUHxumepB1cqou",
+    "sCuMoSEhsbt4IWQN4PTA"
+   ],
+   "name": "S12"
+  },
+  {
+   "use": "toolu_011iyaGoZD5dEwZnqdXLuEvk",
+   "time": "2026-11-14T14:14:05.253Z",
+   "flow": "FEsz8qczhCIpPe85UWpV",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S13 horn pour on David",
+   "prompt": "Thick golden olive oil poured slowly from a ram's horn onto a young man's hair: a soft gurgle as it starts after half a second, then a thick viscous trickle flowing steadily, glistening, close and quiet",
+   "params": {
+    "duration_seconds": 4.5,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "",
+   "node": "PtNDALuFsNxBFlF7aNDq",
+   "sessions": [
+    "LfgbFzXyZDJ2DmsJNdRx",
+    "12V00TyaDVB6109fbD4a",
+    "gZRgbdY0RGfpNmEINqsn"
+   ],
+   "name": "S13"
+  },
+  {
+   "use": "toolu_01N4C2rDT3GP5LcrAf3xnNPr",
+   "time": "2026-11-14T14:14:07.790Z",
+   "flow": "FEsz8qczhCIpPe85UWpV",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S14 jug pour on Aaron",
+   "prompt": "A small clay jug tipped over a cloth turban: a soft clay knock, then a thin stream of thick oil pouring gently and trickling down cloth, warm, close and quiet",
+   "params": {
+    "duration_seconds": 4,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "",
+   "node": "BvFrYwC9i5zlfIXoxc27",
+   "sessions": [
+    "DH6pJT7o6bNwBsUhwyoW",
+    "vbvJ6gyEv0iFdv6EBqbE",
+    "hfGQDBQ8cHjd5qxanRgQ"
+   ],
+   "name": "S14"
+  },
+  {
+   "use": "toolu_01PhvP7dLjUj7NKbhiKuDK76",
+   "time": "2026-11-14T14:14:10.457Z",
+   "flow": "FEsz8qczhCIpPe85UWpV",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S15 tent door hush",
+   "prompt": "Inside the doorway of an ancient tent shrine at dusk: a woven curtain breathing softly in still air, an oil lamp burning behind it with a faint flutter, deep hush, reverent",
+   "params": {
+    "duration_seconds": 4.1,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "",
+   "node": "z3ev1LojdaE2IYcrrV02",
+   "sessions": [
+    "JRaVoVtFbOkbSdkFTKOj",
+    "lWmbeM40TOgrW1boa5ff",
+    "YY5UqxwMHZH7TiVoIuwy"
+   ],
+   "name": "S15"
+  },
+  {
+   "use": "toolu_01KL3BeUrmmFrkGVJKrTxEhc",
+   "time": "2026-11-14T14:14:13.064Z",
+   "flow": "FEsz8qczhCIpPe85UWpV",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S16 oxen plough field",
+   "prompt": "Two oxen plodding slowly through a ploughed field at sunset: heavy soft hoof steps in earth, a wooden plough cutting a furrow with a low crumbling scrape, a wooden yoke creaking, a light breeze",
+   "params": {
+    "duration_seconds": 4.4,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "",
+   "node": "Azgpk0THPCGDW5FyOQfi",
+   "sessions": [
+    "w2HKup73nkkkOlmORuyQ",
+    "Qy6BbpOBRKtHpwL8iOpk",
+    "GWhKgw4o1DuoUBxyZeEk"
+   ],
+   "name": "S16"
+  },
+  {
+   "use": "toolu_01UwpuQphnLJdt7cr19U7KLW",
+   "time": "2026-11-14T14:14:15.291Z",
+   "flow": "FEsz8qczhCIpPe85UWpV",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S17 cloak gathered",
+   "prompt": "A heavy woven wool cloak slipping off a forearm into a hand: a short thick fabric rustle, close",
+   "params": {
+    "duration_seconds": 0.6,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "",
+   "node": "tm53rI0XGU3nkAz5FhEj",
+   "sessions": [
+    "poMx3EZFX2B36T1H9Z2S",
+    "S47z76RhdWLkmlFtxvHb",
+    "Mk7y7HAiGqJBoNHtuw4y"
+   ],
+   "name": "S17"
+  },
+  {
+   "use": "toolu_014YkkVvUW731m8YMSGQvSno",
+   "time": "2026-11-14T14:14:17.647Z",
+   "flow": "FEsz8qczhCIpPe85UWpV",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S18 cloak swing",
+   "prompt": "A heavy wool cloak swung once through the air and let go: a deep soft cloth whoosh with a flap at the end",
+   "params": {
+    "duration_seconds": 0.5,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "",
+   "node": "rQ7nWLVP0uOic7z0KWVm",
+   "sessions": [
+    "9r4KIrG9PKcWkyUKnYnx",
+    "CoItu6figWXWSJx3JMOV",
+    "RHXD1fgSwYzD0IySlcTz"
+   ],
+   "name": "S18"
+  },
+  {
+   "use": "toolu_017Hhw8VfCcgXvJGJKJvNVae",
+   "time": "2026-11-14T14:14:20.146Z",
+   "flow": "FEsz8qczhCIpPe85UWpV",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S19 cloak lands",
+   "prompt": "A heavy wool cloak landing over a man's shoulders and back: a soft thick fabric thump, then a short settle and sway of cloth, close",
+   "params": {
+    "duration_seconds": 1,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "",
+   "node": "C9FcyluVHD1s8J01MmC1",
+   "sessions": [
+    "AA9z9cFeW7CuZ5EfYOMB",
+    "1Qs7yhm8sCkhLTsseeAq",
+    "ZYeUjk87lChEPrdYSdSm"
+   ],
+   "name": "S19"
+  },
+  {
+   "use": "toolu_016LfCr6bmubg8tDqo4rRfFn",
+   "time": "2026-11-14T14:14:22.443Z",
+   "flow": "FEsz8qczhCIpPe85UWpV",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S20 beam on Elisha",
+   "prompt": "A soft warm glassy shimmer swelling gently as a beam of golden light falls from above, delicate and quiet",
+   "params": {
+    "duration_seconds": 1.3,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "",
+   "node": "SblA1QcoHMMAfABbmOKs",
+   "sessions": [
+    "cjkWd6juQ6KKwPCqPriX",
+    "tDGqzRIeuqyOG8qs8Yh9",
+    "F7Ig1MB1YVDobsmIjUjp"
+   ],
+   "name": "S20"
+  },
+  {
+   "use": "toolu_015XQNskfLWofkLgPXJJ4NnU",
+   "time": "2026-11-14T14:14:24.839Z",
+   "flow": "FEsz8qczhCIpPe85UWpV",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S21 gate wind",
+   "prompt": "Evening wind moving through a tall arched stone city gate: a hollow airy wind along stone walls, a distant murmur of a city, a far dog bark, cool and wide, no music",
+   "params": {
+    "duration_seconds": 8.2,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "",
+   "node": "S0hzMk7pG4JlcXE1tiTf",
+   "sessions": [
+    "LSihtjNrdLx9wpuHjD9g",
+    "l1yDjuOr74hh3EWTLjx3",
+    "OB1h5RlBKuZpMMhkkCVE"
+   ],
+   "name": "S21"
+  },
+  {
+   "use": "toolu_01RvJS7ipNKMZc6PQHbatcKz",
+   "time": "2026-11-14T14:14:27.189Z",
+   "flow": "FEsz8qczhCIpPe85UWpV",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S22 crowd in gate",
+   "prompt": "A small crowd standing in a stone gateway: a few low murmurs, robes rustling, one man shifting his feet on stone, quiet",
+   "params": {
+    "duration_seconds": 1.6,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "",
+   "node": "U58qlz6UTMHpjbbRcF4G",
+   "sessions": [
+    "hxzlKj3SKWZbsn2VlSnv",
+    "JZ2eMHS23SA8gNhKCjZl",
+    "bOZw6bSKFeJymw598Mrz",
+    "06J7bjnnALoXXXCJqXz8"
+   ],
+   "name": "S22"
+  },
+  {
+   "use": "toolu_01NRh6YDCwkpexhboX9AiKZg",
+   "time": "2026-11-14T14:14:29.689Z",
+   "flow": "FEsz8qczhCIpPe85UWpV",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S23 Roman standard",
+   "prompt": "A heavy cloth military banner flapping slowly high on a stone wall in the evening wind, with faint metal clinks of armor and a spear shaft, distant and stern",
+   "params": {
+    "duration_seconds": 3,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "",
+   "node": "WfCA6wRthEkK2RQkdy2X",
+   "sessions": [
+    "VwER3I2SxkJGCt1OeGJZ",
+    "kvT9C6tVQzfsY6s7wRQd",
+    "wX4JJ4IS6jEgRjgu1YV1",
+    "Bq0Pbs0BMet0QmRs8hhH"
+   ],
+   "name": "S23"
+  },
+  {
+   "use": "toolu_01FgzKnA2WA7AtUH5y38PxHM",
+   "time": "2026-11-14T14:14:31.989Z",
+   "flow": "FEsz8qczhCIpPe85UWpV",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S24 band walks stops",
+   "prompt": "A small band of men walking on a dry dirt road in sandals: many soft footsteps on dust and pebbles, robes swishing, then they all come to a stop",
+   "params": {
+    "duration_seconds": 1.6,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "",
+   "node": "GXGBCf4l4xKjKJE6eion",
+   "sessions": [
+    "WXn4PnaL6UeuIir3v6Aw",
+    "ytkQ0oyLqoy3x2viWoyN",
+    "rgYYqbdBVfo68Cwk26eC",
+    "3JhzgSP7hETFb1qZ1djJ"
+   ],
+   "name": "S24"
+  },
+  {
+   "use": "toolu_01AVPQKnHrLvJUarbE8KmRVm",
+   "time": "2026-11-14T14:14:34.393Z",
+   "flow": "FEsz8qczhCIpPe85UWpV",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S25 Peter steps out warm light",
+   "prompt": "One firm step forward on a dry dirt road in a sandal, then a soft warm glassy swell of light, quiet",
+   "params": {
+    "duration_seconds": 1.5,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "",
+   "node": "dtd3FSf4zVhgNaNbr2nf",
+   "sessions": [
+    "xlyCjskkeoDuOXOSLXva",
+    "v0kFgALmWoUOFTkO5L06",
+    "tKtJEb05qabWPLKG0cJZ",
+    "3IANtVrUq6iJlzaNoV1w"
+   ],
+   "name": "S25"
+  },
+  {
+   "use": "toolu_01DN6H6VoBQ7GSSjskzzX6GH",
+   "time": "2026-11-14T14:14:36.793Z",
+   "flow": "FEsz8qczhCIpPe85UWpV",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S26 band walking hesitant",
+   "prompt": "A group of men walking slowly and hesitantly along a dry dirt road at sunset: uneven sandal footsteps on dust, some slowing and starting again, robes brushing, a light evening wind",
+   "params": {
+    "duration_seconds": 5.4,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "",
+   "node": "Ne1V1AXYJm1FVsPtMRc0",
+   "sessions": [
+    "SMxixM6aMvL8bjCYD1k7",
+    "6mPQSjwgKo1Zrmi0MniC",
+    "7UyIdUsuSLYvOmP2qM1d",
+    "UTrz1U6OpnL43OewmUuG"
+   ],
+   "name": "S26"
+  },
+  {
+   "use": "toolu_01H2cXrHnoZP3W9v6doSG8hq",
+   "time": "2026-11-14T14:14:39.339Z",
+   "flow": "FEsz8qczhCIpPe85UWpV",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S27 Peter hurries after",
+   "prompt": "A man breaking into a hurried run on a dry dirt road in sandals: quickening footsteps on dust and gravel coming closer, robe flapping, heavy breathing, no voice",
+   "params": {
+    "duration_seconds": 2.6,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "",
+   "node": "ECVWPfXMuKafFqcovV0N",
+   "sessions": [
+    "0adw9fbx84XxMRhmsvnk",
+    "GVJ3tXpUM0urpRjltsFB",
+    "fg6lmVKwLsccpHQyCGaQ",
+    "cH4LakgWZ5zQT77iyokE"
+   ],
+   "name": "S27"
+  },
+  {
+   "use": "toolu_01RHujgC75QN8HAz7NdyGtGF",
+   "time": "2026-11-14T14:14:41.888Z",
+   "flow": "FEsz8qczhCIpPe85UWpV",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S28 Peter runs past stops",
+   "prompt": "A man running past on a dirt road and skidding to a sudden stop: a few fast sandal steps, a gritty scuff in the dust, a robe swish",
+   "params": {
+    "duration_seconds": 1.2,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "",
+   "node": "yXcv4Y78zZm4S5ZGRko0",
+   "sessions": [
+    "qPuH5NzlAMEuQzqTjoQg",
+    "vzcfXyDKpNkWzMpTcB5r",
+    "t2kHaDiXq5e6QYGHKzxb",
+    "CqYIoPldZMuxIFSDDOjp"
+   ],
+   "name": "S28"
+  },
+  {
+   "use": "toolu_01LHG1SwhFRqsTtbtKB7HvWv",
+   "time": "2026-11-14T14:14:44.327Z",
+   "flow": "FEsz8qczhCIpPe85UWpV",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S29 arms spread",
+   "prompt": "Two arms flung wide in a heavy linen robe: a quick broad cloth whoosh of the sleeves, close",
+   "params": {
+    "duration_seconds": 0.9,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "",
+   "node": "Aw6b8mZCA2b9BWgVsif7",
+   "sessions": [
+    "V5JV95ZkiS5neLH7MQPC",
+    "QGSLA0IqfjMcIfSWymJq",
+    "0L2KyIkI8H9vA34s01EH",
+    "FCzIZVnzzf8FWEUebpot"
+   ],
+   "name": "S29"
+  },
+  {
+   "use": "toolu_014Du9X84hgPzYLiBVKm7cWK",
+   "time": "2026-11-14T14:14:46.639Z",
+   "flow": "FEsz8qczhCIpPe85UWpV",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S30 grips his arm",
+   "prompt": "A hand gripping someone's arm through a woolen sleeve: a short firm fabric rustle and tug, close and quiet",
+   "params": {
+    "duration_seconds": 1,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "",
+   "node": "K04pWyuayDa3vJs6r8iO",
+   "sessions": [
+    "CChsZdnsbz0vE3hjNhJw",
+    "qsLKmLRPII8o7LgrnBvt",
+    "1eqb3QLEGUAz4crNi3ue",
+    "9CIH9LSkbW7DF0o1a5sX"
+   ],
+   "name": "S30"
+  },
+  {
+   "use": "toolu_01Hd4NqdPzgucX6qfL5Km9or",
+   "time": "2026-11-14T14:14:49.138Z",
+   "flow": "FEsz8qczhCIpPe85UWpV",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S31 walking away dusk",
+   "prompt": "Footsteps of a group walking away up a dirt road at dusk, slowly fading into the distance, a soft evening wind over a field, the first crickets, one man left standing still",
+   "params": {
+    "duration_seconds": 4.6,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "",
+   "node": "lyr4cgwB6zLidPDeSLkO",
+   "sessions": [
+    "Vl0uxOfybp2v1oxnRT9J",
+    "0lTEwsDyjsdFMXVZtuo1",
+    "JuI4KBBU4xFnhUw3PsKb",
+    "ZojBfxrwWfMzuKHTSNMS"
+   ],
+   "name": "S31"
+  },
+  {
+   "use": "toolu_01UcTwDA1r3ma67yoyDxfjcA",
+   "time": "2026-11-14T14:14:51.549Z",
+   "flow": "FEsz8qczhCIpPe85UWpV",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S32 first star",
+   "prompt": "A single tiny, soft, high glass chime like a star appearing in the evening sky, very faint and pure, with a gentle tail",
+   "params": {
+    "duration_seconds": 1.5,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "",
+   "node": "1Ner5fO8bXyMY0yeRCMr",
+   "sessions": [
+    "MbOaxYBei5p4CAK0OgRr",
+    "ijv38oRN3rEZ6MYmW1XZ",
+    "cQR4a0bMYE8eyihNumDN",
+    "iC7Yexco123jaGTrPgtr"
+   ],
+   "name": "S32"
+  },
+  {
+   "use": "toolu_01AyWmjoXKHkWmxyGm7csUnx",
+   "time": "2026-11-14T14:14:54.088Z",
+   "flow": "FEsz8qczhCIpPe85UWpV",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S33 scroll unrolls",
+   "prompt": "An old parchment scroll on wooden rollers unrolling slowly across a wooden table: dry crisp paper rustle and a soft wooden roll, starting very softly, close and quiet",
+   "params": {
+    "duration_seconds": 5.3,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "",
+   "node": "aXWkYPto6MhwDXuv17E5",
+   "sessions": [
+    "yS8S7NR5QeGZ1udodOwI",
+    "W02LAYx9yki7DVFutFHH",
+    "Gg0DI1JQ7cwW8xNhjUrQ",
+    "oDuK132X9RtQqBJRBH2u"
+   ],
+   "name": "S33"
+  },
+  {
+   "use": "toolu_016EUuyr8otG4Gm1A3V4ph5b",
+   "time": "2026-11-14T14:14:56.542Z",
+   "flow": "FEsz8qczhCIpPe85UWpV",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S34 lamp gust",
+   "prompt": "A small clay oil lamp flame fluttering in a sudden soft gust of air: a quick airy flicker, close and quiet",
+   "params": {
+    "duration_seconds": 1,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "",
+   "node": "69MGQWGoz62gVwu1dxvv",
+   "sessions": [
+    "ougFyMhJbTONdM6k3KWY",
+    "rQtOw6USCj5TvVEoUd6K",
+    "kntw3JMU6lLnqkPVU2mV",
+    "B3725hziC0U0ToLH6cgH"
+   ],
+   "name": "S34"
+  },
+  {
+   "use": "toolu_01LzYv7UPZc3JMDVrCCcBqZu",
+   "time": "2026-11-14T14:14:58.949Z",
+   "flow": "FEsz8qczhCIpPe85UWpV",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S35 lamp flare",
+   "prompt": "A small oil lamp flame flaring up brighter with a soft breathy whoomph, then settling, close and quiet",
+   "params": {
+    "duration_seconds": 1.5,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "",
+   "node": "FgV6qK5YUZqZ2aCOfRXK",
+   "sessions": [
+    "lgJ8VWSAdKI7o1OOZSuS",
+    "drhJy8MAFMaczDLPmp5x",
+    "PSkpxxc5DwUMKQyLxmwa",
+    "aJaNJdOgDxbkpIDcLEXA"
+   ],
+   "name": "S35"
+  },
+  {
+   "use": "toolu_01TXHSXwedanCuSsaqwtA3gN",
+   "time": "2026-11-14T14:15:01.438Z",
+   "flow": "FEsz8qczhCIpPe85UWpV",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S36 bw film projector",
+   "prompt": "An old 16mm film projector running in a quiet dark room: a soft steady flutter and rattle of the film gate with faint crackles and low hum, distant and gentle",
+   "params": {
+    "duration_seconds": 10.4,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "",
+   "node": "cdw4sLkclOLhSyRbzxLF",
+   "sessions": [
+    "G0uos1Aw96iVP1Jo0AUU",
+    "vbSFzNEDVcp00l3l9FT1",
+    "ZucVc7r6bMeJgKW9jwVy",
+    "qqJc2JQr4Yt6YgMsjzrW"
+   ],
+   "name": "S36"
+  },
+  {
+   "use": "toolu_01LKgPJcXeQHWGPxzhiLJMdD",
+   "time": "2026-11-14T14:15:04.010Z",
+   "flow": "FEsz8qczhCIpPe85UWpV",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S37 darkness wind hill",
+   "prompt": "A heavy darkness over a bare hill at noon: a slow low wind across open stony ground, a very distant deep rumble, desolate and still, no thunder crack, no voices",
+   "params": {
+    "duration_seconds": 8,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "",
+   "node": "Vmj5aVdO53OazvyLZ3Hm",
+   "sessions": [
+    "rflOAXa9Nustx0osYell",
+    "hZZVjdCsFjXPhawXgsMj",
+    "ApwugRjWe3AnJPEnppmV",
+    "rj0PdJNX9jG4v4jFmJul"
+   ],
+   "name": "S37"
+  },
+  {
+   "use": "toolu_01DJPaTvr3giHTtZm2S6Jgoh",
+   "time": "2026-11-14T14:15:06.437Z",
+   "flow": "FEsz8qczhCIpPe85UWpV",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S38 darkness sinks",
+   "prompt": "A deep, slow, low swell of dark air sinking down, like light draining away: a soft sub rumble, ominous and quiet, no impact",
+   "params": {
+    "duration_seconds": 3,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "",
+   "node": "fVk3ErtgH9U9sUdfTbI1",
+   "sessions": [
+    "W3lxtJ30I6ac9zWwyNrZ",
+    "iJ1ZTCzdEt39QLl6rObD",
+    "DRhIAzh0k2f8giGEvr3o",
+    "QQJkWINBO0gfpAqbp50c"
+   ],
+   "name": "S38"
+  },
+  {
+   "use": "toolu_013Z3bovLt1avxYBdydf1byR",
+   "time": "2026-11-14T14:15:09.003Z",
+   "flow": "FEsz8qczhCIpPe85UWpV",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S39 ember left",
+   "prompt": "A single small ember glowing in darkness: soft tiny crackles, a few sparks drifting up with faint ticks, close and quiet",
+   "params": {
+    "duration_seconds": 1.5,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "",
+   "node": "DEx2d8ArTBHa5yElMibO",
+   "sessions": [
+    "98XE0tCVnJWx3To1fIIK",
+    "myp1ni5MUNGT4DiRZqHQ",
+    "FZC7DiXH0quRGiGk2pL2",
+    "U7AAB3e6S0g6xgxRP7lO"
+   ],
+   "name": "S39"
+  },
+  {
+   "use": "toolu_01NTCpvwUYeqg4RHY6GmRj6i",
+   "time": "2026-11-14T14:15:11.343Z",
+   "flow": "FEsz8qczhCIpPe85UWpV",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S40 ember flies",
+   "prompt": "A glowing ember drifting quickly through dark air: a tiny fizzing crackle gliding past, very close and quiet",
+   "params": {
+    "duration_seconds": 0.95,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "",
+   "node": "vOFjnG82zVq0kdy0uNB1",
+   "sessions": [
+    "Yj3qVQgZdnskmEsVFa3b",
+    "tAbQr3Dp4Aw43EQ6H9vl",
+    "uga6qHbZTppsOi63xhYQ",
+    "cQu5EYq7BBYjiFQ0fn7R"
+   ],
+   "name": "S40"
+  },
+  {
+   "use": "toolu_01JLP3YdcyCrDrTZa1XrwDKj",
+   "time": "2026-11-14T14:15:13.889Z",
+   "flow": "FEsz8qczhCIpPe85UWpV",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S41 wick catches",
+   "prompt": "A small oil lamp wick catching flame from an ember: a tiny soft puff and a gentle fwoop of a flame starting, close and quiet",
+   "params": {
+    "duration_seconds": 0.9,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "",
+   "node": "HnUQP7s4iC70uVw2aO1V",
+   "sessions": [
+    "YnbN7XNSAXXYbQlacVHi",
+    "M1C4SjshGxoU3sc4Pcrl",
+    "CTEzBjyhr4ru2i3163OI",
+    "DSh5RdKxbXYiDvL1EGM0"
+   ],
+   "name": "S41"
+  },
+  {
+   "use": "toolu_01W6fv5A42rGKvwdqXy827Gn",
+   "time": "2026-11-14T14:15:16.368Z",
+   "flow": "FEsz8qczhCIpPe85UWpV",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S42 sparks settle on parchment",
+   "prompt": "Tiny warm sparks landing one after another on old parchment: soft delicate ticks and tiny sizzles, very close and quiet",
+   "params": {
+    "duration_seconds": 1.5,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "",
+   "node": "lH70zSdv5s9eTQ7UPQBB",
+   "sessions": [
+    "eQVRei5VX1LIAxAlxwWp",
+    "edDdJqsYfPDyAgBulMJa",
+    "FAlJ5Gy4XFN9D7LNWBO3",
+    "8VghewTF3yyYSwcdalL2"
+   ],
+   "name": "S42"
+  },
+  {
+   "use": "toolu_01FFkyCU8UMEUN46mB8vfMXK",
+   "time": "2026-11-14T14:15:18.836Z",
+   "flow": "FEsz8qczhCIpPe85UWpV",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S43 gold line A",
+   "prompt": "A fine gold pen nib drawing one quick line across old parchment from right to left: a soft continuous scratch with a warm glassy shimmer swelling on top, close and quiet",
+   "params": {
+    "duration_seconds": 1.5,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "",
+   "node": "UZZeOWVw7RznOyuCVhuD",
+   "sessions": [
+    "V5kT5s7MPq2er72uxafd",
+    "7q7rxjSDJOyWY2BVw6ZF",
+    "kIAACZpTq53C2e0fgM40",
+    "8Lr8N0asXuocylyngQgB"
+   ],
+   "name": "S43"
+  },
+  {
+   "use": "toolu_014Uy2FMC1GepkpAPxgBRGma",
+   "time": "2026-11-14T14:15:21.287Z",
+   "flow": "FEsz8qczhCIpPe85UWpV",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S44 gold line B",
+   "prompt": "A fine gold pen nib drawing a second line across old parchment: a soft continuous scratch with a bright warm glassy shimmer on top, settling, close and quiet",
+   "params": {
+    "duration_seconds": 1.5,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "",
+   "node": "77ptU1xV2U61iUya2W8U",
+   "sessions": [
+    "cqyzhgrf3gQXbtHUrJeA",
+    "VLnCb4mDEaaGz5jttuNp",
+    "GmnzxpMGiYVYHxwMUHWQ",
+    "JJ8vW5JXCVuZILBbMjwQ"
+   ],
+   "name": "S44"
+  },
+  {
+   "use": "toolu_018u1mm8oq9PcDvUV4frgrLJ",
+   "time": "2026-11-14T14:15:23.837Z",
+   "flow": "FEsz8qczhCIpPe85UWpV",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S45 knucklebones shaken",
+   "prompt": "Small bone knucklebones shaken in a cupped hand outdoors in daylight: a dry clattering rattle, a light wind over dry ground, close",
+   "params": {
+    "duration_seconds": 1.9,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "",
+   "node": "DNkvVtKd8SmXB4dgZ2yE",
+   "sessions": [
+    "Z6s83DmuTwyki2pTFEOh",
+    "BBslZ6woo7rqD4pRa5tu",
+    "mGsDJNAZWnw9DyBDdo5G",
+    "vqJgLx34vSZBFd3osolS"
+   ],
+   "name": "S45"
+  },
+  {
+   "use": "toolu_015xe5RqbgTRnG4Mx5wsiQ5T",
+   "time": "2026-11-14T14:15:26.186Z",
+   "flow": "FEsz8qczhCIpPe85UWpV",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S46 knucklebones thrown",
+   "prompt": "Small bone knucklebones thrown onto gravelly dry ground: a short dry clatter, a bounce and scatter, coming to rest, close",
+   "params": {
+    "duration_seconds": 1,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "",
+   "node": "8vLFtL2ZipYJMzTgYDnC",
+   "sessions": [
+    "7UMPTi79NKqpXDsFYtEh",
+    "IJEl55bHv71BXcAQkuK7",
+    "94CPccNxzPoR57bIuHx0",
+    "Qe41t8hUt8spMv99IPXO"
+   ],
+   "name": "S46"
+  },
+  {
+   "use": "toolu_01Ya4BsW5h1ZXCUxVWx6ox7g",
+   "time": "2026-11-14T14:15:28.644Z",
+   "flow": "FEsz8qczhCIpPe85UWpV",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S47 hand takes tunic",
+   "prompt": "A rough hand grabbing the hem of a woven linen tunic and pulling it: a firm fabric rustle and tug, close and quiet",
+   "params": {
+    "duration_seconds": 1.5,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "",
+   "node": "OYcfnSIeyZQykgATejXX",
+   "sessions": [
+    "c4AxHdvNgipIIgm8u2S2",
+    "9vggv363XuKfVKb9yRVj",
+    "K2lCTlgfQO5GM1nNMioT",
+    "jAPglRDqiTVfA3WWNUAM"
+   ],
+   "name": "S47"
+  },
+  {
+   "use": "toolu_01BJJDtSQsJ3aAbQBBEfi85b",
+   "time": "2026-11-14T14:15:31.187Z",
+   "flow": "FEsz8qczhCIpPe85UWpV",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S48 courtyard hush",
+   "prompt": "A stone courtyard full of quietly seated people listening: a deep hush, a few soft robe rustles, someone shifting on a wooden bench, distant birds beyond the wall, warm and still",
+   "params": {
+    "duration_seconds": 5.1,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "",
+   "node": "aJASS65s8xzKjfSlI0c3",
+   "sessions": [
+    "KIkBB0mjqxuwNvqoT72s",
+    "w9r3KBLDm2SdV7jliKXD",
+    "vdkIuO68Nid70dNzcggG",
+    "0j2wAJXNcbcpqNaOhQ7o"
+   ],
+   "name": "S48"
+  },
+  {
+   "use": "toolu_01LTAmiatJwSJ3uBudhCemCn",
+   "time": "2026-11-14T14:15:33.636Z",
+   "flow": "FEsz8qczhCIpPe85UWpV",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S49 dust in sunbeam",
+   "prompt": "Dust drifting in a warm beam of low sunlight: a very soft airy glassy shimmer, delicate and slow, almost silent",
+   "params": {
+    "duration_seconds": 4.5,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "",
+   "node": "7trppCuklHy3HJV05mwY",
+   "sessions": [
+    "Xl3Oe5fQAU5MnqGaVmvd",
+    "M5l9ngi9lE5QPbwLEvvS",
+    "blY4jJdMOaY7cfn049Wq",
+    "lgNiHIbmwHSLN3UU5Pzw"
+   ],
+   "name": "S49"
+  },
+  {
+   "use": "toolu_01SvTDwmi5QkJvsP8fHNCKRd",
+   "time": "2026-11-14T14:15:36.162Z",
+   "flow": "FEsz8qczhCIpPe85UWpV",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S50 sky opens over river",
+   "prompt": "The sky slowly opening over a quiet river: a soft rising airy swell of pale light, faint water lapping below, calm and cool",
+   "params": {
+    "duration_seconds": 3.3,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "",
+   "node": "MK1FoND80ZOs4GfuHsIX",
+   "sessions": [
+    "KGtHErAXCroTRNKAH7je",
+    "9woQUfGv9lXo56EQl2GL",
+    "kruNJMMGJTTAF1QQXTBq",
+    "UF09gVR0bPOpXGUinDA0"
+   ],
+   "name": "S50"
+  },
+  {
+   "use": "toolu_01FJqkZVaowob88AKm1Cg53n",
+   "time": "2026-11-14T14:15:38.585Z",
+   "flow": "FEsz8qczhCIpPe85UWpV",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S51 dove light descends",
+   "prompt": "A gentle gathering of light descending slowly like a dove: soft slow wing-like flutters of air with a pale glassy shimmer, coming down and opening, tender and quiet",
+   "params": {
+    "duration_seconds": 4.5,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "",
+   "node": "TguGpehTHxpdaGRwZgyU",
+   "sessions": [
+    "6hHGnEL0eQOVMSCrKuEh",
+    "KqXnfN9EnXwxmbPbZYzz",
+    "eDpDoP2LbWDlkFyJ9f4h",
+    "v558iKEgVs1bzvLOBFsZ"
+   ],
+   "name": "S51"
+  },
+  {
+   "use": "toolu_01MsWoTy2EHjxgXnVQ2cmeT2",
+   "time": "2026-11-14T14:15:40.992Z",
+   "flow": "FEsz8qczhCIpPe85UWpV",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S52 water rings",
+   "prompt": "Gentle rings spreading on still river water around a man standing in it: soft small laps and ripples widening, calm, close",
+   "params": {
+    "duration_seconds": 2.1,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "",
+   "node": "rEMdOK8lbL6HcOHXFkue",
+   "sessions": [
+    "q8JIkSthqji8UzklgvgO",
+    "gqRqHsccywbTBnd55YTB",
+    "7DlQmupKMdlPeJnKxsSx",
+    "4wj7V2nCAUJ5YzSYxkre"
+   ],
+   "name": "S52"
+  },
+  {
+   "use": "toolu_01GXhxJ7b2SWK9i7TU2VSovf",
+   "time": "2026-11-14T14:15:43.385Z",
+   "flow": "FEsz8qczhCIpPe85UWpV",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S53 cross shadow",
+   "prompt": "A deep soft low whoosh like a long shadow sliding across dark stony ground, cold and quiet with a faint low rumble, no impact",
+   "params": {
+    "duration_seconds": 1.25,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "",
+   "node": "J2y26tbLr85Q10QPdwcu",
+   "sessions": [
+    "mja0mD25qJl1ovqxSg6C",
+    "I4PxKnkUQJXEmF0s4fXa",
+    "F87eYpDTbVVRLHSmn1oF",
+    "rU0pexfvQk96hOuhkGpy"
+   ],
+   "name": "S53"
+  },
+  {
+   "use": "toolu_01PgGAKSLndMNG8E4FJS1Uhb",
+   "time": "2026-11-14T14:15:45.740Z",
+   "flow": "FEsz8qczhCIpPe85UWpV",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S54 cold light dims",
+   "prompt": "Cold pale light dimming to darkness: a soft fading breath of cold wind over stone, very quiet",
+   "params": {
+    "duration_seconds": 1.7,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "",
+   "node": "kGJWb5eagjwJF9NWIDEz",
+   "sessions": [
+    "hj6GveiFlKdeRTYkrTic",
+    "fwNzXPIa25ob3my6sRQA",
+    "Axle5b351WnmSVPnJP4H",
+    "Sol3tP4TLV1KpbYUh3Xg"
+   ],
+   "name": "S54"
+  },
+  {
+   "use": "toolu_016DWt7SGF3euijB5yv513As",
+   "time": "2026-11-14T14:15:48.336Z",
+   "flow": "FEsz8qczhCIpPe85UWpV",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S55 dawn pours into tomb",
+   "prompt": "First dawn light pouring through a low stone doorway into a dark tomb: a warm soft swell of air with a faint glassy shimmer as light touches linen cloths, quiet",
+   "params": {
+    "duration_seconds": 2,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "",
+   "node": "cuTpM0KWrcZxtYTLpkGh",
+   "sessions": [
+    "uU9wGa3GYCWhnRbrww4M",
+    "pLRoZTGWeqfwSUip91vK",
+    "OjGTH7D5SxFHXIYQtkg7",
+    "gL9QUTRtwnjO2h9rFjbR"
+   ],
+   "name": "S55"
+  },
+  {
+   "use": "toolu_01RNcC5agBUSFpDmtuRYbYMk",
+   "time": "2026-11-14T14:15:50.885Z",
+   "flow": "FEsz8qczhCIpPe85UWpV",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S56 tomb dawn garden",
+   "prompt": "A garden at sunrise heard from inside a rock-cut tomb: still cool air, a few birds far off beginning to sing, soft stone room tone, peaceful and quiet",
+   "params": {
+    "duration_seconds": 9,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "",
+   "node": "X8bJU7tHB6m7zSrBntSj",
+   "sessions": [
+    "jRCSovDteivV9Y1KY9RB",
+    "YS7owH6uwh4GmHUaNiDL",
+    "vbkOdFFu2Y5spxh5m7J8",
+    "hHXcvwK92YYIJGKrJMVr"
+   ],
+   "name": "S56"
+  },
+  {
+   "use": "toolu_01CXe9LVmD5dbZfMN1cEGaob",
+   "time": "2026-11-14T14:15:53.421Z",
+   "flow": "FEsz8qczhCIpPe85UWpV",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S57 recall David light rises",
+   "prompt": "Golden oil light glowing and rising slowly into the air: a soft warm glassy shimmer over a fine faint scratch, rising in pitch, delicate",
+   "params": {
+    "duration_seconds": 2.6,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "",
+   "node": "lNRxRoJFmp90VpYfYxp3",
+   "sessions": [
+    "baIQJun8ufb4PWFP3hJt",
+    "woSlJA5tNWpRbEYFUmti",
+    "to8RWhIYG4AOMImcraOt",
+    "eOz4cjZ0sbP4FDYv8xeM"
+   ],
+   "name": "S57"
+  },
+  {
+   "use": "toolu_01RBs3gJP7opLcVYnb4ubZeu",
+   "time": "2026-11-14T14:15:56.083Z",
+   "flow": "FEsz8qczhCIpPe85UWpV",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S58 recall Aaron light rises",
+   "prompt": "Light rising softly from oil on a man's head: a warm glassy shimmer over a fine faint scratch, gently rising and opening, a little higher, delicate",
+   "params": {
+    "duration_seconds": 2.6,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "",
+   "node": "1Ge9cyqfFuMHndLa0zMa",
+   "sessions": [
+    "0pb4qo9FshPAB4a79STq",
+    "AioFlKjNEukiVheYWng7",
+    "xiGAVaAVQXptfOFUsk7L",
+    "uxavI9RoOQMkoFSpGwDo"
+   ],
+   "name": "S58"
+  },
+  {
+   "use": "toolu_01SMqTKg4Z56VmgP8i64zixY",
+   "time": "2026-11-14T14:15:58.585Z",
+   "flow": "FEsz8qczhCIpPe85UWpV",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S59 recall Elisha light rises",
+   "prompt": "Golden light rising from the edge of a wool cloak: a soft warm glassy shimmer over a faint fabric brush, rising and brightening, delicate",
+   "params": {
+    "duration_seconds": 2.6,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "",
+   "node": "Z3JyJ1EKgrlXThTuQgOT",
+   "sessions": [
+    "2gxW7JGF0yXUbA61cYWA",
+    "LxAHBV0SsYYDi40k74ut",
+    "5yvjn7kEaRghlxrAcjXj",
+    "GZtm43aSgToHuL9Cth6O"
+   ],
+   "name": "S59"
+  },
+  {
+   "use": "toolu_01VT9DXkZqDf62aPuBihJEZm",
+   "time": "2026-11-14T14:16:00.984Z",
+   "flow": "FEsz8qczhCIpPe85UWpV",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S60 three lights converge",
+   "prompt": "Three soft streams of light flowing together from different sides: layered gentle glassy shimmers converging, quiet",
+   "params": {
+    "duration_seconds": 1.4,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "",
+   "node": "vyfsTNNb8WVwvBX8681u",
+   "sessions": [
+    "XGYlHAtlmJgfKco5ceWu",
+    "rbVxlRwt5uIBPIwhE8AD",
+    "MTUvfVXdT3dt3Hre1YoG",
+    "a646BgG8DzbqFta2pqik"
+   ],
+   "name": "S60"
+  },
+  {
+   "use": "toolu_01QaXRNsBKSfkjPLSTQsBHsH",
+   "time": "2026-11-14T14:16:03.384Z",
+   "flow": "FEsz8qczhCIpPe85UWpV",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S61 lights become one",
+   "prompt": "Lights merging into one: a soft luminous bloom, a warm glassy swell, pure and calm",
+   "params": {
+    "duration_seconds": 1,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "",
+   "node": "gzlY9nxYXDGjqDE3Xm9K",
+   "sessions": [
+    "d4F6Tzp3xMU5RiZ7fKHV",
+    "NoeFSdUnu4V5a2GmYjaf",
+    "KGxAyLqSjrdO858KeapX",
+    "VFVJUbbsuE2JulT12rWJ"
+   ],
+   "name": "S61"
+  },
+  {
+   "use": "toolu_01Niw2HES7MMFtEdBzCLCra1",
+   "time": "2026-11-14T14:16:05.784Z",
+   "flow": "FEsz8qczhCIpPe85UWpV",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S62 sunrise air",
+   "prompt": "Sunrise over far hills: a slow warm swell of air opening wide, faint birds far away, gentle, no music",
+   "params": {
+    "duration_seconds": 2.5,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "",
+   "node": "rSGw7dOSZvgQsI8ufL0R",
+   "sessions": [
+    "4dPI0UsqXPDUCNGWNIu4",
+    "PTCMNfErSNp0OdJOQ2Oc",
+    "c5bYjFtXmh4n32yARxOq",
+    "RzHV8m9QbFYFzrQ17bWb"
+   ],
+   "name": "S62"
+  },
+  {
+   "use": "toolu_01Am5RLC5FEqCxr7cTH8xiHb",
+   "time": "2026-11-14T14:16:08.365Z",
+   "flow": "FEsz8qczhCIpPe85UWpV",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S63 candle room end",
+   "prompt": "A single candle burning in a quiet old wooden room before dawn: a soft breathing flame with tiny flutters, still room tone, a slow gentle drift of air, very quiet",
+   "params": {
+    "duration_seconds": 7,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "",
+   "node": "RQpc6YqPOfisXMHlhNck",
+   "sessions": [
+    "adqXTJwOoLziUDm1ltSE",
+    "HOcO5ha1UpDMiED8nlll",
+    "ksx1GOZm5UJl1GzFIhJq",
+    "RPPnbvfU3Cut1qj0kkqJ"
+   ],
+   "name": "S63"
+  },
+  {
+   "use": "toolu_01159LM2yJu3yJu9JmfBjyhG",
+   "time": "2026-11-14T14:16:10.788Z",
+   "flow": "FEsz8qczhCIpPe85UWpV",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S64 window dawn birds",
+   "prompt": "Dawn coming outside a small window of an old room: the first birds far off, faint morning air, a quiet house, peaceful",
+   "params": {
+    "duration_seconds": 6.5,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "",
+   "node": "SgbXJNLX4LSH1dYX5Cvl",
+   "sessions": [
+    "f5SxL4H1BltwiMC4nRRP",
+    "H9tRMyysIyaIU85bWLr1",
+    "ANGya7Mx66cQ2au9iT0V",
+    "9Jvc547GvpEZDwhB25BR"
+   ],
+   "name": "S64"
+  },
+  {
+   "use": "toolu_011m5MQ91ku2v9jNDzH8mmHf",
+   "time": "2026-11-14T14:16:13.184Z",
+   "flow": "FEsz8qczhCIpPe85UWpV",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S65 light reaches hands",
+   "prompt": "A soft warm glassy shimmer slowly swelling as morning light reaches folded hands, very delicate and quiet",
+   "params": {
+    "duration_seconds": 3,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "",
+   "node": "NvB2svrMWkTBisZ52CBw",
+   "sessions": [
+    "jI8dJqOnl6UUMdTJHNiP",
+    "cT1N7q8SvBSBbMw0QOgq",
+    "En24RSICSD2HiJfu3Lqo",
+    "8NnEDweKpPva4v8vTyxc"
+   ],
+   "name": "S65"
+  },
+  {
+   "use": "toolu_01ED2oiuUWyQNiRd36W4GHVW",
+   "time": "2026-11-14T14:16:15.293Z",
+   "flow": "FEsz8qczhCIpPe85UWpV",
+   "tool": "creative_add_flow_node:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S66 sun fills room",
+   "prompt": "Morning sunlight filling a quiet room: a slow warm swell of air, birdsong outside the window a little brighter, peaceful",
+   "params": {
+    "duration_seconds": 5,
+    "prompt_influence": 0.5,
+    "loop": false
+   },
+   "why": "",
+   "node": "uIlUSXU7Bz7lg2HhQ06p",
+   "sessions": [
+    "ZeUZZcHi3CeCdtEUZ4hw",
+    "GqH4Y0JlFKlRhjWFDayF",
+    "JAirvUFb1I0pkQGTow6b",
+    "ArkPLgEAFS4xGlgnkTbt"
+   ],
+   "name": "S66"
+  }
+ ],
+ "title": "그리스도",
+ "about": "「그리스도」(motion/films/christ) — 해설 34줄(flow Zbs7p9CGD1RBI4UPlT7n, eleven_v4, 목소리 HYALOqtTLlRjxo4uBKeg) + 음악 4악장 CM1–CM4(eleven_music_v2_5, 악장마다 4가지) · 효과음 65개 S01–S66(eleven_text_to_sound_v2, duration = 화면 동작 길이, 3–4가지; flow FEsz8qczhCIpPe85UWpV). name = sound/audio/<name>.mp3 · voice/<name>.mp3; 고른 가지는 takes-picked.json, 배치는 cues.json · place.json. E2/E3은 「메시아」 파일 재사용."
+}

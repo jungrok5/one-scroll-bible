@@ -43,8 +43,10 @@ const questions = lines.filter(l => l.kind === 'narr' && /\?\s*$/.test((l.voice 
 // quotes: reading pace and the hold after them (the next voice's start minus this take's end)
 const quotes = voiced.map((x, i) => ({ x, n: voiced[i + 1] })).filter(({ x }) => x.l.kind === 'quote').map(({ x, n }) => {
   const d = x.t?.dur, end = d != null ? x.at + d : null, pc = pieces[x.l.id]?.pieceStarts || null;
+  // the last voiced line holds until the end card comes in (「그리스도」 Q13 ends on the confession, then the card: 2026-11-14 the gate counted no hold)
+  const card = !n ? Math.min(...s.lines.filter(l => l.kind === 'label' && l.at > x.at && /끝 화면/.test(l.screen || '')).map(l => l.at), s.dur) : null;
   return { id: x.l.id, cite: x.l.cite, syl: x.syl, sec: d != null ? +d.toFixed(2) : null, sps: d ? +(x.syl / d).toFixed(2) : null,
-    hold: end != null && n ? +(n.at - end).toFixed(2) : null, next: n?.l.id || null, pieces: pc ? pc.length : 1 };
+    hold: end != null ? +((n ? n.at : card) - end).toFixed(2) : null, next: n?.l.id || (n ? null : 'end card'), pieces: pc ? pc.length : 1 };
 });
 // tone: raw take loudness against the film median (sound.mjs evens only 70 % of the way, ±4 dB — a whispered take stays quieter and thinner)
 const L = voiced.filter(x => x.t?.lufs != null).map(x => x.t.lufs).sort((a, b) => a - b), med = L.length ? L[Math.floor(L.length / 2)] : null;

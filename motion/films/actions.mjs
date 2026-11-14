@@ -6,8 +6,11 @@
 //   text   — TEXT rows: a verse (quote), its gold word (hlAt), a verse link, the end card; subtitles are listed but need no effect
 //   scene  — SCENES joins (a 0.7 s dissolve: music or a soft whoosh carries it)
 //   flash  — big picture changes measured in the render (ffmpeg scene score ≥ 0.25 on motion/out/<film>-v-narr.mp4)
+//   manual — sound/actions-manual.json { actions: [{ t, len, kind: act|gold|end, what }] }: what the code scan cannot see
+//            (「그리스도」 2026-11-14: TEXT built at run time from script.json, scene modules timed in scene-local u) — read
+//            from the scene modules + SCENES t0 and checked on the frame sheets
 // Covered = an effect (cues.json sfx) starts within ±0.5 s (music cue starts count for scene joins). The sound gate reads
-// actions.json: share of gold words · links · flashes covered ≥ targets.json sound.action_cover_min.
+// actions.json: share of gold words · links · flashes · end card · manual actions covered ≥ targets.json sound.action_cover_min.
 import { readFileSync, writeFileSync, existsSync, readdirSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import { join, dirname } from 'node:path';
@@ -40,6 +43,8 @@ for (const m of T.matchAll(/\['(\w+)',\s*'([^']+)',\s*([\d.]+),\s*([\d.]+)([^\]]
 // 3. scene joins
 const SC = html.match(/const SCENES = \[([\s\S]*?)\n\];/)?.[1] || '';
 for (const m of SC.matchAll(/\[\s*([\d.]+)\s*,\s*([\d.]+)\s*,/g)) if (+m[1] > 0) A.push({ t: num(m[1]), len: .7, kind: 'scene', what: `scene from ${m[1]} to ${m[2]}` });
+// 3b. the hand-read sheet (sound/actions-manual.json)
+for (const x of J(join(S, 'actions-manual.json'))?.actions || []) A.push({ t: num(x.t), len: num(x.len), kind: x.kind || 'act', what: x.what || '' });
 // 4. measured flashes
 const vid = join(HERE, '..', 'out', `${film}-v-narr.mp4`);
 if (!noVideo && existsSync(vid)) {
@@ -51,10 +56,10 @@ const inFilm = A.filter(x => x.t >= 0 && x.t <= dur).sort((a, b) => a.t - b.t);
 const acts = inFilm.filter((x, i, L) => !(x.kind === 'code' && L.slice(0, i).some(y => y.kind === 'code' && Math.abs(y.t - x.t) < .2)));
 const sfx = (cues.sfx || []).map(q => q.at), mus = (cues.music || []).map(q => q.at);
 for (const x of acts) { const near = sfx.filter(a => Math.abs(a - x.t) <= .5); x.covered = near.length > 0 || (x.kind === 'scene' && mus.some(a => Math.abs(a - x.t) <= 1)); x.sfx = (cues.sfx || []).filter(q => Math.abs(q.at - x.t) <= .5).map(q => q.id); }
-const need = acts.filter(x => ['gold', 'link', 'flash', 'end'].includes(x.kind)), cover = need.length ? +(need.filter(x => x.covered).length / need.length).toFixed(2) : 1;
+const need = acts.filter(x => ['gold', 'link', 'flash', 'end', 'act'].includes(x.kind)), cover = need.length ? +(need.filter(x => x.covered).length / need.length).toFixed(2) : 1;
 const outFile = { film, dur, made: new Date().toISOString().slice(0, 16), cover, need: need.length, actions: acts };
 writeFileSync(join(S, 'actions.json'), JSON.stringify(outFile, null, 1) + '\n');
 if (asJson) { console.log(JSON.stringify({ cover, need: need.length, uncovered: need.filter(x => !x.covered) })); process.exit(0); }
-console.log(`「${film}」 동작 ${acts.length}개 (코드 ${acts.filter(x => x.kind === 'code').length} · 글자 ${acts.filter(x => ['sub', 'quote', 'gold', 'link', 'end'].includes(x.kind)).length} · 장면 이음 ${acts.filter(x => x.kind === 'scene').length} · 렌더에서 잰 큰 변화 ${acts.filter(x => x.kind === 'flash').length}) → sound/actions.json`);
-console.log(`소리가 꼭 있어야 하는 동작(금빛 말·말씀 잇기·큰 변화·끝 화면) ${need.length}개 중 효과음 있음 ${Math.round(cover * 100)}%`);
+console.log(`「${film}」 동작 ${acts.length}개 (코드 ${acts.filter(x => x.kind === 'code').length} · 글자 ${acts.filter(x => ['sub', 'quote', 'gold', 'link', 'end'].includes(x.kind)).length} · 장면 이음 ${acts.filter(x => x.kind === 'scene').length} · 렌더에서 잰 큰 변화 ${acts.filter(x => x.kind === 'flash').length} · 손으로 적은 동작 ${acts.filter(x => x.kind === 'act').length}) → sound/actions.json`);
+console.log(`소리가 꼭 있어야 하는 동작(금빛 말·말씀 잇기·큰 변화·끝 화면·손으로 적은 동작) ${need.length}개 중 효과음 있음 ${Math.round(cover * 100)}%`);
 for (const x of acts) if (x.kind !== 'sub') console.log(`${x.covered ? '  ' : '✗ '}${String(x.t).padStart(6)}s ${String(x.len).padStart(5)}s  ${x.kind.padEnd(5)} ${x.what}${x.sfx.length ? '  ← ' + x.sfx.join(',') : ''}`);

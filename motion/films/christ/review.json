@@ -1,7 +1,7 @@
 {
  "_about": "A film's state and decisions — every field a gate reads (film.mjs new copies this). Fill by stage: topic → logline·topic_*; script → story_spine·ending·parts·looks·message_check; review → artifact_url; picture → shots_check; clips → clips; site → site_slug. Feedback and rounds only through film.mjs feedback/applied/round.",
  "stage": 1,
- "round": 1,
+ "round": 2,
  "status": "3단계 원고 굳힘 — 관리자·아내 초안 확인 대기",
  "logline": "매일 부르는 '예수 그리스도'의 그리스도는 성이 아니라 '기름 부음 받은 자(메시야)'라는 고백이다 — 왕·제사장·선지자에게 부어지던 기름의 약속, 그리고 그를 기다린 사람들도 몰랐던 고난받는 그리스도를 성경은 이미 적어 두었다.",
  "topic_id": "christ",
@@ -388,6 +388,87 @@
     0,
     1
    ]
+  },
+  {
+   "n": 2,
+   "date": "2026-11-14",
+   "summary": "11차(최종 그림): 5·6부 재구성(안뜰의 베드로·세 직분 절정·노인 방 끝), 관리자 #20–41·아내 #39–40 반영, 이상 확인 10회 — MAJOR 0, MINOR는 관리자 결정으로 그대로",
+   "changed": [
+    "L3",
+    "N06",
+    "N07",
+    "N11",
+    "N14",
+    "N20",
+    "Q9",
+    "Q11",
+    "Q12",
+    "N16K",
+    "N16P",
+    "N16R",
+    "N16",
+    "N17",
+    "Q14",
+    "Q13",
+    "E1",
+    "Q10",
+    "P6",
+    "N18",
+    "Q8",
+    "N19"
+   ],
+   "retimed": [
+    "Q2",
+    "P7",
+    "N15",
+    "B1"
+   ],
+   "feedback": [
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41
+   ],
+   "forced": "그림 확정 — 소리본(christ-v-narr.mp4)은 다음 소리 단계에서 만듦(관리자: 최종 만들고 사운드로 넘어가자)",
+   "failing": [
+    "picture: 렌더+소리본 motion/out/christ-v-narr.mp4 없음 / 장면표 시트 없음 — py motion/films/shots-sheet.py christ"
+   ]
   }
  ],
  "feedback_log": [
@@ -418,7 +499,8 @@
    "status": "applied",
    "round": 1,
    "applied": "title-research.mjs로 같은 주제 시장 조사(research/titles.json) + 우리 CTR → 제목·썸네일 3안 후보를 근거와 함께 decisions에. 공정: rules.json title-thumb-evidence, sheet 검사(research/titles.json·'근거' 줄), tasks/sheet.md",
-   "applied_at": "2026-11-10 00:15 KST"
+   "applied_at": "2026-11-10 00:15 KST",
+   "answered_by": 2
   },
   {
    "at": "2026-11-10 00:26 KST",
@@ -427,7 +509,8 @@
    "status": "applied",
    "round": 1,
    "applied": "제목·썸네일 3안 확정 → review.json publish_plan(title, thumbs A/B/C, 쇼츠 표지 A), decisions에서 뺌",
-   "applied_at": "2026-11-10 00:26 KST"
+   "applied_at": "2026-11-10 00:26 KST",
+   "answered_by": 2
   },
   {
    "at": "2026-11-10 08:50 KST",
@@ -436,7 +519,8 @@
    "status": "applied",
    "round": 1,
    "applied": "이상 확인 단계(pipeline/tasks/anomaly.md, review.json anomaly_check)를 공정에 넣고 렌더마다 돌림 — 5~10차",
-   "applied_at": "2026-11-14 22:47 KST"
+   "applied_at": "2026-11-14 22:47 KST",
+   "answered_by": 2
   },
   {
    "at": "2026-11-10 09:05 KST",
@@ -445,7 +529,8 @@
    "status": "applied",
    "round": 1,
    "applied": "이상 확인 단계(pipeline/tasks/anomaly.md, frame-sheets.py, anomaly 게이트) — 렌더마다 실행 중",
-   "applied_at": "2026-11-12 20:04 KST"
+   "applied_at": "2026-11-12 20:04 KST",
+   "answered_by": 2
   },
   {
    "at": "2026-11-10 13:41 KST",
@@ -454,7 +539,8 @@
    "status": "applied",
    "round": 1,
    "applied": "두루마리 감긴 부분: 금속 광택 띠 → 무광 양피지 원통 + 끝의 나선 단면(lamp-scrolls.js), 글씨 그대로",
-   "applied_at": "2026-11-10 13:47 KST"
+   "applied_at": "2026-11-10 13:47 KST",
+   "answered_by": 2
   },
   {
    "at": "2026-11-10 21:58 KST",
@@ -463,7 +549,8 @@
    "status": "applied",
    "round": 1,
    "applied": "두루마리 감긴 부분을 둥근 양피지 원통으로(3D 단면 명암·둥근 마구리·나선 끝·접촉 그림자) + 이상 확인 항목 반영: 군인 그림자 웅크림·빛 하나·손 하나·뼈가 떨어져 나감, 여인들 알파 제거, 첫 장면 상 넓힘, 안드레 손짓, 원고 screen 3곳",
-   "applied_at": "2026-11-10 22:20 KST"
+   "applied_at": "2026-11-10 22:20 KST",
+   "answered_by": 2
   },
   {
    "at": "2026-11-10 22:26 KST",
@@ -472,7 +559,8 @@
    "status": "applied",
    "round": 1,
    "applied": "군인 장면은 이전 모양·자세를 유지(이후 무채색만 손봄)",
-   "applied_at": "2026-11-14 22:47 KST"
+   "applied_at": "2026-11-14 22:47 KST",
+   "answered_by": 2
   },
   {
    "at": "2026-11-10 22:30 KST",
@@ -481,7 +569,8 @@
    "status": "applied",
    "round": 1,
    "applied": "군인 장면을 서 있는 그림자 판으로 되돌림(bw-cross.js bwSoldiers)",
-   "applied_at": "2026-11-12 20:04 KST"
+   "applied_at": "2026-11-12 20:04 KST",
+   "answered_by": 2
   },
   {
    "at": "2026-11-10 22:31 KST",
@@ -490,7 +579,8 @@
    "status": "applied",
    "round": 1,
    "applied": "B(서 있는 그림자) 적용",
-   "applied_at": "2026-11-12 20:04 KST"
+   "applied_at": "2026-11-12 20:04 KST",
+   "answered_by": 2
   },
   {
    "at": "2026-11-10 23:43 KST",
@@ -499,7 +589,8 @@
    "status": "applied",
    "round": 1,
    "applied": "2·3·5·6부 모두 그림 — 전체 렌더 8차까지",
-   "applied_at": "2026-11-12 20:04 KST"
+   "applied_at": "2026-11-12 20:04 KST",
+   "answered_by": 2
   },
   {
    "at": "2026-11-11 08:14 KST",
@@ -508,7 +599,8 @@
    "status": "applied",
    "round": 1,
    "applied": "뿔병 2.2초로 줄임, 3부·5부·6부 화풍 바꿈(길 위 파스텔·프레스코·그림자극), 소실점으로 가던 엠마오 → 그림자극",
-   "applied_at": "2026-11-12 20:03 KST"
+   "applied_at": "2026-11-12 20:03 KST",
+   "answered_by": 2
   },
   {
    "at": "2026-11-11 22:02 KST",
@@ -517,7 +609,8 @@
    "status": "applied",
    "round": 1,
    "applied": "look-per-scene 규칙 고침(구성 먼저→화풍, 모든 출처 확인, claude-drawing-skill 추가), 마지막 단계 대화 피드백 정리(sweep 검사·site.md), 3부 도레·5부 호퍼·6부 그림자극 선택 근거 기록",
-   "applied_at": "2026-11-11 22:06 KST"
+   "applied_at": "2026-11-11 22:06 KST",
+   "answered_by": 2
   },
   {
    "at": "2026-11-11 22:17 KST",
@@ -526,7 +619,8 @@
    "status": "applied",
    "round": 1,
    "applied": "3부 시아노타입 시도 → 관리자 구성 피드백으로 길 위의 매직 아워 파스텔로 대체",
-   "applied_at": "2026-11-12 20:03 KST"
+   "applied_at": "2026-11-12 20:03 KST",
+   "answered_by": 2
   },
   {
    "at": "2026-11-11 22:18 KST",
@@ -535,7 +629,8 @@
    "status": "applied",
    "round": 1,
    "applied": "고넬료의 집 호퍼 → 페르메이르 → 폼페이 프레스코(fresco-cornelius.js)",
-   "applied_at": "2026-11-12 20:03 KST"
+   "applied_at": "2026-11-12 20:03 KST",
+   "answered_by": 2
   },
   {
    "at": "2026-11-11 22:35 KST",
@@ -544,7 +639,8 @@
    "status": "applied",
    "round": 1,
    "applied": "유화 반복 피해 폼페이 프레스코로",
-   "applied_at": "2026-11-12 20:03 KST"
+   "applied_at": "2026-11-12 20:03 KST",
+   "answered_by": 2
   },
   {
    "at": "2026-11-11 22:46 KST",
@@ -553,7 +649,8 @@
    "status": "applied",
    "round": 1,
    "applied": "3부 구성부터 다시: 가이사랴 빌립보로 가는 길(막 8:27) — 고백·예고·길을 막고 붙드는 베드로·첫 별, 매직 아워 파스텔(road-pastel.js)",
-   "applied_at": "2026-11-12 20:03 KST"
+   "applied_at": "2026-11-12 20:03 KST",
+   "answered_by": 2
   },
   {
    "at": "2026-11-12 18:58 KST",
@@ -562,7 +659,8 @@
    "status": "applied",
    "round": 1,
    "applied": "goldThree 그리스도 실루엣을 목·어깨·벌린 팔이 있는 역광 인물로(openFigure)",
-   "applied_at": "2026-11-12 20:03 KST"
+   "applied_at": "2026-11-12 20:03 KST",
+   "answered_by": 2
   },
   {
    "at": "2026-11-13 12:30 KST",
@@ -571,7 +669,8 @@
    "status": "applied",
    "round": 1,
    "applied": "69.6초 베드로 두 손을 손등·손가락 네 개(사이 어두운 틈)·엄지가 있는 손으로 — 예수님 아래팔을 가로질러 감싸 쥠, 팔 관절 위치는 그대로(소매 끝만 손목 앞에서 짧게), 손은 팔 끝에만; 예수님 손은 그늘 톤으로(반투명해 보이던 것), 소매 그늘이 두건 위에 얹히지 않게. 137초 십자가 그림자는 말씀 글자 띠(Film.SAFE) 위에서 흐려져 사라짐 — 세로 아래쪽이 글자 뒤로 가지 않음, 머리·가로대·흐려지는 긴 발로 십자가로 읽힘, 돌 오른쪽 아래(돌 밑 아님); 가로는 돌 오른쪽 바위 면에",
-   "applied_at": "2026-11-13 13:03 KST"
+   "applied_at": "2026-11-13 13:03 KST",
+   "answered_by": 2
   },
   {
    "at": "2026-11-13 22:15 KST",
@@ -580,7 +679,8 @@
    "status": "applied",
    "round": 1,
    "applied": "노인 비율 고침(5차), 이후 처음·끝 같은 사람 모양으로(9·10차)",
-   "applied_at": "2026-11-14 22:47 KST"
+   "applied_at": "2026-11-14 22:47 KST",
+   "answered_by": 2
   },
   {
    "at": "2026-11-13 22:15 KST",
@@ -589,7 +689,8 @@
    "status": "applied",
    "round": 1,
    "applied": "요단 그림자를 근평면에서 잘라 사람과 같이 사라짐(5차)",
-   "applied_at": "2026-11-14 22:47 KST"
+   "applied_at": "2026-11-14 22:47 KST",
+   "answered_by": 2
   },
   {
    "at": "2026-11-13 22:15 KST",
@@ -598,7 +699,8 @@
    "status": "applied",
    "round": 1,
    "applied": "뿔병 장면 뺌 — 제목이 노을 언덕으로 바로(5차)",
-   "applied_at": "2026-11-14 22:47 KST"
+   "applied_at": "2026-11-14 22:47 KST",
+   "answered_by": 2
   },
   {
    "at": "2026-11-13 22:15 KST",
@@ -607,7 +709,8 @@
    "status": "applied",
    "round": 1,
    "applied": "엘리사: 명령은 겉옷으로 이루어짐(왕상 19:19) → 11차에 표기 하나로; 겉옷 천·크기 다듬기(6~10차)",
-   "applied_at": "2026-11-14 22:47 KST"
+   "applied_at": "2026-11-14 22:47 KST",
+   "answered_by": 2
   },
   {
    "at": "2026-11-13 22:15 KST",
@@ -616,7 +719,8 @@
    "status": "applied",
    "round": 1,
    "applied": "성문 그림자 떨림 고침, 병사·깃발 테두리 없앰, 흉벽 뒤 통로에 세움(5·6차)",
-   "applied_at": "2026-11-14 22:47 KST"
+   "applied_at": "2026-11-14 22:47 KST",
+   "answered_by": 2
   },
   {
    "at": "2026-11-13 22:15 KST",
@@ -625,7 +729,8 @@
    "status": "applied",
    "round": 1,
    "applied": "길 장면을 걷는 장면으로 — 예수님이 앞서 예루살렘으로, 제자들 머뭇거림(5·6·9차)",
-   "applied_at": "2026-11-14 22:47 KST"
+   "applied_at": "2026-11-14 22:47 KST",
+   "answered_by": 2
   },
   {
    "at": "2026-11-13 22:15 KST",
@@ -634,7 +739,8 @@
    "status": "applied",
    "round": 1,
    "applied": "무덤 안에서 본 새벽·세마포와 따로 놓인 수건(요 20:5–7)(5~8차)",
-   "applied_at": "2026-11-14 22:47 KST"
+   "applied_at": "2026-11-14 22:47 KST",
+   "answered_by": 2
   },
   {
    "at": "2026-11-13 22:15 KST",
@@ -643,7 +749,8 @@
    "status": "applied",
    "round": 1,
    "applied": "행 10:38/39/40 세 화면으로 끊고 사이에 정적(5차)",
-   "applied_at": "2026-11-14 22:47 KST"
+   "applied_at": "2026-11-14 22:47 KST",
+   "answered_by": 2
   },
   {
    "at": "2026-11-13 22:15 KST",
@@ -652,7 +759,8 @@
    "status": "applied",
    "round": 1,
    "applied": "남자 실루엣 전체(두건·수염·어깨), 규칙 figures-gender-legible(5차~)",
-   "applied_at": "2026-11-14 22:47 KST"
+   "applied_at": "2026-11-14 22:47 KST",
+   "answered_by": 2
   },
   {
    "at": "2026-11-14 06:34 KST",
@@ -661,7 +769,8 @@
    "status": "applied",
    "round": 1,
    "applied": "성벽 통로 깊이를 주고 병사·독수리 깃발을 흉벽 뒤 통로 위에 세움(성가퀴 틈 셋, 하반신은 흉벽에 가려짐) — 6차",
-   "applied_at": "2026-11-14 08:16 KST"
+   "applied_at": "2026-11-14 08:16 KST",
+   "answered_by": 2
   },
   {
    "at": "2026-11-14 06:34 KST",
@@ -670,7 +779,8 @@
    "status": "applied",
    "round": 1,
    "applied": "들판을 걷는 장면으로: 예수님이 앞서 예루살렘으로 계속 걷고 열두 제자가 길 위로 머뭇거리며 뒤따라 사이가 벌어짐, 끝에 베드로가 서두름(마 16:21, 막 10:32) — 6차",
-   "applied_at": "2026-11-14 08:16 KST"
+   "applied_at": "2026-11-14 08:16 KST",
+   "answered_by": 2
   },
   {
    "at": "2026-11-14 08:58 KST",
@@ -679,7 +789,8 @@
    "status": "applied",
    "round": 1,
    "applied": "빛줄기 없앰 → 마 27:45 어둠, 지평선의 희미한 빛 띠만; 끝에 작은 불씨 — 7·8차",
-   "applied_at": "2026-11-14 15:37 KST"
+   "applied_at": "2026-11-14 15:37 KST",
+   "answered_by": 2
   },
   {
    "at": "2026-11-14 08:58 KST",
@@ -688,7 +799,8 @@
    "status": "applied",
    "round": 1,
    "applied": "세 직분 절정: 2부 세 장면 회상에서 금빛이 떠올라 하나로 모여 먼 언덕 빈 십자가 뒤 해돋이 — 7·8차",
-   "applied_at": "2026-11-14 15:37 KST"
+   "applied_at": "2026-11-14 15:37 KST",
+   "answered_by": 2
   },
   {
    "at": "2026-11-14 08:58 KST",
@@ -697,7 +809,8 @@
    "status": "applied",
    "round": 1,
    "applied": "고넬료 집 → 3부와 같은 베드로가 안뜰에서 여러 사람 앞에서 전함; 규칙 scene-reads-without-bible — 7차",
-   "applied_at": "2026-11-14 15:37 KST"
+   "applied_at": "2026-11-14 15:37 KST",
+   "answered_by": 2
   },
   {
    "at": "2026-11-14 08:58 KST",
@@ -706,7 +819,8 @@
    "status": "applied",
    "round": 1,
    "applied": "엠마오 뺌, 처음 노인 방으로 돌아가 고백(N17·행 10:43·마 16:16), 끝 화면 영상 속 주요 말씀; ending-hook 개정 — 7차",
-   "applied_at": "2026-11-14 15:37 KST"
+   "applied_at": "2026-11-14 15:37 KST",
+   "answered_by": 2
   },
   {
    "at": "2026-11-14 11:41 KST",
@@ -715,7 +829,8 @@
    "status": "applied",
    "round": 1,
    "applied": "첫 장면 카메라를 한 번의 느린 움직임으로(최대 줌 속도 0.55→0.24/s) — 8차",
-   "applied_at": "2026-11-14 15:37 KST"
+   "applied_at": "2026-11-14 15:37 KST",
+   "answered_by": 2
   },
   {
    "at": "2026-11-14 11:41 KST",
@@ -724,7 +839,8 @@
    "status": "applied",
    "round": 1,
    "applied": "비둘기 같은 빛이 예수님 축을 따라 곧게 내려와 어깨 둘레로 번짐 — 8차",
-   "applied_at": "2026-11-14 15:37 KST"
+   "applied_at": "2026-11-14 15:37 KST",
+   "answered_by": 2
   },
   {
    "at": "2026-11-14 11:41 KST",
@@ -733,7 +849,8 @@
    "status": "applied",
    "round": 1,
    "applied": "해를 빈 십자가 바로 뒤로, 세 빛이 아래에서 떠올라 모임 — 8차",
-   "applied_at": "2026-11-14 15:37 KST"
+   "applied_at": "2026-11-14 15:37 KST",
+   "answered_by": 2
   },
   {
    "at": "2026-11-14 11:41 KST",
@@ -742,7 +859,8 @@
    "status": "applied",
    "round": 1,
    "applied": "베드로 장면 빛 먼지: 300개 흰 점 → 빛줄기 안 96개 은은한 먼지, 피사계 심도 — 8차",
-   "applied_at": "2026-11-14 15:37 KST"
+   "applied_at": "2026-11-14 15:37 KST",
+   "answered_by": 2
   },
   {
    "at": "2026-11-14 22:10 KST",
@@ -751,7 +869,8 @@
    "status": "applied",
    "round": 1,
    "applied": "N06 '많은 사람들은 메시야를 / 로마를 몰아낼 왕으로만 기다렸습니다.' — 11차",
-   "applied_at": "2026-11-14 22:15 KST"
+   "applied_at": "2026-11-14 22:15 KST",
+   "answered_by": 2
   },
   {
    "at": "2026-11-14 22:10 KST",
@@ -760,7 +879,8 @@
    "status": "applied",
    "round": 1,
    "applied": "N07 '예수님이 오신 뒤 어느 날, / 베드로가 고백했습니다.'(50.8, 성문 장면 끝에서 시작), Q2 55.3, 가이사랴 장면 t0 51.8로 베드로가 나서는 순간을 Q2에 맞춤 — 11차",
-   "applied_at": "2026-11-14 22:15 KST"
+   "applied_at": "2026-11-14 22:15 KST",
+   "answered_by": 2
   },
   {
    "at": "2026-11-14 22:38 KST",
@@ -769,7 +889,8 @@
    "status": "applied",
    "round": 1,
    "applied": "N17 '예수님이 바로 그 메시야라는 고백', L3 '선지자 · 엘리사'(L3N 뺌), N11 '십자가 위, / 예수님의 외침.' — 11차",
-   "applied_at": "2026-11-14 22:38 KST"
+   "applied_at": "2026-11-14 22:38 KST",
+   "answered_by": 2
   }
  ],
  "process_changes": [
@@ -809,8 +930,8 @@
     "note": "관리자: \"1순위 내용 완전 마음에 들어 — 지금 만들던 메시아 대체하자\" · \"성탄 얘기하지 말고 1순위 내용, 뒤집힘으로 붙일 사실까지 다 마음에 들어 — 그 기준으로 제작 시작해줘\" (2026-11-09)"
    },
    "review": {
-    "at": "2026-11-09T16:01:03.172Z",
-    "note": "관리자: 이대로 진행 (2026-11-10, 아내분 확인은 따로 말씀 없음)"
+    "at": "2026-11-14T13:51:26.667Z",
+    "note": "관리자 2026-11-14: 그럼 아까 1 2 3이랑 선지자 바꾸는 것만 하고 최종 만들고 사운드로 넘어가자"
    }
   }
  },
@@ -917,97 +1038,111 @@
   ]
  },
  "anomaly_check": {
-  "render": "246724568-d842d3d742f5",
+  "render": "246581224-d71f02e66c17",
   "at": "2026-11-14",
   "sheets": "motion/out/frames/christ",
-  "round": 10,
+  "round": 11,
   "issues": [
    {
     "t": 3,
     "what": "노인(1.5–8.6): 카디건 무늬는 보이나 몸통이 둥근 상자, 팔이 매끈한 원통 — 마네킹 같음; 머리 오른쪽 밝은 띠가 닭벼슬·가발 같음; 귀 안 보임",
     "severity": "MINOR",
-    "status": "open"
+    "status": "ok",
+    "why": "관리자 2026-11-14 \"아까 작은 문제 나온것들은 냅둬\" — 그림체의 한계인 MINOR, 그림 확정"
    },
    {
     "t": 161,
     "what": "끝 노인(160–165.5): 빛 닿기 전 머리가 매끈한 회색 공(대머리처럼), 몸 종 모양; 166.6부터 흰 솜뭉치 머리 — 처음과 같은 사람 느낌 약함",
     "severity": "MINOR",
-    "status": "open"
+    "status": "ok",
+    "why": "관리자 2026-11-14 \"아까 작은 문제 나온것들은 냅둬\" — 그림체의 한계인 MINOR, 그림 확정"
    },
    {
     "t": 40.5,
     "what": "엘리야 겉옷 40.5–41.0 세로 줄무늬 빳빳한 직사각형, 42.0 공중에서 단단한 종·조개껍데기 모양(입가 흰 점 없음 확인)",
     "severity": "MINOR",
-    "status": "open"
+    "status": "ok",
+    "why": "관리자 2026-11-14 \"아까 작은 문제 나온것들은 냅둬\" — 그림체의 한계인 MINOR, 그림 확정"
    },
    {
     "t": 42,
     "what": "엘리야·사무엘 몸이 어깨·다리 구분 없는 기둥에 가는 팔; 사무엘 팔 손목·팔꿈치에 고리 같은 빛줄 — 로봇 팔 같음",
     "severity": "MINOR",
-    "status": "open"
+    "status": "ok",
+    "why": "관리자 2026-11-14 \"아까 작은 문제 나온것들은 냅둬\" — 그림체의 한계인 MINOR, 그림 확정"
    },
    {
     "t": 69,
     "what": "막아섬 68.5–69.4: 옆모습으로 돌아섬은 맞으나 앞팔은 앞으로·뒷팔은 등 뒤로 수평 — 몸을 꿰뚫는 가로 막대, 허수아비 느낌 남음(70부터 붙듦 자연스러움)",
     "severity": "MINOR",
-    "status": "open"
+    "status": "ok",
+    "why": "관리자 2026-11-14 \"아까 작은 문제 나온것들은 냅둬\" — 그림체의 한계인 MINOR, 그림 확정"
    },
    {
     "t": 68,
     "what": "베드로 수염이 턱을 덮은 검은 덩어리 — 마스크 같음; 등 가운데까지 내려오는 황토 두건이 긴 금발 머리로 읽힐 수 있음(안뜰도) — figures-gender-legible",
     "severity": "MINOR",
-    "status": "open"
+    "status": "ok",
+    "why": "관리자 2026-11-14 \"아까 작은 문제 나온것들은 냅둬\" — 그림체의 한계인 MINOR, 그림 확정"
    },
    {
     "t": 67.7,
     "what": "베드로가 예수님을 앞지를 때(67.6–67.9) 두 실루엣이 겹쳐 한 덩어리",
     "severity": "MINOR",
-    "status": "open"
+    "status": "ok",
+    "why": "관리자 2026-11-14 \"아까 작은 문제 나온것들은 냅둬\" — 그림체의 한계인 MINOR, 그림 확정"
    },
    {
     "t": 56,
     "what": "베드로 옷 색: 들판(54.5–58)은 밝은 주황·황갈, 길·막아섬·안뜰은 짙은 자주 — 같은 사람 알아보기 약함",
     "severity": "MINOR",
-    "status": "open"
+    "status": "ok",
+    "why": "관리자 2026-11-14 \"아까 작은 문제 나온것들은 냅둬\" — 그림체의 한계인 MINOR, 그림 확정"
    },
    {
     "t": 88,
     "what": "두루마리→흑백 십자가 섞일 때(87.6–88.2) 등잔 불꽃·타원 고리가 가운데 십자가의 몸 위에 겹쳐 남음",
     "severity": "MINOR",
-    "status": "open"
+    "status": "ok",
+    "why": "관리자 2026-11-14 \"아까 작은 문제 나온것들은 냅둬\" — 그림체의 한계인 MINOR, 그림 확정"
    },
    {
     "t": 92,
     "what": "흑백 십자가: 매달린 몸 실루엣 뚜렷, 세 십자가가 화면 너비 약 40% — 원고 \"멀리 작은\"보다 가까움, depict-christ-restraint 경계",
     "severity": "MINOR",
-    "status": "open"
+    "status": "ok",
+    "why": "관리자 2026-11-14 \"아까 작은 문제 나온것들은 냅둬\" — 그림체의 한계인 MINOR, 그림 확정"
    },
    {
     "t": 122.5,
     "what": "안뜰 베드로 얼굴: 눈 자리 흰 얼룩 둘 + 검은 수염 덩어리 — 뭉개진 가면 같음, 화면 가운데라 눈에 띔",
     "severity": "MINOR",
-    "status": "open"
+    "status": "ok",
+    "why": "관리자 2026-11-14 \"아까 작은 문제 나온것들은 냅둬\" — 그림체의 한계인 MINOR, 그림 확정"
    },
    {
     "t": 121,
     "what": "안뜰 오른쪽 앞 앉은 사람: 흰 민머리에 챙 같은 모양, 뒤통수 검은 혹 — 마네킹 머리",
     "severity": "MINOR",
-    "status": "open"
+    "status": "ok",
+    "why": "관리자 2026-11-14 \"아까 작은 문제 나온것들은 냅둬\" — 그림체의 한계인 MINOR, 그림 확정"
    },
    {
     "t": 130.9,
     "what": "요단(옷·머리·후광 없음 확인): 비둘기 빛이 머리 높이에서 양옆으로 퍼지는 130.6–131.5에 머리 뒤 가로 빛띠·날개처럼 — 후광·천사 날개 연상",
     "severity": "MINOR",
-    "status": "open"
+    "status": "ok",
+    "why": "관리자 2026-11-14 \"아까 작은 문제 나온것들은 냅둬\" — 그림체의 한계인 MINOR, 그림 확정"
    },
    {
     "t": 166.6,
     "what": "끝 방 165.8–167.2 왼쪽 어두운 세로 띠, 167.8 창틀이 가는 조각으로(168.4부터 다 들어옴)",
     "severity": "MINOR",
-    "status": "open"
+    "status": "ok",
+    "why": "관리자 2026-11-14 \"아까 작은 문제 나온것들은 냅둬\" — 그림체의 한계인 MINOR, 그림 확정"
    }
   ],
-  "clean": "MAJOR 없음 · 안드레 손짓 · 사무엘 뿔병 얼굴 앞 안 지남 · 엘리야 흰 점 없음 · 성문 · 길·베드로 서두름 · 군인 장면 무채색 · 십자가 그림자·빈 무덤 · 세 직분 · 새벽 방·끝 화면 · 자막 겹침 없음"
+  "clean": "11차 렌더는 10차 그림에 원고 문구만 바꿈(N06 메시야, N07 예수님이 오신 뒤, N11 예수님의 외침, N17 그 메시야, 엘리사 표기 하나, 선지자,) — frame-qa 깨끗(black 0·frozen 0·pops 0)"
  },
  "anomaly_history": [
   {
@@ -1509,6 +1644,99 @@
     }
    ],
    "clean": "MAJOR 없음 · 막아섬 옆 구도·두건 깊이·예루살렘 · 들판 사이 벌어짐·베드로 서두름 · 가이사랴 길 번짐 없음 · 흑백 채도 0·튐 없음 · 등잔 켜짐 매끄러움 · 두루마리 두 겹 없음 · 비둘기 빛 어깨까지·후광 없음 · 세 직분 · 노인 처음·끝 같은 사람 · 끝 화면 · 자막 겹침 없음"
+  },
+  {
+   "render": "246724568-d842d3d742f5",
+   "at": "2026-11-14",
+   "sheets": "motion/out/frames/christ",
+   "round": 10,
+   "issues": [
+    {
+     "t": 3,
+     "what": "노인(1.5–8.6): 카디건 무늬는 보이나 몸통이 둥근 상자, 팔이 매끈한 원통 — 마네킹 같음; 머리 오른쪽 밝은 띠가 닭벼슬·가발 같음; 귀 안 보임",
+     "severity": "MINOR",
+     "status": "open"
+    },
+    {
+     "t": 161,
+     "what": "끝 노인(160–165.5): 빛 닿기 전 머리가 매끈한 회색 공(대머리처럼), 몸 종 모양; 166.6부터 흰 솜뭉치 머리 — 처음과 같은 사람 느낌 약함",
+     "severity": "MINOR",
+     "status": "open"
+    },
+    {
+     "t": 40.5,
+     "what": "엘리야 겉옷 40.5–41.0 세로 줄무늬 빳빳한 직사각형, 42.0 공중에서 단단한 종·조개껍데기 모양(입가 흰 점 없음 확인)",
+     "severity": "MINOR",
+     "status": "open"
+    },
+    {
+     "t": 42,
+     "what": "엘리야·사무엘 몸이 어깨·다리 구분 없는 기둥에 가는 팔; 사무엘 팔 손목·팔꿈치에 고리 같은 빛줄 — 로봇 팔 같음",
+     "severity": "MINOR",
+     "status": "open"
+    },
+    {
+     "t": 69,
+     "what": "막아섬 68.5–69.4: 옆모습으로 돌아섬은 맞으나 앞팔은 앞으로·뒷팔은 등 뒤로 수평 — 몸을 꿰뚫는 가로 막대, 허수아비 느낌 남음(70부터 붙듦 자연스러움)",
+     "severity": "MINOR",
+     "status": "open"
+    },
+    {
+     "t": 68,
+     "what": "베드로 수염이 턱을 덮은 검은 덩어리 — 마스크 같음; 등 가운데까지 내려오는 황토 두건이 긴 금발 머리로 읽힐 수 있음(안뜰도) — figures-gender-legible",
+     "severity": "MINOR",
+     "status": "open"
+    },
+    {
+     "t": 67.7,
+     "what": "베드로가 예수님을 앞지를 때(67.6–67.9) 두 실루엣이 겹쳐 한 덩어리",
+     "severity": "MINOR",
+     "status": "open"
+    },
+    {
+     "t": 56,
+     "what": "베드로 옷 색: 들판(54.5–58)은 밝은 주황·황갈, 길·막아섬·안뜰은 짙은 자주 — 같은 사람 알아보기 약함",
+     "severity": "MINOR",
+     "status": "open"
+    },
+    {
+     "t": 88,
+     "what": "두루마리→흑백 십자가 섞일 때(87.6–88.2) 등잔 불꽃·타원 고리가 가운데 십자가의 몸 위에 겹쳐 남음",
+     "severity": "MINOR",
+     "status": "open"
+    },
+    {
+     "t": 92,
+     "what": "흑백 십자가: 매달린 몸 실루엣 뚜렷, 세 십자가가 화면 너비 약 40% — 원고 \"멀리 작은\"보다 가까움, depict-christ-restraint 경계",
+     "severity": "MINOR",
+     "status": "open"
+    },
+    {
+     "t": 122.5,
+     "what": "안뜰 베드로 얼굴: 눈 자리 흰 얼룩 둘 + 검은 수염 덩어리 — 뭉개진 가면 같음, 화면 가운데라 눈에 띔",
+     "severity": "MINOR",
+     "status": "open"
+    },
+    {
+     "t": 121,
+     "what": "안뜰 오른쪽 앞 앉은 사람: 흰 민머리에 챙 같은 모양, 뒤통수 검은 혹 — 마네킹 머리",
+     "severity": "MINOR",
+     "status": "open"
+    },
+    {
+     "t": 130.9,
+     "what": "요단(옷·머리·후광 없음 확인): 비둘기 빛이 머리 높이에서 양옆으로 퍼지는 130.6–131.5에 머리 뒤 가로 빛띠·날개처럼 — 후광·천사 날개 연상",
+     "severity": "MINOR",
+     "status": "open"
+    },
+    {
+     "t": 166.6,
+     "what": "끝 방 165.8–167.2 왼쪽 어두운 세로 띠, 167.8 창틀이 가는 조각으로(168.4부터 다 들어옴)",
+     "severity": "MINOR",
+     "status": "open"
+    }
+   ],
+   "clean": "MAJOR 없음 · 안드레 손짓 · 사무엘 뿔병 얼굴 앞 안 지남 · 엘리야 흰 점 없음 · 성문 · 길·베드로 서두름 · 군인 장면 무채색 · 십자가 그림자·빈 무덤 · 세 직분 · 새벽 방·끝 화면 · 자막 겹침 없음"
   }
  ]
 }

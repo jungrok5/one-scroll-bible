@@ -63,7 +63,8 @@ if (doit('series')) { const want = films().map(f => G.films[f]?.h?.id).filter(Bo
 if (doit('home')) { const secs = (await api('channelSections?part=snippet,contentDetails&mine=true')).items || [], lang = Object.values(G.playlists || {});
   for (const [n, s] of R.home.sections.entries()) { const pls = s.playlists === 'language' ? lang : seriesId ? [seriesId] : [];
     if (!pls.length) { console.log(`home ${s.type}: waits for the series playlist`); continue; }
-    const cur = secs.find(x => x.snippet.type === s.type && (x.contentDetails?.playlists || []).some(p => pls.includes(p)));
+    // YouTube returns the section type in lower case ('multipleplaylists'): compare without case (2026-11-14: plan kept saying "add" after apply)
+    const cur = secs.find(x => x.snippet.type.toLowerCase() === s.type.toLowerCase() && (x.contentDetails?.playlists || []).some(p => pls.includes(p)));
     if (cur && pls.every(p => cur.contentDetails.playlists.includes(p))) continue;
     say(`home: ${cur ? 'update' : 'add'} ${s.type}${s.title ? ` "${s.title}"` : ''} (${pls.length} playlist(s))`);
     if (apply) { const body = { snippet: { type: s.type, position: n, ...(s.title ? { title: s.title } : {}) }, contentDetails: { playlists: pls } };
@@ -75,7 +76,11 @@ if (doit('channel')) { const ch = (await api('channels?part=brandingSettings,loc
   for (const [L, pl] of Object.entries(G.playlists || {})) { if (L === 'en') continue; const p = pls.find(x => x.id === pl); if (!p?.snippet.description) continue;
     const site = `https://one-scroll-bible.com/${L}/?utm_source=youtube&utm_medium=channel&utm_campaign=intl_${L}`;
     const d = R.channel_localizations.lines.map(l => l.replace('{playlist_description}', p.snippet.description.trim()).replace('{site}', site)).join('\n');
-    if (next[loc(L)]?.description !== d) { next[loc(L)] = { title, description: d }; chg++; say(`channel: ${loc(L)} description`); } }
+    // YouTube stores localization keys in its own form (zh-Hans → zh_CN, ja → ja_JP …): an entry counts as present when a stored key of
+    // the same language (and the same Chinese script) already has this description (2026-11-14: plan kept listing 18 after apply)
+    const base = loc(L).split(/[-_]/)[0], trad = k => /Hant|TW|HK/.test(k);
+    const have = Object.entries(ch.localizations || {}).some(([k, v]) => k.split(/[-_]/)[0] === base && (base !== 'zh' || trad(k) === trad(loc(L))) && v.description === d);
+    if (!have) { next[loc(L)] = { title, description: d }; chg++; say(`channel: ${loc(L)} description`); } }
   if (apply && chg) await api('channels?part=localizations', { method: 'PUT', body: JSON.stringify({ id: ch.id, localizations: next }) }); }
 // 5. related videos (Studio only) — what must change once a narrated version exists
 for (const L of Object.keys(G.shorts || {})) { const n = id(`${L}-narr`); if (n) console.log(`related: ${L} scene Shorts → ${n} (Studio, studio-related.js)`); }

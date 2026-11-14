@@ -973,7 +973,8 @@
     "captions_note": "2026-11-01: 19 caption languages (16 added through Studio — motion/youtube/studio-caption.js, no API quota), English-narration timing (sound/<lang>.en-timing.vtt); automatic en captions removed (yt-api asr-off). 2026-11-01 later: it, pl, tr added (owner's fixed caption list, films README §4 step 9) — Studio, all four videos. Then uz, ne, km, mn, my (migrant languages in Korea) — Studio, all four videos. 2026-11-02: tr and fa tracks replaced on all four via API caption-file --replace (line 01 now shows only the voiced clause — first upload began with a lone verb).",
     "published": "2026-11-01 21:42 KST: both made public by the owner's OK (videos.update status, API); horizontal end screen saved in Studio — last 5 s (2:54.12–2:59.12) = English 14-min film MFH3Hj4V6KA bottom-left + subscribe bottom-right, below the end-card text (found via the picker's other-channel box with the video URL — the my-videos search returned nothing for this channel)"
    }
-  }
+  },
+  "playlists_series": "PLUkvqbcq-Vok"
  },
  "silence400": {
   "note": "「침묵의 400년」 — same content, two versions (motion/films/silence400/upload.md). 2026-10-31: first uploads (SiSsE3W61eM / vJh-gAZl4UU) were rendered without Noto Serif KR installed (Batang, faux bold) — unscheduled, kept private (owner deletes); re-rendered with the real font (render.mjs now serves motion/out/fonts) and uploaded again. Studio upload (studio-upload.js entry = films/silence400/youtube.json), filled + scheduled by API (yt-api film-schedule) for 2026-10-31 20:30 KST, captions sound/ko.vtt (top-positioned) via API — uploaded to both and checked 2026-10-31 16:07 KST (private, publishAt 11:30Z, category 27, captions ko).",

@@ -259,7 +259,16 @@
 15. **11/13 이 세션에 걸어 둔 1회성 예약**(세션이 끝나면 사라짐 — 다른 세션에서는 결과만 확인):
     - ~~17:13 vi·th·tl 쇼츠 재생목록~~ — 끝남(각 21편), `global.wave4_pending` 지움.
     - ~~17:37 연결 줄 올리기·언어 수 빼기·400년 고정 댓글~~ — 끝남(아래 "11/13 연결 작업").
-    - 11/14 17:23 `film14.mjs captions --dry`·`intl-layout`(재생목록에 400년, 첫 화면 섹션).
+    - ~~11/14 17:23 `film14.mjs captions --dry`·`intl-layout`(재생목록에 400년, 첫 화면 섹션)~~ — **끝남(11/14)**:
+      - **언어별 재생목록 19개:** 「침묵의 400년」(oYKz_HHI8yw)을 14분 다음 자리(1번)에 넣음.
+      - **시리즈 재생목록:** "The Bible's story, one film at a time"(PLUkvqbcq-Vok, `global.playlists_series`)을 만들고 400년을 넣음. 처음에는 새 재생목록이 아직 안 보여 404가 났고, 다시 돌려서 넣음.
+      - **첫 화면 섹션:** "Watch in your language"(재생목록 19개)와 시리즈 재생목록 하나를 만듦.
+      - **채널 소개:** 18개 언어로 넣음.
+      - **plan 오인 고침:** YouTube가 섹션 종류는 소문자로, 언어 키는 zh-Hans→zh_CN처럼 바꿔 저장해서, 넣은 뒤에도 plan이 20건을 계속 '할 일'로 셌다. `intl-layout.mjs` 비교를 고쳐 plan 0 확인.
+      - **국제 채널 소개:** "in 200+ languages" → "in your language"(`text-edit` te-intl-channel.json).
+      - **자막:** `film14.mjs captions --dry` 결과 38개 모두 이미 올라가 있음. 올린 것이 없어서 asr-off도 하지 않음.
+      - **연결 점검:** `xlinks audit` 모두 linked(ko-film 2/2 · ko-shorts 21/21 · ko-silence400 5/5 · gl-film 19/19 · gl-silence400 2/2).
+      - **스튜디오에서 손으로 할 것(API 없음):** 맞춤설정 → 레이아웃 → 구독자용 추천 영상 = oYKz_HHI8yw.
     - 11/19 19:47 매일·월목 예약 갱신.
 
     남아 있지 않으면 위 명령으로 다시 하면 된다.

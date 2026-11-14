@@ -107,3 +107,5 @@
 | S64 | add_flow_node:sfx | eleven_text_to_sound_v2 | 6.5 | Dawn coming outside a small window of an old room: the first birds far off, faint morning air, a quiet house, peaceful |
 | S65 | add_flow_node:sfx | eleven_text_to_sound_v2 | 3 | A soft warm glassy shimmer slowly swelling as morning light reaches folded hands, very delicate and quiet |
 | S66 | add_flow_node:sfx | eleven_text_to_sound_v2 | 5 | Morning sunlight filling a quiet room: a slow warm swell of air, birdsong outside the window a little brighter, peaceful |
+| Q13 | speech | eleven_v4 |  | 주는 그리스도시요 살아 계신 하나님의 아들이시니이다 |
+| S67 | in_flow:sfx | eleven_text_to_sound_v2 |  | Fine pen drawing one slow straight line across thick paper from left to right, a soft continuous dry scratch that starts gently and slows at the end, very close and quiet, no shimmer, no music |

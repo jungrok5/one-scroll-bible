@@ -1,7 +1,7 @@
 {
  "film": "christ",
- "dur": 180,
- "made": "2026-11-14T14:47",
+ "dur": 183,
+ "made": "2026-11-14T21:28",
  "cover": 1,
  "need": 83,
  "actions": [
@@ -175,7 +175,7 @@
    "covered": true,
    "sfx": [
     "S09",
-    "E2a"
+    "S67"
    ]
   },
   {
@@ -1058,7 +1058,7 @@
    "t": 159.4,
    "len": 0.7,
    "kind": "scene",
-   "what": "scene from 159.4 to 181",
+   "what": "scene from 159.4 to 184",
    "covered": true,
    "sfx": [
     "S63"
@@ -1125,7 +1125,7 @@
    ]
   },
   {
-   "t": 175.6,
+   "t": 178.6,
    "len": 1.8,
    "kind": "end",
    "what": "the end card appears (영상 속 주요 말씀)",
@@ -1135,13 +1135,13 @@
    ]
   },
   {
-   "t": 177.4,
+   "t": 180.4,
    "len": 1.4,
    "kind": "act",
    "what": "the end card underline draws",
    "covered": true,
    "sfx": [
-    "E2b"
+    "S67e"
    ]
   }
  ]

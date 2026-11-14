@@ -2216,6 +2216,44 @@
     "ArkPLgEAFS4xGlgnkTbt"
    ],
    "name": "S66"
+  },
+  {
+   "use": "toolu_01A1sXg8jzv3YaS6qBet35kG",
+   "time": "2026-11-14T21:16:36.029Z",
+   "flow": "Zbs7p9CGD1RBI4UPlT7n",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "주는 그리스도시요 살아 계신 하나님의 아들이시니이다",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "",
+   "node": "TVqtNCfuA4YFaylFlvRl",
+   "sessions": [
+    "xClcPPwhz0jEpewR9ADT",
+    "MMUNrCKGEi8K2uXKAJYK"
+   ],
+   "name": "Q13"
+  },
+  {
+   "use": "toolu_01HSVmRtpcLwx28Yh5koMuop",
+   "time": "2026-11-14T21:20:19.388Z",
+   "flow": "FEsz8qczhCIpPe85UWpV",
+   "tool": "creative_generate_in_flow:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "",
+   "prompt": "Fine pen drawing one slow straight line across thick paper from left to right, a soft continuous dry scratch that starts gently and slows at the end, very close and quiet, no shimmer, no music",
+   "params": {},
+   "why": "",
+   "node": "LlpCW75fYbBFJRF7on4v",
+   "sessions": [
+    "BoC8F0IPmWYGPvcrNXCi",
+    "QZlwCFPToRwpLzpvvON9",
+    "HefLAaFkMwTlFkTtc61W",
+    "KuNQP4cNXPhhbaZ3oelT"
+   ],
+   "name": "S67"
   }
  ],
  "title": "그리스도",

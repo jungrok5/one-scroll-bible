@@ -1,9 +1,9 @@
 {
  "film": "christ",
  "dur": 183,
- "made": "2026-11-14T21:28",
- "cover": 1,
- "need": 83,
+ "made": "2026-11-14T21:43",
+ "cover": 0.99,
+ "need": 81,
  "actions": [
   {
    "t": 0,
@@ -162,21 +162,16 @@
    "len": 3.4,
    "kind": "act",
    "what": "the spread light gathers into the title",
-   "covered": true,
-   "sfx": [
-    "S09"
-   ]
+   "covered": false,
+   "sfx": []
   },
   {
    "t": 20.6,
    "len": 1.6,
-   "kind": "act",
-   "what": "the title underline draws",
-   "covered": true,
-   "sfx": [
-    "S09",
-    "S67"
-   ]
+   "kind": "quiet",
+   "what": "the title underline draws — 소리 없음(관리자 #44: 줄 긋는 소리 어색, 「침묵의 400년」도 밑줄은 무음 — 음악이 받침)",
+   "covered": false,
+   "sfx": []
   },
   {
    "t": 23.2,
@@ -1137,12 +1132,10 @@
   {
    "t": 180.4,
    "len": 1.4,
-   "kind": "act",
-   "what": "the end card underline draws",
-   "covered": true,
-   "sfx": [
-    "S67e"
-   ]
+   "kind": "quiet",
+   "what": "the end card underline draws — 소리 없음(관리자 #44: 줄 긋는 소리 어색, 「침묵의 400년」도 밑줄은 무음 — 음악이 받침)",
+   "covered": false,
+   "sfx": []
   }
  ]
 }

@@ -3,10 +3,12 @@
    bwCross(ctx, u)    u 0..10.2  (film 87.6–97.8)
      N11 "십자가 위에서 예수님은 외치셨습니다." — darkness over the land at noon (Mt 27:45): a heavy grey sky, the hill and three
      crosses in silhouette, a few women standing far off (Mt 27:55), the camera slowly pushing in.
-     Q5 (u 3.9 = 91.5) "나의 하나님, 나의 하나님, 어찌하여 나를 버리셨나이까" — the sky closes and darkens; one shaft of light is all
-     that is left, slanting from a gap aside (upper right) onto the far plain; the camera stays far, the crosses small silhouettes
-     the whole scene (6차: no dolly to the middle cross, no light behind its head — depict-christ-restraint).
-     u 9–10.2: the shaft draws back up into its gap in the clouds and the gap closes to one point of light (bwCross.point(u)).
+     Q5 (u 3.9 = 91.5) "나의 하나님, 나의 하나님, 어찌하여 나를 버리셨나이까" — the darkness comes over the whole land (Mt 27:45
+     "온 땅에 어둠이 임하여"): the overcast sinks darker from the top down; the only light left is a thin pale band low along the
+     horizon behind and beside the hill (wide, low, no disc, nothing behind any cross's head). The camera stays far, the crosses
+     small silhouettes the whole scene (6차: no dolly to the middle cross, no light behind its head — depict-christ-restraint;
+     7차: no shaft of light — aside it lit an empty field and read as random, 관리자 "빛이 엉뚱한곳에 비추는건 의도인가?").
+     u 9–10.2: everything sinks; the dull glow hidden in the clouds (upper right) closes to one point of light (bwCross.point(u)).
    bwSoldiers(ctx, u) u 0..6.2   (film 114–120.2)
      N14 "십자가 아래 군인들은 그 옷을 두고 제비를 뽑았습니다." — daylight, the third hour (Mk 15:24–25): close on the ground at the
      foot of the cross, two squatting soldiers' hands, the seamless tunic spread above them (Jn 19:23–24); the cross is only
@@ -25,7 +27,6 @@
     B.grain = []; for (let i = 0; i < 6; i++) B.grain.push(Pilot.speckle(W >> 1, H >> 1, 62, 410 + i));
     B.halo = canvas(W >> 2, H >> 2); B.halo2 = canvas(W >> 2, H >> 2);
     B.clouds = [cloudTex(640, 300, 3, .30, 70, 150), cloudTex(640, 300, 11, .47, 40, 120)];
-    B.shaft = shaftTex();
     buildCrossWorld(); buildSoldierWorld();
     return B;
   }
@@ -43,19 +44,6 @@
     }
     g.putImageData(im, 0, 0); return c;
   }
-  // a shaft of light: soft edges, striations along its length, fading towards the ground (warm white)
-  function shaftTex() {
-    const w = 256, h = 1024, c = canvas(w, h), g = c.getContext('2d'), im = g.createImageData(w, h);
-    for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
-      const xn = (x - w / 2) / (w / 2), yn = y / h, wid = lerp(.35, 1, yn);
-      const edge = Math.exp(-Math.pow(xn / wid, 2) * 2.6), str = .55 + .45 * fbm(x * .045 / wid + 3, yn * 1.2, 3);
-      const along = ss(0, .24, yn) * (1 - ss(.55, 1, yn) * .92);   // its top melts into the cloud it comes from
-      const a = clamp(edge * str * along), i = (y * w + x) * 4;
-      im.data[i] = 255; im.data[i + 1] = 246; im.data[i + 2] = 230; im.data[i + 3] = a * 255;
-    }
-    g.putImageData(im, 0, 0); return c;
-  }
-
   // ------------------------------------------------------------------ film treatment
   function finish(ctx, t, o) {
     const { W, H } = B, hw = B.halo.width, hh = B.halo.height, fi = Math.floor(t * 24);
@@ -195,7 +183,7 @@
     const scr = (k, x, y) => { const s = 1 + push * k; return [Tx + (x - X.F[0]) * s, Ty + (y - X.F[1]) * s]; };
     ctx.save();
     // --- sky: dim noon overcast that darkens at the cry; the gap is where the light still is
-    const dk = ss(.2, 3.9, u), sb = lerp(1.18, .8, dk) * lerp(1, .9, q) * lerp(1, .35, endk);
+    const dk = ss(.2, 3.9, u), sb = lerp(1.2, .95, dk) * lerp(1, .95, q) * lerp(1, .35, endk);
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     const sk = ctx.createLinearGradient(0, 0, 0, H * .62); sk.addColorStop(0, `rgb(${70 * sb | 0},${70 * sb | 0},${72 * sb | 0})`); sk.addColorStop(.6, `rgb(${132 * sb | 0},${132 * sb | 0},${130 * sb | 0})`); sk.addColorStop(1, `rgb(${166 * sb | 0},${165 * sb | 0},${160 * sb | 0})`);
     ctx.fillStyle = sk; ctx.fillRect(0, 0, W, H);
@@ -205,35 +193,36 @@
     const drawClouds = (g, half) => { for (const [ci, sp, a, yo, hh] of CL) { const [s, ox, oy] = camT(.3); g.setTransform(s * half, 0, 0, s * half, ox * half, oy * half);
         const cw = W * 1.6, off = ((t * sp) % cw + cw) % cw; g.globalAlpha = a; for (const o of [-cw, 0, cw]) g.drawImage(B.clouds[ci], o + off - W * .3, H * yo, cw, H * hh); } g.globalAlpha = 1; g.setTransform(1, 0, 0, 1, 0, 0); };
     drawClouds(ctx, 1);
-    // darkness over the land (Mt 27:45) — heavier from the cry, the gap left open
-    { const R = Math.max(W, H) * lerp(.95, .6, q), gd = ctx.createRadialGradient(gp[0], gp[1], R * .14, gp[0], gp[1], R);
-      const d = .04 + .23 * dk + .12 * q; gd.addColorStop(0, `rgba(0,0,0,${d * .1})`); gd.addColorStop(1, `rgba(0,0,0,${d})`); ctx.fillStyle = gd; ctx.fillRect(0, 0, W, H * .75); }
+    // darkness over the whole land (Mt 27:45) — it comes down from the top of the sky and is heavier from the cry; only the
+    // low horizon stays open
+    { const [, hy] = scr(.6, 0, X.hor), d = .04 + .2 * dk + .1 * q, gd = ctx.createLinearGradient(0, 0, 0, hy);
+      gd.addColorStop(0, `rgba(0,0,0,${d})`); gd.addColorStop(.55, `rgba(0,0,0,${d * .7})`); gd.addColorStop(1, `rgba(0,0,0,${d * .08})`); ctx.fillStyle = gd; ctx.fillRect(0, 0, W, hy); }
     // the gap: before the cry a hidden sun's dull glow; at the cry the clouds part around it and their edges catch the light
     // (6차: the gap sits aside, upper right, and is an overcast glow — no bright disc, never behind the middle cross's head)
-    const gapA = (.06 * (1 - dk) + q) * (1 - endk * .35), gr = (V ? W * .2 : H * .3) * lerp(.85, 1.2, q) * lerp(1, .18, endk);
+    const gapA = (.06 * (1 - dk) + .16 * q) * (1 - endk * .35), gr = (V ? W * .2 : H * .3) * lerp(.85, 1.2, q) * lerp(1, .18, endk);
     { ctx.globalCompositeOperation = 'screen'; const gg = ctx.createRadialGradient(gp[0], gp[1], 0, gp[0], gp[1], gr * 3.8);
       gg.addColorStop(0, `rgba(236,232,224,${.5 * gapA})`); gg.addColorStop(.2, `rgba(214,210,202,${.32 * gapA})`); gg.addColorStop(.5, `rgba(170,168,162,${.14 * gapA})`); gg.addColorStop(1, 'rgba(120,120,120,0)');
       ctx.fillStyle = gg; ctx.fillRect(0, 0, W, H);
       const go = ctx.createLinearGradient(0, 0, 0, H * .62);   // the overcast itself holds a dull, even light (the sky is not black at the cry)
-      go.addColorStop(0, 'rgba(150,148,144,0)'); go.addColorStop(.7, `rgba(150,148,144,${(.06 + .14 * q) * (1 - endk)})`); go.addColorStop(1, 'rgba(150,148,144,0)');
+      go.addColorStop(0, 'rgba(150,148,144,0)'); go.addColorStop(.7, `rgba(150,148,144,${(.1 + .16 * q) * (1 - endk)})`); go.addColorStop(1, 'rgba(150,148,144,0)');
       ctx.fillStyle = go; ctx.fillRect(0, 0, W, H * .62); ctx.globalCompositeOperation = 'source-over'; }
     if (q > .01 && endk < .99) { const lc = X.lit.getContext('2d'); lc.setTransform(1, 0, 0, 1, 0, 0); lc.globalCompositeOperation = 'source-over'; lc.clearRect(0, 0, W, H); drawClouds(lc, .5);
       lc.globalCompositeOperation = 'destination-in'; const R2 = gr * 4.3 * .5, mg = lc.createRadialGradient(gp[0] * .5, gp[1] * .5, R2 * .1, gp[0] * .5, gp[1] * .5, R2); mg.addColorStop(0, 'rgba(0,0,0,1)'); mg.addColorStop(1, 'rgba(0,0,0,0)');
-      lc.fillStyle = mg; lc.fillRect(0, 0, W, H); ctx.globalCompositeOperation = 'screen'; ctx.globalAlpha = .9 * q * (1 - endk); ctx.drawImage(X.lit, 0, 0, W, H); ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over'; }   // silver edges
-    // the shaft: from the gap aside, slanting down past the crosses onto the far land beyond the right of the hill (not behind a cross)
-    const [ctx0, cty0] = scr(.6, X.cx + X.sp * (V ? 2.9 : 3.6), X.hor + H * .02);
-    const sa = .85 * q * (1 - ss(8.2, 9.9, u)), retreat = ss(8.0, 10.1, u);   // drawn back slowly: the big shaft collapsing in 1 s popped at 97.13 (6차 render)
-    if (sa > .003) {
-      const dx = ctx0 - gp[0], dy = cty0 - gp[1], ang = Math.atan2(dy, dx) - Math.PI / 2, len = Math.hypot(dx, dy) * lerp(1.75, .2, retreat), wd = (V ? W * .34 : W * .2) * (1 + push * .25) * lerp(1, .15, retreat);
-      ctx.save(); ctx.translate(gp[0], gp[1]); ctx.rotate(ang); ctx.globalCompositeOperation = 'screen';
-      const o0 = -len * .2; ctx.globalAlpha = sa; ctx.drawImage(B.shaft, -wd / 2, o0, wd, len);
-      ctx.globalAlpha = .6 * sa * (.8 + .2 * Math.sin(t * 1.3)); ctx.drawImage(B.shaft, -wd * .3 + Math.sin(t * .7) * wd * .03, o0, wd * .6, len * .9);
-      ctx.globalAlpha = .5 * sa; ctx.drawImage(B.shaft, -wd * .12, o0, wd * .24, len * .8);
-      ctx.fillStyle = '#fff';
-      for (const m of X.motes) { const along = (m.a + t * m.v) % 1, yy = along * len * .8, xx = m.s * wd * .28 * lerp(.4, 1, along) + Math.sin(t * .8 + m.p) * 8;
-        ctx.globalAlpha = sa * .5 * Math.exp(-Math.pow(m.s, 2) * 2) * Math.sin(along * Math.PI); ctx.beginPath(); ctx.arc(xx, yy, m.z, 0, 6.283); ctx.fill(); }
-      ctx.restore(); ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
-    }
+      lc.fillStyle = mg; lc.fillRect(0, 0, W, H); ctx.globalCompositeOperation = 'screen'; ctx.globalAlpha = .22 * q * (1 - endk); ctx.drawImage(X.lit, 0, 0, W, H); ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over'; }   // silver edges
+    // the light that is left: a thin pale band low along the horizon, wide, behind and beside the hill (no disc, no shaft)
+    const bandA = (.55 + .65 * dk) * (1 - endk * .9);
+    layer(.6);
+    { const by = X.hor, bh = H * (V ? .09 : .12); ctx.globalCompositeOperation = 'screen';
+      const bg = ctx.createLinearGradient(0, by - bh, 0, by + H * .004);
+      bg.addColorStop(0, 'rgba(200,196,188,0)'); bg.addColorStop(.55, `rgba(206,201,192,${.16 * bandA})`); bg.addColorStop(.88, `rgba(228,222,210,${.36 * bandA})`); bg.addColorStop(1, `rgba(236,230,218,${.3 * bandA})`);
+      ctx.fillStyle = bg; ctx.fillRect(-W, by - bh, W * 3, bh + H * .004);
+      const bx = X.cx + X.sp * (V ? 1.9 : 2.6), rw = V ? W * .75 : W * .5;   // a little more of it beside the hill, to the right — still a band, not a spot
+      ctx.save(); ctx.translate(bx, by - bh * .12); ctx.scale(1, bh * .6 / rw); const be = ctx.createRadialGradient(0, 0, 0, 0, 0, rw);
+      be.addColorStop(0, `rgba(236,230,218,${.3 * bandA})`); be.addColorStop(.5, `rgba(220,214,204,${.14 * bandA})`); be.addColorStop(1, 'rgba(210,204,196,0)'); ctx.fillStyle = be; ctx.fillRect(-rw, -rw, rw * 2, rw * 2); ctx.restore();
+      ctx.globalAlpha = .5 * bandA; ctx.globalCompositeOperation = 'multiply';   // thin strata of cloud drawn across it
+      const cw = W * 1.6, off = ((t * 18) % cw + cw) % cw; for (const o of [-cw, 0, cw]) ctx.drawImage(B.clouds[2], o + off - W * .3, by - bh * 1.1, cw, bh * .9);
+      ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over'; }
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
     // --- far land and the city wall (atmospheric: lighter than the hill)
     layer(.6); ctx.fillStyle = `rgb(${84 * sb | 0},${84 * sb | 0},${84 * sb | 0})`;
     ctx.beginPath(); ctx.moveTo(-W, H * 1.2); for (let x = -W; x <= W * 2; x += 12) ctx.lineTo(x, X.hor + (fbm(x * .003, 7.7, 4) - .5) * H * .03); ctx.lineTo(W * 2, H * 1.2); ctx.fill();
@@ -241,16 +230,15 @@
     { const wx0 = V ? W * .02 : W * .06, wx1 = V ? W * .3 : W * .34, wy = X.hor - H * .004; ctx.fillStyle = `rgb(${64 * sb | 0},${64 * sb | 0},${66 * sb | 0})`; ctx.beginPath(); ctx.moveTo(wx0, wy + H * .02);
       for (let x = wx0; x < wx1; x += H * .008) { const tw = Math.abs(x - (wx0 + (wx1 - wx0) * .62)) < H * .012 ? H * .022 : 0; ctx.lineTo(x, wy - H * .014 - tw); ctx.lineTo(x + H * .005, wy - H * .014 - tw); ctx.lineTo(x + H * .005, wy - H * .011 - tw); ctx.lineTo(x + H * .008, wy - H * .011 - tw); }
       ctx.lineTo(wx1, wy + H * .02); ctx.fill(); }
-    if (sa > .003) { const lx = X.cx + X.sp * (V ? 2.9 : 3.6), ly = X.hor + H * .02, lr = (V ? W * .22 : W * .12) * lerp(1, .3, retreat);   // where the shaft lands: a pale patch on the plain
-      ctx.save(); ctx.globalCompositeOperation = 'screen'; ctx.translate(lx, ly); ctx.scale(1, .16); const lg = ctx.createRadialGradient(0, 0, 0, 0, 0, lr);
-      lg.addColorStop(0, `rgba(220,214,204,${.4 * sa})`); lg.addColorStop(1, 'rgba(220,214,204,0)'); ctx.fillStyle = lg; ctx.fillRect(-lr, -lr, lr * 2, lr * 2); ctx.restore(); }
+    { const hz = ctx.createLinearGradient(0, X.hor, 0, X.hor + H * .025); hz.addColorStop(0, `rgba(150,148,144,${.22 * bandA})`); hz.addColorStop(1, 'rgba(150,148,144,0)');   // the far plain just under the band catches a little of it
+      ctx.globalCompositeOperation = 'screen'; ctx.fillStyle = hz; ctx.fillRect(-W, X.hor, W * 3, H * .025); ctx.globalCompositeOperation = 'source-over'; }
     layer(1);
     // three crosses
     ctx.fillStyle = '#090909'; ctx.strokeStyle = '#090909';
     crucified(ctx, X.cx - X.sp, X.crest(X.cx - X.sp) + 3, X.hc * .8, 1);
     crucified(ctx, X.cx + X.sp, X.crest(X.cx + X.sp) + 3, X.hc * .8, -1);
     crucified(ctx, X.cx, X.crest(X.cx) + 3, X.hc, 1, true);
-    // --- the hill: rock, scree and dry grass, its rough crest picked out by the shaft behind it
+    // --- the hill: rock, scree and dry grass, its rough crest picked out by the low light behind it
     layer(1);
     { const hv = lerp(1, .72, q), hill = new Path2D(); hill.moveTo(-W, H * 1.5); for (let x = -W; x <= W * 2; x += 6) hill.lineTo(x, X.crest(x)); hill.lineTo(W * 2, H * 1.5); hill.closePath();
       const hg = ctx.createLinearGradient(0, X.cy, 0, X.cy + X.A * 1.4); hg.addColorStop(0, `rgb(${46 * hv | 0},${46 * hv | 0},${47 * hv | 0})`); hg.addColorStop(1, `rgb(${30 * hv | 0},${30 * hv | 0},${31 * hv | 0})`);
@@ -261,7 +249,7 @@
       ctx.strokeStyle = `rgb(${18 * hv | 0},${18 * hv | 0},${19 * hv | 0})`; ctx.lineCap = 'round'; ctx.lineWidth = 1.6;
       for (const tf of X.tufts) { const y = X.crest(tf.x) + 1 + tf.d, sw = Math.sin(t * 1.5 + tf.b) * .15 + .1; for (let j = -tf.n; j <= tf.n; j++) { ctx.beginPath(); ctx.moveTo(tf.x + j * 1.5, y); ctx.quadraticCurveTo(tf.x + j * 2.5, y - tf.h * .5, tf.x + j * tf.h * .3 + tf.h * sw, y - tf.h * (1 - Math.abs(j) * .15)); ctx.stroke(); } }
       if (q > 0) { ctx.save(); ctx.globalCompositeOperation = 'screen'; ctx.lineWidth = 3; ctx.filter = 'blur(2px)'; const rg = ctx.createLinearGradient(X.cx - X.sig * .2, 0, X.cx + X.sig * 1.6, 0);   // the crest's lip on the side toward the gap
-        rg.addColorStop(0, 'rgba(200,198,194,0)'); rg.addColorStop(.6, `rgba(235,230,222,${.4 * sa})`); rg.addColorStop(1, 'rgba(200,198,194,0)'); ctx.strokeStyle = rg;
+        rg.addColorStop(0, 'rgba(200,198,194,0)'); rg.addColorStop(.6, `rgba(235,230,222,${.18 * q * bandA})`); rg.addColorStop(1, 'rgba(200,198,194,0)'); ctx.strokeStyle = rg;
         ctx.beginPath(); for (let x = X.cx - X.sig * .2; x <= X.cx + X.sig * 1.6; x += 4) { const y = X.crest(x) + 1.2; x === X.cx - X.sig * .2 ? ctx.moveTo(x, y) : ctx.lineTo(x, y); } ctx.stroke(); ctx.restore(); } }
     // soldiers keeping watch at the foot
     { const sh = X.hc * .24; [[-1.5, 1, 1, 0, .06], [1.52, 1, -1, 2.1, .08]].forEach(([dx, sp, fc, ph, dn]) => { const x = X.cx + X.sp * dx; sentry(ctx, x, X.crest(x) + X.hc * dn, sh * (1 + dn * .4), sp, fc, t, ph); }); }
@@ -295,8 +283,8 @@
       ctx.fillStyle = pg; ctx.fillRect(0, 0, W, H); ctx.globalCompositeOperation = 'source-over';
     }
     ctx.restore();
-    const wr = (V ? W * .55 : H * .7) * lerp(.6, 1.1, q) * lerp(1, .4, endk);
-    finish(ctx, t, { halo: .38 + .2 * q, warm: [lerp(gp[0], ctx0, .35), lerp(gp[1], cty0, .35 * (1 - endk)), wr, .3 * (.4 + .6 * q)], vig: .6 });
+    const bw0 = scr(.6, X.cx + X.sp * (V ? 1.9 : 2.6), X.hor - H * .01), wr = (V ? W * .55 : H * .7) * lerp(.6, 1.1, q) * lerp(1, .4, endk);
+    finish(ctx, t, { halo: .38 + .2 * q, warm: [lerp(bw0[0], gp[0], endk), lerp(bw0[1], gp[1], endk), wr, .3 * (.4 + .6 * q)], vig: .6 });
   }
   bwCross.point = u => { buildBW(); const push = .3 * (1 - Math.exp(-u / 5)), pr = clamp(push / 1.6);
     return [lerp(X.gap0[0], X.gap1[0], eio(pr)), lerp(X.gap0[1], X.gap1[1], eio(pr))]; };

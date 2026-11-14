@@ -24,8 +24,6 @@
 <script src="jerusalem3d.js"></script>
 <script src="road-pastel.js"></script>
 <script src="fresco-cornelius.js"></script>
-<script src="kit-shadowstage.js"></script>
-<script src="shadow-emmaus.js"></script>
 <script src="dawn-impasto.js"></script>
 <script>
 /* 그리스도 — '그리스도'는 성이 아니라 '기름 부음 받은 자', 그리고 고난받는 그리스도는 처음부터 성경이 가리킨 길이었다 (~2:56).
@@ -47,6 +45,9 @@ function todo(ctx, t) { const g = ctx.createRadialGradient(W * (.5 + .1 * Math.s
   g.addColorStop(0, 'rgb(70,52,34)'); g.addColorStop(1, 'rgb(10,8,8)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H); }
 const sc = (fn, t0, ...a) => (c, t) => { if (hasF(fn)) window[fn](c, t - t0, ...a); else todo(c, t); textBand(c); };
 const scz = (fn, t0, ...a) => (c, t) => { if (hasF(fn)) window[fn](c, Math.max(0, t - t0), ...a); else todo(c, t); textBand(c); };   // a module that starts at u = 0 (holds its first frame through the dissolve in)
+// a part-2 anointing recalled in the climax (goldRecall in goldoil-anoint.js; until it exists, the pour moment of the original scene)
+const RECALL_AT = { david: 5.7, aaron: 2.0, elisha: 2.5 };
+const recall = (which, t0) => (c, t) => { const u = Math.max(0, t - t0); if (hasF('goldRecall')) goldRecall(c, u, which); else if (hasF('goldAnoint')) goldAnoint(c, RECALL_AT[which] + u * .5, which); else todo(c, t); textBand(c); };
 // the timeline (film seconds = script.json `at`); scenes dissolve over their overlap (0.8 s, longer where the music turns)
 const SCENES = [
   [0, 8.6, (c, t) => { sc('roomOil', 0, 'open')(c, t); textBand(c); }],   // N01 N02 — the candle, the old man from behind, the open Bible (the bright pages sit under the words: a double band)
@@ -67,16 +68,19 @@ const SCENES = [
   [113.8, 120.9, sc('bwSoldiers', 114.0)],         // L4 N14 — at the foot of the cross, the lots
   // 5차(관점 검수 4차, 관리자 2026-11-14 "고고"): the empty tomb no longer comes before the preaching — Acts 10:38 / 39 / 40 on three
   // screens, the dawn first at "다시 살리사", then N15 reads it ("실패가 아니라, 성경이 가리킨 길")
-  [119.9, 125.0, scz('corneliusFresco', 119.9)],   // N20 — Peter speaks in Cornelius' house at Caesarea (Acts 10), Pompeian fresco
+  [119.9, 125.0, scz('corneliusFresco', 119.9)],   // N20 — the same Peter (part 3) in a courtyard before many seated people, warm light through the gate (7차, 관리자 #33: no Roman room that needs the Bible to read)
   // the spirit mode is written for 6.5 s; Q9 now holds 11 s (10:38 to "선한 일을 행하시고") → its clock runs at 0.6 (5차 render: frozen 132–134 s)
   [124.3, 135.7, (c, t) => { if (hasF('jordanScene')) jordanScene(c, Math.max(0, t - 124.4) * .6, { mode: 'spirit' }); else todo(c, t); textBand(c); }],   // P7 Q9 — the light like a dove on the Jordan (Acts 10:38)
   [134.5, 139.9, scz('dawnOil', 134.6, 'tree')],   // Q11 — the dove's light withdraws (1.2 s dissolve: 5차 render popped at 135.07), dark ground, one cross-shaped shadow (Acts 10:39 "나무에 달아"): no tree, no crowd, held
   [139.3, 148.7, scz('dawnOil', 139.5, 'tomb')],   // Q12 N15 — the first dawn: inside the tomb looking out, light on the linen (Acts 10:40, Jn 20:5–7)
-  [148.0, 152.6, scz('goldThree', 148.3)],         // N16 — the three lights meet on one
-  [151.7, 158.3, scz('roomOil', 152.0, 'dawn')],   // N17 — the first room: dawn comes through the window
-  [157.7, 164.6, scz('emmausShadow', 158.1, 'walk')], // P6 N18 — the road to Emmaus at sunset
-  [164.0, 171.5, scz('emmausShadow', 164.3, 'speak')],// Q8 Q8N — the middle one turns (never a profile): "그리스도가 이런 고난을 받고…"
-  [170.9, 181, scz('emmausShadow', 171.2, 'lamp')],   // N19 E1 — a lamp lit in the village; the end card
+  // 7차 (관리자 2026-11-14 #32–34): the climax — the three anointings of part 2 come back one by one, each light rises; they meet as one
+  // light (the colour of the dove's light, Acts 10:38) that becomes the sun rising behind an empty cross far away; then the first room,
+  // where the film ends (no Emmaus: "억지로 넣은 느낌")
+  [148.0, 151.0, recall('david', 148.2)],          // N16K "왕," — the hill: the oil on the shepherd boy glows and rises
+  [150.4, 153.4, recall('aaron', 150.6)],          // N16P "제사장," — the tent door: the oil from Aaron's head rises
+  [152.8, 155.8, recall('elisha', 153.0)],         // N16R "선지자 —" — the field: light rises from the cloak on Elisha's shoulders
+  [155.2, 160.4, scz('goldThree', 155.4)],         // N16 "세 직분이, 한 분에게." — three lights become one over a far empty cross, the sun rises behind it
+  [159.4, 181, scz('roomOil', 159.5, 'end')],      // N17 Q14 Q13 E1 — the first room again: dawn fills it; Peter's confession as the old man's prayer; the end card
 ];
 // text: every line from its `at` to the next voiced line (quotes hold until then; a caption label rides with its quote)
 let TEXT = [];
@@ -103,14 +107,17 @@ function title(ctx, id, t, a, b) { const ta = win(t, a, b, .9, .6); if (ta <= 0)
   Pilot.text(ctx, Film.text(id), W / 2, ty, { size: sz, weight: 600, color: '#e9c77a', alpha: ta, shadow: 'rgba(233,185,73,.35)', shadowBlur: 40, ls: 10 });
   const lw = (V ? 380 : 480) * eo(clamp((t - a - .3) / 1.6)); ctx.fillStyle = `rgba(233,199,122,${ta * .8})`; ctx.fillRect(W / 2 - lw / 2, ty + (V ? 52 : 56), lw, 2); }
 function endCard(ctx, t, a, b) {   /* one place to read: a small gold 뒷이야기, then the chapter, large (as 「메시아」) */
-  const k = win(t, a, b, 1, .8); if (k <= 0) return; const [kick, where] = Film.text('E1').split(/\s*·\s*/), size = V ? 50 : 44, y0 = H * .3;
-  dark(ctx, .55 * k);
-  Pilot.text(ctx, kick, W / 2, y0, { size: size * .8, weight: 600, font: "'Noto Serif KR',serif", color: '#e9c77a', alpha: k, shadow: 'rgba(0,0,0,.9)', shadowBlur: 18, ls: 8 });
-  Pilot.text(ctx, where || '', W / 2, y0 + size * 2.0, { size: size * 1.7, weight: 600, font: "'Noto Serif KR',serif", color: '#f6ead0', alpha: k * ss(a + .5, a + 1.3, t), shadow: 'rgba(233,185,73,.35)', shadowBlur: 36 });
-  const lw = (V ? 360 : 440) * eo(clamp((t - a - 1.0) / 1.4)); ctx.fillStyle = `rgba(233,199,122,${k * .8})`; ctx.fillRect(W / 2 - lw / 2, y0 + size * 3.3, lw, 2);
-  Pilot.text(ctx, Film.text('B1'), W / 2, y0 + size * 4.4, { size: size * .66, font: "'Noto Sans KR',sans-serif", color: '#e2d2a8', shadow: 'rgba(0,0,0,.9)', shadowBlur: 14, alpha: k * ss(a + 1.8, a + 2.6, t), ls: 2 }); }
+  /* 7차: "영상 속 주요 말씀" and the film's passages one per line (an ending like 「400년의 침묵」, 관리자 #34), then the site */
+  const k = win(t, a, b, 1, .8); if (k <= 0) return; const [kick, ...refs] = Film.text('E1').split(/\s*·\s*/), size = V ? 46 : 38, lh = size * 1.5, y0 = V ? H * .26 : H * .22;
+  /* only a soft band behind the words — the room's dawn stays warm (a full-frame .5 dark took the ending to 45/255) */
+  { const ya = y0 - size * 1.4, yb = y0 + size * 1.6 + refs.length * lh + size * 2.2, g = ctx.createLinearGradient(0, ya, 0, yb);
+    g.addColorStop(0, 'rgba(6,5,8,0)'); g.addColorStop(.25, `rgba(6,5,8,${.42 * k})`); g.addColorStop(.75, `rgba(6,5,8,${.42 * k})`); g.addColorStop(1, 'rgba(6,5,8,0)'); ctx.fillStyle = g; ctx.fillRect(0, ya, W, yb - ya); }
+  Pilot.text(ctx, kick, W / 2, y0, { size: size * .78, weight: 600, font: "'Noto Serif KR',serif", color: '#e9c77a', alpha: k, shadow: 'rgba(0,0,0,.9)', shadowBlur: 18, ls: 8 });
+  refs.forEach((r, i) => Pilot.text(ctx, r, W / 2, y0 + size * 1.6 + i * lh, { size, weight: 600, font: "'Noto Serif KR',serif", color: '#f6ead0', alpha: k * ss(a + .4 + i * .35, a + 1.1 + i * .35, t), shadow: 'rgba(0,0,0,.85)', shadowBlur: 22 }));
+  const yl = y0 + size * 1.6 + refs.length * lh, lw = (V ? 360 : 440) * eo(clamp((t - a - 1.8) / 1.4)); ctx.fillStyle = `rgba(233,199,122,${k * .8})`; ctx.fillRect(W / 2 - lw / 2, yl, lw, 2);
+  Pilot.text(ctx, Film.text('B1'), W / 2, yl + size * 1.1, { size: size * .7, font: "'Noto Sans KR',sans-serif", color: '#e2d2a8', shadow: 'rgba(0,0,0,.9)', shadowBlur: 14, alpha: k * ss(a + 2.4, a + 3.2, t), ls: 2 }); }
 const FILM_DUR = 180;
-const QA_HOLD = [[175.4, 180.0, 'the end card (뒷이야기 · 누가복음 24장)'], [134.8, 139.9, 'Q11: one cross shadow held on purpose (나무에 달아)']];
+const QA_HOLD = [[175.6, 180.0, 'the end card (영상 속 주요 말씀)'], [134.8, 139.9, 'Q11: one cross shadow held on purpose (나무에 달아)']];
 const QA_PLANNED = [[87.4, 88.4, 'black-and-white film starts: gate flicker'], [97.6, 98.2, 'the ember lights the lamp on the psalm scroll'], [23.2, 24.2, 'title → David: the title dissolves into the sunset hill (horn scene removed, 관리자 2026-11-14)']];
 let XL = null;
 function draw(ctx, t) {
@@ -133,7 +140,7 @@ function draw(ctx, t) {
 }
 Pilot.run({ W, H, dur: FILM_DUR, fonts: ["600 40px 'Noto Serif KR'", "400 40px 'Noto Serif KR'", "400 20px 'Noto Sans KR'"],
   init: async () => { await Film.load(); buildText();
-    for (const b of ['buildRoomOil', 'buildJordan', 'buildGoldoil', 'buildScrolls', 'buildBW', 'buildJerusalem', 'buildDawn', 'buildRoadPastel', 'buildCorneliusFresco', 'buildEmmausShadow']) if (hasF(b)) await window[b](); }, draw });
+    for (const b of ['buildRoomOil', 'buildJordan', 'buildGoldoil', 'buildScrolls', 'buildBW', 'buildJerusalem', 'buildDawn', 'buildRoadPastel', 'buildCorneliusFresco']) if (hasF(b)) await window[b](); }, draw });
 </script>
 </body>
 </html>

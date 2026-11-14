@@ -5,13 +5,16 @@
                 0–5.7 사무엘이 걸어와 뿔병을 들어 올림, 5.7부터(영상 28.9) 기울여 기름이 어린 목동 머리 위로
        'aaron'  u 0..4.1  (35.8–39.9, K2 레 8:12)  회막 문 앞, 성막 휘장 뒤 등불 — 관(금 패)·흉패의 아론 머리 위로 모세가 관유를 부음(작은 병)
        'elisha' u 0..4.4  (39.9–44.3, K3 왕상 19:16·19)  기름은 붓지 않음 — 겨릿소로 밭 가는 엘리사에게 엘리야가 겉옷을 던짐, 겉옷 가장자리에 금빛
-     goldThree(ctx, u)   u 0..3.8  (148.3–152.6, N16)  세 금빛 줄기가 지평선 위 한 점에서 만나 하나의 빛기둥이 됨 — 사람은 그리지 않음(빛이 주인공)
+     goldRecall(ctx, u, which)  u 0..3.4 (5부 148–155.8)  2부 장면을 기름 부은 뒤로 다시 보여 줌 — 천천히 다가가며 기름/겉옷의 금빛이 위로 떠오름
+     goldThree(ctx, u)   u 0..5.2  (155.4–160.4, N16)  세 장면의 빛이 세 방향에서 와서 한 빛(요단의 성령 빛 색) 안으로 들어가고, 그 빛이 먼 언덕 빈 십자가 뒤의 해돋이가 됨 — 사람 없음
    세 기름 부음은 같은 구도(붓는 이 왼쪽·받는 이 오른쪽, 빛은 뒤에서). 글자는 그리지 않는다.
    사람은 모두 남자로 읽혀야 한다(관리자 2026-11-14): 넓고 각진 어깨, 곧은 겉옷(A자 드레스 윤곽 금지), 어른은 머릿수건(끈 두름, 목덜미까지만)이나
    짧은 머리 + 수염(역광에 수염 가장자리가 빛남), 소년 다윗은 짧은 곱슬머리·무릎 길이 속옷·다리·목자 지팡이. 긴 머리처럼 흘러내리는 선은 그리지 않는다.
-   엘리야의 겉옷은 무거운 직물 메시(접힘 음영·두꺼운 단·술·가장자리 역광) — 엘리야가 깃을 쥐고 뒤로 젖혔다 앞으로 휘둘러 스윙 꼭대기에서 손을 놓고
-   (팔은 따라 나갔다 내려감), 겉옷은 혼자 짧은 호를 날아 — 부드러운 양모처럼 펄럭이며(흐르는 물결·뒤처지는 모서리·바뀌는 주름, 판처럼 굳지 않음)
-   엘리사의 뒤에서 어깨와 등 위로 내려앉고, 먼저 얹힌 깃 뒤로 나머지가 떨어져 한 번 흔들린 뒤 늘어진다. 머리는 절대 덮지 않는다(머리를 겉옷 위에 다시 그림). */
+   엘리야의 겉옷은 무거운 직물 메시(접힘 음영·두꺼운 단·술·가장자리 역광) — 단순하게(관리자 6차 #1): 엘리야는 몸 앞으로 내민 팔뚝에 접은 겉옷을
+   걸치고 서 있다가(팔이 몸 밖으로 보임, 어깨에서 나옴) 겉옷이 손으로 모이며 팔을 조금 내렸다가 앞위로 한 번 고르게 휘둘러 놓는다. 겉옷은 혼자
+   짧고 부드러운 호를 날아(뒤처지는 모서리·펄럭임, 날 때는 늘 면이 보임 — 막대·판 모양 없음) 엘리사의 뒤에서 어깨와 등 위로 내려앉아 한 번 흔들린 뒤
+   늘어진다(가장자리 고르지 않게, 주름 몇 개). 엘리야 몸을 감아 돌지 않고, 엘리사 머리는 절대 덮지 않는다(머리·목을 겉옷 위에 다시 그림).
+   엘리사는 젊은 농부: 곧게 서서 두 손으로 쟁기 손잡이를 잡고(지팡이처럼 기대지 않음), 겉옷이 올 때 엘리야 쪽으로 고개를 돌려 올려다본다. */
 (function () {
   const P = Pilot, { clamp, lerp, ss, eio, eo } = P;
   const css = GOLD.css;
@@ -55,7 +58,8 @@
     const hr = (k === 'youth' ? .066 : .062) * h, hc = T(.015 + bw * .04, -.915 + bw * .02);
     const nk = new Path2D(); const n1 = T(-.03, -.85), n2 = T(.045, -.85); nk.moveTo(...n1); nk.lineTo(...n2); nk.lineTo(hc[0] + d * hr * .45, hc[1]); nk.lineTo(hc[0] - d * hr * .55, hc[1]); nk.closePath(); parts.push(nk);
     const hp = new Path2D(); hp.arc(hc[0], hc[1], hr, 0, 6.2832); parts.push(hp);
-    const Hp = (a, b) => [hc[0] + d * hr * a, hc[1] + hr * b];               // head-local (a forward, b down), in head radii
+    const hs = f.hs == null ? 1 : f.hs;                                         // head turn: 1 faces d, -1 looks back over the shoulder (through a frontal 0)
+    const Hp = (a, b) => [hc[0] + d * hs * hr * a, hc[1] + hr * b];          // head-local (a forward, b down), in head radii
     const poly = (q, closed = true) => { const p = new Path2D(); p.moveTo(...Hp(...q[0])); q.slice(1).forEach(v => p.lineTo(...Hp(...v))); if (closed) p.closePath(); return p; };
     const curve = (q) => { const p = new Path2D(), r = q.map(v => Hp(...v)); p.moveTo(...r[0]); for (let i = 1; i < r.length - 1; i++) p.quadraticCurveTo(r[i][0], r[i][1], (r[i][0] + r[i + 1][0]) / 2, (r[i][1] + r[i + 1][1]) / 2); p.lineTo(...r[r.length - 1]); return p; };
     // brow and nose so the profile reads which way he faces; a square jaw
@@ -110,7 +114,7 @@
     if (f.glow) { ctx.shadowColor = css(f.rim || [255, 180, 96], .7 * f.glow); ctx.shadowBlur = h * .06; }
     parts.forEach(p => ctx.fill(p)); ctx.restore();
     ctx.save(); ctx.fillStyle = f.fill || '#0d0704'; parts.forEach(p => ctx.fill(p)); ctx.restore();
-    if (lines.length) { ctx.save(); ctx.strokeStyle = css(f.rim || [255, 180, 96], f.fill ? .5 : .75); ctx.lineWidth = Math.max(1.2, h * .004); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    if (lines.length) { ctx.save(); ctx.strokeStyle = css(f.rim || [255, 180, 96], (f.fill ? .5 : .75) * Math.min(1, Math.abs(hs) * 2.5));   // (the inner lines fade while the head turns through frontal) ctx.lineWidth = Math.max(1.2, h * .004); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
       ctx.shadowColor = css(f.rim || [255, 180, 96], .6); ctx.shadowBlur = h * .012; lines.forEach(p => ctx.stroke(p)); ctx.restore(); }
     return { head: [hc[0], hc[1], hr], crown: [hc[0] - d * hr * .1, top], top, sh: S, hands, elbows };
   }
@@ -230,16 +234,18 @@
     const walkK = lead ? eio(clamp(u / (lead - .9))) : 1, liftK = lead ? eio(clamp((u - (lead - 1.5)) / 1.5)) : 1;
     const tiltIn = eio(clamp(ui / 1.2)), flow = ss(.9, 1.6, ui);
     const sx = tip[0] - U * (o.sxOff || .42) - U * .55 * (1 - walkK);
-    const vangP = (o.pourAng || -2.6) - .3 * (1 - tiltIn);
-    const vtipP = [tip[0] - U * .05 * (1 - tiltIn), tip[1] - U * .03 * (1 - tiltIn)];
+    const pre = o.preTilt == null ? .3 : o.preTilt, vangP = (o.pourAng || -2.6) - pre * (1 - tiltIn);
+    const vtipP = [tip[0] - U * .05 * pre / .3 * (1 - tiltIn), tip[1] - U * .03 * pre / .3 * (1 - tiltIn)];
     // carried in front of the chest, tip up so nothing spills; then lifted and turned over the young man's head
-    const vang = lerp(1.25, vangP + 6.2832, liftK), vtip = [lerp(sx + U * .15 * pH, vtipP[0], liftK), lerp(gy - U * .84 * pH, vtipP[1], liftK)];
+    // (the horn first comes out in front of him, then turns over: its wide end never passes over his own head)
+    const cr = o.carry || [.15, .84, 1.25], posK = o.posEase ? o.posEase(liftK) : liftK, angK = o.angEase ? o.angEase(liftK) : liftK;
+    const vang = lerp(cr[2], vangP + 6.2832, angK), vtip = [lerp(sx + U * cr[0] * pH, vtipP[0], posK), lerp(gy - U * cr[1] * pH, vtipP[1], posK)];
     // vessel first into a scratch path to know where the hands go: draw it after the bodies (it is in front)
     const ghost = GH || (GH = P.canvas(2, 2).getContext('2d'));
     const vs = o.vessel === 'jar' ? GOLD.jar(ghost, vtip[0], vtip[1], U * .16, vang) : GOLD.horn(ghost, vtip[0], vtip[1], U * (o.hornL || .34), vang, { curl: o.hornCurl || .7, wide: .11 });
-    const gi = o.vessel === 'jar' ? [Math.round((vs.C.length - 1) * .42), Math.round((vs.C.length - 1) * .9)] : [Math.round((vs.C.length - 1) * .35), Math.round((vs.C.length - 1) * .75)];
+    const gi = o.vessel === 'jar' ? [Math.round((vs.C.length - 1) * .42), Math.round((vs.C.length - 1) * .9)] : (o.grip || [.35, .75]).map(k => Math.round((vs.C.length - 1) * k));
     const grip = i => { const [x, y, a, w] = vs.C[i]; return [x + Math.sin(a) * w * .2, y - Math.cos(a) * w * .2]; };
-    const pourer = figure(ctx, { x: sx, y: gy, h: U * pH, d: 1, kind: 'elder', stoop: .5, bow: .3, walk: walkK < 1 ? u * 4.5 : null, hands: [grip(gi[0]), grip(gi[1])], light: sun, rim: o.rim, glow: .6 });
+    const pourer = figure(ctx, { x: sx, y: gy, h: U * pH, d: 1, kind: 'elder', stoop: o.pStoop == null ? .5 : o.pStoop, bow: o.pBow == null ? .3 : o.pBow, walk: walkK < 1 ? u * 4.5 : null, hands: [grip(gi[0]), grip(gi[1])], light: sun, rim: o.rim, glow: .6 });
     const anointed = figure(ctx, { ...(o.aFig || {}), x: ax, y: gy, h: ah, d: -1, kind: o.aKind, bow: lead ? lerp(.05, .55, ss(lead - 1.2, lead + .2, u)) : .55, light: sun, rim: o.rim, glow: .6 });
     if (o.aKind === 'priest') o.priestGold(ctx, anointed, ah, u);
     // the vessel in their hands, then the oil: a stream to the crown and running down the head
@@ -247,7 +253,11 @@
     else GOLD.horn(ctx, vtip[0], vtip[1], U * (o.hornL || .34), vang, { curl: o.hornCurl || .7, wide: .11, rim: o.rim, light: Math.atan2(sun[1] - vtip[1], sun[0] - vtip[0]) });
     // hands drawn again over the vessel (fingers wrap it)
     ctx.fillStyle = '#0d0704'; pourer.hands.forEach(([x, y]) => { ctx.beginPath(); ctx.arc(x, y, U * pH * .024, 0, 6.2832); ctx.fill(); });
-    if (flow > 0) {
+    { const m = ctx.getTransform(), q = m.transformPoint(new DOMPoint(anointed.crown[0], anointed.crown[1])); SRC = [q.x, q.y, U * m.a]; }   // (for goldRecall)
+    if (o.after) {                       // recalled in part 5: the pour is over — the oil lies on his head and catches the light
+      headOil(ctx, anointed, -1, .9, u, U * .007);
+      GOLD.bloom(ctx, anointed.crown[0], anointed.crown[1], [255, 196, 110], .4, { r: U * .22, streak: .2, ghosts: false });
+    } else if (flow > 0) {
       const crown = anointed.crown;
       GOLD.stream(ctx, GOLD.path(vtip[0], vtip[1], crown[0], crown[1] + U * .005), flow, { w: U * .011, t: u, back: true, glints: 3, speed: U * .5 });
       headOil(ctx, anointed, -1, ss(1.5, dur - lead, ui) * .9, u, U * .007);
@@ -261,12 +271,15 @@
     if (ex < 1) { ctx.fillStyle = `rgba(0,0,0,${1 - ex})`; ctx.fillRect(0, 0, W, H); }
     return { pourer, anointed };
   }
-  let GH = null, BEAM = null;
+  let GH = null, BEAM = null, SRC = [0, 0, 1], OFF = null, RISE = null;
   const toScr = (p, z, fx, fy) => [fx + (p[0] - fx) * z, fy + (p[1] - fy) * z];
 
   // David: Bethlehem hills at sunset, his brothers on the slope behind
   const DAVID = {
-    dur: 13.3, lead: 5.7, fade: 0, aFig: { tunic: true, staff: true }, aKind: 'youth', aH: .70, pH: .80, gap: .08, sxOff: .27, hornL: .28, pourAng: -2.75, hornCurl: .45, vessel: 'horn', rim: [255, 184, 100], seed: 4,
+    // Samuel stands back from the boy: both arms reach forward and up from the shoulder (upper arm, elbow, forearm against the sky),
+    // the horn held above the BOY's head, tilted to pour — never over his own head (관리자 6차 #4)
+    dur: 13.3, lead: 5.7, fade: 0, aFig: { tunic: true, staff: true }, aKind: 'youth', aH: .70, pH: .90, gap: .06, sxOff: .37, hornL: .24, pourAng: -2.3, hornCurl: .15, vessel: 'horn', rim: [255, 184, 100], seed: 4,
+    pStoop: .2, pBow: .15, preTilt: .1, grip: [.27, .64], carry: [.17, .70, 1.45], posEase: p => eo(clamp(p / .7)), angEase: p => eio(clamp((p - .3) / .7)),
     sun: (W, H, gy, ax, U) => [ax + U * .02, gy - U * .30],
     back(ctx, W, H, gy, sun, u, U, ex) {
       dusk(ctx, W, H, gy - U * .2, sun, { top: '#2c1812', mid: '#8a4420', low: '#eea050' });
@@ -362,7 +375,7 @@
     ctx.fillStyle = 'rgba(236,180,96,.95)'; ctx.fillRect(hc[0] - hr * .28, mb - hr * .42, hr * .56, hr * .2); glint(hc[0], mb - hr * .32, hr * .55, .3);
     return { head: [hc[0], hc[1], hr], crown: [hc[0], mt], top: mt, tw: mw };
   }
-  function aaronScene(ctx, u) {
+  function aaronScene(ctx, u, after) {
     const W = P.W, H = P.H, V = P.ori === 'v', dur = 4.1;
     const U = V ? .30 * H : .48 * H, gy = H * (V ? .62 : .80);
     const ex = ss(0, .35, u), z = 1 + .12 * u / dur, pan = (u / dur - .5) * U * .08;
@@ -403,8 +416,9 @@
     const aaron = priestFront(ctx, { x: ax, y: gy, h: ah, bow, light: lamp, rim: [255, 200, 130] }, u);
     GOLD.jar(ctx, vtip[0], vtip[1], U * .15, vang, { rim: [255, 200, 130], light: Math.atan2(lamp[1] - vtip[1], lamp[0] - vtip[0]) });
     ctx.fillStyle = '#0d0704'; moses.hands.forEach(([x, y]) => { ctx.beginPath(); ctx.arc(x, y, mh * .024, 0, 6.2832); ctx.fill(); });
+    { const m = ctx.getTransform(), q = m.transformPoint(new DOMPoint(aaron.crown[0], aaron.crown[1])); SRC = [q.x, q.y, U * m.a]; }
     if (flow > 0) {
-      GOLD.stream(ctx, GOLD.path(vtip[0], vtip[1], aaron.crown[0], aaron.crown[1] + U * .004), flow, { w: U * .010, t: u, back: true, glints: 3, speed: U * .5 });
+      if (!after) GOLD.stream(ctx, GOLD.path(vtip[0], vtip[1], aaron.crown[0], aaron.crown[1] + U * .004), flow, { w: U * .010, t: u, back: true, glints: 3, speed: U * .5 });
       // the oil runs over the turban's side
       const [hx, hy, hr] = aaron.head, tw = aaron.tw, run = [[hx, aaron.top], [hx + tw * .5, aaron.top + hr * .2], [hx + tw * .95, aaron.top + hr * .8], [hx + tw * 1.0, hy - hr * .25], [hx + hr * 1.0, hy + hr * .5]];
       GOLD.stream(ctx, run, ss(1.1, dur, u) * .85, { w: U * .006, t: u, back: true, glints: 2, speed: hr * 2, taper: .4 });
@@ -462,7 +476,7 @@
       let n = [ea[1] * eb[2] - ea[2] * eb[1], ea[2] * eb[0] - ea[0] * eb[2], ea[0] * eb[1] - ea[1] * eb[0]]; const nl = Math.hypot(...n) || 1; n = n.map(v => v / nl); if (n[2] > 0) n = n.map(v => -v);
       const qx = (A[0] + C[0]) / 2, qy = (A[1] + C[1]) / 2, sx = sun[0] - qx, sy = sun[1] - qy, sl = Math.hypot(sx, sy) || 1, nxy = Math.hypot(n[0], n[1]) || 1e-6;
       const face = clamp((n[0] * sx + n[1] * sy) / (sl * nxy)), rimK = Math.pow(nxy, 1.4) * face;
-      const tex = .86 + .28 * P.noise(i * .9 + j * 3.1, 7), b = j / (NB - 2);
+      const tex = .88 + .24 * P.noise(i * .7 + j * .35, 7), b = j / (NB - 2);
       const side = (n[0] * sx + n[1] * sy) / sl;
       let k = clamp((.07 + 1.1 * rimK + .1 * side) * tex), c = [lerp(base[0], lit[0], k), lerp(base[1], lit[1], k), lerp(base[2], lit[2], k)];
       if ((b > .70 && b < .78) || (b > .84 && b < .88)) c = [c[0] * 1.18 + 7, c[1] * 1.02 + 3, c[2] * .92 + 1];     // two woven bands near the hem
@@ -477,11 +491,11 @@
     ctx.strokeStyle = g; ctx.lineWidth = U * .028; ctx.filter = `blur(${Math.max(1, U * .006).toFixed(1)}px)`; ctx.stroke(path); ctx.filter = 'none';
     ctx.restore();
     // the rim: the backlight along the edge — bright where the edge faces the sun, a thin thread of gold where it faces away
-    ctx.save(); ctx.globalCompositeOperation = 'screen'; ctx.lineCap = 'round'; ctx.shadowColor = 'rgba(255,170,70,.85)'; ctx.shadowBlur = U * .03;
+    ctx.save(); ctx.globalCompositeOperation = 'screen'; ctx.lineCap = 'butt'; ctx.shadowColor = 'rgba(255,170,70,.85)'; ctx.shadowBlur = U * .03;
     for (let i = 0; i < per.length; i++) {
       const a = per[i], b = per[(i + 1) % per.length], dx = b[0] - a[0], dy = b[1] - a[1], dl = Math.hypot(dx, dy) || 1;
       const ox = (area > 0 ? dy : -dy) / dl, oy = (area > 0 ? -dx : dx) / dl, mx = (a[0] + b[0]) / 2 - sun[0], my = (a[1] + b[1]) / 2 - sun[1], ml = Math.hypot(mx, my) || 1;
-      const k = .18 + .82 * Math.pow(clamp(-(ox * mx + oy * my) / ml), .7);
+      const k = (.08 + .92 * Math.pow(clamp(-(ox * mx + oy * my) / ml), .9)) * (.7 + .3 * P.noise(i * .15, 11));
       ctx.strokeStyle = `rgba(255,${190 + 30 * k | 0},${100 + 40 * k | 0},${.35 + .6 * k})`; ctx.lineWidth = Math.max(1.2, U * .0055) * (.45 + .8 * k);
       ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.stroke();
     }
@@ -511,94 +525,250 @@
     ctx.strokeStyle = '#0d0704'; ctx.lineWidth = U * .02; ctx.beginPath(); ctx.moveTo(ex2 + oxS * .38, gy - oxS * .62); ctx.lineTo(ex2 + oxS * .55, gy - oxS * .66); ctx.stroke();   // yoke
     const plX = ex2 - oxS * .95, beam0 = [ex2 + oxS * .30, gy - oxS * .60];
     ctx.lineWidth = U * .02; ctx.beginPath(); ctx.moveTo(...beam0); ctx.quadraticCurveTo(ex2 - oxS * .3, gy - oxS * .2, plX, gy - U * .01); ctx.stroke();          // plough beam to the share
-    const handle = [plX - U * .08, gy - U * .43]; ctx.beginPath(); ctx.moveTo(plX, gy); ctx.lineTo(...handle); ctx.stroke();
+    // the plough's handle rises back to the ploughman's hands at hip height (the far handle a little behind it)
+    const handle = [plX - U * .11, gy - U * .38]; ctx.beginPath(); ctx.moveTo(plX, gy); ctx.lineTo(...handle); ctx.moveTo(plX - U * .01, gy - U * .01); ctx.lineTo(handle[0] - U * .035, handle[1] + U * .01); ctx.stroke();
     ctx.fillStyle = '#0d0704'; ctx.beginPath(); ctx.moveTo(plX - U * .03, gy - U * .02); ctx.lineTo(plX + U * .07, gy + U * .005); ctx.lineTo(plX - U * .02, gy + U * .01); ctx.closePath(); ctx.fill();   // the share                                         // handle
-    const elX = handle[0] - U * .21;
+    const elX = handle[0] - U * .15;
     // light from above on Elisha (a single beam) — grows as the mantle comes down
     const bm = ss(2.2, 3.4, u);
     if (bm > 0) { ctx.save(); ctx.globalCompositeOperation = 'screen'; const bxx = elX + U * .78 * .03; const g = ctx.createLinearGradient(bxx - U * .12, 0, bxx + U * .12, 0); g.addColorStop(0, 'rgba(255,200,110,0)'); g.addColorStop(.5, `rgba(255,206,120,${.32 * bm})`); g.addColorStop(1, 'rgba(255,200,110,0)'); ctx.fillStyle = g; ctx.fillRect(bxx - U * .12, -H, U * .24, gy - U * .78 * .9 + H); ctx.restore(); }
-    const eh = U * .78, est = .35;
-    const elFig = { x: elX, y: gy, h: eh, d: 1, kind: 'man', tunic: true, bow: .25, stoop: est, walk: u * 3, hands: [handle, [handle[0] - U * .012, handle[1] + U * .025]], light: sun, rim: [255, 180, 100], glow: .4 + .5 * ss(2.0, 3.2, u) };
+    // Elisha: the young ploughman (1 Ki 19:19) — upright, short dark beard, both hands on the plough handles (not leaning on them);
+    // as Elijah swings the cloak he turns his head back towards him and looks up
+    const eh = U * .78, est = 0, turn = eio(clamp((u - 1.7) / .45));
+    const elFig = { x: elX, y: gy, h: eh, d: 1, kind: 'man', tunic: true, bow: .1 - .25 * turn, hs: 1 - 1.85 * turn, stoop: est, walk: u * 3,
+      hands: [handle, [handle[0] - U * .035, handle[1] + U * .012]], light: sun, rim: [255, 180, 100], glow: .4 + .5 * ss(2.0, 3.2, u) };
     const elisha = figure(ctx, elFig);
-    // Elijah's mantle (1 Ki 19:19): a heavy woven cloth, not a sheet or a board. At rest (after t1) it lies over Elisha's shoulders —
-    // top edge round the neck and over the shoulder, then hanging in deep folds, longer behind than in front, the hem scalloped.
-    // A mesh: each cell shaded by how it turns to the low sun behind (fold crests catch it), a thick hem with a short fringe.
+    // Elijah's mantle (1 Ki 19:19): a heavy woven cloth, not a sheet or a board. One simple throw (관리자 6차 #1): he stands holding it
+    // folded over his forearm (his arm out in front of him, clear of his body), draws the arm down and back a little as the cloth slips into
+    // his hand, swings it forward and up once and lets go; the cloak flies a short soft arc on its own and settles over Elisha's shoulders
+    // and back from behind. It never circles his own body and never passes over Elisha's head.
     const t1 = 2.5, NA = 33, NB = 21;
     const Te = (lx, ly) => { if (ly < -.5) lx += est * Math.pow((-ly - .5) / .45, 2) * .08; return [elX + lx * eh, gy + ly * eh]; };
     const bez = (p0, c, p1, s) => [(1 - s) * (1 - s) * p0[0] + 2 * (1 - s) * s * c[0] + s * s * p1[0], (1 - s) * (1 - s) * p0[1] + 2 * (1 - s) * s * c[1] + s * s * p1[1]];
-    // at rest: the top edge round the neck and over the shoulder, the cloth falling over the round of the shoulder and the upper arm,
-    // then hanging straight (heavy) in deep folds — longer behind than in front, the hem scalloped by the folds
-    const rT = [Te(.105, -.83), Te(-.01, -.93), Te(-.165, -.79)], rB = [Te(.175, -.50), Te(-.02, -.36), Te(-.165, -.26)];
+    // at rest: the top edge round the back of the neck and over the shoulder, the cloth falling over the round of the shoulder and the upper
+    // arm, then hanging (heavy) in a few deep folds — longer behind than in front, the hem and the sides soft and uneven
+    const rT = [Te(.085, -.765), Te(-.035, -.862), Te(-.17, -.775)], rB = [Te(.15, -.54), Te(-.02, -.38), Te(-.185, -.26)];
     const since = u - t1, swing = since > 0 ? Math.sin(since * 6.2) * Math.exp(-since * 2.6) : 0;
     const rest = (s, b) => {          // s 0 front → 1 back, b 0 shoulders → 1 hem
       const tp = bez(...rT, s), bt = bez(...rB, s), fb = Math.pow(b, .7);
-      const ctl = [lerp(tp[0], bt[0], .35) + (.5 - s) * 2 * eh * .028, lerp(tp[1], bt[1], .22)];              // over the shoulder's round, then down
+      const ctl = [lerp(tp[0], bt[0], .35) + (.5 - s) * 2 * eh * .028, lerp(tp[1], bt[1], .22)];
       const p = bez(tp, ctl, bt, b);
       const ph = s * Math.PI * 3.3 + .5, ph2 = s * Math.PI * 5.1 + 1.3, fold = Math.sin(ph) + .3 * Math.sin(ph2), dfold = Math.cos(ph) + .45 * Math.cos(ph2);
-      const z = dfold * eh * .03 * fb - Math.sin(b * Math.PI) * eh * .02;
-      return [p[0] + fold * eh * .016 * fb + swing * eh * .045 * Math.pow(b, 1.5) + Math.sin(u * 1.7 + b * 2) * eh * .003 * b,
-        p[1] + fold * eh * .012 * b * b + (P.noise(s * 6, 3) - .5) * eh * .03 * b * b - Math.abs(swing) * eh * .012 * b * b, z];
+      const z = dfold * eh * .035 * fb - Math.sin(b * Math.PI) * eh * .02;
+      const edge = Math.pow(Math.abs(1 - 2 * s), 6);                                                       // the side edges wave
+      return [p[0] + fold * eh * .02 * fb + swing * eh * .045 * Math.pow(b, 1.5) + Math.sin(u * 1.7 + b * 2) * eh * .003 * b
+          + edge * eh * .03 * Math.sin(b * 5.1 + s * 3) * b,
+        p[1] + fold * eh * .012 * b * b + (1 - fold) * eh * .022 * b * b + (P.noise(s * 6, 3) - .5) * eh * .06 * b * b - Math.abs(swing) * eh * .012 * b * b, z];
     };
-    // Elijah at the left CASTS it. He holds it gathered by the collar, hanging from his near hand (0–tw); swings it back (tw–tsw); swings
-    // forward and up underhand and lets go near the top of the swing (tr) — the arm follows through and drops while the cloak flies on by itself.
-    const ejX = elX - U * .55, sh = [ejX + U * .03, gy - U * .785];
-    const tw = .85, tsw = 1.47, tsd = .5, tr = 1.85, tdn = tsw + tsd, Tf = .6;
-    const armAng = t => t < tw ? 1.2 : t < tsw ? lerp(1.2, 2.35, eio((t - tw) / (tsw - tw))) : t < tdn ? lerp(2.35, -.45, eio((t - tsw) / tsd)) : lerp(-.45, 1.25, eio((t - tdn) / .4));
-    const HD = t => { const a = armAng(t), r = U * (.27 + .05 * ss(tw, tsw + .2, t) - .03 * ss(tdn, tdn + .4, t)); return [sh[0] + Math.cos(a) * r, sh[1] + Math.sin(a) * r]; };
-    const elijah = figure(ctx, { x: ejX, y: gy, h: U, d: 1, kind: 'elder', stoop: .3, hands: [HD(u), null], light: sun, rim: [255, 180, 100] });
-    // the flight: its gathered top edge (the part he held) leads along a short arc — up and over, then down from behind onto Elisha's
-    // shoulders, slowing in the air; the rest of the wool streams behind it (relative wind), opening, rippling with a travelling wave,
-    // its corners lagging and the whole sheet twisting a little, so it never reads as a stiff plane.
-    const Pr = HD(tr), rc0 = rest(.5, 0), C1 = [Pr[0] + U * .12, Pr[1] - U * .17], C2 = [rc0[0] - U * .20, rc0[1] - U * .07];
-    const fx = t => { const x = clamp((t - tr) / Tf); return x * (1.6 - .6 * x); };
-    const cub = p => { const q = 1 - p, a = q * q * q, b2 = 3 * q * q * p, c = 3 * q * p * p, d = p * p * p; return [a * Pr[0] + b2 * C1[0] + c * C2[0] + d * rc0[0], a * Pr[1] + b2 * C1[1] + c * C2[1] + d * rc0[1]]; };
-    const lead = t => t <= tr ? HD(t) : cub(fx(t));
-    const vel = t => { const a = lead(t), b = lead(t - .04); return [(a[0] - b[0]) / .04, (a[1] - b[1]) / .04]; };
-    const flyK = t => ss(tr, tr + .3, t) * (1 - ss(tr + Tf - .1, tr + Tf + .35, t));          // 1 while free in the air
-    const alpha = t => {             // the leading edge's direction on screen: square to the arc, flattening as it comes down to lie on the shoulders
-      if (t <= tr) return -2.78;
-      const p = fx(t), q = 1 - p, T = [3 * q * q * (C1[0] - Pr[0]) + 6 * q * p * (C2[0] - C1[0]) + 3 * p * p * (rc0[0] - C2[0]), 3 * q * q * (C1[1] - Pr[1]) + 6 * q * p * (C2[1] - C1[1]) + 3 * p * p * (rc0[1] - C2[1])];
-      return lerp(Math.atan2(-T[0], T[1]), -.1, ss(.4, 1, clamp((t - tr) / Tf)));
-    };
-    const Vs = U * .45, cD = .2, F = [], L0 = lead(u);
-    let cx = L0[0], cy = L0[1];
+    // Elijah, at the left, facing Elisha's back; his near hand in polar coordinates about the shoulder [angle, radius / U]
+    const ejX = elX - U * .62, eSt = .3;
+    const sh = [ejX + U * (.01 + eSt * Math.pow(.285 / .45, 2) * .08 + .01), gy - U * .785];
+    const A0 = [.52, .335], A1 = [.92, .345], A2 = [-.15, .33], A3 = [-.25, .32], A4 = [1.15, .27];
+    const mixA = (p, q, k) => [lerp(p[0], q[0], k), lerp(p[1], q[1], k)];
+    const es = x => .5 - .5 * Math.cos(Math.PI * clamp(x));                                        // one even swing, no whip
+    const armA = t => t < 1.36 ? A0 : t < 1.74 ? mixA(A0, A1, es((t - 1.36) / .38)) : t < 2.24 ? mixA(A1, A2, es((t - 1.74) / .5))
+      : t < 2.4 ? mixA(A2, A3, eo((t - 2.24) / .16)) : mixA(A3, A4, eio(clamp((t - 2.4) / .6)));
+    const HD = t => { const [a, r] = armA(t); return [sh[0] + Math.cos(a) * r * U, sh[1] + Math.sin(a) * r * U]; };
+    const elijah = figure(ctx, { x: ejX, y: gy, h: U, d: 1, kind: 'elder', stoop: eSt, hands: [HD(u), null], light: sun, rim: [255, 180, 100] });
+    // where the cloth is held: over the forearm (under it, past the elbow), then gathered in the hand; free after tr
+    const tr = 2.0, Tf = t1 - tr, gat = t => ss(1.36, 1.74, t);
+    const heldC = t => { const Hd = HD(t), E = ik(sh, Hd, U * .19, U * .17, true).E, k = gat(t);
+      return [lerp(lerp(E[0], Hd[0], .6), Hd[0], k), lerp(lerp(E[1], Hd[1], .6) + U * .035, Hd[1] + U * .012, k)]; };
+    const Pr = heldC(tr), rc0 = rest(.5, 0), C1 = [Pr[0] + U * .10, Pr[1] - U * .10], C2 = [rc0[0] - U * .12, rc0[1] - U * .09];
+    const fx = t => { const x = clamp((t - tr) / Tf); return x * (2 - x); };                       // slows as it settles
+    const bz3 = p => { const q = 1 - p, a = q * q * q, b2 = 3 * q * q * p, c = 3 * q * p * p, d = p * p * p; return [a * Pr[0] + b2 * C1[0] + c * C2[0] + d * rc0[0], a * Pr[1] + b2 * C1[1] + c * C2[1] + d * rc0[1]]; };
+    const topC = t => t <= tr ? heldC(t) : bz3(fx(t));
+    const flyK = t => ss(tr - .04, tr + .12, t) * (1 - ss(t1 - .22, t1 + .05, t));
+    const Vs = U * .9;
+    const gdir = t => { const a = topC(t), b = topC(t - .03), vx = (a[0] - b[0]) / .03, vy = (a[1] - b[1]) / .03;   // the cloth trails behind its held edge: weight + drag
+      let x = -vx / Vs, y = (1 - .6 * flyK(t)) - vy / Vs; let l = Math.hypot(x, y) || 1; const k = ss(tr + .05, t1 - .08, t);   // the weight takes over through the second half of the flight
+      x = lerp(x / l, 0, k); y = lerp(y / l, 1, k); l = Math.hypot(x, y) || 1; return [x / l, y / l]; };
+    // the sheet: top-edge centre, half-widths (top/hem) and length change with the phase — folded on the arm, gathered in the hand, opening in the air
+    const gk = gat(u), ok = ss(tr + .05, t1, u), fk0 = flyK(u);
+    const wT = U * lerp(lerp(.095, .022, gk), .105, ok), wH = U * lerp(lerp(.105, .085, gk), .115, ss(tr, t1, u)), Lh = U * lerp(lerp(.23, .29, gk), .33, ss(tr, t1, u));
+    const F = [], T0 = topC(u), cD = .1;
+    let cx = T0[0], cy = T0[1];
     for (let j = 0; j < NB; j++) {
-      const b = j / (NB - 1), t = u - cD * b, fl = ss(tr, tr + .35, t - .1 * b), fk = flyK(t), v = vel(t);
-      const gw = 1 - .8 * fk;                                                                // in the air the drag, not the weight, shapes it
-      let dx = -v[0] / Vs, dy = gw - v[1] / Vs; const dl = Math.hypot(dx, dy) || 1; dx /= dl; dy /= dl;
-      const del = (.18 + .22 * fl) * Math.sin(Math.PI * 2 * 1.2 * b - 8 * u) * (.1 + .9 * b), cd = Math.cos(del), sd = Math.sin(del);
-      const ddx = dx * cd - dy * sd, ddy = dx * sd + dy * cd;
-      if (j) { const seg = U * lerp(.40, .34, fl) / (NB - 1); cx += ddx * seg; cy += ddy * seg; }
-      const al = alpha(t), w = lerp(U * (.02 + .06 * ss(0, .35, b) + .015 * b) * (1 + .1 * Math.sin(b * 7 - u * 4)), U * lerp(.02, .105, eo(clamp((t - tr) / .45))) * (1 + .12 * b) * (1 + .14 * Math.sin(Math.PI * 2 * .9 * b - 7 * u + 1)), fl);
-      // held, the cloth hangs/streams square to its own fall (never edge-on to the eye); free, the leading edge follows alpha
-      let ecx = lerp(-ddy, Math.cos(al), fl), ecy = lerp(ddx, Math.sin(al), fl); const el = Math.hypot(ecx, ecy) || 1; ecx /= el; ecy /= el;
-      const gam = fk * .5 * Math.sin(2.2 * (t - tr) + .3), exc = ecx * w * Math.cos(gam), eyc = ecy * w * Math.cos(gam);
+      const b = j / (NB - 1), t = u - cD * b, fk = flyK(t);
+      let [gx, gy2] = gdir(t);
+      const del = ((.05 + .22 * fk) * Math.sin(Math.PI * 2 * 1.1 * b - 8 * u) + .04 * Math.sin(u * 1.3 + b * 2)) * (.15 + .85 * b), cd = Math.cos(del), sd = Math.sin(del);
+      [gx, gy2] = [gx * cd - gy2 * sd, gx * sd + gy2 * cd];
+      if (j) { const seg = Lh / (NB - 1); cx += gx * seg; cy += gy2 * seg; }
+      const ex = gy2, ey = -gx;                                                                      // across the cloth, square to its fall (never edge-on)
+      const w = lerp(wT, wH, Math.pow(b, .6)) * (1 + .1 * Math.sin(b * 6 - u * 3) * fk);
       const row = [];
       for (let i = 0; i < NA; i++) {
-        const s = i / (NA - 1), a = 1 - 2 * s;
-        const fo = Math.sin(s * Math.PI * 3.3 + .5), lag = -U * .05 * a * a * fl * (.5 + .5 * b) + U * .022 * b * fl * Math.sin(Math.PI * 2 * 1.6 * s - 6.5 * u + 3 * b)   // corners trail, the hem flutters
-          + (1 - fl) * U * .03 * b * b * fo, side = (1 - fl) * U * .012 * b * Math.sin(s * Math.PI * 4.4 + 1.7 + u * 2);              // held: the hem scalloped by its folds, the sides not straight
-        const z = Math.sin(gam) * a * w + U * .03 * fl * Math.cos(Math.PI * 2 * 1.2 * b - 8 * u + 2.4 * s) * (.25 + .75 * b) + U * .04 * fl * Math.sin(Math.PI * s) * Math.sin(Math.PI * b)
-          + (1 - fl) * U * .04 * fo * Math.min(1, b * 3);
-        row.push([cx + a * exc + ddx * lag + ecx * side, cy + a * eyc + ddy * lag + ecy * side, z]);
+        const s = i / (NA - 1), a = 1 - 2 * s, fo = Math.sin(s * Math.PI * 3.3 + .5);
+        const lag = -U * .045 * a * a * fk * (.4 + .6 * b) + U * .02 * b * fk * Math.sin(Math.PI * 2 * 1.4 * s - 7 * u + 3 * b)   // in the air the corners trail, the hem flutters
+          + U * (.03 * (1 - fk) + .012) * b * b * fo + U * .02 * b * b * (P.noise(s * 5 + 2, 9) - .5);                  // the hem scalloped by its folds, uneven
+        const side = U * .012 * b * Math.sin(s * Math.PI * 4.4 + 1.7 + u * 2) + U * .015 * Math.pow(Math.abs(a), 5) * Math.sin(b * 6 + u * 2.5) * b;  // the sides not straight
+        const z = U * .04 * fo * Math.min(1, b * 3) * (1 - .5 * fk) + U * .03 * fk * Math.cos(Math.PI * 2 * 1.1 * b - 8 * u + 2.4 * s) * (.25 + .75 * b) + U * .035 * fk * Math.sin(Math.PI * s) * Math.sin(Math.PI * b);
+        row.push([cx + a * w * ex + gx * lag + ex * side, cy + a * w * ey + gy2 * lag + ey * side, z]);
       }
       F.push(row);
     }
     const G = [];
-    for (let j = 0; j < NB; j++) { const b = j / (NB - 1), land = ss(t1 - .3 + .1 * b, t1 + .25 + .4 * b, u), row = [];
+    for (let j = 0; j < NB; j++) { const b = j / (NB - 1), land = ss(t1 - .3 + .08 * b, t1 + .2 + .3 * b, u), row = [];
       for (let i = 0; i < NA; i++) { const s = i / (NA - 1), Fp = F[j][i], R = rest(s, b); row.push([lerp(Fp[0], R[0], land), lerp(Fp[1], R[1], land), lerp(Fp[2], R[2], land)]); }
       G.push(row); }
     mantle(ctx, G, sun, U, u, .3 + .7 * ss(t1 - .1, t1 + .6, u));
-    // while he still holds it, his hand closes over the gathered collar
-    if (u < tr) { ctx.fillStyle = '#0d0704'; ctx.beginPath(); ctx.arc(elijah.hands[0][0], elijah.hands[0][1], U * .026, 0, 6.2832); ctx.fill(); }
-    // the cloak comes down from behind him: it passes behind his head, never over it (his head drawn again over the cloth, above the jaw)
-    { const [hx, hy, hr] = elisha.head; ctx.save(); ctx.beginPath(); ctx.rect(hx - hr * 3, hy - hr * 3, hr * 6, hr * 3.5); ctx.clip(); figure(ctx, { ...elFig, glow: 0 }); ctx.restore(); }
+    { const m = ctx.getTransform(), c0 = G[5][NA >> 1], q = m.transformPoint(new DOMPoint(c0[0], c0[1])); SRC = [q.x, q.y, U * m.a]; }   // (for goldRecall: the cloak on his shoulders)
+    // while he holds it, his arm lies over the cloth (it hangs from his forearm, then from his hand)
+    if (u < tr + .02) {
+      const Hd = elijah.hands[0], E = elijah.elbows[0], s0 = [sh[0], sh[1]];
+      ctx.fillStyle = '#0d0704'; ctx.fill(limb([s0, E, Hd], [.05 * U, .04 * U, .042 * U]));
+      ctx.beginPath(); ctx.arc(E[0], E[1], .041 * U, 0, 6.2832); ctx.fill();
+      ctx.beginPath(); ctx.arc(Hd[0], Hd[1], U * .027, 0, 6.2832); ctx.fill();
+    }
+    // the cloak comes down from behind him: it passes behind his head, never over it (his head and neck drawn again over the cloth)
+    { const [hx, hy, hr] = elisha.head; ctx.save(); ctx.beginPath(); ctx.rect(hx - hr * 2.2, hy - hr * 3, hr * 4.4, hr * 4.05); ctx.clip(); figure(ctx, { ...elFig, glow: 0 }); ctx.restore(); }
     ctx.restore();
     GOLD.bloom(ctx, ...toScr(sun, z, W * .5 + U * .1, gy - U * .6), [255, 170, 80], .3 * ex, { r: U * .45, streak: 0 });
     GOLD.motes(ctx, u * 2, { n: 110, seed: 17, light: [W * .5, gy - U * .4, W * .8], a: ex, size: 1.2 });
     GOLD.glow(ctx, .5, { wide: .5 });
     GOLD.finish(ctx, u, { vignette: .5 });
     if (ex < 1) { ctx.fillStyle = `rgba(0,0,0,${1 - ex})`; ctx.fillRect(0, 0, W, H); }
+  }
+
+  // ---------------- 5부 climax: soft light (quarter resolution, blurred, screened — never a hard-edged beam) ----------------
+  const lerpC = (a, b, k) => [lerp(a[0], b[0], k), lerp(a[1], b[1], k), lerp(a[2], b[2], k)];
+  function softLight(ctx, draw, o = {}) {
+    const W = P.W, H = P.H, q = .25, bw = Math.round(W * q), bh = Math.round(H * q), [z, fx, fy] = o.cam || [1, 0, 0];
+    if (!RISE || RISE.c.width !== bw || RISE.c.height !== bh) { const c = P.canvas(bw, bh), c2 = P.canvas(bw, bh); RISE = { c, x: c.getContext('2d'), c2, x2: c2.getContext('2d') }; }
+    const g = RISE.x; g.setTransform(1, 0, 0, 1, 0, 0); g.globalCompositeOperation = 'source-over'; g.clearRect(0, 0, bw, bh);
+    g.setTransform(q * z, 0, 0, q * z, q * fx * (1 - z), q * fy * (1 - z)); g.globalCompositeOperation = 'lighter';
+    draw(g);
+    const g2 = RISE.x2; g2.setTransform(1, 0, 0, 1, 0, 0); g2.globalCompositeOperation = 'copy'; g2.filter = `blur(${Math.max(1, Math.round(Math.max(bw, bh) * (o.blur || .012)))}px)`; g2.drawImage(RISE.c, 0, 0); g2.filter = 'none'; g2.globalCompositeOperation = 'source-over';
+    ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalCompositeOperation = 'screen'; ctx.globalAlpha = o.alpha == null ? 1 : o.alpha; ctx.imageSmoothingEnabled = true; ctx.drawImage(RISE.c2, 0, 0, W, H); ctx.restore();
+  }
+  const blob = (g, x, y, r, col, a, sy = 1) => { if (a <= .002 || r < .5) return; g.save(); g.translate(x, y); g.scale(1, sy); const gr = g.createRadialGradient(0, 0, 0, 0, 0, r);
+    gr.addColorStop(0, css(col, Math.min(1, a))); gr.addColorStop(.45, css(col, Math.min(1, a) * .38)); gr.addColorStop(1, css(col, 0)); g.fillStyle = gr; g.fillRect(-r, -r, 2 * r, 2 * r); g.restore(); };
+
+  // the anointing rises: from the oil on the head (or the cloak on the shoulders) a stream of gold light lifts out of the scene and up
+  // past the top of the frame — soft lumps of light flowing upward, wavering, widening and paling as they go; sparks drift up with it
+  function riseLight(ctx, src, u, S, o = {}) {
+    const H = P.H, gold = [255, 192, 104], pale = [255, 236, 200], top = -H * .15, len = src[1] - top, reach = eo(clamp((u - .25) / 1.7)), on = ss(0, .7, u), w0 = o.w0 || .05;
+    softLight(ctx, g => {
+      blob(g, src[0], src[1], S * (w0 * 2.2 + .08 * reach), gold, .5 * on);                                             // the oil itself glows
+      blob(g, src[0], src[1] - S * .06, S * (w0 * 3.5 + .12 * reach), [255, 176, 90], .22 * on);
+      const n = 70;
+      for (let i = 0; i < n; i++) {
+        const s = ((i / n) + u * .24) % 1; if (s > reach) continue;                                                  // flowing upward
+        const y = src[1] - s * len, x = src[0] + S * (.06 * Math.sin(s * 4.6 - u * 1.2 + 1.3) * s + .05 * (P.noise(s * 2.4 - u * .35, 7) - .5) * s);
+        const a = .3 * Math.pow(1 - s, 1.7) * clamp((reach - s) / .12) * on, r = S * (w0 + .11 * s);      // brightest at the oil, thinning as it rises
+        blob(g, x, y, r, lerpC(gold, pale, ss(.1, .8, s)), a, 1.5);
+      }
+    }, { blur: .014 });
+    // sparks carried up in it (full resolution, tiny)
+    ctx.save(); ctx.globalCompositeOperation = 'screen'; const R = P.rng(o.seed || 23);
+    for (let i = 0; i < 46; i++) { const sp = .12 + .2 * R(), ph = R(), s = (ph + u * sp) % 1, sx = (R() - .5) * 2; if (s > reach * 1.05) continue;
+      const y = src[1] - s * len * .9, x = src[0] + S * (sx * (.03 + .14 * s) + .06 * Math.sin(s * 4.6 - u * 1.2 + 1.3) * s), a = (1 - s) * on * (.4 + .6 * Math.abs(Math.sin(u * 3 + i)));
+      ctx.fillStyle = css(lerpC([255, 214, 140], [255, 244, 222], s), .8 * a); ctx.beginPath(); ctx.arc(x, y, Math.max(1, S * .005 * (1.3 - s)), 0, 6.2832); ctx.fill(); }
+    ctx.restore();
+    GOLD.bloom(ctx, src[0], src[1], [255, 200, 120], .35 * on, { r: S * .35, streak: .1, ghosts: false });
+  }
+
+  // a part-2 anointing remembered (film 148–155.8, u 0..~3.4): the scene already after the anointing, in its own look, a slow push-in,
+  // and the gold of the oil / the cloak rising out of it as a stream of light — "this one's anointing rises". No replay of the pour or the throw.
+  function goldRecall(ctx, u, which) {
+    const W = P.W, H = P.H;
+    if (!OFF || OFF.width !== W || OFF.height !== H) OFF = P.canvas(W, H);
+    const o = OFF.getContext('2d'); o.setTransform(1, 0, 0, 1, 0, 0); o.globalAlpha = 1; o.globalCompositeOperation = 'source-over'; o.filter = 'none';
+    let w0 = .05;
+    if (which === 'david') pourScene(o, 11.4 + u * .3, { ...DAVID, after: true });
+    else if (which === 'aaron') aaronScene(o, 3.5 + u * .15, true);
+    else { elishaScene(o, 3.6 + u * .3); w0 = .09; }
+    const src = SRC.slice(), z = 1 + .12 * eio(clamp(u / 3.4));
+    ctx.save(); ctx.setTransform(z, 0, 0, z, src[0] * (1 - z), src[1] * (1 - z)); ctx.drawImage(OFF, 0, 0); ctx.restore();
+    riseLight(ctx, src, u, src[2] * z, { w0, seed: which.length * 7 });
+  }
+
+  // ---------------- 5부: "세 직분이, 한 분에게" (film 155.4–160.4, u 0..5.2) ----------------
+  // A dawn sky over a real horizon. The three remembered lights come in from three directions (the hill's from the left, the tent's from
+  // high on the right, the field's from the low right), each arriving at its own moment, and are taken into ONE light low over a far hill:
+  // as they arrive that light turns from the oil's amber to the pale, soft, dove-like light of the Jordan (jordan3d.js 'spirit': cream-white
+  // core, wing-glows, a cool pale haze — Acts 10:38: the oil pointed ahead to the anointing God gave by the Spirit). It is not a sum of three
+  // lights and makes no triple sign: the streams fade into it as they arrive. That light becomes the sun rising behind the far hill, where a
+  // small EMPTY cross stands as a backlit silhouette, a little to the side of the sun (the light is the sunrise behind it, never stuck on it).
+  // No person anywhere. Peak ≈ u 2.1–3.1, then a still breath with the dawn spreading — haze and dust keep moving.
+  function goldThree(ctx, u) {
+    const W = P.W, H = P.H, V = P.ori === 'v';
+    const U = V ? .24 * H : .40 * H, gy = H * (V ? .60 : .72), cx = W * .5;
+    const z = 1 + .07 * eio(clamp(u / 5.2)), crestX = cx - U * .06, crestY = gy - U * .17, fx = cx, fy = crestY;
+    const hillY = x => { const d = (x - crestX) / (U * 1.25); return crestY + (gy - U * .02 - crestY) * Math.min(1, d * d * (1.2 - .2 * Math.min(1, Math.abs(d)))) + U * .006 * (P.noise(x * .012, 5) - .5); };
+    const meet = ss(1.35, 2.05, u), spirit = ss(1.55, 2.4, u), dawn = ss(2.0, 3.8, u), sunUp = eo(clamp((u - 2.2) / 3.0)), breathe = .5 + .5 * Math.sin(u * 1.6);
+    const sun = [crestX + U * .16, crestY + U * .025 - U * .085 * sunUp];
+    const M = [sun[0], crestY - U * .045];                                          // where the three lights are taken in, just over the crest
+    ctx.save(); camera(ctx, W, H, z, fx, fy);
+    // the sky: before dawn (deep blue-violet above, a low ember at the horizon), spreading to a warm dawn
+    { const g = ctx.createLinearGradient(0, -H * .1, 0, gy);
+      g.addColorStop(0, css(lerpC([44, 40, 62], [66, 60, 84], dawn))); g.addColorStop(.45, css(lerpC([100, 74, 90], [158, 114, 108], dawn)));
+      g.addColorStop(.8, css(lerpC([176, 112, 86], [236, 168, 118], dawn))); g.addColorStop(1, css(lerpC([214, 140, 94], [255, 206, 150], dawn)));
+      ctx.fillStyle = g; ctx.fillRect(-W, -H, W * 3, gy + H + 2); }
+    // the low glow where the sun will come, there from the first frame, growing
+    { const R = U * (1.1 + 1.6 * dawn), g = ctx.createRadialGradient(sun[0], crestY, 0, sun[0], crestY, R), k = .35 + .65 * dawn;
+      g.addColorStop(0, `rgba(255,214,150,${.55 * k})`); g.addColorStop(.3, `rgba(240,150,90,${.32 * k})`); g.addColorStop(1, 'rgba(120,60,50,0)');
+      ctx.save(); ctx.globalCompositeOperation = 'screen'; ctx.fillStyle = g; ctx.fillRect(-W, -H, W * 3, H * 3); ctx.restore(); }
+    // high thin clouds catching the first light, drifting
+    { ctx.save(); ctx.globalCompositeOperation = 'screen'; for (let i = 0; i < 6; i++) { const y = gy - U * (.75 + .32 * i), x = W * (((i * .37 + u * .006) % 1.4) - .2), rx = U * (1.3 + .3 * (i % 3)), ry = U * .16;
+        const g = ctx.createRadialGradient(0, 0, 0, 0, 0, rx); g.addColorStop(0, `rgba(${lerp(150, 255, dawn) | 0},${lerp(100, 190, dawn) | 0},${lerp(110, 150, dawn) | 0},${.07 + .07 * dawn})`); g.addColorStop(1, 'rgba(0,0,0,0)');
+        ctx.save(); ctx.translate(x, y); ctx.scale(1, ry / rx); ctx.fillStyle = g; ctx.fillRect(-rx, -rx, 2 * rx, 2 * rx); ctx.restore(); } ctx.restore(); }
+    // the far ranges, hazed by distance (aerial perspective), warming as the dawn comes
+    ridge(ctx, W, H, gy - U * .22, U * .14, .0018, 61, css(lerpC([84, 62, 78], [176, 120, 104], dawn), .75));
+    ridge(ctx, W, H, gy - U * .12, U * .12, .0026, 67, css(lerpC([56, 40, 52], [120, 78, 70], dawn), .88));
+    // the sun's disc rising behind the hill (the hill is drawn over it)
+    { const sr = U * .05, a = ss(2.0, 3.0, u), g = ctx.createRadialGradient(sun[0], sun[1], 0, sun[0], sun[1], sr * 2.2);
+      g.addColorStop(0, `rgba(255,250,236,${a})`); g.addColorStop(.42, `rgba(255,240,206,${a})`); g.addColorStop(.5, `rgba(255,214,150,${.6 * a})`); g.addColorStop(1, 'rgba(255,190,110,0)');
+      ctx.fillStyle = g; ctx.fillRect(sun[0] - sr * 2.2, sun[1] - sr * 2.2, sr * 4.4, sr * 4.4); }
+    // haze lying in the valleys, lit from the sun's side, drifting slowly
+    { ctx.save(); ctx.globalCompositeOperation = 'screen'; for (let i = 0; i < 7; i++) { const y = gy - U * (.02 + .05 * (i % 3)), x = cx + U * (-1.6 + .55 * i) + u * U * .03 * (i % 2 ? 1 : -.6), rx = U * .7, k = .5 + .5 * clamp(1 - Math.abs(x - sun[0]) / (U * 2));
+        const g = ctx.createRadialGradient(0, 0, 0, 0, 0, rx); g.addColorStop(0, `rgba(255,200,150,${(.08 + .14 * dawn) * k})`); g.addColorStop(1, 'rgba(0,0,0,0)');
+        ctx.save(); ctx.translate(x, y); ctx.scale(1, .13); ctx.fillStyle = g; ctx.fillRect(-rx, -rx, 2 * rx, 2 * rx); ctx.restore(); } ctx.restore(); }
+    ctx.restore();
+
+    // the three lights and the one light they come into (soft layer, in the camera's frame)
+    const gold = [255, 184, 92], pale = [255, 240, 214];
+    const streams = [   // [start, control, t0, t1] — the hill's light from the left, the tent's from high right, the field's from the low right
+      [[-U * .4, crestY - U * 1.1], [cx - U * .8, crestY - U * .1], .0, 1.55],
+      [[cx + U * .5, -H * .06], [cx + U * .8, crestY - U * .9], .25, 1.8],
+      [[W + U * .3, crestY - U * .55], [cx + U * 1.1, crestY], .45, 2.0]];
+    softLight(ctx, g => {
+      streams.forEach(([P0, C, t0, t1], si) => {
+        const h = eio(clamp((u - t0) / (t1 - t0))), fade = 1 - ss(t1 + .05, t1 + .8, u); if (h <= 0 || fade <= 0) return;
+        const pt = s => { const q = 1 - s; return [q * q * P0[0] + 2 * q * s * C[0] + s * s * M[0], q * q * P0[1] + 2 * q * s * C[1] + s * s * M[1]]; };
+        const n = 54;
+        for (let i = 0; i <= n; i++) { const s = h - .85 * i / n; if (s < 0) break; const p = pt(s), p2 = pt(Math.min(1, s + .01)), tx = p2[0] - p[0], ty = p2[1] - p[1], tl = Math.hypot(tx, ty) || 1;
+          const wob = U * .035 * Math.sin(s * 9 - u * 2.2 + si * 2) * (1 - s) + U * .03 * (P.noise(s * 3 + si * 5, u * .5 + si) - .5);
+          const x = p[0] - ty / tl * wob, y = p[1] + tx / tl * wob, tail = 1 - i / n, r = U * (.05 + .05 * (1 - s) * tail), cl = lerpC(gold, pale, ss(.8, 1, s) * spirit);
+          blob(g, x, y, r, cl, .55 * Math.pow(tail, 1.1) * fade, 1); blob(g, x, y, U * .022, lerpC(cl, [255, 236, 190], .5), .55 * tail * tail * fade, 1); }
+        // its head, brighter
+        const ph = pt(h); blob(g, ph[0], ph[1], U * .1, lerpC([255, 214, 140], pale, ss(.85, 1, h) * spirit), .8 * fade * (1 - .5 * ss(.95, 1, h)));
+      });
+      // the one light: amber at first, turning pale and soft as the lights arrive — a bright core and two wing-glows that open,
+      // beat once slowly and fold as it sinks into the dawn and becomes the sunrise
+      const L = meet * (1 - .55 * ss(2.6, 3.6, u)), wing = spirit * (1 - ss(2.3, 3.1, u)), beat = Math.sin((u - 1.6) * 2.4), sp = .22 + .14 * (.5 + .5 * beat) * (1 - ss(2.2, 2.8, u));
+      if (L > 0) { const col = lerpC([255, 200, 110], pale, spirit), my = lerp(M[1], sun[1], ss(2.2, 3.2, u));
+        blob(g, M[0], my, U * (.15 + .12 * meet), col, .85 * L); blob(g, M[0], my, U * (.5 + .3 * spirit), lerpC([255, 170, 90], [226, 226, 232], spirit), .3 * L);
+        for (const sd of [-1, 1]) { g.save(); g.translate(M[0] + sd * U * .2, my - U * sp * .5); g.rotate(sd * -sp * .8); blob(g, 0, 0, U * .3, lerpC(col, [255, 228, 170], .5), .75 * wing * L, .36); g.restore(); } }
+      // the dawn spreading: a wide soft wash from the sun along the horizon, breathing a little
+      blob(g, sun[0], sun[1], U * (.6 + 1.2 * dawn), [255, 214, 160], .28 * dawn * (.9 + .1 * breathe), .45);
+    }, { cam: [z, fx, fy], blur: .016 });
+
+    ctx.save(); camera(ctx, W, H, z, fx, fy);
+    // the far hill with the cross on its top (dark, the sun behind it); the near land below in shadow, its edge catching the sky
+    ctx.fillStyle = css(lerpC([28, 18, 22], [46, 28, 26], dawn)); ctx.beginPath(); ctx.moveTo(-W, H * 2); for (let x = -W; x <= W * 2; x += 10) ctx.lineTo(x, hillY(x)); ctx.lineTo(W * 2, H * 2); ctx.fill();
+    { const bx = crestX, by = hillY(crestX) + U * .004, ch = U * (V ? .12 : .11), cw = ch * .08, ay = by - ch * .72, aw = ch * .56;   // the empty cross: small, far, a silhouette
+      ctx.fillStyle = '#140c0c'; ctx.fillRect(bx - cw / 2, by - ch, cw, ch); ctx.fillRect(bx - aw / 2, ay - cw / 2, aw, cw * .95); }
+    { const g = ctx.createLinearGradient(0, gy - U * .02, 0, H); g.addColorStop(0, css(lerpC([30, 20, 20], [64, 40, 30], dawn))); g.addColorStop(.25, css(lerpC([18, 12, 12], [34, 22, 18], dawn))); g.addColorStop(1, 'rgb(10,7,7)');
+      ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(-W, H * 2); for (let x = -W; x <= W * 2; x += 14) ctx.lineTo(x, gy + U * .02 + U * .025 * (P.fbm(x * .004, 3, 3) - .5)); ctx.lineTo(W * 2, H * 2); ctx.fill(); }
+    groundLight(ctx, W, H, gy + U * .02, .35 + .5 * dawn);
+    ctx.restore();
+    // the sun's light wraps the hill's edge and the cross (backlight), dust drifts in it — it keeps moving through the still breath
+    const ss2 = toScr(sun, z, fx, fy);
+    GOLD.bloom(ctx, ss2[0], ss2[1], [255, 214, 150], .2 + .4 * dawn, { r: U * (.4 + .4 * dawn), streak: .12 * dawn, ghosts: false });
+    GOLD.motes(ctx, u, { n: 90, seed: 53, light: [ss2[0], ss2[1], W * .7], a: .4 + .6 * ss(1.5, 3, u), size: 1.1 });
+    GOLD.glow(ctx, .5, { wide: .5 });
+    GOLD.finish(ctx, u, { vignette: .5 });
   }
 
   function goldAnoint(ctx, u, which) {
@@ -608,52 +778,5 @@
     if (which === 'elisha') return elishaScene(ctx, u);
   }
 
-  // ---------------- 5부: three golden lights meet in one point and become one pillar ----------------
-  // no figure (rule 2026-11-14: Jesus is never a large centred figure; the light is the protagonist) — the three shafts meet above the horizon
-  function goldThree(ctx, u) {
-    const W = P.W, H = P.H, V = P.ori === 'v';
-    const U = V ? .24 * H : .40 * H, gy = H * (V ? .60 : .76), cx = W * .5;
-    const ex = ss(0, .35, u), z = 1 + .07 * u / 3.8, one = ss(2.3, 3.4, u);
-    ctx.save(); camera(ctx, W, H, z, cx, gy - U * .6);
-    ctx.fillStyle = '#0c0705'; ctx.fillRect(0, 0, W, H);
-    let g = ctx.createRadialGradient(cx, gy - U * .2, 0, cx, gy - U * .2, Math.max(W, H) * .7); g.addColorStop(0, `rgba(236,160,80,${.95 * ex})`); g.addColorStop(.35, `rgba(160,98,44,${.88 * ex})`); g.addColorStop(1, `rgba(70,42,20,${.8 * ex})`);
-    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
-    ridge(ctx, W, H, gy - U * .05, U * .06, .002, 41, 'rgba(40,22,11,.95)');
-    g = ctx.createLinearGradient(0, gy, 0, H); g.addColorStop(0, `rgba(80,48,22,${ex})`); g.addColorStop(.3, `rgba(36,22,11,${ex})`); g.addColorStop(1, `rgba(16,10,5,${ex})`); ctx.fillStyle = g; ctx.fillRect(0, gy, W, H);
-    groundLight(ctx, W, H, gy, ex * (.7 + .5 * one));
-    // three shafts of light through haze — the king's, the priest's, the prophet's — from different heights and angles,
-    // leaning slowly until they meet at one point above the horizon; then they become one pillar. Drawn soft (low resolution, blurred), never as lines.
-    const tgt = [cx, gy - U * .35];
-    const q = .25, bw = Math.round(W * q), bh = Math.round(H * q);
-    if (!BEAM || BEAM.c.width !== bw || BEAM.c.height !== bh) { const c = P.canvas(bw, bh), c2 = P.canvas(bw, bh); BEAM = { c, x: c.getContext('2d'), c2, x2: c2.getContext('2d') }; }
-    const bx = BEAM.x; bx.setTransform(1, 0, 0, 1, 0, 0); bx.clearRect(0, 0, bw, bh); bx.globalCompositeOperation = 'lighter';
-    const conv = eio(clamp((u - .2) / 2.6));
-    const shafts = [[-W * .45, -H * .30, .26, .55, .10, [255, 196, 120]], [W * 1.35, H * .02, -.30, .40, .55, [255, 180, 100]], [W * .78, -H * .60, .14, .45, .95, [255, 210, 140]]];
-    for (const [sxw, syw, off, wd, t0, col] of shafts) {
-      const a = ss(t0, t0 + 1.3, u) * (1 - .55 * one), ang = Math.atan2(tgt[1] - syw, tgt[0] - sxw) + off * (1 - conv) + .02 * Math.sin(u * .9 + t0 * 5), len = Math.hypot(tgt[0] - sxw, tgt[1] - syw) * 1.2;
-      if (a <= 0) continue;
-      bx.save(); bx.scale(q, q); bx.translate(sxw, syw); bx.rotate(ang);
-      const w0 = U * wd * .25, w1 = U * wd, g2 = bx.createLinearGradient(0, -w1, 0, w1);
-      g2.addColorStop(0, css(col, 0)); g2.addColorStop(.5, css(col, .42 * a)); g2.addColorStop(1, css(col, 0));
-      bx.fillStyle = g2; bx.beginPath(); bx.moveTo(0, -w0); bx.lineTo(len, -w1); bx.lineTo(len, w1); bx.lineTo(0, w0); bx.closePath(); bx.fill();
-      // fade along its length into the haze past him
-      bx.globalCompositeOperation = 'destination-out'; const g3 = bx.createLinearGradient(0, 0, len, 0); g3.addColorStop(0, 'rgba(0,0,0,.35)'); g3.addColorStop(.75, 'rgba(0,0,0,0)'); g3.addColorStop(1, 'rgba(0,0,0,.9)'); bx.fillStyle = g3; bx.fillRect(0, -w1, len, 2 * w1);
-      bx.restore(); bx.globalCompositeOperation = 'lighter';
-    }
-    if (one > 0) { bx.save(); bx.scale(q, q); const g4 = bx.createLinearGradient(tgt[0] - U * .45, 0, tgt[0] + U * .45, 0); g4.addColorStop(0, 'rgba(255,200,120,0)'); g4.addColorStop(.5, `rgba(255,214,150,${.6 * one})`); g4.addColorStop(1, 'rgba(255,200,120,0)');
-      bx.fillStyle = g4; bx.fillRect(tgt[0] - U * .45, -H, U * .9, gy + U * .02 + H); bx.restore(); }
-    // haze: the shafts are uneven where the air is thicker
-    bx.globalCompositeOperation = 'destination-out'; for (let i = 0; i < 9; i++) { const hx = (W * ((i * .37 + u * .02) % 1)) * q, hy = H * (.1 + .08 * i) * q, hr = W * .12 * q; const g5 = bx.createRadialGradient(hx, hy, 0, hx, hy, hr); g5.addColorStop(0, 'rgba(0,0,0,.35)'); g5.addColorStop(1, 'rgba(0,0,0,0)'); bx.fillStyle = g5; bx.fillRect(hx - hr, hy - hr, 2 * hr, 2 * hr); }
-    BEAM.x2.setTransform(1, 0, 0, 1, 0, 0); BEAM.x2.clearRect(0, 0, bw, bh); BEAM.x2.filter = `blur(${Math.round(U * q * .05)}px)`; BEAM.x2.drawImage(BEAM.c, 0, 0); BEAM.x2.filter = 'none';
-    ctx.save(); ctx.globalCompositeOperation = 'screen'; ctx.imageSmoothingEnabled = true; ctx.drawImage(BEAM.c2, 0, 0, W, H); ctx.restore();
-    ctx.restore();
-    const ts = toScr(tgt, z, cx, gy - U * .6);
-    GOLD.bloom(ctx, ts[0], ts[1], [255, 196, 110], .15 + .45 * one, { r: U * (.3 + .4 * one), streak: .2 * one, ghosts: false });
-    GOLD.motes(ctx, u, { n: 80, seed: 51, light: [ts[0], ts[1], W * .6], pull: one > 0 ? [ts[0], ts[1], one * .6, U * .5, U * .3] : null, a: ex });
-    GOLD.glow(ctx, .6, { wide: .5 });
-    GOLD.finish(ctx, u, { vignette: .55 });
-    if (ex < 1) { ctx.fillStyle = `rgba(0,0,0,${1 - ex})`; ctx.fillRect(0, 0, W, H); }
-  }
-
-  window.goldAnoint = goldAnoint; window.goldThree = goldThree;
+  window.goldAnoint = goldAnoint; window.goldThree = goldThree; window.goldRecall = goldRecall;
 })();

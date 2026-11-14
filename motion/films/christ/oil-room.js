@@ -7,10 +7,18 @@
             bowed figure, rimmed in gold, is found in front of it (N01); then the camera passes over the shoulder and comes down onto
             the open Bible (N02, from 4.9) — no letters, only the grain of lines, the candle in the paper, one page corner lifting.
      'dawn' (u 0–6.5, video 2:26.5–): the same figure and candle; the window beyond brightens with dawn, the figure stands in the
-            dawn backlight and the shadows of the window bars fall across the table toward us (N17).
+            dawn backlight and the shadows of the window bars fall across the table toward us (kept for compatibility).
+     'end'  (u −0.1–21.5, video 2:39.4–3:01; 관리자 2026-11-14: the film returns to this room and ends here, the end card over it):
+            the same room seen wider (roomLayoutEnd: a tall window on the left of the back wall, the old man small at the low table
+            in the lower middle, the open Bible and the candle beside him). One slow pull back, z 1.52 → 1.0. N17 (159.6) candle-lit,
+            the window starts to grey; Q14 (166.8) the window's light creeps across the table and reaches the place beyond his right
+            shoulder where his folded hands rest (still no hands drawn), the dawn rim grows on him, the candle grows small; Q13 (172.6)
+            the room fills — a shaft from the window to the floor, the sun still rising to the last frame; from 175.6 the quiet wall
+            between window and table (portrait y .24–.50, x .2–.8) carries the end card. The man stays above the words' band (.64).
    The room is one painted plate (night and dawn, same seed); the figure is a layer of its own in front of it (parallax as the
    camera moves; the shoulders breathe very slightly; its rim flickers with the flame). Closed form: roomOil(ctx, u, mode) depends
-   only on (u, mode). No words are drawn. Needs Pilot (lib.js) and kit-oilpaint.js (window.OIL). */
+   only on (u, mode). No words are drawn. Needs Pilot (lib.js) and kit-oilpaint.js (window.OIL).
+   Check 'end' alone: node motion/render.mjs v --page films/christ/sample-room-end.html --stills 159.6,167,173,177 */
 const ROIL = {};
 
 function roomLayout() {
@@ -19,7 +27,21 @@ function roomLayout() {
               : { person: { cx: W * .36, top: H * .3, P: H * .36 }, win: [W * .18, H * .05, W * .32, H * .3], cand: { x: W * .6, top: H * .33, base: H * .43, r: 8 }, book: { cx: W * .53, cy: H * .5, w: W * .105, d: H * .07 }, tableY: H * .36, tableF: H * .6, floorY: H * .625 };
   L.flame = [L.cand.x, L.cand.top - 2]; L.LP = [L.flame[0], L.flame[1] - (V ? 9 : 6)];
   L.zEnd = V ? 4.7 : 6.5;   // the close-up on the pages after the camera passes over her shoulder
-  return Object.assign(L, { W, H, V, S: V ? 2 : 1.6 });
+  return Object.assign(L, { W, H, V, S: V ? 2 : 1.6, R0: V ? W : H, sc: 1, tx0: -W * .15, tx1: W * 1.15 });
+}
+// 'end' (관리자 2026-11-14: the film returns to this room and ends here, the end card over it): the same room seen from further
+// back — a tall window on the left of the back wall, the low table, the old man small in the lower middle. The quiet wall between
+// the window and the table is where the end card sits (portrait y .24–.50, x .2–.8: no window edge, no detail there); the man,
+// the candle and the key light stay above the words' band (.64). His folded hands (hidden by him, as in the opening) rest on the
+// table just beyond his right shoulder — L.hands, where the dawn arrives at Q14 — and the open Bible lies beside them.
+function roomLayoutEnd() {
+  const W = Pilot.W, H = Pilot.H, V = Pilot.ori === 'v';
+  const L = V ? { person: { cx: W * .4, top: H * .517, P: H * .118 }, win: [W * .025, H * .115, W * .155, H * .455], cand: { x: W * .7, top: H * .515, base: H * .546, r: 5.5 }, tableY: H * .506, tableF: H * .578, floorY: H * .592, tx0: -W * .05, tx1: W * 1.08, bw: W * .17, bd: H * .024 }
+              : { person: { cx: W * .44, top: H * .565, P: H * .175 }, win: [W * .1, H * .09, W * .19, H * .54], cand: { x: W * .625, top: H * .56, base: H * .615, r: 4.5 }, tableY: H * .555, tableF: H * .66, floorY: H * .675, tx0: -W * .05, tx1: W * 1.05, bw: W * .075, bd: H * .036 };
+  const p = L.person, hx = p.cx + .25 * p.P, hy = p.top + .22 * p.P;
+  L.hands = [hx, hy]; L.book = { cx: hx + L.bw * .4, cy: hy + L.bd * .15, w: L.bw, d: L.bd };
+  L.flame = [L.cand.x, L.cand.top - 1]; L.LP = [L.flame[0], L.flame[1] - (V ? 5 : 4)];
+  return Object.assign(L, { W, H, V, S: V ? 2 : 1.6, R0: (V ? W : H) * .45, sc: .45, end: true });
 }
 
 // the candle: brass holder, a pillar lit from its flame, wax run down one side (frame px)
@@ -59,12 +81,12 @@ function roomPersonPaths() {
 }
 
 async function buildRoomOil() {
-  const { clamp, lerp, rng, canvas } = Pilot, L = roomLayout(), { W, H, V, S, book: B, cand: C } = L, PW = Math.round(W * S), PH = Math.round(H * S);
-  ROIL.L = L; ROIL.S = S;
-  const R0 = V ? W : H;   // a radius unit
+  const { clamp, lerp, rng, canvas } = Pilot, L0 = roomLayout(), { W, H, V, S } = L0;
+  ROIL.L = L0; ROIL.S = S; ROIL.LE = roomLayoutEnd();
+  // the room's painter for a layout (the opening's, or the wider 'end' view of the same room); R0 = the layout's radius unit
+  const painter = L => { const { book: B, cand: C, R0 } = L;
   // a page's row k (0 back … 1 front) as a quadratic gutter → outer edge; side -1 left, +1 right
   const pageRow = (side, k) => { const y = B.cy - B.d / 2 + B.d * k, f = lerp(.8, 1, k), lift = lerp(.07, .05, k) * B.d; return [B.cx, y + .015 * B.d, B.cx + side * B.w * .17 * f, y - lift, B.cx + side * B.w / 2 * f, y - lerp(.015, 0, k) * B.d]; };   // the far edge narrower (it lies on the table)
-  ROIL.pageRow = pageRow;
 
   function plate(dawn, S = ROIL.S, rect = [0, 0, W, H]) {
     const c = canvas(Math.round(rect[2] * S), Math.round(rect[3] * S)), g = c.getContext('2d'); g.save(); g.scale(S, S); g.translate(-rect[0], -rect[1]);
@@ -73,27 +95,28 @@ async function buildRoomOil() {
     const LP = L.LP, [wx0, wy0, wx1, wy1] = L.win, ww = wx1 - wx0, wh = wy1 - wy0;
     // the wall: warm darkness, warmer round the flame
     g.fillStyle = '#0b0705'; g.fillRect(0, 0, W, H);
-    radial(LP[0], LP[1], .75 * R0, [[0, 'rgba(176,110,54,.95)'], [.25, 'rgba(100,62,30,.75)'], [.6, 'rgba(40,24,12,.5)'], [1, 'rgba(11,7,5,0)']]);
+    { const a = L.end && dawn ? .3 : 1; radial(LP[0], LP[1], .75 * R0, [[0, `rgba(176,110,54,${.95 * a})`], [.25, `rgba(100,62,30,${.75 * a})`], [.6, `rgba(40,24,12,${.5 * a})`], [1, 'rgba(11,7,5,0)']]); }   // ('end' at dawn: the candle's pool small in the day)
     // the small window beyond: deep blue before dawn (far darker than the candle) — at dawn pale gold, the room lit from it
-    { g.fillStyle = dawn ? lin(0, wy0, 0, wy1, [[0, '#8ea6c4'], [.5, '#ecdcbc'], [.8, '#ffe2a8'], [1, '#f2c088']]) : lin(0, wy0, 0, wy1, [[0, '#060b13'], [.7, '#0c1827'], [1, '#122233']]); g.fillRect(wx0, wy0, ww, wh);
+    { g.fillStyle = dawn ? lin(0, wy0, 0, wy1, L.end ? [[0, '#b4b6c0'], [.35, '#efdcbc'], [.7, '#ffd896'], [1, '#f4b870']] : [[0, '#8ea6c4'], [.5, '#ecdcbc'], [.8, '#ffe2a8'], [1, '#f2c088']]) : lin(0, wy0, 0, wy1, [[0, '#060b13'], [.7, '#0c1827'], [1, '#122233']]); g.fillRect(wx0, wy0, ww, wh);
       g.save(); g.beginPath(); g.rect(wx0, wy0, ww, wh); g.clip();
+      if (dawn && L.end) radial(wx0 + ww * .55, wy0 + wh * .86, ww * 1.6, [[0, 'rgba(255,246,214,1)'], [.3, 'rgba(255,214,140,.7)'], [1, 'rgba(255,180,100,0)']]);   // the sun low behind the far hill
       if (dawn) radial(wx0 + ww * .62, wy0 + wh * .75, ww * .9, [[0, 'rgba(255,248,226,1)'], [.25, 'rgba(255,228,176,.65)'], [1, 'rgba(255,200,140,0)']]);
-      g.fillStyle = dawn ? '#5e6070' : '#04070c'; g.beginPath(); g.moveTo(wx0, wy1); for (let x = wx0; x <= wx1 + 4; x += 4) g.lineTo(x, wy0 + wh * .78 - .008 * R0 * Math.sin((x - wx0) / (.03 * R0)) - .004 * R0); g.lineTo(wx1, wy1); g.fill();
+      g.fillStyle = dawn ? (L.end ? '#8a7462' : '#5e6070') : '#04070c'; g.beginPath(); g.moveTo(wx0, wy1); for (let x = wx0; x <= wx1 + 4; x += 4) g.lineTo(x, wy0 + wh * (L.end ? .93 : .78) - .008 * R0 * Math.sin((x - wx0) / (.03 * R0)) - .004 * R0); g.lineTo(wx1, wy1); g.fill();
       if (!dawn) { const r = rng(9); for (let i = 0; i < 6; i++) { g.fillStyle = `rgba(210,222,255,${.3 + .4 * r()})`; g.beginPath(); g.arc(wx0 + r() * ww, wy0 + r() * wh * .55, .9 + r(), 0, 6.283); g.fill(); } }
       g.restore();
-      const fw = .011 * R0; g.strokeStyle = dawn ? '#2e2016' : '#140c08'; g.lineWidth = fw * 1.6; g.strokeRect(wx0, wy0, ww, wh); g.lineWidth = fw;
-      g.beginPath(); g.moveTo(wx0 + ww / 2, wy0); g.lineTo(wx0 + ww / 2, wy1); for (const k of [1 / 3, 2 / 3]) { g.moveTo(wx0, wy0 + wh * k); g.lineTo(wx1, wy0 + wh * k); } g.stroke();
+      const fw = L.end ? .013 * W : .011 * R0; g.strokeStyle = dawn ? '#2e2016' : '#140c08'; g.lineWidth = fw * 1.6; g.strokeRect(wx0, wy0, ww, wh); g.lineWidth = fw;
+      g.beginPath(); g.moveTo(wx0 + ww / 2, wy0); g.lineTo(wx0 + ww / 2, wy1); for (const k of L.end ? [.25, .5, .75] : [1 / 3, 2 / 3]) { g.moveTo(wx0, wy0 + wh * k); g.lineTo(wx1, wy0 + wh * k); } g.stroke();
       g.fillStyle = dawn ? 'rgba(236,206,160,.6)' : 'rgba(150,94,48,.4)'; g.fillRect(wx0 - fw, wy1 + fw * .4, ww + fw * 2, fw * .5);
       if (dawn) { radial(wx0 + ww / 2, wy0 + wh / 2, 1.0 * R0, [[0, 'rgba(230,220,206,.45)'], [.35, 'rgba(170,170,180,.18)'], [1, 'rgba(120,120,130,0)']], 'screen'); } }
     // the low table: its top lit round the candle and from the pages, a dark front edge, short legs; beyond and below, the oiled
     // paper floor (장판) warm in the candle light, falling into dark toward us
-    { const y0 = L.tableY, yf = L.tableF, yF = L.floorY, x0 = -W * .15, x1 = W * 1.15;
+    { const y0 = L.tableY, yf = L.tableF, yF = L.floorY, x0 = L.tx0, x1 = L.tx1, hs = H * L.sc;
       g.fillStyle = lin(0, yF, 0, H, [[0, '#6a4622'], [.35, '#4e3218'], [1, '#1a0f07']]); g.fillRect(0, y0, W, H - y0);
       radial(L.cand.x - .15 * R0, yF + .08 * R0, 1.05 * R0, [[0, 'rgba(226,164,90,.75)'], [.4, 'rgba(160,104,52,.42)'], [1, 'rgba(40,24,12,0)']]);
       { const r = rng(5); g.strokeStyle = 'rgba(20,12,6,.18)'; g.lineWidth = .002 * R0; for (let i = -6; i < 12; i++) { const y = yF + (H - yF) * (i / 10) ** 1.4; if (y < yF) continue; g.beginPath(); g.moveTo(0, y); g.lineTo(W, y); g.stroke(); }
-        for (let i = -8; i <= 8; i++) { g.beginPath(); g.moveTo(W * .5 + i * .09 * R0, yF); g.lineTo(W * .5 + i * .26 * R0, H); g.stroke(); } }   // the floor's paper squares, faint
-      g.fillStyle = lin(0, yf, 0, yF + .04 * H, [[0, '#1a0f07'], [1, '#0c0704']]); g.fillRect(x0, yf, x1 - x0, yF - yf + .005 * H);
-      g.fillRect(x0 + .02 * R0, yF, .025 * R0, .035 * H); g.fillRect(x1 - .045 * R0, yF, .025 * R0, .035 * H);   // the legs
+        if (!L.end) for (let i = -8; i <= 8; i++) { g.beginPath(); g.moveTo(W * .5 + i * .09 * R0, yF); g.lineTo(W * .5 + i * .26 * R0, H); g.stroke(); } }   // the floor's paper squares, faint
+      g.fillStyle = lin(0, yf, 0, yF + .04 * hs, [[0, '#1a0f07'], [1, '#0c0704']]); g.fillRect(x0, yf, x1 - x0, yF - yf + .005 * hs);
+      g.fillRect(x0 + .02 * R0, yF, .025 * R0, .035 * hs); g.fillRect(x1 - .045 * R0, yF, .025 * R0, .035 * hs);   // the legs
       g.fillStyle = lin(0, y0, 0, yf, [[0, '#24150a'], [.5, '#3a2210'], [1, '#2a180a']]); g.fillRect(x0, y0, x1 - x0, yf - y0);
       g.save(); g.beginPath(); g.rect(x0, y0, x1 - x0, yf - y0); g.clip();
       radial(L.cand.x - .03 * R0, L.cand.base + .03 * R0, .55 * R0, [[0, 'rgba(244,170,94,.95)'], [.35, 'rgba(180,112,58,.6)'], [1, 'rgba(60,36,18,0)']]);
@@ -101,7 +124,7 @@ async function buildRoomOil() {
       const r = rng(17); g.lineCap = 'round'; for (let y = y0; y < yf; y += .004 * R0 + r() * .008 * R0) { g.strokeStyle = `rgba(${r() < .55 ? '10,6,3' : '190,128,72'},${.06 + .08 * r()})`; g.lineWidth = .0015 * R0 + r() * .002 * R0; g.beginPath(); g.moveTo(x0, y); g.lineTo(x1, y + (r() - .5) * .004 * R0); g.stroke(); }
       g.restore();
       g.fillStyle = 'rgba(230,150,80,.5)'; g.fillRect(x0, yf - .003 * R0, x1 - x0, .003 * R0);   // the front edge catches the flame
-      g.fillStyle = lin(0, y0, 0, y0 + .03 * H, [[0, 'rgba(10,6,4,.7)'], [1, 'rgba(10,6,4,0)']]); g.fillRect(x0, y0, x1 - x0, .03 * H); }
+      g.fillStyle = lin(0, y0, 0, y0 + .03 * hs, [[0, 'rgba(10,6,4,.7)'], [1, 'rgba(10,6,4,0)']]); g.fillRect(x0, y0, x1 - x0, .03 * hs); }
     { g.save(); g.filter = `blur(${(.006 * R0 * S).toFixed(1)}px)`; g.fillStyle = 'rgba(10,5,2,.75)'; g.beginPath(); g.ellipse(L.cand.x + .004 * R0, L.cand.base + L.cand.r * .4, L.cand.r * 2.6, L.cand.r * .75, 0, 0, 6.283); g.fill(); g.restore(); }   // the holder's shadow on the table
     roomCandle(g, L);
     // the open Bible: dark cover, two pages bowed up from the gutter, the gilt page block toward us, a red ribbon
@@ -118,7 +141,20 @@ async function buildRoomOil() {
     radial(C.x, B.cy - B.d * .2, .5 * R0, [[0, 'rgba(255,200,130,.45)'], [1, 'rgba(255,180,110,0)']], 'screen');
     radial(LP[0], LP[1], .42 * R0, [[0, 'rgba(255,236,190,.5)'], [.25, 'rgba(240,180,100,.2)'], [1, 'rgba(200,130,60,0)']], 'screen');
     // dawn: the window's bars cast long soft shadows across the table toward us
-    if (dawn) { g.save(); g.globalCompositeOperation = 'screen'; g.filter = `blur(${(.02 * R0 * S).toFixed(1)}px)`;
+    // 'end' at dawn: the light of the tall window lies on the floor toward us (a long patch leaning right, the bars' soft shadows in
+    // it), the room lifts with its bounce; the window wall stays the quieter plane (the end card sits on it)
+    if (dawn && L.end) { g.save(); const ty = L.tableY, pr = [wx0 - .02 * W, wx1 + .03 * W, W * .98, -W * .02];   // patch: sill corners → bottom corners
+      g.globalCompositeOperation = 'screen';
+      g.fillStyle = lin(0, 0, 0, H, [[0, 'rgba(84,70,60,.5)'], [.45, 'rgba(112,92,72,.5)'], [.6, 'rgba(168,128,84,.6)'], [1, 'rgba(130,96,60,.5)']]); g.fillRect(0, 0, W, H);
+      radial(wx0 + ww * .5, ty, .9 * W, [[0, 'rgba(255,226,180,.42)'], [.4, 'rgba(220,180,130,.18)'], [1, 'rgba(160,120,80,0)']], 'screen');
+      g.filter = `blur(${(.03 * W * S).toFixed(1)}px)`;
+      const fan = new Path2D(); fan.moveTo(pr[0], ty); fan.lineTo(pr[1], ty); fan.lineTo(pr[2], H); fan.lineTo(pr[3], H); fan.closePath();
+      g.fillStyle = lin(0, ty, 0, H, [[0, 'rgba(255,232,190,.75)'], [.35, 'rgba(250,214,160,.55)'], [1, 'rgba(220,170,110,.38)']]); g.fill(fan);
+      g.save(); g.clip(fan); g.globalCompositeOperation = 'multiply'; g.strokeStyle = 'rgba(120,96,80,.8)'; g.lineWidth = .012 * W;
+      const fx0 = (pr[0] + pr[1]) / 2, fx1 = (pr[2] + pr[3]) / 2; g.beginPath(); g.moveTo(fx0, ty); g.lineTo(fx1, H); g.stroke();
+      for (const k of [.22, .5]) { const y = ty + (H - ty) * k * k * 1.6; g.beginPath(); g.moveTo(lerp(pr[0], pr[3], (y - ty) / (H - ty)), y); g.lineTo(lerp(pr[1], pr[2], (y - ty) / (H - ty)), y + .01 * H); g.stroke(); }
+      g.restore(); g.restore(); }
+    else if (dawn) { g.save(); g.globalCompositeOperation = 'screen'; g.filter = `blur(${(.02 * R0 * S).toFixed(1)}px)`;
       const fan = new Path2D(); fan.moveTo(wx0, wy1); fan.lineTo(wx1, wy1); fan.lineTo(W * .95, H); fan.lineTo(-W * .25, H); fan.closePath();
       g.fillStyle = lin(0, wy1, 0, H, [[0, 'rgba(210,214,226,.32)'], [.4, 'rgba(200,204,220,.2)'], [1, 'rgba(180,190,210,.06)']]); g.fill(fan);
       g.globalCompositeOperation = 'multiply'; g.strokeStyle = 'rgba(70,66,76,.7)'; g.lineWidth = .026 * R0;
@@ -141,8 +177,12 @@ async function buildRoomOil() {
       t.globalCompositeOperation = 'destination-in'; const gr = t.createLinearGradient(0, y0 - yy, 0, y0 - yy + (V ? H * .34 : H * .2) * S * .6); gr.addColorStop(0, 'rgba(0,0,0,0)'); gr.addColorStop(1, 'rgba(0,0,0,1)'); t.fillStyle = gr; t.fillRect(0, 0, CW, CH - yy);
       a.drawImage(tc, 0, yy); } }
   }
+  return { pageRow, plate, crisp }; };
+  const L = L0, B = L.book, { pageRow, plate, crisp } = painter(L); ROIL.pageRow = pageRow;
   const paintOpt = { key: 'rembrandt', S, seed: 17, len: [4, 7.5], jit: .04, wid: V ? 1 / 150 : 1 / 200, cell: V ? 6 : 5.5, dirAt: (x, y) => -1.25 + 1.1 * (Pilot.noise(x / 420, y / 420) - .5) };
   for (const dawn of [false, true]) { const art = OIL.paint(plate(dawn), paintOpt); crisp(art); ROIL[dawn ? 'dawn' : 'night'] = art; }
+  // 'end': the wider view of the same room, night and dawn, painted with the same hand
+  { const pE = painter(ROIL.LE); for (const dawn of [false, true]) { const art = OIL.paint(pE.plate(dawn), paintOpt); pE.crisp(art); ROIL[dawn ? 'endD' : 'endN'] = art; } }
   // the page close-up: the same room repainted for a rectangle round the right-hand page, finer (the camera ends L.zEnd times in)
   { const page = [B.cx + B.w * .24, B.cy - B.d * .05], mid = [(L.person.cx + L.flame[0]) / 2 + .02 * W, L.person.top + .3 * L.person.P], ze = L.zEnd;
     const rw = W / ze * 3.2, rh = H / ze * 2.6, cx = page[0] + .25 * (mid[0] - page[0]), cy = page[1] + .25 * (mid[1] - page[1]), rect = [cx - rw / 2, cy - rh / 2, rw, rh], Sc = ze * .85;
@@ -151,7 +191,8 @@ async function buildRoomOil() {
 
   // the figure: a canvas of its own (plate scale), body almost black with a faint warm turn at the edges; its rim on a second
   // canvas (gold from the candle, silver on the grey hair; at dawn a cool rim from the window as well), so the rim can flicker
-  { const Pp = L.person.P, Pa = roomPersonPaths(), pad = .25, bw = Math.ceil((1 + 2 * pad) * Pp * S), bh = Math.ceil((1 + 2 * pad) * Pp * S);
+  // ('end': the same figure at its smaller size — still no hands drawn: the dawn reaches them on the table beyond his shoulder)
+  const figOf = L => { const Pp = L.person.P, Pa = roomPersonPaths(), pad = .25, bw = Math.ceil((1 + 2 * pad) * Pp * S), bh = Math.ceil((1 + 2 * pad) * Pp * S);
     const toP = g => { g.setTransform(Pp * S, 0, 0, Pp * S, (.5 + pad) * Pp * S, pad * Pp * S); };   // P units → layer px (head top-centre at (.5+pad, pad)·P)
     const mask = canvas(bw, bh), mg = mask.getContext('2d'); toP(mg); mg.fillStyle = '#fff'; mg.fill(Pa.body); mg.fill(Pa.neck); mg.fill(Pa.head);
     const body = canvas(bw, bh), bg = body.getContext('2d'); toP(bg);
@@ -179,9 +220,10 @@ async function buildRoomOil() {
       return out; };
     // the candle is beyond the figure, up and to the right of its head: the light comes from there
     const [hx, hy] = [L.person.cx, L.person.top + .12 * Pp], ldx = L.LP[0] - hx, ldy = L.LP[1] - hy - .9 * Pp, ll = Math.hypot(ldx, ldy), lx = ldx / ll, ly = ldy / ll;
-    ROIL.fig = { body, bw, bh, pad, Pp, rimN: rimOf(lx, ly, .011, '#ffc070', '#f4ece0'),
+    return { body, bw, bh, pad, Pp, rimN: rimOf(lx, ly, .011, '#ffc070', '#f4ece0'),
       rimD: rimOf(-.7, -.7, .02, '#cfdcf0', '#eef4ff') };   // dawn: the window is up and to the left
-  }
+  };
+  ROIL.fig = figOf(L); ROIL.figE = figOf(ROIL.LE);
   { const g = canvas(256, 256), x = g.getContext('2d'), im = x.createImageData(256, 256), r = rng(91); for (let i = 0; i < 65536; i++) { const v = 128 + (r() - .5) * 120; im.data[i * 4] = im.data[i * 4 + 1] = im.data[i * 4 + 2] = v; im.data[i * 4 + 3] = 255; }
     x.putImageData(im, 0, 0); ROIL.grain = g; }
 }
@@ -215,27 +257,31 @@ function roomCam(keys, u) {
 }
 
 function roomOil(ctx, u, mode = 'open') {
-  const { clamp, ss } = Pilot, L = ROIL.L, { W, H, V, book: B } = L, S = ROIL.S, dawnM = mode === 'dawn', R0 = V ? W : H, Fg = ROIL.fig;
+  const { clamp, ss } = Pilot, dawnM = mode === 'dawn', endM = mode === 'end', openM = !dawnM && !endM, L = endM ? ROIL.LE : ROIL.L, { W, H, V, book: B } = L, S = ROIL.S, R0 = L.R0, Fg = endM ? ROIL.figE : ROIL.fig;
   const page = [B.cx + B.w * .24, B.cy - B.d * .05], mid = [(L.person.cx + L.flame[0]) / 2 + .02 * W, L.person.top + .3 * L.person.P];
-  const KEYS = dawnM
+  // 'end' (u −0.1…21.5, film 159.4–181): one slow pull back from the man, the candle and the book (the window's edge just in at
+  // the left) to the whole quiet room; the man's feet stay above the words' band all the way
+  const KEYS = endM ? (V ? [[-.2, .43 * W, .552 * H, 1.52], [7.3, .45 * W, .543 * H, 1.38], [13.1, .48 * W, .525 * H, 1.2], [16.1, .49 * W, .51 * H, 1.08], [21.6, .5 * W, .5 * H, 1.0]]
+                          : [[-.2, .47 * W, .6 * H, 1.52], [7.3, .475 * W, .585 * H, 1.35], [13.1, .485 * W, .56 * H, 1.18], [16.1, .49 * W, .53 * H, 1.07], [21.6, .5 * W, .5 * H, 1.0]])
+    : dawnM
     ? [[0, mid[0], mid[1] - .02 * H, 1.18], [3.2, mid[0] - .02 * W, mid[1] - .04 * H, 1.26], [6.5, mid[0] - .05 * W, mid[1] - .07 * H, 1.36]]
     : [[0, L.flame[0] - .015 * W, L.flame[1] + .025 * H, 3.6], [.9, L.flame[0] - .025 * W, L.flame[1] + .035 * H, 3.25], [3.1, mid[0] + .02 * W, mid[1] - .01 * H, 1.42], [4.9, mid[0], mid[1] + .01 * H, 1.22],
        [8.2, page[0], page[1], L.zEnd]];
   let [fx, fy, z] = roomCam(KEYS, u); z = Math.max(1.0, z);
   fx = clamp(fx, W / 2 / z, W - W / 2 / z); fy = clamp(fy, H / 2 / z, H - H / 2 / z);
-  const k = dawnM ? ss(.2, 5.2, u) : 0;                                                // how far the dawn has come
-  const T = dawnM ? 146.5 + u : u, fl = roomFlick(T);                                  // the candle runs on film time
+  const k = dawnM ? ss(.2, 5.2, u) : endM ? .1 + .9 * ss(.4, 15.5, u) : 0;          // how far the dawn has come ('end': the window greys at N17, full by Q13)
+  const T = dawnM ? 146.5 + u : endM ? 159.5 + u : u, fl = roomFlick(T);              // the candle runs on film time
   const sc = (px, py) => [W / 2 + (px - fx) * z, H / 2 + (py - fy) * z];
-  OIL.view(ctx, ROIL.night, S, fx * S, fy * S, z); if (k > 0) { ctx.save(); ctx.globalAlpha = k; OIL.view(ctx, ROIL.dawn, S, fx * S, fy * S, z); ctx.restore(); }
-  if (!dawnM) { const a = ss(L.zEnd * .6, L.zEnd * .78, z); if (a > 0) { const C = ROIL.close, [rx, ry, rw, rh] = C.rect; ctx.save(); ctx.globalAlpha = a; ctx.drawImage(C.art, W / 2 + (rx - fx) * z, H / 2 + (ry - fy) * z, rw * z, rh * z); ctx.restore(); } }   // the fine page close-up
+  OIL.view(ctx, ROIL[endM ? 'endN' : 'night'], S, fx * S, fy * S, z); if (k > 0) { ctx.save(); ctx.globalAlpha = k; OIL.view(ctx, ROIL[endM ? 'endD' : 'dawn'], S, fx * S, fy * S, z); ctx.restore(); }
+  if (openM) { const a = ss(L.zEnd * .6, L.zEnd * .78, z); if (a > 0) { const C = ROIL.close, [rx, ry, rw, rh] = C.rect; ctx.save(); ctx.globalAlpha = a; ctx.drawImage(C.art, W / 2 + (rx - fx) * z, H / 2 + (ry - fy) * z, rw * z, rh * z); ctx.restore(); } }   // the fine page close-up
   // the candle's light breathes over the room
   const [lx, ly] = sc(L.LP[0], L.LP[1]);
   { ctx.save(); ctx.globalCompositeOperation = 'multiply'; const dim = Math.min(1, 1 - .3 * (1.04 - fl) * (1 - .5 * k)), v = 255 * Math.max(0, dim) | 0, R = 1.4 * R0 * z;
     let gr = ctx.createRadialGradient(lx, ly, 0, lx, ly, R); gr.addColorStop(0, `rgb(${v},${v},${v})`); gr.addColorStop(1, '#fff'); ctx.fillStyle = gr; ctx.fillRect(0, 0, W, H);
-    ctx.globalCompositeOperation = 'screen'; const wa = .1 + Math.max(0, (fl - .9) * .5); gr = ctx.createRadialGradient(lx, ly, 0, lx, ly, .35 * R0 * z); gr.addColorStop(0, `rgba(255,170,90,${wa})`); gr.addColorStop(1, 'rgba(255,150,80,0)'); ctx.fillStyle = gr; ctx.fillRect(0, 0, W, H);
+    ctx.globalCompositeOperation = 'screen'; const wa = (.1 + Math.max(0, (fl - .9) * .5)) * (endM ? 1 - .6 * k : 1); gr = ctx.createRadialGradient(lx, ly, 0, lx, ly, .35 * R0 * z); gr.addColorStop(0, `rgba(255,170,90,${wa})`); gr.addColorStop(1, 'rgba(255,150,80,0)'); ctx.fillStyle = gr; ctx.fillRect(0, 0, W, H);
     ctx.restore(); }
   // 'open' N02: the light spreads across the open pages, and the corner of the right-hand page lifts a little in the candle's draught
-  if (!dawnM) { const g2 = ss(4.4, 7.2, u);
+  if (openM) { const g2 = ss(4.4, 7.2, u);
     if (g2 > 0) { const [bx, by] = sc(page[0], page[1]); ctx.save(); ctx.globalCompositeOperation = 'screen';
       const gr = ctx.createRadialGradient(bx + .04 * R0 * z, by - .02 * R0 * z, 0, bx, by, .45 * R0 * z); gr.addColorStop(0, `rgba(255,226,170,${.32 * g2})`); gr.addColorStop(.5, `rgba(240,180,110,${.12 * g2})`); gr.addColorStop(1, 'rgba(200,130,70,0)');
       ctx.fillStyle = gr; ctx.fillRect(0, 0, W, H); ctx.restore(); }
@@ -244,20 +290,39 @@ function roomOil(ctx, u, mode = 'open') {
       ctx.save(); ctx.filter = `blur(${(3 * z).toFixed(1)}px)`; ctx.fillStyle = `rgba(40,22,10,${.45 * lift})`; ctx.beginPath(); ctx.moveTo(...m(A)); ctx.lineTo(...m([Cp[0] + 4, Cp[1] + 6])); ctx.lineTo(...m(Bp)); ctx.closePath(); ctx.fill(); ctx.restore();
       ctx.save(); const gA = m(A), gC = m(C2), gr = ctx.createLinearGradient(gA[0], gA[1], gC[0], gC[1]); gr.addColorStop(0, 'rgba(232,206,160,.85)'); gr.addColorStop(1, 'rgba(255,240,208,.95)'); ctx.filter = `blur(${(.8 * z).toFixed(1)}px)`;
       ctx.fillStyle = gr; ctx.beginPath(); ctx.moveTo(...m(A)); ctx.quadraticCurveTo(...m([(A[0] + C2[0]) / 2, (A[1] + C2[1]) / 2 - Lc * .2]), ...m(C2)); ctx.quadraticCurveTo(...m([(Bp[0] + C2[0]) / 2 + Lc * .1, (Bp[1] + C2[1]) / 2]), ...m(Bp)); ctx.closePath(); ctx.fill(); ctx.restore(); } }
-  // the flame and its lens bloom (a soft horizontal streak) — behind the figure, which stands nearer
-  { const [fx2, fy2] = sc(L.flame[0], L.flame[1]), h = L.cand.r * 2.3 * z;
-    roomFlame(ctx, fx2, fy2, h, T, 1);
+  // 'end' Q14: the window's light creeps across the table top from the left until it reaches the folded hands (u ≈ 10)
+  if (endM) { const e = L.tx0 + (L.hands[0] + .02 * W - L.tx0) * ss(3.5, 10.5, u), [ax, ay] = sc(L.tx0, L.tableY), [ex, ey] = sc(e, L.tableF), soft = .06 * W * z;
+    if (ex > ax) { ctx.save(); ctx.globalCompositeOperation = 'screen'; const gr = ctx.createLinearGradient(ax, 0, ex + soft, 0), a = .34 * k;
+      gr.addColorStop(0, `rgba(255,226,178,${a})`); gr.addColorStop(clamp((ex - ax) / (ex + soft - ax)), `rgba(255,220,170,${a * .8})`); gr.addColorStop(1, 'rgba(255,210,160,0)');
+      ctx.filter = `blur(${(6 * z).toFixed(1)}px)`; ctx.fillStyle = gr; ctx.fillRect(ax, ay, ex + soft - ax, ey - ay); ctx.restore(); } }
+  // Q14: where the light arrives, a warm pool on the table just beyond his right shoulder, where his folded hands rest (the figure
+  // in front hides them, as in the opening; the rim of the dawn grows on him at the same time)
+  if (endM) { const hl = ss(7.5, 11, u) * (.92 + .08 * fl), [hx, hy] = sc(L.hands[0], L.hands[1]), R = .22 * L.person.P * z;
+    if (hl > 0) { ctx.save(); ctx.globalCompositeOperation = 'screen'; const gr = ctx.createRadialGradient(hx, hy, 0, hx, hy, R); gr.addColorStop(0, `rgba(255,222,170,${.38 * hl})`); gr.addColorStop(.45, `rgba(240,190,130,${.16 * hl})`); gr.addColorStop(1, 'rgba(200,150,100,0)');
+      ctx.fillStyle = gr; ctx.fillRect(hx - R, hy - R, 2 * R, 2 * R); ctx.restore(); } }
+  // the flame and its lens bloom (a soft horizontal streak) — behind the figure, which stands nearer ('end': it grows small in the day)
+  { const [fx2, fy2] = sc(L.flame[0], L.flame[1]), h = L.cand.r * 2.3 * z * (endM ? 1 - .25 * k : 1);
+    roomFlame(ctx, fx2, fy2, h, T, endM ? 1 - .45 * k : 1);
     ctx.save(); ctx.globalCompositeOperation = 'lighter'; const bl = .16 * (fl - .2) * (1 - .4 * k), st = ctx.createLinearGradient(fx2 - W * .4, 0, fx2 + W * .4, 0);
     st.addColorStop(0, 'rgba(255,170,90,0)'); st.addColorStop(.5, `rgba(255,200,140,${bl})`); st.addColorStop(1, 'rgba(255,170,90,0)'); ctx.fillStyle = st; ctx.fillRect(fx2 - W * .4, fy2 - h * .5 - 2 * z, W * .8, 4 * z);
-    const R = .3 * R0 * z, gr = ctx.createRadialGradient(fx2, fy2 - h * .5, 0, fx2, fy2 - h * .5, R); gr.addColorStop(0, `rgba(255,214,150,${.32 * fl})`); gr.addColorStop(.3, `rgba(255,170,90,${.1 * fl})`); gr.addColorStop(1, 'rgba(255,150,70,0)');
+    const R = .3 * R0 * z * (endM ? 1 - .45 * k : 1), gr = ctx.createRadialGradient(fx2, fy2 - h * .5, 0, fx2, fy2 - h * .5, R); gr.addColorStop(0, `rgba(255,214,150,${.32 * fl})`); gr.addColorStop(.3, `rgba(255,170,90,${.1 * fl})`); gr.addColorStop(1, 'rgba(255,150,70,0)');
     ctx.fillStyle = gr; ctx.fillRect(fx2 - R, fy2 - h * .5 - R, 2 * R, 2 * R); ctx.restore(); }
+  // 'end': the shaft of the dawn from the tall window down through the air to the floor beside him, and the sun still rising
+  // (the window keeps blooming to the last frame) — all of it left of and below the end card's wall
+  if (endM && k > .1) { const [x0, y0, x1, y1] = L.win, s2 = ss(11, 21.5, u), a = (k - .1) / .9;
+    const q = [sc(x0 + (x1 - x0) * .1, y0 + (y1 - y0) * .35), sc(x1, y0 + (y1 - y0) * .5), sc(x1 + .42 * W, L.floorY + .16 * H), sc(x0 + .06 * W, L.floorY + .16 * H)];
+    ctx.save(); ctx.globalCompositeOperation = 'screen'; ctx.filter = `blur(${(18 * z).toFixed(1)}px)`;
+    const gr = ctx.createLinearGradient(q[1][0], q[1][1], (q[2][0] + q[3][0]) / 2, q[2][1]); gr.addColorStop(0, `rgba(255,226,170,${.3 * a + .1 * s2})`); gr.addColorStop(.6, `rgba(250,206,140,${.18 * a + .08 * s2})`); gr.addColorStop(1, 'rgba(240,190,120,0)');
+    ctx.fillStyle = gr; ctx.beginPath(); ctx.moveTo(...q[0]); for (const v of q.slice(1)) ctx.lineTo(...v); ctx.closePath(); ctx.fill(); ctx.filter = 'none';
+    const [wx, wy] = sc((x0 + x1) / 2, y0 + (y1 - y0) * .85), R = (.2 + .06 * s2) * W * z, g2 = ctx.createRadialGradient(wx, wy, 0, wx, wy, R);
+    g2.addColorStop(0, `rgba(255,230,180,${.3 * a + .15 * s2})`); g2.addColorStop(.35, `rgba(255,200,130,${.1 * a + .06 * s2})`); g2.addColorStop(1, 'rgba(240,180,110,0)'); ctx.fillStyle = g2; ctx.fillRect(wx - R, wy - R, 2 * R, 2 * R); ctx.restore(); }
   // dawn: the window blooms like a lens
   if (k > 0) { const [x0, y0, x1, y1] = L.win, [wx, wy] = sc((x0 + x1) / 2, y0 + (y1 - y0) * .7); ctx.save(); ctx.globalCompositeOperation = 'screen';
     const R = (x1 - x0) * 1.3 * z, gr = ctx.createRadialGradient(wx, wy, 0, wx, wy, R); gr.addColorStop(0, `rgba(255,240,210,${.45 * k})`); gr.addColorStop(.4, `rgba(240,220,190,${.14 * k})`); gr.addColorStop(1, 'rgba(220,200,170,0)');
     ctx.fillStyle = gr; ctx.fillRect(wx - R, wy - R, 2 * R, 2 * R); ctx.restore(); }
   // the figure, nearer than the table: it moves a little more than the room (parallax) and, as the camera passes over its
   // shoulder (open, after 4.9), it sinks out of the bottom of the frame. Its shoulders breathe; its rim flickers with the flame
-  { const p = L.person, pf = 1 + .22 * (z - 1.2), drop = dawnM ? 0 : ss(4.9, 7.6, u), zf = z * pf * (1 + .5 * drop);
+  { const p = L.person, pf = 1 + .22 * (z - 1.2), drop = openM ? ss(4.9, 7.6, u) : 0, zf = z * pf * (1 + .5 * drop);
     const sm = x => (x = clamp(x), x * x * (3 - 2 * x)), ph = ((T + 1.3) / 5.2) % 1, br = ph < .4 ? sm(ph / .4) : ph < .88 ? 1 - sm((ph - .4) / .48) : 0;
     const ax = p.cx, ay = p.top + .55 * p.P;                                                    // the parallax pivot (the figure's middle)
     const sx = W / 2 + (ax - fx) * z * pf, sy = H / 2 + (ay - fy) * z * pf + drop * H * .95;
@@ -276,11 +341,15 @@ function roomOil(ctx, u, mode = 'open') {
     if (k > .2) { const [x0, y0, x1, y1] = L.win; for (let i = 0; i < 60; i++) { const ph = r(), xa = x0 + (r() - .3) * (x1 - x0) * 2.5, ya = y1 + r() * H * .45, x = W / 2 + (xa + Math.sin(T * .2 + i) * 14 - fx) * z, y = H / 2 + (ya + Math.sin(T * .17 + i * 1.3) * 10 - ((T * 2 + ph * 50) % 50) - fy) * z;
       ctx.fillStyle = `rgba(236,240,250,${(.1 + .2 * r()) * (k - .2)})`; ctx.beginPath(); ctx.arc(x, y, (.8 + r() * 1.2) * z * .7, 0, 6.283); ctx.fill(); } }
     ctx.restore(); }
+  // 'end': the day keeps coming after the last words — the floor toward us warms (below the man, never behind the end card)
+  if (endM) { const s3 = ss(13, 21.5, u); if (s3 > 0) { ctx.save(); ctx.globalCompositeOperation = 'screen'; const y0 = sc(0, L.floorY)[1], g3 = ctx.createLinearGradient(0, y0, 0, H);
+    g3.addColorStop(0, 'rgba(255,214,160,0)'); g3.addColorStop(.25, `rgba(240,190,130,${.16 * s3})`); g3.addColorStop(1, `rgba(200,150,100,${.1 * s3})`); ctx.fillStyle = g3; ctx.fillRect(0, y0, W, H - y0); ctx.restore(); } }
   // varnish, vignette, the words' band a little darker, film grain
   OIL.varnish(ctx, .45, [120, 74, 30]);
   ctx.save(); ctx.globalCompositeOperation = 'multiply';
-  { const R = Math.hypot(W, H) * .6, gr = ctx.createRadialGradient(W / 2, H * .42, R * .35, W / 2, H * .42, R); gr.addColorStop(0, '#fff'); gr.addColorStop(1, 'rgb(150,130,116)'); ctx.fillStyle = gr; ctx.fillRect(0, 0, W, H); }
-  { const y0 = V ? H * .6 : H * .72, y1 = V ? H * .8 : H, b = ctx.createLinearGradient(0, y0, 0, y1); b.addColorStop(0, '#fff'); b.addColorStop(1, 'rgb(176,166,156)'); ctx.fillStyle = b; ctx.fillRect(0, y0, W, y1 - y0); if (V) { ctx.fillStyle = 'rgb(176,166,156)'; ctx.fillRect(0, y1, W, H - y1); } }
+  { const R = Math.hypot(W, H) * .6, gr = ctx.createRadialGradient(W / 2, H * .42, R * .35, W / 2, H * .42, R); const e = endM ? k : 0; gr.addColorStop(0, '#fff'); gr.addColorStop(1, `rgb(${150 + 30 * e | 0},${130 + 30 * e | 0},${116 + 28 * e | 0})`); ctx.fillStyle = gr; ctx.fillRect(0, 0, W, H); }   // ('end': the day opens the corners)
+  { const y0 = V ? H * .6 : H * .72, y1 = V ? H * .8 : H, b = ctx.createLinearGradient(0, y0, 0, y1), lift = endM ? ss(15.6, 18.5, u) : 0;   // ('end': no more words below after Q13 — the floor may open up)
+    const bc = `rgb(${176 + 46 * lift | 0},${166 + 50 * lift | 0},${156 + 52 * lift | 0})`; b.addColorStop(0, '#fff'); b.addColorStop(1, bc); ctx.fillStyle = b; ctx.fillRect(0, y0, W, y1 - y0); if (V) { ctx.fillStyle = bc; ctx.fillRect(0, y1, W, H - y1); } }
   ctx.globalCompositeOperation = 'overlay'; ctx.globalAlpha = .07; const o = Math.floor(u * 24); ctx.translate(-((o * 73) % 256), -((o * 151) % 256));
   ctx.fillStyle = ctx.createPattern(ROIL.grain, 'repeat'); ctx.fillRect(0, 0, W + 256, H + 256); ctx.restore();
 }

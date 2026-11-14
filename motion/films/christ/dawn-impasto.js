@@ -3,13 +3,15 @@
    name (film.html loads it); the look is now light drawn by ray casting — clean forms, one light, restraint (README §7).
    await buildDawn() once, then dawnOil(ctx, u, mode):
      'tree'  u 0..5.1  (film 135.0–140.1, Q11 Acts 10:39 «나무에 달아 죽였으나»): the dove's light of the Jordan scene withdraws into
-             darkness; on dark stony ground lies ONE shadow — the cross of part 4 (bw-cross.js crucified(): upright, beam 0.13 h
-             below its top, half-length 0.31 h, the title board — the EMPTY cross, no body: 6차), long, laid away from us by a cold
-             light behind the camera. No people, no faces. The camera drifts; the cold light breathes as clouds pass, then dims to
+             darkness; on dark stony ground lies ONE shadow — the EMPTY cross (no body: 6차), long, laid away from us by a cold
+             light behind the camera. 7차: rough-timber proportions (a heavy upright and beam, the beam short against the upright,
+             no title board) — the thin long beam with a small board on top read as a telephone pole. The picture comes in from the
+             dark (u 0–0.6) and the shadow only appears as the cold light comes up (u 0.6–1.9), after the Jordan figure has
+             dissolved away — the upright never passes through the man in the water. No people, no faces. The camera drifts; the cold light breathes as clouds pass, then dims to
              near dark — so the tomb's dawn is the first warm light of the part.
      'tomb'  u 0..9.4  (film 139.5–148.9, Q12 Acts 10:40 «하나님이 사흘 만에 다시 살리사» + N15): inside the rock-hewn tomb looking
              out through its low door (Jn 20:5). Dark chamber, a burial bench cut along the right wall with the linen cloths lying
-             there and the head cloth folded up by itself (Jn 20:6–7); outside, the great round stone rolled back (Mk 16:4) and a
+             there and the head cloth lying apart, still wrapped together as it was (Jn 20:6–7 «딴 곳에 쌌던 대로 놓여 있더라»); outside, the great round stone rolled back (Mk 16:4) and a
              garden in the sunrise (Mk 16:2 «해 돋을 때»). The sun comes up: the door turns gold, the light pours in (u 0.4–2.4,
              on «다시 살리사») across the floor onto the bench and the linen; during N15 it keeps growing gently, the chamber fills
              with warm bounce light, outside brightens. No person. The lower part stays dark and calm for the words.
@@ -49,9 +51,11 @@
     // X across (h), s = height above ground (h). Signed distance (negative inside), union by min.
     const box = (x, s, x0, x1, s0, s1) => { const dx = Math.max(x0 - x, x - x1), ds = Math.max(s0 - s, s - s1); return dx > 0 && ds > 0 ? Math.hypot(dx, ds) : Math.max(dx, ds); };
     const crossD = (x, s) => {
-      let d = box(x, s, -.022, .022, -.2, .89);                       // the upright (tapering a little: as drawn in part 4)
-      d = Math.min(d, box(x, s, -.31, .31, .742, .782));              // the beam
-      d = Math.min(d, box(x, s, -.075, .075, .846, .9));              // the title board (Jn 19:19)
+      // 7차: rough timber — a heavy upright, a heavy beam set a little below its top, the beam short against the upright's long
+      // shadow (no thin 'pole', no title board); the edges hewn, not ruled
+      const rough = .006 * (noise(s * 9 + 3, x * 4) - .5) + .004 * (noise(s * 31, x * 17 + 2) - .5);
+      let d = box(x, s, -.05, .05, -.2, .9) + rough;                  // the upright
+      d = Math.min(d, box(x, s, -.215, .215, .7, .785) + rough);     // the beam
       // 6차: the shadow of the empty cross only — no body on it (depict-christ-restraint: never the suffering body)
       return d; };
     // the ground: dry, stony earth as a height field (clods, half-buried stones, grit) lit by the cold light — no round pebbles
@@ -87,8 +91,19 @@
     const GO = FL - .12, EDGE = ZF + 7.5, VAL = -7;   // the ground outside: a terrace before the door, then the slope falls to the valley
     const Ls = nrm(-.9, .5, 1);   // toward the sun: outside, up, to the left — its light runs in across the floor onto the bench
     const jag = (v, s) => .014 * (noise(v * 6 + s, s * 3) - .5) + .004 * (noise(v * 19 + s, 2) - .5);   // the door's hewn, uneven edges
-    // the linen cloths lying on the bench (Jn 20:6), the head cloth folded up in a place by itself (Jn 20:7)
-    const LIN = [.8, 1.4, 1.45, 2.3], HC = [1.0, 1.26, 2.46, 2.66], HCc = [(HC[0] + HC[1]) / 2, (HC[2] + HC[3]) / 2], DRP = [1.62, 2.0];
+    // the linen cloths lying on the bench (Jn 20:6), the head cloth lying apart, still wrapped together as it was (Jn 20:7)
+    const LIN = [.8, 1.4, 1.45, 2.3], HCc = [1.12, 2.7], HCR = .34, HC = [HCc[0] - HCR, HCc[0] + HCR, HCc[1] - HCR, HCc[1] + HCR], DRP = [1.62, 2.0];
+    // the head cloth's shape in its own frame: a soft roll of linen (lx along it, lz across), slumped a little, and its loose end
+    const HCA = -.45, HL = .42, HRr = .062, HHt = .066;
+    const hcAt = (x, z) => { const ca = Math.cos(HCA), sa = Math.sin(HCA), lx = (x - HCc[0]) * ca - (z - HCc[1]) * sa, lzr = (x - HCc[0]) * sa + (z - HCc[1]) * ca;
+      const lz = lzr - .012 * Math.sin(lx * 11 + .5), ax = Math.abs(lx), cap = 1 - ss(HL / 2 - .028, HL / 2, ax);   // the axis wanders; the ends round off
+      const R = HRr * (1 + .22 * (noise(lx * 7 + 2, 1) - .5)) * (.55 + .45 * Math.sqrt(cap)), q = 1 - (lz / R) * (lz / R);
+      const out = { lx, lz, R, roll: q > 0 && ax < HL / 2 ? Math.pow(q, .45) * Math.pow(cap, .2) : 0, tail: 0 };
+      // the loose end: the last turn unwound, lying out flat from the roll's near side towards us, ragged, its corner turned over
+      const v = -(lz + R * .7), u0 = -.13, u1 = .15, tw = .1 + .02 * (noise(lx * 14, 3) - .5) + .025 * (lx - u0) / (u1 - u0);
+      if (lx > u0 && lx < u1 && v > -.01 && v < tw) { const ed = ss(0, .012, tw - v) * ss(0, .015, lx - u0) * ss(0, .015, u1 - lx), turn = ss(-.25, .9, (v / tw) * 1.2 - .2) * ss(.06, .1, lx);
+        out.tail = ed * (.0045 + .0018 * Math.sin(v * 90 + lx * 40) + .01 * turn * ss(.6, 1, v / tw)); }
+      return out; };
     const hf = (x, z) => {
       let h = 0;
       // the linen cloths (6차: the flat board folded in the middle read as an open book): one long sheet of thin cloth lying slack on
@@ -110,18 +125,18 @@
           const sunk = 1 - .65 * Math.exp(-xn * xn / .16) * ss(LIN[2] + .1, LIN[2] + .3, z) * (1 - ss(LIN[3] - .3, LIN[3] - .1, z));    // flat down the middle
           const heap = .016 * Math.max(0, fbm(x * 2.6 + 1, z * 2.6, 3) - .48);
           h = Math.max(h, edge * (.004 + hem + (.009 * r1 * r1 * (.45 + .55 * noise(wx * 3, wz * 3)) + .006 * r2 * r2 * r2 * noise(wx * 2.5 + 4, wz * 2.5) + .004 * r3 * r3 * r3 * ss(.5, .8, noise(wx * 2 + 9, wz * 2))) * sunk + roll + heap)); } }
-      // the head cloth, folded up and lying apart (a little away from the linen, turned): a soft folded bundle — rounded, its folds
-      // stepping up unevenly, a crease or two, not a block
-      { const ca = Math.cos(.22), sa = Math.sin(.22), lx = (x - HCc[0]) * ca - (z - HCc[1]) * sa, lz = (x - HCc[0]) * sa + (z - HCc[1]) * ca, hw = (HC[1] - HC[0]) / 2, hd = (HC[3] - HC[2]) / 2;
-        const rr = (px, pz, ax, az, r) => { const qx = Math.abs(px) - ax + r, qz = Math.abs(pz) - az + r; return Math.hypot(Math.max(qx, 0), Math.max(qz, 0)) + Math.min(Math.max(qx, qz), 0) - r; };
-        const wob = .016 * (noise(lx * 7 + 3, lz * 7) - .5) + .005 * (noise(lx * 23, lz * 23 + 4) - .5), d0 = rr(lx, lz, hw, hd, .025) + wob;
-        if (d0 < 0) { const c2 = Math.cos(.12), s2 = Math.sin(.12), mx = lx * c2 - lz * s2, mz = lx * s2 + lz * c2;   // folds turned a little against each other
-          const d1 = rr(mx + .012, mz - .03, hw * .9, hd * .62, .02) + wob * .7, d2 = rr(lx - .01, lz - .05, hw * .78, hd * .34, .016) + wob * .5;
-          const lay = d => Math.sqrt(clamp(-d / .009));   // a thin folded layer: a rounded fold edge, then flat
-          h = Math.max(h, .006 * lay(d0) + .006 * lay(d1) + .006 * lay(d2) + .0015 * Math.sin(lz * 50 + lx * 22 + 4 * noise(lx * 8, lz * 8)) * lay(d0)); } }
+      // the head cloth (7차: the small rounded block read as a bar of soap; theology review: 개역개정 요 20:7 «딴 곳에 쌌던 대로 놓여
+      // 있더라» — not a neat napkin): a length of the same linen lying a little apart, still in the round shape it was wound in —
+      // a soft roll of cloth slumped on the slab, its turns showing as creases running round it and as a spiral at its ends, and the
+      // loose end unwound and lying out flat towards us, ragged, its corner turned over
+      { const H0 = hcAt(x, z);
+        if (H0.roll > 0) { const { lx, lz, R } = H0, w1 = Math.sin(lx * 40 + lz / R * 2.2 + 1.4 * noise(lx * 6, 2)), w2 = Math.sin(lx * 23 - lz / R * 1.4 + 1);   // the turns: creases running round the roll, slanting
+          const edge = ss(-.004, .004, lx - (.03 + lz * .9)) * .0035;   // where the outer turn ends, a layer's edge across the roll
+          h = Math.max(h, HHt * (.8 + .3 * noise(lx * 5 + 3, 6)) * H0.roll - .007 * w1 * w1 * H0.roll + .0015 * w2 + edge * H0.roll + .0012 * (noise(x * 70, z * 70) - .5)); }
+        if (H0.tail > 0) h = Math.max(h, H0.tail); }
       return h; };
     const inLin = (x, z) => x > BX && x < LIN[1] + .05 && z > LIN[2] - .05 && z < LIN[3] + .14;
-    const inHC = (x, z) => x > HC[0] - .06 && x < HC[1] + .06 && z > HC[2] - .06 && z < HC[3] + .06;
+    const inHC = (x, z) => x > HC[0] && x < HC[1] && z > HC[2] && z < HC[3];
     // geometry: the first surface a ray from the eye meets. returns [t, kind, nx, ny, nz] (kind: 0 rock, 1 cloth, 2 outside)
     const O = [C.cam, 0, 0];
     function hit(rx, ry) {   // ray direction (rx, ry, 1)
@@ -143,7 +158,7 @@
           if (nn) { t = tt; k = 0; n = nn; } else { t = 1e9; k = 2; n = null; }
         } else { t = ZF; k = 0; n = [0, 0, -1]; } }
       // the cloths: march the heightfield just above the bench top
-      if (ry < 0 && k !== 2) { const t0 = (BY + .08) / ry, t1 = BY / ry;
+      if (ry < 0 && k !== 2) { const t0 = (BY + .1) / ry, t1 = BY / ry;
         if (t0 < t) { let prev = t0, hitT = 0; const N = 48, under = tt => { const x = O[0] + rx * tt, z = tt; if (!inLin(x, z) && !inHC(x, z)) return false; const h = hf(x, z); return h > 1e-4 && ry * tt < BY + h; };
           for (let j = 0; j <= N; j++) { const tt = lerp(t0, t1, j / N); if (tt > t) break;
             if (under(tt)) { let lo = prev, hi = tt; for (let q = 0; q < 7; q++) { const mid = (lo + hi) / 2; if (under(mid)) hi = mid; else lo = mid; } hitT = hi; break; } prev = tt; }
@@ -211,7 +226,13 @@
       let al, n = n0;
       const drape = k === 0 && n0[0] === -1 && Math.abs(x - BX) < 1e-4 && z > DRP[0] && z < DRP[1] && y > BY - (.1 + .035 * Math.sin((z - DRP[0]) * 15) + .02 * noise(z * 30, 1)) * Math.sin(Math.PI * (z - DRP[0]) / (DRP[1] - DRP[0])) ** .3;
       if (drape) { const fold = .5 + .5 * Math.sin(z * 24 + 2.4 * noise(z * 5, y * 8 + 2) + y * 9), dep = clamp((BY - y) / .1); n = nrm(-1, -.1, (fold - .5) * .9); al = [.9, .87, .81].map(v => v * (.72 + .28 * fold) * (1 - .25 * dep)); }   // the end of the linen hanging over the edge
-      else if (k === 1) { const wv = .95 + .05 * Math.sin(x * 900) * Math.sin(z * 900); al = [.94 * wv, .91 * wv, .85 * wv]; }
+      else if (k === 1) { let wv = .95 + .05 * Math.sin(x * 900) * Math.sin(z * 900);
+        if (inHC(x, z)) { const H0 = hcAt(x, z);
+          if (H0.roll > 0 && Math.abs(H0.lx) > HL / 2 - .05) { const yy = (y - BY - HHt * .45) / (HHt * .55), rr = Math.hypot(H0.lz / H0.R, yy), sp = rr * 2.4 - Math.atan2(yy, H0.lz) / 6.283, fr = sp - Math.floor(sp);   // the turns seen at the end: a spiral
+            wv *= 1 - .55 * Math.exp(-Math.pow((fr - .5) / .12, 2)) * ss(HL / 2 - .04, HL / 2 - .02, Math.abs(H0.lx)); }
+          if (H0.tail === 0 && H0.roll > 0 && H0.roll < .35) wv *= .7 + .3 * H0.roll / .35;   // the roll's foot in its own shadow
+          if (H0.roll === 0 && H0.tail === 0) { const d = Math.abs(H0.lz) - H0.R; if (d > 0 && d < .03) wv *= .6 + .4 * d / .03; } }
+        al = [.94 * wv, .91 * wv, .85 * wv]; }
       else { const [u1, v1] = Math.abs(n[1]) > .5 ? [x, z] : Math.abs(n[0]) > .5 ? [z, y] : [x, y];
         const tx = fbm(u1 * 1.8 + 5, v1 * 1.8, 4), pit = noise(u1 * 40, v1 * 40);
         const bump = (a, b) => .5 * fbm(a * 3, b * 3, 3) + .5 * Math.sin((a + b * .7) * 26 + 9 * fbm(a * 2, b * 2, 2)) * .08 * fbm(a * 1.3 + 4, b * 1.3, 2), eb = .01;
@@ -266,9 +287,10 @@
     if (mode === 'tree') {
       const T = D.tr, k = eio(u / 5.1);
       cam(1.015 + .04 * k, W * .5, H * .3, lerp(10, -12, k), lerp(-6, 8, k), lerp(-.006, .004, k));
-      ctx.drawImage(T.amb, -ox, -oy);
-      // the cold light: comes up as the dove's light withdraws, breathes with the clouds passing, then dims to near dark
-      const L = (.55 + .45 * ss(.1, 1.3, u)) * (1 - .62 * ss(3.3, 5.0, u)) * (1 + .07 * Math.sin(u * 1.7 + .6));
+      ctx.globalAlpha = lerp(.12, 1, ss(.15, 1.0, u)); ctx.drawImage(T.amb, -ox, -oy); ctx.globalAlpha = 1;   // in from the dark
+      // the cold light (and with it the shadow): comes up only after the Jordan figure has dissolved away (7차: at 135.0–135.4 the
+      // shadow's upright ran through the man in the water), breathes with the clouds passing, then dims to near dark
+      const L = ss(.6, 1.9, u) * (1 - .62 * ss(3.3, 5.0, u)) * (1 + .07 * Math.sin(u * 1.7 + .6));
       ctx.globalCompositeOperation = 'lighter'; ctx.globalAlpha = clamp(L); ctx.drawImage(T.lit, -ox, -oy); ctx.globalAlpha = 1;
       ctx.globalCompositeOperation = 'multiply'; ctx.globalAlpha = .55; ctx.imageSmoothingEnabled = true;   // cloud light drifting across
       ctx.drawImage(D.cloud, -ox - W * .6 + u * W * .05, -oy - H * .2, D.PW * 1.8, D.PH * 1.4); ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';

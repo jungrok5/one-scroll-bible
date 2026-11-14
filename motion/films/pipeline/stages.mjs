@@ -72,7 +72,16 @@ const G = {
       if (dur - cardAt < T.script.end_card_min_s) why.push(`끝 화면 ${(dur - cardAt).toFixed(1)}초 < ${T.script.end_card_min_s}초 — script-retime.mjs로 다시 맞추기`); }
     return why.length ? { ok: false, why } : { ok: true, why: [], info: { syllables: s.syllables, est_sec: s.est_sec, quote_share: s.quote_share } }; },
   // the ending is one reading hook (관리자·아내 2026-11-07): an open question in the last seconds, an end card with ONE passage, no "읽어 보세요" list
+  // or (관리자 2026-11-14 「그리스도」 6차 "억지로 넣은 느낌 … 400년 영상 끝처럼 해도 돼") a message ending: the film's message brought to the
+  // viewer in its last seconds (ending = { kind: 'message', line: <id>, why }), the end card naming only passages that appear in the film
   ending: c => { if (!c.s) return fail('script.json이 없다'); const e = c.review.ending || {}, why = [], s = stats(c, { noAudio: true });
+    if (e.kind === 'message') { const m = c.lines.find(l => l.id === e.line), card = s?.end_card || [], cardAt = Math.max(...c.lines.map(l => l.at ?? 0));
+      if (!m) why.push(`ending.line ${e.line}이 script.json에 없다`); else if (cardAt - m.at > T.script.ending_window_s) why.push(`맺는 줄 ${m.id}(${m.at}초)이 끝 화면보다 ${(cardAt - m.at).toFixed(1)}초 앞 — 마지막 ${T.script.ending_window_s}초 안에`);
+      const txt = card.map(x => x.text).join(' / '), refs = txt.match(/[가-힣]+\s*\d+\s*장/g) || [], cites = c.lines.map(l => l.cite || '').join(' ') + ' ' + c.lines.filter(l => l.kind === 'label').map(l => l.text).join(' ');
+      for (const r of refs) { const book = r.replace(/\s*\d+\s*장$/, ''), ch = r.match(/(\d+)\s*장/)[1]; if (!new RegExp(`${book}\\s*${ch}(:|장)`).test(cites)) why.push(`끝 화면 ${r}은 영상에 나오지 않은 본문`); }
+      if (/읽어\s*보세요|읽어보세요|관련\s*성경/.test(txt)) why.push('끝 화면이 "읽어 보세요"류 — 영상 속 말씀만 적는다');
+      if (!e.why) why.push('ending.why(왜 열린 질문 대신 메시지로 맺는지) 없음');
+      return why.length ? { ok: false, why } : pass(); }
     if (!e.question || !e.passage) return fail('review.json ending = { question: <끝의 열린 질문 줄 id>, passage: "<읽을 곳 하나, 예: 마태복음 2장>", answer: "<그 본문에서 풀리는 것 한 줄>" } 없음');
     const q = c.lines.find(l => l.id === e.question), card = s?.end_card || [], cardAt = Math.max(...c.lines.map(l => l.at ?? 0));
     if (!q) why.push(`ending.question ${e.question}이 script.json에 없다`);

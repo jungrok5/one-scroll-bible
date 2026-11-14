@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>끝의 방 시안</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600&family=Noto+Sans+KR:wght@400&display=swap">
+</head>
+<body>
+<script src="../../pilot/lib.js"></script>
+<script src="kit-oilpaint.js"></script>
+<script src="oil-room.js"></script>
+<script>
+/* 시안: 「그리스도」 끝 — 처음의 방으로 돌아와 끝난다 (roomOil 'end', 영상 159.4–181 = scz('roomOil', 159.5, 'end')).
+   시간은 영상 시간 그대로(159–181). 자막 띠와 끝 화면 자리는 확인용 가짜 글자(실제는 film.html이 그림).
+   node motion/render.mjs v --page films/christ/sample-room-end.html --stills 159.6,165,171,177 */
+const W = Pilot.W, H = Pilot.H, V = Pilot.ori === 'v', { ss } = Pilot;
+function band(ctx) { const y0 = (V ? H * .64 : H - 270) - (V ? 150 : 70), g = ctx.createLinearGradient(0, y0, 0, H); g.addColorStop(0, 'rgba(10,8,10,0)'); g.addColorStop(.45, 'rgba(10,8,10,.42)'); g.addColorStop(1, 'rgba(10,8,10,.55)'); ctx.fillStyle = g; ctx.fillRect(0, y0, W, H - y0); }
+function mock(ctx, t) {
+  const lines = t < 166.8 ? ['\'그리스도\'는 성이 아니라,', '예수님이 바로 약속된 그분이라는', '고백입니다.'] : t < 172.6 ? ['… 그를 믿는 사람들이 다', '그의 이름을 힘입어 죄 사함을 받는다'] : t < 175.6 ? ['주는 그리스도시요', '살아 계신 하나님의 아들이시니이다'] : [];
+  const base = V ? H * .68 : H - 200, lh = V ? 64 : 56;
+  lines.forEach((r, i) => Pilot.text(ctx, r, W / 2, base + i * lh, { size: V ? 44 : 40, font: "'Noto Sans KR',sans-serif", color: '#d9c79a', alpha: .9, shadow: 'rgba(0,0,0,.9)', shadowBlur: 12 }));
+  const k = ss(175.6, 176.6, t); if (k <= 0) return;
+  const y0 = H * .27, sz = V ? 40 : 28;
+  Pilot.text(ctx, '영상 속 주요 말씀', W / 2, y0, { size: sz * .8, weight: 600, font: "'Noto Serif KR',serif", color: '#e9c77a', alpha: k, shadow: 'rgba(0,0,0,.9)', shadowBlur: 18, ls: 6 });
+  ['사무엘상 16:13', '마태복음 16:16', '누가복음 24:26–27', '사도행전 10:38–43'].forEach((r, i) => Pilot.text(ctx, r, W / 2, y0 + sz * (1.9 + i * 1.5), { size: sz, weight: 600, font: "'Noto Serif KR',serif", color: '#f6ead0', alpha: k, shadow: 'rgba(0,0,0,.9)', shadowBlur: 18 }));
+  ctx.save(); ctx.globalAlpha = k * .6; ctx.fillStyle = '#e9c77a'; ctx.fillRect(W * .4, y0 + sz * 7.6, W * .2, 2); ctx.restore();
+  Pilot.text(ctx, 'one-scroll-bible.com', W / 2, y0 + sz * 8.8, { size: sz * .7, font: "'Noto Sans KR',sans-serif", color: '#e2d2a8', alpha: k, shadow: 'rgba(0,0,0,.9)', shadowBlur: 14, ls: 2 });
+}
+function draw(ctx, t) { roomOil(ctx, Math.max(0, t - 159.5), 'end'); band(ctx); if (!/clean=1/.test(location.search)) mock(ctx, t); }
+Pilot.run({ W, H, dur: 181, fonts: ["600 40px 'Noto Serif KR'", "400 20px 'Noto Sans KR'"], init: async () => buildRoomOil(), draw });
+</script>
+</body>
+</html>

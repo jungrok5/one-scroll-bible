@@ -100,7 +100,7 @@
     // the near arm's edge toward the light and the round of the shoulder catch a thin rim, so the arm reads apart from the body
     const lx = f.light ? f.light[0] - f.x : 0, ly = f.light ? f.light[1] - (f.y - h * .5) : -1, ll = Math.hypot(lx, ly) || 1, o = Math.max(1.5, h * .006);
     const LD = [lx / ll, ly / ll], armLines = [], armPaths = [], handPaths = [];
-    const S = T(.01, -.785), L1 = .19 * h, L2 = .17 * h, hands = [], elbows = [];
+    const S = T(.01, -.785 - (f.shRaise || 0)), AL = f.armL || [.19, .17], L1 = AL[0] * h, L2 = AL[1] * h, hands = [], elbows = [], handLines = [], hemLines = [];
     for (let a = 0; a < 2; a++) {
       const tgt = hands0 && hands0[a] ? hands0[a] : T(a ? .08 : .13, a ? -.58 : -.56);
       const r = ik([S[0] + (a ? -1 : 1) * d * .01 * h, S[1]], tgt, L1, L2, true);
@@ -108,6 +108,12 @@
       const fl = Math.hypot(Hd[0] - E[0], Hd[1] - E[1]) || 1, fu = [(Hd[0] - E[0]) / fl, (Hd[1] - E[1]) / fl], wr = [Hd[0] - fu[0] * .022 * h, Hd[1] - fu[1] * .022 * h];
       const um = [lerp(sh[0], E[0], .45), lerp(sh[1], E[1], .45)], fm = [lerp(E[0], wr[0], .5), lerp(E[1], wr[1], .5)];
       const arm = [];
+      if (f.sleeve === 'wide') {           // 9차 (관리자: "사무엘 팔이 굵은 막대, 손이 벙어리장갑"): see wideArm
+        const W2 = wideArm(f, h, a, sh, E, Hd, LD, f.hold && f.hold[a]);
+        armPaths.push(W2.arm); parts.push(...W2.arm); handPaths.push(W2.hand); if (a === 0) armLines.push(...W2.rim); handLines.push(...W2.handRim); hemLines.push([W2.hem, a ? .55 : 1]);
+        hands.push(Hd); elbows.push(E); if (!r.reach && hands0 && hands0[a]) console.warn('reach', k, a, (Math.hypot(tgt[0] - S[0], tgt[1] - S[1]) / (L1 + L2)).toFixed(2));
+        continue;
+      }
       arm.push(limb([sh, um, E], [.056 * h, .045 * h, .034 * h]));                                    // upper arm
       arm.push(limb([E, fm, wr], [.034 * h, .03 * h, .026 * h]));                                     // forearm in the sleeve
       const jt = new Path2D(); jt.arc(E[0], E[1], .034 * h, 0, 6.2832); jt.moveTo(sh[0] + .056 * h, sh[1]); jt.arc(sh[0], sh[1], .056 * h, 0, 6.2832); arm.push(jt);
@@ -136,7 +142,71 @@
     if (lines.length) { ctx.save(); ctx.strokeStyle = css(f.rim || [255, 180, 96], (f.fill ? .5 : .75) * Math.min(1, Math.abs(hs) * 2.5));   // (the inner lines fade while the head turns through frontal) ctx.lineWidth = Math.max(1.2, h * .004); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
       ctx.shadowColor = css(f.rim || [255, 180, 96], .6); ctx.shadowBlur = h * .012; lines.forEach(p => ctx.stroke(p)); ctx.restore(); }
     drawArmRim(ctx, f, h, armLines);
-    return { head: [hc[0], hc[1], hr], crown: [hc[0] - d * hr * .1, top], top, sh: S, hands, elbows, armPaths, handPaths, armLines, f };
+    if (hemLines.length) { ctx.save(); ctx.lineWidth = Math.max(1.4, h * .005); ctx.lineCap = 'round'; ctx.shadowColor = css(f.rim || [255, 180, 96], .7); ctx.shadowBlur = h * .014;   // the sleeve hems in the low sun
+      hemLines.forEach(([p, kk]) => { ctx.strokeStyle = css(f.rim || [255, 180, 96], .85 * kk); ctx.stroke(p); }); ctx.restore(); }
+    return { head: [hc[0], hc[1], hr], crown: [hc[0] - d * hr * .1, top], top, sh: S, hands, elbows, armPaths, handPaths, armLines, handLines, f };
+  }
+  // 9차: an old man's arm raised in a wide robe sleeve (Samuel). The arm bends at the elbow (ik); the upper arm tapers from the round of the
+  // shoulder to the elbow, the forearm on to a thin wrist. The wide sleeve has slid back a little: its cuff opens a hand's breadth short of
+  // the wrist and the cloth hangs straight down from under the forearm in a deep soft fold, gathered back under the elbow and the upper arm;
+  // its hem catches the rim light. The hand (hold = [axis x, axis y, axis angle, half-width] of the thing held): the palm against the
+  // near side, the fingers wrapped across the front of it and the thumb laid round it the other way — the dark band crossing the lit horn.
+  function wideArm(f, h, a, sh, E, Hd, LD, hold) {
+    const arm = [], rim = [], handRim = []; let hem = null;
+    const fl = Math.hypot(Hd[0] - E[0], Hd[1] - E[1]) || 1, fu = [(Hd[0] - E[0]) / fl, (Hd[1] - E[1]) / fl];
+    let nu = [-fu[1], fu[0]]; if (nu[1] > 0) nu = [-nu[0], -nu[1]];                                   // the forearm's upper side
+    const ul = Math.hypot(E[0] - sh[0], E[1] - sh[1]) || 1, uu = [(E[0] - sh[0]) / ul, (E[1] - sh[1]) / ul];
+    let un = [-uu[1], uu[0]]; if (un[1] < 0) un = [-un[0], -un[1]];                                   // the upper arm's under side
+    const wr = [Hd[0] - fu[0] * .03 * h, Hd[1] - fu[1] * .03 * h];
+    const P2 = (p, v, s) => [p[0] + v[0] * s * h, p[1] + v[1] * s * h];
+    const um = [lerp(sh[0], E[0], .5), lerp(sh[1], E[1], .5)], fm = [lerp(E[0], wr[0], .5), lerp(E[1], wr[1], .5)];
+    arm.push(limb([sh, um, E], [.05 * h, .04 * h, .03 * h]));                                           // upper arm (in the sleeve)
+    arm.push(limb([E, fm, wr], [.028 * h, .021 * h, .0135 * h]));                                       // forearm → wrist
+    { const j = new Path2D(); j.arc(E[0], E[1], .03 * h, 0, 6.2832); j.moveTo(sh[0] + .05 * h, sh[1]); j.arc(sh[0], sh[1], .05 * h, 0, 6.2832); arm.push(j); }
+    // the sleeve: cuff 62% along the forearm, opening wide; the cloth hangs from under the forearm in one soft fold back to the elbow
+    const cuf = [lerp(E[0], wr[0], .62), lerp(E[1], wr[1], .62)], open = a ? .03 : .036, hang = a ? .038 : .058;
+    const cT = P2(cuf, nu, open * .5), cB = P2(cuf, nu, -open);                                        // cuff's upper and lower lips
+    const mid = [lerp(E[0], cuf[0], .5), lerp(E[1], cuf[1], .5)];
+    const low = [mid[0], Math.max(cB[1], mid[1]) + hang * h];                                          // the deepest point of the fold, hanging straight down
+    const eb = [E[0] - nu[0] * .026 * h, E[1] - nu[1] * .026 * h + .012 * h];                          // gathered back under the elbow
+    const sv = new Path2D();
+    sv.moveTo(...cT); sv.lineTo(...cB);
+    sv.bezierCurveTo(cB[0], cB[1] + hang * h * .6, low[0] + (cB[0] - low[0]) * .45, low[1], low[0], low[1]);
+    sv.bezierCurveTo(low[0] - (low[0] - eb[0]) * .5, low[1], eb[0], eb[1] + (low[1] - eb[1]) * .5, eb[0], eb[1]);
+    sv.lineTo(...P2(E, nu, .03)); sv.closePath(); arm.push(sv);
+    // the hem: from the cuff's lower lip down round the fold — the edge the low sun catches
+    { const hm = new Path2D(); hm.moveTo(...cB); hm.bezierCurveTo(cB[0], cB[1] + hang * h * .6, low[0] + (cB[0] - low[0]) * .45, low[1], low[0], low[1]);
+      hm.quadraticCurveTo(low[0] - (low[0] - eb[0]) * .35, low[1], low[0] - (low[0] - eb[0]) * .6, low[1] - (low[1] - eb[1]) * .2); hem = hm;
+      const cf = new Path2D(); cf.moveTo(...cT); cf.lineTo(...cB); rim.push(cf); }        // the cuff's lip
+    // the upper edge of the bare forearm toward the light (thin)
+    { const s = LD[0] * nu[0] + LD[1] * nu[1] >= 0 ? 1 : -1, e = new Path2D(); e.moveTo(...P2(cuf, nu, s * .018)); e.lineTo(...P2(wr, nu, s * .012)); rim.push(e); }
+    // the hand
+    const hand = new Path2D();
+    if (hold) {
+      const [ax, ay, ang, hw] = hold, av = [Math.cos(ang), Math.sin(ang)]; let cr = [-av[1], av[0]];
+      if ((wr[0] - ax) * cr[0] + (wr[1] - ay) * cr[1] < 0) cr = [-cr[0], -cr[1]];                       // cr points from the axis toward the wrist side
+      const L = (uu2, vv) => [ax + cr[0] * uu2 * h + av[0] * vv * h, ay + cr[1] * uu2 * h + av[1] * vv * h], hu = hw / h;   // hand-local, in body heights
+      const cap = (p, q, r) => { const dx = q[0] - p[0], dy = q[1] - p[1], A = Math.atan2(dy, dx); hand.moveTo(p[0] + Math.cos(A + 1.5708) * r * h, p[1] + Math.sin(A + 1.5708) * r * h);
+        hand.arc(p[0], p[1], r * h, A + 1.5708, A - 1.5708); hand.arc(q[0], q[1], r * h, A - 1.5708, A + 1.5708); hand.closePath(); };
+      // the back of the hand behind the near edge, the wrist coming into it
+      const pc = L(hu + .012, -.001);
+      hand.ellipse(pc[0], pc[1], .017 * h, .021 * h, Math.atan2(cr[1], cr[0]), 0, 6.2832);
+      // four fingers curled across the front of the horn, stacked along it; their tips round over the far edge
+      [[-.0135, .0062], [-.0045, .0066], [.0047, .0064], [.0136, .0058]].forEach(([v, r], i) => cap(L(hu + .006, v), L(-hu + (i === 3 ? .004 : .001), v), r));
+      // the thumb: from the root of the hand round the near side and across the front, above the first finger
+      cap(L(hu + .016, .013), L(-hu * .3, .026), .0063);
+      arm.push(limb([wr, pc], [.0135 * h, .0145 * h]));
+      // rim: along the outer edge of the thumb and the top finger toward the light, and the fingertips' edge
+      const s = LD[0] * av[0] + LD[1] * av[1] >= 0 ? 1 : -1, kr = new Path2D();
+      if (s > 0) { kr.moveTo(...L(hu + .016, .0195)); kr.lineTo(...L(-hu * .3, .0325)); }
+      else { kr.moveTo(...L(hu + .006, -.0197)); kr.lineTo(...L(-hu + .001, -.0197)); }
+      handRim.push(kr);
+      { const tl = new Path2D(); tl.moveTo(...L(hu + .008, .0072)); tl.lineTo(...L(-hu * .3, .0197)); handRim.push(tl); }   // where the thumb lies over the first finger
+    } else {
+      const ang = Math.atan2(fu[1], fu[0]); hand.ellipse(Hd[0], Hd[1], .026 * h, .014 * h, ang, 0, 6.2832);
+    }
+    arm.push(hand);
+    return { arm, hand, rim, handRim, hem };
   }
   // 8차 (관리자: "뿔병이 판자/책처럼 보인다"): Samuel's horn of oil (1 Sam 16:13) — a ram's horn, curved and tapering from a wide mouth
   // (closed with a wooden stopper) to the narrow tip the oil runs from; ridged, the light glowing amber through its thin edge and a lit
@@ -244,6 +314,7 @@
     ctx.save(); ctx.fillStyle = F.f.fill || '#0d0704';
     if (handsOnly) F.handPaths.forEach(p => ctx.fill(p)); else F.armPaths[which].forEach(p => ctx.fill(p));
     ctx.restore(); if (!handsOnly && which === 0) drawArmRim(ctx, F.f, F.f.h, F.armLines);
+    if (handsOnly && F.handLines && F.handLines.length) drawArmRim(ctx, F.f, F.f.h, F.handLines);
   }
   // oil running from the crown down the back of the head (and onto the neck)
   function headOil(ctx, F, d, k, t, w) {
@@ -372,7 +443,8 @@
     const vs = o.vessel === 'jar' ? flask(ghost, vtip[0], vtip[1], U * .16, vang, { ghost: true }) : ramHorn(ghost, vtip[0], vtip[1], U * (o.hornL || .34), vang, { curl: o.hornCurl, ghost: true });
     const gi = o.vessel === 'jar' ? [Math.round((vs.C.length - 1) * .42), Math.round((vs.C.length - 1) * .9)] : (o.grip || [.35, .75]).map(k => Math.round((vs.C.length - 1) * k));
     const grip = i => { const [x, y, a, w] = vs.C[i]; return [x + Math.sin(a) * w * .2, y - Math.cos(a) * w * .2]; };
-    const pourer = figure(ctx, { x: sx, y: gy, h: U * pH, d: 1, kind: 'elder', stoop: o.pStoop == null ? .5 : o.pStoop, bow: o.pBow == null ? .3 : o.pBow, walk: walkK < 1 ? u * 4.5 : null, hands: [grip(gi[0]), grip(gi[1])], light: sun, rim: o.rim, glow: .6 });
+    const hold = o.vessel === 'jar' ? null : gi.map(i => { const [x, y, a, w] = vs.C[i]; return [x, y, a, w]; });
+    const pourer = figure(ctx, { ...(o.pFig || {}), hold, x: sx, y: gy, h: U * pH, d: 1, kind: 'elder', stoop: o.pStoop == null ? .5 : o.pStoop, bow: o.pBow == null ? .3 : o.pBow, walk: walkK < 1 ? u * 4.5 : null, hands: [grip(gi[0]), grip(gi[1])], light: sun, rim: o.rim, glow: .6 });
     const anointed = figure(ctx, { ...(o.aFig || {}), x: ax, y: gy, h: ah, d: -1, kind: o.aKind, bow: lead ? lerp(.05, .55, ss(lead - 1.2, lead + .2, u)) : .55, light: sun, rim: o.rim, glow: .6 });
     if (o.aKind === 'priest') o.priestGold(ctx, anointed, ah, u);
     // the vessel in their hands, then the oil: a stream to the crown and running down the head
@@ -405,7 +477,7 @@
   const DAVID = {
     // Samuel stands back from the boy: both arms reach forward and up from the shoulder (upper arm, elbow, forearm against the sky),
     // the horn held above the BOY's head, tilted to pour — never over his own head (관리자 6차 #4)
-    dur: 13.3, lead: 5.7, fade: 0, aFig: { tunic: true, staff: true }, aKind: 'youth', aH: .70, pH: .90, gap: .06, sxOff: .37, hornL: .27, pourAng: -2.3, hornCurl: .55, vessel: 'horn', rim: [255, 184, 100], seed: 4,
+    dur: 13.3, lead: 5.7, fade: 0, aFig: { tunic: true, staff: true }, aKind: 'youth', aH: .70, pH: .90, gap: .06, sxOff: .385, pFig: { sleeve: 'wide', armL: [.2, .185], shRaise: .015 }, hornL: .27, pourAng: -2.3, hornCurl: .55, vessel: 'horn', rim: [255, 184, 100], seed: 4,
     pStoop: .2, pBow: .15, preTilt: .1, grip: [.27, .64], carry: [.17, .70, 1.45], posEase: p => eo(clamp(p / .7)), angEase: p => eio(clamp((p - .3) / .7)),
     sun: (W, H, gy, ax, U) => [ax + U * .02, gy - U * .30],
     back(ctx, W, H, gy, sun, u, U, ex) {
@@ -680,7 +752,7 @@
     const bez = (p0, c, p1, s) => [(1 - s) * (1 - s) * p0[0] + 2 * (1 - s) * s * c[0] + s * s * p1[0], (1 - s) * (1 - s) * p0[1] + 2 * (1 - s) * s * c[1] + s * s * p1[1]];
     // at rest: the top edge round the back of the neck and over the shoulder, the cloth falling over the round of the shoulder and the upper
     // arm, then hanging (heavy) in a few deep folds — longer behind than in front, the hem and the sides soft and uneven
-    const rT = [Te(.085, -.765), Te(-.035, -.862), Te(-.152, -.785)], rB = [Te(.125, -.53), Te(-.03, -.41), Te(-.155, -.31)];   // 8차: the hem follows his body (it flared into a bell)
+    const rT = [Te(.085, -.765), Te(-.035, -.862), Te(-.152, -.785)], rB = [Te(.125, -.58), Te(-.03, -.5), Te(-.155, -.45)];   // 8차: the hem follows his body (it flared into a bell); 9차: down the back to the waist/hips (it covered him to the knees)
     const since = u - t1, swing = since > 0 ? Math.sin(since * 6.2) * Math.exp(-since * 2.6) : 0;
     const rest = (s, b) => {          // s 0 front → 1 back, b 0 shoulders → 1 hem
       const tp = bez(...rT, s), bt = bez(...rB, s), fb = Math.pow(b, .7);
@@ -706,7 +778,7 @@
     // where the cloth is held: over the forearm (under it, past the elbow), then gathered in the hand; free after tr
     const tr = 2.0, Tf = t1 - tr, gat = t => ss(1.36, 1.74, t);
     const heldC = t => { const Hd = HD(t), E = ik(sh, Hd, U * .19, U * .17, true).E, k = gat(t);
-      return [lerp(lerp(E[0], Hd[0], .6), Hd[0], k), lerp(lerp(E[1], Hd[1], .6) + U * .035, Hd[1] + U * .012, k)]; };
+      return [lerp(lerp(E[0], Hd[0], .45), Hd[0], k), lerp(lerp(E[1], Hd[1], .45) + U * .03, Hd[1] + U * .012, k)]; };
     const Pr = heldC(tr), rc0 = rest(.5, 0), C1 = [Pr[0] + U * .10, Pr[1] - U * .10], C2 = [rc0[0] - U * .12, rc0[1] - U * .09];
     const fx = t => { const x = clamp((t - tr) / Tf); return x * (2 - x); };                       // slows as it settles
     const bz3 = p => { const q = 1 - p, a = q * q * q, b2 = 3 * q * q * p, c = 3 * q * p * p, d = p * p * p; return [a * Pr[0] + b2 * C1[0] + c * C2[0] + d * rc0[0], a * Pr[1] + b2 * C1[1] + c * C2[1] + d * rc0[1]]; };
@@ -718,7 +790,11 @@
       x = lerp(x / l, 0, k); y = lerp(y / l, 1, k); l = Math.hypot(x, y) || 1; return [x / l, y / l]; };
     // the sheet: top-edge centre, half-widths (top/hem) and length change with the phase — folded on the arm, gathered in the hand, opening in the air
     const gk = gat(u), ok = ss(tr + .05, t1, u), fk0 = flyK(u);
-    const wT = U * lerp(lerp(.07, .05, gk), .1, ok), wH = U * lerp(lerp(.075, .075, gk), .11, ss(tr, t1, u)), Lh = U * lerp(lerp(.17, .22, gk), .31, ss(tr, t1, u));   // 8차: folded on the arm, gathered (not wrung thin), unfurling
+    // 9차 (관리자: "손에선 작은 천, 날며 커지고, 등에선 큰 망토"): ONE cloth size throughout — the area it covers stays within ±15% from his arm
+    // to Elisha's back (measured: folded on the arm ≈ the same as gathered, in flight and settled): on the arm it is a large heavy mantle
+    // hanging from the forearm to his knees, gathered in the hand it hangs as long, in the air it opens to the same size, and on Elisha it
+    // covers the shoulders and the back to the waist/hips
+    const wT = U * lerp(lerp(.09, .055, gk), .09, ok), wH = U * lerp(lerp(.10, .12, gk), .105, ss(tr, t1, u)), Lh = U * lerp(lerp(.26, .31, gk), .30, ss(tr, t1, u));
     const F = [], T0 = topC(u), cD = .1;
     let cx = T0[0], cy = T0[1];
     for (let j = 0; j < NB; j++) {
@@ -745,11 +821,21 @@
       for (let i = 0; i < NA; i++) { const s = i / (NA - 1), Fp = F[j][i], R = rest(s, b); row.push([lerp(Fp[0], R[0], land), lerp(Fp[1], R[1], land), lerp(Fp[2], R[2], land)]); }
       G.push(row); }
     mantle(ctx, G, sun, U, u, ss(t1 - .1, t1 + .6, u));   // (no fringe while it hangs folded on his arm — it read as teeth)
+    const flapOf = (G, gk, U) => { const len = (NB - 1) * .45 * (1 - gk), m = 9; if (len < .25) return null; const Gf = [];   // the fold's length in rows (continuous)
+      const E = elijah.elbows[0], Hd = elijah.hands[0], sl = (Hd[1] - E[1]) / ((Hd[0] - E[0]) || 1), top = x => E[1] + sl * (x - E[0]) - U * .026;   // the top of his forearm
+      for (let j = 0; j <= m; j++) { const q = 1 - j / m, wq = Math.pow(q, 1.6) * (1 - gk), r = j / m * len, j0 = Math.floor(r), fr = r - j0, A = G[j0], B = G[Math.min(NB - 1, j0 + 1)];
+        Gf.push(A.map((a, i) => { const x = lerp(a[0], B[i][0], fr), y = lerp(a[1], B[i][1], fr), z = lerp(a[2], B[i][2], fr);
+          return [x + U * .004 * (1 - q) * (1 - gk), lerp(y, Math.min(y, top(x)), wq) + U * .01 * (1 - q) * (1 - gk) * (P.noise(i * .37, 31) - .5), z * .6]; })); }
+      return Gf; };
     { const m = ctx.getTransform(), c0 = G[5][NA >> 1], q = m.transformPoint(new DOMPoint(c0[0], c0[1])); SRC = [q.x, q.y, U * m.a]; }   // (for goldRecall: the cloak on his shoulders)
     // while he holds it, his arm lies over the cloth (it hangs from his forearm, then from his hand)
     if (u < tr + .02) {
       redrawArm(ctx, elijah, 0);
     }
+    // 9차: folded over his forearm — the near half of the fold lies over the arm and hangs to about half the cloth's length in front of
+    // the far half (its fold and its hem catch the rim light); as he takes the cloth into his hand the fold slides off and opens out
+    const Gf = flapOf(G, gk, U);
+    if (Gf) mantle(ctx, Gf, sun, U, u, 0);
     // the cloak comes down from behind him: it passes behind his head, never over it (his head and neck drawn again over the cloth)
     { const [hx, hy, hr] = elisha.head; ctx.save(); ctx.beginPath(); ctx.rect(hx - hr * 2.2, hy - hr * 3, hr * 4.4, hr * 4.05); ctx.clip(); figure(ctx, { ...elFig, glow: 0 }); ctx.restore(); }
     ctx.restore();

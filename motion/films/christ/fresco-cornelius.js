@@ -17,6 +17,8 @@
    and folds in shade.
    The camera creeps in and slides right (the walls a little slower than the people); the sun grows a little from u ≈ 0.2.
    Portrait: Peter's whole upper body and every head above F.SAFE (0.64 H); the backs of the front row run down under the words.
+   (round 8: Peter's face in shade, found by a few soft value shapes of the gate's light — temple, cheekbone, brow, nose — the beard
+   melting into it; his robe tapers from the shoulders to a sash, folds catch the sun, the held-out arm's sleeve hangs.)
    No words are drawn. Closed form: corneliusFresco(ctx, u) depends only on u. API: await buildCorneliusFresco() · corneliusFresco(ctx, u) */
 const CFR = {};
 const PETER_D = 4.3;   // Peter's depth (also the dust's focus)
@@ -58,6 +60,9 @@ function cfArm(add, pt, sh, tg, bend, palmUp) {
   const Q = (t, y) => [a.wr[0] + c[0] * t + pn[0] * y, a.wr[1] + c[1] * t + pn[1] * y], E = k => [a.el[0] + pn[0] * k * .05, a.el[1] + pn[1] * k * .05];
   add(cfCaps(sh, a.el, .058, .05), pt.arm);
   add([E(-1), Q(-.034, -.056), Q(.004, -.062), Q(.014, -.054), Q(.014, .054), Q(.004, .062), Q(-.034, .056), E(1)], pt.arm);
+  // the arm held out: its wide sleeve hangs below the forearm in a soft bag of cloth, deepest near the cuff (round 8: the arm read
+  // as a box) — pn points down in either mirror, so the cloth always falls
+  if (palmUp) { const dn = pn[1] >= 0 ? 1 : -1, D2 = (t, y) => Q(t, y * dn); add([E(dn * .8), D2(-.1, .07), D2(-.05, .1), D2(-.012, .094), D2(.01, .062), D2(.004, .03), D2(-.06, .03)], pt.arm, pt.drape); }
   const s = palmUp ? 1.1 : 1, th = palmUp ? -1 : 1;
   add([Q(-.004, -.017 * s), Q(.02, -.021 * s), Q(.05, -.02 * s), Q(.06, -.012 * s), Q(.06, .012 * s), Q(.05, .019 * s), Q(.02, .019 * s), Q(-.004, .016 * s)], pt.skin);   // the palm
   for (const [yy, L] of [[-.0125, .03], [-.0042, .037], [.0042, .035], [.0125, .027]]) add(cfCaps(Q(.052, yy * s), Q(.052 + L, yy * 1.3 * s), .0056, .0046, 3), pt.skin);   // four fingers, a little apart at the tips (2026-11-14: not a mitten)
@@ -72,9 +77,13 @@ function cfArm(add, pt, sh, tg, bend, palmUp) {
 function cfMan(P, o) {
   const { w = 1, f = 1, lean: l = 0, pose = 'stand', head = 'cloth', beard = true, arms = ['hang', 'hang'], tunic = 'long', cloak = false, reach = 0 } = o;
   const sit = pose === 'sit', dz = sit ? .2 : 0, piv = sit ? -.5 : 0;
-  const q = new Path2D(), pt = {}; for (const k of ['band', 'cloak', 'arm', 'skin', 'face', 'hair', 'hc', 'hband']) pt[k] = new Path2D();
+  const q = new Path2D(), pt = {}; for (const k of ['band', 'cloak', 'arm', 'drape', 'skin', 'face', 'hair', 'hc', 'hband']) pt[k] = new Path2D();
   const add = cfAdder(P, f, q), U = (x, y) => [x + l * (piv - y), y + dz];
-  if (!sit) {
+  if (!sit && o.taper) {   // (round 8: Peter's torso read as a box) broad rounded shoulders tapering to the belt, the robe blousing over it, the skirt widening to the hem
+    for (const sd of [-1, 1]) { add(cfCaps([sd * .04, -.36], [sd * .04, -.02], .036, .03)); add(cfCirc(sd * .04 + .02, -.012, .05, .022, 10)); }
+    add([[0, -.035], [-.172 * w, -.04], U(-.152 * w, -.24), U(-.13 * w, -.44), U(-.122 * w, -.5), U(-.13 * w, -.56), U(-.148 * w, -.63), U(-.168 * w, -.7), U(-.176 * w, -.738), U(-.163 * w, -.768), U(-.136 * w, -.792), U(-.096 * w, -.812), U(-.05, -.832),
+      U(.05, -.832), U(.096 * w, -.812), U(.136 * w, -.792), U(.163 * w, -.768), U(.176 * w, -.738), U(.168 * w, -.7), U(.148 * w, -.63), U(.13 * w, -.56), U(.122 * w, -.5), U(.13 * w, -.44), U(.152 * w, -.24), [.172 * w, -.04]]);
+  } else if (!sit) {
     for (const sd of [-1, 1]) { add(cfCaps([sd * .04, -.36], [sd * .04, -.02], .036, .03)); add(cfCirc(sd * .04 + .02, -.012, .05, .022, 10)); }
     add([[0, -.035], [-.17 * w, -.045], U(-.162 * w, -.26), U(-.145 * w, -.5), U(-.162 * w, -.62), U(-.178 * w, -.71), U(-.183 * w, -.742), U(-.172 * w, -.772), U(-.148 * w, -.796), U(-.105 * w, -.815), U(-.05, -.832),
       U(.05, -.832), U(.105 * w, -.815), U(.148 * w, -.796), U(.172 * w, -.772), U(.183 * w, -.742), U(.178 * w, -.71), U(.162 * w, -.62), U(.145 * w, -.5), U(.162 * w, -.26), [.17 * w, -.045]]);
@@ -89,8 +98,14 @@ function cfMan(P, o) {
       add([...up, [.24, -.335], [.33, -.322], [.352, -.27], [.335, -.1], [.36, -.035], [.19, -.035], [.205, -.2], [.12, -.236], [-.1, -.236], [-.16 * w, -.25]]);
     }
   }
-  add([U(-.15 * w, -.54), U(.15 * w, -.54), U(.152 * w, -.497), U(-.152 * w, -.497)], pt.band);   // the belt
-  if (!sit) add([U(.05 * w, -.505), U(.085 * w, -.5), U(.08 * w, -.39), U(.058 * w, -.39)], pt.band);
+  if (o.taper) {   // a sash wound round the waist (it follows the taper), its knot and two ends hanging on the near side
+    add([U(-.127 * w, -.535), U(.127 * w, -.535), U(.124 * w, -.49), U(-.124 * w, -.49)], pt.band);
+    add(cfCirc(U(.045 * w, -.51)[0], -.51, .02, .018, 10), pt.band);
+    add([U(.035 * w, -.5), U(.058 * w, -.498), U(.064 * w, -.37), U(.046 * w, -.372)], pt.band); add([U(.06 * w, -.5), U(.078 * w, -.496), U(.094 * w, -.4), U(.078 * w, -.398)], pt.band);
+  } else {
+    add([U(-.15 * w, -.54), U(.15 * w, -.54), U(.152 * w, -.497), U(-.152 * w, -.497)], pt.band);   // the belt
+    if (!sit) add([U(.05 * w, -.505), U(.085 * w, -.5), U(.08 * w, -.39), U(.058 * w, -.39)], pt.band);
+  }
   if (cloak) {   // the cloak: from the shoulders down the back to the bench, a fold over the near shoulder
     add([U(-.178 * w, -.8), U(-.05, -.838), U(.05, -.81), U(-.04, -.66), U(-.09, -.52), [-.11, -.25], [-.215 * w, -.245], U(-.21 * w, -.5), U(-.205 * w, -.7)], pt.cloak);
     add([U(.03, -.835), U(.168 * w, -.792), U(.19 * w, -.69), U(.1, -.73)], pt.cloak);
@@ -100,6 +115,7 @@ function cfMan(P, o) {
     if (mode === 'knee') { tg = [sd > 0 ? .23 : .17, -.37]; bend = 1; }
     else if (mode === 'clasp') { tg = [.26, -.44 + (sd > 0 ? 0 : .012)]; bend = 1; }
     else if (mode === 'open') { tg = U((.27 + .03 * reach) * w, -.56 - .05 * reach); bend = 1; }
+    else if (o.taper) tg = U(sd * .2 * w, -.42);   // (round 8) the hanging arm a little away from the body, the elbow out: the waist shows beside it
     else tg = U(sd * .185 * w, -.41);
     cfArm(add, pt, sh, tg, bend, mode === 'open'); }
   // the head: neck, face (on the side he looks to), short hair or the head cloth and its band, the beard
@@ -287,7 +303,7 @@ async function buildCorneliusFresco() {
   // ---------------- the people ----------------
   const PE = (typeof RD_PETER !== 'undefined') ? RD_PETER : { body: '#7e4c44', hc: '#c9a06a', band: '#4a3426', hair: '#3a302c', w: 1.1 };   // part 3's Peter
   const deep = c => '#' + Pilot.hex(c).map((v, i) => Math.round(v * [.84, .7, .5][i]).toString(16).padStart(2, '0')).join('');   // the head cloth a deeper ochre (in this light the pastel one read pale, like fair hair)
-  const PETER = { X: -.45, D: PETER_D, Hm: 1.8, kind: 'man', peter: true, o: { f: 1, w: PE.w || 1.1, head: 'cloth', lean: .015, arms: ['hang', 'open'] }, c: { body: PE.body, hc: deep(PE.hc), band: PE.band, hair: PE.hair, skin: '#b48a6e', faceK: 1.12 }, amb: .54 };
+  const PETER = { X: -.45, D: PETER_D, Hm: 1.8, kind: 'man', peter: true, o: { f: 1, w: PE.w || 1.1, head: 'cloth', lean: .015, arms: ['hang', 'open'], taper: true }, c: { body: PE.body, hc: deep(PE.hc), band: PE.band, hair: PE.hair, skin: '#b48a6e', faceK: .82, softBeard: true }, amb: .54 };   // (round 8: the face in shade, modelled by the light — faceK was 1.12, a flat pale plane)
   const MEN = [   // c: colours; kind 'back' = seated, seen from behind; 'man' = three-quarter (cfMan)
     // landscape only, at the sides
     { X: -3.05, D: 4.4, Hm: 1.74, kind: 'man', o: { f: 1, w: 1, head: 'cloth', lean: .02 }, c: { body: '#5a4c3e', hc: '#b6a688', band: '#3e2e2c', hair: '#2e2420', skin: '#9c7a62' } },
@@ -317,7 +333,7 @@ async function buildCorneliusFresco() {
     if (c.cloak) { x.fillStyle = tone(c.cloak); x.fill(p.cloak); }
     if (p.arm && !c.mantle) { x.fillStyle = tone(c.body, .88); x.fill(p.arm); }
     x.fillStyle = tone(c.skin); x.fill(p.skin); x.fillStyle = tone(c.skin, c.faceK || .78); x.fill(p.face);
-    x.fillStyle = tone(c.hair); x.fill(p.hair);
+    if (!c.softBeard) { x.fillStyle = tone(c.hair); x.fill(p.hair); }   // (Peter's beard is laid in soft, after his face's shading)
     if (c.hc) { x.fillStyle = tone(c.hc); x.fill(p.hc); x.save(); x.clip(p.hc); x.fillStyle = tone(c.band); x.fill(p.hband); x.restore(); } };
   const place = m => { const [fx, fy] = cfP(m.X, 0, m.D), S = CF.F * m.Hm / m.D; m.fx = fx; m.fy = fy; m.S = S; m.P = (x, y) => [fx + x * S, fy + y * S]; return m; };
   const build = (m, o = m.o) => m.kind === 'back' ? cfBack(m.P, o) : cfMan(m.P, o);
@@ -339,7 +355,34 @@ async function buildCorneliusFresco() {
     B.save(); B.filter = `blur(${(.014 * S).toFixed(1)}px)`; B.fillStyle = 'rgba(16,9,5,.5)'; B.beginPath(); B.ellipse(fx + (m.o.pose === 'sit' ? .14 * (m.o.f || 1) : 0) * S, fy - .004 * S, (back ? .32 : .24) * S, .032 * S, 0, 0, 6.283); B.fill(); B.restore();
     const a = m.amb || .6; AMB = [a, a * .9, a * .82]; parts(B, path, m.c);
     // the face's shading first, then the beard and the cloth again over it (they stand in front of the face)
-    if (path.face) { let gr; B.save(); B.clip(path.face); gr = B.createLinearGradient(fx - .03 * S, 0, fx + .09 * S, 0); gr.addColorStop(0, `rgba(10,5,4,${back ? .25 : .1})`); gr.addColorStop(1, 'rgba(10,5,4,0)'); B.fillStyle = gr; B.fillRect(...box);
+    // Peter (round 8: the face read as a smooth pale plane with a beard stuck on — a mask): the face in shade, its planes found by a
+    // few soft value shapes — the light from the gateway (behind him, on his left) grazes the temple and the cheekbone on that side,
+    // a faint touch on the brow ridge and the bridge of the nose; the eye's hollow and the far cheek fall into shade; the beard
+    // melts into the shading. No eyes, no mouth drawn. FH maps head units (as in cfMan: relative to the face centre, before the
+    // head's 1.1 growth) to px.
+    const pf = m.o.f || 1, plx = m.o.lean || 0, phx = .012 + plx * .9, phy = -.9, pfc = phx + .026;
+    const FH = (x, y) => { const ux = pfc + x, uy = phy + y; return m.P(pf * (phx + (ux - phx) * 1.1), phy + .09 + (uy - phy - .09) * 1.1); };
+    const blob = (X, x, y, rx, ry, rot, rgb, a) => { const [cx, cy] = FH(x, y), R = S * 1.1; X.save(); X.translate(cx, cy); X.rotate(rot * pf); X.scale(rx * R, ry * R);
+      const g3 = X.createRadialGradient(0, 0, 0, 0, 0, 1); g3.addColorStop(0, `rgba(${rgb},${a})`); g3.addColorStop(.55, `rgba(${rgb},${a * .45})`); g3.addColorStop(1, `rgba(${rgb},0)`); X.fillStyle = g3; X.beginPath(); X.arc(0, 0, 1, 0, 6.283); X.fill(); X.restore(); };
+    const UB = (x, y) => m.P(pf * x, y), PFOLDS = [
+        [[[-.13, -.735], [-.08, -.64], [-.03, -.56]], .016, .42, .14], [[[-.06, -.79], [-.03, -.68], [-.005, -.57]], .012, .29, .10],     // from the far shoulder to the waist
+        [[[.15, -.72], [.08, -.65], [.03, -.565]], .016, .48, .12], [[[.11, -.69], [.07, -.62], [.055, -.565]], .01, .32, .08],             // pulled toward the held-out arm
+        [[[-.085, -.48], [-.1, -.28], [-.12, -.06]], .018, .45, .16], [[[-.03, -.48], [-.035, -.26], [-.045, -.05]], .014, .35, .14],    // falling from the sash to the hem
+        [[[.04, -.47], [.05, -.26], [.06, -.05]], .016, .42, .12], [[[.1, -.47], [.115, -.26], [.135, -.05]], .018, .51, .10]];
+    const fold = (X, pts, wd, a, la, litOnly) => { X.save(); X.lineCap = 'round'; X.lineJoin = 'round';   // a fold: a soft shade, its lit edge on the gate side
+      const path2 = () => { X.beginPath(); pts.forEach((p, i) => { const q = UB(...p); i ? X.lineTo(...q) : X.moveTo(...q); }); };
+      X.filter = `blur(${(wd * .7 * S).toFixed(1)}px)`; if (!litOnly) { X.strokeStyle = `rgba(14,6,4,${a})`; X.lineWidth = wd * S; path2(); X.stroke(); }
+      X.translate(-pf * wd * .9 * S, 0); X.strokeStyle = `rgba(255,222,190,${litOnly ? Math.min(1, la * 1.5) : la})`; X.lineWidth = wd * .55 * S; path2(); X.stroke(); X.restore(); };
+    if (path.face && m.peter) { B.save(); B.clip(path.face);
+      let g4 = B.createLinearGradient(...FH(-.05, 0), ...FH(.06, 0)); g4.addColorStop(0, 'rgba(10,5,4,0)'); g4.addColorStop(.5, 'rgba(10,5,4,.12)'); g4.addColorStop(1, 'rgba(10,5,4,.38)'); B.fillStyle = g4; B.fillRect(...box);   // the far cheek turns away into shade
+      blob(B, .012, -.007, .034, .012, 0, '10,5,4', .55);        // the eye's hollow under the brow (one soft shade across both)
+      blob(B, -.008, .03, .022, .011, .2, '10,5,4', .22);        // the hollow under the cheekbone
+      blob(B, .046, .024, .012, .007, 0, '10,5,4', .3);          // the shade under the nose
+      B.restore();
+      B.save(); B.filter = `blur(${(.0035 * S).toFixed(1)}px)`; B.fillStyle = tone(m.c.hair); B.fill(path.hair); B.restore();   // the beard, its edge soft against the cheek
+      B.save(); B.clip(path.hair); g4 = B.createLinearGradient(0, FH(0, .03)[1], 0, FH(0, .07)[1]); g4.addColorStop(0, 'rgba(118,84,62,.4)'); g4.addColorStop(1, 'rgba(118,84,62,0)'); B.fillStyle = g4; B.fillRect(...box); B.restore();   // thinning into the cheek
+      const c = m.c; B.fillStyle = tone(c.hc); B.fill(path.hc); B.save(); B.clip(path.hc); B.fillStyle = tone(c.band); B.fill(path.hband); B.restore(); }
+    else if (path.face) { let gr; B.save(); B.clip(path.face); gr = B.createLinearGradient(fx - .03 * S, 0, fx + .09 * S, 0); gr.addColorStop(0, `rgba(10,5,4,${back ? .25 : .1})`); gr.addColorStop(1, 'rgba(10,5,4,0)'); B.fillStyle = gr; B.fillRect(...box);
       if (!back) { const f = m.o.f || 1, cy = fy - (sit ? .71 : .905) * S, cx = fx + f * .05 * S;   // the eye's hollow under the brow, the nose's small shadow — no features drawn
         gr = B.createLinearGradient(0, cy - .014 * S, 0, cy + .03 * S); gr.addColorStop(0, 'rgba(10,5,4,.55)'); gr.addColorStop(.5, 'rgba(10,5,4,.18)'); gr.addColorStop(1, 'rgba(10,5,4,0)'); B.fillStyle = gr; B.fillRect(...box);
         const g2 = B.createRadialGradient(cx + f * .02 * S, cy + .022 * S, 0, cx + f * .02 * S, cy + .022 * S, .022 * S); g2.addColorStop(0, 'rgba(10,5,4,.2)'); g2.addColorStop(1, 'rgba(10,5,4,0)'); B.fillStyle = g2; B.fillRect(...box); }
@@ -354,11 +397,17 @@ async function buildCorneliusFresco() {
         B.save(); B.transform(1, 0, sk / (y1 - y0), 1, -sk / (y1 - y0) * y0, 0);
         const g2 = B.createLinearGradient(xx - wd, 0, xx + wd * 1.6, 0); g2.addColorStop(0, 'rgba(10,5,4,0)'); g2.addColorStop(.4, `rgba(10,5,4,${(back ? .07 : .12) + .12 * rf()})`); g2.addColorStop(.62, `rgba(255,236,210,${back ? .02 : .05})`); g2.addColorStop(1, 'rgba(255,236,210,0)');
         B.fillStyle = g2; B.fillRect(xx - wd, y0, 2.6 * wd, y1 - y0); B.restore(); } }
+    if (m.peter) {   // (round 8: the torso read as a box) the robe's volume: blousing over the sash, folds pulled from the shoulders to the
+      // waist and falling from the sash to the hem — each a soft shade with its lit edge on the gate side; the hanging sleeve's belly in shade
+      gr = B.createLinearGradient(0, UB(0, -.6)[1], 0, UB(0, -.535)[1]); gr.addColorStop(0, 'rgba(255,226,196,.07)'); gr.addColorStop(.55, 'rgba(14,6,4,0)'); gr.addColorStop(1, 'rgba(14,6,4,.32)'); B.fillStyle = gr; B.fillRect(...box);   // the blouse over the sash
+      for (const fd of PFOLDS) fold(B, ...fd, false);
+      gr = B.createLinearGradient(...UB(-.16, 0), ...UB(.17, 0)); gr.addColorStop(0, 'rgba(255,226,196,.05)'); gr.addColorStop(.3, 'rgba(255,226,196,.08)'); gr.addColorStop(.62, 'rgba(14,6,4,.06)'); gr.addColorStop(1, 'rgba(14,6,4,.3)'); B.fillStyle = gr; B.fillRect(...box);   // round, not flat: the near side up into the light
+      if (path.drape) { B.save(); B.clip(path.drape); gr = B.createLinearGradient(0, UB(0, -.6)[1], 0, UB(0, -.5)[1]); gr.addColorStop(0, 'rgba(14,6,4,.05)'); gr.addColorStop(1, 'rgba(14,6,4,.42)'); B.fillStyle = gr; B.fillRect(...box); B.restore(); } }
     if (back) {   // the spine's valley and the shoulder blades
       gr = B.createLinearGradient(fx - .05 * S, 0, fx + .05 * S, 0); gr.addColorStop(0, 'rgba(10,5,4,0)'); gr.addColorStop(.5, 'rgba(10,5,4,.16)'); gr.addColorStop(1, 'rgba(10,5,4,0)'); B.fillStyle = gr; B.fillRect(fx - .05 * S, fy - .44 * S, .1 * S, .3 * S);
       gr = B.createLinearGradient(0, fy - .47 * S, 0, fy - .3 * S); gr.addColorStop(0, 'rgba(255,236,210,.1)'); gr.addColorStop(1, 'rgba(255,236,210,0)'); B.fillStyle = gr; B.fillRect(fx - .3 * S, fy - .48 * S, .6 * S, .2 * S);   // the tops of the shoulders take the sky
       for (const s of [-1, 1]) { const cx = fx + s * .1 * S, cy = fy - .39 * S, R = .09 * S, g3 = B.createRadialGradient(cx, cy, 0, cx, cy, R); g3.addColorStop(0, 'rgba(255,236,210,.06)'); g3.addColorStop(1, 'rgba(255,236,210,0)'); B.fillStyle = g3; B.fillRect(cx - R, cy - R, 2 * R, 2 * R); } }
-    if (path.arm) { B.save(); B.filter = `blur(${(.01 * S).toFixed(1)}px)`; B.strokeStyle = 'rgba(12,6,4,.34)'; B.lineWidth = .014 * S; B.stroke(path.arm); B.restore(); }   // the sleeves' soft turn into shade where they meet the body
+    if (path.arm) { B.save(); B.filter = `blur(${(.01 * S).toFixed(1)}px)`; B.strokeStyle = `rgba(12,6,4,${m.peter ? .55 : .34})`; B.lineWidth = (m.peter ? .02 : .014) * S; B.stroke(path.arm); B.restore(); }   // the sleeves' soft turn into shade where they meet the body
     if (path.hc) { gr = B.createLinearGradient(0, top, 0, top + .2 * S); gr.addColorStop(0, 'rgba(255,240,220,.07)'); gr.addColorStop(1, 'rgba(10,5,4,.16)'); B.fillStyle = gr; B.fill(path.hc);
       if (!back) { B.save(); B.clip(path.hc); B.strokeStyle = 'rgba(10,5,4,.22)'; B.lineWidth = .008 * S; B.filter = `blur(${(.004 * S).toFixed(1)}px)`; const hx = fx + .012 * S * (m.o.f || 1), hy = top + .1 * S;   // the cloth's folds falling from the band
         for (const dx of [-.095, -.07, .07, .1]) { B.beginPath(); B.moveTo(hx + dx * S, hy - .04 * S); B.quadraticCurveTo(hx + dx * 1.15 * S, hy + .03 * S, hx + dx * 1.25 * S, hy + .1 * S); B.stroke(); } B.restore(); } }
@@ -373,11 +422,16 @@ async function buildCorneliusFresco() {
     // spill and the lit floor, the far side falling into shade; the beard keeps its dark
     if (path.face && !back) { const f = m.o.f || 1, cx = fx + f * .05 * S, A = m.peter ? .3 : .07, [bx, by, bw, bh] = box.map(Math.round);
       T.save(); T.clearRect(bx - 6, by - 6, bw + 12, bh + 12); T.clip(path.face);
-      gr = T.createLinearGradient(cx - .075 * S, 0, cx + .07 * S, 0); gr.addColorStop(0, `rgba(255,200,146,${A})`); gr.addColorStop(.55, `rgba(255,186,128,${A * .5})`); gr.addColorStop(1, `rgba(240,170,120,${A * .15})`); T.fillStyle = gr; T.fillRect(...box);
+      if (m.peter) {   // the planes the light finds (round 8): temple and cheekbone on the gate side strongest, the brow ridge, the nose's bridge and tip faint
+        blob(T, -.036, -.014, .015, .024, .2, '255,204,150', 1); blob(T, -.026, .013, .018, .029, .35, '255,196,140', .95);
+        blob(T, .0, -.021, .034, .009, -.05, '255,206,156', .7); blob(T, .036, .0, .0075, .019, -.35, '255,206,156', .65); blob(T, .05, .016, .009, .008, 0, '255,200,150', .5);
+      } else { gr = T.createLinearGradient(cx - .075 * S, 0, cx + .07 * S, 0); gr.addColorStop(0, `rgba(255,200,146,${A})`); gr.addColorStop(.55, `rgba(255,186,128,${A * .5})`); gr.addColorStop(1, `rgba(240,170,120,${A * .15})`); T.fillStyle = gr; T.fillRect(...box); }
       T.globalCompositeOperation = 'destination-out'; T.fillStyle = '#000'; T.fill(path.hc); T.fill(path.hair); T.restore();   // the cloth and the beard in front of the face keep their own light
-      L.save(); L.setTransform(1, 0, 0, 1, 0, 0); const sx = bx - 6 - off[0], sy = by - 6 - off[1]; L.drawImage(T.canvas, sx, sy, bw + 12, bh + 12, sx, sy, bw + 12, bh + 12); L.restore(); }
+      L.save(); L.setTransform(1, 0, 0, 1, 0, 0); const sx = bx - 6 - off[0], sy = by - 6 - off[1]; L.drawImage(T.canvas, sx, sy, bw + 12, bh + 12, sx, sy, bw + 12, bh + 12); L.restore();
+      if (m.peter) { L.save(); L.clip(path.hair); blob(L, -.044, .062, .012, .032, .25, '230,170,120', .3); L.restore(); } }   // the beard's edge on the gate side takes a little of the light
     if (bc) { L.save(); L.clip(bc); L.clip(path);
       gr = L.createLinearGradient(fx - .26 * S, top, fx + .16 * S, top + .5 * S); const kc = m.peter ? '255,172,100' : '255,200,140'; gr.addColorStop(0, `rgba(${kc},${m.key})`); gr.addColorStop(.5, `rgba(${kc},${m.key * .4})`); gr.addColorStop(1, `rgba(${kc},.02)`); L.fillStyle = gr; L.fillRect(...box);   // the key
+      if (m.peter) for (const fd of PFOLDS) fold(L, ...fd, true);   // the folds' edges catch the sun
       rim(L, T, off, path, box, [1, .4], (m.peter ? .016 : .012) * S, `rgba(255,214,158,${m.rimA})`, `rgba(255,200,140,${m.rimA * .35})`, .006 * S);   // the sun's edge
       L.restore(); }
   };

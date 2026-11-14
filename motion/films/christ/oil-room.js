@@ -16,6 +16,9 @@
             shoulder where his folded hands rest (still no hands drawn), the dawn rim grows on him, the candle grows small; Q13 (172.6)
             the room fills — a shaft from the window to the floor, the sun still rising to the last frame; from 175.6 the quiet wall
             between window and table (portrait y .24–.50, x .2–.8) carries the end card. The man stays above the words' band (.64).
+            (round 8: the man a person seen from behind — roomPersonPathsEnd, figEndOf — the dawn lying inside his shape on the
+            window side, no rim round him; the window laid back crisp from the unpainted plate and the pull back pans left a little
+            sooner so the whole window is in frame from ≈ 171.5 s; the second shaft's foot on him and the table before him.)
    The room is one painted plate (night and dawn, same seed); the figure is a layer of its own in front of it (parallax as the
    camera moves; the shoulders breathe very slightly; its rim flickers with the flame). Closed form: roomOil(ctx, u, mode) depends
    only on (u, mode). No words are drawn. Needs Pilot (lib.js) and kit-oilpaint.js (window.OIL).
@@ -37,7 +40,7 @@ function roomLayout() {
 // table just beyond his right shoulder — L.hands, where the dawn arrives at Q14 — and the open Bible lies beside them.
 function roomLayoutEnd() {
   const W = Pilot.W, H = Pilot.H, V = Pilot.ori === 'v';
-  const L = V ? { person: { cx: W * .4, top: H * .517, P: H * .118 }, win: [W * .025, H * .115, W * .155, H * .455], cand: { x: W * .7, top: H * .515, base: H * .546, r: 5.5 }, tableY: H * .506, tableF: H * .578, floorY: H * .592, tx0: -W * .05, tx1: W * 1.08, bw: W * .17, bd: H * .024 }
+  const L = V ? { person: { cx: W * .4, top: H * .517, P: H * .118 }, win: [W * .05, H * .11, W * .152, H * .43], cand: { x: W * .7, top: H * .515, base: H * .546, r: 5.5 }, tableY: H * .506, tableF: H * .578, floorY: H * .592, tx0: -W * .05, tx1: W * 1.08, bw: W * .17, bd: H * .024 }
               : { person: { cx: W * .44, top: H * .565, P: H * .175 }, win: [W * .1, H * .09, W * .19, H * .54], cand: { x: W * .625, top: H * .56, base: H * .615, r: 4.5 }, tableY: H * .555, tableF: H * .66, floorY: H * .675, tx0: -W * .05, tx1: W * 1.05, bw: W * .075, bd: H * .036 };
   const p = L.person, hx = p.cx + .25 * p.P, hy = p.top + .22 * p.P;
   L.hands = [hx, hy]; L.book = { cx: hx + L.bw * .4, cy: hy + L.bd * .15, w: L.bw, d: L.bd };
@@ -79,6 +82,33 @@ function roomPersonPaths() {
     [.05, .248], [.1, .262], [.165, .29], [.22, .335], [.25, .395], [.265, .47], [.27, .56], [.262, .64], [.25, .72], [.27, .79], [.305, .86], [.325, .93], [.315, .985], [.0, 1.0]]));
   const collar = smooth([[-.115, .262], [-.06, .232], [.0, .225], [.065, .232], [.12, .262], [.065, .284], [.0, .29], [-.065, .284]]);
   return { head, neck, body, collar };
+}
+
+// 'end' (round 8: the old man read as a bell-shaped lump with a white sticker rim): the same old man seen from behind, a little
+// turned toward the book on his right, as a person — the bowed head of grey permed hair on its nape, sloping shoulders, the cardigan
+// with its two arms hanging from the shoulders to the elbows (bent forward: his hands rest on the table in front of him, hidden),
+// a notch of shade under each elbow, the cardigan's ribbed hem across the small of the back, the folded legs on the floor a little
+// wider. Units of his height P, origin = top of the head, y down. Parts: head, ear, neck, torso, arms[2], hem, collar; fillAll(g).
+function roomPersonPathsEnd() {
+  const smooth = pts => { const p = new Path2D(), n = pts.length, m = i => [(pts[i][0] + pts[(i + 1) % n][0]) / 2, (pts[i][1] + pts[(i + 1) % n][1]) / 2];
+    p.moveTo(...m(n - 1)); for (let i = 0; i < n; i++) p.quadraticCurveTo(pts[i][0], pts[i][1], ...m(i)); p.closePath(); return p; };
+  const hc = [.012, .125], curls = [], rc = Pilot.rng(37);
+  for (let i = 0; i < 19; i++) { const a = Math.PI * (.86 + 1.28 * i / 18) + (rc() - .5) * .12, R = .02 + rc() * .01, d = .068 + rc() * .008; curls.push([Math.cos(a) * d, Math.sin(a) * d * 1.05, R]); }
+  const headPts = Array.from({ length: 120 }, (_, i) => { const a = i / 120 * 6.283, dx = Math.cos(a), dy = Math.sin(a);
+    let t = 1 / Math.hypot(dx / .08, dy / .09);
+    for (const [cx, cy, R] of curls) { const b = dx * cx + dy * cy, q = b * b - (cx * cx + cy * cy - R * R); if (q >= 0) t = Math.max(t, b + Math.sqrt(q)); }
+    return [hc[0] + dx * t * 1.08, hc[1] + dy * t * 1.08]; });
+  const head = smooth(headPts), ear = smooth([[.088, .14], [.1, .152], [.098, .185], [.086, .19], [.08, .16]]);
+  const neck = smooth([[-.042, .19], [.05, .19], [.058, .262], [-.05, .262]]);
+  const torsoPts = [[-.06, .246], [-.14, .272], [-.192, .31], [-.208, .36], [-.2, .46], [-.186, .56], [-.176, .64], [-.19, .7], [-.215, .77], [-.25, .835], [-.29, .875], [-.315, .925], [-.305, .972], [-.27, .996], [0, 1.0],
+    [.27, .996], [.305, .972], [.315, .925], [.29, .875], [.25, .835], [.215, .77], [.19, .7], [.176, .64], [.186, .56], [.2, .46], [.208, .36], [.192, .31], [.14, .272], [.06, .246], [0, .24]];
+  const torso = smooth(torsoPts);
+  const armPts = s => [[s * .15, .282], [s * .208, .3], [s * .238, .35], [s * .25, .44], [s * .247, .53], [s * .232, .585], [s * .204, .604], [s * .176, .585], [s * .164, .5], [s * .158, .4], [s * .155, .32]];
+  const arms = [-1, 1].map(s => smooth(armPts(s)));
+  const hem = smooth([[-.184, .622], [.184, .622], [.19, .668], [-.192, .67]]);
+  const collar = smooth([[-.1, .258], [-.05, .234], [.0, .228], [.055, .234], [.105, .258], [.06, .28], [.0, .286], [-.06, .28]]);
+  const fillAll = g => { for (const p of [torso, ...arms, neck, ear, head]) g.fill(p); };   // (each on its own: their windings differ)
+  return { head, ear, neck, torso, arms, hem, collar, fillAll };
 }
 
 async function buildRoomOil() {
@@ -183,7 +213,13 @@ async function buildRoomOil() {
   const paintOpt = { key: 'rembrandt', S, seed: 17, len: [4, 7.5], jit: .04, wid: V ? 1 / 150 : 1 / 200, cell: V ? 6 : 5.5, dirAt: (x, y) => -1.25 + 1.1 * (Pilot.noise(x / 420, y / 420) - .5) };
   for (const dawn of [false, true]) { const art = OIL.paint(plate(dawn), paintOpt); crisp(art); ROIL[dawn ? 'dawn' : 'night'] = art; }
   // 'end': the wider view of the same room, night and dawn, painted with the same hand
-  { const pE = painter(ROIL.LE); for (const dawn of [false, true]) { const art = OIL.paint(pE.plate(dawn), paintOpt); pE.crisp(art); ROIL[dawn ? 'endD' : 'endN'] = art; } }
+  // (round 8: the window's edge, painted over, showed as a ragged white strip at the frame's edge) the window itself is laid back
+  // in from the unpainted plate — straight frame, bars and sill — through a mask feathered just outside the frame, so the brush
+  // texture of the wall meets a clean window
+  { const pE = painter(ROIL.LE), LE = ROIL.LE; for (const dawn of [false, true]) { const pl = pE.plate(dawn), art = OIL.paint(pl, paintOpt); pE.crisp(art);
+      const [x0, y0, x1, y1] = LE.win, fw = .013 * W, m = fw * 1.15, R = [(x0 - m) * S, (y0 - m) * S, (x1 - x0 + 2 * m) * S, (y1 - y0 + 2 * m) * S].map(Math.round), mc = canvas(art.width, art.height), mx = mc.getContext('2d');
+      mx.filter = `blur(${(fw * .2 * S).toFixed(1)}px)`; mx.fillStyle = '#fff'; mx.fillRect(...R); mx.filter = 'none'; mx.globalCompositeOperation = 'source-in'; mx.drawImage(pl, 0, 0);
+      art.getContext('2d').drawImage(mc, 0, 0); ROIL[dawn ? 'endD' : 'endN'] = art; } }
   // the page close-up: the same room repainted for a rectangle round the right-hand page, finer (the camera ends L.zEnd times in)
   { const page = [B.cx + B.w * .24, B.cy - B.d * .05], mid = [(L.person.cx + L.flame[0]) / 2 + .02 * W, L.person.top + .3 * L.person.P], ze = L.zEnd;
     const rw = W / ze * 3.2, rh = H / ze * 2.6, cx = page[0] + .25 * (mid[0] - page[0]), cy = page[1] + .25 * (mid[1] - page[1]), rect = [cx - rw / 2, cy - rh / 2, rw, rh], Sc = ze * .85;
@@ -225,7 +261,62 @@ async function buildRoomOil() {
       rimD: rimOf(-.7, -.7, .02, '#cfdcf0', '#eef4ff'),   // dawn: the window is up and to the left
       rimW: L.end ? rimOf(-.85, -.53, .03, '#f6c486', '#f4e2c4') : null };   // 'end' Q14: the warm dawn shaft arriving on his shoulders and the left of his head
   };
-  ROIL.fig = figOf(L); ROIL.figE = figOf(ROIL.LE);
+  // 'end' (round 8): the old man as a person seen from behind (roomPersonPathsEnd), in two states painted once — night (almost black,
+  // the candle on his right finding the edge of his hair and right shoulder) and day (the room's dawn fill: the grey of his hair, the
+  // cardigan's wool, the arms parted from the back by shade) — and the dawn from the window on his left as a soft warm light lying
+  // INSIDE his shape on the head, the nape and the left shoulder and arm, strongest at the top, gone by the small of the back: no
+  // outline round him, no rim on the far side
+  const figEndOf = (L, near) => {   // near: the opening's close view (the candle's edge is the protagonist there: wider, brighter)
+ const Pp = L.person.P, Pa = roomPersonPathsEnd(), pad = .25, bw = Math.ceil((1 + 2 * pad) * Pp * S), bh = Math.ceil((1 + 2 * pad) * Pp * S), U = Pp * S;
+    const toP = g => { g.setTransform(U, 0, 0, U, (.5 + pad) * U, pad * U); }, mk = () => { const c = canvas(bw, bh); return [c, c.getContext('2d')]; };
+    const [mask, mg] = mk(); toP(mg); mg.fillStyle = '#fff'; Pa.fillAll(mg);
+    const lg = (g, x0, y0, x1, y1, stops) => { const gr = g.createLinearGradient(x0, y0, x1, y1); stops.forEach(([k, c]) => gr.addColorStop(k, c)); return gr; };
+    const blob = (g, x, y, rx, ry, col) => { g.save(); g.translate(x, y); g.scale(rx, ry); const gr = g.createRadialGradient(0, 0, 0, 0, 0, 1); gr.addColorStop(0, col); gr.addColorStop(1, col.replace(/[\d.]+\)$/, '0)')); g.fillStyle = gr; g.fillRect(-1, -1, 2, 2); g.restore(); };
+    // the light's directions in the plate: the window up on his left, the candle on the table to his right
+    const [hx, hy] = [L.person.cx, L.person.top + .12 * Pp], wcx = (L.win[0] + L.win[2]) / 2, wcy = (L.win[1] + L.win[3]) / 2, wl = Math.hypot(wcx - hx, wcy - hy), WL = [(wcx - hx) / wl, (wcy - hy) / wl];
+    const cl = Math.hypot(L.LP[0] - hx, L.LP[1] - hy - .5 * Pp), CL = [(L.LP[0] - hx) / cl, (L.LP[1] - hy - .5 * Pp) / cl];
+    const paint = (day) => { const [c, g] = mk(); toP(g);
+      g.save(); g.filter = `blur(${(.03 * U).toFixed(1)}px)`; g.fillStyle = day ? 'rgba(20,10,4,.55)' : 'rgba(8,4,2,.7)'; g.beginPath(); g.ellipse(day ? .06 : 0, .99, .4, .045, 0, 0, 6.283); g.fill(); g.restore();   // his shadow on the floor (by day thrown a little right)
+      const C = day ? { t0: '#3e3229', t1: '#2a201a', t2: '#231a14', arm: '#45382e', hem: '#4c3e33', hair: '#66615a', hairD: '#36322d', neck: '#5e4434', ear: '#6e4e3e' }
+                    : { t0: '#1c130d', t1: '#150e09', t2: '#0c0705', arm: '#1e150e', hem: '#21170f', hair: '#2a241f', hairD: '#17120e', neck: '#120b07', ear: '#1a110b' };
+      g.fillStyle = lg(g, 0, .25, 0, 1, [[0, C.t0], [.45, C.t1], [1, C.t2]]); g.fill(Pa.torso);
+      g.save(); g.clip(Pa.torso);   // the back: its bowed top a little lighter, the spine's soft valley, the far (right) side away from the window darker
+      g.fillStyle = lg(g, -.2, 0, .22, 0, [[0, 'rgba(255,230,200,0)'], [.55, 'rgba(0,0,0,0)'], [1, `rgba(0,0,0,${day ? .32 : .2})`]]); g.fillRect(-.4, 0, .8, 1.05);
+      blob(g, -.02, .34, .17, .1, `rgba(255,236,210,${day ? .1 : .03})`); blob(g, .0, .46, .022, .14, `rgba(0,0,0,${day ? .22 : .1})`);
+      g.fillStyle = C.hem; g.fill(Pa.hem); g.strokeStyle = `rgba(0,0,0,${day ? .22 : .12})`; g.lineWidth = .006; for (let x = -.185; x < .19; x += .018) { g.beginPath(); g.moveTo(x, .626); g.lineTo(x + .002, .666); g.stroke(); }   // the ribbed hem
+      g.fillStyle = `rgba(0,0,0,${day ? .22 : .2})`; g.fillRect(-.3, .668, .6, .018);
+      g.fillStyle = lg(g, 0, .68, 0, 1, [[0, 'rgba(0,0,0,.08)'], [1, `rgba(0,0,0,${day ? .22 : .45})`]]); g.fillRect(-.4, .68, .8, .4);   // the folded legs below, in their own shade
+      g.restore();
+      for (const [i, s] of [[0, -1], [1, 1]]) { const A = Pa.arms[i];   // the arms: shade where each parts from the back, the sleeve rounder toward the window
+        g.save(); g.filter = `blur(${(.012 * U).toFixed(1)}px)`; g.fillStyle = `rgba(0,0,0,${day ? .55 : .7})`; g.translate(-s * .012, .006); g.fill(A); g.restore();
+        g.fillStyle = lg(g, s * .15, 0, s * .25, 0, s < 0 ? [[0, C.arm], [1, C.arm]] : [[0, C.arm], [1, C.t1]]); g.fill(A);
+        g.save(); g.clip(A); g.fillStyle = lg(g, 0, .3, 0, .6, [[0, 'rgba(255,236,210,0)'], [.7, 'rgba(0,0,0,0)'], [1, `rgba(0,0,0,${day ? .3 : .2})`]]); g.fillRect(-.4, .25, .8, .4);
+        g.strokeStyle = `rgba(0,0,0,${day ? .25 : .15})`; g.lineWidth = .008; g.beginPath(); g.moveTo(s * .2, .5); g.quadraticCurveTo(s * .215, .555, s * .232, .575); g.stroke(); g.restore(); }   // the elbow's crease
+      g.fillStyle = C.neck; g.fill(Pa.neck); g.fillStyle = C.ear; g.fill(Pa.ear);
+      g.save(); g.filter = `blur(${(.006 * U).toFixed(1)}px)`; g.fillStyle = day ? 'rgba(70,54,44,.9)' : 'rgba(40,26,18,.7)'; g.fill(Pa.collar); g.fillStyle = 'rgba(0,0,0,.5)'; g.beginPath(); g.ellipse(.005, .272, .07, .016, 0, 0, 6.283); g.fill(); g.restore();   // the collar under the nape, the head's shade on it
+      g.fillStyle = lg(g, -.08, .05, .1, .2, [[0, C.hair], [1, C.hairD]]); g.fill(Pa.head);
+      g.save(); g.clip(Pa.head); g.filter = `blur(${(.005 * U).toFixed(1)}px)`; const r = rng(23);   // the permed curls: small lighter and darker turns
+      for (let i = 0; i < 90; i++) { const a = r() * 6.283, rr = Math.sqrt(r()) * .1, x = .012 + Math.cos(a) * rr, y = .125 + Math.sin(a) * rr; const lt = r() < .5;
+        g.fillStyle = lt ? `rgba(${day ? '170,164,156' : '90,80,70'},${day ? .16 : .1})` : `rgba(0,0,0,${day ? .22 : .15})`; g.beginPath(); g.ellipse(x, y, .007 + r() * .008, .005 + r() * .005, r() * 3, 0, 6.283); g.fill(); }
+      g.restore(); return c; };
+    // a light lying inside the shape on the edges that face it (the shape minus itself moved away from the light, blurred, kept inside),
+    // weighted by where it falls (wt: [cx, cy, rx, ry] in P units — strongest there, fading out)
+    const inside = (dir, k, col, blurK, wt, sharpA) => { const [e, eg] = mk(), d = k * U;
+      eg.drawImage(mask, 0, 0); eg.globalCompositeOperation = 'destination-out'; eg.drawImage(mask, -dir[0] * d, -dir[1] * d);
+      eg.globalCompositeOperation = 'source-in'; eg.fillStyle = col; eg.fillRect(0, 0, bw, bh);
+      const [o, og] = mk(); og.filter = `blur(${(blurK * U).toFixed(1)}px)`; og.drawImage(e, 0, 0); og.filter = `blur(${(.004 * U).toFixed(1)}px)`; og.globalAlpha = sharpA; og.drawImage(e, 0, 0); og.globalAlpha = 1; og.filter = 'none';
+      og.globalCompositeOperation = 'destination-in'; og.drawImage(mask, 0, 0);
+      toP(og); const [cx, cy, rx, ry] = wt; og.translate(cx, cy); og.scale(rx, ry); const gr = og.createRadialGradient(0, 0, 0, 0, 0, 1); gr.addColorStop(0, '#000'); gr.addColorStop(.5, 'rgba(0,0,0,.6)'); gr.addColorStop(1, 'rgba(0,0,0,0)'); og.fillStyle = gr; og.fillRect(-1, -1, 2, 2);
+      return o; };
+    const sideX = Math.sign(WL[0]) || -1;
+    return { body: paint(false), bodyD: paint(true), bw, bh, pad, Pp,
+      rimN: near ? inside(CL, .03, '#ffc274', .014, [.14, .24, .36, .42], 1) : inside(CL, .022, '#ffbe6a', .012, [.12, .2, .3, .34], .9),                              // the candle: the right of his hair and his right shoulder
+      lightW: inside(WL, .07, '#ffd49a', .032, [sideX * .1, .24, .36, .44], 1),                   // the dawn: head, nape, the left shoulder and arm
+      lightW2: inside([WL[0] * .4, -1], .03, '#ffd9a6', .025, [0, .18, .26, .2], .5),             // and a little on the tops of the head and shoulders
+      lightK: inside(WL, .05, '#f0c48c', .03, [sideX * .2, .86, .2, .18], .6) };                   // and the near knee on the floor            // and a little on the tops of the head and shoulders
+  };
+  // (round 8: the same old man at the start and the end) 'open' uses the end's figure too, in its night state; the old figure stays only for 'dawn'
+  ROIL.figOld = figOf(L); ROIL.fig = figEndOf(L, true); ROIL.figE = figEndOf(ROIL.LE);
   { const g = canvas(256, 256), x = g.getContext('2d'), im = x.createImageData(256, 256), r = rng(91); for (let i = 0; i < 65536; i++) { const v = 128 + (r() - .5) * 120; im.data[i * 4] = im.data[i * 4 + 1] = im.data[i * 4 + 2] = v; im.data[i * 4 + 3] = 255; }
     x.putImageData(im, 0, 0); ROIL.grain = g; }
 }
@@ -270,14 +361,14 @@ function roomCam(keys, u) {
 }
 
 function roomOil(ctx, u, mode = 'open') {
-  const { clamp, ss } = Pilot, dawnM = mode === 'dawn', endM = mode === 'end', openM = !dawnM && !endM, L = endM ? ROIL.LE : ROIL.L, { W, H, V, book: B } = L, S = ROIL.S, R0 = L.R0, Fg = endM ? ROIL.figE : ROIL.fig;
+  const { clamp, ss } = Pilot, dawnM = mode === 'dawn', endM = mode === 'end', openM = !dawnM && !endM, L = endM ? ROIL.LE : ROIL.L, { W, H, V, book: B } = L, S = ROIL.S, R0 = L.R0, Fg = endM ? ROIL.figE : dawnM ? ROIL.figOld : ROIL.fig;
   const page = [B.cx + B.w * .24, B.cy - B.d * .05], mid = [(L.person.cx + L.flame[0]) / 2 + .02 * W, L.person.top + .3 * L.person.P];
   // 'end' (u −0.1…21.5, film 159.4–181): one slow pull back from the man, the candle and the book (the window's edge just in at
   // the left) to the whole quiet room; the man's feet stay above the words' band all the way
   // (2026-11-14: it starts looking a little right of him — the candle where the sun of goldThree was, the man at the left edge, never
   // where the far cross stood during the 1.4 s dissolve — and drifts left as it pulls back until he sits in the room's middle-left)
-  const KEYS = endM ? (V ? [[-.2, .66 * W, .552 * H, 1.52], [5.5, .58 * W, .545 * H, 1.4], [10.5, .52 * W, .528 * H, 1.22], [16.1, .5 * W, .51 * H, 1.08], [21.6, .5 * W, .5 * H, 1.0]]
-                          : [[-.2, .66 * W, .6 * H, 1.52], [5.5, .58 * W, .585 * H, 1.37], [10.5, .52 * W, .56 * H, 1.2], [16.1, .5 * W, .53 * H, 1.07], [21.6, .5 * W, .5 * H, 1.0]])
+  const KEYS = endM ? (V ? [[-.2, .66 * W, .552 * H, 1.52], [5.5, .565 * W, .545 * H, 1.4], [10.5, .47 * W, .528 * H, 1.22], [16.1, .48 * W, .51 * H, 1.08], [21.6, .5 * W, .5 * H, 1.0]]
+                          : [[-.2, .66 * W, .6 * H, 1.52], [5.5, .575 * W, .585 * H, 1.37], [10.5, .5 * W, .56 * H, 1.2], [16.1, .49 * W, .53 * H, 1.07], [21.6, .5 * W, .5 * H, 1.0]])
     : dawnM
     ? [[0, mid[0], mid[1] - .02 * H, 1.18], [3.2, mid[0] - .02 * W, mid[1] - .04 * H, 1.26], [6.5, mid[0] - .05 * W, mid[1] - .07 * H, 1.36]]
     : null;
@@ -317,7 +408,11 @@ function roomOil(ctx, u, mode = 'open') {
     if (hl > 0) { ctx.save(); ctx.globalCompositeOperation = 'screen'; let gr = ctx.createRadialGradient(hx, hy, 0, hx, hy, R); gr.addColorStop(0, `rgba(255,222,170,${.38 * hl})`); gr.addColorStop(.45, `rgba(240,190,130,${.16 * hl})`); gr.addColorStop(1, 'rgba(200,150,100,0)');
       ctx.fillStyle = gr; ctx.fillRect(hx - R, hy - R, 2 * R, 2 * R);
       const p = L.person, [cx2, cy2] = sc(p.cx + .08 * p.P, p.top + .42 * p.P), R2 = .9 * p.P * z; gr = ctx.createRadialGradient(cx2, cy2, 0, cx2, cy2, R2);
-      gr.addColorStop(0, `rgba(255,216,160,${.5 * hl})`); gr.addColorStop(.45, `rgba(250,196,130,${.24 * hl})`); gr.addColorStop(1, 'rgba(220,160,100,0)'); ctx.fillStyle = gr; ctx.fillRect(cx2 - R2, cy2 - R2, 2 * R2, 2 * R2); ctx.restore(); } }
+      gr.addColorStop(0, `rgba(255,216,160,${.5 * hl})`); gr.addColorStop(.45, `rgba(250,196,130,${.24 * hl})`); gr.addColorStop(1, 'rgba(220,160,100,0)'); ctx.fillStyle = gr; ctx.fillRect(cx2 - R2, cy2 - R2, 2 * R2, 2 * R2);
+      // (round 8) the dawn lies on the table top in front of him, on both sides of his shoulders (he sits dark against it)
+      const [tx, ty] = sc(p.cx + .12 * p.P, L.tableY + .45 * (L.tableF - L.tableY)), rx = .95 * p.P * z, ry = .32 * p.P * z;
+      ctx.save(); ctx.translate(tx, ty); ctx.scale(rx, ry); gr = ctx.createRadialGradient(0, 0, 0, 0, 0, 1); gr.addColorStop(0, `rgba(255,222,168,${.42 * hl})`); gr.addColorStop(.5, `rgba(250,204,146,${.22 * hl})`); gr.addColorStop(1, 'rgba(230,180,120,0)'); ctx.fillStyle = gr; ctx.fillRect(-1, -1, 2, 2); ctx.restore();
+      ctx.restore(); } }
   // the flame and its lens bloom (a soft horizontal streak) — behind the figure, which stands nearer ('end': it grows small in the day)
   { const [fx2, fy2] = sc(L.flame[0], L.flame[1]), h = L.cand.r * 2.3 * z * (endM ? 1 - .25 * k : 1);
     roomFlame(ctx, fx2, fy2, h, T, endM ? 1 - .45 * k : 1);
@@ -337,10 +432,10 @@ function roomOil(ctx, u, mode = 'open') {
   // Q14 (2026-11-14: the dawn reaches HIM by ≈ 169 s): a second, narrower shaft from the upper window travels down across the floor
   // (its far end runs from the window to him, u 3 → 9.5) and lies over his shoulders, the table in front of him and the floor round him
   if (endM) { const a2 = ss(3, 9.5, u), p = L.person; if (a2 > 0) { const [x0, y0, x1, y1] = L.win, lp = (A, B, t) => [A[0] + (B[0] - A[0]) * t, A[1] + (B[1] - A[1]) * t];
-    const s0 = [x0 + (x1 - x0) * .3, y0 + (y1 - y0) * .25], s1 = [x1, y0 + (y1 - y0) * .6], e1 = lp(s1, [p.cx + .95 * p.P, L.tableY - .01 * H], a2), e0 = lp(s0, [p.cx - .55 * p.P, L.floorY + .045 * H], a2);
+    const s0 = [x0 + (x1 - x0) * .3, y0 + (y1 - y0) * .25], s1 = [x1, y0 + (y1 - y0) * .6], e1 = lp(s1, [p.cx + .8 * p.P, L.tableY + .004 * H], a2), e0 = lp(s0, [p.cx - .5 * p.P, L.floorY + .03 * H], a2);   // (round 8: its foot on him and the table before him, not the floor to his left)
     const q = [s0, s1, e1, e0].map(v => sc(v[0], v[1])), m0 = [(q[0][0] + q[1][0]) / 2, (q[0][1] + q[1][1]) / 2], m1 = [(q[2][0] + q[3][0]) / 2, (q[2][1] + q[3][1]) / 2], al = .26 * k * (.5 + .5 * a2);
     ctx.save(); ctx.globalCompositeOperation = 'screen'; ctx.filter = `blur(${(14 * z).toFixed(1)}px)`;
-    const gr = ctx.createLinearGradient(m0[0], m0[1], m1[0], m1[1]); gr.addColorStop(0, `rgba(255,224,170,${al * .6})`); gr.addColorStop(.75, `rgba(255,212,150,${al})`); gr.addColorStop(1, 'rgba(250,200,140,0)');
+    const gr = ctx.createLinearGradient(m0[0], m0[1], m1[0], m1[1]); gr.addColorStop(0, `rgba(255,224,170,${al * .5})`); gr.addColorStop(.85, `rgba(255,212,150,${al})`); gr.addColorStop(1, `rgba(250,200,140,${al * .7})`);
     ctx.fillStyle = gr; ctx.beginPath(); ctx.moveTo(...q[0]); for (const v of q.slice(1)) ctx.lineTo(...v); ctx.closePath(); ctx.fill(); ctx.restore(); } }
   // dawn: the window blooms like a lens
   if (k > 0) { const [x0, y0, x1, y1] = L.win, [wx, wy] = sc((x0 + x1) / 2, y0 + (y1 - y0) * .7); ctx.save(); ctx.globalCompositeOperation = 'screen';
@@ -356,10 +451,17 @@ function roomOil(ctx, u, mode = 'open') {
     const ox = p.cx - (.5 + Fg.pad) * p.P, oy = p.top - Fg.pad * p.P, dw = Fg.bw / S, dh = Fg.bh / S;
     ctx.translate(p.cx, p.top + .98 * p.P); ctx.scale(1 + .004 * br, 1 + .01 * br); ctx.translate(-p.cx, -(p.top + .98 * p.P));   // breathing from below the shoulders
     ctx.drawImage(Fg.body, ox, oy, dw, dh);
-    ctx.globalCompositeOperation = 'lighter';
-    ctx.globalAlpha = (1 - .55 * k) * (.72 + .3 * fl); ctx.drawImage(Fg.rimN, ox, oy, dw, dh);
-    if (k > 0) { ctx.globalAlpha = k; ctx.drawImage(Fg.rimD, ox, oy, dw, dh); }
-    if (endM) { const ar = ss(5.5, 9.5, u); if (ar > 0) { ctx.globalAlpha = .6 * ar; ctx.drawImage(Fg.rimW, ox, oy, dw, dh); } }   // Q14: the shaft on his shoulders
+    if (Fg.bodyD) {   // (round 8) the day comes into his wool and hair; the candle's edge fades; the dawn lies on his head and left shoulder
+      const dk = clamp((k - .12) / .55), ar = endM ? ss(4.5, 9.5, u) * (.9 + .1 * Math.sin(T * .7)) : 0;
+      if (dk > 0) { ctx.globalAlpha = dk; ctx.drawImage(Fg.bodyD, ox, oy, dw, dh); }
+      ctx.globalCompositeOperation = 'lighter';
+      ctx.globalAlpha = (1 - k) * (.6 + .3 * fl); ctx.drawImage(Fg.rimN, ox, oy, dw, dh); if (openM) { ctx.globalAlpha = .55 + .3 * fl; ctx.drawImage(Fg.rimN, ox, oy, dw, dh); }   // (the opening: the candle edge stronger)
+      if (ar > 0) { ctx.globalAlpha = ar; ctx.drawImage(Fg.lightW, ox, oy, dw, dh); ctx.globalAlpha = .3 * ar; ctx.drawImage(Fg.lightW, ox, oy, dw, dh); ctx.globalAlpha = .25 * ar; ctx.drawImage(Fg.lightW2, ox, oy, dw, dh); ctx.globalAlpha = .7 * ar; ctx.drawImage(Fg.lightK, ox, oy, dw, dh); }
+    } else {
+      ctx.globalCompositeOperation = 'lighter';
+      ctx.globalAlpha = (1 - .55 * k) * (.72 + .3 * fl); ctx.drawImage(Fg.rimN, ox, oy, dw, dh);
+      if (k > 0) { ctx.globalAlpha = k; ctx.drawImage(Fg.rimD, ox, oy, dw, dh); }
+    }
     ctx.restore(); }
   // dust in the candle light; at dawn in the light from the window
   { const r = Pilot.rng(41); ctx.save(); ctx.globalCompositeOperation = 'screen';

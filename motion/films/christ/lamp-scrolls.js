@@ -383,9 +383,9 @@
     isaiah: V ? [[-3.8, { x: 300, z: -700, h: 680, p: 31, cy: .34, f: 1200 }], [1.5, { x: 390, z: -780, h: 600, p: 23, cy: .37, f: 1200 }], [7.6, { x: 400, z: -820, h: 560, p: 16, cy: .385, f: 1250 }]]
               : [[-3.8, { x: 120, z: -920, h: 880, p: 38, cy: .38, f: 1150 }], [1.5, { x: 170, z: -980, h: 730, p: 26, cy: .38, f: 1150 }], [7.6, { x: 260, z: -960, h: 560, p: 14, cy: .395, f: 1150 }]],
     psalm: V ? [[0, { x: 420, z: -520, h: 620, p: 30, cy: .33, f: 1200 }], [4, { x: 500, z: -450, h: 560, p: 31, cy: .33, f: 1200 }], [9.5, { x: 550, z: -380, h: 510, p: 32, cy: .335, f: 1200 }],
-               [11.6, { x: 470, z: -400, h: 520, p: 33, cy: .335, f: 1200 }], [13.4, { x: 40, z: -430, h: 520, p: 33, cy: .34, f: 1200 }], [16.5, { x: 10, z: -500, h: 560, p: 32, cy: .345, f: 1200 }]]
+               [11.4, { x: 470, z: -400, h: 520, p: 33, cy: .335, f: 1200 }], [14.0, { x: 40, z: -430, h: 520, p: 33, cy: .34, f: 1200 }], [16.5, { x: 10, z: -500, h: 560, p: 32, cy: .345, f: 1200 }]]
              : [[0, { x: 320, z: -760, h: 740, p: 34, cy: .36, f: 1150 }], [4, { x: 420, z: -640, h: 640, p: 35, cy: .36, f: 1150 }], [9.5, { x: 500, z: -500, h: 560, p: 36, cy: .36, f: 1150 }],
-               [11.6, { x: 430, z: -520, h: 560, p: 37, cy: .36, f: 1150 }], [13.4, { x: 90, z: -560, h: 560, p: 39, cy: .35, f: 1150 }], [16.5, { x: 50, z: -640, h: 600, p: 38, cy: .355, f: 1150 }]],
+               [11.4, { x: 430, z: -520, h: 560, p: 37, cy: .36, f: 1150 }], [14.0, { x: 90, z: -560, h: 560, p: 39, cy: .35, f: 1150 }], [16.5, { x: 50, z: -640, h: 600, p: 38, cy: .355, f: 1150 }]],
   };
 
   function isaiah(ctx, u) {
@@ -403,10 +403,16 @@
     finish(ctx, u, f[0], f[1] + 200, lampI);
   }
 
-  function psalm(ctx, u) {
+  // the lamp's light (psalm). 8차 이상 확인 (97.87: the whole room jumped brighter in one frame, luma 33→41): the ignition flare
+  // was a step (0 → .25 the frame the ember touched the wick). The room's light now rises over ~0.5 s (flare eased in, then
+  // decaying); only the flame itself catches at once (a small flame the instant the ember lands — flameOn).
+  const psalmLight = u => { const ign = ss(.95, 1.7, u), flare = .25 * ss(.95, 1.45, u) * Math.exp(-Math.max(0, u - 1.25) * 3);
+    return { ign, lampI: (ign * 1.26 + flare) * flick(u), amb: .34 + .7 * (1 - ign), flameOn: Math.max(ign, .45 * ss(.95, 1.12, u)) }; };
+  const xlPsalm = u => lerp(90, V ? -330 : -420, eio(clamp((u - 11.6) / 1.4)));
+  function psalm(ctx, u, sub = false) {
     setCam(camAt(CAM.psalm, u));
-    const color = ss(.6, 3.2, u), ign = ss(.95, 1.7, u), lampI = (ign * 1.26 + (u > .95 ? .25 * Math.exp(-(u - .95) * 3) : 0)) * flick(u), amb = .34 + .7 * (1 - ign);
-    const xr = 780, xl = lerp(90, V ? -330 : -420, eio(clamp((u - 11.6) / 1.4)));
+    const color = ss(.6, 3.2, u), { ign, lampI, amb, flameOn } = psalmLight(u);
+    const xr = 780, xl = xlPsalm(u);
     // line A: embers settle (dots), the line warms, then at 6.0 it wakes to gold right → left; line B wakes at 12.2
     const dots = S.embers.filter(e => e.land).map(e => [e.land, u < e.t1 ? 0 : (Math.exp(-(u - e.t1) * 1.4) * .9 + .25) * (1 - ss(6, 7, u))]);
     const A = { G: S.goldA, warm: ss(1.8, 3.3, u) * (.85 + .15 * Math.sin(u * 5)), dots, reveal: clamp((u - 6.0) / .9), lit: ss(6.0, 6.9, u), pulse: Math.exp(-Math.max(0, u - 6.9) * .8) };
@@ -415,25 +421,44 @@
     drawTable(ctx, lampI, amb, xl, xr);   // (no jar here: the camera pans along the scroll and the jar showed cut off at the edge)
     drawLamp(ctx, u, ign, 0, lampI);
     drawSheet(ctx, S.psa, xl, xr, lampI, amb, 0, [A, B]);
-    const f = flame(ctx, u, ign, 0); smoke(ctx, u, f, u < 1 ? .9 : .7);
+    const f = flame(ctx, u, flameOn, 0); smoke(ctx, u, f, u < 1 ? .9 : .7);
     // light blooms where a line wakes (screen space, over the paper)
     for (const [L, t0] of [[A, 6.0], [B, 12.2]]) { if (L.lit <= 0) continue; const G = L.G, k = L.reveal, xm = lerp(G.X1, G.X0, Math.min(k, 1) * .5 + (k >= 1 ? .0 : 0)), p = proj(lerp(G.X1, G.X0, Math.min(1, k) * .5), 6, G.Z), sc = cam.f / p[2];
       const burst = Math.exp(-Math.max(0, u - t0 - .3) * 1.6) * ss(t0, t0 + .3, u);
       ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.translate(p[0], p[1]); ctx.scale(2.6, 1);
       Lamplit.glow(ctx, 0, 0, 260 * sc, [255, 196, 100], (.3 * L.lit + .5 * burst)); ctx.restore(); }
-    bloom(ctx, f, ign, lampI);
+    bloom(ctx, f, flameOn, lampI);
     // the black-and-white of the scene before still lingers, then colour comes back (the embers keep their gold)
     if (color < 1) { ctx.save(); ctx.globalCompositeOperation = 'saturation'; ctx.globalAlpha = 1 - color; ctx.fillStyle = 'rgb(128,128,128)'; ctx.fillRect(0, 0, W, H);
       ctx.globalCompositeOperation = 'multiply'; ctx.globalAlpha = (1 - color) * .5; ctx.fillStyle = 'rgb(150,155,170)'; ctx.fillRect(0, 0, W, H); ctx.restore(); }
     if (ign < 1) { ctx.save(); ctx.globalCompositeOperation = 'screen'; Lamplit.glow(ctx, W * .6, -H * .05, Math.max(W, H) * .7, [200, 190, 175], .22 * (1 - ign)); ctx.restore(); }   // the light of the cry above, before the lamp
     drawEmbers(ctx, u);
-    finish(ctx, u, f[0], f[1] + 200, lampI + .3);
+    if (!sub) finish(ctx, u, f[0], f[1] + 200, lampI + .3);
+  }
+  // 8차 이상 확인 (108.5–109.5 "두루마리·글줄이 두 겹"): while the camera panned along the scroll the ink moved ~18 px a frame —
+  // more than the spacing of its own strokes, so at 30 fps the rows strobed into two overlapping copies. The pan is now slower
+  // (11.4–14.0 instead of 11.6–13.4) and, while the picture moves, each frame is the average of a few instants across half a
+  // frame (a 180° film shutter): the lines smear a little along the motion instead of doubling. Grain/vignette once, on top.
+  function psalmShutter(ctx, u) {
+    const h = 1 / 120, a = camAt(CAM.psalm, u - h), b = camAt(CAM.psalm, u + h);
+    const move = 1.8 * Math.max(Math.hypot(b.x - a.x, b.z - a.z, b.h - a.h), .5 * Math.abs(xlPsalm(u + h) - xlPsalm(u - h)));   // ≈ px moved in half a frame (f/d ≈ 1.8 at the near rows)
+    const n = Math.min(7, Math.ceil(move / 2));
+    if (n <= 1) { psalm(ctx, u); return; }
+    if (!S.acc || S.acc.width !== W) { S.acc = canvas(W, H); S.sub = canvas(W, H); }
+    const A = S.acc.getContext('2d'), B = S.sub.getContext('2d');
+    for (let i = 0; i < n; i++) { const ui = u + (i / (n - 1) - .5) * 2 * h;
+      B.setTransform(1, 0, 0, 1, 0, 0); B.globalAlpha = 1; B.globalCompositeOperation = 'source-over'; B.filter = 'none'; B.fillStyle = '#050403'; B.fillRect(0, 0, W, H);
+      B.save(); psalm(B, ui, true); B.restore();
+      A.setTransform(1, 0, 0, 1, 0, 0); A.globalCompositeOperation = 'source-over'; A.globalAlpha = 1 / (i + 1); A.drawImage(S.sub, 0, 0); }   // running average
+    A.globalAlpha = 1; ctx.drawImage(S.acc, 0, 0);
+    setCam(camAt(CAM.psalm, u)); const f = proj(FLAME.x, FLAME.y, FLAME.z);
+    finish(ctx, u, f[0], f[1] + 200, psalmLight(u).lampI + .3);
   }
 
   function scene(ctx, u, which) {
     if (!S.isa) build();
     ctx.save(); ctx.fillStyle = '#050403'; ctx.fillRect(0, 0, W, H);
-    if (which === 'psalm') psalm(ctx, u); else isaiah(ctx, u);
+    if (which === 'psalm') psalmShutter(ctx, u); else isaiah(ctx, u);
     ctx.restore(); }
 
   window.__LampScrolls = { build, scene, S };

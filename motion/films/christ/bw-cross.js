@@ -62,8 +62,15 @@
       ctx.globalCompositeOperation = o.warmMode || 'color'; ctx.globalAlpha = 1; ctx.fillStyle = gw; ctx.fillRect(0, 0, W, H); }
     // gate flicker
     // (the per-frame part scales with o.flicker: in the 8차 darkness the full-size flicker jumped ±5 luma a frame — frame-qa pops)
-    const fk = o.flicker || .09, fl = (noise(t * 9.3, 4.1) - .5) * fk + (rng(fi * 13 + 5)() - .5) * .03 * fk / .09;
-    ctx.globalCompositeOperation = 'source-over'; ctx.globalAlpha = Math.abs(fl); ctx.fillStyle = fl > 0 ? '#fff' : '#000'; ctx.fillRect(0, 0, W, H);
+    // o.flickerRel (the darkness, round 8 fix): a relative, slow breathing of the exposure instead — the white fill above adds the
+    // same luma to black as to grey (+3.4 a frame on a mean of 25 = the 93.17 / 93.83 jumps of ±8 %), and its 9.3 Hz noise and
+    // per-frame random part step every frame. Here the frame is lifted by adding itself (lighter) or lowered by black, two slow
+    // noises (≤ 1.6 % change a frame), so the flicker scales with the picture and never jumps.
+    if (o.flickerRel) { const a = o.flickerRel, fl = (noise(t * 2.4, 4.1) - .5) * 2 * a + (noise(t * 5.1, 7.3) - .5) * .6 * a;
+      if (fl > 0) { ctx.globalCompositeOperation = 'lighter'; ctx.globalAlpha = fl; ctx.drawImage(ctx.canvas, 0, 0, ctx.canvas.width, ctx.canvas.height, 0, 0, W, H); }
+      else { ctx.globalCompositeOperation = 'source-over'; ctx.globalAlpha = -fl; ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H); } }
+    else { const fk = o.flicker || .09, fl = (noise(t * 9.3, 4.1) - .5) * fk + (rng(fi * 13 + 5)() - .5) * .03 * fk / .09;
+      ctx.globalCompositeOperation = 'source-over'; ctx.globalAlpha = Math.abs(fl); ctx.fillStyle = fl > 0 ? '#fff' : '#000'; ctx.fillRect(0, 0, W, H); }
     // grain (24 fps, a different plate and flip each frame)
     const r = rng(fi * 7 + 1), gi = fi % B.grain.length; ctx.globalCompositeOperation = 'overlay'; ctx.globalAlpha = o.grain || .42;
     ctx.save(); if (r() < .5) { ctx.translate(W, 0); ctx.scale(-1, 1); } if (r() < .5) { ctx.translate(0, H); ctx.scale(1, -1); }
@@ -191,7 +198,7 @@
     // 8차: dark from the first frame (Mt 27:45 "제육시로부터 온 땅에 어둠이 임하여") — the 7차 grey overcast read as day
     const dk = ss(.2, 3.9, u), sb = lerp(1, .96, dk) * lerp(1, .8, q) * lerp(1, .5, endk);
     ctx.setTransform(1, 0, 0, 1, 0, 0);
-    const sk = ctx.createLinearGradient(0, 0, 0, H * .62); sk.addColorStop(0, `rgb(${44 * sb | 0},${44 * sb | 0},${46 * sb | 0})`); sk.addColorStop(.6, `rgb(${52 * sb | 0},${52 * sb | 0},${53 * sb | 0})`); sk.addColorStop(1, `rgb(${66 * sb | 0},${65 * sb | 0},${64 * sb | 0})`);
+    const sk = ctx.createLinearGradient(0, 0, 0, H * .62); sk.addColorStop(0, `rgb(${45 * sb | 0},${45 * sb | 0},${45 * sb | 0})`); sk.addColorStop(.6, `rgb(${52 * sb | 0},${52 * sb | 0},${52 * sb | 0})`); sk.addColorStop(1, `rgb(${65 * sb | 0},${65 * sb | 0},${65 * sb | 0})`);
     ctx.fillStyle = sk; ctx.fillRect(0, 0, W, H);
     // clouds: three layers moving at their own speeds (the near ones faster)
     const CL = [[0, 10, .5, -.06, V ? .44 : .62], [1, 24, .42, .02, V ? .44 : .62], [2, 46, .2, .06, V ? .26 : .36]];   // 8차: barely parted
@@ -208,25 +215,25 @@
     layer(.6);
     { const by = X.hor, bh = H * (V ? .09 : .12); ctx.globalCompositeOperation = 'screen';
       const bt = H * (V ? .2 : .26), tg = ctx.createLinearGradient(0, by - bt, 0, by - bh * .5);   // a faint lift above it: the low sky behind the crosses
-      tg.addColorStop(0, 'rgba(180,178,172,0)'); tg.addColorStop(1, `rgba(190,187,180,${.1 * bandA})`); ctx.fillStyle = tg; ctx.fillRect(-W, by - bt, W * 3, bt - bh);
+      tg.addColorStop(0, 'rgba(177,177,177,0)'); tg.addColorStop(1, `rgba(186,186,186,${.1 * bandA})`); ctx.fillStyle = tg; ctx.fillRect(-W, by - bt, W * 3, bt - bh);
       const bg = ctx.createLinearGradient(0, by - bh, 0, by + H * .004);
-      bg.addColorStop(0, `rgba(200,196,188,${.1 * bandA})`); bg.addColorStop(.5, `rgba(206,201,192,${.22 * bandA})`); bg.addColorStop(.86, `rgba(228,222,210,${.52 * bandA})`); bg.addColorStop(1, `rgba(236,230,218,${.46 * bandA})`);
+      bg.addColorStop(0, `rgba(196,196,196,${.1 * bandA})`); bg.addColorStop(.5, `rgba(201,201,201,${.22 * bandA})`); bg.addColorStop(.86, `rgba(222,222,222,${.52 * bandA})`); bg.addColorStop(1, `rgba(230,230,230,${.46 * bandA})`);
       ctx.fillStyle = bg; ctx.fillRect(-W, by - bh, W * 3, bh + H * .004);
       const bx = X.cx + X.sp * (V ? 1.9 : 2.6), rw = V ? W * .75 : W * .5;   // a little more of it beside the hill, to the right — still a band, not a spot
       ctx.save(); ctx.translate(bx, by - bh * .12); ctx.scale(1, bh * .6 / rw); const be = ctx.createRadialGradient(0, 0, 0, 0, 0, rw);
-      be.addColorStop(0, `rgba(236,230,218,${.3 * bandA})`); be.addColorStop(.5, `rgba(220,214,204,${.14 * bandA})`); be.addColorStop(1, 'rgba(210,204,196,0)'); ctx.fillStyle = be; ctx.fillRect(-rw, -rw, rw * 2, rw * 2); ctx.restore();
+      be.addColorStop(0, `rgba(230,230,230,${.3 * bandA})`); be.addColorStop(.5, `rgba(215,215,215,${.14 * bandA})`); be.addColorStop(1, 'rgba(205,205,205,0)'); ctx.fillStyle = be; ctx.fillRect(-rw, -rw, rw * 2, rw * 2); ctx.restore();
       ctx.globalAlpha = .5 * bandA; ctx.globalCompositeOperation = 'multiply';   // thin strata of cloud drawn across it
       const cw = W * 1.6, off = ((t * 18) % cw + cw) % cw; for (const o of [-cw, 0, cw]) ctx.drawImage(B.clouds[2], o + off - W * .3, by - bh * 1.1, cw, bh * .9);
       ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over'; }
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     // --- far land and the city wall (atmospheric: lighter than the hill)
-    layer(.6); ctx.fillStyle = `rgb(${56 * sb | 0},${56 * sb | 0},${57 * sb | 0})`;
+    layer(.6); ctx.fillStyle = `rgb(${56 * sb | 0},${56 * sb | 0},${56 * sb | 0})`;
     ctx.beginPath(); ctx.moveTo(-W, H * 1.2); for (let x = -W; x <= W * 2; x += 12) ctx.lineTo(x, X.hor + (fbm(x * .003, 7.7, 4) - .5) * H * .03); ctx.lineTo(W * 2, H * 1.2); ctx.fill();
-    { const hz = ctx.createLinearGradient(0, X.hor - H * .05, 0, X.hor + H * .03); hz.addColorStop(0, 'rgba(130,130,128,0)'); hz.addColorStop(.7, `rgba(130,130,128,${.14 * sb})`); hz.addColorStop(1, 'rgba(130,130,128,0)'); ctx.fillStyle = hz; ctx.fillRect(-W, X.hor - H * .05, W * 3, H * .08); }
-    { const wx0 = V ? W * .02 : W * .06, wx1 = V ? W * .3 : W * .34, wy = X.hor - H * .004; ctx.fillStyle = `rgb(${30 * sb | 0},${30 * sb | 0},${31 * sb | 0})`; ctx.beginPath(); ctx.moveTo(wx0, wy + H * .02);
+    { const hz = ctx.createLinearGradient(0, X.hor - H * .05, 0, X.hor + H * .03); hz.addColorStop(0, 'rgba(129,129,129,0)'); hz.addColorStop(.7, `rgba(129,129,129,${.14 * sb})`); hz.addColorStop(1, 'rgba(129,129,129,0)'); ctx.fillStyle = hz; ctx.fillRect(-W, X.hor - H * .05, W * 3, H * .08); }
+    { const wx0 = V ? W * .02 : W * .06, wx1 = V ? W * .3 : W * .34, wy = X.hor - H * .004; ctx.fillStyle = `rgb(${30 * sb | 0},${30 * sb | 0},${30 * sb | 0})`; ctx.beginPath(); ctx.moveTo(wx0, wy + H * .02);
       for (let x = wx0; x < wx1; x += H * .008) { const tw = Math.abs(x - (wx0 + (wx1 - wx0) * .62)) < H * .012 ? H * .022 : 0; ctx.lineTo(x, wy - H * .014 - tw); ctx.lineTo(x + H * .005, wy - H * .014 - tw); ctx.lineTo(x + H * .005, wy - H * .011 - tw); ctx.lineTo(x + H * .008, wy - H * .011 - tw); }
       ctx.lineTo(wx1, wy + H * .02); ctx.fill(); }
-    { const hz = ctx.createLinearGradient(0, X.hor, 0, X.hor + H * .025); hz.addColorStop(0, `rgba(150,148,144,${.22 * bandA})`); hz.addColorStop(1, 'rgba(150,148,144,0)');   // the far plain just under the band catches a little of it
+    { const hz = ctx.createLinearGradient(0, X.hor, 0, X.hor + H * .025); hz.addColorStop(0, `rgba(147,147,147,${.22 * bandA})`); hz.addColorStop(1, 'rgba(147,147,147,0)');   // the far plain just under the band catches a little of it
       ctx.globalCompositeOperation = 'screen'; ctx.fillStyle = hz; ctx.fillRect(-W, X.hor, W * 3, H * .025); ctx.globalCompositeOperation = 'source-over'; }
     layer(1);
     // three crosses
@@ -237,28 +244,28 @@
     // --- the hill: rock, scree and dry grass, its rough crest picked out by the low light behind it
     layer(1);
     { const hv = lerp(.6, .48, q) * lerp(1, .6, endk), hill = new Path2D(); hill.moveTo(-W, H * 1.5); for (let x = -W; x <= W * 2; x += 6) hill.lineTo(x, X.crest(x)); hill.lineTo(W * 2, H * 1.5); hill.closePath();
-      const hg = ctx.createLinearGradient(0, X.cy, 0, X.cy + X.A * 1.4); hg.addColorStop(0, `rgb(${46 * hv | 0},${46 * hv | 0},${47 * hv | 0})`); hg.addColorStop(1, `rgb(${30 * hv | 0},${30 * hv | 0},${31 * hv | 0})`);
+      const hg = ctx.createLinearGradient(0, X.cy, 0, X.cy + X.A * 1.4); hg.addColorStop(0, `rgb(${46 * hv | 0},${46 * hv | 0},${46 * hv | 0})`); hg.addColorStop(1, `rgb(${30 * hv | 0},${30 * hv | 0},${30 * hv | 0})`);
       ctx.fillStyle = hg; ctx.fill(hill);
       ctx.save(); ctx.clip(hill); ctx.globalAlpha = .22 * hv; ctx.drawImage(X.tex, X.cx - X.sig * 2.4, X.cy - H * .02, X.sig * 4.8, X.A * 1.6 + H * .1); ctx.globalAlpha = 1;
       ctx.globalAlpha = .55 * hv; ctx.drawImage(X.relief, X.reliefAt[0], X.reliefAt[1]); ctx.globalAlpha = 1;
       ctx.restore();
-      ctx.strokeStyle = `rgb(${18 * hv | 0},${18 * hv | 0},${19 * hv | 0})`; ctx.lineCap = 'round'; ctx.lineWidth = 1.6;
+      ctx.strokeStyle = `rgb(${18 * hv | 0},${18 * hv | 0},${18 * hv | 0})`; ctx.lineCap = 'round'; ctx.lineWidth = 1.6;
       for (const tf of X.tufts) { const y = X.crest(tf.x) + 1 + tf.d, sw = Math.sin(t * 1.5 + tf.b) * .15 + .1; for (let j = -tf.n; j <= tf.n; j++) { ctx.beginPath(); ctx.moveTo(tf.x + j * 1.5, y); ctx.quadraticCurveTo(tf.x + j * 2.5, y - tf.h * .5, tf.x + j * tf.h * .3 + tf.h * sw, y - tf.h * (1 - Math.abs(j) * .15)); ctx.stroke(); } }
       if (q > 0) { ctx.save(); ctx.globalCompositeOperation = 'screen'; ctx.lineWidth = 3; ctx.filter = 'blur(2px)'; const rg = ctx.createLinearGradient(X.cx - X.sig * .2, 0, X.cx + X.sig * 1.6, 0);   // the crest's lip on the side toward the gap
-        rg.addColorStop(0, 'rgba(200,198,194,0)'); rg.addColorStop(.6, `rgba(235,230,222,${.18 * q * bandA})`); rg.addColorStop(1, 'rgba(200,198,194,0)'); ctx.strokeStyle = rg;
+        rg.addColorStop(0, 'rgba(197,197,197,0)'); rg.addColorStop(.6, `rgba(229,229,229,${.18 * q * bandA})`); rg.addColorStop(1, 'rgba(197,197,197,0)'); ctx.strokeStyle = rg;
         ctx.beginPath(); for (let x = X.cx - X.sig * .2; x <= X.cx + X.sig * 1.6; x += 4) { const y = X.crest(x) + 1.2; x === X.cx - X.sig * .2 ? ctx.moveTo(x, y) : ctx.lineTo(x, y); } ctx.stroke(); ctx.restore(); } }
     // soldiers keeping watch at the foot
     { const sh = X.hc * .24; [[-1.5, 1, 1, 0, .06], [1.52, 1, -1, 2.1, .08]].forEach(([dx, sp, fc, ph, dn]) => { const x = X.cx + X.sp * dx; sentry(ctx, x, X.crest(x) + X.hc * dn, sh * (1 + dn * .4), sp, fc, t, ph); }); }
     // --- mist lying in the valley between the hill and the near ridge
     layer(1.35);
     { const my = (X.cy + X.A * .95 + ridgeY(X.cx)) / 2, mg = ctx.createLinearGradient(0, my - H * .09, 0, my + H * .09);
-      const ma = (.2 - .06 * q) * (1 - endk) * (1 - ss(.15, .9, push) * .6); mg.addColorStop(0, 'rgba(96,96,94,0)'); mg.addColorStop(.55, `rgba(96,96,94,${ma})`); mg.addColorStop(1, 'rgba(100,100,98,0)');
+      const ma = (.2 - .06 * q) * (1 - endk) * (1 - ss(.15, .9, push) * .6); mg.addColorStop(0, 'rgba(95,95,95,0)'); mg.addColorStop(.55, `rgba(95,95,95,${ma})`); mg.addColorStop(1, 'rgba(99,99,99,0)');
       ctx.fillStyle = mg; ctx.fillRect(-W, my - H * .09, W * 3, H * .18);
       ctx.globalAlpha = ma * .8; ctx.drawImage(B.clouds[0], -W * .4 + (t * 14) % (W * .4), my - H * .06, W * 2, H * .09); ctx.globalAlpha = 1; }
     // --- the near ridge: the women standing far off, close together, leaning on one another; dry grass in the wind
     layer(2.3);
     { const fv = lerp(.7, .55, q), ridge = new Path2D(); ridge.moveTo(-W, H * 2); for (let x = -W; x <= W * 2; x += 8) ridge.lineTo(x, ridgeY(x)); ridge.lineTo(W * 2, H * 2); ridge.closePath();
-      const fg = ctx.createLinearGradient(0, X.ridge - H * .01, 0, X.ridge + H * .32); fg.addColorStop(0, `rgb(${50 * fv | 0},${50 * fv | 0},${51 * fv | 0})`); fg.addColorStop(.4, `rgb(${38 * fv | 0},${38 * fv | 0},${39 * fv | 0})`); fg.addColorStop(1, `rgb(${28 * fv | 0},${28 * fv | 0},${29 * fv | 0})`);
+      const fg = ctx.createLinearGradient(0, X.ridge - H * .01, 0, X.ridge + H * .32); fg.addColorStop(0, `rgb(${50 * fv | 0},${50 * fv | 0},${50 * fv | 0})`); fg.addColorStop(.4, `rgb(${38 * fv | 0},${38 * fv | 0},${38 * fv | 0})`); fg.addColorStop(1, `rgb(${28 * fv | 0},${28 * fv | 0},${28 * fv | 0})`);
       ctx.fillStyle = fg; ctx.fill(ridge); ctx.save(); ctx.clip(ridge); ctx.globalAlpha = .4 * fv; ctx.drawImage(X.tex, -W * .2, X.ridge - H * .01, W * 1.4, H * .4); ctx.restore(); ctx.globalAlpha = 1;
       { ctx.fillStyle = '#0d0d0e'; ctx.globalAlpha = 1 - ss(4.2, 5.8, u);   // the push carries them to the left edge; as the sky closes the dark takes them (no cut sliver at the frame edge)
         X.wom.forEach(([fx, hk, ln], i) => { const x = W * fx; woman(ctx, x, ridgeY(x) + 2, X.wh * hk, ln, i * 1.9, t, i === 1 || i === 3 ? 1 : 0); });
@@ -272,8 +279,9 @@
     // --- the end: everything sinks slowly into the dark (8차: 1.5 s, the 7차 fall to black took 0.5 s)
     if (endk > 0) { ctx.fillStyle = `rgba(0,0,0,${.5 * endk})`; ctx.fillRect(0, 0, W, H); }   // .5, not .7: the 8차 darkness already starts low (97.1–97.3 read as black frames)
     ctx.restore();
-    const bw0 = scr(.6, X.cx + X.sp * (V ? 1.9 : 2.6), X.hor - H * .01), wr = (V ? W * .55 : H * .7) * lerp(.6, 1.1, q) * lerp(1, .5, endk);
-    finish(ctx, t, { halo: .38 + .2 * q, warm: [bw0[0], bw0[1], wr, .3 * (.4 + .6 * q) * (1 - endk * .7)], vig: .6, flicker: .03 });   // gentle gate flicker in the darkness
+    // strictly monochrome (round 8 fix: the 'warm' colour tint on the band read as a brown stripe on the right horizon) — the ember
+    // below is the scene's only colour; the gate flicker is relative and slow (see finish)
+    finish(ctx, t, { halo: .38 + .2 * q, vig: .6, flickerRel: .035 });
     // one ember is left (8차: the 7차 round point of light read as a sun / moon / star) — small, warm orange-gold, flickering,
     // a few sparks drifting off it, rising a little; drawn after the film treatment so the halation does not swell it
     const ea = ss(8.5, 9.2, u);
@@ -348,16 +356,17 @@
       g.save(); g.setTransform(1, 0, 0, 1, 0, 0); g.globalCompositeOperation = 'multiply'; g.globalAlpha = .6; g.drawImage(sb, 0, 0); g.restore(); }
     S.G = gc; S.Gb = canvas(GW >> 1, GH >> 1); { const b = S.Gb.getContext('2d'); b.filter = 'blur(2.5px)'; b.drawImage(gc, 0, 0, GW >> 1, GH >> 1); }
     // the crumpled end of a woven cloth (the tunic), coming into the frame from its right edge: weave and creases only
+    // (round 8: cloth and knucklebones in neutral greys — their cream read as colour in the black-and-white film)
     { const cw = Math.ceil((V ? 560 : 640) * k), ch = Math.ceil((V ? 380 : 330) * k), pad = 40, tc = canvas(cw + pad * 2, ch + pad * 2), t2 = tc.getContext('2d'), r = rng(31);
       const pts = [];
       for (let i = 0; i <= 12; i++) { const f = 1 - i / 12; pts.push([pad + cw * (.18 + .82 * f), pad + ch * (.04 + .16 * fbm(f * 5 + 1, 2.2, 3))]); }               // its upper side, rumpled
       for (let i = 1; i < 16; i++) { const v = i / 16; pts.push([pad + cw * (.06 + .2 * fbm(v * 5 + 3, 1.3, 3) + .1 * Math.sin(v * 9)), pad + ch * v]); }   // the end, folded and ragged
       for (let i = 0; i <= 12; i++) { const f = i / 12; pts.push([pad + cw * (.16 + .84 * f), pad + ch * (.96 - .16 * fbm(f * 5 + 7, 4.4, 3))]); }               // its lower side
       const p = new Path2D(); p.moveTo(tc.width + 20, pts[0][1]); pts.forEach(([x, y]) => p.lineTo(x, y)); p.lineTo(tc.width + 20, pts[pts.length - 1][1]); p.closePath();
-      t2.save(); t2.fillStyle = 'rgba(30,28,26,.5)'; t2.filter = 'blur(9px)'; t2.translate(4, 16); t2.fill(p); t2.restore();          // its shadow on the earth
-      t2.save(); t2.clip(p); t2.fillStyle = 'rgb(200,195,184)'; t2.fillRect(0, 0, tc.width, tc.height);
-      for (let y = 0; y < tc.height; y += 3) { t2.fillStyle = `rgba(70,64,56,${.14 + .06 * r()})`; t2.fillRect(0, y, tc.width, 1.3); }   // the weave
-      for (let x = 0; x < tc.width; x += 3) { t2.fillStyle = `rgba(255,252,244,${.08 + .05 * r()})`; t2.fillRect(x, 0, 1.2, tc.height); }
+      t2.save(); t2.fillStyle = 'rgba(28,28,28,.5)'; t2.filter = 'blur(9px)'; t2.translate(4, 16); t2.fill(p); t2.restore();          // its shadow on the earth
+      t2.save(); t2.clip(p); t2.fillStyle = 'rgb(194,194,194)'; t2.fillRect(0, 0, tc.width, tc.height);
+      for (let y = 0; y < tc.height; y += 3) { t2.fillStyle = `rgba(62,62,62,${.14 + .06 * r()})`; t2.fillRect(0, y, tc.width, 1.3); }   // the weave
+      for (let x = 0; x < tc.width; x += 3) { t2.fillStyle = `rgba(250,250,250,${.08 + .05 * r()})`; t2.fillRect(x, 0, 1.2, tc.height); }
       { const q = 3, w = Math.ceil(tc.width / q), h = Math.ceil(tc.height / q), hf = new Float32Array(w * h), rr = rng(77), L = [];
         for (let i = 0; i < 15; i++) { const x0 = rr() * w, y0 = rr() * h, a = (rr() - .5) * .9 + (rr() < .6 ? 0 : .6), l = (.3 + rr() * .45) * w; L.push([x0, y0, Math.cos(a), Math.sin(a), l, 4 + rr() * 7, (rr() < .7 ? 1 : -.6) * (.7 + rr() * .7), (rr() - .5) * .012]); }
         for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) { let hh = fbm(x * .018, y * .018, 3) * .8;
@@ -366,8 +375,8 @@
         const im = t2.createImageData(w, h); for (let y = 1; y < h - 1; y++) for (let x = 1; x < w - 1; x++) { const i = y * w + x, sh = (hf[i + w] - hf[i - w]) * 2.4 + (hf[i + 1] - hf[i - 1]) * .8, v = clamp(.5 + sh) * 255; im.data[i * 4] = im.data[i * 4 + 1] = im.data[i * 4 + 2] = v; im.data[i * 4 + 3] = 255; }
         const hc = canvas(w, h); hc.getContext('2d').putImageData(im, 0, 0); t2.globalCompositeOperation = 'overlay'; t2.drawImage(hc, 0, 0, tc.width, tc.height); t2.globalAlpha = .55; t2.drawImage(hc, 0, 0, tc.width, tc.height); t2.globalAlpha = 1; t2.globalCompositeOperation = 'source-over'; }
       t2.restore();
-      t2.save(); t2.clip(p); t2.strokeStyle = 'rgba(255,252,240,.6)'; t2.lineWidth = 5; t2.filter = 'blur(2px)'; t2.translate(2, 4); t2.stroke(p); t2.restore();   // light along its far edge
-      { const rf = rng(4); t2.strokeStyle = 'rgba(200,194,182,.8)'; t2.lineWidth = 1.4; for (let i = 13; i < 13 + 15; i++) { const [x, y] = pts[i]; for (let j = 0; j < 4; j++) { const yy = y + (rf() - .5) * ch / 16; t2.beginPath(); t2.moveTo(x + 4, yy); t2.quadraticCurveTo(x - 8, yy + (rf() - .5) * 8, x - 10 - rf() * 12, yy + (rf() - .5) * 10); t2.stroke(); } } }   // loose threads at the end
+      t2.save(); t2.clip(p); t2.strokeStyle = 'rgba(250,250,250,.6)'; t2.lineWidth = 5; t2.filter = 'blur(2px)'; t2.translate(2, 4); t2.stroke(p); t2.restore();   // light along its far edge
+      { const rf = rng(4); t2.strokeStyle = 'rgba(192,192,192,.8)'; t2.lineWidth = 1.4; for (let i = 13; i < 13 + 15; i++) { const [x, y] = pts[i]; for (let j = 0; j < 4; j++) { const yy = y + (rf() - .5) * ch / 16; t2.beginPath(); t2.moveTo(x + 4, yy); t2.quadraticCurveTo(x - 8, yy + (rf() - .5) * 8, x - 10 - rf() * 12, yy + (rf() - .5) * 10); t2.stroke(); } } }   // loose threads at the end
       S.cloth = tc; S.clothAt = V ? [W - tc.width + pad * .5, H * .335] : [W * .6, H * .34]; }
     S.t1 = canvas(W, H); S.t2 = canvas(W, H);
     const r = rng(5); S.motes = []; for (let i = 0; i < 26; i++) S.motes.push({ x: r(), y: r() * .7, r: 3 + r() * 9, v: .004 + r() * .01, p: r() * 6.28 });
@@ -414,21 +423,21 @@
   // a knucklebone (astragalus): a squarish, waisted little bone, its four long sides different (hollow, ridged, flat with a pit,
   // twisted) — top face, the near side in shade, a rim of light, its contact shadow
   function bone(g, x, y, s, rot, face, hgt, roll) {
-    g.save(); g.fillStyle = `rgba(16,14,12,${.6 - Math.min(.42, hgt / 110)})`; g.filter = hgt > 3 ? `blur(${Math.min(5, hgt / 8)}px)` : 'none';
+    g.save(); g.fillStyle = `rgba(14,14,14,${.6 - Math.min(.42, hgt / 110)})`; g.filter = hgt > 3 ? `blur(${Math.min(5, hgt / 8)}px)` : 'none';
     g.beginPath(); g.ellipse(x + s * .08, y + s * .3 + hgt * .45, s * .56, s * .3, 0, 0, 6.283); g.fill(); g.restore();
     g.save(); g.translate(x, y - hgt); g.rotate(rot); const fy = .62 + .3 * Math.abs(Math.cos(roll)); g.scale(1, fy);
     const top = new Path2D(); top.moveTo(-.5 * s, -.3 * s); top.bezierCurveTo(-.3 * s, -.38 * s, -.1 * s, -.2 * s, .02 * s, -.24 * s); top.bezierCurveTo(.18 * s, -.3 * s, .4 * s, -.36 * s, .52 * s, -.24 * s);
     top.bezierCurveTo(.6 * s, -.12 * s, .56 * s, .02 * s, .5 * s, .12 * s); top.bezierCurveTo(.56 * s, .22 * s, .44 * s, .32 * s, .3 * s, .3 * s); top.bezierCurveTo(.14 * s, .26 * s, -.04 * s, .34 * s, -.2 * s, .3 * s);
     top.bezierCurveTo(-.4 * s, .34 * s, -.56 * s, .24 * s, -.54 * s, .06 * s); top.bezierCurveTo(-.58 * s, -.08 * s, -.58 * s, -.24 * s, -.5 * s, -.3 * s); top.closePath();
-    g.save(); g.translate(0, s * .2 / fy); g.fillStyle = '#4e483f'; g.fill(top); g.restore();                                   // the near side, in shade
-    const bg = g.createLinearGradient(0, -s * .35, 0, s * .35); bg.addColorStop(0, '#f8f1de'); bg.addColorStop(.5, '#cfc4ad'); bg.addColorStop(1, '#8e8472');
-    g.fillStyle = bg; g.fill(top); g.strokeStyle = 'rgba(46,40,32,.55)'; g.lineWidth = 1.2; g.stroke(top);
-    g.fillStyle = 'rgba(66,58,46,.75)'; g.strokeStyle = 'rgba(66,58,46,.8)'; g.lineWidth = Math.max(1.4, s * .055); g.lineCap = 'round';
+    g.save(); g.translate(0, s * .2 / fy); g.fillStyle = '#494949'; g.fill(top); g.restore();                                   // the near side, in shade
+    const bg = g.createLinearGradient(0, -s * .35, 0, s * .35); bg.addColorStop(0, '#ececec'); bg.addColorStop(.5, '#c3c3c3'); bg.addColorStop(1, '#838383');
+    g.fillStyle = bg; g.fill(top); g.strokeStyle = 'rgba(40,40,40,.55)'; g.lineWidth = 1.2; g.stroke(top);
+    g.fillStyle = 'rgba(58,58,58,.75)'; g.strokeStyle = 'rgba(58,58,58,.8)'; g.lineWidth = Math.max(1.4, s * .055); g.lineCap = 'round';
     if (face === 0) { g.beginPath(); g.ellipse(-.02 * s, .02 * s, s * .2, s * .1, .1, 0, 6.283); g.fill(); }                                   // hollow
     else if (face === 1) { g.beginPath(); g.moveTo(-.36 * s, -.06 * s); g.quadraticCurveTo(0, .16 * s, .36 * s, -.08 * s); g.stroke(); g.beginPath(); g.moveTo(-.2 * s, .14 * s); g.lineTo(.18 * s, .16 * s); g.stroke(); }   // ridged
     else if (face === 2) { g.beginPath(); g.arc(.22 * s, -.04 * s, s * .06, 0, 6.283); g.fill(); }                                             // flat, a pit
     else { g.beginPath(); g.moveTo(-.38 * s, .1 * s); g.bezierCurveTo(-.12 * s, -.18 * s, .12 * s, .2 * s, .38 * s, -.1 * s); g.stroke(); }    // twisted
-    g.strokeStyle = 'rgba(255,252,240,.8)'; g.lineWidth = 2; g.beginPath(); g.moveTo(-.46 * s, -.3 * s); g.bezierCurveTo(-.3 * s, -.37 * s, -.1 * s, -.2 * s, .02 * s, -.24 * s); g.bezierCurveTo(.18 * s, -.3 * s, .4 * s, -.36 * s, .5 * s, -.25 * s); g.stroke();
+    g.strokeStyle = 'rgba(250,250,250,.8)'; g.lineWidth = 2; g.beginPath(); g.moveTo(-.46 * s, -.3 * s); g.bezierCurveTo(-.3 * s, -.37 * s, -.1 * s, -.2 * s, .02 * s, -.24 * s); g.bezierCurveTo(.18 * s, -.3 * s, .4 * s, -.36 * s, .5 * s, -.25 * s); g.stroke();
     g.restore();
   }
   function bonePos(u, from, to, t0, t1, seed, last) {
@@ -469,7 +478,7 @@
       if (d.p < .5) { const dp = bonePos(u - .03, ...a); ctx.globalAlpha = .28; bone(ctx, dp.x, dp.y, sz, dp.rot, dp.face, dp.hgt, dp.roll); ctx.globalAlpha = 1; }
       bone(ctx, d.x, d.y, sz, d.rot, d.face, d.hgt, d.roll); }
     BN.forEach((a, i) => { const ap = clamp((u - a[3] + .4) / 1.3); if (ap > 0 && ap < 1) { const r = rng(9 + i * 7), [x, y] = a[1];
-        for (let j = 0; j < 14; j++) { const an = r() * 6.283, rr = (10 + r() * 44) * eo(ap) * k; ctx.fillStyle = `rgba(232,226,212,${.3 * (1 - ap)})`; ctx.beginPath(); ctx.arc(x + Math.cos(an) * rr, y + Math.sin(an) * rr * .35 - ap * 18, (3 + r() * 6) * k, 0, 6.283); ctx.fill(); } } });
+        for (let j = 0; j < 14; j++) { const an = r() * 6.283, rr = (10 + r() * 44) * eo(ap) * k; ctx.fillStyle = `rgba(224,224,224,${.3 * (1 - ap)})`; ctx.beginPath(); ctx.arc(x + Math.cos(an) * rr, y + Math.sin(an) * rr * .35 - ap * 18, (3 + r() * 6) * k, 0, 6.283); ctx.fill(); } } });
     // the two shadows, one light: drawn together (no double darkness where they cross), soft at the edges
     { const sc = S.shc || (S.shc = canvas(W >> 1, H >> 1)), g = sc.getContext('2d'); g.setTransform(1, 0, 0, 1, 0, 0); g.clearRect(0, 0, W, H); g.setTransform(.5, 0, 0, .5, cam * .5 * .7, 0); g.fillStyle = '#000';
       const A = (sh, el, wr, open, w0) => { const a = Math.atan2(wr[1] - el[1], (wr[0] - el[0]) * W / H); return [M(sh), M(el), M(wr), open, a, w0]; };

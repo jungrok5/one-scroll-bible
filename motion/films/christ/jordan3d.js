@@ -346,14 +346,14 @@
       // motes drifting down through it
       ctx.save(); ctx.globalCompositeOperation = 'screen'; const r = rng(66); ctx.fillStyle = 'rgba(255,244,222,.8)'; for (let i = 0; i < 60; i++) { const yy = ((r() * 12 - u * (.22 + .25 * r())) % 12 + 12) % 12 - .3, xx = mx + (r() - .5) * 2 * lerp(rBot, rTop, yy / 60), p = W3.P(c, xx, yy, mz + (r() - .5) * 1.6); if (!p) continue; ctx.globalAlpha = pk * (.2 + .5 * r()) * clamp(yy / 1.2); ctx.beginPath(); ctx.arc(p[0], p[1], Math.max(1, p[2] * .01), 0, 6.283); ctx.fill(); } ctx.restore(); }
     // where it meets the river: the water lights round him; rings spread as the light comes to rest
-    const bot = W3.P(c, mx, WY, mz), settle = ss(3.7, 5.2, u);   // settle: the dove's light has come down upon him and spread
+    const bot = W3.P(c, mx, WY, mz), settle = ss(4.0, 5.3, u);   // settle: the dove's light has come down upon him and spread
     if (bot) { ctx.save(); ctx.globalCompositeOperation = 'screen';
       const ring = (rad, a) => { ctx.strokeStyle = `rgba(255,238,210,${a})`; ctx.lineWidth = Math.max(1, bot[2] * .016); ctx.beginPath(); for (let i = 0; i <= 48; i++) { const an = i / 48 * 6.283, p = W3.P(c, mx + Math.cos(an) * rad, WY, mz + Math.sin(an) * rad); if (p) i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1]); } ctx.stroke(); };
       { const R = bot[2] * 2.4, g = ctx.createRadialGradient(bot[0], bot[1], 0, bot[0], bot[1], R); g.addColorStop(0, `rgba(255,234,200,${.45 * pk + .25 * settle})`); g.addColorStop(1, 'rgba(255,234,200,0)'); ctx.save(); ctx.translate(bot[0], bot[1]); ctx.scale(1, .22); ctx.translate(-bot[0], -bot[1]); ctx.fillStyle = g; ctx.fillRect(bot[0] - R, bot[1] - R, 2 * R, 2 * R); ctx.restore(); }
-      ctx.filter = 'blur(1px)'; for (let i = 0; i < 4; i++) { const tt = u - 3.6 - i * .7; if (tt <= 0) continue; ring(.55 + tt * .9, .3 * Math.max(0, 1 - tt / 2.6)); } ring(.5, .25 * pk); ctx.filter = 'none';
+      ctx.filter = 'blur(1px)'; for (let i = 0; i < 4; i++) { const tt = u - 4.1 - i * .7; if (tt <= 0) continue; ring(.55 + tt * .9, .3 * Math.max(0, 1 - tt / 2.6)); } ring(.5, .25 * pk); ctx.filter = 'none';
       ctx.restore(); }
     // the man, lit from above (a rim on the head and shoulders), and his broken reflection
-    if (bot) { const s = bot[2], g = J.fig.getContext('2d'), S = J.fig.width, k = Math.min(1, S * .3 / (1.3 * s)), m = s * k, rise = ss(4.0, 6.0, u), lit = ss(2.6, 4.4, u);
+    if (bot) { const s = bot[2], g = J.fig.getContext('2d'), S = J.fig.width, k = Math.min(1, S * .3 / (1.3 * s)), m = s * k, rise = ss(4.2, 6.2, u), lit = ss(3.2, 4.5, u);
       g.setTransform(1, 0, 0, 1, 0, 0); g.clearRect(0, 0, S, S); g.save(); g.translate(S / 2, S * .6); g.scale(m, m);
       g.fillStyle = `rgb(255,232,192)`; manParts(g, rise, false); g.globalCompositeOperation = 'source-atop'; g.translate(0, .022 + .03 * (1 - lit)); g.fillStyle = 'rgb(40,40,48)'; manParts(g, rise, true, 'rgba(96,94,100,.3)');
       // 8차: the rim on the crown dimmed (no bright line sitting on top of his head — rule depict-christ-restraint, no halo)
@@ -371,16 +371,23 @@
     // loses its core and pours down over his head and shoulders (u 3.3–4.3), and as it reaches him it becomes a soft bloom round
     // his whole upper body, centred on his shoulders, that fades into the wash on him and the water (gone by u 5.8). No ring, no
     // disc, no point left above the head.
-    { const k = clamp((u - .5) / 4.0), dk = lerp(eio(k), k, .5), dy = lerp(11.5, .12, dk), p = W3.P(c, mx, dy, mz + .06);
-      if (p && u > .4 && u < 4.6) { const s = p[2], a = ss(1.5, 2.5, u) * (1 - ss(3.3, 4.4, u)), core = 1 - ss(3.1, 3.9, u), open = ss(3.1, 4.3, u), beat = (1 - ss(3.0, 3.8, u)) * Math.sin(u * 3.0), spread = lerp(.2, .48, .5 + .5 * beat) * (1 - .4 * open), sc = J.soft.width / W, g = J.soft.getContext('2d');
+    // 8차 이상 확인 (관리자): it used to fade out ~2 m over his head — against the far thicket it read as a light far away among
+    // the trees, and the bloom came only after it had gone. Now it keeps coming down past the tree line, over the mist on the
+    // water, through his head height without slowing to a stop (≈1.4 m/s there), and its body reaches his shoulders (u ≈ 4.2)
+    // at full strength, opening as it goes (its bright core already thinned to a downward pour before it passes his head, so
+    // no point of light sits on the head even for a moment); the shoulder bloom (b below, centred where the dove ends) rises from the same moment, so there is no gap.
+    { const yEnd = WY + .6, k = clamp((u - .5) / 3.9), dy = yEnd + (11.5 - yEnd) * Math.pow(1 - k, 1.6), p = W3.P(c, mx, dy, mz + .06);
+      if (p && u > .4 && u < 5.0) { const s = p[2], a = ss(1.5, 2.5, u) * (1 - ss(4.2, 4.95, u)), core = 1 - ss(3.45, 4.0, u), open = ss(3.4, 4.2, u), beat = (1 - ss(3.0, 3.6, u)) * Math.sin(u * 3.0), spread = lerp(.2, .48, .5 + .5 * beat) * (1 - .4 * open), sc = J.soft.width / W, g = J.soft.getContext('2d');
         g.setTransform(1, 0, 0, 1, 0, 0); g.clearRect(0, 0, J.soft.width, J.soft.height); g.setTransform(sc, 0, 0, sc, 0, 0); g.globalCompositeOperation = 'lighter';
         const glow = (x, y, rx, ry, rot, al) => { g.save(); g.translate(x, y); g.rotate(rot); g.scale(1, ry / rx); const gr = g.createRadialGradient(0, 0, 0, 0, 0, rx); gr.addColorStop(0, `rgba(255,228,150,${al})`); gr.addColorStop(.45, `rgba(255,190,92,${al * .5})`); gr.addColorStop(1, 'rgba(240,160,60,0)'); g.fillStyle = gr; g.fillRect(-rx, -rx, 2 * rx, 2 * rx); g.restore(); };
-        const L0 = .62 * s, wl = 1 + 1.3 * open; for (const sd of [-1, 1]) glow(p[0] + sd * L0 * .55 * wl, p[1] - L0 * spread * .55 + L0 * .25 * open, L0 * .62 * wl, L0 * .16 * (1 + open), sd * (-spread * .9), .75 * a * (1 - .45 * open));
-        glow(p[0], p[1] + L0 * .3 * open, L0 * .22 * (1 + .8 * open), L0 * .3 * (1 + 2.2 * open), 0, a * lerp(.35, 1, core)); glow(p[0], p[1] + L0 * .32, L0 * .14, L0 * .2, 0, .5 * a * core);   // the core pours down and thins
+        const L0 = .62 * s, wl = 1 + 1.3 * open, gain = 1 + .35 * ss(2.8, 3.4, u) * (1 - ss(4.2, 4.8, u));   // a little stronger while it crosses the dark thicket and the mist (it must stay the brightest thing there)
+        for (const sd of [-1, 1]) glow(p[0] + sd * L0 * .55 * wl, p[1] - L0 * spread * .55 + L0 * .25 * open, L0 * .62 * wl, L0 * .16 * (1 + open), sd * (-spread * .9), .75 * gain * a * (1 - .45 * open));
+        glow(p[0], p[1] + L0 * .3 * open, L0 * .22 * (1 + .8 * open), L0 * .3 * (1 + 2.2 * open), 0, a * lerp(.35, 1, core)); glow(p[0], p[1] + L0 * .32, L0 * .14, L0 * .2, 0, .5 * gain * a * core * core);   // the core pours down and thins
         ctx.save(); ctx.globalCompositeOperation = 'screen'; ctx.filter = 'blur(4px)'; ctx.drawImage(J.soft, 0, 0, W, H); ctx.filter = 'none'; ctx.restore();
-        const ba = a * .55 * (1 - ss(2.9, 3.7, u)); if (ba > .005) W3.bloom(ctx, p[0], p[1], [255, 190, 100], ba, { r: V ? 170 : 140, streak: .08 }); }
+        const ba = a * .55 * (1 - ss(3.3, 3.85, u));   // the lens bloom gone before it reaches his head (no point of light there)
+        if (ba > .005) W3.bloom(ctx, p[0], p[1], [255, 190, 100], ba, { r: V ? 170 : 140, streak: .08 }); }
       // the arrival: a gentle bloom round his whole upper body, centred on his shoulders (filled, wider than tall — never a ring)
-      const b = ss(3.6, 4.4, u) * (1 - ss(4.6, 5.8, u));
+      const b = ss(3.85, 4.5, u) * (1 - ss(5.1, 6.3, u));
       if (bot && b > 0) { const s = bot[2], cx = bot[0], cy = bot[1] - s * .6, R = s * 1.1, g = ctx.createRadialGradient(cx, cy, 0, cx, cy, R); g.addColorStop(0, `rgba(255,226,166,${.3 * b})`); g.addColorStop(.5, `rgba(255,212,146,${.13 * b})`); g.addColorStop(1, 'rgba(255,212,146,0)');
         ctx.save(); ctx.globalCompositeOperation = 'screen'; ctx.translate(cx, cy); ctx.scale(1, .78); ctx.translate(-cx, -cy); ctx.fillStyle = g; ctx.fillRect(cx - R, cy - R, 2 * R, 2 * R); ctx.restore(); } }
     terrain(ctx, c, L, c.z - 1, 16.5);

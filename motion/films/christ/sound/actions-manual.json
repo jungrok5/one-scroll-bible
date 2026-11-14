@@ -64,8 +64,8 @@
   {
    "t": 20.6,
    "len": 1.6,
-   "kind": "quiet",
-   "what": "the title underline draws — 소리 없음(관리자 #44: 줄 긋는 소리 어색, 「침묵의 400년」도 밑줄은 무음 — 음악이 받침)"
+   "kind": "act",
+   "what": "the title underline draws — 첫 영상의 라인 따라가는 펜 소리(관리자 #45)"
   },
   {
    "t": 23.2,
@@ -496,8 +496,8 @@
   {
    "t": 180.4,
    "len": 1.4,
-   "kind": "quiet",
-   "what": "the end card underline draws — 소리 없음(관리자 #44: 줄 긋는 소리 어색, 「침묵의 400년」도 밑줄은 무음 — 음악이 받침)"
+   "kind": "act",
+   "what": "the end card underline draws — 첫 영상의 라인 따라가는 펜 소리(관리자 #45)"
   }
  ]
 }

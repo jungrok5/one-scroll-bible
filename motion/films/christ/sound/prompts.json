@@ -2254,6 +2254,38 @@
     "KuNQP4cNXPhhbaZ3oelT"
    ],
    "name": "S67"
+  },
+  {
+   "use": "reuse-S68",
+   "time": "2026-11-15T07:00:00.000Z",
+   "flow": "OgUGYxH0WVBynNZ3pqFq",
+   "tool": "reuse:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S68",
+   "name": "S68",
+   "prompt": "Fine pen gliding smoothly on thick textured paper, continuous soft scratch that speeds up and slows down, very close and quiet",
+   "params": {
+    "duration_seconds": 8.6,
+    "source": "motion/pilot/audio/opening__s2.mp3",
+    "trim_s": "4.3–6.1"
+   },
+   "why": "첫 영상 opening s2(라인을 따라가는 펜 소리)를 잘라 다시 씀 — 관리자 #45"
+  },
+  {
+   "use": "reuse-S68e",
+   "time": "2026-11-15T07:00:00.000Z",
+   "flow": "OgUGYxH0WVBynNZ3pqFq",
+   "tool": "reuse:sfx",
+   "model": "eleven_text_to_sound_v2",
+   "label": "S68e",
+   "name": "S68e",
+   "prompt": "Fine pen gliding smoothly on thick textured paper, continuous soft scratch that speeds up and slows down, very close and quiet",
+   "params": {
+    "duration_seconds": 8.6,
+    "source": "motion/pilot/audio/opening__s2.mp3",
+    "trim_s": "6.1–7.6"
+   },
+   "why": "첫 영상 opening s2(라인을 따라가는 펜 소리)를 잘라 다시 씀 — 관리자 #45"
   }
  ],
  "title": "그리스도",

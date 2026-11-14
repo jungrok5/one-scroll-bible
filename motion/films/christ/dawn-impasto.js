@@ -298,6 +298,9 @@
       // Jordan scene has ended at 135.7), breathes with the clouds passing, then dims to near dark
       const L = ss(1.15, 2.4, u) * (1 - .62 * ss(3.3, 5.0, u)) * (1 + .07 * Math.sin(u * 1.7 + .6));
       ctx.globalCompositeOperation = 'lighter'; ctx.globalAlpha = clamp(L); ctx.drawImage(T.lit, -ox, -oy); ctx.globalAlpha = 1;
+      // a faint cold fill with no shadow bridges the dark between the Jordan and the light (8차 render: 5 black frames at 135.77–135.9)
+      { const fk = ss(.5, 1.1, u) * (1 - ss(1.6, 2.6, u)); if (fk > 0) { ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); const g = ctx.createRadialGradient(W * .5, H * .38, 0, W * .5, H * .38, Math.max(W, H) * .7);
+        g.addColorStop(0, `rgba(120,135,165,${.22 * fk})`); g.addColorStop(1, 'rgba(120,135,165,0)'); ctx.globalCompositeOperation = 'screen'; ctx.fillStyle = g; ctx.fillRect(0, 0, W, H); ctx.restore(); } }
       ctx.globalCompositeOperation = 'multiply'; ctx.globalAlpha = .55; ctx.imageSmoothingEnabled = true;   // cloud light drifting across
       ctx.drawImage(D.cloud, -ox - W * .6 + u * W * .05, -oy - H * .2, D.PW * 1.8, D.PH * 1.4); ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
       ctx.setTransform(1, 0, 0, 1, 0, 0);

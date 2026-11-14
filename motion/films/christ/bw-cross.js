@@ -61,7 +61,8 @@
       gw.addColorStop(0, `rgba(255,196,128,${a})`); gw.addColorStop(1, 'rgba(255,196,128,0)');
       ctx.globalCompositeOperation = o.warmMode || 'color'; ctx.globalAlpha = 1; ctx.fillStyle = gw; ctx.fillRect(0, 0, W, H); }
     // gate flicker
-    const fl = (noise(t * 9.3, 4.1) - .5) * (o.flicker || .09) + (rng(fi * 13 + 5)() - .5) * .03;
+    // (the per-frame part scales with o.flicker: in the 8차 darkness the full-size flicker jumped ±5 luma a frame — frame-qa pops)
+    const fk = o.flicker || .09, fl = (noise(t * 9.3, 4.1) - .5) * fk + (rng(fi * 13 + 5)() - .5) * .03 * fk / .09;
     ctx.globalCompositeOperation = 'source-over'; ctx.globalAlpha = Math.abs(fl); ctx.fillStyle = fl > 0 ? '#fff' : '#000'; ctx.fillRect(0, 0, W, H);
     // grain (24 fps, a different plate and flip each frame)
     const r = rng(fi * 7 + 1), gi = fi % B.grain.length; ctx.globalCompositeOperation = 'overlay'; ctx.globalAlpha = o.grain || .42;
@@ -269,10 +270,10 @@
       ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(gb.x, y); ctx.quadraticCurveTo(gb.x + gb.l * gb.h * .1, y - gb.h * .6, gb.x + gb.h * sw + gb.l * gb.h * .15, y - gb.h); ctx.stroke(); }
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     // --- the end: everything sinks slowly into the dark (8차: 1.5 s, the 7차 fall to black took 0.5 s)
-    if (endk > 0) { ctx.fillStyle = `rgba(0,0,0,${.7 * endk})`; ctx.fillRect(0, 0, W, H); }
+    if (endk > 0) { ctx.fillStyle = `rgba(0,0,0,${.5 * endk})`; ctx.fillRect(0, 0, W, H); }   // .5, not .7: the 8차 darkness already starts low (97.1–97.3 read as black frames)
     ctx.restore();
     const bw0 = scr(.6, X.cx + X.sp * (V ? 1.9 : 2.6), X.hor - H * .01), wr = (V ? W * .55 : H * .7) * lerp(.6, 1.1, q) * lerp(1, .5, endk);
-    finish(ctx, t, { halo: .38 + .2 * q, warm: [bw0[0], bw0[1], wr, .3 * (.4 + .6 * q) * (1 - endk * .7)], vig: .6 });
+    finish(ctx, t, { halo: .38 + .2 * q, warm: [bw0[0], bw0[1], wr, .3 * (.4 + .6 * q) * (1 - endk * .7)], vig: .6, flicker: .03 });   // gentle gate flicker in the darkness
     // one ember is left (8차: the 7차 round point of light read as a sun / moon / star) — small, warm orange-gold, flickering,
     // a few sparks drifting off it, rising a little; drawn after the film treatment so the halation does not swell it
     const ea = ss(8.5, 9.2, u);

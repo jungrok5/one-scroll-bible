@@ -6,7 +6,7 @@
              darkness; on dark stony ground lies ONE shadow — the EMPTY cross (no body: 6차), long, laid away from us by a cold
              light behind the camera. 7차: rough-timber proportions (a heavy upright and beam, the beam short against the upright,
              no title board) — the thin long beam with a small board on top read as a telephone pole. The picture comes in from the
-             dark (u 0–0.6) and the shadow only appears as the cold light comes up (u 0.6–1.9), after the Jordan figure has
+             dark (u 0–0.6) and the shadow only appears as the cold light comes up (u 1.15–2.4, 8차), after the Jordan figure has
              dissolved away — the upright never passes through the man in the water. No people, no faces. The camera drifts; the cold light breathes as clouds pass, then dims to
              near dark — so the tomb's dawn is the first warm light of the part.
      'tomb'  u 0..9.4  (film 139.5–148.9, Q12 Acts 10:40 «하나님이 사흘 만에 다시 살리사» + N15): inside the rock-hewn tomb looking
@@ -42,8 +42,10 @@
     const { W, H, V, PW, PH, ox, oy } = D;
     // camera above the ground looking down at it (pitch th); the cross stands behind us, a cold light low behind us lays its
     // shadow away from us up the frame: the foot near (below the frame, under the words), the beam and the title far (upper third)
-    const C = V ? { f: W * 1.25, cx: W * .5, cy: H * .36, th: .78, hc: 3.2, zb: 2.0, hx: 2.3, ks: 1.5, x0: 0 }
-                : { f: H * 1.25, cx: W * .5, cy: H * .38, th: .74, hc: 3.2, zb: 2.3, hx: 1.6, ks: 1.5, x0: 0 };
+    // 8차: the foot of the shadow lies on the ground inside the frame (portrait ≈ .61 H, landscape ≈ .70 H, just above the words) —
+    // with the upright running out at the bottom edge and a short beam near the top it read as a sword hilt
+    const C = V ? { f: W * 1.25, cx: W * .5, cy: H * .36, th: .78, hc: 3.2, zb: 1.52, hx: 2.3, ks: 1.73, x0: 0 }
+                : { f: H * 1.25, cx: W * .5, cy: H * .38, th: .74, hc: 3.2, zb: 2.1, hx: 1.6, ks: 1.64, x0: 0 };
     const st = Math.sin(C.th), ct = Math.cos(C.th);
     const Lt = nrm(.18, .62, -.76);   // toward the cold light: up and behind the camera, a little to the right
     const amb = new Uint8ClampedArray(PW * PH * 4), lit = new Uint8ClampedArray(PW * PH * 4);
@@ -54,8 +56,11 @@
       // 7차: rough timber — a heavy upright, a heavy beam set a little below its top, the beam short against the upright's long
       // shadow (no thin 'pole', no title board); the edges hewn, not ruled
       const rough = .006 * (noise(s * 9 + 3, x * 4) - .5) + .004 * (noise(s * 31, x * 17 + 2) - .5);
-      let d = box(x, s, -.05, .05, -.2, .9) + rough;                  // the upright
-      d = Math.min(d, box(x, s, -.215, .215, .7, .785) + rough);     // the beam
+      // 8차: the upright stands on the ground (its foot at s = 0 is seen, a little wider where it goes into the earth); the beam
+      // at about a third from the shadow's far end on screen (s ≈ .52 of .9 — perspective shortens the far part) and longer
+      let d = box(x, s, -.05, .05, 0, .9) + rough;                    // the upright
+      d = Math.min(d, box(x, s, -.05 - .012 * ss(.04, 0, s), .05 + .012 * ss(.04, 0, s), 0, .04) + rough);   // its foot, wedged in the ground
+      d = Math.min(d, box(x, s, -.27, .27, .478, .565) + rough);     // the beam
       // 6차: the shadow of the empty cross only — no body on it (depict-christ-restraint: never the suffering body)
       return d; };
     // the ground: dry, stony earth as a height field (clods, half-buried stones, grit) lit by the cold light — no round pebbles
@@ -74,7 +79,7 @@
       const s = (Z - C.zb) / (C.hx * C.ks), xx = (X - C.x0) / C.hx, d = crossD(xx, s), pen = .006 + .018 * clamp(s);
       const sh = 1 - .9 * (1 - ss(-pen, pen, d));
       // the pool of light: brightest around the beam, falling off towards the frame edges and towards us (the words below)
-      const pz = (Z - (C.zb + C.hx * C.ks * .78)) / (C.hx * C.ks * .75), pxv = X / (C.hx * .9), pool = Math.exp(-(pxv * pxv * .7 + pz * pz * 1.1));
+      const pz = (Z - (C.zb + C.hx * C.ks * .5)) / (C.hx * C.ks * .78), pxv = X / (C.hx * .9), pool = Math.exp(-(pxv * pxv * .7 + pz * pz * 1.1));
       const lv = al * ndl * pool * sh * 560, av = al * 46 * (.55 + .45 * pool);
       lit[i] = lv * .66; lit[i + 1] = lv * .74; lit[i + 2] = lv * .9; lit[i + 3] = 255;
       amb[i] = av * .7; amb[i + 1] = av * .78; amb[i + 2] = av * .95; amb[i + 3] = 255;
@@ -289,8 +294,9 @@
       cam(1.015 + .04 * k, W * .5, H * .3, lerp(10, -12, k), lerp(-6, 8, k), lerp(-.006, .004, k));
       ctx.globalAlpha = lerp(.12, 1, ss(.15, 1.0, u)); ctx.drawImage(T.amb, -ox, -oy); ctx.globalAlpha = 1;   // in from the dark
       // the cold light (and with it the shadow): comes up only after the Jordan figure has dissolved away (7차: at 135.0–135.4 the
-      // shadow's upright ran through the man in the water), breathes with the clouds passing, then dims to near dark
-      const L = ss(.6, 1.9, u) * (1 - .62 * ss(3.3, 5.0, u)) * (1 + .07 * Math.sin(u * 1.7 + .6));
+      // shadow's upright ran through the man in the water; 8차: still faintly — now it starts at u 1.15 = film 135.75, after the
+      // Jordan scene has ended at 135.7), breathes with the clouds passing, then dims to near dark
+      const L = ss(1.15, 2.4, u) * (1 - .62 * ss(3.3, 5.0, u)) * (1 + .07 * Math.sin(u * 1.7 + .6));
       ctx.globalCompositeOperation = 'lighter'; ctx.globalAlpha = clamp(L); ctx.drawImage(T.lit, -ox, -oy); ctx.globalAlpha = 1;
       ctx.globalCompositeOperation = 'multiply'; ctx.globalAlpha = .55; ctx.imageSmoothingEnabled = true;   // cloud light drifting across
       ctx.drawImage(D.cloud, -ox - W * .6 + u * W * .05, -oy - H * .2, D.PW * 1.8, D.PH * 1.4); ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';

@@ -3,9 +3,10 @@
    from behind, a small old person sits bowed at a table; beyond them on the table a candle and a large open Bible, beyond that a
    small window. The body is an almost black shape — no face, no hands drawn; the candle lays a gold rim round the bowed head, the
    grey hair (it shines silver at the edge) and the round shoulders of the cardigan. That rim is the scene's protagonist.
-     'open' (u 0–8.2, video 0:00–0:08.2): close on the flame in the dark (it reads within 0.3 s); the camera draws back and the
-            bowed figure, rimmed in gold, is found in front of it (N01); then the camera passes over the shoulder and comes down onto
-            the open Bible (N02, from 4.9) — no letters, only the grain of lines, the candle in the paper, one page corner lifting.
+     'open' (u 0–8.6, video 0:00–0:08.6): near the candle, the table and the dark room round it (it reads within 0.3 s); in one
+            slow eased move (roomOpenCam) the camera draws back and the bowed figure, rimmed in gold, is found in front of it (N01);
+            then it passes over the shoulder and comes down onto the open Bible (N02, from 4.9) — no letters, only the grain of
+            lines, the candle in the paper, one page corner lifting.
      'dawn' (u 0–6.5, video 2:26.5–): the same figure and candle; the window beyond brightens with dawn, the figure stands in the
             dawn backlight and the shadows of the window bars fall across the table toward us (kept for compatibility).
      'end'  (u −0.1–21.5, video 2:39.4–3:01; 관리자 2026-11-14: the film returns to this room and ends here, the end card over it):
@@ -26,7 +27,7 @@ function roomLayout() {
   const L = V ? { person: { cx: W * .37, top: H * .262, P: H * .3 }, win: [W * .1, H * .05, W * .32, H * .19], cand: { x: W * .74, top: H * .228, base: H * .3, r: 11 }, book: { cx: W * .63, cy: H * .385, w: W * .28, d: H * .06 }, tableY: H * .255, tableF: H * .47, floorY: H * .49 }
               : { person: { cx: W * .36, top: H * .3, P: H * .36 }, win: [W * .18, H * .05, W * .32, H * .3], cand: { x: W * .6, top: H * .33, base: H * .43, r: 8 }, book: { cx: W * .53, cy: H * .5, w: W * .105, d: H * .07 }, tableY: H * .36, tableF: H * .6, floorY: H * .625 };
   L.flame = [L.cand.x, L.cand.top - 2]; L.LP = [L.flame[0], L.flame[1] - (V ? 9 : 6)];
-  L.zEnd = V ? 4.7 : 6.5;   // the close-up on the pages after the camera passes over her shoulder
+  L.zEnd = V ? 2.8 : 3.4;   // the close-up on the pages after the camera passes over his shoulder (2026-11-14: less close, was 4.7 : 6.5)
   return Object.assign(L, { W, H, V, S: V ? 2 : 1.6, R0: V ? W : H, sc: 1, tx0: -W * .15, tx1: W * 1.15 });
 }
 // 'end' (관리자 2026-11-14: the film returns to this room and ends here, the end card over it): the same room seen from further
@@ -221,7 +222,8 @@ async function buildRoomOil() {
     // the candle is beyond the figure, up and to the right of its head: the light comes from there
     const [hx, hy] = [L.person.cx, L.person.top + .12 * Pp], ldx = L.LP[0] - hx, ldy = L.LP[1] - hy - .9 * Pp, ll = Math.hypot(ldx, ldy), lx = ldx / ll, ly = ldy / ll;
     return { body, bw, bh, pad, Pp, rimN: rimOf(lx, ly, .011, '#ffc070', '#f4ece0'),
-      rimD: rimOf(-.7, -.7, .02, '#cfdcf0', '#eef4ff') };   // dawn: the window is up and to the left
+      rimD: rimOf(-.7, -.7, .02, '#cfdcf0', '#eef4ff'),   // dawn: the window is up and to the left
+      rimW: L.end ? rimOf(-.85, -.53, .03, '#f6c486', '#f4e2c4') : null };   // 'end' Q14: the warm dawn shaft arriving on his shoulders and the left of his head
   };
   ROIL.fig = figOf(L); ROIL.figE = figOf(ROIL.LE);
   { const g = canvas(256, 256), x = g.getContext('2d'), im = x.createImageData(256, 256), r = rng(91); for (let i = 0; i < 65536; i++) { const v = 128 + (r() - .5) * 120; im.data[i * 4] = im.data[i * 4 + 1] = im.data[i * 4 + 2] = v; im.data[i * 4 + 3] = 255; }
@@ -248,6 +250,17 @@ function roomFlame(ctx, x, y, h, t, a = 1) {
   ctx.restore();
 }
 
+// 'open' camera (관리자 2026-11-14 "첫시작에 카메라 워킹이 좀 과격하다"): ONE slow eased move over the whole shot (u 0–8.6) —
+// near the candle (the table and the room already around it, z 2.2) → drawing back until the old man is found (z 1.3, u ≈ 3.8) →
+// over his shoulder down onto the open Bible (z 2.8 = L.zEnd at 8.6). Each coordinate (x, y, log z) is one parabola through the
+// three points in an eased progress p, so speed and zoom rate change smoothly (zoom turns from out to in without a jolt, never a
+// stop, no clamping at the frame's edge): ≤ 0.24 log-zoom/s, ≤ 15 px/frame at the frame's corners (was 0.55/s, 45 px, jumps).
+function roomOpenCam(L, u, page, mid) {
+  const { W, H, V } = L, t = Pilot.clamp(u / 8.6), p = .3 * t + .7 * t * t * (3 - 2 * t), pm = .44, zm = 1.3;
+  const P0 = [L.flame[0] - .05 * W, L.flame[1] + .06 * H, Math.log(V ? 2.2 : 2.3)], Pm = [mid[0] + .01 * W, Math.max(mid[1], H / 2 / zm + .02 * H), Math.log(zm)], P1 = [page[0], page[1], Math.log(L.zEnd)];
+  const a = (p - pm) * (p - 1) / pm, b = p * (p - 1) / (pm * (pm - 1)), c = p * (p - pm) / (1 - pm);
+  return [a * P0[0] + b * Pm[0] + c * P1[0], a * P0[1] + b * Pm[1] + c * P1[1], Math.exp(a * P0[2] + b * Pm[2] + c * P1[2])];
+}
 // camera keys → (fx, fy, z) in frame units: Catmull-Rom through the keys (velocity continuous, never a stop)
 function roomCam(keys, u) {
   let i = 0; while (i < keys.length - 2 && u > keys[i + 1][0]) i++;
@@ -261,13 +274,14 @@ function roomOil(ctx, u, mode = 'open') {
   const page = [B.cx + B.w * .24, B.cy - B.d * .05], mid = [(L.person.cx + L.flame[0]) / 2 + .02 * W, L.person.top + .3 * L.person.P];
   // 'end' (u −0.1…21.5, film 159.4–181): one slow pull back from the man, the candle and the book (the window's edge just in at
   // the left) to the whole quiet room; the man's feet stay above the words' band all the way
-  const KEYS = endM ? (V ? [[-.2, .43 * W, .552 * H, 1.52], [7.3, .45 * W, .543 * H, 1.38], [13.1, .48 * W, .525 * H, 1.2], [16.1, .49 * W, .51 * H, 1.08], [21.6, .5 * W, .5 * H, 1.0]]
-                          : [[-.2, .47 * W, .6 * H, 1.52], [7.3, .475 * W, .585 * H, 1.35], [13.1, .485 * W, .56 * H, 1.18], [16.1, .49 * W, .53 * H, 1.07], [21.6, .5 * W, .5 * H, 1.0]])
+  // (2026-11-14: it starts looking a little right of him — the candle where the sun of goldThree was, the man at the left edge, never
+  // where the far cross stood during the 1.4 s dissolve — and drifts left as it pulls back until he sits in the room's middle-left)
+  const KEYS = endM ? (V ? [[-.2, .66 * W, .552 * H, 1.52], [5.5, .58 * W, .545 * H, 1.4], [10.5, .52 * W, .528 * H, 1.22], [16.1, .5 * W, .51 * H, 1.08], [21.6, .5 * W, .5 * H, 1.0]]
+                          : [[-.2, .66 * W, .6 * H, 1.52], [5.5, .58 * W, .585 * H, 1.37], [10.5, .52 * W, .56 * H, 1.2], [16.1, .5 * W, .53 * H, 1.07], [21.6, .5 * W, .5 * H, 1.0]])
     : dawnM
     ? [[0, mid[0], mid[1] - .02 * H, 1.18], [3.2, mid[0] - .02 * W, mid[1] - .04 * H, 1.26], [6.5, mid[0] - .05 * W, mid[1] - .07 * H, 1.36]]
-    : [[0, L.flame[0] - .015 * W, L.flame[1] + .025 * H, 3.6], [.9, L.flame[0] - .025 * W, L.flame[1] + .035 * H, 3.25], [3.1, mid[0] + .02 * W, mid[1] - .01 * H, 1.42], [4.9, mid[0], mid[1] + .01 * H, 1.22],
-       [8.2, page[0], page[1], L.zEnd]];
-  let [fx, fy, z] = roomCam(KEYS, u); z = Math.max(1.0, z);
+    : null;
+  let [fx, fy, z] = openM ? roomOpenCam(L, u, page, mid) : roomCam(KEYS, u); z = Math.max(1.0, z);
   fx = clamp(fx, W / 2 / z, W - W / 2 / z); fy = clamp(fy, H / 2 / z, H - H / 2 / z);
   const k = dawnM ? ss(.2, 5.2, u) : endM ? .1 + .9 * ss(.4, 15.5, u) : 0;          // how far the dawn has come ('end': the window greys at N17, full by Q13)
   const T = dawnM ? 146.5 + u : endM ? 159.5 + u : u, fl = roomFlick(T);              // the candle runs on film time
@@ -291,15 +305,19 @@ function roomOil(ctx, u, mode = 'open') {
       ctx.save(); const gA = m(A), gC = m(C2), gr = ctx.createLinearGradient(gA[0], gA[1], gC[0], gC[1]); gr.addColorStop(0, 'rgba(232,206,160,.85)'); gr.addColorStop(1, 'rgba(255,240,208,.95)'); ctx.filter = `blur(${(.8 * z).toFixed(1)}px)`;
       ctx.fillStyle = gr; ctx.beginPath(); ctx.moveTo(...m(A)); ctx.quadraticCurveTo(...m([(A[0] + C2[0]) / 2, (A[1] + C2[1]) / 2 - Lc * .2]), ...m(C2)); ctx.quadraticCurveTo(...m([(Bp[0] + C2[0]) / 2 + Lc * .1, (Bp[1] + C2[1]) / 2]), ...m(Bp)); ctx.closePath(); ctx.fill(); ctx.restore(); } }
   // 'end' Q14: the window's light creeps across the table top from the left until it reaches the folded hands (u ≈ 10)
-  if (endM) { const e = L.tx0 + (L.hands[0] + .02 * W - L.tx0) * ss(3.5, 10.5, u), [ax, ay] = sc(L.tx0, L.tableY), [ex, ey] = sc(e, L.tableF), soft = .06 * W * z;
+  if (endM) { const e = L.tx0 + (L.hands[0] + .02 * W - L.tx0) * ss(3, 9.5, u), [ax, ay] = sc(L.tx0, L.tableY), [ex, ey] = sc(e, L.tableF), soft = .06 * W * z;
     if (ex > ax) { ctx.save(); ctx.globalCompositeOperation = 'screen'; const gr = ctx.createLinearGradient(ax, 0, ex + soft, 0), a = .34 * k;
       gr.addColorStop(0, `rgba(255,226,178,${a})`); gr.addColorStop(clamp((ex - ax) / (ex + soft - ax)), `rgba(255,220,170,${a * .8})`); gr.addColorStop(1, 'rgba(255,210,160,0)');
       ctx.filter = `blur(${(6 * z).toFixed(1)}px)`; ctx.fillStyle = gr; ctx.fillRect(ax, ay, ex + soft - ax, ey - ay); ctx.restore(); } }
   // Q14: where the light arrives, a warm pool on the table just beyond his right shoulder, where his folded hands rest (the figure
   // in front hides them, as in the opening; the rim of the dawn grows on him at the same time)
-  if (endM) { const hl = ss(7.5, 11, u) * (.92 + .08 * fl), [hx, hy] = sc(L.hands[0], L.hands[1]), R = .22 * L.person.P * z;
-    if (hl > 0) { ctx.save(); ctx.globalCompositeOperation = 'screen'; const gr = ctx.createRadialGradient(hx, hy, 0, hx, hy, R); gr.addColorStop(0, `rgba(255,222,170,${.38 * hl})`); gr.addColorStop(.45, `rgba(240,190,130,${.16 * hl})`); gr.addColorStop(1, 'rgba(200,150,100,0)');
-      ctx.fillStyle = gr; ctx.fillRect(hx - R, hy - R, 2 * R, 2 * R); ctx.restore(); } }
+  // (2026-11-14: by ≈ 169 s (u 9.5) — a warm glow also comes up in front of his chest, where the hands are: drawn behind him, it
+  // shows round his shoulders and sides, so he sits dark against it, seen from behind)
+  if (endM) { const hl = ss(6.5, 9.5, u) * (.92 + .08 * fl), [hx, hy] = sc(L.hands[0], L.hands[1]), R = .22 * L.person.P * z;
+    if (hl > 0) { ctx.save(); ctx.globalCompositeOperation = 'screen'; let gr = ctx.createRadialGradient(hx, hy, 0, hx, hy, R); gr.addColorStop(0, `rgba(255,222,170,${.38 * hl})`); gr.addColorStop(.45, `rgba(240,190,130,${.16 * hl})`); gr.addColorStop(1, 'rgba(200,150,100,0)');
+      ctx.fillStyle = gr; ctx.fillRect(hx - R, hy - R, 2 * R, 2 * R);
+      const p = L.person, [cx2, cy2] = sc(p.cx + .08 * p.P, p.top + .42 * p.P), R2 = .9 * p.P * z; gr = ctx.createRadialGradient(cx2, cy2, 0, cx2, cy2, R2);
+      gr.addColorStop(0, `rgba(255,216,160,${.5 * hl})`); gr.addColorStop(.45, `rgba(250,196,130,${.24 * hl})`); gr.addColorStop(1, 'rgba(220,160,100,0)'); ctx.fillStyle = gr; ctx.fillRect(cx2 - R2, cy2 - R2, 2 * R2, 2 * R2); ctx.restore(); } }
   // the flame and its lens bloom (a soft horizontal streak) — behind the figure, which stands nearer ('end': it grows small in the day)
   { const [fx2, fy2] = sc(L.flame[0], L.flame[1]), h = L.cand.r * 2.3 * z * (endM ? 1 - .25 * k : 1);
     roomFlame(ctx, fx2, fy2, h, T, endM ? 1 - .45 * k : 1);
@@ -316,16 +334,24 @@ function roomOil(ctx, u, mode = 'open') {
     ctx.fillStyle = gr; ctx.beginPath(); ctx.moveTo(...q[0]); for (const v of q.slice(1)) ctx.lineTo(...v); ctx.closePath(); ctx.fill(); ctx.filter = 'none';
     const [wx, wy] = sc((x0 + x1) / 2, y0 + (y1 - y0) * .85), R = (.2 + .06 * s2) * W * z, g2 = ctx.createRadialGradient(wx, wy, 0, wx, wy, R);
     g2.addColorStop(0, `rgba(255,230,180,${.3 * a + .15 * s2})`); g2.addColorStop(.35, `rgba(255,200,130,${.1 * a + .06 * s2})`); g2.addColorStop(1, 'rgba(240,180,110,0)'); ctx.fillStyle = g2; ctx.fillRect(wx - R, wy - R, 2 * R, 2 * R); ctx.restore(); }
+  // Q14 (2026-11-14: the dawn reaches HIM by ≈ 169 s): a second, narrower shaft from the upper window travels down across the floor
+  // (its far end runs from the window to him, u 3 → 9.5) and lies over his shoulders, the table in front of him and the floor round him
+  if (endM) { const a2 = ss(3, 9.5, u), p = L.person; if (a2 > 0) { const [x0, y0, x1, y1] = L.win, lp = (A, B, t) => [A[0] + (B[0] - A[0]) * t, A[1] + (B[1] - A[1]) * t];
+    const s0 = [x0 + (x1 - x0) * .3, y0 + (y1 - y0) * .25], s1 = [x1, y0 + (y1 - y0) * .6], e1 = lp(s1, [p.cx + .95 * p.P, L.tableY - .01 * H], a2), e0 = lp(s0, [p.cx - .55 * p.P, L.floorY + .045 * H], a2);
+    const q = [s0, s1, e1, e0].map(v => sc(v[0], v[1])), m0 = [(q[0][0] + q[1][0]) / 2, (q[0][1] + q[1][1]) / 2], m1 = [(q[2][0] + q[3][0]) / 2, (q[2][1] + q[3][1]) / 2], al = .26 * k * (.5 + .5 * a2);
+    ctx.save(); ctx.globalCompositeOperation = 'screen'; ctx.filter = `blur(${(14 * z).toFixed(1)}px)`;
+    const gr = ctx.createLinearGradient(m0[0], m0[1], m1[0], m1[1]); gr.addColorStop(0, `rgba(255,224,170,${al * .6})`); gr.addColorStop(.75, `rgba(255,212,150,${al})`); gr.addColorStop(1, 'rgba(250,200,140,0)');
+    ctx.fillStyle = gr; ctx.beginPath(); ctx.moveTo(...q[0]); for (const v of q.slice(1)) ctx.lineTo(...v); ctx.closePath(); ctx.fill(); ctx.restore(); } }
   // dawn: the window blooms like a lens
   if (k > 0) { const [x0, y0, x1, y1] = L.win, [wx, wy] = sc((x0 + x1) / 2, y0 + (y1 - y0) * .7); ctx.save(); ctx.globalCompositeOperation = 'screen';
     const R = (x1 - x0) * 1.3 * z, gr = ctx.createRadialGradient(wx, wy, 0, wx, wy, R); gr.addColorStop(0, `rgba(255,240,210,${.45 * k})`); gr.addColorStop(.4, `rgba(240,220,190,${.14 * k})`); gr.addColorStop(1, 'rgba(220,200,170,0)');
     ctx.fillStyle = gr; ctx.fillRect(wx - R, wy - R, 2 * R, 2 * R); ctx.restore(); }
   // the figure, nearer than the table: it moves a little more than the room (parallax) and, as the camera passes over its
   // shoulder (open, after 4.9), it sinks out of the bottom of the frame. Its shoulders breathe; its rim flickers with the flame
-  { const p = L.person, pf = 1 + .22 * (z - 1.2), drop = openM ? ss(4.9, 7.6, u) : 0, zf = z * pf * (1 + .5 * drop);
+  { const p = L.person, pf = 1 + .22 * (z - 1.2), drop = openM ? ss(4.4, 9.4, u) : 0, zf = z * pf * (1 + .35 * drop);   // (2026-11-14: slow, with the slower push)
     const sm = x => (x = clamp(x), x * x * (3 - 2 * x)), ph = ((T + 1.3) / 5.2) % 1, br = ph < .4 ? sm(ph / .4) : ph < .88 ? 1 - sm((ph - .4) / .48) : 0;
     const ax = p.cx, ay = p.top + .55 * p.P;                                                    // the parallax pivot (the figure's middle)
-    const sx = W / 2 + (ax - fx) * z * pf, sy = H / 2 + (ay - fy) * z * pf + drop * H * .95;
+    const sx = W / 2 + (ax - fx) * z * pf, sy = H / 2 + (ay - fy) * z * pf + drop * H * .7;
     ctx.save(); ctx.translate(sx, sy); ctx.scale(zf, zf); ctx.translate(-ax, -ay);
     const ox = p.cx - (.5 + Fg.pad) * p.P, oy = p.top - Fg.pad * p.P, dw = Fg.bw / S, dh = Fg.bh / S;
     ctx.translate(p.cx, p.top + .98 * p.P); ctx.scale(1 + .004 * br, 1 + .01 * br); ctx.translate(-p.cx, -(p.top + .98 * p.P));   // breathing from below the shoulders
@@ -333,6 +359,7 @@ function roomOil(ctx, u, mode = 'open') {
     ctx.globalCompositeOperation = 'lighter';
     ctx.globalAlpha = (1 - .55 * k) * (.72 + .3 * fl); ctx.drawImage(Fg.rimN, ox, oy, dw, dh);
     if (k > 0) { ctx.globalAlpha = k; ctx.drawImage(Fg.rimD, ox, oy, dw, dh); }
+    if (endM) { const ar = ss(5.5, 9.5, u); if (ar > 0) { ctx.globalAlpha = .6 * ar; ctx.drawImage(Fg.rimW, ox, oy, dw, dh); } }   // Q14: the shaft on his shoulders
     ctx.restore(); }
   // dust in the candle light; at dawn in the light from the window
   { const r = Pilot.rng(41); ctx.save(); ctx.globalCompositeOperation = 'screen';
@@ -344,6 +371,11 @@ function roomOil(ctx, u, mode = 'open') {
   // 'end': the day keeps coming after the last words — the floor toward us warms (below the man, never behind the end card)
   if (endM) { const s3 = ss(13, 21.5, u); if (s3 > 0) { ctx.save(); ctx.globalCompositeOperation = 'screen'; const y0 = sc(0, L.floorY)[1], g3 = ctx.createLinearGradient(0, y0, 0, H);
     g3.addColorStop(0, 'rgba(255,214,160,0)'); g3.addColorStop(.25, `rgba(240,190,130,${.16 * s3})`); g3.addColorStop(1, `rgba(200,150,100,${.1 * s3})`); ctx.fillStyle = g3; ctx.fillRect(0, y0, W, H - y0); ctx.restore(); } }
+  // 'end' (2026-11-14): the first seconds carry the sunrise of goldThree over the dissolve — a warm glow round the candle (where the
+  // sun stood) that settles into the room by u ≈ 6.5 (a little of it stays), so the picture does not drop from ≈106 to the room's night at once
+  if (endM) { const wg = 1 - .7 * ss(.8, 6.5, u); if (wg > 0) { ctx.save(); ctx.globalCompositeOperation = 'screen'; const [gx, gy] = sc(L.flame[0], L.flame[1]), R = .95 * W;
+    const gr = ctx.createRadialGradient(gx, gy, 0, gx, gy, R); gr.addColorStop(0, `rgba(255,214,160,${.5 * wg})`); gr.addColorStop(.35, `rgba(236,170,110,${.3 * wg})`); gr.addColorStop(1, `rgba(150,100,70,${.12 * wg})`);
+    ctx.fillStyle = gr; ctx.fillRect(0, 0, W, H); ctx.restore(); } }
   // varnish, vignette, the words' band a little darker, film grain
   OIL.varnish(ctx, .45, [120, 74, 30]);
   ctx.save(); ctx.globalCompositeOperation = 'multiply';

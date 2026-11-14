@@ -19,6 +19,7 @@
    Portrait: Peter's whole upper body and every head above F.SAFE (0.64 H); the backs of the front row run down under the words.
    No words are drawn. Closed form: corneliusFresco(ctx, u) depends only on u. API: await buildCorneliusFresco() · corneliusFresco(ctx, u) */
 const CFR = {};
+const PETER_D = 4.3;   // Peter's depth (also the dust's focus)
 // the courtyard in metres, seen by a camera 1.55 m above the floor: X right, Y up, D depth; world px = portrait screen px at zoom 1
 const CF = { F: 1000, E: 1.55, YH: 700, CX: 540, DW: 6.5, XL: -3.9, XR: 2.8,
   G0: -3.0, G1: -1.7, GS: 2.35, GH: 3.0,          // the gateway in the back wall: X G0..G1, straight jambs to GS, a round arch to GH
@@ -58,8 +59,9 @@ function cfArm(add, pt, sh, tg, bend, palmUp) {
   add(cfCaps(sh, a.el, .058, .05), pt.arm);
   add([E(-1), Q(-.034, -.056), Q(.004, -.062), Q(.014, -.054), Q(.014, .054), Q(.004, .062), Q(-.034, .056), E(1)], pt.arm);
   const s = palmUp ? 1.1 : 1, th = palmUp ? -1 : 1;
-  add([Q(-.004, -.017 * s), Q(.022, -.022 * s), Q(.052, -.022 * s), Q(.082, -.013 * s), Q(.098, 0), Q(.088, .012 * s), Q(.056, .02 * s), Q(.022, .019 * s), Q(-.004, .016 * s)], pt.skin);
-  add(cfCaps(Q(.026, th * .015), Q(.056, th * .03), .009, .006), pt.skin);
+  add([Q(-.004, -.017 * s), Q(.02, -.021 * s), Q(.05, -.02 * s), Q(.06, -.012 * s), Q(.06, .012 * s), Q(.05, .019 * s), Q(.02, .019 * s), Q(-.004, .016 * s)], pt.skin);   // the palm
+  for (const [yy, L] of [[-.0125, .03], [-.0042, .037], [.0042, .035], [.0125, .027]]) add(cfCaps(Q(.052, yy * s), Q(.052 + L, yy * 1.3 * s), .0056, .0046, 3), pt.skin);   // four fingers, a little apart at the tips (2026-11-14: not a mitten)
+  add(cfCaps(Q(.02, th * .016), Q(.058, th * .036), .0085, .0056, 3), pt.skin);   // the thumb, apart from the fingers
   return a;
 }
 // a man in units of his height (feet at the origin, y up negative) through a map P(x, y) → px, seen three-quarter toward f (+1 right,
@@ -74,10 +76,10 @@ function cfMan(P, o) {
   const add = cfAdder(P, f, q), U = (x, y) => [x + l * (piv - y), y + dz];
   if (!sit) {
     for (const sd of [-1, 1]) { add(cfCaps([sd * .04, -.36], [sd * .04, -.02], .036, .03)); add(cfCirc(sd * .04 + .02, -.012, .05, .022, 10)); }
-    add([[0, -.035], [-.17 * w, -.045], U(-.162 * w, -.26), U(-.145 * w, -.5), U(-.162 * w, -.62), U(-.178 * w, -.715), U(-.182 * w, -.752), U(-.165 * w, -.788), U(-.115 * w, -.808), U(-.05, -.83),
-      U(.05, -.83), U(.115 * w, -.808), U(.165 * w, -.788), U(.182 * w, -.752), U(.178 * w, -.715), U(.162 * w, -.62), U(.145 * w, -.5), U(.162 * w, -.26), [.17 * w, -.045]]);
+    add([[0, -.035], [-.17 * w, -.045], U(-.162 * w, -.26), U(-.145 * w, -.5), U(-.162 * w, -.62), U(-.178 * w, -.71), U(-.183 * w, -.742), U(-.172 * w, -.772), U(-.148 * w, -.796), U(-.105 * w, -.815), U(-.05, -.832),
+      U(.05, -.832), U(.105 * w, -.815), U(.148 * w, -.796), U(.172 * w, -.772), U(.183 * w, -.742), U(.178 * w, -.71), U(.162 * w, -.62), U(.145 * w, -.5), U(.162 * w, -.26), [.17 * w, -.045]]);
   } else {
-    const up = [U(-.145 * w, -.5), U(-.162 * w, -.62), U(-.178 * w, -.715), U(-.182 * w, -.752), U(-.165 * w, -.788), U(-.115 * w, -.808), U(-.05, -.83), U(.05, -.83), U(.115 * w, -.808), U(.165 * w, -.788), U(.182 * w, -.752), U(.178 * w, -.715), U(.162 * w, -.62), U(.145 * w, -.52)];
+    const up = [U(-.145 * w, -.5), U(-.162 * w, -.62), U(-.178 * w, -.71), U(-.183 * w, -.742), U(-.172 * w, -.772), U(-.148 * w, -.796), U(-.105 * w, -.815), U(-.05, -.832), U(.05, -.832), U(.105 * w, -.815), U(.148 * w, -.796), U(.172 * w, -.772), U(.183 * w, -.742), U(.178 * w, -.71), U(.162 * w, -.62), U(.145 * w, -.52)];
     if (tunic === 'short') {   // a soldier's tunic to the knee: bare shins, sandals
       for (const kx of [.28, .33]) add(cfCaps([kx, -.27], [kx - .01, -.035], .028, .023), pt.skin);
       add(cfCirc(.29, -.016, .05, .02, 10), pt.band); add(cfCirc(.345, -.014, .055, .021, 10), pt.band);
@@ -93,7 +95,7 @@ function cfMan(P, o) {
     add([U(-.178 * w, -.8), U(-.05, -.838), U(.05, -.81), U(-.04, -.66), U(-.09, -.52), [-.11, -.25], [-.215 * w, -.245], U(-.21 * w, -.5), U(-.205 * w, -.7)], pt.cloak);
     add([U(.03, -.835), U(.168 * w, -.792), U(.19 * w, -.69), U(.1, -.73)], pt.cloak);
   }
-  for (const [i, sd] of [[0, -1], [1, 1]]) { const mode = arms[i], sh = U(sd * .15 * w, -.745);
+  for (const [i, sd] of [[0, -1], [1, 1]]) { const mode = arms[i], sh = U(sd * .148 * w, -.738);   // (the shoulder rounded, 2026-11-14)
     let tg, bend = -sd;
     if (mode === 'knee') { tg = [sd > 0 ? .23 : .17, -.37]; bend = 1; }
     else if (mode === 'clasp') { tg = [.26, -.44 + (sd > 0 ? 0 : .012)]; bend = 1; }
@@ -101,19 +103,24 @@ function cfMan(P, o) {
     else tg = U(sd * .185 * w, -.41);
     cfArm(add, pt, sh, tg, bend, mode === 'open'); }
   // the head: neck, face (on the side he looks to), short hair or the head cloth and its band, the beard
-  const [hx, hy0] = U(.012, -.9), fcx = hx + .026;
-  add([[hx - .036, hy0 + .045], [hx + .036, hy0 + .045], [hx + .038, hy0 + .088], [hx - .038, hy0 + .088]], pt.skin);
+  // (2026-11-14: the head a tenth larger — it read small on the broad shoulders — grown up from the neck)
+  const [hx, hy0] = U(.012, -.9), fcx = hx + .026, hcY = hy0 + .09, add0 = add;
+  add0([[hx - .036, hy0 + .045], [hx + .036, hy0 + .045], [hx + .038, hy0 + .088], [hx - .038, hy0 + .088]], pt.skin);
+  { const add = (pts, ...to) => add0(pts.map(([x, y]) => [hx + (x - hx) * 1.1, hcY + (y - hcY) * 1.1]), ...to);
   add(cfCirc(fcx, hy0 + .006, .052, .064), pt.face); add([[fcx + .044, hy0 - .008], [fcx + .068, hy0 + .016], [fcx + .046, hy0 + .03]], pt.face);
   if (head === 'cloth') {
-    add(cfCirc(hx - .014, hy0 - .044, .077, .042), pt.hc);   // the cloth over the crown down to the band: the face shows below it
+    add(cfCirc(hx - .004, hy0 - .046, .086, .04), pt.hc);   // the cloth over the crown down to the band: the face shows below it (2026-11-14: it covers the forehead to the band on the face side too)
     for (const sd of [-1, 1]) add([[hx + sd * .08, hy0 - .03], [fcx + sd * .043, hy0 - .032], [fcx + sd * .048, hy0 + .07], [fcx + sd * .062, hy0 + .108], [hx + sd * .124, hy0 + .114], [hx + sd * .1, hy0 + .03]], pt.hc);
     add([[hx - .08, hy0 - .05], [hx, hy0 - .062], [hx + .08, hy0 - .05], [hx + .081, hy0 - .028], [hx, hy0 - .04], [hx - .081, hy0 - .028]], pt.hband);
     for (const sd of [-1, 1]) for (const [a, b] of [[.072, .084], [.092, .098]]) add([[fcx + sd * (.05 + a * .1), hy0 + a], [hx + sd * (.11 + a * .1), hy0 + a + .004], [hx + sd * (.112 + b * .1), hy0 + b + .004], [fcx + sd * (.05 + b * .1), hy0 + b]], pt.hband);   // woven stripes along the cloth's hem: cloth, not hair
   } else {
     add(cfCirc(hx - .06, hy0 + .01, .014, .022, 8), pt.skin);
+    add(cfCirc(hx - .018, hy0 + .014, .05, .06), pt.face);   // the back of the skull under the short hair (2026-11-14: the ear floated beside a face-only head)
     add([[hx - .062, hy0 - .02], [hx - .066, hy0 - .03], [hx - .04, hy0 - .066], [hx, hy0 - .074], [hx + .04, hy0 - .066], [hx + .066, hy0 - .03], [hx + .062, hy0 + .01], [fcx + .04, hy0 - .03], [fcx - .04, hy0 - .03]], pt.hair);
   }
-  if (beard) add([[fcx - .05, hy0 + .006], [fcx - .046, hy0 + .052], [fcx - .016, hy0 + .088], [fcx + .02, hy0 + .094], [fcx + .046, hy0 + .068], [fcx + .055, hy0 + .03], [fcx + .05, hy0 + .018], [fcx + .02, hy0 + .03], [fcx - .012, hy0 + .03], [fcx - .042, hy0 + .014]], pt.hair);   // a full black beard along the jaw (no notch: a notch read as a grin)
+  // a full black beard along the jaw and chin, from the mouth down (2026-11-14: it covered the whole face — a black mask; now the cheek,
+  // the eye's hollow and the nose show above it; no notch: a notch read as a grin)
+  if (beard) add([[fcx - .05, hy0 + .036], [fcx - .045, hy0 + .07], [fcx - .016, hy0 + .097], [fcx + .02, hy0 + .102], [fcx + .046, hy0 + .08], [fcx + .056, hy0 + .052], [fcx + .05, hy0 + .047], [fcx + .026, hy0 + .057], [fcx - .008, hy0 + .055], [fcx - .038, hy0 + .042]], pt.hair); }
   return Object.assign(q, pt);
 }
 // a man seated, seen FROM BEHIND (the listeners in front), in units of his standing height: on the ground (legs crossed, knees out) or
@@ -125,17 +132,18 @@ function cfBack(P, o) {
   const q = new Path2D(), pt = {}; for (const k of ['mantle', 'stripe', 'band', 'arm', 'skin', 'face', 'hair', 'hc', 'hband']) pt[k] = new Path2D();
   const add = cfAdder(P, 1, q), b = seat === 'bench' ? .25 : 0, sd = turn < 0 ? -1 : 1, at = Math.min(1, Math.abs(turn));
   const B = (x, y) => [x + turn * .045 * Math.max(0, Math.min(1, (-y - .16) / .3)), y - b];   // the body leans a little toward the speaker   // body coords (0 = the seat); the shoulders swing to the turn
-  const up = [B(-.162, -.2), B(-.154, -.27), B(-.164 * w, -.34), B(-.18 * w, -.385), B(-.188 * w, -.408), B(-.17 * w, -.434), B(-.115 * w, -.452), B(-.045, -.46), B(.045, -.46), B(.115 * w, -.452), B(.17 * w, -.434), B(.188 * w, -.408), B(.18 * w, -.385), B(.164 * w, -.34), B(.154, -.27), B(.162, -.2)];
+  // (2026-11-14: the shoulders slope from the neck — no flat yoke — and the head sits on a neck, not on the shoulders)
+  const up = [B(-.162, -.2), B(-.154, -.27), B(-.164 * w, -.34), B(-.18 * w, -.378), B(-.188 * w, -.4), B(-.172 * w, -.422), B(-.118 * w, -.44), B(-.05, -.462), B(.05, -.462), B(.118 * w, -.44), B(.172 * w, -.422), B(.188 * w, -.4), B(.18 * w, -.378), B(.164 * w, -.34), B(.154, -.27), B(.162, -.2)];
   if (!b) { add([[-.17, -.01], [-.178, -.11], ...up, [.178, -.11], [.17, -.01]]);   // the back down to the hips; the crossed legs' knees out to the sides
     for (const s of [-1, 1]) add([[s * .1, -.004], [s * .215, -.01], [s * .236, -.038], [s * .212, -.072], [s * .15, -.088]]); }
   else add([[-.205, -b + .07], [-.215, -b - .03], ...up, [.215, -b - .03], [.205, -b + .07]]);
-  for (const s of [-1, 1]) { const sh = B(s * .165 * w, -.41), el = B(s * (.198 + .012 * (s === sd ? 0 : 1)) * w, -.27), hd = [s * (b ? .17 : .2), -b - .14];   // the arms down the sides, elbows out, hands forward onto the knees
-    add(cfCaps(sh, el, .046, .042), pt.arm); add(cfCaps(el, hd, .042, .036), pt.arm); }
+  for (const s of [-1, 1]) { const sh = B(s * .158 * w, -.392), el = B(s * (.196 + .012 * (s === sd ? 0 : 1)) * w, -.27), hd = [s * (b ? .17 : .2), -b - .14];   // the arms down the sides, elbows out, hands forward onto the knees
+    add(cfCaps(sh, el, .043, .041), pt.arm); add(cfCaps(el, hd, .042, .036), pt.arm); }
   if (mantle) { const lo = b ? -b + .06 : -.02;
     add([B(-.192 * w, -.405), B(-.13 * w, -.452), B(0, -.465), B(.13 * w, -.452), B(.192 * w, -.405), B(.205, -.2), [b ? .215 : .245, lo], [b ? -.215 : -.245, lo], B(-.205, -.2)], pt.mantle);
     for (const sx of [-.085, .085]) add([B(sx - .016, -.44), B(sx + .016, -.44), [sx * 1.15 + .02, lo - .005], [sx * 1.15 - .02, lo - .005]], pt.stripe); }
-  const [hx, hy] = [turn * .048, -.516 - b];   // the head a little forward and down: listening
-  add([[hx - .036, -.44 - b], [hx + .036, -.44 - b], [hx + .034, hy + .04], [hx - .034, hy + .04]], pt.skin);   // the neck
+  const [hx, hy] = [turn * .048, -.545 - b];   // the head a little forward and down: listening (raised onto its neck, 2026-11-14)
+  add([[hx - .037, -.45 - b], [hx + .037, -.45 - b], [hx + .032, hy + .03], [hx - .032, hy + .03]], pt.skin);   // the neck
   if (head === 'cloth') {
     const px0 = hx + sd * (.066 + .04 * at);   // the face's edge past the cloth
     if (at > .15) { add([[hx + sd * .045, hy - .032], [px0 + sd * .01, hy - .008], [px0 + sd * .02, hy + .016], [px0, hy + .028], [hx + sd * .045, hy + .046]], pt.face);
@@ -279,7 +287,7 @@ async function buildCorneliusFresco() {
   // ---------------- the people ----------------
   const PE = (typeof RD_PETER !== 'undefined') ? RD_PETER : { body: '#7e4c44', hc: '#c9a06a', band: '#4a3426', hair: '#3a302c', w: 1.1 };   // part 3's Peter
   const deep = c => '#' + Pilot.hex(c).map((v, i) => Math.round(v * [.84, .7, .5][i]).toString(16).padStart(2, '0')).join('');   // the head cloth a deeper ochre (in this light the pastel one read pale, like fair hair)
-  const PETER = { X: -.45, D: 4.3, Hm: 1.8, kind: 'man', peter: true, o: { f: 1, w: PE.w || 1.1, head: 'cloth', lean: .015, arms: ['hang', 'open'] }, c: { body: PE.body, hc: deep(PE.hc), band: PE.band, hair: PE.hair, skin: '#b48a6e', faceK: 1.12 }, amb: .54 };
+  const PETER = { X: -.45, D: PETER_D, Hm: 1.8, kind: 'man', peter: true, o: { f: 1, w: PE.w || 1.1, head: 'cloth', lean: .015, arms: ['hang', 'open'] }, c: { body: PE.body, hc: deep(PE.hc), band: PE.band, hair: PE.hair, skin: '#b48a6e', faceK: 1.12 }, amb: .54 };
   const MEN = [   // c: colours; kind 'back' = seated, seen from behind; 'man' = three-quarter (cfMan)
     // landscape only, at the sides
     { X: -3.05, D: 4.4, Hm: 1.74, kind: 'man', o: { f: 1, w: 1, head: 'cloth', lean: .02 }, c: { body: '#5a4c3e', hc: '#b6a688', band: '#3e2e2c', hair: '#2e2420', skin: '#9c7a62' } },
@@ -330,6 +338,13 @@ async function buildCorneliusFresco() {
     // the shadow under it
     B.save(); B.filter = `blur(${(.014 * S).toFixed(1)}px)`; B.fillStyle = 'rgba(16,9,5,.5)'; B.beginPath(); B.ellipse(fx + (m.o.pose === 'sit' ? .14 * (m.o.f || 1) : 0) * S, fy - .004 * S, (back ? .32 : .24) * S, .032 * S, 0, 0, 6.283); B.fill(); B.restore();
     const a = m.amb || .6; AMB = [a, a * .9, a * .82]; parts(B, path, m.c);
+    // the face's shading first, then the beard and the cloth again over it (they stand in front of the face)
+    if (path.face) { let gr; B.save(); B.clip(path.face); gr = B.createLinearGradient(fx - .03 * S, 0, fx + .09 * S, 0); gr.addColorStop(0, `rgba(10,5,4,${back ? .25 : .1})`); gr.addColorStop(1, 'rgba(10,5,4,0)'); B.fillStyle = gr; B.fillRect(...box);
+      if (!back) { const f = m.o.f || 1, cy = fy - (sit ? .71 : .905) * S, cx = fx + f * .05 * S;   // the eye's hollow under the brow, the nose's small shadow — no features drawn
+        gr = B.createLinearGradient(0, cy - .014 * S, 0, cy + .03 * S); gr.addColorStop(0, 'rgba(10,5,4,.55)'); gr.addColorStop(.5, 'rgba(10,5,4,.18)'); gr.addColorStop(1, 'rgba(10,5,4,0)'); B.fillStyle = gr; B.fillRect(...box);
+        const g2 = B.createRadialGradient(cx + f * .02 * S, cy + .022 * S, 0, cx + f * .02 * S, cy + .022 * S, .022 * S); g2.addColorStop(0, 'rgba(10,5,4,.2)'); g2.addColorStop(1, 'rgba(10,5,4,0)'); B.fillStyle = g2; B.fillRect(...box); }
+      B.restore();
+      const c = m.c; B.fillStyle = tone(c.hair); B.fill(path.hair); if (c.hc) { B.fillStyle = tone(c.hc); B.fill(path.hc); B.save(); B.clip(path.hc); B.fillStyle = tone(c.band); B.fill(path.hband); B.restore(); } }   // the beard and the cloth stay in front of the face's shading
     B.save(); B.clip(path);
     let gr = B.createLinearGradient(0, top + .25 * S, 0, fy); gr.addColorStop(0, 'rgba(12,6,4,0)'); gr.addColorStop(1, `rgba(12,6,4,${back ? .5 : .4})`); B.fillStyle = gr; B.fillRect(...box);   // darker down the body (and the backs toward us)
     const hw = (back ? .3 : .19) * S;   // roundness: the far side (away from the gate) darker, the near edge a touch darker too
@@ -344,7 +359,6 @@ async function buildCorneliusFresco() {
       gr = B.createLinearGradient(0, fy - .47 * S, 0, fy - .3 * S); gr.addColorStop(0, 'rgba(255,236,210,.1)'); gr.addColorStop(1, 'rgba(255,236,210,0)'); B.fillStyle = gr; B.fillRect(fx - .3 * S, fy - .48 * S, .6 * S, .2 * S);   // the tops of the shoulders take the sky
       for (const s of [-1, 1]) { const cx = fx + s * .1 * S, cy = fy - .39 * S, R = .09 * S, g3 = B.createRadialGradient(cx, cy, 0, cx, cy, R); g3.addColorStop(0, 'rgba(255,236,210,.06)'); g3.addColorStop(1, 'rgba(255,236,210,0)'); B.fillStyle = g3; B.fillRect(cx - R, cy - R, 2 * R, 2 * R); } }
     if (path.arm) { B.save(); B.filter = `blur(${(.01 * S).toFixed(1)}px)`; B.strokeStyle = 'rgba(12,6,4,.34)'; B.lineWidth = .014 * S; B.stroke(path.arm); B.restore(); }   // the sleeves' soft turn into shade where they meet the body
-    if (path.face) { B.save(); B.clip(path.face); gr = B.createLinearGradient(fx - .03 * S, 0, fx + .09 * S, 0); gr.addColorStop(0, 'rgba(10,5,4,.25)'); gr.addColorStop(1, 'rgba(10,5,4,0)'); B.fillStyle = gr; B.fillRect(...box); B.restore(); }
     if (path.hc) { gr = B.createLinearGradient(0, top, 0, top + .2 * S); gr.addColorStop(0, 'rgba(255,240,220,.07)'); gr.addColorStop(1, 'rgba(10,5,4,.16)'); B.fillStyle = gr; B.fill(path.hc);
       if (!back) { B.save(); B.clip(path.hc); B.strokeStyle = 'rgba(10,5,4,.22)'; B.lineWidth = .008 * S; B.filter = `blur(${(.004 * S).toFixed(1)}px)`; const hx = fx + .012 * S * (m.o.f || 1), hy = top + .1 * S;   // the cloth's folds falling from the band
         for (const dx of [-.095, -.07, .07, .1]) { B.beginPath(); B.moveTo(hx + dx * S, hy - .04 * S); B.quadraticCurveTo(hx + dx * 1.15 * S, hy + .03 * S, hx + dx * 1.25 * S, hy + .1 * S); B.stroke(); } B.restore(); } }
@@ -355,6 +369,13 @@ async function buildCorneliusFresco() {
     L.save(); L.clip(path); const bA = m.bA ?? .05;
     gr = L.createLinearGradient(0, fy, 0, fy - .7 * S); gr.addColorStop(0, `rgba(255,178,116,${bA})`); gr.addColorStop(1, 'rgba(255,178,116,0)'); L.fillStyle = gr; L.fillRect(...box);
     gr = L.createLinearGradient(fx - .3 * S, 0, fx + .1 * S, 0); gr.addColorStop(0, `rgba(255,190,130,${bA * .8})`); gr.addColorStop(1, 'rgba(255,190,130,0)'); L.fillStyle = gr; L.fillRect(...box); L.restore();
+    // the face in soft side light (2026-11-14: Peter's face read as a black mask): the cheek toward the gate warm from the beam's
+    // spill and the lit floor, the far side falling into shade; the beard keeps its dark
+    if (path.face && !back) { const f = m.o.f || 1, cx = fx + f * .05 * S, A = m.peter ? .3 : .07, [bx, by, bw, bh] = box.map(Math.round);
+      T.save(); T.clearRect(bx - 6, by - 6, bw + 12, bh + 12); T.clip(path.face);
+      gr = T.createLinearGradient(cx - .075 * S, 0, cx + .07 * S, 0); gr.addColorStop(0, `rgba(255,200,146,${A})`); gr.addColorStop(.55, `rgba(255,186,128,${A * .5})`); gr.addColorStop(1, `rgba(240,170,120,${A * .15})`); T.fillStyle = gr; T.fillRect(...box);
+      T.globalCompositeOperation = 'destination-out'; T.fillStyle = '#000'; T.fill(path.hc); T.fill(path.hair); T.restore();   // the cloth and the beard in front of the face keep their own light
+      L.save(); L.setTransform(1, 0, 0, 1, 0, 0); const sx = bx - 6 - off[0], sy = by - 6 - off[1]; L.drawImage(T.canvas, sx, sy, bw + 12, bh + 12, sx, sy, bw + 12, bh + 12); L.restore(); }
     if (bc) { L.save(); L.clip(bc); L.clip(path);
       gr = L.createLinearGradient(fx - .26 * S, top, fx + .16 * S, top + .5 * S); const kc = m.peter ? '255,172,100' : '255,200,140'; gr.addColorStop(0, `rgba(${kc},${m.key})`); gr.addColorStop(.5, `rgba(${kc},${m.key * .4})`); gr.addColorStop(1, `rgba(${kc},.02)`); L.fillStyle = gr; L.fillRect(...box);   // the key
       rim(L, T, off, path, box, [1, .4], (m.peter ? .016 : .012) * S, `rgba(255,214,158,${m.rimA})`, `rgba(255,200,140,${m.rimA * .35})`, .006 * S);   // the sun's edge
@@ -395,8 +416,15 @@ async function buildCorneliusFresco() {
     CFR.shaft = sc; CFR.SB = SB; }
   { const BB = { x: -500, y: 120, w: 1300, h: 1150 }, bc = canvas(BB.w, BB.h), x = bc.getContext('2d'); x.translate(-BB.x, -BB.y); x.filter = 'blur(60px)'; x.fillStyle = 'rgba(255,220,160,.85)'; poly(x, apW); x.fill();
     x.filter = 'blur(16px)'; x.fillStyle = 'rgba(255,240,210,.55)'; poly(x, apW); x.fill(); CFR.bloom = bc; CFR.BB = BB; }
-  // dust motes on rays from the opening (closed form: each mote's place is a function of u)
-  { const r = rng(41); CFR.dust = Array.from({ length: 300 }, () => { const X = lerp(G0 + .05, G1 - .05, r()), Y = lerp(.2, cfArchY(X) - .05, r()); return { X, Y, lam: r(), p1: r() * 6.283, p2: r() * 6.283, s: r(), a: r() }; }); }
+  // dust in the light (관리자 2026-11-14 "빛 파티클을 좀더 고급지고 덜 어색하게": no more snow of sharp white dots): few motes, all of them
+  // INSIDE the shaft — each lives at a point of the gateway's opening (ox, oy in 0..1 of its width and height) carried a distance h along
+  // the sun — so a mote that drifts toward the opening's edge has drifted to the beam's edge and fades there, and it is brightest in the
+  // beam's core. Most are tiny and faint (in focus round Peter's depth); six are large soft discs nearer the camera (out of focus).
+  // None in the shadowed foreground, none over a face (CFR.heads). Closed form: each mote's place is a function of u.
+  { const r = rng(41); CFR.dust = Array.from({ length: 96 }, (_, i) => ({ ox: r(), oy: .08 + .86 * r(), lam: i < 6 ? .62 + .3 * r() : Math.pow(r(), .85), bok: i < 6, p1: r() * 6.283, p2: r() * 6.283, p3: r() * 6.283, s: r(), a: r() })); }
+  CFR.heads = [PETER, ...MEN, ...FRONT].map(m => { const f = m.o.f || 1, back = m.kind === 'back', sit = !back && m.o.pose === 'sit';
+    const [x, y] = back ? m.P((m.o.turn || 0) * .048, -.545 - (m.o.seat === 'bench' ? .25 : 0)) : m.P(.03 * f, sit ? -.71 : -.91); return [x, y, .1 * m.S]; });
+  CFR.bodies = [PETER, ...MEN, ...FRONT].map(m => { const back = m.kind === 'back', h = back ? (m.o.seat === 'bench' ? .85 : .62) : m.o.pose === 'sit' ? .82 : 1.02; return [m.fx, m.fy, m.S, m.D, h]; });   // a mote behind a nearer body is hidden by it
   { const gc = canvas(256, 256), x = gc.getContext('2d'), im = x.createImageData(256, 256), rr = rng(91); for (let i = 0; i < 65536; i++) { const v = 128 + (rr() - .5) * 110; im.data[i * 4] = im.data[i * 4 + 1] = im.data[i * 4 + 2] = v; im.data[i * 4 + 3] = 255; } x.putImageData(im, 0, 0); CFR.grain = gc; }
 }
 
@@ -419,11 +447,26 @@ function corneliusFresco(ctx, u) {
   plate(CFR.front); plate(CFR.near);
   // a thinner veil of the shaft in front of everyone, and the dust turning in it
   ctx.globalCompositeOperation = 'screen'; layer(.97); ctx.globalAlpha = .14 * I; ctx.drawImage(CFR.shaft, CFR.SB.x, CFR.SB.y);
-  { layer(1); const ce = Math.cos(Math.atan(CF.tanE)), se = Math.sin(Math.atan(CF.tanE)); ctx.globalAlpha = 1;
-    for (const m of CFR.dust) { const lam = m.lam * m.Y / se, X = m.X + lam * ce * CF.hx + .05 * Math.sin(u * .35 + m.p1), Y = m.Y - lam * se + .04 * Math.sin(u * .27 + m.p2) + .02 * u, D = CF.DW - lam * ce * CF.hz + .04 * Math.cos(u * .3 + m.p1);
-      if (Y < .03 || D < 1.1) continue; const [x, y] = cfP(X, Y, D), tw = .55 + .45 * Math.sin(u * 1.7 + m.p2 * 3), near = D < 2.2, R = (near ? 4 + 5 * m.s : 1.4 + 2 * m.s) * 4 / D, a = (near ? .14 : .35 + .5 * m.a) * tw * I;
-      if (a < .01) continue; if (near) { const gr = ctx.createRadialGradient(x, y, 0, x, y, R); gr.addColorStop(0, `rgba(255,236,200,${a})`); gr.addColorStop(1, 'rgba(255,236,200,0)'); ctx.fillStyle = gr; ctx.fillRect(x - R, y - R, 2 * R, 2 * R); }
-      else { ctx.fillStyle = `rgba(255,238,206,${a})`; ctx.beginPath(); ctx.arc(x, y, R, 0, 6.283); ctx.fill(); } } }
+  { layer(1); ctx.globalAlpha = 1; const N = Pilot.noise, DF = PETER_D, TOP = .05;
+    for (const m of CFR.dust) {
+      // drift in the opening's coordinates: slow wander + a gentle turbulence, a slow settling; and slowly along the beam
+      const ox = m.ox + .035 * Math.sin(u * .21 + m.p1) + .03 * (N(u * .28 + m.p2 * 3, m.p1 * 5) - .5), oy = m.oy + .03 * Math.sin(u * .17 + m.p2) + .03 * (N(u * .25 + m.p3 * 3, m.p2 * 5) - .5) - .012 * u;
+      const edge = ss(0, .16, Math.min(ox, 1 - ox)) * ss(0, .12, Math.min(oy, 1 - oy)); if (edge <= 0) continue;
+      const core = Math.exp(-(((ox - .5) / .3) ** 2) - (((oy - .45) / .45) ** 2));                     // the beam's core brighter
+      const X0 = CF.G0 + (CF.G1 - CF.G0) * ox, Y0 = oy * (cfArchY(X0) - .02); if (Y0 < TOP + .05) continue;
+      const hMax = Math.min((Y0 - TOP) / CF.tanE, (CF.DW - (m.bok ? 2.5 : 3.4)) / CF.hz), h = hMax * clamp(m.lam + .025 * Math.sin(u * .13 + m.p3) + .01 * u);
+      const X = X0 + h * CF.hx, Y = Y0 - h * CF.tanE, D = CF.DW - h * CF.hz, [x, y] = cfP(X, Y, D);
+      let hid = false; for (const [bx, by, bS, bD, bh] of CFR.bodies) if (bD < D - .05 && Math.abs(x - bx) < .21 * bS && y < by && y > by - bh * bS) { hid = true; break; } if (hid) continue;
+      let face = 1; for (const [hx, hy, hr] of CFR.heads) { const d = Math.hypot(x - hx, y - hy) / hr; if (d < 2.2) face = Math.min(face, ss(1.2, 2.2, d)); } if (face <= 0) continue;
+      // depth of field round Peter: a circle of confusion that grows quickly toward the camera, slowly beyond him
+      const coc = 150 * Math.max(0, 1 / D - 1 / DF) + 22 * Math.max(0, 1 / DF - 1 / D), r0 = (m.bok ? 2.4 : 1.1 + 1.4 * m.s) * 4 / D, R = Math.max(r0 * 2.2, r0 + coc * (m.bok ? 1.6 : 1));
+      const glint = .8 + .2 * Math.sin(u * .9 + m.p1 * 2);                                             // a slow turn, no twinkle
+      let a = edge * (.25 + .75 * core) * face * glint * I * (m.bok ? .12 + .06 * m.a : (.4 + .4 * m.a) * Math.min(1, (r0 * 2.2 / R) ** 1.2));
+      if (a < .006) continue;
+      const gr = ctx.createRadialGradient(x, y, 0, x, y, R);
+      if (m.bok) { gr.addColorStop(0, `rgba(255,222,172,${a})`); gr.addColorStop(.62, `rgba(255,220,168,${a * .8})`); gr.addColorStop(1, 'rgba(255,214,160,0)'); }
+      else { gr.addColorStop(0, `rgba(255,228,184,${a})`); gr.addColorStop(.4, `rgba(255,220,170,${a * .45})`); gr.addColorStop(1, 'rgba(255,214,160,0)'); }
+      ctx.fillStyle = gr; ctx.fillRect(x - R, y - R, 2 * R, 2 * R); } }
   ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1;
   // grade: a soft vignette (lighter toward the gate and Peter), grain
   ctx.globalCompositeOperation = 'multiply';

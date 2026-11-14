@@ -20,8 +20,9 @@
                 city and the city comes out of the haze as a silhouette. From u 5.4 Peter quickens out of the group toward him (into 'protest').
      'protest'  (u 0–4.3, 67.1–): nearer, low, a few steps behind Jesus, rose → violet: he walks on up the road with his back to us
                 (small, left of centre) and stops; Peter comes in across the road from the right and stands in the road ahead of him,
-                facing him (seen from the front, his head turned to Jesus) — barring the way: one hand holds Jesus's arm above the elbow,
-                the other is raised, palm out (관점 검수 6차); between their heads, in the dip of the hills where the road goes, the last light.
+                in the middle of the road, between him and the small city in the dip where the last light is (the same Jerusalem as
+                'foretell'), facing him (seen from the front, his head turned to Jesus), leaning in, both hands clinging to Jesus's right arm
+                — barring the way (관점 검수 7차: no raised hand, it read as a wave).
      'alone'    (u 0–4.6, 71.4–): violet dusk; Jesus and the band walk on up the road, growing small; Peter stands a few steps
                 behind, alone on the road; the first star.
    Each mode draws for u from -0.8 to its length + 0.8 (dissolves). Closed form: roadPastel(ctx, u, mode) depends only on (u, mode).
@@ -175,7 +176,7 @@ function rdFigure(g, path, P, o, body, light, Lt, d, rimA = 1) {
   g.restore();
   if (rimA > 0 && d < 14 && !o.softRim) {   // a small figure: the cheap rim (light, then the shape again shifted with the light), faded down the body
     const top = Math.min(...ys); g.save(); g.clip(path); g.globalAlpha = rimA; g.fillStyle = light; g.fill(path); g.globalAlpha = 1; g.translate(Lt[0] * d, Lt[1] * d); rdParts(g, path, o, body); g.translate(-Lt[0] * d, -Lt[1] * d);
-    const fg = g.createLinearGradient(0, top + .3 * s, 0, top + .8 * s); fg.addColorStop(0, 'rgba(0,0,0,0)'); fg.addColorStop(1, body); g.fillStyle = fg; g.fillRect(Math.min(...xs), top + .3 * s, Math.abs(xs[1] - xs[0]), 1.2 * s); g.restore(); return; }
+    const fg = g.createLinearGradient(0, top + .3 * s, 0, top + .8 * s); fg.addColorStop(0, body.replace(/,[^,]*\)$/, ',0)')); fg.addColorStop(1, body); g.fillStyle = fg; g.fillRect(Math.min(...xs), top + .3 * s, Math.abs(xs[1] - xs[0]), 1.2 * s); g.restore(); return; }   // the fade from the body colour at alpha 0 (from transparent black it darkened the chest and left the lower body pale: 7차 "semi-transparent")
   if (rimA > 0) rdRim(g, path, Lt, d, light, rimA, [Math.min(...xs), Math.min(...ys), Math.abs(xs[1] - xs[0]), Math.abs(ys[1] - ys[0])]);
 }
 function rdCam(keys, u) {   // Catmull-Rom through [t, fx, fy, z] keys, held outside
@@ -411,13 +412,20 @@ function roadPastel(ctx, u, mode = 'confess') {
     let a, walk = 0, face = 1, ph, back = 1;   // walking up the road we see their backs
     if (mode === 'confess') { const ts = 1.1 + .07 * b.back / L.fh; a = RDP.aLead - b.back * (1 - .06 * ss(.6, 2, u)) + vel * (walkF(u, ts) - .55); const wv = u < ts ? 1 - u / ts : 0; walk = clamp(wv * 1.4); ph = b.ph0 + (a / (RDP.hl * .55)) * Math.PI;
       back = 1 - .2 * ss(ts * .8, ts + .6, u); face = .6 + .4 * Math.sin(u * .7 + b.ph0) * ss(ts, ts + 1, u);   // stopped, they look up to him
-      if (b.jesus) { const k = ss(.85, 1.7, u); face = lerp(1, -1, k); back = lerp(1, .15, k); }   // he turns to them (his face stays in the shade of the cloth)
+      if (b.jesus) { const k = ss(.85, 1.7, u); face = lerp(1, -1, k); back = lerp(1, .58, k); }   // he turns to them only so far that we still see the back of his head (7차: turned to us, the face in the cloth read as a dark oval)
       if (b.peter) { a += b.back * .5 * peterStep; walk = Math.max(walk, Math.sin(Math.PI * peterStep) * .9); ph = b.ph0 + (a / (RDP.hl * .55)) * Math.PI; back = lerp(back, .3, peterStep); face = lerp(face, 1, peterStep); } }
     else { const rest = RDP.aLead - b.back * .94 + RDP.hl * 1.6; if (b.peter) { a = RDP.aLead - RDP.hl * 3; ph = b.ph0; walk = 0; }   // the band has walked on; Peter stays a few steps behind the last of them
       else { a = rest + RDP.hl * .6 + vel * .95 * (u + .8); walk = 1; ph = b.ph0 + (a / (RDP.hl * .55)) * Math.PI; } }
     const { p, n } = at(a), hw = RDP.wd(p[1]) / 2, side = b.peter && mode !== 'confess' ? -.1 : b.peter ? lerp(b.side, -.1, peterStep) : b.side;
     const lat = side * Math.max(hw * 1.6, RDP.hl * 1.6), X = p[0] + n[0] * lat, Y = p[1] + n[1] * lat;
     return { b, i, X, Y, h: RDP.hs(Y), walk, face, ph, back }; }).sort((a, b) => a.Y - b.Y);
+  // Peter's step into the warmest light (confess) — under the shadows, so a shadow stays with its man while the light grows (7차: the
+  // screen glow washed Jesus's shadow out before the figure)
+  const glow = mode === 'confess' ? ss(3.2, 4.6, u) * (1 - .3 * ss(6.2, 8, u)) : 0, P0 = items.find(it => it.b.peter);
+  if (glow > 0 && P0) { const [px, py] = sc(P0.X, P0.Y - P0.h * .3), rr = .2 * R0 * z; ctx.globalCompositeOperation = 'screen'; const g = ctx.createRadialGradient(px, py, 0, px, py, rr);
+    g.addColorStop(0, `rgba(255,214,140,${.75 * glow})`); g.addColorStop(.4, `rgba(255,190,120,${.3 * glow})`); g.addColorStop(1, 'rgba(255,170,100,0)'); ctx.fillStyle = g; ctx.fillRect(px - rr, py - rr, 2 * rr, 2 * rr);
+    const [fx2, fy2] = sc(P0.X, P0.Y), pr = P0.h * z * 1.3, g3 = ctx.createRadialGradient(fx2, fy2, 0, fx2, fy2, pr); g3.addColorStop(0, `rgba(255,226,160,${.7 * glow})`); g3.addColorStop(1, 'rgba(255,200,130,0)');
+    ctx.save(); ctx.translate(fx2, fy2); ctx.scale(1, .4); ctx.translate(-fx2, -fy2); ctx.fillStyle = g3; ctx.fillRect(fx2 - pr, fy2 - pr, 2 * pr, 2 * pr); ctx.restore(); ctx.globalCompositeOperation = 'source-over'; }   // a pool of sun on the road where he stands
   // shadows: long and running up the road ahead of each (from the low sun behind us)
   if (shLen > 0 && shA > 0) { const sh = RDP.shC, sg = sh.getContext('2d'); sg.setTransform(1, 0, 0, 1, 0, 0); sg.clearRect(0, 0, sh.width, sh.height); sg.scale(.5, .5); sg.fillStyle = 'rgb(84,72,124)';
     const nrm = [-shD[1], shD[0]];
@@ -425,12 +433,6 @@ function roadPastel(ctx, u, mode = 'confess') {
       const Ps = (x, y) => [px + shD[0] * (-y) * Ls + nrm[0] * x * h * .9, py + shD[1] * (-y) * Ls + nrm[1] * x * h * .9 + .02 * h];
       sg.fill(rdPerson(Ps, Object.assign({}, it.b.o, { face: 1, ph: it.ph, walk: it.walk }))); }
     ctx.save(); ctx.globalCompositeOperation = 'multiply'; ctx.globalAlpha = shA * 2.2; ctx.drawImage(sh, 0, 0, W, H); ctx.restore(); }   // one layer: where shadows overlap it is no darker
-  // Peter's step into the warmest light (confess)
-  const glow = mode === 'confess' ? ss(3.2, 4.6, u) * (1 - .3 * ss(6.2, 8, u)) : 0, P0 = items.find(it => it.b.peter);
-  if (glow > 0 && P0) { const [px, py] = sc(P0.X, P0.Y - P0.h * .3), rr = .2 * R0 * z; ctx.globalCompositeOperation = 'screen'; const g = ctx.createRadialGradient(px, py, 0, px, py, rr);
-    g.addColorStop(0, `rgba(255,214,140,${.75 * glow})`); g.addColorStop(.4, `rgba(255,190,120,${.3 * glow})`); g.addColorStop(1, 'rgba(255,170,100,0)'); ctx.fillStyle = g; ctx.fillRect(px - rr, py - rr, 2 * rr, 2 * rr);
-    const [fx2, fy2] = sc(P0.X, P0.Y), pr = P0.h * z * 1.3, g3 = ctx.createRadialGradient(fx2, fy2, 0, fx2, fy2, pr); g3.addColorStop(0, `rgba(255,226,160,${.7 * glow})`); g3.addColorStop(1, 'rgba(255,200,130,0)');
-    ctx.save(); ctx.translate(fx2, fy2); ctx.scale(1, .4); ctx.translate(-fx2, -fy2); ctx.fillStyle = g3; ctx.fillRect(fx2 - pr, fy2 - pr, 2 * pr, 2 * pr); ctx.restore(); ctx.globalCompositeOperation = 'source-over'; }   // a pool of sun on the road where he stands
   // the figures, on their own layer (grained like pastel), nearest last
   const fl = RDP.fl, g = fl.getContext('2d'); g.setTransform(1, 0, 0, 1, 0, 0); g.globalCompositeOperation = 'source-over'; g.globalAlpha = 1; g.clearRect(0, 0, W, H);
   const rimA = 1 - .55 * ss(.6, .95, T), land = C('land');
@@ -462,11 +464,12 @@ function rdFinish(ctx, T, band) {
 // small, left of centre, the head cloth covering his head, no face and no profile line at any frame — and slows to a stop; Peter comes in
 // across the road from the right and stops in the road AHEAD of him, square in his way, facing him (seen from the front, his head turned to
 // Jesus: he is the one who acts — 관점 검수 6차 "he seemed to stand beside him"): one hand holds Jesus's arm above the elbow (at the wrist it
-// read as walking hand in hand), the other is raised, palm out. From u 1.4 his insistent small movements, Jesus's head turning a little.
-// Between their heads, in the dip, the last light. Fixed bone lengths (two-bone IK from each shoulder to its target).
+// read as walking hand in hand), the other the forearm, leaning in (7차: a raised palm read as a wave, beside him he read as walking with
+// him). From u 1.4 his insistent small movements, Jesus's head turning a little. Behind Peter, in the dip, the city and the last light. Fixed bone lengths (two-bone IK from each shoulder to its target).
+const RD_PV = { jx: -.45, px: -.05, pz: 1.25 };   // protest: Jesus's and Peter's place across the road (body heights off its middle), Peter's depth × Jesus's
 function rdProtest(ctx, u, T, C) {
-  const { ss, clamp, lerp, rgb, mix } = Pilot, { W, H } = RDP.L, PV = RDP.pv, hp = PV.hp, f = PV.f;
-  const z = 1 + .07 * ss(-.8, 5.1, u), dx = -.012 * W * ss(-.8, 5.1, u), cx0 = PV.gx, cy0 = hp;
+  const { ss, clamp, lerp, rgb, mix } = Pilot, { W, H, V } = RDP.L, PV = RDP.pv, hp = PV.hp, f = PV.f;
+  const z = 1.1 + .07 * ss(-.8, 5.1, u), dx = -.012 * W * ss(-.8, 5.1, u), cx0 = PV.gx, cy0 = hp;
   const S = (x, y) => [cx0 + (x - cx0) * z + dx, cy0 + (y - cy0) * z];   // the camera: a slow push in toward the two and a drift
   ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
   // the sky: rose → violet
@@ -478,6 +481,11 @@ function rdProtest(ctx, u, T, C) {
   { ctx.globalCompositeOperation = 'screen'; const R = .35 * W, g = ctx.createRadialGradient(gx, gy, 0, gx, gy, R); g.addColorStop(0, `rgba(255,204,150,${.65 * lastA})`); g.addColorStop(.3, `rgba(240,150,130,${.25 * lastA})`); g.addColorStop(1, 'rgba(200,120,140,0)');
     ctx.fillStyle = g; ctx.fillRect(gx - R, gy - R, 2 * R, 2 * R); ctx.globalCompositeOperation = 'source-over'; }
   { const pl = RDP.pland, [x0, y0] = S(-(pl.width - W) / 2, -(pl.height - H) / 2); ctx.drawImage(pl, x0, y0, pl.width * z, pl.height * z); }
+  // the small city on the horizon where the road goes — the same Jerusalem as in 'foretell' (7차: it went missing at the cut): a dark
+  // silhouette in the dip, the last light in its gate; Peter stands between Jesus and it
+  { const ct = RDP.city, Fv = RDP.fv, k = (V ? .78 : .85) * z, col = mix(mix(C('hor'), C('mid'), .35), [56, 42, 82], .88), [cx, cy] = S(PV.gx, hp + .002 * H);
+    ctx.save(); ctx.beginPath(); ctx.rect(0, 0, W, S(0, hp)[1] + 1); ctx.clip(); ctx.translate(cx, cy); ctx.scale(k, k); ctx.translate(-Fv.vx, -ct.cb);   // (its foot cut at the horizon line)
+    ctx.fillStyle = rgb(col); ctx.fill(ct.p); ctx.fillStyle = rgb(mix(C('light'), [255, 236, 196], .3), .9 * lastA); ctx.fill(ct.ar); ctx.restore(); }
   // (no bright seam on the horizon: it would read as a line joining them; the glow in the dip carries the last light)
   ctx.globalCompositeOperation = 'multiply'; { const g = ctx.createLinearGradient(0, gy - .01 * H, 0, gy + .08 * H); g.addColorStop(0, 'rgba(255,255,255,1)'); g.addColorStop(1, rgb(C('land'))); ctx.fillStyle = g; ctx.fillRect(0, gy - .01 * H, W, H); } ctx.globalCompositeOperation = 'source-over';
   // the road catches the last light toward the dip
@@ -485,36 +493,42 @@ function rdProtest(ctx, u, T, C) {
   // Jesus: a few more steps up the road (away from us), slowing to a stop; world lateral -.34 (left of the road's middle) — small, off the
   // centre, his back to us all through. His arms hang in the sleeves (a sleeve flaring to its cuff, a shaped hand: 관점 검수 6차 "the
   // forearm read as a log, the hand as a lump"); Peter holds the right one above the elbow, drawing it out a little.
-  // From u 1.4 (film 68.5) a little life: Peter's tugs and his raised hand, Jesus's head turning a little toward him (inside the back
+  // From u 1.4 (film 68.5) a little life: Peter's tugs and his head shaking, Jesus's head turning a little toward him (inside the back
   // view: the head cloth only shifts), the robes and the head cloths in the wind.
   const life = ss(1.2, 1.9, u), ph6 = (u - 1.4) * 6.6, wob = Math.sin(ph6), tug = life * (.5 + .5 * Math.sin(ph6 - .7));
-  const pull = ss(1.3, 3.1, u) * (1 - .3 * ss(3.6, 4.3, u)), wk = clamp((u + 1.2) / 2.3), Zj = PV.ZJ - .6 * (1 - wk) ** 2, hj = f / Zj, xj = PV.gx - .34 * hj, fyj = hp + PV.cH * hj;
-  const take = ss(.35, 1.2, u), jx = lerp(.18, .205 + .012 * pull + .012 * tug, take), jy = lerp(-.405, -.425 - .006 * pull - .006 * tug, take);
+  const pull = ss(1.3, 3.1, u) * (1 - .3 * ss(3.6, 4.3, u)), wk = clamp((u + 1.2) / 2.3), Zj = PV.ZJ - .6 * (1 - wk) ** 2, hj = f / Zj, xj = PV.gx + RD_PV.jx * hj, fyj = hp + PV.cH * hj;
+  const take = ss(.35, 1.2, u), jx = lerp(.18, .225 + .02 * pull + .012 * tug, take), jy = lerp(-.405, -.44 - .012 * pull - .006 * tug, take);   // his right arm, drawn out a little toward Peter
   const jo = { w: RD_JESUS.w, noFace: true, back: 1, face: 1, hem: 1.04, ph: 7.85 * Zj, walk: 1 - ss(.15, 1.1, u), lean: .004 + .006 * pull, handT: true, reach: [null, [jx, jy]],
-    wind: .012 * Math.sin(u * 2.1) + .006 * Math.sin(u * 3.7 + 1), hemSway: .006 * Math.sin(u * 1.7 + .4) * ss(.8, 1.6, u), headX: .022 * ss(1.5, 2.4, u) * (1 - .45 * ss(3.3, 4.2, u)) };
+    wind: .012 * Math.sin(u * 2.1) + .006 * Math.sin(u * 3.7 + 1), hemSway: .006 * Math.sin(u * 1.7 + .4) * ss(.8, 1.6, u), headX: .012 * ss(1.5, 2.4, u) * (1 - .45 * ss(3.3, 4.2, u)) };
   const Pj = (x, y) => S(xj + x * hj, fyj + y * hj), jesus = rdPerson(Pj, jo), aJ = jesus.joints[1];   // his right arm (on Peter's side)
-  // Peter: in the road AHEAD of him (Z × 1.22: smaller, his feet further up the road), come in across it from the right; he stands square
-  // in Jesus's way facing him (seen from the front, his head turned to Jesus), leaning toward him: his right hand grips Jesus's arm above the elbow,
-  // his left is raised, palm out (마 16:22 "붙들고 항변하여 … 주여 그리 마옵소서"). He is the one who moves.
-  const arrive = ss(-.7, .9, u), hP = f / (PV.ZJ * 1.22), xp = PV.gx + (.19 + 1.1 * (1 - arrive)) * PV.hJ, fyp = hp + PV.cH * hP, h = hP * z;
-  const pl = -.03 - .02 * pull + .012 * wob * life;
-  const po = { w: RD_PETER.w, lean: pl, face: -1, back: 0, hem: 1.0, beard: true, faceOpen: true, ph: 3.14 * 3 * arrive, walk: clamp(Math.sin(Math.PI * arrive) * 1.2), noArms: true,
-    wind: .01 * Math.sin(u * 2.3 + 2), hemSway: .007 * Math.sin(u * 2.2 + 1.3) * life };
+  // Peter (관점 검수 7차: beside him, a hand at his elbow and the other raised palm out, he read as walking with him and waving to us): in
+  // the road AHEAD of him, square in his way — further up the road (Z × RD_PV.pz: smaller, his feet higher) and a little to his right, so
+  // Jesus's right arm overlaps him — between Jesus and the last light, the small city on the horizon behind him; come in across the road from
+  // the right. He faces Jesus (seen from the front, his head turned to him) and leans in to him, clinging to his arm with both hands (마 16:22
+  // "붙들고 항변하여 … 주여 그리 마옵소서"): his left hand (our right, the arm across his chest) grips it above the elbow, his right hand
+  // the forearm. No raised hand, no hand over the shoulder (it read as an arm round him). He is the one who moves: small insistent tugs,
+  // his head shaking a little.
+  const arrive = ss(-.7, .9, u), hP = f / (PV.ZJ * RD_PV.pz), xp = PV.gx + (RD_PV.px + 1.1 * (1 - arrive)) * hP, fyp = hp + PV.cH * hP, h = hP * z;
+  const pl = -.06 - .05 * ss(.4, 1.4, u) - .02 * pull + .01 * wob * life;   // he leans in to him
+  const po = { w: RD_PETER.w, lean: pl, face: -.7, back: 0, hem: 1.0, beard: true, faceOpen: true, ph: 3.14 * 3 * arrive, walk: clamp(Math.sin(Math.PI * arrive) * 1.2), noArms: true,
+    wind: .01 * Math.sin(u * 2.3 + 2), hemSway: .007 * Math.sin(u * 2.2 + 1.3) * life, headX: -.01 * life + .007 * Math.sin(ph6 * 1.3) * life };
   const Pp = (x, y) => S(xp + x * hP, fyp + y * hP), peter = rdPerson(Pp, po), B = (x, y) => Pp(x + pl * (-y), y), swP = .148 * RD_PETER.w;
-  const grip1 = ss(.5, 1.15, u), raise = ss(.75, 1.5, u), sv = Math.sin(po.ph) * po.walk;
-  const G1 = [lerp(aJ.sh[0], aJ.el[0], .74), lerp(aJ.sh[1], aJ.el[1], .74)];   // on Jesus's arm just above the elbow (at the wrist it read as walking hand in hand)
+  const grip1 = ss(.5, 1.15, u), grip2 = ss(.3, 1.0, u), sv = Math.sin(po.ph) * po.walk, L2 = (a, b, t) => [lerp(a[0], b[0], t), lerp(a[1], b[1], t)];
+  const G1 = L2(aJ.sh, aJ.el, .74);   // on Jesus's right arm just above the elbow (at the wrist it read as walking hand in hand)
   const aD = (() => { const dx = aJ.el[0] - aJ.sh[0], dy = aJ.el[1] - aJ.sh[1], d = Math.hypot(dx, dy) || 1; return [dx / d, dy / d]; })(), nA = aD[1] > 0 ? [-aD[1], aD[0]] : [aD[1], -aD[0]];   // across his upper arm, away from Peter
-  const sP1 = B(-swP, -.745), rest1 = B(-swP - .035 + .05 * sv, -.42), aP1 = rdIK(sP1, [lerp(rest1[0], G1[0], grip1), lerp(rest1[1], G1[1], grip1)], .19 * h, .17 * h, -1);
-  const R2 = B(-.05 + .008 * wob * life, -.69 + .014 * Math.sin(ph6 + .5) * life), sP2 = B(swP, -.745), rest2 = B(swP + .035 - .05 * sv, -.42), aP2 = rdIK(sP2, [lerp(rest2[0], R2[0], raise), lerp(rest2[1], R2[1], raise)], .19 * h, .17 * h, -1);
+  const G2 = L2(aJ.el, aJ.wr, .42);   // on Jesus's right forearm
+  const sP1 = B(swP, -.745), rest1 = B(swP + .035 - .05 * sv, -.42), aP1 = rdIK(sP1, L2(rest1, G1, grip1), .19 * h, .17 * h, -1);       // his left arm, across his chest to Jesus's arm above the elbow
+  const sP2 = B(-swP, -.745), rest2 = B(-swP - .035 + .05 * sv, -.42), aP2 = rdIK(sP2, L2(rest2, G2, grip2), .19 * h, .17 * h, -1);     // his right arm, to Jesus's forearm
   // back: Peter's sleeve ends a little short of the wrist once his hand comes out (the joints stay where they are)
   const arm = (p, s, a, w0, back = 0) => { rdLimb(p, s, a.el, w0 * h, w0 * .88 * h); const d = Math.hypot(a.wr[0] - a.el[0], a.wr[1] - a.el[1]) || 1, e = Math.max(.3, 1 - back / d);
     rdLimb(p, a.el, [lerp(a.el[0], a.wr[0], e), lerp(a.el[1], a.wr[1], e)], w0 * .85 * h, w0 * .62 * h); };
-  const back1 = .05 * h * clamp((grip1 - .3) / .4), back2 = .05 * h * raise;
+  const back1 = .05 * h * clamp((grip1 - .3) / .4);
+  const back2 = .05 * h * clamp((grip2 - .3) / .4);
   const pArm1 = new Path2D(); arm(pArm1, sP1, aP1, .05, back1);
   const pArm2 = new Path2D(); arm(pArm2, sP2, aP2, .05, back2);
-  // Peter's hands (8th render: tapered shapes read as mittens): out of the cuff the back of the hand, then four fingers with dark gaps
-  // laid across Jesus's arm toward its far edge, the thumb along the near side; while reaching, the same hand open along his own forearm.
-  // The raised hand: the palm toward Jesus, fingers up, the thumb toward him. sil = the outline (and the finger gaps).
+  // Peter's hand on Jesus's arm (8th render: tapered shapes read as mittens): out of the cuff the back of the hand, then four fingers with
+  // dark gaps laid across Jesus's arm toward its far edge, the thumb along the near side; while reaching, the same hand open along his own
+  // forearm. sil = the outline (and the finger gaps).
   const poly = (p, pts) => { let s = 0; for (let i = 0; i < pts.length; i++) { const [x0, y0] = pts[i], [x1, y1] = pts[(i + 1) % pts.length]; s += x0 * y1 - x1 * y0; } if (s < 0) pts = pts.slice().reverse();
     const n = pts.length, m = i => [(pts[i][0] + pts[(i + 1) % n][0]) / 2, (pts[i][1] + pts[(i + 1) % n][1]) / 2]; p.moveTo(...m(n - 1)); for (let i = 0; i < n; i++) p.quadraticCurveTo(pts[i][0], pts[i][1], ...m(i)); p.closePath(); };
   const holdHand = (a, G, grip, cuff, back, thumbTo) => {
@@ -533,19 +547,7 @@ function rdProtest(ctx, u, T, C) {
     const gap = new Path2D(); poly(gap, [Q(xk - .004 * h, -1.5 * sp), Q(xk + fl * .7, -1.5 * sp), Q(xk + fl * .7, 1.5 * sp), Q(xk - .004 * h, 1.5 * sp)]);   // dark between the fingers
     sil.addPath(gap); return { sil, palm, fingers, thumb };
   };
-  const raisedHand = (a, k) => {   // k 0 hanging (along his forearm) … 1 raised (fingers up, leaning a little toward Jesus)
-    const [wx, wy] = a.wr, [ex, ey] = a.el, d0 = Math.hypot(wx - ex, wy - ey) || 1, fa = [(wx - ex) / d0, (wy - ey) / d0], upv = [-.3, -1];
-    let c = [lerp(fa[0], upv[0], k), lerp(fa[1], upv[1], k)]; { const cl = Math.hypot(...c) || 1; c = [c[0] / cl, c[1] / cl]; }
-    let p = [-c[1], c[0]]; if (p[0] > 0) p = [-p[0], -p[1]];   // p toward Jesus (screen left): the thumb's side
-    const Q = (x, y) => [wx + (c[0] * x + p[0] * y) * h, wy + (c[1] * x + p[1] * y) * h], sp = .0105, fw = .0046;
-    const palm = new Path2D(); poly(palm, [Q(-.006, -.017), Q(.026, -.022), Q(.05, -.021), Q(.052, .02), Q(.026, .021), Q(-.006, .016)]);
-    const fingers = [-1.5, -.5, .5, 1.5].map(i => { const f = new Path2D(), y = i * sp, len = (.034 - Math.abs(i) * .0035 + (i === -.5 ? .002 : 0)) * (.75 + .25 * k);
-      rdLimb(f, Q(.046, y * .95), Q(.046 + len, y * (1 + .12 * k)), fw * 1.1 * h, fw * .9 * h); return f; });
-    const thumb = new Path2D(); rdLimb(thumb, Q(.012, .016), Q(.032, .03 + .006 * k), .0064 * h, .0046 * h);
-    const sil = new Path2D(); sil.addPath(palm); sil.addPath(thumb); fingers.forEach(f => sil.addPath(f));
-    const gap = new Path2D(); poly(gap, [Q(.046, -1.5 * sp), Q(.072, -1.6 * sp), Q(.072, 1.6 * sp), Q(.046, 1.5 * sp)]); sil.addPath(gap); return { sil, palm, fingers, thumb };
-  };
-  const H1 = holdHand(aP1, G1, grip1, .05 * .62 * h, back1, 1), H2 = raisedHand(aP2, raise);
+  const H1 = holdHand(aP1, G1, grip1, .05 * .62 * h, back1, 1), H2 = holdHand(aP2, G2, grip2, .05 * .62 * h, back2, 1);
   const fl = RDP.fl, g = fl.getContext('2d'); g.setTransform(1, 0, 0, 1, 0, 0); g.globalCompositeOperation = 'source-over'; g.globalAlpha = 1; g.clearRect(0, 0, W, H);
   // short soft shadows toward us (the light is ahead of them)
   for (const [P0, hh] of [[Pp, h], [Pj, hj * z]]) { const [ex, ey] = P0(0, .035); g.save(); g.translate(ex, ey); g.scale(1, .2); const sg = g.createRadialGradient(0, 0, 0, 0, 0, .3 * hh);
@@ -554,20 +556,20 @@ function rdProtest(ctx, u, T, C) {
   const join = (...ps) => { const p = new Path2D(); ps.forEach(q => p.addPath(q)); return p; };
   const wp = join(peter, pArm2, pArm1); for (const k of ['hd', 'hf', 'hr', 'hc', 'hb', 'arm', 'noFace', 'hs']) wp[k] = peter[k];
   rdLook({ jesus: true, hc: RD_JESUS.hc, band: RD_JESUS.band }, jo, land); rdLook({ hc: RD_PETER.hc, band: RD_PETER.band, hairCol: RD_PETER.hair }, po, land); jo.softRim = po.softRim = true;
-  // Peter first (he stands further up the road), his sleeves a shade darker (the raised one, across his chest, darker still; not over his
+  // Peter first (he stands further up the road), his sleeves a shade darker (the one across his chest darker still; not over his
   // head cloth or beard)
   rdFigure(g, wp, Pp, po, tint(RD_PETER.body), light, [1, .05], .02 * h, rimA);
   g.save(); { const ex = new Path2D(); ex.rect(0, 0, W, H); ex.addPath(peter.hc); ex.addPath(peter.hr); g.clip(ex, 'evenodd'); }
-  g.fillStyle = 'rgba(28,16,30,.22)'; g.fill(pArm1); g.fillStyle = 'rgba(28,16,30,.3)'; g.fill(pArm2); g.restore();
+  g.fillStyle = 'rgba(28,16,30,.3)'; g.fill(pArm1); g.fillStyle = 'rgba(28,16,30,.22)'; g.fill(pArm2); g.restore();
   // then Jesus, nearer, his back to us
   rdFigure(g, jesus, Pj, jo, tint(RD_JESUS.body), light, [-1, .05], .02 * hj * z, rimA);
-  // Peter's hands: the raised one, and the one round Jesus's wrist
+  // Peter's hands on Jesus's arm (above the elbow, the forearm)
   const skinHand = (Hh, shade) => { g.fillStyle = tint('#6a4436'); g.fill(Hh.sil); g.fillStyle = po.skin; g.fill(Hh.palm); g.fill(Hh.thumb); Hh.fingers.forEach(f => g.fill(f));
     if (shade) { g.fillStyle = 'rgba(28,16,30,' + shade + ')'; g.fill(Hh.palm); g.fill(Hh.thumb); Hh.fingers.forEach(f => g.fill(f)); } };
   skinHand(H2, .12); skinHand(H1, 0);
   g.globalCompositeOperation = 'destination-out'; g.globalAlpha = .1; g.fillStyle = g.createPattern(RDP.grain, 'repeat'); g.fillRect(0, 0, W, H); g.globalCompositeOperation = 'source-over'; g.globalAlpha = 1;
   ctx.drawImage(fl, 0, 0);
-  RDP.lastPose = { grips: [G1, R2], hands: [aP1.wr, aP2.wr], elbows: [aP1.el, aP2.el, aJ.el], shoulders: [sP1, sP2, aJ.sh], jesusX: xj, peterX: xp, jesusH: hj * z };
+  RDP.lastPose = { grips: [G1, G2], hands: [aP1.wr, aP2.wr], elbows: [aP1.el, aP2.el, aJ.el], shoulders: [sP1, sP2, aJ.sh], jesusX: xj, peterX: xp, jesusH: hj * z };
   rdExpose(ctx, T);
   rdFinish(ctx, T, RDP.L.band);
   ctx.restore();

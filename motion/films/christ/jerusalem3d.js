@@ -197,7 +197,7 @@
     else { down(-1); down(1); }
     g.restore();
   }
-  function crowd(ctx, c, L, u, sunP) {
+  function crowd(ctx, c, L, u, sunP, vis = 1) {
     const rimC = mix(L.glow, [255, 226, 180], .35), list = [];
     for (let i = 0; i < G.crowd.length; i++) { const [x0, z0, h, kind] = G.crowd[i]; let x = x0, z = z0; if (kind === 'walk') { const k = ss(0, 6.5, u); z = lerp(23.6, 26.6, k); x = lerp(-.6, -.25, k); } list.push({ x, z, h, kind, i }); }
     list.sort((a, b) => b.z - a.z);
@@ -206,7 +206,7 @@
     // so a shadow never changes direction or drops out between frames (관리자 2026-11-14 "그림자가 덜그덕거려")
     const e = Math.max(.02, L.sd[1]); for (const f of list) { const A = [f.x, .01, f.z], B = [f.x - L.sd[0] / e * f.h * .5, .01, f.z - L.sd[2] / e * f.h * .5], s = clipSeg(c, A, B); if (!s) continue;
       const a = W3.P(c, ...s[0]), b = W3.P(c, ...s[1]); if (!a || !b) continue;
-      ctx.save(); const g = ctx.createLinearGradient(a[0], a[1], b[0], b[1]); g.addColorStop(0, 'rgba(14,8,8,.55)'); g.addColorStop(1, `rgba(14,8,8,${(.55 * (1 - s[2])).toFixed(3)})`); ctx.strokeStyle = g; ctx.lineWidth = a[2] * .34; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.stroke(); ctx.restore(); }
+      ctx.save(); const g = ctx.createLinearGradient(a[0], a[1], b[0], b[1]); const sa = .55 * (.1 + .9 * vis); g.addColorStop(0, `rgba(14,8,8,${sa.toFixed(3)})`); g.addColorStop(1, `rgba(14,8,8,${(sa * (1 - s[2])).toFixed(3)})`); ctx.strokeStyle = g; ctx.lineWidth = a[2] * (.34 + .12 * (1 - vis)); ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.stroke(); ctx.restore(); }   // vis: as the sun goes behind the wall the shadows soften and fade with it (7차)
     for (const f of list) { const p = W3.P(c, f.x, 0, f.z); if (!p) continue; const s = p[2] * (f.kind === 'child' ? f.h / 1.7 : f.h / 1.72), oc = G.fig, g = oc.getContext('2d'), S = oc.width, k = Math.min(1, S * .4 / (2.2 * s)), m = s * k;
       const tw = sunP ? [sunP[0] - p[0], sunP[1] - (p[1] - 1.4 * p[2])] : [0, -1], l = Math.hypot(...tw) || 1, w = Math.max(1.2, m * .028);
       g.setTransform(1, 0, 0, 1, 0, 0); g.clearRect(0, 0, S, S);
@@ -219,6 +219,13 @@
     if (!G) buildJerusalem(); u = clamp(u, 0, 7.1);
     const W = P.W, H = P.H, V = P.ori === 'v', c = G.cam(u), L = G.light(u);
     const sk = W3.sky(ctx, c, L, u), sunP = sk.sun;
+    // how much of the sun is seen through the arch (0 behind the stone … 1 clear in it), smooth from the sun's distance to the arch's
+    // edge — the light pool, the shafts, the crowd's shadows and the flare all follow it in the same frame (7차: the sun went behind the
+    // right wall at 48–51 and the shadows stayed as strong; the flare switched on/off)
+    let vis = 0, pa = null; if (sunP) { const ap = archPts(27.5, 16).map(p => W3.P(c, ...p)), ao = archPts(34, 16).map(p => W3.P(c, ...p)); if (ap.every(Boolean) && ao.every(Boolean)) { pa = new Path2D(); ap.forEach((p, i) => i ? pa.lineTo(p[0], p[1]) : pa.moveTo(p[0], p[1])); pa.closePath();
+      const po = new Path2D(); ao.forEach((p, i) => i ? po.lineTo(p[0], p[1]) : po.moveTo(p[0], p[1])); po.closePath();   // the far (outer) face of the passage is the opening the sun is seen through
+      let d = 1e9; for (let i = 0; i < ao.length; i++) { const A = ao[i], B = ao[(i + 1) % ao.length], ex = B[0] - A[0], ey = B[1] - A[1], t = clamp(((sunP[0] - A[0]) * ex + (sunP[1] - A[1]) * ey) / (ex * ex + ey * ey || 1)); d = Math.min(d, Math.hypot(sunP[0] - A[0] - ex * t, sunP[1] - A[1] - ey * t)); }
+      const r = V ? 22 : 19, sd = ctx.isPointInPath(po, sunP[0], sunP[1]) ? d : -d; vis = ss(-1.3 * r, 1.1 * r, sd); } }
     terrain(ctx, c, L, 34);                                                                 // the valley and the hills, seen through the gate
     // the far haze along the hills, lit by the sun
     { const hz = W3.P(c, c.x + c.f[0] * 1e4, c.y, c.z + c.f[2] * 1e4); if (hz) { const g = ctx.createLinearGradient(0, hz[1] - (V ? 120 : 90), 0, hz[1] + 20); g.addColorStop(0, css(L.fog, 0)); g.addColorStop(.7, css(mix(L.fog, L.glow, .4), .4)); g.addColorStop(1, css(L.fog, .1)); ctx.fillStyle = g; ctx.fillRect(0, hz[1] - (V ? 120 : 90), W, (V ? 140 : 110)); } }
@@ -230,7 +237,7 @@
     // points, which made its left side jump from frame to frame)
     { const e = Math.max(.02, L.sd[1]), out = archPts(34, 16).map(([x, y, z]) => [x - L.sd[0] / e * y, .01, z - L.sd[2] / e * y]);
       ctx.save(); if (W3.poly(ctx, c, out)) { ctx.globalCompositeOperation = 'screen'; const n = W3.P(c, 0, 0, 34), f = W3.P(c, 0, 0, Math.max(c.z + .8, 6)), g = ctx.createLinearGradient(0, n ? n[1] : 0, 0, f ? f[1] : H);
-        g.addColorStop(0, css(L.glow, .7)); g.addColorStop(.5, css(L.glow, .32)); g.addColorStop(1, css(L.glow, .08)); ctx.fillStyle = g; ctx.filter = 'blur(3px)'; ctx.fill(); ctx.filter = 'none'; } ctx.restore(); }
+        const pk = .3 + .7 * vis; g.addColorStop(0, css(L.glow, .7 * pk)); g.addColorStop(.5, css(L.glow, .32 * pk)); g.addColorStop(1, css(L.glow, .08 * pk)); ctx.fillStyle = g; ctx.filter = `blur(${(3 + 5 * (1 - vis)).toFixed(1)}px)`; ctx.fill(); ctx.filter = 'none'; } ctx.restore(); }
     W3.faces(ctx, c, L, G.P2);
     W3.faces(ctx, c, L, G.FB); burn(ctx, c, L, G.MB);
     W3.faces(ctx, c, L, G.FF);
@@ -245,11 +252,11 @@
     burn(ctx, c, L, G.MF);
     // light in the air of the passage: soft shafts from the sun through the arch toward us
     if (sunP) { const ap = archPts(27.5, 16).map(p => W3.P(c, ...p)); if (ap.every(Boolean)) { ctx.save(); ctx.beginPath(); ap.forEach((p, i) => i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1])); ctx.closePath(); ctx.clip(); ctx.globalCompositeOperation = 'screen';
-      ctx.filter = `blur(${V ? 6 : 5}px)`; const R = Math.max(W, H); for (let i = 0; i < 14; i++) { const ang = Math.PI * .5 + (i / 14 - .5) * 2.8 + u * .02, w = .02 + .03 * noise(i * 1.7, 2), g = ctx.createRadialGradient(sunP[0], sunP[1], 0, sunP[0], sunP[1], R); g.addColorStop(0, css(L.glow, .16 * noise(i * 2.3, u * .3))); g.addColorStop(1, css(L.glow, 0)); ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(sunP[0], sunP[1]); ctx.arc(sunP[0], sunP[1], R, ang - w, ang + w); ctx.closePath(); ctx.fill(); } ctx.filter = 'none';
+      ctx.filter = `blur(${V ? 6 : 5}px)`; const R = Math.max(W, H); for (let i = 0; i < 14; i++) { const ang = Math.PI * .5 + (i / 14 - .5) * 2.8 + u * .02, w = .02 + .03 * noise(i * 1.7, 2), g = ctx.createRadialGradient(sunP[0], sunP[1], 0, sunP[0], sunP[1], R); g.addColorStop(0, css(L.glow, .16 * (.3 + .7 * vis) * noise(i * 2.3, u * .3))); g.addColorStop(1, css(L.glow, 0)); ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(sunP[0], sunP[1]); ctx.arc(sunP[0], sunP[1], R, ang - w, ang + w); ctx.closePath(); ctx.fill(); } ctx.filter = 'none';
       ctx.restore(); } }
-    crowd(ctx, c, L, u, sunP);
+    crowd(ctx, c, L, u, sunP, vis);
     // the sun only flares where it is seen (through the arch); behind stone it only warms the sky
-    let seen = 0, pa = null; if (sunP) { const ap = archPts(27.5, 16).map(p => W3.P(c, ...p)); if (ap.every(Boolean)) { pa = new Path2D(); ap.forEach((p, i) => i ? pa.lineTo(p[0], p[1]) : pa.moveTo(p[0], p[1])); pa.closePath(); seen = ctx.isPointInPath(pa, sunP[0], sunP[1]) ? 1 : .2; } }
+    const seen = .2 + .8 * vis;
     if (sunP) { if (pa) { ctx.save(); ctx.clip(pa); W3.bloom(ctx, sunP[0], sunP[1], L.glow, .85 * seen, { r: V ? 200 : 170, streak: .55 }); ctx.restore(); } ctx.save(); ctx.globalCompositeOperation = 'screen'; const R = Math.max(W, H) * .8, g = ctx.createRadialGradient(sunP[0], sunP[1], 0, sunP[0], sunP[1], R); g.addColorStop(0, css(L.glow, .38)); g.addColorStop(.4, css(L.glow, .15)); g.addColorStop(1, css(L.glow, .05)); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H); ctx.restore(); }
     W3.finish(ctx, u, { vignette: .6 });
   }

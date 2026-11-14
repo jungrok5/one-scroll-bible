@@ -79,7 +79,7 @@ const SCENES = [
   [148.0, 151.0, recall('david', 148.2)],          // N16K "왕," — the hill: the oil on the shepherd boy glows and rises
   [150.4, 153.4, recall('aaron', 150.6)],          // N16P "제사장," — the tent door: the oil from Aaron's head rises
   [152.8, 155.8, recall('elisha', 153.0)],         // N16R "선지자 —" — the field: light rises from the cloak on Elisha's shoulders
-  [155.2, 160.4, scz('goldThree', 155.4)],         // N16 "세 직분이, 한 분에게." — three lights become one over a far empty cross, the sun rises behind it
+  [155.2, 160.8, scz('goldThree', 155.4)],         // (1.4 s into the room: 7차 render dropped 106→37 in 0.6 s) N16 "세 직분이, 한 분에게." — three lights become one over a far empty cross, the sun rises behind it
   [159.4, 181, scz('roomOil', 159.5, 'end')],      // N17 Q14 Q13 E1 — the first room again: dawn fills it; Peter's confession as the old man's prayer; the end card
 ];
 // text: every line from its `at` to the next voiced line (quotes hold until then; a caption label rides with its quote)
@@ -115,7 +115,7 @@ function endCard(ctx, t, a, b) {   /* one place to read: a small gold 뒷이야�
   Pilot.text(ctx, kick, W / 2, y0, { size: size * .78, weight: 600, font: "'Noto Serif KR',serif", color: '#e9c77a', alpha: k, shadow: 'rgba(0,0,0,.9)', shadowBlur: 18, ls: 8 });
   refs.forEach((r, i) => Pilot.text(ctx, r, W / 2, y0 + size * 1.6 + i * lh, { size, weight: 600, font: "'Noto Serif KR',serif", color: '#f6ead0', alpha: k * ss(a + .4 + i * .35, a + 1.1 + i * .35, t), shadow: 'rgba(0,0,0,.85)', shadowBlur: 22 }));
   const yl = y0 + size * 1.6 + refs.length * lh, lw = (V ? 360 : 440) * eo(clamp((t - a - 1.8) / 1.4)); ctx.fillStyle = `rgba(233,199,122,${k * .8})`; ctx.fillRect(W / 2 - lw / 2, yl, lw, 2);
-  Pilot.text(ctx, Film.text('B1'), W / 2, yl + size * 1.1, { size: size * .7, font: "'Noto Sans KR',sans-serif", color: '#e2d2a8', shadow: 'rgba(0,0,0,.9)', shadowBlur: 14, alpha: k * ss(a + 2.4, a + 3.2, t), ls: 2 }); }
+  Pilot.text(ctx, Film.text('B1'), W / 2, yl + size * 1.1, { size: size * .7, font: "'Noto Sans KR',sans-serif", color: '#f3e6c4', weight: 600, shadow: 'rgba(0,0,0,.95)', shadowBlur: 20, alpha: k * ss(a + 2.4, a + 3.2, t), ls: 2 }); }
 const FILM_DUR = 180;
 const QA_HOLD = [[175.6, 180.0, 'the end card (영상 속 주요 말씀)'], [134.8, 139.9, 'Q11: one cross shadow held on purpose (나무에 달아)']];
 const QA_PLANNED = [[87.4, 88.4, 'black-and-white film starts: gate flicker'], [97.6, 98.2, 'the ember lights the lamp on the psalm scroll'], [23.2, 24.2, 'title → David: the title dissolves into the sunset hill (horn scene removed, 관리자 2026-11-14)']];

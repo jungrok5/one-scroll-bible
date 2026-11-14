@@ -4,10 +4,10 @@
      water glitters; reeds stand along the shore. Andrew hurries along the bank to his brother Simon, who turns; Andrew points
      back the way he came and beckons — "우리가 메시야를 만났다". Simon takes a first step. The camera trucks right and closes in.
    · { mode: 'spirit' } (Q9, 행 10:38, film 129.7–136 s, u = 0..6.5): the same river and reeds in a paler, cooler light. A soft
-     shaft of light comes down through the haze; a dove-like gathering of light descends in it, a little to one side, and comes
-     down upon one man standing in the water (seen from behind — never a face or profile): it never stops over his head (7차:
-     resting at u 4.4+ just above his head it read as a glowing point / halo at 130–134 s); at his shoulder it closes its wings
-     and dissolves into a soft, wide wash of light on his shoulders and on the water round him. The camera closes in.
+     shaft of light comes down through the haze; a dove-like gathering of light descends in it straight down his axis (8차: off
+     to his right read as odd) upon one man standing in the water (seen from behind — never a face or profile): it never stops
+     over his head (7차: resting just above his head read as a glowing point / halo); still descending it opens, pours over him
+     and becomes a soft bloom round his upper body, then a wide wash on his shoulders and the water. The camera closes in.
    Round 2 (coordinator: "평면 벡터 일러스트로 읽힌다"): the land is world3d terrain (a world-locked grid, each cell shaded
    smoothly, aerial perspective by distance — after messiah film.html terrain()); the water is a rippled mirror of what stands
    above it; reeds are dark backlit masses with lit plumes, the near ones out of focus; the brothers are jointed silhouettes
@@ -355,7 +355,9 @@
     // the man, lit from above (a rim on the head and shoulders), and his broken reflection
     if (bot) { const s = bot[2], g = J.fig.getContext('2d'), S = J.fig.width, k = Math.min(1, S * .3 / (1.3 * s)), m = s * k, rise = ss(4.0, 6.0, u), lit = ss(2.6, 4.4, u);
       g.setTransform(1, 0, 0, 1, 0, 0); g.clearRect(0, 0, S, S); g.save(); g.translate(S / 2, S * .6); g.scale(m, m);
-      g.fillStyle = `rgb(255,232,192)`; manParts(g, rise, false); g.globalCompositeOperation = 'source-atop'; g.translate(0, .022 + .03 * (1 - lit)); g.fillStyle = 'rgb(40,40,48)'; manParts(g, rise, true, 'rgba(96,94,100,.3)'); g.restore();
+      g.fillStyle = `rgb(255,232,192)`; manParts(g, rise, false); g.globalCompositeOperation = 'source-atop'; g.translate(0, .022 + .03 * (1 - lit)); g.fillStyle = 'rgb(40,40,48)'; manParts(g, rise, true, 'rgba(96,94,100,.3)');
+      // 8차: the rim on the crown dimmed (no bright line sitting on top of his head — rule depict-christ-restraint, no halo)
+      g.translate(0, -.016 - .03 * (1 - lit)); g.globalAlpha = .85; g.beginPath(); g.ellipse(0, -.985, .09, .106, 0, 0, 6.283); g.fill(); g.beginPath(); g.ellipse(0, -1.015, .094, .08, 0, Math.PI, 2 * Math.PI); g.fill(); g.globalAlpha = 1; g.restore();
       ctx.save(); ctx.globalAlpha = .3; ctx.filter = 'blur(2px)'; ctx.translate(bot[0], bot[1]); ctx.scale(1, -.8); ctx.drawImage(J.fig, -S / 2 / k, -S * .6 / k, S / k, S / k); ctx.restore();
       ctx.drawImage(J.fig, bot[0] - S / 2 / k, bot[1] - S * .6 / k, S / k, S / k);
       // the light come down upon him: a soft, wide, low wash across his shoulders and back — wider than it is tall and centred
@@ -364,16 +366,23 @@
         ctx.save(); ctx.globalCompositeOperation = 'screen'; ctx.translate(bot[0], cy); ctx.scale(1, .42); ctx.translate(-bot[0], -cy); ctx.fillStyle = g2; ctx.fillRect(bot[0] - rx, cy - rx, rx * 2, rx * 2); ctx.restore(); }
       ctx.save(); ctx.globalCompositeOperation = 'screen'; ctx.strokeStyle = `rgba(255,238,210,${.45 * pk})`; ctx.lineWidth = Math.max(1.2, s * .016); ctx.beginPath(); ctx.ellipse(bot[0], bot[1], s * .3, s * .045, 0, 0, 6.283); ctx.stroke(); ctx.restore(); }   // the water at his hips
     // the dove: a gathering of light with no outline — a bright core, two soft wing-glows that beat slowly then still, a faint tail
-    // 7차: it comes down a little to his right, never stopping above his head, alights at his shoulder (u ≈ 4) and there folds
-    // its wings and dissolves into the wash of light on him and the water (gone by u 5.2) — no glowing point left over him
-    { const dk = eio(clamp((u - .5) / 3.5)), dsx = lerp(1.1, .46, dk) - .14 * ss(3.9, 5.0, u), dy = lerp(11.5, .4, dk) - .16 * ss(3.9, 5.0, u), p = W3.P(c, mx + dsx, dy, mz - .05 * dk);
-      if (p && u > .4 && u < 5.3) { const s = p[2], a = ss(.4, 1.3, u) * (1 - ss(3.9, 5.2, u)), beat = (1 - ss(3.4, 4.3, u)) * Math.sin(u * 3.0), spread = lerp(.2, .48, .5 + .5 * beat) * (1 - .45 * ss(3.6, 4.6, u)), sc = J.soft.width / W, g = J.soft.getContext('2d');
+    // 8차 (관리자 "예수님 오른쪽으로 비둘기가 내려오는건 의도야?"): it comes straight down the shaft on his own axis, from the opening
+    // in the sky toward him (마 3:16 "자기 위에 임하심"), and never stops over his head: still descending, it opens its wings wide,
+    // loses its core and pours down over his head and shoulders (u 3.3–4.3), and as it reaches him it becomes a soft bloom round
+    // his whole upper body, centred on his shoulders, that fades into the wash on him and the water (gone by u 5.8). No ring, no
+    // disc, no point left above the head.
+    { const k = clamp((u - .5) / 4.0), dk = lerp(eio(k), k, .5), dy = lerp(11.5, .12, dk), p = W3.P(c, mx, dy, mz + .06);
+      if (p && u > .4 && u < 4.6) { const s = p[2], a = ss(1.5, 2.5, u) * (1 - ss(3.3, 4.4, u)), core = 1 - ss(3.1, 3.9, u), open = ss(3.1, 4.3, u), beat = (1 - ss(3.0, 3.8, u)) * Math.sin(u * 3.0), spread = lerp(.2, .48, .5 + .5 * beat) * (1 - .4 * open), sc = J.soft.width / W, g = J.soft.getContext('2d');
         g.setTransform(1, 0, 0, 1, 0, 0); g.clearRect(0, 0, J.soft.width, J.soft.height); g.setTransform(sc, 0, 0, sc, 0, 0); g.globalCompositeOperation = 'lighter';
         const glow = (x, y, rx, ry, rot, al) => { g.save(); g.translate(x, y); g.rotate(rot); g.scale(1, ry / rx); const gr = g.createRadialGradient(0, 0, 0, 0, 0, rx); gr.addColorStop(0, `rgba(255,228,150,${al})`); gr.addColorStop(.45, `rgba(255,190,92,${al * .5})`); gr.addColorStop(1, 'rgba(240,160,60,0)'); g.fillStyle = gr; g.fillRect(-rx, -rx, 2 * rx, 2 * rx); g.restore(); };
-        const L0 = .62 * s; for (const sd of [-1, 1]) glow(p[0] + sd * L0 * .55, p[1] - L0 * spread * .55, L0 * .62, L0 * .16, sd * (-spread * .9), .75 * a);
-        glow(p[0], p[1], L0 * .22, L0 * .3, 0, a); glow(p[0], p[1] + L0 * .32, L0 * .14, L0 * .2, 0, .5 * a);
+        const L0 = .62 * s, wl = 1 + 1.3 * open; for (const sd of [-1, 1]) glow(p[0] + sd * L0 * .55 * wl, p[1] - L0 * spread * .55 + L0 * .25 * open, L0 * .62 * wl, L0 * .16 * (1 + open), sd * (-spread * .9), .75 * a * (1 - .45 * open));
+        glow(p[0], p[1] + L0 * .3 * open, L0 * .22 * (1 + .8 * open), L0 * .3 * (1 + 2.2 * open), 0, a * lerp(.35, 1, core)); glow(p[0], p[1] + L0 * .32, L0 * .14, L0 * .2, 0, .5 * a * core);   // the core pours down and thins
         ctx.save(); ctx.globalCompositeOperation = 'screen'; ctx.filter = 'blur(4px)'; ctx.drawImage(J.soft, 0, 0, W, H); ctx.filter = 'none'; ctx.restore();
-        W3.bloom(ctx, p[0], p[1], [255, 190, 100], a * .55, { r: V ? 170 : 140, streak: .16 }); } }
+        const ba = a * .55 * (1 - ss(2.9, 3.7, u)); if (ba > .005) W3.bloom(ctx, p[0], p[1], [255, 190, 100], ba, { r: V ? 170 : 140, streak: .08 }); }
+      // the arrival: a gentle bloom round his whole upper body, centred on his shoulders (filled, wider than tall — never a ring)
+      const b = ss(3.6, 4.4, u) * (1 - ss(4.6, 5.8, u));
+      if (bot && b > 0) { const s = bot[2], cx = bot[0], cy = bot[1] - s * .6, R = s * 1.1, g = ctx.createRadialGradient(cx, cy, 0, cx, cy, R); g.addColorStop(0, `rgba(255,226,166,${.3 * b})`); g.addColorStop(.5, `rgba(255,212,146,${.13 * b})`); g.addColorStop(1, 'rgba(255,212,146,0)');
+        ctx.save(); ctx.globalCompositeOperation = 'screen'; ctx.translate(cx, cy); ctx.scale(1, .78); ctx.translate(-cx, -cy); ctx.fillStyle = g; ctx.fillRect(cx - R, cy - R, 2 * R, 2 * R); ctx.restore(); } }
     terrain(ctx, c, L, c.z - 1, 16.5);
     const body = [30, 31, 36];
     const objs = []; for (const cl of J.clumps) if (!cl.near) objs.push(cl); objs.sort((a, b) => b.z - a.z); for (const cl of objs) reedClump(ctx, c, L, u, cl, null, body, body);

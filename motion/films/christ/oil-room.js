@@ -92,23 +92,28 @@ function roomPersonPaths() {
 function roomPersonPathsEnd() {
   const smooth = pts => { const p = new Path2D(), n = pts.length, m = i => [(pts[i][0] + pts[(i + 1) % n][0]) / 2, (pts[i][1] + pts[(i + 1) % n][1]) / 2];
     p.moveTo(...m(n - 1)); for (let i = 0; i < n; i++) p.quadraticCurveTo(pts[i][0], pts[i][1], ...m(i)); p.closePath(); return p; };
-  const hc = [.012, .125], curls = [], rc = Pilot.rng(37);
-  for (let i = 0; i < 19; i++) { const a = Math.PI * (.86 + 1.28 * i / 18) + (rc() - .5) * .12, R = .02 + rc() * .01, d = .068 + rc() * .008; curls.push([Math.cos(a) * d, Math.sin(a) * d * 1.05, R]); }
-  const headPts = Array.from({ length: 120 }, (_, i) => { const a = i / 120 * 6.283, dx = Math.cos(a), dy = Math.sin(a);
-    let t = 1 / Math.hypot(dx / .08, dy / .09);
+  // (round 9: the head read as a cotton ball with no ear and no neck) short grey hair close on the skull — only a slight unevenness
+  // at its edge, no ring of curls — ending in a hairline on the nape (the bowed neck shows between it and the cardigan's collar); an
+  // ear at each side, the right one (toward the book) a little more in view
+  const hc = [.012, .122], curls = [], rc = Pilot.rng(37);
+  for (let i = 0; i < 26; i++) { const a = Math.PI * (.8 + 1.4 * i / 25) + (rc() - .5) * .1, R = .006 + rc() * .004, d = .079 + rc() * .003; curls.push([Math.cos(a) * d, Math.sin(a) * d * 1.05, R]); }
+  const headPts = Array.from({ length: 140 }, (_, i) => { const a = i / 140 * 6.283, dx = Math.cos(a), dy = Math.sin(a);
+    let t = 1 / Math.hypot(dx / .08, dy / .088);
     for (const [cx, cy, R] of curls) { const b = dx * cx + dy * cy, q = b * b - (cx * cx + cy * cy - R * R); if (q >= 0) t = Math.max(t, b + Math.sqrt(q)); }
-    return [hc[0] + dx * t * 1.08, hc[1] + dy * t * 1.08]; });
-  const head = smooth(headPts), ear = smooth([[.088, .14], [.1, .152], [.098, .185], [.086, .19], [.08, .16]]);
-  const neck = smooth([[-.042, .19], [.05, .19], [.058, .262], [-.05, .262]]);
+    const x = hc[0] + dx * t * 1.06, y = hc[1] + dy * t * 1.06, yl = .192 + .004 * Math.sin(x * 160) + .008 * (1 - Math.min(1, Math.abs(x - hc[0]) / .06));   // the nape's hairline: a little uneven, coming down a little in the middle
+    return [x, Math.min(y, yl)]; });
+  const head = smooth(headPts);
+  const ear = smooth([[.083, .138], [.097, .142], [.106, .158], [.103, .181], [.092, .194], [.082, .186]]), earL = smooth([[-.058, .142], [-.071, .147], [-.077, .163], [-.073, .184], [-.063, .193], [-.056, .18]]);
+  const neck = smooth([[-.046, .15], [.005, .148], [.056, .15], [.058, .205], [.062, .262], [.004, .265], [-.054, .262], [-.05, .205]]);   // straight-sided (four points smoothed made it a ball)
   const torsoPts = [[-.06, .246], [-.14, .272], [-.192, .31], [-.208, .36], [-.2, .46], [-.186, .56], [-.176, .64], [-.19, .7], [-.215, .77], [-.25, .835], [-.29, .875], [-.315, .925], [-.305, .972], [-.27, .996], [0, 1.0],
     [.27, .996], [.305, .972], [.315, .925], [.29, .875], [.25, .835], [.215, .77], [.19, .7], [.176, .64], [.186, .56], [.2, .46], [.208, .36], [.192, .31], [.14, .272], [.06, .246], [0, .24]];
   const torso = smooth(torsoPts);
-  const armPts = s => [[s * .15, .282], [s * .208, .3], [s * .238, .35], [s * .25, .44], [s * .247, .53], [s * .232, .585], [s * .204, .604], [s * .176, .585], [s * .164, .5], [s * .158, .4], [s * .155, .32]];
+  const armPts = s => [[s * .15, .282], [s * .208, .296], [s * .238, .34], [s * .25, .42], [s * .245, .5], [s * .236, .56], [s * .222, .598], [s * .2, .614], [s * .181, .598], [s * .17, .555], [s * .162, .48], [s * .157, .39], [s * .154, .32]];   // (round 9) the sleeve fuller at the shoulder, the elbow a little pointed where it bends
   const arms = [-1, 1].map(s => smooth(armPts(s)));
   const hem = smooth([[-.184, .622], [.184, .622], [.19, .668], [-.192, .67]]);
-  const collar = smooth([[-.1, .258], [-.05, .234], [.0, .228], [.055, .234], [.105, .258], [.06, .28], [.0, .286], [-.06, .28]]);
-  const fillAll = g => { for (const p of [torso, ...arms, neck, ear, head]) g.fill(p); };   // (each on its own: their windings differ)
-  return { head, ear, neck, torso, arms, hem, collar, fillAll };
+  const collar = smooth([[-.104, .262], [-.07, .234], [-.03, .229], [.0, .228], [.034, .229], [.074, .234], [.11, .262], [.07, .282], [.0, .29], [-.064, .282]]);   // the knitted collar standing round the nape
+  const fillAll = g => { for (const p of [torso, ...arms, neck, earL, ear, head]) g.fill(p); };   // (each on its own: their windings differ)
+  return { head, ear, earL, neck, torso, arms, hem, collar, fillAll };
 }
 
 async function buildRoomOil() {
@@ -275,30 +280,83 @@ async function buildRoomOil() {
     // the light's directions in the plate: the window up on his left, the candle on the table to his right
     const [hx, hy] = [L.person.cx, L.person.top + .12 * Pp], wcx = (L.win[0] + L.win[2]) / 2, wcy = (L.win[1] + L.win[3]) / 2, wl = Math.hypot(wcx - hx, wcy - hy), WL = [(wcx - hx) / wl, (wcy - hy) / wl];
     const cl = Math.hypot(L.LP[0] - hx, L.LP[1] - hy - .5 * Pp), CL = [(L.LP[0] - hx) / cl, (L.LP[1] - hy - .5 * Pp) / cl];
+    // (round 9: the old man read as a bare mannequin — a smooth torso, a flesh highlight on the shoulder, cylinder arms, a cotton-ball
+    // head) a knitted cardigan seen from behind: ribs running down the wool, the shoulder blades and the pull of the arms reaching forward
+    // folded into the back, the sleeves parted from the back by shade, creases where they bend; the collar standing round the nape; short
+    // grey hair combed in strands from the crown, an ear at each side. The lights below are broken by the same knit (tex), so the candle
+    // and the dawn lie on WOOL.
+    // the knit (stockinette): columns of small V stitches with a soft groove between them, a faint lit side to each stitch
+    const ribs = (g, aD, aL, y0 = .23, y1 = .63) => { const r = rng(71); g.save(); g.lineCap = 'round'; g.lineJoin = 'round';
+      for (let x0 = -.34; x0 <= .34; x0 += .0085) { const X = y => x0 * (1 + .06 * (y - .45));
+        g.strokeStyle = `rgba(0,0,0,${aD * .45})`; g.lineWidth = .002; g.beginPath(); g.moveTo(X(y0) - .0043, y0); g.lineTo(X(y1) - .0043, y1); g.stroke();
+        for (let b = 0; b < 3; b++) { g.strokeStyle = `rgba(0,0,0,${aD * (.45 + .3 * b)})`; g.lineWidth = .0015; g.beginPath();
+          for (let y = y0; y < y1; y += .0064) { if ((r() * 3 | 0) !== b) continue; const x = X(y) + (r() - .5) * .001; g.moveTo(x - .0031, y); g.lineTo(x, y + .0035); g.lineTo(x + .0031, y); }
+          g.stroke(); }
+        if (aL > 0) { g.strokeStyle = `rgba(255,240,220,${aL})`; g.lineWidth = .0011; g.beginPath(); for (let y = y0; y < y1; y += .0064) { const x = X(y); g.moveTo(x - .0025, y - .0008); g.lineTo(x - .0006, y + .0017); } g.stroke(); } }
+      g.restore(); };
+    const strands = (g, n, lt, dk, seed) => { const r = rng(seed), cr = [.014, .066]; g.save(); g.lineCap = 'round';
+      for (let i = 0; i < n; i++) { const a = r() * 6.283, rr = Math.sqrt(r()), x0 = .012 + Math.cos(a) * rr * .085, y0 = .122 + Math.sin(a) * rr * .085, dx = x0 - cr[0], dy = y0 - cr[1], dl = Math.hypot(dx, dy) || 1, L = .01 + .014 * r(), cv = (r() - .5) * .4, light = r() < .45;
+        g.strokeStyle = light ? lt : dk; g.globalAlpha = .5 + .5 * r(); g.lineWidth = .002 + .0014 * r();
+        g.beginPath(); g.moveTo(x0, y0); g.quadraticCurveTo(x0 + (dx * .5 - dy * cv) / dl * L, y0 + (dy * .5 + dx * cv) / dl * L, x0 + dx / dl * L, y0 + dy / dl * L); g.stroke(); }
+      g.restore(); };
+    const stroke = (g, pts, w, col) => { g.strokeStyle = col; g.lineWidth = w; g.beginPath(); g.moveTo(...pts[0]); if (pts.length === 3) g.quadraticCurveTo(...pts[1], ...pts[2]); else g.lineTo(...pts[1]); g.stroke(); };
     const paint = (day) => { const [c, g] = mk(); toP(g);
       g.save(); g.filter = `blur(${(.03 * U).toFixed(1)}px)`; g.fillStyle = day ? 'rgba(20,10,4,.55)' : 'rgba(8,4,2,.7)'; g.beginPath(); g.ellipse(day ? .06 : 0, .99, .4, .045, 0, 0, 6.283); g.fill(); g.restore();   // his shadow on the floor (by day thrown a little right)
-      const C = day ? { t0: '#3e3229', t1: '#2a201a', t2: '#231a14', arm: '#45382e', hem: '#4c3e33', hair: '#66615a', hairD: '#36322d', neck: '#5e4434', ear: '#6e4e3e' }
-                    : { t0: '#1c130d', t1: '#150e09', t2: '#0c0705', arm: '#1e150e', hem: '#21170f', hair: '#2a241f', hairD: '#17120e', neck: '#120b07', ear: '#1a110b' };
+      const C = day ? { t0: '#3b352f', t1: '#2b2621', t2: '#221d19', arm: '#433c35', hem: '#4a423a', col: '#4f473f', hair: '#7a766f', hairD: '#423f3a', neck: '#5a4234', ear: '#684a3b' }
+                    : { t0: '#1c150f', t1: '#150f0a', t2: '#0c0705', arm: '#1e1711', hem: '#211812', col: '#241b14', hair: '#2e2924', hairD: '#17130f', neck: '#120b07', ear: '#1d130d' };
+      const dA = day ? 1 : .7;   // how much of the knit and the folds shows (the night is near black)
       g.fillStyle = lg(g, 0, .25, 0, 1, [[0, C.t0], [.45, C.t1], [1, C.t2]]); g.fill(Pa.torso);
       g.save(); g.clip(Pa.torso);   // the back: its bowed top a little lighter, the spine's soft valley, the far (right) side away from the window darker
       g.fillStyle = lg(g, -.2, 0, .22, 0, [[0, 'rgba(255,230,200,0)'], [.55, 'rgba(0,0,0,0)'], [1, `rgba(0,0,0,${day ? .32 : .2})`]]); g.fillRect(-.4, 0, .8, 1.05);
-      blob(g, -.02, .34, .17, .1, `rgba(255,236,210,${day ? .1 : .03})`); blob(g, .0, .46, .022, .14, `rgba(0,0,0,${day ? .22 : .1})`);
+      blob(g, -.02, .34, .17, .1, `rgba(255,236,210,${day ? .08 : .025})`); blob(g, .0, .46, .022, .14, `rgba(0,0,0,${day ? .22 : .1})`);
+      ribs(g, .15 * dA, .05 * dA);   // the knit (down to the hem; below it the trousers)
+      g.save(); g.filter = `blur(${(.01 * U).toFixed(1)}px)`; g.lineCap = 'round';
+      for (const s of [-1, 1]) {   // the shoulder blades under the wool (a soft ridge, its shade below), the wool drawn from each armpit toward the spine
+        blob(g, s * .095, .35, .07, .045, `rgba(255,236,210,${.08 * dA})`);
+        stroke(g, [[s * .04, .43 + (s > 0 ? .02 : 0)], [s * .11, .46 + (s > 0 ? .015 : 0)], [s * .175, .4]], .012, `rgba(0,0,0,${(s < 0 ? .26 : .18) * dA})`);   // (not mirrored: wool, not anatomy)
+        stroke(g, [[s * .182, .335], [s * .11, .335], [s * .03, .385]], .01, `rgba(0,0,0,${.32 * dA})`); stroke(g, [[s * .18, .322], [s * .11, .322], [s * .035, .37]], .005, `rgba(255,236,210,${.06 * dA})`);
+        stroke(g, [[s * .17, .5], [s * .1, .53], [s * .05, .58]], .008, `rgba(0,0,0,${.16 * dA})`);
+        if (s > 0) { stroke(g, [[.15, .29], [.09, .37], [.02, .5]], .01, `rgba(0,0,0,${.2 * dA})`); stroke(g, [[.142, .285], [.082, .365], [.012, .495]], .005, `rgba(255,236,210,${.06 * dA})`); }   // a long drag of the cardigan from the right shoulder toward the small of the back (he leans to the book)
+        stroke(g, [[s * .162, .3], [s * .17, .45], [s * .178, .6]], .028, `rgba(0,0,0,${day ? .5 : .6})`); }   // the sleeve's shade on the back, along its inner edge
+      g.restore();
       g.fillStyle = C.hem; g.fill(Pa.hem); g.strokeStyle = `rgba(0,0,0,${day ? .22 : .12})`; g.lineWidth = .006; for (let x = -.185; x < .19; x += .018) { g.beginPath(); g.moveTo(x, .626); g.lineTo(x + .002, .666); g.stroke(); }   // the ribbed hem
       g.fillStyle = `rgba(0,0,0,${day ? .22 : .2})`; g.fillRect(-.3, .668, .6, .018);
       g.fillStyle = lg(g, 0, .68, 0, 1, [[0, 'rgba(0,0,0,.08)'], [1, `rgba(0,0,0,${day ? .22 : .45})`]]); g.fillRect(-.4, .68, .8, .4);   // the folded legs below, in their own shade
       g.restore();
-      for (const [i, s] of [[0, -1], [1, 1]]) { const A = Pa.arms[i];   // the arms: shade where each parts from the back, the sleeve rounder toward the window
-        g.save(); g.filter = `blur(${(.012 * U).toFixed(1)}px)`; g.fillStyle = `rgba(0,0,0,${day ? .55 : .7})`; g.translate(-s * .012, .006); g.fill(A); g.restore();
+      for (const [i, s] of [[0, -1], [1, 1]]) { const A = Pa.arms[i];   // the sleeves: a shade where each parts from the back, round toward the window, creased where they bend
+        g.save(); g.filter = `blur(${(.012 * U).toFixed(1)}px)`; g.fillStyle = `rgba(0,0,0,${day ? .6 : .75})`; g.translate(-s * .014, .006); g.fill(A); g.restore();
         g.fillStyle = lg(g, s * .15, 0, s * .25, 0, s < 0 ? [[0, C.arm], [1, C.arm]] : [[0, C.arm], [1, C.t1]]); g.fill(A);
-        g.save(); g.clip(A); g.fillStyle = lg(g, 0, .3, 0, .6, [[0, 'rgba(255,236,210,0)'], [.7, 'rgba(0,0,0,0)'], [1, `rgba(0,0,0,${day ? .3 : .2})`]]); g.fillRect(-.4, .25, .8, .4);
-        g.strokeStyle = `rgba(0,0,0,${day ? .25 : .15})`; g.lineWidth = .008; g.beginPath(); g.moveTo(s * .2, .5); g.quadraticCurveTo(s * .215, .555, s * .232, .575); g.stroke(); g.restore(); }   // the elbow's crease
-      g.fillStyle = C.neck; g.fill(Pa.neck); g.fillStyle = C.ear; g.fill(Pa.ear);
-      g.save(); g.filter = `blur(${(.006 * U).toFixed(1)}px)`; g.fillStyle = day ? 'rgba(70,54,44,.9)' : 'rgba(40,26,18,.7)'; g.fill(Pa.collar); g.fillStyle = 'rgba(0,0,0,.5)'; g.beginPath(); g.ellipse(.005, .272, .07, .016, 0, 0, 6.283); g.fill(); g.restore();   // the collar under the nape, the head's shade on it
-      g.fillStyle = lg(g, -.08, .05, .1, .2, [[0, C.hair], [1, C.hairD]]); g.fill(Pa.head);
-      g.save(); g.clip(Pa.head); g.filter = `blur(${(.005 * U).toFixed(1)}px)`; const r = rng(23);   // the permed curls: small lighter and darker turns
-      for (let i = 0; i < 90; i++) { const a = r() * 6.283, rr = Math.sqrt(r()) * .1, x = .012 + Math.cos(a) * rr, y = .125 + Math.sin(a) * rr; const lt = r() < .5;
-        g.fillStyle = lt ? `rgba(${day ? '170,164,156' : '90,80,70'},${day ? .16 : .1})` : `rgba(0,0,0,${day ? .22 : .15})`; g.beginPath(); g.ellipse(x, y, .007 + r() * .008, .005 + r() * .005, r() * 3, 0, 6.283); g.fill(); }
-      g.restore(); return c; };
+        g.save(); g.clip(A);
+        g.fillStyle = lg(g, s * .155, 0, s * .2, 0, [[0, `rgba(0,0,0,${.32 * dA})`], [1, 'rgba(0,0,0,0)']]); g.fillRect(-.4, .25, .8, .4);   // its inner side turning away
+        g.fillStyle = lg(g, 0, .3, 0, .6, [[0, 'rgba(255,236,210,0)'], [.7, 'rgba(0,0,0,0)'], [1, `rgba(0,0,0,${day ? .3 : .2})`]]); g.fillRect(-.4, .25, .8, .4);
+        ribs(g, .15 * dA, .05 * dA, .28, .62);
+        g.filter = `blur(${(.006 * U).toFixed(1)}px)`; g.lineCap = 'round';
+        stroke(g, [[s * .152, .3], [s * .2, .296], [s * .236, .345]], .008, `rgba(0,0,0,${.3 * dA})`);   // the sleeve set into the shoulder
+        for (const [y, w] of [[.49, .55], [.52, .7], [.555, .85]]) stroke(g, [[s * .165, y], [s * .2, y + .02], [s * (.165 + .07 * w), y + .045]], .007, `rgba(0,0,0,${.3 * dA})`);   // the creases at the bend
+        stroke(g, [[s * .168, .5], [s * .2, .515], [s * .225, .54]], .004, `rgba(255,236,210,${.07 * dA})`);
+        g.restore(); }
+      // the nape: the neck between the hairline and the collar, shaded under the hair and at its sides
+      g.fillStyle = C.neck; g.fill(Pa.neck);
+      g.save(); g.clip(Pa.neck); g.fillStyle = lg(g, 0, .19, 0, .235, [[0, 'rgba(0,0,0,.6)'], [1, 'rgba(0,0,0,0)']]); g.fillRect(-.1, .15, .2, .15);
+      g.fillStyle = lg(g, -.05, 0, .06, 0, [[0, 'rgba(0,0,0,.35)'], [.35, 'rgba(0,0,0,0)'], [.7, 'rgba(0,0,0,0)'], [1, 'rgba(0,0,0,.45)']]); g.fillRect(-.1, .15, .2, .15); g.restore();
+      // the collar: its shade on the back below it, the ribbed band, its top edge turned over
+      g.save(); g.filter = `blur(${(.008 * U).toFixed(1)}px)`; g.fillStyle = `rgba(0,0,0,${day ? .4 : .5})`; g.beginPath(); g.ellipse(.003, .29, .115, .02, 0, 0, 6.283); g.fill(); g.restore();
+      g.fillStyle = C.col; g.fill(Pa.collar);
+      g.save(); g.clip(Pa.collar); ribs(g, .22 * dA, .06 * dA, .22, .3); g.fillStyle = lg(g, 0, .224, 0, .29, [[0, `rgba(255,236,210,${.1 * dA})`], [.3, 'rgba(0,0,0,0)'], [1, 'rgba(0,0,0,.35)']]); g.fillRect(-.2, .2, .4, .1); g.restore();
+      // the hair: grey, close, combed from the crown in strands; the nape's hairline soft
+      g.save(); g.filter = `blur(${(.003 * U).toFixed(1)}px)`; g.fillStyle = lg(g, -.08, .05, .1, .2, [[0, C.hair], [1, C.hairD]]); g.fill(Pa.head); g.restore();
+      g.save(); g.clip(Pa.head); g.filter = `blur(${(.0018 * U).toFixed(1)}px)`;
+      strands(g, 260, day ? 'rgba(206,202,194,.18)' : 'rgba(120,108,96,.14)', day ? 'rgba(16,14,12,.2)' : 'rgba(0,0,0,.2)', 23);
+      g.fillStyle = lg(g, 0, .16, 0, .2, [[0, 'rgba(0,0,0,0)'], [1, `rgba(0,0,0,${day ? .3 : .25})`]]); g.fillRect(-.1, .14, .22, .08);   // thinner and darker toward the nape
+      g.restore();
+      // the ears at the sides: the backs of them, a soft edge, the fold inside in shade
+      for (const E of [Pa.ear, Pa.earL]) { g.save(); g.filter = `blur(${(.0022 * U).toFixed(1)}px)`; g.fillStyle = C.ear; g.fill(E); g.restore(); }
+      g.save(); g.filter = `blur(${(.002 * U).toFixed(1)}px)`; g.lineCap = 'round'; stroke(g, [[.088, .148], [.099, .162], [.092, .185]], .005, 'rgba(0,0,0,.45)'); stroke(g, [[-.062, .152], [-.071, .165], [-.065, .184]], .005, 'rgba(0,0,0,.45)'); g.restore();
+      return c; };
+    // the knit as a texture for the lights: ribs on the wool, strands in the hair (where they cross the light, it shows the material)
+    const tex = (() => { const [t, tg] = mk(); toP(tg);
+      for (const p of [Pa.torso, ...Pa.arms, Pa.collar]) { tg.save(); tg.clip(p); ribs(tg, .3, 0, .2, .64); tg.restore(); }
+      tg.save(); tg.clip(Pa.head); strands(tg, 360, 'rgba(0,0,0,0)', 'rgba(0,0,0,.38)', 29); tg.restore(); return t; })();
     // a light lying inside the shape on the edges that face it (the shape minus itself moved away from the light, blurred, kept inside),
     // weighted by where it falls (wt: [cx, cy, rx, ry] in P units — strongest there, fading out)
     const inside = (dir, k, col, blurK, wt, sharpA) => { const [e, eg] = mk(), d = k * U;
@@ -307,13 +365,19 @@ async function buildRoomOil() {
       const [o, og] = mk(); og.filter = `blur(${(blurK * U).toFixed(1)}px)`; og.drawImage(e, 0, 0); og.filter = `blur(${(.004 * U).toFixed(1)}px)`; og.globalAlpha = sharpA; og.drawImage(e, 0, 0); og.globalAlpha = 1; og.filter = 'none';
       og.globalCompositeOperation = 'destination-in'; og.drawImage(mask, 0, 0);
       toP(og); const [cx, cy, rx, ry] = wt; og.translate(cx, cy); og.scale(rx, ry); const gr = og.createRadialGradient(0, 0, 0, 0, 0, 1); gr.addColorStop(0, '#000'); gr.addColorStop(.5, 'rgba(0,0,0,.6)'); gr.addColorStop(1, 'rgba(0,0,0,0)'); og.fillStyle = gr; og.fillRect(-1, -1, 2, 2);
+      og.setTransform(1, 0, 0, 1, 0, 0); og.globalCompositeOperation = 'destination-out'; og.drawImage(tex, 0, 0);   // (round 9) broken by the knit and the hair's strands
       return o; };
+    // (round 9) the collar's top edge — an inner edge the silhouette's light can't find — catches the same light: the knitted rim round the nape
+    const edgeOf = (path, dir, k, col, blurK, a) => { const [m1, g1] = mk(), [e, eg] = mk(), [o, og] = mk(); toP(g1); g1.fillStyle = '#fff'; g1.fill(path);
+      eg.drawImage(m1, 0, 0); eg.globalCompositeOperation = 'destination-out'; eg.drawImage(m1, -dir[0] * k * U, -dir[1] * k * U); eg.globalCompositeOperation = 'source-in'; eg.fillStyle = col; eg.fillRect(0, 0, bw, bh);
+      og.globalAlpha = a; og.filter = `blur(${(blurK * U).toFixed(1)}px)`; og.drawImage(e, 0, 0); og.filter = 'none'; og.globalAlpha = a * .6; og.drawImage(e, 0, 0); return o; };
+    const plus = (cv, ...more) => { const x = cv.getContext('2d'); for (const m of more) x.drawImage(m, 0, 0); return cv; }, nrm = v => { const l = Math.hypot(...v); return [v[0] / l, v[1] / l]; };
     const sideX = Math.sign(WL[0]) || -1;
     return { body: paint(false), bodyD: paint(true), bw, bh, pad, Pp,
-      rimN: near ? inside(CL, .03, '#ffc274', .014, [.14, .24, .36, .42], 1) : inside(CL, .022, '#ffbe6a', .012, [.12, .2, .3, .34], .9),                              // the candle: the right of his hair and his right shoulder
-      lightW: inside(WL, .07, '#ffd49a', .032, [sideX * .1, .24, .36, .44], 1),                   // the dawn: head, nape, the left shoulder and arm
+      rimN: plus(near ? inside(CL, .03, '#ffb862', .014, [.14, .24, .36, .42], 1) : inside(CL, .022, '#ffb660', .012, [.12, .2, .3, .34], .9), edgeOf(Pa.collar, nrm([CL[0] * .6, -1]), .008, '#ffb862', .004, near ? .75 : .6)),                              // the candle: the right of his hair and his right shoulder
+      lightW: plus(inside(WL, .07, '#ffcc8c', .032, [sideX * .1, .24, .36, .44], 1), edgeOf(Pa.collar, nrm([WL[0] * .6, -1]), .01, '#ffcc8c', .005, .7)),                   // the dawn: head, nape, the left shoulder and arm
       lightW2: inside([WL[0] * .4, -1], .03, '#ffd9a6', .025, [0, .18, .26, .2], .5),             // and a little on the tops of the head and shoulders
-      lightK: inside(WL, .05, '#f0c48c', .03, [sideX * .2, .86, .2, .18], .6) };                   // and the near knee on the floor            // and a little on the tops of the head and shoulders
+      lightK: inside(WL, .05, '#f0c48c', .03, [sideX * .2, .86, .2, .18], .6) };                   // and the near knee on the floor
   };
   // (round 8: the same old man at the start and the end) 'open' uses the end's figure too, in its night state; the old figure stays only for 'dawn'
   ROIL.figOld = figOf(L); ROIL.fig = figEndOf(L, true); ROIL.figE = figEndOf(ROIL.LE);
@@ -478,6 +542,14 @@ function roomOil(ctx, u, mode = 'open') {
   if (endM) { const wg = 1 - .7 * ss(.8, 6.5, u); if (wg > 0) { ctx.save(); ctx.globalCompositeOperation = 'screen'; const [gx, gy] = sc(L.flame[0], L.flame[1]), R = .95 * W;
     const gr = ctx.createRadialGradient(gx, gy, 0, gx, gy, R); gr.addColorStop(0, `rgba(255,214,160,${.5 * wg})`); gr.addColorStop(.35, `rgba(236,170,110,${.3 * wg})`); gr.addColorStop(1, `rgba(150,100,70,${.12 * wg})`);
     ctx.fillStyle = gr; ctx.fillRect(0, 0, W, H); ctx.restore(); } }
+  // 'end' (round 9: at ≈ 166.6–167.5 the window came in at the left edge as a thin cut strip that seemed to slide on its own): the
+  // window is painted into the same plate as the wall (one transform, OIL.view) — it only moves faster than the candle because the pull
+  // back spreads the frame from its centre. Its entry happens inside a soft dark lens edge on the left, so its frame's first sliver is
+  // lost in the shade and the window comes out of it already a few panes wide; the edge lets go as the window comes in (gone once
+  // a few panes show, ≈ 169 s, well before the whole window is in frame)
+  if (endM) { const wx = sc(L.win[2], 0)[0], s = ss(2.5, 5.5, u) * (1 - ss(.04 * W, .11 * W, wx)); if (s > 0) {
+    ctx.save(); ctx.globalCompositeOperation = 'multiply'; const gr = ctx.createLinearGradient(0, 0, .13 * W, 0), v = k => `rgb(${255 - (255 - 62) * k * s | 0},${255 - (255 - 54) * k * s | 0},${255 - (255 - 48) * k * s | 0})`;
+    gr.addColorStop(0, v(1)); gr.addColorStop(.22, v(.82)); gr.addColorStop(.48, v(.4)); gr.addColorStop(.75, v(.1)); gr.addColorStop(1, '#fff'); ctx.fillStyle = gr; ctx.fillRect(0, 0, .13 * W, H); ctx.restore(); } }
   // varnish, vignette, the words' band a little darker, film grain
   OIL.varnish(ctx, .45, [120, 74, 30]);
   ctx.save(); ctx.globalCompositeOperation = 'multiply';

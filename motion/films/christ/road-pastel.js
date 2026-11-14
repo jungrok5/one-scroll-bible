@@ -22,7 +22,8 @@
                 a moment and start again; from u 5.4 Peter breaks out of the group and hurries after him, gaining (into 'protest').
      'protest'  (u 0–4.3, 67.1–): a wide side view of the road (관리자 2026-11-14 승인), rose → violet, Jerusalem small on the right horizon and
                 the last light between them and it: Jesus walks right toward the city and stops; Peter hurries past him, turns round in the
-                road right in front of him with both arms spread wide (u 1.2–2.1), then steps in and holds his arm, pleading (u 2.1–).
+                road right in front of him and, turned to him from the side, spreads both arms wide, palms open, pleading (u 1.2–2.1;
+                관리자 9차: never square to the camera), then steps in and holds his arm (u 2.1–).
      'alone'    (u 0–4.6, 71.4–): violet dusk; Jesus and the band walk on up the road, growing small; Peter stands a few steps
                 behind, alone on the road; the first star.
    Each mode draws for u from -0.8 to its length + 0.8 (dissolves). Closed form: roadPastel(ctx, u, mode) depends only on (u, mode).
@@ -59,6 +60,9 @@ function rdLook(b, o, land) { const t = c => Pilot.rgb(Pilot.hex(c).map((v, k) =
 // lean tips the top forward; staff = a staff held in the right hand. noFace (Jesus): the face is never drawn — the opening of the head
 // cloth stays in shade, no nose, no beard. Parts: q = the silhouette (robe colour), hd = skin (neck, hands), hf = the face, hr = hair and
 // beard, hc = head cloth, hb = the band round the head cloth and the belt, arm = the sleeves (a shade darker).
+// a closed smooth shape through pts (quadratic through the midpoints), wound the same way as rdLimb so overlapping parts never cut holes
+function rdSmooth(p, pts) { let a = 0; for (let i = 0; i < pts.length; i++) { const [x0, y0] = pts[i], [x1, y1] = pts[(i + 1) % pts.length]; a += x0 * y1 - x1 * y0; } if (a < 0) pts = pts.slice().reverse();
+  const n = pts.length, m = i => [(pts[i][0] + pts[(i + 1) % n][0]) / 2, (pts[i][1] + pts[(i + 1) % n][1]) / 2]; p.moveTo(...m(n - 1)); for (let i = 0; i < n; i++) p.quadraticCurveTo(pts[i][0], pts[i][1], ...m(i)); p.closePath(); }
 function rdLimb(p, a, b, w0, w1) { const ang = Math.atan2(b[1] - a[1], b[0] - a[0]); p.moveTo(a[0] + Math.cos(ang - Math.PI / 2) * w0, a[1] + Math.sin(ang - Math.PI / 2) * w0); p.arc(b[0], b[1], w1, ang - Math.PI / 2, ang + Math.PI / 2); p.arc(a[0], a[1], w0, ang + Math.PI / 2, ang + Math.PI * 1.5); p.closePath(); }
 function rdPerson(P, o) {
   const { w = 1, lean: l = 0, face: f = 1, staff = false, hem = 1, ph = 0, walk = 0, back = 0, hair = false, beard = true, noFace = false, wind = 0 } = o;
@@ -482,8 +486,9 @@ function rdFinish(ctx, T, band) {
 // him and it read as two men walking side by side). Rose → violet; Jerusalem small on the right horizon, the last light on the horizon
 // between them and the city. Jesus, small, walks right toward the city — seen from the side only as a hooded shape (the cloth drawn forward
 // over his head: a soft round silhouette, no face, no nose or brow line at any frame) — slows and stands still. Peter comes hurrying from
-// behind (from the left: out of 'foretell'), passes him, turns round in the road right in front of him and stops with both arms spread
-// wide, barring the way (u 1.2–2.3, "주여 그리 마옵소서"); then steps in and takes hold of him — one hand on his shoulder, the other on his
+// behind (from the left: out of 'foretell'), passes him, turns round in the road right in front of him — facing him, seen from the side —
+// and stops with both arms spread wide, palms open toward him, leaning in, barring the way (u 1.2–2.3, "주여 그리 마옵소서"); then steps
+// in and takes hold of him — one hand on his arm at the elbow, the other on his
 // forearm — leaning in, pleading, his head shaking a little (u 2.4–, "이 일이 결코 주께 미치지 아니하리이다"). Both small (≈ 14–15% of
 // the frame's height) and left of centre; the gap between them and their gestures read at once against the sky.
 const rdRem = (a, b, u) => u < b ? (b - u) - (rdSsI(a, b, b) - rdSsI(a, b, u)) : 0;   // the way still to go when a pace of 1 eases to 0 over a → b
@@ -533,14 +538,45 @@ function rdProtest(ctx, u, T, C) {
   if (peterR) { const sh = Pp(.08 * run * .8 * 1.05, -.765), tg = Pp(.05 + .15 * Math.sin(phP + Math.PI) * run, -.48 + .05 * run), a = rdIK(sh, tg, .18 * sP, .172 * sP, 1), p = new Path2D();
     rdLimb(p, sh, a.el, .05 * sP, .046 * sP); rdLimb(p, a.el, a.wr, .046 * sP, .038 * sP); peterR.addPath(p); peterR.arm.addPath(p);
     const hd = new Path2D(); hd.ellipse(a.wr[0], a.wr[1] + .01 * sP, .026 * sP, .032 * sP, 0, 0, 6.283); peterR.hd.addPath(hd); peterR.addPath(hd); rdLook({ hc: RD_PETER.hc, band: RD_PETER.band, hairCol: RD_PETER.hair }, poR, land); }
-  // … then turned round to him (seen a little from the front, his head to him): arms spread wide across the road, then his left hand on
-  // Jesus's shoulder and his right on Jesus's forearm, leaning in
+  // … then turning round to him: for a moment seen a little from the front, his head to him, the arms starting to open
   const pl = -.03 * spread - .1 * hold - .015 * tug, rest = [[-.18, -.405], [.18, -.405]], wide = [[-.56, -.6], [.56, -.6]];   // wide: past his reach, so the arms are straight
   const toSh = loc(Pj(.17 + .006 * tug, -.6)), toWr = loc(aJ.wr);   // his arm at the elbow (higher up the hand rose by his face like a wave), his forearm
   const reach = [0, 1].map(s => { const sp = [lerp(rest[s][0], wide[s][0], spread), lerp(rest[s][1], wide[s][1], spread)], h2 = s ? [toWr[0] - .01, toWr[1]] : toSh; return [lerp(sp[0], h2[0], hold), lerp(sp[1], h2[1], hold)]; });
   const poF = { w: RD_PETER.w, face: lerp(.6, -.85, turn), back: 0, beard: true, handT: true, reach, bend: [-1, 1 - 2 * ss(.1, .5, hold)], lean: pl, hem: 1,
     ph: Math.PI / 2 + Math.PI * step, walk: lerp(.45 * spread, .8, Math.sin(Math.PI * step)), headX: (-.008 + .006 * Math.sin(ph6 * 1.3)) * life, wind: .01 * Math.sin(u * 2.3 + 2) };
-  const peterF = turn > 0 || run <= 0 ? rdPerson(Pp, poF) : null; if (peterF) rdLook({ hc: RD_PETER.hc, band: RD_PETER.band, hairCol: RD_PETER.hair }, poF, land);
+  // (that front view only carries the moment of the turn, u 1.0–1.15) — then he is seen from the side, turned to Jesus (f -1, his beard
+  // toward him; 관리자 9차: square to the camera with both arms straight out he read as a frozen scarecrow): leaning in, both arms spread
+  // wide from the shoulders at an angle — the near arm toward him, the far arm back (a three-quarter spread), elbows a little bent, the
+  // wide sleeves hanging from the forearms, palms open toward him — pumping a little as he pleads (never still); then (u 2.1–) his near
+  // hand on Jesus's forearm and his far hand on his arm at the elbow, as before
+  const k1 = ss(1.0, 1.06, u), k2 = ss(1.05, 1.15, u), peterF = k1 > 0 && k2 < 1 ? rdPerson(Pp, poF) : null; if (peterF) rdLook({ hc: RD_PETER.hc, band: RD_PETER.band, hairCol: RD_PETER.hair }, poF, land);
+  let peterS = null, farS = null; const poS = { w: RD_PETER.w, profile: true, face: -1, beard: true, hem: 1, ph: Math.PI / 2 + Math.PI * step, walk: lerp(.42 * spread, .8, Math.sin(Math.PI * step)), wind: .01 * Math.sin(u * 2.3 + 2) };
+  if (k2 > 0) { const f = -1, live = ss(1.3, 1.75, u) * (1 - hold), pu = Math.sin((u - 1.3) * 7.2), pu2 = Math.sin((u - 1.3) * 3.3 + .8);   // the pleading pulse
+    const l = -(.055 * spread + .022 * live * (.5 + .5 * pu) + .06 * hold + .015 * tug); poS.lean = l;
+    const bob = -.014 * Math.abs(Math.sin(poS.ph)) * poS.walk, shL = [[.012 * f + l * .755 * 1.05, -.755 + bob], [-.035 * f + l * .775 * 1.05, -.775 + bob]];   // near, far shoulder (local)
+    const gripL = [[toWr[0] + .01, toWr[1] - .004], toSh], wrapA = a => Math.atan2(Math.sin(a), Math.cos(a));
+    const arms = [0, 1].map(s => { const sh = shL[s], gp = gripL[s], gA = Math.atan2(gp[1] - sh[1], gp[0] - sh[0]), gR = Math.min(.35, Math.hypot(gp[0] - sh[0], gp[1] - sh[1]));
+      // polar targets round the shoulder: hanging (down) → spread (near: forward toward him a little above the shoulder; far: back, higher) →
+      // the grip (the far arm swings down and forward, its elbow bend easing through straight so it never flips)
+      const aW = s ? -.12 - .06 * pu2 * live : Math.PI - .02 + .07 * pu * live, aG = gA + 2 * Math.PI * (gA < 0);   // wrists about shoulder high, the arms out
+      const A = lerp(lerp(Math.PI / 2, aW, spread), aG, hold), R = lerp(lerp(.33, .335 - .01 * pu * live, spread), gR, hold);
+      const tg = Pp(sh[0] + Math.cos(A) * R, sh[1] + Math.sin(A) * R), a = rdIK(Pp(...sh), tg, .18 * sP, .172 * sP, s ? lerp(1, -1, hold) : lerp(-1, -.55, hold));
+      const fa = Math.atan2(a.wr[1] - a.el[1], a.wr[0] - a.el[0]), open = -Math.PI / 2 + (s ? -.6 * f : .7 * f) + .1 * pu * live;   // palms toward him: the fingers up and forward (near) / up and out (far)
+      return { sh: Pp(...sh), el: a.el, wr: a.wr, hA: open + wrapA(fa + .15 * (s ? -1 : 1) - open) * hold }; });
+    // a sleeve: the upper arm tapering to the elbow, the forearm to the wrist, the wide cuff hanging under the forearm as it rises
+    const sleeve = (p, J) => { const u1 = [J.el[0] - J.sh[0], J.el[1] - J.sh[1]], u2 = [J.wr[0] - J.el[0], J.wr[1] - J.el[1]], n1 = Math.hypot(...u1) || 1, n2 = Math.hypot(...u2) || 1;
+      const c1 = [u1[0] / n1, u1[1] / n1], c2 = [u2[0] / n2, u2[1] / n2], up = c => { const n = [c[1], -c[0]]; return n[1] <= 0 ? n : [-n[0], -n[1]]; }, N1 = up(c1), N2 = up(c2), Ne = up([(c1[0] + c2[0]) / 2, (c1[1] + c2[1]) / 2]);
+      const h1 = Math.abs(c1[0]), h2 = Math.abs(c2[0]), k = sP, at = (b, n, w, g = 0) => [b[0] + n[0] * w * k, b[1] + n[1] * w * k + g * k];
+      const m1 = [(J.sh[0] + J.el[0]) / 2, (J.sh[1] + J.el[1]) / 2], m2 = [(J.el[0] + J.wr[0]) / 2, (J.el[1] + J.wr[1]) / 2];
+      const pts = [at(J.sh, N1, .062), at(m1, N1, .052), at(J.el, Ne, .045), at(m2, N2, .04), at(J.wr, N2, .037), at(J.wr, N2, -.04, .085 * h2), at(m2, N2, -.046, .05 * h2), at(J.el, Ne, -.05, .025 * h1), at(m1, N1, -.056, .03 * h1), at(J.sh, N1, -.064, .012)];
+      rdSmooth(p, pts); };
+    // an open hand out of the cuff: the wrist, the palm, the fingers together, the thumb apart
+    const hand = (p, J) => { const c = [Math.cos(J.hA), Math.sin(J.hA)], pn = [-c[1], c[0]], Q = (t, y) => [J.wr[0] + (c[0] * t + pn[0] * y) * sP, J.wr[1] + (c[1] * t + pn[1] * y) * sP];
+      rdSmooth(p, [Q(-.012, -.017), Q(.02, -.022), Q(.05, -.02), Q(.085, -.011), Q(.098, .002), Q(.086, .013), Q(.052, .02), Q(.02, .02), Q(-.012, .016)]);
+      const sd = J.hA > -Math.PI / 2 ? -1 : 1; rdLimb(p, Q(.022, sd * .016), Q(.05, sd * .036), .008 * sP, .0055 * sP); };
+    peterS = rdPerson(Pp, poS); const sl = new Path2D(), hn = new Path2D(); sleeve(sl, arms[0]); hand(hn, arms[0]); peterS.addPath(sl); peterS.arm.addPath(sl); peterS.addPath(hn); peterS.hd.addPath(hn);
+    farS = new Path2D(); const fs = new Path2D(), fh = new Path2D(); sleeve(fs, arms[1]); hand(fh, arms[1]); farS.addPath(fs); farS.addPath(fh); farS.arm = fs; farS.hd = fh;
+    rdLook({ hc: RD_PETER.hc, band: RD_PETER.band, hairCol: RD_PETER.hair }, poS, land); }
   // long soft shadows to the left along the road from their feet (the last light is low on the right, beyond them)
   for (const [P0, s0] of [[Pj, sJ], [Pp, sP]]) { const [px, py] = P0(0, .01), Ls = 1.9 * s0; ctx.save(); ctx.translate(px, py); ctx.scale(1, .05); const sg = ctx.createLinearGradient(0, 0, -Ls, 0);
     sg.addColorStop(0, `rgba(54,42,86,${.42 * lastA})`); sg.addColorStop(.6, `rgba(54,42,86,${.2 * lastA})`); sg.addColorStop(1, "rgba(54,42,86,0)"); ctx.fillStyle = sg; ctx.beginPath(); ctx.ellipse(-Ls / 2 + .06 * s0, 0, Ls / 2, .16 * s0 / .05 * .3, 0, 0, 6.283); ctx.fill(); ctx.restore(); }
@@ -548,12 +584,15 @@ function rdProtest(ctx, u, T, C) {
   const fl = RDP.fl, g = fl.getContext('2d'); g.setTransform(1, 0, 0, 1, 0, 0); g.globalCompositeOperation = 'source-over'; g.globalAlpha = 1; g.clearRect(0, 0, W, H);
   const rimA = clamp(.95 - .35 * ss(2.6, 4.6, u)), Lt = [-1, .12];
   rdFigure(g, jesus, Pj, jo, tint(RD_JESUS.body, .4), light, Lt, Math.max(1.1, .012 * sJ), rimA);
-  const drawP = (path, o) => rdFigure(g, path, Pp, o, tint(RD_PETER.body), light, Lt, Math.max(1.1, .012 * sP), rimA);
-  if (peterR && peterF) {   // the turn: the running figure gives way to the turned one (on a scratch layer each, so neither shows through itself)
-    const pc = RDP.pc, q = pc.getContext('2d'), k = ss(0, 1, (u - 1.0) / .22);
-    for (const [path, o, a] of [[peterR, poR, 1 - k], [peterF, poF, k]]) { if (a <= 0) continue; q.setTransform(1, 0, 0, 1, 0, 0); q.globalAlpha = 1; q.globalCompositeOperation = 'source-over'; q.clearRect(0, 0, W, H);
-      rdFigure(q, path, Pp, o, tint(RD_PETER.body), light, Lt, Math.max(1.1, .012 * sP), rimA); g.globalAlpha = a; g.drawImage(pc, 0, 0); g.globalAlpha = 1; } }
-  else if (peterR) drawP(peterR, poR); else drawP(peterF, poF);
+  const drawP = (x, path, o) => { if (path === peterS) rdFigure(x, farS, Pp, o, tint(RD_PETER.body, .34), light, Lt, Math.max(1.1, .012 * sP), rimA);   // the far arm behind him
+    rdFigure(x, path, Pp, o, tint(RD_PETER.body), light, Lt, Math.max(1.1, .012 * sP), rimA); };
+  // the turn: running → the front view → turned to him from the side (on a scratch layer each, so none shows through itself)
+  // (the leading pose drawn last and solid, the others under it at up to twice their weight — so the body never goes see-through mid-turn)
+  const layers = [[peterR, poR, run > 0 ? 1 - k1 : 0], [peterF, poF, k1 * (1 - k2)], [peterS, poS, k2]].filter(([p, , a]) => p && a > 0).sort((a, b) => a[2] - b[2]);
+  if (layers.length === 1) drawP(g, layers[0][0], layers[0][1]);
+  else { const pc = RDP.pc, q = pc.getContext('2d');
+    layers.forEach(([path, o, a], i) => { q.setTransform(1, 0, 0, 1, 0, 0); q.globalAlpha = 1; q.globalCompositeOperation = 'source-over'; q.clearRect(0, 0, W, H); drawP(q, path, o);
+      g.globalAlpha = i === layers.length - 1 ? 1 : Math.min(1, 2 * a); g.drawImage(pc, 0, 0); g.globalAlpha = 1; }); }
   g.globalCompositeOperation = 'destination-out'; g.globalAlpha = .1; g.fillStyle = g.createPattern(RDP.grain, 'repeat'); g.fillRect(0, 0, W, H); g.globalCompositeOperation = 'source-over'; g.globalAlpha = 1;
   ctx.drawImage(fl, 0, 0);
   RDP.lastPose = { xJ, xP, gap: (xP - xJ) / hS };

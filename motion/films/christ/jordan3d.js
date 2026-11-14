@@ -174,26 +174,38 @@
   // its hanging end, beard, neck, sloped shoulders, a tunic belted at the waist, a mantle over the back with three folds,
   // sleeves that widen at the forearm, hands with a thumb. Arms are two bones of fixed length from the shoulder: angle a from
   // straight down (+ = forward), elbow bend e ≥ 0 (the forearm only ever turns forward/up — never backwards).
+  // 9차 (관리자: the calling arm read as a straight horizontal rod): e may also be negative for an arm raised behind him (the
+  // forearm then lifts above the upper arm — a bent elbow, never a straight bar); the arm tapers shoulder → elbow → wrist, the
+  // sleeve's loose underside is always on the LOWER side and hangs with gravity (it used to sit on top for an arm pointing back),
+  // and the hand can bend at the wrist (hb, + = up) and curl its fingers (curl 0..1, a beckoning hook).
   const UA = .29, FA = .26;
-  function armShape(o, sx, sy, a, e, col, point = 0) {
+  function armShape(o, sx, sy, a, e, col, point = 0, hb = 0, curl = 0) {
     const ex = sx + Math.sin(a) * UA, ey = sy + Math.cos(a) * UA, fa = a + e, hx = ex + Math.sin(fa) * FA, hy = ey + Math.cos(fa) * FA;
     const n1 = [Math.cos(a), -Math.sin(a)], n2 = [Math.cos(fa), -Math.sin(fa)];
     o.push({ k: 'ell', col, x: sx, y: sy + .01, rx: .075, ry: .07, r: 0 });                                        // the shoulder cap
-    o.push({ k: 'poly', col, pts: [[sx + n1[0] * .064, sy + n1[1] * .064], [ex + n1[0] * .05, ey + n1[1] * .05], [ex - n1[0] * .05, ey - n1[1] * .05], [sx - n1[0] * .064, sy - n1[1] * .064]] });   // upper arm
-    o.push({ k: 'ell', col, x: ex, y: ey, rx: .052, ry: .052, r: 0 });                                         // the elbow, rounded
-    // the sleeve widens toward the wrist; its loose underside hangs down a little (gravity, not the arm's own axis)
-    const wo = .1, hang = .07 * Math.abs(Math.sin(fa));
-    o.push({ k: 'poly', col, pts: [[ex + n2[0] * .048, ey + n2[1] * .048], [hx + n2[0] * wo * .8, hy + n2[1] * wo * .8], [hx - n2[0] * wo, hy - n2[1] * wo + hang], [lerp(ex, hx, .55) - n2[0] * .075, lerp(ey, hy, .55) - n2[1] * .075 + hang * .5], [ex - n2[0] * .048, ey - n2[1] * .048]] });
-    // the hand out of the sleeve: a mitten and a thumb (or a pointing finger)
-    const hx2 = hx + Math.sin(fa) * .05, hy2 = hy + Math.cos(fa) * .05;
-    o.push({ k: 'ell', col, x: hx2, y: hy2, rx: .046, ry: .032, r: Math.PI / 2 - fa });
-    o.push({ k: 'line', col, w: .02, pts: [[hx2, hy2], [hx2 + Math.sin(fa + .9) * .055, hy2 + Math.cos(fa + .9) * .055]] });
-    if (point > 0) o.push({ k: 'line', col, w: .022, pts: [[hx2, hy2], [hx2 + Math.sin(fa) * .11 * point, hy2 + Math.cos(fa) * .11 * point]] });
+    o.push({ k: 'poly', col, pts: [[sx + n1[0] * .066, sy + n1[1] * .066], [ex + n1[0] * .046, ey + n1[1] * .046], [ex - n1[0] * .046, ey - n1[1] * .046], [sx - n1[0] * .066, sy - n1[1] * .066]] });   // upper arm, tapering
+    o.push({ k: 'ell', col, x: ex, y: ey, rx: .047, ry: .047, r: 0 });                                         // the elbow, rounded
+    // the sleeve: its upper edge follows the forearm and narrows to the wrist; its loose underside hangs down (gravity). +n2 is
+    // the upper side when the forearm points forward (fa > 0), −n2 when it points back — blended through fa ≈ 0 so nothing pops.
+    const up = ss(-.35, .35, fa), wN = .034, wW = .1, hang = .085 * Math.abs(Math.sin(fa)) + .015;
+    const wP = lerp(wW, wN, up), wM = lerp(wN, wW, up), hP = (1 - up) * hang, hM = up * hang;   // widths and hang on the +n2 / −n2 sides
+    const mx = lerp(ex, hx, .55), my = lerp(ey, hy, .55);
+    o.push({ k: 'poly', col, pts: [[ex + n2[0] * .045, ey + n2[1] * .045], [mx + n2[0] * lerp(.07, .04, up), my + n2[1] * lerp(.07, .04, up) + hP * .55], [hx + n2[0] * wP, hy + n2[1] * wP + hP],
+      [hx - n2[0] * wM, hy - n2[1] * wM + hM], [mx - n2[0] * lerp(.04, .07, up), my - n2[1] * lerp(.04, .07, up) + hM * .55], [ex - n2[0] * .045, ey - n2[1] * .045]] });
+    // the hand out of the sleeve: a narrow palm bent a little at the wrist, a thumb, and (when calling) fingers hooking up
+    const sg = fa < 0 ? -1 : 1, ha = fa + sg * hb, hx2 = hx + Math.sin(ha) * .045, hy2 = hy + Math.cos(ha) * .045;
+    o.push({ k: 'line', col, w: .036, pts: [[hx, hy], [hx2, hy2]] });                                                // the wrist
+    o.push({ k: 'ell', col, x: hx2, y: hy2, rx: .044, ry: .026, r: Math.PI / 2 - ha });
+    o.push({ k: 'line', col, w: .018, pts: [[hx2, hy2], [hx2 + Math.sin(ha + sg * .9) * .05, hy2 + Math.cos(ha + sg * .9) * .05]] });
+    if (point > 0) o.push({ k: 'line', col, w: .02, pts: [[hx2, hy2], [hx2 + Math.sin(ha) * .1 * point, hy2 + Math.cos(ha) * .1 * point]] });
+    else if (curl > 0) { const pts = [[hx2 + Math.sin(ha) * .03, hy2 + Math.cos(ha) * .03]]; let an = ha, px = pts[0][0], py = pts[0][1];   // fingers: three joints, each turning further up
+      for (let i = 0; i < 3; i++) { an += sg * curl * .75; px += Math.sin(an) * .026; py += Math.cos(an) * .026; pts.push([px, py]); }
+      o.push({ k: 'line', col, w: .022, pts }); }
   }
   function bodyParts(ps, tunic, mantle) {
     const o = [], s = ps.stride || 0, sway = ps.sway || 0, hd = ps.head || 0, fl = ps.flutter || 0;
     const f = ps.armF || [-.1, .25], n = ps.armN || [.1, .25];
-    armShape(o, -.05, -1.37, f[0], f[1], mantle, ps.pointF || 0);                                            // far arm, behind
+    armShape(o, -.05, -1.37, f[0], f[1], mantle, ps.pointF || 0, f[2] || 0, f[3] || 0);                                            // far arm, behind
     // legs: when he strides, the front leg pushes the robe forward and the back leg trails — the hem opens into an inverted V
     const fx = .26 * s, bx = -.26 * s, lead = Math.max(fx, bx), trail = Math.min(fx, bx), open = Math.abs(s);
     for (const lx of [fx, bx]) { o.push({ k: 'poly', col: tunic, pts: [[lx - .04, -.2], [lx + .04, -.2], [lx + .035, -.03], [lx - .035, -.03]] }); o.push({ k: 'ell', col: tunic, x: lx + .05, y: -.025, rx: .1, ry: .03, r: 0 }); }   // shins and sandalled feet
@@ -207,7 +219,7 @@
     o.push({ k: 'poly', col: mantle, pts: [[-.22, -1.44], [.02, -1.49], [.12, -1.42], [.07, -1.15], [.0, -.75], [-.04, -.36], [-.18, -.3 + fl * .05], [-.36 - fl * .2, -.3 - fl * .12], [-.3 - fl * .08, -.8], [-.26, -1.15]] });
     o.push({ k: 'fold', pts: [[-.04, -1.36], [-.1, -.9], [-.14, -.4]] }, { k: 'fold', pts: [[-.13, -1.32], [-.2, -.85], [-.28 - fl * .1, -.36]] }, { k: 'fold', pts: [[.04, -1.2], [.0, -.8], [-.04, -.42]] });
     o.push({ k: 'head', col: mantle, hd, sway });
-    armShape(o, .05, -1.37, n[0], n[1], mantle, 0);                                                            // near arm, in front
+    armShape(o, .05, -1.37, n[0], n[1], mantle, 0, n[2] || 0, n[3] || 0);                                                            // near arm, in front
     return o;
   }
   function headPath(g, hd, sway) {
@@ -251,11 +263,17 @@
     const wk = clamp(u / 3.0), walkK = 1.5 * wk - .5 * wk * wk * wk, ax = lerp(A_FROM, A_TO, walkK), ph = (ax - A_FROM) / .7 * Math.PI, moving = 1 - ss(2.6, 3.1, u);
     const step = ss(4.2, 5.4, u), sx = SIMON[0] - .2 * step, sph = .2 * step / .7 * Math.PI;
     const pt = ss(2.9, 3.5, u), bk = ss(3.3, 3.8, u), beck = u > 3.7 && u < 5.7 ? Math.pow(Math.sin((u - 3.7) * Math.PI), 2) : 0;   // two lifts of the calling hand
+    const wv = u > 4.2 && u < 6.2 ? Math.pow(Math.sin((u - 4.2) * Math.PI), 2) : 0, low = ss(6.2, 7.0, u);   // the back hand's waves (peaks 4.7, 5.7)
     const tk = ss(2.3, 3.1, u), cf = Math.cos(Math.PI * tk);
     return [
       { x: ax, z: SIMON[1] - .25, face: 1, ps: { stride: Math.sin(ph) * moving, flutter: (.7 + .3 * Math.sin(ph * 2)) * moving + .15 * (1 - moving) * Math.max(0, Math.sin(u * 1.6)), sway: .06 * Math.abs(Math.sin(ph)) * moving + .03 * Math.sin(u * 2), lean: .08 * moving + .03 * pt, head: -.04 * moving + .08 * pt,
-        armN: [lerp(.35 * Math.sin(ph) * moving, .38, bk), lerp(.25, 1.0 + .6 * beck, bk)],      // calling: upper arm near the body, the forearm lifts toward Simon, palm up
-        armF: [lerp(-.35 * Math.sin(ph) * moving, -1.62 - .04 * Math.sin(u * 1.3), pt), lerp(.25, .28, pt)], pointF: ss(3.2, 3.6, u) } },   // pointing back the way he came: a little below the shoulder, elbow soft
+        armN: [lerp(.35 * Math.sin(ph) * moving, .38, bk), lerp(.25, 1.0 + .6 * beck, bk), .25 * bk, bk * (.2 + .6 * beck)],      // calling: upper arm near the body, the forearm lifts toward Simon, palm up, fingers hooking
+        // 9차 (관리자: the back arm was a straight horizontal rod — a held T): pointing back the way he came with the upper arm
+        // below the shoulder and the elbow clearly bent (forearm a little above the upper arm), then two "this way" waves —
+        // the forearm swings up from the elbow, the hand bends up and the fingers hook (alternating with the near hand's
+        // lifts) — and at the end of the shot the arm comes down a little
+        armF: [lerp(-.35 * Math.sin(ph) * moving, -1.02 - .14 * wv + .36 * low + .03 * Math.sin(u * 1.3), pt), lerp(.25, -.5 - .72 * wv + .25 * low, pt), pt * (.2 + .3 * wv), pt * (.15 + .65 * wv)],
+        pointF: ss(3.2, 3.6, u) * (1 - ss(4.0, 4.3, u)) } },
       { x: sx, z: SIMON[1], face: 1, ps: { xs: Math.sign(cf || 1) * (.6 + .4 * Math.abs(cf)), stride: tk >= 1 ? Math.sin(sph) * (1 - ss(5.1, 5.6, u)) * .8 : 0, flutter: .3 * step * (1 - ss(5.2, 6, u)), sway: .02 * Math.sin(u * 1.7), lean: -.03 * step,
         head: .1 * ss(3.2, 4.2, u) - .06 * (1 - tk), armN: [.12 + .12 * ss(3.4, 4.4, u), .3 + .3 * ss(3.4, 4.4, u)], armF: [-.08, .22] } }];
   }
@@ -304,21 +322,40 @@
   // thick neck, broad shoulders, the wet tunic clinging to the back (spine and shoulder-blade folds), arms from the shoulders —
   // upper arm, elbow, forearm out over the water, open hands just above it. rise (0..1) opens the hands a little upward as
   // the light rests on him. (origin at the water surface on his axis)
-  function manParts(g, rise, folds, foldCol) {
-    g.beginPath(); g.ellipse(0, -.985, .09, .106, 0, 0, 6.283); g.fill();                                                        // the back of the head
-    g.beginPath(); g.ellipse(0, -1.015, .094, .08, 0, Math.PI, 2 * Math.PI); g.fill();                                            // short hair over the crown
-    for (const sd of [-1, 1]) { g.beginPath(); g.ellipse(sd * .088, -.975, .018, .03, 0, 0, 6.283); g.fill();                     // the ears
-      g.beginPath(); g.ellipse(sd * .062, -.913, .036, .03, 0, 0, 6.283); g.fill(); }                                            // the beard past the jaw
-    g.beginPath(); g.moveTo(-.062, -.92); g.lineTo(.062, -.92); g.lineTo(.075, -.81); g.lineTo(-.075, -.81); g.fill();                     // neck
-    g.beginPath(); g.moveTo(-.07, -.85); g.quadraticCurveTo(-.17, -.81, -.28, -.75); g.quadraticCurveTo(-.33, -.66, -.29, -.5); g.quadraticCurveTo(-.23, -.25, -.22, .02); g.lineTo(.22, .02); g.quadraticCurveTo(.23, -.25, .29, -.5); g.quadraticCurveTo(.33, -.66, .28, -.74); g.quadraticCurveTo(.17, -.81, .07, -.85); g.closePath(); g.fill();   // broad shoulders, the back
-    for (const sd of [-1, 1]) { const sx = sd * .27, sy = -.69, a = .1, e = lerp(.42, .8, rise), ex = sx + sd * Math.sin(a) * .29, ey = sy + Math.cos(a) * .29, hx = ex + sd * Math.sin(a + e) * .26, hy = ey + Math.cos(a + e) * .26;
-      const n1 = [Math.cos(a), -sd * Math.sin(a)], fa = a + e, n2 = [Math.cos(fa), -sd * Math.sin(fa)];
-      g.beginPath(); g.ellipse(sx - sd * .01, sy + .01, .075, .07, 0, 0, 6.283); g.fill();                                                          // the shoulder cap
-      g.beginPath(); g.moveTo(sx - n1[0] * .066, sy - n1[1] * .066); g.lineTo(ex - n1[0] * .052, ey - n1[1] * .052); g.lineTo(ex + n1[0] * .052, ey + n1[1] * .052); g.lineTo(sx + n1[0] * .066, sy + n1[1] * .066); g.closePath(); g.fill();   // upper arm in the wet sleeve
-      g.beginPath(); g.arc(ex, ey, .054, 0, 6.283); g.fill();                                                                                       // elbow
-      { const wo = .085, hang = .05; g.beginPath(); g.moveTo(ex - n2[0] * .05, ey - n2[1] * .05); g.lineTo(hx - n2[0] * wo * .8, hy - n2[1] * wo * .8); g.lineTo(hx + n2[0] * wo, hy + n2[1] * wo + hang); g.lineTo(lerp(ex, hx, .55) + n2[0] * .07, lerp(ey, hy, .55) + n2[1] * .07 + hang * .5); g.lineTo(ex + n2[0] * .05, ey + n2[1] * .05); g.closePath(); g.fill(); }   // the sleeve widening to the wrist, its wet hem hanging
-      const hx2 = hx + sd * Math.sin(fa) * .04, hy2 = hy + Math.cos(fa) * .04; g.beginPath(); g.ellipse(hx2, hy2, .045, .028, sd * (Math.PI / 2 - fa) * -1, 0, 6.283); g.fill(); }
-    if (folds) { g.strokeStyle = foldCol; g.lineWidth = .012; for (const [a, b, cc] of [[[0, -.74], [.01, -.5], [0, -.2]], [[-.2, -.68], [-.14, -.6], [-.08, -.55]], [[.2, -.68], [.14, -.6], [.08, -.55]]]) { g.beginPath(); g.moveTo(...a); g.quadraticCurveTo(...b, ...cc); g.stroke(); } }   // the spine, the shoulder blades under the wet cloth
+  // 9차 (관리자: he read as a bald statue — bare upper body with muscle lines, short stiff arms — unlike the grey-robed man of
+  // the other scenes): a modest man seen from behind, small — short dark wet hair over the whole back of the head (a ragged wet
+  // edge at the nape, the ears showing, the beard just past the jaw), a plain grey undergarment-tunic with a simple neckline and
+  // sleeves to below the elbow (no spine or muscle lines), arms of a man's length hanging with a slight bend, forearms and open
+  // hands just above the water, lifting a little (rise) as the light rests on him. C = one fill for every part (the silhouette
+  // pass) or { tunic, hair, skin }.
+  function manHair(g) {
+    g.beginPath(); g.ellipse(0, -.985, .089, .106, 0, Math.PI * .8, Math.PI * 2.2);
+    for (const [x, y] of [[.06, -.903], [.044, -.89], [.03, -.9], [.014, -.884], [-.004, -.897], [-.02, -.883], [-.036, -.898], [-.05, -.889], [-.062, -.902]]) g.lineTo(x, y);   // the wet ends at the nape
+    g.closePath(); g.fill();
+  }
+  function manParts(g, rise, C) {
+    const one = typeof C === 'string', T = one ? C : C.tunic, Hr = one ? C : C.hair, Sk = one ? C : C.skin;
+    const poly = pts => { g.beginPath(); pts.forEach(([x, y], i) => i ? g.lineTo(x, y) : g.moveTo(x, y)); g.closePath(); g.fill(); };
+    g.fillStyle = Sk; poly([[-.05, -.94], [.05, -.94], [.064, -.84], [-.064, -.84]]);                                              // the neck
+    for (const sd of [-1, 1]) { g.beginPath(); g.ellipse(sd * .087, -.977, .016, .028, 0, 0, 6.283); g.fill(); }                    // the ears
+    g.fillStyle = Hr; manHair(g);                                                                                                   // short wet hair
+    for (const sd of [-1, 1]) { g.beginPath(); g.ellipse(sd * .066, -.918, .03, .03, 0, 0, 6.283); g.fill(); }                     // the beard just past the jaw
+    // the tunic: a plain neckline, the shoulders squared but not heavy, the back falling straight into the water
+    g.fillStyle = T; g.beginPath(); g.moveTo(-.064, -.862); g.quadraticCurveTo(-.14, -.845, -.21, -.805); g.quadraticCurveTo(-.262, -.775, -.262, -.7);
+    g.lineTo(-.243, -.52); g.quadraticCurveTo(-.22, -.3, -.228, .02); g.lineTo(.228, .02); g.quadraticCurveTo(.22, -.3, .243, -.52); g.lineTo(.262, -.7);
+    g.quadraticCurveTo(.262, -.775, .21, -.805); g.quadraticCurveTo(.14, -.845, .064, -.862); g.quadraticCurveTo(0, -.85, -.064, -.862); g.closePath(); g.fill();
+    // the arms: upper arm a little out from the side, the elbow bent forward a little (the forearm foreshortened, angled out), the hands open
+    for (const sd of [-1, 1]) { const sx = sd * .232, sy = -.725, a1 = .14 + .04 * rise, ex = sx + sd * Math.sin(a1) * .3, ey = sy + Math.cos(a1) * .3;
+      const a2 = lerp(.36, .66, rise), l2 = lerp(.24, .2, rise), wx = ex + sd * Math.sin(a2) * l2, wy = ey + Math.cos(a2) * l2;
+      const u1 = [sd * Math.sin(a1), Math.cos(a1)], n1 = [u1[1], -u1[0]], u2 = [sd * Math.sin(a2), Math.cos(a2)], n2 = [u2[1], -u2[0]];
+      g.fillStyle = Sk;   // forearm (skin), tapering to the wrist, then the open hand
+      poly([[ex + n2[0] * .038, ey + n2[1] * .038], [wx + n2[0] * .027, wy + n2[1] * .027], [wx - n2[0] * .027, wy - n2[1] * .027], [ex - n2[0] * .038, ey - n2[1] * .038]]);
+      const ha = a2 + .12 + .3 * rise, hx = wx + sd * Math.sin(ha) * .045, hy = wy + Math.cos(ha) * .045;
+      g.beginPath(); g.ellipse(hx, hy, .029, .052, -sd * ha, 0, 6.283); g.fill();
+      g.fillStyle = T;    // the sleeve: shoulder cap, upper arm, and a loose wet hem just past the elbow
+      g.beginPath(); g.ellipse(sx, sy + .005, .066, .062, 0, 0, 6.283); g.fill();
+      const hm = [ex + u2[0] * .06, ey + u2[1] * .06];
+      poly([[sx + n1[0] * .062, sy + n1[1] * .062], [ex + n1[0] * .054, ey + n1[1] * .054], [hm[0] + n2[0] * .056, hm[1] + n2[1] * .056 + .012], [hm[0] - n2[0] * .052, hm[1] - n2[1] * .052 + .02], [ex - n1[0] * .05, ey - n1[1] * .05], [sx - n1[0] * .062, sy - n1[1] * .062]]); }
   }
   function spirit(ctx, u) {
     const W = P.W, H = P.H, V = P.ori === 'v', c = J.camS(u), L = J.lightS(u), [mx, mz] = J.man;
@@ -355,9 +392,10 @@
     // the man, lit from above (a rim on the head and shoulders), and his broken reflection
     if (bot) { const s = bot[2], g = J.fig.getContext('2d'), S = J.fig.width, k = Math.min(1, S * .3 / (1.3 * s)), m = s * k, rise = ss(4.2, 6.2, u), lit = ss(3.2, 4.5, u);
       g.setTransform(1, 0, 0, 1, 0, 0); g.clearRect(0, 0, S, S); g.save(); g.translate(S / 2, S * .6); g.scale(m, m);
-      g.fillStyle = `rgb(255,232,192)`; manParts(g, rise, false); g.globalCompositeOperation = 'source-atop'; g.translate(0, .022 + .03 * (1 - lit)); g.fillStyle = 'rgb(40,40,48)'; manParts(g, rise, true, 'rgba(96,94,100,.3)');
+      const HAIR = 'rgb(22,21,24)';
+      manParts(g, rise, 'rgb(255,232,192)'); g.globalCompositeOperation = 'source-atop'; g.translate(0, .022 + .03 * (1 - lit)); manParts(g, rise, { tunic: 'rgb(64,64,70)', hair: HAIR, skin: 'rgb(54,44,42)' });
       // 8차: the rim on the crown dimmed (no bright line sitting on top of his head — rule depict-christ-restraint, no halo)
-      g.translate(0, -.016 - .03 * (1 - lit)); g.globalAlpha = .85; g.beginPath(); g.ellipse(0, -.985, .09, .106, 0, 0, 6.283); g.fill(); g.beginPath(); g.ellipse(0, -1.015, .094, .08, 0, Math.PI, 2 * Math.PI); g.fill(); g.globalAlpha = 1; g.restore();
+      g.translate(0, -.016 - .03 * (1 - lit)); g.globalAlpha = .85; g.fillStyle = HAIR; manHair(g); g.globalAlpha = 1; g.restore();
       ctx.save(); ctx.globalAlpha = .3; ctx.filter = 'blur(2px)'; ctx.translate(bot[0], bot[1]); ctx.scale(1, -.8); ctx.drawImage(J.fig, -S / 2 / k, -S * .6 / k, S / k, S / k); ctx.restore();
       ctx.drawImage(J.fig, bot[0] - S / 2 / k, bot[1] - S * .6 / k, S / k, S / k);
       // the light come down upon him: a soft, wide, low wash across his shoulders and back — wider than it is tall and centred

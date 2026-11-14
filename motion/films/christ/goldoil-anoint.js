@@ -56,7 +56,9 @@
     }
     // neck + head
     const hr = (k === 'youth' ? .066 : .062) * h, hc = T(.015 + bw * .04, -.915 + bw * .02);
-    const nk = new Path2D(); const n1 = T(-.03, -.85), n2 = T(.045, -.85); nk.moveTo(...n1); nk.lineTo(...n2); nk.lineTo(hc[0] + d * hr * .45, hc[1]); nk.lineTo(hc[0] - d * hr * .55, hc[1]); nk.closePath(); parts.push(nk);
+    // 10차 (관리자: "엘리야 머리 안 입 근처에 작은 흰 점"): the neck reaches well down into the robe — at -.85 it stopped 1–2 px above the robe's
+    // top edge, and between the head cloth's back panel and the beard that sliver let the rim layer (drawn offset toward the light) show through
+    const nk = new Path2D(); const n1 = T(-.03, -.80), n2 = T(.045, -.80); nk.moveTo(...n1); nk.lineTo(...n2); nk.lineTo(hc[0] + d * hr * .45, hc[1]); nk.lineTo(hc[0] - d * hr * .55, hc[1]); nk.closePath(); parts.push(nk);
     const hp = new Path2D(); hp.arc(hc[0], hc[1], hr, 0, 6.2832); parts.push(hp);
     const hs = f.hs == null ? 1 : f.hs;                                         // head turn: 1 faces d, -1 looks back over the shoulder (through a frontal 0)
     const Hp = (a, b) => [hc[0] + d * hs * hr * a, hc[1] + hr * b];          // head-local (a forward, b down), in head radii
@@ -139,7 +141,10 @@
     if (f.glow) { ctx.shadowColor = css(f.rim || [255, 180, 96], .7 * f.glow); ctx.shadowBlur = h * .06; }
     parts.forEach(p => ctx.fill(p)); ctx.restore();
     ctx.save(); ctx.fillStyle = f.fill || '#0d0704'; parts.forEach(p => ctx.fill(p)); ctx.restore();
-    if (lines.length) { ctx.save(); ctx.strokeStyle = css(f.rim || [255, 180, 96], (f.fill ? .5 : .75) * Math.min(1, Math.abs(hs) * 2.5));   // (the inner lines fade while the head turns through frontal) ctx.lineWidth = Math.max(1.2, h * .004); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    // (the inner lines fade while the head turns through frontal). 10차: the width/caps were inside that comment, so the lines took whatever
+    // width the scene last stroked with (the plough beam: Elijah's cord and beard edge came out as thick white bands, unlike Samuel's)
+    if (lines.length) { ctx.save(); ctx.strokeStyle = css(f.rim || [255, 180, 96], (f.fill ? .5 : .75) * Math.min(1, Math.abs(hs) * 2.5));
+      ctx.lineWidth = Math.max(1.2, h * .004); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
       ctx.shadowColor = css(f.rim || [255, 180, 96], .6); ctx.shadowBlur = h * .012; lines.forEach(p => ctx.stroke(p)); ctx.restore(); }
     drawArmRim(ctx, f, h, armLines);
     if (hemLines.length) { ctx.save(); ctx.lineWidth = Math.max(1.4, h * .005); ctx.lineCap = 'round'; ctx.shadowColor = css(f.rim || [255, 180, 96], .7); ctx.shadowBlur = h * .014;   // the sleeve hems in the low sun
@@ -437,14 +442,23 @@
     // carried in front of the chest, tip up so nothing spills; then lifted and turned over the young man's head
     // (the horn first comes out in front of him, then turns over: its wide end never passes over his own head)
     const cr = o.carry || [.15, .84, 1.25], posK = o.posEase ? o.posEase(liftK) : liftK, angK = o.angEase ? o.angEase(liftK) : liftK;
-    const vang = lerp(cr[2], vangP + 6.2832, angK), vtip = [lerp(sx + U * cr[0] * pH, vtipP[0], posK), lerp(gy - U * cr[1] * pH, vtipP[1], posK)];
+    let vang = lerp(cr[2], vangP + 6.2832, angK), vtip = [lerp(sx + U * cr[0] * pH, vtipP[0], posK), lerp(gy - U * cr[1] * pH, vtipP[1], posK)];
+    if (o.liftPath && liftK < 1) {         // keyed lift (tip x from sx, tip y above the ground, in U; horn angle) through a smooth Hermite spline
+      const K = [[0, sx + U * cr[0] * pH, gy - U * cr[1] * pH, cr[2]], ...o.liftPath.map(([k, x, y, a]) => [k, sx + U * x, gy - U * y, a]), [1, vtipP[0], vtipP[1], vangP + 6.2832]];
+      let i = 0; while (i < K.length - 2 && liftK > K[i + 1][0]) i++;
+      const k0 = K[i][0], k1 = K[i + 1][0], hh = k1 - k0, t = clamp((liftK - k0) / hh), t2 = t * t, t3 = t2 * t;
+      const tan = (j, c) => { const a = K[Math.max(0, j - 1)], b = K[Math.min(K.length - 1, j + 1)]; return (b[c] - a[c]) / (b[0] - a[0]); };
+      const hv = c => (2 * t3 - 3 * t2 + 1) * K[i][c] + (t3 - 2 * t2 + t) * hh * tan(i, c) + (-2 * t3 + 3 * t2) * K[i + 1][c] + (t3 - t2) * hh * tan(i + 1, c);
+      vtip = [hv(1), hv(2)]; vang = hv(3);
+    }
     // vessel first into a scratch path to know where the hands go: draw it after the bodies (it is in front)
     const ghost = GH || (GH = P.canvas(2, 2).getContext('2d'));
     const vs = o.vessel === 'jar' ? flask(ghost, vtip[0], vtip[1], U * .16, vang, { ghost: true }) : ramHorn(ghost, vtip[0], vtip[1], U * (o.hornL || .34), vang, { curl: o.hornCurl, ghost: true });
     const gi = o.vessel === 'jar' ? [Math.round((vs.C.length - 1) * .42), Math.round((vs.C.length - 1) * .9)] : (o.grip || [.35, .75]).map(k => Math.round((vs.C.length - 1) * k));
     const grip = i => { const [x, y, a, w] = vs.C[i]; return [x + Math.sin(a) * w * .2, y - Math.cos(a) * w * .2]; };
     const hold = o.vessel === 'jar' ? null : gi.map(i => { const [x, y, a, w] = vs.C[i]; return [x, y, a, w]; });
-    const pourer = figure(ctx, { ...(o.pFig || {}), hold, x: sx, y: gy, h: U * pH, d: 1, kind: 'elder', stoop: o.pStoop == null ? .5 : o.pStoop, bow: o.pBow == null ? .3 : o.pBow, walk: walkK < 1 ? u * 4.5 : null, hands: [grip(gi[0]), grip(gi[1])], light: sun, rim: o.rim, glow: .6 });
+    const pF = o.pFig || {}, raise = (pF.shRaise || 0) + (o.liftRaise || 0) * ss(.05, .4, liftK) * (1 - ss(.75, 1, liftK));   // the shoulders come up with the arms over the head
+    const pourer = figure(ctx, { ...pF, shRaise: raise, hold, x: sx, y: gy, h: U * pH, d: 1, kind: 'elder', stoop: o.pStoop == null ? .5 : o.pStoop, bow: o.pBow == null ? .3 : o.pBow, walk: walkK < 1 ? u * 4.5 : null, hands: [grip(gi[0]), grip(gi[1])], light: sun, rim: o.rim, glow: .6 });
     const anointed = figure(ctx, { ...(o.aFig || {}), x: ax, y: gy, h: ah, d: -1, kind: o.aKind, bow: lead ? lerp(.05, .55, ss(lead - 1.2, lead + .2, u)) : .55, light: sun, rim: o.rim, glow: .6 });
     if (o.aKind === 'priest') o.priestGold(ctx, anointed, ah, u);
     // the vessel in their hands, then the oil: a stream to the crown and running down the head
@@ -477,8 +491,12 @@
   const DAVID = {
     // Samuel stands back from the boy: both arms reach forward and up from the shoulder (upper arm, elbow, forearm against the sky),
     // the horn held above the BOY's head, tilted to pour — never over his own head (관리자 6차 #4)
-    dur: 13.3, lead: 5.7, fade: 0, aFig: { tunic: true, staff: true }, aKind: 'youth', aH: .70, pH: .90, gap: .06, sxOff: .385, pFig: { sleeve: 'wide', armL: [.2, .185], shRaise: .015 }, hornL: .27, pourAng: -2.3, hornCurl: .55, vessel: 'horn', rim: [255, 184, 100], seed: 4,
-    pStoop: .2, pBow: .15, preTilt: .1, grip: [.27, .64], carry: [.17, .70, 1.45], posEase: p => eo(clamp(p / .7)), angEase: p => eio(clamp((p - .3) / .7)),
+    dur: 13.3, lead: 5.7, fade: 0, aFig: { tunic: true, staff: true }, aKind: 'youth', aH: .70, pH: .90, gap: .06, sxOff: .385, pFig: { sleeve: 'wide', armL: [.215, .2], shRaise: .015 }, hornL: .27, pourAng: -2.3, hornCurl: .55, vessel: 'horn', rim: [255, 184, 100], seed: 4,
+    pStoop: .2, pBow: .15, preTilt: .1, grip: [.27, .64], carry: [.17, .70, 1.45],
+    // 10차 (관리자: "28초에 뿔병이 소년 얼굴 앞에 가로로 — 마시라고 내미는 것 같다"): the horn goes UP from his chest, tip up, clear above both
+    // heads first (film ≈28.0), turns over up there with its tip well above the boy's head, then comes down onto the crown to pour.
+    // [liftK, tip x from Samuel (U), tip height above the ground (U), horn angle]
+    liftPath: [[.34, .31, .98, 1.5], [.5, .395, .965, 2.15], [.66, .39, .93, 2.85]], liftRaise: .035,
     sun: (W, H, gy, ax, U) => [ax + U * .02, gy - U * .30],
     back(ctx, W, H, gy, sun, u, U, ex) {
       dusk(ctx, W, H, gy - U * .2, sun, { top: '#2c1812', mid: '#8a4420', low: '#eea050' });
@@ -706,6 +724,21 @@
     }
     ctx.restore();
   }
+  // 10차 (관리자: "겉옷이 각진 판·네모"): cloth has no cut corners — resample the mesh through a rounded-square map of its (s, b) square
+  // (a superellipse per corner, each its own exponent n so the four corners are not alike; lower n = rounder), so in every phase the outline
+  // rounds off at the corners and the hem curves up into the sides. Interior folds and shading are carried along unchanged.
+  function roundCloth(G, nTF, nTB, nHF, nHB) {
+    const NB = G.length, NA = G[0].length, out = [];
+    const at = (s, b) => { const x = s * (NA - 1), y = b * (NB - 1), i = Math.min(NA - 2, Math.floor(x)), j = Math.min(NB - 2, Math.floor(y)), fx = x - i, fy = y - j;
+      const A = G[j][i], B = G[j][i + 1], C = G[j + 1][i + 1], D = G[j + 1][i];
+      return [0, 1, 2].map(k => lerp(lerp(A[k], B[k], fx), lerp(D[k], C[k], fx), fy)); };
+    for (let j = 0; j < NB; j++) { const row = [];
+      for (let i = 0; i < NA; i++) { const a = 2 * i / (NA - 1) - 1, c = 2 * j / (NB - 1) - 1, m = Math.max(Math.abs(a), Math.abs(c));
+        let k = 1; if (m > 1e-6) { const n = c < 0 ? (a < 0 ? nTF : nTB) : (a < 0 ? nHF : nHB); k = Math.pow(Math.pow(Math.abs(a) / m, n) + Math.pow(Math.abs(c) / m, n), -1 / n); }
+        row.push(at((a * k + 1) / 2, (c * k + 1) / 2)); }
+      out.push(row); }
+    return out;
+  }
   function elishaScene(ctx, u) {
     const W = P.W, H = P.H, V = P.ori === 'v', dur = 4.4;
     const U = V ? .24 * H : .40 * H, gy = H * (V ? .60 : .76);
@@ -752,18 +785,28 @@
     const bez = (p0, c, p1, s) => [(1 - s) * (1 - s) * p0[0] + 2 * (1 - s) * s * c[0] + s * s * p1[0], (1 - s) * (1 - s) * p0[1] + 2 * (1 - s) * s * c[1] + s * s * p1[1]];
     // at rest: the top edge round the back of the neck and over the shoulder, the cloth falling over the round of the shoulder and the upper
     // arm, then hanging (heavy) in a few deep folds — longer behind than in front, the hem and the sides soft and uneven
-    const rT = [Te(.085, -.765), Te(-.035, -.862), Te(-.152, -.785)], rB = [Te(.125, -.58), Te(-.03, -.5), Te(-.155, -.45)];   // 8차: the hem follows his body (it flared into a bell); 9차: down the back to the waist/hips (it covered him to the knees)
+    // 10차 (관리자: "겉옷이 각진 판·네모로 읽힌다"): the hem hangs in a soft curve, lowest down the middle of the back (its corners round up —
+    // see roundCloth); the top edge drapes over the shoulder rather than standing in a dome, with a little sag behind the nape
+    const rT = [Te(.085, -.755), Te(-.035, -.85), Te(-.155, -.775)], rB = [Te(.13, -.585), Te(-.02, -.465), Te(-.165, -.465)];   // 8차: the hem follows his body (it flared into a bell); 9차: down the back to the waist/hips (it covered him to the knees)
     const since = u - t1, swing = since > 0 ? Math.sin(since * 6.2) * Math.exp(-since * 2.6) : 0;
     const rest = (s, b) => {          // s 0 front → 1 back, b 0 shoulders → 1 hem
       const tp = bez(...rT, s), bt = bez(...rB, s), fb = Math.pow(b, .7);
-      const ctl = [lerp(tp[0], bt[0], .35) + (.5 - s) * 2 * eh * .028, lerp(tp[1], bt[1], .22)];
+      tp[1] += eh * .012 * Math.pow(Math.sin(Math.PI * clamp((s - .35) / .55)), 2);                     // the sag between nape and shoulder blade
+      // the sides are not straight: in front the cloth rounds out over the upper arm and tucks back under it; behind it swells over the
+      // shoulder blade and falls in toward the small of the back
+      const ctl = [lerp(tp[0], bt[0], .35) + (.5 - s) * 2 * eh * .024, lerp(tp[1], bt[1], .22)];
       const p = bez(tp, ctl, bt, b);
-      const ph = s * Math.PI * 3.3 + .5, ph2 = s * Math.PI * 5.1 + 1.3, fold = Math.sin(ph) + .3 * Math.sin(ph2), dfold = Math.cos(ph) + .45 * Math.cos(ph2);
+      // the folds hang from the shoulder and slant forward along the arm in front (the arms reach forward to the plough)
+      const ph = s * Math.PI * 3.3 + .5 + (1 - s) * b * 1.4, ph2 = s * Math.PI * 5.1 + 1.3 + b * .8, fold = Math.sin(ph) + .3 * Math.sin(ph2), dfold = Math.cos(ph) + .45 * Math.cos(ph2);
       const z = dfold * eh * .025 * fb - Math.sin(b * Math.PI) * eh * .02;
-      const edge = Math.pow(Math.abs(1 - 2 * s), 6);                                                       // the side edges wave
+      const edge = Math.pow(Math.abs(1 - 2 * s), 5);                                                       // the side edges wave, unevenly
+      // the corners hang down as soft points (heavy cloth over a shoulder: its corners droop, the front one lower), and behind, the edge
+      // falls in toward the small of the back — so the outline has hollows as well as rounds (all-convex read as a shell)
+      const cF = Math.pow(clamp(1 - s * 2.2), 2.2), cB = Math.pow(clamp(s * 2.2 - 1.2), 2.2);
       return [p[0] + fold * eh * .012 * fb + swing * eh * .045 * Math.pow(b, 1.5) + Math.sin(u * 1.7 + b * 2) * eh * .003 * b
-          + edge * eh * .015 * Math.sin(b * 5.1 + s * 3) * b,
-        p[1] + fold * eh * .012 * b * b + (1 - fold) * eh * .022 * b * b + (P.noise(s * 6, 3) - .5) * eh * .035 * b * b - Math.abs(swing) * eh * .012 * b * b, z];
+          + edge * eh * (.02 * Math.sin(b * 3.4 + s * 3 + .6) + .01 * Math.sin(b * 8.3 + s * 5)) * b
+          + cB * eh * (.05 * Math.sin(Math.PI * Math.min(1, b * 1.15)) - .022 * Math.sin(Math.PI * Math.min(1, b * 3.5))) + cF * eh * .012 * Math.pow(b, 3),
+        p[1] + (cF * .05 + cB * .028) * eh * Math.pow(b, 3) + fold * eh * .012 * b * b + (1 - fold) * eh * .022 * b * b + (P.noise(s * 6, 3) - .5) * eh * .035 * b * b - Math.abs(swing) * eh * .012 * b * b, z];
     };
     // Elijah, at the left, facing Elisha's back; his near hand in polar coordinates about the shoulder [angle, radius / U]
     const ejX = elX - U * .62, eSt = .3;
@@ -794,8 +837,10 @@
     // to Elisha's back (measured: folded on the arm ≈ the same as gathered, in flight and settled): on the arm it is a large heavy mantle
     // hanging from the forearm to his knees, gathered in the hand it hangs as long, in the air it opens to the same size, and on Elisha it
     // covers the shoulders and the back to the waist/hips
-    const wT = U * lerp(lerp(.09, .055, gk), .09, ok), wH = U * lerp(lerp(.10, .12, gk), .105, ss(tr, t1, u)), Lh = U * lerp(lerp(.26, .31, gk), .30, ss(tr, t1, u));
-    const F = [], T0 = topC(u), cD = .1;
+    // 10차: gathered in his fist the top pinches in (it read as a skirt with a straight waistband); ×1.06 / ×1.04 make up for the corners
+    // roundCloth takes off, so the cloth keeps its size
+    const wT = U * 1.06 * lerp(lerp(.09, .032, gk), .09, ok), wH = U * 1.06 * lerp(lerp(.10, .12, gk), .105, ss(tr, t1, u)), Lh = U * 1.04 * lerp(lerp(.26, .31, gk), .30, ss(tr, t1, u));
+    const F = [], T0 = topC(u), cD = .1, wl = ss(tr + .25, t1, u);
     let cx = T0[0], cy = T0[1];
     for (let j = 0; j < NB; j++) {
       const b = j / (NB - 1), t = u - cD * b, fk = flyK(t);
@@ -803,12 +848,17 @@
       const del = ((.04 + .1 * fk) * Math.sin(Math.PI * 2 * 1.1 * b - 8 * u) + .04 * Math.sin(u * 1.3 + b * 2)) * (.15 + .85 * b), cd = Math.cos(del), sd = Math.sin(del);
       [gx, gy2] = [gx * cd - gy2 * sd, gx * sd + gy2 * cd];
       if (j) { const seg = Lh / (NB - 1); cx += gx * seg; cy += gy2 * seg; }
-      const ex = gy2, ey = -gx;                                                                      // across the cloth, square to its fall (never edge-on)
-      const w = lerp(wT, wH, Math.pow(b, .6)) * (1 + .1 * Math.sin(b * 6 - u * 3) * fk);
+      // across the cloth, square to its fall (never edge-on); 10차: in the air the sheet twists a little along its length and keeps turning
+      // (the rows no longer parallel — it was flying as a rigid quad)
+      const tw = fk * (.55 * (b - .45) + .14 * Math.sin(u * 4.5 + b * 3.2)), ex = gy2 * Math.cos(tw) + gx * Math.sin(tw), ey = -gx * Math.cos(tw) + gy2 * Math.sin(tw);
+      const w = lerp(wT, wH, Math.pow(b, .6)) * (1 + .1 * Math.sin(b * 6 - u * 3) * fk) * (1 + .09 * Math.sin(Math.PI * b) - .05 * Math.pow(b, 4));   // 10차: a belly in the sides, tucking in at the hem
       const row = [];
       for (let i = 0; i < NA; i++) {
         const s = i / (NA - 1), a = 1 - 2 * s, fo = Math.sin(s * Math.PI * 3.3 + .5);
         const lag = -U * .03 * a * a * fk * (.4 + .6 * b) + U * .01 * b * fk * Math.sin(Math.PI * 2 * 1.4 * s - 7 * u + 3 * b)   // in the air the corners trail, the hem flutters
+          + U * .03 * fk * a * a * (1 - b) * (1 + .3 * Math.sin(u * 5 + a * 2))                                          // 10차: the leading edge leads with its middle, rounded (the air fills it)
+          + U * .02 * a * a * b * (1 - fk)                                                                                 // 10차: hanging, the corners droop (every row curves, the flap's edge too)
+          + wl * U * (.045 * a * a * b * b * b - .035 * (1 - a * a) * (1 - b) * (1 - b));                                 // coming down onto him: the top arches, the hem corners hang
           + U * (.006 * (1 - fk) + .008) * b * b * fo + U * .012 * b * b * (P.noise(s * 5 + 2, 9) - .5);                  // the hem scalloped by its folds, uneven
         const side = U * .012 * b * Math.sin(s * Math.PI * 4.4 + 1.7 + u * 2) + U * .015 * Math.pow(Math.abs(a), 5) * Math.sin(b * 6 + u * 2.5) * b;  // the sides not straight
         const z = U * .04 * fo * Math.min(1, b * 3) * (1 - .5 * fk) + U * .03 * fk * Math.cos(Math.PI * 2 * 1.1 * b - 8 * u + 2.4 * s) * (.25 + .75 * b) + U * .035 * fk * Math.sin(Math.PI * s) * Math.sin(Math.PI * b);
@@ -817,9 +867,10 @@
       F.push(row);
     }
     const G = [];
-    for (let j = 0; j < NB; j++) { const b = j / (NB - 1), land = ss(t1 - .3 + .08 * b, t1 + .2 + .3 * b, u), row = [];
+    for (let j = 0; j < NB; j++) { const b = j / (NB - 1), land = ss(t1 - .45 + .06 * b, t1 + .12 + .18 * b, u), row = [];
       for (let i = 0; i < NA; i++) { const s = i / (NA - 1), Fp = F[j][i], R = rest(s, b); row.push([lerp(Fp[0], R[0], land), lerp(Fp[1], R[1], land), lerp(Fp[2], R[2], land)]); }
       G.push(row); }
+    const lk = ss(t1 + .15, t1 + .9, u), Gr = roundCloth(G, lerp(2.6, 3.8, lk), lerp(2.8, 4.8, lk), lerp(2.5, 7, lk), lerp(3.0, 5, lk));   // softest in the air; once on his back the corners droop instead (rest) G.length = 0; G.push(...Gr);
     mantle(ctx, G, sun, U, u, ss(t1 - .1, t1 + .6, u));   // (no fringe while it hangs folded on his arm — it read as teeth)
     const flapOf = (G, gk, U) => { const len = (NB - 1) * .45 * (1 - gk), m = 9; if (len < .25) return null; const Gf = [];   // the fold's length in rows (continuous)
       const E = elijah.elbows[0], Hd = elijah.hands[0], sl = (Hd[1] - E[1]) / ((Hd[0] - E[0]) || 1), top = x => E[1] + sl * (x - E[0]) - U * .026;   // the top of his forearm

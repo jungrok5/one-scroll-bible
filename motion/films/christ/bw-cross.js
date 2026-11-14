@@ -328,17 +328,17 @@
     // rough earth and gravel, in values
     { const lw = GW >> 1, lh = GH >> 1, lo = canvas(lw, lh), lg = lo.getContext('2d'), im = lg.createImageData(lw, lh);
       for (let y = 0; y < lh; y++) for (let x = 0; x < lw; x++) { const n = fbm(x * .02, y * .03, 4), n2 = fbm(x * .09 + 9, y * .12, 2), v = 146 + (n - .5) * 66 + (n2 - .5) * 30, i = (y * lw + x) * 4;
-        im.data[i] = v + 2; im.data[i + 1] = v; im.data[i + 2] = v - 4; im.data[i + 3] = 255; }
+        im.data[i] = im.data[i + 1] = im.data[i + 2] = v; im.data[i + 3] = 255; }
       lg.putImageData(im, 0, 0); g.save(); g.setTransform(1, 0, 0, 1, 0, 0); g.imageSmoothingQuality = 'high'; g.drawImage(lo, 0, 0, GW, GH);
       g.globalCompositeOperation = 'overlay'; g.globalAlpha = .6; g.drawImage(Pilot.speckle(GW, GH, 70, 5), 0, 0); g.restore(); }
     { const r = rng(12);
       for (let i = 0; i < 2600; i++) { const P = lerp(P0, P1, r()), x = lerp(S.px0, S.px0 + hw * 2, r()), s = (r() < .08 ? 10 + r() * 18 : 2.5 + r() * 7) * k, v = 110 + r() * 90, a = r() * 3;   // stones, lit from beyond, shadows towards us
-        g.save(); g.translate(x, P); g.fillStyle = 'rgba(30,28,26,.34)'; g.beginPath(); g.ellipse(s * .1, s * .9, s * .9, s * 1.1, 0, 0, 6.283); g.fill();
-        g.rotate(a); const sg = g.createLinearGradient(0, -s, 0, s); sg.addColorStop(0, `rgb(${v + 70},${v + 66},${v + 58})`); sg.addColorStop(.35, `rgb(${v - 20},${v - 20},${v - 22})`); sg.addColorStop(1, `rgb(${v - 66},${v - 66},${v - 68})`);
+        g.save(); g.translate(x, P); g.fillStyle = 'rgba(28,28,28,.34)'; g.beginPath(); g.ellipse(s * .1, s * .9, s * .9, s * 1.1, 0, 0, 6.283); g.fill();
+        g.rotate(a); const sg = g.createLinearGradient(0, -s, 0, s); sg.addColorStop(0, `rgb(${v + 65},${v + 65},${v + 65})`); sg.addColorStop(.35, `rgb(${v - 21},${v - 21},${v - 21})`); sg.addColorStop(1, `rgb(${v - 67},${v - 67},${v - 67})`);
         g.fillStyle = sg; g.beginPath(); for (let j = 0; j < 7; j++) { const aa = j / 7 * 6.283, rr = s * (.75 + .35 * r()); g.lineTo(Math.cos(aa) * rr, Math.sin(aa) * rr * .7); } g.closePath(); g.fill(); g.restore(); }
-      for (let i = 0; i < 26; i++) { const x = lerp(S.px0, S.px0 + hw * 2, r()), P = lerp(P0, P1, r()); g.strokeStyle = 'rgba(56,52,46,.45)'; g.lineWidth = 1.6; g.beginPath(); g.moveTo(x, P); let qx = x, qy = P;   // cracks
+      for (let i = 0; i < 26; i++) { const x = lerp(S.px0, S.px0 + hw * 2, r()), P = lerp(P0, P1, r()); g.strokeStyle = 'rgba(52,52,52,.45)'; g.lineWidth = 1.6; g.beginPath(); g.moveTo(x, P); let qx = x, qy = P;   // cracks
         for (let j = 0; j < 6; j++) { qx += (r() - .5) * 80; qy += (r() - .5) * 60; g.lineTo(qx, qy); } g.stroke(); }
-      for (let i = 0; i < 60; i++) { const x = lerp(S.px0, S.px0 + hw * 2, r()), P = lerp(P0, P1, r()); g.strokeStyle = 'rgba(60,56,50,.6)'; g.lineWidth = 2;   // dry weeds
+      for (let i = 0; i < 60; i++) { const x = lerp(S.px0, S.px0 + hw * 2, r()), P = lerp(P0, P1, r()); g.strokeStyle = 'rgba(56,56,56,.6)'; g.lineWidth = 2;   // dry weeds
         for (let j = 0; j < 6; j++) { const a = -Math.PI / 2 + (r() - .5) * 1.7, l = (12 + r() * 26) * k; g.beginPath(); g.moveTo(x, P); g.quadraticCurveTo(x + Math.cos(a) * l * .5, P + Math.sin(a) * l * .3, x + Math.cos(a) * l, P + Math.sin(a) * l * .5); g.stroke(); } } }
     // the cross's shadow on the ground (with the body on it), laid long towards us
     { const sc = canvas(GW, GH), s2 = sc.getContext('2d'); s2.scale(.5, .5); s2.translate(-S.px0, -P0); s2.fillStyle = '#000';
@@ -453,7 +453,7 @@
     const z = 1 + .06 * eio(u / 6.2), cam = lerp(14, -14, u / 6.2) * k;
     const wv = rng(Math.floor(t * 24) + 2), jx = (wv() - .5) * 1.6, jy = (wv() - .5) * 1.6, zc = [W * .5, H * .5];
     ctx.save(); ctx.setTransform(z, 0, 0, z, zc[0] - zc[0] * z + jx, zc[1] - zc[1] * z + jy);
-    ctx.fillStyle = 'rgb(150,146,140)'; ctx.fillRect(-W, -H, W * 3, H * 3);
+    ctx.fillStyle = 'rgb(146,146,146)'; ctx.fillRect(-W, -H, W * 3, H * 3);
     // the ground, row by row in perspective; the far and near rows a little soft
     const focus = H * .5;
     for (let y = -12; y < H + 12; y += 3) {
@@ -488,14 +488,14 @@
     ctx.restore();
     // the sun high behind them: the far ground brighter, dust in the air
     ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalCompositeOperation = 'screen';
-    { const sg = ctx.createLinearGradient(0, 0, 0, H * .5); sg.addColorStop(0, 'rgba(255,250,236,.32)'); sg.addColorStop(1, 'rgba(255,250,236,0)'); ctx.fillStyle = sg; ctx.fillRect(0, 0, W, H);
+    { const sg = ctx.createLinearGradient(0, 0, 0, H * .5); sg.addColorStop(0, 'rgba(249,249,249,.32)'); sg.addColorStop(1, 'rgba(249,249,249,0)'); ctx.fillStyle = sg; ctx.fillRect(0, 0, W, H);
       for (const m of S.motes) { const x = ((m.x + t * m.v) % 1) * W, y = (m.y + Math.sin(t * .5 + m.p) * .02) * H, a = .16 * (1 - m.y / .7) * (.6 + .4 * Math.sin(t * 2 + m.p)), rr = m.r * k;
-        const mg = ctx.createRadialGradient(x, y, 0, x, y, rr); mg.addColorStop(0, `rgba(255,250,236,${a})`); mg.addColorStop(1, 'rgba(255,250,236,0)'); ctx.fillStyle = mg; ctx.fillRect(x - rr, y - rr, rr * 2, rr * 2); } }
+        const mg = ctx.createRadialGradient(x, y, 0, x, y, rr); mg.addColorStop(0, `rgba(249,249,249,${a})`); mg.addColorStop(1, 'rgba(249,249,249,0)'); ctx.fillStyle = mg; ctx.fillRect(x - rr, y - rr, rr * 2, rr * 2); } }
     ctx.globalCompositeOperation = 'source-over';
     { const bg = ctx.createLinearGradient(0, H * (V ? .6 : .7), 0, H); bg.addColorStop(0, 'rgba(0,0,0,0)'); bg.addColorStop(.3, 'rgba(0,0,0,.34)'); bg.addColorStop(1, 'rgba(0,0,0,.55)'); ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H); }
     ctx.restore();
     const lt = ss(5.2, 6.2, u);   // a breath more light at the end (the next part: dawn)
-    finish(ctx, t, { halo: .3 + .12 * lt, grain: .4, vig: .58 - .1 * lt, warm: [W * .5, -H * .1, Math.max(W, H) * .9, .14 + .2 * lt], flicker: .08 });
+    finish(ctx, t, { halo: .3 + .12 * lt, grain: .4, vig: .58 - .1 * lt, flicker: .08 });   // 9차: strictly neutral like the cross scene (no warm tint)
   }
   window.bwSoldiers = bwSoldiers;
 })();

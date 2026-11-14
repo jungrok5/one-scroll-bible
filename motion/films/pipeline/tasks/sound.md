@@ -1,5 +1,5 @@
 # 5. 소리 — {film}
-참고로 읽기: `motion/films/SOUND.md`(동작표 → 동작마다 그 재료의 효과음, 같은 시각·같은 길이 · 숨 멈춤 · 장면의 문장인 음악), 첫 영상 프롬프트 `motion/pilot/audio/prompts/first-film.md`, 앞 영상 `sound/prompts.md`.
+참고로 읽기: `motion/films/SOUND.md`(동작표 → 동작마다 그 재료의 효과음, 같은 시각·같은 길이 · 숨 멈춤 · 장면의 문장인 음악), 첫 영상 프롬프트 `motion/pilot/audio/prompts/first-film.md`, 「침묵의 400년」 `silence400/sound/prompts.md`·`cues.json`(SOUND.md 「400년에서 배운 것」 — 음역대만 비켜 주기, 목소리 6–7 LU 위, 전율 순간엔 목소리 비우고 음악, `--envelope`로 터지는 지점 맞추기), 앞 영상 `sound/prompts.md`.
 해설: 목소리 HYALOqtTLlRjxo4uBKeg · eleven_v4 · 줄당 한 번 · 숫자는 한글. 다듬은 길이를 재서 `place.json` at을 정하고 그림의 TEXT 시각을 목소리에 맞춘다.
 음악: eleven_music_v2_5 instrumental, 효과음: eleven_text_to_sound_v2(duration_seconds = 화면 동작 길이). 모두 ElevenLabs 플로 하나에.
 만든 직후 기록: `sound-prompts.mjs logs … → names(sessions-*.json) → md`.

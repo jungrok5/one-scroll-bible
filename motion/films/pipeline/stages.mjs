@@ -236,6 +236,9 @@ const G = {
     { const M = [...(c.cues.music || [])].sort((p, q) => p.at - q.at), mpm = M.length / (dur / 60); if (mpm > T.sound.music_cues_per_min_max) why.push(`음악 큐 분당 ${mpm.toFixed(1)}개 > ${T.sound.music_cues_per_min_max} — 장면마다 새 큐는 컷이 된다(SOUND.md: 악장 3~4개)`);
       for (let i = 1; i < M.length; i++) { const end = M[i - 1].at + M[i - 1].len, ov = end - M[i].at; if (ov > -.01 && ov < 1) why.push(`음악 ${M[i - 1].id} → ${M[i].id}: 겹침 ${ov.toFixed(1)}초 < 1초`);
         for (const d of c.cues.ducks || []) if (d.from >= M[i].at - 1 && d.from <= M[i].at + 1) why.push(`음악 이음매 ${M[i].at}초에 숨 멈춤(ducks) — 이음매가 컷으로 들린다`); } }
+    // the length can change in the sound stage too (a longer take moves the end card): 「그리스도」 2026-11-15 went to 3:03 and only the
+    // picture gate knew (관리자 #47 "3분 넘으면 안 되잖아") — check it here as well
+    { const P = J(join(sd, 'place.json')), d = Math.max(P?.dur || 0, c.cues.dur || 0, c.s?.dur || 0); if (d > T.format.portrait_max_s + .5) why.push(`길이 ${d}s > ${T.format.portrait_max_s}s(쇼츠 3:00) — 끝을 줄인다`); }
     if ((c.cues.ducks || []).length < T.sound.ducks_min) why.push(`숨 멈춤(ducks) ${(c.cues.ducks || []).length}개 < ${T.sound.ducks_min}`);
     for (const q of [...(c.cues.music || []), ...sfx]) { const f = q.file ? join(ROOT, q.file) : join(sd, 'audio', q.id + '.mp3'); if (!existsSync(f)) why.push(`소리 ${q.id}: 파일 없음`); }
     const pr = J(join(sd, 'prompts.json')), names = new Set((pr?.entries || []).map(e => e.name));

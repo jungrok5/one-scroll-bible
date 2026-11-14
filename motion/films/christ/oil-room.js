@@ -427,12 +427,12 @@ function roomCam(keys, u) {
 function roomOil(ctx, u, mode = 'open') {
   const { clamp, ss } = Pilot, dawnM = mode === 'dawn', endM = mode === 'end', openM = !dawnM && !endM, L = endM ? ROIL.LE : ROIL.L, { W, H, V, book: B } = L, S = ROIL.S, R0 = L.R0, Fg = endM ? ROIL.figE : dawnM ? ROIL.figOld : ROIL.fig;
   const page = [B.cx + B.w * .24, B.cy - B.d * .05], mid = [(L.person.cx + L.flame[0]) / 2 + .02 * W, L.person.top + .3 * L.person.P];
-  // 'end' (u −0.1…24.5, film 159.4–184; 12차: the end card 3 s later, the pull back lasts to the last frame): one slow pull back from the man, the candle and the book (the window's edge just in at
+  // 'end' (u −0.1…21.5, film 159.4–181; the end card at 176.5 — the film stays inside 3:00 for Shorts): one slow pull back from the man, the candle and the book (the window's edge just in at
   // the left) to the whole quiet room; the man's feet stay above the words' band all the way
   // (2026-11-14: it starts looking a little right of him — the candle where the sun of goldThree was, the man at the left edge, never
   // where the far cross stood during the 1.4 s dissolve — and drifts left as it pulls back until he sits in the room's middle-left)
-  const KEYS = endM ? (V ? [[-.2, .66 * W, .552 * H, 1.52], [5.5, .565 * W, .545 * H, 1.4], [10.5, .47 * W, .528 * H, 1.22], [16.1, .48 * W, .51 * H, 1.08], [24.6, .5 * W, .5 * H, 1.0]]
-                          : [[-.2, .66 * W, .6 * H, 1.52], [5.5, .575 * W, .585 * H, 1.37], [10.5, .5 * W, .56 * H, 1.2], [16.1, .49 * W, .53 * H, 1.07], [24.6, .5 * W, .5 * H, 1.0]])
+  const KEYS = endM ? (V ? [[-.2, .66 * W, .552 * H, 1.52], [5.5, .565 * W, .545 * H, 1.4], [10.5, .47 * W, .528 * H, 1.22], [16.1, .48 * W, .51 * H, 1.08], [21.6, .5 * W, .5 * H, 1.0]]
+                          : [[-.2, .66 * W, .6 * H, 1.52], [5.5, .575 * W, .585 * H, 1.37], [10.5, .5 * W, .56 * H, 1.2], [16.1, .49 * W, .53 * H, 1.07], [21.6, .5 * W, .5 * H, 1.0]])
     : dawnM
     ? [[0, mid[0], mid[1] - .02 * H, 1.18], [3.2, mid[0] - .02 * W, mid[1] - .04 * H, 1.26], [6.5, mid[0] - .05 * W, mid[1] - .07 * H, 1.36]]
     : null;
@@ -535,7 +535,7 @@ function roomOil(ctx, u, mode = 'open') {
       ctx.fillStyle = `rgba(236,240,250,${(.1 + .2 * r()) * (k - .2)})`; ctx.beginPath(); ctx.arc(x, y, (.8 + r() * 1.2) * z * .7, 0, 6.283); ctx.fill(); } }
     ctx.restore(); }
   // 'end': the day keeps coming after the last words — the floor toward us warms (below the man, never behind the end card)
-  if (endM) { const s3 = ss(13, 24.5, u); if (s3 > 0) { ctx.save(); ctx.globalCompositeOperation = 'screen'; const y0 = sc(0, L.floorY)[1], g3 = ctx.createLinearGradient(0, y0, 0, H);
+  if (endM) { const s3 = ss(13, 21.5, u); if (s3 > 0) { ctx.save(); ctx.globalCompositeOperation = 'screen'; const y0 = sc(0, L.floorY)[1], g3 = ctx.createLinearGradient(0, y0, 0, H);
     g3.addColorStop(0, 'rgba(255,214,160,0)'); g3.addColorStop(.25, `rgba(240,190,130,${.16 * s3})`); g3.addColorStop(1, `rgba(200,150,100,${.1 * s3})`); ctx.fillStyle = g3; ctx.fillRect(0, y0, W, H - y0); ctx.restore(); } }
   // 'end' (2026-11-14): the first seconds carry the sunrise of goldThree over the dissolve — a warm glow round the candle (where the
   // sun stood) that settles into the room by u ≈ 6.5 (a little of it stays), so the picture does not drop from ≈106 to the room's night at once

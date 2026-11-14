@@ -1,7 +1,7 @@
 {
  "_about": "줄마다 id·part·at·kind(narr|quote|label|title)·text·screen(보이는 것) — 인용은 usfm·cite·hl, 화면 전용은 voice: null. README 3절, rules.json",
  "title": "그리스도 — 예수님의 성이 아니라 고백입니다",
- "dur": 182.9,
+ "dur": 179.9,
  "lines": [
   {
    "id": "N01",
@@ -406,7 +406,7 @@
   {
    "id": "Q14",
    "part": 6,
-   "at": 166.8,
+   "at": 165.5,
    "kind": "quote",
    "usfm": "ACT.10.43",
    "cite": "사도행전 10:43",
@@ -418,7 +418,7 @@
   {
    "id": "Q13",
    "part": 6,
-   "at": 172.6,
+   "at": 171,
    "kind": "quote",
    "usfm": "MAT.16.16",
    "cite": "마태복음 16:16",
@@ -430,7 +430,7 @@
   {
    "id": "E1",
    "part": 6,
-   "at": 178.6,
+   "at": 176.5,
    "kind": "label",
    "voice": null,
    "text": "영상 속 주요 말씀 · 마태복음 16장 · 이사야 53장 · 시편 22편 · 사도행전 10장",
@@ -439,7 +439,7 @@
   {
    "id": "B1",
    "part": 6,
-   "at": 178.6,
+   "at": 176.5,
    "kind": "label",
    "voice": null,
    "text": "한눈에 보는 성경 이야기 · one-scroll-bible.com",

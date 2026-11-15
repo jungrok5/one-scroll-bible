@@ -1031,6 +1031,15 @@
    "round": 2,
    "applied": "hi·bn N09, ta Q14 반영 → 재검수 OK",
    "applied_at": "2026-11-16 00:20 KST"
+  },
+  {
+   "at": "2026-11-16 00:24 KST",
+   "who": "관리자",
+   "said": "1 2는 네 제안대로하자. 숏폼은 누적시간 포함이 안 된다네? 우린 안되는거지 그럼? 어떻게 하면 가장 좋을까",
+   "status": "applied",
+   "round": 2,
+   "applied": "rules clips-plan-cadence·shorts-to-long-text·long-form-watch-hours + tasks script/clips/sheet/after, yt-api.mjs ypp(구독 682, 일반 365일 2,061시간)",
+   "applied_at": "2026-11-16 00:24 KST"
   }
  ],
  "process_changes": [
@@ -2098,17 +2107,13 @@
    "자막 MED 17건 반영(관리자 \"그래\") → 고친 줄만 재검수 motion/reviews/film-christ-captions-rereview.md 모두 OK",
    "영어판 글자: \"…\"을 화면에서 \"...\"로(lib-film), 구절은 U+00A0로 이음 → film-en-v/h·christ-en-v/h-narr 다시 렌더",
    "원어민 검수 5묶음 모두 끝(ar-fa-hi-bn-ta-ne MED 3)",
-   "자막 MED 3줄(hi·bn N09, ta Q14) 반영(관리자 \"그래\") → 재검수 2차 모두 OK — 27개 언어 자막 번역 품질 관문 통과"
+   "자막 MED 3줄(hi·bn N09, ta Q14) 반영(관리자 \"그래\") → 재검수 2차 모두 OK — 27개 언어 자막 번역 품질 관문 통과",
+   "유튜브 전략 ①② 공정에(관리자 \"1 2는 네 제안대로하자\"): rules clips-plan-cadence · shorts-to-long-text · long-form-watch-hours, yt-api.mjs ypp"
   ],
   "running": [],
-  "owner": [
-   {
-    "what": "유튜브 연결 전략 3가지(관리자 질문 2026-11-16, Gemini 화면)",
-    "detail": "① 쇼츠 끝 \"관련 동영상에서 전체 보기\" 안내 — 지금 없음(끝 = 성경 한 구절 읽기 질문) ② 짧은 쇼츠 공개 시점·구간을 원고 단계에서 정하기(본편 뒤 1–2일 간격) — 지금 시점 규칙 없음(400년은 2주 반 뒤) ③ 8–15분 가로 긴 영상 — 새 영상은 3분, 긴 영상은 14분 첫 영상뿐",
-    "proposal": "② 바로 공정에(그리스도부터) · ① 그림은 두고 설명 첫 줄·고정 댓글로 안내 · ③ 시리즈 3–4편 쌓이면 「모아 보기」 10–12분 가로판"
-   }
-  ],
+  "owner": [],
   "next": [
+   "「그리스도」 clips_plan(짧은 쇼츠 구간 2–3개) 정하기 → 본편 다음 날부터 1–2일 간격 공개, 세로판 설명 첫 줄·고정 댓글에 관련 동영상 안내",
    "es·pt-BR 해설(voices intl.voices.es / pt-BR, tasks/intl.md 3–4) — es-pt 검수 MED 반영 뒤",
    "영어 해설 받아쓰기 대조(Scribe → check-voice.mjs christ en)",
    "자막 파일 captions-on-ko.mjs christ <27개>(한국어 시각) / --timing en(국제판) → .vtt 눈 확인",

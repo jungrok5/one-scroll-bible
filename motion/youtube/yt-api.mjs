@@ -105,6 +105,20 @@ if (cmd === 'whoami') {
     if (rest.includes('--each')) { for (const v of pick) { const r = rows[v.id]; console.log(`  ${v.lang.padEnd(6)} ${v.kind.padEnd(6)} ${String(v.n).padStart(2)} ${v.id}  views ${r ? r[1] : 0} · avg viewed ${r ? r[3].toFixed(1) : '-'}% · subs +${r ? r[4] : 0}`); } }   // --each: one row per video (which scene did well)
     for (const [k, b] of Object.entries(by)) console.log(`${k.padEnd(14)} views ${b.views} · minutes ${Math.round(b.min)} · avg viewed ${b.views ? (b.pctW / b.views).toFixed(1) : '-'}% · subs +${b.subs}`);
   }
+} else if (cmd === 'ypp') {
+  // ypp: where the channel stands against the YouTube Partner Program bars — subscribers, and the last 365 days' watch hours of
+  // long-form (VIDEO_ON_DEMAND: landscape cuts, the 14-min film, any vertical over 3 min) apart from Shorts views (last 90 days),
+  // split by YouTube's own creatorContentType (관리자 2026-11-16 "숏폼은 누적시간 포함이 안 된다네? 우린 안 되는 거지?"). YT_AS=GLOBAL for the intl channel.
+  const ch = await api('channels?part=statistics,snippet&mine=true'), st = ch.items?.[0]?.statistics || {}, name = ch.items?.[0]?.snippet?.title;
+  const day = n => new Date(Date.now() - n * 864e5).toISOString().slice(0, 10), q = (from, metrics) => api('https://youtubeanalytics.googleapis.com/v2/reports?' +
+    new URLSearchParams({ ids: 'channel==MINE', startDate: from, endDate: day(0), dimensions: 'creatorContentType', metrics }));
+  const y = await q(day(365), 'views,estimatedMinutesWatched'), s = await q(day(90), 'views');
+  const row = (j, k) => (j.rows || []).find(r => r[0] === k) || [k, 0, 0];
+  const lf = row(y, 'videoOnDemand'), sh = row(y, 'shorts'), sh90 = row(s, 'shorts');
+  console.log(`${name}: subscribers ${st.subscriberCount} (bars: 500 · 1,000)`);
+  console.log(`  long-form watch hours, last 365 days: ${(lf[2] / 60).toFixed(0)} h (bars: 3,000 · 4,000) — views ${lf[1]}`);
+  console.log(`  Shorts: last 365 days ${sh[1]} views · ${(sh[2] / 60).toFixed(0)} h (these hours do NOT count) · last 90 days ${sh90[1]} views (bars: 3M · 10M)`);
+  for (const r of y.rows || []) if (!['videoOnDemand', 'shorts'].includes(r[0])) console.log(`  ${r[0]}: views ${r[1]} · ${(r[2] / 60).toFixed(1)} h`);
 } else if (cmd === 'playlist-add') {
   // playlist-add <playlistId> <videoId…>: append videos in the given order (50 units each); skips ones already in it
   const [pl, ...ids] = rest; if (!pl || !ids.length) { console.log('usage: playlist-add <playlistId> <videoId…>'); process.exit(1); }

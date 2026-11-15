@@ -12,3 +12,5 @@
 7. **화풍** — `review.json` `parts[]`(name·feel·key·story·samples), `looks[]` = 장면마다 `{at, scene, look, source, style_new?, kit?, same_reason?}`.
 8. **메시지 점검** — `message_check` 12문항.
 확인: `node motion/films/film.mjs check {film} script` → 모두 ✓일 때까지(원문 대조·뼈대·장면표·화풍·음절·끝).
+
+**짧은 쇼츠 구간을 여기서 정한다**(rules clips-plan-cadence, 관리자 2026-11-16): 원고를 굳힐 때 잘라 낼 후보 2–3개를 review.json `clips_plan = [{ from_id, to_id, why }]`에(20–60초, 한 연결, 끝이 처음으로).

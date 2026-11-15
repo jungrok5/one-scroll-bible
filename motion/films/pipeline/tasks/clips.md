@@ -9,3 +9,5 @@
 review.json `clips[]` = `{ id, from, to, title, why }` — `why`에 끝이 어떻게 처음으로 이어지는지 한 줄.
 만들기: `node motion/films/film.mjs run {film} clips` (clips.mjs: 구간을 자르고 마지막 0.5초가 첫 프레임으로 녹아들게, 소리도 첫 말로 이어지게).
 보이기: 만든 쇼츠를 SendUserFile로. 올리기는 sheet·publish 단계에서 본편과 같은 기준(주일 공개 없음)으로.
+
+구간은 원고 단계의 `clips_plan`에서(rules clips-plan-cadence). **공개: 본편 공개 다음 날부터 1–2일 간격**(한국어 채널 주일 건너뜀) — publish.md 일정에 같이 넣는다.

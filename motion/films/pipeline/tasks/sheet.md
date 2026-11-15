@@ -11,3 +11,4 @@
 **연결 규칙**(관리자 2026-11-13: "서로 연결되어야지"): 모든 영상은 세 방향으로 잇는다 — ① 같은 영상의 다른 언어(한국어 → 국제 채널, 국제 → 언어별 재생목록·한국어 원본) ② 같은 시리즈의 다른 영상(14분 ↔ 400년 ↔ 새 영상) ③ 사이트. 줄과 링크는 `motion/youtube/xlinks.json`이 원본이고, 새 영상은 ids를 uploaded.json에 넣은 뒤 `xlinks.mjs`에 종류를 하나 더하고 `node motion/youtube/xlinks.mjs audit` → `apply --dry` → `apply`. 국제판 고정 댓글에도 '오늘 읽어 볼 말씀' + 14분 언어별 목록 줄을 둔다(xlinks.mjs comment). 정기 분석이 audit을 돌려 빠진 것을 알린다.
 여러 영상·채널 설명·재생목록 이름을 줄 단위로 고칠 때: `yt-api.mjs text-edit <spec.json> --dry`(앞뒤를 out/에 저장) → `--dry` 빼고 실행.
 이미 올린 영상의 설명 고치기: `yt-api.mjs film-desc <film> <h|v|clip-a…> <videoId> --dry`(지금 설명을 out/에 저장해 원본과 같은지 먼저 확인) → `--dry` 빼고 실행.
+**세로판 설명 첫 줄과 고정 댓글**: "전체 이야기는 아래 관련 동영상(14분 해설판)에서" — 쇼츠 시청 시간은 수익 기준에 안 들어가 긴 영상으로 보낸다(rules shorts-to-long-text · long-form-watch-hours, 관리자 2026-11-16).

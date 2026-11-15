@@ -34,7 +34,9 @@ window.__osbUpload = async (L, { save = true, key = 'film', entry = null } = {})
   // tags: one chip each, then drop from the end until YouTube's own counter is under 500
   const ti = D.querySelector('ytcp-chip-bar input#text-input'); ti.focus();
   for (const t of f.tags) { ti.value = t; ti.dispatchEvent(new Event('input', { bubbles: true })); ti.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', code: 'Enter', keyCode: 13, bubbles: true })); await sleep(120); }
-  const count = () => +(D.innerText.match(/(\d+)\/500/) || [])[1];
+  // (?!\d): the description's own counter reads "1008/5000" — on the international channel it came first and the loop below
+  // deleted every tag (2026-11-16 「그리스도」)
+  const count = () => +(D.innerText.match(/(\d+)\/500(?!\d)/) || [])[1];
   for (let n = 0; count() > 480 && n < 15; n++) { const c = [...D.querySelectorAll('ytcp-chip')].pop(); c.querySelector('#delete-icon, tp-yt-iron-icon, yt-icon')?.click(); await sleep(200); }
   // notifications off (every non-Korean version)
   const notify = [...D.querySelectorAll('ytcp-checkbox-lit')].find(e => e.innerText.includes('구독 피드에 게시'));

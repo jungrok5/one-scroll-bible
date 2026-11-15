@@ -1064,6 +1064,13 @@
    "round": 2,
    "applied": "rules clips-plan-cadence·shorts-to-long-text·long-form-watch-hours + tasks script/clips/sheet/after, yt-api.mjs ypp(구독 682, 일반 365일 2,061시간)",
    "applied_at": "2026-11-16 00:24 KST"
+  },
+  {
+   "at": "2026-11-16 08:20 KST",
+   "who": "관리자",
+   "said": "가로판 두루마리가 좀 위로 쏠린 것 같은데 밑으로 좀 내릴 수 있을까. 밑에 글씨 때문에 올린 건가",
+   "status": "open",
+   "round": 2
   }
  ],
  "process_changes": [

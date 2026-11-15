@@ -19,6 +19,6 @@ README 4절 "순서와 도구" 그대로. 해설 트랙 언어 = `targets.json` 
    영어는 `{film}-en-v|h-narr.mp4`, 다른 언어는 오디오 트랙 `{film}-<lang>-narr.mp3` + `sound/<lang>.vtt`.
 5. 들은 대로 읽었나: 목소리만 받아쓰기(Scribe) → `check-voice.mjs {film} <lang> <결과>` — 다른 단어만 나온다.
 6. 제목·설명: `youtube-intl.json`(검수된 문장만) + 새 문장 원어민 검수 `motion/reviews/film-{film}-yt.md`. 썸네일 `py motion/films/{film}/thumbs/make.py --lang <lang>`.
-7. 올리기(국제 채널, 비공개): `node motion/films/intl.mjs entry {film} v|h` → 스튜디오 `__osbUpload('en', { entry })` → `YT_AS=GLOBAL node motion/films/intl.mjs api {film} v|h <id>` → 스튜디오 언어 탭에서 오디오 트랙(세로·가로 각각) → 기록 `uploaded.json` `global.films.{film}.h|v` = id·privacy·audio·captions.
+7. 올리기(국제 채널, 비공개): `node motion/films/intl.mjs entry {film} v|h` → 스튜디오 `__osbUpload('en', { entry })` → `YT_AS=GLOBAL node motion/films/intl.mjs api {film} v|h <id>` → 오디오 트랙(세로·가로 각각): `motion/youtube/studio-audio.js` `__osbAudio([['es', 'out/{film}-es-narr.mp3'], ['pt-BR', 'out/{film}-pt-BR-narr.mp3']])` — 언어 페이지에 "오디오" 열이 없으면 채널 고급 기능이 꺼진 것(설정 → 채널 → 기능 사용 자격, 소유자 인증 — 도우미가 먼저 알려 줌). 자막은 `studio-caption.js`(할당량 없음), `intl.mjs api … --no-captions` → 기록 `uploaded.json` `global.films.{film}.h|v` = id·privacy·audio·captions.
 es·pt-BR 해설은 그 언어 원어민 검수(11단계 es-pt-fr-it-de 묶음)의 HIGH/MED가 정리된 뒤 3단계부터.
 확인: `node motion/films/film.mjs check {film} intl`

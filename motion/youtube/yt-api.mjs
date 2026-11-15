@@ -119,6 +119,11 @@ if (cmd === 'whoami') {
   console.log(`  long-form watch hours, last 365 days: ${(lf[2] / 60).toFixed(0)} h (bars: 3,000 · 4,000) — views ${lf[1]}`);
   console.log(`  Shorts: last 365 days ${sh[1]} views · ${(sh[2] / 60).toFixed(0)} h (these hours do NOT count) · last 90 days ${sh90[1]} views (bars: 3M · 10M)`);
   for (const r of y.rows || []) if (!['videoOnDemand', 'shorts'].includes(r[0])) console.log(`  ${r[0]}: views ${r[1]} · ${(r[2] / 60).toFixed(1)} h`);
+  // the pace: long-form hours and subscribers gained in the last 28 days, and when 4,000 h / 1,000 subs would come at that pace
+  const m = await q(day(28), 'estimatedMinutesWatched,subscribersGained,subscribersLost'), h28 = row(m, 'videoOnDemand')[1] / 60;
+  const subs28 = (m.rows || []).reduce((a, r) => a + r[2] - r[3], 0), need = 4000 - lf[2] / 60, needS = 1000 - +st.subscriberCount;
+  console.log(`  pace, last 28 days: long-form ${h28.toFixed(0)} h · net subscribers ${subs28 >= 0 ? '+' : ''}${subs28}` +
+    (need > 0 && h28 > 0 ? ` → 4,000 h in ~${Math.ceil(need / h28 * 4)} weeks` : '') + (needS > 0 && subs28 > 0 ? ` · 1,000 subs in ~${Math.ceil(needS / subs28 * 4)} weeks` : '') + ' (if the pace holds)');
 } else if (cmd === 'playlist-add') {
   // playlist-add <playlistId> <videoId…>: append videos in the given order (50 units each); skips ones already in it
   const [pl, ...ids] = rest; if (!pl || !ids.length) { console.log('usage: playlist-add <playlistId> <videoId…>'); process.exit(1); }

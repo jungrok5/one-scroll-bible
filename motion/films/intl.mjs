@@ -16,11 +16,14 @@ const [cmd, film, ori, vid] = args.filter(a => !a.startsWith('--'));
 const Y = JSON.parse(readFileSync(join(HERE, film, 'youtube-intl.json'), 'utf8')), D = Y.default_language;
 const SITE = 'https://one-scroll-bible.com/';
 const desc = (L, o) => { const t = Y.text[L], link = `${SITE}?lang=${L}&utm_source=youtube&utm_medium=${o === 'v' ? 'shorts' : 'video'}&utm_campaign=film_${film}`;
-  return [t.intro, t.read, `${t.site}\n${link}`, dropCredit(t.legal), ...(o === 'h' ? [t.chapters.join('\n')] : [])].join('\n\n'); };
+  // lead_v: the Short's first line (its links do not click — it points to the related video); more_h: a clickable line after the
+  // reading list (rules shorts-to-long-text, 2026-11-16). Films without them (silence400) are unchanged.
+  return [o === 'v' && t.lead_v, t.intro, t.read, o === 'h' && t.more_h, `${t.site}\n${link}`, dropCredit(t.legal),
+    ...(o === 'h' ? [t.chapters.join('\n')] : [])].filter(Boolean).join('\n\n'); };
 
 if (cmd === 'entry') {
   const e = { path: Y[ori].path, file: Y[ori].file, title: Y.text[D].title, description: desc(D, ori), tags: Y.tags[D] };
-  if (ori === 'h') e.thumbnail = `films/${film}/thumbs/A-glass-${D}.jpg`;
+  if (ori === 'h') e.thumbnail = (Y.thumbnail || `films/${film}/thumbs/A-glass-{lang}.jpg`).replace('{lang}', D);   // per film (silence400: A-glass)
   const out = join(M, 'out', `${film}-intl-${ori}.json`); writeFileSync(out, JSON.stringify(e, null, 1)); console.log('→', out);
 } else if (cmd === 'api') {
   if (!/^[\w-]{11}$/.test(vid || '')) { console.log('usage: intl.mjs api <film> <v|h> <videoId> [--dry]'); process.exit(1); }

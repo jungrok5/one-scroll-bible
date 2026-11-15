@@ -3,6 +3,8 @@
 # Words: review.json publish_plan.thumbs (관리자 2026-11-10 "그래 이대로 진행"). The big middle word is fitted to the width (it ranges from
 # 2 to 6 syllables here). Frames (no captions — lib-film ?clean=1):
 #   RENDER_QUERY=clean=1 node motion/render.mjs h|v --page films/christ/film.html --stills 17.5,93,164   (→ thumbs/src/<h|v>-<t>.jpg)
+#   py motion/films/christ/thumbs/make.py --lang en|es|pt-BR   → A-oil-<lang>.jpg + V-A-oil-<lang>.jpg only: the international video's
+#   thumbnails, words = youtube-intl.json thumb_words (from the reviewed lines N01/N03; native review motion/reviews/film-christ-yt.md)
 import os, sys, urllib.request
 from PIL import Image, ImageDraw, ImageFont, ImageFilter, ImageEnhance
 HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.dirname(os.path.dirname(os.path.dirname(HERE)))
@@ -13,7 +15,8 @@ import json
 PLAN = json.load(open(os.path.join(HERE, '..', 'review.json'), encoding='utf-8'))['publish_plan']['thumbs']
 # name, picture, crop focus (0..1 of width — lands at 66 %), brightness, zoom, shade strength, words key
 PICS = [('A-oil', 'h-17_5.jpg', .4, 1.1, 1.12, 1.0, 'A'), ('B-prayer', 'h-164.jpg!flip', .63, 1.25, 1.12, .9, 'B'), ('C-cross', 'h-93.jpg', .56, 1.15, 1.1, 1.0, 'C')]
-LANG = None
+LANG = sys.argv[sys.argv.index('--lang') + 1] if '--lang' in sys.argv else None
+if LANG: PLAN = {**PLAN, 'A': json.load(open(os.path.join(HERE, '..', 'youtube-intl.json'), encoding='utf-8'))['thumb_words'][LANG]}
 
 def font(size):
     p = os.path.join(FONTS, 'NotoSansKR.ttf')
@@ -81,6 +84,8 @@ def make_v(name, src, dy, z, key='A'):
     out = os.path.join(HERE, name + '.jpg'); im.convert('RGB').save(out, quality=92); print(out)
     return im
 
+if LANG:   # the international video: picture A only, landscape (main / per-language thumbnail) and portrait (the Short's cover)
+    make('A-oil-' + LANG, *PICS[0][1:]); make_v('V-A-oil-' + LANG, *VPICS[0][1:]); sys.exit(0)
 vims = [make_v(*p) for p in VPICS]
 vsheet = Image.new('RGB', (3 * 240 + 40, 427 + 20), (24, 24, 24))   # the Shorts / Reels grid size
 for i, im in enumerate(vims): vsheet.paste(im.convert('RGB').resize((240, 427), Image.LANCZOS), (10 + i * 250, 10))

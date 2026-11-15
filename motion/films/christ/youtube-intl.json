@@ -1,0 +1,176 @@
+{
+ "note": "International channel (@bibleinonescroll), films README §4: ONE English-text video per orientation; es + pt-BR ride on it as audio tracks (Studio → Languages → Audio) + 27 caption tracks + localized title/description. Reviewed sentences: intro = narration lines N01+N02 / N03+N15, thumbnail words = N01/N03, book names = each site pack, Scripture notice = the silence400 reviewed lines. New sentences (title, lead_v, more_h, chapters, tags) → native review motion/reviews/film-christ-yt.md. Shorts→long (rules shorts-to-long-text): v opens with lead_v (related video = the 14-min film of the channel); h adds more_h with the 14-min film in that language.",
+ "default_language": "en",
+ "audio_tracks": {
+  "es": "out/christ-es-narr.mp3",
+  "pt-BR": "out/christ-pt-BR-narr.mp3"
+ },
+ "captions": {
+  "en": "films/christ/sound/en.vtt",
+  "es": "films/christ/sound/es.vtt",
+  "pt-BR": "films/christ/sound/pt-BR.vtt",
+  "de": "films/christ/sound/de.en-timing.vtt",
+  "fr": "films/christ/sound/fr.en-timing.vtt",
+  "it": "films/christ/sound/it.en-timing.vtt",
+  "pl": "films/christ/sound/pl.en-timing.vtt",
+  "ru": "films/christ/sound/ru.en-timing.vtt",
+  "tr": "films/christ/sound/tr.en-timing.vtt",
+  "zh-Hans": "films/christ/sound/zh-Hans.en-timing.vtt",
+  "zh-Hant": "films/christ/sound/zh-Hant.en-timing.vtt",
+  "ja": "films/christ/sound/ja.en-timing.vtt",
+  "ar": "films/christ/sound/ar.en-timing.vtt",
+  "fa": "films/christ/sound/fa.en-timing.vtt",
+  "hi": "films/christ/sound/hi.en-timing.vtt",
+  "bn": "films/christ/sound/bn.en-timing.vtt",
+  "ta": "films/christ/sound/ta.en-timing.vtt",
+  "id": "films/christ/sound/id.en-timing.vtt",
+  "vi": "films/christ/sound/vi.en-timing.vtt",
+  "th": "films/christ/sound/th.en-timing.vtt",
+  "tl": "films/christ/sound/tl.en-timing.vtt",
+  "sw": "films/christ/sound/sw.en-timing.vtt",
+  "uz": "films/christ/sound/uz.en-timing.vtt",
+  "ne": "films/christ/sound/ne.en-timing.vtt",
+  "km": "films/christ/sound/km.en-timing.vtt",
+  "mn": "films/christ/sound/mn.en-timing.vtt",
+  "my": "films/christ/sound/my.en-timing.vtt"
+ },
+ "thumbnail": "films/christ/thumbs/A-oil-{lang}.jpg",
+ "related": {
+  "v": "MFH3Hj4V6KA",
+  "note": "Shorts → related video = the international 14-min film (English; es/pt-BR viewers get their own film link in the landscape description)"
+ },
+ "v": {
+  "path": "out/christ-en-v-narr.mp4",
+  "file": "christ-en-v-narr.mp4"
+ },
+ "h": {
+  "path": "out/christ-en-h-narr.mp4",
+  "file": "christ-en-h-narr.mp4"
+ },
+ "tags": {
+  "en": [
+   "Bible",
+   "Bible story",
+   "Christ",
+   "meaning of Christ",
+   "Messiah",
+   "the Anointed One",
+   "Jesus Christ",
+   "Matthew 16",
+   "Isaiah 53",
+   "Psalm 22",
+   "Acts 10",
+   "prophet priest and king",
+   "Bible animation"
+  ],
+  "es": [
+   "Biblia",
+   "historia de la Biblia",
+   "Cristo",
+   "significado de Cristo",
+   "Mesías",
+   "el Ungido",
+   "Jesucristo",
+   "Mateo 16",
+   "Isaías 53",
+   "Salmo 22",
+   "Hechos 10",
+   "animación bíblica"
+  ],
+  "pt-BR": [
+   "Bíblia",
+   "história da Bíblia",
+   "Cristo",
+   "significado de Cristo",
+   "Messias",
+   "o Ungido",
+   "Jesus Cristo",
+   "Mateus 16",
+   "Isaías 53",
+   "Salmo 22",
+   "Atos 10",
+   "animação bíblica"
+  ]
+ },
+ "text": {
+  "en": {
+   "title": "What “Christ” Really Means — the Anointed One",
+   "lead_v": "▶ The whole story of the Bible in one film (14 min): the related video above.",
+   "intro": "The “Christ” in “Jesus Christ” — is it Jesus’ last name? The name at the end of every prayer.\nChrist is not a last name. It means “the Anointed One” — the Messiah. A suffering Christ was not a failure — it was the road the Scriptures pointed to.",
+   "read": "📖 Read this story in your Bible\nJohn 1:41 · 1 Samuel 16:13 · Matthew 16:13–23 · Isaiah 53 · Psalm 22 · Matthew 27:46 · John 19:23–24 · Acts 10:34–43",
+   "more_h": "▶ The whole story of the Bible in one film (14 min): https://youtu.be/MFH3Hj4V6KA",
+   "site": "one-scroll-bible.com",
+   "legal": "Scripture quotations are from the ESV® Bible (The Holy Bible, English Standard Version®), © 2001 by Crossway, a publishing ministry of Good News Publishers. ESV Text Edition: 2025. The ESV text may not be quoted in any publication made available to the public by a Creative Commons license. The ESV may not be translated in whole or in part into any other language. Used by permission. All rights reserved.",
+   "chapters": [
+    "0:00 Is “Christ” Jesus’ last name?",
+    "0:20 Anointed kings, priests and prophets",
+    "0:44 The Messiah people waited for",
+    "0:51 Peter’s confession",
+    "1:16 A road already written",
+    "1:27 The cry on the cross",
+    "1:59 Peter, after meeting the risen Jesus",
+    "2:28 Three offices in one person",
+    "2:39 Today’s confession"
+   ]
+  },
+  "es": {
+   "title": "Lo que realmente significa «Cristo»: el Ungido",
+   "lead_v": "▶ Toda la historia de la Biblia en una sola película (14 min): el video relacionado de arriba.",
+   "intro": "El «Cristo» de «Jesucristo», ¿es el apellido de Jesús? El nombre al final de cada oración.\nCristo no es un apellido. Significa «el Ungido»: el Mesías. El Cristo que padeció no fue un fracaso: era el camino que señalaban las Escrituras.",
+   "read": "📖 Lee esta historia en tu Biblia\nJuan 1:41 · 1 Samuel 16:13 · Mateo 16:13–23 · Isaías 53 · Salmos 22 · Mateo 27:46 · Juan 19:23–24 · Hechos 10:34–43",
+   "more_h": "▶ Toda la historia de la Biblia en una sola película (14 min): https://youtu.be/20CdOZWWDIw",
+   "site": "one-scroll-bible.com",
+   "legal": "El texto bíblico ha sido tomado de la versión Reina-Valera © 1960 Sociedades Bíblicas en América Latina; © renovado 1988 Sociedades Bíblicas Unidas. Utilizado con permiso. Reina-Valera 1960® es una marca registrada de Sociedades Bíblicas Unidas, y se puede usar solamente bajo licencia.",
+   "chapters": [
+    "0:00 ¿Es «Cristo» el apellido de Jesús?",
+    "0:20 Reyes, sacerdotes y profetas ungidos",
+    "0:44 El Mesías que esperaban",
+    "0:51 La confesión de Pedro",
+    "1:16 Un camino ya escrito",
+    "1:27 El clamor en la cruz",
+    "1:59 Pedro, tras encontrarse con Jesús resucitado",
+    "2:28 Tres oficios en una sola persona",
+    "2:39 La confesión de hoy"
+   ]
+  },
+  "pt-BR": {
+   "title": "O verdadeiro significado de «Cristo» — o Ungido",
+   "lead_v": "▶ A história completa da Bíblia em um só filme (14 min): o vídeo relacionado acima.",
+   "intro": "O «Cristo» de «Jesus Cristo» — é o sobrenome de Jesus? O nome no fim de cada oração.\nCristo não é sobrenome. Significa «o Ungido» — o Messias. O Cristo que padeceu não foi um fracasso: era o caminho apontado pelas Escrituras.",
+   "read": "📖 Leia esta história na sua Bíblia\nJoão 1:41 · 1 Samuel 16:13 · Mateus 16:13–23 · Isaías 53 · Salmos 22 · Mateus 27:46 · João 19:23–24 · Atos 10:34–43",
+   "more_h": "▶ A história completa da Bíblia em um só filme (14 min): https://youtu.be/mqLeYW8YAQ8",
+   "site": "one-scroll-bible.com",
+   "legal": "Citações bíblicas: Almeida Revista e Corrigida (ARC) — citadas com indicação da fonte; quaisquer direitos sobre essa tradução permanecem com a editora dessa tradução.",
+   "chapters": [
+    "0:00 «Cristo» é o sobrenome de Jesus?",
+    "0:20 Reis, sacerdotes e profetas ungidos",
+    "0:44 O Messias que esperavam",
+    "0:51 A confissão de Pedro",
+    "1:16 Um caminho já escrito",
+    "1:27 O clamor na cruz",
+    "1:59 Pedro, depois de encontrar Jesus ressuscitado",
+    "2:28 Três ofícios em uma só pessoa",
+    "2:39 A confissão de hoje"
+   ]
+  }
+ },
+ "thumb_words": {
+  "en": [
+   "“JESUS CHRIST”",
+   "CHRIST",
+   "IS NOT A LAST NAME"
+  ],
+  "es": [
+   "«JESUCRISTO»",
+   "CRISTO",
+   "NO ES UN APELLIDO"
+  ],
+  "pt-BR": [
+   "«JESUS CRISTO»",
+   "CRISTO",
+   "NÃO É SOBRENOME"
+  ]
+ },
+ "license": "youtube",
+ "reviews": "(pending) motion/reviews/film-christ-yt.md"
+}

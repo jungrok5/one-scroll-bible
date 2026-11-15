@@ -18,6 +18,7 @@ import { readFileSync, writeFileSync, existsSync, mkdirSync, statSync } from 'no
 import { execFileSync, spawnSync } from 'node:child_process';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { music, fileOfFor } from './music-bus.mjs';
 const HERE = dirname(fileURLToPath(import.meta.url)), OUT = join(HERE, '..', 'out'), args = process.argv.slice(2);
 const json = f => JSON.parse(readFileSync(f, 'utf8').replace(/^\uFEFF/, ''));
 const ff = a => execFileSync('ffmpeg', ['-y', '-loglevel', 'error', ...a], { maxBuffer: 1 << 28 });
@@ -81,8 +82,13 @@ writeFileSync(join(T, 'voice-fc.txt'), info.map((x, i) => `[${i}:a]volume=${x.ga
 ff([...info.flatMap(x => ['-i', join(T, x.id + '.wav')]), '-filter_complex_script', join(T, 'voice-fc.txt'), '-map', '[v]', '-ac', '2', '-ar', '48000', voice]);
 
 // 2. the bed (music + effects), then the two mixes
-const cues = [...C.music, ...C.sfx], inputs = [], parts = [];
-cues.forEach((c, i) => {
+// the music layer first, as one input: laid like the effects below plus cues.json bus.music_ceiling (music-bus.mjs — the same music
+// music-arc.mjs and sfx-stick.mjs measure; 「그리스도」 #51 "고조되는 구간이 너무 여러 번, 소리가 큰 느낌")
+const MB = music(C, fileOfFor(join(HERE, '..', '..'), S), 48000, 2), mraw = join(T, 'music-bus.f32');
+writeFileSync(mraw, Buffer.from(MB.x.buffer, MB.x.byteOffset, MB.x.byteLength));
+if (C.bus?.music_ceiling) { const cut = MB.gain.filter(g => g < -1); console.log(`music ceiling: ${cut.length / 10} s pulled down, deepest ${Math.min(0, ...MB.gain).toFixed(1)} dB`); }
+const cues = [...C.sfx], inputs = ['-f', 'f32le', '-ar', '48000', '-ac', '2', '-i', mraw], parts = ['[0:a]anull[c0]'];
+cues.forEach((c, i0) => { const i = i0 + 1;
   const f = c.file ? join(HERE, '..', '..', c.file) : join(S, 'audio', c.id + '.mp3'); if (!existsSync(f)) throw new Error('missing ' + f);
   inputs.push('-i', f);
   const len = c.len ? `atrim=start=${c.off || 0}:duration=${c.len},asetpts=PTS-STARTPTS,` : (c.off ? `atrim=start=${c.off},asetpts=PTS-STARTPTS,` : '');
@@ -92,11 +98,11 @@ cues.forEach((c, i) => {
   const dk = (C.ducks || []).filter(d => c.at < d.from).map(d => `(1-${(1 - 10 ** (d.db / 20)).toFixed(4)}*clip((t-${d.from})/${d.ramp || .3},0,1)*lt(t,${d.to}))`);
   // cues.json "bus": { sfx_db, sfx_lp, music_db, music_lp } — one softening for the whole layer, a cue's own "lp" (Hz) wins
   // (「그리스도」 #50 "부드럽고 따뜻한 느낌, 날카로운 효과음": the effects sat ~7 dB further forward and brighter than the first film's)
-  const sfx = i >= C.music.length, B = C.bus || {}, lp = c.lp ?? (sfx ? B.sfx_lp : B.music_lp), g = c.db + ((sfx ? B.sfx_db : B.music_db) || 0);
+  const B = C.bus || {}, lp = c.lp ?? B.sfx_lp, g = c.db + (B.sfx_db || 0);
   parts.push(`[${i}:a]aresample=48000,aformat=channel_layouts=stereo,${len}${fin}${fout}${lp ? `lowpass=f=${lp},` : ''}volume=${g}dB,adelay=${Math.round(c.at * 1000)}:all=1${dk.length ? `,volume='${dk.join('*')}':eval=frame` : ''}[c${i}]`);
 });
-const fc = [...parts, `${cues.map((_, i) => `[c${i}]`).join('')}amix=inputs=${cues.length}:normalize=0:dropout_transition=0,apad,atrim=end=${D}[bed]`,
-  `[${cues.length}:a]aresample=48000,aformat=channel_layouts=stereo,asplit=3[v][k1][k2]`, `[bed]asplit=2[bd][bs]`,
+const fc = [...parts, `${parts.map((_, i) => `[c${i}]`).join('')}amix=inputs=${parts.length}:normalize=0:dropout_transition=0,apad,atrim=end=${D}[bed]`,
+  `[${parts.length}:a]aresample=48000,aformat=channel_layouts=stereo,asplit=3[v][k1][k2]`, `[bed]asplit=2[bd][bs]`,
   `[bd]acrossover=split=1200 4500[lo][mid][hi]`, `[lo][hi]amix=inputs=2:normalize=0[lh]`,
   `[mid][k1]sidechaincompress=threshold=0.02:ratio=4:attack=25:release=450:makeup=1[midd]`,
   `[lh][k2]sidechaincompress=threshold=0.03:ratio=1.6:attack=40:release=600:makeup=1[lhd]`,

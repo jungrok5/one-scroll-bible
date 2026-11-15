@@ -245,11 +245,9 @@ const G = {
         if (m.stick[1] > m.first.stick[1] + T.sound.sfx_stick_over_first_db) why.push(`튀는 효과음(상위 10%) ${m.stick[1]} dB > 첫 영상 ${m.first.stick[1]} + ${T.sound.sfx_stick_over_first_db}(#50)`);
         if (m.sharp[0] > m.first.sharp[0] + T.sound.sfx_sharp_over_first_db) why.push(`효과음 3 kHz 위(가운데값) ${m.sharp[0]} dB — 첫 영상 ${m.first.sharp[0]} dB보다 날카롭다(#50): bus.sfx_lp · 큐 lp`);
         if (m.sharp[1] > m.first.sharp[1] + T.sound.sfx_sharp_over_first_db) why.push(`날카로운 효과음(상위 10%) ${m.sharp[1]} dB > 첫 영상 ${m.first.sharp[1]} + ${T.sound.sfx_sharp_over_first_db}(#50)`); }
-      // and the finished narrated mix: brightness and sharp transients against the first film's Shorts (mix-soft.mjs)
-      const mix = join(ROOT, 'motion', 'out', c.film + '-narr.wav');
-      if (existsSync(mix)) { const s = node([join(FILMS, 'mix-soft.mjs'), mix, '--json']), v = s.status ? null : JSON.parse((s.stdout || '').trim() || 'null')?.[0];
-        if (v && v.air > T.sound.mix_air_max_db) why.push(`섞은 소리 고음(4 kHz 위) ${v.air} dB > ${T.sound.mix_air_max_db} — 첫 영상보다 밝고 차갑다(#50): bus.music_lp · sfx_lp`);
-        if (v && v.bite > T.sound.mix_bite_max_db) why.push(`섞은 소리 날카로운 순간 ${v.bite} dB > ${T.sound.mix_bite_max_db}(#50)`); } }
+      // (the finished mix's brightness — mix-soft.mjs — is a diagnostic only: in 「그리스도」 it measured mostly the narrator, and #51
+      // "내가 말한 고음은 음성은 전혀 아니었고" — the complaint was the music swelling too often and too loud)
+    }
     // music as movements, not one cue per scene (SOUND.md 「메시아」에서 배운 것, 2026-11-05): few long cues that overlap ≥ 1 s, no duck on a joint.
     // The same take split in two (a softer second half, 「그리스도」 #50) is one cue to the ear — count takes, not entries
     { const M = [...(c.cues.music || [])].sort((p, q) => p.at - q.at), mpm = new Set(M.map(q => q.file || q.id)).size / (dur / 60); if (mpm > T.sound.music_cues_per_min_max) why.push(`음악 큐 분당 ${mpm.toFixed(1)}개 > ${T.sound.music_cues_per_min_max} — 장면마다 새 큐는 컷이 된다(SOUND.md: 악장 3~4개)`);
@@ -265,6 +263,8 @@ const G = {
       const r = node([join(FILMS, 'music-arc.mjs'), c.film, '--json']), m = r.status ? null : JSON.parse((r.stdout || '').trim().split('\n').pop() || 'null');
       if (!m) why.push('music-arc.mjs 실패 — ' + (r.stderr || '').slice(0, 200));
       else { if (m.contrast < T.sound.music_contrast_min_db) why.push(`음악 대비 ${m.contrast} dB < ${T.sound.music_contrast_min_db} — 큰 순간이 평소와 같은 크기, 단조롭다(#49): 절정·긴장 자리를 프롬프트로 키우고 큐 db로 맞춘다`);
+        if (m.contrast > T.sound.music_contrast_max_db) why.push(`음악 대비 ${m.contrast} dB > ${T.sound.music_contrast_max_db} — 너무 과격하게 솟는다(#51): bus.music_ceiling으로 누른다`);
+        if (m.swells > T.sound.music_swells_max) why.push(`음악이 크게 솟는 구간 ${m.swells}번(${m.swellAt.join(', ')}초) > ${T.sound.music_swells_max} — "고조되는 구간이 너무 여러 번"(#51): 큰 순간 몇 곳만 남기고 bus.music_ceiling으로 누른다`);
         if (m.rise < T.sound.music_rise_min_db) why.push(`음악 고조 ${m.rise} dB < ${T.sound.music_rise_min_db} — 마지막 1/3의 절정이 처음 1/3보다 크지 않다(기승전결, #49)`);
         if (m.endDrop > T.sound.music_end_drop_max_db) why.push(`끝 화면에서 음악이 ${m.endDrop} dB 꺼짐 > ${T.sound.music_end_drop_max_db} — 마지막 고백에서 끝 화면까지 이어 가득하게(#48)`); } }
     for (const q of [...(c.cues.music || []), ...sfx]) { const f = q.file ? join(ROOT, q.file) : join(sd, 'audio', q.id + '.mp3'); if (!existsSync(f)) why.push(`소리 ${q.id}: 파일 없음`); }

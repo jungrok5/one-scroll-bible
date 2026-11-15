@@ -9,6 +9,7 @@ import { readFileSync, existsSync, readdirSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { music, renderCues } from './music-bus.mjs';
 const HERE = dirname(fileURLToPath(import.meta.url)), ROOT = join(HERE, '..', '..'), P = join(ROOT, 'motion', 'pilot');
 const a = process.argv.slice(2), R = 16000;
 const pcm = (f, af) => { const r = spawnSync('ffmpeg', ['-v', 'error', '-i', f, '-af', af, '-ac', '1', '-ar', String(R), '-f', 'f32le', '-'], { maxBuffer: 1 << 28 });
@@ -24,7 +25,8 @@ function musicRef(list) {
   const inp = [], parts = []; list.forEach((c, i) => { inp.push('-i', c.f); parts.push(`[${i}:a]aresample=${R},aformat=channel_layouts=mono,${lay(c)},adelay=${Math.round(c.at * 1000)}:all=1[m${i}]`); });
   const fc = parts.join(';') + ';' + list.map((_, i) => `[m${i}]`).join('') + `amix=inputs=${list.length}:normalize=0[o]`;
   const r = spawnSync('ffmpeg', ['-v', 'error', ...inp, '-filter_complex', fc, '-map', '[o]', '-ar', String(R), '-f', 'f32le', '-'], { maxBuffer: 1 << 28 });
-  const x = new Float32Array(r.stdout.buffer, r.stdout.byteOffset, r.stdout.length / 4), v = [];
+  return refOf(new Float32Array(r.stdout.buffer, r.stdout.byteOffset, r.stdout.length / 4)); }
+function refOf(x) { const v = [];
   for (let i = 0; i + 2 * R <= x.length; i += 2 * R) { let s = 0; for (let k = i; k < i + 2 * R; k++) s += x[k] * x[k]; v.push(10 * Math.log10(s / (2 * R) + 1e-12)); }
   const h = v.filter(d => d > -60).sort((p, q) => p - q); return h[Math.floor(h.length / 2)] ?? -30; }
 function measure(sfx, ref, scene) {
@@ -38,7 +40,8 @@ function jumps(list, ducks, dur) {
     parts.push(`[${i}:a]aresample=${R},aformat=channel_layouts=mono,${lay(c)},adelay=${Math.round(c.at * 1000)}:all=1${dk.length ? `,volume='${dk.join('*')}':eval=frame` : ''}[m${i}]`); });
   const fc = parts.join(';') + ';' + list.map((_, i) => `[m${i}]`).join('') + `amix=inputs=${list.length}:normalize=0,apad,atrim=end=${dur}[o]`;
   const r = spawnSync('ffmpeg', ['-v', 'error', ...inp, '-filter_complex', fc, '-map', '[o]', '-ar', String(R), '-f', 'f32le', '-'], { maxBuffer: 1 << 28 });
-  const x = new Float32Array(r.stdout.buffer, r.stdout.byteOffset, r.stdout.length / 4), w = R / 4, v = [];
+  return risesOf(new Float32Array(r.stdout.buffer, r.stdout.byteOffset, r.stdout.length / 4)); }
+function risesOf(x) { const w = R / 4, v = [];
   for (let i = 0; i + w <= x.length; i += w) { let s = 0; for (let k = i; k < i + w; k++) s += x[k] * x[k]; v.push(Math.max(-70, 10 * Math.log10(s / w + 1e-12))); }
   return v.map((d, i) => ({ t: i / 4, rise: i < 6 ? 0 : +(d - Math.min(...v.slice(i - 6, i))).toFixed(1) })); }
 const pct = (v, p) => { const s = [...v].sort((x, y) => x - y); return s[Math.min(s.length - 1, Math.floor(s.length * p))]; };
@@ -64,10 +67,12 @@ if (a[0] === '--first') { const rows = first(), d = { ...dist(rows), ...riseDist
   BUS = C.bus || {};
   const f = c => c.file ? join(ROOT, c.file) : join(S, 'audio', c.id + '.mp3');
   C.music = C.music.map(c => ({ ...c, kind: 'music' })); C.sfx = C.sfx.map(c => ({ ...c, kind: 'sfx' }));
-  const ref = musicRef(C.music.map(c => ({ ...c, f: f(c) }))), rows = measure(C.sfx.map(c => ({ ...c, f: f(c) })), ref, film), d = dist(rows);
+  // the music as the mix hears it (bus, ducks, bus.music_ceiling — music-bus.mjs)
+  const MX = music(C, f, R, 1).x, ref = refOf(MX), rows = measure(C.sfx.map(c => ({ ...c, f: f(c) })), ref, film), d = dist(rows);
   const F = JSON.parse(spawnSync(process.execPath, [fileURLToPath(import.meta.url), '--first', '--json'], { encoding: 'utf8', maxBuffer: 1 << 24 }).stdout.trim());
   const over = rows.filter(r => r.stick > F.stick[1] || r.sharp > F.sharp[1]);
-  const J = jumps([...C.music, ...C.sfx].map(c => ({ ...c, f: f(c) })), C.ducks, C.dur || 180), RD = riseDist(J.map(j => j.rise));
+  const SX = renderCues(C.sfx, C, R, 1, f, 'sfx'), BED = MX.map((v, i) => v + (SX[i] || 0));
+  const J = risesOf(BED), RD = riseDist(J.map(j => j.rise));
   const jolts = J.filter(j => j.rise > F.rise[0]).map(j => `${j.t}s +${j.rise}`);
   if (a.includes('--json')) console.log(JSON.stringify({ film, ref: +ref.toFixed(1), ...d, ...RD, jolts, first: F, over }));
   else { console.log(`${film}: ${d.n} effects over music median ${ref.toFixed(1)} dB · stick p50/p90/max ${d.stick.join(' / ')} · sharp ${d.sharp.join(' / ')}`);

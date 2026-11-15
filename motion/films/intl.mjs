@@ -11,7 +11,9 @@ import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { homedir } from 'node:os';
 import { dropCredit } from '../youtube/credit.mjs';   // no tools credit in descriptions (owner 2026-11-05)
-const HERE = dirname(fileURLToPath(import.meta.url)), M = join(HERE, '..'), args = process.argv.slice(2), dry = args.includes('--dry');
+const HERE = dirname(fileURLToPath(import.meta.url)), M = join(HERE, '..'), args = process.argv.slice(2), dry = args.includes('--dry'), noCaps = args.includes('--no-captions');
+// --no-captions: leave the caption tracks to Studio (motion/youtube/studio-caption.js, no quota) — 27 languages × 400 units per
+// video is over the 10,000-unit day (2026-11-16 「그리스도」)
 const [cmd, film, ori, vid] = args.filter(a => !a.startsWith('--'));
 const Y = JSON.parse(readFileSync(join(HERE, film, 'youtube-intl.json'), 'utf8')), D = Y.default_language;
 const SITE = 'https://one-scroll-bible.com/';
@@ -38,14 +40,14 @@ if (cmd === 'entry') {
   const s = v.snippet, loc = {};
   for (const L of Object.keys(Y.text)) if (L !== D) loc[L] = { title: Y.text[L].title, description: desc(L, ori) };
   const body = { id: vid,
-    snippet: { title: s.title, description: s.description, tags: s.tags, categoryId: '27', defaultLanguage: D, defaultAudioLanguage: D },
+    snippet: { title: s.title, description: s.description, tags: Y.tags?.[D] || s.tags, categoryId: '27', defaultLanguage: D, defaultAudioLanguage: D },
     localizations: loc,
     status: { privacyStatus: v.status.privacyStatus, ...(v.status.publishAt ? { publishAt: v.status.publishAt } : {}), license: 'youtube',
       embeddable: v.status.embeddable, publicStatsViewable: v.status.publicStatsViewable, selfDeclaredMadeForKids: false } };
   console.log(`${vid}: ${s.title} (${v.status.privacyStatus}) → languages ${D} + ${Object.keys(loc).join(', ')}, licence youtube`);
   if (!dry) { await api('videos?part=snippet,localizations,status', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }); console.log('  title/description/localizations set'); }
   const have = (await api(`captions?part=snippet&videoId=${vid}`)).items || [];
-  for (const [L, file] of Object.entries(Y.captions)) {
+  for (const [L, file] of noCaps ? [] : Object.entries(Y.captions)) {
     if (have.some(c => c.snippet.language === L && c.snippet.trackKind !== 'asr')) { console.log(`  caption ${L}: already there`); continue; }
     if (dry) { console.log(`  caption ${L}: would upload ${file}`); continue; }
     const meta = JSON.stringify({ snippet: { videoId: vid, language: L, name: '', isDraft: false } }), b = 'osb' + Date.now();

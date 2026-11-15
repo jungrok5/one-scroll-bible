@@ -973,6 +973,27 @@
     "related_video": "Short → horizontal oYKz_HHI8yw, set in Studio 2026-11-02 (on 11/1 the picker found no video of this channel — index lag; a day later it listed them). Pinned comment only if a reviewed text exists",
     "captions_note": "2026-11-01: 19 caption languages (16 added through Studio — motion/youtube/studio-caption.js, no API quota), English-narration timing (sound/<lang>.en-timing.vtt); automatic en captions removed (yt-api asr-off). 2026-11-01 later: it, pl, tr added (owner's fixed caption list, films README §4 step 9) — Studio, all four videos. Then uz, ne, km, mn, my (migrant languages in Korea) — Studio, all four videos. 2026-11-02: tr and fa tracks replaced on all four via API caption-file --replace (line 01 now shows only the voiced clause — first upload began with a lone verb).",
     "published": "2026-11-01 21:42 KST: both made public by the owner's OK (videos.update status, API); horizontal end screen saved in Studio — last 5 s (2:54.12–2:59.12) = English 14-min film MFH3Hj4V6KA bottom-left + subscribe bottom-right, below the end-card text (found via the picker's other-channel box with the video URL — the my-videos search returned nothing for this channel)"
+   },
+   "christ": {
+    "note": "「그리스도」 국제판(영어 글자판, motion/films/christ/youtube-intl.json · 검수 motion/reviews/film-christ-yt.md). 2026-11-16 비공개 업로드 → intl.mjs api --no-captions(제목·설명 es/pt-BR, 태그, 표준 라이선스). 자막은 스튜디오(할당량 없음)",
+    "h": {
+     "id": "Bp7GXU7kI4Y",
+     "privacy": "private",
+     "default": "en",
+     "audio": [],
+     "captions": [
+      "en"
+     ]
+    },
+    "v": {
+     "id": "1eM_EMtcXrQ",
+     "privacy": "private",
+     "default": "en",
+     "audio": [],
+     "captions": [
+      "en"
+     ]
+    }
    }
   },
   "playlists_series": "PLUkvqbcq-Vok"
@@ -1097,6 +1118,11 @@
     "vi",
     "zh-Hans",
     "zh-Hant"
+   ],
+   "thumbnail_ab": [
+    "A-oil",
+    "B-prayer",
+    "C-cross"
    ]
   },
   "v": {
@@ -1104,7 +1130,39 @@
    "file": "christ-v-narr.mp4",
    "privacy": "private",
    "uploaded": "2026-11-16",
-   "note": "179.9 s 다시 묶음(180.0 s는 AAC 때문에 3:01로 잡혀 쇼츠가 아님)"
+   "note": "179.9 s 다시 묶음(180.0 s는 AAC 때문에 3:01로 잡혀 쇼츠가 아님)",
+   "captions": [
+    "ar",
+    "bn",
+    "de",
+    "en",
+    "es",
+    "fa",
+    "fil",
+    "fr",
+    "hi",
+    "id",
+    "it",
+    "ja",
+    "km",
+    "ko",
+    "mn",
+    "my",
+    "ne",
+    "pl",
+    "pt-BR",
+    "ru",
+    "sw",
+    "ta",
+    "th",
+    "tr",
+    "uz",
+    "vi",
+    "zh-Hans",
+    "zh-Hant"
+   ],
+   "related": "wrEYqvOU1O8",
+   "cover": "V-A-oil"
   },
   "to_delete": {
    "ids": [

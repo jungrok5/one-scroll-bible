@@ -374,7 +374,12 @@
   }
  ],
  "artifact_url": "https://claude.ai/artifact/FGXBykv4R9nPKr7CfPbnPE",
- "shots_check": null,
+ "shots_check": {
+  "render": "5dda4244be125acf",
+  "at": "2026-11-15",
+  "misses": [],
+  "note": "47줄 시트 6장 — 줄마다 화면이 screen 문장대로(소리 #48–#51 반영 뒤 다시 렌더, 그림 변경 없음)"
+ },
  "clips": [],
  "site_slug": "",
  "rounds": [

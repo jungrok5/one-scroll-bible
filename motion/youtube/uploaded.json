@@ -160,7 +160,8 @@
     "16": "UgyfTBNwJXREKOKVrzp4AaABAg",
     "17": "UgxsfSBHuH39tlo0iiB4AaABAg",
     "18": "Ugz0lkGrivvd8v8fA2p4AaABAg",
-    "19": "UgxbrRtpqD6TjQ1EYPl4AaABAg"
+    "19": "UgxbrRtpqD6TjQ1EYPl4AaABAg",
+    "20": "UgwNbtS0ALG-EeE4BnN4AaABAg"
    },
    "music_ids": {
     "10": "DkMfG7PzRHk",
@@ -1058,6 +1059,21 @@
     "privacy": "private (scheduled)",
     "note": "captions not checked; instagram + threads scheduled same time"
    }
+  }
+ },
+ "christ": {
+  "note": "「그리스도」 한국어 채널(motion/films/christ/upload.md · youtube.json). 2026-11-16 비공개 업로드(스튜디오 studio-upload.js) — 공개는 관리자 \"공개일은 완료되면 바로할꺼야\"",
+  "h": {
+   "id": "WGNt76MeLws",
+   "file": "christ-h-narr.mp4",
+   "privacy": "private",
+   "uploaded": "2026-11-16"
+  },
+  "v": {
+   "id": "6tsn5lq3BCI",
+   "file": "christ-v-narr.mp4",
+   "privacy": "private",
+   "uploaded": "2026-11-16"
   }
  }
 }

@@ -8,6 +8,7 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { shown } from './said.mjs';
 const HERE = dirname(fileURLToPath(import.meta.url)), args = process.argv.slice(2), ti = args.indexOf('--timing');
 const timing = ti > -1 ? args.splice(ti, 2)[1] : 'ko', [film, ...langs] = args, S = join(HERE, film, 'sound');
 const json = f => JSON.parse(readFileSync(f, 'utf8').replace(/^﻿/, ''));
@@ -19,8 +20,7 @@ const cues = readFileSync(join(S, timing + '.vtt'), 'utf8').split(/\r?\n\r?\n/).
 if (cues.length !== order.length) throw new Error(`${timing}.vtt has ${cues.length} cues, place has ${order.length} lines — run sound.mjs ${film}${timing === 'ko' ? '' : ' v --lang ' + timing} first`);
 for (const L of langs) {
   const P = json(join(HERE, film, 'i18n', L + '.json'));
-  const txt = id => { const k = K[id]; if (!P[id]) throw new Error(`${L}: no line ${id}`); let t = P[id].voice || P[id].text;
-    if (k.voice && k.text.includes('…') && !P[id].voice && id in place.at) t = t.slice(t.lastIndexOf('…') + 1).trim();
+  const txt = id => { const k = K[id]; if (!P[id]) throw new Error(`${L}: no line ${id}`); let t = id in place.at ? shown(k, P[id]) : P[id].voice || P[id].text;
     return t.replace(/\s*\/\s*/g, '\n'); };
   const out = join(S, `${L}.${timing}-timing.vtt`);
   writeFileSync(out, 'WEBVTT\n\n' + order.map((id, i) => `${cues[i]}\n${txt(id)}\n`).join('\n'));

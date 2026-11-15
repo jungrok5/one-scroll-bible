@@ -19,6 +19,7 @@ import { execFileSync, spawnSync } from 'node:child_process';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { music, fileOfFor } from './music-bus.mjs';
+import { shown } from './said.mjs';
 const HERE = dirname(fileURLToPath(import.meta.url)), OUT = join(HERE, '..', 'out'), args = process.argv.slice(2);
 const json = f => JSON.parse(readFileSync(f, 'utf8').replace(/^\uFEFF/, ''));
 const ff = a => execFileSync('ffmpeg', ['-y', '-loglevel', 'error', ...a], { maxBuffer: 1 << 28 });
@@ -65,8 +66,8 @@ info.forEach((x, i) => { const n = info[i + 1], end = x.at + x.dur; if (n && end
   // (line 01), so does it (the same rule as the narration prompts)
   const P = lang ? json(join(HERE, film, 'i18n', lang + '.json')) : null;
   const txt = id => { const k = K[id];
-    if (!lang) return (k.frags ? k.frags.join(' ') : (k.voice || k.text)).replace(/\s*\/\s*/g, '\n');
-    let t = P[id].voice || P[id].text; if (k.voice && k.text.includes('…') && !P[id].voice && id in place.at) t = t.slice(t.lastIndexOf('…') + 1).trim();
+    if (!lang) return (k.frags ? k.frags.join(' ') : shown(k)).replace(/\s*\/\s*/g, '\n');
+    let t = id in place.at ? shown(k, P[id]) : P[id].voice || P[id].text;
     return t.replace(/\s*\/\s*/g, '\n'); };
   const cap = lang || 'ko';
   writeFileSync(join(S, cap + '.srt'), subs.map((s, i) => `${i + 1}\n${ts(s.a)} --> ${ts(s.b)}\n${txt(s.id)}\n`).join('\n'));

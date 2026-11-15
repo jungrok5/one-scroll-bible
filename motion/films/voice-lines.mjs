@@ -6,6 +6,7 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { said } from './said.mjs';
 
 const [film, ...langs] = process.argv.slice(2);
 if (!film || !langs.length) { console.log('usage: voice-lines.mjs <film> <lang…>'); process.exit(1); }
@@ -17,8 +18,7 @@ for (const L of langs) {
   const pk = j(`i18n/${L}.json`), out = {};
   for (const id of ids) {
     const ko = s.lines.find(l => l.id === id); if (!pk[id]) { console.log(`${L} ${id}: MISSING in i18n/${L}.json`); continue; }
-    let t = pk[id].voice || pk[id].text;
-    if (ko?.voice && ko.text.includes('…') && !pk[id].voice) t = t.slice(t.lastIndexOf('…') + 1);
+    let t = said(ko, pk[id]);
     t = t.replace(/\s*\/\s*/g, ' ').replace(/\s+/g, ' ').trim();
     if (/^[a-z]/.test(t)) t = t[0].toUpperCase() + t.slice(1);   // a quote that starts mid-verse is still read as a sentence
     out[id] = t;

@@ -1096,6 +1096,10 @@
   {
    "at": "2026-11-15",
    "what": "번역·국제판을 공정 파일로: pipeline/briefs/(translate · review-captions · review-en · en-layout · captions-brief), i18n-brief.mjs(영상 지시문 자동), targets intl.voices · captions.groups, tasks/intl.md·captions.md 다시 씀, rules translate-parallel-groups · progress-in-repo + captions 검사(intl_progress, 묶음별 검수 파일). fetch-takes.mjs가 대화 기록 .jsonl을 스트리밍으로 읽음(512 MB 넘음). check-quotes가 * 용어 표시·zero-width 문자를 무시(km). 관리자 \"매번 찾지않도록 공정에 기록해둬 … 대화에만 남아있지않게\""
+  },
+  {
+   "date": "2026-11-16",
+   "what": "해설·자막 글의 '…' 규칙을 motion/films/said.mjs(said·shown) 하나로 — km Q9 자막이 비고, voice가 있는 줄은 '/' 줄바꿈이 사라져 한 줄 100자 넘던 것 고침"
   }
  ],
  "pipeline": {
@@ -2145,12 +2149,13 @@
    "유튜브 전략 ①② 공정에(관리자 \"1 2는 네 제안대로하자\"): rules clips-plan-cadence · shorts-to-long-text · long-form-watch-hours, yt-api.mjs ypp",
    "짧은 쇼츠 clips_plan·clips(c1·c2·c3) + upload.md·youtube.json·썸네일(A/B/C·V-*) — 한국어판 올릴 자료 준비 끝(e460288)",
    "es·pt-BR 해설 34줄씩(flow H70YnW4QHUN7jLy44iBa / ckcvoQoiU6Uzt8AFIHfy, sessions-es/pt-BR.json, takes 68개씩) → place-es/pt-BR.json 모두 자리에 맞음 → christ-es-narr.mp3 · christ-pt-BR-narr.mp3 + sound/es.vtt·pt-BR.vtt, 프롬프트 216개",
-   "받아쓰기 대조(Scribe, flow Ujk3BrfCwyGMjo9Uh4Io): en 2줄(아포스트로피 표기만) · es 4줄(Señor·Dios가 줄 경계에서 앞 줄로 찍힘 — 단어 빠짐 없음) · pt-BR 모두 일치 → 셋 다 원고대로 읽음"
+   "받아쓰기 대조(Scribe, flow Ujk3BrfCwyGMjo9Uh4Io): en 2줄(아포스트로피 표기만) · es 4줄(Señor·Dios가 줄 경계에서 앞 줄로 찍힘 — 단어 빠짐 없음) · pt-BR 모두 일치 → 셋 다 원고대로 읽음",
+   "자막 파일 27개 언어 × 2(sound/<lang>.ko-timing.vtt 한국어판 · <lang>.en-timing.vtt 국제판) + ko/en/es/pt-BR.vtt 다시 — 빈 칸 0 · 겹침 0. 고친 것: km Q9 자막이 비던 '…' 규칙, 한 구절이 한 줄 100자 넘던 것(Q9·Q13·Q14 줄바꿈) → motion/films/said.mjs 하나로(네 도구가 같이 씀), 「침묵의 400년」 영향 없음 확인"
   ],
   "running": [],
   "owner": [],
   "next": [
-   "자막 파일 captions-on-ko.mjs christ <27개>(한국어 시각) / --timing en(국제판) → .vtt 눈 확인",
+   "자막 올리기: 한국어판 세로·가로에 ko + 27개(.ko-timing.vtt), 국제판 세로·가로에 .en-timing.vtt — 영상 올린 뒤(studio-caption.js), 그다음 asr-off",
    "youtube-intl.json(검수된 문장만) + motion/reviews/film-christ-yt.md, 썸네일 en/es/pt-BR",
    "한국어판 공개 일정(decisions.date, 주일 제외) → 관리자 OK 뒤 올리기·예약"
   ],

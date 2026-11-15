@@ -922,14 +922,16 @@
       for (let i = 0; i < n; i++) {
         const s = ((i / n) + u * .24) % 1; if (s > reach) continue;                                                  // flowing upward
         const y = src[1] - s * len, x = src[0] + S * (.06 * Math.sin(s * 4.6 - u * 1.2 + 1.3) * s + .05 * (P.noise(s * 2.4 - u * .35, 7) - .5) * s);
-        const a = .3 * Math.pow(1 - s, 1.7) * clamp((reach - s) / .12) * on, r = S * (w0 + .11 * s);      // brightest at the oil, thinning as it rises
+        // brightest at the oil, thinning as it rises; born fading in (2026-11-15 frame-qa: a lump popped in at full strength on the head
+        // every ~2 frames as s wrapped to 0 — the head flickered in 76% of the recall frames)
+        const a = .3 * Math.pow(1 - s, 1.7) * clamp((reach - s) / .12) * ss(0, .08, s) * on, r = S * (w0 + .11 * s);
         blob(g, x, y, r, lerpC(gold, pale, ss(.1, .8, s)), a, 1.5);
       }
     }, { blur: .014 });
     // sparks carried up in it (full resolution, tiny)
     ctx.save(); ctx.globalCompositeOperation = 'screen'; const R = P.rng(o.seed || 23);
     for (let i = 0; i < 46; i++) { const sp = .12 + .2 * R(), ph = R(), s = (ph + u * sp) % 1, sx = (R() - .5) * 2; if (s > reach * 1.05) continue;
-      const y = src[1] - s * len * .9, x = src[0] + S * (sx * (.03 + .14 * s) + .06 * Math.sin(s * 4.6 - u * 1.2 + 1.3) * s), a = (1 - s) * on * (.4 + .6 * Math.abs(Math.sin(u * 3 + i)));
+      const y = src[1] - s * len * .9, x = src[0] + S * (sx * (.03 + .14 * s) + .06 * Math.sin(s * 4.6 - u * 1.2 + 1.3) * s), a = (1 - s) * ss(0, .06, s) * on * (.4 + .6 * Math.abs(Math.sin(u * 3 + i)));
       ctx.fillStyle = css(lerpC([255, 214, 140], [255, 244, 222], s), .8 * a); ctx.beginPath(); ctx.arc(x, y, Math.max(1, S * .005 * (1.3 - s)), 0, 6.2832); ctx.fill(); }
     ctx.restore();
     GOLD.bloom(ctx, src[0], src[1], [255, 200, 120], .35 * on, { r: S * .35, streak: .1, ghosts: false });

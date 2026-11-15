@@ -1,0 +1,151 @@
+{
+ "_dir": "ltr",
+ "_yv": 93,
+ "_version": "LSG",
+ "_scope": "captions",
+ "N01": {
+  "text": "Le « Christ » de « Jésus-Christ » — / est-ce le nom de famille de Jésus ?"
+ },
+ "N02": {
+  "text": "Le nom qui vient toujours / à la fin de nos prières."
+ },
+ "Q1": {
+  "text": "Nous avons trouvé le Messie / (ce qui signifie Christ).",
+  "cite": "Jean 1:41",
+  "hl": "Christ"
+ },
+ "N03": {
+  "text": "Christ n’est pas un nom de famille. / Cela signifie « l’Oint » — le Messie."
+ },
+ "T1": {
+  "text": "Christ"
+ },
+ "N04": {
+  "text": "Dieu oignait d’huile / pour établir les rois, les prêtres et les prophètes."
+ },
+ "K1": {
+  "text": "Samuel prit la corne d’huile, / et l’oignit au milieu de ses frères.",
+  "cite": "1 Samuel 16:13",
+  "hl": "huile"
+ },
+ "K2": {
+  "text": "Il répandit de l’huile d’onction sur la tête d’Aaron,",
+  "cite": "Lévitique 8:12",
+  "hl": "sur la tête d’Aaron"
+ },
+ "K3": {
+  "text": "… et tu oindras Élisée, fils de Schaphath, d’Abel-Mehola, / pour prophète à ta place.",
+  "cite": "1 Rois 19:16",
+  "voice": "tu oindras Élisée, fils de Schaphath, d’Abel-Mehola, pour prophète à ta place.",
+  "hl": "oindras"
+ },
+ "N06": {
+  "text": "Beaucoup attendaient le Messie / seulement comme un roi qui chasserait Rome."
+ },
+ "N07": {
+  "text": "Un jour, après la venue de Jésus, / Pierre a fait une confession."
+ },
+ "Q2": {
+  "text": "Tu es le Christ, / le Fils du Dieu vivant.",
+  "cite": "Matthieu 16:16",
+  "voice": "Tu es le Christ,",
+  "hl": "Christ"
+ },
+ "N08": {
+  "text": "Dès lors, Jésus a dit / qu’il devait souffrir, être mis à mort, / et ressusciter le troisième jour."
+ },
+ "Q3": {
+  "text": "A Dieu ne plaise, Seigneur! / Cela ne t’arrivera pas.",
+  "cite": "Matthieu 16:22",
+  "voice": "A Dieu ne plaise, Seigneur!",
+  "hl": "A Dieu ne plaise"
+ },
+ "N09": {
+  "text": "Pour Pierre, un Christ qui meurt, / cela n’avait pas de sens."
+ },
+ "N10": {
+  "text": "Mais ce chemin / était déjà écrit."
+ },
+ "Q4": {
+  "text": "Mais il était blessé pour nos péchés, / Brisé pour nos iniquités;",
+  "cite": "Ésaïe 53:5",
+  "hl": "blessé"
+ },
+ "N11": {
+  "text": "Sur la croix, / le cri de Jésus."
+ },
+ "Q5": {
+  "text": "Éli, Éli, lama sabachthani? / … Mon Dieu, mon Dieu, / pourquoi m’as-tu abandonné?",
+  "cite": "Matthieu 27:46",
+  "voice": "Mon Dieu, mon Dieu, pourquoi m’as-tu abandonné?",
+  "hl": "m’as-tu abandonné"
+ },
+ "N12": {
+  "text": "Ce cri est le premier vers d’un psaume / écrit mille ans plus tôt / par David, le roi oint."
+ },
+ "Q6": {
+  "text": "Mon Dieu! Mon Dieu! / Pourquoi m’as-tu abandonné",
+  "cite": "Psaume 22:2",
+  "usfm": "PSA.22.2",
+  "hl": "m’as-tu abandonné"
+ },
+ "Q7": {
+  "text": "Ils se partagent mes vêtements, / Ils tirent au sort ma tunique.",
+  "cite": "Psaume 22:19",
+  "usfm": "PSA.22.19",
+  "hl": "tirent au sort"
+ },
+ "N14": {
+  "text": "Au pied de la croix, les soldats / se sont partagé ses vêtements et ont tiré au sort sa tunique."
+ },
+ "N20": {
+  "text": "Pierre, qui avait dit « A Dieu ne plaise », / a rencontré Jésus ressuscité — puis il a prêché ceci."
+ },
+ "Q9": {
+  "text": "comment Dieu a oint du Saint-Esprit et de force / Jésus de Nazareth, / qui allait de lieu en lieu faisant du bien …",
+  "cite": "Actes 10:38",
+  "voice": "comment Dieu a oint du Saint-Esprit et de force Jésus de Nazareth, qui allait de lieu en lieu faisant du bien",
+  "hl": "a oint"
+ },
+ "Q11": {
+  "text": "… Ils l’ont tué, en le pendant au bois.",
+  "cite": "Actes 10:39",
+  "voice": "Ils l’ont tué, en le pendant au bois.",
+  "hl": "en le pendant au bois"
+ },
+ "Q12": {
+  "text": "Dieu l’a ressuscité le troisième jour,",
+  "cite": "Actes 10:40",
+  "hl": "l’a ressuscité"
+ },
+ "N15": {
+  "text": "Le Christ souffrant n’était pas un échec : / c’était le chemin annoncé par les Écritures."
+ },
+ "N16K": {
+  "text": "Roi,"
+ },
+ "N16P": {
+  "text": "Prêtre,"
+ },
+ "N16R": {
+  "text": "Prophète,"
+ },
+ "N16": {
+  "text": "trois offices, / en une seule Personne."
+ },
+ "N17": {
+  "text": "« Christ » n’est pas un nom de famille. / C’est la confession / que Jésus est bien ce Messie."
+ },
+ "Q14": {
+  "text": "… quiconque croit en lui / reçoit par son nom le pardon des péchés.",
+  "cite": "Actes 10:43",
+  "voice": "quiconque croit en lui reçoit par son nom le pardon des péchés.",
+  "hl": "par son nom"
+ },
+ "Q13": {
+  "text": "Tu es le Christ, / le Fils du Dieu vivant.",
+  "cite": "Matthieu 16:16",
+  "voice": "Tu es le Christ, le Fils du Dieu vivant.",
+  "hl": "Christ"
+ }
+}

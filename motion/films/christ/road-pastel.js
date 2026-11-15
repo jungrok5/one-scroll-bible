@@ -139,7 +139,10 @@ function rdProfile(P, o, k) {
   add(circ(px, py, .064, .072), hf);
   if (o.hood) {   // hood: the cloth drawn forward over the head — one soft round shape, no face, no brow, no nose, no chin (관리자 2026-11-14 측면 구도)
     add(circ(px + .014 * f, py - .004, .086, .09), hc);
-    add([[px + .07 * f, py + .02], [px + .066 * f, py + .08], [X(.115, -.79), -.79 + bob], [X(-.13, -.73), -.73 + bob], [px - .118 * f, py + .04], [px - .08 * f, py - .05]], hc);
+    add([[px + .07 * f, py + .02], [px + .066 * f, py + .08], [X(.115, -.79), -.79 + bob], [X(-.13, -.76), -.76 + bob], [px - .118 * f, py + .04], [px - .08 * f, py - .05]], hc);
+    // the dark band round the cloth above the brow, as every man in this film wears it (관리자 2026-11-15 "그래 고쳐": without it the
+    // pale hood beside bearded, banded Peter read as a veiled woman — rules.json figures-gender-legible)
+    add([[px + .1 * f, py - .036], [px + .094 * f, py - .062], [px + .02 * f, py - .088], [px - .07 * f, py - .084], [px - .108 * f, py - .056], [px - .104 * f, py - .032], [px - .068 * f, py - .058], [px + .02 * f, py - .062]], hb);
     Object.assign(q, { hd, hf: null, hr, hc, hb, arm, noFace: true, hs: null }); return q; }
   if (!noFace) { add([[px + .055 * f, py - .022], [px + .088 * f, py + .012], [px + .06 * f, py + .028]], hf);   // the nose
     if (beard) add([[px + .03 * f, py + .026], [px + .066 * f, py + .046], [px + .07 * f, py + .085], [px + .04 * f, py + .122], [px - .012 * f, py + .11], [px - .05 * f, py + .06], [px - .046 * f, py + .01], [px - .01 * f, py + .04]], hr); }

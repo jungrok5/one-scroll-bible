@@ -18,7 +18,9 @@
       F.version = j._version || '';   // the quoted edition's short name, shown after each reference ("ESV", "RVR1960")
     } catch (e) { console.warn('no film language file for', P.lang); } }
   };
-  F.text = id => (F.lines[id] || {}).text || '';
+  // Latin-script languages draw "…" as three periods: the film's serif (Noto Serif KR) draws U+2026 as raised mid-height dots
+  // (「그리스도」 en 2026-11-15). Display only — the language files keep "…" (check-quotes splits fragments on it)
+  F.text = id => { const t = (F.lines[id] || {}).text || ''; return P.lang !== 'ko' && /^[\x00-ɏ -⁯\s]*$/.test(t) ? t.replace(/…/g, '...') : t; };
   F.cite = id => { const l = F.lines[id] || {}; return l.cite ? l.cite + (P.lang === 'ko' ? ' (개역개정)' : F.version ? ` (${F.version})` : '') : ''; };
 
   // break a text into lines that fit maxW: '/' first, then spaces, then characters
@@ -28,7 +30,8 @@
     const out = [];
     for (const seg of segs) {
       if (ctx.measureText(seg).width <= maxW) { out.push(seg); continue; }
-      const words = /\s/.test(seg) ? seg.split(/(?<=\s)/) : P.chars(seg);
+      // a no-break space (U+00A0) in a language file keeps a phrase on one line ("the Anointed One" — 「그리스도」 en 2026-11-15)
+      const words = /\s/.test(seg) ? seg.split(/(?<=[^\S ])/) : P.chars(seg);
       let cur = '';
       for (const w of words) { if (cur && ctx.measureText(cur + w).width > maxW) { out.push(cur.trim()); cur = w.trimStart(); } else cur += w; }
       if (cur.trim()) out.push(cur.trim());

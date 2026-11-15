@@ -1013,6 +1013,15 @@
    "round": 2,
    "applied": "번역·국제판 절차를 공정 파일로(briefs 5개, i18n-brief.mjs, targets intl.voices·captions.groups, tasks/intl·captions, rules 2개 + 검사), 진행 상태는 review.json intl_progress",
    "applied_at": "2026-11-15 23:41 KST"
+  },
+  {
+   "at": "2026-11-15 23:44 KST",
+   "who": "관리자",
+   "said": "그래 (자막 MED 13줄 반영 + 고친 줄 재검수, 영어판 줄 나눔·글꼴 고쳐 다시 렌더)",
+   "status": "applied",
+   "round": 2,
+   "applied": "자막 MED 17건 반영 + 고친 줄 재검수 모두 OK, 영어판 줄임표 글꼴·구절 끊김(U+00A0) 고쳐 다시 렌더",
+   "applied_at": "2026-11-16 00:12 KST"
   }
  ],
  "process_changes": [
@@ -1936,7 +1945,7 @@
   "clean": "0–179.5초 전체에 MAJOR 없음. 가로로 옮기며 양옆이 비거나 늘어난 곳, 인물·글자 잘림, 글자가 얼굴·밝은 면 위에 얹혀 안 읽히는 곳 모두 없음. 문제없던 구간: 요단 강가 형제(8–14), 기름 방울·제목(14.5–23), 성문(44.5–51), 가이사랴 빌립보 길·예루살렘 길·막아섬·홀로 선 베드로(52–75.5, 예수님 두건으로 옆얼굴 선 없음), 이사야 두루마리(76–87.5), 흑백 세 십자가(88–97, 멀리 작게·빛줄기 없음), 시편 두루마리(97.7–113.5), 군인 그림자와 복사뼈(114.5–119, 손가락 정상, 그림자 튐 없음), 요단 비둘기 빛(124.6–134.5, 예수님 작게), 십자가 그림자(135–139), 세 직분 회상과 빛이 하나로 모임(148–159). 장면이 바뀔 때 섞임은 모두 0.5초 안의 정상 크로스페이드였음."
  },
  "en_layout_check": {
-  "render": "film-en-v/h 2026-11-15 (en.json 5줄 고치기 전 렌더)",
+  "render": "film-en-v/h 2026-11-16 다시 렌더(고친 뒤)",
   "at": "2026-11-15",
   "issues": [
    {
@@ -1945,7 +1954,8 @@
     "id": "Q9,Q11,Q14,K3,Q5",
     "what": "The ellipsis '…' draws as raised mid-height dots ('⋯', the Korean/CJK font's glyph) instead of baseline dots, e.g. 'He went about doing good ⋯', '⋯ They put him to death', '⋯ everyone who believes'. Seen in both orientations. Fix: switch the font for U+2026 or use three periods.",
     "severity": "MINOR",
-    "status": "open"
+    "status": "fixed",
+    "fix": "\"…\"→화면 \"...\", 구절 사이 U+00A0(관리자 \"그래\")"
    },
    {
     "ori": "v",
@@ -1953,7 +1963,8 @@
     "id": "N03",
     "what": "Line break splits the title 'the Anointed / One' across lines ('It means “the Anointed / One” — the Messiah.'). Better: 'It means “the Anointed One” — / the Messiah.'",
     "severity": "MINOR",
-    "status": "open"
+    "status": "fixed",
+    "fix": "\"…\"→화면 \"...\", 구절 사이 U+00A0(관리자 \"그래\")"
    },
    {
     "ori": "v",
@@ -1961,7 +1972,8 @@
     "id": "K1",
     "what": "Awkward wrap 'and anointed him in the / midst of his brothers.': 'the' is left hanging at the end of line 1.",
     "severity": "MINOR",
-    "status": "open"
+    "status": "fixed",
+    "fix": "\"…\"→화면 \"...\", 구절 사이 U+00A0(관리자 \"그래\")"
    },
    {
     "ori": "v",
@@ -1969,7 +1981,8 @@
     "id": "N08",
     "what": "Awkward wrap 'and on the third / day rise again.' splits 'third day'.",
     "severity": "MINOR",
-    "status": "open"
+    "status": "fixed",
+    "fix": "\"…\"→화면 \"...\", 구절 사이 U+00A0(관리자 \"그래\")"
    },
    {
     "ori": "v",
@@ -1977,7 +1990,8 @@
     "id": "N20",
     "what": "Awkward wrap 'met the risen Jesus — and / then he preached this.': 'and' is left hanging after the dash.",
     "severity": "MINOR",
-    "status": "open"
+    "status": "fixed",
+    "fix": "\"…\"→화면 \"...\", 구절 사이 U+00A0(관리자 \"그래\")"
    },
    {
     "ori": "v",
@@ -1985,7 +1999,8 @@
     "id": "N12",
     "what": "Awkward wrap 'by David, the / anointed king.': the article is cut off from its noun.",
     "severity": "MINOR",
-    "status": "open"
+    "status": "fixed",
+    "fix": "\"…\"→화면 \"...\", 구절 사이 U+00A0(관리자 \"그래\")"
    },
    {
     "ori": "v",
@@ -1993,7 +2008,8 @@
     "id": "N15",
     "what": "Awkward wrap 'he was the way the / Scriptures pointed to.'",
     "severity": "MINOR",
-    "status": "open"
+    "status": "fixed",
+    "fix": "\"…\"→화면 \"...\", 구절 사이 U+00A0(관리자 \"그래\")"
    },
    {
     "ori": "v",
@@ -2001,7 +2017,8 @@
     "id": "N17",
     "what": "Awkward wrap 'that Jesus is that / very Messiah.' splits 'that very Messiah'.",
     "severity": "MINOR",
-    "status": "open"
+    "status": "fixed",
+    "fix": "\"…\"→화면 \"...\", 구절 사이 U+00A0(관리자 \"그래\")"
    },
    {
     "ori": "v",
@@ -2009,7 +2026,8 @@
     "id": "Q14",
     "what": "Awkward wrap 'receives forgiveness of / sins through his name.' splits 'forgiveness of sins'.",
     "severity": "MINOR",
-    "status": "open"
+    "status": "fixed",
+    "fix": "\"…\"→화면 \"...\", 구절 사이 U+00A0(관리자 \"그래\")"
    },
    {
     "ori": "h",
@@ -2017,7 +2035,8 @@
     "id": "N08",
     "what": "The three '/' segments are joined and re-wrapped into 2 lines with a bad break: 'From then on, Jesus said he must suffer and / be killed, and on the third day rise again.'",
     "severity": "MINOR",
-    "status": "open"
+    "status": "fixed",
+    "fix": "\"…\"→화면 \"...\", 구절 사이 U+00A0(관리자 \"그래\")"
    },
    {
     "ori": "h",
@@ -2025,7 +2044,8 @@
     "id": "N17",
     "what": "Re-wrapped with a dangling break: '“Christ” is not a last name. It is the / confession that Jesus is that very Messiah.' Better to break after 'name.'",
     "severity": "MINOR",
-    "status": "open"
+    "status": "fixed",
+    "fix": "\"…\"→화면 \"...\", 구절 사이 U+00A0(관리자 \"그래\")"
    },
    {
     "ori": "v",
@@ -2033,7 +2053,8 @@
     "id": "P1",
     "what": "The place label 'John 1 · Andrew to his brother Simon (Peter)' runs almost edge to edge (x≈55–1020 of 1080): gold, letter-spaced, on bright sky, with a reed blade crossing 'John'. Low contrast. Landscape has the same low contrast on the bright sky (t 8–13). Consider shortening or reducing the letter-spacing.",
     "severity": "MINOR",
-    "status": "open"
+    "status": "ok",
+    "why": "작은 배치 차이(관리자 그림 확정 범위)"
    },
    {
     "ori": "v",
@@ -2041,7 +2062,8 @@
     "id": "N01",
     "what": "During the opening fade-in (0–~1 s) the first line sits on the bright open-book pages and is hard to read. It clears below the book by ~1 s (same placement as the Korean).",
     "severity": "MINOR",
-    "status": "open"
+    "status": "ok",
+    "why": "작은 배치 차이(관리자 그림 확정 범위)"
    },
    {
     "ori": "h",
@@ -2049,39 +2071,34 @@
     "id": "B1",
     "what": "End-card URL line 'Bible in One Scroll · one-scroll-bible.com' is grey on the bright haze band, with the candle flame just under '.com'. Readable but weak contrast (portrait is similar).",
     "severity": "MINOR",
-    "status": "open"
+    "status": "ok",
+    "why": "작은 배치 차이(관리자 그림 확정 범위)"
    }
   ],
   "clean": "No MAJOR issues. Every sheet was read (portrait 15, landscape 15), and 12 frames were extracted at full size to check details. Nothing is clipped or runs off the frame, nothing overlaps a citation or another line, and there is no leftover Korean or tofu. Curly quotes, apostrophes and em dashes render correctly. The only glyph problem is the centered ellipsis. Every gold highlight (hl) is present and on the right words: Christ, oil, on Aaron’s head, anoint, Christ, Far be it from you, pierced, forsaken me ×2, cast lots, anointed, hanging him on a tree, raised him, through his name, Christ. The 'Christ' title (20–23 s) is centered with its underline and looks right in both orientations. End card (176–180 s): 'Key passages in this film / Matthew 16 · Isaiah 53 · Psalm 22 · Acts 10' plus the URL, centered, clear of the window and the figure. No single piece runs past 3 lines (landscape N12 and Q5 use exactly 3), and there are no orphan words. Portrait text stays left of the right-edge buttons (widest lines end at x≈950/1080). Citations sit at about 77% height, the same as the approved Korean layout. The remaining items are English line-break polish plus two low-contrast labels."
  },
  "intl_progress": {
   "_about": "국제판(10)·자막(11) 진행 상태 — 대화가 아니라 여기서 이어 간다(rules progress-in-repo). 갱신할 때마다 at을 바꾼다.",
-  "at": "2026-11-15",
+  "at": "2026-11-16",
   "done": [
    "en.json(ESV 15구절 check-quotes ok) + 영어 검수 motion/reviews/film-christ-en.md → MED 5줄 반영(관리자 \"그래 고쳐\", #52)",
    "영어판 렌더 film-en-v/h(두건 고친 그림·고친 영어 원고) — 글자 배치 확인 en_layout_check(MAJOR 0, MINOR 14)",
    "영어 해설 34줄(voice intl.voices.en, flow Zxy8bLM46T7l5JU1juuB, sessions-en.json, takes-en 68개) → place-en.json 모두 자리에 맞음 → christ-en-v/h-narr.mp4, 프롬프트 prompts.json/md",
    "번역 26개 언어 i18n/<code>.json(모두 check-quotes 15/15) + backtr-<code>.md — 지시문 i18n/CAPTIONS-BRIEF.md",
-   "원어민 검수 4묶음: pl-ru-tr-uz-id(MED 4) · zh-ja-vi-th(MED 1) · es-pt-fr-it-de(MED 4) · tl-sw-km-mn-my(MED 4) — motion/reviews/film-christ-captions-<묶음>.md"
+   "원어민 검수 4묶음: pl-ru-tr-uz-id(MED 4) · zh-ja-vi-th(MED 1) · es-pt-fr-it-de(MED 4) · tl-sw-km-mn-my(MED 4) — motion/reviews/film-christ-captions-<묶음>.md",
+   "자막 MED 17건 반영(관리자 \"그래\") → 고친 줄만 재검수 motion/reviews/film-christ-captions-rereview.md 모두 OK",
+   "영어판 글자: \"…\"을 화면에서 \"...\"로(lib-film), 구절은 U+00A0로 이음 → film-en-v/h·christ-en-v/h-narr 다시 렌더",
+   "원어민 검수 5묶음 모두 끝(ar-fa-hi-bn-ta-ne MED 3)"
   ],
-  "running": [
-   "원어민 검수 ar-fa-hi-bn-ta-ne (motion/reviews/film-christ-captions-ar-fa-hi-bn-ta-ne.md가 생기면 끝)"
-  ],
+  "running": [],
   "owner": [
    {
-    "what": "자막 원어민 검수 MED 13줄 반영 + 고친 줄만 재검수",
-    "detail": "pl·ru N09(\"말이 안 됐다\"가 \"무의미\"로 읽힘) · uz N03(기름 부어 택하신 분) · id Q9(예수 이름이 자막에 빠짐) · th N17(믿음의 고백) · es·pt-BR N20(Señor/Senhor 넣어 Q3 그대로) · es Q9(구절의 cómo부터) · de Q6·Q7 인용 번호(인쇄본 Psalm 22,2·22,19) · tl Q9(이름 들어가게 범위) · km N04·N16P(សង្ឃ=승려 → បូជាចារ្យ 제사장) · km Q9(3번째 조각) — 정확한 문구는 각 검수 파일",
-    "proposal": "모두 반영, 고친 줄만 새 검수 에이전트로"
-   },
-   {
-    "what": "영어판 화면 글자 다듬기",
-    "detail": "en_layout_check: \"…\"이 한국어 글꼴 가운뎃점으로 그려짐(라틴 글꼴로) · 줄바꿈 어색 8곳(N03 the Anointed / One, K1, N08, N12, N15(옛 문장), N17, Q14, N20(옛 문장)) · P1 표기가 밝은 하늘 위·폭 꽉 참",
-    "proposal": "낱말은 그대로 두고 / 줄 나눔·글꼴만 고쳐 영어판 다시 렌더(약 10분)"
+    "what": "자막 원어민 검수 MED 3줄 (ar-fa-hi-bn-ta-ne 묶음)",
+    "detail": "hi·bn N09 \"죽는 그리스도는 말이 안 됐다\"가 \"아무 의미 없었다\"로 읽힘(pl·ru와 같은 문제) → \"생각할 수 없는 일\" · ta Q14 자막이 동사 없이 \"…받는다고\" 로 끝남 → 같은 절 앞부분(\"모든 선지자가 증언하되\")까지 넣어 문장을 완결 — 정확한 문구는 motion/reviews/film-christ-captions-ar-fa-hi-bn-ta-ne.md",
+    "proposal": "3줄 반영 + 고친 줄 재검수"
    }
   ],
   "next": [
-   "관리자 확인된 owner 항목 반영 → 고친 줄 재검수(briefs/review-captions.md, 그 줄만)",
-   "ar-fa-hi-bn-ta-ne 검수 결과 → owner에 MED 추가",
    "es·pt-BR 해설(voices intl.voices.es / pt-BR, tasks/intl.md 3–4) — es-pt 검수 MED 반영 뒤",
    "영어 해설 받아쓰기 대조(Scribe → check-voice.mjs christ en)",
    "자막 파일 captions-on-ko.mjs christ <27개>(한국어 시각) / --timing en(국제판) → .vtt 눈 확인",

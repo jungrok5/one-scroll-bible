@@ -7,7 +7,7 @@ README 4절 "순서와 도구" 그대로. 해설 트랙 언어 = `targets.json` 
    HIGH/MED는 반영할 것·안 할 것을 정리해 관리자 확인 뒤 고친다(confirm-agent-fixes). 고친 뜻은 돌고 있는 번역 에이전트에 SendMessage로 알린다.
 2. 영어판 렌더: `node motion/render.mjs v|h --page films/{film}/film.html --lang en`(세로·가로 각 약 5분) → `py motion/films/frame-sheets.py {film}-en --video
    motion/out/film-en-v.mp4 --every 1`(가로 `{film}-en --ori h --video motion/out/film-en-h.mp4`) → 글자 배치 에이전트 `pipeline/briefs/en-layout.md` →
-   review.json `en_layout_check`. 줄 나눔(`/`)만 고치는 것은 낱말이 그대로라 재검수 없이(관리자에게 한 줄).
+   review.json `en_layout_check`. 줄 끝에서 구절이 갈리면 `/`(=자막 조각)를 늘리지 말고 U+00A0으로 잇는다 — 낱말이 그대로라 재검수 없이(관리자에게 한 줄).
 3. 해설: `node motion/films/voice-lines.mjs {film} <lang>` → `sound/voice-lines-<lang>.json`(줄 id → 읽을 글). `creative_create_flow` 하나 →
    줄마다 `creative_generate_speech`(model intl.voice_model, voice intl.voices[lang], 테이크 2개 기본) — 돌려받은 session_ids를 바로
    `sound/sessions-<lang>.json` `{ 줄: [a, b] }`에 적는다(컨텍스트가 넘어가도 남게) → `creative_get_flow_run_status`(한 번에 세션 20개까지)로 모두

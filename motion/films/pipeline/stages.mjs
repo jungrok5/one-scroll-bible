@@ -250,7 +250,9 @@ const G = {
     }
     // music as movements, not one cue per scene (SOUND.md 「메시아」에서 배운 것, 2026-11-05): few long cues that overlap ≥ 1 s, no duck on a joint.
     // The same take split in two (a softer second half, 「그리스도」 #50) is one cue to the ear — count takes, not entries
-    { const M = [...(c.cues.music || [])].sort((p, q) => p.at - q.at), mpm = new Set(M.map(q => q.file || q.id)).size / (dur / 60); if (mpm > T.sound.music_cues_per_min_max) why.push(`음악 큐 분당 ${mpm.toFixed(1)}개 > ${T.sound.music_cues_per_min_max} — 장면마다 새 큐는 컷이 된다(SOUND.md: 악장 3~4개)`);
+    { const M = [...(c.cues.music || [])].sort((p, q) => p.at - q.at), mpm = new Set(M.map(q => q.file || q.id)).size / (dur / 60), mx = c.review.music_cues_exception;
+      // over only by the maintainer's own decision after listening — review.json music_cues_exception { max, said, at } (「그리스도」 2026-11-15)
+      if (mpm > (mx?.said && mx?.max ? mx.max : T.sound.music_cues_per_min_max)) why.push(`음악 큐 분당 ${mpm.toFixed(1)}개 > ${T.sound.music_cues_per_min_max} — 장면마다 새 큐는 컷이 된다(SOUND.md: 악장 3~4개)`);
       for (let i = 1; i < M.length; i++) { const end = M[i - 1].at + M[i - 1].len, ov = end - M[i].at; if (ov > -.01 && ov < 1 && (M[i].file || M[i].id) !== (M[i - 1].file || M[i - 1].id)) why.push(`음악 ${M[i - 1].id} → ${M[i].id}: 겹침 ${ov.toFixed(1)}초 < 1초`);
         for (const d of c.cues.ducks || []) if (d.from >= M[i].at - 1 && d.from <= M[i].at + 1) why.push(`음악 이음매 ${M[i].at}초에 숨 멈춤(ducks) — 이음매가 컷으로 들린다`); } }
     // the length can change in the sound stage too (a longer take moves the end card): 「그리스도」 2026-11-15 went to 3:03 and only the

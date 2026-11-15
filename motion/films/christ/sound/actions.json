@@ -1,7 +1,7 @@
 {
  "film": "christ",
  "dur": 180,
- "made": "2026-11-14T22:01",
+ "made": "2026-11-15T00:04",
  "cover": 0.99,
  "need": 83,
  "actions": [
@@ -746,7 +746,7 @@
    "t": 113.8,
    "len": 0.7,
    "kind": "scene",
-   "what": "scene from 113.8 to 120.9",
+   "what": "scene from 113.8 to 120.4",
    "covered": true,
    "sfx": [
     "S45"
@@ -783,10 +783,10 @@
    ]
   },
   {
-   "t": 119.9,
+   "t": 119.4,
    "len": 0.7,
    "kind": "scene",
-   "what": "scene from 119.9 to 125.0",
+   "what": "scene from 119.4 to 125.0",
    "covered": true,
    "sfx": [
     "S48",
@@ -794,7 +794,7 @@
    ]
   },
   {
-   "t": 119.9,
+   "t": 119.4,
    "len": 5.1,
    "kind": "act",
    "what": "the courtyard: many people seated, a hush",
@@ -805,7 +805,7 @@
    ]
   },
   {
-   "t": 120.2,
+   "t": 119.7,
    "len": 4.5,
    "kind": "act",
    "what": "dust turning in the low sun through the gate",

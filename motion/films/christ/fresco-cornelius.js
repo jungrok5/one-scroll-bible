@@ -1,4 +1,5 @@
-/* fresco-cornelius.js — 「그리스도」 N20 (film 119.9–125.0 s, u = 0..5.1): "'그리 마옵소서' 하던 베드로가 / 훗날 사람들 앞에서 전한 말."
+/* fresco-cornelius.js — 「그리스도」 N20 (film 119.4–125.0 s, u = 0..5.6): "'그리 마옵소서' 하던 베드로가 / 부활하신 예수님을 만난 뒤 전한 말."
+   (2026-11-15 아내 #46 "왜 바뀌었나": 문장이 0.5초 길어져 0.5초 일찍 시작)
    Acts 10:24–27 ("여러 사람이 모인 것을 보고"). 7차 (관리자 2026-11-14: 고넬료의 집 같은 장면은 성경을 모르면 이해가 안 된다 — 그림만 보고
    알 수 있게): no Roman room, no painted walls. One thing must read in a second on a phone: THAT MAN — the Peter of part 3 — now stands
    before many people and tells them. The courtyard of a house: plain plastered stone walls (plaster fallen here and there to the stone

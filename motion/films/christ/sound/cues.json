@@ -431,7 +431,7 @@
   },
   {
    "id": "S48",
-   "at": 119.9,
+   "at": 119.4,
    "len": 5.1,
    "db": 2,
    "fin": 1,
@@ -440,7 +440,7 @@
   {
    "id": "S49",
    "file": "motion/films/christ/sound/audio/S49lp.mp3",
-   "at": 120.2,
+   "at": 119.7,
    "len": 4.5,
    "db": -0.5,
    "fout": 0.4

@@ -109,5 +109,6 @@
 | S66 | add_flow_node:sfx | eleven_text_to_sound_v2 | 5 | Morning sunlight filling a quiet room: a slow warm swell of air, birdsong outside the window a little brighter, peaceful |
 | Q13 | speech | eleven_v4 |  | 주는 그리스도시요 살아 계신 하나님의 아들이시니이다 |
 | S67 | in_flow:sfx | eleven_text_to_sound_v2 |  | Fine pen drawing one slow straight line across thick paper from left to right, a soft continuous dry scratch that starts gently and slows at the end, very close and quiet, no shimmer, no music |
+| N20 | speech | eleven_v4 |  | '그리 마옵소서' 하던 베드로가 부활하신 예수님을 만난 뒤 전한 말. |
 | S68 | reuse:sfx | eleven_text_to_sound_v2 | 8.6 | Fine pen gliding smoothly on thick textured paper, continuous soft scratch that speeds up and slows down, very close and quiet |
 | S68e | reuse:sfx | eleven_text_to_sound_v2 | 8.6 | Fine pen gliding smoothly on thick textured paper, continuous soft scratch that speeds up and slows down, very close and quiet |

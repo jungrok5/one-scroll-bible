@@ -2256,6 +2256,25 @@
    "name": "S67"
   },
   {
+   "use": "toolu_01XUeiurjFWjj4kbQMJBtLu7",
+   "time": "2026-11-14T23:56:30.533Z",
+   "flow": "Zbs7p9CGD1RBI4UPlT7n",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "'그리 마옵소서' 하던 베드로가 부활하신 예수님을 만난 뒤 전한 말.",
+   "params": {
+    "voice_id": "HYALOqtTLlRjxo4uBKeg"
+   },
+   "why": "",
+   "node": "6epg55cO37QSJhITcUCu",
+   "sessions": [
+    "gvvsYeIt0mI8YEi0Ka04",
+    "lHRlxe36a2dgl1GrEzK9"
+   ],
+   "name": "N20"
+  },
+  {
    "use": "reuse-S68",
    "time": "2026-11-15T07:00:00.000Z",
    "flow": "OgUGYxH0WVBynNZ3pqFq",

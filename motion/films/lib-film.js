@@ -81,7 +81,9 @@
   // portrait: a narration with '/' pieces is shown piece by piece (each one or two big lines), its time shared by length
   F.pieces = (txt, a, b) => { const segs = String(txt).split(/\s*\/\s*/).filter(Boolean), w = segs.map(s => P.chars(s).length + 6), tw = w.reduce((x, y) => x + y, 0);
     let acc = a; return segs.map((s, i) => { const d = (b - a) * w[i] / tw, r = [s, acc, acc + d, i, segs.length]; acc += d; return r; }); };
-  F.sub = (ctx, id, t, a, b, o = {}) => {
+  // ?clean=1 (RENDER_QUERY=clean=1): pictures only — thumbnail frames for every film (was only in silence400's page, 2026-11-16)
+  F.clean = typeof location !== 'undefined' && /[?&]clean=1/.test(location.search);
+  F.sub = (ctx, id, t, a, b, o = {}) => { if (F.clean) return;
     const txt0 = o.text != null ? o.text : F.text(id);
     if (P.ori === 'v' && !o.whole && o.y == null && /\//.test(txt0)) { for (const [s, a1, b1, i, n] of F.pieces(txt0, a, b)) if (t >= a1 - .1 && t <= b1 + .1)
       F.sub(ctx, id, t, a1, b1, { ...o, text: s, whole: true, fi: i ? .35 : o.fi, fo: i < n - 1 ? .35 : o.fo, still: i > 0 }); return; }
@@ -96,7 +98,7 @@
     F.block(ctx, lines, o.y != null ? P.W / 2 : F.cx(), y, { size, weight: 600, alpha: k, color: o.color || '#f3ece0', shadow: 'rgba(0,0,0,.85)', shadowBlur: 22, lh: 1.55 });
   };
   // a verse on screen: the text (that language's Bible, verbatim) with its reference under it
-  F.quote = (ctx, id, t, a, b, o = {}) => {
+  F.quote = (ctx, id, t, a, b, o = {}) => { if (F.clean) return;
     const txt0 = o.text != null ? o.text : F.text(id);
     // o.cuts: the times each later piece takes over (from the voice — a piece turns when its words are spoken), else shared by length
     const byCuts = (segs => o.cuts ? segs.map((s, i) => [s, i ? o.cuts[i - 1] : a, i < segs.length - 1 ? o.cuts[i] : b, i, segs.length]) : null)(String(txt0).split(/\s*\/\s*/).filter(Boolean));
@@ -117,7 +119,7 @@
       color: o.citeColor || '#d9b56a', alpha: k * .95, shadow: o.citeShadow || 'rgba(0,0,0,.9)', shadowBlur: 12 });
   };
   // a section label (on screen only): small, tracked, gold, at the top — clear of the phone UI
-  F.label = (ctx, id, t, a, b) => { const k = P.win(t, a, b, .8, .8); if (k <= 0) return;
+  F.label = (ctx, id, t, a, b) => { if (F.clean) return; const k = P.win(t, a, b, .8, .8); if (k <= 0) return;
     P.text(ctx, F.text(id), P.W / 2, P.ori === 'v' ? 226 : 66, { size: P.ori === 'v' ? 38 : 34, weight: 600, color: '#e9c77a', alpha: k * .95, ls: 4, shadow: 'rgba(0,0,0,.9)', shadowBlur: 14 }); };
   window.Film = F;
 })();

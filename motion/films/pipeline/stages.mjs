@@ -62,7 +62,9 @@ const G = {
     return why.length ? { ok: false, why } : pass(); },
   // the 3-minute budget in spoken syllables (script-stats.mjs; 관리자 2026-11-07 "640음절로 줄임")
   budget: c => { if (!c.s) return fail('script.json이 없다'); const s = stats(c, { noAudio: true }); if (!s) return fail('script-stats 실패');
-    if (s.syllables > T.script.syllables_max) return fail(`해설 ${s.syllables}음절 > ${T.script.syllables_max}(≈${s.est_sec}초, 「침묵의 400년」 속도) — 목소리 줄을 줄이거나 화면 전용으로`);
+    // a film may go over only by the maintainer's own decision, written in review.json budget_exception { max, said, at, why } (「그리스도」 2026-11-15: 642)
+    const bx = c.review.budget_exception, max = bx?.max && bx?.said ? bx.max : T.script.syllables_max;
+    if (s.syllables > max) return fail(`해설 ${s.syllables}음절 > ${max}(≈${s.est_sec}초, 「침묵의 400년」 속도) — 목소리 줄을 줄이거나 화면 전용으로${bx ? '' : ' (넘겨야 하면 관리자 결정을 review.json budget_exception에)'}`);
     // draft timing (before the voice exists): a line's syllables over the time until the next voiced line, and the end card's hold
     const why = [], sp = l => (l.kind === 'narr' || l.kind === 'quote') && l.voice !== null ? (l.voice ?? l.text) : null, n = t => (t.match(/[가-힣]/g) || []).length;
     const V = c.lines.filter(l => sp(l) != null && l.at != null).sort((a, b) => a.at - b.at), cardAt = Math.max(...c.lines.map(l => l.at ?? 0)), dur = c.s.dur ?? cardAt;

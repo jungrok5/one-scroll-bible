@@ -19,7 +19,8 @@ const inp = [], parts = [];
 C.music.forEach((c, i) => {
   inp.push('-i', c.file ? join(ROOT, c.file) : join(S, 'audio', c.id + '.mp3'));
   const len = c.len ? `:duration=${c.len}` : '';
-  parts.push(`[${i}:a]aresample=${R},aformat=channel_layouts=mono,atrim=start=${c.off || 0}${len},asetpts=PTS-STARTPTS,afade=t=in:d=${c.fin || .01},areverse,afade=t=in:d=${c.fout || .01},areverse,volume=${c.db || 0}dB,adelay=${Math.round(c.at * 1000)}:all=1[c${i}]`);
+  const B = C.bus || {}, lp = c.lp ?? B.music_lp;   // as sound.mjs lays it ("bus", 「그리스도」 #50)
+  parts.push(`[${i}:a]aresample=${R},aformat=channel_layouts=mono,atrim=start=${c.off || 0}${len},asetpts=PTS-STARTPTS,afade=t=in:d=${c.fin || .01},areverse,afade=t=in:d=${c.fout || .01},areverse,${lp && lp < R * .45 ? `lowpass=f=${lp},` : ''}volume=${(c.db || 0) + (B.music_db || 0)}dB,adelay=${Math.round(c.at * 1000)}:all=1[c${i}]`);
 });
 const fc = parts.join(';') + ';' + C.music.map((_, i) => `[c${i}]`).join('') + `amix=inputs=${C.music.length}:normalize=0,apad,atrim=end=${D}[o]`;
 const r = spawnSync('ffmpeg', ['-v', 'error', ...inp, '-filter_complex', fc, '-map', '[o]', '-ar', String(R), '-f', 'f32le', '-'], { maxBuffer: 1 << 28 });

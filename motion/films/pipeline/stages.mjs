@@ -231,12 +231,29 @@ const G = {
     const sfx = c.cues.sfx || [], dur = c.place.dur || 180, perMin = sfx.length / (dur / 60); if (perMin < T.sound.sfx_per_min_min) why.push(`효과음 분당 ${perMin.toFixed(1)}개 < ${T.sound.sfx_per_min_min} (SOUND.md — 화면 동작마다 소리)`);
     // harsh highs (관리자 2026-11-05 「메시아」 S9 제비 소리: "끼긱끼긱 날카로운 불편한 소리, 칠판 긁는 소리 같은"): an effect whose energy above
     // 3.5 kHz is high reads as a screech on a phone speaker — the first film's effects sit under −30 dB there
+    // (until 2026-11-15 the pattern read [d.] and never matched — the gate was silent; now with the cues.json "bus" and a cue's own lowpass)
+    const BUS = c.cues.bus || {};
     for (const q of sfx) { const fp = q.file ? join(ROOT, q.file) : join(sd, 'audio', q.id + '.mp3'); if (!existsSync(fp)) continue;
-      const r = spawnSync('ffmpeg', ['-hide_banner', '-nostats', '-i', fp, '-af', 'highpass=f=3500,volumedetect', '-f', 'null', '-'], { encoding: 'utf8' }), m = (r.stderr || '').match(/mean_volume: (-?[d.]+)/);
-      if (m && +m[1] + (q.db || 0) > T.sound.harsh_hf_max) why.push(`효과음 ${q.id}: 3.5 kHz 위 ${(+m[1] + (q.db || 0)).toFixed(1)} dB > ${T.sound.harsh_hf_max} — 휴대폰에서 날카롭게 들린다(새소리·긁는 소리를 로우패스하거나 바꾼다)`); }
-    // music as movements, not one cue per scene (SOUND.md 「메시아」에서 배운 것, 2026-11-05): few long cues that overlap ≥ 1 s, no duck on a joint
-    { const M = [...(c.cues.music || [])].sort((p, q) => p.at - q.at), mpm = M.length / (dur / 60); if (mpm > T.sound.music_cues_per_min_max) why.push(`음악 큐 분당 ${mpm.toFixed(1)}개 > ${T.sound.music_cues_per_min_max} — 장면마다 새 큐는 컷이 된다(SOUND.md: 악장 3~4개)`);
-      for (let i = 1; i < M.length; i++) { const end = M[i - 1].at + M[i - 1].len, ov = end - M[i].at; if (ov > -.01 && ov < 1) why.push(`음악 ${M[i - 1].id} → ${M[i].id}: 겹침 ${ov.toFixed(1)}초 < 1초`);
+      const lp = q.lp ?? BUS.sfx_lp, g = (q.db || 0) + (BUS.sfx_db || 0);
+      const r = spawnSync('ffmpeg', ['-hide_banner', '-nostats', '-i', fp, '-af', `${lp ? `lowpass=f=${lp},` : ''}highpass=f=3500,volumedetect`, '-f', 'null', '-'], { encoding: 'utf8' }), m = (r.stderr || '').match(/mean_volume: (-?[\d.]+)/);
+      if (m && +m[1] + g > T.sound.harsh_hf_max) why.push(`효과음 ${q.id}: 3.5 kHz 위 ${(+m[1] + g).toFixed(1)} dB > ${T.sound.harsh_hf_max} — 휴대폰에서 날카롭게 들린다(새소리·긁는 소리를 로우패스하거나 바꾼다)`); }
+    // soft and warm like the first film (관리자 2026-11-15 「그리스도」 #50 "부드럽고 따뜻한 느낌 — 고저차, 날카로운 효과음"): sfx-stick.mjs measures
+    // how far the effects stand out of the music and how bright they are, against the first film's 146 effects
+    { const r = node([join(FILMS, 'sfx-stick.mjs'), c.film, '--json']), m = r.status ? null : JSON.parse((r.stdout || '').trim().split('\n').pop() || 'null');
+      if (!m) why.push('sfx-stick.mjs 실패 — ' + (r.stderr || '').slice(0, 200));
+      else { if (m.stick[0] > m.first.stick[0] + T.sound.sfx_stick_over_first_db) why.push(`효과음이 음악보다 ${m.stick[0]} dB 앞(가운데값) — 첫 영상 ${m.first.stick[0]} dB보다 ${T.sound.sfx_stick_over_first_db} dB 넘게 튄다(#50): cues.json bus.sfx_db로 내린다`);
+        if (m.stick[1] > m.first.stick[1] + T.sound.sfx_stick_over_first_db) why.push(`튀는 효과음(상위 10%) ${m.stick[1]} dB > 첫 영상 ${m.first.stick[1]} + ${T.sound.sfx_stick_over_first_db}(#50)`);
+        if (m.sharp[0] > m.first.sharp[0] + T.sound.sfx_sharp_over_first_db) why.push(`효과음 3 kHz 위(가운데값) ${m.sharp[0]} dB — 첫 영상 ${m.first.sharp[0]} dB보다 날카롭다(#50): bus.sfx_lp · 큐 lp`);
+        if (m.sharp[1] > m.first.sharp[1] + T.sound.sfx_sharp_over_first_db) why.push(`날카로운 효과음(상위 10%) ${m.sharp[1]} dB > 첫 영상 ${m.first.sharp[1]} + ${T.sound.sfx_sharp_over_first_db}(#50)`); }
+      // and the finished narrated mix: brightness and sharp transients against the first film's Shorts (mix-soft.mjs)
+      const mix = join(ROOT, 'motion', 'out', c.film + '-narr.wav');
+      if (existsSync(mix)) { const s = node([join(FILMS, 'mix-soft.mjs'), mix, '--json']), v = s.status ? null : JSON.parse((s.stdout || '').trim() || 'null')?.[0];
+        if (v && v.air > T.sound.mix_air_max_db) why.push(`섞은 소리 고음(4 kHz 위) ${v.air} dB > ${T.sound.mix_air_max_db} — 첫 영상보다 밝고 차갑다(#50): bus.music_lp · sfx_lp`);
+        if (v && v.bite > T.sound.mix_bite_max_db) why.push(`섞은 소리 날카로운 순간 ${v.bite} dB > ${T.sound.mix_bite_max_db}(#50)`); } }
+    // music as movements, not one cue per scene (SOUND.md 「메시아」에서 배운 것, 2026-11-05): few long cues that overlap ≥ 1 s, no duck on a joint.
+    // The same take split in two (a softer second half, 「그리스도」 #50) is one cue to the ear — count takes, not entries
+    { const M = [...(c.cues.music || [])].sort((p, q) => p.at - q.at), mpm = new Set(M.map(q => q.file || q.id)).size / (dur / 60); if (mpm > T.sound.music_cues_per_min_max) why.push(`음악 큐 분당 ${mpm.toFixed(1)}개 > ${T.sound.music_cues_per_min_max} — 장면마다 새 큐는 컷이 된다(SOUND.md: 악장 3~4개)`);
+      for (let i = 1; i < M.length; i++) { const end = M[i - 1].at + M[i - 1].len, ov = end - M[i].at; if (ov > -.01 && ov < 1 && (M[i].file || M[i].id) !== (M[i - 1].file || M[i - 1].id)) why.push(`음악 ${M[i - 1].id} → ${M[i].id}: 겹침 ${ov.toFixed(1)}초 < 1초`);
         for (const d of c.cues.ducks || []) if (d.from >= M[i].at - 1 && d.from <= M[i].at + 1) why.push(`음악 이음매 ${M[i].at}초에 숨 멈춤(ducks) — 이음매가 컷으로 들린다`); } }
     // the length can change in the sound stage too (a longer take moves the end card): 「그리스도」 2026-11-15 went to 3:03 and only the
     // picture gate knew (관리자 #47 "3분 넘으면 안 되잖아") — check it here as well

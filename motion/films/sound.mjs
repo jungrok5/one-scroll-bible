@@ -73,8 +73,11 @@ info.forEach((x, i) => { const n = info[i + 1], end = x.at + x.dur; if (n && end
   // viewers on TV, 2026-10-31) and the words are already drawn at the bottom of the picture — bottom captions would sit on them
   writeFileSync(join(S, cap + '.vtt'), 'WEBVTT\n\n' + subs.map(s => `${ts(s.a).replace(',', '.')} --> ${ts(s.b).replace(',', '.')} line:6% position:50% align:center\n${txt(s.id)}\n`).join('\n')); }
 const voice = join(OUT, tag + '-voice.wav');
+// cues.json bus.voice_deess (0–1) · voice_treble_db at voice_treble_hz: the narrator's sibilants softened (「그리스도」 #50 "부드럽고 따뜻한 느낌" —
+// the voice carried most of the mix's energy above 4 kHz: −22.7 dB against the first film's whole Shorts at −26.8)
+const VB = C.bus || {}, vsoft = (VB.voice_deess ? `,deesser=i=${VB.voice_deess}` : '') + (VB.voice_treble_db ? `,treble=g=${VB.voice_treble_db}:f=${VB.voice_treble_hz || 5500}` : '');
 writeFileSync(join(T, 'voice-fc.txt'), info.map((x, i) => `[${i}:a]volume=${x.gain.toFixed(2)}dB,adelay=${Math.round(x.at * 1000)}:all=1[a${i}]`).join(';') +
-  `;${info.map((_, i) => `[a${i}]`).join('')}amix=inputs=${info.length}:normalize=0:dropout_transition=0,apad,atrim=end=${D}[v]`);
+  `;${info.map((_, i) => `[a${i}]`).join('')}amix=inputs=${info.length}:normalize=0:dropout_transition=0,apad,atrim=end=${D}${vsoft}[v]`);
 ff([...info.flatMap(x => ['-i', join(T, x.id + '.wav')]), '-filter_complex_script', join(T, 'voice-fc.txt'), '-map', '[v]', '-ac', '2', '-ar', '48000', voice]);
 
 // 2. the bed (music + effects), then the two mixes
@@ -87,7 +90,10 @@ cues.forEach((c, i) => {
   // cues.json "ducks": [{ from, to, db, ramp }] — a breath of silence before a beat, as in the first film (pilot/mix.py): every cue
   // that started before `from` is pulled down to `db` over `ramp` s and stays down until `to`; cues that start later are untouched
   const dk = (C.ducks || []).filter(d => c.at < d.from).map(d => `(1-${(1 - 10 ** (d.db / 20)).toFixed(4)}*clip((t-${d.from})/${d.ramp || .3},0,1)*lt(t,${d.to}))`);
-  parts.push(`[${i}:a]aresample=48000,aformat=channel_layouts=stereo,${len}${fin}${fout}volume=${c.db}dB,adelay=${Math.round(c.at * 1000)}:all=1${dk.length ? `,volume='${dk.join('*')}':eval=frame` : ''}[c${i}]`);
+  // cues.json "bus": { sfx_db, sfx_lp, music_db, music_lp } — one softening for the whole layer, a cue's own "lp" (Hz) wins
+  // (「그리스도」 #50 "부드럽고 따뜻한 느낌, 날카로운 효과음": the effects sat ~7 dB further forward and brighter than the first film's)
+  const sfx = i >= C.music.length, B = C.bus || {}, lp = c.lp ?? (sfx ? B.sfx_lp : B.music_lp), g = c.db + ((sfx ? B.sfx_db : B.music_db) || 0);
+  parts.push(`[${i}:a]aresample=48000,aformat=channel_layouts=stereo,${len}${fin}${fout}${lp ? `lowpass=f=${lp},` : ''}volume=${g}dB,adelay=${Math.round(c.at * 1000)}:all=1${dk.length ? `,volume='${dk.join('*')}':eval=frame` : ''}[c${i}]`);
 });
 const fc = [...parts, `${cues.map((_, i) => `[c${i}]`).join('')}amix=inputs=${cues.length}:normalize=0:dropout_transition=0,apad,atrim=end=${D}[bed]`,
   `[${cues.length}:a]aresample=48000,aformat=channel_layouts=stereo,asplit=3[v][k1][k2]`, `[bed]asplit=2[bd][bs]`,

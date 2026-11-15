@@ -1135,11 +1135,11 @@
   }
  },
  "christ": {
-  "note": "「그리스도」 한국어 채널(motion/films/christ/upload.md · youtube.json). 2026-11-16 비공개 업로드(스튜디오 studio-upload.js) — 공개는 관리자 \"공개일은 완료되면 바로할꺼야\"",
+  "note": "「그리스도」 한국어 채널(motion/films/christ/upload.md · youtube.json). 2026-11-16 비공개 업로드(스튜디오 studio-upload.js) — 공개는 관리자 \"공개일은 완료되면 바로할꺼야\" · 2026-11-16 일부 공개(관리자 \"아내한테도 링크줘서 검토해보게\")",
   "h": {
    "id": "WGNt76MeLws",
    "file": "christ-h-narr.mp4",
-   "privacy": "private",
+   "privacy": "unlisted",
    "uploaded": "2026-11-16",
    "captions": [
     "ar",
@@ -1180,7 +1180,7 @@
   "v": {
    "id": "BdLn4e40GH4",
    "file": "christ-v-narr.mp4",
-   "privacy": "private",
+   "privacy": "unlisted",
    "uploaded": "2026-11-16",
    "note": "179.9 s 다시 묶음(180.0 s는 AAC 때문에 3:01로 잡혀 쇼츠가 아님)",
    "captions": [

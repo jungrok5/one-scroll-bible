@@ -20,6 +20,9 @@
    Portrait: Peter's whole upper body and every head above F.SAFE (0.64 H); the backs of the front row run down under the words.
    (round 8: Peter's face in shade, found by a few soft value shapes of the gate's light — temple, cheekbone, brow, nose — the beard
    melting into it; his robe tapers from the shoulders to a sash, folds catch the sun, the held-out arm's sleeve hangs.)
+   The look's engine (the camera in metres, plaster, flagstones, the gateway burnt out by the sun, the pool and its shadows, the shaft,
+   the dust, soft light on figures, the grade) is the kit fresco (kit-fresco.js = motion-skills canvas-film/kits/fresco/kit.js, global
+   FRESCO); this file keeps the courtyard's props, the men, Peter and the camera. Load after kit-fresco.js.
    No words are drawn. Closed form: corneliusFresco(ctx, u) depends only on u. API: await buildCorneliusFresco() · corneliusFresco(ctx, u) */
 const CFR = {};
 const PETER_D = 4.3;   // Peter's depth (also the dust's focus)
@@ -29,31 +32,10 @@ const CF = { F: 1000, E: 1.55, YH: 700, CX: 540, DW: 6.5, XL: -3.9, XR: 2.8,
   tanE: .32, hx: .7, hz: .714,                     // the sun: low (tan of its height), travelling right (hx) and toward us (hz)
   OX: 900, OY: 300, RW: 3000, RH: 2100,            // the room plate: world x -900..2100, y -300..1800
   PX: -620, PY: 330, PWW: 2400, PHH: 1500 };       // the people's plates: world x -620.., y 330..
-const cfP = (X, Y, D) => [CF.CX + CF.F * X / D, CF.YH + CF.F * (CF.E - Y) / D];
-const cfSun = (X, Y, D) => { const t = Y / CF.tanE; return [X + t * CF.hx, D - t * CF.hz]; };   // where the sun through (X, Y, D) lands on the floor
-const cfArchY = X => { const c = (CF.G0 + CF.G1) / 2, r = (CF.G1 - CF.G0) / 2, d = Math.abs(X - c); return d >= r ? CF.GS : CF.GS + (CF.GH - CF.GS) * Math.sqrt(1 - (d / r) ** 2); };
-const CF_AP = (() => { const a = [[CF.G0, 0]]; for (let i = 0; i <= 16; i++) { const X = CF.G0 + (CF.G1 - CF.G0) * i / 16; a.push([X, cfArchY(X)]); } a.push([CF.G1, 0]); return a; })();   // the opening's outline (X, Y)
-const cfCirc = (cx, cy, rx, ry, n = 14, rot = 0) => Array.from({ length: n }, (_, i) => { const a = i / n * 6.283, x = Math.cos(a) * rx, y = Math.sin(a) * ry; return [cx + x * Math.cos(rot) - y * Math.sin(rot), cy + x * Math.sin(rot) + y * Math.cos(rot)]; });
-function cfCaps(a, b, w0, w1, n = 5) {   // a capsule from a to b as a polygon
-  const ang = Math.atan2(b[1] - a[1], b[0] - a[0]), pts = [];
-  for (let i = 0; i <= n; i++) { const t = ang - Math.PI / 2 + Math.PI * i / n; pts.push([b[0] + Math.cos(t) * w1, b[1] + Math.sin(t) * w1]); }
-  for (let i = 0; i <= n; i++) { const t = ang + Math.PI / 2 + Math.PI * i / n; pts.push([a[0] + Math.cos(t) * w0, a[1] + Math.sin(t) * w0]); }
-  return pts;
-}
-function cfIK(s, t, a, b, bend) {
-  const dx = t[0] - s[0], dy = t[1] - s[1], dd = Math.hypot(dx, dy), d = Math.min(a + b - 1e-4, Math.max(Math.abs(a - b) + 1e-4, dd)), ang = Math.atan2(dy, dx);
-  const c = (a * a + d * d - b * b) / (2 * a * d), e = ang + bend * Math.acos(Math.max(-1, Math.min(1, c)));
-  const el = [s[0] + Math.cos(e) * a, s[1] + Math.sin(e) * a], k = d / (dd || 1); return { el, wr: [s[0] + dx * k, s[1] + dy * k] };
-}
-function cfClipD(poly, dmin) {   // a floor polygon [X, D] cut at D >= dmin (nearer than that is under the camera)
-  const out = []; for (let i = 0; i < poly.length; i++) { const a = poly[i], b = poly[(i + 1) % poly.length], ia = a[1] >= dmin, ib = b[1] >= dmin;
-    if (ia) out.push(a); if (ia !== ib) { const t = (dmin - a[1]) / (b[1] - a[1]); out.push([a[0] + (b[0] - a[0]) * t, dmin]); } } return out;
-}
-function cfAdder(P, f, q) {   // adds a closed rounded polygon (unit coords, mirrored by f) to the silhouette q and to any parts
-  return (pts, ...to) => { pts = pts.map(([x, y]) => P(x * f, y)); let a = 0; for (let i = 0; i < pts.length; i++) { const [x0, y0] = pts[i], [x1, y1] = pts[(i + 1) % pts.length]; a += x0 * y1 - x1 * y0; } if (a < 0) pts.reverse();
-    const n = pts.length, m = i => [(pts[i][0] + pts[(i + 1) % n][0]) / 2, (pts[i][1] + pts[(i + 1) % n][1]) / 2];
-    for (const t of [q, ...to]) { t.moveTo(...m(n - 1)); for (let i = 0; i < n; i++) t.quadraticCurveTo(pts[i][0], pts[i][1], ...m(i)); t.closePath(); } };
-}
+// the camera, the gateway and the sun through it, and the soft shapes the figures are built of: kit-fresco.js (FRESCO)
+const CFC = FRESCO.court(CF);
+const cfP = CFC.P, cfSun = CFC.sun, cfArchY = CFC.archY, CF_AP = CFC.AP;
+const { circ: cfCirc, caps: cfCaps, ik: cfIK, adder: cfAdder } = FRESCO;
 // an arm: the upper sleeve, the forearm's sleeve flaring a little to its cuff, the hand coming out of it shaped (wrist, palm, tapering
 // fingers, the thumb on its inner side) — never a log and a lump (관점 검수 6차)
 function cfArm(add, pt, sh, tg, bend, palmUp) {
@@ -191,55 +173,23 @@ function cfBack(P, o) {
 
 async function buildCorneliusFresco() {
   const { clamp, lerp, rng, canvas, noise, hex } = Pilot, { OX, OY, RW, RH, XL, XR, DW, G0, G1, GS, GH } = CF;
-  const poly = (g, pts) => { if (g.beginPath) g.beginPath(); pts.forEach((p, i) => i ? g.lineTo(p[0], p[1]) : g.moveTo(p[0], p[1])); g.closePath(); };
+  const poly = FRESCO.poly;
   const Wb = (X, Y) => cfP(X, Y, DW);   // a point on the back wall
-  const hull = pts => { const p = pts.slice().sort((a, b) => a[0] - b[0] || a[1] - b[1]), cr = (o, a, b) => (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0]), lo = [], hi = [];
-    for (const x of p) { while (lo.length > 1 && cr(lo[lo.length - 2], lo[lo.length - 1], x) <= 0) lo.pop(); lo.push(x); }
-    for (const x of p.reverse()) { while (hi.length > 1 && cr(hi[hi.length - 2], hi[hi.length - 1], x) <= 0) hi.pop(); hi.push(x); } return lo.slice(0, -1).concat(hi.slice(0, -1)); };
-  // the sun's pool on the floor: the opening's outline laid on the flagstones, cut where it passes under the camera
-  const footXD = cfClipD(CF_AP.map(([X, Y]) => cfSun(X, Y, DW)), .8), poolW = footXD.map(([X, D]) => cfP(X, 0, D)), apW = CF_AP.map(([X, Y]) => Wb(X, Y));
-  // the beam's section at depth D (the figures standing there are clipped to it): the opening moved along the sun to D
-  const beamAt = D => { const t = (DW - D) / CF.hz, ox = t * CF.hx, dy = t * CF.tanE; return CF_AP.map(([X, Y]) => cfP(X + ox, Y - dy, D)); };
 
   // ---------------- the courtyard's colours (albedo) ----------------
   const room = canvas(RW, RH); let g = room.getContext('2d'); g.translate(OX, OY);
-  const floorPoly = [cfP(XL, 0, DW), cfP(XR, 0, DW), cfP(XR, 0, .7), cfP(XL, 0, .7)];
-  const drawFloor = (x, seed = 12) => {   // flagstones: limestone slabs laid by hand in rows, earth in the joints, worn and mottled
-    x.save(); poly(x, floorPoly); x.clip(); x.fillStyle = '#6a5644'; x.fill();
-    const r = rng(seed); let D = DW;
-    while (D > .75) { const dd = .42 + .26 * r(), D1 = Math.max(.7, D - dd); let X = XL - r() * .5;
-      while (X < XR) { const ww = .45 + .55 * r(), j = () => (r() - .5) * .07, g0 = .014, g1 = .012;
-        const pts = [[X + g0 + j(), D - g1], [X + ww - g0 + j(), D - g1], [X + ww - g0 + j(), D1 + g1], [X + g0 + j(), D1 + g1]].map(([a, b]) => cfP(a, 0, b));
-        const v = .86 + .22 * r(), c = [162 * v, 140 * v, 110 * v]; x.fillStyle = `rgb(${c[0] | 0},${c[1] | 0},${c[2] | 0})`; poly(x, pts); x.fill();
-        const cx = (pts[0][0] + pts[2][0]) / 2, cy = (pts[0][1] + pts[2][1]) / 2, R = Math.abs(pts[1][0] - pts[0][0]) * .5;   // a worn hollow / a stain
-        if (R > 2) { const gr = x.createRadialGradient(cx, cy, 0, cx, cy, R); gr.addColorStop(0, r() < .5 ? 'rgba(200,176,140,.22)' : 'rgba(70,52,36,.2)'); gr.addColorStop(1, 'rgba(0,0,0,0)'); x.fillStyle = gr; x.fillRect(cx - R, cy - R, 2 * R, 2 * R); }
-        X += ww; }
-      D = D1; }
-    x.restore(); };
+  const drawFloor = (x, seed = 12) => FRESCO.flagstones(x, cfP, { XL, XR, DW, near: .7, seed });   // flagstones: limestone slabs laid by hand in rows, earth in the joints, worn and mottled
   drawFloor(g);
-  // walls: plaster over stone, a damp grime at the foot, the plaster fallen here and there to the courses beneath
-  const plaster = (pts, base, seed, wallMap, plain) => {
-    g.save(); poly(g, pts); g.clip(); g.fillStyle = base; g.fill();
-    const r = rng(seed);
-    for (let i = 0; i < (plain ? 0 : 7); i++) {   // patches of bare stone (side walls only: on the back wall they read as blots)
-      const X0 = lerp(-4, 3, r()), Y0 = lerp(.3, 5.5, r()), rw = .3 + .45 * r(), rh = .25 + .3 * r();
-      if ((X0 > G0 - .6 && X0 < G1 + .6 && Y0 < GH + .5) || (X0 > -1.9 && X0 < 1.7)) continue;   // never round the gate, never behind Peter
-      const blob = Array.from({ length: 22 }, (_, k) => { const a = k / 22 * 6.283, rr = .7 + .35 * r(); return wallMap(X0 + Math.cos(a) * rw * rr, Y0 + Math.sin(a) * rh * rr); });
-      g.save(); g.globalAlpha = .5; poly(g, blob); g.clip(); g.fillStyle = '#7a6650'; g.fill();
-      for (let Y = Math.floor((Y0 - rh - .4) / .3) * .3; Y < Y0 + rh + .4; Y += .3) { let X = X0 - rw - .5 + (Math.round(Y / .3) % 2) * .3;
-        while (X < X0 + rw + .5) { const L = .45 + .45 * r(), v = .82 + .26 * r(); g.fillStyle = `rgb(${150 * v | 0},${128 * v | 0},${100 * v | 0})`; poly(g, [wallMap(X + .02, Y + .02), wallMap(X + L - .02, Y + .02), wallMap(X + L - .02, Y + .28), wallMap(X + .02, Y + .28)]); g.fill(); X += L; } }
-      g.restore();
-    }
-    for (let i = 0; i < 90; i++) { const [x, y] = wallMap(lerp(-4, 3, r()), lerp(0, 7, r())), R = 30 + 110 * r(), gr = g.createRadialGradient(x, y, 0, x, y, R);   // mottling
-      gr.addColorStop(0, r() < .55 ? `rgba(214,196,166,${.08 + .1 * r()})` : `rgba(80,62,46,${.06 + .08 * r()})`); gr.addColorStop(1, 'rgba(0,0,0,0)'); g.fillStyle = gr; g.fillRect(x - R, y - R, 2 * R, 2 * R); }
-    g.restore(); };
+  // walls: plaster over stone, a damp grime at the foot, the plaster fallen here and there to the courses beneath (FRESCO.plaster)
+  const plaster = (pts, base, seed, wallMap, plain) => FRESCO.plaster(g, pts, base, seed, wallMap, { patches: plain ? 0 : 7,   // patches of bare stone (side walls only: on the back wall they read as blots)
+    avoid: (X0, Y0) => (X0 > G0 - .6 && X0 < G1 + .6 && Y0 < GH + .5) || (X0 > -1.9 && X0 < 1.7) });   // never round the gate, never behind Peter
   // the side walls (landscape sees them), then the back wall
   plaster([cfP(XR, 0, DW), cfP(XR, 0, 1), cfP(XR, 9, 1), cfP(XR, 9, DW)], '#a28a70', 31, (X, Y) => cfP(XR, Y, lerp(DW, 1.6, (X + 4) / 7)));
   plaster([cfP(XL, 0, DW), cfP(XL, 0, 1), cfP(XL, 9, 1), cfP(XL, 9, DW)], '#a89076', 37, (X, Y) => cfP(XL, Y, lerp(DW, 1.6, (X + 4) / 7)));
   plaster([Wb(XL, 0), Wb(XR, 0), Wb(XR, 9), Wb(XL, 9)], '#b29b7f', 23, Wb, true);
   for (const [X, D0, D1] of [[XL, DW, 1], [XR, DW, 1], [null]]) {   // damp grime at the foot of every wall
     const pts = X === null ? [Wb(XL, 0), Wb(XR, 0), Wb(XR, .7), Wb(XL, .7)] : [cfP(X, 0, D0), cfP(X, 0, D1), cfP(X, .7, D1), cfP(X, .7, D0)];
-    g.save(); poly(g, pts); g.clip(); const y0 = X === null ? Wb(0, .7)[1] : cfP(0, .7, 3)[1], y1 = X === null ? Wb(0, 0)[1] : cfP(0, 0, 1.4)[1], gr = g.createLinearGradient(0, y0, 0, y1); gr.addColorStop(0, 'rgba(60,44,30,0)'); gr.addColorStop(1, 'rgba(60,44,30,.42)'); g.fillStyle = gr; g.fill(); g.restore(); }
+    const y0 = X === null ? Wb(0, .7)[1] : cfP(0, .7, 3)[1], y1 = X === null ? Wb(0, 0)[1] : cfP(0, 0, 1.4)[1]; FRESCO.grime(g, pts, y0, y1); }
   g.fillStyle = 'rgba(40,28,20,.5)'; g.fillRect(cfP(XR, 0, DW)[0] - 2, Wb(0, 9)[1], 5, Wb(0, 0)[1] - Wb(0, 9)[1]);   // the corner's shade
   // beam ends of the upper floor, a small latticed window
   { const [x0, y0] = Wb(-.55, 4.35), [x1, y1] = Wb(.05, 3.75); g.fillStyle = '#8e7a60'; g.fillRect(x0 - 10, y0 - 8, x1 - x0 + 20, y1 - y0 + 18); g.fillStyle = '#1e1610'; g.fillRect(x0, y0, x1 - x0, y1 - y0);
@@ -251,11 +201,7 @@ async function buildCorneliusFresco() {
     g.fillStyle = 'rgba(16,10,6,.55)'; g.fillRect(x0, y0, x1 - x0, 14); g.fillStyle = '#8a7458'; g.fillRect(x0 - 10, y1 - 8, x1 - x0 + 20, 10);
     g.fillStyle = 'rgba(150,120,80,.6)'; g.beginPath(); g.arc(lerp(x0, x1, .82), lerp(y0, y1, .52), 4, 0, 6.283); g.fill(); }
   // the gateway: dressed stones round the arch (voussoirs) and down the jambs
-  { const r = rng(4), c = (G0 + G1) / 2, R0 = (G1 - G0) / 2, R1 = R0 + .3;
-    for (let i = 0; i < 11; i++) { const a0 = Math.PI * i / 11, a1 = Math.PI * (i + 1) / 11, P = (a, R) => Wb(c - Math.cos(a) * R, GS + Math.sin(a) * R), v = .9 + .16 * r();
-      g.fillStyle = `rgb(${176 * v | 0},${156 * v | 0},${124 * v | 0})`; poly(g, [P(a0 + .012, R0), P(a1 - .012, R0), P(a1 - .012, R1), P(a0 + .012, R1)]); g.fill(); }
-    for (const [xa, xb] of [[G0 - .3, G0], [G1, G1 + .3]]) for (let Y = 0; Y < GS; Y += .36) { const v = .88 + .16 * r(), dx = (Math.round(Y / .36) % 2) * .06;
-      g.fillStyle = `rgb(${172 * v | 0},${152 * v | 0},${120 * v | 0})`; poly(g, [Wb(xa - (xa < G0 ? dx : 0) + .01, Y + .01), Wb(xb + (xb > G1 ? dx : 0) - .01, Y + .01), Wb(xb + (xb > G1 ? dx : 0) - .01, Y + .35), Wb(xa - (xa < G0 ? dx : 0) + .01, Y + .35)]); g.fill(); } }
+  FRESCO.gateStones(g, CFC, 4);
   // the bench along the right under the awning; two water jars by the fig
   { const s = .45; g.fillStyle = '#4a3424'; poly(g, [cfP(1.6, s, 3.0), cfP(1.6, s, 5.9), cfP(1.6, 0, 5.9), cfP(1.6, 0, 3.0)]); g.fill();
     g.fillStyle = '#6a4c34'; poly(g, [cfP(1.6, s, 3.0), cfP(1.98, s, 3.0), cfP(1.98, s, 5.9), cfP(1.6, s, 5.9)]); g.fill();
@@ -285,32 +231,19 @@ async function buildCorneliusFresco() {
     g.fillStyle = '#3a2c1e'; for (let D = 2.9; D < 6; D += .05) { const a = cfP(1.2, 2.35, D), L = (.06 + .1 * r()) * CF.F / D; g.fillRect(a[0] - 2, a[1], 3 + 4 / D, L); }
     { const top = cfP(1.2, 2.35, 5.9), bot = cfP(1.2, 0, 5.9), wd = .07 * CF.F / 5.9; g.fillStyle = '#3c2c1e'; g.fillRect(top[0] - wd / 2, top[1], wd, bot[1] - top[1]); g.fillStyle = 'rgba(160,120,80,.25)'; g.fillRect(top[0] - wd / 2, top[1], wd * .35, bot[1] - top[1]); } }
   // plaster grain over everything
-  { const NW = RW >> 1, NH = RH >> 1, nc = canvas(NW, NH), nx = nc.getContext('2d'), im = nx.createImageData(NW, NH), d = im.data, r = rng(5);
-    for (let y = 0; y < NH; y++) for (let x = 0; x < NW; x++) { const v = 128 + 30 * (noise(x * .02, y * .02) - .5) + 16 * (noise(x * .09, y * .09) - .5) + 16 * (r() - .5), i = (y * NW + x) * 4; d[i] = d[i + 1] = d[i + 2] = v; d[i + 3] = 255; }
-    nx.putImageData(im, 0, 0); g.save(); g.setTransform(1, 0, 0, 1, 0, 0); g.globalCompositeOperation = 'overlay'; g.globalAlpha = .45; g.drawImage(nc, 0, 0, RW, RH); g.restore(); }
+  FRESCO.grain(g, RW, RH, 5);
   // ---------------- the courtyard's own light (open shade): the bounce off the sunlit floor, darker up the walls, under the awning, to the right
-  { const lm = canvas(RW, RH), lx = lm.getContext('2d'); lx.translate(OX, OY); lx.fillStyle = 'rgb(222,206,188)'; lx.fillRect(-OX, -OY, RW, RH);
-    lx.globalCompositeOperation = 'lighter';
-    for (const [cx, cy, R, c] of [[520, 1080, 900, 'rgba(100,72,44,1)'], [220, 900, 520, 'rgba(96,70,42,1)'], [760, 1260, 600, 'rgba(70,50,30,1)']]) { const gr = lx.createRadialGradient(cx, cy, 0, cx, cy, R); gr.addColorStop(0, c); gr.addColorStop(1, 'rgba(0,0,0,0)'); lx.fillStyle = gr; lx.fillRect(cx - R, cy - R, 2 * R, 2 * R); }
-    lx.globalCompositeOperation = 'multiply';
-    let gr = lx.createLinearGradient(0, -OY, 0, 760); gr.addColorStop(0, 'rgb(140,130,124)'); gr.addColorStop(1, '#fff'); lx.fillStyle = gr; lx.fillRect(-OX, -OY, RW, 1060);
-    gr = lx.createLinearGradient(400, 0, 1700, 0); gr.addColorStop(0, '#fff'); gr.addColorStop(1, 'rgb(176,166,160)'); lx.fillStyle = gr; lx.fillRect(-OX, -OY, RW, RH);
-    gr = lx.createLinearGradient(0, 1120, 0, 1800); gr.addColorStop(0, '#fff'); gr.addColorStop(1, 'rgb(160,150,140)'); lx.fillStyle = gr; lx.fillRect(-OX, 1120, RW, 700);   // the near floor in the people's shade
-    lx.filter = 'blur(40px)'; lx.fillStyle = 'rgb(168,158,150)'; poly(lx, [cfP(1.2, 2.35, 2.9), cfP(XR, 2.62, 2.9), cfP(XR, 0, 2.9), cfP(1.5, 0, 6), cfP(1.2, 2.35, 6)]); lx.fill(); lx.filter = 'none';
-    g.save(); g.setTransform(1, 0, 0, 1, 0, 0); g.globalCompositeOperation = 'multiply'; g.drawImage(lm, 0, 0); g.restore(); }
+  FRESCO.openShade(g, RW, RH, OX, OY, { base: 'rgb(222,206,188)', bounce: [[520, 1080, 900, 'rgba(100,72,44,1)'], [220, 900, 520, 'rgba(96,70,42,1)'], [760, 1260, 600, 'rgba(70,50,30,1)']],
+    shade: lx => {
+      let gr = lx.createLinearGradient(0, -OY, 0, 760); gr.addColorStop(0, 'rgb(140,130,124)'); gr.addColorStop(1, '#fff'); lx.fillStyle = gr; lx.fillRect(-OX, -OY, RW, 1060);
+      gr = lx.createLinearGradient(400, 0, 1700, 0); gr.addColorStop(0, '#fff'); gr.addColorStop(1, 'rgb(176,166,160)'); lx.fillStyle = gr; lx.fillRect(-OX, -OY, RW, RH);
+      gr = lx.createLinearGradient(0, 1120, 0, 1800); gr.addColorStop(0, '#fff'); gr.addColorStop(1, 'rgb(160,150,140)'); lx.fillStyle = gr; lx.fillRect(-OX, 1120, RW, 700);   // the near floor in the people's shade
+      lx.filter = 'blur(40px)'; lx.fillStyle = 'rgb(168,158,150)'; poly(lx, [cfP(1.2, 2.35, 2.9), cfP(XR, 2.62, 2.9), cfP(XR, 0, 2.9), cfP(1.5, 0, 6), cfP(1.2, 2.35, 6)]); lx.fill(); lx.filter = 'none';
+    } });
   // the opening: the low sun beyond it burns it out white-gold; the far side of the lane a paler shape in the glare; the left jamb's inner
   // face and the arch's soffit in shade, the threshold lit
-  { g.save(); poly(g, apW); g.clip(); const [, yT] = Wb(0, GH), [, yB] = Wb(0, 0);
-    let gr = g.createLinearGradient(0, yT, 0, yB); gr.addColorStop(0, '#fff4dc'); gr.addColorStop(.55, '#ffeccc'); gr.addColorStop(1, '#ffdcaa'); g.fillStyle = gr; g.fillRect(Wb(G0, 0)[0], yT, Wb(G1, 0)[0] - Wb(G0, 0)[0], yB - yT);
-    g.fillStyle = 'rgba(214,184,140,.4)'; poly(g, [Wb(G0, 0), Wb(G0, 1.5), Wb(G0 + .5, 1.6), Wb(G1, 1.3), Wb(G1, 0)]); g.fill();   // the lane's far wall, lost in the glare
-    const Wi = (X, Y) => cfP(X, Y, DW + .5);
-    g.fillStyle = 'rgba(150,118,84,.9)'; poly(g, [Wb(G0, 0), Wb(G0, GS), Wi(G0, GS), Wi(G0, 0)]); g.fill();   // the left jamb's inner face
-    g.fillStyle = 'rgba(120,94,66,.8)'; poly(g, [...CF_AP.slice(1, -1).map(([X, Y]) => Wb(X, Y)), ...CF_AP.slice(1, -1).reverse().map(([X, Y]) => Wi(X, Y))]); g.fill();   // the soffit
-    g.fillStyle = 'rgba(255,240,206,.95)'; poly(g, [Wi(G0, 0), Wi(G1, 0), Wb(G1, 0), Wb(G0, 0)]); g.fill();
-    g.fillStyle = 'rgba(255,250,236,.3)'; g.fillRect(Wb(G0, 0)[0], yT, 400, yB - yT); g.restore(); }
-  { const rb = canvas(RW, RH), x = rb.getContext('2d'); x.filter = 'blur(1.2px)'; x.drawImage(room, 0, 0);
-    for (const [y0, bl] of [[1200, 2.5], [1380, 4.5], [1560, 7]]) { x.save(); x.beginPath(); x.rect(0, y0 + OY, RW, RH); x.clip(); x.filter = `blur(${bl}px)`; x.drawImage(room, 0, 0); x.restore(); }   // the near floor out of focus
-    CFR.room = rb; }   // the walls a touch out of focus
+  FRESCO.gate(g, CFC, { depth: .5, veil: 400 });
+  CFR.room = FRESCO.defocus(room, { blur: 1.2, oy: OY, rows: [[1200, 2.5], [1380, 4.5], [1560, 7]] });   // the walls a touch out of focus, the near floor more
 
   // ---------------- the people ----------------
   const PE = (typeof RD_PETER !== 'undefined') ? RD_PETER : { body: '#7e4c44', hc: '#c9a06a', band: '#4a3426', hair: '#3a302c', w: 1.1 };   // part 3's Peter
@@ -351,23 +284,9 @@ async function buildCorneliusFresco() {
   const place = m => { const [fx, fy] = cfP(m.X, 0, m.D), S = CF.F * m.Hm / m.D; m.fx = fx; m.fy = fy; m.S = S; m.P = (x, y) => [fx + x * S, fy + y * S]; return m; };
   const build = (m, o = m.o) => m.kind === 'back' ? cfBack(m.P, o) : cfMan(m.P, o);
   // which part of a figure the beam crosses: the beam's section at its depth (null if none of it)
-  const beamClip = m => { const pts = beamAt(m.D), xs = pts.map(p => p[0]); if (Math.max(...xs) < m.fx - .4 * m.S || Math.min(...xs) > m.fx + .4 * m.S) return null; const p = new Path2D(); poly(p, pts); return p; };
-  // a soft edge of light: the shape minus itself moved along the light, coloured, blurred, kept inside the shape — never a line round it
-  const rim = (X, T, off, path, box, Lt, d, c0, c1, bl) => {
-    const [bx, by, bw, bh] = box.map(Math.round);
-    T.save(); T.clearRect(bx - 6, by - 6, bw + 12, bh + 12); T.fillStyle = '#fff'; T.fill(path); T.globalCompositeOperation = 'destination-out'; T.translate(Lt[0] * d, Lt[1] * d); T.fill(path); T.restore();
-    T.save(); T.globalCompositeOperation = 'source-in'; const gr = T.createLinearGradient(0, by, 0, by + bh); gr.addColorStop(0, c0); gr.addColorStop(1, c1); T.fillStyle = gr; T.fillRect(bx - 6, by - 6, bw + 12, bh + 12); T.restore();
-    X.save(); X.clip(path); X.setTransform(1, 0, 0, 1, 0, 0); const sx = bx - 6 - off[0], sy = by - 6 - off[1];
-    X.filter = `blur(${bl.toFixed(1)}px)`; X.drawImage(T.canvas, sx, sy, bw + 12, bh + 12, sx, sy, bw + 12, bh + 12); X.filter = 'none'; X.globalAlpha = .55; X.drawImage(T.canvas, sx, sy, bw + 12, bh + 12, sx, sy, bw + 12, bh + 12); X.restore(); };
-  // the same edge band, blurred and NOT kept inside: light coming through a thin backlit cloth, spilling a little past its edge
-  // only on the figure's OUTER edge (its silhouette's band toward the light) where it runs along one part (region): the light from behind
-  // never finds an inner edge (round 9: the cloth's edge beside the face). spill: blurred and not kept inside (thin backlit cloth)
-  const edgeOn = (X, T, off, sil, region, box, Lt, d, col, bl, a, spill) => {
-    const [bx, by, bw, bh] = box.map(Math.round);
-    T.save(); T.clearRect(bx - 6, by - 6, bw + 12, bh + 12); T.fillStyle = '#fff'; T.fill(sil); T.globalCompositeOperation = 'destination-out'; T.translate(Lt[0] * d, Lt[1] * d); T.fill(sil); T.restore();
-    T.save(); T.globalCompositeOperation = 'destination-in'; T.fill(region); T.globalCompositeOperation = 'source-in'; T.fillStyle = col; T.fillRect(bx - 6, by - 6, bw + 12, bh + 12); T.restore();
-    X.save(); if (!spill) X.clip(region); X.setTransform(1, 0, 0, 1, 0, 0); const sx = bx - 6 - off[0], sy = by - 6 - off[1]; X.globalAlpha = a; X.filter = `blur(${bl.toFixed(1)}px)`; X.drawImage(T.canvas, sx, sy, bw + 12, bh + 12, sx, sy, bw + 12, bh + 12);
-    if (!spill) { X.filter = 'none'; X.globalAlpha = a * .5; X.drawImage(T.canvas, sx, sy, bw + 12, bh + 12, sx, sy, bw + 12, bh + 12); } X.restore(); };
+  const beamClip = m => { const pts = CFC.beamAt(m.D), xs = pts.map(p => p[0]); if (Math.max(...xs) < m.fx - .4 * m.S || Math.min(...xs) > m.fx + .4 * m.S) return null; const p = new Path2D(); poly(p, pts); return p; };
+  // a soft edge of light on a figure, never a line round it (FRESCO.rim), or only on its outer edge toward a light behind it (FRESCO.edgeOn)
+  const { rim, edgeOn, lens } = FRESCO;
   // one figure onto a base plate B (its colours in the open shade, roundness, folds, a skylight edge) and a light plate L (what the beam and
   // the lit floor add: drawn later with the sun's strength); T is scratch; all three translated by -off
   const figure = (B, L, T, off, m, path, bc) => {
@@ -493,7 +412,6 @@ async function buildCorneliusFresco() {
       rim(L, T, off, path, box, [1, .4], (m.peter ? .016 : .012) * S, `rgba(255,214,158,${m.rimA})`, `rgba(255,200,140,${m.rimA * .35})`, .006 * S);   // the sun's edge
       L.restore(); }
   };
-  const lens = (c, bl = .8) => { const t = canvas(c.width, c.height), x = t.getContext('2d'); x.filter = `blur(${bl}px)`; x.drawImage(c, 0, 0); const cx = c.getContext('2d'); cx.save(); cx.setTransform(1, 0, 0, 1, 0, 0); cx.clearRect(0, 0, c.width, c.height); cx.drawImage(t, 0, 0); cx.restore(); };   // a lens, not a vector edge
   const plate = (list, bl) => { const off = [CF.PX, CF.PY], B = canvas(CF.PWW, CF.PHH), L = canvas(CF.PWW, CF.PHH), T = canvas(CF.PWW, CF.PHH), xs = [B, L, T].map(c => { const x = c.getContext('2d'); x.translate(-off[0], -off[1]); return x; });
     for (const m of list) { place(m); const bc = beamClip(m); m.key = m.key ?? .2; m.rimA = m.rimA ?? .75; m.bA = m.bA ?? .05; figure(xs[0], xs[1], xs[2], off, m, build(m), bc); }
     lens(B, bl); lens(L, bl); return { B, L }; };
@@ -508,36 +426,23 @@ async function buildCorneliusFresco() {
       figure(xs[0], xs[1], xs[2], off, PETER, build(PETER, { ...PETER.o, reach: key / 40 }), bc); lens(B); lens(L);
       const b2 = canvas(pw, ph), l2 = canvas(pw, ph); b2.getContext('2d').drawImage(B, 0, 0); l2.getContext('2d').drawImage(L, 0, 0); const r = { B: b2, L: l2 }; cache.set(key, r); return r; } }; }
   // ---------------- the sun: the pool on the floor (with the long shadows of everyone standing in it), the shaft in the air, the glow ----
-  { const PB = { x: -700, y: 880, w: 2600, h: 920 }, pc = canvas(PB.w, PB.h), x = pc.getContext('2d'); x.translate(-PB.x, -PB.y);
-    drawFloor(x); x.globalCompositeOperation = 'multiply'; x.fillStyle = 'rgb(255,214,160)'; x.fillRect(PB.x, PB.y, PB.w, PB.h);
-    x.globalCompositeOperation = 'screen'; x.fillStyle = 'rgb(176,124,70)'; x.fillRect(PB.x, PB.y, PB.w, PB.h);
-    const mk = canvas(PB.w, PB.h), mx = mk.getContext('2d'); mx.translate(-PB.x, -PB.y); mx.filter = 'blur(3px)'; mx.fillStyle = '#fff'; poly(mx, poolW); mx.fill();
-    mx.globalCompositeOperation = 'destination-out'; mx.filter = 'blur(3.5px)';
-    for (const m of [PETER, ...MEN, ...FRONT]) {   // each body's shadow: its silhouette carried along the sun onto the floor
-      const S = m.Hm, sp = (x2, y2) => { const [Xs, Ds] = cfSun(m.X + x2 * S, -y2 * S, m.D); return cfP(Xs, 0, Math.max(.6, Ds)); };
-      mx.fill(m.kind === 'back' ? cfBack(sp, m.o) : cfMan(sp, m.o)); }
-    mx.filter = 'none'; { const gr = mx.createLinearGradient(0, 940, 0, 1800); gr.addColorStop(0, 'rgba(0,0,0,0)'); gr.addColorStop(1, 'rgba(0,0,0,.45)'); mx.fillStyle = gr; mx.fillRect(PB.x, PB.y, PB.w, PB.h); }   // weaker toward us
-    x.setTransform(1, 0, 0, 1, 0, 0); x.globalCompositeOperation = 'destination-in'; x.drawImage(mk, 0, 0);
-    CFR.pool = pc; CFR.PB = PB; }
-  { const SB = { x: -500, y: 300, w: 2500, h: 1500 }, sc = canvas(SB.w, SB.h), x = sc.getContext('2d'); x.translate(-SB.x, -SB.y);
-    const H = hull([...apW, ...poolW]);
-    x.filter = 'blur(30px)'; let gr = x.createLinearGradient(apW[0][0], apW[0][1] - 100, poolW[Math.floor(poolW.length / 2)][0], poolW[Math.floor(poolW.length / 2)][1]); gr.addColorStop(0, 'rgba(255,226,170,.55)'); gr.addColorStop(.4, 'rgba(255,214,150,.3)'); gr.addColorStop(1, 'rgba(255,200,140,0)'); x.fillStyle = gr; poly(x, H); x.fill();
-    x.filter = 'blur(9px)'; x.globalCompositeOperation = 'lighter'; const r = rng(33);   // rays: from points of the opening along the sun
-    for (let i = 0; i < 22; i++) { const X = lerp(G0 + .05, G1 - .05, r()), Y0 = lerp(.3, cfArchY(X) - .05, r()), a = Wb(X, Y0), [Xs, Ds] = cfSun(X, Y0, DW), lam = Math.min(1, (DW - 1.2) / (DW - Ds)), b = cfP(X + (Xs - X) * lam, Y0 * (1 - lam), DW - (DW - Ds) * lam), wd = 8 + 26 * r(), al = .08 + .18 * r();
-      gr = x.createLinearGradient(a[0], a[1], b[0], b[1]); gr.addColorStop(0, `rgba(255,232,190,${al})`); gr.addColorStop(.6, `rgba(255,232,190,${al * .4})`); gr.addColorStop(1, 'rgba(255,232,190,0)'); x.strokeStyle = gr; x.lineWidth = wd; x.beginPath(); x.moveTo(...a); x.lineTo(...b); x.stroke(); }
-    CFR.shaft = sc; CFR.SB = SB; }
-  { const BB = { x: -500, y: 120, w: 1300, h: 1150 }, bc = canvas(BB.w, BB.h), x = bc.getContext('2d'); x.translate(-BB.x, -BB.y); x.filter = 'blur(60px)'; x.fillStyle = 'rgba(255,220,160,.85)'; poly(x, apW); x.fill();
-    x.filter = 'blur(16px)'; x.fillStyle = 'rgba(255,240,210,.55)'; poly(x, apW); x.fill(); CFR.bloom = bc; CFR.BB = BB; }
+  { const PB = { x: -700, y: 880, w: 2600, h: 920 };
+    CFR.pool = FRESCO.sunPool(CFC, PB, x => drawFloor(x), mx => {
+      for (const m of [PETER, ...MEN, ...FRONT]) {   // each body's shadow: its silhouette carried along the sun onto the floor
+        const sp = CFC.cast(m.X, m.D, m.Hm); mx.fill(m.kind === 'back' ? cfBack(sp, m.o) : cfMan(sp, m.o)); } }, { clip: .8, fade: [940, 1800, .45] });
+    CFR.PB = PB; }
+  { const SB = { x: -500, y: 300, w: 2500, h: 1500 }; CFR.shaft = FRESCO.shaft(CFC, SB, { clip: .8, n: 22, seed: 33, nearD: 1.2 }); CFR.SB = SB; }   // the shaft in the air, rays from points of the opening
+  { const BB = { x: -500, y: 120, w: 1300, h: 1150 }; CFR.bloom = FRESCO.bloom(CFC, BB); CFR.BB = BB; }
   // dust in the light (관리자 2026-11-14 "빛 파티클을 좀더 고급지고 덜 어색하게": no more snow of sharp white dots): few motes, all of them
   // INSIDE the shaft — each lives at a point of the gateway's opening (ox, oy in 0..1 of its width and height) carried a distance h along
   // the sun — so a mote that drifts toward the opening's edge has drifted to the beam's edge and fades there, and it is brightest in the
   // beam's core. Most are tiny and faint (in focus round Peter's depth); six are large soft discs nearer the camera (out of focus).
   // None in the shadowed foreground, none over a face (CFR.heads). Closed form: each mote's place is a function of u.
-  { const r = rng(41); CFR.dust = Array.from({ length: 96 }, (_, i) => ({ ox: r(), oy: .08 + .86 * r(), lam: i < 6 ? .62 + .3 * r() : Math.pow(r(), .85), bok: i < 6, p1: r() * 6.283, p2: r() * 6.283, p3: r() * 6.283, s: r(), a: r() })); }
+  CFR.dust = FRESCO.dust(96, 41, 6);
   CFR.heads = [PETER, ...MEN, ...FRONT].map(m => { const f = m.o.f || 1, back = m.kind === 'back', sit = !back && m.o.pose === 'sit';
     const [x, y] = back ? m.P((m.o.turn || 0) * .048, -.545 - (m.o.seat === 'bench' ? .25 : 0)) : m.P(.03 * f, sit ? -.71 : -.91); return [x, y, .1 * m.S]; });
   CFR.bodies = [PETER, ...MEN, ...FRONT].map(m => { const back = m.kind === 'back', h = back ? (m.o.seat === 'bench' ? .85 : .62) : m.o.pose === 'sit' ? .82 : 1.02; return [m.fx, m.fy, m.S, m.D, h]; });   // a mote behind a nearer body is hidden by it
-  { const gc = canvas(256, 256), x = gc.getContext('2d'), im = x.createImageData(256, 256), rr = rng(91); for (let i = 0; i < 65536; i++) { const v = 128 + (rr() - .5) * 110; im.data[i * 4] = im.data[i * 4 + 1] = im.data[i * 4 + 2] = v; im.data[i * 4 + 3] = 255; } x.putImageData(im, 0, 0); CFR.grain = gc; }
+  CFR.grain = FRESCO.grainTile(91);
 }
 
 function corneliusFresco(ctx, u) {
@@ -559,31 +464,8 @@ function corneliusFresco(ctx, u) {
   plate(CFR.front); plate(CFR.near);
   // a thinner veil of the shaft in front of everyone, and the dust turning in it
   ctx.globalCompositeOperation = 'screen'; layer(.97); ctx.globalAlpha = .14 * I; ctx.drawImage(CFR.shaft, CFR.SB.x, CFR.SB.y);
-  { layer(1); ctx.globalAlpha = 1; const N = Pilot.noise, DF = PETER_D, TOP = .05;
-    for (const m of CFR.dust) {
-      // drift in the opening's coordinates: slow wander + a gentle turbulence, a slow settling; and slowly along the beam
-      const ox = m.ox + .035 * Math.sin(u * .21 + m.p1) + .03 * (N(u * .28 + m.p2 * 3, m.p1 * 5) - .5), oy = m.oy + .03 * Math.sin(u * .17 + m.p2) + .03 * (N(u * .25 + m.p3 * 3, m.p2 * 5) - .5) - .012 * u;
-      const edge = ss(0, .16, Math.min(ox, 1 - ox)) * ss(0, .12, Math.min(oy, 1 - oy)); if (edge <= 0) continue;
-      const core = Math.exp(-(((ox - .5) / .3) ** 2) - (((oy - .45) / .45) ** 2));                     // the beam's core brighter
-      const X0 = CF.G0 + (CF.G1 - CF.G0) * ox, Y0 = oy * (cfArchY(X0) - .02); if (Y0 < TOP + .05) continue;
-      const hMax = Math.min((Y0 - TOP) / CF.tanE, (CF.DW - (m.bok ? 2.5 : 3.4)) / CF.hz), h = hMax * clamp(m.lam + .025 * Math.sin(u * .13 + m.p3) + .01 * u);
-      const X = X0 + h * CF.hx, Y = Y0 - h * CF.tanE, D = CF.DW - h * CF.hz, [x, y] = cfP(X, Y, D);
-      let hid = false; for (const [bx, by, bS, bD, bh] of CFR.bodies) if (bD < D - .05 && Math.abs(x - bx) < .21 * bS && y < by && y > by - bh * bS) { hid = true; break; } if (hid) continue;
-      let face = 1; for (const [hx, hy, hr] of CFR.heads) { const d = Math.hypot(x - hx, y - hy) / hr; if (d < 2.2) face = Math.min(face, ss(1.2, 2.2, d)); } if (face <= 0) continue;
-      // depth of field round Peter: a circle of confusion that grows quickly toward the camera, slowly beyond him
-      const coc = 150 * Math.max(0, 1 / D - 1 / DF) + 22 * Math.max(0, 1 / DF - 1 / D), r0 = (m.bok ? 2.4 : 1.1 + 1.4 * m.s) * 4 / D, R = Math.max(r0 * 2.2, r0 + coc * (m.bok ? 1.6 : 1));
-      const glint = .8 + .2 * Math.sin(u * .9 + m.p1 * 2);                                             // a slow turn, no twinkle
-      let a = edge * (.25 + .75 * core) * face * glint * I * (m.bok ? .12 + .06 * m.a : (.4 + .4 * m.a) * Math.min(1, (r0 * 2.2 / R) ** 1.2));
-      if (a < .006) continue;
-      const gr = ctx.createRadialGradient(x, y, 0, x, y, R);
-      if (m.bok) { gr.addColorStop(0, `rgba(255,222,172,${a})`); gr.addColorStop(.62, `rgba(255,220,168,${a * .8})`); gr.addColorStop(1, 'rgba(255,214,160,0)'); }
-      else { gr.addColorStop(0, `rgba(255,228,184,${a})`); gr.addColorStop(.4, `rgba(255,220,170,${a * .45})`); gr.addColorStop(1, 'rgba(255,214,160,0)'); }
-      ctx.fillStyle = gr; ctx.fillRect(x - R, y - R, 2 * R, 2 * R); } }
-  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1;
-  // grade: a soft vignette (lighter toward the gate and Peter), grain
-  ctx.globalCompositeOperation = 'multiply';
-  { const R = Math.hypot(W, H) * .62, gr = ctx.createRadialGradient(W * .38, H * .38, R * .25, W * .45, H * .45, R); gr.addColorStop(0, '#fff'); gr.addColorStop(1, 'rgb(206,192,180)'); ctx.fillStyle = gr; ctx.fillRect(0, 0, W, H); }
-  ctx.globalCompositeOperation = 'soft-light'; ctx.globalAlpha = .45; ctx.drawImage(ctx.canvas, 0, 0);   // a little contrast: the haze kept, the shapes firmer
-  ctx.globalCompositeOperation = 'overlay'; ctx.globalAlpha = .07; const o = Math.floor(u * 24); ctx.translate(-((o * 73) % 256), -((o * 151) % 256)); ctx.fillStyle = ctx.createPattern(CFR.grain, 'repeat'); ctx.fillRect(0, 0, W + 256, H + 256);
+  { layer(1); ctx.globalAlpha = 1; FRESCO.drawDust(ctx, u, CFR.dust, CFC, { focus: PETER_D, I, top: .05, near: [2.5, 3.4], bodies: CFR.bodies, heads: CFR.heads }); }
+  // grade: a soft vignette (lighter toward the gate and Peter), a little contrast (the haze kept, the shapes firmer), grain
+  FRESCO.finish(ctx, u, CFR.grain);
   ctx.restore();
 }

@@ -31,3 +31,22 @@ all pass 15/15. Each quote was also compared with the `fetch-verse` output for t
    «Alam din ninyo na …». Both are verbatim.
 2. **km Q9 opening.** The verse starts «បងប្អូន​បាន​ជ្រាប​ថា» ("brothers know that"), and the caption starts after those words without a leading «…».
    The Korean also starts at the clause, so this is not wrong. For consistency with en/id/es («… »), you could prefix `… `. This was not part of the fix.
+
+## 2차 (hi·bn N09, ta Q14)
+
+Scope: only the 3 lines changed in the second MED pass (approved by the maintainer). Each was read fresh against the Korean source
+(`script.json`), the original issue (`film-christ-captions-ar-fa-hi-bn-ta-ne.md`) and, for ta Q14, the `fetch-verse 339 ACT.10.43` output.
+`check-quotes.mjs christ <code>`: hi, bn, ta all ok (no failing line); each JSON parses.
+
+**Result: 3 of 3 lines OK.** No HIGH and no remaining MED. One optional LOW note is below the table.
+
+| lang | id | current | back-translation (literal Korean) | verdict | note |
+|---|---|---|---|---|---|
+| hi | N09 | पतरस के लिए मसीह का मरना / समझ से बाहर की बात थी। | 베드로에게 그리스도가 죽는다는 것은 / 이해를 넘어서는 일이었다. | OK | Resolved. The subject is now the event ("the Christ's dying"), not the person, so the "a dying Messiah meant nothing to Peter" reading is gone. «समझ से बाहर» = 「말이 안 됐다」 (it did not fit his idea). Reverent and natural. «मसीह» is the same word as the rest of hi.json. |
+| bn | N09 | পিতরের কাছে, খ্রীষ্ট মারা যাবেন— / এ কথা ছিল অকল্পনীয়। | 베드로에게, 그리스도가 죽으실 것이다— / 이 말은 상상할 수 없는 것이었다. | OK | Resolved. "Had no meaning" is gone. «অকল্পনীয়» ("unthinkable") is exactly 「말이 안 됐다」. Honorific «যাবেন» for Christ. The future fits the place in the story (right after N08, where Jesus foretells his death). «খ্রীষ্ট» spelling matches the rest of bn.json. |
+| ta | Q14 | text: … அவரை விசுவாசிக்கிறவன் எவனோ அவன் / அவருடைய நாமத்தினாலே பாவமன்னிப்பைப் பெறுவானென்று / தீர்க்கதரிசிகளெல்லாரும் அவரைக்குறித்தே சாட்சிகொடுக்கிறார்கள் · voice: the same words without «… » and «/» | … 그를 믿는 자는 누구든지 그 사람은 / 그의 이름으로 죄 사함을 받으리라고 / 모든 선지자들이 그에 대하여 증언한다 | OK | Resolved. The line now ends on the finite verb «சாட்சிகொடுக்கிறார்கள்», so the gospel promise no longer hangs on the quotative «-என்று». The text is one contiguous run of O.V. Acts 10:43 from the start of the verse. Only the speech tag «என்றான்.» is left off, so there is no closing «…», as in the Korean Q14 (which drops 「하였느니라」). hl «அவருடைய நாமத்தினாலே» is present. The Korean caption does not show 「모든 선지자도 증언하되」, but Tamil word order puts it at the end. It is verbatim, it echoes N15, and the maintainer approved it. LOW: see note 1. |
+
+## Notes (optional, LOW — not blockers)
+1. **ta Q14 length.** The caption is now 3 pieces and about 140 code points (before: 2 pieces, about 80), in about 5.5 s (Q14 at 165.5 s → Q13 at 171 s).
+   Tamil code points include vowel signs, so the visible load is lower than the count suggests. It is acceptable. If it feels rushed in the preview,
+   look at the timing of the pieces first. Do not cut the text, because cutting brings back the hanging «-என்று».

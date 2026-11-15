@@ -1022,6 +1022,15 @@
    "round": 2,
    "applied": "자막 MED 17건 반영 + 고친 줄 재검수 모두 OK, 영어판 줄임표 글꼴·구절 끊김(U+00A0) 고쳐 다시 렌더",
    "applied_at": "2026-11-16 00:12 KST"
+  },
+  {
+   "at": "2026-11-16 00:15 KST",
+   "who": "관리자",
+   "said": "그래 (자막 MED 3줄 hi·bn N09, ta Q14 반영 + 재검수)",
+   "status": "applied",
+   "round": 2,
+   "applied": "hi·bn N09, ta Q14 반영 → 재검수 OK",
+   "applied_at": "2026-11-16 00:20 KST"
   }
  ],
  "process_changes": [
@@ -2088,14 +2097,15 @@
    "원어민 검수 4묶음: pl-ru-tr-uz-id(MED 4) · zh-ja-vi-th(MED 1) · es-pt-fr-it-de(MED 4) · tl-sw-km-mn-my(MED 4) — motion/reviews/film-christ-captions-<묶음>.md",
    "자막 MED 17건 반영(관리자 \"그래\") → 고친 줄만 재검수 motion/reviews/film-christ-captions-rereview.md 모두 OK",
    "영어판 글자: \"…\"을 화면에서 \"...\"로(lib-film), 구절은 U+00A0로 이음 → film-en-v/h·christ-en-v/h-narr 다시 렌더",
-   "원어민 검수 5묶음 모두 끝(ar-fa-hi-bn-ta-ne MED 3)"
+   "원어민 검수 5묶음 모두 끝(ar-fa-hi-bn-ta-ne MED 3)",
+   "자막 MED 3줄(hi·bn N09, ta Q14) 반영(관리자 \"그래\") → 재검수 2차 모두 OK — 27개 언어 자막 번역 품질 관문 통과"
   ],
   "running": [],
   "owner": [
    {
-    "what": "자막 원어민 검수 MED 3줄 (ar-fa-hi-bn-ta-ne 묶음)",
-    "detail": "hi·bn N09 \"죽는 그리스도는 말이 안 됐다\"가 \"아무 의미 없었다\"로 읽힘(pl·ru와 같은 문제) → \"생각할 수 없는 일\" · ta Q14 자막이 동사 없이 \"…받는다고\" 로 끝남 → 같은 절 앞부분(\"모든 선지자가 증언하되\")까지 넣어 문장을 완결 — 정확한 문구는 motion/reviews/film-christ-captions-ar-fa-hi-bn-ta-ne.md",
-    "proposal": "3줄 반영 + 고친 줄 재검수"
+    "what": "유튜브 연결 전략 3가지(관리자 질문 2026-11-16, Gemini 화면)",
+    "detail": "① 쇼츠 끝 \"관련 동영상에서 전체 보기\" 안내 — 지금 없음(끝 = 성경 한 구절 읽기 질문) ② 짧은 쇼츠 공개 시점·구간을 원고 단계에서 정하기(본편 뒤 1–2일 간격) — 지금 시점 규칙 없음(400년은 2주 반 뒤) ③ 8–15분 가로 긴 영상 — 새 영상은 3분, 긴 영상은 14분 첫 영상뿐",
+    "proposal": "② 바로 공정에(그리스도부터) · ① 그림은 두고 설명 첫 줄·고정 댓글로 안내 · ③ 시리즈 3–4편 쌓이면 「모아 보기」 10–12분 가로판"
    }
   ],
   "next": [

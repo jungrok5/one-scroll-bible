@@ -349,6 +349,25 @@
    "source": "관리자 2026-11-01"
   },
   {
+   "id": "translate-parallel-groups",
+   "stages": [
+    "intl",
+    "captions"
+   ],
+   "rule": "번역은 동시에: 본 세션이 en.json(ESV)을 쓰고 영어 검수를 띄우는 것과 함께, captions.groups 묶음마다 번역 에이전트(pipeline/briefs/translate.md)를 한 번에 보내고, 묶음이 끝나는 대로 같은 묶음에 원어민 검수(pipeline/briefs/review-captions.md)를 보낸다. 지시문은 i18n-brief.mjs로 원고에서 만든다(손으로 다시 쓰지 않는다). 에이전트마다 임시 폴더를 따로 준다(scratchpad\tr-<묶음> — 같은 임시 파일 이름으로 다른 묶음 파일을 덮어쓴 일). 해설 목소리는 targets intl.voices에서(찾지 않는다).",
+   "gate": "captions · intl (briefs/ 지시문, targets captions.groups · intl.voices)",
+   "source": "관리자 2026-11-15 「그리스도」 \"병렬로 할수 있는 번역은 그렇게해줘\" · \"매번 찾지않도록 공정에 기록해둬\""
+  },
+  {
+   "id": "progress-in-repo",
+   "stages": [
+    "all"
+   ],
+   "rule": "돌고 있는 일·관리자 확인을 기다리는 일·다음 할 일은 대화에만 두지 않고 review.json에 적는다 — 국제판·자막은 intl_progress { done, running, owner(관리자 확인 대기: 무엇을 왜, 제안), next }, 원고·그림 결정은 decisions. 컨텍스트가 넘어가거나 새 세션이 열려도 film.mjs status · review.json만 보면 이어 갈 수 있게.",
+   "gate": "record (review.json intl_progress — stage 10·11이 시작됐으면)",
+   "source": "관리자 2026-11-15 「그리스도」 \"다른것들도 지금 하던것들 대화에만 남아있지않게 기록해\""
+  },
+  {
    "id": "no-tools-credit",
    "stages": [
     "sheet",

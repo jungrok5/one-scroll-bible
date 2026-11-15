@@ -314,6 +314,9 @@ const G = {
     const idx = join(T.looks.skills_kits, '..', 'references', 'STYLE-INDEX.md'); if (existsSync(idx)) { const s = readFileSync(idx, 'utf8'); for (const x of L) if (x.kit && !x.skill && !s.includes('`' + x.kit + '`')) why.push(`STYLE-INDEX에 ${x.kit}가 없다(scripts/style-index.py)`); }
     return why.length ? { ok: false, why } : pass(); },
   captions: c => { const have = new Set(c.up?.captions || []), miss = T.captions.langs.filter(l => !have.has(l)), why = []; if (miss.length) why.push(`한국어판 자막 없는 언어 ${miss.length}개: ${miss.join(' ')}`);
+    // the state of the translation work lives in the repo, not in a chat (관리자 2026-11-15 "대화에만 남아있지 않게", rules progress-in-repo)
+    if (existsSync(join(c.d, 'i18n')) && !c.review.intl_progress) why.push('review.json intl_progress { done, running, owner, next } 없음 — 번역·검수 진행 상태를 적는다(progress-in-repo)');
+    for (const [g, codes] of Object.entries(T.captions.groups || {})) if (codes.some(l => existsSync(join(c.d, 'i18n', l + '.json'))) && !existsSync(join(ROOT, 'motion/reviews', `film-${c.film}-captions-${g}.md`))) why.push(`원어민 검수 ${g} 없음 — pipeline/briefs/review-captions.md`);
     const g = intlRec(c); if (g) for (const k of ['h', 'v']) { const hv = new Set(g[k]?.captions || []), m = T.captions.langs.filter(l => l !== 'ko' && !hv.has(l)); if (m.length) why.push(`국제판 ${k} 자막 없는 언어 ${m.length}개: ${m.join(' ')}`); }
     return why.length ? { ok: false, why } : pass(); },
   // 10. the English-text master on the international channel with the voice tracks (README 4절 순서와 도구 1–7)

@@ -28,7 +28,9 @@ for (const l of Q.filter(q => q.src)) {
 const verse = (l, u) => (l.src ? SRC[l.src + ' ' + u] : V[u]) || '';
 // case is ignored too: fetch-verse flattens small capitals (LORD/TUHAN/SENHOR print as Lord/Tuhan/Senhor), and the films keep
 // God's name as the Bible prints it (2026-11-01, id Isa 61:1 "Tuhan ALLAH … TUHAN")
-const norm = x => x.replace(/[“”"‘’'«»]/g, '').replace(/\s+/g, '').toLowerCase();
+// "*" glossary marks (Khmer គខប prints them inside verses — 2026-11-15 「그리스도」 km lost two `voice` fragments to it) and zero-width
+// characters are not words either
+const norm = x => x.replace(/[“”"‘’'«»*​‌‍﻿]/g, '').replace(/\s+/g, '').toLowerCase();
 let bad = 0;
 for (const l of Q) {
   if (!l.text) { console.log(l.id, l.usfm, 'MISSING text'); bad++; continue; }

@@ -100,10 +100,15 @@
  },
  "intl": {
   "_source": "README 4절 — 해설 트랙은 반응이 확인된 언어부터(ANALYTICS: 국제 채널 스페인어 쇼츠 · 한국어 채널 포르투갈어 쇼츠 868회), 2026-11-01",
-  "voice_langs": ["en", "es", "pt-BR"]
+  "voice_langs": ["en", "es", "pt-BR"],
+  "voices": { "ko": "HYALOqtTLlRjxo4uBKeg", "en": "wfDOIda26ysF4KJAAUlG", "es": "eA1KGxXkPw301wzoKzzz", "pt-BR": "bZztR6P62TDbe6sgaZgz" },
+  "voice_model": "eleven_v4",
+  "_voices_source": "같은 시리즈 목소리 — 「침묵의 400년」 2026-11-01 prompts.json에서(en 'EJ Calm Conversational Narration'), 「그리스도」 2026-11-15 en도 같은 목소리. 줄당 2테이크(generations_count 기본), 한 언어 한 플로(creative_create_flow). 바꾸려면 관리자 결정"
  },
  "captions": {
   "_source": "관리자 2026-11-01 — fixed 27 + ko",
-  "langs": ["ko", "en", "es", "pt-BR", "de", "fr", "it", "pl", "ru", "tr", "zh-Hans", "zh-Hant", "ja", "ar", "fa", "hi", "bn", "ta", "id", "vi", "th", "tl", "sw", "uz", "ne", "km", "mn", "my"]
+  "langs": ["ko", "en", "es", "pt-BR", "de", "fr", "it", "pl", "ru", "tr", "zh-Hans", "zh-Hant", "ja", "ar", "fa", "hi", "bn", "ta", "id", "vi", "th", "tl", "sw", "uz", "ne", "km", "mn", "my"],
+  "groups": { "es-pt-fr-it-de": ["es", "pt-BR", "fr", "it", "de"], "pl-ru-tr-uz-id": ["pl", "ru", "tr", "uz", "id"], "zh-ja-vi-th": ["zh-Hans", "zh-Hant", "ja", "vi", "th"], "ar-fa-hi-bn-ta-ne": ["ar", "fa", "hi", "bn", "ta", "ne"], "tl-sw-km-mn-my": ["tl", "sw", "km", "mn", "my"] },
+  "_groups_source": "「그리스도」 2026-11-15: 묶음마다 번역 에이전트 하나(briefs/translate.md)를 동시에, 끝나는 대로 같은 묶음에 원어민 검수 하나(briefs/review-captions.md) — 26개 언어가 약 40분. 묶음 = 문자·성경 판본 관례가 비슷한 언어끼리(우즈베크·러시아 = 시편 70인역 번호)"
  }
 }

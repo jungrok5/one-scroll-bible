@@ -118,3 +118,37 @@
 | CM8 | add_flow_node:music | eleven_music_v2_5 | 32 | Instrumental only. Cinematic orchestral film score, one continuous 32-second finale, continuing a piece already in progress: the same slow, noble four-note theme, now in E major. It opens on warm sustained strings. At about 0.4 s a French horn plays the first phrase of the theme, strong and rising; at about 2.8 s the phrase again a step higher with more strings and a timpani stroke; at about 5.2 s a third time, higher still, with choir: three ascending steps. From about 7.5 s a steady, powerful build. At about 9.6 s the biggest climax of the whole score: full orchestra and wordless choir fortissimo state the theme in E major, majestic and overwhelming, until about 11.5 s. 11.5–22 s: it settles into a warm, confident and noble glow, the theme carried by strings and horns over a steady gentle pulse, never thin. From about 22 s it rises again, and from 23 s a long crescendo grows under the theme, fuller and fuller. At about 27.5 s a final radiant statement of the theme by full orchestra and choir, broad and triumphant, held, then from about 30 s one long ringing E major chord that is still sounding at the very end, not fading away. Slow tempo, about 60 BPM, organic orchestra, no synths, no drum kit. |
 | CM9 | add_flow_node:music | eleven_music_v2_5 | 26 | Instrumental only. Tense cinematic orchestral underscore in E minor, one continuous piece of rising unease, continuing a piece already in progress. 0–6 s: a soft, uneasy low string pulse in steady eighth notes with a quiet low drone, restless. At about 6.5 s a rushing string tremolo crescendo, urgent and growing loud. At about 8 s agitated, sharp, stabbing string figures. At about 10 s a loud, harsh dissonant brass and string cry, the most tense and loudest moment, held for two seconds. At about 12.5 s it suddenly drops away to a hollow low drone with a soft pizzicato heartbeat, unsettled and quiet. From about 17 s suspense: high strings hold a long, trembling note and a slow timpani heartbeat grows steadily louder and closer, anticipation without resolution, still building at the end. Slow tempo, about 60 BPM, organic orchestra, no synths, no drum kit. |
 | CM10 | add_flow_node:music | eleven_music_v2_5 | 18 | Instrumental only. Triumphant cinematic orchestral finale in E major with wordless choir, continuing a piece already in progress. 0–2.5 s: warm strings and horns, noble, gently lifting. From about 2.5 s a steady, swelling crescendo, fuller and fuller, timpani roll growing. At about 7 s the full orchestra and choir state a broad, radiant four-note theme fortissimo, glorious and overwhelming, the biggest moment. It stays full and shining, held, until about 11 s, then one long ringing E major chord of full strings, horns and choir that keeps sounding strongly to the very end, never fading out, never stopping. Slow, majestic, about 60 BPM, no synths, no drum kit. |
+| en N01 | speech | eleven_v4 |  | The “Christ” in “Jesus Christ” — is it Jesus’ last name? |
+| en N02 | speech | eleven_v4 |  | The name at the end of every prayer. |
+| en Q1 | speech | eleven_v4 |  | We have found the Messiah (which means Christ). |
+| en N03 | speech | eleven_v4 |  | Christ is not a last name. It means “the Anointed One” — the Messiah. |
+| en N04 | speech | eleven_v4 |  | God set apart kings, priests, and prophets by anointing them with oil. |
+| en K1 | speech | eleven_v4 |  | Then Samuel took the horn of oil and anointed him in the midst of his brothers. |
+| en K2 | speech | eleven_v4 |  | And he poured some of the anointing oil on Aaron’s head |
+| en K3 | speech | eleven_v4 |  | You shall anoint to be prophet in your place. |
+| en N06 | speech | eleven_v4 |  | Many people waited for the Messiah only as a king who would drive out Rome. |
+| en N07 | speech | eleven_v4 |  | One day, after Jesus had come, Peter made a confession. |
+| en Q2 | speech | eleven_v4 |  | You are the Christ, |
+| en N08 | speech | eleven_v4 |  | From then on, Jesus said he must suffer and be killed, and on the third day rise again. |
+| en Q3 | speech | eleven_v4 |  | Far be it from you, Lord! |
+| en N09 | speech | eleven_v4 |  | To Peter, a Christ who dies made no sense. |
+| en N10 | speech | eleven_v4 |  | But that road had already been written. |
+| en Q4 | speech | eleven_v4 |  | But he was pierced for our transgressions; he was crushed for our iniquities; |
+| en N11 | speech | eleven_v4 |  | On the cross, the cry of Jesus. |
+| en Q5 | speech | eleven_v4 |  | My God, my God, why have you forsaken me? |
+| en N12 | speech | eleven_v4 |  | This cry is the first line of a psalm written a thousand years before by David, the anointed king. |
+| en Q6 | speech | eleven_v4 |  | My God, my God, why have you forsaken me? |
+| en Q7 | speech | eleven_v4 |  | They divide my garments among them, and for my clothing they cast lots. |
+| en N14 | speech | eleven_v4 |  | Beneath the cross, the soldiers divided his garments and cast lots for his tunic. |
+| en N20 | speech | eleven_v4 |  | Peter, who once said “Far be it from you,” after meeting the risen Jesus, preached this: |
+| en Q9 | speech | eleven_v4 |  | God anointed Jesus of Nazareth with the Holy Spirit and with power. He went about doing good |
+| en Q11 | speech | eleven_v4 |  | They put him to death by hanging him on a tree, |
+| en Q12 | speech | eleven_v4 |  | But God raised him on the third day |
+| en N15 | speech | eleven_v4 |  | A suffering Christ was not a failure — it was the road the Scriptures pointed to. |
+| en N16K | speech | eleven_v4 |  | King, |
+| en N16P | speech | eleven_v4 |  | Priest, |
+| en N16R | speech | eleven_v4 |  | Prophet, |
+| en N16 | speech | eleven_v4 |  | Three offices, in one Person. |
+| en N17 | speech | eleven_v4 |  | “Christ” is not a last name. It is the confession that Jesus is that very Messiah. |
+| en Q14 | speech | eleven_v4 |  | Everyone who believes in him receives forgiveness of sins through his name. |
+| en Q13 | speech | eleven_v4 |  | You are the Christ, the Son of the living God. |

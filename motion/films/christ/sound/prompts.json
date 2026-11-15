@@ -2443,6 +2443,652 @@
     "2LZBaYoytUlVUdWO0XDp"
    ],
    "name": "CM10"
+  },
+  {
+   "use": "toolu_01T21tWJSB38r2k6monUfbhT",
+   "time": "2026-11-15T14:16:55.637Z",
+   "flow": "Zxy8bLM46T7l5JU1juuB",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "The “Christ” in “Jesus Christ” — is it Jesus’ last name?",
+   "params": {
+    "voice_id": "wfDOIda26ysF4KJAAUlG"
+   },
+   "why": "",
+   "node": "xrSHANuQiVh7lkHZKvlI",
+   "sessions": [
+    "WJwDZ9c3Jj8Q0AgKUXZn",
+    "3p6hW6jbO88V2eYsPJEq"
+   ],
+   "name": "en N01"
+  },
+  {
+   "use": "toolu_0119gH4svzEYeZkMsUaWyjjs",
+   "time": "2026-11-15T14:17:45.416Z",
+   "flow": "Zxy8bLM46T7l5JU1juuB",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "The name at the end of every prayer.",
+   "params": {
+    "voice_id": "wfDOIda26ysF4KJAAUlG"
+   },
+   "why": "",
+   "node": "owUgqlKNe4sKNLAw1rGL",
+   "sessions": [
+    "y3fp0VE6zumVq2xrIF1E",
+    "YdG4G1ILk7Kqf5BYy1Wu"
+   ],
+   "name": "en N02"
+  },
+  {
+   "use": "toolu_01LxhxZHg9vwngjstrYyCvpn",
+   "time": "2026-11-15T14:17:45.419Z",
+   "flow": "Zxy8bLM46T7l5JU1juuB",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "We have found the Messiah (which means Christ).",
+   "params": {
+    "voice_id": "wfDOIda26ysF4KJAAUlG"
+   },
+   "why": "",
+   "node": "GvmihEwbA8rRzC93Q3pO",
+   "sessions": [
+    "OYLuNqYruSNFZsJrYfTf",
+    "umOPKGjLsguSSVDv4JL3"
+   ],
+   "name": "en Q1"
+  },
+  {
+   "use": "toolu_019rJWLs18UDbJcV9CX5GAN4",
+   "time": "2026-11-15T14:17:45.422Z",
+   "flow": "Zxy8bLM46T7l5JU1juuB",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Christ is not a last name. It means “the Anointed One” — the Messiah.",
+   "params": {
+    "voice_id": "wfDOIda26ysF4KJAAUlG"
+   },
+   "why": "",
+   "node": "N2m9w2P10U88LGPxrSfx",
+   "sessions": [
+    "7hNMTd4PzMnhIIOUb9Sw",
+    "6zr0HWpdnC6VY2eU2J2p"
+   ],
+   "name": "en N03"
+  },
+  {
+   "use": "toolu_01CZqrWPAtRunkAiePMxcS1m",
+   "time": "2026-11-15T14:17:45.427Z",
+   "flow": "Zxy8bLM46T7l5JU1juuB",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "God set apart kings, priests, and prophets by anointing them with oil.",
+   "params": {
+    "voice_id": "wfDOIda26ysF4KJAAUlG"
+   },
+   "why": "",
+   "node": "KHtFyi5pD6EWPPRJFLDF",
+   "sessions": [
+    "b0al7VePetzxfOsa7kWL",
+    "QFLC9OKvktyyEdfylISe"
+   ],
+   "name": "en N04"
+  },
+  {
+   "use": "toolu_01TtZrygUmkzCUp1GngGZcSS",
+   "time": "2026-11-15T14:17:45.429Z",
+   "flow": "Zxy8bLM46T7l5JU1juuB",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Then Samuel took the horn of oil and anointed him in the midst of his brothers.",
+   "params": {
+    "voice_id": "wfDOIda26ysF4KJAAUlG"
+   },
+   "why": "",
+   "node": "UyR2YUbJZqUau3c94Xn4",
+   "sessions": [
+    "ILrInycBIRy2M69vtSWW",
+    "qzWXl2LQOilEXyvjCaoc"
+   ],
+   "name": "en K1"
+  },
+  {
+   "use": "toolu_018hHVzrwP4GK5RUmE6Jbwic",
+   "time": "2026-11-15T14:17:45.431Z",
+   "flow": "Zxy8bLM46T7l5JU1juuB",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "And he poured some of the anointing oil on Aaron’s head",
+   "params": {
+    "voice_id": "wfDOIda26ysF4KJAAUlG"
+   },
+   "why": "",
+   "node": "mcKQ4tP8djEUF5Twy7By",
+   "sessions": [
+    "nEdUBHlRC15UAlfGVTxd",
+    "USSoCa0larvsjQal1UYP"
+   ],
+   "name": "en K2"
+  },
+  {
+   "use": "toolu_012q8VQDcquAopAHnohWN8eb",
+   "time": "2026-11-15T14:17:45.435Z",
+   "flow": "Zxy8bLM46T7l5JU1juuB",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "You shall anoint to be prophet in your place.",
+   "params": {
+    "voice_id": "wfDOIda26ysF4KJAAUlG"
+   },
+   "why": "",
+   "node": "6sLeKVbpldYNnAO6AkpS",
+   "sessions": [
+    "163SyYAMj1KtAMFy14Tx",
+    "N1jDRiYxVJ6jR3uLXfxz"
+   ],
+   "name": "en K3"
+  },
+  {
+   "use": "toolu_01XQx1cyS95xFKNA54jW2fU5",
+   "time": "2026-11-15T14:17:45.438Z",
+   "flow": "Zxy8bLM46T7l5JU1juuB",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Many people waited for the Messiah only as a king who would drive out Rome.",
+   "params": {
+    "voice_id": "wfDOIda26ysF4KJAAUlG"
+   },
+   "why": "",
+   "node": "LnIwJ0ix6LK0dpocjzeK",
+   "sessions": [
+    "JUbj5DkgZHPM26mKVRwj",
+    "dSQKNAGA02XCxZuhlFNB"
+   ],
+   "name": "en N06"
+  },
+  {
+   "use": "toolu_01GyDXqsMQZoy8L6bK32Jfox",
+   "time": "2026-11-15T14:17:47.951Z",
+   "flow": "Zxy8bLM46T7l5JU1juuB",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "One day, after Jesus had come, Peter made a confession.",
+   "params": {
+    "voice_id": "wfDOIda26ysF4KJAAUlG"
+   },
+   "why": "",
+   "node": "2fu3EzAwKbNZD3PpqAqW",
+   "sessions": [
+    "DSP0BYxDSuXPgoi6hp3G",
+    "6jq4i1aYKk62uUCiaCuh"
+   ],
+   "name": "en N07"
+  },
+  {
+   "use": "toolu_0196aghMtkMpMfEyiNSpJubK",
+   "time": "2026-11-15T14:17:47.953Z",
+   "flow": "Zxy8bLM46T7l5JU1juuB",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "You are the Christ,",
+   "params": {
+    "voice_id": "wfDOIda26ysF4KJAAUlG"
+   },
+   "why": "",
+   "node": "HWwtnKzLVTtr1Nn0SkQE",
+   "sessions": [
+    "PQP14kRyGbeadC8CV0oE",
+    "a8TA0FQvOUtbrwrZj9qd"
+   ],
+   "name": "en Q2"
+  },
+  {
+   "use": "toolu_01Vqq6rhrAfZqGuLz961WXNp",
+   "time": "2026-11-15T14:17:47.956Z",
+   "flow": "Zxy8bLM46T7l5JU1juuB",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "From then on, Jesus said he must suffer and be killed, and on the third day rise again.",
+   "params": {
+    "voice_id": "wfDOIda26ysF4KJAAUlG"
+   },
+   "why": "",
+   "node": "SRckzd7dI757lifQl72g",
+   "sessions": [
+    "10Bp3FaA6mKngPqeQSmj",
+    "Mij2wnAq5IQsjBAjKmjZ"
+   ],
+   "name": "en N08"
+  },
+  {
+   "use": "toolu_015azxQL4kF5gZk8DHiVJAX4",
+   "time": "2026-11-15T14:18:47.671Z",
+   "flow": "Zxy8bLM46T7l5JU1juuB",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Far be it from you, Lord!",
+   "params": {
+    "voice_id": "wfDOIda26ysF4KJAAUlG"
+   },
+   "why": "",
+   "node": "OgV9OSzNuTdHcnfLwFgl",
+   "sessions": [
+    "u0ivcKBseJwFT0sxdRNr",
+    "g26oAu4lKDjbfTaMQoNs"
+   ],
+   "name": "en Q3"
+  },
+  {
+   "use": "toolu_01SpE7Sf7HdQegURkeyU8hci",
+   "time": "2026-11-15T14:18:47.674Z",
+   "flow": "Zxy8bLM46T7l5JU1juuB",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "To Peter, a Christ who dies made no sense.",
+   "params": {
+    "voice_id": "wfDOIda26ysF4KJAAUlG"
+   },
+   "why": "",
+   "node": "vI7TOLxxS4n7VwuaD4sl",
+   "sessions": [
+    "aJNC3DziDvb6PL8qvUdp",
+    "tJ54f3xOQmKGqPPcW8aB"
+   ],
+   "name": "en N09"
+  },
+  {
+   "use": "toolu_01GANCk8vA4zHqKCdX9DPFP6",
+   "time": "2026-11-15T14:18:47.676Z",
+   "flow": "Zxy8bLM46T7l5JU1juuB",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "But that road had already been written.",
+   "params": {
+    "voice_id": "wfDOIda26ysF4KJAAUlG"
+   },
+   "why": "",
+   "node": "RKBwlb8GmFTxTKsgCSsE",
+   "sessions": [
+    "aD5Ra8r1GV27EFDNsK6y",
+    "PRhpuiYCid9ogARVRDSx"
+   ],
+   "name": "en N10"
+  },
+  {
+   "use": "toolu_01EBsoAzxQSExmkV5ezbY7o8",
+   "time": "2026-11-15T14:18:47.678Z",
+   "flow": "Zxy8bLM46T7l5JU1juuB",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "But he was pierced for our transgressions; he was crushed for our iniquities;",
+   "params": {
+    "voice_id": "wfDOIda26ysF4KJAAUlG"
+   },
+   "why": "",
+   "node": "6wRl2Se3pKRcc9lRws2d",
+   "sessions": [
+    "A5wHcXzq17fmzmlpWQWk",
+    "PmrJJMtLRKWrpWw7kAii"
+   ],
+   "name": "en Q4"
+  },
+  {
+   "use": "toolu_01Bb18KgkQYSrMyBpe6r28P1",
+   "time": "2026-11-15T14:18:47.786Z",
+   "flow": "Zxy8bLM46T7l5JU1juuB",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "On the cross, the cry of Jesus.",
+   "params": {
+    "voice_id": "wfDOIda26ysF4KJAAUlG"
+   },
+   "why": "",
+   "node": "uJa2AmxXW29cQRdeYmE6",
+   "sessions": [
+    "3rCxKbMZAigpCZgklZqq",
+    "qcuiN3HjG9GgArWF9hZT"
+   ],
+   "name": "en N11"
+  },
+  {
+   "use": "toolu_01TTdVdgHD84NVzpduK3ELpa",
+   "time": "2026-11-15T14:18:50.922Z",
+   "flow": "Zxy8bLM46T7l5JU1juuB",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "My God, my God, why have you forsaken me?",
+   "params": {
+    "voice_id": "wfDOIda26ysF4KJAAUlG"
+   },
+   "why": "",
+   "node": "ZTVtUJOPRef1UTbXEMpj",
+   "sessions": [
+    "AJ6KM0a9VfKoOG1CVmdB",
+    "4WHHtkdhsK6rmeJwkpg8"
+   ],
+   "name": "en Q5"
+  },
+  {
+   "use": "toolu_018rmTgf3nchK6eYJbgaf6HB",
+   "time": "2026-11-15T14:18:50.926Z",
+   "flow": "Zxy8bLM46T7l5JU1juuB",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "This cry is the first line of a psalm written a thousand years before by David, the anointed king.",
+   "params": {
+    "voice_id": "wfDOIda26ysF4KJAAUlG"
+   },
+   "why": "",
+   "node": "nong7RSPzFmc3chdLIMd",
+   "sessions": [
+    "ZPsvQZXZOtrhwCQ1jRA6",
+    "sAsKAQMnzhkJFcXMDpbJ"
+   ],
+   "name": "en N12"
+  },
+  {
+   "use": "toolu_011LmfjJFhnoPLHiPr6qZ3kL",
+   "time": "2026-11-15T14:18:51.611Z",
+   "flow": "Zxy8bLM46T7l5JU1juuB",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "My God, my God, why have you forsaken me?",
+   "params": {
+    "voice_id": "wfDOIda26ysF4KJAAUlG"
+   },
+   "why": "",
+   "node": "vfYFUDMN9lvKdiMN1V5T",
+   "sessions": [
+    "wSRgLF1sWUldGJ0SvEf9",
+    "LozAC9BMdllOowZdmkJj"
+   ],
+   "name": "en Q6"
+  },
+  {
+   "use": "toolu_01AqfeNsjKrnnBC2HqcEgicx",
+   "time": "2026-11-15T14:18:52.908Z",
+   "flow": "Zxy8bLM46T7l5JU1juuB",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "They divide my garments among them, and for my clothing they cast lots.",
+   "params": {
+    "voice_id": "wfDOIda26ysF4KJAAUlG"
+   },
+   "why": "",
+   "node": "6xhMBmYHJZt2inaYkJo7",
+   "sessions": [
+    "VbTf9pwqrTT2lNr6xDKc",
+    "FzUZRGRpnpXiZ40RptLq"
+   ],
+   "name": "en Q7"
+  },
+  {
+   "use": "toolu_01BQvxCFCAFsftzxnLVpLVaV",
+   "time": "2026-11-15T14:18:54.258Z",
+   "flow": "Zxy8bLM46T7l5JU1juuB",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Beneath the cross, the soldiers divided his garments and cast lots for his tunic.",
+   "params": {
+    "voice_id": "wfDOIda26ysF4KJAAUlG"
+   },
+   "why": "",
+   "node": "Z2k3602fbHvjisyAKfrY",
+   "sessions": [
+    "Xqml80ItxZHXtSSL1Kua",
+    "KzBYldD0VTFA8aqDREsa"
+   ],
+   "name": "en N14"
+  },
+  {
+   "use": "toolu_014K67EgsEXgbmMtyfeAniud",
+   "time": "2026-11-15T14:18:55.363Z",
+   "flow": "Zxy8bLM46T7l5JU1juuB",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Peter, who once said “Far be it from you,” after meeting the risen Jesus, preached this:",
+   "params": {
+    "voice_id": "wfDOIda26ysF4KJAAUlG"
+   },
+   "why": "",
+   "node": "g56qbtgS2z9IRf7WodrS",
+   "sessions": [
+    "avA404IW7KgYCQVdDa92",
+    "y6p7HpvN5VmzxyUCAIVb"
+   ],
+   "name": "en N20"
+  },
+  {
+   "use": "toolu_01FAdLwnBmocbwobKbF1ZQjW",
+   "time": "2026-11-15T14:20:02.503Z",
+   "flow": "Zxy8bLM46T7l5JU1juuB",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "God anointed Jesus of Nazareth with the Holy Spirit and with power. He went about doing good",
+   "params": {
+    "voice_id": "wfDOIda26ysF4KJAAUlG"
+   },
+   "why": "",
+   "node": "1gJO5w3Z4JN3GbBEjQEZ",
+   "sessions": [
+    "OLSmUTExuzb9zruBHbYD",
+    "vFO0Pg4GAlTJCaCOMqRt"
+   ],
+   "name": "en Q9"
+  },
+  {
+   "use": "toolu_01P6CgSj3Z7TUH2ZqZPQXK6D",
+   "time": "2026-11-15T14:20:02.506Z",
+   "flow": "Zxy8bLM46T7l5JU1juuB",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "They put him to death by hanging him on a tree,",
+   "params": {
+    "voice_id": "wfDOIda26ysF4KJAAUlG"
+   },
+   "why": "",
+   "node": "4nuswnB8PMED7eQCDv5f",
+   "sessions": [
+    "XGP46YGrqM5e5IonsfyX",
+    "2Q4S6vW9eA1inbJPicYh"
+   ],
+   "name": "en Q11"
+  },
+  {
+   "use": "toolu_01G53LF9CBPHRAxTR6yDHaUn",
+   "time": "2026-11-15T14:20:02.509Z",
+   "flow": "Zxy8bLM46T7l5JU1juuB",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "But God raised him on the third day",
+   "params": {
+    "voice_id": "wfDOIda26ysF4KJAAUlG"
+   },
+   "why": "",
+   "node": "ZJTWQ1hHikQQ02kCgaJ8",
+   "sessions": [
+    "iWd8Wsdt6xb2krVxNCIA",
+    "2xjFV0cQnrgyKmPBgjAI"
+   ],
+   "name": "en Q12"
+  },
+  {
+   "use": "toolu_01YVxk9F3YUFy58gJZwEznFa",
+   "time": "2026-11-15T14:20:02.511Z",
+   "flow": "Zxy8bLM46T7l5JU1juuB",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "A suffering Christ was not a failure — it was the road the Scriptures pointed to.",
+   "params": {
+    "voice_id": "wfDOIda26ysF4KJAAUlG"
+   },
+   "why": "",
+   "node": "g4HZtqFl4apzt8Rw3h5k",
+   "sessions": [
+    "IKE6qtc7YbyHLcdzMqsP",
+    "9JPGVnxCN3NGHV0x1PZ0"
+   ],
+   "name": "en N15"
+  },
+  {
+   "use": "toolu_01Vk7eGtNHo6BnpARbaXSgq9",
+   "time": "2026-11-15T14:20:02.515Z",
+   "flow": "Zxy8bLM46T7l5JU1juuB",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "King,",
+   "params": {
+    "voice_id": "wfDOIda26ysF4KJAAUlG"
+   },
+   "why": "",
+   "node": "3f8r9BJ2Dv9AfPp3lm3u",
+   "sessions": [
+    "IyYRlqoCYc5wH01Ntgx0",
+    "oao67nYxIcVO4F9CLF5f"
+   ],
+   "name": "en N16K"
+  },
+  {
+   "use": "toolu_012RAWjjgFTVhtFNSfGMaBTi",
+   "time": "2026-11-15T14:20:02.763Z",
+   "flow": "Zxy8bLM46T7l5JU1juuB",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Priest,",
+   "params": {
+    "voice_id": "wfDOIda26ysF4KJAAUlG"
+   },
+   "why": "",
+   "node": "UGrx14Gu63e46vhWox1C",
+   "sessions": [
+    "6xl6G8BMnXgJlndYeGFD",
+    "kpeIGz9l4rJZPwIRAzKt"
+   ],
+   "name": "en N16P"
+  },
+  {
+   "use": "toolu_01KR9dNHUT9repcDgTNoeosu",
+   "time": "2026-11-15T14:20:02.766Z",
+   "flow": "Zxy8bLM46T7l5JU1juuB",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Prophet,",
+   "params": {
+    "voice_id": "wfDOIda26ysF4KJAAUlG"
+   },
+   "why": "",
+   "node": "QxJbBP4UnIQLdMLuMsGE",
+   "sessions": [
+    "WUMCzYj8RY7P7CvYwL12",
+    "9dFp0Pv90OZ3SqffKWHc"
+   ],
+   "name": "en N16R"
+  },
+  {
+   "use": "toolu_01MddRJsCvHnGn57nmRosRPJ",
+   "time": "2026-11-15T14:20:02.769Z",
+   "flow": "Zxy8bLM46T7l5JU1juuB",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Three offices, in one Person.",
+   "params": {
+    "voice_id": "wfDOIda26ysF4KJAAUlG"
+   },
+   "why": "",
+   "node": "NLsJjY9Ggq5sOb5vP51C",
+   "sessions": [
+    "9nbUJWqjd1z1epupbvfA",
+    "4yOCmvDOZt0OEWgHTr5E"
+   ],
+   "name": "en N16"
+  },
+  {
+   "use": "toolu_01Eu4mv8hFYoKBXbCYD8oWDS",
+   "time": "2026-11-15T14:20:02.772Z",
+   "flow": "Zxy8bLM46T7l5JU1juuB",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "“Christ” is not a last name. It is the confession that Jesus is that very Messiah.",
+   "params": {
+    "voice_id": "wfDOIda26ysF4KJAAUlG"
+   },
+   "why": "",
+   "node": "y8ku8yyilAkTM2zkqHno",
+   "sessions": [
+    "gI1JnxtlA2erzGfeeQxd",
+    "qGjGEP6KhSoVVhLML3E6"
+   ],
+   "name": "en N17"
+  },
+  {
+   "use": "toolu_01BwCHCbB7KmWNzinS1svNxF",
+   "time": "2026-11-15T14:20:02.953Z",
+   "flow": "Zxy8bLM46T7l5JU1juuB",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Everyone who believes in him receives forgiveness of sins through his name.",
+   "params": {
+    "voice_id": "wfDOIda26ysF4KJAAUlG"
+   },
+   "why": "",
+   "node": "yCxU94z3EtCA14MB20A0",
+   "sessions": [
+    "C3kLWgYOK5PM6CC6pVDQ",
+    "S5G7NDCL8SIsRFw2Meav"
+   ],
+   "name": "en Q14"
+  },
+  {
+   "use": "toolu_01UwySjRWGjLVZT6bPnHMcox",
+   "time": "2026-11-15T14:20:04.519Z",
+   "flow": "Zxy8bLM46T7l5JU1juuB",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "You are the Christ, the Son of the living God.",
+   "params": {
+    "voice_id": "wfDOIda26ysF4KJAAUlG"
+   },
+   "why": "",
+   "node": "7t9qmX9hxlBNzw40G66x",
+   "sessions": [
+    "0NfM8aE2hfy4mjWjfbII",
+    "3NHcpwEeeolTlJ1Aza91"
+   ],
+   "name": "en Q13"
   }
  ],
  "title": "그리스도",

@@ -2151,13 +2151,19 @@
    "es·pt-BR 해설 34줄씩(flow H70YnW4QHUN7jLy44iBa / ckcvoQoiU6Uzt8AFIHfy, sessions-es/pt-BR.json, takes 68개씩) → place-es/pt-BR.json 모두 자리에 맞음 → christ-es-narr.mp3 · christ-pt-BR-narr.mp3 + sound/es.vtt·pt-BR.vtt, 프롬프트 216개",
    "받아쓰기 대조(Scribe, flow Ujk3BrfCwyGMjo9Uh4Io): en 2줄(아포스트로피 표기만) · es 4줄(Señor·Dios가 줄 경계에서 앞 줄로 찍힘 — 단어 빠짐 없음) · pt-BR 모두 일치 → 셋 다 원고대로 읽음",
    "자막 파일 27개 언어 × 2(sound/<lang>.ko-timing.vtt 한국어판 · <lang>.en-timing.vtt 국제판) + ko/en/es/pt-BR.vtt 다시 — 빈 칸 0 · 겹침 0. 고친 것: km Q9 자막이 비던 '…' 규칙, 한 구절이 한 줄 100자 넘던 것(Q9·Q13·Q14 줄바꿈) → motion/films/said.mjs 하나로(네 도구가 같이 씀), 「침묵의 400년」 영향 없음 확인",
-   "youtube-intl.json(제목·설명·챕터·태그·자막 27개 경로·오디오 트랙) — 설명 앞부분은 검수된 해설 N01·N02 / N03·N15, 세로판 첫 줄 lead_v(관련 동영상 = 국제 14분 영상 MFH3Hj4V6KA), 가로판 more_h = 그 언어의 14분 영상 링크. intl.mjs가 lead_v·more_h·영상별 썸네일 경로를 읽음(silence400 그대로). 썸네일 A-oil-en/es/pt-BR + V-A-oil-*(make.py --lang, 글 = N01/N03), 받아쓰기 sound/scribe-en/es/pt-BR.json 커밋"
+   "youtube-intl.json(제목·설명·챕터·태그·자막 27개 경로·오디오 트랙) — 설명 앞부분은 검수된 해설 N01·N02 / N03·N15, 세로판 첫 줄 lead_v(관련 동영상 = 국제 14분 영상 MFH3Hj4V6KA), 가로판 more_h = 그 언어의 14분 영상 링크. intl.mjs가 lead_v·more_h·영상별 썸네일 경로를 읽음(silence400 그대로). 썸네일 A-oil-en/es/pt-BR + V-A-oil-*(make.py --lang, 글 = N01/N03), 받아쓰기 sound/scribe-en/es/pt-BR.json 커밋",
+   "국제판 제목·설명 원어민 검수 motion/reviews/film-christ-yt.md — 구절 15/15 원문, 설명 앞부분·법적 문구 정확, 썸네일 6장 잘 읽힘, 자막 깨진 칸 없음. HIGH 1 · MED 3 · LOW 8"
   ],
   "running": [
-   "국제판 제목·설명 원어민 검수(en·es·pt-BR) → motion/reviews/film-christ-yt.md",
    "fresco 키트(motion-skills kit-fresco 브랜치) — goldoil은 kit-goldoil 0fc902a로 끝"
   ],
-  "owner": [],
+  "owner": [
+   "[HIGH] 챕터 0:44→0:51이 7초 — 10초 미만이면 챕터 전체가 안 뜸(README 361). 한국어판 upload.md도 같음. 제안: 0:44 하나로 합침(\"사람들이 기다린 메시야 · 베드로의 고백\" / en·es·pt 같은 방식)",
+   "[MED] 쇼츠 첫 줄 \"위 관련 동영상\" — rules는 \"아래\", upload.md는 \"위\". 제안: 방향 없이 \"관련 동영상 링크를 눌러\"(한국어판·국제판 모두, rules 문구도)",
+   "[MED] es·pt 쇼츠 관련 동영상이 영어 14분 영상 — 제안: \"(영어)\" 표시 + 그 언어판이 채널에 있다고",
+   "[MED] pt-BR «» → 브라질은 “” — 제안: 제목·썸네일·챕터·설명·자막(pt-BR.json 4곳) 바꾸고 pt 썸네일 다시",
+   "[LOW 8] 챕터 낱말(Messiah people·Today’s confession), Person 대문자, 태그 보강, Salmo/Salmos 통일, 쇼츠 표지 아래 줄 위치 등 — 원하시면 함께"
+  ],
   "next": [
    "자막 올리기: 한국어판 세로·가로에 ko + 27개(.ko-timing.vtt), 국제판 세로·가로에 .en-timing.vtt — 영상 올린 뒤(studio-caption.js), 그다음 asr-off",
    "한국어판 공개 일정(decisions.date, 주일 제외) → 관리자 OK 뒤 올리기·예약",

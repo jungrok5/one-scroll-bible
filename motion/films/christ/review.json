@@ -2153,20 +2153,15 @@
    "자막 파일 27개 언어 × 2(sound/<lang>.ko-timing.vtt 한국어판 · <lang>.en-timing.vtt 국제판) + ko/en/es/pt-BR.vtt 다시 — 빈 칸 0 · 겹침 0. 고친 것: km Q9 자막이 비던 '…' 규칙, 한 구절이 한 줄 100자 넘던 것(Q9·Q13·Q14 줄바꿈) → motion/films/said.mjs 하나로(네 도구가 같이 씀), 「침묵의 400년」 영향 없음 확인",
    "youtube-intl.json(제목·설명·챕터·태그·자막 27개 경로·오디오 트랙) — 설명 앞부분은 검수된 해설 N01·N02 / N03·N15, 세로판 첫 줄 lead_v(관련 동영상 = 국제 14분 영상 MFH3Hj4V6KA), 가로판 more_h = 그 언어의 14분 영상 링크. intl.mjs가 lead_v·more_h·영상별 썸네일 경로를 읽음(silence400 그대로). 썸네일 A-oil-en/es/pt-BR + V-A-oil-*(make.py --lang, 글 = N01/N03), 받아쓰기 sound/scribe-en/es/pt-BR.json 커밋",
    "국제판 제목·설명 원어민 검수 motion/reviews/film-christ-yt.md — 구절 15/15 원문, 설명 앞부분·법적 문구 정확, 썸네일 6장 잘 읽힘, 자막 깨진 칸 없음. HIGH 1 · MED 3 · LOW 8",
-   "화풍 키트 둘: goldoil(kit-goldoil 0fc902a) · fresco(kit-fresco 7b10d39, 석회벽·낮은 해 — 7차에 벽화가 빠져 이름만 fresco) — 전후 스틸 픽셀 같음, kits 단계 통과. motion-skills main 병합은 관리자 OK 뒤"
+   "화풍 키트 둘: goldoil(kit-goldoil 0fc902a) · fresco(kit-fresco 7b10d39, 석회벽·낮은 해 — 7차에 벽화가 빠져 이름만 fresco) — 전후 스틸 픽셀 같음, kits 단계 통과. motion-skills main 병합은 관리자 OK 뒤",
+   "검수 12건 모두 반영(관리자 2026-11-16 \"다 네 제안대로. 선택 항목도 해줘\"): 챕터 0:44 합침(한국어판 upload.md·youtube.json도), 관련 동영상 문구 방향 없이(한국어판·국제판·rules·sheet.md), es·pt 쇼츠 첫 줄에 영어판 표시, pt-BR “”(i18n·자막·제목·썸네일), 끝 챕터·Person·es 제목·Salmo 22·태그·설명 순서, 세로 표지 글 120px 위로(한국어판 V-*도). 새 검사: sheet 단계가 챕터 10초 미만을 잡음"
   ],
   "running": [],
-  "owner": [
-   "[HIGH] 챕터 0:44→0:51이 7초 — 10초 미만이면 챕터 전체가 안 뜸(README 361). 한국어판 upload.md도 같음. 제안: 0:44 하나로 합침(\"사람들이 기다린 메시야 · 베드로의 고백\" / en·es·pt 같은 방식)",
-   "[MED] 쇼츠 첫 줄 \"위 관련 동영상\" — rules는 \"아래\", upload.md는 \"위\". 제안: 방향 없이 \"관련 동영상 링크를 눌러\"(한국어판·국제판 모두, rules 문구도)",
-   "[MED] es·pt 쇼츠 관련 동영상이 영어 14분 영상 — 제안: \"(영어)\" 표시 + 그 언어판이 채널에 있다고",
-   "[MED] pt-BR «» → 브라질은 “” — 제안: 제목·썸네일·챕터·설명·자막(pt-BR.json 4곳) 바꾸고 pt 썸네일 다시",
-   "[LOW 8] 챕터 낱말(Messiah people·Today’s confession), Person 대문자, 태그 보강, Salmo/Salmos 통일, 쇼츠 표지 아래 줄 위치 등 — 원하시면 함께"
-  ],
+  "owner": [],
   "next": [
+   "공개: 관리자 \"공개일은 완료되면 바로할꺼야\" — 준비가 끝나면 바로 공개(주일 제외). 한국어판 올리기 → 국제판 올리기(intl.mjs entry → 스튜디오 → intl.mjs api, 오디오 es·pt-BR) → 자막 → 인스타·스레드",
    "자막 올리기: 한국어판 세로·가로에 ko + 27개(.ko-timing.vtt), 국제판 세로·가로에 .en-timing.vtt — 영상 올린 뒤(studio-caption.js), 그다음 asr-off",
-   "한국어판 공개 일정(decisions.date, 주일 제외) → 관리자 OK 뒤 올리기·예약",
-   "검수 HIGH/MED → 관리자 확인 뒤 반영 → 국제판 올리기(intl.mjs entry → 스튜디오 → intl.mjs api, 오디오 트랙 es·pt-BR) — 공개는 관리자 OK"
+   "한국어판 공개 일정(decisions.date, 주일 제외) → 관리자 OK 뒤 올리기·예약"
   ],
   "followups_outside_film": [
    "사이트 i18n/km.json 세 직분 문단의 \"សង្ឃ\"(승려)를 \"បូជាចារ្យ\"(제사장)로 — km 검수자 지적",

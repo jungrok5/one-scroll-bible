@@ -284,7 +284,12 @@ const G = {
       const w = node([join(FILMS, 'word-sync.mjs'), c.film, '--json']), arr = JSON.parse((w.stdout || '[]').trim() || '[]');
       for (const o of arr) if (o.delta == null && !o.note) why.push(`${o.id} 「${o.hl}」 금빛 시각이 없다 — word-sync.mjs --write`); else if (o.delta != null && Math.abs(o.delta) > T.sound.word_tol_s) why.push(`${o.id} 「${o.hl}」 금빛이 말과 ${o.delta > 0 ? '+' : ''}${o.delta}s 어긋남 — word-sync.mjs ${c.film} --write`); }
     return why.length ? { ok: false, why } : pass(); },
-  sheet: c => {
+  // YouTube chapters: first 0:00, at least 3, each ≥ 10 s — one short chapter hides them all (README "챕터" row)
+  // (inner helper: kept next to the gate that uses it)
+  sheet: c => { const chapterWhy = (d, who) => { const ts = [...d.matchAll(/^(\d+):(\d\d) /gm)].map(m => +m[1] * 60 + +m[2]); if (!ts.length) return [];
+      const w = []; if (ts[0] !== 0) w.push(`${who}: 챕터 첫 줄이 0:00이 아니다`); if (ts.length < 3) w.push(`${who}: 챕터 ${ts.length}개 < 3`);
+      ts.forEach((t, i) => { if (i && t - ts[i - 1] < 10) w.push(`${who}: 챕터 ${Math.floor(ts[i - 1] / 60)}:${String(ts[i - 1] % 60).padStart(2, '0')} 가 ${t - ts[i - 1]}초 < 10 — 챕터 전체가 안 뜸, 합친다`); });
+      return w; };
     const f = join(c.d, 'upload.md'); if (!existsSync(f)) return fail('upload.md 없음'); if (!existsSync(join(c.d, 'youtube.json'))) return fail('youtube.json 없음');
     const t = readFileSync(f, 'utf8'), why = []; for (const k of ['제목', '설명', '태그', '고정 댓글']) if (!t.includes(k)) why.push(`upload.md에 '${k}' 칸이 없다`);
     // title/thumbnail from evidence (관리자 2026-11-10 "데이터는 없어? 공정에도 반영해") — same-topic market + our own CTR/A/B
@@ -293,7 +298,10 @@ const G = {
     const y = J(join(c.d, 'youtube.json')) || {}, items = Array.isArray(y) ? y : (y.videos || Object.values(y).filter(v => v && typeof v === 'object'));
     for (const v of items) { if (v.title && v.title.length > T.upload.title_max) why.push(`제목 ${v.title.length}자 > ${T.upload.title_max}`);
       const first = (v.description || '').split('\n')[0]; if (first && first.length > T.upload.first_line_max) why.push(`설명 첫 줄 ${first.length}자 > ${T.upload.first_line_max}(단톡방 미리보기)`);
-      if (/ElevenLabs/.test(v.description || '')) why.push(`${v.title || ''}: 설명에 도구 크레딧 줄 — 빼기로 함(motion/youtube/credit.mjs)`); }
+      if (/ElevenLabs/.test(v.description || '')) why.push(`${v.title || ''}: 설명에 도구 크레딧 줄 — 빼기로 함(motion/youtube/credit.mjs)`);
+      why.push(...chapterWhy(v.description || '', v.title || '')); }
+    // the international text too (2026-11-16 「그리스도」 — a 7-second chapter at 0:44 in both, which drops YouTube's whole chapter list)
+    const yi = J(join(c.d, 'youtube-intl.json')); if (yi) for (const [L, t] of Object.entries(yi.text || {})) why.push(...chapterWhy((t.chapters || []).join('\n'), `국제판 ${L}`));
     return why.length ? { ok: false, why } : pass(); },
   publish: c => { const u = c.up; if (!u?.h?.id || !u?.v?.id) return fail('uploaded.json에 가로·세로 id 없음');
     const why = []; for (const k of ['h', 'v']) { const at = u[k].publish_at; if (!at) { why.push(`${k}: publish_at 없음`); continue; }

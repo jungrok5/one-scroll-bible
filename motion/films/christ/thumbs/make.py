@@ -64,6 +64,9 @@ if ims:
 # The picture sits in the top part of the vertical frames; the words go in the dark band under it, all inside the middle 3:4
 # (y 240–1680 — what the Instagram profile grid shows). Frames: RENDER_QUERY=clean=1 node motion/render.mjs v … --stills 122,113.6,115.2
 VW, VH = 1080, 1920
+# LIFT: the words sit 120 px higher than the first layout — the bottom line was at 84–88 % of the height, under the Shorts overlay and
+# outside Instagram's 3:4 grid crop (y 240–1680) (native review 2026-11-16 #12, 관리자 "선택 항목도 해줘")
+LIFT = 120
 VPICS = [('V-A-oil', 'v-17_5.jpg', -200, 1.0, 'A'), ('V-B-prayer', 'v-164.jpg', -200, 1.0, 'B'), ('V-C-cross', 'v-93.jpg', -200, 1.0, 'C')]
 
 def centered(base, y, s, f, fill, stroke):
@@ -76,11 +79,11 @@ def make_v(name, src, dy, z, key='A'):
     pic = pic.resize((int(VW * z), int(VH * z)), Image.LANCZOS)
     im = Image.new('RGBA', (VW, VH), (8, 6, 4, 255)); im.paste(pic, ((VW - pic.width) // 2, dy))
     shade = Image.new('RGBA', (VW, VH)); d = ImageDraw.Draw(shade)   # darken under the picture for the words
-    for y in range(VH): d.line([(0, y), (VW, y)], fill=(6, 4, 2, int(240 * min(1, max(0, (y - 1000) / 260)))))
+    for y in range(VH): d.line([(0, y), (VW, y)], fill=(6, 4, 2, int(240 * min(1, max(0, (y - 1000 + LIFT) / 260)))))
     im.alpha_composite(shade)
-    centered(im, 1110, TOP, font(78), WHITE, 7)
-    centered(im, 1200, BIG, fit(BIG, 280, 980, 16), GOLD, 16)
-    centered(im, 1580, TAIL, font(84), WHITE, 8)
+    centered(im, 1110 - LIFT, TOP, font(78), WHITE, 7)
+    centered(im, 1200 - LIFT, BIG, fit(BIG, 280, 980, 16), GOLD, 16)
+    centered(im, 1580 - LIFT, TAIL, font(84), WHITE, 8)
     out = os.path.join(HERE, name + '.jpg'); im.convert('RGB').save(out, quality=92); print(out)
     return im
 

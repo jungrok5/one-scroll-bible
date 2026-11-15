@@ -2305,6 +2305,144 @@
     "trim_s": "6.1–7.6"
    },
    "why": "첫 영상 opening s2(라인을 따라가는 펜 소리)를 잘라 다시 씀 — 관리자 #45"
+  },
+  {
+   "use": "toolu_01H6zFwjoWrbUEKp6FXNM58D",
+   "time": "2026-11-15T09:02:53.134Z",
+   "flow": "FEsz8qczhCIpPe85UWpV",
+   "tool": "creative_add_flow_node:music",
+   "model": "eleven_music_v2_5",
+   "label": "CM5 승 — 기대·고백·뒤집힘 (#49)",
+   "prompt": "Instrumental only. Cinematic orchestral film score, one continuous 41-second movement with a wide dynamic range and a clear rising arc of tension, continuing a piece already in progress: the same slow, noble four-note theme in E minor. 0–3 s: a stern, imperial entrance, low brass chords and a deep frame drum, firm and proud. 3–10 s: a restrained martial pulse of low strings and soft frame drum, held back and quiet, with a brief brass swell at about 8 s. 10–15 s: warmer, a gentle walking low-string ostinato with a softly plucked oud, the solo cello sings the theme, quiet. At about 15.5 s a sudden radiant bloom: full strings and French horns state the theme in E major, bright and strong, for two seconds. At about 18 s the major chord darkens into minor and a low, uneasy pulsing ostinato begins, quiet but restless, slowly quickening. At about 24 s a rushing string tremolo crescendo, urgent. At about 26 s agitated, sharp string figures. At about 28 s a loud dissonant brass and viola cry, the most tense moment so far, then at about 30 s it drops to a hollow low drone with a soft pizzicato heartbeat. From about 35 s suspense: high strings hold a long trembling note while a slow, soft timpani heartbeat grows steadily louder, anticipation building to the end without resolving. Slow tempo, about 60 BPM, organic orchestra, no synths, no drum kit.",
+   "params": {
+    "duration_seconds": 41,
+    "instrumental": true,
+    "lyrics_type": "instrumental"
+   },
+   "why": "관리자 #49(단조로움 → 기승전결)·#48(끝 화면까지 이어지게)",
+   "node": "nq6e0MDprf52VRKcdZjD",
+   "sessions": [
+    "FATSmmNIO3Ck4d5Hp2F6",
+    "IeA7o9Z2H6i2VC00jLxN",
+    "6M4SzI4XnFsTAnLDIppX",
+    "4UMsusXlTTfMVyvx1uEC"
+   ],
+   "name": "CM5"
+  },
+  {
+   "use": "toolu_01CCLJDKukmJ7avCyUgyCw3y",
+   "time": "2026-11-15T09:02:58.005Z",
+   "flow": "FEsz8qczhCIpPe85UWpV",
+   "tool": "creative_add_flow_node:music",
+   "model": "eleven_music_v2_5",
+   "label": "CM6 전1 — 이사야·외침·시편 22 성취 (#49)",
+   "prompt": "Instrumental only. Cinematic orchestral film score, one continuous 40-second movement with a wide dynamic range, from crushing grief to a shivering, chill-inducing build, continuing a piece already in progress: the same slow, noble four-note theme in E minor. 0–6 s: a grave lament, solo cello over low sustained strings and a slow, soft timpani heartbeat. At about 6 s the sorrow swells, more strings join. From about 7.5 s a long, heavy crescendo, the lament growing louder and darker with low brass. At about 10 s the most crushing moment: full low brass, strings fortissimo and a rolling timpani, then at about 11.3 s it cuts off almost to silence. 11.3–17.5 s: near silence, only one thin trembling high violin note. From about 17.5 s, out of the stillness, a low pulse returns with an ancient harp, and a slow repeating string ostinato begins, mysterious, quiet. From 23 s the ostinato builds layer by layer, rising in pitch and intensity, higher violins, a soft wordless choir, tingling and awed, with a swell at about 28 s. At about 32.5 s a huge crescendo with a timpani roll, and at about 34 s the full orchestra and choir state the theme in E minor, grand, tragic and powerful, holding strong until about 39 s, then easing slightly. Slow tempo, about 60 BPM, organic orchestra, no synths, no drum kit.",
+   "params": {
+    "duration_seconds": 40.5,
+    "instrumental": true,
+    "lyrics_type": "instrumental"
+   },
+   "why": "관리자 #49(단조로움 → 기승전결)·#48(끝 화면까지 이어지게)",
+   "node": "RbNEg910mw5GeMzwFVAj",
+   "sessions": [
+    "5hTIc8V5G2O4MX43wzn5",
+    "4NOcylEXxE36e18e9Zae",
+    "jRTMWEp6LG1JpGngpMR1",
+    "aWUC34lBQt0Uw3L70GBc"
+   ],
+   "name": "CM6"
+  },
+  {
+   "use": "toolu_01AxNyoRrSbgRuwh8dLmwrNf",
+   "time": "2026-11-15T09:03:03.856Z",
+   "flow": "FEsz8qczhCIpPe85UWpV",
+   "tool": "creative_add_flow_node:music",
+   "model": "eleven_music_v2_5",
+   "label": "CM7 전2 — 베드로의 증언·나무·부활 (#49)",
+   "prompt": "Instrumental only. Cinematic orchestral film score, one continuous 30-second movement with a dramatic reversal from darkness to triumph, continuing a piece already in progress: the same slow, noble four-note theme, moving from E minor to E major. 0–5 s: warmth returns, the cello sings the theme over a gentle, hopeful forward pulse of low strings and harp. 5–13 s: steadily growing, strings rising, walking forward with hope. 13–16 s: the harmony turns dark and an ominous swell of low brass and strings rises. At about 16 s one deep, heavy low drum hit, then a bare grave low drone, hushed. At about 18.5 s from near silence a string tremolo and timpani roll build in a fast crescendo, and at about 20.5 s everything bursts into radiant, triumphant E major: full orchestra, wordless choir, bright horns, bells and timpani, the theme in glory, the brightest moment so far, fullest around 23 s. From about 24 s it stays warm and glowing, high strings shimmering and the choir sustaining, softer but never empty, to the end. Slow tempo, about 60 BPM, organic orchestra, no synths, no drum kit.",
+   "params": {
+    "duration_seconds": 30.5,
+    "instrumental": true,
+    "lyrics_type": "instrumental"
+   },
+   "why": "관리자 #49(단조로움 → 기승전결)·#48(끝 화면까지 이어지게)",
+   "node": "ArdHDrYBJaFPynap15Cf",
+   "sessions": [
+    "fKhfcX4IzxG371XEPIxW",
+    "lVQQzDs5Lpek5SWHbyRx",
+    "TWz0rB2PO2AFcUUi6C8L",
+    "hljMw4doYWPdrejBP5MQ"
+   ],
+   "name": "CM7"
+  },
+  {
+   "use": "toolu_012prvxUMJUHVvM5j4G8sofd",
+   "time": "2026-11-15T09:03:31.429Z",
+   "flow": "FEsz8qczhCIpPe85UWpV",
+   "tool": "creative_add_flow_node:music",
+   "model": "eleven_music_v2_5",
+   "label": "CM8 결 — 세 직분이 한 분에게·마지막 고백 (#48 #49)",
+   "prompt": "Instrumental only. Cinematic orchestral film score, one continuous 32-second finale, continuing a piece already in progress: the same slow, noble four-note theme, now in E major. It opens on warm sustained strings. At about 0.4 s a French horn plays the first phrase of the theme, strong and rising; at about 2.8 s the phrase again a step higher with more strings and a timpani stroke; at about 5.2 s a third time, higher still, with choir: three ascending steps. From about 7.5 s a steady, powerful build. At about 9.6 s the biggest climax of the whole score: full orchestra and wordless choir fortissimo state the theme in E major, majestic and overwhelming, until about 11.5 s. 11.5–22 s: it settles into a warm, confident and noble glow, the theme carried by strings and horns over a steady gentle pulse, never thin. From about 22 s it rises again, and from 23 s a long crescendo grows under the theme, fuller and fuller. At about 27.5 s a final radiant statement of the theme by full orchestra and choir, broad and triumphant, held, then from about 30 s one long ringing E major chord that is still sounding at the very end, not fading away. Slow tempo, about 60 BPM, organic orchestra, no synths, no drum kit.",
+   "params": {
+    "duration_seconds": 32,
+    "instrumental": true,
+    "lyrics_type": "instrumental"
+   },
+   "why": "관리자 #49(단조로움 → 기승전결)·#48(끝 화면까지 이어지게)",
+   "node": "7eenUEPAmRPnsDrgIt9Z",
+   "sessions": [
+    "128DrruN4N38IICJIc9w",
+    "3SlQD3CKqUmHlhBn1Ew2",
+    "s8wwXDMmjEFGLIbQ1ElZ",
+    "bghuLCM3BSUP37zBuBEU"
+   ],
+   "name": "CM8"
+  },
+  {
+   "use": "toolu_01YAsaM2VNPXLWm3FMbm57Zk",
+   "time": "2026-11-15T09:09:34.224Z",
+   "flow": "FEsz8qczhCIpPe85UWpV",
+   "tool": "creative_add_flow_node:music",
+   "model": "eleven_music_v2_5",
+   "label": "CM9 승 긴장 — 고난 예고·그리 마옵소서·이미 적혀 (#49)",
+   "prompt": "Instrumental only. Tense cinematic orchestral underscore in E minor, one continuous piece of rising unease, continuing a piece already in progress. 0–6 s: a soft, uneasy low string pulse in steady eighth notes with a quiet low drone, restless. At about 6.5 s a rushing string tremolo crescendo, urgent and growing loud. At about 8 s agitated, sharp, stabbing string figures. At about 10 s a loud, harsh dissonant brass and string cry, the most tense and loudest moment, held for two seconds. At about 12.5 s it suddenly drops away to a hollow low drone with a soft pizzicato heartbeat, unsettled and quiet. From about 17 s suspense: high strings hold a long, trembling note and a slow timpani heartbeat grows steadily louder and closer, anticipation without resolution, still building at the end. Slow tempo, about 60 BPM, organic orchestra, no synths, no drum kit.",
+   "params": {
+    "duration_seconds": 26,
+    "instrumental": true,
+    "lyrics_type": "instrumental"
+   },
+   "why": "관리자 #49(단조로움 → 기승전결)·#48(끝 화면까지 이어지게)",
+   "node": "xX3OY2wROOMccYmOj4lz",
+   "sessions": [
+    "VtWM9wVwq6odxeYULMtf",
+    "5iFrH9i9IsH9HiCPIzs4",
+    "g18JgnfM7Nfq340lS2U4",
+    "kTWXe7M9qhWsdAVATDf4"
+   ],
+   "name": "CM9"
+  },
+  {
+   "use": "toolu_01M35jZGQ9ppsNskQwKyBrJj",
+   "time": "2026-11-15T09:09:34.241Z",
+   "flow": "FEsz8qczhCIpPe85UWpV",
+   "tool": "creative_add_flow_node:music",
+   "model": "eleven_music_v2_5",
+   "label": "CM10 끝 — 마지막 고백에서 끝 화면까지 이어 터짐 (#48)",
+   "prompt": "Instrumental only. Triumphant cinematic orchestral finale in E major with wordless choir, continuing a piece already in progress. 0–2.5 s: warm strings and horns, noble, gently lifting. From about 2.5 s a steady, swelling crescendo, fuller and fuller, timpani roll growing. At about 7 s the full orchestra and choir state a broad, radiant four-note theme fortissimo, glorious and overwhelming, the biggest moment. It stays full and shining, held, until about 11 s, then one long ringing E major chord of full strings, horns and choir that keeps sounding strongly to the very end, never fading out, never stopping. Slow, majestic, about 60 BPM, no synths, no drum kit.",
+   "params": {
+    "duration_seconds": 18,
+    "instrumental": true,
+    "lyrics_type": "instrumental"
+   },
+   "why": "관리자 #49(단조로움 → 기승전결)·#48(끝 화면까지 이어지게)",
+   "node": "800XcVVOKtn6P1CeDOJM",
+   "sessions": [
+    "Qn4ikbJVUrhykC2XsD5W",
+    "K3p7pe3eJr1Nz9LnAnZb",
+    "1Dg7pGnryw6exgjOgfiT",
+    "2LZBaYoytUlVUdWO0XDp"
+   ],
+   "name": "CM10"
   }
  ],
  "title": "그리스도",

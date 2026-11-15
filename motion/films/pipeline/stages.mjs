@@ -242,6 +242,14 @@ const G = {
     // picture gate knew (관리자 #47 "3분 넘으면 안 되잖아") — check it here as well
     { const P = J(join(sd, 'place.json')), d = Math.max(P?.dur || 0, c.cues.dur || 0, c.s?.dur || 0); if (d > T.format.portrait_max_s + .5) why.push(`길이 ${d}s > ${T.format.portrait_max_s}s(쇼츠 3:00) — 끝을 줄인다`); }
     if ((c.cues.ducks || []).length < T.sound.ducks_min) why.push(`숨 멈춤(ducks) ${(c.cues.ducks || []).length}개 < ${T.sound.ducks_min}`);
+    // the score's shape (관리자 2026-11-15 「그리스도」 #48 끝 화면 앞에서 음악이 꺼짐 · #49 "단조로워 — 기승전결·긴장감·전율·고조"): music-arc.mjs on the music alone
+    { const cardAt = Math.max(...c.lines.map(l => l.at ?? 0));
+      for (const d of c.cues.ducks || []) if (d.to > cardAt - T.sound.end_duck_window_s && d.from < cardAt + 1) why.push(`끝 화면(${cardAt}초) 앞 숨 멈춤 ${d.from}–${d.to}초 — 배경음악이 줄어든 뒤 끝 화면이 나와 끊긴다(#48): 마지막 말씀에서 끝 화면까지 음악이 이어지게`);
+      const r = node([join(FILMS, 'music-arc.mjs'), c.film, '--json']), m = r.status ? null : JSON.parse((r.stdout || '').trim().split('\n').pop() || 'null');
+      if (!m) why.push('music-arc.mjs 실패 — ' + (r.stderr || '').slice(0, 200));
+      else { if (m.contrast < T.sound.music_contrast_min_db) why.push(`음악 대비 ${m.contrast} dB < ${T.sound.music_contrast_min_db} — 큰 순간이 평소와 같은 크기, 단조롭다(#49): 절정·긴장 자리를 프롬프트로 키우고 큐 db로 맞춘다`);
+        if (m.rise < T.sound.music_rise_min_db) why.push(`음악 고조 ${m.rise} dB < ${T.sound.music_rise_min_db} — 마지막 1/3의 절정이 처음 1/3보다 크지 않다(기승전결, #49)`);
+        if (m.endDrop > T.sound.music_end_drop_max_db) why.push(`끝 화면에서 음악이 ${m.endDrop} dB 꺼짐 > ${T.sound.music_end_drop_max_db} — 마지막 고백에서 끝 화면까지 이어 가득하게(#48)`); } }
     for (const q of [...(c.cues.music || []), ...sfx]) { const f = q.file ? join(ROOT, q.file) : join(sd, 'audio', q.id + '.mp3'); if (!existsSync(f)) why.push(`소리 ${q.id}: 파일 없음`); }
     const pr = J(join(sd, 'prompts.json')), names = new Set((pr?.entries || []).map(e => e.name));
     for (const q of [...(c.cues.music || []), ...sfx]) if (!q.file && !names.has(q.id)) why.push(`소리 ${q.id}: 프롬프트 기록 없음(sound-prompts.mjs)`);

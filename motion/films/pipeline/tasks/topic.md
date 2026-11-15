@@ -1,4 +1,5 @@
 # 1. 주제 — {film}
+**먼저 — 형식 결정 보류 중**: (가로 8–10분 본편 + 장면 쇼츠 대 지금의 3분)를 관리자에게 다시 보이고 정한 뒤 주제를 고른다(관리자 2026-11-16 "다음 영상 시 다시 꺼내 보고"). 정해지면 그 문서의 "고칠 곳"을 고치고 이 줄을 지운다.
 후보·근거·추천은 `pipeline/topics.json` 한 곳(세션에서 새로 지어내지 않는다).
 1. `node motion/films/topic.mjs evidence` — 쇼츠·영상별 평균 시청·조회와 화풍, ANALYTICS.md의 마지막 추천을 본다.
 2. 근거를 붙인다: `node motion/films/topic.mjs cite <id> "<숫자가 든 사실>" --source <analytics 파일>`. 새 후보는 `topic.mjs add <id> "<제목>" --refs … --connection "<하나님의 연결>"`.

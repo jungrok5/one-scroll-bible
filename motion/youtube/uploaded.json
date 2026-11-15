@@ -1067,13 +1067,50 @@
    "id": "WGNt76MeLws",
    "file": "christ-h-narr.mp4",
    "privacy": "private",
-   "uploaded": "2026-11-16"
+   "uploaded": "2026-11-16",
+   "captions": [
+    "ar",
+    "bn",
+    "de",
+    "en",
+    "es",
+    "fa",
+    "fil",
+    "fr",
+    "hi",
+    "id",
+    "it",
+    "ja",
+    "km",
+    "ko",
+    "mn",
+    "my",
+    "ne",
+    "pl",
+    "pt-BR",
+    "ru",
+    "sw",
+    "ta",
+    "th",
+    "tr",
+    "uz",
+    "vi",
+    "zh-Hans",
+    "zh-Hant"
+   ]
   },
   "v": {
-   "id": "6tsn5lq3BCI",
+   "id": "BdLn4e40GH4",
    "file": "christ-v-narr.mp4",
    "privacy": "private",
-   "uploaded": "2026-11-16"
+   "uploaded": "2026-11-16",
+   "note": "179.9 s 다시 묶음(180.0 s는 AAC 때문에 3:01로 잡혀 쇼츠가 아님)"
+  },
+  "to_delete": {
+   "ids": [
+    "6tsn5lq3BCI"
+   ],
+   "why": "첫 세로판 — 3:01로 잡혀 일반 동영상이 됨(쇼츠 아님). 비공개. 지우는 것은 관리자 OK 뒤(되돌릴 수 없음)"
   }
  }
 }

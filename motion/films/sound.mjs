@@ -117,6 +117,9 @@ for (const k of lang ? ['narr'] : ['narr', 'sound']) {   // two-pass loudness
   ff(['-i', pre(k), '-af', `loudnorm=I=-14:TP=-1.5:LRA=11:measured_I=${m.input_i}:measured_TP=${m.input_tp}:measured_LRA=${m.input_lra}:measured_thresh=${m.input_thresh}:offset=${m.target_offset}:linear=true`, '-ar', '48000', wav]);
   if (lang) { const mp3 = wav.replace(/\.wav$/, '.mp3'); ff(['-i', wav, '-c:a', 'libmp3lame', '-b:a', '320k', mp3]); console.log('→', mp3, '(audio track)'); }
   const vid = join(OUT, `film-${lang ? lang + '-' : ''}${ori || 'v'}.mp4`);
-  if (existsSync(vid)) { const mp4 = join(OUT, `${tag}-${ori || 'v'}-${k}.mp4`); ff(['-i', vid, '-i', wav, '-map', '0:v', '-map', '1:a', '-c:v', 'copy', '-c:a', 'aac', '-b:a', '192k', '-shortest', '-movflags', '+faststart', mp4]); console.log('→', mp4); }
+  // portrait = a Short only if YouTube counts ≤ 3:00 — AAC frames round a 180.0 s mix up to 180.03 s and YouTube then shows 3:01
+  // and treats it as a normal video (no Shorts feed, no related video; 2026-11-16 「그리스도」 6tsn5lq3BCI) → end portrait at 179.9 s
+  const cap = (ori || 'v') === 'v' ? ['-t', '179.9'] : [];
+  if (existsSync(vid)) { const mp4 = join(OUT, `${tag}-${ori || 'v'}-${k}.mp4`); ff(['-i', vid, '-i', wav, '-map', '0:v', '-map', '1:a', '-c:v', 'copy', '-c:a', 'aac', '-b:a', '192k', '-shortest', ...cap, '-movflags', '+faststart', mp4]); console.log('→', mp4); }
   else console.log('→', wav);
 }

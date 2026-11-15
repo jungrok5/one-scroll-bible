@@ -3089,6 +3089,1298 @@
     "3NHcpwEeeolTlJ1Aza91"
    ],
    "name": "en Q13"
+  },
+  {
+   "use": "toolu_01AAN8Z4AhRKqQiAR11acsLi",
+   "time": "2026-11-15T15:56:43.615Z",
+   "flow": "H70YnW4QHUN7jLy44iBa",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "El «Cristo» de «Jesucristo», ¿es el apellido de Jesús?",
+   "params": {
+    "voice_id": "eA1KGxXkPw301wzoKzzz"
+   },
+   "why": "",
+   "node": "uq00DZ9lRdoJKnODX3Tk",
+   "sessions": [
+    "gfjESr42QWyoOiEfWcEz",
+    "N9xjdClEgdflcEYnDDGf"
+   ],
+   "name": "es N01"
+  },
+  {
+   "use": "toolu_01GP1cuAtzsCXcvHzE1SP3Tz",
+   "time": "2026-11-15T15:56:45.021Z",
+   "flow": "H70YnW4QHUN7jLy44iBa",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "El nombre al final de cada oración.",
+   "params": {
+    "voice_id": "eA1KGxXkPw301wzoKzzz"
+   },
+   "why": "",
+   "node": "McYC4JexJILWKXpdlryZ",
+   "sessions": [
+    "8EVaulgBFmQCC1sy33rZ",
+    "sHxyMgmhQKENfjk5qBOS"
+   ],
+   "name": "es N02"
+  },
+  {
+   "use": "toolu_013VpVof1ijyuNTcLR6HSyFG",
+   "time": "2026-11-15T15:56:46.461Z",
+   "flow": "H70YnW4QHUN7jLy44iBa",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Hemos hallado al Mesías (que traducido es, el Cristo).",
+   "params": {
+    "voice_id": "eA1KGxXkPw301wzoKzzz"
+   },
+   "why": "",
+   "node": "3QwyaB0xkzoPVfoHiY5B",
+   "sessions": [
+    "6qzErsojqMQ7274JEa9M",
+    "VoalEg7YUwUcHPydPHvF"
+   ],
+   "name": "es Q1"
+  },
+  {
+   "use": "toolu_01SD7b4MVmXwaC584zH9XxKC",
+   "time": "2026-11-15T15:56:48.046Z",
+   "flow": "H70YnW4QHUN7jLy44iBa",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Cristo no es un apellido. Significa «el Ungido»: el Mesías.",
+   "params": {
+    "voice_id": "eA1KGxXkPw301wzoKzzz"
+   },
+   "why": "",
+   "node": "JZcRFCl0rDwSle3sC3Vb",
+   "sessions": [
+    "6KMCyvdJjzO8wHutA3DY",
+    "1SPUJ1h7tO7K6XLxPAKR"
+   ],
+   "name": "es N03"
+  },
+  {
+   "use": "toolu_01KDKsyYaugCgNZsgDNVpBgX",
+   "time": "2026-11-15T15:56:49.459Z",
+   "flow": "H70YnW4QHUN7jLy44iBa",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Dios establecía reyes, sacerdotes y profetas ungiéndolos con aceite.",
+   "params": {
+    "voice_id": "eA1KGxXkPw301wzoKzzz"
+   },
+   "why": "",
+   "node": "tTeiZOBrpXxh8vUQRiwR",
+   "sessions": [
+    "bmPUqelcdmlrQxj1HTaF",
+    "6uPvEWLbJU7SKCcU4t6y"
+   ],
+   "name": "es N04"
+  },
+  {
+   "use": "toolu_017YbLmXqWas3LTnk8oyi4dp",
+   "time": "2026-11-15T15:56:51.012Z",
+   "flow": "H70YnW4QHUN7jLy44iBa",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Y Samuel tomó el cuerno del aceite, y lo ungió en medio de sus hermanos;",
+   "params": {
+    "voice_id": "eA1KGxXkPw301wzoKzzz"
+   },
+   "why": "",
+   "node": "WjcrPNYAU6ZVYx1l7zVA",
+   "sessions": [
+    "cY7fGsoDBZ1g61IH4CLl",
+    "i2bqcHJgk8KNZfMjQVaQ"
+   ],
+   "name": "es K1"
+  },
+  {
+   "use": "toolu_01F8R8yz6DncwsZS2TSkMsKq",
+   "time": "2026-11-15T15:56:52.512Z",
+   "flow": "H70YnW4QHUN7jLy44iBa",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Y derramó del aceite de la unción sobre la cabeza de Aarón,",
+   "params": {
+    "voice_id": "eA1KGxXkPw301wzoKzzz"
+   },
+   "why": "",
+   "node": "D7y9YXcLi1c4KdQZTQDf",
+   "sessions": [
+    "SQ2LIZ0sB9Db1eUvCdbi",
+    "Dosvq9fbNWPYmi2fTKgt"
+   ],
+   "name": "es K2"
+  },
+  {
+   "use": "toolu_017L7YsLemHzk7mFoQaUjLAn",
+   "time": "2026-11-15T15:56:54.013Z",
+   "flow": "H70YnW4QHUN7jLy44iBa",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Ungirás para que sea profeta en tu lugar.",
+   "params": {
+    "voice_id": "eA1KGxXkPw301wzoKzzz"
+   },
+   "why": "",
+   "node": "Z5Sg7I8U6qPUWH9TmoFs",
+   "sessions": [
+    "URsNgE36Bc5Gf7VRDAQe",
+    "AC2NNGlLdkz8IcYzqhE2"
+   ],
+   "name": "es K3"
+  },
+  {
+   "use": "toolu_01U4u41qEx8xM7drJK2mPtfS",
+   "time": "2026-11-15T15:56:55.511Z",
+   "flow": "H70YnW4QHUN7jLy44iBa",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Muchos esperaban al Mesías solo como un rey que expulsaría a Roma.",
+   "params": {
+    "voice_id": "eA1KGxXkPw301wzoKzzz"
+   },
+   "why": "",
+   "node": "UUj8LIw3LbHouGU4S1tg",
+   "sessions": [
+    "2dw3fjLGEuNh9FYP9h4K",
+    "S0YQpMkRc5aWJ80Npv66"
+   ],
+   "name": "es N06"
+  },
+  {
+   "use": "toolu_01CUZHGmRMN6a7eb4KYEuhji",
+   "time": "2026-11-15T15:57:21.446Z",
+   "flow": "H70YnW4QHUN7jLy44iBa",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Un día, después de que Jesús vino, Pedro hizo una confesión.",
+   "params": {
+    "voice_id": "eA1KGxXkPw301wzoKzzz"
+   },
+   "why": "",
+   "node": "ivBzy2bxWUnMVIDwTJJX",
+   "sessions": [
+    "0UTv2i1G4NO7eoa5Qutc",
+    "VN1KQyNq7qDdofPvParg"
+   ],
+   "name": "es N07"
+  },
+  {
+   "use": "toolu_0176EE7iCM5zW62ReNCM5ndc",
+   "time": "2026-11-15T15:57:21.449Z",
+   "flow": "H70YnW4QHUN7jLy44iBa",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Tú eres el Cristo,",
+   "params": {
+    "voice_id": "eA1KGxXkPw301wzoKzzz"
+   },
+   "why": "",
+   "node": "SgjaDDQsRrkLt9AQpKC5",
+   "sessions": [
+    "QTn5MUmw6f9VPv0axze9",
+    "cn3SyjmeeMWiuTn7sxcz"
+   ],
+   "name": "es Q2"
+  },
+  {
+   "use": "toolu_01259tZAitixD2c6yanS4Ky2",
+   "time": "2026-11-15T15:57:21.452Z",
+   "flow": "H70YnW4QHUN7jLy44iBa",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Desde entonces Jesús dijo que debía padecer y ser muerto, y resucitar al tercer día.",
+   "params": {
+    "voice_id": "eA1KGxXkPw301wzoKzzz"
+   },
+   "why": "",
+   "node": "jNFzRrElTIVxFAEeYcYC",
+   "sessions": [
+    "IAbdH7jhbc9mG8w8yzC7",
+    "Gqjym8BeZSzSTKzCU7Mo"
+   ],
+   "name": "es N08"
+  },
+  {
+   "use": "toolu_012ez4Fi7BiiREocybwnHBig",
+   "time": "2026-11-15T15:57:52.434Z",
+   "flow": "H70YnW4QHUN7jLy44iBa",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Señor, ten compasión de ti;",
+   "params": {
+    "voice_id": "eA1KGxXkPw301wzoKzzz"
+   },
+   "why": "",
+   "node": "ozkOYrcfi3ZsOkG6huJS",
+   "sessions": [
+    "DXbNLUGToOAOCZRmLKoa",
+    "oQ6avaLgVHlT9ZfqLdBV"
+   ],
+   "name": "es Q3"
+  },
+  {
+   "use": "toolu_018QgzVczaDuHifsXx1VMfiF",
+   "time": "2026-11-15T15:57:52.439Z",
+   "flow": "H70YnW4QHUN7jLy44iBa",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Para Pedro, un Cristo que muere no tenía sentido.",
+   "params": {
+    "voice_id": "eA1KGxXkPw301wzoKzzz"
+   },
+   "why": "",
+   "node": "0dRu4Sodjet8SYDCQcCk",
+   "sessions": [
+    "MPkOj5dbXMiyMREUD7kg",
+    "owYzLW4PLKkJYYL7TPHH"
+   ],
+   "name": "es N09"
+  },
+  {
+   "use": "toolu_01JGC2RcZR4wcdmJKnzdCxv5",
+   "time": "2026-11-15T15:57:52.443Z",
+   "flow": "H70YnW4QHUN7jLy44iBa",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Pero ese camino ya estaba escrito.",
+   "params": {
+    "voice_id": "eA1KGxXkPw301wzoKzzz"
+   },
+   "why": "",
+   "node": "IrYS8drMWuZbdRcCZlwt",
+   "sessions": [
+    "mYLnnMc5UuVuzAAvX1X3",
+    "OcwI9axmZtgk3m7avl1b"
+   ],
+   "name": "es N10"
+  },
+  {
+   "use": "toolu_018oeFPbPezVZyhDsxe18YzS",
+   "time": "2026-11-15T15:57:52.447Z",
+   "flow": "H70YnW4QHUN7jLy44iBa",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Mas él herido fue por nuestras rebeliones, molido por nuestros pecados;",
+   "params": {
+    "voice_id": "eA1KGxXkPw301wzoKzzz"
+   },
+   "why": "",
+   "node": "AeIA0BTkwhmUrrfRf7GO",
+   "sessions": [
+    "Rmvq9V8KECicvdNqfu9d",
+    "RaEv1AfGQ7Myp29Y5j4X"
+   ],
+   "name": "es Q4"
+  },
+  {
+   "use": "toolu_018TJxW5dzAjuPfd6MjRi8oJ",
+   "time": "2026-11-15T15:57:52.451Z",
+   "flow": "H70YnW4QHUN7jLy44iBa",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "En la cruz, el clamor de Jesús.",
+   "params": {
+    "voice_id": "eA1KGxXkPw301wzoKzzz"
+   },
+   "why": "",
+   "node": "Pj0LQ5QPjMbD0NpKSOG1",
+   "sessions": [
+    "sQjnlxBHLCKBdqn0S88n",
+    "Y5Y8rLGSXtqVrbyv4C2B"
+   ],
+   "name": "es N11"
+  },
+  {
+   "use": "toolu_0152UL4CboKYsU6Tx3scT9Jy",
+   "time": "2026-11-15T15:57:52.455Z",
+   "flow": "H70YnW4QHUN7jLy44iBa",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Dios mío, Dios mío, ¿por qué me has desamparado?",
+   "params": {
+    "voice_id": "eA1KGxXkPw301wzoKzzz"
+   },
+   "why": "",
+   "node": "YboExanQivwdVeduQNDM",
+   "sessions": [
+    "rytRtSdqHvrYZSJepWRy",
+    "MIu8Vtg2tfuetKIJDcLW"
+   ],
+   "name": "es Q5"
+  },
+  {
+   "use": "toolu_014exVkzifRUGuhnt11EYUsH",
+   "time": "2026-11-15T15:57:53.883Z",
+   "flow": "H70YnW4QHUN7jLy44iBa",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Este clamor es la primera línea de un salmo escrito mil años antes por David, el rey ungido.",
+   "params": {
+    "voice_id": "eA1KGxXkPw301wzoKzzz"
+   },
+   "why": "",
+   "node": "0q3wQJLhZPvVXPHgw5iY",
+   "sessions": [
+    "riMf9063ZHvUtmiO1KiR",
+    "Z2tps2V2hbprPv4Zn67w"
+   ],
+   "name": "es N12"
+  },
+  {
+   "use": "toolu_01AEKiqDhxzcvLWsJCjXEjWq",
+   "time": "2026-11-15T15:58:00.081Z",
+   "flow": "H70YnW4QHUN7jLy44iBa",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Dios mío, Dios mío, ¿por qué me has desamparado?",
+   "params": {
+    "voice_id": "eA1KGxXkPw301wzoKzzz"
+   },
+   "why": "",
+   "node": "zifnHbEO2NUusOq0H88g",
+   "sessions": [
+    "UlLRJUueYOckweCodRRT",
+    "H1GkwQ8oTOiMgdB7YAJI"
+   ],
+   "name": "es Q6"
+  },
+  {
+   "use": "toolu_01YB1Cf4WoH2N2mi2jh4RS1i",
+   "time": "2026-11-15T15:58:00.090Z",
+   "flow": "H70YnW4QHUN7jLy44iBa",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Repartieron entre sí mis vestidos, Y sobre mi ropa echaron suertes.",
+   "params": {
+    "voice_id": "eA1KGxXkPw301wzoKzzz"
+   },
+   "why": "",
+   "node": "lXNcjoiEe2El9FPSn2Iu",
+   "sessions": [
+    "CTOdox7de9IKFSPjsiuz",
+    "LrAju5Nbh4HhnGIybhwa"
+   ],
+   "name": "es Q7"
+  },
+  {
+   "use": "toolu_01Pub9qU3TitqtyB5N3K1B8E",
+   "time": "2026-11-15T15:58:00.093Z",
+   "flow": "H70YnW4QHUN7jLy44iBa",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Al pie de la cruz, los soldados repartieron sus vestidos y echaron suertes sobre su túnica.",
+   "params": {
+    "voice_id": "eA1KGxXkPw301wzoKzzz"
+   },
+   "why": "",
+   "node": "Nhohwy4o5hFySzYXapTp",
+   "sessions": [
+    "zTCgea2iACSWEWxwZWiv",
+    "yM51wyZBHgsoU03bPmNH"
+   ],
+   "name": "es N14"
+  },
+  {
+   "use": "toolu_012qHmao8hdHzbKxnxgRoZqG",
+   "time": "2026-11-15T15:58:00.096Z",
+   "flow": "H70YnW4QHUN7jLy44iBa",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Pedro, que había dicho «Señor, ten compasión de ti», tras encontrarse con Jesús resucitado, predicó esto:",
+   "params": {
+    "voice_id": "eA1KGxXkPw301wzoKzzz"
+   },
+   "why": "",
+   "node": "qY7S0hZYMGJxitquxBmi",
+   "sessions": [
+    "GuoPNmq8ItR7rVwannYd",
+    "z9NnsLK07gw1xZPWwE2L"
+   ],
+   "name": "es N20"
+  },
+  {
+   "use": "toolu_01SPn31HkALhTX1TqWAtg6Dz",
+   "time": "2026-11-15T15:58:30.361Z",
+   "flow": "H70YnW4QHUN7jLy44iBa",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Cómo Dios ungió con el Espíritu Santo y con poder a Jesús de Nazaret, y cómo este anduvo haciendo bienes",
+   "params": {
+    "voice_id": "eA1KGxXkPw301wzoKzzz"
+   },
+   "why": "",
+   "node": "rq5P2Wljw5JGWRBtAMcH",
+   "sessions": [
+    "vVjTszeQbAdcASevLXee",
+    "y6CIpMN52ciRPZymsEqY"
+   ],
+   "name": "es Q9"
+  },
+  {
+   "use": "toolu_01GcZazKSBrK78a6QB2KNzyq",
+   "time": "2026-11-15T15:58:30.365Z",
+   "flow": "H70YnW4QHUN7jLy44iBa",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "A quien mataron colgándole en un madero.",
+   "params": {
+    "voice_id": "eA1KGxXkPw301wzoKzzz"
+   },
+   "why": "",
+   "node": "8W29hLOQmxGK2mjixCFB",
+   "sessions": [
+    "IUni4rOx9iCAKQM5ctyB",
+    "hhbdhimvW1oL9YaY3fDs"
+   ],
+   "name": "es Q11"
+  },
+  {
+   "use": "toolu_015YhnLQ7vKiTdUPRb3AHm8Y",
+   "time": "2026-11-15T15:58:30.370Z",
+   "flow": "H70YnW4QHUN7jLy44iBa",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "A este levantó Dios al tercer día,",
+   "params": {
+    "voice_id": "eA1KGxXkPw301wzoKzzz"
+   },
+   "why": "",
+   "node": "8Nx5ArGGeHvplPOF6qdF",
+   "sessions": [
+    "Ew1RorSrbJi5Y6QYwF9C",
+    "stKyzo7JS9skfSTFeFZL"
+   ],
+   "name": "es Q12"
+  },
+  {
+   "use": "toolu_01E8YwqWKdRhu6wv9nTe3yEY",
+   "time": "2026-11-15T15:58:30.396Z",
+   "flow": "H70YnW4QHUN7jLy44iBa",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "El Cristo que padeció no fue un fracaso: era el camino que señalaban las Escrituras.",
+   "params": {
+    "voice_id": "eA1KGxXkPw301wzoKzzz"
+   },
+   "why": "",
+   "node": "Z09w90Wd4RTBVTjOEtdF",
+   "sessions": [
+    "0aifZNtEt01PCmnQyMhl",
+    "KvUcUpGD7NBD8gJ2eq9x"
+   ],
+   "name": "es N15"
+  },
+  {
+   "use": "toolu_01YQvkGD1XRijdinBJ6qP3kF",
+   "time": "2026-11-15T15:58:31.741Z",
+   "flow": "H70YnW4QHUN7jLy44iBa",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Rey,",
+   "params": {
+    "voice_id": "eA1KGxXkPw301wzoKzzz"
+   },
+   "why": "",
+   "node": "TElevBWNY2NVZgzOvysh",
+   "sessions": [
+    "g0jb8KO0qj40bQZtEpPP",
+    "yhDOkf4hiuFMHVYRzBaO"
+   ],
+   "name": "es N16K"
+  },
+  {
+   "use": "toolu_01KGYTRR1EmjTxDW75t7KTjQ",
+   "time": "2026-11-15T15:58:33.245Z",
+   "flow": "H70YnW4QHUN7jLy44iBa",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Sacerdote,",
+   "params": {
+    "voice_id": "eA1KGxXkPw301wzoKzzz"
+   },
+   "why": "",
+   "node": "QdtcEFEgCv7Gj90PgJz2",
+   "sessions": [
+    "WjExyLYhGm8HYJ8lef4H",
+    "YpDxHTAqFl4CShFoyuQc"
+   ],
+   "name": "es N16P"
+  },
+  {
+   "use": "toolu_016uLvymBvGfADogJC9pHv1h",
+   "time": "2026-11-15T15:58:34.641Z",
+   "flow": "H70YnW4QHUN7jLy44iBa",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Profeta,",
+   "params": {
+    "voice_id": "eA1KGxXkPw301wzoKzzz"
+   },
+   "why": "",
+   "node": "tUzNOqjfvtljYBzdAcae",
+   "sessions": [
+    "snNjTr9LMkt936r3hMxD",
+    "w4KOgDmp06sYUZoifhU5"
+   ],
+   "name": "es N16R"
+  },
+  {
+   "use": "toolu_01AYHwSVcr2rHd8HQonhVjCT",
+   "time": "2026-11-15T15:58:36.043Z",
+   "flow": "H70YnW4QHUN7jLy44iBa",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Tres oficios, en una sola Persona.",
+   "params": {
+    "voice_id": "eA1KGxXkPw301wzoKzzz"
+   },
+   "why": "",
+   "node": "Od0mIIzTNFoJ9gzOC7OH",
+   "sessions": [
+    "4eVJ86nM1DrEk8OXB2rN",
+    "wWb296nra35KeFePmnkO"
+   ],
+   "name": "es N16"
+  },
+  {
+   "use": "toolu_01NLPDz2HRcFkj4oUZBLVvJs",
+   "time": "2026-11-15T15:58:37.693Z",
+   "flow": "H70YnW4QHUN7jLy44iBa",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "«Cristo» no es un apellido. Es la confesión de que Jesús es precisamente ese Mesías.",
+   "params": {
+    "voice_id": "eA1KGxXkPw301wzoKzzz"
+   },
+   "why": "",
+   "node": "BLzOgLW18MPOLt3tYWVQ",
+   "sessions": [
+    "tfqeapyhhVq0fjr7ZD1s",
+    "eHTrUPm0xGVdjiCtMkZV"
+   ],
+   "name": "es N17"
+  },
+  {
+   "use": "toolu_01TAto2tGmjThXwVErb1DPvJ",
+   "time": "2026-11-15T15:58:39.244Z",
+   "flow": "H70YnW4QHUN7jLy44iBa",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Todos los que en él creyeren, recibirán perdón de pecados por su nombre.",
+   "params": {
+    "voice_id": "eA1KGxXkPw301wzoKzzz"
+   },
+   "why": "",
+   "node": "F90vulVYUE0rsRmNhEo7",
+   "sessions": [
+    "lft1wf6ZDM6onkBmDvCB",
+    "ewMjmYfRiKx3KNzdR8E1"
+   ],
+   "name": "es Q14"
+  },
+  {
+   "use": "toolu_01BuDGaU7Ypj1gQurSKsbg9k",
+   "time": "2026-11-15T15:58:40.526Z",
+   "flow": "H70YnW4QHUN7jLy44iBa",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Tú eres el Cristo, el Hijo del Dios viviente.",
+   "params": {
+    "voice_id": "eA1KGxXkPw301wzoKzzz"
+   },
+   "why": "",
+   "node": "hSy9CSdsJCabmRLz3yx5",
+   "sessions": [
+    "XSfW7i60EWCi8M3swiIJ",
+    "TdyKN8y0CxGP2yXQkHah"
+   ],
+   "name": "es Q13"
+  },
+  {
+   "use": "toolu_01CQEbZTvY6aa97PTjnXTqw9",
+   "time": "2026-11-15T15:59:48.139Z",
+   "flow": "ckcvoQoiU6Uzt8AFIHfy",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "O «Cristo» de «Jesus Cristo» — é o sobrenome de Jesus?",
+   "params": {
+    "voice_id": "bZztR6P62TDbe6sgaZgz"
+   },
+   "why": "",
+   "node": "eIW7xPjOgHwJrIM1nImp",
+   "sessions": [
+    "r4iQYlYbz4Ku1XeTpnNJ",
+    "gdDcCxCk8Gp3SfH3QqXS"
+   ],
+   "name": "pt-BR N01"
+  },
+  {
+   "use": "toolu_01BgWEfVYVBwhAcZRy21yKQW",
+   "time": "2026-11-15T15:59:49.493Z",
+   "flow": "ckcvoQoiU6Uzt8AFIHfy",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "O nome no fim de cada oração.",
+   "params": {
+    "voice_id": "bZztR6P62TDbe6sgaZgz"
+   },
+   "why": "",
+   "node": "DXpvC0vYxEFRabUP2Xm7",
+   "sessions": [
+    "0j5KqNJCiaKAvJmvMnCU",
+    "93VtyDIcV7xUmtvuv8gd"
+   ],
+   "name": "pt-BR N02"
+  },
+  {
+   "use": "toolu_01Dd5ifcsK49FMMKMfZV5sq3",
+   "time": "2026-11-15T15:59:50.891Z",
+   "flow": "ckcvoQoiU6Uzt8AFIHfy",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Achamos o Messias (que, traduzido, é o Cristo).",
+   "params": {
+    "voice_id": "bZztR6P62TDbe6sgaZgz"
+   },
+   "why": "",
+   "node": "u0sUM7qQunGlMRpf9rOG",
+   "sessions": [
+    "7Lul0Xbc0lwzvXP1khJr",
+    "dWv6MLDmCbkZIUzEiWjY"
+   ],
+   "name": "pt-BR Q1"
+  },
+  {
+   "use": "toolu_01Xyq8xzS3uV1tm1yksZ4tjy",
+   "time": "2026-11-15T15:59:52.341Z",
+   "flow": "ckcvoQoiU6Uzt8AFIHfy",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Cristo não é sobrenome. Significa «o Ungido» — o Messias.",
+   "params": {
+    "voice_id": "bZztR6P62TDbe6sgaZgz"
+   },
+   "why": "",
+   "node": "jbKr2VH5h1xtuluDJVya",
+   "sessions": [
+    "ubCff49vrdmW4OHYaqbZ",
+    "CDrigFjAEG3XlwtUVorJ"
+   ],
+   "name": "pt-BR N03"
+  },
+  {
+   "use": "toolu_01WwVgfuf5YtKhysrRNanic7",
+   "time": "2026-11-15T15:59:53.795Z",
+   "flow": "ckcvoQoiU6Uzt8AFIHfy",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Deus estabelecia reis, sacerdotes e profetas ungindo-os com azeite.",
+   "params": {
+    "voice_id": "bZztR6P62TDbe6sgaZgz"
+   },
+   "why": "",
+   "node": "Q3NzV3vX0Nina6FpJ6lY",
+   "sessions": [
+    "ptr74OGpZi4TmszJDLLL",
+    "cv7D49BVcFFAlUQIJNcz"
+   ],
+   "name": "pt-BR N04"
+  },
+  {
+   "use": "toolu_01JuL1SbucqTr7bvmkQGvVQV",
+   "time": "2026-11-15T15:59:55.292Z",
+   "flow": "ckcvoQoiU6Uzt8AFIHfy",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Então, Samuel tomou o vaso do azeite e ungiu-o no meio dos seus irmãos;",
+   "params": {
+    "voice_id": "bZztR6P62TDbe6sgaZgz"
+   },
+   "why": "",
+   "node": "xcO76sn0GgpabKcXztqv",
+   "sessions": [
+    "RCNWYqEpcKY4OxI4yI2O",
+    "er85blAmMxddpEKuE4FZ"
+   ],
+   "name": "pt-BR K1"
+  },
+  {
+   "use": "toolu_018ykRG1jxqr9NTE8WNLfHgY",
+   "time": "2026-11-15T15:59:56.741Z",
+   "flow": "ckcvoQoiU6Uzt8AFIHfy",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Depois, derramou do azeite da unção sobre a cabeça de Arão",
+   "params": {
+    "voice_id": "bZztR6P62TDbe6sgaZgz"
+   },
+   "why": "",
+   "node": "pmddIFeQWwot5uqDBdjg",
+   "sessions": [
+    "wHHIhrTmgEpkuHuIXI9g",
+    "J0Gx1WsaKcYadRc4bNML"
+   ],
+   "name": "pt-BR K2"
+  },
+  {
+   "use": "toolu_01X2ST57ScZSiozTHNwp9b2Z",
+   "time": "2026-11-15T16:00:14.872Z",
+   "flow": "ckcvoQoiU6Uzt8AFIHfy",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Ungirás profeta em teu lugar.",
+   "params": {
+    "voice_id": "bZztR6P62TDbe6sgaZgz"
+   },
+   "why": "",
+   "node": "OkBcgVGJbXQh3IcZ4W3m",
+   "sessions": [
+    "vrFIF8c3S6UxIIXD2CSC",
+    "WVH82Lgp0kx7L3nKPYie"
+   ],
+   "name": "pt-BR K3"
+  },
+  {
+   "use": "toolu_012ck9fGZR2fQ4jc5qjjCDx3",
+   "time": "2026-11-15T16:00:14.880Z",
+   "flow": "ckcvoQoiU6Uzt8AFIHfy",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Muitos esperavam o Messias apenas como um rei que expulsaria Roma.",
+   "params": {
+    "voice_id": "bZztR6P62TDbe6sgaZgz"
+   },
+   "why": "",
+   "node": "4xlv8GwxxjLsjtUAWaLa",
+   "sessions": [
+    "9PVQV9K8W3jDGO9Vummg",
+    "nG1f3KHa3woL7hXKU3SX"
+   ],
+   "name": "pt-BR N06"
+  },
+  {
+   "use": "toolu_01HJ4p2HTFUBhGXhSdaQBtA5",
+   "time": "2026-11-15T16:00:14.883Z",
+   "flow": "ckcvoQoiU6Uzt8AFIHfy",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Certo dia, depois que Jesus veio, Pedro fez uma confissão.",
+   "params": {
+    "voice_id": "bZztR6P62TDbe6sgaZgz"
+   },
+   "why": "",
+   "node": "9MhthEj9ils4g9Zy6tn3",
+   "sessions": [
+    "GwKXDxVgmUbbvS8L0Pd8",
+    "az1R1hehVV0hfqhGfHRu"
+   ],
+   "name": "pt-BR N07"
+  },
+  {
+   "use": "toolu_01WPJwAQmhSr5HMx4E7HbH1U",
+   "time": "2026-11-15T16:00:14.886Z",
+   "flow": "ckcvoQoiU6Uzt8AFIHfy",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Tu és o Cristo,",
+   "params": {
+    "voice_id": "bZztR6P62TDbe6sgaZgz"
+   },
+   "why": "",
+   "node": "HwIUxgg6GppT3KVNvDXg",
+   "sessions": [
+    "OQWxonxrRLziq4WVsDX8",
+    "1nd721FCtSGR8OKGHRpr"
+   ],
+   "name": "pt-BR Q2"
+  },
+  {
+   "use": "toolu_01TA4XvraUiccEM1f8775NES",
+   "time": "2026-11-15T16:00:14.889Z",
+   "flow": "ckcvoQoiU6Uzt8AFIHfy",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Desde então, Jesus disse que devia padecer e ser morto e ressuscitar ao terceiro dia.",
+   "params": {
+    "voice_id": "bZztR6P62TDbe6sgaZgz"
+   },
+   "why": "",
+   "node": "MxLQdRgZs9rHLU6EtgiN",
+   "sessions": [
+    "AlOk2VjJ6MWMNY4N9gUv",
+    "6m9qPFvlwR29FFQwRhJl"
+   ],
+   "name": "pt-BR N08"
+  },
+  {
+   "use": "toolu_01XPqPKCFJm9873f3aEKdWBR",
+   "time": "2026-11-15T16:00:42.940Z",
+   "flow": "ckcvoQoiU6Uzt8AFIHfy",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Senhor, tem compaixão de ti;",
+   "params": {
+    "voice_id": "bZztR6P62TDbe6sgaZgz"
+   },
+   "why": "",
+   "node": "W9rfxWi5mys6OvJgBZQj",
+   "sessions": [
+    "36ORzka6SQefmmXacatL",
+    "aqrKI9IOfDZoKZNfRyY9"
+   ],
+   "name": "pt-BR Q3"
+  },
+  {
+   "use": "toolu_01CoB8dUK6fxdZpzgwEG4GYJ",
+   "time": "2026-11-15T16:01:08.843Z",
+   "flow": "ckcvoQoiU6Uzt8AFIHfy",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Para Pedro, um Cristo que morre não fazia sentido.",
+   "params": {
+    "voice_id": "bZztR6P62TDbe6sgaZgz"
+   },
+   "why": "",
+   "node": "A9dOdMxciVDRHaMKh5lI",
+   "sessions": [
+    "bSPAcCGtAYXVqO8y163d",
+    "gSYwgNLWDf5tKLlmPyUi"
+   ],
+   "name": "pt-BR N09"
+  },
+  {
+   "use": "toolu_01G3FbAb2eTjTchbqWHFPaVt",
+   "time": "2026-11-15T16:01:08.850Z",
+   "flow": "ckcvoQoiU6Uzt8AFIHfy",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Mas esse caminho já estava escrito.",
+   "params": {
+    "voice_id": "bZztR6P62TDbe6sgaZgz"
+   },
+   "why": "",
+   "node": "L9UqjFggsa9Egu1qN2rj",
+   "sessions": [
+    "FdH4tE2Z9ibgCRaqH3wD",
+    "oZGeHebumV4yLnphCcQ0"
+   ],
+   "name": "pt-BR N10"
+  },
+  {
+   "use": "toolu_01CA56YwQPmY89F469JatJTc",
+   "time": "2026-11-15T16:01:08.853Z",
+   "flow": "ckcvoQoiU6Uzt8AFIHfy",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Mas ele foi ferido pelas nossas transgressões e moído pelas nossas iniquidades;",
+   "params": {
+    "voice_id": "bZztR6P62TDbe6sgaZgz"
+   },
+   "why": "",
+   "node": "RDYP15Kqua8jQ5QnJl5H",
+   "sessions": [
+    "D1TERpaN9g5jmESyqdGh",
+    "f4rgasw5x0APWkZP6HL1"
+   ],
+   "name": "pt-BR Q4"
+  },
+  {
+   "use": "toolu_01Q1yxiYJo7HqtAC1f7f72Zt",
+   "time": "2026-11-15T16:01:08.855Z",
+   "flow": "ckcvoQoiU6Uzt8AFIHfy",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Na cruz, o clamor de Jesus.",
+   "params": {
+    "voice_id": "bZztR6P62TDbe6sgaZgz"
+   },
+   "why": "",
+   "node": "gW9p1y6r0SQrQ0oVSv4k",
+   "sessions": [
+    "x5GBPN3OlTkr89XEhEZ3",
+    "PmRod5CjVHw8iSFttpK5"
+   ],
+   "name": "pt-BR N11"
+  },
+  {
+   "use": "toolu_01J2rVtmXebViuSSY4wNRAnG",
+   "time": "2026-11-15T16:01:08.858Z",
+   "flow": "ckcvoQoiU6Uzt8AFIHfy",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Deus meu, Deus meu, por que me desamparaste?",
+   "params": {
+    "voice_id": "bZztR6P62TDbe6sgaZgz"
+   },
+   "why": "",
+   "node": "P5fi4U7d9lcXngJOJTQ5",
+   "sessions": [
+    "5tl5BGSEihzkOnCFtd7g",
+    "95yv3TjFOejYMzyBKIqO"
+   ],
+   "name": "pt-BR Q5"
+  },
+  {
+   "use": "toolu_014yC3qLp94gnoSv6UfB12kR",
+   "time": "2026-11-15T16:01:08.862Z",
+   "flow": "ckcvoQoiU6Uzt8AFIHfy",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Esse clamor é a primeira linha de um salmo escrito mil anos antes por Davi, o rei ungido.",
+   "params": {
+    "voice_id": "bZztR6P62TDbe6sgaZgz"
+   },
+   "why": "",
+   "node": "iNdASNqaa0clfWwMdOPa",
+   "sessions": [
+    "vStiznylyjFBK35yVk5w",
+    "VL4AVx5JrFfsi0YfJovM"
+   ],
+   "name": "pt-BR N12"
+  },
+  {
+   "use": "toolu_0113fz51xLRqoCQcFKkfyVtx",
+   "time": "2026-11-15T16:01:08.864Z",
+   "flow": "ckcvoQoiU6Uzt8AFIHfy",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Deus meu, Deus meu, por que me desamparaste?",
+   "params": {
+    "voice_id": "bZztR6P62TDbe6sgaZgz"
+   },
+   "why": "",
+   "node": "Asr07wIvKSAgCHwwhbyQ",
+   "sessions": [
+    "lHoBwxwvR6eJFJKu7HOx",
+    "9UBJYJsCiYhe7hmc4kxf"
+   ],
+   "name": "pt-BR Q6"
+  },
+  {
+   "use": "toolu_01RrEgUrb2RroMNpq2UM5yZD",
+   "time": "2026-11-15T16:01:08.867Z",
+   "flow": "ckcvoQoiU6Uzt8AFIHfy",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Repartem entre si as minhas vestes e lançam sortes sobre a minha túnica.",
+   "params": {
+    "voice_id": "bZztR6P62TDbe6sgaZgz"
+   },
+   "why": "",
+   "node": "k5zHDd4Xg5lkwU0Q6j1n",
+   "sessions": [
+    "QgiXlhb9PSXRFbSxSCZp",
+    "mY4B14kRJrfvutgY7dsA"
+   ],
+   "name": "pt-BR Q7"
+  },
+  {
+   "use": "toolu_01KsJdf1aKjAjvAgkGGPftMn",
+   "time": "2026-11-15T16:01:08.870Z",
+   "flow": "ckcvoQoiU6Uzt8AFIHfy",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Ao pé da cruz, os soldados repartiram as suas vestes e lançaram sortes sobre a sua túnica.",
+   "params": {
+    "voice_id": "bZztR6P62TDbe6sgaZgz"
+   },
+   "why": "",
+   "node": "yvCdqdII8vG5sEo2zsvZ",
+   "sessions": [
+    "IMmUDjJ5I4faZJBUzmch",
+    "qDklOUKCkwGR1Rd71Wl1"
+   ],
+   "name": "pt-BR N14"
+  },
+  {
+   "use": "toolu_01FKnYmS3sUAqAi9RLvsQSg5",
+   "time": "2026-11-15T16:01:09.112Z",
+   "flow": "ckcvoQoiU6Uzt8AFIHfy",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Pedro, que um dia disse «Senhor, tem compaixão de ti», depois de encontrar Jesus ressuscitado, pregou isto:",
+   "params": {
+    "voice_id": "bZztR6P62TDbe6sgaZgz"
+   },
+   "why": "",
+   "node": "VcUN2K01HXGlQcezODP6",
+   "sessions": [
+    "U2pbPJ8FIq7ThrqJqp55",
+    "j9cRP15oWkkNPpCA6LuP"
+   ],
+   "name": "pt-BR N20"
+  },
+  {
+   "use": "toolu_01XxagrUxGcndo4oa7p5XwSV",
+   "time": "2026-11-15T16:01:48.005Z",
+   "flow": "ckcvoQoiU6Uzt8AFIHfy",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Deus ungiu a Jesus de Nazaré com o Espírito Santo e com virtude; o qual andou fazendo o bem",
+   "params": {
+    "voice_id": "bZztR6P62TDbe6sgaZgz"
+   },
+   "why": "",
+   "node": "bvpopcGOlgq1Sj5JY7tQ",
+   "sessions": [
+    "g2vMqGQp9SjnozXBi22j",
+    "Pgiqk7IGZeDkvCSL9GMM"
+   ],
+   "name": "pt-BR Q9"
+  },
+  {
+   "use": "toolu_01QqJkPh1W5vdVHTpsUDscFN",
+   "time": "2026-11-15T16:01:48.008Z",
+   "flow": "ckcvoQoiU6Uzt8AFIHfy",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Ao qual mataram, pendurando-o num madeiro.",
+   "params": {
+    "voice_id": "bZztR6P62TDbe6sgaZgz"
+   },
+   "why": "",
+   "node": "4EifdubVJ7J9sylGRmcY",
+   "sessions": [
+    "D2CdKIqDOtrizDOUUapu",
+    "ZlyamgY30x9dkTUvGRTJ"
+   ],
+   "name": "pt-BR Q11"
+  },
+  {
+   "use": "toolu_01R8rZYLmCpjozHuXnB1qPNT",
+   "time": "2026-11-15T16:01:48.011Z",
+   "flow": "ckcvoQoiU6Uzt8AFIHfy",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "A este ressuscitou Deus ao terceiro dia",
+   "params": {
+    "voice_id": "bZztR6P62TDbe6sgaZgz"
+   },
+   "why": "",
+   "node": "vz1Y1aow9FFqVhznSFmP",
+   "sessions": [
+    "i2Z0IvLG4Asypb9fmYVa",
+    "S9sUl9DVwKFYmGsYB8K6"
+   ],
+   "name": "pt-BR Q12"
+  },
+  {
+   "use": "toolu_01BybtfbNCwVJqsFnNMsvFcb",
+   "time": "2026-11-15T16:01:48.334Z",
+   "flow": "ckcvoQoiU6Uzt8AFIHfy",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "O Cristo que padeceu não foi um fracasso: era o caminho apontado pelas Escrituras.",
+   "params": {
+    "voice_id": "bZztR6P62TDbe6sgaZgz"
+   },
+   "why": "",
+   "node": "SFpNAOvyMtJm6Fg0dw3p",
+   "sessions": [
+    "KZVrFCoblp5rGop3CHPt",
+    "aksJpaXO3iXsCCPMXvIw"
+   ],
+   "name": "pt-BR N15"
+  },
+  {
+   "use": "toolu_01C8fy5xXjKNPBgC6nwqEcUP",
+   "time": "2026-11-15T16:01:48.338Z",
+   "flow": "ckcvoQoiU6Uzt8AFIHfy",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Rei,",
+   "params": {
+    "voice_id": "bZztR6P62TDbe6sgaZgz"
+   },
+   "why": "",
+   "node": "UgpLt5wfrRTqCALZWUIP",
+   "sessions": [
+    "O4VloYMF3qx6FBXpYdAW",
+    "wpsyFu1ru4RQzS7h73Et"
+   ],
+   "name": "pt-BR N16K"
+  },
+  {
+   "use": "toolu_01TzVd9Uippez28pdnWDnpm8",
+   "time": "2026-11-15T16:01:48.341Z",
+   "flow": "ckcvoQoiU6Uzt8AFIHfy",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Sacerdote,",
+   "params": {
+    "voice_id": "bZztR6P62TDbe6sgaZgz"
+   },
+   "why": "",
+   "node": "375L6u1ypDLTAeQHIyqm",
+   "sessions": [
+    "LVtdN51nlbHjovnB4eKM",
+    "8t6onAmcd8TvGKdZ25YU"
+   ],
+   "name": "pt-BR N16P"
+  },
+  {
+   "use": "toolu_01S6ZGHTQG7rfmVJ3vHS5ZTB",
+   "time": "2026-11-15T16:01:48.344Z",
+   "flow": "ckcvoQoiU6Uzt8AFIHfy",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Profeta,",
+   "params": {
+    "voice_id": "bZztR6P62TDbe6sgaZgz"
+   },
+   "why": "",
+   "node": "pb8ZJs0grquW5HLGOJzW",
+   "sessions": [
+    "svqFjBOwyIiDVZ0EyNMr",
+    "SWEEPaeDbi7sLsi4XJ2C"
+   ],
+   "name": "pt-BR N16R"
+  },
+  {
+   "use": "toolu_01LQak7CDvAv8fNx7nkPfXa3",
+   "time": "2026-11-15T16:01:48.347Z",
+   "flow": "ckcvoQoiU6Uzt8AFIHfy",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Três ofícios, em uma só Pessoa.",
+   "params": {
+    "voice_id": "bZztR6P62TDbe6sgaZgz"
+   },
+   "why": "",
+   "node": "OqqbWW3FTO7FBH6xRYnz",
+   "sessions": [
+    "vhKB3yYJLdF0e3gjwy9M",
+    "QzcRTH0mYOr0gUyyaWWM"
+   ],
+   "name": "pt-BR N16"
+  },
+  {
+   "use": "toolu_01GtTkEmPW9b4FqwgywGoebJ",
+   "time": "2026-11-15T16:01:48.350Z",
+   "flow": "ckcvoQoiU6Uzt8AFIHfy",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "«Cristo» não é sobrenome. É a confissão de que Jesus é justamente esse Messias.",
+   "params": {
+    "voice_id": "bZztR6P62TDbe6sgaZgz"
+   },
+   "why": "",
+   "node": "unvSbzaXTm7Ue8UuHm5d",
+   "sessions": [
+    "jYb2AB9XaMonTJivG7d4",
+    "xZnPMaqbTc5GhRdurZqX"
+   ],
+   "name": "pt-BR N17"
+  },
+  {
+   "use": "toolu_01RyXUQ9SQveWCV744pwzgHx",
+   "time": "2026-11-15T16:01:48.354Z",
+   "flow": "ckcvoQoiU6Uzt8AFIHfy",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Todos os que nele creem receberão o perdão dos pecados pelo seu nome.",
+   "params": {
+    "voice_id": "bZztR6P62TDbe6sgaZgz"
+   },
+   "why": "",
+   "node": "Hyg86Xm85wsk0LuCRcRR",
+   "sessions": [
+    "a4sVoBK7soitZwglnJd4",
+    "1yTdTSk2MYN6nDqsbH6J"
+   ],
+   "name": "pt-BR Q14"
+  },
+  {
+   "use": "toolu_01EzRUjzsKWrvrEW1C9HQTKJ",
+   "time": "2026-11-15T16:01:48.805Z",
+   "flow": "ckcvoQoiU6Uzt8AFIHfy",
+   "tool": "creative_generate_speech",
+   "model": "eleven_v4",
+   "label": "",
+   "prompt": "Tu és o Cristo, o Filho do Deus vivo.",
+   "params": {
+    "voice_id": "bZztR6P62TDbe6sgaZgz"
+   },
+   "why": "",
+   "node": "zyiuyHcGFnMOyQ8F5QNz",
+   "sessions": [
+    "Yl6YqaUGcvMtBkIVa5yL",
+    "dFXibt0wWbeB5F4dVZWL"
+   ],
+   "name": "pt-BR Q13"
   }
  ],
  "title": "그리스도",

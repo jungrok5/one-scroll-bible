@@ -28,7 +28,8 @@
      GOLD.bloom(ctx, x, y, col, k, o)               lens bloom from a bright point (exposure falloff, soft streak, ghosts) — after W3.bloom
      GOLD.glow(ctx, k, o)                           bloom from every bright pixel of the frame (downscale → cube → blur → screen)
      GOLD.finish(ctx, t, o)                         grain + vignette (after W3.finish)
-   Kits: (to package) canvas-film kits/goldoil. */
+   Kit: motion-skills canvas-film/kits/goldoil (kit.js + STYLE.md); a film vendors this file unchanged as kit-goldoil.js.
+   Load after lib.js (Pilot). Exposes window.GOLD. Pure functions of their arguments and t (seek-safe). No network, no images. */
 (function () {
   const P = Pilot, { clamp, lerp, ss } = P;
   const W = () => P.W, H = () => P.H;

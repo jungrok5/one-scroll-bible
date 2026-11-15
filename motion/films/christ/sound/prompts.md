@@ -152,3 +152,71 @@
 | en N17 | speech | eleven_v4 |  | “Christ” is not a last name. It is the confession that Jesus is that very Messiah. |
 | en Q14 | speech | eleven_v4 |  | Everyone who believes in him receives forgiveness of sins through his name. |
 | en Q13 | speech | eleven_v4 |  | You are the Christ, the Son of the living God. |
+| es N01 | speech | eleven_v4 |  | El «Cristo» de «Jesucristo», ¿es el apellido de Jesús? |
+| es N02 | speech | eleven_v4 |  | El nombre al final de cada oración. |
+| es Q1 | speech | eleven_v4 |  | Hemos hallado al Mesías (que traducido es, el Cristo). |
+| es N03 | speech | eleven_v4 |  | Cristo no es un apellido. Significa «el Ungido»: el Mesías. |
+| es N04 | speech | eleven_v4 |  | Dios establecía reyes, sacerdotes y profetas ungiéndolos con aceite. |
+| es K1 | speech | eleven_v4 |  | Y Samuel tomó el cuerno del aceite, y lo ungió en medio de sus hermanos; |
+| es K2 | speech | eleven_v4 |  | Y derramó del aceite de la unción sobre la cabeza de Aarón, |
+| es K3 | speech | eleven_v4 |  | Ungirás para que sea profeta en tu lugar. |
+| es N06 | speech | eleven_v4 |  | Muchos esperaban al Mesías solo como un rey que expulsaría a Roma. |
+| es N07 | speech | eleven_v4 |  | Un día, después de que Jesús vino, Pedro hizo una confesión. |
+| es Q2 | speech | eleven_v4 |  | Tú eres el Cristo, |
+| es N08 | speech | eleven_v4 |  | Desde entonces Jesús dijo que debía padecer y ser muerto, y resucitar al tercer día. |
+| es Q3 | speech | eleven_v4 |  | Señor, ten compasión de ti; |
+| es N09 | speech | eleven_v4 |  | Para Pedro, un Cristo que muere no tenía sentido. |
+| es N10 | speech | eleven_v4 |  | Pero ese camino ya estaba escrito. |
+| es Q4 | speech | eleven_v4 |  | Mas él herido fue por nuestras rebeliones, molido por nuestros pecados; |
+| es N11 | speech | eleven_v4 |  | En la cruz, el clamor de Jesús. |
+| es Q5 | speech | eleven_v4 |  | Dios mío, Dios mío, ¿por qué me has desamparado? |
+| es N12 | speech | eleven_v4 |  | Este clamor es la primera línea de un salmo escrito mil años antes por David, el rey ungido. |
+| es Q6 | speech | eleven_v4 |  | Dios mío, Dios mío, ¿por qué me has desamparado? |
+| es Q7 | speech | eleven_v4 |  | Repartieron entre sí mis vestidos, Y sobre mi ropa echaron suertes. |
+| es N14 | speech | eleven_v4 |  | Al pie de la cruz, los soldados repartieron sus vestidos y echaron suertes sobre su túnica. |
+| es N20 | speech | eleven_v4 |  | Pedro, que había dicho «Señor, ten compasión de ti», tras encontrarse con Jesús resucitado, predicó esto: |
+| es Q9 | speech | eleven_v4 |  | Cómo Dios ungió con el Espíritu Santo y con poder a Jesús de Nazaret, y cómo este anduvo haciendo bienes |
+| es Q11 | speech | eleven_v4 |  | A quien mataron colgándole en un madero. |
+| es Q12 | speech | eleven_v4 |  | A este levantó Dios al tercer día, |
+| es N15 | speech | eleven_v4 |  | El Cristo que padeció no fue un fracaso: era el camino que señalaban las Escrituras. |
+| es N16K | speech | eleven_v4 |  | Rey, |
+| es N16P | speech | eleven_v4 |  | Sacerdote, |
+| es N16R | speech | eleven_v4 |  | Profeta, |
+| es N16 | speech | eleven_v4 |  | Tres oficios, en una sola Persona. |
+| es N17 | speech | eleven_v4 |  | «Cristo» no es un apellido. Es la confesión de que Jesús es precisamente ese Mesías. |
+| es Q14 | speech | eleven_v4 |  | Todos los que en él creyeren, recibirán perdón de pecados por su nombre. |
+| es Q13 | speech | eleven_v4 |  | Tú eres el Cristo, el Hijo del Dios viviente. |
+| pt-BR N01 | speech | eleven_v4 |  | O «Cristo» de «Jesus Cristo» — é o sobrenome de Jesus? |
+| pt-BR N02 | speech | eleven_v4 |  | O nome no fim de cada oração. |
+| pt-BR Q1 | speech | eleven_v4 |  | Achamos o Messias (que, traduzido, é o Cristo). |
+| pt-BR N03 | speech | eleven_v4 |  | Cristo não é sobrenome. Significa «o Ungido» — o Messias. |
+| pt-BR N04 | speech | eleven_v4 |  | Deus estabelecia reis, sacerdotes e profetas ungindo-os com azeite. |
+| pt-BR K1 | speech | eleven_v4 |  | Então, Samuel tomou o vaso do azeite e ungiu-o no meio dos seus irmãos; |
+| pt-BR K2 | speech | eleven_v4 |  | Depois, derramou do azeite da unção sobre a cabeça de Arão |
+| pt-BR K3 | speech | eleven_v4 |  | Ungirás profeta em teu lugar. |
+| pt-BR N06 | speech | eleven_v4 |  | Muitos esperavam o Messias apenas como um rei que expulsaria Roma. |
+| pt-BR N07 | speech | eleven_v4 |  | Certo dia, depois que Jesus veio, Pedro fez uma confissão. |
+| pt-BR Q2 | speech | eleven_v4 |  | Tu és o Cristo, |
+| pt-BR N08 | speech | eleven_v4 |  | Desde então, Jesus disse que devia padecer e ser morto e ressuscitar ao terceiro dia. |
+| pt-BR Q3 | speech | eleven_v4 |  | Senhor, tem compaixão de ti; |
+| pt-BR N09 | speech | eleven_v4 |  | Para Pedro, um Cristo que morre não fazia sentido. |
+| pt-BR N10 | speech | eleven_v4 |  | Mas esse caminho já estava escrito. |
+| pt-BR Q4 | speech | eleven_v4 |  | Mas ele foi ferido pelas nossas transgressões e moído pelas nossas iniquidades; |
+| pt-BR N11 | speech | eleven_v4 |  | Na cruz, o clamor de Jesus. |
+| pt-BR Q5 | speech | eleven_v4 |  | Deus meu, Deus meu, por que me desamparaste? |
+| pt-BR N12 | speech | eleven_v4 |  | Esse clamor é a primeira linha de um salmo escrito mil anos antes por Davi, o rei ungido. |
+| pt-BR Q6 | speech | eleven_v4 |  | Deus meu, Deus meu, por que me desamparaste? |
+| pt-BR Q7 | speech | eleven_v4 |  | Repartem entre si as minhas vestes e lançam sortes sobre a minha túnica. |
+| pt-BR N14 | speech | eleven_v4 |  | Ao pé da cruz, os soldados repartiram as suas vestes e lançaram sortes sobre a sua túnica. |
+| pt-BR N20 | speech | eleven_v4 |  | Pedro, que um dia disse «Senhor, tem compaixão de ti», depois de encontrar Jesus ressuscitado, pregou isto: |
+| pt-BR Q9 | speech | eleven_v4 |  | Deus ungiu a Jesus de Nazaré com o Espírito Santo e com virtude; o qual andou fazendo o bem |
+| pt-BR Q11 | speech | eleven_v4 |  | Ao qual mataram, pendurando-o num madeiro. |
+| pt-BR Q12 | speech | eleven_v4 |  | A este ressuscitou Deus ao terceiro dia |
+| pt-BR N15 | speech | eleven_v4 |  | O Cristo que padeceu não foi um fracasso: era o caminho apontado pelas Escrituras. |
+| pt-BR N16K | speech | eleven_v4 |  | Rei, |
+| pt-BR N16P | speech | eleven_v4 |  | Sacerdote, |
+| pt-BR N16R | speech | eleven_v4 |  | Profeta, |
+| pt-BR N16 | speech | eleven_v4 |  | Três ofícios, em uma só Pessoa. |
+| pt-BR N17 | speech | eleven_v4 |  | «Cristo» não é sobrenome. É a confissão de que Jesus é justamente esse Messias. |
+| pt-BR Q14 | speech | eleven_v4 |  | Todos os que nele creem receberão o perdão dos pecados pelo seu nome. |
+| pt-BR Q13 | speech | eleven_v4 |  | Tu és o Cristo, o Filho do Deus vivo. |

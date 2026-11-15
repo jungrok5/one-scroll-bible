@@ -2142,17 +2142,17 @@
    "영어판 글자: \"…\"을 화면에서 \"...\"로(lib-film), 구절은 U+00A0로 이음 → film-en-v/h·christ-en-v/h-narr 다시 렌더",
    "원어민 검수 5묶음 모두 끝(ar-fa-hi-bn-ta-ne MED 3)",
    "자막 MED 3줄(hi·bn N09, ta Q14) 반영(관리자 \"그래\") → 재검수 2차 모두 OK — 27개 언어 자막 번역 품질 관문 통과",
-   "유튜브 전략 ①② 공정에(관리자 \"1 2는 네 제안대로하자\"): rules clips-plan-cadence · shorts-to-long-text · long-form-watch-hours, yt-api.mjs ypp"
+   "유튜브 전략 ①② 공정에(관리자 \"1 2는 네 제안대로하자\"): rules clips-plan-cadence · shorts-to-long-text · long-form-watch-hours, yt-api.mjs ypp",
+   "짧은 쇼츠 clips_plan·clips(c1·c2·c3) + upload.md·youtube.json·썸네일(A/B/C·V-*) — 한국어판 올릴 자료 준비 끝(e460288)",
+   "es·pt-BR 해설 34줄씩(flow H70YnW4QHUN7jLy44iBa / ckcvoQoiU6Uzt8AFIHfy, sessions-es/pt-BR.json, takes 68개씩) → place-es/pt-BR.json 모두 자리에 맞음 → christ-es-narr.mp3 · christ-pt-BR-narr.mp3 + sound/es.vtt·pt-BR.vtt, 프롬프트 216개",
+   "받아쓰기 대조(Scribe, flow Ujk3BrfCwyGMjo9Uh4Io): en 2줄(아포스트로피 표기만) · es 4줄(Señor·Dios가 줄 경계에서 앞 줄로 찍힘 — 단어 빠짐 없음) · pt-BR 모두 일치 → 셋 다 원고대로 읽음"
   ],
   "running": [],
   "owner": [],
   "next": [
-   "「그리스도」 clips_plan(짧은 쇼츠 구간 2–3개) 정하기 → 본편 다음 날부터 1–2일 간격 공개, 세로판 설명 첫 줄·고정 댓글에 관련 동영상 안내",
-   "es·pt-BR 해설(voices intl.voices.es / pt-BR, tasks/intl.md 3–4) — es-pt 검수 MED 반영 뒤",
-   "영어 해설 받아쓰기 대조(Scribe → check-voice.mjs christ en)",
    "자막 파일 captions-on-ko.mjs christ <27개>(한국어 시각) / --timing en(국제판) → .vtt 눈 확인",
    "youtube-intl.json(검수된 문장만) + motion/reviews/film-christ-yt.md, 썸네일 en/es/pt-BR",
-   "한국어판: 짧은 쇼츠(clips) · upload.md · 썸네일 → 공개 일정은 관리자 OK(주일 제외)"
+   "한국어판 공개 일정(decisions.date, 주일 제외) → 관리자 OK 뒤 올리기·예약"
   ],
   "followups_outside_film": [
    "사이트 i18n/km.json 세 직분 문단의 \"សង្ឃ\"(승려)를 \"បូជាចារ្យ\"(제사장)로 — km 검수자 지적",

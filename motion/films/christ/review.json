@@ -2647,8 +2647,9 @@
     "status": "moved"
    }
   ],
-  "pending": [
-   "T13 targets sound.music_cues_per_min_max 2→3 — 에이전트 제안, 관리자 확인 대기"
+  "pending": [],
+  "applied_later": [
+   "T13 music_cues_per_min_max 2→3 (관리자 2026-11-16 \"응 1 2 둘다해줘\")"
   ]
  }
 }

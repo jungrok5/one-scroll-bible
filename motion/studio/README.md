@@ -18,10 +18,17 @@
 | 토큰 한 곳 | `motion/youtube/yt-token.mjs` `accessToken('ko'|'gl'|NAME)` | 유튜브 API를 쓰는 도구 10개가 모두 여기서 토큰을 받습니다. 채널 전용 클라이언트(`YT_CLIENT_ID_<NAME>`)가 있으면 그것을, 없으면 공용 클라이언트를 씁니다. D2(국제 채널 전용 프로젝트)는 `yt-auth.mjs <json> --as GLOBAL --own-client` 한 번이면 끝납니다. |
 | 할당량 장부 | 같은 파일이 YouTube Data API 호출을 세서 `motion/studio/quota.json`(git 제외)에 적음 | 쿼터일(태평양 자정 = 한국 17시)과 내는 프로젝트별로 셉니다. 단가는 Google 비용표(2026-11-16 확인)를 씁니다. 브라우저 스튜디오와 Analytics API는 세지 않습니다. `studio.mjs status`의 할당량 칸에서 봅니다. |
 
-## 다음 (2~3주차 이후, 계획 §5)
-- 데스크 지시서 5개(`desks/*.md`)와 세션 분리
-- 17시 큐(할당량이 모자랄 때 다음 쿼터일로 미루는 일 목록)
-- 매일 밤 점검 `studio.mjs health`
+## 2~3주차 (2026-11-16)
+
+| 무엇 | 도구 | 메모 |
+|---|---|---|
+| 데스크 지시서 | [desks/](desks/README.md): 프로듀서·제작·언어·채널 운영·시청자·분석 | 새 세션은 "<데스크> 데스크"로 시작해 지시서의 시작 명령부터 칩니다. 데스크끼리는 저장소 파일로 이어집니다. |
+| 밤 점검 | `studio.mjs health [--full]` = health.mjs → `\OSB\health` 매일 23:40(월요일은 전체) | 연결 줄, 국제 재생목록, 사이트 버튼, 기록 모양·주일 규칙, 뒤따를 일을 봅니다. 월요일에는 14분 자막 트랙도 봅니다(≈1,100단위). 결과는 status의 '밤 점검' 칸과 `logs/<날짜>-health.log`에 남습니다. |
+| 17시 큐 | `studio.mjs queue [add|run|drop]` = queue.mjs, 기록 `queue.json` → `\OSB\queue` 매일 17:10 | 할당량이 모자란 API 일을 다음 쿼터일로 미룹니다. `node motion/…` 명령만 받습니다. 영상을 바꾸는 일은 관리자 OK를 받은 것만 넣습니다. |
+
+결정함 페이지(아티팩트): https://claude.ai/artifact/FQxUXYUc2t2XBYVdhQW3w5. 프로듀서가 `decide.mjs page`로 만든 뒤 같은 파일을 다시 게시합니다.
+
+## 다음 (계획 §5)
 - 편성표
 - 영상별 7일·28일 사후 분석
 - 국제 채널 API 프로젝트 분리(결정함 D2, 관리자가 만듦)

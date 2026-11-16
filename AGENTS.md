@@ -90,6 +90,7 @@ Protestant church; Korean Revised Version (개역개정) as the Korean baseline.
 - **Film series** (new films, `motion/films/<name>/`): the pipeline is code — start every session (and after a compaction) with
   `node motion/films/film.mjs status <name>` → `film.mjs task <name> <stage>`; rules in `motion/films/pipeline/rules.json`, topics via
   `motion/films/topic.mjs`. Procedure: the **/make-film skill**; background: `motion/films/README.md`.
+- **Studio operations** (`motion/studio/`): one producer + five desks, each a separate session started by its brief in `motion/studio/desks/` (start with `node motion/studio/studio.mjs status`); decisions go to the decision box (`decide.mjs`), not chat; scheduled jobs run in Windows Task Scheduler folder `\OSB\` (`jobs/register.ps1`).
 - `.claude/skills/add-language/` — the **/add-language skill**. Follow its `SKILL.md` when adding a
   language. Helpers in `lib/`: detect-mode (probe sources → recommend mode) · validate · audit-links ·
   integrate · convert-digits · fetch-verse · verify-verbatim · verify-inline · verify-prose · native-review-prompt.

@@ -1,0 +1,24 @@
+{
+ "_about": "17시 큐 — node motion/studio/studio.mjs queue (queue.mjs 머리말)",
+ "jobs": [
+  {
+   "n": 1,
+   "cmd": "node motion/youtube/yt-api.mjs asr-off Yh_BdiO9qB4 BdLn4e40GH4 Pb7yA35jjUQ KQjmmXH3I5w JfRb1wChEbs",
+   "units": 400,
+   "why": "「그리스도」 한국어 자동 자막 두 번째(규칙 asr-off-all, 관리자 상시 OK 2026-11-16)",
+   "ch": "ko",
+   "after": "2026-11-17",
+   "added": "2026-11-16"
+  },
+  {
+   "n": 2,
+   "cmd": "YT_AS=GLOBAL node motion/youtube/yt-api.mjs asr-off Il9eo92zvBM 1eM_EMtcXrQ",
+   "units": 150,
+   "why": "「그리스도」 국제판 자동 자막 두 번째(같은 규칙)",
+   "ch": "gl",
+   "after": "2026-11-17",
+   "added": "2026-11-16"
+  }
+ ],
+ "done": []
+}

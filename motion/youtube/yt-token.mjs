@@ -46,7 +46,7 @@ import { dirname as _dir } from 'node:path';
 import { fileURLToPath as _f2p } from 'node:url';
 const QF = join(_dir(_f2p(import.meta.url)), '..', 'studio', 'quota.json');
 // units per call (developers.google.com/youtube/v3/determine_quota_cost, checked 2026-11-16)
-const COST = { 'search': 100, 'videos.insert': 1600, 'captions.insert': 400, 'captions.update': 450, 'captions.download': 200, 'captions.delete': 50,
+const COST = { 'search': 100, 'videos.insert': 1600, 'captions.list': 50, 'captions.insert': 400, 'captions.update': 450, 'captions.download': 200, 'captions.delete': 50,
   'thumbnails.set': 50, 'playlistItems.insert': 50, 'playlistItems.update': 50, 'playlistItems.delete': 50, 'playlists.insert': 50,
   'playlists.update': 50, 'playlists.delete': 50, 'videos.update': 50, 'videos.delete': 50, 'videos.rate': 50, 'comments.insert': 50,
   'commentThreads.insert': 50, 'comments.setModerationStatus': 50, 'comments.update': 50, 'comments.delete': 50, 'channels.update': 50,

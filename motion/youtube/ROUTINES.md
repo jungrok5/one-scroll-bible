@@ -11,7 +11,7 @@
 >
 > **2026-11-16부터 매일 댓글 관리는 윈도우 작업 스케줄러가 돈다(1주 시범, operations-proposal §4-4)** — 작업 `\OSB\daily-comments`(매일 19:12),
 > 스크립트 `motion/studio/jobs/daily-comments.ps1`, 지시문 `motion/studio/jobs/daily-comments.prompt.txt`, 기록 `motion/studio/logs/<날짜>-daily.log`,
-> 다시 등록 `motion/studio/jobs/register.ps1`. **세션 예약(CronCreate)으로 매일 댓글 관리를 다시 만들지 않는다**(두 번 돈다) — 갱신 예약은 월·목 분석만
+> 다시 등록 `motion/studio/jobs/register.ps1`. 같은 폴더에 `\OSB\queue`(17:10, 17시 큐)와 `\OSB\health`(23:40, 밤 점검 — node만)도 있다. **세션 예약(CronCreate)으로 매일 댓글 관리를 다시 만들지 않는다**(두 번 돈다) — 갱신 예약은 월·목 분석만
 > 다시 만든다. 시범이 실패하면(기록 없음·브라우저 연결 없음) 아래 세션 예약 지시문으로 되돌린다. 확인: `node motion/studio/studio.mjs status`.
 >
 > (예전) 세션 예약 지시문 — 매일 19:12(`12 19 * * *`):

@@ -1,6 +1,8 @@
 // The studio board — every desk's next step on one screen (motion/studio/operations-proposal.html §4, week 1, approved 2026-11-13).
 //   node motion/studio/studio.mjs status        → films (production desks), decisions waiting, what is scheduled in the next 14 days
-//                                                 (Sunday rule), the language desk's next steps, scheduled jobs, today's API quota
+//                                                 (Sunday rule), the language desk's next steps, scheduled jobs, today's API quota, last nightly check
+//   node motion/studio/studio.mjs queue [add|run|drop] → the 17:00 queue (queue.mjs) — API jobs waiting for quota
+//   node motion/studio/studio.mjs health [--full]  → the nightly check (health.mjs; Task Scheduler \OSB\health)
 // Read-only: it runs the existing status tools and reads the records; it never publishes or changes anything.
 import { readFileSync, existsSync, readdirSync } from 'node:fs';
 import { join, dirname } from 'node:path';
@@ -12,7 +14,9 @@ const run = (a, opt = {}) => { const p = spawnSync(process.execPath, a, { cwd: R
 const KST = t => new Date(Date.parse(t) + 9 * 3600e3), day = t => KST(t).toISOString().slice(0, 10);
 const WD = '일월화수목금토', now = Date.now();
 const cmd = process.argv[2] || 'status';
-if (cmd !== 'status') { console.log('usage: node motion/studio/studio.mjs status'); process.exit(1); }
+if (cmd === 'queue') { const { queue } = await import('./queue.mjs'); await queue(process.argv.slice(3)); process.exit(0); }
+if (cmd === 'health') { const { health } = await import('./health.mjs'); await health(process.argv.slice(3)); process.exit(0); }
+if (cmd !== 'status') { console.log('usage: node motion/studio/studio.mjs status | health [--full] | queue [add|run|drop]'); process.exit(1); }
 const out = [], H = s => out.push('\n■ ' + s);
 
 // 1. production desks — one per film folder with a review.json
@@ -66,6 +70,12 @@ out.push('  세션 예약(CronCreate)은 그 세션 안에서만 보임 — 새 
 const logs = join(HERE, 'logs');
 if (existsSync(logs)) { const L = readdirSync(logs).filter(f => f.endsWith('.log')).sort().slice(-3); for (const f of L) out.push('  최근 실행 기록: motion/studio/logs/' + f); }
 
+// 5b. the last nightly check (health.mjs)
+const HL = J(join(HERE, 'health.json'));
+H('밤 점검 (studio.mjs health)');
+out.push(HL ? `  ${HL.day}${HL.full ? ' 전체' : ''}: 문제 ${HL.problems.length}개 · 통과 ${HL.ok.length}개` + HL.problems.slice(0, 8).map(p => `
+  ✗ [${p.check}] ${p.what.slice(0, 140)}`).join('') : '  아직 안 돌았음 — node motion/studio/studio.mjs health');
+
 // 6. quota — the ledger motion/youtube/yt-token.mjs keeps (every tool that gets its token there is counted; Studio in the browser is not)
 H('할당량 (YouTube Data API, 하루 10,000 — 태평양 자정 = 한국 17시 초기화)');
 const Q = J(join(HERE, 'quota.json'));
@@ -77,6 +87,7 @@ else { const cur = Q.day === quotaDay(), P = cur ? Q.projects : {};
   if (!Object.keys(P).length) out.push('  오늘(' + quotaDay() + ') 쓴 것 없음');
   const pv = cur ? Q.prev : { day: Q.day, projects: Q.projects };
   if (pv?.projects) out.push('  지난 쿼터일 ' + pv.day + ': ' + Object.entries(pv.projects).map(([k, v]) => `${k} ${v.total.toLocaleString()}`).join(' · '));
+  const QQ = J(join(HERE, 'queue.json')); if (QQ?.jobs?.length) out.push(`  17시 큐: 기다리는 일 ${QQ.jobs.length}개 (${QQ.jobs.reduce((a, j) => a + j.units, 0).toLocaleString()} units) — studio.mjs queue`);
   out.push('  국제 채널 전용 프로젝트: ' + (process.env.YT_CLIENT_ID_GLOBAL ? '있음' : '없음 — 결정함 D2(급하지 않음)')); }
 
 console.log(`스튜디오 현황 — ${new Date(now + 9 * 3600e3).toISOString().slice(0, 16).replace('T', ' ')} KST` + out.join('\n'));

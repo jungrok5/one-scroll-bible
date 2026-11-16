@@ -6,6 +6,8 @@ $ps = "$env:SystemRoot\System32\WindowsPowerShell\v1.0\powershell.exe"
 $root = 'C:\Project\one-scroll-bible\motion\studio\jobs'
 $jobs = @(
   @{ name = 'daily-comments'; file = 'daily-comments.ps1'; at = '19:12'; days = $null }   # every day 19:12 KST (was a session cron, motion/youtube/ROUTINES.md)
+  @{ name = 'queue'; file = 'queue.ps1'; at = '17:10'; days = $null }                    # the 17:00 queue right after the quota reset — operations-proposal §4-8
+  @{ name = 'health'; file = 'health.ps1'; at = '23:40'; days = $null }                   # nightly check, node only (Monday = full) — operations-proposal §4-7
 )
 foreach ($j in $jobs) {
   $action = New-ScheduledTaskAction -Execute $ps -Argument "-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File `"$root\$($j.file)`"" -WorkingDirectory 'C:\Project\one-scroll-bible'

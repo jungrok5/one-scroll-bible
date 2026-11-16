@@ -60,3 +60,6 @@ __pycache__/
 client_secret*.json
 token*.json
 .claude/settings.local.json
+
+# studio scheduled-job logs (motion/studio/jobs)
+/motion/studio/logs/

@@ -9,7 +9,12 @@
 > **2026-11-04부터 예약 지시문은 명령 하나다**(관리자: 절차를 코드로). 코드로 되는 일은 `motion/youtube/routine.mjs`가 하고, 남은 브라우저 일을
 > 번호 목록으로 출력한다 — 에이전트는 그것만 한다. 아래 긴 지시문은 그 출력의 원문(기록)이고, 실제 예약은 "새 예약 지시문"을 쓴다.
 >
-> 새 예약 지시문 — 매일 19:12(`12 19 * * *`):
+> **2026-11-16부터 매일 댓글 관리는 윈도우 작업 스케줄러가 돈다(1주 시범, operations-proposal §4-4)** — 작업 `\OSB\daily-comments`(매일 19:12),
+> 스크립트 `motion/studio/jobs/daily-comments.ps1`, 지시문 `motion/studio/jobs/daily-comments.prompt.txt`, 기록 `motion/studio/logs/<날짜>-daily.log`,
+> 다시 등록 `motion/studio/jobs/register.ps1`. **세션 예약(CronCreate)으로 매일 댓글 관리를 다시 만들지 않는다**(두 번 돈다) — 갱신 예약은 월·목 분석만
+> 다시 만든다. 시범이 실패하면(기록 없음·브라우저 연결 없음) 아래 세션 예약 지시문으로 되돌린다. 확인: `node motion/studio/studio.mjs status`.
+>
+> (예전) 세션 예약 지시문 — 매일 19:12(`12 19 * * *`):
 > `[예약 작업 — 댓글 관리] YT_* 사용자 환경 변수(YT_CLIENT_ID·YT_CLIENT_SECRET·YT_REFRESH_TOKEN·YT_REFRESH_TOKEN_GLOBAL)를 불러와 node motion/youtube/routine.mjs daily 를 실행하고, 출력된 "브라우저에서 할 것"만 그 순서대로 하고 한국어로 짧게 보고. 다른 게시·삭제·수정은 하지 말 것.`
 >
 > 새 예약 지시문 — 월·목 10:23(`23 10 * * 1,4`):
@@ -39,3 +44,9 @@ cron `13 9 6 11 *` (KST)
 [예약 점검 — 2주 측정, 2026-11-06] 한국어로 보고. (1) `node motion/youtube/yt-api.mjs stats --from 2026-10-20` (YT_* 사용자 환경 변수 불러오기)로 언어별 영상·쇼츠 성과를 tools/seo-log.md 또는 motion/youtube/uploaded.json 기록에 남기고, 1물결 쇼츠(ko en es pt-BR) 중 반응 좋은/나쁜 장면을 짚어 줄 것. (2) 유튜브 스튜디오의 썸네일 A/B 테스트(영상 16개) 결과를 확인해 승자를 표로 정리 — 기본값 바꾸기는 사용자 확인 후. (3) SEO 재측정: tools/seo-log.md 의 기준선 항목(Search Console 28일, 빙 검색·AI Performance, 네이버는 사용자에게 요청)과 AI 인용 8문항(Perplexity, 사용자에게 ChatGPT·네이버 AI 브리핑 확인 요청)을 다시 재서 기준선과 비교. (4) 인스타·Threads 릴스 반응(조회·좋아요)을 보기만 하고 요약. 게시·삭제·설정 변경은 하지 말 것.
 ```
 
+
+## 갱신 예약(1회, 6일마다 다시) — 2026-11-16부터 월·목 분석만
+
+```text
+[예약 작업 — 정기 예약 갱신(7일 만료 전)] CronList 로 지금 예약을 본다. '[정기 분석]' 예약을 지우고 motion/youtube/ROUTINES.md 의 "새 예약 지시문 — 월·목 10:23" 문구 그대로 cron '23 10 * * 1,4' 로 다시 만든다. 매일 댓글 관리는 윈도우 작업 스케줄러(\OSB\daily-comments)가 하므로 세션 예약으로 만들지 않는다(ROUTINES.md 머리말) — 대신 node motion/studio/studio.mjs status 의 '예약 작업' 칸과 motion/studio/logs/ 최근 기록으로 시범이 돌았는지만 확인해 보고한다. 그다음 이 갱신 작업을 6일 뒤 19:47 로 같은 문구의 1회 예약으로 다시 건다. 한국어로 짧게 보고. 다른 게시·삭제·수정은 하지 말 것.
+```

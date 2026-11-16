@@ -1,0 +1,104 @@
+{
+ "_about": "결정함 — node motion/studio/decide.mjs (머리말 참고)",
+ "items": [
+  {
+   "id": "D1",
+   "at": "2026-11-16",
+   "desk": "channel",
+   "kind": "owner-action",
+   "q": "국제 채널 '고급 기능' 인증",
+   "rec": "스튜디오(국제 채널 Bible in One Scroll) → 설정 → 채널 → 기능 사용 자격에서 중급(전화 인증) → 고급(영상 인증·신분증·채널 기록 중 하나)",
+   "options": [],
+   "why": "국제 채널 언어 페이지에 '오디오' 열이 없음(한국어 채널엔 있음). 다국어 오디오는 고급 기능이 있어야 함 — 2026-11-16 확인",
+   "blocks": "「그리스도」 국제판 스페인어·포르투갈어 오디오 트랙 → 국제판 공개",
+   "proceed": false,
+   "status": "open"
+  },
+  {
+   "id": "D2",
+   "at": "2026-11-16",
+   "desk": "channel",
+   "kind": "owner-action",
+   "q": "국제 채널용 Google Cloud 프로젝트 만들기(승인됨 2026-11-13)",
+   "rec": "관리자 계정(국제 채널 소유 계정)에서 Google Cloud 새 프로젝트 → YouTube Data API v3 · YouTube Analytics API 켜기 → OAuth 동의 화면(외부, 프로덕션) → 사용자 인증 정보 → OAuth 클라이언트 ID(데스크톱 앱) → JSON 받기. 그 JSON 경로를 알려 주시면 yt-auth.mjs가 국제 채널 전용 클라이언트로 저장하도록 고친 뒤 인증을 안내합니다(비밀값은 화면·채팅에 안 나옴)",
+   "options": [],
+   "why": "두 채널이 API 할당량 10,000을 나눠 씀 — 오늘 국제판 자막 27개를 API로 못 올리고 스튜디오로 돌렸다",
+   "blocks": "할당량 분리(급하지 않음)",
+   "proceed": false,
+   "status": "open"
+  },
+  {
+   "id": "D3",
+   "at": "2026-11-16",
+   "desk": "producer",
+   "kind": "decision",
+   "q": "다음 영상 형식 — 3분 가로·세로를 이어 갈지, 가로 8–10분 본편 + 장면 쇼츠 4–5편으로 바꿀지",
+   "rec": "가로 8–10분 본편 + 장면 쇼츠(첫 영상 방식, 길이만 줄임). 장면 단위로 만들고 검수",
+   "options": [
+    "3분 가로·세로 유지(지금 방식)",
+    "가로 8–10분 + 장면 쇼츠 4–5편",
+    "「400년」+「그리스도」를 엮은 8분 가로판으로 먼저 시험"
+   ],
+   "why": "쇼츠 시청 시간은 수익 기준(일반 동영상 4,000시간)에 안 들어감. 14분 해설판이 2,026시간을 만듦. 자세한 근거 motion/films/pipeline/FORMAT-NEXT.md",
+   "blocks": "다음 영상 주제 단계",
+   "proceed": false,
+   "status": "open"
+  },
+  {
+   "id": "D4",
+   "at": "2026-11-16",
+   "desk": "producer",
+   "kind": "decision",
+   "q": "다음 영상 주제",
+   "rec": "유월절 어린 양 → 하나님의 어린 양(출 12 → 요 1:29 · 고전 5:7)",
+   "options": [
+    "유월절 어린 양",
+    "성경은 어떻게 우리 손에 왔나",
+    "사도행전 — 예루살렘에서 로마까지"
+   ],
+   "why": "11/16 분석: 복음의 핵심 쇼츠(18/21·20/21)가 피드를 열고, 인스타 최고 릴스도 같은 주제. 근거 ANALYTICS.md 2026-11-16 · topic.mjs recommend",
+   "blocks": "다음 영상 시작",
+   "proceed": false,
+   "status": "open"
+  },
+  {
+   "id": "D5",
+   "at": "2026-11-16",
+   "desk": "language",
+   "kind": "decision",
+   "q": "14분 해설판 영어·스페인어·포르투갈어 — 성경 낭독 허락을 출판사에 물을지",
+   "rec": "Crossway(ESV)·대한성서공회·성서공회(RVR1960·Almeida)에 낭독 허락 문의 — 메일 초안은 제가 쓰고 보내는 것은 관리자가",
+   "options": [],
+   "why": "film14.mjs status: 해설판 관문 scripture_audio = unknown. 「400년」 오디오 트랙은 이미 낭독 중",
+   "blocks": "14분 해설판 외국어판",
+   "proceed": false,
+   "status": "open"
+  },
+  {
+   "id": "D6",
+   "at": "2026-11-16",
+   "desk": "language",
+   "kind": "decision",
+   "q": "사이트 크메르어 팩 '세 직분' 문단의 សង្ឃ(승려)를 បូជាចារ្យ(제사장)로",
+   "rec": "고친다(「그리스도」 크메르어 원어민 검수자 지적) — 다음 사이트 배포에 같이",
+   "options": [],
+   "why": "km 검수: សង្ឃ는 불교 승려를 가리킴",
+   "blocks": "",
+   "proceed": true,
+   "status": "open"
+  },
+  {
+   "id": "D7",
+   "at": "2026-11-16",
+   "desk": "language",
+   "kind": "decision",
+   "q": "사이트 독일어 팩 'Jesaja 9,5' 링크 번호",
+   "rec": "루터역(9,5)과 YouVersion 51 장절이 맞는지 fetch-verse로 확인해 맞게 고친다 — 다음 사이트 배포에 같이",
+   "options": [],
+   "why": "독어 성경은 사 9:5, 영어·개역은 9:6 — 링크가 다른 절로 갈 수 있음",
+   "blocks": "",
+   "proceed": true,
+   "status": "open"
+  }
+ ]
+}

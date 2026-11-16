@@ -2180,8 +2180,7 @@
   ],
   "running": [],
   "owner": [
-   "국제판 오디오 트랙(es·pt-BR): 국제 채널 스튜디오가 지금 \"동영상 자막\" 화면만 보여 주고 오디오 칸·메뉴가 없음(「침묵의 400년」은 오디오가 붙어 있음) — 관리자 스튜디오에서 언어 화면에 오디오가 보이는지 확인, 파일 motion/out/christ-es-narr.mp3 · christ-pt-BR-narr.mp3",
-   "공개: 한국어판(가로·세로) 공개 → 인스타·스레드 같은 시각 → 고정 댓글·가로판 최종 화면 → 짧은 쇼츠 3편 다음 날부터 1–2일 간격"
+   "국제판 오디오 트랙(es·pt-BR): 국제 채널 스튜디오가 지금 \"동영상 자막\" 화면만 보여 주고 오디오 칸·메뉴가 없음(「침묵의 400년」은 오디오가 붙어 있음) — 관리자 스튜디오에서 언어 화면에 오디오가 보이는지 확인, 파일 motion/out/christ-es-narr.mp3 · christ-pt-BR-narr.mp3"
   ],
   "next": [
    "11/17(공개 다음 날): 자동 자막 두 번째 확인 — yt-api.mjs asr-off Yh_BdiO9qB4 BdLn4e40GH4 Pb7yA35jjUQ KQjmmXH3I5w JfRb1wChEbs → uploaded.json christ.asr_off.again",

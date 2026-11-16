@@ -1,4 +1,6 @@
 {
+ "lifecycle": "legacy",
+ "lifecycle_note": "파이프라인(film.mjs) 이전에 만든 영상 — 2026-10-31 공개. 단계 검사는 적용하지 않음",
  "_about": "「침묵의 400년」 — 2026-11-01 공개(review.json 체계 이전). 지금은 반복용 짧은 쇼츠(clips)만 여기 둔다.",
  "clips": [
   {

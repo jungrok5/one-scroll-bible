@@ -1,4 +1,6 @@
 {
+ "lifecycle": "shelved",
+ "lifecycle_note": "「그리스도」로 대체(2026-11-09) — 만들지 않음",
  "_about": "이 영상의 진행 상태와 검토 기록 — 새 세션은 여기부터 읽는다(지금 몇 단계인지, 무엇을 정해야 하는지, 검토 페이지 주소). 검토 페이지는 `node motion/films/review-page.mjs messiah`로 만들어 아래 artifact_url에 다시 올린다(필름 README 8절). 단계 번호는 README 0절 표.",
  "stage": 2,
  "round": 7,

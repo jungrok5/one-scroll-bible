@@ -1,0 +1,149 @@
+{
+ "_dir": "ltr",
+ "_yv": 399,
+ "_version": "MBB",
+ "_scope": "captions",
+ "T1": {
+  "text": "Cristo"
+ },
+ "N01": {
+  "text": "Ang “Cristo” sa “Jesu-Cristo” — / apelyido ba ito ni Jesus?"
+ },
+ "N02": {
+  "text": "Ang pangalan sa dulo / ng bawat panalangin."
+ },
+ "Q1": {
+  "text": "Nakita na namin ang Mesiyas! / (Ang kahulugan ng salitang ito’y Cristo).",
+  "cite": "Juan 1:41",
+  "hl": "Cristo"
+ },
+ "N03": {
+  "text": "Hindi apelyido ang Cristo. / Ang ibig sabihin nito’y “ang binuhusan ng langis” — ang Mesiyas."
+ },
+ "N04": {
+  "text": "Itinalaga ng Diyos ang mga hari, mga saserdote, at mga propeta / sa pamamagitan ng pagbubuhos sa kanila ng langis."
+ },
+ "K1": {
+  "text": "Kinuha ni Samuel ang sungay na sisidlan ng langis, / at binuhusan niya si David ng langis sa harapan ng kanyang mga kapatid.",
+  "cite": "1 Samuel 16:13",
+  "hl": "langis"
+ },
+ "K2": {
+  "text": "Binuhusan niya ng langis ang ulo ni Aaron",
+  "cite": "Levitico 8:12",
+  "hl": "ang ulo ni Aaron"
+ },
+ "K3": {
+  "text": "… Buhusan mo rin ng langis si Eliseo na anak ni Safat na taga-Abel-mehola / bilang propeta na hahalili sa iyo.",
+  "cite": "1 Mga Hari 19:16",
+  "voice": "Buhusan mo rin ng langis si Eliseo",
+  "hl": "Buhusan mo rin ng langis"
+ },
+ "N06": {
+  "text": "Hinintay ng marami ang Mesiyas / bilang isang hari lamang na magpapalayas sa Roma."
+ },
+ "N07": {
+  "text": "Isang araw, matapos dumating si Jesus, / ipinahayag ni Pedro ang kanyang pananampalataya."
+ },
+ "Q2": {
+  "text": "Kayo po ang Cristo, / ang Anak ng Diyos na buháy.",
+  "cite": "Mateo 16:16",
+  "voice": "Kayo po ang Cristo,",
+  "hl": "Cristo"
+ },
+ "N08": {
+  "text": "Mula noon, sinabi ni Jesus / na kailangan siyang magdusa at patayin, / at sa ikatlong araw ay muling mabuhay."
+ },
+ "Q3": {
+  "text": "Panginoon, huwag nawang itulot ng Diyos! / Kailanma’y hindi iyan mangyayari sa inyo.",
+  "cite": "Mateo 16:22",
+  "voice": "Panginoon, huwag nawang itulot ng Diyos!",
+  "hl": "huwag nawang itulot ng Diyos"
+ },
+ "N09": {
+  "text": "Para kay Pedro, walang saysay / ang isang Cristong mamamatay."
+ },
+ "N10": {
+  "text": "Ngunit ang daang iyon / ay naisulat na noon pa."
+ },
+ "Q4": {
+  "text": "Ngunit dahil sa ating mga kasalanan kaya siya nasugatan; / siya ay binugbog dahil sa ating kasamaan.",
+  "cite": "Isaias 53:5",
+  "hl": "nasugatan"
+ },
+ "N11": {
+  "text": "Sa krus, / ang sigaw ni Jesus."
+ },
+ "Q5": {
+  "text": "Eli, Eli, lema sabachthani? / … Diyos ko, Diyos ko, / bakit mo ako pinabayaan?",
+  "cite": "Mateo 27:46",
+  "voice": "Diyos ko, Diyos ko, / bakit mo ako pinabayaan?",
+  "hl": "ako pinabayaan"
+ },
+ "N12": {
+  "text": "Ang sigaw na ito ang unang linya ng isang Awit / na isinulat isang libong taon bago si Jesus / ni David, ang haring binuhusan ng langis."
+ },
+ "Q6": {
+  "text": "O Diyos ko! Diyos ko! / Bakit mo ako pinabayaan?",
+  "cite": "Awit 22:1",
+  "hl": "ako pinabayaan"
+ },
+ "Q7": {
+  "text": "Mga damit ko’y kanilang pinagsugalan, / at mga saplot ko’y pinaghati-hatian.",
+  "cite": "Awit 22:18",
+  "hl": "pinagsugalan"
+ },
+ "N14": {
+  "text": "Sa paanan ng krus, pinaghati-hatian ng mga kawal ang kanyang mga damit / at pinagsugalan ang kanyang kasuotan."
+ },
+ "N20": {
+  "text": "Si Pedro, na minsang nagsabing “Huwag nawang itulot ng Diyos!”, / matapos makatagpo ang muling nabuhay na si Jesus, ay nangaral nang ganito:"
+ },
+ "Q9": {
+  "text": "Kilala ninyo si Jesus na taga-Nazaret / at alam din ninyo kung papaanong pinili siya ng Diyos / at kung papaanong pinuspos ng Espiritu Santo at ng kapangyarihan. / … saanman siya magpunta, gumagawa siya ng kabutihan …",
+  "cite": "Mga Gawa 10:38",
+  "voice": "Kilala ninyo si Jesus na taga-Nazaret / at alam din ninyo kung papaanong pinili siya ng Diyos / at kung papaanong pinuspos ng Espiritu Santo at ng kapangyarihan. / Alam din ninyo na saanman siya magpunta, gumagawa siya ng kabutihan",
+  "hl": "pinuspos ng Espiritu Santo"
+ },
+ "Q11": {
+  "text": "… Siya’y pinatay nila; / siya ay ipinako nila sa krus.",
+  "cite": "Mga Gawa 10:39",
+  "voice": "Siya’y pinatay nila; / siya ay ipinako nila sa krus.",
+  "hl": "ipinako nila sa krus"
+ },
+ "Q12": {
+  "text": "Ngunit siya’y muling binuhay ng Diyos sa ikatlong araw",
+  "cite": "Mga Gawa 10:40",
+  "hl": "muling binuhay"
+ },
+ "N15": {
+  "text": "Ang Cristong nagdusa ay hindi kabiguan — / iyon ang daang itinuro ng Kasulatan."
+ },
+ "N16K": {
+  "text": "Hari,"
+ },
+ "N16P": {
+  "text": "Saserdote,"
+ },
+ "N16R": {
+  "text": "Propeta,"
+ },
+ "N16": {
+  "text": "Tatlong tungkulin, / sa iisang Persona."
+ },
+ "N17": {
+  "text": "Ang “Cristo” ay hindi apelyido. / Ito ay pagpapahayag / na si Jesus mismo ang Mesiyas na iyon."
+ },
+ "Q14": {
+  "text": "… ang bawat sumampalataya sa kanya / ay tatanggap ng kapatawaran sa kanilang mga kasalanan / sa pamamagitan ng kanyang pangalan.",
+  "cite": "Mga Gawa 10:43",
+  "voice": "ang bawat sumampalataya sa kanya / ay tatanggap ng kapatawaran sa kanilang mga kasalanan / sa pamamagitan ng kanyang pangalan.",
+  "hl": "sa pamamagitan ng kanyang pangalan"
+ },
+ "Q13": {
+  "text": "Kayo po ang Cristo, / ang Anak ng Diyos na buháy.",
+  "cite": "Mateo 16:16",
+  "voice": "Kayo po ang Cristo, / ang Anak ng Diyos na buháy.",
+  "hl": "Cristo"
+ }
+}

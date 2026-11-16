@@ -1185,7 +1185,22 @@
     "B-prayer",
     "C-cross"
    ],
-   "publish_at": "2026-11-16T03:51:28Z"
+   "publish_at": "2026-11-16T03:51:28Z",
+   "pinned_comment": {
+    "id": "Ugy8QXTQjLdlv-a8bNV4AaABAg",
+    "text": "upload.md 고정 댓글(가로)",
+    "pinned": "2026-11-16"
+   },
+   "endscreen": {
+    "at": "2:55–3:00",
+    "items": [
+     "14분 해설판 wrEYqvOU1O8",
+     "구독"
+    ],
+    "how": "스튜디오 최종 화면 → 동영상에서 가져오기(침묵의 400년 가로 BWzpW2MVkCI)",
+    "saved": "2026-11-16"
+   },
+   "playlist": "PLaTgTvGcbOng (해설 영상 모아 보기)"
   },
   "v": {
    "id": "BdLn4e40GH4",
@@ -1225,7 +1240,12 @@
    ],
    "related": "wrEYqvOU1O8",
    "cover": "V-A-oil",
-   "publish_at": "2026-11-16T03:51:28Z"
+   "publish_at": "2026-11-16T03:51:28Z",
+   "pinned_comment": {
+    "id": "Ugw4bGzhGlZoISxtEhF4AaABAg",
+    "text": "upload.md 고정 댓글(세로 — 관련 동영상 안내)",
+    "pinned": "2026-11-16"
+   }
   },
   "captions": [
    "ar",
@@ -1277,6 +1297,13 @@
    "url": "https://www.instagram.com/one.scroll.bible/reel/Dfycp-kBDni/",
    "at": "2026-11-16",
    "how": "instagram.com 웹(3분 릴스 — Business Suite 90초 제한), 원본 비율, 표지 V-A-oil, 글 films/christ/social/instagram.json(실제 키 입력)"
+  },
+  "points_from_14min": {
+   "at": "2026-11-16",
+   "endscreen": "wrEYqvOU1O8 최종 화면 동영상 카드 → Yh_BdiO9qB4(400년에서 바꿈)",
+   "pinned_comment": "UgymTslYHPPenq0Az8Z4AaABAg 맨 앞에 새 영상 줄(FAQ 줄은 아래에 둠, API comments.update)",
+   "description": "첫 줄 \"▶ 새 영상: …\" (API videos.update)",
+   "rule": "endscreen-newest"
   }
  }
 }

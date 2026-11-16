@@ -19,17 +19,19 @@
 
 const W = 1044;
 const at = el => { const b = el.getBoundingClientRect(), s = W / innerWidth; return [Math.round((b.x + b.width / 2) * s), Math.round((b.y + b.height / 2) * s)]; };
-const pinned = async L => {
+// text: a film's own comment (motion/films/<film>/upload.md "고정 댓글", several lines) instead of the manifest's faq line — 2026-11-16
+const pinned = async (L, text) => {
+  if (text) return { lines: text.split('\n'), want: text };
   const m = await (await fetch('http://127.0.0.1:8765/youtube/manifest.json', { cache: 'no-store' })).json();
   const p = m.languages[L]?.film?.pinned;
   if (!p?.text || !/^https:\/\/one-scroll-bible\.com\/\S*#faq$/.test(p.link || '')) throw new Error('manifest has no pinned text/link — run node motion/youtube/manifest.mjs');
-  return { ...p, want: p.text + '\n' + p.link };
+  return { ...p, lines: [p.text, p.link], want: p.text + '\n' + p.link };
 };
 const mine = () => [...document.querySelectorAll('ytd-comment-thread-renderer')].find(t => /one-scroll-bible/.test(t.querySelector('#author-text')?.innerText || ''));
-const typeInto = (ed, p) => { ed.focus(); document.execCommand('selectAll'); document.execCommand('insertText', false, p.text); document.execCommand('insertLineBreak'); document.execCommand('insertText', false, p.link); ed.dispatchEvent(new Event('input', { bubbles: true })); };
+const typeInto = (ed, p) => { ed.focus(); document.execCommand('selectAll'); p.lines.forEach((l, i) => { if (i) document.execCommand('insertLineBreak'); if (l) document.execCommand('insertText', false, l); }); ed.dispatchEvent(new Event('input', { bubbles: true })); };
 
-window.__osbCommentPrep = async L => {
-  const sleep = ms => new Promise(r => setTimeout(r, ms)), p = await pinned(L);
+window.__osbCommentPrep = async (L, text) => {
+  const sleep = ms => new Promise(r => setTimeout(r, ms)), p = await pinned(L, text);
   document.querySelector('video')?.pause();
   for (let k = 0; k < 30 && !document.querySelector('#simplebox-placeholder'); k++) { window.scrollBy(0, 400); await sleep(400); }
   const ph = document.querySelector('#simplebox-placeholder'); if (!ph) return { state: 'error', error: 'comments did not load (comments off?)' };
@@ -51,8 +53,8 @@ window.__osbCommentPrep = async L => {
 
 window.__osbMenuItems = () => [...document.querySelectorAll('ytd-menu-service-item-renderer, tp-yt-paper-item')].filter(e => e.offsetParent).map(e => [e.innerText.trim(), ...at(e)]);
 
-window.__osbCommentType = async L => {
-  const sleep = ms => new Promise(r => setTimeout(r, ms)), p = await pinned(L), th = mine();
+window.__osbCommentType = async (L, text) => {
+  const sleep = ms => new Promise(r => setTimeout(r, ms)), p = await pinned(L, text), th = mine();
   const ed = th?.querySelector('#contenteditable-root'); if (!ed) return 'no inline editor — click 수정/Edit first';
   typeInto(ed, p); await sleep(600); if (ed.innerText.trim() !== p.want) return 'text mismatch';
   th.querySelector('#submit-button button, #submit-button').click();
@@ -61,4 +63,4 @@ window.__osbCommentType = async L => {
 };
 
 window.__osbIsPinned = () => !!(mine()?.querySelector('#pinned-comment-badge')?.innerText || '').trim();
-window.__osbCommentCheck = async L => { const p = await pinned(L); return { pinned: window.__osbIsPinned(), text: (mine()?.querySelector('#content-text')?.innerText || '').trim() === p.want }; };
+window.__osbCommentCheck = async (L, text) => { const p = await pinned(L, text); return { pinned: window.__osbIsPinned(), text: (mine()?.querySelector('#content-text')?.innerText || '').trim() === p.want }; };

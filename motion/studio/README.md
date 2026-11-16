@@ -1,6 +1,6 @@
 # 스튜디오 운영 — 프로듀서 + 데스크
 
-계획과 근거: [operations-proposal.html](operations-proposal.html). 관리자가 2026-11-13에 §6 추천안을 모두 승인했습니다("다 제안대로 하고 그리스도 공개한뒤 하자").
+계획과 근거, 그리고 사용법(7절): [operations-proposal.html](operations-proposal.html) — 아티팩트 https://claude.ai/artifact/J4XbvGE1yWem5bhvasbXPq (이 파일을 고치면 같은 주소로 다시 게시). 관리자가 2026-11-13에 §6 추천안을 모두 승인했습니다("다 제안대로 하고 그리스도 공개한뒤 하자").
 「그리스도」 공개 뒤인 2026-11-16부터 1주차 항목을 시작했습니다.
 
 ## 1주차 (2026-11-16 시작)

@@ -42,5 +42,152 @@
     "threads": "scheduled"
    }
   }
- ]
+ ],
+ "post": {
+  "d7": {
+   "at": "2026-11-17",
+   "from": "2026-10-31",
+   "to": "2026-11-06",
+   "ko": {
+    "h": {
+     "id": "BWzpW2MVkCI",
+     "views": 657,
+     "avgPct": 51.8,
+     "avgSec": 93,
+     "likes": 17,
+     "shares": 22,
+     "subs": 6,
+     "minutes": 422,
+     "tv": 0.143,
+     "mobile": 0.629,
+     "age55": null,
+     "top": "SUBSCRIBER 69% · YT_CHANNEL 12% · END_SCREEN 7%",
+     "retention10": [
+      [
+       0.1,
+       0.686
+      ],
+      [
+       0.2,
+       0.599
+      ],
+      [
+       0.3,
+       0.561
+      ],
+      [
+       0.4,
+       0.545
+      ],
+      [
+       0.5,
+       0.534
+      ],
+      [
+       0.6,
+       0.496
+      ],
+      [
+       0.7,
+       0.477
+      ],
+      [
+       0.8,
+       0.47
+      ],
+      [
+       0.9,
+       0.455
+      ],
+      [
+       1,
+       0.436
+      ]
+     ]
+    },
+    "v": {
+     "id": "smt-UIB_qss",
+     "views": 453,
+     "avgPct": 73.4,
+     "avgSec": 132,
+     "likes": 23,
+     "shares": 11,
+     "subs": 4,
+     "minutes": 456,
+     "tv": 0.015,
+     "mobile": 0.905,
+     "age55": null,
+     "top": "SHORTS 72% · SUBSCRIBER 14% · YT_CHANNEL 6%",
+     "retention10": [
+      [
+       0.1,
+       0.966
+      ],
+      [
+       0.2,
+       0.844
+      ],
+      [
+       0.3,
+       0.771
+      ],
+      [
+       0.4,
+       0.727
+      ],
+      [
+       0.5,
+       0.678
+      ],
+      [
+       0.6,
+       0.658
+      ],
+      [
+       0.7,
+       0.639
+      ],
+      [
+       0.8,
+       0.61
+      ],
+      [
+       0.9,
+       0.585
+      ],
+      [
+       1,
+       0.498
+      ]
+     ]
+    }
+   },
+   "gl": {
+    "h": {
+     "id": "oYKz_HHI8yw",
+     "views": 1,
+     "avgPct": 35.4,
+     "avgSec": 63,
+     "likes": 0,
+     "shares": 0,
+     "subs": 0,
+     "minutes": 1,
+     "tv": 0,
+     "mobile": 1,
+     "age55": null,
+     "top": "EXT_URL 100%",
+     "retention10": []
+    },
+    "v": {
+     "id": "cbg5Z5xg65I",
+     "tv": 0,
+     "mobile": 0,
+     "age55": null,
+     "top": "",
+     "retention10": [],
+     "error": "500 Internal error encountered."
+    }
+   }
+  }
+ }
 }

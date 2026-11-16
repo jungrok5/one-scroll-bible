@@ -18,6 +18,14 @@ const load = () => J(F) || { _about: '17시 큐 — node motion/studio/studio.mj
 const save = q => writeFileSync(F, JSON.stringify(q, null, 1) + '\n');
 const DAY = 10000;
 
+// after a successful second auto-caption pass: uploaded.json <record>.asr_off.again = today for every record whose ids are all in it
+function recordAsrAgain(cmd) {
+  const f = join(ROOT, 'motion', 'youtube', 'uploaded.json'), raw = readFileSync(f, 'utf8'), U = JSON.parse(raw), day = new Date(Date.now() + 9 * 3600e3).toISOString().slice(0, 10);
+  const recs = [...Object.values(U).filter(v => v && typeof v === 'object'), ...Object.values(U.global?.films || {})];
+  let n = 0; for (const r of recs) if (r.asr_off?.ids?.length && !r.asr_off.again && r.asr_off.ids.every(i => cmd.includes(i))) { r.asr_off.again = day; n++; }
+  if (n) { writeFileSync(f, JSON.stringify(U, null, 1) + (raw.endsWith('\n') ? '\n' : '')); console.log(`  → uploaded.json asr_off.again = ${day} (${n})`); }
+}
+
 export async function queue(args) {
   const { quotaDay, clientFor } = await import('../youtube/yt-token.mjs');
   const [sub = 'list', ...rest] = args, q = load();
@@ -48,6 +56,7 @@ export async function queue(args) {
       const tail = ((p.stdout || '') + (p.stderr || '')).trim().split('\n').slice(-4).join(' / ');
       q.jobs = q.jobs.filter(x => x.n !== j.n); q.done.push({ ...j, ran: new Date().toISOString(), exit: p.status, tail }); save(q);
       console.log(`  → exit ${p.status}: ${tail.slice(0, 300)}`);
+      if (p.status === 0 && /yt-api.mjs asr-off/.test(j.cmd)) recordAsrAgain(j.cmd);
       const b2 = { ko: left('ko'), gl: left('gl') }; budget.ko = b2.ko; budget.gl = b2.gl;
     }
     return;

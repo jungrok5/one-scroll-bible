@@ -28,7 +28,12 @@
 
 결정함 페이지(아티팩트): https://claude.ai/artifact/FQxUXYUc2t2XBYVdhQW3w5. 프로듀서가 `decide.mjs page`로 만든 뒤 같은 파일을 다시 게시합니다.
 
+## 4주차 (2026-11-17)
+
+| 무엇 | 도구 | 메모 |
+|---|---|---|
+| 편성표 | `studio.mjs cal [일수|sync|plan|drop]` = calendar.mjs, 기록 `calendar.json` | 유튜브 예약(uploaded.json)과 인스타·스레드 예약(films/*/social)을 그대로 비춥니다. 아직 id가 없는 계획 줄은 프로듀서가 `cal plan`으로 넣습니다. 밤 점검이 주일 규칙(한국어 채널·인스타·스레드), 지난 계획, 유튜브의 실제 예약을 기록과 비교합니다. status의 '편성표' 칸에서도 봅니다. |
+| 사후 분석 7일·28일 | `studio.mjs post [run|show <film> 7|28]` = post.mjs → 그 영상 review.json "post" | 자료가 들어오는 공개 후 9일·30일에 모읍니다(Analytics, 할당량 거의 안 씀). 같은 시점의 이전 영상과 비교합니다. 월·목 정기 분석(routine.mjs analysis)이 `post run`을 돌리고, 읽은 것은 insights·rules로 갑니다. 「침묵의 400년」 7일을 기준으로 모아 두었습니다. |
+
 ## 다음 (계획 §5)
-- 편성표
-- 영상별 7일·28일 사후 분석
 - 국제 채널 API 프로젝트 분리(결정함 D2, 관리자가 만듦)

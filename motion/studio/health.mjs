@@ -47,10 +47,17 @@ export async function health(args = []) {
       if (typeof v === 'object') walk(v, [...path, k], gl || k === 'global'); } };
     walk(U, [], false); return { problems: p }; });
 
+  // 4b. the broadcast calendar vs the records and the real YouTube schedule (calendar.mjs, ≈2 units)
+  { const { checkCalendar } = await import('./calendar.mjs');
+    try { const r = await checkCalendar({ live: !needKeys }); log.push(`## 편성표
+${r.rows}줄`); if (r.problems.length) r.problems.forEach(w => problems.push({ check: '편성표 (calendar)', what: w })); else ok.push('편성표 (calendar)'); }
+    catch (e) { problems.push({ check: '편성표 (calendar)', what: 'check failed: ' + e.message }); } }
+
   // 5. follow-ups that have a date: the second auto-caption pass the day after publishing (rules asr-off-all)
   check('뒤따를 일 (자동 자막 두 번째)', () => {
     const U = J(join(M, 'youtube', 'uploaded.json')) || {}, p = [];
-    const look = (o, name) => { if (o?.asr_off?.at && !o.asr_off.again && o.asr_off.at < today) p.push(`${name}: 자동 자막 두 번째가 ${o.asr_off.at} 다음 날부터 밀림 — ${name.startsWith('global') ? 'YT_AS=GLOBAL ' : ''}yt-api.mjs asr-off ${o.asr_off.ids.join(' ')}`); };
+    const Q = J(join(HERE, 'queue.json')) || { jobs: [] }, queued = ids => Q.jobs.some(j => /asr-off/.test(j.cmd) && ids.every(i => j.cmd.includes(i)));
+    const look = (o, name) => { if (o?.asr_off?.at && !o.asr_off.again && o.asr_off.at < today && !queued(o.asr_off.ids)) p.push(`${name}: 자동 자막 두 번째가 ${o.asr_off.at} 다음 날부터 밀림 — ${name.startsWith('global') ? 'YT_AS=GLOBAL ' : ''}yt-api.mjs asr-off ${o.asr_off.ids.join(' ')}`); };
     for (const [k, v] of Object.entries(U)) if (v && typeof v === 'object' && k !== 'global') look(v, k);
     for (const [k, v] of Object.entries(U.global?.films || {})) look(v, 'global.films.' + k);
     return { problems: p }; });

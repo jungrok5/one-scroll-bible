@@ -34,9 +34,13 @@
 - 다음 영상 주제와 형식을 정합니다. 결정함 D3·D4, `motion/films/pipeline/FORMAT-NEXT.md`.
 - 공개 요일을 정합니다(한국어 채널은 주일 공개 없음).
 
+## 편성표
+- `node motion/studio/studio.mjs cal`로 봅니다. 정한 공개 계획(예: 다음 영상 공개일)은 id가 생기기 전에 `cal plan <날짜> <ko|gl|ig|threads> "<무엇>"`으로 넣습니다.
+- 업로드·예약이 되면 그 줄은 기록(uploaded.json·social)에서 저절로 나타나므로, 계획 줄은 `cal drop <n>`으로 뺍니다.
+
 ## 맡은 파일
 - `motion/studio/decisions.json`
-- (4주차부터) 편성표 `motion/studio/calendar.json`
+- 편성표 `motion/studio/calendar.json`(계획 줄)
 
 ## 하지 않는 일
 - 영상을 직접 만들거나 올리지 않습니다. 각각 제작 데스크와 채널 운영 데스크의 일입니다.

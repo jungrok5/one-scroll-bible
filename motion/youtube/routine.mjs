@@ -27,6 +27,7 @@ if (which === 'daily') {
   console.log('\n--- 한국어↔해외 연결 점검 (xlinks.mjs audit) ---\n' + run(['motion/youtube/xlinks.mjs', 'audit']).trim());
   console.log('\n--- 국제 채널 정리 점검 (intl-layout.mjs plan) ---\n' + run(['motion/youtube/intl-layout.mjs', 'plan']).trim());
   console.log('\n--- 14분 언어별 상태 (film14.mjs status) ---\n' + run(['motion/youtube/film14.mjs', 'status']).trim());
+  console.log('\n--- 영상별 사후 분석 7일·28일 (studio.mjs post run — 때가 된 것만 모음) ---\n' + run(['motion/studio/studio.mjs', 'post', 'run']).trim());
   console.log(`
 === 그다음 (이 순서로) ===
 A. \`node motion/films/analytics/collect.mjs recv\`를 백그라운드로 켜고, 위 페이지를 하나씩 열어 \`collect.mjs script <추출기> <이름>\`(영상 페이지는 \`script studio-video auto\`)
@@ -37,6 +38,7 @@ B. node motion/films/analytics/collect.mjs check  → 빠진 것이 없을 때�
 C. node motion/films/analytics/collect.mjs report → report.md의 표를 motion/films/ANALYTICS.md에 날짜 절로 붙인다.
 D. "읽은 것": ANALYTICS.md "요소 분석" 8항목(이탈 구간↔장면, 화풍, 첫 1초, 썸네일·제목·첫 줄, 소리, 형식, 플랫폼 차이, 댓글)으로 읽고,
    여러 영상이 같은 방향이면 motion/films/pipeline/targets.json의 해당 숫자를 바꾸자고 제안한다(출처·날짜와 함께 — 바꾸는 것은 관리자 OK 뒤).
+D1. 위 '사후 분석'에서 방금 모은 영상이 있으면 그 영상 review.json "post"를 이전 영상과 비교해 읽고(studio.mjs post show <film> 7|28), 다음 영상에 바꿀 것을 아래 D2·E에 넣는다.
 D2. 배운 것을 규칙으로: motion/films/pipeline/insights.json을 갱신한다 — 새 발견은 항목으로 추가(id·since·evidence(숫자+원자료 파일)·finding·rule·stages, 처음엔 status "watch"),
    두 번 이상 같은 방향으로 확인되면 "active"로 올리고, 반대 근거가 나오면 evidence를 고치거나 "retired". 검사로 만들 수 있으면 check를 붙이자고 제안한다.
    (이 파일은 film.mjs task가 단계마다 작업 지시 아래에 찍어 주고, check가 있는 규칙은 단계 검사가 된다 — 다음 영상에 저절로 들어간다.)

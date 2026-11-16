@@ -67,6 +67,11 @@
      "at": "2026-11-12",
      "fact": "해설판 옆자리 2위 '성경은 누가, 언제, 어떻게 편집했나' 0.5% — 11/4·11/5·11/9·11/12 네 번 연속",
      "source": "motion/films/analytics/2026-11-12/video-film-narr-reach_viewers.json"
+    },
+    {
+     "at": "2026-11-16",
+     "fact": "해설판 옆자리에 '성경은 누가, 언제, 어떻게 편집했나' 0.5% — 다섯 번째 연속(11/4–11/16), 쇼츠 19/21 '성경이 진짜 실화인가요?' 11/12–16 100회(평균 시청 비율 253%)",
+     "source": "motion/films/analytics/2026-11-16/video-film-narr-reach_viewers.json"
     }
    ]
   },
@@ -144,6 +149,11 @@
      "at": "2026-11-12",
      "fact": "인스타 7일 최고 릴스가 두 주 연속 십자가 13/21(흑백 필름) 1,332회 — 둘째 678회의 두 배",
      "source": "motion/films/analytics/2026-11-12/instagram.json"
+    },
+    {
+     "at": "2026-11-16",
+     "fact": "복음의 핵심 쇼츠가 피드를 연다: 18/21 '행하라가 아니라 이루어졌다' 11/12–16 432회(평균 시청 비율 210%), 20/21 '착하게 살면?'(은혜로 구원) 첫 1일 15시간 528회 · 구독 +4, 같은 편 인스타 릴스 1,359회로 7일 최고",
+     "source": "motion/films/analytics/2026-11-16/api-ko.json"
     }
    ]
   },
@@ -227,6 +237,24 @@
     "bible-transmission"
    ],
    "source": "motion/films/ANALYTICS.md 2026-11-12"
+  },
+  {
+   "at": "2026-11-16",
+   "ids": [
+    "passover-lamb",
+    "bible-transmission",
+    "acts"
+   ],
+   "source": "motion/films/ANALYTICS.md 2026-11-16"
+  },
+  {
+   "at": "2026-11-16",
+   "ids": [
+    "passover-lamb",
+    "bible-transmission",
+    "acts"
+   ],
+   "source": "motion/films/ANALYTICS.md 2026-11-16"
   }
  ]
 }

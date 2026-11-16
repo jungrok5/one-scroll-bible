@@ -33,7 +33,8 @@ const FILM_CTA = (() => { const h = fs.readFileSync(`${root}/index.html`, 'utf8'
 // 유튜브에 공개된 언어별 영상 id(index.html 의 FILM_YT) — 있으면 버튼이 유튜브로, 없으면 /film/?lang=
 const FILM_YT = (() => { const m = fs.readFileSync(`${root}/index.html`, 'utf8').match(/const FILM_YT=(\{[^;]*\});/); return m ? JSON.parse(m[1]) : {}; })();
 // /film/ 페이지들(sitemap) — 목록 + film/films.json 의 영상마다 하나 (2026-10-31 영상별 주소로 개편)
-const FILM_PAGES = ['film/index.html', ...JSON.parse(fs.readFileSync(`${root}/film/films.json`, 'utf8')).map(f => f.path.replace(/^\//, '') + 'index.html')];
+const FILMS = JSON.parse(fs.readFileSync(`${root}/film/films.json`, 'utf8'));
+const FILM_PAGES = ['film/index.html', ...FILMS.map(f => f.path.replace(/^\//, '') + 'index.html')];
 
 // 한국어(루트) 메타는 직접 지정, 나머지는 i18n 팩에서 로드
 const KO = {
@@ -647,7 +648,7 @@ ${LANGS.map(langLine).join('\n')}
 - [Bible by Map / 지도로 보는 성경](${ORIGIN}/maps/): the Old Testament timeline, the life of Jesus, and Paul's journeys traced on a real map, in time order.
 - [Films / 영상](${ORIGIN}/film/): the films, drawn live in the browser (list: ${ORIGIN}/film/films.json).
 - [The story film / 영상으로 보는 성경 이야기](${ORIGIN}/film/story/): the same storyline as a 14-minute film in 21 scenes, each painted in its own style; Korean, and in ${Object.keys(FILM_CTA).filter(c => c !== 'ko').map(c => (LANGS.find(L => L.code === c) || {}).en || c).join(', ')} via ?lang=<code>.
-- [The Silent 400 Years / 침묵의 400년](${ORIGIN}/film/silence/): a 3-minute narrated film (Korean) on the years between Malachi and the New Testament — what God prepared (dispersion and synagogues, Greek and the Septuagint, Roman roads) — with the chapters to read.
+${FILMS.filter(f => f.llms).map(f => `- [${f.llms.name}](${ORIGIN}${f.path}): ${f.llms.text}`).join('\n')}
 
 ## Resources
 - [Full text outline (llms-full.txt)](${ORIGIN}/llms-full.txt): the 13-epoch storyline, FAQ and language list in one file, without Scripture quotations.

@@ -233,7 +233,7 @@ main 배포는 관리자 허락을 받고 한다.
 - 재생기는 `film/player.js` 하나: 페이지가 `window.FILM`(장면 목록 또는 한 파일 + `marks` 챕터)을 주고 불러온다. 스타일 `film/film.css`.
 - `/film/?lang=xx`(ko 외)나 `#장면`이 붙은 옛 주소는 `/film/story/`로 그대로 넘긴다.
 - 새 영상 올리기: `py motion/films/publish.py <폴더> <slug>`(film.html·스크립트·script.json·글꼴 부분집합·film.m4a → `film/<slug>/f/`),
-  `film/<slug>/index.html`(silence를 본떠 `FILM` 설정·챕터·읽을 말씀), 포스터, `films.json` 한 줄. sitemap·llms.txt는 `films.json`에서 자동.
+  `film/<slug>/index.html`(silence를 본떠 `FILM` 설정·챕터·읽을 말씀), 포스터, `films.json` 한 줄(`llms: { name, text }` 포함). sitemap·llms.txt는 `films.json`에서 자동.
 - GA: 모든 재생 이벤트에 `film` 파라미터(맞춤 측정기준 등록 필요 — `tools/ANALYTICS-SETUP.md`).
 
 ## 7. 만드는 방식 (코드)

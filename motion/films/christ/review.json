@@ -2180,11 +2180,13 @@
   ],
   "running": [],
   "owner": [
-   "국제판 오디오 트랙(es·pt-BR): 국제 채널 스튜디오가 지금 \"동영상 자막\" 화면만 보여 주고 오디오 칸·메뉴가 없음(「침묵의 400년」은 오디오가 붙어 있음) — 관리자 스튜디오에서 언어 화면에 오디오가 보이는지 확인, 파일 motion/out/christ-es-narr.mp3 · christ-pt-BR-narr.mp3"
+   "국제판 오디오 트랙(es·pt-BR): 국제 채널 스튜디오가 지금 \"동영상 자막\" 화면만 보여 주고 오디오 칸·메뉴가 없음(「침묵의 400년」은 오디오가 붙어 있음) — 관리자 스튜디오에서 언어 화면에 오디오가 보이는지 확인, 파일 motion/out/christ-es-narr.mp3 · christ-pt-BR-narr.mp3",
+   "영상 인증 검토 중(2026-11-16 신청) — 결과는 스튜디오 설정 → 채널 → 기능 사용 자격 요건"
   ],
   "next": [
-   "11/17(공개 다음 날): 자동 자막 두 번째 확인 — yt-api.mjs asr-off Yh_BdiO9qB4 BdLn4e40GH4 Pb7yA35jjUQ KQjmmXH3I5w JfRb1wChEbs → uploaded.json christ.asr_off.again",
-   "국제판: 오늘 저녁(관리자 \"아내한테 연락 필요해서 저녁에\") — 고급 기능 인증 뒤 오디오 트랙 es·pt-BR(studio-audio.js) → 공개 → 영어 14분 MFH3Hj4V6KA 최종 화면 → 국제 재생목록(intl-layout.mjs apply)"
+   "2026-11-17: 국제판 자동 자막 두 번째(YT_AS=GLOBAL yt-api.mjs asr-off Il9eo92zvBM 1eM_EMtcXrQ) — 한국어 다섯 편과 같이",
+   "영상 인증 통과 뒤(≈24시간): 국제판 쇼츠 1eM_EMtcXrQ 관련 동영상 → MFH3Hj4V6KA (studio-related.js) → uploaded.json global.films.christ.related_video",
+   "오디오 접근이 열리면: studio-audio.js es·pt-BR (h·v) → audio_deferred 지움"
   ],
   "followups_outside_film": [
    "사이트 i18n/km.json 세 직분 문단의 \"សង្ឃ\"(승려)를 \"បូជាចារ្យ\"(제사장)로 — km 검수자 지적",

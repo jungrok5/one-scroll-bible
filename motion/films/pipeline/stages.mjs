@@ -340,7 +340,9 @@ const G = {
     if (!existsSync(join(c.d, 'youtube-intl.json'))) why.push('youtube-intl.json(언어별 제목·설명) 없음');
     if (!existsSync(join(ROOT, 'motion/reviews', `film-${c.film}-yt.md`))) why.push(`motion/reviews/film-${c.film}-yt.md(제목·설명 원어민 검수) 없음`);
     const g = intlRec(c); if (!g?.h?.id || !g?.v?.id) why.push(`uploaded.json global.films.${c.film} h·v id 없음 — intl.mjs entry → 스튜디오 → intl.mjs api`);
-    else for (const k of ['h', 'v']) { const a = new Set(g[k].audio || []), m = T.intl.voice_langs.filter(l => l !== 'en' && !a.has(l)); if (m.length) why.push(`국제판 ${k} 오디오 트랙 없음: ${m.join(' ')} (스튜디오 언어 탭)`); }
+    // audio_deferred { at, by: the maintainer's words, until }: the channel has no multi-language audio access yet (it is given to *some*
+    // channels with Advanced features — YouTube help 13338784), so the cut goes public with captions and the tracks follow (2026-11-16)
+    else if (!g.audio_deferred?.by) for (const k of ['h', 'v']) { const a = new Set(g[k].audio || []), m = T.intl.voice_langs.filter(l => l !== 'en' && !a.has(l)); if (m.length) why.push(`국제판 ${k} 오디오 트랙 없음: ${m.join(' ')} (스튜디오 언어 탭 — 채널에 오디오 접근이 없으면 관리자 말로 global.films.${c.film}.audio_deferred)`); }
     return why.length ? { ok: false, why } : pass(); },
   // 12. the international cut public (maintainer OK) with its related video / end screen
   intlpub: c => { const g = intlRec(c), why = []; if (!g?.h?.id) return fail('국제판이 아직 없다');

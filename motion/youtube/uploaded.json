@@ -979,7 +979,7 @@
     "note": "「그리스도」 국제판(영어 글자판, motion/films/christ/youtube-intl.json · 검수 motion/reviews/film-christ-yt.md). 2026-11-16 비공개 업로드 → intl.mjs api --no-captions(제목·설명 es/pt-BR, 태그, 표준 라이선스). 자막은 스튜디오(할당량 없음)",
     "h": {
      "id": "Il9eo92zvBM",
-     "privacy": "private",
+     "privacy": "public",
      "default": "en",
      "audio": [],
      "captions": [
@@ -1011,11 +1011,12 @@
       "zh-Hans",
       "zh-Hant"
      ],
-     "note": "두루마리 내린 가로판"
+     "note": "두루마리 내린 가로판",
+     "endscreen": "2026-11-16 Studio: end screen imported from oYKz_HHI8yw (침묵의 400년 국제판) — 2:55–3:00 English 14-min film MFH3Hj4V6KA bottom-left + subscribe bottom-right"
     },
     "v": {
      "id": "1eM_EMtcXrQ",
-     "privacy": "private",
+     "privacy": "public",
      "default": "en",
      "audio": [],
      "captions": [
@@ -1054,7 +1055,25 @@
      ],
      "at": "2026-11-16",
      "ok": "관리자 \"세 편 모두 지우기\""
-    }
+    },
+    "audio_deferred": {
+     "at": "2026-11-16",
+     "by": "관리자: \"응 오디오 기다리지 않고 국제판 공개하자\"",
+     "why": "국제 채널에 다국어 오디오 접근 없음(중급만, 고급은 영상 인증 신청 중 — 고급도 오디오 보장 아님, 도움말 13338784)",
+     "until": "스튜디오 언어 페이지에 오디오 열이 생기면 studio-audio.js로 es·pt-BR 추가 → audio 채우고 이 키 지움"
+    },
+    "published": "2026-11-16 (관리자 \"국제판 공개하자\", 자막 27개만 — 오디오는 audio_deferred)",
+    "asr_off": {
+     "ids": [
+      "Il9eo92zvBM",
+      "1eM_EMtcXrQ"
+     ],
+     "at": "2026-11-16",
+     "again": null
+    },
+    "related_video_todo": "Short 1eM_EMtcXrQ → MFH3Hj4V6KA (youtube-intl.json related.v): 2026-11-16 the 관련 동영상 button showed \"영상 인증 검토 중(대개 24시간)\" — set it once the verification passes (studio-related.js __osbRelated(\"en\",\"1eM_EMtcXrQ\",\"From creation to the new heaven and new earth\"))",
+    "playlists": "2026-11-16 intl-layout.mjs apply: added to 19 language playlists (position 2) + series playlist",
+    "points_from_14min": "2026-11-16 English 14-min MFH3Hj4V6KA end screen (had none) = 「그리스도」 Il9eo92zvBM bottom-left + subscribe bottom-right, last 20 s (rule endscreen-newest)"
    }
   },
   "playlists_series": "PLUkvqbcq-Vok"

@@ -22,3 +22,7 @@ README 4절 "순서와 도구" 그대로. 해설 트랙 언어 = `targets.json` 
 7. 올리기(국제 채널, 비공개): `node motion/films/intl.mjs entry {film} v|h` → 스튜디오 `__osbUpload('en', { entry })` → `YT_AS=GLOBAL node motion/films/intl.mjs api {film} v|h <id>` → 오디오 트랙(세로·가로 각각): `motion/youtube/studio-audio.js` `__osbAudio([['es', 'out/{film}-es-narr.mp3'], ['pt-BR', 'out/{film}-pt-BR-narr.mp3']])` — 언어 페이지에 "오디오" 열이 없으면 채널 고급 기능이 꺼진 것(설정 → 채널 → 기능 사용 자격, 소유자 인증 — 도우미가 먼저 알려 줌). 자막은 `studio-caption.js`(할당량 없음), `intl.mjs api … --no-captions` → 기록 `uploaded.json` `global.films.{film}.h|v` = id·privacy·audio·captions.
 es·pt-BR 해설은 그 언어 원어민 검수(11단계 es-pt-fr-it-de 묶음)의 HIGH/MED가 정리된 뒤 3단계부터.
 확인: `node motion/films/film.mjs check {film} intl`
+
+- Studio channel identity (2026-11-16): youtube.com/channel_switcher changes only YouTube, not Studio — Studio keeps its own identity and a
+  studio.youtube.com/channel/<other id>/… link just shows "오류가 발생했습니다". Switch Studio with its own menu: avatar → 계정 전환 → the channel.
+  Video pages use studio.youtube.com/video/<id>/translations (no /channel/ part). Switch both back to the Korean channel when done.

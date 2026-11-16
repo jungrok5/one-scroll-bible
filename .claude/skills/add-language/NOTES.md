@@ -94,7 +94,7 @@ when it's a modest fuller form; ② **ALL-CAPS Latin names** (Malay `YOHANES`) �
 **Versification (Psalm / OT numbers)**: _full authoritative checklist + traditions table → `versification.md` (grounded in STEPBible TVTMS, CC BY). Short digest below._
 - LXX/Slavonic Psalms (exile = Ps 136, MT 137): ru·uz·uk·tg·kk·ka·tk·tt. **Write cite in the edition's own
   number** (YouVersion doesn't remap). Chapter-level quotes need `:1` (e.g. `136:1`) to link.
-- Isa 9:6 vs 9:5: CUV/ESV/Синод/АБ = 9:6; TB/BTT/Luther/新共同訳 = 9:5. Follow the edition.
+- Isa 9:6 vs 9:5: CUV/ESV/Синод/АБ = 9:6; TB/BTT/Luther 2017/新共同訳 = 9:5. Follow the edition — **de quotes Luther 1912 (YV 51), which numbers it 9:6** (9,5 there is the armour verse; the de pack said "Jesaja 9,5" until 2026-11-16, found by the 「그리스도」 native review). Check with fetch-verse, never from the translation's name.
 - Neh 8:10 vs 8:11 etc. exist per edition (af·nl·ln). For a missing verse, cite a same-meaning different
   verse (fa JDG 17:6, kab 1Tim 1:16).
 

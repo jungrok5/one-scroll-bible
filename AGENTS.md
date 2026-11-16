@@ -152,7 +152,7 @@ so "new format" alone no longer blocks a language.
 - **Don't undo linter/user formatting**: i18n JSON uses `JSON.stringify(p,null,1)` (1-space indent);
   sitemap is one `<url>` per line; keep robots/README formatting as-is.
 - zh-Hant uses **Taiwan standard glyphs** (為/裡/啟/吃/背); watch simplified→traditional miscoversions.
-- Versification differs by translation: Isa 9:6 (CUV/ESV/Синод.) vs 9:5 (TB/BTT/Luther/新共同訳);
+- Versification differs by translation: Isa 9:6 (CUV/ESV/Синод./Luther 1912 on YV 51) vs 9:5 (TB/BTT/Luther 2017/新共同訳);
   LXX/Slavonic Psalms (exile = Ps 136, MT 137) for ru/uz/uk/tg/kk/ka/tk/tt — write each `cite` in the
   translation's own numbering (YouVersion does not remap). Per-language details are in the skill's `NOTES.md` digest.
 - Verse links: `verseUrl(usfm,code)` → ko → bskorea (개역개정); all others → YouVersion

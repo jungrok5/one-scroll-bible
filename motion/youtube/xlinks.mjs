@@ -7,6 +7,7 @@
 //        international channel (50 units). Pin it in Studio afterwards (the API cannot pin).
 // Credentials: YT_CLIENT_ID / YT_CLIENT_SECRET / YT_REFRESH_TOKEN (Korean) / YT_REFRESH_TOKEN_GLOBAL — never printed.
 // New film → add its ids to uploaded.json and a kind below; the audit then shows what is missing.
+import { accessToken } from './yt-token.mjs';
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -16,11 +17,7 @@ const X = JSON.parse(readFileSync(join(HERE, 'xlinks.json'), 'utf8')), U = JSON.
 process.on('uncaughtException', e => { console.error('error: ' + String(e.message).replace(/<[^>]+>/g, '')); process.exit(1); });
 const tok = {};
 async function token(ch) {
-  if (tok[ch]) return tok[ch]; const e = process.env, rt = ch === 'gl' ? e.YT_REFRESH_TOKEN_GLOBAL : e.YT_REFRESH_TOKEN;
-  if (!e.YT_CLIENT_ID || !e.YT_CLIENT_SECRET || !rt) { console.error('missing YT_* environment variables'); process.exit(1); }
-  const r = await fetch('https://oauth2.googleapis.com/token', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: new URLSearchParams({ client_id: e.YT_CLIENT_ID, client_secret: e.YT_CLIENT_SECRET, refresh_token: rt, grant_type: 'refresh_token' }) });
-  const j = await r.json(); if (!j.access_token) { console.error('token refresh failed:', j.error || r.status); process.exit(1); } return (tok[ch] = j.access_token);
+  return (tok[ch] ||= await accessToken(ch));
 }
 async function api(ch, path, opt = {}) {
   const r = await fetch('https://www.googleapis.com/youtube/v3/' + path, { ...opt, headers: { Authorization: 'Bearer ' + await token(ch), 'Content-Type': 'application/json', ...(opt.headers || {}) } });

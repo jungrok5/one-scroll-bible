@@ -7,6 +7,7 @@
 //   node motion/youtube/global-move.mjs playlist-film       → add each language's film to its playlist (first item)
 //   node motion/youtube/global-move.mjs status              → films on the channel: privacy, processing
 // Records live in uploaded.json "global": { channel, film: {L: {id,…}}, shorts: {L: {ids}}, playlists: {L: id} }.
+import { accessToken } from './yt-token.mjs';
 import { readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -20,8 +21,7 @@ const langs = Object.keys(man.languages).filter(L => L !== 'ko' && man.languages
 
 const e = process.env; let tok;
 async function api(path, opt = {}) {
-  tok ||= (await (await fetch('https://oauth2.googleapis.com/token', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: new URLSearchParams({ client_id: e.YT_CLIENT_ID, client_secret: e.YT_CLIENT_SECRET, refresh_token: e.YT_REFRESH_TOKEN_GLOBAL, grant_type: 'refresh_token' }) })).json()).access_token;
+  tok ||= await accessToken('gl');
   if (!tok) throw new Error('no token — needs YT_REFRESH_TOKEN_GLOBAL (yt-auth.mjs --as GLOBAL)');
   const r = await fetch('https://www.googleapis.com/youtube/v3/' + path, { ...opt, headers: { Authorization: 'Bearer ' + tok, 'Content-Type': 'application/json' } });
   const j = await r.json(); if (!r.ok) throw new Error(`${r.status} ${j.error?.message}`.replace(/<[^>]+>/g, '')); return j;
@@ -134,8 +134,7 @@ if (cmd === 'playlists') {
   // working), the scheduled ones → plain private (schedule cancelled). Nothing is deleted.
   const [L] = rest, old = up.shorts[L]; if (!old) { console.log('no shorts for', L); process.exit(1); }
   let kt; const kapi = async (path, opt = {}) => {
-    kt ||= (await (await fetch('https://oauth2.googleapis.com/token', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: new URLSearchParams({ client_id: e.YT_CLIENT_ID, client_secret: e.YT_CLIENT_SECRET, refresh_token: e.YT_REFRESH_TOKEN, grant_type: 'refresh_token' }) })).json()).access_token;
+    kt ||= await accessToken('ko');
     const r = await fetch('https://www.googleapis.com/youtube/v3/' + path, { ...opt, headers: { Authorization: 'Bearer ' + kt, 'Content-Type': 'application/json' } });
     const j = await r.json(); if (!r.ok) throw new Error(`${r.status} ${j.error?.message}`.replace(/<[^>]+>/g, '')); return j; };
   const ids = Object.values(old.ids), v = (await kapi(`videos?part=status&id=${ids.join(',')}`)).items;
@@ -156,8 +155,7 @@ if (cmd === 'playlists') {
   }
 } else if (cmd === 'unlist-old-films') {
   // unlist-old-films [--dry]: the non-Korean films still public on the KOREAN channel → unlisted (old links keep working)
-  const tk = (await (await fetch('https://oauth2.googleapis.com/token', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: new URLSearchParams({ client_id: e.YT_CLIENT_ID, client_secret: e.YT_CLIENT_SECRET, refresh_token: e.YT_REFRESH_TOKEN, grant_type: 'refresh_token' }) })).json()).access_token;
+  const tk = await accessToken('ko');
   const H = { Authorization: 'Bearer ' + tk, 'Content-Type': 'application/json' };
   const films = Object.entries(up.film).filter(([L, f]) => f?.id && L !== 'ko' && L !== 'ko-vertical');
   const v = (await (await fetch(`https://www.googleapis.com/youtube/v3/videos?part=status&id=${films.map(([, f]) => f.id).join(',')}`, { headers: H })).json()).items;

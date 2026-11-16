@@ -5,6 +5,7 @@
 // Expected: Korean channel = ko; international channel = the video's language (YouTube codes: zh-Hans→zh-CN, zh-Hant→zh-TW,
 // pt-BR→pt, tl→fil — same as global-move.mjs); series films (one English-text master) = en. Music versions have no speech
 // but take the on-screen language as audio language too, so YouTube files them under that language.
+import { accessToken } from './yt-token.mjs';
 import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -14,9 +15,7 @@ process.on('uncaughtException', e => { console.error('error: ' + String(e.messag
 export const YT_LANG = { 'zh-Hans': 'zh-CN', 'zh-Hant': 'zh-TW', 'pt-BR': 'pt', tl: 'fil' };
 const yl = L => YT_LANG[L] || L, tok = {};
 async function api(ch, p, o = {}) {
-  if (!tok[ch]) { const e = process.env, rt = ch === 'gl' ? e.YT_REFRESH_TOKEN_GLOBAL : e.YT_REFRESH_TOKEN; if (!rt) { console.error('missing YT_* environment variables'); process.exit(1); }
-    tok[ch] = (await (await fetch('https://oauth2.googleapis.com/token', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: new URLSearchParams({ client_id: e.YT_CLIENT_ID, client_secret: e.YT_CLIENT_SECRET, refresh_token: rt, grant_type: 'refresh_token' }) })).json()).access_token; }
+  if (!tok[ch]) tok[ch] = await accessToken(ch);
   const r = await fetch('https://www.googleapis.com/youtube/v3/' + p, { ...o, headers: { Authorization: 'Bearer ' + tok[ch], 'Content-Type': 'application/json' } });
   const t = await r.text(), j = t ? JSON.parse(t) : {}; if (!r.ok) throw new Error(`${r.status} ${j.error?.message || t.slice(0, 200)}`); return j;
 }

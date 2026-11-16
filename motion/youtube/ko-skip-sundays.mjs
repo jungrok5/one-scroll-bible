@@ -3,6 +3,7 @@
 // at the same time (19:00 KST); writes the dates to uploaded.json shorts.ko.dates (ko-next-comment.mjs "today" reads them).
 // Only the publish time changes — every other status field is read and sent back as it is. 50 units per Short.
 //   node motion/youtube/ko-skip-sundays.mjs <first n to move> <its new date YYYY-MM-DD> [--dry]
+import { accessToken } from './yt-token.mjs';
 import { readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -10,8 +11,7 @@ const HERE = dirname(fileURLToPath(import.meta.url)), F = join(HERE, 'uploaded.j
 const up = JSON.parse(readFileSync(F, 'utf8')), ko = up.shorts.ko, [from, day] = process.argv.slice(2).filter(a => !a.startsWith('--')), dry = process.argv.includes('--dry');
 if (!(+from >= 1) || !/^\d{4}-\d{2}-\d{2}$/.test(day || '')) { console.log('usage: ko-skip-sundays.mjs <n> <YYYY-MM-DD> [--dry]'); process.exit(1); }
 const e = process.env;
-const tok = (await (await fetch('https://oauth2.googleapis.com/token', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-  body: new URLSearchParams({ client_id: e.YT_CLIENT_ID, client_secret: e.YT_CLIENT_SECRET, refresh_token: e.YT_REFRESH_TOKEN, grant_type: 'refresh_token' }) })).json()).access_token;
+const tok = await accessToken('ko');
 const api = async (p, o = {}) => { const r = await fetch('https://www.googleapis.com/youtube/v3/' + p, { ...o, headers: { Authorization: 'Bearer ' + tok, 'Content-Type': 'application/json' } });
   const j = await r.json(); if (!r.ok) throw new Error(j.error?.message); return j; };
 const [hh, mm] = (ko.time_kst || '19:00').split(':').map(Number);

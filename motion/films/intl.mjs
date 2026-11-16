@@ -6,6 +6,7 @@
 //        → default language/audio language, category Education, standard licence (never Creative Commons — the ESV notice
 //          forbids it), localized title + description for every other language, and a caption track per language (top-placed
 //          WebVTT from sound.mjs). ~50 units + 400 per caption track. Audio tracks have no API: Studio → Languages → Audio.
+import { accessToken } from '../youtube/yt-token.mjs';
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -32,8 +33,7 @@ if (cmd === 'entry') {
   const env = { ...process.env }, f = join(homedir(), '.config', 'one-scroll-bible', 'youtube.env');
   if (existsSync(f)) for (const l of readFileSync(f, 'utf8').split('\n')) { const m = l.match(/^(YT_\w+)=(.*)$/); if (m && !env[m[1]]) env[m[1]] = m[2]; }
   if ((env.YT_AS || '').toUpperCase() !== 'GLOBAL') { console.log('set YT_AS=GLOBAL (the international channel)'); process.exit(1); }
-  const tok = (await (await fetch('https://oauth2.googleapis.com/token', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: new URLSearchParams({ client_id: env.YT_CLIENT_ID, client_secret: env.YT_CLIENT_SECRET, refresh_token: env.YT_REFRESH_TOKEN_GLOBAL, grant_type: 'refresh_token' }) })).json()).access_token;
+  const tok = await accessToken('gl');
   const api = async (p, o = {}) => { const r = await fetch(p.startsWith('http') ? p : 'https://www.googleapis.com/youtube/v3/' + p, { ...o, headers: { Authorization: 'Bearer ' + tok, ...(o.headers || {}) } });
     const t = await r.text(); let j; try { j = JSON.parse(t); } catch { j = { raw: t }; } if (!r.ok) throw new Error(`${r.status} ${j.error?.message || t.slice(0, 200)}`); return j; };
   const v = (await api(`videos?part=snippet,status,localizations&id=${vid}`)).items?.[0]; if (!v) { console.log('no such video on this channel'); process.exit(1); }

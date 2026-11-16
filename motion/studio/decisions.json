@@ -22,8 +22,8 @@
    "q": "국제 채널용 Google Cloud 프로젝트 만들기(승인됨 2026-11-13)",
    "rec": "관리자 계정(국제 채널 소유 계정)에서 Google Cloud 새 프로젝트 → YouTube Data API v3 · YouTube Analytics API 켜기 → OAuth 동의 화면(외부, 프로덕션) → 사용자 인증 정보 → OAuth 클라이언트 ID(데스크톱 앱) → JSON 받기. 그 JSON 경로를 알려 주시면 yt-auth.mjs가 국제 채널 전용 클라이언트로 저장하도록 고친 뒤 인증을 안내합니다(비밀값은 화면·채팅에 안 나옴)",
    "options": [],
-   "why": "두 채널이 API 할당량 10,000을 나눠 씀 — 오늘 국제판 자막 27개를 API로 못 올리고 스튜디오로 돌렸다",
-   "blocks": "할당량 분리(급하지 않음)",
+   "why": "두 채널이 API 할당량 10,000을 나눠 씀 — 오늘 국제판 자막 27개를 API로 못 올리고 스튜디오로 돌렸다 관리자 2026-11-16: \"D2 안 급하면 네가 일단 할 수 있는 거 진행해\" → 도구 쪽 준비 끝: 모든 도구가 토큰을 motion/youtube/yt-token.mjs 한 곳에서 받고, 할당량 장부(motion/studio/quota.json)가 프로젝트별로 셈. JSON만 받으면 node motion/youtube/yt-auth.mjs <json> --as GLOBAL --own-client 한 번으로 끝(다른 코드 수정 없음).",
+   "blocks": "할당량 분리(급하지 않음 — 지금 하루 사용량은 studio.mjs status 할당량 칸에서 보임)",
    "proceed": false,
    "status": "open"
   },
@@ -85,7 +85,8 @@
    "why": "km 검수: សង្ឃ는 불교 승려를 가리킴",
    "blocks": "",
    "proceed": true,
-   "status": "open"
+   "status": "answered",
+   "applied": "i18n/km.json epochs[10] christ·detail의 សង្ឃ 2곳 → បូជាចារ្យ (크메르 성경 YV85 히 4:14·5:6·출 28:1 확인), 작업 브랜치 — main 배포 대기"
   },
   {
    "id": "D7",
@@ -98,7 +99,8 @@
    "why": "독어 성경은 사 9:5, 영어·개역은 9:6 — 링크가 다른 절로 갈 수 있음",
    "blocks": "",
    "proceed": true,
-   "status": "open"
+   "status": "answered",
+   "applied": "YV51(루터 1912)는 9,6이 '우리에게 한 아기가'(9,5는 갑옷 구절) → i18n/de.json epochs[6].christ 'Jesaja 9,6'로, NOTES.md·AGENTS.md의 '루터=9:5' 정정 — main 배포 대기"
   }
  ]
 }

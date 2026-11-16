@@ -5,6 +5,7 @@
 // (question mark, number, quote marks, "뜻", "—/|" two-part, length). Shorts (≤ 60 s) and long videos are counted apart.
 // Why: 「그리스도」 2026-11-10 관리자 "제목과 썸네일을 어떻게 하면 좋을지 데이터는 없어?" — our own channel has two long films only
 // (A/B "정보 부족"), so the market of the same topic is the other half of the evidence. Credentials as yt-api.mjs; never printed.
+import { accessToken } from './yt-token.mjs';
 import { readFileSync, existsSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { homedir } from 'node:os';
@@ -20,9 +21,7 @@ function creds() {
   if (need.length) { console.error('missing ' + need.join(', ')); process.exit(1); } return env;
 }
 const e = creds();
-const tk = await (await fetch('https://oauth2.googleapis.com/token', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-  body: new URLSearchParams({ client_id: e.YT_CLIENT_ID, client_secret: e.YT_CLIENT_SECRET, refresh_token: e.YT_REFRESH_TOKEN, grant_type: 'refresh_token' }) })).json();
-if (!tk.access_token) { console.error('token refresh failed'); process.exit(1); }
+const tk = { access_token: await accessToken('ko') };
 const api = async (path, p) => { const r = await fetch(`https://www.googleapis.com/youtube/v3/${path}?` + new URLSearchParams(p), { headers: { Authorization: 'Bearer ' + tk.access_token } });
   const j = await r.json(); if (j.error) throw new Error(j.error.message); return j; };
 const sec = d => { const m = d.match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/) || []; return (+m[1] || 0) * 3600 + (+m[2] || 0) * 60 + (+m[3] || 0); };

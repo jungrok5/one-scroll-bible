@@ -4,6 +4,7 @@
 //   node motion/youtube/ko-next-comment.mjs <n…> [--dry]       (YT_* credentials as for yt-api.mjs)
 //   node motion/youtube/ko-next-comment.mjs today [--dry]      → the Short that went public today (from first_day)
 // Records the comment id in uploaded.json shorts.ko.comments[n]; skips n that already has one.
+import { accessToken } from './yt-token.mjs';
 import { readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -28,9 +29,7 @@ if (args.includes('today')) { const today = new Date(Date.now() + 9 * 3600e3).to
 if (!ns.length) { console.log('usage: ko-next-comment.mjs <n…>|today [--dry]'); process.exit(1); }
 
 const e = process.env;
-async function token() { const j = await (await fetch('https://oauth2.googleapis.com/token', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-  body: new URLSearchParams({ client_id: e.YT_CLIENT_ID, client_secret: e.YT_CLIENT_SECRET, refresh_token: e.YT_REFRESH_TOKEN, grant_type: 'refresh_token' }) })).json();
-  if (!j.access_token) throw new Error('token: ' + j.error); return j.access_token; }
+const token = () => accessToken('ko');
 ko.comments ||= {};
 for (const n of ns) {
   if (n < 1 || n > 21) { console.log(`${n}: outside 1–21`); continue; }

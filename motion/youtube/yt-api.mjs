@@ -19,6 +19,7 @@ import { dirname, join } from 'node:path';
 import { homedir } from 'node:os';
 import { fileURLToPath } from 'node:url';
 import { dropCredit } from './credit.mjs';
+import { accessToken } from './yt-token.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url)), M = join(HERE, '..');
 // an API error (quota, permission) is one readable line, not a stack trace
@@ -31,14 +32,8 @@ function creds() {
   if (need.length) { console.error(`missing ${need.join(', ')} — run node motion/youtube/yt-auth.mjs <client_secret.json> first (and open a new terminal)`); process.exit(1); }
   return env;
 }
-let tok = null;
-async function token() {
-  if (tok) return tok; const e = creds();
-  const r = await fetch('https://oauth2.googleapis.com/token', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: new URLSearchParams({ client_id: e.YT_CLIENT_ID, client_secret: e.YT_CLIENT_SECRET, refresh_token: e.YT_REFRESH_TOKEN, grant_type: 'refresh_token' }) });
-  const j = await r.json(); if (!j.access_token) { console.error('token refresh failed:', j.error || r.status); process.exit(1); }
-  return (tok = j.access_token);
-}
+// the token comes from yt-token.mjs (one place; a channel with its own Google Cloud client — decision box D2 — is picked up there)
+async function token() { creds(); return accessToken(process.env.YT_AS || 'ko'); }
 async function api(path, opt = {}) {
   const r = await fetch(path.startsWith('http') ? path : 'https://www.googleapis.com/youtube/v3/' + path, { ...opt, headers: { Authorization: 'Bearer ' + await token(), ...(opt.headers || {}) } });
   const t = await r.text(); let j; try { j = JSON.parse(t); } catch { j = { raw: t }; }

@@ -4,6 +4,7 @@
 //   node motion/youtube/intl-layout.mjs apply [--only playlists|series|home|channel] → fix it (50 units per insert/move/update)
 // Never removes a video from a playlist and never deletes anything — extra items are only reported.
 // Credentials: YT_CLIENT_ID / YT_CLIENT_SECRET / YT_REFRESH_TOKEN_GLOBAL (never printed).
+import { accessToken } from './yt-token.mjs';
 import { readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -12,9 +13,7 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 const R = JSON.parse(readFileSync(join(HERE, 'intl-layout.json'), 'utf8')), UP = join(HERE, 'uploaded.json'), U = JSON.parse(readFileSync(UP, 'utf8')), G = U.global;
 process.on('uncaughtException', e => { console.error('error: ' + String(e.message).replace(/<[^>]+>/g, '')); process.exit(1); });
 let tok; async function api(p, o = {}) {
-  if (!tok) { const e = process.env; if (!e.YT_CLIENT_ID || !e.YT_REFRESH_TOKEN_GLOBAL) { console.error('missing YT_* environment variables'); process.exit(1); }
-    tok = (await (await fetch('https://oauth2.googleapis.com/token', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: new URLSearchParams({ client_id: e.YT_CLIENT_ID, client_secret: e.YT_CLIENT_SECRET, refresh_token: e.YT_REFRESH_TOKEN_GLOBAL, grant_type: 'refresh_token' }) })).json()).access_token; }
+  if (!tok) tok = await accessToken('gl');
   const r = await fetch('https://www.googleapis.com/youtube/v3/' + p, { ...o, headers: { Authorization: 'Bearer ' + tok, 'Content-Type': 'application/json' } });
   const t = await r.text(); const j = t ? JSON.parse(t) : {}; if (!r.ok) throw new Error(`${r.status} ${j.error?.message || t.slice(0, 200)}`); return j;
 }

@@ -56,16 +56,27 @@ for (const l of todo.slice(0, 6)) { const c = l.split('|'); out.push(`  ${c[0].t
 
 // 5. scheduled jobs — Windows Task Scheduler (the session's own cron jobs are only visible inside that session: CronList)
 H('예약 작업');
-const st = spawnSync('schtasks', ['/query', '/fo', 'csv', '/nh'], { encoding: 'utf8' }).stdout || '';
-const mine = st.split(/\r?\n/).filter(l => /\\OSB\\/.test(l)).map(l => l.split('","').map(x => x.replace(/"/g, '')));
-out.push(mine.length ? mine.map(c => `  ${c[0]}  다음 실행 ${c[1]}  ${c[2]}`).join('\n') : '  작업 스케줄러: 아직 없음(1주차 시범 — motion/studio/jobs/)');
+// PowerShell, not schtasks: schtasks prints in the console code page (CP949) and the Korean comes out broken
+const ps = "[Console]::OutputEncoding=[Text.Encoding]::UTF8; Get-ScheduledTask -TaskPath '\\OSB\\' -ErrorAction SilentlyContinue | % { $i = $_ | Get-ScheduledTaskInfo; '{0}|{1}|{2}|{3}|{4}' -f $_.TaskName, $(if ($i.NextRunTime) { $i.NextRunTime.ToString('MM-dd HH:mm') } else { '-' }), $_.State, $(if ($i.LastRunTime -and $i.LastRunTime.Year -gt 2000) { $i.LastRunTime.ToString('MM-dd HH:mm') } else { 'never' }), $i.LastTaskResult }";
+const st = spawnSync('powershell', ['-NoProfile', '-Command', ps], { encoding: 'utf8' }).stdout || '';
+const mine = st.split(/\r?\n/).filter(l => l.includes('|')).map(l => l.split('|'));
+const when = c => c[3] === 'never' ? '아직 안 돌았음' : `${c[3]} (결과 ${c[4] === '0' ? '성공' : c[4]})`;
+out.push(mine.length ? mine.map(c => `  \\OSB\\${c[0]}  다음 ${c[1]} · ${c[2] === 'Ready' ? '대기' : c[2] === 'Running' ? '실행 중' : c[2]} · 마지막 ${when(c)}`).join('\n') : '  작업 스케줄러: 아직 없음(1주차 시범 — motion/studio/jobs/)');
 out.push('  세션 예약(CronCreate)은 그 세션 안에서만 보임 — 새 세션은 CronList로 확인(motion/youtube/ROUTINES.md)');
 const logs = join(HERE, 'logs');
 if (existsSync(logs)) { const L = readdirSync(logs).filter(f => f.endsWith('.log')).sort().slice(-3); for (const f of L) out.push('  최근 실행 기록: motion/studio/logs/' + f); }
 
-// 6. quota — ledger arrives in week 2–3 (motion/studio/quota.json)
-H('할당량');
+// 6. quota — the ledger motion/youtube/yt-token.mjs keeps (every tool that gets its token there is counted; Studio in the browser is not)
+H('할당량 (YouTube Data API, 하루 10,000 — 태평양 자정 = 한국 17시 초기화)');
 const Q = J(join(HERE, 'quota.json'));
-out.push(Q ? `  오늘 ${Q.today || 0} / 10,000 (17시 초기화)` : '  장부 없음 — 2~3주차(도구가 쓴 점수를 motion/studio/quota.json에). 지금은 두 채널이 한 프로젝트의 10,000을 나눠 씀(결정함 D2)');
+const { quotaDay } = await import('../youtube/yt-token.mjs');
+if (!Q) out.push('  아직 기록 없음 — 도구가 API를 쓰면 motion/studio/quota.json에 쌓임');
+else { const cur = Q.day === quotaDay(), P = cur ? Q.projects : {};
+  for (const [k, v] of Object.entries(P)) { const top = Object.entries(v.by).sort((a, b) => b[1] - a[1]).slice(0, 4).map(([w, u]) => `${w} ${u}`).join(' · ');
+    out.push(`  ${k === 'shared' ? '공용 프로젝트(두 채널)' : k}: 오늘 ${v.total.toLocaleString()} / 10,000${v.total > 8000 ? '  ← 거의 다 씀' : ''} — ${top}`); }
+  if (!Object.keys(P).length) out.push('  오늘(' + quotaDay() + ') 쓴 것 없음');
+  const pv = cur ? Q.prev : { day: Q.day, projects: Q.projects };
+  if (pv?.projects) out.push('  지난 쿼터일 ' + pv.day + ': ' + Object.entries(pv.projects).map(([k, v]) => `${k} ${v.total.toLocaleString()}`).join(' · '));
+  out.push('  국제 채널 전용 프로젝트: ' + (process.env.YT_CLIENT_ID_GLOBAL ? '있음' : '없음 — 결정함 D2(급하지 않음)')); }
 
 console.log(`스튜디오 현황 — ${new Date(now + 9 * 3600e3).toISOString().slice(0, 16).replace('T', ' ')} KST` + out.join('\n'));

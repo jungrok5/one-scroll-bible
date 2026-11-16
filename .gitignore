@@ -63,3 +63,4 @@ token*.json
 
 # studio scheduled-job logs (motion/studio/jobs)
 /motion/studio/logs/
+/motion/studio/quota.json

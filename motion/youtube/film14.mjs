@@ -10,6 +10,7 @@
 //   node motion/youtube/film14.mjs narr-verify <lang> <transcript.txt> → generated voice vs script (motion/narration/<lang>.json):
 //        each line's best match in the transcript, lines under 0.85 similarity listed. Transcript = ElevenLabs transcribe output text.
 //   node motion/youtube/film14.mjs intl-layout [--dry]   → = intl-layout.mjs plan|apply (international channel layout, intl-layout.json)
+import { accessToken } from './yt-token.mjs';
 import { readFileSync, writeFileSync, existsSync, readdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -78,8 +79,7 @@ if (cmd === 'status' || !cmd) {
   }
   const env = k => ({ ...process.env, ...(k === 'gl' ? { YT_AS: 'GLOBAL' } : {}) }), have = {};
   async function tracks(ch, id) {
-    if (have[id]) return have[id]; const e = process.env, rt = ch === 'gl' ? e.YT_REFRESH_TOKEN_GLOBAL : e.YT_REFRESH_TOKEN;
-    const t = (await (await fetch('https://oauth2.googleapis.com/token', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: new URLSearchParams({ client_id: e.YT_CLIENT_ID, client_secret: e.YT_CLIENT_SECRET, refresh_token: rt, grant_type: 'refresh_token' }) })).json()).access_token;
+    if (have[id]) return have[id]; const t = await accessToken(ch);
     const j = await (await fetch(`https://www.googleapis.com/youtube/v3/captions?part=snippet&videoId=${id}`, { headers: { Authorization: 'Bearer ' + t } })).json();
     if (j.error) throw new Error(j.error.message); return (have[id] = (j.items || []).filter(c => c.snippet.trackKind !== 'asr').map(c => c.snippet.language));
   }

@@ -221,7 +221,9 @@ const G = {
       if (mt(f) < mt(vid)) why.push(`clip ${x.id}: 본편 렌더보다 오래됨 — clips.mjs 다시`);
       if (r.len < K.len_min || r.len > K.len_max) why.push(`clip ${x.id}: ${r.len}s — ${K.len_min}–${K.len_max}초(목표 ${K.len_goal})`);
       if (r.first == null || r.first > K.first_spoken_max) why.push(`clip ${x.id}: 첫 해설이 ${r.first}초 — ${K.first_spoken_max}초 안에`);
-      if (!x.why) why.push(`clip ${x.id}: why(끝이 어떻게 처음으로 이어지는지) 없음`); if (!x.title) why.push(`clip ${x.id}: title 없음`); }
+      if (!x.why) why.push(`clip ${x.id}: why(끝이 어떻게 처음으로 이어지는지) 없음`); if (!x.title) why.push(`clip ${x.id}: title 없음`);
+      // every Short gets a hook cover (rule shorts-cover-hook, 관리자 2026-11-17)
+      if (!existsSync(join(ROOT, 'motion/youtube/thumbs/shorts', `clips-${c.film}`, 'out', `${x.id}.jpg`))) why.push(`clip ${x.id}: 훅 표지 없음 — motion/youtube/thumbs/shorts/clips-${c.film}/hooks.json + src/${x.id}.jpg → py motion/youtube/thumbs/shorts/make.py clips-${c.film}`); }
     return why.length ? { ok: false, why } : pass(); },
   sound: c => {
     if (!c.place || !c.cues) return fail('sound/place.json · cues.json 없음');

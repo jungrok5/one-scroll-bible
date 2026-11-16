@@ -598,6 +598,17 @@
    "rule": "짧은 쇼츠도 인스타 릴스·스레드에 같은 시각으로 올린다(유튜브와 같은 날·같은 저녁 시각, 주일 건너뜀). 표지는 clip_covers.py, 글은 본편 글을 줄여 그 쇼츠의 질문으로 시작. uploaded.json <film>.clips.<id>.instagram·threads에 적는다.",
    "source": "관리자 2026-11-16 「그리스도」 \"응 인스타랑 스레드도해줘\" · \"400 짧은 쇼츠는 인스타랑 스레드에 올렸었나\" → 짧은 쇼츠 3편 인스타·스레드 예약(decisions_log, commit ebfb1c05)",
    "gate_todo": "social (짧은 쇼츠가 있으면 clips마다 instagram·threads 기록) — 아직 검사로 만들지 않음(2026-11-16 피드백 정리 제안)"
+  },
+  {
+   "id": "shorts-cover-hook",
+   "stages": [
+    "sheet",
+    "clips",
+    "social"
+   ],
+   "rule": "모든 쇼츠(본편 세로판·짧은 쇼츠·장면 쇼츠)는 훅 표지를 단다 — 유튜브 쇼츠 탭·검색과 인스타 그리드에서 누를 이유가 보이게. 틀은 「그리스도」 세로 표지: 그림 위에 어두운 띠, 가운데 3:4 안(y 240–1680)에 작은 흰 줄 · 금색 큰 말(폭에 맞춤) · 작은 흰 줄. 말은 시청자가 이미 품은 질문이나 반전 — 가볍거나 장난스럽게 쓰지 않고(관리자: \"저건 너무 가벼운\"), 말 속 사실은 성경 구절로 확인. 도구: motion/youtube/thumbs/shorts/<set>/hooks.json + src/ → py motion/youtube/thumbs/shorts/make.py <set> → node motion/youtube/thumbs/shorts/apply.mjs <set>(thumbnails.set). 같은 파일을 인스타 릴스 표지로 — 올릴 때 표지를 넣는다(게시 뒤에는 웹·Business Suite에서 못 바꾸고 폰 앱의 커버 수정만 됨). 가로 썸네일도 같은 틀(이미 그렇게 함).",
+   "gate": "clips",
+   "source": "관리자 2026-11-17 — 아내가 다른 채널 쇼츠 탭(질문이 크게 보이는 표지)과 우리 쇼츠 탭을 비교 \"눌러보고 싶게 궁금하게\" → 시안 \"완전 마음에, 아내도 마음에 듦\", \"앞으로 가로세로 이렇게 만들어줘\""
   }
  ]
 }

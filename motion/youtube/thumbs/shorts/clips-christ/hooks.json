@@ -1,0 +1,33 @@
+{
+ "_about": "「그리스도」 short clips (scheduled 11/20-23). Frames: RENDER_QUERY=clean=1 node motion/render.mjs v --page films/christ/film.html --stills 12,65,92. c1 and c3 words = the approved landscape B and C (publish_plan, 관리자 2026-11-10)",
+ "channel": "ko",
+ "items": {
+  "c1": {
+   "id": "Pb7yA35jjUQ",
+   "words": [
+    "예수 그리스도의",
+    "그리스도",
+    "성일까?"
+   ],
+   "applied": "2026-11-17"
+  },
+  "c2": {
+   "id": "KQjmmXH3I5w",
+   "words": [
+    "예수님을 막아선 베드로",
+    "그리 마옵소서",
+    "왜 그랬을까"
+   ],
+   "applied": "2026-11-17"
+  },
+  "c3": {
+   "id": "JfRb1wChEbs",
+   "words": [
+    "십자가 위의 외침",
+    "천 년 전",
+    "이미 적혀 있었다"
+   ],
+   "applied": "2026-11-17"
+  }
+ }
+}

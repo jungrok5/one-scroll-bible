@@ -1,0 +1,33 @@
+{
+ "_about": "「침묵의 400년」 short clips (scheduled 11/17-19). Frames: RENDER_QUERY=clean=1 node motion/render.mjs v --page films/silence400/film.html --stills 6,70,95",
+ "channel": "ko",
+ "items": {
+  "a": {
+   "id": "Gs5UC6xfE20",
+   "words": [
+    "구약의 마지막 말씀",
+    "그리고 400년",
+    "새 말씀이 끊겼다"
+   ],
+   "applied": "2026-11-17"
+  },
+  "b": {
+   "id": "gDXUB9kxUTo",
+   "words": [
+    "말씀 없던 400년",
+    "준비하셨다",
+    "무엇을?"
+   ],
+   "applied": "2026-11-17"
+  },
+  "c": {
+   "id": "8FMHpO6-Umo",
+   "words": [
+    "400년 침묵을 깬",
+    "첫 말씀",
+    "무엇이었을까"
+   ],
+   "applied": "2026-11-17"
+  }
+ }
+}

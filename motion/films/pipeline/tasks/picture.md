@@ -11,3 +11,4 @@
 가로판(TV, `targets.json` format.tv_cut)도 똑같이: `motion/out/look-review/{film}-h/args.json` → 리뷰 → `look-collect.mjs {film} --ori h` (`film-{film}-look-h.json`). 한 리뷰어가 세로·가로를 차례로 봐도 된다. "반영해야 할 것"(장면 평균 < 6, 전체 < 7, BLOCKER·MAJOR)을 고치고 다시 렌더 → 다시 리뷰. 리뷰는 렌더 지문에 묶여 있어 그림을 고치면 다시 받아야 통과한다.
 보이기: 버전 비교 페이지 `node motion/films/compare.mjs {film} <이전>=<커밋> 새=WORK --audio` → `motion/out/compare/{film}/`를 비공개 아티팩트로(index.html + files.json의 파일들), 720p 미리보기와 밀착 시트를 SendUserFile로. 시안을 보이기 전에 피드백·차수: 관리자·가족 의견은 `film.mjs feedback`, 반영은 `applied`, 다시 보낼 때 `film.mjs round {film} "<요약>"`(지금 단계까지 검사가 통과해야 닫힌다 — 섞기·짧은 쇼츠가 오래됐으면 run부터).
 멈춤: `approve {film} picture "관리자: …"`.
+그림 시험은 화풍(장면)마다 하위 에이전트 하나로 동시에 — 공통 지시(캔버스 크기·시간표·Film API·금지 목록) + 장면별 지시. 본 세션은 시간표·글자 층(film.html이 script.json at에서 글자 시각을 읽음)과 검수를 맡는다(「그리스도」 2026-11-10, 다섯 화풍 동시 — 피드백 정리 2026-11-16).

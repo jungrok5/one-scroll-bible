@@ -2216,5 +2216,439 @@
    "chosen": "11/20·21·23 저녁 7시(KST) — 400년 짧은 쇼츠(11/17·18·19) 뒤, 주일 건너뜀",
    "by": "관리자"
   }
- ]
+ ],
+ "feedback_sweep": {
+  "at": "2026-11-16",
+  "report": "motion/reviews/film-christ-feedback-sweep.md",
+  "items": [
+   {
+    "said": "원고 좋아 진행해줘 (1차 리뷰 수정안 컨펌)",
+    "to": "film-only",
+    "status": "film-only"
+   },
+   {
+    "said": "3차 수정안 + 한 번 더 리뷰, 미달이면 굳히기",
+    "to": "tasks/review.md (freeze) · targets.json script.draft_line_pace_max/end_card_min_s",
+    "status": "moved"
+   },
+   {
+    "said": "제목이 썸네일에? 후킹 / 제목·썸네일 데이터 없어? 공정에도 반영",
+    "to": "rules.json:title-thumb-evidence",
+    "status": "moved"
+   },
+   {
+    "said": "제목·썸네일 추천안 그대로 진행",
+    "to": "film-only",
+    "status": "film-only"
+   },
+   {
+    "said": "프레임으로 보면 이상한데 — 이상 확인 단계 있어? → ㅇㅇ",
+    "to": "rules.json:frame-anomaly",
+    "status": "moved"
+   },
+   {
+    "said": "Mp4줘야지 / 기름을 부어 → 이미 적혀 있었습니다, 중간에 뭔가 없어졌나",
+    "to": "tasks/picture.md · rules.json:frame-anomaly · rules.json:shots",
+    "status": "moved"
+   },
+   {
+    "said": "에이전트 리뷰 수정은 확인받고 수정해 (두루마리 쇠판)",
+    "to": "rules.json:confirm-agent-fixes",
+    "status": "moved"
+   },
+   {
+    "said": "두루마리 감긴 부분 철판·평면, 원통형으로",
+    "to": "film-only",
+    "status": "film-only"
+   },
+   {
+    "said": "군인 장면은 이전이 더 나음",
+    "to": "film-only",
+    "status": "film-only"
+   },
+   {
+    "said": "(군인 세 판 중) B",
+    "to": "film-only",
+    "status": "film-only"
+   },
+   {
+    "said": "이어서 2 3 5 6 가자",
+    "to": "film-only",
+    "status": "film-only"
+   },
+   {
+    "said": "일단 다 반영하고 다시 볼게",
+    "to": "film-only",
+    "status": "film-only"
+   },
+   {
+    "said": "뿔에 시간 너무 씀 / 화풍 반복 지루 / 소실점으로 쪼르르 이상",
+    "to": "rules.json:symbol-must-read · rules.json:look-per-scene · rules.json:camera-fx-gentle (new)",
+    "status": "moved"
+   },
+   {
+    "said": "단순히 화풍 동일이 문제 아님, 구성 먼저 / 마지막에 대화 피드백 정리 스텝",
+    "to": "rules.json:look-per-scene · rules.json:chat-feedback-sweep",
+    "status": "moved"
+   },
+   {
+    "said": "새 화풍 적합한 거 없었어? → 시아노타입",
+    "to": "film-only",
+    "status": "film-only"
+   },
+   {
+    "said": "호퍼가 약간 공포영화 느낌이라 다른 걸로",
+    "to": "rules.json:rejected-looks (new) · README §7",
+    "status": "moved"
+   },
+   {
+    "said": "페르메이르풍 이 영상에 제일 많이 차지하던 풍 아니야?",
+    "to": "rules.json:look-per-scene (append material check)",
+    "status": "moved"
+   },
+   {
+    "said": "화면 구성을 이해 못 함 — 동굴 입구에 왜 모여 있나",
+    "to": "rules.json:look-per-scene · rules.json:scene-reads-without-bible",
+    "status": "moved"
+   },
+   {
+    "said": "세 기름 → 그리스도 실루엣 덩어리 고침",
+    "to": "tasks/anomaly.md",
+    "status": "moved"
+   },
+   {
+    "said": "베드로 손이 장갑처럼 / 십자가 그림자가 글자 뒤로",
+    "to": "tasks/anomaly.md",
+    "status": "moved"
+   },
+   {
+    "said": "사람 몸이 머리에 비해 너무 큼, 의도인가",
+    "to": "tasks/anomaly.md (add proportion line)",
+    "status": "moved"
+   },
+   {
+    "said": "요단 — 그림자만 먼저 사라짐",
+    "to": "tasks/anomaly.md",
+    "status": "moved"
+   },
+   {
+    "said": "뿔 장면 없어도 되지 않나? 의도?",
+    "to": "rules.json:symbol-must-read · README §9",
+    "status": "moved"
+   },
+   {
+    "said": "엘리사는 왜 망또? 망또 퀄리티 낮음",
+    "to": "film-only",
+    "status": "film-only"
+   },
+   {
+    "said": "성문 그림자 덜그덕 · 병사·깃발 아웃라인 어색",
+    "to": "tasks/anomaly.md · rules.json:cinematic",
+    "status": "moved"
+   },
+   {
+    "said": "그림자가 쭉 길어지던데 뭘 표현?",
+    "to": "rules.json:symbol-must-read",
+    "status": "moved"
+   },
+   {
+    "said": "무덤 앞 돌 씬, 내용 전달 안 됨",
+    "to": "rules.json:symbol-must-read",
+    "status": "moved"
+   },
+   {
+    "said": "기름붓듯 → 나무에 달았다로 이어 읽힘",
+    "to": "rules.json:symbol-must-read",
+    "status": "moved"
+   },
+   {
+    "said": "머리가 길어 여자처럼 보임",
+    "to": "rules.json:figures-gender-legible",
+    "status": "moved"
+   },
+   {
+    "said": "병사·깃발이 성벽 밖 공중에 떠 있음",
+    "to": "tasks/anomaly.md",
+    "status": "moved"
+   },
+   {
+    "said": "들판에서 다들 가만히 — 걷는 장면? 의도?",
+    "to": "rules.json:shots · rules.json:one-event-per-verse",
+    "status": "moved"
+   },
+   {
+    "said": "십자가 장면 빛이 엉뚱한 들판을 비춤 — 의도?",
+    "to": "rules.json:light-on-subject (new)",
+    "status": "moved"
+   },
+   {
+    "said": "세 직분 장면 심심함",
+    "to": "film-only",
+    "status": "film-only"
+   },
+   {
+    "said": "고넬료 집 — 성경 모르면 이해 어려움, 구절로 메우지 말 것",
+    "to": "rules.json:scene-reads-without-bible",
+    "status": "moved"
+   },
+   {
+    "said": "엠마오 억지 — 400년 끝처럼",
+    "to": "rules.json:ending-hook",
+    "status": "moved"
+   },
+   {
+    "said": "첫 시작 카메라 워킹이 과격",
+    "to": "rules.json:camera-fx-gentle (new)",
+    "status": "moved"
+   },
+   {
+    "said": "비둘기가 예수님 오른쪽으로 — 의도?",
+    "to": "rules.json:light-on-subject (new)",
+    "status": "moved"
+   },
+   {
+    "said": "세 직분 빛이 십자가 우측 — 의도?",
+    "to": "rules.json:light-on-subject (new)",
+    "status": "moved"
+   },
+   {
+    "said": "베드로 장면 빛 파티클 고급지게",
+    "to": "rules.json:camera-fx-gentle (new)",
+    "status": "moved"
+   },
+   {
+    "said": "(아내) N06 '그 왕을' → '메시야를'",
+    "to": "film-only",
+    "status": "film-only"
+   },
+   {
+    "said": "(아내) N07 '예수님이 오신 후 어느 날,'",
+    "to": "film-only",
+    "status": "film-only"
+   },
+   {
+    "said": "원고 훑기 1·2·3 (N17·엘리사 표기·N11)",
+    "to": "film-only",
+    "status": "film-only"
+   },
+   {
+    "said": "끝에 '주는 그리스도시요…' 넣기",
+    "to": "film-only",
+    "status": "film-only"
+   },
+   {
+    "said": "19~21초 음이 줄어듦, 밑줄 소리 어색",
+    "to": "rules.json:title-no-duck",
+    "status": "moved"
+   },
+   {
+    "said": "숨 참고 배경 줄지 않게, 400년 같은 구간 확인",
+    "to": "rules.json:title-no-duck",
+    "status": "moved"
+   },
+   {
+    "said": "선 그을 때는 첫 영상 펜 소리로",
+    "to": "rules.json:title-no-duck",
+    "status": "moved"
+   },
+   {
+    "said": "(아내) '그리 마옵소서' 베드로가 왜 바뀌었는지 없음",
+    "to": "rules.json:change-needs-cause (new)",
+    "status": "moved"
+   },
+   {
+    "said": "3분 3초 — 3분 넘으면 안 되잖아",
+    "to": "stages.mjs sound gate (portrait_max_s)",
+    "status": "moved"
+   },
+   {
+    "said": "마지막 고백 뒤 숨 참듯 음악이 줄고 엔딩 — 끊김",
+    "to": "rules.json:title-no-duck · targets.json sound.end_duck_window_s",
+    "status": "moved"
+   },
+   {
+    "said": "배경음악 단조로움 — 기승전결·전율",
+    "to": "rules.json:score-arc",
+    "status": "moved"
+   },
+   {
+    "said": "부드럽고 따뜻하게, 날카로운 효과음",
+    "to": "rules.json:sound-soft-warm",
+    "status": "moved"
+   },
+   {
+    "said": "고음은 음성 아님 — 고조 구간이 너무 많음",
+    "to": "rules.json:score-arc",
+    "status": "moved"
+   },
+   {
+    "said": "영어 원고 MED 5줄 + 두건이 베일처럼",
+    "to": "rules.json:figures-gender-legible",
+    "status": "moved"
+   },
+   {
+    "said": "그림체는 둬 확정",
+    "to": "film-only",
+    "status": "film-only"
+   },
+   {
+    "said": "매번 찾지 않도록 공정에 기록, 대화에만 남지 않게",
+    "to": "rules.json:progress-in-repo · rules.json:translate-parallel-groups · tasks/intl.md · tasks/captions.md",
+    "status": "moved"
+   },
+   {
+    "said": "자막 MED 13줄 + 영어판 줄 나눔·글꼴",
+    "to": "film-only",
+    "status": "film-only"
+   },
+   {
+    "said": "자막 MED 3줄 (hi·bn N09, ta Q14)",
+    "to": "film-only",
+    "status": "film-only"
+   },
+   {
+    "said": "1 2 제안대로 · 숏폼은 누적시간 안 들어감 — 어떻게?",
+    "to": "rules.json:clips-plan-cadence · rules.json:shorts-to-long-text · rules.json:long-form-watch-hours",
+    "status": "moved"
+   },
+   {
+    "said": "가로판 두루마리가 위로 쏠림",
+    "to": "film-only",
+    "status": "film-only"
+   },
+   {
+    "said": "지금 만들던 메시아 대체하자 · 성탄 얘기하지 말고",
+    "to": "film-only",
+    "status": "film-only"
+   },
+   {
+    "said": "어디서 원고 전체를 확인할 수 있지",
+    "to": "tasks/review.md",
+    "status": "moved"
+   },
+   {
+    "said": "지금은 시청자 리뷰는 돌리지마. 관점만",
+    "to": "rules.json:theology-only-after-freeze (new)",
+    "status": "moved"
+   },
+   {
+    "said": "아까 작은 문제 나온것들은 냅둬",
+    "to": "tasks/anomaly.md",
+    "status": "moved"
+   },
+   {
+    "said": "선지자 뒤에 왜 항상 ㅡ 이거 붙인거야?",
+    "to": "rules.json:screen-no-dash (new)",
+    "status": "moved"
+   },
+   {
+    "said": "유튜브 업로드하고 나면 원본 mp4는 삭제해",
+    "to": "rules.json:delete-local-after-upload",
+    "status": "moved"
+   },
+   {
+    "said": "사운드도 첫영상·400년 방법이 공정에 적혀있지? 내가 뭘 피드백했는지",
+    "to": "rules.json:sound-bar · rules.json:voice · tasks/sound.md",
+    "status": "moved"
+   },
+   {
+    "said": "십자고상처럼 보인다는게 뭐지?",
+    "to": "rules.json:depict-christ-restraint",
+    "status": "moved"
+   },
+   {
+    "said": "너무 큰 오류 아니야 숏츠에 안올라가자나 (3:03)",
+    "to": "stages.mjs sound gate (portrait_max_s)",
+    "status": "moved"
+   },
+   {
+    "said": "3분이 담기에 애매 — 8분? 다음 영상시 다시 꺼내보고",
+    "to": "FORMAT-NEXT.md · tasks/topic.md",
+    "status": "moved"
+   },
+   {
+    "said": "일부공개지? 아내한테도 링크줘서 검토 — 유튜브 인코딩 다른 폰 문제",
+    "to": "rules.json:family-preview-on-youtube (new)",
+    "status": "moved"
+   },
+   {
+    "said": "트랙 찾거든 도구에 잘 반영해놔",
+    "to": "tasks/intl.md",
+    "status": "moved"
+   },
+   {
+    "said": "인스타랑 스레드도 해줘 · 400 짧은 쇼츠는 인스타·스레드에 올렸었나",
+    "to": "rules.json:clips-social (new) · tasks/social.md",
+    "status": "moved"
+   },
+   {
+    "said": "자동자막 매번 이렇게 해야해? 절차에 잘 남겨줘",
+    "to": "rules.json:asr-off-all",
+    "status": "moved"
+   },
+   {
+    "said": "응 규칙에 넣어줘 신규영상을 가리키게",
+    "to": "rules.json:endscreen-newest",
+    "status": "moved"
+   },
+   {
+    "said": "그리스도 끝나면 바로 공개 · 국제채널은 저녁에",
+    "to": "film-only",
+    "status": "film-only"
+   },
+   {
+    "said": "(process 11-09) 메시아 대체, goldoil 새 화풍",
+    "to": "film-only",
+    "status": "film-only"
+   },
+   {
+    "said": "(process 11-10) 리뷰어 제안 구절도 관점 검수 기준으로 (사 61:1)",
+    "to": "rules.json:reviewer-verse-perspective (new)",
+    "status": "moved"
+   },
+   {
+    "said": "(process 11-10) 화풍별 하위 에이전트 동시 · 얼굴·손 유화 크게 실패 → 작은 실루엣",
+    "to": "rules.json:cinematic · rules.json:depict-christ-restraint · tasks/picture.md (parallel look tests, new line)",
+    "status": "moved"
+   },
+   {
+    "said": "(process 11-11) look-per-scene 개정 + sweep 단계",
+    "to": "rules.json:look-per-scene · rules.json:chat-feedback-sweep",
+    "status": "moved"
+   },
+   {
+    "said": "(process 11-12) 구성부터 · 앞뒤 장면 재질 먼저 확인",
+    "to": "rules.json:look-per-scene",
+    "status": "moved"
+   },
+   {
+    "said": "(process 11-12) 손 0.1–0.25초 몽타주로 먼저 보기 · 렌더 준비 3분",
+    "to": "tasks/anomaly.md (hand re-sheet, new line)",
+    "status": "moved"
+   },
+   {
+    "said": "(process 11-15) 번역·국제판 공정 파일, fetch-takes 스트리밍",
+    "to": "tasks/intl.md · tasks/captions.md · rules.json:translate-parallel-groups",
+    "status": "moved"
+   },
+   {
+    "said": "(process 11-16) '…' 규칙 said.mjs 하나로",
+    "to": "motion/films/said.mjs (code)",
+    "status": "moved"
+   },
+   {
+    "said": "음악 큐 분당 2.7 — 굿 좋아!! 이대로 가자 (music_cues_exception)",
+    "to": "targets.json sound.music_cues_per_min_max 2 → 3",
+    "status": "moved"
+   },
+   {
+    "said": "yt 검수 12건 다 네 제안대로 (챕터 0:44, 관련 동영상 문구, 세로 표지 글)",
+    "to": "stages.mjs sheet gate (chapters ≥ 10 s) · rules.json:shorts-to-long-text",
+    "status": "moved"
+   }
+  ],
+  "pending": [
+   "T13 targets sound.music_cues_per_min_max 2→3 — 에이전트 제안, 관리자 확인 대기"
+  ]
+ }
 }

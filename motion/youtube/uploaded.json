@@ -1143,11 +1143,11 @@
   }
  },
  "christ": {
-  "note": "「그리스도」 한국어 채널(motion/films/christ/upload.md · youtube.json). 2026-11-16 비공개 업로드(스튜디오 studio-upload.js) — 공개는 관리자 \"공개일은 완료되면 바로할꺼야\" · 2026-11-16 일부 공개(관리자 \"아내한테도 링크줘서 검토해보게\")",
+  "note": "「그리스도」 한국어 채널(motion/films/christ/upload.md · youtube.json). 2026-11-16 비공개 업로드(스튜디오 studio-upload.js) — 공개는 관리자 \"공개일은 완료되면 바로할꺼야\" · 2026-11-16 일부 공개(관리자 \"아내한테도 링크줘서 검토해보게\") · 2026-11-16 12:51 KST 공개(관리자 \"한국어 공개하자\")",
   "h": {
    "id": "Yh_BdiO9qB4",
    "file": "christ-h-narr.mp4",
-   "privacy": "unlisted",
+   "privacy": "public",
    "uploaded": "2026-11-16",
    "note": "시편 22편 두루마리 내린 가로판(관리자 #58) — 첫 가로판 WGNt76MeLws 대신",
    "captions": [
@@ -1184,12 +1184,13 @@
     "A-oil",
     "B-prayer",
     "C-cross"
-   ]
+   ],
+   "publish_at": "2026-11-16T03:51:28Z"
   },
   "v": {
    "id": "BdLn4e40GH4",
    "file": "christ-v-narr.mp4",
-   "privacy": "unlisted",
+   "privacy": "public",
    "uploaded": "2026-11-16",
    "note": "179.9 s 다시 묶음(180.0 s는 AAC 때문에 3:01로 잡혀 쇼츠가 아님)",
    "captions": [
@@ -1223,7 +1224,8 @@
     "zh-Hant"
    ],
    "related": "wrEYqvOU1O8",
-   "cover": "V-A-oil"
+   "cover": "V-A-oil",
+   "publish_at": "2026-11-16T03:51:28Z"
   },
   "captions": [
    "ar",
@@ -1263,6 +1265,18 @@
    "at": "2026-11-16",
    "ok": "관리자 \"세 편 모두 지우기\"",
    "why": "첫 세로판 — 3:01로 잡혀 일반 동영상이 됨(쇼츠 아님). 비공개. 지우는 것은 관리자 OK 뒤(되돌릴 수 없음) · WGNt76MeLws = 두루마리 내리기 전 가로판(일부 공개)"
+  },
+  "threads": {
+   "post": "Dfyb7tJktzj",
+   "url": "https://www.threads.com/@one.scroll.bible/post/Dfyb7tJktzj",
+   "at": "2026-11-16",
+   "how": "threads.com 웹 바로 게시(threads-reels.js 도우미 + relay, 글 motion/out/insta/reels-christ/threads.json)"
+  },
+  "instagram": {
+   "reel": "Dfycp-kBDni",
+   "url": "https://www.instagram.com/one.scroll.bible/reel/Dfycp-kBDni/",
+   "at": "2026-11-16",
+   "how": "instagram.com 웹(3분 릴스 — Business Suite 90초 제한), 원본 비율, 표지 V-A-oil, 글 films/christ/social/instagram.json(실제 키 입력)"
   }
  }
 }

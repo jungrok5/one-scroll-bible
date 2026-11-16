@@ -1120,7 +1120,8 @@
     "captions": [
      "ko"
     ],
-    "note": "ko(auto) still present (API 11/12) — asr-off before 11/17 needs the owner OK; instagram + threads scheduled same time"
+    "note": "instagram + threads scheduled same time",
+    "asr": "2026-11-16 확인: 자동 자막 없음(우리 ko만)"
    },
    "b": {
     "id": "gDXUB9kxUTo",
@@ -1129,7 +1130,11 @@
     "to": 77.9,
     "publish_at": "2026-11-18T10:00:00Z",
     "privacy": "private (scheduled)",
-    "note": "captions not checked; instagram + threads scheduled same time"
+    "note": "instagram + threads scheduled same time",
+    "captions": [
+     "ko"
+    ],
+    "asr": "2026-11-16 확인: 자동 자막 없음(우리 ko만)"
    },
    "c": {
     "id": "8FMHpO6-Umo",
@@ -1138,7 +1143,11 @@
     "to": 105.6,
     "publish_at": "2026-11-19T10:00:00Z",
     "privacy": "private (scheduled)",
-    "note": "captions not checked; instagram + threads scheduled same time"
+    "note": "instagram + threads scheduled same time",
+    "captions": [
+     "ko"
+    ],
+    "asr": "2026-11-16 확인: 자동 자막 없음(우리 ko만)"
    }
   }
  },
@@ -1315,7 +1324,8 @@
     "captions": [
      "ko"
     ],
-    "related": "Yh_BdiO9qB4"
+    "related": "Yh_BdiO9qB4",
+    "asr": "2026-11-16 자동 ko 지움"
    },
    "b": {
     "id": "KQjmmXH3I5w",
@@ -1325,7 +1335,8 @@
     "captions": [
      "ko"
     ],
-    "related": "Yh_BdiO9qB4"
+    "related": "Yh_BdiO9qB4",
+    "asr": "2026-11-16 자동 en(한국어 말소리를 영어로 잘못 인식) 남음 — 우리 en 자막이 없는 언어라 규칙상 그대로"
    },
    "c": {
     "id": "JfRb1wChEbs",
@@ -1335,7 +1346,8 @@
     "captions": [
      "ko"
     ],
-    "related": "Yh_BdiO9qB4"
+    "related": "Yh_BdiO9qB4",
+    "asr": "2026-11-16 자동 ko 지움"
    },
    "instagram": "Meta Business Suite 예약 11/20·21·23 19:00 KST(meta-reels.js, 표지 out/insta/clips-christ/cover-c1~3 — clip_covers.py, 글 films/christ/social/clips-instagram.json) — 플래너에서 세 칸 확인",
    "threads": "threads.com 웹 예약 11/20·21·23 19:00 KST(threads-reels.js, 글 films/christ/social/clips-threads.json) — 편마다 \"… 오후 7:00 GMT+9에 게시 예정\" 확인"

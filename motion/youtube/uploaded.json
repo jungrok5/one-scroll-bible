@@ -977,7 +977,7 @@
    "christ": {
     "note": "「그리스도」 국제판(영어 글자판, motion/films/christ/youtube-intl.json · 검수 motion/reviews/film-christ-yt.md). 2026-11-16 비공개 업로드 → intl.mjs api --no-captions(제목·설명 es/pt-BR, 태그, 표준 라이선스). 자막은 스튜디오(할당량 없음)",
     "h": {
-     "id": "Bp7GXU7kI4Y",
+     "id": "Il9eo92zvBM",
      "privacy": "private",
      "default": "en",
      "audio": [],
@@ -1009,7 +1009,8 @@
       "vi",
       "zh-Hans",
       "zh-Hant"
-     ]
+     ],
+     "note": "두루마리 내린 가로판"
     },
     "v": {
      "id": "1eM_EMtcXrQ",
@@ -1045,6 +1046,12 @@
       "zh-Hans",
       "zh-Hant"
      ]
+    },
+    "to_delete": {
+     "ids": [
+      "Bp7GXU7kI4Y"
+     ],
+     "why": "두루마리 내리기 전 국제 가로판(비공개) — 관리자 OK 뒤 지움"
     }
    }
   },
@@ -1137,10 +1144,11 @@
  "christ": {
   "note": "「그리스도」 한국어 채널(motion/films/christ/upload.md · youtube.json). 2026-11-16 비공개 업로드(스튜디오 studio-upload.js) — 공개는 관리자 \"공개일은 완료되면 바로할꺼야\" · 2026-11-16 일부 공개(관리자 \"아내한테도 링크줘서 검토해보게\")",
   "h": {
-   "id": "WGNt76MeLws",
+   "id": "Yh_BdiO9qB4",
    "file": "christ-h-narr.mp4",
    "privacy": "unlisted",
    "uploaded": "2026-11-16",
+   "note": "시편 22편 두루마리 내린 가로판(관리자 #58) — 첫 가로판 WGNt76MeLws 대신",
    "captions": [
     "ar",
     "bn",
@@ -1218,9 +1226,10 @@
   },
   "to_delete": {
    "ids": [
-    "6tsn5lq3BCI"
+    "6tsn5lq3BCI",
+    "WGNt76MeLws"
    ],
-   "why": "첫 세로판 — 3:01로 잡혀 일반 동영상이 됨(쇼츠 아님). 비공개. 지우는 것은 관리자 OK 뒤(되돌릴 수 없음)"
+   "why": "첫 세로판 — 3:01로 잡혀 일반 동영상이 됨(쇼츠 아님). 비공개. 지우는 것은 관리자 OK 뒤(되돌릴 수 없음) · WGNt76MeLws = 두루마리 내리기 전 가로판(일부 공개)"
   },
   "captions": [
    "ar",

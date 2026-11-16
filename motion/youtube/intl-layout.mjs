@@ -68,7 +68,7 @@ if (doit('home')) { const secs = (await api('channelSections?part=snippet,conten
     say(`home: ${cur ? 'update' : 'add'} ${s.type}${s.title ? ` "${s.title}"` : ''} (${pls.length} playlist(s))`);
     if (apply) { const body = { snippet: { type: s.type, position: n, ...(s.title ? { title: s.title } : {}) }, contentDetails: { playlists: pls } };
       await api('channelSections?part=snippet,contentDetails', { method: cur ? 'PUT' : 'POST', body: JSON.stringify(cur ? { id: cur.id, ...body } : body) }); } }
-  console.log('home: the featured video for returning subscribers has no API — Studio → Customization → Layout (newest series film).'); }
+  console.log('home: 재방문 구독자 대상 추천 동영상 (section made 2026-11-16, home tab turned on) has no API — Studio (international channel, switched with the account menu inside Studio) → 맞춤설정 → 홈 탭 → that section → the newest series landscape film → 게시.'); }
 // 4. channel description per language
 if (doit('channel')) { const ch = (await api('channels?part=brandingSettings,localizations&mine=true')).items[0], next = { ...(ch.localizations || {}) }; let chg = 0;
   const pls = (await api(`playlists?part=snippet&mine=true&maxResults=50`)).items, title = ch.brandingSettings.channel.title || 'Bible in One Scroll';

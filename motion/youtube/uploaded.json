@@ -1076,7 +1076,12 @@
     "points_from_14min": "2026-11-16 English 14-min MFH3Hj4V6KA end screen (had none) = 「그리스도」 Il9eo92zvBM bottom-left + subscribe bottom-right, last 20 s (rule endscreen-newest)"
    }
   },
-  "playlists_series": "PLUkvqbcq-Vok"
+  "playlists_series": "PLUkvqbcq-Vok",
+  "home_featured": {
+   "id": "Il9eo92zvBM",
+   "at": "2026-11-16",
+   "note": "관리자 \"홈 화면 추천 영상 칸 만들어줘\" — 홈 탭이 꺼져 있어 켜고, 재방문 구독자 대상 추천 동영상 섹션을 트레일러 아래 두 번째로 추가 = 「그리스도」 가로판. 새 시리즈 영상마다 바꾼다(intl-layout.mjs가 알려 줌)."
+  }
  },
  "silence400": {
   "note": "「침묵의 400년」 — same content, two versions (motion/films/silence400/upload.md). 2026-10-31: first uploads (SiSsE3W61eM / vJh-gAZl4UU) were rendered without Noto Serif KR installed (Batang, faux bold) — unscheduled, kept private (owner deletes); re-rendered with the real font (render.mjs now serves motion/out/fonts) and uploaded again. Studio upload (studio-upload.js entry = films/silence400/youtube.json), filled + scheduled by API (yt-api film-schedule) for 2026-10-31 20:30 KST, captions sound/ko.vtt (top-positioned) via API — uploaded to both and checked 2026-10-31 16:07 KST (private, publishAt 11:30Z, category 27, captions ko).",

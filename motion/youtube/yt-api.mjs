@@ -240,14 +240,18 @@ if (cmd === 'whoami') {
   if (!r.ok) { console.error('download failed', r.status, (await r.text()).slice(0, 200)); process.exit(1); }
   process.stdout.write(await r.text());
 } else if (cmd === 'asr-off') {
-  // asr-off <videoId…> [--dry]: remove YouTube's automatic caption track in every language the video already has our own track
-  // for (관리자 결정 2026-11-01: a language we wrote captions for shows only ours). Studio's new Languages page has no control
+  // asr-off <videoId…> [--dry] [--same-lang]: remove YouTube's automatic caption tracks from a video that has captions of ours —
+  // every automatic track, in any language (관리자 2026-11-16 "지워줘 — 자동자막 매번 이렇게 해야 해? 절차에 남겨줘": YouTube also makes
+  // tracks in a language it misheard, e.g. an automatic en track of Korean speech on a Korean Short). --same-lang keeps the old
+  // narrower rule (관리자 결정 2026-11-01: only languages we wrote captions for). A video with none of our tracks is left alone.
+  // YouTube adds the automatic track some minutes to hours after an upload is processed, so run this after processing (and once more
+  // the next day for anything uploaded today); film.mjs check <film> after asks for it on every video of the film. Studio's new Languages page has no control
   // for automatic tracks, so this is the way. Irreversible — YouTube cannot regenerate them. 50 + 50 units per removed track.
   const dry = rest.includes('--dry');
   for (const id of rest.filter(a => /^[\w-]{11}$/.test(a))) {
     const list = (await api(`captions?part=snippet&videoId=${id}`)).items || [];
     const mine = new Set(list.filter(c => c.snippet.trackKind !== 'asr').map(c => c.snippet.language));
-    const auto = list.filter(c => c.snippet.trackKind === 'asr' && mine.has(c.snippet.language));
+    const auto = mine.size ? list.filter(c => c.snippet.trackKind === 'asr' && (!rest.includes('--same-lang') || mine.has(c.snippet.language))) : [];
     if (!auto.length) { console.log(`${id}: nothing to remove (${list.map(c => c.snippet.language + (c.snippet.trackKind === 'asr' ? '(auto)' : '')).join(',') || 'no tracks'})`); continue; }
     for (const c of auto) {
       if (dry) { console.log(`${id}: would remove automatic ${c.snippet.language}`); continue; }

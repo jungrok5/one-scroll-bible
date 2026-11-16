@@ -310,6 +310,11 @@ const G = {
   social: c => c.up?.instagram && c.up?.threads ? pass() : fail('uploaded.json에 instagram·threads 기록 없음'),
   after: c => { const u = c.up || {}, why = []; if (!u.h?.pinned_comment || !u.v?.pinned_comment) why.push('고정 댓글 id 없음');
     if (!/end screen|최종 화면/i.test(JSON.stringify(u.h || {}))) why.push('가로판 최종 화면 기록 없음'); if (!/related/i.test(JSON.stringify(u.v || {}))) why.push('쇼츠 관련 동영상 기록 없음');
+    // automatic captions off on every video of the film, twice — YouTube grows a new automatic track after publishing
+    // (2026-11-16 「그리스도」: removed at upload, back on the landscape cut the same afternoon; rule asr-off-all)
+    { const ids = [u.h?.id, u.v?.id, ...Object.values(u.clips || {}).map(x => x?.id)].filter(Boolean), A = u.asr_off || {};
+      const miss = ids.filter(id => !(A.ids || []).includes(id)); if (miss.length) why.push(`자동 자막 안 지운 영상: ${miss.join(' ')} — yt-api.mjs asr-off ${miss.join(' ')} → uploaded.json ${c.film}.asr_off { ids, at, again }`);
+      else if (!A.again) why.push(`자동 자막 두 번째 확인이 없다 — 공개 다음 날 yt-api.mjs asr-off ${ids.join(' ')} 다시, uploaded.json ${c.film}.asr_off.again = 날짜`); }
     return why.length ? { ok: false, why } : pass(); },
   // every new look of this film is packaged as a motion-skills canvas-film kit (관리자 2026-11-04: "화풍 추가되면 재사용할 수 있게 캔버스필름에 추가")
   kits: c => { const L = (c.review.looks || []).filter(x => x.style_new), why = [];

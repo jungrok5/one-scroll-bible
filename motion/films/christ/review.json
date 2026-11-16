@@ -2184,6 +2184,7 @@
    "공개: 한국어판(가로·세로) 공개 → 인스타·스레드 같은 시각 → 고정 댓글·가로판 최종 화면 → 짧은 쇼츠 3편 다음 날부터 1–2일 간격"
   ],
   "next": [
+   "11/17(공개 다음 날): 자동 자막 두 번째 확인 — yt-api.mjs asr-off Yh_BdiO9qB4 BdLn4e40GH4 Pb7yA35jjUQ KQjmmXH3I5w JfRb1wChEbs → uploaded.json christ.asr_off.again",
    "국제판: 오늘 저녁(관리자 \"아내한테 연락 필요해서 저녁에\") — 고급 기능 인증 뒤 오디오 트랙 es·pt-BR(studio-audio.js) → 공개 → 영어 14분 MFH3Hj4V6KA 최종 화면 → 국제 재생목록(intl-layout.mjs apply)"
   ],
   "followups_outside_film": [

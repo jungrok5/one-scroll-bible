@@ -10,4 +10,4 @@ README 4절 8·9: 번역 → 원문 대조 → 원어민 검수 → MED 고치�
    LOW·원문 그대로인 구절 범위 조정은 재검수 없이.
 4. 자막 파일: `captions-on-ko.mjs {film} <lang…>`(한국어판 = 한국어 해설 시각) / `--timing en`(국제판 = 영어 해설 시각) → .vtt를 언어마다 눈으로(특히 1번 줄).
 5. 올리기: 한국어판·국제판의 **세로·가로 모두(4편)**에 화면 위쪽 .vtt — 스튜디오 `motion/youtube/studio-caption.js`(할당량 없음), 그 뒤 우리 자막이 있는 언어의
-   자동 자막 지우기(`yt-api.mjs asr-off`). 기록: 한국어판 uploaded.json `{film}.captions`, 국제판 `global.films.{film}.h|v.captions`.
+   자동 자막 지우기(`yt-api.mjs asr-off` — 우리 자막이 있는 영상의 자동 자막은 언어 상관없이 모두, 공개 다음 날 한 번 더; 국제 채널은 `YT_AS=GLOBAL`). 기록: 한국어판 uploaded.json `{film}.captions`, 국제판 `global.films.{film}.h|v.captions`.

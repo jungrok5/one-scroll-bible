@@ -1351,6 +1351,18 @@
    },
    "instagram": "Meta Business Suite 예약 11/20·21·23 19:00 KST(meta-reels.js, 표지 out/insta/clips-christ/cover-c1~3 — clip_covers.py, 글 films/christ/social/clips-instagram.json) — 플래너에서 세 칸 확인",
    "threads": "threads.com 웹 예약 11/20·21·23 19:00 KST(threads-reels.js, 글 films/christ/social/clips-threads.json) — 편마다 \"… 오후 7:00 GMT+9에 게시 예정\" 확인"
+  },
+  "asr_off": {
+   "ids": [
+    "Yh_BdiO9qB4",
+    "BdLn4e40GH4",
+    "Pb7yA35jjUQ",
+    "KQjmmXH3I5w",
+    "JfRb1wChEbs"
+   ],
+   "at": "2026-11-16",
+   "again": null,
+   "note": "가로판은 오전에 지운 자동 ko가 오후에 다시 생겨 또 지움 · c2 자동 en(오인식) 지움 — 공개 다음 날(11/17) 한 번 더"
   }
  }
 }

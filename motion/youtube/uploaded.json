@@ -1304,6 +1304,39 @@
    "pinned_comment": "UgymTslYHPPenq0Az8Z4AaABAg 맨 앞에 새 영상 줄(FAQ 줄은 아래에 둠, API comments.update)",
    "description": "첫 줄 \"▶ 새 영상: …\" (API videos.update)",
    "rule": "endscreen-newest"
+  },
+  "clips": {
+   "note": "짧은 쇼츠 3편 — 관리자 2026-11-16 \"11/20·21·23 저녁 7시\"(400년 짧은 쇼츠 11/17·18·19 뒤, 주일 건너뜀). 관련 동영상 = 가로판 Yh_BdiO9qB4(쇼츠 페이지에서 확인), 한국어 자막(clip-vtt.mjs)",
+   "a": {
+    "id": "Pb7yA35jjUQ",
+    "title": "그리스도는 예수님의 성일까?",
+    "publish_at": "2026-11-20T10:00:00Z",
+    "privacy": "private (scheduled)",
+    "captions": [
+     "ko"
+    ],
+    "related": "Yh_BdiO9qB4"
+   },
+   "b": {
+    "id": "KQjmmXH3I5w",
+    "title": "베드로는 왜 \"그리 마옵소서\" 했을까",
+    "publish_at": "2026-11-21T10:00:00Z",
+    "privacy": "private (scheduled)",
+    "captions": [
+     "ko"
+    ],
+    "related": "Yh_BdiO9qB4"
+   },
+   "c": {
+    "id": "JfRb1wChEbs",
+    "title": "십자가의 외침, 천 년 전의 시",
+    "publish_at": "2026-11-23T10:00:00Z",
+    "privacy": "private (scheduled)",
+    "captions": [
+     "ko"
+    ],
+    "related": "Yh_BdiO9qB4"
+   }
   }
  }
 }

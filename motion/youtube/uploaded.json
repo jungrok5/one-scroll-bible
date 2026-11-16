@@ -1173,7 +1173,8 @@
      "ko"
     ],
     "asr": "2026-11-16 확인: 자동 자막 없음(우리 ko만)"
-   }
+   },
+   "social_covers": "2026-11-17 인스타 예약 릴스를 훅 표지(motion/youtube/thumbs/shorts/clips-<film>/out)로 다시 예약 — 같은 글·같은 시각, 옛 예약은 지움(관리자 \"제안대로\"). 400년 클립 영상은 로컬에 없어 render.mjs v → sound.mjs → clips.mjs로 다시 만듦(인스타 내려받기는 177kbps 재인코딩이라 안 씀). 유튜브 쇼츠 표지도 같은 날 thumbnails.set"
   }
  },
  "christ": {
@@ -1375,7 +1376,8 @@
     "asr": "2026-11-16 자동 ko 지움"
    },
    "instagram": "Meta Business Suite 예약 11/20·21·23 19:00 KST(meta-reels.js, 표지 out/insta/clips-christ/cover-c1~3 — clip_covers.py, 글 films/christ/social/clips-instagram.json) — 플래너에서 세 칸 확인",
-   "threads": "threads.com 웹 예약 11/20·21·23 19:00 KST(threads-reels.js, 글 films/christ/social/clips-threads.json) — 편마다 \"… 오후 7:00 GMT+9에 게시 예정\" 확인"
+   "threads": "threads.com 웹 예약 11/20·21·23 19:00 KST(threads-reels.js, 글 films/christ/social/clips-threads.json) — 편마다 \"… 오후 7:00 GMT+9에 게시 예정\" 확인",
+   "social_covers": "2026-11-17 인스타 예약 릴스를 훅 표지(motion/youtube/thumbs/shorts/clips-<film>/out)로 다시 예약 — 같은 글·같은 시각, 옛 예약은 지움(관리자 \"제안대로\"). 400년 클립 영상은 로컬에 없어 render.mjs v → sound.mjs → clips.mjs로 다시 만듦(인스타 내려받기는 177kbps 재인코딩이라 안 씀). 유튜브 쇼츠 표지도 같은 날 thumbnails.set"
   },
   "asr_off": {
    "ids": [

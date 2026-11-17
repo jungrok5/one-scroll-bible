@@ -1,5 +1,5 @@
 // Screenshot a draft page at desktop and phone width before publishing it (make-film skill: "Screenshot it at 1280 and 400 px").
-//   node motion/films/page-shot.mjs motion/out/review/<film>.html [--widths 1280,400] [--full]
+//   node motion/films/page-shot.mjs motion/out/review/<film>.html [--widths 1280,400] [--full] [--el '#direction']
 // Writes <page>-<width>.png next to the page and prints the paths. Playwright is loaded the same way as motion/sheets.mjs.
 import { createRequire } from 'node:module';
 import { execSync } from 'node:child_process';
@@ -16,8 +16,10 @@ for (const w of widths) {
   await p.goto(pathToFileURL(resolve(page)).href, { waitUntil: 'networkidle' }).catch(() => {});
   await p.waitForTimeout(600);
   const overflow = await p.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
-  const out = resolve(page).replace(/\.html$/, `-${w}.png`);
-  await p.screenshot({ path: out, fullPage: full });
+  const si = args.indexOf('--el'), sel = si > -1 ? args[si + 1] : null;   // one section only, e.g. --el '#direction'
+  const out = resolve(page).replace(/\.html$/, `${sel ? '-' + sel.replace(/\W+/g, '') : ''}-${w}.png`);
+  if (sel) { const el = await p.$(sel); if (!el) { console.error('no element ' + sel); process.exit(1); } await el.screenshot({ path: out }); }
+  else await p.screenshot({ path: out, fullPage: full });
   console.log(out + (overflow > 1 ? `  ⚠ 가로 넘침 ${overflow}px` : ''));
   await p.close();
 }

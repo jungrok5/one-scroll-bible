@@ -161,6 +161,8 @@ const G = {
     if (T.looks.new_max != null && nw > T.looks.new_max) why.push(`새 화풍 ${nw}개 — 많아야 ${T.looks.new_max}개`);
     if (distinct < T.looks.distinct_min) why.push(`화풍 종류 ${distinct}개 — 적어도 ${T.looks.distinct_min}개`);
     for (let i = 1; i < L.length; i++) if (L[i].look === L[i - 1].look && !L[i].same_reason) why.push(`${L[i - 1].scene} → ${L[i].scene}: 같은 화풍이 이어진다(same_reason 없음)`);
+    // rule direction-per-scene (관리자 2026-11-18): films made with a format (from 「kingdom」 on) name a film reference, a camera line and the hand-off per scene
+    if (c.review.format) for (const l of L) { const miss = ['film_ref', 'camera', 'out'].filter(k => !l[k]); if (miss.length) why.push(`${l.scene}: 연출 ${miss.join('·')} 없음(rule direction-per-scene)`); }
     return why.length ? { ok: false, why } : pass(); },
   reviews: c => { const f = join(ROOT, 'motion/reviews', `film-${c.film}-script.md`); if (!existsSync(f)) return fail(`motion/reviews/film-${c.film}-script.md 없음`);
     const t = readFileSync(f, 'utf8'), why = []; if (!/관점 검수/.test(t)) why.push('리뷰 기록에 관점 검수가 없다'); if (!/성경 잘 모르는/.test(t)) why.push('리뷰 기록에 1번 대상(성경 잘 모르는 크리스천) 리뷰가 없다');

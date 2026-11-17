@@ -128,3 +128,13 @@ footer { color: var(--muted); font-size: 13px; padding-block: 30px 40px }
   .tc { text-align: left; padding-top: 0 }
   .sy { padding-left: 14px } .sy .n, .sy blockquote { font-size: 17px }
 }
+
+/* scene-by-scene direction (review.json looks[] with film_ref · camera · out) */
+#direction { margin-top: 40px }
+.dir { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px }
+.dir li { background: var(--paper); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; display: grid; gap: 4px; min-width: 0 }
+.dir h3 { margin: 0; font-family: var(--serif); font-size: 18px; text-wrap: balance }
+.dir h3 em { font: 700 11px/1 var(--sans); font-style: normal; color: var(--gold); border: 1px solid var(--gold-soft); border-radius: 999px; padding: 2px 8px; vertical-align: middle; margin-left: 6px }
+.dir p { margin: 0; font-size: 14px; line-height: 1.65; max-width: 70ch }
+.dir p b { color: var(--muted); font-weight: 700; margin-right: 6px }
+.dir .cv { font-size: 15px; font-weight: 500 }

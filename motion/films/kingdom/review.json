@@ -142,7 +142,10 @@
    "shot": "물안개 위를 낮게 미끄러지는 카메라 → 언덕 위 작은 한 사람, 해가 그 뒤에서 번짐. Q1에서 아침 빛이 호수를 건너 무리 위로",
    "look": "칠한 3D 세계 — 새벽 호수",
    "source": "canvas-film kits/world3d (첫 영상)",
-   "kit": "world3d"
+   "kit": "world3d",
+   "film_ref": "「아웃 오브 아프리카」(1985, OPUSCAR 58) — 호수 위 낮은 3D 비행, 호박색 안개, 지나가면 새 떼가 날아오름",
+   "camera": "FPV 저공 비행, 8 s, linear → crane up 3 s, ease-in-out, 언덕 위 작은 한 사람 쪽으로(첫 컷은 ease-out — 훅)",
+   "out": "Q1의 아침 빛이 호수를 건너 방 창으로 — match cut(빛의 띠)"
   },
   {
    "at": "0:34–1:14",
@@ -151,7 +154,10 @@
    "shot": "창빛이 바닥을 천천히 건너다 Q2에서 하늘빛이 방바닥까지 닿음. N07 두루마리의 같은 자리들이 하나씩 켜지며 종이에 빛을 드리움(luminous-score 기법, 글자는 결만)",
    "look": "페르메이르 창빛 유화",
    "source": "canvas-film kits/oilpaint vermeer + luminous-score 기법",
-   "kit": "oilpaint"
+   "kit": "oilpaint",
+   "film_ref": "페르메이르 창빛(첫 영상 기도 장면과 같은 결) + 「뷰티풀 마인드」(2001, OPUSCAR 74) — 숫자가 빛으로 켜지며 금빛 선으로 이어지는 기법을 두루마리의 같은 자리에",
+   "camera": "locked off(빛이 움직임) → push-in on detail, 3 s, slow, 두루마리의 켜진 자리로",
+   "out": "켜진 금빛 한 점이 다음 장면 마을의 첫 등불로 — grow out of(빛나는 점에서 다음 샷이 자라남)"
   },
   {
    "at": "1:14–1:47",
@@ -161,7 +167,10 @@
    "look": "칠한 3D 세계 — 높이 오르는 크레인",
    "source": "canvas-film kits/world3d",
    "kit": "world3d",
-   "same_reason": "1장과 같은 갈릴리 새벽 — 낮은 물 위 → 높은 하늘로 카메라 높이·구도가 완전히 바뀜"
+   "same_reason": "1장과 같은 갈릴리 새벽 — 낮은 물 위 → 높은 하늘로 카메라 높이·구도가 완전히 바뀜",
+   "film_ref": "「반지의 제왕: 왕의 귀환」(2003, OPUSCAR 76) — 깊은 공기 원근, 봉화가 산마다 차례로 켜짐 → 호숫가 마을이 하나씩 켜짐",
+   "camera": "crane up, 6 s, slow ease-in-out(희망·규모) — 돌아선 작은 사람에서 하늘 높이, 제목은 해가 번지는 한가운데",
+   "out": "제목 뒤 hard cut — 붉은 저녁으로(색이 바뀌는 2부의 문턱)"
   },
   {
    "at": "1:47–2:21",
@@ -170,7 +179,10 @@
    "shot": "3D 항공: 낮은 해에 붉은 망토 병사들의 창 행렬이 긴 그림자를 끌고 지나감 → 카메라가 들판 위로 넘어가 앉아 있는 오천 명을 훑음(바구니가 손에서 손으로) → 무리가 일어나 한 사람에게 몰려듦",
    "look": "시네마틱 3D — 저녁 안개·낮은 해·군중",
    "source": "motion-skills cinematic-3d(three.js, 세로 기본 · 「메시아」 베들레헴 골목 1회)",
-   "kit": "cinematic3d"
+   "kit": "cinematic3d",
+   "film_ref": "「벤허」(1959, OPUSCAR 32) 65mm 서사 — 강한 낮은 해·먼지·대리석과 금 + 「아라비아의 로렌스」(1962, OPUSCAR 35) 망원 렌즈 아지랑이 속 행렬, 따뜻함과 차가움의 대비",
+   "camera": "망원 tracking으로 병사 창 행렬(아지랑이) → crane/pedestal up 넘어 들판의 오천 명 위를 FPV 저공 → 무리가 일어설 때 slow orbit 15°, 가운데 한 사람(handheld 0.5로 술렁임)",
+   "out": "무리의 함성 → 산 위 정적 smash cut(소리가 같은 프레임에 끊김)"
   },
   {
    "at": "2:21–2:38",
@@ -179,7 +191,10 @@
    "shot": "3D로 그 한 사람을 따라 어두워지는 산을 오름, 아래 들판에 무리의 불빛 → 꼭대기에서 밤이 내려오며 화면이 도레 판화 선으로 새겨짐(3D가 판화로 굳음) — 하늘을 등진 작은 실루엣",
    "look": "시네마틱 3D → 도레 판화 선",
    "source": "canvas-film kits/doreline (첫 영상)",
-   "kit": "doreline"
+   "kit": "doreline",
+   "film_ref": "「노인을 위한 나라는 없다」(2007, OPUSCAR 80) 디킨스 빛 — 지평선에 눌린 해, 카메라 쪽으로 늘어지는 긴 그림자, 빛 바랜 황토·회녹 → 도레 판화",
+   "camera": "tracking(걷는 속도, linear)으로 한 사람을 뒤따라 산을 오름 → 꼭대기 dolly out, 5 s, slow(고립) — 밤이 내려오며 판화 선이 새겨짐",
+   "out": "판화의 흰 하늘이 관정 높은 창의 새벽빛으로 — match cut(밝은 틈)"
   },
   {
    "at": "2:38–3:09",
@@ -188,7 +203,10 @@
    "shot": "높은 창으로 드는 푸른 새벽과 화로 불빛 둘 — 벽의 높은 자리 그림자가 크게, Q5에서 그림자가 작아지고 빛이 묶인 사람에게 모임, N14b 창 그림자가 사라짐, N16 시선이 하늘로",
    "look": "렘브란트 키 유화 — 새벽 창빛 + 화로",
    "source": "canvas-film kits/oilpaint rembrandt(+caravaggio 테네브리즘에 새벽 창 하나)",
-   "kit": "oilpaint"
+   "kit": "oilpaint",
+   "film_ref": "「대부」(1972, OPUSCAR 45) 렘브란트 탑 라이트 — 따뜻한 빛은 위에서만, 어둠은 얇은 글레이즈 + 「햄릿」(1948, OPUSCAR 21) 깊은 초점의 차가운 새벽",
+   "camera": "locked off(벽의 큰 그림자가 움직임) → rack focus 1 s, 벽의 높은 자리 그림자 → 묶인 손 → N16 tilt up, 3 s, 하늘로(경외)",
+   "out": "하늘에서 천막의 등잔불로 — cross dissolve 0.8 s(이야기 속으로 들어가는 시간)"
   },
   {
    "at": "3:09–4:05",
@@ -198,7 +216,10 @@
    "look": "그림자 인형극 → 3D 나무로 현상",
    "source": "canvas-film kits/puppet(새) + claude-drawing-skill Shadow puppetry + 2D→3D 현상(첫 영상 「귀환」 청사진 → 3D)",
    "kit": "puppet",
-   "style_new": true
+   "style_new": true,
+   "film_ref": "「올리버!」(1968, OPUSCAR 41) 빅토리아 장난감 극장 — 촛불 각광, 겹친 무대판 + 그림자 인형극 키트 → 「타이타닉」(1997, OPUSCAR 70) 2D가 3D로 현상",
+   "camera": "iris open 0.5 s(천막의 막이 열림) → 씨 push-in → 나무가 천막을 뚫는 순간 tilt up + crane up 6 s, 그림자가 3D 나무로 현상되며 가지 사이로(경외·규모) → 다시 천막, 보화 상자에 push-in on detail(가죽 구멍의 금빛)",
+   "out": "천막 뒤 등잔빛 → 노을빛으로 cross dissolve(같은 따뜻한 빛, 바깥으로)"
   },
   {
    "at": "4:05–4:48",
@@ -207,7 +228,10 @@
    "shot": "부모 손을 잡고 오는 아이들, 팔 벌려 막는 어른들, 돌아서는 한 사람 → 아이 하나가 내민 빈 두 손에 노을빛이 고임(가까운 구도)",
    "look": "소프트 파스텔 — 노을",
    "source": "canvas-film A patriarch(첫 영상 족장)",
-   "kit": "pastel"
+   "kit": "pastel",
+   "film_ref": "「노매드랜드」(2020, OPUSCAR 93) 매직아워 소프트 파스텔 — 금빛에서 장밋빛·보랏빛으로",
+   "camera": "tracking(아이들과 같은 높이) → N21 push-in on detail, 3 s, 내민 빈 두 손(노을빛이 고임)",
+   "out": "빈손의 손금 결이 목판의 칼자국으로 — match cut(선의 결)"
   },
   {
    "at": "4:48–5:37",
@@ -216,7 +240,10 @@
    "shot": "세로로 길게 오르는 예루살렘 길을 칼끝이 파낼 때마다 빛이 드러남, 양옆 자리를 손짓하는 두 사람 → Q11에서 언덕을 오르는 한 사람 뒤로 많은 사람들의 그림자가 한 줄로 이어짐(「포로」의 가로 풍경과 다른 세로 길 구도)",
    "look": "목판화 — 칼끝이 빛을 파냄",
    "source": "canvas-film kits/woodcut (첫 영상 「포로」에서 씀 — 새 화풍 아님)",
-   "kit": "woodcut"
+   "kit": "woodcut",
+   "film_ref": "「서부 전선 이상 없다」(1930, OPUSCAR 3) 콜비츠 목판 — 큰 검은 덩어리, 흰 칼자국 윤곽, 거친 결",
+   "camera": "crane down(세로로 긴 길을 따라 칼끝과 함께 내려옴, 칼이 지날 때마다 빛) → Q11 dolly out, 5 s, 언덕을 오르는 한 사람 뒤로 많은 그림자",
+   "out": "목판의 검은 언덕이 목탄 종이의 언덕으로 — match cut(같은 실루엣, 재질만 바뀜)"
   },
   {
    "at": "5:37–7:05",
@@ -226,7 +253,10 @@
    "look": "고딕 목탄 + 붉은 한 점",
    "source": "canvas-film kits/charcoal(새 · Lemo-Opuscar 13 Rebecca) — 「메시아」 1차 에덴에서 낮은 점수: 이번엔 멀리 작게, 명암 대비로 폰 가독성 먼저 시험",
    "kit": "charcoal",
-   "style_new": true
+   "style_new": true,
+   "film_ref": "「레베카」(1940, OPUSCAR 13) 고딕 목탄 — 벨벳 같은 검정, 지우개로 들어낸 안개와 달빛 + 「쉰들러 리스트」(1993, OPUSCAR 66) 흑백 속 붉은 하나",
+   "camera": "멀리 locked off(가까이 가지 않음 — 절제) → N24c \"그곳에는 십자가가\": dolly zoom 3 s, slow ease-in-out — 세 십자가는 그대로, 뒤의 하늘이 커짐(깨달음 · 영상에 한 번만) → Q14 앞 0.8초 정적(소리 빠짐)",
+   "out": "\"숨지시던 그때\" 목탄 종이가 넘어가며 도면이 그려짐 — 재질 전환(page turn)"
   },
   {
    "at": "7:05–7:45",
@@ -236,7 +266,10 @@
    "look": "레오나르도 코덱스 도면 → 시네마틱 3D 성전",
    "source": "claude-drawing-skill Leonardo codex(새) + motion-skills cinematic-3d(볼류메트릭 빛·안개·블룸, 세로 기본) + 2D→3D 현상(「귀환」)",
    "kit": "codex",
-   "style_new": true
+   "style_new": true,
+   "film_ref": "「타이타닉」(1997, OPUSCAR 70) 설계도가 3D로 현상(첫 영상 「귀환」 성벽) + 레오나르도 코덱스 철갈색 잉크 도면 + 「햄릿」(1948, OPUSCAR 21) 볼류메트릭 안개 실내 + 「오펜하이머」(2023, OPUSCAR 96) IMAX 빛 폭발 · 한 번에 이어 찍기(「버드맨」 2014, OPUSCAR 87)",
+   "camera": "도면이 일어서며 회전(orbit 30°) → 3D 성전으로 한 번에 이어지는 이동(one continuous shot): crane down으로 뜰 → dolly in 6 s, slow inertia로 성소의 어둠 속 휘장 앞까지 → 휘장이 위에서 아래로 갈라질 때 speed ramp 0.25×(무게) → FPV로 그 틈을 지나 빛 가득한 지성소 → dolly out으로 빛이 바깥 뜰 사람들에게 흐름 → 빛이 열린 문 모양으로",
+   "out": "문 모양 빛의 흰 화면 → 새벽 빈 무덤 입구의 빛으로 — match cut(같은 문 모양 빛)"
   },
   {
    "at": "7:45–8:20",
@@ -245,7 +278,10 @@
    "shot": "두터운 붓 자국의 새벽 — 열린 무덤 입구로 첫 햇빛이 들어감(사람 없음) → 석회벽 마당, 낮은 해의 빛줄기 속 둘러앉은 그림자들, 문간의 한 사람(구별되지 않게)",
    "look": "임파스토 새벽 → 석회벽 낮은 해(fresco)",
    "source": "canvas-film styles/rise(첫 영상 부활) → kits/fresco",
-   "kit": "fresco"
+   "kit": "fresco",
+   "film_ref": "「바람과 함께 사라지다」(1939, OPUSCAR 12) 임파스토 · 첫 영상 「부활」 팔레트 나이프 새벽 → 석회벽 마당의 낮은 해",
+   "camera": "빈 무덤 dolly in, 3 s(입구로 드는 첫 햇빛을 따라) → 마당 locked off(빛줄기 속 먼지가 움직임)",
+   "out": "마당의 빛줄기 → 감람산 바람 — hard cut"
   },
   {
    "at": "8:20–8:58",
@@ -254,7 +290,10 @@
    "shot": "3D 감람산: 제자들이 로마 깃발 걸린 성벽을 가리킴 → 한 사람이 지평선 쪽으로 돌아섬 → Q6a에서 카메라가 끝없이 솟아오르며 예루살렘·유대·사마리아로 길들이 뻗고 마을마다 등불 → 밤의 지구 위로 불빛이 번짐(3부 나무의 등불과 같은 빛)",
    "look": "시네마틱 3D — 크레인 상승, 밤의 지구",
    "source": "motion-skills cinematic-3d + 첫 영상 church 엔진(능선 등불 → 밤 지구)",
-   "kit": "cinematic3d"
+   "kit": "cinematic3d",
+   "film_ref": "「아웃 오브 아프리카」 항공 + 「반지의 제왕: 왕의 귀환」 봉화(1부 3장의 마을 등불과 수미상관) → 첫 영상 「교회」 밤 지구(능선 등불 → 도시 불빛)",
+   "camera": "N28c 성벽을 가리키던 제자들 → 한 사람이 지평선으로 돌아섬(pan, 4 s) → Q6a crane up 10 s, slow ease-in-out → 대기권까지 pull-back reveal, 밤의 지구 위로 불빛이 번짐(규모 · 영상에서 가장 큰 상승)",
+   "out": "밤 지구의 금빛 불빛이 필사본 테두리의 금박으로 — match cut(금빛 점들)"
   },
   {
    "at": "8:58–9:20",
@@ -263,7 +302,10 @@
    "shot": "금박 테두리 안 작은 마을과 들판의 한 면 → Q16에서 그 작은 세상이 입체로 일어서 금빛 3D 풍경이 되고 금빛이 지평선까지 퍼짐",
    "look": "채색 필사본 → 금빛 3D로 현상",
    "source": "canvas-film kits/illuminated + 2D→3D 현상",
-   "kit": "illuminated"
+   "kit": "illuminated",
+   "film_ref": "「브레이브하트」(1995, OPUSCAR 68) 채색 필사본 — 눌러 박은 금박, 청금석·주홍, 창 같은 그림 틀 → 「타이타닉」식 현상으로 금빛 3D",
+   "camera": "push-in on detail로 필사본 틀 속 작은 세상 → Q16 그 세상이 일어서며 crane up(입체가 됨), 금빛이 지평선까지",
+   "out": "금빛 → 등잔 하나만 남은 어둠 — cross dissolve(크게 열렸다가 작은 방으로)"
   },
   {
    "at": "9:20–9:35",
@@ -273,7 +315,10 @@
    "look": "그림자 인형극 + 공 렌즈 빛",
    "source": "canvas-film kits/puppet + goldoil 공 렌즈 기법",
    "kit": "puppet",
-   "same_reason": "3부 그림자 극장의 수미상관 — 바로 앞은 필사본이라 이웃 반복 아님"
+   "same_reason": "3부 그림자 극장의 수미상관 — 바로 앞은 필사본이라 이웃 반복 아님",
+   "film_ref": "「아마데우스」(1984, OPUSCAR 57) 금빛 촛불 속 검은 실루엣 + 3부 그림자 극장의 수미상관, 공 렌즈(goldoil) — 등잔이 거꾸로 맺힌 진주",
+   "camera": "tracking으로 먼 길을 걸어오는 상인 실루엣 → push-in on detail 손 → N32b freeze frame 1.5 s — 손이 펴지기 직전(영상에 한 번만)",
+   "out": "멈춘 등불이 2장 기도 방의 창빛으로 — match cut(같은 구도로 돌아옴)"
   },
   {
    "at": "9:35–9:58",
@@ -282,7 +327,10 @@
    "shot": "2장과 같은 구도의 흙벽 방, 창빛이 바닥의 같은 자리에 → 한 사람이 무릎 꿇고 고개 숙임(뒷모습) → 등잔 아래 펼친 두루마리 끝 화면 \"마태복음 13장 45–46절\"",
    "look": "페르메이르 창빛 유화 → 등잔 두루마리",
    "source": "canvas-film kits/oilpaint vermeer + kits/lamplit",
-   "kit": "oilpaint"
+   "kit": "oilpaint",
+   "film_ref": "페르메이르 창빛 — 2장과 같은 구도(수미상관) → 첫 영상 「등잔 두루마리」 끝 화면",
+   "camera": "locked off(창빛이 바닥의 같은 자리에 닿음) → 무릎 꿇은 뒷모습으로 dolly in, 4 s, slow → 끝 화면 등잔 아래 두루마리",
+   "out": "끝 화면(마태복음 13장 45–46절) — L-cut으로 음악 꼬리"
   }
  ],
  "message_check": [
@@ -680,6 +728,15 @@
    "applied": "새 화풍 3(그림자 인형극 · 목탄 · 레오나르도 코덱스 도면) + 장면마다 전할 것(convey)·구성(shot)을 먼저 적고 화풍을 고름. rules.json look-per-scene: 1–2개는 기본, 어울리면 더 · 느려도 장면마다 최선",
    "applied_at": "2026-11-18 07:10 KST",
    "answered_by": 3
+  },
+  {
+   "at": "2026-11-18 07:17 KST",
+   "who": "관리자",
+   "said": "모든 것은 영화 연출과 기법을 써서 고급지게 14분 영상이 참고한 그런 것들 기억에 없으면 읽고 와 화풍 아니고도 그게 아마 역대 아카데미상을 본 거라서 기법 같은 게 적혀 있지 않았을까",
+   "status": "applied",
+   "round": 3,
+   "applied": "STYLES.md·STYLE-INDEX C(OPUSCAR 98 작품상)·cinecode camera-moves.md를 읽고 16장면마다 film_ref·camera·out을 적음(예: 오천 명 = 벤허 65mm + 아라비아의 로렌스 망원, 휘장 = 타이타닉 설계도 현상 + 햄릿 안개 실내 + 오펜하이머 빛 + 한 번에 이어 찍기, 십자가 = 레베카 목탄 + 쉰들러 리스트 붉은 하나, dolly zoom은 N24c 한 번). 초안 페이지에 '장면별 연출' 칸, rules.json direction-per-scene + looks 관문",
+   "applied_at": "2026-11-18 07:17 KST"
   }
  ],
  "process_changes": [
@@ -750,5 +807,5 @@
    ]
   }
  },
- "looks_note": "2026-11-18 관리자: 3D 카메라 무빙이 전달력이 가장 강함 — 큰 순간(오천 명·휘장·땅 끝까지·겨자씨·필사본)은 3D로 공간 안에 들어가게, 2D 그림이 3D로 현상되는 전환(첫 영상 「귀환」 청사진 → 3D)을 겨자씨·휘장·필사본에. 새 화풍 3(그림자 인형극 · 목탄 · 코덱스 도면) — \"1-2개 기본, 어울리면 더\". 휘장 장면을 먼저 세로 시험 영상으로."
+ "looks_note": "2026-11-18 관리자: 3D 카메라 무빙이 전달력이 가장 강함 — 큰 순간(오천 명·휘장·땅 끝까지·겨자씨·필사본)은 3D로 공간 안에 들어가게, 2D 그림이 3D로 현상되는 전환(첫 영상 「귀환」 청사진 → 3D)을 겨자씨·휘장·필사본에. 새 화풍 3(그림자 인형극 · 목탄 · 코덱스 도면) — \"1-2개 기본, 어울리면 더\". 휘장 장면을 먼저 세로 시험 영상으로. · 2026-11-18 관리자 \"모든 것은 영화 연출과 기법을 써서 고급지게\" — 장면마다 film_ref(역대 작품상 OPUSCAR 98 등) · camera(cinecode 이름 붙은 움직임: 이름·초·속도·대상) · out(다음 장면으로 넘기는 방식). 큰 기법은 한 번씩: dolly zoom(N24c) · freeze frame(N32b) · speed ramp(휘장) · smash cut(함성 → 산 위 정적)."
 }

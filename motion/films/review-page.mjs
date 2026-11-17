@@ -164,6 +164,9 @@ const sayHtml = `<section id="say"><h2>들리는 대로 <small>목소리로 읽�
   const ls = p.lines.filter(l => l.kind !== 'label' && l.voice !== null).sort((a, b) => a.at - b.at);
   return `<article class="sy" id="say-${p.n}" style="--pc: var(--p${p.n})"><header><span class="no">${p.n}부 · ${tc(p.start)}–${tc(p.end)}${p.feel ? ` · ${esc(p.feel)}` : ''}</span><h3>${esc(p.name || '')}</h3></header>${p.story ? `<p class="see"><b>화면</b> ${esc(p.story)}</p>` : ''}${ls.map(l => l.kind === 'quote' ? `<blockquote>${lineHtml(l, true)}<cite>${esc(l.cite)}</cite></blockquote>` : `<p class="n">${lineHtml(l, true)}</p>`).join('')}${p.style ? `<p class="style">화풍: ${esc(p.style)}${p.why ? `<br>고른 까닭: ${esc(p.why)}` : ''}${p.src ? `<br><small>출처: ${esc(p.src)}</small>` : ''}</p>` : ''}</article>`;
 }).join('\n')}</div></section>`;
+// 3) direction per scene (review.json looks[]: convey · shot · look · film_ref · camera · out) — 관리자 2026-11-18 "모든 것은 영화 연출과 기법을 써서 고급지게"
+const looks = (RV.looks || []).filter(l => l.camera || l.film_ref);
+const dirHtml = looks.length ? `<section id="direction"><h2>장면별 연출 <small>전할 것 → 구성·빛 → 화풍 · 참고 영화 · 카메라 · 다음 장면으로</small></h2><ol class="dir">${looks.map(l => `<li><span class="no">${esc(l.at)}</span><h3>${esc(l.scene.replace(/\s*\([^)]*\)\s*$/, ''))}${l.style_new ? ' <em>새 화풍</em>' : ''}</h3>${l.convey ? `<p class="cv">${esc(l.convey)}</p>` : ''}<p><b>화풍</b> ${esc(l.look)}</p>${l.shot ? `<p><b>장면</b> ${esc(l.shot)}</p>` : ''}${l.film_ref ? `<p><b>참고</b> ${esc(l.film_ref)}</p>` : ''}${l.camera ? `<p><b>카메라</b> ${esc(l.camera)}</p>` : ''}${l.out ? `<p><b>넘김</b> ${esc(l.out)}</p>` : ''}</li>`).join('')}</ol></section>` : '';
 const html = `<title>${esc(S.title)} 초안</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -180,6 +183,7 @@ ${readFileSync(join(HERE, 'review', 'page.css'), 'utf8')}
 <div class="wide">${boardHtml}${pilotHtml}</div>
 <main class="wrap">
 ${sayHtml}
+${dirHtml}
 ${(RV.decisions || []).length ? `<section id="decide"><h2>정할 것 <small>${RV.decisions.length}가지</small></h2><ol class="decide">${RV.decisions.map(d => `<li><b>${esc(d.q)}</b><span>${d.options.filter(o => !/의견/.test(o)).map(esc).join(' · ')}</span></li>`).join('')}</ol></section>` : ''}
 <section id="script"><h2>자세히 <small>화면 글자 · 그림 설명 · 메모 — 필요할 때만 펼쳐 보세요</small></h2>
 <p class="lede">'해설'은 목소리로 읽고 화면에도 같은 글자가 나옵니다. '성경'은 개역개정 원문 그대로입니다. '화면 글자'는 읽지 않고 화면에만 보입니다.</p>

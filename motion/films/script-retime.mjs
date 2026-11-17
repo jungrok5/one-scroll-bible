@@ -36,5 +36,9 @@ for (let k = 0; k < L.length; k++) {
 }
 const endAt = Math.max(...L.filter(isEnd).map(l => l.at)), dur = Math.ceil(endAt + P.end);
 for (const [id, o, nw, why] of rows) console.log(`${id.padEnd(4)} ${String(o).padStart(6)} → ${String(nw).padStart(6)}  ${why}`);
-console.log(`길이 ${s.dur} → ${dur}초 (끝 화면 ${endAt}초부터 ${P.end}초)${dur >= 180 ? ' — 3분 넘음: 줄이거나 --pace/--gap 조정' : ''}`);
+// The length bar follows the film's format (targets.json formats, review.json format — long = 8–10 min, 「kingdom」 2026-11-18).
+const fmt = (() => { try { return JSON.parse(readFileSync(join(HERE, film, 'review.json'), 'utf8').replace(/^﻿/, '')).format || 'short'; } catch { return 'short'; } })();
+const mins = (() => { try { return JSON.parse(readFileSync(join(HERE, 'pipeline', 'targets.json'), 'utf8')).formats?.[fmt]?.minutes; } catch { return null; } })() || [0, 3];
+const warn = dur > mins[1] * 60 ? ` — ${mins[1]}분 넘음: 줄이거나 --pace/--gap 조정` : dur < mins[0] * 60 ? ` — ${mins[0]}분 안 됨(${fmt})` : '';
+console.log(`길이 ${s.dur} → ${dur}초 (끝 화면 ${endAt}초부터 ${P.end}초, 형식 ${fmt} ${mins[0]}–${mins[1]}분)${warn}`);
 if (write) { s.dur = dur; writeFileSync(F, JSON.stringify(s, null, 1) + '\n'); console.log('저장: ' + F); }

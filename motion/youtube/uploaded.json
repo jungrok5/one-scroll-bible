@@ -1069,7 +1069,7 @@
       "1eM_EMtcXrQ"
      ],
      "at": "2026-11-16",
-     "again": null
+     "again": "2026-11-17"
     },
     "related_video_todo": "Short 1eM_EMtcXrQ → MFH3Hj4V6KA (youtube-intl.json related.v): 2026-11-16 the 관련 동영상 button showed \"영상 인증 검토 중(대개 24시간)\" — set it once the verification passes (studio-related.js __osbRelated(\"en\",\"1eM_EMtcXrQ\",\"From creation to the new heaven and new earth\"))",
     "playlists": "2026-11-16 intl-layout.mjs apply: added to 19 language playlists (position 2) + series playlist",
@@ -1388,7 +1388,7 @@
     "JfRb1wChEbs"
    ],
    "at": "2026-11-16",
-   "again": null,
+   "again": "2026-11-17",
    "note": "가로판은 오전에 지운 자동 ko가 오후에 다시 생겨 또 지움 · c2 자동 en(오인식) 지움 — 공개 다음 날(11/17) 한 번 더"
   }
  }

@@ -1,6 +1,7 @@
 {
  "_about": "17시 큐 — node motion/studio/studio.mjs queue (queue.mjs 머리말)",
- "jobs": [
+ "jobs": [],
+ "done": [
   {
    "n": 1,
    "cmd": "node motion/youtube/yt-api.mjs asr-off Yh_BdiO9qB4 BdLn4e40GH4 Pb7yA35jjUQ KQjmmXH3I5w JfRb1wChEbs",
@@ -8,7 +9,10 @@
    "why": "「그리스도」 한국어 자동 자막 두 번째(규칙 asr-off-all, 관리자 상시 OK 2026-11-16)",
    "ch": "ko",
    "after": "2026-11-17",
-   "added": "2026-11-16"
+   "added": "2026-11-16",
+   "ran": "2026-11-17T08:10:05.654Z",
+   "exit": 0,
+   "tail": "BdLn4e40GH4: nothing to remove (fa,pl,tr,uz,km,it,ko,zh-Hans,ru,en,fr,pt-BR,mn,bn,fil,th,id,sw,hi,es,ja,de,ne,my,ta,vi,zh-Hant,ar) / Pb7yA35jjUQ: nothing to remove (ko) / KQjmmXH3I5w: nothing to remove (ko) / JfRb1wChEbs: nothing to remove (ko)"
   },
   {
    "n": 2,
@@ -17,8 +21,10 @@
    "why": "「그리스도」 국제판 자동 자막 두 번째(같은 규칙)",
    "ch": "gl",
    "after": "2026-11-17",
-   "added": "2026-11-16"
+   "added": "2026-11-16",
+   "ran": "2026-11-17T08:10:07.171Z",
+   "exit": 0,
+   "tail": "Il9eo92zvBM: nothing to remove (hi,km,ru,tr,ne,bn,id,zh-Hant,uz,pl,my,fr,zh-Hans,sw,ar,pt-BR,de,fa,it,ta,vi,es,fil,mn,ja,en,th) / 1eM_EMtcXrQ: nothing to remove (hi,km,vi,sw,fr,ja,fa,ne,pl,th,ta,zh-Hant,en,my,it,id,mn,fil,ru,tr,uz,pt-BR,zh-Hans,bn,ar,es,de)"
   }
- ],
- "done": []
+ ]
 }

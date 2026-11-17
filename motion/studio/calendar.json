@@ -2,28 +2,6 @@
  "_about": "편성표 — node motion/studio/studio.mjs cal (calendar.mjs 머리말). source=uploaded/social은 sync가 다시 만들고, plan만 손으로.",
  "rows": [
   {
-   "at": "2026-11-17T10:00:00.000Z",
-   "ch": "ko",
-   "what": "silence400.clips.a",
-   "title": "구약의 마지막 말씀, 그리고 400년",
-   "id": "Gs5UC6xfE20",
-   "source": "uploaded"
-  },
-  {
-   "at": "2026-11-17T10:00:00.000Z",
-   "ch": "ig",
-   "what": "silence400.clips.a",
-   "title": "구약의 마지막 말씀, 그리고 400년",
-   "source": "uploaded-note"
-  },
-  {
-   "at": "2026-11-17T10:00:00.000Z",
-   "ch": "threads",
-   "what": "silence400.clips.a",
-   "title": "구약의 마지막 말씀, 그리고 400년",
-   "source": "uploaded-note"
-  },
-  {
    "at": "2026-11-18T10:00:00.000Z",
    "ch": "ko",
    "what": "silence400.clips.b",
@@ -140,5 +118,5 @@
    "source": "social"
   }
  ],
- "synced": "2026-11-16T15:37:27.138Z"
+ "synced": "2026-11-17T14:40:13.747Z"
 }

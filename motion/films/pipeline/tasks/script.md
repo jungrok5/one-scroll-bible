@@ -5,7 +5,7 @@
 순서 (이 순서를 바꾸지 않는다):
 1. **뼈대** — `review.json` `story_spine` 여섯 칸(question · stakes · person · reversal · payoff · surprise)을 먼저 문장으로. 아직 줄 id는 비워 둔다.
 2. **끝** — `review.json` `ending`: 영상의 질문이 풀린 뒤 열 두 번째 질문(`question` = 그 줄 id), 그 답이 있는 본문 하나(`passage`, 예 "마태복음 2장"), 그 본문에서 무엇이 풀리는지(`answer`).
-3. **틀** — 부 5~7개, 한 부 20~45초. 0~1초 첫 해설, 10초 안에 물음표 해설, 마지막 25초 안에 열린 질문, 끝 화면 5초 이상(읽을 곳 하나). 인용 비중은 음절의 30~35%(400년 31%, 메시아 34%).
+3. **틀** — (short 형식) 부 5~7개, 한 부 20~45초. **long 형식(review.json format=long, 8–10분)은 장면 4–5개, 장면마다 1:30–2:00, 장면이 쇼츠 한 편이 되게 장면 질문 → 답, 음절 1,500–2,000(targets formats.long), 인용 30–35%. 다시 맞출 때 script-retime --pace 4.5 --gap 1.0 --quote-hold 1.8 --part-gap 6(새 줄에 at이 없으면 파일 순서대로 임시 at부터).** 0~1초 첫 해설, 10초 안에 물음표 해설, 마지막 25초 안에 열린 질문, 끝 화면 5초 이상(읽을 곳 하나). 인용 비중은 음절의 30~35%(400년 31%, 메시아 34%).
 4. **줄** — `script.json` 줄마다 `id`·`part`·`at`·`kind`(narr|quote|label|title)·`text`·**`screen`**(그 줄 동안 화면에 보이는 것 한 문장 = 장면표). 인용은 `usfm`·`cite`·`hl`, 문장은 `node motion/narration/krv.mjs <usfm>`로 가져온다(손으로 치지 않는다). 화면 전용 줄은 `voice: null`.
 5. 뼈대·끝 칸에 줄 id를 채운다.
 6. **세기** — `node motion/films/script-stats.mjs {film}`: 음절(≤ 640), 부별 길이, 질문 위치, 끝 화면.

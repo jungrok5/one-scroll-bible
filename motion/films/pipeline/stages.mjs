@@ -9,6 +9,8 @@ import { join } from 'node:path';
 
 export const ROOT = process.cwd(), FILMS = join(ROOT, 'motion/films'), OUT = join(ROOT, 'motion/out');
 export const T = JSON.parse(readFileSync(join(FILMS, 'pipeline/targets.json'), 'utf8'));
+// the film's format (targets.json formats, review.json "format"; 관리자 2026-11-17 D3: long = 8–10분 가로 + 장면 쇼츠)
+export const FMT = c => ({ ...(T.formats?.short || {}), ...(T.formats?.[c?.review?.format || 'short'] || {}) });
 const J = f => { try { return JSON.parse(readFileSync(f, 'utf8')); } catch { return null; } };
 const mt = f => existsSync(f) ? statSync(f).mtimeMs : 0;
 const node = (args, o = {}) => spawnSync(process.execPath, args, { encoding: 'utf8', maxBuffer: 1 << 26, ...o });
@@ -63,7 +65,8 @@ const G = {
   // the 3-minute budget in spoken syllables (script-stats.mjs; 관리자 2026-11-07 "640음절로 줄임")
   budget: c => { if (!c.s) return fail('script.json이 없다'); const s = stats(c, { noAudio: true }); if (!s) return fail('script-stats 실패');
     // a film may go over only by the maintainer's own decision, written in review.json budget_exception { max, said, at, why } (「그리스도」 2026-11-15: 642)
-    const bx = c.review.budget_exception, max = bx?.max && bx?.said ? bx.max : T.script.syllables_max;
+    const bx = c.review.budget_exception, F = FMT(c), max = bx?.max && bx?.said ? bx.max : (F.syllables_max ?? T.script.syllables_max);
+    if (F.syllables_min && s.syllables < F.syllables_min) return fail(`해설 ${s.syllables}음절 < ${F.syllables_min} — ${c.review.format} 형식(8–10분)에 모자람`);
     if (s.syllables > max) return fail(`해설 ${s.syllables}음절 > ${max}(≈${s.est_sec}초, 「침묵의 400년」 속도) — 목소리 줄을 줄이거나 화면 전용으로${bx ? '' : ' (넘겨야 하면 관리자 결정을 review.json budget_exception에)'}`);
     // draft timing (before the voice exists): a line's syllables over the time until the next voiced line, and the end card's hold
     const why = [], sp = l => (l.kind === 'narr' || l.kind === 'quote') && l.voice !== null ? (l.voice ?? l.text) : null, n = t => (t.match(/[가-힣]/g) || []).length;
@@ -181,7 +184,7 @@ const G = {
     if (j.brightness < T.look.brightness_min) why.push(`밝기 ${j.brightness} < ${T.look.brightness_min}`);
     if (j.dark > T.look.dark_max) why.push(`어두운 화면 ${(j.dark * 100).toFixed(0)}% > ${T.look.dark_max * 100}% — 가장 어두운 곳 ${j.darkest.map(([t]) => t + 's').join(' ')}`);
     if (j.still > T.look.still_max) why.push(`거의 멈춘 화면 ${(j.still * 100).toFixed(0)}% > ${T.look.still_max * 100}% — 가장 멈춘 곳 ${j.stillest.map(([t]) => t + 's').join(' ')}`);
-    if (j.seconds > T.format.portrait_max_s + .5) why.push(`세로판 ${j.seconds}s > ${T.format.portrait_max_s}s`);
+    if (FMT(c).portrait_max_s && j.seconds > FMT(c).portrait_max_s + .5) why.push(`세로판 ${j.seconds}s > ${FMT(c).portrait_max_s}s`);
     // every frame (frame-qa.mjs): black, frozen, pops outside the film's planned effects, held share overall and per scene
     const q = node([join(FILMS, 'frame-qa.mjs'), vid, '--film', c.film, '--json']), F = JSON.parse((q.stdout || '{}').trim().split('\n').pop() || '{}'), TF = T.frames;
     if (F.frames) { if (F.black > TF.black_max) why.push(`검은 프레임 ${F.black}장 — ${F.blackAt.join(' ')}s`); if (F.frozen.length > TF.frozen_max) why.push(`얼어붙은 구간 ${F.frozen.map(([a, b]) => a + '–' + b + 's').join(' ')}`);
@@ -259,7 +262,8 @@ const G = {
         for (const d of c.cues.ducks || []) if (d.from >= M[i].at - 1 && d.from <= M[i].at + 1) why.push(`음악 이음매 ${M[i].at}초에 숨 멈춤(ducks) — 이음매가 컷으로 들린다`); } }
     // the length can change in the sound stage too (a longer take moves the end card): 「그리스도」 2026-11-15 went to 3:03 and only the
     // picture gate knew (관리자 #47 "3분 넘으면 안 되잖아") — check it here as well
-    { const P = J(join(sd, 'place.json')), d = Math.max(P?.dur || 0, c.cues.dur || 0, c.s?.dur || 0); if (d > T.format.portrait_max_s + .5) why.push(`길이 ${d}s > ${T.format.portrait_max_s}s(쇼츠 3:00) — 끝을 줄인다`); }
+    { const P = J(join(sd, 'place.json')), d = Math.max(P?.dur || 0, c.cues.dur || 0, c.s?.dur || 0); if (FMT(c).portrait_max_s && d > FMT(c).portrait_max_s + .5) why.push(`길이 ${d}s > ${FMT(c).portrait_max_s}s(쇼츠 3:00) — 끝을 줄인다`);
+      if (FMT(c).minutes && d && (d < FMT(c).minutes[0] * 60 - 30 || d > FMT(c).minutes[1] * 60 + 30)) why.push(`길이 ${d}s — ${FMT(c).minutes.join('–')}분 형식`); }
     if ((c.cues.ducks || []).length < T.sound.ducks_min) why.push(`숨 멈춤(ducks) ${(c.cues.ducks || []).length}개 < ${T.sound.ducks_min}`);
     // the score's shape (관리자 2026-11-15 「그리스도」 #48 끝 화면 앞에서 음악이 꺼짐 · #49 "단조로워 — 기승전결·긴장감·전율·고조"): music-arc.mjs on the music alone
     { const cardAt = Math.max(...c.lines.map(l => l.at ?? 0));

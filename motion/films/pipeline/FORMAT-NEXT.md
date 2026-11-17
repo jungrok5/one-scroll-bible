@@ -1,4 +1,10 @@
-# 다음 영상 형식 — 시작하기 전에 관리자와 다시 정할 것 (2026-11-16, 결정 보류)
+# 다음 영상 형식 — 결정됨 2026-11-17: 8~10분 가로 + 장면 쇼츠(관리자, 결정함 D3) · 첫 적용 「kingdom」
+
+> 영상마다 review.json `format`(short = 3분 가로·세로, long = 8–10분 가로 + 장면 쇼츠)으로 고른다 — 값은 targets.json `formats`, 단계 검사는 stages.mjs `FMT(c)`.
+> 고친 곳(2026-11-17): targets.json formats · stages.mjs budget(음절 1,500–2,000)·세로 길이 검사(long은 건너뜀)·소리 길이(8–10분) · tasks/topic.md 보류 줄 삭제.
+> 남은 곳(그 단계에 이를 때 고친다): rules portrait-first(long은 가로 먼저) · loop-clips/clips-plan-cadence(장면 쇼츠) · tasks picture/clips/publish · README 2절 · 메모리.
+
+(아래는 결정 전 기록)
 
 관리자 2026-11-16: "원래는 3분 가로세로만 딱 만들라고 했지. 그런데 세로 3분을 또 쪼개서 숏츠로 만들고 있으니… 3분이 뭔가 담기에 애매한 시간인 듯해서
 가로 긴 거에 세로는 안 올리고 숏츠로 올리는 첫 영상처럼 해야 되나, 그런데 14분은 기니까 8분? 8분 넘으면 좋은 게 있나?" → "이 내용을 다음 영상 시

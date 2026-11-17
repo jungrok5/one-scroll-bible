@@ -5,7 +5,11 @@
   "brightness_min": 60,
   "dark_max": 0.35,
   "still_max": 0.15,
-  "goal": { "brightness": 78, "dark": 0.12, "still": 0.05 }
+  "goal": {
+   "brightness": 78,
+   "dark": 0.12,
+   "still": 0.05
+  }
  },
  "frames": {
   "_source": "frame-qa.mjs (after mromidev/claude-animated-shorts short_qa.py), 2026-11-04 — first film's Shorts: held 0–51 %, frozen spans 0–2, pops 0–17 (incl. planned effects); 「메시아」 2차: black dip at 137.2 s, end card held 89 %",
@@ -16,7 +20,36 @@
   "scene_held_max": 0.8,
   "first_film": {
    "_source": "frame-qa.mjs (contrast-relative held) over the first film's 21 Korean Shorts (release-narr, one scene each, 23–66 s), 2026-11-04 — p10 / median / p90. A scene below p10 on both p98 and motion is darker-and-slower than anything in the first film: the gate names it, the look review judges it",
-   "luma": [0.071, 0.314, 0.675], "std": [0.074, 0.131, 0.239], "p98": [0.294, 0.737, 0.851], "sat": [0.144, 0.272, 0.457], "motion": [0.56, 1.53, 3.59], "held": [0.01, 0.236, 0.517]
+   "luma": [
+    0.071,
+    0.314,
+    0.675
+   ],
+   "std": [
+    0.074,
+    0.131,
+    0.239
+   ],
+   "p98": [
+    0.294,
+    0.737,
+    0.851
+   ],
+   "sat": [
+    0.144,
+    0.272,
+    0.457
+   ],
+   "motion": [
+    0.56,
+    1.53,
+    3.59
+   ],
+   "held": [
+    0.01,
+    0.236,
+    0.517
+   ]
   }
  },
  "look_review": {
@@ -41,7 +74,7 @@
   "harsh_hf_max": -38,
   "harsh_hf_note": "효과음 하나의 3.5 kHz 위 평균(파일 + db) — 「메시아」 S9 제비 −19.8−13 = −32.8 → 관리자 \"칠판 긁는 소리\"; 첫 영상 효과음은 대개 −40 아래",
   "music_cues_note": "「메시아」 8a: 16큐/3분(5.4/분) → 관리자 \"씬별 단절된 느낌\" · 8b: 4악장(1.3/분) · 2026-11-16 2 → 3: score-arc가 15–25초 짧은 음악 묶음을 요구해 2로는 매 영상 예외가 필요했다(「그리스도」 music_cues_exception) — 피드백 정리 제안, 관리자 \"응 1 2 둘다해줘\"",
-  "peak_max": -1.0,
+  "peak_max": -1,
   "sfx_per_min_min": 8,
   "ducks_min": 0,
   "ducks_note": "제목 앞은 숨 멈춤 대신 음악이 잦아들었다 피어나며 받친다 — 관리자 2026-11-15 「그리스도」 #43·#44 \"숨 참고 배경 소리 줄어들지 않게\"(「침묵의 400년」도 제목 앞 믹스 덕 없음). 같은 날 #48 \"마지막 고백 다음이 이어지는 느낌이 아니라 첫 인트로처럼 숨 참듯 배경음악이 줄어든 뒤 엔딩\" → 마지막 카드 앞 덕도 없앰(end_duck_window_s). 큰 순간 앞의 정적은 음악 파일 자체에 만든다(「그리스도」 CM6: 외침 직전 뚝 끊김)",
@@ -76,7 +109,7 @@
   "len_min": 20,
   "len_max": 60,
   "len_goal": 40,
-  "first_spoken_max": 1.0
+  "first_spoken_max": 1
  },
  "upload": {
   "_source": "ANALYTICS 2026-11-04: shared in KakaoTalk/Telegram — the first line must read in a chat preview",
@@ -89,7 +122,7 @@
   "syllables_max": 640,
   "_pace_source": "관리자 2026-11-07 「메시아」 3차 \"너무 급하게 지나감, 특히 성경구절은 훅훅\" → 4차(조각 사이 0.8초, 끝 1.2–1.5초 머묾). 잰 값: 3차 음절÷(읽는 시간+머묾) 최고 4.64·머묾 최저 0.95초, 4차 최고 4.33·최저 1.29초(「침묵의 400년」은 5.15·0.29초까지 — 그때는 지적 없었지만 기준은 4차). 4차에 대한 관리자 의견이 오면 다시 맞춘다",
   "quote_pace_max": 4.4,
-  "quote_hold_min": 1.0,
+  "quote_hold_min": 1,
   "_review_source": "film-script-review 1번 대상(성경 잘 모르는 크리스천 63세) 부마다 (감동+전율)/2. 「메시아」 3차 원고 3.07·최저 2(2부) — 관리자 11/6 \"감흥·흥미·놀라움이 없다\"는 2차 원고에서. 첫 보정이라 「만나」 뒤 다시 본다. 리뷰를 굳힐 때(관리자 OK)는 review JSON frozen으로 넘어간다",
   "novice_mean_min": 3.2,
   "novice_part_min": 2.5,
@@ -100,15 +133,117 @@
  },
  "intl": {
   "_source": "README 4절 — 해설 트랙은 반응이 확인된 언어부터(ANALYTICS: 국제 채널 스페인어 쇼츠 · 한국어 채널 포르투갈어 쇼츠 868회), 2026-11-01",
-  "voice_langs": ["en", "es", "pt-BR"],
-  "voices": { "ko": "HYALOqtTLlRjxo4uBKeg", "en": "wfDOIda26ysF4KJAAUlG", "es": "eA1KGxXkPw301wzoKzzz", "pt-BR": "bZztR6P62TDbe6sgaZgz" },
+  "voice_langs": [
+   "en",
+   "es",
+   "pt-BR"
+  ],
+  "voices": {
+   "ko": "HYALOqtTLlRjxo4uBKeg",
+   "en": "wfDOIda26ysF4KJAAUlG",
+   "es": "eA1KGxXkPw301wzoKzzz",
+   "pt-BR": "bZztR6P62TDbe6sgaZgz"
+  },
   "voice_model": "eleven_v4",
   "_voices_source": "같은 시리즈 목소리 — 「침묵의 400년」 2026-11-01 prompts.json에서(en 'EJ Calm Conversational Narration'), 「그리스도」 2026-11-15 en도 같은 목소리. 줄당 2테이크(generations_count 기본), 한 언어 한 플로(creative_create_flow). 바꾸려면 관리자 결정"
  },
  "captions": {
   "_source": "관리자 2026-11-01 — fixed 27 + ko",
-  "langs": ["ko", "en", "es", "pt-BR", "de", "fr", "it", "pl", "ru", "tr", "zh-Hans", "zh-Hant", "ja", "ar", "fa", "hi", "bn", "ta", "id", "vi", "th", "tl", "sw", "uz", "ne", "km", "mn", "my"],
-  "groups": { "es-pt-fr-it-de": ["es", "pt-BR", "fr", "it", "de"], "pl-ru-tr-uz-id": ["pl", "ru", "tr", "uz", "id"], "zh-ja-vi-th": ["zh-Hans", "zh-Hant", "ja", "vi", "th"], "ar-fa-hi-bn-ta-ne": ["ar", "fa", "hi", "bn", "ta", "ne"], "tl-sw-km-mn-my": ["tl", "sw", "km", "mn", "my"] },
+  "langs": [
+   "ko",
+   "en",
+   "es",
+   "pt-BR",
+   "de",
+   "fr",
+   "it",
+   "pl",
+   "ru",
+   "tr",
+   "zh-Hans",
+   "zh-Hant",
+   "ja",
+   "ar",
+   "fa",
+   "hi",
+   "bn",
+   "ta",
+   "id",
+   "vi",
+   "th",
+   "tl",
+   "sw",
+   "uz",
+   "ne",
+   "km",
+   "mn",
+   "my"
+  ],
+  "groups": {
+   "es-pt-fr-it-de": [
+    "es",
+    "pt-BR",
+    "fr",
+    "it",
+    "de"
+   ],
+   "pl-ru-tr-uz-id": [
+    "pl",
+    "ru",
+    "tr",
+    "uz",
+    "id"
+   ],
+   "zh-ja-vi-th": [
+    "zh-Hans",
+    "zh-Hant",
+    "ja",
+    "vi",
+    "th"
+   ],
+   "ar-fa-hi-bn-ta-ne": [
+    "ar",
+    "fa",
+    "hi",
+    "bn",
+    "ta",
+    "ne"
+   ],
+   "tl-sw-km-mn-my": [
+    "tl",
+    "sw",
+    "km",
+    "mn",
+    "my"
+   ]
+  },
   "_groups_source": "「그리스도」 2026-11-15: 묶음마다 번역 에이전트 하나(briefs/translate.md)를 동시에, 끝나는 대로 같은 묶음에 원어민 검수 하나(briefs/review-captions.md) — 26개 언어가 약 40분. 묶음 = 문자·성경 판본 관례가 비슷한 언어끼리(우즈베크·러시아 = 시편 70인역 번호)"
+ },
+ "formats": {
+  "_source": "관리자 2026-11-17 결정함 D3 \"8~10분 가로 + 장면 쇼츠\"(FORMAT-NEXT.md 제안). review.json \"format\"이 고른다 — 없으면 short(지금까지의 3분 가로·세로).",
+  "short": {
+   "syllables_max": 640,
+   "portrait_max_s": 180,
+   "main": "v"
+  },
+  "long": {
+   "_source": "8–10분 가로 본편 + 장면 쇼츠 4–5편(첫 영상 방식, 길이만 줄임). 음절은 「침묵의 400년」 속도 3.66음절/초로 8–9분 → 1,750–2,000. 긴 세로판은 올리지 않고 장면마다 30–60초 쇼츠.",
+   "syllables_max": 2000,
+   "syllables_min": 1500,
+   "portrait_max_s": null,
+   "main": "h",
+   "minutes": [
+    8,
+    10
+   ],
+   "scenes": [
+    4,
+    5
+   ],
+   "scene_short_s": [
+    30,
+    60
+   ]
+  }
  }
 }

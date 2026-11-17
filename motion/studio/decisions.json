@@ -45,7 +45,10 @@
    "why": "쇼츠 시청 시간은 수익 기준(일반 동영상 4,000시간)에 안 들어감. 14분 해설판이 2,026시간을 만듦. 자세한 근거 motion/films/pipeline/FORMAT-NEXT.md",
    "blocks": "다음 영상 주제 단계",
    "proceed": false,
-   "status": "open"
+   "status": "answered",
+   "answer": "관리자 2026-11-17: 8~10분 가로 + 장면 쇼츠",
+   "answered": "2026-11-17",
+   "applied": "film kingdom 형식(FORMAT-NEXT.md)"
   },
   {
    "id": "D4",
@@ -62,7 +65,10 @@
    "why": "11/16 분석: 복음의 핵심 쇼츠(18/21·20/21)가 피드를 열고, 인스타 최고 릴스도 같은 주제. 근거 ANALYTICS.md 2026-11-16 · topic.mjs recommend 2026-11-17 관리자: \"예수님의 꿈은? 누구신지·왜 오셨는지·뭐하다 가셨는지? 가장 많이 하신 말? 전달하고 싶었던 것?\" → 네 질문의 답이 한 낱말로 모임: 하나님 나라. 근거: topics.json kingdom(시장 쇼츠 46.3만 회, 사복음서 85번, 「그리스도」 세로 첫날 최다).",
    "blocks": "다음 영상 시작",
    "proceed": false,
-   "status": "open"
+   "status": "answered",
+   "answer": "관리자 2026-11-17: 하나님 나라 (추천) — \"여기서 원고단계하자\"",
+   "answered": "2026-11-17",
+   "applied": "topic kingdom → film kingdom"
   },
   {
    "id": "D5",

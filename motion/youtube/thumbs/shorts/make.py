@@ -6,6 +6,8 @@
 # three centred lines sit inside the middle 3:4 (y 240–1680, Instagram's grid crop) — small white line, the big gold word fitted to the
 # width, small white line. Same file = the Instagram Reels cover. Words: a question the viewer already has, or a reversal — never light
 # or joking (관리자: "저건 너무 가벼운"); facts in the words checked against the verse.
+# The Short must answer its own cover (아내 2026-11-17: "제목을 보고 기대하는 내용이 안 담겨 있다 — 왜 돌아갔는지 영상에 없음"):
+# every item carries "payoff" = the line in that Short that pays the cover off; make.py refuses an item without one.
 # Upload: node motion/youtube/thumbs/shorts/apply.mjs <set> [--dry]  (thumbnails.set, 50 units each; YT_* in the environment).
 import os, sys, json, urllib.request
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
@@ -50,6 +52,8 @@ def cover(src, words):
 for name in sys.argv[1:] or [d for d in sorted(os.listdir(HERE)) if os.path.exists(os.path.join(HERE, d, 'hooks.json'))]:
     D = os.path.join(HERE, name); H = json.load(open(os.path.join(D, 'hooks.json'), encoding='utf-8'))['items']
     os.makedirs(os.path.join(D, 'out'), exist_ok=True); ims = []
+    missing = [k for k in sorted(H) if not H[k].get('payoff')]
+    if missing: sys.exit(f'{name}: no payoff for {missing} — every cover needs the line in that Short that answers it (rule shorts-cover-hook)')
     for k in sorted(H):
         im = cover(os.path.join(D, 'src', k + '.jpg'), H[k]['words']); p = os.path.join(D, 'out', k + '.jpg')
         q = 90

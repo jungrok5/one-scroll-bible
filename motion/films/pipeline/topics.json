@@ -208,6 +208,30 @@
     }
    ],
    "film": "christ"
+  },
+  {
+   "id": "kingdom",
+   "title": "예수님이 가장 많이 하신 말 — 하나님 나라",
+   "refs": "막 1:15 · 눅 4:43 · 마 6:10,33 · 마 13장 · 행 1:3",
+   "connection": "창조 때의 다스림 → 다윗의 영원한 왕위 → 왕이 오셔서 '때가 찼고 하나님의 나라가 가까이 왔다' → 십자가로 여신 나라(막 10:45) → 부활 뒤 40일도 하나님 나라 → 다시 오실 때 완성",
+   "status": "recommended",
+   "evidence": [
+    {
+     "at": "2026-11-17",
+     "fact": "같은 주제 시장: 유튜브 쇼츠 '예수님이 가장 많이 하신 말'(빛과소망) 287일 46.3만 회 · 하루 1,616회 — 검색 '예수님이 가장 많이 하신 말' 1위",
+     "source": "motion/films/analytics/2026-11-17/titles-jesus.json"
+    },
+    {
+     "at": "2026-11-17",
+     "fact": "사복음서(개역개정)에 '천국'+'하나님의 나라' 85번(마 38+4 · 막 12 · 눅 29 · 요 2), 예수님만 쓰신 '진실로 … 너희에게 이르노니' 70번 — 서술 포함 전체 빈도",
+     "source": "motion/films/analytics/2026-11-17/gospel-counts.json"
+    },
+    {
+     "at": "2026-11-17",
+     "fact": "우리 채널: 예수님을 직접 다룬 「그리스도」 세로판 공개 약 20시간에 1,292회 — 이전 쇼츠 첫날 최고(부활 14/21, 1일 15시간 856회)보다 많음",
+     "source": "motion/films/analytics/2026-11-17/shorts-ko-views.json"
+    }
+   ]
   }
  ],
  "recommendations": [
@@ -255,6 +279,15 @@
     "acts"
    ],
    "source": "motion/films/ANALYTICS.md 2026-11-16"
+  },
+  {
+   "at": "2026-11-17",
+   "ids": [
+    "kingdom",
+    "passover-lamb",
+    "bible-transmission"
+   ],
+   "source": "motion/films/ANALYTICS.md 2026-11-17"
   }
  ]
 }

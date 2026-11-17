@@ -93,7 +93,7 @@ function partHtml(p) {
 const round = RV.rounds?.at(-1) || { n: RV.round, date: '', summary: '' };
 const tightN = Object.keys(tight).length;
 const facts = [
-  { b: tc(S.dur), s: '목표 길이(쇼츠·릴스 3분 미만)' },
+  { b: tc(S.dur), s: RV.format === 'long' ? '목표 길이(가로 본편 8–10분 + 장면 쇼츠)' : '목표 길이(쇼츠·릴스 3분 미만)' },   // review.json format (「kingdom」 2026-11-18)
   { b: `${voiced.length}줄 · ${sylTotal}음절`, s: ref ? `목소리 분량 · 「${ref.title}」 ${ref.syl}음절 = ${tc(ref.dur)}` : '목소리 분량' },
   ...(estSec ? [{ b: `약 ${tc(estSec)}`, s: `같은 빠르기로 읽으면(${estSec > S.dur ? '목표보다 김 — 줄일 곳 필요' : '목표 안'})`, c: estSec > S.dur + 2 ? 'warn' : 'ok' }] : []),
   { b: quoteCheck.ok === false ? '다름' : quoteCheck.ok ? '일치' : '—', s: `성경 인용 개역개정 원문 대조 · ${quoteCheck.text}`, c: quoteCheck.ok === false ? 'warn' : quoteCheck.ok ? 'ok' : '' },
@@ -175,7 +175,7 @@ ${readFileSync(join(HERE, 'review', 'page.css'), 'utf8')}
   <span class="eyebrow">새 영상 원고 초안 · ${RV.round}차 · ${esc(round.date)}</span>
   <h1>「${esc(S.title)}」</h1>
   ${RV.logline ? `<p class="logline">${esc(RV.logline)}</p>` : ''}
-  <p>${tc(S.dur)} · ${parts.length}부 · 세로(쇼츠·릴스)와 가로(유튜브) 같은 내용</p>
+  <p>${tc(S.dur)} · ${parts.length}부 · ${RV.format === 'long' ? `가로 본편(유튜브) + 장면마다 세로 쇼츠 ${(RV.clips_plan || []).length || parts.length}편` : '세로(쇼츠·릴스)와 가로(유튜브) 같은 내용'}</p>
 </div></div>
 <div class="wide">${boardHtml}${pilotHtml}</div>
 <main class="wrap">

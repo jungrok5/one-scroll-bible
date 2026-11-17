@@ -120,7 +120,7 @@ if (cmd === 'round') {
   const prevN = r.round || 0, prev = join(D, 'rounds', `script-${prevN}.json`), ch = changedSince(existsSync(prev) ? prev : join(D, 'rounds', 'script-approved-review.json')) || [];
   const n = prevN + 1, answered = (r.feedback_log || []).map((f, i) => [f, i]).filter(([f]) => f.round === prevN || f.round == null && !f.answered_by).map(([, i]) => i);
   for (const i of answered) r.feedback_log[i].answered_by = n;
-  (r.rounds ||= []).push({ n, date: new Date().toISOString().slice(0, 10), summary, changed: ch.filter(x => !x.quiet).map(x => x.id), retimed: ch.filter(x => x.quiet).map(x => x.id), feedback: answered, ...(force ? { forced: force, failing: bad } : {}) });
+  (r.rounds ||= []).push({ n, date: NOW().slice(0, 10), summary, changed: ch.filter(x => !x.quiet).map(x => x.id), retimed: ch.filter(x => x.quiet).map(x => x.id), feedback: answered, ...(force ? { forced: force, failing: bad } : {}) });
   r.round = n; writeR(r); snap(String(n));
   console.log(`${n}차 닫음: 바뀐 줄 ${ch.filter(x => !x.quiet).map(x => x.id).join(' ') || '없음'} · 답한 피드백 ${answered.map(i => '#' + i).join(' ') || '없음'} · rounds/script-${n}.json${force ? ' · 강제: ' + force : ''}`); process.exit(0);
 }

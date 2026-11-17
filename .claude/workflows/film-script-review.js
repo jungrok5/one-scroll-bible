@@ -11,8 +11,9 @@ if (!film || typeof film !== 'string') throw new Error('args.film is required')
 
 const BASE = `영상 「${film}」의 원고를 읽고 보고만 한다(파일을 고치지 않는다).
 읽을 것: motion/films/${film}/script.json(줄마다 id·part·kind·text·cite), motion/films/${film}/review.json의 parts(부 이름·느낌·핵심 줄·이야기)와 logline.
-영상은 세로 쇼츠가 메인(3분 이하)이고, 화면 글자는 성경 인용(개역개정 그대로)과 해설 자막이다.
+영상의 형식은 review.json format을 따른다(없으면 세로 쇼츠 3분 이하, long이면 가로 본편 + 장면마다 쇼츠). 화면 글자는 성경 인용(개역개정 그대로)과 해설 자막이다.
 부(part)마다 감동 0–5, 전율 0–5를 정수로 매기고, 넘기고 싶어지는 순간이 있으면 그 줄 id와 이유를 적는다.
+이해 확인(관리자·아내 2026-11-18 「kingdom」: 초안을 다 보고도 "그래서 하나님 나라가 뭐지?"): 원고만 보고 이 영상이 답하려는 핵심 질문(review.json core_question.q, 없으면 logline에서 네가 뽑은 질문)에 너 자신의 말로 한 문장 답을 써서 summary 맨 앞에 "이해: …"로 둔다. 원고 안에 그 답이 평이한 말로 나오지 않아 답을 못 쓰거나, 상징·옛말·인용으로만 짐작해야 하면 issues에 severity MAJOR, line "core_question"으로 적는다(시청자 셋은 네 인물의 지식으로만 답한다 — 네가 원래 아는 신학으로 빈칸을 채우지 않는다).
 고칠 점은 BLOCKER(내보내면 안 됨) · MAJOR(꼭 고침) · MINOR · NOTE로 나누고, 줄 id와 구체적인 대안 문장을 함께 낸다. 한국어로.`
 
 const REVIEWERS = [

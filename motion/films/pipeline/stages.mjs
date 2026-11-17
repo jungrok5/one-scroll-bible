@@ -97,6 +97,14 @@ const G = {
     if (refs.length > 1) why.push(`끝 화면에 읽을 곳이 ${refs.length}개(${refs.join(', ')}) — 하나만, 나머지는 설명란·고정 댓글`);
     if (/읽어\s*보세요|읽어보세요|관련\s*성경/.test(txt)) why.push('끝 화면이 "읽어 보세요"류 — 뒷이야기가 궁금하게 끝내고 본문 하나만 가리킨다');
     if (!e.answer) why.push('ending.answer(그 본문에서 무엇이 풀리는지) 없음');
+    // core question (관리자·아내 2026-11-18 「kingdom」 "초안을 다 보고도 그래서 하나님 나라가 뭐지"): a film with a format states its
+    // answer in plain words at least twice — once in the first quarter and once in the last quarter (tell → show → tell)
+    if (c.review.format) { const cq = c.review.core_question, dur = c.s.dur || cardAt;
+      if (!cq?.q || !cq?.answer || !cq?.said_at?.length) why.push('review.json core_question = { q: "<시청자의 진짜 질문>", answer: "<평이한 한 문장>", said_at: [<그 답을 말하는 줄 id>…] } 없음');
+      else { const ats = cq.said_at.map(id => c.lines.find(l => l.id === id)).filter(Boolean).map(l => l.at);
+        if (ats.length < cq.said_at.length) why.push(`core_question.said_at 중 script.json에 없는 줄: ${cq.said_at.filter(id => !c.lines.some(l => l.id === id)).join(', ')}`);
+        if (!ats.some(a => a <= dur * 0.25)) why.push('핵심 답이 앞 1/4 안에 평이한 말로 나오지 않는다(core_question.said_at)');
+        if (!ats.some(a => a >= dur * 0.75)) why.push('핵심 답이 뒤 1/4에서 다시 묶이지 않는다(core_question.said_at)'); } }
     return why.length ? { ok: false, why } : pass(); },
   // feedback and rounds are written by film.mjs feedback/applied/round, in one shape (관리자 2026-11-09)
   record: c => { const r = c.review, why = [], FB = r.feedback_log || [], R = r.rounds || [];

@@ -182,7 +182,9 @@ const G = {
       if (mean < T.script.novice_mean_min) why.push(`1번 대상 평균 ${mean.toFixed(2)} < ${T.script.novice_mean_min} — 낮은 부를 고쳐 다시 리뷰(또는 관리자가 굳히기로 하면 frozen)`);
       for (const x of g) if (x.v < T.script.novice_part_min) why.push(`1번 대상 ${x.p}: ${x.v} < ${T.script.novice_part_min}`); }
     else if (!/관리자/.test(R.frozen.by || '')) why.push('리뷰 frozen에 관리자의 말(by)이 없다');
-    const st = stats(c, { noAudio: true }); if (st && R?.syllables != null && Math.abs(st.syllables - R.syllables) > 40) why.push(`리뷰한 원고(${R.syllables}음절)와 지금 원고(${st.syllables}음절)가 크게 다르다 — 다시 리뷰`);
+    // trimmed = lines only deleted after the review on the maintainer's word ({ at, by: "관리자: …", removed: [ids], to: <syllables> }) — 「kingdom」 2026-11-18 끝 질문 두 줄
+    const tr = R?.trimmed, reviewed = tr && /관리자/.test(tr.by || '') && Array.isArray(tr.removed) && !tr.removed.some(id => c.lines.some(l => l.id === id)) ? tr.to : R?.syllables;
+    const st = stats(c, { noAudio: true }); if (st && reviewed != null && Math.abs(st.syllables - reviewed) > 40) why.push(`리뷰한 원고(${reviewed}음절)와 지금 원고(${st.syllables}음절)가 크게 다르다 — 다시 리뷰`);
     return why.length ? { ok: false, why } : pass(); },
   picture: c => {
     const vid = join(OUT, `${c.film}-v-narr.mp4`); if (!existsSync(vid)) return fail(`렌더+소리본 motion/out/${c.film}-v-narr.mp4 없음`);

@@ -4,7 +4,7 @@
  "_about": "A film's state and decisions — every field a gate reads (film.mjs new copies this). Fill by stage: topic → logline·topic_*; script → story_spine·ending·parts·looks·message_check; review → artifact_url; picture → shots_check; clips → clips; site → site_slug. Feedback and rounds only through film.mjs feedback/applied/round.",
  "stage": "picture",
  "round": 7,
- "status": "휘장 장면 확정 — 1묶음(2부) 세로 시안 제작 중",
+ "status": "2부 세로 시안 1차 — 관리자 확인 대기",
  "logline": "예수님이 가장 많이 하신 말은 '하나님 나라' — 하나님이 왕으로 다스리시는 것이다. 사람이 밀어낸 그 왕이 돌아오셔서 세상을 원래대로 되돌리기 시작하셨고, 섬기러 와서 목숨으로 문을 여셨으며, 그 나라는 지금 예수님을 왕으로 모시는 자리에서 시작되어 다시 오실 때 완성된다.",
  "topic_id": "kingdom",
  "topic_evidence": [
@@ -1371,7 +1371,34 @@
    "stills_r2": "motion/out/review/kingdom-veil-stills-r2.jpg",
    "stills_r3": "motion/out/review/kingdom-veil-stills-r3.jpg"
   },
-  "veil_accepted": "2026-11-18 관리자: 고고(3차)"
+  "veil_accepted": "2026-11-18 관리자: 고고(3차)",
+  "part2": {
+   "at": "110.0–237.6",
+   "page": "motion/films/kingdom/sample-part2.html",
+   "modules": [
+    "ink-garden.js",
+    "heal-village.js",
+    "oil-roof-table.js",
+    "kit-oilpaint.js"
+   ],
+   "video": "motion/out/sample-part2-v.mp4",
+   "preview": "motion/out/review/kingdom-part2-pilot-720.mp4",
+   "stills": "motion/out/review/kingdom-part2-stills.jpg",
+   "check": {
+    "brightness": 98,
+    "dark": "0%",
+    "still": "4%",
+    "frame_qa": "검은·흰 화면 0, 깜빡임 0, pops 10은 계획된 컷"
+   },
+   "weak": [
+    "카라바조 유화(지붕·식탁) 인물이 두건 쓴 유령처럼 읽힘 — 다시 그릴 1순위",
+    "3D 인물이 크게 잡히는 S3·S4·S5는 장난감처럼 보임",
+    "S4 화면 설명(손등 반점)과 그림(싸맨 사람 빛 띠) 다름",
+    "L43 라벨이 세로 화면 너비보다 김",
+    "멈춘 화면 4%(목표 ≤1%)"
+   ],
+   "round": 1
+  }
  },
  "picture_plan": [
   {

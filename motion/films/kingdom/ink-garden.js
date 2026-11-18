@@ -32,33 +32,56 @@
   const MAL = [86, 142, 112], AZU = [64, 104, 150], OCH = [186, 132, 70], CIN = [178, 70, 46], GOLD = [222, 168, 72], WIL = [132, 160, 96];
   let W, H, V, PS, PW, PH, FW, FH;   // frame size, plate scale, plate size, field size (plate / 4)
   let paper, comp, cx_, tmp, tmx, mk, mkx, mk2, mkx2, grain, LAY = [], FLOOD, floodF, fallen, fallenC, colourC, linesC, compKey = '';
-  const LIGHT = [540, 800], DROP = [410, 890], MAN0 = [432, 902], MAN1 = [338, 934];
+  const LIGHT = [540, 800], DROP = [410, 890], MAN0 = [432, 902], MAN1 = [300, 940];
   const DEER = [[652, 930, 1], [700, 946, 1]], GRAVE = [640, 1094], DEADTREE = [772, 968];
 
   // ---------------------------------------------------------------- the one table: visual beats from the line times
   function beats(B) {
     const T = {};
+    // round 2 (owner 2026-11-19 "수묵화 부분이 전체적으로 길다"): the first visit ends at N43 (the gold point becomes the village
+    // sun), the second starts at L43/Q44; inside both, short framings with their own slow moves and cut-ins (T.shots)
     T.paint0 = B.C2a + .35;                 // the far ranges bloom in under the chapter title
     T.glow0 = B.N40 + .3; T.glow1 = B.N40 + 3.6;               // the place of light opens
-    T.ring0 = B.Q40 + .25; T.ring1 = B.Q40 + 7.6;               // the grain of light spreads: lines + colour join in order
+    T.ring0 = B.Q40 + .25; T.ring1 = B.Q40 + 7.0;               // the grain of light spreads: lines + colour join in order
     T.man0 = B.Q40 + 1.6;                                        // the man is painted in with the ring
     T.turn = B.N41 + 1.2;                                        // he turns his back on the light (.5 s, on twos)
-    T.walk0 = T.turn + .7; T.walk1 = T.turn + 4.6;
+    T.walk0 = T.turn + .7; T.walk1 = T.walk0 + 3.6;              // he walks away: ~1 step a second, feet planted
     T.drop = B.N42 + .5;                                         // the drop falls (.45 s)
-    T.flood0 = T.drop + .45; T.flood1 = T.flood0 + 6.2;          // the flood spreads (fall.html: 6.2 s)
-    T.push0 = T.flood0; T.push1 = T.flood0 + 2.4;                // push-in on the ink edge
+    T.flood0 = T.drop + .45; T.flood1 = T.flood0 + 5.0;          // the flood spreads (5 s)
     T.crouch = T.flood0 + 1.1;                                   // the man crouches as the ink reaches him
-    T.gold0 = B.N43 + .5;                                        // the gold point shows
-    T.toGold0 = B.N43 + .1; T.toGold1 = B.N43 + 4.6;             // the camera comes to rest on it
-    T.white0 = B.N44 - 1.7; T.white1 = B.N44 + .05;              // the point grows into the village sun
-    // second visit
-    T.back0 = B.N46c;                                            // dissolved in from the table light (page: 0.8 s)
+    T.gold0 = B.N42 + 4.3;                                       // the gold point shows
+    T.white0 = B.N43 - 1.3; T.white1 = B.N43 + .3;               // the point grows into the village sun
+    // second visit (from L43/Q44)
+    T.back0 = B.Q44 - .2;
     T.rec0 = B.Q44 + .5; T.rec1 = T.rec0 + 9;                    // the same flood, backwards
-    T.pull0 = B.Q44 + .9; T.pull1 = T.pull0 + 7.4;               // pull-back reveal of the whole garden
-    T.rise = T.rec0 + 4.6;                                       // the man stands as the ink leaves him
+    T.rise = T.rec1 - .4;                                        // the man stands as the ink leaves him
     T.ring2 = B.N47 + .3; T.ring3 = B.N47 + 8;                   // the grain of light again
     T.return = B.N47 + 3.2;                                      // the man turns back to the light
     T.end = B.C2;
+    // the camera: [a, b, [x, y, zoom] at a, [x, y, zoom] at b] — hard cuts between, every framing moving (≤ 3.8 s each)
+    const n40 = B.N40, q40 = B.Q40, n41 = B.N41, n42 = B.N42, n43 = B.N43, q44 = B.Q44, n47 = B.N47;
+    T.shots = [
+      [B.C2a, n40, [540, 960, 1.0], [540, 850, 1.1]],              // the sheet paints itself (wide)
+      [n40, n40 + 2.7, [540, 830, 1.3], [540, 805, 1.42]],          // the place of light opens
+      [n40 + 2.7, q40, [830, 790, 1.75], [730, 800, 1.82]],         // the crowns lean toward it (pan)
+      [q40, q40 + 2.7, [540, 830, 1.14], [540, 860, 1.04]],         // the grain of light spreads (pull out)
+      [q40 + 2.7, q40 + 5.4, [700, 880, 1.7], [684, 890, 1.82]],    // the deer lift their heads
+      [q40 + 5.4, n41, [800, 470, 1.9], [772, 480, 2.0]],           // the cranes glide in (track)
+      [n41, n41 + 3.4, [432, 878, 2.05], [395, 888, 2.15]],          // the man faces the light, turns
+      [n41 + 3.4, n42, [430, 860, 1.42], [400, 872, 1.5]],          // he walks away from it
+      [n42, n42 + 1.9, [410, 860, 2.1], [412, 872, 2.22]],          // the drop
+      [n42 + 1.9, n42 + 4.1, [450, 880, 1.5], [480, 862, 1.68]],    // the ink edge; he crouches
+      [n42 + 4.1, n42 + 5.8, [640, 940, 1.24], [620, 930, 1.3]],    // the drowned garden: dead tree, grave
+      [n42 + 5.8, n43 + 1, [540, 800, 1.6], [540, 800, 2.1]],       // the gold point — into the sun
+      [q44 - .2, q44 + 2.9, [540, 770, 1.75], [540, 735, 1.58]],    // second visit: the gold point, the ink begins to leave
+      [q44 + 2.9, q44 + 5.3, [560, 600, 1.5], [600, 590, 1.42]],    // colour back on the far ranges
+      [q44 + 5.3, q44 + 7.7, [920, 420, 1.8], [770, 455, 1.9]],     // the cranes come back
+      [q44 + 7.7, n47 + .7, [330, 900, 1.95], [540, 930, 1.0]],     // the drop lifts off, he stands — pull back: the whole garden
+      [n47 + .7, n47 + 3.1, [540, 900, 1.02], [540, 880, 1.08]],    // the grain of light again
+      [n47 + 3.1, n47 + 6.5, [380, 872, 2.05], [400, 866, 2.15]],   // he turns back to the light
+      [n47 + 6.5, n47 + 8.6, [700, 880, 1.7], [688, 885, 1.8]],   // the deer
+      [n47 + 8.6, B.C2 + 1, [540, 900, 1.15], [540, 880, 1.05]],    // the whole sheet
+    ];
     return T;
   }
 
@@ -328,15 +351,24 @@
 
   // ---------------------------------------------------------------- live things (frame units, drawn through the camera)
   // the man (fall.html xieyi figure, male: no hair stroke, short-cropped head); facing f (±1, |f| < 1 = mid-turn), crouch 0..1
-  function man(x, px, py, h, crouch, f, tone = 1, C = INK) {
+  // walk: null (standing) or the walked distance in his own units (100 = his height): feet planted, step L, bob at twice the rate
+  function man(x, px, py, h, crouch, f, tone = 1, C = INK, walk = null) {
     const u = h / 100, P_ = pts => { const p = new Path2D(); pts.forEach((q, i) => i ? p.lineTo(q[0], q[1]) : p.moveTo(q[0], q[1])); p.closePath(); return p; };
     x.save(); x.translate(px, py); x.scale(f * u, u); x.lineCap = 'round';
     if (crouch < .5) {
-      const mass = P_([[0, -84], [6, -80], [9.5, -66], [7.5, -52], [9.5, -38], [8, -22], [6.5, -3], [-5, -2], [-7, -20], [-10, -40], [-10, -52], [-7, -66], [-6, -80]]);
+      // feet: [u forward, lift]; standing = a short stride; walking = the stance foot slides back exactly as the body moves on
+      const L = 30, foot = p => { p = (p % 1 + 1) % 1; if (p < .5) return [L / 2 - L * p / .5, 0]; const k = (p - .5) / .5, kk = k * k * (3 - 2 * k); return [-L / 2 + L * kk, 5 * Math.sin(k * Math.PI)]; };
+      let F = [[4, 0], [-3, 0]], bob = 0, arm = 0;
+      if (walk != null) { const ph = walk / (2 * L); F = [foot(ph), foot(ph + .5)]; bob = -1.6 * (1 - Math.cos(ph * 4 * Math.PI)) / 2; arm = 4 * Math.sin(ph * 2 * Math.PI); }
+      x.translate(0, bob);
+      const uf = Math.max(F[0][0], F[1][0], 0), ub = Math.min(F[0][0], F[1][0], 0);
+      const mass = P_([[0, -84], [6, -80], [9.5, -66], [7.5, -52], [9.5, -38], [8 + uf * .25, -22], [6.5 + uf * .6, -3 - bob], [-5 + ub * .6, -2 - bob], [-7 + ub * .25, -20], [-10, -40], [-10, -52], [-7, -66], [-6, -80]]);
       x.fillStyle = rgb(C, .36 * tone); x.fill(mass);
-      x.strokeStyle = rgb(C, .85 * tone); x.lineWidth = 3.4; x.beginPath(); x.moveTo(-4, -84); x.bezierCurveTo(-10, -66, -11, -50, -8, -40); x.quadraticCurveTo(-6, -20, -5, -2); x.stroke();
-      x.lineWidth = 2.8; x.beginPath(); x.moveTo(2, -79); x.quadraticCurveTo(7, -66, 6, -48); x.stroke();
-      x.strokeStyle = rgb(C, .95 * tone); x.lineWidth = 1.6; x.beginPath(); x.moveTo(5, -30); x.lineTo(7.5, -1); x.moveTo(-3, -30); x.lineTo(-4.5, -1); x.stroke();
+      x.strokeStyle = rgb(C, .85 * tone); x.lineWidth = 3.4; x.beginPath(); x.moveTo(-4, -84); x.bezierCurveTo(-10, -66, -11, -50, -8, -40); x.quadraticCurveTo(-6 + ub * .3, -20, -5 + ub * .6, -2 - bob); x.stroke();
+      x.lineWidth = 2.8; x.beginPath(); x.moveTo(2, -79); x.quadraticCurveTo(7 + arm * .4, -66, 6 + arm, -48); x.stroke();   // the sleeve swings
+      x.strokeStyle = rgb(C, .95 * tone); x.lineWidth = 1.6; x.beginPath();
+      for (const [i, hx] of [[0, 3], [1, -1]]) { const [u, lift] = F[i]; x.moveTo(hx + u * .25, -30); x.quadraticCurveTo(hx + u * .55 + 2, -15 - lift * .5, u + 1, -1 - lift - bob); }   // legs: hips to planted / swinging feet
+      x.stroke();
       x.fillStyle = rgb(C, .95 * tone); x.beginPath(); x.ellipse(2, -92, 6.2, 7.2, .1, 0, 6.283); x.fill();          // a short-cropped head
     } else {
       const mass = P_([[0, -50], [-9, -46], [-15, -35], [-16.5, -18], [-13, -3], [15, -3], [16, -10], [19, -28], [15, -34], [8, -40]]);
@@ -377,22 +409,9 @@
 
   // ---------------------------------------------------------------- camera (frame point at the screen centre, zoom)
   function cam(t) {
-    let c = [540, 960, 1.012 + .03 * eio(clamp((t - T.paint0) / 24))];
-    const drift = 6 * Math.sin(t * .23);
-    c[0] += drift;
-    if (t < T.back0 - 5) {
-      const kp = eio(clamp((t - T.push0) / (T.push1 - T.push0)));   // push-in on the advancing ink edge
-      c = [lerp(c[0], 488, kp), lerp(c[1], 880, kp), lerp(c[2], 1.17, kp)];
-      c = [c[0] + kp * 14 * eio(clamp((t - T.push1) / 5)), c[1], c[2] + .02 * clamp((t - T.push1) / 5)];
-      const kg = eio(clamp((t - T.toGold0) / (T.toGold1 - T.toGold0)));   // come to rest on the gold point
-      c = [lerp(c[0], LIGHT[0], kg), lerp(c[1], LIGHT[1], kg), lerp(c[2], 1.42, kg)];
-      c[2] += .07 * eio(clamp((t - T.toGold1) / (T.white1 - T.toGold1)));
-    } else {
-      // second visit: on the gold point (as we left it), creep, then the pull-back reveal while the ink withdraws
-      const kp = eio(clamp((t - T.pull0) / (T.pull1 - T.pull0)));
-      c = [lerp(LIGHT[0] + 4 * Math.sin(t * .3), 540 + drift, kp), lerp(LIGHT[1], 930, kp), lerp(1.49 - .05 * clamp((t - T.back0) / 6), 1.0, kp)];
-      c[2] += .045 * eio(clamp((t - T.pull1) / 12)); c[1] -= 24 * eio(clamp((t - T.pull1) / 12));
-    }
+    const sh = T.shots.find(([a, b]) => t >= a && t < b) || (t < T.shots[0][0] ? T.shots[0] : T.shots[T.shots.length - 1]);
+    const [a, b, p0, p1] = sh, k = sh === T.shots[0] ? clamp((t - a) / (b - a)) : eio(clamp((t - a) / (b - a)));
+    const c = [lerp(p0[0], p1[0], k) + 4 * Math.sin(t * .37), lerp(p0[1], p1[1], k) + 3 * Math.sin(t * .29), lerp(p0[2], p1[2], k)];
     // keep the sheet filling the frame (no edge ever shows)
     const hw = W / (2 * c[2]), hh = H / (2 * c[2]); c[0] = clamp(c[0], hw, W - hw); c[1] = clamp(c[1], hh, H - hh);
     return c;
@@ -420,13 +439,15 @@
     rings(T.ring0, T.ring1, 1); rings(T.ring2, T.ring3, 1);
     // the man: painted in with the ring; turns, walks away, crouches in the flood; stands again, turns back to the light
     { const tf = Math.floor(t * 12) / 12, rev = clamp((ringR(t, T.ring0, T.ring1) - Math.hypot(MAN0[0] - LIGHT[0], MAN0[1] - LIGHT[1])) / 80);
-      let face = 1, x = MAN0[0], y = MAN0[1], cr = 0;
+      let face = 1, x = MAN0[0], y = MAN0[1], cr = 0, walkD = null;
       const turnK = clamp((tf - T.turn) / .5); face = Math.cos(Math.PI * turnK); if (Math.abs(face) < .3) face = .3 * Math.sign(face || -1);
-      const wk = clamp((tf - T.walk0) / (T.walk1 - T.walk0)); x = lerp(MAN0[0], MAN1[0], eio(wk)); y = lerp(MAN0[1], MAN1[1], eio(wk)) - (wk > 0 && wk < 1 ? Math.abs(Math.sin(wk * Math.PI * 6)) * 3 : 0);
+      // walking: a trapezoid speed profile (eases in and out over 15 %), the feet derived from the distance (no sliding)
+      const wk = clamp((t - T.walk0) / (T.walk1 - T.walk0)), ac = .15, vm = 1 / (1 - ac), dk = wk < ac ? vm * wk * wk / (2 * ac) : wk > 1 - ac ? 1 - vm * (1 - wk) * (1 - wk) / (2 * ac) : vm * (wk - ac / 2);
+      x = lerp(MAN0[0], MAN1[0], dk); y = lerp(MAN0[1], MAN1[1], dk); walkD = wk > 0 && wk < 1 ? dk * Math.hypot(MAN1[0] - MAN0[0], MAN1[1] - MAN0[1]) / 1.28 : null;
       if (tf >= T.crouch) cr = 1;
-      if (t > T.back0 - 5) { cr = tf < T.rise ? 1 : 0; const rk = clamp((tf - T.return) / .5); face = -Math.cos(Math.PI * rk); if (Math.abs(face) < .3) face = .3 * Math.sign(face || 1); x = MAN1[0]; y = MAN1[1]; }
+      if (t > T.back0 - 5) { walkD = null; cr = tf < T.rise ? 1 : 0; const rk = clamp((tf - T.return) / .5); face = -Math.cos(Math.PI * rk); if (Math.abs(face) < .3) face = .3 * Math.sign(face || 1); x = MAN1[0]; y = MAN1[1]; }
       const a = t > T.back0 - 5 ? 1 : rev;
-      if (a > 0) { ctx.save(); ctx.globalCompositeOperation = 'multiply'; man(ctx, x, y, 128, cr, face, a); ctx.restore(); } }
+      if (a > 0) { ctx.save(); ctx.globalCompositeOperation = 'multiply'; man(ctx, x, y, 128, cr, face, a, INK, walkD); ctx.restore(); } }
     // the deer (heads lift toward the light), cranes flying in toward it; both leave when the ink covers them
     { const Rf = Math.max(ringR(t, T.ring0, T.ring1), t > T.back0 - 5 ? 2000 : 0);
       for (const [dx, dy, dir] of DEER) { const rv = clamp((Rf - Math.hypot(dx - LIGHT[0], dy - LIGHT[1])) / 80), cov = floodAt(p, dx, dy - 20, .05), a = rv * (1 - cov);

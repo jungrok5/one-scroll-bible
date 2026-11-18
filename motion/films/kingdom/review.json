@@ -4,7 +4,7 @@
  "_about": "A film's state and decisions — every field a gate reads (film.mjs new copies this). Fill by stage: topic → logline·topic_*; script → story_spine·ending·parts·looks·message_check; review → artifact_url; picture → shots_check; clips → clips; site → site_slug. Feedback and rounds only through film.mjs feedback/applied/round.",
  "stage": "picture",
  "round": 7,
- "status": "2부 세로 시안 1차 — 관리자 확인 대기",
+ "status": "2부 세로 시안 2차 — 실내 장면 3차 작업",
  "logline": "예수님이 가장 많이 하신 말은 '하나님 나라' — 하나님이 왕으로 다스리시는 것이다. 사람이 밀어낸 그 왕이 돌아오셔서 세상을 원래대로 되돌리기 시작하셨고, 섬기러 와서 목숨으로 문을 여셨으며, 그 나라는 지금 예수님을 왕으로 모시는 자리에서 시작되어 다시 오실 때 완성된다.",
  "topic_id": "kingdom",
  "topic_evidence": [
@@ -1268,6 +1268,20 @@
    "round": 7,
    "applied": "휘장 장면 3차로 확정, 1묶음(2부 왕이 돌아오셨다: 수묵 동산·3D 치유·카라바조 식탁) 시안 시작 — sample-part2",
    "applied_at": "2026-11-18 23:30 KST"
+  },
+  {
+   "at": "2026-11-19 00:40 KST",
+   "who": "관리자",
+   "said": "2부 시안 1차: 네 제안대로 해봐(유화 두 장면 3D 명암+유화 질감, 크게 잡힌 인물 컷 물리기). 안 보이던 사람이 보이고 나병환자가 낫고 쭉 나올 때 너무 빠르게 나오는 것 같고, 수묵화 부분이 전체적으로 길다는 느낌",
+   "status": "open",
+   "round": 7
+  },
+  {
+   "at": "2026-11-19 00:45 KST",
+   "who": "관리자",
+   "said": "2부 시안 1차: 캐릭터가 뒤뚱거리며 걷거나 다들 가만히 있거나 한 게 어색해",
+   "status": "open",
+   "round": 7
   }
  ],
  "process_changes": [
@@ -1397,7 +1411,24 @@
     "L43 라벨이 세로 화면 너비보다 김",
     "멈춘 화면 4%(목표 ≤1%)"
    ],
-   "round": 1
+   "round": 2,
+   "r2": {
+    "preview": "motion/out/review/kingdom-part2-pilot2-720.mp4",
+    "check": {
+     "brightness": 92,
+     "dark": "1%",
+     "still": "0%"
+    },
+    "done": [
+     "마을 N43부터, 치유마다 3.5–4초 + 0.6초 디졸브",
+     "수묵 110–142.3 + 215.7–237.6, 컷 3.8초 이하",
+     "걸음: 디딘 발 IK, 좌우 흔들림 없음 · 모두 각자 숨쉬기·물결 반응",
+     "지붕·식탁 3D 명암 + 유화 처리"
+    ],
+    "weak": [
+     "실내 3D 인물이 볼링핀·인형처럼 보임(가까운 프레이밍) — 3차에서 넓게·작은 실루엣으로"
+    ]
+   }
   }
  },
  "picture_plan": [

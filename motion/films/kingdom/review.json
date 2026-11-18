@@ -4,7 +4,7 @@
  "_about": "A film's state and decisions — every field a gate reads (film.mjs new copies this). Fill by stage: topic → logline·topic_*; script → story_spine·ending·parts·looks·message_check; review → artifact_url; picture → shots_check; clips → clips; site → site_slug. Feedback and rounds only through film.mjs feedback/applied/round.",
  "stage": "picture",
  "round": 7,
- "status": "원고 승인(7차, 12:45) — 그림 단계: 휘장 장면 세로 시안 제작 중(sample-veil, 566.8–620.5)",
+ "status": "휘장 장면 세로 시안 1차 보냄 — 관리자 의견 대기",
  "logline": "예수님이 가장 많이 하신 말은 '하나님 나라' — 하나님이 왕으로 다스리시는 것이다. 사람이 밀어낸 그 왕이 돌아오셔서 세상을 원래대로 되돌리기 시작하셨고, 섬기러 와서 목숨으로 문을 여셨으며, 그 나라는 지금 예수님을 왕으로 모시는 자리에서 시작되어 다시 오실 때 완성된다.",
  "topic_id": "kingdom",
  "topic_evidence": [
@@ -1322,5 +1322,15 @@
    "N29d"
   ],
   "why": "관리자·아내 2026-11-18 \"초안을 다 보고도 그래서 하나님 나라가 뭐지\""
+ },
+ "pilot": {
+  "date": "2026-11-18",
+  "note": "휘장 장면 세로 시안 1차(sample-veil.html, 566.8–620.5) — 흐름·시각 확인용. look-check 밝기 97 · 어두운 4% · 멈춤 0%, frame-qa 깨끗. 제가 본 부족한 점: 3D 성전이 밋밋한 블록, 휘장이 카펫처럼 보이고 찢어짐이 천이 아니라 구멍처럼 열림, 지성소가 평평한 빛, 긴 하강 카메라가 0.25/s 규칙을 넘음(약 0.4–0.5/s)",
+  "shots": [],
+  "files": {
+   "video": "motion/out/sample-veil-v.mp4",
+   "stills": "motion/out/review/kingdom-veil-stills.jpg",
+   "sheets": "motion/out/frames/kingdom-veil/"
+  }
  }
 }

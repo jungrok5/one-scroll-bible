@@ -4,7 +4,7 @@
  "_about": "A film's state and decisions — every field a gate reads (film.mjs new copies this). Fill by stage: topic → logline·topic_*; script → story_spine·ending·parts·looks·message_check; review → artifact_url; picture → shots_check; clips → clips; site → site_slug. Feedback and rounds only through film.mjs feedback/applied/round.",
  "stage": "picture",
  "round": 7,
- "status": "휘장 장면 세로 시안 1차 보냄 — 관리자 의견 대기",
+ "status": "휘장 장면 세로 시안 2차 보냄 — 관리자 의견 대기",
  "logline": "예수님이 가장 많이 하신 말은 '하나님 나라' — 하나님이 왕으로 다스리시는 것이다. 사람이 밀어낸 그 왕이 돌아오셔서 세상을 원래대로 되돌리기 시작하셨고, 섬기러 와서 목숨으로 문을 여셨으며, 그 나라는 지금 예수님을 왕으로 모시는 자리에서 시작되어 다시 오실 때 완성된다.",
  "topic_id": "kingdom",
  "topic_evidence": [
@@ -1237,8 +1237,10 @@
    "at": "2026-11-18 10:36 KST",
    "who": "관리자",
    "said": "좋아 2차 시안도 보자 (휘장 시안 1차 — 제안한 고칠 방향대로)",
-   "status": "open",
-   "round": 7
+   "status": "applied",
+   "round": 7,
+   "applied": "휘장 시안 2차: 휘장을 청·자·홍 무거운 직물(세로 주름·결 광택·흐린 무늬)로, 찢어짐을 위에서부터 갈라져 두 자락이 처지며 벌어지고 빛줄기가 쏟아지게, 틈 너머 두 톤 띠 제거, 헤롯식 마름돌·금박 문·등잔 그을음, 지성소 위에서 내리는 빛기둥, 하강 0.6→0.5/s, 자막 띠 진하게 — motion/out/sample-veil-v.mp4 (1차는 -r1)",
+   "applied_at": "2026-11-18 23:13 KST"
   }
  ],
  "process_changes": [
@@ -1332,12 +1334,14 @@
  },
  "pilot": {
   "date": "2026-11-18",
-  "note": "휘장 장면 세로 시안 1차(sample-veil.html, 566.8–620.5) — 흐름·시각 확인용. look-check 밝기 97 · 어두운 4% · 멈춤 0%, frame-qa 깨끗. 제가 본 부족한 점: 3D 성전이 밋밋한 블록, 휘장이 카펫처럼 보이고 찢어짐이 천이 아니라 구멍처럼 열림, 지성소가 평평한 빛, 긴 하강 카메라가 0.25/s 규칙을 넘음(약 0.4–0.5/s)",
+  "note": "휘장 장면 세로 시안 1차(sample-veil.html, 566.8–620.5) — 흐름·시각 확인용. look-check 밝기 97 · 어두운 4% · 멈춤 0%, frame-qa 깨끗. 제가 본 부족한 점: 3D 성전이 밋밋한 블록, 휘장이 카펫처럼 보이고 찢어짐이 천이 아니라 구멍처럼 열림, 지성소가 평평한 빛, 긴 하강 카메라가 0.25/s 규칙을 넘음(약 0.4–0.5/s) · 2차(2026-11-18 밤): 휘장 직물·찢어짐·성전 재질·지성소 빛줄기 개선 — 남은 것: 지성소 안 약 9초가 밝은 크림색 면, 하강 최대 0.5/s, 금박 문 번쩍임(0:34), 밝기 98",
   "shots": [],
   "files": {
    "video": "motion/out/sample-veil-v.mp4",
    "stills": "motion/out/review/kingdom-veil-stills.jpg",
-   "sheets": "motion/out/frames/kingdom-veil/"
+   "sheets": "motion/out/frames/kingdom-veil/",
+   "video_r1": "motion/out/sample-veil-v-r1.mp4",
+   "stills_r2": "motion/out/review/kingdom-veil-stills-r2.jpg"
   }
  }
 }

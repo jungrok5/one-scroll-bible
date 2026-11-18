@@ -30,6 +30,59 @@ export function ik2(S, T, a, b, pole) {
 const q0 = new THREE.Quaternion(), tv = V();
 function boneTo(m, A, B) { tv.copy(B).sub(A); const L = tv.length(); m.position.copy(A).add(B).multiplyScalar(.5); if (L > 1e-6) m.quaternion.copy(q0.setFromUnitVectors(Y, tv.divideScalar(L))); }
 
+// ---------------------------------------------------------------- a robed man (round 3, the rooms): lathe profiles, not cylinders
+// Owner 2026-11-19: close up the primitive figures read as bowling pins / chess pieces / dolls. Proportions after a figure
+// drawing canon: head ≈ 1/7.5 of the height, shoulders about 2.3 heads wide, a hood that drapes over the shoulders with the
+// face set back in its shadow (never a lit featureless face), a mantle falling past the hips, a robe that widens to the hem with
+// folds; seated men bend at hip and knee (thighs forward under the robe, the cloth falling from the knees). Same U structure
+// as man(), so pose()/walk()/idle() drive it unchanged.
+const lathe = (pts, seg = 28, phi0 = 0, phiL = Math.PI * 2, folds = 0, foldK = 0) => {
+  const g = new THREE.LatheGeometry(pts.map(([r, y]) => new THREE.Vector2(r, y)), seg, phi0, phiL);
+  if (folds) { const p = g.attributes.position, y0 = pts[0][1], y1 = pts[pts.length - 1][1];
+    for (let i = 0; i < p.count; i++) { const x = p.getX(i), z = p.getZ(i), y = p.getY(i), a = Math.atan2(z, x), k = foldK * Math.pow(clamp((y1 - y) / (y1 - y0)), 1.4);
+      const f = 1 + k * (Math.sin(a * folds) * .6 + Math.sin(a * folds * 1.7 + 1.3) * .4); p.setX(i, x * f); p.setZ(i, z * f); } }
+  g.computeVertexNormals(); return g; };
+export function robeMan({ h = 1.74, broad = 1, mat, skin, kind = 'stand', cloth, face } = {}) {
+  const s = h / 1.75, b = broad, m = mat, cm = cloth || m, fm = face || skin || m;
+  const g = new THREE.Group(), lower = new THREE.Group(), upper = new THREE.Group(); g.add(lower, upper);
+  const U = { s, kind, upper, lower, hipY: .9 * s, arms: [], legs: [], ph: 0, robe: true };
+  const mesh = (geo, mt, parent) => { const o = new THREE.Mesh(geo, mt); o.castShadow = o.receiveShadow = true; parent.add(o); return o; };
+  U.la = .3 * s; U.lb = .27 * s; U.lt = .45 * s; U.ls = .44 * s; U.ank = .075 * s;
+  if (kind === 'stand') {   // the robe's skirt: widening to the hem, folds deepening toward it (deformed by the legs in pose())
+    const sg = lathe([[.3 * b, .03], [.295 * b, .1], [.27 * b, .35], [.235 * b, .65], [.2 * b, .9], [.19 * b, .99]].map(([r, y]) => [r * s, y * s]), 30, 0, Math.PI * 2, 9, .07);
+    U.skirt = mesh(sg, m, g); U.skirtBase = sg.attributes.position.array.slice();
+    for (let i = 0; i < 2; i++) { const sd = i ? 1 : -1, thigh = mesh(new THREE.CapsuleGeometry(.07 * s, U.lt - .14 * s, 3, 8), m, g), shin = mesh(new THREE.CapsuleGeometry(.05 * s, U.ls - .1 * s, 3, 8), m, g);
+      const foot = mesh(K.roundedBox(.09 * s, .06 * s, .24 * s, .025 * s, 2), m, g); U.legs.push({ sd, thigh, shin, foot }); }
+  } else {   // seated on the floor: hips and thighs forward under the robe, knees up a little, the cloth falling from the knees
+    U.hipY = .16 * s;
+    const seat = mesh(new THREE.SphereGeometry(.2 * s * b, 18, 12), m, lower); seat.scale.set(1.15, .7, 1.05); seat.position.set(0, .14 * s, .02 * s);
+    const lap = mesh(new THREE.CapsuleGeometry(.13 * s, .32 * s, 4, 12), m, lower); lap.rotation.x = Math.PI / 2 - .18; lap.scale.set(1.55 * b, 1, 1); lap.position.set(0, .2 * s, -.24 * s);
+    const fall = lathe([[.3, .0], [.27, .12], [.2, .26]].map(([r, y]) => [r * s * b, y * s]), 20, Math.PI * .6, Math.PI * .8, 6, .06); const fl = mesh(fall, m, lower); fl.position.set(0, 0, -.38 * s); fl.scale.set(1, 1, .6);
+  }
+  upper.position.y = U.hipY;
+  // torso: waist → chest → the shoulders' slope → the neck (shoulders ≈ 2.3 head-widths)
+  const torsoH = .52 * s; U.torsoH = torsoH;
+  mesh(lathe([[.19 * b, 0], [.215 * b, .2], [.235 * b, .4], [.225 * b, .47], [.15 * b, .52], [.07, .55]].map(([r, y]) => [r * s, y * s]), 24), m, upper).scale.z = .8;
+  // the mantle over the shoulders, falling past the hips (folds below); breath lifts it a little (pivot at the shoulder line)
+  U.shoulders = new THREE.Group(); U.shoulders.position.y = torsoH; upper.add(U.shoulders);
+  const mh = kind === 'stand' ? .5 : .42;
+  const mant = mesh(lathe([[.285 * b, -mh], [.28 * b, -mh * .6], [.27 * b, -.2], [.262 * b, -.06], [.2 * b, .0], [.12, .04]].map(([r, y]) => [r * s, y * s]), 30, 0, Math.PI * 2, 7, .06), cm, U.shoulders);
+  mant.scale.z = .85;
+  // a fold of the mantle thrown over the left shoulder and across the chest (breaks the column), a sash at the waist
+  const fold = mesh(new THREE.TorusGeometry(.22 * s * b, .035 * s, 6, 20, Math.PI * 1.1), cm, upper); fold.position.set(0, torsoH * .62, -.02 * s); fold.rotation.set(-.15, 0, .95); fold.scale.set(1, 1.25, .62);
+  const sash = mesh(new THREE.TorusGeometry(.205 * s * b, .022 * s, 5, 24), m, upper); sash.rotation.x = Math.PI / 2; sash.position.y = .02 * s; sash.scale.y = .8;
+  // the head inside a hood: the hood's opening faces forward, the face set back and dark (no lit face anywhere)
+  const neck = new THREE.Group(); neck.position.y = torsoH + .06 * s; neck.rotation.order = 'YXZ'; upper.add(neck); U.neck = neck;
+  const hr = .112 * s, head = mesh(new THREE.SphereGeometry(hr, 16, 12), fm, neck); head.position.set(0, .12 * s, .03 * s); head.scale.set(.86, 1.05, .95);
+  const hood = lathe([[.2, -.03], [.17, .05], [.15, .14], [.145, .2], [.12, .26], [.07, .3], [.0, .315]].map(([r, y]) => [r * s, y * s]), 26, Math.PI + .85, Math.PI * 2 - 1.7);   // opening toward −z (phi = π)
+  mesh(hood, cm, neck).material.side = THREE.DoubleSide;
+  for (const sd of [-1, 1]) {   // sleeves: narrow at the shoulder, wide at the wrist; a small dark hand
+    const up = mesh(new THREE.CylinderGeometry(.062 * s, .068 * s, U.la, 10), m, upper), fo = mesh(new THREE.CylinderGeometry(.085 * s, .06 * s, U.lb, 10, 1, true), m, upper);
+    const hand = mesh(new THREE.CapsuleGeometry(.026 * s, .05 * s, 3, 6), fm, upper); hand.scale.set(1.25, 1, .7);   // a hand, longer than wide
+    U.arms.push({ sd, up, fo, hand, S: V(sd * .2 * s * b, torsoH - .04 * s, 0) }); }
+  g.userData = U; return g;
+}
+
 // ---------------------------------------------------------------- a man
 // kind: 'stand' | 'sit' (cross-legged on the ground) | 'kneel' (on his knees, sitting back or leaning forward)
 export function man({ h = 1.74, broad = 1, mat, skin, kind = 'stand', hood = false, child = false, cloth } = {}) {

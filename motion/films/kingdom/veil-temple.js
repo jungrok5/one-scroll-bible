@@ -39,9 +39,10 @@ const win = (t, a, b, fi, fo) => ss(a, a + fi, t) * (1 - ss(b - fo, b, t));
 // ---------------------------------------------------------------- the one table: visual beats from the line times
 export function beats(B) {
   const T = {};
-  T.turn0 = B.N25e + .55; T.turn1 = T.turn0 + 1.45;          // "숨지시던 그때": the charcoal page turns
-  T.draw0 = B.N25e + .9; T.draw1 = B.N25e + 3.25;            // the pen draws the plan (the red veil line last)
-  T.move0 = B.N25e + 3.05;                                    // the plan stands up: the long move begins (2D → 3D join)
+  // pilot 2: the plan beat is shorter (1.75 s of pen, the page leaves faster) so the descent has ~7 s
+  T.turn0 = B.N25e + .55; T.turn1 = T.turn0 + 1.2;           // "숨지시던 그때": the charcoal page turns
+  T.draw0 = B.N25e + .75; T.draw1 = B.N25e + 2.5;            // the pen draws the plan (the red veil line last)
+  T.move0 = B.N25e + 2.35;                                    // the plan stands up: the long move begins (2D → 3D join)
   T.join0 = T.move0 - .1; T.join1 = T.move0 + .5;
   T.rise0 = T.move0 + .25; T.rise1 = T.move0 + 2.7;           // ink lines rise into walls
   T.dev0 = T.move0 + .9; T.dev1 = T.move0 + 3.6;              // colour develops outward from the sanctuary
@@ -60,6 +61,7 @@ export function beats(B) {
 }
 // time warp for the speed ramp: tau(t) = ∫ rate; rate 0.25 between ramp[1] and ramp[2]
 const RATE_SLOW = .25;
+const GLOWK = 1;   // strength of the light through the torn edges
 const SMOKE = false;   // incense ribbons before the veil (off: they read as a crack)
 function makeTau(T) {
   const [a, b, c, d] = T.ramp, rate = t => 1 - (1 - RATE_SLOW) * ss(a, b, t) * (1 - ss(c, d, t));
@@ -191,7 +193,7 @@ export async function build(W, H) {
     const inv = (sx, sy) => [((sx - pv[0]) / k + pv[0] - PL.cx) / PL.s, ((sy - pv[1]) / k + pv[1] - PL.cy) / PL.s + PL.Zc];
     return { s, map, inv };
   };
-  const planZoom = t => 1 + .05 * sine((t - T.draw0 + .6) / (T.move0 - T.draw0 + .6));
+  const planZoom = t => 1 + .3 * sine((t - T.draw0 + .6) / (T.move0 - T.draw0 + .6));   // the sheet pushes in on the sanctuary while it draws (≤ 0.12/s): the 3D descent then starts lower
   const burn = (() => { const c = mkC(W, H), g = c.getContext('2d'), gr = g.createRadialGradient(W / 2, H * .42, Math.min(W, H) * .3, W / 2, H * .45, Math.max(W, H) * .75);
     gr.addColorStop(0, 'rgba(90,60,30,0)'); gr.addColorStop(1, 'rgba(90,60,30,.42)'); g.fillStyle = gr; g.fillRect(0, 0, W, H); return c; })();
   function codex(ctx, t) {
@@ -241,14 +243,60 @@ export async function build(W, H) {
     const pk = m.customProgramCacheKey.bind(m); m.customProgramCacheKey = () => pk() + '|dev-' + key;
     return m;
   };
-  // materials
+  // Herodian ashlar (pilot 2 — "not a grey block-out"): long blocks in courses, each with its drafted margin and a raised boss,
+  // a warm/cool tone per block, broad patches of weathering, rain streaks down the faces, grime at the foot, a lit upper arris
+  const ashlar = ({ color, course, block, key, rough = .86 }) => {
+    const m = new THREE.MeshStandardMaterial({ color, roughness: rough }), U = { aCourse: { value: course }, aBlock: { value: block } };
+    m.onBeforeCompile = sh => { Object.assign(sh.uniforms, U);
+      sh.vertexShader = sh.vertexShader.replace('#include <common>', '#include <common>\nvarying vec3 vAP; varying vec3 vAN;')
+        .replace('#include <project_vertex>', '#include <project_vertex>\nvAP = (modelMatrix * vec4(transformed, 1.)).xyz; vAN = normalize(mat3(modelMatrix) * objectNormal);');
+      sh.fragmentShader = sh.fragmentShader.replace('#include <common>', `#include <common>
+        varying vec3 vAP; varying vec3 vAN; uniform float aCourse, aBlock;
+        float ah(vec2 p){ vec3 p3 = fract(vec3(p.xyx) * .1031); p3 += dot(p3, p3.yzx + 33.33); return fract((p3.x + p3.y) * p3.z); }
+        float an(vec2 p){ vec2 i = floor(p), f = fract(p); vec2 u = f * f * (3. - 2. * f); return mix(mix(ah(i), ah(i + vec2(1, 0)), u.x), mix(ah(i + vec2(0, 1)), ah(i + vec2(1, 1)), u.x), u.y); }`)
+        .replace('#include <map_fragment>', `#include <map_fragment>
+        { vec3 N = normalize(vAN), P = vAP; vec2 q; float vert = 1. - smoothstep(.6, .8, abs(N.y));
+          if (vert < .5) q = P.xz; else { vec3 T = normalize(vec3(-N.z, 0., N.x) + 1e-5); q = vec2(dot(P, T), P.y); }
+          float row = floor(q.y / aCourse), L = aBlock * mix(.7, 1.35, ah(vec2(row, 7.)));
+          vec2 b = vec2(q.x / L + ah(vec2(row, 1.)), q.y / aCourse), id = vec2(floor(b.x), row), f = fract(b);
+          float e = min(min(f.x, 1. - f.x) * L, min(f.y, 1. - f.y) * aCourse);
+          float joint = 1. - smoothstep(.012, .035, e), margin = (1. - smoothstep(.1, .14, e)) * (1. - joint);
+          vec3 c = diffuseColor.rgb * mix(.82, 1.1, ah(id + 3.1)) * mix(vec3(1.04, .99, .92), vec3(.95, .97, 1.02), ah(id + 9.7));
+          c *= mix(.86, 1.08, an(P.xz * .045 + P.y * .03 + 4.) * .6 + an(q * .6) * .4);
+          c *= 1. - .5 * joint; c *= 1. - .1 * margin;
+          float streak = an(vec2(q.x * 2.7, q.y * .1 + floor(q.x * 2.7) * .37));
+          c *= mix(1., .76, smoothstep(.58, .88, streak) * vert);
+          c *= 1. + vert * (.12 * (1. - smoothstep(0., .1, (1. - f.y) * aCourse)) - .14 * (1. - smoothstep(0., .1, f.y * aCourse)));
+          c *= mix(.7, 1., smoothstep(0., 5., P.y));
+          diffuseColor.rgb = c; }`); };
+    m.customProgramCacheKey = () => 'ashlar-' + key;
+    return m;
+  };
+  // the environment the metals reflect: dark slate cloud above, the amber band low, a few warm glows (gold glints, not chrome)
+  { const es = new THREE.Scene(), em = new THREE.ShaderMaterial({ side: THREE.BackSide, depthWrite: false,
+      vertexShader: 'varying vec3 vD; void main(){ vD = normalize(position); gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.); }',
+      fragmentShader: `varying vec3 vD; void main(){ float y = vD.y; vec3 c = mix(vec3(.9, .55, .25) * 1.6, vec3(.05, .055, .07), smoothstep(-.02, .5, y));
+        c = mix(c, vec3(.16, .11, .07), smoothstep(0., -.3, y));
+        c += vec3(1.6, .95, .45) * (pow(max(dot(vD, normalize(vec3(-.6, .25, .5))), 0.), 60.) * 3. + pow(max(dot(vD, normalize(vec3(.7, .15, -.4))), 0.), 90.) * 2.);
+        gl_FragColor = vec4(c, 1.); }` });
+    es.add(new THREE.Mesh(new THREE.SphereGeometry(50, 32, 16), em));
+    const pm = new THREE.PMREMGenerator(film.renderer); S.environment = pm.fromScene(es, 0).texture; S.environmentIntensity = 0; pm.dispose(); }
+  // gold leaf on cedar: relief panels, a running vine border (abstract), worn a little at the edges — the doors and their frame
+  const goldTex = (() => { const c = mkC(256, 512), g = c.getContext('2d'), R = rng(44);
+    g.fillStyle = '#b48a3c'; g.fillRect(0, 0, 256, 512);
+    for (let k = 0; k < 600; k++) { g.fillStyle = `rgba(${R() < .5 ? '255,220,140' : '90,60,20'},${.05 + R() * .08})`; g.fillRect(R() * 256, R() * 512, 2 + R() * 8, 1 + R() * 3); }
+    g.strokeStyle = 'rgba(70,45,15,.6)'; g.lineWidth = 5; g.strokeRect(14, 14, 228, 484); g.strokeRect(40, 60, 176, 170); g.strokeRect(40, 270, 176, 200);
+    g.strokeStyle = 'rgba(255,225,150,.5)'; g.lineWidth = 2; g.strokeRect(18, 18, 220, 476);
+    g.strokeStyle = 'rgba(70,45,15,.45)'; g.lineWidth = 3; for (let y = 30; y < 500; y += 22) { g.beginPath(); g.arc(27, y, 7, -1.2, 1.9); g.stroke(); g.beginPath(); g.arc(229, y + 11, 7, 1.9, 5.1); g.stroke(); }
+    const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t; })();
   const M = {
-    stone: devPatch(K.stoneMaterial({ color: '#ddd2b8', course: 1.6, block: 4.6, grime: .22, roughness: .88 }), 'stone'),     // massive Herodian ashlar
-    facade: devPatch(K.stoneMaterial({ color: '#ece2cc', course: 1.4, block: 3.6, grime: .12, roughness: .8 }), 'facade'),
+    stone: devPatch(ashlar({ color: '#ddd1b4', course: 1.2, block: 3.6, key: 'stone' }), 'stone'),     // massive Herodian ashlar
+    facade: devPatch(ashlar({ color: '#ece0c6', course: 1.05, block: 3.0, key: 'facade', rough: .8 }), 'facade'),
     roof: devPatch(K.std('#9c8e74', { roughness: .9 }), 'roof'),
     col: devPatch(K.std('#cfc2a6', { roughness: .85 }), 'col'),
     line: devPatch(new THREE.LineBasicMaterial({ color: gained('#3b2414').multiplyScalar(.8), transparent: true, depthWrite: false }), 'line', 'line'),
-    gold: devPatch(K.std('#a8823c', { roughness: .38, metalness: .55, emissive: col('#3a2408'), emissiveIntensity: .25 }), 'gold'),
+    gold: devPatch(K.std('#c49a48', { roughness: .32, metalness: .85, emissive: col('#3a2408'), emissiveIntensity: .2 }), 'gold'),
+    goldLeaf: devPatch(K.std('#b0a490', { map: goldTex, roughness: .62, metalness: .65, emissive: col('#2a1806'), emissiveIntensity: .2 }), 'goldleaf'),
     goldDark: devPatch(K.std('#6a4e22', { roughness: .5, metalness: .4 }), 'golddark'),
     person: devPatch(K.std('#16110d', { roughness: .95 }), 'person'),
   };
@@ -266,8 +314,10 @@ export async function build(W, H) {
     const im = new THREE.InstancedMesh(g, M.col, COLS.length), mm = new THREE.Matrix4();
     COLS.forEach(([x, z], i) => { mm.makeTranslation(x, 0, z); im.setMatrixAt(i, mm); }); im.castShadow = true; groups.outer.add(im); }
   // facade: a gilded frame round the door, a gilded band under the cornice (they catch the light at the end)
-  { const fr = (w, h, x, y) => { const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, .5), M.gold); m.position.set(x, y, .2); groups.sanct.add(m); };
-    fr(.6, 14.4, -3.25, 7.2); fr(.6, 14.4, 3.25, 7.2); fr(7.1, .6, 0, 14.3); fr(28.2, 1.1, 0, 27.6); }
+  { const fr = (w, h, x, y) => { const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, .5), M.goldLeaf); m.position.set(x, y, .2); groups.sanct.add(m); };
+    fr(.6, 14.4, -3.25, 7.2); fr(.6, 14.4, 3.25, 7.2); fr(7.1, .6, 0, 14.3); fr(28.2, 1.1, 0, 27.6);
+    // the gold-sheathed door leaves, folded open against the porch walls (hinged at the Holy Place's threshold)
+    for (const sd of [-1, 1]) { const d = new THREE.Mesh(new THREE.BoxGeometry(.18, 11.5, 2.9), M.goldLeaf); d.position.set(sd * 2.88, 5.75, -4.55); d.castShadow = true; groups.sanct.add(d); } }
 
   // the ground: one plane — the plan on paper where it is undeveloped, limestone pavement where the colour has come
   const planTex = new THREE.CanvasTexture(planCanvas); planTex.flipY = false; planTex.colorSpace = THREE.SRGBColorSpace; planTex.anisotropy = 8;   // flipY off: canvas row 0 = z0 (flipped, the plan lay mirrored under its own walls)
@@ -317,23 +367,55 @@ export async function build(W, H) {
     { const m = pm(.5, 5); lin(2, 20, -4, 10, -6.02, Math.PI, m); lin(2, 20, 4, 10, -6.02, Math.PI, m); lin(6, 6, 0, 17, -6.02, Math.PI, pm(1.5, 1.5)); }
   }
   // the Most Holy Place: walls that become the light (emissive gold-white) once the veil is torn — no ark, no figure
-  const mhpU = { e: 0 }, mhpMats = [];
+  const mhpU = { e: 0 }, mhpMats = [], shaftU = { uA: { value: 0 } };
   // the light has a shape (not a flat white): brightest behind the axis, high, falling off to the corners and toward the veil
   { const glowTex = (cx, cy, rx, ry, k0) => { const c = mkC(256, 512), g = c.getContext('2d');
       g.fillStyle = '#5a3a14'; g.fillRect(0, 0, 256, 512);
       // gilded panels first (three across — no joint on the axis, which drew a glowing cross), then the light over them:
       // the panels show toward the edges and dissolve in the bright middle
-      g.strokeStyle = 'rgba(30,18,6,.45)'; g.lineWidth = 3; for (let y = 0; y < 512; y += 128) for (let x = 0; x < 256; x += 85.3) g.strokeRect(x + 8, y + 8, 69, 112);
+      const panels = a => { g.strokeStyle = `rgba(110,70,25,${a})`; g.lineWidth = 3; for (let y = 0; y < 512; y += 128) for (let x = 0; x < 256; x += 85.3) g.strokeRect(x + 8, y + 8, 69, 112); };
+      panels(.45);
       g.save(); g.translate(cx * 256, cy * 512); g.scale(rx, ry); const gr = g.createRadialGradient(0, 0, 0, 0, 0, 256);
       gr.addColorStop(0, '#fffaf0'); gr.addColorStop(.3, 'rgba(255,234,192,.97)'); gr.addColorStop(.62, `rgba(240,190,110,${k0})`); gr.addColorStop(1, 'rgba(150,100,40,0)'); g.fillStyle = gr; g.fillRect(-256, -256, 512, 512); g.restore();
+      panels(.16);   // the gilded panels still read faintly inside the glow: a room, not a lit sheet
       const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t; };
     const wall = (w, h, x, y, z, ry, tex) => { const m = new THREE.MeshStandardMaterial({ color: col('#c89c58'), roughness: .5, metalness: .3, emissive: col('#ffffff'), emissiveMap: tex, emissiveIntensity: 0 }); mhpMats.push(m);
       const p = new THREE.Mesh(new THREE.PlaneGeometry(w, h), m); p.position.set(x, y, z); p.rotation.y = ry; inner.add(p); };
-    // (the frame inside sees ~4 × 7 m of the back wall: the glow must fall off within that, or it reads as a flat lit wall)
-    wall(10, 20, 0, 10, -34.98, 0, glowTex(.5, .44, .5, .55, .8));
-    wall(10, 20, -4.97, 10, -30, Math.PI / 2, glowTex(0, .44, .7, .7, .5)); wall(10, 20, 4.97, 10, -30, -Math.PI / 2, glowTex(1, .44, .7, .7, .5));
-    const ceil = new THREE.Mesh(new THREE.PlaneGeometry(10, 10), (() => { const m = new THREE.MeshStandardMaterial({ color: col('#c8a060'), emissive: col('#ffe8c0'), emissiveIntensity: 0 }); mhpMats.push(m); return m; })()); ceil.rotation.x = Math.PI / 2; ceil.position.set(0, 19.97, -30); inner.add(ceil);
+    // pilot 2: the light comes from ABOVE, so every surface is brightest where it meets the ceiling at the back and falls off
+    // smoothly from there — the back wall's top and the ceiling's back edge have the same value (pilot 1 showed a hard
+    // bright/dark seam there through the tear). Seen through the gap it is a deep space with falloff, not a flat rectangle.
+    wall(10, 20, 0, 10, -34.98, 0, glowTex(.5, .02, .62, 1.25, .75));
+    wall(10, 20, -4.97, 10, -30, Math.PI / 2, glowTex(1, .02, .9, 1.1, .45)); wall(10, 20, 4.97, 10, -30, -Math.PI / 2, glowTex(0, .02, .9, 1.1, .45));   // (u = 1 is the back edge on the left wall, u = 0 on the right)
+    const ceilTex = (() => { const c = mkC(256, 256), g = c.getContext('2d'), gr = g.createRadialGradient(128, 256, 0, 128, 256, 300);
+      gr.addColorStop(0, '#fffaf0'); gr.addColorStop(.25, '#ffeac0'); gr.addColorStop(.7, '#9a6a30'); gr.addColorStop(1, '#5a3a14'); g.fillStyle = gr; g.fillRect(0, 0, 256, 256);
+      const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t; })();
+    const ceil = new THREE.Mesh(new THREE.PlaneGeometry(10, 10), (() => { const m = new THREE.MeshStandardMaterial({ color: col('#c8a060'), emissive: col('#ffffff'), emissiveMap: ceilTex, emissiveIntensity: 0 }); mhpMats.push(m); return m; })());
+    ceil.rotation.x = Math.PI / 2; ceil.position.set(0, 19.97, -30); ceil.material.userData.k = .6; inner.add(ceil);   // (the canvas bottom lands on the back edge; a little dimmer than the wall top)
+    // where the light comes from: a soft glow along the top of the back wall, over the wall/ceiling junction, so the
+    // corner is a falloff of light and never a hard line
+    { const m = new THREE.ShaderMaterial({ uniforms: shaftU, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
+        vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.); }',
+        fragmentShader: 'varying vec2 vUv; uniform float uA; void main(){ float y = (vUv.y - .62) / .22, x = (vUv.x - .5) / .5; gl_FragColor = vec4(vec3(1., .9, .7) * 2.2, exp(-y * y * 2.2) * (1. - x * x * .7) * uA * 1.6); }' });
+      const g = new THREE.Mesh(new THREE.PlaneGeometry(10, 9), m); g.position.set(0, 17.2, -34.7); inner.add(g); }
   }
+  // shafts of light falling from above in the Most Holy Place (soft additive cones, brightest high, fading at their silhouettes):
+  // the room reads as a volume flooded with light, not a lit wall. Light only — nothing stands in it.
+  // (shaftU is declared with the Most Holy Place walls: the glow at their top uses it too)
+  { const m = new THREE.ShaderMaterial({ uniforms: shaftU, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, side: THREE.DoubleSide,
+      vertexShader: 'varying vec3 vN, vV; varying float vY; void main(){ vec4 wp = modelMatrix * vec4(position, 1.); vN = normalize(mat3(modelMatrix) * normal); vV = normalize(cameraPosition - wp.xyz); vY = wp.y; gl_Position = projectionMatrix * viewMatrix * wp; }',
+      fragmentShader: `varying vec3 vN, vV; varying float vY; uniform float uA; ${hashGLSL}
+        void main(){ float edge = pow(abs(dot(normalize(vN), normalize(vV))), 1.8), along = smoothstep(0., 5., vY) * (.3 + .7 * clamp(vY / 20., 0., 1.));
+          float n = .65 + .35 * vn(vec2(atan(vN.z, vN.x) * 3., vY * .15));
+          gl_FragColor = vec4(vec3(1., .86, .62) * 1.05, edge * along * n * uA); }` });
+    // (all behind z −31.4: the camera stops at −29.4 — inside an additive cone the whole frame went to flat haze, pilot 2 test)
+    for (const [x, z, r0, r1, tz, tx] of [[0, -32.9, .45, .95, 0, -.04], [-2.4, -33.4, .32, .7, .06, -.03], [2.3, -32.4, .32, .75, -.05, -.05], [-1.1, -32.1, .22, .5, .03, -.05], [1.3, -33.9, .28, .6, -.04, -.03]]) {
+      const c = new THREE.Mesh(new THREE.CylinderGeometry(r0, r1, 20, 28, 1, true), m); c.position.set(x, 10, z); c.rotation.set(tx, 0, tz); c.frustumCulled = false; inner.add(c); } }
+  // soot above the lampstand on the Holy Place's left wall, and the warm stain of the flames on the gold (painterly, small)
+  { const c = mkC(256, 256), g = c.getContext('2d'), gr = g.createRadialGradient(128, 190, 10, 128, 150, 140);
+    gr.addColorStop(0, 'rgba(20,12,6,.55)'); gr.addColorStop(.5, 'rgba(30,18,8,.25)'); gr.addColorStop(1, 'rgba(30,18,8,0)'); g.fillStyle = gr; g.fillRect(0, 0, 256, 256);
+    const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace;
+    const p = new THREE.Mesh(new THREE.PlaneGeometry(4, 5), new THREE.MeshStandardMaterial({ map: t, transparent: true, depthWrite: false, roughness: 1, color: col('#ffffff') }));
+    p.position.set(-4.95, 5.6, -19); p.rotation.y = Math.PI / 2; inner.add(p); }
   // the lampstand (left, by the wall), the table (right), the incense altar on the axis before the veil
   const flames = [], flameLamps = [];
   { const g = new THREE.Group(); g.position.set(-3.1, 0, -19); g.rotation.y = .45; inner.add(g);
@@ -367,49 +449,92 @@ export async function build(W, H) {
     // (pilot 1: left out — even faint, the rising ribbon on the axis read as a crack already in the veil before the tear)
     if (SMOKE) for (const ry of [0, Math.PI / 2]) { const p = new THREE.Mesh(new THREE.PlaneGeometry(3, 11), m); p.position.set(0, 1.2 + 5.5, -22.4); p.rotation.y = ry + .3; inner.add(p); } }
 
-  // ---- the veil: two halves of one heavy woven curtain (blue, purple, scarlet — Ex 26:31, no figures), torn from the top
-  const VEIL = { z: -25, w: 5.25, h: 20.3, ns: 30, nv: 90 };
-  const veilTex = (() => { const c = mkC(512, 1024), g = c.getContext('2d'), R = rng(31);
-    g.fillStyle = '#2a1e46'; g.fillRect(0, 0, 512, 1024);
-    // woven bands (horizontal): deep blue, purple, scarlet, a thin linen thread between; lozenge damask faint in the field
-    const bands = ['#1e2a5a', '#3e1d4c', '#7a1a22', '#1e2a5a', '#3e1d4c'];
-    for (let y = 0; y < 1024; y += 128) bands.forEach((b, i) => { g.fillStyle = b; g.globalAlpha = .55; g.fillRect(0, y + 8 + i * 22, 512, 16); });
-    g.globalAlpha = 1;
-    for (let y = 0; y < 1024; y += 128) { g.fillStyle = 'rgba(220,205,180,.18)'; g.fillRect(0, y + 4, 512, 2); g.fillRect(0, y + 122, 512, 2); }
-    g.strokeStyle = 'rgba(160,60,70,.16)'; g.lineWidth = 2; for (let y = 0; y < 1024; y += 64) for (let x = 0; x < 512; x += 64) { g.beginPath(); g.moveTo(x + 32, y + 6); g.lineTo(x + 58, y + 32); g.lineTo(x + 32, y + 58); g.lineTo(x + 6, y + 32); g.closePath(); g.stroke(); }
-    const im = g.getImageData(0, 0, 512, 1024); for (let i = 0; i < im.data.length; i += 4) { const px = (i >> 2) % 512, py = (i >> 2) / 512 | 0, wv = ((px + py) % 4 < 2 ? 1 : .88) * (.9 + .2 * R());
-      im.data[i] *= wv; im.data[i + 1] *= wv; im.data[i + 2] *= wv; } g.putImageData(im, 0, 0);
+  // ---- the veil (pilot 2): one towering, heavy woven curtain — blue, purple and scarlet yarn and fine linen (Ex 26:31). No
+  // stripes: the colours are woven together, so at a distance the cloth is a deep violet-blue with scarlet in it and a faint
+  // linen sheen; large woven motifs (abstract rosettes on a lattice — the cherubim are NOT drawn as figures) show only where
+  // the lamplight grazes. Large soft vertical folds; a slow breathing sway. Torn from the top: two halves on one rod.
+  const VEIL = { z: -25, w: 5.25, h: 20.3, ns: 44, nv: 110 };
+  const veilTex = (() => { const TW2 = 1024, TH2 = 2048, c = mkC(TW2, TH2), g = c.getContext('2d'), R = rng(31);
+    const im = g.createImageData(TW2, TH2), B = [26, 36, 92], P = [60, 26, 78], Sc = [118, 22, 34];
+    for (let y = 0; y < TH2; y++) for (let x = 0; x < TW2; x++) { const i = (y * TW2 + x) * 4;
+      // yarn colours drift in long soft vertical streaks (warp), scarlet rising through in places; a fine twill underneath
+      const a = vnoise(x * .006, y * .0012), b = vnoise(x * .02 + 9, y * .004), tw = ((x + y) % 4 < 2 ? 1 : .86) * (.92 + .16 * hash2(x, y));
+      const kP = clamp(.35 + .9 * (a - .5)), kS = clamp((b - .62) * 3) * .55;
+      for (let ch = 0; ch < 3; ch++) im.data[i + ch] = (lerp(B[ch], P[ch], kP) * (1 - kS) + Sc[ch] * kS) * tw;
+      im.data[i + 3] = 255; }
+    g.putImageData(im, 0, 0);
+    // the woven motifs: rosettes of six almond shapes (wing-like, abstract) on an offset lattice ≈ 1.6 m, scarlet and linen, faint
+    // (pilot 2b: larger, softer and fainter, each a little off the lattice — at full strength they read as printed wallpaper)
+    g.filter = 'blur(3px)';
+    for (let row = 0, y = 120; y < TH2; y += 230, row++) for (let x = (row % 2) * 115 + 57; x < TW2; x += 230) { const jx = x + (R() - .5) * 30, jy = y + (R() - .5) * 30, rot = R() * .5;
+      for (let k = 0; k < 6; k++) { const an = k / 6 * Math.PI * 2 + rot; g.save(); g.translate(jx + Math.cos(an) * 38, jy + Math.sin(an) * 38); g.rotate(an);
+        g.fillStyle = k % 2 ? 'rgba(150,40,46,.1)' : 'rgba(210,190,150,.065)'; g.beginPath(); g.ellipse(0, 0, 36, 13, 0, 0, 6.283); g.fill(); g.restore(); }
+      g.strokeStyle = 'rgba(210,190,150,.06)'; g.lineWidth = 4; g.beginPath(); g.arc(jx, jy, 86, 0, 6.283); g.stroke(); }
+    g.filter = 'none';
+    // linen threads catching light here and there (a woven sheen, not lines across)
+    for (let k = 0; k < 9000; k++) { const x = R() * TW2, y = R() * TH2; g.fillStyle = `rgba(220,200,170,${.04 + R() * .06})`; g.fillRect(x, y, 1, 3 + R() * 8); }
+    // a narrow woven border down the two outer edges only (vertical — no bands across)
+    for (const x0 of [0, TW2 - 22]) { g.fillStyle = 'rgba(120,24,34,.55)'; g.fillRect(x0, 0, 22, TH2); g.fillStyle = 'rgba(210,180,120,.25)'; g.fillRect(x0 + 8, 0, 4, TH2); }
     const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8; return t; })();
-  const veilM = new THREE.MeshStandardMaterial({ map: veilTex, roughness: .82, metalness: 0, side: THREE.DoubleSide, color: col('#ffffff', 2.1) });   // (albedo lifted: in lamplight the woven colours must read, not a black wall)
-  const jag = y => .16 * noise1(y * 1.4, 5) + .07 * noise1(y * 5.3, 8);   // the tear line (shared by both edges)
+  const veilM = new THREE.MeshPhysicalMaterial({ map: veilTex, roughness: .86, metalness: 0, side: THREE.DoubleSide, color: col('#ffffff', 1.9),
+    sheen: 1, sheenRoughness: .5, sheenColor: col('#b896d0') });   // sheen: the velvet-like grazing highlight of heavy wool
+  // torn: the light behind shines THROUGH the thin frayed edge and rims it (aGlow, per vertex, from the opening) — the halves are
+  // cloth with light in their edges, not black cut-outs
+  const veilGlow = { uGlowCol: { value: col('#ffd9a0', 2.6) } };
+  veilM.onBeforeCompile = sh => { Object.assign(sh.uniforms, veilGlow);
+    sh.vertexShader = sh.vertexShader.replace('#include <common>', '#include <common>\nattribute float aGlow; varying float vGlow;').replace('#include <project_vertex>', '#include <project_vertex>\nvGlow = aGlow;');
+    sh.fragmentShader = sh.fragmentShader.replace('#include <common>', '#include <common>\nvarying float vGlow; uniform vec3 uGlowCol;').replace('#include <emissivemap_fragment>', '#include <emissivemap_fragment>\ntotalEmissiveRadiance += uGlowCol * vGlow * (.55 + .45 * diffuseColor.r);'); };
+  veilM.customProgramCacheKey = () => 'kingdom-veil';
+  // the tear line, ragged at three scales (shared by both torn edges, plus a little fray of their own)
+  const jag = y => .2 * noise1(y * 1.1, 5) + .09 * noise1(y * 4.7, 8) + .035 * noise1(y * 13, 2);
   const halves = [-1, 1].map(side => {
     const g = new THREE.BufferGeometry(), n = (VEIL.ns + 1) * (VEIL.nv + 1), pos = new Float32Array(n * 3), uv = new Float32Array(n * 2), idx = [];
     for (let j = 0; j <= VEIL.nv; j++) for (let i = 0; i <= VEIL.ns; i++) { const k = j * (VEIL.ns + 1) + i, s = i / VEIL.ns; uv[k * 2] = side < 0 ? s * .5 : 1 - s * .5; uv[k * 2 + 1] = j / VEIL.nv; }
     for (let j = 0; j < VEIL.nv; j++) for (let i = 0; i < VEIL.ns; i++) { const a = j * (VEIL.ns + 1) + i, b = a + 1, c = a + VEIL.ns + 1, d = c + 1; if (side < 0) idx.push(a, b, c, b, d, c); else idx.push(a, c, b, b, c, d); }
+    const glow = new Float32Array(n); g.setAttribute('aGlow', new THREE.BufferAttribute(glow, 1));
     g.setAttribute('position', new THREE.BufferAttribute(pos, 3)); g.setAttribute('uv', new THREE.BufferAttribute(uv, 2)); g.setIndex(idx);
-    const m = new THREE.Mesh(g, veilM); m.castShadow = m.receiveShadow = true; m.frustumCulled = false; inner.add(m); return { side, g, pos, m };
+    const m = new THREE.Mesh(g, veilM); m.castShadow = m.receiveShadow = true; m.frustumCulled = false; inner.add(m); return { side, g, pos, glow, m };
   });
   // the rod the veil hangs from
   { const rod = new THREE.Mesh(new THREE.CylinderGeometry(.12, .12, 10.4, 10), M.gold); rod.rotation.z = Math.PI / 2; rod.position.set(0, 20.15, VEIL.z + .3); inner.add(rod); }
-  // where the tear front is (y) and how far the cloth has parted at height y, from the warped time
-  const tearFront = tt => 20.6 - 11 * Math.max(0, tt);               // 11 m/s in warped time
-  const openAt = (y, tt) => { if (tt <= 0) return 0; const yT = tearFront(tt); return ss(0, 5.5, y - yT) * lerp(.55, 1, ss(20.3, 16.5, y)) * (.82 + .18 * ss(0, 3, tt)); };
-  function veilShape(tt, tauNow) {
-    for (const H2 of halves) { const { side, pos } = H2;
-      for (let j = 0; j <= VEIL.nv; j++) { const v = j / VEIL.nv, y = -.25 + v * VEIL.h, o = openAt(y, tt), edge = jag(y);
+  // threads hanging from the torn edges (backlit linen: they glow against the light)
+  const THR = []; for (const sd of [-1, 1]) for (let j = 2; j < VEIL.nv; j += 3) THR.push({ sd, j, L: .15 + .55 * hash2(j * 7 + 3, sd + 5), ph: hash2(j, sd * 9) * 6.28 });
+  const thrPos = new Float32Array(THR.length * 12), thrGeo = new THREE.BufferGeometry(); thrGeo.setAttribute('position', new THREE.BufferAttribute(thrPos, 3));
+  { const l = new THREE.LineSegments(thrGeo, new THREE.LineBasicMaterial({ color: col('#ffdcaa', 2.4), transparent: true, opacity: .85 })); l.frustumCulled = false; inner.add(l); }
+  // the rip: its front runs down from the top at 11 m/s (warped time); at each height the cloth, once freed, falls open under its
+  // own weight — swings out, overshoots a little, settles, and keeps a slow sway. The lower cloth swings further (it hangs from
+  // the rod), the freed edge sags and curls toward us, the gathered cloth folds deeper.
+  const tearFront = tt => 20.6 - 11 * Math.max(0, tt);
+  const sinceRip = (y, tt) => tt - (20.6 - y) / 11;
+  const swing = u => u <= 0 ? 0 : 1 - Math.exp(-1.5 * u) * Math.cos(2.4 * u);
+  const hangK = y => .3 + .7 * Math.pow(clamp((20.3 - y) / 20.3), .85);
+  const openAt = (y, tt) => tt <= 0 ? 0 : clamp(swing(sinceRip(y, tt)) * hangK(y), 0, 1.2);
+  function veilShape(tt, ta) {
+    const yT = tearFront(tt);
+    for (const H2 of halves) { const { side, pos, glow } = H2;
+      for (let j = 0; j <= VEIL.nv; j++) { const v = j / VEIL.nv, y = -.25 + v * VEIL.h, u = tt > 0 ? sinceRip(y, tt) : -1, o = openAt(y, tt), hang = clamp((20.3 - y) / 20.3);
+        const edge = jag(y) + (u > 0 ? .035 * noise1(y * 9, side + 4) : 0), rel = ss(-.15, .35, u);
         for (let i = 0; i <= VEIL.ns; i++) { const s = i / VEIL.ns, k = (j * (VEIL.ns + 1) + i) * 3;
-          let x = lerp(side * VEIL.w, edge - side * .035, s);   // the halves overlap 7 cm while whole: no seam of light before the tear
-          // heavy vertical folds; when torn the inner part is pulled aside (bunching), the torn edge curls toward us and sways
-          const fold = .11 * Math.sin(x * 3.3 + 1.3) + .05 * Math.sin(x * 7.9 + .4);
-          const pull = 2.05 * o * Math.pow(s, 1.6);
-          x += side * pull;
-          let z = VEIL.z + (side < 0 ? .03 : 0) + fold * (1 + 1.6 * o * s) + .34 * o * Math.pow(s, 1.2) * Math.sin(s * 13 + y * .35)
-            + .85 * o * Math.pow(s, 4) + .09 * o * Math.sin(tauNow * 1.1 + y * .22 + side) * s;
-          // the cloth right at the tear front shivers (seeded by the warped time — it slows with the ramp)
-          if (tt > 0) { const yT = tearFront(tt), near = Math.exp(-Math.pow((y - yT) / 1.2, 2)) * Math.pow(s, 3); z += near * .12 * noise1(tauNow * 14 + y, 3); }
-          pos[k] = x; pos[k + 1] = y - .18 * o * Math.pow(s, 3); pos[k + 2] = z; } }
-      H2.g.attributes.position.needsUpdate = true; H2.g.computeVertexNormals(); }
+          let x = lerp(side * VEIL.w, edge - side * .035 * (1 - rel), s);   // whole: the halves overlap 7 cm (no seam of light before the tear)
+          const fold = .3 * Math.sin(x * 1.25 + .6) + .1 * Math.sin(x * 3.1 + 2.1) + .035 * Math.sin(x * 7.3 + .3);   // large soft folds
+          const breath = .05 * Math.sin(ta * .55 + x * .5) * Math.pow(hang, 1.2);                                    // the slow breathing sway
+          const sway = .08 * o * Math.sin(ta * 1.05 + y * .18 + side * 1.3) * s;                                     // still swinging, after
+          x += side * (2.7 * o * Math.pow(s, 1.5) - .3 * o * Math.pow(s, 8)) + sway * .6 + .02 * Math.sin(ta * .4 + y * .1) * hang;
+          let z = VEIL.z + (side < 0 ? .03 : 0) + fold * (1 + 1.3 * o * s) + breath + .9 * o * s * s + .55 * o * Math.pow(s, 6) + sway;
+          let yy = y - .55 * o * Math.pow(s, 2.2);
+          // at the front the cloth is under tension: it bulges toward us and shivers as it gives (slows with the ramp)
+          if (tt > 0) { const near = Math.exp(-Math.pow((y - yT) / 1.1, 2)) * Math.pow(s, 3); z += near * (.16 + .1 * noise1(ta * 14 + y, 3)); }
+          pos[k] = x; pos[k + 1] = yy; pos[k + 2] = z;
+          glow[k / 3] = Math.min(1, o) * (Math.pow(s, 30) * .9 + Math.pow(s, 4) * .03) * GLOWK; } }
+      H2.g.attributes.position.needsUpdate = true; H2.g.attributes.aGlow.needsUpdate = true; H2.g.computeVertexNormals(); }
+    // threads: from each freed edge point, hanging down and a little toward us, swaying
+    THR.forEach((th, n) => { const hv = halves[th.sd < 0 ? 0 : 1].pos, k = (th.j * (VEIL.ns + 1) + VEIL.ns) * 3, x = hv[k], y = hv[k + 1], z = hv[k + 2];
+      const u = tt > 0 ? sinceRip(-.25 + th.j / VEIL.nv * VEIL.h, tt) : -1, L = th.L * ss(0, .6, u), sw = .06 * Math.sin(ta * 1.7 + th.ph);
+      const o = n * 12; if (u <= 0) { thrPos.fill(-50, o, o + 12); return; } thrPos.set([x, y, z, x + sw * .5 + th.sd * .03, y - L * .55, z + .05, x + sw * .5 + th.sd * .03, y - L * .55, z + .05, x + sw, y - L, z + .08], o); });
+    thrGeo.attributes.position.needsUpdate = true;
   }
+  // the inner edge x of each half at height y (for the light between them)
+  const gapAt = y => { const j = clamp(Math.round((y + .25) / VEIL.h * VEIL.nv), 0, VEIL.nv), k = (j * (VEIL.ns + 1) + VEIL.ns) * 3; return [halves[0].pos[k], halves[1].pos[k]]; };
 
   // ---- the light behind the veil: a spot that throws the tear's shape out through the doors; the gap's glow in the haze
   // (43° half-angle: it must not light the Most Holy Place's own walls — that flattened the radiance to a lit wall)
@@ -472,7 +597,8 @@ export async function build(W, H) {
     const h0 = (H / 2) / (pxpm * Math.tan(FOV * Math.PI / 360));
     // round 30° to the right while it stands up, then on the axis from the front: through the inner gate (under its lintel at
     // 13 m), the facade growing frontally with the door centred, through the porch to the veil
-    const P = [V(xc, h0, zc), V(xc + 16, h0 * .7, zc + 46), V(40, 90, 118), V(16, 34, 84), V(2.5, 13, 50), V(0, 10.2, 30), V(0, 8.4, 10), V(0, 7.4, 0), V(0, 7.1, -3.4)];
+    // pilot 2: it ends LOW (3.6 m), looking up at the towering curtain
+    const P = [V(xc, h0, zc), V(xc + 12, h0 * .72, zc + 36), V(30, 70, 98), V(11, 28, 74), V(2, 12.5, 50), V(0, 9.2, 30), V(0, 6.2, 10), V(0, 4.4, 0), V(0, 3.6, -3.4)];
     const curve = new THREE.CatmullRomCurve3(P, false, 'centripetal', .5), N = 1400, pts = [], ld = [];
     for (let i = 0; i <= N; i++) { const p = curve.getPointAt(i / N); pts.push(p); ld.push(Math.log(p.distanceTo(VEILC))); }
     for (let i = 1; i <= N; i++) ld[i] = Math.min(ld[i], ld[i - 1] - 1e-6);   // monotone envelope
@@ -483,11 +609,11 @@ export async function build(W, H) {
     if (x < a) return vmax * x * x / (2 * a); if (x > 1 - d) { const y = 1 - x; return 1 - vmax * y * y / (2 * d); } return vmax * (x - a / 2); };
   const sCam = new THREE.Matrix4();
   function placeMove(t) {
-    const e = trap((t - T.move0) / (T.move1 - T.move0), .24, .42), target = lerp(move.ld[0], move.ld[move.N], e);
+    const e = trap((t - T.move0) / (T.move1 - T.move0), .3, .45), target = lerp(move.ld[0], move.ld[move.N], e);
     let lo = 0, hi = move.N; while (hi - lo > 1) { const mid = (lo + hi) >> 1; if (move.ld[mid] > target) lo = mid; else hi = mid; }
     const f = (move.ld[lo] - target) / Math.max(1e-9, move.ld[lo] - move.ld[hi]), p = move.pts[lo].clone().lerp(move.pts[hi], clamp(f)), s = (lo + f) / move.N;
     // look: straight down at first (the plan), then toward the sanctuary, finally the veil's upper half (so its top is in frame)
-    const w = ss(0, .42, s), down = V(0, -1, 0), tgt = V(0, lerp(4, 13.2, ss(.55, 1, s)), lerp(-14, VEIL.z, ss(.45, 1, s)));
+    const w = ss(0, .42, s), down = V(0, -1, 0), tgt = V(0, lerp(4, 11, ss(.55, 1, s)), lerp(-14, VEIL.z, ss(.45, 1, s)));
     const dir = down.clone().lerp(tgt.clone().sub(p).normalize(), w).normalize();
     const up = V(0, 0, -1).lerp(V(0, 1, 0), ss(.02, .35, s)).normalize();
     return { p, dir, up, s };
@@ -504,24 +630,28 @@ export async function build(W, H) {
     let p, dir, up = V(0, 1, 0), focus;
     if (t < T.move1) { const m = placeMove(t); p = m.p; dir = m.dir; up = m.up; focus = p.distanceTo(VEILC) * .8; }
     else {
-      const pA = V(0, 7.1, -3.4);
+      const pA = V(0, 3.6, -3.4);
       if (t < T.enter0) {   // before the veil: creep in (in warped time — it nearly holds in the slow motion), tilt down with the tear
-        const c = creep(ta - tau(T.move1)); p = pA.clone().add(V(0, -.05 * c, -.32 * c));
-        const yl = lerp(13.2, 9.5, ss(.35, 2.9, tt)); dir = lookDir(p, V(0, yl, VEIL.z)); focus = p.distanceTo(V(0, yl, VEIL.z));
+        // looking up at the curtain; during the tear one slight move: a slow push with a little tilt up (it nearly holds in the ramp)
+        const c = creep(ta - tau(T.move1)); p = pA.clone().add(V(0, .03 * c, -.32 * c));
+        const yl = lerp(11, 11.8, ss(.35, 3.2, tt)); dir = lookDir(p, V(0, yl, VEIL.z)); focus = p.distanceTo(V(0, yl, VEIL.z));
       } else {
-        const c0 = creep(tau(T.enter0) - tau(T.move1)), pB0 = pA.clone().add(V(0, -.05 * c0, -.32 * c0));
+        const c0 = creep(tau(T.enter0) - tau(T.move1)), pB0 = pA.clone().add(V(0, .03 * c0, -.32 * c0));
         // pIn: inside the Most Holy Place, risen a little and looking up into the light; pOut: in the court behind the people at
         // their eye height (they stand at 52–60 % of the frame, above the caption band); pPush: the end of the last push (the
         // people stay ahead of it — none comes near the lens)
         // pOut at eye height (1.9 m): the figures stand against the door's light, heads on the horizon (≈ 54–61 % of the frame)
-        const pIn = V(0, 9.2, -29.4), pOut = V(0, 1.9, 44), pPush = V(0, 2.2, 25.5), lkIn = V(0, 13.5, -35), lkDoor = V(0, 3.2, 0);
+        const pIn = V(0, 5.2, -27.2), pOut = V(0, 1.9, 44), pPush = V(0, 2.2, 25.5), lkIn = V(0, 7.8, -35), lkDoor = V(0, 3.2, 0);
         if (t < T.out0) {   // N25f: one move through the tear into the radiance, rising, the whole line long (no hold: the light fills)
-          const k = trap((t - T.enter0) / (T.out0 - T.enter0), .25, .5); p = pB0.clone().lerp(pIn, k);
-          p.y = lerp(pB0.y, pIn.y, ss(.35, 1, k));
-          const yl0 = lerp(13.2, 9.5, ss(.35, 2.9, tau(T.enter0) - tau(T.tear0)));   // where the tilt had got to (no jump: frame-qa pop 17.93)
+          // pilot 2: timed on the log of the distance to the back wall — it slows as it nears the light, so most of the line is
+          // spent at the threshold with the torn halves framing the room (depth: dark cloth, shafts, floor, the glow beyond)
+          const e = trap((t - T.enter0) / (T.out0 - T.enter0), .3, .4), d0 = pB0.z + 35, d1 = pIn.z + 35, z = -35 + d0 * Math.pow(d1 / d0, e), k = (pB0.z - z) / (pB0.z - pIn.z);
+          p = V(0, lerp(pB0.y, pIn.y, ss(.3, 1, k)), z);
+          const yl0 = lerp(11, 11.8, ss(.35, 3.2, tau(T.enter0) - tau(T.tear0)));   // where the tilt had got to (no jump: frame-qa pop 17.93)
           const lk = V(0, lerp(yl0, lkIn.y, ss(.2, 1, k)), lerp(VEIL.z, lkIn.z, ss(0, .6, k))); dir = lookDir(p, lk); focus = Math.max(3, p.distanceTo(lk));
         } else if (t < T.N26) {   // N25g: drawing back out the way we came, facing in, past the veil and the lamps, out to the people
-          const k = trap((t - T.out0) / (T.N26 - T.out0), .3, .3), z = lerp(pIn.z, pOut.z, k);
+          // pilot 2: timed on the log of the distance from the light (back wall): the picture shrinks at an even rate (peak was 0.6/s)
+          const e = trap((t - T.out0) / (T.N26 - T.out0), .3, .3), d0 = pIn.z + 35, d1 = pOut.z + 35, z = -35 + d0 * Math.pow(d1 / d0, e), k = (z - pIn.z) / (pOut.z - pIn.z);
           // height by place: high in the house, down through the door, above the heads over the crowd, then to their eye height
           const y = z < 0 ? lerp(pIn.y, 6.2, ss(-29.4, 0, z)) : lerp(6.2, pOut.y, ss(21, 44, z));   // high over the crowd, down only behind it
           p = V(0, y, z);
@@ -552,11 +682,12 @@ export async function build(W, H) {
     // ---- the tear and its light
     veilShape(tt, ta);
     const gap = tt > 0 ? clamp(openAt(10, tt)) : 0, burst = ss(0, 1.4, tt), full = ss(.8, 3.2, tt);
-    const inMHP = ss(T.enter0 + 3.5, T.enter1, t) * (1 - ss(T.out0 + .8, T.out0 + 3.2, t));
-    for (const [i, L] of gapLamps.entries()) { const y = [2, 5, 8, 11, 14, 17][i]; L.power = (tt > 0 ? openAt(y, tt) : 0) * 1.6 * (1 - .85 * inMHP); L.pos.x = jag(y); }
+    // pilot 2: "inside the Most Holy Place" follows the camera itself (time-based, it let the exposure rise while still inside: white frames)
+    const inMHP = t > T.enter0 ? ss(-23.5, -27.5, cam.position.z) : 0;
+    for (const [i, L] of gapLamps.entries()) { const y = [2, 5, 8, 11, 14, 17][i]; L.power = (tt > 0 ? openAt(y, tt) : 0) * 1.6 * (1 - .85 * inMHP); const gx = gapAt(y); L.pos.x = (gx[0] + gx[1]) / 2; }
     if (tt > 0 && tt < 3) { const yT = tearFront(tt); sparkLamp.pos.set(jag(yT), Math.max(0, yT), VEIL.z + .3); sparkLamp.power = 2.4 * ss(0, .3, tt) * (1 - ss(2.2, 2.9, tt)); } else sparkLamp.power = 0;
     const mhpE = lerp(0, 1, burst) * (1 + .35 * full) * (1 + .3 * ss(T.enter0 + 1.5, T.out0, t));   // N25f: the room fills with light
-    mhpMats.forEach(m => { m.emissiveIntensity = 2.6 * mhpE * (1 - .62 * inMHP); });
+    mhpMats.forEach(m => { m.emissiveIntensity = 2.6 * mhpE * (1 - .9 * inMHP) * (m.userData.k || 1); });   // inside, the walls step back: the air and the shafts carry the light
     mhpLight.intensity = 28 * mhpE; mhpLamp.power = .8 * mhpE * (1 - .7 * inMHP);
     // the spot throws the tear's light out; its reach grows with the flow (N25g) and settles into the door's shape (N26)
     const flow = ss(T.flow0, T.flow1, t), dark = ss(T.dark0, T.dark1, t);
@@ -574,16 +705,23 @@ export async function build(W, H) {
 
     // ---- light on the world outside (the ninth hour's darkness), the haze, the exposure, the look
     const outsideK = ss(T.dev0, T.dev0 + 1.4, t) * (1 - .9 * dark);   // the light comes with the colour: pale limestone under the dark sky
-    hemi.intensity = 1.0 * outsideK; dirL.intensity = 1.9 * outsideK;
+    hemi.intensity = .8 * outsideK; dirL.intensity = 2.1 * outsideK;
     const inside = ss(T.move1 - 1.4, T.move1 - .2, t) * (1 - ss(T.out0 + 3.8, T.out0 + 6.5, t));
+    S.environmentIntensity = lerp(.0, lerp(.35, .18, inside), outsideK + (1 - outsideK) * inside);   // gold glints; less inside
     const A = film.atmos; A.density = lerp(.0005, lerp(.01, lerp(.026, .012, inMHP), inside), skyK); A.falloff = lerp(.03, .012, inside);
     A.color.copy(col('#4a4238', .5)).lerp(col('#2a2018', .4), inside).multiplyScalar(1 - .75 * dark); A.colorUp.copy(A.color);
     const Lk = film.look;
     // paper (developed 0): neutral, bright, as the 2D sheet. Developed: a dim, warm, contrasty night interior. Burst: eye adapts.
-    Lk.exposure = lerp(1, lerp(1.25, 1.2, inside), ss(T.dev0 + .4, T.dev1, t)) * lerp(1, .62, burst * (1 - .2 * flow)) * lerp(1, .5, inMHP);
+    Lk.exposure = lerp(1, lerp(1.25, 1.2, inside), ss(T.dev0 + .4, T.dev1, t)) * lerp(1, .62, burst * (1 - .2 * flow)) * lerp(1, .32, inMHP);
     Lk.contrast = lerp(1, 1.1, skyK); Lk.saturation = lerp(.95, 1.04, skyK); Lk.vignette = lerp(.22, .42, skyK); Lk.grain = lerp(.025, .045, skyK);
     Lk.shadowTint.copy(col('#ffffff')).lerp(col('#c8c0d8'), skyK); Lk.highTint.copy(col('#ffffff')).lerp(col('#fff0d4'), skyK); Lk.lift.copy(col('#000000')).lerp(col('#0b0907'), skyK);
     film.bloomCfg.strength = lerp(.02, .06, skyK) + .08 * burst - .03 * inMHP;
+    // shafts of light (drawn after, in screen space): they radiate from the source on the gap's axis behind the veil — toward the
+    // camera and down to the floor through the widening tear; inside the Most Holy Place from above
+    shaftU.uA.value = .4 * burst * (1 + 1.6 * inMHP) * (1 - .6 * ss(T.out0 + 2, T.out0 + 5, t));
+    // (no shafts while the camera is in or at the gap: there the whole frame is bright and the zoom blur only washed it out)
+    GR.k = .42 * burst * (1 - .35 * dark) * ss(-23, -16, cam.position.z);
+    GR.src.set(0, lerp(9, 24, inMHP), lerp(-31, -30, inMHP));
     film.render(t);
   }
 
@@ -613,6 +751,23 @@ export async function build(W, H) {
     ctx.globalCompositeOperation = 'lighter'; const gx = garden.P0[0] * garden.c.width, gy = garden.P0[1] * garden.c.height, r = 46, gr = ctx.createRadialGradient(gx, gy, 0, gx, gy, r);
     gr.addColorStop(0, `rgba(255,220,130,${.95 * gk})`); gr.addColorStop(.12, `rgba(250,196,96,${.6 * gk})`); gr.addColorStop(.4, `rgba(240,180,80,${.18 * gk})`); gr.addColorStop(1, 'rgba(240,170,70,0)'); ctx.globalAlpha = 1; ctx.fillStyle = gr; ctx.fillRect(gx - r, gy - r, 2 * r, 2 * r);
     ctx.restore();
+  }
+
+  // ---- volumetric light scattering in screen space (after Mitchell, GPU Gems 3 ch. 13): the frame's bright pixels at quarter
+  //      resolution, zoom-blurred away from the light's screen position — the dark cloth, the threads and the door frame
+  //      cut the shafts by themselves. Deterministic (pure function of the frame).
+  const GR = { k: 0, src: V(0, 9, -31) };
+  const gS = mkC(W >> 2, H >> 2), gsx = gS.getContext('2d', { willReadFrequently: true }), gB = mkC(W >> 2, H >> 2), gbx = gB.getContext('2d');
+  function godRays(ctx, cx, cy, k) {
+    const w = gS.width, h = gS.height; gsx.setTransform(1, 0, 0, 1, 0, 0); gsx.drawImage(ctx.canvas, 0, 0, w, h);
+    const im = gsx.getImageData(0, 0, w, h), d = im.data;
+    for (let i = 0; i < d.length; i += 4) { const v = clamp((.3 * d[i] + .59 * d[i + 1] + .11 * d[i + 2] - 165) / 90); d[i] *= v; d[i + 1] *= v; d[i + 2] *= v; }
+    gsx.putImageData(im, 0, 0);
+    gbx.setTransform(1, 0, 0, 1, 0, 0); gbx.globalAlpha = 1; gbx.globalCompositeOperation = 'source-over'; gbx.fillStyle = '#000'; gbx.fillRect(0, 0, w, h);
+    gbx.globalCompositeOperation = 'lighter'; const sx = cx / 4, sy = cy / 4;
+    for (let i = 0; i < 24; i++) { const sc = 1 + i * .045; gbx.globalAlpha = Math.pow(.9, i) * .15; gbx.setTransform(sc, 0, 0, sc, sx * (1 - sc), sy * (1 - sc)); gbx.drawImage(gS, 0, 0); }
+    gbx.setTransform(1, 0, 0, 1, 0, 0); gbx.globalAlpha = 1; gbx.globalCompositeOperation = 'source-over';
+    ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalCompositeOperation = 'screen'; ctx.globalAlpha = k; ctx.imageSmoothingEnabled = true; ctx.drawImage(gB, 0, 0, W, H); ctx.restore();
   }
 
   // ---- the page turn: the front sheet (charcoal) folds away along a line sweeping from the lower right to the upper left;
@@ -649,6 +804,7 @@ export async function build(W, H) {
     if (t < T.join0) { codex(ctx, t); return; }
     frame3D(t);
     ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.drawImage(film.canvas, 0, 0, W, H); ctx.restore();
+    if (GR.k > .01) { tmp.copy(GR.src).project(cam); if (tmp.z < 1) godRays(ctx, (tmp.x + 1) / 2 * W, (1 - tmp.y) / 2 * H, GR.k); }
     if (t < T.join1) { ctx.save(); ctx.globalAlpha = 1 - ss(T.join0, T.join1, t); codex(ctx, t); ctx.restore(); }
     doorOverlay(ctx, t);
   }

@@ -4,7 +4,7 @@
  "_about": "A film's state and decisions — every field a gate reads (film.mjs new copies this). Fill by stage: topic → logline·topic_*; script → story_spine·ending·parts·looks·message_check; review → artifact_url; picture → shots_check; clips → clips; site → site_slug. Feedback and rounds only through film.mjs feedback/applied/round.",
  "stage": "picture",
  "round": 7,
- "status": "휘장 장면 세로 시안 3차 보냄 — 관리자 의견 대기",
+ "status": "휘장 장면 확정 — 1묶음(2부) 세로 시안 제작 중",
  "logline": "예수님이 가장 많이 하신 말은 '하나님 나라' — 하나님이 왕으로 다스리시는 것이다. 사람이 밀어낸 그 왕이 돌아오셔서 세상을 원래대로 되돌리기 시작하셨고, 섬기러 와서 목숨으로 문을 여셨으며, 그 나라는 지금 예수님을 왕으로 모시는 자리에서 시작되어 다시 오실 때 완성된다.",
  "topic_id": "kingdom",
  "topic_evidence": [
@@ -1259,6 +1259,15 @@
    "round": 7,
    "applied": "하강은 2차 그대로 두고(0.25/s 규칙 예외 — 관리자 확인), 3차는 지성소 문턱·금박 문 번쩍임·밝기만 고침",
    "applied_at": "2026-11-18 23:18 KST"
+  },
+  {
+   "at": "2026-11-18 23:30 KST",
+   "who": "관리자",
+   "said": "고고 (휘장 시안 3차 확정 + 나머지 장면 묶음 순서)",
+   "status": "applied",
+   "round": 7,
+   "applied": "휘장 장면 3차로 확정, 1묶음(2부 왕이 돌아오셨다: 수묵 동산·3D 치유·카라바조 식탁) 시안 시작 — sample-part2",
+   "applied_at": "2026-11-18 23:30 KST"
   }
  ],
  "process_changes": [
@@ -1361,6 +1370,29 @@
    "video_r1": "motion/out/sample-veil-v-r1.mp4",
    "stills_r2": "motion/out/review/kingdom-veil-stills-r2.jpg",
    "stills_r3": "motion/out/review/kingdom-veil-stills-r3.jpg"
+  },
+  "veil_accepted": "2026-11-18 관리자: 고고(3차)"
+ },
+ "picture_plan": [
+  {
+   "batch": 1,
+   "what": "2부 왕이 돌아오셨다(수묵 동산 · 3D 치유 · 카라바조 식탁) 110.0–237.6",
+   "status": "제작 중"
+  },
+  {
+   "batch": 2,
+   "what": "3D 큰 장면: 오천 명 항공 + 혼자 산으로, 땅 끝까지 크레인",
+   "status": "대기"
+  },
+  {
+   "batch": 3,
+   "what": "새 화풍: 그림자 인형극 겨자씨(→3D 나무), 목탄 십자가 장면 전체",
+   "status": "대기"
+  },
+  {
+   "batch": 4,
+   "what": "나머지: 갈릴리 새벽 · 기도 방 · 빌라도 · 아이들 · 목판화 · 빈 무덤 · 필사본 · 끝 화면",
+   "status": "대기"
   }
- }
+ ]
 }

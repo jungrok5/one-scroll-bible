@@ -296,7 +296,8 @@ export async function build(W, H) {
     col: devPatch(K.std('#cfc2a6', { roughness: .85 }), 'col'),
     line: devPatch(new THREE.LineBasicMaterial({ color: gained('#3b2414').multiplyScalar(.8), transparent: true, depthWrite: false }), 'line', 'line'),
     gold: devPatch(K.std('#c49a48', { roughness: .32, metalness: .85, emissive: col('#3a2408'), emissiveIntensity: .2 }), 'gold'),
-    goldLeaf: devPatch(K.std('#b0a490', { map: goldTex, roughness: .62, metalness: .65, emissive: col('#2a1806'), emissiveIntensity: .2 }), 'goldleaf'),
+    // (pilot 3: matte, low-metal gold — the leaves sit in the spot's beam and flashed at the frame edges during the pull-back)
+    goldLeaf: devPatch(K.std('#9a8c74', { map: goldTex, roughness: .82, metalness: .35, envMapIntensity: .4, emissive: col('#2a1806'), emissiveIntensity: .2 }), 'goldleaf'),
     goldDark: devPatch(K.std('#6a4e22', { roughness: .5, metalness: .4 }), 'golddark'),
     person: devPatch(K.std('#16110d', { roughness: .95 }), 'person'),
   };
@@ -360,7 +361,7 @@ export async function build(W, H) {
       g.strokeStyle = 'rgba(200,160,80,.55)'; g.lineWidth = 4; g.strokeRect(34, 34, 188, 444);   // gilded inner bead
       g.strokeStyle = 'rgba(20,12,6,.6)'; g.lineWidth = 2; g.strokeRect(18, 18, 220, 476);
       const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.wrapS = t.wrapT = THREE.RepeatWrapping; return t; })();
-    const pm = (rx, ry) => { const t = panelTex.clone(); t.repeat.set(rx, ry); t.needsUpdate = true; return K.std('#ffffff', { map: t, roughness: .45, metalness: .45 }); };
+    const pm = (rx, ry) => { const t = panelTex.clone(); t.repeat.set(rx, ry); t.needsUpdate = true; return K.std('#ffffff', { map: t, roughness: .68, metalness: .22 }); };   // (pilot 3: less mirror — the spot through the tear flared on them)
     lin(19, 20, -4.98, 10, -15.5, Math.PI / 2, pm(7.6, 4)); lin(19, 20, 4.98, 10, -15.5, -Math.PI / 2, pm(7.6, 4));
     { const c = new THREE.Mesh(new THREE.PlaneGeometry(10, 29), K.std('#2a1c10', { roughness: .8 })); c.rotation.x = Math.PI / 2; c.position.set(0, 19.98, -20.5); inner.add(c); }
     // inside face of the front wall round the door (seen when we look back in from the Most Holy Place: it is lit gold)
@@ -519,7 +520,7 @@ export async function build(W, H) {
           const fold = .3 * Math.sin(x * 1.25 + .6) + .1 * Math.sin(x * 3.1 + 2.1) + .035 * Math.sin(x * 7.3 + .3);   // large soft folds
           const breath = .05 * Math.sin(ta * .55 + x * .5) * Math.pow(hang, 1.2);                                    // the slow breathing sway
           const sway = .08 * o * Math.sin(ta * 1.05 + y * .18 + side * 1.3) * s;                                     // still swinging, after
-          x += side * (2.7 * o * Math.pow(s, 1.5) - .3 * o * Math.pow(s, 8)) + sway * .6 + .02 * Math.sin(ta * .4 + y * .1) * hang;
+          x += side * (1.75 * o * Math.pow(s, 1.5) - .25 * o * Math.pow(s, 8))   /* pilot 3: a narrower opening (was 2.7) so the dark halves frame the threshold view */ + sway * .6 + .02 * Math.sin(ta * .4 + y * .1) * hang;
           let z = VEIL.z + (side < 0 ? .03 : 0) + fold * (1 + 1.3 * o * s) + breath + .9 * o * s * s + .55 * o * Math.pow(s, 6) + sway;
           let yy = y - .55 * o * Math.pow(s, 2.2);
           // at the front the cloth is under tension: it bulges toward us and shivers as it gives (slows with the ramp)
@@ -641,19 +642,26 @@ export async function build(W, H) {
         // their eye height (they stand at 52–60 % of the frame, above the caption band); pPush: the end of the last push (the
         // people stay ahead of it — none comes near the lens)
         // pOut at eye height (1.9 m): the figures stand against the door's light, heads on the horizon (≈ 54–61 % of the frame)
-        const pIn = V(0, 5.2, -27.2), pOut = V(0, 1.9, 44), pPush = V(0, 2.2, 25.5), lkIn = V(0, 7.8, -35), lkDoor = V(0, 3.2, 0);
-        if (t < T.out0) {   // N25f: one move through the tear into the radiance, rising, the whole line long (no hold: the light fills)
-          // pilot 2: timed on the log of the distance to the back wall — it slows as it nears the light, so most of the line is
-          // spent at the threshold with the torn halves framing the room (depth: dark cloth, shafts, floor, the glow beyond)
-          const e = trap((t - T.enter0) / (T.out0 - T.enter0), .3, .4), d0 = pB0.z + 35, d1 = pIn.z + 35, z = -35 + d0 * Math.pow(d1 / d0, e), k = (pB0.z - z) / (pB0.z - pIn.z);
-          p = V(0, lerp(pB0.y, pIn.y, ss(.3, 1, k)), z);
-          const yl0 = lerp(11, 11.8, ss(.35, 3.2, tau(T.enter0) - tau(T.tear0)));   // where the tilt had got to (no jump: frame-qa pop 17.93)
-          const lk = V(0, lerp(yl0, lkIn.y, ss(.2, 1, k)), lerp(VEIL.z, lkIn.z, ss(0, .6, k))); dir = lookDir(p, lk); focus = Math.max(3, p.distanceTo(lk));
+        const pIn = V(0, 6, -22), pOut = V(0, 1.9, 44), pPush = V(0, 2.2, 25.5), lkIn = V(0, 8.5, -35), lkDoor = V(0, 3.2, 0);
+        if (t < T.out0) {   // N25f, pilot 3: approach → hold at the threshold → a short step in
+          // (pilot 2 spent ~9 s inside the bright room: a flat cream frame. Now the camera stands back in the torn opening, the two
+          // dark halves framing left and right, the radiant room beyond — shafts from above, dust, the floor's edge — and only at
+          // the end of the line steps into the tear; the pull-back starts from there.) Each part timed on the log of the distance
+          // to the back wall, so the picture grows evenly.
+          const zT = -13.4, zH = -15.3, tA = T.enter0 + 4, tB = T.out0 - 2.0, dz = (z0, z1, e) => -35 + (z0 + 35) * Math.pow((z1 + 35) / (z0 + 35), e);
+          let z, y, x = 0;
+          if (t < tA) { const e = trap((t - T.enter0) / (tA - T.enter0), .3, .45); z = dz(pB0.z, zT, e); y = lerp(pB0.y, 5.4, ss(0, 1, e)); }
+          else if (t < tB) { const e = ss(tA, tB, t); z = lerp(zT, zH, e); y = lerp(5.4, 5.6, e); x = .45 * Math.sin(Math.PI * e); }   // the hold: a slow drift with a little sideways arc (parallax between the cloth and the light; never still)
+          else { const e = trap((t - tB) / (T.out0 - tB), .35, .4); z = dz(zH, pIn.z, e); y = lerp(5.6, pIn.y, e); }
+          p = V(x, y, z);
+          const yl0 = lerp(11, 11.8, ss(.35, 3.2, tau(T.enter0) - tau(T.tear0)));   // where the tilt had got to (no jump)
+          const a = ss(T.enter0, tA, t), b = ss(tB, T.out0, t);
+          const lk = V(0, lerp(lerp(yl0, 10.8, a), lkIn.y, b), lerp(VEIL.z, -35, ss(0, .7, a))); dir = lookDir(p, lk); focus = Math.max(3, p.distanceTo(V(0, 9, VEIL.z - 1)));
         } else if (t < T.N26) {   // N25g: drawing back out the way we came, facing in, past the veil and the lamps, out to the people
           // pilot 2: timed on the log of the distance from the light (back wall): the picture shrinks at an even rate (peak was 0.6/s)
-          const e = trap((t - T.out0) / (T.N26 - T.out0), .3, .3), d0 = pIn.z + 35, d1 = pOut.z + 35, z = -35 + d0 * Math.pow(d1 / d0, e), k = (z - pIn.z) / (pOut.z - pIn.z);
+          const e = trap((t - T.out0) / (T.N26 - T.out0), .15, .3), d0 = pIn.z + 35, d1 = pOut.z + 35, z = -35 + d0 * Math.pow(d1 / d0, e), k = (z - pIn.z) / (pOut.z - pIn.z);
           // height by place: high in the house, down through the door, above the heads over the crowd, then to their eye height
-          const y = z < 0 ? lerp(pIn.y, 6.2, ss(-29.4, 0, z)) : lerp(6.2, pOut.y, ss(21, 44, z));   // high over the crowd, down only behind it
+          const y = z < 0 ? lerp(pIn.y, 6.2, ss(pIn.z, 0, z)) : lerp(6.2, pOut.y, ss(21, 44, z));   // high over the crowd, down only behind it
           p = V(0, y, z);
           const lk = V(0, lerp(lkIn.y, lkDoor.y, ss(.15, .9, k)), lerp(lkIn.z, lkDoor.z, ss(.25, .95, k))); dir = lookDir(p, lk); focus = p.distanceTo(V(0, 4, Math.min(p.z - 8, 0)));
         } else {   // N26 + N26b: one long slow push toward the door of light (light moves on N26, the garden shows on N26b)
@@ -718,7 +726,7 @@ export async function build(W, H) {
     film.bloomCfg.strength = lerp(.02, .06, skyK) + .08 * burst - .03 * inMHP;
     // shafts of light (drawn after, in screen space): they radiate from the source on the gap's axis behind the veil — toward the
     // camera and down to the floor through the widening tear; inside the Most Holy Place from above
-    shaftU.uA.value = .4 * burst * (1 + 1.6 * inMHP) * (1 - .6 * ss(T.out0 + 2, T.out0 + 5, t));
+    shaftU.uA.value = .4 * burst * (1 + 1.6 * Math.max(inMHP, ss(-9, -13, cam.position.z))) * (1 - .6 * ss(T.out0 + 2, T.out0 + 5, t));   // strong from the threshold too
     // (no shafts while the camera is in or at the gap: there the whole frame is bright and the zoom blur only washed it out)
     GR.k = .42 * burst * (1 - .35 * dark) * ss(-23, -16, cam.position.z);
     GR.src.set(0, lerp(9, 24, inMHP), lerp(-31, -30, inMHP));

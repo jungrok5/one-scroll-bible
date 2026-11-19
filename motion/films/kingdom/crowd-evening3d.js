@@ -620,32 +620,43 @@ export async function build(W, H, Bt) {
     }
     // the man: still among them; at "억지로 붙들어" he lowers his head a little; then he steps away from them (back to us) — the
     // stride eases in from his stance (r2 started the gait at full stride in one frame: the feet jumped 0.19 m)
-    { const U = king.userData, aw = T.away, dir = V(-.25, 0, -1).normalize(), v = .52 / .56, ra = .7;
+    { const U = king.userData, aw = T.away, dir = V(-.25, 0, -1).normalize(), WK = { T: 1.5, L: .34 }, v = WK.L / (WK.T / 2), ra = .9;   // round 4: the solemn gait
       const amt = ss(aw, aw + ra, t), x = clamp((t - aw) / ra), dist = t <= aw ? 0 : v * (ra * (x * x * x - x * x * x * x / 2) + Math.max(0, t - aw - ra));
-      const id = P.idle(t, U.ph, { s: U.s }), w = P.walk(king, t, aw, { T: 1.12, L: .52, amt: Math.max(.001, amt) });
-      king.position.copy(C).addScaledVector(dir, dist); king.position.y = hB(king.position.x, king.position.z); king.rotation.y = face(dir.x, dir.z) * ss(aw - .2, aw + .6, t);
+      const id = P.idle(t, U.ph, { s: U.s }), w = P.walk(king, t, aw, { T: WK.T, L: WK.L, amt: Math.max(.001, amt) }); U.wph = w.ph; U.wamt = amt;
+      king.position.copy(C).addScaledVector(dir, dist); king.position.y = hB(king.position.x, king.position.z); king.rotation.y = face(dir.x, dir.z) * ss(aw - .2, aw + .8, t);
       const hd = [-.03 - .08 * ss(T.q4 + .5, T.q4 + 1.6, t), .1 * Math.sin(t * .3) * (1 - ss(T.rise[0], T.rise[0] + 1, t))];
-      P.pose(king, { breath: P.breath(t, U.ph), bob: id.bob * (1 - amt) + w.bob, side: id.side * (1 - amt), twist: id.twist * (1 - amt), lean: w.lean * amt,
-        swing: id.swing.map((v0, i) => lerp(v0, w.swing[i], amt)), feet: w.feet.map((f, i) => ({ u: lerp(id.feet[i].u, f.u, amt), lift: f.lift, pitch: f.pitch })),
-        head: [lerp(hd[0], -.08, amt), lerp(hd[1], 0, amt)] }); }
+      P.pose(king, { ...solemn(id, w, amt), breath: P.breath(t, U.ph), lean: -.06 * amt, head: [lerp(hd[0], -.18, amt), lerp(hd[1], 0, amt)] }); }
     chainsAt(t);
   }
 
   // ---------------------------------------------------------------- S3: the mountain — his climb, the fires, the stars
   const climbDir = V(-1, 0, -.22).normalize();   // from the field side (+x) up to the top, toward the set sun
   const STOP = SUMMIT.clone().addScaledVector(climbDir, -.6); STOP.y = hB(STOP.x, STOP.z);
-  const walkLen = (T.top - T.q4b) * (.52 / .56) + .35;
+  // round 4 (owner 2026-11-19: "예수님의 발걸음이 너무 경쾌하게 산을 올라가시는 것 같아"): a solemn, unhurried, weighted walk —
+  // 0.65 strides/s (was 0.89), a 0.68 m stride (was 1.04 m), so 0.44 m/s (was 0.93); he slows over the last 1.5 s into a settled
+  // stance. The body moves exactly as fast as the planted foot goes back (v·amt, the stride scaled by the same amt): no slide.
+  const CLIMB = { T: 1.55, L: .34 }, CV = CLIMB.L / (CLIMB.T / 2), SLOW = 1.5, tSlow = T.top - SLOW;
+  const climbDist = t => { const x = clamp((t - tSlow) / SLOW); return CV * (Math.max(0, Math.min(t, tSlow) - T.q4b) + (t > tSlow ? SLOW * (x - (x * x * x - x * x * x * x / 2)) : 0)); };
+  const walkLen = climbDist(T.top + 1);   // ≈ 1.1 m of the last rise to the top (shorter than r3's 3.2 m: the walk is not sped back up)
   const START = STOP.clone().addScaledVector(climbDir, -walkLen); START.y = hB(START.x, START.z);
   const kingS3 = mk({ h: 1.76, head: 'cloth', mat: kingM, cloth: kingC, broad: 1.02 }); kingS3.userData.ph = .13; Bg.add(kingS3);
+  // the solemn gait from walk()'s parts: nearly no vertical bob and the hips a little LOWER over the planted leg (the walk's bob
+  // inverted, a quarter of it), a small roll of the hips toward the planted side, the swing foot kept low (55 % lift) with no
+  // springy toe-off (25 % pitch), the arms swinging little and close to the body; amt blends it from/to the idle stance
+  function solemn(id, w, amt, slope = 0) {
+    const feet = w.feet.map((f, i) => { const g = { u: lerp(id.feet[i].u, f.u, amt), lift: f.lift * .55, pitch: (f.pitch || 0) * .25 }; g.lift += g.u * slope; return g; });
+    return { feet, bob: -.25 * w.bob * amt + id.bob * (1 - amt), side: .018 * amt * Math.sin(w.ph * 6.2832) + id.side * (1 - amt), twist: id.twist * (1 - amt),
+      swing: w.swing.map((v, i) => lerp(id.swing[i], v * .35, amt)), abd: [-.04, -.04] }; }
   function kingClimb(t) {
-    const tStop = T.top, v = .52 / .56; let d;
-    if (t < tStop - .5) d = (t - T.q4b) * v; else { const e = Math.min(t, tStop + .5) - (tStop - .5); d = (tStop - .5 - T.q4b) * v + v * (e - e * e / 2); }   // slows over the last second
+    const amt = 1 - ss(tSlow, T.top, t), d = climbDist(t);
     const p = START.clone().addScaledVector(climbDir, Math.max(0, d)); p.y = hB(p.x, p.z); kingS3.position.copy(p); kingS3.rotation.y = face(climbDir.x, climbDir.z);
-    const amt = 1 - ss(tStop - .6, tStop + .5, t), w = P.walk(kingS3, t, T.q4b - .27, { T: 1.12, L: .52, amt: Math.max(.001, amt) });
+    const w = P.walk(kingS3, t, T.q4b - .4, { T: CLIMB.T, L: CLIMB.L, amt: Math.max(.001, amt) });
     const slope = (hB(p.x + climbDir.x * .5, p.z + climbDir.z * .5) - hB(p.x - climbDir.x * .5, p.z - climbDir.z * .5));   // rise per metre along the way
-    const id = P.idle(t, .13, { s: kingS3.userData.s });
-    const feet = w.feet.map((f, i) => { const g = { u: lerp(id.feet[i].u, f.u, amt), lift: f.lift * amt, pitch: (f.pitch || 0) * amt }; g.lift += g.u * slope; return g; });
-    P.pose(kingS3, { ...id, ...w, feet, bob: w.bob * amt, lean: -.1 * amt - .02, swing: w.swing.map(s => s * amt), head: [lerp(-.05, .1, ss(T.n13, T.n13 + 3, t)), 0], breath: P.breath(t, .13) });
+    const id = P.idle(t, .13, { s: kingS3.userData.s }), G = solemn(id, w, amt, slope);
+    kingS3.userData.wph = w.ph; kingS3.userData.wamt = amt;
+    // leaning into the slope (more as it steepens), head bowed; at the top the lean settles to a slight stoop, the head stays low
+    const lean = -(.07 + .5 * clamp(slope, 0, .5)) * amt - .04 * (1 - amt);
+    P.pose(kingS3, { ...G, lean, breath: P.breath(t, .13), head: [lerp(-.22, -.16, 1 - amt) + .015 * Math.sin(t * .4), .03 * Math.sin(t * .23) * (1 - amt)] });
   }
   // S3 camera: behind him at walking pace, then the dolly out to OUT (just under his eye line, so he stands against the sky)
   const back = climbDir.clone().negate(), lat = V(-back.z, 0, back.x);
@@ -863,6 +874,15 @@ export async function build(W, H, Bt) {
   function trace(i, t0, t1) { const out = []; for (let f = Math.round(t0 * 30); f <= Math.round(t1 * 30); f++) { const t = f / 30, shot = shotAt(t);
       if (shot === 0) { soldiersAt(t); crowdAAt(t); } else if (shot === 3) kingClimb(t); else crowdBAt(t);
       const g = figsFor(shot)[i], o = sampleFig(g); out.push([+t.toFixed(3), o.rot.map(v => +v.toFixed(3)), o.arms.map(A => [+A.bend.toFixed(3), A.dir.toArray().map(v => +v.toFixed(2)), A.hand.toArray().map(v => +v.toFixed(2))]), g.userData.kind, +(g.userData.tRise ?? 0).toFixed(2), +(g.userData.tWalk ?? 0).toFixed(2)]); } return out; }
-  return { film, draw, marks, debug: { fires, nB: crowdB.length, nI: spotsI.length, SUMMIT, OUT, chains: chains.length, motionCheck, trace,
+  // foot slide (round 4): the stance foot's world displacement per frame while it is planted (gait phase: foot 0 in stance for
+  // ph < .5, foot 1 for ph ≥ .5; the first/last 4 % of each stance left out), for him on the hill (shot 3) or walking out (field)
+  function footSlide(which, t0, t1) { const g = which === 'climb' ? kingS3 : king; let prev = null, max = 0, at = 0, sum = 0, n = 0, steps = 0, lastF = -1;
+    for (let f = Math.round(t0 * 30); f <= Math.round(t1 * 30); f++) { const t = f / 30; if (which === 'climb') kingClimb(t); else crowdBAt(t);
+      const U = g.userData, ph = U.wph ?? 0, amt = U.wamt ?? 0, fi = ph < .5 ? 0 : 1, pin = (fi === 0 ? ph : ph - .5) / .5;
+      g.updateMatrixWorld(true); const wpos = U.legs[fi].foot.getWorldPosition(new THREE.Vector3());
+      if (prev && prev.fi === fi && pin > .04 && pin < .96 && amt > .05) { const d = wpos.distanceTo(prev.p); sum += d; n++; if (d > max) { max = d; at = t; } }
+      if (fi !== lastF) { steps++; lastF = fi; } prev = { fi, p: wpos }; }
+    return { maxSlide_m_per_frame: +max.toFixed(4), at: +at.toFixed(2), meanSlide: +(sum / Math.max(1, n)).toFixed(4), stanceFrames: n, steps }; }
+  return { film, draw, marks, debug: { footSlide, fires, nB: crowdB.length, nI: spotsI.length, SUMMIT, OUT, chains: chains.length, motionCheck, trace,
       handCheck(t0, t1, dt = .05) { handErrOn = true; handErr.length = 0; handErrWho.length = 0; const worst = []; for (let t = t0; t <= t1; t += dt) { const n0 = handErr.length; crowdBAt(t); const m = Math.max(0, ...handErr.slice(n0)); worst.push([+t.toFixed(2), +m.toFixed(3)]); } handErrOn = false; worst.sort((a, b) => b[1] - a[1]); return { max: worst[0], top: worst.slice(0, 6), n: handErr.length, who: handErrWho.slice(0, 40) }; } }, beats: () => T, shotAt, canvas: film.canvas };
 }

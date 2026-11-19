@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>목탄 십자가 시안</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600&family=Noto+Sans+KR:wght@400;600&display=swap">
+<script type="importmap">{ "imports": { "three": "../lib3d/three.module.min.js" } }</script>
+</head>
+<body>
+<script src="../../pilot/lib.js"></script>
+<script src="../lib-film.js"></script>
+<script src="kit-charcoal.js"></script>
+<script src="charcoal-cross.js"></script>
+<script>
+/* 시안 2차 (2026-11-20, 3묶음): 「kingdom」 5부 「왕이 가신 길」 — 목탄 십자가 장면 전체(block 3b). 1차(한 구도 84초)가 너무 정적이고
+   강도의 고개 떨굼이 안 보인다는 조정자 의견 → 같은 목탄 화풍 그대로 여섯 구도, 구도마다 느린 움직임 하나, 목탄 번짐 디졸브로 이음:
+   (a) 와이드, 어둠이 내려옴 → (b) 망원 압축: 가운데 십자가(화면 높이 25% 이하)와 큰 구름, 느린 밀기, 죄패의 붉은 점(Q12b)·N24 어두워짐
+   → (c) 언덕 아래 가로 트럭: 왼쪽 십자가가 어둠에서, 오른쪽이 프레임으로 — "우편에 / 좌편에" 차가운 빛 테두리 → (d) 와이드: 제자 그림자 +
+   dolly zoom(영상에 한 번) → (e) 아래에서 망원으로 왼쪽(회개한) 강도의 십자가(화면 높이 36–39%), 구름 틈이 열리고 그에게 빛, 고개 떨굼(Q13a)
+   → (f) 느리게 빠지며 charcoalCross 구도로 → 0.8초 정적 → 빛줄기(Q14) → 566.8에서 승인된 휘장 장면(sample-veil.html)으로.
+   그림: charcoal-calvary.js(이 장면) → charcoal-cross.js(장면의 끝, 휘장 시안과 같은 함수 — 덧붙인 옵션만) → kit-charcoal.js.
+   필름 시간 482.8(N23c) → 566.8(N25c) = 시안 u 0 → 84.0. 모든 시각은 script.json at에서(charcoal-calvary.js beats()). 자막은 시안에서만 얹음.
+   ?tail=1 (RENDER_QUERY=tail=1): 566.8 뒤를 실제 휘장 장면으로 이어 그림 — VT.draw(…, { prev: charcoalCross.prev(B) }), film.html이 쓸 그 방식
+   (휘장 장면 첫 4.65초에 먼 인물 실루엣이 이어짐). 자막도 sample-veil.html 규칙 그대로.
+   node motion/render.mjs v --page films/kingdom/sample-part5c.html                 (→ motion/out/sample-part5c-v.mp4)
+   node motion/render.mjs v --page films/kingdom/sample-part5c.html --stills 2,8,14   (u seconds) */
+const W = Pilot.W, H = Pilot.H, V = Pilot.ori === 'v', { ss, win } = Pilot;
+const TAIL = /[?&]tail=1/.test(location.search);
+const T0 = 482.8, T1 = TAIL ? 576.8 : 566.8, TV1 = 620.5;   // (TV1: the veil scene's end, for its caption timing rule)
+let CV = null, VT = null, B = null, TEXT = [];
+// the scene table (film seconds): [a, b, name] — overlaps are the smudge dissolves (charcoal-calvary.js beats() T.SHOTS, from script.json)
+const SCENES = [
+  [482.8, 488.9, 'wide'],        // (a) N23c: wide establishing, the dark coming down, slow widen
+  [487.6, 500.4, 'longlens'],    // (b) L8–N24: long lens on the middle cross, slow push; the red point; all darker but it
+  [499.1, 514.3, 'truck'],       // (c) N24b–Q12a: lateral truck below the hill; the side crosses one after the other; cold rims
+  [513.1, 521.5, 'wide-dz'],     // (d) N24c: the disciples' ghost; the dolly zoom (once in the film)
+  [520.2, 551.6, 'thief'],       // (e) N25–Q13a: low-angle telephoto on the repentant thief; the gap opens; he bows his head
+  [550.2, 566.8, 'wide-end'],    // (f) N25b–Q14: pull back to charcoalCross's framing; 0.8 s stillness; the shaft; → veil 566.8
+];
+function band(ctx) { const y0 = Film.SAFE() - (V ? 190 : 80), g = ctx.createLinearGradient(0, y0, 0, H); g.addColorStop(0, 'rgba(10,8,10,0)'); g.addColorStop(.35, 'rgba(10,8,10,.5)'); g.addColorStop(.7, 'rgba(10,8,10,.62)'); g.addColorStop(1, 'rgba(10,8,10,.66)'); ctx.fillStyle = g; ctx.fillRect(0, y0, W, H - y0); }
+const IDS = ['N23c', 'L8', 'Q12b', 'N24', 'N24b', 'Q12a', 'N24c', 'N25', 'N25d', 'L8c', 'Q13a', 'N25b', 'Q13', 'Q14', 'N25c', 'N25e', 'L8d', 'Q14a', 'N25f', 'N25g', 'N26', 'N26b', 'C5'];
+// text: every line from its `at` to the next voiced line (as sample-veil.html); a label rides with its quote. Two ranges with their
+// own end clamps — this scene's (to 566.8) and, in tail mode, the veil scene's (as sample-veil.html: T0 566.8, T1 620.5).
+function buildText() {
+  const L = Film.script.lines, spoken = l => (l.kind === 'narr' || l.kind === 'quote') && l.voice !== null;
+  const V2 = L.filter(spoken).sort((a, b) => a.at - b.at), next = l => V2.find(x => x.at > l.at + .01);
+  for (const [a0, a1] of TAIL ? [[T0, 566.8], [566.8, TV1]] : [[T0, 566.8]]) for (const l of L) { if (l.at < a0 - .01 || l.at >= a1 - .01) continue;
+    if (l.kind === 'label') { const q = V2.find(x => x.at >= l.at - .01), qn = q && next(q); TEXT.push(['label', l.id, l.at, (qn?.at ?? a1) - .2]); continue; }
+    if (!spoken(l)) continue;
+    const n = next(l), b = a1 === 566.8 ? Math.min((n?.at ?? a1) - (l.kind === 'quote' ? .1 : .25), 566.8 - .1) : Math.min((n?.at ?? a1) - (l.kind === 'quote' ? .1 : .25), a1 - .25);
+    TEXT.push([l.kind === 'quote' ? 'quote' : 'sub', l.id, l.at, b]); }
+}
+function label(ctx, id, t, a, b) { const txt = Film.text(id); ctx.save(); ctx.font = `600 ${V ? 38 : 34}px 'Noto Serif KR'`; ctx.letterSpacing = '4px'; const w = ctx.measureText(txt).width; ctx.restore();
+  if (w <= W * .88) return Film.label(ctx, id, t, a, b);
+  const k = win(t, a, b, .8, .8); if (k <= 0 || Film.clean) return;
+  Pilot.text(ctx, txt, W / 2, V ? 226 : 66, { size: (V ? 38 : 34) * W * .88 / w, weight: 600, color: '#e9c77a', alpha: k * .95, ls: 3, shadow: 'rgba(0,0,0,.9)', shadowBlur: 14 }); }
+function draw(ctx, u) {
+  const t = T0 + u;
+  if (t < 566.8) CV.draw(ctx, t, B); else VT.draw(ctx, t, B, { prev: charcoalCross.prev(B) });   // (tail: the veil scene as film.html will call it)
+  band(ctx);
+  for (const [kind, id, a, b] of TEXT) { if (t < a - .1 || t > b + .1) continue;
+    if (kind === 'sub') Film.sub(ctx, id, t, a, b); else if (kind === 'label') (t < 566.8 ? label : Film.label)(ctx, id, t, a, b);
+    else Film.quote(ctx, id, t, a, b, { bottom: Film.subBottom() + 40, hl: Film.lines[id].hl, hlk: ss(a + .4, a + 1.6, t) }); }
+}
+Pilot.run({ W, H, dur: +(T1 - T0).toFixed(2), fonts: ["600 40px 'Noto Serif KR'", "400 40px 'Noto Serif KR'", "400 20px 'Noto Sans KR'"],
+  init: async () => { await Film.load(); buildText();
+    B = Object.fromEntries(IDS.map(id => [id, Film.lines[id].at]));
+    buildCharcoalCross();
+    CV = await (await import('./charcoal-calvary.js')).build(W, H); window.__CV = CV; window.__B = B;
+    if (TAIL) VT = await (await import('./veil-temple.js')).build(W, H); }, draw });
+</script>
+</body>
+</html>

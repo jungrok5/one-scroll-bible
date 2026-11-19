@@ -244,3 +244,82 @@ export function kneelRise(k, s = 1, ph = 0) {
   const e = k * k * (3 - 2 * k), mid = Math.sin(Math.PI * clamp(k));
   return { bob: lerp(-.44 * s, 0, e), lean: -.42 * mid + lerp(.02, -.02, e), feet: [{ u: lerp(.3 * s, .08 * s, e), lift: 0 }, { u: lerp(-.26 * s, -.06 * s, e), lift: 0, x: lerp(-.04 * s, 0, e) }] };
 }
+
+// ================================================================ additions for part 6 (2026-11-19, sample-part6a round 2: 「땅 끝까지」)
+// Additive only — nothing above changes. The eleven on the Mount must not read as a choir (owner on part 2: "성가대처럼",
+// "다들 가만히 있거나"): mixed headwear on the same robeMan body, men sitting on rocks, a staff held in the hand.
+// headwear(g, kind, {mat, dark}): re-dress a robeMan built with head:'cloth' — 'cloth' (as built), 'turban' (cloth wound round
+// the head in turns, a short tail at the back), 'bare' (short dark hair, a beard). Every adult man keeps a beard line (the
+// silhouette reads as a man: 관리자 2026-11-14). The face stays set back and dark at this size.
+export function headwear(g, kind = 'cloth', { mat, dark } = {}) {
+  const U = g.userData, s = U.s, n = U.neck, hk = 1, mk = (geo, m) => { const o = new THREE.Mesh(geo, m); o.castShadow = o.receiveShadow = true; n.add(o); return o; };
+  const hair = dark || K.std('#1c140e', { roughness: 1 });
+  if (kind === 'turban' || kind === 'bare') { while (n.children.length > 1) n.remove(n.children[n.children.length - 1]); }
+  if (kind === 'turban') {
+    const m = mat || U.skirt?.material;
+    for (const [y, r, tilt] of [[.15, .138, .12], [.19, .142, -.1], [.228, .132, .07]]) { const t = mk(new THREE.TorusGeometry(r * s, .048 * s, 7, 24), m); t.rotation.set(Math.PI / 2 + tilt, 0, tilt * .6); t.position.set(0, y * s, .025 * s); t.scale.set(1, 1.08, 1); }
+    const dome = mk(new THREE.SphereGeometry(.135 * s, 16, 8, 0, Math.PI * 2, 0, Math.PI * .5), m); dome.position.set(0, .2 * s, .025 * s); dome.scale.set(1, .62, 1.06);
+    const tail = mk(lathe([[.1, -.1], [.09, 0], [.07, .1]].map(([r, y]) => [r * s, y * s]), 10, -.7, 1.4, 3, .05), m); tail.position.set(0, .15 * s, .07 * s);
+  }
+  if (kind === 'bare') { const cap = mk(new THREE.SphereGeometry(.118 * s, 14, 10, 0, Math.PI * 2, 0, Math.PI * .56), hair); cap.position.set(0, .135 * s, .04 * s); cap.scale.set(.9, 1, 1); }
+  // the beard: a soft wedge under the jaw, forward (−z)
+  const b = mk(new THREE.SphereGeometry(.07 * s, 10, 8), hair); b.position.set(0, .05 * s, -.045 * s); b.scale.set(.95, 1.15, .8);
+  return g;
+}
+// sitting on a rock (a 'stand' robeMan): hips down onto the seat, thighs forward, shins down, feet planted a little apart, one
+// tucked back; the robe falls from the knees. seat = height of the rock's top (m). Hands rest on the knees unless P.hands says.
+export function rockSit(seat = .44, s = 1, { tuck = .08, lean = -.1 } = {}) {
+  const hip = seat + .05, bob = hip - .86 * s;
+  return { bob, lean, feet: [{ u: .4 * s, lift: 0, x: -.02 * s }, { u: (.4 - tuck * 2) * s, lift: 0, x: .03 * s }] };
+}
+export const kneeHand = (g, sd, P) => { const U = g.userData, s = U.s; return V(sd * .11 * s, U.hipY + (P.bob || 0) + .06 * s, -.34 * s); };
+// a rock to sit on (or a stone in the grass): a squashed, lumpy icosahedron; its top is at height `top`
+export function rock(mat, { w = .7, d = .55, top = .44, seed = 1 } = {}) {
+  const g = new THREE.IcosahedronGeometry(1, 2), p = g.attributes.position;
+  for (let i = 0; i < p.count; i++) { const x = p.getX(i), y = p.getY(i), z = p.getZ(i), n = 1 + .12 * Math.sin(x * 5.1 + seed) * Math.cos(z * 4.3 + seed * 1.7) + .06 * Math.sin(y * 9 + seed * 3);
+    p.setXYZ(i, x * n, (y > 0 ? y * .85 : y) * n, z * n); }
+  g.computeVertexNormals(); const m = new THREE.Mesh(g, mat); m.scale.set(w / 2, top / .85 / 1.0, d / 2); m.position.y = 0; m.castShadow = m.receiveShadow = true; return m;
+}
+
+// ================================================================ additions for part 3, round 2 (2026-11-19, sample-part3a r2)
+// Additive only. legionary(): the spear column seen through a long lens has to read as Roman soldiers at a glance (owner, round 1:
+// "too small to read as soldiers") — so the silhouette carries the signs: a helmet with a front-to-back horsehair CREST and cheek
+// guards, a tall RECTANGULAR curved scutum carried on the left side with its face outward (iron binding round the edge and a boss —
+// the binding catches the low sun as a lit outline even when the board is in shadow), a pilum on the right shoulder with a bright
+// point. Same body and IK as soldier() (man() + a knee tunic); posed by soldierPose() (both hands solved onto their grips).
+//   crestM: the crest (red), bind: the binding/boss metal; tip: the point's material (pass one per soldier to let points glint
+//   on their own beats).
+export function legionary({ h = 1.74, mat, skin, metal, shieldM, wood, tip, crestM, bind } = {}) {
+  const g = man({ h, mat, skin, kind: 'stand', cloth: metal }), U = g.userData, s = U.s, bm = bind || metal;
+  const mk = (geo, m, parent) => { const o = new THREE.Mesh(geo, m); o.castShadow = true; o.receiveShadow = true; parent.add(o); return o; };
+  // the tunic to the knee (as soldier())
+  const tg = new THREE.CylinderGeometry(.205 * s, .27 * s, .44 * s, 18, 6, true); tg.translate(0, .55 * s + .22 * s, 0);
+  U.skirt.geometry.dispose(); U.skirt.geometry = tg; U.skirtBase = tg.attributes.position.array.slice();
+  // the helmet: the cap in iron, a short neck guard, a brim, cheek guards, and the crest on top (a half-disc brush front to back
+  // with a round edge so its outline takes the rim light)
+  const [, cap, drape] = U.neck.children; if (cap) cap.scale.set(1.04, 1.08, 1.06); if (drape) { drape.scale.set(1.02, .32, 1.02); drape.position.y += .1 * s; }
+  const rim = mk(new THREE.TorusGeometry(.128 * s, .012 * s, 5, 20), metal, U.neck); rim.rotation.x = Math.PI / 2; rim.position.y = .15 * s;
+  for (const sd of [-1, 1]) { const ch = mk(new THREE.BoxGeometry(.012 * s, .1 * s, .08 * s), metal, U.neck); ch.position.set(sd * .118 * s, .1 * s, -.03 * s); ch.rotation.z = sd * .12; }
+  const cR = .14 * s, crest = new THREE.Group(); crest.position.set(0, .27 * s, .01 * s); U.neck.add(crest);
+  const fan = mk(new THREE.CircleGeometry(cR, 18, 0, Math.PI), crestM || mat, crest); fan.rotation.y = Math.PI / 2; fan.material.side = THREE.DoubleSide;
+  const edge = mk(new THREE.TorusGeometry(cR * .93, .022 * s, 5, 18, Math.PI), crestM || mat, crest); edge.rotation.y = Math.PI / 2; edge.scale.z = 1.4;
+  U.crest = crest;
+  // the scutum: a curved rectangle 1.05 × 0.66 m, convex face to the left (−x), carried at the left side, the hand on the grip
+  // behind the boss; iron binding round the edge and a boss
+  const sh = new THREE.Group(); U.upper.add(sh); sh.position.set(-.37 * s, .08 * s, -.04 * s); sh.rotation.set(0, -.12, .04);
+  const R = .72 * s, hh = 1.05 * s, span = .66 * s / R;
+  const board = mk(new THREE.CylinderGeometry(R, R, hh, 16, 1, true, -Math.PI / 2 - span / 2, span), shieldM, sh); board.position.x = R;
+  for (const y of [-hh / 2, hh / 2]) { const b = mk(new THREE.TorusGeometry(R, .014 * s, 4, 16, span), bm, sh); b.rotation.set(Math.PI / 2, 0, Math.PI - span / 2); b.position.set(R, y, 0); }
+  for (const sd of [-1, 1]) { const a = -Math.PI / 2 + sd * span / 2, e = mk(new THREE.CylinderGeometry(.014 * s, .014 * s, hh, 4), bm, sh); e.position.set(R + R * Math.sin(a), 0, R * Math.cos(a)); }
+  const boss = mk(new THREE.SphereGeometry(.085 * s, 12, 8, 0, Math.PI * 2, 0, Math.PI / 2), bm, sh); boss.rotation.z = Math.PI / 2; boss.position.x = -.005 * s;
+  const spine = mk(new THREE.BoxGeometry(.02 * s, hh * .92, .035 * s), bm, sh); spine.position.x = -.004 * s;
+  U.shield = sh; U.shieldGrip = V(-.37 * s + .07 * s, .08 * s, -.04 * s);   // the hand-hold behind the boss (upper frame)
+  // the pilum (as soldier())
+  const sp = new THREE.Group(); U.upper.add(sp); sp.position.set(.3 * s, -.25 * s, -.16 * s); sp.rotation.x = -.12;
+  mk(new THREE.CylinderGeometry(.016 * s, .02 * s, 1.75 * s, 6), wood, sp).position.y = .7 * s;
+  mk(new THREE.CylinderGeometry(.007 * s, .012 * s, .5 * s, 5), metal, sp).position.y = 1.82 * s;
+  const pt = mk(new THREE.ConeGeometry(.024 * s, .12 * s, 4), tip || metal, sp); pt.position.y = 2.13 * s;
+  U.spear = sp; U.spearTip = pt;
+  U.spearGrip = V(.3 * s, -.25 * s + .62 * s * Math.cos(.12), -.16 * s - .62 * s * Math.sin(.12));
+  return g;
+}

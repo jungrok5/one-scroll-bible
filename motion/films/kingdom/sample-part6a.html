@@ -11,7 +11,9 @@
 <script src="../../pilot/lib.js"></script>
 <script src="../lib-film.js"></script>
 <script>
-/* 시안 1차 (2026-11-19): 「kingdom」 6부 「땅 끝까지」 앞 블록 — 감람산에서 땅 끝까지 (N15c · Q6 · N15d · N28c · Q6a · N28b).
+/* 시안 2차 (2026-11-19): 성가대 줄 → 불규칙한 무리(바위에 앉은 셋, 섞인 머리쓰개, 각자의 숨), 해를 마주 보는 역광 · 짙은 금빛 대기 · 먼 성,
+   빛은 지형 위의 길을 따라(지도 선이 아니라), 꼭대기의 지구는 밝게(푸른 시간의 테두리 · 구름 · 새벽 경계선).
+   시안 1차 (2026-11-19): 「kingdom」 6부 「땅 끝까지」 앞 블록 — 감람산에서 땅 끝까지 (N15c · Q6 · N15d · N28c · Q6a · N28b).
    한 대의 카메라, 컷 없음(olivet3d.js): 늦은 오후 감람산 꼭대기 — 몇 사람이 한 사람을 둘러섬, 한 사람이 기드론 건너 성전 옆 안토니아의
    붉은 로마 깃발을 가리킴, 긴 그림자가 성벽 쪽으로(해가 내려가며 길어짐) → 렌즈가 깃발 쪽으로 좁혀짐(초점이 성으로) → 가리키던 손이
    내려가고 한 사람이 성벽에서 먼 지평선으로 돌아섬, 카메라가 그와 함께 돎(4 s) → Q6a 10초 크레인 업(느리게 시작, 느리게 끝): 발밑에서
@@ -52,6 +54,7 @@ function draw(ctx, u) {
 Pilot.run({ W, H, dur: +(T1 - T0).toFixed(2), fonts: ["600 40px 'Noto Serif KR'", "400 40px 'Noto Serif KR'", "400 20px 'Noto Sans KR'"],
   init: async () => { await Film.load(); buildText();
     B = Object.fromEntries(IDS.map(id => [id, Film.lines[id].at]));
+    { const q = TEXT.find(x => x[1] === 'Q6a'); B.cuts = Film.pieces(Film.text('Q6a'), q[2], q[3]).slice(1).map(p => p[1]); }   // when "예루살렘과 …" and "내 증인이 되리라" come on
     OL = await (await import('./olivet3d.js')).build(W, H); window.__OL = OL; }, draw });
 </script>
 </body>

@@ -101,7 +101,7 @@ export function routePolylines(step = 25000) {
 // A polyline becomes quads; each vertex knows both ends of its segment and is pushed sideways in pixels, so a line is never thinner
 // than uMinPx and never wider than its world width allows. The light: dark until the front uF reaches it (network distance aD),
 // a white-hot head just behind the front, gold behind it with light flowing outward (pulses moving with the front), soft edges.
-export function lineMesh(lines, { minPx = 2.2, color = [1, .72, .36] } = {}) {
+export function lineMesh(lines, { minPx = 2.2, color = [1, .72, .36], halo = false } = {}) {   // halo: a wide soft additive pass under the core (round 2: light, not a vector line)
   let n = 0; for (const L of lines) n += Math.max(0, L.p.length - 1);
   const A = new Float32Array(n * 4 * 3), Bv = new Float32Array(n * 4 * 3), D = new Float32Array(n * 4 * 2), Q = new Float32Array(n * 4 * 2), Wd = new Float32Array(n * 4), K = new Float32Array(n * 4), idx = new Uint32Array(n * 6);
   let s = 0;
@@ -116,10 +116,11 @@ export function lineMesh(lines, { minPx = 2.2, color = [1, .72, .36] } = {}) {
   g.setAttribute('aD', new THREE.BufferAttribute(D, 2)); g.setAttribute('aQ', new THREE.BufferAttribute(Q, 2)); g.setAttribute('aW', new THREE.BufferAttribute(Wd, 1)); g.setAttribute('aK', new THREE.BufferAttribute(K, 1));
   g.setIndex(new THREE.BufferAttribute(idx, 1));
   const u = { uRes: { value: new THREE.Vector2(1080, 1920) }, uMinPx: { value: minPx }, uPull: { value: .004 }, uPullMax: { value: 120 }, uF: { value: 0 }, uT: { value: 0 }, uK: { value: 1 }, uHead: { value: 1 }, uCol: { value: new THREE.Vector3(...color) }, uFlow: { value: 1 } };
+  u.uSoft = { value: halo ? .35 : 1.6 }; u.uDay = { value: new THREE.Vector3(0, -1, 0) };
   const m = new THREE.ShaderMaterial({ uniforms: u, transparent: true, depthWrite: false, depthTest: true, fog: false, side: THREE.DoubleSide,
     blending: THREE.CustomBlending, blendEquation: THREE.MaxEquation, blendSrc: THREE.OneFactor, blendDst: THREE.OneFactor,
     vertexShader: /* glsl */`attribute vec3 aA, aB; attribute vec2 aD, aQ; attribute float aW, aK; uniform vec2 uRes; uniform float uMinPx, uPull, uPullMax;
-      varying float vD, vX, vK;
+      varying float vD, vX, vK, vSun; uniform vec3 uDay;
       vec3 pulled(vec3 P){ vec3 d = cameraPosition - P; float L = length(d); return P + d / max(L, 1e-3) * min(L * uPull, uPullMax); }
       void main(){
         vec3 A = pulled(aA), B = pulled(aB);
@@ -130,16 +131,16 @@ export function lineMesh(lines, { minPx = 2.2, color = [1, .72, .36] } = {}) {
         float wpx = max(uMinPx, aW * uRes.y * .5 * projectionMatrix[1][1] / c.w), hw = wpx * .5 + 1.2;
         vec2 off = vec2(-dir.y, dir.x) * aQ.x * hw + dir * (aQ.y < .5 ? -1. : 1.) * wpx * .35;
         c.xy += off / (uRes * .5) * c.w; gl_Position = c;
-        vD = aQ.y < .5 ? aD.x : aD.y; vX = aQ.x * hw / max(wpx * .5, .5); vK = aK; }`,
-    fragmentShader: /* glsl */`uniform float uF, uT, uK, uHead, uFlow; uniform vec3 uCol; varying float vD, vX, vK;
+        vD = aQ.y < .5 ? aD.x : aD.y; vX = aQ.x * hw / max(wpx * .5, .5); vK = aK; vSun = dot(normalize((aQ.y < .5 ? aA : aB) - vec3(0., -6371000., 0.)), uDay); }`,
+    fragmentShader: /* glsl */`uniform float uF, uT, uK, uHead, uFlow, uSoft; uniform vec3 uCol; varying float vD, vX, vK, vSun;
       void main(){
         float bh = uF - vD; if (bh < 0.) discard;
-        float across = exp(-vX * vX * 1.6);
+        float across = exp(-vX * vX * uSoft);
         float on = smoothstep(0., uHead * .25, bh);                           // the head fades in just behind the front
         float head = exp(-bh / uHead);                                         // white-hot near the front
         float flow = 1. + .22 * uFlow * sin((vD - uT * uHead * 1.2) / (uHead * .9)) * smoothstep(uHead * .6, uHead * 2., bh);
         vec3 c = mix(uCol * .9, vec3(1., .96, .86), head) * (1.0 + 1.7 * head) * flow * on;
-        gl_FragColor = vec4(c * across * uK * vK, 1.); }` });
+        gl_FragColor = vec4(c * across * uK * vK * (1. - .8 * smoothstep(-.02, .12, vSun)), 1.); }` });   // fades where the dawn has come
   const mesh = new THREE.Mesh(g, m); mesh.frustumCulled = false; mesh.renderOrder = 5;
   return { mesh, u };
 }
@@ -159,7 +160,8 @@ export function lampPoints(list, { px = 5.5, minPx = 1.4, fade = 400 } = {}) {
         vec4 mv = modelViewMatrix * vec4(q, 1.); gl_Position = projectionMatrix * mv; float d = -mv.z;
         float on = smoothstep(aD, aD + aFd, uF);
         float sz = uPx * aS * clamp(uRef / d, .0, 1.) * uScale; float px = max(uMin, sz);
-        gl_PointSize = px * on + step(.001, on) * .5; vA = on * aB * clamp(sz / px, .25, 1.) * (sz < uMin ? 1. : 1.); }`,
+        float fl = step(3., aS) * on * exp(-max(uF - aD - aFd, 0.) / (aFd * 2.5));
+        gl_PointSize = px * on * (1. + 2.2 * fl) + step(.001, on) * .5; vA = on * aB * clamp(sz / px, .25, 1.) * (1. + 1.4 * fl); }`,
     fragmentShader: /* glsl */`uniform float uK; varying float vA;
       void main(){ vec2 c = gl_PointCoord - .5; float r2 = dot(c, c) * 4.; float a = exp(-r2 * 3.2) + .55 * exp(-r2 * 14.);
         if (vA <= 0.) discard; gl_FragColor = vec4(vec3(1., .78, .46) * a * vA * uK * 3.2, 1.); }` });
@@ -167,13 +169,31 @@ export function lampPoints(list, { px = 5.5, minPx = 1.4, fade = 400 } = {}) {
   return { pts, u };
 }
 
+// ---------------------------------------------------------------- the earth's light (round 2, 2026-11-19 — "the rise is too dark")
+// One shading for the globe and for the terrain patch seen from high up, after the first film's 「교회」 night earth (lifted blue
+// land, not black) and orbital photographs at the terminator: night land a deep lifted blue; a wide blue-hour band on the night
+// side of the terminator; a warm gold line along the terminator itself; the day side in low warm sun turning to full daylight.
+// mu = dot(surface normal, sun). land 0..1, rel = relief noise 0..1, grn = how green the land is, cl = cloud cover 0..1.
+export const SHADE_GLSL = /* glsl */`
+  vec3 eShade(float mu, float land, float rel, float grn, float cl){
+    vec3 alb = mix(vec3(.04, .085, .16), mix(vec3(.58, .44, .29), vec3(.26, .31, .17), grn) * (.8 + .4 * rel), land);
+    vec3 sunC = mix(vec3(1., .52, .26), vec3(1., .94, .86), smoothstep(.0, .32, mu));
+    float lit = smoothstep(-.035, .1, mu) * (.32 + .95 * max(mu, 0.));
+    vec3 night = mix(vec3(.016, .026, .058), vec3(.042, .05, .085) * (.8 + .4 * rel), land);
+    float tw = smoothstep(-.2, -.01, mu) * (1. - smoothstep(-.01, .14, mu));
+    vec3 c = night + alb * sunC * lit * 1.25 + vec3(.1, .13, .3) * tw * mix(.45, 1., land) + vec3(1., .5, .24) * exp(-abs(mu + .012) / .03) * .4;
+    vec3 cc = vec3(1., .97, .92) * sunC * smoothstep(-.03, .12, mu) * (.45 + .8 * max(mu, 0.)) + vec3(.06, .07, .12) + vec3(.16, .19, .36) * tw + vec3(1., .55, .3) * exp(-abs(mu) / .035) * .45;
+    return mix(c, cc, cl * .85);
+  }
+  vec3 eHaze(float mu){ return mix(vec3(.05, .075, .17), vec3(.42, .58, .9), smoothstep(-.12, .2, mu)) + vec3(.9, .45, .22) * exp(-abs(mu) / .06) * .25; }`;
+
 // ---------------------------------------------------------------- the globe: a polar cap mesh round the origin out to the antipode
 // (dense near the terrain patch so the sphere meets it without facets), shaded as the earth at night: dark land, darker sea,
 // a faint relief, haze toward the limb; the city lights and the gold roads are separate meshes (above).
 export function buildGlobe({ thetaMin = .018, rings = 260, seg = 512, texW = 4096 } = {}) {
   // the land mask, equirectangular (row 0 = 90°N), painted from the polygons
   const cv = document.createElement('canvas'); cv.width = texW; cv.height = texW / 2; const x = cv.getContext('2d');
-  x.fillStyle = '#000'; x.fillRect(0, 0, cv.width, cv.height); x.fillStyle = '#fff'; x.filter = 'blur(6px)';   // soft edges: bilinear + smoothstep = a smooth coast when magnified
+  x.fillStyle = '#000'; x.fillRect(0, 0, cv.width, cv.height); x.fillStyle = '#fff'; x.filter = 'blur(2.5px)';   // soft edges: bilinear + smoothstep = a smooth coast when magnified
   const px = (lon, lat) => [(lon + 180) / 360 * cv.width, (90 - lat) / 180 * cv.height];
   for (const p of LAND) { x.beginPath(); p.forEach((q, i) => { const [a, b] = px(...q); i ? x.lineTo(a, b) : x.moveTo(a, b); }); x.closePath(); x.fill(); }
   x.fillRect(0, px(0, -68)[1], cv.width, cv.height);   // Antarctica
@@ -190,6 +210,7 @@ export function buildGlobe({ thetaMin = .018, rings = 260, seg = 512, texW = 409
   const m = new THREE.ShaderMaterial({ uniforms: u, fog: false, side: THREE.DoubleSide,
     vertexShader: /* glsl */`varying vec3 vN, vW; void main(){ vec4 w = modelMatrix * vec4(position, 1.); vW = w.xyz; vN = normalize(w.xyz - vec3(0., -${R_E.toFixed(1)}, 0.)); gl_Position = projectionMatrix * viewMatrix * w; }`,
     fragmentShader: /* glsl */`uniform sampler2D tLand; uniform vec3 uN0, uU0, uE0, uLand, uSea, uHaze, uSun, uDusk; uniform float uHazeL, uK; varying vec3 vN, vW;
+      ${SHADE_GLSL}
       float hh(vec2 p){ vec3 p3 = fract(vec3(p.xyx) * .1031); p3 += dot(p3, p3.yzx + 33.33); return fract((p3.x + p3.y) * p3.z); }
       float vn(vec2 p){ vec2 i = floor(p), f = fract(p); vec2 w = f * f * (3. - 2. * f); return mix(mix(hh(i), hh(i + vec2(1, 0)), w.x), mix(hh(i + vec2(0, 1)), hh(i + vec2(1, 1)), w.x), w.y); }
       void main(){
@@ -198,22 +219,25 @@ export function buildGlobe({ thetaMin = .018, rings = 260, seg = 512, texW = 409
         vec2 uv = vec2((lon + 3.14159265) / 6.2831853, (lat + 1.5707963) / 3.14159265);
         float land = smoothstep(.38, .62, texture2D(tLand, uv).r);
         float rel = vn(uv * vec2(900., 450.)) * .6 + vn(uv * vec2(2400., 1200.)) * .4;
-        vec3 c = mix(uSea, uLand * (.75 + .5 * rel), land);
+        float latd = abs(lat) * 57.3, grn = clamp(smoothstep(38., 52., latd) + (1. - smoothstep(8., 18., latd)) * .9, 0., 1.) * (.6 + .4 * vn(uv * vec2(60., 30.)));
+        float clr = vn(uv * vec2(70., 35.)) * .55 + vn(uv * vec2(190., 95.)) * .3 + vn(uv * vec2(600., 300.)) * .15;
+        float cl = smoothstep(.56, .78, clr) * smoothstep(.07, .12, acos(clamp(dot(p, uU0), -1., 1.)));   // clear skies over the Holy Land (the terrain patch)
+        float ms = dot(n, uSun);
+        vec3 c = eShade(ms, land, rel, grn, cl);
         vec3 v = normalize(cameraPosition - vW); float mu = max(dot(n, v), 0.);
-        c += uDusk * pow(max(dot(n, uSun), 0.) , 1.5) * .25 * land;                // the last of the dusk on the land toward the sun
-        float hz = 1. - exp(-length(cameraPosition - vW) / uHazeL); c = mix(c, uHaze, clamp(hz * .35 + pow(1. - mu, 6.) * .5, 0., 1.));
+        float hz = 1. - exp(-length(cameraPosition - vW) / uHazeL); c = mix(c, eHaze(ms), clamp(hz * .12 + pow(1. - mu, 9.) * .6, 0., 1.));
         gl_FragColor = vec4(c * uK, 1.); }` });
   const mesh = new THREE.Mesh(g, m); mesh.frustumCulled = false;
   // the atmosphere seen from outside: a shell 90 km up, its limb glowing blue, warm on the side the sun has just left
-  const sg = new THREE.SphereGeometry(R_E + 90000, 256, 128); sg.translate(0, -R_E, 0);
+  const sg = new THREE.SphereGeometry(R_E + 28000, 256, 128); sg.translate(0, -R_E, 0);
   const au = { uK: { value: 0 }, uSun: { value: V(0, -1, 0) }, uBlue: { value: new THREE.Color(.22, .42, 1.0) }, uWarm: { value: new THREE.Color(1.0, .62, .32) } };
   const am = new THREE.ShaderMaterial({ uniforms: au, transparent: true, depthWrite: false, fog: false, blending: THREE.AdditiveBlending, side: THREE.FrontSide,
     vertexShader: /* glsl */`varying vec3 vN, vW; void main(){ vec4 w = modelMatrix * vec4(position, 1.); vW = w.xyz; vN = normalize(w.xyz - vec3(0., -${R_E.toFixed(1)}, 0.)); gl_Position = projectionMatrix * viewMatrix * w; }`,
     fragmentShader: /* glsl */`uniform float uK; uniform vec3 uSun, uBlue, uWarm; varying vec3 vN, vW;
       void main(){ vec3 n = normalize(vN), v = normalize(cameraPosition - vW); float mu = clamp(dot(n, v), 0., 1.);
-        float rim = pow(1. - mu, 5.) * 1.6 + pow(1. - mu, 14.) * 2.4;                 // thin and bright at the edge
-        float sun = pow(max(dot(n, uSun) * .5 + .5, 0.), 6.);
-        vec3 c = mix(uBlue, uWarm, sun * .8) * rim * (.16 + .55 * sun);
+        float rim = pow(1. - mu, 6.) * 1.0 + pow(1. - mu, 13.) * 1.9;                // a thick glow, brightest at the edge
+        float ms = dot(n, uSun), sun = pow(max(ms * .5 + .5, 0.), 4.), lineS = exp(-abs(ms + .02) / .09);
+        vec3 c = mix(uBlue, uWarm, clamp(sun * .55 + lineS * .6, 0., 1.)) * rim * (.34 + 1.1 * sun + .9 * lineS);
         gl_FragColor = vec4(c * uK, 1.); }` });
   const atm = new THREE.Mesh(sg, am); atm.frustumCulled = false; atm.renderOrder = 4;
   return { mesh, u, atm, au, tex };

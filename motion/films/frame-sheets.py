@@ -2,7 +2,7 @@
 # with pipeline/tasks/anomaly.md, or the maintainer) can look at the whole film for what the machine checks cannot see — hands
 # like wood, a body that is a lump, a thing floating or cut off, words over a face, a wrong colour (관리자 2026-11-10: "프레임으로
 # 보면 이상한데 … 만든 영상을 확인해서 이상유무 판단하는 스텝이 제작공정에 있어?" → "ㅇㅇ").
-#   py motion/films/frame-sheets.py <film> [--ori v|h] [--video <mp4>] [--every 0.5] [--from S] [--to S]
+#   py motion/films/frame-sheets.py <film> [--ori v|h] [--video <mp4>] [--out <dir>] [--every 0.5] [--from S] [--to S]
 #   → motion/out/frames/<film>[-h]/sheet-01.jpg … + manifest.json { render, video, every, sheets: [{file, from, to}] }
 # Without --video it reads motion/out/<film>-<ori>-narr.mp4 (render = its .src.json hash, as shots-sheet.py). A pilot or a part
 # render: --video (render = size + head hash of that file). Then the anomaly check writes review.json anomaly_check (see the gate).
@@ -25,7 +25,11 @@ else:
     with open(vid, 'rb') as f: render = f'{os.path.getsize(vid)}-' + hashlib.sha1(f.read(1 << 20)).hexdigest()[:12]
 dur = float(subprocess.run(['ffprobe', '-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', vid], capture_output=True, text=True).stdout.strip())
 end = min(dur, float(t_to)) if t_to else dur
-dest = os.path.join(OUT, 'frames', film + ('-h' if ori == 'h' else '')); os.makedirs(dest, exist_ok=True)
+# A pilot/part render (--video) gets its own folder (frames/<video name>) unless --out says otherwise — before 2026-11-20 it
+# wrote into frames/<film>/ and wiped the main film's anomaly sheets there (「kingdom」 part-4a pilot).
+out_opt = opt('--out')
+dest = out_opt or os.path.join(OUT, 'frames', (os.path.splitext(os.path.basename(video))[0] if video else film + ('-h' if ori == 'h' else '')))
+os.makedirs(dest, exist_ok=True)
 for f in os.listdir(dest):
     if f.startswith('sheet-') or f.startswith('_f'): os.remove(os.path.join(dest, f))
 # frames: one ffmpeg pass at 2 fps (every 0.5 s), small

@@ -5,7 +5,7 @@
    the penitent thief's cross), so the veil scene's page turn has its front page. The rest of the cross scene (8:01–9:15) is
    not built here yet; charcoalCross(ctx, t) is valid from Q14 (561.6) onward.
 
-   Restraint (rules: no body on the cross, crosses only far as silhouettes, no halo): three small bare crosses on the crest,
+   Restraint (crosses only far as silhouettes, no halo; figures only as faceless far backlit silhouettes — owner 2026-11-20 "이대로 가자" for block 3b): three small bare crosses on the crest,
    backlit by a pale band of mist, the darkness heavy above (Mk 15:33). The one colour: the middle cross's title board, a
    single red pastel point (「Schindler's List」's one red). The light: one thin eraser-lifted shaft from a gap in the cloud,
    on the axis of the left cross (the right hand of the middle one, Lk 23:33), reaching the ground at its foot on N25c.

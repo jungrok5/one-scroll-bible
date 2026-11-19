@@ -202,3 +202,45 @@ export function idle(t, ph = 0, o = {}) {
     breath: .5 + .5 * Math.sin(t * 1.45 + ph * 6.283), swing: [.04 * Math.sin(t * .5 + ph * 7), .04 * Math.sin(t * .43 + ph * 3)], head: [0, .05 * Math.sin(t * .27 + ph * 11)] };
 }
 export const breath = (t, ph) => .5 + .5 * Math.sin(t * 1.45 + ph * 6.283);
+
+// ================================================================ additions for part 3 (2026-11-19, sample-part3a: 「사람들이 기다린 나라」)
+// Additive only — nothing above changes. soldier(): a Roman legionary for the spear column (crowd-evening3d.js): man()'s body with a
+// short tunic instead of the long robe, a plain iron helmet with a neck guard, a curved shield on the left arm and a spear on the
+// right shoulder, both HELD (the hands are solved onto the grips every frame by soldierPose — BODY-CHECK §4 contact).
+export function soldier({ h = 1.74, mat, skin, metal, shieldM, wood, tip } = {}) {
+  const g = man({ h, mat, skin, kind: 'stand', cloth: metal }), U = g.userData, s = U.s;
+  // the tunic to the knee (replaces the robe's skirt geometry; pose() deforms it the same way)
+  const tg = new THREE.CylinderGeometry(.205 * s, .27 * s, .44 * s, 18, 6, true); tg.translate(0, .55 * s + .22 * s, 0);
+  U.skirt.geometry.dispose(); U.skirt.geometry = tg; U.skirtBase = tg.attributes.position.array.slice();
+  // the helmet: man()'s cap in iron; its back cloth becomes a short neck guard
+  const [, cap, drape] = U.neck.children; if (cap) cap.scale.set(1.04, 1.08, 1.06); if (drape) { drape.scale.set(1.02, .32, 1.02); drape.position.y += .1 * s; }
+  const mk = (geo, m, parent) => { const o = new THREE.Mesh(geo, m); o.castShadow = true; o.receiveShadow = true; parent.add(o); return o; };
+  const rim = mk(new THREE.TorusGeometry(.128 * s, .012 * s, 5, 20), metal, U.neck); rim.rotation.x = Math.PI / 2; rim.position.y = .15 * s;
+  // the shield (scutum): a curved board, its boss outward, on the left forearm in front of the body
+  const sh = new THREE.Group(); U.upper.add(sh); sh.position.set(-.3 * s, .12 * s, -.2 * s); sh.rotation.y = .5;
+  const board = mk(new THREE.CylinderGeometry(.62 * s, .62 * s, 1.0 * s, 14, 1, true, Math.PI - .42, .84), shieldM, sh); board.position.z = .58 * s;
+  mk(new THREE.SphereGeometry(.07 * s, 10, 6, 0, Math.PI * 2, 0, Math.PI / 2), metal, sh).rotation.x = -Math.PI / 2;
+  U.shieldGrip = V(-.3 * s + .05 * s, .12 * s, -.2 * s + .1 * s);   // the hand-hold behind the boss (upper frame)
+  // the spear (pilum): an ash shaft, an iron shank, a small bright point; upright, a little forward, on the right side
+  const sp = new THREE.Group(); U.upper.add(sp); sp.position.set(.3 * s, -.25 * s, -.16 * s); sp.rotation.x = -.12;
+  mk(new THREE.CylinderGeometry(.016 * s, .02 * s, 1.75 * s, 6), wood, sp).position.y = .7 * s;
+  mk(new THREE.CylinderGeometry(.007 * s, .012 * s, .5 * s, 5), metal, sp).position.y = 1.82 * s;
+  const pt = mk(new THREE.ConeGeometry(.02 * s, .1 * s, 4), tip || metal, sp); pt.position.y = 2.12 * s;
+  U.spear = sp; U.spearTip = pt;
+  U.spearGrip = V(.3 * s, -.25 * s + .62 * s * Math.cos(.12), -.16 * s - .62 * s * Math.sin(.12));   // where the right hand closes on the shaft
+  return g;
+}
+// pose a soldier from P (walk()/idle() parts): both hands placed on their grips through the upper body's own transform
+const _M = new THREE.Matrix4(), _E = new THREE.Euler(), _Q = new THREE.Quaternion();
+export function soldierPose(g, P = {}) {
+  const U = g.userData;
+  _E.set(P.lean || 0, P.twist || 0, P.side || 0, 'YXZ'); _Q.setFromEuler(_E); _M.compose(V(0, U.hipY + (P.bob || 0), 0), _Q, V(1, 1, 1));
+  const gS = U.shieldGrip.clone().applyMatrix4(_M), gP = U.spearGrip.clone().applyMatrix4(_M);
+  pose(g, { ...P, hands: [gS, gP] });
+}
+// from kneeling/sitting back on the heels (k = 0) to standing (k = 1) with a robeMan/man 'stand' figure: the hips drop and the legs
+// fold under the robe (IK keeps the bone lengths), the torso leans forward through the middle of the rise as a body does.
+export function kneelRise(k, s = 1, ph = 0) {
+  const e = k * k * (3 - 2 * k), mid = Math.sin(Math.PI * clamp(k));
+  return { bob: lerp(-.44 * s, 0, e), lean: -.42 * mid + lerp(.02, -.02, e), feet: [{ u: lerp(.3 * s, .08 * s, e), lift: 0 }, { u: lerp(-.26 * s, -.06 * s, e), lift: 0, x: lerp(-.04 * s, 0, e) }] };
+}

@@ -19,6 +19,13 @@
                       → L4/Q4 무리가 그에게 몰려듦, 그는 등을 보인 채 무리에게서 걸어 나감
      mountain Q4b–end 걷는 속도로 그를 뒤따라 언덕 끝을 오름(지평선에 눌린 해, 긴 그림자가 카메라 쪽으로) → N13 dolly out, 밤 · 별 ·
                       아래 들판의 불빛 → 도레 판화 선이 새겨짐(mountain-dore.js)
+   시안 2차 (2026-11-19, 관리자 "네 말대로 진행해" — 세 가지만 고치고 나머지는 그대로):
+     column   C2–N10 망원 2.7°(「아라비아의 로렌스」 장초점 압축 · 아지랑이): 행렬이 화면의 띠를 채움 — 볏 달린 투구, 직사각 방패(쇠테가 역광에
+              빛남), 저마다의 박자로 반짝이는 창끝, 독수리 · 원반 · 깃발 군기, 발에서 이는 먼지, 발 맞춘 행진 → 같은 카메라의 줌아웃으로
+              언덕 위 무리가 드러남(초점거리 로그 등속 · sine 가속, 조준은 화면이 넓어진 뒤에야 행렬을 떠남 — 점프 없음)
+     baskets  N12 앞 4.6초(새 샷): 앉은 무리의 호(arc) — 바구니가 손에서 손으로(두 손이 테두리에, 받는 손이 먼저 쥐고 주는 손이 놓음,
+              넘기는 순간마다 감속), 뒤로 다섯 무리가 저마다 바구니를 돌림(규모) → 넘김이 끝나는 순간 FPV로 컷
+     mountain 그를 17 m 뒤에서 따름(화면 높이 ≈ 12 %) · 멈추는 순간부터 47 m까지 dolly out · 불빛 30개
    그림의 모든 시각은 script.json의 at에서 나온다(crowd-evening3d.js beats()). Q4b = 인용 둘째 조각("다시 혼자 산으로…")이 화면에 오는 시각.
    node motion/render.mjs v --page films/kingdom/sample-part3a.html                       (→ motion/out/sample-part3a-v.mp4)
    node motion/render.mjs v --page films/kingdom/sample-part3a.html --stills 2,8,14         (u seconds = film − 237.6) */
@@ -27,8 +34,9 @@ const T0 = 237.6, T1 = 288.3;
 let CE = null, ENG = null, B = null, TEXT = [];
 // the scene table (film seconds): [a, b, name] — one 3D world; the joins are hard cuts between clearly different framings
 const SCENES = [
-  [237.6, 256.0, 'column'],    // C2–N11: the spear column in heat shimmer → the crowd on the hill looking down at it
-  [256.0, 277.7, 'field'],     // N12–Q4b: the five thousand, the baskets; they rise and press in toward him (Q4b from the quote's pieces)
+  [237.6, 256.0, 'column'],    // C2–N11: the legion through a long lens (heat shimmer, dust) → zoom out to the crowd on the hill looking down at it
+  [256.0, 260.6, 'baskets'],   // N12: seated groups passing baskets hand to hand (round 2)
+  [260.6, 277.7, 'field'],     // N12–Q4b: FPV to him; they rise and press in toward him (Q4b from the quote's pieces)
   [277.7, 288.3, 'mountain'],  // Q4b–N14: alone up the hill; night, stars, the fires below; the Doré engraving
 ];
 function band(ctx, k = 1) { const y0 = Film.SAFE() - (V ? 190 : 80), g = ctx.createLinearGradient(0, y0, 0, H); g.addColorStop(0, 'rgba(10,8,10,0)'); g.addColorStop(.35, `rgba(10,8,10,${.5 * k})`); g.addColorStop(.7, `rgba(10,8,10,${.62 * k})`); g.addColorStop(1, `rgba(10,8,10,${.66 * k})`); ctx.fillStyle = g; ctx.fillRect(0, y0, W, H - y0); }

@@ -37,8 +37,12 @@ const D2R = Math.PI / 180;
 // ---------------------------------------------------------------- the one table: shots and events from the line times
 export function beats(B) {
   const T = { c2: B.C2, n10: B.N10, n11: B.N11, n12: B.N12, n12c: B.N12c, l4: B.L4, q4: B.Q4, q4b: B.Q4b, n13: B.N13, end: B.END };
-  T.shots = [[T.c2, T.n12], [T.n12, T.q4b], [T.q4b, T.end + .5]];
-  T.zoom = [T.n10 + .1, T.n11 + 2.4];              // S1 telephoto → wide (with the pedestal up)
+  // round 2: four shots — the column (long lens → zoom out to the crowd), the baskets (a mid shot of seated groups passing baskets),
+  // the field (FPV to him, they rise, press in), the mountain
+  T.bcut = T.n12 + 4.6;                             // the baskets → the field (a cut on a completed hand-off)
+  T.shots = [[T.c2, T.n12], [T.n12, T.bcut], [T.bcut, T.q4b], [T.q4b, T.end + .5]];
+  T.tele = [T.c2, T.n10 + 2.9];                     // S1 the long-lens beat: the column fills a band of the frame (2.7°)
+  T.zoom = [T.n10 + 2.9, T.n11 + 3.6];              // S1 telephoto → wide (with the pedestal up)
   T.crane = [T.n11 + 1.0, T.n12];                   // S1 the slow rise over the crowd under N11
   T.turn0 = T.n10 + 3.2;                            // S1 heads begin to follow the column (each on his own delay)
   T.point0 = T.n11 + .9;                            // S1 the ripple of pointing
@@ -49,7 +53,7 @@ export function beats(B) {
   T.surge = [T.l4 - .2, T.q4b - .4];                // S2 they press in toward him
   T.away = T.q4b - 1.7;                             // S2 he steps away from them
   T.top = T.n13 - .8;                               // S3 he reaches the top and stops
-  T.dolly = [T.n13 - .4, T.n13 + 5.6];              // S3 the dolly out (≈ 0.27/s in size, then a slow drift to the cut)
+  T.dolly = [T.top - .3, T.n13 + 5.6];              // S3 the dolly out from the moment he stops (17 -> 47 m, ≈ 0.15/s in size, then a slow drift)
   T.night = [T.q4b + .5, T.n13 + 4.5];              // S3 the sun goes under, night comes down
   T.stars = [T.n13 - .5, T.n13 + 4.2];
   T.etch = [T.n13 + 1.2, T.n13 + 5.4];              // S3 the engraving is cut into the picture (mountain-dore.js)
@@ -132,8 +136,8 @@ export async function build(W, H, Bt) {
     const back = 26 * ss(-430, -760, z); const roadFlat = Math.exp(-(((z + 240) / 18) ** 2));
     return ridge + back + (1 - roadFlat) * 1.1 * noise1(x * .021, 8) * ss(-80, -160, z) + .4 * noise1(x * .013 + 5, 2); };
   const ROADZ = -240;
-  terrain(hA, -6000, -300, 1500, 300, groundM('a', '.4, .32, .21', '.5, .42, .27', ROADZ), A);   // (size/seg 5 m; crest smooth)
-  terrain(hA, -6000, -12, 120, 120, groundM('a2', '.4, .32, .21', '.5, .42, .27', ROADZ), A).position.y = .02;   // 1 m cells where the people stand
+  terrain(hA, -6000, -300, 1500, 300, groundM('a', '.4, .32, .21', '.5, .42, .27', ROADZ.toFixed(1)), A);   // (size/seg 5 m; crest smooth)
+  terrain(hA, -6000, -12, 120, 120, groundM('a2', '.4, .32, .21', '.5, .42, .27', ROADZ.toFixed(1)), A).position.y = .02;   // 1 m cells where the people stand
   farHills(A, -900, '#9a7a62', 31, 10, 40, 160);
   // a few olive trees on the slope (bare kit tree + clumps), dark against the haze
   const leafM = K.std('#5c6448', { roughness: .9 }), trunkM = K.std('#3e3226', { roughness: .95 });
@@ -146,7 +150,7 @@ export async function build(W, H, Bt) {
   // scrub and stone across the valley: dark low clumps so the haze has something to lie over (and the shimmer something to bend)
   { const r = rng(919), n = 1000, g = new THREE.IcosahedronGeometry(1, 1), pp = g.attributes.position; for (let k = 0; k < pp.count; k++) { const f = 1 + .3 * Math.sin(pp.getX(k) * 5 + pp.getZ(k) * 3); pp.setXYZ(k, pp.getX(k) * f, Math.max(-.2, pp.getY(k)) * f, pp.getZ(k) * f); } g.computeVertexNormals();
     const inst = new THREE.InstancedMesh(g, K.std('#5a5034', { roughness: 1 }), n), m4 = new THREE.Matrix4(), q = new THREE.Quaternion(), c = new THREE.Color();
-    for (let i = 0; i < n; i++) { let x, z; do { x = (r() - .5) * 520; z = -110 - r() * 540; } while (Math.abs(z - ROADZ) < 8);
+    for (let i = 0; i < n; i++) { let x, z; do { x = (r() - .5) * 520; z = -110 - r() * 540; } while (Math.abs(z - ROADZ) < 8 || (x > 5 && x < 80 && z > ROADZ - 150 && z < ROADZ + 70));   // round 2: none round the long lens's frame
       const lane = Math.round(x / 38) * 38 + (r() - .5) * 6, xx = r() < .55 ? lane : x;   // many along field edges, some loose
       const sz = .25 + r() * r() * .6; q.setFromEuler(new THREE.Euler(0, r() * 6, 0)); m4.compose(V(-6000 + xx, hA(-6000 + xx, z), z), q, V(sz * (1 + r() * .4), sz * (.75 + r() * .3), sz)); inst.setMatrixAt(i, m4); c.setHSL(.1 + r() * .05, .16 + r() * .1, .33 + r() * .1); inst.setColorAt(i, c); }
     inst.castShadow = true; inst.receiveShadow = true; A.add(inst); }
@@ -213,30 +217,100 @@ export async function build(W, H, Bt) {
   // ---------------------------------------------------------------- S1: the soldiers on the road (region A)
   const red = rimSun(K.std('#7a2418', { roughness: .9, side: THREE.DoubleSide }), 'sold', .9), iron = rimSun(K.std('#5a5650', { roughness: .45, metalness: .6 }), 'iron', 1.3);
   const shieldM = rimSun(K.std('#6a2016', { roughness: .7, side: THREE.DoubleSide }), 'shield', 1.1), ash = K.std('#6a5034', { roughness: .8 }), skinA = K.std('#5e3c26', { roughness: .8 });
-  const tipM = new THREE.MeshStandardMaterial({ color: '#d8c8a8', roughness: .2, metalness: .9, emissive: col('#ffd8a0'), emissiveIntensity: 2.2 });
-  const soldiers = []; const COLV = 1.25, ROWS = 24, FILES = 4;
+  // round 2 (owner: "the column is too small to read as soldiers"): legionaries with crests, rectangular scutum with a lit iron
+  // binding, pila whose points glint each on its own beat (smooth in t), the eagle, a signum of discs and two vexilla, dust kicked
+  // up from the road — all seen first through a long lens (2.7°) where the column fills a band of the frame.
+  const crestM = rimSun(K.std('#8a2214', { roughness: .95, side: THREE.DoubleSide }), 'crest', 1.7);
+  const bindM = rimSun(K.std('#9a8660', { roughness: .32, metalness: .75 }), 'bind', 2.4);
+  const goldM = rimSun(new THREE.MeshStandardMaterial({ color: '#b48c3c', roughness: .3, metalness: .85, emissive: col('#ffcf80'), emissiveIntensity: .35, side: THREE.DoubleSide }), 'gold', 2.6);
+  const clothM = rimSun(K.std('#8a2216', { roughness: .85, side: THREE.DoubleSide }), 'vex', 1.4);
+  const tipMat = () => new THREE.MeshStandardMaterial({ color: '#d8c8a8', roughness: .2, metalness: .9, emissive: col('#ffd8a0'), emissiveIntensity: 1.6 });
+  const STRIDE = 1.0, STEP = .62, COLV = STEP / (STRIDE / 2);   // the body moves exactly one step per half stride: planted feet
+  const ROWS = 30, FILES = 4, ROWG = 1.3;
+  const BEARERS = { 5: 'aquila', 13: 'signum', 20: 'vexillum', 26: 'vexillum' };   // rows whose middle two files are one bearer
+  const soldiers = [], bearers = [];
   { const r = rng(808); for (let row = 0; row < ROWS; row++) for (let f = 0; f < FILES; f++) {
-      const s = P.soldier({ h: 1.7 + r() * .1, mat: red, skin: skinA, metal: iron, shieldM, wood: ash, tip: tipM });
-      s.userData.row = row; s.userData.dz = (f - 1.5) * 1.05 + (r() - .5) * .12; s.userData.dx = (r() - .5) * .14; s.userData.ph = (r() - .5) * .06; A.add(s); soldiers.push(s); } }
-  // the standard at the head of the column: a pole with a crossbar and a red cloth (no letters)
-  const standard = new THREE.Group(); { const pole = new THREE.Mesh(new THREE.CylinderGeometry(.025, .03, 3.2, 6), ash); pole.position.y = 1.6; standard.add(pole);
-    const bar = new THREE.Mesh(new THREE.CylinderGeometry(.015, .015, .7, 5), ash); bar.rotation.z = Math.PI / 2; bar.position.y = 3.0; standard.add(bar);
-    const cl = new THREE.Mesh(new THREE.PlaneGeometry(.62, .55, 4, 3), shieldM); cl.position.set(0, 2.68, .01); standard.add(cl);
-    standard.traverse(o => { if (o.isMesh) o.castShadow = true; }); A.add(standard); }
-  const bearer = P.soldier({ h: 1.76, mat: red, skin: skinA, metal: iron, shieldM, wood: ash, tip: tipM }); bearer.userData.ph = 0; A.add(bearer);
-  bearer.userData.U = bearer.userData; bearer.userData.spear.visible = false;
+      if (BEARERS[row] && (f === 1 || f === 2)) continue;
+      const tip = tipMat(), s = P.legionary({ h: 1.7 + r() * .1, mat: red, skin: skinA, metal: iron, shieldM, wood: ash, tip, crestM, bind: bindM });
+      s.userData.row = row; s.userData.dz = (f - 1.5) * 1.05 + (r() - .5) * .1; s.userData.dx = (r() - .5) * .1; s.userData.ph = (r() - .5) * .03;
+      s.userData.tip = tip; s.userData.gph = r(); A.add(s); soldiers.push(s); } }
+  // the standards (no letters on any of them): built standing on their foot at the origin, the pole along +y
+  const mkS = (geo, m, g) => { const o = new THREE.Mesh(geo, m); o.castShadow = true; g.add(o); return o; };
+  const pole = (g, h) => { mkS(new THREE.CylinderGeometry(.022, .028, h, 6), ash, g).position.y = h / 2; };
+  function aquila() {   // the eagle: wings raised in a V, on a wreath, on a tall pole — faces the side the camera is on (+z)
+    const g = new THREE.Group(); pole(g, 3.25); const top = new THREE.Group(); top.position.y = 3.25; g.add(top);
+    const wr = mkS(new THREE.TorusGeometry(.13, .022, 6, 18), goldM, top); wr.position.y = .1;
+    const body = mkS(new THREE.SphereGeometry(.07, 10, 8), goldM, top); body.scale.set(.8, 1.5, .8); body.position.y = .32;
+    mkS(new THREE.SphereGeometry(.045, 8, 6), goldM, top).position.set(.03, .46, .02);
+    const beak = mkS(new THREE.ConeGeometry(.018, .06, 5), goldM, top); beak.position.set(.08, .45, .02); beak.rotation.z = -Math.PI / 2;
+    const wing = new THREE.Shape(); wing.moveTo(0, 0); wing.bezierCurveTo(.12, .05, .26, .2, .34, .42); wing.lineTo(.28, .36); wing.lineTo(.27, .43); wing.lineTo(.2, .3);
+    wing.lineTo(.18, .36); wing.lineTo(.12, .24); wing.bezierCurveTo(.07, .14, .03, .08, 0, .06); wing.lineTo(0, 0);
+    for (const sd of [-1, 1]) { const w = mkS(new THREE.ExtrudeGeometry(wing, { depth: .015, bevelEnabled: false }), goldM, top); w.scale.set(sd, 1, 1); w.position.set(sd * .03, .3, 0); w.rotation.y = sd * -.2; }
+    const tail = mkS(new THREE.ConeGeometry(.05, .16, 4), goldM, top); tail.position.set(0, .2, 0); tail.rotation.z = Math.PI; tail.scale.z = .3;
+    for (const sd of [-1, 1]) { const rib = mkS(new THREE.PlaneGeometry(.035, .32, 1, 4), clothM, top); rib.position.set(sd * .12, -.08, .02); }
+    return g; }
+  function signum() {   // the century's standard: a spear point, a crossbar with tassels, six discs down the pole, a crescent
+    const g = new THREE.Group(); pole(g, 3.3);
+    const pt = mkS(new THREE.ConeGeometry(.035, .2, 4), goldM, g); pt.position.y = 3.4;
+    const bar = mkS(new THREE.CylinderGeometry(.012, .012, .42, 5), goldM, g); bar.rotation.z = Math.PI / 2; bar.position.y = 3.18;
+    for (const sd of [-1, 1]) { const ts = mkS(new THREE.CylinderGeometry(.01, .025, .2, 5), clothM, g); ts.position.set(sd * .2, 3.06, 0); }
+    const cr = mkS(new THREE.TorusGeometry(.11, .02, 5, 14, Math.PI), goldM, g); cr.position.y = 2.88; cr.rotation.z = Math.PI;
+    for (let i = 0; i < 6; i++) { const d = mkS(new THREE.CylinderGeometry(.095, .095, .022, 18), goldM, g); d.rotation.x = Math.PI / 2; d.position.y = 2.62 - i * .22; }
+    return g; }
+  function vexillum() {   // a square red cloth with a fringe hanging from a crossbar; it moves in the evening wind (vertices, smooth in t)
+    const g = new THREE.Group(); pole(g, 3.15);
+    const bar = mkS(new THREE.CylinderGeometry(.013, .013, .86, 5), ash, g); bar.rotation.z = Math.PI / 2; bar.position.y = 3.0;
+    const geo = new THREE.PlaneGeometry(.78, .7, 10, 8); geo.translate(0, -.35, 0); const cl = mkS(geo, clothM, g); cl.position.set(0, 2.98, .015);
+    const fr = mkS(new THREE.PlaneGeometry(.78, .07, 10, 1), crestM, g); fr.position.set(0, 2.24, .015);
+    const pt = mkS(new THREE.ConeGeometry(.03, .16, 4), goldM, g); pt.position.y = 3.24;
+    g.userData.cloth = cl; g.userData.base = geo.attributes.position.array.slice(); g.userData.fringe = fr; return g; }
+  for (const [row, kind] of Object.entries(BEARERS)) {
+    const b = P.legionary({ h: 1.76, mat: red, skin: skinA, metal: iron, shieldM, wood: ash, tip: tipMat(), crestM, bind: bindM }); b.userData.spear.visible = false;
+    b.userData.row = +row; b.userData.dz = 0; b.userData.dx = 0; b.userData.ph = 0; A.add(b);
+    const std = kind === 'aquila' ? aquila() : kind === 'signum' ? signum() : vexillum(); A.add(std); bearers.push({ b, std, kind, row: +row }); }
   const colX = t => 34 - COLV * (t - T.c2);          // the head of the column (region-A local x), marching toward −x
+  const rowX = row => 2.2 + row * ROWG;              // a row's place behind the head
+  // dust kicked up by the feet: soft sprites born along the column at the feet, rising, spreading and drifting back, fading — each
+  // particle's whole life a function of t (seeded), positions computed here every frame. Lit warm in the low sun.
+  const NDUST = 700, dustCol = { pos: new Float32Array(NDUST * 3), sz: new Float32Array(NDUST), al: new Float32Array(NDUST), seed: [] };
+  { const r = rng(4040); for (let i = 0; i < NDUST; i++) dustCol.seed.push({ off: -1.5 + r() * (rowX(ROWS) + 6), dz: (r() - .5) * 5.2, life: 2.6 + r() * 2.4, ph: r(), up: .2 + r() * .4, drift: .15 + r() * .35, wz: (r() - .5) * .5, s0: .3 + r() * .4, a: .035 + r() * .055 }); }
+  const dustColU = { uPx: { value: 1000 } };
+  const dustPts = (() => { const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(dustCol.pos, 3)); g.setAttribute('aSz', new THREE.BufferAttribute(dustCol.sz, 1)); g.setAttribute('aA', new THREE.BufferAttribute(dustCol.al, 1));
+    const m = new THREE.ShaderMaterial({ uniforms: dustColU, transparent: true, depthWrite: false,
+      vertexShader: `attribute float aSz, aA; uniform float uPx; varying float vA; void main(){ vec4 mv = modelViewMatrix * vec4(position, 1.); gl_Position = projectionMatrix * mv;
+        gl_PointSize = clamp(uPx * aSz / -mv.z, 1., 480.); vA = aA * smoothstep(1., 6., gl_PointSize); }`,
+      fragmentShader: `varying float vA; void main(){ vec2 c = gl_PointCoord - .5; float a = exp(-dot(c, c) * 9.) - .02; if (a <= 0.) discard; gl_FragColor = vec4(vec3(.86, .64, .44), a * vA); }` });
+    const p = new THREE.Points(g, m); p.frustumCulled = false; A.add(p); return p; })();
+  function dustAt(t) {
+    const d = dustCol;
+    d.seed.forEach((q, i) => { const L = q.life, tb = Math.floor((t + q.ph * L) / L) * L - q.ph * L, age = t - tb, k = age / L;
+      const bx = colX(tb) + q.off, x = -6000 + bx + q.drift * age, z = ROADZ + q.dz + q.wz * age, y = hA(x, ROADZ) + .05 + q.up * (1 - Math.exp(-age * .8)) * 1.6;
+      const inCol = bx > colX(tb) - 1.2 && bx < colX(tb) + rowX(ROWS) + 1;   // only where feet are (plus the trail behind)
+      d.pos[i * 3] = x; d.pos[i * 3 + 1] = y; d.pos[i * 3 + 2] = z; d.sz[i] = q.s0 + 1.5 * k;
+      d.al[i] = (inCol ? 1 : .5) * q.a * ss(0, .25, k) * (1 - ss(.45, 1, k)); });
+    const g = dustPts.geometry; g.attributes.position.needsUpdate = true; g.attributes.aSz.needsUpdate = true; g.attributes.aA.needsUpdate = true;
+  }
   function soldiersAt(t) {
     const x0 = colX(t);
-    for (const s of soldiers) { const U = s.userData, x = -6000 + x0 + 2.2 + U.row * 1.3 + U.dx;
-      const w = P.walk(s, t + U.ph, T.c2 - 3, { T: 1.0, L: .62 });   // in step (they march), each a hair off
+    for (const s of soldiers) { const U = s.userData, x = -6000 + x0 + rowX(U.row) + U.dx;
+      const w = P.walk(s, t + U.ph, T.c2 - 3, { T: STRIDE, L: STEP });   // in step (they march), each a hair off
       s.position.set(x, hA(x, ROADZ + U.dz), ROADZ + U.dz); s.rotation.y = Math.PI / 2;   // facing −x
-      P.soldierPose(s, { ...w, lean: -.04, head: [0, 0] }); }
-    { const x = -6000 + x0, w = P.walk(bearer, t, T.c2 - 3, { T: 1.0, L: .62 }); bearer.position.set(x, hA(x, ROADZ), ROADZ); bearer.rotation.y = Math.PI / 2;
-      // the standard in both hands, upright before him (hands ON the pole: it is placed at his grips)
-      bearer.updateMatrix(); const gl = V(-.05, 1.22 + w.bob, -.34), gr = V(.05, .92 + w.bob, -.33);
-      P.pose(bearer, { ...w, lean: -.03, hands: [gl, gr] });
-      const gw = gr.clone().applyMatrix4(bearer.matrix); standard.position.set(gw.x, gw.y - .92 + .02, gw.z); standard.rotation.set(0, Math.PI / 2, 0); }
+      P.soldierPose(s, { ...w, lean: -.04, head: [0, 0] });
+      // the point catches the sun now and then as the spear rocks with the step (a soft pulse, its own beat, travelling down the column)
+      const gl = Math.pow(Math.max(0, Math.sin(6.2832 * (t * .42 + U.gph + U.row * .045))), 22);
+      U.tip.emissiveIntensity = 1.5 + 11 * gl; }
+    for (const { b, std, kind } of bearers) { const U = b.userData, x = -6000 + x0 + rowX(U.row), w = P.walk(b, t, T.c2 - 3, { T: STRIDE, L: STEP });
+      b.position.set(x, hA(x, ROADZ), ROADZ); b.rotation.y = Math.PI / 2;
+      // the standard in both hands, upright before him on the pole's line (both hands ON the pole: it is placed at his grips)
+      b.updateMatrix(); const gl = V(0, 1.24 + w.bob, -.36), gr = V(0, .94 + w.bob, -.36);
+      P.pose(b, { ...w, lean: -.03, hands: [gl, gr] });
+      const gw = gr.clone().applyMatrix4(b.matrix); std.position.set(gw.x, gw.y - .94 + .03, gw.z); std.rotation.set(0, kind === 'aquila' ? -.25 : .35, 0);
+      if (std.userData.cloth) { const p = std.userData.cloth.geometry.attributes.position, B0 = std.userData.base;
+        for (let i = 0; i < p.count; i++) { const px = B0[i * 3], py = B0[i * 3 + 1], dn = -py / .7;
+          p.setZ(i, (.05 * Math.sin(px * 7 - t * 2.6 + py * 3) + .03 * Math.sin(px * 13 + t * 3.7)) * (.3 + dn)); p.setX(i, px + .02 * dn * Math.sin(t * 1.3 + x * .1)); }
+        p.needsUpdate = true; std.userData.cloth.geometry.computeVertexNormals();
+        std.userData.fringe.position.z = .015 + .04 * Math.sin(-t * 2.6 + 1.2); } }
+    dustAt(t);
   }
 
   // ---------------------------------------------------------------- S1: the crowd on the crest (region A), from behind
@@ -258,7 +332,7 @@ export async function build(W, H, Bt) {
   const mother = (() => { const p = mk({ h: 1.56, head: 'veil', broad: .86, mat: robes[1], cloth: mantles[3] }); const x = AX - 4.5, z = -5.2; p.position.set(x, hA(x, z), z); p.rotation.y = -.15; p.userData.ph = .61; A.add(p); return p; })();
   const childA = (() => { const p = mk({ h: 1.1, child: true, head: 'cloth', mat: robes[6], cloth: mantles[6] }); const x = AX - 3.85, z = -5.0; p.position.set(x, hA(x, z), z); p.rotation.y = -.1; p.userData.ph = .2; A.add(p); return p; })();
   function crowdAAt(t) {
-    const cx = AX + colX(t) + 14, cz = ROADZ;   // where they look: the middle of the column
+    const cx = AX + colX(t) + rowX(ROWS / 2), cz = ROADZ;   // where they look: the middle of the column
     for (const p of crowdA) { const U = p.userData, k = ss(T.turn0 + U.dl, T.turn0 + U.dl + 1.4, t);
       const yaw = clamp(yawTo(p, cx, cz), -1.0, 1.0) * k, ex = { head: [lerp(.02, -.12, k) + .03 * Math.sin(t * .4 + U.ph * 9), yaw * .7], twist: yaw * .25 };
       if (U.mate && t < T.turn0 + U.dl) ex.head = [0, clamp(yawTo(p, AX + U.mate.x, U.mate.z), -.8, .8) * .6];
@@ -306,6 +380,24 @@ export async function build(W, H, Bt) {
     const ax = side.clone().multiplyScalar(lat > 0 ? -1 : 1).applyAxisAngle(V(0, 1, 0), .35 * (i - 1));   // giver → receiver, across the frame
     return { tp, posA: mid.clone().addScaledVector(ax, -.55), posB: mid.clone().addScaledVector(ax, .55), mid }; });
   T.pass = passPos.map(q => q.tp);
+  // ---------------------------------------------------------------- S1b (round 2): the baskets — seated groups passing baskets
+  // (owner: "the basket passing isn't visible"). A mid shot, not a toy close-up: the hero group sits in an arc open toward the
+  // camera (≈ 8 m away), the basket going round it from hand to hand (both hands on the rim; the next pair of hands closes on it
+  // before the last lets go; each hand-off eased to rest), and behind it, deeper in the field, five more groups each passing their
+  // own basket on their own beat — so the scale reads. Placed off the FPV's path and sight lane (the crowd keeps clear of them).
+  const GA = V(11, 0, 6); GA.y = hB(GA.x, GA.z);
+  const BCAM = [V(GA.x + .95, 0, GA.z + 5.3), V(GA.x + .3, 0, GA.z + 4.85)];   // a slow truck left with a little push in
+  const CHAINS = [
+    { c: [0, 0], R: 1.75, n: 6, a0: -68, a1: 68, t0: T.n12 + .5, dt: 1.12, dir: 1, seed: 11 },   // the hero arc (open toward the camera)
+    { c: [-3.2, -5.0], n: 7, full: true, t0: T.n12 + .15, dt: 1.0, dir: -1, seed: 12 },   // the others: placed down the camera's view at
+    { c: [-.4, -9.8], n: 6, full: true, t0: T.n12 + .75, dt: 1.05, dir: 1, seed: 13 },     // 11–31 m, left and right of its centre line
+    { c: [-6.0, -13.6], n: 8, full: true, t0: T.n12 + .35, dt: .95, dir: 1, seed: 14 },
+    { c: [-1.6, -19.8], n: 7, full: true, t0: T.n12 + .95, dt: 1.0, dir: -1, seed: 15 },
+    { c: [-6.4, -24.8], n: 8, full: true, t0: T.n12 + .55, dt: 1.0, dir: 1, seed: 16 },
+  ].map(q => ({ ...q, R: q.R || .86 / (2 * Math.sin(Math.PI / q.n)), C: V(GA.x + q.c[0], 0, GA.z + q.c[1]) }));   // neighbours ≈ 0.86 m apart (within reach)
+  const nearChains = (x, z) => CHAINS.some((q, i) => Math.hypot(x - q.C.x, z - q.C.z) < q.R + (i ? 2.1 : 1.05))   // grass round each far group so its basket reads
+    || (z > GA.z - .4 && z < GA.z + 9 && Math.abs(x - GA.x - .6) < 3.4)                                  // the hero arc's front and the camera
+    || (z > GA.z - 4.5 && z < GA.z - 1 && Math.abs(x - (GA.x + 1.1 - .232 * (GA.z + 6.7 - z))) < 2.4);   // just behind the arc, mid-frame
   const crowdB = [], spotsI = [];
   { const r = rng(5150), centres = [];
     for (let n = 0; n < 6000 && centres.length < 700; n++) { const a = r() * 6.283, d = 3.2 + Math.pow(r(), .8) * 86, x = C.x + Math.cos(a) * d, z = C.z + Math.sin(a) * d * .9;
@@ -314,7 +406,7 @@ export async function build(W, H, Bt) {
       for (let j = 0; j < m * 6 && pts.length < m; j++) { const a = r() * 6.283, d = Math.sqrt(r()) * s, x = cx + Math.cos(a) * d, z = cz + Math.sin(a) * d;
         if (Math.hypot(x - C.x, z - C.z) < 2.6 || pts.some(([u, v]) => Math.hypot(u - x, v - z) < .62)) continue; pts.push([x, z]); }
       for (const [x, z] of pts) { const dc = Math.hypot(x - C.x, z - C.z), pd = pathD(x, z);
-        if (pd < 2.1 || laneD(x, z) < 0 || passPos.some(q => Math.hypot(q.mid.x - x, q.mid.z - z) < 1.6)) continue;   // the camera's corridor, the sight lane to him, the basket pairs
+        if (pd < 2.1 || laneD(x, z) < 0 || passPos.some(q => Math.hypot(q.mid.x - x, q.mid.z - z) < 1.6) || nearChains(x, z)) continue;   // the camera's corridor, the sight lane to him, the basket pairs, the basket groups
         const detailed = inWedge(x, z) && (dc < 17 || pd < 7) && crowdB.length < 190;
         if (detailed) { const p = person(r); p.position.set(x, hB(x, z), z);
           const toC = face(C.x - x, C.z - z), toG = face(cx - x, cz - z); p.rotation.y = r() < .55 ? toC + (r() - .5) * .5 : toG + (r() - .5) * .6;   // to him, or into the group
@@ -340,11 +432,11 @@ export async function build(W, H, Bt) {
     sh.fragmentShader = sh.fragmentShader.replace('#include <common>', '#include <common>\nuniform vec3 uSunV, uRimC; uniform float uRimK, uRimS;').replace('#include <emissivemap_fragment>', `#include <emissivemap_fragment>
       { vec3 Vd = normalize(vViewPosition); float fr = pow(1. - clamp(dot(normal, Vd), 0., 1.), 2.5); totalEmissiveRadiance += uRimC * fr * smoothstep(-.3, .5, dot(normal, uSunV)) * uRimK * uRimS; }`); }; }
   const breadM = rimSun(K.std('#d09a5a', { roughness: .85 }), 'bread', 1.6), fishM = K.std('#8a8478', { roughness: .5, metalness: .2 });
-  const makeBasket = () => { const g = new THREE.Group(); const b = new THREE.Mesh(new THREE.LatheGeometry([[.12, 0], [.17, .03], [.2, .09], [.21, .15], [.2, .16]].map(([x, y]) => new THREE.Vector2(x, y)), 22), wickerM); b.castShadow = true; g.add(b);
+  const makeBasket = (sc = 1.3) => { const g = new THREE.Group(); const b = new THREE.Mesh(new THREE.LatheGeometry([[.12, 0], [.17, .03], [.2, .09], [.21, .15], [.2, .16]].map(([x, y]) => new THREE.Vector2(x, y)), 22), wickerM); b.castShadow = true; g.add(b);
     const rimT = new THREE.Mesh(new THREE.TorusGeometry(.205, .013, 5, 24), wickerM); rimT.rotation.x = Math.PI / 2; rimT.position.y = .155; g.add(rimT);
     for (let i = 0; i < 4; i++) { const l = new THREE.Mesh(new THREE.SphereGeometry(.065, 10, 6), breadM); l.scale.set(1, .5, 1); l.position.set(Math.cos(i * 1.7) * .09, .13, Math.sin(i * 1.7) * .09); g.add(l); }
     for (let i = 0; i < 2; i++) { const f = new THREE.Mesh(new THREE.SphereGeometry(.04, 8, 5), fishM); f.scale.set(2.6, .55, .9); f.position.set(-.04 + i * .07, .145, .03 - i * .07); f.rotation.y = .6 + i; g.add(f); }
-    g.scale.setScalar(1.3); Bg.add(g); return g; };
+    g.scale.setScalar(sc); Bg.add(g); return g; };
   // the three pairs, placed beside the camera's path a little ahead of where the camera is at each hand-off
   const passes = passPos.map(({ tp, posA, posB, mid }, i) => {
     const r = rng(90 + i), a = person(() => r() * .85 + .15), b = person(r);
@@ -354,6 +446,67 @@ export async function build(W, H, Bt) {
     return { tp, a, b, basket: makeBasket() }; });
   for (const ps of passes) for (const p of [ps.a, ps.b]) { const U = p.userData; U.tRise = T.rise[0] + (U.dc / 17) * (T.rise[1] - T.rise[0] - 1.2) + .3; U.walkD = 0; U.gest = 0; U.mateI = 0; U.dir = V(0, 0, -1); }
   const lapAt = (p, k = 0) => { p.updateMatrix(); return V(0, .5 + .1 * k, -.32).applyMatrix4(p.matrix); };   // in front of a kneeling person, world
+  // the basket groups (S1b): adults only hold baskets (a child's arms would not reach the rim); mixed headwear and mantles
+  const BSC = 1.05, RIMR = .205 * BSC, RIMY = .16 * BSC;
+  const chains = CHAINS.map(q => { const r = rng(900 + q.seed), people = [];
+    for (let j = 0; j < q.n; j++) {
+      const a = (q.full ? (j / q.n) * 360 + (r() - .5) * 5 : lerp(q.a0, q.a1, j / (q.n - 1))) * D2R, rr = q.R * (1 + (r() - .5) * .06);
+      const x = q.C.x + Math.sin(a) * rr, z = q.C.z - Math.cos(a) * rr, woman = r() < .4;
+      const p = mk({ kind: 'sit', h: woman ? 1.52 + r() * .1 : 1.64 + r() * .16, head: woman ? 'veil' : (r() < .5 ? 'hood' : 'cloth'), broad: woman ? .84 + r() * .06 : .92 + r() * .18, mat: robes[(r() * robes.length) | 0], cloth: mantles[(r() * mantles.length) | 0] });
+      p.position.set(x, hB(x, z), z); p.rotation.y = face(q.C.x - x, q.C.z - z) + (r() - .5) * .2;
+      const U = p.userData; U.ph = r(); U.kind = woman ? 'woman' : 'man'; U.dc = Math.hypot(x - C.x, z - C.z); U.eat = r() < .45; U.eph = r() * 6;
+      U.tRise = Infinity;   // seated on the grass (no legs to rise on); the last holder keeps the basket on his lap
+      Bg.add(p); people.push(p); }
+    const order = people.map((_, j) => q.dir > 0 ? j : q.n - 1 - j);
+    const taus = []; for (let k = 0; k < q.n - 1; k++) { const tt = q.t0 + k * q.dt; if (tt > T.n12c - 1.2) break; taus.push(tt); }
+    return { ...q, people, order, taus, basket: makeBasket(BSC) }; });
+  const smoother = x => { x = clamp(x); return x * x * x * (x * (x * 6 - 15) + 10); };
+  const bez = (a, b, c, u) => a.clone().multiplyScalar((1 - u) * (1 - u)).addScaledVector(b, 2 * u * (1 - u)).addScaledVector(c, u * u);
+  const lapW = (p, up = 0) => { p.updateMatrix(); return V(0, .33 + up, -.36).applyMatrix4(p.matrix); };   // on the lap of a seated ('sit') person
+  const midW = (pa, pb, cen) => { const A0 = lapW(pa), B0 = lapW(pb), m = A0.clone().add(B0).multiplyScalar(.5), toC = V(cen.x - m.x, 0, cen.z - m.z);
+    if (toC.lengthSq() > 1e-6) m.addScaledVector(toC.normalize(), -.02); m.y = Math.max(A0.y, B0.y) + .16; return m; };
+  // where the basket is at t and who holds it how much: [{ p, w }] (w: 0 = hands at rest … 1 = both hands on the rim)
+  function chainAt(ch, t) {
+    const { order, taus, people, C: cen } = ch, Pk = k => people[order[k]], nT = taus.length, hold = [];
+    let pos;
+    if (!nT || t <= taus[0] - 1.0) pos = lapW(Pk(0), .04);
+    else if (t >= taus[nT - 1]) { const h = Pk(nT); pos = bez(midW(Pk(nT - 1), h, cen), lapW(h, .14), lapW(h, .04), smoother((t - taus[nT - 1]) / .95)); }
+    else if (t < taus[0]) pos = bez(lapW(Pk(0), .04), lapW(Pk(0), .16), midW(Pk(0), Pk(1), cen), smoother((t - taus[0] + 1.0) / 1.0));
+    else { let k = 1; while (k < nT && t >= taus[k]) k++;   // between taus[k-1] and taus[k]: order[k] carries it across his front
+      pos = bez(midW(Pk(k - 1), Pk(k), cen), lapW(Pk(k), .1), midW(Pk(k), Pk(k + 1), cen), smoother((t - taus[k - 1]) / (taus[k] - taus[k - 1]))); }
+    for (let k = 0; k <= nT; k++) {
+      const eIn = k === 0 ? 1 : ss(taus[k - 1] - .62, taus[k - 1] - .08, t), eOut = k < nT ? ss(taus[k] + .12, taus[k] + .58, t) : 0, w = eIn * (1 - eOut);
+      if (w > 0) hold.push({ p: Pk(k), w, last: k === nT }); }
+    // the last holder keeps it; when he rises it rises with him, carried before his waist (a root-frame point, both hands on the rim)
+    const last = Pk(nT), kr = clamp((t - last.userData.tRise) / 1.25);
+    if (kr > 0) { last.updateMatrix(); pos = lv(pos, V(0, .92, -.33).applyMatrix4(last.matrix), smoother(kr)); }
+    return { pos, hold };
+  }
+  // the two grips on the rim, on the holder's side, as root-frame targets for his left and right hands
+  function rimGrips(p, pos) {
+    const d = V(p.position.x - pos.x, 0, p.position.z - pos.z); if (d.lengthSq() < 1e-6) d.set(0, 0, 1); d.normalize();
+    const perp = V(-d.z, 0, d.x), c = pos.clone().add(V(0, RIMY, 0)), A0 = c.clone().addScaledVector(d, RIMR * Math.cos(.75)).addScaledVector(perp, RIMR * Math.sin(.75)), B0 = c.clone().addScaledVector(d, RIMR * Math.cos(.75)).addScaledVector(perp, -RIMR * Math.sin(.75));
+    p.updateMatrix(); const inv = p.matrix.clone().invert(), a = A0.applyMatrix4(inv), b = B0.applyMatrix4(inv);
+    return a.x < b.x ? [a, b] : [b, a];   // the left hand (−x in his frame) takes the grip on his left
+  }
+  const handErr = [], handErrWho = []; let handErrOn = false;
+  function sitPose(p, t, ex = {}) { const U = p.userData, s = U.s;
+    P.pose(p, { breath: P.breath(t, U.ph), twist: .03 * Math.sin(t * .23 + U.ph * 5), lean: -.07 - .04 * Math.sin(t * .3 + U.ph * 7), head: [-.06 + .04 * Math.sin(t * .4 + U.ph * 9), .06 * Math.sin(t * .19 + U.ph * 4)],
+      hands: [V(-.15 * s, .4 * s, -.27 * s), V(.15 * s, .4 * s, -.26 * s)], ...ex }); }
+  function chainsAt(t) {
+    for (const ch of chains) { const { pos, hold } = chainAt(ch, t); ch.basket.position.copy(pos); ch.basket.rotation.y = ch.seed;
+      for (const p of ch.people) { const U = p.userData, h = hold.find(q => q.p === p), k = clamp((t - U.tRise) / 1.25), s = U.s;
+        const rest = [V(-.15 * s, .4 * s, -.27 * s), V(.15 * s, .4 * s, -.26 * s)];
+        if (h) { const g = rimGrips(p, pos), w = smoother(h.w), yaw = clamp(yawTo(p, pos.x, pos.z), -.9, .9);
+          const ex = { hands: [lv(rest[0], g[0], w), lv(rest[1], g[1], w)], twist: yaw * .62 * w, head: [lerp(-.05, -.3, w * (1 - k)), yaw * .55 * w] };
+          ex.lean = -.07 - .12 * w; sitPose(p, t, ex);
+          if (handErrOn && h.w > .985) for (let i = 0; i < 2; i++) { const e = P.handAt(p, i).applyMatrix4(p.matrix).distanceTo(g[i].clone().applyMatrix4(p.matrix)); handErr.push(e); if (e > .03) handErrWho.push([+t.toFixed(2), chains.indexOf(ch), ch.people.indexOf(p), i, +e.toFixed(3), +k.toFixed(2), h.last ? 'last' : '', +g[i].x.toFixed(2), +g[i].y.toFixed(2), +g[i].z.toFixed(2)]); } continue; }
+        const near = pos.distanceTo(p.position) < 1.6 ? clamp(yawTo(p, pos.x, pos.z), -.8, .8) : 0, ex = {};
+        if (k >= 1) ex.head = [.05, clamp(yawTo(p, C.x, C.z), -1, 1) * .6];
+        else { ex.head = [-.12 + .04 * Math.sin(t * .4 + U.ph * 9), near * .5 + .06 * Math.sin(t * .19 + U.ph * 4)];
+          if (U.eat) { const e = Math.max(0, Math.sin(t * .8 + U.eph)), ek = e * e * (3 - 2 * e); ex.hands = [rest[0], lv(rest[1], V(.05 * s, .74 * s, -.15 * s), ek * .9)]; } }
+        sitPose(p, t, ex); } }
+  }
   // instanced far crowd: one lathe figure that morphs from sitting to standing (same vertex count), rising on its own time
   const IU = { uT: { value: 0 }, uC: { value: C.clone() }, uSurge0: { value: T.surge[0] }, uRiseOverride: { value: -1 } };
   const prof = (pts) => pts.map(([r, y]) => new THREE.Vector2(r, y));
@@ -442,6 +595,7 @@ export async function build(W, H, Bt) {
       if (t < aw) { king.position.copy(C); P.pose(king, { ...P.idle(t, U.ph, { s: U.s }), head: [-.03 - .08 * ss(T.q4 + .5, T.q4 + 1.6, t), .1 * Math.sin(t * .3) * (1 - ss(T.rise[0], T.rise[0] + 1, t))] }); }
       else { const dir = V(-.25, 0, -1).normalize(); const w = P.walk(king, t, aw, { T: 1.12, L: .52 }); king.position.copy(C).addScaledVector(dir, w.dist); king.position.y = hB(king.position.x, king.position.z); king.rotation.y = face(dir.x, dir.z) * ss(aw, aw + .5, t);
         P.pose(king, { ...w, breath: .5, head: [-.08, 0] }); } }
+    chainsAt(t);
   }
 
   // ---------------------------------------------------------------- S3: the mountain — his climb, the fires, the stars
@@ -462,12 +616,12 @@ export async function build(W, H, Bt) {
   }
   // S3 camera: behind him at walking pace, then the dolly out to OUT (just under his eye line, so he stands against the sky)
   const back = climbDir.clone().negate(), lat = V(-back.z, 0, back.x);
-  const OUT = SUMMIT.clone().addScaledVector(back, 38).addScaledVector(lat, 3.5); OUT.y = SUMMIT.y - 1.4;
+  const OUT = SUMMIT.clone().addScaledVector(back, 47).addScaledVector(lat, 4.2); OUT.y = SUMMIT.y - 1.6;   // round 2: farther (38 -> 47 m)
   const OUTDIR = V(climbDir.x, Math.tan(-1.2 * D2R), climbDir.z).normalize().applyAxisAngle(V(0, 1, 0), .02);
   // the crowd's fires on the plain below and beyond the knoll, placed where the final frame sees them (rays from OUT through
   // chosen points of the frame, marched to the ground; only flat ground, off the knoll). Flicker: smooth sums of sines.
   const fires = []; { const r = rng(2024), cm = new THREE.PerspectiveCamera(FOV, W / H, .1, 3000); cm.position.copy(OUT); cm.lookAt(OUT.clone().add(OUTDIR)); cm.updateMatrixWorld();
-    for (let i = 0; i < 400 && fires.length < 24; i++) { const u = r() < .5 ? .05 + r() * .33 : .62 + r() * .33, v = .515 + r() * .085;
+    for (let i = 0; i < 500 && fires.length < 30; i++) { const u = r() < .5 ? .05 + r() * .33 : .62 + r() * .33, v = .515 + r() * .085;
       const d = V(u * 2 - 1, 1 - v * 2, .5).unproject(cm).sub(OUT).normalize(); let hit = null;
       for (let s2 = 30; s2 < 1200; s2 += 2) { const q = OUT.clone().addScaledVector(d, s2); if (q.y < hB(q.x, q.z)) { hit = q; break; } }
       if (!hit || hillH(hit.x, hit.z) > 1.2 || fires.some(f => f.p.distanceTo(hit) < 25)) continue;
@@ -478,7 +632,7 @@ export async function build(W, H, Bt) {
     const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(pos, 3)); g.setAttribute('aS', new THREE.BufferAttribute(aS, 1));
     const m = new THREE.ShaderMaterial({ uniforms: fireU, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
       vertexShader: `attribute float aS; uniform float uT, uPx; varying float vA; void main(){ vec4 mv = modelViewMatrix * vec4(position, 1.); gl_Position = projectionMatrix * mv;
-        float fl = .75 + .15 * sin(uT * 7.1 + aS * 3.) + .1 * sin(uT * 13.3 + aS * 7.); gl_PointSize = clamp(uPx * 5200. / -mv.z * fl, 1.5, 26.); vA = fl; }`,
+        float fl = .75 + .15 * sin(uT * 7.1 + aS * 3.) + .1 * sin(uT * 13.3 + aS * 7.); gl_PointSize = clamp(uPx * 6400. / -mv.z * fl, 2., 30.); vA = fl; }`,
       fragmentShader: `uniform float uK; varying float vA; void main(){ vec2 c = gl_PointCoord - .5; float a = exp(-dot(c, c) * 18.); gl_FragColor = vec4(vec3(1., .62, .28) * 2.4 * vA, a * uK); }` });
     const pts = new THREE.Points(g, m); pts.frustumCulled = false; Bg.add(pts); }
   const fireLamps = fires.slice(0, 14).map(f => film.lamp(f.p.clone().add(V(0, .6, 0)), '#ff9a4a', { power: 0, size: 2.5, fog: 1 }));
@@ -517,32 +671,53 @@ export async function build(W, H, Bt) {
   const skyEvening = { top: col('#56688c', .4), mid: col('#cf9a6e', .76), horizon: col('#ffbf7e', 1.45) };
   let shimmerK = 0, godK = .5, inS3 = false;
   const S1 = { A0: V(AX + 2, hA(AX + 2, 13) + 6.2, 13), A1: V(AX + 1, hA(AX + 1, 11) + 5.6, 11), A2: V(AX + .5, hA(AX + .5, 9.5) + 8.6, 9.5) };
+  // the long-lens beat: where the frame's centre is on the road (region-A local x) — a slow pan behind the column, slower than it
+  // marches, so the ranks drift through the frame (the eagle crosses the middle ≈ 1 s after N10 begins)
+  const teleX = t => 38.8 - .35 * (t - T.c2), F0 = 2.7, F1 = 42;
+  const sineIO = x => (1 - Math.cos(Math.PI * clamp(x))) / 2;
   function frame(shot, t) {
     const Lk = film.look, Dc = film.dofCfg, at = film.atmos;
-    A.visible = shot === 0; Bg.visible = shot > 0; stars.visible = shot === 2; dust.visible = shot !== 0 || t > T.zoom[1] - 1;
-    Lk.grain = .03; Lk.exposure = .72; Dc.maxCoc = 24; inS3 = shot === 2;
+    A.visible = shot === 0; Bg.visible = shot > 0; stars.visible = shot === 3; dust.visible = shot !== 0 || t > T.zoom[1] - 1;
+    Lk.grain = .03; Lk.exposure = .72; Dc.maxCoc = 24; inS3 = shot === 3;
     SKY.top.value.copy(skyEvening.top); SKY.mid.value.copy(skyEvening.mid); SKY.horizon.value.copy(skyEvening.horizon); SKY.sunColor.value.copy(col('#fff0cc', 22)); SKY.sunGlow.value.copy(col('#ffb070', 1.5)); SKY.clouds.value = .25;
     at.color.copy(col('#c98a5a', .54)); at.colorUp.copy(col('#b39a84', .47)); at.density = .006; at.falloff = .03; at.base = 0; at.scatter = 1;
     RIMU.uRimK.value = 1; RIMU.uRimC.value.copy(col('#ff9a5a', 1.25)); fireU.uK.value = 0; fireLamps.forEach(l => l.power = 0); hemi.intensity = .5; hemi.color.copy(col('#b8a894')); sunLamp.power = 2000; godK = .5;
     if (shot === 0) {
-      // S1: telephoto on the column (shimmer), zoom out + pedestal up to the crowd on the hill; then the slow rise over them under N11
+      // S1: the long lens on the column (2.7°: the ranks fill a band of the frame, heat shimmer, dust) → the zoom out (even in log
+      // focal length, a sine ease) with the pedestal up to the crowd on the hill; then the slow rise over them under N11
       soldiersAt(t); crowdAAt(t);
-      const kz = eio((t - T.zoom[0]) / (T.zoom[1] - T.zoom[0])), kc = eio((t - T.crane[0]) / (T.crane[1] - T.crane[0]));
-      const fov = Math.exp(lerp(Math.log(8), Math.log(42), kz));
+      const kz = sineIO((t - T.zoom[0]) / (T.zoom[1] - T.zoom[0])), kc = eio((t - T.crane[0]) / (T.crane[1] - T.crane[0]));
+      const fov = Math.exp(lerp(Math.log(F0), Math.log(F1), kz)), kl = (fov - F0) / (F1 - F0);   // the aim follows the lens: it leaves the column only once the frame is wide
       const pos = lv(S1.A0, S1.A1, kz).lerp(S1.A2, kc * .9);
-      const colMid = V(AX + colX(t) + 13, 1.0, ROADZ);
-      const teleLook = colMid.clone().sub(S1.A0).normalize(), wideLook = V(AX + 2.5, 2, -95).sub(pos).normalize();
-      const look = pos.clone().add(lv(teleLook, wideLook, kz).normalize().multiplyScalar(100));
+      const tx = AX + teleX(t), colMid = V(tx, hA(tx, ROADZ) + 1.15, ROADZ);
+      const teleLook = colMid.clone().sub(pos).normalize(), wideLook = V(AX + 2.5, 2, -95).sub(pos).normalize();
+      const look = pos.clone().add(lv(teleLook, wideLook, kl).normalize().multiplyScalar(100));
       setFov(fov); setCam(pos, look);
-      setSun(V(-.1, .042, -1), 9, V(AX + 8, 8, -120), 3.0); shadowBox(70, 34);
+      // the shadow box: tight round the ranks while the lens is long (crisp shadows of the planted feet), out to the whole hill
+      // before the crowd enters the frame
+      const kb = ss(0, .4, kz), tx0 = AX + teleX(T.c2 + 3.2);
+      setSun(V(-.1, .042, -1), 9, lv(V(tx0, 1, ROADZ), V(AX + 8, 8, -120), kb), 3.0); shadowBox(lerp(14, 70, kb), lerp(9, 34, kb));
       at.density = lerp(.0016, .0036, kz); at.falloff = .02; at.scatter = lerp(.35, .8, kz);
       SKY.sunColor.value.copy(col('#ffd9a8', lerp(7, 20, kz))); SKY.sunGlow.value.copy(col('#ffa060', lerp(2.2, 1.5, kz)));
       Dc.focus = lerp(colMid.distanceTo(pos), pos.distanceTo(V(AX + 1, hA(AX + 1, -4) + 1.4, -4)), kz); Dc.aperture = lerp(5, 1.1, kz);
       Lk.exposure = lerp(.68, .72, kz); shimmerK = 1 - ss(T.zoom[0], T.zoom[0] + 3.5, t) * .85;
+      dustColU.uPx.value = (H / 2) / Math.tan(fov * D2R / 2);
       dustU.uC.value.set(pos.x, pos.y - 3, pos.z - 2);
     } else if (shot === 1) {
+      // S1b: the baskets — a mid shot, low, of the hero group's arc with the basket going round it; the other groups behind
+      crowdBAt(t); fireSitters.visible = false; kingS3.visible = false; king.visible = true; crowdI.visible = true;
+      const u = eio((t - T.n12) / (T.bcut - T.n12)), cp = lv(BCAM[0], BCAM[1], u); cp.y = hB(cp.x, cp.z) + 1.75;
+      const look = V(GA.x - .75 + .25 * u, GA.y + .38, GA.z - 2.2);
+      setFov(44); setCam(cp, look);
+      setSun(V(0, .062, -1), 9, GA.clone().add(V(0, 0, -9)), 3.1); shadowBox(20, 14);
+      at.density = .0055; at.falloff = .03; at.base = 3;
+      RIMU.uRimC.value.copy(col('#ff8248', 1.35));
+      Dc.focus = cp.distanceTo(chains[0].basket.position); Dc.aperture = 1.25;
+      waterU.uSunW.value.copy(SUN); waterU.uT.value = t; tuftU.uT.value = t; shimmerK = 0;
+      dustU.uC.value.set(cp.x, cp.y - 1.4, cp.z - 1);
+    } else if (shot === 2) {
       // S2: FPV in over the seated groups toward him, the orbit as they rise, the press
-      crowdBAt(t); for (const f of [fireSitters]) f.visible = false; kingS3.visible = false; king.visible = true; crowdI.visible = true;
+      crowdBAt(t); fireSitters.visible = false; kingS3.visible = false; king.visible = true; crowdI.visible = true;
       const pos = camS2(t).add(hand(t, .5 * ss(T.n12c - .5, T.n12c + .8, t)));
       const look = C.clone().add(V(0, 1.15 + .35 * ss(T.n12c, T.n12c + 3, t), 0)).add(hand(t + 7, .25 * ss(T.n12c - .5, T.n12c + .8, t)));
       const bank = (noise1(t * .35, 21) * .6) * D2R * (1 - ss(T.fpv1 - 1, T.fpv1, t)) + hand(t + 3, .5 * ss(T.n12c - .5, T.n12c + .8, t)).x * .06;
@@ -554,15 +729,17 @@ export async function build(W, H, Bt) {
       waterU.uSunW.value.copy(SUN); waterU.uT.value = t; tuftU.uT.value = t; shimmerK = 0;
       dustU.uC.value.set(pos.x, pos.y - 1.4, pos.z - 1);
     } else {
-      // S3: behind him up the last of the hill, the sun pressed on the horizon behind the top; he stands; the dolly out into the night
+      // S3: behind him up the last of the hill — round 2: from farther back (he stays a small figure against the sky, about 12 % of
+      // the frame's height), the sun pressed on the horizon behind the top; he stands; the dolly out into the night (isolation)
       king.visible = false; crowdI.visible = false; kingS3.visible = true; for (const p of crowdB) p.visible = false; for (const ps of passes) { ps.a.visible = ps.b.visible = ps.basket.visible = false; }
+      for (const ch of chains) { ch.basket.visible = false; for (const p of ch.people) p.visible = false; }
       fireSitters.visible = true; kingClimb(t);
       const n = eio((t - T.night[0]) / (T.night[1] - T.night[0])), kd = eio((t - T.dolly[0]) / (T.dolly[1] - T.dolly[0])), drift = Math.max(0, t - T.dolly[1]) * .4;
-      const kp = kingS3.position.clone(), kpF = kp.clone(); if (t > T.dolly[0]) { /* the follow point stays where it was when the dolly began */ }
-      const follow = kp.clone().addScaledVector(back, 10.5).addScaledVector(lat, 1.2); follow.y = Math.max(hB(follow.x, follow.z) + 1.1, kp.y - .1);
+      const kp = kingS3.position.clone();
+      const follow = kp.clone().addScaledVector(back, 17).addScaledVector(lat, 2.0); follow.y = Math.max(hB(follow.x, follow.z) + 1.1, kp.y - 1.0);
       const outP = OUT.clone().addScaledVector(back, drift).add(V(0, drift * .05, 0));
       const pos = lv(follow, outP, kd);
-      const look = lv(kp.clone().add(V(0, 1.3, 0)).addScaledVector(climbDir, 6), outP.clone().addScaledVector(OUTDIR, 100), kd);
+      const look = lv(kp.clone().add(V(0, 1.1, 0)).addScaledVector(climbDir, 6), outP.clone().addScaledVector(OUTDIR, 100), kd);
       setFov(FOV); setCam(pos, look);
       // the sun sits on the horizon behind the top, then goes under; the sky cools to night
       const elev = lerp(1.7, -4.5, ss(T.q4b, T.n13 + 2.2, t)), az = climbDir.clone(); const sd = V(az.x, Math.tan(elev * D2R), az.z).normalize().applyAxisAngle(V(0, 1, 0), -.12);
@@ -579,7 +756,8 @@ export async function build(W, H, Bt) {
       tuftU.uT.value = t; shimmerK = 0; godK = .55 * (1 - n);
       dustU.uC.value.set(pos.x, pos.y - 1.4, pos.z); dustU.uA.value = 1 - n;
     }
-    if (shot !== 2) { for (const p of crowdB) p.visible = true; for (const ps of passes) { ps.a.visible = ps.b.visible = ps.basket.visible = true; } dustU.uA.value = 1; }
+    if (shot !== 3) { for (const p of crowdB) p.visible = true; for (const ps of passes) { ps.a.visible = ps.b.visible = ps.basket.visible = true; }
+      for (const ch of chains) { ch.basket.visible = true; for (const p of ch.people) p.visible = true; } dustU.uA.value = 1; }
     RIMU.uSunV.value.copy(SUN).transformDirection(cam.matrixWorldInverse.copy(cam.matrixWorld).invert());
     dustU.uT.value = t;
     film.render(t);
@@ -610,8 +788,9 @@ export async function build(W, H, Bt) {
         ctx.drawImage(film.canvas, 0, y * film.canvas.height / H, film.canvas.width, sh * film.canvas.height / H, dx, y, W, sh); } }
     ctx.restore();
   }
+  function shotAt(t) { let k = 0; for (let i = 1; i < T.shots.length; i++) if (t >= T.shots[i][0]) k = i; return k; }
   function draw(ctx, t) {
-    let shot = 0; T.shots.forEach(([a, b], i) => { if (t >= a && t < b) shot = i; }); if (t >= T.shots[2][0]) shot = 2;
+    const shot = shotAt(t);
     frame(shot, t); blit(ctx, t);
     tmpV.copy(cam.position).add(SUN.clone().multiplyScalar(500)).project(cam);
     if (godK > .01 && tmpV.z < 1 && Math.abs(tmpV.x) < 1.6 && Math.abs(tmpV.y) < 1.6) godRays(ctx, (tmpV.x + 1) / 2 * W, (1 - tmpV.y) / 2 * H, godK);
@@ -619,5 +798,6 @@ export async function build(W, H, Bt) {
   // where the knoll's top and the plain's horizon are in the frame now (for the engraving's line field, mountain-dore.js)
   function marks() { const sP = SUMMIT.clone().project(cam), hz = V(cam.position.x + OUTDIR.x * 1200, 2, cam.position.z + OUTDIR.z * 1200).project(cam);
     return { xs: (sP.x + 1) / 2 * W, hy: (1 - hz.y) / 2 * H }; }
-  return { film, draw, marks, debug: { fires, nB: crowdB.length, nI: spotsI.length, SUMMIT, OUT }, beats: () => T, shotAt: t => (t >= T.shots[2][0] ? 2 : t >= T.shots[1][0] ? 1 : 0), canvas: film.canvas };
+  return { film, draw, marks, debug: { fires, nB: crowdB.length, nI: spotsI.length, SUMMIT, OUT, chains: chains.length,
+      handCheck(t0, t1, dt = .05) { handErrOn = true; handErr.length = 0; handErrWho.length = 0; const worst = []; for (let t = t0; t <= t1; t += dt) { const n0 = handErr.length; crowdBAt(t); const m = Math.max(0, ...handErr.slice(n0)); worst.push([+t.toFixed(2), +m.toFixed(3)]); } handErrOn = false; worst.sort((a, b) => b[1] - a[1]); return { max: worst[0], top: worst.slice(0, 6), n: handErr.length, who: handErrWho.slice(0, 40) }; } }, beats: () => T, shotAt, canvas: film.canvas };
 }

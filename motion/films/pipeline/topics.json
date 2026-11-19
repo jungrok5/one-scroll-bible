@@ -72,6 +72,11 @@
      "at": "2026-11-16",
      "fact": "해설판 옆자리에 '성경은 누가, 언제, 어떻게 편집했나' 0.5% — 다섯 번째 연속(11/4–11/16), 쇼츠 19/21 '성경이 진짜 실화인가요?' 11/12–16 100회(평균 시청 비율 253%)",
      "source": "motion/films/analytics/2026-11-16/video-film-narr-reach_viewers.json"
+    },
+    {
+     "at": "2026-11-19",
+     "fact": "해설판 옆자리에 '성경은 누가, 언제, 어떻게 편집했나' 0.5% — 여섯 번째 연속(11/4–11/19)",
+     "source": "motion/films/analytics/2026-11-19/video-film-narr-reach_viewers.json"
     }
    ]
   },
@@ -101,6 +106,11 @@
      "at": "2026-11-12",
      "fact": "교회의 시작 15/21(땅 끝까지 내 증인) 11/9–11/12 평균 시청 비율 486% — 한국어 쇼츠 중 가장 많이 다시 봄",
      "source": "motion/films/analytics/2026-11-12/api-ko.json"
+    },
+    {
+     "at": "2026-11-19",
+     "fact": "「침묵의 400년」 가로 검색어 1위 '어성경이읽어지네 신약' 7.7% — 신약 흐름을 찾는 시청자, 음악판 옆자리 '신약성경 전체 흐름' 이후 같은 방향",
+     "source": "motion/films/analytics/2026-11-19/video-silence400-h-reach_viewers.json"
     }
    ]
   },
@@ -154,6 +164,11 @@
      "at": "2026-11-16",
      "fact": "복음의 핵심 쇼츠가 피드를 연다: 18/21 '행하라가 아니라 이루어졌다' 11/12–16 432회(평균 시청 비율 210%), 20/21 '착하게 살면?'(은혜로 구원) 첫 1일 15시간 528회 · 구독 +4, 같은 편 인스타 릴스 1,359회로 7일 최고",
      "source": "motion/films/analytics/2026-11-16/api-ko.json"
+    },
+    {
+     "at": "2026-11-19",
+     "fact": "「그리스도」 세로 3:00(고난받는 메시아 → 십자가) 공개 사흘 2,300회 · 계속 시청 57.8% · 구독 +15 · 신규 시청자 84% — 400년 세로가 19일 동안 488회였던 것의 약 5배",
+     "source": "motion/films/analytics/2026-11-19/video-christ-v-overview.json"
     }
    ]
   },
@@ -240,7 +255,13 @@
    "refs": "레 16(대속죄일) · 히 9:11–14 · 히 10:11–12 · 막 15:38(휘장) · 히 10:19–22 · 요 14:13",
    "connection": "구약은 제사장을 통해 제사로 죄 사함 → 예수님이 제물이자 대제사장이 되어 단번에 → 휘장이 찢어져 이제 누구나 예수 이름으로 하나님께 직접 나아간다(아내: '제사장한테 안 가도 예수 그리스도 이름으로 하나님께 직접 기도할 수 있는 권한')",
    "status": "candidate",
-   "evidence": []
+   "evidence": [
+    {
+     "at": "2026-11-19",
+     "fact": "「그리스도」 세로 3:00 사흘 2,300회 · 구독 +15 · 55세 이상 77% · 구독 안 한 사람 96% — 고난받는 그리스도·십자가 이야기가 새 시청자에게 닿음(아내 제안 주제와 같은 결)",
+     "source": "motion/films/analytics/2026-11-19/video-christ-v-build_audience.json"
+    }
+   ]
   }
  ],
  "recommendations": [
@@ -297,6 +318,24 @@
     "bible-transmission"
    ],
    "source": "motion/films/ANALYTICS.md 2026-11-17"
+  },
+  {
+   "at": "2026-11-19",
+   "ids": [
+    "passover-lamb",
+    "bible-transmission",
+    "acts"
+   ],
+   "source": "motion/films/ANALYTICS.md 2026-11-19"
+  },
+  {
+   "at": "2026-11-19",
+   "ids": [
+    "passover-lamb",
+    "bible-transmission",
+    "acts"
+   ],
+   "source": "motion/films/ANALYTICS.md 2026-11-19"
   }
  ]
 }

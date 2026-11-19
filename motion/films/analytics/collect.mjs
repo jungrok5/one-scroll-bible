@@ -82,7 +82,7 @@ if (cmd === 'plan') {
   const need = ['api-ko', ...pages().map(p => p.name)], miss = need.filter(n => !existsSync(out(n)));
   console.log(miss.length ? `빠진 것 ${miss.length}개:\n  ` + miss.join('\n  ') : '모두 모였다'); process.exit(miss.length ? 2 : 0);
 } else if (cmd === 'report') {
-  const g = n => J(out(n)), p = prevDate(), pg = n => p ? J(join(A, p, n + '.json')) : null, fmt = v => v == null ? '—' : typeof v === 'number' ? (Math.abs(v) < 1 && v !== 0 ? (v * 100).toFixed(1) + '%' : v.toLocaleString('en-US')) : v;
+  const g = n => J(out(n)), p = prevDate(), pg = n => p ? J(join(A, p, n + '.json')) : null, pf = v => v == null ? "—" : (v * 100).toFixed(1) + "%", fmt = v => v == null ? '—' : typeof v === 'number' ? (Math.abs(v) < 1 && v !== 0 ? (v * 100).toFixed(1) + '%' : v.toLocaleString('en-US')) : v;
   const d = (a, b) => (a == null || b == null) ? '' : ` (${a - b >= 0 ? '+' : ''}${Math.abs(a) < 1 ? ((a - b) * 100).toFixed(1) + '%p' : (a - b).toLocaleString('en-US')})`;
   const R = [`## ${date} — 정기 분석 (수집: analytics/${date}/, collect.mjs report${p ? ` · 지난 분석 ${p} 대비` : ''})`, ''];
   const ch = g('studio-channel'), cp = pg('studio-channel');
@@ -95,7 +95,7 @@ if (cmd === 'plan') {
   const ct = g('studio-content'), LK = J(join(A, 'looks.json'))?.shorts_ko || {};
   if (ct) { R.push('', '**화풍·요소 표 — 한국어 쇼츠(28일)**', '', '| 편 | 화풍 | 판 | 조회 | 평균 조회율 | 구독 |', '|---|---|---|---|---|---|');
     for (const r of ct.rows.filter(r => /\d+\/21/.test(r.title) && /[가-힣]/.test(r.title)).sort((a, b) => b.views - a.views)) { const n = +r.title.match(/(\d+)\/21/)[1];
-      R.push(`| ${n} | ${LK[n]?.look || '—'} | ${LK[n]?.cut || ''} | ${fmt(r.views)} | ${fmt(r.avgPct)} | ${fmt(r.subs)} |`); } }
+      R.push(`| ${n} | ${LK[n]?.look || '—'} | ${LK[n]?.cut || ''} | ${fmt(r.views)} | ${pf(r.avgPct)} | ${fmt(r.subs)} |`); } }
   const ig = g('instagram'), ip = pg('instagram'); if (ig) R.push('', `**인스타그램(7일)**: 조회 ${fmt(ig.views)}${d(ig.views, ip?.views)} · 도달 ${fmt(ig.reached)} · 팔로워 아닌 사람 ${fmt(ig.nonFollowerShare)} · 반응 ${fmt(ig.interactions)} · 프로필 방문 ${fmt(ig.profileVisits)} · 팔로워 ${fmt(ig.followers)}${d(ig.followers, ip?.followers)}`,
     '  인기 릴스: ' + ig.topByViews.map(x => `${x.date} ${fmt(x.views)}`).join(' · '));
   const th = g('threads'); if (th) R.push(`**스레드**: 최근 글 조회 ${th.posts.map(x => x.views).join(' · ')}`);

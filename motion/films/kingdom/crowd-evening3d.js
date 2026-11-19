@@ -62,6 +62,7 @@ export function beats(B) {
 
 export async function build(W, H, Bt) {
   const T = beats(Bt);
+  const RISE = 2.0, riseK = (U, t) => Math.min(1, Math.max(0, (t - U.tRise) / RISE));   // the stand-up: 2 s, hips forward then up (round 3)
   const vert = H > W, FOV = vert ? 46 : 32;
   const film = new Film({
     W, H, dur: 1e4, fov: FOV, near: .1, far: 3000,
@@ -335,10 +336,10 @@ export async function build(W, H, Bt) {
     const cx = AX + colX(t) + rowX(ROWS / 2), cz = ROADZ;   // where they look: the middle of the column
     for (const p of crowdA) { const U = p.userData, k = ss(T.turn0 + U.dl, T.turn0 + U.dl + 1.4, t);
       const yaw = clamp(yawTo(p, cx, cz), -1.0, 1.0) * k, ex = { head: [lerp(.02, -.12, k) + .03 * Math.sin(t * .4 + U.ph * 9), yaw * .7], twist: yaw * .25 };
-      if (U.mate && t < T.turn0 + U.dl) ex.head = [0, clamp(yawTo(p, AX + U.mate.x, U.mate.z), -.8, .8) * .6];
+      if (U.mate) { const wm = 1 - ss(T.turn0 + U.dl - .5, T.turn0 + U.dl + .6, t), mh = clamp(yawTo(p, AX + U.mate.x, U.mate.z), -.8, .8) * .6; ex.head = [lerp(ex.head[0], 0, wm), lerp(ex.head[1], mh, wm)]; }   // (round 3: eased, was a switch)
       if (U.point) { const pk = ss(T.point0 + U.pdl, T.point0 + U.pdl + .9, t) * (1 - ss(T.point0 + U.pdl + 3.6, T.point0 + U.pdl + 4.6, t));
         if (pk > 0) { const d = V(cx - p.position.x, 0, cz - p.position.z).normalize().applyAxisAngle(V(0, 1, 0), -p.rotation.y);   // to the column, in his frame
-          ex.hands = [null, lv(V(.22 * U.s, .82 * U.s, -.12 * U.s), V(.2 * U.s + d.x * .55, 1.32 * U.s, d.z * .6), pk)]; } }
+          ex.hands = [null, V(.2 * U.s + d.x * .55, 1.32 * U.s, d.z * .6)]; ex.handsW = [0, pk]; } }   // (round 3: from the hanging arm, no jump)
       life(p, t, ex); }
     // the staff: held in his right hand; lifted (not shaken) under "로마를 몰아낼 왕"
     { const U = staffMan.userData, k = eio((t - T.staff[0]) / (T.staff[1] - T.staff[0])) * (1 - ss(T.staff[1] + 2.4, T.staff[1] + 3.6, t)), turn = ss(T.turn0, T.turn0 + 1.6, t);
@@ -388,12 +389,12 @@ export async function build(W, H, Bt) {
   const GA = V(11, 0, 6); GA.y = hB(GA.x, GA.z);
   const BCAM = [V(GA.x + .95, 0, GA.z + 5.3), V(GA.x + .3, 0, GA.z + 4.85)];   // a slow truck left with a little push in
   const CHAINS = [
-    { c: [0, 0], R: 1.75, n: 6, a0: -68, a1: 68, t0: T.n12 + .5, dt: 1.12, dir: 1, seed: 11 },   // the hero arc (open toward the camera)
-    { c: [-3.2, -5.0], n: 7, full: true, t0: T.n12 + .15, dt: 1.0, dir: -1, seed: 12 },   // the others: placed down the camera's view at
-    { c: [-.4, -9.8], n: 6, full: true, t0: T.n12 + .75, dt: 1.05, dir: 1, seed: 13 },     // 11–31 m, left and right of its centre line
-    { c: [-6.0, -13.6], n: 8, full: true, t0: T.n12 + .35, dt: .95, dir: 1, seed: 14 },
-    { c: [-1.6, -19.8], n: 7, full: true, t0: T.n12 + .95, dt: 1.0, dir: -1, seed: 15 },
-    { c: [-6.4, -24.8], n: 8, full: true, t0: T.n12 + .55, dt: 1.0, dir: 1, seed: 16 },
+    { c: [0, 0], R: 1.75, n: 6, a0: -68, a1: 68, t0: T.n12 + .5, dt: 1.35, dir: 1, seed: 11 },   // the hero arc (open toward the camera)
+    { c: [-3.2, -5.0], n: 7, full: true, t0: T.n12 + .15, dt: 1.3, dir: -1, seed: 12 },   // the others: placed down the camera's view at
+    { c: [-.4, -9.8], n: 6, full: true, t0: T.n12 + .75, dt: 1.35, dir: 1, seed: 13 },     // 11–31 m, left and right of its centre line
+    { c: [-6.0, -13.6], n: 8, full: true, t0: T.n12 + .35, dt: 1.25, dir: 1, seed: 14 },
+    { c: [-1.6, -19.8], n: 7, full: true, t0: T.n12 + .95, dt: 1.3, dir: -1, seed: 15 },
+    { c: [-6.4, -24.8], n: 8, full: true, t0: T.n12 + .55, dt: 1.3, dir: 1, seed: 16 },
   ].map(q => ({ ...q, R: q.R || .86 / (2 * Math.sin(Math.PI / q.n)), C: V(GA.x + q.c[0], 0, GA.z + q.c[1]) }));   // neighbours ≈ 0.86 m apart (within reach)
   const nearChains = (x, z) => CHAINS.some((q, i) => Math.hypot(x - q.C.x, z - q.C.z) < q.R + (i ? 2.1 : 1.05))   // grass round each far group so its basket reads
     || (z > GA.z - .4 && z < GA.z + 9 && Math.abs(x - GA.x - .6) < 3.4)                                  // the hero arc's front and the camera
@@ -418,7 +419,7 @@ export async function build(W, H, Bt) {
       U.gest = r() < .25 ? 1 : r() < .2 ? 2 : 0;                 // 1: an arm raised (they stir), 2: a hand to the chest
       const out = V(p.position.x - C.x, 0, p.position.z - C.z), d = out.length(); out.normalize();
       U.rStop = 2.2 + Math.min(1, d / 17) * 3.6 + r() * .6; U.walkD = Math.max(0, d - U.rStop); U.dir = out.clone().negate();
-      U.tWalk = T.surge[0] + .3 + (d / 17) * 1.2 + r() * .9; U.reach = r() < .7;
+      U.tWalk = Math.max(T.surge[0] + .3 + (d / 17) * 1.2 + r() * .9, U.tRise + RISE + .25); U.reach = r() < .7;   // (round 3: never before he has finished standing)
       for (let q = 0; q <= 10; q++) { const w = p.position.clone().addScaledVector(U.dir, U.walkD * q / 10); if (laneD(w.x, w.z) < .35) { U.walkD = 0; break; } } } }   // nobody walks into the camera's sight lane
   // the man: undyed robe, a darker headcloth like every man's (heal-village.js) — no mark, no glow; standing, back to us, on the sun's axis
   const king = mk({ h: 1.76, head: 'cloth', mat: kingM, cloth: kingC, broad: 1.02 }); king.position.copy(C); king.rotation.y = 0; king.userData.ph = .13; Bg.add(king);
@@ -475,7 +476,7 @@ export async function build(W, H, Bt) {
     else { let k = 1; while (k < nT && t >= taus[k]) k++;   // between taus[k-1] and taus[k]: order[k] carries it across his front
       pos = bez(midW(Pk(k - 1), Pk(k), cen), lapW(Pk(k), .1), midW(Pk(k), Pk(k + 1), cen), smoother((t - taus[k - 1]) / (taus[k] - taus[k - 1]))); }
     for (let k = 0; k <= nT; k++) {
-      const eIn = k === 0 ? 1 : ss(taus[k - 1] - .62, taus[k - 1] - .08, t), eOut = k < nT ? ss(taus[k] + .12, taus[k] + .58, t) : 0, w = eIn * (1 - eOut);
+      const eIn = k === 0 ? 1 : ss(taus[k - 1] - .95, taus[k - 1] - .08, t), eOut = k < nT ? ss(taus[k] + .12, taus[k] + 1.3, t) : 0, w = eIn * (1 - eOut);
       if (w > 0) hold.push({ p: Pk(k), w, last: k === nT }); }
     // the last holder keeps it; when he rises it rises with him, carried before his waist (a root-frame point, both hands on the rim)
     const last = Pk(nT), kr = clamp((t - last.userData.tRise) / 1.25);
@@ -487,25 +488,26 @@ export async function build(W, H, Bt) {
     const d = V(p.position.x - pos.x, 0, p.position.z - pos.z); if (d.lengthSq() < 1e-6) d.set(0, 0, 1); d.normalize();
     const perp = V(-d.z, 0, d.x), c = pos.clone().add(V(0, RIMY, 0)), A0 = c.clone().addScaledVector(d, RIMR * Math.cos(.75)).addScaledVector(perp, RIMR * Math.sin(.75)), B0 = c.clone().addScaledVector(d, RIMR * Math.cos(.75)).addScaledVector(perp, -RIMR * Math.sin(.75));
     p.updateMatrix(); const inv = p.matrix.clone().invert(), a = A0.applyMatrix4(inv), b = B0.applyMatrix4(inv);
-    return a.x < b.x ? [a, b] : [b, a];   // the left hand (−x in his frame) takes the grip on his left
+    return [a, b];   // perp is the left of the line holder → basket, so A0 is always the left hand's grip (r2 sorted by x and the hands swapped grips when the basket was beside him)
   }
   const handErr = [], handErrWho = []; let handErrOn = false;
   function sitPose(p, t, ex = {}) { const U = p.userData, s = U.s;
     P.pose(p, { breath: P.breath(t, U.ph), twist: .03 * Math.sin(t * .23 + U.ph * 5), lean: -.07 - .04 * Math.sin(t * .3 + U.ph * 7), head: [-.06 + .04 * Math.sin(t * .4 + U.ph * 9), .06 * Math.sin(t * .19 + U.ph * 4)],
-      hands: [V(-.15 * s, .4 * s, -.27 * s), V(.15 * s, .4 * s, -.26 * s)], ...ex }); }
+      hands: [V(-.15 * s, .37 * s, -.34 * s), V(.15 * s, .37 * s, -.33 * s)], ...ex }); }
   function chainsAt(t) {
     for (const ch of chains) { const { pos, hold } = chainAt(ch, t); ch.basket.position.copy(pos); ch.basket.rotation.y = ch.seed;
-      for (const p of ch.people) { const U = p.userData, h = hold.find(q => q.p === p), k = clamp((t - U.tRise) / 1.25), s = U.s;
-        const rest = [V(-.15 * s, .4 * s, -.27 * s), V(.15 * s, .4 * s, -.26 * s)];
-        if (h) { const g = rimGrips(p, pos), w = smoother(h.w), yaw = clamp(yawTo(p, pos.x, pos.z), -.9, .9);
-          const ex = { hands: [lv(rest[0], g[0], w), lv(rest[1], g[1], w)], twist: yaw * .62 * w, head: [lerp(-.05, -.3, w * (1 - k)), yaw * .55 * w] };
-          ex.lean = -.07 - .12 * w; sitPose(p, t, ex);
-          if (handErrOn && h.w > .985) for (let i = 0; i < 2; i++) { const e = P.handAt(p, i).applyMatrix4(p.matrix).distanceTo(g[i].clone().applyMatrix4(p.matrix)); handErr.push(e); if (e > .03) handErrWho.push([+t.toFixed(2), chains.indexOf(ch), ch.people.indexOf(p), i, +e.toFixed(3), +k.toFixed(2), h.last ? 'last' : '', +g[i].x.toFixed(2), +g[i].y.toFixed(2), +g[i].z.toFixed(2)]); } continue; }
-        const near = pos.distanceTo(p.position) < 1.6 ? clamp(yawTo(p, pos.x, pos.z), -.8, .8) : 0, ex = {};
-        if (k >= 1) ex.head = [.05, clamp(yawTo(p, C.x, C.z), -1, 1) * .6];
-        else { ex.head = [-.12 + .04 * Math.sin(t * .4 + U.ph * 9), near * .5 + .06 * Math.sin(t * .19 + U.ph * 4)];
-          if (U.eat) { const e = Math.max(0, Math.sin(t * .8 + U.eph)), ek = e * e * (3 - 2 * e); ex.hands = [rest[0], lv(rest[1], V(.05 * s, .74 * s, -.15 * s), ek * .9)]; } }
-        sitPose(p, t, ex); } }
+      // round 3: one pose for everyone in the group, holder or not — holding is a weight w (0..1) blended over the same base
+      // (r2 switched branches when a hand let go: head, twist, lean and an eating hand jumped in one frame; and the head snapped
+      // to the basket the frame it came within 1.6 m)
+      for (const p of ch.people) { const U = p.userData, h = hold.find(q => q.p === p), s = U.s, w = h ? smoother(h.w) : 0, k = 0;
+        const rest = [V(-.15 * s, .37 * s, -.34 * s), V(.15 * s, .37 * s, -.33 * s)];
+        const nw = 1 - ss(1.1, 2.2, pos.distanceTo(p.position)), yawB = clamp(yawTo(p, pos.x, pos.z), -.9, .9);
+        const e = U.eat ? Math.max(0, Math.sin(t * .8 + U.eph)) : 0, ek = e * e * (3 - 2 * e) * (1 - nw);   // bread to the mouth, not while the basket comes
+        const base = [rest[0], lv(rest[1], V(.05 * s, .74 * s, -.15 * s), ek * .9)];
+        const g = h ? rimGrips(p, pos) : null, hands = g ? [lv(base[0], g[0], w), lv(base[1], g[1], w)] : base;
+        const head = [lerp(-.12 + .04 * Math.sin(t * .4 + U.ph * 9), -.3, w), lerp(yawB * .5 * nw + .06 * Math.sin(t * .19 + U.ph * 4), yawB * .55, w)];
+        sitPose(p, t, { hands, head, twist: lerp(.03 * Math.sin(t * .23 + U.ph * 5), yawB * .62, w), lean: lerp(-.07 - .04 * Math.sin(t * .3 + U.ph * 7), -.19, w) });
+        if (handErrOn && h && h.w > .985) for (let i = 0; i < 2; i++) { const e = P.handAt(p, i).applyMatrix4(p.matrix).distanceTo(g[i].clone().applyMatrix4(p.matrix)); handErr.push(e); if (e > .03) handErrWho.push([+t.toFixed(2), chains.indexOf(ch), ch.people.indexOf(p), i, +e.toFixed(3), k, h.last ? 'last' : '']); } } }
   }
   // instanced far crowd: one lathe figure that morphs from sitting to standing (same vertex count), rising on its own time
   const IU = { uT: { value: 0 }, uC: { value: C.clone() }, uSurge0: { value: T.surge[0] }, uRiseOverride: { value: -1 } };
@@ -520,12 +522,12 @@ export async function build(W, H, Bt) {
     im.onBeforeCompile = sh => { Object.assign(sh.uniforms, IU, RIMU); sh.uniforms.uRimS = { value: .9 };
       sh.vertexShader = sh.vertexShader.replace('#include <common>', `#include <common>
           attribute vec3 position2; attribute vec3 normal2; attribute float aT, aD, aS; uniform float uT, uSurge0, uRiseOverride; uniform vec3 uC; varying float vRise;`)
-        .replace('#include <beginnormal_vertex>', `float rise = uRiseOverride >= 0. ? uRiseOverride : smoothstep(aT, aT + 1.3, uT); vRise = rise;
+        .replace('#include <beginnormal_vertex>', `float rise = uRiseOverride >= 0. ? uRiseOverride : smoothstep(aT, aT + 2.0, uT); vRise = rise;
           vec3 objectNormal = normalize(mix(normal2, normal, rise));`)
         .replace('#include <begin_vertex>', `vec3 transformed = mix(position2, position, rise);
           transformed.x += sin(uT * (.4 + aS * .3) + aS * 30.) * .03 * transformed.y; transformed.z += sin(uT * .5 + aS * 17.) * .02 * transformed.y;
-          { float m = smoothstep(uSurge0 + aS * 1.2, uSurge0 + aS * 1.2 + 4.5, uT) * aD; vec3 ip = vec3(instanceMatrix[3].x, 0., instanceMatrix[3].z);
-            vec3 toC = normalize(vec3(uC.x, 0., uC.z) - ip); transformed += (mat3(inverse(instanceMatrix)) * toC) * m; transformed.y += abs(sin(uT * 5.7 + aS * 9.)) * .04 * step(.01, m) * (1. - step(aD - .01, m)); }`);
+          { float s0 = max(uSurge0 + aS * 1.2, aT + 2.1); float m = smoothstep(s0, s0 + 4.5, uT) * aD; vec3 ip = vec3(instanceMatrix[3].x, 0., instanceMatrix[3].z);
+            vec3 toC = normalize(vec3(uC.x, 0., uC.z) - ip); transformed += (mat3(inverse(instanceMatrix)) * toC) * m; transformed.y += (.5 - .5 * cos(uT * 11.4 + aS * 18.)) * .03 * smoothstep(0., .35, m) * (1. - smoothstep(aD - .35, aD, m)); }`);
       sh.fragmentShader = sh.fragmentShader.replace('#include <common>', '#include <common>\nuniform vec3 uSunV, uRimC; uniform float uRimK, uRimS;')
         .replace('#include <emissivemap_fragment>', `#include <emissivemap_fragment>
           { vec3 Vd = normalize(vViewPosition); float fr = pow(1. - clamp(dot(normal, Vd), 0., 1.), 3.2); totalEmissiveRadiance += uRimC * fr * smoothstep(-.2, .55, dot(normal, uSunV)) * uRimK * uRimS; }`); };
@@ -536,65 +538,96 @@ export async function build(W, H, Bt) {
       c.set(r() < .5 ? mantleCols[(r() * mantleCols.length) | 0] : robeCols[(r() * robeCols.length) | 0]); inst.setColorAt(i, c); });
     inst.castShadow = false; inst.receiveShadow = true; inst.frustumCulled = false; Bg.add(inst); var crowdI = inst; }
 
-  function kneelOrStand(p, t, extra = {}) {   // a field person before/through/after rising; ex: head/hands overrides
-    const U = p.userData, k = clamp((t - U.tRise) / 1.25), kr = P.kneelRise(k, U.s, U.ph);
-    const base = k >= 1 ? P.idle(t, U.ph, { s: U.s }) : { breath: P.breath(t, U.ph), twist: .03 * Math.sin(t * .23 + U.ph * 5), lean: -.16 - .05 * Math.sin(t * .3 + U.ph * 7), head: [-.05 + .04 * Math.sin(t * .4 + U.ph * 9), .06 * Math.sin(t * .19 + U.ph * 4)] };
-    const restH = [V(-.16 * U.s, lerp(.52, .82, k) * U.s, lerp(-.3, -.12, k) * U.s), V(.16 * U.s, lerp(.52, .82, k) * U.s, lerp(-.28, -.12, k) * U.s)];
-    const P0 = { ...base, ...(k < 1 ? kr : { feet: base.feet }), lean: (k < 1 ? kr.lean : 0) + (base.lean || 0) };
-    if (k >= 1) { P0.bob = base.bob; }
-    P.pose(p, { ...P0, hands: k < 1 ? restH : null, ...extra });
+  // ---- round 3 (owner 2026-11-19 "27초부터 두둑 두둑 로봇 같은 움직임" — rule body-motion). In r2 the field people switched pose
+  // at the END of their rise (k = 1): the lean jumped from the seated −0.2 rad to 0, the head from the seated drift to the look
+  // at him (up to 0.8 rad), the hands from the lap to hanging, the feet from the kneel to the stance — 190 people each snapping
+  // once on a ripple of beats from 263.7 to 267 s, then again when each began and ended his walk (feet switched between idle and
+  // gait at amt = 0.02, the look snapped off, the body stopped dead at walkD). Now ONE pose blends everything continuously:
+  //   sitting back on the heels → hips forward (the lean leads) → up (the lift follows) over RISE = 2.0 s, staggered per person;
+  //   the hands leave the lap and fall to hanging through the rise (pose handsW), the stand's idle sway fades in over its second
+  //   half; the look/stir layer and the gestures ease in after; the walk eases its stride in and out with the feet blended from
+  //   the stance, the distance integrated from the same ease (planted feet) and scaled to end exactly at his place.
+  // ex: { hands, handsW, seatHands, head, lean, twist } — head/lean/twist overrides are blended in by exW (0..1)
+  const SEATH = s => [V(-.16 * s, .52 * s, -.3 * s), V(.16 * s, .52 * s, -.28 * s)];
+  const handsOff = k => 1 - ss(.08, .85, k);                      // the hands on the lap → hanging, through the rise
+  function kneelOrStand(p, t, ex = {}, exW = 1) {
+    const U = p.userData, s = U.s, k = riseK(U, t);
+    const lift = ss(.22, 1, k), fwd = -.38 * Math.sin(Math.PI * clamp(k / .8)), b = ss(.5, 1, k);
+    const id = P.idle(t, U.ph, { s });
+    const seat = { twist: .03 * Math.sin(t * .23 + U.ph * 5), lean: -.16 - .05 * Math.sin(t * .3 + U.ph * 7), head: [-.05 + .04 * Math.sin(t * .4 + U.ph * 9), .06 * Math.sin(t * .19 + U.ph * 4)] };
+    const kf = [{ u: lerp(.3 * s, .08 * s, lift), x: 0 }, { u: lerp(-.26 * s, -.06 * s, lift), x: lerp(-.04 * s, 0, lift) }];
+    const feet = kf.map((f, i) => ({ u: lerp(f.u, id.feet[i].u, b), lift: 0, x: f.x * (1 - b) }));
+    let lean = lerp(seat.lean, 0, lift) + fwd, twist = lerp(seat.twist, id.twist, b), head = [lerp(seat.head[0], id.head[0], b), lerp(seat.head[1], id.head[1], b)];
+    if (ex.lean != null) lean = lerp(lean, ex.lean, exW);
+    if (ex.twist != null) twist = lerp(twist, ex.twist, exW);
+    if (ex.head) head = [lerp(head[0], ex.head[0], exW), lerp(head[1], ex.head[1], exW)];
+    const ho = handsOff(k), hands = ex.hands || SEATH(s), handsW = ex.handsW || (ex.hands && !ex.seatHands ? [1, 1] : [ho, ho]);
+    P.pose(p, { breath: P.breath(t, U.ph), side: id.side * b, swing: id.swing.map(v => v * b), bob: lerp(-.44 * s, 0, lift) + id.bob * b, feet, lean, twist, head, hands, handsW });
     return k;
   }
+  // the walk's ease (stride in, stride out) and its integral on a grid fixed to the walk's start (continuous in t)
+  const walkAmt = (t, a0, t1) => ss(a0, a0 + .7, t) * (1 - ss(t1 - .9, t1, t));
+  function walkInt(a0, t1, t) { const h = 1 / 120, n = Math.floor((t - a0) / h); let I = 0;
+    for (let i = 0; i < n; i++) I += (walkAmt(a0 + i * h, a0, t1) + walkAmt(a0 + (i + 1) * h, a0, t1)) * h / 2;
+    const tl = a0 + n * h; if (t > tl) I += (walkAmt(tl, a0, t1) + walkAmt(t, a0, t1)) * (t - tl) / 2; return I; }
   function crowdBAt(t) {
     IU.uT.value = t;
-    const camP = cam.position;
-    for (const p of crowdB) { const U = p.userData; const k = clamp((t - U.tRise) / 1.25);
-      if (U.walkD > 0 && t > U.tWalk && k >= 1) {   // pressing in toward him (feet planted; they slow and stop at their place)
-        const v = .5 / .58, dur = U.walkD / v * 1.25, t1 = U.tWalk + dur, steps = 24; let dist = 0;
-        for (let i = 0; i < steps; i++) { const tt = U.tWalk + (Math.min(t, t1) - U.tWalk) * (i + .5) / steps; dist += v * ss(U.tWalk, U.tWalk + .6, tt) * (1 - ss(t1 - .8, t1, tt)) * (Math.min(t, t1) - U.tWalk) / steps; }
-        const amt = ss(U.tWalk, U.tWalk + .6, t) * (1 - ss(t1 - .8, t1, t)), w = P.walk(p, t, U.tWalk, { T: 1.16, L: .5, amt: Math.max(.001, amt) });
-        if (!U.p0) U.p0 = p.position.clone(); p.position.copy(U.p0).addScaledVector(U.dir, Math.min(dist, U.walkD)); p.position.y = hB(p.position.x, p.position.z);
-        const ry0 = U.ry0 ?? (U.ry0 = p.rotation.y), ryW = face(U.dir.x, U.dir.z), dr = Math.atan2(Math.sin(ryW - ry0), Math.cos(ryW - ry0)); p.rotation.y = ry0 + dr * ss(U.tWalk - .3, U.tWalk + .5, t);
-        const up = U.reach ? ss(U.tWalk + .8, U.tWalk + 2.0, t) : 0;
-        const id = P.idle(t, U.ph, { s: U.s }), feet = amt > .02 ? w.feet : id.feet;
-        P.pose(p, { ...id, ...(amt > .02 ? w : {}), feet, head: [.12 * up + .05, 0], hands: up > 0 ? [null, lv(V(.2, .85, -.15).multiplyScalar(U.s), V(.22 * U.s, 1.78 * U.s, -.38 * U.s), up)] : null });
+    for (const p of crowdB) { const U = p.userData, s = U.s, k = riseK(U, t);
+      if (U.p0) p.position.copy(U.p0); if (U.ry0 != null) p.rotation.y = U.ry0;
+      // standing: they look at each other, stir; a few raise an arm or press a hand to the chest (eased in after the rise)
+      const kb = ss(.45, 1, k), m = crowdB[U.mateI], lk = ss(U.tRise + RISE * .8, U.tRise + RISE * .8 + 1, t);
+      const toM = m ? clamp(yawTo(p, m.position.x, m.position.z), -1.1, 1.1) : 0, toK = clamp(yawTo(p, C.x, C.z), -1.1, 1.1);
+      const sw = .5 + .5 * Math.sin(t * .9 + U.ph * 6), yaw = lerp(toK, toM, lk * sw);
+      const walks = U.walkD > 0, wOut = walks ? 1 - ss(U.tWalk - .4, U.tWalk + .5, t) : 1;   // the look lets go as he turns to walk
+      const ex = { head: [.05 + .03 * Math.sin(t * .5 + U.ph * 7), yaw * .75 * wOut], twist: yaw * .3 * wOut };
+      let gR = 0, gL = 0;
+      if (U.gest === 1) gR = ss(U.tRise + RISE * .75, U.tRise + RISE * .75 + 1, t) * (.75 + .25 * Math.sin(t * 1.1 + U.ph * 4));
+      else if (U.gest === 2) gL = ss(U.tRise + RISE * .7, U.tRise + RISE * .7 + 1, t);
+      if (walks) { gR *= wOut; gL *= wOut; }
+      const handR = V(.25 * s, 1.7 * s, -.3 * s), handL = V(-.04 * s, 1.18 * s, -.2 * s);
+      if (walks && t > U.tWalk) {   // pressing in toward him (feet planted; the stride eases in and out; he ends exactly at his place)
+        const a0 = U.tWalk, v = .5 / .58;
+        if (U.wI == null) { U.t1 = a0 + U.walkD / v + .8; U.wI = walkInt(a0, U.t1, U.t1); }
+        const amt = walkAmt(t, a0, U.t1), dist = U.walkD * walkInt(a0, U.t1, Math.min(t, U.t1)) / U.wI;
+        if (!U.p0) U.p0 = p.position.clone(); p.position.copy(U.p0).addScaledVector(U.dir, dist); p.position.y = hB(p.position.x, p.position.z);
+        const ry0 = U.ry0 ?? (U.ry0 = p.rotation.y), ryW = face(U.dir.x, U.dir.z), dr = Math.atan2(Math.sin(ryW - ry0), Math.cos(ryW - ry0)); p.rotation.y = ry0 + dr * ss(a0, a0 + 1.4, t);
+        const up = U.reach ? ss(a0 + .8, a0 + 2.0, t) : 0, reach = V(.22 * s, 1.78 * s, -.38 * s);
+        const id = P.idle(t, U.ph, { s }), w = P.walk(p, t, a0, { T: 1.16, L: .5, amt: Math.max(.001, amt) });
+        const feet = w.feet.map((f, i) => ({ u: lerp(id.feet[i].u, f.u, amt), lift: f.lift, pitch: f.pitch }));
+        P.pose(p, { breath: P.breath(t, U.ph), bob: id.bob * (1 - amt) + w.bob, side: id.side * (1 - amt), lean: w.lean * amt, swing: id.swing.map((v0, i) => lerp(v0, w.swing[i], amt)), feet,
+          twist: lerp(id.twist, ex.twist, 1), head: [lerp(ex.head[0], .12 * up + .05, ss(a0, a0 + .8, t)), ex.head[1]],
+          hands: [handL, lv(handR, reach, up)], handsW: [gL, Math.max(gR, up)] });
         continue; }
-      if (U.p0) { p.position.copy(U.p0); }   // (pure in t: back to the start before the walk)
-      if (U.ry0 != null) p.rotation.y = U.ry0;
-      const ex = {};
-      if (k >= 1) {   // standing: they look at each other, stir; a few raise an arm or press a hand to the chest
-        const m = crowdB[U.mateI], lk = ss(U.tRise + 1.2, U.tRise + 2.2, t), toM = m ? clamp(yawTo(p, m.position.x, m.position.z), -1.1, 1.1) : 0, toK = clamp(yawTo(p, C.x, C.z), -1.1, 1.1);
-        const sw = .5 + .5 * Math.sin(t * .9 + U.ph * 6), yaw = lerp(toK, toM, lk * sw);
-        ex.head = [.05 + .03 * Math.sin(t * .5 + U.ph * 7), yaw * .75]; ex.twist = yaw * .3;
-        if (U.gest === 1) { const g = ss(U.tRise + 1.6, U.tRise + 2.6, t) * (.75 + .25 * Math.sin(t * 1.1 + U.ph * 4)); ex.hands = [null, lv(V(.2, .85, -.15).multiplyScalar(U.s), V(.25 * U.s, 1.7 * U.s, -.3 * U.s), g)]; }
-        else if (U.gest === 2) { const g = ss(U.tRise + 1.4, U.tRise + 2.4, t); ex.hands = [lv(V(-.2, .85, -.15).multiplyScalar(U.s), V(-.04 * U.s, 1.18 * U.s, -.2 * U.s), g), null]; }
-      } else if (U.eat) {   // sitting: now and then a hand to the mouth (bread), eased
-        const e = Math.max(0, Math.sin(t * .8 + U.eph)), ek = e * e * (3 - 2 * e);
-        ex.hands = [V(-.16 * U.s, .52 * U.s, -.3 * U.s), lv(V(.16 * U.s, .52 * U.s, -.28 * U.s), V(.05 * U.s, 1.3 * U.s - .44 * U.s, -.16 * U.s), ek * .9)];
-      }
-      kneelOrStand(p, t, ex); }
-    // the baskets
+      if (U.eat && k < .25) {   // sitting: now and then a hand to the mouth (bread), eased; it stops as he begins to rise
+        const e = Math.max(0, Math.sin(t * .8 + U.eph)), ek = e * e * (3 - 2 * e) * (1 - ss(0, .25, k)), sh = SEATH(s);
+        ex.hands = [sh[0], lv(sh[1], V(.05 * s, .86 * s, -.16 * s), ek * .9)]; ex.seatHands = true; }
+      else if (gR > 0 || gL > 0) { const ho = handsOff(k), sh = SEATH(s), mix = (seat, gt, gw) => gw + ho > 1e-6 ? seat.clone().multiplyScalar(ho / (ho + gw)).addScaledVector(gt, gw / (ho + gw)) : seat;
+        ex.hands = [mix(sh[0], handL, gL), mix(sh[1], handR, gR)]; ex.handsW = [Math.min(1, ho + gL), Math.min(1, ho + gR)]; }
+      kneelOrStand(p, t, ex, kb); }
+    // the baskets (round-1 pairs): the giver lets go and his hands go back to the lap; the receiver keeps it and rises with it
     for (const ps of passes) { const { tp, a, b, basket } = ps, LA = lapAt(a), LB = lapAt(b), M = LA.clone().lerp(LB, .5); M.y += .2;
-      const up = ss(tp - 1.6, tp - .6, t), dn = ss(tp + .2, tp + 1.2, t), kr = clamp((t - b.userData.tRise) / 1.25);
-      // after the rise he keeps it, both hands on the rim, carried in front of his waist (it rises with him)
+      const up = ss(tp - 1.6, tp - .6, t), dn = ss(tp + .2, tp + 1.2, t), kr = riseK(b.userData, t);
       const pos = kr > 0 ? lv(LB, V(0, .5 + .4, -.3).applyMatrix4(b.matrix), kr * kr * (3 - 2 * kr)) : t < tp ? lv(LA, M, up) : lv(M, LB, dn); basket.position.copy(pos); basket.rotation.y = a.rotation.y;
       const ax = LB.clone().sub(LA).setY(0).normalize(), perp = V(-ax.z, 0, ax.x), rimY = .2;
       const grip = (towards, side) => pos.clone().add(V(0, rimY, 0)).addScaledVector(towards, -.195).addScaledVector(perp, side * .18);   // on the rim, toward the holder
       const inv = p => { p.updateMatrix(); return p.matrix.clone().invert(); };
-      const restA = [V(-.16 * a.userData.s, .52 * a.userData.s, -.3 * a.userData.s), V(.16 * a.userData.s, .52 * a.userData.s, -.28 * a.userData.s)], restB = [V(-.16 * b.userData.s, .52 * b.userData.s, -.3 * b.userData.s), V(.16 * b.userData.s, .52 * b.userData.s, -.28 * b.userData.s)];
+      const restA = SEATH(a.userData.s), restB = SEATH(b.userData.s);
       const iA = inv(a), iB = inv(b), rel = ss(tp + .2, tp + .8, t), take = ss(tp - 1.0, tp - .2, t);
       const gA = [grip(ax, -1).applyMatrix4(iA), grip(ax, 1).applyMatrix4(iA)], gB = [grip(ax.clone().negate(), 1).applyMatrix4(iB), grip(ax.clone().negate(), -1).applyMatrix4(iB)];
-      const lean = (k) => -.15 * k;
-      if (t < a.userData.tRise) kneelOrStand(a, t, { hands: [lv(gA[0], restA[0], rel), lv(gA[1], restA[1], rel)], lean: lean(up * (1 - rel)) - .05, head: [-.2, 0] });
-      else kneelOrStand(a, t);
-      if (t < b.userData.tRise) kneelOrStand(b, t, { hands: [lv(restB[0], gB[0], take), lv(restB[1], gB[1], take)], lean: lean(take * (1 - dn)) - .05, head: [-.2, 0] });
-      else kneelOrStand(b, t, { hands: gB, lean: -.04, head: [-.08, 0] });
+      const lean = (k) => -.15 * k, hoA = handsOff(riseK(a.userData, t)), aOut = 1 - ss(a.userData.tRise, a.userData.tRise + .8, t), bUp = ss(b.userData.tRise, b.userData.tRise + .9, t);
+      kneelOrStand(a, t, { hands: [lv(gA[0], restA[0], rel), lv(gA[1], restA[1], rel)], handsW: [lerp(1, hoA, rel), lerp(1, hoA, rel)], lean: lean(up * (1 - rel)) - .05, head: [-.2, 0] }, aOut);
+      kneelOrStand(b, t, { hands: [lv(restB[0], gB[0], take), lv(restB[1], gB[1], take)], handsW: [1, 1], lean: lerp(lean(take * (1 - dn)) - .05, -.04, bUp), head: [lerp(-.2, -.08, bUp), 0] }, 1);
     }
-    // the man: still among them; at "억지로 붙들어" he lowers his head a little; then he steps away from them (back to us)
-    { const U = king.userData, aw = T.away;
-      if (t < aw) { king.position.copy(C); P.pose(king, { ...P.idle(t, U.ph, { s: U.s }), head: [-.03 - .08 * ss(T.q4 + .5, T.q4 + 1.6, t), .1 * Math.sin(t * .3) * (1 - ss(T.rise[0], T.rise[0] + 1, t))] }); }
-      else { const dir = V(-.25, 0, -1).normalize(); const w = P.walk(king, t, aw, { T: 1.12, L: .52 }); king.position.copy(C).addScaledVector(dir, w.dist); king.position.y = hB(king.position.x, king.position.z); king.rotation.y = face(dir.x, dir.z) * ss(aw, aw + .5, t);
-        P.pose(king, { ...w, breath: .5, head: [-.08, 0] }); } }
+    // the man: still among them; at "억지로 붙들어" he lowers his head a little; then he steps away from them (back to us) — the
+    // stride eases in from his stance (r2 started the gait at full stride in one frame: the feet jumped 0.19 m)
+    { const U = king.userData, aw = T.away, dir = V(-.25, 0, -1).normalize(), v = .52 / .56, ra = .7;
+      const amt = ss(aw, aw + ra, t), x = clamp((t - aw) / ra), dist = t <= aw ? 0 : v * (ra * (x * x * x - x * x * x * x / 2) + Math.max(0, t - aw - ra));
+      const id = P.idle(t, U.ph, { s: U.s }), w = P.walk(king, t, aw, { T: 1.12, L: .52, amt: Math.max(.001, amt) });
+      king.position.copy(C).addScaledVector(dir, dist); king.position.y = hB(king.position.x, king.position.z); king.rotation.y = face(dir.x, dir.z) * ss(aw - .2, aw + .6, t);
+      const hd = [-.03 - .08 * ss(T.q4 + .5, T.q4 + 1.6, t), .1 * Math.sin(t * .3) * (1 - ss(T.rise[0], T.rise[0] + 1, t))];
+      P.pose(king, { breath: P.breath(t, U.ph), bob: id.bob * (1 - amt) + w.bob, side: id.side * (1 - amt), twist: id.twist * (1 - amt), lean: w.lean * amt,
+        swing: id.swing.map((v0, i) => lerp(v0, w.swing[i], amt)), feet: w.feet.map((f, i) => ({ u: lerp(id.feet[i].u, f.u, amt), lift: f.lift, pitch: f.pitch })),
+        head: [lerp(hd[0], -.08, amt), lerp(hd[1], 0, amt)] }); }
     chainsAt(t);
   }
 
@@ -798,6 +831,38 @@ export async function build(W, H, Bt) {
   // where the knoll's top and the plain's horizon are in the frame now (for the engraving's line field, mountain-dore.js)
   function marks() { const sP = SUMMIT.clone().project(cam), hz = V(cam.position.x + OUTDIR.x * 1200, 2, cam.position.z + OUTDIR.z * 1200).project(cam);
     return { xs: (sP.x + 1) / 2 * W, hy: (1 - hz.y) / 2 * H }; }
-  return { film, draw, marks, debug: { fires, nB: crowdB.length, nI: spotsI.length, SUMMIT, OUT, chains: chains.length,
+  // ---- motion check (rule body-motion, 2026-11-19): every posed figure sampled at 30 fps; per channel the largest frame-to-frame
+  // change (Δ) and the largest change of that change (ΔΔ — a snap shows as a spike here), plus the worst elbow height above the
+  // shoulder–hand line (> 0 = the elbow is cocked up: chicken wing)
+  function sampleFig(g) { const U = g.userData, up = U.upper, o = { rot: [up.rotation.x, up.rotation.y, up.rotation.z, U.neck.rotation.x, U.neck.rotation.y, g.rotation.y], arms: [], feet: [], root: g.position.clone() };
+    for (const A of U.arms) { const S = A.S2 || A.S, E = A.E ? A.E.clone() : A.up.position.clone().multiplyScalar(2).sub(S), T = A.T || A.hand.position, u = E.clone().sub(S), f = T.clone().sub(E);
+      const L = T.clone().sub(S), x = u.dot(L.clone().normalize()), lineY = S.y + (T.y - S.y) * clamp(x / Math.max(1e-6, L.length()));
+      o.arms.push({ bend: u.angleTo(f), dir: u.normalize(), up: E.y - lineY, hand: T.clone() }); }
+    if (U.legs) for (const L of U.legs) if (L.foot) o.feet.push(L.foot.position.clone());
+    return o; }
+  function figsFor(shot) { if (shot === 0) return [...soldiers, ...bearers.map(b => b.b), ...crowdA, staffMan, mother, childA];
+    if (shot === 3) return [kingS3]; return [...crowdB, ...chains.flatMap(c => c.people), ...passes.flatMap(q => [q.a, q.b]), king]; }
+  function motionCheck(t0, t1) {
+    const R = {}, put = (k, v, t, i) => { if (!R[k] || v > R[k][0]) R[k] = [+v.toFixed(4), +t.toFixed(3), i]; };
+    let prev = null, prevD = null, prevShot = -1;
+    for (let f = Math.round(t0 * 30); f <= Math.round(t1 * 30); f++) { const t = f / 30, shot = shotAt(t);
+      if (shot === 0) { soldiersAt(t); crowdAAt(t); } else if (shot === 3) kingClimb(t); else crowdBAt(t);
+      const figs = figsFor(shot), cur = figs.map(g => sampleFig(g));
+      for (const [i, c] of cur.entries()) for (const A of c.arms) if (A.up > 0) put('elbowUp_m', A.up, t, i);
+      if (prev && shot === prevShot) { const D = cur.map((c, i) => { const p = prev[i], d = {};
+          d.rot = Math.max(...c.rot.map((v, k) => Math.abs(Math.atan2(Math.sin(v - p.rot[k]), Math.cos(v - p.rot[k])))));
+          d.bend = Math.max(0, ...c.arms.map((A, k) => Math.abs(A.bend - p.arms[k].bend)));
+          d.armDir = Math.max(0, ...c.arms.map((A, k) => A.dir.angleTo(p.arms[k].dir)));
+          d.hand = Math.max(0, ...c.arms.map((A, k) => A.hand.distanceTo(p.arms[k].hand)));
+          d.foot = Math.max(0, ...c.feet.map((F, k) => F.distanceTo(p.feet[k])));
+          d.root = c.root.distanceTo(p.root); return d; });
+        D.forEach((d, i) => { for (const k in d) { put('d_' + k, d[k], t, i); if (prevD) put('dd_' + k, Math.abs(d[k] - prevD[i][k]), t, i); } });
+        prevD = D; } else prevD = null;
+      prev = cur; prevShot = shot; }
+    return R; }
+  function trace(i, t0, t1) { const out = []; for (let f = Math.round(t0 * 30); f <= Math.round(t1 * 30); f++) { const t = f / 30, shot = shotAt(t);
+      if (shot === 0) { soldiersAt(t); crowdAAt(t); } else if (shot === 3) kingClimb(t); else crowdBAt(t);
+      const g = figsFor(shot)[i], o = sampleFig(g); out.push([+t.toFixed(3), o.rot.map(v => +v.toFixed(3)), o.arms.map(A => [+A.bend.toFixed(3), A.dir.toArray().map(v => +v.toFixed(2)), A.hand.toArray().map(v => +v.toFixed(2))]), g.userData.kind, +(g.userData.tRise ?? 0).toFixed(2), +(g.userData.tWalk ?? 0).toFixed(2)]); } return out; }
+  return { film, draw, marks, debug: { fires, nB: crowdB.length, nI: spotsI.length, SUMMIT, OUT, chains: chains.length, motionCheck, trace,
       handCheck(t0, t1, dt = .05) { handErrOn = true; handErr.length = 0; handErrWho.length = 0; const worst = []; for (let t = t0; t <= t1; t += dt) { const n0 = handErr.length; crowdBAt(t); const m = Math.max(0, ...handErr.slice(n0)); worst.push([+t.toFixed(2), +m.toFixed(3)]); } handErrOn = false; worst.sort((a, b) => b[1] - a[1]); return { max: worst[0], top: worst.slice(0, 6), n: handErr.length, who: handErrWho.slice(0, 40) }; } }, beats: () => T, shotAt, canvas: film.canvas };
 }

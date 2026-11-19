@@ -168,15 +168,35 @@ export function pose(g, P = {}) {
       pos.setXYZ(i, x * (1 + .1 * k * Math.abs(uf - ub) / (.5 * s)), y + bob * (1 - k) + lift * (front > 0 ? 1 : .3), z - reach * k + (P.lean || 0) * -.2 * (1 - k) * s); }
     pos.needsUpdate = true; U.skirt.geometry.computeVertexNormals();
   }
-  // arms: a target per hand (IK, elbow back and out), or a hanging arm swung by `swing`
+  // arms: a target per hand (IK), or a hanging arm swung by `swing`.
+  // 2026-11-19 (「kingdom」 3부 r3, owner: "팔꿈치가 비정상적으로 위로 꺾인 채로" — rule body-motion; BODY-CHECK §2.2):
+  //   * the elbow's pole is BELOW and a little behind and outside the shoulder (was mostly behind: V(sd·.45, −.25, 1)). With a
+  //     hand reaching forward at chest height the old pole projected sideways and the elbow cocked up and out (chicken wing);
+  //     now the elbow hangs down and slightly out and the forearm comes up to the hand from below, whatever the reach.
+  //   * the shoulder settles when a hand reaches forward and down (it moves ≤ 4.5 cm toward the hand and drops ≤ 1.5 cm — a body
+  //     reaches with the shoulder, not by hiking it); the upper arm and forearm keep their lengths (two-bone IK, fixed la/lb).
+  //   * P.handsW: [w, w] (optional) blends each hand between its free hanging/swinging place (0) and its target (1), so a pose can
+  //     ease from arms-down to holding without a snap. Without handsW a given target is used fully (as before).
   up.updateMatrix(); inv.copy(up.matrix).invert();
-  U.arms.forEach((A, i) => { const S = A.S.clone(); let T;
-    const tg = P.hands && P.hands[i];
-    if (tg) T = tg.clone().applyMatrix4(inv);
-    else { const sw = (P.swing && P.swing[i]) || 0, ab = ((P.abd && P.abd[i]) || 0) + .1, r = (U.la + U.lb) * .96;
-      T = S.clone().add(V(A.sd * Math.sin(ab) * r, -Math.cos(sw) * Math.cos(ab) * r, -Math.sin(sw) * r * .95)); }
-    const [E, T2] = ik2(S, T, U.la, U.lb, V(A.sd * .45, -.25, 1));
-    boneTo(A.up, S, E); boneTo(A.fo, E, T2); A.hand.position.copy(T2); A.T = T2; });
+  U.arms.forEach((A, i) => { let S = A.S.clone(), T;
+    const sw = (P.swing && P.swing[i]) || 0, ab = ((P.abd && P.abd[i]) || 0) + .1, r = (U.la + U.lb) * .96;
+    const free = S.clone().add(V(A.sd * Math.sin(ab) * r, -Math.cos(sw) * Math.cos(ab) * r, -Math.sin(sw) * r * .95));
+    const tg = P.hands && P.hands[i], w = tg ? (P.handsW ? clamp(P.handsW[i] ?? 1) : 1) : 0;
+    // the blend free → target swings round the shoulder (direction slerped, distance lerped), so a hand rising from the side to
+    // overhead travels on an arc instead of a straight line through the shoulder (which folded the elbow shut and flipped the arm)
+    if (w > 0 && w < 1) { const d0 = free.clone().sub(S), d1 = tg.clone().applyMatrix4(inv).sub(S), l0 = d0.length(), l1 = d1.length();
+      const qa = new THREE.Quaternion().setFromUnitVectors(d0.clone().normalize(), d1.clone().normalize()), q = new THREE.Quaternion().slerp(qa, w);
+      T = S.clone().addScaledVector(d0.normalize().applyQuaternion(q), lerp(l0, l1, w)); }
+    else T = w > 0 ? tg.clone().applyMatrix4(inv) : free;
+    if (w > 0) { const d = T.clone().sub(S), q = d.length() / (U.la + U.lb); d.normalize();
+      const k = ss(.6, 1.02, q) * clamp(-d.z * 1.4) * (1 - ss(.05, .4, d.y)) * w;   // reaching forward (and not up) — all factors smooth
+      S = S.addScaledVector(d, .045 * s * k); S.y -= .015 * s * k; }
+    // soft reach: past 93 % of the arm's length the hand approaches full reach asymptotically, so the elbow never snaps
+    // straight in a frame or two (the IK's singularity at full stretch — r3 measured a 0.28 rad/frame elbow flick on a pointing arm)
+    { const L0 = U.la + U.lb, d = T.clone().sub(S), L = d.length(), a = .93 * L0, m = .995 * L0 - a;
+      if (L > a) T = S.clone().addScaledVector(d, (a + m * (1 - Math.exp(-(L - a) / m))) / L); }
+    const [E, T2] = ik2(S, T, U.la, U.lb, V(A.sd * .35, -1, .45));
+    boneTo(A.up, S, E); boneTo(A.fo, E, T2); A.hand.position.copy(T2); A.T = T2; A.E = E; A.S2 = S; });
 }
 // where a hand is now (root frame) — for objects held in it
 export function handAt(g, i) { const U = g.userData; return U.arms[i].T.clone().applyMatrix4(U.upper.matrix); }

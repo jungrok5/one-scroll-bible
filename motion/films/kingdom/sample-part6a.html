@@ -55,7 +55,7 @@ Pilot.run({ W, H, dur: +(T1 - T0).toFixed(2), fonts: ["600 40px 'Noto Serif KR'"
   init: async () => { await Film.load(); buildText();
     B = Object.fromEntries(IDS.map(id => [id, Film.lines[id].at]));
     { const q = TEXT.find(x => x[1] === 'Q6a'); B.cuts = Film.pieces(Film.text('Q6a'), q[2], q[3]).slice(1).map(p => p[1]); }   // when "예루살렘과 …" and "내 증인이 되리라" come on
-    OL = await (await import('./olivet3d.js')).build(W, H); window.__OL = OL; }, draw });
+    OL = await (await import('./olivet3d.js')).build(W, H, B); window.__OL = OL; }, draw });
 </script>
 </body>
 </html>

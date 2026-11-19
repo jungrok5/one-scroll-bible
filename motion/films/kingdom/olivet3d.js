@@ -32,6 +32,7 @@ import { Film, THREE, V, col, rng } from '../lib3d/cine.js';
 import * as K from '../lib3d/kit.js';
 import * as P from './people3d.js';
 import * as E from './earth-night.js';
+import LANDP from './data/land-110m.js';
 
 const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
 const lerp = (a, b, k) => a + (b - a) * k;
@@ -130,7 +131,8 @@ const sunHead = T => t => keys([[T.a, 145], [T.c1 + 1.0, 145], [T.c2 + .8, 40], 
 const sunElev = T => t => keys([[T.a, 7.4], [T.c, 6.7], [T.d, 6.2], [T.e, 5.8], [T.e + 2.2, 3.6], [T.c1, 1.2], [T.c1 + 2.2, -3.0], [T.c2, -8.5], [T.f, -19], [T.f + 1.4, -20.5], [T.g, -9.5]], t);
 const GC = V(.2, 0, -.6);   // the group's centre (the camera works round it)
 
-export async function build(W, H_) {
+export async function build(W, H_, B0 = null) {
+  const T0B = beats(B0);   // round 3: the arcs' launch times are laid out once at build, from the same line times
   const Hh = H_, vert = Hh > W;
   const film = new Film({
     W, H: Hh, dur: 1e4, fov: 40, near: .3, far: 3.5e5,
@@ -141,7 +143,7 @@ export async function build(W, H_) {
   });
   film.canvas.style.display = 'none';
   const S = film.scene, cam = film.camera, R = film.renderer;
-  let T = null, SUNE = null, SUNH = null;
+  let T = null, SUNE = null, SUNH = null, SUNF = null;
 
   // ---------------------------------------------------------------- light
   const sunL = new THREE.DirectionalLight(col('#ffd39a'), 3.0); S.add(sunL, sunL.target);
@@ -190,7 +192,7 @@ export async function build(W, H_) {
           c += vec3(1., .66, .32) * (pow(s, 6.) * .55 + pow(s, 40.) * 1.2 + pow(s, 400.) * 3.) * smoothstep(-6., 1., uE) + vec3(1., .92, .75) * 34. * smoothstep(.99962, .9998, s) * smoothstep(-1., .5, uE);
           c += vec3(1., .7, .38) * uGlow * exp(-abs(y) / .025) * pow(max(dot(hz, normalize(uGlowDir.xz)), 0.), 2.);   // the light gone beyond the horizon
           float ys = dot(uSun, uUp) + uDip;   // the sun against the camera's own horizon (the limb)
-          vec3 sp = vec3(.004, .006, .014) + vec3(.07, .14, .36) * exp(-abs(y) / .014) + (vec3(1., .62, .3) * exp(-abs(y) / .01) * 1.0 + vec3(1., .78, .5) * exp(-abs(y) / .03) * .14) * pow(max(sd, 0.), 6.) * smoothstep(-.4, .0, ys);   // above the air: the blue rim; the dawn on the limb toward the sun
+          vec3 sp = vec3(.004, .006, .014) + vec3(.07, .14, .36) * exp(-abs(y) / .014) + (vec3(1., .62, .3) * exp(-abs(y) / .008) * .7 + vec3(1., .74, .48) * exp(-abs(y) / .022) * .05) * pow(max(sd, 0.), 6.) * smoothstep(-.4, .0, ys);   // above the air: the blue rim; the dawn on the limb toward the sun
           c = mix(c, sp, uSpace);
           if (uStars > 0. && y > .02){ vec3 gg = d * 260., g = floor(gg); vec2 k = g.xy + g.z * 17.31; float st = step(.9986, h12(k)) * smoothstep(.32, .05, length(fract(gg) - .5)); c += vec3(st * uStars * (.3 + .7 * h12(k + 3.))) * smoothstep(.02, .12, y); }
           gl_FragColor = vec4(c, 0.); }` });
@@ -594,25 +596,67 @@ export async function build(W, H_) {
       for (let i = 0; i < nl; i++) { const a = r() * 6.283, rr = Math.sqrt(r()) * rad, xx = x + Math.cos(a) * rr, zz = z + Math.sin(a) * rr; const y = H(xx, zz); if (WATER) continue;
         lamps.push({ p: localToW(xx, zz, y + 3.5, V()), d: d0 + rr * 1.2 + r() * rad * 1.5, b: .45 + r() * .7, s: .75 + r() * .5, f: Math.max(260, d0 * .03) }); } } }
   const LAMPS = E.lampPoints(lamps, { px: 5.0, minPx: 1.4 }); LAMPS.u.uRef.value = 900; S.add(LAMPS.pts);
-  // the world's roads beyond the terrain patch: soft lines of light on the globe (a core and a wide halo), each continuing from the
-  // node it starts at; and a brighter lamp where each road ends ("the village at each road's end")
-  const lines = [], ends = [];
-  for (const r of E.routePolylines(30000)) {
-    const gd = r.pts.map(([lo, la]) => E.gcDist(lo, la)); if (Math.max(...gd) < 160000) continue;
-    const L = { p: [], d: [], w: 120, k: [] }; let d = gd[0] * 1.15, prev = null;
-    for (let i = 0; i < r.pts.length; i++) { const [lo, la] = r.pts[i];
-      const p = gd[i] < PATCH - 8000 ? (() => { const [x, z] = LL(lo, la); return localToW(x, z, H(x, z) + 30, V()); })() : E.llToWorld(lo, la, 400, V());
-      if (prev) d += p.distanceTo(prev); prev = p; if (gd[i] < 120000 && i + 1 < r.pts.length && gd[i + 1] < 120000) continue;
-      L.p.push(p); L.d.push(d); if (L.p.length > 1) L.k.push(r.sea[i - 1] ? .6 : 1); }
-    if (L.p.length > 1) { lines.push(L); if (r.end) ends.push({ p: L.p[L.p.length - 1].clone(), d: L.d[L.d.length - 1] }); } }
-  // (round 2: no lines on the globe — the round-1 'abstract map lines'; the roads' ends are kept for their lamps)
-  for (const c of E.cityLights({ count: 12000 })) far.push({ p: E.llToWorld(c.lon, c.lat, 600, V()), d: c.gd * 1.28 + c.j * 260000, b: c.b, s: 1, f: 380000 });
-  for (const e of ends) far.push({ p: e.p, d: e.d, b: 3.2, s: 4.2, f: 500000 });
-  const CITIES = E.lampPoints(far, { px: 4.6, minPx: 1.7 }); CITIES.u.uRef.value = 4e6; S.add(CITIES.pts);
-
-  // ---------------------------------------------------------------- the globe
-  const GL = E.buildGlobe(); S.add(GL.mesh, GL.atm);
+  // ---------------------------------------------------------------- the globe (round 3: Natural Earth 1:110m land, data/land-110m.js)
+  const GL = E.buildGlobe({ polys: LANDP }); S.add(GL.mesh, GL.atm);
   Object.assign(terrU, { tLand: GL.u.tLand, uN0: GL.u.uN0, uU0: GL.u.uU0, uE0: GL.u.uE0, uHazeL: GL.u.uHazeL });   // before the first render compiles the terrain
+
+  // ---------------------------------------------------------------- round 3: arcs of light over the curve of the earth (owner 2026-11-19)
+  // From the hill, waves of great-circle arcs on Q6a's phrases: "온 유대" short arcs to the towns of Judea · "사마리아" north to Samaria
+  // and Galilee · "땅 끝까지" a burst to the near world (Asia Minor, Egypt, Greece, Rome, Mesopotamia, Arabia) AND a fan of long arcs to
+  // every continent; then every landing branches again (lineage-glow doubling) — N28b: still growing, new arcs to the last frame.
+  const JER = [E.LL0[0], E.LL0[1]], R_E0 = E.R_E;
+  const v3 = (lo, la) => E.llToWorld(lo, la, 0, V()).sub(V(0, -R_E0, 0)).normalize();
+  const gcd = (a, b) => Math.acos(clamp(v3(...a).dot(v3(...b)), -1, 1)) * R_E0;
+  const bearing = (a, b) => { const [l1, p1] = a.map(x => x * D2R), [l2, p2] = b.map(x => x * D2R); return Math.atan2(Math.sin(l2 - l1) * Math.cos(p2), Math.cos(p1) * Math.sin(p2) - Math.sin(p1) * Math.cos(p2) * Math.cos(l2 - l1)); };
+  const dest = (a, brg, d) => { const [l1, p1] = a.map(x => x * D2R), dr = d / R_E0, p2 = Math.asin(Math.sin(p1) * Math.cos(dr) + Math.cos(p1) * Math.sin(dr) * Math.cos(brg));
+    const l2 = l1 + Math.atan2(Math.sin(brg) * Math.sin(dr) * Math.cos(p1), Math.cos(dr) - Math.sin(p1) * Math.sin(p2)); return [((l2 / D2R + 540) % 360) - 180, p2 / D2R]; };
+  const surfY = (lo, la) => { if (E.gcDist(lo, la) < PATCH - 8000) { const [x, z] = LL(lo, la); return Math.max(H(x, z), -30); } return -30; };
+  function arcPts(a, b) {   // the bow: a great circle lifted ∝ its length (region arcs low over the hills, ocean crossings 1000+ km up)
+    const d = gcd(a, b), va = v3(...a), vb = v3(...b), om = Math.acos(clamp(va.dot(vb), -1, 1)), n = clamp(Math.round(d / 110000), 14, 80);
+    const hTop = Math.min(1.35e6, d * (.06 + .1 * ss(5e4, 1.2e6, d))), ya = surfY(...a) + 180, yb = surfY(...b) + 180, P = [];
+    for (let i = 0; i <= n; i++) { const s = i / n, k0 = Math.sin((1 - s) * om) / Math.sin(om || 1e-9), k1 = Math.sin(s * om) / Math.sin(om || 1e-9);
+      const v = om < 1e-9 ? va.clone() : va.clone().multiplyScalar(k0).addScaledVector(vb, k1), y = lerp(ya, yb, s) + hTop * Math.pow(Math.sin(Math.PI * s), .85);
+      P.push(V(0, -R_E0, 0).addScaledVector(v, R_E0 + y)); }
+    return P; }
+  const ARCS = [], HUBS = [], cells = new Set(), rA = rng(2026);
+  const cellOf = ([lo, la]) => `${Math.round(la / 1.6)}:${Math.round(lo * Math.cos(la * D2R) / 1.6)}`;
+  function arc(a, b, t0, lvl, k = 1) { const d = gcd(a, b), Tf = (d < 1.2e5 ? .7 : .62) + 1.3 * Math.sqrt(d / 3e6); ARCS.push({ a, b, t0, T: Tf, lvl, k, d }); return t0 + Tf; }
+  const TW = (k) => E.NODE[k] || TOWN[k];
+  // (the Q6a words, from the pieces: c1 "예루살렘과 온 유대와 사마리아와 땅 끝까지 이르러" — 온 유대 ≈ +1.1, 사마리아 ≈ +2.1, 땅 끝까지 ≈ +3.4)
+  const W1 = ['BET', 'HEB', 'EMM', 'JRC', 'TEK', 'GIB', 'RAM', 'BTL', 'ANA', 'MIC', 'GBN', 'BHR', 'LYD', 'BGU', 'MAS'];
+  const W2 = ['SHI', 'SHE', 'SAM', 'JEN', 'NAI', 'NAZ', 'CAN', 'CAP', 'TIB', 'SCY', 'GAD', 'CAE', 'APO', 'JOP', 'JV1', 'JV2', 'AZO', 'ASK'];
+  const W3 = { DAM: 0, ANT: 0, TAR: 0, ICO: 0, EPH: 0, TRO: 0, PHI: 0, THE: 0, ATH: 0, COR: 0, CRE: 0, MAL: 0, ROM: 0, ALX: 0, MEM: 0, CYR: 0, EDE: 0, BAB: 0, PER: 0, MER: 0, AXU: 0, CON: 0, CAR: 0,
+    PAP: [32.42, 34.77], PET: [35.44, 30.33], BOS: [36.48, 32.52], PAL: [38.27, 34.55], ARM: [44.5, 40.2], NIS: [41.2, 37.1], SUS: [48.25, 32.19], ADE: [45.0, 12.8], SAN: [44.2, 15.4], SYR: [15.3, 37.1],
+    NAP: [14.3, 40.8], ANC: [32.85, 39.93], SIN: [33.95, 28.55], TAI: [40.4, 21.3], MED: [39.6, 24.5], HAR: [42.1, 9.3], DJE: [10.9, 33.8], SAR: [9.1, 39.2], KRK: [21.0, 42.0], ODE: [30.7, 46.5] };
+  const FAN = ['LON', 'LIS', 'MOS', 'STO', 'DEL', 'BEI', 'SEO', 'TOK', 'SYD', 'CAP', 'LAG', 'NAI', 'RIO', 'BUE', 'NYC', 'MEX', 'LIM', 'MAN', 'KER', 'CHI', 'LAX', 'DAK', 'KIN', 'SAMK'];
+  { const tJ = T0B.c1 + 1.0, tS = T0B.c1 + 2.0, tE = T0B.c1 + 3.35;
+    W1.forEach((k, i) => arc(JER, TW(k), tJ + i * .055, 1, .9));
+    W2.forEach((k, i) => arc(i % 3 ? JER : TW(W1[(i * 5) % W1.length]), TW(k), tS + i * .05, 2, .9));
+    Object.entries(W3).forEach(([k, v], i) => { const b = v || E.NODE[k]; const tl = arc(JER, b, tE + rA() * .55, 3, 1); HUBS.push({ ll: b, t: tl, lvl: 3, d: gcd(JER, b) }); cells.add(cellOf(b)); });
+    FAN.forEach((k, i) => { const b = E.NODE[k]; const tl = arc(JER, b, tE + .5 + i * .05 + rA() * .2, 4, 1.1); HUBS.push({ ll: b, t: tl, lvl: 4, d: gcd(JER, b) }); cells.add(cellOf(b)); }); }
+  // doubling: every landing (in the order they land) sends out new arcs, shorter as the lace fills, onto land only, one per cell
+  { const q = HUBS.slice().sort((x, y) => x.t - y.t); let qi = 0; const tEnd = T0B.g - .25;
+    while (qi < q.length && ARCS.length < 2400) { const h = q[qi++]; if (h.t > tEnd) break;
+      const nk = h.lvl < 5 ? 3 : 2, out0 = bearing(JER, h.ll);
+      for (let c = 0; c < nk; c++) { let ok = null;
+        for (let tr = 0; tr < 10 && !ok; tr++) { const brg = (tr < 5 ? out0 : rA() * 6.283) + (rA() - .5) * 2.4, dd = lerp(1.8e6, 9e5, ss(4, 8, h.lvl)) * (.6 + rA() * .8), b = dest(h.ll, brg, dd);
+          if (Math.abs(b[1]) > 70 || !GL.isLand(b[0], b[1]) || cells.has(cellOf(b))) continue; ok = b; }
+        if (!ok) continue; cells.add(cellOf(ok));
+        const t0 = h.t + .12 + rA() * .55; if (t0 > tEnd) continue; const tl = arc(h.ll, ok, t0, h.lvl + 1, .85);
+        const nh = { ll: ok, t: tl, lvl: h.lvl + 1, d: gcd(h.ll, ok) }; HUBS.push(nh);
+        let j = q.length; while (j > qi && q[j - 1].t > tl) j--; q.splice(j, 0, nh); } } }
+  ARCS.forEach(a => { a.P = arcPts(a.a, a.b); });
+  const ARC = E.arcMesh(ARCS, { px: 2.2 }); S.add(ARC.mesh);
+  // a cluster of lamps where each arc lands (a flare as it comes on), and the world's other lights lighting as the waves pass
+  const hubL = [];
+  for (const h of HUBS) { const r = rng(Math.round(h.t * 1000)), rad = clamp(h.d * .05, 3e4, 1.3e5);
+    hubL.push({ p: E.llToWorld(h.ll[0], h.ll[1], 900, V()), d: h.t * 1000, b: 2.2, s: 3.4, f: 260 });
+    for (let i = 0; i < 7; i++) { const b = dest(h.ll, r() * 6.283, Math.sqrt(r()) * rad); if (!GL.isLand(b[0], b[1])) continue; hubL.push({ p: E.llToWorld(b[0], b[1], 900, V()), d: (h.t + .1 + r() * .6) * 1000, b: .5 + r() * .7, s: 1.1, f: 350 }); } }
+  const HUBP = E.lampPoints(hubL, { px: 4.6, minPx: 1.8 }); HUBP.u.uRef.value = 4e6; S.add(HUBP.pts);
+  for (const c of E.cityLights({ count: 14000, isLand: GL.isLand })) far.push({ p: E.llToWorld(c.lon, c.lat, 700, V()), d: c.gd + c.j * 1.2e6, b: c.b * .8, s: 1, f: 5e5 });
+  const CITIES = E.lampPoints(far, { px: 4.0, minPx: 1.45 }); CITIES.u.uRef.value = 4e6; S.add(CITIES.pts);
+  let GW = null;   // the wave front over the world's lights (m from Jerusalem), behind the arcs
+  const waveFront = t => { if (!GW) GW = mono([[T.c1 + 3.3, Math.log(1.5e5)], [T.c2, Math.log(1.6e6)], [T.c2 + 2.0, Math.log(4.5e6)], [T.f + 2.5, Math.log(1.0e7)], [T.g, Math.log(2.1e7)]]); return t < T.c1 + 3.3 ? 0 : Math.exp(GW(t)); };
 
   // ---------------------------------------------------------------- the camera: one move (see beats)
   function groundCam(t) {
@@ -634,7 +678,7 @@ export async function build(W, H_) {
   // cubic (one smooth speed curve: slow off the ground, fastest while the light runs over Judea and Samaria, slowing as the earth
   // rounds), on the real sphere: the camera stays behind the hill on its great circle and looks down at it, the limb coming in at the top.
   let crane0 = null, LNA = null, GOFF = null;
-  const R_E = E.R_E, up0 = V(0, 1, 0);
+  const R_E = E.R_E, up0 = V(0, 1, 0), NPOLE = E.llToWorld(0, 90, 0, V()).sub(V(0, -E.R_E, 0)).normalize();
   function thetaFor(h, delta) {   // the arc (rad) behind the hill from which the hill is seen `delta` degrees below the horizontal
     const dip = Math.acos(R_E / (R_E + h)) / D2R; delta = Math.max(delta, dip + .4); let lo = 1e-12, hi = Math.acos(R_E / (R_E + h));
     for (let i = 0; i < 60; i++) { const th = (lo + hi) / 2, dl = Math.atan2(R_E + h - R_E * Math.cos(th), R_E * Math.sin(th)) / D2R; if (dl > delta) lo = th; else hi = th; }
@@ -643,14 +687,17 @@ export async function build(W, H_) {
     const tT = T;
     if (t < tT.crane) return groundCam(t);
     if (!crane0) { crane0 = groundCam(tT.crane); const a0 = Math.log(crane0.alt);
-      LNA = mono([[tT.crane, a0], [tT.crane + 2.0, Math.log(12)], [tT.c1, Math.log(150)], [tT.c1 + 1.4, Math.log(1500)], [tT.c1 + 2.7, Math.log(9000)], [tT.c1 + 4.0, Math.log(45000)], [tT.c2 + .5, Math.log(2e5)], [tT.f + .6, Math.log(7e5)], [tT.g, Math.log(2.8e6)]]);
+      LNA = mono([[tT.crane, a0], [tT.crane + 2.0, Math.log(12)], [tT.c1, Math.log(150)], [tT.c1 + 1.4, Math.log(1500)], [tT.c1 + 2.7, Math.log(9000)], [tT.c1 + 3.4, Math.log(2.0e4)], [tT.c1 + 4.6, Math.log(2.2e5)], [tT.c1 + 5.6, Math.log(1.1e6)], [tT.c2 + 1.6, Math.log(3.2e6)], [tT.f + .6, Math.log(6.5e6)], [tT.f + 3.1, Math.log(1.05e7)], [tT.g, Math.log(1.35e7)]]);
       GOFF = Math.atan2(crane0.alt, crane0.dist) / D2R - crane0.pd; }
     const c0 = crane0, alt = Math.exp(LNA(t)), la = Math.log(alt), dip = Math.acos(R_E / (R_E + alt)) / D2R;
     const pdMid = lerp(c0.pd, 47, ss(Math.log(8), Math.log(4000), la)), pd = Math.max(pdMid, dip + 11 * ss(Math.log(2e4), Math.log(2e5), la));
     const gOff = lerp(GOFF, 4, ss(Math.log(8), Math.log(400), la));
-    const yaw = lerp(60, 40, sine((t - tT.crane) / (tT.g - tT.crane)));
-    const th = thetaFor(alt, pd + gOff), h = hd(yaw);
-    const uC = up0.clone().multiplyScalar(Math.cos(th)).addScaledVector(h, -Math.sin(th)), tC = up0.clone().multiplyScalar(Math.sin(th)).addScaledVector(h, Math.cos(th));
+    const yaw = keys([[tT.crane, 60], [tT.c1 + 3.4, 46], [tT.g, 28]], t);
+    // the point the camera keeps in view: the hill, then (from 땅 끝까지) it travels south-west over the earth — the globe turns under us
+    const gk = ss(tT.c1 + 3.6, tT.g, t), lonT = lerp(JER[0], 18, gk), latT = lerp(JER[1], 22, gk);
+    const upT = gk > 0 ? v3(lonT, latT) : up0.clone(), ET = gk > 0 ? NPOLE.clone().cross(upT).normalize() : V(0, 0, 1), NT = gk > 0 ? upT.clone().cross(ET) : V(1, 0, 0);
+    const th = thetaFor(alt, pd + gOff), h = NT.clone().multiplyScalar(Math.sin(yaw * D2R)).addScaledVector(ET, -Math.cos(yaw * D2R));
+    const uC = upT.clone().multiplyScalar(Math.cos(th)).addScaledVector(h, -Math.sin(th)), tC = upT.clone().multiplyScalar(Math.sin(th)).addScaledVector(h, Math.cos(th));
     const pos = V(GC.x, -R_E, GC.z).addScaledVector(uC, R_E + alt);
     return { pos, yaw, pd, fov: lerp(c0.fov, 39, ss(Math.log(8), Math.log(300), la)), focus: lerp(c0.focus, Math.max(20, alt * 1.4), ss(tT.crane, tT.crane + 1.6, t)), aperture: 2.0 * (1 - ss(tT.crane, tT.crane + 2.2, t)), dist: th * R_E, alt, uC, tC };
   }
@@ -673,7 +720,9 @@ export async function build(W, H_) {
     return c;
   }
   function frame(t) {
-    const c = setView(t), e = SUNE(t), sh = SUNH(t), night = ss(-.5, -7, e), sunDir = V(Math.sin(sh * D2R) * Math.cos(e * D2R), Math.sin(e * D2R), -Math.cos(sh * D2R) * Math.cos(e * D2R));
+    const c = setView(t), e0 = SUNE(t), sh0 = SUNH(t), sunDir = V(Math.sin(sh0 * D2R) * Math.cos(e0 * D2R), Math.sin(e0 * D2R), -Math.cos(sh0 * D2R) * Math.cos(e0 * D2R));
+    { const w = ss(T.c1 + 3.8, T.f + 1.5, t); if (w > 0) { if (!SUNF) { const cg = camAt(T.g); SUNF = cg.uC.clone().multiplyScalar(-.9).addScaledVector(cg.tC, .44).normalize(); } sunDir.lerp(SUNF, w).normalize(); } }
+    const e = Math.asin(clamp(sunDir.y, -1, 1)) / D2R, sh = Math.atan2(sunDir.x, -sunDir.z) / D2R, night = ss(-.5, -7, e);
     const alt = c.alt, space = ss(9e3, 7e4, alt), lowA = 1 - ss(300, 3000, alt);
     // sun, its glow in the haze, sky light
     const sk = ss(-.8, 3.5, e); sunL.intensity = 3.2 * sk; sunL.color.copy(col('#ffd7a0')).lerp(col('#ff9a52'), 1 - ss(1, 8, e)); sunL.castShadow = sk > .01 && alt < 4000; if (sunL.castShadow) fitShadow(sunDir);
@@ -688,14 +737,17 @@ export async function build(W, H_) {
     A.density = 9e-4 * lerp(1, .12, ss(120, 2000, alt)) * (1 - ss(6e3, 1.5e4, alt)); A.falloff = alt > 1.5e4 ? 1e-9 : 1.3e-3;
     terrU.uSkyW.value.copy(fc).multiplyScalar(.9 + .4 * (1 - night)); terrU.uDetail.value = 1;
     // the look: exposure rides up into the blue hour so the land never goes black; bloom for the lamps
-    const L = film.look; L.exposure = lerp(1.05, 1.5, ss(3, -5, e)) * lerp(1, .92, space) * lerp(1, .7, ss(7e3, 2.5e4, alt) * (1 - ss(8e4, 4e5, alt)));   // the land→globe blend at 10–60 km is brighter than either: held level film.bloomCfg.strength = lerp(.07, .17, ss(1, -5, e)) * lerp(1, .6, ss(3e5, 3e6, alt)); L.grain = .03;
+    const L = film.look; L.exposure = lerp(1.05, 1.5, ss(3, -5, e)) * lerp(1, .92, space) * lerp(1, .7, ss(7e3, 2.5e4, alt) * (1 - ss(8e4, 4e5, alt))) * lerp(1, 1.18, ss(1e6, 6e6, alt));   // the land→globe blend at 10–60 km is brighter than either: held level
+    film.bloomCfg.strength = lerp(.07, .17, ss(1, -5, e)) * lerp(1, .4, ss(3e5, 3e6, alt)); L.grain = .03;
     const Df = film.dofCfg; Df.focus = c.focus; Df.aperture = c.aperture; Df.maxCoc = 14;
     // the light along the roads (terrain), the lamps, the world's lines
     const F = front(t), glowOn = ss(T.crane - .2, T.crane + 1.4, t);
     terrU.uF.value = F; terrU.uGlow.value = glowOn * lerp(.8, 1.3, ss(2, -4, e)) * lerp(1, .3, ss(6e4, 6e5, alt)); terrU.uHeadW.value = Math.max(18, F * .12);
     terrU.uFeet.value = .7 * ss(T.crane - .3, T.crane + 1.0, t) * (1 - ss(T.crane + 3.5, T.crane + 7, t));
         LAMPS.u.uF.value = F; LAMPS.u.uK.value = lerp(.5, 1.15, ss(2, -4, e)); LAMPS.u.uPull.value = alt < 4e4 ? .003 : .0005; LAMPS.u.uScale.value = film.scale;
-    CITIES.u.uF.value = F; CITIES.u.uK.value = 1.5; CITIES.u.uPull.value = .0004; CITIES.u.uScale.value = film.scale;
+    CITIES.u.uF.value = waveFront(t); CITIES.u.uK.value = 1.2; CITIES.u.uPull.value = .0004; CITIES.u.uScale.value = film.scale;
+    HUBP.u.uF.value = t * 1000; HUBP.u.uK.value = 1.3; HUBP.u.uPull.value = .0004; HUBP.u.uScale.value = film.scale;
+    ARC.u.uT.value = t; ARC.u.uRes.value.set(film.w, film.h); ARC.u.uPx.value = 2.2 * film.scale; ARC.u.uK.value = lerp(1.1, .8, ss(3e6, 1.2e7, alt)); ARC.u.uBandY.value = .44;
     // the globe (only once the camera is high enough for it to show past the terrain) and its air seen from outside
     GL.mesh.visible = alt > 1500; GL.atm.visible = alt > 6e4; GL.au.uK.value = ss(9e4, 5e5, alt); GL.au.uSun.value.copy(sunDir); GL.u.uSun.value.copy(sunDir);
     GL.u.uHazeL.value = lerp(2.5e5, 8e6, ss(1e4, 2e6, alt));

@@ -190,13 +190,18 @@ export const SHADE_GLSL = /* glsl */`
 // ---------------------------------------------------------------- the globe: a polar cap mesh round the origin out to the antipode
 // (dense near the terrain patch so the sphere meets it without facets), shaded as the earth at night: dark land, darker sea,
 // a faint relief, haze toward the limb; the city lights and the gold roads are separate meshes (above).
-export function buildGlobe({ thetaMin = .018, rings = 260, seg = 512, texW = 4096 } = {}) {
+// round 3 (2026-11-19, owner: "지구가 좀 어색하고"): `polys` = Natural Earth 1:110m land ([polygon][ring][lon, lat], data/land-110m.js)
+// replaces the first film's hand-drawn LAND outlines (straight coasts, a dark slab by the Red Sea); painted soft, holes even-odd.
+export function buildGlobe({ thetaMin = .018, rings = 260, seg = 512, texW = 4096, polys = null } = {}) {
   // the land mask, equirectangular (row 0 = 90°N), painted from the polygons
   const cv = document.createElement('canvas'); cv.width = texW; cv.height = texW / 2; const x = cv.getContext('2d');
   x.fillStyle = '#000'; x.fillRect(0, 0, cv.width, cv.height); x.fillStyle = '#fff'; x.filter = 'blur(2.5px)';   // soft edges: bilinear + smoothstep = a smooth coast when magnified
   const px = (lon, lat) => [(lon + 180) / 360 * cv.width, (90 - lat) / 180 * cv.height];
-  for (const p of LAND) { x.beginPath(); p.forEach((q, i) => { const [a, b] = px(...q); i ? x.lineTo(a, b) : x.moveTo(a, b); }); x.closePath(); x.fill(); }
-  x.fillRect(0, px(0, -68)[1], cv.width, cv.height);   // Antarctica
+  if (polys) { x.filter = 'blur(1.6px)'; for (const P of polys) { x.beginPath(); for (const ring of P) ring.forEach((q, i) => { const [a, b] = px(...q); i ? x.lineTo(a, b) : x.moveTo(a, b); }); x.fill('evenodd'); } x.fillRect(0, px(0, -84)[1], cv.width, cv.height); }
+  else { for (const p of LAND) { x.beginPath(); p.forEach((q, i) => { const [a, b] = px(...q); i ? x.lineTo(a, b) : x.moveTo(a, b); }); x.closePath(); x.fill(); }
+    x.fillRect(0, px(0, -68)[1], cv.width, cv.height); }   // Antarctica
+  const md = x.getImageData(0, 0, cv.width, cv.height).data, CW = cv.width, CH = cv.height;
+  const isLand = (lon, lat) => { const i = Math.min(CW - 1, Math.max(0, Math.floor((((lon + 180) % 360 + 360) % 360) / 360 * CW))), j = Math.min(CH - 1, Math.max(0, Math.floor((90 - lat) / 180 * CH))); return md[(j * CW + i) * 4] > 140; };
   const tex = new THREE.CanvasTexture(cv); tex.colorSpace = THREE.NoColorSpace; tex.minFilter = THREE.LinearMipmapLinearFilter; tex.magFilter = THREE.LinearFilter; tex.generateMipmaps = true; tex.anisotropy = 4;
   // the cap mesh: rings at polar angle θ from the origin, exponential near it, out to π
   const pos = [], ix = [];
@@ -223,7 +228,8 @@ export function buildGlobe({ thetaMin = .018, rings = 260, seg = 512, texW = 409
         float clr = vn(uv * vec2(70., 35.)) * .55 + vn(uv * vec2(190., 95.)) * .3 + vn(uv * vec2(600., 300.)) * .15;
         float cl = smoothstep(.56, .78, clr) * smoothstep(.07, .12, acos(clamp(dot(p, uU0), -1., 1.)));   // clear skies over the Holy Land (the terrain patch)
         float ms = dot(n, uSun);
-        vec3 c = eShade(ms, land, rel, grn, cl);
+        vec3 c = eShade(ms, land, rel, grn, cl * .8);
+        { vec3 vv = normalize(cameraPosition - vW); float sp = max(dot(reflect(-uSun, n), vv), 0.); c += vec3(1., .74, .46) * (pow(sp, 90.) * 1.6 + pow(sp, 14.) * .16) * (1. - land) * (1. - cl) * smoothstep(-.03, .12, ms); }
         vec3 v = normalize(cameraPosition - vW); float mu = max(dot(n, v), 0.);
         float hz = 1. - exp(-length(cameraPosition - vW) / uHazeL); c = mix(c, eHaze(ms), clamp(hz * .12 + pow(1. - mu, 9.) * .6, 0., 1.));
         gl_FragColor = vec4(c * uK, 1.); }` });
@@ -235,22 +241,70 @@ export function buildGlobe({ thetaMin = .018, rings = 260, seg = 512, texW = 409
     vertexShader: /* glsl */`varying vec3 vN, vW; void main(){ vec4 w = modelMatrix * vec4(position, 1.); vW = w.xyz; vN = normalize(w.xyz - vec3(0., -${R_E.toFixed(1)}, 0.)); gl_Position = projectionMatrix * viewMatrix * w; }`,
     fragmentShader: /* glsl */`uniform float uK; uniform vec3 uSun, uBlue, uWarm; varying vec3 vN, vW;
       void main(){ vec3 n = normalize(vN), v = normalize(cameraPosition - vW); float mu = clamp(dot(n, v), 0., 1.);
-        float rim = pow(1. - mu, 6.) * 1.0 + pow(1. - mu, 13.) * 1.9;                // a thick glow, brightest at the edge
+        float rim = pow(1. - mu, 10.) * .8 + pow(1. - mu, 22.) * 2.2;   // round 3: one clean rim                // a thick glow, brightest at the edge
         float ms = dot(n, uSun), sun = pow(max(ms * .5 + .5, 0.), 4.), lineS = exp(-abs(ms + .02) / .09);
-        vec3 c = mix(uBlue, uWarm, clamp(sun * .55 + lineS * .6, 0., 1.)) * rim * (.34 + 1.1 * sun + .9 * lineS);
+        vec3 c = mix(uBlue, uWarm, clamp(sun * .55 + lineS * .6, 0., 1.)) * rim * (.34 + .55 * sun + .45 * lineS);
         gl_FragColor = vec4(c * uK, 1.); }` });
   const atm = new THREE.Mesh(sg, am); atm.frustumCulled = false; atm.renderOrder = 4;
-  return { mesh, u, atm, au, tex };
+  return { mesh, u, atm, au, tex, isLand };
 }
 
 // ---------------------------------------------------------------- the world's city lights (church.html's CITIES, more of them)
 // Each light knows its great-circle distance from Jerusalem; it comes on when the light along the roads has gone a little further.
-export function cityLights({ count = 13000, skipWithin = 210000, seed = 31 } = {}) {
+export function cityLights({ count = 13000, skipWithin = 210000, seed = 31, isLand = null } = {}) {
   const r = rng(seed), out = [], boxes = LAND.map(p => { let a = 1e9, b = -1e9, c = 1e9, d = -1e9; for (const [x, y] of p) { a = Math.min(a, x); b = Math.max(b, x); c = Math.min(c, y); d = Math.max(d, y); } return [a, b, c, d]; });
-  const land = (lon, lat) => lat < -60 ? false : LAND.some((p, i) => { const q = boxes[i]; return lon >= q[0] && lon <= q[1] && lat >= q[2] && lat <= q[3] && inPoly(lon, lat, p); });
+  const land = isLand ? ((lon, lat) => lat > -58 && isLand(lon, lat)) : (lon, lat) => lat < -60 ? false : LAND.some((p, i) => { const q = boxes[i]; return lon >= q[0] && lon <= q[1] && lat >= q[2] && lat <= q[3] && inPoly(lon, lat, p); });
   let guard = 0;
   while (out.length < count && guard++ < count * 60) { const lon = -180 + r() * 360, lat = Math.asin(r() * 2 - 1) / D2R; if (lat < -50 || lat > 66 || !land(lon, lat)) continue;
     const pp = popW(lon, lat); if (r() > .015 + Math.pow(pp, 1.6) * .985) continue; const gd = gcDist(lon, lat); if (gd < skipWithin) continue;
     out.push({ lon, lat, gd, b: (.25 + .75 * Math.pow(r(), 2)) * (.4 + .6 * pp), j: r() }); }
   return out;
+}
+
+// ---------------------------------------------------------------- round 3: arcs of light over the curve of the earth (owner 2026-11-19:
+// "더 압도적인 선이 전 세계로 번져 나가는 느낌 … 선들이 호를 그리며 쫘악 전 지구적으로 퍼져 나간다든지")
+// After motion-skills lineage-glow (one lit node, lines that branch and double, a white-hot head running ahead, warm trail) and the
+// classic great-circle "flight arc" globe: each arc = a great circle from A to B lifted into a parabola-like bow (height ∝ length),
+// drawn as a screen-space ribbon. Its head runs from A to B in [t0, t0 + T]; behind the head a warm trail fades, and once landed the
+// arc stays as a faint residual line, so the lace builds up. Depth-tested against the globe: arcs go over the horizon and come back.
+// arcs: [{ P: [Vector3 …] (points along the arc, world), t0, T, k (brightness) }]. Uniforms: uT (film seconds), uRes, uPx (core px),
+// uBandY (fraction of the frame height from the bottom under which the words sit — arcs dimmed there), uK.
+export function arcMesh(arcs, { px = 2.4 } = {}) {
+  let nSeg = 0; for (const a of arcs) nSeg += a.P.length - 1;
+  const A = new Float32Array(nSeg * 12), Bv = new Float32Array(nSeg * 12), Q = new Float32Array(nSeg * 8), Sv = new Float32Array(nSeg * 8), Tm = new Float32Array(nSeg * 12), idx = new Uint32Array(nSeg * 6);
+  let s = 0;
+  for (const a of arcs) { const n = a.P.length - 1;
+    for (let i = 0; i < n; i++, s++) { const p = a.P[i], q = a.P[i + 1];
+      for (let v = 0; v < 4; v++) { const o = s * 4 + v; A.set([p.x, p.y, p.z], o * 3); Bv.set([q.x, q.y, q.z], o * 3); Q.set([v & 1 ? 1 : -1, v >> 1], o * 2); Sv.set([i / n, (i + 1) / n], o * 2); Tm.set([a.t0, a.T, a.k], o * 3); }
+      idx.set([s * 4, s * 4 + 1, s * 4 + 3, s * 4, s * 4 + 3, s * 4 + 2], s * 6); } }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.BufferAttribute(A.slice(), 3)); g.setAttribute('aA', new THREE.BufferAttribute(A, 3)); g.setAttribute('aB', new THREE.BufferAttribute(Bv, 3));
+  g.setAttribute('aQ', new THREE.BufferAttribute(Q, 2)); g.setAttribute('aS', new THREE.BufferAttribute(Sv, 2)); g.setAttribute('aTm', new THREE.BufferAttribute(Tm, 3)); g.setIndex(new THREE.BufferAttribute(idx, 1));
+  const u = { uT: { value: 0 }, uRes: { value: new THREE.Vector2(1080, 1920) }, uPx: { value: px }, uK: { value: 1 }, uBandY: { value: .36 }, uRest: { value: .16 } };
+  const m = new THREE.ShaderMaterial({ uniforms: u, transparent: true, depthWrite: false, depthTest: true, fog: false, side: THREE.DoubleSide, blending: THREE.AdditiveBlending,
+    vertexShader: /* glsl */`attribute vec3 aA, aB, aTm; attribute vec2 aQ, aS; uniform vec2 uRes; uniform float uPx, uT; varying float vS, vX, vP, vAge, vK, vH;
+      void main(){
+        float p = clamp((uT - aTm.x) / aTm.y, 0., 1.); p = 1. - (1. - p) * (1. - p) * (1. - .35 * p);   // the head: fast off the ground, easing in to land
+        float sA = aS.x, sB = aS.y;
+        if (uT < aTm.x || sA > p + .002) { gl_Position = vec4(2., 2., 2., 1.); return; }
+        vec4 cA = projectionMatrix * viewMatrix * vec4(aA, 1.), cB = projectionMatrix * viewMatrix * vec4(aB, 1.);
+        if (cA.w < 1e-3 || cB.w < 1e-3) { gl_Position = vec4(2., 2., 2., 1.); return; }
+        vec2 sa = cA.xy / cA.w * uRes * .5, sb = cB.xy / cB.w * uRes * .5, dir = sb - sa; float L = length(dir); dir = L > 1e-4 ? dir / L : vec2(1., 0.);
+        vec4 c = aQ.y < .5 ? cA : cB;
+        float head = exp(-max(p - (aQ.y < .5 ? sA : sB), 0.) * 9.);
+        float w = uPx * (1. + 1.6 * head) * 2.6;                                   // a soft ribbon: the core is in the fragment
+        c.xy += (vec2(-dir.y, dir.x) * aQ.x * w * .5 + dir * (aQ.y < .5 ? -1. : 1.) * w * .3) / (uRes * .5) * c.w; gl_Position = c;
+        vS = aQ.y < .5 ? sA : sB; vX = aQ.x; vP = p; vAge = max(uT - aTm.x - aTm.y, 0.); vK = aTm.z; vH = head; }`,
+    fragmentShader: /* glsl */`uniform float uK, uBandY, uRest; uniform vec2 uRes; varying float vS, vX, vP, vAge, vK, vH;
+      void main(){
+        float bh = vP - vS; if (bh < -.002) discard;
+        float across = exp(-vX * vX * 5.) + .5 * exp(-vX * vX * 22.);
+        float head = exp(-bh * 14.), trail = exp(-bh * 2.4);
+        float landed = smoothstep(.0, 2.8, vAge);
+        float body = mix(.3 * max(trail, .3), uRest * .5, landed);              // in flight: a warm trail; landed: a faint line that stays
+        vec3 col = mix(vec3(1., .58, .25), vec3(1., .93, .78), head) * (body + 1.2 * head * (1. - smoothstep(0., .5, vAge)));
+        float y = gl_FragCoord.y / uRes.y, band = mix(.4, 1., smoothstep(uBandY - .1, uBandY + .04, y));
+        gl_FragColor = vec4(col * across * vK * uK * band, 1.); }` });
+  const mesh = new THREE.Mesh(g, m); mesh.frustumCulled = false; mesh.renderOrder = 7;
+  return { mesh, u };
 }

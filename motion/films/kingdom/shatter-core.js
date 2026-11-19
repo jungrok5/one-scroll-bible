@@ -5,6 +5,11 @@
 // Changes from the source (marked "B2:"): ES module exports; HIC.rng inlined as rngOf; the contact planes come from
 // o.planes and each plane may carry a region test (a window ledge, the wall below a sill) instead of the fixed floor + wall;
 // a piece records its parent (child.parent) so a group can be rewound on its own clock.
+// B3 (opt-in, B2 runs unchanged): o.capsules — round bars and columns {a, b, r} the plates collide with (corners + points
+// along every edge are tested, so a bar cannot slip through the middle of an edge); o.stack — a plate that comes to rest on a
+// lifted plane (floor, ledge) becomes a support: its top face (footprint in x-z + the plane of the face) is remembered, and a
+// moving plate's corner and edge points that sink into a support's top are pushed out along its normal, like the floor — so a
+// plate lands on a pile and lies on it (tilted where it bridges), glass on glass, never glass through glass.
 const TAU = Math.PI * 2;
 function clamp(x, a, b) { return x < a ? a : x > b ? b : x; }
 function mix(a, b, t) { return a + (b - a) * t; }
@@ -149,6 +154,7 @@ export const GLASS = {
     var bodies = [], frames = [], events = [], breaks = [];
     var time = 0, steps = 0, idle = true, refSize = o.refSize;
     sim.bodies = bodies; sim.frames = frames; sim.events = events;
+    var caps = o.capsules || [], stack = !!o.stack, restGrid = new Map(), RG = .5;   // B3
     var planes = o.planes || [{ n: [0, 1, 0], d: 0, lift: 1 }, { n: [0, 0, 1], d: o.wallZ }];   // B2: planes from o.planes, each may carry region(x, y, z) and maxDepth
 
     function inertia(poly, m, ar) { // second moments of the polygon about its centroid (axes in the plane), plus thickness
@@ -198,12 +204,44 @@ export const GLASS = {
       b.v[0] += n[0] * j / b.m; b.v[1] += n[1] * j / b.m; b.v[2] += n[2] * j / b.m;
       if (b.kind === 'shard') { var dw = iw(b, R, cross(r, [n[0] * j, n[1] * j, n[2] * j])); b.w[0] += dw[0]; b.w[1] += dw[1]; b.w[2] += dw[2]; }
     }
+    // B3: sample points of a plate (pane-local): its corners and points along each edge every ~0.1 m
+    function samples(b) { if (b.samp) return b.samp; var s = [], n = b.loc.length;
+      for (var i = 0; i < n; i++) { var a = b.loc[i], c = b.loc[(i + 1) % n], L = Math.hypot(c[0] - a[0], c[1] - a[1]), m = Math.max(1, Math.ceil(L / .1));
+        for (var j = 0; j < m; j++) s.push([a[0] + (c[0] - a[0]) * j / m, a[1] + (c[1] - a[1]) * j / m]); }
+      return (b.samp = s); }
+    function segDist(p, A, B) { var ab = [B[0] - A[0], B[1] - A[1], B[2] - A[2]], ap = [p[0] - A[0], p[1] - A[1], p[2] - A[2]], l2 = dot(ab, ab), t = l2 > 0 ? clamp(dot(ap, ab) / l2, 0, 1) : 0;
+      var c = [A[0] + ab[0] * t, A[1] + ab[1] * t, A[2] + ab[2] * t]; return [p[0] - c[0], p[1] - c[1], p[2] - c[2]]; }
+    // B3: the footprint of a resting plate on its plane (convex hull of its corners in x-z) and the stacking query
+    function hullXZ(pts) { pts.sort(function (a, b) { return a[0] - b[0] || a[1] - b[1]; }); var cr = function (o2, a, b) { return (a[0] - o2[0]) * (b[1] - o2[1]) - (a[1] - o2[1]) * (b[0] - o2[0]); }, lo = [], up = [], i;
+      for (i = 0; i < pts.length; i++) { while (lo.length >= 2 && cr(lo[lo.length - 2], lo[lo.length - 1], pts[i]) <= 0) lo.pop(); lo.push(pts[i]); }
+      for (i = pts.length - 1; i >= 0; i--) { while (up.length >= 2 && cr(up[up.length - 2], up[up.length - 1], pts[i]) <= 0) up.pop(); up.push(pts[i]); }
+      lo.pop(); up.pop(); return lo.concat(up); }
+    function footprint(b) { var R = quatMat(b.q), pts = []; for (var i = 0; i < b.loc.length; i++) { var r = rot(R, b.loc[i][0], b.loc[i][1], 0); pts.push([b.p[0] + r[0], b.p[2] + r[2]]); } return hullXZ(pts); }
+    function overlap(A, B) { var P2 = [A, B]; for (var s2 = 0; s2 < 2; s2++) { var Q = P2[s2]; for (var i = 0; i < Q.length; i++) { var a = Q[i], c = Q[(i + 1) % Q.length], nx = c[1] - a[1], nz = a[0] - c[0], nl = Math.hypot(nx, nz); if (nl < 1e-6) continue; nx /= nl; nz /= nl;
+          var mn1 = 1e9, mx1 = -1e9, mn2 = 1e9, mx2 = -1e9, k; for (k = 0; k < A.length; k++) { var d1 = A[k][0] * nx + A[k][1] * nz; mn1 = Math.min(mn1, d1); mx1 = Math.max(mx1, d1); }
+          for (k = 0; k < B.length; k++) { var d2 = B[k][0] * nx + B[k][1] * nz; mn2 = Math.min(mn2, d2); mx2 = Math.max(mx2, d2); } if (mx1 < mn2 + 1e-4 || mx2 < mn1 + 1e-4) return false; } } return true; }
+    function gridKeys(fp) { var x0 = 1e9, x1 = -1e9, z0 = 1e9, z1 = -1e9; fp.forEach(function (p) { x0 = Math.min(x0, p[0]); x1 = Math.max(x1, p[0]); z0 = Math.min(z0, p[1]); z1 = Math.max(z1, p[1]); });
+      var ks = []; for (var gx = Math.floor(x0 / RG); gx <= Math.floor(x1 / RG); gx++) for (var gz = Math.floor(z0 / RG); gz <= Math.floor(z1 / RG); gz++) ks.push(gx * 100003 + gz); return ks; }
+    function restOn(b, pl) { var R = quatMat(b.q), nn = [R[6], R[7], R[8]]; if (nn[1] < 0) nn = [-nn[0], -nn[1], -nn[2]];
+      if (nn[1] < .35) return;                                                         // standing on edge: not a support
+      var fp = footprint(b), c0 = [b.p[0] + nn[0] * th / 2, b.p[1] + nn[1] * th / 2, b.p[2] + nn[2] * th / 2];
+      var ym = -1e9; for (var i = 0; i < b.loc.length; i++) { var r = rot(R, b.loc[i][0], b.loc[i][1], 0); ym = Math.max(ym, b.p[1] + r[1] + th); }
+      var e = { id: b.id, pl: pl, fp: fp, nn: nn, c0: c0, cx: b.p[0], cz: b.p[2], r: b.rad, ymax: ym }; gridKeys(fp).forEach(function (k) { var a = restGrid.get(k); if (!a) restGrid.set(k, a = []); a.push(e); }); b.rest = e; restVer++; }
+    function inPoly(fp, x, z) { for (var i = 0, j = fp.length - 1; i < fp.length; j = i++) if ((fp[i][0] - fp[j][0]) * (z - fp[j][1]) - (fp[i][1] - fp[j][1]) * (x - fp[j][0]) < 0) return false; return true; }
+    var markA = [], stamp = 0, restVer = 0;
+    function supports(b) { if (b.sup && steps - b.supT < 8) return b.sup; stamp++; var out = [], x0 = b.p[0] - b.rad, x1 = b.p[0] + b.rad, z0 = b.p[2] - b.rad, z1 = b.p[2] + b.rad;
+      for (var gx = Math.floor(x0 / RG); gx <= Math.floor(x1 / RG); gx++) for (var gz = Math.floor(z0 / RG); gz <= Math.floor(z1 / RG); gz++) { var a = restGrid.get(gx * 100003 + gz); if (!a) continue;
+        for (var i = 0; i < a.length; i++) { var e = a[i], o2 = bodies[e.id]; if (markA[e.id] === stamp || e.id === b.id || o2.awake || o2.died !== Infinity || o2.rest !== e) continue; markA[e.id] = stamp;
+          if (b.p[1] - b.rad < e.ymax + .3 && Math.hypot(e.cx - b.p[0], e.cz - b.p[2]) < e.r + b.rad + .3) out.push(e); } }
+      b.sup = out; b.supT = steps; b.supV = restVer; return out; }
     function stepBody(b) {
       b.pp[0] = b.p[0]; b.pp[1] = b.p[1]; b.pp[2] = b.p[2]; b.pq[0] = b.q[0]; b.pq[1] = b.q[1]; b.pq[2] = b.q[2]; b.pq[3] = b.q[3];
       if (!b.awake) return;
       if (b.held) { if (b.release > 0 && time >= b.release) b.held = 0; else return; }
       b.life += H;
       var R = quatMat(b.q), i, k;
+      if (stack && b.kind === 'shard' && (steps + b.id) % 6 === 0) for (var sp0 = 0; sp0 < planes.length; sp0++) { var P0 = planes[sp0]; if (!P0.lift) continue;   // B3: which lifted plane it is over
+        var hgt = dot(P0.n, b.p) - P0.d; if (hgt < b.rad + .6 && hgt > -.2 && (!P0.region || P0.region(b.p[0], b.p[1], b.p[2]))) b.onPl = sp0; }
       // gravity, air: drag across the plate (with a centre of pressure ahead of the centroid, so big flat pieces glide
       // and tumble a little) plus plain damping
       b.v[1] -= G * H;
@@ -219,6 +257,7 @@ export const GLASS = {
       var touching = false, hit = 0, hitAt = null, hitN = null;
       for (var pi = 0; pi < planes.length; pi++) {
         var pl = planes[pi], d0 = pl.d + (pl.lift ? b.lift : 0), cs = [], deep = 0;
+        if (caps.length && b.kind === 'shard' && dot(pl.n, b.p) - d0 > b.rad + th + SLOP) continue;   // B3 (speed): too far from this plane to touch it
         if (b.kind === 'ball') {
           var dist = dot(pl.n, b.p) - d0 - b.r;
           if (dist < SLOP) { cs.push({ r: [-pl.n[0] * b.r, -pl.n[1] * b.r, -pl.n[2] * b.r], depth: -dist }); deep = Math.max(deep, -dist); }
@@ -257,6 +296,39 @@ export const GLASS = {
           var rr = Math.exp(-(cs.length >= 3 ? 9 : 3) * H); b.w[0] *= rr; b.w[1] *= rr; b.w[2] *= rr;
         }
       }
+      if (stack && b.kind === 'shard' && b.onPl !== undefined && dot(planes[b.onPl].n, b.p) - planes[b.onPl].d < b.rad + .5) {   // B3: glass lying on glass
+        var sup = supports(b), WP = null;
+        for (var si = 0; si < sup.length; si++) { var E = sup[si], smpS = samples(b), cs3 = [], deep3 = 0;
+          if (E.nn[0] * (b.p[0] - E.c0[0]) + E.nn[1] * (b.p[1] - E.c0[1]) + E.nn[2] * (b.p[2] - E.c0[2]) > b.rad + th) continue;   // wholly above this support
+          if (Math.hypot(E.cx - b.p[0], E.cz - b.p[2]) > E.r + b.rad || b.p[1] - b.rad > E.ymax + .01) continue;
+          if (!WP) { WP = []; for (i = 0; i < smpS.length; i++) for (k = -1; k <= 1; k += 2) { var rr0 = rot(R, smpS[i][0], smpS[i][1], k * th / 2); WP.push([b.p[0] + rr0[0], b.p[1] + rr0[1], b.p[2] + rr0[2], rr0]); } }
+          for (i = 0; i < WP.length; i++) { var wq = WP[i], r3 = wq[3], wx = wq[0], wy = wq[1], wz = wq[2];
+            var hs = (E.nn[0] * (wx - E.c0[0]) + E.nn[1] * (wy - E.c0[1]) + E.nn[2] * (wz - E.c0[2]));   // signed distance above the support's top face
+            if (hs < SLOP && hs > -.03 && inPoly(E.fp, wx, wz)) { cs3.push({ r: r3, depth: -hs }); if (-hs > deep3) deep3 = -hs; } }
+          if (!cs3.length) continue; touching = true; var cn3 = E.nn, ra3 = [0, 0, 0], ws3 = 0;
+          for (i = 0; i < cs3.length; i++) { var w3 = cs3[i].depth + SLOP; ra3[0] += cs3[i].r[0] * w3; ra3[1] += cs3[i].r[1] * w3; ra3[2] += cs3[i].r[2] * w3; ws3 += w3; } ra3 = [ra3[0] / ws3, ra3[1] / ws3, ra3[2] / ws3];
+          var vr4 = [b.v[0] + b.w[1] * ra3[2] - b.w[2] * ra3[1], b.v[1] + b.w[2] * ra3[0] - b.w[0] * ra3[2], b.v[2] + b.w[0] * ra3[1] - b.w[1] * ra3[0]], vn4 = dot(vr4, cn3);
+          if (vn4 < 0) { var kk4 = 1 / b.m + dot(cross(iw(b, R, cross(ra3, cn3)), ra3), cn3), j4 = -(1 + (vn4 < -0.7 ? P.bounce : 0)) * vn4 / kk4; impulseAt(b, R, ra3, cn3, j4);
+            var vr5 = [b.v[0] + b.w[1] * ra3[2] - b.w[2] * ra3[1], b.v[1] + b.w[2] * ra3[0] - b.w[0] * ra3[2], b.v[2] + b.w[0] * ra3[1] - b.w[1] * ra3[0]], vq5 = dot(vr5, cn3), vt5 = [vr5[0] - cn3[0] * vq5, vr5[1] - cn3[1] * vq5, vr5[2] - cn3[2] * vq5], vtl5 = Math.hypot(vt5[0], vt5[1], vt5[2]);
+            if (vtl5 > 1e-6) { var t5 = [-vt5[0] / vtl5, -vt5[1] / vtl5, -vt5[2] / vtl5], kt5 = 1 / b.m + dot(cross(iw(b, R, cross(ra3, t5)), ra3), t5); impulseAt(b, R, ra3, t5, Math.min(vtl5 / kt5, P.friction * Math.abs(j4) + (cs3.length >= 3 ? b.m * G * H * P.friction : 0))); } }
+          var corr3 = Math.max(0, deep3 - SLOP * .5) * .6; b.p[0] += cn3[0] * corr3; b.p[1] += cn3[1] * corr3; b.p[2] += cn3[2] * corr3;
+          if (cs3.length >= 3) { var rr3 = Math.exp(-9 * H); b.w[0] *= rr3; b.w[1] *= rr3; b.w[2] *= rr3; }
+        }
+      }
+      if (b.kind === 'shard') for (var ci = 0; ci < caps.length; ci++) {   // B3: round bars and columns
+        var C = caps[ci], dc = segDist(b.p, C.a, C.b); if (Math.hypot(dc[0], dc[1], dc[2]) > b.rad + C.r + th) continue;
+        var smp = samples(b), cs2 = [], nsum = [0, 0, 0], deep2 = 0;
+        for (i = 0; i < smp.length; i++) for (k = -1; k <= 1; k += 2) { var r2 = rot(R, smp[i][0], smp[i][1], k * th / 2), wpt = [b.p[0] + r2[0], b.p[1] + r2[1], b.p[2] + r2[2]], dv = segDist(wpt, C.a, C.b), dl2 = Math.hypot(dv[0], dv[1], dv[2]);
+          if (dl2 < C.r + SLOP && dl2 > 1e-6) { var dep = C.r - dl2; cs2.push({ r: r2, depth: dep }); nsum[0] += dv[0] / dl2 * (dep + SLOP); nsum[1] += dv[1] / dl2 * (dep + SLOP); nsum[2] += dv[2] / dl2 * (dep + SLOP); if (dep > deep2) deep2 = dep; } }
+        if (!cs2.length) continue; var nl2 = Math.hypot(nsum[0], nsum[1], nsum[2]); if (nl2 < 1e-9) continue; var cn = [nsum[0] / nl2, nsum[1] / nl2, nsum[2] / nl2];
+        touching = true; var ra2 = [0, 0, 0], ws2 = 0; for (i = 0; i < cs2.length; i++) { var w2 = cs2[i].depth + SLOP; ra2[0] += cs2[i].r[0] * w2; ra2[1] += cs2[i].r[1] * w2; ra2[2] += cs2[i].r[2] * w2; ws2 += w2; } ra2 = [ra2[0] / ws2, ra2[1] / ws2, ra2[2] / ws2];
+        var vr2 = [b.v[0] + b.w[1] * ra2[2] - b.w[2] * ra2[1], b.v[1] + b.w[2] * ra2[0] - b.w[0] * ra2[2], b.v[2] + b.w[0] * ra2[1] - b.w[1] * ra2[0]], vn3 = dot(vr2, cn);
+        if (-vn3 > hit) { hit = -vn3; hitAt = ra2; hitN = cn; }
+        if (vn3 < 0) { var kk2 = 1 / b.m + dot(cross(iw(b, R, cross(ra2, cn)), ra2), cn), j2 = -(1 + (vn3 < -0.7 ? P.bounce : 0)) * vn3 / kk2; impulseAt(b, R, ra2, cn, j2);
+          var vr3 = [b.v[0] + b.w[1] * ra2[2] - b.w[2] * ra2[1], b.v[1] + b.w[2] * ra2[0] - b.w[0] * ra2[2], b.v[2] + b.w[0] * ra2[1] - b.w[1] * ra2[0]], vq = dot(vr3, cn), vt2 = [vr3[0] - cn[0] * vq, vr3[1] - cn[1] * vq, vr3[2] - cn[2] * vq], vtl2 = Math.hypot(vt2[0], vt2[1], vt2[2]);
+          if (vtl2 > 1e-6) { var tt = [-vt2[0] / vtl2, -vt2[1] / vtl2, -vt2[2] / vtl2], kt2 = 1 / b.m + dot(cross(iw(b, R, cross(ra2, tt)), ra2), tt); impulseAt(b, R, ra2, tt, Math.min(vtl2 / kt2, P.friction * Math.abs(j2))); } }
+        var corr2 = Math.max(0, deep2 - SLOP * .5) * .6; b.p[0] += cn[0] * corr2; b.p[1] += cn[1] * corr2; b.p[2] += cn[2] * corr2;
+      }
       if (hit > 0.45) {
         events.push({ id: b.id, speed: hit, t: time, kind: b.kind, size: b.kind === 'ball' ? 0 : Math.sqrt(b.area) });
         if (b.kind === 'shard' && P.breakSpeed > 0 && hit > P.breakSpeed && b.area > Math.max(16 * M.crack.minArea, 0.012 * refSize * refSize) && b.gen < 3) {
@@ -279,7 +351,8 @@ export const GLASS = {
           if (an > 1e-5) { var dq = axisQuat(ax[0], 0, ax[2], -an * 0.15), nq = qmul(dq, b.q); b.q[0] = nq[0]; b.q[1] = nq[1]; b.q[2] = nq[2]; b.q[3] = nq[3]; }
           b.w[0] *= 0.9; b.w[2] *= 0.9; }
       }
-      if (b.calm > 0.3 || (touching && b.life > 5 && sp < 0.3) || (touching && b.life > 12) || b.p[1] < -1) { b.awake = 0; b.v = [0, 0, 0]; b.w = [0, 0, 0]; b.calm = 0; }
+      var sleepy = b.calm > 0.3 || (touching && b.life > 5 && sp < 0.3) || (touching && b.life > 12) || b.p[1] < -1;
+      if (sleepy) { b.awake = 0; b.v = [0, 0, 0]; b.w = [0, 0, 0]; b.calm = 0; if (stack && b.kind === 'shard' && b.onPl !== undefined) restOn(b, b.onPl); }   // B3: remember the resting plate
     }
 
     sim.step = function () {

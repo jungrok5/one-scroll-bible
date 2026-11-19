@@ -4,7 +4,7 @@
  "_about": "A film's state and decisions — every field a gate reads (film.mjs new copies this). Fill by stage: topic → logline·topic_*; script → story_spine·ending·parts·looks·message_check; review → artifact_url; picture → shots_check; clips → clips; site → site_slug. Feedback and rounds only through film.mjs feedback/applied/round.",
  "stage": "picture",
  "round": 7,
- "status": "2부 세로 시안 2차 — 실내 장면 3차 작업",
+ "status": "2부 세로 시안 5차(창 B3 합침) — 관리자 확인 대기",
  "logline": "예수님이 가장 많이 하신 말은 '하나님 나라' — 하나님이 왕으로 다스리시는 것이다. 사람이 밀어낸 그 왕이 돌아오셔서 세상을 원래대로 되돌리기 시작하셨고, 섬기러 와서 목숨으로 문을 여셨으며, 그 나라는 지금 예수님을 왕으로 모시는 자리에서 시작되어 다시 오실 때 완성된다.",
  "topic_id": "kingdom",
  "topic_evidence": [
@@ -1303,6 +1303,20 @@
    "said": "실내 3차: '작은 자야' 전후에 카메라가 튀는 것 같고 급격한 변화 있음. 식당 씬에 팔 같은 게 사라졌다 나타났다(Z-fighting 같아 보임) 또는 급격한 움직임, 문밖 사람들이 슬라이딩하듯 나타남. 네 말대로 군중 다듬어 줘",
    "status": "open",
    "round": 7
+  },
+  {
+   "at": "2026-11-19 14:16 KST",
+   "who": "관리자",
+   "said": "B2 시안: 금이 발밑에서 시작하는 것 장면 뜻 괜찮아. 약한 점 보완하면 될 듯. B안을 한다면 회복까지 같은 형태가 좋겠다",
+   "status": "open",
+   "round": 7
+  },
+  {
+   "at": "2026-11-19 14:35 KST",
+   "who": "관리자",
+   "said": "수묵 대체 시안: B(스테인드글라스, 진짜 깨짐 → 되감아 금 이음선)로 결정",
+   "status": "open",
+   "round": 7
   }
  ],
  "process_changes": [
@@ -1436,7 +1450,7 @@
     "L43 라벨이 세로 화면 너비보다 김",
     "멈춘 화면 4%(목표 ≤1%)"
    ],
-   "round": 4,
+   "round": 5,
    "r2": {
     "preview": "motion/out/review/kingdom-part2-pilot2-720.mp4",
     "check": {
@@ -1486,6 +1500,41 @@
      "손 순간이동 제거(0.8초 뻗기)",
      "문밖 세 사람 실제 걸음으로 등장·퇴장",
      "군중 12무리 · 두건/머릿수건/베일 · 아이 · 흙색 8가지"
+    ]
+   },
+   "ink_replacement": {
+    "chosen": "B",
+    "by": "관리자 2026-11-19: \"B\"",
+    "why": "A2(oil-paint-world 골짜기)는 질감은 좋지만 사람·빛웅덩이가 약함; B는 돌아섬 → 그 자리에서 깨짐 → 빛 꺼짐 → 같은 조각이 되감겨 금으로 이어짐이 한 장면에 읽힘. 회복까지 같은 형태(관리자)",
+    "modules": [
+     "concept-glass2.html",
+     "glass-shatter.js",
+     "shatter-core.js (motion-skills shatter-page 사본)"
+    ],
+    "rejected": [
+     "ink-garden.js(관리자: 카메라 휙휙, 동심원 이해 안 됨)",
+     "A1 valley3d.js",
+     "A2 valley-oil.js"
+    ]
+   },
+   "r5": {
+    "preview": "motion/out/review/kingdom-part2-pilot5-720.mp4",
+    "check": {
+     "brightness": 77,
+     "dark": "4%",
+     "still": "0%",
+     "flicker": 0,
+     "pops": "4곳 = 계획된 마을·방 컷"
+    },
+    "done": [
+     "수묵 두 블록 → B3 스테인드글라스(110–142.8, 215.3–237.6)",
+     "B3: 사람 23–26% 크기·카메라 다가감, 쇠띠·기둥 충돌, 바닥 쌓임, 깊이 인식 안개, 회복 첫 프레임부터",
+     "식탁 → 창 1.2초 디졸브(빛 웅덩이 → 해 유리)"
+    ],
+    "weak": [
+     "밝기 77(기준 78–97에 1 모자람) — 창의 의도한 어둠 + 어두운 방",
+     "쇠띠 뚫는 조각 13개(최대 4cm, 순간)",
+     "근접에서 아주 옅은 안개 막"
     ]
    }
   }

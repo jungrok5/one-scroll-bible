@@ -42,7 +42,9 @@ const lathe = (pts, seg = 28, phi0 = 0, phiL = Math.PI * 2, folds = 0, foldK = 0
     for (let i = 0; i < p.count; i++) { const x = p.getX(i), z = p.getZ(i), y = p.getY(i), a = Math.atan2(z, x), k = foldK * Math.pow(clamp((y1 - y) / (y1 - y0)), 1.4);
       const f = 1 + k * (Math.sin(a * folds) * .6 + Math.sin(a * folds * 1.7 + 1.3) * .4); p.setX(i, x * f); p.setZ(i, z * f); } }
   g.computeVertexNormals(); return g; };
-export function robeMan({ h = 1.74, broad = 1, mat, skin, kind = 'stand', cloth, face } = {}) {
+// head: 'hood' | 'cloth' (a headcloth: cap, cord, cloth falling at the sides and back) | 'veil' (a woman: one long veil over head,
+// shoulders and back, no mantle); child: a bigger head for the height, no mantle fold
+export function robeMan({ h = 1.74, broad = 1, mat, skin, kind = 'stand', cloth, face, head: headKind = 'hood', child = false } = {}) {
   const s = h / 1.75, b = broad, m = mat, cm = cloth || m, fm = face || skin || m;
   const g = new THREE.Group(), lower = new THREE.Group(), upper = new THREE.Group(); g.add(lower, upper);
   const U = { s, kind, upper, lower, hipY: .9 * s, arms: [], legs: [], ph: 0, robe: true };
@@ -65,21 +67,28 @@ export function robeMan({ h = 1.74, broad = 1, mat, skin, kind = 'stand', cloth,
   mesh(lathe([[.19 * b, 0], [.215 * b, .2], [.235 * b, .4], [.225 * b, .47], [.15 * b, .52], [.07, .55]].map(([r, y]) => [r * s, y * s]), 24), m, upper).scale.z = .8;
   // the mantle over the shoulders, falling past the hips (folds below); breath lifts it a little (pivot at the shoulder line)
   U.shoulders = new THREE.Group(); U.shoulders.position.y = torsoH; upper.add(U.shoulders);
-  const mh = kind === 'stand' ? .5 : .42;
-  const mant = mesh(lathe([[.285 * b, -mh], [.28 * b, -mh * .6], [.27 * b, -.2], [.262 * b, -.06], [.2 * b, .0], [.12, .04]].map(([r, y]) => [r * s, y * s]), 30, 0, Math.PI * 2, 7, .06), cm, U.shoulders);
-  mant.scale.z = .85;
+  const mh = kind === 'stand' ? .5 : .28, veil = headKind === 'veil';
+  const mant = veil ? null : mesh(lathe([[.285 * b, -mh], [.28 * b, -mh * .6], [.27 * b, -.2], [.262 * b, -.06], [.2 * b, .0], [.12, .04]].map(([r, y]) => [r * s, y * s]), 30, 0, Math.PI * 2, 7, .06), cm, U.shoulders);
+  if (mant) mant.scale.z = .85;
   // a fold of the mantle thrown over the left shoulder and across the chest (breaks the column), a sash at the waist
-  const fold = mesh(new THREE.TorusGeometry(.22 * s * b, .035 * s, 6, 20, Math.PI * 1.1), cm, upper); fold.position.set(0, torsoH * .62, -.02 * s); fold.rotation.set(-.15, 0, .95); fold.scale.set(1, 1.25, .62);
+  if (!veil && !child) { const fold = mesh(new THREE.TorusGeometry(.22 * s * b, .035 * s, 6, 20, Math.PI * 1.1), cm, upper); fold.position.set(0, torsoH * .62, -.02 * s); fold.rotation.set(-.15, 0, .95); fold.scale.set(1, 1.25, .62); }
   const sash = mesh(new THREE.TorusGeometry(.205 * s * b, .022 * s, 5, 24), m, upper); sash.rotation.x = Math.PI / 2; sash.position.y = .02 * s; sash.scale.y = .8;
   // the head inside a hood: the hood's opening faces forward, the face set back and dark (no lit face anywhere)
   const neck = new THREE.Group(); neck.position.y = torsoH + .06 * s; neck.rotation.order = 'YXZ'; upper.add(neck); U.neck = neck;
-  const hr = .112 * s, head = mesh(new THREE.SphereGeometry(hr, 16, 12), fm, neck); head.position.set(0, .12 * s, .03 * s); head.scale.set(.86, 1.05, .95);
-  const hood = lathe([[.2, -.03], [.17, .05], [.15, .14], [.145, .2], [.12, .26], [.07, .3], [.0, .315]].map(([r, y]) => [r * s, y * s]), 26, Math.PI + .85, Math.PI * 2 - 1.7);   // opening toward −z (phi = π)
-  mesh(hood, cm, neck).material.side = THREE.DoubleSide;
+  const hr = (child ? .13 : veil ? .105 : .112) * s, head = mesh(new THREE.SphereGeometry(hr, 16, 12), fm, neck); head.position.set(0, .12 * s, .03 * s); head.scale.set(.86, 1.05, .95);
+  const hk = hr / (.112 * s);
+  if (headKind === 'hood') { const hood = lathe([[.2, -.03], [.17, .05], [.15, .14], [.145, .2], [.12, .26], [.07, .3], [.0, .315]].map(([r, y]) => [r * s * hk, y * s * hk]), 26, Math.PI + .85, Math.PI * 2 - 1.7);   // opening toward −z (phi = π)
+    mesh(hood, cm, neck); }
+  else if (headKind === 'cloth') {   // headcloth: a cap on the crown, a cord round it, the cloth falling to the shoulders at the sides and back
+    mesh(lathe([[.128, .14], [.13, .2], [.11, .26], [.06, .29], [0, .3]].map(([r, y]) => [r * s * hk, y * s * hk]), 22), cm, neck);
+    const cord = mesh(new THREE.TorusGeometry(.125 * s * hk, .012 * s, 5, 22), m, neck); cord.rotation.x = Math.PI / 2; cord.position.y = .2 * s * hk;
+    mesh(lathe([[.21, -.06], [.17, .04], [.14, .14], [.132, .2]].map(([r, y]) => [r * s * hk, y * s * hk]), 22, Math.PI + 1.0, Math.PI * 2 - 2.0, 5, .05), cm, neck); }
+  else {   // veil: from the crown over the shoulders and down the back to the waist, open only round the face
+    mesh(lathe([[.3, -.62], [.28, -.35], [.24, -.12], [.19, .02], [.15, .12], [.135, .2], [.1, .27], [.05, .3], [0, .31]].map(([r, y]) => [r * s * b, y * s]), 28, Math.PI + .6, Math.PI * 2 - 1.2, 8, .06), cm, neck); }
   for (const sd of [-1, 1]) {   // sleeves: narrow at the shoulder, wide at the wrist; a small dark hand
     const up = mesh(new THREE.CylinderGeometry(.062 * s, .068 * s, U.la, 10), m, upper), fo = mesh(new THREE.CylinderGeometry(.085 * s, .06 * s, U.lb, 10, 1, true), m, upper);
     const hand = mesh(new THREE.CapsuleGeometry(.026 * s, .05 * s, 3, 6), fm, upper); hand.scale.set(1.25, 1, .7);   // a hand, longer than wide
-    U.arms.push({ sd, up, fo, hand, S: V(sd * .2 * s * b, torsoH - .04 * s, 0) }); }
+    U.arms.push({ sd, up, fo, hand, S: V(sd * .235 * s * b, torsoH - .04 * s, 0) }); }
   g.userData = U; return g;
 }
 

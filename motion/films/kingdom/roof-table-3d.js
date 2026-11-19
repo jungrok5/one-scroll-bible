@@ -159,12 +159,23 @@ export async function build(W, H) {
   // the King: seated low on the floor in front, facing the stretcher, back to the camera
   const kingA = mk({ kind: 'sit', h: 1.74, mat: kingM, cloth: kingC }); kingA.position.set(.6, 0, .95); kingA.rotation.y = face(LAND.x - .6, LAND.z - .95); A.add(kingA);
   // the crowd round the cleared floor: standing, each with his own phase and delay
-  const crowdA = []; { const r = rng(33);
-    // a packed room: rings round the cleared floor, a gap toward the camera corner (+x +z) and the King
-    const spots = []; for (let n = 0; n < 400 && spots.length < 36; n++) { const a = r() * 6.283, rr = 1.85 + Math.sqrt(r()) * 2.3, x = Math.cos(a) * rr, z = Math.sin(a) * rr;
-      if (Math.abs(x) > RW - .35 || Math.abs(z) > RW - .35) continue; const an = Math.atan2(z, x); if (an > .05 && an < 1.5) continue; if (spots.some(([u, v]) => Math.hypot(u - x, v - z) < .62)) continue; spots.push([x, z]); }
-    for (const [x, z] of spots) { const p = mk({ h: 1.62 + r() * .18, mat: robes[(r() * 8) | 0], broad: .92 + r() * .18 }); p.position.set(x, 0, z); p.rotation.y = face(LAND.x - x, LAND.z - z) + (r() - .5) * .3;
-      p.userData.ph = r(); p.userData.dl = r() * .9; p.userData.shade = r() < .2; A.add(p); crowdA.push(p); } }
+  // the crowd (round 4, owner: "군중 다듬어 주고" — it read as a choir): irregular clusters round the cleared floor; men in hoods or
+  // headcloths, women in veils, children beside them; mantles in muted earth tones; mixed heights and widths; each looks at the
+  // stretcher, up at the hole, or at a neighbour, on his own delay and phase
+  const mantleCols = ['#6e5228', '#4a4a2a', '#5a2a1e', '#857a66', '#46342a', '#3a3632', '#6a4a30', '#544632'];
+  const mantles = mantleCols.map((c, i) => rimify(K.std(c, { roughness: .95, side: THREE.DoubleSide }), 'm' + i));
+  const crowdA = []; { const r = rng(33), spots = [], centres = [];
+    for (let n = 0; n < 300 && centres.length < 12; n++) { const a = r() * 6.283, rr = 2.1 + r() * 1.9, x = Math.cos(a) * rr, z = Math.sin(a) * rr, an = Math.atan2(z, x);
+      if (Math.abs(x) > RW - .6 || Math.abs(z) > RW - .6 || (an > .05 && an < 1.85)) continue; if (centres.some(([u, v]) => Math.hypot(u - x, v - z) < 1.15)) continue; centres.push([x, z]); }
+    centres.forEach(([cx, cz], ci) => { const m = 2 + ((r() * 4) | 0);
+      for (let j = 0; j < m * 6 && spots.filter(q => q.c === ci).length < m; j++) { const x = cx + (r() - .5) * 1.1, z = cz + (r() - .5) * 1.1, an = Math.atan2(z, x), rr = Math.hypot(x, z);
+        if (rr < 1.75 || Math.abs(x) > RW - .3 || Math.abs(z) > RW - .3 || (an > .05 && an < 1.85)) continue; if (spots.some(q => Math.hypot(q.x - x, q.z - z) < .5)) continue; spots.push({ x, z, c: ci }); } });
+    for (const q of spots) { const u = r(), kind = u < .16 ? 'child' : u < .42 ? 'woman' : 'man';
+      const o = kind === 'child' ? { h: 1.05 + r() * .28, child: true, head: r() < .5 ? 'cloth' : 'veil', broad: .9 } : kind === 'woman' ? { h: 1.52 + r() * .12, head: 'veil', broad: .82 + r() * .1 } : { h: 1.62 + r() * .2, head: r() < .55 ? 'hood' : 'cloth', broad: .9 + r() * .22 };
+      const p = mk({ ...o, mat: robes[(r() * 8) | 0], cloth: mantles[(r() * 8) | 0] }); p.position.set(q.x, 0, q.z);
+      const mates = spots.filter(w => w.c === q.c && w !== q), mate = mates.length && r() < .35 ? mates[(r() * mates.length) | 0] : null;
+      p.rotation.y = mate && r() < .5 ? face(mate.x - q.x, mate.z - q.z) : face(LAND.x - q.x, LAND.z - q.z) + (r() - .5) * .6;
+      p.userData.ph = r(); p.userData.dl = r() * 1.4; p.userData.shade = kind === 'man' && r() < .15; p.userData.look = mate ? 2 : r() < .3 ? 1 : 0; p.userData.mate = mate; p.userData.kind = kind; A.add(p); crowdA.push(p); } }
   // dust in the shaft (bright only inside the light)
   const dustU = { uT: { value: 0 }, uL: { value: L1 }, uMode: { value: 0 }, uOpen: { value: 1 }, uK: { value: 1 } };
   const SHAFT_GLSL = `
@@ -201,10 +212,10 @@ export async function build(W, H) {
     // the low table, its cloth, bread, bowls, cups, a little heap of coins; cushions and a jar
     // (round 3: the table and the diners moved 1.15 m toward the camera — a wide floor between the doorway and the table, for the shadows)
     box(2.3, .06, .95, -.15, .42, -1.05, M.wood, TBg); for (const [x, z] of [[-1.2, -1.45], [.9, -1.45], [-1.2, -.65], [.9, -.65]]) box(.08, .4, .08, x, .2, z, M.wood, TBg);
-    const cl = box(1.5, .012, .8, -.15, .456, -1.05, M.cloth, TBg);
+    const cl = box(1.5, .012, .8, -.15, .462, -1.05, M.cloth, TBg);   // 6 mm clear of the table top (no shared plane)
     for (const [x, z] of [[-.75, -1.2], [.35, -1.0]]) { const bw = new THREE.Mesh(new THREE.SphereGeometry(.12, 14, 8, 0, Math.PI * 2, Math.PI / 2, Math.PI / 2), M.dark); bw.position.set(x, .53, z); bw.castShadow = true; TBg.add(bw); }
-    for (const [x, z] of [[-.4, -.8], [.15, -1.3], [.62, -.85]]) { const c = new THREE.Mesh(new THREE.CylinderGeometry(.045, .035, .1, 10), M.dark); c.position.set(x, .51, z); c.castShadow = true; TBg.add(c); }
-    const coinM = K.std('#b8892e', { roughness: .4, metalness: .6 }); const r = rng(5); for (let i = 0; i < 18; i++) { const c = new THREE.Mesh(new THREE.CylinderGeometry(.018, .018, .005, 10), coinM); c.position.set(.62 + r() * .2, .465 + i * .002, -1.3 + r() * .12); c.rotation.set(r() * .3, 0, r() * .3); TBg.add(c); }
+    for (const [x, z] of [[-.4, -.8], [.15, -1.3], [.62, -.85]]) { const c = new THREE.Mesh(new THREE.CylinderGeometry(.045, .035, .1, 10), M.dark); c.position.set(x, .522, z); c.castShadow = true; TBg.add(c); }
+    const coinM = K.std('#b8892e', { roughness: .4, metalness: .6 }); const r = rng(5); for (let i = 0; i < 18; i++) { const c = new THREE.Mesh(new THREE.CylinderGeometry(.018, .018, .005, 10), coinM); c.position.set(.58 + (i % 6) * .045 + r() * .01, .474 + Math.floor(i / 6) * .007, -1.33 + (i % 3) * .05); c.rotation.set(r() * .3, 0, r() * .3); TBg.add(c); }
     for (let i = 0; i < 3; i++) { const j = new THREE.Mesh(new THREE.SphereGeometry(.24, 12, 10), M.dark); j.scale.set(1, 1.4, 1); j.position.set(-BX + .4, .32, 1.0 + i * .55); j.castShadow = j.receiveShadow = true; Bm.add(j); }
   }
   const breadM = surfM('#a8763e', 'br');
@@ -218,14 +229,14 @@ export async function build(W, H) {
   // the lights: the sun through the window (high, from the right), the low sun in the street behind the doorway
   const L2 = V(1, .52, .2).normalize(), L3 = V(-.55, .3, -1).normalize();
   const sunB = new THREE.DirectionalLight(col('#ffe2b8'), 7.5); sunB.position.copy(L2.clone().multiplyScalar(25)).add(Bm.position); sunB.target.position.copy(Bm.position).add(V(0, 0, -.9 + TZ));
-  sunB.castShadow = true; sunB.shadow.mapSize.set(2048, 2048); Object.assign(sunB.shadow.camera, { left: -5, right: 5, top: 5, bottom: -5, near: 1, far: 60 }); sunB.shadow.bias = -.0005; sunB.shadow.normalBias = .03; S.add(sunB, sunB.target);
+  sunB.castShadow = true; sunB.shadow.mapSize.set(2048, 2048); Object.assign(sunB.shadow.camera, { left: -5, right: 5, top: 5, bottom: -5, near: 1, far: 60 }); sunB.shadow.bias = -.0008; sunB.shadow.normalBias = .06; S.add(sunB, sunB.target);
   const sunD = new THREE.DirectionalLight(col('#ffcf96'), 5); sunD.position.copy(L3.clone().multiplyScalar(25)).add(Bm.position); sunD.target.position.copy(Bm.position).add(V(0, 0, -1));
-  sunD.castShadow = true; sunD.shadow.mapSize.set(2048, 2048); Object.assign(sunD.shadow.camera, { left: -6, right: 6, top: 6, bottom: -6, near: 1, far: 60 }); sunD.shadow.bias = -.0005; sunD.shadow.normalBias = .03; S.add(sunD, sunD.target);
+  sunD.castShadow = true; sunD.shadow.mapSize.set(2048, 2048); Object.assign(sunD.shadow.camera, { left: -6, right: 6, top: 6, bottom: -6, near: 1, far: 60 }); sunD.shadow.bias = -.0008; sunD.shadow.normalBias = .06; S.add(sunD, sunD.target);
   const poolB = new THREE.PointLight(col('#ffbf80'), .8, 5, 2); poolB.position.set(-.2, .9, -1.0 + TZ); Bm.add(poolB);
   const hemiB = new THREE.HemisphereLight(col('#5a4632'), col('#2a1a10'), .3); Bm.add(hemiB);
   // the people at the table: three behind it (facing us), one at each end, the King at the near side (back to us), a guest
   const tbl = [[-.95, -1.85, 0], [-.15, -1.9, 0], [.65, -1.85, 0], [-1.65, -.95, 1], [1.35, -1.0, -1], [-.25, -.22, 2], [.95, -.35, 2]];
-  const eaters = tbl.map(([x, z, side], i) => { const isK = i === 5, p = mk({ kind: 'sit', h: isK ? 1.74 : 1.66 + (i % 2) * .08, mat: isK ? kingM : robes[(i * 3 + 1) % 8], cloth: isK ? kingC : undefined });
+  const eaters = tbl.map(([x, z, side], i) => { const isK = i === 5, p = mk({ kind: 'sit', h: isK ? 1.74 : 1.66 + (i % 2) * .08, mat: isK ? kingM : robes[(i * 3 + 1) % 8], cloth: isK ? kingC : mantles[(i * 3) % 8], head: isK || i % 2 ? 'cloth' : 'hood' });
     p.position.set(x, .08, z); p.rotation.y = side === 0 ? Math.PI + (x * -.12) : side === 1 ? -Math.PI / 2 : side === -1 ? Math.PI / 2 : face(-.05 - x * .2, -1); p.userData.ph = i * .17 + .05; TBg.add(p); return p; });
   const kingB = eaters[5];
   // the three in the doorway (outside, in the street's sun): they lean together, one points; then they turn and walk off
@@ -255,7 +266,7 @@ export async function build(W, H) {
     void main(){
       vec4 c = texture2D(tColor, vUv); float dz = texture2D(tDepth, vUv).x;
       vec4 ndc = vec4(vUv * 2. - 1., dz * 2. - 1., 1.), vp = projInv * ndc; vp /= vp.w; vec3 wp = (camWorld * vec4(vp.xyz, 1.)).xyz, rd = normalize(wp - camPos);
-      float D = min(length(wp - camPos), 14.); const int N = 44; float dt = D / float(N), j = hh(gl_FragCoord.xy + fract(frame * .618) * 91.);
+      float D = min(length(wp - camPos), 14.); const int N = 44; float dt = D / float(N), j = hh(gl_FragCoord.xy);   // a fixed dither (a per-frame one shimmered on the table — owner r3: 깜빡임)
       vec3 acc = vec3(0.);
       for (int i = 0; i < N; i++){ vec3 p = camPos + rd * dt * (float(i) + j) - boff;
         float dust = (mode < .5 ? .08 : .4) + 1.1 * smoothstep(.42, .88, n3(p * 1.3));
@@ -300,6 +311,13 @@ export async function build(W, H) {
   }
 
   // ================================================================ the shots
+  // one continuous camera: keys [t, [px, py, pz, lx, ly, lz, fov, exposure, focus, aperture]] → cubic Hermite with Catmull-Rom
+  // tangents over time (C1: no jump in position or speed at a key; zero speed at the ends)
+  const spline = (K, t) => { if (t <= K[0][0]) return K[0][1].slice(); const n = K.length; if (t >= K[n - 1][0]) return K[n - 1][1].slice();
+    let i = 0; while (t > K[i + 1][0]) i++; const [t0, a] = K[i], [t1, b] = K[i + 1], h = t1 - t0, u = (t - t0) / h;
+    const tan = j => j <= 0 || j >= n - 1 ? K[j][1].map(() => 0) : K[j + 1][1].map((v, c) => (v - K[j - 1][1][c]) / (K[j + 1][0] - K[j - 1][0]));
+    const ma = tan(i), mb = tan(i + 1), h00 = 2 * u ** 3 - 3 * u * u + 1, h10 = u ** 3 - 2 * u * u + u, h01 = -2 * u ** 3 + 3 * u * u, h11 = u ** 3 - u * u;
+    return a.map((v, c) => h00 * v + h10 * h * ma[c] + h01 * b[c] + h11 * h * mb[c]); };
   const setCam = (pos, look, up = null) => { cam.position.copy(pos); if (up) cam.up.copy(up); else cam.up.set(0, 1, 0); cam.lookAt(look); };
   const toY = (p, target) => { const d = target.clone().sub(p.getWorldPosition(V()).add(V(0, 1.5, 0))); const lp = Math.atan2(d.y, Math.hypot(d.x, d.z)); const yaw = Math.atan2(-d.x, -d.z) - p.rotation.y; return [lp, Math.atan2(Math.sin(yaw), Math.cos(yaw))]; };
   function roof(t) {
@@ -323,7 +341,11 @@ export async function build(W, H) {
       setRope(slack[i], ancW.clone().addScaledVector(dir, -.2), p.localToWorld(V(.3, .05, -.15))); });
     // the crowd: heads follow the stretcher down, each on his own delay; a few shade their eyes; breathing, weight shifts
     const sp = ST.getWorldPosition(V());
-    for (const p of crowdA) { const U = p.userData, [pt, yw] = toY(p, sp), k = ss(T.down0 + U.dl, T.down0 + U.dl + 1.2, t);
+    const holeP = V(0, RH + .3, 0);
+    for (const p of crowdA) { const U = p.userData, k = ss(T.down0 + U.dl, T.down0 + U.dl + 1.4, t), toMat = ss(T.down1 + U.dl * .6, T.down1 + U.dl * .6 + 1.6, t);
+      // where he looks: the stretcher (most), up at the hole (then down to the man once it lands), or the one beside him (and back)
+      const tgt = U.look === 1 ? lv(holeP, sp, toMat) : U.look === 2 ? lv(V(U.mate.x, 1.5 * U.s, U.mate.z), sp, ss(T.rest + U.dl, T.rest + U.dl + 1.5, t)) : sp;
+      const [pt, yw] = toY(p, tgt);
       P.pose(p, { ...P.idle(t, U.ph, { s: U.s }), head: [clamp(pt, -.6, .75) * k + (1 - k) * -.05, clamp(yw, -.9, .9) * k], lean: lerp(0, -.06, ss(T.down1, T.down1 + 2, t)),
         hands: U.shade && t < T.down1 ? [null, V(.06, 1.62 * U.s, -.12)] : null }); }
     // the King: seated, facing the man; at Q42 he leans toward him a little
@@ -339,16 +361,19 @@ export async function build(W, H) {
     RIM.uRimP.value[1].set(0, RH + 1.5, 0); RIM.uRimK.value[1] = 1.4;   // the sky above the hole
     // the camera
     const D = film.dofCfg, Lk = film.look;
-    if (t < T.cut1) {   // looking up at the torn roof, the four against the sky; tilt down with the stretcher
-      // from below and to the side (the mat end-on, so the hole and the four against the sky stay clear until late); the camera
-      // rises and draws back with the descent — wide, the crowd small below, heads turned up
-      const tk = eio((t - T.tilt0) / (T.tilt1 - T.tilt0)), pos = V(lerp(.55, 2.9, tk), lerp(.95, 2.75, tk), lerp(3.45, 3.95, tk)); cam.fov = lerp(58, 52, tk);
-      const look = V(lerp(-.3, -.2, tk), lerp(RH + .9, .15, tk), lerp(-.1, -.25, tk)); setCam(pos, look); D.focus = pos.distanceTo(sp); D.aperture = 1.6; Lk.exposure = lerp(1.6, 2.6, tk);
-    } else if (t < T.cut2) {   // the room: the man in the light, the crowd round him, the King low in front from behind
-      const k = (t - T.cut1) / (T.cut2 - T.cut1), pos = V(lerp(3.95, 3.75, k), lerp(3.05, 2.95, k), lerp(3.95, 3.65, k)); setCam(pos, V(-.35, .25, -.35)); cam.fov = 52; D.focus = pos.distanceTo(sp); D.aperture = 1.8; Lk.exposure = 2.6;
-    } else {   // closer, over the King's shoulder, a slow push; the light warms
-      const k = (t - T.cut2) / (T.table0 - T.cut2), pos = V(lerp(3.6, 3.3, k), lerp(2.88, 2.75, k), lerp(3.45, 3.1, k)); setCam(pos, V(-.3, .15, -.3)); cam.fov = lerp(44, 40, k);   // the same high corner, a slow push while the light warms (figures stay small) D.focus = pos.distanceTo(sp); D.aperture = 2.2; Lk.exposure = 1.8 + .12 * warm;
-    }
+    // ONE continuous move (owner r3: "작은 자야 전후에 카메라가 튀는 것 같고"): from below the torn roof, follow the stretcher down,
+    // then glide and rise to the high corner, then a slow push while the light settles and warms — no cut, no dissolve
+    if (!T.camA) T.camA = [
+      [T.roof0, [.55, .95, 3.45, -.3, RH + .9, -.1, 58, 1.6, 6, 1.6]],
+      [T.tilt0, [.6, .98, 3.45, -.3, RH + .85, -.1, 58, 1.6, 6, 1.6]],
+      [T.down0 + 4.0, [1.6, 1.6, 3.7, -.2, 1.9, -.2, 55, 2.1, 4.5, 1.7]],
+      [T.down1, [2.9, 2.6, 3.95, -.3, .35, -.3, 52, 2.6, 5.4, 1.8]],
+      [T.rest + 1.4, [3.9, 3.02, 3.9, -.35, .25, -.35, 50, 2.6, 6.0, 1.8]],
+      [T.warm0, [3.8, 2.97, 3.75, -.33, .22, -.33, 48, 2.65, 5.9, 2.0]],
+      [T.table0, [3.6, 2.88, 3.5, -.3, .2, -.3, 45, 2.75, 5.4, 2.2]]];
+    const cv = spline(T.camA, t), wTrack = ss(T.tilt0 - .2, T.tilt0 + 1.4, t) * (1 - ss(T.down1 - 1.6, T.down1 + .8, t));   // the eye follows the stretcher while it comes down
+    const look = lv(V(cv[3], cv[4], cv[5]), V(sp.x, sp.y + .1, sp.z), wTrack);
+    setCam(V(cv[0], cv[1], cv[2]), look); cam.fov = cv[6]; Lk.exposure = cv[7] + .1 * warm; D.focus = lerp(cv[8], cam.position.distanceTo(sp), wTrack); D.aperture = cv[9];
     renderAll(t);
   }
   function table(t) {
@@ -372,19 +397,38 @@ export async function build(W, H) {
       passed.position.copy(bw).sub(tb); passed.visible = true; loaves[1].visible = false;
       kingB.updateMatrix(); recv.updateMatrix();
       const inK = w => w.clone().sub(tb).applyMatrix4(kingB.matrix.clone().invert()), inR = w => w.clone().sub(tb).applyMatrix4(recv.matrix.clone().invert());
-      const kh = k > 0 && k < .78 ? inK(bw.clone().add(V(.03, .03, .04))) : lv(inK(bw), V(.17 * s, .32 * s, -.3 * s), ss(.78, 1, k));
-      P.pose(kingB, { breath: P.breath(t, .2), lean: -.12 - .1 * Math.sin(clamp(k) * Math.PI), twist: -.05, head: [-.1 - .12 * Math.sin(clamp(k) * Math.PI), .12 * Math.sin(t * .27)], hands: [V(-.17 * s, .32 * s, -.32 * s), k <= 0 ? lv(V(.17 * s, .32 * s, -.3 * s), inK(pick), 0) : kh] });
-      if (k > .5) { const rs = recv.userData.s; P.pose(recv, { breath: P.breath(t, recv.userData.ph), lean: -.18, head: [-.25, 0], hands: [inR(bw.clone().add(V(-.04, .02, -.03))), t > T.bread[1] + 1 ? V(.17 * rs, .32 * rs, -.3 * rs) : inR(bw.clone().add(V(.04, .02, -.03)))] }); }
+      // the King: reaches for the loaf (.8 s), carries it across, lets go and his hand comes back — every move eased, one path
+      const off = V(.03, .03, .04), restK = V(.17 * s, .32 * s, -.3 * s);
+      const kh = t < T.bread[0] ? lv(restK, inK(pick.clone().add(off)), ss(T.bread[0] - .8, T.bread[0], t)) : lv(inK(bw.clone().add(off)), restK, ss(.78, 1, k));
+      P.pose(kingB, { breath: P.breath(t, .2), lean: -.12 - .1 * Math.sin(clamp(k) * Math.PI), twist: -.05, head: [-.1 - .12 * Math.sin(clamp(k) * Math.PI), .12 * Math.sin(t * .27)], hands: [V(-.17 * s, .32 * s, -.32 * s), kh] });
+      // the one across: his hands come up to meet it (blended in, never switched), he lifts it, his right hand goes back down
+      const rs = recv.userData.s, rb = ss(.28, .5, k), back = ss(T.bread[1] + .4, T.bread[1] + 1.6, t);
+      P.pose(recv, { breath: P.breath(t, recv.userData.ph), lean: lerp(-.1, -.18, rb), head: [lerp(-.05, -.25, rb), lerp(.25 * Math.sin(t * .5), 0, rb)],
+        hands: [lv(V(-.17 * rs, .32 * rs, -.32 * rs), inR(bw.clone().add(V(-.04, .02, -.03))), rb), lv(V(.17 * rs, .32 * rs, -.3 * rs), inR(bw.clone().add(V(.04, .02, -.03))), rb * (1 - back))] });
     }
     // the three in the doorway
+    // the three outside: they walk into the doorway from off frame (feet planted, P.walk), stop with a settle, lean together and
+    // point; then they turn and walk off. Each arrival lands on a whole number of steps so the stance carries straight on.
     const on = ss(T.whisper0 - .3, T.whisper0 + .6, t);
-    whis.forEach((p, i) => { const U = p.userData; p.visible = t > T.whisper0 - .4;
-      if (t < T.leave + i * .35) { p.position.set(U.x0 + (1 - on) * -1.2, 0, U.z0); const lean = [.25, -.1, -.3][i] * on;
-        const ptk = i === 0 ? ss(T.point, T.point + .8, t) * (1 - ss(T.leave - .6, T.leave, t)) : 0;
-        P.pose(p, { ...P.idle(t, U.ph, { s: U.s }), lean: -.12 - .1 * on * Math.abs(Math.sin(t * .9 + i)), side: lean * .4, twist: lean, head: [-.15 + .1 * Math.sin(t * 1.3 + i * 2), [-.45, .5, .45][i] * on],
-          hands: i === 0 ? [null, lv(V(.25, .9, -.05), V(.32, 1.42, -.55), ptk)] : i === 2 ? [lv(V(-.25, .88, -.05), V(-.12, 1.1, -.3), on * (.5 + .5 * Math.sin(t * 2.1))), null] : null }); }
-      else { const t0 = T.leave + i * .35, dir = V(-1, 0, -.12).normalize(); const w = P.walk(p, t, t0, { T: 1.1, L: .5 }); const turn = ss(0, .55, t - t0);
-        p.position.set(U.x0, 0, U.z0).addScaledVector(dir, w.dist); { const a0 = face(.05 - U.x0 * .2, 1), a1 = face(dir.x, dir.z), da = Math.atan2(Math.sin(a1 - a0), Math.cos(a1 - a0)); p.rotation.y = a0 + da * turn; } P.pose(p, { ...w, head: [-.05, 0] }); } });
+    whis.forEach((p, i) => { const U = p.userData, s = U.s;
+      if (!U.arr) { const S0 = V(-3.4 - i * .5, 0, U.z0 - .9 - i * .2), dir = V(U.x0 - S0.x, 0, U.z0 - S0.z), D = dir.length(); dir.normalize();
+        const n = Math.max(3, Math.round(D / .5)), L = D / n, TS = 1.15, tA = T.whisper0 - .4 + i * .5;
+        U.arr = { S0, dir, n, L, TS, tA, tS: tA - n * TS / 2, odd: n % 2 === 1, a0: face(dir.x, dir.z), a1: face(.05 - U.x0 * .2, 1) }; }
+      const R = U.arr, tL = T.leave + i * .35; p.visible = t > R.tS;
+      if (t < R.tA) { const w = P.walk(p, t, R.tS, { T: R.TS, L: R.L }); p.position.copy(R.S0).addScaledVector(R.dir, w.dist); p.rotation.y = R.a0; P.pose(p, { ...w, breath: .5, head: [-.05, 0] }); return; }
+      if (t < tL) {   // arrived: the last stride's stance held, the weight settles (a small dip), he turns to the room on his feet
+        const k = clamp((t - R.tA) / .6), stance = R.odd ? [{ u: -R.L / 2, lift: 0 }, { u: R.L / 2, lift: 0 }] : [{ u: R.L / 2, lift: 0 }, { u: -R.L / 2, lift: 0 }];
+        const id = P.idle(t, U.ph, { s }), lean = [.25, -.1, -.3][i] * on, ptk = i === 0 ? ss(T.point, T.point + .9, t) * (1 - ss(tL - .8, tL - .1, t)) : 0;
+        p.position.copy(R.S0).addScaledVector(R.dir, R.n * R.L); { const da = Math.atan2(Math.sin(R.a1 - R.a0), Math.cos(R.a1 - R.a0)); p.rotation.y = R.a0 + da * ss(R.tA + .1, R.tA + 1.1, t); }
+        P.pose(p, { ...id, feet: stance, bob: lerp(-.02 * s, 0, k) - .012 * s * Math.sin(Math.PI * k), swing: [lerp(0, id.swing[0], k), lerp(0, id.swing[1], k)],
+          lean: lerp(-.06, -.12 - .1 * on * Math.abs(Math.sin(t * .9 + i)), k), side: lean * .4, twist: lean * k, head: [-.12 + .06 * Math.sin(t * 1.1 + i * 2), [-.45, .5, .45][i] * on],
+          hands: i === 0 ? [null, lv(V(.25, .9, -.05), V(.32, 1.42, -.55), ptk)] : i === 2 ? [lv(V(-.25, .88, -.05), V(-.12, 1.1, -.3), on * (.5 + .5 * Math.sin(t * 1.6)) * (1 - ss(tL - .8, tL - .1, t))), null] : null });
+        return; }
+      // leaving: the walk resumes from the held stance (phase matched), turning away over the first stride
+      const dir2 = V(-1, 0, -.12).normalize(), offT = R.odd ? R.TS / 2 : 0, w = P.walk(p, t, tL - offT, { T: R.TS, L: R.L }), dist = w.dist - (R.odd ? R.L : 0);
+      const at = R.S0.clone().addScaledVector(R.dir, R.n * R.L); p.position.copy(at).addScaledVector(dir2, dist);
+      { const a2 = face(dir2.x, dir2.z), da = Math.atan2(Math.sin(a2 - R.a1), Math.cos(a2 - R.a1)); p.rotation.y = R.a1 + da * ss(tL, tL + 1.2, t); }
+      P.pose(p, { ...w, head: [-.05, 0] }); });
     const wv = shaftP.u.wh.value; whis.forEach((p, i) => wv[i].set(p.position.x, p.position.z, 1.75 * p.userData.s, p.visible ? 1 : 0));
     // light levels
     const kB = open, rest = .25 + .75 * ss(T.shut0, T.shut1, t);
@@ -395,10 +439,13 @@ export async function build(W, H) {
     RIM.uRimP.value[1].set(-.5, 1.6, -3.4).add(wb); RIM.uRimK.value[1] = 2.4 * dOpen;
     dustU.uK.value = 0; lampA.power = 0;
     const D = film.dofCfg, Lk = film.look;
-    if (t >= T.side0 && t < T.side1) { const k = (t - T.side0) / (T.side1 - T.side0), pos = V(lerp(2.55, 2.45, k), lerp(2.8, 2.72, k), lerp(.7, .4, k)).add(wb); setCam(pos, V(lerp(-.75, -.85, k), -.15, -3.3).add(wb)); D.focus = pos.distanceTo(V(-.5, .8, -3.9).add(wb)); D.aperture = 1.6; cam.fov = 50; }
-    else if (t < T.push0) { const k = (t - T.table0) / (T.push0 - T.table0), pos = V(lerp(-2.75, -2.6, k), lerp(3.08, 3.02, k), lerp(3.7, 3.45, k)).add(wb); setCam(pos, V(lerp(-.15, -.2, k), .3, -1.55).add(wb)); D.focus = 5.0; D.aperture = 1.6; cam.fov = 50; }
-    else { const k = eio((t - T.push0) / (T.end - T.push0)), pos = V(lerp(-2.6, -2.25, k), lerp(3.02, 2.9, k), lerp(3.45, 3.05, k)).add(wb); setCam(pos, V(lerp(-.2, -.22, k), lerp(.3, .45, k), lerp(-1.55, -.5, k)).add(wb)); D.focus = lerp(5.5, 4.2, k); cam.fov = 50; D.aperture = 2.4; }
-    Lk.exposure = 1.35 + .75 * (1 - dOpen);
+    if (!T.camB) T.camB = [
+      [T.table0, [-2.75, 3.08, 3.7, -.15, .3, -1.55, 50, 1.35, 5.0, 1.6]],
+      [T.push0, [-2.6, 3.02, 3.45, -.2, .3, -1.55, 50, 1.6, 5.1, 1.8]],
+      [T.push0 + 2.6, [-2.5, 2.99, 3.33, -.2, .33, -1.3, 50, 2.1, 5.0, 2.0]],
+      [T.end, [-2.25, 2.9, 3.05, -.22, .45, -.5, 50, 2.1, 4.2, 2.4]]];
+    { const cv = spline(T.camB, t); setCam(V(cv[0], cv[1], cv[2]).add(wb), V(cv[3], cv[4], cv[5]).add(wb)); cam.fov = cv[6]; D.focus = cv[8]; D.aperture = cv[9]; }
+    Lk.exposure = 1.35 + .75 * (1 - dOpen);   // the door's light goes; the room is lifted so the table light carries it
     renderAll(t);
   }
   function draw(ctx, t, B) {

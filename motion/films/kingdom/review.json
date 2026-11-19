@@ -1399,8 +1399,10 @@
    "at": "2026-11-20 08:57 KST",
    "who": "관리자",
    "said": "목탄 십자가: 세 십자가 모두 먼 역광 실루엣(가운데 예수님 포함, 얼굴 없음) — 응 이대로 가자",
-   "status": "open",
-   "round": 7
+   "status": "applied",
+   "round": 7,
+   "applied": "review.json settled.cross_figures + charcoal-cross.js 주석 갱신, 5부 2차 그대로",
+   "applied_at": "2026-11-20 08:57 KST"
   }
  ],
  "process_changes": [

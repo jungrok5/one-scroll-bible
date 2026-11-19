@@ -179,13 +179,13 @@ export const SHADE_GLSL = /* glsl */`
     vec3 alb = mix(vec3(.04, .085, .16), mix(vec3(.58, .44, .29), vec3(.26, .31, .17), grn) * (.8 + .4 * rel), land);
     vec3 sunC = mix(vec3(1., .52, .26), vec3(1., .94, .86), smoothstep(.0, .32, mu));
     float lit = smoothstep(-.035, .1, mu) * (.32 + .95 * max(mu, 0.));
-    vec3 night = mix(vec3(.016, .026, .058), vec3(.042, .05, .085) * (.8 + .4 * rel), land);
+    vec3 night = mix(vec3(.004, .007, .017), vec3(.018, .024, .045) * (.7 + .6 * rel), land);   // round 5: the night side dark (deep blue-black)
     float tw = smoothstep(-.2, -.01, mu) * (1. - smoothstep(-.01, .14, mu));
-    vec3 c = night + alb * sunC * lit * 1.25 + vec3(.1, .13, .3) * tw * mix(.45, 1., land) + vec3(1., .5, .24) * exp(-abs(mu + .012) / .03) * .4;
-    vec3 cc = vec3(1., .97, .92) * sunC * smoothstep(-.03, .12, mu) * (.45 + .8 * max(mu, 0.)) + vec3(.06, .07, .12) + vec3(.16, .19, .36) * tw + vec3(1., .55, .3) * exp(-abs(mu) / .035) * .45;
-    return mix(c, cc, cl * .85);
+    vec3 c = night + alb * sunC * lit * 1.25 + vec3(.04, .055, .13) * tw * tw * mix(.4, 1., land) + vec3(1., .5, .24) * exp(-abs(mu + .012) / .025) * .22;
+    vec3 cc = vec3(1., .97, .92) * sunC * smoothstep(-.03, .12, mu) * (.45 + .8 * max(mu, 0.)) + vec3(.018, .022, .04) + vec3(.08, .1, .2) * tw * tw + vec3(1., .55, .3) * exp(-abs(mu) / .03) * .35;
+    return mix(c, cc, cl * mix(.35, .85, smoothstep(-.05, .1, mu)));   // moonlit clouds on the night side are faint
   }
-  vec3 eHaze(float mu){ return mix(vec3(.05, .075, .17), vec3(.42, .58, .9), smoothstep(-.12, .2, mu)) + vec3(.9, .45, .22) * exp(-abs(mu) / .06) * .25; }`;
+  vec3 eHaze(float mu){ return mix(vec3(.02, .035, .09), vec3(.42, .58, .9), smoothstep(-.12, .2, mu)) + vec3(.9, .45, .22) * exp(-abs(mu) / .06) * .25; }`;
 
 // ---------------------------------------------------------------- the globe: a polar cap mesh round the origin out to the antipode
 // (dense near the terrain patch so the sphere meets it without facets), shaded as the earth at night: dark land, darker sea,
@@ -211,10 +211,10 @@ export function buildGlobe({ thetaMin = .018, rings = 260, seg = 512, texW = 409
   for (let i = 0; i < rings; i++) for (let j = 0; j < seg; j++) { const a = i * (seg + 1) + j, b = a + seg + 1; ix.push(a, b, a + 1, a + 1, b, b + 1); }
   const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); g.setIndex(ix);
   const u = { tLand: { value: tex }, uN0: { value: V(...N0) }, uU0: { value: V(...U0) }, uE0: { value: V(...E0) }, uLand: { value: new THREE.Color(.011, .0135, .022) }, uSea: { value: new THREE.Color(.0035, .0055, .014) },
-    uHaze: { value: new THREE.Color(.03, .045, .1) }, uHazeL: { value: 4e6 }, uK: { value: 1 }, uSun: { value: V(0, -1, 0) }, uDusk: { value: new THREE.Color(.5, .22, .12) } };
+    uHaze: { value: new THREE.Color(.03, .045, .1) }, uHazeL: { value: 4e6 }, uK: { value: 1 }, uNM: { value: 1 }, uSun: { value: V(0, -1, 0) }, uDusk: { value: new THREE.Color(.5, .22, .12) } };
   const m = new THREE.ShaderMaterial({ uniforms: u, fog: false, side: THREE.DoubleSide,
     vertexShader: /* glsl */`varying vec3 vN, vW; void main(){ vec4 w = modelMatrix * vec4(position, 1.); vW = w.xyz; vN = normalize(w.xyz - vec3(0., -${R_E.toFixed(1)}, 0.)); gl_Position = projectionMatrix * viewMatrix * w; }`,
-    fragmentShader: /* glsl */`uniform sampler2D tLand; uniform vec3 uN0, uU0, uE0, uLand, uSea, uHaze, uSun, uDusk; uniform float uHazeL, uK; varying vec3 vN, vW;
+    fragmentShader: /* glsl */`uniform sampler2D tLand; uniform vec3 uN0, uU0, uE0, uLand, uSea, uHaze, uSun, uDusk; uniform float uHazeL, uK, uNM; varying vec3 vN, vW;
       ${SHADE_GLSL}
       float hh(vec2 p){ vec3 p3 = fract(vec3(p.xyx) * .1031); p3 += dot(p3, p3.yzx + 33.33); return fract((p3.x + p3.y) * p3.z); }
       float vn(vec2 p){ vec2 i = floor(p), f = fract(p); vec2 w = f * f * (3. - 2. * f); return mix(mix(hh(i), hh(i + vec2(1, 0)), w.x), mix(hh(i + vec2(0, 1)), hh(i + vec2(1, 1)), w.x), w.y); }
@@ -227,7 +227,7 @@ export function buildGlobe({ thetaMin = .018, rings = 260, seg = 512, texW = 409
         float latd = abs(lat) * 57.3, grn = clamp(smoothstep(38., 52., latd) + (1. - smoothstep(8., 18., latd)) * .9, 0., 1.) * (.6 + .4 * vn(uv * vec2(60., 30.)));
         float clr = vn(uv * vec2(70., 35.)) * .55 + vn(uv * vec2(190., 95.)) * .3 + vn(uv * vec2(600., 300.)) * .15;
         float cl = smoothstep(.56, .78, clr) * smoothstep(.07, .12, acos(clamp(dot(p, uU0), -1., 1.)));   // clear skies over the Holy Land (the terrain patch)
-        float ms = dot(n, uSun);
+        float ms = min(dot(n, uSun), uNM);
         vec3 c = eShade(ms, land, rel, grn, cl * .8);
         { vec3 vv = normalize(cameraPosition - vW); float sp = max(dot(reflect(-uSun, n), vv), 0.); c += vec3(1., .74, .46) * (pow(sp, 90.) * 1.6 + pow(sp, 14.) * .16) * (1. - land) * (1. - cl) * smoothstep(-.03, .12, ms); }
         vec3 v = normalize(cameraPosition - vW); float mu = max(dot(n, v), 0.);
@@ -243,7 +243,7 @@ export function buildGlobe({ thetaMin = .018, rings = 260, seg = 512, texW = 409
       void main(){ vec3 n = normalize(vN), v = normalize(cameraPosition - vW); float mu = clamp(dot(n, v), 0., 1.);
         float rim = pow(1. - mu, 10.) * .8 + pow(1. - mu, 22.) * 2.2;   // round 3: one clean rim                // a thick glow, brightest at the edge
         float ms = dot(n, uSun), sun = pow(max(ms * .5 + .5, 0.), 4.), lineS = exp(-abs(ms + .02) / .09);
-        vec3 c = mix(uBlue, uWarm, clamp(sun * .55 + lineS * .6, 0., 1.)) * rim * (.34 + .55 * sun + .45 * lineS);
+        vec3 c = mix(uBlue, uWarm, clamp(sun * .55 + lineS * .6, 0., 1.)) * rim * (.3 + .3 * sun + .25 * lineS);
         gl_FragColor = vec4(c * uK, 1.); }` });
   const atm = new THREE.Mesh(sg, am); atm.frustumCulled = false; atm.renderOrder = 4;
   return { mesh, u, atm, au, tex, isLand };
@@ -267,22 +267,22 @@ export function cityLights({ count = 13000, skipWithin = 210000, seed = 31, isLa
 // classic great-circle "flight arc" globe: each arc = a great circle from A to B lifted into a parabola-like bow (height ∝ length),
 // drawn as a screen-space ribbon. Its head runs from A to B in [t0, t0 + T]; behind the head a warm trail fades, and once landed the
 // arc stays as a faint residual line, so the lace builds up. Depth-tested against the globe: arcs go over the horizon and come back.
-// arcs: [{ P: [Vector3 …] (points along the arc, world), t0, T, k (brightness) }]. Uniforms: uT (film seconds), uRes, uPx (core px),
+// arcs: [{ P: [Vector3 …] (points along the arc, world), t0, T, k (brightness), w (width ×), rest (what stays once landed) }]. Uniforms: uT (film seconds), uRes, uPx (core px),
 // uBandY (fraction of the frame height from the bottom under which the words sit — arcs dimmed there), uK.
 export function arcMesh(arcs, { px = 2.4 } = {}) {
   let nSeg = 0; for (const a of arcs) nSeg += a.P.length - 1;
-  const A = new Float32Array(nSeg * 12), Bv = new Float32Array(nSeg * 12), Q = new Float32Array(nSeg * 8), Sv = new Float32Array(nSeg * 8), Tm = new Float32Array(nSeg * 12), idx = new Uint32Array(nSeg * 6);
+  const A = new Float32Array(nSeg * 12), Bv = new Float32Array(nSeg * 12), Q = new Float32Array(nSeg * 8), Sv = new Float32Array(nSeg * 8), Tm = new Float32Array(nSeg * 12), Wv = new Float32Array(nSeg * 8), idx = new Uint32Array(nSeg * 6);
   let s = 0;
   for (const a of arcs) { const n = a.P.length - 1;
     for (let i = 0; i < n; i++, s++) { const p = a.P[i], q = a.P[i + 1];
-      for (let v = 0; v < 4; v++) { const o = s * 4 + v; A.set([p.x, p.y, p.z], o * 3); Bv.set([q.x, q.y, q.z], o * 3); Q.set([v & 1 ? 1 : -1, v >> 1], o * 2); Sv.set([i / n, (i + 1) / n], o * 2); Tm.set([a.t0, a.T, a.k], o * 3); }
+      for (let v = 0; v < 4; v++) { const o = s * 4 + v; A.set([p.x, p.y, p.z], o * 3); Bv.set([q.x, q.y, q.z], o * 3); Q.set([v & 1 ? 1 : -1, v >> 1], o * 2); Sv.set([i / n, (i + 1) / n], o * 2); Tm.set([a.t0, a.T, a.k], o * 3); Wv.set([a.w || 1, a.rest == null ? .2 : a.rest], o * 2); }
       idx.set([s * 4, s * 4 + 1, s * 4 + 3, s * 4, s * 4 + 3, s * 4 + 2], s * 6); } }
   const g = new THREE.BufferGeometry();
   g.setAttribute('position', new THREE.BufferAttribute(A.slice(), 3)); g.setAttribute('aA', new THREE.BufferAttribute(A, 3)); g.setAttribute('aB', new THREE.BufferAttribute(Bv, 3));
-  g.setAttribute('aQ', new THREE.BufferAttribute(Q, 2)); g.setAttribute('aS', new THREE.BufferAttribute(Sv, 2)); g.setAttribute('aTm', new THREE.BufferAttribute(Tm, 3)); g.setIndex(new THREE.BufferAttribute(idx, 1));
+  g.setAttribute('aQ', new THREE.BufferAttribute(Q, 2)); g.setAttribute('aS', new THREE.BufferAttribute(Sv, 2)); g.setAttribute('aTm', new THREE.BufferAttribute(Tm, 3)); g.setAttribute('aW', new THREE.BufferAttribute(Wv, 2)); g.setIndex(new THREE.BufferAttribute(idx, 1));
   const u = { uT: { value: 0 }, uRes: { value: new THREE.Vector2(1080, 1920) }, uPx: { value: px }, uK: { value: 1 }, uBandY: { value: .36 }, uRest: { value: .16 } };
   const m = new THREE.ShaderMaterial({ uniforms: u, transparent: true, depthWrite: false, depthTest: true, fog: false, side: THREE.DoubleSide, blending: THREE.AdditiveBlending,
-    vertexShader: /* glsl */`attribute vec3 aA, aB, aTm; attribute vec2 aQ, aS; uniform vec2 uRes; uniform float uPx, uT; varying float vS, vX, vP, vAge, vK, vH;
+    vertexShader: /* glsl */`attribute vec3 aA, aB, aTm; attribute vec2 aQ, aS, aW; uniform vec2 uRes; uniform float uPx, uT; varying float vS, vX, vP, vAge, vK, vH, vR;
       void main(){
         float p = clamp((uT - aTm.x) / aTm.y, 0., 1.); p = 1. - (1. - p) * (1. - p) * (1. - .35 * p);   // the head: fast off the ground, easing in to land
         float sA = aS.x, sB = aS.y;
@@ -292,19 +292,19 @@ export function arcMesh(arcs, { px = 2.4 } = {}) {
         vec2 sa = cA.xy / cA.w * uRes * .5, sb = cB.xy / cB.w * uRes * .5, dir = sb - sa; float L = length(dir); dir = L > 1e-4 ? dir / L : vec2(1., 0.);
         vec4 c = aQ.y < .5 ? cA : cB;
         float head = exp(-max(p - (aQ.y < .5 ? sA : sB), 0.) * 9.);
-        float w = uPx * (1. + 1.6 * head) * 2.6;                                   // a soft ribbon: the core is in the fragment
+        float w = uPx * aW.x * (1. + .45 * head * (1. - smoothstep(.85, 1., p))) * 2.6;   // a soft ribbon (no widening tick where it lands)
         c.xy += (vec2(-dir.y, dir.x) * aQ.x * w * .5 + dir * (aQ.y < .5 ? -1. : 1.) * w * .3) / (uRes * .5) * c.w; gl_Position = c;
-        vS = aQ.y < .5 ? sA : sB; vX = aQ.x; vP = p; vAge = max(uT - aTm.x - aTm.y, 0.); vK = aTm.z; vH = head; }`,
-    fragmentShader: /* glsl */`uniform float uK, uBandY, uRest; uniform vec2 uRes; varying float vS, vX, vP, vAge, vK, vH;
+        vS = aQ.y < .5 ? sA : sB; vX = aQ.x; vP = p; vAge = max(uT - aTm.x - aTm.y, 0.); vK = aTm.z; vH = head; vR = aW.y; }`,
+    fragmentShader: /* glsl */`uniform float uK, uBandY, uRest; uniform vec2 uRes; varying float vS, vX, vP, vAge, vK, vH, vR;
       void main(){
         float bh = vP - vS; if (bh < -.002) discard;
         float across = exp(-vX * vX * 5.) + .5 * exp(-vX * vX * 22.);
         float head = exp(-bh * 14.), trail = exp(-bh * 2.4);
         float landed = smoothstep(.0, 2.8, vAge);
-        float body = mix(.3 * max(trail, .3), uRest * .5, landed);              // in flight: a warm trail; landed: a faint line that stays
-        vec3 col = mix(vec3(1., .58, .25), vec3(1., .93, .78), head) * (body + 1.2 * head * (1. - smoothstep(0., .5, vAge)));
+        float body = mix(.34 * max(trail, .4), vR * .55, landed);               // in flight: a warm trail; landed: a line that stays (by rank)
+        vec3 col = mix(vec3(1., .58, .25), vec3(1., .93, .78), head) * (body + 1.15 * head * (1. - smoothstep(.86, 1., vP)));
         float y = gl_FragCoord.y / uRes.y, band = mix(.4, 1., smoothstep(uBandY - .1, uBandY + .04, y));
-        gl_FragColor = vec4(col * across * vK * uK * band, 1.); }` });
+        vec3 o = col * across * vK * uK * band; if (any(isnan(o)) || any(isinf(o))) o = vec3(0.); gl_FragColor = vec4(clamp(o, 0., 6.), 1.); }` });
   const mesh = new THREE.Mesh(g, m); mesh.frustumCulled = false; mesh.renderOrder = 7;
   return { mesh, u };
 }

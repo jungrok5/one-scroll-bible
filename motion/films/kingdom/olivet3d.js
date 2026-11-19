@@ -143,7 +143,7 @@ export async function build(W, H_, B0 = null) {
   });
   film.canvas.style.display = 'none';
   const S = film.scene, cam = film.camera, R = film.renderer;
-  let T = null, SUNE = null, SUNH = null, SUNF = null;
+  let T = null, SUNE = null, SUNH = null, SUNF = null, OFFS = [];
 
   // ---------------------------------------------------------------- light
   const sunL = new THREE.DirectionalLight(col('#ffd39a'), 3.0); S.add(sunL, sunL.target);
@@ -192,9 +192,9 @@ export async function build(W, H_, B0 = null) {
           c += vec3(1., .66, .32) * (pow(s, 6.) * .55 + pow(s, 40.) * 1.2 + pow(s, 400.) * 3.) * smoothstep(-6., 1., uE) + vec3(1., .92, .75) * 34. * smoothstep(.99962, .9998, s) * smoothstep(-1., .5, uE);
           c += vec3(1., .7, .38) * uGlow * exp(-abs(y) / .025) * pow(max(dot(hz, normalize(uGlowDir.xz)), 0.), 2.);   // the light gone beyond the horizon
           float ys = dot(uSun, uUp) + uDip;   // the sun against the camera's own horizon (the limb)
-          vec3 sp = vec3(.004, .006, .014) + vec3(.07, .14, .36) * exp(-abs(y) / .014) + (vec3(1., .62, .3) * exp(-abs(y) / .008) * .7 + vec3(1., .74, .48) * exp(-abs(y) / .022) * .05) * pow(max(sd, 0.), 6.) * smoothstep(-.4, .0, ys);   // above the air: the blue rim; the dawn on the limb toward the sun
-          c = mix(c, sp, uSpace);
-          if (uStars > 0. && y > .02){ vec3 gg = d * 260., g = floor(gg); vec2 k = g.xy + g.z * 17.31; float st = step(.9986, h12(k)) * smoothstep(.32, .05, length(fract(gg) - .5)); c += vec3(st * uStars * (.3 + .7 * h12(k + 3.))) * smoothstep(.02, .12, y); }
+          vec3 sp = vec3(.003, .005, .012) + vec3(.04, .08, .2) * exp(-abs(y) / .0015) + (vec3(1., .64, .32) * exp(-abs(y) / .0012) * .9 + vec3(1., .7, .42) * exp(-abs(y) / .005) * .06) * pow(max(sd, 0.), 6.) * smoothstep(-.4, .0, ys);   // round 5: near-black navy; a thin rim, the dawn glow only on the far limb   // above the air: the blue rim; the dawn on the limb toward the sun
+          c = uSpace > .999 ? sp : mix(c, sp, uSpace); if (any(isnan(c))) c = sp;
+          if (uStars > 0. && y > .02){ vec3 gg = d * 260., g = floor(gg); vec2 k = g.xy + g.z * 17.31; float st = step(.9986, h12(k)) * (1. - smoothstep(.05, .32, length(fract(gg) - .5))); c += vec3(st * uStars * (.3 + .7 * h12(k + 3.))) * smoothstep(.02, .12, y); }
           gl_FragColor = vec4(c, 0.); }` });
     const sky = new THREE.Mesh(new THREE.SphereGeometry(1000, 48, 24), m); sky.frustumCulled = false; sky.renderOrder = -10;
     sky.onBeforeRender = (r, s, c) => { sky.position.setFromMatrixPosition(c.matrixWorld); sky.updateMatrixWorld(); }; S.add(sky); }
@@ -290,7 +290,7 @@ export async function build(W, H_, B0 = null) {
       sh.vertexShader = sh.vertexShader.replace('#include <common>', '#include <common>\nattribute float aWet, aCoast; varying float vWet, vCoast; varying vec3 vWP; varying vec3 vWN;')
         .replace('#include <project_vertex>', '#include <project_vertex>\nvWet = aWet; vCoast = aCoast; vWP = (modelMatrix * vec4(transformed, 1.)).xyz; vWN = normalize(mat3(modelMatrix) * objectNormal);');
       sh.fragmentShader = sh.fragmentShader.replace('#include <common>', `#include <common>
-          uniform sampler2D tRoad, tRoadH, tReg, tRegH, tLand, tMid; uniform float uMidR; uniform vec3 uN0, uU0, uE0; uniform float uHazeL; uniform float uRoadR, uRegR, uDetail, uGK, uF, uGlow, uHeadW, uFeet; uniform vec3 uSkyW, uSunW; varying float vWet, vCoast; varying vec3 vWP; varying vec3 vWN;
+          uniform sampler2D tRoad, tRoadH, tReg, tRegH, tLand, tMid; uniform float uMidR, uNM; uniform vec3 uN0, uU0, uE0; uniform float uHazeL; uniform float uRoadR, uRegR, uDetail, uGK, uF, uGlow, uHeadW, uFeet; uniform vec3 uSkyW, uSunW; varying float vWet, vCoast; varying vec3 vWP; varying vec3 vWN;
           float wetF(){ return max(smoothstep(-.2, .2, vWet), smoothstep(-.25, .25, vCoast)); }
           ${hashGLSL}
           ${E.SHADE_GLSL}
@@ -335,12 +335,12 @@ export async function build(W, H_, B0 = null) {
             diffuseColor.rgb = c; }`)
         .replace('#include <emissivemap_fragment>', `#include <emissivemap_fragment>
           { float wf = wetF(); vec3 v = normalize(cameraPosition - vWP); float fr = pow(1. - clamp(v.y, 0., 1.), 4.); totalEmissiveRadiance += uSkyW * (.015 + .1 * fr) * wf; }`)
-        .replace('#include <fog_fragment>', `if (uGK > 0.) { vec3 n = normalize(vWP - vec3(0., -${E.R_E.toFixed(1)}, 0.)), v = normalize(cameraPosition - vWP); float mu = max(dot(n, v), 0.), ms = dot(n, uSunW);
+        .replace('#include <fog_fragment>', `if (uGK > 0.) { vec3 n = normalize(vWP - vec3(0., -${E.R_E.toFixed(1)}, 0.)), v = normalize(cameraPosition - vWP); float mu = max(dot(n, v), 0.), ms = min(dot(n, uSunW), uNM);
             vec3 pp = n.x * uN0 + n.y * uU0 + n.z * uE0; float lat = asin(clamp(pp.z, -1., 1.)), lon = atan(pp.y, pp.x);
             vec2 uv = vec2((lon + 3.14159265) / 6.2831853, (lat + 1.5707963) / 3.14159265);
             float land = smoothstep(.38, .62, texture2D(tLand, uv).r), rel = vn(uv * vec2(900., 450.)) * .6 + vn(uv * vec2(2400., 1200.)) * .4;
             float latd = abs(lat) * 57.3, grn = clamp(smoothstep(38., 52., latd) + (1. - smoothstep(8., 18., latd)) * .9, 0., 1.) * (.6 + .4 * vn(uv * vec2(60., 30.)));
-            vec3 gc = eShade(ms, land, rel, grn, 0.);
+            vec3 gc = eShade(ms, land, rel, grn, 0.);   // (the patch is tiny against the terminator: no warm terminator line flashing over it)
             float hz = 1. - exp(-length(cameraPosition - vWP) / uHazeL); gc = mix(gc, eHaze(ms), clamp(hz * .12 + pow(1. - mu, 9.) * .6, 0., 1.));
             gl_FragColor.rgb = mix(gl_FragColor.rgb, gc, uGK); }
           gl_FragColor.rgb += roadGlow() + vec3(1., .7, .38) * uFeet * exp(-length(vWP.xz - vec2(.6, .4)) / 2.6) * .9;
@@ -373,6 +373,7 @@ export async function build(W, H_, B0 = null) {
   const place = (o, x, z, dy = 0) => { o.position.set(x, H(x, z) + dy, z); S.add(o); return o; };
   const box = (w, h, d, x, z, mat, { y = null, ry = 0, cast = true } = {}) => { const b = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat); b.position.set(x, (y ?? H(x, z)) + h / 2, z); b.rotation.y = ry; b.castShadow = cast; b.receiveShadow = true; S.add(b); return b; };
 
+  const nBeforeCity = S.children.length;
   // ---------------------------------------------------------------- Jerusalem (from the Mount: the east wall over the Kidron, the Temple, the Antonia)
   const CITY = [[330, -700], [120, -705], [-150, -700], [-420, -690], [-560, -1150], [-430, -1650], [60, -1750], [300, -1350]];   // x north, z east
   const TMB = { x0: -150, x1: 170, z0: -985, z1: -705, top: -30 };   // the Temple Mount's platform
@@ -449,6 +450,8 @@ export async function build(W, H_, B0 = null) {
   // Herod's palace towers on the west wall
   for (const [x, z, h] of [[40, -1735, 42], [10, -1730, 36], [-20, -1726, 32]]) { box(13, h, 13, x, z, M.stone); box(14.6, 1.4, 14.6, x, z, M.stone2, { y: H(x, z) + h }); }
 
+  const CITYOBJ = S.children.slice(nBeforeCity);   // round 5: faded out from the air (a grey slab from above); the lamps carry the city
+  const CITYMAT = [...new Set(CITYOBJ.map(o => o.material).filter(Boolean))]; CITYMAT.forEach(m => { m.transparent = true; });
   // ---------------------------------------------------------------- olive trees on the Mount (near ones in 3D; far groves are dots in the terrain)
   // ---------------------------------------------------------------- olive trees on the Mount (near ones in 3D; far groves are dots in the terrain)
   const olive = (x, z, h, seed) => { const tr = K.tree({ seed, height: h, trunk: .22, depth: 4, spread: .75, up: .2, twig: 0, mat: M.trunk, layer: 0 }); tr.position.set(x, H(x, z) - .1, z); S.add(tr);
@@ -595,68 +598,71 @@ export async function build(W, H_, B0 = null) {
     for (const [[x, z], sz] of [...TOWNS.map(([p, s]) => [p, s * 1.4]), ...hamlets]) { const d0 = RD(x, z), nl = Math.round(6 + sz * 22), rad = 120 + sz * 260;
       for (let i = 0; i < nl; i++) { const a = r() * 6.283, rr = Math.sqrt(r()) * rad, xx = x + Math.cos(a) * rr, zz = z + Math.sin(a) * rr; const y = H(xx, zz); if (WATER) continue;
         lamps.push({ p: localToW(xx, zz, y + 3.5, V()), d: d0 + rr * 1.2 + r() * rad * 1.5, b: .45 + r() * .7, s: .75 + r() * .5, f: Math.max(260, d0 * .03) }); } } }
-  const LAMPS = E.lampPoints(lamps, { px: 5.0, minPx: 1.4 }); LAMPS.u.uRef.value = 900; S.add(LAMPS.pts);
+  // round 5: the city's own lamps (the first 2,440) in a mesh of their own — from high up they would draw the walls' outline as a
+  // textured slab, so they give way to one soft warm glow over Jerusalem as the camera climbs
+  const CLAMPS = E.lampPoints(lamps.slice(0, 2440), { px: 5.0, minPx: 1.4 }); CLAMPS.u.uRef.value = 900; S.add(CLAMPS.pts);
+  const LAMPS = E.lampPoints(lamps.slice(2440), { px: 5.0, minPx: 1.4 }); LAMPS.u.uRef.value = 900; S.add(LAMPS.pts);
+  const JGLOW = E.lampPoints([{ p: localToW(60, -1200, 200, V()), d: 0, b: 1.0, s: 4.2, f: 1 }], { px: 6, minPx: 1 }); JGLOW.u.uRef.value = 1e12; S.add(JGLOW.pts);
   // ---------------------------------------------------------------- the globe (round 3: Natural Earth 1:110m land, data/land-110m.js)
   const GL = E.buildGlobe({ polys: LANDP }); S.add(GL.mesh, GL.atm);
-  Object.assign(terrU, { tLand: GL.u.tLand, uN0: GL.u.uN0, uU0: GL.u.uU0, uE0: GL.u.uE0, uHazeL: GL.u.uHazeL });   // before the first render compiles the terrain
+  Object.assign(terrU, { tLand: GL.u.tLand, uN0: GL.u.uN0, uU0: GL.u.uU0, uE0: GL.u.uE0, uHazeL: GL.u.uHazeL, uNM: GL.u.uNM });   // before the first render compiles the terrain
 
-  // ---------------------------------------------------------------- round 3: arcs of light over the curve of the earth (owner 2026-11-19)
-  // From the hill, waves of great-circle arcs on Q6a's phrases: "온 유대" short arcs to the towns of Judea · "사마리아" north to Samaria
-  // and Galilee · "땅 끝까지" a burst to the near world (Asia Minor, Egypt, Greece, Rome, Mesopotamia, Arabia) AND a fan of long arcs to
-  // every continent; then every landing branches again (lineage-glow doubling) — N28b: still growing, new arcs to the last frame.
+  // ---------------------------------------------------------------- round 4: the arcs as a tree over the night side (owner 2026-11-19: "완전 이상해 …
+  // 호가 지구를 커버하는 느낌도 아니고 좀 엉망", "처음에 직선이 마구마구"). No arc flies before the whole globe is coming into view
+  // (before that the spread is only the light on the real roads: Jerusalem → Judea → Samaria). Then, as a tree with its trunk at Jerusalem:
+  //   wave 1  a few short hops round Jerusalem — a bright knot spreading;  wave 2  12 thick arcs to the first world (Rome, Corinth, Ephesus,
+  //   Antioch, Alexandria, Carthage, Aksum, Arabia, Babylon, Persia, India, Armenia);  wave 3  from each of those landings 3–6 onward,
+  //   so the branching shows, to every continent (Europe, Africa, Asia, Korea and Japan, the Americas, Australia);  wave 4 (N28b →)
+  //   thinner arcs from those, like a mustard tree still growing. Each landing: a soft bloom that leaves a warm glow of lamps.
   const JER = [E.LL0[0], E.LL0[1]], R_E0 = E.R_E;
   const v3 = (lo, la) => E.llToWorld(lo, la, 0, V()).sub(V(0, -R_E0, 0)).normalize();
   const gcd = (a, b) => Math.acos(clamp(v3(...a).dot(v3(...b)), -1, 1)) * R_E0;
-  const bearing = (a, b) => { const [l1, p1] = a.map(x => x * D2R), [l2, p2] = b.map(x => x * D2R); return Math.atan2(Math.sin(l2 - l1) * Math.cos(p2), Math.cos(p1) * Math.sin(p2) - Math.sin(p1) * Math.cos(p2) * Math.cos(l2 - l1)); };
   const dest = (a, brg, d) => { const [l1, p1] = a.map(x => x * D2R), dr = d / R_E0, p2 = Math.asin(Math.sin(p1) * Math.cos(dr) + Math.cos(p1) * Math.sin(dr) * Math.cos(brg));
     const l2 = l1 + Math.atan2(Math.sin(brg) * Math.sin(dr) * Math.cos(p1), Math.cos(dr) - Math.sin(p1) * Math.sin(p2)); return [((l2 / D2R + 540) % 360) - 180, p2 / D2R]; };
   const surfY = (lo, la) => { if (E.gcDist(lo, la) < PATCH - 8000) { const [x, z] = LL(lo, la); return Math.max(H(x, z), -30); } return -30; };
-  function arcPts(a, b) {   // the bow: a great circle lifted ∝ its length (region arcs low over the hills, ocean crossings 1000+ km up)
-    const d = gcd(a, b), va = v3(...a), vb = v3(...b), om = Math.acos(clamp(va.dot(vb), -1, 1)), n = clamp(Math.round(d / 110000), 14, 80);
-    const hTop = Math.min(1.35e6, d * (.06 + .1 * ss(5e4, 1.2e6, d))), ya = surfY(...a) + 180, yb = surfY(...b) + 180, P = [];
+  function arcPts(a, b) {   // a great circle lifted into a bow; the height grows with the length (seen in profile over the limb)
+    const d = gcd(a, b), va = v3(...a), vb = v3(...b), om = Math.acos(clamp(va.dot(vb), -1, 1)), n = clamp(Math.round(d / 90000), 16, 96);
+    const hTop = Math.min(1.0e6, d * (.08 + .08 * ss(2e5, 3e6, d))), ya = surfY(...a) + 200, yb = surfY(...b) + 200, P = [];
     for (let i = 0; i <= n; i++) { const s = i / n, k0 = Math.sin((1 - s) * om) / Math.sin(om || 1e-9), k1 = Math.sin(s * om) / Math.sin(om || 1e-9);
-      const v = om < 1e-9 ? va.clone() : va.clone().multiplyScalar(k0).addScaledVector(vb, k1), y = lerp(ya, yb, s) + hTop * Math.pow(Math.sin(Math.PI * s), .85);
+      const v = om < 1e-9 ? va.clone() : va.clone().multiplyScalar(k0).addScaledVector(vb, k1), y = lerp(ya, yb, s) + hTop * Math.sin(Math.PI * s);
       P.push(V(0, -R_E0, 0).addScaledVector(v, R_E0 + y)); }
     return P; }
   const ARCS = [], HUBS = [], cells = new Set(), rA = rng(2026);
-  const cellOf = ([lo, la]) => `${Math.round(la / 1.6)}:${Math.round(lo * Math.cos(la * D2R) / 1.6)}`;
-  function arc(a, b, t0, lvl, k = 1) { const d = gcd(a, b), Tf = (d < 1.2e5 ? .7 : .62) + 1.3 * Math.sqrt(d / 3e6); ARCS.push({ a, b, t0, T: Tf, lvl, k, d }); return t0 + Tf; }
-  const TW = (k) => E.NODE[k] || TOWN[k];
-  // (the Q6a words, from the pieces: c1 "예루살렘과 온 유대와 사마리아와 땅 끝까지 이르러" — 온 유대 ≈ +1.1, 사마리아 ≈ +2.1, 땅 끝까지 ≈ +3.4)
-  const W1 = ['BET', 'HEB', 'EMM', 'JRC', 'TEK', 'GIB', 'RAM', 'BTL', 'ANA', 'MIC', 'GBN', 'BHR', 'LYD', 'BGU', 'MAS'];
-  const W2 = ['SHI', 'SHE', 'SAM', 'JEN', 'NAI', 'NAZ', 'CAN', 'CAP', 'TIB', 'SCY', 'GAD', 'CAE', 'APO', 'JOP', 'JV1', 'JV2', 'AZO', 'ASK'];
-  const W3 = { DAM: 0, ANT: 0, TAR: 0, ICO: 0, EPH: 0, TRO: 0, PHI: 0, THE: 0, ATH: 0, COR: 0, CRE: 0, MAL: 0, ROM: 0, ALX: 0, MEM: 0, CYR: 0, EDE: 0, BAB: 0, PER: 0, MER: 0, AXU: 0, CON: 0, CAR: 0,
-    PAP: [32.42, 34.77], PET: [35.44, 30.33], BOS: [36.48, 32.52], PAL: [38.27, 34.55], ARM: [44.5, 40.2], NIS: [41.2, 37.1], SUS: [48.25, 32.19], ADE: [45.0, 12.8], SAN: [44.2, 15.4], SYR: [15.3, 37.1],
-    NAP: [14.3, 40.8], ANC: [32.85, 39.93], SIN: [33.95, 28.55], TAI: [40.4, 21.3], MED: [39.6, 24.5], HAR: [42.1, 9.3], DJE: [10.9, 33.8], SAR: [9.1, 39.2], KRK: [21.0, 42.0], ODE: [30.7, 46.5] };
-  const FAN = ['LON', 'LIS', 'MOS', 'STO', 'DEL', 'BEI', 'SEO', 'TOK', 'SYD', 'CAP', 'LAG', 'NAI', 'RIO', 'BUE', 'NYC', 'MEX', 'LIM', 'MAN', 'KER', 'CHI', 'LAX', 'DAK', 'KIN', 'SAMK'];
-  { const tJ = T0B.c1 + 1.0, tS = T0B.c1 + 2.0, tE = T0B.c1 + 3.35;
-    W1.forEach((k, i) => arc(JER, TW(k), tJ + i * .055, 1, .9));
-    W2.forEach((k, i) => arc(i % 3 ? JER : TW(W1[(i * 5) % W1.length]), TW(k), tS + i * .05, 2, .9));
-    Object.entries(W3).forEach(([k, v], i) => { const b = v || E.NODE[k]; const tl = arc(JER, b, tE + rA() * .55, 3, 1); HUBS.push({ ll: b, t: tl, lvl: 3, d: gcd(JER, b) }); cells.add(cellOf(b)); });
-    FAN.forEach((k, i) => { const b = E.NODE[k]; const tl = arc(JER, b, tE + .5 + i * .05 + rA() * .2, 4, 1.1); HUBS.push({ ll: b, t: tl, lvl: 4, d: gcd(JER, b) }); cells.add(cellOf(b)); }); }
-  // doubling: every landing (in the order they land) sends out new arcs, shorter as the lace fills, onto land only, one per cell
-  { const q = HUBS.slice().sort((x, y) => x.t - y.t); let qi = 0; const tEnd = T0B.g - .25;
-    while (qi < q.length && ARCS.length < 2400) { const h = q[qi++]; if (h.t > tEnd) break;
-      const nk = h.lvl < 5 ? 3 : 2, out0 = bearing(JER, h.ll);
-      for (let c = 0; c < nk; c++) { let ok = null;
-        for (let tr = 0; tr < 10 && !ok; tr++) { const brg = (tr < 5 ? out0 : rA() * 6.283) + (rA() - .5) * 2.4, dd = lerp(1.8e6, 9e5, ss(4, 8, h.lvl)) * (.6 + rA() * .8), b = dest(h.ll, brg, dd);
-          if (Math.abs(b[1]) > 70 || !GL.isLand(b[0], b[1]) || cells.has(cellOf(b))) continue; ok = b; }
-        if (!ok) continue; cells.add(cellOf(ok));
-        const t0 = h.t + .12 + rA() * .55; if (t0 > tEnd) continue; const tl = arc(h.ll, ok, t0, h.lvl + 1, .85);
-        const nh = { ll: ok, t: tl, lvl: h.lvl + 1, d: gcd(h.ll, ok) }; HUBS.push(nh);
-        let j = q.length; while (j > qi && q[j - 1].t > tl) j--; q.splice(j, 0, nh); } } }
+  const cellOf = ([lo, la]) => `${Math.round(la / 2.6)}:${Math.round(lo * Math.cos(la * D2R) / 2.6)}`;
+  function arc(a, b, t0, rank) { const d = gcd(a, b), Tf = .85 + 1.15 * Math.sqrt(d / 3e6), R = [null, [3.0, .45, 1.05], [4.4, .55, 1.15], [2.8, .38, 1.0], [1.7, .26, .85]][rank];
+    ARCS.push({ a, b, t0, T: Tf, k: R[2], w: R[0], rest: R[1], d }); const h = { ll: b, t: t0 + Tf, rank, d }; HUBS.push(h); cells.add(cellOf(b)); return h; }
+  const N = E.NODE;
+  const W2 = { ROM: N.ROM, COR: N.COR, EPH: N.EPH, ANT: N.ANT, ALX: N.ALX, CAR: N.CAR, AXU: N.AXU, ADE: [45.0, 12.8], BAB: N.BAB, PER: N.PER, MUM: N.MUM, ARM: [44.5, 40.2] };
+  const W3 = { ROM: [N.LON, N.PAR, N.MAD, N.LIS, N.BER], COR: [N.VIE, [30.5, 50.45], N.STO, [21.0, 52.2]], EPH: [N.CON, N.MOS, [26.1, 44.4], [30.7, 46.5]],
+    ANT: [[32.85, 39.93], [44.8, 41.7], [49.1, 55.8]], ALX: [[32.5, 15.6], N.LAG, [15.0, 12.1], [-3.0, 16.8]], CAR: [N.NYC, N.RIO, N.DAK, N.MEX, N.BUE, N.LIM],
+    AXU: [N.NAI, N.KIN, N.CAP, [47.5, -18.9], [13.2, -8.8]], ADE: [[39.2, -6.2], [58.4, 23.6], [46.7, 24.7], [45.3, 2.0]], BAB: [[51.4, 35.7], [69.2, 34.5], N.SAMK, [76.9, 43.25]],
+    PER: [N.DEL, N.XIA, N.BEI, N.SEO, N.TOK], MUM: [N.KER, [90.4, 23.8], N.SIN, [106.8, -6.2], N.SYD, N.MAN], ARM: [[82.9, 55.0], [106.9, 47.9], [135.1, 48.5]] };
+  { const t1 = T0B.c2 + .5, t2 = T0B.c2 + .9;   // only once the whole globe is coming into view (≈ 12,000 km up): no arc is ever seen end-on as a streak
+    [N.DAM, N.GAZ, N.CAE, N.SAM, N.NAZ, [35.44, 30.33], [36.48, 32.52], [33.95, 28.55]].forEach((b, i) => arc(JER, b, t1 + i * .06, 1));
+    const hubs = Object.entries(W2).map(([k, b], i) => [k, arc(JER, b, t2 + i * .075, 2)]);
+    const w3 = [];
+    for (const [k, h] of hubs) W3[k].forEach((b, j) => { if (!b) return; w3.push(arc(h.ll, b, h.t + .2 + j * .17, 3)); });
+    // wave 4: from each wave-3 landing, thinner arcs to the land round it (one per cell), launching from N28b to the last second
+    const tEnd = T0B.g - .45;
+    for (const h of w3.sort((x, y) => x.t - y.t)) { const n = 3 + (rA() < .45 ? 1 : 0), t0b = Math.max(h.t + .3, T0B.f);
+      for (let j = 0; j < n; j++) { let ok = null;
+        for (let tr = 0; tr < 12 && !ok; tr++) { const b = dest(h.ll, rA() * 6.283, 5e5 + rA() * 1.4e6); if (Math.abs(b[1]) > 66 || !GL.isLand(b[0], b[1]) || cells.has(cellOf(b))) continue; ok = b; }
+        const t0 = t0b + j * .38 + rA() * .45; if (!ok || t0 > tEnd) continue; arc(h.ll, ok, t0, 4); } } }
   ARCS.forEach(a => { a.P = arcPts(a.a, a.b); });
   const ARC = E.arcMesh(ARCS, { px: 2.2 }); S.add(ARC.mesh);
-  // a cluster of lamps where each arc lands (a flare as it comes on), and the world's other lights lighting as the waves pass
+  // each landing: a soft bloom and the lamps of a city coming on round it; the world's other lights after the waves
   const hubL = [];
-  for (const h of HUBS) { const r = rng(Math.round(h.t * 1000)), rad = clamp(h.d * .05, 3e4, 1.3e5);
-    hubL.push({ p: E.llToWorld(h.ll[0], h.ll[1], 900, V()), d: h.t * 1000, b: 2.2, s: 3.4, f: 260 });
-    for (let i = 0; i < 7; i++) { const b = dest(h.ll, r() * 6.283, Math.sqrt(r()) * rad); if (!GL.isLand(b[0], b[1])) continue; hubL.push({ p: E.llToWorld(b[0], b[1], 900, V()), d: (h.t + .1 + r() * .6) * 1000, b: .5 + r() * .7, s: 1.1, f: 350 }); } }
+  for (const h of HUBS) { const r = rng(Math.round(h.t * 1000)), rad = h.rank === 1 ? 2.5e4 : clamp(h.d * .03, 3e4, 9e4);
+    hubL.push({ p: E.llToWorld(h.ll[0], h.ll[1], 900, V()), d: h.t * 1000, b: h.rank === 2 ? 1.5 : 1.0, s: 3.4, f: 650 });
+    for (let i = 0; i < 6; i++) { const b = dest(h.ll, r() * 6.283, Math.sqrt(r()) * rad); if (!GL.isLand(b[0], b[1])) continue; hubL.push({ p: E.llToWorld(b[0], b[1], 900, V()), d: (h.t + .15 + r() * .7) * 1000, b: .45 + r() * .5, s: 1.1, f: 450 }); } }
+  { const r = rng(7); hubL.push({ p: E.llToWorld(JER[0], JER[1], 900, V()), d: (T0B.c2 - 1.6) * 1000, b: 1.4, s: 2.6, f: 900 });   // Jerusalem keeps its glow (the trunk) as the lamps of the hills fade into the globe
+    for (let i = 0; i < 14; i++) { const b = dest(JER, r() * 6.283, Math.sqrt(r()) * 6e4); hubL.push({ p: E.llToWorld(b[0], b[1], 900, V()), d: (T0B.c2 - 1.5 + r() * .6) * 1000, b: .5 + r() * .5, s: 1.1, f: 700 }); } }
   const HUBP = E.lampPoints(hubL, { px: 4.6, minPx: 1.8 }); HUBP.u.uRef.value = 4e6; S.add(HUBP.pts);
-  for (const c of E.cityLights({ count: 14000, isLand: GL.isLand })) far.push({ p: E.llToWorld(c.lon, c.lat, 700, V()), d: c.gd + c.j * 1.2e6, b: c.b * .8, s: 1, f: 5e5 });
-  const CITIES = E.lampPoints(far, { px: 4.0, minPx: 1.45 }); CITIES.u.uRef.value = 4e6; S.add(CITIES.pts);
-  let GW = null;   // the wave front over the world's lights (m from Jerusalem), behind the arcs
-  const waveFront = t => { if (!GW) GW = mono([[T.c1 + 3.3, Math.log(1.5e5)], [T.c2, Math.log(1.6e6)], [T.c2 + 2.0, Math.log(4.5e6)], [T.f + 2.5, Math.log(1.0e7)], [T.g, Math.log(2.1e7)]]); return t < T.c1 + 3.3 ? 0 : Math.exp(GW(t)); };
+  for (const c of E.cityLights({ count: 16000, isLand: GL.isLand, skipWithin: 90000 })) far.push({ p: E.llToWorld(c.lon, c.lat, 700, V()), d: c.gd + c.j * 1.2e6, b: c.b * .8, s: 1, f: 5e5 });
+  const CITIES = E.lampPoints(far, { px: 4.0, minPx: 1.4 }); CITIES.u.uRef.value = 4e6; S.add(CITIES.pts);
+  const CDIM = E.lampPoints(far.filter(c => c.b > .42).map(c => ({ ...c, d: 0, b: c.b * .9, f: 1 })), { px: 3.6, minPx: 1.2 }); CDIM.u.uRef.value = 4e6; S.add(CDIM.pts);
+  let GW = null;   // the wave front over the world's other lights (m from Jerusalem), behind the arcs
+  const waveFront = t => { if (!GW) GW = mono([[T.c2 + .4, Math.log(3e5)], [T.c2 + 2.2, Math.log(2.5e6)], [T.f + 1.5, Math.log(7e6)], [T.g, Math.log(2.0e7)]]); return t < T.c2 + .4 ? 0 : Math.exp(GW(t)); };
 
   // ---------------------------------------------------------------- the camera: one move (see beats)
   function groundCam(t) {
@@ -687,16 +693,18 @@ export async function build(W, H_, B0 = null) {
     const tT = T;
     if (t < tT.crane) return groundCam(t);
     if (!crane0) { crane0 = groundCam(tT.crane); const a0 = Math.log(crane0.alt);
-      LNA = mono([[tT.crane, a0], [tT.crane + 2.0, Math.log(12)], [tT.c1, Math.log(150)], [tT.c1 + 1.4, Math.log(1500)], [tT.c1 + 2.7, Math.log(9000)], [tT.c1 + 3.4, Math.log(2.0e4)], [tT.c1 + 4.6, Math.log(2.2e5)], [tT.c1 + 5.6, Math.log(1.1e6)], [tT.c2 + 1.6, Math.log(3.2e6)], [tT.f + .6, Math.log(6.5e6)], [tT.f + 3.1, Math.log(1.05e7)], [tT.g, Math.log(1.35e7)]]);
+      LNA = mono([[tT.crane, a0], [tT.crane + 2.0, Math.log(12)], [tT.c1, Math.log(150)], [tT.c1 + 1.0, Math.log(1500)], [tT.c1 + 2.0, Math.log(1.5e4)], [tT.c1 + 3.0, Math.log(2.0e5)], [tT.c1 + 3.9, Math.log(1.5e6)], [tT.c2 - .4, Math.log(5e6)], [tT.c2 + .6, Math.log(1.2e7)], [tT.f - .4, Math.log(2.5e7)], [tT.f + 1.6, Math.log(2.9e7)], [tT.g, Math.log(3.05e7)]]);
       GOFF = Math.atan2(crane0.alt, crane0.dist) / D2R - crane0.pd; }
     const c0 = crane0, alt = Math.exp(LNA(t)), la = Math.log(alt), dip = Math.acos(R_E / (R_E + alt)) / D2R;
-    const pdMid = lerp(c0.pd, 47, ss(Math.log(8), Math.log(4000), la)), pd = Math.max(pdMid, dip + 11 * ss(Math.log(2e4), Math.log(2e5), la));
+    const pdMid = lerp(c0.pd, 47, ss(Math.log(8), Math.log(4000), la)), pd0 = Math.max(pdMid, dip + 11 * ss(Math.log(2e4), Math.log(2e5), la));
     const gOff = lerp(GOFF, 4, ss(Math.log(8), Math.log(400), la));
-    const yaw = keys([[tT.crane, 60], [tT.c1 + 3.4, 46], [tT.g, 28]], t);
-    // the point the camera keeps in view: the hill, then (from 땅 끝까지) it travels south-west over the earth — the globe turns under us
-    const gk = ss(tT.c1 + 3.6, tT.g, t), lonT = lerp(JER[0], 18, gk), latT = lerp(JER[1], 22, gk);
+    // from the region view to the whole globe: wG 0 → 1 as the camera climbs from 200 km to 5,000 km. At 1 the camera is straight over
+    // a point south-east of Jerusalem (Jerusalem up and left of the disc's centre, north up), looking at the earth's centre, tilted so the
+    // disc sits at 40 % of the height; that point drifts west (the globe turns west → east under us), so arcs rise over the limbs in profile
+    const wG = ss(Math.log(2e5), Math.log(5e6), la), yaw = lerp(keys([[tT.crane, 60], [tT.c1 + 2.0, 52]], t), 90, wG);
+    const nk = ss(tT.c2 - .8, tT.g, t), lonN = lerp(62, 46, nk), latN = lerp(14, 11, nk), gk = ss(Math.log(4e6), Math.log(2.6e7), la), lonT = lerp(JER[0], lonN, gk), latT = lerp(JER[1], latN, gk);
     const upT = gk > 0 ? v3(lonT, latT) : up0.clone(), ET = gk > 0 ? NPOLE.clone().cross(upT).normalize() : V(0, 0, 1), NT = gk > 0 ? upT.clone().cross(ET) : V(1, 0, 0);
-    const th = thetaFor(alt, pd + gOff), h = NT.clone().multiplyScalar(Math.sin(yaw * D2R)).addScaledVector(ET, -Math.cos(yaw * D2R));
+    const th = lerp(thetaFor(alt, pd0 + gOff), 0, wG), pd = lerp(pd0, 94.05, wG), h = NT.clone().multiplyScalar(Math.sin(yaw * D2R)).addScaledVector(ET, -Math.cos(yaw * D2R));
     const uC = upT.clone().multiplyScalar(Math.cos(th)).addScaledVector(h, -Math.sin(th)), tC = upT.clone().multiplyScalar(Math.sin(th)).addScaledVector(h, Math.cos(th));
     const pos = V(GC.x, -R_E, GC.z).addScaledVector(uC, R_E + alt);
     return { pos, yaw, pd, fov: lerp(c0.fov, 39, ss(Math.log(8), Math.log(300), la)), focus: lerp(c0.focus, Math.max(20, alt * 1.4), ss(tT.crane, tT.crane + 1.6, t)), aperture: 2.0 * (1 - ss(tT.crane, tT.crane + 2.2, t)), dist: th * R_E, alt, uC, tC };
@@ -721,37 +729,41 @@ export async function build(W, H_, B0 = null) {
   }
   function frame(t) {
     const c = setView(t), e0 = SUNE(t), sh0 = SUNH(t), sunDir = V(Math.sin(sh0 * D2R) * Math.cos(e0 * D2R), Math.sin(e0 * D2R), -Math.cos(sh0 * D2R) * Math.cos(e0 * D2R));
-    { const w = ss(T.c1 + 3.8, T.f + 1.5, t); if (w > 0) { if (!SUNF) { const cg = camAt(T.g); SUNF = cg.uC.clone().multiplyScalar(-.9).addScaledVector(cg.tC, .44).normalize(); } sunDir.lerp(SUNF, w).normalize(); } }
+    { const w = ss(T.c1 + 2.6, T.c2 + .6, t); if (w > 0) { if (!SUNF) { const cg = camAt(T.g), rt = cg.uC.clone().negate().cross(cg.tC).normalize(), side = cg.tC.clone().multiplyScalar(.78).addScaledVector(rt, -.62).normalize(), b = 132 * D2R; SUNF = cg.uC.clone().multiplyScalar(Math.cos(b)).addScaledVector(side, Math.sin(b)).normalize(); } sunDir.lerp(SUNF, w).normalize(); } }
     const e = Math.asin(clamp(sunDir.y, -1, 1)) / D2R, sh = Math.atan2(sunDir.x, -sunDir.z) / D2R, night = ss(-.5, -7, e);
     const alt = c.alt, space = ss(9e3, 7e4, alt), lowA = 1 - ss(300, 3000, alt);
     // sun, its glow in the haze, sky light
     const sk = ss(-.8, 3.5, e); sunL.intensity = 3.2 * sk; sunL.color.copy(col('#ffd7a0')).lerp(col('#ff9a52'), 1 - ss(1, 8, e)); sunL.castShadow = sk > .01 && alt < 4000; if (sunL.castShadow) fitShadow(sunDir);
     sunLamp.pos.copy(cam.position).addScaledVector(sunDir, 3500); sunLamp.power = 1.3e6 * ss(-1.5, 2.5, e) * lowA;
-    { const tw = ss(1, -3, e) * (1 - ss(-12, -17, e)); twi.intensity = .75 * tw; twi.color.copy(col('#c69a8c')).lerp(col('#7c8ed0'), ss(-1, -7, e)); twi.target.position.copy(cam.position); twi.position.copy(cam.position).add(V(Math.sin(sh * D2R) * 100, 32, -Math.cos(sh * D2R) * 100)); }
+    { const tw = ss(1, -3, e) * (1 - ss(-12, -17, e)); twi.intensity = .75 * tw; twi.color.copy(col('#9aa4d0')).lerp(col('#6c80c8'), ss(-1, -7, e)); twi.target.position.copy(cam.position); twi.position.copy(cam.position).add(V(Math.sin(sh * D2R) * 100, 32, -Math.cos(sh * D2R) * 100)); }
     hemi.color.copy(col('#a6b4cc')).lerp(col('#6a80bc'), ss(4, -2, e)).lerp(col('#4c62a6'), night); hemi.groundColor.copy(col('#7a5a3a')).lerp(col('#2c2836'), night); hemi.intensity = lerp(.55, .62, ss(3, -3, e));
-    skyU.uUp.value.copy(c.uC || up0); skyU.uSun.value.copy(sunDir); skyU.uE.value = e; skyU.uDip.value = Math.sin(Math.acos(R_E / (R_E + Math.max(0, alt)))); skyU.uSpace.value = space; skyU.uStars.value = ss(-3, -10, e) * (1 - space) * .5 + space * .3;
+    skyU.uUp.value.copy(c.uC || up0); skyU.uSun.value.copy(sunDir); skyU.uE.value = e; skyU.uDip.value = Math.sin(Math.acos(R_E / (R_E + Math.max(0, alt)))); skyU.uSpace.value = space; skyU.uStars.value = ss(-3, -10, e) * (1 - space) * .5 + space * .35;
     skyU.uGlow.value = 0;
     // haze: warm gold by day, violet-blue at the blue hour; thinner as the camera climbs, gone above the air
-    const A = film.atmos, fogDay = col('#d6ad7c', .72), fogDusk = col('#62688e', .3), fogNight = col('#24345e', .22);
+    const A = film.atmos, fogDay = col('#d6ad7c', .72), fogDusk = col('#4a5a88', .28), fogNight = col('#1e2c56', .2);
     const fc = fogDay.clone().lerp(fogDusk, ss(5, -1.5, e)).lerp(fogNight, night); A.color.copy(fc); A.colorUp = fc.clone().multiplyScalar(.9);
     A.density = 9e-4 * lerp(1, .12, ss(120, 2000, alt)) * (1 - ss(6e3, 1.5e4, alt)); A.falloff = alt > 1.5e4 ? 1e-9 : 1.3e-3;
     terrU.uSkyW.value.copy(fc).multiplyScalar(.9 + .4 * (1 - night)); terrU.uDetail.value = 1;
     // the look: exposure rides up into the blue hour so the land never goes black; bloom for the lamps
-    const L = film.look; L.exposure = lerp(1.05, 1.5, ss(3, -5, e)) * lerp(1, .92, space) * lerp(1, .7, ss(7e3, 2.5e4, alt) * (1 - ss(8e4, 4e5, alt))) * lerp(1, 1.18, ss(1e6, 6e6, alt));   // the land→globe blend at 10–60 km is brighter than either: held level
-    film.bloomCfg.strength = lerp(.07, .17, ss(1, -5, e)) * lerp(1, .4, ss(3e5, 3e6, alt)); L.grain = .03;
+    const L = film.look; L.exposure = lerp(1.05, 1.5, ss(3, -5, e)) * lerp(1, .92, space) * lerp(1, 1.55, ss(8e3, 1.5e5, alt)) * lerp(1, 1.12, ss(1e5, 6e5, alt) * (1 - ss(6e6, 2e7, alt)));   // a little more light on the night globe
+    film.bloomCfg.strength = lerp(.07, .17, ss(1, -5, e)) * lerp(1, .3, ss(2e3, 2.5e4, alt)); L.grain = .03;   // (from the air the whole lamp field would bloom into a veil)
     const Df = film.dofCfg; Df.focus = c.focus; Df.aperture = c.aperture; Df.maxCoc = 14;
     // the light along the roads (terrain), the lamps, the world's lines
     const F = front(t), glowOn = ss(T.crane - .2, T.crane + 1.4, t);
-    terrU.uF.value = F; terrU.uGlow.value = glowOn * lerp(.8, 1.3, ss(2, -4, e)) * lerp(1, .3, ss(6e4, 6e5, alt)); terrU.uHeadW.value = Math.max(18, F * .12);
+    terrU.uF.value = F; terrU.uGlow.value = (OFFS.includes("glow") ? 0 : 1) * glowOn * lerp(.8, 1.3, ss(2, -4, e)) * lerp(1, .3, ss(6e4, 6e5, alt)); terrU.uHeadW.value = Math.max(18, F * .12);
     terrU.uFeet.value = .7 * ss(T.crane - .3, T.crane + 1.0, t) * (1 - ss(T.crane + 3.5, T.crane + 7, t));
-        LAMPS.u.uF.value = F; LAMPS.u.uK.value = lerp(.5, 1.15, ss(2, -4, e)); LAMPS.u.uPull.value = alt < 4e4 ? .003 : .0005; LAMPS.u.uScale.value = film.scale;
+        CLAMPS.u.uF.value = F; CLAMPS.u.uK.value = lerp(.5, 1.15, ss(2, -4, e)) * (1 - ss(1100, 3800, alt)); CLAMPS.u.uPull.value = .003; CLAMPS.u.uScale.value = film.scale;
+        JGLOW.u.uF.value = 1; JGLOW.u.uK.value = 0; JGLOW.u.uPull.value = .0005; JGLOW.u.uScale.value = film.scale;
+        LAMPS.u.uF.value = F; LAMPS.u.uK.value = lerp(.5, 1.15, ss(2, -4, e)) * (1 - ss(2.5e5, 1.6e6, alt)); LAMPS.u.uPull.value = alt < 4e4 ? .003 : .0005; LAMPS.u.uScale.value = film.scale;   // (from orbit the lamps would pile into one blob: the globe's own lights take over)
     CITIES.u.uF.value = waveFront(t); CITIES.u.uK.value = 1.2; CITIES.u.uPull.value = .0004; CITIES.u.uScale.value = film.scale;
-    HUBP.u.uF.value = t * 1000; HUBP.u.uK.value = 1.3; HUBP.u.uPull.value = .0004; HUBP.u.uScale.value = film.scale;
-    ARC.u.uT.value = t; ARC.u.uRes.value.set(film.w, film.h); ARC.u.uPx.value = 2.2 * film.scale; ARC.u.uK.value = lerp(1.1, .8, ss(3e6, 1.2e7, alt)); ARC.u.uBandY.value = .44;
+    CDIM.u.uF.value = 1; CDIM.u.uK.value = ss(3e4, 4e5, alt) * 2.0; CDIM.u.uPull.value = .0004; CDIM.u.uScale.value = film.scale;
+    HUBP.u.uF.value = t * 1000; HUBP.u.uK.value = 1.7; HUBP.u.uPull.value = .0004; HUBP.u.uScale.value = film.scale;
+    ARC.u.uT.value = t; ARC.u.uRes.value.set(film.w, film.h); ARC.u.uPx.value = 2.2 * film.scale; ARC.u.uK.value = 1.25; ARC.u.uBandY.value = .38;
     // the globe (only once the camera is high enough for it to show past the terrain) and its air seen from outside
-    GL.mesh.visible = alt > 1500; GL.atm.visible = alt > 6e4; GL.au.uK.value = ss(9e4, 5e5, alt); GL.au.uSun.value.copy(sunDir); GL.u.uSun.value.copy(sunDir);
+    { const op = 1 - ss(700, 2600, alt); CITYMAT.forEach(m => { m.opacity = op; }); CITYOBJ.forEach(o => { o.visible = op > .002; }); }
+    GL.mesh.visible = alt > 1500; GL.atm.visible = alt > 6e4 && !OFFS.includes("atm"); GL.au.uK.value = ss(9e4, 5e5, alt); GL.au.uSun.value.copy(sunDir); GL.u.uSun.value.copy(sunDir);
     GL.u.uHazeL.value = lerp(2.5e5, 8e6, ss(1e4, 2e6, alt));
-    terrU.uGK.value = ss(9e3, 6e4, alt); terrU.uSunW.value.copy(sunDir);
+    terrU.uGK.value = OFFS.includes("gk") ? 0 : ss(1.5e4, 8e4, alt); GL.u.uNM.value = lerp(-.22, 1.2, ss(T.c2 - .9, T.c2 + 1.2, t)); terrU.uSunW.value.copy(sunDir);   // uNM: the night holds over the land as the globe look comes in; then the dawn comes in at the far limb
     // banners, dust
     banU.uT.value = t; banU.uGust.value = Math.exp(-Math.pow((t - T.gust - .8) / 1.1, 2)) * .9;
     dustU.uT.value = t; dustU.uA.value = ss(-1, 3, e) * (1 - ss(T.crane, T.crane + 2, t));
@@ -763,5 +775,6 @@ export async function build(W, H_, B0 = null) {
     if (!T) { T = beats(B); SUNE = sunElev(T); SUNH = sunHead(T); }
     frame(clamp(t, T.a, T.g)); blit(ctx);
   }
-  return { film, draw, beats: () => T, camAt: t => (T ? camAt(t) : null), front: t => (T ? front(t) : 0), people: { king, men } };
+  { const off = (new URLSearchParams(location.search).get('off') || '').split(','); if (off.includes('arc')) ARC.mesh.visible = false; if (off.includes('hub')) HUBP.pts.visible = false; if (off.includes('city')) CITIES.pts.visible = false; if (off.includes('lamp')) LAMPS.pts.visible = false; if (off.includes('atm')) GL.atm.visible = false; OFFS = off; }
+  return { film, draw, beats: () => T, camAt: t => (T ? camAt(t) : null), front: t => (T ? front(t) : 0), people: { king, men }, arcs: ARCS.map(a => [a.w, +a.t0.toFixed(2)]) };
 }

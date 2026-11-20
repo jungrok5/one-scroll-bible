@@ -285,12 +285,12 @@ export async function build(W, H) {
     g.computeBoundingSphere(); const land = new THREE.Mesh(g, groundM); land.receiveShadow = true; land.frustumCulled = false; S.add(land); }
 
   // ---------------------------------------------------------------- the lake: the engine's planar mirror, small waves, the sun's road
-  const waterU = { uT: { value: 0 } };
+  const waterU = { uT: { value: 0 }, uRefl: { value: 1 }, uSpec: { value: 1 }, uDist: { value: 1 } };
   const waterM = new THREE.MeshStandardMaterial({ color: '#2c3c42', roughness: .22, metalness: 0 });
   waterM.onBeforeCompile = sh => { Object.assign(sh.uniforms, mirU, waterU);
     sh.vertexShader = sh.vertexShader.replace('#include <common>', '#include <common>\nvarying vec3 vWW;').replace('#include <project_vertex>', '#include <project_vertex>\nvWW = (modelMatrix * vec4(transformed, 1.)).xyz;');
     sh.fragmentShader = sh.fragmentShader.replace('#include <common>', `#include <common>
-        varying vec3 vWW; uniform sampler2D tMirror, tMirrorBlur; uniform mat4 mirrorMatrix; uniform float uT; vec2 wG;
+        varying vec3 vWW; uniform sampler2D tMirror, tMirrorBlur; uniform mat4 mirrorMatrix; uniform float uT, uRefl, uSpec, uDist; vec2 wG;
         ${hashGLSL}
         // small wind waves: a few directional trains (gradient only), finer far less (no far sparkle)
         vec2 waveG(vec2 p, float t, float det){ vec2 g = vec2(0.);
@@ -305,16 +305,16 @@ export async function build(W, H) {
         { float dist = length(vWW - cameraPosition); float det = 1. - smoothstep(60., 600., dist); wG = waveG(vWW.xz, uT, det);
           vec3 nW = normalize(vec3(-wG.x, 1., -wG.y)); normal = normalize((viewMatrix * vec4(nW, 0.)).xyz); }`)
       .replace('#include <lights_fragment_end>', `#include <lights_fragment_end>
-        { float wv; float lk = lightK(vWW, wv); reflectedLight.directDiffuse *= lk; reflectedLight.directSpecular *= lk * .35; reflectedLight.indirectDiffuse *= mix(.7, 1., lk);
+        { float wv; float lk = lightK(vWW, wv); reflectedLight.directDiffuse *= lk; reflectedLight.directSpecular *= lk * .35 * uSpec; reflectedLight.indirectDiffuse *= mix(.7, 1., lk);
           totalEmissiveRadiance += vec3(1., .78, .52) * .13 * lk * lk + vec3(1., .74, .38) * gPool * .22; }`)
       .replace('#include <opaque_fragment>', `
         { vec4 mp = mirrorMatrix * vec4(vWW, 1.); vec2 muv = mp.xy / mp.w; float dist = length(vWW - cameraPosition);
-          vec2 dd = wG * vec2(.35, 1.) * .55 / (1. + dist * .012);
+          vec2 dd = wG * vec2(.35, 1.) * .55 * uDist / (1. + dist * .012);
           vec3 sharpR = texture2D(tMirror, muv + dd).rgb, blurR = texture2D(tMirrorBlur, muv + dd * 1.6).rgb;
           vec3 Vd = normalize(cameraPosition - vWW); float cosT = clamp(dot(Vd, normalize(vec3(-wG.x, 1., -wG.y))), 0., 1.);
           float fres = .02 + .98 * pow(1. - cosT, 5.);
           vec3 R = mix(sharpR, blurR, .45);
-          outgoingLight = outgoingLight * (1. - fres * .85) + R * mix(.12, 1., fres) * vec3(.96, .97, 1.); }
+          outgoingLight = outgoingLight * (1. - fres * .85 * uRefl) + R * mix(.12, 1., fres) * vec3(.96, .97, 1.) * uRefl; }
         #include <opaque_fragment>`); };
   waterM.customProgramCacheKey = () => 'gl-water';
   lightify(waterM, 'water', { vil: 0 });
@@ -482,8 +482,23 @@ export async function build(W, H) {
     const hm = new THREE.Mesh(hull, M.hull); hm.castShadow = true; boat.add(hm);
     for (const zz of [-1.6, .2, 1.9]) { const b = new THREE.Mesh(K.roundedBox(1.7, .07, .3, .02, 1), M.wood); b.position.set(0, Dp * .82, zz); boat.add(b); }
     { const oar = new THREE.Mesh(new THREE.CylinderGeometry(.028, .028, 3.0, 6), M.wood); oar.rotation.set(.12, 0, 1.38); oar.position.set(.35, Dp * .9, 1.0); boat.add(oar); } }   // one oar shipped along the gunwale
+  // round 5 (owner: "배가 물에 잠긴 게 아니라 허공에 떠 있는 듯"): the hull sits at a real draft (≈ 0.3 m under the surface — the water
+  // plane cuts it, the reflection starts at the waterline) and a waterline decal lies on the surface round it: a dark contact band where
+  // the hull meets the water and small rings spreading from it (moving with the bob), never in the mirror
+  const wakeU = { uT: { value: 0 } };
+  function waterline(L, Wd, seed = 0) {
+    const m = new THREE.ShaderMaterial({ uniforms: { ...wakeU, uSeed: { value: seed }, uL: { value: L }, uW: { value: Wd } }, transparent: true, depthWrite: false,
+      vertexShader: `varying vec2 vP; void main(){ vP = position.xz; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.); }`,
+      fragmentShader: `uniform float uT, uSeed, uL, uW; varying vec2 vP;
+        void main(){ vec2 q = vP / vec2(uW * .5, uL * .5); float d = length(q), e = (d - 1.) * min(uW, uL) * .5;   // metres outside the hull's waterline ellipse
+          float band = exp(-pow(e / .16, 2.)) * .62 + exp(-pow((e + .05) / .06, 2.)) * .35;
+          float rings = (.5 + .5 * sin(e * 11. - uT * 2.2 + uSeed)) * exp(-max(e, 0.) * 1.1) * smoothstep(-.02, .1, e) * .22;
+          float foam = (.5 + .5 * sin(atan(q.y, q.x) * 9. + uT * 1.7 + uSeed)) * exp(-pow(e / .05, 2.)) * .18;
+          if (d < .97) discard;
+          gl_FragColor = vec4(mix(vec3(.05, .05, .06), vec3(.95, .85, .7), foam / max(band + rings + foam, .001)), clamp(band + rings * .6 + foam, 0., .75)); }` });
+    const g = new THREE.PlaneGeometry(Wd * 3.2, L * 1.8, 1, 1); g.rotateX(-Math.PI / 2); const w = new THREE.Mesh(g, m); w.renderOrder = 3; w.layers.set(2); w.frustumCulled = false; S.add(w); return w; }
   const boatP = bshore.clone().addScaledVector(bout, -24); boatP.y = 0;
-  boat.position.copy(boatP); boat.rotation.y = Math.atan2(bal.x, bal.z);
+  boat.position.copy(boatP); boat.rotation.y = Math.atan2(bal.x, bal.z); const boatWL = waterline(6.4, 1.95, 1.3); boatWL.visible = false;
   const KB = king(); boat.add(KB); KB.position.set(0, .62, .3); KB.rotation.y = Math.atan2(bout.x, bout.z) - boat.rotation.y + Math.PI;   // facing the shore (−outward)
   { const r0 = person(rng(3), { kind: 'man', sit: true }); boat.add(r0); r0.position.set(.1, .5, 2.0); r0.rotation.y = KB.rotation.y + .3; r0.userData.sitBoat = true; groups.boatMan = r0; }
   const beachCrowd = [];
@@ -577,8 +592,8 @@ export async function build(W, H) {
   const streetPeople = [];
   { const r = rng(2468), doors = sDoors.filter(d => d.u < 26 && d.u > -30).sort((a, b) => a.u - b.u);
     doors.forEach((d, i) => { if (i % 4 === 3) return; const p = person(r); streetG.add(p); p.userData.door = d; p.userData.mode = 'door'; streetPeople.push(p); });
-    for (const [u, v, kind] of [[9, -1.2, 'man'], [6.5, 1.1, 'woman'], [3, -.4, 'child'], [-2, 1.6, 'man'], [-8, -1.3, 'woman'], [13, .6, 'man'], [-14, .2, 'man']]) {
-      const p = person(r, { kind }); const q = SP(u, v); place(streetG, p, q.x, q.z, face(-SOUT.x, -SOUT.z) + (r() - .5) * .5); p.userData.mode = kind === 'child' ? 'point' : (kind === 'woman' && u > 0 ? 'shade' : 'stand'); p.userData.u = u; streetPeople.push(p); } }
+    for (const [u, v, kind] of [[16.2, -1.55, 'man'], [15.2, 1.2, 'woman'], [14.4, -.25, 'child'], [11, 1.7, 'man'], [7, -1.3, 'woman'], [17.6, .95, 'man'], [2, .3, 'man']]) {   // round 5: the near ones closer (readable)
+      const p = person(r, { kind }); const q = SP(u, v); place(streetG, p, q.x, q.z, face(-SOUT.x, -SOUT.z) + (r() - .5) * .5); p.userData.mode = kind === 'child' ? 'point' : (kind === 'woman' && u > 12 ? 'shade' : 'stand'); p.userData.u = u; streetPeople.push(p); } }
   // the ovens' smoke behind the houses
   const sSmoke = (() => { const r = rng(616), n = 22, src = [[12, -9], [-4, 9.5], [-20, -10], [24, 10]].map(([u, v]) => { const q = SP(u, v); return q.setY(hgt(q.x, q.z) + 2.5); }), pos = new Float32Array(src.length * n * 3), sd = new Float32Array(src.length * n * 2);
     src.forEach((p, j) => { for (let i = 0; i < n; i++) { const k = j * n + i; pos[k * 3] = p.x; pos[k * 3 + 1] = p.y; pos[k * 3 + 2] = p.z; sd[k * 2] = i / n + r() * .03; sd[k * 2 + 1] = r(); } });
@@ -621,7 +636,7 @@ export async function build(W, H) {
     const ng = new THREE.PlaneGeometry(4.2, 1.6, 12, 4), np = ng.attributes.position; for (let k = 0; k < np.count; k++) { const x = np.getX(k), y = np.getY(k); np.setZ(k, .25 * Math.sin(x * 1.3) + (y + .8) * .25); } ng.computeVertexNormals();
     const net = new THREE.Mesh(ng, netM); net.position.set(side * 1.05, .1, 0); net.rotation.set(0, Math.PI / 2, side * .55); b.add(net);
     for (let k = 0; k < 16; k++) { const a = -1.2 + k / 15 * 2.4, fl = new THREE.Mesh(new THREE.SphereGeometry(.045, 8, 6), floatM); fl.scale.y = .5; fl.position.set(side * (1.6 + 4.5 * Math.cos(a) - 4.5 + 3.4), -.01, 4.5 * Math.sin(a)); b.add(fl); }
-    b.userData = { x0: b.position.x, z0: b.position.z, ry, ph: i * 1.7 }; return b; });
+    b.userData = { x0: b.position.x, z0: b.position.z, ry, ph: i * 1.7, wl: waterline(5.0, 1.6, i * 2.1) }; b.userData.wl.visible = false; return b; });
   // the flock: resting on the water in loose rafts along the path and beside it; each bird lifts as the lens comes near, banks away
   // and climbs past the camera (some across the frame, some overhead)
   const birds = []; { const bm = new THREE.MeshBasicMaterial({ color: '#1e1814', side: THREE.DoubleSide }); const r = rng(31);
@@ -660,24 +675,51 @@ export async function build(W, H) {
     for (let i = 0; i < p.count; i++) { const x = p.getX(i), y = p.getY(i), z = p.getZ(i), top = y > .2, n = Math.sin(x * 7.1 + 1.3) * Math.cos(z * 6.3) * .03 + Math.sin(x * 17 + z * 13) * .008;
       p.setXYZ(i, x * (1 + (top ? 0 : .06 * Math.sin(z * 5 + x))), y + (top ? n * .15 : n), z * (1 + (top ? 0 : .05 * Math.cos(x * 4)))); }
     g.computeVertexNormals(); g.computeBoundingBox(); const stone = new THREE.Mesh(g, M.stone); stone.position.copy(SC).add(V(0, .56 - g.boundingBox.max.y, 0)); stone.rotation.y = .1; stone.castShadow = stone.receiveShadow = true; S.add(stone); }
-  { const tw = 1024, th = 256, c = document.createElement('canvas'); c.width = tw; c.height = th; const g = c.getContext('2d'), r = rng(61);
-    const gr = g.createLinearGradient(0, 0, 0, th); gr.addColorStop(0, '#d9c49a'); gr.addColorStop(.5, '#e6d4ae'); gr.addColorStop(1, '#cfb88c'); g.fillStyle = gr; g.fillRect(0, 0, tw, th);
-    for (let i = 0; i < 900; i++) { g.fillStyle = `rgba(${120 + r() * 60 | 0},${90 + r() * 40 | 0},${60 + r() * 20 | 0},${.04 + r() * .05})`; g.beginPath(); g.ellipse(r() * tw, r() * th, 4 + r() * 22, 2 + r() * 8, r() * 3, 0, 6.283); g.fill(); }
-    // round 2 (no text in the art): no glyph rows — only soft, blurred bands of ink like faded writing seen out of focus, columns of
-    // grey-brown haze; the "same word" moments are points of gold light that kindle along the bands (luminous-score's soft rise and
-    // held glow), with a faint warm sheen flowing along the parchment between them
-    const mk = []; g.filter = 'blur(3.2px)';
-    for (let col = 0; col < 3; col++) { const x0 = 72 + col * 310, x1 = x0 + 246; for (let row = 0; row < 11; row++) { const y = 31 + row * 19.5; let x = x0;
-        while (x < x1) { const wd = 18 + r() * 40; g.fillStyle = `rgba(${58 + r() * 14 | 0},${42 + r() * 8 | 0},${30 + r() * 6 | 0},${.18 + r() * .14})`;
-          g.beginPath(); g.ellipse(x + wd / 2, y - 1.5, wd / 2, 2.6 + r() * 1.2, 0, 0, 6.283); g.fill(); if (r() < .1 && mk.length < 24) mk.push([x + wd / 2, y - 1.5]); x += wd + 8; } } }
-    g.filter = 'none';
+  { const tw = 2048, th = 512, c = document.createElement('canvas'); c.width = tw; c.height = th; const g = c.getContext('2d'), r = rng(61);
+    // round 5 (owner: "성경이 흐릿한데 의도야?"): the scroll in focus. Parchment: warm skin with fibres running along the sheet, darker
+    // edges and worn stains; writing: columns of brush strokes in a manuscript rhythm (square-script-like thick verticals and roofs,
+    // thin hairlines, hooks and dots, word gaps) — strokes, never letters of any real script; sharp, with the ink a little sunk into
+    // the skin. A bump map from the same fibres gives the sheet relief under the raking light.
+    const bc = document.createElement('canvas'); bc.width = tw; bc.height = th; const bg = bc.getContext('2d'); bg.fillStyle = '#808080'; bg.fillRect(0, 0, tw, th);
+    const gr = g.createLinearGradient(0, 0, 0, th); gr.addColorStop(0, '#cdb487'); gr.addColorStop(.12, '#ddc79c'); gr.addColorStop(.5, '#e4d0a8'); gr.addColorStop(.88, '#d8c196'); gr.addColorStop(1, '#bfa478'); g.fillStyle = gr; g.fillRect(0, 0, tw, th);
+    for (let i = 0; i < 1400; i++) { const x = r() * tw, y = r() * th, a = .03 + r() * .05; g.fillStyle = r() < .5 ? `rgba(120,88,52,${a})` : `rgba(250,236,206,${a})`; g.beginPath(); g.ellipse(x, y, 6 + r() * 40, 2 + r() * 10, (r() - .5) * .3, 0, 6.283); g.fill(); }
+    for (let i = 0; i < 2600; i++) { const x = r() * tw, y = r() * th, L = 20 + r() * 120, a = .05 + r() * .08, lt = r() < .5;   // fibres along the sheet
+      g.strokeStyle = lt ? `rgba(248,234,204,${a})` : `rgba(110,80,48,${a})`; g.lineWidth = .6 + r() * .8; g.beginPath(); g.moveTo(x, y); g.quadraticCurveTo(x + L / 2, y + (r() - .5) * 4, x + L, y + (r() - .5) * 6); g.stroke();
+      bg.strokeStyle = lt ? `rgba(200,200,200,${a * 4})` : `rgba(60,60,60,${a * 4})`; bg.lineWidth = 1; bg.beginPath(); bg.moveTo(x, y); bg.lineTo(x + L, y + (r() - .5) * 5); bg.stroke(); }
+    { const eg = g.createLinearGradient(0, 0, tw, 0); eg.addColorStop(0, 'rgba(90,62,34,.35)'); eg.addColorStop(.04, 'rgba(90,62,34,0)'); eg.addColorStop(.96, 'rgba(90,62,34,0)'); eg.addColorStop(1, 'rgba(90,62,34,.35)'); g.fillStyle = eg; g.fillRect(0, 0, tw, th); }
+    // the ruled guide lines (faint), then the strokes
+    const mk = [], ink = () => `rgba(${38 + r() * 12 | 0},${24 + r() * 8 | 0},${16 + r() * 6 | 0},${.82 + r() * .14})`;
+    g.lineCap = 'round'; g.lineJoin = 'round';
+    for (let col = 0; col < 3; col++) { const x0 = 150 + col * 620, x1 = x0 + 500;
+      for (let row = 0; row < 12; row++) { const y = 62 + row * 34; g.strokeStyle = 'rgba(120,92,60,.12)'; g.lineWidth = 1; g.beginPath(); g.moveTo(x0 - 10, y - 12); g.lineTo(x1 + 10, y - 12); g.stroke();
+        let x = x1;   // right to left, as a Hebrew column runs
+        while (x > x0) { const nG = 2 + (r() * 5 | 0), wx = x;
+          // round 5c: a broad-nib hand in the rhythm of a square-script scroll — heavy roofs that overhang their stem a little, stems that
+          // curve, an ascender rising over the line now and then, a long stem dropping under it, a three-pronged form on a heavy base, small
+          // high commas; tight spacing so a word reads as one rhythm. Strokes only — no letter of any real alphabet is drawn as such.
+          for (let k = 0; k < nG && x > x0; k++) { const w = 8 + r() * 8, h = 15 + r() * 4, kind = r(), c = ink(); g.fillStyle = c; g.strokeStyle = c; g.lineCap = 'round';
+            const nib = (xa, ya, xb, yb, wd) => { g.beginPath(); g.moveTo(xa, ya - wd * .25); g.lineTo(xb, yb - wd * .55); g.lineTo(xb + .5, yb + wd * .45); g.lineTo(xa + .3, ya + wd * .3); g.closePath(); g.fill(); };
+            const crv = (xa, ya, xb, yb, wd, bend = .8) => { g.lineWidth = wd; g.beginPath(); g.moveTo(xa, ya); g.quadraticCurveTo((xa + xb) / 2 + bend, (ya + yb) / 2, xb, yb); g.stroke(); };
+            const top = y - h + (r() - .5) * 1.2, R = x - 2;   // R: where the right stem comes down (the roof runs on past it)
+            if (kind < .26) { nib(x - w, top + .5, x, top - .5, 3.6); crv(R, top + 1, R - .6, y, 2); }
+            else if (kind < .4) { nib(x - w, top + .5, x, top - .5, 3.4); crv(R, top + 1, R - .4, y, 2); crv(x - w + 1.5, top + 4.5, x - w + 1.2, y, 1.3, .3); }
+            else if (kind < .52) { nib(x - w, top + .5, x - 1, top - .4, 3.2); crv(R - .5, top + 1, R - 1, y - 2, 1.9, 1.2); nib(R, y - 1, x - w - 2, y - .4, 3.4); }
+            else if (kind < .6) { crv(x - 1, top - 8, x - 2.5, top + 1, 1.5, -.5); nib(x - w * .9, top + .5, x - 1.5, top, 3.2); crv(x - 2.5, top + 1.5, x - w * .6, y - 3, 1.8, 3); }
+            else if (kind < .68) { nib(x - w * .8, top + .5, x, top - .3, 3.2); crv(R, top + 1, R - 1, y + 7, 1.8); }
+            else if (kind < .79) { nib(x - 1, y - 1, x - w - 1, y - .2, 3.6); for (const f of [.15, .5, .85]) crv(x - w * f - .5, y - 2, x - w * f + (f - .5) * 3, top + 1.5 + r() * 2, 1.4, .4); }
+            else if (kind < .88) { nib(x - 5, top + 1.5, x, top + .6, 3.6); crv(x - 1, top + 2, x - 2.2, top + 7, 1.6); x += w - 6; }
+            else { nib(x - w, top + .5, x - .5, top - .4, 3.2); g.lineWidth = 2; g.beginPath(); g.moveTo(x - 1.5, top + 1); g.bezierCurveTo(x + .5, y - 1, x - w * .9, y + 1, x - w + .5, top + h * .45); g.stroke(); }
+            if (r() < .08) { g.beginPath(); g.moveTo(x - w * .35, top - 1.5); g.lineTo(x - w * .27, top - 5.5); g.lineTo(x - w * .2, top - 1.5); g.closePath(); g.fill(); }   // a small crown tick
+            x -= w + 1.5 + r() * 1.5; }
+          if (r() < .09 && mk.length < 24) mk.push([(wx + x) / 2, y - 9]);
+          x -= 11 + r() * 7; } } }
     // the marks' map: a small soft point per mark — its order in green, its brightness in red
     const mc = document.createElement('canvas'); mc.width = tw; mc.height = th; const mg = mc.getContext('2d'); mg.fillStyle = '#000'; mg.fillRect(0, 0, tw, th);
     const order = mk.map((_, i) => i).sort(() => r() - .5);
-    mk.forEach(([x, y], i) => { const o = (order[i] + .5) / mk.length, gg = mg.createRadialGradient(x, y, 0, x, y, 9); gg.addColorStop(0, `rgb(255,${o * 255 | 0},0)`); gg.addColorStop(.35, `rgb(120,${o * 255 | 0},0)`); gg.addColorStop(1, `rgb(0,${o * 255 | 0},0)`); mg.fillStyle = gg; mg.fillRect(x - 9, y - 9, 18, 18); });
+    mk.forEach(([x, y], i) => { const o = (order[i] + .5) / mk.length, gg = mg.createRadialGradient(x, y, 0, x, y, 24); gg.addColorStop(0, `rgb(255,${o * 255 | 0},0)`); gg.addColorStop(.3, `rgb(130,${o * 255 | 0},0)`); gg.addColorStop(1, `rgb(0,${o * 255 | 0},0)`); mg.fillStyle = gg; mg.fillRect(x - 24, y - 24, 48, 48); });
     markU.uN.value = mk.length;
-    const tex = new THREE.CanvasTexture(c); tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = 8; const mtex = new THREE.CanvasTexture(mc); mtex.anisotropy = 8;
-    const pm = new THREE.MeshStandardMaterial({ map: tex, roughness: .85, side: THREE.DoubleSide });
+    const tex = new THREE.CanvasTexture(c); tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = 16; const mtex = new THREE.CanvasTexture(mc); mtex.anisotropy = 8; const btex = new THREE.CanvasTexture(bc); btex.anisotropy = 8;
+    const pm = new THREE.MeshStandardMaterial({ map: tex, bumpMap: btex, bumpScale: 1.2, roughness: .82, side: THREE.DoubleSide });
     pm.onBeforeCompile = sh => { Object.assign(sh.uniforms, markU); sh.uniforms.tMarks = { value: mtex };
       sh.fragmentShader = sh.fragmentShader.replace('#include <common>', '#include <common>\nuniform sampler2D tMarks; uniform float uK, uN;')
         .replace('#include <emissivemap_fragment>', `#include <emissivemap_fragment>
@@ -795,10 +837,10 @@ export async function build(W, H) {
   function stageReset() {}
   function stage(shot, t) {   // poses, light field, camera — everything but the render
     const Lk = film.look, D = film.dofCfg, [a, b] = T.shots[shot], k = clamp((t - a) / (b - a));
-    for (const p of hillCrowd) p.visible = true; fishers.visible = false; vwGroup.visible = false; film.cloud = null; OV.flare = 0; OV.point = 0; OV.halos = null; OV.tear = 0; OV.glow = 0; OV.rays = 0; smoke.visible = false; streetG.visible = false; OV.jag = false;
+    for (const p of hillCrowd) p.visible = true; fishers.visible = false; vwGroup.visible = false; film.cloud = null; OV.flare = 0; OV.point = 0; OV.halos = null; OV.tear = 0; OV.glow = 0; OV.rays = 0; smoke.visible = false; streetG.visible = false; OV.jag = false; OV.topDark = 0; boatWL.visible = false; FB.forEach(b => b.userData.wl.visible = false);
     LU.uFrontS.value = 1; LU.uSweep.value.set(0, 0); SK.sunHide.value = 0; SK.domeK.value = 1;
     LU.uFront.value.set(-1e5, 40, 20, 1); LU.uDim.value = 1; LU.uPool.value.set(0, 0, 0, 0); LU.uVil.value.forEach(v => v.w = 0); VILL.forEach(v => v.lamp.power = 0);
-    SK.sunDir.value.copy(SUN); SK.cover.value = 0; SK.clouds.value = .22; SK.pointK.value = 0; SK.gapK.value = 0; shaftU.uK.value = 0; markU.uK.value = 0; mistU.uK.value = 1; dustU.uA.value = 0;
+    waterU.uRefl.value = 1; waterU.uSpec.value = 1; waterU.uDist.value = 1; SK.sunDir.value.copy(SUN); SK.cover.value = 0; SK.clouds.value = .22; SK.pointK.value = 0; SK.gapK.value = 0; shaftU.uK.value = 0; markU.uK.value = 0; mistU.uK.value = 1; dustU.uA.value = 0;
     birds.forEach(bd => bd.visible = false); Lk.exposure = 1; Lk.contrast = 1.06; D.aperture = .5; D.maxCoc = 20; sunLamp.power = 2400; palette(.5);
     if (shot === 0) {   // S1: the hook — skimming the blue mist, boats and nets beside the lens, birds bursting off the water, the sun breaking
       vis('hill'); poseHill(t); for (const p of hillCrowd) p.visible = false; fishers.visible = true; shadowAt(V(KH.position.x, 0, S1Z(170)), 70);
@@ -810,7 +852,7 @@ export async function build(W, H) {
       const pos = V(x, y, z), look = V(KH.position.x, lerp(1.2, KH.position.y + 2.5, ss(.55, 1, u)), z - 120);
       setCam(pos, look, -.035 * Math.sin(u * 3.1 + .5)); D.focus = 14; D.aperture = .5; D.maxCoc = 14; Lk.exposure = 1.05;
       // the boats rock and drift a little; the fishermen haul at their nets
-      for (const bt of FB) { const U = bt.userData; bt.position.set(U.x0 + .3 * Math.sin(t * .2 + U.ph), .04 * Math.sin(t * 1.2 + U.ph), U.z0); bt.rotation.set(.02 * Math.sin(t * .9 + U.ph), U.ry + .03 * Math.sin(t * .3 + U.ph), .035 * Math.sin(t * 1.1 + U.ph));
+      for (const bt of FB) { const U = bt.userData; bt.position.set(U.x0 + .3 * Math.sin(t * .2 + U.ph), -.46 + .03 * Math.sin(t * 1.2 + U.ph), U.z0); U.wl.visible = true; U.wl.position.set(bt.position.x, .012, bt.position.z); U.wl.rotation.y = U.ry + .03 * Math.sin(t * .3 + U.ph); wakeU.uT.value = t; bt.rotation.set(.02 * Math.sin(t * .9 + U.ph), U.ry + .03 * Math.sin(t * .3 + U.ph), .035 * Math.sin(t * 1.1 + U.ph));
         const f = bt.children.find(o => o.userData && o.userData.fisher), s = f.userData.s, h = .5 + .5 * Math.sin(t * 1.4 + U.ph);
         P.pose(f, { breath: P.breath(t, U.ph), lean: -.18 - .12 * h, twist: .1 * Math.sin(t * .7 + U.ph), head: [-.25, 0], hands: [V(-.15 * s, (.42 + .1 * h) * s, -.44 * s), V(.15 * s, (.42 + .1 * h) * s, -.44 * s)] }); }
       for (const bd of birds) { const U = bd.userData; bd.visible = true; const tl = (S1Z(222) - (U.z + 16)) / v0 + U.dl * .5, tau = Math.max(0, t - tl);
@@ -819,7 +861,7 @@ export async function build(W, H) {
     } else if (shot === 1) {   // S2: behind him (west of the crest), looking into the sunrise: he is a small dark figure against it, the crowd rim-lit
       vis('hill'); poseHill(t); shadowAt(V(KH.position.x, 0, KH.position.z - 26), 60); palette(lerp(.33, .43, k));
       const e = sine(k), az = lerp(-16, 16, e) * D2R, R0 = 25, c = KH.position, pos = V(c.x + Math.sin(az) * R0, c.y + lerp(4.4, 5.2, e), c.z + Math.cos(az) * R0);
-      const [yw, pt] = lookAtY(pos, c.clone().add(V(0, .9, 0)), .56); aim(pos, yw, pt); D.focus = pos.distanceTo(c); D.aperture = .6; Lk.exposure = .95;
+      const [yw, pt] = lookAtY(pos, c.clone().add(V(0, .9, 0)), .56); aim(pos, yw, pt); D.focus = pos.distanceTo(c); D.aperture = .6; Lk.exposure = .93; Lk.contrast = 1.14;   // round 5: more bite against the sunrise
     } else if (shot === 2) {   // S3: high on the hill, looking west over the slope and the lake: the morning light comes across the water toward us
       vis('hill'); poseHill(t); shadowAt(V(KH.position.x, 0, KH.position.z + 60), 90);
       const fk = sine((t - T.front[0]) / (T.front[1] - T.front[0])); palette(lerp(.42, .6, fk)); LU.uFront.value.set(lerp(-700, -1960, fk), 60, 22, .42);
@@ -827,7 +869,8 @@ export async function build(W, H) {
       aim(pos, yw, pt); D.focus = 200; D.aperture = .1; Lk.exposure = 1.0;
     } else if (shot === 3) {   // S4: low over the water behind the boat
       vis('beach'); poseBeach(t); shadowAt(V(boatP.x, 0, boatP.z - 10), 45); palette(lerp(.6, .66, k));
-      boat.rotation.z = .03 * Math.sin(t * .9); boat.rotation.x = .015 * Math.sin(t * .7 + 1); boat.position.y = .05 * Math.sin(t * 1.1);
+      boat.rotation.z = .025 * Math.sin(t * .9); boat.rotation.x = .012 * Math.sin(t * .7 + 1); boat.position.y = -.56 + .035 * Math.sin(t * 1.1);   // the draft: the keel never shows
+      boatWL.visible = true; waterU.uDist.value = .3; boatWL.position.set(boat.position.x, .012, boat.position.z); boatWL.rotation.y = boat.rotation.y; wakeU.uT.value = t;
       const back = V(0, 0, 1), side = V(1, 0, 0), e = sine(k);   // west of the boat on the sun's line: the boat, the beach, the sun behind
       const pos = boatP.clone().addScaledVector(back, lerp(34, 25, e)).addScaledVector(side, lerp(2.6, 1.2, e)); pos.y = 1.9 + .06 * Math.sin(t * .8);
       const look = boatP.clone().addScaledVector(back, -60).addScaledVector(side, .3); look.y = 2.6;
@@ -860,7 +903,7 @@ export async function build(W, H) {
     const ck = eio((t - T.crane[0]) / (T.crane[1] - T.crane[0]));
     if (t < T.crane[0]) { const g = sine((t - T.n07 + .35) / (T.crane[0] - T.n07 + .35)); pos = lv(S5.start, S5.glide, g);
       const fc = scroll.position.clone().add(V(.05 + .12 * g, 0, 0)); [yaw, pitch] = lookAtY(pos, fc, .43);
-      shadowAt(V(SC.x, 0, SC.z), 30); D.focus = pos.distanceTo(fc); D.aperture = .45; D.maxCoc = 10;
+      shadowAt(V(SC.x, 0, SC.z), 30); D.focus = pos.distanceTo(fc); D.aperture = .1; D.maxCoc = 4;
       const mk = clamp((t - T.marks[0]) / (T.marks[1] - T.marks[0])); markU.uK.value = mk * mk * .35 + mk * .65; }
     else { markU.uK.value = 1;
       // crane up: log altitude, ease-in-out, back inland while rising; the view tilts from the scroll to the sun
@@ -879,12 +922,13 @@ export async function build(W, H) {
         const [ye, pe] = lookAtY(S5.end, S5.look, .6), r = sine(dk);
         yaw = lerp(yu + .025, ye, r) + .006 * Math.sin(hold * .5); pitch = lerp(pu + .012, pe, r); }
       if (t < T.crane[1]) shadowAt(V(SC.x, 0, SC.z), 30); else shadowAt(V(VW.c.x, 0, VW.c.z - 40), 170);   // the box changes only when the scroll is a speck
-      D.focus = Math.max(1, pos.distanceTo(scroll.position)); D.aperture = lerp(.45, .02, Math.sqrt(ck)); D.maxCoc = 10; }
+      D.focus = Math.max(1, pos.distanceTo(scroll.position)); D.aperture = lerp(.1, .02, Math.sqrt(ck)); D.maxCoc = lerp(4, 10, ck); }
     aim(pos, yaw, pitch);
     const dim = ss(T.dim[0], T.dim[1], t), clear = ss(T.clear[0], T.clear[1], t), sw = sine((t - T.pool[0]) / (T.pool[1] - T.pool[0])), swOn = ss(T.pool[0], T.pool[0] + .8, t);
     // one sky: the heavy, soft cloud deck (raymarched, big billows) hides the sun; the dome's thin clouds fade out under it (no fish scales)
     if (dim > 0) { film.cloud = CLOUD; CLOUD.density = .07 * dim * (1 - clear * .75); CLOUD.cover = lerp(.34, .6, clear); CLOUD.scale = .0011; CLOUD.steps = 30; CLOUD.wind.set(.028, .004, .012); CLOUD.litTop.copy(SK.cloudColor.value).multiplyScalar(.75 + .5 * clear); }
     // (the deck drifts and boils slowly — never a held frame)
+    waterU.uRefl.value = lerp(1, .3, dim * (1 - clear)); waterU.uSpec.value = 1 - .97 * dim * (1 - ss(T.pool[0] + .8, T.pool[1] + 1, t));   // round 5: no sun-glint column under the cloud   // under the cloud the lake is dull: no bright streak from the horizon's glow
     SK.domeK.value = 1 - dim * (1 - clear * .5); SK.sunHide.value = dim * (1 - clear * .7); SK.pointK.value = 0; SK.gapK.value = 0; SK.cover.value = 0;
     // the land under the cloud (cool shade), then the morning light sweeps over it from the lake in a wave with a soft feathered front;
     // the lit side carries the light from above (warm, on everything that faces the sky); the lake flashes gold behind the front
@@ -901,7 +945,8 @@ export async function build(W, H) {
     sunL.intensity *= lerp(1, .18, dim * (1 - swOn)) * lerp(1, 1.25, sw * swOn);   // no direct sun (no glints) under the cloud; a strong low sun once it pours out
     // the tear in the cloud: a bright rift (overlay), brightening through N09c and opening wide as the shafts come
     OV.tear = ss(T.point[0], T.point[1], t) * (1 - ss(T.pool[1], T.pool[1] + 2.5, t) * .6); OV.tearOpen = ss(T.beam[0] - .3, T.beam[0] + 1.6, t); OV.tearPos = S5.TOPP;
-    OV.rays = OV.tear * (.25 + .5 * OV.tearOpen);
+    // round 5: no drawn rift (it read as a white sticker) — the same broad soft warmth as the street's sky, the shafts out of it
+    OV.glow = OV.tear * (.55 + .45 * OV.tearOpen); OV.glowPos = S5.TOPP; OV.tear = 0; OV.rays = OV.glow * (.3 + .5 * OV.tearOpen);
     // the village: people lift their heads as the light reaches them; smoke rises from the courtyard ovens
     if (t > T.n09c) { vwGroup.visible = true; smoke.visible = true; smokeU.uT.value = t; smokeU.uL.value = swOn;
       const f = LU.uFront.value.x;
@@ -921,7 +966,7 @@ export async function build(W, H) {
     const tw = Math.min(t, T.craneC[0] + 2) - T.n08, walkPos = K0.clone().addScaledVector(headC, Math.max(0, tw) * .32);
     const base = walkPos.clone().addScaledVector(headC, -36).addScaledVector(out, 2.5);
     const yawH = yawOf(headC), yawSun = yawOf(SKY_SUN());
-    const h = logLerp(6.4, 160, ck), back = 60 * ck;
+    const h = logLerp(6.4, 95, ck), back = 60 * ck;   // round 5: lower (the beacon villages stay in frame at 104–108)
     const pos = base.clone().addScaledVector(headC, -back).addScaledVector(out, -18 * ck); pos.y = hgt(base.x, base.z) + h;
     const yaw = yawH + (yawSun - yawH) * Math.max(ck * .5, pk);
     const [, pK] = lookAtY(pos, KS.position.clone().add(V(0, .9, 0)), .47);
@@ -962,7 +1007,7 @@ export async function build(W, H) {
         P.pose(p, { ...id, feet, bob: lerp(id.bob, w.bob, v), swing: [lerp(id.swing[0], w.swing[0], v), lerp(id.swing[1], w.swing[1], v)], head: [lerp(-.05, .42, lift), lerp(0, -.35, lift * (1 - turn))] });
         if (!PS.streetDoor) PS.streetDoor = p; continue; }
       const tr = (U.tr ??= tReach(p.position.z) + U.ph * .6), lift = ss(tr, tr + 1.6, t), id = P.idle(t, U.ph, { s });
-      if (U.mode === 'point') { P.pose(p, { ...id, head: [lerp(.05, .55, lift), 0], hands: [null, V(.16 * s, 1.95 * s, -.32 * s)], handsW: [0, ss(tr + .4, tr + 1.8, t)] }); PS.streetChild = p; continue; }
+      if (U.mode === 'point') { P.pose(p, { ...id, head: [lerp(.05, .55, lift), 0], hands: [null, V(.3 * s, 1.88 * s, -.26 * s)], handsW: [0, ss(tr + .4, tr + 2.6, t)] }); PS.streetChild = p; continue; }
       if (U.mode === 'shade') { P.pose(p, { ...id, head: [lerp(0, .3, lift), 0], hands: [null, V(.2 * s, 1.5 * s, -.12 * s)], handsW: [0, ss(tr + .3, tr + 1.7, t)] }); PS.streetShade = p; continue; }
       P.pose(p, { ...id, head: [lerp(-.04, .4, lift), .05 * Math.sin(t * .3 + U.ph * 6)], lean: lerp(0, .04, lift) }); } }
   function shotStreet(t) {
@@ -974,7 +1019,7 @@ export async function build(W, H) {
     const sw = sine((t - T.ssweep[0]) / (T.ssweep[1] - T.ssweep[0])), on = ss(T.ssweep[0], T.ssweep[0] + .7, t);
     LU.uFrontS.value = -1; LU.uFront.value.set(sFront(t), 9, 0, .3); LU.uSweep.value.set(.22 * on, .7 * on * (1 - ss(T.ssweep[1] - .2, T.ssweep[1] + 1.6, t))); LU.uDim.value = 1;
     sDustU.uF.value = sFront(t); sDustU.uW.value = 9; sDustU.uT.value = t;
-    palette(lerp(.45, 1, sw * on)); film.cloud = CLOUD; CLOUD.density = .07 * (1 - .78 * sw); CLOUD.cover = lerp(.34, .58, sw); CLOUD.scale = .0011; CLOUD.steps = 30; CLOUD.wind.set(.028, .004, .012);
+    palette(lerp(.45, 1, sw * on)); film.cloud = CLOUD; CLOUD.density = .075 * (1 - .5 * sw); CLOUD.cover = lerp(.34, .5, sw); CLOUD.scale = .0011; CLOUD.steps = 30; CLOUD.wind.set(.028, .004, .012);
     CLOUD.litTop.copy(SK.cloudColor.value).multiplyScalar(.8 + .4 * sw);
     SK.domeK.value = 0; SK.sunHide.value = 1; SK.cover.value = 0;
     sunL.intensity *= lerp(.4, 1.35, sw * on); hemi.intensity *= lerp(1, .62, sw * on); film.atmos.density *= lerp(1, .7, sw * on);
@@ -983,7 +1028,8 @@ export async function build(W, H) {
     // round 5: no drawn tear — the cloud deck itself thins over the lake and the sky low over the water brightens warmly; soft rays fan
     // down into the street from that brightness (no shape, nothing that reads as an object)
     OV.tear = 0; OV.glow = ss(T.stear[0], T.ssweep[0] + 1.8, t); OV.glowPos = SE0.clone().add(V(0, 70, -900)).addScaledVector(SAL, 20);
-    OV.rays = OV.glow * (.25 + .4 * ss(T.ssweep[0] - .4, T.ssweep[0] + 1.8, t)) * (1 - .3 * ss(T.spush[1], T.spush[1] + 2, t));
+    OV.rays = OV.glow * (.4 + .6 * ss(T.ssweep[0] - .4, T.ssweep[0] + 1.8, t)) * (1 - .15 * ss(T.spush[1], T.spush[1] + 2, t));
+    OV.topDark = .42 * ss(T.ssweep[0] - .5, T.ssweep[1], t);   // round 5: the upper sky stays heavy (no washed white top)
     setShaft(SE0.clone().add(V(0, 500, -1100)).addScaledVector(SAL, 30), SE0.clone().add(V(0, 0, -10)), 60, 120); shaftU.uK.value = .75 * OV.tearOpen; shaftU.uTip.value = ss(T.ssweep[0] - .5, T.ssweep[0] + 1.2, t);
     smokeU.uT.value = t; smokeU.uL.value = sw * on; mistU.uK.value = 0;
   }
@@ -1012,7 +1058,7 @@ export async function build(W, H) {
   function sunScreen() { tmpV.copy(cam.position).addScaledVector(SKY_SUN(), 1500).project(cam); return tmpV.z < 1 ? [(tmpV.x + 1) / 2, (1 - tmpV.y) / 2] : null; }
   const proj = p => { tmpV.copy(p).project(cam); if (tmpV.z >= 1 || tmpV.z <= -1) return null; return [(tmpV.x + 1) / 2 * W, (1 - tmpV.y) / 2 * H, cam.position.distanceTo(p)]; };
   // what the lens adds after the frame (round 2), measured with each shot's own camera right after its render
-  function overlayInfo(t) { const o = { flare: OV.flare, sun: sunScreen(), point: 0, halos: [] };
+  function overlayInfo(t) { const o = { flare: OV.flare, sun: sunScreen(), point: 0, halos: [], topDark: OV.topDark || 0 };
     if (OV.point > .01 && OV.pointPos) { const q = proj(OV.pointPos); if (q) { o.point = OV.point; o.pp = q; } }
     if (OV.glow > .01 && OV.glowPos) { const q = proj(OV.glowPos); if (q) { o.glow = OV.glow; o.gp = q; o.rays = OV.rays; } }
     if (OV.tear > .01 && OV.tearPos) { const q = proj(OV.tearPos); if (q) { o.tear = OV.tear; o.tearOpen = OV.tearOpen; o.tp = q; o.rays = OV.rays; o.jag = OV.jag; } }
@@ -1033,7 +1079,7 @@ export async function build(W, H) {
     const dx = W / 2 - sx, dy = H / 2 - sy;
     for (const [kk, r, col2, a] of [[.55, 46, '150,190,255', .16], [1.15, 110, '255,190,130', .1], [1.6, 36, '190,255,220', .14], [2.05, 170, '140,170,255', .07]]) {
       const gx = sx + dx * kk * 2, gy = sy + dy * kk * 2, gr = r * 1.2, gg = ctx.createRadialGradient(gx, gy, gr * .55, gx, gy, gr);
-      gg.addColorStop(0, `rgba(${col2},${a * I * .2})`); gg.addColorStop(.85, `rgba(${col2},${a * I * .5})`); gg.addColorStop(1, `rgba(${col2},0)`); ctx.fillStyle = gg; ctx.beginPath(); ctx.arc(gx, gy, gr, 0, 6.283); ctx.fill(); }
+      gg.addColorStop(0, `rgba(${col2},${a * I * .08})`); gg.addColorStop(.85, `rgba(${col2},${a * I * .22})`); gg.addColorStop(1, `rgba(${col2},0)`); ctx.fillStyle = gg; ctx.beginPath(); ctx.arc(gx, gy, gr, 0, 6.283); ctx.fill(); }
     ctx.restore(); }
   // the tear in the cloud (round 3): not a disc — a ragged rift of light along the cloud's grain, brightest at its heart, widening as it
   // opens; drawn under the frame's own scatter so the shafts (godRays) come out of it
@@ -1097,6 +1143,10 @@ export async function build(W, H) {
     else if (o0.tear && o0.tp) godRays(ctx, o0.tp[0], o0.tp[1], o0.rays * (1 - k1) * 1.1);   // the shafts out of the tear
     else { const inF = o => o && o.sun && SK.sunHide.value < .5 && Math.abs(o.sun[0] - .5) < .8 && Math.abs(o.sun[1] - .5) < .8, gk = (inF(o0) ? 1 - k1 : 0) + (inF(o1) ? k1 : 0), gs = inF(o1) && (k1 > .5 || !inF(o0)) ? o1.sun : o0.sun;
       if (gk > .01 && gs) godRays(ctx, gs[0] * W, gs[1] * H, gk * (on[0] === 4 ? .32 : .42)); }
+    for (const [o, kk] of [[o0, 1 - k1], [o1, k1]]) if (o && o.topDark && kk > .01) {   // the heavy upper sky (multiply, a soft gradient from the top)
+      ctx.save(); ctx.globalCompositeOperation = 'multiply'; const g = ctx.createLinearGradient(0, 0, 0, H * .42), a = o.topDark * kk;
+      g.addColorStop(0, `rgba(${255 - 150 * a | 0},${255 - 160 * a | 0},${255 - 150 * a | 0},1)`); g.addColorStop(.55, `rgba(${255 - 60 * a | 0},${255 - 66 * a | 0},${255 - 62 * a | 0},1)`); g.addColorStop(1, 'rgba(255,255,255,1)');
+      ctx.fillStyle = g; ctx.fillRect(0, 0, W, H * .42); ctx.restore(); }
     drawOverlay(ctx, o0, t, 1 - k1); if (o1) drawOverlay(ctx, o1, t, k1);
   }
   // the body check: the joints of the named figures after the last pose (root frame of each figure)

@@ -133,9 +133,12 @@ export async function build(W, H, opts = {}) {
   // of him, the robe pooled unevenly on the floor), a mantle across the back on a diagonal, a head cloth, given volume by the window's
   // light (OIL.relief from the upper left: the left edges catch the light, the right side turns away) and laid in with vermeer strokes.
   // local units: 1 = the kneeling height; origin at the middle of his knees on the floor; y up is negative. Seen from behind.
-  const OUT = [[-.31, 0], [-.3, -.085], [-.258, -.2], [-.214, -.325], [-.236, -.405], [-.244, -.5], [-.226, -.59], [-.196, -.655], [-.14, -.684], [-.094, -.697],
-    [-.088, -.748], [-.068, -.8], [-.03, -.832], [.014, -.836], [.057, -.82], [.086, -.778], [.097, -.728], [.136, -.706], [.192, -.69], [.228, -.638],
-    [.244, -.556], [.252, -.458], [.226, -.36], [.262, -.222], [.302, -.1], [.334, .004], [.2, .018], [.06, .01], [-.1, .02], [-.22, .012]];
+  // round 5 (owner: refine the drape and the posture): narrower lower body (he sits back on his heels — not a bell), the waist drawn in,
+  // elbows out at his sides, the bowed head low between the shoulders and a little forward-right, the robe pooling unevenly at the hem
+  const OUT = [[-.3, .004], [-.252, -.035], [-.232, -.1], [-.21, -.19], [-.196, -.29], [-.218, -.37], [-.238, -.452], [-.232, -.53], [-.218, -.6],
+    [-.19, -.652], [-.13, -.686], [-.082, -.704], [-.07, -.745], [-.048, -.784], [-.012, -.804], [.032, -.8], [.064, -.778], [.082, -.744], [.092, -.708],
+    [.132, -.69], [.18, -.668], [.214, -.62], [.234, -.55], [.246, -.47], [.236, -.39], [.212, -.31], [.214, -.212], [.228, -.112], [.244, -.042], [.262, .002],
+    [.2, .013], [.12, .006], [.04, .015], [-.06, .008], [-.16, .017]];
   function contour(r, j = 1) {   // Catmull-Rom through the points, each nudged a little (no two men alike)
     const pts = OUT.map(([x, y]) => [x + (r() - .5) * .012 * j, y + (r() - .5) * .01 * j]), q = new Path2D(), n = pts.length;
     q.moveTo(...pts[0]); for (let i = 0; i < n; i++) { const p0 = pts[(i - 1 + n) % n], p1 = pts[i], p2 = pts[(i + 1) % n], p3 = pts[(i + 2) % n];
@@ -147,15 +150,30 @@ export async function build(W, H, opts = {}) {
     const kd = lit ? .42 : .26, kl = lit ? .95 : .3,   // round 2: a dark figure against the light, only the window's rim on him
     LC = lit ? [255, 232, 196] : [150, 152, 164];
     const zone = col => ({ base: col.map(v => v * kd), lit: LC.map((v, i) => v * kl * (col[i] / 210 + .3)) });
-    const cloth = (u, v) => v < -.69 && Math.abs(u - .005) < .105 || (v < -.62 && Math.abs(u) < .09);
-    const mantle = (u, v) => v < -.13 - (u + .35) * .55 && !cloth(u, v);   // over the left shoulder and down to the right hip, on a diagonal
-    OIL.relief(g, path, m, [-.34, -.85, .34, .03], [{ test: cloth, ...zone(C.cloth) }, { test: mantle, ...zone(C.mantle) }, zone(C.tunic)], L, { soft: .075, height: 85, amb: lit ? .2 : .3, wrap: .22 });
-    g.save(); g.setTransform(m); g.strokeStyle = 'rgba(26,18,12,.3)'; g.lineWidth = .009; g.lineCap = 'round';
-    g.beginPath(); g.moveTo(-.36, -.12); g.bezierCurveTo(-.1, -.27, .12, -.38, .36, -.52); g.stroke();   // the mantle's edge
-    for (const [x0, x1] of [[-.15, -.24], [-.02, -.06], [.12, .2]]) { g.beginPath(); g.moveTo(x0, -.3); g.bezierCurveTo(x0 - .01, -.18, (x0 + x1) / 2, -.08, x1, -.005); g.stroke(); }   // folds in the robe
-    g.beginPath(); g.moveTo(-.082, -.77); g.bezierCurveTo(-.03, -.79, .04, -.79, .09, -.765); g.stroke(); g.restore();   // the cord round the head cloth
+    // round 5: a prayer shawl over his head and shoulders (light wool, falling to the middle of his back in a soft curve, two dark bands
+    // near its hem, tassels at its corners), the robe below it darker; the soles of his feet show under the hem (he kneels, sitting back)
+    const hem = u => -.43 + .05 * Math.cos(u * 7.5) - .03 * u;
+    const shawl = (u, v) => v < hem(u);
+    const body = C.mantle, wool = C.cloth.map(v => Math.min(255, v * 1.08));
+    OIL.relief(g, path, m, [-.34, -.85, .34, .03], [{ test: shawl, ...zone(wool) }, zone(body)], L, { soft: .075, height: 85, amb: lit ? .2 : .3, wrap: .22 });
+    g.save(); g.setTransform(m); g.lineCap = 'round'; g.save(); g.clip(path);
+    const hemPath = (dv, n = 40) => { const q = new Path2D(); for (let i = 0; i <= n; i++) { const u = -.3 + .6 * i / n; i ? q.lineTo(u, hem(u) - dv) : q.moveTo(u, hem(u) - dv); } return q; };
+    g.strokeStyle = 'rgba(22,16,12,.38)'; g.lineWidth = .011; g.stroke(hemPath(0));                                         // the shawl's hem (its shadow on the robe)
+    g.strokeStyle = lit ? 'rgba(52,46,58,.55)' : 'rgba(36,32,40,.5)'; g.lineWidth = .014; g.stroke(hemPath(.035)); g.lineWidth = .008; g.stroke(hemPath(.062));   // the two bands
+    g.strokeStyle = 'rgba(26,18,12,.26)'; g.lineWidth = .008;
+    for (const [x0, x1] of [[-.04, -.1], [.03, .07], [-.12, -.19], [.11, .17]]) { g.beginPath(); g.moveTo(x0 * .5, -.76); g.bezierCurveTo(x0, -.66, x1 * .9, -.55, x1, hem(x1) + .01); g.stroke(); }   // the wool's folds from the crown
+    for (const [x0, x1] of [[-.15, -.22], [-.03, -.06], [.1, .17], [.19, .25]]) { g.beginPath(); g.moveTo(x0 * .9, hem(x0) + .04); g.bezierCurveTo(x0, -.25, (x0 + x1) / 2, -.1, x1, -.004); g.stroke(); }   // the robe's folds to the floor
+    g.strokeStyle = 'rgba(26,18,12,.34)'; g.lineWidth = .01; g.beginPath(); g.moveTo(.004, hem(0) + .03); g.bezierCurveTo(.0, -.3, -.006, -.16, -.004, -.05); g.stroke();   // the spine's crease
+    g.restore();
+    for (const sd of [-1, 1]) { const u = sd * .205, v = hem(u) + .005; g.strokeStyle = lit ? 'rgba(232,220,196,.7)' : 'rgba(150,146,150,.6)'; g.lineWidth = .006;   // tassels
+      for (let k = 0; k < 3; k++) { g.beginPath(); g.moveTo(u + sd * k * .008, v); g.quadraticCurveTo(u + sd * (k * .008 + .004), v + .04, u + sd * k * .01, v + .075); g.stroke(); } }
+    const soles = new Path2D(); soles.ellipse(-.085, .004, .062, .028, -.12, 0, 6.283); soles.ellipse(.07, .006, .058, .026, .14, 0, 6.283);
+    g.fillStyle = lit ? 'rgb(122,92,70)' : 'rgb(58,46,38)'; g.fill(soles); g.strokeStyle = 'rgba(30,20,14,.45)'; g.lineWidth = .006; g.stroke(soles);
+    g.fillStyle = lit ? 'rgba(255,226,190,.35)' : 'rgba(0,0,0,0)'; g.beginPath(); g.ellipse(-.1, -.004, .03, .01, -.12, 0, 6.283); g.fill();
+    g.restore();
+    const mask = new Path2D(); mask.addPath(path); mask.addPath(soles); for (const sd of [-1, 1]) mask.rect(sd * .205 - .02, hem(sd * .205), .04, .085);
     const art = OIL.paint(c, { key: 'vermeer', S: .85, seed: seed + (lit ? 1 : 0) }), ag = art.getContext('2d');
-    ag.save(); ag.globalCompositeOperation = 'destination-in'; ag.setTransform(m); ag.filter = 'blur(.004px)'; ag.fill(path); ag.restore();
+    ag.save(); ag.globalCompositeOperation = 'destination-in'; ag.setTransform(m); ag.filter = 'blur(.004px)'; ag.fill(mask); ag.restore();
     return { c: art, ox, oy, sc, lit };
   };
   const DRESS = [{ tunic: [176, 162, 136], mantle: [128, 94, 62], sash: [88, 66, 46], cloth: [170, 154, 124] },

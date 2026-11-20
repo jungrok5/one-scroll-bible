@@ -48,9 +48,12 @@ export function beats(B) {
   // Q8 — the push, the sprout, the tree, the birds (tree3d-mustard beats() carries the growth)
   T.push = [B.Q8 + .2, q8[1] - .1];                 // push-in on the seed
   T.back = [q8[1] + .1, q8[2] - .1];                // ease back as the tree fills the cloth
-  T.seedFade = [q8[1] + .4, q8[1] + 2.2];
+  T.seedFade = [q8[1] - .6, q8[1] + .8];
   T.surge = [B.N18 - .3, B.N18 + .5];               // the lamp swells: the light breaks through
-  T.dev = [B.N18, B.N18 + 2.3];                     // the shadow develops: from the trunk outward, the darks first
+  T.dev = [B.N18, B.N18 + .8];                      // the cloth gives way to the 3D world round the still-leather tree (tree3d-mustard
+                                                    // devS then runs the develop up the trunk and out through every branch)
+  T.seed = [q8[1] - 1.05, q8[1] + .55];             // the seedling: a hooked shoot, two seed leaves opening, true leaves, the stem curving up
+  T.seedOut = [q8[1] + 1.0, q8[1] + 1.8];           // it gives way to the young tree growing out of it
   // Q9 — the field and the treasure
   T.q9in = [B.Q9, B.Q9 + .8];                       // dissolve in from the lit tree (light to light)
   T.catch = q9[1] - .65;                            // the share catches on the chest (end of 「밭에 감추인 보화와 같으니」)
@@ -634,9 +637,41 @@ export async function build(W, H, TR) {
     P.place(g, rig, { x: h.origin[0], y: h.origin[1], rot: h.rot, scale: HS, dist: h.dist, alpha: ss(T.handIn[0] - .1, T.handIn[0] + .45, t) * (1 - ss(T.handOff[1] - .35, T.handOff[1], t)) });
     g.restore();
   }
+  // the seedling: a real shoot in carved leather — it comes up hooked, straightens, the two seed leaves open, the true leaves come
+  // between them, and the stem curves as it rises; it gives way to the young tree (tree3d-mustard) growing out of the same place
+  function seedling(g, M, t) {
+    if (t < T.seed[0] || TR.G(t) > TR.forkS) return;
+    const e1 = ss(T.seed[0], T.seed[0] + .7, t), e2 = ss(T.seed[0] + .45, T.seed[0] + 1.0, t), e3 = ss(T.seed[0] + .75, T.seed[0] + 1.25, t), e4 = ss(T.seed[0] + 1.05, T.seed[1], t), e5 = ss(T.seed[0] + .8, T.seed[1] + .3, t);
+    const fade = 1;
+    const L = 10 + 58 * e1 + 66 * e5, hook = 2.5 * (1 - e2), sway = .05 * Math.sin(t * 1.3);
+    // the stem as points along its length; the hook bends the top over, then the stem stands with a soft S
+    const N = 24, pts = []; let x = SEED.x, y = fieldTop(SEED.x) + 3, a = -Math.PI / 2;
+    for (let i = 0; i <= N; i++) { const u = i / N; pts.push([x, y, a]); const da = (.22 * Math.cos(u * Math.PI * 1.4) + sway) / N * 2.2 + hook * ss(.5, 1, u) / N * 2.2; a += da; x += Math.cos(a) * L / N; y += Math.sin(a) * L / N; }
+    const w0 = 3.6 + 2.6 * e5, w1 = 2.2 + 1.0 * e5; let top = pts[N];
+    // the young tree's leader (3D) — when its tip stands above the seedling, the leaves go with it
+    const G = TR.G(t); let ride = 0;
+    if (G > 0) { const v = view(t), tp = TR.project(TR.trunkTip(G), v), Mi = M.inverse(), q = Mi.transformPoint(new DOMPoint(tp[0], tp[1]));
+      ride = ss(TR.forkS * .26, TR.forkS * .42, G); top = [lerp(top[0], q.x, ride), lerp(top[1], q.y, ride), lerp(top[2], -Math.PI / 2 + .04 * Math.sin(t * 1.1), ride)]; }
+    const lf = 1 - ss(TR.forkS * .55, TR.forkS * .95, G);   // the leaves give way as the tree forks into limbs
+    g.save(); g.setTransform(M); g.globalCompositeOperation = 'multiply'; g.globalAlpha = 1 - ss(TR.forkS * .2, TR.forkS * .4, G); g.fillStyle = '#24150a';
+    g.beginPath(); pts.forEach(([px, py, pa], i) => { const w = lerp(w0, w1, i / N) / 2, nx = -Math.sin(pa), ny = Math.cos(pa); i ? g.lineTo(px + nx * w, py + ny * w) : g.moveTo(px + nx * w, py + ny * w); });
+    for (let i = N; i >= 0; i--) { const [px, py, pa] = pts[i], w = lerp(w0, w1, i / N) / 2, nx = -Math.sin(pa), ny = Math.cos(pa); g.lineTo(px - nx * w, py - ny * w); } g.closePath(); g.fill();
+    // a leaf: two halves with a hair of light between them (the midrib), rounded (seed leaf) or toothed (true leaf)
+    const leaf = (len, wid, ang, toothed) => { if (len < 1) return; g.save(); g.translate(top[0], top[1]); g.rotate(ang);
+      for (const sd of [-1, 1]) { g.beginPath(); g.moveTo(0, sd * .5); const n = toothed ? 7 : 1;
+        if (!toothed) { g.bezierCurveTo(len * .3, sd * wid * 1.1, len * 1.05, sd * wid * .9, len, sd * .5); }
+        else for (let k = 1; k <= n; k++) { const u = k / n, wv = wid * Math.sin(Math.PI * Math.min(1, u * 1.05)) * (1 - .25 * u); g.quadraticCurveTo(len * (u - .5 / n), sd * (wv + wid * .18), len * u, sd * (wv * .78 + .5)); }
+        g.lineTo(0, sd * .5); g.closePath(); g.fill(); }
+      g.restore(); };
+    g.globalAlpha = lf;
+    const ta = top[2], op = e3 * 1.12, cs = 15 + 12 * e3 + 7 * e5;
+    leaf(cs, cs * .48, ta - .12 - op, false); leaf(cs, cs * .48, ta + .12 + op, false);                      // the seed leaves open
+    if (e4 > 0) { const ts = 38 * e4; leaf(ts, ts * .32, ta - .42 * e4, true); leaf(ts * .9, ts * .3, ta + .5 * e4, true); }   // the true leaves
+    g.restore();
+  }
   function firstPlay(ctx, t, v, sil, extra = {}) {
     const I = (1 + .55 * ss(T.surge[0], T.surge[1], t)) * P.flicker(t, { amt: .03, hz: 5, seed: 2.2 });
-    play(ctx, t, v, { I, warm: .3, sil, hand: (g, M) => seedHand(g, M, t),
+    play(ctx, t, v, { I, warm: .3, sil, hand: (g, M) => { seedling(g, M, t); seedHand(g, M, t); },
       glows: (c, M) => {   // the seed: the one thing that glows (gold), until the shoot takes its light
         if (t < T.handIn[0]) return;
         const sp = seedPos(t), q = M.transformPoint(new DOMPoint(sp[0], sp[1])), fade = ss(T.handIn[0], T.handIn[0] + .6, t) * (1 - ss(T.seedFade[0], T.seedFade[1], t));
@@ -654,21 +689,10 @@ export async function build(W, H, TR) {
   }
   const DEVC = Pilot.canvas(W, H), devg = DEVC.getContext('2d'), MASK = Pilot.canvas(W >> 2, H >> 2), mg = MASK.getContext('2d');
   function develop(ctx, t) {
-    // the cloth locked to the plane of the moving 3D camera; the shadow develops into the lit tree from the trunk outward
-    const cv = TR.clothView(t), sil = TR.sil(t, null);
-    firstPlay(ctx, t, cv, sil);
-    const lit = TR.lit(t, null);
-    const k = clamp((t - T.dev[0]) / (T.dev[1] - T.dev[0])), seed = [cv.cx, cv.cy];
-    // the mask, at quarter size: distance from the trunk foot, broken by a fixed noise (no per-frame change), opening with k
-    const mw = MASK.width, mh = MASK.height, id = mg.createImageData(mw, mh), d = id.data, sx = seed[0] / 4, sy = seed[1] / 4, Dm = Math.hypot(W, H) / 4;
-    const kk = k * 1.32;                              // the front moves at an even pace: the crown develops over about a second
-    for (let y = 0; y < mh; y++) for (let x = 0; x < mw; x++) { const i = (y * mw + x) * 4, r = Math.hypot(x - sx, (y - sy) * .8) / Dm, n = NOISE[y * mw + x];
-      const m = clamp((kk - r * 1.05 - (n - .5) * .3 + .02) / .5); d[i] = d[i + 1] = d[i + 2] = 0; d[i + 3] = m * 255; }
-    mg.putImageData(id, 0, 0);
-    devg.setTransform(1, 0, 0, 1, 0, 0); devg.globalCompositeOperation = 'source-over'; devg.globalAlpha = 1; devg.clearRect(0, 0, W, H); devg.drawImage(lit, 0, 0, W, H);
-    // the picture comes up from dark while it develops (a print in the tray): darker where the mask is thin
-    devg.globalCompositeOperation = 'destination-in'; devg.imageSmoothingEnabled = true; devg.drawImage(MASK, 0, 0, W, H); devg.globalCompositeOperation = 'source-over';
-    ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.drawImage(DEVC, 0, 0); ctx.restore();
+    // the cloth locked to the plane of the moving 3D camera; the 3D world (with the tree still in leather) comes up behind it
+    const k = ss(T.dev[0] + .15, T.dev[1] - .05, t);
+    if (k < 1) firstPlay(ctx, t, TR.clothView(t), TR.sil(t, null));
+    if (k > 0) { const lit = TR.lit(t, null); ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = k; ctx.drawImage(lit, 0, 0, W, H); ctx.restore(); }
   }
   // a fixed noise field for the develop front (built once: seek-safe, no shimmer)
   const NOISE = (() => { const w = W >> 2, h = H >> 2, a = new Float32Array(w * h); for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) a[y * w + x] = Pilot.fbm(x * .009 + 3, y * .009 + 7, 3); return a; })();

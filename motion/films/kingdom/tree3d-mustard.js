@@ -30,10 +30,11 @@ const eio2 = x => { x = clamp(x); return x < .5 ? 2 * x * x : 1 - Math.pow(-2 * 
 export function beats(B) {
   const q8 = B.pc.Q8, n18 = B.N18, n18b = B.pc.N18b;
   const T = {};
-  T.sprout = [q8[1] - 1.1, q8[1] + .1];              // the seed splits, a shoot with two seed leaves (end of 「작은 것이로되」)
-  T.grow = [q8[1] + .1, q8[2] - .2];                 // 「자란 후에는 풀보다 커서 나무가 되매」 — the tree grows to fill the cloth
+  T.sprout = [q8[1] - 1.1, q8[1] + .5];              // the seedling (2D, puppet-tent.js) — the 3D tree is not there yet
+  T.grow = [q8[1] + .45, q8[2] - .1];                // 「자란 후에는 풀보다 커서 나무가 되매」 — the tree grows out of the seedling to fill the cloth
   T.birds = [q8[2] - .1, B.N18 - .6];                // 「공중의 새들이 와서 그 가지에 깃들이느니라」
-  T.dev = [n18, n18 + 1.5];                          // the shadow develops into the lit tree
+  T.dev = [n18 + .15, n18 + .75];                    // the cloth gives way to the 3D world round the (still leather) tree
+  T.devS = [n18 + .5, n18 + 2.45];                   // then the develop runs up the trunk and out through every branch to the leaves
   T.crane = [n18, n18 + 6];                          // tilt up + crane up through the branches (6 s)
   T.few = [n18b[0] + .5, n18b[1] - .5];              // 「처음엔 갈릴리 어부 몇 사람」 — a few lamps at the fork
   T.all = [n18b[1] + .1, B.Q9 - .6];                 // 「지금은 온 세상에」 — the lamps run out to every branch
@@ -44,7 +45,7 @@ export function beats(B) {
 
 // growth G(t): 0 = the seed, ~.012 a shoot, 1.3 = full grown (segments are born at s ∈ [0, 1] on the path from the root)
 function growth(T, t) {
-  const sp = ss(T.sprout[0], T.sprout[1], t) * .014;
+  const sp = 0;
   const g = T.grow, u = clamp((t - g[0]) / (g[1] - g[0]));
   const k = u < .5 ? 2 * u * u : 1 - Math.pow(-2 * u + 2, 2) / 2;   // slow start, fastest in the middle, eases to full
   return sp + (1.3 - .014) * Math.pow(k, 1.15);
@@ -127,7 +128,7 @@ const GROW_GLSL = /* glsl */`
     float e = clamp((uG - aGS.x) / max(aGS.y - aGS.x, 1e-4), 0., 1.);
     vec3 off = p - (aBase + aDir * aGS.z);
     float sR = mix(aGS.x, aGS.y, aGS.z);                       // this ring's own place on the path: neighbours match (no seams)
-    float rk = uG <= aGS.x ? 0. : clamp(.07 + max(uG - sR, 0.) * 2.4, 0., 1.);
+    float rk = uG <= aGS.x ? 0. : clamp(.06 + min(uG, .25) * .55 + max(uG - sR, 0.) * 2.0, 0., 1.);
     return aBase + aDir * (aGS.z * e) + off * rk;
   }`;
 const LEAF_GLSL = /* glsl */`
@@ -153,19 +154,23 @@ function leafGeo(L = .2, Wd = .11) {
   g.computeVertexNormals(); return g;
 }
 
-// a small bird (body, head, beak, tail, two-part wings) — a Group whose parts are posed by poseBird()
+// a small bird — a Group whose parts are posed by poseBird(): a body that tapers into a fanned tail, a small head and beak,
+// long wings in two panels with the primaries splayed at the tip (reads as a bird from any side, not a ball)
+const tri = (pts, mat) => { const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(new Float32Array(pts.flat()), 3)); g.computeVertexNormals(); return new THREE.Mesh(g, mat); };
 function birdParts(mat) {
-  const G = new THREE.Group(), body = new THREE.Mesh(new THREE.SphereGeometry(.16, 12, 8), mat); body.scale.set(1.55, .82, .9); G.add(body);
-  const head = new THREE.Mesh(new THREE.SphereGeometry(.085, 10, 8), mat); head.position.set(.24, .09, 0); G.add(head);
-  const beak = new THREE.Mesh(new THREE.ConeGeometry(.028, .1, 6), mat); beak.rotation.z = -Math.PI / 2; beak.position.set(.35, .08, 0); G.add(beak);
-  const tailG = new THREE.BufferGeometry(); tailG.setAttribute('position', new THREE.BufferAttribute(new Float32Array([-.18, .02, 0, -.46, .07, -.09, -.46, .07, .09]), 3)); tailG.computeVertexNormals();
-  const tail = new THREE.Mesh(tailG, mat); G.add(tail);
-  const wing = side => { const root = new THREE.Group(); root.position.set(.02, .07, .06 * side);
-    const ig = new THREE.BufferGeometry(); ig.setAttribute('position', new THREE.BufferAttribute(new Float32Array([.1, 0, 0, -.12, 0, 0, -.06, 0, .3 * side, .1, 0, 0, -.06, 0, .3 * side, .07, 0, .26 * side]), 3)); ig.computeVertexNormals();
-    const inner = new THREE.Mesh(ig, mat); root.add(inner);
+  const G = new THREE.Group();
+  const bg = new THREE.SphereGeometry(.15, 16, 10); { const p = bg.attributes.position; for (let i = 0; i < p.count; i++) { let x = p.getX(i) * 1.9, y = p.getY(i) * .8, z = p.getZ(i) * .78;
+    if (x < 0) { const k = 1 + x / .34; y *= Math.max(.18, k); z *= Math.max(.18, k); y += (1 - Math.max(0, k)) * .02; } p.setXYZ(i, x, y, z); } bg.computeVertexNormals(); }
+  G.add(new THREE.Mesh(bg, mat));
+  const head = new THREE.Mesh(new THREE.SphereGeometry(.068, 10, 8), mat); head.position.set(.27, .07, 0); G.add(head);
+  const beak = new THREE.Mesh(new THREE.ConeGeometry(.02, .085, 6), mat); beak.rotation.z = -Math.PI / 2; beak.position.set(.37, .06, 0); head.parent.add(beak);
+  const tail = tri([[-.24, .02, 0], [-.52, .04, -.12], [-.5, .04, 0], [-.24, .02, 0], [-.5, .04, 0], [-.52, .04, .12]], mat); G.add(tail);
+  const wing = side => { const root = new THREE.Group(); root.position.set(.03, .06, .05 * side);
+    root.add(tri([[.11, 0, 0], [-.1, 0, 0], [-.07, 0, .3 * side], [.11, 0, 0], [-.07, 0, .3 * side], [.08, 0, .27 * side]], mat));
     const tip = new THREE.Group(); tip.position.set(0, 0, .28 * side); root.add(tip);
-    const og = new THREE.BufferGeometry(); og.setAttribute('position', new THREE.BufferAttribute(new Float32Array([.07, 0, 0, -.07, 0, 0, -.16, 0, .3 * side, .07, 0, 0, -.16, 0, .3 * side, -.02, 0, .27 * side]), 3)); og.computeVertexNormals();
-    tip.add(new THREE.Mesh(og, mat)); G.add(root); return { root, tip }; };
+    const pr = []; for (let k = 0; k < 4; k++) { const a = -.15 - k * .07; pr.push([.07 - k * .045, 0, 0], [.02 - k * .045, 0, 0], [a - .08, 0, (.3 - k * .03) * side]); }
+    tip.add(tri([[.08, 0, 0], [-.07, 0, 0], [-.12, 0, .18 * side], [.08, 0, 0], [-.12, 0, .18 * side], [.02, 0, .2 * side], ...pr], mat));
+    G.add(root); return { root, tip }; };
   const wl = wing(1), wr = wing(-1);
   G.traverse(o => { if (o.isMesh) { o.castShadow = true; o.frustumCulled = false; } });
   return { G, head, wl, wr, tail };
@@ -209,8 +214,13 @@ export async function build(W, H) {
   const skyO = { top: col('#7c8fb0', .62), mid: col('#e7b585', 1.0), horizon: col('#ffd59c', 1.75), sunDir, sunColor: col('#fff4dc', 30), sunGlow: col('#ffc47c', 1.9), clouds: .18, cloudColor: col('#ffe0b4', 1.15), cloudShade: col('#b88a72', .7) };
   const sky = K.sky(film, skyO);
   const hemi = new THREE.HemisphereLight(col('#a9b4cc'), col('#6e4f34'), .5); S.add(hemi);
-  const sunL = new THREE.DirectionalLight(col('#ffd29a'), 3.0); sunL.castShadow = true; sunL.shadow.mapSize.set(2048, 2048);
-  Object.assign(sunL.shadow.camera, { left: -40, right: 40, top: 40, bottom: -40, near: 1, far: 600 }); sunL.shadow.bias = -.0005; sunL.shadow.normalBias = .05;
+  // the sun's shadow (round 2: the owner saw it jitter): the map was 2048² over an 80 m square and the sun only 8° up, so each texel
+  // lay ~30 cm long on the ground and the PCF edges shimmered as the camera moved. Now a frustum fitted to the tree and its long
+  // shadow, 4096², variance-filtered (VSM: a fixed blur, no random taps) — soft, stable penumbras like a real low sun.
+  film.renderer.shadowMap.type = THREE.VSMShadowMap;
+  const sunL = new THREE.DirectionalLight(col('#ffd29a'), 3.0); sunL.castShadow = true; sunL.shadow.mapSize.set(4096, 4096);
+  Object.assign(sunL.shadow.camera, { left: -15, right: 15, top: 21, bottom: -11, near: 230, far: 420 }); sunL.shadow.bias = -.0003; sunL.shadow.normalBias = .02;
+  sunL.shadow.radius = 9; sunL.shadow.blurSamples = 20;
   S.add(sunL, sunL.target);
   const sunLamp = film.lamp(V(0, 0, 0), '#ffcf96', { power: 1900, size: 70, fog: 1 });
 
@@ -256,12 +266,20 @@ export async function build(W, H) {
   const camPathPts = []; for (let i = 0; i <= 300; i++) camPathPts.push(herm(KP, i / 300 * LEN));
   const near = (p, r) => camPathPts.some(c => c.distanceToSquared(p) < r * r);
   const segsK = TREE.segs.filter(g => !(g.r0 < .07 && (near(g.a, .9) || near(g.b, .9))));
-  const bark = new THREE.MeshStandardMaterial({ color: '#3a2a1e', roughness: .92 });
+  const DEV = { uDev: { value: 2 }, uDevOn: { value: 0 }, uLeatherB: { value: col('#120a05', .35) }, uLeatherL: { value: col('#5a3418', .32) } };
+  // round 3: no ring — the leather gives way over a long feathered stretch (~2 m on the trunk, a few diameters on a branch) and the
+  // front is a soft amber warmth that only lifts the bark a little; colour and leaves bloom in behind it
+  const DEV_FRAG = (leather) => `{ float fdv = smoothstep(uDev - .1, uDev + .03, vS) * uDevOn;
+      float band = exp(-pow((vS - (uDev - .035)) / .07, 2.)) * uDevOn, tail = uDevOn * smoothstep(uDev, uDev - .06, vS) * exp(-max(uDev - vS, 0.) / .12);
+      vec3 lit = outgoingLight * (1. + tail * .5 + band * .8) + vec3(1., .56, .22) * band * .1;
+      outgoingLight = mix(lit, ${leather}, fdv); }
+    #include <opaque_fragment>`;
+  const bark = new THREE.MeshStandardMaterial({ color: '#3a2a1e', roughness: .92, side: THREE.DoubleSide });
   bark.onBeforeCompile = sh => {
-    Object.assign(sh.uniforms, U);
-    sh.vertexShader = sh.vertexShader.replace('#include <common>', '#include <common>\n' + GROW_GLSL + '\nvarying vec3 vBW;')
-      .replace('#include <begin_vertex>', 'vec3 transformed = growPos(vec3(position));').replace('#include <project_vertex>', '#include <project_vertex>\nvBW = (modelMatrix * vec4(transformed, 1.)).xyz;');
-    sh.fragmentShader = sh.fragmentShader.replace('#include <common>', '#include <common>\nvarying vec3 vBW;\n' + NOISE_GLSL)
+    Object.assign(sh.uniforms, U, DEV);
+    sh.vertexShader = sh.vertexShader.replace('#include <common>', '#include <common>\n' + GROW_GLSL + '\nvarying vec3 vBW; varying float vS;')
+      .replace('#include <begin_vertex>', 'vec3 transformed = growPos(vec3(position)); vS = mix(aGS.x, aGS.y, aGS.z);').replace('#include <project_vertex>', '#include <project_vertex>\nvBW = (modelMatrix * vec4(transformed, 1.)).xyz;');
+    sh.fragmentShader = sh.fragmentShader.replace('#include <common>', '#include <common>\nvarying vec3 vBW; varying float vS; uniform float uDev, uDevOn; uniform vec3 uLeatherB;\n' + NOISE_GLSL).replace('#include <opaque_fragment>', DEV_FRAG('uLeatherB'))
       .replace('#include <map_fragment>', `#include <map_fragment>
         { float rid = tn(vec3(vBW.x * 9., vBW.y * 1.6, vBW.z * 9.)); float sp = tn(vBW * 3.);
           diffuseColor.rgb *= mix(.6, 1.15, rid * .65 + sp * .35); diffuseColor.rgb = mix(diffuseColor.rgb, vec3(.33, .32, .27), smoothstep(.62, .85, tn(vBW * 1.3)) * .4); }`);
@@ -291,12 +309,12 @@ export async function build(W, H) {
   const leafMat = new THREE.MeshStandardMaterial({ roughness: .62, side: THREE.DoubleSide, color: '#ffffff' });
   const LU = { uSunV: { value: V() }, uSunC: { value: col('#ffcf8a', 1) }, uTrans: { value: 1 } };
   leafMat.onBeforeCompile = sh => {
-    Object.assign(sh.uniforms, U, LU);
-    sh.vertexShader = sh.vertexShader.replace('#include <common>', '#include <common>\n' + LEAF_GLSL).replace('#include <begin_vertex>', 'vec3 transformed = leafPos(vec3(position));');
-    sh.fragmentShader = sh.fragmentShader.replace('#include <common>', '#include <common>\nuniform vec3 uSunV, uSunC; uniform float uTrans;')
+    Object.assign(sh.uniforms, U, LU, DEV);
+    sh.vertexShader = sh.vertexShader.replace('#include <common>', '#include <common>\n' + LEAF_GLSL + '\nvarying float vS;').replace('#include <begin_vertex>', 'vec3 transformed = leafPos(vec3(position)); vS = aLeaf.x - .02;');
+    sh.fragmentShader = sh.fragmentShader.replace('#include <common>', '#include <common>\nuniform vec3 uSunV, uSunC; uniform float uTrans; varying float vS; uniform float uDev, uDevOn; uniform vec3 uLeatherL;')
       .replace('#include <opaque_fragment>', `{ float bk = max(dot(normalize(-vViewPosition), uSunV), 0.);
           outgoingLight += diffuseColor.rgb * uSunC * (pow(bk, 4.) * .7 + pow(bk, 16.) * 1.6) * uTrans; }
-        #include <opaque_fragment>`);
+        ` + DEV_FRAG('uLeatherL'));
   };
   leafMat.customProgramCacheKey = () => 'mustard-leaf';
   const leaves = new THREE.InstancedMesh(lgeo, leafMat, NL);
@@ -319,7 +337,7 @@ export async function build(W, H) {
   // ---------------------------------------------------------------- birds (one set for the lit scene, one for the leather)
   const PR = rng(53);
   // perches: branch nodes in the outer crown with little leaf around them, spread over the crown (screen-spread from the cloth)
-  const cand = TREE.nodes.filter(n => n.lvl >= 3 && n.lvl <= 5 && n.p.y > 7.5 && n.p.z > -2 && !near(n.p, 6.5));
+  const cand = TREE.nodes.filter(n => n.lvl >= 3 && n.lvl <= 5 && n.p.y > 7.5 && n.p.z > -2 && !near(n.p, 8.5));
   const dens = p => leafPts.reduce((a, L) => a + (L.p.distanceToSquared(p) < 1.0 ? 1 : 0), 0);
   cand.forEach(c => c.dn = dens(c.p));
   const perch = [];
@@ -373,7 +391,7 @@ export async function build(W, H) {
   const silR = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true, alpha: false, stencil: false });
   silR.setPixelRatio(1); silR.setSize(W, H, false); silR.outputColorSpace = THREE.LinearSRGBColorSpace; silR.toneMapping = THREE.NoToneMapping;
   const silS = new THREE.Scene();
-  const silBranchMat = new THREE.ShaderMaterial({ uniforms: { ...U },
+  const silBranchMat = new THREE.ShaderMaterial({ uniforms: { ...U }, side: THREE.DoubleSide,
     vertexShader: GROW_GLSL + `\nvarying vec3 vW; varying float vR; void main(){ vec3 p = growPos(position); vW = (modelMatrix * vec4(p, 1.)).xyz; vR = length(position - (aBase + aDir * aGS.z)); gl_Position = projectionMatrix * viewMatrix * vec4(vW, 1.); }`,
     fragmentShader: NOISE_GLSL + `\nvarying vec3 vW; varying float vR;
       void main(){ vec3 dye = vec3(.105, .062, .034) * (.82 + .3 * tn(vW * 2.3));
@@ -399,7 +417,7 @@ export async function build(W, H) {
       const e = 1 - Math.pow(1 - u, 2.2);                                   // decelerates into the landing
       const p = V().copy(pl.from).multiplyScalar((1 - e) * (1 - e)).addScaledVector(pl.mid, 2 * e * (1 - e)).addScaledVector(pl.to, e * e);
       const d = V().copy(pl.mid).sub(pl.from).multiplyScalar(2 * (1 - e)).addScaledVector(V().copy(pl.to).sub(pl.mid), 2 * e);
-      const yaw = Math.atan2(-d.z, d.x), fold = ss(.88, 1, u), flap = pl.ph + (t - a) * 2 * Math.PI * lerp(3.6, 2.2, u) ;
+      const yaw = Math.atan2(-d.z, d.x), fold = ss(.88, 1, u), flap = pl.ph + (t - a) * 2 * Math.PI * lerp(3.6, 2.2, u) * (.85 + .3 * ((i * .618) % 1));
       const pitch = u < 1 ? clamp(d.y / (Math.hypot(d.x, d.z) + 1e-3), -.5, .5) * .6 + ss(.75, .95, u) * .45 * (1 - fold) : 0;
       const yawP = u >= 1 ? (pl.to.x < 0 ? 0 : Math.PI) + .25 * Math.sin(t * .7 + i) : yaw;   // perched: facing along the branch, a slow look about
       const bob = u >= 1 ? .012 * Math.sin((t - a) * 3.1 + i * 2) : 0;
@@ -439,6 +457,7 @@ export async function build(W, H) {
   function common(t) {
     if (!T) return;
     U.uG.value = growth(T, t); U.uT.value = t;
+    { const k = clamp((t - T.devS[0]) / (T.devS[1] - T.devS[0])); DEV.uDevOn.value = t < T.devS[1] + .4 ? 1 : 0; DEV.uDev.value = lerp(-.06, 1.12, k * k * (3 - 2 * k) * .35 + k * .65); }
     // the sun: at the lamp's place, then down behind the hills under N18b
     const dk = ss(T.dusk[0], T.dusk[1], t), el = lerp(Math.asin(SUN0.y), -.035, dk);
     sunDir.set(0, Math.sin(el), -Math.cos(el)).normalize();
@@ -446,7 +465,9 @@ export async function build(W, H) {
     sky.u.top.value.copy(col('#7c8fb0', .62)).lerp(col('#2c3a64', .5), dk); sky.u.mid.value.copy(col('#e7b585', 1.0)).lerp(col('#8a6a8a', .55), dk);
     sky.u.horizon.value.copy(col('#ffd59c', 1.75)).lerp(col('#f09a62', 1.0), dk); sky.u.sunGlow.value.copy(col('#ffc47c', 1.9)).lerp(col('#ff8a4a', 1.3), dk);
     sky.u.sunColor.value.copy(col('#fff4dc', 30)).multiplyScalar(1 - dk * .9);
-    sunL.position.copy(sunDir).multiplyScalar(300); sunL.target.position.set(0, 0, 0); sunL.intensity = 3.0 * (1 - dk * .85); sunL.color.copy(col('#ffd29a')).lerp(col('#ff9a5a'), dk);
+    // the shadow-casting sun stays where it is: if the shadow map turned with the setting sun, every texel edge would crawl from frame
+    // to frame (round 2: '그림자가 덜덜거린다'); the sun in the sky goes down, the shadows only fade with its light
+    sunL.position.copy(SUN0).multiplyScalar(300); sunL.target.position.set(0, 0, 0); sunL.intensity = 3.0 * (1 - dk * .85); sunL.color.copy(col('#ffd29a')).lerp(col('#ff9a5a'), dk);
     hemi.intensity = lerp(.5, .28, dk);
     sunLamp.pos.copy(sunDir).multiplyScalar(1500).add(cam.position); sunLamp.power = lerp(1900, 700, dk);
     film.atmos.color.copy(col('#e6b07a', .78)).lerp(col('#7a5a6a', .42), dk); film.fogU.uFogColor.value.copy(film.atmos.color);
@@ -476,6 +497,8 @@ export async function build(W, H) {
     silR.setClearColor(0xffffff, 1); silR.clear(); silR.render(silS, cam);
     return silR.domElement;
   }
+  const trunkSegs = TREE.segs.slice(0, 3), forkS = trunkSegs[2].s1;
+  function trunkTip(G) { let g = trunkSegs[0]; for (const q of trunkSegs) if (G > q.s0) g = q; const e = clamp((G - g.s0) / (g.s1 - g.s0)); return g.a.clone().lerp(g.b, e); }
   function project(p, view) { if (view) setView(view); else setPath(_t); const v = p.clone().project(cam); return [(v.x + 1) / 2 * W, (1 - v.y) / 2 * H]; }
   // where the cloth (the plane of the trunk, z = 0) lands on screen while the 3D camera starts to move: a similarity from two
   // points, so the 2D cloth layers stay locked to the developing 3D picture (screen = c + (p − a)·s)
@@ -486,7 +509,7 @@ export async function build(W, H) {
 
   return {
     film, lit, sil, project, clothView, beats: B => { T = beats(B); SIG = null; rankLamps(); return T; }, G: t => (T ? growth(T, t) : 0), T: () => T,
-    perch: perch.map(p => p.p.clone()), seed: V(0, 0, 0), sunPx: [540, 640], camU,
+    perch: perch.map(p => p.p.clone()), seed: V(0, 0, 0), sunPx: [540, 640], camU, trunkTip, forkS, sunL,
     stats: { segs: TREE.segs.length, kept: segsK.length, leaves: NL, lamps: LMP.length, perch: perch.length },
   };
 }

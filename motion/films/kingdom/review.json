@@ -4,7 +4,7 @@
  "_about": "A film's state and decisions — every field a gate reads (film.mjs new copies this). Fill by stage: topic → logline·topic_*; script → story_spine·ending·parts·looks·message_check; review → artifact_url; picture → shots_check; clips → clips; site → site_slug. Feedback and rounds only through film.mjs feedback/applied/round.",
  "stage": "picture",
  "round": 7,
- "status": "2묶음 확정 — 3묶음(그림자 인형극 겨자씨→3D 나무, 목탄 십자가 전체) 제작 중",
+ "status": "3묶음 확정(4부 다듬는 중) — 4묶음 시작",
  "logline": "예수님이 가장 많이 하신 말은 '하나님 나라' — 하나님이 왕으로 다스리시는 것이다. 사람이 밀어낸 그 왕이 돌아오셔서 세상을 원래대로 되돌리기 시작하셨고, 섬기러 와서 목숨으로 문을 여셨으며, 그 나라는 지금 예수님을 왕으로 모시는 자리에서 시작되어 다시 오실 때 완성된다.",
  "topic_id": "kingdom",
  "topic_evidence": [
@@ -1403,6 +1403,13 @@
    "round": 7,
    "applied": "review.json settled.cross_figures + charcoal-cross.js 주석 갱신, 5부 2차 그대로",
    "applied_at": "2026-11-20 08:57 KST"
+  },
+  {
+   "at": "2026-11-20 09:02 KST",
+   "who": "관리자",
+   "said": "3묶음: 다 좋아. 4부 후보(성벽 납작·현상 빠름·싹 가시·가까운 새 덩어리) 네 말대로 수정하고, 추가로 3D 나무 그림자가 좀 덜덜거린다 — 그런 게 좀 있어",
+   "status": "open",
+   "round": 7
   }
  ],
  "process_changes": [
@@ -1648,12 +1655,12 @@
   {
    "batch": 3,
    "what": "새 화풍: 그림자 인형극 겨자씨(→3D 나무), 목탄 십자가 장면 전체",
-   "status": "제작 중"
+   "status": "확정 2026-11-20(관리자: 다 좋아) — 5부 목탄 2차 · 4부 2차(후보 4 + 나무 그림자 떨림) 수정 중"
   },
   {
    "batch": 4,
    "what": "나머지: 갈릴리 새벽 · 기도 방 · 빌라도 · 아이들 · 목판화 · 빈 무덤 · 필사본 · 끝 화면",
-   "status": "대기"
+   "status": "제작 중"
   }
  ]
 }

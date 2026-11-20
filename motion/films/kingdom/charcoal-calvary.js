@@ -301,7 +301,7 @@ export async function build(W, H) {
   // one crucified figure as a close silhouette (charcoalCross.pose: the same joints as the far figures, two-bone IK arms with
   // fixed lengths, elbows below the shoulder–hand line). Tapered limbs, hands closed on the bar, loincloth, bent knees, feet
   // together; short hair and a beard line for a man; no face, no detail inside — one soft charcoal mass (half-res layer, blur)
-  function figVec(x, i, bow, val) {
+  function figVec(x, i, bow, val, form = 0) {
     const p = window.charcoalCross.pose(i, bow), c = p.k, bar = p.bar, u = SC, kn = i === 2 ? -1 : 1, sg = p.sag;
     C.layer(x, l => {
       const v = Math.round(255 * (1 - val)); l.fillStyle = `rgb(${v},${v},255)`;
@@ -325,7 +325,60 @@ export async function build(W, H) {
       const bd = Math.max(0, Math.cos(p.phi * .8)); if (bd > .05) { const bx = p.head[0] - Math.sin(p.tilt) * hr * .7, by = p.head[1] + Math.cos(p.tilt) * hr * .74 * bd;
         l.beginPath(); l.ellipse(bx, by, hr * .74, hr * .55 * bd, p.tilt, 0, 7); l.fill(); }   // the beard line (hidden as the chin goes to the chest)
     }, { blur: 1.1 });
+    if (form > 0) figForm(x, p, form);
     return p;
+  }
+  // round 3 (2026-11-20, owner "남은 점도 개선하자" — "(e) the thief's body is mannequin-simple"): charcoal FORM on the close
+  // silhouette of the penitent thief, still a silhouette with no face. The light comes from the cloud gap upper left, so the
+  // left flank, ribcage and the top of the cloth are lifted with the eraser (smudgeW, clipped to the body) while the right
+  // side keeps the rubbed dark; rib arcs, the sternum and the cloth's folds are eraser lines, the outer contour a broken stick
+  // line with finger smudges just outside it (drawn and smudged, as kits/charcoal STYLE.md "erased and redrawn"). Every mark
+  // is fixed to the pose's joints (seeded once), so it moves only with the bow — no boil. Widths in base px (× ≈ 4.7 on screen).
+  // f (0..1) = how much of the form reads: it grows with the light on him (N25 → N25d → the bow).
+  function figForm(x, p, f) {
+    const c = p.k, bar = p.bar, u = SC, sg = p.sag, kn = 1;
+    const torso = [[p.sh[0][0] - .8 * u, p.sh[0][1] - 1.4 * u], [c.x, p.sh[0][1] - 2.2 * u], [p.sh[1][0] + .8 * u, p.sh[1][1] - 1.4 * u], [c.x + 10.8 * u, bar + 8 * u + sg], [c.x + 10 * u, bar + 18 * u + sg * .8],
+      [c.x + 6.6 * u, bar + 33 * u + sg * .4], [c.x + 7.4 * u, bar + 42 * u], [c.x - 7.4 * u, bar + 42 * u], [c.x - 6.6 * u, bar + 33 * u + sg * .4], [c.x - 10 * u, bar + 18 * u + sg * .8], [c.x - 10.8 * u, bar + 8 * u + sg]];
+    const cloth = [[c.x - 8.2 * u, bar + 38 * u], [c.x + 8.2 * u, bar + 38 * u], [c.x + 8.8 * u, bar + 46 * u], [c.x + 5.4 * u, bar + 49 * u], [c.x + 4.4 * u, bar + 57 * u], [c.x + 2 * u, bar + 50 * u], [c.x - 5.5 * u, bar + 49.5 * u], [c.x - 8.8 * u, bar + 46.5 * u]];
+    const Y = (v, s = .6) => bar + v * u + sg * s;
+    const curve = (x0, x1, y, dip, n = 6) => { const q = []; for (let m = 0; m <= n; m++) { const s = m / n; q.push([lerp(x0, x1, s), y + (s * s * dip - s * dip * .25)]); } return q; };
+    const stroke = (l, q, w, col) => { l.lineWidth = w; l.strokeStyle = col; l.beginPath(); q.forEach((pt, m) => m ? l.lineTo(pt[0], pt[1]) : l.moveTo(pt[0], pt[1])); l.stroke(); };
+    // the tonal form: one soft half-res layer (rubbed, not cut), clipped to the body, then blurred — planes, not plates
+    C.layer(x, l => {
+      l.save(); C.poly(l, torso); C.poly(l, cloth); l.beginPath(); for (const poly of [torso, cloth]) poly.forEach((pt, m) => m ? l.lineTo(pt[0], pt[1]) : l.moveTo(pt[0], pt[1])); l.clip();
+      l.lineCap = 'round';
+      { const g = l.createRadialGradient(c.x - 7.5 * u, Y(17), 1 * u, c.x - 7.5 * u, Y(17), 13 * u); g.addColorStop(0, `rgba(255,255,255,${.3 * f})`); g.addColorStop(.55, `rgba(255,255,255,${.12 * f})`); g.addColorStop(1, 'rgba(255,255,255,0)');
+        l.fillStyle = g; l.fillRect(c.x - 14 * u, bar - 4 * u, 28 * u, 56 * u); }   // the lit flank and chest (upper left)
+      { const g = l.createLinearGradient(c.x + 2 * u, 0, c.x + 11 * u, 0); g.addColorStop(0, 'rgba(0,0,255,0)'); g.addColorStop(1, `rgba(0,0,255,${.7 * f})`);
+        l.fillStyle = g; l.fillRect(c.x, bar - 4 * u, 14 * u, 56 * u); }               // the core shadow on the far side
+      for (let j = 0; j < 3; j++) stroke(l, curve(c.x - 2.4 * u, c.x - (9.2 - .6 * j) * u, Y(15 + 4.6 * j), 3 * u), (1.7 - .2 * j) * u, `rgba(255,255,255,${(.2 - .04 * j) * f})`);    // ribs, lit side (a hint)
+      for (let j = 0; j < 2; j++) stroke(l, curve(c.x + 2.4 * u, c.x + (7.4 - .6 * j) * u, Y(16 + 4.6 * j), 2.6 * u), 1.2 * u, `rgba(255,255,255,${.07 * f})`);                  // ribs, far side
+      stroke(l, [[c.x - .4 * u, Y(8, .9)], [c.x - .2 * u, Y(15)], [c.x, Y(23)]], 1.3 * u, `rgba(255,255,255,${.26 * f})`);                                                       // the sternum
+      stroke(l, [[c.x - 9.6 * u, Y(11.2, .9)], [c.x - 6 * u, Y(13)], [c.x - 2.4 * u, Y(12.4)], [c.x - .4 * u, Y(11)]], 1.8 * u, `rgba(0,0,255,${.8 * f})`);                      // under the chest
+      l.fillStyle = `rgba(255,255,255,${.16 * f})`; l.beginPath(); l.ellipse(c.x - 2.4 * u, Y(30, .4), 3 * u, 4.6 * u, 0, 0, 7); l.fill();                                       // the belly
+      // the cloth: lighter than the skin (linen), its top edge lit, folds pulled toward the knot
+      { const g = l.createLinearGradient(c.x - 9 * u, bar + 38 * u, c.x + 9 * u, bar + 50 * u); g.addColorStop(0, `rgba(255,255,255,${.34 * f})`); g.addColorStop(1, `rgba(255,255,255,${.06 * f})`);
+        C.poly(l, cloth); l.fillStyle = g; l.fill(); }
+      stroke(l, [[c.x - 8.2 * u, bar + 38.6 * u], [c.x, bar + 39.3 * u], [c.x + 8.2 * u, bar + 38.7 * u]], 1.6 * u, `rgba(255,255,255,${.3 * f})`);
+      for (const [a0, a1] of [[[c.x - 7.4 * u, bar + 41 * u], [c.x + 4.6 * u, bar + 46.6 * u]], [[c.x - 7 * u, bar + 45 * u], [c.x + 4 * u, bar + 48.4 * u]], [[c.x - 3 * u, bar + 49 * u], [c.x + 4.6 * u, bar + 47.6 * u]]])
+        stroke(l, [a0, [lerp(a0[0], a1[0], .5), lerp(a0[1], a1[1], .5) + .9 * u], a1], 1.3 * u, `rgba(0,0,255,${.75 * f})`);
+      l.restore();
+      { const knL = [c.x + kn * 5.6 * u, bar + 67 * u], anL = [c.x - 1 * u, bar + 86 * u], hipL = [c.x - 3.6 * u, bar + 46 * u];   // the near leg's front plane
+        stroke(l, [[hipL[0] - 1.6 * u, hipL[1] + 3 * u], [knL[0] - 1.8 * u, knL[1]], [lerp(knL[0], anL[0], .5) - 1.4 * u, lerp(knL[1], anL[1], .5)]], 2.2 * u, `rgba(255,255,255,${.12 * f})`); }
+      l.lineCap = 'butt';
+    }, { blur: 1.6 });
+    // the drawn marks over it (crisp but few, broken): a little hatching on the lit chest, the knee catching light, the far
+    // contour and the underside of the arms redrawn with the stick, finger smudges just outside the edge
+    for (let j = 0; j < 6; j++) { const hx = c.x - (8.4 - 1.1 * j) * u, hy = Y(16 + (j % 3) * 1.4);
+      C.vine(x, [[hx, hy], [hx + 2.4 * u, hy + 5.6 * u]], .7 * u, .16 * f, 7900 + j, '#fff', 0); }
+    { const knL = [c.x + kn * 5.6 * u, bar + 67 * u], anL = [c.x - 1 * u, bar + 86 * u], hipL = [c.x - 3.6 * u, bar + 46 * u];
+      C.vine(x, [[lerp(hipL[0], knL[0], .55) - 2.4 * u, lerp(hipL[1], knL[1], .55)], [knL[0] - 2 * u, knL[1] - 1 * u], [lerp(knL[0], anL[0], .45) - 2 * u, lerp(knL[1], anL[1], .45)]], .9 * u, .18 * f, 7940, '#fff', .2); }
+    const R1 = [[p.sh[1][0] + 1.4 * u, p.sh[1][1]], [c.x + 11.4 * u, Y(8, 1)], [c.x + 10.7 * u, Y(18, .8)], [c.x + 7.3 * u, Y(31, .4)], [c.x + 7.9 * u, bar + 37 * u], [c.x + 9.3 * u, bar + 46 * u]];
+    C.vine(x, R1, 1.2 * u, .55, 7951, '#000', .18);
+    for (let s = 0; s < 2; s++) { const e0 = p.el[s], s0 = p.sh[s], h0 = p.hd[s];
+      C.vine(x, [[s0[0], s0[1] + 2.9 * u], [e0[0], e0[1] + 2.4 * u], [lerp(e0[0], h0[0], .7), lerp(e0[1], h0[1], .7) + 1.9 * u]], 1.1 * u, .45, 7955 + s, '#000', .2); }
+    for (let j = 0; j < 4; j++) { const q = R1[1 + j]; C.blob(x, q[0] + 2.4 * u, q[1], 2.4 * u, 5.4 * u, .1, .1); }
+    for (const q of [[c.x - 11.6 * u, Y(10, 1)], [c.x - 10.6 * u, Y(20, .8)]]) C.blob(x, q[0] - 1.8 * u, q[1], 2 * u, 5 * u, .07, -.1);
   }
   function figRim(x, p, a, k) {   // the light from the upper left on his head, shoulder, arm and side (eraser lines, screen width)
     if (a <= 0) return; const sw = 1 / k, r = p.hr * .82, arc = [];   // (only the left side of the head — never a crescent over it: no halo)
@@ -384,7 +437,12 @@ export async function build(W, H) {
     for (let i = 0; i < 3; i++) crossVec(x, i, k);
     if (id === 'e') { const c0 = CR[0], w = 7 * SC; C.glowLine(x, [[c0.x - w, c0.y - 4 * SC], [c0.x - w * .8, c0.y - c0.h]], .45 * L2.faint + .25 * L2.bowL, 4330, { w: [8 / k, 3 / k, 1.5 / k], al: [.08, .25, .7], brk: [.05, .1, .2] }); }   // (before the figure: only on the wood)
     const bowNow = ss(T.bow0, T.bow1, t) > 0 ? sineBow(t) : 0;
-    const pL = figVec(x, 0, bowNow, .89); figVec(x, 1, 0, .95); figVec(x, 2, 0, .89);
+    // round 3: in the long lens (b) the three bodies are as dark as their wood (the side thieves at the frame edges were grey
+    // figures that pulled the eye; the middle one is one dark mass with his cross); (e) gives the thief his charcoal form
+    const vS = id === 'b' ? 1 : .89, form = id === 'e' ? .55 + .45 * clamp(.25 * L2.tilt + .45 * L2.faint + .3 * L2.bowL) : 0;
+    const pL = figVec(x, 0, bowNow, id === 'e' ? .93 : vS, form); figVec(x, 1, 0, id === 'b' ? 1 : .95); figVec(x, 2, 0, vS);
+    if (id === 'b') { C.applyCam(x); for (const i of [0, 1, 2]) { const p = window.charcoalCross.pose(i, 0), c = p.k;   // a stick sweep down each body, as on the wood
+      C.sweep(x, [[c.x, p.bar + 4 * SC], [c.x, p.bar + 44 * SC]], 9 * SC, .7, 7860 + i); } }
     C.applyCam(x);
     if (id === 'c') for (let j = 0; j < 2; j++) { const pr = clamp((t - (j ? T.rimR : T.rimL)) / T.rimDur); if (pr <= 0 || L2.rimOff <= 0) continue;   // "우편에 / 좌편에"
       const pts = RIMS[j], n = Math.max(2, Math.ceil(eio(pr) * pts.length));
@@ -423,12 +481,57 @@ export async function build(W, H) {
     for (let j = 0; j < MH; j++) for (let i = 0; i < MW; i++) { const v = .55 * P0.noise(i / 26, j / 26) + .3 * P0.noise(i / 11 + 5, j / 11) + .15 * P0.noise(i / 5, j / 5 + 9); NZ[j * MW + i] = v; mn = Math.min(mn, v); mx = Math.max(mx, v); }
     for (let n = 0; n < NZ.length; n++) NZ[n] = (NZ[n] - mn) / (mx - mn); }
   const mask = P0.canvas(MW, MH), mctx = mask.getContext('2d'), mimg = mctx.createImageData(MW, MH), aux = P0.canvas(W, H), actx = aux.getContext('2d');
-  function dissolve(ctx, kk, dir) {
-    const s = .55; for (let j = 0; j < MH; j++) for (let i = 0; i < MW; i++) { const n = .68 * NZ[j * MW + i] + .32 * (dir > 0 ? i / MW : 1 - i / MW), a = clamp((kk * (1 + s) - n) / s);
+  // round 3 (owner "남은 점도 개선하자" — "the crosses of two shots overlap in the smudge dissolves"): the mask is shaped by where
+  // each framing's crosses stand. Around the OLD framing's crosses the new picture is rubbed through first (they are gone by
+  // ≈ 40 % of the dissolve), around the NEW framing's crosses last (from ≈ 58 %) — so the two sets never stand on the screen
+  // together: the old crosses are smudged away, then the new ones are rubbed in. Elsewhere the same noise as before, a
+  // little compressed (0.12–0.88) to leave room for the two. Where both overlap the new one wins (the same place on screen).
+  // Shapes: each cross as two boxes — the upright (wide enough for the body on it, + the board) and the bar (+ the arms and
+  // the head) — in screen px from that framing's own camera at t; their soft edge is broken by the same noise, so the early /
+  // late patches read as smudges, not as rectangles. Where old and new overlap (the same place on screen) the patch turns
+  // over in the middle of the dissolve, between the two.
+  function crossBoxes(t, B, id) {
+    let toS;
+    if (id === 'b' || id === 'c' || id === 'e') { const sc = shotCam(t, id); toS = p => [sc.S[0] + (p[0] - sc.P[0]) * sc.k, sc.S[1] + (p[1] - sc.P[1]) * sc.k]; }
+    else { const cm = cam(t, B, id).cam; toS = p => [cm.zc[0] + (p[0] - cm.zc[0]) * cm.zm + cm.ox, cm.zc[1] + (p[1] - cm.zc[1]) * cm.zm + cm.oy]; }
+    const u = SC, out = [];
+    for (const c of CR) { const bar = c.y - c.h * .74;
+      for (const [p0, p1] of [[[c.x - 14 * u, c.y - c.h - 6 * u], [c.x + 14 * u, c.y + 8 * u]], [[c.x - c.a - 6 * u, bar - 20 * u], [c.x + c.a + 6 * u, bar + 12 * u]]]) {
+        const a = toS(p0), b = toS(p1); out.push([a[0], a[1], b[0], b[1]]); } }
+    return out;
+  }
+  const FEATHER = 46, RAG = 64;   // px (screen): the soft edge of a shape's weight, and how far the noise breaks that edge
+  function boxW(boxes, X, Y, nz = .5) { let w = 0; for (const [x0, y0, x1, y1] of boxes) { const dx = Math.max(x0 - X, 0, X - x1), dy = Math.max(y0 - Y, 0, Y - y1);
+    w = Math.max(w, 1 - clamp((Math.hypot(dx, dy) - (nz - .5) * RAG) / FEATHER)); } return w; }
+  function maskN(i, j, dir, ob, nb) {
+    const nz = NZ[j * MW + i], n0 = .68 * nz + .32 * (dir > 0 ? i / MW : 1 - i / MW);
+    if (!ob) return n0;   // (no shapes: the round-2 mask, unchanged)
+    const X = -40 + (i + .5) * (W + 80) / MW, Y = -40 + (j + .5) * (H + 80) / MH, wo = boxW(ob, X, Y, nz), wn = boxW(nb, X, Y, nz);
+    let n = .12 + .76 * n0;
+    n = lerp(n, .9 + .1 * n0, wn * (1 - wo));            // the new crosses: last
+    n = lerp(n, .02 + .05 * n0, wo * (1 - wn));           // the old crosses: first
+    n = lerp(n, .3 + .06 * n0, wo * wn);                  // both: in the middle
+    return n;
+  }
+  function dissolve(ctx, kk, dir, ob, nb) {
+    const s = .55; for (let j = 0; j < MH; j++) for (let i = 0; i < MW; i++) { const n = maskN(i, j, dir, ob, nb), a = clamp((kk * (1 + s) - n) / s);
       mimg.data[(j * MW + i) * 4 + 3] = a * 255; }
     mctx.putImageData(mimg, 0, 0);
     actx.setTransform(1, 0, 0, 1, 0, 0); actx.globalCompositeOperation = 'destination-in'; actx.imageSmoothingEnabled = true; actx.imageSmoothingQuality = 'high'; actx.filter = `blur(${22 * SC}px)`; actx.drawImage(mask, -40, -40, W + 80, H + 80); actx.filter = 'none'; actx.globalCompositeOperation = 'source-over';
     ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.drawImage(aux, 0, 0); ctx.restore();
+  }
+  // (check) how much of each framing's crosses shows at t in a dissolve: { old, neu } = the visible share of the old crosses'
+  // boxes outside the new ones, and of the new crosses' boxes — "doubled" when both are well above zero. shaped false = round 2.
+  function maskStats(t, B, shaped = true) {
+    const on = T.SHOTS.filter(([, a, b]) => t >= a && t < b); if (on.length < 2) return null;
+    const [id0] = on[0], [id1, a] = on[1], kk = sine((t - a) / (on[0][2] - a)), ob = crossBoxes(t, B, id0), nb = crossBoxes(t, B, id1), dir = 'bd'.includes(id1) ? -1 : 1, s = .55;
+    let so = 0, no = 0, sn = 0, nn = 0;
+    for (let j = 0; j < MH; j++) for (let i = 0; i < MW; i++) { const X = -40 + (i + .5) * (W + 80) / MW, Y = -40 + (j + .5) * (H + 80) / MH;
+      if (X < 0 || X > W || Y < 0 || Y > H) continue;
+      const inO = boxW(ob, X, Y) >= 1, inN = boxW(nb, X, Y) >= 1; if (!inO && !inN) continue;
+      const al = clamp((kk * (1 + s) - maskN(i, j, dir, shaped ? ob : null, nb)) / s);
+      if (inO && !inN) { so += 1 - al; no++; } if (inN) { sn += al; nn++; } }
+    return { pair: id0 + id1, kk: +kk.toFixed(3), old: no ? +(so / no).toFixed(3) : 0, neu: nn ? +(sn / nn).toFixed(3) : 0 };
   }
   function renderShot(c2, t, B, id) {
     c2.setTransform(1, 0, 0, 1, 0, 0); c2.globalAlpha = 1; c2.globalCompositeOperation = 'source-over';
@@ -440,7 +543,8 @@ export async function build(W, H) {
     draw(ctx, t, B) { if (!T) T = beats(B);
       const on = T.SHOTS.filter(([, a, b]) => t >= a && t < b);
       renderShot(ctx, t, B, on[0][0]);
-      if (on.length > 1) { const [id, a] = on[1], e = on[0][2], kk = sine((t - a) / (e - a)); renderShot(actx, t, B, id); dissolve(ctx, kk, 'bd'.includes(id) ? -1 : 1); } },
+      if (on.length > 1) { const [id, a] = on[1], e = on[0][2], kk = sine((t - a) / (e - a)); renderShot(actx, t, B, id); dissolve(ctx, kk, 'bd'.includes(id) ? -1 : 1, crossBoxes(t, B, on[0][0]), crossBoxes(t, B, id)); } },
+    maskStats: (t, B, shaped) => { if (!T) T = beats(B); return maskStats(t, B, shaped); },
     shotAt: t => (T ? T.SHOTS.filter(([, a, b]) => t >= a && t < b).map(s => s[0]).join('+') : ''),
     // after 566.8 (the veil scene's first 4.65 s, before its page turn): the figures stay, his head bowed — pass this as the
     // 4th argument of charcoalCross in the veil's prev. Everything else is already charcoalCross's own frame.

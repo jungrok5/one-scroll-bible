@@ -389,7 +389,7 @@ export async function build(W, H, Bt) {
   const GA = V(11, 0, 6); GA.y = hB(GA.x, GA.z);
   const BCAM = [V(GA.x + .95, 0, GA.z + 5.3), V(GA.x + .3, 0, GA.z + 4.85)];   // a slow truck left with a little push in
   const CHAINS = [
-    { c: [0, 0], R: 1.75, n: 6, a0: -68, a1: 68, t0: T.n12 + .5, dt: 1.35, dir: 1, seed: 11 },   // the hero arc (open toward the camera)
+    { c: [0, 0], R: 1.75, n: 6, a0: -68, a1: 68, t0: T.n12 + .25, dt: 1.25, dir: 1, seed: 11 },   // the hero arc (open toward the camera) — round 5: four hand-offs inside the 4.6 s shot again (.25 1.5 2.75 4.0; r3's 1.35 put the 4th on the cut), same eased envelopes
     { c: [-3.2, -5.0], n: 7, full: true, t0: T.n12 + .15, dt: 1.3, dir: -1, seed: 12 },   // the others: placed down the camera's view at
     { c: [-.4, -9.8], n: 6, full: true, t0: T.n12 + .75, dt: 1.35, dir: 1, seed: 13 },     // 11–31 m, left and right of its centre line
     { c: [-6.0, -13.6], n: 8, full: true, t0: T.n12 + .35, dt: 1.25, dir: 1, seed: 14 },
@@ -471,7 +471,7 @@ export async function build(W, H, Bt) {
     const { order, taus, people, C: cen } = ch, Pk = k => people[order[k]], nT = taus.length, hold = [];
     let pos;
     if (!nT || t <= taus[0] - 1.0) pos = lapW(Pk(0), .04);
-    else if (t >= taus[nT - 1]) { const h = Pk(nT); pos = bez(midW(Pk(nT - 1), h, cen), lapW(h, .14), lapW(h, .04), smoother((t - taus[nT - 1]) / .95)); }
+    else if (t >= taus[nT - 1]) { const h = Pk(nT); pos = bez(midW(Pk(nT - 1), h, cen), lapW(h, .14), lapW(h, .04), smoother((t - taus[nT - 1]) / Math.max(.95, ch.dt))); }   // round 5: the last move as slow as the others (.95 s made the giver's hands trail it: elbow 0.22 rad/frame)
     else if (t < taus[0]) pos = bez(lapW(Pk(0), .04), lapW(Pk(0), .16), midW(Pk(0), Pk(1), cen), smoother((t - taus[0] + 1.0) / 1.0));
     else { let k = 1; while (k < nT && t >= taus[k]) k++;   // between taus[k-1] and taus[k]: order[k] carries it across his front
       pos = bez(midW(Pk(k - 1), Pk(k), cen), lapW(Pk(k), .1), midW(Pk(k), Pk(k + 1), cen), smoother((t - taus[k - 1]) / (taus[k] - taus[k - 1]))); }
@@ -883,6 +883,6 @@ export async function build(W, H, Bt) {
       if (prev && prev.fi === fi && pin > .04 && pin < .96 && amt > .05) { const d = wpos.distanceTo(prev.p); sum += d; n++; if (d > max) { max = d; at = t; } }
       if (fi !== lastF) { steps++; lastF = fi; } prev = { fi, p: wpos }; }
     return { maxSlide_m_per_frame: +max.toFixed(4), at: +at.toFixed(2), meanSlide: +(sum / Math.max(1, n)).toFixed(4), stanceFrames: n, steps }; }
-  return { film, draw, marks, debug: { footSlide, fires, nB: crowdB.length, nI: spotsI.length, SUMMIT, OUT, chains: chains.length, motionCheck, trace,
+  return { film, draw, marks, debug: { footSlide, fires, nB: crowdB.length, nI: spotsI.length, SUMMIT, OUT, chains: chains.length, motionCheck, trace, heroTaus: () => chains[0].taus.slice(),
       handCheck(t0, t1, dt = .05) { handErrOn = true; handErr.length = 0; handErrWho.length = 0; const worst = []; for (let t = t0; t <= t1; t += dt) { const n0 = handErr.length; crowdBAt(t); const m = Math.max(0, ...handErr.slice(n0)); worst.push([+t.toFixed(2), +m.toFixed(3)]); } handErrOn = false; worst.sort((a, b) => b[1] - a[1]); return { max: worst[0], top: worst.slice(0, 6), n: handErr.length, who: handErrWho.slice(0, 40) }; } }, beats: () => T, shotAt, canvas: film.canvas };
 }

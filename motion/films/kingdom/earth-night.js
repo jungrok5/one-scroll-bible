@@ -49,6 +49,7 @@ const LAND = [
 export const LEVANT_COAST = [[30.5, 31.1], [32.3, 31.27], [33.0, 31.1], [33.8, 31.13], [34.2, 31.32], [34.45, 31.5], [34.55, 31.67], [34.68, 31.85], [34.75, 32.05], [34.83, 32.3], [34.89, 32.5], [34.93, 32.7], [34.97, 32.83], [35.07, 32.92], [35.1, 33.1], [35.2, 33.27], [35.37, 33.56], [35.5, 33.9], [35.64, 34.2], [35.83, 34.43], [35.9, 34.9]];
 const inPoly = (x, y, p) => { let c = false; for (let i = 0, j = p.length - 1; i < p.length; j = i++) { if (((p[i][1] > y) !== (p[j][1] > y)) && (x < (p[j][0] - p[i][0]) * (y - p[i][1]) / (p[j][1] - p[i][1]) + p[i][0])) c = !c; } return c; };
 const POP = [[10, 48, 14], [30, 50, 12], [8, 8, 9], [38, 8, 8], [33, -2, 9], [28, -27, 7], [31, 30, 6], [40, 34, 9], [52, 32, 7], [78, 22, 12], [88, 25, 7], [113, 30, 12], [118, 38, 9], [128, 36, 6], [137, 36, 5], [104, 14, 8], [108, 0, 8], [121, 14, 5], [150, -33, 6], [-3, 40, 6], [-74, 41, 9], [-90, 35, 12], [-118, 36, 7], [-99, 19, 7], [-46, -20, 10], [-60, -33, 7], [-74, 5, 6], [12, 42, 4], [23, 38, 3], [29, 41, 3], [36, 36, 3]];
+export const popAt = (lon, lat) => popW(lon, lat);   // round 6: how populated a place is (0..1), for olivet3d's city weighting
 const popW = (lon, lat) => Math.min(1, POP.reduce((s, [a, b, r]) => s + Math.exp(-(((lon - a) * Math.cos(lat * .0175)) ** 2 + (lat - b) ** 2) / (2 * r * r)), 0));
 
 // ---------------------------------------------------------------- the roads the light runs along (lon, lat), Jerusalem outward
@@ -147,12 +148,12 @@ export function lineMesh(lines, { minPx = 2.2, color = [1, .72, .36], halo = fal
 
 // ---------------------------------------------------------------- lamps (village lamps, city lights): warm points that light when the front passes
 // p: positions (Vector3 world), d: network distance (m), b: brightness, s: size scale. Sizes in px, shrinking with distance to a floor.
-export function lampPoints(list, { px = 5.5, minPx = 1.4, fade = 400 } = {}) {
+export function lampPoints(list, { px = 5.5, minPx = 1.4, fade = 400, color = [1, .78, .46] } = {}) {   // color: round 6 — the world's cities warmer (sodium)
   const n = list.length, P = new Float32Array(n * 3), Dd = new Float32Array(n), Bb = new Float32Array(n), Ss = new Float32Array(n), Fd = new Float32Array(n);
   list.forEach((L, i) => { P.set([L.p.x, L.p.y, L.p.z], i * 3); Dd[i] = L.d; Bb[i] = L.b; Ss[i] = L.s || 1; Fd[i] = L.f || fade; });
   const g = new THREE.BufferGeometry();
   g.setAttribute('position', new THREE.BufferAttribute(P, 3)); g.setAttribute('aD', new THREE.BufferAttribute(Dd, 1)); g.setAttribute('aB', new THREE.BufferAttribute(Bb, 1)); g.setAttribute('aS', new THREE.BufferAttribute(Ss, 1)); g.setAttribute('aFd', new THREE.BufferAttribute(Fd, 1));
-  const u = { uF: { value: 0 }, uT: { value: 0 }, uK: { value: 1 }, uPx: { value: px }, uMin: { value: minPx }, uRef: { value: 600 }, uPull: { value: .004 }, uPullMax: { value: 120 }, uScale: { value: 1 } };
+  const u = { uCol: { value: new THREE.Vector3(...color) }, uF: { value: 0 }, uT: { value: 0 }, uK: { value: 1 }, uPx: { value: px }, uMin: { value: minPx }, uRef: { value: 600 }, uPull: { value: .004 }, uPullMax: { value: 120 }, uScale: { value: 1 } };
   const m = new THREE.ShaderMaterial({ uniforms: u, transparent: true, depthWrite: false, depthTest: true, fog: false, blending: THREE.AdditiveBlending,
     vertexShader: /* glsl */`attribute float aD, aB, aS, aFd; uniform float uF, uPx, uMin, uRef, uPull, uPullMax, uScale; varying float vA;
       void main(){
@@ -162,9 +163,9 @@ export function lampPoints(list, { px = 5.5, minPx = 1.4, fade = 400 } = {}) {
         float sz = uPx * aS * clamp(uRef / d, .0, 1.) * uScale; float px = max(uMin, sz);
         float fl = step(3., aS) * on * exp(-max(uF - aD - aFd, 0.) / (aFd * 2.5));
         gl_PointSize = px * on * (1. + 2.2 * fl) + step(.001, on) * .5; vA = on * aB * clamp(sz / px, .25, 1.) * (1. + 1.4 * fl); }`,
-    fragmentShader: /* glsl */`uniform float uK; varying float vA;
+    fragmentShader: /* glsl */`uniform float uK; uniform vec3 uCol; varying float vA;
       void main(){ vec2 c = gl_PointCoord - .5; float r2 = dot(c, c) * 4.; float a = exp(-r2 * 3.2) + .55 * exp(-r2 * 14.);
-        if (vA <= 0.) discard; gl_FragColor = vec4(vec3(1., .78, .46) * a * vA * uK * 3.2, 1.); }` });
+        if (vA <= 0.) discard; gl_FragColor = vec4(uCol * a * vA * uK * 3.2, 1.); }` });
   const pts = new THREE.Points(g, m); pts.frustumCulled = false; pts.renderOrder = 6;
   return { pts, u };
 }
@@ -175,11 +176,12 @@ export function lampPoints(list, { px = 5.5, minPx = 1.4, fade = 400 } = {}) {
 // side of the terminator; a warm gold line along the terminator itself; the day side in low warm sun turning to full daylight.
 // mu = dot(surface normal, sun). land 0..1, rel = relief noise 0..1, grn = how green the land is, cl = cloud cover 0..1.
 export const SHADE_GLSL = /* glsl */`
+  uniform float uDeep;   // round 6: 0 = the round-5 lifted night land (the region view), 1 = blue-black night land (the globe from space); unset = 0
   vec3 eShade(float mu, float land, float rel, float grn, float cl){
     vec3 alb = mix(vec3(.04, .085, .16), mix(vec3(.58, .44, .29), vec3(.26, .31, .17), grn) * (.8 + .4 * rel), land);
     vec3 sunC = mix(vec3(1., .52, .26), vec3(1., .94, .86), smoothstep(.0, .32, mu));
     float lit = smoothstep(-.035, .1, mu) * (.32 + .95 * max(mu, 0.));
-    vec3 night = mix(vec3(.004, .007, .017), vec3(.018, .024, .045) * (.7 + .6 * rel), land);   // round 5: the night side dark (deep blue-black)
+    vec3 night = mix(mix(vec3(.004, .007, .017), vec3(.018, .024, .045) * (.7 + .6 * rel), land), mix(vec3(.0016, .0031, .0098), vec3(.0030, .0058, .0200) * (.8 + .4 * rel), land), uDeep);   // round 6 (2026-11-20 "slightly grey-blue"): blue-black, the land a shade above the sea
     float tw = smoothstep(-.2, -.01, mu) * (1. - smoothstep(-.01, .14, mu));
     vec3 c = night + alb * sunC * lit * 1.25 + vec3(.04, .055, .13) * tw * tw * mix(.4, 1., land) + vec3(1., .5, .24) * exp(-abs(mu + .012) / .025) * .22;
     vec3 cc = vec3(1., .97, .92) * sunC * smoothstep(-.03, .12, mu) * (.45 + .8 * max(mu, 0.)) + vec3(.018, .022, .04) + vec3(.08, .1, .2) * tw * tw + vec3(1., .55, .3) * exp(-abs(mu) / .03) * .35;
@@ -211,10 +213,11 @@ export function buildGlobe({ thetaMin = .018, rings = 260, seg = 512, texW = 409
   for (let i = 0; i < rings; i++) for (let j = 0; j < seg; j++) { const a = i * (seg + 1) + j, b = a + seg + 1; ix.push(a, b, a + 1, a + 1, b, b + 1); }
   const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); g.setIndex(ix);
   const u = { tLand: { value: tex }, uN0: { value: V(...N0) }, uU0: { value: V(...U0) }, uE0: { value: V(...E0) }, uLand: { value: new THREE.Color(.011, .0135, .022) }, uSea: { value: new THREE.Color(.0035, .0055, .014) },
-    uHaze: { value: new THREE.Color(.03, .045, .1) }, uHazeL: { value: 4e6 }, uK: { value: 1 }, uNM: { value: 1 }, uSun: { value: V(0, -1, 0) }, uDusk: { value: new THREE.Color(.5, .22, .12) } };
+    uHaze: { value: new THREE.Color(.03, .045, .1) }, uHazeL: { value: 4e6 }, uK: { value: 1 }, uNM: { value: 1 }, uSun: { value: V(0, -1, 0) }, uDusk: { value: new THREE.Color(.5, .22, .12) },
+    tGlow: { value: null }, uDeep: { value: 0 }, uPre: { value: .3 }, uCG: { value: 0 }, uWF: { value: 0 }, uGlowCol: { value: new THREE.Color(1., .56, .24) } };   // round 6: the cities' warm glow (cityGlowTex), off unless uCG > 0
   const m = new THREE.ShaderMaterial({ uniforms: u, fog: false, side: THREE.DoubleSide,
     vertexShader: /* glsl */`varying vec3 vN, vW; void main(){ vec4 w = modelMatrix * vec4(position, 1.); vW = w.xyz; vN = normalize(w.xyz - vec3(0., -${R_E.toFixed(1)}, 0.)); gl_Position = projectionMatrix * viewMatrix * w; }`,
-    fragmentShader: /* glsl */`uniform sampler2D tLand; uniform vec3 uN0, uU0, uE0, uLand, uSea, uHaze, uSun, uDusk; uniform float uHazeL, uK, uNM; varying vec3 vN, vW;
+    fragmentShader: /* glsl */`uniform sampler2D tLand, tGlow; uniform vec3 uN0, uU0, uE0, uLand, uSea, uHaze, uSun, uDusk, uGlowCol; uniform float uHazeL, uK, uNM, uCG, uWF, uPre; varying vec3 vN, vW;
       ${SHADE_GLSL}
       float hh(vec2 p){ vec3 p3 = fract(vec3(p.xyx) * .1031); p3 += dot(p3, p3.yzx + 33.33); return fract((p3.x + p3.y) * p3.z); }
       float vn(vec2 p){ vec2 i = floor(p), f = fract(p); vec2 w = f * f * (3. - 2. * f); return mix(mix(hh(i), hh(i + vec2(1, 0)), w.x), mix(hh(i + vec2(0, 1)), hh(i + vec2(1, 1)), w.x), w.y); }
@@ -232,6 +235,8 @@ export function buildGlobe({ thetaMin = .018, rings = 260, seg = 512, texW = 409
         { vec3 vv = normalize(cameraPosition - vW); float sp = max(dot(reflect(-uSun, n), vv), 0.); c += vec3(1., .74, .46) * (pow(sp, 90.) * 1.6 + pow(sp, 14.) * .16) * (1. - land) * (1. - cl) * smoothstep(-.03, .12, ms); }
         vec3 v = normalize(cameraPosition - vW); float mu = max(dot(n, v), 0.);
         float hz = 1. - exp(-length(cameraPosition - vW) / uHazeL); c = mix(c, eHaze(ms), clamp(hz * .12 + pow(1. - mu, 9.) * .6, 0., 1.));
+        if (uCG > 0.) { float gd = acos(clamp(dot(p, uU0), -1., 1.)) * ${R_E.toFixed(1)}, on = uPre + (1. - uPre) * smoothstep(gd + 1.5e5, gd + 1.3e6, uWF);   // full as the wave front passes; uPre: the world's cities glow faintly before it (as the dim city points)
+          float gl = texture2D(tGlow, uv).r; c += uGlowCol * (gl * gl * 1.9 + gl * .14) * uCG * on * (1. - .55 * cl) * (1. - smoothstep(-.06, .08, ms)) * mix(.55, 1., mu); }
         gl_FragColor = vec4(c * uK, 1.); }` });
   const mesh = new THREE.Mesh(g, m); mesh.frustumCulled = false;
   // the atmosphere seen from outside: a shell 90 km up, its limb glowing blue, warm on the side the sun has just left
@@ -247,6 +252,20 @@ export function buildGlobe({ thetaMin = .018, rings = 260, seg = 512, texW = 409
         gl_FragColor = vec4(c * uK, 1.); }` });
   const atm = new THREE.Mesh(sg, am); atm.frustumCulled = false; atm.renderOrder = 4;
   return { mesh, u, atm, au, tex, isLand };
+}
+
+// ---------------------------------------------------------------- round 6 (2026-11-20): the cities' glow on the night land — a soft warm haze round
+// the populated land (after night-earth photographs: the land itself blue-black, the light pollution orange round the clusters), so the
+// night side carries warm light instead of a grey-blue lift. Equirectangular, row 0 = 90°N; painted from the city list (lon, lat, b).
+export function cityGlowTex(cities, { w = 2048 } = {}) {
+  const cv = document.createElement('canvas'); cv.width = w; cv.height = w / 2; const x = cv.getContext('2d');
+  x.fillStyle = '#000'; x.fillRect(0, 0, w, w / 2); x.globalCompositeOperation = 'lighter';
+  for (const c of cities) { const px = (c.lon + 180) / 360 * w, py = (90 - c.lat) / 180 * (w / 2), r = (1.4 + 2.2 * c.b) * w / 2048 / Math.max(.35, Math.cos(c.lat * D2R));
+    const g = x.createRadialGradient(px, py, 0, px, py, r * 2.2); g.addColorStop(0, `rgba(255,255,255,${(.03 + .07 * c.b).toFixed(3)})`); g.addColorStop(1, 'rgba(255,255,255,0)');
+    x.fillStyle = g; x.fillRect(px - r * 2.2, py - r * 2.2, r * 4.4, r * 4.4); }
+  x.globalCompositeOperation = 'source-over'; x.filter = 'blur(3px)'; x.drawImage(cv, 0, 0); x.filter = 'none';
+  const t = new THREE.CanvasTexture(cv); t.colorSpace = THREE.NoColorSpace; t.minFilter = THREE.LinearMipmapLinearFilter; t.magFilter = THREE.LinearFilter; t.generateMipmaps = true; t.wrapS = THREE.RepeatWrapping;
+  return t;
 }
 
 // ---------------------------------------------------------------- the world's city lights (church.html's CITIES, more of them)
@@ -271,18 +290,18 @@ export function cityLights({ count = 13000, skipWithin = 210000, seed = 31, isLa
 // uBandY (fraction of the frame height from the bottom under which the words sit — arcs dimmed there), uK.
 export function arcMesh(arcs, { px = 2.4 } = {}) {
   let nSeg = 0; for (const a of arcs) nSeg += a.P.length - 1;
-  const A = new Float32Array(nSeg * 12), Bv = new Float32Array(nSeg * 12), Q = new Float32Array(nSeg * 8), Sv = new Float32Array(nSeg * 8), Tm = new Float32Array(nSeg * 12), Wv = new Float32Array(nSeg * 8), idx = new Uint32Array(nSeg * 6);
+  const A = new Float32Array(nSeg * 12), Bv = new Float32Array(nSeg * 12), PA = new Float32Array(nSeg * 12), NB = new Float32Array(nSeg * 12), Q = new Float32Array(nSeg * 8), Sv = new Float32Array(nSeg * 8), Tm = new Float32Array(nSeg * 12), Wv = new Float32Array(nSeg * 8), idx = new Uint32Array(nSeg * 6);
   let s = 0;
   for (const a of arcs) { const n = a.P.length - 1;
-    for (let i = 0; i < n; i++, s++) { const p = a.P[i], q = a.P[i + 1];
-      for (let v = 0; v < 4; v++) { const o = s * 4 + v; A.set([p.x, p.y, p.z], o * 3); Bv.set([q.x, q.y, q.z], o * 3); Q.set([v & 1 ? 1 : -1, v >> 1], o * 2); Sv.set([i / n, (i + 1) / n], o * 2); Tm.set([a.t0, a.T, a.k], o * 3); Wv.set([a.w || 1, a.rest == null ? .2 : a.rest], o * 2); }
+    for (let i = 0; i < n; i++, s++) { const p = a.P[i], q = a.P[i + 1], pa = a.P[Math.max(0, i - 1)], nb = a.P[Math.min(n, i + 2)];
+      for (let v = 0; v < 4; v++) { const o = s * 4 + v; A.set([p.x, p.y, p.z], o * 3); Bv.set([q.x, q.y, q.z], o * 3); PA.set([pa.x, pa.y, pa.z], o * 3); NB.set([nb.x, nb.y, nb.z], o * 3); Q.set([v & 1 ? 1 : -1, v >> 1], o * 2); Sv.set([i / n, (i + 1) / n], o * 2); Tm.set([a.t0, a.T, a.k], o * 3); Wv.set([a.w || 1, a.rest == null ? .2 : a.rest], o * 2); }
       idx.set([s * 4, s * 4 + 1, s * 4 + 3, s * 4, s * 4 + 3, s * 4 + 2], s * 6); } }
   const g = new THREE.BufferGeometry();
-  g.setAttribute('position', new THREE.BufferAttribute(A.slice(), 3)); g.setAttribute('aA', new THREE.BufferAttribute(A, 3)); g.setAttribute('aB', new THREE.BufferAttribute(Bv, 3));
+  g.setAttribute('position', new THREE.BufferAttribute(A.slice(), 3)); g.setAttribute('aA', new THREE.BufferAttribute(A, 3)); g.setAttribute('aB', new THREE.BufferAttribute(Bv, 3)); g.setAttribute('aPA', new THREE.BufferAttribute(PA, 3)); g.setAttribute('aNB', new THREE.BufferAttribute(NB, 3));
   g.setAttribute('aQ', new THREE.BufferAttribute(Q, 2)); g.setAttribute('aS', new THREE.BufferAttribute(Sv, 2)); g.setAttribute('aTm', new THREE.BufferAttribute(Tm, 3)); g.setAttribute('aW', new THREE.BufferAttribute(Wv, 2)); g.setIndex(new THREE.BufferAttribute(idx, 1));
-  const u = { uT: { value: 0 }, uRes: { value: new THREE.Vector2(1080, 1920) }, uPx: { value: px }, uK: { value: 1 }, uBandY: { value: .36 }, uRest: { value: .16 } };
+  const u = { uT: { value: 0 }, uRes: { value: new THREE.Vector2(1080, 1920) }, uPx: { value: px }, uK: { value: 1 }, uBandY: { value: .36 }, uRest: { value: .16 }, uHalo: { value: 0 }, uLimb: { value: 0 } };   // round 6: uHalo (soft warm glow round each line), uLimb 1 = fade what leaves the globe's disc
   const m = new THREE.ShaderMaterial({ uniforms: u, transparent: true, depthWrite: false, depthTest: true, fog: false, side: THREE.DoubleSide, blending: THREE.AdditiveBlending,
-    vertexShader: /* glsl */`attribute vec3 aA, aB, aTm; attribute vec2 aQ, aS, aW; uniform vec2 uRes; uniform float uPx, uT; varying float vS, vX, vP, vAge, vK, vH, vR;
+    vertexShader: /* glsl */`attribute vec3 aA, aB, aPA, aNB, aTm; attribute vec2 aQ, aS, aW; uniform vec2 uRes; uniform float uPx, uT, uHalo, uLimb; varying float vS, vX, vP, vAge, vK, vH, vR, vOn, vHk;
       void main(){
         float p = clamp((uT - aTm.x) / aTm.y, 0., 1.); p = 1. - (1. - p) * (1. - p) * (1. - .35 * p);   // the head: fast off the ground, easing in to land
         float sA = aS.x, sB = aS.y;
@@ -291,20 +310,28 @@ export function arcMesh(arcs, { px = 2.4 } = {}) {
         if (cA.w < 1e-3 || cB.w < 1e-3) { gl_Position = vec4(2., 2., 2., 1.); return; }
         vec2 sa = cA.xy / cA.w * uRes * .5, sb = cB.xy / cB.w * uRes * .5, dir = sb - sa; float L = length(dir); dir = L > 1e-4 ? dir / L : vec2(1., 0.);
         vec4 c = aQ.y < .5 ? cA : cB;
+        // round 6: joined ribbon — each end is pushed sideways along the curve's tangent at that point (from its neighbours), so two
+        // segments share the same corners: no overlap (an additive overlap per segment read as bright bars where the arc rises end-on)
+        { vec4 cE = aQ.y < .5 ? projectionMatrix * viewMatrix * vec4(aPA, 1.) : projectionMatrix * viewMatrix * vec4(aNB, 1.);
+          if (cE.w > 1e-3) { vec2 sE = cE.xy / cE.w * uRes * .5, tg = aQ.y < .5 ? sb - sE : sE - sa; float lt = length(tg); if (lt > 1e-4 && dot(tg / lt, dir) > .75) dir = tg / lt; } }
         float head = exp(-max(p - (aQ.y < .5 ? sA : sB), 0.) * 9.);
-        float w = uPx * aW.x * (1. + .45 * head * (1. - smoothstep(.85, 1., p))) * 2.6;   // a soft ribbon (no widening tick where it lands)
-        c.xy += (vec2(-dir.y, dir.x) * aQ.x * w * .5 + dir * (aQ.y < .5 ? -1. : 1.) * w * .3) / (uRes * .5) * c.w; gl_Position = c;
-        vS = aQ.y < .5 ? sA : sB; vX = aQ.x; vP = p; vAge = max(uT - aTm.x - aTm.y, 0.); vK = aTm.z; vH = head; vR = aW.y; }`,
-    fragmentShader: /* glsl */`uniform float uK, uBandY, uRest; uniform vec2 uRes; varying float vS, vX, vP, vAge, vK, vH, vR;
+        float w = uPx * aW.x * (1. + .45 * head * (1. - smoothstep(.85, 1., p))) * 2.6 * (1. + uHalo * smoothstep(.25, .8, p));   // a soft ribbon (no widening tick where it lands); wider by uHalo for the glow
+        c.xy += vec2(-dir.y, dir.x) * aQ.x * w * .5 / (uRes * .5) * c.w; gl_Position = c;   // (round 6: no push along the line any more — the ends meet)
+        // round 6: on the globe only — a point whose line of sight passes outside the earth's disc (in space past the limb) fades out
+        vec3 Pw = aQ.y < .5 ? aA : aB, dc = vec3(0., -6371000., 0.) - cameraPosition; float D = length(dc), aD = asin(clamp(6371000. / D, 0., 1.)), aP = acos(clamp(dot(normalize(Pw - cameraPosition), dc / D), -1., 1.));
+        vOn = mix(1., 1. - smoothstep(.97, .998, aP / aD), uLimb);
+        // the glow grows in as the arc lengthens (a short arc rising end-on would read as a plate)
+        vS = aQ.y < .5 ? sA : sB; vHk = uHalo * smoothstep(.25, .8, p); vX = aQ.x * (1. + vHk); vP = p; vAge = max(uT - aTm.x - aTm.y, 0.); vK = aTm.z; vH = head; vR = aW.y; }`,
+    fragmentShader: /* glsl */`uniform float uK, uBandY, uRest; uniform vec2 uRes; varying float vS, vX, vP, vAge, vK, vH, vR, vOn, vHk;
       void main(){
-        float bh = vP - vS; if (bh < -.002) discard;
-        float across = exp(-vX * vX * 5.) + .5 * exp(-vX * vX * 22.);
-        float head = exp(-bh * 14.), trail = exp(-bh * 2.4);
+        float bh = vP - vS; if (bh < -.002 || vOn < .002) discard;
+        float across = exp(-vX * vX * 5.) + .5 * exp(-vX * vX * 22.) + vHk * .16 * exp(-vX * vX * 5. / ((1. + vHk) * (1. + vHk)));   // core as before + a wide soft glow
+        float head = exp(-bh * 14.) * smoothstep(-.002, .014, bh), trail = exp(-bh * 2.4);   // round 6: no flat cut at the head
         float landed = smoothstep(.0, 2.8, vAge);
         float body = mix(.34 * max(trail, .4), vR * .55, landed);               // in flight: a warm trail; landed: a line that stays (by rank)
         vec3 col = mix(vec3(1., .58, .25), vec3(1., .93, .78), head) * (body + 1.15 * head * (1. - smoothstep(.86, 1., vP)));
         float y = gl_FragCoord.y / uRes.y, band = mix(.4, 1., smoothstep(uBandY - .1, uBandY + .04, y));
-        vec3 o = col * across * vK * uK * band; if (any(isnan(o)) || any(isinf(o))) o = vec3(0.); gl_FragColor = vec4(clamp(o, 0., 6.), 1.); }` });
+        vec3 o = col * across * vK * uK * band * vOn; if (any(isnan(o)) || any(isinf(o))) o = vec3(0.); gl_FragColor = vec4(clamp(o, 0., 6.), 1.); }` });
   const mesh = new THREE.Mesh(g, m); mesh.frustumCulled = false; mesh.renderOrder = 7;
   return { mesh, u };
 }

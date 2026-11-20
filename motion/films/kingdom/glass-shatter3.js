@@ -236,7 +236,7 @@ export function buildFall(seed = SEED) {
     ...BARS.map(by => { const y = SILL + (1 - by / TH) * HM; return { a: [-3.15, y, WZ + .07], b: [3.15, y, WZ + .07], r: .042 }; }),   // B3: saddle bars
     ...[[1.0, LEDGE - .25], [.6, LEDGE - .6], [.2, LEDGE - .95]].flatMap(([o, z]) => [-1, 1].map(sx => ({ a: [sx * (3 + o), SILL - o, z], b: [sx * (3 + o), YSP, z], r: .12 }))),   // jamb columns
   ];
-  const sim = new Sim({ material: { thickness: GLASS_TH, crack: LCRACK, physics: PHYS }, seed: 11, refSize: 2.4, maxShards: 2600, capsules, stack: true,
+  const sim = new Sim({ material: { thickness: GLASS_TH, crack: LCRACK, physics: PHYS }, seed: 11, refSize: 2.4, maxShards: 2600, capsules, stack: true, capFace: true,   // B3b: the bars also stop a pane by its face (2026-11-20: 13 shards slipped through)
     planes: [
       { n: [0, 1, 0], d: 0, lift: 1 },                                                                                         // the nave floor
       { n: [0, 1, 0], d: SILL - .07, lift: 1, maxDepth: .2, region: (x, y, z) => z < LEDGE && z > WZ - .4 && Math.abs(x) < 3.4 },   // the window ledge
@@ -402,7 +402,7 @@ export async function build(W, H) {
     uCrackK: { value: 0 }, uGlow: { value: 3.2 }, uSun: { value: 1 }, uSunGlow: { value: 1 }, uGoldK: { value: 0 }, uSunHot: { value: 0 },
     uFigRect: { value: new THREE.Vector4(FR[0] / TW, 1 - FR[3] / TH, FR[2] / TW, 1 - FR[1] / TH) }, uL: { value: L },
     uRound: { value: new THREE.Vector3(SX / TW, 1 - SY / TH, SR / TW * WM) },
-    uT: { value: 0 }, uHaze: { value: 1 }, uDust: { value: 1 }, uRecv: { value: 1 }, uNight: { value: 0 }, uSunLamp: { value: 0 },
+    uT: { value: 0 }, uHaze: { value: 1 }, uNearG: { value: 0 }, uDust: { value: 1 }, uRecv: { value: 1 }, uNight: { value: 0 }, uSunLamp: { value: 0 },
     uSunPos: { value: V(sunPane[0], WCY + sunPane[1], WZ + .1) },
   };
   // ---- the glass in the frame: transmitted light, the lead, crack lines, gold seams; holes where a pane has gone
@@ -547,7 +547,7 @@ export async function build(W, H) {
   const BX = [V(-4.9, .02, WZ + .5), V(4.9, 21, 30)];
   { const m = new THREE.ShaderMaterial({ uniforms: GU, side: THREE.BackSide, transparent: true, depthWrite: false, depthTest: false, blending: THREE.AdditiveBlending,
       vertexShader: 'varying vec3 vWP; void main(){ vec4 w = modelMatrix * vec4(position, 1.); vWP = w.xyz; gl_Position = projectionMatrix * viewMatrix * w; }',
-      fragmentShader: `varying vec3 vWP; uniform float uT, uHaze, uNear, uFar; uniform sampler2D tDepth; uniform vec2 uRes; uniform vec3 uFwd; ${NOISE_GLSL} ${GLASS_GLSL}
+      fragmentShader: `varying vec3 vWP; uniform float uT, uHaze, uNearG, uNear, uFar; uniform sampler2D tDepth; uniform vec2 uRes; uniform vec3 uFwd; ${NOISE_GLSL} ${GLASS_GLSL}
         void main(){ vec3 ro = cameraPosition, rd = normalize(vWP - ro); float tf = length(vWP - ro);
           float dz = texture2D(tDepth, gl_FragCoord.xy / uRes).x; if (dz < 1.){ float vz = uNear * uFar / ((uFar - uNear) * dz - uFar); tf = min(tf, -vz / max(dot(rd, uFwd), 1e-3)); }   // B3: stop at what is there
           vec3 a = vec3(${BX[0].x}, ${BX[0].y}, ${BX[0].z}), b = vec3(${BX[1].x}, ${BX[1].y}, ${BX[1].z});
@@ -559,7 +559,7 @@ export async function build(W, H) {
           for (int i = 0; i < NS; i++){ vec3 p = ro + rd * (tn + (float(i) + j) * dt);
             float d = .55 + .9 * gn(p * vec3(.35, .22, .35) + vec3(0., -uT * .05, uT * .03)) * gn(p * .9 + 3.1);
             d *= smoothstep(0., 3., p.y) * .6 + .4;
-            d *= mix(.3, 1., smoothstep(.4, 4.5, p.z - ${WZ.toFixed(2)})) * smoothstep(.6, 4., length(p - ro));   // B3: no veil on the glass or at the lens
+            float gz = p.z - ${WZ.toFixed(2)}; d *= mix(mix(.3, 1., smoothstep(.4, 4.5, gz)), mix(.2, 1., smoothstep(.6, 8., gz)), uNearG) * smoothstep(.6, 4., length(p - ro));   // B3: no veil on the glass or at the lens; B3b: close on the glass a wider clear zone in front of it
             acc += glassLight(p) * d * dt; }
           gl_FragColor = vec4(acc * ph * .095 * uHaze, 1.); }` });
     const box = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), m); box.scale.copy(BX[1].clone().sub(BX[0])); box.position.copy(BX[0].clone().add(BX[1]).multiplyScalar(.5)); box.frustumCulled = false; box.renderOrder = 5; box.layers.set(3); S.add(box); }
@@ -666,6 +666,7 @@ export async function build(W, H) {
     if (!blk2) Lk.exposure *= lerp(1, 3.5, ss(T.white[0], T.white[1] + .2, t));
     else Lk.exposure *= (1.12 - .04 * ss(T.r1 - 6, T.r1, t)) * (1 + .2 * (1 - ss(T.r0 + 3.5, T.r0 + 7.5, t)));   // B3: a little more while the frame is still mostly empty
     Lk.exposure *= lerp(.8, 1, ss(12, 24, pos.z - WZ));   // B3: close on the glass, a little less exposure, so the pot-metal stays deep (not pastel)
+    { const nearG = 1 - ss(16, 27, pos.z - WZ); GU.uNearG.value = nearG; GU.uHaze.value = lerp(1, .72, nearG); Lk.exposure *= 1 + .12 * nearG; }   // B3b (2026-11-20): the faint veil over the glass in the close shots thinned (far shots — and part 1's 108.8–110 — unchanged)
     D.focus = pos.distanceTo(V(look.x, look.y, WZ)); D.aperture = 1.0;
     cam.updateMatrixWorld(); cam.getWorldDirection(GU.uFwd.value); film._fogMaterials();
     { const R = film.renderer; cam.layers.disable(3); R.setRenderTarget(depthRT); R.setClearColor(0x000000, 0); R.clear(); R.render(S, cam); R.setRenderTarget(null); cam.layers.enable(3); }

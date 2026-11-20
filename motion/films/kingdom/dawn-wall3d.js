@@ -163,9 +163,11 @@ export async function build(W, H) {
   const walk = new THREE.Mesh(new THREE.BoxGeometry(56, .3, 3.2), new THREE.MeshStandardMaterial({ color: '#7d6a50', roughness: .95 }));
   walk.position.set(0, 17 - .05, ZT - .9 - 1.6); walk.receiveShadow = true; S.add(walk);   // the walk behind the parapet (the soldiers stand on it)
   const dk = (c, o = {}) => new THREE.MeshStandardMaterial({ color: c, roughness: .9, side: THREE.DoubleSide, ...o });
-  const tunic = dk('#3a1611'), skinM = dk('#3a2a20'), iron = dk('#2c2c30', { roughness: .45, metalness: .6 }), shieldM = dk('#4e1710'), ash = dk('#3a2c1e'), crestM = dk('#6a1a12'), bindM = dk('#8a7656', { roughness: .35, metalness: .7 });
+  // round 6 (owner "남은 점도 개선하자": the garrison read dark red-brown): the men are dark silhouettes against the sky — near-black
+  // cloth, leather and iron with only a breath of colour (a dull red in the crests), so the line of the army reads as shapes
+  const tunic = dk('#0b0908', { roughness: 1 }), skinM = dk('#0c0a08', { roughness: 1 }), iron = dk('#0c0d0f', { roughness: .55, metalness: .4 }), shieldM = dk('#0f0b0a', { roughness: 1 }), ash = dk('#0d0a08', { roughness: 1 }), crestM = dk('#22100c', { roughness: 1 }), bindM = dk('#2e271e', { roughness: .45, metalness: .5 });
   const tipMat = () => new THREE.MeshStandardMaterial({ color: '#d8c8a8', roughness: .2, metalness: .9, emissive: col('#ffd8a0'), emissiveIntensity: 1.5 });
-  const clothM = dk('#7a1a12', { roughness: .85 }), goldM = dk('#a8823a', { roughness: .3, metalness: .85, emissive: col('#ffcf80'), emissiveIntensity: .3 });
+  const clothM = dk('#5e140e', { roughness: .9, emissive: col('#3a0805'), emissiveIntensity: .35 }), fringeM = dk('#6e5428', { roughness: .5, metalness: .5 }), goldM = dk('#a8823a', { roughness: .3, metalness: .85, emissive: col('#ffcf80'), emissiveIntensity: .3 });
   const FEET = 17.1, GZ = ZT - .3;                                                        // standing in the embrasures between the merlons (seen from below)
   // a soldier in every gap between the merlons across the view, the standards among them
   const gaps = []; for (let x = -26 + 1.8; x < 26; x += 2.2) if (x > -11 && x < 11) gaps.push(x);
@@ -179,9 +181,16 @@ export async function build(W, H) {
       const std = new THREE.Group(), mk = (geo, m) => { const o = new THREE.Mesh(geo, m); o.castShadow = true; std.add(o); return o; };
       mk(new THREE.CylinderGeometry(.022, .028, 3.3, 6), ash).position.y = 1.65;
       if (STD[i] === 'vexillum') { const bar = mk(new THREE.CylinderGeometry(.013, .013, .86, 5), ash); bar.rotation.z = Math.PI / 2; bar.position.y = 3.12;
-        const geo = new THREE.PlaneGeometry(.8, .74, 12, 9); geo.translate(0, -.37, 0); const cl = mk(geo, clothM); cl.position.set(0, 3.1, .015);
-        const fr = mk(new THREE.PlaneGeometry(.8, .07, 12, 1), crestM); fr.position.set(0, 2.33, .015); mk(new THREE.ConeGeometry(.03, .16, 4), goldM).position.y = 3.38;
-        std.userData = { cloth: cl, base: geo.attributes.position.array.slice(), fringe: fr }; }
+        // the vexillum: a hanging cloth (finely divided, so it can fold) with a fringe of loose cords along its hem and a cord with a
+        // tassel at each end of the crossbar — all moved by the wind in vexillumAt() (no rigid plate)
+        const geo = new THREE.PlaneGeometry(.8, .74, 28, 22); geo.translate(0, -.37, 0); const cl = mk(geo, clothM); cl.position.set(0, 3.1, .015);
+        const NF = 26, fg = new THREE.BufferGeometry(); fg.setAttribute('position', new THREE.BufferAttribute(new Float32Array(NF * 4 * 3), 3));
+        const fi = []; for (let k = 0; k < NF; k++) fi.push(k * 4, k * 4 + 1, k * 4 + 2, k * 4 + 2, k * 4 + 1, k * 4 + 3); fg.setIndex(fi);
+        const fr = mk(fg, fringeM); fr.position.set(0, 3.1, .015); fr.frustumCulled = false;
+        const tas = [-1, 1].map(sd => { const c = mk(new THREE.CylinderGeometry(.006, .006, .22, 4), fringeM); c.geometry.translate(0, -.11, 0); c.position.set(sd * .43, 3.12, 0);
+          const tb = new THREE.Mesh(new THREE.ConeGeometry(.022, .07, 6), fringeM); tb.position.y = -.24; tb.castShadow = true; c.add(tb); return c; });
+        mk(new THREE.ConeGeometry(.03, .16, 4), goldM).position.y = 3.38;
+        std.userData = { cloth: cl, base: geo.attributes.position.array.slice(), fringe: fr, NF, tas }; }
       else { mk(new THREE.ConeGeometry(.035, .2, 4), goldM).position.y = 3.4; const bar = mk(new THREE.CylinderGeometry(.012, .012, .42, 5), goldM); bar.rotation.z = Math.PI / 2; bar.position.y = 3.18;
         for (const sd of [-1, 1]) mk(new THREE.CylinderGeometry(.01, .025, .2, 5), clothM).position.set(sd * .2, 3.06, 0);
         for (let k = 0; k < 6; k++) { const d = mk(new THREE.CylinderGeometry(.095, .095, .022, 18), goldM); d.rotation.x = Math.PI / 2; d.position.y = 2.62 - k * .22; } }
@@ -202,10 +211,33 @@ export async function build(W, H) {
       b.updateMatrix(); const gl = V(0, 1.24 + I.bob, -.36), gr = V(0, .94 + I.bob, -.36);
       P.pose(b, { ...I, lean: -.02, hands: [gl, gr] });                                     // both hands on the pole
       const gw = gr.clone().applyMatrix4(b.matrix); std.position.set(gw.x, gw.y - .94 + .03, gw.z); std.rotation.set(0, Math.PI + .3, 0);
-      if (std.userData.cloth) { const q = std.userData.cloth.geometry.attributes.position, B0 = std.userData.base;
-        for (let i = 0; i < q.count; i++) { const px = B0[i * 3], py = B0[i * 3 + 1], dn = -py / .74;
-          q.setZ(i, (.06 * Math.sin(px * 7 - t * 2.4 + py * 3 + ph * 6) + .03 * Math.sin(px * 13 + t * 3.5)) * (.3 + dn)); q.setX(i, px + .02 * dn * Math.sin(t * 1.2 + ph * 5)); }
-        q.needsUpdate = true; std.userData.cloth.geometry.computeVertexNormals(); std.userData.fringe.position.z = .015 + .04 * Math.sin(-t * 2.4 + 1.2 + ph * 6); } }
+      if (std.userData.cloth) vexillumAt(std.userData, t, ph); }
+  }
+  // the cloth in the wind (stateless: every frame is a function of t alone — the render seeks frames out of order): pinned along the
+  // crossbar; standing vertical folds that slowly breathe; a ripple running across with the gusts, growing toward the hem; the
+  // whole cloth billowing back and swaying a little; the hem lagging the cloth and the fringe cords lagging the hem
+  const disp = (px, py, t, ph, out) => {
+    const dn = -py / .74, pin = Math.min(1, dn * 1.6) * (.35 + .65 * dn), gust = .75 + .25 * Math.sin(t * .63 + ph * 4) + .12 * Math.sin(t * 1.37 + ph * 9);
+    const fold = .045 * Math.sin(px * 15.7 + .6 * Math.sin(t * .8 + ph * 3)) * (.4 + .6 * dn);                 // vertical folds
+    const rip = gust * (.085 * Math.sin(px * 8.5 - t * 2.6 + py * 4.2 + ph * 6) + .032 * Math.sin(px * 19 - t * 3.9 + py * 7 + ph * 2));
+    const bil = .1 * dn * dn * (.6 + .4 * Math.sin(t * .9 + ph * 5)) * gust;                                    // billows back from the wind
+    out[0] = px + dn * (.045 * Math.sin(t * 1.15 + ph * 5) + .018 * Math.sin(t * 2.3 + px * 4 + ph)) * gust;
+    out[2] = (fold + rip) * pin + bil;
+    out[1] = py + .05 * dn * dn * Math.abs(Math.sin(px * 8.5 - t * 2.6 + py * 4.2 + ph * 6)) * gust;            // a cloth that folds gets shorter
+    return out;
+  };
+  const dv = [0, 0, 0], dv2 = [0, 0, 0];
+  function vexillumAt(u, t, ph) {
+    const q = u.cloth.geometry.attributes.position, B0 = u.base;
+    for (let i = 0; i < q.count; i++) { disp(B0[i * 3], B0[i * 3 + 1], t, ph, dv); q.setXYZ(i, dv[0], dv[1], dv[2]); }
+    q.needsUpdate = true; u.cloth.geometry.computeVertexNormals(); u.cloth.geometry.computeBoundingSphere();
+    const f = u.fringe.geometry.attributes.position, L = .085, wdt = .011;
+    for (let k = 0; k < u.NF; k++) { const px = -.39 + .78 * k / (u.NF - 1);
+      disp(px, -.74, t, ph, dv); disp(px, -.74, t - .22, ph, dv2);                                                // the cord hangs from the hem, its end where the hem was a moment ago
+      const sw = .02 * Math.sin(t * 3.1 + k * 1.7 + ph * 8), ex = dv2[0] + sw, ez = dv2[2] + .5 * (dv2[2] - dv[2]) + .01, ey = dv[1] - L;
+      f.setXYZ(k * 4, dv[0] - wdt, dv[1], dv[2]); f.setXYZ(k * 4 + 1, dv[0] + wdt, dv[1], dv[2]); f.setXYZ(k * 4 + 2, ex - wdt * .6, ey, ez); f.setXYZ(k * 4 + 3, ex + wdt * .6, ey, ez); }
+    f.needsUpdate = true; u.fringe.geometry.computeVertexNormals();
+    u.tas.forEach((c, j) => { c.rotation.z = .16 * Math.sin(t * 1.3 + ph * 5 + j * 1.1) + .05 * Math.sin(t * 2.7 + j); c.rotation.x = .12 * Math.sin(t * 1.05 + ph * 3 + j * 2); });
   }
   window.__GARRISON = t => garrison.map(g => ({ J: g.s.userData }));
   const birds = []; { const bm = new THREE.MeshBasicMaterial({ color: '#3a342e', side: THREE.DoubleSide });

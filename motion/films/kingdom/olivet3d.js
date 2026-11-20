@@ -261,7 +261,7 @@ export async function build(W, H_, B0 = null) {
     float vn(vec2 p){ vec2 i = floor(p), f = fract(p); vec2 u = f * f * (3. - 2. * f); return mix(mix(hh(i), hh(i + vec2(1, 0)), u.x), mix(hh(i + vec2(0, 1)), hh(i + vec2(1, 1)), u.x), u.y); }
     float fb(vec2 p){ float s = 0., a = .5; for (int i = 0; i < 4; i++){ s += a * vn(p); p = p * 2.03 + 11.7; a *= .5; } return s; }`;
   const terrU = { tRoad: { value: roadTex }, tRoadH: { value: roadHTex }, tReg: { value: regTex }, tRegH: { value: regHTex }, uRoadR: { value: ROADR }, uRegR: { value: REGR }, tMid: { value: midTex }, uMidR: { value: MIDR },
-    uSkyW: { value: new THREE.Color(.4, .35, .3) }, uDetail: { value: 1 }, uGK: { value: 0 }, uSunW: { value: V(0, 1, 0) }, uF: { value: 0 }, uGlow: { value: 0 }, uHeadW: { value: 50 }, uFeet: { value: 0 } };
+    uSkyW: { value: new THREE.Color(.4, .35, .3) }, uDetail: { value: 1 }, uGK: { value: 0 }, uSunW: { value: V(0, 1, 0) }, uF: { value: 0 }, uGlow: { value: 0 }, uHeadW: { value: 50 }, uFeet: { value: 0 }, uDeep: { value: 0 } };
   {
     const NR = 452, NA = 768, r0 = .6, kR = Math.log(PATCH / r0) / (NR - 2);
     const nV = 1 + (NR - 1) * NA, pos = new Float32Array(nV * 3), colr = new Float32Array(nV * 3), wet = new Float32Array(nV), coast = new Float32Array(nV);
@@ -622,7 +622,7 @@ export async function build(W, H_, B0 = null) {
   const surfY = (lo, la) => { if (E.gcDist(lo, la) < PATCH - 8000) { const [x, z] = LL(lo, la); return Math.max(H(x, z), -30); } return -30; };
   function arcPts(a, b) {   // a great circle lifted into a bow; the height grows with the length (seen in profile over the limb)
     const d = gcd(a, b), va = v3(...a), vb = v3(...b), om = Math.acos(clamp(va.dot(vb), -1, 1)), n = clamp(Math.round(d / 90000), 16, 96);
-    const hTop = Math.min(1.0e6, d * (.08 + .08 * ss(2e5, 3e6, d))), ya = surfY(...a) + 200, yb = surfY(...b) + 200, P = [];
+    const hTop = Math.min(5.5e5, d * (.055 + .045 * ss(2e5, 3e6, d))),   /* round 6: a lower bow (was ≤ 1,000 km) so the long arcs stay over the land, not out past the limb */ ya = surfY(...a) + 200, yb = surfY(...b) + 200, P = [];
     for (let i = 0; i <= n; i++) { const s = i / n, k0 = Math.sin((1 - s) * om) / Math.sin(om || 1e-9), k1 = Math.sin(s * om) / Math.sin(om || 1e-9);
       const v = om < 1e-9 ? va.clone() : va.clone().multiplyScalar(k0).addScaledVector(vb, k1), y = lerp(ya, yb, s) + hTop * Math.sin(Math.PI * s);
       P.push(V(0, -R_E0, 0).addScaledVector(v, R_E0 + y)); }
@@ -650,6 +650,7 @@ export async function build(W, H_, B0 = null) {
         const t0 = t0b + j * .38 + rA() * .45; if (!ok || t0 > tEnd) continue; arc(h.ll, ok, t0, 4); } } }
   ARCS.forEach(a => { a.P = arcPts(a.a, a.b); });
   const ARC = E.arcMesh(ARCS, { px: 2.2 }); S.add(ARC.mesh);
+  const DEEP = a => ss(4e6, 1.6e7, a), ARCHALO = 1.3, CGLOW = .08, SPACEBLOOM = .16, LIFT0 = film.look.lift.clone(), LIFTN = col('#020307');   // round 6 strengths
   // each landing: a soft bloom and the lamps of a city coming on round it; the world's other lights after the waves
   const hubL = [];
   for (const h of HUBS) { const r = rng(Math.round(h.t * 1000)), rad = h.rank === 1 ? 2.5e4 : clamp(h.d * .03, 3e4, 9e4);
@@ -658,9 +659,14 @@ export async function build(W, H_, B0 = null) {
   { const r = rng(7); hubL.push({ p: E.llToWorld(JER[0], JER[1], 900, V()), d: (T0B.c2 - 1.6) * 1000, b: 1.4, s: 2.6, f: 900 });   // Jerusalem keeps its glow (the trunk) as the lamps of the hills fade into the globe
     for (let i = 0; i < 14; i++) { const b = dest(JER, r() * 6.283, Math.sqrt(r()) * 6e4); hubL.push({ p: E.llToWorld(b[0], b[1], 900, V()), d: (T0B.c2 - 1.5 + r() * .6) * 1000, b: .5 + r() * .5, s: 1.1, f: 700 }); } }
   const HUBP = E.lampPoints(hubL, { px: 4.6, minPx: 1.8 }); HUBP.u.uRef.value = 4e6; S.add(HUBP.pts);
-  for (const c of E.cityLights({ count: 16000, isLand: GL.isLand, skipWithin: 90000 })) far.push({ p: E.llToWorld(c.lon, c.lat, 700, V()), d: c.gd + c.j * 1.2e6, b: c.b * .8, s: 1, f: 5e5 });
-  const CITIES = E.lampPoints(far, { px: 4.0, minPx: 1.4 }); CITIES.u.uRef.value = 4e6; S.add(CITIES.pts);
-  const CDIM = E.lampPoints(far.filter(c => c.b > .42).map(c => ({ ...c, d: 0, b: c.b * .9, f: 1 })), { px: 3.6, minPx: 1.2 }); CDIM.u.uRef.value = 4e6; S.add(CDIM.pts);
+  const CL = E.cityLights({ count: 16000, isLand: GL.isLand, skipWithin: 90000 });
+  for (const c of CL) { c.pp = E.popAt(c.lon, c.lat); c.b *= .45 + .75 * Math.pow(c.pp, .6); far.push({ p: E.llToWorld(c.lon, c.lat, 700, V()), d: c.gd + c.j * 1.2e6, b: c.b * .8, s: 1, f: 5e5 }); }   // round 6: the empty land's scattered points dimmer, the clusters brighter (the grey speckle)
+  // round 6 (2026-11-20 "the night land slightly grey-blue"): the land blue-black (earth-night eShade), the cities warmer (sodium orange) with a soft glow
+  // round them on the land (cityGlowTex) that comes on with the wave front — the night side's light is warm city light, not a grey lift
+  const CWARM = [1, .66, .34];
+  const CITIES = E.lampPoints(far, { px: 4.0, minPx: 1.4, color: CWARM }); CITIES.u.uRef.value = 4e6; S.add(CITIES.pts);
+  const CDIM = E.lampPoints(far.filter((c, i) => c.b > .42 && CL[i].pp > .2).map(c => ({ ...c, d: 0, b: c.b * .9, f: 1 })), { px: 3.6, minPx: 1.2, color: CWARM }); CDIM.u.uRef.value = 4e6; S.add(CDIM.pts);
+  GL.u.tGlow.value = E.cityGlowTex(CL);
   let GW = null;   // the wave front over the world's other lights (m from Jerusalem), behind the arcs
   const waveFront = t => { if (!GW) GW = mono([[T.c2 + .4, Math.log(3e5)], [T.c2 + 2.2, Math.log(2.5e6)], [T.f + 1.5, Math.log(7e6)], [T.g, Math.log(2.0e7)]]); return t < T.c2 + .4 ? 0 : Math.exp(GW(t)); };
 
@@ -746,7 +752,8 @@ export async function build(W, H_, B0 = null) {
     terrU.uSkyW.value.copy(fc).multiplyScalar(.9 + .4 * (1 - night)); terrU.uDetail.value = 1;
     // the look: exposure rides up into the blue hour so the land never goes black; bloom for the lamps
     const L = film.look; L.exposure = lerp(1.05, 1.5, ss(3, -5, e)) * lerp(1, .92, space) * lerp(1, 1.55, ss(8e3, 1.5e5, alt)) * lerp(1, 1.12, ss(1e5, 6e5, alt) * (1 - ss(6e6, 2e7, alt)));   // a little more light on the night globe
-    film.bloomCfg.strength = lerp(.07, .17, ss(1, -5, e)) * lerp(1, .3, ss(2e3, 2.5e4, alt)); L.grain = .03;   // (from the air the whole lamp field would bloom into a veil)
+    film.bloomCfg.strength = lerp(.07, .17, ss(1, -5, e)) * lerp(1, .3, ss(2e3, 2.5e4, alt)) + SPACEBLOOM * ss(3e6, 1.2e7, alt); L.grain = .03;
+    L.lift.copy(LIFT0).lerp(LIFTN, DEEP(alt));   // round 6: from orbit the warm lift greyed the night (blue-black instead); the hill keeps its lift   // (from the air the whole lamp field would bloom into a veil)
     const Df = film.dofCfg; Df.focus = c.focus; Df.aperture = c.aperture; Df.maxCoc = 14;
     // the light along the roads (terrain), the lamps, the world's lines
     const F = front(t), glowOn = ss(T.crane - .2, T.crane + 1.4, t);
@@ -755,14 +762,14 @@ export async function build(W, H_, B0 = null) {
         CLAMPS.u.uF.value = F; CLAMPS.u.uK.value = lerp(.5, 1.15, ss(2, -4, e)) * (1 - ss(1100, 3800, alt)); CLAMPS.u.uPull.value = .003; CLAMPS.u.uScale.value = film.scale;
         JGLOW.u.uF.value = 1; JGLOW.u.uK.value = 0; JGLOW.u.uPull.value = .0005; JGLOW.u.uScale.value = film.scale;
         LAMPS.u.uF.value = F; LAMPS.u.uK.value = lerp(.5, 1.15, ss(2, -4, e)) * (1 - ss(2.5e5, 1.6e6, alt)); LAMPS.u.uPull.value = alt < 4e4 ? .003 : .0005; LAMPS.u.uScale.value = film.scale;   // (from orbit the lamps would pile into one blob: the globe's own lights take over)
-    CITIES.u.uF.value = waveFront(t); CITIES.u.uK.value = 1.2; CITIES.u.uPull.value = .0004; CITIES.u.uScale.value = film.scale;
+    CITIES.u.uF.value = waveFront(t); CITIES.u.uK.value = 1.2 + .6 * DEEP(alt); CITIES.u.uPull.value = .0004; CITIES.u.uScale.value = film.scale;
     CDIM.u.uF.value = 1; CDIM.u.uK.value = ss(3e4, 4e5, alt) * 2.0; CDIM.u.uPull.value = .0004; CDIM.u.uScale.value = film.scale;
     HUBP.u.uF.value = t * 1000; HUBP.u.uK.value = 1.7; HUBP.u.uPull.value = .0004; HUBP.u.uScale.value = film.scale;
-    ARC.u.uT.value = t; ARC.u.uRes.value.set(film.w, film.h); ARC.u.uPx.value = 2.2 * film.scale; ARC.u.uK.value = 1.25; ARC.u.uBandY.value = .38;
+    ARC.u.uT.value = t; ARC.u.uRes.value.set(film.w, film.h); ARC.u.uPx.value = 2.2 * film.scale; ARC.u.uK.value = 1.25 + .35 * DEEP(alt); ARC.u.uBandY.value = .38; ARC.u.uLimb.value = 1; ARC.u.uHalo.value = ARCHALO;   // round 6: arcs stay on the disc; a soft warm glow round each
     // the globe (only once the camera is high enough for it to show past the terrain) and its air seen from outside
     { const op = 1 - ss(700, 2600, alt); CITYMAT.forEach(m => { m.opacity = op; }); CITYOBJ.forEach(o => { o.visible = op > .002; }); }
     GL.mesh.visible = alt > 1500; GL.atm.visible = alt > 6e4 && !OFFS.includes("atm"); GL.au.uK.value = ss(9e4, 5e5, alt); GL.au.uSun.value.copy(sunDir); GL.u.uSun.value.copy(sunDir);
-    GL.u.uHazeL.value = lerp(2.5e5, 8e6, ss(1e4, 2e6, alt));
+    GL.u.uHazeL.value = lerp(2.5e5, 8e6, ss(1e4, 2e6, alt)); GL.u.uWF.value = Math.max(F, waveFront(t)); GL.u.uCG.value = CGLOW * ss(3e5, 2e6, alt); GL.u.uPre.value = .45 * DEEP(alt); GL.u.uDeep.value = terrU.uDeep.value = DEEP(alt);   // the region view keeps its round-5 night; the globe goes blue-black as the camera leaves the air   // round 6: the cities' glow (from the air down, it would sit over the terrain's own lamps)
     terrU.uGK.value = OFFS.includes("gk") ? 0 : ss(1.5e4, 8e4, alt); GL.u.uNM.value = lerp(-.22, 1.2, ss(T.c2 - .9, T.c2 + 1.2, t)); terrU.uSunW.value.copy(sunDir);   // uNM: the night holds over the land as the globe look comes in; then the dawn comes in at the far limb
     // banners, dust
     banU.uT.value = t; banU.uGust.value = Math.exp(-Math.pow((t - T.gust - .8) / 1.1, 2)) * .9;
@@ -775,6 +782,6 @@ export async function build(W, H_, B0 = null) {
     if (!T) { T = beats(B); SUNE = sunElev(T); SUNH = sunHead(T); }
     frame(clamp(t, T.a, T.g)); blit(ctx);
   }
-  { const off = (new URLSearchParams(location.search).get('off') || '').split(','); if (off.includes('arc')) ARC.mesh.visible = false; if (off.includes('hub')) HUBP.pts.visible = false; if (off.includes('city')) CITIES.pts.visible = false; if (off.includes('lamp')) LAMPS.pts.visible = false; if (off.includes('atm')) GL.atm.visible = false; OFFS = off; }
-  return { film, draw, beats: () => T, camAt: t => (T ? camAt(t) : null), front: t => (T ? front(t) : 0), people: { king, men }, arcs: ARCS.map(a => [a.w, +a.t0.toFixed(2)]) };
+  { const off = (new URLSearchParams(location.search).get('off') || '').split(','); if (off.includes('arc')) ARC.mesh.visible = false; if (off.includes('hub')) HUBP.pts.visible = false; if (off.includes('city')) CITIES.pts.visible = false; if (off.includes('cdim')) CDIM.pts.visible = false; if (off.includes('lamp')) LAMPS.pts.visible = false; if (off.includes('atm')) GL.atm.visible = false; OFFS = off; }
+  return { film, draw, beats: () => T, camAt: t => (T ? camAt(t) : null), front: t => (T ? front(t) : 0), people: { king, men }, arcs: ARCS.map(a => [a.w, +a.t0.toFixed(2)]), arcGeo: ARCS };   // arcGeo: the arcs' points, for the off-limb check (round 6)
 }

@@ -51,7 +51,8 @@ export async function build(W, H) {
     atmos: { density: .02, falloff: 0, base: 0, start: .5, color: col('#3a2414', .5), colorUp: col('#3a2616', .5), max: 60, scatter: 1, anisotropy: .6, phaseMix: .6 },
     bloom: { strength: .08, radius: 1.1, tint: col('#ffd9a8') },
     dof: { focus: 4, aperture: 2, maxCoc: 18 },
-    look: { exposure: 1.0, contrast: 1.12, saturation: .95, lift: col('#33200f'), shadowTint: col('#f2dcc0'), highTint: col('#fff0d4'), vignette: .42, grain: .045, ca: .25 },
+    look: { exposure: 1.0, contrast: 1.12, saturation: .95, lift: col('#3d2713'),   // round 6: lift #33200f → #3d2713 (the umber darks a little higher)
+    shadowTint: col('#f2dcc0'), highTint: col('#fff0d4'), vignette: .42, grain: .045, ca: .25 },
   });
   film.canvas.style.display = 'none';
   const S = film.scene, cam = film.camera, R = film.renderer;
@@ -129,7 +130,7 @@ export async function build(W, H) {
   { for (const sd of [-1, 1]) { const p = new THREE.Mesh(new THREE.CylinderGeometry(.03, .03, 2.3, 8), M.wood); p.rotation.z = Math.PI / 2; p.position.set(0, .03, sd * .4); p.castShadow = p.receiveShadow = true; ST.add(p); }
     box(1.95, .03, .78, 0, .05, 0, M.reed, ST);
     const roll = new THREE.Mesh(new THREE.CapsuleGeometry(.07, .4, 3, 8), M.cloth); roll.rotation.x = Math.PI / 2; roll.position.set(-.82, .12, 0); roll.castShadow = true; ST.add(roll); }
-  const blanketM = new THREE.MeshStandardMaterial({ color: '#6e4a2c', roughness: .95, side: THREE.DoubleSide });
+  const blanketM = new THREE.MeshStandardMaterial({ color: '#4c2c1a', roughness: .95, side: THREE.DoubleSide });   // round 6: darker wool (was #6e4a2c — the same tone as the lit floor, so the body under it was lost in the light)
   blanketM.onBeforeCompile = sh => { sh.vertexShader = sh.vertexShader.replace('#include <common>', '#include <common>\nvarying vec3 vLP;').replace('#include <begin_vertex>', '#include <begin_vertex>\nvLP = position;');
     sh.fragmentShader = sh.fragmentShader.replace('#include <common>', '#include <common>\nvarying vec3 vLP;\n' + hashGLSL).replace('#include <map_fragment>', `#include <map_fragment>
       { float st = step(.5, fract(vLP.x * 2.1)) * step(fract(vLP.x * 2.1), .56); diffuseColor.rgb = mix(diffuseColor.rgb, vec3(.42, .16, .09), st * .25); diffuseColor.rgb *= mix(.85, 1.08, fb(vLP.xz * 22.)); }`); };
@@ -138,7 +139,11 @@ export async function build(W, H) {
   { const pos = blG.attributes.position; for (let i = 0; i < pos.count; i++) { const x = pos.getX(i), z = pos.getZ(i), u = (x + BLX / 2) / BLX;   // u 0 = chest end, 1 = feet
       const chest = Math.exp(-(((u - .12) / .15) ** 2)) * .2, hips = Math.exp(-(((u - .4) / .13) ** 2)) * .17, legs = Math.exp(-(((u - .64) / .1) ** 2)) * .17 + Math.exp(-(((u - .8) / .12) ** 2)) * .09, feet = Math.exp(-(((u - .96) / .035) ** 2)) * .15;
       const w = Math.exp(-((z / (u < .5 ? .22 : .15)) ** 2) * 1.2), legSplit = u > .55 ? 1 - .25 * Math.exp(-((z / .04) ** 2)) : 1;
-      pos.setY(i, .07 + Math.max(chest, hips, legs, feet) * w * legSplit + .015 * Math.sin(x * 23 + z * 7) + (1 - w) * .02); }
+      // round 6: the waist dips between chest and hips, a knee rises, the two feet part at the end, and the wool falls in folds off the
+      // sides (the body under it, not a slab); the chest end tucks under his chin
+      const waist = -.05 * Math.exp(-(((u - .27) / .06) ** 2)), knee = .05 * Math.exp(-(((u - .69) / .05) ** 2)) * Math.exp(-(((z + .05) / .08) ** 2)), toes = .06 * Math.exp(-(((u - .97) / .03) ** 2)) * (Math.exp(-(((z - .07) / .045) ** 2)) + Math.exp(-(((z + .07) / .045) ** 2)));
+      const folds = (1 - w) * (.022 * Math.sin(x * 15 + 1.3) * Math.sin(z * 9) - .012), tuck = -.03 * ss(.05, 0, u);
+      pos.setY(i, .07 + Math.max(chest, hips + waist, legs + knee, feet) * w * legSplit + toes + .015 * Math.sin(x * 23 + z * 7) + (1 - w) * .02 + folds + tuck); }
     blG.computeVertexNormals(); }
   const blanket = new THREE.Mesh(blG, blanketM); blanket.position.x = .15; blanket.castShadow = blanket.receiveShadow = true; ST.add(blanket);
   const lying = new THREE.Group(); lying.position.set(-.72, .16, 0); ST.add(lying);   // his head and shoulders above the blanket, one arm on it
@@ -148,6 +153,10 @@ export async function build(W, H) {
     // (round 3: no tunic, no arm — he is the shape of a body under the blanket; only the dark-haired head shows, turned away)
     lying.traverse(o => { if (o.isMesh) o.castShadow = o.receiveShadow = true; }); lying.userData.head = head; lying.userData.hair = hair; lying.userData.beard = beard; }
   const LAND = V(-.12, 0, -.05);   // where the stretcher comes to rest (in the shaft's footprint)
+  // round 6: a low warm side light raking across the blanket from the camera's left (the bounce off the lit floor, made a little
+  // directional), so the body under it reads — chest, hips, knees, feet — from the high corner; it comes up as the stretcher lands
+  const sideA = new THREE.SpotLight(col('#ffcf9a'), 0, 4.2, .42, .55, 1.6); sideA.position.set(LAND.x - 1.25, .62, LAND.z + 1.15); sideA.target.position.set(LAND.x + .05, .12, LAND.z);
+  sideA.castShadow = true; sideA.shadow.mapSize.set(1024, 1024); sideA.shadow.bias = -.0006; sideA.shadow.normalBias = .01; Object.assign(sideA.shadow.camera, { near: .3, far: 4.5 }); A.add(sideA, sideA.target);
   // the four at the roof's edge, kneeling, leaning over, paying the ropes out hand over hand
   const corners = [[-.95, .36], [-.95, -.36], [.95, -.36], [.95, .36]];
   const MENP = [[-1.5, -.88], [-.45, -1.18], [.45, -1.18], [1.5, -.88]];   // all four on the far rim, so from below all four stand against the sky
@@ -164,15 +173,24 @@ export async function build(W, H) {
   // stretcher, up at the hole, or at a neighbour, on his own delay and phase
   const mantleCols = ['#6e5228', '#4a4a2a', '#5a2a1e', '#857a66', '#46342a', '#3a3632', '#6a4a30', '#544632'];
   const mantles = mantleCols.map((c, i) => rimify(K.std(c, { roughness: .95, side: THREE.DoubleSide }), 'm' + i));
+  // round 6 (2026-11-20, owner "남은 점도 개선하자" — from the high corner the crowd read as a band of figures across the top):
+  // fewer, smaller clusters spread in depth (some close to the cleared floor, some back by the walls), angular gaps between them
+  // so the floor shows through, and a broken head line — a few kneel or sit on the floor in the front row
   const crowdA = []; { const r = rng(33), spots = [], centres = [];
-    for (let n = 0; n < 300 && centres.length < 12; n++) { const a = r() * 6.283, rr = 2.1 + r() * 1.9, x = Math.cos(a) * rr, z = Math.sin(a) * rr, an = Math.atan2(z, x);
-      if (Math.abs(x) > RW - .6 || Math.abs(z) > RW - .6 || (an > .05 && an < 1.85)) continue; if (centres.some(([u, v]) => Math.hypot(u - x, v - z) < 1.15)) continue; centres.push([x, z]); }
-    centres.forEach(([cx, cz], ci) => { const m = 2 + ((r() * 4) | 0);
-      for (let j = 0; j < m * 6 && spots.filter(q => q.c === ci).length < m; j++) { const x = cx + (r() - .5) * 1.1, z = cz + (r() - .5) * 1.1, an = Math.atan2(z, x), rr = Math.hypot(x, z);
-        if (rr < 1.75 || Math.abs(x) > RW - .3 || Math.abs(z) > RW - .3 || (an > .05 && an < 1.85)) continue; if (spots.some(q => Math.hypot(q.x - x, q.z - z) < .5)) continue; spots.push({ x, z, c: ci }); } });
-    for (const q of spots) { const u = r(), kind = u < .16 ? 'child' : u < .42 ? 'woman' : 'man';
+    // the arc they stand on (an 1.85 → 6.33, the side away from the camera) walked in steps; each step's cluster on a different depth
+    // tier than its neighbour (near the cleared floor · middle · back by the wall), with an empty step now and then (the floor shows)
+    const TIER = [[2.1, 2.4], [2.7, 3.05], [3.3, 3.75]]; let tPrev = -1;
+    for (let a = 1.98; a < 6.25; a += .34 + .14 * r()) { if (r() < .14) continue;
+      let ti = (r() * 3) | 0; if (ti === tPrev) ti = (ti + 1 + ((r() * 2) | 0)) % 3; tPrev = ti;
+      const rr = lerp(TIER[ti][0], TIER[ti][1], r()), x = Math.cos(a) * rr, z = Math.sin(a) * rr;
+      if (Math.abs(x) > RW - .45 || Math.abs(z) > RW - .45) continue; centres.push([x, z]); }
+    centres.forEach(([cx, cz], ci) => { const m = 2 + ((r() * 3) | 0), sp = .5 + .4 * r();
+      for (let j = 0; j < m * 8 && spots.filter(q => q.c === ci).length < m; j++) { const x = cx + (r() - .5) * 2 * sp * .8, z = cz + (r() - .5) * 2 * sp * .8, an = Math.atan2(z, x), rr = Math.hypot(x, z);
+        if (rr < 2.0 || Math.abs(x) > RW - .3 || Math.abs(z) > RW - .3 || (an > .05 && an < 1.85)) continue; if (spots.some(q => Math.hypot(q.x - x, q.z - z) < .55)) continue; spots.push({ x, z, c: ci }); } });
+    for (const q of spots) { const u = r(), kind = u < .16 ? 'child' : u < .42 ? 'woman' : 'man', rq = Math.hypot(q.x, q.z), low = r();
+      const pose = kind !== 'child' && rq < 2.75 ? (low < .38 ? 'kneel' : low < .6 ? 'sit' : 'stand') : 'stand';   // the front row breaks the line of heads
       const o = kind === 'child' ? { h: 1.05 + r() * .28, child: true, head: r() < .5 ? 'cloth' : 'veil', broad: .9 } : kind === 'woman' ? { h: 1.52 + r() * .12, head: 'veil', broad: .82 + r() * .1 } : { h: 1.62 + r() * .2, head: r() < .55 ? 'hood' : 'cloth', broad: .9 + r() * .22 };
-      const p = mk({ ...o, mat: robes[(r() * 8) | 0], cloth: mantles[(r() * 8) | 0] }); p.position.set(q.x, 0, q.z);
+      const p = mk({ ...o, kind: pose === 'sit' ? 'sit' : 'stand', mat: robes[(r() * 8) | 0], cloth: mantles[(r() * 8) | 0] }); p.position.set(q.x, 0, q.z); p.userData.low = pose;
       const mates = spots.filter(w => w.c === q.c && w !== q), mate = mates.length && r() < .35 ? mates[(r() * mates.length) | 0] : null;
       p.rotation.y = mate && r() < .5 ? face(mate.x - q.x, mate.z - q.z) : face(LAND.x - q.x, LAND.z - q.z) + (r() - .5) * .6;
       p.userData.ph = r(); p.userData.dl = r() * 1.4; p.userData.shade = kind === 'man' && r() < .15; p.userData.look = mate ? 2 : r() < .3 ? 1 : 0; p.userData.mate = mate; p.userData.kind = kind; A.add(p); crowdA.push(p); } }
@@ -319,7 +337,11 @@ export async function build(W, H) {
     const ma = tan(i), mb = tan(i + 1), h00 = 2 * u ** 3 - 3 * u * u + 1, h10 = u ** 3 - 2 * u * u + u, h01 = -2 * u ** 3 + 3 * u * u, h11 = u ** 3 - u * u;
     return a.map((v, c) => h00 * v + h10 * h * ma[c] + h01 * b[c] + h11 * h * mb[c]); };
   const setCam = (pos, look, up = null) => { cam.position.copy(pos); if (up) cam.up.copy(up); else cam.up.set(0, 1, 0); cam.lookAt(look); };
+  // round 6: the hand that shaded the eyes, on its way down: brow → in front of the chest → hanging at the side (root frame, eased curve)
+  const shadeHand = (s, k) => { const a = V(.06, 1.62 * s, -.12), b = V(.2 * s, 1.18 * s, -.24 * s), c = V(.27 * s, .84 * s, -.03 * s), u = k, w = 1 - u;
+    return V(w * w * a.x + 2 * w * u * b.x + u * u * c.x, w * w * a.y + 2 * w * u * b.y + u * u * c.y, w * w * a.z + 2 * w * u * b.z + u * u * c.z); };
   const toY = (p, target) => { const d = target.clone().sub(p.getWorldPosition(V()).add(V(0, 1.5, 0))); const lp = Math.atan2(d.y, Math.hypot(d.x, d.z)); const yaw = Math.atan2(-d.x, -d.z) - p.rotation.y; return [lp, Math.atan2(Math.sin(yaw), Math.cos(yaw))]; };
+  const LIFT = 1.3;   // round 6 (2026-11-20): both rooms a little brighter (the block's mean was 77, below the first film's 78)
   function roof(t) {
     A.visible = true; Bm.visible = sunB.visible = sunD.visible = false; sunA.visible = true;
     const dk = ss(T.down0, T.down1, t), sy = lerp(RH + 1.2, .02, dk), land = clamp((t - T.down1) / 1.4);
@@ -344,10 +366,17 @@ export async function build(W, H) {
     const holeP = V(0, RH + .3, 0);
     for (const p of crowdA) { const U = p.userData, k = ss(T.down0 + U.dl, T.down0 + U.dl + 1.4, t), toMat = ss(T.down1 + U.dl * .6, T.down1 + U.dl * .6 + 1.6, t);
       // where he looks: the stretcher (most), up at the hole (then down to the man once it lands), or the one beside him (and back)
-      const tgt = U.look === 1 ? lv(holeP, sp, toMat) : U.look === 2 ? lv(V(U.mate.x, 1.5 * U.s, U.mate.z), sp, ss(T.rest + U.dl, T.rest + U.dl + 1.5, t)) : sp;
-      const [pt, yw] = toY(p, tgt);
-      P.pose(p, { ...P.idle(t, U.ph, { s: U.s }), head: [clamp(pt, -.6, .75) * k + (1 - k) * -.05, clamp(yw, -.9, .9) * k], lean: lerp(0, -.06, ss(T.down1, T.down1 + 2, t)),
-        hands: U.shade && t < T.down1 ? [null, V(.06, 1.62 * U.s, -.12)] : null }); }
+      // round 6: the head turns between two looks by blending the two head ANGLES (each faded out when its target is behind him), not
+      // by sliding one target point from the first to the second — a point sliding past his own head swung the head round in a frame
+      // (measured 0.30–0.73 rad/frame)
+      const look = q => { const [a, y] = toY(p, q), f = ss(2.7, 1.5, Math.abs(y)); return [clamp(a, -.6, .75) * f + (1 - f) * -.05, clamp(y, -.9, .9) * f]; };
+      const [l0, l1, kb] = U.look === 1 ? [look(holeP), look(sp), toMat] : U.look === 2 ? [look(V(U.mate.x, 1.5 * U.s, U.mate.z)), look(sp), ss(T.rest + U.dl, T.rest + U.dl + 1.5, t)] : [look(sp), null, 0];
+      const la = l1 ? [lerp(l0[0], l1[0], kb), lerp(l0[1], l1[1], kb)] : l0, hd = [la[0] * k + (1 - k) * -.05, la[1] * k];
+      if (U.low === 'kneel') { const s = U.s, kr = P.kneelRise(0, s), id = P.idle(t, U.ph, { s });   // on his knees, hands on the thighs, breathing; he leans in as it lands
+        P.pose(p, { ...id, ...kr, lean: -.14 + lerp(0, -.08, ss(T.down1, T.down1 + 2, t)), head: hd, swing: [0, 0], hands: [V(-.12 * s, .62 * s, -.2 * s), V(.12 * s, .62 * s, -.2 * s)] }); continue; }
+      if (U.low === 'sit') { const s = U.s; P.pose(p, { breath: P.breath(t, U.ph), lean: -.08 + lerp(0, -.08, ss(T.down1, T.down1 + 2, t)), head: hd, hands: [V(-.17 * s, .32 * s, -.32 * s), V(.17 * s, .32 * s, -.3 * s)] }); continue; }
+      P.pose(p, { ...P.idle(t, U.ph, { s: U.s }), head: hd, lean: lerp(0, -.06, ss(T.down1, T.down1 + 2, t)),
+        hands: U.shade ? [null, shadeHand(U.s, ss(T.down1 - .6, T.down1 + 1.8, t))] : null, handsW: U.shade ? [0, 1 - ss(T.down1 + 1.6, T.down1 + 2.2, t)] : null }); }   // round 6: the shading hand comes down to his side over 2.4 s (was a one-frame drop, 2.6 rad/frame)
     // the King: seated, facing the man; at Q42 he leans toward him a little
     const kl = ss(T.rest, T.rest + 2, t); P.pose(kingA, { breath: P.breath(t, .2), lean: lerp(-.05, -.18, kl), head: [lerp(-.1, -.28, kl), .04 * Math.sin(t * .3)], hands: [V(-.17, .32, -.32), V(.17, .32, -.3)] });
     // the light: settles and breathes on him (Q42), warms (N45b)
@@ -355,6 +384,7 @@ export async function build(W, H) {
     sunA.intensity = 6.2 * br; sunA.color.copy(col('#ffe6c0')).lerp(col('#ffc786'), warm * .8);
     poolA.intensity = (.08 + .17 * dk) * br * (1 + .25 * warm); poolA.color.copy(col('#ffbf80')).lerp(col('#ffa860'), warm * .7); poolA.position.set(ST.position.x, ST.position.y + .45, ST.position.z);
     lampA.power = .08 + .1 * rest; lampA.pos.set(ST.position.x, ST.position.y + 1.0, ST.position.z);
+    sideA.intensity = 3.6 * ss(T.down1 - 1.2, T.down1 + 1.2, t) * (1 + .15 * warm); hemiA.intensity = .45;   // round 6: the blanket's side light; the room's shadows lifted (.14 → .45)
     shaftP.u.mode.value = 0; shaftP.u.kA.value = (1.0 + .35 * rest) * br; shaftP.u.sunCol.value.copy(col('#ffe2b4')).lerp(col('#ffbe78'), warm * .8); shaftP.u.stx.value.set(ST.position.x, ST.position.z, 1, ST.position.y + .1); shaftP.u.boff.value.set(0, 0, 0);
     dustU.uL.value = L1; dustU.uK.value = 1 + .4 * rest;
     RIM.uRimP.value[0].set(ST.position.x, ST.position.y + .8, ST.position.z); RIM.uRimK.value[0] = 2.2 * br; RIM.uRimC.value[0].copy(col('#ffcf96')).lerp(col('#ffb070'), warm * .6);
@@ -373,7 +403,7 @@ export async function build(W, H) {
       [T.table0, [3.6, 2.88, 3.5, -.3, .2, -.3, 45, 2.75, 5.4, 2.2]]];
     const cv = spline(T.camA, t), wTrack = ss(T.tilt0 - .2, T.tilt0 + 1.4, t) * (1 - ss(T.down1 - 1.6, T.down1 + .8, t));   // the eye follows the stretcher while it comes down
     const look = lv(V(cv[3], cv[4], cv[5]), V(sp.x, sp.y + .1, sp.z), wTrack);
-    setCam(V(cv[0], cv[1], cv[2]), look); cam.fov = cv[6]; Lk.exposure = cv[7] + .1 * warm; D.focus = lerp(cv[8], cam.position.distanceTo(sp), wTrack); D.aperture = cv[9];
+    setCam(V(cv[0], cv[1], cv[2]), look); cam.fov = cv[6]; Lk.exposure = (cv[7] + .1 * warm) * LIFT; D.focus = lerp(cv[8], cam.position.distanceTo(sp), wTrack); D.aperture = cv[9];
     renderAll(t);
   }
   function table(t) {
@@ -434,7 +464,7 @@ export async function build(W, H) {
     const kB = open, rest = .25 + .75 * ss(T.shut0, T.shut1, t);
     shaftP.u.mode.value = 1; shaftP.u.open.value = open; shaftP.u.dOpen.value = dOpen; shaftP.u.kB.value = 1.0 * kB; shaftP.u.kD.value = .55; shaftP.u.boff.value.copy(wb);
     sunB.intensity = 7.5; sunD.intensity = 30 * dOpen;
-    poolB.intensity = .35 + .8 * open + .7 * (1 - dOpen); hemiB.intensity = .28;
+    poolB.intensity = .35 + .8 * open + .7 * (1 - dOpen); hemiB.intensity = .6;   // round 6: .28 → .6 (the interiors' shadows lifted)
     RIM.uRimP.value[0].set(-.2, 1.2, -1.0 + TZ).add(wb); RIM.uRimK.value[0] = .6 + 1.8 * open; RIM.uRimC.value[0].copy(col('#ffcf96'));
     RIM.uRimP.value[1].set(-.5, 1.6, -3.4).add(wb); RIM.uRimK.value[1] = 2.4 * dOpen;
     dustU.uK.value = 0; lampA.power = 0;
@@ -445,7 +475,7 @@ export async function build(W, H) {
       [T.push0 + 2.6, [-2.5, 2.99, 3.33, -.2, .33, -1.3, 50, 2.1, 5.0, 2.0]],
       [T.end, [-2.25, 2.9, 3.05, -.22, .45, -.5, 50, 2.1, 4.2, 2.4]]];
     { const cv = spline(T.camB, t); setCam(V(cv[0], cv[1], cv[2]).add(wb), V(cv[3], cv[4], cv[5]).add(wb)); cam.fov = cv[6]; D.focus = cv[8]; D.aperture = cv[9]; }
-    Lk.exposure = 1.35 + .75 * (1 - dOpen);   // the door's light goes; the room is lifted so the table light carries it
+    Lk.exposure = (1.35 + .75 * (1 - dOpen)) * LIFT;   // the door's light goes; the room is lifted so the table light carries it
     renderAll(t);
   }
   function draw(ctx, t, B) {

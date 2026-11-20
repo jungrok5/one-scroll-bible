@@ -155,6 +155,7 @@ export const GLASS = {
     var time = 0, steps = 0, idle = true, refSize = o.refSize;
     sim.bodies = bodies; sim.frames = frames; sim.events = events;
     var caps = o.capsules || [], stack = !!o.stack, restGrid = new Map(), RG = .5;   // B3
+    var capFace = !!o.capFace;   // B3b (2026-11-20, opt-in): bars also collide with the face of a plate, not only its edge points
     var planes = o.planes || [{ n: [0, 1, 0], d: 0, lift: 1 }, { n: [0, 0, 1], d: o.wallZ }];   // B2: planes from o.planes, each may carry region(x, y, z) and maxDepth
 
     function inertia(poly, m, ar) { // second moments of the polygon about its centroid (axes in the plane), plus thickness
@@ -209,6 +210,13 @@ export const GLASS = {
       for (var i = 0; i < n; i++) { var a = b.loc[i], c = b.loc[(i + 1) % n], L = Math.hypot(c[0] - a[0], c[1] - a[1]), m = Math.max(1, Math.ceil(L / .1));
         for (var j = 0; j < m; j++) s.push([a[0] + (c[0] - a[0]) * j / m, a[1] + (c[1] - a[1]) * j / m]); }
       return (b.samp = s); }
+    // B3b (o.capFace): denser edge points for the bars (every 2 cm < a bar's 8.4 cm) and a point-in-plate test for the face contact
+    function samplesC(b) { if (b.sampC) return b.sampC; var s = [], n = b.loc.length;
+      for (var i = 0; i < n; i++) { var a = b.loc[i], c = b.loc[(i + 1) % n], L = Math.hypot(c[0] - a[0], c[1] - a[1]), m = Math.max(1, Math.ceil(L / .02));
+        for (var j = 0; j < m; j++) s.push([a[0] + (c[0] - a[0]) * j / m, a[1] + (c[1] - a[1]) * j / m]); }
+      return (b.sampC = s); }
+    function edgeDist(P, x, y) { var m = 1e9; for (var i = 0, j = P.length - 1; i < P.length; j = i++) { var ex = P[i][0] - P[j][0], ey = P[i][1] - P[j][1], l2 = ex * ex + ey * ey, u = l2 > 0 ? clamp(((x - P[j][0]) * ex + (y - P[j][1]) * ey) / l2, 0, 1) : 0; m = Math.min(m, Math.hypot(x - P[j][0] - ex * u, y - P[j][1] - ey * u)); } return m; }
+    function inLoc(P, x, y) { var c = false; for (var i = 0, j = P.length - 1; i < P.length; j = i++) if ((P[i][1] > y) !== (P[j][1] > y) && x < (P[j][0] - P[i][0]) * (y - P[i][1]) / (P[j][1] - P[i][1]) + P[i][0]) c = !c; return c; }
     function segDist(p, A, B) { var ab = [B[0] - A[0], B[1] - A[1], B[2] - A[2]], ap = [p[0] - A[0], p[1] - A[1], p[2] - A[2]], l2 = dot(ab, ab), t = l2 > 0 ? clamp(dot(ap, ab) / l2, 0, 1) : 0;
       var c = [A[0] + ab[0] * t, A[1] + ab[1] * t, A[2] + ab[2] * t]; return [p[0] - c[0], p[1] - c[1], p[2] - c[2]]; }
     // B3: the footprint of a resting plate on its plane (convex hull of its corners in x-z) and the stacking query
@@ -317,17 +325,32 @@ export const GLASS = {
       }
       if (b.kind === 'shard') for (var ci = 0; ci < caps.length; ci++) {   // B3: round bars and columns
         var C = caps[ci], dc = segDist(b.p, C.a, C.b); if (Math.hypot(dc[0], dc[1], dc[2]) > b.rad + C.r + th) continue;
-        var smp = samples(b), cs2 = [], nsum = [0, 0, 0], deep2 = 0;
+        var smp = capFace ? samplesC(b) : samples(b), cs2 = [], nsum = [0, 0, 0], deep2 = capFace ? -1 : 0;
+        var MG = capFace ? Math.hypot(b.v[0], b.v[1], b.v[2]) * H * 1.5 + Math.hypot(b.w[0], b.w[1], b.w[2]) * b.rad * H + .002 : SLOP;   // B3b: speculative reach — what the plate can cover in one step
         for (i = 0; i < smp.length; i++) for (k = -1; k <= 1; k += 2) { var r2 = rot(R, smp[i][0], smp[i][1], k * th / 2), wpt = [b.p[0] + r2[0], b.p[1] + r2[1], b.p[2] + r2[2]], dv = segDist(wpt, C.a, C.b), dl2 = Math.hypot(dv[0], dv[1], dv[2]);
-          if (dl2 < C.r + SLOP && dl2 > 1e-6) { var dep = C.r - dl2; cs2.push({ r: r2, depth: dep }); nsum[0] += dv[0] / dl2 * (dep + SLOP); nsum[1] += dv[1] / dl2 * (dep + SLOP); nsum[2] += dv[2] / dl2 * (dep + SLOP); if (dep > deep2) deep2 = dep; } }
+          if (dl2 < C.r + MG && dl2 > 1e-6) { var dep = C.r - dl2, wd = capFace ? Math.max(0, dep) + MG - Math.max(0, -dep) * .9 : dep + SLOP; cs2.push({ r: r2, depth: dep }); nsum[0] += dv[0] / dl2 * wd; nsum[1] += dv[1] / dl2 * wd; nsum[2] += dv[2] / dl2 * wd; if (dep > deep2) deep2 = dep; } }
+        if (capFace) {   // B3b: the bar against the plate's FACE (edge points alone let a bar pass through the middle of a big pane)
+          var ab = [C.b[0] - C.a[0], C.b[1] - C.a[1], C.b[2] - C.a[2]], abl = Math.hypot(ab[0], ab[1], ab[2]), nF = [R[6], R[7], R[8]];
+          var tc = clamp(dot([b.p[0] - C.a[0], b.p[1] - C.a[1], b.p[2] - C.a[2]], ab) / (abl * abl), 0, 1), reach = (b.rad + C.r) / abl, ns = Math.max(2, Math.ceil(2 * reach * abl / .02));
+          b.capSide = b.capSide || {};
+          for (var s3 = 0; s3 <= ns; s3++) { var u3 = clamp(tc - reach + 2 * reach * s3 / ns, 0, 1), X3 = [C.a[0] + ab[0] * u3 - b.p[0], C.a[1] + ab[1] * u3 - b.p[1], C.a[2] + ab[2] * u3 - b.p[2]], L3 = rotT(R, X3);
+            if (!inLoc(b.loc, L3[0], L3[1]) || edgeDist(b.loc, L3[0], L3[1]) < C.r) continue;   // near an edge the edge points take it
+            var side = b.capSide[ci], ah = Math.abs(L3[2]); if (ah > C.r + th / 2 + .004) side = b.capSide[ci] = L3[2] >= 0 ? 1 : -1;   // which side of the pane the bar is on, learnt while it is clear
+            if (!side) continue;
+            var dep3 = C.r + th / 2 - side * L3[2]; if (dep3 <= -MG) continue; var wd3 = Math.max(0, dep3) + MG - Math.max(0, -dep3) * .9;
+            var rF = rot(R, L3[0], L3[1], side * th / 2); cs2.push({ r: rF, depth: dep3 });
+            nsum[0] -= side * nF[0] * wd3; nsum[1] -= side * nF[1] * wd3; nsum[2] -= side * nF[2] * wd3; if (dep3 > deep2) deep2 = dep3; }
+        }
         if (!cs2.length) continue; var nl2 = Math.hypot(nsum[0], nsum[1], nsum[2]); if (nl2 < 1e-9) continue; var cn = [nsum[0] / nl2, nsum[1] / nl2, nsum[2] / nl2];
-        touching = true; var ra2 = [0, 0, 0], ws2 = 0; for (i = 0; i < cs2.length; i++) { var w2 = cs2[i].depth + SLOP; ra2[0] += cs2[i].r[0] * w2; ra2[1] += cs2[i].r[1] * w2; ra2[2] += cs2[i].r[2] * w2; ws2 += w2; } ra2 = [ra2[0] / ws2, ra2[1] / ws2, ra2[2] / ws2];
+        touching = true; var ra2 = [0, 0, 0], ws2 = 0; for (i = 0; i < cs2.length; i++) { var w2 = capFace ? Math.max(0, cs2[i].depth) + MG * .1 : cs2[i].depth + SLOP; ra2[0] += cs2[i].r[0] * w2; ra2[1] += cs2[i].r[1] * w2; ra2[2] += cs2[i].r[2] * w2; ws2 += w2; } ra2 = [ra2[0] / ws2, ra2[1] / ws2, ra2[2] / ws2];
         var vr2 = [b.v[0] + b.w[1] * ra2[2] - b.w[2] * ra2[1], b.v[1] + b.w[2] * ra2[0] - b.w[0] * ra2[2], b.v[2] + b.w[0] * ra2[1] - b.w[1] * ra2[0]], vn3 = dot(vr2, cn);
+        var gap2 = capFace && deep2 < 0 ? -deep2 : 0;   // B3b: a speculative contact (not touching yet): take away only the approach that would close the gap within this step
+        if (gap2 > 0) { if (vn3 < -gap2 / H) { var kks = 1 / b.m + dot(cross(iw(b, R, cross(ra2, cn)), ra2), cn); impulseAt(b, R, ra2, cn, -(vn3 + gap2 / H) / kks); } continue; }
         if (-vn3 > hit) { hit = -vn3; hitAt = ra2; hitN = cn; }
         if (vn3 < 0) { var kk2 = 1 / b.m + dot(cross(iw(b, R, cross(ra2, cn)), ra2), cn), j2 = -(1 + (vn3 < -0.7 ? P.bounce : 0)) * vn3 / kk2; impulseAt(b, R, ra2, cn, j2);
           var vr3 = [b.v[0] + b.w[1] * ra2[2] - b.w[2] * ra2[1], b.v[1] + b.w[2] * ra2[0] - b.w[0] * ra2[2], b.v[2] + b.w[0] * ra2[1] - b.w[1] * ra2[0]], vq = dot(vr3, cn), vt2 = [vr3[0] - cn[0] * vq, vr3[1] - cn[1] * vq, vr3[2] - cn[2] * vq], vtl2 = Math.hypot(vt2[0], vt2[1], vt2[2]);
           if (vtl2 > 1e-6) { var tt = [-vt2[0] / vtl2, -vt2[1] / vtl2, -vt2[2] / vtl2], kt2 = 1 / b.m + dot(cross(iw(b, R, cross(ra2, tt)), ra2), tt); impulseAt(b, R, ra2, tt, Math.min(vtl2 / kt2, P.friction * Math.abs(j2))); } }
-        var corr2 = Math.max(0, deep2 - SLOP * .5) * .6; b.p[0] += cn[0] * corr2; b.p[1] += cn[1] * corr2; b.p[2] += cn[2] * corr2;
+        var corr2 = Math.max(0, deep2 - SLOP * .5) * (capFace ? 1 : .6); b.p[0] += cn[0] * corr2; b.p[1] += cn[1] * corr2; b.p[2] += cn[2] * corr2;
       }
       if (hit > 0.45) {
         events.push({ id: b.id, speed: hit, t: time, kind: b.kind, size: b.kind === 'ball' ? 0 : Math.sqrt(b.area) });

@@ -366,13 +366,56 @@ export async function build(W, H) {
   for (const m of [lampMesh, cupMesh]) { m.frustumCulled = false; m.layers.set(2); S.add(m); }
   // the in-scatter halos: a fixed set (assigned once, never switched between frames)
   const glows = Array.from({ length: 18 }, () => ({ l: null, L: film.lamp(V(0, -100, 0), '#ffc57a', { power: 0, size: .18, fog: 1 }) }));
+  // round 6 (owner "남은 점도 개선하자" — of the first six only 1–2 read): the first six are chosen so the eye can find every one of
+  // them for the whole of 「처음엔 갈릴리 어부 몇 사람」 and the start of the spread — in the frame (clear of the words), a few metres
+  // off, not behind the trunk or a limb at any moment of that stretch (rays against the wood; leaves, which are lace, only counted),
+  // spread apart; and each gets a soft halo on screen (firstHalos) so it reads as a warm point against the bright haze.
+  const ray = new THREE.Raycaster(); ray.layers.enableAll();
+  function blocked(p) {   // 99 = behind wood; otherwise the number of leaves in the way
+    const d = p.clone().sub(cam.position), L = d.length(); ray.set(cam.position, d.divideScalar(L)); ray.near = .05; ray.far = L - .32;   // the lamp sits on its own branch: stop short of it
+    if (ray.intersectObjects([trunk, twigs], false).length) return 99;
+    return ray.intersectObject(leaves, false).length;
+  }
+  function pickFirst() {
+    // each of the six has its own moment (slot) inside 「처음엔 …」; a lamp can take a slot only if, from a beat before that moment
+    // until the spread is under way, it never leaves the frame and never goes behind the wood (sampled every 0.1 s)
+    S.updateMatrixWorld(true);
+    // the six moments: one by one over 「…갈릴리 어부 몇 사람이었습니다」 once the crane has settled (before it the camera is still
+    // rising through the crown and nothing stays in view long enough to be found)
+    const slots = Array.from({ length: 6 }, (_, i) => lerp(T.few[0] + 1.4, T.few[1] + .15, i / 5)), tEnd = T.all[0] + 1.4, dt = .1;
+    const ts = []; for (let t = T.few[0] - .3; t <= tEnd + 1e-6; t += dt) ts.push(t);
+    const st = LMP.map(l => ({ l, xy: [], ok: [] }));
+    ts.forEach(t => { setPath(t);
+      for (const s of st) { const q = s.l.p.clone().project(cam), d = s.l.p.distanceTo(cam.position), x = (q.x + 1) / 2 * W, y = (1 - q.y) / 2 * H;
+        s.xy.push([x, y, d]); s.ok.push(q.z < 1 && x > 90 && x < W - 150 && y > 150 && y < H * .6 && d > 2.2 && d < 32); } });
+    // rays only where the frame test passed
+    ts.forEach((t, k) => { setPath(t); for (const s of st) if (s.ok[k]) { const b = blocked(s.l.p); if (b >= 99) s.ok[k] = false; else s.xy[k].push(b); } });
+    for (const s of st) { let k = ts.length - 1; if (!s.ok[k]) { s.from = Infinity; continue; } while (k > 0 && s.ok[k - 1]) k--; s.from = ts[k];
+      s.leaf = s.xy.slice(k).reduce((a, v) => a + (v[3] || 0), 0) / (ts.length - k); }
+    const first = [], idx = t => Math.min(ts.length - 1, Math.max(0, Math.round((t - ts[0]) / dt)));
+    const pass = (lead, gap, leafMax) => slots.forEach((sl, i) => { if (first.some(f => f.slot === i)) return; const k = idx(sl), ke = ts.length - 1; let best = null, bs = Infinity;
+      for (const s of st) { if (s.from > sl - lead || first.some(f => f.l === s.l) || s.leaf > leafMax) continue;
+        const [x, y, d] = s.xy[k], [xe, ye] = s.xy[ke];
+        if (!first.every(f => Math.hypot(f.xy[k][0] - x, f.xy[k][1] - y) > gap && Math.hypot(f.xy[ke][0] - xe, f.xy[ke][1] - ye) > gap * .8)) continue;
+        const sc = Math.hypot(x - W / 2, y - H * .38) * .6 + d * 18 + s.leaf * 60; if (sc < bs) { bs = sc; best = s; } }
+      if (best) { best.l.t0 = sl; first.push({ l: best.l, xy: best.xy, slot: i, x: best.xy[k][0], y: best.xy[k][1] }); } });
+    pass(.1, 170, 1.5); pass(0, 130, 3); pass(-.2, 100, 6);
+    const hist = {}; for (const s of st) if (s.from < Infinity) { const b = Math.floor(s.from * 2) / 2; hist[b] = (hist[b] || 0) + 1; }
+    pickDbg = [hist, first.map(f => f.slot)];
+    return first;
+  }
   function rankLamps() {
     // where the eye is a beat into N18b: the lamps it sees near the middle of the frame, a few metres off, spread apart
-    setPath(T.few[0] + .5);
-    const vis = LMP.map(l => { const q = l.p.clone().project(cam), d = l.p.distanceTo(cam.position); return { l, x: (q.x + 1) / 2 * W, y: (1 - q.y) / 2 * H, d, ok: q.z < 1 && Math.abs(q.x) < .55 && q.y > -.15 && q.y < .62 && d > 3 && d < 11 }; }).filter(v => v.ok);
-    vis.sort((a, b) => Math.hypot(a.x - W / 2, a.y - H * .4) - Math.hypot(b.x - W / 2, b.y - H * .4));
-    const first = []; for (const v of vis) { if (first.length >= 6) break; if (first.every(f => Math.hypot(f.x - v.x, f.y - v.y) > 150)) first.push(v); }
-    first.sort((a, b) => a.y - b.y || a.x - b.x).forEach((v, i) => { v.l.first = true; v.l.rank = i; });
+    let first = pickFirst();
+    if (!first.length) {   // fallback: the round-5 choice
+      setPath(T.few[0] + .5);
+      const vis = LMP.map(l => { const q = l.p.clone().project(cam), d = l.p.distanceTo(cam.position); return { l, x: (q.x + 1) / 2 * W, y: (1 - q.y) / 2 * H, d, ok: q.z < 1 && Math.abs(q.x) < .55 && q.y > -.15 && q.y < .62 && d > 3 && d < 11 }; }).filter(v => v.ok);
+      vis.sort((a, b) => Math.hypot(a.x - W / 2, a.y - H * .4) - Math.hypot(b.x - W / 2, b.y - H * .4));
+      for (const v of vis) { if (first.length >= 6) break; if (first.every(f => f.l !== v.l && Math.hypot(f.x - v.x, f.y - v.y) > 150)) first.push(v); }
+    }
+    firstPicked = first.length;
+    if (first.every(v => v.slot != null)) first.forEach(v => { v.l.first = true; v.l.rank = v.slot; });   // each takes its own moment
+    else first.sort((a, b) => a.y - b.y || a.x - b.x).forEach((v, i) => { v.l.first = true; v.l.rank = i; });
     // the rest spread from the first ones outward through the tree
     const c = first.reduce((a, v) => a.add(v.l.p), V()).divideScalar(Math.max(1, first.length));
     const rest = LMP.filter(l => !l.first).map(l => [l, l.p.distanceTo(c) + (LRR() - .5) * 1.2]).sort((a, b) => a[1] - b[1]);
@@ -380,11 +423,30 @@ export async function build(W, H) {
     const gl = [...LMP.filter(l => l.first), ...rest.slice(0, 40).filter((_, i) => i % 3 === 0).map(r => r[0])].slice(0, glows.length);
     gl.forEach((l, i) => { glows[i].l = l; glows[i].L.pos.copy(l.p).add(V(0, .05, 0)); });
     // the first few are the ones the eye must find: larger flames
-    const m = new THREE.Matrix4(); LMP.forEach((l, i) => { if (!l.first) return; m.compose(l.p, new THREE.Quaternion(), V(2.4, 2.4, 2.4)); lampMesh.setMatrixAt(i, m); }); lampMesh.instanceMatrix.needsUpdate = true;
+    const m = new THREE.Matrix4(); LMP.forEach((l, i) => { if (!l.first) return; m.compose(l.p, new THREE.Quaternion(), V(3.0, 3.0, 3.0)); lampMesh.setMatrixAt(i, m); }); lampMesh.instanceMatrix.needsUpdate = true;
+  }
+  let firstPicked = 0, pickDbg = null;
+  // the halos of the first six, on screen over the lit frame: a hot small core and a wide warm bloom (screen blend, so it never
+  // turns the haze grey and never clips flat); strength follows the wick (lampOn), size with distance; no per-frame noise
+  const comp = document.createElement('canvas'); comp.width = W; comp.height = H; const cx2 = comp.getContext('2d');
+  function firstHalos(t, src) {
+    const on = LMP.filter(l => l.first).map(l => [l, lampOn(l, t)]).filter(([, k]) => k > 0);
+    if (!on.length) return src;
+    cx2.setTransform(1, 0, 0, 1, 0, 0); cx2.globalCompositeOperation = 'source-over'; cx2.globalAlpha = 1; cx2.drawImage(src, 0, 0, W, H);
+    const fade = 1 - .35 * ss(T.all[0] + 1, T.all[1], t);   // they stay the brightest as the rest spread, a little quieter at the end
+    for (const [l, k0] of on) { const q = l.p.clone().add(V(0, .07, 0)).project(cam); if (q.z >= 1) continue;
+      const x = (q.x + 1) / 2 * W, y = (1 - q.y) / 2 * H, d = l.p.distanceTo(cam.position), r = clamp(330 / d, 26, 96), k = k0 * fade;
+      cx2.globalCompositeOperation = 'screen';
+      let g = cx2.createRadialGradient(x, y, 0, x, y, r * 2.4); g.addColorStop(0, `rgba(255,170,80,${.68 * k})`); g.addColorStop(.25, `rgba(255,150,64,${.36 * k})`); g.addColorStop(.6, `rgba(240,120,48,${.12 * k})`); g.addColorStop(1, 'rgba(240,120,48,0)');
+      cx2.fillStyle = g; cx2.fillRect(x - r * 2.4, y - r * 2.4, r * 4.8, r * 4.8);
+      cx2.globalCompositeOperation = 'lighter';
+      g = cx2.createRadialGradient(x, y, 0, x, y, r * .42); g.addColorStop(0, `rgba(255,236,190,${.95 * k})`); g.addColorStop(.35, `rgba(255,200,120,${.55 * k})`); g.addColorStop(1, 'rgba(255,170,80,0)');
+      cx2.fillStyle = g; cx2.fillRect(x - r * .42, y - r * .42, r * .84, r * .84); }
+    return comp;
   }
   const lampOn = (l, t) => {   // 0..1 with a wick's stutter as it catches
     if (!T || !l) return 0;
-    const t0 = l.first ? lerp(T.few[0], T.few[1] - .5, l.rank / 5) : T.all[0] + Math.pow(l.rank, .8) * (T.all[1] - T.all[0] - .4);
+    const t0 = l.first ? (l.t0 ?? lerp(T.few[0], T.few[1] - .5, l.rank / 5)) : T.all[0] + Math.pow(l.rank, .8) * (T.all[1] - T.all[0] - .4);
     const k = clamp((t - t0) / .45); if (k <= 0) return 0;
     return k * (k < 1 ? (.75 + .25 * Math.sin(k * 26)) : 1) * (.93 + .07 * Math.sin(t * 7.3 + l.s * 40));
   };
@@ -491,7 +553,7 @@ export async function build(W, H) {
     film.dofCfg.focus = view ? 40 : Math.min(40, camTgtDist); film.dofCfg.aperture = view ? .4 : lerp(.4, 1.5, ss(.15, .5, u)) * (1 - .45 * ss(.75, 1, u));
     film.look.exposure = .92 + .25 * ss(T.dusk[0], T.dusk[1], t);
     film.render(t);
-    return film.canvas;
+    return view ? film.canvas : firstHalos(t, film.canvas);
   }
   function sil(t, view) {
     if (!T) return silR.domElement;
@@ -512,6 +574,8 @@ export async function build(W, H) {
   return {
     film, lit, sil, project, clothView, beats: B => { T = beats(B); SIG = null; rankLamps(); return T; }, G: t => (T ? growth(T, t) : 0), T: () => T,
     perch: perch.map(p => p.p.clone()), seed: V(0, 0, 0), sunPx: [540, 640], camU, trunkTip, forkS, sunL,
+    firstAt: t => { setPath(t); return LMP.filter(l => l.first).map(l => { const q = l.p.clone().project(cam); return { rank: l.rank, on: +lampOn(l, t).toFixed(2), x: Math.round((q.x + 1) / 2 * W), y: Math.round((1 - q.y) / 2 * H), d: +l.p.distanceTo(cam.position).toFixed(1), occ: blocked(l.p) }; }); },
+    firstPicked: () => [firstPicked, pickDbg],
     stats: { segs: TREE.segs.length, kept: segsK.length, leaves: NL, lamps: LMP.length, perch: perch.length },
   };
 }

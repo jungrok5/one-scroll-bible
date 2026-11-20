@@ -1,20 +1,22 @@
 // impasto-tomb.js — 「kingdom」 6부 첫 장면 C5 · N27 (film 620.5 → 632.4): "십자가에서 죽으신 지 사흘 만에, 그 왕은 / 죽음을 이기고
 // 다시 살아나셨습니다." The garden tomb at dawn, painted with the palette knife — the first film's 「부활」 (motion/pilot/rise.html: knife
-// strokes laid over a value-planned reference, a grey painting and a colour painting of the same strokes, the colour re-laid stroke by
-// stroke in a wave that starts at the empty tomb). Ref 「바람과 함께 사라지다」 (1939, OPUSCAR 12): Technicolor impasto, the sky burning
-// gold, black silhouettes of trees. Engine copied from motion/pilot/rise.html (knifePath / paint / grey / layered / the stroke-ordered
-// reveal mask), recomposed for portrait and for this film's beats; rise.html itself is not changed.
+// strokes laid over a value-planned reference, a grey painting and a colour painting of the same strokes, colour spreading from the empty
+// tomb). Ref 「바람과 함께 사라지다」 (1939, OPUSCAR 12): Technicolor impasto, the sky burning gold, dark silhouettes of trees. Engine copied
+// from motion/pilot/rise.html (knifePath / paint / grey / layered), recomposed for portrait and this film's beats; rise.html is not changed.
+// Round 2 (coordinator 2026-11-20): the stone is a heavy disc with a chiselled rim standing in its groove, the doorway a clean cut in the
+// rock with a dark chamber (both laid crisp over the knife strokes — knife strokes made a ball of yarn and a blotchy rim); the sun comes in
+// as a soft shaft and lies on the folded linen (bigger, clear) on the stone bench; the colour spreads as a soft warm wash from the doorway
+// (the stroke-by-stroke reveal read as orange flames); the dolly ends with the doorway where the courtyard's gateway will be on screen.
 //   620.5  in from the veil scene's open-door light (sample-veil.html, veil-temple.js): the door-shaped white light gathers into the
 //          tomb's doorway at the same place (match cut on the door of light) while the grey painting comes up out of the dark
 //   C5     the world before dawn, grey; the camera creeps; the sky warms behind the hills on the right
-//   N27    the first sunlight rakes across the rock from the right and reaches the open doorway; it goes IN — the inside lights up
-//          (the burial bench, the linen cloths lying there, the head cloth apart — Jn 20:5–7; nobody there) — the first colour of the
-//          picture; the camera follows the light in (dolly in, 3.6 s, eased, peak log-zoom .25/s); the colour re-laid from the doorway outward, flowers
-//          appear in the grass with it; the light keeps filling the chamber
-// No people. No words. The great round stone stands rolled back in its channel to the left of the door (Mk 16:4).
-// Camera: one slow creep, one eased dolly (log-zoom rate ≤ 0.25/s), one slow drift. The paint never moves; only light moves.
-// API: const T = await (await import('./impasto-tomb.js')).build(W, H);  T.draw(ctx, t, B)  t = FILM seconds, B = line times
-//      (C5, N27, N27b). Pure in t (the reveal mask is rebuilt when t goes backwards). Needs window.Pilot (lib.js).
+//   N27    the first sun comes down the face of the rock to the open doorway and goes IN: a soft shaft across the dark chamber onto the
+//          linen cloths lying folded on the bench and the head cloth rolled apart (Jn 20:5–7; nobody there); the camera follows the light
+//          in (dolly in, 4.2 s, eased, peak log-zoom .25/s) and settles with the doorway at SCR; the colour washes outward from the doorway,
+//          flowers come with it; at the end the doorway fills with warm light (light-to-light into the courtyard's gateway)
+// No people. No words. Camera: one slow creep, one eased dolly, the doorway held. The paint never moves; only light moves.
+// API: const T = await (await import('./impasto-tomb.js')).build(W, H);  T.draw(ctx, t, T.beats(B))  t = FILM seconds, B = line times
+//      (C5, N27, N27b). Pure in t. Needs window.Pilot (lib.js).
 const P = window.Pilot;
 const { clamp, lerp, ss, eio, rng, fbm, noise, canvas, mix, rgb } = P;
 
@@ -25,8 +27,8 @@ export function beats(B) {
     warm: [c5 + .8, n + 1.2],                     // the sky warms behind the hills
     rake: [n + .3, n + 1.5],                      // the sunlight rakes across the rock to the doorway
     inn: [n + 1.2, n + 2.6],                      // the light goes in: the chamber lights up
-    wave0: n + 1.7,                               // the colour starts at the doorway
-    dolly: [n + 1.2, n + 4.8],                    // the camera follows the light in (3.6 s, eased: peak log-zoom rate .25/s)
+    wave0: n + 1.7,                               // the colour starts at the doorway (a soft warm wash outward)
+    dolly: [n + 1.0, n + 5.2],                    // the camera follows the light in (4.2 s, eased: peak log-zoom rate .25/s)
     end: e + .55,                                 // (the dissolve to the courtyard is the page's: e − .5 … e + .5)
   };
 }
@@ -114,26 +116,6 @@ export async function build(W, H) {
     x.fillStyle = '#3e2c20'; x.fill(trunkPath(S));
     return c;
   }
-  // the linen cloths lying on the bench (folded, long) and the head cloth rolled up by itself (Jn 20:6–7) — drawn crisp over the strokes
-  // (small soft-edged shapes with a few folds; mode 0 grey · 1 colour in the chamber's shade · 2 lit by the sun)
-  function linen(g, mode) {
-    const dw = DOOR.x1 - DOOR.x0, dh = DOOR.y1 - DOOR.y0, by = DOOR.y0 + dh * .6;
-    const base = mode === 2 ? [250, 236, 210] : mode === 1 ? [118, 102, 88] : [96, 92, 90], sh = mode === 2 ? [196, 150, 108] : mode === 1 ? [70, 58, 50] : [62, 60, 58];
-    g.save(); g.setTransform(S, 0, 0, S, 0, 0); const cl = new Path2D(); cl.roundRect(DOOR.x0, DOOR.y0, dw, dh + 2, [DOOR.r, DOOR.r, 0, 0]); g.clip(cl);
-    const cloth = (x0, x1, y1, h, sk) => { const p = new Path2D(); p.moveTo(x0, y1); p.bezierCurveTo(x0 - h * .2, y1 - h * .6, x0 + h * .3, y1 - h, x0 + h * .9, y1 - h * 1.02); p.lineTo(x1 - h * .7, y1 - h * (.95 + sk)); p.bezierCurveTo(x1 - h * .1, y1 - h * .9, x1 + h * .15, y1 - h * .4, x1, y1); p.closePath(); return p; };
-    const L1 = cloth(DOOR.x0 + dw * .1, DOOR.x0 + dw * .62, by + 1, dh * .075, .08), L2 = cloth(DOOR.x0 + dw * .74, DOOR.x0 + dw * .9, by + 1, dh * .085, -.05);
-    g.filter = `blur(${(1.1 * S).toFixed(1)}px)`;
-    for (const p of [L1, L2]) { g.fillStyle = rgb(base); g.fill(p); }
-    g.filter = 'none';
-    for (const [p, x0, x1] of [[L1, DOOR.x0 + dw * .1, DOOR.x0 + dw * .62], [L2, DOOR.x0 + dw * .74, DOOR.x0 + dw * .9]]) { g.save(); g.clip(p);
-      const gr = g.createLinearGradient(0, by - dh * .09, 0, by); gr.addColorStop(0, rgb(base, 0)); gr.addColorStop(1, rgb(sh, .7)); g.fillStyle = gr; g.fillRect(x0 - 4, by - dh * .1, x1 - x0 + 8, dh * .1);
-      g.strokeStyle = rgb(sh, .8); g.lineWidth = 1.1; for (let i = 1; i < 5; i++) { const xx = lerp(x0, x1, i / 5 + .03 * Math.sin(i * 2.1)); g.beginPath(); g.moveTo(xx, by - dh * .07); g.quadraticCurveTo(xx + 2, by - dh * .035, xx - 1, by); g.stroke(); }
-      g.restore(); }
-    // a few small knife marks laid over the cloth (the same hand as the rest of the painting, not a vector shape)
-    { const rr = rng(mode + 51); for (let i = 0; i < 70; i++) { const big = i < 52, x0 = big ? DOOR.x0 + dw * (.12 + .48 * rr()) : DOOR.x0 + dw * (.75 + .14 * rr()), y0 = by - dh * (.01 + .06 * rr());
-      if (!g.isPointInPath(big ? L1 : L2, x0 * S, y0 * S)) continue; const k = .9 + .2 * rr(), c = [base[0] * k, base[1] * k, base[2] * k];
-      g.save(); g.setTransform(1, 0, 0, 1, 0, 0); paint(g, { x: x0 * S, y: y0 * S, ang: (rr() - .5) * .5, len: (5 + 4 * rr()) * S, wid: (2 + 1.2 * rr()) * S, sl1: (rr() - .5) * .8, sl2: (rr() - .5) * .8, dr: rr(), run: .6, st: 1 }, c, mix(c, sh, .35)); g.restore(); } }
-    g.restore(); }
   // ---------------------------------------------------------------- shape groups (each painted on its own layer, trimmed to its silhouette)
   // 0 sky · 1 far hills · 2 near hills · 3 ground · 4 rock · 5 doorway · 6 olive leaves · 7 trunks · 8 stone · 9 door frame
   const G = new Uint8Array(PW * PH);
@@ -192,67 +174,116 @@ export async function build(W, H) {
       const red = r() < .6, rad = (2.6 + (fy - H * .69) / (H * .3) * 5.5 * (.6 + r() * .6)) * S;
       const s = { x: fx * S, y: fy * S, ang: (r() - .5) * 3, len: rad * 2.2, wid: rad * 1.4, c: red ? [208, 51, 42] : [242, 194, 48], c2: red ? [240, 120, 110] : [255, 230, 140], sl1: .3, sl2: -.3, dr: r(), run: 1, st: 1, grp: 3, flower: true };
       s.path = knifePath(s); s.rt = Math.hypot(fx - DC[0], fy - DC[1]) / WAVE_V + .4; strokes.push(s); } }
-  // the three paintings: grey (before), colour (after), and the lit chamber (the sun inside the doorway) — the same strokes in all
-  const greyImg = canvas(PW, PH), colImg = canvas(PW, PH), litImg = canvas(PW, PH);
-  { const gx = greyImg.getContext('2d'), cx = colImg.getContext('2d'), lx = litImg.getContext('2d');
-    gx.filter = 'blur(1.5px)'; gx.drawImage(ref, 0, 0); gx.filter = 'grayscale(.92)'; gx.drawImage(greyImg, 0, 0); gx.filter = 'none';
-    cx.filter = 'blur(1.5px)'; cx.drawImage(ref, 0, 0); cx.filter = 'none';
-    lx.filter = 'blur(1.5px)'; lx.drawImage(refLit, 0, 0); lx.filter = 'none';
-    const RL = refLit.getContext('2d').getImageData(0, 0, PW, PH).data, atL = (px, py) => { px = clamp(px | 0, 0, PW - 1); py = clamp(py | 0, 0, PH - 1); const k = (py * PW + px) * 4; return [RL[k], RL[k + 1], RL[k + 2]]; };
-    const L = canvas(PW, PH), lc = L.getContext('2d');
-    for (let g = 0; g < NG; g++) { const mk = groupMask(g);
-      for (const [tgt, mode] of [[greyImg, 0], [colImg, 1], [litImg, 2]]) { if (mode === 2 && g !== 5 && g !== 9) continue;
-        lc.globalCompositeOperation = 'source-over'; lc.clearRect(0, 0, PW, PH);
-        for (const s of strokes) { if (s.grp !== g || (s.flower && mode === 0)) continue;
-          if (mode === 0) paint(lc, s, s.g, s.g2); else if (mode === 1) paint(lc, s, s.c, s.c2);
-          else { const lcN = atL(s.x, s.y), k = .94 + (s.dr - .5) * .1; paint(lc, s, [lcN[0] * k, lcN[1] * k, lcN[2] * k], atL(s.x + (s.run - .7) * 20 * S, s.y + (s.st - 1) * 40 * S)); } }
-        lc.globalCompositeOperation = 'destination-in'; lc.drawImage(mk, 0, 0); tgt.getContext('2d').drawImage(L, 0, 0); } }
-    for (const s of strokes) if (s.flower) paint(cx, s, s.c, s.c2);
-    linen(gx, 0); linen(cx, 1); linen(lx, 2); }
-  // the rock (with the stone and the doorway's frame) as a mask for the sunrise's light line
+  // the rock (with the trees) as a mask for the sunrise's light line
   const rockM = canvas(PW >> 1, PH >> 1); { const x = rockM.getContext('2d'), d = x.createImageData(PW >> 1, PH >> 1);
     for (let py = 0; py < PH >> 1; py++) for (let pxx = 0; pxx < PW >> 1; pxx++) { const g = G[(py * 2) * PW + pxx * 2]; if (g === 4 || g === 8 || g === 9 || g === 6 || g === 7) d.data[(py * (PW >> 1) + pxx) * 4 + 3] = g >= 6 ? 150 : 255; }
     x.putImageData(d, 0, 0); }
   const lightL = canvas(W, H), llx = lightL.getContext('2d');
-  strokes.sort((a, b) => a.rt - b.rt);
-  const mask2 = canvas(PW, PH), m2x = mask2.getContext('2d'), mask = canvas(PW, PH), mx = mask.getContext('2d'), tmp = canvas(PW, PH), tx = tmp.getContext('2d');
-  const litMask = canvas(PW >> 2, PH >> 2), lmx = litMask.getContext('2d'), tmpL = canvas(PW, PH), tlx = tmpL.getContext('2d');
-  let lastT = -1e9, idx = 0;
+  // the two paintings: grey (before) and colour (after) — the same strokes in both. The stone, the doorway's cut and the chamber are
+  // NOT knife-painted (round 2, 2026-11-20: the knife made the stone a ball of yarn and the doorway's rim a blotchy smear): they are laid
+  // crisp over the strokes (crisp()), and the chamber is its own sprite so the sun can come into it (interior()).
+  const greyImg = canvas(PW, PH), colImg = canvas(PW, PH);
+  { const gx = greyImg.getContext('2d'), cx = colImg.getContext('2d');
+    gx.filter = 'blur(1.5px)'; gx.drawImage(ref, 0, 0); gx.filter = 'grayscale(.92)'; gx.drawImage(greyImg, 0, 0); gx.filter = 'none';
+    cx.filter = 'blur(1.5px)'; cx.drawImage(ref, 0, 0); cx.filter = 'none';
+    const L = canvas(PW, PH), lc = L.getContext('2d');
+    for (let g = 0; g < NG; g++) { if (g === 5 || g === 8 || g === 9) continue; const mk = groupMask(g);
+      for (const [tgt, mode] of [[greyImg, 0], [colImg, 1]]) {
+        lc.globalCompositeOperation = 'source-over'; lc.clearRect(0, 0, PW, PH);
+        for (const s of strokes) { if (s.grp !== g || (s.flower && mode === 0)) continue; if (mode === 0) paint(lc, s, s.g, s.g2); else paint(lc, s, s.c, s.c2); }
+        lc.globalCompositeOperation = 'destination-in'; lc.drawImage(mk, 0, 0); tgt.getContext('2d').drawImage(L, 0, 0); } }
+    for (const s of strokes) if (s.flower) paint(cx, s, s.c, s.c2);
+    crisp(gx, 0); crisp(cx, 1); }
+  // the great stone and the rock-cut doorway, crisp (mode 0 grey · 1 colour)
+  function crisp(g, mode) {
+    const C = c => mode ? c : grey(c), dw = DOOR.x1 - DOOR.x0, dh = DOOR.y1 - DOOR.y0;
+    g.save(); g.setTransform(S, 0, 0, S, 0, 0);
+    // the groove cut along the foot of the rock, from the doorway to the left: a dark channel with a lit lip
+    { const y0 = H * .655, y1 = H * .676; g.fillStyle = rgb(C([58, 40, 30])); g.beginPath(); g.moveTo(W * .08, y0 + 4); g.lineTo(DOOR.x0 + 6, y0); g.lineTo(DOOR.x0 + 6, y1); g.lineTo(W * .08, y1 + 6); g.fill();
+      g.fillStyle = rgb(C([214, 170, 118]), .9); g.fillRect(W * .08, y1 + 2, DOOR.x0 - W * .08 + 6, 5); }
+    // the stone: a heavy disc standing on edge in the groove, its face a little turned so its thickness shows on the right (the sun's
+    // side); the rim chiselled into short flat facets; tool marks across the face; it casts a shadow onto the rock to its left
+    const sx = STONE.x, sy = STONE.y, rx = STONE.rx, ry = STONE.ry, th = rx * .2, r = rng(5);
+    const rimPts = (cx0, k) => { const a = []; for (let i = 0; i < 26; i++) { const t = i / 26 * 6.283, j = 1 + (rng(i + 9)() - .5) * .035; a.push([cx0 + Math.cos(t) * rx * k * j, sy + Math.sin(t) * ry * k * j]); } return a; };
+    const poly = (pts) => { g.beginPath(); pts.forEach(([x, y], i) => i ? g.lineTo(x, y) : g.moveTo(x, y)); g.closePath(); };
+    g.save(); g.filter = `blur(${(10 * S).toFixed(0)}px)`; g.fillStyle = 'rgba(40,24,18,.45)'; g.beginPath(); g.ellipse(sx - rx * .35, sy + ry * .08, rx * .9, ry * .96, 0, 0, 6.283); g.fill(); g.restore();
+    g.fillStyle = rgb(C([96, 76, 58])); poly(rimPts(sx + th, 1)); g.fill();                                                         // the far rim / thickness
+    g.fillStyle = rgb(C([150, 122, 90])); g.beginPath(); g.rect(sx, sy - ry, th, ry * 2); g.fill();
+    { const gr = g.createLinearGradient(sx, 0, sx + th * 1.6, 0); gr.addColorStop(0, rgb(C([168, 136, 98]))); gr.addColorStop(1, rgb(C([214, 178, 128]))); g.fillStyle = gr; poly(rimPts(sx + th * .55, .995)); g.fill(); }   // the edge in the sun
+    { const gr = g.createRadialGradient(sx + rx * .35, sy - ry * .35, rx * .1, sx, sy, rx * 1.05); gr.addColorStop(0, rgb(C([226, 200, 156]))); gr.addColorStop(.55, rgb(C([186, 158, 118]))); gr.addColorStop(1, rgb(C([126, 102, 76])));
+      g.fillStyle = gr; poly(rimPts(sx, 1)); g.fill(); }                                                                           // the face
+    g.strokeStyle = rgb(C([104, 84, 62]), .55); g.lineWidth = 2.2; poly(rimPts(sx, .9)); g.stroke();                               // the chiselled bevel
+    g.fillStyle = rgb(C([240, 214, 168]), .28); poly(rimPts(sx, .9)); g.save(); g.clip(); g.beginPath(); g.ellipse(sx + rx * .55, sy - ry * .5, rx * .7, ry * .5, -.5, 0, 6.283); g.fill(); g.restore();
+    g.save(); poly(rimPts(sx, .97)); g.clip(); g.lineCap = 'round';                                                                // tool marks: short parallel cuts in rows
+    for (let i = 0; i < 160; i++) { const x0 = sx + (r() - .5) * 2 * rx, y0 = sy + (r() - .5) * 2 * ry, l = 5 + r() * 9, a = .45 + (r() - .5) * .25, dk = r() < .55;
+      g.strokeStyle = dk ? rgb(C([92, 72, 54]), .22 + .14 * r()) : rgb(C([244, 222, 180]), .14 + .12 * r()); g.lineWidth = 1.2 + r(); g.beginPath(); g.moveTo(x0, y0); g.lineTo(x0 + Math.cos(a) * l, y0 + Math.sin(a) * l); g.stroke(); }
+    g.restore();
+    g.fillStyle = rgb(C([150, 112, 78])); g.beginPath(); g.moveTo(sx - rx * 1.1, H * .668); g.lineTo(sx + rx * 1.4, H * .666); g.lineTo(sx + rx * 1.4, H * .684); g.lineTo(sx - rx * 1.1, H * .686); g.fill();   // the groove's front lip hides the stone's foot
+    // the doorway: cut straight into the rock — a recessed, squared frame (the lintel's shadow, the left jamb's inner face catching the
+    // sun from the right, the threshold), the opening itself is the chamber sprite
+    { const m = W * .016; g.fillStyle = rgb(C([132, 92, 70]), .9); g.beginPath(); g.roundRect(DOOR.x0 - m, DOOR.y0 - m, dw + 2 * m, dh + m, DOOR.r + m); g.fill();   // the cut margin, a step back from the face
+      g.fillStyle = rgb(C([70, 46, 36]), .55); g.fillRect(DOOR.x0 - m, DOOR.y0 - m, dw + 2 * m, m * .55);                       // the lintel's shadow on it
+      g.fillStyle = rgb(C([22, 14, 10])); g.beginPath(); g.roundRect(DOOR.x0, DOOR.y0, dw, dh, [DOOR.r, DOOR.r, 0, 0]); g.fill();
+      g.fillStyle = rgb(C([206, 158, 108])); g.fillRect(DOOR.x0 - m * 1.3, DOOR.y1, dw + m * 2.6, H * .009);                     // the threshold
+      g.fillStyle = rgb(C([92, 64, 46]), .6); g.fillRect(DOOR.x0 - m * 1.3, DOOR.y1 + H * .009, dw + m * 2.6, H * .004); }
+    g.restore(); }
+  // the chamber seen through the doorway, crisp, at 3× (two states: in the dark · with the sun in it): the back wall, the burial bench cut
+  // along it, the linen cloths lying folded on the bench, the head cloth rolled up by itself at its end (Jn 20:5–7). Nobody.
+  const IS = 3, DW = DOOR.x1 - DOOR.x0, DH = DOOR.y1 - DOOR.y0, BY = DH * .58;
+  const interior = lit => { const c = canvas(Math.ceil(DW * IS), Math.ceil(DH * IS)), g = c.getContext('2d'); g.scale(IS, IS);
+    const cl = new Path2D(); cl.roundRect(0, 0, DW, DH, [DOOR.r, DOOR.r, 0, 0]); g.clip(cl);
+    let gr = g.createLinearGradient(0, 0, 0, DH); gr.addColorStop(0, '#120b07'); gr.addColorStop(1, '#22160e'); g.fillStyle = gr; g.fillRect(0, 0, DW, DH);   // the back wall in the dark
+    g.fillStyle = '#2c1d13'; g.fillRect(0, BY, DW, DH * .07);                                                                     // the bench top
+    g.fillStyle = '#1a110a'; g.fillRect(0, BY + DH * .07, DW, DH * .2); g.fillStyle = '#140d08'; g.fillRect(0, BY + DH * .27, DW, DH);   // its face, the floor
+    // the linen: a long cloth folded lengthwise, lying along the bench (soft rolls, the folds' shadows), and the head cloth rolled apart
+    const cloth = (x0, x1, h, a, b) => { const p = new Path2D(), y1 = BY + 1.5; p.moveTo(x0, y1); p.bezierCurveTo(x0 - h * .25, y1 - h * .55, x0 + h * .2, y1 - h * 1.05, x0 + h * .9, y1 - h * a);
+      p.bezierCurveTo((x0 + x1) * .5, y1 - h * 1.1, (x0 + x1) * .5, y1 - h * .86, x1 - h * .8, y1 - h * b); p.bezierCurveTo(x1 - h * .1, y1 - h * .92, x1 + h * .25, y1 - h * .45, x1, y1); p.closePath(); return p; };
+    const L1 = cloth(DW * .08, DW * .7, DH * .1, 1.0, .95), L2 = cloth(DW * .77, DW * .93, DH * .095, 1.02, 1.0);
+    const base = lit ? [252, 240, 218] : [86, 76, 66], sh = lit ? [196, 150, 108] : [48, 40, 34];
+    for (const [p, x0, x1] of [[L1, DW * .08, DW * .7], [L2, DW * .77, DW * .93]]) { g.fillStyle = rgb(base); g.fill(p); g.save(); g.clip(p);
+      gr = g.createLinearGradient(0, BY - DH * .11, 0, BY); gr.addColorStop(0, rgb(base, 0)); gr.addColorStop(1, rgb(sh, .75)); g.fillStyle = gr; g.fillRect(x0 - 4, BY - DH * .12, x1 - x0 + 8, DH * .12);
+      g.lineCap = 'round'; const n = x1 - x0 > DW * .3 ? 7 : 2;
+      for (let i = 1; i < n; i++) { const xx = lerp(x0, x1, (i + .25 * Math.sin(i * 2.7)) / n); g.strokeStyle = rgb(sh, .6); g.lineWidth = 1.1; g.beginPath(); g.moveTo(xx, BY - DH * .085); g.bezierCurveTo(xx + 2, BY - DH * .055, xx - 1.5, BY - DH * .03, xx + 1, BY); g.stroke();
+        g.strokeStyle = rgb([255, 252, 240], lit ? .5 : .12); g.lineWidth = .8; g.beginPath(); g.moveTo(xx - 1.6, BY - DH * .08); g.bezierCurveTo(xx + .4, BY - DH * .055, xx - 3, BY - DH * .03, xx - .6, BY); g.stroke(); }
+      if (n === 2) { g.strokeStyle = rgb(sh, .7); g.lineWidth = 1; for (let k = 0; k < 3; k++) { g.beginPath(); g.ellipse((x0 + x1) / 2, BY - DH * .048, (x1 - x0) * (.18 + k * .12), DH * .035, 0, Math.PI * 1.1, Math.PI * 1.9); g.stroke(); } }   // the wrapping of the rolled cloth
+      g.restore(); }
+    g.fillStyle = 'rgba(0,0,0,.45)'; g.fillRect(DW * .05, BY + 1.5, DW * .9, 2.5);                                                 // contact shadow on the bench
+    if (lit) {   // the sun's soft patch: on the bench and the linen, a little up the back wall and down the bench's face (warm, feathered)
+      g.globalCompositeOperation = 'screen'; gr = g.createRadialGradient(DW * .38, BY - DH * .02, 0, DW * .38, BY - DH * .02, DW * .55); gr.addColorStop(0, 'rgba(255,196,120,.75)'); gr.addColorStop(.5, 'rgba(232,150,84,.32)'); gr.addColorStop(1, 'rgba(200,120,60,0)');
+      g.fillStyle = gr; g.fillRect(0, 0, DW, DH); g.globalCompositeOperation = 'source-over'; }
+    g.filter = 'none'; return c; };
+  const INT_DIM = interior(false), INT_LIT = interior(true);
+  // the colour wash: a soft warm front advancing from the doorway (round 2: the stroke-by-stroke reveal read as orange flames)
+  const WM = canvas(PW >> 2, PH >> 2), wmx = WM.getContext('2d'), tmp = canvas(PW, PH), tx = tmp.getContext('2d');
   // ---------------------------------------------------------------- frame
   let T = null;
-  function cam(t) {   // the camera: a creep, the dolly into the doorway (eased; ≤ .25/s in log zoom), a slow drift on
+  // the camera: a creep; then the dolly into the doorway (eased, peak log-zoom .25/s) that ends with the doorway at the place where the
+  // courtyard's gateway will be (SCR — light-to-light match on the dissolve); then the doorway held there while the zoom drifts on
+  const SCR = [W * .593, H * .365];
+  function cam(t) {
     const c = ss(T.start, T.dolly[0], t) * .055, d = eio(clamp((t - T.dolly[0]) / (T.dolly[1] - T.dolly[0]))), af = clamp((t - T.dolly[1]) / 4);
-    const z = (1 + c) * Math.exp(Math.log(1.42 / 1.055) * d) * (1 + .06 * af * (1 - af * .35));
-    const cx = lerp(W * .5, DC[0] + W * .005, d), cy = lerp(lerp(H * .5, H * .52, ss(T.start, T.dolly[0], t)), DC[1] + H * .006, d);
-    return { z, cx, cy };
+    const z = (1 + c) * Math.exp(Math.log(1.5 / 1.055) * d) * (1 + .025 * af);
+    const c0 = [W * .5, lerp(H * .5, H * .52, ss(T.start, T.dolly[0], t))];
+    if (d >= 1) return { z, cx: DC[0] - (SCR[0] - W / 2) / z, cy: DC[1] - (SCR[1] - H / 2) / z };
+    const z1 = 1.5, c1 = [DC[0] - (SCR[0] - W / 2) / z1, DC[1] - (SCR[1] - H / 2) / z1];
+    return { z, cx: lerp(c0[0], c1[0], d), cy: lerp(c0[1], c1[1], d) };
   }
   function draw(ctx, t, TT) {
     T = TT;
-    // the colour re-laid by the knife: accumulate the revealed strokes into the mask (deterministic for any seek order)
-    const tw = t - T.wave0;
-    if (t < lastT) { mx.clearRect(0, 0, PW, PH); idx = 0; }
-    // each stroke fades in over FADE s as the knife lays it (no slab pops on): settled strokes accumulate in `mask`, the ones still
-    // coming in are drawn each frame on a copy (`mask2`) at their partial strength
-    const FADE = .35;
-    while (idx < strokes.length && strokes[idx].rt <= tw - FADE) { const s = strokes[idx++]; mx.save(); mx.translate(s.x, s.y); mx.rotate(s.ang); mx.fillStyle = '#fff'; mx.fill(s.path); mx.restore(); }
-    lastT = t;
-    let mk2 = mask; if (idx < strokes.length && strokes[idx].rt <= tw) { m2x.globalCompositeOperation = 'copy'; m2x.drawImage(mask, 0, 0); m2x.globalCompositeOperation = 'source-over';
-      for (let j = idx; j < strokes.length && strokes[j].rt <= tw; j++) { const s = strokes[j], k = (tw - s.rt) / FADE; m2x.save(); m2x.translate(s.x, s.y); m2x.rotate(s.ang); m2x.fillStyle = `rgba(255,255,255,${(k * k * (3 - 2 * k)).toFixed(3)})`; m2x.fill(s.path); m2x.restore(); }
-      mk2 = mask2; }
-    const { z, cx, cy } = cam(t), view = g => { g.translate(W / 2, H / 2); g.scale(z, z); g.translate(-cx, -cy); g.scale(1 / S, 1 / S); };
+    const tw = t - T.wave0, { z, cx, cy } = cam(t), view = g => { g.translate(W / 2, H / 2); g.scale(z, z); g.translate(-cx, -cy); g.scale(1 / S, 1 / S); };
     ctx.save(); ctx.fillStyle = '#100c0a'; ctx.fillRect(0, 0, W, H);
     ctx.save(); view(ctx); ctx.drawImage(greyImg, 0, 0);
-    if (tw > 0) { tx.globalCompositeOperation = 'source-over'; tx.clearRect(0, 0, PW, PH); tx.drawImage(colImg, 0, 0); tx.globalCompositeOperation = 'destination-in'; tx.drawImage(mk2, 0, 0); ctx.drawImage(tmp, 0, 0); }
-    // the sunlight inside the chamber: the lit painting through a door-shaped patch that grows in from the right
-    const inn = ss(T.inn[0], T.inn[1], t);
-    if (inn > 0) { lmx.setTransform(1, 0, 0, 1, 0, 0); lmx.clearRect(0, 0, litMask.width, litMask.height); lmx.setTransform(S / 4, 0, 0, S / 4, 0, 0);
-      const dw = DOOR.x1 - DOOR.x0, x1 = DOOR.x1 + W * .01, x0 = lerp(DOOR.x1, DOOR.x0 - W * .02, eio(inn)); lmx.filter = `blur(${(3).toFixed(1)}px)`; lmx.fillStyle = '#fff';
-      lmx.beginPath(); lmx.moveTo(x1, DOOR.y0 - H * .03); lmx.lineTo(x0, DOOR.y0 - H * .03); lmx.lineTo(x0 - dw * .1, DOOR.y1 + H * .02); lmx.lineTo(x1, DOOR.y1 + H * .02); lmx.fill(); lmx.filter = 'none';
-      tlx.globalCompositeOperation = 'source-over'; tlx.clearRect(0, 0, PW, PH); tlx.drawImage(litImg, 0, 0); tlx.globalCompositeOperation = 'destination-in'; tlx.drawImage(litMask, 0, 0, PW, PH);
-      ctx.globalAlpha = clamp(inn * 1.2); ctx.drawImage(tmpL, 0, 0); ctx.globalAlpha = 1; }
+    if (tw > 0) { const R = H * 1.5 * S * eio(clamp(tw / 5.2)) + H * .05 * S, F = H * .26 * S; wmx.setTransform(.25, 0, 0, .25, 0, 0); wmx.clearRect(0, 0, PW, PH);
+      const gr = wmx.createRadialGradient(DC[0] * S, DC[1] * S, Math.max(0, R - F), DC[0] * S, DC[1] * S, R + 1); gr.addColorStop(0, '#fff'); gr.addColorStop(1, 'rgba(255,255,255,0)'); wmx.fillStyle = gr; wmx.fillRect(0, 0, PW, PH);
+      tx.globalCompositeOperation = 'source-over'; tx.clearRect(0, 0, PW, PH); tx.drawImage(colImg, 0, 0); tx.globalCompositeOperation = 'destination-in'; tx.drawImage(WM, 0, 0, PW, PH); ctx.drawImage(tmp, 0, 0);
+      const fr = clamp(1 - tw / 6.5); if (fr > 0) { ctx.globalCompositeOperation = 'soft-light'; const g2 = ctx.createRadialGradient(DC[0] * S, DC[1] * S, Math.max(0, R - F * 1.2), DC[0] * S, DC[1] * S, R + F * .3);   // the warm front itself
+        g2.addColorStop(0, 'rgba(255,190,120,0)'); g2.addColorStop(.7, `rgba(255,190,120,${.55 * fr})`); g2.addColorStop(1, 'rgba(255,190,120,0)'); ctx.fillStyle = g2; ctx.fillRect(0, 0, PW, PH); ctx.globalCompositeOperation = 'source-over'; } }
     ctx.restore();
-    // light: the sky warming, the raking sun across the rock, rays into the doorway, the chamber's glow (all in frame space under the camera)
+    // the chamber: dark, then the sun comes in and lies on the bench and the linen
+    const inn = ss(T.inn[0], T.inn[1], t), fill = ss(T.end - 1.6, T.end - .45, t);
     ctx.save(); ctx.translate(W / 2, H / 2); ctx.scale(z, z); ctx.translate(-cx, -cy);
+    ctx.drawImage(INT_DIM, DOOR.x0, DOOR.y0, DW, DH); if (inn > 0) { ctx.globalAlpha = inn; ctx.drawImage(INT_LIT, DOOR.x0, DOOR.y0, DW, DH); ctx.globalAlpha = 1; }
+    // light: the sky warming, the first sun down the rock, the shaft into the doorway, the chamber filling at the end
     const warm = ss(T.warm[0], T.warm[1], t), rk = ss(T.rake[0], T.rake[1], t), col = clamp(tw / 4.5);
     if (warm > 0) { ctx.globalCompositeOperation = 'soft-light'; const g = ctx.createRadialGradient(SUN[0], SUN[1], 0, SUN[0], SUN[1], W * 1.1); g.addColorStop(0, `rgba(255,200,130,${.85 * warm})`); g.addColorStop(.45, `rgba(255,180,120,${.35 * warm})`); g.addColorStop(1, 'rgba(255,180,120,0)'); ctx.fillStyle = g; ctx.fillRect(-W, -H, 3 * W, 3 * H);
       ctx.globalCompositeOperation = 'screen'; const g2 = ctx.createRadialGradient(SUN[0], SUN[1], 0, SUN[0], SUN[1], W * .5); g2.addColorStop(0, `rgba(255,236,190,${.55 * warm * (1 - .5 * col)})`); g2.addColorStop(1, 'rgba(255,220,160,0)'); ctx.fillStyle = g2; ctx.fillRect(-W, -H, 3 * W, 3 * H); }
@@ -263,22 +294,24 @@ export async function build(W, H) {
       llx.globalCompositeOperation = 'source-in'; const g = llx.createLinearGradient(0, yl - H * .06, 0, yl + H * .02); g.addColorStop(0, `rgba(255,196,124,${.95 * fade})`); g.addColorStop(1, 'rgba(255,196,124,0)');
       llx.fillStyle = g; llx.beginPath(); llx.moveTo(-W, -H); llx.lineTo(3 * W, -H); llx.lineTo(3 * W, yl + H * .02 - sl); llx.lineTo(-W, yl + H * .02 + sl * 1.6); llx.closePath(); llx.fill();
       ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalCompositeOperation = 'soft-light'; ctx.drawImage(lightL, 0, 0); ctx.globalCompositeOperation = 'screen'; ctx.globalAlpha = .28; ctx.drawImage(lightL, 0, 0); ctx.restore(); }
-    if (inn > 0) {   // rays of the low sun reaching into the doorway, and the chamber's glow
-      ctx.globalCompositeOperation = 'screen'; const dw = DOOR.x1 - DOOR.x0;
-      for (let i = 0; i < 9; i++) { const yy = lerp(DOOR.y0 + H * .01, DOOR.y1 - H * .02, i / 8), a = (.05 + .035 * Math.sin(i * 2.3 + t * .7)) * inn * (1 - .35 * ss(T.dolly[1], T.dolly[1] + 3, t));
-        const g = ctx.createLinearGradient(W * 1.05, yy - H * .08, DOOR.x0 + dw * .3, yy); g.addColorStop(0, 'rgba(255,230,180,0)'); g.addColorStop(.7, `rgba(255,230,180,${a})`); g.addColorStop(1, `rgba(255,236,196,${a * 1.4})`);
-        ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(W * 1.1, yy - H * .1); ctx.lineTo(W * 1.1, yy - H * .07); ctx.lineTo(DOOR.x0 + dw * .25, yy + H * .008); ctx.lineTo(DOOR.x0 + dw * .25, yy - H * .002); ctx.fill(); }
-      const grow = inn * (.75 + .25 * ss(T.dolly[1], T.end, t)), g = ctx.createRadialGradient(DC[0] - dw * .1, DC[1] + H * .02, 0, DC[0] - dw * .1, DC[1] + H * .02, dw * 1.1);
-      g.addColorStop(0, `rgba(255,236,196,${.32 * grow})`); g.addColorStop(1, 'rgba(255,220,170,0)'); ctx.fillStyle = g; ctx.fillRect(DC[0] - dw * 1.2, DC[1] - dw * 1.2, dw * 2.4, dw * 2.4);
-      // a few motes turning in the light inside the doorway (only there, few)
-      const r = rng(17); for (let i = 0; i < 28; i++) { const u = r(), v = r(), ph = r() * 6.28, sp2 = .015 + r() * .02;
-        const mxp = DOOR.x0 + dw * ((u + t * sp2) % 1), myp = DOOR.y0 + (DOOR.y1 - DOOR.y0) * (.15 + .7 * ((v + Math.sin(t * .3 + ph) * .03 + 1) % 1)), al = .35 * inn * (.4 + .6 * r()) * Math.sin(Math.PI * ((u + t * sp2) % 1));
-        ctx.fillStyle = `rgba(255,240,210,${al})`; ctx.beginPath(); ctx.arc(mxp, myp, .9 + r() * 1.2, 0, 6.283); ctx.fill(); } }
+    if (inn > 0) {   // a soft shaft of the low sun: in at the top right of the doorway, down across the dark to the bench and the linen
+      ctx.globalCompositeOperation = 'screen'; ctx.save(); const cl = new Path2D(); cl.rect(DOOR.x0 - W * .3, DOOR.y0 - H * .2, DW + W * .6, DH + H * .25); ctx.clip(cl);
+      ctx.filter = `blur(${(DW * .06 * z).toFixed(1)}px)`;
+      const top0 = [DOOR.x1 + DW * .9, DOOR.y0 - DH * .55], top1 = [DOOR.x1 + DW * 1.25, DOOR.y0 - DH * .2], b0 = [DOOR.x0 + DW * .1, DOOR.y0 + BY - DH * .03], b1 = [DOOR.x0 + DW * .72, DOOR.y0 + BY + DH * .02];
+      const g = ctx.createLinearGradient(top0[0], top0[1], b0[0], b0[1]); g.addColorStop(0, 'rgba(255,226,170,0)'); g.addColorStop(.5, `rgba(255,222,164,${.16 * inn})`); g.addColorStop(1, `rgba(255,232,186,${.34 * inn})`);
+      ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(...top0); ctx.lineTo(...top1); ctx.lineTo(...b1); ctx.lineTo(...b0); ctx.closePath(); ctx.fill(); ctx.filter = 'none'; ctx.restore();
+      // a few motes turning in the shaft (only there, few)
+      const r = rng(17); for (let i = 0; i < 26; i++) { const u = r(), v = r(), ph = r() * 6.28, sp2 = .012 + r() * .016, k = (u + t * sp2) % 1;
+        const ax = lerp(lerp(top0[0], top1[0], v), lerp(b0[0], b1[0], v), k), ay = lerp(lerp(top0[1], top1[1], v), lerp(b0[1], b1[1], v), k) + Math.sin(t * .4 + ph) * 3;
+        if (ax > DOOR.x1 + 4 || ay < DOOR.y0) continue; ctx.fillStyle = `rgba(255,240,210,${.4 * inn * Math.sin(Math.PI * k)})`; ctx.beginPath(); ctx.arc(ax, ay, .8 + r() * .9, 0, 6.283); ctx.fill(); }
+      // light-to-light: at the end the doorway fills with warm light (the courtyard's gateway glare takes it over on the dissolve)
+      if (fill > 0) { const g3 = ctx.createRadialGradient(DC[0], DC[1], 0, DC[0], DC[1], DH * (.6 + .5 * fill)); g3.addColorStop(0, `rgba(255,240,214,${.95 * fill})`); g3.addColorStop(.55, `rgba(255,226,180,${.55 * fill})`); g3.addColorStop(1, 'rgba(255,214,160,0)');
+        ctx.fillStyle = g3; ctx.fillRect(DC[0] - DH * 1.2, DC[1] - DH * 1.2, DH * 2.4, DH * 2.4); } }
     ctx.restore();
     // the veil scene's door of light gathering into the doorway (match cut in), and the painting coming up out of the dark
     const mk = eio(clamp((t - T.morph[0]) / (T.morph[1] - T.morph[0]))), up = ss(T.morph[0], T.morph[1] + .3, t);
     if (up < 1) { ctx.fillStyle = `rgba(14,10,8,${.55 * (1 - up)})`; ctx.fillRect(0, 0, W, H); }
-    if (mk < 1) { const vr = [W * .3, H * .155, W * .7, H * .69], { z: z0, cx: cx0, cy: cy0 } = cam(t), sx = X => W / 2 + (X - cx0) * z0, sy = Y => H / 2 + (Y - cy0) * z0;
+    if (mk < 1) { const vr = [W * .3, H * .155, W * .7, H * .69], sx = X => W / 2 + (X - cx) * z, sy = Y => H / 2 + (Y - cy) * z;
       const tr = [sx(DOOR.x0), sy(DOOR.y0), sx(DOOR.x1), sy(DOOR.y1)], q = vr.map((v, i) => lerp(v, tr[i], mk)), a = (1 - mk) * (1 - mk * .3);
       ctx.save(); ctx.globalCompositeOperation = 'screen'; ctx.filter = `blur(${(10 + 26 * mk).toFixed(0)}px)`;
       ctx.fillStyle = `rgba(255,246,222,${.95 * a})`; ctx.fillRect(q[0], q[1], q[2] - q[0], q[3] - q[1]);
@@ -287,5 +320,6 @@ export async function build(W, H) {
     const vg = ctx.createRadialGradient(W / 2, H * .46, H * .32, W / 2, H * .5, H * .78); vg.addColorStop(0, 'rgba(20,16,12,0)'); vg.addColorStop(1, 'rgba(20,16,12,.42)'); ctx.fillStyle = vg; ctx.fillRect(0, 0, W, H);
     ctx.restore();
   }
-  return { draw, DOOR, cam: t => cam(t) };
+  return { draw, DOOR, SCR, cam: t => cam(t) };
 }
+

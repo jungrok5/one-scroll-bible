@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>새벽 갈릴리 시안</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600&family=Noto+Sans+KR:wght@400;600&display=swap">
+<script type="importmap">{ "imports": { "three": "../lib3d/three.module.min.js" } }</script>
+</head>
+<body>
+<script src="../../pilot/lib.js"></script>
+<script src="../lib-film.js"></script>
+<script src="kit-oilpaint.js"></script>
+<script>
+/* 시안 1차 (2026-11-20): 「kingdom」 1부 — 영상의 첫 1분 50초(필름 0.0 → 110.0, 2부 C2a 「왕이 돌아오셨다」 앞까지). 훅 → 제목 → 진짜 질문과 답 → 주기도문
+   → 붙드는 무리를 두고 길로. 시안 u = 필름 시간(T0 = 0).
+     galilee  0–66.8      칠한 3D 세계 — 새벽 갈릴리(galilee3d.js: heal-village.js와 같은 lib3d cine.js 엔진 · people3d.js 인물)
+                          S1 FPV 저공 8 s → S2 언덕 위 그의 뒤 50° 아크(N04 손을 듦, 고개가 차례로) → S3 Q1 아침 빛이 호수를 건너 무리에게
+                          → S4 N05 배 위의 작은 실루엣(역광) → S5 N07 돌 위의 두루마리(같은 낱말 자리가 금빛으로) → T1 crane up 6 s, 제목
+                          → N09b 구름, 빛이 가라앉음 → N09c 구름 위 먼 빛 한 점 → N09d 빛이 내려와 마을에 닿고 온 땅으로(crane down 4 s)
+     room     66.8–90.3   페르메이르 창빛 유화(prayer-room.js: kit-oilpaint.js vermeer) — 무릎 꿇은 뒷모습, 창빛이 바닥을 건너감,
+                          Q2 바닥의 두루마리 줄에 금빛 점이 켜지고 이어짐(「뷰티풀 마인드」), N06b 빛이 넓어지며 4 s dolly out. 엔딩 북엔드로 재사용.
+     galilee  90.3–110    북쪽 호숫가 마을: 붙드는 무리를 두고 길로(뒷모습, 천천히, 디딘 발) → Q3 crane up 6 s, 해 쪽 호숫가 마을이 차례로 켜짐
+     glass    108.8–110   빛과 빛을 맞춘 1.2 s 디졸브 → 2부 스테인드글라스 창(glass-shatter3.js, 해 유리 0.5 W · 0.26 H)
+   그림의 모든 시각은 script.json의 at에서 나온다(각 모듈의 beats()). 자막은 sample-part2.html과 같은 규칙.
+   node motion/render.mjs v --page films/kingdom/sample-part1.html                    (→ motion/out/sample-part1-v.mp4)
+   node motion/render.mjs v --page films/kingdom/sample-part1.html --stills 2,8,14      (u = film seconds) */
+const W = Pilot.W, H = Pilot.H, V = Pilot.ori === 'v', { ss, win, clamp, eo } = Pilot;
+const T0 = 0.0, T1 = 110.0;
+let GAL = null, ROOM = null, GLASS = null, B = null, B2 = null, RB = null, TEXT = [], aux = null, auxx = null;
+// the scene table (film seconds): [a, b, name] — overlaps are dissolves; a cut is where one ends and the next begins
+const SCENES = [
+  [0.0, 66.8, 'galilee'],      // N01–N09d: the glide, the hill, the light over the lake, the boat, the scroll, the title, the light comes down
+  [66.8, 90.3, 'room'],        // N06–N06b: the window-lit room, the Lord's Prayer (match cut on the band of light; hard cut out)
+  [90.3, 110.0, 'galilee'],    // N08–Q3: the road out of the town; the villages light one by one
+  [108.8, 110.0, 'glass'],     // the light-to-light dissolve into part 2's window (its sun pane)
+];
+function band(ctx, k = 1) { const y0 = Film.SAFE() - (V ? 190 : 80), g = ctx.createLinearGradient(0, y0, 0, H); g.addColorStop(0, 'rgba(10,8,10,0)'); g.addColorStop(.35, `rgba(10,8,10,${.5 * k})`); g.addColorStop(.7, `rgba(10,8,10,${.62 * k})`); g.addColorStop(1, `rgba(10,8,10,${.66 * k})`); ctx.fillStyle = g; ctx.fillRect(0, y0, W, H - y0); }
+const IDS = ['N01', 'N03', 'N04', 'L1', 'Q1', 'N05', 'N07', 'T1', 'N09', 'N09b', 'N09c', 'N09d', 'N06', 'L2', 'Q2', 'N06b', 'N08', 'L3', 'Q3', 'C2a'];
+const IDS2 = ['C2a', 'N40', 'L40', 'Q40', 'N41', 'N42', 'N43', 'N44', 'L41', 'Q41', 'N45', 'L42', 'Q42', 'N45b', 'N46', 'L42b', 'Q43', 'N46b', 'N46c', 'L43', 'Q44', 'N47', 'C2'];
+// text: every line from its `at` to the next voiced line (as sample-part2.html); a label rides with its quote. T1 (the title) holds
+// over N09 ("제목 아래로 호수와 마을이 고요히 펼쳐짐") and leaves before the real question (N09b).
+function buildText() {
+  const L = Film.script.lines, spoken = l => (l.kind === 'narr' || l.kind === 'quote') && l.voice !== null;
+  const V2 = L.filter(spoken).sort((a, b) => a.at - b.at), next = l => V2.find(x => x.at > l.at + .01);
+  for (const l of L) { if (l.at < T0 - .01 || l.at >= T1) continue;
+    if (l.id === 'T1') { TEXT.push(['title', l.id, l.at, Film.lines.N09b.at - .45]); continue; }
+    if (l.kind === 'label') { const q = V2.find(x => x.at >= l.at - .01), qn = q && next(q); TEXT.push(['label', l.id, l.at, Math.min(qn?.at ?? T1, T1) - .2]); continue; }
+    if (!spoken(l)) continue;
+    const n = next(l), b = Math.min((n?.at ?? T1) - (l.kind === 'quote' ? .1 : .25), T1 - .25);
+    TEXT.push([l.kind === 'quote' ? 'quote' : 'sub', l.id, l.at, b]); }
+}
+// the title: big, gold, in the sun's glow high in the sky (as 「그리스도」's title card: a soft dark ground so it reads on the light)
+function title(ctx, id, t, a, b) { const ta = win(t, a + .6, b, 1.4, .9); if (ta <= 0 || Film.clean) return; const sz = V ? 112 : 112, ty = V ? H * .345 : H * .3;
+  { ctx.save(); ctx.translate(W / 2, ty - sz * .34); ctx.scale(3.2, 1); const g = ctx.createRadialGradient(0, 0, 0, 0, 0, sz * 1.25); g.addColorStop(0, `rgba(40,24,10,${.2 * ta})`); g.addColorStop(.55, `rgba(40,24,10,${.1 * ta})`); g.addColorStop(1, 'rgba(40,24,10,0)'); ctx.fillStyle = g; ctx.fillRect(-sz * 1.3, -sz * 1.3, sz * 2.6, sz * 2.6); ctx.restore(); }   /* a wide soft band, never a disc round the sun */
+  const rise = (1 - eo(clamp((t - a - .6) / 2.2))) * 14;
+  Pilot.text(ctx, Film.text(id), W / 2, ty + rise, { size: sz, weight: 600, color: '#f1d18a', alpha: ta, shadow: 'rgba(60,34,10,.75)', shadowBlur: 34, ls: 12 });
+  const lw = (V ? 400 : 480) * eo(clamp((t - a - 1.1) / 1.8)); ctx.fillStyle = `rgba(241,209,138,${ta * .85})`; ctx.fillRect(W / 2 - lw / 2, ty + (V ? 56 : 58), lw, 2); }
+function label(ctx, id, t, a, b) { const txt = Film.text(id); ctx.save(); ctx.font = `600 ${V ? 38 : 34}px 'Noto Serif KR'`; ctx.letterSpacing = '4px'; const w = ctx.measureText(txt).width; ctx.restore();
+  if (w <= W * .88) return Film.label(ctx, id, t, a, b);
+  const k = win(t, a, b, .8, .8); if (k <= 0 || Film.clean) return;
+  Pilot.text(ctx, txt, W / 2, V ? 226 : 66, { size: (V ? 38 : 34) * W * .88 / w, weight: 600, color: '#e9c77a', alpha: k * .95, ls: 3, shadow: 'rgba(0,0,0,.9)', shadowBlur: 14 }); }
+function scene(ctx, t, name) {
+  if (name === 'galilee') { if (GAL) return GAL.draw(ctx, t, B); ctx.fillStyle = '#c89a6a'; ctx.fillRect(0, 0, W, H); return; }
+  if (name === 'room') { if (ROOM) return ROOM.draw(ctx, t, RB); ctx.fillStyle = '#5a4430'; ctx.fillRect(0, 0, W, H); return; }
+  if (name === 'glass') { if (GLASS) return GLASS.draw(ctx, t, B2); ctx.fillStyle = '#101018'; ctx.fillRect(0, 0, W, H); return; }
+}
+function draw(ctx, u) {
+  const t = T0 + u, on = SCENES.filter(([a, b]) => t >= a && t < b);
+  ctx.save(); scene(ctx, t, on[0][2]); ctx.restore();
+  if (on.length > 1) {   // a dissolve: the later scene over the earlier one, through an offscreen frame
+    const [a, , name] = on[1], k = ss(a, on[0][1], t);
+    auxx.setTransform(1, 0, 0, 1, 0, 0); auxx.globalAlpha = 1; auxx.globalCompositeOperation = 'source-over';
+    auxx.save(); scene(auxx, t, name); auxx.restore();
+    ctx.save(); ctx.globalAlpha = k; ctx.drawImage(aux, 0, 0); ctx.restore();
+  }
+  const BK = { galilee: 1, room: .8, glass: .9 }, last = on[on.length - 1], bk = on.length > 1 ? Pilot.lerp(BK[on[0][2]], BK[last[2]], ss(last[0], on[0][1], t)) : BK[on[0][2]];
+  band(ctx, bk);
+  for (const [kind, id, a, b] of TEXT) { if (t < a - .1 || t > b + .1) continue;
+    if (kind === 'sub') Film.sub(ctx, id, t, a, b); else if (kind === 'label') label(ctx, id, t, a, b); else if (kind === 'title') title(ctx, id, t, a, b);
+    else Film.quote(ctx, id, t, a, b, { bottom: Film.subBottom() + 40, hl: Film.lines[id].hl, hlk: ss(a + .4, a + 1.6, t) }); }
+}
+Pilot.run({ W, H, dur: +(T1 - T0).toFixed(2), fonts: ["600 40px 'Noto Serif KR'", "400 40px 'Noto Serif KR'", "400 20px 'Noto Sans KR'"],
+  init: async () => { await Film.load(); buildText();
+    B = Object.fromEntries(IDS.map(id => [id, Film.lines[id].at])); B.END = B.C2a; window.__B = B;
+    B2 = Object.fromEntries(IDS2.map(id => [id, Film.lines[id].at]));
+    aux = Pilot.canvas(W, H); auxx = aux.getContext('2d');
+    GAL = await (await import('./galilee3d.js')).build(W, H); window.__GAL = GAL;
+    try { const R = await import('./prayer-room.js'); ROOM = await R.build(W, H); RB = R.beatsPart1(B); window.__ROOM = ROOM; } catch (e) { console.warn('room not built', e); }
+    if (!/[?&]noglass=1/.test(location.search)) try { GLASS = await (await import('./glass-shatter3.js')).build(W, H); window.__GLASS = GLASS; } catch (e) { console.warn('glass not built', e); } }, draw });
+</script>
+</body>
+</html>

@@ -119,7 +119,17 @@
       color: o.citeColor || '#d9b56a', alpha: k * .95, shadow: o.citeShadow || 'rgba(0,0,0,.9)', shadowBlur: 12 });
   };
   // a section label (on screen only): small, tracked, gold, at the top — clear of the phone UI
+  // Legible on any picture (관리자 2026-11-20 「kingdom」: "글씨색이 배경색이랑 비슷해 … 상단의 글씨들은 잘 안 보여"): a soft dark band
+  // behind the line, a tight dark edge shadow under the wide glow, a brighter gold — and shrink-to-fit when a label is wider than the frame.
   F.label = (ctx, id, t, a, b) => { if (F.clean) return; const k = P.win(t, a, b, .8, .8); if (k <= 0) return;
-    P.text(ctx, F.text(id), P.W / 2, P.ori === 'v' ? 226 : 66, { size: P.ori === 'v' ? 38 : 34, weight: 600, color: '#e9c77a', alpha: k * .95, ls: 4, shadow: 'rgba(0,0,0,.9)', shadowBlur: 14 }); };
+    const txt = P.tr ? P.tr(F.text(id)) : F.text(id), base = P.ori === 'v' ? 38 : 34, y = P.ori === 'v' ? 226 : 66, maxW = P.W * .88;
+    ctx.save(); ctx.font = F.font(base, 600); ctx.letterSpacing = '4px'; const w0 = ctx.measureText(txt).width; ctx.restore();
+    const size = w0 > maxW ? base * maxW / w0 : base, w = Math.min(w0, maxW);
+    ctx.save(); ctx.translate(P.W / 2, y - size * .32); ctx.scale((w / 2 + size * 2.2) / (size * 1.9), 1);
+    const g = ctx.createRadialGradient(0, 0, 0, 0, 0, size * 1.9); g.addColorStop(0, 'rgba(12,8,4,.62)'); g.addColorStop(.55, 'rgba(12,8,4,.38)'); g.addColorStop(1, 'rgba(12,8,4,0)');
+    ctx.globalAlpha = k; ctx.fillStyle = g; ctx.beginPath(); ctx.arc(0, 0, size * 1.9, 0, Math.PI * 2); ctx.fill(); ctx.restore();
+    const o = { size, weight: 600, color: '#f4d993', ls: 4, maxW: P.W };
+    P.text(ctx, txt, P.W / 2, y, { ...o, alpha: k, shadow: 'rgba(0,0,0,.95)', shadowBlur: 5 });
+    P.text(ctx, txt, P.W / 2, y, { ...o, alpha: k * .97, shadow: 'rgba(0,0,0,.85)', shadowBlur: 16 }); };
   window.Film = F;
 })();

@@ -52,7 +52,7 @@ function buildText() {
     TEXT.push([l.kind === 'quote' ? 'quote' : 'sub', l.id, l.at, b]); }
 }
 function label(ctx, id, t, a, b) { const txt = Film.text(id); ctx.save(); ctx.font = `600 ${V ? 38 : 34}px 'Noto Serif KR'`; ctx.letterSpacing = '4px'; const w = ctx.measureText(txt).width; ctx.restore();
-  if (w <= W * .88) return Film.label(ctx, id, t, a, b);
+  return Film.label(ctx, id, t, a, b);   // lib-film draws, shrinks to fit and keeps it legible (2026-11-20)
   const k = win(t, a, b, .8, .8); if (k <= 0 || Film.clean) return;
   Pilot.text(ctx, txt, W / 2, V ? 226 : 66, { size: (V ? 38 : 34) * W * .88 / w, weight: 600, color: '#e9c77a', alpha: k * .95, ls: 3, shadow: 'rgba(0,0,0,.9)', shadowBlur: 14 }); }
 function draw(ctx, u) {

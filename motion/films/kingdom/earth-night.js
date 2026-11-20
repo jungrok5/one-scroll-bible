@@ -224,7 +224,7 @@ export function burstLines(lines, { px = 1.5, seg = 64 } = {}) {
         float across = exp(-vX * vX * 4.5);
         float fade = exp(-max(vOver, 0.) / vLh);                                       // after arrival the head goes out
         float head = exp(-vB / vLh) * fade;                                            // white-hot running head
-        float trail = exp(-vB / (5. * vLh)) * exp(-max(vOver, 0.) / (3. * vLh));       // warm trail behind it, settling to the rest glow
+        float trail = exp(-vB / (2.5 * vLh)) * exp(-max(vOver, 0.) / (2. * vLh));   // round 9: a short trail that goes out soon after landing       // warm trail behind it, settling to the rest glow
         float b = vRest * mix(1., .3, vS) + max(uTrail - vRest, 0.) * trail;   // the line that stays: brighter toward the source, so the lit points carry the far ends
         vec3 col = mix(vec3(1., .66, .3), vec3(1., .95, .84), head) * (b + 1.5 * head);
         float near = smoothstep(vRho, vRho * 1.5 + 30., vRo);                          // lineage fan: near the source only a few lines show

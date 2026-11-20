@@ -671,8 +671,9 @@ export async function build(W, H_, B0 = null) {
   // flight: launched T before it lands, fast off the ground and slowing in (burstLines' late mode: 1 − (1 − q)³). A few bright lead
   // lines (the brightest city in each 12° of bearing) run well ahead. The density builds as the waves land, and the globe is full by
   // the end of 「내 증인이 되리라」; the far side and the last lines (under N28b) keep arriving.
-  const DEF = mono([[T0B.c1 + 2.3, Math.log(4e4)], [T0B.c2, Math.log(3e5)], [T0B.c2 + 1.0, Math.log(2.4e6)], [T0B.c2 + 1.8, Math.log(7e6)], [T0B.f + .3, Math.log(1.3e7)], [T0B.f + 1.6, Math.log(1.8e7)], [T0B.g - .5, Math.log(2.3e7)]]);
-  const DTAB = []; for (let t = T0B.c1 + 2.3; t <= T0B.g; t += .005) DTAB.push([t, Math.exp(DEF(t))]);
+  const B9 = T0B.c1 + 2.8;   // round 9: the burst begins (u 34.3, 「땅 끝까지」 ≈ u 34.3 — the line's words are timed by syllable, no recorded voice yet)
+  const DEF = mono([[B9, Math.log(1.5e5)], [B9 + .6, Math.log(1.4e6)], [B9 + 1.4, Math.log(4.5e6)], [T0B.c2, Math.log(9e6)], [T0B.c2 + 1.5, Math.log(1.45e7)], [T0B.f + .2, Math.log(1.8e7)], [T0B.g - .5, Math.log(2.3e7)]]);
+  const DTAB = []; for (let t = B9; t <= T0B.g; t += .005) DTAB.push([t, Math.exp(DEF(t))]);
   const Dinv = d => { if (d <= DTAB[0][1]) return DTAB[0][0]; for (let i = 1; i < DTAB.length; i++) if (DTAB[i][1] >= d) { const [t0, d0] = DTAB[i - 1], [t1, d1] = DTAB[i]; return t0 + (t1 - t0) * (d - d0) / (d1 - d0); } return T0B.g + .5; };
   const brg = P => (Math.atan2(P.z - OZ, P.x - OX) / D2Rr + 360) % 360;   // bearing from the hill: 0 north, 90 east
   const ROUTES8 = ['ROM', 'CON', 'EPH', 'ANT', 'EDE', 'BAB', 'PER', 'MUM', 'ADD', 'AXU', 'MEM', 'ALX', 'CAR'].map(k => brg(E.llToWorld(...E.NODE[k], 0, V())));
@@ -682,26 +683,60 @@ export async function build(W, H_, B0 = null) {
   for (const c of CL) { const P = E.llToWorld(c.lon, c.lat, 700, V()), d = lineLen(P); if (d < 8e5) continue; const k = Math.floor(brg(P) / 12), sc = c.b * (.5 + E.popAt(c.lon, c.lat)); if (!lead.has(k) || lead.get(k).sc < sc) lead.set(k, { c, sc }); }
   const LEADS = new Set([...lead.values()].map(v => v.c)), LEADI = new Map([...LEADS].map((c, i) => [c, i]));
   for (const c of CL) { c.pp = E.popAt(c.lon, c.lat); c.b *= .45 + .75 * Math.pow(c.pp, .6);   // round 6: the empty land's scattered points dimmer, the clusters brighter
-    const P = E.llToWorld(c.lon, c.lat, 700, V()), d = lineLen(P), rest = .06 + .1 * rL(), rho = 2e6 * rL() ** 2, hTop = clamp(d * .004, 300, 2.5e4);   // hugging the surface (from low down a lifted line stood in the sky)
+    const P = E.llToWorld(c.lon, c.lat, 700, V()), d = lineLen(P), rest = .012 + .022 * rL(), rho = 2e6 * rL() ** 2, hTop = clamp(d * .004, 300, 2.5e4);   // hugging the surface (from low down a lifted line stood in the sky)
     if (d > 2.5e6 && vis(c.lon, c.lat) < 62 && rL() < .035) {   // the last lines: launched one by one under N28b, on the side of the globe we see
       const t0 = T0B.f + .25 + rL() * (T0B.g - T0B.f - 1.7), Tl = .8 + .8 * Math.sqrt(d / 1e7); c.late = true;
-      lateL.push({ p: P, d: (t0 + Tl) * 1000, b: c.b * .8, s: 1, f: 220 }); GLN.push({ P, late: { t0, T: Tl }, k: 1.15, rest: rest + .04, rho: 0, hTop }); continue; }
+      lateL.push({ p: P, d: (t0 + Tl) * 1000, b: c.b * .8, s: 1, f: 220 }); GLN.push({ P, late: { t0, T: Tl }, k: 1.15, rest: rest + .015, rho: 0, hTop }); continue; }
     const isLead = LEADS.has(c), ta = Dinv(d / finger(brg(P)) / (isLead ? 2.1 : 1)) + (isLead ? -.15 : pulse(c.lon, c.lat) + .22 * rL() ** 2);
-    let Tl = (.32 + 1.05 * Math.sqrt(d / 2e7)) * (.8 + .4 * rL()), t0 = Math.max(T0B.crane + .4, ta - Tl);
-    if (isLead) { t0 = T0B.crane + .5 + ((LEADI.get(c) * 7) % LEADS.size) * (3.2 / LEADS.size) + .08 * rL(); Tl = ta - t0; }   // from the hill moment: they run out over the horizon and creep in to land
+    let Tl = (.32 + 1.05 * Math.sqrt(d / 2e7)) * (.8 + .4 * rL()), t0 = Math.max(B9 + .08, ta - Tl);
+    if (isLead) { t0 = B9 + ((LEADI.get(c) * 7) % LEADS.size) * (.45 / LEADS.size) + .03 * rL(); Tl = Math.max(.5, ta - t0); }   // round 9: first out of the point after the hold
     far.push({ p: P, d: (t0 + Tl) * 1000, b: c.b * .8 * (isLead ? 1.6 : 1), s: isLead ? 1.6 : 1, f: 200 });
-    GLN.push({ P, late: { t0, T: t0 + Tl - t0 }, k: (.8 + .4 * c.b) * (isLead ? 3.2 : (.35 + 2.4 * rL() ** 4)), rest: isLead ? .22 : rest, rho: isLead ? 0 : rho, hTop }); }   // a few bright fibres among many faint ones (lineage-glow)
+    GLN.push({ P, late: { t0, T: t0 + Tl - t0 }, k: (.8 + .4 * c.b) * (isLead ? 3.2 : (.35 + 2.4 * rL() ** 4)), rest: isLead ? .05 : rest, rho: isLead ? 0 : rho, hTop }); }   // a few bright fibres among many faint ones (lineage-glow)
   const CITIES = E.lampPoints(far, { px: 4.0, minPx: 1.4, color: CWARM }); CITIES.u.uRef.value = 4e6; CITIES.u.uBurst.value = 1; S.add(CITIES.pts);
   const LATEP = E.lampPoints(lateL, { px: 4.0, minPx: 1.4, color: CWARM }); LATEP.u.uRef.value = 4e6; LATEP.u.uBurst.value = 1; S.add(LATEP.pts);
   GL.u.tGlow.value = E.cityGlowTex(CL.filter(c => !c.late)); GL.u.uPre.value = 0;   // the cities' warm glow comes on only behind the slowest heads
   // lines crowding one bearing (most of the world's lights lie toward Europe and Asia) are each dimmer, so a crowded sector glows like the rest
   for (const Ls of [LOC, GLN]) { const bins = new Float32Array(180), bOf = L => Math.floor(((Math.atan2(L.P.z - OZ, L.P.x - OX) / Math.PI + 1) * 90) % 180); Ls.forEach(L => { bins[bOf(L)]++; });
     const sm = bins.map((_, i) => (bins[(i + 179) % 180] + 2 * bins[i] + bins[(i + 1) % 180]) / 4), avg = Ls.length / 180; Ls.forEach(L => { L.k *= clamp(Math.sqrt(avg / Math.max(1, sm[bOf(L)])), .18, 1.3); }); }
-  const LCITY = E.burstLines(LOC.slice(0, 2440), { px: 1.4 }), LLOC = E.burstLines(LOC.slice(2440), { px: 1.4 }), LGLB = E.burstLines(GLN, { px: 1.5 }); S.add(LCITY.mesh, LLOC.mesh, LGLB.mesh);   // the city's lines fade with the city's lamps
+  const LCITY = E.burstLines(LOC.slice(0, 2440), { px: 1.4 }), LLOC = E.burstLines(LOC.slice(2440), { px: 1.4 }), LGLB = E.burstLines(GLN, { px: 1.5 }); S.add(LGLB.mesh);
+  CLAMPS.pts.visible = LAMPS.pts.visible = false;   // round 9 (owner: the rise must stay clean): no lamps, lines or road glow on the ground — only the light at their feet   // the city's lines fade with the city's lamps
   for (const L of [LCITY, LLOC, LGLB]) L.u.uO.value.set(OX, OY, OZ);
   LGLB.u.uNv.value = GLN.length; LGLB.u.uRmax.value = 2e6; LLOC.u.uNv.value = LOC.length - 2440; LLOC.u.uRmax.value = 1.5e5; LCITY.u.uNv.value = 2440; LCITY.u.uRmax.value = 3000;
   // the origin: a radiant hub at their feet, seen from the air (on the ground the terrain's feet glow is the light)
-  const HUB = E.lampPoints([{ p: V(OX, OY + 1.2, OZ), d: 0, b: 1.1, s: 4.4, f: 1 }], { px: 7, minPx: 2 }); HUB.u.uRef.value = 1e12; HUB.pts.material.depthTest = false; S.add(HUB.pts);
+  // round 9: the cloud deck the crane punches through — 2.15–2.85 km up. Two parts: (1) the deck itself, broad FLAT sheets lying in the
+  // layer (seen from above they read as a stratocumulus deck, not as balls), soft fbm cells, fading out toward 40 km so the field has no
+  // edge, with an opening 1.3 km round the hill (the line of sight to the light at their feet drops through it once the camera is above);
+  // (2) camera-facing wisps only along the crane's path, so the lens passes through mist for a moment. Warm on top in the last of the sun,
+  // blue-grey beneath; it fades out as the earth rounds (the globe's own clouds take over).
+  const cloudU = { uK: { value: 0 }, uLit: { value: new THREE.Color() }, uDark: { value: new THREE.Color() }, uO: { value: V(OX, 0, OZ) } };
+  const CLOUD_FS = `uniform float uK; uniform vec3 uLit, uDark, uO; varying vec2 vU; varying float vSd, vD, vR, vFlat, vH;
+    float hh(vec2 p){ vec3 p3 = fract(vec3(p.xyx) * .1031); p3 += dot(p3, p3.yzx + 33.33); return fract((p3.x + p3.y) * p3.z); }
+    float vn(vec2 p){ vec2 i = floor(p), f = fract(p); vec2 w = f * f * (3. - 2. * f); return mix(mix(hh(i), hh(i + vec2(1, 0)), w.x), mix(hh(i + vec2(0, 1)), hh(i + vec2(1, 1)), w.x), w.y); }
+    void main(){ vec2 q = vU * (vFlat > .5 ? 3.2 : 2.2) + vSd * 37.; float n = vn(q) * .5 + vn(q * 2.03) * .28 + vn(q * 4.1) * .14 + vn(q * 8.3) * .08;
+      float edge = length(vU), a;
+      if (vFlat > .5) a = smoothstep(.42, .7, n + (1. - edge) * .32) * smoothstep(1., .55, edge) * .8 * smoothstep(1300., 1900., vR) * (1. - smoothstep(26000., 40000., vR)) * smoothstep(60., 1700., vH);   // a sheet the camera rises through comes in as it falls away below (no one-frame cover)
+      else a = smoothstep(1., .2, edge + (n - .5) * .8) * .45 * smoothstep(18., 900., vD);   // (a wisp crossing the near plane would pop: it comes in from far enough away)
+      a *= uK; if (a < .003) discard;
+      float lit = clamp(.35 + .9 * (n - .35) + (vFlat > .5 ? .2 : .45 * vU.y), 0., 1.);
+      gl_FragColor = vec4(mix(uDark, uLit, lit) * a, a); }`;
+  const cloudMesh = (n, flat, seed, place) => { const r = rng(seed), Cc = new Float32Array(n * 3), Sz = new Float32Array(n * 3);
+    for (let i = 0; i < n; i++) { const [x, y, z, sz] = place(r); Cc.set([x, y, z], i * 3); Sz.set([sz, r(), r() * 6.283], i * 3); }
+    const g = new THREE.InstancedBufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(new Float32Array([-1, -1, 0, 1, -1, 0, 1, 1, 0, -1, 1, 0]), 3)); g.setIndex([0, 1, 2, 0, 2, 3]);
+    g.setAttribute('aC', new THREE.InstancedBufferAttribute(Cc, 3)); g.setAttribute('aSz', new THREE.InstancedBufferAttribute(Sz, 3)); g.instanceCount = n;
+    const vs = flat
+      ? `attribute vec3 aC, aSz; uniform vec3 uO; varying vec2 vU; varying float vSd, vD, vR, vFlat, vH;
+         void main(){ float c = cos(aSz.z), s = sin(aSz.z); vec2 o = mat2(c, -s, s, c) * position.xy * aSz.x * vec2(1., .7); vec3 w = aC + vec3(o.x, 0., o.y);
+           vec4 mv = viewMatrix * vec4(w, 1.); vU = position.xy; vSd = aSz.y; vD = -mv.z; vR = length(w.xz - uO.xz); vFlat = 1.; vH = abs(cameraPosition.y - w.y); gl_Position = projectionMatrix * mv; }`
+      : `attribute vec3 aC, aSz; varying vec2 vU; varying float vSd, vD, vR, vFlat, vH;
+         void main(){ vec4 mv = viewMatrix * vec4(aC, 1.); mv.xy += position.xy * aSz.x * vec2(1.3, .7); vU = position.xy; vSd = aSz.y; vD = -mv.z; vR = 0.; vFlat = 0.; vH = 1e4; gl_Position = projectionMatrix * mv; }`;
+    const m = new THREE.ShaderMaterial({ uniforms: cloudU, transparent: true, depthWrite: false, depthTest: true, fog: false, side: THREE.DoubleSide,
+      blending: THREE.CustomBlending, blendSrc: THREE.OneFactor, blendDst: THREE.OneMinusSrcAlphaFactor, vertexShader: vs, fragmentShader: CLOUD_FS });
+    const ms = new THREE.Mesh(g, m); ms.frustumCulled = false; ms.renderOrder = 3; S.add(ms); return ms; };
+  // the deck: 3 sub-layers of broad sheets (1.5–5 km), denser near the hill
+  const CDECK = cloudMesh(1700, true, 4242, r => { const a = r() * 6.283, d = 900 + Math.pow(r(), 1.35) * 40000; return [OX + Math.cos(a) * d, 2200 + Math.floor(r() * 3) * 230 + r() * 120, OZ + Math.sin(a) * d, 1500 + r() * 2600 + d * .04]; });
+  // the wisps along the crane's path (the camera crosses the layer 2.5–4 km south-west of the hill)
+  let CWISP = null; { CWISP = cloudMesh(120, false, 4343, r => { const ph = (200 + r() * 70) * D2R, d = 1800 + r() * 3200; return [OX + Math.sin(ph) * d, 2150 + r() * 750, OZ - Math.cos(ph) * d, 250 + r() * 650]; }); }
+  const HUB = E.lampPoints([{ p: V(OX, OY + 1.2, OZ), d: 0, b: .95, s: 3.2, f: 1 }], { px: 7, minPx: 2 }); HUB.u.uRef.value = 1e12; HUB.pts.material.depthTest = false; S.add(HUB.pts);
 
   // ---------------------------------------------------------------- the camera: one move (see beats)
   function groundCam(t) {
@@ -728,25 +763,33 @@ export async function build(W, H_, B0 = null) {
     const dip = Math.acos(R_E / (R_E + h)) / D2R; delta = Math.max(delta, dip + .4); let lo = 1e-12, hi = Math.acos(R_E / (R_E + h));
     for (let i = 0; i < 60; i++) { const th = (lo + hi) / 2, dl = Math.atan2(R_E + h - R_E * Math.cos(th), R_E * Math.sin(th)) / D2R; if (dl > delta) lo = th; else hi = th; }
     return (lo + hi) / 2; }
+  // round 9 (2026-11-20, owner: "제자들에서 점점 카메라가 올라가며 구름을 뚫고 지구 전체로 보여져야 하는데 … 제자들이 가운데가 아니라 지구가
+  // 왼쪽으로 치우치는 것도 어색해"): the crane rebuilt so that the camera, the spot where they stood (the origin), the look target and the
+  // earth's centre are always in ONE vertical plane — the origin sits on the frame's vertical centre line from the hill to the whole globe.
+  // The plane turns about the origin's vertical axis (heading phi 243° → 180°: the camera comes round to the south, so north ends up), which
+  // turns the ground and then the globe about Jerusalem itself. Low down the camera looks at the origin from `el` degrees above (13° at the
+  // hill → 38° through the cloud deck → 76° above it, so the line of sight drops through the opening over the hill); from 300 km to
+  // 15,000 km it swings round the earth to BETA south of Jerusalem and aims near the earth's centre: the whole disc, Jerusalem a point on
+  // its centre line, upper-middle. Altitude on a log monotone cubic: the punch through the deck at u 30.1–31.4, the whole earth by u 33.5, held to the burst at u 34.3.
+  const BETA = 25 * D2R, KAP = .1;
   function camAt(t) {
     const tT = T;
     if (t < tT.crane) return groundCam(t);
-    if (!crane0) { crane0 = groundCam(tT.crane); const a0 = Math.log(crane0.alt);
-      LNA = mono([[tT.crane, a0], [tT.crane + 2.0, Math.log(12)], [tT.c1, Math.log(150)], [tT.c1 + 1.0, Math.log(1500)], [tT.c1 + 2.0, Math.log(1.5e4)], [tT.c1 + 3.0, Math.log(2.0e5)], [tT.c1 + 3.9, Math.log(1.5e6)], [tT.c2 - .4, Math.log(5e6)], [tT.c2 + .6, Math.log(1.2e7)], [tT.f - .4, Math.log(2.5e7)], [tT.f + 1.6, Math.log(2.9e7)], [tT.g, Math.log(3.05e7)]]);
-      GOFF = Math.atan2(crane0.alt, crane0.dist) / D2R - crane0.pd; }
-    const c0 = crane0, alt = Math.exp(LNA(t)), la = Math.log(alt), dip = Math.acos(R_E / (R_E + alt)) / D2R;
-    const pdMid = lerp(c0.pd, 47, ss(Math.log(8), Math.log(4000), la)), pd0 = Math.max(pdMid, dip + 11 * ss(Math.log(2e4), Math.log(2e5), la));
-    const gOff = lerp(GOFF, 4, ss(Math.log(8), Math.log(400), la));
-    // from the region view to the whole globe: wG 0 → 1 as the camera climbs from 200 km to 5,000 km. At 1 the camera is straight over
-    // a point south-east of Jerusalem (Jerusalem up and left of the disc's centre, north up), looking at the earth's centre, tilted so the
-    // disc sits at 40 % of the height; that point drifts west (the globe turns west → east under us), so arcs rise over the limbs in profile
-    const wG = ss(Math.log(2e5), Math.log(5e6), la), yaw = lerp(keys([[tT.crane, 60], [tT.c1 + 2.0, 52]], t), 90, wG);
-    const nk = ss(tT.c2 - .8, tT.g, t), lonN = lerp(62, 46, nk), latN = lerp(14, 11, nk), gk = ss(Math.log(4e6), Math.log(2.6e7), la), lonT = lerp(JER[0], lonN, gk), latT = lerp(JER[1], latN, gk);
-    const upT = gk > 0 ? v3(lonT, latT) : up0.clone(), ET = gk > 0 ? NPOLE.clone().cross(upT).normalize() : V(0, 0, 1), NT = gk > 0 ? upT.clone().cross(ET) : V(1, 0, 0);
-    const th = lerp(thetaFor(alt, pd0 + gOff), 0, wG), pd = lerp(pd0, 94.05, wG), h = NT.clone().multiplyScalar(Math.sin(yaw * D2R)).addScaledVector(ET, -Math.cos(yaw * D2R));
-    const uC = upT.clone().multiplyScalar(Math.cos(th)).addScaledVector(h, -Math.sin(th)), tC = upT.clone().multiplyScalar(Math.sin(th)).addScaledVector(h, Math.cos(th));
-    const pos = V(GC.x, -R_E, GC.z).addScaledVector(uC, R_E + alt);
-    return { pos, yaw, pd, fov: lerp(c0.fov, 39, ss(Math.log(8), Math.log(300), la)), focus: lerp(c0.focus, Math.max(20, alt * 1.4), ss(tT.crane, tT.crane + 1.6, t)), aperture: 2.0 * (1 - ss(tT.crane, tT.crane + 2.2, t)), dist: th * R_E, alt, uC, tC };
+    if (!crane0) { const c0 = crane0 = groundCam(tT.crane), dx = c0.pos.x - OX, dz = c0.pos.z - OZ;
+      c0.dH = Math.hypot(dx, dz); c0.phi = Math.atan2(dx, -dz) / D2R; c0.el = Math.atan2(c0.pos.y - OY, c0.dH) / D2R;
+      const pr = c0.pd * D2R, dh = hd(c0.yaw); c0.look = c0.pos.clone().add(V(dh.x * Math.cos(pr), -Math.sin(pr), dh.z * Math.cos(pr)).multiplyScalar(c0.dist));
+      const k = tT.crane, L = Math.log;
+      LNA = mono([[k, L(c0.pos.y)], [k + 1.1, L(22)], [k + 2.1, L(120)], [k + 3.2, L(1400)], [k + 3.9, L(2350)], [k + 4.5, L(3400)], [k + 4.9, L(1e4)], [k + 5.3, L(2e5)],
+        [k + 5.75, L(4e6)], [k + 6.2, L(1.6e7)], [k + 6.6, L(2.4e7)], [tT.c2, L(2.8e7)], [tT.g, L(3.05e7)]]); }
+    const c0 = crane0, alt = Math.exp(LNA(t)), la = Math.log(alt), k = tT.crane;
+    const el = (c0.el + (38 - c0.el) * ss(k, k + 3.3, t) + 38 * ss(k + 4.3, k + 5.1, t)) * D2R;
+    const wG = ss(Math.log(3e5), Math.log(1.5e7), la), th = lerp(Math.max(alt - OY, .1) / Math.tan(el) / R_E, BETA, wG);
+    const phi = c0.phi + wrapD(180 - c0.phi) * ss(k + .6, k + 6.2, t), h = hd(phi), R1 = R_E + alt, st = Math.sin(th);
+    const pos = V(OX + h.x * R1 * st, alt * Math.cos(th) - 2 * R_E * Math.sin(th / 2) ** 2, OZ + h.z * R1 * st);
+    const org = V(OX, OY, OZ), tg = org.clone().lerp(V(0, -R_E + R_E * KAP, 0), ss(Math.log(2e4), Math.log(1.5e7), la)); tg.lerp(org, 0).lerp(c0.look, 1 - eio((t - k) / 1.0));
+    const v = tg.clone().sub(pos).normalize(), uC = V(pos.x, pos.y + R_E, pos.z).normalize(), tC = v.clone().addScaledVector(uC, -v.dot(uC)).normalize();
+    return { pos, yaw: phi + 180, pd: Math.asin(clamp(-v.dot(uC), -1, 1)) / D2R, fov: lerp(c0.fov, 39, ss(Math.log(8), Math.log(300), la)), focus: lerp(c0.focus, Math.max(20, alt * 1.4), ss(k, k + 1.6, t)),
+      aperture: 2.0 * (1 - ss(k, k + 2.2, t)), dist: th * R_E, alt, uC, tC };
   }
   // how far the light has run (metres, compared with distance-from-the-hill × 1.15): from their feet down to the city as Q6a
   // begins, Jerusalem's lamps on "예루살렘과", out over Judea, north to Samaria, then beyond the terrain along the world's roads
@@ -763,7 +806,7 @@ export async function build(W, H_, B0 = null) {
     else { const dirH = hd(c.yaw); dir = dirH.clone().multiplyScalar(Math.cos(pdr)).add(V(0, -Math.sin(pdr), 0)); up = dirH.clone().multiplyScalar(Math.sin(pdr)).add(V(0, Math.cos(pdr), 0)); }
     cam.position.copy(c.pos); cam.up.copy(up); cam.lookAt(c.pos.clone().add(dir));
     cam.fov = c.fov; const altG = c.alt - (c.alt < 50 ? H(c.pos.x, c.pos.z) : 0);
-    cam.near = c.alt < 30 ? .3 : Math.max(.3, .2 * altG); cam.far = Math.max(3.5e5, Math.sqrt((R_E + c.alt) ** 2 - R_E ** 2) * 1.2 + 3e5);
+    cam.near = c.alt < 30 ? .3 : Math.max(.3, lerp(.008, .2, ss(6000, 2e4, c.alt)) * altG); cam.far = Math.max(3.5e5, Math.sqrt((R_E + c.alt) ** 2 - R_E ** 2) * 1.2 + 3e5);   // round 9: near close enough for the cloud wisps
     return c;
   }
   function frame(t) {
@@ -790,23 +833,25 @@ export async function build(W, H_, B0 = null) {
     const Df = film.dofCfg; Df.focus = c.focus; Df.aperture = c.aperture; Df.maxCoc = 14;
     // the light along the roads (terrain), the lamps, the world's lines
     const F = front(t), glowOn = ss(T.crane - .2, T.crane + 1.4, t);
-    terrU.uF.value = F; terrU.uGlow.value = (OFFS.includes("glow") ? 0 : 1) * glowOn * lerp(.8, 1.3, ss(2, -4, e)) * lerp(1, .3, ss(6e4, 6e5, alt)); terrU.uHeadW.value = Math.max(18, F * .12);
-    terrU.uFeet.value = .7 * ss(T.crane - .3, T.crane + 1.0, t) * (1 - ss(T.crane + 3.5, T.crane + 7, t));
+    terrU.uF.value = F; terrU.uGlow.value = 0 * glowOn * lerp(.8, 1.3, ss(2, -4, e)) * lerp(1, .3, ss(6e4, 6e5, alt)); terrU.uHeadW.value = Math.max(18, F * .12);
+    terrU.uFeet.value = .7 * ss(T.crane - .3, T.crane + 1.0, t);   // round 9: the one light, all the way up (the hub point takes it over from the air)
         CLAMPS.u.uBurst.value = LAMPS.u.uBurst.value = 1; CLAMPS.u.uF.value = t * 1000; CLAMPS.u.uK.value = lerp(.5, 1.15, ss(2, -4, e)) * (1 - ss(1100, 3800, alt)); CLAMPS.u.uPull.value = .003; CLAMPS.u.uScale.value = film.scale;
         JGLOW.u.uF.value = 1; JGLOW.u.uK.value = 0; JGLOW.u.uPull.value = .0005; JGLOW.u.uScale.value = film.scale;
         LAMPS.u.uF.value = t * 1000; LAMPS.u.uK.value = lerp(.5, 1.15, ss(2, -4, e)) * (1 - ss(2.5e5, 1.6e6, alt)); LAMPS.u.uPull.value = alt < 4e4 ? .003 : .0005; LAMPS.u.uScale.value = film.scale;   // (from orbit the lamps would pile into one blob: the globe's own lights take over)
     CITIES.u.uF.value = t * 1000; CITIES.u.uK.value = 1.2 + .6 * DEEP(alt); CITIES.u.uPull.value = .0004; CITIES.u.uScale.value = film.scale;
     LATEP.u.uF.value = t * 1000; LATEP.u.uK.value = 1.2 + .6 * DEEP(alt); LATEP.u.uPull.value = .0004; LATEP.u.uScale.value = film.scale;
-    HUB.u.uF.value = 1; HUB.u.uK.value = 1.5 * ss(150, 4000, alt) * (1 - .35 * DEEP(alt)); HUB.u.uPull.value = .0004; HUB.u.uScale.value = film.scale;
+    HUB.u.uF.value = 1; HUB.u.uK.value = 1.5 * ss(150, 4000, alt) * (1 - .35 * DEEP(alt)) * (1 - .85 * ss(1400, 2300, alt) * (1 - ss(3200, 6500, alt)));   // round 9: hidden inside the deck, back through the opening HUB.u.uPull.value = .0004; HUB.u.uScale.value = film.scale;
     // round 7: the lines — the local ones fade with their lamps as the camera leaves the region; the world's lines thin out where they crowd the hub
     for (const L of [LCITY, LLOC, LGLB]) { L.u.uF.value = F; L.u.uT.value = t; L.u.uRes.value.set(film.w, film.h); L.u.uBandY.value = .38; L.u.uLimb.value = ss(5e3, 6e4, alt); }   // the disc test only from the air (on the hill it would cut lines at eye level)
     LLOC.u.uPx.value = 1.4 * film.scale; LLOC.u.uK.value = lerp(.6, 1.1, ss(2, -4, e)) * (1 - ss(3e5, 2e6, alt)); LLOC.u.uDens.value = LINEDENS; LLOC.u.uK.value *= .55; LLOC.u.uTrail.value = .32;   // round 8: the villages' lines lighter (they blanketed the lower frame at 33.5–34.5)
     LCITY.u.uPx.value = 1.4 * film.scale; LCITY.u.uK.value = lerp(.6, 1.1, ss(2, -4, e)) * (1 - ss(1100, 3800, alt)); LCITY.u.uDens.value = LINEDENS; LCITY.u.uTrail.value = .36;
     LGLB.u.uPx.value = 1.5 * film.scale; LGLB.u.uK.value = LINEK * lerp(.7, 1, ss(2e4, 2e6, alt)); LGLB.u.uDens.value = LINEDENS; LGLB.u.uTrail.value = .3;
+    cloudU.uK.value = ss(T.crane + .3, T.crane + 1.8, t) * (1 - ss(T.crane + 4.7, T.crane + 5.8, t)); if (OFFS.includes('cloud')) cloudU.uK.value = 0; CDECK.visible = !OFFS.includes('deck'); CWISP.visible = !OFFS.includes('wisp');   // (fades out by time: above the deck the climb is too fast for an altitude fade)   // round 9: the deck (none in the ground shots before the crane)
+    cloudU.uLit.value.copy(col('#7c88a8')).lerp(col('#efae86'), ss(-2.5, 2, e)); cloudU.uDark.value.copy(col('#2a3146')).lerp(col('#5a5462'), ss(-2.5, 2, e) * .5);
     // the globe (only once the camera is high enough for it to show past the terrain) and its air seen from outside
     { const op = 1 - ss(700, 2600, alt); CITYMAT.forEach(m => { m.opacity = op; }); CITYOBJ.forEach(o => { o.visible = op > .002; }); }
     GL.mesh.visible = alt > 1500; GL.atm.visible = alt > 6e4 && !OFFS.includes("atm"); GL.au.uK.value = ss(9e4, 5e5, alt); GL.au.uSun.value.copy(sunDir); GL.u.uSun.value.copy(sunDir);
-    GL.u.uHazeL.value = lerp(2.5e5, 8e6, ss(1e4, 2e6, alt)); GL.u.uWF.value = .85 * Math.exp(DEF(Math.max(T0B.c1 + 2.3, t - .7))) * (t > T0B.c1 + 3 ? 1 : 0); GL.u.uCG.value = CGLOW * ss(3e5, 2e6, alt);   /* round 7: .8 F = behind the slowest heads (lam ≥ .8) */ GL.u.uDeep.value = terrU.uDeep.value = DEEP(alt);   // the region view keeps its round-5 night; the globe goes blue-black as the camera leaves the air   // round 6: the cities' glow (from the air down, it would sit over the terrain's own lamps)
+    GL.u.uHazeL.value = lerp(2.5e5, 8e6, ss(1e4, 2e6, alt)); GL.u.uWF.value = .85 * Math.exp(DEF(Math.max(B9, t - .7))) * (t > B9 + .5 ? 1 : 0); GL.u.uCG.value = CGLOW * ss(3e5, 2e6, alt);   /* round 7: .8 F = behind the slowest heads (lam ≥ .8) */ GL.u.uDeep.value = terrU.uDeep.value = DEEP(alt);   // the region view keeps its round-5 night; the globe goes blue-black as the camera leaves the air   // round 6: the cities' glow (from the air down, it would sit over the terrain's own lamps)
     terrU.uGK.value = OFFS.includes("gk") ? 0 : ss(1.5e4, 8e4, alt); GL.u.uNM.value = lerp(-.22, 1.2, ss(T.c2 - .9, T.c2 + 1.2, t)); terrU.uSunW.value.copy(sunDir);   // uNM: the night holds over the land as the globe look comes in; then the dawn comes in at the far limb
     // banners, dust
     banU.uT.value = t; banU.uGust.value = Math.exp(-Math.pow((t - T.gust - .8) / 1.1, 2)) * .9;

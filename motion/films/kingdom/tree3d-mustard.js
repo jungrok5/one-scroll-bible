@@ -220,7 +220,7 @@ export async function build(W, H) {
   film.renderer.shadowMap.type = THREE.VSMShadowMap;
   const sunL = new THREE.DirectionalLight(col('#ffd29a'), 3.0); sunL.castShadow = true; sunL.shadow.mapSize.set(4096, 4096);
   Object.assign(sunL.shadow.camera, { left: -15, right: 15, top: 21, bottom: -11, near: 230, far: 420 }); sunL.shadow.bias = -.0003; sunL.shadow.normalBias = .02;
-  sunL.shadow.radius = 9; sunL.shadow.blurSamples = 20;
+  sunL.shadow.radius = 20; sunL.shadow.blurSamples = 24;
   S.add(sunL, sunL.target);
   const sunLamp = film.lamp(V(0, 0, 0), '#ffcf96', { power: 1900, size: 70, fog: 1 });
 
@@ -235,7 +235,9 @@ export async function build(W, H) {
             float m = tn(vGW * .07) * .6 + tn(vGW * .6) * .4;
             diffuseColor.rgb *= mix(.72, 1.08, fur * .5 + m * .5); diffuseColor.rgb = mix(diffuseColor.rgb, vec3(.42, .40, .24), smoothstep(.55, .8, tn(vGW * .02)) * .35); }`);
     };
-    const g = new THREE.Mesh(new THREE.PlaneGeometry(5000, 5000, 1, 1).rotateX(-Math.PI / 2), gm); g.receiveShadow = true; film.ground(g); S.add(g);
+    // finely tessellated (12.5 m quads): on one huge quad the interpolated shadow coordinates lost precision and the shadow swam
+    // as the camera moved (round 4: "그림자 떨리던데")
+    const g = new THREE.Mesh(new THREE.PlaneGeometry(5000, 5000, 400, 400).rotateX(-Math.PI / 2), gm); g.receiveShadow = true; film.ground(g); S.add(g);
     // ridges: strips of low hills far behind the tree, each one more lost in the haze
     const hm = new THREE.MeshStandardMaterial({ color: '#6d5a4a', roughness: 1 });
     const RR = rng(31);

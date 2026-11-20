@@ -19,7 +19,7 @@
 export function buildIllum(W, H, paint, B) {
   const P = window.Pilot, I = window.Illum, { clamp, lerp, ss, eio, rng, fbm, canvas } = P;
   if (!I.init.done) { I.init(); I.init.done = true; }
-  const T = { start: B.N29, light: [B.N29 + .15, B.N29 + 1.9], lay: [B.N29 + 1.6, B.L10 - .3], q: B.Q16, glint: [B.Q16 + .05, B.Q16 + 1.55],
+  const T = { start: B.N29, light: [B.N29 + .1, B.N29 + 1.25], lay: [B.N29 + 1.6, B.L10 - .3], q: B.Q16, glint: [B.Q16 + .05, B.Q16 + 1.55],
     dev: [B.Q16 + 1.0, B.Q16 + 3.6], open: [B.Q16 + 3.0, B.Q16 + 7.4], push: [B.N29, B.Q16 + 1.0] };
   // develop coordinates D: at zoom 1 a D point lands on the screen at (x, y − DY) — the miniature then sits exactly on the 3D frame
   const DY = 80, C0 = [540, 900];
@@ -64,13 +64,32 @@ export function buildIllum(W, H, paint, B) {
       p.quadraticCurveTo(x + c * L * .5 - sn * Wd, y + sn * L * .5 + c * Wd, x + c * L, y + sn * L); p.quadraticCurveTo(x + c * L * .5 + sn * Wd, y + sn * L * .5 - c * Wd, x, y); return p; };
     vine.forEach(([a, b], i) => { if (i % 3) return; const sd = (i / 3) % 2 ? 1 : -1; const lp = leaf(a, b, .9 + vr() * .3, sd > 0 ? -.4 : Math.PI + .4); I.gold(g, lp, { lw: 1.4 }); g.strokeStyle = INK; g.lineWidth = 1.6; g.beginPath(); g.moveTo(a, b); g.quadraticCurveTo(a + sd * 10, b + 4, a + sd * 18, b - 6); g.stroke();
       if (i % 6 === 0) { const bud = I.ell(a - sd * 14, b + 8, 6.5, 9, sd * .5); I.fillInk(g, bud, (i / 6) % 2 ? VERM : LAP, 1.6); } });
-    // the script-like rows under the miniature: textura rhythm (minims, feet, a few ascenders) — never a letter
-    { const rr = rng(77); for (const [y0, x0, x1] of [[206, PAGE.x + 190, PAGE.x + PAGE.w - 130], [248, PAGE.x + 190, PAGE.x + PAGE.w - 380]]) {
-      let x = x0; g.strokeStyle = 'rgba(38,24,14,.9)'; g.lineCap = 'butt';
-      while (x < x1) { const n = 2 + (rr() * 5 | 0); for (let k = 0; k < n && x < x1; k++) { const hgt = 22, asc = rr() < .12 ? 10 : 0, des = rr() < .06 ? 6 : 0;
-          g.lineWidth = 4.2; g.beginPath(); g.moveTo(x, y0 - hgt - asc); g.lineTo(x, y0 + des); g.stroke();
-          g.lineWidth = 1.2; g.beginPath(); g.moveTo(x - 2, y0 - hgt + 3); g.lineTo(x + 3, y0 - hgt - 1); g.moveTo(x - 2, y0 + 1); g.lineTo(x + 3, y0 - 3); g.stroke(); x += 8.5; }
-        x += 13 + rr() * 6; if (rr() < .07) { g.fillStyle = VERM; g.fillRect(x - 6, y0 - 14, 7, 7); x += 12; } } } }
+    // the script-like rows (round 2: no longer a barcode): a broad-nib hand — each mark a pen stroke with thick and thin parts at the
+    // pen's 40° angle, of several kinds (minims joined at the foot, rounds, ascenders with a flag, a descender, a hairline crossbar),
+    // words of uneven length on a baseline that breathes, the ink heavier at a word's start; a vermilion rubric word and a lapis
+    // paragraph mark here and there, a gold-and-lapis line filler at the end of the short row. Never a letter of any alphabet.
+    { const rr = rng(77), na = .64, nc = Math.cos(na), ns = Math.sin(na);
+      const nib = (x0, y0, x1, y1, w, col) => { const ox = nc * w / 2, oy = -ns * w / 2; g.fillStyle = col; g.beginPath(); g.moveTo(x0 - ox, y0 - oy); g.lineTo(x0 + ox, y0 + oy); g.lineTo(x1 + ox, y1 + oy); g.lineTo(x1 - ox, y1 - oy); g.closePath(); g.fill(); };
+      const curve = (pts, w, col) => { for (let i = 0; i + 1 < pts.length; i++) nib(pts[i][0], pts[i][1], pts[i + 1][0], pts[i + 1][1], w, col); };
+      for (const [y0, x0, x1, short] of [[206, PAGE.x + 190, PAGE.x + PAGE.w - 130, false], [248, PAGE.x + 190, PAGE.x + PAGE.w - 400, true]]) {
+        let x = x0;
+        while (x < x1 - 30) {
+          const rub = rr() < .08, n = 2 + (rr() * 6 | 0), base = y0 + Math.sin(x * .013) * 1.4;
+          for (let k = 0; k < n && x < x1 - 14; k++) {
+            const a = (rub ? .9 : .82) * (k === 0 ? 1 : .86 + rr() * .14), col = rub ? `rgba(176,48,26,${a})` : `rgba(40,24,14,${a})`, xh = 15 + rr() * 2, kind = rr();
+            if (kind < .46) { curve([[x, base - xh], [x + .6, base - xh * .5], [x, base - 2], [x + 3.4, base + .6]], 4.4, col); x += 7.6; }           // a minim, its foot turned to the next
+            else if (kind < .62) { const r2 = 4.6; curve([[x + r2, base - xh], [x, base - xh * .55], [x + .4, base - 3], [x + r2 + .6, base], [x + r2 * 2, base - xh * .5], [x + r2 * 1.6, base - xh + 1], [x + r2, base - xh]], 3.6, col); x += r2 * 2 + 4; }   // a round
+            else if (kind < .74) { curve([[x, base - xh - 10], [x + .4, base - xh * .4], [x + 3, base + .4]], 4.4, col); nib(x, base - xh - 10, x + 5, base - xh - 12, 2.2, col); x += 8.2; }   // an ascender with a flag
+            else if (kind < .82) { curve([[x, base - xh], [x, base + 7], [x - 3, base + 9]], 4.2, col); x += 7.4; }                               // a descender
+            else if (kind < .92) { curve([[x, base - xh], [x + 1, base - 2], [x + 3.6, base]], 4.4, col); nib(x - 3, base - xh * .55, x + 6, base - xh * .58, 1.4, col); x += 8; }   // with a hairline crossbar
+            else { curve([[x, base - xh * .6], [x + 3, base - xh], [x + 6, base - xh * .6], [x + 3, base]], 3.4, col); x += 9.5; }               // a lozenge
+          }
+          x += 10 + rr() * 9;
+          if (rr() < .05 && x < x1 - 60) { g.fillStyle = 'rgba(44,72,150,.92)'; g.beginPath(); g.arc(x + 4, base - 10, 5.5, Math.PI * .5, Math.PI * 1.5); g.lineTo(x + 6, base - 15.5); g.lineTo(x + 6, base - 4.5); g.fill(); g.fillRect(x + 5, base - 16, 2.2, 17); x += 16; }   // a lapis paragraph mark
+        }
+        if (short) { const xs = x + 8, xe = PAGE.x + PAGE.w - 130; I.fillInk(g, I.rectP(xs, y0 - 12, xe - xs, 8), LAP, 1); I.gold(g, I.rectP(xs + 2, y0 - 10, xe - xs - 4, 4), { lw: 0 });
+          g.fillStyle = 'rgba(250,246,232,.9)'; for (let px = xs + 8; px < xe - 4; px += 16) { g.beginPath(); g.arc(px, y0 - 8, 1.4, 0, 6.28); g.fill(); } }
+      } }
     // the decorated block at the head of the rows (a lapis square, vermilion field, gold vine — an ornament, no letter in it)
     { const x0 = PAGE.x + 92, y0 = 178, s = 74; I.fillInk(g, I.rectP(x0, y0, s, s), LAP, 2.2); I.fillInk(g, I.rectP(x0 + 9, y0 + 9, s - 18, s - 18), VERM, 1.6);
       const knot = new Path2D(); for (let k = 0; k < 4; k++) { const an = k * Math.PI / 2 + Math.PI / 4; knot.addPath(leaf(x0 + s / 2, y0 + s / 2, 1.1, an)); } I.gold(g, knot, { lw: 1.4 });

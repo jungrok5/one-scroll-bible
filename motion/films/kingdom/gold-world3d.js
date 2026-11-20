@@ -92,7 +92,7 @@ export async function build(W, H, B) {
 
   // ---------------------------------------------------------------- light: a low sun ahead-left, going down over N29d
   const SUN0 = V(.95, .17, -.42).normalize(), SUN1 = V(.98, .015, -.3).normalize();
-  const sky = K.sky(film, { top: col('#6a80b0', .6), mid: col('#d8a868', .78), horizon: col('#ffcc80', 1.35), sunDir: SUN0, sunColor: col('#fff0c8', 24), sunGlow: col('#ffc070', 1.7), clouds: .22, cloudColor: col('#ffe2b0', 1.15), cloudShade: col('#c0906a', .7), radius: 8000 });
+  const sky = K.sky(film, { top: col('#2848a0', .8), mid: col('#d9a85c', .85), horizon: col('#ffd286', 1.5), sunDir: SUN0, sunColor: col('#fff0c8', 24), sunGlow: col('#ffc070', 1.7), clouds: .22, cloudColor: col('#ffe2b0', 1.15), cloudShade: col('#c0906a', .7), radius: 8000 });
   const hemi = new THREE.HemisphereLight(col('#b0bcd4'), col('#7a5a36'), .5); S.add(hemi);
   const sunL = new THREE.DirectionalLight(col('#ffd296'), 3.1); S.add(sunL, sunL.target);
   // FIXED shadow frustum over the near land and the lamp village (never moves with the camera: no shimmer)
@@ -103,15 +103,19 @@ export async function build(W, H, B) {
   const sunLamp = film.lamp(SUN0.clone().multiplyScalar(6000), '#ffcf90', { power: 260, size: 160, fog: 1 });
 
   // ---------------------------------------------------------------- the gold (uniforms shared by every lit material)
-  const GU = { uGR: { value: -10 }, uGC: { value: new THREE.Vector2(0, -560) }, uGild: { value: 1 }, uGoldCol: { value: col('#e8b456') } };
+  const GU = { uGR: { value: -10 }, uGC: { value: new THREE.Vector2(52, -262) }, uGild: { value: 1 }, uGoldCol: { value: col('#e8b456') } };
   const hashGLSL = `float hh(vec2 p){ vec3 p3 = fract(vec3(p.xyx) * .1031); p3 += dot(p3, p3.yzx + 33.33); return fract((p3.x + p3.y) * p3.z); }
     float vn(vec2 p){ vec2 i = floor(p), f = fract(p); vec2 u = f * f * (3. - 2. * f); return mix(mix(hh(i), hh(i + vec2(1, 0)), u.x), mix(hh(i + vec2(0, 1)), hh(i + vec2(1, 1)), u.x), u.y); }
     float fb(vec2 p){ float s = 0., a = .5; for (int i = 0; i < 4; i++){ s += a * vn(p); p = p * 2.03 + 11.7; a *= .5; } return s; }`;
-  const GILD_DECL = `uniform float uGR, uGild; uniform vec2 uGC; uniform vec3 uGoldCol; float gIn, gFront;`;
-  // gilding: behind the front the albedo turns toward gold leaf; the front itself is a soft bright band
-  const GILD_MAP = `{ float gd = length(vWP.xz - uGC) + (fb(vWP.xz * .006) - .5) * 160.; gIn = smoothstep(uGR, uGR - 220., gd) * uGild; gFront = exp(-pow((gd - uGR) / (45. + uGR * .03), 2.)) * step(1., uGR) * uGild;
-      diffuseColor.rgb = mix(diffuseColor.rgb, diffuseColor.rgb * vec3(1.3, 1.08, .72), .7 * gIn); }`;
-  const GILD_EMIT = `totalEmissiveRadiance += uGoldCol * (gFront * 2.6 + gIn * .07);`;
+  const GU2 = { uAct: { value: 0 }, uShade: { value: new THREE.Vector3(.7, .74, .86) }, uLitK: { value: new THREE.Vector3(1.2, 1.05, .86) } };
+  Object.assign(GU, GU2);
+  const GILD_DECL = `uniform float uGR, uGild, uAct; uniform vec2 uGC; uniform vec3 uGoldCol, uShade, uLitK; float gIn, gFront;`;
+  // a real light front (round 2): ahead of it the land lies in a cool soft shade (uAct comes up during the develop), behind it the
+  // low gold sun; the front itself is a narrow bright edge of light running out to the horizon — no glow in the air
+  const GILD_MAP = `{ float gd = length(vWP.xz - uGC) + (fb(vWP.xz * .006) - .5) * 90.; float wF = 10. + uGR * .008; gIn = smoothstep(uGR + wF, uGR - wF, gd) * step(1., uGR);
+      gFront = exp(-pow((gd - uGR) / wF, 2.)) * step(1., uGR) * uGild; }`;
+  const GILD_EMIT = ``;
+  const GILD_OUT = `outgoingLight *= mix(vec3(1.), mix(uShade, uLitK, gIn), uAct); outgoingLight += uGoldCol * gFront * .7 * uAct;`;
   const litPatch = (m, key, mapExtra = '') => { m.onBeforeCompile = sh => { Object.assign(sh.uniforms, GU);
       sh.vertexShader = sh.vertexShader.replace('#include <common>', '#include <common>\nvarying vec3 vWP; varying vec3 vWN;').replace('#include <project_vertex>', `#include <project_vertex>
         { vec4 wp = vec4(transformed, 1.);
@@ -121,7 +125,7 @@ export async function build(W, H, B) {
           vWP = (modelMatrix * wp).xyz; } vWN = normalize(mat3(modelMatrix) * objectNormal);`);
       sh.fragmentShader = sh.fragmentShader.replace('#include <common>', '#include <common>\nvarying vec3 vWP; varying vec3 vWN;\n' + hashGLSL + GILD_DECL + LAKE_GLSL + FIELD_GLSL)
         .replace('#include <map_fragment>', '#include <map_fragment>\n' + mapExtra + GILD_MAP)
-        .replace('#include <emissivemap_fragment>', '#include <emissivemap_fragment>\n' + GILD_EMIT); };
+        .replace('#include <emissivemap_fragment>', '#include <emissivemap_fragment>\n' + GILD_EMIT).replace('#include <opaque_fragment>', GILD_OUT + '\n#include <opaque_fragment>'); };
     m.customProgramCacheKey = () => 'gw-' + key; return m; };
 
   // ---------------------------------------------------------------- terrain on a fixed world grid (finer near the villages)
@@ -138,16 +142,22 @@ export async function build(W, H, B) {
   const groundM = litPatch(new THREE.MeshStandardMaterial({ color: '#7a7a4a', roughness: 1 }), 'ground', `{
       vec2 q = vWP.xz; float n = fb(q * .02), f = fb(q * .35), d = lakeD(q), fm = fieldM(q);
       vec3 c = diffuseColor.rgb * mix(.82, 1.1, n) * mix(.93, 1.05, f);
-      vec3 grass = vec3(.25, .4, .14) * mix(.8, 1.15, fb(q * .01 + 4.));
+      vec3 grass = vec3(.36, .48, .18) * mix(.82, 1.15, fb(q * .01 + 4.));
       c = mix(c, grass, (.45 + .45 * smoothstep(.35, .7, fb(q * .004 + 9.))) * (1. - fm));                 // dry grass and scrub on the open hills
       // the fields: a patchwork of strips (wheat, green barley, ploughed earth), furrows along each strip
       vec2 rq = mat2(.94, -.34, .34, .94) * q; vec2 cell = floor(rq / vec2(46., 30.)); float hc = hh(cell);
-      vec3 fc = hc < .3 ? vec3(.78, .62, .3) : hc < .55 ? vec3(.42, .5, .24) : hc < .8 ? vec3(.56, .42, .26) : vec3(.66, .58, .32);
+      vec3 fc = hc < .3 ? vec3(.86, .68, .3) : hc < .55 ? vec3(.46, .58, .24) : hc < .72 ? vec3(.6, .4, .24) : hc < .8 ? vec3(.8, .2, .1) : vec3(.74, .62, .32);   // wheat, barley, ploughed earth, an anemone field, stubble
       float fur = .5 + .5 * sin((hc < .5 ? rq.x : rq.y) * 2.1); fc *= mix(.9, 1.06, fur);
       vec2 fe = abs(fract(rq / vec2(46., 30.)) - .5) * vec2(46., 30.); float edge = smoothstep(21.4, 22.6, fe.x) + smoothstep(13.6, 14.6, fe.y);
       fc = mix(fc, vec3(.34, .36, .2), clamp(edge, 0., 1.) * .7);                                     // the low walls and hedges between
       c = mix(c, fc, fm);
       c = mix(c, vec3(.55, .5, .4), smoothstep(1.06, .99, d) * .6);                                   // the wet shore
+      float slope = 1. - normalize(vWN).y, ter = fract(vWP.y / 3.4);
+      c *= 1. - .3 * (1. - smoothstep(.02, .12, ter)) * smoothstep(.03, .1, slope) * (1. - fm) * step(1.06, d);   // the terraces' dry-stone walls on the slopes
+      float an = smoothstep(.64, .72, fb(q * .022 + 3.)) * (1. - fm) * step(1.08, d), sp = step(.45, vn(q * 1.9));
+      c = mix(c, vec3(.78, .1, .05) * (.8 + .4 * vn(q * 4.)), an * sp * .85);                           // red anemones (the lilies of the field) — the illuminator's vermilion
+      float vy = smoothstep(.6, .66, fb(q * .012 + 21.)) * (1. - fm) * step(1.1, d) * smoothstep(.02, .06, slope);
+      c = mix(c, c * (.62 + .38 * step(.5, fract(dot(q, vec2(.6, .8)) / 2.6))) * vec3(.85, 1.05, .8), vy * .8);   // vineyard rows
       diffuseColor.rgb = c; }
     { float rd = 1e9; ${ROADS.map(([ax, az, bx, bz]) => `{ vec2 a = vec2(${ax}., ${az}.), v = vec2(${bx - ax}., ${bz - az}.); float k = clamp(dot(vWP.xz - a, v) / dot(v, v), 0., 1.); rd = min(rd, length(vWP.xz - a - v * k)); }`).join(' ')}
       diffuseColor.rgb = mix(diffuseColor.rgb, vec3(.82, .72, .54) * mix(.9, 1.05, fb(vWP.xz * .3)), smoothstep(3.4, 2.2, rd)); }`);
@@ -156,7 +166,7 @@ export async function build(W, H, B) {
   setLift(0);
 
   // ---------------------------------------------------------------- the lake: a still, warm mirror of the sky with the sun's glitter
-  const WU = { uSun: { value: SUN0.clone() }, uSkyH: { value: col('#f0c080', .95) }, uSkyT: { value: col('#8a9cc0', .55) }, uDeep: { value: col('#24507e', .55) }, uGlit: { value: 1 } };
+  const WU = { uSun: { value: SUN0.clone() }, uSkyH: { value: col('#7090d8', .75) }, uSkyT: { value: col('#8a9cc0', .55) }, uDeep: { value: col('#1c3c9c', .72) }, uGlit: { value: 1 } };
   const waterM = new THREE.MeshStandardMaterial({ color: '#203050', roughness: 1 });
   waterM.onBeforeCompile = sh => { Object.assign(sh.uniforms, WU, GU);
     sh.vertexShader = sh.vertexShader.replace('#include <common>', '#include <common>\nvarying vec3 vWP;').replace('#include <project_vertex>', '#include <project_vertex>\nvWP = (modelMatrix * vec4(transformed, 1.)).xyz;');
@@ -164,8 +174,8 @@ export async function build(W, H, B) {
       .replace('#include <opaque_fragment>', `{ vec3 Vd = normalize(cameraPosition - vWP); vec2 w = (vec2(fb(vWP.xz * .045 + vec2(0., 0.)), fb(vWP.xz * .045 + 7.)) - .5) * .09 + (vec2(vn(vWP.xz * .5), vn(vWP.xz * .5 + 3.)) - .5) * .03;
           vec3 N = normalize(vec3(w.x, 1., w.y)); vec3 Rr = reflect(-Vd, N); float fr = .03 + .97 * pow(1. - clamp(dot(N, Vd), 0., 1.), 5.);
           vec3 skyc = mix(uSkyH, uSkyT, smoothstep(0., .5, Rr.y)); float s = max(dot(Rr, uSun), 0.);
-          vec3 c = mix(uDeep, skyc * .62, clamp(fr * .4 + .04, 0., 1.)) + uSkyH * (pow(s, 120.) * 3. + pow(s, 14.) * .35) * uGlit;
-          float gd = length(vWP.xz - uGC); float gi = smoothstep(uGR, uGR - 220., gd) * uGild; c = mix(c, c * vec3(1.25, 1.05, .7), gi * .5) + uGoldCol * exp(-pow((gd - uGR) / 70., 2.)) * step(1., uGR) * uGild * .6;
+          vec3 c = mix(uDeep, skyc * .62, clamp(fr * .4 + .04, 0., 1.)) + uGoldCol * (pow(s, 120.) * 3. + pow(s, 14.) * .3) * uGlit;
+          float gd = length(vWP.xz - uGC) + (fb(vWP.xz * .006) - .5) * 90.; float wF = 10. + uGR * .008, gi = smoothstep(uGR + wF, uGR - wF, gd) * step(1., uGR); c *= mix(vec3(1.), mix(vec3(.82, .84, .92), vec3(1.08, 1.06, 1.1), gi), uAct); c += uGoldCol * exp(-pow((gd - uGR) / wF, 2.)) * step(1., uGR) * uGild * .8 * uAct;
           outgoingLight = c; }
         #include <opaque_fragment>`); };
   waterM.customProgramCacheKey = () => 'gw-water';
@@ -219,11 +229,71 @@ export async function build(W, H, B) {
     wins.push(mkWin(g, w / 2 + .02, h * .62, (r() - .5) * d * .3, Math.PI / 2, vi));
     const o = { g, x, z, y0, w, d, h, ry, wins, vi }; HOUSES.push(o); return o;
   }
+  // ---------------------------------------------------------------- the house the camera comes to (round 2: real Galilean detail)
+  // basalt courses below, lime-washed plaster above; a raised door on three basalt steps with a long wooden lintel, the door ajar with
+  // a thread of lamplight; a tall window with a wooden lintel, a basalt sill and open shutters, the lamp inside spilling warm light
+  // onto the sill, the shutters and the ground (a real point light); an outside stair to the roof; a fig tree, clay jars, potted herbs,
+  // a vine on the wall. The window is tall and narrow like the prayer room's, and the last frame puts it where that window is.
+  const whiteM = wallM('#efe8d8', 'w');
+  const basaltM = litPatch(new THREE.MeshStandardMaterial({ color: '#3d3a37', roughness: .9 }), 'basalt', `{ vec2 q = abs(vWN.x) > abs(vWN.z) ? vWP.zy : vWP.xy; float row = floor(q.y / .32); float bw = .5 + .2 * hh(vec2(row, 3.)); vec2 c = floor(vec2(q.x / bw + row * .37, row));
+      vec2 f = vec2(fract(q.x / bw + row * .37), fract(q.y / .32)); float j = smoothstep(.0, .07, min(min(f.x, 1. - f.x) * 1.6, min(f.y, 1. - f.y)));
+      diffuseColor.rgb *= mix(.45, 1., j) * mix(.75, 1.2, hh(c)) * mix(.9, 1.08, vn(q * 9.)); }`);
+  const clayM = litPatch(new THREE.MeshStandardMaterial({ color: '#9a5634', roughness: .85 }), 'clay');
+  const herbM = litPatch(new THREE.MeshStandardMaterial({ color: '#4e6a34', roughness: .9 }), 'herb'), figM = litPatch(new THREE.MeshStandardMaterial({ color: '#3e5a2a', roughness: .85 }), 'fig');
+  const doorM = litPatch(new THREE.MeshStandardMaterial({ color: '#4a3220', roughness: .8 }), 'door');
+  const winTexT = (() => { const c = document.createElement('canvas'); c.width = 96; c.height = 200; const x = c.getContext('2d');
+    const g = x.createRadialGradient(48, 176, 4, 48, 150, 190); g.addColorStop(0, '#fff4d0'); g.addColorStop(.16, '#ffcc7a'); g.addColorStop(.5, '#c06a30'); g.addColorStop(1, '#3a1a0c'); x.fillStyle = g; x.fillRect(0, 0, 96, 200);
+    x.fillStyle = 'rgba(60,26,10,.5)'; x.fillRect(58, 30, 26, 120);
+    x.fillStyle = 'rgba(70,34,14,.6)'; x.fillRect(10, 70, 30, 6);
+    x.fillStyle = '#4a2a16'; x.beginPath(); x.ellipse(44, 190, 18, 6, 0, 0, 6.283); x.fill();
+    const f = x.createRadialGradient(52, 178, 0, 52, 178, 13); f.addColorStop(0, '#ffffff'); f.addColorStop(.4, '#ffe0a0'); f.addColorStop(1, 'rgba(255,200,120,0)'); x.fillStyle = f; x.fillRect(36, 160, 32, 34);
+    const sh = x.createLinearGradient(0, 0, 0, 34); sh.addColorStop(0, 'rgba(20,8,2,.85)'); sh.addColorStop(1, 'rgba(20,8,2,0)'); x.fillStyle = sh; x.fillRect(0, 0, 96, 34);
+    const sl = x.createLinearGradient(96, 0, 76, 0); sl.addColorStop(0, 'rgba(20,8,2,.75)'); sl.addColorStop(1, 'rgba(20,8,2,0)'); x.fillStyle = sl; x.fillRect(70, 0, 26, 200);
+    const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t; })();
+  let SPILL = null, DOORSLIT = null, TRUNK_M = null;
+  const trunkMat = () => TRUNK_M || (TRUNK_M = litPatch(new THREE.MeshStandardMaterial({ color: '#5a4a3a', roughness: .95 }), 'figtrunk'));
+  function targetHouse(x, z) {
+    const g = new THREE.Group(), y0 = hgt(x, z), w = 6.6, d = 6.2, h = 3.6; g.position.set(x, 0, z); S.add(g);
+    const add = (geo, mat, px, py, pz, ill, ry = 0) => { const m = new THREE.Mesh(geo, mat); m.position.set(px, py, pz); m.rotation.y = ry; m.castShadow = m.receiveShadow = true; g.add(m); m.userData.ill = ill; return m; };
+    box(g, w, h + 1.2, d, 0, (h - 1.2) / 2, 0, whiteM, 'wall');
+    box(g, w + .1, 2.3, d + .1, 0, .15, 0, basaltM, 'roof');
+    box(g, w + .16, .2, d + .16, 0, h + .04, 0, roofM, 'roof');
+    for (const s2 of [-1, 1]) box(g, w, .38, .14, 0, h + .32, s2 * (d / 2 - .07), whiteM, 'wall');
+    for (const s2 of [-1, 1]) box(g, .14, .38, d, s2 * (w / 2 - .07), h + .32, 0, whiteM, 'wall');
+    for (let i = 0; i < 6; i++) { const bm = new THREE.Mesh(new THREE.CylinderGeometry(.075, .085, .34, 14), woodM); bm.rotation.x = Math.PI / 2; bm.position.set(-w / 2 + (i + .5) * w / 6, h - .3, d / 2 + .12); bm.castShadow = true; g.add(bm); bm.userData.ill = 'door'; }
+    const dx = 1.15, dy = .48, fz = d / 2;
+    add(new THREE.PlaneGeometry(.98, 1.98), darkM, dx, dy + .99, fz + .012, 'door');
+    add(K.roundedBox(.8, 1.94, .06, .02, 2), doorM, dx + .12, dy + .97, fz + .2, 'door', -.55);
+    DOORSLIT = add(new THREE.PlaneGeometry(.06, 1.9), new THREE.MeshBasicMaterial({ color: new THREE.Color(0, 0, 0) }), dx - .43, dy + .96, fz + .02, 'win'); DOORSLIT.castShadow = false;
+    for (const s2 of [-1, 1]) add(K.roundedBox(.22, 2.1, .2, .03, 2), basaltM, dx + s2 * .6, dy + 1.0, fz + .06, 'roof');
+    add(K.roundedBox(1.7, .2, .26, .03, 2), woodM, dx, dy + 2.12, fz + .08, 'door');
+    for (let i = 0; i < 3; i++) add(K.roundedBox(1.7 - i * .1, .16, .38, .04, 2), basaltM, dx, dy - .08 - i * .16, fz + .2 + i * .36, 'roof');
+    const wxl = -1.55, wyc = 2.05;
+    const mat = new THREE.MeshBasicMaterial({ color: new THREE.Color(0, 0, 0), map: winTexT }), wm = add(new THREE.PlaneGeometry(.32, 1.05), mat, wxl, wyc, fz + .012, 'win'); wm.castShadow = false;
+    for (const s2 of [-1, 1]) add(K.roundedBox(.16, 1.2, .16, .03, 2), basaltM, wxl + s2 * .24, wyc, fz + .07, 'roof');
+    add(K.roundedBox(1.0, .18, .22, .03, 2), woodM, wxl, wyc + .66, fz + .1, 'door');
+    add(K.roundedBox(.6, .1, .3, .03, 2), basaltM, wxl, wyc - .58, fz + .14, 'roof');
+    for (const s2 of [-1, 1]) { const sh = add(K.roundedBox(.2, 1.02, .05, .015, 2), doorM, 0, wyc, 0, 'door'); sh.position.set(wxl + s2 * (.33 + .1 * Math.cos(1.4)), wyc, fz + .12 + .14 * Math.sin(1.4) * .5); sh.rotation.y = -s2 * 1.4; }   // swung back flat to the wall
+    const tw = { m: wm, mat, v: 1, t0: 1e9, k: 0 }; WINS.push(tw);
+    SPILL = new THREE.PointLight(col('#ffb070'), 0, 9, 2); SPILL.position.set(wxl, wyc - .25, fz + .75); g.add(SPILL);
+    for (let i = 0; i < 9; i++) add(K.roundedBox(1.0, (i + 1) * .4, .44, .04, 2), i < 3 ? basaltM : whiteM, w / 2 + .52, (i + 1) * .2 - .02, fz - .45 - i * .44, i < 3 ? 'roof' : 'wall');
+    const lathe = (pts, sc) => new THREE.LatheGeometry(pts.map(([a, b]) => new THREE.Vector2(a * sc, b * sc)), 16);
+    const jar = [[0, 0], [.16, .02], [.24, .2], [.25, .45], [.18, .66], [.09, .74], [.11, .8], [.0, .8]], pot = [[0, 0], [.13, 0], [.17, .18], [.19, .26], [0, .26]];
+    add(lathe(jar, 1.1), clayM, -2.55, 0, fz + .34, 'roof'); add(lathe(jar, .9), clayM, -2.95, 0, fz + .5, 'roof');
+    const herbs = (px, py, pz, sc) => { add(lathe(pot, sc), clayM, px, py, pz, 'roof'); const r = rng(Math.abs((px * 100 + pz * 10) | 0) + 1); for (let k = 0; k < 7; k++) { const a = r() * 6.283, rr = r() * .12 * sc; add(new THREE.IcosahedronGeometry(.11 * sc, 1), herbM, px + Math.cos(a) * rr, py + .3 * sc + r() * .16 * sc, pz + Math.sin(a) * rr, 'leaf'); } };
+    herbs(dx + .7, dy - .08, fz + .25, 1.1); herbs(dx - .62, dy - .24, fz + .6, 1.0); herbs(dx + .62, dy - .4, fz + .95, 1.2);
+    { const r = rng(77), leaf = new THREE.CircleGeometry(1, 6); for (let k = 0; k < 90; k++) { const u = r(), vx2 = dx - 1.05 + u * 2.1, arch = 2.62 + .32 * Math.sin(Math.PI * u), vy2 = arch + (r() - .3) * .42;
+        const m = add(leaf, herbM, vx2, vy2 + dy, fz + .07 + r() * .07, 'leaf'); const sc = .09 + r() * .07; m.scale.set(sc, sc * (.8 + r() * .3), sc); m.rotation.set((r() - .5) * .8, (r() - .5) * .8, r() * 3); m.castShadow = true; }
+      for (let k = 0; k < 14; k++) { const t = k / 14; const m = add(leaf, herbM, dx + .88 + Math.sin(t * 7) * .05, dy + .1 + t * 2.5, fz + .08, 'leaf'); const sc = .08 + r() * .05; m.scale.set(sc, sc, sc); m.rotation.z = r() * 3; } }   // and up the jamb from a root by the step
+    { const fx = -w / 2 - 1.5, fz2 = fz - .8, tr = K.tree({ seed: 31, height: 3.6, trunk: .16, depth: 4, spread: .9, up: .25, twig: 0, mat: trunkMat(), layer: 0 }); tr.position.set(fx, 0, fz2); g.add(tr);
+      const r = rng(32); for (let k = 0; k < 40; k++) { const a = r() * 6.283, rr = Math.sqrt(r()) * 1.6; const m = add(new THREE.IcosahedronGeometry(.42 + r() * .3, 1), figM, fx + Math.cos(a) * rr, 2.3 + r() * 1.4, fz2 + Math.sin(a) * rr, 'leaf'); m.rotation.set(r() * 3, r() * 3, 0); m.scale.y = .7; } }
+    const o = { g, x, z, y0, w, d, h, ry: 0, wins: [tw], vi: 1 }; HOUSES.push(o); return o;
+  }
   let TARGET = null;
   VILLS.forEach(([vx, vz, rad, n, seed], vi) => { const r = rng(seed * 31 + 1);
     const placed = [];
     if (vi === 1) {   // the lamp village: the house the camera goes to stands at its front edge, its face to the camera (+z)
-      const th = house(vi, vx - 12, vz + rad * .62, 6.4, 6.2, 3.5, 0, MW[2], 901); placed.push([th.x, th.z, 5.2]); TARGET = th;
+      const th = targetHouse(vx - 12, vz + rad * .62); placed.push([th.x, th.z, 7]); TARGET = th;
     }
     for (let i = 0, tries = 0; i < n && tries < 400; tries++) { const a = r() * 6.283, rr = Math.sqrt(r()) * rad, x = vx + Math.cos(a) * rr, z = vz + Math.sin(a) * rr * .8;
       const w = 4.6 + r() * 3, d = 5 + r() * 2.6, h = 2.7 + r() * 1.4;
@@ -234,11 +304,7 @@ export async function build(W, H, B) {
       house(vi, x, z, w, d, h, ry, MW[(r() * 3) | 0], seed * 100 + i); placed.push([x, z, Math.max(w, d) * .62]); i++;
       if (r() < .5) { const cw = new THREE.Mesh(K.roundedBox(.45, 1.2, 3 + r() * 4, .08, 2), MW[(r() * 3) | 0]); const ca = r() * 6.283; cw.position.set(x + Math.cos(ca) * (w * .9), hgt(x + Math.cos(ca) * (w * .9), z + Math.sin(ca) * (d * .9)) + .45, z + Math.sin(ca) * (d * .9)); cw.rotation.y = r() * 3; cw.castShadow = cw.receiveShadow = true; cw.userData.ill = 'wall'; cw.userData.y0 = cw.position.y; S.add(cw); HOUSES.push({ g: cw, wallOnly: true, y0: cw.position.y - .45 }); } }
   });
-  // the target window: a deeper reveal with open wooden shutters, the lamp inside
   const TW = TARGET.wins[0]; TW.target = true;
-  { const g = TARGET.g, p = TW.m.position; for (const s of [-1, 1]) { const sh = new THREE.Mesh(K.roundedBox(.36, .82, .05, .015, 2), woodM); sh.position.set(p.x + s * .52, p.y, p.z + .16); sh.rotation.y = s * .9; sh.castShadow = true; g.add(sh); sh.userData.ill = 'door'; }
-    const sill = new THREE.Mesh(K.roundedBox(.86, .07, .22, .02, 2), roofM); sill.position.set(p.x, p.y - .44, p.z + .08); g.add(sill); sill.userData.ill = 'roof';
-    const lintel = new THREE.Mesh(K.roundedBox(.92, .1, .14, .02, 2), woodM); lintel.position.set(p.x, p.y + .45, p.z + .05); g.add(lintel); lintel.userData.ill = 'door'; }
   const TWP = new THREE.Vector3(); const targetWorld = () => { TARGET.g.updateMatrixWorld(); return TW.m.getWorldPosition(TWP.set(0, 0, 0)); };
   // window lamps: the order they light (the lamp village one by one, the target early; far villages as small points)
   { const lv = WINS.filter(w => w.v === 1 && !w.target), r = rng(55); lv.forEach((w, i) => { w.t0 = T.lamps[0] + (T.lamps[1] - T.lamps[0]) * ((i + r() * .8) / lv.length); });
@@ -250,7 +316,7 @@ export async function build(W, H, B) {
   // ---------------------------------------------------------------- olive trees (clumps of grey-green), a few palms; kept off fields, roads, water
   const leafM = litPatch(new THREE.MeshStandardMaterial({ color: '#66704c', roughness: .9 }), 'leaf'), trunkM = litPatch(new THREE.MeshStandardMaterial({ color: '#4a3a2a', roughness: .95 }), 'trunk');
   const TREES = [];
-  { const n = 1400, ico = new THREE.IcosahedronGeometry(1, 1), inst = new THREE.InstancedMesh(ico, leafM, n * 3), trunks = new THREE.InstancedMesh(new THREE.CylinderGeometry(.18, .28, 1, 6), trunkM, n), m4 = new THREE.Matrix4(), q = new THREE.Quaternion();
+  { const n = 1400, NO = 2600, ico = new THREE.IcosahedronGeometry(1, 1), inst = new THREE.InstancedMesh(ico, leafM, (n + NO) * 3), trunks = new THREE.InstancedMesh(new THREE.CylinderGeometry(.18, .28, 1, 6), trunkM, n + NO), m4 = new THREE.Matrix4(), q = new THREE.Quaternion();
     let ti = 0, li = 0;
     for (let tries = 0; ti < n && tries < 40000; tries++) {
       const x = (R() - .5) * 2600, z = 300 - R() * 1500, d = lakeD(x, z);
@@ -264,6 +330,17 @@ export async function build(W, H, B) {
       m4.compose(V(x, y + hgtT * .25, z), q.identity(), V(1, hgtT * .5, 1)); trunks.setMatrixAt(ti, m4);
       for (let k = 0; k < 3; k++) { const a = R() * 6.283, rr = R() * 1.3; m4.compose(V(x + Math.cos(a) * rr, y + hgtT * (.62 + R() * .22), z + Math.sin(a) * rr), q.setFromEuler(new THREE.Euler(R() * 3, R() * 3, 0)), V(1, .72, 1).multiplyScalar(1.4 + R() * 1.1)); inst.setMatrixAt(li++, m4); }
       ti++; }
+    // orchards (round 2): olive groves planted in rows on the slopes round the villages and on the far shore, each grid on its own angle
+    const OR = [[-250, -150, 190, 120, .3], [235, -125, 170, 110, -.2], [150, -335, 80, 60, .1], [-210, -415, 90, 60, -.35], [210, -1095, 220, 110, .05], [-360, -1000, 190, 120, .4], [-540, -520, 200, 170, .2], [520, -420, 180, 160, -.3], [-20, -1170, 200, 80, .15]];
+    for (const [cx, cz, ow, od, an] of OR) { const ca = Math.cos(an), sa = Math.sin(an), dx = 8.5, dz = 9.5;
+      for (let u = -ow / 2; u <= ow / 2 && ti < n + NO; u += dx) for (let v = -od / 2; v <= od / 2 && ti < n + NO; v += dz) {
+        const x = cx + u * ca - v * sa + (R() - .5) * 1.4, z = cz + u * sa + v * ca + (R() - .5) * 1.4;
+        if (lakeD(x, z) < 1.1 || roadD(x, z) < 5) continue; let nv = 99; for (const [vx, vz, rad] of VILLS) nv = Math.min(nv, Math.hypot(x - vx, z - vz) / rad); if (nv < 1.1) continue;
+        if (R() < .08) continue;                                                                     // a gap here and there (an old tree gone)
+        const hgtT = 3.8 + R() * 1.6, y = hgt(x, z); TREES.push({ x, z, y, h: hgtT, i0: li, ti });
+        m4.compose(V(x, y + hgtT * .25, z), q.identity(), V(1, hgtT * .5, 1)); trunks.setMatrixAt(ti, m4);
+        for (let k = 0; k < 3; k++) { const a = R() * 6.283, rr = R() * 1.0; m4.compose(V(x + Math.cos(a) * rr, y + hgtT * (.62 + R() * .2), z + Math.sin(a) * rr), q.setFromEuler(new THREE.Euler(R() * 3, R() * 3, 0)), V(1, .72, 1).multiplyScalar(1.3 + R() * .7)); inst.setMatrixAt(li++, m4); }
+        ti++; } }
     inst.count = li; trunks.count = ti; inst.castShadow = trunks.castShadow = true; inst.receiveShadow = true; S.add(inst, trunks);
     inst.userData.ill = 'leaf'; trunks.userData.ill = 'trunk';
     TREES.inst = inst; TREES.trunks = trunks; }
@@ -281,7 +358,7 @@ export async function build(W, H, B) {
 
   // ---------------------------------------------------------------- the camera
   const CAM0 = { pos: V(-20, 95, 60), yaw: 3.5 * D2R, pitch: -12.5 * D2R };    // the develop camera = the miniature's view
-  const CAM1 = { pos: V(-20, 250, 150), yaw: 2.0 * D2R, pitch: -8.6 * D2R };     // the top of the crane
+  const CAM1 = { pos: V(-20, 250, 150), yaw: 2.0 * D2R, pitch: -5.2 * D2R };     // the top of the crane
   const fwd = (yaw, pitch) => V(Math.sin(yaw) * Math.cos(pitch), Math.sin(pitch), -Math.cos(yaw) * Math.cos(pitch));
   function setCam(pos, look) { cam.position.copy(pos); cam.up.set(0, 1, 0); cam.lookAt(look); cam.updateMatrixWorld(); }
   function camAt(t) {
@@ -293,12 +370,17 @@ export async function build(W, H, B) {
     //    crane's top to level in front of the facade by the time we are ~40 m away
     const wp = targetWorld(), ak = clamp((t - T.approach[0]) / (T.approach[1] - T.approach[0]));
     const kl = (() => { const a = .16, b = .12, v = 1 / (1 - a / 2 - b / 2); if (ak < a) return v * ak * ak / (2 * a); if (ak > 1 - b) return 1 - v * (1 - ak) * (1 - ak) / (2 * b); return v * (a / 2 + ak - a); })();   // quadratic ease in/out, even speed between
-    const d1 = CAM1.pos.distanceTo(wp), dE = 4.6, dist = d1 * Math.pow(dE / d1, kl);
-    const dir0 = CAM1.pos.clone().sub(wp).normalize(), dirE = V(.06, .1, 1).normalize(), dk = sine(clamp(kl * 1.22));
+    const d1 = CAM1.pos.distanceTo(wp), dE = 6.25, dist = d1 * Math.pow(dE / d1, kl);
+    const dir0 = CAM1.pos.clone().sub(wp).normalize(), dirE = V(.45, .05, .89).normalize(), dk = sine(clamp(kl * 1.22));   // round 2: we end a little to the side, the window at the frame's left
     const dir = dir0.clone().lerp(dirE, dk).normalize();
     const ap = wp.clone().addScaledVector(dir, dist);
     const lookA = CAM1.pos.clone().addScaledVector(fwd(CAM1.yaw, CAM1.pitch), 900), lk = sine(clamp((kl - .05) / .6));
-    const al = lookA.clone().lerp(wp.clone().add(V(0, -.05, 0)), lk);
+    let al = lookA.clone().lerp(wp.clone().add(V(0, -.05, 0)), lk);
+    // the last stretch: turn so the window sits where the prayer room's window is (frame x 90, y 437 — the window-to-window dissolve)
+    { const fk = sine(clamp((kl - .62) / .36)); if (fk > 0) { const f = H / 2 / Math.tan(FOV / 2 * D2R), th = Math.atan((W / 2 - 90) / f), ph = Math.atan((H / 2 - 445) / f);
+        const wd = wp.clone().sub(ap).normalize(), rt = wd.clone().cross(V(0, 1, 0)).normalize(); let ld = wd.clone().multiplyScalar(Math.cos(th)).addScaledVector(rt, Math.sin(th)).normalize();
+        const upv = rt.clone().cross(ld).normalize(); ld = ld.multiplyScalar(Math.cos(ph)).addScaledVector(upv, -Math.sin(ph)).normalize();
+        al = al.clone().lerp(ap.clone().addScaledVector(ld, wp.distanceTo(ap)), fk); } }
     // blend the crane into the glide (both are at rest at the joint: no jump in speed)
     const bw = ss(T.approach[0], T.approach[0] + 1.6, t);
     if (bw <= 0) return { pos: cp, look: cp.clone().addScaledVector(cd, 900) };
@@ -394,20 +476,21 @@ export async function build(W, H, B) {
     // the land rises with the develop
     const L = eio((t - T.lift[0]) / (T.lift[1] - T.lift[0])); setLift(L); liftObjects(L);
     // the gold runs out to the horizon
-    const gk = clamp((t - T.gold[0]) / (T.gold[1] - T.gold[0])); GU.uGR.value = gk <= 0 ? -10 : 40 + 4200 * Math.pow(gk, 1.6);
+    const gk = clamp((t - T.gold[0]) / (T.gold[1] - T.gold[0])); GU.uGR.value = gk <= 0 ? -10 : 40 + 4200 * Math.pow(gk, 1.6); GU.uAct.value = ss(T.dev[0], T.dev[1], t);
     // dusk: the sun goes down, the gilding quiets so the lamps can read
     const dk = sine((t - T.dusk[0]) / (T.dusk[1] - T.dusk[0]));
     const sd = SUN0.clone().lerp(SUN1, dk).normalize(); setSun(sd); WU.uSun.value.copy(sd); sunLamp.pos.copy(sd.clone().multiplyScalar(6000));
     sunL.intensity = lerp(3.1, .55, dk); sunL.color.set(col('#ffd296').lerp(col('#ff9a58'), dk)); hemi.intensity = lerp(.5, .42, dk); hemi.color.copy(col('#b0bcd4').lerp(col('#7c88b8'), dk));
     sunLamp.power = lerp(260, 180, dk);
-    sky.u.top.value.copy(col('#6a80b0', .6).lerp(col('#33406e', .42), dk)); sky.u.mid.value.copy(col('#d8a868', .78).lerp(col('#b87060', .55), dk)); sky.u.horizon.value.copy(col('#ffcc80', 1.35).lerp(col('#ff9858', 1.15), dk));
+    const gl = 1 + .3 * Math.pow(gk, .7) * (1 - dk); sky.u.top.value.copy(col('#2848a0', .8).lerp(col('#1c2c6a', .5), dk)); sky.u.mid.value.copy(col('#d9a85c', .85 * gl).lerp(col('#b87060', .6), dk)); sky.u.horizon.value.copy(col('#ffd286', 1.5 * gl).lerp(col('#ff9858', 1.2), dk));
     A.color.copy(col('#c8a87a', .6).lerp(col('#7a5e62', .42), dk)); A.colorUp = (A.colorUp || A.color.clone()); A.colorUp.copy(col('#b8b4b0', .55).lerp(col('#605e80', .4), dk));
-    WU.uSkyH.value.copy(col('#f0c080', .95).lerp(col('#e88a50', .8), dk)); WU.uSkyT.value.copy(col('#8a9cc0', .55).lerp(col('#3e4874', .38), dk));
+    WU.uSkyH.value.copy(col('#7090d8', .75).lerp(col('#6a6aa8', .6), dk)); WU.uSkyT.value.copy(col('#8a9cc0', .55).lerp(col('#3e4874', .38), dk));
     GU.uGild.value = lerp(1, .45, dk);
-    Lk.exposure = look0.exposure * lerp(1, 1.4, dk); Lk.saturation = look0.saturation * lerp(1, 1.06, dk);
+    Lk.exposure = look0.exposure * lerp(1, 1.62, dk); Lk.saturation = look0.saturation * lerp(1, 1.06, dk);
     // the windows
     for (const w of WINS) { const k = ss(w.t0, w.t0 + .7, t) * (1 + .05 * Math.sin(t * 5.3 + w.t0 * 7)); w.k = k;
       const glow = w.target ? 1 + 2.2 * ss(T.glow[0], T.glow[1], t) : 1; w.mat.color.setRGB(.02 + 3.4 * k * glow, .012 + 1.9 * k * glow, .004 + .62 * k * glow);
+      if (w.target) { SPILL.intensity = k * glow * 7; DOORSLIT.material.color.setRGB(1.1 * k, .62 * k, .22 * k); }
       if (w.lamp) { w.m.getWorldPosition(w.lamp.pos); w.lamp.pos.add(V(0, 0, .5).applyQuaternion(w.m.getWorldQuaternion(qq))); w.lamp.power = k * (w.target ? 2.4 * glow : 1.6); } }
     // camera
     const c = camAt(t); setCam(c.pos, c.look);

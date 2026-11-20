@@ -259,7 +259,7 @@ export async function build(W, H) {
     const lean = eio((t - T.lean[0]) / (T.lean[1] - T.lean[0])) * (1 - eio((t - T.back[0]) / (T.back[1] - T.back[0]))), hk = ss(T.hand[0], T.hand[1], t) * (1 - ss(T.back[0], T.back[0] + 1.8, t));
     const chin = ss(T.back[1] - .4, T.back[1] + 1.8, t) * (1 - ss(T.tilt[0] - 2.5, T.tilt[0] - .3, t)), away = sine((t - T.back[1]) / 4.5) * (1 - ss(T.tilt[0] - 2, T.tilt[0], t));
     { const U = gov.userData, s = U.s, sit = P.rockSit(.5, s, { tuck: .06, lean: -.05 }), id = P.idle(t, .3, { s }), br = P.breath(t, .3);
-      const hR = V(.13 * s, U.hipY + sit.bob + .1 * s, -.34 * s).lerp(V(.2 * s, 1.18 * s + sit.bob, -.52 * s), hk);   // the right hand from the knee up into a gesture
+      const hR = V(.13 * s, U.hipY + sit.bob + .1 * s, -.34 * s).lerp(V(.5 * s, 1.0 * s + sit.bob, -.26 * s), hk);   // the right hand from the knee out to his side at chest height (review: in the shadow the arm must read shoulder → elbow → hand, apart from the head)
       const hL = V(-.12 * s, U.hipY + sit.bob + .07 * s, -.32 * s).lerp(V(-.06 * s, 1.2 * s + sit.bob, -.2 * s), chin);   // later the hand to the chin
       P.pose(gov, { bob: sit.bob, feet: sit.feet, lean: -.08 - .55 * lean + .04 * Math.sin(t * .55), twist: .05 * lean + id.twist * .5 + .06 * Math.sin(t * .31), side: .03 * Math.sin(t * .23), breath: br,
         head: [-.05 + .12 * lean - .08 * chin, -.08 + .05 * Math.sin(t * .3) + .45 * away], hands: [hL, hR] }); }

@@ -181,7 +181,7 @@ export async function build(W, H) {
   // --- the four disciples who block (S1/S2): they step in from the sides and spread their arms; at Q10 the arms come down
   const D = [[-2.6, -10.6, -4.2, -9.6, .3, RM[8], CM[3], false], [-1.2, -11.3, -3.8, -12.8, .55, RM[1], CM[3], false], [1.2, -10.8, 4.0, -9.9, .12, RM[3], CM[1], false], [2.8, -11.6, 4.3, -13.0, .8, RM[6], CM[3], false]]
     .map(([x, z, x0, z0, ph, m, c, tb], i) => { const g = add(adult({ h: 1.72 + i * .02, mat: m, cloth: c, broad: 1.04, turban: tb }), x0, z0, face(x - x0, z - z0), ph);
-      g.userData.to = V(x, 0, z); g.userData.from = V(x0, 0, z0); g.userData.i = i; return g; });
+      g.userData.to = V(x, 0, z); g.userData.from = V(x0, 0, z0); g.userData.i = i; g.userData.arms.forEach(A => { A.S.x *= 1.16; }); return g; });   // review: broader shoulders (the spread arms read from the shoulder, not the neck)
   // --- Him: sitting on the low wall of the open plot, his back to the road (looking out over the fields into the sun)
   const kingM = K.std('#b4a48a', { roughness: .95, side: THREE.DoubleSide }), kingC = K.std('#8a7a62', { roughness: .95, side: THREE.DoubleSide });
   const KP = V(.45, 0, -21.2), KN = V(.35, 0, -19.6);   // where He stands (S1) and kneels (S2, S3)
@@ -401,20 +401,21 @@ export async function build(W, H) {
     king.position.set(KN.x, 0, KN.z); king.rotation.y = face(FWD.x, FWD.z); king.updateMatrix();
     const kw = v => v.clone().applyMatrix4(king.matrix), toK = w => w.clone().applyMatrix4(king.matrix.clone().invert());
     // her: before Him, facing Him; at the hug she takes two small steps in (feet lifting in turn)
-    const gz = lerp(.58, .33, hug), gid = P.idle(t, GU.ph, { s: gs });
+    const gz = lerp(lerp(.58, .74, bl), .33, hug), gid = P.idle(t, GU.ph, { s: gs });   // (she comes a little closer under his hand: his elbow bends)
     G.position.copy(KN).addScaledVector(FWD, gz); G.position.y = 0; G.rotation.y = face(-FWD.x, -FWD.z); G.updateMatrix();
     const toG = w => w.clone().applyMatrix4(G.matrix.clone().invert());
     const stepL = Math.max(0, Math.sin(Math.PI * clamp((hug - .05) / .4))) * .05 * gs, stepR = Math.max(0, Math.sin(Math.PI * clamp((hug - .45) / .4))) * .05 * gs;
+    const sbL = Math.max(0, Math.sin(Math.PI * clamp((bl - .05) / .4))) * .04 * gs, sbR = Math.max(0, Math.sin(Math.PI * clamp((bl - .45) / .4))) * .04 * gs;   // (she settles back half a step under his hand: two small steps, not a slide)
     // her hands (her root frame, −z forward): at her sides → held out, palms up → (held) → lower → round his shoulders
     const handsOut = [V(-.055, .6, -.27), V(.055, .6, -.27)];
     const shW = [kw(V(-.2, .95, -.02)), kw(V(.2, .95, -.02))].map(toG);   // his shoulders in her frame; her left (−x) hand to the nearer one
     const shFor = i => (shW[0].x < shW[1].x) === (i === 0) ? shW[0] : shW[1];
     const gHands = [0, 1].map(i => handsOut[i].clone().lerp(V((i ? 1 : -1) * .1, .4, -.12), low * (1 - hug)).lerp(shFor(i), hug));
     const gW = clamp(out * (1 - low * .85) + hug);
-    P.pose(G, { ...gid, feet: [{ u: .06 * gs, lift: stepL }, { u: -.05 * gs, lift: stepR }], side: gid.side * .4, twist: gid.twist * .3, lean: -.04 - .06 * out - .1 * bl * (1 - hug) - .12 * hug,
+    P.pose(G, { ...gid, feet: [{ u: .06 * gs, lift: Math.max(stepL, sbL) }, { u: -.05 * gs, lift: Math.max(stepR, sbR) }], side: gid.side * .4, twist: gid.twist * .3, lean: -.04 - .06 * out - .1 * bl * (1 - hug) - .12 * hug,
       head: [-.18 - .22 * bl * (1 - hug) + .25 * hug, .03 * Math.sin(t * .4)], hands: gHands, handsW: [gW, gW] });
     G.updateMatrix(); const gripW = [0, 1].map(i => P.handAt(G, i).applyMatrix4(G.matrix));   // where her hands are now (world)
-    const headTop = G.position.clone().add(V(0, .99, 0)).addScaledVector(FWD, .03);
+    G.updateMatrixWorld(true); const headTop = GU.neck.localToWorld(V(0, .12 * gs + .13 * gs * 1.05 + .045, .02 * gs));   // the crown of her head, from her own neck (review: the hand ON the head, not sunk in it)
     const side = V(-FWD.z, 0, FWD.x);   // her lateral axis (world)
     const backW = [G.position.clone().addScaledVector(FWD, .1).addScaledVector(side, .11).add(V(0, .6, 0)), G.position.clone().addScaledVector(FWD, .1).addScaledVector(side, -.11).add(V(0, .62, 0))];
     // his hands: on his knees → hers (one grip each) → his right on her head → both round her back
@@ -424,7 +425,7 @@ export async function build(W, H) {
     const gL = toK(gripW[0]), gR = toK(gripW[1]), [hl, hr] = gL.x < gR.x ? [gL, gR] : [gR, gL];   // his left hand takes her hand on his left
     const bL = toK(backW[0]), bR = toK(backW[1]), [bl2, br2] = bL.x < bR.x ? [bL, bR] : [bR, bL];
     const L0 = knee[0].clone().lerp(hl.add(V(0, -.015, .01)), take).lerp(bl2, hug), R0 = knee[1].clone().lerp(hr.add(V(0, -.015, .01)), take).lerp(toK(headTop.clone().add(V(0, .03, 0))), bl).lerp(br2, hug);
-    P.pose(king, { ...kr, breath: P.breath(t, U.ph), lean: kr.lean - .1 * take - .06 * bl - .08 * hug, twist: .03 * Math.sin(t * .3), head: [-.12 - .06 * bl + .04 * hug, .04 * Math.sin(t * .27)], hands: [L0, R0] });
+    P.pose(king, { ...kr, breath: P.breath(t, U.ph), lean: kr.lean - .1 * take - .02 * bl * (1 - hug) - .08 * hug, twist: .03 * Math.sin(t * .3), head: [-.12 - .06 * bl + .04 * hug, .04 * Math.sin(t * .27)], hands: [L0, R0] });
     // the others: a loose cluster round and beyond the two, leaning in one after another (heads toward them), never frozen
     const NEAR = [[-1.55, -1.05], [1.85, -1.15], [-.75, -1.85], [.95, -1.95], [-2.05, -.55], [2.25, -.35]];
     const mid = KN.clone().addScaledVector(FWD, .3);

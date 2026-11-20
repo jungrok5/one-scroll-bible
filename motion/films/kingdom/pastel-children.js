@@ -51,7 +51,7 @@ export function beats(B) {
   T.kneel = [B.Q10 + .2, B.Q10 + 2.4];                   // He kneels to their height
   T.push = [B.N21 + .3, B.N21 + 3.3];                    // S3: push-in 3 s on the open hands
   T.fill = [B.N21b + .2, B.N21b + 7.5];                  // the light fills the hands
-  T.n21b = n21b;
+  T.n21b = n21b; T.n21bB = pc.N21b ? pc.N21b[1] : B.N21b + 7.4;   // round 3: the bless scene's beats (blessBeats)
   return T;
 }
 
@@ -161,7 +161,7 @@ export async function build(W, H) {
   { const fa = add(adult({ h: 1.78, mat: RM[1], cloth: CM[0], broad: 1.05 }), -2.95, 0, 0, .1), so = add(child({ h: 1.12, mat: RM[2] }), -2.32, 0, 0, .43), sm = add(child({ h: .9, mat: RM[7], cloth: CM[2], girl: true }), -3.5, 0, 0, .81);
     F.push(mkFam([{ g: fa, T: 1.2, x: -2.95 }, { g: so, T: .8, x: -2.32 }, { g: sm, T: .6, x: -3.48 }], 2.0, -2, 0, 2.4, 7.2, [[0, 1], [0, 2]])); }
   { const mo = add(woman({ h: 1.64, mat: RM[5], cloth: CM[1] }), .9, 0, 0, .27), da = add(child({ h: 1.04, mat: RM[7], cloth: CM[2], girl: true }), 1.45, 0, 0, .71), bo = add(child({ h: .98, mat: RM[3] }), .4, 0, 0, .58);
-    { const td = P.robeMan({ h: .78, mat: RM[9], face: faceM, child: true, kind: 'sit', head: 'cloth' }); P.headwear(td, 'bare', { dark: hairM }); { const n = td.userData.neck; n.remove(n.children[n.children.length - 1]); } mo.add(td); mo.userData.toddler = td; td.userData.ph = .37; }   // a toddler carried on her left hip
+    { const td = P.robeMan({ h: .86, mat: RM[9], face: faceM, child: true, kind: 'sit', head: 'cloth' }); P.headwear(td, 'bare', { dark: hairM }); { const n = td.userData.neck; n.remove(n.children[n.children.length - 1]); } mo.add(td); mo.userData.toddler = td; td.userData.ph = .37; }   // a toddler carried on her left hip
     F.push(mkFam([{ g: mo, T: 1.1, x: .9 }, { g: da, T: .733, x: 1.45 }, { g: bo, T: .55, x: 1.0, ahead: 1.6 }], -.5, -1.4, 0, 2.2, 6.6, [[0, 1]])); }
   { const gr = add(adult({ h: 1.7, mat: RM[8], cloth: CM[3] }), 2.4, 0, 0, .35), gi = add(child({ h: 1.18, mat: RM[6], cloth: CM[0], girl: true }), 1.9, 0, 0, .9);
     const staff = new THREE.Mesh(new THREE.CylinderGeometry(.018, .022, 1.55, 6), M.trunk); staff.castShadow = true; S.add(staff); gr.userData.staff = staff;
@@ -188,7 +188,7 @@ export async function build(W, H) {
   const king = add(adult({ h: 1.76, mat: kingM, cloth: kingC }), KP.x, KP.z, face(-.1, -1), .2);   // standing at the road's edge, his back to the road, looking into the sun
   // --- the children who run to Him (S2: the same children as S1, they leave their parents) and the girl with the open hands (S3)
   // S2 run targets round Him (irregular): [member ref, target offset from Him (x, z), arrive order]
-  const RUN = [[F[1].people[2].g, [-.78, .42]], [F[3].people[0].g, [.82, .3]], [F[3].people[1].g, [-1.35, -.15]], [F[2].people[1].g, [1.3, -.25]], [F[1].people[1].g, [-.52, 1.15]], [F[0].people[1].g, [.62, 1.6]]];
+  const RUN = [[F[1].people[2].g, [-.82, .55]], [F[3].people[0].g, [.9, .12]], [F[3].people[1].g, [-1.3, -.35]], [F[2].people[1].g, [1.25, .85]], [F[1].people[1].g, [.62, .32]], [F[0].people[1].g, [-.5, 1.25]]];
   // S3's girl: F[1]'s daughter (the same pink-cream robe), standing close in front of Him
   const GIRL = F[1].people[1].g;
 
@@ -244,12 +244,12 @@ export async function build(W, H) {
       float cover = .74 + .26 * smoothstep(tooth - .32, tooth + .2, press);
       // colour: cel-era pastel logic — coloured shadows (blue-violet, never grey or black), warm cream lights
       vec3 g = mix(vec3(l), col, 1.1);
-      g = mix(g, g * vec3(.82, .78, 1.1) + vec3(.07, .045, .12), (1. - smoothstep(.12, .55, l)) * (.55 + .25 * violet));
+      g = mix(g, g * vec3(.82, .78, 1.1) + vec3(.07, .045, .12), (1. - smoothstep(.12, .55, l)) * (.28 + .4 * violet));   // round 3: warmer darks early (gold hour), violet only as the light goes
       g = mix(g, g * vec3(1.04, 1., .9) + vec3(.035, .025, 0.), smoothstep(.55, .95, l));
       g *= 1. + (st - .5) * .1;
       vec3 c = mix(paper, g, cover);
       gl_FragColor = vec4(c, 1.);
-    }`, { tIn: { value: null }, px: { value: new THREE.Vector2(1 / film.w, 1 / film.h) }, paper: { value: new THREE.Vector3(.36, .3, .44) }, violet: { value: 0 } });
+    }`, { tIn: { value: null }, px: { value: new THREE.Vector2(1 / film.w, 1 / film.h) }, paper: { value: new THREE.Vector3(.42, .32, .38) }, violet: { value: 0 } });
   const realSRT = R.setRenderTarget.bind(R);
   function renderAll(t) {
     if (window.__NOREN) return;   // debug (joint measurement): poses only, no GPU work
@@ -282,14 +282,14 @@ export async function build(W, H) {
         const ph = res[ia].pose.ph ?? 0, swing = ft.stopped ? .02 * Math.sin(t * .8) : .05 * Math.sin(ph * 2 * Math.PI) * clamp(1.2 - ft.tau / f.gaitS * 0);
         const gw = V(lerp(A.position.x + sdA * .26 * sA, Bc.position.x - sdA * .17 * sB, .55), lerp(.84 * sA, .68 * sB, .45), (A.position.z + Bc.position.z) / 2 - .05 + swing);
         const hA = [null, null], hB = [null, null]; hA[sdA > 0 ? 1 : 0] = toLocal(A, gw); hB[sdA > 0 ? 0 : 1] = toLocal(Bc, gw);
-        { const prev = res[ia].pose.hands || [null, null]; res[ia].pose.hands = [hA[0] || prev[0], hA[1] || prev[1]]; } res[ib].pose.hands = hB;   // (a parent may hold a child on each hand) }
+        { const prev = res[ia].pose.hands || [null, null]; res[ia].pose.hands = [hA[0] || prev[0], hA[1] || prev[1]]; } res[ib].pose.hands = hB; }   // (a parent may hold a child on each hand)
       f.people.forEach((m, j) => { const g = m.g, U = g.userData;
         if (U.staff) { const s = U.s, sw = res[j].pose.ph != null ? Math.sin(res[j].pose.ph * 2 * Math.PI) : 0, tip = g.position.clone().add(V(-.34 * s, 0, -.25 * s + .1 * sw));   // the staff planted a little ahead on his left
           const grip = tip.clone().add(V(.05, 1.02 * s, .1)); res[j].pose.hands = [toLocal(g, grip), res[j].pose.hands ? res[j].pose.hands[1] : null];
           U.staff.position.copy(tip).add(grip).multiplyScalar(.5); U.staff.position.y = (tip.y + grip.y) / 2 + .2; U.staff.lookAt(grip.clone().add(V(0, .3, 0))); U.staff.rotateX(Math.PI / 2); }
         if (U.toddler) { const s = U.s, td = U.toddler, ts = td.userData.s, bob = res[j].pose.bob || 0;   // on her left hip: her left arm round it (the hand under it)
-          td.position.set(-.19 * s, .66 * s + bob, -.02 * s); td.rotation.set(0, .9, -.08);
-          res[j].pose.hands = [V(-.15 * s, .7 * s + bob, -.13 * s), res[j].pose.hands ? res[j].pose.hands[1] : null]; res[j].pose.side = (res[j].pose.side || 0) + .05;
+          td.position.set(-.25 * s, .64 * s + bob, .0 * s); td.rotation.set(0, 1.2, -.12);
+          res[j].pose.hands = [V(-.2 * s, .68 * s + bob, -.12 * s), res[j].pose.hands ? res[j].pose.hands[1] : null]; res[j].pose.side = (res[j].pose.side || 0) + .05;
           P.pose(td, { breath: P.breath(t, .37), head: [.05 * Math.sin(t * .7), .3 * Math.sin(t * .4)], hands: [null, V(.08 * ts, .55 * ts, -.12 * ts)], handsW: [0, .7] }); }
         if (U.baby) { const s = U.s, c = V(.02 * s, 1.08 * s + (res[j].pose.bob || 0), -.2 * s); res[j].pose.hands = [c.clone().add(V(-.1 * s, -.04 * s, .02 * s)), c.clone().add(V(.11 * s, .03 * s, -.01 * s))]; res[j].pose.lean = (res[j].pose.lean || 0) + .05;
           g.updateMatrix(); U.baby.position.copy(c).applyMatrix4(g.matrix); U.baby.rotation.set(0, g.rotation.y + .5, .25); }
@@ -372,6 +372,68 @@ export async function build(W, H) {
     return c;
   }
 
+  // ---------------------------------------------------------------- round 3: S3 — he takes her empty hands, blesses her, gathers her in
+  // Owner r2: "빈손이 한참 이렇게 있어서 더 나은 다른 형태가 없을까" → a moving scene after Mk 10:16 (「그 어린 아이들을 안고 그들 위에 안수하시고
+  // 축복하시니라」), in the same sunset: (a) mid-wide, from behind Him (his back, kneeling at her height — never his face): a small girl
+  // stands before Him with empty hands, then holds them out; He takes her small hands in his (both hands solved onto hers — one grip).
+  // (b) N21b: He lets go with one hand and lays it on her head; the other children lean in, one after another. (c) As N21b ends she
+  // steps in and is gathered into his arms (her arms round his shoulders, his round her back); a pool of warm light round the two
+  // blooms. Everything eased and staggered; two-bone IK with fixed lengths, elbows down/out (people3d.js).
+  function blessBeats() {
+    const pc = T.n21b ? null : null, a = T.push[0] - .3;   // T.push[0] = N21 + .3
+    return { out: [T.n21b - .55, T.n21b + .85],             // 「빈손으로 받는 나라입니다」: she holds out her empty hands
+      take: [T.n21b + 1.0, T.n21b + 2.4],                     // He takes them in his
+      bless: [T.fill[0] + .3, T.fill[0] + 2.0],               // N21b: one hand to her head
+      lean: T.fill[0] + .5,                                   // the others lean in (staggered from here)
+      low: [T.fill[0] + 2.6, T.fill[0] + 4.2],                // her hands come down, still in his left
+      hug: [T.n21bB - .7, T.n21bB + 1.5],                     // 「주시는 것을 그냥 받습니다」: she steps in, gathered into his arms
+      bloom: [T.n21bB - .3, T.end] };
+  }
+  // staging (round 3b): the two stand across the road, seen from down the street against the low sun (pure backlit silhouettes): He
+  // kneels facing right and a little away from us (his back three-quarters, the hood hiding any profile), she stands before him; the sun
+  // sits low between them at the height of their hands, so the light pools exactly where the hands meet (never behind a head).
+  const FWD = V(1, 0, -.45).normalize();
+  function bless(t) {
+    const Bb = blessBeats(), U = king.userData, s = U.s, G = GIRL, GU = G.userData, gs = GU.s;
+    const out = sine((t - Bb.out[0]) / (Bb.out[1] - Bb.out[0])), take = sine((t - Bb.take[0]) / (Bb.take[1] - Bb.take[0])), bl = sine((t - Bb.bless[0]) / (Bb.bless[1] - Bb.bless[0]));
+    const low = sine((t - Bb.low[0]) / (Bb.low[1] - Bb.low[0])), hug = sine((t - Bb.hug[0]) / (Bb.hug[1] - Bb.hug[0]));
+    // Him: kneeling (sitting back on his heels)
+    king.position.set(KN.x, 0, KN.z); king.rotation.y = face(FWD.x, FWD.z); king.updateMatrix();
+    const kw = v => v.clone().applyMatrix4(king.matrix), toK = w => w.clone().applyMatrix4(king.matrix.clone().invert());
+    // her: before Him, facing Him; at the hug she takes two small steps in (feet lifting in turn)
+    const gz = lerp(.58, .33, hug), gid = P.idle(t, GU.ph, { s: gs });
+    G.position.copy(KN).addScaledVector(FWD, gz); G.position.y = 0; G.rotation.y = face(-FWD.x, -FWD.z); G.updateMatrix();
+    const toG = w => w.clone().applyMatrix4(G.matrix.clone().invert());
+    const stepL = Math.max(0, Math.sin(Math.PI * clamp((hug - .05) / .4))) * .05 * gs, stepR = Math.max(0, Math.sin(Math.PI * clamp((hug - .45) / .4))) * .05 * gs;
+    // her hands (her root frame, −z forward): at her sides → held out, palms up → (held) → lower → round his shoulders
+    const handsOut = [V(-.055, .6, -.27), V(.055, .6, -.27)];
+    const shW = [kw(V(-.2, .95, -.02)), kw(V(.2, .95, -.02))].map(toG);   // his shoulders in her frame; her left (−x) hand to the nearer one
+    const shFor = i => (shW[0].x < shW[1].x) === (i === 0) ? shW[0] : shW[1];
+    const gHands = [0, 1].map(i => handsOut[i].clone().lerp(V((i ? 1 : -1) * .1, .4, -.12), low * (1 - hug)).lerp(shFor(i), hug));
+    const gW = clamp(out * (1 - low * .85) + hug);
+    P.pose(G, { ...gid, feet: [{ u: .06 * gs, lift: stepL }, { u: -.05 * gs, lift: stepR }], side: gid.side * .4, twist: gid.twist * .3, lean: -.04 - .06 * out - .1 * bl * (1 - hug) - .12 * hug,
+      head: [-.18 - .22 * bl * (1 - hug) + .25 * hug, .03 * Math.sin(t * .4)], hands: gHands, handsW: [gW, gW] });
+    G.updateMatrix(); const gripW = [0, 1].map(i => P.handAt(G, i).applyMatrix4(G.matrix));   // where her hands are now (world)
+    const headTop = G.position.clone().add(V(0, .99, 0)).addScaledVector(FWD, .03);
+    const side = V(-FWD.z, 0, FWD.x);   // her lateral axis (world)
+    const backW = [G.position.clone().addScaledVector(FWD, .1).addScaledVector(side, .11).add(V(0, .6, 0)), G.position.clone().addScaledVector(FWD, .1).addScaledVector(side, -.11).add(V(0, .62, 0))];
+    // his hands: on his knees → hers (one grip each) → his right on her head → both round her back
+    const kr = P.kneelRise(0, s, U.ph);
+    const knee = [V(-.12 * s, .5 * s + kr.bob * .2, -.3 * s), V(.12 * s, .5 * s + kr.bob * .2, -.3 * s)];
+    const near = (w, i) => { const l = toK(w); return l; };
+    const gL = toK(gripW[0]), gR = toK(gripW[1]), [hl, hr] = gL.x < gR.x ? [gL, gR] : [gR, gL];   // his left hand takes her hand on his left
+    const bL = toK(backW[0]), bR = toK(backW[1]), [bl2, br2] = bL.x < bR.x ? [bL, bR] : [bR, bL];
+    const L0 = knee[0].clone().lerp(hl.add(V(0, -.015, .01)), take).lerp(bl2, hug), R0 = knee[1].clone().lerp(hr.add(V(0, -.015, .01)), take).lerp(toK(headTop.clone().add(V(0, .03, 0))), bl).lerp(br2, hug);
+    P.pose(king, { ...kr, breath: P.breath(t, U.ph), lean: kr.lean - .1 * take - .06 * bl - .08 * hug, twist: .03 * Math.sin(t * .3), head: [-.12 - .06 * bl + .04 * hug, .04 * Math.sin(t * .27)], hands: [L0, R0] });
+    // the others: a loose cluster round and beyond the two, leaning in one after another (heads toward them), never frozen
+    const NEAR = [[-1.55, -1.05], [1.85, -1.15], [-.75, -1.85], [.95, -1.95], [-2.05, -.55], [2.25, -.35]];
+    const mid = KN.clone().addScaledVector(FWD, .3);
+    RUNS.forEach((r, i) => { if (r.g === G) return; const g = r.g, Ug = g.userData, k = ss(Bb.lean + i * .45, Bb.lean + i * .45 + 1.6, t), id = P.idle(t, Ug.ph, { s: Ug.s });
+      g.position.set(mid.x + NEAR[i][0], 0, mid.z + NEAR[i][1]); g.rotation.y = face(mid.x - g.position.x, mid.z - g.position.z);
+      P.pose(g, { ...id, lean: -.04 - .16 * k, head: [-.05 - .1 * k, .1 * Math.sin(t * .5 + i)], swing: [.04 * Math.sin(t * .6 + i), .04 * Math.sin(t * .5 + i * 2)] }); });
+    return { c: mid.clone().add(V(0, .62, 0)), hug, bloom: ss(Bb.bloom[0], Bb.bloom[1], t), take, bl };
+  }
+
   // ---------------------------------------------------------------- shots
   function setCam(pos, look) { cam.position.copy(pos); cam.up.set(0, 1, 0); cam.lookAt(look); }
   function magic(h) {   // the sky through the hour: h 0 gold → 1 rose → 2 violet
@@ -393,7 +455,7 @@ export async function build(W, H) {
       families(t); disciples(t, shot); kingPose(t, shot);
       RUNS.forEach(r => { r.from = null; });
       // tracking at a child's eye height: the camera keeps pace with the first family (same eased stop), then a slow push
-      const f = F[0], ft = famTau(f, t), z = 11.4 - (ft.tau * SPD - famTau(f, T.start).tau * SPD) - .16 * Math.max(0, t - ft.tStop);
+      const f = F[0], ft = famTau(f, t), z = 9.2 - (ft.tau * SPD - famTau(f, T.start).tau * SPD) - .16 * Math.max(0, t - ft.tStop);
       const x = lerp(-1.75, -.95, sine((t - T.start) / (T.cut1 - T.start)));
       setCam(V(x, 1.0, z), V(x + 1.1, 1.05, z - 30));
       { const d = Math.hypot(KP.x - x, KP.z - z); aimSun(V(x, 1, z), KP.clone().add(V(.8, 0, 0)), (1.22 - 1.0) / d); sunL.position.copy(SUN).multiplyScalar(120).add(V(0, 0, -15)); sunLamp.pos.copy(SUN).multiplyScalar(300); }   // the sun just beside him at his shoulder (never a disc round a head)
@@ -417,22 +479,20 @@ export async function build(W, H) {
       families(t); RUNS.forEach((r, i) => { r.from = V(...RUN0[i]); });
       F.forEach(f => f.people.forEach(m => { if (!RUNS.some(r => r.g === m.g)) m.g.visible = false; }));
       disciples(t, 'gather'); kingPose(t, shot); gather(t + 30);
-      const c = girlHands(t);
-      // push-in on detail 3 s (eased), then an almost imperceptible drift: low, in front of her (from his place), the low sun behind
-      // her — her bowed head, her cupped empty hands in silhouette, the light gathering in the palms
-      // after the push the camera keeps a slow arc round to her side (≈ 9°) and creeps in — the shot never stops (no still stretch)
-      const u = sine((t - T.push[0]) / (T.push[1] - T.push[0])), lw = clamp((t - T.push[1]) / (T.end - T.push[1])), w = lw * .8 + .2 * sine(lw);
-      const from = c.clone().add(V(.1, .06, -1.95)), to = c.clone().add(V(.06, .07, -1.25)), pos = from.clone().lerp(to, u);
-      { const rel = pos.clone().sub(c), a = -.3 * w, ca = Math.cos(a), sa = Math.sin(a); pos.copy(c).add(V(rel.x * ca - rel.z * sa, rel.y + .03 * w, rel.x * sa + rel.z * ca).multiplyScalar(1 - .2 * w)); }
-      setCam(pos, c.clone().add(V(.02, -.1 + .02 * u + .03 * w, .1)));
-      king.visible = false;   // we are where He kneels: the girl seen from his place, never Him
-      aimSun(pos, c.clone().add(V(-.28, 0, 0)), .085); sunL.position.copy(SUN).multiplyScalar(120).add(V(0, 0, -15)); sunLamp.pos.copy(SUN).multiplyScalar(300);
-      film.dofCfg.focus = .35; film.dofCfg.aperture = 16;   // round 2: everything behind the drawn hands is soft colour (her sleeves, her robe, the street)
-      magic(1.35 + .55 * ss(T.push[0], T.end, t));
-      const fl = ss(T.push[0] + .5, T.push[1] + 1, t) * .45 + ss(T.fill[0], T.fill[1], t) * .55;
-      palmL.intensity = 0; hemi.intensity = .42; all.forEach(g => { if (g !== GIRL) g.visible = false; });
-      glow.material.opacity = 0; handM.emissiveIntensity = 0; HANDS.forEach(h => { h.visible = false; });   // round 2: the hands are drawn in 2D (drawHands)
-      sunLamp.power = 700; film.look.exposure = 1.42 + .1 * fl;
+      const R3 = bless(t), c = R3.c;
+      // mid-wide from behind Him and a little to his left, at a child's eye height; one slow push in with a small arc (16 s, never still)
+      const u = sine((t - T.cut2) / (T.end - T.cut2));
+      const pos = V(c.x + lerp(-.9, .7, u), lerp(.64, .58, u), c.z + lerp(6.9, 4.6, u));   // (a push with a small lateral arc — the shot never stops)   // down the street toward the low sun, at a child's height: the two side by side in silhouette, mid distance
+      setCam(pos, c.clone().add(V(0, .12, 0)));
+      // the low sun just off frame right (warm rims on both of them, long shadows toward us); a pool of warm light round the two
+      aimSun(pos, c, (c.y - pos.y) / pos.distanceTo(c) + .004);   // the low sun between them at the height of their hands (the light pools where the hands meet; never behind a head) sunL.position.copy(SUN).multiplyScalar(120).add(V(0, 0, -15)); sunLamp.pos.copy(SUN).multiplyScalar(300);
+      film.dofCfg.focus = pos.distanceTo(c); film.dofCfg.aperture = 3.2;
+      magic(.85 + .3 * u);
+      const bloom = R3.bloom, pool = .35 + .35 * ss(T.cut2, T.cut2 + 2, t) + .3 * R3.take;
+      palmL.distance = 3; palmL.position.copy(c).add(V(0, -.2, -1.2)); palmL.intensity = 1.0 * pool + 3.5 * bloom;   // a little warm light round the two (from beyond them, low)   // warm light pooling round the two (from beyond them, low)
+      glow.material.opacity = 0; handM.emissiveIntensity = 0; HANDS.forEach(h => { h.visible = false; });
+      F.forEach(f => f.people.forEach(m => { if (!RUNS.some(r => r.g === m.g)) m.g.visible = false; }));   // the parents stay back
+      hemi.intensity = .4; sunLamp.power = 1900 + 2600 * bloom; film.look.exposure = 1.55 + .15 * bloom;
     }
     if (shot !== 'hands') { palmL.intensity = 0; glow.material.opacity = 0; }
     renderAll(t);
@@ -522,7 +582,6 @@ export async function build(W, H) {
     if (!T) T = beats(B);
     frame(t);
     ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.drawImage(film.canvas, 0, 0, W, H); ctx.restore();
-    if (t >= T.cut2 && t < T.end + .5) drawHands(ctx, t);
   }
 
   S.updateMatrixWorld(true);

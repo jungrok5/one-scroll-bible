@@ -70,11 +70,12 @@ export async function build(W, H) {
   const CX = 540, FOOT = 1390;                         // the road meets the hill's foot here
   // the road: a centre line from the foot of the hill down to the bottom of the block, widening toward us (perspective)
   const roadX = y => CX + 70 * Math.sin((y - FOOT) / 520) * ss(FOOT, FOOT + 400, y) - 40 * Math.sin((y - FOOT) / 1300) + 30 * ss(2600, 3840, y) * Math.sin(y / 300);
-  const roadW = y => lerp(18, 470, Math.pow(clamp((y - FOOT) / (HP - FOOT)), 1.25));
+  const roadW = y => lerp(19, 470, Math.pow(clamp((y - FOOT) / (HP - FOOT)), 1.25));
   // the path up the hill: switchbacks from the foot to the crest just right of the middle
   const PATH = (() => { const pts = [], top = ridgeY(560) + 8, n = 160;
-    for (let i = 0; i <= n; i++) { const u = i / n, y = lerp(FOOT, top, u), w = lerp(150, 40, u);   // a winding climb: two long bends and a short one near the top
-      const x = CX + 20 * u + w * Math.sin(u * 7.2 + .4) * (1 - .25 * Math.sin(u * 13)) + 18 * Math.sin(u * 23) * (1 - u); pts.push([x, y]); }
+    for (let i = 0; i <= n; i++) { const u = i / n, y = lerp(FOOT, top, u), w = lerp(150, 40, u), ramp = ss(0, .2, u);   // a winding climb: two long bends and a short one near the top
+      // round 3 (owner: "길이 끊어져 있어"): it starts exactly where the road ends (same x, heading straight up) and only then winds
+      const x = roadX(FOOT) + ramp * (20 * u + w * (Math.sin(u * 7.2 + .4) - Math.sin(.4)) * (1 - .25 * Math.sin(u * 13)) + 18 * Math.sin(u * 23) * (1 - u)); pts.push([x, y]); }
     return pts; })();
   const pathLen = (() => { let L = 0; const acc = [0]; for (let i = 1; i < PATH.length; i++) { L += Math.hypot(PATH[i][0] - PATH[i - 1][0], PATH[i][1] - PATH[i - 1][1]); acc.push(L); } return { L, acc }; })();
   const pathAt = u => { const d = clamp(u) * pathLen.L; let i = 1; while (i < PATH.length - 1 && pathLen.acc[i] < d) i++; const k = (d - pathLen.acc[i - 1]) / Math.max(1e-6, pathLen.acc[i] - pathLen.acc[i - 1]); return [lerp(PATH[i - 1][0], PATH[i][0], k), lerp(PATH[i - 1][1], PATH[i][1], k)]; };
@@ -95,10 +96,10 @@ export async function build(W, H) {
       // the sky: rays from behind the crest (just right of the middle — where He will stand), wide near it; a bright band low over the
       // crest (the charcoal's pale mist band); carved outward from the crest
       const SX = 560, SY = 905;
-      { const lines = [], n = 150; for (let i = 0; i < n; i++) { const a = Math.PI + .02 + (Math.PI - .04) * (i + .5) / n, r0 = 22 + (i % 3) * 16, L = [];
-          for (let r = r0; r < 2200; r += 22) L.push([SX + Math.cos(a) * r, SY + Math.sin(a) * r]); lines.push(L); }
-        pl.hatch(lines, { keep: (x, y) => !below(x, y) && y < SY + 4, kind: 'v', len: [50, 220], gap: [8, 60], thr: .15, wmin: 1.1, wmax: 7.5, gamma: 1.1, dur: .32,
-          tone: (x, y) => { const d = Math.hypot(x - SX, (y - SY) * 1.25), band = Math.exp(-Math.max(0, ridgeY(x) - y) / 140); return clamp((Math.exp(-d / 430) * .9 + band * .62) * (.5 + .75 * P.fbm(x * .003 + 2, y * .006))); },
+      { const lines = [], n = 170, rj = P.rng(5512); for (let i = 0; i < n; i++) { const a = Math.PI + .02 + (Math.PI - .04) * (i + .5 + (rj() - .5) * 1.6) / n, r0 = 18 + rj() * 220, r1 = 300 + rj() * 1300, bend = (rj() - .5) * .00022, L = [];
+          for (let r = r0; r < r1; r += 22) { const aa = a + bend * r; L.push([SX + Math.cos(aa) * r, SY + Math.sin(aa) * r]); } lines.push(L); }   // round 3: each ray its own angle, start, length and a slight curve
+        pl.hatch(lines, { keep: (x, y) => !below(x, y) && y < SY + 4, kind: 'v', len: [20, 150], gap: [10, 110], thr: .15, wmin: 1.5, wmax: 10, gamma: 1.15, dur: .32,
+          tone: (x, y) => { const d = Math.hypot(x - SX, (y - SY) * 1.25), band = Math.exp(-Math.max(0, ridgeY(x) - y) / 140); return clamp((Math.exp(-d / 430) * .9 + band * .62) * (.25 + 1.1 * P.fbm(x * .0045 + 2, y * .008))); },   // patchy, like a knife working the block
           t0: (x, y, r) => T.sky[0] + Math.hypot(x - SX, y - SY) / 520 + r() * .3 + (y < 500 && Math.abs(x - 540) < 340 ? 1.3 : 0) }); }   // clear of the chapter title until it goes
       // the glare band just over the crest: long horizontal U-cuts (so He reads dark against it), carved with the sky's first rays
       for (let k = 0; k < 9; k++) { const y = 870 - k * 13, x0 = 30 + 60 * hash(k), x1 = W - 30 - 60 * hash(k + 9); pl.cut([[x0, y + 3 * Math.sin(k)], [x1, y]], 7 - k * .55, { kind: 'u', chip: .06, t0: T.sky[0] + .2 + k * .12, dur: .9 }); }
@@ -114,11 +115,11 @@ export async function build(W, H) {
           t0: (x, y, r) => roadT(y) + r() * .15 }); }
       { const lines = []; for (const sd of [-1, 1]) for (let k = 1; k < 26; k++) { const L = []; for (let y = FOOT + 20; y <= HP; y += 16) L.push([roadX(y) + sd * (roadW(y) * .5 + k * lerp(6, 36, (y - FOOT) / (HP - FOOT))), y]); lines.push(L); }
         pl.hatch(lines, { keep: (x, y) => y > FOOT, kind: 'v', len: [30, 140], gap: [10, 60], thr: .16, wmin: .9, wmax: 5, dur: .3,
-          tone: (x, y) => { const d = Math.abs(x - roadX(y)) - roadW(y) * .5; return clamp(.9 * Math.exp(-d / lerp(150, 380, (y - FOOT) / (HP - FOOT))) * (.65 + .6 * P.fbm(x * .004 + 7, y * .003))); },
+          tone: (x, y) => { const d = Math.abs(x - roadX(y)) - roadW(y) * .5; return clamp(.9 * Math.exp(-d / lerp(150, 380, (y - FOOT) / (HP - FOOT))) * (.65 + .6 * P.fbm(x * .004 + 7, y * .003))) * ss(FOOT, FOOT + 340, y + 60 * P.fbm(x * .01, 3)); },
           t0: (x, y, r) => roadT(y) + .25 + Math.abs(x - roadX(y)) / 900 + r() * .3 }); }
       // the path up the hill: one narrow gouge along the switchbacks, cut from the foot to the crest, with a knife edge on its lower side
       { const segs = 10; for (let s = 0; s < segs; s++) { const a = Math.floor(s * (PATH.length - 1) / segs), b = Math.floor((s + 1) * (PATH.length - 1) / segs);
-          const pts = PATH.slice(a, b + 1), w = lerp(13, 7, s / segs), t0 = lerp(T.path[0], T.path[1], s / segs), dur = (T.path[1] - T.path[0]) / segs;
+          const pts = PATH.slice(a, b + 1), w = lerp(18, 7, s / segs), t0 = lerp(T.path[0], T.path[1], s / segs), dur = (T.path[1] - T.path[0]) / segs;
           pl.cut(pts, w, { kind: 'u', t0, dur, chip: .1 }); pl.cut(pts.map(([x, y]) => [x + 2, y + w * .9]), 1.6, { kind: 'k', t0: t0 + .1, dur, chip: .2 }); } }
       // gold: the light behind the crest, only through the cuts (warms as the man climbs)
       pl.gold((g, t) => { const k = .45 + .55 * ss(T.man[0], T.end, t); const R = 980, gr = g.createRadialGradient(SX, SY, 0, SX, SY, R);
@@ -140,7 +141,7 @@ export async function build(W, H) {
     const h = o.h, x = o.x, y = o.y, d = o.dir || 1, bow = o.bow || 0, kneel = o.kneel || 0, back = o.view === 'back';
     const ph = o.ph ?? 0, amp = o.ph == null ? 0 : (o.walkAmp ?? 1), walking = amp > 0, sw = Math.sin(ph * 2 * Math.PI) * amp;   // amp eases the gait in/out (no snap at a stop)
     const hipY = y - h * (.5 - .12 * kneel), hip = [x, hipY - h * .012 * Math.abs(Math.cos(ph * 2 * Math.PI)) * amp];
-    const ta = bow * .62, tl = h * .33;                                     // torso pitch (forward), length hip → shoulder
+    const ta = bow * .72, tl = h * .33;                                     // torso pitch (forward), length hip → shoulder
     const sh = back ? [x, hip[1] - tl] : [x + d * Math.sin(ta) * tl, hip[1] - Math.cos(ta) * tl];
     const headR = h * .066, neck = back ? [sh[0], sh[1] - h * .03] : [sh[0] + d * Math.sin(ta) * h * .04, sh[1] - Math.cos(ta) * h * .04];
     const head = back ? [neck[0], neck[1] - headR * .95] : [neck[0] + d * Math.sin(ta + .15) * headR * 1.05, neck[1] - Math.cos(ta + .15) * headR * .95];
@@ -172,7 +173,7 @@ export async function build(W, H) {
         const fx = x + off; body.moveTo(fx - d * h * .03, y - lift); body.lineTo(fx + d * h * .065, y - lift); body.lineTo(fx + d * h * .02, y - h * .045 - lift); body.lineTo(fx - d * h * .03, y - h * .04 - lift); body.closePath(); }
       // arms: the near one in front of the body, the far one behind it (drawn first)
       for (const s of [0, 1]) { const S = [sh[0] + d * h * (s ? .01 : -.02), sh[1] + h * .035], free = [S[0] + d * h * .06 * (-sw * (s ? 1 : -1)) + d * h * .04, S[1] + h * .36 - h * .05 * bow];
-        const hw = o.handsW ? o.handsW[s] ?? 1 : 1, tg0 = (o.hands && o.hands[s]) || free, tg = [lerp(free[0], tg0[0], hw), lerp(free[1], tg0[1], hw)], [E, Hd] = ik(S, tg, h * .19, h * .18, [-d * .7, 1]); arms.push([S, E, Hd, h * .05, s ? 'near' : 'far']); }
+        const hw = o.handsW ? o.handsW[s] ?? 1 : 1, tg0 = (o.hands && o.hands[s]) || free, tg = [lerp(free[0], tg0[0], hw), lerp(free[1], tg0[1], hw)], [E, Hd] = ik(S, tg, h * .19, h * .18, [-d * .7, 1]); arms.push([S, E, Hd, h * (s && hw > .2 ? .062 : .05), s ? 'near' : 'far']); }
     }
     return { body, arms };
   }
@@ -270,7 +271,7 @@ export async function build(W, H) {
         const facing = -sd;   // each faces Him (the left one faces right)
         const hands = [null, seat], handsW = [0, pK];   // the near hand eases from where it hangs to the place beside Him (no snap)
         // keep still and alive after the gesture (a small breath in the bow)
-        const bow = lerp(0, .8, lowK) - .22 * pK + .02 * Math.sin(t * 1.3 + i), kneel = .6 * lowK;
+        const bow = lerp(0, 1.0, lowK) - .3 * pK + .02 * Math.sin(t * 1.3 + i), kneel = .75 * lowK;   // round 3: a deeper bow, a clearer reach
         // after N22d they stay where they are, still lowered (He walks on)
         if (t > T.come[0] - .1) drawFig(ctx, { x: fx, y: fy, h: fh, view: 'side', dir: facing, ph: ph2, walkAmp: amp2, bow, kneel, hands, handsW, seed }, z);
       });

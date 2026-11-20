@@ -61,10 +61,10 @@ export async function build(W, H) {
   const FOV = 52;
   const film = new Film({
     W, H, dur: 1e4, fov: FOV, near: .05, far: 400,
-    atmos: { density: .0045, falloff: .02, base: 0, start: .5, color: col('#1c2030', .4), colorUp: col('#20263a', .45), max: 60, scatter: .8, anisotropy: .6, phaseMix: .6 },
+    atmos: { density: .0045, falloff: .02, base: 0, start: .5, color: col('#2a1c14', .4), colorUp: col('#2c2018', .42), max: 60, scatter: .8, anisotropy: .6, phaseMix: .6 },
     bloom: { strength: .07, radius: 1.1, tint: col('#ffd9a8') },
     dof: { focus: 13, aperture: 26, maxCoc: 22 },
-    look: { exposure: 1.0, contrast: 1.3, saturation: .98, lift: col('#120c08'), shadowTint: col('#ead8c2'), highTint: col('#ffeacc'), vignette: .42, grain: .02, ca: .2 },
+    look: { exposure: 1.0, contrast: 1.42, saturation: .98, lift: col('#080504'), shadowTint: col('#ead8c2'), highTint: col('#ffeacc'), vignette: .42, grain: .02, ca: .2 },
   });
   Object.defineProperty(film, 'frame', { get: () => 0, set: () => {} });   // fixed dither / grain (no per-frame shimmer)
   film.canvas.style.display = 'none';
@@ -167,7 +167,7 @@ export async function build(W, H) {
   const sun = new THREE.DirectionalLight(col('#9fb4e0'), 0); sun.castShadow = true; sun.shadow.mapSize.set(2048, 2048);
   Object.assign(sun.shadow.camera, { left: -9, right: 9, top: 9, bottom: -9, near: .5, far: 60 }); sun.shadow.bias = -.0006; sun.shadow.normalBias = .02; sun.shadow.radius = 7;
   S.add(sun, sun.target);
-  const hemi = new THREE.HemisphereLight(col('#8a8070'), col('#3a2c20'), .5); S.add(hemi);   // the sky light through the roof opening
+  const hemi = new THREE.HemisphereLight(col('#9a8064'), col('#3a2c20'), .5); S.add(hemi);   // the sky light through the roof opening
   const amb = new THREE.AmbientLight(col('#5a4030'), .1); S.add(amb);
   // the dawn sky over the opening — after dawn-wall3d.js's sky (this film, 4부 opening: a broken deck of cloud lit at its edges),
   // rewritten for a sky seen straight up at sunrise: the sun just over the eastern hills (+x), the undersides of the cloud deck
@@ -274,13 +274,13 @@ export async function build(W, H) {
     const Ld = Ld0.clone().lerp(Ld1, dk).normalize();
     sun.position.copy(Ld).multiplyScalar(30).add(V(0, 0, -6)); sun.target.position.set(0, 0, -6);
     const st = sine((t - T.settle[0]) / (T.settle[1] - T.settle[0]));
-    sun.color.copy(col('#c8bcae')).lerp(col('#ffc27a'), dk); sun.intensity = lerp(3.4, 9.5, dk) + 2.5 * st;
-    shaftP.u.L.value.copy(Ld); shaftP.u.sunCol.value.copy(col('#cac0b4')).lerp(col('#ffcf8a'), dk); shaftP.u.kS.value = lerp(1.7, 2.1, dk) + .5 * st; shaftP.u.manK.value = dk;
+    sun.color.copy(col('#d4b89c')).lerp(col('#ffc27a'), dk); sun.intensity = lerp(4.2, 12, dk) + 3 * st;
+    shaftP.u.L.value.copy(Ld); shaftP.u.sunCol.value.copy(col('#d4bca4')).lerp(col('#ffcf8a'), dk); shaftP.u.kS.value = lerp(1.7, 2.1, dk) + .5 * st; shaftP.u.manK.value = dk;
     const fk = flick(t) * lerp(1, .62, dk) * lerp(1, .2, sink);
-    fire.intensity = 30 * fk; fireLamp.power = 1.2 * fk; coals.material.color.copy(col('#ff7a2a', 3 * lerp(1, .5, sink)));
+    fire.intensity = 44 * fk; fireLamp.power = 1.2 * fk; coals.material.color.copy(col('#ff7a2a', 3 * lerp(1, .5, sink)));
     torch.intensity = 9 * flick(t + 3.1) * (1 - sp) * lerp(1, .8, dk); torchLamp.power = .5 * (1 - sp); torch.shadow.radius = lerp(2, 14, sp);
-    hemi.intensity = lerp(.5, .55, dk) * (1 - .7 * st); hemi.color.copy(col('#8a8070')).lerp(col('#c8b49a'), dk); film.look.vignette = .42 + .3 * st;   // the room sinks into warm dark round him
-    film.look.exposure = lerp(3.75, 3.4, dk) + .1 * sink;
+    hemi.intensity = lerp(.3, .34, dk) * (1 - .7 * st); hemi.color.copy(col('#9a8064')).lerp(col('#c8b49a'), dk); film.look.vignette = .42 + .3 * st;   // the room sinks into warm dark round him
+    film.look.exposure = lerp(4.25, 3.85, dk) + .1 * sink;
     sky.u.uK.value = dk;
     // camera: nearly locked off (a slow creep in); rack focus
     const pk = 0, pitch = .4 * Math.PI / 180;   // round 2: no tilt (4a opens with the wall → sky move)

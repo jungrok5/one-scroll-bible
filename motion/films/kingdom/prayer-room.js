@@ -33,7 +33,7 @@ export function beatsPart1(B) {
 }
 
 export async function build(W, H, opts = {}) {
-  const OIL = window.OIL, people = opts.people ?? 3, V = H > W;
+  const OIL = window.OIL, people = opts.people ?? 1, V = H > W;
   const S = 1.3, M = .05;                                     // plate px per frame px; margin (fraction of the frame) round the frame
   const PW = Math.round(W * (1 + 2 * M) * S), PH = Math.round(H * (1 + 2 * M) * S);
   const OX = M * W, OY = M * H;                               // frame px → plate px: (x + OX) * S
@@ -48,7 +48,7 @@ export async function build(W, H, opts = {}) {
     const xl = lerp(BW.x0, -W * .75, v), xr = lerp(BW.x1, W * 1.9, v); return [lerp(xl, xr, u), y]; };
   // the people: main man kneeling in the floor's middle (u .5, v .14), a second further right in half-shade, a third behind on the left
   const MEN = [{ u: .5, v: .2, s: 1, main: true }, { u: .7, v: .09, s: .92 }, { u: .27, v: .07, s: .9 }].slice(0, people);
-  const manAt = m => { const [x, y] = floorXY(m.u, m.v), sc = (H * .092) * m.s * (1 + m.v * 1.1); return { x, y, sc }; };   // sc = his height on screen (px)
+  const manAt = m => { const [x, y] = floorXY(m.u, m.v), sc = (H * .078) * m.s * (1 + m.v * 1.1); return { x, y, sc }; };   // sc = his height on screen (px)
   // the scroll on the floor in the light, to his left at about his depth
   const SCR = (() => { const a = floorXY(.235, .19), b = floorXY(.395, .19), c = floorXY(.4, .235), d = floorXY(.23, .235); return [a, b, c, d]; })();
   // ---------------------------------------------------------------- the plates
@@ -144,7 +144,8 @@ export async function build(W, H, opts = {}) {
   const fig = (lit, C, seed) => {
     const sc = 420, w = Math.round(.78 * sc), h = Math.round(1.0 * sc), ox = w / 2, oy = h - .07 * sc, c = P.canvas(w, h), g = c.getContext('2d');
     const m = new DOMMatrix([sc, 0, 0, sc, ox, oy]), path = contour(P.rng(seed)), L = { x: ox - sc * 1.5, y: oy - sc * 1.35, z: sc * .9, R: sc * 6 };
-    const kd = lit ? .74 : .44, kl = lit ? 1 : .36, LC = lit ? [255, 232, 196] : [150, 152, 164];
+    const kd = lit ? .42 : .26, kl = lit ? .95 : .3,   // round 2: a dark figure against the light, only the window's rim on him
+    LC = lit ? [255, 232, 196] : [150, 152, 164];
     const zone = col => ({ base: col.map(v => v * kd), lit: LC.map((v, i) => v * kl * (col[i] / 210 + .3)) });
     const cloth = (u, v) => v < -.69 && Math.abs(u - .005) < .105 || (v < -.62 && Math.abs(u) < .09);
     const mantle = (u, v) => v < -.13 - (u + .35) * .55 && !cloth(u, v);   // over the left shoulder and down to the right hip, on a diagonal
@@ -217,9 +218,9 @@ export async function build(W, H, opts = {}) {
     ctx.drawImage(layC, 0, 0);
     // 3. the air in the beam: a soft shaft and a few motes inside it (screen)
     ctx.save(); zoomer(ctx); ctx.globalCompositeOperation = 'screen';
-    { const bp = beamPoly(pp), gr = ctx.createLinearGradient(WIN[1][0], WIN[1][1], pp[2][0], pp[2][1]); gr.addColorStop(0, `rgba(255,236,200,${.2 * bright})`); gr.addColorStop(1, `rgba(255,236,200,${.05 * bright})`);
+    { const bp = beamPoly(pp), gr = ctx.createLinearGradient(WIN[1][0], WIN[1][1], pp[2][0], pp[2][1]); gr.addColorStop(0, `rgba(255,236,200,${.3 * bright})`); gr.addColorStop(1, `rgba(255,236,200,${.08 * bright})`);
       ctx.filter = 'blur(18px)'; ctx.fillStyle = gr; ctx.beginPath(); bp.forEach(([x, y], i) => i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)); ctx.closePath(); ctx.fill(); ctx.filter = 'none';
-      const r = P.rng(5); for (let i = 0; i < 70; i++) { const a = r(), b = r(), ph = r() * 6.28, sp = .02 + r() * .03;
+      const r = P.rng(5); for (let i = 0; i < 150; i++) { const a = r(), b = r(), ph = r() * 6.28, sp = .02 + r() * .03;
         const u = (a + t * sp * .3) % 1, v = (b + Math.sin(t * .2 + ph) * .04 + 1) % 1, top = [lerp(WIN[1][0], WIN[0][0], v), lerp(WIN[1][1], WIN[3][1], v)], bot = [lerp(pp[3][0], pp[1][0], v), lerp(pp[3][1], pp[1][1], v)];
         const x = lerp(top[0], bot[0], u) + Math.sin(t * .5 + ph) * 6, y = lerp(top[1], bot[1], u) + Math.cos(t * .4 + ph) * 6, al = .25 * bright * Math.sin(Math.PI * u) * (.4 + .6 * r());
         ctx.fillStyle = `rgba(255,240,210,${al})`; ctx.beginPath(); ctx.arc(x, y, 1.2 + r() * 1.6, 0, 6.283); ctx.fill(); } }

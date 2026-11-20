@@ -86,7 +86,7 @@ Pilot.run({ W, H, dur: +(T1 - T0).toFixed(2), fonts: ["600 40px 'Noto Serif KR'"
     B2 = Object.fromEntries(IDS2.map(id => [id, Film.lines[id].at]));
     aux = Pilot.canvas(W, H); auxx = aux.getContext('2d');
     GAL = await (await import('./galilee3d.js')).build(W, H); window.__GAL = GAL;
-    try { const R = await import('./prayer-room.js'); ROOM = await R.build(W, H); RB = R.beatsPart1(B); window.__ROOM = ROOM; } catch (e) { console.warn('room not built', e); }
+    try { const R = await import('./prayer-room.js'); ROOM = await R.build(W, H, { people: 1 }); RB = R.beatsPart1(B); window.__ROOM = ROOM; } catch (e) { console.warn('room not built', e); }
     if (!/[?&]noglass=1/.test(location.search)) try { GLASS = await (await import('./glass-shatter3.js')).build(W, H); window.__GLASS = GLASS; } catch (e) { console.warn('glass not built', e); } }, draw });
 </script>
 </body>

@@ -105,12 +105,12 @@ export function beats(B) {
   T.marks = [T.n07 + .9, T.n07 + 5.3];                      // S5 the marks light on the scroll
   T.crane = [T.t1 - 2.0, T.t1 + 4.0];                       // S5 crane up 6 s
   T.dim = [T.n09b + .3, T.n09b + 3.2];                      // S5 the cloud comes, the light sinks
-  T.tilt = [T.n09c + .15, T.n09c + 2.75];                   // S5 tilt up to the far light
-  T.point = [T.n09c + .6, T.n09c + 2.2];
-  T.down = [T.n09d + .05, T.n09d + 4.05];                   // S5 crane down 4 s, following the light
-  T.beam = [T.n09d - .1, T.n09d + 1.8];                     // the shaft grows down from the point to the village
-  T.pool = [T.n09d + 1.3, T.n09d + 5.0];                    // the light spreads from the village over everything
-  T.clear = [T.n09d + 1.2, T.n09d + 5.4];
+  T.tilt = [T.n09c + .15, T.n09c + 2.6];                    // S5 a small tilt up to the far light (a tear in the cloud, low in the sky)
+  T.point = [T.n09c + .5, T.n09d + .9];                     // round 3: the tear brightens, then opens wide at N09d
+  T.down = [T.n09c + 4.0, T.n09d + 4.1];                    // round 3: one calm descent and push, ≈ 5.8 s, eased in and out
+  T.beam = [T.n09d + .05, T.n09d + 2.4];                    // broad shafts through the tear
+  T.pool = [T.n09d + .2, T.n09d + 3.9];                     // the light sweeps over the land in a wave (feathered front)
+  T.clear = [T.n09d + .6, T.n09d + 5.0];
   T.turn = [T.n08 + .1, T.n08 + 1.7];                       // S6 he turns from them to the road
   T.walk0 = T.n08 + .9;                                     // S6 his first step
   T.craneC = [T.q3, T.q3 + 6.0];                            // S6 crane up 6 s
@@ -174,16 +174,17 @@ export async function build(W, H) {
 
   // the light field shared by every material: the morning front (S3), the cloud's dimming (S5), the pool from above (N09d), the
   // villages' beacons (S6). LU is one set of uniform objects, so changing a value reaches every material at once.
-  const LU = { uFront: { value: new THREE.Vector4(-1e5, 40, 20, 1) }, uDim: { value: 1 }, uPool: { value: new THREE.Vector4(0, 0, 0, 0) },
+  const LU = { uFrontS: { value: 1 }, uSweep: { value: new THREE.Vector2(0, 0) }, uFront: { value: new THREE.Vector4(-1e5, 40, 20, 1) }, uDim: { value: 1 }, uPool: { value: new THREE.Vector4(0, 0, 0, 0) },
     uVil: { value: Array.from({ length: 8 }, () => new THREE.Vector4(0, 0, 1, 0)) }, uVilC: { value: col('#ffb468', 1) },
     uSunV: { value: V(0, 0, -1) }, uRimC: { value: col('#ffa868', 1.15) } };
-  const LGLSL = `uniform vec4 uFront; uniform float uDim; uniform vec4 uPool; uniform vec4 uVil[8]; uniform vec3 uVilC; float gPool;
+  const LGLSL = `uniform float uFrontS; uniform vec2 uSweep; uniform vec4 uFront; uniform float uDim; uniform vec4 uPool; uniform vec4 uVil[8]; uniform vec3 uVilC; float gPool;
     float lightK(vec3 p, out float warm){
-      float fr = smoothstep(uFront.x - uFront.y, uFront.x + uFront.y, p.z + p.y * uFront.z);
+      float fz = uFrontS * p.z + p.y * uFront.z, fr = smoothstep(uFront.x - uFront.y, uFront.x + uFront.y, fz);
       float l = mix(uFront.w, 1., fr);
       float pd = length(p.xz - uPool.xy), pool = uPool.w * (1. - smoothstep(uPool.z * .45, uPool.z, pd));
       l *= mix(uDim, 1., clamp(pool, 0., 1.));
       gPool = clamp(pool, 0., 1.) + uPool.w * .9 * exp(-pow((pd - uPool.z * .9) / max(uPool.z * .1, 6.), 2.));   // the pool and its spreading golden edge
+      gPool += uSweep.x * fr + uSweep.y * exp(-pow((fz - uFront.x - uFront.y * .4) / (uFront.y * .9), 2.));   // round 3: the sweep's light, brightest just behind its feathered edge
       warm = 0.;
       for (int i = 0; i < 8; i++){ vec2 d = p.xz - uVil[i].xy; warm += uVil[i].w * exp(-dot(d, d) / (uVil[i].z * uVil[i].z)); }
       return l;
@@ -302,7 +303,7 @@ export async function build(W, H) {
           vec3 nW = normalize(vec3(-wG.x, 1., -wG.y)); normal = normalize((viewMatrix * vec4(nW, 0.)).xyz); }`)
       .replace('#include <lights_fragment_end>', `#include <lights_fragment_end>
         { float wv; float lk = lightK(vWW, wv); reflectedLight.directDiffuse *= lk; reflectedLight.directSpecular *= lk * .35; reflectedLight.indirectDiffuse *= mix(.7, 1., lk);
-          totalEmissiveRadiance += vec3(1., .78, .52) * .13 * lk * lk; }`)
+          totalEmissiveRadiance += vec3(1., .78, .52) * .13 * lk * lk + vec3(1., .74, .38) * gPool * .22; }`)
       .replace('#include <opaque_fragment>', `
         { vec4 mp = mirrorMatrix * vec4(vWW, 1.); vec2 muv = mp.xy / mp.w; float dist = length(vWW - cameraPosition);
           vec2 dd = wG * vec2(.35, 1.) * .55 / (1. + dist * .012);
@@ -403,6 +404,9 @@ export async function build(W, H) {
     // groves round the villages and along the shores (smaller; far they are the ground's dark dots)
     for (const v of VILL) for (let i = 0; i < 7; i++) { const a = r() * 6.283, d = 70 + r() * 90, x = v.c.x + Math.cos(a) * d, z = v.c.z + Math.sin(a) * d; if (inland(x, z) < 8) continue; olive(x, z, 4.5 + r() * 2, 900 + VILL.indexOf(v) * 17 + i); }
     for (let i = 0; i < 4; i++) { const a = r() * 6.283; palm(V0.c.x + Math.cos(a) * 40, V0.c.z + Math.sin(a) * 40, 8 + r() * 3, 70 + i); palm(VW.c.x + Math.cos(a + 1) * 38, VW.c.z + Math.sin(a + 1) * 38, 8 + r() * 3, 80 + i); }
+    // round 3: olive orchards in loose rows round the village the light comes down on (fields and groves for the sweep to turn gold)
+    { const out = outward(VWTH), al = along(VWTH), base = shoreAt(VWTH); for (const [u0, v0, nu, nv] of [[-150, 110, 5, 3], [95, 95, 4, 4], [-40, 175, 6, 2], [150, 160, 4, 2]])
+        for (let i = 0; i < nu; i++) for (let j = 0; j < nv; j++) { const p = base.clone().addScaledVector(al, u0 + i * 13 + (r() - .5) * 4).addScaledVector(out, v0 + j * 12 + (r() - .5) * 4); if (inland(p.x, p.z) < 10) continue; olive(p.x, p.z, 4.2 + r() * 1.6, 1200 + i * 31 + j * 7 + u0); } }
     // the scroll's stone: an old olive behind it (its shade is what the light crosses at N07)
     olive(SCP.x + 6, SCP.z + 9, 6.5, 4321); }
   { const im = new THREE.InstancedMesh(leafG, leafM, leafItems.length); leafItems.forEach((m, i) => im.setMatrixAt(i, m)); im.castShadow = im.receiveShadow = true; S.add(im); }
@@ -509,6 +513,20 @@ export async function build(W, H) {
         const p = person(r); place(vwGroup, p, x, z, r() * 6.283); p.userData.d0 = Math.hypot(x - VW.c.x, z - VW.c.z); vwPeople.push(p); } }
     for (let i = 0; i < 14; i++) { const a = r() * 6.283, d = 70 + r() * 60, x = VW.c.x + Math.cos(a) * d, z = VW.c.z + Math.sin(a) * d; if (inland(x, z) < 6) continue;
       const p = person(r, { kind: 'man' }); place(vwGroup, p, x, z, r() * 6.283); p.userData.d0 = d; p.userData.field = true; vwPeople.push(p); } }
+  // smoke from the courtyard ovens of the village (round 3): soft puffs that rise, lean with the breeze, widen and thin; lit warm once
+  // the morning light has reached them
+  const smokeU = { uT: { value: 0 }, uL: { value: 0 }, uPx: { value: H / 1920 } };
+  const smoke = (() => { const r = rng(515), src = VW.comps.filter(() => r() < .55).map(c => c.yard), n = 22, pos = new Float32Array(src.length * n * 3), sd = new Float32Array(src.length * n * 2);
+    src.forEach((p, j) => { for (let i = 0; i < n; i++) { const k = (j * n + i); pos[k * 3] = p.x; pos[k * 3 + 1] = p.y + 1.2; pos[k * 3 + 2] = p.z; sd[k * 2] = i / n + r() * .03; sd[k * 2 + 1] = r(); } });
+    const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(pos, 3)); g.setAttribute('aS', new THREE.BufferAttribute(sd, 2));
+    const m = new THREE.ShaderMaterial({ uniforms: smokeU, transparent: true, depthWrite: false,
+      vertexShader: `attribute vec2 aS; uniform float uT, uPx; varying float vA, vH;
+        void main(){ float age = fract(uT * .055 + aS.x), h = age * 26.; vec3 q = position + vec3(h * .55 + sin(uT * .3 + aS.y * 9.) * .8 * age, h, -h * .2);
+          vec4 mv = modelViewMatrix * vec4(q, 1.); gl_Position = projectionMatrix * mv; gl_PointSize = clamp(uPx * (1.2 + age * 7.) * 900. / -mv.z, 2., 160.);
+          vA = smoothstep(0., .08, age) * (1. - age) * .32; vH = age; }`,
+      fragmentShader: `uniform float uL; varying float vA, vH; void main(){ vec2 c = gl_PointCoord - .5; float a = exp(-dot(c, c) * 9.) * vA;
+          gl_FragColor = vec4(mix(vec3(.52, .54, .6), vec3(1.05, .86, .66), uL) * (.8 + .2 * vH), a); }` });
+    const pts = new THREE.Points(g, m); pts.frustumCulled = false; pts.layers.set(2); pts.visible = false; S.add(pts); return pts; })();
   // ---------------------------------------------------------------- the hook (S1, round 2): boats, nets, birds and mist close to the lens
   // Round 1 opened on a small sun over a flat lake. Now the camera skims 1.6–2 m above the water in the blue mist before dawn; fishing
   // boats with nets out drift past close beside the lens, a flock bursts off the water all round the camera, and the sun breaks over the
@@ -704,12 +722,14 @@ export async function build(W, H) {
   function vis(which) { groups.hill.visible = which === 'hill'; groups.beach.visible = which === 'beach'; boat.visible = which === 'beach'; groups.town.visible = which === 'town'; }
   const camAt = {};
   const OV = {};   // what the lens draws after the frame (lens flare, the far light's corona, the fires' halos)
+  function stageReset() {}
   function stage(shot, t) {   // poses, light field, camera — everything but the render
     const Lk = film.look, D = film.dofCfg, [a, b] = T.shots[shot], k = clamp((t - a) / (b - a));
-    for (const p of hillCrowd) p.visible = true; fishers.visible = false; vwGroup.visible = false; film.cloud = null; OV.flare = 0; OV.point = 0; OV.halos = null;
+    for (const p of hillCrowd) p.visible = true; fishers.visible = false; vwGroup.visible = false; film.cloud = null; OV.flare = 0; OV.point = 0; OV.halos = null; OV.tear = 0; OV.rays = 0; smoke.visible = false;
+    LU.uFrontS.value = 1; LU.uSweep.value.set(0, 0); SK.sunHide.value = 0; SK.domeK.value = 1;
     LU.uFront.value.set(-1e5, 40, 20, 1); LU.uDim.value = 1; LU.uPool.value.set(0, 0, 0, 0); LU.uVil.value.forEach(v => v.w = 0); VILL.forEach(v => v.lamp.power = 0);
     SK.sunDir.value.copy(SUN); SK.cover.value = 0; SK.clouds.value = .22; SK.pointK.value = 0; SK.gapK.value = 0; shaftU.uK.value = 0; markU.uK.value = 0; mistU.uK.value = 1; dustU.uA.value = 0;
-    birds.forEach(bd => bd.visible = false); Lk.exposure = 1; D.aperture = .5; D.maxCoc = 20; sunLamp.power = 2400; palette(.5);
+    birds.forEach(bd => bd.visible = false); Lk.exposure = 1; Lk.contrast = 1.06; D.aperture = .5; D.maxCoc = 20; sunLamp.power = 2400; palette(.5);
     if (shot === 0) {   // S1: the hook — skimming the blue mist, boats and nets beside the lens, birds bursting off the water, the sun breaking
       vis('hill'); poseHill(t); for (const p of hillCrowd) p.visible = false; fishers.visible = true; shadowAt(V(KH.position.x, 0, S1Z(170)), 70);
       palette(lerp(.02, .3, ss(1.6, T.fly[1], t)));
@@ -756,8 +776,10 @@ export async function build(W, H) {
     S5.glide = S5.start.clone().addScaledVector(F0, .06).add(V(.24, -.04, 0));
     S5.top = V(S5.glide.x, SC.y + CRANE_TOP, S5.glide.z).addScaledVector(F0, -CRANE_BACK);               // the crane's top (the title)
     S5.hold = S5.top.clone().addScaledVector(F0, (T.n09d - T.crane[1]) * 6.0).add(V(30, 18, 0));                           // after the slow drift east
-    S5.TOPP = S5.hold.clone().addScaledVector(dirYP(10 * D2R, 33 * D2R), 1350);                           // the far point above the clouds
-    S5.end = LAND.clone().add(V(-25, 46, 140));                                                          // low over the village's edge: roofs, courtyards, people, the lake
+    S5.TOPP = S5.hold.clone().addScaledVector(dirYP(6 * D2R, 14 * D2R), 2600);                            // round 3: the tear in the cloud, low in the eastern sky
+    S5.end = LAND.clone().add(V(-28, 34, 118));                                                          // a low three-quarter view from behind the village: roofs, courtyards, people, the shore, the lake
+    S5.look = LAND.clone().add(V(2, -2, -25));                                                          // what the final image centres on (the village's lake edge)
+    S5.shaftTop = LAND.clone().add(V(20, 600, -620)); S5.shaftBot = LAND.clone().add(V(0, -2, -140));   // the shafts: from the cloud base over the lake down to the shore
   }
   // where the camera looks: yaw/pitch so that point Q sits at frame height fy (0 top … 1 bottom)
   const lookAtY = (pos, Q, fy) => { const d = Q.clone().sub(pos); return [yawOf(d), pitchOf(d) - (.5 - fy) * FOV * D2R]; };
@@ -775,36 +797,47 @@ export async function build(W, H) {
       const [y0, p0] = lookAtY(S5.glide, scroll.position.clone().add(V(.17, 0, 0)), .43);
       pos = V(S5.glide.x, SC.y + hNow, S5.glide.z).addScaledVector(F0, -back); yaw = lerp(y0, YAW0, sine(ck)); pitch = lerp(p0, -6.5 * D2R, sine(clamp(ck * 1.3)));
       if (t > T.crane[1]) { const dr = clamp((t - T.crane[1]) / (T.n09d - T.crane[1])); pos = lv(S5.top, S5.hold, dr); pitch = lerp(-6.5, -8.5, clamp((t - T.crane[1]) / 8)) * D2R; }
-      // the tilt up to the far point (it sits at 0.32 H), a slow hold
+      // round 3 (N09c–N09d): a small tilt up to the tear in the cloud, then ONE calm move — a slow descent and push (≈ 5.8 s, eased in and
+      // out) from high over the west hills to a low three-quarter view over the village and the shore, the lake and the light beyond; the
+      // final wide image holds under the core sentence with only a breath of drift
       const tu = eio((t - T.tilt[0]) / (T.tilt[1] - T.tilt[0]));
-      if (t > T.tilt[0]) { const [yu, pu] = lookAtY(pos, S5.TOPP, .3 + .06 * clamp((t - T.tilt[1]) / 3)); yaw = lerp(yaw, yu, tu); pitch = lerp(pitch, pu, tu); }
-      // the descent: crane down 4 s (soft start, ease-out), following the light's front down to the village (it lands at 0.43 H)
-      if (t > T.down[0]) { const dk = softOut((t - T.down[0]) / (T.down[1] - T.down[0]), .3, 1.25), tk = 1 - Math.pow(1 - clamp((t - T.beam[0]) / (T.beam[1] - T.beam[0])), 1.6);
-        pos = lv(S5.hold, S5.end, dk).addScaledVector(F0, Math.max(0, t - T.down[1]) * .7); pos.y = logLerp(S5.hold.y, S5.end.y, dk);
-        const tip = lv(S5.TOPP, LAND, tk), fy = lerp(.36, .43, tk), [yt, pt] = lookAtY(pos, tip, fy), [y0, p0] = lookAtY(pos, S5.TOPP, .36);
-        const w = ss(0, .25, (t - T.down[0]) / (T.down[1] - T.down[0])); yaw = lerp(y0, yt, w); pitch = lerp(p0, pt, w); }
-      if (t < T.crane[1]) shadowAt(V(SC.x, 0, SC.z), 30); else shadowAt(V(VW.c.x, 0, VW.c.z), 160);   // the box changes only when the scroll is a speck
+      const [yu, pu] = lookAtY(S5.hold, S5.TOPP, .3);
+      if (t > T.tilt[0]) { yaw = lerp(yaw, yu, tu) + .025 * ss(T.tilt[0], T.down[0], t); pitch = lerp(pitch, pu, tu) + .012 * ss(T.tilt[1], T.down[0], t); }   // a slow drift while we look at the tear
+      if (t > T.down[0]) { const dk = eio((t - T.down[0]) / (T.down[1] - T.down[0])), hold = Math.max(0, t - T.down[1]);
+        pos = lv(S5.hold, S5.end, dk); pos.y = logLerp(S5.hold.y, S5.end.y, dk); pos.addScaledVector(F0, hold * .45); pos.y -= hold * .12;
+        const [ye, pe] = lookAtY(S5.end, S5.look, .6), r = sine(dk);
+        yaw = lerp(yu + .025, ye, r) + .006 * Math.sin(hold * .5); pitch = lerp(pu + .012, pe, r); }
+      if (t < T.crane[1]) shadowAt(V(SC.x, 0, SC.z), 30); else shadowAt(V(VW.c.x, 0, VW.c.z - 40), 170);   // the box changes only when the scroll is a speck
       D.focus = Math.max(1, pos.distanceTo(scroll.position)); D.aperture = lerp(.45, .02, Math.sqrt(ck)); D.maxCoc = 10; }
     aim(pos, yaw, pitch);
-    // the light: the cloud comes over (N09b), the far point (N09c), the shaft and the pool (N09d), the sky clears
-    const dim = ss(T.dim[0], T.dim[1], t), clear = ss(T.clear[0], T.clear[1], t);
-    SK.cover.value = dim * (1 - clear) * .85; LU.uDim.value = lerp(1, .42, dim);
-    Lk.exposure = t < T.crane[0] ? 1.05 : lerp(1.0, .9, ss(T.crane[0], T.crane[1], t)) * lerp(1, .95, dim * (1 - clear)) + .05 * clear;
-    const pk = ss(T.point[0], T.point[1], t) * (1 - ss(T.beam[1], T.beam[1] + 2.4, t) * .8);
-    SK.pointK.value = pk; SK.pointDir.value.copy(S5.TOPP).sub(pos).normalize(); SK.gapK.value = ss(T.point[0] - .6, T.point[1], t) * (1 - clear);
-    const bk = clamp((t - T.beam[0]) / (T.beam[1] - T.beam[0])); shaftU.uTip.value = 1 - Math.pow(1 - bk, 1.6); shaftU.uK.value = ss(T.beam[0], T.beam[0] + .5, t) * (1 - ss(T.pool[1] - 1.2, T.pool[1] + 1.4, t) * .8);
-    setShaft(S5.TOPP, LAND.clone().add(V(0, -2, 0)), 16, 52);
-    const pr = clamp((t - T.pool[0]) / (T.pool[1] - T.pool[0] + 1.2)); LU.uPool.value.set(LAND.x, LAND.z, lerp(20, 3600, Math.pow(pr, 2.6)), ss(T.beam[1] - .4, T.beam[1] + .3, t));
-    sunLamp.power = lerp(1400, 500, dim * (1 - clear)); mistU.uK.value = 1;
-    // round 2: the colour journey (gold → the cool under the cloud → full warm morning as the light pours out), a real cloud deck, the far
-    // light drawn as a lens corona behind the cloud (the overlay), the people of the village lifting their heads as the light reaches them
-    let pk2 = t < T.crane[0] ? .64 : lerp(.64, .74, ss(T.crane[0], T.crane[1], t)); pk2 = lerp(pk2, .48, dim * (1 - clear)); pk2 = lerp(pk2, 1, ss(T.beam[1] - .5, T.pool[1] + 1.2, t)); palette(pk2);
-    if (dim > 0) { film.cloud = CLOUD; CLOUD.density = .055 * dim * (1 - clear * .8); CLOUD.cover = lerp(.46, .64, clear); CLOUD.litTop.copy(SK.cloudColor.value).multiplyScalar(.8); }
-    SK.pointK.value = 0; SK.gapK.value = 0; SK.cover.value = 0; SK.clouds.value = lerp(.22, .05, dim * (1 - clear));
-    OV.point = pk; OV.pointPos = S5.TOPP;
-    if (t > T.n09c) { vwGroup.visible = true; const R0 = LU.uPool.value.z, on = LU.uPool.value.w;
-      for (const p of vwPeople) { const U = p.userData, up = on * ss(R0 * .55, R0 * .95, R0 - U.d0 + R0 * .5) * ss(0, 1.2, t - T.beam[1]);
-        const hk = ss(0, 1, (R0 - U.d0) / 25 + .0) * on; P.pose(p, { ...P.idle(t, U.ph, { s: U.s }), head: [lerp(-.05, .5, hk), .1 * Math.sin(t * .3 + U.ph * 5)], lean: lerp(0, .06, hk) }); } }
+    const dim = ss(T.dim[0], T.dim[1], t), clear = ss(T.clear[0], T.clear[1], t), sw = sine((t - T.pool[0]) / (T.pool[1] - T.pool[0])), swOn = ss(T.pool[0], T.pool[0] + .8, t);
+    // one sky: the heavy, soft cloud deck (raymarched, big billows) hides the sun; the dome's thin clouds fade out under it (no fish scales)
+    if (dim > 0) { film.cloud = CLOUD; CLOUD.density = .07 * dim * (1 - clear * .75); CLOUD.cover = lerp(.34, .6, clear); CLOUD.scale = .0011; CLOUD.steps = 30; CLOUD.wind.set(.028, .004, .012); CLOUD.litTop.copy(SK.cloudColor.value).multiplyScalar(.75 + .5 * clear); }
+    // (the deck drifts and boils slowly — never a held frame)
+    SK.domeK.value = 1 - dim * (1 - clear * .5); SK.sunHide.value = dim * (1 - clear * .7); SK.pointK.value = 0; SK.gapK.value = 0; SK.cover.value = 0;
+    // the land under the cloud (cool shade), then the morning light sweeps over it from the lake in a wave with a soft feathered front;
+    // the lit side carries the light from above (warm, on everything that faces the sky); the lake flashes gold behind the front
+    LU.uDim.value = 1; LU.uFrontS.value = -1; LU.uFront.value.set(lerp(2100, -500, sw), 170, 6, lerp(1, .36, dim * (1 - swOn * 0)));
+    LU.uSweep.value.set(.22 * swOn, .8 * swOn * (1 - ss(T.pool[1] - .3, T.pool[1] + 1.5, t)));
+    LU.uPool.value.set(0, 0, 0, 0);
+    // broad shafts through the tear, over the lake toward the village
+    const bk = clamp((t - T.beam[0]) / (T.beam[1] - T.beam[0])); shaftU.uTip.value = 1 - Math.pow(1 - bk, 1.4); shaftU.uK.value = .7 * ss(T.beam[0], T.beam[0] + .8, t) * (1 - ss(T.pool[1], T.pool[1] + 2, t) * .7);
+    setShaft(S5.shaftTop, S5.shaftBot, 70, 230);
+    Lk.exposure = (t < T.crane[0] ? 1.05 : lerp(1.0, .9, ss(T.crane[0], T.crane[1], t)) * lerp(1, .93, dim * (1 - clear))) * lerp(1, .86, sw * swOn);
+    sunLamp.power = lerp(1400, 300, dim * (1 - clear)); mistU.uK.value = 1;
+    let pk2 = t < T.crane[0] ? .64 : lerp(.64, .74, ss(T.crane[0], T.crane[1], t)); pk2 = lerp(pk2, .46, dim * (1 - swOn)); pk2 = lerp(pk2, 1, sw * swOn); palette(pk2);
+    film.atmos.density *= lerp(1, .3, sw * swOn); hemi.intensity *= lerp(1, .6, sw * swOn); Lk.contrast = lerp(1.06, 1.16, sw * swOn); Lk.saturation *= lerp(1, 1.1, sw * swOn);   // the haze lifts as the light comes: rich contrast in the final image
+    sunL.intensity *= lerp(1, .18, dim * (1 - swOn)) * lerp(1, 1.25, sw * swOn);   // no direct sun (no glints) under the cloud; a strong low sun once it pours out
+    // the tear in the cloud: a bright rift (overlay), brightening through N09c and opening wide as the shafts come
+    OV.tear = ss(T.point[0], T.point[1], t) * (1 - ss(T.pool[1], T.pool[1] + 2.5, t) * .6); OV.tearOpen = ss(T.beam[0] - .3, T.beam[0] + 1.6, t); OV.tearPos = S5.TOPP;
+    OV.rays = OV.tear * (.25 + .5 * OV.tearOpen);
+    // the village: people lift their heads as the light reaches them; smoke rises from the courtyard ovens
+    if (t > T.n09c) { vwGroup.visible = true; smoke.visible = true; smokeU.uT.value = t; smokeU.uL.value = swOn;
+      const f = LU.uFront.value.x;
+      for (const p of vwPeople) { const U = p.userData, fz = -p.position.z + p.position.y * 6, hk = ss(f - 40, f + 120, fz + 0) * swOn;
+        const lift = ss(0, 1, hk) * ss(0, 1, (t - T.pool[0]) - U.ph * .8);
+        P.pose(p, { ...P.idle(t, U.ph, { s: U.s }), head: [lerp(-.06, .46, lift), .1 * Math.sin(t * .3 + U.ph * 5) * (1 - lift)], lean: lerp(0, .05, lift),
+          hands: U.ph > .72 ? [null, V(.2 * U.s, 1.35 * U.s, -.3 * U.s)] : null, handsW: [0, lift * (U.ph > .72 ? 1 : 0)] }); } }
   }
   function shotTown(t) {
     const Lk = film.look, D = film.dofCfg; poseTown(t); shadowAt(V(K0.x, 0, K0.z).addScaledVector(headC, -6), 40);
@@ -863,6 +896,7 @@ export async function build(W, H) {
   // what the lens adds after the frame (round 2), measured with each shot's own camera right after its render
   function overlayInfo(t) { const o = { flare: OV.flare, sun: sunScreen(), point: 0, halos: [] };
     if (OV.point > .01 && OV.pointPos) { const q = proj(OV.pointPos); if (q) { o.point = OV.point; o.pp = q; } }
+    if (OV.tear > .01 && OV.tearPos) { const q = proj(OV.tearPos); if (q) { o.tear = OV.tear; o.tearOpen = OV.tearOpen; o.tp = q; o.rays = OV.rays; } }
     if (OV.halos) for (const h of OV.halos) { const q = proj(h.p); if (q && q[0] > -100 && q[0] < W + 100 && q[1] > -100 && q[1] < H + 100) o.halos.push([q[0], q[1], q[2], h.a, h.flick]); }
     return o; }
   // the lens, after motion/pilot/creation-lens.html: a layered corona (white-hot heart, warm corona, wide amber air), an anamorphic streak
@@ -882,6 +916,25 @@ export async function build(W, H) {
       const gx = sx + dx * kk * 2, gy = sy + dy * kk * 2, gr = r * 1.2, gg = ctx.createRadialGradient(gx, gy, gr * .55, gx, gy, gr);
       gg.addColorStop(0, `rgba(${col2},${a * I * .2})`); gg.addColorStop(.85, `rgba(${col2},${a * I * .5})`); gg.addColorStop(1, `rgba(${col2},0)`); ctx.fillStyle = gg; ctx.beginPath(); ctx.arc(gx, gy, gr, 0, 6.283); ctx.fill(); }
     ctx.restore(); }
+  // the tear in the cloud (round 3): not a disc — a ragged rift of light along the cloud's grain, brightest at its heart, widening as it
+  // opens; drawn under the frame's own scatter so the shafts (godRays) come out of it
+  // the tear in the cloud (round 3): not a disc or a shape — the cloud's own texture brightened along a long feathered band (its edges turn
+  // to silver lining), with a thin ragged core of light; it widens as it opens. Drawn under the scatter so the shafts come out of it.
+  const tearC = mkC(W >> 1, H >> 1), tgx = tearC.getContext('2d');
+  function drawTear(ctx, o, k) {
+    if (!o.tear || k <= .01) return; const [x, y] = o.tp, I = o.tear * k, op = o.tearOpen || 0, L = W * (.32 + .5 * op), Hh = H * (.035 + .05 * op), ang = -.1;
+    // 1. the band mask × the frame itself (half res), laid back over with 'screen' twice: the clouds' own billows light up near the rift
+    const w2 = tearC.width, h2 = tearC.height; tgx.setTransform(1, 0, 0, 1, 0, 0); tgx.globalCompositeOperation = 'source-over'; tgx.clearRect(0, 0, w2, h2);
+    tgx.save(); tgx.translate(x / 2, y / 2); tgx.rotate(ang); const r = rng(77);
+    for (let i = 0; i < 7; i++) { const u = (i / 6 - .5) * 2; tgx.save(); tgx.translate(u * L * .3 + (r() - .5) * L * .06, (r() - .5) * Hh * .4); tgx.scale(L * (.22 + .1 * r()) / 200, Hh * (.8 + .5 * r()) / 200);
+      const g = tgx.createRadialGradient(0, 0, 0, 0, 0, 100); g.addColorStop(0, `rgba(255,255,255,${.75 * (1 - .4 * Math.abs(u))})`); g.addColorStop(1, 'rgba(255,255,255,0)'); tgx.fillStyle = g; tgx.fillRect(-100, -100, 200, 200); tgx.restore(); }
+    tgx.restore(); tgx.globalCompositeOperation = 'source-in'; tgx.drawImage(ctx.canvas, 0, 0, w2, h2); tgx.globalCompositeOperation = 'source-over';
+    ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalCompositeOperation = 'screen'; ctx.globalAlpha = Math.min(1, I * 1.1); ctx.drawImage(tearC, 0, 0, W, H); ctx.drawImage(tearC, 0, 0, W, H); ctx.restore();
+    // 2. the thin core of light inside it: one long streak, feathered at both ends
+    ctx.save(); ctx.translate(x, y); ctx.rotate(ang); ctx.globalCompositeOperation = 'screen';
+    for (const [sx, sy2, a] of [[L * .46, Hh * (.08 + .1 * op), .85], [L * .6, Hh * (.25 + .2 * op), .3]]) { ctx.save(); ctx.scale(sx / 100, sy2 / 100); const g = ctx.createRadialGradient(0, 0, 0, 0, 0, 100);
+      g.addColorStop(0, `rgba(255,250,232,${a * I})`); g.addColorStop(.45, `rgba(255,228,180,${a * .45 * I})`); g.addColorStop(1, 'rgba(255,210,150,0)'); ctx.fillStyle = g; ctx.fillRect(-100, -100, 200, 200); ctx.restore(); }
+    ctx.restore(); }
   function drawOverlay(ctx, o, t, k) {
     if (k <= .01) return; ctx.save(); ctx.globalAlpha = k;
     if (o.flare > .01 && o.sun) lensFlare(ctx, o.sun[0] * W, o.sun[1] * H, o.flare);
@@ -897,8 +950,10 @@ export async function build(W, H) {
     render(on[0], t); const o0 = overlayInfo(t); blit(ctx, 1); lastSun = o0.sun;
     let o1 = null, k1 = 0; if (on.length > 1) { const i1 = on[1]; render(i1, t); o1 = overlayInfo(t); k1 = ss(T.shots[i1][0], T.shots[on[0]][1], t); blit(ctx, k1); lastSun = o1.sun || lastSun; }
     // the sun's scatter weighted by how much of each shot is on screen (a dissolve to a shot without the sun fades it, never a pop)
-    const inF = o => o && o.sun && Math.abs(o.sun[0] - .5) < .8 && Math.abs(o.sun[1] - .5) < .8, gk = (inF(o0) ? 1 - k1 : 0) + (inF(o1) ? k1 : 0), gs = inF(o1) && (k1 > .5 || !inF(o0)) ? o1.sun : o0.sun;
-    if (gk > .01 && gs) godRays(ctx, gs[0] * W, gs[1] * H, gk * (on[0] === 4 ? .32 * (1 - SK.cover.value) : .42));
+    drawTear(ctx, o0, 1 - k1); if (o1) drawTear(ctx, o1, k1);
+    if (o0.tear && o0.tp) godRays(ctx, o0.tp[0], o0.tp[1], o0.rays * (1 - k1) * 1.1);   // the shafts out of the tear
+    else { const inF = o => o && o.sun && SK.sunHide.value < .5 && Math.abs(o.sun[0] - .5) < .8 && Math.abs(o.sun[1] - .5) < .8, gk = (inF(o0) ? 1 - k1 : 0) + (inF(o1) ? k1 : 0), gs = inF(o1) && (k1 > .5 || !inF(o0)) ? o1.sun : o0.sun;
+      if (gk > .01 && gs) godRays(ctx, gs[0] * W, gs[1] * H, gk * (on[0] === 4 ? .32 : .42)); }
     drawOverlay(ctx, o0, t, 1 - k1); if (o1) drawOverlay(ctx, o1, t, k1);
   }
   // the body check: the joints of the named figures after the last pose (root frame of each figure)
@@ -917,24 +972,24 @@ function skyDome(film, o = {}) {
   const c = Object.assign({ top: col('#05070d', .2), mid: col('#101826', .25), horizon: col('#202838', .35), sunDir: V(0, -1, 0), sunColor: col('#fff1d0', 20), sunGlow: col('#ffcf8a', 1.2), clouds: 0, cloudColor: col('#ffffff', 1), cloudShade: col('#a0a8c0', .6), radius: 1800 }, o);
   const u = { ...film.fogU, top: { value: c.top }, mid: { value: c.mid }, horizon: { value: c.horizon }, sunDir: { value: c.sunDir.clone().normalize() }, sunColor: { value: c.sunColor }, sunGlow: { value: c.sunGlow },
     clouds: { value: c.clouds }, cloudColor: { value: c.cloudColor }, cloudShade: { value: c.cloudShade }, time: { value: 0 }, skyFogMax: { value: film.atmos.max },
-    cover: { value: 0 }, pointDir: { value: V(0, 1, 0) }, pointK: { value: 0 }, gapK: { value: 0 } };
+    cover: { value: 0 }, pointDir: { value: V(0, 1, 0) }, pointK: { value: 0 }, gapK: { value: 0 }, sunHide: { value: 0 }, domeK: { value: 1 } };
   const m = new THREE.ShaderMaterial({
     uniforms: u, side: THREE.BackSide, depthWrite: false,
     vertexShader: `varying vec3 vD; void main(){ vD = normalize((modelMatrix * vec4(position, 0.)).xyz); vec4 p = projectionMatrix * viewMatrix * vec4((modelMatrix * vec4(position,1.)).xyz, 1.); gl_Position = p.xyww; }`,
-    fragmentShader: `varying vec3 vD; uniform vec3 top, mid, horizon, sunDir, sunColor, sunGlow, cloudColor, cloudShade, pointDir; uniform float clouds, time, skyFogMax, cover, pointK, gapK;
+    fragmentShader: `varying vec3 vD; uniform vec3 top, mid, horizon, sunDir, sunColor, sunGlow, cloudColor, cloudShade, pointDir; uniform float clouds, time, skyFogMax, cover, pointK, gapK, sunHide, domeK;
       ${GLSL.hash}
       ${FOG_GLSL}
       void main(){ vec3 d = normalize(vD); float y = d.y;
         vec3 c = mix(horizon, mid, smoothstep(-.02, .22, y)); c = mix(c, top, smoothstep(.2, .9, y));
         c = mix(c, mix(cloudShade, cloudColor, .45) * .9, cover * .55 * smoothstep(0., .3, y));   // overcast: the blue goes out of the sky
-        float s = max(dot(d, sunDir), 0.); c += (sunGlow * (pow(s, 8.) * .45 + pow(s, 30.) * .45 + pow(s, 400.) * 1.1) * (1. - cover * .7) + sunColor * smoothstep(.9999, .99995, s) * (1. - smoothstep(.2, .6, cover)));
+        float s = max(dot(d, sunDir), 0.); c += (sunGlow * (pow(s, 8.) * .45 + pow(s, 30.) * .45 + pow(s, 400.) * 1.1) * (1. - cover * .7) * (1. - sunHide) + sunColor * smoothstep(.9999, .99995, s) * (1. - smoothstep(.2, .6, cover)) * (1. - sunHide));
         if (y > 0.){ vec2 p = d.xz / (y + .12) * (1.6 + cover * 1.2) + vec2(time * .02, time * .007);
           float n = fbm(p * 1.3) * .7 + fbm(p * 3.7) * .3; float cv = clouds + cover;
           float m = smoothstep(.58 - min(cv, .62) * .3, .82 - min(cv, .62) * .22, n) * smoothstep(0., .2, y + cover * .12);
           float gap = smoothstep(.93, .985, dot(d, pointDir)); m *= 1. - gap * gapK;
           vec3 cc = mix(cloudShade * (.75 + .25 * n), cloudColor, smoothstep(.45, .8, n + (fbm(p * 7.3) - .5) * .18)); cc += sunGlow * pow(s, 6.) * .6 * (1. - cover * .6);
           cc *= 1. - cover * .25; cc += vec3(1., .85, .6) * gap * gapK * .35 * smoothstep(.5, .8, n);
-          c = mix(c, cc, m * (.85 + cover * .15)); }
+          c = mix(c, cc, m * (.85 + cover * .15) * domeK); }
         float pd = max(dot(d, pointDir), 0.); c += pointK * (vec3(1., .95, .84) * smoothstep(.999955, .99999, pd) * 30. + vec3(1., .86, .62) * pow(pd, 2500.) * 2.4 + vec3(1., .8, .55) * pow(pd, 120.) * .3);
         float T = fogT(cameraPosition, d, skyFogMax); c = c * T + fogCol(d) * (1. - T);
         gl_FragColor = vec4(c, 0.); }`,

@@ -39,9 +39,9 @@ export function beats(B) {
     crane: [q + 3.4, c + 1.2],      // crane up and tilt toward the horizon (eased)
     gold: [q + 4.2, c + 1.6],       // the gold runs out from the middle of the land to the horizon
     approach: [c - .6, e - .15],    // one long glide down to the window
-    dusk: [d - .5, e - 3.0],        // the sun goes down: the lamps can read
-    lamps: [d + .3, d + 6.5],       // the windows light one after another
-    target: d + 2.2,                // the window we go to lights early
+    dusk: [c - .6, d + 5.0],        // the sun goes down from N29c on: the lamps can read (r4)
+    lamps: [c + .4, d + 5.5],       // r4: village after village across the land (N29c), the lamp village last (into N29d)
+    target: d + 2.6,                // the window we go to lights on "사람의 삶에"
     glow: [e - 1.3, e + .2] };      // that window's light swells (the light-to-light dissolve into the room)
 }
 
@@ -168,7 +168,7 @@ export async function build(W, H, B) {
   // ---------------------------------------------------------------- the lake (r3: natural water, not a flat blue): dark blue-green body with
   // depth (lighter, greener and browner in the shallows by the shore), the sky in it by Fresnel — the lapis only from the reflected sky
   // above, the gold of the horizon at grazing angles — two scales of small waves, and sun glints in gold
-  const WU = { uSun: { value: SUN0.clone() }, uSkyH: { value: col('#ffd286', 1.1) }, uSkyT: { value: col('#2848a0', .8) }, uDeep: { value: col('#0b2630', 1) }, uShal: { value: col('#4a5a3c', 1) }, uGlit: { value: 1 } };
+  const WU = { uSun: { value: SUN0.clone() }, uSkyH: { value: col('#ffd286', 1.1) }, uSkyT: { value: col('#2848a0', .8) }, uDeep: { value: col('#0f3b3a', 1) }, uShal: { value: col('#4e6040', 1) }, uGlit: { value: 1 } };
   const waterM = new THREE.MeshStandardMaterial({ color: '#203050', roughness: 1 });
   waterM.onBeforeCompile = sh => { Object.assign(sh.uniforms, WU, GU);
     sh.vertexShader = sh.vertexShader.replace('#include <common>', '#include <common>\nvarying vec3 vWP;').replace('#include <project_vertex>', '#include <project_vertex>\nvWP = (modelMatrix * vec4(transformed, 1.)).xyz;');
@@ -176,12 +176,12 @@ export async function build(W, H, B) {
       .replace('#include <opaque_fragment>', `{ vec3 Vd = normalize(cameraPosition - vWP); float dist = length(cameraPosition - vWP);
           vec2 w = (vec2(fb(vWP.xz * .03), fb(vWP.xz * .03 + 7.)) - .5) * .07 + (vec2(vn(vWP.xz * .35), vn(vWP.xz * .35 + 3.)) - .5) * .05 * exp(-dist / 900.) + (vec2(vn(vWP.xz * 1.7), vn(vWP.xz * 1.7 + 5.)) - .5) * .03 * exp(-dist / 250.);
           vec3 N = normalize(vec3(w.x, 1., w.y)); vec3 Rr = reflect(-Vd, N); float fr = .02 + .98 * pow(1. - clamp(dot(N, Vd), 0., 1.), 5.);
-          vec3 skyc = mix(uSkyH, uSkyT, smoothstep(.0, .35, Rr.y));
+          vec3 skyc = mix(uSkyH * .85, uSkyT, smoothstep(.4, .95, Rr.y));
           float sh = smoothstep(.93, 1.0, lakeD(vWP.xz));                                                      // the shallows by the shore
-          vec3 body = mix(uDeep * (.85 + .3 * fb(vWP.xz * .008)), uShal, sh * .7);
+          vec3 body = mix(uDeep * (1.5 + .45 * fb(vWP.xz * .008)), uShal, sh * .7) + uSkyH * .02;
           float s = max(dot(Rr, uSun), 0.);
-          vec3 c = mix(body, skyc, clamp(fr, 0., 1.)) + uGoldCol * (pow(s, 300.) * 6. + pow(s, 40.) * .5) * uGlit;
-          float gd = length(vWP.xz - uGC) + (fb(vWP.xz * .006) - .5) * 90.; float wF = 10. + uGR * .008, gi = smoothstep(uGR + wF, uGR - wF, gd) * step(1., uGR); c *= mix(vec3(1.), mix(vec3(.82, .84, .92), vec3(1.08, 1.06, 1.1), gi), uAct); c += uGoldCol * exp(-pow((gd - uGR) / wF, 2.)) * step(1., uGR) * uGild * .8 * uAct;
+          vec3 c = mix(body, skyc, clamp(pow(fr, 1.7) * .95, 0., 1.)) + uGoldCol * (pow(s, 300.) * 6. + pow(s, 40.) * .5) * uGlit;
+          float gd = length(vWP.xz - uGC) + (fb(vWP.xz * .006) - .5) * 90.; float wF = 10. + uGR * .008, gi = smoothstep(uGR + wF, uGR - wF, gd) * step(1., uGR); c *= mix(vec3(1.), mix(vec3(.86, .88, .86), vec3(1.1, 1.06, .98), gi), uAct); c += uGoldCol * exp(-pow((gd - uGR) / wF, 2.)) * step(1., uGR) * uGild * .8 * uAct;
           outgoingLight = c; }
         #include <opaque_fragment>`); };
   waterM.customProgramCacheKey = () => 'gw-water';
@@ -318,11 +318,25 @@ export async function build(W, H, B) {
   const TW = TARGET.wins[0]; TW.target = true;
   const TWP = new THREE.Vector3(); const targetWorld = () => { TARGET.g.updateMatrixWorld(); return TW.m.getWorldPosition(TWP.set(0, 0, 0)); };
   // window lamps: the order they light (the lamp village one by one, the target early; far villages as small points)
-  { const lv = WINS.filter(w => w.v === 1 && !w.target), r = rng(55); lv.forEach((w, i) => { w.t0 = T.lamps[0] + (T.lamps[1] - T.lamps[0]) * ((i + r() * .8) / lv.length); });
-    TW.t0 = T.target; WINS.filter(w => w.v !== 1).forEach(w => { w.t0 = T.lamps[0] + 1 + r() * (T.lamps[1] - T.lamps[0]); }); }
+  // r4 (N29c "하나님이 왕으로 다스리시는 것"): the light reaches village after village — far shore first, round the lake, the near
+  // villages, the lamp village last — each village a quick ripple of its windows (0.15–1.1 s apart), every house in it
+  const ORDER = [3, 2, 4, 0, 5, 1], VT = {}; { const c = B.N29c; ORDER.forEach((vi, k) => { VT[vi] = c + .4 + k * (vi === 1 ? 1.0 : .95); }); }
+  { const r = rng(55); for (const w of WINS) { if (w.target) continue; const n = WINS.filter(q => q.v === w.v).indexOf(w); w.t0 = VT[w.v] + (w.v === 1 ? n * .2 : n * .09) + r() * .5; }
+    TW.t0 = T.target; }
   // in-scatter halos for the nearest windows (cine.js has 24 lamps)
   const lampWins = [TW, ...WINS.filter(w => w.v === 1 && !w.target).slice(0, 18)];
   lampWins.forEach(w => { w.lamp = film.lamp(V(), '#ffb060', { power: 0, size: .9, fog: 1 }); });
+  // a soft halo over each other village as its lamps come on (seen from the air the windows themselves are a few pixels)
+  const GLOWS = (() => { const hs = HOUSES.filter(o => o.wins && o.wins.length), n = hs.length, pos = new Float32Array(n * 3), aK = new Float32Array(n), aS = new Float32Array(n);
+    hs.forEach((o, i) => { pos[i * 3] = o.x; pos[i * 3 + 1] = o.y0 + 2.2; pos[i * 3 + 2] = o.z; aS[i] = .7 + (i * .37 % 1) * .6; });
+    const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(pos, 3)); g.setAttribute('aK', new THREE.BufferAttribute(aK, 1)); g.setAttribute('aS', new THREE.BufferAttribute(aS, 1));
+    const u = { uPx: { value: H / 2 / Math.tan(FOV / 2 * D2R) }, uLift: { value: 1 } };
+    const m = new THREE.ShaderMaterial({ uniforms: u, transparent: true, depthWrite: false, depthTest: true, blending: THREE.AdditiveBlending, fog: false,
+      vertexShader: `attribute float aK, aS; uniform float uPx; varying float vK, vNear; void main(){ vec4 mv = modelViewMatrix * vec4(position, 1.); gl_Position = projectionMatrix * mv;
+        float d = -mv.z; gl_PointSize = clamp(uPx * 15. * aS / d, 3., 44.); vNear = smoothstep(90., 220., d); vK = aK; }`,
+      fragmentShader: `varying float vK, vNear; void main(){ vec2 q = gl_PointCoord - .5; float r = length(q) * 2.; float a = exp(-r * r * 4.) * vK * vNear; if (a < .002) discard; gl_FragColor = vec4(vec3(3.4, 2.0, .8) * a, a); }` });
+    const pts = new THREE.Points(g, m); pts.frustumCulled = false; pts.renderOrder = 5; S.add(pts); return { pts, hs, aK, g }; })();
+  const HALOS = VILLS.map(([vx, vz, rad], vi) => vi === 1 ? null : { vi, L: film.lamp(V(vx, hgt(vx, vz) + 6, vz), '#ffb468', { power: 0, size: rad * .55, fog: 1 }) }).filter(Boolean);
 
   // ---------------------------------------------------------------- olive trees (clumps of grey-green), a few palms; kept off fields, roads, water
   const leafM = litPatch(new THREE.MeshStandardMaterial({ color: '#66704c', roughness: .9 }), 'leaf'), trunkM = litPatch(new THREE.MeshStandardMaterial({ color: '#4a3a2a', roughness: .95 }), 'trunk');
@@ -369,7 +383,7 @@ export async function build(W, H, B) {
 
   // ---------------------------------------------------------------- the camera
   const CAM0 = { pos: V(-20, 95, 60), yaw: 3.5 * D2R, pitch: -12.5 * D2R };    // the develop camera = the miniature's view
-  const CAM1 = { pos: V(-20, 250, 150), yaw: 2.0 * D2R, pitch: -5.2 * D2R };     // the top of the crane
+  const CAM1 = { pos: V(-20, 250, 150), yaw: 2.0 * D2R, pitch: -12.5 * D2R };   // r4: the crane tops out looking over the lake and every village round it     // the top of the crane
   const fwd = (yaw, pitch) => V(Math.sin(yaw) * Math.cos(pitch), Math.sin(pitch), -Math.cos(yaw) * Math.cos(pitch));
   function setCam(pos, look) { cam.position.copy(pos); cam.up.set(0, 1, 0); cam.lookAt(look); cam.updateMatrixWorld(); }
   function camAt(t) {
@@ -500,9 +514,13 @@ export async function build(W, H, B) {
     Lk.exposure = look0.exposure * lerp(1, 1.62, dk); Lk.saturation = look0.saturation * lerp(1, 1.06, dk);
     // the windows
     for (const w of WINS) { const k = ss(w.t0, w.t0 + .7, t) * (1 + .05 * Math.sin(t * 5.3 + w.t0 * 7)); w.k = k;
-      const glow = w.target ? 1 + 2.2 * ss(T.glow[0], T.glow[1], t) : 1; w.mat.color.setRGB(.02 + 3.4 * k * glow, .012 + 1.9 * k * glow, .004 + .62 * k * glow);
+      const glow = w.target ? 1 + 2.2 * ss(T.glow[0], T.glow[1], t) : (w.v === 1 ? 1 : 3.2); w.mat.color.setRGB(.02 + 3.4 * k * glow, .012 + 1.9 * k * glow, .004 + .62 * k * glow);
       if (w.target) { SPILL.intensity = k * glow * 3.5; DOORSLIT.material.color.setRGB(1.1 * k, .62 * k, .22 * k); }
       if (w.lamp) { w.m.getWorldPosition(w.lamp.pos); w.lamp.pos.add(V(0, 0, .5).applyQuaternion(w.m.getWorldQuaternion(qq))); w.lamp.power = k * (w.target ? 2.4 * glow : 1.6); } }
+    for (const h of HALOS) { let sk = 0, n = 0; for (const w of WINS) if (w.v === h.vi) { sk += w.k; n++; } h.L.power = (n ? sk / n : 0) * 140; }
+    { const ts = lerp(.62, 1, eio((t - T.lift[0]) / (T.lift[1] - T.lift[0]))), P2 = GLOWS.g.attributes.position.array;
+      GLOWS.hs.forEach((o, i) => { let mk = 0; for (const w of o.wins) mk = Math.max(mk, w.k); GLOWS.aK[i] = mk; P2[i * 3 + 1] = (o.y0 > 0 ? o.y0 * ts : o.y0) + 2.2; });
+      GLOWS.g.attributes.aK.needsUpdate = true; GLOWS.g.attributes.position.needsUpdate = true; }
     // camera
     const c = camAt(t); setCam(c.pos, c.look);
     const fd = c.dist != null ? lerp(c.pos.distanceTo(c.look), c.dist, ss(T.approach[0] + 6, T.approach[1] - 4, t)) : 650;

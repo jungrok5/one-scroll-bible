@@ -19,7 +19,7 @@
    밤 지구의 금빛 불빛(6a 끝) → 채색 필사본 한 면(illum-world.js: 촛불 아래 양피지, 청금석 테두리, 금박 하늘의 작은 세상, 금박이
    테두리를 따라 입혀짐, 천천히 밀어 들어감) → Q16 모든 금박에 빛이 한 번 스치고 그 작은 세상이 자기가 그려진 3D 세상으로 현상
    (gold-world3d.js: 같은 카메라·같은 지형이라 어긋나지 않음), 틀이 화면 밖으로 열리며 땅이 솟고 크레인 업, 금빛이 지평선까지 →
-   N29c 1부의 호숫가 마을(galilee3d.js 실제 화면)이 겹쳐 떠오름 → N29d 해가 지며 한 마을의 창마다 등불, 카메라가 한 집의 창으로
+   N29c (4차: 1부 마을 겹침은 뺌 — 관리자 "다른 마을 씬으로 갔다가 돌아오는 이유는?") 같은 금빛 세상에서 마을마다 차례로 창에 등불이 켜짐(왕의 다스림이 집집마다 닿음) → N29d 해가 지며 등불 마을로, 카메라가 한 집의 창으로
    한 번에 내려가 다가감 → 그 창의 빛에서 빛으로 처음의 기도 방(prayer-room.js, 1부와 같은 구도) → N30 창빛이 바닥을 건너 무릎 꿇은
    사람에게 닿음 → Q17 고개를 숙이고 4초 돌리 인 → E1 창빛이 등잔 하나로 줄고(같은 방, 저녁) → 등잔 아래 펼친 두루마리
    (lamp-scroll-end.js), 끝 화면 글자(E1)는 그 위 어둠에 — 그대로 머묾(L-cut 음악 꼬리 자리).
@@ -29,17 +29,16 @@
 const W = Pilot.W, H = Pilot.H, V = Pilot.ori === 'v', { ss, win, clamp, eo, lerp } = Pilot;
 const T0 = 700.3;
 let T1 = 765.0;
-let IW = null, GW = null, GAL = null, BG = null, ROOM = null, RT = null, B = null, TEXT = [], aux = null, auxx = null, aux2 = null, aux2x = null;
+let IW = null, GW = null, ROOM = null, RT = null, B = null, TEXT = [], aux = null, auxx = null, aux2 = null, aux2x = null;
 // the scene table (film seconds): [a, b, name] — overlaps are dissolves
 const SCENES = [
   [700.3, 717.7, 'illum'],   // N29–Q16: the page in candlelight, the gold laid round the frame, the glint; the develop into the world (the 3D shows through the arch)
-  [717.7, 737.95, 'world'],  // Q16–N29d: crane up, gold to the horizon; part 1's villages superimposed (N29c); the lamps and the glide down to one window
+  [717.7, 737.95, 'world'],  // Q16–N29d: crane up, gold to the horizon; village after village lights (N29c); the glide down to one lit window
   [737.2, 760.6, 'room'],    // N30–Q17–E1: light to light into the prayer room (same composition as part 1); the light reaches him; he bows; dolly in; evening, the lamp
   [759.6, 765.0, 'end'],     // E1: the lamp and the open scroll under it — the end card's words above
 ];
 function band(ctx, k = 1) { if (k <= 0) return; const y0 = Film.SAFE() - (V ? 190 : 80), g = ctx.createLinearGradient(0, y0, 0, H); g.addColorStop(0, 'rgba(10,8,10,0)'); g.addColorStop(.35, `rgba(10,8,10,${.5 * k})`); g.addColorStop(.7, `rgba(10,8,10,${.62 * k})`); g.addColorStop(1, `rgba(10,8,10,${.66 * k})`); ctx.fillStyle = g; ctx.fillRect(0, y0, W, H - y0); }
 const IDS = ['N29', 'L10', 'Q16', 'N29c', 'N29d', 'N30', 'L11', 'Q17', 'E1'];
-const IDS1 = ['N01', 'N03', 'N04', 'L1', 'Q1', 'N05', 'N07', 'T1', 'N09', 'N09b', 'N09c', 'N09d', 'N06', 'L2', 'Q2', 'N06b', 'N08', 'L3', 'Q3', 'C2a'];   // part 1's times (galilee3d)
 function buildText() {
   const L = Film.script.lines, spoken = l => (l.kind === 'narr' || l.kind === 'quote') && l.voice !== null;
   const V2 = L.filter(spoken).sort((a, b) => a.at - b.at), next = l => V2.find(x => x.at > l.at + .01);
@@ -65,14 +64,7 @@ function endCard(ctx, t, a, b) {
   const yl = yb - size * .35, lw = (V ? 360 : 440) * eo(clamp((t - a - 2.4) / 1.0)); ctx.fillStyle = `rgba(244,217,147,${k * .85})`; ctx.fillRect(W / 2 - lw / 2, yl, lw, 2); }
 function world(ctx, t) {
   GW.draw(ctx, t);
-  // N29c (round 2, a clear overlay): part 1's lakeside villages lighting up (galilee3d.js, its own frames from film 104 → 109, after
-  // its walkers have left the frame) laid over the golden land in gold — a warm grade so its dusk reads as the same gold light
-  const sk = ss(B.N29c + .2, B.N29c + 1.4, t) * (1 - ss(B.N29d - 1.2, B.N29d + .4, t));
-  if (sk > 0 && GAL) { const tg = 104.0 + (t - B.N29c) * .9; aux2x.setTransform(1, 0, 0, 1, 0, 0); aux2x.globalAlpha = 1; aux2x.globalCompositeOperation = 'source-over'; aux2x.filter = 'none';
-    aux2x.save(); GAL.draw(aux2x, tg, BG); aux2x.restore();
-    const z = 1.03 + .04 * clamp((t - B.N29c) / 6), tf = c => { c.translate(W / 2, H * .5); c.scale(z, z); c.translate(-W / 2, -H * .5); };
-    ctx.save(); tf(ctx); ctx.globalAlpha = .58 * sk; ctx.filter = 'sepia(.45) saturate(1.35) brightness(1.12) contrast(1.06)'; ctx.drawImage(aux2, 0, 0); ctx.restore();
-    ctx.save(); tf(ctx); ctx.globalCompositeOperation = 'screen'; ctx.globalAlpha = .26 * sk; ctx.filter = 'brightness(1.3) contrast(1.6)'; ctx.drawImage(aux2, 0, 0); ctx.restore(); }
+  // N29c (round 4): no other place laid over it — the one gold world, its villages lighting one after another (gold-world3d.js)
   // the target window's light swells into the cut (light to light) — kept tight round the window so its shape carries into the room's
   const gk = ss(GW.T.glow[0], GW.T.e + .4, t); if (gk > 0) { const [x, y] = GW.windowScreen(t); ctx.save(); ctx.globalCompositeOperation = 'screen';
     ctx.translate(x, y); ctx.scale(.4, 1); const R = lerp(140, 520, gk), g = ctx.createRadialGradient(0, 0, 0, 0, 0, R); g.addColorStop(0, `rgba(255,236,196,${.85 * gk})`); g.addColorStop(.4, `rgba(255,214,150,${.4 * gk})`); g.addColorStop(1, 'rgba(255,200,130,0)'); ctx.fillStyle = g; ctx.fillRect(-R, -R, 2 * R, 2 * R); ctx.restore(); }
@@ -104,11 +96,9 @@ function draw(ctx, u) {
 Pilot.run({ W, H, dur: +(T1 - T0).toFixed(2), fonts: ["600 40px 'Noto Serif KR'", "400 40px 'Noto Serif KR'", "400 20px 'Noto Sans KR'"],
   init: async () => { await Film.load(); T1 = Film.script.dur; buildText();
     B = Object.fromEntries(IDS.map(id => [id, Film.lines[id].at]));
-    BG = Object.fromEntries(IDS1.map(id => [id, Film.lines[id].at])); BG.END = BG.C2a;
     aux = Pilot.canvas(W, H); auxx = aux.getContext('2d'); aux2 = Pilot.canvas(W, H); aux2x = aux2.getContext('2d');
     GW = await (await import('./gold-world3d.js')).build(W, H, B); window.__GW = GW;
     IW = (await import('./illum-world.js')).buildIllum(W, H, GW.paint, B); window.__IW = IW;
-    try { GAL = await (await import('./galilee3d.js')).build(W, H); } catch (e) { console.warn('galilee not built', e); }
     try { const R = await import('./prayer-room.js'); ROOM = await R.build(W, H, { people: 1, lamp: true });
       RT = { start: B.N30, end: T1, cross: [B.N30 - 1.6, B.N30 + 8.6], reach: [B.Q17 - 2.8, B.Q17 + .6], widen: [B.Q17 + 3.0, B.Q17 + 16.0], pieces: [], join: [0, 0],
         bow: [B.Q17 + .2, B.Q17 + 2.4], lift: [1e9, 1e9 + 1], dolly: [1e9, 1e9 + 1], dollyIn: [B.Q17 + .1, B.Q17 + 4.1], zIn: 1.12, clouds: [B.N30 - 2.0, B.E1 + .5], dusk: [B.E1, B.E1 + 1.5], lampOn: B.E1 + .25 };

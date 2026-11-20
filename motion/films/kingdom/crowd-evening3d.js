@@ -476,7 +476,7 @@ export async function build(W, H, Bt) {
     else { let k = 1; while (k < nT && t >= taus[k]) k++;   // between taus[k-1] and taus[k]: order[k] carries it across his front
       pos = bez(midW(Pk(k - 1), Pk(k), cen), lapW(Pk(k), .1), midW(Pk(k), Pk(k + 1), cen), smoother((t - taus[k - 1]) / (taus[k] - taus[k - 1]))); }
     for (let k = 0; k <= nT; k++) {
-      const eIn = k === 0 ? 1 : ss(taus[k - 1] - .95, taus[k - 1] - .08, t), eOut = k < nT ? ss(taus[k] + .12, taus[k] + 1.3, t) : 0, w = eIn * (1 - eOut);
+      const eIn = k === 0 ? 1 : ss(taus[k - 1] - .95, taus[k - 1] - .08, t), eOut = k < nT ? ss(taus[k] + .1, taus[k] + .6, t) : 0,   /* round 5: the hands back to the knees in 0.5 s, eased (reviewer: a released arm hung mid-air) */ w = eIn * (1 - eOut);
       if (w > 0) hold.push({ p: Pk(k), w, last: k === nT }); }
     // the last holder keeps it; when he rises it rises with him, carried before his waist (a root-frame point, both hands on the rim)
     const last = Pk(nT), kr = clamp((t - last.userData.tRise) / 1.25);
@@ -484,9 +484,12 @@ export async function build(W, H, Bt) {
     return { pos, hold };
   }
   // the two grips on the rim, on the holder's side, as root-frame targets for his left and right hands
-  function rimGrips(p, pos) {
+  // spread: the grips' angle either side of the holder's line to the basket. Round 5 (body review: "no hands visible on the rim,
+  // the basket floats"): alone with the basket he holds it by its two SIDES (1.3 rad — the hands show left and right of it);
+  // while the other pair of hands is on it they slide round toward his side (0.75 rad) so the four hands never meet
+  function rimGrips(p, pos, spread = .75) {
     const d = V(p.position.x - pos.x, 0, p.position.z - pos.z); if (d.lengthSq() < 1e-6) d.set(0, 0, 1); d.normalize();
-    const perp = V(-d.z, 0, d.x), c = pos.clone().add(V(0, RIMY, 0)), A0 = c.clone().addScaledVector(d, RIMR * Math.cos(.75)).addScaledVector(perp, RIMR * Math.sin(.75)), B0 = c.clone().addScaledVector(d, RIMR * Math.cos(.75)).addScaledVector(perp, -RIMR * Math.sin(.75));
+    const perp = V(-d.z, 0, d.x), c = pos.clone().add(V(0, RIMY, 0)), A0 = c.clone().addScaledVector(d, RIMR * Math.cos(spread)).addScaledVector(perp, RIMR * Math.sin(spread)), B0 = c.clone().addScaledVector(d, RIMR * Math.cos(spread)).addScaledVector(perp, -RIMR * Math.sin(spread));
     p.updateMatrix(); const inv = p.matrix.clone().invert(), a = A0.applyMatrix4(inv), b = B0.applyMatrix4(inv);
     return [a, b];   // perp is the left of the line holder → basket, so A0 is always the left hand's grip (r2 sorted by x and the hands swapped grips when the basket was beside him)
   }
@@ -504,7 +507,7 @@ export async function build(W, H, Bt) {
         const nw = 1 - ss(1.1, 2.2, pos.distanceTo(p.position)), yawB = clamp(yawTo(p, pos.x, pos.z), -.9, .9);
         const e = U.eat ? Math.max(0, Math.sin(t * .8 + U.eph)) : 0, ek = e * e * (3 - 2 * e) * (1 - nw);   // bread to the mouth, not while the basket comes
         const base = [rest[0], lv(rest[1], V(.05 * s, .74 * s, -.15 * s), ek * .9)];
-        const g = h ? rimGrips(p, pos) : null, hands = g ? [lv(base[0], g[0], w), lv(base[1], g[1], w)] : base;
+        const other = Math.max(0, ...hold.filter(q => q.p !== p).map(q => smoother(q.w))), g = h ? rimGrips(p, pos, lerp(1.3, .75, other)) : null, hands = g ? [lv(base[0], g[0], w), lv(base[1], g[1], w)] : base;
         const head = [lerp(-.12 + .04 * Math.sin(t * .4 + U.ph * 9), -.3, w), lerp(yawB * .5 * nw + .06 * Math.sin(t * .19 + U.ph * 4), yawB * .55, w)];
         sitPose(p, t, { hands, head, twist: lerp(.03 * Math.sin(t * .23 + U.ph * 5), yawB * .62, w), lean: lerp(-.07 - .04 * Math.sin(t * .3 + U.ph * 7), -.19, w) });
         if (handErrOn && h && h.w > .985) for (let i = 0; i < 2; i++) { const e = P.handAt(p, i).applyMatrix4(p.matrix).distanceTo(g[i].clone().applyMatrix4(p.matrix)); handErr.push(e); if (e > .03) handErrWho.push([+t.toFixed(2), chains.indexOf(ch), ch.people.indexOf(p), i, +e.toFixed(3), k, h.last ? 'last' : '']); } } }

@@ -55,7 +55,7 @@ const fbm2 = (x, z) => .5 * noise1(x * .0021 + noise1(z * .0013, 3) * 2, 1) + .3
 function hRaw(x, z) {
   const d = lakeD(x, z);
   let y = lerp(-14, 3.5, ss(.86, 1.06, d));                                       // the lake bed rises steeply to the shore
-  y += 34 * Math.pow(clamp(d - 1.04, 0, 2.4), 1.35);                              // the land rises away from the water
+  y += 16 * Math.pow(clamp(d - 1.04, 0, 2.6), 1.2);                               // the land rises gently away from the water (r3: was 34·x^1.35 — too steep)
   y += 200 * ss(-1300, -2100, z) * (.6 + .4 * noise1(x * .0016, 5));             // the far hills
   y += 120 * ss(-820, -1500, x) + 110 * ss(860, 1500, x);                         // ridges left and right
   y += 9 * fbm2(x, z) * ss(1.02, 1.3, d);                                          // rolling ground
@@ -63,7 +63,7 @@ function hRaw(x, z) {
   return y;
 }
 function hgt(x, z) { let y = hRaw(x, z);
-  for (const [vx, vz, r] of VILLS) { const k = ss(r * 1.5, r * .7, Math.hypot(x - vx, z - vz)); if (k > 0) y = lerp(y, hRaw(vx, vz), k * .85); }   // each village on its own gentle shelf
+  for (const [vx, vz, r] of VILLS) { const k = ss(r * (vx === 52 ? 2.6 : 1.5), r * .7, Math.hypot(x - vx, z - vz)); if (k > 0) y = lerp(y, hRaw(vx, vz), k * .85); }   // each village on its own gentle shelf
   return y; }
 // the fields: a near band between the camera and the lake, and one on the far shore (no hash: JS and GLSL agree)
 const VEX_GLSL = VILLS.map(([x, z, r]) => `smoothstep(${(r * 1.1).toFixed(1)}, ${(r * 1.45).toFixed(1)}, length(p - vec2(${x}., ${z}.)))`).join(' * ');
@@ -165,16 +165,22 @@ export async function build(W, H, B) {
   ground.userData.ill = 'ground';
   setLift(0);
 
-  // ---------------------------------------------------------------- the lake: a still, warm mirror of the sky with the sun's glitter
-  const WU = { uSun: { value: SUN0.clone() }, uSkyH: { value: col('#7090d8', .75) }, uSkyT: { value: col('#8a9cc0', .55) }, uDeep: { value: col('#1c3c9c', .72) }, uGlit: { value: 1 } };
+  // ---------------------------------------------------------------- the lake (r3: natural water, not a flat blue): dark blue-green body with
+  // depth (lighter, greener and browner in the shallows by the shore), the sky in it by Fresnel — the lapis only from the reflected sky
+  // above, the gold of the horizon at grazing angles — two scales of small waves, and sun glints in gold
+  const WU = { uSun: { value: SUN0.clone() }, uSkyH: { value: col('#ffd286', 1.1) }, uSkyT: { value: col('#2848a0', .8) }, uDeep: { value: col('#0b2630', 1) }, uShal: { value: col('#4a5a3c', 1) }, uGlit: { value: 1 } };
   const waterM = new THREE.MeshStandardMaterial({ color: '#203050', roughness: 1 });
   waterM.onBeforeCompile = sh => { Object.assign(sh.uniforms, WU, GU);
     sh.vertexShader = sh.vertexShader.replace('#include <common>', '#include <common>\nvarying vec3 vWP;').replace('#include <project_vertex>', '#include <project_vertex>\nvWP = (modelMatrix * vec4(transformed, 1.)).xyz;');
-    sh.fragmentShader = sh.fragmentShader.replace('#include <common>', '#include <common>\nvarying vec3 vWP; uniform vec3 uSun, uSkyH, uSkyT, uDeep; uniform float uGlit;\n' + hashGLSL + GILD_DECL)
-      .replace('#include <opaque_fragment>', `{ vec3 Vd = normalize(cameraPosition - vWP); vec2 w = (vec2(fb(vWP.xz * .045 + vec2(0., 0.)), fb(vWP.xz * .045 + 7.)) - .5) * .09 + (vec2(vn(vWP.xz * .5), vn(vWP.xz * .5 + 3.)) - .5) * .03;
-          vec3 N = normalize(vec3(w.x, 1., w.y)); vec3 Rr = reflect(-Vd, N); float fr = .03 + .97 * pow(1. - clamp(dot(N, Vd), 0., 1.), 5.);
-          vec3 skyc = mix(uSkyH, uSkyT, smoothstep(0., .5, Rr.y)); float s = max(dot(Rr, uSun), 0.);
-          vec3 c = mix(uDeep, skyc * .62, clamp(fr * .4 + .04, 0., 1.)) + uGoldCol * (pow(s, 120.) * 3. + pow(s, 14.) * .3) * uGlit;
+    sh.fragmentShader = sh.fragmentShader.replace('#include <common>', '#include <common>\nvarying vec3 vWP; uniform vec3 uSun, uSkyH, uSkyT, uDeep, uShal; uniform float uGlit;\n' + hashGLSL + GILD_DECL + LAKE_GLSL)
+      .replace('#include <opaque_fragment>', `{ vec3 Vd = normalize(cameraPosition - vWP); float dist = length(cameraPosition - vWP);
+          vec2 w = (vec2(fb(vWP.xz * .03), fb(vWP.xz * .03 + 7.)) - .5) * .07 + (vec2(vn(vWP.xz * .35), vn(vWP.xz * .35 + 3.)) - .5) * .05 * exp(-dist / 900.) + (vec2(vn(vWP.xz * 1.7), vn(vWP.xz * 1.7 + 5.)) - .5) * .03 * exp(-dist / 250.);
+          vec3 N = normalize(vec3(w.x, 1., w.y)); vec3 Rr = reflect(-Vd, N); float fr = .02 + .98 * pow(1. - clamp(dot(N, Vd), 0., 1.), 5.);
+          vec3 skyc = mix(uSkyH, uSkyT, smoothstep(.0, .35, Rr.y));
+          float sh = smoothstep(.93, 1.0, lakeD(vWP.xz));                                                      // the shallows by the shore
+          vec3 body = mix(uDeep * (.85 + .3 * fb(vWP.xz * .008)), uShal, sh * .7);
+          float s = max(dot(Rr, uSun), 0.);
+          vec3 c = mix(body, skyc, clamp(fr, 0., 1.)) + uGoldCol * (pow(s, 300.) * 6. + pow(s, 40.) * .5) * uGlit;
           float gd = length(vWP.xz - uGC) + (fb(vWP.xz * .006) - .5) * 90.; float wF = 10. + uGR * .008, gi = smoothstep(uGR + wF, uGR - wF, gd) * step(1., uGR); c *= mix(vec3(1.), mix(vec3(.82, .84, .92), vec3(1.08, 1.06, 1.1), gi), uAct); c += uGoldCol * exp(-pow((gd - uGR) / wF, 2.)) * step(1., uGR) * uGild * .8 * uAct;
           outgoingLight = c; }
         #include <opaque_fragment>`); };
@@ -241,15 +247,20 @@ export async function build(W, H, B) {
   const clayM = litPatch(new THREE.MeshStandardMaterial({ color: '#9a5634', roughness: .85 }), 'clay');
   const herbM = litPatch(new THREE.MeshStandardMaterial({ color: '#4e6a34', roughness: .9 }), 'herb'), figM = litPatch(new THREE.MeshStandardMaterial({ color: '#3e5a2a', roughness: .85 }), 'fig');
   const doorM = litPatch(new THREE.MeshStandardMaterial({ color: '#4a3220', roughness: .8 }), 'door');
-  const winTexT = (() => { const c = document.createElement('canvas'); c.width = 96; c.height = 200; const x = c.getContext('2d');
-    const g = x.createRadialGradient(48, 176, 4, 48, 150, 190); g.addColorStop(0, '#fff4d0'); g.addColorStop(.16, '#ffcc7a'); g.addColorStop(.5, '#c06a30'); g.addColorStop(1, '#3a1a0c'); x.fillStyle = g; x.fillRect(0, 0, 96, 200);
-    x.fillStyle = 'rgba(60,26,10,.5)'; x.fillRect(58, 30, 26, 120);
-    x.fillStyle = 'rgba(70,34,14,.6)'; x.fillRect(10, 70, 30, 6);
-    x.fillStyle = '#4a2a16'; x.beginPath(); x.ellipse(44, 190, 18, 6, 0, 0, 6.283); x.fill();
-    const f = x.createRadialGradient(52, 178, 0, 52, 178, 13); f.addColorStop(0, '#ffffff'); f.addColorStop(.4, '#ffe0a0'); f.addColorStop(1, 'rgba(255,200,120,0)'); x.fillStyle = f; x.fillRect(36, 160, 32, 34);
-    const sh = x.createLinearGradient(0, 0, 0, 34); sh.addColorStop(0, 'rgba(20,8,2,.85)'); sh.addColorStop(1, 'rgba(20,8,2,0)'); x.fillStyle = sh; x.fillRect(0, 0, 96, 34);
-    const sl = x.createLinearGradient(96, 0, 76, 0); sl.addColorStop(0, 'rgba(20,8,2,.75)'); sl.addColorStop(1, 'rgba(20,8,2,0)'); x.fillStyle = sl; x.fillRect(70, 0, 26, 200);
-    const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t; })();
+  // r3: the room through the window, painted larger — warm plaster lit from below by a clay lamp burning on the inner sill (its flame
+  // and its glow), a niche with a jar, a hanging cloth in shadow; the reveal's shade on two sides (the wall's depth)
+  const winTexT = (() => { const c = document.createElement('canvas'); c.width = 200; c.height = 420; const x = c.getContext('2d');
+    const g = x.createRadialGradient(130, 280, 6, 110, 260, 380); g.addColorStop(0, '#fff6dc'); g.addColorStop(.12, '#ffd690'); g.addColorStop(.42, '#d8843c'); g.addColorStop(.8, '#6a3214'); g.addColorStop(1, '#2a1208'); x.fillStyle = g; x.fillRect(0, 0, 200, 420);
+    x.fillStyle = 'rgba(70,30,10,.55)'; x.beginPath(); x.moveTo(126, 40); x.lineTo(176, 40); x.quadraticCurveTo(170, 180, 182, 300); x.lineTo(132, 300); x.quadraticCurveTo(124, 170, 126, 40); x.fill();   // a cloth hanging on the far wall
+    x.fillStyle = 'rgba(60,24,8,.6)'; x.beginPath(); x.moveTo(20, 150); x.lineTo(78, 150); x.lineTo(78, 210); x.quadraticCurveTo(49, 196, 20, 210); x.fill();                      // a niche
+    x.fillStyle = 'rgba(150,80,40,.9)'; x.beginPath(); x.ellipse(49, 192, 13, 17, 0, 0, 6.283); x.fill(); x.fillRect(44, 170, 10, 8);                                      // its jar
+    x.fillStyle = 'rgba(80,40,18,.85)'; x.fillRect(0, 300, 200, 16);                                                                                                       // the inner sill
+    x.fillStyle = '#5a3018'; x.beginPath(); x.moveTo(52, 300); x.quadraticCurveTo(56, 322, 96, 322); x.quadraticCurveTo(130, 320, 146, 298); x.quadraticCurveTo(100, 288, 52, 300); x.fill();   // the clay lamp
+    const f = x.createRadialGradient(140, 270, 0, 140, 270, 46); f.addColorStop(0, '#ffffff'); f.addColorStop(.3, '#fff0b8'); f.addColorStop(1, 'rgba(255,200,120,0)'); x.fillStyle = f; x.fillRect(90, 220, 100, 100);
+    x.fillStyle = '#fffbe8'; x.beginPath(); x.moveTo(134, 298); x.quadraticCurveTo(131, 274, 141, 250); x.quadraticCurveTo(150, 274, 146, 298); x.fill();                    // its flame
+    const sh = x.createLinearGradient(0, 0, 0, 60); sh.addColorStop(0, 'rgba(20,8,2,.9)'); sh.addColorStop(1, 'rgba(20,8,2,0)'); x.fillStyle = sh; x.fillRect(0, 0, 200, 60);
+    const sl = x.createLinearGradient(0, 0, 34, 0); sl.addColorStop(0, 'rgba(20,8,2,.75)'); sl.addColorStop(1, 'rgba(20,8,2,0)'); x.fillStyle = sl; x.fillRect(0, 0, 34, 420);
+    const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 4; return t; })();
   let SPILL = null, DOORSLIT = null, TRUNK_M = null;
   const trunkMat = () => TRUNK_M || (TRUNK_M = litPatch(new THREE.MeshStandardMaterial({ color: '#5a4a3a', roughness: .95 }), 'figtrunk'));
   function targetHouse(x, z) {
@@ -269,11 +280,11 @@ export async function build(W, H, B) {
     add(K.roundedBox(1.7, .2, .26, .03, 2), woodM, dx, dy + 2.12, fz + .08, 'door');
     for (let i = 0; i < 3; i++) add(K.roundedBox(1.7 - i * .1, .16, .38, .04, 2), basaltM, dx, dy - .08 - i * .16, fz + .2 + i * .36, 'roof');
     const wxl = -1.55, wyc = 2.05;
-    const mat = new THREE.MeshBasicMaterial({ color: new THREE.Color(0, 0, 0), map: winTexT }), wm = add(new THREE.PlaneGeometry(.32, 1.05), mat, wxl, wyc, fz + .012, 'win'); wm.castShadow = false;
-    for (const s2 of [-1, 1]) add(K.roundedBox(.16, 1.2, .16, .03, 2), basaltM, wxl + s2 * .24, wyc, fz + .07, 'roof');
-    add(K.roundedBox(1.0, .18, .22, .03, 2), woodM, wxl, wyc + .66, fz + .1, 'door');
-    add(K.roundedBox(.6, .1, .3, .03, 2), basaltM, wxl, wyc - .58, fz + .14, 'roof');
-    for (const s2 of [-1, 1]) { const sh = add(K.roundedBox(.2, 1.02, .05, .015, 2), doorM, 0, wyc, 0, 'door'); sh.position.set(wxl + s2 * (.33 + .1 * Math.cos(1.4)), wyc, fz + .12 + .14 * Math.sin(1.4) * .5); sh.rotation.y = -s2 * 1.4; }   // swung back flat to the wall
+    const mat = new THREE.MeshBasicMaterial({ color: new THREE.Color(0, 0, 0), map: winTexT }), wm = add(new THREE.PlaneGeometry(.5, 1.05), mat, wxl, wyc, fz + .012, 'win'); wm.castShadow = false;
+    for (const s2 of [-1, 1]) add(K.roundedBox(.16, 1.2, .16, .03, 2), basaltM, wxl + s2 * .33, wyc, fz + .07, 'roof');
+    add(K.roundedBox(1.25, .18, .22, .03, 2), woodM, wxl, wyc + .66, fz + .1, 'door');
+    add(K.roundedBox(.8, .1, .3, .03, 2), basaltM, wxl, wyc - .58, fz + .14, 'roof');
+    for (const s2 of [-1, 1]) { const sh = add(K.roundedBox(.28, 1.02, .05, .015, 2), doorM, 0, wyc, 0, 'door'); sh.position.set(wxl + s2 * (.42 + .14 * Math.cos(1.4)), wyc, fz + .12 + .14 * Math.sin(1.4) * .5); sh.rotation.y = -s2 * 1.4; }   // swung back flat to the wall
     const tw = { m: wm, mat, v: 1, t0: 1e9, k: 0 }; WINS.push(tw);
     SPILL = new THREE.PointLight(col('#ffb070'), 0, 9, 2); SPILL.position.set(wxl, wyc - .25, fz + .75); g.add(SPILL);
     for (let i = 0; i < 9; i++) add(K.roundedBox(1.0, (i + 1) * .4, .44, .04, 2), i < 3 ? basaltM : whiteM, w / 2 + .52, (i + 1) * .2 - .02, fz - .45 - i * .44, i < 3 ? 'roof' : 'wall');
@@ -370,22 +381,22 @@ export async function build(W, H, B) {
     //    crane's top to level in front of the facade by the time we are ~40 m away
     const wp = targetWorld(), ak = clamp((t - T.approach[0]) / (T.approach[1] - T.approach[0]));
     const kl = (() => { const a = .16, b = .12, v = 1 / (1 - a / 2 - b / 2); if (ak < a) return v * ak * ak / (2 * a); if (ak > 1 - b) return 1 - v * (1 - ak) * (1 - ak) / (2 * b); return v * (a / 2 + ak - a); })();   // quadratic ease in/out, even speed between
-    const d1 = CAM1.pos.distanceTo(wp), dE = 6.25, dist = d1 * Math.pow(dE / d1, kl);
-    const dir0 = CAM1.pos.clone().sub(wp).normalize(), dirE = V(.45, .05, .89).normalize(), dk = sine(clamp(kl * 1.22));   // round 2: we end a little to the side, the window at the frame's left
+    const d1 = CAM1.pos.distanceTo(wp), dE = 3.5, dist = d1 * Math.pow(dE / d1, kl);
+    const dir0 = CAM1.pos.clone().sub(wp).normalize(), dirE = V(.1, .04, 1).normalize(), dk = sine(clamp(kl * 1.22));   // round 2: we end a little to the side, the window at the frame's left
     const dir = dir0.clone().lerp(dirE, dk).normalize();
     const ap = wp.clone().addScaledVector(dir, dist);
     const lookA = CAM1.pos.clone().addScaledVector(fwd(CAM1.yaw, CAM1.pitch), 900), lk = sine(clamp((kl - .05) / .6));
     let al = lookA.clone().lerp(wp.clone().add(V(0, -.05, 0)), lk);
-    // the last stretch: turn so the window sits where the prayer room's window is (frame x 90, y 437 — the window-to-window dissolve)
-    { const fk = sine(clamp((kl - .62) / .36)); if (fk > 0) { const f = H / 2 / Math.tan(FOV / 2 * D2R), th = Math.atan((W / 2 - 90) / f), ph = Math.atan((H / 2 - 445) / f);
-        const wd = wp.clone().sub(ap).normalize(), rt = wd.clone().cross(V(0, 1, 0)).normalize(); let ld = wd.clone().multiplyScalar(Math.cos(th)).addScaledVector(rt, Math.sin(th)).normalize();
-        const upv = rt.clone().cross(ld).normalize(); ld = ld.multiplyScalar(Math.cos(ph)).addScaledVector(upv, -Math.sin(ph)).normalize();
-        al = al.clone().lerp(ap.clone().addScaledVector(ld, wp.distanceTo(ap)), fk); } }
+    // r3: the last stretch ends on the lit window itself, centred and a little low in the frame (the lamp on its sill in view) —
+    // never on the wall (관리자 2026-11-20 "지금 임합니다 … 벽에서 끝나는 게 무슨 의미?")
+    { const fk = sine(clamp((kl - .6) / .38)); if (fk > 0) al = al.clone().lerp(wp.clone().add(V(0, -.3, 0)), fk); }   // the window sits in the upper middle, clear of the captions
     // blend the crane into the glide (both are at rest at the joint: no jump in speed)
     const bw = ss(T.approach[0], T.approach[0] + 1.6, t);
     if (bw <= 0) return { pos: cp, look: cp.clone().addScaledVector(cd, 900) };
     const cl = cp.clone().addScaledVector(cd, 900);
-    return { pos: cp.lerp(ap, bw), look: cl.lerp(al, bw), dist };
+    const pos = cp.lerp(ap, bw), g = hgt(pos.x, pos.z) * lerp(.62, 1, eio((t - T.lift[0]) / (T.lift[1] - T.lift[0]))) + 1.4;   // never under the ground (soft floor)
+    if (pos.y < g + 1.5) pos.y = g + 1.5 * Math.exp((pos.y - g - 1.5) / 1.5);   // continuous in value and slope at g + 1.5; tends to g
+    return { pos, look: cl.lerp(al, bw), dist };
   }
 
   // ---------------------------------------------------------------- the miniature: the same world, flat colours + ink (once, at init)
@@ -484,13 +495,13 @@ export async function build(W, H, B) {
     sunLamp.power = lerp(260, 180, dk);
     const gl = 1 + .3 * Math.pow(gk, .7) * (1 - dk); sky.u.top.value.copy(col('#2848a0', .8).lerp(col('#1c2c6a', .5), dk)); sky.u.mid.value.copy(col('#d9a85c', .85 * gl).lerp(col('#b87060', .6), dk)); sky.u.horizon.value.copy(col('#ffd286', 1.5 * gl).lerp(col('#ff9858', 1.2), dk));
     A.color.copy(col('#c8a87a', .6).lerp(col('#7a5e62', .42), dk)); A.colorUp = (A.colorUp || A.color.clone()); A.colorUp.copy(col('#b8b4b0', .55).lerp(col('#605e80', .4), dk));
-    WU.uSkyH.value.copy(col('#7090d8', .75).lerp(col('#6a6aa8', .6), dk)); WU.uSkyT.value.copy(col('#8a9cc0', .55).lerp(col('#3e4874', .38), dk));
+    WU.uSkyH.value.copy(col('#ffd286', 1.1).lerp(col('#ff9858', .9), dk)); WU.uSkyT.value.copy(col('#2848a0', .8).lerp(col('#1c2c6a', .5), dk));
     GU.uGild.value = lerp(1, .45, dk);
     Lk.exposure = look0.exposure * lerp(1, 1.62, dk); Lk.saturation = look0.saturation * lerp(1, 1.06, dk);
     // the windows
     for (const w of WINS) { const k = ss(w.t0, w.t0 + .7, t) * (1 + .05 * Math.sin(t * 5.3 + w.t0 * 7)); w.k = k;
       const glow = w.target ? 1 + 2.2 * ss(T.glow[0], T.glow[1], t) : 1; w.mat.color.setRGB(.02 + 3.4 * k * glow, .012 + 1.9 * k * glow, .004 + .62 * k * glow);
-      if (w.target) { SPILL.intensity = k * glow * 7; DOORSLIT.material.color.setRGB(1.1 * k, .62 * k, .22 * k); }
+      if (w.target) { SPILL.intensity = k * glow * 3.5; DOORSLIT.material.color.setRGB(1.1 * k, .62 * k, .22 * k); }
       if (w.lamp) { w.m.getWorldPosition(w.lamp.pos); w.lamp.pos.add(V(0, 0, .5).applyQuaternion(w.m.getWorldQuaternion(qq))); w.lamp.power = k * (w.target ? 2.4 * glow : 1.6); } }
     // camera
     const c = camAt(t); setCam(c.pos, c.look);

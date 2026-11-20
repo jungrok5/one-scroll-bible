@@ -207,7 +207,7 @@ function cfBackHood(P, o) {
 export function armFK(k) { const th = (12 + 14 * k) * Math.PI / 180, ph = (12 + 70 * k) * Math.PI / 180, ua = Math.PI / 2 - th, fa = ua - ph;
   const el = [Math.cos(ua) * .18, Math.sin(ua) * .18], wr = [el[0] + Math.cos(fa) * .172, el[1] + Math.sin(fa) * .172]; return { el, wr, th: th * 180 / Math.PI, ph: ph * 180 / Math.PI }; }
 
-const SCR = [1080 * .593, 1920 * .365];   // where the tomb's doorway ends on screen (impasto-tomb.js SCR): the gateway is held there
+const SCR = [332, 645];   // where the tomb's low door is on screen at the end (sample-part5d.html doorRect at 631.9 — round 3: 「그리스도」's tomb): the gateway is held there
 export function beats(B) {
   const a = B.N27b, q = B.Q15, n = B.N28, e = B.N15c;
   return { start: a - .5, end: e, sun: [a - .5, a + 2.2], speak: [a + .9, a + 3.4], speak2: [q - .6, q + 1.6], drop: [n - 1.4, n + .6], speak3: [n + .4, n + 2.6],
@@ -216,7 +216,7 @@ export function beats(B) {
 
 export async function build(W, H) {
   const { clamp, lerp, rng, canvas, hex, ss, eio } = Pl, V = H > W;
-  const CF = { F: 1000, E: 1.55, YH: 700, CX: 540, DW: 6.5, XL: -3.9, XR: 2.8, G0: -3.0, G1: -1.7, GS: 2.35, GH: 3.0, tanE: .28, hx: .45, hz: .89,
+  const CF = { F: 1000, E: 1.55, YH: 700, CX: 540, DW: 6.5, XL: -3.9, XR: 2.8, G0: -3.0, G1: -1.7, GS: 2.35, GH: 3.0, tanE: .28, hx: .62, hz: .78,
     OX: 900, OY: 300, RW: 3000, RH: 2450 };
   const CFC = FRESCO.court(CF), cfP = CFC.P, poly = FRESCO.poly, { OX, OY, RW, RH, XL, XR, DW, G0, G1, GH } = CF, Wb = (X, Y) => cfP(X, Y, DW);
   // ---------------------------------------------------------------- the courtyard (albedo): limewashed walls, flagstones, an outside stair,
@@ -254,7 +254,7 @@ export async function build(W, H) {
     g.fillStyle = 'rgba(20,12,8,.3)'; g.beginPath(); g.ellipse(cx + .1 * s, cy, .2 * s, .03 * s, 0, 0, 6.283); g.fill(); }
   { const [cx, cy] = cfP(1.6, 0, 3.1), s = CF.F / 3.1; g.fillStyle = '#8a6e44'; g.beginPath(); g.ellipse(cx, cy - .1 * s, .22 * s, .11 * s, 0, 0, 6.283); g.fill(); g.strokeStyle = 'rgba(50,36,20,.4)'; g.lineWidth = 2; for (let i = 0; i < 5; i++) { g.beginPath(); g.ellipse(cx, cy - .1 * s, .22 * s, (.03 + i * .018) * s, 0, Math.PI, 2 * Math.PI); g.stroke(); } }
   { const p0 = cfP(-2.0, 0, 3.0), p1 = cfP(-.9, 0, 3.0), p2 = cfP(-.9, 0, 3.9), p3 = cfP(-2.0, 0, 3.9); g.fillStyle = 'rgba(122,98,66,.75)'; poly(g, [p0, p1, p2, p3]); g.fill(); }
-  { const X = .3, D = 4.4, s = CF.F / D, [cx, cy] = cfP(X, 0, D); g.fillStyle = '#5a3e28'; g.fillRect(cx - .2 * s, cy - .44 * s, .4 * s, .06 * s);   // a low wooden stool
+  { const X = .95, D = 4.6, s = CF.F / D, [cx, cy] = cfP(X, 0, D); g.fillStyle = '#5a3e28'; g.fillRect(cx - .2 * s, cy - .44 * s, .4 * s, .06 * s);   // a low wooden stool
     g.fillStyle = '#3e2a1a'; for (const dx of [-.17, .14]) g.fillRect(cx + dx * s, cy - .4 * s, .035 * s, .4 * s); g.fillStyle = 'rgba(20,12,8,.35)'; g.beginPath(); g.ellipse(cx, cy, .26 * s, .035 * s, 0, 0, 6.283); g.fill(); }
   FRESCO.gateStones(g, CFC, 6);
   FRESCO.grain(g, RW, RH, 7);
@@ -416,12 +416,12 @@ export async function build(W, H) {
   // with the head turned only a little (no cheek/beard slivers — no toy faces). ld: lean delay. fixA: a constant lean (on the wall).
   const MEN = [
     // two in the sun's pool that runs from the gate across the floor toward us (their long shadows lie down it beside his), the rest round it
-    { X: -1.84, D: 4.6, Hm: 1.74, kind: 'back', o: { turn: .04, head: 'cloth' }, c: { body: '#56503e', hc: '#a89676', band: '#3e2e2c', hair: '#2e2420', skin: '#a07a60' }, ld: .3 },
+    { X: -1.4, D: 4.6, Hm: 1.74, kind: 'back', o: { turn: .04, head: 'cloth' }, c: { body: '#56503e', hc: '#a89676', band: '#3e2e2c', hair: '#2e2420', skin: '#a07a60' }, ld: .3 },
     { X: -.55, D: 5.2, Hm: 1.7, kind: 'back', o: { turn: -.12, hood: true, mantle: true }, c: { body: '#4e4a44', mantle: '#6a5a46', stripe: '#4e4032', hc: '#6a5a46', band: '#3a2e24', hair: '#2e2420', skin: '#a07a60' }, ld: 1.1 },
     { X: -2.15, D: 3.75, Hm: 1.66, kind: 'back', o: { turn: .06, head: 'cloth', w: .96 }, c: { body: '#6a5a46', hc: '#7e6e56', band: '#4a3424', hair: '#2e2420', skin: '#a8806a' }, ld: .7 },
-    { X: -.55, D: 3.7, Hm: 1.8, kind: 'back', o: { turn: -.1, head: 'hair', w: 1.06 }, c: { body: '#5a4e40', hair: '#2a201a', skin: '#a07a60' }, ld: 2.6 },
+    { X: .3, D: 3.75, Hm: 1.8, kind: 'back', o: { turn: -.1, head: 'hair', w: 1.06 }, c: { body: '#5a4e40', hair: '#2a201a', skin: '#a07a60' }, ld: 2.6 },
     // in the courtyard's shade: on a stool, on the step, one standing, one against the wall, one by himself near the wall
-    { X: .3, D: 4.4, Hm: 1.8, kind: 'back', o: { turn: -.14, head: 'hair', seat: 'bench', w: 1.04 }, c: { body: '#4a5464', hair: '#241c18', skin: '#a07a60' }, ld: 1.9, stool: true },
+    { X: .95, D: 4.6, Hm: 1.8, kind: 'back', o: { turn: -.14, head: 'hair', seat: 'bench', w: 1.04 }, c: { body: '#4a5464', hair: '#241c18', skin: '#a07a60' }, ld: 1.9, stool: true },
     { X: -3.0, D: 4.4, Hm: 1.76, kind: 'back', o: { turn: .1, hood: true }, c: { body: '#5e5240', hc: '#74624a', band: '#4a3a2c', hair: '#2e2420', skin: '#a07a60' }, ld: 3.2 },
     { X: .55, D: 5.95, Hm: 1.76, kind: 'back', o: { turn: -.14, head: 'cloth', seat: 'bench', mantle: true }, c: { body: '#5e5444', mantle: '#7a6a52', stripe: '#5e4e3c', hc: '#9c8c70', band: '#3e2e2c', hair: '#3a3430', skin: '#a07a60' }, ld: 2.2 },
     { X: .05, D: 5.45, Hm: 1.84, kind: 'stand', o: { w: 1.02, reach: 0 }, c: { body: '#6a5e4c', hc: '#8a7a60', band: '#4a3c30', hair: '#2e2420', skin: '#a07a60' }, ld: 3.6 },
@@ -477,8 +477,8 @@ export async function build(W, H) {
     const cr = clamp((t - T.start) / (T.end - T.start)), wid = ss(T.widen[0], T.widen[1], t);
     const I = (.78 + .22 * ss(T.sun[0], T.sun[1], t)) * (1 + .4 * wid) * (1 + .09 * Math.sin((t - T.start) * 2 * Math.PI / 7.3) * (1 - wid));   // thin high cloud thins and thickens over the sun
     const cr2 = clamp((t - T.start - 1.0) / (T.end - T.start - 1.0)), ce = .7 * cr2 + .3 * eio(cr2), z0 = V ? 1.0 : .82, z = z0 * (1 + .08 * ce);
-    const [ax, ay] = Wb((G0 + G1) / 2, (GH) / 2), sa = [SCR[0] - 14 * ce, SCR[1] + 10 * ce];   // the gateway's middle → its screen place
-    const layer = p => { const s = z0 * (1 + (z / z0 - 1) * p), cx = ax + (sa[0] - W / 2) / s, cy = ay - (sa[1] - H / 2) / s; ctx.setTransform(-s, 0, 0, s, W / 2 + cx * s, H / 2 - cy * s); return s; };   // mirrored: the gate on the right
+    const [ax, ay] = Wb((G0 + G1) / 2, (GH) / 2), sa = [SCR[0] + 14 * ce, SCR[1] + 10 * ce];   // the gateway's middle → its screen place
+    const layer = p => { const s = z0 * (1 + (z / z0 - 1) * p), cx = ax - (sa[0] - W / 2) / s, cy = ay - (sa[1] - H / 2) / s; ctx.setTransform(s, 0, 0, s, W / 2 - cx * s, H / 2 - cy * s); return s; };   // (round 3: not mirrored — the gateway sits left of centre where the tomb's door was, the sun's pool runs across the frame)
     ctx.save(); ctx.fillStyle = '#16100c'; ctx.fillRect(0, 0, W, H);
     layer(.94); ctx.drawImage(ROOM, -OX, -OY);
     ctx.globalCompositeOperation = 'screen'; ctx.globalAlpha = clamp(.5 + .5 * I); ctx.drawImage(BLOOM, BB.x, BB.y);
@@ -486,7 +486,17 @@ export async function build(W, H) {
     const P2 = ALL.map((m, i) => poseOf(m, i, t));
     ptx.setTransform(1, 0, 0, 1, 0, 0); ptx.globalCompositeOperation = 'source-over'; ptx.clearRect(0, 0, PB.w, PB.h); ptx.drawImage(POOL, 0, 0);
     ptx.translate(-PB.x, -PB.y); ptx.globalCompositeOperation = 'destination-out'; ptx.filter = 'blur(3px)'; ptx.fillStyle = 'rgba(0,0,0,1)';
-    ALL.forEach((m, i) => { const q = P2[i], cast = CFC.cast(m.X, m.D, m.Hm), mp = (x, y) => cast(x + q.a * y, q.b * y); ptx.fill(buildM({ ...m, P: mp }, { ...m.o, turn: q.turn, reach: q.reach })); });
+    ALL.forEach((m, i) => { const q = P2[i], cast = CFC.cast(m.X, m.D, m.Hm), mp = (x, y) => cast(x + q.a * y, q.b * y);
+      if (m.kind === 'risen' || m.kind === 'stand') return;
+      ptx.fill(buildM({ ...m, P: mp }, { ...m.o, turn: q.turn, reach: q.reach })); });
+    // (round 3, owner: the man's long shadow read as something anatomical) a standing man's shadow is cast from a plain robe shape —
+    // broad at the hem, tapering a little, the shoulders and the mantle over the head one blunt rounded end, no legs, no feet, no arm —
+    // blurred more and fading toward the far end, so it lies on the floor as a soft wedge of shade beside the listeners' shadows
+    ptx.filter = 'blur(7px)';
+    ALL.forEach((m, i) => { if (m.kind !== 'risen' && m.kind !== 'stand') return; const q = P2[i], cast = CFC.cast(m.X, m.D, m.Hm), mp = (x, y) => cast(x + q.a * y, q.b * y);
+      const pts = [[-.23, .01], [-.215, -.25], [-.2, -.5], [-.205, -.72], [-.19, -.84], [-.15, -.93], [-.07, -.985], [.07, -.985], [.15, -.93], [.19, -.84], [.205, -.72], [.2, -.5], [.215, -.25], [.23, .01]].map(([x, y]) => mp(x, y));
+      const f0 = mp(0, 0), f1 = mp(0, -1), g = ptx.createLinearGradient(f0[0], f0[1], f1[0], f1[1]); g.addColorStop(0, 'rgba(0,0,0,.95)'); g.addColorStop(.6, 'rgba(0,0,0,.75)'); g.addColorStop(1, 'rgba(0,0,0,.3)');
+      ptx.fillStyle = g; ptx.beginPath(); pts.forEach(([x, y], j) => j ? ptx.lineTo(x, y) : ptx.moveTo(x, y)); ptx.closePath(); ptx.fill(); });
     ptx.filter = 'none';
     layer(1); ctx.globalCompositeOperation = 'source-over'; ctx.globalAlpha = clamp(I * 1.05); ctx.drawImage(poolT, PB.x, PB.y);
     ctx.globalCompositeOperation = 'screen'; ctx.globalAlpha = clamp(.55 * I); ctx.drawImage(poolT, PB.x, PB.y); ctx.globalAlpha = 1;   // the pool stronger: the long shadows read (round 2)

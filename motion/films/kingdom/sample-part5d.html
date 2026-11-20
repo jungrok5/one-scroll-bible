@@ -10,8 +10,14 @@
 <script src="../../pilot/lib.js"></script>
 <script src="../lib-film.js"></script>
 <script src="kit-fresco.js"></script>
+<script src="kit-oilpaint.js"></script>
+<script src="tomb-christ.js"></script>
 <script>
-/* 시안 1차 (2026-11-20): 「kingdom」 6부 「땅 끝까지」 첫 블록 — 빈 무덤의 새벽 → 돌집 마당의 사십 일 (C5 · N27 · N27b · L9 · Q15 · N28).
+/* 시안 3차 (2026-11-20, 관리자): 무덤을 「그리스도」의 빈 무덤 안 장면으로 교체(tomb-christ.js = christ/dawn-impasto.js 'tomb', 이 블록의 줄 시각으로
+   구동 — N27 둘째 조각 "죽음을 이기고 다시 살아나셨습니다"에 빛이 쏟아짐). 들어올 때 휘장의 문 모양 빛 → 낮은 문, 나갈 때 문의 빛 → 마당 문의 빛
+   (같은 화면 자리). 마당: 좌우 반전 해제, 문간의 사람과 서 있는 사람의 그림자는 다리·발 없는 넓은 옷자락 쐐기로 흐리게, 해를 더 비스듬히.
+   impasto-tomb.js(1·2차)는 폴더에 남겨 둠.
+   시안 1차 (2026-11-20): 「kingdom」 6부 「땅 끝까지」 첫 블록 — 빈 무덤의 새벽 → 돌집 마당의 사십 일 (C5 · N27 · N27b · L9 · Q15 · N28).
    impasto-tomb.js: 성전 휘장 장면 끝의 문 모양 빛이 무덤 입구로 모이며(같은 자리, match cut) 잿빛 팔레트 나이프 그림이 어둠에서 떠오름 →
    N27 첫 햇빛이 바위를 가로질러 열린 입구에 닿고 안으로 들어감(돌 침상 위 개켜진 세마포, 따로 놓인 머리 수건 — 사람 없음), 카메라가 빛을
    따라 입구로 3.4초 다가감, 색이 입구에서 바깥으로 다시 칠해짐(첫 영상 「부활」). → 1초 디졸브(빛에서 빛으로: 무덤 안의 빛 → 마당 문의 빛,
@@ -24,10 +30,10 @@
    node motion/render.mjs v --page films/kingdom/sample-part5d.html --stills 1,5,9    (u seconds) */
 const W = Pilot.W, H = Pilot.H, V = Pilot.ori === 'v', { ss, win, clamp } = Pilot;
 const T0 = 620.5, T1 = 655.4;
-let TOMB = null, FORTY = null, B = null, TT = null, TF = null, TEXT = [], aux = null, auxx = null;
+let TOMB = null, TD = null, FORTY = null, B = null, TT = null, TF = null, TEXT = [], aux = null, auxx = null;
 // the scene table (film seconds): [a, b, name] — overlaps are dissolves; a cut is where one ends and the next begins
 const SCENES = [
-  [620.5, 632.4, 'tomb'],     // C5–N27: in from the veil's door of light; the grey dawn; the sun goes into the open tomb; the colour from the doorway
+  [620.5, 632.4, 'tomb'],     // C5–N27: in from the veil's door of light; inside the empty tomb (「그리스도」); the sun pours in on the linen
   [631.4, 655.4, 'court'],    // N27b–N28: light to light (the tomb's lit doorway → the gate's glare, 1.0 s dissolve); the forty days; hard cut at N15c
 ];
 // the dark band under the words (sample-veil.html)
@@ -48,9 +54,38 @@ function buildText() {
 function chapter(ctx, id, t, a, b) { const k = win(t, a, b, .7, .7); if (k <= 0 || Film.clean) return;
   Pilot.text(ctx, Film.text(id), W / 2, V ? H * .205 : H * .2, { size: V ? 54 : 50, weight: 600, color: '#f3ece0', alpha: k, ls: 8, shadow: 'rgba(0,0,0,.85)', shadowBlur: 18 }); }
 function scene(ctx, t, name) {
-  if (name === 'tomb') { if (TOMB) return TOMB.draw(ctx, t, TT); ctx.fillStyle = '#2a2420'; ctx.fillRect(0, 0, W, H); return; }
+  if (name === 'tomb') { if (TD) return tomb(ctx, t); ctx.fillStyle = '#2a2420'; ctx.fillRect(0, 0, W, H); return; }
   if (name === 'court') { if (FORTY) return FORTY.draw(ctx, t, TF); ctx.fillStyle = '#b8a080'; ctx.fillRect(0, 0, W, H); return; }
 }
+// 3차 (관리자 2026-11-20): the tomb is 「그리스도」's empty tomb seen from inside (tomb-christ.js = christ/dawn-impasto.js 'tomb'), driven
+// by this block's line times: the dark chamber and the cold glimmer at the low door (C5, the first half of N27, the outside slowly
+// greying toward dawn) → the sun pours in through the door on "죽음을 이기고 다시 살아나셨습니다" (the second piece of N27) across the floor
+// onto the linen on the bench and the head cloth apart → it keeps filling the chamber; the camera creeps the whole time.
+// In: the veil's door-shaped white light gathers into the low door (same place on screen). Out: the door fills with warm light and
+// the courtyard's gateway (held at the same screen place — fresco-forty.js SCR) takes it over on the 1 s dissolve.
+let TP = 0;   // when the light pours in (the second piece of N27)
+const ZX = t => 1 + .08 * clamp((t - 620.5) / 11.4);   // an extra steady creep (the dark chamber is never still), about the door
+function tomb(ctx, t) {
+  // (the chamber comes up into a grey-blue dawn early — 20 % dark frames otherwise; the event of N27 stays the sun pouring in)
+  const rise = .32 * ss(620.6, 622.4, t) + .2 * clamp((t - 622.4) / (TP - 622.4)) + .48 * ss(TP - .3, TP + 1.7, t), grow = ss(TP + 1.8, 632.4, t), k = Pilot.eio(clamp((t - 620.5) / 11.9));
+  tombChrist(ctx, 0, 'tomb', { rise, grow, pour: t - TP, k, zx: ZX(t) });
+  { const lf = 1 - ss(TP, TP + 2, t); if (lf > 0) { ctx.save(); ctx.globalCompositeOperation = 'screen'; ctx.fillStyle = `rgba(78,84,104,${.32 * lf})`; ctx.fillRect(0, 0, W, H); ctx.restore(); } }   // open shade of the dawn in the chamber
+  const R = doorRect(t);
+  // the door of light from the veil scene gathering into the low door (match cut in), the chamber coming up out of the dark
+  const mk = Pilot.eio(clamp((t - 620.5) / 1.3)), up = ss(620.5, 621.9, t);
+  if (up < 1) { ctx.fillStyle = `rgba(6,4,3,${.5 * (1 - up)})`; ctx.fillRect(0, 0, W, H); }
+  if (mk < 1) { const vr = [W * .3, H * .155, W * .7, H * .69], q = vr.map((v, i) => Pilot.lerp(v, R[i], mk)), a = (1 - mk) * (1 - mk * .3);
+    ctx.save(); ctx.globalCompositeOperation = 'screen'; ctx.filter = `blur(${(10 + 22 * mk).toFixed(0)}px)`;
+    ctx.fillStyle = `rgba(255,246,222,${.95 * a})`; ctx.fillRect(q[0], q[1], q[2] - q[0], q[3] - q[1]);
+    ctx.fillStyle = `rgba(255,236,200,${.45 * a})`; ctx.fillRect(q[0] - W * .05, q[1] - H * .025, q[2] - q[0] + W * .1, q[3] - q[1] + H * .05); ctx.restore(); }
+  // light to light: at the end the door fills with warm light (the courtyard's gateway glare takes it over)
+  const fill = ss(630.6, 631.9, t); if (fill > 0) { const cx = (R[0] + R[2]) / 2, cy = (R[1] + R[3]) / 2, rr = (R[3] - R[1]) * (.75 + .6 * fill), g = ctx.createRadialGradient(cx, cy, 0, cx, cy, rr);
+    g.addColorStop(0, `rgba(255,242,216,${.95 * fill})`); g.addColorStop(.5, `rgba(255,228,184,${.6 * fill})`); g.addColorStop(1, 'rgba(255,214,160,0)'); ctx.fillStyle = g; ctx.fillRect(cx - rr, cy - rr, 2 * rr, 2 * rr); }
+}
+// the low door on screen at time t (the module's camera: zoom 1 + .055 k about the door, a small drift) — measured on the plate
+function doorRect(t) { const D = TD, [d0, d1] = D.tb.door, k = Pilot.eio(clamp((t - 620.5) / 11.9)), z = (1 + .055 * k) * ZX(t), dcx = (d0[0] + d1[0]) / 2, dcy = (d0[1] + d1[1]) / 2;
+  const dx = Pilot.lerp(8, -6, k), dy = Pilot.lerp(4, -2, k), S = (x, y) => [z * (x - dcx) + dcx + dx, z * (y - dcy) + dcy + dy];   // (door is in canvas coords)
+  const a = S(Math.min(d0[0], d1[0]), Math.min(d0[1], d1[1])), b = S(Math.max(d0[0], d1[0]), Math.max(d0[1], d1[1])); return [a[0], a[1], b[0], b[1]]; }
 function draw(ctx, u) {
   const t = T0 + u, on = SCENES.filter(([a, b]) => t >= a && t < b);
   ctx.save(); scene(ctx, t, on[0][2]); ctx.restore();
@@ -69,7 +104,8 @@ Pilot.run({ W, H, dur: +(T1 - T0).toFixed(2), fonts: ["600 40px 'Noto Serif KR'"
   init: async () => { await Film.load(); buildText();
     B = Object.fromEntries(IDS.map(id => [id, Film.lines[id].at]));
     aux = Pilot.canvas(W, H); auxx = aux.getContext('2d');
-    const MT = await import('./impasto-tomb.js'); TT = MT.beats(B); TOMB = await MT.build(W, H); window.__TOMB = TOMB;
+    TD = await buildTombChrist(); window.__TD = TD;   // (impasto-tomb.js — rounds 1–2 — is kept in the folder, no longer used here)
+    { const q = Film.pieces(Film.text('N27'), B.N27, B.N27b - .25); TP = q.length > 1 ? q[1][1] : B.N27 + 3.6; window.__TP = TP; }
     const MF = await import('./fresco-forty.js'); TF = MF.beats(B); FORTY = await MF.build(W, H); window.__FORTY = FORTY; window.__TF = TF; window.__TT = TT; }, draw });
 </script>
 </body>

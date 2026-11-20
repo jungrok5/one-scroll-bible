@@ -153,21 +153,86 @@ export function lampPoints(list, { px = 5.5, minPx = 1.4, fade = 400, color = [1
   list.forEach((L, i) => { P.set([L.p.x, L.p.y, L.p.z], i * 3); Dd[i] = L.d; Bb[i] = L.b; Ss[i] = L.s || 1; Fd[i] = L.f || fade; });
   const g = new THREE.BufferGeometry();
   g.setAttribute('position', new THREE.BufferAttribute(P, 3)); g.setAttribute('aD', new THREE.BufferAttribute(Dd, 1)); g.setAttribute('aB', new THREE.BufferAttribute(Bb, 1)); g.setAttribute('aS', new THREE.BufferAttribute(Ss, 1)); g.setAttribute('aFd', new THREE.BufferAttribute(Fd, 1));
-  const u = { uCol: { value: new THREE.Vector3(...color) }, uF: { value: 0 }, uT: { value: 0 }, uK: { value: 1 }, uPx: { value: px }, uMin: { value: minPx }, uRef: { value: 600 }, uPull: { value: .004 }, uPullMax: { value: 120 }, uScale: { value: 1 } };
+  const u = { uBurst: { value: 0 }, uCol: { value: new THREE.Vector3(...color) }, uF: { value: 0 }, uT: { value: 0 }, uK: { value: 1 }, uPx: { value: px }, uMin: { value: minPx }, uRef: { value: 600 }, uPull: { value: .004 }, uPullMax: { value: 120 }, uScale: { value: 1 } };
   const m = new THREE.ShaderMaterial({ uniforms: u, transparent: true, depthWrite: false, depthTest: true, fog: false, blending: THREE.AdditiveBlending,
-    vertexShader: /* glsl */`attribute float aD, aB, aS, aFd; uniform float uF, uPx, uMin, uRef, uPull, uPullMax, uScale; varying float vA;
+    vertexShader: /* glsl */`attribute float aD, aB, aS, aFd; uniform float uF, uPx, uMin, uRef, uPull, uPullMax, uScale, uBurst; varying float vA;
       void main(){
         vec3 dc = cameraPosition - position; float Lc = length(dc); vec3 q = position + dc / max(Lc, 1e-3) * min(Lc * uPull, uPullMax);
         vec4 mv = modelViewMatrix * vec4(q, 1.); gl_Position = projectionMatrix * mv; float d = -mv.z;
         float on = smoothstep(aD, aD + aFd, uF);
         float sz = uPx * aS * clamp(uRef / d, .0, 1.) * uScale; float px = max(uMin, sz);
-        float fl = step(3., aS) * on * exp(-max(uF - aD - aFd, 0.) / (aFd * 2.5));
+        float fl = max(step(3., aS), uBurst) * on * exp(-max(uF - aD - aFd, 0.) / (aFd * 2.5));   // uBurst (round 7): every light flares as its line arrives
         gl_PointSize = px * on * (1. + 2.2 * fl) + step(.001, on) * .5; vA = on * aB * clamp(sz / px, .25, 1.) * (1. + 1.4 * fl); }`,
     fragmentShader: /* glsl */`uniform float uK; uniform vec3 uCol; varying float vA;
-      void main(){ vec2 c = gl_PointCoord - .5; float r2 = dot(c, c) * 4.; float a = exp(-r2 * 3.2) + .55 * exp(-r2 * 14.);
+      void main(){ vec2 c = gl_PointCoord - .5; float r2 = dot(c, c) * 4.; float a = (exp(-r2 * 3.2) + .55 * exp(-r2 * 14.)) * (1. - smoothstep(.7, 1., r2));   // round 7: round (a big bright point showed its square corners)
         if (vA <= 0.) discard; gl_FragColor = vec4(uCol * a * vA * uK * 3.2, 1.); }` });
   const pts = new THREE.Points(g, m); pts.frustumCulled = false; pts.renderOrder = 6;
   return { pts, u };
+}
+
+// ---------------------------------------------------------------- round 7 (2026-11-20, owner: "제자들 위치에서부터 밝은 점들이 번져 나가며 생기고,
+// lineage-glow 스킬처럼 가는 선들이 밝은 점으로 쏴아악 퍼져서 지구 전체로 번지듯 — 지금 밝은 점 숫자만큼 위치마다"): one thin line from the
+// disciples' feet to every light. After motion-skills lineage-glow (C:/Project/motion-skills/lineage-glow — lib/glow.js `fibers` / `node`,
+// lib/lineage.js `fan`, references/LOOK.md: "thin gold lines, a white-hot running head, the line stays faintly lit, end nodes ignite with a
+// flare, everything 'lighter' on near-black, lines always grow from source to target, never pop in"), re-drawn as an instanced screen-space
+// ribbon on the 3D globe so one draw call carries thousands of lines.
+// Each line = the great circle from the origin (the world origin: x north, y up, z east at the hill) to its light, written in the origin's
+// tangent frame — y = h·cos φ − 2R·sin²(φ/2) — so a line keeps full float precision at the disciples' feet and over the whole planet.
+// lines: [{ P (Vector3 world, the light), k (brightness), rest (what stays once arrived), rho (m from the origin before the line shows —
+// lineage-glow's fan: near the source only a few lines, more emerge as they spread), lam (0..1: the head runs at lam × the front), or
+// late: { t0, T } (a line launched on its own clock: the last lines that keep arriving), hTop (m: a slight lift over the surface) }].
+// Uniforms: uF (front, m), uT (s), uO (origin: x, ground y, z), uPx (core px), uK, uBandY (words band), uLimb (1 = fade off the disc),
+// uNv / uRmax / uDens (screen-density control near the hub: lines thin out where thousands converge, so the hub glows, never blows out).
+export function burstLines(lines, { px = 1.5, seg = 64 } = {}) {
+  const n = lines.length, D = new Float32Array(n * 2), Lv = new Float32Array(n * 4), Tv = new Float32Array(n * 4), Hv = new Float32Array(n * 2);
+  lines.forEach((L, i) => { const X = L.P.x, Y = L.P.y + R_E, Z = L.P.z, hz = Math.hypot(X, Z) || 1e-6, r = Math.hypot(X, Y, Z);
+    D.set([X / hz, Z / hz], i * 2); Lv.set([Math.atan2(hz, Y), L.lam ?? 1, L.rho ?? 0, L.hTop ?? 0], i * 4);
+    Tv.set(L.late ? [1, L.late.t0, L.late.T, L.k ?? 1] : [0, 0, 1, L.k ?? 1], i * 4); Hv.set([r - R_E, L.rest ?? .15], i * 2); });
+  const S = new Float32Array((seg + 1) * 2), Sd = new Float32Array((seg + 1) * 2), idx = [];
+  for (let i = 0; i <= seg; i++) { S.set([i / seg, i / seg], i * 2); Sd.set([-1, 1], i * 2); if (i < seg) { const a = i * 2; idx.push(a, a + 1, a + 3, a, a + 3, a + 2); } }
+  const g = new THREE.InstancedBufferGeometry();
+  g.setAttribute('position', new THREE.BufferAttribute(new Float32Array((seg + 1) * 2 * 3), 3)); g.setAttribute('aS', new THREE.BufferAttribute(S, 1)); g.setAttribute('aSide', new THREE.BufferAttribute(Sd, 1)); g.setIndex(idx);
+  g.setAttribute('aDir', new THREE.InstancedBufferAttribute(D, 2)); g.setAttribute('aL', new THREE.InstancedBufferAttribute(Lv, 4)); g.setAttribute('aT', new THREE.InstancedBufferAttribute(Tv, 4)); g.setAttribute('aH', new THREE.InstancedBufferAttribute(Hv, 2));
+  g.instanceCount = n;
+  const u = { uF: { value: 0 }, uT: { value: 0 }, uO: { value: new THREE.Vector3() }, uRes: { value: new THREE.Vector2(1080, 1920) }, uPx: { value: px }, uK: { value: 1 }, uBandY: { value: .36 }, uLimb: { value: 1 },
+    uNv: { value: n }, uRmax: { value: 2e6 }, uDens: { value: 0 }, uSeg: { value: seg } };
+  const m = new THREE.ShaderMaterial({ uniforms: u, transparent: true, depthWrite: false, depthTest: true, fog: false, side: THREE.DoubleSide, blending: THREE.AdditiveBlending,
+    vertexShader: /* glsl */`attribute float aS, aSide; attribute vec2 aDir, aH; attribute vec4 aL, aT;
+      uniform float uF, uT, uPx, uLimb, uNv, uRmax, uDens, uSeg; uniform vec3 uO; uniform vec2 uRes;
+      varying float vX, vB, vLh, vOver, vRo, vS, vRho, vK, vRest, vOn, vDn;
+      const float R = 6371000.;
+      vec3 P(float s){ float ph = aL.x * s, h = mix(uO.y, aH.x, s) + aL.w * sin(3.14159265 * s) + min(s * aL.x * R, 2500.) * .024 * (1. - s),   /* + a lift off the hill's crest over the first km */ sh = sin(ph * .5), rr = R + h, sp = sin(ph);
+        return vec3(sp * rr * aDir.x + uO.x * (1. - s), h * cos(ph) - 2. * R * sh * sh, sp * rr * aDir.y + uO.z * (1. - s)); }
+      vec2 scr(vec4 c){ return c.xy / c.w * uRes * .5; }
+      void main(){
+        float d = max(aL.x * R, 1.), p, over, Lh;
+        if (aT.x < .5) { float dist = aL.y * uF; p = clamp(dist / d, 0., 1.); over = dist - d; Lh = max(.07 * dist, 3.); }
+        else { float q = clamp((uT - aT.y) / aT.z, 0., 1.); p = 1. - (1. - q) * (1. - q) * (1. - q); over = (uT - aT.y - aT.z) / aT.z * d; Lh = .1 * d; }
+        if (p <= 0.) { gl_Position = vec4(2., 2., 2., 1.); return; }
+        float s = min(aS, p), e = .5 / uSeg;
+        vec3 Pc = P(s); vec4 cC = projectionMatrix * viewMatrix * vec4(Pc, 1.), cA = projectionMatrix * viewMatrix * vec4(P(max(s - e, 0.)), 1.), cB = projectionMatrix * viewMatrix * vec4(P(min(s + e, 1.)), 1.);
+        if (cC.w < 1e-3 || cA.w < 1e-3 || cB.w < 1e-3) { gl_Position = vec4(2., 2., 2., 1.); return; }
+        vec2 tg = scr(cB) - scr(cA); float lt = length(tg); tg = lt > 1e-5 ? tg / lt : vec2(1., 0.);
+        cC.xy += vec2(-tg.y, tg.x) * aSide * uPx * 1.6 / (uRes * .5) * cC.w; gl_Position = cC;
+        vX = aSide; vB = (p - s) * d; vLh = Lh; vOver = over; vRo = s * d; vS = s; vRho = aL.z; vK = aT.w; vRest = aH.y;
+        vec3 dc = vec3(0., -R, 0.) - cameraPosition; float Dc = length(dc), aD = asin(clamp(R / Dc, 0., 1.)), aP = acos(clamp(dot(normalize(Pc - cameraPosition), dc / Dc), -1., 1.));
+        vOn = mix(1., 1. - smoothstep(.97, .998, aP / aD), uLimb);
+        vDn = 1.; if (uDens > 0.) { vec4 cO = projectionMatrix * viewMatrix * vec4(uO, 1.); if (cO.w > 1e-3) { float rpx = length(scr(cC) - scr(cO)), nv = uNv * min(1., sqrt(vRo / uRmax)); vDn = clamp(uDens * 6.2832 * rpx / max(nv, 1.), 0., 1.); } } }`,
+    fragmentShader: /* glsl */`uniform float uK, uBandY; uniform vec2 uRes; varying float vX, vB, vLh, vOver, vRo, vS, vRho, vK, vRest, vOn, vDn;
+      void main(){
+        if (vOn < .002) discard;
+        float across = exp(-vX * vX * 4.5);
+        float fade = exp(-max(vOver, 0.) / vLh);                                       // after arrival the head goes out
+        float head = exp(-vB / vLh) * fade;                                            // white-hot running head
+        float trail = exp(-vB / (5. * vLh)) * exp(-max(vOver, 0.) / (3. * vLh));       // warm trail behind it, settling to the rest glow
+        float b = vRest * mix(1., .3, vS) + (.55 - vRest) * trail;   // the line that stays: brighter toward the source, so the lit points carry the far ends
+        vec3 col = mix(vec3(1., .66, .3), vec3(1., .95, .84), head) * (b + 1.5 * head);
+        float near = smoothstep(vRho, vRho * 1.5 + 30., vRo);                          // lineage fan: near the source only a few lines show
+        float y = gl_FragCoord.y / uRes.y, band = mix(.22, 1., smoothstep(uBandY - .1, uBandY + .04, y));   // under the words the lines step back
+        vec3 o = col * across * vK * uK * near * vDn * vOn * band; if (any(isnan(o)) || any(isinf(o))) o = vec3(0.);
+        gl_FragColor = vec4(clamp(o, 0., 6.), 1.); }` });
+  const mesh = new THREE.Mesh(g, m); mesh.frustumCulled = false; mesh.renderOrder = 7;
+  return { mesh, u };
 }
 
 // ---------------------------------------------------------------- the earth's light (round 2, 2026-11-19 — "the rise is too dark")

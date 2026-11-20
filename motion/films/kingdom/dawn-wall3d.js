@@ -7,6 +7,10 @@
 // raised boss, courses of three heights and two master courses of tall long stones, every course set back a finger's width,
 // weathering (pits, drips, lichen), capers and hyssop in the joints, a low raking morning light across the face; the round-3 cloud
 // break (darker deck, ragged silver-edged opening, sky kept sharp).
+// Round 5 (owner: "군대가 지키는 성벽"): the wall is the earthly kingdom guarded by an army — a regular line of legionaries along
+// the wall-walk between the merlons (crested helmets, scuta, upright pila whose points catch the light), a signum and two red
+// vexilla stirring in the wind, one sentry turning his head; silhouettes against the bright sky as the round-1 camera rises past
+// them into the light (the camera's path and timing untouched). people3d.js legionary() / soldierPose() (fixed-length IK).
 // After 「벤허」 (1959, OPUSCAR 32: Herodian stone in raking light) and the first film's 「귀환」 walls; cinecode camera-moves.md
 // "tilt up — awe, scale" + "crane / pedestal up — a reveal over something". Engine: motion-skills cinematic-3d (lib3d/cine.js,
 // kit.js mergeGeometries, tubesGeometry); god rays after heal-village.js. No words; frame index frozen (fixed dither).
@@ -14,6 +18,7 @@
 // API: const DW = await (await import('./dawn-wall3d.js')).build(W, H);  DW.draw(ctx, t, B)   B = { C3, N16, N17 }
 import { Film, THREE, V, col, rng, GLSL, FOG_GLSL } from '../lib3d/cine.js';
 import * as K from '../lib3d/kit.js';
+import * as P from './people3d.js';
 
 const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
 const lerp = (a, b, k) => a + (b - a) * k;
@@ -80,6 +85,7 @@ export async function build(W, H) {
   Object.assign(sunL.shadow.camera, { left: -30, right: 30, top: 30, bottom: -30, near: 1, far: 500 }); sunL.shadow.bias = -.0005; sunL.shadow.radius = 3; sunL.shadow.blurSamples = 10; S.add(sunL, sunL.target);
   const sunLamp = film.lamp(SUN.clone().multiplyScalar(1500), '#ffd9a0', { power: 140, size: 60, fog: 1 });
 
+  let ZT = 0;
   // the wall: Herodian ashlar on the round-1 face (x −26…26, the walk at 17 m, the merlons above)
   {
     const R = rng(11), parts = [], box = new THREE.BoxGeometry(1, 1, 1);
@@ -101,7 +107,7 @@ export async function build(W, H) {
       }
       y += h;
     });
-    const zt = -rows.length * .022;
+    const zt = -rows.length * .022; ZT = zt;
     // the parapet with merlons on top (round 1), in the same stone
     for (let x = -26; x < 26; x += 2.2) parts.push([box, M(x + .7, TOP + .7, zt - .45, 1.4, 1.4, .9), base.clone().multiplyScalar(.82 + R() * .14)]);
     parts.push([box, M(0, TOP + .05, zt - .4, 56, .1, 1.1), base.clone().multiplyScalar(.78)]);
@@ -152,6 +158,56 @@ export async function build(W, H) {
     leaves.castShadow = false; leaves.frustumCulled = false; S.add(leaves);   // the plants cast no shadow: the stone keeps the strong light
     const st = new THREE.Mesh(K.tubesGeometry(stems, 4), new THREE.MeshStandardMaterial({ color: '#4a4a30', roughness: .9 })); st.castShadow = false; S.add(st);
   }
+
+  // ---------------------------------------------------------------- the garrison on the wall-walk (round 5)
+  const walk = new THREE.Mesh(new THREE.BoxGeometry(56, .3, 3.2), new THREE.MeshStandardMaterial({ color: '#7d6a50', roughness: .95 }));
+  walk.position.set(0, 17 - .05, ZT - .9 - 1.6); walk.receiveShadow = true; S.add(walk);   // the walk behind the parapet (the soldiers stand on it)
+  const dk = (c, o = {}) => new THREE.MeshStandardMaterial({ color: c, roughness: .9, side: THREE.DoubleSide, ...o });
+  const tunic = dk('#3a1611'), skinM = dk('#3a2a20'), iron = dk('#2c2c30', { roughness: .45, metalness: .6 }), shieldM = dk('#4e1710'), ash = dk('#3a2c1e'), crestM = dk('#6a1a12'), bindM = dk('#8a7656', { roughness: .35, metalness: .7 });
+  const tipMat = () => new THREE.MeshStandardMaterial({ color: '#d8c8a8', roughness: .2, metalness: .9, emissive: col('#ffd8a0'), emissiveIntensity: 1.5 });
+  const clothM = dk('#7a1a12', { roughness: .85 }), goldM = dk('#a8823a', { roughness: .3, metalness: .85, emissive: col('#ffcf80'), emissiveIntensity: .3 });
+  const FEET = 17.1, GZ = ZT - .3;                                                        // standing in the embrasures between the merlons (seen from below)
+  // a soldier in every gap between the merlons across the view, the standards among them
+  const gaps = []; for (let x = -26 + 1.8; x < 26; x += 2.2) if (x > -11 && x < 11) gaps.push(x);
+  const STD = { 2: 'vexillum', 5: 'signum', 8: 'vexillum' };
+  const garrison = [], bearers = [];
+  const RG = rng(515);
+  gaps.forEach((x, i) => {
+    if (STD[i]) {
+      const b = P.legionary({ h: 1.76, mat: tunic, skin: skinM, metal: iron, shieldM, wood: ash, tip: tipMat(), crestM, bind: bindM }); b.userData.spear.visible = false;
+      b.position.set(x, FEET, GZ - .35); b.rotation.y = Math.PI; S.add(b);
+      const std = new THREE.Group(), mk = (geo, m) => { const o = new THREE.Mesh(geo, m); o.castShadow = true; std.add(o); return o; };
+      mk(new THREE.CylinderGeometry(.022, .028, 3.3, 6), ash).position.y = 1.65;
+      if (STD[i] === 'vexillum') { const bar = mk(new THREE.CylinderGeometry(.013, .013, .86, 5), ash); bar.rotation.z = Math.PI / 2; bar.position.y = 3.12;
+        const geo = new THREE.PlaneGeometry(.8, .74, 12, 9); geo.translate(0, -.37, 0); const cl = mk(geo, clothM); cl.position.set(0, 3.1, .015);
+        const fr = mk(new THREE.PlaneGeometry(.8, .07, 12, 1), crestM); fr.position.set(0, 2.33, .015); mk(new THREE.ConeGeometry(.03, .16, 4), goldM).position.y = 3.38;
+        std.userData = { cloth: cl, base: geo.attributes.position.array.slice(), fringe: fr }; }
+      else { mk(new THREE.ConeGeometry(.035, .2, 4), goldM).position.y = 3.4; const bar = mk(new THREE.CylinderGeometry(.012, .012, .42, 5), goldM); bar.rotation.z = Math.PI / 2; bar.position.y = 3.18;
+        for (const sd of [-1, 1]) mk(new THREE.CylinderGeometry(.01, .025, .2, 5), clothM).position.set(sd * .2, 3.06, 0);
+        for (let k = 0; k < 6; k++) { const d = mk(new THREE.CylinderGeometry(.095, .095, .022, 18), goldM); d.rotation.x = Math.PI / 2; d.position.y = 2.62 - k * .22; } }
+      S.add(std); bearers.push({ b, std, ph: RG() });
+    } else {
+      const tip = tipMat(), sd = P.legionary({ h: 1.7 + RG() * .1, mat: tunic, skin: skinM, metal: iron, shieldM, wood: ash, tip, crestM, bind: bindM });
+      sd.position.set(x + (RG() - .5) * .12, FEET, GZ + (RG() - .5) * .1); sd.rotation.y = Math.PI + (RG() - .5) * .12; S.add(sd);
+      garrison.push({ s: sd, tip, ph: RG(), gph: RG(), sentry: i === 4 });
+    }
+  });
+  function garrisonAt(t) {
+    for (const g of garrison) { const I = P.idle(t, g.ph);
+      // the sentry slowly turns his head to look along the wall and back (eased, ~5 s), the others breathe and shift their weight
+      const look = g.sentry ? .55 * Math.sin(Math.PI * 2 * (t - 318) / 5.2) * Math.min(1, Math.max(0, (t - 318.5) / 1.2)) : 0;
+      P.soldierPose(g.s, { ...I, lean: -.02, head: [I.head[0], I.head[1] + look], twist: I.twist + look * .15 });
+      const gl = Math.pow(Math.max(0, Math.sin(6.2832 * (t * .37 + g.gph))), 18); g.tip.emissiveIntensity = 1.5 + 9 * gl; }   // the points catch the light
+    for (const { b, std, ph } of bearers) { const I = P.idle(t, ph);
+      b.updateMatrix(); const gl = V(0, 1.24 + I.bob, -.36), gr = V(0, .94 + I.bob, -.36);
+      P.pose(b, { ...I, lean: -.02, hands: [gl, gr] });                                     // both hands on the pole
+      const gw = gr.clone().applyMatrix4(b.matrix); std.position.set(gw.x, gw.y - .94 + .03, gw.z); std.rotation.set(0, Math.PI + .3, 0);
+      if (std.userData.cloth) { const q = std.userData.cloth.geometry.attributes.position, B0 = std.userData.base;
+        for (let i = 0; i < q.count; i++) { const px = B0[i * 3], py = B0[i * 3 + 1], dn = -py / .74;
+          q.setZ(i, (.06 * Math.sin(px * 7 - t * 2.4 + py * 3 + ph * 6) + .03 * Math.sin(px * 13 + t * 3.5)) * (.3 + dn)); q.setX(i, px + .02 * dn * Math.sin(t * 1.2 + ph * 5)); }
+        q.needsUpdate = true; std.userData.cloth.geometry.computeVertexNormals(); std.userData.fringe.position.z = .015 + .04 * Math.sin(-t * 2.4 + 1.2 + ph * 6); } }
+  }
+  window.__GARRISON = t => garrison.map(g => ({ J: g.s.userData }));
   const birds = []; { const bm = new THREE.MeshBasicMaterial({ color: '#3a342e', side: THREE.DoubleSide });
     for (let i = 0; i < 5; i++) { const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(new Float32Array(18), 3)); const b = new THREE.Mesh(g, bm); b.frustumCulled = false; S.add(b); birds.push(b); } }
   const setBird = (b, p, s, flap) => { const a = b.geometry.attributes.position, w = Math.sin(flap) * .55;
@@ -181,6 +237,7 @@ export async function build(W, H) {
     film.look.exposure = lerp(1.0, 1.12, pk);
     film.dofCfg.focus = lerp(9.5, 30, ss(T.rise[0], T.rise[1], t)); film.dofCfg.aperture = lerp(.6, .05, ss(T.rise[0], T.rise[1], t));
     birds.forEach((b, i) => { const a = t * .25 + i * 1.3; setBird(b, V(-6 + i * 3 + Math.sin(a) * 4, 24 + i * 1.5 + Math.sin(a * 1.7) * 1.2, -6 - i * 2 + Math.cos(a) * 3), .35, t * (7 + i) + i); });
+    garrisonAt(t);
     film.render(t);
   }
   // screen-space scatter from the sun (after heal-village.js godRays): bright pixels zoom-blurred from the light

@@ -65,15 +65,16 @@ export function beats(B) {
   T.look = [T.catch + 2.8, T.catch + 3.35];         // he looks about (head up, back, round)
   T.cover = [q9[2] - 1.0, q9[2] - .1];              // 「숨겨 두고」 — he pushes the soil back; a pinhole stays lit
   T.rise = [q9[2] + .05, q9[2] + .8];               // up off his knee, arms lifting (「기뻐하며」)
-  T.flip1 = [q9[2] + .8, q9[2] + 1.12];             // the puppeteer turns him toward home
-  T.run = [q9[2] + 1.15, q9[2] + 2.75];             // runs home (left), planted steps
+  T.armsDown = [q9[2] + .85, q9[2] + 1.25];         // the joy settles, arms come down before he turns
+  T.flip1 = [q9[2] + 1.3, q9[2] + 1.42];            // the puppeteer turns him toward home (arms down, quick)
+  T.run = [q9[2] + 1.45, q9[2] + 2.95];             // runs home (left), planted steps
   T.inside = [q9[2] + 2.75, q9[2] + 3.35];          // behind the house; comes out with the bundle
   T.out = [q9[2] + 3.0, q9[2] + 4.15];              // walks out to the buyer
-  T.merchIn = [q9[2] - .3, q9[2] + 2.8];            // the buyer walks in from the left edge
-  T.merchTurn = [q9[2] + 2.85, q9[2] + 3.17];       // and turns to face the house
+  T.merchIn = [q9[1] + .55, q9[1] + 2.35];          // the buyer walks in from beside the house while the man digs (after the plough has passed)
+  T.merchTurn = [q9[1] + 2.55, q9[1] + 2.67];       // one clear turn to face the house door (arms down, away from anyone): he waits there
   T.give = [q9[2] + 4.15, q9[2] + 5.85];              // 「자기의 소유를 다 팔아」 — the bundle into the buyer's hands
   T.merchOut = [q9[2] + 6.0, B.N19 + 3.4];         // the buyer goes off left with it on his shoulder
-  T.flip2 = [q9[2] + 5.85, q9[2] + 6.17];            // he turns back to the field
+  T.flip2 = [1e9, 1e9];                             // (no second turn: he comes out of the house already facing the field)
   T.walkBack = [B.N19 + .55, n19[1] + .9];           // walks back to stand before his field (「그 밭을 사느니라」 → N19)
   T.detail = [B.N19 + .1, n19[1] - .2];             // N19 push-in on detail: the gold through the pinhole
   T.detailBack = [n19[1] - .2, n19[2] - .1];
@@ -144,8 +145,9 @@ function kneelOn(front, k, s, f, lean = .3) { const x = front[0] - f * 34 * s, g
 // the foot that moves between two poses lifts on an arc (nothing slides on the ground)
 function stepBlend(A, Bp, k, lift = 11) { const F = mixPose(A, Bp, k); if (k <= 0 || k >= 1) return F;
   F.feet = F.feet.map((q, i) => { const d = Math.hypot(A.feet[i][0] - Bp.feet[i][0], A.feet[i][1] - Bp.feet[i][1]); return d > 2 ? [q[0], q[1] - lift * A.s * Math.sin(Math.PI * k) * clamp(d / 30)] : q; }); return F; }
+const clonePose = F => ({ ...F, hip: F.hip.slice(), feet: F.feet.map(q => q.slice()), hands: F.hands.map(h => h && h.slice()), kneel: F.kneel && F.kneel.slice(), toes: F.toes && F.toes.slice() });
 function mixPose(A, Bp, k) {
-  if (k <= 0) return A; if (k >= 1) return Bp;
+  if (k <= 0) return clonePose(A); if (k >= 1) return clonePose(Bp);
   const pick = k < .5 ? A : Bp, hang = F => [0, 1].map(i => { const sh = shoulderOf(F, i); return [sh[0] - F.f * 5 * F.s, sh[1] + 70 * F.s]; }), hA = hang(A), hB = hang(Bp);
   return { ...pick, s: lerp(A.s, Bp.s, k), gy: lerp(A.gy, Bp.gy, k), hip: mixv(A.hip, Bp.hip, k), ang: lerp(A.ang, Bp.ang, k), feet: [mixv(A.feet[0], Bp.feet[0], k), mixv(A.feet[1], Bp.feet[1], k)],
     hands: [0, 1].map(i => mixv(A.hands[i] || hA[i], Bp.hands[i] || hB[i], k)), tilt: lerp(A.tilt || 0, Bp.tilt || 0, k), sway: lerp(A.sway || 0, Bp.sway || 0, k), kneel: k < .5 ? A.kneel : Bp.kneel };
@@ -268,9 +270,9 @@ export async function build(W, H, TR) {
     return legs;
   }
   // the man's way through the second play, built from anchors so every phase starts where the last one ended
-  const STR = 120 * S, HOLD = pg => [[pg.top[0] + 4, pg.top[1] + 6], [pg.top[0], pg.top[1]]];
+  const STR = 120 * S, HOLD = pg => [[pg.top[0] - 15, pg.top[1] + 19], [pg.top[0], pg.top[1]]];
   const ploughPose = t => { const pg = plough(oxAt(t), 0), hx = pg.top[0] - 52 * S; const F = walkPose(hx, S, 1, (hx - 60) / STR, STR, { lean: .16, armSwing: 0 }); F.hands = HOLD(pg); return F; };
-  const hangOf = (F, i) => [shoulderOf(F, i)[0] - F.f * 5 * F.s, shoulderOf(F, i)[1] + 70 * F.s];
+  const hangOf = (F, i) => [shoulderOf(F, i)[0] + F.f * (i ? -4 : 9) * F.s, shoulderOf(F, i)[1] + (i ? 70 : 62) * F.s];
   let A = null;   // anchors (computed once T is known)
   function anchors() {
     const Wc = ploughPose(T.catch);
@@ -313,7 +315,7 @@ export async function build(W, H, TR) {
       F.tilt = .45;
     } else if (t < T.rise[0]) {   // kneeling: dig, the gold, look about, cover
       F = stepBlend(A.Wend, A.Kn, ease2((t - T.kneel[0]) / (T.kneel[1] - T.kneel[0])), 14);
-      const awe = ss(T.gold[0], T.gold[1], t) * (1 - ss(T.cover[0] - .35, T.cover[0], t));
+      const awe = ss(T.gold[0], T.gold[1], t) * (1 - ss(T.cover[0] - .75, T.cover[0], t));
       F.ang = lerp(F.ang, F.f * .42, awe); F.hip = [F.hip[0], F.hip[1] - 4 * S * awe];
       const dk = clamp((t - T.dig[0]) / (T.dig[1] - T.dig[0])), lk = clamp((t - T.look[0]) / (T.look[1] - T.look[0])), ck = clamp((t - T.cover[0]) / (T.cover[1] - T.cover[0]));
       const hk = ss(T.kneel[0] + .3, T.kneel[1], t);
@@ -328,26 +330,25 @@ export async function build(W, H, TR) {
     } else if (t < T.run[0]) {   // up off the knee with joy; then the flip toward home
       const up = ease2((t - T.rise[0]) / (T.rise[1] - T.rise[0]));
       const Kc = { ...A.Kn, ang: A.Kn.f * lerp(1.22, .42, ss(T.rise[0], T.rise[0] + .3, t)) };
-      F = stepBlend(Kc, A.Sr, up, 12); joyArms(F, ss(T.rise[0] + .15, T.rise[1] + .1, t), t); F.tilt = lerp(.38, -.22, up);
+      F = stepBlend(Kc, A.Sr, up, 12); joyArms(F, ss(T.rise[0] + .15, T.rise[1], t) * (1 - ss(T.armsDown[0], T.armsDown[1], t)), t); F.tilt = lerp(.38, -.22, up) + .2 * ss(T.armsDown[0], T.armsDown[1], t);
       const H0 = manAt(T.rise[0] - .001).F.hands, hb = ss(T.rise[0], T.rise[0] + .4, t); F.hands = F.hands.map((h, i) => mixv(H0[i] || h, h, hb));
       if (t > T.flip1[0]) { const k = clamp((t - T.flip1[0]) / (T.flip1[1] - T.flip1[0])); flip = k < 1 ? k : null;
-        if (k >= .5) { F = standOn(A.Sr.feet, S, -1, { lean: -.02 }); joyArms(F, 1, t); F.tilt = -.22; } }
+        if (k >= .5) { F = standOn(A.Sr.feet, S, -1, { lean: .02 }); F.tilt = -.02; } }
     } else if (t < T.out[0]) {   // runs home: a flight phase, planted feet, one arm still up for joy at first
       const w = walkAlong(t, T.run[0], T.run[1], A.runX0, A.runX1, A.runStr, .22, .02);
       F = walkPose(w.x, S, -1, w.ph + .05, A.runStr, { stance: .38, lift: 24, lean: .2, bounce: 3, pump: 1, armSwing: 15, crouch: .96 });
-      const joy = 1 - ss(T.run[0] + .1, T.run[0] + .9, t); if (joy > 0) { const pump = F.hands[1]; armTo(F, 1, lerp(1.2, 2.5, joy)); F.hands[1] = mixv(pump, F.hands[1], ss(0, 1, joy)); }
-      if (t < T.run[0] + .3) { const St = standOn(A.Sr.feet, S, -1, { lean: -.02 }); joyArms(St, 1, t); St.tilt = -.22; F = mixPose(St, F, ease2((t - T.run[0]) / .3)); }
+      if (t < T.run[0] + .3) { const St = standOn(A.Sr.feet, S, -1, { lean: .02 }); St.tilt = -.02; F = mixPose(St, F, ease2((t - T.run[0]) / .3)); }
       F.tilt = F.tilt ?? -.1;
     } else if (t < T.give[0]) {   // out of the door with the bundle in both arms
       const w = walkAlong(t, T.out[0], T.out[1], A.outX0, A.outX1, A.outStr, .05, .35);
       F = walkPose(w.x, S, 1, w.ph + .05, A.outStr, { lean: .1, armSwing: 0 });
-      const c = frameOf(F).P(30, 36); F.carry = c; F.hands = [[c[0] - 22 * S, c[1] + 18 * S], [c[0] + 18 * S, c[1] + 20 * S]];
+      const c = frameOf(F).P(30, 14); F.carry = c; F.hands = [[c[0] - 30, c[1] + 20], [c[0] + 28, c[1] + 22]];
     } else if (t < T.walkBack[0]) {   // gives it; then the flip back to the field
       const gk = ease2((t - T.give[0]) / (T.give[1] - T.give[0]));
       F = { ...A.Wd, hands: A.Wd.hands.slice(), ang: A.Wd.f * lerp(.1, .03, ss(.6, 1, gk)) };
-      const c0 = frameOf(A.Wd).P(30, 36), c1 = [c0[0] + 18 * gk, c0[1] - 4 * gk];
+      const c0 = frameOf(A.Wd).P(30, 14), c1 = [c0[0] + 18 * gk, c0[1] - 4 * gk];
       F.carry = gk < .6 ? c1 : null;
-      const hold = [[c1[0] - 22 * S, c1[1] + 18 * S], [c1[0] + 18 * S, c1[1] + 20 * S]];
+      const hold = [[c1[0] - 30, c1[1] + 20], [c1[0] + 28, c1[1] + 22]];
       F.hands = [0, 1].map(i => mixv(hold[i], hangOf(F, i), ss(.6, .95, gk)));
       if (t > T.flip2[0]) { const k = clamp((t - T.flip2[0]) / (T.flip2[1] - T.flip2[0])); flip = k < 1 ? k : null; if (k >= .5) F = { ...A.St0, hands: [null, null] }; }
     } else {   // walks back to the field and stands before it; arms open
@@ -361,29 +362,31 @@ export async function build(W, H, TR) {
     return { F, flip, pg, o };
   }
   function buyerAt(t) {
+    // the buyer stands by the house watching the field (breathing, weight shifting); after the man has run past him he turns once
+    // toward the house (arms down, quick), takes the bundle, swings it onto his back and goes off left with it
     if (t < T.merchIn[0] || t > T.merchOut[1]) return null;
-    const s = BUY.s, str = stopStride(296 + 110, 140 * s);
-    if (t < T.merchTurn[0]) { const w = walkAlong(t, T.merchIn[0], T.merchIn[1], -110, 296, str, .05, .3); return { F: walkPose(w.x, s, 1, w.ph + .05, str, { lean: .05 }), flip: null, carry: null }; }
-    const We = walkPose(296, s, 1, 406 / str + .05, str, { lean: .05 });
-    if (t < T.merchTurn[1]) { const k = clamp((t - T.merchTurn[0]) / (T.merchTurn[1] - T.merchTurn[0])); return { F: k < .5 ? standOn(We.feet, s, 1) : standOn(We.feet, s, -1), flip: k, carry: null }; }
-    const St = standOn(We.feet, s, -1, { lean: .04 }), gk = ease2((t - T.give[0]) / (T.give[1] - T.give[0]));
-    // the near hand over the shoulder (an arc round it), the bundle hanging from it on his back
-    const overArm = (F, th) => { armTo(F, 1, th, 64); const h = F.hands[1]; return [h[0] - F.f * 6, h[1] + 30]; };
+    const s = BUY.s, X = 296, life = (F, ph) => { const w = Math.sin(t * .35 + ph * 6.283); F.hip = [F.hip[0] + .8 * w, F.hip[1] - .6 * Math.abs(w)]; F.tilt = (F.tilt || 0) + .04 * Math.sin(t * .27 + ph * 11); return F; };
+    const strI = stopStride(X - 20, 140 * s), We = walkPose(X, s, 1, (X - 20) / strI + .05, strI, { lean: .05 }), feet = We.feet.map(q => q.slice());
+    if (t < T.merchIn[1]) { const w = walkAlong(t, T.merchIn[0], T.merchIn[1], 20, X, strI, .1, .3); return { F: walkPose(w.x, s, 1, w.ph + .05, strI, { lean: .05 }), flip: null, carry: null }; }
+    if (t < T.merchTurn[0]) return { F: life(stepBlend(We, standOn(feet, s, 1, { lean: .02 }), ease2((t - T.merchIn[1]) / .2)), .3), flip: null, carry: null };
+    if (t < T.merchTurn[1]) { const k = clamp((t - T.merchTurn[0]) / (T.merchTurn[1] - T.merchTurn[0])); return { F: life(standOn(feet, s, k < .5 ? 1 : -1, { lean: .02 }), .3), flip: k, carry: null }; }
+    const St = life(standOn(feet, s, -1, { lean: .04 }), .3), gk = ease2((t - T.give[0]) / (T.give[1] - T.give[0]));
+    const overArm = (F, th) => { armTo(F, 1, th * .86, 54); const h = F.hands[1]; return [h[0] - F.f * 16, h[1] + 54]; };   // the hand over the shoulder on its neck, the bundle on his back below it
     if (t < T.merchOut[0]) {
-      const c0 = frameOf(A.Wd).P(30, 36), c = [c0[0] + 18 * gk, c0[1] - 4 * gk];
-      const hang = [0, 1].map(i => hangOf(St, i)), grab = [[c[0] + 20 * S, c[1] + 16 * S], [c[0] - 14 * S, c[1] + 20 * S]];
+      const c0 = frameOf(A.Wd).P(30, 14), c = [c0[0] + 18 * gk, c0[1] - 4 * gk];
+      const hang = [0, 1].map(i => hangOf(St, i)), grab = [[c[0] + 29, c[1] + 18], [c[0] - 27, c[1] + 22]];
       const sw = ss(.6, 1, gk), hand2 = ss(.55, .9, gk);
       St.hands = [0, 1].map(i => mixv(hang[i], grab[i], ss(.2, .55, gk)));
       let cc = null;
       if (gk >= .55) { const Fx = { ...St, hands: St.hands.slice() }; const back = overArm(Fx, lerp(1.45, 2.85, sw));
         St.hands[1] = mixv(grab[1], Fx.hands[1], hand2); St.hands[0] = mixv(grab[0], hang[0], ss(.6, .95, gk)); cc = mixv(c, back, hand2); }
-      return { F: St, flip: null, carry: cc };
+      return { F: St, flip: null, carry: cc, behind: gk > .72 };
     }
     const str2 = stopStride(St.hip[0] + 110, 140 * s), w = walkAlong(t, T.merchOut[0], T.merchOut[1], St.hip[0], -110, str2, .25, .05);
     const F = walkPose(w.x, s, -1, w.ph + .05, str2, { lean: .12, armSwing: 8 });
-    if (t < T.merchOut[0] + .3) { const k = ease2((t - T.merchOut[0]) / .3); F.hip = mixv(St.hip, F.hip, k); F.feet = F.feet.map((q, i) => mixv(St.feet[i], q, k)); }
+    if (t < T.merchOut[0] + .4) { const k = ease2((t - T.merchOut[0]) / .4); F.hip = mixv(St.hip, F.hip, k); F.feet = F.feet.map((q, i) => mixv(St.feet[i], q, k)); F.hands = [mixv(hangOf(St, 0), F.hands[0], k), F.hands[1]]; }
     const back = overArm(F, 2.85);
-    return { F, flip: null, carry: back };
+    return { F, flip: null, carry: back, behind: true };
   }
 
   // ---------------------------------------------------------------- drawing figures into the leather layer (FIG, then × into T)
@@ -399,6 +402,7 @@ export async function build(W, H, TR) {
     const leg = L => { cap(g, L.hp, L.kn, 8 * s, 6.2 * s); cap(g, L.kn, L.an, 6.2 * s, 4.6 * s);
       const lift = Math.max(0, gyAt(L.foot[0]) - L.foot[1]), toe = F.kneel && F.kneel[L.i] ? .9 : lift > 3 * s ? -.25 * clamp(lift / (10 * s)) : 0, cs = Math.cos(toe), sn = Math.sin(toe);
       g.beginPath(); [[-6, -8], [6, -8], [15, -4], [20, -1], [20, 1], [-7, 1]].forEach(([u, v], j) => { const x = L.an[0] + f * (u * cs - v * sn) * s, y = L.an[1] + BD.ANK * s + (u * sn + v * cs) * s; j ? g.lineTo(x, y) : g.moveTo(x, y); }); g.closePath(); g.fill(); };
+    if (o.carry && o.behind) { g.save(); g.translate(o.carry[0], o.carry[1]); g.scale(S * .82, S * .82); P.drawP(g, bundle); g.restore(); }
     arm(J.arm[0]); leg(J.leg[0]);
     g.fillStyle = pat(g, 'body', M); leg(J.leg[1]);
     // tunic: shoulders → belt → a skirt to mid-calf that hangs with gravity (turns with 30 % of the lean)
@@ -419,7 +423,7 @@ export async function build(W, H, TR) {
     g.fillStyle = pat(g, 'robe', M);
     fillP([[-15, 6], [-16, -6], [-12, -15], [-4, -20], [6, -20], [13, -15], [15, -9], [12, -8], [8, -12], [0, -12], [-6, -6], [-8, 4], [-10, 14], [-16, 30], [-24, 34], [-22, 20]]);   // head cloth to the shoulder
     // carry: the bundle in front (between body and near arm)
-    if (o.carry) { g.save(); g.translate(o.carry[0], o.carry[1]); g.scale(S * .95, S * .95); P.drawP(g, bundle); g.restore(); }
+    if (o.carry && !o.behind) { g.save(); g.translate(o.carry[0], o.carry[1]); g.scale(S * .82, S * .82); P.drawP(g, bundle); g.restore(); }
     g.fillStyle = pat(g, 'body', M); arm(J.arm[1]);
     // cut lace: the belt line, a row of holes round the hem, the cord of the head cloth (holes move with the body)
     g.save(); g.globalCompositeOperation = 'destination-out'; g.fillStyle = 'rgba(0,0,0,.85)';
@@ -454,6 +458,7 @@ export async function build(W, H, TR) {
     g.fillStyle = pat(g, 'wood', M); g.strokeStyle = g.fillStyle;
     cap(g, pg.yoke, pg.heel, 4.2, 4.6);                         // the beam from the yoke down to the share
     cap(g, pg.heel, pg.top, 4, 3.4);                            // the handle (stilt) up to his hands
+    cap(g, [pg.top[0] - 3, pg.top[1] + 15], [pg.top[0] - 17, pg.top[1] + 20], 2.8, 2.6);   // the second handle (a peg on the stilt) for the far hand
     g.beginPath(); g.moveTo(pg.heel[0] - 4, pg.heel[1] - 4); g.lineTo(pg.share[0] + 22, pg.share[1] + 3); g.lineTo(pg.heel[0] - 2, pg.heel[1] + 9); g.closePath(); g.fill();   // the share
     g.beginPath(); g.ellipse(pg.yoke[0], pg.yoke[1], 16, 5, -.2, 0, TAU); g.fill();   // the yoke on the neck
   }
@@ -707,7 +712,7 @@ export async function build(W, H, TR) {
         const man = manAt(t), buy = buyerAt(t);
         drawOx(g, o, M);
         drawPlough(g, man.pg, M);
-        if (buy) drawFig(g, buy.F, M, buy.flip, { carry: buy.carry }, rods);
+        if (buy) drawFig(g, buy.F, M, buy.flip, { carry: buy.carry, behind: buy.behind }, rods);
         // the man (hidden while he is in the house)
         if (!man.F.hide) drawFig(g, man.F, M, man.flip, { carry: man.F.carry }, rods);
         // the house over everything near it: he passes behind it, seen only in the doorway
@@ -766,5 +771,5 @@ export async function build(W, H, TR) {
     if (t >= T.q9in[0]) { const m = manAt(t); out.man = { J: joints(m.F), flip: m.flip }; const b = buyerAt(t); if (b) out.buyer = { J: joints(b.F), flip: b.flip }; const o = oxAt(t); out.ox = oxLegs({ ...o, bob: 0 }).map(L => { const l1 = L.front ? OX.len.fu : OX.len.hu, l2 = L.front ? OX.len.fl : OX.len.hl; const [kn, an] = ik2(L.hip, [L.foot[0], L.foot[1] - 9], l1, l2, L.front ? -1 : 1); return { hp: L.hip, kn, an }; }); }
     if (t >= T.handIn[0] && t <= T.handOff[1]) { const h = handAt(t); out.hand = { c: h.c, th: h.th, w: h.w, rot: h.rot, o: h.origin }; }
     return out; }
-  return { draw, beats: () => T, view, posesAt, CHEST, SEED, LAMP };
+  return { draw, beats: () => T, view, posesAt, CHEST, SEED, LAMP, fieldTop };
 }

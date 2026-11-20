@@ -195,8 +195,33 @@ export function pose(g, P = {}) {
     // straight in a frame or two (the IK's singularity at full stretch — r3 measured a 0.28 rad/frame elbow flick on a pointing arm)
     { const L0 = U.la + U.lb, d = T.clone().sub(S), L = d.length(), a = .93 * L0, m = .995 * L0 - a;
       if (L > a) T = S.clone().addScaledVector(d, (a + m * (1 - Math.exp(-(L - a) / m))) / L); }
-    const [E, T2] = ik2(S, T, U.la, U.lb, V(A.sd * .35, -1, .45));
+    const [E, T2] = ik2(S, T, U.la, U.lb, elbowPole(S, T, A.sd));
     boneTo(A.up, S, E); boneTo(A.fo, E, T2); A.hand.position.copy(T2); A.T = T2; A.E = E; A.S2 = S; });
+}
+// ---------------------------------------------------------------- the elbow's pole, with an anti-inversion check (round 8, 2026-11-20)
+// 「kingdom」 6부 body check (owner: "팔 한쪽도 반대로 꺾이고"): the fixed pole V(sd·.35, −1, .45) (down, a little out and back) is right
+// for every hand in front of or beside the body, but when a hand goes BEHIND the body or across the back (a target swinging round
+// as a figure turns, hands clasped behind the back) its component across the reach flips: the elbow pointed forward into the chest
+// or inward through the torso. elbowPole() keeps the old pole wherever it is sound — same result, other films unchanged — and only
+// where the elbow it gives would point against the anatomical reference does it turn the pole round the shoulder→hand axis toward
+// that reference, smoothly (no snap):
+//   reference = out (sd·x) + down + back, with "out" growing and "back"/"down" shrinking as the hand goes behind (z > 0): a hand
+//   reaching behind the back has its elbow out and back, a hand in front has it down and out;
+//   sanity clamp: when the old pole is nearly parallel to the reach (|perp| < .2) the reference takes over (no arbitrary side);
+//   anti-inversion: w = ss(.5, −.3, cos(old elbow, reference elbow)) — 0 while they agree within ~60°, 1 when opposed.
+const _ax = V(), _p0 = V(), _pr = V(), _cr = V();
+export function elbowPole(S, T, sd) {
+  _ax.copy(T).sub(S); const L = _ax.length(); if (L < 1e-6) return V(sd * .35, -1, .45); _ax.divideScalar(L);
+  const back = Math.max(0, _ax.z), pole0 = V(sd * .35, -1, .45);
+  const ref = V(sd * (.35 + 1.2 * back), -(1 - .9 * back), .45 * (1 - back));
+  _p0.copy(pole0).addScaledVector(_ax, -pole0.dot(_ax)); _pr.copy(ref).addScaledVector(_ax, -ref.dot(_ax));
+  const l0 = _p0.length(), lr = _pr.length(); if (lr < 1e-6) return pole0;
+  _pr.divideScalar(lr); if (l0 < 1e-6) return _pr.clone();
+  _p0.divideScalar(l0);
+  const c = clamp(_p0.dot(_pr), -1, 1), w = Math.max(ss(.5, -.3, c), 1 - ss(.08, .2, l0));
+  if (w <= 0) return pole0;
+  const ang = Math.atan2(_cr.copy(_p0).cross(_pr).dot(_ax), c);   // signed angle old → reference round the reach axis
+  return _p0.clone().applyAxisAngle(_ax, ang * w);
 }
 // where a hand is now (root frame) — for objects held in it
 export function handAt(g, i) { const U = g.userData; return U.arms[i].T.clone().applyMatrix4(U.upper.matrix); }

@@ -520,30 +520,58 @@ export async function build(W, H_, B0 = null) {
   const stepFeet = (g, k01) => { const U = g.userData, u = clamp(k01), l0 = Math.max(0, Math.sin(clamp(u * 2) * Math.PI)), l1 = Math.max(0, Math.sin(clamp(u * 2 - 1) * Math.PI));
     return [{ u: .09 * U.s, lift: .04 * l0 }, { u: -.07 * U.s, lift: .04 * l1 }]; };
   const HORIZON = 78;   // the far horizon he turns to (north-north-west: Samaria, and on to the ends of the earth)
+  // round 8 (2026-11-20, owner: "사람 회전이 이상한 게 있어, 팔 한쪽도 반대로 꺾이고") — body check of every figure every 0.2 s found:
+  //   * the one man spun 310° (lerp(328, 18) went the long way round) and his right hand's target swung behind his back → the elbow
+  //     pointed into his chest; the men walking out spun on the spot (up to 18°/frame) with their planted feet sliding 15–18 cm a frame;
+  //   * head-and-torso turns flipped 39° in one frame when the thing they looked at passed behind them (wrapD jumps at ±180°).
+  // turnSteps: a turn in place as n real steps — each step one foot lifts and swings while the body pivots on the other, planted
+  // foot (its world position held), so no foot slides. Pure function of k (0..1). Returns { h (heading), pos (root, world), feet }.
+  const FOOT = (U, i, u) => V((i ? 1 : -1) * .1 * U.s, 0, -u);   // a foot's place in the root frame (as pose() puts the ankle)
+  function turnSteps(g, P0, h0, h1, k, dur) {
+    const U = g.userData, s = U.s, D = wrapD(h1 - h0), n = Math.max(1, Math.ceil(Math.abs(D) / 50), Math.round(dur / .8)), u0 = [.09 * s, -.07 * s];
+    let h = h0, pos = P0.clone(); const kk = clamp(k) * n, j = Math.min(n - 1, Math.floor(kk)), f = kk - j;
+    const rotT = (v, hh) => v.clone().applyAxisAngle(V(0, 1, 0), yawOf(hh));
+    for (let q = 0; q <= j; q++) { const piv = q % 2 ? 0 : 1, a = q < j ? 1 : ss(0, 1, f), hq = h0 + D * q / n, hn = hq + D / n * a;   // even steps pivot on the right foot (the left lifts)
+      const Fp = pos.clone().add(rotT(FOOT(U, piv, u0[piv]), hq)); pos = Fp.sub(rotT(FOOT(U, piv, u0[piv]), hn)); h = hn; }
+    const lift = .04 * Math.sin(Math.PI * clamp(f)), lifted = j % 2 ? 1 : 0;
+    return { h, pos, feet: [{ u: u0[0], lift: lifted === 0 ? lift : 0 }, { u: u0[1], lift: lifted === 1 ? lift : 0 }] }; }
+  // a head/torso turn toward heading hw from body heading `body`: shortest way, but fading to straight ahead as the target passes
+  // behind (|rel| 120°→175°), so the turn is continuous through ±180° instead of flipping sides
+  const relLook = (hw, body) => { const r = wrapD(hw - body); return r * (1 - ss(120, 175, Math.abs(r))) * D2R; };
   function people(t) {
     const tT = T, k = (t0, U, d = .95) => ss(t0 + U.dl, t0 + U.dl + d, t);
     // the one man: alive, still; he listens (head to whoever speaks), and at N28c his right hand opens toward the far horizon
-    { const U = king.userData, s = U.s, tk = (t - tT.open[0]) / (tT.turn[1] - tT.open[0]), body = lerp(328, 18, eio(tk));
-      king.rotation.y = yawOf(body);
+    { const U = king.userData, s = U.s, tk = (t - tT.open[0]) / (tT.turn[1] - tT.open[0]);
+      const ts = turnSteps(king, V(JX, H(JX, JZ), JZ), 328, 378, eio(tk), tT.turn[1] - tT.open[0]), body = ts.h;   // round 8: 328 → 378 (= 18), not back round through 0
+      king.rotation.y = yawOf(body); king.position.copy(ts.pos); king.position.y = H(ts.pos.x, ts.pos.z);
       const id = P.idle(t, U.ph, { s }), gk = eio((t - tT.open[0]) / (tT.open[1] - tT.open[0])) * (1 - eio((t - tT.crane - 1.2) / 1.8));
       let hw = blendH(blendH(headingTo(JX, JZ, CAST[0][0], CAST[0][1]), headingTo(JX, JZ, CAST[1][0], CAST[1][1]), ss(tT.ask[0], tT.ask[1], t)), HORIZON, ss(tT.open[0], tT.open[1] + .5, t));
-      const hy = clamp(wrapD(hw - body) * D2R, -1.1, 1.1);
-      const Sh = shoulder(king, 1), dirR = toRoot(king, hd(HORIZON)), hand = Sh.clone().addScaledVector(dirR, (U.la + U.lb) * .78).add(V(0, -.16 * s, 0));
-      P.pose(king, { ...id, feet: stepFeet(king, tk), head: [-.03 + .02 * Math.sin(t * .4), hy * .8], twist: id.twist + hy * .15, hands: [null, restHand(king, 1).lerp(hand, gk)] }); }
+      const hy = clamp(relLook(hw, body), -1.1, 1.1);
+      const Sh = shoulder(king, 1), dirR = toRoot(king, hd(body + clamp(wrapD(HORIZON - body), -62, 62))),   /* round 8: the open hand stays in front of his shoulder (it reached 110° round behind him before he had turned) */ hand = Sh.clone().addScaledVector(dirR, (U.la + U.lb) * .78).add(V(0, -.16 * s, 0));
+      P.pose(king, { ...id, feet: ts.feet, head: [-.03 + .02 * Math.sin(t * .4), hy * .8], twist: id.twist + hy * .15, hands: [null, restHand(king, 1).lerp(hand, gk)] }); }
     const ant = V(AN0.x - 12, -10, AN0.z + 20);
     men.forEach((g, i) => { const U = g.userData, s = U.s;
-      const wk = WALKERS.find(w => w[0] === i), wi = WALKERS.findIndex(w => w[0] === i);
-      if (wk && t > tT.walk + wi * .45) {   // walks out along his road: turns toward it, then real steps (planted feet)
-        const t0 = tT.walk + wi * .45, tk = eio((t - t0) / .9), hdg = blendH(U.h0, wk[1], tk);
-        g.rotation.y = yawOf(hdg); const w = P.walk(g, t, t0 + .6, { T: 1.12, L: .5 }); const dir = hd(wk[1]);
-        g.position.set(U.x0 + dir.x * w.dist, 0, U.z0 + dir.z * w.dist); g.position.y = H(g.position.x, g.position.z);
-        P.pose(g, t > t0 + .6 ? { ...w, breath: .5, head: [0, 0] } : { ...P.idle(t, U.ph, { s }), feet: stepFeet(g, tk), head: [0, 0] }); return; }
+      const wk = WALKERS.find(w => w[0] === i), wi = WALKERS.findIndex(w => w[0] === i); let turning = null;
+      if (wk && t > tT.walk + wi * .45) {   // walks out along his road: turns toward it in steps, then walks (planted feet throughout)
+        const t0 = tT.walk + wi * .45, Dg = Math.abs(wrapD(wk[1] - U.h0)), Td = .6 + Dg / 120, P0 = V(U.x0, 0, U.z0);   // round 8: ≤ ~2.2°/frame, was 18
+        if (!U.turnEnd) U.turnEnd = turnSteps(g, P0, U.h0, wk[1], 1, Td);
+        if (t < t0 + Td) turning = { ts: turnSteps(g, P0, U.h0, wk[1], (t - t0) / Td, Td), k: ss(0, .7, t - t0) };   // turning: the standing pose below, with its look and hands easing off
+        else {
+        // the first stride eases in (amt 0 → 1 over 0.8 s, feet blended from where they stood), the distance integrates the same ease
+        const e = t - t0 - Td, ea = clamp(e / .8), amt = ea * ea * (3 - 2 * ea), w = P.walk(g, t, t0 + Td, { T: 1.12, L: .5, amt }), dir = hd(wk[1]);
+        const dist = (.5 / .56) * (e < .8 ? .8 * (Math.pow(ea, 3) - Math.pow(ea, 4) / 2) : .4 + (e - .8)), B = U.turnEnd.pos;
+        if (amt < 1) w.feet = w.feet.map((f, j) => ({ ...f, u: lerp(U.turnEnd.feet[j].u, f.u, amt) }));
+        g.rotation.y = yawOf(U.turnEnd.h); g.position.set(B.x + dir.x * dist, 0, B.z + dir.z * dist); g.position.y = H(g.position.x, g.position.z);
+        P.pose(g, { ...w, breath: .5, head: [0, 0] }); return; } }
       g.position.set(U.x0, H(U.x0, U.z0), U.z0);
+      if (turning) g.position.set(turning.ts.pos.x, H(turning.ts.pos.x, turning.ts.pos.z), turning.ts.pos.z);
       // the body: 10 turns to the far horizon at N28c (eased, small steps); the rest stay where they are
-      const tk = (t - tT.turn[0]) / (tT.turn[1] - tT.turn[0]), body = i === 10 ? lerp(U.h0, HORIZON, eio(tk)) : U.h0; g.rotation.y = yawOf(body);
+      const tk = (t - tT.turn[0]) / (tT.turn[1] - tT.turn[0]), ts10 = i === 10 ? turnSteps(g, V(U.x0, 0, U.z0), U.h0, HORIZON, eio(tk), tT.turn[1] - tT.turn[0]) : null, body = turning ? turning.ts.h : ts10 ? ts10.h : U.h0; g.rotation.y = yawOf(body);
+      if (ts10) g.position.set(ts10.pos.x, H(ts10.pos.x, ts10.pos.z), ts10.pos.z);
       const sit = U.kind === 'rock', id = P.idle(t, U.ph, { s });
       const base = sit ? { ...id, ...P.rockSit(U.seat, s, { lean: i === 4 ? -.3 : -.08 }), side: id.side * .4 } : id;
-      if (i === 10) base.feet = stepFeet(g, tk);
+      if (i === 10) base.feet = ts10.feet;
+      if (turning) base.feet = turning.ts.feet;
       // where the head looks: him (they were talking) → the walls after Peter's arm, one after another → (some) back to him at the
       // question → the walls and banners → him as he speaks → the far horizon, one after another
       const pos = g.position, hJ = headingTo(pos.x, pos.z, JX, JZ), hC = headingTo(pos.x, pos.z, ant.x, ant.z);
@@ -552,7 +580,7 @@ export async function build(W, H_, B0 = null) {
       if (i === 1 || i === 2 || i === 9 || i === 3) hw = blendH(hw, hJ, k(tT.ask[0] + .15, U) * (1 - k(tT.look2, U)));
       hw = blendH(hw, hC, k(tT.look2, U)); hw = blendH(hw, hJ, k(tT.look3, U, .8)); hw = blendH(hw, HORIZON, k(tT.look4, U, 1.1));
       if (i === 10) hw = blendH(hw, HORIZON, ss(tT.turn[0] - .3, tT.turn[0] + .6, t));   // his head leads the turn
-      const rel = wrapD(hw - body) * D2R, tw = clamp(rel * .3, sit ? -.2 : -.34, sit ? .2 : .34), hy = clamp(rel - tw, -1.15, 1.15);
+      const rel = relLook(hw, body), tw = clamp(rel * .3, sit ? -.2 : -.34, sit ? .2 : .34), hy = clamp(rel - tw, -1.15, 1.15);
       const ex = { ...base, head: [(sit ? .02 : -.04) + .03 * Math.sin(t * .37 + U.ph * 5), hy + .04 * Math.sin(t * .31 + U.ph * 9)], twist: base.twist + tw };
       if (sit) ex.hands = i === 4 ? [V(-.1 * s, U.hipY + base.bob + .02 * s, -.5 * s), V(.12 * s, U.hipY + base.bob + .04 * s, -.48 * s)] : [P.kneeHand(g, -1, base), P.kneeHand(g, 1, base)];
       if (i === 0) {   // Peter: the arm comes up and points across the valley at the Antonia; half down while they talk; up again; down at N28c
@@ -560,13 +588,15 @@ export async function build(W, H_, B0 = null) {
         const kk = up * rel2 * (1 - eio((t - tT.lower[0]) / (tT.lower[1] - tT.lower[0])));
         const Sh = shoulder(g, 1), dirW = ant.clone().sub(g.position.clone().add(V(0, 1.45, 0))).normalize(), dirR = toRoot(g, dirW), tip = Sh.clone().addScaledVector(dirR.clone().add(V(0, .32, 0)).normalize(), (U.la + U.lb) * .97);
         ex.hands = [null, restHand(g, 1).lerp(tip, kk)]; ex.twist += .1 * kk;
-        const hW = wrapD(hC - body) * D2R; ex.head = [ex.head[0] + .02 * kk, lerp(ex.head[1], clamp(hW, -1, 1), clamp(kk * 1.3, 0, 1))]; }
+        const hW = relLook(hC, body); ex.head = [ex.head[0] + .02 * kk, lerp(ex.head[1], clamp(hW, -1, 1), clamp(kk * 1.3, 0, 1))]; }
       if (i === 1) { const kq = ss(tT.ask[0], tT.ask[1], t) * (1 - ss(tT.askOff[0], tT.askOff[1], t));   // the question: an open hand toward him
         const Sh = shoulder(g, -1), dirR = toRoot(g, V(JX - pos.x, 0, JZ - pos.z).normalize()), palm = Sh.clone().add(V(0, -.36 * s, 0)).addScaledVector(dirR, .38 * s);
         ex.hands = [restHand(g, -1).lerp(palm, kq), null]; ex.twist += .1 * kq; ex.lean = (ex.lean || 0) - .05 * kq; }
       if (i === 5) ex.hands = [null, U.grip.clone()];
       if (i === 7) ex.hands = [null, V(.06 * s, U.hipY + U.torsoH - .16 * s, -.2 * s)];
-      if (i === 8) ex.hands = [V(.04 * s, U.hipY + .06 * s, .15 * s), V(-.04 * s, U.hipY + .08 * s, .16 * s)];
+      if (i === 8) ex.hands = [V(-.03 * s, U.hipY + .07 * s, .22 * s), V(.03 * s, U.hipY + .09 * s, .225 * s)];   // round 8: behind the back, not inside it
+      if (turning) { const kt = turning.k; ex.head = [ex.head[0] * (1 - kt), ex.head[1] * (1 - kt)]; ex.twist = (ex.twist || 0) * (1 - kt);
+        if (ex.hands) { ex.handsW = ex.hands.map(h => h ? 1 - kt : 0); } }
       P.pose(g, ex); });
   }
 
@@ -602,8 +632,16 @@ export async function build(W, H_, B0 = null) {
   // d = the front value at that moment (line length ÷ the line's speed share lam). The road glow keeps running along the roads.
   const R_E0 = E.R_E, OX = .6, OZ = .4, OY = H(OX, OZ) + .15;   // the origin: between their feet (the terrain's feet glow is centred here)
   const lineLen = P => Math.atan2(Math.hypot(P.x, P.z), P.y + R_E0) * R_E0;   // great-circle metres from the origin, as burstLines measures
-  const rL = rng(1208), LOC = lamps.map((L, i) => { const d = lineLen(L.p), lam = .82 + .18 * rL(); L.d = d / lam; L.f = Math.max(40, d * .06);
-    return { P: L.p, lam, k: i < 2440 ? .5 : .85, rest: .05 + .06 * rL(), rho: d * .4 * rL(), hTop: clamp(d * .02, 6, 1500) }; });
+  const cellH = (x, z, k) => { const h = Math.sin(Math.round(x / 3000) * 127.1 + Math.round(z / 3000) * 311.7 + k) * 43758.5453; return h - Math.floor(h); };
+  // round 8: each lamp's line on its own clock (burstLines late mode), and the lamp lights when that line lands — the city's lamps on
+  // 「예루살렘과」 (by 250 m quarter, a pulse each), then the villages of Judea and Samaria by distance, a pulse per village (3 km cell);
+  // all landed by c1 + 2.4, so the near ring never stands as a ball in the air at 34–37. Fast off, slowing in (1 − (1 − q)³).
+  const rL = rng(1208), LOC = lamps.map((L, i) => { const d = lineLen(L.p), city = i < 2440;
+    const ta = city ? T0B.c1 - .45 + .9 * clamp(d / 2600) + .7 * cellH(L.p.x * 12, L.p.z * 12, 2) - .2 + .15 * rL()
+                    : T0B.c1 + .35 + 2.0 * Math.pow(clamp(d / 1.5e5), .5) + .55 * cellH(L.p.x, L.p.z, 1) - .25 + .12 * rL();
+    const Tl = city ? .38 + .25 * rL() : .4 + .85 * Math.sqrt(clamp(d / 1.5e5)) * (.8 + .4 * rL()), t0 = Math.max(T0B.crane + .3, ta - Tl);
+    L.d = (t0 + Tl) * 1000; L.f = 200;   // the lamp's moment = its line's landing (ms of film time; the lamp meshes run on t × 1000)
+    return { P: L.p, late: { t0, T: t0 + Tl - t0 }, k: city ? .5 : .85, rest: .05 + .06 * rL(), rho: d * .4 * rL(), hTop: clamp(d * .02, 6, 1500) }; });
   // round 5: the city's own lamps (the first 2,440) in a mesh of their own — from high up they would draw the walls' outline as a
   // textured slab, so they give way to one soft warm glow over Jerusalem as the camera climbs
   const CLAMPS = E.lampPoints(lamps.slice(0, 2440), { px: 5.0, minPx: 1.4 }); CLAMPS.u.uRef.value = 900; S.add(CLAMPS.pts);
@@ -621,17 +659,38 @@ export async function build(W, H_, B0 = null) {
   // ride one front (front(t), shared with the road glow): the city on "예루살렘과", Judea, Samaria, the Mediterranean, the continents, the far
   // side by the end of "내 증인이 되리라". Under N28b a few last lines keep arriving on their own clocks and their lights bloom.
   const JER = [E.LL0[0], E.LL0[1]], v3 = (lo, la) => E.llToWorld(lo, la, 0, V()).sub(V(0, -R_E0, 0)).normalize();   // (the camera's frame)
-  const LINEK = .4, LINEDENS = .8;   // round 7: the world's lines — brightness, and how many lines per screen pixel round the hub before they thin out
+  const LINEK = .4, LINEDENS = .55;   // round 7: the world's lines — brightness, and how many lines per screen pixel round the hub before they thin out
   const DEEP = a => ss(4e6, 1.6e7, a), CGLOW = .08, SPACEBLOOM = .16, LIFT0 = film.look.lift.clone(), LIFTN = col('#020307');   // round 6 strengths
   const CWARM = [1, .66, .34];
   const CL = E.cityLights({ count: 16000, isLand: GL.isLand, skipWithin: 90000 });
   const GLN = [], lateL = [], D2Rr = Math.PI / 180, vis = (lo, la) => Math.acos(clamp(Math.sin(la * D2Rr) * Math.sin(11 * D2Rr) + Math.cos(la * D2Rr) * Math.cos(11 * D2Rr) * Math.cos((lo - 46) * D2Rr), -1, 1)) / D2Rr;
+  // round 8 (2026-11-20, owner: "너무 한 번에 같은 속도로 나오니까 좀 이상하게… 덜 어색하게"): the world's lines no longer ride one front at
+  // one speed. Each line has its own clock: an arrival time from an uneven front — faster along the old roads and sea lanes (fingers
+  // toward Rome, Asia, Antioch, Mesopotamia and Persia, India, Arabia, Ethiopia, Egypt and Africa), slower between them — then a
+  // pulse per region (the lines of one region leave together, regions at different moments), a little delay per line, and its own
+  // flight: launched T before it lands, fast off the ground and slowing in (burstLines' late mode: 1 − (1 − q)³). A few bright lead
+  // lines (the brightest city in each 12° of bearing) run well ahead. The density builds as the waves land, and the globe is full by
+  // the end of 「내 증인이 되리라」; the far side and the last lines (under N28b) keep arriving.
+  const DEF = mono([[T0B.c1 + 2.3, Math.log(4e4)], [T0B.c2, Math.log(3e5)], [T0B.c2 + 1.0, Math.log(2.4e6)], [T0B.c2 + 1.8, Math.log(7e6)], [T0B.f + .3, Math.log(1.3e7)], [T0B.f + 1.6, Math.log(1.8e7)], [T0B.g - .5, Math.log(2.3e7)]]);
+  const DTAB = []; for (let t = T0B.c1 + 2.3; t <= T0B.g; t += .005) DTAB.push([t, Math.exp(DEF(t))]);
+  const Dinv = d => { if (d <= DTAB[0][1]) return DTAB[0][0]; for (let i = 1; i < DTAB.length; i++) if (DTAB[i][1] >= d) { const [t0, d0] = DTAB[i - 1], [t1, d1] = DTAB[i]; return t0 + (t1 - t0) * (d - d0) / (d1 - d0); } return T0B.g + .5; };
+  const brg = P => (Math.atan2(P.z - OZ, P.x - OX) / D2Rr + 360) % 360;   // bearing from the hill: 0 north, 90 east
+  const ROUTES8 = ['ROM', 'CON', 'EPH', 'ANT', 'EDE', 'BAB', 'PER', 'MUM', 'ADD', 'AXU', 'MEM', 'ALX', 'CAR'].map(k => brg(E.llToWorld(...E.NODE[k], 0, V())));
+  const finger = b => 1 + .75 * Math.min(1, ROUTES8.reduce((a, r) => a + Math.exp(-((((b - r + 540) % 360 - 180) / 9) ** 2)), 0));
+  const pulse = (lo, la) => { const h = Math.sin(Math.round(la / 5) * 91.7 + Math.round(lo * Math.cos(la * D2Rr) / 5) * 47.3) * 43758.5453; return (h - Math.floor(h)) * .9 - .35; };   // a region's moment, −0.35…+0.55 s
+  const lead = new Map();   // the brightest light per 12° of bearing beyond 800 km
+  for (const c of CL) { const P = E.llToWorld(c.lon, c.lat, 700, V()), d = lineLen(P); if (d < 8e5) continue; const k = Math.floor(brg(P) / 12), sc = c.b * (.5 + E.popAt(c.lon, c.lat)); if (!lead.has(k) || lead.get(k).sc < sc) lead.set(k, { c, sc }); }
+  const LEADS = new Set([...lead.values()].map(v => v.c)), LEADI = new Map([...LEADS].map((c, i) => [c, i]));
   for (const c of CL) { c.pp = E.popAt(c.lon, c.lat); c.b *= .45 + .75 * Math.pow(c.pp, .6);   // round 6: the empty land's scattered points dimmer, the clusters brighter
-    const P = E.llToWorld(c.lon, c.lat, 700, V()), d = lineLen(P), lam = .8 + .2 * rL(), rest = .06 + .1 * rL(), rho = 2e6 * rL() ** 2, hTop = clamp(d * .004, 300, 2.5e4);   // hugging the surface (from low down a lifted line stood in the sky)
+    const P = E.llToWorld(c.lon, c.lat, 700, V()), d = lineLen(P), rest = .06 + .1 * rL(), rho = 2e6 * rL() ** 2, hTop = clamp(d * .004, 300, 2.5e4);   // hugging the surface (from low down a lifted line stood in the sky)
     if (d > 2.5e6 && vis(c.lon, c.lat) < 62 && rL() < .035) {   // the last lines: launched one by one under N28b, on the side of the globe we see
       const t0 = T0B.f + .25 + rL() * (T0B.g - T0B.f - 1.7), Tl = .8 + .8 * Math.sqrt(d / 1e7); c.late = true;
       lateL.push({ p: P, d: (t0 + Tl) * 1000, b: c.b * .8, s: 1, f: 220 }); GLN.push({ P, late: { t0, T: Tl }, k: 1.15, rest: rest + .04, rho: 0, hTop }); continue; }
-    far.push({ p: P, d: d / lam, b: c.b * .8, s: 1, f: Math.max(2e4, d * .05) }); GLN.push({ P, lam, k: (.8 + .4 * c.b) * (.35 + 2.4 * rL() ** 4), rest, rho, hTop }); }   // a few bright fibres among many faint ones (lineage-glow)
+    const isLead = LEADS.has(c), ta = Dinv(d / finger(brg(P)) / (isLead ? 2.1 : 1)) + (isLead ? -.15 : pulse(c.lon, c.lat) + .22 * rL() ** 2);
+    let Tl = (.32 + 1.05 * Math.sqrt(d / 2e7)) * (.8 + .4 * rL()), t0 = Math.max(T0B.crane + .4, ta - Tl);
+    if (isLead) { t0 = T0B.crane + .5 + ((LEADI.get(c) * 7) % LEADS.size) * (3.2 / LEADS.size) + .08 * rL(); Tl = ta - t0; }   // from the hill moment: they run out over the horizon and creep in to land
+    far.push({ p: P, d: (t0 + Tl) * 1000, b: c.b * .8 * (isLead ? 1.6 : 1), s: isLead ? 1.6 : 1, f: 200 });
+    GLN.push({ P, late: { t0, T: t0 + Tl - t0 }, k: (.8 + .4 * c.b) * (isLead ? 3.2 : (.35 + 2.4 * rL() ** 4)), rest: isLead ? .22 : rest, rho: isLead ? 0 : rho, hTop }); }   // a few bright fibres among many faint ones (lineage-glow)
   const CITIES = E.lampPoints(far, { px: 4.0, minPx: 1.4, color: CWARM }); CITIES.u.uRef.value = 4e6; CITIES.u.uBurst.value = 1; S.add(CITIES.pts);
   const LATEP = E.lampPoints(lateL, { px: 4.0, minPx: 1.4, color: CWARM }); LATEP.u.uRef.value = 4e6; LATEP.u.uBurst.value = 1; S.add(LATEP.pts);
   GL.u.tGlow.value = E.cityGlowTex(CL.filter(c => !c.late)); GL.u.uPre.value = 0;   // the cities' warm glow comes on only behind the slowest heads
@@ -733,21 +792,21 @@ export async function build(W, H_, B0 = null) {
     const F = front(t), glowOn = ss(T.crane - .2, T.crane + 1.4, t);
     terrU.uF.value = F; terrU.uGlow.value = (OFFS.includes("glow") ? 0 : 1) * glowOn * lerp(.8, 1.3, ss(2, -4, e)) * lerp(1, .3, ss(6e4, 6e5, alt)); terrU.uHeadW.value = Math.max(18, F * .12);
     terrU.uFeet.value = .7 * ss(T.crane - .3, T.crane + 1.0, t) * (1 - ss(T.crane + 3.5, T.crane + 7, t));
-        CLAMPS.u.uBurst.value = LAMPS.u.uBurst.value = 1; CLAMPS.u.uF.value = F; CLAMPS.u.uK.value = lerp(.5, 1.15, ss(2, -4, e)) * (1 - ss(1100, 3800, alt)); CLAMPS.u.uPull.value = .003; CLAMPS.u.uScale.value = film.scale;
+        CLAMPS.u.uBurst.value = LAMPS.u.uBurst.value = 1; CLAMPS.u.uF.value = t * 1000; CLAMPS.u.uK.value = lerp(.5, 1.15, ss(2, -4, e)) * (1 - ss(1100, 3800, alt)); CLAMPS.u.uPull.value = .003; CLAMPS.u.uScale.value = film.scale;
         JGLOW.u.uF.value = 1; JGLOW.u.uK.value = 0; JGLOW.u.uPull.value = .0005; JGLOW.u.uScale.value = film.scale;
-        LAMPS.u.uF.value = F; LAMPS.u.uK.value = lerp(.5, 1.15, ss(2, -4, e)) * (1 - ss(2.5e5, 1.6e6, alt)); LAMPS.u.uPull.value = alt < 4e4 ? .003 : .0005; LAMPS.u.uScale.value = film.scale;   // (from orbit the lamps would pile into one blob: the globe's own lights take over)
-    CITIES.u.uF.value = F; CITIES.u.uK.value = 1.2 + .6 * DEEP(alt); CITIES.u.uPull.value = .0004; CITIES.u.uScale.value = film.scale;
+        LAMPS.u.uF.value = t * 1000; LAMPS.u.uK.value = lerp(.5, 1.15, ss(2, -4, e)) * (1 - ss(2.5e5, 1.6e6, alt)); LAMPS.u.uPull.value = alt < 4e4 ? .003 : .0005; LAMPS.u.uScale.value = film.scale;   // (from orbit the lamps would pile into one blob: the globe's own lights take over)
+    CITIES.u.uF.value = t * 1000; CITIES.u.uK.value = 1.2 + .6 * DEEP(alt); CITIES.u.uPull.value = .0004; CITIES.u.uScale.value = film.scale;
     LATEP.u.uF.value = t * 1000; LATEP.u.uK.value = 1.2 + .6 * DEEP(alt); LATEP.u.uPull.value = .0004; LATEP.u.uScale.value = film.scale;
     HUB.u.uF.value = 1; HUB.u.uK.value = 1.5 * ss(150, 4000, alt) * (1 - .35 * DEEP(alt)); HUB.u.uPull.value = .0004; HUB.u.uScale.value = film.scale;
     // round 7: the lines — the local ones fade with their lamps as the camera leaves the region; the world's lines thin out where they crowd the hub
     for (const L of [LCITY, LLOC, LGLB]) { L.u.uF.value = F; L.u.uT.value = t; L.u.uRes.value.set(film.w, film.h); L.u.uBandY.value = .38; L.u.uLimb.value = ss(5e3, 6e4, alt); }   // the disc test only from the air (on the hill it would cut lines at eye level)
-    LLOC.u.uPx.value = 1.4 * film.scale; LLOC.u.uK.value = lerp(.6, 1.1, ss(2, -4, e)) * (1 - ss(3e5, 2e6, alt)); LLOC.u.uDens.value = LINEDENS;
-    LCITY.u.uPx.value = 1.4 * film.scale; LCITY.u.uK.value = lerp(.6, 1.1, ss(2, -4, e)) * (1 - ss(1100, 3800, alt)); LCITY.u.uDens.value = LINEDENS;
-    LGLB.u.uPx.value = 1.5 * film.scale; LGLB.u.uK.value = LINEK * lerp(.7, 1, ss(2e4, 2e6, alt)); LGLB.u.uDens.value = LINEDENS;
+    LLOC.u.uPx.value = 1.4 * film.scale; LLOC.u.uK.value = lerp(.6, 1.1, ss(2, -4, e)) * (1 - ss(3e5, 2e6, alt)); LLOC.u.uDens.value = LINEDENS; LLOC.u.uK.value *= .55; LLOC.u.uTrail.value = .32;   // round 8: the villages' lines lighter (they blanketed the lower frame at 33.5–34.5)
+    LCITY.u.uPx.value = 1.4 * film.scale; LCITY.u.uK.value = lerp(.6, 1.1, ss(2, -4, e)) * (1 - ss(1100, 3800, alt)); LCITY.u.uDens.value = LINEDENS; LCITY.u.uTrail.value = .36;
+    LGLB.u.uPx.value = 1.5 * film.scale; LGLB.u.uK.value = LINEK * lerp(.7, 1, ss(2e4, 2e6, alt)); LGLB.u.uDens.value = LINEDENS; LGLB.u.uTrail.value = .3;
     // the globe (only once the camera is high enough for it to show past the terrain) and its air seen from outside
     { const op = 1 - ss(700, 2600, alt); CITYMAT.forEach(m => { m.opacity = op; }); CITYOBJ.forEach(o => { o.visible = op > .002; }); }
     GL.mesh.visible = alt > 1500; GL.atm.visible = alt > 6e4 && !OFFS.includes("atm"); GL.au.uK.value = ss(9e4, 5e5, alt); GL.au.uSun.value.copy(sunDir); GL.u.uSun.value.copy(sunDir);
-    GL.u.uHazeL.value = lerp(2.5e5, 8e6, ss(1e4, 2e6, alt)); GL.u.uWF.value = .8 * F; GL.u.uCG.value = CGLOW * ss(3e5, 2e6, alt);   /* round 7: .8 F = behind the slowest heads (lam ≥ .8) */ GL.u.uDeep.value = terrU.uDeep.value = DEEP(alt);   // the region view keeps its round-5 night; the globe goes blue-black as the camera leaves the air   // round 6: the cities' glow (from the air down, it would sit over the terrain's own lamps)
+    GL.u.uHazeL.value = lerp(2.5e5, 8e6, ss(1e4, 2e6, alt)); GL.u.uWF.value = .85 * Math.exp(DEF(Math.max(T0B.c1 + 2.3, t - .7))) * (t > T0B.c1 + 3 ? 1 : 0); GL.u.uCG.value = CGLOW * ss(3e5, 2e6, alt);   /* round 7: .8 F = behind the slowest heads (lam ≥ .8) */ GL.u.uDeep.value = terrU.uDeep.value = DEEP(alt);   // the region view keeps its round-5 night; the globe goes blue-black as the camera leaves the air   // round 6: the cities' glow (from the air down, it would sit over the terrain's own lamps)
     terrU.uGK.value = OFFS.includes("gk") ? 0 : ss(1.5e4, 8e4, alt); GL.u.uNM.value = lerp(-.22, 1.2, ss(T.c2 - .9, T.c2 + 1.2, t)); terrU.uSunW.value.copy(sunDir);   // uNM: the night holds over the land as the globe look comes in; then the dawn comes in at the far limb
     // banners, dust
     banU.uT.value = t; banU.uGust.value = Math.exp(-Math.pow((t - T.gust - .8) / 1.1, 2)) * .9;

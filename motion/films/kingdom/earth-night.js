@@ -195,7 +195,7 @@ export function burstLines(lines, { px = 1.5, seg = 64 } = {}) {
   g.setAttribute('aDir', new THREE.InstancedBufferAttribute(D, 2)); g.setAttribute('aL', new THREE.InstancedBufferAttribute(Lv, 4)); g.setAttribute('aT', new THREE.InstancedBufferAttribute(Tv, 4)); g.setAttribute('aH', new THREE.InstancedBufferAttribute(Hv, 2));
   g.instanceCount = n;
   const u = { uF: { value: 0 }, uT: { value: 0 }, uO: { value: new THREE.Vector3() }, uRes: { value: new THREE.Vector2(1080, 1920) }, uPx: { value: px }, uK: { value: 1 }, uBandY: { value: .36 }, uLimb: { value: 1 },
-    uNv: { value: n }, uRmax: { value: 2e6 }, uDens: { value: 0 }, uSeg: { value: seg } };
+    uNv: { value: n }, uRmax: { value: 2e6 }, uDens: { value: 0 }, uSeg: { value: seg }, uTrail: { value: .55 } };   // uTrail (round 8): the warm trail's peak behind the head
   const m = new THREE.ShaderMaterial({ uniforms: u, transparent: true, depthWrite: false, depthTest: true, fog: false, side: THREE.DoubleSide, blending: THREE.AdditiveBlending,
     vertexShader: /* glsl */`attribute float aS, aSide; attribute vec2 aDir, aH; attribute vec4 aL, aT;
       uniform float uF, uT, uPx, uLimb, uNv, uRmax, uDens, uSeg; uniform vec3 uO; uniform vec2 uRes;
@@ -218,14 +218,14 @@ export function burstLines(lines, { px = 1.5, seg = 64 } = {}) {
         vec3 dc = vec3(0., -R, 0.) - cameraPosition; float Dc = length(dc), aD = asin(clamp(R / Dc, 0., 1.)), aP = acos(clamp(dot(normalize(Pc - cameraPosition), dc / Dc), -1., 1.));
         vOn = mix(1., 1. - smoothstep(.97, .998, aP / aD), uLimb);
         vDn = 1.; if (uDens > 0.) { vec4 cO = projectionMatrix * viewMatrix * vec4(uO, 1.); if (cO.w > 1e-3) { float rpx = length(scr(cC) - scr(cO)), nv = uNv * min(1., sqrt(vRo / uRmax)); vDn = clamp(uDens * 6.2832 * rpx / max(nv, 1.), 0., 1.); } } }`,
-    fragmentShader: /* glsl */`uniform float uK, uBandY; uniform vec2 uRes; varying float vX, vB, vLh, vOver, vRo, vS, vRho, vK, vRest, vOn, vDn;
+    fragmentShader: /* glsl */`uniform float uK, uBandY, uTrail; uniform vec2 uRes; varying float vX, vB, vLh, vOver, vRo, vS, vRho, vK, vRest, vOn, vDn;
       void main(){
         if (vOn < .002) discard;
         float across = exp(-vX * vX * 4.5);
         float fade = exp(-max(vOver, 0.) / vLh);                                       // after arrival the head goes out
         float head = exp(-vB / vLh) * fade;                                            // white-hot running head
         float trail = exp(-vB / (5. * vLh)) * exp(-max(vOver, 0.) / (3. * vLh));       // warm trail behind it, settling to the rest glow
-        float b = vRest * mix(1., .3, vS) + (.55 - vRest) * trail;   // the line that stays: brighter toward the source, so the lit points carry the far ends
+        float b = vRest * mix(1., .3, vS) + max(uTrail - vRest, 0.) * trail;   // the line that stays: brighter toward the source, so the lit points carry the far ends
         vec3 col = mix(vec3(1., .66, .3), vec3(1., .95, .84), head) * (b + 1.5 * head);
         float near = smoothstep(vRho, vRho * 1.5 + 30., vRo);                          // lineage fan: near the source only a few lines show
         float y = gl_FragCoord.y / uRes.y, band = mix(.22, 1., smoothstep(uBandY - .1, uBandY + .04, y));   // under the words the lines step back

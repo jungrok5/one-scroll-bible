@@ -18,6 +18,8 @@
 // the light goes to the man and the scroll (the protagonists), never beside them.
 // API: const R = await import('./prayer-room.js'); const ROOM = await R.build(W, H, { people: 3 });  ROOM.draw(ctx, t, R.beatsPart1(B))
 //      t = FILM seconds. Pure in t. Needs window.Pilot (lib.js) and window.OIL (kit-oilpaint.js).
+// The ending (added 2026-11-20 for sample-part6b.html, additive only — part 1 passes none of these, so its frames are unchanged):
+//      build(W, H, { people: 1, lamp: true }) and a T with dollyIn [a, b], zIn, dusk [a, b], lampOn, clouds [a, b] (see camIn() / drawLamp() / drawClouds()).
 const P = window.Pilot;
 const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
 const lerp = (a, b, k) => a + (b - a) * k;
@@ -206,7 +208,8 @@ export async function build(W, H, opts = {}) {
     // the camera: locked off, then the slow dolly out as the light widens, then a last drift
     // (a creep of 1.5 % while "locked off" — never read as a move, but the painting is never frozen — then the dolly out, then a drift)
     const dk = sine((t - T.dolly[0]) / (T.dolly[1] - T.dolly[0])), creep = .018 * (1 - clamp((t - T.start) / (T.dolly[0] - T.start)));
-    const z = lerp(1.16 + creep * 3.6, 1.0, dk) - .022 * clamp((t - T.dolly[1]) / 4), cx = lerp(W * .47 + W * .012 * (1 - clamp((t - T.start) / (T.dolly[0] - T.start))), W * .5, dk), cy = H * .5;
+    const CI = T.dollyIn ? camIn(t) : null;   // the ending (bookend) only — part 1's T has no dollyIn, so its camera below is unchanged
+    const z = CI ? CI.z : lerp(1.16 + creep * 3.6, 1.0, dk) - .022 * clamp((t - T.dolly[1]) / 4), cx = CI ? CI.cx : lerp(W * .47 + W * .012 * (1 - clamp((t - T.start) / (T.dolly[0] - T.start))), W * .5, dk), cy = CI ? CI.cy : H * .5;
     const zoomer = g => { g.translate(W / 2, H / 2); g.scale(z, z); g.translate(-cx, -cy); };
     const view = (g, art) => { g.save(); zoomer(g); g.drawImage(art, -OX, -OY, PW / S, PH / S); g.restore(); };
     // the light's state: sliding across the floor (N06), reaching the man and the scroll (Q2), widening (N06b)
@@ -247,6 +250,54 @@ export async function build(W, H, opts = {}) {
     drawMarks(ctx, t, zoomer);
     // 5. a soft vignette (the painting's edge in shade)
     { const vg = ctx.createRadialGradient(W * .5, H * .42, H * .25, W * .5, H * .5, H * .78); vg.addColorStop(0, 'rgba(14,10,6,0)'); vg.addColorStop(1, 'rgba(14,10,6,.42)'); ctx.fillStyle = vg; ctx.fillRect(0, 0, W, H); }
+    // 6. (the ending only: opts.lamp / T.dusk) the clay lamp by the scroll; the window's light narrows down to it as evening comes
+    if (T.clouds) drawClouds(ctx, t, zoomer, pp);
+    if (LAMP) drawLamp(ctx, t, zoomer);
+  }
+  // ---------------------------------------------------------------- the ending (bookend) — additive: used only when the caller asks for it
+  // T.dollyIn [a, b]: locked off at part 1's last framing (z ≈ 1.0, a 1 % creep so the painting never freezes), then a slow dolly IN
+  // toward the kneeling man's back (sine-eased, to T.zIn), then a last drift. T.dusk [a, b]: the window light narrows to the lamp;
+  // T.lampOn: the lamp's flame catches (opts.lamp draws the lamp itself from the start, unlit, so nothing pops in).
+  function camIn(t) {
+    const { x: mx, y: my, sc } = manAt(MEN[0]), a = T.dollyIn[0], b = T.dollyIn[1];
+    const dk = sine((t - a) / (b - a)), creep = .03 * sine(clamp((t - T.start) / Math.max(.1, a - T.start))), drift = .03 * sine(clamp((t - b) / 9));
+    return { z: lerp(1.0 + creep, T.zIn || 1.4, dk) + drift, cx: lerp(W * .5, lerp(W * .5, mx, .8), dk), cy: lerp(H * .5, lerp(H * .5, my - sc * .55, .75), dk) };
+  }
+  // T.clouds [a, b] (the ending only): three soft cloud shadows pass across the window's light on the floor and the wall — the light
+  // breathes while the camera is locked off (the painting is never still)
+  function drawClouds(ctx, t, zoomer, pp) {
+    const [a, b] = T.clouds; if (t < a || t > b) return;
+    const cx = (pp[0][0] + pp[1][0] + pp[2][0] + pp[3][0]) / 4, cy = (pp[0][1] + pp[1][1] + pp[2][1] + pp[3][1]) / 4, span = Math.hypot(pp[3][0] - pp[0][0], pp[3][1] - pp[0][1]);
+    ctx.save(); zoomer(ctx); ctx.globalCompositeOperation = 'multiply';
+    for (let i = 0; i < 3; i++) { const ph = (t - a) / (b - a) * 2.0 - i * .6, k = Math.sin(Math.PI * clamp(ph)); if (k <= 0) continue;
+      const x = lerp(cx - span * .9, cx + span * 1.3, clamp(ph)), y = cy - span * .08 + Math.sin(ph * 3 + i) * span * .05, R = span * (.55 + .08 * i);
+      const d = Math.round(255 - 70 * k), rg = ctx.createRadialGradient(x, y, 0, x, y, R); rg.addColorStop(0, `rgb(${d},${d},${Math.min(255, d + 8)})`); rg.addColorStop(1, 'rgb(255,255,255)');
+      ctx.save(); ctx.translate(x, y); ctx.scale(1.6, .62); ctx.translate(-x, -y); ctx.fillStyle = rg; ctx.fillRect(x - R, y - R, 2 * R, 2 * R); ctx.restore();
+      const wy = H * .3, rw = ctx.createRadialGradient(x + span * .3, wy, 0, x + span * .3, wy, R * .9); rw.addColorStop(0, `rgb(${d + 20},${d + 20},${Math.min(255, d + 28)})`); rw.addColorStop(1, 'rgb(255,255,255)');   // and over the back wall's light
+      ctx.fillStyle = rw; ctx.fillRect(x + span * .3 - R, wy - R, 2 * R, 2 * R); }
+    ctx.restore();
+  }
+  const LAMP = opts.lamp ? (() => { const [x, y] = floorXY(.415, .215); return { x, y, s: H * .021 }; })() : null;
+  function drawLamp(ctx, t, zoomer) {
+    const L = LAMP, on = T.lampOn != null ? ss(T.lampOn, T.lampOn + .5, t) : 0, nk = T.dusk ? ss(T.dusk[0], T.dusk[1], t) : 0, fl = 1 + .06 * Math.sin(t * 7.3) * Math.sin(t * 2.9 + 1) + .04 * Math.sin(t * 17.1);
+    // the evening: the room sinks toward night, but a pool round the lamp stays (the light narrowing down to one lamp)
+    if (nk > 0) { ctx.save(); ctx.globalCompositeOperation = 'multiply'; ctx.save(); zoomer(ctx);
+      const R = lerp(W * 1.6, W * .34, nk), rg = ctx.createRadialGradient(L.x, L.y - L.s, 0, L.x, L.y - L.s, R), dim = c => Math.round(lerp(255, c, nk));
+      rg.addColorStop(0, `rgb(${dim(255)},${dim(236)},${dim(200)})`); rg.addColorStop(.45, `rgb(${dim(120)},${dim(100)},${dim(86)})`); rg.addColorStop(1, `rgb(${dim(34)},${dim(32)},${dim(42)})`);
+      ctx.fillStyle = rg; ctx.fillRect(-W, -H, 3 * W, 3 * H); ctx.restore(); ctx.restore(); }
+    ctx.save(); zoomer(ctx); ctx.translate(L.x, L.y); const s = L.s;
+    // a clay saucer lamp: a shallow body, the pinched spout toward the scroll, a dark wick hole; its shadow on the floor
+    ctx.fillStyle = 'rgba(16,10,6,.45)'; ctx.beginPath(); ctx.ellipse(s * .3, s * .08, s * 1.5, s * .32, 0, 0, 6.283); ctx.fill();
+    const lit = .35 + .65 * on;
+    ctx.fillStyle = `rgb(${92 * lit + 40 | 0},${60 * lit + 26 | 0},${38 * lit + 16 | 0})`; ctx.beginPath(); ctx.moveTo(-s * 1.1, -s * .2); ctx.quadraticCurveTo(-s * 1.15, s * .32, 0, s * .34); ctx.quadraticCurveTo(s * .9, s * .3, s * 1.45, -s * .18); ctx.quadraticCurveTo(s * .9, -s * .5, 0, -s * .52); ctx.quadraticCurveTo(-s * 1.05, -s * .52, -s * 1.1, -s * .2); ctx.fill();
+    ctx.fillStyle = 'rgba(20,12,8,.8)'; ctx.beginPath(); ctx.ellipse(-s * .1, -s * .3, s * .32, s * .1, 0, 0, 6.283); ctx.fill();
+    ctx.fillStyle = `rgba(255,214,150,${.5 * on})`; ctx.beginPath(); ctx.ellipse(-s * .2, -s * .44, s * .7, s * .07, 0, 0, 6.283); ctx.fill();   // its rim catching its own flame
+    if (on > 0) { const fx = s * 1.32, fy = -s * .28, fh = s * (1.3 + .12 * Math.sin(t * 9.1)) * on, sw = s * .07 * Math.sin(t * 3.7);
+      ctx.globalCompositeOperation = 'lighter';
+      const g = ctx.createRadialGradient(fx, fy - fh * .4, 0, fx, fy - fh * .4, s * 9); g.addColorStop(0, `rgba(255,200,120,${.42 * on * fl})`); g.addColorStop(.3, `rgba(255,170,90,${.14 * on * fl})`); g.addColorStop(1, 'rgba(255,160,80,0)'); ctx.fillStyle = g; ctx.fillRect(fx - s * 9, fy - s * 9, s * 18, s * 18);
+      const f = ctx.createLinearGradient(fx, fy, fx, fy - fh); f.addColorStop(0, `rgba(255,236,190,${on})`); f.addColorStop(.5, `rgba(255,190,90,${.9 * on})`); f.addColorStop(1, 'rgba(255,140,60,0)');
+      ctx.fillStyle = f; ctx.beginPath(); ctx.moveTo(fx - s * .2, fy); ctx.quadraticCurveTo(fx - s * .28, fy - fh * .45, fx + sw, fy - fh); ctx.quadraticCurveTo(fx + s * .28, fy - fh * .45, fx + s * .2, fy); ctx.fill(); }
+    ctx.restore();
   }
   // a light that switches on with a soft rise, a small flare and a held glow (after luminous-score's intensity curve)
   const markI = (t, t0) => { if (t < t0) return 0; const a = ss(t0, t0 + .35, t); return a * (1 + .5 * Math.exp(-(t - t0 - .35) / .25) * (t > t0 + .35 ? 1 : 0)) * (1 - .25 * ss(t0 + .6, t0 + 3, t)); };

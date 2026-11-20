@@ -97,6 +97,9 @@ export function beats(B) {
   const cuts = [0, T.fly[1], T.q1, T.n05, T.n07];
   T.shots = cuts.map((a, i) => [i ? a - D : 0, i < 4 ? cuts[i + 1] + D : T.n06]);   // S1 … S5 (soft dissolves between them)
   T.shots.push([T.n08, T.end]);                             // S6: one camera to the hand-off
+  // round 4: the end of N09d at ground level (shot 6): S5 hands over on the overcast sky (a dissolve cloud to cloud)
+  T.sfrom = T.n09c + 3.7; T.shots[4][1] = T.sfrom + .8; T.shots.push([T.sfrom, T.n06]);
+  T.stilt = [T.sfrom + .2, T.n09d + .3]; T.stear = [T.sfrom + .1, T.n09d - .1]; T.ssweep = [T.n09d + .15, T.n09d + 3.4]; T.spush = [T.n09d + .1, T.n09d + 3.7];
   T.sunrise = [0, T.fly[1]];                                // S1 the disc clears the far ridge
   T.birds = T.n01 + 2.4;                                    // S1 the flock lifts (each on his own delay as we near)
   T.arm = [T.n04 + .3, T.n04 + 1.9];                        // S2 he lifts his hand and speaks
@@ -527,6 +530,73 @@ export async function build(W, H) {
       fragmentShader: `uniform float uL; varying float vA, vH; void main(){ vec2 c = gl_PointCoord - .5; float a = exp(-dot(c, c) * 9.) * vA;
           gl_FragColor = vec4(mix(vec3(.52, .54, .6), vec3(1.05, .86, .66), uL) * (.8 + .2 * vH), a); }` });
     const pts = new THREE.Points(g, m); pts.frustumCulled = false; pts.layers.set(2); pts.visible = false; S.add(pts); return pts; })();
+  // ---------------------------------------------------------------- the street (N09d, round 4): ground level, in the liked village grammar
+  // After heal-village.js (its house() and street: flat-roofed houses on both sides, a dusty road, the light at the end of the road,
+  // rim-lit silhouettes, dust glowing in the light) — copied as a pattern, rebuilt here in this world: a street in the village the light
+  // comes down on, running from the west (camera) down to the lake (east), so the light pours up it toward us.
+  const STH = VWTH + 7, SOUT = outward(STH), SAL = along(STH), SB0 = shoreAt(STH).addScaledVector(SOUT, 58);
+  const SP = (u, v) => SB0.clone().addScaledVector(SOUT, u).addScaledVector(SAL, v);   // u: + west (toward the camera end), v: across the street
+  const streetG = new THREE.Group(); S.add(streetG); streetG.visible = false;
+  const SW0 = SP(34, 0), SE0 = SP(-38, 0);                                            // the camera's end and the lake end of the street
+  { // the road: packed dust draped on the land (a grid that follows the terrain, a little above it — no flat plane cutting through)
+    const nu = 90, nv = 8, pos = [], idx = [], ae = [];
+    for (let i = 0; i <= nu; i++) for (let j = 0; j <= nv; j++) { const u = 40 - i * 82 / nu, v = -3.2 + j * 6.4 / nv, p = SP(u, v); pos.push(p.x, hgt(p.x, p.z) + .05, p.z); ae.push(j / nv); }
+    for (let i = 0; i < nu; i++) for (let j = 0; j < nv; j++) { const a = i * (nv + 1) + j, b = a + 1, c = a + nv + 1, d = c + 1; idx.push(a, c, b, b, c, d); }
+    const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); g.setAttribute('aE', new THREE.Float32BufferAttribute(ae, 1)); g.setIndex(idx); g.computeVertexNormals();
+    const rm = new THREE.MeshStandardMaterial({ color: '#c8a87c', roughness: 1, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 });
+    rm.onBeforeCompile = sh => { sh.vertexShader = sh.vertexShader.replace('#include <common>', '#include <common>\nvarying vec3 vRP; attribute float aE; varying float vE;').replace('#include <project_vertex>', '#include <project_vertex>\nvRP = (modelMatrix * vec4(transformed, 1.)).xyz; vE = aE;');
+      sh.fragmentShader = sh.fragmentShader.replace('#include <common>', '#include <common>\nvarying vec3 vRP; varying float vE;\n' + hashGLSL).replace('#include <map_fragment>', `#include <map_fragment>
+        { vec2 q = vRP.xz; float n = fbm(q * .25), f = fbm(q * 2.3), st = smoothstep(.72, .78, fbm(q * 3.7 + 5.)); vec3 c = diffuseColor.rgb * mix(.82, 1.06, n) * mix(.92, 1.05, f); c = mix(c, vec3(.42, .36, .3), st * .5);
+          float e = abs(vE - .5) * 2.; diffuseColor.rgb = c * mix(1., .88, smoothstep(.7, 1., e)); }`); };
+    rm.customProgramCacheKey = () => 'gl-street'; lightify(rm, 'street');
+    const road = new THREE.Mesh(g, rm); road.receiveShadow = true; streetG.add(road); }
+  const SWALL = [wallM('#d9c4a0', 'sa'), wallM('#cdb08a', 'sb'), wallM('#6a645c', 'sc')];   // lime plaster, warm plaster, basalt
+  const sDoors = [];   // { p (in the doorway, on the street side), face: direction from the door into the street }
+  { const r = rng(4321);
+    const box = (cx, cz, y0, ry, lx, ly, lz, m) => { const b = new THREE.Mesh(K.roundedBox(lx, ly, lz, .06, 2), m); b.position.set(cx, y0 + ly / 2, cz); b.rotation.y = ry; b.castShadow = b.receiveShadow = true; streetG.add(b); return b; };
+    const ry0 = Math.atan2(SAL.x, SAL.z);
+    for (const side of [-1, 1]) { let u = 40;
+      while (u > -40) { const len = 5 + r() * 4, dep = 6 + r() * 3, h = 2.7 + r() * 1.4, gap = r() < .35 ? 2 + r() * 2.5 : .3, m = SWALL[(r() * 3) | 0];
+        const c = SP(u - len / 2, side * (3.3 + dep / 2)), y0 = Math.min(hgt(c.x, c.z), ...[[-len / 2, -dep / 2], [len / 2, dep / 2]].map(([a, b]) => { const q = SP(u - len / 2 + a, side * (3.3 + dep / 2) + b); return hgt(q.x, q.z); })) - .3;
+        box(c.x, c.z, y0, ry0, len, h + .3, dep, m);                                                             // the house (lx along the street, lz across)
+        box(c.x, c.z, y0 + h + .25, ry0, len + .2, .18, dep + .2, M.roof);                                     // the roof edge
+        const pe = SP(u - len / 2, side * 3.3 + side * .07); box(pe.x, pe.z, y0 + h + .38, ry0, len, .32, .14, m);   // the parapet on the street side
+        if (r() < .4) { const up = SP(u - len / 2 + (r() - .5) * len * .3, side * (3.3 + dep * .6)); box(up.x, up.z, y0 + h + .3, ry0, len * .45, h * .55, dep * .45, m); }   // an upper room
+        // a doorway onto the street (dark, set in), a small window; a few houses have an outside stair
+        const du = u - len * (.3 + r() * .4), dp = SP(du, side * 3.28), door = new THREE.Mesh(new THREE.PlaneGeometry(1.05, 2.0), M.dark);
+        door.position.set(dp.x, y0 + .3 + 1.0, dp.z); door.lookAt(SP(du, 0).setY(y0 + 1.3)); streetG.add(door);
+        sDoors.push({ p: SP(du, side * 2.7), face: V().copy(SAL).multiplyScalar(-side), u: du, side });
+        const wp = SP(u - len * .15, side * 3.28), win = new THREE.Mesh(new THREE.PlaneGeometry(.45, .5), M.dark); win.position.set(wp.x, y0 + .3 + h * .68, wp.z); win.lookAt(SP(u - len * .15, 0).setY(y0 + h * .68)); streetG.add(win);
+        if (r() < .3) { for (let k = 0; k < 5; k++) { const sp = SP(u - len + .6 + k * .55, side * 2.85); box(sp.x, sp.z, y0, ry0, .55, .35 + (k + 1) * (h / 5), .7, m); } }
+        u -= len + gap; } }
+    // palms and an olive along the street, low courtyard walls in the gaps
+    for (const [u, v, h] of [[18, -7.5, 9], [-6, 8, 10], [-26, -7, 11]]) { const q = SP(u, v); palm(q.x, q.z, h, 900 + u); }
+    for (const [u, v] of [[6, 8.5], [-16, -9]]) { const q = SP(u, v); olive(q.x, q.z, 4.6, 990 + u); } }
+  // the people of the street: a few already standing in it (their backs to us), the others step out of their doorways as the light reaches
+  // them and lift their heads toward it; a child points up, a woman shades her eyes
+  const streetPeople = [];
+  { const r = rng(2468), doors = sDoors.filter(d => d.u < 26 && d.u > -30).sort((a, b) => a.u - b.u);
+    doors.forEach((d, i) => { if (i % 4 === 3) return; const p = person(r); streetG.add(p); p.userData.door = d; p.userData.mode = 'door'; streetPeople.push(p); });
+    for (const [u, v, kind] of [[9, -1.2, 'man'], [6.5, 1.1, 'woman'], [3, -.4, 'child'], [-2, 1.6, 'man'], [-8, -1.3, 'woman'], [13, .6, 'man'], [-14, .2, 'man']]) {
+      const p = person(r, { kind }); const q = SP(u, v); place(streetG, p, q.x, q.z, face(-SOUT.x, -SOUT.z) + (r() - .5) * .5); p.userData.mode = kind === 'child' ? 'point' : (kind === 'woman' && u > 0 ? 'shade' : 'stand'); p.userData.u = u; streetPeople.push(p); } }
+  // the ovens' smoke behind the houses
+  const sSmoke = (() => { const r = rng(616), n = 22, src = [[12, -9], [-4, 9.5], [-20, -10], [24, 10]].map(([u, v]) => { const q = SP(u, v); return q.setY(hgt(q.x, q.z) + 2.5); }), pos = new Float32Array(src.length * n * 3), sd = new Float32Array(src.length * n * 2);
+    src.forEach((p, j) => { for (let i = 0; i < n; i++) { const k = j * n + i; pos[k * 3] = p.x; pos[k * 3 + 1] = p.y; pos[k * 3 + 2] = p.z; sd[k * 2] = i / n + r() * .03; sd[k * 2 + 1] = r(); } });
+    const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(pos, 3)); g.setAttribute('aS', new THREE.BufferAttribute(sd, 2));
+    const pts = new THREE.Points(g, smoke.material); pts.frustumCulled = false; pts.layers.set(2); streetG.add(pts); return pts; })();
+  // the dust in the street's air: tens of motes, gold where the light has reached (a field fixed in the world along the street)
+  const sDustU = { uT: { value: 0 }, uPx: { value: H / 1920 }, uF: { value: 1e5 }, uW: { value: 1 } };
+  { const n = 260, rr = rng(99), p = new Float32Array(n * 3), sd = new Float32Array(n);
+    for (let i = 0; i < n; i++) { const q = SP(30 - rr() * 62, (rr() - .5) * 6); p[i * 3] = q.x; p[i * 3 + 1] = hgt(q.x, q.z) + .3 + rr() * 4.5; p[i * 3 + 2] = q.z; sd[i] = rr(); }
+    const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(p, 3)); g.setAttribute('aS', new THREE.BufferAttribute(sd, 1));
+    const m = new THREE.ShaderMaterial({ uniforms: sDustU, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
+      vertexShader: `attribute float aS; uniform float uT, uPx, uF, uW; varying float vA;
+        void main(){ vec3 q = position; q.y += sin(uT * .35 + aS * 40.) * .25; q.x += sin(uT * .22 + aS * 17.) * .4; q.z += cos(uT * .19 + aS * 23.) * .4;
+          vec4 mv = modelViewMatrix * vec4(q, 1.); gl_Position = projectionMatrix * mv; float d = -mv.z;
+          gl_PointSize = clamp(uPx * (2. + 4. * aS) * 14. / d, 1., 10.); float lit = smoothstep(uF - uW, uF + uW, -q.z) * .85 + .15;
+          vA = lit * clamp(1.4 - d / 30., 0., 1.) * (.35 + .65 * aS); }`,
+      fragmentShader: `varying float vA; void main(){ vec2 c = gl_PointCoord - .5; float a = exp(-dot(c, c) * 12.); gl_FragColor = vec4(vec3(1., .82, .5) * 1.7, a * vA); }` });
+    const pts = new THREE.Points(g, m); pts.frustumCulled = false; pts.layers.set(2); streetG.add(pts); }
   // ---------------------------------------------------------------- the hook (S1, round 2): boats, nets, birds and mist close to the lens
   // Round 1 opened on a small sun over a flat lake. Now the camera skims 1.6–2 m above the water in the blue mist before dawn; fishing
   // boats with nets out drift past close beside the lens, a flock bursts off the water all round the camera, and the sun breaks over the
@@ -725,7 +795,7 @@ export async function build(W, H) {
   function stageReset() {}
   function stage(shot, t) {   // poses, light field, camera — everything but the render
     const Lk = film.look, D = film.dofCfg, [a, b] = T.shots[shot], k = clamp((t - a) / (b - a));
-    for (const p of hillCrowd) p.visible = true; fishers.visible = false; vwGroup.visible = false; film.cloud = null; OV.flare = 0; OV.point = 0; OV.halos = null; OV.tear = 0; OV.rays = 0; smoke.visible = false;
+    for (const p of hillCrowd) p.visible = true; fishers.visible = false; vwGroup.visible = false; film.cloud = null; OV.flare = 0; OV.point = 0; OV.halos = null; OV.tear = 0; OV.glow = 0; OV.rays = 0; smoke.visible = false; streetG.visible = false; OV.jag = false;
     LU.uFrontS.value = 1; LU.uSweep.value.set(0, 0); SK.sunHide.value = 0; SK.domeK.value = 1;
     LU.uFront.value.set(-1e5, 40, 20, 1); LU.uDim.value = 1; LU.uPool.value.set(0, 0, 0, 0); LU.uVil.value.forEach(v => v.w = 0); VILL.forEach(v => v.lamp.power = 0);
     SK.sunDir.value.copy(SUN); SK.cover.value = 0; SK.clouds.value = .22; SK.pointK.value = 0; SK.gapK.value = 0; shaftU.uK.value = 0; markU.uK.value = 0; mistU.uK.value = 1; dustU.uA.value = 0;
@@ -763,6 +833,7 @@ export async function build(W, H) {
       const look = boatP.clone().addScaledVector(back, -60).addScaledVector(side, .3); look.y = 2.6;
       setCam(pos, look, .006 * Math.sin(t * .7)); D.focus = pos.distanceTo(boatP); D.aperture = .9; Lk.exposure = .82; dustU.uA.value = 0;
     } else if (shot === 4) { shotScrollSky(t); }
+    else if (shot === 6) { shotStreet(t); }
     else { vis('town'); shotTown(t); }
   }
   // S5: the scroll → crane up → the sky → the light comes down (one camera, keyed: position, yaw, pitch)
@@ -869,6 +940,53 @@ export async function build(W, H) {
     Lk.exposure = lerp(1.0, 1.0, ck) + .1 * ss(T.xd[0] - .6, T.end, t); sunLamp.power = 600 + 1800 * ss(T.xd[0] - 1.5, T.end, t);
     dustU.uA.value = .4 * (1 - ck); dustU.uC.value.copy(pos).addScaledVector(headC, 4);
   }
+  // ---------------------------------------------------------------- S5b (round 4): the street — the light reaches everyone
+  // 59–61 from the overcast sky the camera tilts slowly down to the street in shadow; the tear is above the street's lake end.
+  // 61–64.5 the shaft widens and the light pours up the street toward the camera in a wave (feathered front): doorways, courtyards, palms
+  // and oven smoke catch it one by one; people step out of their doors (staggered, planted feet) and lift their heads; a child points
+  // up, a woman shades her eyes; the dust ignites gold. A slow push down the street at walking height.
+  // 64.5–66.8 the luminous street held, a calm drift, the people standing in the light. No sun disc anywhere (the tear is the source;
+  // the disc stays hidden — no halo behind a head).
+  const SFE = -SE0.z + 18, SFW = -SW0.z - 30;                          // the front's start (beyond the lake end) and end (behind the camera)
+  const sFront = t => lerp(SFE, SFW, sine((t - T.ssweep[0]) / (T.ssweep[1] - T.ssweep[0])));
+  const tReach = z => { let lo = T.ssweep[0], hi = T.ssweep[1] + .5; for (let i = 0; i < 30; i++) { const m = (lo + hi) / 2; if (sFront(m) > -z) lo = m; else hi = m; } return (lo + hi) / 2; };
+  function poseStreet(t) {
+    for (const p of streetPeople) { const U = p.userData, s = U.s;
+      if (U.mode === 'door') { const d = U.door, t0 = (U.t0 ??= tReach(d.p.z) + .15 + U.ph * .5), tEnd = t0 + 2.6;
+        const start = d.p.clone().addScaledVector(d.face, -.7), { tau, v } = warp(t, t0, .7, tEnd, .7), w = P.walk(p, tau, t0, { T: 1.3, L: .42 }), id = P.idle(t, U.ph, { s });
+        const pos = start.clone().addScaledVector(d.face, w.dist); p.position.set(pos.x, hgt(pos.x, pos.z), pos.z);
+        const turn = ss(tEnd - .2, tEnd + 1.4, t), towardLight = face(-SOUT.x, -SOUT.z), out = face(d.face.x, d.face.z); p.rotation.y = out + Math.atan2(Math.sin(towardLight - out), Math.cos(towardLight - out)) * turn * .55;
+        const st = [{ u: .21, lift: 0 }, { u: -.21, lift: 0 }], endF = P.walk(p, warp(tEnd + 1, t0, .7, tEnd, .7).tau, t0, { T: 1.3, L: .42 }).feet.map(f => ({ u: f.u, lift: 0 }));
+        const feet = t < t0 ? stepFeet(id.feet, st, ss(t0 - .6, t0 - .02, t), [1, 0]) : t < tEnd ? w.feet : stepFeet(endF, id.feet, ss(tEnd + .05, tEnd + .9, t), endF[0].u < endF[1].u ? [0, 1] : [1, 0]);
+        const lift = ss(t0 + .6, t0 + 2.0, t);
+        P.pose(p, { ...id, feet, bob: lerp(id.bob, w.bob, v), swing: [lerp(id.swing[0], w.swing[0], v), lerp(id.swing[1], w.swing[1], v)], head: [lerp(-.05, .42, lift), lerp(0, -.35, lift * (1 - turn))] });
+        if (!PS.streetDoor) PS.streetDoor = p; continue; }
+      const tr = (U.tr ??= tReach(p.position.z) + U.ph * .6), lift = ss(tr, tr + 1.6, t), id = P.idle(t, U.ph, { s });
+      if (U.mode === 'point') { P.pose(p, { ...id, head: [lerp(.05, .55, lift), 0], hands: [null, V(.16 * s, 1.95 * s, -.32 * s)], handsW: [0, ss(tr + .4, tr + 1.8, t)] }); PS.streetChild = p; continue; }
+      if (U.mode === 'shade') { P.pose(p, { ...id, head: [lerp(0, .3, lift), 0], hands: [null, V(.2 * s, 1.5 * s, -.12 * s)], handsW: [0, ss(tr + .3, tr + 1.7, t)] }); PS.streetShade = p; continue; }
+      P.pose(p, { ...id, head: [lerp(-.04, .4, lift), .05 * Math.sin(t * .3 + U.ph * 6)], lean: lerp(0, .04, lift) }); } }
+  function shotStreet(t) {
+    vis('none'); streetG.visible = true; const Lk = film.look, D = film.dofCfg; poseStreet(t); shadowAt(SP(-2, 0), 46);
+    const tl = eio((t - T.stilt[0]) / (T.stilt[1] - T.stilt[0])), pk = eio((t - T.spush[0]) / (T.spush[1] - T.spush[0])), hold = Math.max(0, t - T.spush[1]);
+    const pos = SW0.clone().addScaledVector(SOUT, -(4.8 * pk + .3 * hold)); pos.y = hgt(pos.x, pos.z) + 1.7 + .025 * Math.sin(t * 1.1);
+    const yaw = yawOf(SOUT.clone().negate()) + .012 * Math.sin(t * .23), pitch = (lerp(34, 3.2, tl) - .4 * ss(T.spush[0], T.spush[1] + 2, t)) * D2R;
+    aim(pos, yaw, pitch); D.focus = 14; D.aperture = .7; D.maxCoc = 12;
+    const sw = sine((t - T.ssweep[0]) / (T.ssweep[1] - T.ssweep[0])), on = ss(T.ssweep[0], T.ssweep[0] + .7, t);
+    LU.uFrontS.value = -1; LU.uFront.value.set(sFront(t), 9, 0, .3); LU.uSweep.value.set(.22 * on, .7 * on * (1 - ss(T.ssweep[1] - .2, T.ssweep[1] + 1.6, t))); LU.uDim.value = 1;
+    sDustU.uF.value = sFront(t); sDustU.uW.value = 9; sDustU.uT.value = t;
+    palette(lerp(.45, 1, sw * on)); film.cloud = CLOUD; CLOUD.density = .07 * (1 - .78 * sw); CLOUD.cover = lerp(.34, .58, sw); CLOUD.scale = .0011; CLOUD.steps = 30; CLOUD.wind.set(.028, .004, .012);
+    CLOUD.litTop.copy(SK.cloudColor.value).multiplyScalar(.8 + .4 * sw);
+    SK.domeK.value = 0; SK.sunHide.value = 1; SK.cover.value = 0;
+    sunL.intensity *= lerp(.4, 1.35, sw * on); hemi.intensity *= lerp(1, .62, sw * on); film.atmos.density *= lerp(1, .7, sw * on);
+    Lk.exposure = lerp(1.12, .88, sw * on); Lk.contrast = lerp(1.06, 1.14, sw * on); sunLamp.power = 0;
+    // the tear above the lake end, opening; the shaft from it down onto the street's end; the dust and the ovens' smoke
+    // round 5: no drawn tear — the cloud deck itself thins over the lake and the sky low over the water brightens warmly; soft rays fan
+    // down into the street from that brightness (no shape, nothing that reads as an object)
+    OV.tear = 0; OV.glow = ss(T.stear[0], T.ssweep[0] + 1.8, t); OV.glowPos = SE0.clone().add(V(0, 70, -900)).addScaledVector(SAL, 20);
+    OV.rays = OV.glow * (.25 + .4 * ss(T.ssweep[0] - .4, T.ssweep[0] + 1.8, t)) * (1 - .3 * ss(T.spush[1], T.spush[1] + 2, t));
+    setShaft(SE0.clone().add(V(0, 500, -1100)).addScaledVector(SAL, 30), SE0.clone().add(V(0, 0, -10)), 60, 120); shaftU.uK.value = .75 * OV.tearOpen; shaftU.uTip.value = ss(T.ssweep[0] - .5, T.ssweep[0] + 1.2, t);
+    smokeU.uT.value = t; smokeU.uL.value = sw * on; mistU.uK.value = 0;
+  }
   const EXPO = .75;   // the block's overall key (look-check: brightness 78–97 over the whole part)
   function render(shot, t) { stage(shot, t); film.look.exposure *= EXPO; waterU.uT.value = t; tuftU.uT.value = t; mistU.uT.value = t; dustU.uT.value = t;
     sunLamp.pos.copy(cam.position).addScaledVector(SKY_SUN(), 600);
@@ -896,7 +1014,8 @@ export async function build(W, H) {
   // what the lens adds after the frame (round 2), measured with each shot's own camera right after its render
   function overlayInfo(t) { const o = { flare: OV.flare, sun: sunScreen(), point: 0, halos: [] };
     if (OV.point > .01 && OV.pointPos) { const q = proj(OV.pointPos); if (q) { o.point = OV.point; o.pp = q; } }
-    if (OV.tear > .01 && OV.tearPos) { const q = proj(OV.tearPos); if (q) { o.tear = OV.tear; o.tearOpen = OV.tearOpen; o.tp = q; o.rays = OV.rays; } }
+    if (OV.glow > .01 && OV.glowPos) { const q = proj(OV.glowPos); if (q) { o.glow = OV.glow; o.gp = q; o.rays = OV.rays; } }
+    if (OV.tear > .01 && OV.tearPos) { const q = proj(OV.tearPos); if (q) { o.tear = OV.tear; o.tearOpen = OV.tearOpen; o.tp = q; o.rays = OV.rays; o.jag = OV.jag; } }
     if (OV.halos) for (const h of OV.halos) { const q = proj(h.p); if (q && q[0] > -100 && q[0] < W + 100 && q[1] > -100 && q[1] < H + 100) o.halos.push([q[0], q[1], q[2], h.a, h.flick]); }
     return o; }
   // the lens, after motion/pilot/creation-lens.html: a layered corona (white-hot heart, warm corona, wide amber air), an anamorphic streak
@@ -921,8 +1040,22 @@ export async function build(W, H) {
   // the tear in the cloud (round 3): not a disc or a shape — the cloud's own texture brightened along a long feathered band (its edges turn
   // to silver lining), with a thin ragged core of light; it widens as it opens. Drawn under the scatter so the shafts come out of it.
   const tearC = mkC(W >> 1, H >> 1), tgx = tearC.getContext('2d');
+  // round 4: a real break — a jagged opening (a ragged polygon along the cloud's grain), bright sky inside, silver edges, the light behind
+  function drawTearJag(ctx, o, k) {
+    const [x, y] = o.tp, I = o.tear * k, op = o.tearOpen || 0, L = W * (.1 + .24 * op), Hh = H * (.007 + .022 * op), r = rng(311), N = 34, top = [], bot = [];
+    // a ragged outline: the envelope of a torn seam, broken at two scales (no regular zigzag), the lower edge flatter than the upper
+    for (let i = 0; i <= N; i++) { const u = i / N, xx = (u - .5) * L, env = Math.pow(Math.sin(Math.PI * u), .8) * (.75 + .25 * Math.sin(u * 9.1 + 1.3));
+      const j1 = Math.sin(u * 23.7 + 2) * .35 + (r() - .5) * .45; top.push([xx + (r() - .5) * L * .012, -Hh * env * (.8 + j1)]); bot.push([xx + (r() - .5) * L * .012, Hh * env * (.45 + .3 * Math.sin(u * 17.3) + (r() - .5) * .25)]); }
+    const path = new Path2D(); top.forEach(([a, b], i) => i ? path.lineTo(a, b) : path.moveTo(a, b)); for (let i = N; i >= 0; i--) path.lineTo(...bot[i]); path.closePath();
+    ctx.save(); ctx.translate(x, y); ctx.rotate(-.06);
+    ctx.save(); ctx.filter = 'blur(14px)'; ctx.globalAlpha = .22 * I; ctx.strokeStyle = 'rgba(40,38,48,1)'; ctx.lineWidth = Hh * 1.2 + 12; ctx.stroke(path); ctx.restore();   // the cloud heavier round the break
+    ctx.globalCompositeOperation = 'screen';
+    ctx.save(); ctx.filter = 'blur(28px)'; ctx.globalAlpha = .4 * I; ctx.fillStyle = 'rgba(255,224,170,1)'; ctx.fill(path); ctx.restore();   // its glow in the cloud
+    ctx.save(); ctx.filter = 'blur(4px)'; const g = ctx.createLinearGradient(0, -Hh, 0, Hh); g.addColorStop(0, `rgba(255,244,220,${.7 * I})`); g.addColorStop(.6, `rgba(255,236,198,${.62 * I})`); g.addColorStop(1, `rgba(248,212,160,${.45 * I})`); ctx.fillStyle = g; ctx.fill(path); ctx.restore();
+    ctx.save(); ctx.filter = 'blur(1.5px)'; ctx.strokeStyle = `rgba(255,252,240,${.75 * I})`; ctx.lineWidth = 1.4 + 1.2 * op; ctx.stroke(path); ctx.restore();   // silver edges
+    ctx.restore(); }
   function drawTear(ctx, o, k) {
-    if (!o.tear || k <= .01) return; const [x, y] = o.tp, I = o.tear * k, op = o.tearOpen || 0, L = W * (.32 + .5 * op), Hh = H * (.035 + .05 * op), ang = -.1;
+    if (!o.tear || k <= .01) return; if (o.jag) return drawTearJag(ctx, o, k); const [x, y] = o.tp, I = o.tear * k, op = o.tearOpen || 0, L = W * (.32 + .5 * op), Hh = H * (.035 + .05 * op), ang = -.1;
     // 1. the band mask × the frame itself (half res), laid back over with 'screen' twice: the clouds' own billows light up near the rift
     const w2 = tearC.width, h2 = tearC.height; tgx.setTransform(1, 0, 0, 1, 0, 0); tgx.globalCompositeOperation = 'source-over'; tgx.clearRect(0, 0, w2, h2);
     tgx.save(); tgx.translate(x / 2, y / 2); tgx.rotate(ang); const r = rng(77);
@@ -943,15 +1076,25 @@ export async function build(W, H) {
       corona(ctx, x, y, I, R / 60, [[3, '255,250,230', '255,220,160', 1], [16, '255,214,150', '255,170,90', .55], [60, '255,180,110', '255,140,70', .22], [150, '255,170,100', '255,130,60', .08]]); }
     ctx.restore(); }
   let lastSun = null;
+  let warmed = false;
   function draw(ctx, t, B) {
     if (!T) T = beats(B);
+    // a page that starts inside the street shot (a render worker, a still) must first draw one frame under the cloud deck, or the deck's
+    // first use there leaves the sky unlit (seen in round 5's stills): warm the passes once, then draw the asked frame
+    if (!warmed) { warmed = true; render(4, T.n09b + 2.5); }
     const on = []; T.shots.forEach(([a, b], i) => { if (t >= a && t < b) on.push(i); });
     if (!on.length) on.push(t < T.n06 ? 4 : 5);
     render(on[0], t); const o0 = overlayInfo(t); blit(ctx, 1); lastSun = o0.sun;
     let o1 = null, k1 = 0; if (on.length > 1) { const i1 = on[1]; render(i1, t); o1 = overlayInfo(t); k1 = ss(T.shots[i1][0], T.shots[on[0]][1], t); blit(ctx, k1); lastSun = o1.sun || lastSun; }
     // the sun's scatter weighted by how much of each shot is on screen (a dissolve to a shot without the sun fades it, never a pop)
     drawTear(ctx, o0, 1 - k1); if (o1) drawTear(ctx, o1, k1);
-    if (o0.tear && o0.tp) godRays(ctx, o0.tp[0], o0.tp[1], o0.rays * (1 - k1) * 1.1);   // the shafts out of the tear
+    for (const [o, kk] of [[o0, 1 - k1], [o1, k1]]) if (o && o.glow && kk > .01) {   // the sky over the lake brightening (a broad soft warmth, no shape)
+      const [gx, gy] = o.gp, I = o.glow * kk; ctx.save(); ctx.globalCompositeOperation = 'screen';
+      for (const [rw, rh, a, c] of [[W * 1.1, H * .16, .42, '255,226,176'], [W * .7, H * .07, .38, '255,240,210'], [W * 1.6, H * .34, .16, '255,210,160']]) {
+        ctx.save(); ctx.translate(gx, gy); ctx.scale(rw / 200, rh / 200); const g = ctx.createRadialGradient(0, 0, 0, 0, 0, 100); g.addColorStop(0, `rgba(${c},${a * I})`); g.addColorStop(1, `rgba(${c},0)`); ctx.fillStyle = g; ctx.fillRect(-100, -100, 200, 200); ctx.restore(); }
+      ctx.restore(); }
+    if (o0.glow && o0.gp) godRays(ctx, o0.gp[0], o0.gp[1], o0.rays * (1 - k1) * 1.2);
+    else if (o0.tear && o0.tp) godRays(ctx, o0.tp[0], o0.tp[1], o0.rays * (1 - k1) * 1.1);   // the shafts out of the tear
     else { const inF = o => o && o.sun && SK.sunHide.value < .5 && Math.abs(o.sun[0] - .5) < .8 && Math.abs(o.sun[1] - .5) < .8, gk = (inF(o0) ? 1 - k1 : 0) + (inF(o1) ? k1 : 0), gs = inF(o1) && (k1 > .5 || !inF(o0)) ? o1.sun : o0.sun;
       if (gk > .01 && gs) godRays(ctx, gs[0] * W, gs[1] * H, gk * (on[0] === 4 ? .32 : .42)); }
     drawOverlay(ctx, o0, t, 1 - k1); if (o1) drawOverlay(ctx, o1, t, k1);
@@ -963,7 +1106,7 @@ export async function build(W, H) {
         root: g.getWorldPosition(V()).toArray(), ry: g.rotation.y, neck: [U.neck.rotation.x, U.neck.rotation.y] }; } return out; }
   // pose only (no render) — for measuring joint deltas fast
   function poseOnly(t, B) { if (!T) T = beats(B); const on = []; T.shots.forEach(([a, b], i) => { if (t >= a && t < b) on.push(i); }); const s = on.length ? on[on.length - 1] : (t < T.n06 ? 4 : 5);
-    if (s <= 2) poseHill(t); else if (s === 3) poseBeach(t); else if (s === 5) poseTown(t); return s; }
+    if (s <= 2) poseHill(t); else if (s === 3) poseBeach(t); else if (s === 5) poseTown(t); else if (s === 6) poseStreet(t); return s; }
   return { film, draw, beats: () => T, sunAt: () => lastSun, joints, poseOnly, PS, dbg: { SC, SCP, scroll, LAND, V0, VW, K0, KH, KS, boatP } };
 }
 

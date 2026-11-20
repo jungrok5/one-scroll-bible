@@ -236,6 +236,12 @@ export async function build(W, H) {
     drawPeople(ctx, t, cam.z);
     if (kn && kn[3] > 0) { chips(ctx, kn[0], kn[1], kn[2], t, 31, cam.z); knife(ctx, kn[0], kn[1], kn[2] + Math.PI, cam.z, kn[3]); }
     ctx.restore();
+    // round 2 (coordinator: ease the luminance drop at the cut from the glowing hands): the first cut flashes — for 0.7 s the light of
+    // the palms runs along the crest groove and lifts the block a little, then settles into the carved line
+    { const u = clamp((t - T.start) / .7); if (u < 1) { const k = (1 - u) * (1 - u); ctx.save(); ctx.setTransform(cam.z, 0, 0, cam.z, W / 2 - cam.x * cam.z, H / 2 - cam.y * cam.z);
+      ctx.globalCompositeOperation = 'lighter'; ctx.filter = 'blur(14px)'; ctx.strokeStyle = `rgba(255,214,150,${.85 * k})`; ctx.lineWidth = 34 * (1 - .5 * u); ctx.lineCap = 'round';
+      ctx.beginPath(); for (let x = lerp(CX, -10, ss(0, .6, u) * .6 + .4); x <= lerp(CX, W + 10, ss(0, .6, u) * .6 + .4); x += 12) { const y = ridgeY(x) - 5; x === lerp(CX, -10, ss(0, .6, u) * .6 + .4) ? ctx.moveTo(x, y) : ctx.lineTo(x, y); } ctx.stroke();
+      ctx.filter = 'none'; ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.fillStyle = `rgba(255,214,160,${.22 * k})`; ctx.fillRect(0, 0, W, H); ctx.restore(); } }
   }
   // He walks up the near road; the two come; they bow and point; He walks on (out of the frame as the camera rises). On the hill a
   // small man climbs; the many follow.

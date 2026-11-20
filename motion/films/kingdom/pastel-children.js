@@ -60,7 +60,7 @@ export async function build(W, H) {
   const FOV = 44;
   const film = new Film({
     W, H, dur: 1e4, fov: FOV, near: .03, far: 2500,
-    atmos: { density: .007, falloff: .05, base: 0, start: 3, color: col('#d8a07a', .6), colorUp: col('#b49cb4', .55), max: 1400, scatter: 1, anisotropy: .8, phaseMix: .85 },
+    atmos: { density: .0045, falloff: .05, base: 0, start: 3, color: col('#d8a07a', .6), colorUp: col('#b49cb4', .55), max: 1400, scatter: 1, anisotropy: .8, phaseMix: .85 },
     bloom: { strength: .08, radius: 1.15, tint: col('#ffd8b4') },
     dof: { focus: 12, aperture: 4, maxCoc: 24 },
     look: { exposure: 1.1, contrast: .97, saturation: 1.0, lift: col('#2c2236'), shadowTint: col('#c8bce0'), highTint: col('#fff0dc'), vignette: .3, grain: 0, ca: .2 },
@@ -150,33 +150,36 @@ export async function build(W, H) {
   // a child: the robeMan child body; a boy has short dark hair (no beard), a girl a small veil
   const child = (o) => { const g = P.robeMan({ face: faceM, child: true, head: o.girl ? 'veil' : 'cloth', ...o });
     if (!o.girl) { P.headwear(g, 'bare', { dark: hairM }); const n = g.userData.neck; n.remove(n.children[n.children.length - 1]); }
+    // round 2: a child's silhouette at a glance — a short tunic (boys to the knee, girls to the calf) so the legs show and walk
+    const U = g.userData; if (U.skirt) { const k = o.girl ? .72 : .5, top = .99 * U.s; U.skirt.scale.y = k; U.skirt.position.y = top * (1 - k); }
     return g; };
   // --- the families (S1): they walk up the road (−z) at one speed (1.0 m/s), each family on its own clock
   // fam: { people: [{g, T, L, x}], t0, acc, dec, n (steps of the first), z0, hold: [[ia, ib, sideA]] }
   const SPD = 1.0;
   const mkFam = (people, z0, t0, acc, dec, gaitS, holds = []) => ({ people, z0, t0, acc, dec, gaitS, holds });
   const F = [];
-  { const fa = add(adult({ h: 1.78, mat: RM[1], cloth: CM[0], broad: 1.05 }), -2.95, 0, 0, .1), so = add(child({ h: 1.12, mat: RM[2] }), -2.32, 0, 0, .43);
-    F.push(mkFam([{ g: fa, T: 1.2, x: -2.95 }, { g: so, T: .8, x: -2.32 }], 2.0, -2, 0, 2.4, 7.2, [[0, 1]])); }
+  { const fa = add(adult({ h: 1.78, mat: RM[1], cloth: CM[0], broad: 1.05 }), -2.95, 0, 0, .1), so = add(child({ h: 1.12, mat: RM[2] }), -2.32, 0, 0, .43), sm = add(child({ h: .9, mat: RM[7], cloth: CM[2], girl: true }), -3.5, 0, 0, .81);
+    F.push(mkFam([{ g: fa, T: 1.2, x: -2.95 }, { g: so, T: .8, x: -2.32 }, { g: sm, T: .6, x: -3.48 }], 2.0, -2, 0, 2.4, 7.2, [[0, 1], [0, 2]])); }
   { const mo = add(woman({ h: 1.64, mat: RM[5], cloth: CM[1] }), .9, 0, 0, .27), da = add(child({ h: 1.04, mat: RM[7], cloth: CM[2], girl: true }), 1.45, 0, 0, .71), bo = add(child({ h: .98, mat: RM[3] }), .4, 0, 0, .58);
+    { const td = P.robeMan({ h: .78, mat: RM[9], face: faceM, child: true, kind: 'sit', head: 'cloth' }); P.headwear(td, 'bare', { dark: hairM }); { const n = td.userData.neck; n.remove(n.children[n.children.length - 1]); } mo.add(td); mo.userData.toddler = td; td.userData.ph = .37; }   // a toddler carried on her left hip
     F.push(mkFam([{ g: mo, T: 1.1, x: .9 }, { g: da, T: .733, x: 1.45 }, { g: bo, T: .55, x: 1.0, ahead: 1.6 }], -.5, -1.4, 0, 2.2, 6.6, [[0, 1]])); }
   { const gr = add(adult({ h: 1.7, mat: RM[8], cloth: CM[3] }), 2.4, 0, 0, .35), gi = add(child({ h: 1.18, mat: RM[6], cloth: CM[0], girl: true }), 1.9, 0, 0, .9);
     const staff = new THREE.Mesh(new THREE.CylinderGeometry(.018, .022, 1.55, 6), M.trunk); staff.castShadow = true; S.add(staff); gr.userData.staff = staff;
-    F.push(mkFam([{ g: gr, T: 1.3, x: 2.45 }, { g: gi, T: .867, x: 1.88 }], -4.2, -1.0, 0, 2.6, 5.2, [[0, 1]])); }
+    F.push(mkFam([{ g: gr, T: 1.3, x: 2.45 }, { g: gi, T: .867, x: 1.88 }], -3.4, -1.0, 0, 2.6, 5.2, [[0, 1]])); }
   { const b1 = add(child({ h: 1.24, mat: RM[0] }), -1.55, 0, 0, .15), b2 = add(child({ h: 1.12, mat: RM[9] }), -.95, 0, 0, .66);
-    F.push(mkFam([{ g: b1, T: .62, x: -1.55 }, { g: b2, T: .58, x: -.95, lag: .94 }], -6.6, -.6, 0, 1.6, 5.58)); }
-  { const mb = add(woman({ h: 1.6, mat: RM[4], cloth: CM[2] }), 2.9, 0, 0, .52);
+    F.push(mkFam([{ g: b1, T: .62, x: -1.55 }, { g: b2, T: .58, x: -.95, lag: .94 }], -3.9, -.6, 0, 1.6, 5.58)); }
+  { const mb = add(woman({ h: 1.6, mat: RM[4], cloth: CM[2] }), 2.9, 0, 0, .52), sb = add(child({ h: .96, mat: RM[0] }), 3.5, 0, 0, .24);
     const baby = new THREE.Mesh(new THREE.SphereGeometry(.13, 12, 8), CM[0]); baby.scale.set(1, .75, 1.6); baby.castShadow = true; S.add(baby); mb.userData.baby = baby;
-    F.push(mkFam([{ g: mb, T: 1.1, x: 2.95 }], 4.5, -2.6, 0, 2.4, 7.7)); }
+    F.push(mkFam([{ g: mb, T: 1.1, x: 2.95 }, { g: sb, T: .55, x: 3.5 }], 4.5, -2.6, 0, 2.4, 7.7, [[0, 1]])); }
   // the gait of a family member at t: the family's speed profile (ease in/out by a time-warp), the member's own stride
   // (L = SPD × T / 2 so all of a family move at one speed and stop together; feet planted throughout)
   function famTau(f, t) { const total = f.gaitS, cruise = Math.max(0, total - f.dec / 2), tStop = T.block + f.stopDelay; // the walk ends at tStop (real)
     const tD = tStop - f.dec; // deceleration starts
     let tau; if (t < tD) tau = cruise - (tD - t); else if (t < tStop) { const u = (t - tD) / f.dec; tau = cruise + f.dec * (u - rampI(u)); } else tau = total;
     return { tau, total, stopped: t >= tStop, tStop }; }
-  F.forEach((f, i) => { f.stopDelay = [1.9, 2.5, 1.5, .9, 3.0][i]; });
+  F.forEach((f, i) => { f.stopDelay = [1.9, 2.5, 1.5, .9, 3.0][i]; });   // staggered stops
   // --- the four disciples who block (S1/S2): they step in from the sides and spread their arms; at Q10 the arms come down
-  const D = [[-2.6, -13.2, -4.2, -12.0, .3, RM[8], CM[3], false], [-1.2, -14.0, -3.8, -15.6, .55, RM[1], CM[3], false], [1.2, -13.4, 4.0, -12.4, .12, RM[3], CM[1], false], [2.8, -14.4, 4.3, -16.0, .8, RM[6], CM[3], false]]
+  const D = [[-2.6, -10.6, -4.2, -9.6, .3, RM[8], CM[3], false], [-1.2, -11.3, -3.8, -12.8, .55, RM[1], CM[3], false], [1.2, -10.8, 4.0, -9.9, .12, RM[3], CM[1], false], [2.8, -11.6, 4.3, -13.0, .8, RM[6], CM[3], false]]
     .map(([x, z, x0, z0, ph, m, c, tb], i) => { const g = add(adult({ h: 1.72 + i * .02, mat: m, cloth: c, broad: 1.04, turban: tb }), x0, z0, face(x - x0, z - z0), ph);
       g.userData.to = V(x, 0, z); g.userData.from = V(x0, 0, z0); g.userData.i = i; return g; });
   // --- Him: sitting on the low wall of the open plot, his back to the road (looking out over the fields into the sun)
@@ -276,14 +279,18 @@ export async function build(W, H) {
       // hands held
       for (const [ia, ib] of f.holds) { const A = f.people[ia].g, Bc = f.people[ib].g, sA = A.userData.s, sB = Bc.userData.s;
         const sdA = Bc.position.x > A.position.x ? 1 : -1;
-        const ph = res[ia].pose.ph ?? 0, swing = ft.stopped ? .02 * Math.sin(t * .8) : .06 * Math.sin(ph * 2 * Math.PI) * clamp(1.2 - ft.tau / f.gaitS * 0);
+        const ph = res[ia].pose.ph ?? 0, swing = ft.stopped ? .02 * Math.sin(t * .8) : .05 * Math.sin(ph * 2 * Math.PI) * clamp(1.2 - ft.tau / f.gaitS * 0);
         const gw = V(lerp(A.position.x + sdA * .26 * sA, Bc.position.x - sdA * .17 * sB, .55), lerp(.84 * sA, .68 * sB, .45), (A.position.z + Bc.position.z) / 2 - .05 + swing);
         const hA = [null, null], hB = [null, null]; hA[sdA > 0 ? 1 : 0] = toLocal(A, gw); hB[sdA > 0 ? 0 : 1] = toLocal(Bc, gw);
-        res[ia].pose.hands = hA; res[ib].pose.hands = hB; }
+        { const prev = res[ia].pose.hands || [null, null]; res[ia].pose.hands = [hA[0] || prev[0], hA[1] || prev[1]]; } res[ib].pose.hands = hB;   // (a parent may hold a child on each hand) }
       f.people.forEach((m, j) => { const g = m.g, U = g.userData;
         if (U.staff) { const s = U.s, sw = res[j].pose.ph != null ? Math.sin(res[j].pose.ph * 2 * Math.PI) : 0, tip = g.position.clone().add(V(-.34 * s, 0, -.25 * s + .1 * sw));   // the staff planted a little ahead on his left
           const grip = tip.clone().add(V(.05, 1.02 * s, .1)); res[j].pose.hands = [toLocal(g, grip), res[j].pose.hands ? res[j].pose.hands[1] : null];
           U.staff.position.copy(tip).add(grip).multiplyScalar(.5); U.staff.position.y = (tip.y + grip.y) / 2 + .2; U.staff.lookAt(grip.clone().add(V(0, .3, 0))); U.staff.rotateX(Math.PI / 2); }
+        if (U.toddler) { const s = U.s, td = U.toddler, ts = td.userData.s, bob = res[j].pose.bob || 0;   // on her left hip: her left arm round it (the hand under it)
+          td.position.set(-.19 * s, .66 * s + bob, -.02 * s); td.rotation.set(0, .9, -.08);
+          res[j].pose.hands = [V(-.15 * s, .7 * s + bob, -.13 * s), res[j].pose.hands ? res[j].pose.hands[1] : null]; res[j].pose.side = (res[j].pose.side || 0) + .05;
+          P.pose(td, { breath: P.breath(t, .37), head: [.05 * Math.sin(t * .7), .3 * Math.sin(t * .4)], hands: [null, V(.08 * ts, .55 * ts, -.12 * ts)], handsW: [0, .7] }); }
         if (U.baby) { const s = U.s, c = V(.02 * s, 1.08 * s + (res[j].pose.bob || 0), -.2 * s); res[j].pose.hands = [c.clone().add(V(-.1 * s, -.04 * s, .02 * s)), c.clone().add(V(.11 * s, .03 * s, -.01 * s))]; res[j].pose.lean = (res[j].pose.lean || 0) + .05;
           g.updateMatrix(); U.baby.position.copy(c).applyMatrix4(g.matrix); U.baby.rotation.set(0, g.rotation.y + .5, .25); }
         P.pose(g, res[j].pose); }); });
@@ -334,7 +341,7 @@ export async function build(W, H) {
   }
   // S2: the children run from where their families stopped to Him, staggered, slowing as they arrive; then stand round Him, alive
   const RUNS = RUN.map(([g, off], i) => ({ g, off, t0: 0, i }));
-  const RUN0 = [[-2.1, 0, -11.3], [1.75, 0, -11.9], [-2.75, 0, -12.5], [2.4, 0, -11.1], [-1.7, 0, -10.6], [2.0, 0, -12.6]];   // S2: where each child starts (in front of the long lens)
+  const RUN0 = [[-2.1, 0, -8.6], [1.75, 0, -9.2], [-2.75, 0, -9.6], [2.4, 0, -8.4], [-1.7, 0, -8.0], [2.0, 0, -9.8]];   // S2: where each child starts (in front of the long lens)
   function gather(t) {
     for (const r of RUNS) { const g = r.g, U = g.userData, s = U.s;
       const to = V(KN.x + r.off[0], 0, KN.z + r.off[1]), dir = to.clone().sub(r.from), dist = dir.length(); dir.normalize();
@@ -379,16 +386,16 @@ export async function build(W, H) {
   function frame(t) {
     const shot = t < T.cut1 ? 'road' : t < T.cut2 ? 'gather' : 'hands';
     all.forEach(g => { g.visible = true; }); HANDS.forEach(h => { h.visible = false; }); hemi.intensity = .6; GIRL.userData.arms.forEach(A => { A.hand.visible = true; });
-    if (shot === 'gather') aimSun(V(-.4, 1, -2.2), KN.clone().add(V(-4.4, 0, 0)), .05);   // the long lens: the low sun just out of frame left (its light rakes in; no disc behind any head)
+    if (shot === 'gather') aimSun(V(-.4, 1, 1.5), KN.clone().add(V(2.3, 0, 0)), .028);   // the long lens: the low sun just out of frame left (its light rakes in; no disc behind any head)
     sunL.position.copy(SUN).multiplyScalar(120).add(V(0, 0, -15)); sunL.target.position.set(0, 0, -15); sunLamp.pos.copy(SUN).multiplyScalar(300);
-    if (shot !== 'gather') { cam.fov = FOV; cam.updateProjectionMatrix(); }
+    if (shot === 'road') { cam.fov = 36; cam.updateProjectionMatrix(); } else if (shot === 'hands') { cam.fov = FOV; cam.updateProjectionMatrix(); }
     if (shot === 'road') {
       families(t); disciples(t, shot); kingPose(t, shot);
       RUNS.forEach(r => { r.from = null; });
       // tracking at a child's eye height: the camera keeps pace with the first family (same eased stop), then a slow push
-      const f = F[0], ft = famTau(f, t), z = 13.6 - (ft.tau * SPD - famTau(f, T.start).tau * SPD) - .16 * Math.max(0, t - ft.tStop);
+      const f = F[0], ft = famTau(f, t), z = 11.4 - (ft.tau * SPD - famTau(f, T.start).tau * SPD) - .16 * Math.max(0, t - ft.tStop);
       const x = lerp(-1.75, -.95, sine((t - T.start) / (T.cut1 - T.start)));
-      setCam(V(x, 1.0, z), V(x + 1.1, 1.35 + .25 * ss(T.turn[0], T.turn[1] + 1, t), z - 30));
+      setCam(V(x, 1.0, z), V(x + 1.1, 1.05, z - 30));
       { const d = Math.hypot(KP.x - x, KP.z - z); aimSun(V(x, 1, z), KP.clone().add(V(.8, 0, 0)), (1.22 - 1.0) / d); sunL.position.copy(SUN).multiplyScalar(120).add(V(0, 0, -15)); sunLamp.pos.copy(SUN).multiplyScalar(300); }   // the sun just beside him at his shoulder (never a disc round a head)
       film.dofCfg.focus = 10 + 6 * ss(T.block, T.turn[0], t); film.dofCfg.aperture = 3;
       magic(ss(T.start - 6, T.cut1 + 4, t) * .7);
@@ -401,7 +408,8 @@ export async function build(W, H) {
       gather(t);
       const lu = clamp((t - T.cut1) / (T.cut2 - T.cut1)), u = lu * .75 + .25 * sine(lu);   // moving from the first frame (no slow start)
       cam.fov = 28; cam.updateProjectionMatrix();
-      setCam(V(lerp(-1.7, .2, u), lerp(.92, 1.02, u), lerp(.4, -3.6, u)), V(lerp(.15, .35, u), lerp(.95, .78, u), -19.6));   // a slow push with a lateral arc (the gap between the men opens round Him)
+      cam.fov = 28 - 7 * sine((t - T.lower) / (T.cut2 - T.lower)); cam.updateProjectionMatrix();   // the lens closes in on the gathering
+      setCam(V(lerp(-.6, .3, u), lerp(.92, 1.0, u), lerp(3.4, -.4, u)), V(lerp(.15, .35, u), lerp(.95, .7, u), -19.6));   // a slow push with a lateral arc (the gap between the men opens round Him)
       film.dofCfg.focus = lerp(19, 16.7, u); film.dofCfg.aperture = 2.4;
       const bl = ss(T.bloom[0], T.bloom[1], t);
       magic(.75 + .4 * u); sunLamp.power = 2200 + 1800 * bl; film.look.exposure = 1.34 + .05 * bl; sky.u.sunGlow.value.multiplyScalar(1 + .5 * bl);
@@ -419,22 +427,104 @@ export async function build(W, H) {
       setCam(pos, c.clone().add(V(.02, -.1 + .02 * u + .03 * w, .1)));
       king.visible = false;   // we are where He kneels: the girl seen from his place, never Him
       aimSun(pos, c.clone().add(V(-.28, 0, 0)), .085); sunL.position.copy(SUN).multiplyScalar(120).add(V(0, 0, -15)); sunLamp.pos.copy(SUN).multiplyScalar(300);
-      film.dofCfg.focus = pos.distanceTo(c); film.dofCfg.aperture = 7;
+      film.dofCfg.focus = .35; film.dofCfg.aperture = 16;   // round 2: everything behind the drawn hands is soft colour (her sleeves, her robe, the street)
       magic(1.35 + .55 * ss(T.push[0], T.end, t));
       const fl = ss(T.push[0] + .5, T.push[1] + 1, t) * .45 + ss(T.fill[0], T.fill[1], t) * .55;
       palmL.intensity = 0; hemi.intensity = .42; all.forEach(g => { if (g !== GIRL) g.visible = false; });
-      glow.position.copy(c).add(V(0, .008, 0)); glow.material.opacity = .3 * fl; glow.scale.setScalar(lerp(.12, .24, fl)); glow.quaternion.copy(cam.quaternion);
-      handM.emissiveIntensity = .2 * fl;
+      glow.material.opacity = 0; handM.emissiveIntensity = 0; HANDS.forEach(h => { h.visible = false; });   // round 2: the hands are drawn in 2D (drawHands)
       sunLamp.power = 700; film.look.exposure = 1.42 + .1 * fl;
     }
     if (shot !== 'hands') { palmL.intensity = 0; glow.material.opacity = 0; }
     renderAll(t);
   }
+  // ---------------------------------------------------------------- round 2: the empty hands, drawn (418.3 – 434.7)
+  // Coordinator r1: "a close robeMan is a toy — draw a proper pair of small child's hands in soft pastel". Two small hands seen from
+  // in front and a little above (from where He kneels): palms up, slightly cupped, the little-finger edges almost touching, fingers
+  // toward us in a natural curl (two segments each, the distal one shorter and bending — no straight sticks, no broken joints),
+  // thumbs out and turning in. Drawn as a pastel drawing: a soft fill, then fixed strokes (seeded, pinned to the hand — they never
+  // crawl) coloured by the light at that spot, a broken rose contour, the paper's tooth; three faint palm creases (the creases the
+  // woodcut's first knife line answers). The sunset pools in the cup of the palms and slowly fills them. Behind: her sleeves (drawn,
+  // soft) and the 3D frame defocused to colour (her robe, the street, the light).
+  const HAND = (() => {
+    const r = rng(9191);
+    // finger table: [base x, base y, angle from straight down (outward +), length, width] — index (outer) … little (inner)
+    const FING = [[.41, .012, .1, .31, .102], [.305, .028, .035, .35, .108], [.2, .028, -.02, .32, .1], [.105, .012, -.08, .25, .088]];
+    const strokes = []; for (let i = 0; i < 1500; i++) strokes.push([r() * .68 + .01, r() * 1.0 - .66, (r() - .5) * .5, .025 + r() * .045, .010 + r() * .016, r()]);
+    const tooth = (() => { const c = document.createElement('canvas'); c.width = c.height = 256; const g = c.getContext('2d'), im = g.createImageData(256, 256), rr = rng(77);
+      for (let y = 0; y < 256; y++) for (let x = 0; x < 256; x++) { const v = 200 + 55 * Math.max(0, Math.sin(x * .9 + rr() * 2) * Math.sin(y * .7 + rr() * 2)) - rr() * 40, k = (y * 256 + x) * 4; im.data[k] = im.data[k + 1] = im.data[k + 2] = v; im.data[k + 3] = 255; }
+      g.putImageData(im, 0, 0); return c; })();
+    return { FING, strokes, tooth };
+  })();
+  // the centre line of one finger: base → middle joint (straight) → tip; the curl shortens the distal segment as seen from above
+  // and turns it slightly toward the middle finger (a hand at rest)
+  function fingerPts(f, sgn, curl) {
+    const [bx, by, a, L, w] = f, L1 = L * .56, L2 = L * .44 * (1 - .4 * curl), a2 = a * (1 - .5 * curl);
+    const kx = bx + Math.sin(a) * L1, ky = by + Math.cos(a) * L1, tx = kx + Math.sin(a2) * L2, ty = ky + Math.cos(a2) * L2;
+    return { b: [bx * sgn, by], k: [kx * sgn, ky], t: [tx * sgn, ty], w };
+  }
+  function capsule(p, P0, P1, w0, w1) {   // a tapered segment with round ends (added to path p)
+    const dx = P1[0] - P0[0], dy = P1[1] - P0[1], l = Math.hypot(dx, dy) || 1, nx = -dy / l, ny = dx / l, a1 = Math.atan2(ny, nx);
+    p.moveTo(P0[0] + nx * w0 / 2, P0[1] + ny * w0 / 2); p.lineTo(P1[0] + nx * w1 / 2, P1[1] + ny * w1 / 2); p.arc(P1[0], P1[1], w1 / 2, a1, a1 + Math.PI, true);
+    p.lineTo(P0[0] - nx * w0 / 2, P0[1] - ny * w0 / 2); p.arc(P0[0], P0[1], w0 / 2, a1 + Math.PI, a1 + 2 * Math.PI, true); p.closePath();
+  }
+  // the parts of one hand (each filled on its own so overlaps never punch holes): the palm, eight finger segments, two thumb segments
+  function handParts(sgn, curl, thumbA) {
+    const X = x => x * sgn, parts = [];   // (a child's palm: a little narrower at the wrist, the thenar full, the heel of the hand round)
+    const palm = new Path2D(); palm.moveTo(X(.13), -.58); palm.bezierCurveTo(X(.24), -.62, X(.38), -.62, X(.44), -.56);
+    palm.bezierCurveTo(X(.56), -.46, X(.58), -.26, X(.52), -.07); palm.lineTo(X(.49), .015);
+    palm.bezierCurveTo(X(.36), .05, X(.2), .05, X(.07), .025); palm.bezierCurveTo(X(.02), -.16, X(.04), -.42, X(.13), -.58); palm.closePath(); parts.push(palm);
+    HAND.FING.forEach((f, i) => { const c = fingerPts(f, sgn, curl[i]); const a = new Path2D(); capsule(a, c.b, c.k, c.w, c.w * .92); parts.push(a); const b = new Path2D(); capsule(b, c.k, c.t, c.w * .92, c.w * .78); parts.push(b); });
+    const b0 = [X(.47), -.33], m = [b0[0] + sgn * Math.sin(thumbA) * .17, b0[1] + Math.cos(thumbA) * .17], tp = [m[0] + sgn * Math.sin(thumbA - .6) * .13, m[1] + Math.cos(thumbA - .6) * .13];
+    const t1 = new Path2D(); capsule(t1, b0, m, .125, .11); parts.push(t1); const t2 = new Path2D(); capsule(t2, m, tp, .11, .092); parts.push(t2);
+    return parts;
+  }
+  const HC = document.createElement('canvas'); HC.width = W; HC.height = H; const hx = HC.getContext('2d');
+  function drawHands(ctx, t) {
+    const u = sine((t - T.push[0]) / (T.push[1] - T.push[0])), lw = clamp((t - T.push[1]) / (T.end - T.push[1])), w = lw * .8 + .2 * sine(lw);
+    const fill = ss(T.push[0] + .4, T.push[1] + 1.2, t) * .4 + ss(T.fill[0], T.fill[1], t) * .6;   // the light pooling in the palms
+    const S0 = W * .72 * lerp(.8, 1, u) * (1 + .05 * w), cx = W / 2 + 6 * Math.sin(t * .21) * (1 - u * .5), cy = H * .45 - .03 * S0 * fill + 4 * Math.sin(t * .37);
+    const M0 = new DOMMatrix().translate(cx, cy).rotate((.02 * Math.sin(t * .17) - .015 * w) * 57.3).scale(S0, S0);
+    const MH = sgn => M0.translate(-sgn * .06, 0);   // the two hands close together, little-finger edges almost touching
+    // the sleeves: soft robe-coloured shapes from the top of the frame narrowing into the cuffs (behind the hands)
+    ctx.save(); ctx.setTransform(M0); ctx.filter = 'blur(16px)';
+    for (const sgn of [-1, 1]) { const sl = new Path2D(); sl.moveTo(sgn * .1, -.58); sl.bezierCurveTo(sgn * .06, -.85, sgn * .02, -1.2, sgn * -.02, -1.7); sl.lineTo(sgn * .62, -1.7); sl.bezierCurveTo(sgn * .58, -1.2, sgn * .52, -.86, sgn * .48, -.58); sl.closePath();
+      const g = ctx.createLinearGradient(0, -1.5, 0, -.56); g.addColorStop(0, 'rgba(96,70,110,0)'); g.addColorStop(.5, 'rgba(150,108,124,.8)'); g.addColorStop(1, 'rgba(196,146,132,.92)'); ctx.fillStyle = g; ctx.fill(sl); }
+    ctx.filter = 'none'; ctx.restore();
+    // the hands, composed off screen: a soft contour (the silhouette stroked, behind), the fills, then strokes / creases / pads / tooth
+    // painted only where the hand is (source-atop) — so the contour is the outer edge only
+    hx.setTransform(1, 0, 0, 1, 0, 0); hx.clearRect(0, 0, W, H); hx.setTransform(M0);
+    const sets = [-1, 1].map(sgn => ({ sgn, curl: HAND.FING.map((f, i) => .6 + .05 * Math.sin(t * .8 + i * 1.3 + (sgn > 0 ? 0 : 2)) + .06 * fill), thumbA: .62 + .05 * Math.sin(t * .6 + sgn) }));
+    for (const st of sets) { hx.setTransform(MH(st.sgn)); st.parts = handParts(st.sgn, st.curl, st.thumbA); hx.strokeStyle = 'rgba(122,64,70,.85)'; hx.lineWidth = .02; hx.lineJoin = 'round'; for (const p of st.parts) hx.stroke(p); }
+    for (const st of sets) { hx.setTransform(MH(st.sgn)); const pc = [st.sgn * .3, -.26], g = hx.createRadialGradient(pc[0], pc[1], .02, pc[0], pc[1], .6);
+      g.addColorStop(0, 'rgb(' + (lerp(172, 255, fill) | 0) + ',' + (lerp(108, 212, fill) | 0) + ',' + (lerp(96, 150, fill) | 0) + ')'); g.addColorStop(.45, '#d6987e'); g.addColorStop(1, '#efc29c');
+      hx.fillStyle = g; for (const p of st.parts) hx.fill(p); }
+    hx.globalCompositeOperation = 'source-atop'; hx.lineCap = 'round';
+    for (const st of sets) { const sgn = st.sgn, pc = [sgn * .3, -.26]; hx.setTransform(MH(sgn));
+      for (const [x0, y0, da, L, wd, rr] of HAND.strokes) { const x = x0 * sgn, y = y0, dc = Math.hypot(x - pc[0], (y - pc[1]) * 1.15), edge = clamp((dc - .22) / .35), pool = Math.exp(-dc * dc / .03) * fill;
+        const cr = lerp(lerp(196, 244, edge), 255, pool), cg = lerp(lerp(124, 190, edge), 228, pool), cb = lerp(lerp(114, 152, edge), 170, pool), j = (rr - .5) * 18, a = -.7 + da;
+        hx.strokeStyle = 'rgba(' + (cr + j | 0) + ',' + (cg + j * .8 | 0) + ',' + (cb + j * .6 | 0) + ',.5)'; hx.lineWidth = wd; hx.beginPath(); hx.moveTo(x, y); hx.lineTo(x + Math.cos(a) * L, y + Math.sin(a) * L); hx.stroke(); }
+      hx.strokeStyle = 'rgba(146,82,80,.32)'; hx.lineWidth = .008;   // the palm creases (heart, head, life line)
+      for (const c of [[[.1, -.07], [.24, -.12], [.38, -.1], [.5, -.17]], [[.1, -.2], [.24, -.24], [.38, -.26], [.52, -.34]], [[.45, -.06], [.36, -.2], [.36, -.38], [.44, -.54]]]) { hx.beginPath(); hx.moveTo(c[0][0] * sgn, c[0][1]); hx.bezierCurveTo(c[1][0] * sgn, c[1][1], c[2][0] * sgn, c[2][1], c[3][0] * sgn, c[3][1]); hx.stroke(); }
+      HAND.FING.forEach((f, i) => { const c = fingerPts(f, sgn, st.curl[i]), nx = c.k[1] - c.b[1], ny = -(c.k[0] - c.b[0]), l = Math.hypot(nx, ny) || 1;
+        hx.strokeStyle = 'rgba(150,86,82,.3)'; hx.lineWidth = .007; hx.beginPath(); hx.moveTo(c.k[0] - nx / l * c.w * .34, c.k[1] - ny / l * c.w * .34); hx.lineTo(c.k[0] + nx / l * c.w * .34, c.k[1] + ny / l * c.w * .34); hx.stroke();
+        const pg = hx.createRadialGradient(c.t[0], c.t[1] - .008, 0, c.t[0], c.t[1], c.w * .5); pg.addColorStop(0, 'rgba(255,228,200,.55)'); pg.addColorStop(1, 'rgba(255,228,200,0)'); hx.fillStyle = pg; hx.fillRect(c.t[0] - c.w, c.t[1] - c.w, c.w * 2, c.w * 2);
+        // the shadow line between touching fingers (they lie together, a hand at rest)
+        if (i < 3) { const c2 = fingerPts(HAND.FING[i + 1], sgn, st.curl[i + 1]); hx.strokeStyle = 'rgba(140,76,76,.28)'; hx.lineWidth = .008; hx.beginPath(); hx.moveTo((c.b[0] + c2.b[0]) / 2, (c.b[1] + c2.b[1]) / 2 + .02); hx.lineTo((c.k[0] + c2.k[0]) / 2, (c.k[1] + c2.k[1]) / 2); hx.stroke(); } }); }
+    hx.setTransform(1, 0, 0, 1, 0, 0); hx.globalCompositeOperation = 'source-atop'; hx.globalAlpha = .16; hx.fillStyle = hx.createPattern(HAND.tooth, 'repeat'); hx.fillRect(0, 0, W, H);   // the paper's tooth, on the hands only
+    hx.globalAlpha = 1; hx.globalCompositeOperation = 'source-over';
+    ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.drawImage(HC, 0, 0);
+    // the light pooling in the cupped palms, then filling them (soft, never an orb)
+    if (fill > 0) { ctx.setTransform(M0); ctx.globalCompositeOperation = 'lighter';
+      for (const sgn of [-1, 1]) { ctx.setTransform(MH(sgn)); const g = ctx.createRadialGradient(sgn * .3, -.26, 0, sgn * .3, -.26, .18 + .3 * fill); g.addColorStop(0, 'rgba(255,200,130,' + (.4 * fill) + ')'); g.addColorStop(.5, 'rgba(255,160,110,' + (.16 * fill) + ')'); g.addColorStop(1, 'rgba(255,140,100,0)'); ctx.fillStyle = g; ctx.fillRect(-1.2, -1.2, 2.4, 2.4); } }
+    ctx.restore();
+  }
   function draw(ctx, t, B) {
     if (!T) T = beats(B);
     frame(t);
     ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.drawImage(film.canvas, 0, 0, W, H); ctx.restore();
+    if (t >= T.cut2 && t < T.end + .5) drawHands(ctx, t);
   }
+
   S.updateMatrixWorld(true);
   return { film, draw, beats: () => T, people: { F, D, king, GIRL } };
 }

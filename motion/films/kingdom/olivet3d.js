@@ -692,12 +692,12 @@ export async function build(W, H_, B0 = null) {
   const LINES = [];   // the hub lines (the relay's spine)
   { let i12 = 0; for (const [k, ll, par, gen] of HUBDEF) { const P0 = RH[par], d = gc(P0.ll, ll);
       let t0, T; if (gen === 1) { t0 = L0 + .1 * i12; T = 1.1 + 1.6 * Math.sqrt(d / 4e6); i12++; }   // round 14: one by one, 0.1 s apart   // the twelve: one by one, slow enough to count
-      else { t0 = P0.ta + BEAT + .12 * (P0.kids++); T = hubT(d); }
+      else { t0 = P0.ta + (gen >= 3 ? .15 : BEAT) + .12 * (P0.kids++); T = hubT(d) * (gen >= 3 ? .7 : 1); }   // round 15: from the third generation the hops quicken — Korea is lit just before 「지금도」
       RH[k] = { ll, ta: t0 + T, gen, kids: 0 }; LINES.push({ src: par, dst: k, ll, t0, T, gen, d }); } }
   // the dark that remains (work still to do): reserved for Korea's generation (some reached at the end, the rest still dark)
   const RESV = (lo, la) => (lo > 46 && lo < 90 && la > 36 && la < 55) || (lo > 90 && lo < 120 && la > 42 && la < 52) || (lo > 38 && lo < 58 && la > 15 && la < 28) ||
     (lo > -15 && lo < 35 && la > 9 && la < 19) || (lo > -126 && lo < -96 && la > 15 && la < 55);
-  const HK = Object.keys(RH), SEO = RH.SEO, KG0 = SEO.ta + .4;   // Korea's generation leaves on 「지금도」
+  const HK = Object.keys(RH), SEO = RH.SEO, KG0 = SEO.ta + .25;   // Korea's generation leaves on 「지금도」
   // round 14: Korea's targets balanced by bearing — up to 34 per 30° sector, dark regions first, then lit cities (they flare again); the
   // Americas over the Pacific thinned to a few
   const KT = new Set(), KX = [];
@@ -706,19 +706,47 @@ export async function build(W, H_, B0 = null) {
       const am = c.lon < -95 && c.lon > -126; bins[bi].push({ c, pri: (RESV(c.lon, c.lat) ? 0 : 1) + (am ? .6 : 0) + rK() * .5 }); }
     for (const B of bins) { B.sort((a, b) => a.pri - b.pri); B.slice(0, 34).forEach(x => { if (RESV(x.c.lon, x.c.lat)) KT.add(x.c); else KX.push(x.c); }); } }
   const rC = rng(1313), rampT = (win, r) => { for (let q = 0; q < 40; q++) { const x = rC() * win; if (x >= r || rC() < x / r) return x; } return r; };   // a sender's launch times: rising over r s, then even
+  // round 15 (owner 2026-11-21: "단계별로 딱 쉬고 그다음 딱 가고 하는 게 어색해" — motion-continuity): each city still takes its sender
+  // from the relay and never launches before that sender is lit (e = sender lit + a beat), but WHEN it launches comes from one scheduler
+  // that releases the waiting lines at the rate of a single smooth curve, earliest-natural first: no lull after the twelve, no surge
+  // when a generation starts sending, and Korea's lines (served first once they are due) swelling in on 「지금도」 while older ones still send.
+  const QB = [];
   if (VER === 'b') for (const c of CL) { c.pp = E.popAt(c.lon, c.lat); c.b *= .45 + .75 * Math.pow(c.pp, .6);
     const P = E.llToWorld(c.lon, c.lat, 700, V()), ll = [c.lon, c.lat], resv = RESV(c.lon, c.lat), rest = .01 + .02 * rC();
     let best = null;
-    if (resv) { if (KT.has(c)) { const d = gc(SEO.ll, ll); best = { k: 'SEO', d, t0: KG0 + rampT(T0B.g - KG0 - .2, .5), T: .8 + 1.9 * Math.sqrt(d / 1e7) }; } }
+    if (resv) { if (KT.has(c)) { const d = gc(SEO.ll, ll), e = KG0 + rampT(T0B.g - KG0 - .3, 1.0); best = { k: 'SEO', d, e, key: e, T: .8 + 1.9 * Math.sqrt(d / 1e7) }; } }
     else for (const k of HK) { if (k === 'SEO') continue; const H0 = RH[k], d = gc(H0.ll, ll); if (d > (H0.gen === 0 ? 9e5 : H0.gen <= 2 ? 3.0e6 : 4.5e6)) continue;   // each sender reaches its own region (Jerusalem the near one)
-      const T = (.32 + 1.0 * Math.sqrt(d / 1e7)) * (.85 + .3 * rC()), win = k === 'JER' ? 1.9 : H0.gen === 1 ? 1.8 : 1.4, t0 = H0.ta + BEAT + rampT(win, .45) + (k === 'JER' ? 1.05 : 0);   /* round 14: Jerusalem's near region after the twelve are out */   // each sender's rate rises from zero (no step)
-      if (!best || t0 + T < best.t0 + best.T) best = { k, d, t0, T }; }
+      const T = (.32 + 1.0 * Math.sqrt(d / 1e7)) * (.85 + .3 * rC()), win = k === 'JER' ? 1.9 : H0.gen === 1 ? 1.8 : 1.4, e = H0.ta + BEAT + (k === 'JER' ? .2 : 0), key = e + rampT(win, .45) + (k === 'JER' ? .6 : 0);
+      if (!best || key + T < best.key + best.T) best = { k, d, e, key, T }; }
     if (!best) { c.dark = true; continue; }   // stays dark
-    c.ta = best.t0 + best.T; RH[best.k].sent = (RH[best.k].sent || 0) + 1;
-    far.push({ p: P, d: c.ta * 1000, b: c.b * .8, s: 1, f: 200 });
-    GLN.push({ P, A: uv3(...RH[best.k].ll), B: P.clone().sub(V(0, -R_E0, 0)).normalize().toArray(), hA: 900, hB: 700, hTop: clamp(best.d * .01, 600, 9e4),
-      curl: (best.k === 'SEO' ? .15 + .45 * rC() : .12 + .24 * rC()) * (rC() < .55 ? 1 : -1) * ss(2e5, 1.5e6, best.d), t0: best.t0, T: best.T, k: (.8 + .4 * c.b) * (.35 + 2.4 * rC() ** 4) * (best.k === 'SEO' ? 1.9 : 1),
-      rest: best.k === 'SEO' ? .05 : rest, warm: best.k === 'SEO' ? 1 : 0, src: best.k }); }   // round 14: Korea's lines leave a faint gold trace
+    QB.push({ c, P, rest, ...best, kor: best.k === 'SEO' }); }
+  if (VER === 'b') for (const c of KX) { const P = E.llToWorld(c.lon, c.lat, 760, V()), d = gc(SEO.ll, [c.lon, c.lat]), e = KG0 + rampT(T0B.g - KG0 - .3, 1.0);
+    QB.push({ c, P, d, e, key: e, T: .8 + 1.9 * Math.sqrt(d / 1e7), k: 'SEO', kor: true, kx: true }); }
+  if (VER === 'b') {
+    // the curve: launches per 0.25 s (the hub lines counted in) — a monotone cubic through log-rate keys: one rise from the twelve to the
+    // peak while the light covers the near world, a long ease down, a small swell as Korea joins, still sending at the cut; scaled to carry every line
+    const RK = [[0, 2.5], [.5, 5], [1, 14], [1.5, 40], [2, 105], [2.5, 230], [3, 400], [3.5, 530], [4, 590], [5.3, 590], [6.2, 420], [6.9, 270], [7.5, 190], [8.4, 175], [10, 135], [T0B.g - L0, 100]],
+      RC = mono(RK.map(([x, r]) => [L0 + x, Math.log(r)])), dt = 1 / 240, tE = T0B.g - .05;
+    let S = 0; for (let t = L0; t < tE; t += dt) S += Math.exp(RC(t)) * dt / .25; const sc = (QB.length + LINES.length) / S;
+    const hubT0 = LINES.map(L => L.t0).sort((a, b) => a - b), H = [], lt = (a, b) => (a.kor !== b.kor ? a.kor : a.key < b.key);
+    const hpush = q => { H.push(q); let i = H.length - 1; while (i) { const j = (i - 1) >> 1; if (!lt(H[i], H[j])) break; [H[i], H[j]] = [H[j], H[i]]; i = j; } };
+    const hpop = () => { const top = H[0], last = H.pop(); if (H.length) { H[0] = last; let i = 0; for (;;) { const l = 2 * i + 1, r = l + 1; let m = i; if (l < H.length && lt(H[l], H[m])) m = l; if (r < H.length && lt(H[r], H[m])) m = r; if (m === i) break; [H[i], H[m]] = [H[m], H[i]]; i = m; } } return top; };
+    QB.sort((a, b) => a.e - b.e); let qi = 0, hj = 0, bud = 0;
+    for (let t = L0; t < tE; t += dt) { while (qi < QB.length && QB[qi].e <= t) hpush(QB[qi++]);
+      bud += sc * Math.exp(RC(t)) * dt / .25; while (hj < hubT0.length && hubT0[hj] < t + dt) { bud -= 1; hj++; }   // a hub line counts against the curve
+      while (bud >= 1 && H.length) { hpop().t0 = t + rC() * dt; bud -= 1; }
+      if (!H.length) bud = Math.min(bud, 1); }   // nothing due: no backlog of budget (it would come out as a surge)
+    for (const q of QB) { const c = q.c;
+      if (q.t0 === undefined) { if (!q.kx) c.dark = true; continue; }   // not reached by the cut: stays dark
+      if (q.kx) { far.push({ p: q.P, d: (q.t0 + q.T) * 1000, b: .9, s: 1.2, f: 200 });
+        GLN.push({ P: q.P, A: uv3(...SEO.ll), B: q.P.clone().sub(V(0, -R_E0, 0)).normalize().toArray(), hA: 900, hB: 760, hTop: clamp(q.d * .01, 600, 9e4), curl: (.15 + .45 * rC()) * (rC() < .5 ? 1 : -1) * ss(2e5, 1.5e6, q.d),
+          t0: q.t0, T: q.T, k: 1.7 * (.8 + .4 * c.b) * (.5 + 1.6 * rC() ** 3), rest: .05, warm: 1, src: 'SEO' }); continue; }
+      c.ta = q.t0 + q.T; RH[q.k].sent = (RH[q.k].sent || 0) + 1;
+      far.push({ p: q.P, d: c.ta * 1000, b: c.b * .8, s: 1, f: 200 });
+      GLN.push({ P: q.P, A: uv3(...RH[q.k].ll), B: q.P.clone().sub(V(0, -R_E0, 0)).normalize().toArray(), hA: 900, hB: 700, hTop: clamp(q.d * .01, 600, 9e4),
+        curl: (q.kor ? .15 + .45 * rC() : .12 + .24 * rC()) * (rC() < .55 ? 1 : -1) * ss(2e5, 1.5e6, q.d), t0: q.t0, T: q.T, k: (.8 + .4 * c.b) * (.35 + 2.4 * rC() ** 4) * (q.kor ? 1.9 : 1),
+        rest: q.kor ? .05 : q.rest, warm: q.kor ? 1 : 0, src: q.k }); }   // round 14: Korea's lines leave a faint gold trace
+    window.__SCHED = { sc, left: QB.filter(q => q.t0 === undefined).length, n: QB.length }; }
   // A: one wave from Jerusalem. Leads (the brightest light per 12° of bearing beyond 800 km) one by one from u 32.0; the rest ordered near
   // to far (ragged) on round 12's smooth rate curve; a city on the side the turn brings round lands as it comes onto the disc.
   if (VER === 'a') {
@@ -740,10 +768,6 @@ export async function build(W, H_, B0 = null) {
       GLN.push({ P: it.P, A: uv3(JER[0], JER[1]), B: it.dv.toArray(), hA: 900, hB: 700, hTop: clamp(it.d * .01, 600, 9e4), curl: (.14 + .26 * rC()) * (rC() < .55 ? 1 : -1) * ss(2e5, 1.5e6, it.d),
         t0: it.t0, T: it.T, k: (.8 + .4 * c.b) * (it.lead ? 3.2 : (.35 + 2.4 * rC() ** 4)), rest: it.lead ? .05 : .012 + .022 * rC(), warm: 0, src: 'JER', hub: !!it.lead }); }
     { const n = GLN.filter(L => !L.hub).length; for (const L of GLN) if (!L.hub) L.k *= clamp(Math.sqrt(4000 / n) * 1.4, .2, 1); } }
-  if (VER === 'b') for (const c of KX) { const P = E.llToWorld(c.lon, c.lat, 760, V()), d = gc(SEO.ll, [c.lon, c.lat]), t0 = KG0 + rampT(T0B.g - KG0 - .2, .5), T = .8 + 1.9 * Math.sqrt(d / 1e7);
-    far.push({ p: P, d: (t0 + T) * 1000, b: .9, s: 1.2, f: 200 });
-    GLN.push({ P, A: uv3(...SEO.ll), B: P.clone().sub(V(0, -R_E0, 0)).normalize().toArray(), hA: 900, hB: 760, hTop: clamp(d * .01, 600, 9e4), curl: (.15 + .45 * rC()) * (rC() < .5 ? 1 : -1) * ss(2e5, 1.5e6, d),
-      t0, T, k: 1.7 * (.8 + .4 * c.b) * (.5 + 1.6 * rC() ** 3), rest: .05, warm: 1, src: 'SEO' }); }
   // the hub lines and the hub lights (senders: a little larger); the twelve brighter, countable threads
   if (VER === 'b') for (const L of LINES) { const H1 = RH[L.dst], P = E.llToWorld(L.ll[0], L.ll[1], 900, V());
     far.push({ p: P, d: H1.ta * 1000, b: L.gen === 5 && L.dst === 'SEO' ? 1.5 : 1.2, s: L.dst === 'SEO' ? 2.2 : 1.7, f: 220 });
@@ -834,6 +858,13 @@ export async function build(W, H_, B0 = null) {
   const R1 = 45, H2 = 3.0e7, TT = 1.5, DK = E.llToWorld(E.NODE.SEO[0], E.NODE.SEO[1] - 2.5, 0, V()).sub(V(0, -E.R_E, 0)).normalize(), ROTX = V(0, 1, 0).cross(DK).normalize(), ROTA = Math.acos(clamp(DK.y, -1, 1));
   // A's turn: eastward about the earth's axis from u 35.6 to the end
   function ROTA_A(t) { const t0 = T0B.c2 - 1.0; return 100 * D2R * ss(t0, t0 + 8.2, t); }   // eased in and out, ≤ 18.3°/s, ≈ 100° east — East Asia filling the disc at the end
+  // round 15 (owner: "36초에서 회전하기 시작하는데 그 전부터 자연스럽게"): B's turn begins while the camera is still easing out of the rise
+  // (u 32.5), very slowly (speed ∝ smoothstep^1.6 up to u 38.2), so the globe is already drifting as the light spreads; it travels, then
+  // eases out ((1−u)³(1+3u) from u 39.6) onto Korea by u 43.0
+  let RBT = null;
+  function ROTB(t) { if (!RBT) { const a = T.c1 + 1.0, p = T.c2 + 1.6, q = T.c2 + 3.0, z = T.c2 + 6.4, g = u => u <= 0 ? 1 : u >= 1 ? 0 : (1 - u) ** 3 * (1 + 3 * u), w = x => Math.pow(ss(a, p, x), 1.6) * g((x - q) / (z - q)), n = 1000, ar = [0];
+      for (let i = 1; i <= n; i++) ar.push(ar[i - 1] + w(a + (z - a) * (i - .5) / n)); RBT = { a, z, n, ar }; }
+    const { a, z, n, ar } = RBT; if (t <= a) return 0; if (t >= z) return ROTA; const f = (t - a) / (z - a) * n, i = Math.floor(f); return ROTA * (ar[i] + (ar[i + 1] - ar[i]) * (f - i)) / ar[n]; }
   let LH = null;
   function camAt(t) {
     const tT = T;
@@ -842,16 +873,19 @@ export async function build(W, H_, B0 = null) {
     if (!crane0) { const c0 = crane0 = groundCam(k), rel = c0.pos.clone().sub(org), hz = Math.hypot(rel.x, rel.z);
       c0.hc = V(rel.x / hz, 0, rel.z / hz); c0.d0 = rel.length(); c0.el0 = Math.atan2(rel.y, hz); c0.fwd = c0.hc.clone().negate();
       const pr = c0.pd * D2R, dh = hd(c0.yaw); c0.look = c0.pos.clone().add(V(dh.x * Math.cos(pr), -Math.sin(pr), dh.z * Math.cos(pr)).multiplyScalar(c0.dist)); c0.dh = dh;
-      // log-height after the tilt: a trapezoid speed profile (ease in .4 s, constant V, ease out 1 s to a drift vE), landing at H2 at u 33.0
-      const t1 = k + TT, t2 = tT.c1 + 1.5, vE = .006, aI = .4, aO = 1.0, D = Math.log(H2 / R1), V0 = (D - vE * aO * .5) / ((t2 - t1) - aI * .5 - aO * .5);
-      LH = tt => { const x = tt - t1; if (x <= 0) return Math.log(R1); let L = 0;
-        const s1 = Math.min(x, aI); L += V0 * s1 * s1 / (2 * aI); if (x <= aI) return Math.log(R1) + L;
-        const s2 = Math.min(x, t2 - t1 - aO) - aI; L += V0 * s2; if (x <= t2 - t1 - aO) return Math.log(R1) + L;
-        const s3 = Math.min(x - (t2 - t1 - aO), aO); L += V0 * s3 - (V0 - vE) * s3 * s3 / (2 * aO); if (x <= t2 - t1) return Math.log(R1) + L;
-        return Math.log(R1) + L + vE * (x - (t2 - t1)); }; }
+      // round 15 (owner: "딱 기다렸다가 쑤욱 올라가는데" — motion-continuity): ONE log-altitude speed curve from the crane's first frame, no
+      // hold: it ramps up (smoothstep, 0.6 s) while the camera swings up over them, runs at one speed, and eases out over 3.4 s
+      // ((1−u)³(1+3u): no step) into a slow drift, landing at H2 at u ≈ 34.9. During the tilt the swing itself lifts the camera, so the
+      // pull-away from their spot (log r) takes only what the swing does not give (never negative): the altitude rises smoothly either way.
+      const aR = .6, aO = 3.4, vE = .006, t2 = tT.c1 + 3.4, X = t2 - k, tc = X - aO, LC0 = Math.log(c0.d0), N = 3000, dx = X / N;
+      const lsE = y => Math.log(Math.sin(lerp(c0.el0, Math.PI / 2 - 1e-4, eio(y / TT)))), elT = x => x >= TT ? 0 : (lsE(Math.min(TT, x + 1e-3)) - lsE(Math.max(0, x - 1e-3))) / (Math.min(TT, x + 1e-3) - Math.max(0, x - 1e-3));
+      const vA = (x, V0) => x < aR ? V0 * (x / aR) ** 2 * (3 - 2 * x / aR) : x < tc ? V0 : x < X ? vE + (V0 - vE) * (1 - (x - tc) / aO) ** 3 * (1 + 3 * (x - tc) / aO) : vE;
+      let V0 = 3, tab = null; const fill = () => { tab = new Float64Array(N + 1); tab[0] = LC0; for (let i = 1; i <= N; i++) { const x = (i - .5) * dx; tab[i] = tab[i - 1] + Math.max(vA(x, V0) - elT(x), 0) * dx; } };
+      for (let it = 0; it < 6; it++) { fill(); V0 *= (Math.log(H2) - LC0) / (tab[N] - LC0); } fill(); c0.V0 = V0;
+      LH = tt => { const x = tt - k; if (x <= 0) return LC0; if (x >= X) return tab[N] + vE * (x - X); const f = x / dx, i = Math.min(N - 1, Math.floor(f)); return tab[i] + (tab[i + 1] - tab[i]) * (f - i); }; }
     const c0 = crane0;
     let pos, tC, pd, h;
-    if (t < k + TT) { const q = eio((t - k) / TT), q2 = eio((t - k) / .8), el = lerp(c0.el0, Math.PI / 2 - 1e-4, q), r = Math.exp(lerp(Math.log(c0.d0), Math.log(R1), q));
+    if (t < k + TT) { const q = eio((t - k) / TT), q2 = eio((t - k) / .8), el = lerp(c0.el0, Math.PI / 2 - 1e-4, q), r = Math.exp(LH(t));
       pos = org.clone().addScaledVector(c0.hc, Math.cos(el) * r).add(V(0, Math.sin(el) * r, 0)); h = pos.y - OY;
       const tg = c0.look.clone().lerp(org, q2), v = tg.clone().sub(pos).normalize();
       tC = c0.dh.clone().lerp(c0.fwd, q2).normalize(); pd = Math.asin(clamp(-v.y, -1, 1)) / D2R; }
@@ -859,7 +893,7 @@ export async function build(W, H_, B0 = null) {
     // round 13: as the light fills the side we see, the globe turns east — the camera carried round the earth's centre on the great
     // circle from over Jerusalem to over Korea (eased in and out, ≤ ~21°/s), and stops there for 「지금도」. Lines and lights are on the
     // globe, so they turn with it.
-    let uCv = V(0, 1, 0); { const a = VER === 'a' ? ROTA_A(t) : ROTA * ss(tT.c2 - 1.0, tT.c2 + 4.8, t), AX = VER === 'a' ? NPOLE : ROTX; if (a > 1e-6) { const E0 = V(0, -R_E, 0), rel = pos.clone().sub(E0).applyAxisAngle(AX, a); pos = E0.add(rel); tC.applyAxisAngle(AX, a); uCv = rel.normalize(); } }
+    let uCv = V(0, 1, 0); { const a = VER === 'a' ? ROTA_A(t) : ROTB(t), AX = VER === 'a' ? NPOLE : ROTX; if (a > 1e-6) { const E0 = V(0, -R_E, 0), rel = pos.clone().sub(E0).applyAxisAngle(AX, a); pos = E0.add(rel); tC.applyAxisAngle(AX, a); uCv = rel.normalize(); } }
     const alt = OY + h;
     return { pos, yaw: 0, pd, fov: lerp(c0.fov, 39, ss(k, k + TT, t)), focus: lerp(c0.focus, Math.max(20, h * 1.4), ss(k, k + 1.6, t)), aperture: 2.0 * (1 - ss(k, k + 2.2, t)), dist: 0, alt, uC: uCv, tC };
   }
@@ -919,7 +953,7 @@ export async function build(W, H_, B0 = null) {
     LLOC.u.uPx.value = 1.4 * film.scale; LLOC.u.uK.value = lerp(.6, 1.1, ss(2, -4, e)) * (1 - ss(3e5, 2e6, alt)); LLOC.u.uDens.value = LINEDENS; LLOC.u.uK.value *= .55; LLOC.u.uTrail.value = .32;   // round 8: the villages' lines lighter (they blanketed the lower frame at 33.5–34.5)
     LCITY.u.uPx.value = 1.4 * film.scale; LCITY.u.uK.value = lerp(.6, 1.1, ss(2, -4, e)) * (1 - ss(1100, 3800, alt)); LCITY.u.uDens.value = LINEDENS; LCITY.u.uTrail.value = .36;
     LGLB.u.uPx.value = 1.5 * film.scale; LGLB.u.uK.value = LINEK * lerp(.7, 1, ss(2e4, 2e6, alt)); LGLB.u.uDens.value = LINEDENS; LGLB.u.uTrail.value = .3;
-    cloudU.uK.value = ss(T.crane + 2.6, T.crane + 3.6, t) * (1 - ss(Math.log(9e3), Math.log(1.8e5), Math.log(alt)));   /* round 10: gone before the deck's edge (≥ 9 km round the spot, 6× height) could enter the frame */ if (OFFS.includes('cloud')) cloudU.uK.value = 0; CDECK.visible = !OFFS.includes('deck'); CWISP.visible = false;   /* round 10: the wisps round the vertical path piled into a flat white-out and a bright blob — the deck's sheets carry the punch */   // (fades out by time: above the deck the climb is too fast for an altitude fade)   // round 9: the deck (none in the ground shots before the crane)
+    cloudU.uK.value = ss(T.crane + 2.0, T.crane + 2.8, t) * (1 - ss(Math.log(9e3), Math.log(1.8e5), Math.log(alt)));   /* round 10: gone before the deck's edge (≥ 9 km round the spot, 6× height) could enter the frame */ if (OFFS.includes('cloud')) cloudU.uK.value = 0; CDECK.visible = !OFFS.includes('deck'); CWISP.visible = false;   /* round 10: the wisps round the vertical path piled into a flat white-out and a bright blob — the deck's sheets carry the punch */   // (fades out by time: above the deck the climb is too fast for an altitude fade)   // round 9: the deck (none in the ground shots before the crane)
     cloudU.uLit.value.copy(col('#646f92')).lerp(col('#b88a7e'), ss(-3, 2, e)); cloudU.uDark.value.copy(col('#2e3652')).lerp(col('#5a5462'), ss(-3, 2, e) * .5);   // round 10/11: dusk-lit, then moonlit cloud tops as the sun goes (uDark had been lost behind a comment)
     // the globe (only once the camera is high enough for it to show past the terrain) and its air seen from outside
     { const op = 1 - ss(Math.log(4e3), Math.log(1e4), Math.log(alt)); CITYMAT.forEach(m => { m.opacity = op; }); CITYOBJ.forEach(o => { o.visible = op > .002; }); }

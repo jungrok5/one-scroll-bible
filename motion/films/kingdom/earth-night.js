@@ -365,13 +365,13 @@ export function buildGlobe({ thetaMin = .018, rings = 260, seg = 512, texW = 409
         float cl = smoothstep(.56, .78, clr) * smoothstep(.07, .12, acos(clamp(dot(p, uU0), -1., 1.)));   // clear skies over the Holy Land (the terrain patch)
         float ms = min(dot(n, uSun), uNM);
         vec3 c = eShade(ms, land, rel, grn, cl * .8);
-        { vec3 vv = normalize(cameraPosition - vW); float sp = max(dot(reflect(-uSun, n), vv), 0.); c += vec3(1., .74, .46) * (pow(sp, 90.) * 1.6 + pow(sp, 14.) * .16) * (1. - land) * (1. - cl) * smoothstep(-.03, .12, ms); }
+        { vec3 vv = normalize(cameraPosition - vW); float sp = max(dot(reflect(-uSun, n), vv), 0.); c += (1. - uDeep) * vec3(1., .74, .46) * (pow(sp, 90.) * 1.6 + pow(sp, 14.) * .16) * (1. - land) * (1. - cl) * smoothstep(-.03, .12, ms); }
         vec3 v = normalize(cameraPosition - vW); float mu = max(dot(n, v), 0.);
         float hz = 1. - exp(-length(cameraPosition - vW) / uHazeL); c = mix(c, eHaze(ms), clamp(hz * .12 + pow(1. - mu, 9.) * .6, 0., 1.));
         if (uCG > 0.) { float gd = acos(clamp(dot(p, uU0), -1., 1.)) * ${R_E.toFixed(1)}, on = uPre + (1. - uPre) * smoothstep(gd + 1.5e5, gd + 1.3e6, uWF);
           if (uGT > 0.) { vec2 gtx = texture2D(tGlow, uv).rg; on = gtx.g > .17 ? smoothstep(30. + 16. * gtx.g + .25, 30. + 16. * gtx.g + 1.1, uGT) : 0.; }   // (g < .17 = before any line lands; the blend at a region's edge toward 'no light': off)   // round 13: each region's glow on its own lines' clock   // full as the wave front passes; uPre: the world's cities glow faintly before it (as the dim city points)
           float gl = texture2D(tGlow, uv).r; c += uGlowCol * (gl * gl * 1.9 + gl * .14) * uCG * on * (1. - .55 * cl) * (1. - smoothstep(-.06, .08, ms)) * mix(.55, 1., mu); }
-        if (uGT > 0.) { vec3 vv = normalize(cameraPosition - vW); float mg = max(dot(reflect(-uMoon, n), vv), 0.); c += vec3(.55, .65, .85) * (pow(mg, 160.) * .16 + pow(mg, 20.) * .012) * (1. - land) * (1. - cl) * (1. - smoothstep(-.06, .08, ms));   // round 13: moon glint on the sea
+        if (uGT > 0.) { vec3 vv = normalize(cameraPosition - vW); float mg = max(dot(reflect(-uMoon, n), vv), 0.); c += vec3(.55, .65, .85) * (pow(mg, 30.) * .0045 + pow(mg, 6.) * .0012) * (1. - land) * (1. - cl) * (1. - smoothstep(-.06, .08, ms));   // round 13: moon glint on the sea   // round 14: a soft, faint sheen only (the night is exposed ×10 — .06 read as a bright blob at 32.0–33.5)
           c *= mix(1., mix(1.12, .82, grn) * (.9 + .2 * rel), land * (1. - smoothstep(-.06, .08, ms))); }   // desert lighter, forest darker under the moon
         gl_FragColor = vec4(c * uK, 1.); }` });
   const mesh = new THREE.Mesh(g, m); mesh.frustumCulled = false;

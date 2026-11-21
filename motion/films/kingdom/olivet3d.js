@@ -340,7 +340,7 @@ export async function build(W, H_, B0 = null) {
             vec2 uv = vec2((lon + 3.14159265) / 6.2831853, (lat + 1.5707963) / 3.14159265);
             float land = smoothstep(.38, .62, texture2D(tLand, uv).r), rel = vn(uv * vec2(900., 450.)) * .6 + vn(uv * vec2(2400., 1200.)) * .4;
             float latd = abs(lat) * 57.3, grn = clamp(smoothstep(38., 52., latd) + (1. - smoothstep(8., 18., latd)) * .9, 0., 1.) * (.6 + .4 * vn(uv * vec2(60., 30.)));
-            vec3 gc = eShade(ms, min(land, 1. - wetF()), rel, grn, 0.) * (.45 + 1.05 * max(dot(normalize(vWN), normalize(vec3(.35, .8, -.45))), 0.)) / 1.28;   // round 10: moonlight on the real relief (flat ground = the globe's own shade, so the patch edge never shows)   // (the patch is tiny against the terminator: no warm terminator line flashing over it)
+            vec3 gc = eShade(ms, min(land, 1. - wetF()), rel, grn, 0.) * (.3 + 1.5 * max(dot(normalize(vWN), normalize(vec3(.55, .5, -.67))), 0.)) / 1.05;   // round 14: a lower moon, the Judean hills and the rift in relief   // round 10: moonlight on the real relief (flat ground = the globe's own shade, so the patch edge never shows)   // (the patch is tiny against the terminator: no warm terminator line flashing over it)
             float hz = 1. - exp(-length(cameraPosition - vWP) / uHazeL); gc = mix(gc, eHaze(ms), clamp(hz * .12 + pow(1. - mu, 9.) * .6, 0., 1.));
             gl_FragColor.rgb = mix(gl_FragColor.rgb, gc, uGK); }
           gl_FragColor.rgb += roadGlow() + vec3(1., .7, .38) * uFeet * exp(-length(vWP.xz - vec2(.6, .4)) / 2.6) * .9;
@@ -691,27 +691,34 @@ export async function build(W, H_, B0 = null) {
   const gc = (a, b) => Math.acos(clamp(v3(...a).dot(v3(...b)), -1, 1)) * R_E0, hubT = d => .55 + 1.1 * Math.sqrt(d / 1e7);
   const LINES = [];   // the hub lines (the relay's spine)
   { let i12 = 0; for (const [k, ll, par, gen] of HUBDEF) { const P0 = RH[par], d = gc(P0.ll, ll);
-      let t0, T; if (gen === 1) { t0 = L0 + 1.3 * Math.pow((i12 + .5) / 12, 1.25); T = 1.0 + 1.6 * Math.sqrt(d / 4e6); i12++; }   // the twelve: one by one, slow enough to count
+      let t0, T; if (gen === 1) { t0 = L0 + .1 * i12; T = 1.1 + 1.6 * Math.sqrt(d / 4e6); i12++; }   // round 14: one by one, 0.1 s apart   // the twelve: one by one, slow enough to count
       else { t0 = P0.ta + BEAT + .12 * (P0.kids++); T = hubT(d); }
       RH[k] = { ll, ta: t0 + T, gen, kids: 0 }; LINES.push({ src: par, dst: k, ll, t0, T, gen, d }); } }
   // the dark that remains (work still to do): reserved for Korea's generation (some reached at the end, the rest still dark)
   const RESV = (lo, la) => (lo > 46 && lo < 90 && la > 36 && la < 55) || (lo > 90 && lo < 120 && la > 42 && la < 52) || (lo > 38 && lo < 58 && la > 15 && la < 28) ||
     (lo > -15 && lo < 35 && la > 9 && la < 19) || (lo > -126 && lo < -96 && la > 15 && la < 55);
   const HK = Object.keys(RH), SEO = RH.SEO, KG0 = SEO.ta + .4;   // Korea's generation leaves on 「지금도」
-  const rC = rng(1313);
+  // round 14: Korea's targets balanced by bearing — up to 34 per 30° sector, dark regions first, then lit cities (they flare again); the
+  // Americas over the Pacific thinned to a few
+  const KT = new Set(), KX = [];
+  { const kv = v3(...SEO.ll), NPw = E.llToWorld(0, 90, 0, V()).sub(V(0, -R_E0, 0)).normalize(), kN = NPw.clone().sub(kv.clone().multiplyScalar(NPw.dot(kv))).normalize(), kE = kN.clone().cross(kv), bins = Array.from({ length: 12 }, () => []), rK = rng(4242);
+    for (const c of CL) { if (gc(SEO.ll, [c.lon, c.lat]) < 6e5) continue; const w = v3(c.lon, c.lat), b = Math.atan2(w.dot(kE), w.dot(kN)), bi = Math.floor(((b / Math.PI + 1) * 6)) % 12;
+      const am = c.lon < -95 && c.lon > -126; bins[bi].push({ c, pri: (RESV(c.lon, c.lat) ? 0 : 1) + (am ? .6 : 0) + rK() * .5 }); }
+    for (const B of bins) { B.sort((a, b) => a.pri - b.pri); B.slice(0, 34).forEach(x => { if (RESV(x.c.lon, x.c.lat)) KT.add(x.c); else KX.push(x.c); }); } }
+  const rC = rng(1313), rampT = (win, r) => { for (let q = 0; q < 40; q++) { const x = rC() * win; if (x >= r || rC() < x / r) return x; } return r; };   // a sender's launch times: rising over r s, then even
   if (VER === 'b') for (const c of CL) { c.pp = E.popAt(c.lon, c.lat); c.b *= .45 + .75 * Math.pow(c.pp, .6);
     const P = E.llToWorld(c.lon, c.lat, 700, V()), ll = [c.lon, c.lat], resv = RESV(c.lon, c.lat), rest = .01 + .02 * rC();
     let best = null;
-    if (resv) { if (rC() < .58) { const d = gc(SEO.ll, ll); best = { k: 'SEO', d, t0: KG0 + Math.pow(rC(), .8) * (T0B.g - KG0 - .2), T: .8 + 1.9 * Math.sqrt(d / 1e7) }; } }
+    if (resv) { if (KT.has(c)) { const d = gc(SEO.ll, ll); best = { k: 'SEO', d, t0: KG0 + rampT(T0B.g - KG0 - .2, .5), T: .8 + 1.9 * Math.sqrt(d / 1e7) }; } }
     else for (const k of HK) { if (k === 'SEO') continue; const H0 = RH[k], d = gc(H0.ll, ll); if (d > (H0.gen === 0 ? 9e5 : H0.gen <= 2 ? 3.0e6 : 4.5e6)) continue;   // each sender reaches its own region (Jerusalem the near one)
-      const T = (.32 + 1.0 * Math.sqrt(d / 1e7)) * (.85 + .3 * rC()), win = k === 'JER' ? 1.9 : H0.gen === 1 ? 1.8 : 1.4, t0 = H0.ta + BEAT + win * Math.pow(rC(), .6) + (k === 'JER' ? .55 : 0);   // each sender's rate rises from zero (no step)
+      const T = (.32 + 1.0 * Math.sqrt(d / 1e7)) * (.85 + .3 * rC()), win = k === 'JER' ? 1.9 : H0.gen === 1 ? 1.8 : 1.4, t0 = H0.ta + BEAT + rampT(win, .45) + (k === 'JER' ? 1.05 : 0);   /* round 14: Jerusalem's near region after the twelve are out */   // each sender's rate rises from zero (no step)
       if (!best || t0 + T < best.t0 + best.T) best = { k, d, t0, T }; }
     if (!best) { c.dark = true; continue; }   // stays dark
     c.ta = best.t0 + best.T; RH[best.k].sent = (RH[best.k].sent || 0) + 1;
     far.push({ p: P, d: c.ta * 1000, b: c.b * .8, s: 1, f: 200 });
     GLN.push({ P, A: uv3(...RH[best.k].ll), B: P.clone().sub(V(0, -R_E0, 0)).normalize().toArray(), hA: 900, hB: 700, hTop: clamp(best.d * .01, 600, 9e4),
-      curl: (.12 + .24 * rC()) * (rC() < .55 ? 1 : -1) * ss(2e5, 1.5e6, best.d), t0: best.t0, T: best.T, k: (.8 + .4 * c.b) * (.35 + 2.4 * rC() ** 4) * (best.k === 'SEO' ? 1.6 : 1),
-      rest, warm: best.k === 'SEO' ? 1 : 0, src: best.k }); }
+      curl: (best.k === 'SEO' ? .15 + .45 * rC() : .12 + .24 * rC()) * (rC() < .55 ? 1 : -1) * ss(2e5, 1.5e6, best.d), t0: best.t0, T: best.T, k: (.8 + .4 * c.b) * (.35 + 2.4 * rC() ** 4) * (best.k === 'SEO' ? 1.9 : 1),
+      rest: best.k === 'SEO' ? .05 : rest, warm: best.k === 'SEO' ? 1 : 0, src: best.k }); }   // round 14: Korea's lines leave a faint gold trace
   // A: one wave from Jerusalem. Leads (the brightest light per 12° of bearing beyond 800 km) one by one from u 32.0; the rest ordered near
   // to far (ragged) on round 12's smooth rate curve; a city on the side the turn brings round lands as it comes onto the disc.
   if (VER === 'a') {
@@ -733,11 +740,15 @@ export async function build(W, H_, B0 = null) {
       GLN.push({ P: it.P, A: uv3(JER[0], JER[1]), B: it.dv.toArray(), hA: 900, hB: 700, hTop: clamp(it.d * .01, 600, 9e4), curl: (.14 + .26 * rC()) * (rC() < .55 ? 1 : -1) * ss(2e5, 1.5e6, it.d),
         t0: it.t0, T: it.T, k: (.8 + .4 * c.b) * (it.lead ? 3.2 : (.35 + 2.4 * rC() ** 4)), rest: it.lead ? .05 : .012 + .022 * rC(), warm: 0, src: 'JER', hub: !!it.lead }); }
     { const n = GLN.filter(L => !L.hub).length; for (const L of GLN) if (!L.hub) L.k *= clamp(Math.sqrt(4000 / n) * 1.4, .2, 1); } }
+  if (VER === 'b') for (const c of KX) { const P = E.llToWorld(c.lon, c.lat, 760, V()), d = gc(SEO.ll, [c.lon, c.lat]), t0 = KG0 + rampT(T0B.g - KG0 - .2, .5), T = .8 + 1.9 * Math.sqrt(d / 1e7);
+    far.push({ p: P, d: (t0 + T) * 1000, b: .9, s: 1.2, f: 200 });
+    GLN.push({ P, A: uv3(...SEO.ll), B: P.clone().sub(V(0, -R_E0, 0)).normalize().toArray(), hA: 900, hB: 760, hTop: clamp(d * .01, 600, 9e4), curl: (.15 + .45 * rC()) * (rC() < .5 ? 1 : -1) * ss(2e5, 1.5e6, d),
+      t0, T, k: 1.7 * (.8 + .4 * c.b) * (.5 + 1.6 * rC() ** 3), rest: .05, warm: 1, src: 'SEO' }); }
   // the hub lines and the hub lights (senders: a little larger); the twelve brighter, countable threads
   if (VER === 'b') for (const L of LINES) { const H1 = RH[L.dst], P = E.llToWorld(L.ll[0], L.ll[1], 900, V());
     far.push({ p: P, d: H1.ta * 1000, b: L.gen === 5 && L.dst === 'SEO' ? 1.5 : 1.2, s: L.dst === 'SEO' ? 2.2 : 1.7, f: 220 });
     GLN.push({ P, A: uv3(...RH[L.src].ll), B: P.clone().sub(V(0, -R_E0, 0)).normalize().toArray(), hA: 900, hB: 900, hTop: clamp(L.d * .012, 2e3, 1e5),
-      curl: (L.gen === 1 ? .1 : .18) * (LINES.indexOf(L) % 2 ? 1 : -1), t0: L.t0, T: L.T, k: L.gen === 1 ? 3.4 : 2.2, rest: L.gen === 1 ? .08 : .05, warm: 0, src: L.src, hub: true }); }
+      curl: (L.gen === 1 ? .1 : .18) * (LINES.indexOf(L) % 2 ? 1 : -1), t0: L.t0, T: L.T, k: L.gen === 1 ? 4.2 : 2.2, rest: L.gen === 1 ? .16 : .05, warm: 0, src: L.src, hub: true }); }
   // density: a sender's crowd of lines is each dimmer, so a busy hub glows like the rest
   if (VER === 'b') { const cnt = {}; for (const L of GLN) if (!L.hub) cnt[L.src] = (cnt[L.src] || 0) + 1; for (const L of GLN) if (!L.hub) L.k *= clamp(Math.sqrt(220 / cnt[L.src]), .16, 1); }
   window.__RELAY = { RH, LINES, gens: HUBDEF.map(h => [h[0], h[3], h[2]]) };
@@ -872,7 +883,7 @@ export async function build(W, H_, B0 = null) {
   }
   function frame(t) {
     const c = setView(t), e0 = SUNE(t), sh0 = SUNH(t), sunDir = V(Math.sin(sh0 * D2R) * Math.cos(e0 * D2R), Math.sin(e0 * D2R), -Math.cos(sh0 * D2R) * Math.cos(e0 * D2R));
-    { const w = ss(T.c1 - 2.0, T.c1 + .7, t); if (w > 0) { SUNF = (c.uC || V(0, 1, 0)).clone().negate(); sunDir.lerp(SUNF, w).normalize(); } }   // round 10: the sun goes under Jerusalem as the camera leaves the air — the whole disc is night, the rim even (round 9's sunlit limb read as a white veil)
+    { const w = ss(T.c1 - 2.0, T.c1 - .1, t); if (w > 0) { SUNF = (c.uC || V(0, 1, 0)).clone().negate(); sunDir.lerp(SUNF, w).normalize(); } }   // round 10: the sun goes under Jerusalem as the camera leaves the air — the whole disc is night, the rim even (round 9's sunlit limb read as a white veil)
     const e = Math.asin(clamp(sunDir.y, -1, 1)) / D2R, sh = Math.atan2(sunDir.x, -sunDir.z) / D2R, night = ss(-.5, -7, e);
     const alt = c.alt, lss = (a, b) => ss(Math.log(a), Math.log(b), Math.log(Math.max(alt, 1))), space = lss(6e3, 1e5), lowA = 1 - ss(300, 3000, alt);   // round 10/11: ramps in log altitude
     // sun, its glow in the haze, sky light
@@ -899,7 +910,7 @@ export async function build(W, H_, B0 = null) {
         CLAMPS.u.uBurst.value = LAMPS.u.uBurst.value = 1; CLAMPS.u.uF.value = t * 1000; CLAMPS.u.uK.value = lerp(.5, 1.15, ss(2, -4, e)) * (1 - ss(1100, 3800, alt)); CLAMPS.u.uPull.value = .003; CLAMPS.u.uScale.value = film.scale;
         JGLOW.u.uF.value = 1; JGLOW.u.uK.value = 0; JGLOW.u.uPull.value = .0005; JGLOW.u.uScale.value = film.scale;
         LAMPS.u.uF.value = t * 1000; LAMPS.u.uK.value = lerp(.5, 1.15, ss(2, -4, e)) * (1 - ss(2.5e5, 1.6e6, alt)); LAMPS.u.uPull.value = alt < 4e4 ? .003 : .0005; LAMPS.u.uScale.value = film.scale;   // (from orbit the lamps would pile into one blob: the globe's own lights take over)
-    CITIES.u.uLimb.value = LATEP.u.uLimb.value = lss(5e4, 5e5); CITIES.u.uF.value = t * 1000; CITIES.u.uK.value = (1.2 + 4.0 * DEEP(alt)) * (VER === 'a' ? 1.6 : 1); CITIES.u.uPull.value = .0004; CITIES.u.uScale.value = film.scale;
+    CITIES.u.uLimb.value = LATEP.u.uLimb.value = lss(5e4, 5e5); CITIES.u.uF.value = t * 1000; CITIES.u.uK.value = (1.2 + 4.0 * DEEP(alt)) * (VER === 'a' ? 1.6 : 1 + .5 * ss(KG0 - 4, KG0 + .6, t));   /* round 14: the lit world warms as Korea sends (fewer Korean lines) */ CITIES.u.uPull.value = .0004; CITIES.u.uScale.value = film.scale;
     LATEP.u.uF.value = t * 1000; LATEP.u.uK.value = 1.2 + 1.4 * DEEP(alt); LATEP.u.uPull.value = .0004; LATEP.u.uScale.value = film.scale;
     { const pin = ss(Math.log(4e6), Math.log(2e7), Math.log(alt)), fl = 0, af = ss(B9, B9 + 1.5, t);   /* round 12: no flare, no swell */   // round 10: no orb — a pin-point once the globe shows, a flare where the lines leave, then a city-sized light
       HUB.u.uLimb.value = lss(5e4, 5e5); HUB.u.uF.value = 1; HUB.u.uK.value = (.22 * pin * (1 - af) + .5 * af + 1.1 * fl) * pin; HUB.u.uPx.value = 2.2 + 1.2 * af + 3.5 * fl; HUB.u.uPull.value = .0004; HUB.u.uScale.value = film.scale; }
@@ -913,7 +924,7 @@ export async function build(W, H_, B0 = null) {
     // the globe (only once the camera is high enough for it to show past the terrain) and its air seen from outside
     { const op = 1 - ss(Math.log(4e3), Math.log(1e4), Math.log(alt)); CITYMAT.forEach(m => { m.opacity = op; }); CITYOBJ.forEach(o => { o.visible = op > .002; }); }
     GL.mesh.visible = alt > 1500 && !OFFS.includes('globe'); GL.atm.visible = alt > 3e4 && !OFFS.includes("atm"); GL.au.uK.value = lss(4e4, 6e5); GL.au.uNight.value = ss(T.c1 - 1.6, T.c1 + 1.0, t); GL.au.uSoft.value = ss(T.c1 - 1.0, T.c1 + 1.2, t); GL.au.uSun.value.copy(sunDir); GL.u.uSun.value.copy(sunDir);
-    GL.u.uHazeL.value = lerp(2.5e5, 8e6, lss(1e4, 2e6)); GL.u.uWF.value = 0; GL.u.uGT.value = t - GLOFF + 30;   /* round 13: the glow on each region's own clock (cityGlowTexTimed) */ GL.u.uCG.value = CGLOW * lss(3e5, 2e6) * (VER === 'a' ? 1.7 : 1);   /* round 7: .8 F = behind the slowest heads (lam ≥ .8) */ GL.u.uDeep.value = terrU.uDeep.value = DEEP(alt);   // the region view keeps its round-5 night; the globe goes blue-black as the camera leaves the air   // round 6: the cities' glow (from the air down, it would sit over the terrain's own lamps)
+    GL.u.uHazeL.value = lerp(2.5e5, 8e6, lss(1e4, 2e6)); GL.u.uWF.value = 0; GL.u.uGT.value = t - GLOFF + 30;   /* round 13: the glow on each region's own clock (cityGlowTexTimed) */ GL.u.uCG.value = CGLOW * lss(3e5, 2e6) * (VER === 'a' ? 1.7 : 1 + 1.2 * ss(KG0 - 4, KG0 + .6, t));   /* round 7: .8 F = behind the slowest heads (lam ≥ .8) */ GL.u.uDeep.value = terrU.uDeep.value = DEEP(alt);   // the region view keeps its round-5 night; the globe goes blue-black as the camera leaves the air   // round 6: the cities' glow (from the air down, it would sit over the terrain's own lamps)
     terrU.uGK.value = OFFS.includes("gk") ? 0 : lss(7e3, 9e4); GL.u.uNM.value = lerp(-.22, 1.2, ss(T.c2 - .9, T.c2 + 1.2, t)); terrU.uSunW.value.copy(sunDir);   // uNM: the night holds over the land as the globe look comes in; then the dawn comes in at the far limb
     // banners, dust
     banU.uT.value = t; banU.uGust.value = Math.exp(-Math.pow((t - T.gust - .8) / 1.1, 2)) * .9;

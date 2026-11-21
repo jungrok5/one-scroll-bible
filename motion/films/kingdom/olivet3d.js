@@ -671,9 +671,9 @@ export async function build(W, H_, B0 = null) {
   // flight: launched T before it lands, fast off the ground and slowing in (burstLines' late mode: 1 − (1 − q)³). A few bright lead
   // lines (the brightest city in each 12° of bearing) run well ahead. The density builds as the waves land, and the globe is full by
   // the end of 「내 증인이 되리라」; the far side and the last lines (under N28b) keep arriving.
-  const B9 = T0B.c1 + 2.8;   // round 9: the burst begins (u 34.3, 「땅 끝까지」 ≈ u 34.3 — the line's words are timed by syllable, no recorded voice yet)
-  const DEF = mono([[B9, Math.log(1.5e5)], [B9 + .6, Math.log(1.4e6)], [B9 + 1.4, Math.log(4.5e6)], [T0B.c2, Math.log(9e6)], [T0B.c2 + 1.5, Math.log(1.45e7)], [T0B.f + .2, Math.log(1.8e7)], [T0B.g - .5, Math.log(2.3e7)]]);
-  const DTAB = []; for (let t = B9; t <= T0B.g; t += .005) DTAB.push([t, Math.exp(DEF(t))]);
+  const B9 = T0B.c1 + .51;   // round 12 (owner: "32초부터 선이 나오고 있으면 될 듯해. 지금은 펑 터지듯 나오네"): the first lines leave as the point appears in the reveal (u 32.0); no hold, no pop
+  const DEF = mono([[T0B.c1 + 2.8, Math.log(1.5e5)], [T0B.c1 + 3.4, Math.log(1.4e6)], [T0B.c1 + 4.2, Math.log(4.5e6)], [T0B.c2, Math.log(9e6)], [T0B.c2 + 1.5, Math.log(1.45e7)], [T0B.f + .2, Math.log(1.8e7)], [T0B.g - .5, Math.log(2.3e7)]]);
+  const DTAB = []; for (let t = T0B.c1 + 2.8; t <= T0B.g; t += .005) DTAB.push([t, Math.exp(DEF(t))]);
   const Dinv = d => { if (d <= DTAB[0][1]) return DTAB[0][0]; for (let i = 1; i < DTAB.length; i++) if (DTAB[i][1] >= d) { const [t0, d0] = DTAB[i - 1], [t1, d1] = DTAB[i]; return t0 + (t1 - t0) * (d - d0) / (d1 - d0); } return T0B.g + .5; };
   const brg = P => (Math.atan2(P.z - OZ, P.x - OX) / D2Rr + 360) % 360;   // bearing from the hill: 0 north, 90 east
   const ROUTES8 = ['ROM', 'CON', 'EPH', 'ANT', 'EDE', 'BAB', 'PER', 'MUM', 'ADD', 'AXU', 'MEM', 'ALX', 'CAR'].map(k => brg(E.llToWorld(...E.NODE[k], 0, V())));
@@ -681,17 +681,28 @@ export async function build(W, H_, B0 = null) {
   const pulse = (lo, la) => { const h = Math.sin(Math.round(la / 5) * 91.7 + Math.round(lo * Math.cos(la * D2Rr) / 5) * 47.3) * 43758.5453; return (h - Math.floor(h)) * .9 - .35; };   // a region's moment, −0.35…+0.55 s
   const lead = new Map();   // the brightest light per 12° of bearing beyond 800 km
   for (const c of CL) { const P = E.llToWorld(c.lon, c.lat, 700, V()), d = lineLen(P); if (d < 8e5) continue; const k = Math.floor(brg(P) / 12), sc = c.b * (.5 + E.popAt(c.lon, c.lat)); if (!lead.has(k) || lead.get(k).sc < sc) lead.set(k, { c, sc }); }
-  const LEADS = new Set([...lead.values()].map(v => v.c)), LEADI = new Map([...LEADS].map((c, i) => [c, i]));
+  const LEADS = new Set([...lead.values()].map(v => v.c)), LEADI = new Map([...LEADS].map((c, i) => [c, i])), SW = [];
   for (const c of CL) { c.pp = E.popAt(c.lon, c.lat); c.b *= .45 + .75 * Math.pow(c.pp, .6);   // round 6: the empty land's scattered points dimmer, the clusters brighter
-    const P = E.llToWorld(c.lon, c.lat, 700, V()), d = lineLen(P), rest = .012 + .022 * rL(), rho = 2e6 * rL() ** 2, hTop = clamp(d * .01, 600, 9e4), curl = (.14 + .26 * rL()) * (rL() < .68 ? 1 : -1) * ss(2e5, 1.5e6, d);   // round 11: every line bows (owner liked the arcs)   // hugging the surface (from low down a lifted line stood in the sky)
+    const P = E.llToWorld(c.lon, c.lat, 700, V()), d = lineLen(P), rest = .012 + .022 * rL(), rho = 2e6 * rL() ** 2, hTop = clamp(d * .01, 600, 9e4), curl = (.14 + .26 * rL()) * (rL() < .55 ? 1 : -1) * ss(2e5, 1.5e6, d);   // round 11: every line bows (owner liked the arcs)   // hugging the surface (from low down a lifted line stood in the sky)
     if (d > 2.5e6 && vis(c.lon, c.lat) < 62 && rL() < .035) {   // the last lines: launched one by one under N28b, on the side of the globe we see
       const t0 = T0B.f + .25 + rL() * (T0B.g - T0B.f - 1.7), Tl = .8 + .8 * Math.sqrt(d / 1e7); c.late = true;
       lateL.push({ p: P, d: (t0 + Tl) * 1000, b: c.b * .8, s: 1, f: 220 }); GLN.push({ P, late: { t0, T: Tl }, k: 1.15, rest: rest + .015, rho: 0, hTop, curl }); continue; }
     const isLead = LEADS.has(c), ta = Dinv(d / finger(brg(P)) / (isLead ? 2.1 : 1)) + (isLead ? -.15 : pulse(c.lon, c.lat) + .22 * rL() ** 2);
-    let Tl = (.32 + 1.05 * Math.sqrt(d / 2e7)) * (.8 + .4 * rL()), t0 = Math.max(B9 + .08, ta - Tl);
-    if (isLead) { t0 = B9 + ((LEADI.get(c) * 7) % LEADS.size) * (.45 / LEADS.size) + .03 * rL(); Tl = Math.max(.5, ta - t0); }   // round 9: first out of the point after the hold
-    far.push({ p: P, d: (t0 + Tl) * 1000, b: c.b * .8 * (isLead ? 1.6 : 1), s: isLead ? 1.6 : 1, f: 200 });
-    GLN.push({ P, late: { t0, T: t0 + Tl - t0 }, k: (.8 + .4 * c.b) * (isLead ? 3.2 : (.35 + 2.4 * rL() ** 4)), rest: isLead ? .05 : rest, rho: isLead ? 0 : rho, hTop, curl }); }   // a few bright fibres among many faint ones (lineage-glow)
+    const Tl = (.32 + 1.05 * Math.sqrt(d / 2e7)) * (.8 + .4 * rL()) * (isLead ? 1.9 : 1), fp = { p: P, b: c.b * .8 * (isLead ? 1.6 : 1), s: isLead ? 1.6 : 1, f: 200 };
+    far.push(fp); SW.push({ key: isLead ? -1e9 + LEADI.get(c) : ta, Tl, fp, lead: isLead });
+    GLN.push({ P, late: SW[SW.length - 1].late = { t0: 0, T: Tl }, k: (.8 + .4 * c.b) * (isLead ? 3.2 : (.35 + 2.4 * rL() ** 4)), rest: isLead ? .05 : rest, rho: isLead ? 0 : rho, hTop, curl }); }   // a few bright fibres among many faint ones (lineage-glow)
+  // round 12: lay the launches on the rate curve. Leads: 32.0 → 33.3, one by one (the trickle). The swarm, in its order: the cumulative of
+  // r(t) = a smooth bump (Gaussian, centre u 34.6, σ 0.8) that starts from zero after the leads — no step at any frame.
+  { const L0 = B9, nL = LEADS.size, sw = SW.filter(x => !x.lead).sort((a, b) => a.key - b.key), N = sw.length;
+    SW.filter(x => x.lead).sort((a, b) => a.key - b.key).forEach((x, i) => { x.late.t0 = L0 + 1.3 * Math.pow((i + .5) / nL, 1.3); });
+    const mu = T0B.c1 + 3.1, sg = .8, ta0 = L0 + .25, CT = []; let acc = 0;
+    for (let t = ta0; t <= T0B.g; t += .002) { acc += Math.exp(-(((t - mu) / sg) ** 2) / 2) * ss(ta0, ta0 + .9, t); CT.push([t, acc]); }
+    let j = 0; sw.forEach((x, i) => { const q = (i + .5) / N * acc; while (j < CT.length - 1 && CT[j][1] < q) j++; x.late.t0 = CT[j][0]; });
+    for (const x of SW) x.fp.d = (x.late.t0 + x.late.T) * 1000; }
+  // the cities' glow front: the largest distance D such that every line shorter than D has landed by t (glow never ahead of its lines)
+  const GFRONT = (() => { const L = SW.map(x => [lineLen(x.fp.p), x.late.t0 + x.late.T]).sort((a, b) => a[0] - b[0]); const out = []; let mx = 0;
+    for (const [d, ta] of L) { mx = Math.max(mx, ta); out.push([mx, d]); } return out; })();
+  const gfront = t => { let lo = 0, hi = GFRONT.length - 1; if (t < GFRONT[0][0]) return 0; while (lo < hi) { const m = (lo + hi + 1) >> 1; if (GFRONT[m][0] <= t) lo = m; else hi = m - 1; } return GFRONT[lo][1]; };
   const CITIES = E.lampPoints(far, { px: 6.2, minPx: 1.8, color: CWARM }); CITIES.u.uRef.value = 4e6; CITIES.u.uBurst.value = 1; S.add(CITIES.pts);
   const LATEP = E.lampPoints(lateL, { px: 4.0, minPx: 1.4, color: CWARM }); LATEP.u.uRef.value = 4e6; LATEP.u.uBurst.value = 1; S.add(LATEP.pts);
   GL.u.tGlow.value = E.cityGlowTex(CL.filter(c => !c.late)); GL.u.uPre.value = 0;   // the cities' warm glow comes on only behind the slowest heads
@@ -845,7 +856,7 @@ export async function build(W, H_, B0 = null) {
         LAMPS.u.uF.value = t * 1000; LAMPS.u.uK.value = lerp(.5, 1.15, ss(2, -4, e)) * (1 - ss(2.5e5, 1.6e6, alt)); LAMPS.u.uPull.value = alt < 4e4 ? .003 : .0005; LAMPS.u.uScale.value = film.scale;   // (from orbit the lamps would pile into one blob: the globe's own lights take over)
     CITIES.u.uLimb.value = LATEP.u.uLimb.value = lss(5e4, 5e5); CITIES.u.uF.value = t * 1000; CITIES.u.uK.value = 1.2 + 3.4 * DEEP(alt); CITIES.u.uPull.value = .0004; CITIES.u.uScale.value = film.scale;
     LATEP.u.uF.value = t * 1000; LATEP.u.uK.value = 1.2 + 1.4 * DEEP(alt); LATEP.u.uPull.value = .0004; LATEP.u.uScale.value = film.scale;
-    { const pin = ss(Math.log(4e6), Math.log(2e7), Math.log(alt)), fl = Math.exp(-(((t - B9 - .25) / .32) ** 2)), af = ss(B9, B9 + .6, t);   // round 10: no orb — a pin-point once the globe shows, a flare where the lines leave, then a city-sized light
+    { const pin = ss(Math.log(4e6), Math.log(2e7), Math.log(alt)), fl = 0, af = ss(B9, B9 + 1.5, t);   /* round 12: no flare, no swell */   // round 10: no orb — a pin-point once the globe shows, a flare where the lines leave, then a city-sized light
       HUB.u.uF.value = 1; HUB.u.uK.value = (.22 * pin * (1 - af) + .5 * af + 1.1 * fl) * pin; HUB.u.uPx.value = 2.2 + 1.2 * af + 3.5 * fl; HUB.u.uPull.value = .0004; HUB.u.uScale.value = film.scale; }
     // round 7: the lines — the local ones fade with their lamps as the camera leaves the region; the world's lines thin out where they crowd the hub
     for (const L of [LCITY, LLOC, LGLB]) { L.u.uF.value = F; L.u.uT.value = t; L.u.uRes.value.set(film.w, film.h); L.u.uBandY.value = .38; L.u.uLimb.value = ss(5e3, 6e4, alt); }   // the disc test only from the air (on the hill it would cut lines at eye level)
@@ -857,7 +868,7 @@ export async function build(W, H_, B0 = null) {
     // the globe (only once the camera is high enough for it to show past the terrain) and its air seen from outside
     { const op = 1 - ss(700, 2600, alt); CITYMAT.forEach(m => { m.opacity = op; }); CITYOBJ.forEach(o => { o.visible = op > .002; }); }
     GL.mesh.visible = alt > 1500 && !OFFS.includes('globe'); GL.atm.visible = alt > 3e4 && !OFFS.includes("atm"); GL.au.uK.value = lss(4e4, 6e5); GL.au.uNight.value = ss(T.c1 - 1.6, T.c1 + 1.0, t); GL.au.uSun.value.copy(sunDir); GL.u.uSun.value.copy(sunDir);
-    GL.u.uHazeL.value = lerp(2.5e5, 8e6, lss(1e4, 2e6)); GL.u.uWF.value = .85 * Math.exp(DEF(Math.max(B9, t - .7))) * (t > B9 + .5 ? 1 : 0); GL.u.uCG.value = CGLOW * lss(3e5, 2e6);   /* round 7: .8 F = behind the slowest heads (lam ≥ .8) */ GL.u.uDeep.value = terrU.uDeep.value = DEEP(alt);   // the region view keeps its round-5 night; the globe goes blue-black as the camera leaves the air   // round 6: the cities' glow (from the air down, it would sit over the terrain's own lamps)
+    GL.u.uHazeL.value = lerp(2.5e5, 8e6, lss(1e4, 2e6)); GL.u.uWF.value = gfront(t) - 1.5e5;   /* round 12: exactly behind the landed lines */ GL.u.uCG.value = CGLOW * lss(3e5, 2e6);   /* round 7: .8 F = behind the slowest heads (lam ≥ .8) */ GL.u.uDeep.value = terrU.uDeep.value = DEEP(alt);   // the region view keeps its round-5 night; the globe goes blue-black as the camera leaves the air   // round 6: the cities' glow (from the air down, it would sit over the terrain's own lamps)
     terrU.uGK.value = OFFS.includes("gk") ? 0 : lss(7e3, 9e4); GL.u.uNM.value = lerp(-.22, 1.2, ss(T.c2 - .9, T.c2 + 1.2, t)); terrU.uSunW.value.copy(sunDir);   // uNM: the night holds over the land as the globe look comes in; then the dawn comes in at the far limb
     // banners, dust
     banU.uT.value = t; banU.uGust.value = Math.exp(-Math.pow((t - T.gust - .8) / 1.1, 2)) * .9;

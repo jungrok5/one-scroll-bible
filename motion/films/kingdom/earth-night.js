@@ -237,6 +237,72 @@ export function burstLines(lines, { px = 1.5, seg = 64 } = {}) {
   return { mesh, u };
 }
 
+// ---------------------------------------------------------------- round 13 (2026-11-21, owner: "사람들이 이거 보고 … '그래 나도 전 세계에 사명을
+// 전하는 한 사람이 되자'고 결심들 하게"): a RELAY — every line now has its own source, so a lit city can send the next lines on.
+// lines: [{ A, B: unit vectors from the earth's centre (world), hA, hB (m above the sphere), hTop (m lift), curl (rad: sideways bow ×
+// arc), t0, T (s: the head leaves at t0 and lands at t0 + T, fast off, slowing in), k (brightness), rest (what stays), warm (0..1: the
+// newest generation a little warmer) }]. Same look as burstLines (lineage-glow: white-hot head, short warm trail, faint trace), drawn on
+// the globe in world space (from orbit the float precision of earth-centred positions is ample), faded before the limb.
+export function relayLines(lines, { px = 1.5, seg = 48 } = {}) {
+  const n = lines.length, A = new Float32Array(n * 3), Bv = new Float32Array(n * 3), Pv = new Float32Array(n * 4), Qv = new Float32Array(n * 4), Kv = new Float32Array(n * 2);
+  lines.forEach((L, i) => { A.set(L.A, i * 3); Bv.set(L.B, i * 3); const c = Math.min(1, Math.max(-1, L.A[0] * L.B[0] + L.A[1] * L.B[1] + L.A[2] * L.B[2]));
+    Pv.set([Math.acos(c), L.hA || 0, L.hB || 0, L.hTop || 0], i * 4); Qv.set([L.curl || 0, L.rest ?? .03, L.t0, L.T], i * 4); Kv.set([L.k ?? 1, L.warm || 0], i * 2); });
+  const S = new Float32Array((seg + 1) * 2), Sd = new Float32Array((seg + 1) * 2), idx = [];
+  for (let i = 0; i <= seg; i++) { S.set([i / seg, i / seg], i * 2); Sd.set([-1, 1], i * 2); if (i < seg) { const a = i * 2; idx.push(a, a + 1, a + 3, a, a + 3, a + 2); } }
+  const g = new THREE.InstancedBufferGeometry();
+  g.setAttribute('position', new THREE.BufferAttribute(new Float32Array((seg + 1) * 2 * 3), 3)); g.setAttribute('aS', new THREE.BufferAttribute(S, 1)); g.setAttribute('aSide', new THREE.BufferAttribute(Sd, 1)); g.setIndex(idx);
+  g.setAttribute('aA', new THREE.InstancedBufferAttribute(A, 3)); g.setAttribute('aB', new THREE.InstancedBufferAttribute(Bv, 3)); g.setAttribute('aP', new THREE.InstancedBufferAttribute(Pv, 4));
+  g.setAttribute('aQ', new THREE.InstancedBufferAttribute(Qv, 4)); g.setAttribute('aKw', new THREE.InstancedBufferAttribute(Kv, 2)); g.instanceCount = n;
+  const u = { uF: { value: 0 }, uT: { value: 0 }, uRes: { value: new THREE.Vector2(1080, 1920) }, uPx: { value: px }, uK: { value: 1 }, uBandY: { value: .36 }, uLimb: { value: 1 }, uDens: { value: 0 }, uTrail: { value: .32 }, uSeg: { value: seg } };
+  const m = new THREE.ShaderMaterial({ uniforms: u, transparent: true, depthWrite: false, depthTest: true, fog: false, side: THREE.DoubleSide, blending: THREE.AdditiveBlending,
+    vertexShader: /* glsl */`attribute float aS, aSide; attribute vec3 aA, aB; attribute vec4 aP, aQ; attribute vec2 aKw;
+      uniform float uT, uPx, uLimb, uSeg; uniform vec2 uRes;
+      varying float vX, vB, vLh, vOver, vS, vK, vRest, vOn, vW;
+      const float R = 6371000.;
+      vec3 P(float s){ float om = max(aP.x, 1e-6), so = sin(om); vec3 v = (sin((1. - s) * om) * aA + sin(s * om) * aB) / so;
+        vec3 nn = cross(aA, aB); float ln = length(nn); if (ln > 1e-6) v = normalize(v + nn / ln * aQ.x * sin(3.14159265 * s) * om * .5);
+        float h = mix(aP.y, aP.z, s) + aP.w * sin(3.14159265 * s); return vec3(0., -R, 0.) + v * (R + h); }
+      vec2 scr(vec4 c){ return c.xy / c.w * uRes * .5; }
+      void main(){
+        float d = max(aP.x * R, 1.), q = clamp((uT - aQ.z) / aQ.w, 0., 1.), p = 1. - (1. - q) * (1. - q) * (1. - q), over = (uT - aQ.z - aQ.w) / aQ.w * d, Lh = .1 * d;
+        if (p <= 0.) { gl_Position = vec4(2., 2., 2., 1.); return; }
+        float s = min(aS, p), e = .5 / uSeg;
+        vec3 Pc = P(s); vec4 cC = projectionMatrix * viewMatrix * vec4(Pc, 1.), cA = projectionMatrix * viewMatrix * vec4(P(max(s - e, 0.)), 1.), cB = projectionMatrix * viewMatrix * vec4(P(min(s + e, 1.)), 1.);
+        if (cC.w < 1e-3 || cA.w < 1e-3 || cB.w < 1e-3) { gl_Position = vec4(2., 2., 2., 1.); return; }
+        vec2 tg = scr(cB) - scr(cA); float lt = length(tg); tg = lt > 1e-5 ? tg / lt : vec2(1., 0.);
+        cC.xy += vec2(-tg.y, tg.x) * aSide * uPx * 1.6 / (uRes * .5) * cC.w; gl_Position = cC;
+        vX = aSide; vB = (p - s) * d; vLh = Lh; vOver = over; vS = s; vK = aKw.x; vRest = aQ.y; vW = aKw.y;
+        vec3 dc = vec3(0., -R, 0.) - cameraPosition; float Dc = length(dc), aD = asin(clamp(R / Dc, 0., 1.)), aPp = acos(clamp(dot(normalize(Pc - cameraPosition), dc / Dc), -1., 1.));
+        vOn = mix(1., 1. - smoothstep(.86, .975, aPp / aD), uLimb); }`,
+    fragmentShader: /* glsl */`uniform float uK, uBandY, uTrail; uniform vec2 uRes; varying float vX, vB, vLh, vOver, vS, vK, vRest, vOn, vW;
+      void main(){
+        if (vOn < .002) discard;
+        float across = exp(-vX * vX * 4.5), fade = exp(-max(vOver, 0.) / vLh), head = exp(-vB / vLh) * fade;
+        float trail = exp(-vB / (2.5 * vLh)) * exp(-max(vOver, 0.) / (2. * vLh));
+        float b = vRest * mix(1., .3, vS) + max(uTrail - vRest, 0.) * trail;
+        vec3 gold = mix(vec3(1., .66, .3), vec3(1., .54, .2), vW), col = mix(gold, vec3(1., .95, .84), head) * (b + 1.5 * head);
+        float y = gl_FragCoord.y / uRes.y, band = mix(.22, 1., smoothstep(uBandY - .1, uBandY + .04, y));
+        vec3 o = col * across * vK * uK * vOn * band; if (any(isnan(o)) || any(isinf(o))) o = vec3(0.);
+        gl_FragColor = vec4(clamp(o, 0., 6.), 1.); }` });
+  const mesh = new THREE.Mesh(g, m); mesh.frustumCulled = false; mesh.renderOrder = 7;
+  return { mesh, u };
+}
+// round 13: the cities' glow on its own clock — R = how much light (as cityGlowTex), G = when it lands (the latest arrival in the
+// texel, (t − 30) / 16), so each region's glow comes on just behind its own lines (relay order, not distance from Jerusalem)
+export function cityGlowTexTimed(cities, { w = 2048 } = {}) {
+  const cv = document.createElement('canvas'); cv.width = w; cv.height = w / 2; const x = cv.getContext('2d');
+  x.fillStyle = '#000'; x.fillRect(0, 0, w, w / 2); x.globalCompositeOperation = 'lighter';
+  const pos = c => [(c.lon + 180) / 360 * w, (90 - c.lat) / 180 * (w / 2), (1.4 + 2.2 * c.b) * w / 2048 / Math.max(.35, Math.cos(c.lat * D2R))];
+  for (const c of cities) { const [px, py, r] = pos(c), g = x.createRadialGradient(px, py, 0, px, py, r * 2.2);
+    g.addColorStop(0, `rgba(255,0,0,${(.03 + .07 * c.b).toFixed(3)})`); g.addColorStop(1, 'rgba(255,0,0,0)'); x.fillStyle = g; x.fillRect(px - r * 2.2, py - r * 2.2, r * 4.4, r * 4.4); }
+  x.globalCompositeOperation = 'source-over'; x.filter = 'blur(3px)'; x.drawImage(cv, 0, 0); x.filter = 'none';
+  x.globalCompositeOperation = 'lighten';
+  for (const c of cities) { const [px, py, r] = pos(c), gv = Math.round(Math.min(255, Math.max(1, (c.ta - 30) / 16 * 255))); x.fillStyle = `rgb(0,${gv},0)`; x.beginPath(); x.arc(px, py, r * 2.6, 0, 6.2832); x.fill(); }
+  x.globalCompositeOperation = 'source-over';
+  const t = new THREE.CanvasTexture(cv); t.colorSpace = THREE.NoColorSpace; t.minFilter = THREE.LinearFilter; t.magFilter = THREE.LinearFilter; t.generateMipmaps = false; t.wrapS = THREE.RepeatWrapping;
+  return t;
+}
+
 // ---------------------------------------------------------------- the earth's light (round 2, 2026-11-19 — "the rise is too dark")
 // One shading for the globe and for the terrain patch seen from high up, after the first film's 「교회」 night earth (lifted blue
 // land, not black) and orbital photographs at the terminator: night land a deep lifted blue; a wide blue-hour band on the night
@@ -281,10 +347,10 @@ export function buildGlobe({ thetaMin = .018, rings = 260, seg = 512, texW = 409
   const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); g.setIndex(ix);
   const u = { tLand: { value: tex }, uN0: { value: V(...N0) }, uU0: { value: V(...U0) }, uE0: { value: V(...E0) }, uLand: { value: new THREE.Color(.011, .0135, .022) }, uSea: { value: new THREE.Color(.0035, .0055, .014) },
     uHaze: { value: new THREE.Color(.03, .045, .1) }, uHazeL: { value: 4e6 }, uK: { value: 1 }, uNM: { value: 1 }, uSun: { value: V(0, -1, 0) }, uDusk: { value: new THREE.Color(.5, .22, .12) },
-    tGlow: { value: null }, uDeep: { value: 0 }, uPre: { value: .3 }, uCG: { value: 0 }, uWF: { value: 0 }, uGlowCol: { value: new THREE.Color(1., .56, .24) } };   // round 6: the cities' warm glow (cityGlowTex), off unless uCG > 0
+    tGlow: { value: null }, uGT: { value: -1 }, uMoon: { value: V(.3, .55, -.78).normalize() }, uDeep: { value: 0 }, uPre: { value: .3 }, uCG: { value: 0 }, uWF: { value: 0 }, uGlowCol: { value: new THREE.Color(1., .56, .24) } };   // round 6: the cities' warm glow (cityGlowTex), off unless uCG > 0
   const m = new THREE.ShaderMaterial({ uniforms: u, fog: false, side: THREE.DoubleSide,
     vertexShader: /* glsl */`varying vec3 vN, vW; void main(){ vec4 w = modelMatrix * vec4(position, 1.); vW = w.xyz; vN = normalize(w.xyz - vec3(0., -${R_E.toFixed(1)}, 0.)); gl_Position = projectionMatrix * viewMatrix * w; }`,
-    fragmentShader: /* glsl */`uniform sampler2D tLand, tGlow; uniform vec3 uN0, uU0, uE0, uLand, uSea, uHaze, uSun, uDusk, uGlowCol; uniform float uHazeL, uK, uNM, uCG, uWF, uPre; varying vec3 vN, vW;
+    fragmentShader: /* glsl */`uniform sampler2D tLand, tGlow; uniform vec3 uN0, uU0, uE0, uLand, uSea, uHaze, uSun, uDusk, uGlowCol; uniform float uHazeL, uK, uNM, uCG, uWF, uPre, uGT; uniform vec3 uMoon; varying vec3 vN, vW;
       ${SHADE_GLSL}
       float hh(vec2 p){ vec3 p3 = fract(vec3(p.xyx) * .1031); p3 += dot(p3, p3.yzx + 33.33); return fract((p3.x + p3.y) * p3.z); }
       float vn(vec2 p){ vec2 i = floor(p), f = fract(p); vec2 w = f * f * (3. - 2. * f); return mix(mix(hh(i), hh(i + vec2(1, 0)), w.x), mix(hh(i + vec2(0, 1)), hh(i + vec2(1, 1)), w.x), w.y); }
@@ -302,20 +368,25 @@ export function buildGlobe({ thetaMin = .018, rings = 260, seg = 512, texW = 409
         { vec3 vv = normalize(cameraPosition - vW); float sp = max(dot(reflect(-uSun, n), vv), 0.); c += vec3(1., .74, .46) * (pow(sp, 90.) * 1.6 + pow(sp, 14.) * .16) * (1. - land) * (1. - cl) * smoothstep(-.03, .12, ms); }
         vec3 v = normalize(cameraPosition - vW); float mu = max(dot(n, v), 0.);
         float hz = 1. - exp(-length(cameraPosition - vW) / uHazeL); c = mix(c, eHaze(ms), clamp(hz * .12 + pow(1. - mu, 9.) * .6, 0., 1.));
-        if (uCG > 0.) { float gd = acos(clamp(dot(p, uU0), -1., 1.)) * ${R_E.toFixed(1)}, on = uPre + (1. - uPre) * smoothstep(gd + 1.5e5, gd + 1.3e6, uWF);   // full as the wave front passes; uPre: the world's cities glow faintly before it (as the dim city points)
+        if (uCG > 0.) { float gd = acos(clamp(dot(p, uU0), -1., 1.)) * ${R_E.toFixed(1)}, on = uPre + (1. - uPre) * smoothstep(gd + 1.5e5, gd + 1.3e6, uWF);
+          if (uGT > 0.) { vec2 gtx = texture2D(tGlow, uv).rg; on = gtx.g > .17 ? smoothstep(30. + 16. * gtx.g + .25, 30. + 16. * gtx.g + 1.1, uGT) : 0.; }   // (g < .17 = before any line lands; the blend at a region's edge toward 'no light': off)   // round 13: each region's glow on its own lines' clock   // full as the wave front passes; uPre: the world's cities glow faintly before it (as the dim city points)
           float gl = texture2D(tGlow, uv).r; c += uGlowCol * (gl * gl * 1.9 + gl * .14) * uCG * on * (1. - .55 * cl) * (1. - smoothstep(-.06, .08, ms)) * mix(.55, 1., mu); }
+        if (uGT > 0.) { vec3 vv = normalize(cameraPosition - vW); float mg = max(dot(reflect(-uMoon, n), vv), 0.); c += vec3(.55, .65, .85) * (pow(mg, 160.) * .16 + pow(mg, 20.) * .012) * (1. - land) * (1. - cl) * (1. - smoothstep(-.06, .08, ms));   // round 13: moon glint on the sea
+          c *= mix(1., mix(1.12, .82, grn) * (.9 + .2 * rel), land * (1. - smoothstep(-.06, .08, ms))); }   // desert lighter, forest darker under the moon
         gl_FragColor = vec4(c * uK, 1.); }` });
   const mesh = new THREE.Mesh(g, m); mesh.frustumCulled = false;
   // the atmosphere seen from outside: a shell 90 km up, its limb glowing blue, warm on the side the sun has just left
   const sg = new THREE.SphereGeometry(R_E + 28000, 256, 128); sg.translate(0, -R_E, 0);
-  const au = { uNight: { value: 0 }, uK: { value: 0 }, uSun: { value: V(0, -1, 0) }, uBlue: { value: new THREE.Color(.22, .42, 1.0) }, uWarm: { value: new THREE.Color(1.0, .62, .32) } };
+  const au = { uSoft: { value: 0 }, uSide: { value: V(-.5, .3, .8).normalize() }, uNight: { value: 0 }, uK: { value: 0 }, uSun: { value: V(0, -1, 0) }, uBlue: { value: new THREE.Color(.22, .42, 1.0) }, uWarm: { value: new THREE.Color(1.0, .62, .32) } };
   const am = new THREE.ShaderMaterial({ uniforms: au, transparent: true, depthWrite: false, fog: false, blending: THREE.AdditiveBlending, side: THREE.FrontSide,
     vertexShader: /* glsl */`varying vec3 vN, vW; void main(){ vec4 w = modelMatrix * vec4(position, 1.); vW = w.xyz; vN = normalize(w.xyz - vec3(0., -${R_E.toFixed(1)}, 0.)); gl_Position = projectionMatrix * viewMatrix * w; }`,
-    fragmentShader: /* glsl */`uniform float uK, uNight; uniform vec3 uSun, uBlue, uWarm; varying vec3 vN, vW;
+    fragmentShader: /* glsl */`uniform float uK, uNight, uSoft; uniform vec3 uSun, uBlue, uWarm, uSide; varying vec3 vN, vW;
       void main(){ vec3 n = normalize(vN), v = normalize(cameraPosition - vW); float mu = clamp(dot(n, v), 0., 1.);
         float rim = pow(1. - mu, 10.) * .8 + pow(1. - mu, 22.) * 2.2;   // round 3: one clean rim                // a thick glow, brightest at the edge
         float ms = dot(n, uSun), sun = pow(max(ms * .5 + .5, 0.), 4.), lineS = exp(-abs(ms + .02) / .09);
-        vec3 c = mix(uBlue, uWarm, clamp(sun * .55 + lineS * .45 * pow(1. - mu, 18.), 0., 1.)) * rim * (.3 + .3 * sun + .25 * lineS + 1.6 * uNight);   // round 10: uNight — backlit, an even rim all round
+        vec3 c = mix(uBlue, uWarm, clamp(sun * .55 + lineS * .45 * pow(1. - mu, 18.), 0., 1.)) * rim * (.3 + .3 * sun + .25 * lineS + 1.6 * uNight);
+        if (uSoft > 0.) { float r2 = pow(1. - mu, 5.) * .45 + pow(1. - mu, 14.) * 1.1, side = .65 + .55 * max(dot(n, uSide), 0.);   // round 13: a feathered teal scatter, brighter on one side — not a drawn white ring
+          c = mix(c, vec3(.16, .46, .78) * r2 * side * (.55 + .5 * uNight) + vec3(.5, .8, 1.) * pow(1. - mu, 30.) * .35 * side, uSoft); }   // round 10: uNight — backlit, an even rim all round
         gl_FragColor = vec4(c * uK, 1.); }` });
   const atm = new THREE.Mesh(sg, am); atm.frustumCulled = false; atm.renderOrder = 4;
   return { mesh, u, atm, au, tex, isLand };

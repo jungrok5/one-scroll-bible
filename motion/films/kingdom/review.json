@@ -1683,6 +1683,15 @@
    "round": 7,
    "applied": "N33c 화자 표시 · N28e 롬 14:17 풀이 + L15 · N43 사람이 밀어낸 그 왕 · N06 · N03 · N15d 반영, 원고 굳힘(frozen)",
    "applied_at": "2026-11-21 23:34 KST"
+  },
+  {
+   "at": "2026-11-22 10:16 KST",
+   "who": "관리자",
+   "said": "응 4개 반영해. (관점 재검수 낱말 고치기: N33c '그에게' 빼기 · N28e '바른 삶'→'의' · N43 '돌아오셨다'→'다시 다스리시려고 친히 오셨다' · N15d '로마를 몰아내고'→'다윗 때처럼 눈에 보이게')",
+   "status": "applied",
+   "round": 7,
+   "applied": "script.json 4줄 낱말 고침 · check-quotes 37개 ok · 관점 재검수 기록 motion/reviews/film-kingdom-theology-r9.json",
+   "applied_at": "2026-11-22 10:16 KST"
   }
  ],
  "process_changes": [

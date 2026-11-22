@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>문밖으로 흐르는 빛 시안</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600&family=Noto+Sans+KR:wght@400;600&display=swap">
+<script type="importmap">{ "imports": { "three": "../lib3d/three.module.min.js" } }</script>
+</head>
+<body>
+<script src="../../pilot/lib.js"></script>
+<script src="../lib-film.js"></script>
+<script>
+/* 시안 1차 (2026-11-22): 「kingdom」 7부 「왕을 모신 사람들」 셋째 블록 7-3 — 문밖으로 흐르는 빛 → 골목의 문들 → 마태복음 25장
+   (Q19b · Q19c · N34 · N35 · N36 · L13 · Q20a · Q20b · N36c · Q20 · N37). 한 밤 마을(nocturne3d.js, 레밍턴 야경의 청록 달빛 + 따뜻한 문빛):
+   C1 7-2의 과슈 화면(삭개오 집 정면, 문 가운데, 안쪽 탁자의 등잔)에서 「오늘 구원이」에 문의 빛이 길로 흘러나오며 그림이 3.2초에 걸쳐 3D로
+      현상되고, 카메라가 빛을 따라 낮게 골목으로 → Q19c 빛이 멀리 어두운 골목들까지 닿음.
+   C2 (컷) 광장 오른쪽에서: 떡·돈이 손에서 손으로(선물마다 작은 빛), 노인이 떡을 쪼개 아이에게 → 삭개오가 등잔을 들고 어두운 골목 B로,
+      문을 두드리고 문이 한 뼘 열리며 빛.  C3 (디졸브: 시간) 문마다 작은 등불이 켜진 골목 A의 느린 돌리 → Q20a 골목 끝 성문이 열리며 빛이
+      골목을 따라 우리 쪽으로 번짐.  C4 (컷) 같은 따뜻한 빛 속 문들의 거리: 떡 · 물 한 그릇 · 나그네를 들임 → 등불 든 사람들의 뒷모습, 서로를
+      돌아봄 → C5 (이어서) 크레인 업 + 선회로 온 마을 위로, 문들의 등불이 하나의 빛줄기로 이어짐(골목 A가 화면 위로 광장까지) →
+      N37 등불 없는 문간의 작은 사람 하나에게 내려가며 빛이 그 위에 머묾 → 따뜻한 금빛 블룸(다음 블록 금빛 필사본이 받음).
+   필름 시간 805.8(Q19b) → 905.6(N29) = 시안 u 0 → 99.8. 모든 시각은 script.json의 at에서 나온다(nocturne3d.js beats()). 자막은 시안에서만 얹음.
+   node motion/render.mjs v --page films/kingdom/sample-part7c.html                    (→ motion/out/sample-part7c-v.mp4)
+   node motion/render.mjs v --page films/kingdom/sample-part7c.html --stills 1,5,9     (u seconds) */
+const W = Pilot.W, H = Pilot.H, V = Pilot.ori === 'v', { ss, win, clamp } = Pilot;
+const T0 = 805.8, T1 = 905.6;
+let NC = null, B = null, TEXT = [], aux = null, auxx = null;
+// the scene table (film seconds): [a, b, shot] — overlaps are dissolves; a cut is where one ends and the next begins
+const SCENES = [
+  [805.8, 819.7, 'c1'],   // Q19b–Q19c: the gouache frame develops into 3D; low tracking after the light into lane A
+  [819.7, 840.4, 'c2'],   // N34–N35 (cut): the giving at the door; Zacchaeus with the lamp knocks at a door in alley B
+  [839.4, 862.6, 'c3'],   // N36–Q20a (1.0 s dissolve: time): lane A, a lamp at every door; the gate opens and its light spreads
+  [862.6, 905.6, 'c4'],   // Q20b–N37 (cut): the street of doors → the lamp-bearers → crane up over the town → the small man
+];
+function band(ctx, k = 1) { const y0 = Film.SAFE() - (V ? 190 : 80), g = ctx.createLinearGradient(0, y0, 0, H); g.addColorStop(0, 'rgba(10,8,10,0)'); g.addColorStop(.35, `rgba(10,8,10,${.5 * k})`); g.addColorStop(.7, `rgba(10,8,10,${.62 * k})`); g.addColorStop(1, `rgba(10,8,10,${.66 * k})`); ctx.fillStyle = g; ctx.fillRect(0, y0, W, H - y0); }
+const IDS = ['Q19b', 'Q19c', 'N34', 'N35', 'N36', 'L13', 'Q20a', 'Q20b', 'N36c', 'Q20', 'N37', 'N29'];
+function buildText() {
+  const L = Film.script.lines, spoken = l => (l.kind === 'narr' || l.kind === 'quote') && l.voice !== null;
+  const V2 = L.filter(spoken).sort((a, b) => a.at - b.at), next = l => V2.find(x => x.at > l.at + .01);
+  for (const l of L) { if (l.at < T0 - .01 || l.at >= T1) continue;
+    if (l.kind === 'label') { const q = V2.find(x => x.at >= l.at - .01), qn = q && next(q); TEXT.push(['label', l.id, l.at, (qn?.at ?? T1) - .2]); continue; }
+    if (!spoken(l)) continue;
+    const n = next(l), b = Math.min((n?.at ?? T1) - (l.kind === 'quote' ? .1 : .25), T1 - .25);
+    TEXT.push([l.kind === 'quote' ? 'quote' : 'sub', l.id, l.at, b]); }
+}
+function scene(ctx, t, name) { if (NC) return NC.draw(ctx, t, name); ctx.fillStyle = '#1c2a38'; ctx.fillRect(0, 0, W, H); }
+function draw(ctx, u) {
+  const t = T0 + u, on = SCENES.filter(([a, b]) => t >= a && t < b);
+  if (!on.length) on.push(SCENES[SCENES.length - 1]);
+  ctx.save(); scene(ctx, t, on[0][2]); ctx.restore();
+  if (on.length > 1) {   // a dissolve: the later scene over the earlier one, through an offscreen frame
+    const [a, , name] = on[1], k = ss(a, on[0][1], t);
+    auxx.setTransform(1, 0, 0, 1, 0, 0); auxx.globalAlpha = 1; auxx.globalCompositeOperation = 'source-over';
+    auxx.save(); scene(auxx, t, name); auxx.restore();
+    ctx.save(); ctx.globalAlpha = k; ctx.drawImage(aux, 0, 0); ctx.restore();
+  }
+  band(ctx, 1);
+  for (const [kind, id, a, b] of TEXT) { if (t < a - .1 || t > b + .1) continue;
+    if (kind === 'sub') Film.sub(ctx, id, t, a, b); else if (kind === 'label') Film.label(ctx, id, t, a, b);
+    else Film.quote(ctx, id, t, a, b, { bottom: Film.subBottom() + 40, hl: Film.lines[id].hl, hlk: ss(a + .4, a + 1.6, t) }); }
+}
+Pilot.run({ W, H, dur: +(T1 - T0).toFixed(2), fonts: ["600 40px 'Noto Serif KR'", "400 40px 'Noto Serif KR'", "400 20px 'Noto Sans KR'"],
+  init: async () => { await Film.load(); buildText();
+    B = Object.fromEntries(IDS.map(id => [id, Film.lines[id].at])); B.END = T1;
+    // the pieces of the long lines (portrait shows them piece by piece): the module times its events on them
+    const nextAt = id => { const L = Film.script.lines.filter(l => (l.kind === 'narr' || l.kind === 'quote') && l.voice !== null).sort((a, b) => a.at - b.at); const i = L.findIndex(l => l.id === id); return L[i + 1] ? L[i + 1].at : T1; };
+    B.pc = {}; for (const id of ['N34', 'N35', 'Q20b', 'Q20', 'N37']) B.pc[id] = Film.pieces(Film.text(id), B[id], nextAt(id) - .25).map(q => q[1]);
+    window.__B = B;
+    aux = Pilot.canvas(W, H); auxx = aux.getContext('2d');
+    NC = await (await import('./nocturne3d.js')).build(W, H, B); window.__NC = NC; }, draw });
+</script>
+</body>
+</html>

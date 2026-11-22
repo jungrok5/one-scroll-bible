@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>여리고 돌무화과나무 시안</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600&family=Noto+Sans+KR:wght@400;600&display=swap">
+<script type="importmap">{ "imports": { "three": "../lib3d/three.module.min.js" } }</script>
+</head>
+<body>
+<script src="../../pilot/lib.js"></script>
+<script src="../lib-film.js"></script>
+<script>
+/* 시안 1차 (2026-11-22): 「kingdom」 7부 「왕을 모신 사람들」 첫 블록 7-1 — 여리고, 돌무화과나무 (C6 · N31 · N32 · L12 · Q18).
+   watercolour-jericho.js: 투명 수채(층층이 올린 글레이즈, 번짐·물자국 테두리, 코발트 그림자의 입자, 빛 = 남겨 둔 종이) — 새 화풍.
+   A0 C6 여리고 길(종이에서 물감이 차례로 앉음 → 밀어 들어감) | A1 N31 군중의 뒷모습 사이에서 나무 꼭대기로 크레인 업 |
+   A2 N32 가지 사이 반쯤 숨은 작은 사람(삭개오)으로 밀어 들어감, 「죄인이라 불렀습니다」에 아래 머리 몇이 그를 올려다봄 |
+   A3 L12/Q18 길 가운데 멈춰 선 한 사람의 등 뒤 낮은 자리(얼굴 없음) — 가지 사이로 빛이 삭개오에게 쏟아짐, 둘째 조각에 그가 내려오기 시작,
+   끝 1초 푸른 저녁 물감이 종이 위로 흘러내림(7-2 밤으로 이어짐).
+   필름 시간 735.8(C6) → 767.8(N33) = 시안 u 0 → 32.0. 모든 시각은 script.json의 at에서 나온다(모듈의 beats()). 자막은 시안에서만 얹음.
+   node motion/render.mjs v --page films/kingdom/sample-part7a.html                    (→ motion/out/sample-part7a-v.mp4)
+   node motion/render.mjs v --page films/kingdom/sample-part7a.html --stills 1,5,9    (u seconds) */
+const W = Pilot.W, H = Pilot.H, V = Pilot.ori === 'v', { ss, win, clamp } = Pilot;
+const T0 = 735.8, T1 = 767.8;
+let WJ = null, TJ = null, B = null, TEXT = [];
+// the scene table (film seconds): [a, b, name] — one module, its own cuts (A0 | A1 | A2 | A3) inside
+const SCENES = [
+  [735.8, 767.8, 'jericho'],
+];
+// the dark band under the words (sample-veil.html)
+function band(ctx, k = 1) { const y0 = Film.SAFE() - (V ? 190 : 80), g = ctx.createLinearGradient(0, y0, 0, H); g.addColorStop(0, 'rgba(10,8,10,0)'); g.addColorStop(.35, `rgba(10,8,10,${.5 * k})`); g.addColorStop(.7, `rgba(10,8,10,${.62 * k})`); g.addColorStop(1, `rgba(10,8,10,${.66 * k})`); ctx.fillStyle = g; ctx.fillRect(0, y0, W, H - y0); }
+const IDS = ['C6', 'N31', 'N32', 'L12', 'Q18', 'N33'];
+// text: every line from its `at` to the next voiced line (as sample-part2.html); a label rides with its quote. C6 is the chapter title.
+function buildText() {
+  const L = Film.script.lines, spoken = l => (l.kind === 'narr' || l.kind === 'quote') && l.voice !== null;
+  const V2 = L.filter(spoken).sort((a, b) => a.at - b.at), next = l => V2.find(x => x.at > l.at + .01);
+  for (const l of L) { if (l.at < T0 - .01 || l.at >= T1) continue;
+    if (l.id === 'C6') { TEXT.push(['chapter', l.id, l.at, (next(l)?.at ?? l.at + 3) - .3]); continue; }
+    if (l.kind === 'label') { const q = V2.find(x => x.at >= l.at - .01), qn = q && next(q); TEXT.push(['label', l.id, l.at, (qn?.at ?? T1) - .2]); continue; }
+    if (!spoken(l)) continue;
+    const n = next(l), b = Math.min((n?.at ?? T1) - (l.kind === 'quote' ? .1 : .25), T1 - .25);
+    TEXT.push([l.kind === 'quote' ? 'quote' : 'sub', l.id, l.at, b]); }
+}
+// the chapter title (as sample-part5d.html): small serif, light, a dark shadow — over the cobalt of the sky (a soft dark ground under it)
+function chapter(ctx, id, t, a, b) { const k = win(t, a, b, .7, .7); if (k <= 0 || Film.clean) return; const y = V ? H * .205 : H * .2;
+  ctx.save(); ctx.translate(W / 2, y - 18); ctx.scale(3.4, 1); const g = ctx.createRadialGradient(0, 0, 0, 0, 0, 110); g.addColorStop(0, `rgba(20,24,40,${.42 * k})`); g.addColorStop(1, 'rgba(20,24,40,0)'); ctx.fillStyle = g; ctx.fillRect(-110, -110, 220, 220); ctx.restore();
+  Pilot.text(ctx, Film.text(id), W / 2, y, { size: V ? 54 : 50, weight: 600, color: '#f3ece0', alpha: k, ls: 8, shadow: 'rgba(0,0,0,.85)', shadowBlur: 18 }); }
+function draw(ctx, u) {
+  const t = T0 + u;
+  ctx.save(); if (WJ) WJ.draw(ctx, t, TJ); else { ctx.fillStyle = '#e8dcc4'; ctx.fillRect(0, 0, W, H); } ctx.restore();
+  band(ctx, 1);
+  for (const [kind, id, a, b] of TEXT) { if (t < a - .1 || t > b + .1) continue;
+    if (kind === 'sub') Film.sub(ctx, id, t, a, b); else if (kind === 'label') Film.label(ctx, id, t, a, b); else if (kind === 'chapter') chapter(ctx, id, t, a, b);
+    else Film.quote(ctx, id, t, a, b, { bottom: Film.subBottom() + 40, hl: Film.lines[id].hl, hlk: ss(a + .4, a + 1.6, t) }); }
+}
+Pilot.run({ W, H, dur: +(T1 - T0).toFixed(2), fonts: ["600 40px 'Noto Serif KR'", "400 40px 'Noto Serif KR'", "400 20px 'Noto Sans KR'"],
+  init: async () => { await Film.load(); buildText();
+    B = Object.fromEntries(IDS.map(id => [id, Film.lines[id].at]));
+    const pc = id => Film.pieces(Film.text(id), B[id], (id === 'N32' ? B.L12 : B.N33) - .25).map(q => q[1]);
+    B.pc = { N32: pc('N32'), Q18: pc('Q18') };
+    const M = await import('./watercolour-jericho.js'); TJ = M.beats(B); WJ = await M.build(W, H);
+    window.__WJ = WJ; window.__TJ = TJ; window.__T0 = T0; }, draw });
+</script>
+</body>
+</html>

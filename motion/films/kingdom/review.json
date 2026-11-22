@@ -462,7 +462,19 @@
    "a": "본편: 5장 끝이 1장의 기도 방(N30)으로 돌아감. 장면 쇼츠는 장마다 질문 → 답으로 끝나 첫 질문으로 이어지게(clips_plan)."
   }
  ],
- "decisions": [],
+ "decisions": [
+  {
+   "id": "part7-looks",
+   "at": "2026-11-22",
+   "q": "7부 「왕을 모신 사람들」 장면별 화풍",
+   "detail": "7-1 여리고 돌무화과나무(N31–Q18, 739–767) 투명 수채 · 7-2 삭개오의 집 문간과 등불(N33–Q19, 767–805) 밤 구아슈(따뜻한 문 안 / 차가운 길) · 7-3 문밖으로 흐르는 빛 → 골목의 문들 → 마 25 → 빛이 모여 위로(Q19b–N37, 805–905) 새 3D 야경(레밍턴 녹턴 색) — 구아슈 문간이 3D로 현상되며 카메라가 빛을 따라감 → N29 금빛 필사본 세상(기존 6b)에 Q21 새벽·N29e 문간을 더함. 손 클로즈업은 3D 인물이 단순해 보여서(피드백 #19) 2D 구아슈 또는 중간 거리 실루엣으로.",
+   "options": [
+    "제안대로 시험본 3개(세로) 만들기",
+    "화풍 바꾸기"
+   ],
+   "status": "관리자 OK 2026-11-22(\"그래\") — 세로 시험본 3개 제작 중 (지시문 rounds/part7-pilot1/)"
+  }
+ ],
  "artifact_url": "https://claude.ai/artifact/EMqkzm6bSeJubrJ89kiA12",
  "shots_check": null,
  "clips": [],
@@ -1692,6 +1704,13 @@
    "round": 7,
    "applied": "script.json 4줄 낱말 고침 · check-quotes 37개 ok · 관점 재검수 기록 motion/reviews/film-kingdom-theology-r9.json",
    "applied_at": "2026-11-22 10:16 KST"
+  },
+  {
+   "at": "2026-11-22 13:50 KST",
+   "who": "관리자",
+   "said": "그래..나는 만들고 있는 줄 알았네 (7부 화풍 안 — 7-1 수채 · 7-2 밤 구아슈 · 7-3 구아슈→3D 야경 — 시험본 만들기 OK)",
+   "status": "open",
+   "round": 7
   }
  ],
  "process_changes": [
@@ -1950,5 +1969,172 @@
   "said": "\"영상이 늘어나든 다시 만들든 그런 건 중요하지 않고 제대로 잘 만드는 게 중요해 신학 검수도 다시 받고\"",
   "at": "2026-11-21",
   "why": "7부 「왕을 모신 사람들」 신설(하나님 나라 사람의 삶) — 3270음절"
+ },
+ "anomaly_checks": {
+  "part7c-pilot2": {
+   "render": "91581766-8ef6caf812c4",
+   "video": "motion/out/sample-part7c-v.mp4",
+   "at": "2026-11-22",
+   "sheets": "scratchpad/anom7c/s05",
+   "note": "시각 = 영상 초(필름 805.8 + u). 고치기 전에 관리자 확인",
+   "issues": [
+    {
+     "t": 79.5,
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "Q20 절정에서 금빛 골목 → 어두운 청회색 저폴리 항공(밝기 116→57), 등불이 작은 점 — 빛이 이어져 올라가야 하는데 꺼지듯"
+    },
+    {
+     "t": 0,
+     "severity": "MINOR",
+     "status": "open",
+     "what": "구아슈 → 3D 1.5초 섞임에서 사람이 반쯤 남은 것처럼"
+    },
+    {
+     "t": 6,
+     "severity": "MINOR",
+     "status": "open",
+     "what": "Q19c 7초 넘게 빈 골목"
+    },
+    {
+     "t": 16.8,
+     "severity": "MINOR",
+     "status": "open",
+     "what": "손이 속 빈 육각 고리 / 떡 넘길 때 사라짐 / 아이 떡이 떠 있음(16.8–20.8)"
+    },
+    {
+     "t": 18.6,
+     "severity": "MINOR",
+     "status": "open",
+     "what": "주황 두건이 긴 붉은 머리처럼 — 삭개오와 다른 인물이 같은 색"
+    },
+    {
+     "t": 27,
+     "severity": "MINOR",
+     "status": "open",
+     "what": "N35 등불이 손에서 사라짐"
+    },
+    {
+     "t": 29,
+     "severity": "MINOR",
+     "status": "open",
+     "what": "벽의 가는 세로줄(전선 같은 선)"
+    },
+    {
+     "t": 34.2,
+     "severity": "MINOR",
+     "status": "open",
+     "what": "N36 카메라 거의 정지, 문들이 안 보임"
+    },
+    {
+     "t": 61,
+     "severity": "MINOR",
+     "status": "open",
+     "what": "물 받는 사람 몸이 종 모양 덩어리"
+    },
+    {
+     "t": 66,
+     "severity": "MINOR",
+     "status": "open",
+     "what": "나그네가 둥근 빛 덩어리를 안고 있음"
+    },
+    {
+     "t": 70,
+     "severity": "MINOR",
+     "status": "open",
+     "what": "N36c 놀라 돌아서는 동작이 안 보임"
+    }
+   ]
+  },
+  "part7b-pilot3": {
+   "render": "25391579-bb47e2430043",
+   "video": "motion/out/sample-part7b-v.mp4",
+   "at": "2026-11-22",
+   "sheets": "scratchpad/anom7b",
+   "note": "시각 = 영상 초(필름 767.8 + u). 고치기 전에 관리자 확인",
+   "issues": [
+    {
+     "t": 25,
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "큰 돈주머니가 탁자를 미끄러지지 않고 왼쪽 위에서 날아와 등불 위 허공에 떴다 내려앉음"
+    },
+    {
+     "t": 34.6,
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "앉은 손님(예수님) 머리가 고개 들 때 남색 종 모양 덩어리로 바뀜 · 바깥의 흰 옷과 안의 색이 달라 같은 인물로 안 이어짐"
+    },
+    {
+     "t": 12,
+     "severity": "MINOR",
+     "status": "open",
+     "what": "삭개오 몸통의 밝은 노란 타원이 불덩이처럼 · 일어설 때 마네킹처럼 수직 상승 · 얼굴 가면"
+    },
+    {
+     "t": 35.4,
+     "severity": "MINOR",
+     "status": "open",
+     "what": "마지막 컷 삭개오 손이 위팔 없이 장갑처럼"
+    },
+    {
+     "t": 9.8,
+     "severity": "MINOR",
+     "status": "open",
+     "what": "문간 삭개오 머리가 문빛에 묻힘, 팔이 막대처럼"
+    },
+    {
+     "t": 27.8,
+     "severity": "MINOR",
+     "status": "open",
+     "what": "넘어진 주머니가 다른 주머니에 파묻힘"
+    },
+    {
+     "t": 28,
+     "severity": "MINOR",
+     "status": "open",
+     "what": "선반 항아리에 하얀 얼룩"
+    }
+   ]
+  },
+  "part7a-pilot2": {
+   "render": "48540992-83d26f2723d2",
+   "video": "motion/out/sample-part7a-v.mp4",
+   "at": "2026-11-22",
+   "sheets": "scratchpad/anom7a",
+   "note": "시각 = 영상 초(필름 735.8 + u). 고치기 전에 관리자 확인",
+   "issues": [
+    {
+     "t": 28.7,
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "삭개오가 손발 없이 엘리베이터처럼 미끄러져 내려오고 몸이 40–60% 늘어남(Q18 내려오라)"
+    },
+    {
+     "t": 24.4,
+     "severity": "MINOR",
+     "status": "open",
+     "what": "예수님 손 드는 동작·올려다봄이 안 읽힘, 팔이 납작한 띠"
+    },
+    {
+     "t": 12,
+     "severity": "MINOR",
+     "status": "open",
+     "what": "N32 나무 위 삭개오가 너무 작고 줄기 색에 묻힘"
+    },
+    {
+     "t": 10,
+     "severity": "MINOR",
+     "status": "open",
+     "what": "앞줄 군중 원뿔 두건이 베일 쓴 여자·유령처럼"
+    },
+    {
+     "t": 31.5,
+     "severity": "MINOR",
+     "status": "open",
+     "what": "블록 끝 밤 전환에 인용·삭개오가 반쯤 남음(이어 붙인 본에서 다시 확인)"
+    }
+   ]
+  }
  }
 }

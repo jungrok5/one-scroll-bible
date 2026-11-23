@@ -2214,6 +2214,110 @@
      "what": "블록 끝 밤 전환에 인용·삭개오가 반쯤 남음(이어 붙인 본에서 다시 확인)"
     }
    ]
+  },
+  "rooster-pilot4": {
+   "video": "motion/out/sample-r10-rooster-v.mp4",
+   "at": "2026-11-24",
+   "sheets": "scratchpad/anomR",
+   "note": "시각 = 영상 초(필름 541.2 + u). MAJOR 16 · 몸 HIGH 10. 고치기 전에 관리자 확인",
+   "issues": [
+    {
+     "t": 9.6,
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "촛불과 주황빛이 일어선 베드로의 사타구니 자리에 놓임"
+    },
+    {
+     "t": 24,
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "밤 장면이 낮처럼 밝음(동산 안개·뜰·문)"
+    },
+    {
+     "t": 32.2,
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "칼 든 팔이 머리를 뚫고 지나감"
+    },
+    {
+     "t": 36,
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "손 없이 칼날이 덩어리에서 솟아 광선검처럼"
+    },
+    {
+     "t": 43.2,
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "베드로의 칼끝이 지나가는 예수님 옆구리에 닿아 찌르는 것처럼"
+    },
+    {
+     "t": 46.2,
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "머리를 묶은 인물이 여자처럼"
+    },
+    {
+     "t": 54,
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "앉은 사람들이 네모 판·원통 팔의 로봇·체스말처럼"
+    },
+    {
+     "t": 58.4,
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "여종의 팔이 파이프, 베드로가 고개 돌리는 것이 안 보임"
+    },
+    {
+     "t": 67.6,
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "수탉이 클립아트처럼, 볏이 떠 있음"
+    },
+    {
+     "t": 72.8,
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "끌려가는 분의 머리 윤곽에 옆얼굴처럼 읽히는 선(depict-christ-restraint)"
+    },
+    {
+     "t": 72.8,
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "문 앞 두 남자가 여자처럼, 안거나 춤추는 듯"
+    },
+    {
+     "t": 74.3,
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "돌아선 분이 베드로를 본다는 방향이 안 읽힘"
+    },
+    {
+     "t": 75.4,
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "맞은편 컷의 문이 비어 있음(방금 그분이 사라짐)"
+    },
+    {
+     "t": 78.1,
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "벽 그림자가 몸에서 떨어지고 삼각형이 날개처럼"
+    },
+    {
+     "t": 81.2,
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "마지막 컷의 몸이 직각 덩어리"
+    },
+    {
+     "t": 46.2,
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "모든 인물의 발이 네모 블록, 다리는 막대(몸 HIGH 10건 포함)"
+    }
+   ]
   }
  },
  "parts_r9": [

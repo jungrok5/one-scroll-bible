@@ -1,0 +1,152 @@
+{
+ "entries": [
+  {
+   "use": "toolu_015nNdGgRkL1HNvcEw1sRKMG",
+   "time": "2026-11-23T15:25:04.203Z",
+   "flow": "49AGBDyTF1OLCfNNQnnd",
+   "tool": "creative_add_flow_node:music",
+   "model": "eleven_music_v2_5",
+   "label": "PT-A 첼로 독주 (45s)",
+   "prompt": "Instrumental only. One continuous 45-second cinematic film-score theme, warm, humble and deeply human, slow tempo around 60 BPM, D minor opening toward F major. A solo cello sings one simple, memorable six-note melody that rises gently and falls back home, like a weathered working man's song at first light. 0–15 s: the cello alone over a very soft low string drone. 15–32 s: the same melody again, a small warm string ensemble entering beneath it. 32–40 s: one gentle swell of the strings. 40–45 s: it thins back to the lone cello and resolves quietly. Soft and tender, never harsh, no drums, no synths, recorded in a warm hall, quiet enough to sit under a spoken voice.",
+   "params": {
+    "duration_seconds": 45,
+    "instrumental": true,
+    "lyrics_type": "instrumental"
+   },
+   "why": "",
+   "node": "ySrIaKZV1JTY1MKyb8BJ",
+   "sessions": [
+    "AYpr0IUiMQrji1G788jZ"
+   ],
+   "name": "PT-A-cello"
+  },
+  {
+   "use": "toolu_011wLoRKvmU4Thev8gQYGJrv",
+   "time": "2026-11-23T15:25:08.402Z",
+   "flow": "49AGBDyTF1OLCfNNQnnd",
+   "tool": "creative_add_flow_node:music",
+   "model": "eleven_music_v2_5",
+   "label": "PT-B 나무 피리와 현악 (45s)",
+   "prompt": "Instrumental only. One continuous 45-second cinematic film-score theme, still, spacious and longing, slow tempo around 58 BPM, D minor with a gentle ancient Near Eastern modal color. A breathy wooden ney flute plays one simple, memorable six-note melody that rises gently and falls back home, with soft natural ornaments, like dawn over a quiet lake. 0–15 s: the flute alone over a faint low string drone. 15–32 s: the same melody again, warm muted strings and a softly plucked oud entering beneath it. 32–40 s: one gentle swell of the strings. 40–45 s: it thins back to the lone flute and resolves quietly. Soft and tender, never harsh, no drums, no synths, natural room reverb, quiet enough to sit under a spoken voice.",
+   "params": {
+    "duration_seconds": 45,
+    "instrumental": true,
+    "lyrics_type": "instrumental"
+   },
+   "why": "",
+   "node": "MlS1Nvs2ireckAw0dDjV",
+   "sessions": [
+    "Q1h4qc2vZYJGnf2Q3oCm"
+   ],
+   "name": "PT-B-ney-strings"
+  },
+  {
+   "use": "toolu_01PrwE3B9mnnWYjjEY7sSHjS",
+   "time": "2026-11-23T15:25:12.075Z",
+   "flow": "49AGBDyTF1OLCfNNQnnd",
+   "tool": "creative_add_flow_node:music",
+   "model": "eleven_music_v2_5",
+   "label": "PT-C 피아노와 현악 (45s)",
+   "prompt": "Instrumental only. One continuous 45-second lyrical film-soundtrack main theme, intimate and quietly moving, slow tempo around 64 BPM, D minor opening toward F major. A felt upright piano plays one simple, memorable six-note melody that rises gently and falls back home, with space between the notes. 0–15 s: the piano alone, very soft. 15–32 s: the same melody again, a warm string section entering with long sustained harmonies and a solo violin answering it. 32–40 s: one gentle swell of the full strings. 40–45 s: it thins back to the lone piano and resolves quietly. Tender and hopeful, never harsh, no drums, no synths, warm hall, quiet enough to sit under a spoken voice.",
+   "params": {
+    "duration_seconds": 45,
+    "instrumental": true,
+    "lyrics_type": "instrumental"
+   },
+   "why": "",
+   "node": "jitJfYHhjQ5h4VdLyn6x",
+   "sessions": [
+    "PdRUD6L10FdFNu5pTuT5"
+   ],
+   "name": "PT-C-piano-strings"
+  },
+  {
+   "use": "toolu_01KCJQ19oDrsChL2ogEdmeBH",
+   "time": "2026-11-23T15:25:31.013Z",
+   "flow": "49AGBDyTF1OLCfNNQnnd",
+   "tool": "creative_add_flow_node:music",
+   "model": "eleven_music_v2",
+   "label": "비용 확인용 v2 (45s, 생성 안 함)",
+   "prompt": "Instrumental only. Cost estimate test for a 45-second solo cello film theme.",
+   "params": {
+    "duration_seconds": 45,
+    "instrumental": true,
+    "lyrics_type": "instrumental"
+   },
+   "why": "",
+   "node": "WB2zc0bPZXXIhNVKAWS8",
+   "sessions": []
+  },
+  {
+   "use": "toolu_01PUoPUCx8VnjSMoamoHRna2",
+   "time": "2026-11-23T15:25:33.112Z",
+   "flow": "49AGBDyTF1OLCfNNQnnd",
+   "tool": "creative_add_flow_node:music",
+   "model": "eleven_music_v1",
+   "label": "비용 확인용 v1 (45s, 생성 안 함)",
+   "prompt": "Instrumental only. Cost estimate test for a 45-second solo cello film theme.",
+   "params": {
+    "duration_seconds": 45,
+    "instrumental": true,
+    "lyrics_type": "instrumental"
+   },
+   "why": "",
+   "node": "J7aAnme1Zs5C5SJj1jFs",
+   "sessions": []
+  },
+  {
+   "use": "toolu_01TYpTstCN7mXS1WMNCpe7BB",
+   "time": "2026-11-23T15:26:00.405Z",
+   "flow": "49AGBDyTF1OLCfNNQnnd",
+   "tool": "creative_update_node",
+   "model": "",
+   "label": "PT-A 첼로 독주 (24s)",
+   "prompt": "Instrumental only. One continuous 24-second cinematic film-score theme, warm, humble and deeply human, slow tempo around 60 BPM, D minor opening toward F major. A solo cello sings one simple, memorable six-note melody that rises gently and falls back home, like a weathered working man's song at first light. 0–10 s: the cello alone over a very soft low string drone. 10–19 s: the same melody again, a small warm string ensemble entering beneath it with one gentle swell. 19–24 s: it thins back to the lone cello and resolves quietly. Soft and tender, never harsh, no drums, no synths, recorded in a warm hall, quiet enough to sit under a spoken voice.",
+   "params": {
+    "node_id": "ySrIaKZV1JTY1MKyb8BJ",
+    "duration_seconds": 24,
+    "instrumental": true,
+    "lyrics_type": "instrumental"
+   },
+   "why": "",
+   "node": "",
+   "sessions": []
+  },
+  {
+   "use": "toolu_01Y5BPArkVrb3nwkNdjfeQuX",
+   "time": "2026-11-23T15:26:03.905Z",
+   "flow": "49AGBDyTF1OLCfNNQnnd",
+   "tool": "creative_update_node",
+   "model": "",
+   "label": "PT-B 나무 피리와 현악 (24s)",
+   "prompt": "Instrumental only. One continuous 24-second cinematic film-score theme, still, spacious and longing, slow tempo around 58 BPM, D minor with a gentle ancient Near Eastern modal color. A breathy wooden ney flute plays one simple, memorable six-note melody that rises gently and falls back home, with soft natural ornaments, like dawn over a quiet lake. 0–10 s: the flute alone over a faint low string drone. 10–19 s: the same melody again, warm muted strings and a softly plucked oud entering beneath it with one gentle swell. 19–24 s: it thins back to the lone flute and resolves quietly. Soft and tender, never harsh, no drums, no synths, natural room reverb, quiet enough to sit under a spoken voice.",
+   "params": {
+    "node_id": "MlS1Nvs2ireckAw0dDjV",
+    "duration_seconds": 24,
+    "instrumental": true,
+    "lyrics_type": "instrumental"
+   },
+   "why": "",
+   "node": "",
+   "sessions": []
+  },
+  {
+   "use": "toolu_01JbpCd9jpFwqJyTGjkm2BXx",
+   "time": "2026-11-23T15:26:07.355Z",
+   "flow": "49AGBDyTF1OLCfNNQnnd",
+   "tool": "creative_update_node",
+   "model": "",
+   "label": "PT-C 피아노와 현악 (24s)",
+   "prompt": "Instrumental only. One continuous 24-second lyrical film-soundtrack main theme, intimate and quietly moving, slow tempo around 64 BPM, D minor opening toward F major. A felt upright piano plays one simple, memorable six-note melody that rises gently and falls back home, with space between the notes. 0–10 s: the piano alone, very soft. 10–19 s: the same melody again, a warm string section entering with long sustained harmonies and a solo violin answering it, one gentle swell. 19–24 s: it thins back to the lone piano and resolves quietly. Tender and hopeful, never harsh, no drums, no synths, warm hall, quiet enough to sit under a spoken voice.",
+   "params": {
+    "node_id": "jitJfYHhjQ5h4VdLyn6x",
+    "duration_seconds": 24,
+    "instrumental": true,
+    "lyrics_type": "instrumental"
+   },
+   "why": "",
+   "node": "",
+   "sessions": []
+  }
+ ]
+}

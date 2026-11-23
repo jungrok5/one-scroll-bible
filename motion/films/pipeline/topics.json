@@ -77,6 +77,11 @@
      "at": "2026-11-19",
      "fact": "해설판 옆자리에 '성경은 누가, 언제, 어떻게 편집했나' 0.5% — 여섯 번째 연속(11/4–11/19)",
      "source": "motion/films/analytics/2026-11-19/video-film-narr-reach_viewers.json"
+    },
+    {
+     "at": "2026-11-23",
+     "fact": "해설판 옆자리에 '성경은 누가, 언제, 어떻게 편집했나' 0.5% — 일곱 번째 연속(11/4–11/23)",
+     "source": "motion/films/analytics/2026-11-23/video-film-narr-reach_viewers.json"
     }
    ]
   },
@@ -169,6 +174,11 @@
      "at": "2026-11-19",
      "fact": "「그리스도」 세로 3:00(고난받는 메시아 → 십자가) 공개 사흘 2,300회 · 계속 시청 57.8% · 구독 +15 · 신규 시청자 84% — 400년 세로가 19일 동안 488회였던 것의 약 5배",
      "source": "motion/films/analytics/2026-11-19/video-christ-v-overview.json"
+    },
+    {
+     "at": "2026-11-23",
+     "fact": "「그리스도」 세로(고난받는 메시아 → 십자가) 계속 시청 57.9% · 4일 동안 평균 시청 비율 117% — 채널 새 영상 중 가장 높은 다시 보기",
+     "source": "motion/films/analytics/2026-11-23/api-ko.json"
     }
    ]
   },
@@ -262,6 +272,25 @@
      "source": "motion/films/analytics/2026-11-19/video-christ-v-build_audience.json"
     }
    ]
+  },
+  {
+   "id": "peter",
+   "title": "베드로 — '그리 마옵소서'에서 '주님을 사랑합니다'까지",
+   "refs": "마 16:16–23 · 눅 22:61–62 · 요 21:15–17 · 행 2:14–41",
+   "connection": "부인한 제자를 다시 부르신 은혜가 오순절 설교로",
+   "status": "recommended",
+   "evidence": [
+    {
+     "at": "2026-11-23",
+     "fact": "「그리스도」 짧은 쇼츠 「베드로는 왜 \"그리 마옵소서\" 했을까」(11/21 공개) 실시간 48시간 985회 — 하루 먼저 나온 개념 질문 쇼츠 「그리스도는 예수님의 성일까?」 240회의 약 4배, 채널 48시간 조회 둘째",
+     "source": "motion/films/analytics/2026-11-23/studio-channel.json"
+    },
+    {
+     "at": "2026-11-23",
+     "fact": "스레드에서도 베드로 글 24회로 「그리스도」 글 중 가장 많음(그리스도 성 10회)",
+     "source": "motion/films/analytics/2026-11-23/threads.json"
+    }
+   ]
   }
  ],
  "recommendations": [
@@ -336,6 +365,15 @@
     "acts"
    ],
    "source": "motion/films/ANALYTICS.md 2026-11-19"
+  },
+  {
+   "at": "2026-11-23",
+   "ids": [
+    "peter",
+    "passover-lamb",
+    "bible-transmission"
+   ],
+   "source": "motion/films/ANALYTICS.md 2026-11-23"
   }
  ]
 }

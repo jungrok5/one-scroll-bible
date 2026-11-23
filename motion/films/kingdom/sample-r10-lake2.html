@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>호수의 다시 부르신 아침 시안</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600&family=Noto+Sans+KR:wght@400;600&display=swap">
+<script type="importmap">{ "imports": { "three": "../lib3d/three.module.min.js" } }</script>
+</head>
+<body>
+<script src="../../pilot/lib.js"></script>
+<script src="../lib-film.js"></script>
+<script>
+/* 「kingdom」 10차 시안 — 호수 한 벌 (lake-peter3d.js): film 803.0 → 896.0. 그림의 모든 시각은 script.json의 at에서 나온다(beats()).
+   자막은 본 영상이 얹는 자리를 보려고 시안에서만 얹음(sample-part5d.html과 같은 규칙).
+   node motion/render.mjs v --page films/kingdom/sample-r10-lake2.html   (→ motion/out/sample-r10-lake2-v.mp4) */
+const W = Pilot.W, H = Pilot.H, V = Pilot.ori === 'v', { ss, win } = Pilot;
+const T0 = 803.0, T1 = 896.0, IDS = ['N160', 'N161', 'N162', 'N163', 'N163b', 'N164', 'L106', 'Q117', 'L109', 'N165', 'N166', 'Q118', 'N167', 'Q120', 'N168', 'C5', ];
+let LK = null, TB = null, TEXT = [];
+function band(ctx, k = 1) { const y0 = Film.SAFE() - (V ? 190 : 80), g = ctx.createLinearGradient(0, y0, 0, H); g.addColorStop(0, 'rgba(10,8,10,0)'); g.addColorStop(.35, `rgba(10,8,10,${.5 * k})`); g.addColorStop(.7, `rgba(10,8,10,${.62 * k})`); g.addColorStop(1, `rgba(10,8,10,${.66 * k})`); ctx.fillStyle = g; ctx.fillRect(0, y0, W, H - y0); }
+function buildText() {
+  const L = Film.script.lines, spoken = l => (l.kind === 'narr' || l.kind === 'quote') && l.voice !== null;
+  const V2 = L.filter(spoken).sort((a, b) => a.at - b.at), next = l => V2.find(x => x.at > l.at + .01);
+  for (const l of L) { if (l.at < T0 - .01 || l.at >= T1) continue;
+    if (l.kind === 'label') { const q = V2.find(x => x.at >= l.at - .01), qn = q && next(q); TEXT.push(['label', l.id, l.at, (qn?.at ?? T1) - .2]); continue; }
+    if (!spoken(l)) continue;
+    const n = next(l), b = Math.min((n?.at ?? T1) - (l.kind === 'quote' ? .1 : .25), T1 - .25);
+    TEXT.push([l.kind === 'quote' ? 'quote' : 'sub', l.id, l.at, b]); }
+}
+function draw(ctx, u) {
+  const t = T0 + u;
+  LK.draw(ctx, t, TB);
+  band(ctx, 1);
+  for (const [kind, id, a, b] of TEXT) { if (t < a - .1 || t > b + .1) continue;
+    if (kind === 'sub') Film.sub(ctx, id, t, a, b); else if (kind === 'label') Film.label(ctx, id, t, a, b);
+    else Film.quote(ctx, id, t, a, b, { bottom: Film.subBottom() + 40, hl: Film.lines[id].hl, hlk: ss(a + .4, a + 1.6, t) }); }
+}
+Pilot.run({ W, H, dur: +(T1 - T0).toFixed(2), fonts: ["600 40px 'Noto Serif KR'", "400 40px 'Noto Serif KR'", "400 20px 'Noto Sans KR'"],
+  init: async () => { await Film.load(); buildText();
+    const B = Object.fromEntries(IDS.map(id => [id, Film.lines[id].at])); B.N165b = Film.pieces(Film.text('N165'), B.N165, B.N166 - .25)[1][1];
+    const M = await import('./lake-peter3d.js'); TB = M.beats(B); LK = await M.build(W, H); window.__LK = LK; window.__TB = TB; window.__T0 = T0; }, draw });
+</script>
+</body>
+</html>

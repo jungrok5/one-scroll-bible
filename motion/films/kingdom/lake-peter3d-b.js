@@ -1,5 +1,5 @@
-// lake-peter3d-b.js — 「kingdom」 10차 B안 (rounds/r10-pilot/lake-b.md), a copy of lake-peter3d.js for side-by-side comparison. Only a2/b2, uwA/uwB, the new
-// tA/hB (the rope parts / holds) and a5 are redrawn, with light and silhouette instead of a built net; the other shots are the current version's.
+// lake-peter3d-b.js — 「kingdom」 10차 B안 (rounds/r10-pilot/lake-b.md), a copy of lake-peter3d.js for side-by-side comparison. Only a2/b2, the new tA/hB
+// (the rope parts / holds) and a5 are redrawn, with light and silhouette; uwA/uwB stay the current version's net filling (owner, after comparing a vortex), as do the other shots.
 // lake-peter3d.js — 「kingdom」 10차: one lake, two mornings. Part 1 (film 50.8–117.6, the first call, Luke 5) and part 7 (803.0–896.0, the
 // return, John 21) drawn from ONE world with the SAME camera setups for the matching shots, so block B feels like "the same morning
 // again" and then shows what is different (the net holds; the man who fell at his knees now runs through the water; a small fire).
@@ -657,38 +657,6 @@ export async function build(W, H) {
       vertexShader: `varying vec2 vP; void main(){ vP = position.xz; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.); }`,
       fragmentShader: `uniform float uT, uK; varying vec2 vP; ${hashGLSL} void main(){ float s = vP.x + 3.7; if (s < 0.) discard; float n = fbm(vec2(vP.x * 1.4 + uT * 1.5, vP.y * 3.)), hw = .36 * s + .1, d = abs(abs(vP.y) - hw), arm = exp(-pow(d / (.07 + s * .035), 2.)) * exp(-s * .17), inner = (1. - smoothstep(0., hw, abs(vP.y))) * (.5 + .5 * sin(s * 5.5 - uT * 6.5 + vP.y * 2.)) * exp(-s * .3) * .22; float a = (arm * (.5 + .9 * n) + inner) * uK * smoothstep(9.8, 7., abs(vP.x)) * smoothstep(4.4, 3., abs(vP.y)); gl_FragColor = vec4(vec3(1., .92, .8) * a, a); }` });
     const w = new THREE.Mesh(g, m); w.renderOrder = 4; w.layers.set(2); w.frustumCulled = false; w.visible = false; S.add(w); return w; })();
-  // ---- the school: a few thousand thin silver fish, each a pure function of t, drawn with a real shutter streak; the hull above it stays black
-  const NS = 5600, schP = new Float32Array(NS * 3), schV = new Float32Array(NS * 3), schA = new Float32Array(NS * 4);
-  const SD = Array.from({ length: NS }, (_, i) => { const r = rng(7000 + i); const arm = Math.floor(r() * 3), sp = (r() + r() + r()) / 3 - .5; return { e: r(), a: (arm + sp * .62) / 3, rr: r(), h: r(), d: r(), sz: .72 + r() * .62, wob: r() * 6.283 }; });
-  SD.forEach((f, i) => { schA[i * 4] = f.wob; schA[i * 4 + 1] = f.sz; schA[i * 4 + 2] = f.d; schA[i * 4 + 3] = f.rr; });
-  const instA = { aP: new THREE.InstancedBufferAttribute(schP, 3).setUsage(THREE.DynamicDrawUsage), aV: new THREE.InstancedBufferAttribute(schV, 3).setUsage(THREE.DynamicDrawUsage), aS: new THREE.InstancedBufferAttribute(schA, 4) };
-  const schoolU = { uT: { value: 0 }, uLight: { value: V(.22, 1, .12).normalize() }, uShut: { value: .042 } };
-  const fishBody = (() => { const b = new THREE.OctahedronGeometry(1, 0); b.scale(.013, .038, .098); const tl = new THREE.BufferGeometry(); tl.setAttribute('position', new THREE.Float32BufferAttribute([0, 0, .09, 0, .036, .15, 0, -.036, .15], 3)); tl.computeVertexNormals(); const m = K.mergeGeometries([[b.toNonIndexed(), new THREE.Matrix4()], [tl, new THREE.Matrix4()]]), g = new THREE.InstancedBufferGeometry(); g.setAttribute('position', m.attributes.position); g.setAttribute('normal', m.attributes.normal); for (const k in instA) g.setAttribute(k, instA[k]); g.instanceCount = NS; return g; })();
-  const schoolM = new THREE.ShaderMaterial({ uniforms: schoolU, side: THREE.DoubleSide,
-    vertexShader: `attribute vec3 aP, aV; attribute vec4 aS; uniform float uT; uniform vec3 uLight; varying vec3 vC; void main(){ float spd = length(aV); vec3 f = spd > 1e-4 ? aV / spd : vec3(1., 0., 0.), r = normalize(cross(vec3(0., 1., 0.), f) + vec3(1e-4, 0., 0.)), u = cross(f, r); vec3 q = position * aS.y; q.z *= 1. + min(.16, spd * .016); q.x += sin(uT * (12. + aS.z * 7.) + aS.x + position.z * 26.) * max(position.z + .02, 0.) * .4; vec4 w = modelMatrix * vec4(aP + r * q.x + u * q.y - f * q.z, 1.);
-      float roll = .9 * sin(uT * (1.5 + aS.z * 2.4) + aS.x * 3.) + .45 * sin(uT * (3.3 + aS.w * 2.) + aS.x * 7.); vec3 sd = normalize(r * cos(roll) + u * sin(roll)), Vd = normalize(cameraPosition - w.xyz), H = normalize(uLight + Vd); float m = abs(dot(sd, H)), flash = pow(m, 48.) * 4.6 + pow(m, 7.) * .42, belly = smoothstep(-.03, .02, -position.y); vC = mix(vec3(.018, .05, .056), vec3(.2, .3, .31), belly) + vec3(.92, 1., .98) * flash * mix(.35, 1., belly); gl_Position = projectionMatrix * viewMatrix * w; }`,
-    fragmentShader: `varying vec3 vC; void main(){ gl_FragColor = vec4(vC, 1.); }` });
-  const schoolMesh = new THREE.Mesh(fishBody, schoolM); schoolMesh.frustumCulled = false; G.uw.add(schoolMesh);
-  const schoolS = (() => { const g = new THREE.InstancedBufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute([-1, 0, 0, 1, 0, 0, -1, 1, 0, 1, 0, 0, 1, 1, 0, -1, 1, 0], 3)); for (const k in instA) g.setAttribute(k, instA[k]); g.instanceCount = NS;
-    const m = new THREE.ShaderMaterial({ uniforms: schoolU, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, side: THREE.DoubleSide,
-      vertexShader: `attribute vec3 aP, aV; attribute vec4 aS; uniform float uShut, uT; varying float vA; void main(){ float spd = length(aV); vec3 f = spd > 1e-4 ? aV / spd : vec3(1., 0., 0.); vec4 c = modelMatrix * vec4(aP, 1.); vec3 Vd = normalize(cameraPosition - c.xyz), wd = normalize(cross(f, Vd) + vec3(1e-4, 0., 0.)); float len = min(.26, spd * uShut * .8) + .03; vec3 p = c.xyz + wd * position.x * .012 * aS.y - f * position.y * len; float tw = .5 + .5 * sin(uT * (1.5 + aS.z * 2.4) * 1.2 + aS.x * 3.); vA = (1. - position.y) * (1. - position.y) * (.1 + .3 * tw) * smoothstep(.2, 2.2, spd); gl_Position = projectionMatrix * viewMatrix * vec4(p, 1.); }`,
-      fragmentShader: `varying float vA; void main(){ gl_FragColor = vec4(vec3(.72, .94, .92) * vA, vA); }` });
-    const o = new THREE.Mesh(g, m); o.frustumCulled = false; o.renderOrder = 6; G.uw.add(o); return o; })();
-  const hullBlack = new THREE.ShaderMaterial({ uniforms: uwU, side: THREE.DoubleSide, vertexShader: `varying vec3 vN; void main(){ vN = normalize(mat3(modelMatrix) * normal); gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(position, 1.); }`, fragmentShader: `varying vec3 vN; void main(){ float e = pow(1. - abs(normalize(vN).y), 3.); gl_FragColor = vec4(vec3(.003, .009, .011) + vec3(.012, .05, .052) * e, 1.); }` });
-  uwHull.children[0].material = hullBlack;
-  // the vortex: the mass comes up from the deep at lower left in a rope, winds into a funnel under the hull and tightens
-  const AXIS = V(.1, 0, .2);
-  function schoolAt(f, t, c, out) { const tA = c.t0 + f.e * c.spread, k0 = clamp((t - tA) / c.dur), k = k0 * k0 * (3 - 2 * k0), h = f.h, tau = 6.28318;
-    const R = (.34 + 2.28 * Math.pow(Math.sin(Math.PI * Math.pow(h, .72)), .8)) * lerp(1.28, .7, c.tight) * (.74 + .42 * f.rr), wv = c.spin * 1.25, ang = f.a * tau + t * wv + h * 7.4, y = lerp(-1.25, -5.7, h) + .13 * Math.sin(t * .8 + f.a * tau) + .08 * Math.sin(t * 1.9 + f.wob);
-    const px = AXIS.x + c.lean * (1 - h) + Math.cos(ang) * R, pz = AXIS.z + Math.sin(ang) * R;
-    if (k >= 1) return out.set(px, y, pz);
-    const b = f.a * tau + t * .55, br = 1.15 * Math.sqrt(f.rr), sx = -8.6 + Math.cos(b) * br + 1.4 * Math.sin(t * .4), sy = -11.5 + 2.8 * f.h + Math.sin(b * 2.) * .5, sz = 6.4 + Math.sin(b) * br;
-    const arc = Math.sin(Math.PI * k), wx = lerp(sx, px, k) + arc * 1.9 * Math.cos(ang * .5 + 1), wz = lerp(sz, pz, k) + arc * 1.9 * Math.sin(ang * .5 + 1);
-    return out.set(wx, lerp(sy, y, k) - arc * .55, wz); }
-  let schoolN = 0; const _sa = V(), _sb = V();
-  function setSchool(t, c) { schoolN = 0; for (let i = 0; i < NS; i++) { const f = SD[i]; schoolAt(f, t, c, _sa); schoolAt(f, t - .03, c, _sb); schP[i * 3] = _sa.x; schP[i * 3 + 1] = _sa.y; schP[i * 3 + 2] = _sa.z; schV[i * 3] = (_sa.x - _sb.x) / .03; schV[i * 3 + 1] = (_sa.y - _sb.y) / .03; schV[i * 3 + 2] = (_sa.z - _sb.z) / .03; if (t > c.t0 + f.e * c.spread) schoolN++; }
-    instA.aP.needsUpdate = instA.aV.needsUpdate = true; schoolU.uT.value = t; }
-
   // ---- the two men on one rope, in profile, hand over hand
   const toRoot = (g, v) => v.clone().sub(g.position).applyAxisAngle(UPV, -g.rotation.y);
   // a hand: on the rope pulling from far (0) to near (1), then off it, travelling back in a small arc above it
@@ -731,18 +699,6 @@ export async function build(W, H) {
         else { const lat = (hsh(key3, 45) - .5) * .9, sx = -(.25 + hsh(key3, 46) * 1.0), up0 = 1.1 + hsh(key3, 47) * 1.5, pp = Lc(dragAt(born) + 2.72 + sx * age, DEEP + lat * (1 + age)); BU.P3[i * 3] = pp.x; BU.P3[i * 3 + 1] = Math.max(.01, .08 + up0 * age - 4.9 * age * age); BU.P3[i * 3 + 2] = pp.z; BU.Ak[i] = pow2 * .8 * (1 - age / per); } al += BU.Ak[i] > .02 ? 1 : 0; } BU.alive = al; BU.g.attributes.position.needsUpdate = BU.g.attributes.aK.needsUpdate = true; BU.m.visible = true; }
     setHaulCam(7.5 + e * .4, drag * .9); }
 
-  // ----- uwA / uwB: from below. A black hull, shafts, and the living silver vortex tightening under it
-  function underB(t, Tm, blk) { show('uw'); hideBoatProps(); wl1.visible = false; bag.visible = false; roped.forEach(m => { m.visible = false; }); shoal.visible = false; streaks.visible = false; const isB = blk === 'B', t0 = isB ? Tm.N163 : Tm.N105, t1 = isB ? Tm.N163b : Tm.tA0, s = t - t0 + .45;
-    const tight = isB ? ss(t0 + .2, t0 + 5.6, t) : ss(t0 - .1, t1, t), lean = isB ? .65 * ss(t1 - 2.2, t1 + .3, t) : 0;
-    setSchool(t, { t0: t0 - (isB ? 2.1 : 1.5), spread: isB ? 5.2 : 2.9, dur: isB ? 1.7 : 1.3, tight, spin: isB ? 1.0 + .22 * tight : 1.0 + .5 * tight, lean });
-    uwU.uT.value = t; uwU.uWarm.value = .1; uwU.uB.value = 1; uwU.uDrag.value = 0; uwFloor.position.y = -13.5;
-    uwHull.scale.setScalar(1.22); uwHull.rotation.set(0, HRY, .04 + .1 * tight + .012 * Math.sin(t * 1.1)); uwHull.position.set(.1, .03 * Math.sin(t * .8), 0);
-    const a0 = .92 + s * .022, r0 = 8.2 - s * .05, cc = V(Math.cos(a0) * r0, -9.1 + s * .02, Math.sin(a0) * r0), M4 = new THREE.Matrix4(), q = new THREE.Quaternion(); shS.forEach((h, i) => { const a = Math.atan2(cc.x - h.x, cc.z - h.z); q.setFromAxisAngle(UPV, a); const tilt = new THREE.Quaternion().setFromAxisAngle(V(0, 0, 1), -.2); q.multiply(tilt); M4.compose(V(h.x, 0, h.z), q, V(h.w * 1.15, h.l * 1.15, 1)); shafts.setMatrixAt(i, M4); }); shafts.instanceMatrix.needsUpdate = true;
-    for (let i = 0; i < NMO; i++) { const per = 9 + hsh(i, 21) * 8, ph = ((t + hsh(i, 22) * per) / per) % 1; moP[i * 3] = (hsh(i, 23) - .5) * 14 + Math.sin(t * .15 + i) * .3; moP[i * 3 + 1] = -8.5 + ph * 8.2; moP[i * 3 + 2] = (hsh(i, 24) - .5) * 12 + 2; moA[i] = Math.sin(ph * Math.PI) * (.28 + .4 * hsh(i, 25)); } moG.attributes.position.needsUpdate = moG.attributes.aK.needsUpdate = true;
-    const a = film.atmos; a.color.set('#0e4a50').multiplyScalar(.15); a.colorUp.set('#0e4a50').multiplyScalar(.15); a.density = .05; a.falloff = .001; a.base = 0; a.start = 1.5; a.max = 3000; a.scatter = 0; a.anisotropy = 0; a.phaseMix = 0; sunLamp.power = 0; fireLamp.power = 0; fireLamp.light.intensity = 0; hemi.intensity = .6; sunL.intensity = 0; sky.mesh.visible = false;
-    const L2 = film.look; L2.saturation = 1.08; L2.contrast = 1.12; L2.vignette = .4; L2.exposure = .75; L2.shadowTint.set('#b0e8e4'); L2.highTint.set('#f2fff8');
-    setCam(cc.clone().add(UWO), V(.12, -2.75, .28).add(UWO)); film.dofCfg.focus = cc.distanceTo(V(.1, -3.4, .2)); film.dofCfg.aperture = 1.25; }
-
   // ----- a5: low on the water, the boat side-on on the bright lake. Peter, large, drops to his knees and bows before the seated man;
   // the sun stands in the gap between them, never behind either head
   function fallB(t, Tm) { show('land', 'boat'); hideBoatProps(); leap.visible = pile.visible = true; const k = key(Tm.N106 - .45, Tm.Q102 + .45, t), pos = Lc(0, 46), yaw = Math.atan2(RIGHT.x, RIGHT.z); placeBoat(pos, yaw, t, .006); const sd = side();
@@ -758,10 +714,10 @@ export async function build(W, H) {
   const STAGE = {
     a1: (t, T) => boatWide(t, key(T.N101, T.N103 + .45, t), lerp(.03, .07, key(T.N101, T.N103, t)), 1.12),
     a2: (t, T) => netHaul(t, ss(T.N103 + .1, T.N104 - .2, t), t - T.N103 + .45, false),
-    a3: (t, T) => word(t, T), uwA: (t, T) => underB(t, T, 'A'), tA: (t, T) => netStrain(t, T, 'A'), a5: (t, T) => fallB(t, T), a7: (t, T) => lift(t, T), a8: (t, T) => follow(t, T),
+    a3: (t, T) => word(t, T), uwA: (t, T) => under(t, T, 'A'), tA: (t, T) => netStrain(t, T, 'A'), a5: (t, T) => fallB(t, T), a7: (t, T) => lift(t, T), a8: (t, T) => follow(t, T),
     b1: (t, T) => boatWide(t, lerp(.34, 1, key(T.N160, T.N161 + .45, t)), .03, 1.2),
     b2: (t, T) => netHaul(t, ss(T.N161 + .05, T.N162 - .15, t), t - T.N161 + .45, true),
-    b3: (t, T) => far(t, T), uwB: (t, T) => underB(t, T, 'B'), hB: (t, T) => netStrain(t, T, 'B'), b5: (t, T) => run(t, T), b6: (t, T) => fireShot(t, T), cy: (t, T) => courtShot(t, T), b7: (t, T) => dialog(t, T), b8: (t, T) => ending(t, T),
+    b3: (t, T) => far(t, T), uwB: (t, T) => under(t, T, 'B'), hB: (t, T) => netStrain(t, T, 'B'), b5: (t, T) => run(t, T), b6: (t, T) => fireShot(t, T), cy: (t, T) => courtShot(t, T), b7: (t, T) => dialog(t, T), b8: (t, T) => ending(t, T),
   };
   function render(name, t, T) { STAGE[name](t, T); waterU.uT.value = t; wakeU.uT.value = t; mistU.uT.value = t; ringU.uT.value = t; netU.uT.value = t; fishU.uT.value = t;
     cam.updateMatrixWorld(); sunLamp.pos.copy(cam.position).addScaledVector(SK.sunDir.value, 600); RU.uSunV.value.copy(SK.sunDir.value).transformDirection(cam.matrixWorldInverse); mistU.uSunV.value.copy(SK.sunDir.value);
@@ -807,7 +763,7 @@ export async function build(W, H) {
   }
   // the checks (no render): the camera + what is being emitted, and the bone directions
   function probe(t, T) { const on = T.shots.filter(s => t >= s[3] && t < s[4]), nm = (on[0] || T.shots[T.shots.length - 1])[0]; STAGE[nm](t, T); cam.updateMatrixWorld(); const d = V(); cam.getWorldDirection(d);
-    let em = 0; if (nm === 'a2' || nm === 'b2') em = DR.alive || 0; else if (nm === 'tA' || nm === 'hB') em = BU.m.visible ? (BU.alive || 0) : 0; else if (nm === 'b5') for (let i = 0; i < NSPR; i++) em += sprA[i] > 0 ? 1 : 0; else if (nm === 'b6' || nm === 'b7' || nm === 'cy') for (let i = 0; i < NSPK; i++) em += spA[i] > .05 ? 1 : 0; else if (nm.startsWith('uw')) em = schoolN;
+    let em = 0; if (nm === 'a2' || nm === 'b2') em = DR.alive || 0; else if (nm === 'tA' || nm === 'hB') em = BU.m.visible ? (BU.alive || 0) : 0; else if (nm === 'b5') for (let i = 0; i < NSPR; i++) em += sprA[i] > 0 ? 1 : 0; else if (nm === 'b6' || nm === 'b7' || nm === 'cy') for (let i = 0; i < NSPK; i++) em += spA[i] > .05 ? 1 : 0; else if (nm.startsWith('uw')) for (let i = 0; i < NMO; i++) em += moA[i] > .05 ? 1 : 0;
     return { shot: nm, p: cam.position.toArray(), d: d.toArray(), fov: cam.fov, emit: em, focus: film.dofCfg.focus }; }
   function joints(t, T) { if (!_matePS) { PS.mate = mate; _matePS = true; } const on = T.shots.filter(s => t >= s[3] && t < s[4]), nm = (on[0] || T.shots[T.shots.length - 1])[0]; if (nm === 'cy') return {}; STAGE[nm](t, T); const out = {}, Y = V(0, 1, 0);
     for (const [k, g] of Object.entries(PS)) { if (!g.visible) continue; const U = g.userData; if (!U.arms[0].E) continue; const rec = {}; U.arms.forEach((A, i) => { rec['ua' + i] = A.E.clone().sub(A.S2 || A.S).normalize().toArray(); rec['fa' + i] = A.T.clone().sub(A.E).normalize().toArray(); }); (U.legs || []).forEach((L, i) => { rec['th' + i] = Y.clone().applyQuaternion(L.thigh.quaternion).toArray(); rec['sh' + i] = Y.clone().applyQuaternion(L.shin.quaternion).toArray(); }); rec.neck = [U.neck.rotation.x, U.neck.rotation.y]; rec.up = [U.upper.rotation.x, U.upper.rotation.y]; out[k] = rec; } return out; }

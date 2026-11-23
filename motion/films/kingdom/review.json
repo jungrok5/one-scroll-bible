@@ -510,6 +510,13 @@
     "spent": "24초 × 3개 = 실제 1,080 (초당 15). 도구의 사전 추정은 초당 27.5로 나왔으나 실제 청구는 15"
    },
    "picked": "PT-A-cello"
+  },
+  {
+   "id": "r10-shadow-vs-current",
+   "at": "2026-11-24",
+   "q": "5부·호수: 지금 판(A) vs 동작을 그림자·실루엣으로 찍은 판(B)",
+   "detail": "B 제작 중 — 지시문 rounds/r10-pilot/rooster-b.md · lake-b.md. A 파일은 그대로 두고 B는 새 파일. 완성되면 나란히 놓은 비교 영상을 보내고 관리자가 고른다",
+   "status": "B 제작 중"
   }
  ],
  "artifact_url": "https://claude.ai/artifact/EMqkzm6bSeJubrJ89kiA12",
@@ -1811,6 +1818,13 @@
    "round": 7,
    "applied": "주제 A(첼로)로 기록, B·C 예비, 90초 발전은 12/1 뒤",
    "applied_at": "2026-11-24 06:12 KST"
+  },
+  {
+   "at": "2026-11-24 06:16 KST",
+   "who": "관리자",
+   "said": "내가 비교할 수 있게 줘봐 (5부·호수: 지금 판 vs 그림자·실루엣 판)",
+   "status": "open",
+   "round": 7
   }
  ],
  "process_changes": [

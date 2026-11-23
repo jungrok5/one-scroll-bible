@@ -1,0 +1,24 @@
+# 5부 「닭이 울 때」 B안 — the action told in shadows (to compare side by side with the current version)
+Block: film 541.2 (C13) → 627.3 (C14). Lines: C13, N140, L103, Q109, N141, N142, N143, N144, N145, N146, N147, N148, N149, L105, Q114, Q115. Same lines, same times, same text layer as version A.
+**Your files (new):** `motion/films/kingdom/bw-rooster-b.js`, `motion/films/kingdom/sample-r10-rooster-b.html`. Version A (`bw-rooster.js`, `sample-r10-rooster.html`) must stay exactly as it is, because the owner compares the two. Read A first and copy what works: the page structure, text layer, grain, palette, the torches, the fire.
+
+**Why B exists.** A fresh reviewer found 16 major problems in A, nearly all from asking code-built figures to act up close: a sword with no hand reads as a lightsaber, the sword tip seems to stab Jesus, seated men read as robots, the rooster reads as clip art, the candle sits at Peter's crotch, the night looks like day. The strongest frame in A is the giant shadow on the wall. **B's rule: nobody performs an action in full view. The action happens as shadows thrown on walls and tree trunks by fire. People are dark masses, far, or out of focus.** Look: German Expressionist and film-noir black-and-white, one colour kept (fire orange `#ff8a2a`).
+
+**A real night.** Most of the frame is black or deep grey; light exists only where fire or torches reach. Do not chase the usual brightness bar: aim for about 60–72/255 and report it.
+
+**Shadow craft.** Shapes must read in one second on a phone. Draw them with care (soft penumbra that widens with distance, slight perspective stretch across the surface, gentle flicker tied to the flame, the surface texture showing through). They must be anatomically believable: real arm taper, wrist, a closed hand on a hilt. If a shadow does not read in one second, cut that beat and use light instead.
+
+**Safety for every silhouette and shadow.** The owner has already caught a shadow in this film that looked like male genitals. Check every frame at phone size: nothing may read as indecent. Never put a flame or glow at a figure's groin. Jesus: no face and **no profile line, including in his shadow** (head cloth keeps the head outline round: no nose, no beard), never large or central, no halo. Men do not read as women or nuns; only the servant woman is veiled. No blood, no wound.
+
+**Shots (one slow named move each; moves overlap):**
+- R1 upper room (C13, N140, Q109, N141): keep the giant wall shadow. Lamp on the table at the left third of the frame, well away from any body's centre line. On Q109 Peter's shadow rises on the wall (his body is only a dark foreground mass). On N141 the lamp dips and the shadow swells, **keeping its head inside the frame** so it stays a man's shadow.
+- R2a (N142): torches come through black olive trunks in a slow lateral track.
+- R2b (N143): one lit trunk or rock face fills the frame: the shadow of an arm draws a sword and swings once; a single glint of steel crosses the frame. No body in view.
+- R2c (N144): the sword's shadow trembling on the bark as the torchlight shakes.
+- R2d (N145): the blade's shadow lowers. A shadow hand reaches gently to the side of a bowed head's shadow (Luke 22:51). Then a procession of torches and shadows slides along a stone wall, one shadow in the middle held by the arms and led away.
+- R3 courtyard (N146–N148): true night. Fire low in the frame, just above the caption band, a small mound of fine embers with low flame (no candle-like spikes). The wall behind carries the flickering shadows of the men seated around it; Peter's has the broadest shoulders and a tied head cloth. N147: a long shadow of a veiled woman's arm and pointing finger stretches across the wall to his shadow; his shadow turns away. N148: on 「두 번」 and 「세 번」 other shadows turn toward him one at a time and grow, closing around his.
+- R4 (N149): **no rooster on screen.** A black roofline against the first thin line of grey dawn; everything stops. Leave a clean beat for the sound.
+- R5 (L105, Q114): **one shot, both men in it.** Foreground left: Peter's dark, out-of-focus shoulders and tied head cloth. Far away through the courtyard: a lit doorway where a small backlit figure, held by a guard, stops and turns toward him. A slow rack focus from Peter to the doorway, then hold. No profile, and the doorway never goes empty.
+- R6 (Q115): a black alley. Peter is a dark mass seated against the wall, side-on, head bowed on drawn-up knees; limbs may melt into the dark. A single thin line of grey dawn touches his shoulder and bowed head. No colour at all in this shot. Only breathing shoulders and drifting haze. No rounded hip shape.
+
+Render `node motion/render.mjs v --page films/kingdom/sample-r10-rooster-b.html`, make the 720p preview `motion/out/review/sample-r10-rooster-b-720.mp4`, and report as common.md says, plus honest weak spots and 4–6 still paths.

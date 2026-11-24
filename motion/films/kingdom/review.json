@@ -2369,6 +2369,62 @@
      "what": "모든 인물의 발이 네모 블록, 다리는 막대(몸 HIGH 10건 포함)"
     }
    ]
+  },
+  "rooster-b3": {
+   "video": "motion/out/sample-r10-rooster-b-v.mp4",
+   "at": "2026-11-24",
+   "sheets": "scratchpad/anomRb",
+   "note": "시각 = 영상 초(104.8초판). 떨림은 없어짐. 고치기 전에 관리자 확인",
+   "issues": [
+    {
+     "t": 47.8,
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "끌려가는 분이 여자·아이처럼, 손잡고 걷는 가족처럼 읽힘 · 묶인 팔이 몸 아래에서 튀어나와 민망할 수 있음"
+    },
+    {
+     "t": 76.5,
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "묶인 손목 선이 가슴 밑선처럼 보임 · 정면 뒤 대칭으로 굳어 조각상처럼, 나를 보신다가 1초에 안 읽힘"
+    },
+    {
+     "t": 82,
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "자막이 뜬 채 베드로의 큰 옆얼굴로 컷되어 예수님 옆얼굴로 오해될 수 있음"
+    },
+    {
+     "t": 85,
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "도망이 치마 입고 춤추는 듯 희극적, 디딘 발 미끄러짐"
+    },
+    {
+     "t": 88.6,
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "벽 짚는 손이 판자 모양, 허공을 짚음"
+    },
+    {
+     "t": 91.4,
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "한 프레임에 인물이 1.68배로 튐"
+    },
+    {
+     "t": 98.6,
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "고개 젖히는 동작이 기계적이고 쪽 찐 머리의 여자처럼 보임"
+    },
+    {
+     "t": 93,
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "통곡 중 벽만 흘러내려 합성처럼 보임 · 입김이 벽 얼룩처럼"
+    }
+   ]
   }
  },
  "parts_r9": [

@@ -19,15 +19,17 @@
 //   S3b 615.8–620.2 his eyes     Q114  telephoto through the arch: three men walk; He alone stops (616.4, over two steps), the front guard's pull does not move Him (617.0); He turns,
 //                                      shoulders 616.8–618.0, head 617.4–618.8, the head a plain round cloth every frame; square to us at 618.8 with the yard's firelight on His chest;
 //                                      the guards lower their torches and go out of both sides (front guard out right ≈619.6). Dolly in 2 %/s on (470, 900), running on through S3c.
-//   S3c 620.2–621.8 His eyes     Q114  reverse: the yard from the cloister, 35° down; seven men round the fire, six with heads bowed, Peter alone looking up, a warm patch for a face.
-//                                      Dolly in 5 %/s (8 % on Peter).
-//   S3d 621.8–625.0 Him again    Q114  the same push as S3b, as if it never stopped; the torches gone, cold edge on the shoulder and the warm chest only; breath and smoke. Q114 out 624.6.
+//   S3c (cut, owner's fix list 2026-11-24: the reverse high angle did not read as 'all heads bowed, one looks up' at phone size in one second; its time goes to S3b/S3d,
+//        which are now one unbroken take of Him from 615.8 to 625.0; the code rev() is kept but not in the plan)
+//   S3d 620.2–625.0 (same take) the push goes on; from 620.2 the dark closes round Him over 2.6 s (the arch edges lost), the torches gone, a cold edge on one shoulder and a thin warm rim on
+//                                      the shoulder line and sleeves; breath and smoke. Q114 out 624.6.
 //   S3e 625.0–625.8 OTS close           Peter's head and shoulder fill the left 60 %, soft; the arch tiny; flinch at 625.15 (14 px up in .2 s, down in .6 s). Locked.
 //   S3f 625.8–628.6 memory              the upper room (R1) redrawn at film 557.5 → 559.9 (0.85×), feathered, bloom, heavier grain — the last full orange. In by a .35 s dissolve, out by a hard cut.
 //   S3g 628.6–630.0 OTS close           as S3e; the colour dies 628.6 → 629.6 (whole frame, ease-in), the fire −30 %, the rim turns grey; his head sinks 70 px (628.8–629.9).
-//   S4  630.0–633.0 court, grey  Q115  S1's frame, no colour: Peter's shadow rises (630.2–631.2), takes two heavy steps left and leaves the light (631.2–632.4); the gap stays. Locked.
-//   S5  633.0–650.0 alley               a real alley in perspective (ray-cast walls, wet floor, the dawn slit at its end); he staggers in on two steps, hits the wall shoulder first (633.6),
-//                                      slides to his knees with his forehead on his left forearm on the wall (–635.4), sobs as events, sinks onto his heels (640.8–642.0).
+//   S4  630.0–633.0 court, grey  Q115  S1's frame, no colour, the row of shadows closed: Peter's shadow rises (630.2–631.0), turns, and walks out to the left on two heavy steps (631.0–632.6);
+//                                      a gap is left where he sat. Locked.
+//   S5  633.0–650.0 alley               a real alley in perspective (ray-cast walls, wet floor, the dawn slit at its end, above the floor only); the shot opens on him already on his knees
+//                                      against the wall, sliding the last part down (633.0–634.4), his forehead on his left forearm flat on the wall, sobs as events, sinks onto his heels (640.8–642.0).
 //                                      A cold wedge of dawn on the upper wall comes down and stops above his head (646.5). Dolly in 17 s, ease-in-out, ×1.75, ending on (480, 820).
 //                                      Black from 649.3 to 650.0.
 // Holds (page time map only, script.json untouched): Q114 4.7 → 16.0 s (+11.3), Q115 8.6 → 20.0 s (+11.4). Block 108.8 s (B: 104.8 with +7.3/+11.4).
@@ -42,12 +44,11 @@
 //   613.6–615.8  crackle at −28 dB; three pairs of sandals on stone, panned toward the arch
 //   616.4        one pair of sandals stops; the other two take two more steps and stop
 //   618.8–624.6  the deepest silence of the film: room tone −45 dB, the torches out of the mix
-//   620.9        one coal pops, very small (S3c)
 //   624.6        Peter's sharp intake of breath, close (J-cut ahead of S3e)
 //   625.4–628.6  memory voice: N141 「오늘 닭이 울기 전에, 네가 세 번 나를 모른다고 할 것이라고」 at −16 dB, 3 kHz low-pass, stone reverb 2.5 s; the lamp's hiss very low (S3f)
 //   628.6–630.0  silence; one broken exhale
 //   630.2–632.4  his footsteps going away; 632.6 a wooden gate creaks open off screen left
-//   633.6        shoulder against stone (dull thud), cloth dragging down the wall
+//   633.0–634.4  cloth dragging down the wall as he slides the last part to his knees (no stagger, no impact: the owner's decision)
 //   635.4–636.2  silence
 //   636.2        first sob, an intake (a man's voice, muffled by the sleeve; never a wail) · 637.9 small · 639.4 the largest · 642.8 · 644.6 small · 646.4 small
 //   639.4–649.0  cello solo under sob 2, ppp sul tasto: Peter's theme, the first phrase falling chromatically, stopping on the leading note ≈646, unresolved, gone by 649.0
@@ -96,7 +97,7 @@ export function beats(B) {
   T.s3b = q + 1.8; T.stop = q + 2.4; T.halt = q + 3.2; T.pull = q + 3.0; T.turnSh = [q + 2.8, q + 4.0]; T.turnHd = [q + 3.4, q + 4.8]; T.guardLook = q + 3.6; T.front = q + 4.8; T.exitR = q + 5.6;
   T.s3c = q + 6.2; T.coal = q + 6.9; T.s3d = q + 7.8; T.s3e = q + 11.0; T.flinch = q + 11.15; T.s3f = q + 11.8; T.memAt = B.N141 + 1.0;
   T.s3g = e - 1.4; T.drain = [e - 1.4, e - .4]; T.sink = [e - 1.2, e - .1];
-  T.up4 = [e + .2, e + 1.2]; T.go4 = [e + 1.2, e + 2.4]; T.gate = e + 2.6;
+  T.up4 = [e + .2, e + 1.0]; T.go4 = [e + 1.0, e + 2.6]; T.gate = e + 2.6;
   T.s5 = e + 3.0; T.hit = e + 3.6; T.knelt = e + 5.4; T.deeper = [e + 10.8, e + 12.0]; T.lightStop = e + 16.5; T.slow = e + 17.0;
   // sobs: [time, amplitude px, catch of breath s, collapse s] — events, never a sine
   T.sobs = [[e + 6.2, 18, .35, .9], [e + 7.9, 6, .18, .32], [e + 9.4, 22, .35, 1.1], [e + 12.8, 14, .32, .9], [e + 14.6, 8, .3, .8], [e + 16.4, 5, .3, .7]];
@@ -196,12 +197,11 @@ const ALLEY = `#version 300 es
     } else {
       vec3 P = vec3(0., uEye, 0.) + d * tt; float endK = exp(-(uZE - P.z) / 5.), slitK = exp(-pow(P.x / 1.1, 2.)) * exp(-(uZE - P.z) / 7.);
       if (tt == tF) { vec4 s = tex(vec2(P.x * 1.5 + 3., P.z * 1.5)); vec2 n = s.rg * 2. - 1.; float al = s.b * .6, wet = smoothstep(.45, .75, fb(P.xz * vec2(2.2, .9) + 3.)), gut = smoothstep(.1, .02, abs(P.x + .05));
-        col = al * vec3(uAmb) * (.35 + .2 * smoothstep(.9, .0, abs(P.x))) * (1. + 3. * slitK) * (1. - .45 * gut);
+        col = al * vec3(uAmb) * (.35 + .05 * smoothstep(.9, .0, abs(P.x))) * (1. + .3 * slitK) * (1. - .45 * gut);
         // wet stone gives back the gap of dawn as a broken streak, and a little of the lit wall
         vec3 r = vec3(d.x, -d.y, 1.); float ye = (uZE - P.z) * r.y, xe = P.x + (uZE - P.z) * r.x; vec3 refl = vec3(0.);
-        if (xe > SLX.x && xe < SLX.y && ye < SLH) refl = dawn(ye) * 1.25;
-        else if (r.x < 0.) { float zl = P.z + (-uWL - P.x) / r.x, yl = (zl - P.z) * r.y; if (zl < uZE && yl < uWH) refl = vec3(.84, .86, .9) * uIb * .12 * smoothstep(uHb - .05, uHb + .05, yl); }
-        col += refl * mix(.015, .2, max(wet, gut * .8)) * (.6 + .4 * (1. - abs(n.x)));
+        if (r.x < 0.) { float zl = P.z + (-uWL - P.x) / r.x, yl = (zl - P.z) * r.y; if (zl < uZE && yl < uWH) refl = vec3(.84, .86, .9) * uIb * .12 * smoothstep(uHb - .05, uHb + .05, yl); }
+        col += refl * mix(.01, .1, max(wet, gut * .8)) * (.6 + .4 * (1. - abs(n.x)));
       } else { bool lw = tt == tL; vec4 s = tex(vec2(P.z, P.y) + (lw ? vec2(0.) : vec2(31., 7.))); vec2 n = s.rg * 2. - 1.; vec3 N = normalize(vec3(lw ? 1. : -1., n.y * 1.4, n.x * 1.4)); float al = s.b, sky = .3 + .7 * smoothstep(.0, uWH, P.y);
         float door = (!lw && P.z > 9.2 && P.z < 10.4 && P.y < 2.25) ? .25 : 1.;   // a door recess in the right wall
         col = al * vec3(uAmb) * sky * (1. + 2.6 * endK + 1.5 * slitK) * (lw ? 1. : .55) * door;
@@ -391,20 +391,20 @@ export async function build(W, H) {
   function r3(t, T, gone = false) { const u = gone ? 1 : clamp((t - T.N146) / (T.N149 - T.N146)), zz = lerp(1.0, 1.11, u), cam = [lerp(536, 552, u), FIRE3[1] - 206 / zz, zz],
  f = fl(t, .4), Q = poseR3(gone ? T.N149 - .001 : t, T), { aw, en, g1, g2 } = Q;
     maskBegin(); const fan = x => (x - FIRE3[0]) / 1000 * .24, by = 1252;
-    MEN3.forEach((m, i) => { const g = i === 1 ? g1 : i === 2 ? g2 : g2 * .5, side = m.x < PX3 ? 1 : -1, sc = m.s * (1 + g * .26), turn = lerp(m.t0, side * .92, g), lean = fan(m.x) + side * g * .13; man(mg, MB, m.x + side * g * 62, by, sc, { h: m.h, br: m.br * (1 - .3 * Math.sin(Math.PI * g)), turn, lean, sv: 1.1, hx: side * .04 * g }); });   // the shoulders narrow through the turn and the head turns with them
+    MEN3.forEach((m, i) => { const g = i === 1 ? g1 : i === 2 ? g2 : g2 * .5, side = m.x < PX3 ? 1 : -1, sc = m.s * (1 + g * .26), turn = lerp(m.t0, side * .92, g), lean = fan(m.x) + side * g * .13; const sh2 = i >= 2 ? -1.8 : 1; man(mg, MB, m.x + side * g * 62 * sh2, by, sc, { h: m.h, br: m.br * (1 - .3 * Math.sin(Math.PI * g)), turn, lean: i === 2 ? fan(m.x) : lean, sv: 1.1, hx: side * .04 * g * Math.max(0, sh2) }); });   // the shoulders narrow through the turn and the head turns with them
     if (!gone) { const k = sine(aw), turn = lerp(-.86, .9, k), lean = fan(PX3) + k * .17, sk = clamp((t - T.three) / .56), shake = Math.sin(TAU * sk) * Math.sin(Math.PI * sk);   // on 「세 번」 his shadow shakes its head once (left–right, .56 s)
       man(mg, MB, PX3 + k * 44, by, 560, { h: lerp(1.25, 1.19, k), br: lerp(1.26, .9, k), turn, lean, sv: 1.1, hx: k * .075 + .05 * shake, hy: -.05 * k }); }   // shoulders narrow, head and back swing away together
     else { // S4: his shadow stands up (and, nearer the wall, smaller), turns to the left, two heavy steps, and walks out of the firelight: softer, fainter, gone. The gap stays.
-      const r = ss(T.up4[0], T.up4[1], t), tn = ss(T.up4[0], T.up4[0] + .9, t), go = clamp((t - T.go4[0]) / (T.go4[1] - T.go4[0])), x = PX3 + 44 - 150 * sine(go), dip = 9 * Math.abs(Math.sin(Math.PI * 2 * go)), a = 1 - ss(.3, 1, go), bl = 16 * ss(.25, 1, go);
+      const r = ss(T.up4[0], T.up4[1], t), tn = ss(T.up4[0] + .1, T.up4[1] + .2, t), go = clamp((t - T.go4[0]) / (T.go4[1] - T.go4[0])), x = PX3 + 44 - 980 * (.45 * go + .55 * sine(go)), dip = 12 * Math.abs(Math.sin(Math.PI * 2 * go)), a = 1, bl = 0;
       mg.save(); mg.globalAlpha = a; if (bl > .05) mg.filter = `blur(${bl.toFixed(1)}px)`;
-      man(mg, MB, x, by + dip, lerp(560, 410, r), { h: lerp(1.19, 1.72, r), br: lerp(.9, 1.04, tn) * (1 - .28 * Math.sin(Math.PI * tn)), turn: lerp(.9, -.86, tn), lean: fan(x) + lerp(.17, -.05, r) + .05 * Math.sin(Math.PI * r), sv: 1.1, hx: lerp(.075, -.03, tn), hy: -.05 });
+      man(mg, MB, x, by + dip, lerp(560, 410, r), { h: lerp(1.19, 1.72, r), br: lerp(.9, 1.04, tn) * (1 - .28 * Math.sin(Math.PI * tn)), turn: lerp(.9, -.86, tn), lean: fan(x) + lerp(.17, -.05, r) + .05 * Math.sin(Math.PI * r) - .05 * Math.sin(Math.PI * go), sv: 1.1, hx: lerp(.075, -.03, tn), hy: -.05 });
       mg.restore(); }
     if (en > .001) { const wx = lerp(-330, 110, en), wy = by + 26, ws = 430; man(mg, MB, wx, wy, ws, { h: 1.75, br: .76, veil: true, lean: .015, sv: 1.06 }); atf(mg, MB, wx, wy, ws, .015, 1, 1.06); mg.translate(.2, 1.31); mg.scale(1.15, 1); blob(mg, [[-.1, .06], [Q.E[0] * .7, Q.E[1] + .05], [lerp(Q.E[0], Q.W[0], .52), lerp(Q.E[1], Q.W[1], .52) - .02], [lerp(Q.E[0], Q.W[0], .4), Q.E[1] - .3], [.02, -.58], [-.22, -.6]]); sleeveArm(mg, Q.St, Q.W, .36, .32, -1, pointing,
  Math.atan2(Q.W[1] - Q.E[1], Q.W[0] - Q.E[0]) * .6 + .06); }
     mg.setTransform(MB.k, 0, 0, MB.k, MB.ox, MB.oy); { const ny = lerp(884, 772, ss(0, .6, en)); mg.beginPath(); mg.moveTo(170, 1010); mg.lineTo(250, 856); mg.lineTo(380, ny); mg.quadraticCurveTo(476, ny + 44, 600, ny); mg.lineTo(880, 856); mg.lineTo(960, 1010); mg.lineTo(960, 1446); mg.lineTo(170, 1446); mg.closePath(); mg.fill(); }   // below the shoulders the seated men are one shadow (no sliver of wall between them)
     const flames = [[FIRE3[0], FIRE3[1] + 22, 280, 64, 0, .86, 1], [FIRE3[0] - 62, FIRE3[1] + 6, 118, 30, 2.1, .3 * f, 2], [FIRE3[0] - 6, FIRE3[1] + 4, 142, 40, 4.7, .37 * f, 2], [FIRE3[0] + 60, FIRE3[1] + 7, 110, 27, 7.3, .27 * f, 2]];
     return { kind: 0, cam, t, flames, L: [{ x: FIRE3[0], y: FIRE3[1] - 26, z: 230, I: 5.2 * f, r: 520, c: [1, .5, .15] }, { x: FIRE3[0], y: FIRE3[1] + 2, z: 62, I: .55 * f, r: 130, c: [1, .4, .08] }]
-, amb: .004, haze: .1, soft: .5, softD: 2.0, gain: 1.05, vig: .68,
+, amb: .004, haze: .1, soft: gone ? 1.5 : .5, softD: gone ? 2.6 : 2.0, gain: 1.05, vig: .68,
       over(o) { mass(o, cam, (g, b) => { g.setTransform(b.k, 0, 0, b.k, b.ox, b.oy); g.beginPath(); g.moveTo(-200, 1244); for (let x = -200; x <= 1400; x += 60) g.lineTo(x, 1230 + 7 * Math.sin(x * .024) + 3 * Math.sin(x * .09)); g.lineTo(1400, 2200); g.lineTo(-200, 2200); g.closePath(); g.fill();
           }, { blur: 1.6, rim: { c: 'rgb(255,138,52)', dx: 0, dy: 3.4, a: .5 } });
         embers(o, cam, FIRE3[0], FIRE3[1], .9, t); halo(o, cam, FIRE3[0], FIRE3[1] - 2, 280, '255,122,34', .24 * f); house3(o, cam, t, T, gone); } };
@@ -414,13 +414,14 @@ export async function build(W, H) {
   const ROOF = (() => { const r = rngOf(3301), K = [[-200, 900], [60, 896], [66, 872], [150, 870], [156, 862], [232, 860], [238, 884], [352, 880], [356, 868], [372, 866], [376, 880], [470, 878], [474, 846], [520, 844], [524, 834], [566, 832], [570, 843], [612, 842], [618, 874], [700, 872], [728, 870], [752, 846], [790, 826], [826, 816], [860, 820], [892, 838], [916, 866], [990, 864], [994, 852], [1012, 851], [1016, 864], [1120, 860], [1126, 884], [1400, 880]], out = [];
     K.forEach((q, i) => { out.push(q); const n = K[i + 1]; if (!n || Math.abs(n[0] - q[0]) < 40) return; const m = Math.floor(Math.abs(n[0] - q[0]) / 26); for (let j = 1; j < m; j++) { const k = j / m, x = lerp(q[0], n[0], k), y = lerp(q[1], n[1], k) + (r() - .5) * 3.4; out.push([x, y]); if (r() < .14) { out.push([x + 1, y + 3 + r() * 4], [x + 5 + r() * 5, y + 3 + r() * 4], [x + 11, y]); j++; } } }); return out; })();
   // ================================================================ figure parts kept from B (R2e's walker uses them): one robe outline in two views, a plain round cloth head
-  const BF = [[-.27, -.01], [-.285, .16], [-.262, .36], [-.282, .56], [-.262, .72], [-.268, .86], [-.272, .94], [-.312, 1.02], [-.33, 1.14], [-.315, 1.26], [-.25, 1.35], [-.14, 1.42], [-.066, 1.5], [.062, 1.505], [.125, 1.43], [.235, 1.365], [.305, 1.285], [.33, 1.16], [.318, 1.03], [.285, .95], [.28, .84], [.298, .6], [.272, .38], [.3, .16], [.285, -.01]];
+  const BF = [[-.29, -.01], [-.295, .16], [-.285, .36], [-.3, .56], [-.28, .8], [-.295, .95], [-.315, 1.06], [-.325, 1.18], [-.322, 1.29], [-.3, 1.37], [-.2, 1.405], [-.07, 1.44], [0, 1.445], [.07, 1.44], [.2, 1.405], [.3, 1.37], [.322, 1.29], [.325, 1.18], [.315, 1.06], [.295, .95], [.28, .8], [.3, .56], [.285, .36], [.295, .16], [.29, -.01]];   // square on: broad level shoulders, sleeves to the wrists, the cloak falling straight
   const BS = [[-.2, -.01], [-.19, .16], [-.215, .36], [-.19, .56], [-.205, .72], [-.2, .87], [-.195, .93], [-.205, 1.01], [-.205, 1.16], [-.195, 1.3], [-.15, 1.385], [-.085, 1.43], [-.045, 1.5], [.07, 1.505], [.11, 1.45], [.15, 1.4], [.18, 1.33], [.2, 1.2], [.31, .99], [.3, .93], [.2, .84], [.215, .6], [.19, .38], [.235, .16], [.22, -.01]];
-  BF.forEach(q => { if (q[1] > .9) q[0] *= lerp(1, .84, clamp((q[1] - .9) / .14)); });   // approach 1: the square-on outline a little narrower above the elbows (sloping shoulders)
+
   // hem: the bottom of the robe swings a little with the stride (metres at the ground, nothing above the calf)
   function manBody(g, side, sideL, br = 0, hem = 0) { blob(g, BF.map((f, i) => { const q = BS[i], k = f[1] > 1.02 ? side : f[1] < .82 ? sideL : lerp(sideL, side, (f[1] - .82) / .2); const o = 1 - k, tilt = .04 * o, hip = .022 * (1 - sideL) * Math.sin(Math.PI * clamp(f[1] / .95)), x0 = lerp(f[0], q[0], k), y0 = lerp(f[1], q[1], k), up = Math.max(0, y0 - .85);
     return [x0 + hip - up * tilt * .6 + (y0 < .34 ? hem * (.34 - y0) / .34 : 0), y0 + (y0 > .85 ? x0 * tilt : 0) + (y0 > 1.2 ? br * ss(1.2, 1.38, y0) : 0)]; })); }
-  function clothHead(g, cx, cy, inc) { g.save(); g.translate(cx, cy); g.rotate(-inc); g.beginPath(); g.ellipse(0, 0, .118, .132, 0, 0, TAU); g.fill(); blob(g, [[-.085, .112], [0, .135], [.085, .112], [.122, .045], [.134, .012], [.128, -.02], [.14, -.09], [.17, -.17], [.2, -.235], [.08, -.25], [0, -.2], [-.08, -.25], [-.2, -.235], [-.17, -.17], [-.14, -.09], [-.128, -.02], [-.136, .012], [-.121, .045]]); g.restore(); }
+  function clothHead(g, cx, cy, inc) { g.save(); g.translate(cx, cy); g.rotate(-inc); g.beginPath(); g.ellipse(0, 0, .118, .132, 0, 0, TAU); g.fill(); blob(g, [[-.085, .112], [0, .135], [.085, .112], [.122, .045], [.134, .012], [.128, -.02], [.118, -.09], [.1, -.16], [.1, -.215], [-.1, -.215], [-.1, -.16], [-.118, -.09], [-.128, -.02], [-.136, .012], [-.121, .045]]);
+    g.beginPath(); g.ellipse(.122, -.03, .03, .024, .5, 0, TAU); g.fill(); limb(g, .126, -.04, .016, .15, -.15, .012); g.restore(); }   // a tied head cloth: the cloth close round the neck, a knot and its end at the side
   const hermite = (keys, x) => { const n = keys.length; if (x <= keys[0][0]) return keys[0][1]; if (x >= keys[n - 1][0]) return keys[n - 1][1]; let i = 0; while (x > keys[i + 1][0]) i++; const [a, va] = keys[i], [b, vb] = keys[i + 1], h = b - a, u = (x - a) / h, m = (p, q) => (keys[q][1] - keys[p][1]) / (keys[q][0] - keys[p][0]), m0 = i > 0 ? m(i - 1, i + 1) : 0, m1 = i < n - 2 ? m(i, i + 2) : 0, u2 = u * u, u3 = u2 * u; return (2 * u3 - 3 * u2 + 1) * va + (u3 - 2 * u2 + u) * h * m0 + (-2 * u3 + 3 * u2) * vb + (u3 - u2) * h * m1; };
   const pushCam = (tx, ty, z) => [tx - (tx - 540) / z, ty - (ty - 960) / z, z];   // a dolly in that keeps (tx, ty) where it is in the frame
   const pathOf = (g, P) => { g.moveTo(P[0][0], P[0][1]); for (const q of P) g.lineTo(q[0], q[1]); g.closePath(); };
@@ -450,8 +451,8 @@ export async function build(W, H) {
     for (const [j, hl, wd, ph] of T5) { const hh = h * hl * (.82 + .18 * Math.sin(t * (2.3 + .4 * j) + ph + seed)), side = (j % 2 ? 1 : -1) * (j ? .16 + .05 * j : 0) * h, lean = lean0 + .1 * Math.sin(t * 1.7 + ph + seed) + (j % 2 ? .12 : -.08) * (j ? 1 : 0), a = (.85 - .12 * j) * k;
       o.save(); o.translate(x + side * .5, y); o.rotate(lean); o.fillStyle = `rgba(255,${118 + 18 * j},${38 + 10 * j},${a.toFixed(3)})`; o.beginPath(); o.moveTo(-wd * h, 0); o.quadraticCurveTo(-wd * h * 1.05, -hh * .45, 0, -hh); o.quadraticCurveTo(wd * h * .9, -hh * .5, wd * h, 0); o.closePath(); o.fill(); o.restore(); }
     o.save(); o.translate(x, y); o.rotate(lean0 * .7); o.fillStyle = `rgba(255,226,168,${(.75 * k).toFixed(3)})`; o.beginPath(); o.ellipse(0, -h * .22, h * .11, h * .26, 0, 0, TAU); o.fill(); o.restore(); o.restore(); }
-  function smallWalker(g, b, f, s) { atf(g, b, f.x, f.y, s, 0, 1, 1.04); manBody(g, 1, 1, 0, .02 * Math.sin(f.ph)); if (f.jesus) clothHead(g, .03, 1.62, .07); else head(g, .03, 1.615, .116, .92, { beard: true, cl: .7 });
-    if (f.torch) { sleeveArm(g, [.08, 1.32], [.3, 1.16], .3, .28, -1, fist, .3); torchHeld(g, [.34, 1.12], .32); } else sleeveArm(g, [.08, 1.32], [.14, .88], .3, .28, -1, fist, -1.2); }
+  function smallWalker(g, b, f, s) { atf(g, b, f.x, f.y, s, f.front ? .02 : 0, 1, 1.04); manBody(g, f.front ? 0 : 1, f.front ? 0 : 1, 0, f.front ? 0 : .02 * Math.sin(f.ph)); if (f.front) { clothHead(g, .006, 1.605, .012); return; } if (f.jesus) clothHead(g, .03, 1.62, .07); else head(g, .03, 1.615, .116, .92, { beard: true, cl: .7 });
+    if (f.front) return; if (f.torch) { sleeveArm(g, [.08, 1.32], [.3, 1.16], .3, .28, -1, fist, .3); torchHeld(g, [.34, 1.12], .32); } else sleeveArm(g, [.08, 1.32], [.14, .88], .3, .28, -1, fist, -1.2); }
   const SW_TIP = torchTipL([.34, 1.12], .32);
   // inside an arch: the cold grey of the walkway, the carried torches, the men in black
   function archInterior(o, cam, P, A) { const q = camBase(cam), L = A.lum;
@@ -502,10 +503,10 @@ export async function build(W, H) {
   const ARCHO = archPts(680, 120, 420, 540, 700, 3313);
   const OTS_A = { head: [256, 952], k: 1, at: [0, 0] }, OTS_E = { k: 1.36, at: [285 - 256 * 1.36, 795 - 952 * 1.36] };
   const poseOTS = (t, T, which) => { if (which === 'a') { const l = ss(T.lift[0], T.lift[1], t); return { lift: 24 * l, rot: -.05 * l, sway: 10 * Math.sin(Math.PI * clamp((t - T.lift[0]) / 1.4)) * (1 - .4 * l), sh: 4 * l, sink: 0 }; }
-    const f = T.flinch, j = t < f ? 0 : t < f + .2 ? sine((t - f) / .2) : 1 - sine(clamp((t - f - .2) / .6)), sk = ss(T.sink[0], T.sink[1], t); return { lift: 0, rot: .03 * sk, sway: 4 * sk, sh: 14 * j - 8 * sk, sink: 70 * sk, jolt: j }; };
+    const f = T.flinch, j = t < f ? 0 : t < f + .2 ? sine((t - f) / .2) : 1 - sine(clamp((t - f - .2) / .6)), sk = ss(T.sink[0], T.sink[1], t); return { lift: 0, rot: .05 * sk, sway: 6 * sk, sh: 14 * j + 8 * sk, sink: 125 * sk, jolt: j }; };
   function ots(t, T, which) { const A = which === 'a', P = poseOTS(t, T, which), pf = A ? ss(T.rack[0], T.rack[1], t) : 0, drain = ss(T.drain[0], T.drain[1], t), f = fl(t, .4) * (1 - .3 * drain), cam = [540, 960, 1];
     const pBlur = A ? 18 * pf : 5, bgBlur = A ? 14 * (1 - pf) : 9, fBlur = A ? lerp(9, 6, pf) : 7, bg = A ? [540, 960, 1] : [(540 - (760 - 680 * .42)) / .42, (960 - (480 - 560 * .42)) / .42, .42];
-    const walk = fileAt(t, 640, 40, T.s3b - 1.2, 60, 698, 1).slice(2, 7);   // rear guard, …, the bound man, … (150 px tall)
+    const walk = A ? fileAt(t, 640, 40, T.s3b - 1.2, 60, 698, 1).slice(2, 7) : [{ jesus: 1, front: 1, x: 672, y: 698, ph: 0 }];   // S3e/S3g: He stands in the arch, still facing us   // rear guard, …, the bound man, … (150 px tall)
     return { kind: 2, cam, t, L: [{ x: 690, y: 1500, z: 520, I: .38 * f, r: 640, c: [1, .52, .17] }, { x: 680, y: 610, z: 170, I: .14, r: 240, c: [.8, .82, .86] }, { x: 300, y: 100, z: 1300, I: .4, r: 1700, c: [.78, .8, .85] }], amb: .004, haze: .16, shD: 0, vig: .7, bgBlur,
       over(o) { layer(o, g => { archInterior(g, bg, ARCHO, { cx: 680, top: 420, sill: 700, lum: .8, s: 83, tk: 1, figs: walk }); }, { blur: bgBlur });
         layer(o, g => { const q = camBase(bg); g.setTransform(q.k, 0, 0, q.k, q.ox, q.oy); g.fillStyle = '#060606'; g.beginPath(); pathOf(g, ARCHO); g.lineWidth = 10; g.strokeStyle = 'rgba(0,0,0,.6)'; g.stroke(); }, { blur: bgBlur + 1 });
@@ -524,8 +525,8 @@ export async function build(W, H) {
   // body x over time (base px) — He walks, slows over two steps, stands; the front guard takes one more step, pulls, lets go and walks off right; the rear guard steps up, turns, walks off left
   const easeGo = (tau, v, k) => tau <= 0 ? 0 : v * (tau - k * (1 - Math.exp(-tau / k)));
   const jxAt = (t, T) => { const v = 150, d = .8, tau = t - T.stop; return tau < 0 ? 410 + v * tau : tau < d ? 410 + v * (tau - tau * tau / (2 * d)) : 410 + v * d / 2; };
-  const fxAt = (t, T) => jxAt(Math.min(t, T.stop), T) + 118 + 26 * sine(clamp((t - T.stop) / .6)) + easeGo(t - (T.front - .6), 255, .35);   // one short step more: his arm comes straight (the pull)
-  const rxAt = (t, T) => { const base = jxAt(Math.min(t, T.stop), T) - 196, tau = clamp(t - T.stop, 0, .8); return base + 150 * (tau - tau * tau / 1.6) - easeGo(t - (T.front + .35), 255, .35); };
+  const fxAt = (t, T) => jxAt(Math.min(t, T.stop), T) + 118 + 26 * sine(clamp((t - T.stop) / .6)) + easeGo(t - (T.front - .6), 140, .35);   // one short step more: his arm comes straight (the pull)
+  const rxAt = (t, T) => { const base = jxAt(Math.min(t, T.stop), T) - 196, tau = clamp(t - T.stop, 0, .8); return base + 150 * (tau - tau * tau / 1.6) - easeGo(t - (T.front + .35), 140, .35); };
   // footsteps [time of landing, x] alternate feet; a foot lifts .3 s before it lands
   function stepsFor(times, xb, ahead, extra = []) { return [...times.map(tt => [tt, xb(tt) + ahead]), ...extra]; }
   function footAt(St, f, t, sw = .3) { const own = St.filter((_, i) => i % 2 === f); let j = -1; for (let i = 0; i < own.length; i++) if (own[i][0] <= t) j = i; const p = own[Math.max(0, j)], n = own[j + 1];
@@ -533,30 +534,30 @@ export async function build(W, H) {
   function lookSteps(T) { if (lookSteps.c && lookSteps.T === T) return lookSteps.c; const J = t => jxAt(t, T), F = t => fxAt(t, T), R = t => rxAt(t, T);
     const jt = [-1.5, -1, -.5, 0].map(d => T.stop + d), c = {
       J: stepsFor(jt, J, 20, [[T.stop + .45, 470 + 28], [T.stop + .8, 470 - 30]]),
-      F: stepsFor([-1.3, -.8, -.3, .2].map(d => T.stop + d), F, 20, [[T.stop + .65, F(T.stop + .9) - 26], ...[0, .4, .8, 1.2, 1.6, 2.0].map(d => [T.front - .25 + d, F(T.front - .25 + d) + 26])]),
-      R: stepsFor([-1.2, -.7, -.2, .3].map(d => T.stop + d), R, 20, [[T.stop + .75, R(T.stop + .9) + 26], ...[0, .4, .8, 1.2, 1.6].map(d => [T.front + .65 + d, R(T.front + .65 + d) - 26])]) };
+      F: stepsFor([-1.3, -.8, -.3, .2].map(d => T.stop + d), F, 20, [[T.stop + .65, F(T.stop + .9) - 26], ...[0, .5, 1.0, 1.5, 2.0, 2.5].map(d => [T.front - .2 + d, F(T.front - .2 + d) + 22])]),
+      R: stepsFor([-1.2, -.7, -.2, .3].map(d => T.stop + d), R, 20, [[T.stop + .75, R(T.stop + .9) + 26], ...[0, .5, 1.0, 1.5, 2.0].map(d => [T.front + .75 + d, R(T.front + .75 + d) - 22])]) };
     lookSteps.T = T; lookSteps.c = c; return c; }
   // one walker in the walkway: robe (side ↔ square), feet that stay where they land, a head; dir = +1 facing right, −1 facing left
   function feet(g, b, St, t, xb, y, s, side, dir) { for (const f of [0, 1]) { const [fx, lift] = footAt(St, f, t), lx = (fx - xb) / s, ly = lift; const L = lerp(.13, .24, side);
-      g.save(); atf(g, b, xb, y, s, 0, 1, 1.04); limb(g, clamp(lx, -.1, .12) * .5, .34, .05, lx + dir * L * .02, ly + .07, .04); g.translate(lx, ly); g.scale(dir, 1); blob(g, [[-L * .38, 0], [L * .62, 0], [L * .6, .045], [L * .1, .085], [-L * .38, .07]]); g.restore(); } }
+      g.save(); atf(g, b, xb, y, s, 0, 1, 1.04); limb(g, clamp(lx, -.16, .16), .14, .045, lx + dir * L * .02, ly + .07, .04); g.translate(lx, ly); g.scale(dir, 1); blob(g, [[-L * .38, 0], [L * .62, 0], [L * .6, .045], [L * .1, .085], [-L * .38, .07]]); g.restore(); } }
   function poseLook(t, T) { const side = 1 - ss(T.turnSh[0], T.turnSh[1], t), sideL = 1 - ss(T.turnSh[0] + .25, T.turnHd[1] - .3, t), headK = 1 - ss(T.turnHd[0], T.turnHd[1], t), walk = 1 - ss(T.stop - .1, T.halt, t), still = 1 - side;
     const breathe = .006 * still * Math.sin((t - T.front) * TAU / 4), front = ss(T.front, T.front + .6, t) * still;
     const torchK = kf(t, [[T.front, 1], [T.front + 2, .6], [T.s3d, .12], [T.s3e, .07]]);
     const fLook = ss(T.guardLook, T.guardLook + .45, t) * (1 - ss(T.guardLook + .75, T.guardLook + 1.15, t)), grip = 1 - ss(T.guardLook + .2, T.guardLook + .55, t), fLow = ss(T.front - .2, T.front + .6, t);
-    const rTurn = ss(T.front, T.front + .6, t), rLow = ss(T.front + .1, T.front + .7, t);
+    const rTurn = ss(T.front + .1, T.front + .7, t), rLow = ss(T.front - .3, T.front + .2, t);   // he lowers the torch first, then turns
     return { side, sideL, headK, walk, still, breathe, front, torchK, fLook, grip, fLow, rTurn, rLow, jx: jxAt(t, T), fx: fxAt(t, T), rx: rxAt(t, T) }; }
   function lookShot(t, T) { const Q = poseLook(t, T), St = lookSteps(T), z = Math.exp(.02 * Math.max(0, t - T.s3b)), cam = pushCam(470, 900, z), s = LS, Y = FLOOR;
-    const rdir = Q.rTurn < .5 ? 1 : -1, rsd = Math.abs(1 - 2 * Q.rTurn), fH = [lerp(.3, .3, Q.fLow), lerp(1.16, .94, Q.fLow)], fA = lerp(.3, .55, Q.fLow), rH = [lerp(.3, .3, Q.rLow) * rsd + .05 * (1 - rsd), lerp(1.16, .94, Q.rLow)], rA = lerp(.3, .55, Q.rLow) * rsd,
+    const rdir = Q.rTurn < .5 ? 1 : -1, rsd = Math.abs(1 - 2 * Q.rTurn), fH = [lerp(.3, .3, Q.fLow), lerp(1.16, .94, Q.fLow)], fA = lerp(.3, .55, Q.fLow), rH = [.3 * rsd, lerp(1.16, .86, Q.rLow)], rA = lerp(.3, .55, Q.rLow) * rsd,
       fT = torchTipL(fH, fA), rT = torchTipL(rH, rA), ft = Q.fx + fT[0] * s, fty = Y - fT[1] * s * 1.04, rt = Q.rx + rT[0] * s * rdir, rty = Y - rT[1] * s * 1.04;
     const fIn = 1 - ss(980, 1060, Q.fx), rIn = 1 - ss(-60, 100, -Q.rx + 160);
-    const WT = [220 + torchTipL([0, 0], -.32)[0] * LS, 700 - torchTipL([0, 0], -.32)[1] * LS], flames = [];
+    const WT = [220 + torchTipL([0, 0], -.18)[0] * LS, 700 - torchTipL([0, 0], -.18)[1] * LS], flames = [];
     const glow = 1 - .2 * ss(T.turnSh[0] + .6, T.turnSh[0] + 1.1, t) * (1 - ss(T.turnHd[0] + .6, T.turnHd[1], t));   // darkest at the most side-on moment of the turn, as a torch passes between them
     return { kind: 2, cam, t, flames, L: [{ x: WT[0], y: WT[1] - 20, z: 110, I: 1.5 * Q.torchK * fl(t, 3), r: 300, c: [1, .56, .2] }, { x: ft, y: fty, z: 120, I: .55 * fIn, r: 170, c: [1, .54, .18] }, { x: rt, y: rty, z: 120, I: .55 * rIn, r: 170, c: [1, .54, .18] }, { x: 820, y: 360, z: 1250, I: .29 * glow * lerp(1, .95, ss(T.front, T.s3d, t)), r: 1500, c: [.8, .82, .86] }],
       amb: .004, haze: lerp(.3, .42, ss(T.front, T.s3d, t)), shD: 0, vig: .7, hzS: 2.2, hzV: 2.2, det: .1,
       over(o) { const q = camBase(cam);
         // the wall torch's bracket
-        o.save(); o.setTransform(q.k * LS, 0, 0, -q.k * LS, q.k * 220 + q.ox, q.k * 700 + q.oy); o.fillStyle = '#050505'; torchHeld(o, [0, 0], -.32); o.fillRect(-.02, -.06, .09, .03); o.fillRect(-.03, -.1, .03, .1); o.restore();   // the wall torch in an iron ring
-        o.save(); o.setTransform(q.k, 0, 0, q.k, q.ox, q.oy); smallFlame(o, WT[0], WT[1] + 6, 74, .95 * Q.torchK + .1, t, 1.7, -.2); if (fIn > .02) smallFlame(o, ft, fty + 6, 70, .95 * fIn, t, 2.3, -.45); if (rIn > .02) smallFlame(o, rt, rty + 6, 70, .95 * rIn, t, 4.1, -.45 * rdir); o.restore();
+        o.save(); o.setTransform(q.k * LS, 0, 0, -q.k * LS, q.k * 220 + q.ox, q.k * 700 + q.oy); o.fillStyle = '#050505'; o.beginPath(); o.ellipse(.01, -.03, .055, .075, 0, 0, TAU); o.fill(); torchHeld(o, [0, 0], -.18); o.fillRect(-.05, -.012, .1, .026); o.restore();   // the wall torch: an iron plate on the wall, an arm and a ring round the shaft
+        o.save(); o.setTransform(q.k, 0, 0, q.k, q.ox, q.oy); smallFlame(o, WT[0], WT[1] + 8, 96, .95 * Q.torchK + .14, t, 1.7, -.2); if (fIn > .02) smallFlame(o, ft, fty + 6, 70, .95 * fIn * (1 - .45 * Q.fLow), t, 2.3, -.45); if (rIn > .02) smallFlame(o, rt, rty + 6, 70, .95 * rIn * (1 - .45 * Q.rLow), t, 4.1, -.45 * rdir); o.restore();
         torchSmoke(o, cam, WT[0], WT[1] - 30, t, Q.torchK, .3, 1.2, -.4); torchSmoke(o, cam, ft, fty - 30, t, fIn * (1 - .5 * Q.fLow), .6, 1.1, 1); torchSmoke(o, cam, rt, rty - 30, t, rIn * (1 - .5 * Q.rLow), .1, 1.1, rdir);
         // guards: side-on, torches in the outer hand; the front guard's rear hand on His upper arm until he lets go
         mass(o, cam, (g, b) => {
@@ -571,6 +572,7 @@ export async function build(W, H) {
             g.setTransform(1, 0, 0, 1, 0, 0); feet(g, b, St.R, t, x, y, s, sd, dir); } }, { blur: 1, fill: '#050505', rim: { c: 'rgb(255,150,76)', dx: 2, dy: 1.6, a: .4 } });
         // Him: robe falling closed, no hands showing; a cold edge on one shoulder (none on the head), the yard's firelight on the chest once He is square to us (head 0, below the waist 0)
         drawHim(o, cam, Q, t, St);
+        { const dk = ss(T.s3c, T.s3d + 1.0, t); if (dk > .001) { const cx = q.k * Q.jx + q.ox, cy = q.k * (FLOOR - 90) + q.oy, gD = o.createRadialGradient(cx, cy, 170 * q.k, cx, cy, 640 * q.k); gD.addColorStop(0, 'rgba(0,0,0,0)'); gD.addColorStop(.55, 'rgba(0,0,0,.32)'); gD.addColorStop(1, 'rgba(0,0,0,.82)'); o.save(); o.setTransform(1, 0, 0, 1, 0, 0); o.globalAlpha = dk; o.fillStyle = gD; o.fillRect(0, 0, VW, VH); o.restore(); } }   // S3d: dark round Him; the clear part is low, at His body, never a ring at His head
         // the walkway's front edge, and the black wall below it
         mass(o, cam, (g, b) => { g.setTransform(b.k, 0, 0, b.k, b.ox, b.oy); g.beginPath(); g.moveTo(-400, FLOOR + 2); for (let x = -400; x <= 1500; x += 40) g.lineTo(x, FLOOR + 2 + 2 * Math.sin(x * .05) + 1.4 * Math.sin(x * .17)); g.lineTo(1500, 2400); g.lineTo(-400, 2400); g.closePath(); g.fill(); }, { fill: '#060606', rim: { c: 'rgb(150,146,140)', dx: 0, dy: 2.2, a: .28 * Q.torchK + .1 } });
         // the arch, near and soft
@@ -586,16 +588,17 @@ export async function build(W, H) {
     const gr = tb.createRadialGradient(sx, shY + 6, 4, sx, shY + 6, 42 * b.k); gr.addColorStop(0, 'rgba(154,160,166,1)'); gr.addColorStop(1, 'rgba(154,160,166,0)'); tb.fillStyle = gr; tb.fillRect(0, 0, VW, VH);
     tb.globalCompositeOperation = 'destination-out'; tb.drawImage(tA, -1.8, 1.6); tb.fillStyle = '#000'; tb.fillRect(0, 0, VW, neckY + 4); tb.globalCompositeOperation = 'source-over';
     o.save(); o.setTransform(1, 0, 0, 1, 0, 0); o.globalCompositeOperation = 'lighter'; o.filter = 'blur(1.1px)'; o.globalAlpha = .5; o.drawImage(tB, 0, 0); o.restore();
-    // the firelight of the yard (Peter's side) on the front of the robe: shoulders, chest, the tops of the sleeves only
-    if (Q.front > .002) { tb.globalCompositeOperation = 'source-over'; tb.clearRect(0, 0, VW, VH); tb.drawImage(tA, 0, 0); tb.globalCompositeOperation = 'source-in';
-      const cx2 = b.k * x + b.ox, cy2 = b.k * (y - 1.25 * s * 1.04) + b.oy, g2 = tb.createRadialGradient(cx2, cy2, 0, cx2, cy2, .34 * s * b.k); g2.addColorStop(0, 'rgba(255,138,42,1)'); g2.addColorStop(.6, 'rgba(255,138,42,.55)'); g2.addColorStop(1, 'rgba(255,138,42,0)'); tb.fillStyle = g2; tb.fillRect(0, 0, VW, VH);
-      tb.globalCompositeOperation = 'destination-out'; tb.fillStyle = '#000'; tb.fillRect(0, 0, VW, neckY + 2); tb.fillRect(0, waistY, VW, VH); tb.globalCompositeOperation = 'source-over';
-      o.save(); o.setTransform(1, 0, 0, 1, 0, 0); o.globalCompositeOperation = 'lighter'; o.filter = 'blur(4px)'; o.globalAlpha = .13 * Q.front; o.drawImage(tB, 0, 0); o.restore(); } }
+    // the firelight of the yard (Peter's side): a thin rim only — along the top line of the shoulders and the outer edge of each sleeve; never the torso, the head, or below the waist
+    if (Q.front > .002) { const cx2 = b.k * x + b.ox, Yp = h => b.k * (y - h * s * 1.04) + b.oy, edge = (dx, dy, x0, y0, x1, y1) => { tb.globalCompositeOperation = 'source-over'; tb.clearRect(0, 0, VW, VH); tb.drawImage(tA, 0, 0); tb.globalCompositeOperation = 'destination-out'; tb.drawImage(tA, dx, dy);
+        tb.globalCompositeOperation = 'destination-in'; tb.fillStyle = '#fff'; tb.fillRect(x0, y0, x1 - x0, y1 - y0); tb.globalCompositeOperation = 'source-in'; tb.fillStyle = 'rgb(255,138,42)'; tb.fillRect(0, 0, VW, VH); tb.globalCompositeOperation = 'source-over';
+        o.save(); o.setTransform(1, 0, 0, 1, 0, 0); o.globalCompositeOperation = 'lighter'; o.filter = 'blur(.7px)'; o.globalAlpha = .3 * Q.front; o.drawImage(tB, 0, 0); o.restore(); }, hw = .13 * s * b.k;
+      edge(0, 2.6, cx2 - VW, Yp(1.47), cx2 - hw, Yp(1.3)); edge(0, 2.6, cx2 + hw, Yp(1.47), cx2 + VW, Yp(1.3));   // shoulder line, left and right of the neck
+      edge(2.6, 0, 0, Yp(1.36), cx2 - .22 * s * b.k, Yp(1.0)); edge(-2.6, 0, cx2 + .22 * s * b.k, Yp(1.36), VW, Yp(1.0)); } }   // the sleeves' outer edges, down to the wrists
 
   // ================================================================ S3c: what He sees — the yard from the cloister, 35° down (reverse shot)
-  const RV = { th: 35 * Math.PI / 180, f: 2600, h: 5, S: 160, Z0: 5, Y0: 1500 };
+  const RV = { th: 50 * Math.PI / 180, f: 2600, h: 5, S: 160, Z0: 3.5, Y0: 1500 };
   const projR = (X, Yw, Z) => { const c = Math.cos(RV.th), sn = Math.sin(RV.th), zc = -(Yw - RV.h) * sn + Z * c, yu = (Yw - RV.h) * c + Z * sn; return [540 + RV.f * X / zc, 960 - RV.f * yu / zc, RV.f / zc]; };
-  const FIRE_R = [0, 5.99];
+  const FIRE_R = [0, 3.52];
   const RING = Array.from({ length: 7 }, (_, i) => { const a = [0, 47, -54, 97, -106, 152, -147][i] * Math.PI / 180, r = 1.3 + [0, .1, -.06, .05, .12, -.04, .08][i]; return { peter: i === 0, X: FIRE_R[0] + Math.sin(a) * r, Z: FIRE_R[1] + Math.cos(a) * r, bow: [0, .9, 1, .8, .95, 1, .85][i], sz: [1, 1.03, .96, 1.05, .98, 1.02, .99][i], br: [1.08, 1.0, 1.14, .92, 1.06, 1.12, .97][i], ht: [1, .97, 1.04, .95, 1.0, 1.03, .98][i], el: [.4, 1, .2, .8, .6, 1, .3][i], knot: [1, -1, 1, 1, -1, -1, 1][i], tilt: [0, .05, -.04, .07, -.06, .03, -.05][i] }; });
   // a seated man seen from above: the hull of his cloak (footprint, knees toward the fire, shoulders) and a round head — bowed toward the fire, or (Peter) lifted
   // a seated man seen from above and behind (or across the fire): broad sloping shoulders, the cloak spread over folded legs, elbows out on the knees, a tied head cloth whose end falls to one shoulder;
@@ -622,8 +625,8 @@ export async function build(W, H) {
     return lo.slice(0, -1).concat(up.slice(0, -1)); }
   function rev(t, T) { const P0 = projR(0, 1.16, FIRE_R[1] + 1.3), z = Math.exp(.048 * Math.max(0, t - T.s3c)), cam = pushCam(P0[0], P0[1], z), f = fl(t, .4), FP = projR(0, 0, FIRE_R[1]), breath = .006 * Math.sin((t - T.s3c) * TAU / 3.2);
     const fyP = RV.Y0 - (FIRE_R[1] - RV.Z0) * RV.S;
-    return { kind: 4, cam, t, persp: [RV.th, RV.f, RV.h, RV.S], pz: [RV.Z0, RV.Y0], flames: [[FP[0], FP[1] + 30, 220, 110, 1.3, .9, 1], [FP[0] - 30, FP[1] + 8, 70, 46, 2.1, .35 * f, 2], [FP[0] + 26, FP[1] + 4, 80, 54, 5.3, .4 * f, 2]],
-      L: [{ x: 540, y: fyP, z: 58, I: 2.5 * f, r: 300, c: [1, .5, .15] }, { x: 540, y: fyP, z: 30, I: .5 * f, r: 90, c: [1, .4, .08] }, { x: 700, y: 200, z: 900, I: .09, r: 1600, c: [.78, .8, .85] }], amb: .004, haze: .08, shD: 0, vig: .6, hzS: 2, hzV: 2,
+    return { kind: 4, cam, t, persp: [RV.th, RV.f, RV.h, RV.S], pz: [RV.Z0, RV.Y0], flames: [[FP[0], FP[1] + 44, 250, 120, 1.3, .7, 1]],
+      L: [{ x: 540, y: fyP, z: 58, I: .75 * f, r: 210, c: [1, .5, .15] }, { x: 540, y: fyP, z: 30, I: .5 * f, r: 90, c: [1, .4, .08] }, { x: 700, y: 200, z: 900, I: .09, r: 1600, c: [.78, .8, .85] }], amb: .004, haze: .08, shD: 0, vig: .6, hzS: 2, hzV: 2,
       over(o) { const order = [...RING].sort((a, b) => b.Z - a.Z);
         { const q = camBase(cam); o.save(); o.setTransform(1, 0, 0, 1, 0, 0); o.filter = 'blur(18px)'; o.fillStyle = 'rgba(4,3,2,.62)'; for (const m of RING) { const dx = m.X - FIRE_R[0], dz = m.Z - FIRE_R[1], d = Math.hypot(dx, dz), A = projR(m.X + dx / d * .15, 0, m.Z + dz / d * .15), B2 = projR(m.X + dx / d * 1.2, 0, m.Z + dz / d * 1.2), cx = q.k * (A[0] + B2[0]) / 2 + q.ox, cy = q.k * (A[1] + B2[1]) / 2 + q.oy, L = q.k * Math.hypot(B2[0] - A[0], B2[1] - A[1]) / 2 + 20, an = Math.atan2(B2[1] - A[1], B2[0] - A[0]); o.beginPath(); o.ellipse(cx, cy, L, .26 * A[2] * q.k, an, 0, TAU); o.fill(); } o.restore(); }   // their shadows on the stones, away from the fire
         mass(o, cam, (g, b) => cloakRing(g, b), { fill: '#090605', blur: 2.2, rim: { c: 'rgb(255,138,42)', dx: 0, dy: 3, a: .35 } });   // the cloaks and folded legs on the stones, one dark ring
@@ -633,7 +636,8 @@ export async function build(W, H) {
           mass(o, cam, (g, b) => { info = seated(g, m, m.peter ? breath : 0, b); }, { fill, blur: bl, rim: { c: 'rgb(255,138,42)', dx: -fd[0] * 3, dy: -fd[1] * 3, a: m.peter ? .55 : .8 } });
           // Peter, the one head raised: a thin warm edge along the top of his head cloth and shoulders, from the fire below him — no face drawn
           if (m.peter) mass(o, cam, (g, b) => { seated(g, m, breath, b); }, { fill, blur: bl, rim: { c: 'rgb(255,150,64)', dx: 0, dy: 2.4, a: .7, blur: 1.3 } }); }
-        embers(o, cam, FP[0], FP[1] - 10, .55, t); halo(o, cam, FP[0], FP[1], 240, '255,122,34', .2 * f);
+        embers(o, cam, FP[0], FP[1] - 10, .55, t); halo(o, cam, FP[0], FP[1] - 10, 90, '255,122,34', .08 * f);
+        { const q = camBase(cam); o.save(); o.setTransform(q.k, 0, 0, q.k, q.ox, q.oy); for (const [dx, dy, h, sd] of [[-40, 6, 62, .3], [-6, -2, 84, 1.1], [34, 6, 58, 2.3]]) smallFlame(o, FP[0] + dx, FP[1] + 22 + dy, h, .3 * f, t, sd, -.08 + .05 * Math.sin(sd)); /* few and soft, so the tongues stay orange over the coals */ o.restore(); }   // tongues of flame over the coals
         // smoke going up toward us, a few slow veils
         o.save(); o.setTransform(1, 0, 0, 1, 0, 0); o.filter = 'blur(26px)'; for (let i = 0; i < 3; i++) { const ph = ((t - T.s3c) * .18 + i / 3) % 1, X = camBase(cam).k * (FP[0] + (i - 1) * 60 + 40 * ph) + camBase(cam).ox, Yy = camBase(cam).k * (FP[1] - 80 - ph * 520) + camBase(cam).oy; o.fillStyle = `rgba(120,116,110,${.07 * Math.sin(Math.PI * ph)})`; o.beginPath(); o.ellipse(X, Yy, 90 + 120 * ph, 60 + 70 * ph, 0, 0, TAU); o.fill(); } o.restore();
         // the cloister's stone edge across the top: near, out of focus — we stand where He stands
@@ -662,26 +666,26 @@ export async function build(W, H) {
   function sobOf(x, T) { let up = 0, down = 0; for (const [a, amp, ci, co] of T.sobs) { const q = x - a; if (q <= 0 || q > ci + co + 1.6) continue; const m = amp / 300;
       if (q < ci) up += m * sine(q / ci); else if (q < ci + co) { const k = sine((q - ci) / co); up += m * (1 - k); down += m * .9 * k; } else { const k = sine((q - ci - co) / 1.6); down += m * .9 * (1 - k); } } return { up, down }; }
   function poseAlley(t, T) { const x = t - T.s5, dp = ss(T.deeper[0], T.deeper[1], t), sb = sobOf(t, T), bk = t > T.slow ? lerp(3, 2, clamp((t - T.slow) / 3)) / 300 * Math.sin((t - T.slow) * TAU / 2.4) : 0;
-    const psi = hermite([[0, .12], [.3, .22], [.6, .35], [1.5, .9], [2.4, 1.2], [3, 1.2]], x), f = [-Math.sin(psi), 0, Math.cos(psi)], left = [-Math.cos(psi), 0, -Math.sin(psi)], up = [0, 1, 0];
-    let P = H3([[0, [-.36, .85, 5.2]], [.3, [-.48, .84, 5.45]], [.6, [-.68, .84, 5.72]], [.8, [-.68, .82, 5.76]], [1.5, [-.76, .66, 5.92]], [2.4, [-.8, .53, 6.05]], [3, [-.8, .53, 6.05]]], x);
+    const psi = 1.2, f = [-Math.sin(psi), 0, Math.cos(psi)], left = [-Math.cos(psi), 0, -Math.sin(psi)], up = [0, 1, 0];
+    let P = H3([[0, [-.79, .68, 6.03]], [1.4, [-.8, .53, 6.05]], [3, [-.8, .53, 6.05]]], x);
     P = V.lerp(P, [-.52, .38, 5.95], dp);
-    let D = V.nrm(H3([[0, [-.1, .95, .3]], [.3, [-.2, .94, .26]], [.6, [-.38, .92, .1]], [.8, [-.3, .94, .14]], [1.5, [-.18, .97, .12]], [2.4, [-.06, .99, .1]], [3, [-.06, .99, .1]]], x));
+    let D = V.nrm(H3([[0, [-.26, .95, .12]], [1.4, [-.17, .97, .1]], [3, [-.17, .97, .1]]], x));   // leaning into the wall
     const Dn = V.nrm(V.lerp(D, V.nrm([-.6, .78, .1]), dp)); D = V.nrm(V.add(Dn, V.mul(f, .5 * sb.down)));
     const N = V.add(V.add(P, V.mul(D, .52)), [0, sb.up - sb.down * .3 + bk, 0]);
-    const hb = H3([[0, [1, .25, 0]], [.6, [.85, .3, .1]], [2.4, [.55, .8, 0]], [3, [.55, .8, 0]]], x), hb2 = V.lerp(hb, [.35, .9, 0], dp), Bd = V.nrm(V.add(V.add(V.mul(D, hb2[0]), V.mul(f, hb2[1] + .25 * sb.down / .06)), V.mul(left, hb2[2])));
+    const hb = H3([[0, [.5, .85, 0]], [1.4, [.45, .9, 0]], [3, [.45, .9, 0]]], x), hb2 = V.lerp(hb, [.35, .95, 0], dp), Bd = V.nrm(V.add(V.add(V.mul(D, hb2[0]), V.mul(f, hb2[1] + .25 * sb.down / .06)), V.mul(left, hb2[2])));
     const C = V.add(N, V.mul(Bd, .15)), Bd0 = V.nrm(V.add(V.add(V.mul(Dn, hb2[0]), V.mul(f, hb2[1])), V.mul(left, hb2[2]))), C0 = V.add(V.add(P, V.mul(Dn, .52)), V.mul(Bd0, .15));   // C0: the head without the sobs (the hand follows it, not the sobs)
     const SL = V.add(V.add(N, V.mul(left, .19)), V.mul(D, -.05)), SR = V.add(V.add(N, V.mul(left, -.19)), V.mul(D, -.05));
     // left hand: hangs, then goes up onto the wall and stays there (planted)
-    const w = ss(.9, 2.1, x), hang = V.add(SL, [-.02, -.5, .1]), WW = [AWX, C0[1] + .045, C0[2] + .17], WL = V.lerp(hang, WW, w), ik0 = ik3(SL, WL, .3, .28, V.nrm(V.add(V.mul(f, -1), V.mul(left, .4)))), Ew = elbowOnWall(SL, WL, .3, .28),
+    const w = 1, hang = SL, WW = [AWX, C0[1] + .15, C0[2] + .12], WL = V.lerp(hang, WW, w), ik0 = ik3(SL, WL, .3, .28, V.nrm(V.add(V.mul(f, -1), V.mul(left, .4)))), Ew = elbowOnWall(SL, WL, .3, .28),
       armL = { E: V.lerp(ik0.E, Ew, w), W: WL };   // the forearm lies flat on the wall from the moment the hand is there; with the forehead it slides down the wall as he sinks (owner, 2026-11-24)
     const WR = V.add(V.add(P, V.mul(f, .2)), V.add(V.mul(up, .26), V.mul(left, .02))), armR = ik3(SR, WR, .3, .28, V.nrm(V.add(V.mul(f, -.6), V.add(V.mul(left, -.5), [0, -.3, 0]))));
     // feet: toes planted where they land; from the hit the heels come up and the toes stay (kneeling on curled toes)
     const toe = (TT, t0, t1, tl) => x < t0 ? TT[0] : x < t1 ? (() => { const u = (x - t0) / (t1 - t0), k = sine(u); const p = V.lerp(TT[0], TT[1], k); p[1] = Math.pow(Math.sin(Math.PI * u), 2) * .05; return p; })() : TT[1];
-    const tL = toe(TOE_L, -.04, .32), tR = toe(TOE_R, .26, .6), piv = ss(.7, 2.2, x), ffL = V.nrm(V.lerp(V.nrm(V.sub(TOE_L[1], TOE_L[0])), f, piv)), ffR = V.nrm(V.lerp(V.nrm(V.sub(TOE_R[1], TOE_R[0])), f, piv));
-    const phi = 1.4 * ss(.9, 2.2, x), ank = (tp, ff, sw) => { const b = .18 * Math.cos(phi) - .08 * Math.sin(phi), u = .18 * Math.sin(phi) + .08 * Math.cos(phi) + sw; return V.add(tp, [-ff[0] * b, u, -ff[2] * b]); };
+    const tL = TOE_L[1], tR = TOE_R[1], piv = 1, ffL = V.nrm(V.lerp(V.nrm(V.sub(TOE_L[1], TOE_L[0])), f, piv)), ffR = V.nrm(V.lerp(V.nrm(V.sub(TOE_R[1], TOE_R[0])), f, piv));
+    const phi = lerp(1.05, 1.4, ss(0, 1.4, x)), ank = (tp, ff, sw) => { const b = .18 * Math.cos(phi) - .08 * Math.sin(phi), u = .18 * Math.sin(phi) + .08 * Math.cos(phi) + sw; return V.add(tp, [-ff[0] * b, u, -ff[2] * b]); };
     const aL = ank(tL, ffL, tL[1]), aR = ank(tR, ffR, tR[1]), HL = V.add(P, V.mul(left, .1)), HR = V.add(P, V.mul(left, -.1));
     const legL = ik3(HL, aL, .46, .43, V.nrm(V.add(ffL, [0, .15, 0]))), legR = ik3(HR, aR, .46, .43, V.nrm(V.add(ffR, [0, .15, 0])));
-    const kneel = ss(.7, 2.3, x);
+    const kneel = lerp(.72, 1, ss(0, 1.2, x));
     return { x, f, left, up, P, D, N, C, Bd, SL, SR, WL, armL, WR, armR, tL, tR, aL, aR, ffL, ffR, HL, HR, legL, legR, kneel, phi, dp }; }
   function drawPeterAlley(g, Q) { const p = projA, cap = (A, B, ra, rb) => { const a = p(A), b = p(B); limb(g, a[0], a[1], ra * a[2], b[0], b[1], rb * b[2]); }, ball = (A, r) => { const a = p(A); g.beginPath(); g.arc(a[0], a[1], r * a[2], 0, TAU); g.fill(); };
     const pts = [], add = A => { const a = p(A); pts.push([a[0], a[1]]); }, ring = (c, r, n = 10, ax1 = Q.left, ax2 = Q.f) => { for (let i = 0; i < n; i++) { const a = i / n * TAU; add(V.add(c, V.add(V.mul(ax1, Math.cos(a) * r), V.mul(ax2, Math.sin(a) * r * .8)))); } };
@@ -736,8 +740,8 @@ export async function build(W, H) {
 
   // ---------------------------------------------------------------- shots, dissolves, colour, finish
   const SHOT = { r1, r2a, r2b, r2e, r3, r4, ots1: (t, T) => ots(t, T, 'a'), look: lookShot, rev, look2: lookShot, ots2: (t, T) => ots(t, T, 'e'), mem, ots3: (t, T) => ots(t, T, 'e'), gone: (t, T) => r3(t, T, true), alley };
-  const plan = T => [['r1', T.start, T.N142, .55], ['r2a', T.N142, T.N143, 0], ['r2b', T.N143, T.wall, .5], ['r2e', T.wall, T.N146, .7], ['r3', T.N146, T.N149, 0], ['r4', T.N149, T.s2, .5],
-    ['ots1', T.s2, T.s3b, 0], ['look', T.s3b, T.s3c, 0], ['rev', T.s3c, T.s3d, 0], ['look2', T.s3d, T.s3e, 0], ['ots2', T.s3e, T.s3f, .35], ['mem', T.s3f, T.s3g, 0], ['ots3', T.s3g, T.Q115, 0], ['gone', T.Q115, T.s5, 0], ['alley', T.s5, T.end, 0]];
+  const plan = T => [['r1', T.start, T.N142, 0], ['r2a', T.N142, T.N143, 0], ['r2b', T.N143, T.wall, 0], ['r2e', T.wall, T.N146, 0], ['r3', T.N146, T.N149, 0], ['r4', T.N149, T.s2, 0],
+    ['ots1', T.s2, T.s3b, 0], ['look', T.s3b, T.s3e, 0], ['ots2', T.s3e, T.s3f, .35], ['mem', T.s3f, T.s3g, 0], ['ots3', T.s3g, T.Q115, 0], ['gone', T.Q115, T.s5, 0], ['alley', T.s5, T.end, 0]];
   const offA = mk(VW, VH), oa = offA.getContext('2d'), offB = mk(VW, VH), ob = offB.getContext('2d'), offC = mk(VW, VH), oc = offC.getContext('2d');
   const GK = { r1: 1.92, r2a: 3.5, r2b: 1.34, r2e: 1.62, r3: 2.15, r4: 1.6, ots1: 3.2, look: 2.5, rev: 3.0, look2: 2.5, ots2: 3.2, mem: 1.92, ots3: 3.2, gone: 2.15, alley: 1 };   // the shot's exposure
   function shoot(id, t, T, o) { const sp = SHOT[id](t, T); sp.gain = (sp.gain ?? 1) * GK[id]; if (sp.alley) alleyFrame(sp); else glFrame(sp);
@@ -765,7 +769,7 @@ export async function build(W, H) {
     for (let t = T.s5; t < T.end; t += dt) { const Q = poseAlley(t, T), a = { elbowL: ang3(Q.SL, Q.armL.E, Q.armL.W), elbowR: ang3(Q.SR, Q.armR.E, Q.armR.W), kneeL: ang3(Q.HL, Q.legL.E, Q.legL.W), kneeR: ang3(Q.HR, Q.legR.E, Q.legR.W) };
       if (prevA) { for (const k in a) { const d = Math.abs(a[k] - prevA.a[k]); J[k] = Math.max(J[k] || 0, d); if (d > mx.v) mx = { v: d, t: +t.toFixed(2), who: k }; }
         if (t - T.s5 > 2.15 && (t < T.deeper[0] - .05 || t > T.deeper[1] + .05)) slip.wrist = Math.max(slip.wrist, V.len(V.sub(Q.armL.W, prevA.Q.armL.W))); if (t - T.s5 > 2.15) { slip.forearmOffWall = Math.max(slip.forearmOffWall || 0, Math.abs(Q.armL.E[0] - AWX), Math.abs(Q.armL.W[0] - AWX)); }
-        if (t - T.s5 > .335) slip.toeL = Math.max(slip.toeL, V.len(V.sub(Q.tL, prevA.Q.tL))); if (t - T.s5 > .61) slip.toeR = Math.max(slip.toeR, V.len(V.sub(Q.tR, prevA.Q.tR))); }
+        slip.toeL = Math.max(slip.toeL, V.len(V.sub(Q.tL, prevA.Q.tL))); if (t - T.s5 > 0) slip.toeR = Math.max(slip.toeR, V.len(V.sub(Q.tR, prevA.Q.tR))); }
       prevA = { a, Q }; }
     const lims = { arm: .58, leg: .89 }, reach = { wristOnWallX: +Math.abs(poseAlley(T.end - .01, T).armL.W[0] - AWX).toFixed(4) };
     return { rows, maxJoint: { rad: +mx.v.toFixed(3), deg: +(mx.v * 180 / Math.PI).toFixed(1), t: mx.t, who: mx.who, per: Object.fromEntries(Object.entries(J).map(([k, v]) => [k, +(v * 180 / Math.PI).toFixed(2)])) },

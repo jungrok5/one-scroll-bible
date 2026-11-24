@@ -156,12 +156,12 @@ export async function build(W, H) {
     const land = new THREE.Mesh(g, groundM); land.receiveShadow = true; land.frustumCulled = false; land.layers.set(1); G.land.add(land); }
 
   // ---------------------------------------------------------------- the lake (galilee3d.js water: the engine's mirror, small waves)
-  const waterU = { uT: { value: 0 }, uRefl: { value: 1 }, uSpec: { value: 1 }, uDist: { value: 1 } };
+  const waterU = { uT: { value: 0 }, uRefl: { value: 1 }, uSpec: { value: 1 }, uDist: { value: 1 }, uSoft: { value: .45 } };
   const waterM = new THREE.MeshStandardMaterial({ color: '#2c3c42', roughness: .22, metalness: 0 });
   waterM.onBeforeCompile = sh => { Object.assign(sh.uniforms, mirU, waterU);
     sh.vertexShader = sh.vertexShader.replace('#include <common>', '#include <common>\nvarying vec3 vWW;').replace('#include <project_vertex>', '#include <project_vertex>\nvWW = (modelMatrix * vec4(transformed, 1.)).xyz;');
     sh.fragmentShader = sh.fragmentShader.replace('#include <common>', `#include <common>
-        varying vec3 vWW; uniform sampler2D tMirror, tMirrorBlur; uniform mat4 mirrorMatrix; uniform float uT, uRefl, uSpec, uDist; vec2 wG;
+        varying vec3 vWW; uniform sampler2D tMirror, tMirrorBlur; uniform mat4 mirrorMatrix; uniform float uT, uRefl, uSpec, uDist, uSoft; vec2 wG;
         ${hashGLSL}
         vec2 waveG(vec2 p, float t, float det){ vec2 g = vec2(0.);
           vec4 W[5]; W[0] = vec4(normalize(vec2(1., .3)), .09, .55); W[1] = vec4(normalize(vec2(.6, -1.)), .13, .8); W[2] = vec4(normalize(vec2(-1., .45)), .21, 1.1); W[3] = vec4(normalize(vec2(.2, 1.)), .37, 1.6); W[4] = vec4(normalize(vec2(-.7, -.6)), .6, 2.2);
@@ -182,7 +182,7 @@ export async function build(W, H) {
           vec3 sharpR = texture2D(tMirror, muv + dd).rgb, blurR = texture2D(tMirrorBlur, muv + dd * 1.6).rgb;
           vec3 Vd = normalize(cameraPosition - vWW); float cosT = clamp(dot(Vd, normalize(vec3(-wG.x, 1., -wG.y))), 0., 1.);
           float fres = .02 + .98 * pow(1. - cosT, 5.);
-          vec3 R = mix(sharpR, blurR, .45);
+          vec3 R = mix(sharpR, blurR, uSoft);
           outgoingLight = outgoingLight * (1. - fres * .85 * uRefl) + R * mix(.12, 1., fres) * vec3(.96, .97, 1.) * uRefl; }
         #include <opaque_fragment>`); };
   waterM.customProgramCacheKey = () => 'lp-water';
@@ -554,7 +554,7 @@ export async function build(W, H) {
     tunicM.color.copy(TUNIC).multiplyScalar(.06); clothM.color.copy(CLOTH).multiplyScalar(.16); legM.color.copy(LEGC).multiplyScalar(.1); M.hull.color.copy(HULLC).multiplyScalar(.3); RU.uRimC.value.setRGB(.06, .04, .025);
     AN.visible = false; JS.visible = false; PT.visible = true; PT.position.set(-.3, DECK, .5); PT.rotation.y = Math.atan2(-.68, -1.22); const up = ss(Tm.Q102 + .5, Tm.Q102 + 2.7, t), q = kneelPose(0, .735 * (1 - up), t); q.head = [lerp(.68, -.14, up), .05 * up]; q.hands[0].lerp(V(-.25, .42, -.3), up); q.hands[1].lerp(V(.25, .42, -.3), up); q.handsW = [1, 1]; P.pose(PT, q);
     for (const q2 of crowd) lifeStand(q2, t); palette(.9); film.look.exposure = .74; setSunE(7.5); mistU.uK.value = .4; shadowAt(pos.clone().addScaledVector(EAST, -30), 44);
-    const c = pos.clone().addScaledVector(EAST, 19.5 - 1.6 * k).addScaledVector(RIGHT, lerp(-2.2, -2.6, k)); c.y = lerp(1.15, 1.3, k); const l = Lc(lerp(4.4, 4.0, k), 12, lerp(1.62, 1.72, k)); setCam(c, l, 30); film.dofCfg.focus = 17; film.dofCfg.aperture = .32; }
+    const c = pos.clone().addScaledVector(EAST, 19.5 - 1.6 * k).addScaledVector(RIGHT, lerp(-2.2, -2.6, k)); c.y = lerp(1.15, 1.3, k); const l = Lc(lerp(4.4, 4.0, k), 12, lerp(1.62, 1.72, k)); setCam(c, l, 30); waterU.uDist.value = .22; waterU.uSoft.value = 1; /* the half-res mirror's tree and figure edges crawl under a long lens, so these two shots read the blurred mirror only; */ /* 관리자 2026-11-24 "바다에 비친 부분이 좌우로 덜덜": a long lens magnifies the screen-space ripple of the mirror (galilee3d.js boat shot uses the same damping) */ film.dofCfg.focus = 17; film.dofCfg.aperture = .32; }
   // ----- a8: the beach, the boats drawn up, the torn net; small figures walk away up the road
   function follow(t, Tm) { show('land', 'drawn', 'walkers'); hideBoatProps(); wl1.visible = false; const k = key(Tm.N108 - .45, Tm.C10, t);
     const pace = 1.18, du = .926, dv = -.378;   // the path: from the boats up the beach to the road, away from the lens
@@ -564,7 +564,7 @@ export async function build(W, H) {
   // ----- b3: from the boat toward the shore in the mist: someone stands there; a speck of fire beside him
   function far(t, Tm) { show('land', 'shore', 'fire'); hideBoatProps(); seatJ.visible = seatP.visible = false; const k = key(Tm.N162 - .45, Tm.N163 + .45, t); PT2.visible = false; JS2.visible = true; spray.visible = false; const jp = Lc(5.6, -.9); JS2.position.set(jp.x, gy(5.6, -.9), jp.z); JS2.rotation.y = yawTo(EAST); P.pose(JS2, { ...P.idle(t, .3, { s: JS2.userData.s }) });
     kingM.color.copy(KGM).multiplyScalar(.2); kingC.color.copy(KGC).multiplyScalar(.2); setFire(t, .3, 0); palette(.16); film.look.exposure = 1.0; film.atmos.density *= 1.5; setSunE(.5); mistU.uK.value = 1; shadowAt(Lc(0, 0), 40);
-    const c = Lc(.4 + .35 * k, 96 - 1.4 * k, 1.45 + .05 * k), l = Lc(4.2, -.4, 2.1); setCam(c, l, lerp(23, 18.5, k)); film.dofCfg.focus = 96; film.dofCfg.aperture = .1; }
+    const c = Lc(.4 + .35 * k, 96 - 1.4 * k, 1.45 + .05 * k), l = Lc(4.2, -.4, 2.1); setCam(c, l, lerp(23, 18.5, k)); waterU.uDist.value = .14; waterU.uSoft.value = 1; /* the longest lens of the block: same fix as a7 */ film.dofCfg.focus = 96; film.dofCfg.aperture = .1; }
   // ----- b5: he wraps his cloak, jumps, wades ashore
   function run(t, Tm) { show('land', 'boat', 'shore'); hideBoatProps(); seatJ.visible = seatP.visible = false; const t0 = Tm.N164, pos = Lc(2.5, 15.4), yaw = Math.atan2(RIGHT.x, RIGHT.z); placeBoat(pos, yaw, t); const sd = side(); PT.visible = false; JS.visible = false; AN.visible = true; AN.position.set(sd * .2, DECK, 1.4); faceW(AN, RIGHT.clone().multiplyScalar(-1)); P.pose(AN, { breath: P.breath(t, .6), hands: seatH(AN.userData.s), lean: -.2 });
     PT2.visible = true; JS2.visible = false; spray.visible = true;
@@ -719,7 +719,7 @@ export async function build(W, H) {
     b2: (t, T) => netHaul(t, ss(T.N161 + .05, T.N162 - .15, t), t - T.N161 + .45, true),
     b3: (t, T) => far(t, T), uwB: (t, T) => under(t, T, 'B'), hB: (t, T) => netStrain(t, T, 'B'), b5: (t, T) => run(t, T), b6: (t, T) => fireShot(t, T), cy: (t, T) => courtShot(t, T), b7: (t, T) => dialog(t, T), b8: (t, T) => ending(t, T),
   };
-  function render(name, t, T) { STAGE[name](t, T); waterU.uT.value = t; wakeU.uT.value = t; mistU.uT.value = t; ringU.uT.value = t; netU.uT.value = t; fishU.uT.value = t;
+  function render(name, t, T) { waterU.uDist.value = 1; waterU.uSoft.value = .45; STAGE[name](t, T); waterU.uT.value = t; wakeU.uT.value = t; mistU.uT.value = t; ringU.uT.value = t; netU.uT.value = t; fishU.uT.value = t;
     cam.updateMatrixWorld(); sunLamp.pos.copy(cam.position).addScaledVector(SK.sunDir.value, 600); RU.uSunV.value.copy(SK.sunDir.value).transformDirection(cam.matrixWorldInverse); mistU.uSunV.value.copy(SK.sunDir.value);
     if (GOLD.has(name)) film.look.exposure *= .86; film._mirrorOff = name.startsWith('uw') || name === 'cy'; film.render(t); }
 

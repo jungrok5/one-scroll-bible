@@ -538,8 +538,11 @@ export async function build(W, H) {
       R: stepsFor([-1.2, -.7, -.2, .3].map(d => T.stop + d), R, 20, [[T.stop + .75, R(T.stop + .9) + 26], ...[0, .5, 1.0, 1.5, 2.0].map(d => [T.front + .75 + d, R(T.front + .75 + d) - 22])]) };
     lookSteps.T = T; lookSteps.c = c; return c; }
   // one walker in the walkway: robe (side ↔ square), feet that stay where they land, a head; dir = +1 facing right, −1 facing left
-  function feet(g, b, St, t, xb, y, s, side, dir) { for (const f of [0, 1]) { const [fx, lift] = footAt(St, f, t), lx = (fx - xb) / s, ly = lift; const L = lerp(.13, .24, side);
-      g.save(); atf(g, b, xb, y, s, 0, 1, 1.04); limb(g, clamp(lx, -.16, .16), .14, .045, lx + dir * L * .02, ly + .07, .04); g.translate(lx, ly); g.scale(dir, 1); blob(g, [[-L * .38, 0], [L * .62, 0], [L * .6, .045], [L * .1, .085], [-L * .38, .07]]); g.restore(); } }
+  // 관리자 2026-11-24 "걸어갈 때 뒤에 보이는 다리가 꼬리 같아 … 1분21초에는 그게 그냥 남아 있어": the trailing leg showed behind the hem as a
+  // diagonal tail, and a planted foot stayed on the floor after its walker had left. Feet now show only just under the hem, never behind it,
+  // and a foot that is far from its body is not drawn at all.
+  function feet(g, b, St, t, xb, y, s, side, dir) { for (const f of [0, 1]) { const [fx, lift] = footAt(St, f, t), lx0 = (fx - xb) / s; if (Math.abs(lx0) > .3) continue; const lx = clamp(lx0, -.08, .08), ly = lift; const L = lerp(.13, .24, side);
+      g.save(); atf(g, b, xb, y, s, 0, 1, 1.04); g.translate(lx, ly); g.scale(dir, 1); blob(g, [[-L * .38, 0], [L * .62, 0], [L * .6, .045], [L * .1, .085], [-L * .38, .07]]); g.restore(); } }
   function poseLook(t, T) { const side = 1 - ss(T.turnSh[0], T.turnSh[1], t), sideL = 1 - ss(T.turnSh[0] + .25, T.turnHd[1] - .3, t), headK = 1 - ss(T.turnHd[0], T.turnHd[1], t), walk = 1 - ss(T.stop - .1, T.halt, t), still = 1 - side;
     const breathe = .006 * still * Math.sin((t - T.front) * TAU / 4), front = ss(T.front, T.front + .6, t) * still;
     const torchK = kf(t, [[T.front, 1], [T.front + 2, .6], [T.s3d, .12], [T.s3e, .07]]);

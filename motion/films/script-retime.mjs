@@ -30,8 +30,9 @@ for (let k = 0; k < L.length; k++) {
     continue;
   }
   const n = syl(spoken(l)), sec = n / P.pace, extra = l.kind === 'quote' ? Math.max(P.qhold, (syl(l.text) - n) / 6) : P.gap;
-  const after = next && next.part !== l.part ? Math.max(extra, P.pgap) : extra;
-  l.at = +t.toFixed(1); rows.push([l.id, old, l.at, `${n}음절 ${sec.toFixed(1)}s +${after.toFixed(1)}`]);
+  // `hold` (seconds) = a picture hold after the line, decided with the picture (「kingdom」 5부 1안 2026-11-24: Q114 +11.3, Q115 +11.4), kept across re-times.
+  const after = (next && next.part !== l.part ? Math.max(extra, P.pgap) : extra) + (l.hold || 0);
+  l.at = +t.toFixed(1); rows.push([l.id, old, l.at, `${n}음절 ${sec.toFixed(1)}s +${after.toFixed(1)}${l.hold ? ` (hold ${l.hold})` : ''}`]);
   t += sec + after;
 }
 const endAt = Math.max(...L.filter(isEnd).map(l => l.at)), dur = Math.ceil(endAt + P.end);

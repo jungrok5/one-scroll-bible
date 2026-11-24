@@ -11,7 +11,7 @@
 <script src="../lib-film.js"></script>
 <script type="module">
 /* 「kingdom」 10차 5부 「닭이 울 때」 B안 — 행동을 불이 던진 그림자로 말한다. 그림: bw-rooster-b.js (A안 bw-rooster.js와 나란히 비교).
-   필름 시간 541.2(C13) → 627.3(C14), 두 침묵을 넣어 시안 u 0 → 104.8. 모든 시각은 script.json의 at + 아래 loc()에서 나온다(bw-rooster-b.js beats()).
+   필름 시간 541.2(C13) → 627.3(C14), 두 침묵을 넣어 시안 u 0 → 104.8. 모든 시각은 script.json의 at + 아래 sloc()에서 나온다(bw-rooster-b.js beats()).
    node motion/render.mjs v --page films/kingdom/sample-r10-rooster-b.html                 (→ motion/out/sample-r10-rooster-b-v.mp4)
    node motion/render.mjs v --page films/kingdom/sample-r10-rooster-b.html --stills 5,20,40 (u seconds) */
 import * as MOD from './bw-rooster-b.js';
@@ -19,6 +19,8 @@ import * as MOD from './bw-rooster-b.js';
 const W = Pilot.W, H = Pilot.H, V = Pilot.ori === 'v', { ss, win } = Pilot;
 // 관리자 2026-11-24: 두 순간에 침묵을 준다. script.json은 그대로 두고 이 페이지 안에서만 시간을 늘린다 — Q114 4.7→12초(+7.3), Q115 8.6→20초(+11.4), 블록 86.1→104.8초.
 const { Q114: H1, Q115: H2 } = MOD.HOLDS, loc = at => at <= 614.01 ? at : at <= 618.71 ? at + H1 : at + H1 + H2;
+// script.json now carries the chosen holds itself (`hold` on Q114/Q115, 관리자 2026-11-24 1안), so a script time is first taken back to the un-held time, then this page applies its own holds.
+const unhold = at => at - Film.script.lines.filter(l => l.hold && l.at < at - .01).reduce((s, l) => s + l.hold, 0), sloc = at => loc(unhold(at));
 const T0 = 541.2, T1 = loc(627.3);
 const IDS = ['C13', 'N140', 'L103', 'Q109', 'N141', 'N142', 'N143', 'N144', 'N145', 'N146', 'N147', 'N148', 'N149', 'L105', 'Q114', 'Q115', 'C14'];
 let SC = null, TB = null, TEXT = [];
@@ -26,11 +28,11 @@ function band(ctx, k = 1) { const y0 = Film.SAFE() - (V ? 190 : 80), g = ctx.cre
 function buildText() {
   const L = Film.script.lines, spoken = l => (l.kind === 'narr' || l.kind === 'quote') && l.voice !== null;
   const V2 = L.filter(spoken).sort((a, b) => a.at - b.at), next = l => V2.find(x => x.at > l.at + .01);
-  for (const l of L) { const at = loc(l.at); if (at < T0 - .01 || at >= T1) continue;
-    if (l.id === 'C13') { TEXT.push(['chapter', l.id, at, loc(next(l)?.at ?? l.at + 3) - .3]); continue; }
-    if (l.kind === 'label') { const q = V2.find(x => x.at >= l.at - .01), qn = q && next(q); TEXT.push(['label', l.id, l.id === 'L105' ? TB.caption114 : at, l.id === 'L105' ? TB.caption114end : (qn ? loc(qn.at) : T1) - .2]); continue; }
+  for (const l of L) { const at = sloc(l.at); if (at < T0 - .01 || at >= T1) continue;
+    if (l.id === 'C13') { TEXT.push(['chapter', l.id, at, sloc(next(l)?.at ?? l.at + 3) - .3]); continue; }
+    if (l.kind === 'label') { const q = V2.find(x => x.at >= l.at - .01), qn = q && next(q); TEXT.push(['label', l.id, l.id === 'L105' ? TB.caption114 : at, l.id === 'L105' ? TB.caption114end : (qn ? sloc(qn.at) : T1) - .2]); continue; }
     if (!spoken(l)) continue;
-    const n = next(l), b = Math.min((n ? loc(n.at) : T1) - (l.kind === 'quote' ? .1 : .25), T1 - .25);
+    const n = next(l), b = Math.min((n ? sloc(n.at) : T1) - (l.kind === 'quote' ? .1 : .25), T1 - .25);
     TEXT.push([l.kind === 'quote' ? 'quote' : 'sub', l.id, l.id === 'Q114' ? TB.caption114 : at, l.id === 'Q114' ? TB.caption114end : b]); }   // Q114's words come with his finished gaze and are gone before Peter's profile returns
 }
 function chapter(ctx, id, t, a, b) { const k = win(t, a, b, .7, .7); if (k <= 0 || Film.clean) return;
@@ -45,7 +47,7 @@ function draw(ctx, u) {
 }
 Pilot.run({ W, H, dur: +(T1 - T0).toFixed(2), fonts: ["600 40px 'Noto Serif KR'", "400 40px 'Noto Serif KR'", "400 20px 'Noto Sans KR'"],
   init: async () => { await Film.load();
-    const B = Object.fromEntries(IDS.map(id => [id, loc(Film.lines[id].at)])), nextAt = { N143: B.N144, N145: B.N146, N147: B.N148, N149: B.L105 };
+    const B = Object.fromEntries(IDS.map(id => [id, sloc(Film.lines[id].at)])), nextAt = { N143: B.N144, N145: B.N146, N147: B.N148, N149: B.L105 };
     B.pc = {}; for (const id of ['N143', 'N145', 'N147', 'N149']) B.pc[id] = Film.pieces(Film.text(id), B[id], nextAt[id] - .25).map(q => q[1]);
     TB = MOD.beats(B); buildText(); SC = await MOD.build(W, H); window.__SC = SC; window.__TB = TB; }, draw });
 </script>

@@ -1904,8 +1904,10 @@
    "at": "2026-11-24 20:55 KST",
    "who": "관리자",
    "said": "1안",
-   "status": "open",
-   "round": 7
+   "status": "applied",
+   "round": 7,
+   "applied": "1안으로 결정, 그분 쪽 컷·횃불·통곡 끝 자세·밝기 다듬음",
+   "applied_at": "2026-11-24 21:18 KST"
   }
  ],
  "process_changes": [
@@ -2477,6 +2479,57 @@
      "severity": "MAJOR",
      "status": "open",
      "what": "통곡 중 벽만 흘러내려 합성처럼 보임 · 입김이 벽 얼룩처럼"
+    }
+   ]
+  },
+  "rooster-p1b": {
+   "video": "motion/out/sample-r10-rooster-p1-v.mp4",
+   "render": "56341075-37110c70ceee",
+   "at": "2026-11-24",
+   "sheets": "scratchpad/anomP1",
+   "note": "영상 초. 고치기 전 관리자 확인. 얼굴·옆얼굴·후광·민망한 형태는 없음",
+   "issues": [
+    {
+     "t": 79,
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "그분 쪽에서 본 컷: 사람들이 종·바위 같고 불이 빛나는 탁자처럼, 혼자 든 고개가 안 읽힘"
+    },
+    {
+     "t": 77.8,
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "정면 그분 앞자락 불빛이 몸 가운데 둥근 주황 얼룩(빛나는 배)처럼"
+    },
+    {
+     "t": 77.6,
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "정면 그분 실루엣이 병·체스 말·수녀 모양"
+    },
+    {
+     "t": 89.6,
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "빈자리: 베드로 그림자가 걸어 나가지 않고 제자리에서 흐려짐, 틈이 처음부터 있음"
+    },
+    {
+     "t": 92.2,
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "골목 등장: 판자처럼 기울고 발이 뜸, 곧은 다리가 순간 L자로"
+    },
+    {
+     "t": 91.8,
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "골목 끝 하늘 틈이 바닥 아래로 내려와 빛기둥처럼 서 있음(레이어 순서)"
+    },
+    {
+     "t": 77.4,
+     "severity": "MINOR",
+     "status": "open",
+     "what": "경비 발 깜빡임 · 횃불 순간이동 · 벽 횃불이 화살처럼 · S3d 아치가 감실처럼 · S3e 빈 창 · 고개 떨굼 약함 · 디졸브 잔상 · 머리 둘 그림자 · 무릎 자세가 자루처럼"
     }
    ]
   }

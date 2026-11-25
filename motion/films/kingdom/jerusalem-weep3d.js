@@ -234,11 +234,13 @@ export async function build(W, H) {
     box(60, 14, 12, tx, -575, M.pale, { y: top + 38 });            // … wider above, as Herod's porch was
     box(61, 1.3, 12.8, tx, -575, M.stone2, { y: top + 37.4 });
     box(12, 26, .6, tx, -568.7, M.dark, { y: top + 6, cast: false });   // its open doorway
-    box(18, 2.4, .5, tx, -568.6, M.gold, { y: top + 33, cast: false });  // the golden vine over the door
     for (const s of [-17, -10.5, 10.5, 17]) box(1.8, 33, .9, tx + s, -568.6, M.stone, { y: top + 1 });
     box(61, 1.0, 12.6, tx, -575, M.gold, { y: top + 52 }); box(31, .8, 64.4, tx, -612, M.gold, { y: top + 40 });
     for (let i = 0; i < 9; i++) box(.5, 1.8, .5, tx - 28 + i * 7, -575, M.gold, { y: top + 53, cast: false });
-    box(9, 4, 9, ALTAR.x, ALTAR.z, M.stone2, { y: top }); }
+    box(9, 4, 9, ALTAR.x, ALTAR.z, M.stone2, { y: top });
+    // fix 2 (no plain box faces): pilasters along the upper courses of the east retaining wall, a dark band of shade under the porch roof
+    for (let i = 0; i < 46; i++) box(1.3, 9, .8, x0 + 4 + i * ((x1 - x0 - 8) / 45), z1 + .3, M.stone2, { y: top - 9.5 });
+    box(x1 - x0, 1.2, 1.4, cx, z1 + .5, M.stone2, { y: top - .6 }); }
   // the Antonia at the platform's north-west corner; Herod's towers in the west
   { const ax = 178, az = -700; box(56, 26, 42, ax, az, M.stone, { y: TMB.top - 6 });
     for (const [dx, dz, h] of [[-26, 19, 50], [26, 19, 38], [-26, -19, 38], [26, -19, 38]]) { box(13, h, 13, ax + dx, az + dz, M.stone2, { y: TMB.top - 6 }); box(14.6, 1.4, 14.6, ax + dx, az + dz, M.stone, { y: TMB.top - 6 + h }); } }
@@ -316,15 +318,25 @@ export async function build(W, H) {
   const robes = robeCols.map((c, i) => rimSun(K.std(c, { roughness: .95, side: THREE.DoubleSide }), 'r' + i));
   const mantles = mantleCols.map((c, i) => rimSun(K.std(c, { roughness: .95, side: THREE.DoubleSide }), 'm' + i));
   const faceM = K.std('#1c120a', { roughness: 1 });
-  const mkMan = (r, o = {}) => { const head = r() < .62 ? 'cloth' : r() < .6 ? 'turban' : 'bare';
+  // fix 2 (owner): men read as men in silhouette — a head cloth with a LEVEL top, tied with a FLUSH band (no ring, no bump), ending at the
+  // shoulder without flaring (never a veil or long hair). Rebuilds the robeMan 'cloth' head (people3d.js is not edited); keeps head + beard.
+  const bandM = K.std('#3a2e24', { roughness: .95 });
+  const tidyCloth = g => { const U = g.userData, n = U.neck, s = U.s, head = n.children[0], hk = head.geometry.parameters.radius / (.112 * s), clothMat = n.children[1].material;
+    for (const c of n.children.slice(1)) if (!(c.geometry && c.geometry.type === 'SphereGeometry' && c.geometry.parameters.radius < .08 * s)) n.remove(c);
+    const L = (pts, a0 = 0, aL = Math.PI * 2) => new THREE.LatheGeometry(pts.map(([r, y]) => new THREE.Vector2(r * s * hk, y * s * hk)), 24, a0, aL);
+    const mk = (geo, m) => { const o = new THREE.Mesh(geo, m); o.castShadow = o.receiveShadow = true; n.add(o); return o; };
+    mk(L([[.137, .12], [.142, .2], [.14, .236], [.12, .253], [0, .257]]), clothMat);
+    mk(new THREE.CylinderGeometry(.145 * s * hk, .145 * s * hk, .032 * s * hk, 24, 1, true), bandM).position.y = .2 * s * hk;
+    mk(L([[.235, -.06], [.2, .02], [.162, .11], [.145, .185]], Math.PI + 1.0, Math.PI * 2 - 2.0), clothMat); return g; };
+  const mkMan = (r, o = {}) => { const head = r() < .75 ? 'cloth' : 'bare';
     const g = P.robeMan({ h: 1.66 + r() * .18, broad: 1.04 + r() * .14, head: 'cloth', mat: robes[(r() * robes.length) | 0], cloth: mantles[(r() * mantles.length) | 0], face: faceM, ...o });
-    P.headwear(g, head, { mat: mantles[(r() * mantles.length) | 0] }); g.userData.kind = 'man'; return g; };
+    P.headwear(g, head, { mat: mantles[(r() * mantles.length) | 0] }); if (head === 'cloth') tidyCloth(g); g.userData.kind = 'man'; return g; };
   const mkWoman = r => { const g = P.robeMan({ h: 1.5 + r() * .12, broad: .86 + r() * .08, head: 'veil', mat: robes[(r() * robes.length) | 0], cloth: mantles[(r() * mantles.length) | 0], face: faceM }); g.userData.kind = 'woman'; return g; };
-  const mkChild = r => { const g = P.robeMan({ h: 1.0 + r() * .3, child: true, broad: .9, head: r() < .6 ? 'cloth' : 'veil', mat: robes[(r() * robes.length) | 0], cloth: mantles[(r() * mantles.length) | 0], face: faceM }); g.userData.kind = 'child'; return g; };
+  const mkChild = r => { const hc = r() < .6, g = P.robeMan({ h: 1.0 + r() * .3, child: true, broad: .9, head: hc ? 'cloth' : 'veil', mat: robes[(r() * robes.length) | 0], cloth: mantles[(r() * mantles.length) | 0], face: faceM }); if (hc) tidyCloth(g); g.userData.kind = 'child'; return g; };
   // HIM: the same clothes as the other men (oatmeal robe, grey-brown head cloth tied with a band), broad level shoulders
   const jRobe = rimSun(K.std('#c8b694', { roughness: .95, side: THREE.DoubleSide }), 'jr', 1.15), jCloth = rimSun(K.std('#8a7a66', { roughness: .95, side: THREE.DoubleSide }), 'jc', 1.15);
   const J = P.robeMan({ h: 1.78, broad: 1.18, head: 'cloth', mat: jRobe, cloth: jCloth, face: faceM }); P.headwear(J, 'cloth'); S.add(J);
-{ const s = J.userData.s, band = new THREE.Mesh(new THREE.TorusGeometry(.132 * s, .019 * s, 6, 24), K.std('#4a3828', { roughness: .9 })); band.rotation.x = Math.PI / 2; band.position.y = .2 * s; band.castShadow = true; J.userData.neck.add(band); }   // the head cloth tied with a dark band (reads as a man's, never a veil)
+tidyCloth(J);   // the tied head cloth (fix 2)
   const JTg = 1.15, JV = 1.0, JL = JV * JTg / 2;                    // his stride: one step per half stride at 1 m/s
   const S_STOP = roadNear(9, -40).s, J_U = 2.0;                     // where he stops (arclength along the road; lateral offset)
   const posOn = (s, u) => { const p = roadAt(s); const x = p.x - p.tz * u, z = p.z + p.tx * u; return { x, z, y: hT(x, z), tx: p.tx, tz: p.tz }; };
@@ -417,11 +429,11 @@ export async function build(W, H) {
   function jPose(t, shot) {
     const s = J.userData.s;
     if (shot === 'S6') {   // he sets off down the road toward the gate: the gait eases in over 1.2 s (a time-warp), then walks on at 0.9 m/s
-      const a = T.walk6, e = 1.2, u = (t - a) / e, tau = t <= a ? 0 : u < 1 ? e * rampI(u) : e * .5 + (t - a - e), L = .9 * JTg / 2;
+      const a = T.cuts[5] + .1, e = .7, u = (t - a) / e, tau = t <= a ? 0 : u < 1 ? e * rampI(u) : e * .5 + (t - a - e), L = 1.15 * JTg / 2;
       const dist = tau / (JTg / 2) * L, p = posOn(S_STOP + dist, J_U); J.position.set(p.x, p.y, p.z); J.rotation.y = face(p.tx, p.tz);
       const w = P.walk(J, tau, 0, { T: JTg, L }), k = ss(a, a + 1.4, t);
       const id = P.idle(t, .3, { s });
-      P.pose(J, { ...(tau > 0 ? w : { ...id, feet: [{ u: L / 2, lift: 0 }, { u: -L / 2, lift: 0 }] }), head: [lerp(-.2, -.04, k), 0], swing: tau > 0 ? w.swing.map(v => v * .6) : [0, 0], breath: P.breath(t, .3) });
+      P.pose(J, { ...(tau > 0 ? w : { ...id, feet: [{ u: L / 2, lift: 0 }, { u: -L / 2, lift: 0 }] }), head: [lerp(-.58, -.08, ss(a, a + 2.5, t)), 0], lean: (tau > 0 ? w.lean : 0) - .2 * (1 - ss(a, a + 2, t)), swing: tau > 0 ? w.swing.map(v => v * .8) : [0, 0], breath: P.breath(t, .3) });
       return; }
     const c = jClock(t), dist = c.tau / (JTg / 2) * JL, sNow = S_STOP - (c.total / (JTg / 2) * JL - dist), p = posOn(sNow, J_U);
     J.position.set(p.x, p.y, p.z);
@@ -431,8 +443,8 @@ export async function build(W, H) {
     if (!c.stopped) { const w = P.walk(J, c.tau, 0, { T: JTg, L: JL }); P.pose(J, { ...w, head: [-.03, 0], breath: P.breath(t, .3), swing: w.swing.map(v => v * .7) }); return; }
     const n = c.nh, odd = n % 2 === 1, k = clamp((t - T.jStop) / .9), id = P.idle(t, .3, { s });
     const stance = odd ? [{ u: -JL / 2, lift: 0 }, { u: JL / 2, lift: 0 }] : [{ u: JL / 2, lift: 0 }, { u: -JL / 2, lift: 0 }];
-    P.pose(J, { feet: stance, bob: lerp(-.02 * s, -.006, ss(0, 1, k)) - .07 * s * drop, lean: lerp(-.06, -.03, k) - .1 * bow - .08 * drop, side: 0, twist: 0,
-      breath: lerp(.5 + .5 * Math.sin(t * 1.45 + 1.9), 1, inh) * (1 - drop) + .05 * drop, head: [-.03 - .38 * bow, 0], swing: [.02 * (1 - k) - .03 * drop, -.02 * (1 - k) - .03 * drop], abd: [-.04 * drop, -.04 * drop] });
+    P.pose(J, { feet: stance, bob: lerp(-.02 * s, -.006, ss(0, 1, k)) - .1 * s * drop, lean: lerp(-.06, -.03, k) - .14 * bow - .12 * drop, side: 0, twist: 0,
+      breath: lerp(.5 + .5 * Math.sin(t * 1.45 + 1.9), 1, inh) * (1 - drop) + .05 * drop, head: [-.03 - .55 * bow, 0], swing: [.02 * (1 - k) + .04 * drop, -.02 * (1 - k) + .04 * drop], abd: [.05, .05] });
   }
 
   // ---------------------------------------------------------------- the city's people (S4): busy in the streets and on the roofs, nobody looks up
@@ -485,7 +497,6 @@ export async function build(W, H) {
   // smoke: soft sprites whose whole life is a function of t (seeded) — a steady emission, nothing per frame random
   const SMK = []; { const r = rng(909);
     const add = (x, y, z, n, rise, spread, k) => { for (let i = 0; i < n; i++) SMK.push({ x, y, z, ph: i / n + r() * .02, life: 9 + r() * 5, rise: rise * (.8 + r() * .4), spread, k, sd: r() * 6.283, a: .07 + r() * .07 }); };
-    add(ALTAR.x, ALTAR.y + 1, ALTAR.z, 70, 4.2, 12, 1.4);
     for (const h of HOUSES.filter((h, i) => i % 97 === 13).slice(0, 14)) add(h.x, h.top + .5, h.z, 26, 2.2, 6, .7); }
   const NS = SMK.length, smkPos = new Float32Array(NS * 3), smkSz = new Float32Array(NS), smkA = new Float32Array(NS);
   const smkU = { uPx: { value: 1000 }, uC: { value: col('#d8c4b0', 1) } };
@@ -545,9 +556,9 @@ export async function build(W, H) {
   const BIRDS = []; { const r = rng(6161), bm = new THREE.MeshBasicMaterial({ color: '#2a2026', side: THREE.DoubleSide });
     for (let i = 0; i < 16; i++) { const g = new THREE.Group(), wing = sd => { const sh = new THREE.Shape(); sh.moveTo(0, 0); sh.lineTo(sd * .55, .06); sh.lineTo(sd * .5, -.05); sh.lineTo(0, -.08); const m = new THREE.Mesh(new THREE.ShapeGeometry(sh), bm); g.add(m); return m; };
       const w0 = wing(1), w1 = wing(-1); g.userData = { w0, w1, r: 40 + r() * 90, h: 38 + r() * 40, w: (.25 + r() * .2) * (r() < .5 ? 1 : -1), ph: r() * 6.283, fl: 7 + r() * 3, cx: TEMPLE.x - 60 + r() * 120, cz: TEMPLE.z - 40 + r() * 80 };
-      g.scale.setScalar(1.6); S.add(g); BIRDS.push(g); } }
-  function birdsAt(t, on) { for (const g of BIRDS) { g.visible = on; if (!on) continue; const U = g.userData, a = U.ph + U.w * t;
-      g.position.set(U.cx + Math.cos(a) * U.r, U.h + 6 * Math.sin(t * .4 + U.ph), U.cz + Math.sin(a) * U.r); g.rotation.set(0, -a + (U.w > 0 ? 0 : Math.PI), 0);
+      g.scale.setScalar(2.4); S.add(g); BIRDS.push(g); } }
+  function birdsAt(t, on, C = null) { for (const g of BIRDS) { g.visible = on; if (!on) continue; const U = g.userData, a = U.ph + U.w * t, cx = C ? C.x + (U.cx - TEMPLE.x) * .6 : U.cx, cz = C ? C.z + (U.cz - TEMPLE.z) * .6 : U.cz, cy = C ? C.y + (U.h - 58) * .5 : U.h;
+      g.position.set(cx + Math.cos(a) * U.r * (C ? .55 : 1), cy + 6 * Math.sin(t * .4 + U.ph), cz + Math.sin(a) * U.r * (C ? .55 : 1)); g.rotation.set(0, -a + (U.w > 0 ? 0 : Math.PI), 0);
       const f = Math.sin(t * U.fl + U.ph) * .6; U.w0.rotation.z = f; U.w1.rotation.z = -f; } }
   // washing on lines between posts on the lower city's roofs (S4): cloths swaying a little in the evening wind
   const WASH = []; { const r = rng(7373), cm = ['#e8dcc0', '#c8a878', '#b07050', '#8a7a9a', '#d8c8a0'];
@@ -578,11 +589,11 @@ export async function build(W, H) {
         m[0] += a; s2[0] += a * a; m[1] += b; s2[1] += b * b; m[2] += c; s2[2] += c * c; m[3] += d; s2[3] += d * d; }
       float n = float((R + 1) * (R + 1)), best = 1e9; vec3 col = vec3(0.);
       for (int k = 0; k < 4; k++){ vec3 mu = m[k] / n, v = abs(s2[k] / n - mu * mu); float sv = v.r + v.g + v.b; if (sv < best){ best = sv; col = mu; } }
-      vec3 src = texture2D(tIn, vUv).rgb; col = mix(col, src, .25);   // keep a little of the drawing's edge (small figures stay legible)
+      vec3 src = texture2D(tIn, vUv).rgb; col = mix(col, src, .5);   // keep a little of the drawing's edge (small figures stay legible)
       vec2 p = gl_FragCoord.xy; float l = lum(col);
       float tooth = vn(p * .13) * .55 + vn(p * .31 + 3.) * .3 + vn(p * .06 + 7.) * .15;
       float thin = 1. - smoothstep(.04, .3, l);                          // the pigment is thin in the darks
-      float cover = 1. - thin * .22 * smoothstep(.35, .75, tooth);
+      float cover = 1.;   // fix 2: no tooth speckle (it read as dither on the robes)
       vec3 g = mix(vec3(l), col, 1.08);
       g = mix(g, g * vec3(.84, .8, 1.08) + vec3(.06, .04, .1), (1. - smoothstep(.1, .5, l)) * (.3 + .35 * violet));   // coloured shadows
       g = mix(g, g * vec3(1.04, 1., .9) + vec3(.03, .02, 0.), smoothstep(.55, .95, l));                                // cream lights
@@ -609,8 +620,8 @@ export async function build(W, H) {
   // ==== fix 1 (rounds/r10-pilot/batch3-fix1.md, owner 2026-11-25): people are cast shadows, far small silhouettes, or backlit silhouettes —
   // never mid-distance bodies with visible surfaces, never a top-down street of figures.
   const QN = (k, d) => (QS.get(k) != null ? +QS.get(k) : d), QV = (k, d) => (QS.get(k) || d).split(',').map(Number);
-  const S1P = QV('s1p', '13,30,140'), S1L = QV('s1l', '16,-30.5,-300'), S1F = QN('s1f', 12);
-  const S2H = QN('s2h', 3.0), S2L = QN('s2l', .37), S2F = QN('s2f', 10.5);
+  const S1P = QV('s1p', '13,20,140'), S1L = QV('s1l', '16,-12,-300'), S1F = QN('s1f', 20);
+  const S2H = QN('s2h', 1.0), S2L = QN('s2l', .9), S2F = QN('s2f', 10.5);
   const S3D = QN('s3d', 125), S3X = QN('s3x', 9), S3P = QN('s3p', -2.0), S3F = QN('s3f', 17);
   const S4X = QN('s4x', -60), S4P = QN('s4p', 13), S4F = QN('s4f', 20), S4H = QN('s4h', 30);
   const S5D = QN('s5d', 36), S5X = QN('s5x', 3.3), S5P = QN('s5p', -47);
@@ -636,11 +647,11 @@ export async function build(W, H) {
   //     streaming back along the road toward us. He walks, slows over two steps and stops; the others flow on past him and over the brow
   //     (their clock runs down to 0.3x, the lens softens them; he stays sharp); his head bows a little, his shoulders drop once. Back view
   //     only, the sun to the right of his head (never behind it). Move: tracking, then a slow push in.
-  const camS2 = t => { const uu = clamp((t - T.cuts[1]) / (T.cuts[2] - T.cuts[1])), D = 46 - 7 * (uu * .55 + .45 * sine(uu)), jp = J.position;
+  const camS2 = t => { const uu = clamp((t - T.cuts[1]) / (T.cuts[2] - T.cuts[1])), D = 70 - 8 * (uu * .55 + .45 * sine(uu)), jp = J.position;
     const x = jp.x - DIRC.x * D + .5, z = jp.z - DIRC.z * D; return V(x, hT(x, z) + S2H, z); };
   STAGE.S2 = t => {
-    setVis(SIDE, true); jPose(t, 'S2'); crowdAt(t); setVis(CITYP, false); J.visible = true; { const cp = camS2(t); for (const g of [...CROWD, ...SIDE]) if (g.visible && g.position.distanceTo(cp) < 34) { g.visible = false; if (g.userData.palm) g.userData.palm.visible = false; } }   // nobody near the lens: silhouettes stay far
-    const pos = camS2(t), jp = J.position.clone(), look = jp.clone().add(V(0, S2L, 0)).addScaledVector(DIRC, 6);
+    setVis(SIDE, true); jPose(t, 'S2'); crowdAt(t); setVis(CITYP, false); J.visible = true; { const cp = camS2(t); for (const g of [...CROWD, ...SIDE]) if (g.visible && g.position.distanceTo(cp) < 50) { g.visible = false; if (g.userData.palm) g.userData.palm.visible = false; } }   // nobody near the lens: silhouettes stay far
+    const pos = camS2(t), jp = J.position.clone(), look = jp.clone().add(V(0, S2L, 0)).addScaledVector(DIRC, 6).addScaledVector(RIGHT, 1.3);
     setFov(S2F); setCam(pos, look);
     setSun(sunDirFrom(look.clone().sub(pos), -3.4, 3.0), 4, jp.clone().addScaledVector(DIRC, -15), 40, 3.2);
     SKY.sunColor.value.copy(col('#fff0cc', 9)); SKY.sunGlow.value.copy(col('#ffb070', 1.9));
@@ -657,11 +668,11 @@ export async function build(W, H) {
   STAGE.S3 = t => {
     setVis(SIDE, false); crowdAt(t, 16, S_STOP + 55); jPose(t, 'S3'); setVis(CITYP, false); J.visible = true;
     const a = T.cuts[2], b = T.cuts[3], u = (t - a) / (b - a), jp = J.position;
-    const pos = jp.clone().addScaledVector(DIRC, -S3D).addScaledVector(RIGHT, S3X); pos.y = hT(pos.x, pos.z) + 1.4;
+    const kk = u * .8 + .2 * sine(u), pos = jp.clone().addScaledVector(DIRC, -S3D).addScaledVector(RIGHT, S3X - 3.4 + 3.6 * kk); pos.y = hT(pos.x, pos.z) + 1.4 + .8 * kk;
     const h = V(TEMPLE.x - pos.x, 0, TEMPLE.z - pos.z).normalize(), look = pos.clone().addScaledVector(h, 600); look.y = pos.y + 600 * Math.tan(S3P * D2R);
     setFov(lerp(S3F, S3F * .86, u * .8 + .2 * sine(u))); setCam(pos, look);
     setSun(sunDirFrom(look.clone().sub(pos), -2.2, 3.3), 5, V(0, -20, -700), 520, 2.4);
-    hemi.intensity = .2; goldM.emissiveIntensity = .7; film.dofCfg.focus = pos.distanceTo(TEMPLE); film.dofCfg.aperture = .8;
+    hemi.intensity = .12; goldM.emissiveIntensity = .55; film.dofCfg.focus = pos.distanceTo(TEMPLE); film.dofCfg.aperture = .8;
     film.atmos.density = .0014; film.look.exposure = 1.04; lamp.shimmer = 0; lamp.god = .4;
     moteU.uA.value = 0; RIMU.uRimC.value.copy(col('#ff8a50', 1.8)); pastelP.u.violet.value = .3 + .1 * u; pastelP.u.gild.value = 0;
   };
@@ -670,21 +681,23 @@ export async function build(W, H) {
   STAGE.S4 = t => {
     setVis(CROWD, false); setVis(SIDE, false); setVis(CITYP, true); J.visible = false; cityPeopleAt(t);
     const a = T.cuts[3], b = T.cuts[4], u = (t - a) / (b - a), k = u * .8 + .2 * sine(u);
-    const pos = V(S4C.x + 28 + lerp(-5, 5, k), 0, CITYZ + 2); pos.y = hT(pos.x, pos.z) + S4H;   // on the east rampart
-    const look = V(S4C.x - 20 + lerp(-8, 14, k), hT(S4C.x, S4C.z) + S4P, S4C.z + 20);
+    const pos = V(S4C.x + 28 + lerp(-12, 12, k), 0, CITYZ + 2); pos.y = hT(pos.x, pos.z) + S4H;   // on the east rampart
+    const look = V(S4C.x - 20 + lerp(-30, 34, k), hT(S4C.x, S4C.z) + S4P, S4C.z + 20);
     setFov(S4F); setCam(pos, look);
     setSun(sunDirFrom(look.clone().sub(pos), -14, 4), 5, V(S4C.x, -20, S4C.z - 40), 300, 2.4);
-    hemi.intensity = .42; film.dofCfg.focus = pos.distanceTo(look); film.dofCfg.aperture = .5;
+    hemi.intensity = .3; film.dofCfg.focus = pos.distanceTo(look); film.dofCfg.aperture = .5;
     film.atmos.density = .0009; film.look.exposure = 1.1; lamp.shimmer = 0; lamp.god = 0;
     moteU.uA.value = 0; RIMU.uRimC.value.copy(col('#ff8a50', 1.6)); pastelP.u.violet.value = .4; pastelP.u.gild.value = 0;
     LAMPS.forEach((L, i) => { lampA[i] = L.gate ? 0 : (L.t < .5 ? ss(a - 1 + L.t * 8, a + L.t * 8, t) * Math.min(1, L.k * 1.1) : 0); }); lamps.geometry.attributes.aA.needsUpdate = true;
   };
   // S5: the sun sets over the city (the disc sinks onto the hills right of the Temple); his back small at the left edge. A slow crane up.
+  // S6 continues S5's camera without a break (fix 2: the 35.25 s jump cut): the crane goes on rising and pushes in a little while he walks.
+  const camS5 = kk => { const pos = V(JSTOP.x, 0, JSTOP.z).addScaledVector(DIRC, -S5D).addScaledVector(RIGHT, S5X); pos.y = hT(pos.x, pos.z) + 1.5 + 3.4 * kk;
+    return { pos, look: TEMPLE.clone().add(V(0, S5P - QN('l5', 20) * kk, 0)) }; };
   STAGE.S5 = t => {
     setVis(SIDE, false); crowdAt(t, 95, S_STOP + 32); jPose(t, 'S5'); setVis(CITYP, false); J.visible = true;
     const a = T.cuts[4], b = T.cuts[5], u = (t - a) / (b - a), k = u * .75 + .25 * sine(u), jp = J.position.clone();
-    const pos = jp.clone().addScaledVector(DIRC, -S5D).addScaledVector(RIGHT, S5X); pos.y = hT(pos.x, pos.z) + 1.5 + 3.4 * k;
-    const look = TEMPLE.clone().add(V(0, S5P + 2 * k, 0));
+    const { pos, look } = camS5(k);
     setFov(24); setCam(pos, look);
     const el = lerp(2.0, .5, ss(T.sunset[0], T.sunset[1], t));
     setSun(sunDirFrom(look.clone().sub(pos), -2.6, el), Math.max(2.5, el + 2.5), V(0, -20, -400), 520, lerp(2.8, 1.5, ss(T.sunset[0], T.sunset[1], t)));
@@ -694,30 +707,31 @@ export async function build(W, H) {
     RIMU.uRimC.value.copy(col('#ff7a48', 1.7)); pastelP.u.violet.value = .4 + .2 * u; pastelP.u.gild.value = 0;
     SKY.horizon.value.copy(col('#ffb070', 1.55)); SKY.mid.value.copy(lerp3(col('#d89a78', .88), col('#c08088', .75), u));
   };
-  // S6: his small far silhouette walks away down the road toward the gate, off centre, his long shadow streaming back to us from the last
-  //     sun on the hills; the camera stays and rises slowly; lamps begin in the city, two at the gate; it settles to a calm dark gold.
+  // S6: his small far silhouette walks away down the road toward the gate for the whole shot (steps in the hem and the long shadow
+  //     streaming back from the last sun), getting smaller, off centre; lamps begin in the city, two at the gate; a calm dark gold to end.
   STAGE.S6 = t => {
-    setVis(SIDE, false); crowdAt(t, 230, S_STOP + 45); jPose(t, 'S6'); setVis(CITYP, false); J.visible = true;
-    const a = T.cuts[5], b = T.end, u = (t - a) / (b - a), k = u * .7 + .3 * sine(u);
-    const pos = V(JSTOP.x, 0, JSTOP.z).addScaledVector(DIRC, -S6D).addScaledVector(RIGHT, S6X); pos.y = hT(pos.x, pos.z) + S6H + 2.6 * k;
-    const look = V(JSTOP.x, JSTOP.y + S6Y - 1.5 * k, JSTOP.z).addScaledVector(DIRC, 40).addScaledVector(RIGHT, S6X * .6);
-    setFov(S6F); setCam(pos, look);
-    setSun(sunDirFrom(look.clone().sub(pos), -1.5, lerp(.55, .1, u)), 1.2, V(JSTOP.x, JSTOP.y, JSTOP.z - 10), 60, lerp(1.6, .6, u));
-    SKY.sunColor.value.copy(col('#ffc890', lerp(9, 4, u))); SKY.sunGlow.value.copy(col('#ff9a68', lerp(1.3, .9, u)));
-    SKY.top.value.copy(lerp3(col('#4a5480', .45), col('#2c2f58', .38), u)); SKY.mid.value.copy(lerp3(col('#c08088', .75), col('#8a6a7e', .6), u)); SKY.horizon.value.copy(lerp3(col('#ffa070', 1.35), col('#e08a6a', 1.0), u));
-    hemi.intensity = lerp(.28, .22, u); hemi.color.copy(col('#a8a0c8'));
-    film.dofCfg.focus = pos.distanceTo(J.position); film.dofCfg.aperture = .45;
-    film.atmos.density = .0014; lamp.shimmer = 0; lamp.god = 0; smkU.uC.value.copy(col('#9a8478', 1));
-    const dk = ss(T.dark[0], T.dark[1], t); film.look.exposure = lerp(1.12, .74, dk);
-    moteU.uA.value = 0; RIMU.uRimC.value.copy(col('#ff9a68', lerp(1.5, .8, u))); pastelP.u.violet.value = .55; pastelP.u.gild.value = .55 * dk + .15 * u;
-    LAMPS.forEach((L, i) => { const o = a + 1.2 + 6.5 * Math.acos(1 - 2 * L.t) / Math.PI; lampA[i] = Math.max(L.gate ? 0 : (L.t < .4 ? .8 * L.k : 0), ss(o, o + 1.2, t) * L.k); }); lamps.geometry.attributes.aA.needsUpdate = true;
-    gateLamps.forEach(g => { g.power = 30 * ss(a + .8, a + 3.5, t); });
+    setVis(SIDE, false); crowdAt(t, 95, S_STOP + 32); jPose(t, 'S6'); setVis(CITYP, false); J.visible = true;
+    const a = T.cuts[5], b = T.end, u = clamp((t - a) / (b - a)), k = u * .6 + .4 * sine(u);
+    const c5 = camS5(1), pos = c5.pos.clone().addScaledVector(DIRC, 4 * k); pos.y += 2.4 * k;
+    const look = c5.look.clone().add(V(0, -QN('l6', 26) * k, 0));
+    setFov(24 - 2.5 * k); setCam(pos, look);
+    setSun(sunDirFrom(look.clone().sub(pos), -2.6, lerp(.5, .05, u)), Math.max(1.2, 3 - 2 * u), V(JSTOP.x, JSTOP.y, JSTOP.z - 10), 80, lerp(1.5, .6, u));
+    SKY.sunColor.value.copy(lerp3(col('#fff0cc', 18), col('#ffc890', 4), u)); SKY.sunGlow.value.copy(lerp3(col('#ffb070', 1.5), col('#ff9a68', .9), u));
+    SKY.top.value.copy(lerp3(col('#5a6a92', .5), col('#2c2f58', .38), u)); SKY.mid.value.copy(lerp3(col('#c08088', .75), col('#8a6a7e', .6), u)); SKY.horizon.value.copy(lerp3(col('#ffb070', 1.55), col('#e08a6a', 1.0), u));
+    hemi.intensity = lerp(.3, .22, u); hemi.color.copy(lerp3(col('#b4a8b8'), col('#a8a0c8'), u)); goldM.emissiveIntensity = lerp(.5, .25, u);
+    film.dofCfg.focus = pos.distanceTo(J.position); film.dofCfg.aperture = .8;
+    film.atmos.density = .0013; lamp.shimmer = 0; lamp.god = .45 * (1 - ss(0, .5, u)); smkU.uC.value.copy(lerp3(col('#d8c4b0', 1), col('#9a8478', 1), ss(0, .4, u)));
+    const dk = ss(T.dark[0], T.dark[1], t); film.look.exposure = lerp(1.02, .74, dk);
+    moteU.uA.value = .5 * (1 - ss(0, .3, u)); moteU.uC.value.set(pos.x, pos.y - 2, pos.z - 2);
+    RIMU.uRimC.value.copy(lerp3(col('#ff7a48', 1.7), col('#ff9a68', .8), u)); pastelP.u.violet.value = .6; pastelP.u.gild.value = .55 * dk + .15 * u;
+    LAMPS.forEach((L, i) => { const o = a + 1.0 + 7 * Math.acos(1 - 2 * L.t) / Math.PI; lampA[i] = ss(o, o + 1.2, t) * L.k; }); lamps.geometry.attributes.aA.needsUpdate = true;
+    gateLamps.forEach(g => { g.power = 30 * ss(a + 1.5, a + 4.5, t); });
   };
   const lerp3 = (A, B, k) => A.clone().lerp(B, clamp(k));
   function stage(t) {
     const nm = shotOf(t);
     skyGold(); hemi.intensity = .55; goldM.emissiveIntensity = .12; hemi.color.copy(col('#b4a8b8')); lamps.visible = nm === 'S6' || nm === 'S4'; gateLamps.forEach(g => { g.power = 0; }); smkU.uC.value.copy(col('#d8c4b0', 1)); if (nm !== 'S6' && nm !== 'S4') { lampA.fill(0); lamps.geometry.attributes.aA.needsUpdate = true; }
-    dust.visible = nm === 'S1'; TUFTS.visible = true; smoke.visible = true; motes.visible = true; birdsAt(t, nm === 'S3' || nm === 'S4' || nm === 'S5'); washAt(t);
+    dust.visible = nm === 'S1'; TUFTS.visible = true; smoke.visible = true; motes.visible = true; birdsAt(t, nm === 'S3' || nm === 'S4' || nm === 'S5', nm === 'S3' ? V(-10, 30, -330) : nm === 'S4' ? V(S4C.x - 10, 10, S4C.z + 60) : null); washAt(t);
     film.dofCfg.maxCoc = 22; film.atmos.scatter = nm === 'S6' ? .15 : 1; STAGE[nm](t);
     if (dust.visible) dustAt(t); smokeAt(t); smkU.uPx.value = (H / 2) / Math.tan(cam.fov * D2R / 2); lampU.uPx.value = (H / 2) / Math.tan(cam.fov * D2R / 2) * (nm === 'S4' ? 2.6 : .5);
     tuftU.uT.value = t; moteU.uT.value = t; GU.uSunG.value.copy(SUN);

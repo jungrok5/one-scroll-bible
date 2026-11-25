@@ -143,7 +143,7 @@ const ROOM = `#version 300 es
       vec3 Lb = uBc - P; float db = length(Lb); Lb /= db; float bounce = (.3 + .7 * max(dot(Nb, Lb), 0.)) / (1. + db * db / 1.1);
       vec3 Dc = vec3((uDoor.x + uDoor.y) * .5, uDoor.z * .5, uZB), Ld = Dc - P; float dd = length(Ld); Ld /= dd; float dl = max(dot(Nb, Ld), 0.) * max(-Ld.z, 0.) / (1. + dd * dd / 1.6);
       if (id == 0 && P.x > uDoor.x - .12 && P.x < uDoor.y + .12 && P.y < uDoor.z + .12) dl *= .3;   // the wall round the door sees little of it
-      col = alb * (vec3(.045, .04, .042) + SUNC * uSunI * sd * mix(.85, 1.12, uWarm) + vec3(1., .72, .46) * .22 * uSunI * bounce * (1. - .75 * s) + vec3(1., .82, .6) * .45 * dl);
+      col = alb * (vec3(.045, .04, .042) + SUNC * uSunI * sd * mix(.85, 1.12, uWarm) + vec3(1., .72, .46) * .1 * uSunI * bounce * (1. - .75 * s) + vec3(1., .82, .6) * .45 * dl);
     }
     // haze in the beam, marched along the ray (fixed per-pixel dither); uMode 0: beyond uZf only, 1: in front of uZf only
     float hz = 0., j = hh(fc * .73 + 3.1); for (int i = 0; i < 28; i++) { float s = (float(i) + j) / 28. * tt; vec3 Q = O + d * s; bool fr = Q.z < uZf; if ((uMode == 1) != fr) continue;
@@ -196,14 +196,14 @@ const ALLEY = `#version 300 es
         col = al * vec3(uAmb) * sky * (1. + 2.6 * endK + 1.5 * slitK) * (lw ? 1. : .55) * door;
         if (lw) { float soft = .03 + .02 * max(0., uWH - P.y), k = smoothstep(uHb - soft, uHb + soft, P.y);
           // the dawn turns gold, most at the moving edge (the first light), less above it
-          vec3 lc = mix(vec3(.84, .86, .9), vec3(1.08, .8, .5), uWarm * (.45 + .55 * exp(-max(0., P.y - uHb) / 1.1)));
+          vec3 lc = mix(vec3(.84, .86, .9), vec3(1.28, .74, .32), uWarm * (.45 + .55 * exp(-max(0., P.y - uHb) / 1.1)));
           col += al * lc * uIb * max(dot(N, uLd), 0.) * k; litK = k; }
       }
       if (tt < uZE) { vec3 Q = vec3(0., uEye, 0.) + d * tt; float occ = exp(-pow((Q.z - uOcc.z) / .55, 2.) - pow(max(0., Q.y - uOcc.y) / 1.0, 2.) - pow((Q.x - uOcc.x) / .6, 2.) * (tt == tF ? 1. : 0.)); col *= 1. - .55 * occ * (tt == tR ? 0. : 1.); }
       col += vec3(.6, .62, .66) * .014 * smoothstep(8., uZE, tt);
     }
     vec3 c = 1. - exp(-col * uGain); c = pow(c, vec3(.4545)); vec2 v = (fc / uRes - vec2(.5, .44)) * vec2(1.05, .92); c *= 1. - uVig * smoothstep(.22, .74, length(v));
-    float lum = dot(c, vec3(.3, .59, .11)), sat = clamp(uSat * (.22 + .9 * clamp(litK, 0., 1.)), 0., 1.);
+    float lum = dot(c, vec3(.3, .59, .11)), sat = clamp(uSat * (.5 + 1.1 * clamp(litK, 0., 1.)), 0., 1.);
     o = vec4(mix(vec3(lum), c, sat), 1.); }`;
 
 // ---------------------------------------------------------------- 2D craft (spline, hull, limb: copied from bw-rooster-p1.js)
@@ -216,7 +216,7 @@ function hull(P) { const p = [...P].sort((a, b) => a[0] - b[0] || a[1] - b[1]), 
   for (const q of p) { while (lo.length >= 2 && cr(lo[lo.length - 2], lo[lo.length - 1], q) <= 0) lo.pop(); lo.push(q); }
   for (const q of p.reverse()) { while (up.length >= 2 && cr(up[up.length - 2], up[up.length - 1], q) <= 0) up.pop(); up.push(q); }
   return lo.slice(0, -1).concat(up.slice(0, -1)); }
-const fillHull = (g, P) => { const Hh = hull(P).filter((q, i, A) => { const n = A[(i + 1) % A.length]; return Math.hypot(n[0] - q[0], n[1] - q[1]) > 1.2; }); g.beginPath(); spline(g, Hh); g.fill(); };
+const fillHull = (g, P) => { const Hh = hull(P).filter((q, i, A) => { const n = A[(i + 1) % A.length]; return Math.hypot(n[0] - q[0], n[1] - q[1]) > 2.5; }); g.beginPath(); spline(g, Hh); g.fill(); };
 // 2D two-bone IK: elbow/knee on the side `side` picks (a function scoring the two solutions: the lower score wins)
 function ik2(S, W, l1, l2, pick) { let dx = W[0] - S[0], dy = W[1] - S[1], d = Math.hypot(dx, dy) || 1e-5; const mx = (l1 + l2) * .999; if (d > mx) { dx *= mx / d; dy *= mx / d; d = mx; }
   const a = (l1 * l1 - l2 * l2 + d * d) / (2 * d), h = Math.sqrt(Math.max(0, l1 * l1 - a * a)), ux = dx / d, uy = dy / d, bx = S[0] + ux * a, by = S[1] + uy * a;
@@ -263,9 +263,12 @@ export async function build(W, H, opt = {}) {
   function present(ctx) { const sc = Math.max(W / VW, H / VH), dw = VW * sc, dh = VH * sc; ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.drawImage(off, (W - dw) / 2, (H - dh) * (H > W ? .5 : .36), dw, dh); ctx.restore(); }
 
   // ============================================================== ROOM
-  const RM = { F: 1200, eye: 1.35, VP: [560, 860], XL: -2.75, XR: 2.3, ZB: 5.6, YC: 3.05, win: [3.72, 4.5, .62, 1.75], door: [-1.7, -.86, 1.98], b0: [-.85, 0, 4.55], b1: [1.6, .45, 5.6], Zw: 5.08, Zf: 4.98 };
+  const RM = { F: 1200, eye: 1.35, VP: [560, 860], XL: -2.75, XR: 2.3, ZB: 5.6, YC: 3.05, win: [3.55, 4.42, .62, 1.75], door: [-1.7, -.86, 1.98], b0: [-.85, 0, 4.55], b1: [1.6, .45, 5.6], Zw: 5.08, Zf: 4.98 };
   // fix 1 (관리자 2026-11-25): a low late sun through a low window, almost level, so her SHADOW on the wall reads from lying to sitting (shadow play)
-  { const v = [-.85, -.1, .5], l = Math.hypot(...v); RM.sun = v.map(q => q / l); }
+  { const v = [-.15, -.1, .98], l = Math.hypot(...v); RM.sun = v.map(q => q / l);
+    // the window (on the right wall, behind the camera's side) sized so that its light on the back wall covers x −0.8 … 1.4, y 0.3 … 1.9 there
+    const sv = RM.sun, back = (x, y) => { const sd = (RM.XR - x) / (-sv[0]); return [RM.ZB - sv[2] * sd, y - sv[1] * sd]; }, a = back(1.4, .3), b = back(-.8, 1.9);
+    RM.win = [b[0], a[0], back(1.4, .3)[1], back(-.8, 1.9)[1]]; }
   const projR = (x, y, z) => [RM.VP[0] + RM.F * x / z, RM.VP[1] - RM.F * (y - RM.eye) / z];
   // the lit band at depth z: the window opening carried along the sun ray (for the figures' light)
   const beamAt = (z) => { const s = RM.sun, P = []; for (const [wz, wy] of [[RM.win[0], RM.win[2]], [RM.win[0], RM.win[3]], [RM.win[1], RM.win[3]], [RM.win[1], RM.win[2]]]) { const t = (z - wz) / s[2]; P.push([RM.XR + s[0] * t, wy + s[1] * t]); } return P; };
@@ -329,18 +332,17 @@ export async function build(W, H, opt = {}) {
     const f1 = P(-.1, .015), f2 = P(.12, .015); g.beginPath(); g.ellipse(f1[0], f1[1], .07 * k, .02 * k, 0, 0, TAU); g.ellipse(f2[0], f2[1], .07 * k, .02 * k, 0, 0, TAU); g.fill(); }
   // ---- Peter: frontal in the doorway, his right hand on the jamb (screen left), then down at his side
   const PG = [-1.28, 0, RM.ZB + .2];
-  function posePeter(t, T) { const s = ss(T.peter[0], T.peter[1], t), br = .005 * Math.sin((t - T.room[0]) * TAU / 3.9 + 1); return { s, br }; }
-  function drawPeter(g, Q) { const z = PG[2], k = RM.F / z, P = (x, y) => projR(PG[0] + x, y, z), s = Q.s, b = Q.br;
+  function posePeter(t, T) { const s = ss(T.peter[0], T.peter[1], t), u = t - T.room[0], br = .013 * Math.sin(u * TAU / 3.2 + 1), sw = .012 * Math.sin(u * TAU / 5.1) + .02 * sine(s); return { s, br, sw }; }
+  function drawPeter(g, Q) { const z = PG[2], k = RM.F / z, P = (x, y) => projR(PG[0] + x + Q.sw * clamp(y / 1.8), y, z), s = Q.s, b = Q.br;
     const sh = 1.46 + b + .012 * s;   // he straightens a little as he takes the hand off the jamb
     // tunic to mid-calf, belted, broad level shoulders
     g.beginPath(); spline(g, [P(-.25, .04), P(-.24, .9), P(-.25, 1.2), P(-.27, sh - .04), P(-.2, sh + .03), P(.2, sh + .03), P(.27, sh - .04), P(.25, 1.2), P(.24, .9), P(.25, .04)]); g.fill();
     // legs and feet (planted)
     // (his feet are behind the threshold: no feet drawn)
     // neck, head, head cloth tied with a band (the knot's ends at the side), falling to the shoulders
-    const n0 = P(0, sh), hc = P(0, sh + .2); limb(g, n0[0], n0[1], .07 * k, hc[0], hc[1], .06 * k);
-    g.beginPath(); g.ellipse(hc[0], hc[1], .115 * k, .125 * k, 0, 0, TAU); g.fill();
-    g.beginPath(); spline(g, [P(-.115, sh + .22), P(-.14, sh + .1), P(-.17, sh + .02), P(.17, sh + .02), P(.14, sh + .1), P(.115, sh + .22)]); g.fill();
-    { const b0 = P(-.122, sh + .25), b1 = P(.122, sh + .25); g.beginPath(); g.ellipse((b0[0] + b1[0]) / 2, b0[1], .124 * k, .022 * k, 0, 0, TAU); g.fill(); }   // the band round the head cloth (a slight ridge, no loose tail)
+    // neck, then the head in its cloth: a level top, straight sides, the cloth tied at the back and falling only to the shoulders (no bump, no ring, no veil)
+    { const n0 = P(0, sh), n1 = P(0, sh + .13); limb(g, n0[0], n0[1], .068 * k, n1[0], n1[1], .062 * k);
+      g.beginPath(); spline(g, [P(-.175, sh + .02), P(-.138, sh + .12), P(-.124, sh + .22), P(-.11, sh + .29), P(-.06, sh + .322), P(.06, sh + .322), P(.11, sh + .29), P(.124, sh + .22), P(.138, sh + .12), P(.175, sh + .02)]); g.fill(); }
     // the arms: his right (screen left) up on the jamb → down at his side; the left hangs
     const SR = [-.23, sh - .03], SL = [.23, sh - .03], jamb = [-.3, 1.02], side = [-.3, .8];
     const WR = [lerp(jamb[0], side[0], sine(s)), lerp(jamb[1], side[1], sine(s)) + .05 * Math.sin(Math.PI * s)];
@@ -358,7 +360,7 @@ export async function build(W, H, opt = {}) {
     gl.bindFramebuffer(gl.FRAMEBUFFER, null); gl.viewport(0, 0, VW, VH); gl.disable(gl.BLEND); gl.useProgram(PR.p);
     const u1 = (n, v) => gl.uniform1f(PR.u(n), v), u3 = (n, v) => gl.uniform3f(PR.u(n), v[0], v[1], v[2]);
     gl.uniform4f(PR.u('uRect'), 0, 0, 1, 1); gl.uniform2f(PR.u('uRes'), VW, VH); gl.uniform2f(PR.u('uVP'), RM.VP[0], RM.VP[1]); u3('uCam', cam);
-    u1('uF', RM.F); u1('uEye', RM.eye); u1('uXL', RM.XL); u1('uXR', RM.XR); u1('uZB', RM.ZB); u1('uYC', RM.YC); u1('uT', t); u1('uSunI', lerp(2.5, 3.0, warm)); u1('uHaze', .07); u1('uGain', 2.45); u1('uZf', RM.Zf); u1('uVig', .5); u1('uWarm', warm);
+    u1('uF', RM.F); u1('uEye', RM.eye); u1('uXL', RM.XL); u1('uXR', RM.XR); u1('uZB', RM.ZB); u1('uYC', RM.YC); u1('uT', t); u1('uSunI', lerp(1.35, 1.6, warm)); u1('uHaze', .03); u1('uGain', 1.6); u1('uZf', RM.Zf); u1('uVig', .5); u1('uWarm', warm);
     gl.uniform4f(PR.u('uWin'), ...RM.win); u3('uSun', RM.sun); gl.uniform4f(PR.u('uDoor'), RM.door[0], RM.door[1], RM.door[2], 0); u3('uB0', RM.b0); u3('uB1', RM.b1); u3('uBc', [-.3, .8, 5.45]);
     gl.uniform1i(PR.u('uMode'), 1); gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4); hzx.setTransform(1, 0, 0, 1, 0, 0); hzx.drawImage(glc, 0, 0);   // the haze in front of her, kept for later
     gl.uniform1i(PR.u('uMode'), 0); gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
@@ -385,7 +387,7 @@ export async function build(W, H, opt = {}) {
       camT(tb, cam); const z = RM.Zw, bp = beamAt(z).map(q => projR(q[0], q[1], z)); tb.globalCompositeOperation = 'destination-in'; tb.filter = 'blur(5px)'; tb.beginPath(); tb.moveTo(...bp[0]); for (const q of bp.slice(1)) tb.lineTo(...q); tb.closePath(); tb.fillStyle = '#000'; tb.fill(); tb.filter = 'none'; tb.globalCompositeOperation = 'source-over';
       o.save(); o.setTransform(1, 0, 0, 1, 0, 0); o.globalCompositeOperation = 'lighter'; o.filter = 'blur(1.6px)'; o.globalAlpha = .3 + .2 * warm; o.drawImage(tB, 0, 0); o.restore(); }
     // the haze in front of her (over her, behind Jesus, who stands nearer than the beam)
-    o.save(); o.setTransform(1, 0, 0, 1, 0, 0); o.globalCompositeOperation = 'lighter'; o.globalAlpha = .5; o.drawImage(hzC, 0, 0); o.restore();
+    o.save(); o.setTransform(1, 0, 0, 1, 0, 0); o.globalCompositeOperation = 'lighter'; o.globalAlpha = .15; o.drawImage(hzC, 0, 0); o.restore();   // (fix 2: kept faint, the frontal beam's haze must not wash her out)
     // Jesus: dark against the lit wall, a faint warm edge on the doorway side and a cool one from the beam's scatter
     // (Jesus is not shown here — batch3.md §C allows it: every place by the bed where his back would face us put a large dark figure in front of her;
     //  drawJesus/poseJesus stay for a later choice. The light that comes onto her as she rises carries the line.)
@@ -453,7 +455,7 @@ export async function build(W, H, opt = {}) {
     const pool = [cl(Y(1000)), Y(1000)];
     RD = { plate, CR, GR, DU, cl, hwAt, crest, pool, SC, Wd, Hd, X, Y }; return RD; }
   const wind = (t, T) => .55 + 1.0 * Math.pow(Math.sin(Math.PI * clamp((t - T.gust[0]) / (T.gust[1] - T.gust[0]))), 2) + .85 * Math.pow(Math.sin(Math.PI * clamp((t - T.gust2[0]) / (T.gust2[1] - T.gust2[0]))), 2);
-  const zoomRoad = (t, T) => { const v = clamp((t - T.road[0]) / (T.road[1] - T.road[0])); return lerp(1, 1.08, .45 * v + .55 * sine(v)); };   // never at rest inside the shot
+  const zoomRoad = (t, T) => { const v = clamp((t - T.road[0]) / (T.road[1] - T.road[0])); return lerp(1, 1.13, .5 * v + .5 * sine(v)); };   // never at rest inside the shot
   function roadFrame(ctx, t, T) { const D = buildRoad(), SC = D.SC, Wd = D.Wd, Hd = D.Hd, zm = zoomRoad(t, T), tt = t - T.road[0], wd = wind(t, T);
     C.setCam({ zm, zc: [D.pool[0], D.pool[1] - 120 * SC], ox: 0, oy: 0 });
     const x = C.begin(); C.applyCam(x); C.drawSheet(x, D.plate);
@@ -468,7 +470,7 @@ export async function build(W, H, opt = {}) {
       const xx = d.x0 + (40 + 160 * wd) * SC * k * d.s + 14 * SC * Math.sin(age * 2 + d.ph), yy = d.y - (20 + 120 * k) * SC * d.s;
       C.blob(x, xx, yy, (40 + 120 * k) * SC * d.s, (16 + 40 * k) * SC * d.s, a, -.2, C.smudgeW); }
     // dust in sheets, blown across the road (long thin lifts moving with the wind; fixed in the world, only drifting with t)
-    { const r = Pilot.rng(612); for (let i = 0; i < 9; i++) { const span = Wd + 1400 * SC, y0 = lerp(Hd * .38, Hd * .95, r()), v = (150 + 120 * r()) * SC, ph = r() * span, a0 = .1 + .06 * r();
+    { const r = Pilot.rng(612); for (let i = 0; i < 14; i++) { const span = Wd + 1400 * SC, y0 = lerp(Hd * .36, Hd * .95, r()), v = (230 + 160 * r()) * SC, ph = r() * span, a0 = .16 + .08 * r();
       const xx = ((ph + v * (tt + .35 * wd * tt)) % span) - 700 * SC; for (let j = 0; j < 3; j++) C.blob(x, xx - j * 150 * SC, y0 - j * 8 * SC - 12 * SC * Math.sin(tt * 1.6 + i), (240 - 50 * j) * SC * (.5 + y0 / Hd), (18 + 6 * j) * SC * (.5 + y0 / Hd), a0 * (.55 + .6 * wd) * (1 - .25 * j), -.06, C.smudgeW); } }
     // grass bends with the wind (each stem a 3-point vine from its root; no re-seeding per frame, so no boil)
     for (const g of D.GR) { const sway = (wd * (.32 + .22 * Math.sin(tt * 2.7 - g.x * .011 / SC + g.ph * .3)) + .05 * Math.sin(tt * 1.3 + g.ph)) * (g.near ? 1 : .6), ang = g.lean + sway;   // waves run through the grass with the gust
@@ -492,7 +494,7 @@ export async function build(W, H, opt = {}) {
   V.nrm = a => V.mul(a, 1 / (V.len(a) || 1)); V.dot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
   const Q0 = R5.poseAlley(T5.end, T5);   // S5's last pose (sunk on his heels, forehead on the left forearm flat on the wall)
   // his head lifts a little off the forearm (k 0..1): the head turns about the neck toward up and away from the wall; the neck rises 2 cm; a slow breath
-  function poseAlleyN(t, T) { const k = ss(T.lift[0], T.lift[1], t) + .3 * clamp((t - T.lift[1]) / (T.alley[1] - T.lift[1])), br = .005 * Math.sin((t - T.alley[0]) * TAU / 3.4) * ss(T.alley[0], T.alley[0] + 1, t);
+  function poseAlleyN(t, T) { const k = ss(T.lift[0], T.lift[1], t) + .12 * sine((t - T.lift[1]) / (T.alley[1] - T.lift[1])), br = .005 * Math.sin((t - T.alley[0]) * TAU / 3.4) * ss(T.alley[0], T.alley[0] + 1, t);
     const N = V.add(Q0.N, [0, .02 * k + br, .006 * k]), up = V.nrm([.35, 1, -.05]), Bd = V.nrm(V.lerp(Q0.Bd, up, .38 * k)), C = V.add(N, V.mul(Bd, .15));
     const SL = V.add(Q0.SL, [0, br * .6 + .01 * k, 0]), SR = V.add(Q0.SR, [0, br * .6 + .01 * k, 0]);
     return { ...Q0, N, C, Bd, SL, SR, k }; }
@@ -509,9 +511,10 @@ export async function build(W, H, opt = {}) {
         for (const A of [V.add(Q.legL.E, [0, .08, 0]), V.add(Q.legR.E, [0, .08, 0]), V.add(Q.legL.E, [0, -.03, 0]), V.add(Q.legR.E, [0, -.03, 0]), V.add(Q.aL, [0, .07, 0]), V.add(Q.aR, [0, .07, 0]), V.add(Q.aL, [0, -.08, 0]), V.add(Q.aR, [0, -.08, 0]), V.add(Q.tL, [0, -.01, 0]), V.add(Q.tR, [0, -.01, 0]), V.add(Q.P, [0, -.12, 0]), V.lerp(midK, V.add(Q.P, V.mul(Q.D, .3)), Q.dp), V.lerp(midK, V.add(Q.P, V.add(V.mul(Q.D, .2), V.mul(Q.f, .12))), Q.dp), V.lerp(midK, V.add(Q.N, V.mul(Q.f, -.15)), Q.dp), V.lerp(midK, V.add(V.lerp(Q.P, Q.N, .5), V.mul(Q.f, -.19)), Q.dp), V.lerp(midK, V.add(Q.P, V.mul(Q.f, -.17)), Q.dp)]) L2(A);
         fillHull(g, pts); } }
       for (const [leg, a, tp, Hh] of [[Q.legL, Q.aL, Q.tL, Q.HL], [Q.legR, Q.aR, Q.tR, Q.HR]]) { cap(Hh, leg.E, .08, .062); cap(leg.E, a, .058, .046); cap(a, tp, .046, .032); }
-      cap(Q.SL, Q.SR, .085, .085); cap(Q.SL, Q.armL.E, .068, .058); cap(Q.armL.E, Q.armL.W, .056, .05); if (Q.kneel < .5) { cap(Q.SR, Q.armR.E, .062, .052); cap(Q.armR.E, Q.armR.W, .05, .042); }
+      cap(V.add(Q.SL, V.mul(Q.left, .05)), V.sub(Q.SR, V.mul(Q.left, .05)), .095, .095); cap(Q.SL, Q.armL.E, .068, .058);   // broad, level shoulders
+      cap(Q.armL.E, Q.armL.W, .056, .05); if (Q.kneel < .5) { cap(Q.SR, Q.armR.E, .062, .052); cap(Q.armR.E, Q.armR.W, .05, .042); }
       cap(Q.N, V.lerp(Q.N, Q.C, .5), .08, .077); }
-    if (part !== 'tunic') { cap(V.lerp(Q.N, Q.C, .45), Q.C, .078, .075); ball(Q.C, .118); cap(V.add(Q.C, V.mul(Q.f, -.05)), V.add(Q.N, V.mul(Q.f, -.06)), .09, .08); } }
+    if (part !== 'tunic') { cap(V.lerp(Q.N, Q.C, .45), Q.C, .078, .075); ball(Q.C, .118); cap(V.add(Q.C, V.mul(Q.f, -.05)), V.add(V.lerp(Q.C, Q.N, .7), V.mul(Q.f, -.05)), .085, .066); } }   // fix 2: a short tied head cloth, ending above the shoulder line (never long like hair)
   // the light's lower edge in the alley: on the left wall at height Hb; on things off the wall it lies a little higher (the light comes over the right wall)
   const SLOPE = .42, litY = (X, Hb) => Hb + (X + AWL) * SLOPE;
   const hbN = (t, T) => { const e0 = AE.lightEdgeH, a = T.alley[0], q = clamp((t - T.edge[0]) / (T.edge[1] - T.edge[0]));
@@ -525,7 +528,7 @@ export async function build(W, H, opt = {}) {
     gl.bindFramebuffer(gl.FRAMEBUFFER, null); gl.viewport(0, 0, VW, VH); gl.disable(gl.BLEND); gl.useProgram(PA.p);
     gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, alleyTex); gl.uniform1i(PA.u('tS'), 0); gl.uniform4f(PA.u('uRect'), 0, 0, 1, 1);
     const f1 = (n, v) => gl.uniform1f(PA.u(n), v); gl.uniform2f(PA.u('uRes'), VW, VH); gl.uniform3f(PA.u('uCam'), cam[0], cam[1], cam[2]); gl.uniform2f(PA.u('uVP'), AVP[0], AVP[1]);
-    f1('uF', AF); f1('uEye', AH); f1('uWL', AWL); f1('uWR', AWR); f1('uWH', AWH); f1('uZE', AZE); f1('uHb', Hb); f1('uT', t); f1('uGain', 1); f1('uVig', .55); f1('uAmb', .09); f1('uIb', 1.25 * (1 + .75 * wk)); f1('uWarm', wk); f1('uSat', sat);
+    f1('uF', AF); f1('uEye', AH); f1('uWL', AWL); f1('uWR', AWR); f1('uWH', AWH); f1('uZE', AZE); f1('uHb', Hb); f1('uT', t); f1('uGain', 1); f1('uVig', .55); f1('uAmb', .09); f1('uIb', 1.25 * (1 + 1.05 * wk)); f1('uWarm', wk); f1('uSat', sat);
     const Ld = V.nrm([.62, .6, .5]); gl.uniform3f(PA.u('uLd'), Ld[0], Ld[1], Ld[2]); gl.uniform3f(PA.u('uOcc'), Q.P[0] - .05, Q.N[1] - .2, Q.P[2] + .05); gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
     o.save(); o.setTransform(1, 0, 0, 1, 0, 0); o.globalAlpha = 1; o.globalCompositeOperation = 'source-over'; o.filter = 'none'; o.drawImage(glc, 0, 0); o.restore();
     const q = { k: cam[2] };
@@ -545,8 +548,8 @@ export async function build(W, H, opt = {}) {
       // fix 1: his head cloth and body stay dark (never lit blue); the dawn touches only a thin warm rim along the head cloth's edge and his shoulder line
       // the rim: upper edges in the light, gold
       ta.setTransform(1, 0, 0, 1, 0, 0); ta.clearRect(0, 0, VW, VH); camT(ta, cam); ta.fillStyle = '#fff'; drawPeterAlley(ta, Q);
-      tcx.setTransform(1, 0, 0, 1, 0, 0); tcx.globalCompositeOperation = 'source-over'; tcx.clearRect(0, 0, VW, VH); tcx.drawImage(tA, 0, 0); tcx.globalCompositeOperation = 'destination-out'; tcx.drawImage(tA, -3.4, 3.6);
-      tcx.globalCompositeOperation = 'source-in'; tcx.fillStyle = `rgb(255,${lerp(236, 196, wk) | 0},${lerp(220, 130, wk) | 0})`; tcx.fillRect(0, 0, VW, VH);
+      tcx.setTransform(1, 0, 0, 1, 0, 0); tcx.globalCompositeOperation = 'source-over'; tcx.clearRect(0, 0, VW, VH); tcx.drawImage(tA, 0, 0); tcx.globalCompositeOperation = 'destination-out'; tcx.drawImage(tA, -4.2, 4.4);
+      tcx.globalCompositeOperation = 'source-in'; tcx.fillStyle = `rgb(255,${lerp(236, 172, wk) | 0},${lerp(210, 84, wk) | 0})`; tcx.fillRect(0, 0, VW, VH);
       tcx.globalCompositeOperation = 'destination-in'; { const gr = tcx.createLinearGradient(sx - ux * soft, sy - uy * soft, sx + ux * soft, sy + uy * soft); gr.addColorStop(0, 'rgba(0,0,0,0)'); gr.addColorStop(1, 'rgba(0,0,0,1)'); tcx.fillStyle = gr; tcx.fillRect(0, 0, VW, VH); }
       tcx.globalCompositeOperation = 'source-over';
       { o.save(); o.setTransform(1, 0, 0, 1, 0, 0); o.globalCompositeOperation = 'lighter'; o.filter = 'blur(1.2px)'; o.globalAlpha = .95; o.drawImage(tC, 0, 0); o.restore(); } }

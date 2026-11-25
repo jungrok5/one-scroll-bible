@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>짧은 장면 세 개</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600&family=Noto+Sans+KR:wght@400;600&display=swap">
+</head>
+<body>
+<script src="../../pilot/lib.js"></script>
+<script src="../lib-film.js"></script>
+<script src="kit-charcoal.js"></script>
+<script type="module">
+/* 「kingdom」 10-3 C (rounds/r10-pilot/batch3.md §C): 새 짧은 장면 세 개를 1초 검정을 사이에 두고 이어 붙인 시안. 그림: short-scenes.js.
+   장면별 필름 창(script.json의 at; 장면 안의 모든 시각은 short-scenes.js beats()):
+     room   2부 N111  162.2 → 168.7 (6.5 s)  — 시안 u 0.0 → 6.5     (앞: N44 3D 마을 길 heal-village.js · 뒤: L41/Q41 같은 마을)
+     road   6부 N150  699.2 → 704.2 (5.0 s)  — 시안 u 7.5 → 12.5    (앞: N24c · 뒤: N25, charcoal-calvary.js)
+     alley  7부 N159  818.9 → 825.7 (6.8 s)  — 시안 u 13.5 → 20.3   (5부 S5의 마지막 프레임에서 이어짐 · 뒤: N160 밤 호수)
+   (위 숫자는 지금 script.json의 값; 페이지는 실행 때 at에서 다시 읽는다.)
+   node motion/render.mjs v --page films/kingdom/sample-r10-shorts.html                  (→ motion/out/sample-r10-shorts-v.mp4)
+   node motion/render.mjs v --page films/kingdom/sample-r10-shorts.html --stills 1,4,9,15,19 (u seconds)
+   ?ref=1 : 골목의 첫 프레임 대신 5부 S5의 마지막 프레임(bw-rooster-p1.js)을 그려 맞춤을 비교. */
+import * as MOD from './short-scenes.js';
+const W = Pilot.W, H = Pilot.H, V = Pilot.ori === 'v';
+const REF = /[?&]ref=1/.test(location.search), GAP = 1;
+let SC = null, TB = null, PLAN = [], TEXT = [];
+function band(ctx, k = 1) { const y0 = Film.SAFE() - (V ? 190 : 80), g = ctx.createLinearGradient(0, y0, 0, H); g.addColorStop(0, 'rgba(6,6,6,0)'); g.addColorStop(.35, `rgba(6,6,6,${.5 * k})`); g.addColorStop(.7, `rgba(6,6,6,${.62 * k})`); g.addColorStop(1, `rgba(6,6,6,${.66 * k})`); ctx.fillStyle = g; ctx.fillRect(0, y0, W, H - y0); }
+function draw(ctx, u) {
+  const sh = PLAN.find(p => u >= p.u0 && u < p.u1 + 1e-6);
+  if (!sh || !SC) { ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H); return; }
+  const t = Math.min(sh.a + (u - sh.u0), sh.b - .001);
+  SC.draw(ctx, REF && sh.name === 'alley' && u - sh.u0 < .5 ? 'ref' : sh.name, t, TB);
+  band(ctx, 1);
+  for (const [id, a, b] of TEXT) if (t >= a - .1 && t <= b + .1 && a >= sh.a - .01 && a < sh.b) Film.sub(ctx, id, t, a, b);
+}
+// the plan is built before Pilot.run (DURATION must be known); Film.load first
+await Film.load();
+const L = id => Film.lines[id].at;
+let u = 0; for (const [name, [a0, a1]] of Object.entries(MOD.WINDOWS)) { const a = L(a0), b = L(a1); PLAN.push({ name, a, b, u0: u, u1: u + (b - a) }); u += (b - a) + GAP; }
+const DUR = +(u - GAP).toFixed(2);
+Pilot.run({ W, H, dur: DUR, fonts: ["600 40px 'Noto Serif KR'", "400 40px 'Noto Serif KR'", "400 20px 'Noto Sans KR'"],
+  init: async () => {
+    const spoken = l => (l.kind === 'narr' || l.kind === 'quote') && l.voice !== null, Vs = Film.script.lines.filter(spoken).sort((a, b) => a.at - b.at), next = id => Vs.find(x => x.at > L(id) + .01);
+    const B = Object.fromEntries(MOD.IDS.map(id => [id, L(id)])); B.pc = {};
+    for (const id of ['N111', 'N150', 'N159']) B.pc[id] = Film.pieces(Film.text(id), L(id), next(id).at - .25).map(q => q[1]);
+    for (const p of PLAN) { const id = MOD.WINDOWS[p.name][0]; TEXT.push([id, L(id), Math.min(next(id).at - .25, p.b - .25)]); }
+    TB = MOD.beats(B);
+    // part 5's table for the alley (bw-rooster-p1.js beats(): script.json now carries its holds, so its `at`s are used as they are)
+    const P5IDS = ['C13', 'N140', 'L103', 'Q109', 'N141', 'N142', 'N143', 'N144', 'N145', 'N146', 'N147', 'N148', 'N149', 'L105', 'Q114', 'Q115', 'C14'];
+    const P5B = Object.fromEntries(P5IDS.map(id => [id, L(id)])), nx = { N143: P5B.N144, N145: P5B.N146, N147: P5B.N148, N149: P5B.L105 }; P5B.pc = {};
+    for (const id of ['N143', 'N145', 'N147', 'N149']) P5B.pc[id] = Film.pieces(Film.text(id), P5B[id], nx[id] - .25).map(q => q[1]);
+    SC = await MOD.build(W, H, { P5B }); window.__SC = SC; window.__TB = TB; window.__PLAN = PLAN; window.__measure = () => SC.measure(TB); },
+  draw });
+</script>
+</body>
+</html>

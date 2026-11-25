@@ -15,7 +15,7 @@
    자막은 본 영상이 얹는 자리를 보려고 시안에서만 얹음(sample-part5d.html과 같은 규칙).
    node motion/render.mjs v --page films/kingdom/sample-r10-lake2b.html   (→ motion/out/sample-r10-lake2b-v.mp4) */
 const W = Pilot.W, H = Pilot.H, V = Pilot.ori === 'v', { ss, win } = Pilot;
-const T0 = 825.7, T1 = 918.7,   // N160 → C5; was 803.0–896.0 before 5부 holds went into script.json (2026-11-24, +22.7)
+const T0 = 835.5, T1 = 928.5,   // N160 → C5; +9.8 for Q108b (2026-11-26); was 803.0–896.0 before 5부 holds went into script.json (2026-11-24, +22.7)
  IDS = ['N160', 'N161', 'N162', 'N163', 'N163b', 'N164', 'L106', 'Q117', 'L109', 'N165', 'N166', 'Q118', 'N167', 'Q120', 'N168', 'C5', ];
 let LK = null, TB = null, TEXT = [];
 function band(ctx, k = 1) { const y0 = Film.SAFE() - (V ? 190 : 80), g = ctx.createLinearGradient(0, y0, 0, H); g.addColorStop(0, 'rgba(10,8,10,0)'); g.addColorStop(.35, `rgba(10,8,10,${.5 * k})`); g.addColorStop(.7, `rgba(10,8,10,${.62 * k})`); g.addColorStop(1, `rgba(10,8,10,${.66 * k})`); ctx.fillStyle = g; ctx.fillRect(0, y0, W, H - y0); }

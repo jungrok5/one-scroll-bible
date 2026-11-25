@@ -20,7 +20,8 @@ const W = Pilot.W, H = Pilot.H, V = Pilot.ori === 'v', { ss, win } = Pilot;
 // 관리자 2026-11-24: 두 순간에 침묵을 준다. script.json은 그대로 두고 이 페이지 안에서만 시간을 늘린다 — Q114 4.7→12초(+7.3), Q115 8.6→20초(+11.4), 블록 86.1→104.8초.
 const { Q114: H1, Q115: H2 } = MOD.HOLDS, loc = at => at <= 614.01 ? at : at <= 618.71 ? at + H1 : at + H1 + H2;
 // script.json now carries the chosen holds itself (`hold` on Q114/Q115, 관리자 2026-11-24 1안), so a script time is first taken back to the un-held time, then this page applies its own holds.
-const unhold = at => at - Film.script.lines.filter(l => l.hold && l.at < at - .01).reduce((s, l) => s + l.hold, 0), sloc = at => loc(unhold(at));
+// Q108b (눅 19:44, 관리자 2026-11-26 "그래") went in before this block: its added length (N135b's move from 515.2) is taken back out too.
+const unhold = at => at - Film.script.lines.filter(l => l.hold && l.at < at - .01).reduce((s, l) => s + l.hold, 0) - (at > 515.3 ? Film.script.lines.find(l => l.id === 'N135b').at - 515.2 : 0), sloc = at => loc(unhold(at));
 const T0 = 541.2, T1 = loc(627.3);
 const IDS = ['C13', 'N140', 'L103', 'Q109', 'N141', 'N142', 'N143', 'N144', 'N145', 'N146', 'N147', 'N148', 'N149', 'L105', 'Q114', 'Q115', 'C14'];
 let SC = null, TB = null, TEXT = [];

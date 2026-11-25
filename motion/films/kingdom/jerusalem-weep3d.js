@@ -5,20 +5,22 @@
 //   pass fixed in the frame (chalk patches, coloured shadows, the paper's tooth only in the darks; no slanted strokes over the whole frame — the
 //   owner read a uniform texture as rain). Film refs: 「아라비아의 로렌스」(1962) telephoto crowds in heat haze, small figures; Enrique Simonet
 //   「Flevit super illam」(1892): Jerusalem across the Kidron at sunset from the Mount of Olives, the Temple white and gold.
-// Shots (every time from beats(B); hard cuts between clearly different framings, one slow named move per shot — cinecode camera-moves):
-//   S1 N133a        telephoto from high behind the procession: the road down the Mount full of small figures, palm branches waving, cloaks on
-//                   the road, dust in the low sun, the city glowing across the valley in heat haze.            move: slow truck right + tilt down
-//   S2 N133b–N134   long lens at eye level behind HIM in the crowd (his back mid distance, oatmeal robe, grey-brown head cloth): he walks, slows
-//                   over two steps and stops; the crowd flows on past him, goes soft (depth of field opens) and slows (its clock runs down to
-//                   0.3×); he stays sharp; his head bows a little, the shoulders drop once. No face, no hands to the face.  move: tracking → push in
-//   S3 L102–Q108    over his shoulder (only a dark soft shoulder at the far right edge): the city across the valley at dusk, the Temple's gold,
-//                   the altar smoke rising, the crowd small on the road below.                                 move: slow push in (zoom 1.3 %/s)
-//   S4 N135b        down onto the lower city: roofs, small people busy in the streets and on the roofs, nobody looks up (heads down, at work).
-//                                                                                                               move: slow truck left + crane down
-//   S5 N136         the sun sets over the city (its disc sinks to the hills beyond the Temple); his back small at the left edge on the ridge.
-//                                                                                                               move: slow crane up
-//   S6 N137         his small back walks down the road toward the gate in the last light; lamps begin in the city, two at the gate; the frame
-//                   ends calm and dark gold for C13.                                                           move: slow pull back + crane up
+// Shots (every time from beats(B); hard cuts; one slow named move per shot). Fix 1 (rounds/r10-pilot/batch3-fix1.md, owner 2026-11-25):
+// people are only backlit silhouettes, far small silhouettes or cast shadows; no mid-distance bodies with lit surfaces, no top-down street.
+//   S1 N133a        long lens from high behind the procession, into the low sun over the city: a stream of backlit silhouettes with palm
+//                   branches, long shadows back toward us, dust lit, heat shimmer; the city a hazy silhouette above.  move: slow truck right
+//   S2 N133b–N134   long lens on the road behind him, into the sun (right of his head, never behind it): backlit silhouettes with a rim,
+//                   long shadows along the road toward the lens. He slows over two steps and stops; the others flow on over the brow
+//                   (their clock runs down to 0.3x, the lens softens them); his head bows a little, the shoulders drop once. Nobody within
+//                   34 m of the lens.                                                                         move: tracking, then push in
+//   S3 L102–Q108    (the shoulder shot is cut) far back on the ridge: his small backlit back at the left edge (about 6 % of the frame),
+//                   the city across the valley at sunset in layers of haze, the Temple's gold catching the light, altar smoke, swifts.
+//                                                                                                               move: slow zoom in
+//   S4 N135b        from the east rampart, a low angle across the lower city's roofs rising into the haze at dusk: lamps in windows,
+//                   smoke, washing, a few tiny far figures; nobody looks up.                                   move: slow truck/pan right
+//   S5 N136         the sun sinks onto the hills right of the Temple; his back small at the left edge.          move: slow crane up
+//   S6 N137         his small far silhouette walks away down the road toward the gate, off centre (the lit smoke is to the right, never
+//                   above him), lamps lighting in the city and at the gate; settles to a calm dark gold.        move: slow crane up
 // People: people3d.js robeMan (two-bone IK, fixed lengths, elbows down/out, planted feet; walks start/stop by a time-warp of the gait, ending on
 //   a completed step — pastel-children.js famTau). Palm branches are HELD: each is placed at the solved hand every frame (BODY-CHECK §4).
 // Rules kept: Jesus never by face or profile (back view, far, or a soft shoulder edge; head yaw 0 throughout; no halo — the sun is never behind
@@ -35,7 +37,7 @@
 //   ≈500.8–502.0 (1.2) his two slowing steps: two soft sandal steps, the second a little heavier (the stop)
 //   502.3–504.2 (1.9)  the noise drains away: the crowd low-passed and pulled down −20 dB as the picture slows (a long exhale of sound)
 //   503.6–504.5 (0.9)  one breath, close and quiet, as the shoulders drop (no sob)
-//   505.6–515.2 (9.6)  S3: near silence; wind; very far the crowd; one swift's cry over the city ≈509; the Temple's evening trumpet far off ≈512 (soft)
+//   505.6–515.2 (9.6)  S3: near silence; wind; very far the crowd; swifts' cries over the city (they circle on screen) ≈507–514; the Temple's evening trumpet far off ≈512 (soft)
 //   515.2–522.2 (7.0)  S4: the city's evening murmur from above: a pot set down, a door, water poured, a donkey far off, children; nobody calls up
 //   522.2–530.3 (8.1)  S5: the wind drops; one low sustained string note under the setting sun
 //   530.3–539.0 (8.7)  S6: his footsteps on the road, slow and even, receding; the city's evening sounds rising faintly ahead
@@ -166,7 +168,7 @@ export async function build(W, H) {
     g.computeVertexNormals(); const m = new THREE.Mesh(g, groundM(key)); m.position.set(cx, dy, cz); m.receiveShadow = true; S.add(m); return m; };
   terrain(0, -500, 3600, 360, 'far');                        // 10 m cells
   terrain(20, -70, 380, 380, 'near', .03);                   // 1 m round the road where the crowd walks
-  const S4C = { x: -208, z: -560 };                          // the lower city patch the S4 camera looks down on
+  const S4C = { x: -205, z: -640 };                          // the lower city patch the S4 camera looks down on
   terrain(S4C.x, S4C.z, 160, 160, 'city', .04);
   // far hills beyond the city to the west (and the Mount's shoulders behind the camera in S1)
   { const hm = new THREE.MeshStandardMaterial({ color: '#9a7e6c', roughness: 1 });
@@ -273,7 +275,7 @@ export async function build(W, H) {
   const leafM = K.std('#5e6648', { roughness: .9 }), trunkM = K.std('#3e3226', { roughness: .95 });
   { const r = rng(4242), pts = [];
     for (let n = 0; n < 6000 && pts.length < 520; n++) { const x = (r() - .5) * 900, z = 150 - r() * 560; if (z < -400) continue;
-      const rn = roadNear(x, z); if (rn.d < 8) continue; const dens = .25 + .75 * ss(-200, -330, z) + .3 * ss(90, 40, z); if (r() > dens) continue; pts.push([x, z, 4.5 + r() * 2.5]); }
+      const rn = roadNear(x, z); if (rn.d < 8) continue; if (z > -35 && z < 125 && Math.abs(x - 18) < 32) continue; const dens = .25 + .75 * ss(-200, -330, z) + .3 * ss(90, 40, z); if (r() > dens) continue; pts.push([x, z, 4.5 + r() * 2.5]); }
     const tg = new THREE.CylinderGeometry(.2, .32, 1, 6); tg.translate(0, .5, 0); const cg = new THREE.IcosahedronGeometry(1, 1);
     const ti = new THREE.InstancedMesh(tg, trunkM, pts.length), ci = new THREE.InstancedMesh(cg, leafM, pts.length * 7), m4 = new THREE.Matrix4(), q = new THREE.Quaternion(), c = new THREE.Color();
     pts.forEach(([x, z, h], i) => { const y = hT(x, z) - .1; ti.setMatrixAt(i, m4.compose(V(x, y, z), q.setFromEuler(new THREE.Euler((r() - .5) * .25, 0, (r() - .5) * .25)), V(1, h * .45, 1)));
@@ -299,7 +301,7 @@ export async function build(W, H) {
     const pts = []; for (let i = 0; i < 9000; i++) { const x = 20 + (r() - .5) * 90, z = -10 - r() * 90, rn = roadNear(x, z); if (rn.d < 3.4 && r() < .9) continue; pts.push([x, z]); }
     const inst = new THREE.InstancedMesh(geo, tm, pts.length), m4 = new THREE.Matrix4(), q = new THREE.Quaternion(), c = new THREE.Color();
     pts.forEach(([x, z], i) => { q.setFromAxisAngle(V(0, 1, 0), r() * 6.283); inst.setMatrixAt(i, m4.compose(V(x, hT(x, z) + .02, z), q, V(1, .7 + r() * .7, 1))); c.setHSL(.12 + r() * .04, .32 + r() * .15, .45 + r() * .14); inst.setColorAt(i, c); });
-    inst.receiveShadow = true; S.add(inst); }
+    inst.receiveShadow = true; S.add(inst); var TUFTS = inst; }
 
   // ---------------------------------------------------------------- people: materials (crowd-evening3d.js rimSun, copied)
   const RIMU = { uSunV: { value: V(0, 0, -1) }, uRimC: { value: col('#ff9a5a', 1.3) }, uRimK: { value: 1 } };
@@ -324,7 +326,7 @@ export async function build(W, H) {
   const J = P.robeMan({ h: 1.78, broad: 1.18, head: 'cloth', mat: jRobe, cloth: jCloth, face: faceM }); P.headwear(J, 'cloth'); S.add(J);
 { const s = J.userData.s, band = new THREE.Mesh(new THREE.TorusGeometry(.132 * s, .019 * s, 6, 24), K.std('#4a3828', { roughness: .9 })); band.rotation.x = Math.PI / 2; band.position.y = .2 * s; band.castShadow = true; J.userData.neck.add(band); }   // the head cloth tied with a dark band (reads as a man's, never a veil)
   const JTg = 1.15, JV = 1.0, JL = JV * JTg / 2;                    // his stride: one step per half stride at 1 m/s
-  const S_STOP = roadNear(9, -40).s, J_U = -.25;                     // where he stops (arclength along the road; lateral offset)
+  const S_STOP = roadNear(9, -40).s, J_U = 2.0;                     // where he stops (arclength along the road; lateral offset)
   const posOn = (s, u) => { const p = roadAt(s); const x = p.x - p.tz * u, z = p.z + p.tx * u; return { x, z, y: hT(x, z), tx: p.tx, tz: p.tz }; };
   const JSTOP = posOn(S_STOP, J_U);
   const TEMPLE = V(20, TMB.top + 22, -580);
@@ -353,7 +355,7 @@ export async function build(W, H) {
      for (const u0 of lanes) {
       if (r() < (core ? (s > S_STOP - 7 ? .72 : .6) : .56)) continue;
       const u = u0 + (r() - .5) * .45, rel = s - (S_STOP - 7.5);           // relative to his own s at the block start (he is ≈7.5 m before his stop)
-      if (Math.abs(u - J_U) < 1.9 && rel < 1.6 && rel > -46) continue;   // the lane behind him stays clear (the long lens sees him through it)
+      if (Math.abs(u - J_U) < .9 && rel < 1.6 && rel > -46) continue;   // the lane behind him stays clear (the long lens sees him through it)
       if (Math.abs(u - J_U) < .8 && rel > -1.2 && rel < 1.6) continue;
       const kk = r(), g = kk < .14 ? mkChild(r) : kk < .44 ? mkWoman(r) : mkMan(r); S.add(g);
       const U = g.userData, child = U.kind === 'child', Tg = child ? .78 + r() * .1 : 1.05 + r() * .14;
@@ -368,7 +370,7 @@ export async function build(W, H) {
     for (let i = 0; i < 46; i++) { const s = S_STOP - 120 + r() * 170, sd = r() < .5 ? -1 : 1, u = sd * (4.2 + r() * 4.5), p = posOn(s, u);
       const kk = r(), g = kk < .2 ? mkChild(r) : kk < .45 ? mkWoman(r) : mkMan(r); S.add(g);
       g.position.set(p.x, p.y, p.z); g.rotation.y = face(-p.tz * -sd, p.tx * -sd) + (r() - .5) * .8;   // facing the road
-      const U = g.userData; U.ph = r(); U.act = r() < .55 ? 'palm' : 'cheer'; U.wph = r() * 6.283; U.wT = 1.1 + r() * .4; U.wA = .12 + r() * .08;
+      const U = g.userData; U.sRoad = s; U.ph = r(); U.act = r() < .55 ? 'palm' : 'cheer'; U.wph = r() * 6.283; U.wT = 1.1 + r() * .4; U.wA = .12 + r() * .08;
       if (U.act === 'palm') { const pm = new THREE.Mesh(palmGeo, palmM); pm.castShadow = true; pm.scale.setScalar(U.kind === 'child' ? .7 : 1); S.add(pm); U.palm = pm; U.side = 1; }
       SIDE.push(g); } }
   // cloaks spread on the road (Luke 19:36) — flat cloths laid on the ground, following it
@@ -396,14 +398,14 @@ export async function build(W, H) {
       U.palm.position.copy(hw); U.palm.quaternion.setFromUnitVectors(V(0, 1, 0), d); }
   }
   // offset: seconds added to the crowd's clock (later shots: they have gone on down the road); sMin: nobody shown behind this arclength
-  function crowdAt(t, offset = 0, sMin = -1e9) {
+  function crowdAt(t, offset = 0, sMin = -1e9, sMax = 1e9) {
     const tc = crowdTau(t) + offset;
     for (const g of CROWD) { const U = g.userData, s = U.s0 + CV * (tc - T.t0);
-      const show = s < ROADLEN - 2 && s > sMin; g.visible = show; if (U.palm) U.palm.visible = show; if (!show) continue;
+      const show = s < ROADLEN - 2 && s > sMin && s < sMax; g.visible = show; if (U.palm) U.palm.visible = show; if (!show) continue;
       const p = posOn(s, U.u); g.position.set(p.x, p.y, p.z); g.rotation.y = face(p.tx, p.tz);
       const w = P.walk(g, tc + U.gp + 50, 0, { T: U.Tg, L: U.L });
       poseWave(g, t, tc, w); }
-    for (const g of SIDE) { const U = g.userData; poseWave(g, t, tc, P.idle(tc, U.ph, { s: U.s })); }
+    for (const g of SIDE) { const U = g.userData; if (!g.visible) continue; poseWave(g, t, tc, P.idle(tc, U.ph, { s: U.s })); }
   }
   const setVis = (arr, v) => { for (const g of arr) { g.visible = v; if (g.userData.palm) g.userData.palm.visible = v; if (g.userData.obj) g.userData.obj.visible = v; if (g.userData.stool) g.userData.stool.visible = v; } };
 
@@ -429,8 +431,8 @@ export async function build(W, H) {
     if (!c.stopped) { const w = P.walk(J, c.tau, 0, { T: JTg, L: JL }); P.pose(J, { ...w, head: [-.03, 0], breath: P.breath(t, .3), swing: w.swing.map(v => v * .7) }); return; }
     const n = c.nh, odd = n % 2 === 1, k = clamp((t - T.jStop) / .9), id = P.idle(t, .3, { s });
     const stance = odd ? [{ u: -JL / 2, lift: 0 }, { u: JL / 2, lift: 0 }] : [{ u: JL / 2, lift: 0 }, { u: -JL / 2, lift: 0 }];
-    P.pose(J, { feet: stance, bob: lerp(-.02 * s, -.006, ss(0, 1, k)) - .03 * s * drop, lean: lerp(-.06, -.03, k) - .07 * bow - .03 * drop, side: 0, twist: 0,
-      breath: lerp(.5 + .5 * Math.sin(t * 1.45 + 1.9), 1, inh) * (1 - drop) + .05 * drop, head: [-.03 - .3 * bow, 0], swing: [.02 * (1 - k) - .03 * drop, -.02 * (1 - k) - .03 * drop], abd: [-.04 * drop, -.04 * drop] });
+    P.pose(J, { feet: stance, bob: lerp(-.02 * s, -.006, ss(0, 1, k)) - .07 * s * drop, lean: lerp(-.06, -.03, k) - .1 * bow - .08 * drop, side: 0, twist: 0,
+      breath: lerp(.5 + .5 * Math.sin(t * 1.45 + 1.9), 1, inh) * (1 - drop) + .05 * drop, head: [-.03 - .38 * bow, 0], swing: [.02 * (1 - k) - .03 * drop, -.02 * (1 - k) - .03 * drop], abd: [-.04 * drop, -.04 * drop] });
   }
 
   // ---------------------------------------------------------------- the city's people (S4): busy in the streets and on the roofs, nobody looks up
@@ -515,14 +517,14 @@ export async function build(W, H) {
       dSz[i] = q.s0 + 1.6 * k; dA[i] = q.a * ss(0, .25, k) * (1 - ss(.45, 1, k)); if (dA[i] > .01) dustAlive++; });
     const g = dust.geometry; g.attributes.position.needsUpdate = true; g.attributes.aSz.needsUpdate = true; g.attributes.aA.needsUpdate = true; }
   // the city's lamps (S6): small warm points in windows and on the roofs, lighting one after another as the light goes; two at the gate
-  const LAMPS = []; { const r = rng(3131); for (const h of HOUSES) { if (r() > .05) continue; LAMPS.push({ p: V(h.x + (r() - .5) * h.w * .5, h.top - 1.6 - r() * 1.5, h.z + h.d / 2 + .05), k: .5 + r() * .7, t: r() }); }
+  const LAMPS = []; { const r = rng(3131); for (const h of HOUSES) { if (r() > (Math.abs(h.x - S4C.x) < 70 && Math.abs(h.z - S4C.z) < 110 ? .3 : .05)) continue; LAMPS.push({ p: V(h.x + (r() - .5) * h.w * .5, h.top - 1.6 - r() * 1.5, h.z + h.d / 2 + .05), k: .5 + r() * .7, t: r() }); }
     for (const sd of [-1, 1]) LAMPS.push({ p: V(GATE.x + sd * 7.5, hT(GATE.x, GATE.z) + 4.5, GATE.z + 5.4), k: 3.2, t: 0, gate: true }); }
   const lampPos = new Float32Array(LAMPS.length * 3), lampA = new Float32Array(LAMPS.length), lampS = new Float32Array(LAMPS.length);
   LAMPS.forEach((L, i) => { lampPos.set([L.p.x, L.p.y, L.p.z], i * 3); lampS[i] = L.gate ? 1.6 : .8; });
   const lampU = { uPx: { value: 1000 } };
   const lamps = (() => { const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(lampPos, 3)); g.setAttribute('aA', new THREE.BufferAttribute(lampA, 1)); g.setAttribute('aSz', new THREE.BufferAttribute(lampS, 1));
     const m = new THREE.ShaderMaterial({ uniforms: lampU, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
-      vertexShader: `attribute float aA, aSz; uniform float uPx; varying float vA; void main(){ vec4 mv = modelViewMatrix * vec4(position, 1.); gl_Position = projectionMatrix * mv; gl_PointSize = clamp(uPx * aSz / -mv.z, 2., 26.); vA = aA; }`,
+      vertexShader: `attribute float aA, aSz; uniform float uPx; varying float vA; void main(){ vec4 mv = modelViewMatrix * vec4(position, 1.); gl_Position = projectionMatrix * mv; gl_PointSize = clamp(uPx * aSz / -mv.z, 6., 30.); vA = aA; }`,
       fragmentShader: `varying float vA; void main(){ vec2 c = gl_PointCoord - .5; float a = exp(-dot(c, c) * 18.); gl_FragColor = vec4(vec3(1., .66, .3) * 3.2, a * vA); }` });
     const p = new THREE.Points(g, m); p.frustumCulled = false; S.add(p); return p; })();
   const gateLamps = LAMPS.filter(L => L.gate).map(L => film.lamp(L.p, '#ffb060', { power: 0, size: 3, fog: 1 }));
@@ -538,6 +540,23 @@ export async function build(W, H) {
           gl_PointSize = clamp(uPx * (2. + 4. * aS) * 12. / d, 1., 12.); vA = clamp(1.2 - d / 16., 0., 1.) * (.4 + .6 * aS); }`,
       fragmentShader: `uniform float uA; varying float vA; void main(){ vec2 c = gl_PointCoord - .5; float a = exp(-dot(c, c) * 14.); gl_FragColor = vec4(vec3(1., .82, .58) * 1.4, a * vA * uA); }` });
     var motes = new THREE.Points(g, m); motes.frustumCulled = false; S.add(motes); }
+
+  // ---------------------------------------------------------------- swifts over the city at dusk (S3–S5): small dark V's circling, wings beating — pure in t
+  const BIRDS = []; { const r = rng(6161), bm = new THREE.MeshBasicMaterial({ color: '#2a2026', side: THREE.DoubleSide });
+    for (let i = 0; i < 16; i++) { const g = new THREE.Group(), wing = sd => { const sh = new THREE.Shape(); sh.moveTo(0, 0); sh.lineTo(sd * .55, .06); sh.lineTo(sd * .5, -.05); sh.lineTo(0, -.08); const m = new THREE.Mesh(new THREE.ShapeGeometry(sh), bm); g.add(m); return m; };
+      const w0 = wing(1), w1 = wing(-1); g.userData = { w0, w1, r: 40 + r() * 90, h: 38 + r() * 40, w: (.25 + r() * .2) * (r() < .5 ? 1 : -1), ph: r() * 6.283, fl: 7 + r() * 3, cx: TEMPLE.x - 60 + r() * 120, cz: TEMPLE.z - 40 + r() * 80 };
+      g.scale.setScalar(1.6); S.add(g); BIRDS.push(g); } }
+  function birdsAt(t, on) { for (const g of BIRDS) { g.visible = on; if (!on) continue; const U = g.userData, a = U.ph + U.w * t;
+      g.position.set(U.cx + Math.cos(a) * U.r, U.h + 6 * Math.sin(t * .4 + U.ph), U.cz + Math.sin(a) * U.r); g.rotation.set(0, -a + (U.w > 0 ? 0 : Math.PI), 0);
+      const f = Math.sin(t * U.fl + U.ph) * .6; U.w0.rotation.z = f; U.w1.rotation.z = -f; } }
+  // washing on lines between posts on the lower city's roofs (S4): cloths swaying a little in the evening wind
+  const WASH = []; { const r = rng(7373), cm = ['#e8dcc0', '#c8a878', '#b07050', '#8a7a9a', '#d8c8a0'];
+    for (const h of HOUSES.filter(h => Math.abs(h.x - S4C.x - 10) < 45 && h.z < CITYZ - 10 && h.z > CITYZ - 170 && h.w > 4.5).slice(0, 34)) { if (r() < .4) continue;
+      const len = Math.min(h.w, 5) * .8, y = h.top + 1.5, line = new THREE.Mesh(new THREE.CylinderGeometry(.015, .015, len, 4), K.std('#3a2e26')); line.rotation.z = Math.PI / 2; line.position.set(h.x, y, h.z); S.add(line);
+      for (const sd of [-1, 1]) { const p = new THREE.Mesh(new THREE.CylinderGeometry(.04, .04, 1.5, 5), K.std('#4a3a2a')); p.position.set(h.x + sd * len / 2, h.top + .75, h.z); S.add(p); }
+      const n = 2 + ((r() * 3) | 0); for (let k = 0; k < n; k++) { const w = .5 + r() * .5, ht = .6 + r() * .5, g = new THREE.PlaneGeometry(w, ht, 2, 3); g.translate(0, -ht / 2, 0);
+        const c = new THREE.Mesh(g, K.std(cm[(r() * cm.length) | 0], { side: THREE.DoubleSide, roughness: .95 })); c.position.set(h.x - len / 2 + (k + .5) * len / n, y, h.z); c.userData.ph = r() * 6; S.add(c); WASH.push(c); } } }
+  function washAt(t) { for (const c of WASH) c.rotation.x = .12 * Math.sin(t * 1.3 + c.userData.ph) + .05 * Math.sin(t * 2.9 + c.userData.ph * 2); }
 
   S.traverse(o => { if (o.isMesh && o.material !== M.dark) { o.castShadow = o.castShadow !== false; o.receiveShadow = true; } });
 
@@ -587,101 +606,120 @@ export async function build(W, H) {
   const shotOf = t => { let k = 0; for (let i = 1; i < T.cuts.length; i++) if (t >= T.cuts[i]) k = i; return T.names[k]; };
   const STAGE = {};
   const QS = typeof location !== 'undefined' ? new URLSearchParams(location.search) : new Map();
-  const S1P = (QS.get('s1p') || '13,30,140').split(',').map(Number), S1L = (QS.get('s1l') || '16,-30.5,-300').split(',').map(Number), S1F = +(QS.get('s1f') || 12), S6Y = +(QS.get('s6y') || -2), S6H = +(QS.get('s6h') || 3), S6F = +(QS.get('s6f') || 34), S4H = +(QS.get('s4h') || 46), S4D = +(QS.get('s4d') || 60), S4F = +(QS.get('s4f') || 17), S4Y = +(QS.get('s4y') || 70), S3X = +(QS.get('s3x') || -.42), S3Y = +(QS.get('s3y') || 40), S2X = +(QS.get('s2x') || .6), S2H = +(QS.get('s2h') || 3.0), S2L = +(QS.get('s2l') || .37);
-  // S1: telephoto from high behind the procession — a slow truck right with a tilt down as the lens follows the road toward the city
+  // ==== fix 1 (rounds/r10-pilot/batch3-fix1.md, owner 2026-11-25): people are cast shadows, far small silhouettes, or backlit silhouettes —
+  // never mid-distance bodies with visible surfaces, never a top-down street of figures.
+  const QN = (k, d) => (QS.get(k) != null ? +QS.get(k) : d), QV = (k, d) => (QS.get(k) || d).split(',').map(Number);
+  const S1P = QV('s1p', '13,30,140'), S1L = QV('s1l', '16,-30.5,-300'), S1F = QN('s1f', 12);
+  const S2H = QN('s2h', 3.0), S2L = QN('s2l', .37), S2F = QN('s2f', 10.5);
+  const S3D = QN('s3d', 125), S3X = QN('s3x', 9), S3P = QN('s3p', -2.0), S3F = QN('s3f', 17);
+  const S4X = QN('s4x', -60), S4P = QN('s4p', 13), S4F = QN('s4f', 20), S4H = QN('s4h', 30);
+  const S5D = QN('s5d', 36), S5X = QN('s5x', 3.3), S5P = QN('s5p', -47);
+  const S6D = QN('s6d', 28), S6X = QN('s6x', 2.2), S6H = QN('s6h', 2.2), S6Y = QN('s6y', -3), S6F = QN('s6f', 30);
+  const RIGHT = V(-DIRC.z, 0, DIRC.x);
+  // S1: a long lens from high behind the procession, looking west into the low sun over the city: the procession is a stream of backlit
+  //     silhouettes (each well under 12 % of the frame) with palm branches against the glowing haze, their long shadows streaming back
+  //     toward us; the city a layered silhouette above. He is not picked out here. Move: a slow truck right.
   STAGE.S1 = t => {
-    const a = T.cuts[0], b = T.cuts[1], u = (t - a) / (b - a), k = u * .8 + .2 * sine(u);   // moving from the first frame
+    const a = T.cuts[0], b = T.cuts[1], u = (t - a) / (b - a), k = u * .8 + .2 * sine(u);
     setVis(SIDE, true); crowdAt(t); jPose(t, 'S1'); setVis(CITYP, false); J.visible = true;
-    const base = posOn(S_STOP - 55, 0), pos = V(S1P[0] + 8 * k, S1P[1], S1P[2] - 3 * k);
-    const look = V(S1L[0] + 3 * k, S1L[1] - .6 * k, S1L[2]);
+    const pos = V(S1P[0] + 8 * k, S1P[1], S1P[2] - 3 * k), look = V(S1L[0] + 3 * k, S1L[1] - .6 * k, S1L[2]);
     setFov(S1F); setCam(pos, look);
-    setSun(sunDirFrom(look.clone().sub(pos), -16, 11), 12, V(base.x, base.y, base.z - 50), 130, 3.0);
-    { const f = posOn(S_STOP - 20, 0); film.dofCfg.focus = pos.distanceTo(V(f.x, f.y, f.z)); } film.dofCfg.aperture = .9;
-    film.atmos.density = .0019; film.look.exposure = 1.05; lamp.shimmer = 1; lamp.god = .25;
+    setSun(sunDirFrom(look.clone().sub(pos), -1.5, 4.2), 5, V(JSTOP.x, JSTOP.y, JSTOP.z + 30), 110, 3.0);
+    SKY.sunColor.value.copy(col('#fff0cc', 10)); SKY.sunGlow.value.copy(col('#ffb070', 1.8));
+    hemi.intensity = .2;
+    { const f = posOn(S_STOP - 20, 0); film.dofCfg.focus = pos.distanceTo(V(f.x, f.y, f.z)); } film.dofCfg.aperture = .8;
+    film.atmos.density = .0017; film.look.exposure = 1.0; lamp.shimmer = .8; lamp.god = .5;
     dustU.uPx.value = (H / 2) / Math.tan(cam.fov * D2R / 2); moteU.uA.value = 0;
-    RIMU.uRimC.value.copy(col('#ff9a5a', 1.4)); pastelP.u.violet.value = 0; pastelP.u.gild.value = 0;
+    RIMU.uRimC.value.copy(col('#ffa060', 2.2)); pastelP.u.violet.value = .1; pastelP.u.gild.value = 0;
   };
-  // S2: the long lens at eye level behind him (tracking with him; after he stops, the push goes on) — the crowd goes soft and slow
-  const camS2 = t => { const uu = (t - T.cuts[1]) / (T.cuts[2] - T.cuts[1]), D = 44 - 7 * (uu * .55 + .45 * sine(uu)), jp = J.position;
-    const x = jp.x - DIRC.x * D + S2X, z = jp.z - DIRC.z * D; return V(x, hT(x, z) + S2H + .2 * ss(T.cuts[1], T.cuts[2], t), z); };
+  // S2: the long lens on the road behind him, into the low sun: the people are backlit silhouettes with a thin rim, their long shadows
+  //     streaming back along the road toward us. He walks, slows over two steps and stops; the others flow on past him and over the brow
+  //     (their clock runs down to 0.3x, the lens softens them; he stays sharp); his head bows a little, his shoulders drop once. Back view
+  //     only, the sun to the right of his head (never behind it). Move: tracking, then a slow push in.
+  const camS2 = t => { const uu = clamp((t - T.cuts[1]) / (T.cuts[2] - T.cuts[1])), D = 46 - 7 * (uu * .55 + .45 * sine(uu)), jp = J.position;
+    const x = jp.x - DIRC.x * D + .5, z = jp.z - DIRC.z * D; return V(x, hT(x, z) + S2H, z); };
   STAGE.S2 = t => {
-    setVis(SIDE, true); crowdAt(t); jPose(t, 'S2'); setVis(CITYP, false); J.visible = true;
+    setVis(SIDE, true); jPose(t, 'S2'); crowdAt(t); setVis(CITYP, false); J.visible = true; { const cp = camS2(t); for (const g of [...CROWD, ...SIDE]) if (g.visible && g.position.distanceTo(cp) < 34) { g.visible = false; if (g.userData.palm) g.userData.palm.visible = false; } }   // nobody near the lens: silhouettes stay far
     const pos = camS2(t), jp = J.position.clone(), look = jp.clone().add(V(0, S2L, 0)).addScaledVector(DIRC, 6);
-    setFov(10.5); setCam(pos, look);
-    const view = look.clone().sub(pos);
-    setSun(sunDirFrom(view, -9.5, 6.2), 9, jp.clone(), 45, 3.0);   // the low sun left of his axis (never behind his head): warm rim on his left edge
+    setFov(S2F); setCam(pos, look);
+    setSun(sunDirFrom(look.clone().sub(pos), -3.4, 3.0), 4, jp.clone().addScaledVector(DIRC, -15), 40, 3.2);
+    SKY.sunColor.value.copy(col('#fff0cc', 9)); SKY.sunGlow.value.copy(col('#ffb070', 1.9));
+    hemi.intensity = .18;
     const dr = ss(T.drain[0], T.drain[1] + .6, t);
-    film.dofCfg.focus = pos.distanceTo(jp.clone().add(V(0, 1.2, 0))); film.dofCfg.aperture = lerp(1.1, 16, dr); film.dofCfg.maxCoc = lerp(22, 30, dr);
-    film.atmos.density = .0017; film.look.exposure = lerp(1.06, 1.02, dr); lamp.shimmer = .35 * (1 - dr); lamp.god = .35;
+    film.dofCfg.focus = pos.distanceTo(jp.clone().add(V(0, 1.2, 0))); film.dofCfg.aperture = lerp(1.1, 14, dr); film.dofCfg.maxCoc = lerp(22, 30, dr);
+    film.atmos.density = .0016; film.look.exposure = lerp(1.0, .97, dr); lamp.shimmer = .3 * (1 - dr); lamp.god = .5;
     dustU.uPx.value = (H / 2) / Math.tan(cam.fov * D2R / 2); moteU.uA.value = 0;
-    RIMU.uRimC.value.copy(col('#ff9a5a', lerp(1.35, 1.6, dr))); pastelP.u.violet.value = .15 * dr; pastelP.u.gild.value = 0;
+    RIMU.uRimC.value.copy(col('#ffa060', lerp(2.2, 2.6, dr))); pastelP.u.violet.value = .15 + .15 * dr; pastelP.u.gild.value = 0;
   };
-  // S3: over his shoulder onto the city at dusk — a slow push in (zoom), held for the quote
+  // S3: (the shoulder shot is cut) from far back on the ridge, a long lens over his small backlit back at the frame's left edge onto the
+  //     city across the valley at sunset: layered silhouettes in haze, the Temple's gold catching the last light, altar smoke, swifts
+  //     circling. One slow zoom in.
   STAGE.S3 = t => {
     setVis(SIDE, false); crowdAt(t, 16, S_STOP + 55); jPose(t, 'S3'); setVis(CITYP, false); J.visible = true;
-    const a = T.cuts[2], b = T.cuts[3], u = (t - a) / (b - a);
-    J.updateMatrix(); const loc = V(S3X, 1.5, 1.15).applyMatrix4(J.matrix), pos = loc.add(V(0, .02 * Math.sin(t * .6), 0));
-    const look = TEMPLE.clone().add(V(-8, -26 + 3 * u, 0));
-    setFov(lerp(30, 26.4, u * .85 + .15 * sine(u))); setCam(pos, look);
-    setSun(sunDirFrom(look.clone().sub(pos), S3Y, 5), 7,  V(0, -20, -700), 520, 3.2);
-    film.dofCfg.focus = pos.distanceTo(TEMPLE); film.dofCfg.aperture = 1.6;
-    film.atmos.density = .0012; film.look.exposure = 1.0; lamp.shimmer = 0; lamp.god = .35;
-    moteU.uA.value = .8; moteU.uC.value.set(pos.x, pos.y - 2, pos.z - 2);
-    RIMU.uRimC.value.copy(col('#ff8a50', 1.5)); pastelP.u.violet.value = .25 + .1 * u; pastelP.u.gild.value = 0;
+    const a = T.cuts[2], b = T.cuts[3], u = (t - a) / (b - a), jp = J.position;
+    const pos = jp.clone().addScaledVector(DIRC, -S3D).addScaledVector(RIGHT, S3X); pos.y = hT(pos.x, pos.z) + 1.4;
+    const h = V(TEMPLE.x - pos.x, 0, TEMPLE.z - pos.z).normalize(), look = pos.clone().addScaledVector(h, 600); look.y = pos.y + 600 * Math.tan(S3P * D2R);
+    setFov(lerp(S3F, S3F * .86, u * .8 + .2 * sine(u))); setCam(pos, look);
+    setSun(sunDirFrom(look.clone().sub(pos), -2.2, 3.3), 5, V(0, -20, -700), 520, 2.4);
+    hemi.intensity = .2; goldM.emissiveIntensity = .7; film.dofCfg.focus = pos.distanceTo(TEMPLE); film.dofCfg.aperture = .8;
+    film.atmos.density = .0014; film.look.exposure = 1.04; lamp.shimmer = 0; lamp.god = .4;
+    moteU.uA.value = 0; RIMU.uRimC.value.copy(col('#ff8a50', 1.8)); pastelP.u.violet.value = .3 + .1 * u; pastelP.u.gild.value = 0;
   };
-  // S4: down onto the lower city — a slow truck left and crane down over the roofs; people busy below, nobody looks up
+  // S4: from the ridge at a low angle onto the lower city's roofs at dusk: lamps in windows, smoke, washing on lines, a few tiny figures on
+  //     the roofs at their work, nobody looking up. One slow pan right across the roofs toward the Temple.
   STAGE.S4 = t => {
     setVis(CROWD, false); setVis(SIDE, false); setVis(CITYP, true); J.visible = false; cityPeopleAt(t);
     const a = T.cuts[3], b = T.cuts[4], u = (t - a) / (b - a), k = u * .8 + .2 * sine(u);
-    const tgt = V(S4C.x + lerp(1.2, -1.2, k), hT(S4C.x, S4C.z) + 1, S4C.z - lerp(0, 5, k)), pos = tgt.clone().add(V(lerp(3, 1, k), lerp(S4H, S4H - 3, k), S4D - 5 * k));
-    setFov(S4F); setCam(pos, tgt);
-    setSun(sunDirFrom(tgt.clone().sub(pos), S4Y, 7), 15, tgt.clone(), 70, 3.2);
-    film.dofCfg.focus = pos.distanceTo(tgt); film.dofCfg.aperture = .7;
-    film.atmos.density = .0009; film.look.exposure = 1.22; lamp.shimmer = 0; lamp.god = 0;
-    moteU.uA.value = 0; RIMU.uRimC.value.copy(col('#ff8a50', 1.4)); pastelP.u.violet.value = .2; pastelP.u.gild.value = 0;
+    const pos = V(S4C.x + 28 + lerp(-5, 5, k), 0, CITYZ + 2); pos.y = hT(pos.x, pos.z) + S4H;   // on the east rampart
+    const look = V(S4C.x - 20 + lerp(-8, 14, k), hT(S4C.x, S4C.z) + S4P, S4C.z + 20);
+    setFov(S4F); setCam(pos, look);
+    setSun(sunDirFrom(look.clone().sub(pos), -14, 4), 5, V(S4C.x, -20, S4C.z - 40), 300, 2.4);
+    hemi.intensity = .42; film.dofCfg.focus = pos.distanceTo(look); film.dofCfg.aperture = .5;
+    film.atmos.density = .0009; film.look.exposure = 1.1; lamp.shimmer = 0; lamp.god = 0;
+    moteU.uA.value = 0; RIMU.uRimC.value.copy(col('#ff8a50', 1.6)); pastelP.u.violet.value = .4; pastelP.u.gild.value = 0;
+    LAMPS.forEach((L, i) => { lampA[i] = L.gate ? 0 : (L.t < .5 ? ss(a - 1 + L.t * 8, a + L.t * 8, t) * Math.min(1, L.k * 1.1) : 0); }); lamps.geometry.attributes.aA.needsUpdate = true;
   };
-  // S5: the sun sets over the city; his back small at the left edge — a slow crane up
+  // S5: the sun sets over the city (the disc sinks onto the hills right of the Temple); his back small at the left edge. A slow crane up.
   STAGE.S5 = t => {
     setVis(SIDE, false); crowdAt(t, 95, S_STOP + 32); jPose(t, 'S5'); setVis(CITYP, false); J.visible = true;
-    const a = T.cuts[4], b = T.cuts[5], u = (t - a) / (b - a), k = u * .75 + .25 * sine(u);
-    const jp = J.position.clone(), right = V(-DIRC.z, 0, DIRC.x);
-    const pos = jp.clone().addScaledVector(DIRC, -24).addScaledVector(right, 2.2).add(V(0, 1.6 + 3.2 * k, 0));
-    const look = TEMPLE.clone().add(V(0, -47 + 2 * k, 0));
+    const a = T.cuts[4], b = T.cuts[5], u = (t - a) / (b - a), k = u * .75 + .25 * sine(u), jp = J.position.clone();
+    const pos = jp.clone().addScaledVector(DIRC, -S5D).addScaledVector(RIGHT, S5X); pos.y = hT(pos.x, pos.z) + 1.5 + 3.4 * k;
+    const look = TEMPLE.clone().add(V(0, S5P + 2 * k, 0));
     setFov(24); setCam(pos, look);
-    const el = lerp(2.0, -.2, ss(T.sunset[0], T.sunset[1], t));
-    setSun(sunDirFrom(look.clone().sub(pos), -2.6, el), Math.max(2.5, el + 2.5), V(0, -20, -400), 520, lerp(2.8, 1.2, ss(T.sunset[0], T.sunset[1], t)));
-    film.dofCfg.focus = pos.distanceTo(jp); film.dofCfg.aperture = 1.0;
+    const el = lerp(2.0, .5, ss(T.sunset[0], T.sunset[1], t));
+    setSun(sunDirFrom(look.clone().sub(pos), -2.6, el), Math.max(2.5, el + 2.5), V(0, -20, -400), 520, lerp(2.8, 1.5, ss(T.sunset[0], T.sunset[1], t)));
+    hemi.intensity = .3; goldM.emissiveIntensity = .5; film.dofCfg.focus = pos.distanceTo(jp); film.dofCfg.aperture = .8;
     film.atmos.density = .0013; film.look.exposure = 1.02; lamp.shimmer = 0; lamp.god = .45;
     moteU.uA.value = .5; moteU.uC.value.set(pos.x, pos.y - 2, pos.z - 2);
-    RIMU.uRimC.value.copy(col('#ff7a48', 1.6)); pastelP.u.violet.value = .4 + .2 * u; pastelP.u.gild.value = 0;
+    RIMU.uRimC.value.copy(col('#ff7a48', 1.7)); pastelP.u.violet.value = .4 + .2 * u; pastelP.u.gild.value = 0;
     SKY.horizon.value.copy(col('#ffb070', 1.55)); SKY.mid.value.copy(lerp3(col('#d89a78', .88), col('#c08088', .75), u));
   };
-  // S6: his small back walks down the road toward the gate in the last light — a slow pull back with a crane up; it settles dark gold
+  // S6: his small far silhouette walks away down the road toward the gate, off centre, his long shadow streaming back to us from the last
+  //     sun on the hills; the camera stays and rises slowly; lamps begin in the city, two at the gate; it settles to a calm dark gold.
   STAGE.S6 = t => {
     setVis(SIDE, false); crowdAt(t, 230, S_STOP + 45); jPose(t, 'S6'); setVis(CITYP, false); J.visible = true;
     const a = T.cuts[5], b = T.end, u = (t - a) / (b - a), k = u * .7 + .3 * sine(u);
-    // the camera trails him (it walks with him) and, on top of that, pulls back and rises: he gets smaller, the road to the gate opens
-    const base = JSTOP, jp = J.position, D = lerp(13, 22, k), pos = V(jp.x - DIRC.x * D + .8, base.y + lerp(S6H, S6H + 4, k), jp.z - DIRC.z * D);
-    const look = V(jp.x + .6, jp.y + S6Y - 5 * k, jp.z + DIRC.z * 22);
+    const pos = V(JSTOP.x, 0, JSTOP.z).addScaledVector(DIRC, -S6D).addScaledVector(RIGHT, S6X); pos.y = hT(pos.x, pos.z) + S6H + 2.6 * k;
+    const look = V(JSTOP.x, JSTOP.y + S6Y - 1.5 * k, JSTOP.z).addScaledVector(DIRC, 40).addScaledVector(RIGHT, S6X * .6);
     setFov(S6F); setCam(pos, look);
-    setSun(sunDirFrom(look.clone().sub(pos), -12, -1.2 - 1.5 * u), 2.5, V(base.x, base.y, base.z), 200, lerp(.25, 0, u));
-    SKY.sunColor.value.copy(col('#ffd090', 0)); SKY.sunGlow.value.copy(col('#ff9a68', lerp(1.3, .9, u)));
+    setSun(sunDirFrom(look.clone().sub(pos), -1.5, lerp(.55, .1, u)), 1.2, V(JSTOP.x, JSTOP.y, JSTOP.z - 10), 60, lerp(1.6, .6, u));
+    SKY.sunColor.value.copy(col('#ffc890', lerp(9, 4, u))); SKY.sunGlow.value.copy(col('#ff9a68', lerp(1.3, .9, u)));
     SKY.top.value.copy(lerp3(col('#4a5480', .45), col('#2c2f58', .38), u)); SKY.mid.value.copy(lerp3(col('#c08088', .75), col('#8a6a7e', .6), u)); SKY.horizon.value.copy(lerp3(col('#ffa070', 1.35), col('#e08a6a', 1.0), u));
-    hemi.intensity = lerp(.62, .5, u); hemi.color.copy(col('#a8a0c8'));
-    film.dofCfg.focus = pos.distanceTo(J.position); film.dofCfg.aperture = .35;
-    film.atmos.density = .0014; lamp.shimmer = 0; lamp.god = 0;
-    const dk = ss(T.dark[0], T.dark[1], t); film.look.exposure = lerp(1.22, .78, dk) * lerp(1, 1.05, u);
-    moteU.uA.value = 0; RIMU.uRimC.value.copy(col('#ff9a68', lerp(1.0, .55, u))); pastelP.u.violet.value = .6; pastelP.u.gild.value = .55 * dk + .15 * u;
-    LAMPS.forEach((L, i) => { { const o = a + 1.2 + 6.5 * Math.acos(1 - 2 * L.t) / Math.PI; lampA[i] = ss(o, o + 1.2, t) * L.k; } }); lamps.geometry.attributes.aA.needsUpdate = true;
+    hemi.intensity = lerp(.28, .22, u); hemi.color.copy(col('#a8a0c8'));
+    film.dofCfg.focus = pos.distanceTo(J.position); film.dofCfg.aperture = .45;
+    film.atmos.density = .0014; lamp.shimmer = 0; lamp.god = 0; smkU.uC.value.copy(col('#9a8478', 1));
+    const dk = ss(T.dark[0], T.dark[1], t); film.look.exposure = lerp(1.12, .74, dk);
+    moteU.uA.value = 0; RIMU.uRimC.value.copy(col('#ff9a68', lerp(1.5, .8, u))); pastelP.u.violet.value = .55; pastelP.u.gild.value = .55 * dk + .15 * u;
+    LAMPS.forEach((L, i) => { const o = a + 1.2 + 6.5 * Math.acos(1 - 2 * L.t) / Math.PI; lampA[i] = Math.max(L.gate ? 0 : (L.t < .4 ? .8 * L.k : 0), ss(o, o + 1.2, t) * L.k); }); lamps.geometry.attributes.aA.needsUpdate = true;
     gateLamps.forEach(g => { g.power = 30 * ss(a + .8, a + 3.5, t); });
   };
   const lerp3 = (A, B, k) => A.clone().lerp(B, clamp(k));
   function stage(t) {
     const nm = shotOf(t);
-    skyGold(); hemi.intensity = .55; hemi.color.copy(col('#b4a8b8')); lamps.visible = nm === 'S6'; gateLamps.forEach(g => { g.power = 0; }); if (nm !== 'S6') { lampA.fill(0); lamps.geometry.attributes.aA.needsUpdate = true; }
-    dust.visible = nm === 'S1' || nm === 'S2'; smoke.visible = true; motes.visible = true;
+    skyGold(); hemi.intensity = .55; goldM.emissiveIntensity = .12; hemi.color.copy(col('#b4a8b8')); lamps.visible = nm === 'S6' || nm === 'S4'; gateLamps.forEach(g => { g.power = 0; }); smkU.uC.value.copy(col('#d8c4b0', 1)); if (nm !== 'S6' && nm !== 'S4') { lampA.fill(0); lamps.geometry.attributes.aA.needsUpdate = true; }
+    dust.visible = nm === 'S1'; TUFTS.visible = true; smoke.visible = true; motes.visible = true; birdsAt(t, nm === 'S3' || nm === 'S4' || nm === 'S5'); washAt(t);
     film.dofCfg.maxCoc = 22; film.atmos.scatter = nm === 'S6' ? .15 : 1; STAGE[nm](t);
-    if (dust.visible) dustAt(t); smokeAt(t); smkU.uPx.value = (H / 2) / Math.tan(cam.fov * D2R / 2); lampU.uPx.value = (H / 2) / Math.tan(cam.fov * D2R / 2) * .5;
+    if (dust.visible) dustAt(t); smokeAt(t); smkU.uPx.value = (H / 2) / Math.tan(cam.fov * D2R / 2); lampU.uPx.value = (H / 2) / Math.tan(cam.fov * D2R / 2) * (nm === 'S4' ? 2.6 : .5);
     tuftU.uT.value = t; moteU.uT.value = t; GU.uSunG.value.copy(SUN);
     RIMU.uSunV.value.copy(SUN).transformDirection(cam.matrixWorldInverse.copy(cam.matrixWorld).invert());
     return nm;

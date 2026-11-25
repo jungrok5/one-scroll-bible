@@ -59,10 +59,10 @@ const PLZ = z => ss(-26, -30, z) * (1 - ss(-49.6, -50.8, z));   // the square: t
 const halfW = z => 3.6 + 4.9 * PLZ(z);
 const PETER = V(-.5, PLAT, -52.2);
 // the sun up the street and to the left: it rakes the right-hand walls (the front reads on them) and backlights Peter from his left
-const SUN1 = V(Math.sin(-28 * D2R) * Math.cos(30 * D2R), Math.sin(30 * D2R), -Math.cos(28 * D2R) * Math.cos(30 * D2R));
+const SUN1 = V(Math.sin(-22 * D2R) * Math.cos(16 * D2R), Math.sin(16 * D2R), -Math.cos(22 * D2R) * Math.cos(16 * D2R));   // fix 1: lower, so Peter stands against the bright sky near the sun
 // ---------------------------------------------------------------- the pool (shot 3), far from the street (fog hides one from the other)
 const PO = V(0, 0, 640), PSI = 14 * D2R, NR = 6, A0 = 7.4, B0 = 4.1, DR = .85, STEP = .3, YW = -(NR * STEP) - .36, YF = YW - .95;
-const SUN3 = V(.55, .62, -.56).normalize();
+const SUN3 = V(Math.sin(-12 * D2R) * Math.cos(13 * D2R), Math.sin(13 * D2R), -Math.cos(12 * D2R) * Math.cos(13 * D2R));   // fix 1: a low sun beyond the pool — long shadows toward the lens
 
 export function beats(B) {
   const T = { ...B }, c1 = B.N170b, c2 = B.N172, end = B.N173;
@@ -169,14 +169,14 @@ export async function build(W, H) {
   const glowM = K.glow('#ffb468', 1.5), WALLS = [M.wall, M.wall2, M.wall3, M.wall4, M.wall5, M.wall6];
   for (const sd of [-1, 1]) { let z = 46; while (z > -290) {
       const wz = 3.6 + R() * 4.4, d = 6 + R() * 4, z1 = z - wz, zc = (z + z1) / 2; let hw = 0; for (let k = 0; k <= 6; k++) hw = Math.max(hw, halfW(lerp(z, z1, k / 6)));
-      const x0 = sd * (hw + .1 + R() * .9), base = gY(z) - .5, top = gY(z1) + 3 + R() * 3.6 + (R() < .3 ? 2.6 : 0), m = WALLS[(R() * WALLS.length) | 0], ry = (R() - .5) * .06, far = zc < -150;
+      const x0 = sd * (hw + .1 + R() * .9), base = gY(z) - .5, lowZ = zc < -47 && zc > -80, top = gY(z1) + (lowZ ? 2.2 + R() * .7 : 3 + R() * 3.6 + (R() < .3 ? 2.6 : 0)), m = WALLS[(R() * WALLS.length) | 0], ry = (R() - .5) * .06, far = zc < -150;   // fix 1: low houses round the landing — the sky opens behind Peter
       const hg = new THREE.Group(); hg.position.set(x0 + sd * d / 2, 0, zc); hg.rotation.y = ry; G.street.add(hg);
       addBox(hg, d, top - base, wz, 0, (top + base) / 2, 0, 0, m);
       addBox(hg, d + .12, .18, wz + .12, 0, top + .04, 0, 0, M.roof, .04);
       // an irregular roof line: parapets of different heights, a room on the roof, a low dome, beam ends under the roof
       const ph = .25 + R() * .55; for (const s2 of [-1, 1]) addBox(hg, d, ph, .18, 0, top + ph / 2 + .1, s2 * (wz / 2 - .09), 0, m, .04);
       addBox(hg, .18, ph * (.6 + R() * .6), wz, -sd * (d / 2 - .09), top + ph / 2 + .1, 0, 0, m, .04);
-      const roofK = R();
+      const roofK = lowZ ? .8 + R() * .2 : R();
       if (roofK < .4) { const uw = d * (.35 + R() * .25), ud = wz * (.4 + R() * .3), uh = 2.2 + R() * .8, ux = sd * (d / 2 - uw / 2 - .4) * R(), uz = (R() - .5) * (wz - ud) * .6; addBox(hg, uw, uh, ud, ux, top + uh / 2, uz, 0, m);
         addBox(hg, uw + .1, .14, ud + .1, ux, top + uh + .05, uz, 0, M.roof, .03);
         if (R() < .5) { const dm = new THREE.Mesh(new THREE.SphereGeometry(Math.min(uw, ud) * .38, 18, 8, 0, Math.PI * 2, 0, Math.PI / 2), m); dm.position.set(ux, top + uh + .1, uz); dm.castShadow = dm.receiveShadow = true; hg.add(dm); } }
@@ -202,10 +202,10 @@ export async function build(W, H) {
       z = z1 - (R() < .22 ? 1.2 + R() * .9 : 0); } }
   // the landing's low wall behind Peter is the street going on up; beyond the city: the temple's platform and sanctuary in the haze
   { const gt = gY(-290); const pl = new THREE.Mesh(new THREE.PlaneGeometry(900, 700), M.pave); pl.rotation.x = -Math.PI / 2; pl.position.set(0, gt, -640); pl.receiveShadow = true; G.street.add(pl);
-    const zt = -560; addBox(G.street, 230, 40, 30, -40, gt + 20 - 6, zt, 0, M.ashlar, .3);
-    for (let k = 0; k < 9; k++) addBox(G.street, 3, 4, 3, -150 + k * 28, gt + 36, zt + 14, 0, M.ashlar, .2);   // the colonnade's line along the top, far off
-    addBox(G.street, 34, 44, 50, -46, gt + 34 + 22, zt - 60, 0, M.wall5, .4); addBox(G.street, 54, 22, 40, -46, gt + 34 + 11, zt - 40, 0, M.wall5, .4);
-    addBox(G.street, 36, 1.2, 52, -46, gt + 34 + 44.6, zt - 60, 0, patch(K.std('#e8d0a0', { roughness: .5, metalness: .3 }), 'tg'), .2); }
+    const zt = -560; addBox(G.street, 230, 40, 30, -300, gt + 20 - 6, zt, 0, M.ashlar, .3);
+    for (let k = 0; k < 9; k++) addBox(G.street, 3, 4, 3, -410 + k * 28, gt + 36, zt + 14, 0, M.ashlar, .2);   // the colonnade's line along the top, far off
+    addBox(G.street, 34, 44, 50, -306, gt + 34 + 22, zt - 60, 0, M.wall5, .4); addBox(G.street, 54, 22, 40, -306, gt + 34 + 11, zt - 40, 0, M.wall5, .4);
+    addBox(G.street, 36, 1.2, 52, -306, gt + 34 + 44.6, zt - 60, 0, patch(K.std('#e8d0a0', { roughness: .5, metalness: .3 }), 'tg'), .2); }
   { const bm = new THREE.InstancedMesh(new THREE.CylinderGeometry(.07, .08, .42, 6), M.wood, beamM4.length); beamM4.forEach((q, i) => bm.setMatrixAt(i, q)); bm.castShadow = true; G.street.add(bm); }
   const doorLamps = lampAt.map(p => film.lamp(p, '#ffb466', { power: 0, size: .25, fog: 1 }));
   // olive trees and palms rising behind the roofs (heal-village.js olive/palm, copied)
@@ -225,8 +225,8 @@ export async function build(W, H) {
   palm(G.street, -12.5, -36, 11, 3, gY(-36)); palm(G.street, 12, -60, 12, 5, gY(-60)); palm(G.street, -11.5, -112, 12, 7, gY(-112));
 
   // ---------------------------------------------------------------- people (lake-peter3d-b.js: one Peter, tied head cloth, loose robe; person())
-  const tunicM = patch(K.std('#a58f6f', { roughness: .95, side: THREE.DoubleSide }), 'pt', { rim: 1.2 }), clothM = patch(K.std('#3b4f6b', { roughness: .95, side: THREE.DoubleSide }), 'pc', { rim: 1.1 });
-  const faceM = K.std('#2a1a10', { roughness: 1 }), hairM = K.std('#1c140e', { roughness: 1 }), legM = K.std('#5e4430', { roughness: .9 }), ropeM = K.std('#3a2e20', { roughness: 1 });
+  const tunicM = patch(K.std('#2c2219', { roughness: .95, side: THREE.DoubleSide }), 'pt', { rim: 1.2 }), clothM = patch(K.std('#1b2432', { roughness: .95, side: THREE.DoubleSide }), 'pc', { rim: 1.1 });
+  const faceM = K.std('#2a1a10', { roughness: 1 }), hairM = K.std('#1c140e', { roughness: 1 }), legM = K.std('#17110c', { roughness: 1 }), ropeM = K.std('#3a2e20', { roughness: 1 });
   const tiedHead = (g, m, beard) => { const U = g.userData, s = U.s, n = U.neck; n.children.slice(1).forEach(o => n.remove(o));   // lake-peter3d-b.js
     const mk = (geo, mt) => { const o = new THREE.Mesh(geo, mt); o.castShadow = o.receiveShadow = true; n.add(o); return o; };
     mk(new THREE.CylinderGeometry(.056 * s, .07 * s, .17 * s, 12), legM).position.set(0, -.005 * s, .012 * s);
@@ -242,17 +242,19 @@ export async function build(W, H) {
     U.arms.forEach(A => { A.S.x *= .97; A.fo.scale.set(.74, 1, .74); }); };
   const peter = () => { const g = P.robeMan({ h: 1.78, broad: 1.14, mat: tunicM, cloth: tunicM, face: faceM, head: 'cloth' }), U = g.userData; tiedHead(g, clothM, true); dressMan(g, { hem: .84, flare: .92 }); U.legs.forEach(L => { L.shin.material = legM; L.foot.material = legM; }); U.ph = .17; return g; };
   const robeCols = ['#5e4c38', '#4c4032', '#6a5642', '#403628', '#5a4834', '#504436', '#64523e', '#48392b', '#8a7458', '#a08a6a'], mantleCols = ['#8a6a34', '#5e5a34', '#7a3626', '#a89a80', '#5a4030', '#4c4842', '#9a8458', '#6a4a2c', '#7c6a48', '#4c5262', '#c8b89a'];
-  const robes = robeCols.map((c, i) => patch(K.std(c, { roughness: .95, side: THREE.DoubleSide }), 'r' + i, { rim: 1 })), mantles = mantleCols.map((c, i) => patch(K.std(c, { roughness: .95, side: THREE.DoubleSide }), 'm' + i, { rim: 1 }));
+  const dk = c => new THREE.Color(c).multiplyScalar(.3);   // fix 1: dark backlit bodies, the rim carries the shape
+  const robes = robeCols.map((c, i) => patch(K.std(dk(c), { roughness: .95, side: THREE.DoubleSide }), 'r' + i, { rim: 1.3 })), mantles = mantleCols.map((c, i) => patch(K.std(dk(c), { roughness: .95, side: THREE.DoubleSide }), 'm' + i, { rim: 1 }));
   const HEADW = ['cloth', 'cloth', 'bare', 'cloth'];   // (turbans read as tubes at this distance in round 1)
   function man(r) { const base = { mat: robes[(r() * robes.length) | 0], cloth: mantles[(r() * mantles.length) | 0], face: faceM, kind: 'stand' };   // lake-peter3d-b.js person(), men only
     // round 2: the same tied head cloth as Peter (cap, band, a fall ending at the shoulder) and a beard; no mantle bell — the draped
     // 'cloth' heads read as hooded nuns in the s2 crowd (shared.md: men must read as men, broad level shoulders)
     const p = P.robeMan({ ...base, h: 1.64 + r() * .18, head: 'cloth', broad: 1.04 + r() * .14 }); tiedHead(p, base.cloth, true); dressMan(p, { hem: .86 + r() * .1, flare: .92 });
+    p.userData.neck.children.forEach(o => { if (o.geometry && o.geometry.type === 'LatheGeometry') o.scale.set(1.3, 1.2, 1.25); });   // fix 1: the cloth's fall reads past the jaw to the shoulder (no bald domes)
     p.userData.legs.forEach(L => { L.shin.material = legM; L.foot.material = legM; }); p.userData.ph = r(); return p; }
   const PT = peter(); PT.position.copy(PETER); PT.rotation.y = Math.PI + .45; G.street.add(PT);
   // the crowd in the square, facing him (an aisle kept clear for the s2 camera)
   const crowd = []; { const r = rng(1702); for (let i = 0; i < 400 && crowd.length < 104; i++) { const x = -7.6 + r() * 15.2, z = -47.2 + r() * 16.6;
-      if (Math.abs(x - 2.5) < 1.05 && z > -39.4) continue; if (crowd.some(q => Math.hypot(q.position.x - x, q.position.z - z) < 1.0)) continue;
+      if (Math.abs(x - 2.05) < .95 && z > -44.7) continue; if (crowd.some(q => Math.hypot(q.position.x - x, q.position.z - z) < 1.0)) continue;
       if (Math.abs(x) > halfW(z) - .5) continue;
       const p = man(r); p.position.set(x, gY(z), z); p.rotation.y = yawTo(PETER.clone().sub(p.position)) + (r() - .5) * .3; G.street.add(p); crowd.push(p); } }
   // the lower street (s1): three walkers going up toward the square, two men at their doors, one more far up
@@ -300,16 +302,17 @@ export async function build(W, H) {
     sh.fragmentShader = sh.fragmentShader.replace('#include <common>', `#include <common>\nvarying vec3 vWL; uniform float uT, uWarm; uniform vec4 uRip[${NRIP}]; vec3 wGlow, wDir;\n${GLSL.hash}`)
       .replace('#include <lights_fragment_end>', `#include <lights_fragment_end>
         { vec2 q = vWL.xy; float n = fbm(q * .9 + vec2(uT * .12, -uT * .08)), g = vnoise(q * 3.3 + vec2(-uT * .5, uT * .35));
-          float rr = 0.; for (int i = 0; i < ${NRIP}; i++){ vec4 R = uRip[i]; float a = uT - R.z; if (a < 0. || a > 3.2) continue; float d = length(q - R.xy), w = a * 1.05 + .15; rr += R.w * exp(-pow((d - w) / (.12 + a * .1), 2.)) * pow(1. - a / 3.2, 2.) * .32; }
+          float rr = 0.; for (int i = 0; i < ${NRIP}; i++){ vec4 R = uRip[i]; float a = uT - R.z; if (a < 0. || a > 3.2) continue; float d = length(q - R.xy), w = a * 1.05 + .15; rr += R.w * exp(-pow((d - w) / (.12 + a * .1), 2.)) * pow(1. - a / 3.2, 2.) * .32 * smoothstep(0., .45, a); }
           vec3 sky = mix(vec3(.42, .5, .55), vec3(1., .84, .58), uWarm);
-          wGlow = sky * (.035 + .05 * n) + vec3(1., .86, .6) * (smoothstep(.8, .95, g) * .1 + rr * .5 + uWarm * .09 * smoothstep(.35, .75, n)) * (.6 + uWarm);
+          float g2 = vnoise(q * 8.3 + vec2(uT * .9, -uT * .6)), far = smoothstep(-4., 4., q.y), gl = smoothstep(.6, .78, g * g2) * (.15 + 1.2 * far);   // sparse glints, more toward the sun
+          wGlow = sky * (.012 + .016 * n) + vec3(1., .82, .52) * (gl * .9 + rr * .4 + far * .035 * (.6 + .4 * n)) * (.7 + uWarm * .6);
           wDir = reflectedLight.directDiffuse; }`)
       .replace('#include <opaque_fragment>', `outgoingLight = vec3(.006, .024, .024) + wDir * .25 + wGlow;
         #include <opaque_fragment>`); };
   waterM.customProgramCacheKey = () => 'pc-water';
   { const g = new THREE.ShapeGeometry(new THREE.Shape(ring(RA(0) + .05, RB(0) + .05)), 1); const w = new THREE.Mesh(g, waterM); w.rotation.x = -Math.PI / 2; w.position.y = YW; pool.add(w); }
   // five streets come down to the square round the pool; houses fill the rest (instanced: roofs seen from above)
-  const STR = [18, 92, 158, 214, 300].map(a => a * D2R), PLA = RA(NR) + 6.5, PLB = RB(NR) + 6.5;
+  const STR = [18, 92, 158, 214, 300].map(a => a * D2R), PLA = RA(NR) + 11, PLB = RB(NR) + 11;
   const mouth = a => { const [x, z] = seP(PLA, PLB, a); return V(x, 0, z); };
   const dirOut = a => { const [x, z] = seP(PLA, PLB, a); return V(x, 0, z).normalize(); };
   const distStreet = (x, z) => { let d = 1e9; for (const a of STR) { const m = mouth(a), dv = dirOut(a), px = x - m.x, pz = z - m.z, along = px * dv.x + pz * dv.z; if (along < -2) continue; d = Math.min(d, Math.abs(px * dv.z - pz * dv.x)); } return d; };
@@ -317,7 +320,7 @@ export async function build(W, H) {
     for (let gx = -86; gx <= 86; gx += 6.4) for (let gz = -86; gz <= 86; gz += 6.4) { const x = gx + (r() - .5) * 1.6, z = gz + (r() - .5) * 1.6;
       if (Math.pow(Math.abs(x) / (PLA + 1.5), 4) + Math.pow(Math.abs(z) / (PLB + 1.5), 4) < 1) continue; if (distStreet(x, z) < 5.4) continue;
       if (r() < .1) { if (r() < .6) trees.push([x, z]); continue; }   // a courtyard (sometimes a tree)
-      const w = 4.6 + r() * 2.2, d = 4.6 + r() * 2.2, h = 3 + r() * 4.5, ry = (r() - .5) * .12, c = new THREE.Color().setHSL(.08 + r() * .03, .18 + r() * .14, .62 + r() * .16);
+      const w = 4.6 + r() * 2.2, d = 4.6 + r() * 2.2, near = Math.hypot(x / PLA, z / PLB) < 2.0, h = near ? 2.6 + r() * 1.6 : 3 + r() * 4.5, ry = (r() - .5) * .12, c = new THREE.Color().setHSL(.08 + r() * .03, .18 + r() * .14, .62 + r() * .16);
       hm.push(new THREE.Matrix4().compose(V(x, h / 2 - .3, z), new THREE.Quaternion().setFromAxisAngle(V(0, 1, 0), ry), V(w, h + .6, d))); hc.push(c);
       if (r() < .65) { pm.push(new THREE.Matrix4().compose(V(x, h + .02, z), new THREE.Quaternion().setFromAxisAngle(V(0, 1, 0), ry), V(w * .78, .06, d * .78))); }
       if (r() < .3) { const uw = w * .45, ud = d * .45, uh = 2.4; hm.push(new THREE.Matrix4().compose(V(x + (r() - .5) * w * .3, h + uh / 2, z + (r() - .5) * d * .3), new THREE.Quaternion().setFromAxisAngle(V(0, 1, 0), ry), V(uw, uh, ud))); hc.push(c.clone().multiplyScalar(.97)); } }
@@ -332,7 +335,7 @@ export async function build(W, H) {
     const sh = new THREE.SphereGeometry(.17, 12, 8); sh.scale(1.42, .55, .82); sh.translate(0, 1.33, 0); return K.mergeGeometries([[lg], [sh]]); })();
   const headG = (() => { const hd = new THREE.SphereGeometry(.118, 12, 8); hd.scale(.95, 1.05, 1); hd.translate(0, 1.56, .01); const fall = new THREE.SphereGeometry(.15, 12, 8, Math.PI * .1, Math.PI * .8 + Math.PI, 0, Math.PI * .6); fall.scale(1, 1.1, .9); fall.translate(0, 1.5, .03);
     return K.mergeGeometries([[hd], [fall]]); })();
-  const figM = patch(K.std('#ffffff', { roughness: .92 }), 'fig', { rim: .5 }), figH = patch(K.std('#ffffff', { roughness: .92 }), 'figh', { rim: .5 });
+  const figM = patch(K.std('#241c15', { roughness: 1 }), 'fig', { rim: .35 }), figH = patch(K.std('#241c15', { roughness: 1 }), 'figh', { rim: .35 });   // fix 1: dark small silhouettes; their shadows draw the net
   const robeTop = ['#e9e1cf', '#dcd2bc', '#f0e8d8', '#cfc3a8', '#b8a688', '#d8ccb0', '#9a7c58', '#7c6448', '#5c6c7e', '#8a4a34', '#c8b48c', '#e4dac6'];
   const clothTop = ['#efe7d6', '#d8cdb4', '#3b4f6b', '#8a7a66', '#e6dcc8', '#a89070', '#c4b08a', '#6a5440', '#f2ead8'];
   const crowd3 = [];
@@ -399,40 +402,40 @@ export async function build(W, H) {
   const mixC = (out, a, ka, b, kb, f) => out.copy(_c1.set(a).multiplyScalar(ka)).lerp(_c2.set(b).multiplyScalar(kb), f);
   function streetLight(warm, sunK) {   // warm: 0 cool shadow → 1 warm morning;  sunK: the sun out of the cloud
     const a = film.atmos; mixC(a.color, '#7e8aa4', .5, '#d0a274', .62, warm); mixC(a.colorUp, '#7a88a6', .5, '#b4aca4', .56, warm); a.density = lerp(.0034, .0026, warm); a.falloff = .03; a.base = 0; a.start = 2; a.scatter = 1; a.anisotropy = .8; a.phaseMix = .85; a.max = 2000;
-    mixC(hemi.color, '#8c9cc4', 1, '#c4bcaa', 1, warm); mixC(hemi.groundColor, '#4a4440', 1, '#7a5e42', 1, warm); hemi.intensity = lerp(.62, .56, warm);
+    mixC(hemi.color, '#8c9cc4', 1, '#c4bcaa', 1, warm); mixC(hemi.groundColor, '#4a4440', 1, '#7a5e42', 1, warm); hemi.intensity = lerp(.5, .46, warm);
     sunL.color.set('#ffd7a2'); sunL.intensity = 3.3;
     mixC(SK.top.value, '#4a628c', .6, '#56739f', .62, warm); mixC(SK.mid.value, '#98a0b0', .8, '#d2ae8a', .95, warm); mixC(SK.horizon.value, '#c0b0a0', 1.1, '#ffd39a', 1.6, warm);
     SK.sunColor.value.set('#fff1d4').multiplyScalar(18 * sunK); SK.sunGlow.value.set('#ffc583').multiplyScalar(lerp(.35, 1.6, sunK)); SK.clouds.value = .3;
     mixC(SK.cloudColor.value, '#c8c4c4', .9, '#ffe2c0', 1.1, warm); mixC(SK.cloudShade.value, '#6c6c7c', .7, '#a48a84', .7, warm);
     sunLamp.power = 900 * sunK; const L = film.look; L.exposure = lerp(.9, 1.0, warm); L.saturation = lerp(.86, 1.05, warm); doorLamps.forEach(d => d.power = .9); mixC(L.shadowTint, '#c4cce8', 1, '#d6d2e6', 1, warm); mixC(L.highTint, '#e8ecf4', 1, '#fff0d8', 1, warm); L.contrast = 1.05; L.vignette = .3; }
   function s1(t, T) { G.street.visible = true; G.pool.visible = false; for (const p of lower) p.visible = true; SK.sunDir.value.copy(SUN1); shadowAt(V(0, 3, -24), 62, SUN1);
-    const u = (t - T.t0) / (T.c1 - T.t0), sunK = ss(T.sun[0], T.sun[1], t), zF = -110 + 45 * (t - T.fr0);
-    const warm = ss(-40, 22, zF) * .8 + sunK * .2; streetLight(warm, sunK);
-    LU.uFront.value = zF; LU.uShade.value = .08; LU.uEdgeK.value = .75 * sunK; LU.uEdgeW.value = 4.5; LU.uEdgeC.value.set('#ffd8a0');
+    const u = (t - T.t0) / (T.c1 - T.t0), sunK = 1, zF = -110 + 45 * (t - T.fr0);
+    const warm = lerp(.3, .85, u); streetLight(warm, sunK); LU.uRimC.value.set('#ffc078').multiplyScalar(1.6);
+    LU.uFront.value = zF; LU.uShade.value = .1; LU.uEdgeK.value = 1.0; LU.uEdgeW.value = 3.6; LU.uEdgeC.value.set('#ffd8a0');
     frontLamp.pos.set(0, gY(Math.min(zF, 20)) + 3.2, zF); frontLamp.power = 60 * sunK * (1 - ss(14, 30, zF)); frontLamp.size = 8;
     // push in: already moving at the first frame, the same speed to the cut (≈ 1.1 m/s)
     const cz = lerp(15.5, 12.1, u), c = V(lerp(1.2, 1.0, u), gY(cz) + lerp(3.3, 3.45, u), cz), l = V(-3.2, gY(-40) + 1.2, -40);
     setCam(c, l, FOV); film.dofCfg.focus = 13; film.dofCfg.aperture = .45; film.dofCfg.maxCoc = 14;
-    posePeter(t, T); poseCrowd(t); poseLower(t, T); setMotes(t, 's1', zF, .42 * sunK, 5); motes.visible = true; }
+    posePeter(t, T); poseCrowd(t); poseLower(t, T); setMotes(t, 's1', zF, 1.0, 4.5); motes.visible = true; }
   function s2(t, T) { G.street.visible = true; G.pool.visible = false; SK.sunDir.value.copy(SUN1); shadowAt(V(0, 3, -36), 40, SUN1);
     const u = (t - T.c1) / (T.c2 - T.c1), grow = ss(T.c1, T.c2, t);
-    streetLight(1, 1); film.look.exposure = lerp(.98, 1.08, grow); film.atmos.density = .0017; hemi.intensity = .4;
+    streetLight(1, 1); film.look.exposure = lerp(.98, 1.08, grow); film.atmos.density = .0017; hemi.intensity = .34; LU.uRimC.value.set('#ffc078').multiplyScalar(1.5 + .5 * grow);
     const zE = lerp(-58, -26, clamp((t - T.sweep[0]) / (T.sweep[1] - T.sweep[0]))), ek = ss(T.sweep[0], T.sweep[0] + .6, t) * (1 - ss(T.sweep[1] - .6, T.sweep[1], t));
     LU.uFront.value = zE; LU.uShade.value = 1; LU.uEdgeK.value = .3 * ek; LU.uEdgeW.value = 3.2; LU.uEdgeC.value.set('#ffdcaa');
     frontLamp.pos.set(PETER.x + .4, PLAT + 2.6, PETER.z - 2.5); frontLamp.power = lerp(5, 13, grow); frontLamp.size = 5;
     // dolly in over the heads, toward him (≈ 0.6 m/s, already moving)
-    const cz = lerp(-33.6, -37.3, u), c = V(lerp(2.7, 2.35, u), RISE * (ZS0 - cz) / RUN - RISE * .5 + 2.12, cz),   /* a smooth ramp, not the treads: no bump per step */ l = V(PETER.x - .35, PLAT + .9 - .05 * u, PETER.z);
-    setCam(c, l, FOV); film.dofCfg.focus = c.distanceTo(PETER.clone().setY(PLAT + 1.3)); film.dofCfg.aperture = 4.2; film.dofCfg.maxCoc = 30;
+    const cz = lerp(-40.6, -43.0, u), c = V(lerp(2.2, 1.95, u), RISE * (ZS0 - cz) / RUN - RISE * .5 + 1.85, cz),   /* a smooth ramp, not the treads: no bump per step */ l = V(PETER.x - .7, PLAT + .55, PETER.z);
+    setCam(c, l, FOV); film.dofCfg.focus = c.distanceTo(PETER.clone().setY(PLAT + 1.3)); film.dofCfg.aperture = 6.5; film.dofCfg.maxCoc = 34;
     posePeter(t, T); poseCrowd(t); for (const p of lower) p.visible = false; setMotes(t, 's2', zE, .5 * ek, 3.2); motes.visible = true; }
-  function s3(t, T) { G.street.visible = false; G.pool.visible = true; SK.sunDir.value.copy(SUN3); shadowAt(PO.clone(), 46, SUN3);
+  function s3(t, T) { G.street.visible = false; G.pool.visible = true; SK.sunDir.value.copy(SUN3); shadowAt(PO.clone(), 58, SUN3);
     const u = (t - T.c2) / (T.end - T.c2), warm = ss(T.c2, T.end, t);
-    const a = film.atmos; a.color.set('#d8b28a').multiplyScalar(.62); a.colorUp.set('#c0b4a8').multiplyScalar(.56); a.density = .0011; a.falloff = .01; a.base = 0; a.start = 20; a.scatter = .6; a.anisotropy = .7; a.phaseMix = .8; a.max = 2000;
-    hemi.color.set('#bcc4d0'); hemi.groundColor.set('#8a6a48'); hemi.intensity = .62; sunL.color.set('#ffdcb0'); sunL.intensity = lerp(3.2, 3.6, warm);
+    const a = film.atmos; a.color.set('#d8a878').multiplyScalar(.64); a.colorUp.set('#c8b4a0').multiplyScalar(.58); a.density = .0026; a.falloff = .012; a.base = 0; a.start = 30; a.scatter = .8; a.anisotropy = .7; a.phaseMix = .8; a.max = 2000;
+    hemi.color.set('#a8b0c4'); hemi.groundColor.set('#6a5038'); hemi.intensity = .42; sunL.color.set('#ffd29a'); sunL.intensity = lerp(4.2, 4.6, warm);
     SK.sunColor.value.set('#fff1d4').multiplyScalar(18); SK.sunGlow.value.set('#ffc583').multiplyScalar(1.4); sunLamp.power = 0; frontLamp.power = 0; doorLamps.forEach(d => d.power = 0);
-    LU.uFront.value = 1e4; LU.uShade.value = 1; LU.uEdgeK.value = 0; waterU.uWarm.value = .25 + .55 * warm;
-    const L = film.look; L.exposure = lerp(.98, 1.07, warm); L.saturation = 1.06; L.contrast = 1.1; L.shadowTint.set('#d4d0e4'); L.highTint.set('#fff2dc'); L.vignette = .3;
+    LU.uRimC.value.set('#ffc078').multiplyScalar(1.4); LU.uFront.value = 1e4; LU.uShade.value = 1; LU.uEdgeK.value = 0; waterU.uWarm.value = .25 + .55 * warm;
+    const L = film.look; L.exposure = lerp(1.1, 1.22, warm); L.saturation = 1.06; L.contrast = 1.1; L.shadowTint.set('#d4d0e4'); L.highTint.set('#fff2dc'); L.vignette = .3;
     // crane up: constant log-rate rise (no start/stop inside the shot), the pool held above the words
-    const D = 88 * Math.exp(Math.log(128 / 88) * u), pit = 80 * D2R, tgt = PO.clone().add(V(0, -1.2, D * .1)), c = tgt.clone().add(V(0, Math.sin(pit) * D, Math.cos(pit) * D));
+    const D = 66 * Math.exp(Math.log(92 / 66) * u), pit = 52 * D2R, tgt = PO.clone().add(V(0, -1.2, D * .1)), c = tgt.clone().add(V(0, Math.sin(pit) * D, Math.cos(pit) * D));
     setCam(c, tgt, vert ? 36 : 24); film.dofCfg.focus = c.distanceTo(PO); film.dofCfg.aperture = .12; film.dofCfg.maxCoc = 8;
     setCrowd3(t, T); motes.visible = false; }
   const STAGE = { s1, s2, s3 };
@@ -450,13 +453,16 @@ export async function build(W, H) {
     ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalCompositeOperation = 'screen'; ctx.globalAlpha = k; ctx.imageSmoothingEnabled = true; ctx.drawImage(gB, 0, 0, W, H); ctx.restore(); }
   function corona(ctx, x, y, I, k, rings2) { ctx.save(); ctx.globalCompositeOperation = 'lighter'; for (const [r, cA, cB, a] of rings2) { const R0 = r * k * (.8 + .2 * I), g = ctx.createRadialGradient(x, y, 0, x, y, R0); g.addColorStop(0, `rgba(${cA},${Math.min(1, a * I)})`); g.addColorStop(.3, `rgba(${cB},${Math.min(1, a * I * .45)})`); g.addColorStop(1, `rgba(${cB},0)`); ctx.fillStyle = g; ctx.fillRect(x - R0, y - R0, R0 * 2, R0 * 2); } ctx.restore(); }
   const SUN_RINGS = [[16, '255,255,252', '255,246,226', .9], [70, '255,244,214', '255,214,150', .55], [220, '255,214,160', '255,170,96', .24], [560, '255,190,130', '255,150,80', .1]];
+  const rayc = new THREE.Raycaster(), _rd = V();
+  function sunVis() { let v = 0; const P0 = cam.position, off = [[0, 0], [.012, 0], [-.012, 0], [0, .012], [0, -.012]]; const rt = V(), up = V(0, 1, 0), sd = SUN1.clone(), rgt = V().crossVectors(sd, up).normalize(), u2 = V().crossVectors(rgt, sd);
+    for (const [a, b] of off) { _rd.copy(sd).addScaledVector(rgt, a).addScaledVector(u2, b).normalize(); rayc.set(P0, _rd); rayc.far = 900; if (!rayc.intersectObjects(G.street.children, true).some(h => !h.object.isPoints)) v++; } return v / off.length; }
   const project = p => { tmpV.copy(p).project(cam); if (tmpV.z >= 1 || tmpV.z <= -1) return null; return [(tmpV.x + 1) / 2 * W, (1 - tmpV.y) / 2 * H]; };
   function blit(ctx) { ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.drawImage(film.canvas, 0, 0, W, H); ctx.restore(); }
   function draw(ctx, t, T) {
     const sh = T.shots.find(s => t >= s[1] && t < s[2]) || (t < T.shots[0][1] ? T.shots[0] : T.shots[T.shots.length - 1]), nm = sh[0];
     render(nm, t, T); blit(ctx);
     if (nm === 's1' || nm === 's2') { const q = project(cam.position.clone().addScaledVector(SUN1, 1500));
-      if (q && q[0] > -W * .4 && q[0] < W * 1.4) { const sunK = nm === 's1' ? ss(T.sun[0], T.sun[1], t) : 1, grow = nm === 's2' ? ss(T.c1, T.c2, t) : 0, arm = nm === 's2' ? ss(T.arm[0], T.arm[1], t) : 0;
+      if (q && q[0] > -W * .4 && q[0] < W * 1.4) { const sunK = sunVis(), grow = nm === 's2' ? ss(T.c1, T.c2, t) : 0, arm = nm === 's2' ? ss(T.arm[0], T.arm[1], t) : 0;
         corona(ctx, q[0], q[1], sunK * (nm === 's1' ? .62 : .66 + .26 * grow), nm === 's1' ? .85 : .95 + .15 * arm, SUN_RINGS);
         godRays(ctx, q[0], q[1], sunK * (nm === 's1' ? .28 : .3 + .16 * grow)); } }
     if (nm === 's3') { const k = ss(T.c2 + 2, T.end, t), lg = ctx.createRadialGradient(W * 1.05, -H * .05, 0, W * 1.05, -H * .05, W * 1.1); lg.addColorStop(0, `rgba(255,214,150,${.26 * k + .04})`); lg.addColorStop(.5, `rgba(255,190,120,${.07 * k})`); lg.addColorStop(1, 'rgba(255,170,100,0)');

@@ -30,7 +30,7 @@ function draw(ctx, u) {
   if (!sh || !SC) { ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H); return; }
   const t = Math.min(sh.a + (u - sh.u0), sh.b - .001);
   SC.draw(ctx, REF && sh.name === 'alley' && u - sh.u0 < .5 ? 'ref' : sh.name, t, TB);
-  band(ctx, 1);
+  band(ctx, sh.name === 'alley' ? 1.4 : 1);   // fix 1: a deeper band in the alley, so the words hold over his dark shape and the lit wall
   for (const [id, a, b] of TEXT) if (t >= a - .1 && t <= b + .1 && a >= sh.a - .01 && a < sh.b) Film.sub(ctx, id, t, a, b);
 }
 // the plan is built before Pilot.run (DURATION must be known); Film.load first

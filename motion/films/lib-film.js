@@ -125,9 +125,11 @@
     const txt = P.tr ? P.tr(F.text(id)) : F.text(id), base = P.ori === 'v' ? 38 : 34, y = P.ori === 'v' ? 226 : 66, maxW = P.W * .88;
     ctx.save(); ctx.font = F.font(base, 600); ctx.letterSpacing = '4px'; const w0 = ctx.measureText(txt).width; ctx.restore();
     const size = w0 > maxW ? base * maxW / w0 : base, w = Math.min(w0, maxW);
-    ctx.save(); ctx.translate(P.W / 2, y - size * .32); ctx.scale((w / 2 + size * 2.2) / (size * 1.9), 1);
-    const g = ctx.createRadialGradient(0, 0, 0, 0, 0, size * 1.9); g.addColorStop(0, 'rgba(12,8,4,.62)'); g.addColorStop(.55, 'rgba(12,8,4,.38)'); g.addColorStop(1, 'rgba(12,8,4,0)');
-    ctx.globalAlpha = k; ctx.fillStyle = g; ctx.beginPath(); ctx.arc(0, 0, size * 1.9, 0, Math.PI * 2); ctx.fill(); ctx.restore();
+    // 관리자 2026-11-25 「kingdom」 "뒤에 검은 배경 깔았는데 좀 못생겼어": the oval patch behind the label read as a pasted shape. Now a
+    // full-width shade from the top edge (a graduated filter on the lens), darkest at the top, still dark behind the label, gone below it.
+    const yc = y - size * .32, yEnd = yc + size * 4.5, g = ctx.createLinearGradient(0, 0, 0, yEnd), r = yc / yEnd;
+    g.addColorStop(0, 'rgba(10,7,4,.62)'); g.addColorStop(r, 'rgba(10,7,4,.46)'); g.addColorStop(r + (1 - r) * .45, 'rgba(10,7,4,.16)'); g.addColorStop(1, 'rgba(10,7,4,0)');
+    ctx.save(); ctx.globalAlpha = k; ctx.fillStyle = g; ctx.fillRect(0, 0, P.W, yEnd); ctx.restore();
     const o = { size, weight: 600, color: '#f4d993', ls: 4, maxW: P.W };
     P.text(ctx, txt, P.W / 2, y, { ...o, alpha: k, shadow: 'rgba(0,0,0,.95)', shadowBlur: 5 });
     P.text(ctx, txt, P.W / 2, y, { ...o, alpha: k * .97, shadow: 'rgba(0,0,0,.85)', shadowBlur: 16 }); };

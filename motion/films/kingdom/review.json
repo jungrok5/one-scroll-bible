@@ -2588,6 +2588,111 @@
      "what": "경비 발 깜빡임 · 횃불 순간이동 · 벽 횃불이 화살처럼 · S3d 아치가 감실처럼 · S3e 빈 창 · 고개 떨굼 약함 · 디졸브 잔상 · 머리 둘 그림자 · 무릎 자세가 자루처럼"
     }
    ]
+  },
+  "b3-jerusalem": {
+   "video": "motion/out/sample-r10-jerusalem-v.mp4",
+   "at": "2026-11-25",
+   "note": "영상 초. 고치기 전 관리자 확인. 얼굴·후광 없음",
+   "issues": [
+    {
+     "t": 11,
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "오른쪽 흐린 어깨가 몸으로 안 읽히고 둥근 전구 같은 덩어리"
+    },
+    {
+     "t": 12,
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "12–17초 거의 멈춤"
+    },
+    {
+     "t": 4,
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "그분이 상자 몸통·원뿔 옷의 마네킹, 무리는 모자이크 질감"
+    },
+    {
+     "t": 20.5,
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "위에서 본 거리: 사람이 체스 말, 건물은 블록 — 게임 지도"
+    },
+    {
+     "t": 36,
+     "severity": "MINOR",
+     "status": "open",
+     "what": "작지만 가운데, 성전 빛기둥이 바로 위"
+    },
+    {
+     "t": 36,
+     "severity": "MINOR",
+     "status": "open",
+     "what": "걸음 없이 미끄러짐"
+    },
+    {
+     "t": 11,
+     "severity": "MINOR",
+     "status": "open",
+     "what": "상단 표기·출처 대비 약함"
+    }
+   ]
+  },
+  "b3-pentecost": {
+   "video": "motion/out/sample-r10-pentecost-v.mp4",
+   "at": "2026-11-25",
+   "note": "영상 초. 고치기 전 관리자 확인. 얼굴·후광 없음",
+   "issues": [
+    {
+     "t": 3.5,
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "베드로와 무리가 민머리 캡슐 머리 마네킹(로블록스)"
+    },
+    {
+     "t": 9,
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "연못 둘레 사람이 알약·스프링클, 가득 찬 그물이 안 읽힘 — 보드게임"
+    },
+    {
+     "t": 9.5,
+     "severity": "MINOR",
+     "status": "open",
+     "what": "물결 고리가 깜빡, 물 위 흰 점이 쓰레기 같음"
+    },
+    {
+     "t": 0.25,
+     "severity": "MINOR",
+     "status": "open",
+     "what": "바람 빛이 화면 전체 노출 점프로 읽힘"
+    }
+   ]
+  },
+  "b3-shorts": {
+   "video": "motion/out/sample-r10-shorts-v.mp4",
+   "at": "2026-11-25",
+   "note": "영상 초. 고치기 전 관리자 확인. 얼굴·후광 없음",
+   "issues": [
+    {
+     "t": 0,
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "문간 베드로가 단추 발·머리 고리의 종이 오림, 여인은 자루 → 빛나는 타원 머리(유령), 일어남이 뻣뻣하게 기울기만"
+    },
+    {
+     "t": 7.5,
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "빈 길 4.5초 거의 멈춤, 목탄 입자가 디지털 잡음처럼 끓음"
+    },
+    {
+     "t": 13.5,
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "무릎 꿇은 베드로가 자루+파란 모자, 17–20 거의 멈춤"
+    }
+   ]
   }
  },
  "parts_r9": [

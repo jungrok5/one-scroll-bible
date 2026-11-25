@@ -1971,6 +1971,13 @@
    "said": "응 (10-3 1차 고칠 방향: 그림자·실루엣·빛으로 — 예루살렘 그림자 행렬·멀리 작은 뒷모습, 오순절 역광 베드로·모이는 그림자 그물, 장모 벽 그림자극, 빈 길 바람·종이 질감, 골목 머리 수건 어둡게·자막·끝 움직임)",
    "status": "open",
    "round": 7
+  },
+  {
+   "at": "2026-11-26 00:39 KST",
+   "who": "관리자",
+   "said": "ㄱㄱ (10-3 수정 2: 예루살렘 그분 멀리 작게·묶은 머리 천·끝 10초 걸어감·성전 역광 실루엣·떠 있는 빛 지움·멈춘 구간 / 오순절 앞 무리 머리 빼고 먼 역광 베드로·삼천 명은 물속에서 올려다보기(1부 그물과 짝) / 장모 튀는 그림자 지움·문간 베드로 머리 반듯·조금 움직임 / 골목 머리 천 짧게·어깨 넓게·새벽 색 분명)",
+   "status": "open",
+   "round": 7
   }
  ],
  "process_changes": [
@@ -2809,6 +2816,123 @@
      "severity": "MINOR",
      "status": "open",
      "what": "빈 길 4.5초 거의 멈춤"
+    }
+   ]
+  },
+  "b3-jerusalem-f2": {
+   "video": "motion/out/sample-r10-jerusalem-v.mp4",
+   "at": "2026-11-26",
+   "note": "수정 2 뒤. 영상 초. 고치기 전 관리자 확인. 얼굴·후광 없음",
+   "issues": [
+    {
+     "t": 4,
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "무리가 상자 머리 로우폴리 — 게임 말, 일부 수녀처럼"
+    },
+    {
+     "t": 28,
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "나무가 각진 공·바닥 평면 음영 — 게임(Journey) 같음"
+    },
+    {
+     "t": 28,
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "그분이 왼쪽 앞 13%로 크고 18초 거의 안 움직여 걸어감이 안 읽힘"
+    },
+    {
+     "t": 12,
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "12–19.5 거의 멈춤"
+    },
+    {
+     "t": 8,
+     "severity": "MINOR",
+     "status": "open",
+     "what": "우셨습니다 때 누가 그분인지 안 읽힘"
+    },
+    {
+     "t": 11.5,
+     "severity": "MINOR",
+     "status": "open",
+     "what": "상단 표기·출처 밝은 하늘에서 약함"
+    },
+    {
+     "t": 12,
+     "severity": "MINOR",
+     "status": "open",
+     "what": "흐린 바위 얼룩"
+    },
+    {
+     "t": 37,
+     "severity": "MINOR",
+     "status": "open",
+     "what": "성문 등불 두 점이 눈처럼"
+    }
+   ]
+  },
+  "b3-pentecost-f2": {
+   "video": "motion/out/sample-r10-pentecost-v.mp4",
+   "at": "2026-11-26",
+   "note": "수정 2 뒤. 영상 초. 고치기 전 관리자 확인. 얼굴·후광 없음",
+   "issues": [
+    {
+     "t": 9,
+     "severity": "BLOCKER",
+     "status": "open",
+     "what": "물속 장면이 현미경 슬라이드(세포·세균) — 사람이 물에 들어가는 것으로 안 읽힘"
+    },
+    {
+     "t": 2,
+     "severity": "MINOR",
+     "status": "open",
+     "what": "왼쪽 벽 밝기 깜빡"
+    },
+    {
+     "t": 3.5,
+     "severity": "MINOR",
+     "status": "open",
+     "what": "아래 절반 평평한 어둠, 계단 아닌 난간"
+    }
+   ]
+  },
+  "b3-shorts-f2": {
+   "video": "motion/out/sample-r10-shorts-v.mp4",
+   "at": "2026-11-26",
+   "note": "수정 2 뒤. 영상 초. 고치기 전 관리자 확인. 얼굴·후광 없음",
+   "issues": [
+    {
+     "t": 0,
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "문간 베드로 평평한 오림·말 머리·안 움직임"
+    },
+    {
+     "t": 2.5,
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "여인이 경첩 달린 판자처럼 통째로 일어남"
+    },
+    {
+     "t": 13.5,
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "무릎 꿇은 베드로가 두건 자루·베일 여인처럼(빛 테두리와 색은 좋음)"
+    },
+    {
+     "t": 7.5,
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "빈 길 4.5초 거의 멈춤, 입자가 TV 잡음"
+    },
+    {
+     "t": 10,
+     "severity": "MINOR",
+     "status": "open",
+     "what": "가운데 십자가 붉은 점이 지도 핀"
     }
    ]
   }

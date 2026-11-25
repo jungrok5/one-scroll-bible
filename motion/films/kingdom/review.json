@@ -1964,6 +1964,13 @@
    "round": 7,
    "applied": "상단 표기 뒤 타원 그림자 → 화면 위 가장자리부터 부드럽게 어두워지는 띠(렌즈의 그라데이션 필터처럼) — lib-film.js F.label, 모든 장면 공통",
    "applied_at": "2026-11-25 23:12 KST"
+  },
+  {
+   "at": "2026-11-25 23:32 KST",
+   "who": "관리자",
+   "said": "응 (10-3 1차 고칠 방향: 그림자·실루엣·빛으로 — 예루살렘 그림자 행렬·멀리 작은 뒷모습, 오순절 역광 베드로·모이는 그림자 그물, 장모 벽 그림자극, 빈 길 바람·종이 질감, 골목 머리 수건 어둡게·자막·끝 움직임)",
+   "status": "open",
+   "round": 7
   }
  ],
  "process_changes": [
@@ -2691,6 +2698,117 @@
      "severity": "MAJOR",
      "status": "open",
      "what": "무릎 꿇은 베드로가 자루+파란 모자, 17–20 거의 멈춤"
+    }
+   ]
+  },
+  "b3-jerusalem-f1": {
+   "video": "motion/out/sample-r10-jerusalem-v.mp4",
+   "at": "2026-11-26",
+   "note": "수정 1 뒤. 영상 초. 고치기 전 관리자 확인. 얼굴·후광 없음, 자막 다 읽힘, 잔상·떨림 없음",
+   "issues": [
+    {
+     "t": 4,
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "그분이 가운데 크게, 늘어진 머리 천이 베일(여인·수녀처럼), 팔이 마네킹, 옷에 얼룩 디더 — 우심이 몸으로 안 보임"
+    },
+    {
+     "t": 36,
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "36–46 성문으로 걷지 않고 10초 서 있음"
+    },
+    {
+     "t": 11.5,
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "11.5–19.5·21–27 거의 멈춤"
+    },
+    {
+     "t": 0,
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "성전·성문이 상자, 문 안 흐린 빛+금 막대가 떠 있는 십자가처럼 — 게임 에셋"
+    },
+    {
+     "t": 35.25,
+     "severity": "MINOR",
+     "status": "open",
+     "what": "점프 컷"
+    },
+    {
+     "t": 0,
+     "severity": "MINOR",
+     "status": "open",
+     "what": "위 40% 평평한 벽, 3.75 빛줄 흠"
+    },
+    {
+     "t": 12,
+     "severity": "MINOR",
+     "status": "open",
+     "what": "먼 인물이 말 같음"
+    }
+   ]
+  },
+  "b3-pentecost-f1": {
+   "video": "motion/out/sample-r10-pentecost-v.mp4",
+   "at": "2026-11-26",
+   "note": "수정 1 뒤. 영상 초. 고치기 전 관리자 확인. 얼굴·후광 없음, 자막 다 읽힘, 잔상·떨림 없음",
+   "issues": [
+    {
+     "t": 3.5,
+     "severity": "BLOCKER",
+     "status": "open",
+     "what": "앞 무리 머리에 뾰족한 두 끝 — 뿔·고양이 귀·주교관, 빛 받으면 베이지 마네킹, 막대 팔"
+    },
+    {
+     "t": 6,
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "베드로가 네모 어깨 로봇·장난감"
+    },
+    {
+     "t": 9,
+     "severity": "BLOCKER",
+     "status": "open",
+     "what": "위에서 본 연못: 똑같은 말·볼링핀 수백 개 — 보드게임, 가까이선 남근처럼 읽힐 수도, 6.5초 거의 멈춤"
+    }
+   ]
+  },
+  "b3-shorts-f1": {
+   "video": "motion/out/sample-r10-shorts-v.mp4",
+   "at": "2026-11-26",
+   "note": "수정 1 뒤. 영상 초. 고치기 전 관리자 확인. 얼굴·후광 없음, 자막 다 읽힘, 잔상·떨림 없음",
+   "issues": [
+    {
+     "t": 3.5,
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "여인 그림자가 앉을 때 앉은 그림자 하나가 더 튀어나옴"
+    },
+    {
+     "t": 0,
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "문간 베드로가 안 움직이는 종이 오림, 머리 혹이 가시관·후광처럼 — 예수님으로 오해"
+    },
+    {
+     "t": 13.5,
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "무릎 꿇은 베드로 실루엣이 머리 긴 여인처럼, 새벽 색이 거의 안 옴"
+    },
+    {
+     "t": 20,
+     "severity": "MINOR",
+     "status": "open",
+     "what": "끝 프레임 윤곽 모양 바뀜"
+    },
+    {
+     "t": 7.5,
+     "severity": "MINOR",
+     "status": "open",
+     "what": "빈 길 4.5초 거의 멈춤"
     }
    ]
   }

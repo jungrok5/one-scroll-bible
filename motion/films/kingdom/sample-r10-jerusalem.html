@@ -24,7 +24,7 @@ function buildText() {
   const L = Film.script.lines, spoken = l => (l.kind === 'narr' || l.kind === 'quote') && l.voice !== null;
   const V2 = L.filter(spoken).sort((a, b) => a.at - b.at), next = l => V2.find(x => x.at > l.at + .01);
   for (const l of L) { if (l.at < T0 - .01 || l.at >= T1) continue;
-    if (l.kind === 'label') { const q = V2.find(x => x.at >= l.at - .01), qn = q && next(q); TEXT.push(['label', l.id, l.at, (qn?.at ?? T1) - .2]); continue; }
+    if (l.kind === 'label') { const q = V2.find(x => x.at >= l.at - .01); let qn = q && next(q); while (qn && qn.kind === 'quote') qn = next(qn); TEXT.push(['label', l.id, l.at, (qn?.at ?? T1) - .2]); continue; }   // the label stays over the whole passage (Q108 and Q108b)
     if (!spoken(l)) continue;
     const n = next(l), b = Math.min((n?.at ?? T1) - (l.kind === 'quote' ? .1 : .25), T1 - .25);
     TEXT.push([l.kind === 'quote' ? 'quote' : 'sub', l.id, l.at, b]); }

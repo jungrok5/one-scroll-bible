@@ -19,7 +19,7 @@
 //   P3     c1+3.2 → N172    telephoto from the foot of the steps, crane up with inertia: Peter small (≈ 5 %) against the bright sky, the arm
 //                           already up (match on P2's action), it goes once slowly forward; the crowd only as long shadows on the treads
 //                           (shadow-camera layer), the tread edges lines of gold; the sun up-left of him (x 230, y 520), never behind his head
-//   P4     N172 → N173      the aerial (fix 1): warm sun 27°, crane up D 66 → 86 m, pitch 58° → 62°, fov 36°,
+//   P4     N172 → N173      the aerial (fix 2: people = warm light points + short soft shadows; the pool edge in light): warm sun 32°, crane up D 66 → 86 m, pitch 58° → 62°, fov 36°,
 //                           yaw 6°, NO depth of field; five streets flow into a funnel narrowing onto the stepped pool (part 1's net bag);
 //                           people matte cloth patches (≤ 12 px at the start, ≈ 5 px at the end) drawn by their shadows; golden rings 1 → 6/s,
 //                           glints that live .3–.6 s; on 「사람을 취하리라던」 the sun flares in from the upper right and the frame warms (≥ 120 at the end)
@@ -108,10 +108,12 @@ function fhead(g, cx, cy, r) { blob(g, [[cx - r * .9, cy + r * .62], [cx - r * .
     [cx - r * 1.75, cy - r * 1.95], [cx - r * 1.3, cy - r * 1.55], [cx - r * .96, cy - r * .9], [cx - r * 1.02, cy - r * .1]]); blob(g, [[cx - r * .62, cy - r * .55], [cx + r * .62, cy - r * .55], [cx + r * .5, cy - r * 1.32], [cx, cy - r * 1.52], [cx - r * .5, cy - r * 1.32]]); }
 // fix 1: a man's body in shadow — BROAD LEVEL SHOULDERS (wider than any veil), the head cloth tied with a band (a notch at the brow),
 // a level top, falling straight past the jaw and ENDING ON the shoulder; bow = 0…1 rounds the shoulders down and drops the head.
-function pbody(g, sh, br = 1, bow = 0) { const W = .37 * br, d = .07 * bow; blob(g, [[-W * .96, -.5], [-W * .97, sh * .5], [-W, sh - .14 - d], [-W * .9, sh - .05 - d * .7], [-W * .62, sh - .005 - d * .35], [-.1, sh + .03], [.1, sh + .03], [W * .62, sh - .005 - d * .35], [W * .9, sh - .05 - d * .7], [W, sh - .14 - d], [W * .97, sh * .5], [W * .96, -.5]]); }
+function pbody(g, sh, br = 1, bow = 0) { const W = .37 * br, d = .07 * bow; blob(g, [[-W * .96, -.5], [-W * .8, sh * .4], [-W * .97, sh * .62], [-W, sh - .14 - d], [-W * .9, sh - .05 - d * .7], [-W * .62, sh - .005 - d * .35], [-.1, sh + .03], [.1, sh + .03], [W * .62, sh - .005 - d * .35], [W * .9, sh - .05 - d * .7], [W, sh - .14 - d], [W * .97, sh * .62], [W * .8, sh * .4], [W * .96, -.5]]); }   // the belt draws in the waist
+// a sleeve hanging free of the body (a gap between it and the robe), ending at the wrist — no hand blob
+function hangArm(g, sd, sh, W, sway = 0) { const S = [sd * (W - .03), sh - .1], E = [sd * (W + .05), sh * .62], Wr = [sd * (W + .045) + sway, sh * .3]; limb(g, S[0], S[1], .075, E[0], E[1], .062); limb(g, E[0], E[1], .062, Wr[0], Wr[1], .05); }
 function phead(g, cx, cy, r, sh) { const ys = sh + .01; blob(g, [[cx - r * .98, cy + r * .62], [cx - r * .66, cy + r * 1.08], [cx, cy + r * 1.2], [cx + r * .66, cy + r * 1.08], [cx + r * .98, cy + r * .62], [cx + r * 1.08, cy - r * .2],
     [cx + r * .94, cy - r * .95], [cx + r * 1.12, ys + r * .32], [cx + r * 1.55, ys], [cx - r * 1.55, ys], [cx - r * 1.12, ys + r * .32], [cx - r * .94, cy - r * .95], [cx - r * 1.08, cy - r * .2]]); }
-function pman(g, b, x, y, s, o = {}) { const { h = 1.2, br = 1, lean = 0, sv = 1.06, hy = 0, bow = 0 } = o; atf(g, b, x, y, s, lean, 1, sv); const sh = h - .36, hc = h - .15 + hy, r = .116;
+function pman(g, b, x, y, s, o = {}) { const { h = 1.2, br = 1, lean = 0, sv = 1.06, hy = 0, bow = 0, left = true } = o; atf(g, b, x, y, s, lean, 1, sv); const sh = h - .36, hc = h - .15 + hy, r = .116; if (left) hangArm(g, -1, sh, .37 * br, -.01 * bow);
   pbody(g, sh, br, bow); limb(g, 0, sh + .02, .072, 0, hc - .08, .06); phead(g, 0, hc, r, sh); return { sh, hc }; }
 function cman(g, b, x, y, s, o = {}) { const { h = 1.2, br = 1, sv = 1.06, turn = 0 } = o; atf(g, b, x, y, s, 0, 1, sv); const sh = h - .36, hc = h - .15, r = .116;
   pbody(g, sh, br * (1 - .22 * Math.abs(turn)), 0); limb(g, 0, sh + .02, .07, turn * .02, hc - .07, .058); head(g, turn * .03, hc, r, turn, { beard: true }); }
@@ -269,6 +271,14 @@ export async function build(W, H) {
     addBox(G.street, 34, 44, 50, -306, gt + 34 + 22, zt - 60, 0, M.wall5, .4); addBox(G.street, 54, 22, 40, -306, gt + 34 + 11, zt - 40, 0, M.wall5, .4);
     addBox(G.street, 36, 1.2, 52, -306, gt + 34 + 44.6, zt - 60, 0, patch(K.std('#e8d0a0', { roughness: .5, metalness: .3 }), 'tg'), .2); }
   { const bm = new THREE.InstancedMesh(new THREE.CylinderGeometry(.07, .08, .42, 6), M.wood, beamM4.length); beamM4.forEach((q, i) => bm.setMatrixAt(i, q)); bm.castShadow = true; G.street.add(bm); }
+  const P3L = V(0, .3, -1);
+  // the unseen crowd of P3 (first-draft figure shapes, so the shadows have a tied head cloth and shoulders)
+  const p3Crowd = (() => { const lg = new THREE.LatheGeometry([[.21, 0], [.23, .05], [.21, .6], [.19, 1.0], [.24, 1.32], [.16, 1.42], [.06, 1.48]].map(([r, y]) => new THREE.Vector2(r, y)), 12); lg.scale(1.15, 1, .8);
+    const hd = new THREE.SphereGeometry(.13, 10, 7); hd.translate(0, 1.6, 0); const cl = new THREE.SphereGeometry(.17, 10, 6, 0, Math.PI * 2, 0, Math.PI * .62); cl.translate(0, 1.55, .02);
+    const g = K.mergeGeometries([[lg], [hd], [cl]]), r = rng(3131), pts = []; for (let i = 0; i < 200 && pts.length < 46; i++) { const z = -10 + r() * 26, hw = 1.2 + (34 - z) * .085, x = .9 + (r() * 2 - 1) * hw; if (Math.abs(x - .9) < .35 || pts.some(([a, b]) => Math.hypot(a - x, b - z) < 1.0)) continue;   /* inside the telephoto's narrow cone */ pts.push([x, z]); }
+    const im = new THREE.InstancedMesh(g, K.std('#222222', { colorWrite: false, depthWrite: false }), pts.length), m4 = new THREE.Matrix4();   /* invisible to the lens (no colour, no depth), still drawn into the shadow map */ pts.forEach(([x, z], i) => { m4.compose(V(x, gY(z), z), new THREE.Quaternion().setFromAxisAngle(V(0, 1, 0), r() * .6 - .3), V(1, .92 + r() * .14, 1)); im.setMatrixAt(i, m4); });
+    im.castShadow = true; im.frustumCulled = false; im.visible = false; G.street.add(im); return im; })();
+  let hsOn = true; const houseShadows = on => { if (on === hsOn) return; hsOn = on; for (const hg of boxes) hg.traverse(o => { if (o.isMesh) o.castShadow = on; }); };
   const doorLamps = lampAt.map(p => film.lamp(p, '#ffb466', { power: 0, size: .25, fog: 1 }));
   // olive trees and palms rising behind the roofs (heal-village.js olive/palm, copied)
   const olive = (grp, x, z, h, seed, y0) => { const tr = K.tree({ seed, height: h, trunk: .2, depth: 4, spread: .7, up: .2, twig: 0, mat: M.trunk, layer: 0 }); tr.position.set(x, y0, z); grp.add(tr);
@@ -360,7 +370,7 @@ export async function build(W, H) {
     for (let k = 0; k < PNR; k++) { const sh = new THREE.Shape(ring(RA(k + 1), RB(k + 1))); sh.holes.push(new THREE.Path(ring(RA(k), RB(k)))); const dep = treadY(k) - PYF + .02, g = new THREE.ExtrudeGeometry(sh, { depth: dep, bevelEnabled: false, curveSegments: 1 }); g.rotateX(-Math.PI / 2); g.translate(0, PYF - .02, 0); parts.push([g]); }
     { const sh = new THREE.Shape([[-400, -400], [400, -400], [400, 400], [-400, 400]].map(([x, y]) => new THREE.Vector2(x, y))); sh.holes.push(new THREE.Path(ring(RA(PNR), RB(PNR)))); const g = new THREE.ShapeGeometry(sh, 1); g.rotateX(-Math.PI / 2); parts.push([g]); }
     { const g = new THREE.ShapeGeometry(new THREE.Shape(ring(RA(0) + .1, RB(0) + .1)), 1); g.rotateX(-Math.PI / 2); g.translate(0, PYF, 0); parts.push([g]); }
-    const m = new THREE.Mesh(K.mergeGeometries(parts), M.pave); m.receiveShadow = true; m.castShadow = true; sq.add(m); }
+    const poolM = patch(K.std('#d6c2a0', { roughness: .9, side: THREE.DoubleSide, emissive: col('#7a5c40'), emissiveIntensity: 1.0 }), 'pool4', { map: PAVE }); const m = new THREE.Mesh(K.mergeGeometries(parts), poolM); m.receiveShadow = true; m.castShadow = false; sq.add(m); }   // fix 2: the steps' edges in light (lifted shade, no black rope lines)
   // the water: dark, the warm sky in it, a sheen toward the sun; glints and rings are separate (below)
   const pwU = { uT: { value: 0 }, uWarm: { value: 0 } };
   const pwM = new THREE.MeshStandardMaterial({ color: '#17302e', roughness: .25 });
@@ -407,7 +417,7 @@ export async function build(W, H) {
   { const r = rng(2026), slots = [];
     for (let k = -1; k <= PNR + 1; k++) { const sA = k < 0 ? -.7 : k + .5, a = PA0 + sA * PDR, b = PB0 + sA * PDR, sp = k < 0 ? 1.2 : .72; let per = 0, pv = seP(a, b, 0); for (let i = 1; i <= 300; i++) { const c = seP(a, b, i / 300 * 6.283); per += Math.hypot(c[0] - pv[0], c[1] - pv[1]); pv = c; }
       const n = Math.floor(per / sp); for (let i = 0; i < n; i++) { const [x, z] = seP(a, b, (i + r() * .4) / n * 6.283); slots.push({ x: x + (r() - .5) * .2, z: z + (r() - .5) * .2, d: Math.max(0, k) * 1.2 + r() * 2.5, w: k < 0 }); } }
-    for (let z = -FZ0 - .5; z >= -FZ1; z -= 1.45) for (let x = -fHW(z); x <= fHW(z); x += 1.45) { const jx = x + (r() - .5) * .7, jz = z + (r() - .5) * .7; if (!inFun(jx, jz) || r() > 1 - .42 * ss(14, FZ1, -jz)) continue; slots.push({ x: jx, z: jz, d: 7 + (-jz - FZ0) * .85 + r() * 5 }); }
+    for (let z = -FZ0 - .5; z >= -FZ1; z -= 1.15) for (let x = -fHW(z); x <= fHW(z); x += 1.15) { const jx = x + (r() - .5) * .7, jz = z + (r() - .5) * .7; if (!inFun(jx, jz) || r() > 1 - .42 * ss(14, FZ1, -jz)) continue; slots.push({ x: jx, z: jz, d: 7 + (-jz - FZ0) * .85 + r() * 5 }); }
     slots.sort((a, b) => a.d - b.d);
     const nearestStr = s => { if (s.z > 0) return 4; let bi = 0, bd = 1e9; STRS.forEach((t, i) => { if (i === 4) return; const d = Math.hypot(s.x - t.m.x, s.z - t.m.z); if (d < bd) { bd = d; bi = i; } }); return bi; };
     slots.forEach((s, i) => crowd4.push({ ...s, f: i / slots.length, st: nearestStr(s), v: 1.1 + r() * .25, lane: (r() - .5) * 4.6, col: new THREE.Color(CLOTH[(r() * CLOTH.length) | 0]).multiplyScalar(.82 + r() * .26), ph: r() }));
@@ -418,8 +428,12 @@ export async function build(W, H) {
   const headG4 = (() => { const hd = new THREE.SphereGeometry(.118, 12, 8); hd.scale(.95, 1.05, 1); hd.translate(0, 1.56, .01); const fall = new THREE.SphereGeometry(.15, 12, 8, Math.PI * .1, Math.PI * .8 + Math.PI, 0, Math.PI * .6); fall.scale(1, 1.1, .9); fall.translate(0, 1.5, .03); return K.mergeGeometries([[hd], [fall]]); })();
   const ROBE4 = ['#e9e1cf', '#dcd2bc', '#f0e8d8', '#cfc3a8', '#b8a688', '#d8ccb0', '#9a7c58', '#7c6448', '#5c6c7e', '#8a4a34', '#c8b48c', '#e4dac6'], CL4 = ['#efe7d6', '#d8cdb4', '#3b4f6b', '#8a7a66', '#e6dcc8', '#a89070', '#c4b08a', '#6a5440', '#f2ead8'];
   const fig4 = patch(K.std('#ffffff', { roughness: .92 }), 'fig4', { rim: .5 }), fig4h = patch(K.std('#ffffff', { roughness: .92 }), 'fig4h', { rim: .5 });
-  const NP4 = crowd4.length, p4I = new THREE.InstancedMesh(bodyG4, fig4, NP4), p4H = new THREE.InstancedMesh(headG4, fig4h, NP4);
-  crowd4.forEach((p, i) => { p4I.setColorAt(i, new THREE.Color(ROBE4[(hsh(i, 81) * ROBE4.length) | 0])); p4H.setColorAt(i, new THREE.Color(CL4[(hsh(i, 82) * CL4.length) | 0])); });
+  // fix 2: from this height a person is a warm point of light (a sunlit head cloth and shoulders) and a short soft dash of shadow: a low lens of
+  // cloth (.55 m) with a small lit dome — never a peg, never a long stalk shadow
+  const dotB = (() => { const g = new THREE.SphereGeometry(.26, 12, 7); g.scale(1, .9, .78); g.translate(0, .22, 0); return g; })(), dotH = (() => { const g = new THREE.SphereGeometry(.13, 10, 7); g.translate(0, .5, 0); return g; })();
+  const glowB = new THREE.MeshStandardMaterial({ color: '#ffffff', roughness: .9, emissive: col('#ffcf8e'), emissiveIntensity: .28 }), glowH = new THREE.MeshStandardMaterial({ color: '#ffffff', roughness: .9, emissive: col('#ffe2b0'), emissiveIntensity: .55 });
+  const NP4 = crowd4.length, p4I = new THREE.InstancedMesh(dotB, glowB, NP4), p4H = new THREE.InstancedMesh(dotH, glowH, NP4);
+  crowd4.forEach((p, i) => { p4I.setColorAt(i, new THREE.Color(ROBE4[(hsh(i, 81) * ROBE4.length) | 0]).lerp(new THREE.Color('#f4dcb0'), .35)); p4H.setColorAt(i, new THREE.Color(CL4[(hsh(i, 82) * CL4.length) | 0]).lerp(new THREE.Color('#fff0d0'), .5)); });
   for (const o of [p4I, p4H]) { o.castShadow = true; o.receiveShadow = true; o.frustumCulled = false; sq.add(o); }
   const arrive4 = (f, T) => { const a = T.c2, b = T.end; if (f < .28) return a - 14 + f / .28 * 13.6; if (f <= 1) return a + .05 + (b - a - .35) * Math.pow((f - .28) / .72, .92); return b + .3 + (f - 1) * 12; };
   // the baptisms: golden rings on the water, their rate rising smoothly 1 → 6 a second (one pure table of events)
@@ -467,7 +481,7 @@ export async function build(W, H) {
   const P2DUST = Array.from({ length: 14 }, (_, i) => [hsh(i, 61), hsh(i, 62), hsh(i, 63)]);
   const P2CROWD = Array.from({ length: 8 }, (_, i) => { const row = i % 2, x = 30 + (i / 7) * 1020 + (hsh(i, 71) - .5) * 50; return { x, y: row ? 2010 : 1900, s: 600 + hsh(i, 72) * 60, t0: hsh(i, 73) > .5 ? .8 : -.8, t1: x < 480 ? .62 : -.62, br: .96 + hsh(i, 74) * .12, h: 1.14 + hsh(i, 75) * .08, ord: i }; }).sort((a, b) => Math.abs(a.x - 480) - Math.abs(b.x - 480));
   function p2Arm(t, T) { const a = T.p2; const rise = ss(a + .6, a + 1.9, t), arm = ss(a + 2.0, a + 3.15, t), h = lerp(1.06, 1.26, rise), sh = h - .36, S = [.33, sh - .1];   // fix 1: a clear rise (bowed → upright, 19 %); the shoulder joint at the broad shoulder's corner
-    const ang = lerp(-1.47, 35 * D2R, arm), L = lerp(.5, .53, arm), W2 = [S[0] + Math.cos(ang) * L + .04 * (1 - arm), S[1] + Math.sin(ang) * L + .006 * Math.sin(t * 1.6) * arm]; return { rise, arm, h, S, W: W2, ...ik(S, W2, .33, .3, -1) }; }
+    const ang = lerp(-1.5, 35 * D2R, arm), L = lerp(.52, .53, arm), W2 = [S[0] + Math.cos(ang) * L + .04 * (1 - arm), S[1] + Math.sin(ang) * L + .006 * Math.sin(t * 1.6) * arm]; return { rise, arm, h, S, W: W2, ...ik(S, W2, .33, .3, -1) }; }
   function drawP2(ctx, t, T) { const a = T.p2, u = clamp((t - a) / (T.p3 - a)), zoom = lerp(1, .92, eio(u)), cx = W / 2, cy = H * .42, b = { k: zoom, ox: cx * (1 - zoom), oy: cy * (1 - zoom) };
     ctx.save(); ctx.setTransform(zoom, 0, 0, zoom, cx * (1 - zoom), cy * (1 - zoom)); ctx.drawImage(p2Wall, -(p2Wall.width - W) / 2, -(p2Wall.height - H) / 2); ctx.restore();
     // the band of light crossing the wall, right → left (P1's front, same way), only on the sunlit wall
@@ -481,8 +495,10 @@ export async function build(W, H) {
     const shade = (tg, k = 1) => { tg.globalCompositeOperation = 'source-in'; tg.fillStyle = `rgba(128,120,168,${k})`; tg.fillRect(0, 0, W, H); tg.globalCompositeOperation = 'source-over';   // #6b5f73 over #f3d29a: a cool violet-grey, never black
       ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalCompositeOperation = 'multiply'; ctx.drawImage(p2Tmp, 0, 0); ctx.restore(); };
     shade(layer(5 * zoom, g => { for (const c of P2CROWD) { const k = ss(a + 1.6 + c.ord * .15, a + 2.2 + c.ord * .15, t); cman(g, b, c.x, c.y, c.s, { h: c.h, br: c.br, turn: lerp(c.t0, c.t1, k) }); } }));
-    shade(layer(9 * zoom, g => { const P0 = [480, 1103], s = 560; pman(g, b, P0[0], P0[1], s, { h: pose.h, br: 1.04, hy: lerp(-.2, 0, pose.rise), bow: 1 - pose.rise, lean: lerp(.04, 0, pose.rise) });
-      atf(g, b, P0[0], P0[1], s, lerp(.04, 0, pose.rise), 1, 1.06); sleeveArm(g, pose.S, pose.W, .33, .3, -1, openHand, Math.atan2(pose.W[1] - pose.E[1], pose.W[0] - pose.E[0])); }));
+    shade(layer(9 * zoom, g => { const P0 = [480, 1103], s = 560; pman(g, b, P0[0], P0[1], s, { h: pose.h, br: 1.04, hy: lerp(-.13, 0, pose.rise), bow: 1 - pose.rise, lean: lerp(.04, 0, pose.rise) });
+      atf(g, b, P0[0], P0[1], s, lerp(.04, 0, pose.rise), 1, 1.06);
+      if (pose.arm < .02) hangArm(g, 1, pose.h - .36, .37 * 1.04, 0); else { const q = ik(pose.S, pose.W, .33, .3, -1); limb(g, pose.S[0], pose.S[1], .075, q.E[0], q.E[1], .062); limb(g, q.E[0], q.E[1], .062, q.W[0], q.W[1], .05);
+        g.save(); g.globalAlpha = ss(.25, .7, pose.arm); inHand(g, q.W, Math.atan2(q.W[1] - q.E[1], q.W[0] - q.E[0]), gg => { gg.scale(.8, .8); openHand(gg); }); g.restore(); } }));
     ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); const bt = p2Tmp.getContext('2d'); bt.globalCompositeOperation = 'source-over'; bt.clearRect(0, 0, W, H); bt.drawImage(p2Band, 0, 0); bt.globalCompositeOperation = 'destination-out'; bt.filter = 'blur(14px)'; bt.drawImage(p2Mask, 0, 0); bt.filter = 'none'; bt.globalCompositeOperation = 'source-over';
     ctx.globalCompositeOperation = 'screen'; ctx.drawImage(p2Tmp, 0, 0); ctx.globalCompositeOperation = 'source-over';
     const vg = ctx.createRadialGradient(W / 2, H * .44, H * .3, W / 2, H * .44, H * .78); vg.addColorStop(0, 'rgba(40,26,20,0)'); vg.addColorStop(1, 'rgba(40,26,20,.38)'); ctx.fillStyle = vg; ctx.fillRect(0, 0, W, H); ctx.restore(); }
@@ -511,11 +527,11 @@ export async function build(W, H) {
     mixC(SK.cloudColor.value, '#c8c4c4', .9, '#ffe2c0', 1.1, warm); mixC(SK.cloudShade.value, '#6c6c7c', .7, '#a48a84', .7, warm);
     sunLamp.power = 900 * sunK; const L = film.look; L.exposure = lerp(.9, 1.0, warm); L.saturation = lerp(.86, 1.05, warm); doorLamps.forEach(d => d.power = .9); mixC(L.shadowTint, '#c4cce8', 1, '#d6d2e6', 1, warm); mixC(L.highTint, '#e8ecf4', 1, '#fff0d8', 1, warm); L.contrast = 1.05; L.vignette = .3; }
   // P1 (= s1 of fix 1/2, kept): the wind of light down the street
-  function s1(t, T) { FAR.visible = true; G.street.visible = true; G.pool.visible = false; sky.mesh.visible = true; crowdLayer(0); LU.uGold.value = 0; for (const p of lower) p.visible = true; SK.sunDir.value.copy(SUN1); shadowAt(V(0, 3, -24), 62, SUN1);
+  function s1(t, T) { houseShadows(true); p3Crowd.visible = false; FAR.visible = true; G.street.visible = true; G.pool.visible = false; sky.mesh.visible = true; crowdLayer(0); LU.uGold.value = 0; for (const p of lower) p.visible = true; SK.sunDir.value.copy(SUN1); shadowAt(V(0, 3, -24), 62, SUN1);
     const u = (t - T.t0) / (T.c1 - T.t0), sunK = 1, zF = -72 + 30 * (t - T.fr0);   // fix 1: slower, wider (no wall lighting in two frames)
     const warm = lerp(.3, .85, u); streetLight(warm, sunK); LU.uRimC.value.set('#ffc078').multiplyScalar(1.6);
-    LU.uFront.value = zF; LU.uShade.value = .1; LU.uEdgeK.value = 1.0; LU.uEdgeW.value = 3.6; LU.uEdgeC.value.set('#ffd8a0');
-    frontLamp.pos.set(0, gY(Math.min(zF, 20)) + 3.2, zF); frontLamp.power = 60 * sunK * (1 - ss(14, 30, zF)); frontLamp.size = 8;
+    LU.uFront.value = zF; LU.uShade.value = .38; LU.uEdgeK.value = 0; LU.uEdgeW.value = 6;   // fix 2: no +60 flash on the near wall LU.uEdgeC.value.set('#ffd8a0');
+    frontLamp.pos.set(0, gY(Math.min(zF, 20)) + 3.2, zF); frontLamp.power = 7 * sunK * ss(-60, -30, zF) * (1 - ss(-12, 6, zF)); frontLamp.size = 8;
     const cz = lerp(15.5, 12.1, u), c = V(lerp(1.2, 1.0, u), gY(cz) + lerp(3.3, 3.45, u), cz), l = V(-3.2, gY(-40) + 1.2, -40);
     setCam(c, l, FOV); film.dofCfg.focus = 13; film.dofCfg.aperture = .45; film.dofCfg.maxCoc = 14;
     posePeter(t, T); poseCrowd(t); poseLower(t, T); setMotes(t, 's1', zF, 1.0, 4.5); motes.visible = true; }
@@ -527,9 +543,10 @@ export async function build(W, H) {
   let SUNP3 = null;
   function p3(t, T) { FAR.visible = false; G.street.visible = true; G.pool.visible = false; sky.mesh.visible = true; LU.uGold.value = 0; for (const p of lower) p.visible = false;
     if (!SUNP3) { const q = P3C((T.p3 + T.c2) / 2, T); setCam(q.c, q.l, q.fov); cam.updateMatrixWorld(); const d = V(230 / W * 2 - 1, 1 - 520 / H * 2, .5).unproject(cam).sub(cam.position).normalize(); SUNP3 = d; }   // the sun placed where the plan wants it (x 230, y 520), up-left of him
+    houseShadows(false);
     for (const p of crowd) { const keep = p.position.z < -47; if (p.userData.lay !== keep) { p.userData.lay = keep; p.traverse(o => o.layers.set(keep ? 0 : 3)); } } crowdL = -1;
-    SK.sunDir.value.copy(SUNP3); shadowAt(V(0, 3, -30), 46, SUNP3);
-    const grow = ss(T.p3, T.c2, t); streetLight(1, 1); film.atmos.density = .0012; hemi.intensity = .3; film.look.exposure = lerp(.78, .84, grow); LU.uRimC.value.set('#ffc078').multiplyScalar(1.8);
+    SK.sunDir.value.copy(SUNP3); { const az = Math.atan2(SUNP3.x, -SUNP3.z), el = 14 * D2R; P3L.set(Math.sin(az) * Math.cos(el), Math.sin(el), -Math.cos(az) * Math.cos(el)); } shadowAt(V(0, 3, -12), 52, P3L); p3Crowd.visible = true;
+    const grow = ss(T.p3, T.c2, t); streetLight(1, 1); sunL.intensity = 4.2; film.atmos.density = .0012; hemi.intensity = .3; film.look.exposure = lerp(.78, .84, grow); LU.uRimC.value.set('#ffc078').multiplyScalar(1.8);
     SK.horizon.value.set('#f6e2b8').multiplyScalar(1.45); SK.mid.value.set('#f0d6a8').multiplyScalar(1.05);   // a little cooler than P4's gold (time passes before 「그날」)
     const zE = lerp(-50, 30, clamp((t - T.p3 - .3) / 2.2)), ek = ss(T.p3 + .3, T.p3 + .8, t) * (1 - ss(T.c2 - .4, T.c2, t));
     LU.uFront.value = zE; LU.uShade.value = 1; LU.uEdgeK.value = .22 * ek; LU.uEdgeW.value = 4; LU.uEdgeC.value.set('#ffdcaa');
@@ -538,7 +555,7 @@ export async function build(W, H) {
     posePeter(t, T); poseCrowd(t); setMotes(t, 'p3', zE, .5 * ek, 4); motes.visible = true; }
   // P4: the aerial
   const P4C = (t, T) => { const u = clamp((t - T.c2) / (T.end - T.c2)), D = 96 * Math.exp(Math.log(122 / 96) * u), pit = lerp(57, 61, u) * D2R, yaw = (-2 + 4 * u) * D2R, fov = vert ? 36 : 24;
-    const off = D * Math.tan(1.6 * D2R) / Math.sin(pit), tgt = PO.clone().add(V(0, 0, off - 6)), dir = V(Math.sin(yaw) * Math.cos(pit), Math.sin(pit), Math.cos(yaw) * Math.cos(pit));
+    const off = D * Math.tan(1.6 * D2R) / Math.sin(pit), tgt = PO.clone().add(V(0, 0, off + 1)), dir = V(Math.sin(yaw) * Math.cos(pit), Math.sin(pit), Math.cos(yaw) * Math.cos(pit));
     return { c: tgt.clone().addScaledVector(dir, D), l: tgt, fov, D }; };
   function p4(t, T) { G.street.visible = false; G.pool.visible = true; sky.mesh.visible = false; LU.uGold.value = 0; shadowAt(PO.clone().add(V(0, 0, -12)), 80, SUN4);
     const u = clamp((t - T.c2) / (T.end - T.c2)), late = ss(T.c2b - .3, T.c2b + 1.6, t), warm = .35 + .65 * ss(T.c2, T.end, t);

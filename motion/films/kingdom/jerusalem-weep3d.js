@@ -677,10 +677,11 @@ tidyCloth(J);   // the tied head cloth (fix 2)
   //      pace, easing to a stop with his last two steps (T.jStop — the script's beat N134).
   STAGE.J2 = t => {
     setVis(SIDE, false); jPose(t, 'J2'); crowdAt(t); setVis(CITYP, false); J.visible = true;
-    const jp = J.position.clone(), pos = jp.clone().addScaledVector(DIRC, -32).addScaledVector(RIGHT, -2.4); pos.y = hT(pos.x, pos.z) + .5;   // a little to his left, over the crowd's lanes: their shadows stream at us; the Temple stands left of him, never behind his head
+    const u2 = clamp((t - T.cuts[1]) / (T.cuts[2] - T.cuts[1])), jp = J.position.clone(), pos = jp.clone().addScaledVector(DIRC, -48 + 10 * u2).addScaledVector(RIGHT, -2.4); pos.y = hT(pos.x, pos.z) + .5 + .5 * u2;   // tracking with him, and a slow push in on top that never stops   // a little to his left, over the crowd's lanes: their shadows stream at us; the Temple stands left of him, never behind his head
     const view = rotY(V(jp.x - pos.x, 0, jp.z - pos.z).normalize(), -2.2), look = lookFrom(pos, view, -6);
     setFov(26); setCam(pos, look);
-    for (const g of CROWD) if (g.visible) shadowOnly(g, g.position.distanceTo(pos) < 40);
+    for (const g of CROWD) if (g.visible) shadowOnly(g, true);   // fix 2: the crowd is only its shadows
+    for (const o of CITYHIDE) o.visible = false; PLATREF.v.visible = false; if (jRobe.userData.rimS) jRobe.userData.rimS.value = 0;   // no 3D city; no rim on the robe (the waist)
     const sv = sunDirFrom(view, -1.4, 3.6); SUN.copy(sv); SKY.sunDir.value.copy(SUN);
     { const f = pos.clone().addScaledVector(DIRC, 18); sunL.target.position.copy(f); sunL.position.copy(f).addScaledVector(SUN, 900); sunL.intensity = 30;
       const c = sunL.shadow.camera; if (c.right !== 26) { Object.assign(c, { left: -26, right: 26, top: 26, bottom: -26 }); c.updateProjectionMatrix(); } sunLamp.pos.copy(cam.position).addScaledVector(SUN, 1400); }
@@ -783,7 +784,7 @@ tidyCloth(J);   // the tied head cloth (fix 2)
   const lerp3 = (A, B, k) => A.clone().lerp(B, clamp(k));
   function stage(t) {
     const nm = shotOf(t);
-    skyGold(); hemi.intensity = .55; goldM.emissiveIntensity = .12; hemi.color.copy(col('#b4a8b8')); lamps.visible = nm === 'J4' || nm === 'J5' || nm === 'J6' || nm === 'J7'; for (const o of CITYHIDE) o.visible = true; film.look.saturation = 1;
+    skyGold(); hemi.intensity = .55; goldM.emissiveIntensity = .12; hemi.color.copy(col('#b4a8b8')); lamps.visible = nm === 'J4' || nm === 'J5' || nm === 'J6' || nm === 'J7'; for (const o of CITYHIDE) o.visible = true; PLATREF.v.visible = true; film.look.saturation = 1;
     gateLamps.forEach(g => { g.power = 0; }); smkU.uC.value.copy(col('#d8c4b0', 1)); lampA.fill(0); lamps.geometry.attributes.aA.needsUpdate = true;
     GU.uShK.value = 0; setRimJ(1); CRIM.value.copy(col('#ffd58a', .9)); if (nm !== 'J2') resetLayers(); J5.group.visible = false; for (const c of CLOAKS) c.visible = nm === 'J1' || nm === 'J2';
     dust.visible = nm === 'J1' || nm === 'J2'; TUFTS.visible = true; smoke.visible = !(nm === 'J4' && inRuin(t)); motes.visible = nm === 'J2'; birdsAt(t, (nm === 'J4' && !inRuin(t)) || nm === 'J6', null, nm === 'J4' ? 6 : 3); washAt(t);
@@ -906,15 +907,212 @@ tidyCloth(J);   // the tied head cloth (fix 2)
   }
   const tmpV = V();
   function draw(ctx, t, TB) {
-    T = TB; const nm = stage(t); renderAll(t); blit(ctx, t, lamp.shimmer);
-    const ru = nm === 'J4' && inRuin(t); if (ru) ruinFrame(ctx, t);
+    T = TB; const nm0 = shotOf(t); if (nm0 !== 'J2') { drawPainted(ctx, t, nm0); return; }
+    const nm = stage(t); renderAll(t); blit(ctx, t, lamp.shimmer);
     tmpV.copy(cam.position).addScaledVector(SUN, 900).project(cam);
-    if (lamp.god > .01 && tmpV.z < 1 && !ru) { const e = Math.max(Math.abs(tmpV.x), Math.abs(tmpV.y)), k = lamp.god * (1 - ss(.95, 1.55, e)); if (k > .004) godRays(ctx, (tmpV.x + 1) / 2 * W, (1 - tmpV.y) / 2 * H, k); }
+    if (lamp.god > .01 && tmpV.z < 1) { const e = Math.max(Math.abs(tmpV.x), Math.abs(tmpV.y)), k = lamp.god * (1 - ss(.95, 1.55, e)); if (k > .004) godRays(ctx, (tmpV.x + 1) / 2 * W, (1 - tmpV.y) / 2 * H, k); }
   }
+  // ==== fix 2 (rounds/r10-pilot/batch3-director-fix2.md, owner 2026-11-26): the city is ONE PAINTED PANORAMA ====
+  // After Simonet 「Flevit super illam」 (1892): Jerusalem across the Kidron from the Mount of Olives at sunset — the walls, the Temple's
+  // white-and-gold porch catching the last light, roofs climbing the hill, haze between the layers. Painted once in code as layered 2D
+  // planes (sky per frame; hills, upper city, Temple Mount, lower city, wall, valley, near slope), each in three states — lit, dusk, ruin —
+  // so a 2D camera can truck, push and crane through them with parallax. The ruin is the same painting, same camera, redrawn in charcoal
+  // greys (the porch gone, a heap of stones where it stood, walls broken, roofs fallen); the sky stays the same sky.
+  // Pano coordinates: 2400 wide; hills on y ≈ 1440–1520; city 1460–1840; wall 1830–1905; Kidron valley 1880–2340; near slope 2330–3400.
+  const PANO = (() => {
+    const PW = 2400, cv = (w, h) => { const c = document.createElement('canvas'); c.width = w; c.height = h; return c; };
+    const hx = h => { const n = parseInt(h.slice(1), 16); return [n >> 16 & 255, n >> 8 & 255, n & 255]; };
+    const mixc = (a, b, k) => { const A = hx(a), B = hx(b); return `rgb(${A.map((v, i) => Math.round(v + (B[i] - v) * clamp(k))).join(',')})`; };
+    const HAZE = '#d9a983', SHADE = '#6e5a6e', GOLD = '#ffd58a';
+    const mixH = (a, b, k) => { const A = hx(a), B = hx(b); return '#' + A.map((v, i) => Math.round(v + (B[i] - v) * clamp(k)).toString(16).padStart(2, '0')).join(''); };
+    const pal = {   // by state: front face, roof, sunward rim, window, ground
+      lit: { face: '#c48c62', roof: '#e3b27e', rim: GOLD, win: '#5a3a34', stone: '#dcbc90', white: '#f6e6c8', whiteS: '#c9ab92' },
+      dusk: { face: '#7d5a5c', roof: '#8e6c6c', rim: null, win: '#3a2a30', stone: '#86686a', white: '#a08488', whiteS: '#6e5a6e' },
+      ruin: { face: '#6c6664', roof: '#86807c', rim: null, win: '#3a3634', stone: '#7a7470', white: '#9a948e', whiteS: '#5a5452' } };
+    // a layer: an offscreen canvas placed at (ox, oy) in pano coordinates, parallax p (0 far … 1 near)
+    const layer = (ox, oy, w, h, p, paint) => { const out = { ox, oy, p, v: {} }; for (const st of ['lit', 'dusk', 'ruin']) { const c = cv(w, h), x = c.getContext('2d'); x.translate(-ox, -oy); paint(x, st, rng(9100 + oy));
+      const c2 = cv(w, h), x2 = c2.getContext('2d'); x2.filter = 'blur(0.8px)'; x2.drawImage(c, 0, 0); x2.filter = 'none'; x2.globalAlpha = .45; x2.drawImage(c, 0, 0); out.v[st] = c2; } return out; };
+    const dab = (x, x0, y0, x1, y1, n, col, a, r0, r1, R) => { x.fillStyle = col; for (let i = 0; i < n; i++) { x.globalAlpha = a * (.5 + .5 * R()); x.beginPath(); x.ellipse(lerp(x0, x1, R()), lerp(y0, y1, R()), r0 + R() * (r1 - r0), (r0 + R() * (r1 - r0)) * .6, R() * 3, 0, 6.283); x.fill(); } x.globalAlpha = 1; };
+    const hazeOver = (x, x0, y0, w, h, k) => { if (k <= 0) return; x.save(); x.globalCompositeOperation = 'source-atop'; x.globalAlpha = k; x.fillStyle = HAZE; x.fillRect(x0, y0, w, h); x.restore(); };
+    // a house seen a little from above, the low sun to the right: front face, roof strip, a gold edge on the sunward side, dark windows
+    function house(x, X, Y, w, h, st, hz, R) { const P = pal[st], k = hz, jit = (R() - .5) * .22;
+      x.fillStyle = mixc(mixH(P.face, jit > 0 ? '#f0d0a8' : '#5a3e3a', Math.abs(jit)), HAZE, k * .8); x.fillRect(X, Y - h, w, h);
+      x.fillStyle = mixc(P.face, '#000000', .28 + k * -.1); x.globalAlpha = .55; x.fillRect(X, Y - 3, w, 3); x.globalAlpha = 1;
+      x.fillStyle = mixc(P.roof, HAZE, k * .7); x.beginPath(); x.moveTo(X, Y - h); x.lineTo(X + w, Y - h); x.lineTo(X + w - 3, Y - h - 4); x.lineTo(X + 3, Y - h - 4); x.closePath(); x.fill();
+      if (P.rim) { x.fillStyle = P.rim; x.globalAlpha = .75 * (1 - k * .6); x.fillRect(X + w - 2.4, Y - h - 3, 2.4, h + 3); x.fillRect(X + 2, Y - h - 4.5, w - 4, 1.4); x.globalAlpha = 1; }
+      x.fillStyle = mixc(P.win, HAZE, k * .6); const nw = Math.max(1, Math.floor(w / 14)); for (let i = 0; i < nw; i++) if (R() < .7) x.fillRect(X + 4 + i * (w - 8) / nw + R() * 3, Y - h * (.55 + .2 * R()), 2.6, 4 + R() * 3); }
+    // a ruined house: a low broken stump of wall in grey, fallen stones at its foot
+    function stump(x, X, Y, w, h, hz, R) { x.fillStyle = mixc('#5a5452', HAZE, hz * .5); x.beginPath(); x.moveTo(X, Y); x.lineTo(X, Y - h * (.3 + .5 * R())); x.lineTo(X + w * .3, Y - h * (.2 + .4 * R())); x.lineTo(X + w * .5, Y - h * (.5 + .4 * R())); x.lineTo(X + w * .75, Y - h * .15); x.lineTo(X + w, Y - h * (.1 + .3 * R())); x.lineTo(X + w, Y); x.closePath(); x.fill();
+      dab(x, X - 4, Y - 6, X + w + 4, Y + 2, 6, mixc('#78726e', HAZE, hz * .5), .9, 2, 5, R); }
+    function cityRows(x, st, R, x0, x1, yBack, yFront, rows, scale, skip) {
+      for (let r = 0; r < rows; r++) { const k = r / (rows - 1), Y = lerp(yBack, yFront, k), sc = lerp(.55, 1, k) * scale, hz = (1 - k) * .55;
+        for (let X = x0 + R() * 30; X < x1; X += (14 + R() * 30) * sc) { if (skip && skip(X, Y)) continue; const w = (14 + R() * 34) * sc, h = (12 + R() * 26) * sc + (R() < .1 ? 16 * sc : 0), yj = Y + (R() - .5) * 14 * sc;
+          if (R() < .07) { X += 10 * sc; continue; }   // an alley
+          if (st !== 'ruin' && R() < .06) { const tc = st === 'lit' ? mixc('#3e4430', HAZE, hz * .7) : mixc('#2e2a36', HAZE, hz * .5); x.fillStyle = tc; x.beginPath(); x.ellipse(X, yj - 14 * sc, 4 * sc, 16 * sc, 0, 0, 6.283); x.fill(); continue; }   // a cypress
+          if (st === 'ruin') { if (R() < .75) stump(x, X, yj, w, h * .55, hz, R); else R(); } else house(x, X, yj, w, h, st, hz, R); } } }
+    function patches(x, st, R, x0, y0, w, h) { if (st === 'ruin') return; x.save(); x.globalCompositeOperation = 'source-atop';
+      for (let i = 0; i < 26; i++) { const X = x0 + R() * w, Y = y0 + R() * h, rx = 80 + R() * 220, g = x.createRadialGradient(X, Y, 0, X, Y, rx), warm = st === 'lit' && R() < .55;
+        g.addColorStop(0, warm ? 'rgba(255,214,150,.22)' : 'rgba(90,70,100,.2)'); g.addColorStop(1, 'rgba(0,0,0,0)'); x.fillStyle = g; x.fillRect(X - rx, Y - rx, rx * 2, rx * 2); } x.restore(); }
+    // ---- the layers
+    const hills = layer(0, 1360, PW, 220, .05, (x, st) => { const c1 = st === 'lit' ? '#a88a86' : st === 'dusk' ? '#7c6a7a' : '#8a8480', c2 = st === 'lit' ? '#977a7a' : st === 'dusk' ? '#6a5a6c' : '#7a7470';
+      x.fillStyle = c1; x.beginPath(); x.moveTo(0, 1580); for (let X = 0; X <= PW; X += 20) x.lineTo(X, 1452 + 26 * Math.sin(X * .0021 + 1) + 12 * Math.sin(X * .0071)); x.lineTo(PW, 1580); x.closePath(); x.fill();
+      x.fillStyle = c2; x.beginPath(); x.moveTo(0, 1580); for (let X = 0; X <= PW; X += 20) x.lineTo(X, 1490 + 18 * Math.sin(X * .0031 + 2.2) + 8 * Math.sin(X * .011)); x.lineTo(PW, 1580); x.closePath(); x.fill(); });
+    const inTemple = (X, Y) => X > 800 && X < 1740;
+    const cityBack = layer(0, 1420, PW, 260, .14, (x, st, R) => { cityRows(x, st, R, 0, PW, 1500, 1640, 11, .75, null); patches(x, st, R, 0, 1440, PW, 220); hazeOver(x, 0, 1420, PW, 260, st === 'ruin' ? .1 : .12); });
+    const temple = layer(760, 1300, 1140, 440, .2, (x, st, R) => { const P = pal[st], L = st === 'lit';
+      // the platform's retaining wall: courses, a lit top edge; in the ruin breached, its top jagged, stones at its foot
+      x.fillStyle = P.stone; x.fillRect(820, 1598, 900, 104);
+      x.strokeStyle = mixc(P.stone, '#000000', .18); x.lineWidth = 1.2; for (let y = 1610; y < 1700; y += 9) { x.beginPath(); x.moveTo(820, y); x.lineTo(1720, y); x.stroke(); }
+      for (let y = 1606, i = 0; y < 1700; y += 9, i++) for (let X = 826 + (i % 2) * 14; X < 1716; X += 28) { x.beginPath(); x.moveTo(X, y); x.lineTo(X, y + 9); x.stroke(); }
+      if (L) { x.fillStyle = '#f2d6a4'; x.fillRect(820, 1594, 900, 6); x.fillStyle = GOLD; x.globalAlpha = .8; x.fillRect(1716, 1594, 4, 108); x.globalAlpha = 1; }
+      if (st === 'ruin') { x.fillStyle = '#5a5452'; for (let i = 0; i < 9; i++) { const X = 840 + R() * 860, w = 20 + R() * 50; x.beginPath(); x.moveTo(X, 1598); x.lineTo(X + w * .5, 1612 + R() * 16); x.lineTo(X + w, 1598); x.fill(); }
+        dab(x, 820, 1690, 1720, 1712, 120, '#6a6462', .9, 3, 8, R); }
+      if (st !== 'ruin') {
+        // the Royal Stoa along the south: a long roof on a row of columns, deep shade between
+        x.fillStyle = mixc(P.whiteS, '#000000', .25); x.fillRect(832, 1560, 230, 38); x.fillStyle = P.white; x.fillRect(828, 1552, 238, 9);
+        for (let X = 836; X < 1060; X += 12) { x.fillStyle = P.white; x.fillRect(X, 1561, 4, 37); }
+        // Solomon's Porch along the front (east) edge: a low colonnade
+        x.fillStyle = mixc(P.whiteS, '#000000', .3); x.fillRect(1066, 1580, 640, 18); x.fillStyle = P.white; x.fillRect(1062, 1575, 650, 6);
+        for (let X = 1068; X < 1706; X += 10) { x.fillStyle = mixc(P.white, '#000000', .05); x.fillRect(X, 1581, 3, 17); }
+        // the court wall with its gate
+        x.fillStyle = mixc(P.white, HAZE, .15); x.fillRect(1090, 1548, 380, 28); x.fillStyle = mixc(P.whiteS, '#000000', .35); x.fillRect(1255, 1556, 30, 20);
+        // the sanctuary and its porch: white, gold on the cornice, a gold frame round the dark doorway, gold spikes on the roofline
+        x.fillStyle = P.whiteS; x.fillRect(1206, 1440, 124, 112); x.fillStyle = P.white; x.fillRect(1206, 1440, 100, 112);
+        x.fillStyle = P.white; x.fillRect(1170, 1450, 196, 102); x.fillRect(1160, 1386, 216, 66);
+        x.fillStyle = mixc(P.whiteS, '#000000', .05); for (const X of [1186, 1214, 1316, 1344]) x.fillRect(X, 1452, 7, 98);   // engaged columns
+        x.fillStyle = '#3a2420'; x.fillRect(1240, 1474, 54, 78);
+        if (L) { x.fillStyle = GOLD; x.fillRect(1160, 1384, 216, 8); x.fillRect(1160, 1448, 216, 4); x.fillRect(1233, 1468, 6, 84); x.fillRect(1295, 1468, 6, 84); x.fillRect(1233, 1466, 68, 5);
+          for (let X = 1164; X < 1376; X += 12) { x.beginPath(); x.moveTo(X, 1384); x.lineTo(X + 2, 1374); x.lineTo(X + 4, 1384); x.fill(); }
+          x.globalAlpha = .7; x.fillRect(1372, 1386, 4, 166); x.fillRect(1326, 1440, 4, 110); x.globalAlpha = 1;
+          const g = x.createLinearGradient(1160, 0, 1376, 0); g.addColorStop(0, 'rgba(255,214,150,0)'); g.addColorStop(1, 'rgba(255,214,150,.28)'); x.fillStyle = g; x.fillRect(1160, 1386, 216, 166); }
+        else { x.fillStyle = '#9a8478'; x.fillRect(1160, 1384, 216, 6); }
+        // the Antonia: a block with four towers at the north-west corner
+        x.fillStyle = mixc(P.stone, '#000000', .12); x.fillRect(1730, 1540, 130, 160); x.fillStyle = mixc(P.stone, '#000000', .04);
+        for (const [X, top] of [[1726, 1474], [1832, 1494]]) { x.fillRect(X, top, 32, 230); for (let c = 0; c < 4; c++) x.fillRect(X + c * 9, top - 7, 5, 8); }
+        if (L) { x.fillStyle = GOLD; x.globalAlpha = .7; x.fillRect(1756, 1474, 3, 230); x.fillRect(1862, 1494, 3, 206); x.globalAlpha = 1; }
+      } else {
+        // where the porch stood: a long heap of stones; the Antonia a broken stump
+        x.fillStyle = '#4e4846'; x.beginPath(); x.moveTo(1110, 1600); for (let i = 0; i <= 40; i++) { const k = i / 40; x.lineTo(lerp(1110, 1420, k), 1600 - Math.pow(Math.sin(Math.PI * k), .75) * (56 + 8 * Math.sin(i * 1.7))); } x.closePath(); x.fill();
+        dab(x, 1120, 1548, 1410, 1600, 160, '#6e6866', .9, 3, 9, R); dab(x, 1130, 1556, 1400, 1598, 60, '#8a8480', .8, 2, 5, R);
+        x.fillStyle = '#5e5856'; x.beginPath(); x.moveTo(1730, 1700); x.lineTo(1730, 1600); x.lineTo(1752, 1586); x.lineTo(1770, 1616); x.lineTo(1800, 1596); x.lineTo(1830, 1630); x.lineTo(1860, 1610); x.lineTo(1860, 1700); x.fill();
+        dab(x, 1150, 1585, 1700, 1600, 80, '#6a6462', .9, 3, 7, R); }
+      hazeOver(x, 760, 1300, 1140, 440, .08); });
+    const cityFront = layer(0, 1580, PW, 300, .24, (x, st, R) => { cityRows(x, st, R, 0, PW, 1660, 1830, 9, 1.05, (X, Y) => X > 790 && X < 1750 && Y < 1720); patches(x, st, R, 0, 1600, PW, 260); hazeOver(x, 0, 1580, PW, 300, .04); });
+    const wall = layer(0, 1780, PW, 150, .28, (x, st, R) => { const P = pal[st], L = st === 'lit';
+      const breaks = st === 'ruin' ? [[300, 380], [610, 700], [980, 1050], [1460, 1560], [1900, 1980], [2160, 2210]] : [];
+      const open = X => breaks.some(([a, b]) => X > a && X < b);
+      for (let X = 0; X < PW; X += 6) { if (open(X)) { if (st === 'ruin') dab(x, X, 1888, X + 6, 1904, 2, '#6a6462', .9, 3, 6, R); continue; }
+        const top = 1846 + (st === 'ruin' ? R() * 18 : 0); x.fillStyle = mixc(P.stone, '#000000', .1 + .06 * Math.sin(X * .05)); x.fillRect(X, top, 6.5, 1904 - top); }
+      for (let X = 0; X < PW; X += 14) if (!open(X) && st !== 'ruin') { x.fillStyle = mixc(P.stone, '#000000', .1); x.fillRect(X, 1838, 8, 9); }
+      for (let X = 80; X < PW; X += 170) { if (open(X) || (X > 1200 && X < 1340)) continue; const th = st === 'ruin' ? 20 + R() * 20 : 52; x.fillStyle = mixc(P.stone, '#000000', .04); x.fillRect(X, 1904 - th - 16, 34, th + 16); if (L) { x.fillStyle = GOLD; x.globalAlpha = .6; x.fillRect(X + 32, 1904 - th - 16, 2.5, th + 16); x.globalAlpha = 1; } }
+      // the Golden Gate below the Temple: two arches between two towers
+      if (st !== 'ruin') { x.fillStyle = mixc(P.stone, '#000000', .02); x.fillRect(1226, 1826, 96, 78); x.fillStyle = '#3a2824';
+        for (const X of [1246, 1286]) { x.beginPath(); x.moveTo(X - 13, 1904); x.lineTo(X - 13, 1872); x.arc(X, 1872, 13, Math.PI, 0); x.lineTo(X + 13, 1904); x.fill(); } }
+      else dab(x, 1220, 1870, 1330, 1904, 50, '#5e5856', .9, 3, 8, R); });
+    const road = (x, pts, w0, w1, col) => { x.strokeStyle = col; x.lineCap = 'round'; for (let i = 0; i < pts.length - 1; i++) { x.lineWidth = lerp(w0, w1, i / (pts.length - 1)); x.beginPath(); x.moveTo(...pts[i]); x.lineTo(...pts[i + 1]); x.stroke(); } };
+    const valley = layer(0, 1880, PW, 470, .45, (x, st, R) => { const lit = st === 'lit', d = st === 'dusk';
+      const g = x.createLinearGradient(0, 1890, 0, 2340); g.addColorStop(0, lit ? '#8a7258' : d ? '#5e4c58' : '#7a7470'); g.addColorStop(.75, lit ? '#6a5a44' : d ? '#463a48' : '#5e5856'); g.addColorStop(1, lit ? '#7a6a4c' : d ? '#4e4250' : '#6a6462');
+      x.fillStyle = g; x.fillRect(0, 1890, PW, 460);
+      road(x, [[1272, 1904], [1258, 1990], [1296, 2080], [1236, 2170], [1262, 2250], [1214, 2336]], 9, 14, lit ? '#caa878' : d ? '#7a6670' : '#8e8884');
+      for (let i = 0; i < 260; i++) { const X = R() * PW, Y = lerp(1930, 2320, Math.sqrt(R())), s2 = lerp(.6, 1.2, (Y - 1930) / 390);   // olive trees: low spreading crowns, short dark trunks
+        x.fillStyle = lit ? '#3e3428' : d ? '#2e2630' : '#3a3634'; x.fillRect(X - 1.5 * s2, Y - 4 * s2, 3 * s2, 8 * s2);
+        dab(x, X - 16 * s2, Y - 16 * s2, X + 16 * s2, Y - 4 * s2, 7, lit ? '#5e6648' : d ? '#3e3a48' : '#56524e', .95, 6 * s2, 11 * s2, R);
+        if (lit) dab(x, X - 10 * s2, Y - 17 * s2, X + 14 * s2, Y - 12 * s2, 3, '#8a8a5a', .7, 3 * s2, 6 * s2, R); }
+      hazeOver(x, 0, 1880, PW, 470, .06); });
+    const near = layer(0, 2320, PW, 1080, 1, (x, st, R) => { const lit = st === 'lit', d = st === 'dusk';
+      const g = x.createLinearGradient(0, 2330, 0, 3400); g.addColorStop(0, lit ? '#c49a6a' : d ? '#6e5a62' : '#8e8884'); g.addColorStop(1, lit ? '#a07a52' : d ? '#4e4048' : '#6e6866');
+      x.fillStyle = g; x.beginPath(); x.moveTo(0, 2350); for (let X = 0; X <= PW; X += 30) x.lineTo(X, 2338 + 10 * Math.sin(X * .01) + 6 * Math.sin(X * .037)); x.lineTo(PW, 3400); x.lineTo(0, 3400); x.closePath(); x.fill();
+      road(x, [[1214, 2340], [1180, 2440], [1120, 2560], [1080, 2700], [1060, 2900], [1080, 3150], [1120, 3400]], 16, 90, lit ? '#dcbc8c' : d ? '#86727a' : '#a09a94');
+      for (let i = 0; i < 900; i++) { const X = R() * PW, Y = lerp(2360, 3400, Math.pow(R(), .8)), s2 = lerp(.5, 2.4, (Y - 2360) / 1040); x.strokeStyle = lit ? (R() < .5 ? '#8a7448' : '#b89a62') : d ? '#4e4250' : '#5e5856'; x.globalAlpha = .55; x.lineWidth = 1.2 * s2;
+        x.beginPath(); x.moveTo(X, Y); x.lineTo(X + (R() - .3) * 4 * s2, Y - (5 + R() * 9) * s2); x.stroke(); }
+      x.globalAlpha = 1; for (let i = 0; i < 40; i++) { const X = R() * PW, Y = lerp(2400, 3400, R()); if (Math.abs(X - lerp(1214, 1120, (Y - 2340) / 1060)) < 120) continue; const s2 = lerp(.6, 2, (Y - 2400) / 1000); dab(x, X - 10 * s2, Y - 6 * s2, X + 10 * s2, Y, 3, lit ? '#8a7a64' : d ? '#4a3e48' : '#5a5452', .9, 4 * s2, 8 * s2, R); } });
+    const L = [hills, cityBack, temple, cityFront, wall, valley, near];
+    // the lamps: windows of the lower city and the upper city (pano coords on their layer), and the gate's two (not level like eyes)
+    const lamps = []; { const r = rng(5353); for (let i = 0; i < 70; i++) { const front = r() < .55, X = r() * PW, Y = front ? lerp(1680, 1820, r()) : lerp(1520, 1630, r()); if (X > 790 && X < 1750 && (!front || Y < 1720)) { i--; continue; } lamps.push({ x: X, y: Y, p: front ? .24 : .14, rank: i }); }
+      lamps.push({ x: 1232, y: 1846, p: .28, rank: 1e9, gate: 1 }, { x: 1316, y: 1858, p: .28, rank: 1e9, gate: 2 }); }
+    // charcoal paper (fixed to the frame) for the ruin
+    const grain = cv(W, H); { const g = grain.getContext('2d'), im = g.createImageData(W, H), r = rng(77); for (let i = 0; i < W * H; i++) { const v = 200 + r() * 55 | 0; im.data[i * 4] = v; im.data[i * 4 + 1] = v; im.data[i * 4 + 2] = v; im.data[i * 4 + 3] = 255; } g.putImageData(im, 0, 0); }
+    const scratch = cv(PW, 1100), sx = scratch.getContext('2d');
+    const xf = (ctx, c, p) => { const Z = c.z * (1 + (c.push || 0) * p); ctx.setTransform(Z, 0, 0, Z, W / 2 - (c.cx + (c.tx || 0) * p) * Z, H / 2 - (c.cy + (c.ty || 0) * p) * Z); return Z; };
+    // draw one layer; `split` = { y, feather, litAbove }: lit on one side of a pano line, dusk on the other
+    function drawLayer(ctx, Ly, c, st, split) { const Z = xf(ctx, c, Ly.p);
+      if (!split || st === 'ruin') { ctx.drawImage(Ly.v[st], Ly.ox, Ly.oy); return; }
+      ctx.drawImage(Ly.v.dusk, Ly.ox, Ly.oy);
+      const w = Ly.v.lit.width, h = Ly.v.lit.height, yl = split.y - Ly.oy, f = split.feather;
+      if (split.litAbove ? yl <= -f : yl >= h + f) return;
+      if (split.litAbove ? yl >= h + f : yl <= -f) { ctx.drawImage(Ly.v.lit, Ly.ox, Ly.oy); return; }
+      sx.setTransform(1, 0, 0, 1, 0, 0); sx.globalCompositeOperation = 'source-over'; sx.clearRect(0, 0, w, h); sx.drawImage(Ly.v.lit, 0, 0);
+      sx.globalCompositeOperation = 'destination-in'; const g = sx.createLinearGradient(0, yl - f, 0, yl + f); g.addColorStop(0, split.litAbove ? 'rgba(0,0,0,1)' : 'rgba(0,0,0,0)'); g.addColorStop(1, split.litAbove ? 'rgba(0,0,0,0)' : 'rgba(0,0,0,1)');
+      sx.fillStyle = g; sx.fillRect(0, 0, w, h); sx.globalCompositeOperation = 'source-over'; ctx.drawImage(scratch, 0, 0, w, h, Ly.ox, Ly.oy, w, h); }
+    function sky(ctx, c, s) { ctx.setTransform(1, 0, 0, 1, 0, 0); const Z = c.z, sxp = W / 2 + (s.sun.x - c.cx) * Z, syp = H / 2 + (s.sun.y - c.cy) * Z;
+      const hyS = H / 2 + (1480 - c.cy) * Z, g = ctx.createLinearGradient(0, hyS - 1400 * Z, 0, hyS);
+      g.addColorStop(0, s.top); g.addColorStop(.7, s.mid); g.addColorStop(1, s.hor); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+      const gl = ctx.createRadialGradient(sxp, syp, 0, sxp, syp, 520 * Z); gl.addColorStop(0, `rgba(246,220,168,${.75 * s.glow})`); gl.addColorStop(.35, `rgba(246,214,160,${.35 * s.glow})`); gl.addColorStop(1, 'rgba(246,214,160,0)'); ctx.fillStyle = gl; ctx.fillRect(0, 0, W, H);
+      if (s.sunA > 0) { ctx.globalAlpha = s.sunA; const gd = ctx.createRadialGradient(sxp, syp, 0, sxp, syp, 44 * Z); gd.addColorStop(0, '#fff6dc'); gd.addColorStop(.8, '#fbe4b0'); gd.addColorStop(1, 'rgba(251,228,176,0)'); ctx.fillStyle = gd; ctx.beginPath(); ctx.arc(sxp, syp, 44 * Z, 0, 6.283); ctx.fill(); ctx.globalAlpha = 1; }
+      // soft clouds lit from below, fixed to the sky (they drift very slowly)
+      ctx.globalAlpha = .22 * s.glow; ctx.fillStyle = '#fbe0b8'; for (let i = 0; i < 6; i++) { const X = W / 2 + ((300 + i * 330 + s.t * 3) % 2400 - c.cx) * Z * .9, Y = H / 2 + (900 + 70 * Math.sin(i * 2.1) - c.cy) * Z; ctx.beginPath(); ctx.ellipse(X, Y, 180 * Z, 16 * Z, 0, 0, 6.283); ctx.fill(); } ctx.globalAlpha = 1; }
+    // his small figure (2D, backlit): a tied head cloth with a level top ending at the shoulder, broad level shoulders, a robe to the
+    // hem; walking shows in the hem; a rim (gold) on the head-cloth edge and shoulder line only — never at the waist
+    function figure(ctx, X, Y, h, o = {}) { const s = h / 100, ph = o.ph || 0, walk = o.walk || 0, bow = o.bow || 0, col = o.col || '#2a1f22';
+      ctx.save(); ctx.translate(X, Y); ctx.scale(s, s); const sw = Math.sin(ph * 6.283) * walk;
+      ctx.fillStyle = col; ctx.beginPath(); ctx.moveTo(-17, -66); ctx.lineTo(17, -66); ctx.lineTo(20, -60); ctx.lineTo(23 + 3 * sw, 0); ctx.lineTo(4 + 6 * sw, -1 - 2 * Math.abs(sw)); ctx.lineTo(-4 + 6 * sw, -1); ctx.lineTo(-23 + 3 * sw, 0); ctx.lineTo(-20, -60); ctx.closePath(); ctx.fill();
+      ctx.beginPath(); ctx.ellipse(10 * sw, 0, 6, 2, 0, 0, 6.283); ctx.ellipse(-10 * sw, 0, 6, 2, 0, 0, 6.283); ctx.fill();   // the two feet, stepping
+      ctx.save(); ctx.translate(0, -68 + 3 * bow); ctx.rotate(.08 * bow);
+      ctx.beginPath(); ctx.moveTo(-10, 2); ctx.lineTo(-10, -16); ctx.lineTo(-8, -20); ctx.lineTo(8, -20); ctx.lineTo(10, -16); ctx.lineTo(10, 2); ctx.lineTo(16, 6); ctx.lineTo(-16, 6); ctx.closePath(); ctx.fill();   // the head cloth: level top, falling to the shoulders
+      if (o.rim > 0) { ctx.strokeStyle = GOLD; ctx.globalAlpha = o.rim; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(-8, -20); ctx.lineTo(8, -20); ctx.lineTo(10, -16); ctx.stroke(); ctx.globalAlpha = 1; }
+      ctx.restore();
+      if (o.rim > 0) { ctx.strokeStyle = GOLD; ctx.globalAlpha = o.rim; ctx.lineWidth = 1.8; ctx.beginPath(); ctx.moveTo(-17, -66); ctx.lineTo(17, -66); ctx.lineTo(20, -60); ctx.stroke(); ctx.globalAlpha = 1; }
+      if (o.shadow > 0) { ctx.globalAlpha = o.shadow; ctx.fillStyle = 'rgba(70,52,64,.75)'; ctx.beginPath(); ctx.moveTo(-14, 2); ctx.lineTo(14, 2); ctx.lineTo(30 + 8 * sw, 300); ctx.lineTo(-2 - 8 * sw, 300); ctx.closePath(); ctx.fill(); ctx.globalAlpha = 1; }
+      ctx.restore(); }
+    // the scene: c = 2D camera {cx, cy, z, tx, ty, push}; s = {state, split (city), splitLow (valley/near), sun, sky colours, lamps(i)→a, birds, smoke, fig}
+    function draw(ctx, c, s) { ctx.save(); sky(ctx, c, s);
+      for (const Ly of L) { const st = s.state === 'ruin' ? 'ruin' : (s.allDusk ? 'dusk' : 'lit'); const low = Ly === valley || Ly === near;
+        drawLayer(ctx, Ly, c, st, s.state === 'ruin' || s.allDusk ? null : low ? s.splitLow : s.split);
+        if (Ly === temple && s.smoke != null) { xf(ctx, c, temple.p); ctx.filter = 'blur(6px)'; for (const [X, Y, n] of [[1265, 1560, 0], [560, 1640, 1], [1980, 1650, 2]]) for (let i = 0; i < 30; i++) { const Lf = 6, age = ((s.smoke * .8 + i / 30 * Lf + n * 1.7) % Lf), k = age / Lf;
+            ctx.globalAlpha = .38 * (1 - k) * ss(0, .08, k); ctx.fillStyle = '#3e3a38'; ctx.beginPath(); ctx.ellipse(X - 10 * age * age * .6 + 5 * Math.sin(age + n), Y - 10 - age * 40, 14 + 30 * k, 12 + 22 * k, 0, 0, 6.283); ctx.fill(); } ctx.globalAlpha = 1; ctx.filter = 'none'; }
+        if (Ly === temple && s.birds != null) { xf(ctx, c, temple.p); ctx.strokeStyle = '#3a2a2a'; ctx.lineWidth = 2.2; for (let i = 0; i < 14; i++) { const a = i * .9 + s.birds * (.35 + .05 * (i % 4)) * (i % 2 ? 1 : -1), rr = 70 + 18 * (i % 5), X = 1270 + Math.cos(a) * rr * 1.8, Y = 1330 + Math.sin(a) * rr * .45, f = 3 + 3 * Math.sin(s.birds * 9 + i);
+            ctx.beginPath(); ctx.moveTo(X - 7, Y - f); ctx.lineTo(X, Y); ctx.lineTo(X + 7, Y - f); ctx.stroke(); } }
+        if ((Ly === cityFront || Ly === wall) && s.lamps) { for (const Lp of lamps) { if ((Ly === wall) !== !!Lp.gate) continue; const a = s.lamps(Lp); if (a <= .01) continue; const Z = xf(ctx, c, Lp.p); ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0);
+            const X = W / 2 + (Lp.x - c.cx - (c.tx || 0) * Lp.p) * Z, Y = H / 2 + (Lp.y - c.cy - (c.ty || 0) * Lp.p) * Z, r = Math.max(3, 4 * Z);
+            const gg = ctx.createRadialGradient(X, Y, 0, X, Y, r * 3.5); gg.addColorStop(0, `rgba(255,214,140,${a})`); gg.addColorStop(.3, `rgba(255,179,92,${.7 * a})`); gg.addColorStop(1, 'rgba(255,179,92,0)'); ctx.fillStyle = gg; ctx.fillRect(X - r * 4, Y - r * 4, r * 8, r * 8); ctx.restore(); } }
+        if (Ly === near && s.fig) { const Z = xf(ctx, c, 1); figure(ctx, s.fig.x, s.fig.y, s.fig.h / Z, s.fig); } }
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      if (s.state === 'ruin') { ctx.globalCompositeOperation = 'multiply'; const hy = H / 2 + (1452 - c.cy) * c.z; ctx.save(); ctx.beginPath(); ctx.rect(0, hy, W, H - hy); ctx.clip(); ctx.drawImage(grain, 0, 0); ctx.restore(); ctx.globalCompositeOperation = 'source-over'; }
+      ctx.restore(); }
+    return { draw, lamps, temple, near, valley };
+  })();
+  // ---- the painted shots: a 2D camera per shot (pano coordinates) and the painting's state
+  const skyCols = u => ({ top: mixHex('#c9a28e', '#5e5070', u), mid: mixHex('#f2c48e', '#c58a7a', u), hor: mixHex('#f6dca8', '#e8a87a', u) });
+  function mixHex(a, b, k) { const p = h => { const n = parseInt(h.slice(1), 16); return [n >> 16 & 255, n >> 8 & 255, n & 255]; }, A = p(a), B = p(b); return `rgb(${A.map((v, i) => Math.round(v + (B[i] - v) * clamp(k))).join(',')})`; }
+  function pano(t, nm) {
+    const S0 = { t, sun: { x: 1490, y: 1460 }, sunA: 1, glow: 1, ...skyCols(0), state: 'lit', split: null, splitLow: null };
+    if (nm === 'J1') { const a = T.cuts[0], b = T.cuts[1], u = clamp((t - a) / (b - a)), k = .4 * u + .6 * sine(u);
+      return { c: { cx: 1210, cy: 1980, z: .7, tx: 0, ty: lerp(90, -40, k), push: .04 * k }, s: { ...S0, birds: t } }; }
+    if (nm === 'J4') { const a = T.cuts[2], b = T.cuts[3], u = clamp((t - a) / (b - a)), ru = t >= T.ruin[0] && t < T.ruin[1];
+      return { c: { cx: 1270, cy: 1780, z: lerp(1.45, 1.62, u), tx: lerp(-60, 60, u), ty: 0, push: lerp(0, .14, u) }, s: { ...S0, state: ru ? 'ruin' : 'lit', birds: ru ? null : t, smoke: ru ? t : null, sunA: 1 } }; }
+    if (nm === 'J5') { const a = T.cuts[3], b = T.cuts[4], u = clamp((t - a) / (b - a)), ly = lerp(1910, 1300, ss(0, .82, u)) - 160 * ss(.82, 1, u);
+      return { c: { cx: 1200, cy: 1760, z: 1.05, tx: lerp(40, -40, u), ty: 0, push: 0 }, s: { ...S0, ...skyCols(.25 * u), sun: { x: 1490, y: lerp(1462, 1470, u) }, split: { y: ly, feather: 26, litAbove: true }, splitLow: { y: lerp(1900, 2600, ss(.1, .9, u)), feather: 60, litAbove: false } } }; }
+    if (nm === 'J6') { const a = T.cuts[4], b = T.cuts[5], u = clamp((t - a) / (b - a)), k = .35 * u + .65 * sine(u), sy = lerp(1462, 1500, ss(T.sunset[0], T.sunset[1], t));
+      return { c: { cx: 1250, cy: 2360, z: .78, tx: 0, ty: lerp(30, -60, k), push: .05 * k }, s: { ...S0, ...skyCols(.35 + .25 * u), sun: { x: 1490, y: sy }, allDusk: false, split: { y: 1200, feather: 10, litAbove: true }, splitLow: { y: lerp(2330, 2470, u), feather: 30, litAbove: false },
+        lamps: Lp => Lp.gate ? ss(T.gateLamps + (Lp.gate - 1) * .45, T.gateLamps + (Lp.gate - 1) * .45 + .8, t) : Lp.rank < 32 ? ss(a + .4 + Lp.rank / (Lp.rank < 14 ? 1.75 : 1) + (Lp.rank < 14 ? 0 : 8 - 14), a + 1.2 + Lp.rank / (Lp.rank < 14 ? 1.75 : 1) + (Lp.rank < 14 ? 0 : 8 - 14), t) : 0,
+        fig: { x: 1062, y: 2540, h: 108, walk: 0, rim: 1, shadow: 0 } } }; }
+    // J7
+    const a = T.cuts[5], b = T.end, u = clamp((t - a) / (b - a)), k = .5 * u + .5 * sine(u), e = 1.2, uu = (t - T.walk6) / e, tau = t <= T.walk6 ? 0 : uu < 1 ? e * rampI(uu) : e * .5 + (t - T.walk6 - e);
+    const prog = clamp(tau / (b - T.walk6)), fy = lerp(2540, 2380, prog), fx = lerp(1066, 1176, prog), line = lerp(2420, 2650, u);
+    const inL = 1 - ss(-8, 8, line - fy);   // 1 while he is on the lit (near) side of the shadow's edge
+    return { c: { cx: 1150, cy: 2365, z: lerp(1.35, 1.45, k), tx: 0, ty: lerp(0, -50, k), push: .04 * k },
+      s: { ...S0, ...skyCols(.6 + .3 * u), sun: { x: 1490, y: lerp(1500, 1530, u) }, sunA: 1 - ss(0, .6, u), glow: lerp(.8, .45, u), split: { y: 1200, feather: 10, litAbove: true }, splitLow: { y: line, feather: 26, litAbove: false },
+        lamps: Lp => Lp.gate ? 1 : Lp.rank < 32 ? (Lp.rank < 14 ? 1 : ss(a + (Lp.rank - 14) / 1.0, a + .8 + (Lp.rank - 14) / 1.0, t)) : 0,
+        fig: { x: fx, y: fy, h: lerp(150, 70, Math.pow(prog, .8)), walk: tau > 0 ? Math.min(1, tau) : 0, ph: tau / JTg, rim: inL, shadow: .8 * inL } } };
+  }
+  function drawPainted(ctx, t, nm) { const { c, s } = pano(t, nm); PANO.draw(ctx, c, s);
+    if (nm === 'J7') { const dk = ss(T.dark[0], T.dark[1], t); if (dk > 0) { ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalCompositeOperation = 'multiply'; ctx.fillStyle = `rgba(196,150,84,${dk})`; ctx.fillRect(0, 0, W, H); ctx.globalCompositeOperation = 'source-over'; ctx.fillStyle = `rgba(60,42,20,${.22 * dk})`; ctx.fillRect(0, 0, W, H); ctx.restore(); } } }
+
   // ---------------------------------------------------------------- the checks (no render): camera + emission; bone directions
-  function probe(t, TB) { T = TB; const nm = stage(t); const d = V(); cam.getWorldDirection(d);
+  function probe(t, TB) { T = TB; if (shotOf(t) !== 'J2') { const nm2 = shotOf(t), { c } = pano(t, nm2); return { shot: nm2, p: [(c.cx + (c.tx || 0) * .4) * c.z, (c.cy + (c.ty || 0) * .4) * c.z, 0], d: [0, 0, -1], fov: 40 / c.z / (1 + (c.push || 0) * .4), emit: { lamps: 0 } }; }
+    const nm = stage(t); const d = V(); cam.getWorldDirection(d);
     return { shot: nm, p: cam.position.toArray(), d: d.toArray(), fov: cam.fov, focus: film.dofCfg.focus, emit: { smoke: smkAlive, dust: dust.visible ? dustAlive : 0, lamps: lampA.reduce((a, b) => a + (b > .05 ? 1 : 0), 0), ruin: nm === 'J4' && inRuin(t) ? 1 : 0 } }; }
-  function joints(t, TB) { T = TB; const nm = stage(t); const out = {}, Y = V(0, 1, 0);
+  function joints(t, TB) { T = TB; if (shotOf(t) !== 'J2') return { shot: shotOf(t), figs: {} }; const nm = stage(t); const out = {}, Y = V(0, 1, 0);
     const figs = nm === 'S4' ? CITYP : [J, ...CROWD.slice(0, 400), ...SIDE];
     figs.forEach((g, n) => { if (!g.visible) return; const U = g.userData; if (!U.arms[0].E) return; const rec = {};
       U.arms.forEach((A, i) => { rec['ua' + i] = A.E.clone().sub(A.S2 || A.S).normalize().toArray(); rec['fa' + i] = A.T.clone().sub(A.E).normalize().toArray(); });

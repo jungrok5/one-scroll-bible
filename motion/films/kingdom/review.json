@@ -3122,6 +3122,135 @@
      "what": "문틀 안 떠 있는 검은 막대 그림자"
     }
    ]
+  },
+  "b3-jerusalem-d2": {
+   "video": "motion/out/review/sample-r10-jerusalem-720.mp4",
+   "at": "2026-11-26",
+   "note": "감독안 수정 1 — 불합격 (눈물·점프컷·자막·끝 밝기 고침)",
+   "issues": [
+    {
+     "t": "20.5–25.25",
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "폐허가 같은 구도 아님 — 3D 금빛 성 → 평평한 2D 회색 들판·묘비 말뚝·거대한 연기 호, 다른 장소(묘지)처럼; 4.75초 정지, 바닥 띠 경계"
+    },
+    {
+     "t": "0–56",
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "성전이 회색 상자(벙커), 도시는 상자 격자 — 금빛 성이 성립 안 함"
+    },
+    {
+     "t": "3.75–11",
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "무리 여전히 두건 수도복, 그분을 지나쳐 흐르지 않음"
+    },
+    {
+     "t": "10.0–11.75",
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "그분 실루엣 허리띠에 밝은 가로 테(허리 빛 금지)"
+    },
+    {
+     "t": "30.25–37.25",
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "창 불빛 2–3 px라 꺼짐 안 보임, 7초 정지 노을, 연기 줄기 글리치, 34.25 빛 받은 상자 집"
+    },
+    {
+     "t": "12–19.5",
+     "severity": "MINOR",
+     "status": "open",
+     "what": "느린 줌뿐, 폰에서 7초 거의 같은 그림"
+    },
+    {
+     "t": "19.75–20.25",
+     "severity": "MINOR",
+     "status": "open",
+     "what": "밝기 펌프 83→96 그대로"
+    },
+    {
+     "t": "42–45",
+     "severity": "MINOR",
+     "status": "open",
+     "what": "성문 등불 둘이 두 눈처럼"
+    },
+    {
+     "t": "56",
+     "severity": "MINOR",
+     "status": "open",
+     "what": "끝 색이 금빛보다 자줏빛 갈색"
+    }
+   ]
+  },
+  "b3-pentecost-d2": {
+   "video": "motion/out/review/sample-r10-pentecost-720.mp4",
+   "at": "2026-11-26",
+   "note": "감독안 수정 1 — P4 사람·P2 숙인 자세 고치면 통과 (깔때기·못·자막 간격·남자 그림자·b판 고침)",
+   "issues": [
+    {
+     "t": "9–15.75",
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "P4 사람이 확대하면 말뚝, 폰에서 사선 해칭·그루터기 밭"
+    },
+    {
+     "t": "3.25–4.4",
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "숙인 베드로 그림자가 혹 달린 자루+벙어리장갑 손"
+    },
+    {
+     "t": "1.8–2.8",
+     "severity": "MINOR",
+     "status": "open",
+     "what": "왼쪽 벽 노출 +60 번쩍, 2.73→2.80 계단"
+    },
+    {
+     "t": "6.5–9",
+     "severity": "MINOR",
+     "status": "open",
+     "what": "P3 아래 절반 평평한 어둠"
+    },
+    {
+     "t": "9–15.75",
+     "severity": "MINOR",
+     "status": "open",
+     "what": "못 둘레 검은 평행선이 권투 링 줄·철책"
+    }
+   ]
+  },
+  "b3-room-d2": {
+   "video": "motion/out/review/sample-r10-shorts-720.mp4 (0–6.5 s)",
+   "at": "2026-11-26",
+   "note": "감독안 수정 1 — 불합격 (항아리·문간 오림 고침, 물동이 그림자로 섬김이 읽힘)",
+   "issues": [
+    {
+     "t": "0–1.2",
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "누운 몸이 밝기 32로 폰에서 안 보임, 숨 안 보임, 빛 받으면 흰 천 덮인 덩어리(시신 위험), 천장 흰 막대 그대로"
+    },
+    {
+     "t": "2.25–4",
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "빈 병상이 돌 상자에 노란 모래판 — 일어났다가 안 읽힘, 대접 검은 구멍"
+    },
+    {
+     "t": "1.25–2.0",
+     "severity": "MINOR",
+     "status": "open",
+     "what": "빛이 쐐기 아닌 수직 경계 판"
+    },
+    {
+     "t": "4.25–5.25",
+     "severity": "MINOR",
+     "status": "open",
+     "what": "그림자 다리 막대처럼 가늘고 1초뿐, 문틈 가장자리 검은 조각"
+    }
+   ]
   }
  },
  "parts_r9": [

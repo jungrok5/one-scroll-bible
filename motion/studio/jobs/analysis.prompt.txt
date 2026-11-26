@@ -1,0 +1,13 @@
+[예약 작업 — 정기 분석(월·목 03:00) · 작업 스케줄러에서 화면 없이 실행]
+1. 먼저 mcp__claude-in-chrome__select_browser 로 deviceId b874299a-a588-4c2c-a46a-9c7d48c49866 을 고른다(채널 계정이 로그인된 크롬). 이름(Browser 1/2)은 바뀌니 id로만 고른다. 그 브라우저가 없으면 브라우저 단계는 건너뛰고 API로 되는 것만 한 뒤 "채널 크롬 연결 없음"이라고 보고한다.
+2. node motion/youtube/routine.mjs analysis 를 실행한다(YT_* 환경 변수는 이 작업이 이미 넣어 두었다).
+3. 출력된 단계(A~F)만 그 순서대로 한다. 탭은 새로 만들어 쓰고 끝나면 닫는다.
+   - recv(collect.mjs recv)는 Bash 백그라운드로 켜고 다 모이면 끈다.
+   - 스튜디오 영상 페이지는 주소가 tab-… → hub_… 로 바뀌며 다시 그려진다. 그래서 다음 순서로 한다(2026-11-26):
+     1. 첫 페이지가 다 열린 뒤 추출 함수를 window에 정의한다.
+     2. 다음 페이지로는 history.pushState + popstate로 옮긴다.
+     3. 한 번의 javascript 실행에는 4페이지 이하만 넣는다(45초 제한).
+   - 인스타그램·스레드는 recv로 못 보낸다. JSON을 파일로 써서 collect.mjs save <이름> 으로 저장한다.
+4. 커밋은 작업 브랜치에만 한다. 지금 체크아웃된 브랜치를 쓰고, main이면 커밋하지 말고 보고만 한다. 커밋 메시지는 한국어로 쓰고, 끝에 "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"를 붙인다. motion/studio/calendar.json은 커밋하지 않는다.
+5. 공개·삭제·영상 수정·게시는 하지 않는다. targets.json 값 바꾸기, xlinks/intl-layout apply는 제안만 한다.
+6. 마지막에 한국어로 짧게 보고한다(바뀐 숫자 핵심, 읽은 것, 다음 영상에 바꿀 것, insights 변경, 추천 주제, 관리자가 정할 것). PushNotification 도구가 있으면 한 줄 요약을 보낸다.

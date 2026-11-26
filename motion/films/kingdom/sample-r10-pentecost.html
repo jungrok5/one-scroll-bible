@@ -10,12 +10,15 @@
 <body>
 <script src="../../pilot/lib.js"></script>
 <script src="../lib-film.js"></script>
+<script src="kit-fresco.js"></script>
 <script>
-/* 「kingdom」 10-3 B — 8부 「오순절」 N170–N172 (pentecost3d.js): film 961.0 → 977.0. 그림의 모든 시각은 script.json의 at에서 나온다(beats()).
+/* 「kingdom」 10-3 감독안 — 8부 「오순절」 N170–N172 (pentecost3d.js, rounds/r10-pilot/director3-plan.md B): film 970.8 → 986.8.
+   ?var=b: 변형 B — 「사람을 취하리라던」(N172 둘째 조각)에서 1부 물속 그물(lake-peter3d-b.js uwA, u 27.9–28.9: the bag full of silver)을 1.0 s 하드 컷으로 끼운다. 그림의 모든 시각은 script.json의 at에서 나온다(beats()).
    자막은 본 영상이 얹는 자리를 보려고 시안에서만 얹음(sample-r10-lake1b.html과 같은 규칙).
    node motion/render.mjs v --page films/kingdom/sample-r10-pentecost.html   (→ motion/out/sample-r10-pentecost-v.mp4) */
 const W = Pilot.W, H = Pilot.H, V = Pilot.ori === 'v', { ss, win } = Pilot;
-const T0 = 961.0, T1 = 977.0, IDS = ['N170', 'N172', 'N173'];
+const T0 = 970.8, T1 = 986.8, IDS = ['N170', 'N172', 'N173'], VARB = /[?&]var=b/.test(location.search);
+let LK = null, LTB = null;
 let PC = null, TB = null, TEXT = [];
 function band(ctx, k = 1) { const y0 = Film.SAFE() - (V ? 190 : 80), g = ctx.createLinearGradient(0, y0, 0, H); g.addColorStop(0, 'rgba(10,8,10,0)'); g.addColorStop(.35, `rgba(10,8,10,${.5 * k})`); g.addColorStop(.7, `rgba(10,8,10,${.62 * k})`); g.addColorStop(1, `rgba(10,8,10,${.66 * k})`); ctx.fillStyle = g; ctx.fillRect(0, y0, W, H - y0); }
 function buildText() {
@@ -29,7 +32,8 @@ function buildText() {
 }
 function draw(ctx, u) {
   const t = T0 + u;
-  PC.draw(ctx, t, TB);
+  if (VARB && LK && t >= TB.c2b && t < TB.c2b + 1.0) LK.draw(ctx, 50.8 + 27.9 + (t - TB.c2b), LTB);   // the memory cut: part 1's net, the same place in the frame
+  else PC.draw(ctx, t, TB);
   band(ctx, 1);
   for (const [kind, id, a, b] of TEXT) { if (t < a - .1 || t > b + .1) continue;
     if (kind === 'sub') Film.sub(ctx, id, t, a, b); else if (kind === 'label') Film.label(ctx, id, t, a, b);
@@ -37,8 +41,10 @@ function draw(ctx, u) {
 }
 Pilot.run({ W, H, dur: +(T1 - T0).toFixed(2), fonts: ["600 40px 'Noto Serif KR'", "400 40px 'Noto Serif KR'", "400 20px 'Noto Sans KR'"],
   init: async () => { await Film.load(); buildText();
-    const B = Object.fromEntries(IDS.map(id => [id, Film.lines[id].at])); B.N170b = Film.pieces(Film.text('N170'), B.N170, B.N172 - .25)[1][1];
-    const M = await import('./pentecost3d.js'); TB = M.beats(B); PC = await M.build(W, H); window.__PC = PC; window.__TB = TB; window.__T0 = T0; }, draw });
+    const B = Object.fromEntries(IDS.map(id => [id, Film.lines[id].at])); B.N170b = Film.pieces(Film.text('N170'), B.N170, B.N172 - .25)[1][1]; B.N172b = Film.pieces(Film.text('N172'), B.N172, B.N173 - .25)[1][1];
+    const M = await import('./pentecost3d.js'); TB = M.beats(B); PC = await M.build(W, H); window.__PC = PC; window.__TB = TB; window.__T0 = T0;
+    if (VARB) { const LI = ['N101', 'N102', 'N103', 'N104', 'N105', 'N106', 'L100', 'Q101', 'N107', 'Q102', 'N108', 'C10'], BL = Object.fromEntries(LI.map(id => [id, Film.lines[id].at])); BL.N106b = Film.pieces(Film.text('N106'), BL.N106, BL.L100 - .2)[1][1];
+      const LM = await import('./lake-peter3d-b.js'); LTB = LM.beats(BL); LK = await LM.build(W, H); } }, draw });
 </script>
 </body>
 </html>

@@ -1,22 +1,28 @@
 // short-scenes.js — 「kingdom」 10-3 C: three short scenes the round-10 script added (rounds/r10-pilot/batch3.md §C). One module, three scenes:
 //   room   2부 N111  film 162.2 → 168.7 (6.5 s)  "베드로의 집에서는, / 열병으로 누워 있던 장모가 일어났습니다."
-//   road   6부 N150  film 699.2 → 704.2 (5.0 s)  "함께 죽겠다던 그 곁에, 베드로는 없었습니다."
-//   alley  7부 N159  film 818.9 → 825.7 (6.8 s)  "제자들과, 베드로. / 세 번 부인한 그 사람의 이름이 따로 불렸습니다."
+//   road   6부 N150  film 709.0 → 714.0 (5.0 s)  "함께 죽겠다던 그 곁에, 베드로는 없었습니다."           (was 699.2: every `at` from N135b on moved +9.8 s)
+//   alley  7부 N159  film 828.7 → 835.5 (6.8 s)  "제자들과, 베드로. / 세 번 부인한 그 사람의 이름이 따로 불렸습니다."  (was 818.9, +9.8 s)
 // (windows = [line, next line] from script.json `at`; every visual time comes from beats(B); only the page names the windows.)
 //
-// ROOM — Peter's house, a dark stone room lit by one high window (Vermeer 「The Milkmaid」/「Woman Reading a Letter」: one window, a
-//   slanted patch on a plaster wall; Caravaggio 「The Calling of St Matthew」: the beam over the heads, the dark figure against the lit
-//   wall; Georges de La Tour for the stillness). Engine: one WebGL2 pass ray-casts the room per pixel (back wall, ceiling beams, floor,
-//   the stone bench-bed, a doorway with a sunlit lane behind it) with the window light traced back to the window opening (soft edges
-//   growing with distance), warm bounce from the lit patch, the door's daylight, and in-scattered haze marched along every ray (fixed
-//   per-pixel dither: no frame noise); a second pass adds only the haze in front of the woman, after the figures.
-//   Figures are 2D silhouettes of 3D skeletons (fixed limb lengths, two-bone IK) projected through the same pinhole:
-//   the woman (veil) lies on the bench, below the beam; she sits up INTO the beam (head curls, the near elbow plants, the arm straightens
-//   and pushes, the hand leaves the mattress for her lap, the knees draw up under the blanket); her shadow rises on the lit wall.
-//   Jesus is not shown (batch3.md §C allows it): every place by the bed where his back faces us put a big dark figure in front of her on a
-//   phone; drawJesus/poseJesus are kept (SHOW_JESUS) for a later choice. Peter: frontal dark silhouette in the bright doorway (broad level
-//   shoulders, head cloth tied with a band to the shoulder), his right hand on the jamb; he takes it off and straightens as she rises.
-//   Camera: one slow push-in (zoom 1.50 → 1.64 over the shot, sine, ≤ 2.2 %/s) toward her sitting place.
+// ROOM — director's approach 1 「빈 자리, 그리고 물동이」 (rounds/r10-pilot/director3-plan.md C1, build notes E3; 관리자 2026-11-26 "그래").
+//   Mk 1:31 / Lk 4:39: healed, she gets up at once and serves them. No body is drawn rising: we see the sickness, the light coming in, the empty
+//   place, and her serving outside. Refs: Ford 「The Searchers」 (the door opens on the dark room and the day comes in), Vermeer's window light,
+//   Ozu's emptied room, Lee Chang-dong 「밀양」's patch of sun, 「Schindler's List」's one colour (the madder veil #8e3b2e on the bed, then the rim
+//   of her veil in the courtyard), Bresson (sound carries the getting up). Engine: one WebGL2 ray-cast pass with a real camera (position,
+//   yaw, pitch): walls, beams, floor, the stone bench with a marched height field (r1: a body under a raw-wool blanket #8a7a66, three hills,
+//   the veil corner on the roll; r2: the empty straw mat pressed where she lay, the blanket pushed to the foot), a door in the back wall with a
+//   swinging leaf, its light traced back to the open part of the doorway and flooding in only as far as T.reach, haze in that light, the
+//   shutter's slit high on the wall, the sunlit courtyard beyond (far wall #f4e0b8, shaded left). Small things are 2D, projected through the
+//   same camera: the jug in the niche, the stool with the bowl, the folded wet cloth and the lamp just put out (one thread of smoke), the wet
+//   cloth on the floor in r2, the seated men's shoulders in the shade at the jamb (soft), her shadow and her small backlit silhouette (a real
+//   gait: planted feet, two hands fixed on the jar's handle, the veil's end swinging).
+//   r1 r0 → p2 (2.35 s with today's pieces): camera 1.1 m, pitch −8°, ~3 m from the bed; dolly in ×1.06 (0.18 m). The blanket breathes fast
+//      (0.9 s); at 44 % of r1 the door (off frame left) opens, its light crosses the floor, climbs the bench onto the blanket and stops (78 %);
+//      a shoulder's shadow at the light's edge (SHOW_DOOR_SHADOW; no head ever in it); the breath slows to 1.6 s. Mean brightness ≈ 45–60.
+//   r2 p2 → end: camera 1.5 m, pitch −20°, closer; the empty mat in the light; pan left 3.0 s (yaw R2.yaw0 → R2.yaw1) to the open door; at
+//      p2 + 1.5 (「장모가」) her shadow with the water jar crosses the courtyard's far wall right → left in 1.4 s; at p2 + 2.25 she herself crosses
+//      the bright gap (≤ 220 px, backlit, the veil's rim in madder); then only the courtyard light. Hard cut to Q41's bright village.
+//   Jesus is not drawn (the shoulder's shadow at the light's edge is the most there is).
 // ROAD — part 6's Gothic charcoal (kit-charcoal.js = motion-skills canvas-film/kits/charcoal, vendored; charcoal-calvary.js's hand:
 //   rubbed tone, eraser lifts, vine strokes, the paper tooth moving with the camera; one red point = the title board, far). After
 //   「Rebecca」 (OPUSCAR 13) and 「Schindler's List」's one red. The hill with the three crosses very small at the top edge; the road comes
@@ -36,15 +42,18 @@
 //   cinecode references/camera-moves.md (dolly in / push in, one move per shot, eased), doodle-styles `charcoal` (lifted light, rubbed dark).
 //
 // Sound cue table (film seconds; for the sound stage):
-//   ROOM 162.2–168.7  room tone of a stone house, a fly far off, the lane outside (a child, a dog, far) through the doorway
-//     T.curl  (≈ p2+.1, .45 s)   a breath in, cloth rustle (her head lifts off the roll)
-//     T.rise  (≈ p2+.2, 2.4 s)   the straw mattress creaks under the elbow (at +.5) and the hand (at +.9); wool sliding; her long exhale at the end
-//     T.peter (≈ p2+1.3, 1.1 s)  Peter's palm leaves the wooden jamb (a soft knock of the wood), one sandal shifts on the threshold
-//     T.knees (≈ p2+1.6, 1.6 s)  the blanket drawn over the knees (soft wool)
-//     T.lean  (≈ p2+.6, 2.3 s)   no sound for Him; the beam gets a high, quiet shimmer (strings harmonic) as she enters it
-//   ROAD 699.2–704.2  wind only: a low steady wind; gust 1 at T.gust[0] (1.8 s, dry grass hiss, dust ticks on stone); gust 2 at T.gust2[0];
+//   ROOM 162.2–168.7 (approach 1; times through beats: r0 = 162.2, p2 = N111's second piece)
+//     r0           a fevered shallow breath (0.9 s), one fly; the outside shut out
+//     T.open[0]    the wooden bar and the door creak open; N44's village pours in through it (dusty road, a child, a dog, far voices)
+//     T.reach[1]   the breath lengthens (to 1.6 s by the cut)
+//     T.jcut (p2 − 0.3, J-cut over the cut)  the wool blanket thrown back, the straw mat settling, two bare steps on the stone — the getting up is HEARD
+//     p2           water poured outside (a jar filling)
+//     T.shadow[0]  light quick steps on the courtyard stones
+//     T.walk[1]    low voices of the men in the shade; the jar set down, a soft thud (off frame)
+//     music        part 2's 'wonder' cue (strings) opens one chord in r2;  L41 / Q41 follows (hard cut)
+//   ROAD 709.0–714.0  wind only: a low steady wind; gust 1 at T.gust[0] (1.8 s, dry grass hiss, dust ticks on stone); gust 2 at T.gust2[0];
 //     no footsteps, no voices; far, very faint: nothing from the hill (silence is the point)
-//   ALLEY 818.9–825.7  the alley's room tone from part 5 (wet stone drip, far city), then
+//   ALLEY 828.7–835.5  the alley's room tone from part 5 (wet stone drip, far city), then
 //     T.edge  (≈ a0+.3 → a1-.8)  a held high string, very soft, rising with the light (not a swell)
 //     T.lift  (≈ q1-.35, 1.6 s)  his breath in as the head lifts (a man's breath, close, no sob); cloth on stone as the forearm stays
 //     T.color (≈ a0+.9 → a1-.3)  a first bird far off at ≈ a0+2.5 (dawn), a second at ≈ a1-1.5
@@ -66,10 +75,13 @@ export const WINDOWS = { room: ['N111', 'L41'], road: ['N150', 'N25'], alley: ['
 export function beats(B) {
   const pc = B.pc || {}, T = { ...B };
   // ROOM: the second piece 「열병으로 누워 있던 장모가 일어났습니다」 starts the rise
-  const r0 = B.N111, r1 = B.L41, p2 = pc.N111 ? pc.N111[1] : r0 + 1.6;
+  // ROOM (approach 1): the plan's seconds (162.2 / 163.4 / 164.3 / ≈164.9 …) mapped through the line and its second piece p2:
+  //   r1 = r0 → p2 (the door opens at 44 % of r1, its light stops on the blanket at 78 %, the breath slows from there to the cut);
+  //   r2 = p2 → r1: pan left 3.0 s; her shadow at p2 + 1.5 (「장모가」) for 1.4 s; she herself crosses at p2 + 2.25 for 1.2 s; the light stays.
+  const r0 = B.N111, r1 = B.L41, p2 = pc.N111 ? pc.N111[1] : r0 + 2.7, r1len = p2 - r0;
   T.room = [r0, r1]; T.p2 = p2;
-  T.curl = [p2 + .05, p2 + .6]; T.rise = [p2 + .25, p2 + 2.75]; T.knees = [p2 + 1.7, p2 + 3.4]; T.turn = [p2 + 2.5, p2 + 3.9];
-  T.lean = [p2 + .55, p2 + 2.9]; T.warm = [p2 - .5, p2 + 2.9]; T.peter = [p2 + 1.3, p2 + 2.6];
+  T.open = [r0 + .444 * r1len, r0 + .444 * r1len + .55]; T.reach = [T.open[0], r0 + .778 * r1len]; T.calm = [T.reach[1], p2]; T.jcut = p2 - .3;
+  T.pan = [p2, Math.min(p2 + 3.0, r1 - .2)]; T.shadow = [p2 + 1.5, p2 + 2.9]; T.walk = [p2 + 2.25, p2 + 3.45];
   // ROAD
   const d0 = B.N150, d1 = B.N25; T.road = [d0, d1]; T.gust = [d0 + .5, d0 + 2.6]; T.gust2 = [d0 + 2.7, d0 + 4.9];
   // ALLEY: the name is said at the end of the first piece 「제자들과, 베드로.」; the head lifts as the second piece begins
@@ -86,76 +98,109 @@ const NOISE = `float hh(vec2 p){ vec3 p3 = fract(vec3(p.xyx) * .1031); p3 += dot
 const VS = `#version 300 es
   in vec2 aP; uniform vec4 uRect; out vec2 vUv; void main(){ vUv = aP * .5 + .5; gl_Position = vec4(uRect.xy + aP * uRect.zw, 0., 1.); }`;
 
-// ================================================================ ROOM shader
-// world metres, y up, camera at (0, uEye, 0) looking down +z; screen base px (1080×1920) = uVP + uF·(x/z, −(y−eye)/z); 2D zoom uCam (x, y, k)
+// ================================================================ ROOM shader — approach 1 「빈 자리, 그리고 물동이」 (director3-plan.md C1, E3)
+// World metres, y up. A real camera: position uO, yaw uYaw (− = left), pitch uPitch (− = down), focal uF px about the frame centre.
+// Peter's house: back wall z = uZB with the door (uDoor: x0, x1, top) at its left; the stone bench-bed along the back wall (box uB0–uB1)
+// carries a height field: in r1 (uState 0) a woman's body under a raw-wool blanket (three hills: shoulder, hip, knee; the madder veil on the
+// roll at the right) breathing by uBreath; in r2 (uState 1) the empty straw mat, pressed where she lay, the blanket pushed to the foot.
+// The door's light: traced back along the sun to the door plane, inside the open part of the doorway (the leaf's free edge moves with uOpen),
+// and only as far along the beam as uReach (the light floods in across the floor and climbs onto the bed). Haze marched in that light.
+// Through the door: a courtyard, its far wall in sun (#f4e0b8), the left part in shade. Fixed per-pixel dither, no frame noise.
 const ROOM = `#version 300 es
   precision highp float; in vec2 vUv; out vec4 o; ${NOISE}
-  uniform vec2 uRes, uVP; uniform vec3 uCam; uniform float uF, uEye, uXL, uXR, uZB, uYC, uT, uSunI, uHaze, uGain, uZf, uVig, uWarm; uniform int uMode;
-  uniform vec4 uWin; uniform vec3 uSun; uniform vec4 uDoor; uniform vec3 uB0, uB1, uBc;
-  const vec3 SUNC = vec3(1., .80, .56);
-  // the window light reaching P: back along the sun ray to the right wall, inside the opening (penumbra grows with the distance)
-  float sunAt(vec3 P){ float s = (uXR - P.x) / (-uSun.x); if (s < 0.) return 0.; vec3 Q = P - uSun * s; float pe = .012 + .028 * s;
-    return smoothstep(uWin.x - pe, uWin.x + pe, Q.z) * (1. - smoothstep(uWin.y - pe, uWin.y + pe, Q.z)) * smoothstep(uWin.z - pe, uWin.z + pe, Q.y) * (1. - smoothstep(uWin.w - pe, uWin.w + pe, Q.y)); }
+  uniform vec2 uRes; uniform vec3 uO, uSun, uB0, uB1; uniform float uYaw, uPitch, uF, uT, uGain, uVig, uXL, uXR, uZB, uYC, uOpen, uReach, uSunI, uHaze, uState, uBreath, uShoulder, uZc, uLeaf;
+  uniform vec4 uDoor, uSlit, uNiche, uWin; uniform float uLW; uniform vec3 uDc, uDn;
+  const vec3 SUNC = vec3(1., .902, .69);
   float stones(vec2 q, float sx, float sy){ float yy = q.y + (fb3(q * 1.3) - .5) * .1; vec2 b = vec2(q.x, yy) / vec2(sx, sy); float row = floor(b.y); b.x += hh(vec2(row, 3.)) * 2. + (vn(vec2(q.x * 1.7, row)) - .5) * .5;
     vec2 f = fract(b); return smoothstep(-.02, .1, min(min(f.x, 1. - f.x) * 1.6, min(f.y, 1. - f.y)) + (fb3(q * 11.) - .5) * .22); }
-  // plaster over rubble stone: where the plaster has fallen the stones show (never one texture over the whole wall)
-  float wallH(vec2 q){ float m = smoothstep(.88, .98, fb3(q * .55 + 3.1) + .22 * fb3(q * 2.3)); return mix(.55 + .25 * fb3(q * 3.1) + .12 * fb3(q * 17.), .3 + .55 * stones(q, .36, .21), m); }
+  float wallH(vec2 q){ float m = smoothstep(.84, .96, fb3(q * .55 + 3.1) + .22 * fb3(q * 2.3)); return mix(.55 + .25 * fb3(q * 3.1) + .12 * fb3(q * 17.), .3 + .55 * stones(q, .36, .21), m); }
   float floorH(vec2 q){ float m = smoothstep(.6, .7, fb3(q * .9 + 7.)); return mix(.45 + .35 * fb3(q * 2.2) + .15 * fb3(q * 13.), .4 + .5 * stones(q * vec2(1., 1.4), .5, .4), m); }
-  vec3 lane(vec3 o3, vec3 d){   // the sunlit lane outside the doorway: the opposite house wall, the ground, a strip of sky
-    float tW = (uZB + 2.6 - o3.z) / d.z, tG = d.y < 0. ? -o3.y / d.y : 1e9; vec3 c;
-    if (tG < tW) { vec3 P = o3 + d * tG; c = vec3(1., .84, .62) * (.5 + .2 * fb3(P.xz * 1.4)) * (.75 + .25 * smoothstep(uZB + 2.6, uZB + 1., P.z)); }
-    else { vec3 P = o3 + d * tW; if (P.y > 3.3 + .3 * fb3(vec2(P.x * .8, 1.))) c = vec3(1., .96, .88) * 1.3; else c = vec3(1., .82, .58) * (.38 + .3 * fb3(P.xy * vec2(1.6, 2.6)) + .4 * wallH(P.xy * 1.3)) * (P.y < 1.1 + .4 * fb3(vec2(P.x, 4.)) ? .8 : 1.); }
+  float g2(float x, float c, float w){ float u = (x - c) / w; return exp(-u * u); }
+  // the bed's height field above the mattress line (metres), and what lies there: 0 straw, 1 wool blanket, 2 madder veil, 3 linen roll
+  float bedH(vec2 q0, out float kind){ vec2 q = q0 - vec2(.3, 0.); float zc = (q.y - uZc) / .2, acr = exp(-zc * zc), roll = .1 * g2(q.x, 1.92, .11) * smoothstep(uB0.z, uB0.z + .1, q.y) * smoothstep(uB1.z, uB1.z - .1, q.y);
+    float h; kind = 0.;
+    if (uState < .5) { float x = q.x, body = (.21 * g2(x, 1.38, .2) * (1. + uBreath) + .25 * g2(x, .82, .24) + .18 * g2(x, .28, .2) + .11 * g2(x, -.12, .14)) * acr;
+      float head = .12 * g2(x, 1.78, .1) * exp(-zc * zc * 1.6);
+      h = max(max(body, head + .06 * g2(x, 1.78, .16) * acr), roll); kind = roll > body + .01 && roll > head ? 3. : head > body * .8 && x > 1.62 ? 2. : body > .015 ? 1. : 0.;
+      h += .006 * fb3(q * 23.) * step(.5, kind); }
+    else { float press = -.022 * smoothstep(-.1, .15, q.x) * smoothstep(1.7, 1.45, q.x) * acr, heap = .2 * exp(-pow((q.x + .2) / .23, 2.) - zc * zc * .6) * (.72 + .5 * fb3(q * 6.));
+      h = max(.015 + press, max(heap, roll)); kind = roll > heap && roll > .02 ? 3. : heap > .03 ? 1. : 0.; h += .01 * fb3(q * 19.); }
+    return h; }
+  float bedHs(vec2 q){ float k; return bedH(q, k); }
+  // the door's light at P (0..1)
+  float doorLight(vec3 P){ float s, k, xf, pe, a0, a1, qa, qy;
+    if (uLW > .5) { s = (P.x - uXL) / uSun.x; if (s < 0.) return 0.; vec3 Q = P - uSun * s; qa = Q.z; qy = Q.y; a0 = uWin.x; a1 = uWin.y; }
+    else { s = (uZB - P.z) / (-uSun.z); if (s < 0.) return 0.; vec3 Q = P - uSun * s; qa = Q.x; qy = Q.y; a0 = uDoor.x; a1 = uDoor.y; }
+    pe = .012 + .02 * s; xf = mix(a1, a0, uOpen);
+    k = smoothstep(xf - pe, xf + pe, qa) * (1. - smoothstep(a1 - pe, a1 + pe, qa)) * (1. - smoothstep(uDoor.z - pe, uDoor.z + pe, qy)) * step(-.02, qy) * smoothstep(.0, .25, uOpen);   // (no light through the shut door)
+    k *= smoothstep(uReach + .05, uReach - .5, s);
+    if (k > 0.) { vec3 dir = -uSun, iv = 1. / dir, t0 = (uB0 - P) * iv, t1 = (vec3(uB1.x, uB1.y + .08, uB1.z) - P) * iv, a = min(t0, t1), b = max(t0, t1); float tn = max(max(a.x, a.y), a.z), tf = min(min(b.x, b.y), b.z); if (tn < tf && tf > .02 && tn < s && tn > .01) k = 0.; }
+    // (optional) one shoulder's shadow at the light's edge: someone standing just outside the door, head never in the light's reach of the frame
+    if (uShoulder > 0.) { float a = xf + .05; k *= 1. - uShoulder * .85 * smoothstep(a - .025, a + .025, qa) * (1. - smoothstep(a + .16, a + .21, qa)) * (1. - smoothstep(1.22, 1.32, qy)); }
+    return k; }
+  vec3 court(vec3 o3, vec3 d){   // the sunlit courtyard beyond the door
+    float zw = uZB + .42 + 8., tW = (zw - o3.z) / d.z, tG = d.y < 0. ? -o3.y / d.y : 1e9; vec3 c; float shade;
+    if (tG < tW) { vec3 P = o3 + d * tG; shade = smoothstep(uDoor.x - .5, uDoor.x + .4, P.x + (P.z - uZB) * .15); c = vec3(1., .86, .66) * (.9 + .25 * fb3(P.xz * 1.4)) * mix(.42, 1., shade); }
+    else { vec3 P = o3 + d * tW; if (P.y > 3.4 + .3 * fb3(vec2(P.x * .8, 1.))) c = vec3(1., .97, .9) * 1.9;
+      else { shade = smoothstep(uDoor.x - 1.6, uDoor.x - .5, P.x); c = vec3(.957, .878, .722) * (1.35 + .2 * fb3(P.xy * vec2(1.6, 2.6)) + .25 * wallH(P.xy * 1.3)) * mix(.45, 1., shade); } }
     return c; }
-  void main(){ vec2 fc = gl_FragCoord.xy; fc.y = uRes.y - fc.y; vec2 p = (fc - uRes * .5) / uCam.z + uCam.xy;
-    vec3 O = vec3(0., uEye, 0.), d = normalize(vec3((p.x - uVP.x) / uF, -(p.y - uVP.y) / uF, 1.));
-    float tt = (uZB - O.z) / d.z; int id = 0; vec3 N = vec3(0., 0., -1.);
+  vec3 camDir(vec2 p){ vec3 v = normalize(vec3((p.x - uRes.x * .5) / uF, -(p.y - uRes.y * .5) / uF, 1.)); float cp = cos(uPitch), sp = sin(uPitch), cy = cos(uYaw), sy = sin(uYaw);
+    v = vec3(v.x, v.y * cp + v.z * sp, -v.y * sp + v.z * cp); return vec3(v.x * cy + v.z * sy, v.y, -v.x * sy + v.z * cy); }
+  void main(){ vec2 fc = gl_FragCoord.xy; fc.y = uRes.y - fc.y; vec3 O = uO, d = camDir(fc);
+    float tt = d.z > 0. ? (uZB - O.z) / d.z : 1e9; int id = 0; vec3 N = vec3(0., 0., -1.);
     if (d.x < 0.) { float t = (uXL - O.x) / d.x; if (t < tt) { tt = t; id = 1; N = vec3(1., 0., 0.); } }
     if (d.x > 0.) { float t = (uXR - O.x) / d.x; if (t < tt) { tt = t; id = 2; N = vec3(-1., 0., 0.); } }
     if (d.y < 0.) { float t = -O.y / d.y; if (t < tt) { tt = t; id = 3; N = vec3(0., 1., 0.); } }
     if (d.y > 0.) { float t = (uYC - O.y) / d.y; if (t < tt) { tt = t; id = 4; N = vec3(0., -1., 0.); } }
+    // the bench (stone box below the mattress line)
     { vec3 iv = 1. / d, t0 = (uB0 - O) * iv, t1 = (uB1 - O) * iv, a = min(t0, t1), b = max(t0, t1); float tn = max(max(a.x, a.y), a.z), tf = min(min(b.x, b.y), b.z);
       if (tn < tf && tn > 0. && tn < tt) { tt = tn; id = 5; N = tn == a.x ? vec3(-sign(d.x), 0., 0.) : tn == a.y ? vec3(0., -sign(d.y), 0.) : vec3(0., 0., -sign(d.z)); } }
-    vec3 P = O + d * tt, col = vec3(0.); float lit = 0.;
+    // the mattress / blanket height field above it (marched)
+    float bk = -1.; { vec3 bmin = vec3(uB0.x, uB1.y - .002, uB0.z), bmax = vec3(uB1.x, uB1.y + .3, uB1.z), iv = 1. / d, t0 = (bmin - O) * iv, t1 = (bmax - O) * iv, a = min(t0, t1), b = max(t0, t1);
+      float tn = max(max(a.x, a.y), a.z), tf = min(min(b.x, b.y), b.z);
+      if (tn < tf && tf > 0. && tn < tt) { tn = max(tn, 0.); float pt = tn;
+        for (int i = 0; i < 56; i++) { float t = mix(tn, tf, float(i) / 55.); vec3 P = O + d * t; if (P.y <= uB1.y + bedHs(P.xz)) { float lo = pt, hi = t; for (int j = 0; j < 6; j++) { float m = (lo + hi) * .5; vec3 Q = O + d * m; if (Q.y <= uB1.y + bedHs(Q.xz)) hi = m; else lo = m; }
+          if (hi < tt) { tt = hi; id = 6; vec3 Q = O + d * hi; float e = .006; N = normalize(vec3(-(bedHs(Q.xz + vec2(e, 0.)) - bedHs(Q.xz - vec2(e, 0.))) / (2. * e), 1., -(bedHs(Q.xz + vec2(0., e)) - bedHs(Q.xz - vec2(0., e))) / (2. * e))); bedH(Q.xz, bk); } break; } pt = t; } } }
+    // the door leaf, hinged at the doorway's left edge, swung into the room by uLeaf (rad)
+    { vec3 hA = vec3(uDoor.x, 0., uZB), ax = vec3(cos(uLeaf), 0., -sin(uLeaf)), nL = vec3(-ax.z, 0., ax.x); float dn = dot(d, nL);
+      if (abs(dn) > 1e-4) { float t = dot(hA - O, nL) / dn; vec3 P = O + d * t; float u = dot(P - hA, ax); if (t > 0. && t < tt && u > 0. && u < uDoor.y - uDoor.x && P.y < uDoor.z) { tt = t; id = 7; N = dn < 0. ? nL : -nL; } } }
+    vec3 P = O + d * tt, col = vec3(0.);
     bool door = id == 0 && P.x > uDoor.x && P.x < uDoor.y && P.y < uDoor.z;
-    if (door) {   // through the doorway: the reveal (jambs and lintel, 0.42 m deep), then the lane
-      float tz = (uZB + .42 - O.z) / d.z, tj = 1e9; vec3 Nj = vec3(0.);
-      if (d.x < 0.) { float t = (uDoor.x - O.x) / d.x; if (t < tj) { tj = t; Nj = vec3(1., 0., 0.); } } if (d.x > 0.) { float t = (uDoor.y - O.x) / d.x; if (t < tj) { tj = t; Nj = vec3(-1., 0., 0.); } }
-      if (d.y > 0.) { float t = (uDoor.z - O.y) / d.y; if (t < tj) { tj = t; Nj = vec3(0., -1., 0.); } }
-      if (tj < tz) { vec3 Q = O + d * tj; float k = smoothstep(uZB, uZB + .42, Q.z); col = vec3(.62, .52, .4) * (.06 + .9 * k * k) * (.8 + .4 * fb3(Q.zy * 5.)); }
-      else col = lane(O + d * tz, d);
+    if (door) {
+      float tz = (uZB + .42 - O.z) / d.z, tj = 1e9;
+      if (d.x < 0.) tj = min(tj, (uDoor.x - O.x) / d.x); if (d.x > 0.) tj = min(tj, (uDoor.y - O.x) / d.x); if (d.y > 0.) tj = min(tj, (uDoor.z - O.y) / d.y);
+      if (tj < tz) { vec3 Q = O + d * tj; float k = smoothstep(uZB, uZB + .42, Q.z); col = vec3(.62, .52, .4) * (.05 + .95 * k * k) * (.8 + .4 * fb3(Q.zy * 5.)) * mix(.1, 1., uOpen); }
+      else col = court(O + d * tz, d) * mix(.02, 1., uOpen);
     } else {
       vec2 q; vec3 Tg, Bt; float h, hx, hy, e = .006, amp = .9;
-      // surface coordinates and the height field for a little relief in the raking light
-      if (id == 0 || id == 5 && abs(N.z) > .5) { q = P.xy; Tg = vec3(1., 0., 0.); Bt = vec3(0., 1., 0.); }
+      if (id == 0 || (id == 5 || id == 7) && abs(N.z) > .5) { q = P.xy; Tg = vec3(1., 0., 0.); Bt = vec3(0., 1., 0.); }
       else if (id == 1 || id == 2 || id == 5 && abs(N.x) > .5) { q = P.zy; Tg = vec3(0., 0., 1.); Bt = vec3(0., 1., 0.); }
       else { q = P.xz; Tg = vec3(1., 0., 0.); Bt = vec3(0., 0., 1.); }
-      bool mat = id == 5 && (N.y > .5 || P.y > uB1.y - .13);   // the mattress (top and its front lip): woven cloth
-      if (id == 3) { h = floorH(q); hx = floorH(q + vec2(e, 0.)) - h; hy = floorH(q + vec2(0., e)) - h; }
-      else if (mat) { h = .6 + .2 * fb3(q * vec2(2.5, 6.)) + .06 * sin(q.x * 90. + fb3(q * 3.) * 4.); hx = 0.; hy = 0.; amp = 0.; }
-      else { h = wallH(q * (id == 5 ? 1.6 : 1.)); hx = wallH((q + vec2(e, 0.)) * (id == 5 ? 1.6 : 1.)) - h; hy = wallH((q + vec2(0., e)) * (id == 5 ? 1.6 : 1.)) - h; }
-      vec3 Nb = normalize(N - (Tg * hx + Bt * hy) / e * amp * .08);
-      vec3 alb = id == 3 ? vec3(.58, .47, .36) * (.62 + .5 * h) : mat ? vec3(.74, .63, .47) * h : id == 4 ? vec3(.3, .23, .17) : vec3(.78, .68, .54) * (.5 + .62 * h);
-      if (id == 4) { float bm = smoothstep(.06, .0, abs(fract(P.z / .7) - .5) - .36); alb = mix(vec3(.16, .12, .09), vec3(.36, .29, .21), bm) * (.7 + .5 * fb3(P.xz * vec2(6., 1.))); }
-      if (id == 5 && !mat) alb = vec3(.62, .53, .42) * (.3 + .55 * stones(q, .3, .19) + .15 * fb3(q * 9.)) * .62;   // the bench's front: rough stones, in its own shade
-      if (id == 0 && P.y < .32) alb *= .78;   // a darker plinth where feet and water wear the wall
-      float s = id == 4 ? 0. : sunAt(P); lit = s;
-      vec3 L = -uSun; float sd = s * max(dot(Nb, L), 0.);
-      vec3 Lb = uBc - P; float db = length(Lb); Lb /= db; float bounce = (.3 + .7 * max(dot(Nb, Lb), 0.)) / (1. + db * db / 1.1);
-      vec3 Dc = vec3((uDoor.x + uDoor.y) * .5, uDoor.z * .5, uZB), Ld = Dc - P; float dd = length(Ld); Ld /= dd; float dl = max(dot(Nb, Ld), 0.) * max(-Ld.z, 0.) / (1. + dd * dd / 1.6);
-      if (id == 0 && P.x > uDoor.x - .12 && P.x < uDoor.y + .12 && P.y < uDoor.z + .12) dl *= .3;   // the wall round the door sees little of it
-      col = alb * (vec3(.045, .04, .042) + SUNC * uSunI * sd * mix(.85, 1.12, uWarm) + vec3(1., .72, .46) * .1 * uSunI * bounce * (1. - .75 * s) + vec3(1., .82, .6) * .45 * dl);
+      vec3 alb;
+      if (id == 6) { // straw, wool, madder veil, linen
+        float n = fb3(P.xz * vec2(9., 30.)); alb = bk > 2.5 ? vec3(.66, .6, .5) * (.85 + .2 * n) : bk > 1.5 ? vec3(.557, .231, .18) * (.85 + .2 * n) : bk > .5 ? vec3(.46, .42, .37) * (.8 + .22 * fb3(P.xz * 14.) + .12 * sin(P.x * 34. + fb3(P.xz * 5.) * 6.)) : vec3(.5, .42, .25) * (.7 + .4 * fb3(P.xz * vec2(40., 6.)));
+        amp = 0.; hx = hy = 0.; }
+      else if (id == 7) { alb = vec3(.32, .22, .14) * (.7 + .4 * fb3(P.xy * vec2(3., 40.))); amp = 0.; hx = hy = 0.; }
+      else if (id == 3) { h = floorH(q); hx = floorH(q + vec2(e, 0.)) - h; hy = floorH(q + vec2(0., e)) - h; alb = vec3(.5, .41, .32) * (.62 + .5 * h); }
+      else if (id == 4) { float bm = smoothstep(.06, .0, abs(fract(P.z / .7) - .5) - .36); alb = mix(vec3(.12, .09, .07), vec3(.3, .24, .18), bm) * (.7 + .5 * fb3(P.xz * vec2(6., 1.))); hx = hy = 0.; amp = 0.; }
+      else if (id == 5) { alb = vec3(.55, .47, .38) * (.3 + .55 * stones(q, .3, .19) + .15 * fb3(q * 9.)) * .7; hx = hy = 0.; amp = 0.; }
+      else { h = wallH(q); hx = wallH(q + vec2(e, 0.)) - h; hy = wallH(q + vec2(0., e)) - h; alb = vec3(.29, .255, .225) * (.55 + .62 * h);   // dark lime plaster #2b2622–#4a4038
+        if (id == 0 && P.x > uNiche.x && P.x < uNiche.y && P.y > uNiche.z && P.y < uNiche.w) alb *= .38;   // the wall niche
+        if (id == 0 && P.y < .3) alb *= .8; }
+      vec3 Nb = amp > 0. ? normalize(N - (Tg * hx + Bt * hy) / e * amp * .08) : N;
+      float s = id == 4 ? 0. : doorLight(P), sd = s * max(dot(Nb, -uSun), 0.);
+      // the slit of the shutter, high on the back wall: a thin line of day and its faint fill
+      vec3 Sc = vec3((uSlit.x + uSlit.y) * .5, (uSlit.z + uSlit.w) * .5, uZB - .05), Ls = Sc - P; float ds = length(Ls); Ls /= ds; float fillS = (.25 + .75 * max(dot(Nb, Ls), 0.)) * max(-Ls.z, .2) / (1. + ds * ds / 2.5);
+      // the open door's daylight spill (soft, grows as the door opens) and the warm bounce off the lit floor and bed
+      vec3 Ld = uDc - P; float dd = length(Ld); Ld /= dd; float dl = max(dot(Nb, Ld), 0.) * max(dot(-Ld, uDn), 0.) / (1. + dd * dd / 1.4) * uOpen;
+      col = alb * (vec3(.03, .027, .026) + SUNC * uSunI * sd + vec3(1., .86, .7) * .13 * fillS + vec3(1., .82, .6) * .28 * dl + vec3(1., .74, .5) * .05 * uSunI * smoothstep(2.5, 4.5, uReach) * (.4 + .6 * max(Nb.y, 0.)));
+      if (id == 0 && P.x > uSlit.x && P.x < uSlit.y && P.y > uSlit.z && P.y < uSlit.w) col = vec3(1., .93, .78) * 1.15 * (.75 + .25 * fb3(P.xy * vec2(30., 4.)));
     }
-    // haze in the beam, marched along the ray (fixed per-pixel dither); uMode 0: beyond uZf only, 1: in front of uZf only
-    float hz = 0., j = hh(fc * .73 + 3.1); for (int i = 0; i < 28; i++) { float s = (float(i) + j) / 28. * tt; vec3 Q = O + d * s; bool fr = Q.z < uZf; if ((uMode == 1) != fr) continue;
-      float k = sunAt(Q); if (k <= 0.) continue; hz += k * (.45 + 1.1 * fb3(vec2(Q.x * 1.6 + Q.z * .7 + uT * .06, Q.y * 2.2 - uT * .04))); }
-    hz *= tt / 28.; vec3 hc = SUNC * hz * uHaze * uSunI;
-    // the doorway's daylight glows a little in the air of the room
-    { vec2 dc = vec2(uVP.x + uF * (uDoor.x + uDoor.y) * .5 / uZB, uVP.y - uF * (uDoor.z * .5 - uEye) / uZB); vec2 dv = (p - dc) / vec2(170., 330.); hc += vec3(1., .8, .58) * .05 * exp(-dot(dv, dv)) * (uMode == 1 ? 0. : 1.); }
-    if (uMode == 1) { vec3 c = 1. - exp(-hc * uGain); o = vec4(pow(c, vec3(.4545)), 1.); return; }
-    col += hc;
-    vec3 c = 1. - exp(-col * uGain); c = pow(c, vec3(.4545));
-    c = mix(c, c * vec3(1.04, .99, .9), .6);   // warm grade (the village is golden late afternoon)
-    vec2 v = (fc / uRes - vec2(.5, .45)) * vec2(1.05, .9); c *= 1. - uVig * smoothstep(.25, .78, length(v));
+    // haze in the door's light (fixed dither per pixel), and a faint glow round the slit
+    float hz = 0., j = hh(fc * .73 + 3.1), tm = min(tt, 14.); for (int i = 0; i < 26; i++) { float s = (float(i) + j) / 26. * tm; vec3 Q = O + d * s; if (Q.z > uZB) break; float k = doorLight(Q); if (k <= 0.) continue; hz += k * (.45 + 1.1 * fb3(vec2(Q.x * 1.6 + Q.z * .7 + uT * .06, Q.y * 2.2 - uT * .04))); }
+    col += SUNC * hz * tm / 26. * uHaze * uSunI;
+    vec3 c = 1. - exp(-col * uGain); c = pow(c, vec3(.4545)); c = mix(c, c * vec3(1.04, .99, .9), .5);
+    vec2 v = (fc / uRes - vec2(.5, .47)) * vec2(1.05, .9); c *= 1. - uVig * smoothstep(.25, .78, length(v));
     o = vec4(c, 1.); }`;
 
 // ================================================================ ALLEY shader — copied from bw-rooster-p1.js (ALLEY + the alley bake), with the dawn colour added:
@@ -262,151 +307,122 @@ export async function build(W, H, opt = {}) {
     g.save(); g.setTransform(1, 0, 0, 1, 0, 0); g.globalCompositeOperation = 'screen'; g.globalAlpha = k; g.imageSmoothingEnabled = true; g.drawImage(bl, 0, 0, VW, VH); g.restore(); }
   function present(ctx) { const sc = Math.max(W / VW, H / VH), dw = VW * sc, dh = VH * sc; ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.drawImage(off, (W - dw) / 2, (H - dh) * (H > W ? .5 : .36), dw, dh); ctx.restore(); }
 
-  // ============================================================== ROOM
-  const RM = { F: 1200, eye: 1.35, VP: [560, 860], XL: -2.75, XR: 2.3, ZB: 5.6, YC: 3.05, win: [3.55, 4.42, .62, 1.75], door: [-1.7, -.86, 1.98], b0: [-.85, 0, 4.55], b1: [1.6, .45, 5.6], Zw: 5.08, Zf: 4.98 };
-  // fix 1 (관리자 2026-11-25): a low late sun through a low window, almost level, so her SHADOW on the wall reads from lying to sitting (shadow play)
-  { const v = [-.15, -.1, .98], l = Math.hypot(...v); RM.sun = v.map(q => q / l);
-    // the window (on the right wall, behind the camera's side) sized so that its light on the back wall covers x −0.8 … 1.4, y 0.3 … 1.9 there
-    const sv = RM.sun, back = (x, y) => { const sd = (RM.XR - x) / (-sv[0]); return [RM.ZB - sv[2] * sd, y - sv[1] * sd]; }, a = back(1.4, .3), b = back(-.8, 1.9);
-    RM.win = [b[0], a[0], back(1.4, .3)[1], back(-.8, 1.9)[1]]; }
-  const projR = (x, y, z) => [RM.VP[0] + RM.F * x / z, RM.VP[1] - RM.F * (y - RM.eye) / z];
-  // the lit band at depth z: the window opening carried along the sun ray (for the figures' light)
-  const beamAt = (z) => { const s = RM.sun, P = []; for (const [wz, wy] of [[RM.win[0], RM.win[2]], [RM.win[0], RM.win[3]], [RM.win[1], RM.win[3]], [RM.win[1], RM.win[2]]]) { const t = (z - wz) / s[2]; P.push([RM.XR + s[0] * t, wy + s[1] * t]); } return P; };
-  const camRoom = (t, T) => { const k = sine((t - T.room[0]) / (T.room[1] - T.room[0])); return [lerp(578, 562, k), lerp(935, 915, k), lerp(1.42, 1.53, k)]; };
-  // ---- the woman: a side-view skeleton in the bed's plane (x, y metres at z = RM.Zw); lying head to the right, she sits up facing left
-  const WH = [.56, .58], LEN = { torso: .47, neck: .09, ua: .27, fa: .25, th: .42, sh: .41 };
-  function poseWoman(t, T) { const r = clamp((t - T.rise[0]) / (T.rise[1] - T.rise[0])), cu = ss(T.curl[0], T.curl[1], t), kn = ss(T.knees[0], T.knees[1], t), tu = ss(T.turn[0], T.turn[1], t);
-    // the torso's angle from the mattress: slow start (the push), faster through the middle, eased into upright, a small settle
-    const th = hermite([[0, 0], [.18, .12], [.45, .52], [.72, 1.2], [1, 1.6]], r);
-    const u = [Math.cos(th), Math.sin(th)], n = [-Math.sin(th), Math.cos(th)];   // u along the spine toward the head, n her front
-    const Hh = [WH[0] - .015 * ss(.3, 1, r), WH[1] - .012 * ss(.3, 1, r)], S = add2(Hh, u, LEN.torso);
-    // the head: chin curls to the chest first (curl), comes up as she sits, then turns a little toward Him (left, down)
-    const nod = .42 * cu * (1 - .75 * ss(.55, 1, r)) + .12 * tu, hd = [u[0] * Math.cos(nod) + n[0] * Math.sin(nod), u[1] * Math.cos(nod) + n[1] * Math.sin(nod)];
-    const Nk = add2(S, u, .05), Hc = add2(Nk, hd, .13);
-    // the near arm: lying straight by her side → as the torso starts up (r .08 → .44, ~0.9 s) the hand slides to a point beside her hip and plants; it pushes (the arm straightens) until r .64; then (0.9 s) it lifts into her lap
-    const Wside = [WH[0] - .06, WH[1] - .07], Wplant = [WH[0] + .1, WH[1] - .105], lap = add2(Hh, [-.2, .1]);
-    const pl = ss(.08, .44, r), off = ss(.64, 1, r);
-    let Wr = [lerp(Wside[0], Wplant[0], sine(pl)), lerp(Wside[1], Wplant[1], sine(pl)) + .025 * Math.sin(Math.PI * pl)];
-    if (off > 0) Wr = [lerp(Wr[0], lap[0], sine(off)), lerp(Wr[1], lap[1], sine(off)) + .06 * Math.sin(Math.PI * off)];
-    const Sh = add2(S, u, -.04), arm = ik2(Sh, Wr, LEN.ua, LEN.fa, E => E[0] * n[0] + E[1] * n[1]);   // the elbow always on her back side (bends down/back, never forward)
-    // legs: ankle slides toward her as the knees come up (knee by IK, bending upward)
-    const A = add2(Hh, [lerp(-.82, -.6, kn), -.06]), leg = ik2(Hh, A, LEN.th, LEN.sh, K => -K[1]);
-    return { r, th, u, n, H: Hh, S, Sh, Nk, Hc, hd, arm, A, K: leg.E, kn, tu }; }
-  function drawWoman(g, Q, part) {   // world (x, y) at z = RM.Zw → base px; part: 'all' | 'veil' | 'torso' | 'arm' | 'dress' (= torso + arm) | 'blanket' | 'skin'
-    const z = RM.Zw, P = a => projR(a[0], a[1], z), k = RM.F / z, u = Q.u, n = Q.n;
-    const at = (b, du, dn) => P([b[0] + u[0] * du + n[0] * dn, b[1] + u[1] * du + n[1] * dn]);
-    if (part === 'all' || part === 'blanket') {   // the blanket over the legs, down to the mattress on both sides; tented over the knee
-      const K = Q.K, A = Q.A, Hh = Q.H, ml = RM.b1[1] + .03;
-      const pts = [P([Hh[0] + .1, ml - .03]), P([Hh[0] + .02, Hh[1] + .05]), P([lerp(Hh[0], K[0], .5), lerp(Hh[1], K[1], .5) + .085]), P([K[0] + .02, K[1] + .09]), P([K[0] - .07, K[1] + .06]),
-        P([lerp(K[0], A[0], .55), lerp(K[1], A[1], .55) + .075]), P([A[0] + .02, A[1] + .1]), P([A[0] - .09, A[1] + .07]), P([A[0] - .16, ml - .02]), P([Hh[0] + .1, ml - .06])];
-      g.beginPath(); spline(g, pts); g.fill(); }
-    if (part === 'all' || part === 'dress' || part === 'torso') {   // the dress: one loose hull from the shoulders to the hips, into the lap
-      const cv = .055 * Math.sin(Math.PI * clamp(Q.r * 1.15));   // the back rounds as she curls up, straightens once she sits
-      const pts = [at(Q.H, -.1, -.11), at(Q.H, -.06, .12), at(Q.H, .12, .12 - cv * .4), at(Q.H, .3, .115 - cv * .3), at(Q.H, .42, .085), at(Q.H, .47, .02), at(Q.H, .44, -.09 - cv * .5), at(Q.H, .25, -.105 - cv), at(Q.H, .06, -.12 - cv * .3), P(add2(Q.H, [-.16, .07])), P(add2(Q.H, [-.14, -.06]))];
-      fillHull(g, pts); }
-    if (part === 'all' || part === 'dress' || part === 'arm') { const a = Q.arm, s = P(Q.Sh), e = P(a.E), w = P(a.W); limb(g, s[0], s[1], .055 * k, e[0], e[1], .046 * k); limb(g, e[0], e[1], .044 * k, w[0], w[1], .034 * k); }
-    if (part === 'all' || part === 'skin') { const a = Q.arm, e = P(a.E), w = P(a.W), dx = w[0] - e[0], dy = w[1] - e[1], l = Math.hypot(dx, dy) || 1;   // the hand: small, a soft oval past the wrist
-      g.beginPath(); g.ellipse(w[0] + dx / l * .045 * k, w[1] + dy / l * .045 * k, .05 * k, .028 * k, Math.atan2(dy, dx), 0, TAU); g.fill(); }
-    if (part === 'all' || part === 'veil') {   // the veil: over the head, forward past the face as a hood, down the back to the shoulder blades
-      const hd = Q.hd, hn = [-hd[1], hd[0]], c = Q.Hc, at2 = (du, dn) => P([c[0] + hd[0] * du + hn[0] * dn, c[1] + hd[1] * du + hn[1] * dn]);
-      const pts = [at2(.112, .0), at2(.095, .07), at2(.035, .108), at2(-.06, .1), at2(-.1, .06), at(Q.S, .03, .045), at(Q.S, -.03, .0), at(Q.S, -.09, -.085), at2(-.08, -.105), at2(.04, -.1), at2(.1, -.055)];
-      g.beginPath(); spline(g, pts); g.fill(); }
-  }
-  // the hood's opening (the face, never drawn): a dark recess where the light cannot reach
-  function faceShade(g, Q) { const z = RM.Zw, P = a => projR(a[0], a[1], z), k = RM.F / z, hd = Q.hd, hn = [-hd[1], hd[0]], c = Q.Hc, f = P([c[0] + hd[0] * -.01 + hn[0] * .075, c[1] + hd[1] * -.01 + hn[1] * .075]);
-    g.beginPath(); g.ellipse(f[0], f[1], .05 * k, .072 * k, Math.atan2(-hd[1], hd[0]) - Math.PI / 2, 0, TAU); g.fill(); }
-  // ---- Jesus: standing at the foot of the bed, three-quarter back to us; leans toward her, straightens as she rises
-  const JG = [-.32, 0, 4.3], SHOW_JESUS = false;
-  function poseJesus(t, T) { const s = ss(T.lean[0], T.lean[1], t), br = .004 * Math.sin((t - T.room[0]) * TAU / 3.6); return { lean: lerp(.2, .05, s), br }; }
-  function drawJesus(g, J) { const z = JG[2], k = RM.F / z, P = (x, y) => projR(JG[0] + x, y, z), hip = [0, .95], rot = (x, y) => { const dx = x - hip[0], dy = y - hip[1], c = Math.cos(-J.lean), s = Math.sin(-J.lean); return [hip[0] + dx * c - dy * s, hip[1] + dx * s + dy * c]; };
-    const Q = (x, y) => { const r = y > .95 ? rot(x, y + J.br * ss(.95, 1.4, y)) : [x, y]; return P(r[0], r[1]); };
-    // robe from the hem to the broad shoulders (level), sleeves at the sides; no waist
-    // the sleeves hang a little away from the robe at the elbows (arms, not a sack), the hands in front of him
-    const pts = [Q(-.25, .04), Q(-.235, .5), Q(-.24, .86), Q(-.275, 1.05), Q(-.265, 1.25), Q(-.262, 1.38), Q(-.25, 1.45), Q(-.15, 1.48), Q(.15, 1.48), Q(.25, 1.45), Q(.262, 1.38), Q(.265, 1.25), Q(.275, 1.05), Q(.24, .86), Q(.235, .5), Q(.26, .04)];
-    g.beginPath(); spline(g, pts); g.fill();
-    const a = Q(-.03, 1.48), h = Q(-.02 + .0, 1.63); limb(g, a[0], a[1], .075 * k, h[0], h[1], .06 * k);
-    // the head from behind: a round cloth, falling to the shoulders (no face, no profile)
-    const hc = Q(0, 1.66); g.beginPath(); g.ellipse(hc[0], hc[1], .108 * k, .118 * k, 0, 0, TAU); g.fill();
-    g.beginPath(); spline(g, [Q(-.098, 1.66), Q(-.115, 1.56), Q(-.13, 1.47), Q(.13, 1.47), Q(.115, 1.56), Q(.098, 1.66)]); g.fill();
-    // feet: the hem just touches the floor; a dark foot edge in front
-    const f1 = P(-.1, .015), f2 = P(.12, .015); g.beginPath(); g.ellipse(f1[0], f1[1], .07 * k, .02 * k, 0, 0, TAU); g.ellipse(f2[0], f2[1], .07 * k, .02 * k, 0, 0, TAU); g.fill(); }
-  // ---- Peter: frontal in the doorway, his right hand on the jamb (screen left), then down at his side
-  const PG = [-1.28, 0, RM.ZB + .2];
-  function posePeter(t, T) { const s = ss(T.peter[0], T.peter[1], t), u = t - T.room[0], br = .013 * Math.sin(u * TAU / 3.2 + 1), sw = .012 * Math.sin(u * TAU / 5.1) + .02 * sine(s); return { s, br, sw }; }
-  function drawPeter(g, Q) { const z = PG[2], k = RM.F / z, P = (x, y) => projR(PG[0] + x + Q.sw * clamp(y / 1.8), y, z), s = Q.s, b = Q.br;
-    const sh = 1.46 + b + .012 * s;   // he straightens a little as he takes the hand off the jamb
-    // tunic to mid-calf, belted, broad level shoulders
-    g.beginPath(); spline(g, [P(-.25, .04), P(-.24, .9), P(-.25, 1.2), P(-.27, sh - .04), P(-.2, sh + .03), P(.2, sh + .03), P(.27, sh - .04), P(.25, 1.2), P(.24, .9), P(.25, .04)]); g.fill();
-    // legs and feet (planted)
-    // (his feet are behind the threshold: no feet drawn)
-    // neck, head, head cloth tied with a band (the knot's ends at the side), falling to the shoulders
-    // neck, then the head in its cloth: a level top, straight sides, the cloth tied at the back and falling only to the shoulders (no bump, no ring, no veil)
-    { const n0 = P(0, sh), n1 = P(0, sh + .13); limb(g, n0[0], n0[1], .068 * k, n1[0], n1[1], .062 * k);
-      g.beginPath(); spline(g, [P(-.175, sh + .02), P(-.138, sh + .12), P(-.124, sh + .22), P(-.11, sh + .29), P(-.06, sh + .322), P(.06, sh + .322), P(.11, sh + .29), P(.124, sh + .22), P(.138, sh + .12), P(.175, sh + .02)]); g.fill(); }
-    // the arms: his right (screen left) up on the jamb → down at his side; the left hangs
-    const SR = [-.23, sh - .03], SL = [.23, sh - .03], jamb = [-.3, 1.02], side = [-.3, .8];
-    const WR = [lerp(jamb[0], side[0], sine(s)), lerp(jamb[1], side[1], sine(s)) + .05 * Math.sin(Math.PI * s)];
-    const aR = ik2(SR, WR, .3, .28, E => E[1] - E[0] * .3), aL = ik2(SL, [.31, .8], .3, .28, E => E[1] - E[0] * .3);   // elbows down and out
-    for (const [S0, a] of [[SR, aR], [SL, aL]]) { const p0 = P(...S0), e = P(...a.E), w = P(...a.W); limb(g, p0[0], p0[1], .062 * k, e[0], e[1], .05 * k); limb(g, e[0], e[1], .048 * k, w[0], w[1], .036 * k); g.beginPath(); g.arc(w[0], w[1], .04 * k, 0, TAU); g.fill(); }
-    return { aR, aL }; }
-  // ---- still things: a jar by the door, a net hung on a peg (Peter is a fisherman), the pillow roll
-  function drawJar(g) { const z = RM.ZB - .35, P = (x, y) => projR(x, y, z); g.beginPath(); spline(g, [[-1.05, .02], [-1.24, .2], [-1.25, .4], [-1.16, .55], [-1.11, .62], [-1.12, .68], [-.98, .68], [-.99, .62], [-.94, .55], [-.85, .4], [-.86, .2]].map(([x, y]) => P(x - .8, y))); g.fill(); }
-  function drawNet(g, t) { const z = RM.ZB - .04, P = (x, y) => projR(x, y, z), sw = .004 * Math.sin(t * 1.1); g.beginPath(); spline(g, [P(1.12, 2.05), P(1.02 + sw, 1.6), P(.98 + sw, 1.15), P(1.1 + sw, .98), P(1.3 + sw, .96), P(1.42 + sw, 1.12), P(1.44, 1.6), P(1.32, 2.05), P(1.22, 2.1)]); g.fill(); }
-  function drawPillow(g) { const z = RM.Zw, P = (x, y) => projR(x, y, z); g.beginPath(); spline(g, [[.86, .53], [.88, .63], [.98, .69], [1.18, .69], [1.27, .62], [1.24, .53]].map(([x, y]) => P(x + .16, y - .08))); g.fill(); }
-  // dust in the beam: fixed motes drifting slowly (no births: a constant count), soft by their distance from the focus (her depth)
-  const MOTES_R = Array.from({ length: 46 }, (_, i) => { const r = rngOf(331 + i * 17); r(); return [r(), r(), r(), r() * TAU, .4 + .6 * r()]; });
+  // ============================================================== ROOM — approach 1 「빈 자리, 그리고 물동이」 (director3-plan.md C1 + E3)
+  // Kept from the earlier room: the WebGL2 ray-cast (walls, beams, floor, stone bench, doorway and sunlit outside, haze, fixed dither, grain).
+  // Removed: Peter's doorway cut-out, the woman's rising rig and wall shadow (no body is drawn rising), drawJesus (gone with SHOW_JESUS off).
+  // r1 (r0 → p2): the dark sickroom; the blanket breathes fast (fever, 0.9 s) — the door off frame left opens (T.open), its light floods
+  //   across the floor and climbs the bench onto the blanket (T.reach) and stays; the breath slows (T.calm, 0.9 → 1.6 s). Dolly in ×1.06.
+  // r2 (p2 → end): higher and closer; the empty straw mat in the light, pressed where she lay, the blanket pushed to the foot, the wet cloth on
+  //   the floor, the bowl upright; pan left 3.0 s to the open door: the sunlit courtyard; a woman's shadow carrying a water jar crosses its far
+  //   wall (T.shadow), then she herself crosses the bright gap once, small and backlit, only her madder veil's rim catching the light (T.walk).
+  const RM = { XL: -2.7, XR: 2.9, ZB: 3.6, YC: 2.7, door: [-1.62, -.82, 1.9], b0: [-.15, 0, 2.25], b1: [2.35, .45, 3.6], zc: 2.62, slit: [1.6, 2.1, 2.5, 2.555], niche: [.45, .95, 1.15, 1.6], SHOW_DOOR_SHADOW: true };
+  RM.win1 = [-.5, .4, 0, 1.9];   // r1's door, off frame left (in the left wall, z −0.5…0.4, beside and behind the camera): its wedge crosses the floor at the lower left, climbs the bench's front, lies on her hips
+  const dirTo = (a, b) => { const v = [b[0] - a[0], b[1] - a[1], b[2] - a[2]], l = Math.hypot(...v); return v.map(q => q / l); };
+  RM.sun1 = dirTo([RM.XL, 1.2, (RM.win1[0] + RM.win1[1]) / 2], [.55, .66, 2.62]); RM.sun2 = dirTo([(RM.door[0] + RM.door[1]) / 2, 1.18, RM.ZB], [1.1, .52, 2.62]); RM.sun = RM.sun2;
+  const VEIL = '#8e3b2e', VEIL_LIT = '#8e3b2e';   // the one colour: on the bed in r1, the rim of her veil in the courtyard in r2 (same value: ΔE 0)
+  // the two cameras (world metres; yaw − = left, pitch − = down; F px about the frame centre) — the shader's camDir() inverted here
+  const yawTo = (O, P) => Math.atan2(P[0] - O[0], P[2] - O[2]);
+  const R1 = { O: [1.05, 1.1, -.4], pitch: -8 * Math.PI / 180, F: 1200 }, R2 = { O: [1.2, 1.5, .3], pitch: -20 * Math.PI / 180, F: 1500 };
+  R2.yaw0 = yawTo(R2.O, [1.25, .5, 2.62]); R2.yaw1 = yawTo(R2.O, [(RM.door[0] + RM.door[1]) / 2, 1, RM.ZB]) + Math.atan(200 / R2.F);
+  function camRoomAt(t, T) { if (t < T.p2) { const k = sine((t - T.room[0]) / (T.p2 - T.room[0])), d = .18 * (.25 * clamp((t - T.room[0]) / (T.p2 - T.room[0])) + .75 * k);   // dolly in ×1.06 (with a little inertia at the start: it is already moving)
+      return { O: [R1.O[0], R1.O[1], R1.O[2] + d], yaw: 0, pitch: R1.pitch, F: R1.F, shot: 1 }; }
+    const k = sine((t - T.pan[0]) / (T.pan[1] - T.pan[0])); return { O: R2.O, yaw: lerp(R2.yaw0, R2.yaw1, k), pitch: R2.pitch, F: R2.F, shot: 2 }; }
+  const projC = (c, P) => { const vx = P[0] - c.O[0], vy = P[1] - c.O[1], vz = P[2] - c.O[2], cy = Math.cos(c.yaw), sy = Math.sin(c.yaw), x1 = vx * cy - vz * sy, z1 = vx * sy + vz * cy, cp = Math.cos(c.pitch), sp = Math.sin(c.pitch), y2 = vy * cp - z1 * sp, z2 = vy * sp + z1 * cp;
+    return [VW / 2 + c.F * x1 / z2, VH / 2 - c.F * y2 / z2, c.F / z2]; };
+  // the door's light at P (the same test as the shader's doorLight)
+  function doorLightJS(P, open, reach, shot) { if (shot === 1) { const d = RM.sun1, s = (P[0] - RM.XL) / d[0]; if (s < 0) return 0; const Qz = P[2] - d[2] * s, Qy = P[1] - d[1] * s, zf = lerp(RM.win1[1], RM.win1[0], open);
+      return (Qz > zf && Qz < RM.win1[1] && Qy > 0 && Qy < RM.door[2] ? 1 : 0) * clamp((reach - s) / .5); }
+    const d = RM.sun2, s = (RM.ZB - P[2]) / (-d[2]); if (s < 0) return 0; const Qx = P[0] - d[0] * s, Qy = P[1] - d[1] * s, xf = lerp(RM.door[1], RM.door[0], open);
+    return (Qx > xf && Qx < RM.door[1] && Qy > 0 && Qy < RM.door[2] ? 1 : 0) * clamp((reach - s) / .5); }
+  // fever breath: phase integrated over a period easing 0.9 → 1.6 s
+  function breath(t, T) { let ph = 0; const dt = .02; for (let x = T.room[0]; x < t; x += dt) ph += dt * TAU / lerp(.9, 1.6, sine((x - T.calm[0]) / (T.calm[1] - T.calm[0]))); return Math.sin(ph) * lerp(.075, .05, ss(T.calm[0], T.calm[1], t)); }
+  const openAt = (t, T) => sine((t - T.open[0]) / (T.open[1] - T.open[0])), reachAt = (t, T) => t < T.p2 ? lerp(2.6, 4.9, hermite([[0, 0], [.5, .55], [1, 1]], clamp((t - T.reach[0]) / (T.reach[1] - T.reach[0])))) * ss(T.open[0] - .01, T.open[0] + .05, t) : lerp(4.6, 6.4, sine((t - T.p2) / (T.room[1] - T.p2)));
+  // ---- things in the room (2D, projected through the shot's camera)
+  const poly3 = (g, c, pts) => { const q = pts.map(p => projC(c, p)); if (q.some(v => v[2] <= 0)) return false; g.beginPath(); spline(g, q.map(v => [v[0], v[1]])); return true; };
+  function drawJug(g, c) { const x = .7, z = RM.ZB - .12, y0 = 1.17; poly3(g, c, [[x - .07, y0, z], [x - .12, y0 + .12, z], [x - .1, y0 + .26, z], [x - .04, y0 + .31, z], [x - .045, y0 + .37, z], [x + .045, y0 + .37, z], [x + .04, y0 + .31, z], [x + .1, y0 + .26, z], [x + .12, y0 + .12, z], [x + .07, y0, z]]) && g.fill(); }
+  // r1 foreground (lower left, a little soft): a low stool with an earthen bowl, the folded wet cloth and the lamp put out, one thread of smoke
+  function drawStool(g, c, shot) { const z = 1.85;   // (no stool: the bowl, the folded wet cloth and the lamp put out stand on the floor)
+    poly3(g, c, [[.3, 0, z], [.33, .07, z], [.52, .07, z], [.55, 0, z]]) && g.fill();   // the bowl
+    if (shot === 1) { poly3(g, c, [[.6, 0, z + .05], [.61, .035, z + .05], [.78, .04, z + .05], [.8, 0, z + .05]]) && g.fill();   // the folded wet cloth
+      poly3(g, c, [[.12, 0, z - .05], [.14, .04, z - .05], [.24, .05, z - .05], [.27, .025, z - .05], [.25, 0, z - .05]]) && g.fill(); } }   // the lamp, out
+  function smoke(g, c, t, T) { const base = [.22, .06, 1.8]; g.save(); g.lineCap = 'round';
+    for (let i = 0; i < 2; i++) { const pts = []; for (let k = 0; k <= 22; k++) { const h = k / 22 * .9, w = .01 + .05 * h; pts.push(projC(c, [base[0] + w * Math.sin(h * 9 - t * 1.3 + i) + .03 * h, base[1] + h, base[2]])); }
+      g.strokeStyle = `rgba(190,180,165,${.16 - .05 * i})`; g.lineWidth = 2.2 + 2 * i; g.beginPath(); pts.forEach((p, k) => k ? g.lineTo(p[0], p[1]) : g.moveTo(p[0], p[1])); g.stroke(); } g.restore(); }
+  function drawWetCloth(g, c) { poly3(g, c, [[.6, .005, 2.0], [.68, .025, 1.95], [.84, .02, 1.97], [.9, .01, 2.05], [.78, .01, 2.11], [.64, .008, 2.08]]) && g.fill(); }
+  // the woman walking with the water jar (side view, facing −x), metres, feet at y 0; a real gait: each foot is planted from its landing until it swings
+  function walkerShape(g, P, t, t0, x0, v) { const f = 2.2, Tc = 2 / f, L = v * Tc, xb = tt => x0 - v * (tt - t0), cyc = (t - t0) / Tc, bob = .018 * Math.cos(cyc * 2 * TAU), X = xb(t);
+    const foot = i => { const cc = cyc + i * .5, n = Math.floor(cc), u = cc - n, tl = t0 + (n - i * .5) * Tc, xl = xb(tl) - .3 * L, xl2 = xb(tl + Tc) - .3 * L;
+      if (u < .6) return [xl, 0]; const k = (u - .6) / .4; return [lerp(xl, xl2, sine(k)), .08 * Math.sin(Math.PI * k)]; };
+    const hip = [X + .02, .9 + bob], fill = pts => { g.beginPath(); spline(g, pts.map(P)); g.fill(); }, cap = (a, b, ra, rb) => { const A = P(a), B = P(b), s = Math.hypot(...[P([1, 0])[0] - P([0, 0])[0]]); limb(g, A[0], A[1], ra * s, B[0], B[1], rb * s); };
+    for (const i of [0, 1]) { const ft = foot(i), A = [ft[0] + .04, ft[1] + .07], q = ik2(hip, A, .45, .43, K => K[0]); cap(q.E, A, .05, .04); cap([A[0] - .02, A[1] - .03], [A[0] - .13, A[1] - .055], .035, .028); }   // shins below the hem, knees forward, feet
+    const sw = .025 * Math.sin(cyc * 2 * TAU + .8);   // the hem and the veil's end swing with the steps
+    fill([[X - .2 + sw, .34 + bob], [X - .14, .9 + bob], [X - .12, 1.36 + bob], [X - .02, 1.42 + bob], [X + .1, 1.38 + bob], [X + .14, .95 + bob], [X + .2 - sw, .34 + bob]]);   // the robe to mid-calf
+    fill([[X - .13, 1.43 + bob], [X - .1, 1.62 + bob], [X + .02, 1.66 + bob], [X + .11, 1.6 + bob], [X + .16 + sw, 1.32 + bob], [X + .2 + sw * 1.5, .98 + bob], [X + .1, 1.0 + bob], [X + .04, 1.36 + bob], [X - .1, 1.4 + bob]]);   // the veil over the head, down the back
+    const jar = [X - .24, 1.12 + bob]; g.beginPath(); { const c0 = P(jar), s = Math.abs(P([1, 0])[0] - P([0, 0])[0]); g.ellipse(c0[0], c0[1], .1 * s, .115 * s, 0, 0, TAU); } g.fill();
+    fill([[jar[0] - .03, jar[1] + .09], [jar[0] - .035, jar[1] + .16], [jar[0] + .035, jar[1] + .16], [jar[0] + .03, jar[1] + .09]]);
+    const S = [X - .03, 1.36 + bob], Wr = [jar[0] + .1, jar[1] + .09], a = ik2(S, Wr, .27, .25, E => E[1] - E[0] * .3); cap(S, a.E, .05, .042); cap(a.E, a.W, .04, .032);   // the arm, the hand on the handle (stays there)
+    return { X }; }
+  const zWall = RM.ZB + .42 + 8, zWalk = RM.ZB + 7.6;   // (the shader's courtyard wall is at the same zWall)
   function roomFrame(t, T) {
-    const cam = camRoom(t, T), warm = ss(T.warm[0], T.warm[1], t);
+    const c = camRoomAt(t, T), open = openAt(t, T), reach = reachAt(t, T);
     gl.bindFramebuffer(gl.FRAMEBUFFER, null); gl.viewport(0, 0, VW, VH); gl.disable(gl.BLEND); gl.useProgram(PR.p);
     const u1 = (n, v) => gl.uniform1f(PR.u(n), v), u3 = (n, v) => gl.uniform3f(PR.u(n), v[0], v[1], v[2]);
-    gl.uniform4f(PR.u('uRect'), 0, 0, 1, 1); gl.uniform2f(PR.u('uRes'), VW, VH); gl.uniform2f(PR.u('uVP'), RM.VP[0], RM.VP[1]); u3('uCam', cam);
-    u1('uF', RM.F); u1('uEye', RM.eye); u1('uXL', RM.XL); u1('uXR', RM.XR); u1('uZB', RM.ZB); u1('uYC', RM.YC); u1('uT', t); u1('uSunI', lerp(1.35, 1.6, warm)); u1('uHaze', .03); u1('uGain', 1.6); u1('uZf', RM.Zf); u1('uVig', .5); u1('uWarm', warm);
-    gl.uniform4f(PR.u('uWin'), ...RM.win); u3('uSun', RM.sun); gl.uniform4f(PR.u('uDoor'), RM.door[0], RM.door[1], RM.door[2], 0); u3('uB0', RM.b0); u3('uB1', RM.b1); u3('uBc', [-.3, .8, 5.45]);
-    gl.uniform1i(PR.u('uMode'), 1); gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4); hzx.setTransform(1, 0, 0, 1, 0, 0); hzx.drawImage(glc, 0, 0);   // the haze in front of her, kept for later
-    gl.uniform1i(PR.u('uMode'), 0); gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    gl.uniform4f(PR.u('uRect'), 0, 0, 1, 1); gl.uniform2f(PR.u('uRes'), VW, VH); u3('uO', c.O); u1('uYaw', c.yaw); u1('uPitch', c.pitch); u1('uF', c.F);
+    u1('uXL', RM.XL); u1('uXR', RM.XR); u1('uZB', RM.ZB); u1('uYC', RM.YC); u1('uT', t); u1('uOpen', open); u1('uReach', reach); u1('uLeaf', open * 1.35);
+    u1('uSunI', c.shot === 1 ? 2.6 : 3.1); u1('uHaze', .09); u1('uGain', c.shot === 1 ? 2.25 : 4.6); u1('uVig', .55); u1('uState', c.shot === 1 ? 0 : 1); u1('uBreath', c.shot === 1 ? breath(t, T) : 0);
+    u1('uShoulder', RM.SHOW_DOOR_SHADOW && c.shot === 1 ? ss(T.open[0], T.open[1], t) : 0); u1('uZc', RM.zc);
+    gl.uniform4f(PR.u('uDoor'), RM.door[0], RM.door[1], RM.door[2], 0); gl.uniform4f(PR.u('uSlit'), ...RM.slit); gl.uniform4f(PR.u('uNiche'), ...RM.niche); u3('uSun', c.shot === 1 ? RM.sun1 : RM.sun2); u1('uLW', c.shot === 1 ? 1 : 0); gl.uniform4f(PR.u('uWin'), ...RM.win1); u3('uDc', c.shot === 1 ? [RM.XL, .95, (RM.win1[0] + RM.win1[1]) / 2] : [(RM.door[0] + RM.door[1]) / 2, .95, RM.ZB]); u3('uDn', c.shot === 1 ? [1, 0, 0] : [0, 0, -1]); u3('uB0', RM.b0); u3('uB1', RM.b1);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
     o.save(); o.setTransform(1, 0, 0, 1, 0, 0); o.globalAlpha = 1; o.globalCompositeOperation = 'source-over'; o.filter = 'none'; o.drawImage(glc, 0, 0); o.restore();
-    const Qw = poseWoman(t, T), Qj = poseJesus(t, T), Qp = posePeter(t, T);
-    // her shadow on the lit wall behind: her shape carried along the sun ray to the wall (z = ZB), only where the wall is lit and above the bed
-    { const sdz = (RM.ZB - RM.Zw) / RM.sun[2], dx = RM.sun[0] * sdz, dy = RM.sun[1] * sdz, Sg = RM.F / RM.ZB, Wg = RM.F / RM.Zw;
-      ta.setTransform(1, 0, 0, 1, 0, 0); ta.clearRect(0, 0, VW, VH); camT(ta, cam); ta.save();
-      // only where the wall is lit (the window's patch) and above the bed's top: clip first, then draw her carried shape
-      const bp = beamAt(RM.ZB).map(q => projR(q[0], q[1], RM.ZB)), bt = projR(0, RM.b1[1], RM.ZB)[1];
-      ta.beginPath(); ta.moveTo(...bp[0]); for (const q of bp.slice(1)) ta.lineTo(...q); ta.closePath(); ta.clip(); ta.beginPath(); ta.rect(-400, -400, VW + 800, bt + 400); ta.clip(); { const d0 = projR(RM.door[1], 0, RM.ZB); ta.beginPath(); ta.rect(d0[0], -400, VW + 800, VH + 800); ta.clip(); }
-      // map: woman base px p (at Zw) → the same world point carried along the sun to the wall (z = ZB), in base px: p·r + VP·(1 − r) + Sg·(dx, −dy), r = Sg/Wg
-      const rr = Sg / Wg; ta.transform(rr, 0, 0, rr, RM.VP[0] * (1 - rr) + Sg * dx, RM.VP[1] * (1 - rr) - Sg * dy);
-      ta.fillStyle = '#000'; drawPillow(ta); drawWoman(ta, Qw, 'blanket'); drawWoman(ta, Qw, 'veil'); drawWoman(ta, Qw, 'dress'); drawWoman(ta, Qw, 'skin'); ta.restore();
-      tcx.setTransform(1, 0, 0, 1, 0, 0); tcx.globalCompositeOperation = 'source-over'; tcx.clearRect(0, 0, VW, VH); tcx.fillStyle = 'rgb(58,44,34)'; tcx.fillRect(0, 0, VW, VH); tcx.globalCompositeOperation = 'destination-in'; tcx.drawImage(tA, 0, 0); tcx.globalCompositeOperation = 'source-over';
-      o.save(); o.setTransform(1, 0, 0, 1, 0, 0); o.globalCompositeOperation = 'multiply'; o.filter = 'blur(3.2px)'; o.globalAlpha = .92; o.drawImage(tC, 0, 0); o.restore(); }
-    // still things (dark, soft)
-    mass(o, cam, g => { drawJar(g); }, { fill: '#120d0a', blur: 1.2, rim: { c: 'rgb(255,190,130)', dx: 2.4, dy: 0, a: .35 } });
-    // the woman herself stays in the dark (fix 1): one soft dark shape, the beam only grazing a thin warm edge on her back; the wall tells it
-    mass(o, cam, g => { drawPillow(g); drawWoman(g, Qw, 'torso'); drawWoman(g, Qw, 'blanket'); drawWoman(g, Qw, 'arm'); drawWoman(g, Qw, 'skin'); drawWoman(g, Qw, 'veil'); }, { fill: '#17100c', blur: 2.4 });
-    // a thin warm rim where the beam grazes her back and the top of the veil
-    { ta.setTransform(1, 0, 0, 1, 0, 0); ta.clearRect(0, 0, VW, VH); camT(ta, cam); ta.fillStyle = '#fff'; drawWoman(ta, Qw, 'veil'); drawWoman(ta, Qw, 'dress');
-      tb.setTransform(1, 0, 0, 1, 0, 0); tb.globalCompositeOperation = 'source-over'; tb.clearRect(0, 0, VW, VH); tb.drawImage(tA, 0, 0); tb.globalCompositeOperation = 'destination-out'; tb.drawImage(tA, -3, 2.2); tb.globalCompositeOperation = 'source-in'; tb.fillStyle = 'rgb(255,214,150)'; tb.fillRect(0, 0, VW, VH);
-      camT(tb, cam); const z = RM.Zw, bp = beamAt(z).map(q => projR(q[0], q[1], z)); tb.globalCompositeOperation = 'destination-in'; tb.filter = 'blur(5px)'; tb.beginPath(); tb.moveTo(...bp[0]); for (const q of bp.slice(1)) tb.lineTo(...q); tb.closePath(); tb.fillStyle = '#000'; tb.fill(); tb.filter = 'none'; tb.globalCompositeOperation = 'source-over';
-      o.save(); o.setTransform(1, 0, 0, 1, 0, 0); o.globalCompositeOperation = 'lighter'; o.filter = 'blur(1.6px)'; o.globalAlpha = .3 + .2 * warm; o.drawImage(tB, 0, 0); o.restore(); }
-    // the haze in front of her (over her, behind Jesus, who stands nearer than the beam)
-    o.save(); o.setTransform(1, 0, 0, 1, 0, 0); o.globalCompositeOperation = 'lighter'; o.globalAlpha = .15; o.drawImage(hzC, 0, 0); o.restore();   // (fix 2: kept faint, the frontal beam's haze must not wash her out)
-    // Jesus: dark against the lit wall, a faint warm edge on the doorway side and a cool one from the beam's scatter
-    // (Jesus is not shown here — batch3.md §C allows it: every place by the bed where his back would face us put a large dark figure in front of her;
-    //  drawJesus/poseJesus stay for a later choice. The light that comes onto her as she rises carries the line.)
-    if (SHOW_JESUS) mass(o, cam, g => drawJesus(g, Qj), { fill: '#120e0b', blur: 1.3, rim: { c: 'rgb(255,200,140)', dx: 2.6, dy: 1.2, a: .3 } });
-    // Peter in the doorway: black against the day; the bloom eats his edges
-    mass(o, cam, g => drawPeter(g, Qp), { fill: '#0d0907', blur: 2.6 });
-    // the threshold: a raised stone sill across the doorway hides his feet
-    mass(o, cam, g => { const z = RM.ZB + .02, a = projR(RM.door[0] - .04, .17, z), b = projR(RM.door[1] + .04, 0, z); g.fillRect(a[0], a[1], b[0] - a[0], b[1] - a[1]); }, { fill: '#241a13', blur: 1, rim: { c: 'rgb(255,200,140)', dx: 0, dy: 2, a: .35 } });
-    // the dust motes in the beam
-    o.save(); o.setTransform(1, 0, 0, 1, 0, 0); o.globalCompositeOperation = 'lighter';
-    { const s = RM.sun, k = cam[2]; for (const [a, b, c, ph, br] of MOTES_R) { const zz = lerp(4.2, 5.5, c), wz = lerp(RM.win[0], RM.win[1], a), tt = (zz - wz) / s[2]; let x = RM.XR + s[0] * tt, y = lerp(RM.win[2], RM.win[3], b) + s[1] * tt;
-      x += .05 * Math.sin(t * .31 + ph); y += .04 * Math.sin(t * .23 + ph * 1.7) - .012 * ((t - T.room[0]) % 4); if (x < -1.0 || y < .45) continue;
-      const q = toScr(cam, projR(x, y, zz)), df = Math.abs(1 / zz - 1 / RM.Zw) * 900 * k + 1.3, al = .2 * br * (1 - .5 * Math.abs(zz - RM.Zw));
-      const gr = o.createRadialGradient(q[0], q[1], 0, q[0], q[1], df * 2); gr.addColorStop(0, `rgba(255,226,180,${al})`); gr.addColorStop(1, 'rgba(255,226,180,0)'); o.fillStyle = gr; o.fillRect(q[0] - df * 2, q[1] - df * 2, df * 4, df * 4); } }
+    const id = g => g.setTransform(1, 0, 0, 1, 0, 0);
+    // the jug in the niche (dark)
+    mass(o, [540, 960, 1], g => { id(g); drawJug(g, c); }, { fill: '#16110d', blur: 1.2, alpha: .9 });
+    if (c.shot === 1) {
+      // the madder veil's corner on the roll is in the shader (the one saturated colour of r1); foreground stool things, soft
+      mass(o, [540, 960, 1], g => { id(g); drawStool(g, c, 1); }, { fill: '#3a2c20', blur: 1.8, rim: { c: 'rgb(255,214,160)', dx: -2, dy: 2, a: .3 * open } });
+      o.save(); id(o); o.filter = 'blur(1.5px)'; smoke(o, c, t, T); o.restore();
+    } else {
+      mass(o, [540, 960, 1], g => { id(g); drawStool(g, c, 2); }, { fill: '#4a3a2c', blur: 1.2, rim: { c: 'rgb(255,225,180)', dx: 0, dy: 2, a: .3 } });
+      mass(o, [540, 960, 1], g => { id(g); drawWetCloth(g, c); }, { fill: '#8c8270', blur: 1, rim: { c: 'rgb(255,235,200)', dx: 0, dy: 2, a: .35 } });
+      // the courtyard through the door: the seated men in the shade at the left jamb (soft, shoulders only at the edge), her shadow on the far wall, then her
+      const dz = RM.ZB + .42, inner = [[RM.door[0], 0, dz], [RM.door[0], RM.door[2], dz], [RM.door[1], RM.door[2], dz], [RM.door[1], 0, dz]].map(p => projC(c, p));
+      const leafA = open * 1.35, lx = Math.cos(leafA) * (RM.door[1] - RM.door[0]), lz = -Math.sin(leafA) * (RM.door[1] - RM.door[0]), leaf = [[RM.door[0], 0, RM.ZB], [RM.door[0], RM.door[2], RM.ZB], [RM.door[0] + lx, RM.door[2], RM.ZB + lz], [RM.door[0] + lx, 0, RM.ZB + lz]].map(p => projC(c, p));
+      if (inner.every(v => v[2] > 0)) {
+        const clipDoor = g => { g.beginPath(); inner.forEach((v, i) => i ? g.lineTo(v[0], v[1]) : g.moveTo(v[0], v[1])); g.closePath(); g.clip(); g.beginPath(); g.rect(-4000, -4000, 9000, 9000); leaf.forEach((v, i) => i ? g.lineTo(v[0], v[1]) : g.moveTo(v[0], v[1])); g.closePath(); g.clip('evenodd'); };
+        // her shadow on the far wall: right → left, 1.4 s, larger than she is (the low sun rakes the wall)
+        const shk = (t - T.shadow[0]) / (T.shadow[1] - T.shadow[0]);
+        if (shk > -.05 && shk < 1.05) { ta.setTransform(1, 0, 0, 1, 0, 0); ta.clearRect(0, 0, VW, VH); ta.save(); clipDoor(ta); ta.fillStyle = '#000';
+          const sc = 1.6, SX0 = -5.75, Pw = p => { const v = projC(c, [SX0 + p[0] * sc, p[1] * sc - .05, zWall]); return [v[0], v[1]]; };   // (local walker coordinates from x 0, scaled onto the wall)
+          walkerShape(ta, Pw, t, T.shadow[0], 0, 1.3 / sc); ta.restore();
+          o.save(); id(o); o.globalCompositeOperation = 'multiply'; o.filter = 'blur(3px)'; tcx.setTransform(1, 0, 0, 1, 0, 0); tcx.globalCompositeOperation = 'source-over'; tcx.clearRect(0, 0, VW, VH); tcx.fillStyle = 'rgb(150,118,90)'; tcx.fillRect(0, 0, VW, VH); tcx.globalCompositeOperation = 'destination-in'; tcx.drawImage(tA, 0, 0); tcx.globalCompositeOperation = 'source-over';
+          o.globalAlpha = .85; o.drawImage(tC, 0, 0); o.restore(); }
+        // she herself crosses the bright gap once, small and backlit; the bloom eats her edges, her veil's rim takes the light
+        const wk = (t - T.walk[0]) / (T.walk[1] - T.walk[0]);
+        if (wk > -.05 && wk < 1.05) { const Pz = p => { const v = projC(c, [p[0], p[1], zWalk]); return [v[0], v[1]]; }, x0 = WALK_X0;
+          ta.setTransform(1, 0, 0, 1, 0, 0); ta.clearRect(0, 0, VW, VH); ta.save(); clipDoor(ta); ta.fillStyle = '#1b130f'; walkerShape(ta, Pz, t, T.walk[0], x0, 1.3); ta.restore();
+          o.save(); id(o); o.filter = 'blur(1.3px)'; o.drawImage(tA, 0, 0); o.restore();
+          // the rim: the shape minus itself pushed away from the light (behind her, above), coloured as the bed's veil
+          tb.setTransform(1, 0, 0, 1, 0, 0); tb.globalCompositeOperation = 'source-over'; tb.clearRect(0, 0, VW, VH); tb.drawImage(tA, 0, 0); tb.globalCompositeOperation = 'destination-out'; tb.drawImage(tA, 1.6, 2.2); tb.globalCompositeOperation = 'source-in'; tb.fillStyle = VEIL_LIT; tb.fillRect(0, 0, VW, VH); tb.globalCompositeOperation = 'source-over';
+          o.save(); id(o); o.filter = 'blur(.8px)'; o.drawImage(tB, 0, 0); o.restore(); }
+        // the seated men in the shade at the left jamb: soft dark shoulders (heads behind the jamb)
+        ta.setTransform(1, 0, 0, 1, 0, 0); ta.clearRect(0, 0, VW, VH); ta.save(); clipDoor(ta); ta.fillStyle = '#20180f';
+        for (const [mx, mz, h] of [[-4.4, 6.2, .9], [-4.0, 6.9, .86], [-3.7, 6.4, .88]]) { const Pm = p => { const v = projC(c, [p[0], p[1], mz]); return [v[0], v[1]]; };
+          ta.beginPath(); spline(ta, [[mx - .3, 0], [mx - .28, h - .25], [mx - .22, h - .06], [mx - .1, h], [mx + .1, h], [mx + .22, h - .06], [mx + .28, h - .25], [mx + .3, 0]].map(Pm)); ta.fill(); }
+        ta.restore(); o.save(); id(o); o.filter = 'blur(6px)'; o.globalAlpha = .9; o.drawImage(tA, 0, 0); o.restore();
+      }
+    }
+    // dust in the door's light only (fixed motes drifting; a constant count), soft by their distance from the focus
+    o.save(); id(o); o.globalCompositeOperation = 'lighter';
+    for (const [a, b, cc, ph, br] of MOTES_R) { const P = [lerp(-1.4, 2.4, a) + .05 * Math.sin(t * .31 + ph), lerp(.15, 2.0, b) + .04 * Math.sin(t * .23 + ph * 1.7) + .03 * Math.sin(t * .11 + ph), lerp(1.4, 3.5, cc)];
+      const k = doorLightJS(P, open, reach, c.shot); if (k <= .01) continue; const q = projC(c, P); if (q[2] <= 0) continue; const df = 1.3 + Math.abs(q[2] - c.F / 2.7) * .006, al = .22 * br * k;
+      const gr = o.createRadialGradient(q[0], q[1], 0, q[0], q[1], df * 2.2); gr.addColorStop(0, `rgba(255,232,186,${al})`); gr.addColorStop(1, 'rgba(255,232,186,0)'); o.fillStyle = gr; o.fillRect(q[0] - df * 2.2, q[1] - df * 2.2, df * 4.4, df * 4.4); }
     o.restore();
-    bloom(o, .45);
+    bloom(o, c.shot === 1 ? .35 : .5);
     grain(o, .1);
-    return { cam, Qw, Qj, Qp };
+    return { c, open, reach };
   }
+  const MOTES_R = Array.from({ length: 70 }, (_, i) => { const r = rngOf(331 + i * 17); r(); return [r(), r(), r(), r() * TAU, .4 + .6 * r()]; });
+  const WALK_X0 = -5.3;
 
   // ============================================================== ROAD (charcoal)
   const C = window.Charcoal; let RD = null;
@@ -567,16 +583,13 @@ export async function build(W, H, opt = {}) {
   // measurement for the report: every .25 s camera speed (px/s on screen at the focus) and zoom rate (%/s), emission; joints per frame
   function measure(T, dt = 1 / 30) { const rows = [], J = {}; let mx = { v: 0, t: 0, who: '' };
     const sp = (f, t, w) => { const a = f(t, T), b = f(Math.min(t + dt, w[1] - 1e-3), T); return [+(Math.hypot(b[0] - a[0], b[1] - a[1]) * a[2] / dt).toFixed(1), +(Math.abs(Math.log(b[2] / a[2])) / dt * 100).toFixed(2)]; };
-    for (const [sc, f, w, em] of [['room', camRoom, T.room, () => 0], ['road', (t) => { const z = zoomRoad(t, T); return [540, 960, z]; }, T.road, () => 1 / .4], ['alley', camAlleyN, T.alley, () => 0]])
+    for (let t = T.room[0]; t < T.room[1] - .01; t += .25) { const a = camRoomAt(t, T), b = camRoomAt(Math.min(t + dt, T.room[1] - 1e-3), T);
+      rows.push(['room', +t.toFixed(2), +(Math.abs(b.yaw - a.yaw) / dt * 180 / Math.PI).toFixed(2), +(Math.hypot(b.O[0] - a.O[0], b.O[2] - a.O[2]) / dt).toFixed(3), +reachAt(t, T).toFixed(2)]); }   // room: yaw °/s, dolly m/s, the light's reach m
+    for (const [sc, f, w, em] of [['road', (t) => { const z = zoomRoad(t, T); return [540, 960, z]; }, T.road, () => 1 / .4], ['alley', camAlleyN, T.alley, () => 0]])
       for (let t = w[0]; t < w[1] - .01; t += .25) { const [v, z] = sp(f, t, w); rows.push([sc, +t.toFixed(2), v, z, +em(t).toFixed(2)]); }
     const note = (k, d, t) => { J[k] = Math.max(J[k] || 0, d); if (d > mx.v) mx = { v: d, t: +t.toFixed(2), who: k }; };
-    let pw = null; for (let t = T.room[0]; t < T.room[1]; t += dt) { const Q = poseWoman(t, T), a = { wElbow: ang2(Q.Sh, Q.arm.E, Q.arm.W), wKnee: ang2(Q.H, Q.K, Q.A), wTorso: Q.th, wHead: Math.atan2(Q.hd[1], Q.hd[0]) };
-      if (pw) for (const k in a) note(k, Math.abs(a[k] - pw[k]), t); pw = a; }
     let pa = null; for (let t = T.alley[0]; t < T.alley[1]; t += dt) { const Q = poseAlleyN(t, T), a = { pHeadLift: Math.acos(clamp(V.dot(Q.Bd, Q0.Bd), -1, 1)) }; if (pa) for (const k in a) note(k, Math.abs(a[k] - pa[k]), t); pa = a; }
-    // planted contacts: her wrist while planted, Peter's feet in the doorway (fixed by construction), Peter's wrist on the alley wall (Q0, unchanged)
-    let slip = 0, prevW = null; for (let t = T.rise[0] + .45 * (T.rise[1] - T.rise[0]); t < T.rise[0] + .63 * (T.rise[1] - T.rise[0]); t += dt) { const Q = poseWoman(t, T); if (prevW) slip = Math.max(slip, Math.hypot(Q.arm.W[0] - prevW[0], Q.arm.W[1] - prevW[1])); prevW = Q.arm.W; }
-    const reach = []; for (let t = T.room[0]; t < T.room[1]; t += dt) { const Q = poseWoman(t, T); reach.push(Math.hypot(Q.arm.W[0] - Q.Sh[0], Q.arm.W[1] - Q.Sh[1]) - (LEN.ua + LEN.fa)); }
     return { rows, maxJoint: { rad: +mx.v.toFixed(4), deg: +(mx.v * 180 / Math.PI).toFixed(2), t: mx.t, who: mx.who, per: Object.fromEntries(Object.entries(J).map(([k, v]) => [k, +(v * 180 / Math.PI).toFixed(2)])) },
-      wristSlip: +slip.toFixed(5), armOverReach: +Math.max(...reach).toFixed(4), ALLEY_END: AE, edge: { start: +hbN(T.alley[0], T).toFixed(3), end: +hbN(T.alley[1], T).toFixed(3) } }; }
-  return { draw, measure, refC, poseWoman, alleyFrame, roomFrame };
+      ALLEY_END: AE, room: { yaw0: +(R2.yaw0 * 180 / Math.PI).toFixed(1), yaw1: +(R2.yaw1 * 180 / Math.PI).toFixed(1) }, edge: { start: +hbN(T.alley[0], T).toFixed(3), end: +hbN(T.alley[1], T).toFixed(3) } }; }
+  return { draw, measure, refC, alleyFrame, roomFrame, camRoomAt, projC, R2, RM };
 }

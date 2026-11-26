@@ -19,11 +19,12 @@
 //   P3     c1+3.2 → N172    telephoto from the foot of the steps, crane up with inertia: Peter small (≈ 5 %) against the bright sky, the arm
 //                           already up (match on P2's action), it goes once slowly forward; the crowd only as long shadows on the treads
 //                           (shadow-camera layer), the tread edges lines of gold; the sun up-left of him (x 230, y 520), never behind his head
-//   P4     N172 → N173      the aerial: low sun 19° (shadows to the lower left, 4.9 m), crane up D 140 → 300 m, pitch 66° → 84°, fov 30°,
+//   P4     N172 → N173      the aerial (fix 1): warm sun 27°, crane up D 66 → 86 m, pitch 58° → 62°, fov 36°,
 //                           yaw 6°, NO depth of field; five streets flow into a funnel narrowing onto the stepped pool (part 1's net bag);
 //                           people matte cloth patches (≤ 12 px at the start, ≈ 5 px at the end) drawn by their shadows; golden rings 1 → 6/s,
 //                           glints that live .3–.6 s; on 「사람을 취하리라던」 the sun flares in from the upper right and the frame warms (≥ 120 at the end)
-//   ?var=b (page): a 1.0 s hard cut at c2b to part 1's underwater net (lake-peter3d-b.js uwA, u 27.9–28.9) and back.
+// fix 1 (batch3-director-fix1.md B): P4 back to the first draft's look (edc61537 figures, oblique crane) — only the funnel, warm low light,
+//   haze at the edges, a slow crane, soft rings and a trapezoid pool changed; P2 men's shadows (broad shoulders, tied cloth); variant B removed.
 // Rules kept: Peter = broad shoulders, tied head cloth, no face, small/backlit/shadow only; no close heads; no flames, no dove; no words in the
 //   art; fixed dither; everything a pure function of t; clean cuts.
 // Sound cue table (film seconds at the current script; all from beats()):
@@ -105,6 +106,15 @@ function robe(g, sh, br = 1) { blob(g, [[-.43 * br, -.5], [-.42 * br, sh * .36],
 // straight down past the jaw to the shoulder, a beard under the chin; no knot, no point, no ring on the head.
 function fhead(g, cx, cy, r) { blob(g, [[cx - r * .9, cy + r * .62], [cx - r * .56, cy + r * 1.08], [cx, cy + r * 1.2], [cx + r * .56, cy + r * 1.08], [cx + r * .9, cy + r * .62], [cx + r * 1.02, cy - r * .1], [cx + r * .96, cy - r * .9], [cx + r * 1.3, cy - r * 1.55], [cx + r * 1.75, cy - r * 1.95],
     [cx - r * 1.75, cy - r * 1.95], [cx - r * 1.3, cy - r * 1.55], [cx - r * .96, cy - r * .9], [cx - r * 1.02, cy - r * .1]]); blob(g, [[cx - r * .62, cy - r * .55], [cx + r * .62, cy - r * .55], [cx + r * .5, cy - r * 1.32], [cx, cy - r * 1.52], [cx - r * .5, cy - r * 1.32]]); }
+// fix 1: a man's body in shadow — BROAD LEVEL SHOULDERS (wider than any veil), the head cloth tied with a band (a notch at the brow),
+// a level top, falling straight past the jaw and ENDING ON the shoulder; bow = 0…1 rounds the shoulders down and drops the head.
+function pbody(g, sh, br = 1, bow = 0) { const W = .37 * br, d = .07 * bow; blob(g, [[-W * .96, -.5], [-W * .97, sh * .5], [-W, sh - .14 - d], [-W * .9, sh - .05 - d * .7], [-W * .62, sh - .005 - d * .35], [-.1, sh + .03], [.1, sh + .03], [W * .62, sh - .005 - d * .35], [W * .9, sh - .05 - d * .7], [W, sh - .14 - d], [W * .97, sh * .5], [W * .96, -.5]]); }
+function phead(g, cx, cy, r, sh) { const ys = sh + .01; blob(g, [[cx - r * .98, cy + r * .62], [cx - r * .66, cy + r * 1.08], [cx, cy + r * 1.2], [cx + r * .66, cy + r * 1.08], [cx + r * .98, cy + r * .62], [cx + r * 1.08, cy - r * .2],
+    [cx + r * .94, cy - r * .95], [cx + r * 1.12, ys + r * .32], [cx + r * 1.55, ys], [cx - r * 1.55, ys], [cx - r * 1.12, ys + r * .32], [cx - r * .94, cy - r * .95], [cx - r * 1.08, cy - r * .2]]); }
+function pman(g, b, x, y, s, o = {}) { const { h = 1.2, br = 1, lean = 0, sv = 1.06, hy = 0, bow = 0 } = o; atf(g, b, x, y, s, lean, 1, sv); const sh = h - .36, hc = h - .15 + hy, r = .116;
+  pbody(g, sh, br, bow); limb(g, 0, sh + .02, .072, 0, hc - .08, .06); phead(g, 0, hc, r, sh); return { sh, hc }; }
+function cman(g, b, x, y, s, o = {}) { const { h = 1.2, br = 1, sv = 1.06, turn = 0 } = o; atf(g, b, x, y, s, 0, 1, sv); const sh = h - .36, hc = h - .15, r = .116;
+  pbody(g, sh, br * (1 - .22 * Math.abs(turn)), 0); limb(g, 0, sh + .02, .07, turn * .02, hc - .07, .058); head(g, turn * .03, hc, r, turn, { beard: true }); }
 function fman(g, b, x, y, s, o = {}) { const { h = 1.2, br = 1, lean = 0, sv = 1.06, hx = 0, hy = 0 } = o; atf(g, b, x, y, s, lean, 1, sv); const sh = h - .36, hc = h - .15, r = .116;
   robe(g, sh, br); limb(g, 0, sh + .02, .074, hx * .6, hc - .07 + hy * .5, .058); fhead(g, hx, hc + hy, r); return { sh, hc }; }
 function sman(g, b, x, y, s, o = {}) { const { h = 1.2, br = 1, turn = 0, lean = 0, sv = 1.06, jesus = false, veil = false, beard = true, hx = 0, hy = 0 } = o; atf(g, b, x, y, s, lean, 1, sv); const sh = h - .36, hc = h - .15, r = .116;
@@ -173,7 +183,7 @@ export async function build(W, H) {
           float frontZ(vec3 p){ return p.z + (vnoise(p.xz * .05 + 3.) - .5) * 7. - p.y * .3; }   // director fix: smooth in z only — the .3-frequency term flickered the left wall`)
         .replace('#include <map_fragment>', '#include <map_fragment>\n' + map)
         .replace('#include <lights_fragment_end>', `#include <lights_fragment_end>
-          { float fz = frontZ(vLWP), lit = 1. - smoothstep(uFront - 5., uFront + 5., fz), ed = exp(-pow((fz - uFront) / uEdgeW, 2.)) * uEdgeK;
+          { float fz = frontZ(vLWP), lit = 1. - smoothstep(uFront - 9., uFront + 9., fz), ed = exp(-pow((fz - uFront) / uEdgeW, 2.)) * uEdgeK;
             float sh = mix(uShade, 1., lit); reflectedLight.directDiffuse *= sh; reflectedLight.directSpecular *= sh;
             totalEmissiveRadiance += diffuseColor.rgb * uEdgeC * ed + vec3(1., .835, .54) * gE * uGold * 2.6 * smoothstep(.0, .004, dot(reflectedLight.directDiffuse, vec3(.33)));   /* the gold edge is sunlight: the crowd's shadows cut it */
             if (uRimS > 0.) { vec3 Vd = normalize(vViewPosition); float fr = pow(1. - clamp(dot(normal, Vd), 0., 1.), 3.2); totalEmissiveRadiance += uRimC * fr * smoothstep(-.2, .55, dot(normal, uSunV)) * uRimS * mix(.25, 1., lit); } }`); };
@@ -194,7 +204,7 @@ export async function build(W, H) {
         float jx = smoothstep(.0, .05, fract(sx)) * smoothstep(1., .95, fract(sx)), jz = smoothstep(.0, .06, fract(q.y * 1.1)) * smoothstep(1., .94, fract(q.y * 1.1));
         c *= mix(.86, 1.08, h12(vec2(slab, row))) * mix(.62, 1., jx * jz * step(.7, N.y) + (1. - step(.7, N.y))); }
       c *= mix(1., 1.08, (1. - smoothstep(1.2, 3.2, abs(vLWP.x))) * step(.7, N.y));
-      if (N.y < .5) c *= .72;
+      if (N.y < .5) c *= .88;
       { float fe = fract((-10. - vLWP.z) / 1.6); gE = step(.7, N.y) * (1. - smoothstep(.0, .08, fe)) * step(vLWP.z, -10.); }   // the tread's front edge (P3: a line of gold)
       diffuseColor.rgb = c; }`;
   const M = {
@@ -338,12 +348,13 @@ export async function build(W, H) {
   // flowing in like rivers (「간디」's funeral from the air); the crowd filling a funnel that narrows onto the pool — the same direction and
   // outline as part 1's net bag (lake-peter3d-b.js uwA). No DOF, no tilt-shift (a miniature is a board game): depth by warm haze only.
   const sq = new THREE.Group(); sq.position.copy(PO); G.pool.add(sq);
-  const SUN4 = V(Math.cos(19 * D2R) * Math.sin(42 * D2R), Math.sin(19 * D2R), -Math.cos(19 * D2R) * Math.cos(42 * D2R));   // upper right: shadows lie to the lower left
-  const PA0 = 15, PB0 = 5.2, PNR = 5, PDR = .85, PST = .3, PYW = -(PNR * PST) - .34, PYF = PYW - 1.0;
-  const seP = (a, b, th, n = 6) => { const c = Math.cos(th), s = Math.sin(th); return [a * Math.sign(c) * Math.pow(Math.abs(c), 2 / n), b * Math.sign(s) * Math.pow(Math.abs(s), 2 / n)]; };
-  const ring = (a, b, N = 140) => { const pts = []; for (let i = 0; i < N; i++) { const [x, y] = seP(a, b, i / N * Math.PI * 2); pts.push(new THREE.Vector2(x, y)); } return pts; };
+  const SUN4 = V(Math.cos(32 * D2R) * Math.sin(40 * D2R), Math.sin(32 * D2R), -Math.cos(32 * D2R) * Math.cos(40 * D2R));   // fix 1: a warm low sun at 27° (32°: shadows ≈ 2.6 m, no hatching), upper right
+  const PA0 = 8.6, PB0 = 4.2, PNR = 5, PDR = .8, PST = .3, TP = .17, PYW = -(PNR * PST) - .34, PYF = PYW - 1.0;
+  // fix 1: a stepped TRAPEZOID (Siloam: wider toward the lens), squarer corners — not a pill. seP → world [x, z] (z toward the lens)
+  const seP = (a, b, th, n = 10) => { const c = Math.cos(th), s = Math.sin(th), z = b * Math.sign(s) * Math.pow(Math.abs(s), 2 / n); return [a * Math.sign(c) * Math.pow(Math.abs(c), 2 / n) * (1 + TP * z / b), z]; };
+  const ring = (a, b, N = 160) => { const pts = []; for (let i = 0; i < N; i++) { const [x, z] = seP(a, b, i / N * Math.PI * 2); pts.push(new THREE.Vector2(x, -z)); } return pts; };   // shape y = −world z
   const RA = k => PA0 + k * PDR, RB = k => PB0 + k * PDR, treadY = k => -(PNR - k) * PST;
-  function ringS(x, z) { let lo = -PB0 + .2, hi = 200; const f = s => Math.pow(Math.abs(x) / (PA0 + s), 6) + Math.pow(Math.abs(z) / (PB0 + s), 6) - 1; for (let i = 0; i < 28; i++) { const m = (lo + hi) / 2; if (f(m) > 0) lo = m; else hi = m; } return lo / PDR; }
+  function ringS(x, z) { let lo = -PB0 + .2, hi = 200; const f = s => Math.pow(Math.abs(x / (1 + TP * clamp(z / (PB0 + s), -1, 1))) / (PA0 + s), 10) + Math.pow(Math.abs(z) / (PB0 + s), 10) - 1; for (let i = 0; i < 28; i++) { const m = (lo + hi) / 2; if (f(m) > 0) lo = m; else hi = m; } return lo / PDR; }
   const groundAt = (x, z) => { const s = ringS(x, z); if (s >= PNR) return 0; if (s < 0) return PYF; const k = Math.floor(s), fr = s - k, y0 = treadY(k), y1 = k + 1 >= PNR ? 0 : treadY(k + 1); return lerp(y0, y1, ss(.86, 1, fr)); };
   { const parts = [];
     for (let k = 0; k < PNR; k++) { const sh = new THREE.Shape(ring(RA(k + 1), RB(k + 1))); sh.holes.push(new THREE.Path(ring(RA(k), RB(k)))); const dep = treadY(k) - PYF + .02, g = new THREE.ExtrudeGeometry(sh, { depth: dep, bevelEnabled: false, curveSegments: 1 }); g.rotateX(-Math.PI / 2); g.translate(0, PYF - .02, 0); parts.push([g]); }
@@ -362,8 +373,8 @@ export async function build(W, H) {
   pwM.customProgramCacheKey = () => 'pc-pw';
   { const w = new THREE.Mesh(new THREE.ShapeGeometry(new THREE.Shape(ring(RA(0) + .05, RB(0) + .05)), 1), pwM); w.rotation.x = -Math.PI / 2; w.position.y = PYW; w.receiveShadow = true; sq.add(w); }
   // the funnel the crowd fills (wide at the top, narrowing onto the pool: part 1's net bag), the five streets, and the town round them
-  const FZ0 = RB(PNR) + 1.5, FZ1 = 60, fHW = z => RA(PNR) * .92 + .62 * (-z - FZ0), inFun = (x, z, m = 0) => z <= -FZ0 + m && z >= -FZ1 - m && Math.abs(x) <= fHW(z) + m;
-  const inPlaza = (x, z, m = 0) => Math.pow(Math.abs(x) / (RA(PNR) + 4 + m), 6) + Math.pow(Math.abs(z) / (RB(PNR) + 4 + m), 6) < 1;
+  const FZ0 = RB(PNR) + 1.0, FZ1 = 36, fHW = z => RA(PNR) * .9 + .6 * (-z - FZ0), inFun = (x, z, m = 0) => z <= -FZ0 + m && z >= -FZ1 - m && Math.abs(x) <= fHW(z) + m;
+  const inPlaza = (x, z, m = 0) => ringS(x, z) < PNR + (4 + m) / PDR;
   const STRS = [[-30, -FZ1, -.42, -1], [30, -FZ1, .42, -1], [-fHW(-34) + 1, -34, -1, -.18], [fHW(-34) - 1, -34, 1, -.18], [RA(PNR) * .7, RB(PNR) + 2, .72, 1]].map(([x, z, dx, dz]) => { const d = V(dx, 0, dz).normalize(); return { m: V(x, 0, z), d }; });
   const distStr = (x, z) => { let best = 1e9; for (const s of STRS) { const px = x - s.m.x, pz = z - s.m.z, al = px * s.d.x + pz * s.d.z; if (al < -3) continue; best = Math.min(best, Math.abs(px * s.d.z - pz * s.d.x)); } return best; };
   { const r = rng(9091), hm = [], hc = [], rm = [], jm = [], am = [], ac = [], trees = [], palms = [];
@@ -396,26 +407,34 @@ export async function build(W, H) {
   { const r = rng(2026), slots = [];
     for (let k = -1; k <= PNR + 1; k++) { const sA = k < 0 ? -.7 : k + .5, a = PA0 + sA * PDR, b = PB0 + sA * PDR, sp = k < 0 ? 1.2 : .72; let per = 0, pv = seP(a, b, 0); for (let i = 1; i <= 300; i++) { const c = seP(a, b, i / 300 * 6.283); per += Math.hypot(c[0] - pv[0], c[1] - pv[1]); pv = c; }
       const n = Math.floor(per / sp); for (let i = 0; i < n; i++) { const [x, z] = seP(a, b, (i + r() * .4) / n * 6.283); slots.push({ x: x + (r() - .5) * .2, z: z + (r() - .5) * .2, d: Math.max(0, k) * 1.2 + r() * 2.5, w: k < 0 }); } }
-    for (let z = -FZ0 - .5; z >= -FZ1; z -= 1.22) for (let x = -fHW(z); x <= fHW(z); x += 1.22) { const jx = x + (r() - .5) * .7, jz = z + (r() - .5) * .7; if (!inFun(jx, jz) || r() > 1 - .42 * ss(14, FZ1, -jz)) continue; slots.push({ x: jx, z: jz, d: 7 + (-jz - FZ0) * .85 + r() * 5 }); }
+    for (let z = -FZ0 - .5; z >= -FZ1; z -= 1.45) for (let x = -fHW(z); x <= fHW(z); x += 1.45) { const jx = x + (r() - .5) * .7, jz = z + (r() - .5) * .7; if (!inFun(jx, jz) || r() > 1 - .42 * ss(14, FZ1, -jz)) continue; slots.push({ x: jx, z: jz, d: 7 + (-jz - FZ0) * .85 + r() * 5 }); }
     slots.sort((a, b) => a.d - b.d);
     const nearestStr = s => { if (s.z > 0) return 4; let bi = 0, bd = 1e9; STRS.forEach((t, i) => { if (i === 4) return; const d = Math.hypot(s.x - t.m.x, s.z - t.m.z); if (d < bd) { bd = d; bi = i; } }); return bi; };
     slots.forEach((s, i) => crowd4.push({ ...s, f: i / slots.length, st: nearestStr(s), v: 1.1 + r() * .25, lane: (r() - .5) * 4.6, col: new THREE.Color(CLOTH[(r() * CLOTH.length) | 0]).multiplyScalar(.82 + r() * .26), ph: r() }));
-    for (let i = 0; i < 1100; i++) { const st = i % 5, m = STRS[st].m; crowd4.push({ x: m.x, z: m.z, f: 1.02 + i / 1100 * 2.2, st, v: 1.1 + r() * .25, lane: (r() - .5) * 4.6, col: new THREE.Color(CLOTH[(r() * CLOTH.length) | 0]).multiplyScalar(.82 + r() * .26), ph: r(), late: true }); } }
-  const NP4 = crowd4.length, p4I = new THREE.InstancedMesh(p4G, p4M, NP4); crowd4.forEach((p, i) => p4I.setColorAt(i, p.col)); p4I.castShadow = true; p4I.receiveShadow = false; p4I.frustumCulled = false; sq.add(p4I);
+    for (let i = 0; i < 700; i++) { const st = i % 5, m = STRS[st].m; crowd4.push({ x: m.x, z: m.z, f: 1.02 + i / 1100 * 2.2, st, v: 1.1 + r() * .25, lane: (r() - .5) * 4.6, col: new THREE.Color(CLOTH[(r() * CLOTH.length) | 0]).multiplyScalar(.82 + r() * .26), ph: r(), late: true }); } }
+  // fix 1: back to the first draft's little figures (edc61537: robe + head cloth as two meshes, light cloth, a soft rim)
+  const bodyG4 = (() => { const lg = new THREE.LatheGeometry([[.2, 0], [.22, .05], [.2, .6], [.175, 1.0], [.2, 1.28], [.15, 1.39], [.05, 1.45]].map(([r, y]) => new THREE.Vector2(r, y)), 14); lg.scale(1, 1, .78);
+    const sh = new THREE.SphereGeometry(.17, 12, 8); sh.scale(1.42, .55, .82); sh.translate(0, 1.33, 0); return K.mergeGeometries([[lg], [sh]]); })();
+  const headG4 = (() => { const hd = new THREE.SphereGeometry(.118, 12, 8); hd.scale(.95, 1.05, 1); hd.translate(0, 1.56, .01); const fall = new THREE.SphereGeometry(.15, 12, 8, Math.PI * .1, Math.PI * .8 + Math.PI, 0, Math.PI * .6); fall.scale(1, 1.1, .9); fall.translate(0, 1.5, .03); return K.mergeGeometries([[hd], [fall]]); })();
+  const ROBE4 = ['#e9e1cf', '#dcd2bc', '#f0e8d8', '#cfc3a8', '#b8a688', '#d8ccb0', '#9a7c58', '#7c6448', '#5c6c7e', '#8a4a34', '#c8b48c', '#e4dac6'], CL4 = ['#efe7d6', '#d8cdb4', '#3b4f6b', '#8a7a66', '#e6dcc8', '#a89070', '#c4b08a', '#6a5440', '#f2ead8'];
+  const fig4 = patch(K.std('#ffffff', { roughness: .92 }), 'fig4', { rim: .5 }), fig4h = patch(K.std('#ffffff', { roughness: .92 }), 'fig4h', { rim: .5 });
+  const NP4 = crowd4.length, p4I = new THREE.InstancedMesh(bodyG4, fig4, NP4), p4H = new THREE.InstancedMesh(headG4, fig4h, NP4);
+  crowd4.forEach((p, i) => { p4I.setColorAt(i, new THREE.Color(ROBE4[(hsh(i, 81) * ROBE4.length) | 0])); p4H.setColorAt(i, new THREE.Color(CL4[(hsh(i, 82) * CL4.length) | 0])); });
+  for (const o of [p4I, p4H]) { o.castShadow = true; o.receiveShadow = true; o.frustumCulled = false; sq.add(o); }
   const arrive4 = (f, T) => { const a = T.c2, b = T.end; if (f < .28) return a - 14 + f / .28 * 13.6; if (f <= 1) return a + .05 + (b - a - .35) * Math.pow((f - .28) / .72, .92); return b + .3 + (f - 1) * 12; };
   // the baptisms: golden rings on the water, their rate rising smoothly 1 → 6 a second (one pure table of events)
-  const RINGS4 = []; { const r = rng(77); let acc = .5; for (let t = -2.5; t < 9.5; t += .01) { acc += .01 * (1 + 5 * ss(.4, 6.2, t)); if (acc >= 1) { acc -= 1; let x, z; do { x = (r() - .5) * 2 * (PA0 - 1.5); z = (r() - .5) * 2 * (PB0 - 1.2); } while (Math.pow(Math.abs(x) / (PA0 - 1.2), 6) + Math.pow(Math.abs(z) / (PB0 - 1), 6) > 1); RINGS4.push({ dt: t, x, z }); } } }
+  const RINGS4 = []; { const r = rng(77); let acc = .5; for (let t = -2.5; t < 9.5; t += .01) { acc += .01 * (1 + 5 * ss(.4, 6.2, t)); if (acc >= 1) { acc -= 1; let x, z; do { x = (r() - .5) * 2 * (PA0 - 1.5); z = (r() - .5) * 2 * (PB0 - 1.2); } while (ringS(x, z) > -1.6); RINGS4.push({ dt: t, x, z }); } } }
   const NR4 = RINGS4.length, r4Age = new THREE.InstancedBufferAttribute(new Float32Array(NR4), 1), r4G = new THREE.PlaneGeometry(1, 1); r4G.rotateX(-Math.PI / 2); r4G.setAttribute('aAge', r4Age);
   const r4M = new THREE.ShaderMaterial({ transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
     vertexShader: `attribute float aAge; varying float vA; varying vec2 vUv; void main(){ vA = aAge; vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * instanceMatrix * vec4(position, 1.); }`,
-    fragmentShader: `varying float vA; varying vec2 vUv; void main(){ if (vA <= 0. || vA > 1.6) discard; float k = vA / 1.6, d = length(vUv - .5) * 2., R = k; float a = .45 * (1. - k) * smoothstep(0., .12, vA);
-      float ring = exp(-pow((d - R) / (.035 + .04 * k), 2.)); gl_FragColor = vec4(vec3(1., .886, .627) * ring * a, 1.); }` });
-  const r4I = new THREE.InstancedMesh(r4G, r4M, NR4); { const mm = new THREE.Matrix4(); RINGS4.forEach((e, i) => { mm.compose(V(e.x, PYW + .03, e.z), new THREE.Quaternion(), V(6, 1, 6)); r4I.setMatrixAt(i, mm); }); } r4I.frustumCulled = false; r4I.renderOrder = 6; sq.add(r4I);
+    fragmentShader: `varying float vA; varying vec2 vUv; void main(){ if (vA <= 0. || vA > 1.6) discard; float k = vA / 1.6, d = length(vUv - .5) * 2., R = .08 + k * .92; float a = .26 * (1. - k) * (1. - k) * smoothstep(0., .4, vA);
+      float ring = exp(-pow((d - R) / (.09 + .1 * k), 2.)) * .8; gl_FragColor = vec4(vec3(1., .886, .627) * ring * a, 1.); }` });
+  const r4I = new THREE.InstancedMesh(r4G, r4M, NR4); { const mm = new THREE.Matrix4(); RINGS4.forEach((e, i) => { mm.compose(V(e.x, PYW + .03, e.z), new THREE.Quaternion(), V(4.4, 1, 4.4)); r4I.setMatrixAt(i, mm); }); } r4I.frustumCulled = false; r4I.renderOrder = 6; sq.add(r4I);
   // silver glints: each lives .3–.6 s, eases in and out, then is born again elsewhere (a pure function of t — never re-drawn at random per frame)
-  const NGL = 70, glG = new THREE.BufferGeometry(), glP = new Float32Array(NGL * 3), glA = new Float32Array(NGL); glG.setAttribute('position', new THREE.BufferAttribute(glP, 3)); glG.setAttribute('aK', new THREE.BufferAttribute(glA, 1));
+  const NGL = 40, glG = new THREE.BufferGeometry(), glP = new Float32Array(NGL * 3), glA = new Float32Array(NGL); glG.setAttribute('position', new THREE.BufferAttribute(glP, 3)); glG.setAttribute('aK', new THREE.BufferAttribute(glA, 1));
   const glints = new THREE.Points(glG, dotM(46, '#fff2d6')); glints.frustumCulled = false; glints.renderOrder = 7; sq.add(glints);
   function setGlints(t, warm) { for (let i = 0; i < NGL; i++) { const per = 1.1 + hsh(i, 51) * .9, life = .3 + hsh(i, 52) * .3, c = Math.floor((t + hsh(i, 53) * per) / per), ph = (t + hsh(i, 53) * per) / per - c, s = hsh(i * 7 + c, 54), u2 = hsh(i * 7 + c, 55);
-      let x = (s - .5) * 2 * (PA0 - 1), z = (u2 - .5) * 2 * (PB0 - .8); if (Math.pow(Math.abs(x) / (PA0 - .8), 6) + Math.pow(Math.abs(z) / (PB0 - .6), 6) > 1) { x *= .7; z *= .7; }
+      let x = (s - .5) * 2 * (PA0 - 1), z = (u2 - .5) * 2 * (PB0 - .8); if (ringS(x, z) > -1) { x *= .6; z *= .6; }
       const L = ph * per / life; glP[i * 3] = x; glP[i * 3 + 1] = PYW + .05; glP[i * 3 + 2] = z; glA[i] = L < 1 ? Math.sin(Math.PI * L) * (.35 + .35 * (x + 18) / 36) * (.7 + .6 * warm) : 0; }
     glG.attributes.position.needsUpdate = true; glG.attributes.aK.needsUpdate = true; }
   let VIS4 = 0, ARR4 = 0;
@@ -427,8 +446,8 @@ export async function build(W, H) {
       else if (dRem <= legB) { const k = dRem / legB, mx = Mo.x + side.x * p.lane * .3, mz = Mo.z + side.z * p.lane * .3; x = lerp(S.x, mx, k); z = lerp(S.z, mz, k); yaw = Math.atan2(-(S.x - mx), -(S.z - mz)); }
       else { const e = dRem - legB, lx = Mo.x + side.x * p.lane * (.3 + .7 * ss(0, 5, e)), lz = Mo.z + side.z * p.lane * (.3 + .7 * ss(0, 5, e)); x = lx + D.x * e; z = lz + D.z * e; yaw = Math.atan2(D.x, D.z); }
       const y = p.w && dRem <= 0 ? PYF + .02 : groundAt(x, z), sw = dRem > 0 ? Math.sin(t * 5.4 + p.ph * 6.283) * .03 : 0;
-      m4b.compose(V(x, y, z), q4b.setFromEuler(e4b.set(0, yaw, sw, 'YXZ')), one); p4I.setMatrixAt(i, m4b); });
-    p4I.instanceMatrix.needsUpdate = true; ARR4 = arr;
+      m4b.compose(V(x, y, z), q4b.setFromEuler(e4b.set(0, yaw, sw, 'YXZ')), one); p4I.setMatrixAt(i, m4b); p4H.setMatrixAt(i, m4b); });
+    p4I.instanceMatrix.needsUpdate = p4H.instanceMatrix.needsUpdate = true; ARR4 = arr;
     RINGS4.forEach((e, i) => r4Age.setX(i, t - (T.c2 + e.dt))); r4Age.needsUpdate = true; }
   function countVisible4() { let n = 0; const v = V(); cam.updateMatrixWorld(); for (let i = 0; i < NP4; i++) { p4I.getMatrixAt(i, m4b); v.setFromMatrixPosition(m4b).add(PO); v.y += .8; v.project(cam); if (v.z < 1 && Math.abs(v.x) <= 1 && Math.abs(v.y) <= 1) n++; } return n; }
 
@@ -446,8 +465,8 @@ export async function build(W, H) {
     const foot = g.createLinearGradient(0, WH * .86, 0, WH); foot.addColorStop(0, 'rgba(70,52,36,0)'); foot.addColorStop(1, 'rgba(70,52,36,.4)'); g.fillStyle = foot; g.fillRect(0, WH * .86, WW, WH * .14);
     if (F) F.grain(g, WW, WH, 9); }
   const P2DUST = Array.from({ length: 14 }, (_, i) => [hsh(i, 61), hsh(i, 62), hsh(i, 63)]);
-  const P2CROWD = Array.from({ length: 11 }, (_, i) => { const row = i % 2, x = 20 + (i / 10) * 1040 + (hsh(i, 71) - .5) * 70; return { x, y: row ? 2180 : 2010, s: 640 + hsh(i, 72) * 70, t0: hsh(i, 73) > .5 ? .75 : -.75, t1: x < 480 ? .55 : -.55, br: .96 + hsh(i, 74) * .12, h: 1.14 + hsh(i, 75) * .08, ord: i }; }).sort((a, b) => Math.abs(a.x - 480) - Math.abs(b.x - 480));
-  function p2Arm(t, T) { const a = T.p2; const rise = ss(a + .8, a + 1.8, t), arm = ss(a + 2.0, a + 3.15, t), h = lerp(1.14, 1.26, rise), sh = h - .36, S = [.255, sh * .9];   // the shoulder joint inside the robe's outline (no knob)
+  const P2CROWD = Array.from({ length: 8 }, (_, i) => { const row = i % 2, x = 30 + (i / 7) * 1020 + (hsh(i, 71) - .5) * 50; return { x, y: row ? 2010 : 1900, s: 600 + hsh(i, 72) * 60, t0: hsh(i, 73) > .5 ? .8 : -.8, t1: x < 480 ? .62 : -.62, br: .96 + hsh(i, 74) * .12, h: 1.14 + hsh(i, 75) * .08, ord: i }; }).sort((a, b) => Math.abs(a.x - 480) - Math.abs(b.x - 480));
+  function p2Arm(t, T) { const a = T.p2; const rise = ss(a + .6, a + 1.9, t), arm = ss(a + 2.0, a + 3.15, t), h = lerp(1.06, 1.26, rise), sh = h - .36, S = [.33, sh - .1];   // fix 1: a clear rise (bowed → upright, 19 %); the shoulder joint at the broad shoulder's corner
     const ang = lerp(-1.47, 35 * D2R, arm), L = lerp(.5, .53, arm), W2 = [S[0] + Math.cos(ang) * L + .04 * (1 - arm), S[1] + Math.sin(ang) * L + .006 * Math.sin(t * 1.6) * arm]; return { rise, arm, h, S, W: W2, ...ik(S, W2, .33, .3, -1) }; }
   function drawP2(ctx, t, T) { const a = T.p2, u = clamp((t - a) / (T.p3 - a)), zoom = lerp(1, .92, eio(u)), cx = W / 2, cy = H * .42, b = { k: zoom, ox: cx * (1 - zoom), oy: cy * (1 - zoom) };
     ctx.save(); ctx.setTransform(zoom, 0, 0, zoom, cx * (1 - zoom), cy * (1 - zoom)); ctx.drawImage(p2Wall, -(p2Wall.width - W) / 2, -(p2Wall.height - H) / 2); ctx.restore();
@@ -461,9 +480,9 @@ export async function build(W, H) {
       const tg = p2Tmp.getContext('2d'); tg.setTransform(1, 0, 0, 1, 0, 0); tg.clearRect(0, 0, W, H); tg.filter = `blur(${blur}px)`; tg.drawImage(p2Mask, 0, 0); tg.filter = 'none'; return tg; };
     const shade = (tg, k = 1) => { tg.globalCompositeOperation = 'source-in'; tg.fillStyle = `rgba(128,120,168,${k})`; tg.fillRect(0, 0, W, H); tg.globalCompositeOperation = 'source-over';   // #6b5f73 over #f3d29a: a cool violet-grey, never black
       ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalCompositeOperation = 'multiply'; ctx.drawImage(p2Tmp, 0, 0); ctx.restore(); };
-    shade(layer(9 * zoom, g => { for (const c of P2CROWD) { const k = ss(a + 1.4 + c.ord * .15, a + 2.0 + c.ord * .15, t); fman(g, b, c.x, c.y, c.s, { h: c.h, br: c.br, hx: lerp(c.t0, c.t1, k) * .05, hy: .02 * k, lean: lerp(c.t0, c.t1, k) * -.04 }); } }));
-    shade(layer(9 * zoom, g => { const P0 = [480, 1103], s = 560; fman(g, b, P0[0], P0[1], s, { h: pose.h, br: .98, hy: lerp(-.1, 0, pose.rise), lean: lerp(.03, 0, pose.rise) });
-      atf(g, b, P0[0], P0[1], s, lerp(.03, 0, pose.rise), 1, 1.06); sleeveArm(g, pose.S, pose.W, .33, .3, -1, openHand, Math.atan2(pose.W[1] - pose.E[1], pose.W[0] - pose.E[0])); }));
+    shade(layer(5 * zoom, g => { for (const c of P2CROWD) { const k = ss(a + 1.6 + c.ord * .15, a + 2.2 + c.ord * .15, t); cman(g, b, c.x, c.y, c.s, { h: c.h, br: c.br, turn: lerp(c.t0, c.t1, k) }); } }));
+    shade(layer(9 * zoom, g => { const P0 = [480, 1103], s = 560; pman(g, b, P0[0], P0[1], s, { h: pose.h, br: 1.04, hy: lerp(-.2, 0, pose.rise), bow: 1 - pose.rise, lean: lerp(.04, 0, pose.rise) });
+      atf(g, b, P0[0], P0[1], s, lerp(.04, 0, pose.rise), 1, 1.06); sleeveArm(g, pose.S, pose.W, .33, .3, -1, openHand, Math.atan2(pose.W[1] - pose.E[1], pose.W[0] - pose.E[0])); }));
     ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); const bt = p2Tmp.getContext('2d'); bt.globalCompositeOperation = 'source-over'; bt.clearRect(0, 0, W, H); bt.drawImage(p2Band, 0, 0); bt.globalCompositeOperation = 'destination-out'; bt.filter = 'blur(14px)'; bt.drawImage(p2Mask, 0, 0); bt.filter = 'none'; bt.globalCompositeOperation = 'source-over';
     ctx.globalCompositeOperation = 'screen'; ctx.drawImage(p2Tmp, 0, 0); ctx.globalCompositeOperation = 'source-over';
     const vg = ctx.createRadialGradient(W / 2, H * .44, H * .3, W / 2, H * .44, H * .78); vg.addColorStop(0, 'rgba(40,26,20,0)'); vg.addColorStop(1, 'rgba(40,26,20,.38)'); ctx.fillStyle = vg; ctx.fillRect(0, 0, W, H); ctx.restore(); }
@@ -474,7 +493,7 @@ export async function build(W, H) {
     P.pose(PT, { ...id, lean: -.3 * bowK - .03 - .03 * armK - .03 * fwd, head: [-.34 * bowK + .1 * (1 - bowK), id.head[1] * .5], swing: [id.swing[0] - .1 * bowK, id.swing[1]], hands: [null, tg], handsW: [0, armK] }); }
   function poseCrowd(t) { for (const p of crowd) { const U = p.userData, id = P.idle(t, U.ph, { s: U.s }); P.pose(p, { ...id, head: [.12 + id.head[0], id.head[1]] }); } }
   function poseLower(t, T) { for (const p of lower) { const U = p.userData;
-      const tPass = T.fr0 + (U.z0 + 110) / 45, k = ss(tPass - .1, tPass + .9, t);
+      const tPass = T.fr0 + (U.z0 + 72) / 30, k = ss(tPass - .1, tPass + .9, t);
       if (U.kind === 'walk') { const w = P.walk(p, t, T.t0 + U.t0 - 2, { T: 1.15, L: .55 }); const d0 = P.walk(p, T.t0, T.t0 + U.t0 - 2, { T: 1.15, L: .55 }).dist; const z = U.z0 - (w.dist - d0);
         p.position.set(p.position.x, Math.max(gY(z) - .06, RISE * Math.max(0, ZS0 - z) / RUN - RISE * .5), z); P.pose(p, { ...w, head: [.12 * k, 0] }); }
       else { const id = P.idle(t, U.ph, { s: U.s }), turn = Math.atan2(Math.sin(0 - p.rotation.y), Math.cos(0 - p.rotation.y)); P.pose(p, { ...id, twist: id.twist + turn * .25 * k, head: [.16 * k, turn * .45 * k] }); } } }
@@ -493,7 +512,7 @@ export async function build(W, H) {
     sunLamp.power = 900 * sunK; const L = film.look; L.exposure = lerp(.9, 1.0, warm); L.saturation = lerp(.86, 1.05, warm); doorLamps.forEach(d => d.power = .9); mixC(L.shadowTint, '#c4cce8', 1, '#d6d2e6', 1, warm); mixC(L.highTint, '#e8ecf4', 1, '#fff0d8', 1, warm); L.contrast = 1.05; L.vignette = .3; }
   // P1 (= s1 of fix 1/2, kept): the wind of light down the street
   function s1(t, T) { FAR.visible = true; G.street.visible = true; G.pool.visible = false; sky.mesh.visible = true; crowdLayer(0); LU.uGold.value = 0; for (const p of lower) p.visible = true; SK.sunDir.value.copy(SUN1); shadowAt(V(0, 3, -24), 62, SUN1);
-    const u = (t - T.t0) / (T.c1 - T.t0), sunK = 1, zF = -110 + 45 * (t - T.fr0);
+    const u = (t - T.t0) / (T.c1 - T.t0), sunK = 1, zF = -72 + 30 * (t - T.fr0);   // fix 1: slower, wider (no wall lighting in two frames)
     const warm = lerp(.3, .85, u); streetLight(warm, sunK); LU.uRimC.value.set('#ffc078').multiplyScalar(1.6);
     LU.uFront.value = zF; LU.uShade.value = .1; LU.uEdgeK.value = 1.0; LU.uEdgeW.value = 3.6; LU.uEdgeC.value.set('#ffd8a0');
     frontLamp.pos.set(0, gY(Math.min(zF, 20)) + 3.2, zF); frontLamp.power = 60 * sunK * (1 - ss(14, 30, zF)); frontLamp.size = 8;
@@ -506,7 +525,7 @@ export async function build(W, H) {
   const P3C = (t, T) => { const u = clamp((t - T.p3) / (T.c2 - T.p3)), e = u * u * .55 + u * .45, c = V(.9, lerp(1.25, 3.6, e), 34), fov = vert ? 19 : 12;
     return { c, l: V(PETER.x + 1.25, PLAT - 2.3 + lerp(0, 1.6, e), PETER.z), fov }; };
   let SUNP3 = null;
-  function p3(t, T) { FAR.visible = false; G.street.visible = true; G.pool.visible = false; sky.mesh.visible = true; LU.uGold.value = 1; for (const p of lower) p.visible = false;
+  function p3(t, T) { FAR.visible = false; G.street.visible = true; G.pool.visible = false; sky.mesh.visible = true; LU.uGold.value = 0; for (const p of lower) p.visible = false;
     if (!SUNP3) { const q = P3C((T.p3 + T.c2) / 2, T); setCam(q.c, q.l, q.fov); cam.updateMatrixWorld(); const d = V(230 / W * 2 - 1, 1 - 520 / H * 2, .5).unproject(cam).sub(cam.position).normalize(); SUNP3 = d; }   // the sun placed where the plan wants it (x 230, y 520), up-left of him
     for (const p of crowd) { const keep = p.position.z < -47; if (p.userData.lay !== keep) { p.userData.lay = keep; p.traverse(o => o.layers.set(keep ? 0 : 3)); } } crowdL = -1;
     SK.sunDir.value.copy(SUNP3); shadowAt(V(0, 3, -30), 46, SUNP3);
@@ -518,15 +537,15 @@ export async function build(W, H) {
     const q = P3C(t, T); setCam(q.c, q.l, q.fov); film.dofCfg.focus = q.c.distanceTo(PETER); film.dofCfg.aperture = .9; film.dofCfg.maxCoc = 18;
     posePeter(t, T); poseCrowd(t); setMotes(t, 'p3', zE, .5 * ek, 4); motes.visible = true; }
   // P4: the aerial
-  const P4C = (t, T) => { const u = clamp((t - T.c2) / (T.end - T.c2)), D = 140 * Math.exp(Math.log(300 / 140) * u), pit = lerp(66, 84, u * .85 + u * u * .15) * D2R, yaw = (-3 + 6 * u) * D2R, fov = vert ? 30 : 20;
-    const off = D * Math.tan(3.1 * D2R) / Math.sin(pit), tgt = PO.clone().add(V(0, 0, -off - 2)), dir = V(Math.sin(yaw) * Math.cos(pit), Math.sin(pit), Math.cos(yaw) * Math.cos(pit));
+  const P4C = (t, T) => { const u = clamp((t - T.c2) / (T.end - T.c2)), D = 96 * Math.exp(Math.log(122 / 96) * u), pit = lerp(57, 61, u) * D2R, yaw = (-2 + 4 * u) * D2R, fov = vert ? 36 : 24;
+    const off = D * Math.tan(1.6 * D2R) / Math.sin(pit), tgt = PO.clone().add(V(0, 0, off - 6)), dir = V(Math.sin(yaw) * Math.cos(pit), Math.sin(pit), Math.cos(yaw) * Math.cos(pit));
     return { c: tgt.clone().addScaledVector(dir, D), l: tgt, fov, D }; };
-  function p4(t, T) { G.street.visible = false; G.pool.visible = true; sky.mesh.visible = false; LU.uGold.value = 0; shadowAt(PO.clone().add(V(0, 0, -30)), 100, SUN4);
+  function p4(t, T) { G.street.visible = false; G.pool.visible = true; sky.mesh.visible = false; LU.uGold.value = 0; shadowAt(PO.clone().add(V(0, 0, -12)), 80, SUN4);
     const u = clamp((t - T.c2) / (T.end - T.c2)), late = ss(T.c2b - .3, T.c2b + 1.6, t), warm = .35 + .65 * ss(T.c2, T.end, t);
-    const a = film.atmos; a.color.set('#e9c48c').multiplyScalar(.78); a.colorUp.copy(a.color); a.density = lerp(.0002, .00072, u); a.falloff = .0005; a.base = 0; a.start = 20; a.scatter = .5; a.anisotropy = .6; a.phaseMix = .7; a.max = 3000;
-    hemi.color.set('#b8bccc'); hemi.groundColor.set('#7a5c40'); hemi.intensity = .46; sunL.color.set('#ffd49c'); sunL.intensity = 3.9; sunLamp.power = 0; frontLamp.power = 0; doorLamps.forEach(d => d.power = 0);
-    LU.uFront.value = 1e4; LU.uShade.value = 1; LU.uEdgeK.value = 0; LU.uRimC.value.set('#ffc078').multiplyScalar(.6); pwU.uWarm.value = warm; pwU.uT.value = t;
-    const L = film.look; L.exposure = lerp(1.5, 1.82, late) + .1 * ss(T.end - 1.2, T.end, t); L.saturation = 1.02; L.contrast = 1.06; L.shadowTint.set('#c8c4dc'); L.highTint.set('#fff0d6'); L.vignette = .26;
+    const a = film.atmos; a.color.set('#e9c48c').multiplyScalar(.78); a.colorUp.copy(a.color); a.density = .0024; a.falloff = .002; a.base = 0; a.start = 20; a.scatter = .5; a.anisotropy = .6; a.phaseMix = .7; a.max = 3000;
+    hemi.color.set('#b8bccc'); hemi.groundColor.set('#7a5c40'); hemi.intensity = .52; sunL.color.set('#ffc98a'); sunL.intensity = 3.7; sunLamp.power = 0; frontLamp.power = 0; doorLamps.forEach(d => d.power = 0);
+    LU.uFront.value = 1e4; LU.uShade.value = 1; LU.uEdgeK.value = 0; LU.uRimC.value.set('#ffc078').multiplyScalar(1.2); pwU.uWarm.value = warm; pwU.uT.value = t;
+    const L = film.look; L.exposure = lerp(1.0, 1.22, late) + .08 * ss(T.end - 1.2, T.end, t); L.saturation = 1.02; L.contrast = 1.06; L.shadowTint.set('#c8c4dc'); L.highTint.set('#fff0d6'); L.vignette = .26;
     const q = P4C(t, T); setCam(q.c, q.l, q.fov); film.dofCfg.focus = q.D; film.dofCfg.aperture = 0; film.dofCfg.maxCoc = 1;   // no DOF, no tilt-shift
     setCrowd4(t, T); setGlints(t, warm); motes.visible = false; }
   const STAGE = { s1, p3, p4 };
@@ -557,6 +576,8 @@ export async function build(W, H) {
       if (q && q[0] > -W * .4 && q[0] < W * 1.4) { const sunK = sunVis(sd), grow = nm === 'p3' ? ss(T.p3, T.c2, t) : 0;
         corona(ctx, q[0], q[1], sunK * (nm === 's1' ? .62 : .72 + .2 * grow), nm === 's1' ? .85 : 1.05, SUN_RINGS);
         godRays(ctx, q[0], q[1], sunK * (nm === 's1' ? .28 : .34 + .12 * grow)); } }
+    if (nm === 'p4') { const hz = ctx.createRadialGradient(W / 2, H * .42, H * .22, W / 2, H * .45, H * .72); hz.addColorStop(0, 'rgba(236,200,146,0)'); hz.addColorStop(1, 'rgba(236,200,146,.42)');
+      ctx.save(); ctx.globalCompositeOperation = 'screen'; ctx.fillStyle = hz; ctx.fillRect(0, 0, W, H); ctx.restore(); }
     if (nm === 'p4') { // the sun, off the frame at the upper right, flares in on 「사람을 취하리라던」; the end blooms gold for the cut to N173
       const k = ss(T.c2b - .3, T.c2b + 1.8, t), e = ss(T.end - 1.0, T.end, t), lg = ctx.createRadialGradient(W * 1.15, -H * .08, 0, W * 1.15, -H * .08, W * 1.5);
       lg.addColorStop(0, `rgba(255,222,160,${.1 + .38 * k + .12 * e})`); lg.addColorStop(.45, `rgba(255,196,124,${.03 + .14 * k + .08 * e})`); lg.addColorStop(1, 'rgba(255,170,100,0)');

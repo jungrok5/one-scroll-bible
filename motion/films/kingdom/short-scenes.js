@@ -81,7 +81,7 @@ export function beats(B) {
   const r0 = B.N111, r1 = B.L41, p2 = pc.N111 ? pc.N111[1] : r0 + 2.7, r1len = p2 - r0;
   T.room = [r0, r1]; T.p2 = p2;
   T.open = [r0 + .444 * r1len, r0 + .444 * r1len + .55]; T.reach = [T.open[0], r0 + .778 * r1len]; T.calm = [T.reach[1], p2]; T.jcut = p2 - .3;
-  T.pan = [p2, Math.min(p2 + 3.0, r1 - .2)]; T.shadow = [p2 + 1.5, p2 + 2.9]; T.walk = [p2 + 2.25, p2 + 3.45];
+  T.pan = [p2, Math.min(p2 + 3.0, r1 - .2)]; T.shadow = [p2 + 1.9, Math.min(p2 + 3.8, r1 - .1)];
   // ROAD
   const d0 = B.N150, d1 = B.N25; T.road = [d0, d1]; T.gust = [d0 + .5, d0 + 2.6]; T.gust2 = [d0 + 2.7, d0 + 4.9];
   // ALLEY: the name is said at the end of the first piece 「제자들과, 베드로.」; the head lifts as the second piece begins
@@ -117,14 +117,33 @@ const ROOM = `#version 300 es
   float floorH(vec2 q){ float m = smoothstep(.6, .7, fb3(q * .9 + 7.)); return mix(.45 + .35 * fb3(q * 2.2) + .15 * fb3(q * 13.), .4 + .5 * stones(q * vec2(1., 1.4), .5, .4), m); }
   float g2(float x, float c, float w){ float u = (x - c) / w; return exp(-u * u); }
   // the bed's height field above the mattress line (metres), and what lies there: 0 straw, 1 wool blanket, 2 madder veil, 3 linen roll
-  float bedH(vec2 q0, out float kind){ vec2 q = q0 - vec2(.3, 0.); float zc = (q.y - uZc) / .2, acr = exp(-zc * zc), roll = .1 * g2(q.x, 1.92, .11) * smoothstep(uB0.z, uB0.z + .1, q.y) * smoothstep(uB1.z, uB1.z - .1, q.y);
-    float h; kind = 0.;
-    if (uState < .5) { float x = q.x, body = (.21 * g2(x, 1.38, .2) * (1. + uBreath) + .25 * g2(x, .82, .24) + .18 * g2(x, .28, .2) + .11 * g2(x, -.12, .14)) * acr;
-      float head = .12 * g2(x, 1.78, .1) * exp(-zc * zc * 1.6);
-      h = max(max(body, head + .06 * g2(x, 1.78, .16) * acr), roll); kind = roll > body + .01 && roll > head ? 3. : head > body * .8 && x > 1.62 ? 2. : body > .015 ? 1. : 0.;
-      h += .006 * fb3(q * 23.) * step(.5, kind); }
-    else { float press = -.022 * smoothstep(-.1, .15, q.x) * smoothstep(1.7, 1.45, q.x) * acr, heap = .2 * exp(-pow((q.x + .2) / .23, 2.) - zc * zc * .6) * (.72 + .5 * fb3(q * 6.));
-      h = max(.015 + press, max(heap, roll)); kind = roll > heap && roll > .02 ? 3. : heap > .03 ? 1. : 0.; h += .01 * fb3(q * 19.); }
+  float ell(vec2 q, vec2 c, vec2 r, float H){ vec2 d = (q - c) / r; float u = 1. - dot(d, d); return u > 0. ? H * sqrt(u) : 0.; }
+  float smax(float a, float b, float k){ float h = clamp(.5 + .5 * (a - b) / k, 0., 1.); return mix(b, a, h) + k * h * (1. - h); }
+  // fix 1 (b3-room-d1): the bed holds a readable lying woman — feet, shins, bent knees, thigh, hip, waist, shoulder, neck, the head on the raised
+  // roll — under a raw-wool blanket that drapes down to the straw; the madder veil round the head and over the roll. Body coordinates: x along the
+  // bed (q.x, head to the right), z across it about uZc. In r2 the same footprint is pressed into the straw and the blanket lies thrown back at the foot.
+  float bodyH(vec2 q){ vec2 b = vec2(q.x, q.y - uZc); float h = 0., k = .11;   // one continuous body under the wool (strong soft union: no row of bumps)
+    h = smax(h, ell(b, vec2(.0, .0), vec2(.3, .12), .12), k);            // feet and shins
+    h = smax(h, ell(b, vec2(.42, -.08), vec2(.17, .16), .19), k);        // the bent knees, a little forward
+    h = smax(h, ell(b, vec2(.86, -.01), vec2(.36, .2), .26), k);         // thigh into the hip (she lies on her side, the hip the high point)
+    h = smax(h, ell(b, vec2(1.25, .02), vec2(.18, .17), .2), k);         // waist
+    h = smax(h, ell(b, vec2(1.5, .02), vec2(.19, .19), .25 * (1. + uBreath)), k);   // shoulder and chest (the breath)
+    return h; }
+  float bedH(vec2 q0, out float kind){ vec2 q = q0 - vec2(.3, 0.), b = vec2(q.x, q.y - uZc); float h; kind = 0.;
+    float roll = min(.17, ell(b, vec2(1.92, 0.), vec2(.2, .34), .26));
+    if (uState < .5) {
+      float body = bodyH(q), skirt = .07 * exp(-pow(b.y / .3, 2.)) * smoothstep(-.32, -.1, q.x) * smoothstep(1.72, 1.5, q.x);
+      float blanket = smax(body, skirt, .06) + .008 * sin(q.x * 26. + b.y * 11. + 2. * fb3(q * 4.)) * smoothstep(.02, .1, body);   // wool folds
+      float neck = ell(b, vec2(1.68, .03), vec2(.13, .14), .2), head = .14 + ell(b, vec2(1.84, .03), vec2(.15, .12), .11);
+      float veil = smax(neck, head * step(.001, ell(b, vec2(1.84, .03), vec2(.2, .17), 1.)), .06) + .006 * sin(b.y * 40. + q.x * 12.);
+      h = max(max(blanket, veil), roll);
+      kind = veil >= h - .002 && veil > .01 ? 2. : roll >= h - .002 && roll > blanket ? 3. : blanket > .02 ? 1. : 0.;
+      h += .005 * fb3(q * 23.) * step(.5, kind); }
+    else {
+      float foot = bodyH(q), press = -.045 * smoothstep(.0, .1, foot) + .012 * smoothstep(.0, .03, foot) * (1. - smoothstep(.03, .12, foot));   // her pressed shape, the straw pushed up at its rim
+      float fx = smoothstep(-.42, -.25, q.x) * (1. - smoothstep(.12, .34, q.x)), heap = fx * (.05 + .05 * smoothstep(.3, -.2, q.x)) * smoothstep(.42, .2, abs(b.y)) * (1. + .22 * sin(q.x * 18. + .8 * sin(b.y * 5.)) + .1 * sin(b.y * 9. + q.x * 4.));   // the blanket thrown back toward the foot: long folds across the bed
+      float rd = roll - .05 * exp(-pow((q.x - 1.88) / .09, 2.) - pow(b.y / .1, 2.));   // the roll keeps the dent of her head
+      h = max(.02 + press, max(heap, rd)); kind = rd > heap && rd > .03 ? 3. : heap > .025 ? 1. : clamp(-press * 9., 0., .4); h += .008 * fb3(q * 19.); }   // (straw: kind 0…0.4 = how pressed)
     return h; }
   float bedHs(vec2 q){ float k; return bedH(q, k); }
   // the door's light at P (0..1)
@@ -139,7 +158,7 @@ const ROOM = `#version 300 es
     if (uShoulder > 0.) { float a = xf + .05; k *= 1. - uShoulder * .85 * smoothstep(a - .025, a + .025, qa) * (1. - smoothstep(a + .16, a + .21, qa)) * (1. - smoothstep(1.22, 1.32, qy)); }
     return k; }
   vec3 court(vec3 o3, vec3 d){   // the sunlit courtyard beyond the door
-    float zw = uZB + .42 + 8., tW = (zw - o3.z) / d.z, tG = d.y < 0. ? -o3.y / d.y : 1e9; vec3 c; float shade;
+    float zw = uZB + .42 + 2., tW = (zw - o3.z) / d.z, tG = d.y < 0. ? -o3.y / d.y : 1e9; vec3 c; float shade;
     if (tG < tW) { vec3 P = o3 + d * tG; shade = smoothstep(uDoor.x - .5, uDoor.x + .4, P.x + (P.z - uZB) * .15); c = vec3(1., .86, .66) * (.9 + .25 * fb3(P.xz * 1.4)) * mix(.42, 1., shade); }
     else { vec3 P = o3 + d * tW; if (P.y > 3.4 + .3 * fb3(vec2(P.x * .8, 1.))) c = vec3(1., .97, .9) * 1.9;
       else { shade = smoothstep(uDoor.x - 1.6, uDoor.x - .5, P.x); c = vec3(.957, .878, .722) * (1.35 + .2 * fb3(P.xy * vec2(1.6, 2.6)) + .25 * wallH(P.xy * 1.3)) * mix(.45, 1., shade); } }
@@ -178,14 +197,16 @@ const ROOM = `#version 300 es
       else { q = P.xz; Tg = vec3(1., 0., 0.); Bt = vec3(0., 0., 1.); }
       vec3 alb;
       if (id == 6) { // straw, wool, madder veil, linen
-        float n = fb3(P.xz * vec2(9., 30.)); alb = bk > 2.5 ? vec3(.66, .6, .5) * (.85 + .2 * n) : bk > 1.5 ? vec3(.557, .231, .18) * (.85 + .2 * n) : bk > .5 ? vec3(.46, .42, .37) * (.8 + .22 * fb3(P.xz * 14.) + .12 * sin(P.x * 34. + fb3(P.xz * 5.) * 6.)) : vec3(.5, .42, .25) * (.7 + .4 * fb3(P.xz * vec2(40., 6.)));
+        float n = fb3(P.xz * vec2(9., 30.)); alb = bk > 2.5 ? vec3(.68, .62, .52) * (.85 + .2 * n) : bk > 1.5 ? vec3(.557, .231, .18) * (.85 + .2 * n) : bk > .5 ? vec3(.42, .37, .31) * (.82 + .2 * fb3(P.xz * 14.)) : vec3(.64, .52, .27) * (.62 + .45 * fb3(P.xz * vec2(70., 5.)) + .1 * fb3(P.xz * vec2(9., 200.))) * (1. - 1.9 * bk);   // pressed straw is darker: her shape shows
         amp = 0.; hx = hy = 0.; }
       else if (id == 7) { alb = vec3(.32, .22, .14) * (.7 + .4 * fb3(P.xy * vec2(3., 40.))); amp = 0.; hx = hy = 0.; }
       else if (id == 3) { h = floorH(q); hx = floorH(q + vec2(e, 0.)) - h; hy = floorH(q + vec2(0., e)) - h; alb = vec3(.5, .41, .32) * (.62 + .5 * h); }
       else if (id == 4) { float bm = smoothstep(.06, .0, abs(fract(P.z / .7) - .5) - .36); alb = mix(vec3(.12, .09, .07), vec3(.3, .24, .18), bm) * (.7 + .5 * fb3(P.xz * vec2(6., 1.))); hx = hy = 0.; amp = 0.; }
       else if (id == 5) { alb = vec3(.55, .47, .38) * (.3 + .55 * stones(q, .3, .19) + .15 * fb3(q * 9.)) * .7; hx = hy = 0.; amp = 0.; }
       else { h = wallH(q); hx = wallH(q + vec2(e, 0.)) - h; hy = wallH(q + vec2(0., e)) - h; alb = vec3(.29, .255, .225) * (.55 + .62 * h);   // dark lime plaster #2b2622–#4a4038
-        if (id == 0 && P.x > uNiche.x && P.x < uNiche.y && P.y > uNiche.z && P.y < uNiche.w) alb *= .38;   // the wall niche
+        { float cx = (uNiche.x + uNiche.y) * .5, hw = (uNiche.y - uNiche.x) * .5, u = (P.x - cx) / hw, top = uNiche.w - hw * (1. - sqrt(max(0., 1. - u * u)));
+          float inN = (1. - smoothstep(.96, 1., abs(u))) * smoothstep(uNiche.z - .005, uNiche.z + .005, P.y) * (1. - smoothstep(top - .01, top + .01, P.y));
+          alb *= 1. - inN * (.45 + .25 * smoothstep(uNiche.z, top, P.y)); }   // the wall niche: an arched recess, darker toward its top
         if (id == 0 && P.y < .3) alb *= .8; }
       vec3 Nb = amp > 0. ? normalize(N - (Tg * hx + Bt * hy) / e * amp * .08) : N;
       float s = id == 4 ? 0. : doorLight(P), sd = s * max(dot(Nb, -uSun), 0.);
@@ -194,7 +215,10 @@ const ROOM = `#version 300 es
       // the open door's daylight spill (soft, grows as the door opens) and the warm bounce off the lit floor and bed
       vec3 Ld = uDc - P; float dd = length(Ld); Ld /= dd; float dl = max(dot(Nb, Ld), 0.) * max(dot(-Ld, uDn), 0.) / (1. + dd * dd / 1.4) * uOpen;
       col = alb * (vec3(.03, .027, .026) + SUNC * uSunI * sd + vec3(1., .86, .7) * .13 * fillS + vec3(1., .82, .6) * .28 * dl + vec3(1., .74, .5) * .05 * uSunI * smoothstep(2.5, 4.5, uReach) * (.4 + .6 * max(Nb.y, 0.)));
-      if (id == 0 && P.x > uSlit.x && P.x < uSlit.y && P.y > uSlit.z && P.y < uSlit.w) col = vec3(1., .93, .78) * 1.15 * (.75 + .25 * fb3(P.xy * vec2(30., 4.)));
+      if (id == 0) { float fx = smoothstep(uSlit.x - .03, uSlit.x + .03, P.x) * (1. - smoothstep(uSlit.y - .03, uSlit.y + .03, P.x)), fy = smoothstep(uSlit.z - .012, uSlit.z + .012, P.y) * (1. - smoothstep(uSlit.w - .012, uSlit.w + .012, P.y));
+        float slats = 1. - .75 * (1. - smoothstep(.0, .012, abs(fract((P.x - uSlit.x) / ((uSlit.y - uSlit.x) / 3.)) - .5) - .44));
+        vec2 sc = vec2((uSlit.x + uSlit.y) * .5, (uSlit.z + uSlit.w) * .5), dv = (P.xy - sc) / vec2(.55, .22);
+        col = mix(col, vec3(1., .9, .72) * .62 * slats, fx * fy) + vec3(1., .86, .66) * .035 * exp(-dot(dv, dv)); }   // a soft shuttered slit, not a lamp
     }
     // haze in the door's light (fixed dither per pixel), and a faint glow round the slit
     float hz = 0., j = hh(fc * .73 + 3.1), tm = min(tt, 14.); for (int i = 0; i < 26; i++) { float s = (float(i) + j) / 26. * tm; vec3 Q = O + d * s; if (Q.z > uZB) break; float k = doorLight(Q); if (k <= 0.) continue; hz += k * (.45 + 1.1 * fb3(vec2(Q.x * 1.6 + Q.z * .7 + uT * .06, Q.y * 2.2 - uT * .04))); }
@@ -335,16 +359,22 @@ export async function build(W, H, opt = {}) {
     const d = RM.sun2, s = (RM.ZB - P[2]) / (-d[2]); if (s < 0) return 0; const Qx = P[0] - d[0] * s, Qy = P[1] - d[1] * s, xf = lerp(RM.door[1], RM.door[0], open);
     return (Qx > xf && Qx < RM.door[1] && Qy > 0 && Qy < RM.door[2] ? 1 : 0) * clamp((reach - s) / .5); }
   // fever breath: phase integrated over a period easing 0.9 → 1.6 s
-  function breath(t, T) { let ph = 0; const dt = .02; for (let x = T.room[0]; x < t; x += dt) ph += dt * TAU / lerp(.9, 1.6, sine((x - T.calm[0]) / (T.calm[1] - T.calm[0]))); return Math.sin(ph) * lerp(.075, .05, ss(T.calm[0], T.calm[1], t)); }
+  function breath(t, T) { let ph = 0; const dt = .02; for (let x = T.room[0]; x < t; x += dt) ph += dt * TAU / lerp(1.5, 2.2, sine((x - T.calm[0]) / (T.calm[1] - T.calm[0]))); return Math.sin(ph) * lerp(.13, .09, ss(T.calm[0], T.calm[1], t)); }
   const openAt = (t, T) => sine((t - T.open[0]) / (T.open[1] - T.open[0])), reachAt = (t, T) => t < T.p2 ? lerp(2.6, 4.9, hermite([[0, 0], [.5, .55], [1, 1]], clamp((t - T.reach[0]) / (T.reach[1] - T.reach[0])))) * ss(T.open[0] - .01, T.open[0] + .05, t) : lerp(4.6, 6.4, sine((t - T.p2) / (T.room[1] - T.p2)));
   // ---- things in the room (2D, projected through the shot's camera)
   const poly3 = (g, c, pts) => { const q = pts.map(p => projC(c, p)); if (q.some(v => v[2] <= 0)) return false; g.beginPath(); spline(g, q.map(v => [v[0], v[1]])); return true; };
-  function drawJug(g, c) { const x = .7, z = RM.ZB - .12, y0 = 1.17; poly3(g, c, [[x - .07, y0, z], [x - .12, y0 + .12, z], [x - .1, y0 + .26, z], [x - .04, y0 + .31, z], [x - .045, y0 + .37, z], [x + .045, y0 + .37, z], [x + .04, y0 + .31, z], [x + .1, y0 + .26, z], [x + .12, y0 + .12, z], [x + .07, y0, z]]) && g.fill(); }
+  function drawJug(g, c) { const x = .7, z = RM.ZB - .1, y0 = RM.niche[2] + .005; poly3(g, c, [[x - .07, y0, z], [x - .12, y0 + .12, z], [x - .1, y0 + .26, z], [x - .04, y0 + .31, z], [x - .045, y0 + .37, z], [x + .045, y0 + .37, z], [x + .04, y0 + .31, z], [x + .1, y0 + .26, z], [x + .12, y0 + .12, z], [x + .07, y0, z]]) && g.fill(); }
   // r1 foreground (lower left, a little soft): a low stool with an earthen bowl, the folded wet cloth and the lamp put out, one thread of smoke
   function drawStool(g, c, shot) { const z = 1.85;   // (no stool: the bowl, the folded wet cloth and the lamp put out stand on the floor)
-    poly3(g, c, [[.3, 0, z], [.33, .07, z], [.52, .07, z], [.55, 0, z]]) && g.fill();   // the bowl
     if (shot === 1) { poly3(g, c, [[.6, 0, z + .05], [.61, .035, z + .05], [.78, .04, z + .05], [.8, 0, z + .05]]) && g.fill();   // the folded wet cloth
       poly3(g, c, [[.12, 0, z - .05], [.14, .04, z - .05], [.24, .05, z - .05], [.27, .025, z - .05], [.25, 0, z - .05]]) && g.fill(); } }   // the lamp, out
+  function drawBowl(g, c) { const z = 1.85, cx = .425, r = .12, h = .075;
+    const rim = []; for (let k = 0; k < 24; k++) { const a = k / 24 * TAU; rim.push(projC(c, [cx + r * Math.cos(a), h, z + r * Math.sin(a)])); } if (rim.some(v => v[2] <= 0)) return;
+    const body = []; for (let k = 0; k <= 12; k++) { const a = Math.PI + k / 12 * Math.PI; body.push(projC(c, [cx + r * Math.cos(a), h, z + r * .02 * Math.sin(a)])); }
+    const bot = projC(c, [cx, 0, z]); g.save(); g.fillStyle = '#4b3423'; g.beginPath(); body.forEach((v, k) => k ? g.lineTo(v[0], v[1]) : g.moveTo(v[0], v[1])); g.quadraticCurveTo(bot[0] + (body[0][0] - bot[0]) * .3, bot[1] + 6, body[0][0], body[0][1]); g.fill();
+    { const c0 = projC(c, [cx, h, z]), gr = g.createRadialGradient(c0[0], c0[1] - 4, 2, c0[0], c0[1], r * c0[2] * 1.1); gr.addColorStop(0, '#8a7a66'); gr.addColorStop(1, '#3e2c1e'); g.fillStyle = gr; }
+    g.beginPath(); rim.forEach((v, k) => k ? g.lineTo(v[0], v[1]) : g.moveTo(v[0], v[1])); g.closePath(); g.fill();   // its inside, a little water catching the light
+    g.strokeStyle = '#9a7656'; g.lineWidth = 2; g.stroke(); g.restore(); }   // its lit rim
   function smoke(g, c, t, T) { const base = [.22, .06, 1.8]; g.save(); g.lineCap = 'round';
     for (let i = 0; i < 2; i++) { const pts = []; for (let k = 0; k <= 22; k++) { const h = k / 22 * .9, w = .01 + .05 * h; pts.push(projC(c, [base[0] + w * Math.sin(h * 9 - t * 1.3 + i) + .03 * h, base[1] + h, base[2]])); }
       g.strokeStyle = `rgba(190,180,165,${.16 - .05 * i})`; g.lineWidth = 2.2 + 2 * i; g.beginPath(); pts.forEach((p, k) => k ? g.lineTo(p[0], p[1]) : g.moveTo(p[0], p[1])); g.stroke(); } g.restore(); }
@@ -362,7 +392,7 @@ export async function build(W, H, opt = {}) {
     fill([[jar[0] - .03, jar[1] + .09], [jar[0] - .035, jar[1] + .16], [jar[0] + .035, jar[1] + .16], [jar[0] + .03, jar[1] + .09]]);
     const S = [X - .03, 1.36 + bob], Wr = [jar[0] + .1, jar[1] + .09], a = ik2(S, Wr, .27, .25, E => E[1] - E[0] * .3); cap(S, a.E, .05, .042); cap(a.E, a.W, .04, .032);   // the arm, the hand on the handle (stays there)
     return { X }; }
-  const zWall = RM.ZB + .42 + 8, zWalk = RM.ZB + 7.6;   // (the shader's courtyard wall is at the same zWall)
+  const zWall = RM.ZB + .42 + 2, zWalk = RM.ZB + 1.5;   // (the shader's courtyard wall is at the same zWall)
   function roomFrame(t, T) {
     const c = camRoomAt(t, T), open = openAt(t, T), reach = reachAt(t, T);
     gl.bindFramebuffer(gl.FRAMEBUFFER, null); gl.viewport(0, 0, VW, VH); gl.disable(gl.BLEND); gl.useProgram(PR.p);
@@ -376,13 +406,16 @@ export async function build(W, H, opt = {}) {
     o.save(); o.setTransform(1, 0, 0, 1, 0, 0); o.globalAlpha = 1; o.globalCompositeOperation = 'source-over'; o.filter = 'none'; o.drawImage(glc, 0, 0); o.restore();
     const id = g => g.setTransform(1, 0, 0, 1, 0, 0);
     // the jug in the niche (dark)
-    mass(o, [540, 960, 1], g => { id(g); drawJug(g, c); }, { fill: '#16110d', blur: 1.2, alpha: .9 });
+    { const a = projC(c, [.58, 1.3, RM.ZB - .1]), b = projC(c, [.82, 1.3, RM.ZB - .1]);   // the earthen jar in the niche: dark side left, the slit's light on its right shoulder
+      if (a[2] > 0) { const gr = o.createLinearGradient(a[0], a[1], b[0], b[1]); gr.addColorStop(0, '#1b130e'); gr.addColorStop(.6, '#4a3424'); gr.addColorStop(1, '#7a5638');
+        o.save(); id(o); o.filter = 'blur(.8px)'; o.fillStyle = gr; drawJug(o, c); o.restore();
+        o.save(); id(o); o.fillStyle = '#0f0b08'; const m = projC(c, [.7, RM.niche[2] + .375, RM.ZB - .1]); o.beginPath(); o.ellipse(m[0], m[1], .04 * m[2], .012 * m[2], 0, 0, TAU); o.fill(); o.restore(); } }
     if (c.shot === 1) {
       // the madder veil's corner on the roll is in the shader (the one saturated colour of r1); foreground stool things, soft
       mass(o, [540, 960, 1], g => { id(g); drawStool(g, c, 1); }, { fill: '#3a2c20', blur: 1.8, rim: { c: 'rgb(255,214,160)', dx: -2, dy: 2, a: .3 * open } });
-      o.save(); id(o); o.filter = 'blur(1.5px)'; smoke(o, c, t, T); o.restore();
+      o.save(); id(o); o.filter = 'blur(1.2px)'; drawBowl(o, c); smoke(o, c, t, T); o.restore();
     } else {
-      mass(o, [540, 960, 1], g => { id(g); drawStool(g, c, 2); }, { fill: '#4a3a2c', blur: 1.2, rim: { c: 'rgb(255,225,180)', dx: 0, dy: 2, a: .3 } });
+      o.save(); id(o); o.filter = 'blur(.6px)'; drawBowl(o, c); o.restore();
       mass(o, [540, 960, 1], g => { id(g); drawWetCloth(g, c); }, { fill: '#8c8270', blur: 1, rim: { c: 'rgb(255,235,200)', dx: 0, dy: 2, a: .35 } });
       // the courtyard through the door: the seated men in the shade at the left jamb (soft, shoulders only at the edge), her shadow on the far wall, then her
       const dz = RM.ZB + .42, inner = [[RM.door[0], 0, dz], [RM.door[0], RM.door[2], dz], [RM.door[1], RM.door[2], dz], [RM.door[1], 0, dz]].map(p => projC(c, p));
@@ -390,25 +423,13 @@ export async function build(W, H, opt = {}) {
       if (inner.every(v => v[2] > 0)) {
         const clipDoor = g => { g.beginPath(); inner.forEach((v, i) => i ? g.lineTo(v[0], v[1]) : g.moveTo(v[0], v[1])); g.closePath(); g.clip(); g.beginPath(); g.rect(-4000, -4000, 9000, 9000); leaf.forEach((v, i) => i ? g.lineTo(v[0], v[1]) : g.moveTo(v[0], v[1])); g.closePath(); g.clip('evenodd'); };
         // her shadow on the far wall: right → left, 1.4 s, larger than she is (the low sun rakes the wall)
-        const shk = (t - T.shadow[0]) / (T.shadow[1] - T.shadow[0]);
+        const shk = (t - T.shadow[0]) / (T.shadow[1] - T.shadow[0]);   // (fix 1: large and clear — the beat that works)
         if (shk > -.05 && shk < 1.05) { ta.setTransform(1, 0, 0, 1, 0, 0); ta.clearRect(0, 0, VW, VH); ta.save(); clipDoor(ta); ta.fillStyle = '#000';
-          const sc = 1.6, SX0 = -5.75, Pw = p => { const v = projC(c, [SX0 + p[0] * sc, p[1] * sc - .05, zWall]); return [v[0], v[1]]; };   // (local walker coordinates from x 0, scaled onto the wall)
+          const sc = 1.25, SX0 = -1.85, Pw = p => { const v = projC(c, [SX0 + p[0] * sc, p[1] * sc - .05, zWall]); return [v[0], v[1]]; };   // (local walker coordinates from x 0, scaled onto the wall)
           walkerShape(ta, Pw, t, T.shadow[0], 0, 1.3 / sc); ta.restore();
-          o.save(); id(o); o.globalCompositeOperation = 'multiply'; o.filter = 'blur(3px)'; tcx.setTransform(1, 0, 0, 1, 0, 0); tcx.globalCompositeOperation = 'source-over'; tcx.clearRect(0, 0, VW, VH); tcx.fillStyle = 'rgb(150,118,90)'; tcx.fillRect(0, 0, VW, VH); tcx.globalCompositeOperation = 'destination-in'; tcx.drawImage(tA, 0, 0); tcx.globalCompositeOperation = 'source-over';
-          o.globalAlpha = .85; o.drawImage(tC, 0, 0); o.restore(); }
-        // she herself crosses the bright gap once, small and backlit; the bloom eats her edges, her veil's rim takes the light
-        const wk = (t - T.walk[0]) / (T.walk[1] - T.walk[0]);
-        if (wk > -.05 && wk < 1.05) { const Pz = p => { const v = projC(c, [p[0], p[1], zWalk]); return [v[0], v[1]]; }, x0 = WALK_X0;
-          ta.setTransform(1, 0, 0, 1, 0, 0); ta.clearRect(0, 0, VW, VH); ta.save(); clipDoor(ta); ta.fillStyle = '#1b130f'; walkerShape(ta, Pz, t, T.walk[0], x0, 1.3); ta.restore();
-          o.save(); id(o); o.filter = 'blur(1.3px)'; o.drawImage(tA, 0, 0); o.restore();
-          // the rim: the shape minus itself pushed away from the light (behind her, above), coloured as the bed's veil
-          tb.setTransform(1, 0, 0, 1, 0, 0); tb.globalCompositeOperation = 'source-over'; tb.clearRect(0, 0, VW, VH); tb.drawImage(tA, 0, 0); tb.globalCompositeOperation = 'destination-out'; tb.drawImage(tA, 1.6, 2.2); tb.globalCompositeOperation = 'source-in'; tb.fillStyle = VEIL_LIT; tb.fillRect(0, 0, VW, VH); tb.globalCompositeOperation = 'source-over';
-          o.save(); id(o); o.filter = 'blur(.8px)'; o.drawImage(tB, 0, 0); o.restore(); }
-        // the seated men in the shade at the left jamb: soft dark shoulders (heads behind the jamb)
-        ta.setTransform(1, 0, 0, 1, 0, 0); ta.clearRect(0, 0, VW, VH); ta.save(); clipDoor(ta); ta.fillStyle = '#20180f';
-        for (const [mx, mz, h] of [[-4.4, 6.2, .9], [-4.0, 6.9, .86], [-3.7, 6.4, .88]]) { const Pm = p => { const v = projC(c, [p[0], p[1], mz]); return [v[0], v[1]]; };
-          ta.beginPath(); spline(ta, [[mx - .3, 0], [mx - .28, h - .25], [mx - .22, h - .06], [mx - .1, h], [mx + .1, h], [mx + .22, h - .06], [mx + .28, h - .25], [mx + .3, 0]].map(Pm)); ta.fill(); }
-        ta.restore(); o.save(); id(o); o.filter = 'blur(6px)'; o.globalAlpha = .9; o.drawImage(tA, 0, 0); o.restore();
+          o.save(); id(o); o.globalCompositeOperation = 'multiply'; o.filter = 'blur(1.6px)'; tcx.setTransform(1, 0, 0, 1, 0, 0); tcx.globalCompositeOperation = 'source-over'; tcx.clearRect(0, 0, VW, VH); tcx.fillStyle = 'rgb(96,74,54)'; tcx.fillRect(0, 0, VW, VH); tcx.globalCompositeOperation = 'destination-in'; tcx.drawImage(tA, 0, 0); tcx.globalCompositeOperation = 'source-over';
+          o.globalAlpha = .92; o.drawImage(tC, 0, 0); o.restore(); }
+        // (fix 1: her crossing in the doorway and the seated men are removed — they read as a crouching cut-out and a floating bar)
       }
     }
     // dust in the door's light only (fixed motes drifting; a constant count), soft by their distance from the focus

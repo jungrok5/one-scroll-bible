@@ -32,7 +32,7 @@ function buildText() {
 function draw(ctx, u) {
   const t = Math.min(T0 + u, T1 - .001);
   if (JW) JW.draw(ctx, t, TB); else { ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H); }
-  band(ctx, 1);
+  band(ctx, TB && t >= TB.cuts[1] && t < TB.cuts[2] ? 1.5 : 1);   // over the bright road the words need a deeper band
   for (const [kind, id, a, b] of TEXT) { if (t < a - .1 || t > b + .1) continue;
     if (kind === 'sub') Film.sub(ctx, id, t, a, b); else if (kind === 'label') Film.label(ctx, id, t, a, b);
     else Film.quote(ctx, id, t, a, b, { bottom: Film.subBottom() + 40, hl: Film.lines[id].hl, hlk: ss(a + .4, a + 1.6, t) }); }

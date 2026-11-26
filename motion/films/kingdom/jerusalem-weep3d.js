@@ -65,8 +65,9 @@ export function beats(B) {
   const T = { t0: B.N133, end: B.C13 };
   T.n133b = P('N133', 1, B.N133 + 4.1); T.q108b = P('Q108', 1, B.Q108 + 5.2); T.q44b = P('Q108b', 1, B.Q108b + 4.2);
   T.n135bb = P('N135b', 1, B.N135b + 3.5); T.n136b = P('N136', 1, B.N136 + 4.3); T.n137b = P('N137', 1, B.N137 + 3.2);
-  T.cuts = [B.N133, T.n133b, B.L102, B.L102 + 1.2, B.N135b, B.N136, B.N137];   // J1 … J7 starts (J4 carries Q108 and Q108b in one camera)
-  T.names = ['J1', 'J2', 'J3', 'J4', 'J5', 'J6', 'J7'];
+  T.cuts = [B.N133, T.n133b, B.L102 + 1.2, B.N135b, B.N136, B.N137];   // J1 J2 J4 J5 J6 J7 starts (fix 1: no J3; J4 carries Q108 and Q108b in one camera)
+  T.names = ['J1', 'J2', 'J4', 'J5', 'J6', 'J7'];
+  T.ruin = [B.Q108b, T.q44b + .7];             // J4: a clean cut to the charcoal ruin, held, a clean cut back on 「보살핌 받는 날을」
   T.jStop = B.N134 - .25;                    // his last step lands just before 「예수님은 우셨습니다」 (the one stop in the block)
   T.jDec = 1.9;                              // he slows over two steps
   T.drain = [B.N134 - .35, B.N134 + 1.6];    // the crowd's clock runs down (1 → 0.3)
@@ -182,13 +183,15 @@ export async function build(W, H) {
   terrain(20, -70, 380, 380, 'near', .03);                   // 1 m round the road where the crowd walks
   const S4C = { x: -205, z: -640 };                          // the lower city patch the S4 camera looks down on
   terrain(S4C.x, S4C.z, 160, 160, 'city', .04);
+  const HILLS = [];
   // far hills beyond the city to the west (and the Mount's shoulders behind the camera in S1)
   { const hm = new THREE.MeshStandardMaterial({ color: '#9a7e6c', roughness: 1 });
     for (let i = 0; i < 11; i++) { const g = new THREE.SphereGeometry(1, 40, 14, 0, Math.PI * 2, 0, Math.PI / 2), r = rng(31 + i), pos = g.attributes.position;
       for (let k = 0; k < pos.count; k++) pos.setY(k, pos.getY(k) * (1 + .22 * noise1(pos.getX(k) * 3 + i, i)));
-      g.computeVertexNormals(); const m = new THREE.Mesh(g, hm); m.scale.set(260 + r() * 260, 50 + r() * 45, 160 + r() * 120); m.position.set((i - 5) * 330 + r() * 120, -20, -2000 - r() * 500); S.add(m); } }
+      g.computeVertexNormals(); const m = new THREE.Mesh(g, hm); m.scale.set(260 + r() * 260, 50 + r() * 45, 160 + r() * 120); m.position.set((i - 5) * 330 + r() * 120, -20, -2000 - r() * 500); S.add(m); HILLS.push({ x: m.position.x, z: m.position.z, sx: m.scale.x, sy: m.scale.y * 1.1, sz: m.scale.z }); } }
 
   // ---------------------------------------------------------------- the city (olivet3d.js wallM + the Temple's layout, copied and re-placed)
+  const nCity0 = S.children.length, PLATREF = {};
   const wallM = (base, key, { win = 0 } = {}) => { const m = new THREE.MeshStandardMaterial({ color: base, roughness: .92 });
     m.onBeforeCompile = sh => { sh.uniforms.uCSun = RIMU.uSunV; sh.uniforms.uCRim = CRIM;
       sh.fragmentShader = sh.fragmentShader.replace('#include <emissivemap_fragment>', '#include <emissivemap_fragment>\n { vec3 Vd = normalize(vViewPosition); float fr = pow(1. - clamp(dot(normal, Vd), 0., 1.), 4.); totalEmissiveRadiance += uCRim * fr * smoothstep(.15, .75, dot(normal, uCSun)); }').replace('#include <common>', '#include <common>\nuniform vec3 uCSun, uCRim;');
@@ -235,7 +238,7 @@ export async function build(W, H) {
   // the Temple Mount: platform, Solomon's Porch along the east edge facing us, the Royal Stoa south, the courts, the sanctuary facing east
   const ALTAR = V(20, TMB.top + 4, -540);
   { const { x0, x1, z0, z1, top } = TMB, cx = (x0 + x1) / 2, cz = (z0 + z1) / 2, base = -60;
-    box(x1 - x0, top - base, z1 - z0, cx, cz, M.stone, { y: base });
+    PLATREF.v = box(x1 - x0, top - base, z1 - z0, cx, cz, M.stone, { y: base });
     box(26, 20, z1 - z0 - 10, x0 + 13, cz, M.pale, { y: top }); box(20, 7, z1 - z0 - 14, x0 + 25.6, cz, M.dark, { y: top + 2, cast: false });
     box(x1 - x0 - 30, 1.6, 14, cx + 6, z1 - 9, M.pale, { y: top + 11 }); box(x1 - x0 - 32, 10.5, 9, cx + 6, z1 - 10, M.shade, { y: top, cast: false });
     for (let i = 0; i < 26; i++) box(1.2, 10.6, 1.2, x0 + 22 + i * ((x1 - x0 - 34) / 25), z1 - 4.6, M.pale, { y: top });
@@ -286,11 +289,12 @@ export async function build(W, H) {
       const m = new THREE.Mesh(new THREE.PlaneGeometry(2.2, 1.4), K.std(cols[(r() * cols.length) | 0], { side: THREE.DoubleSide, roughness: .9 }));
       const sd = r() < .5 ? -1 : 1; m.position.set(h.x + sd * (h.w / 2 + .6), hT(h.x, h.z) + 1.0, h.z); m.rotation.set(0, Math.PI / 2, .55 * sd); m.rotation.order = 'YZX'; m.castShadow = true; S.add(m); } }
 
+  const CITYHIDE = S.children.slice(nCity0).filter(o => o !== PLATREF.v);
   // ---------------------------------------------------------------- olive trees, rocks, tufts on the Mount and in the valley
   const leafM = K.std('#5e6648', { roughness: .9 }), trunkM = K.std('#3e3226', { roughness: .95 });
   { const r = rng(4242), pts = [];
     for (let n = 0; n < 6000 && pts.length < 520; n++) { const x = (r() - .5) * 900, z = 150 - r() * 560; if (z < -400) continue;
-      const rn = roadNear(x, z); if (rn.d < 8) continue; if (z > -35 && z < 125 && Math.abs(x - 18) < 32) continue; const dens = .25 + .75 * ss(-200, -330, z) + .3 * ss(90, 40, z); if (r() > dens) continue; pts.push([x, z, 4.5 + r() * 2.5]); }
+      const rn = roadNear(x, z); if (rn.d < 8) continue; if (z > -35 && z < 125 && Math.abs(x - 18) < 32) continue; if (z < -35 && z > -345 && Math.abs(x - 12) < 170) continue; const dens = .25 + .75 * ss(-200, -330, z) + .3 * ss(90, 40, z); if (r() > dens) continue; pts.push([x, z, 4.5 + r() * 2.5]); }
     const tg = new THREE.CylinderGeometry(.2, .32, 1, 6); tg.translate(0, .5, 0); const cg = new THREE.IcosahedronGeometry(1, 1);
     const ti = new THREE.InstancedMesh(tg, trunkM, pts.length), ci = new THREE.InstancedMesh(cg, leafM, pts.length * 7), m4 = new THREE.Matrix4(), q = new THREE.Quaternion(), c = new THREE.Color();
     pts.forEach(([x, z, h], i) => { const y = hT(x, z) - .1; ti.setMatrixAt(i, m4.compose(V(x, y, z), q.setFromEuler(new THREE.Euler((r() - .5) * .25, 0, (r() - .5) * .25)), V(1, h * .45, 1)));
@@ -299,7 +303,7 @@ export async function build(W, H) {
     ti.castShadow = ci.castShadow = true; ti.receiveShadow = ci.receiveShadow = true; S.add(ti, ci); }
   { const r = rng(919), n = 1400, g = new THREE.IcosahedronGeometry(1, 1), pp = g.attributes.position; for (let k = 0; k < pp.count; k++) { const f = 1 + .3 * Math.sin(pp.getX(k) * 5 + pp.getZ(k) * 3); pp.setXYZ(k, pp.getX(k) * f, Math.max(-.2, pp.getY(k)) * f, pp.getZ(k) * f); } g.computeVertexNormals();
     const inst = new THREE.InstancedMesh(g, K.std('#8a7a62', { roughness: 1 }), n), m4 = new THREE.Matrix4(), q = new THREE.Quaternion(), c = new THREE.Color();
-    for (let i = 0; i < n; i++) { let x, z; do { x = (r() - .5) * 500; z = 160 - r() * 520; } while (roadNear(x, z).d < 4.5);
+    for (let i = 0; i < n; i++) { let x, z; do { x = (r() - .5) * 500; z = 160 - r() * 200; } while (roadNear(x, z).d < 4.5 || Math.abs(x - 12) < 110);
       const sz = .2 + r() * r() * .7; q.setFromEuler(new THREE.Euler(0, r() * 6, 0)); inst.setMatrixAt(i, m4.compose(V(x, hT(x, z), z), q, V(sz * (1 + r() * .4), sz * (.6 + r() * .3), sz))); c.setHSL(.09 + r() * .04, .14 + r() * .08, .4 + r() * .12); inst.setColorAt(i, c); }
     inst.castShadow = inst.receiveShadow = true; S.add(inst); }
   const tuftU = { uT: { value: 0 } };
@@ -340,12 +344,15 @@ export async function build(W, H) {
     const mk = (geo, m) => { const o = new THREE.Mesh(geo, m); o.castShadow = o.receiveShadow = true; n.add(o); return o; };
     mk(L([[.137, .12], [.142, .2], [.14, .236], [.12, .253], [0, .257]]), clothMat);
     mk(new THREE.CylinderGeometry(.145 * s * hk, .145 * s * hk, .032 * s * hk, 24, 1, true), bandM).position.y = .2 * s * hk;
-    mk(L([[.235, -.06], [.2, .02], [.162, .11], [.145, .185]], Math.PI + 1.0, Math.PI * 2 - 2.0), clothMat); return g; };
-  const mkMan = (r, o = {}) => { const head = r() < .75 ? 'cloth' : 'bare';
+    mk(L([[.19, -.035], [.172, .03], [.152, .11], [.143, .185]], Math.PI + 1.0, Math.PI * 2 - 2.0), clothMat);
+    { const sh = U.shoulders.children[0], ym = new THREE.Mesh(new THREE.CapsuleGeometry(.075 * s, .36 * s * (U.arms[1].S.x / (.235 * s)), 4, 10), sh ? sh.material : clothMat); ym.rotation.z = Math.PI / 2; ym.position.y = U.torsoH - .035 * s; ym.castShadow = ym.receiveShadow = true; if (!child0(g)) U.upper.add(ym); }
+    return g; };
+  const child0 = g => g.userData.s < .8;
+  const mkMan = (r, o = {}) => { const head = r() < .75 || o.head === 'cloth' ? 'cloth' : 'bare'; delete o.head;
     const g = P.robeMan({ h: 1.66 + r() * .18, broad: 1.04 + r() * .14, head: 'cloth', mat: robes[(r() * robes.length) | 0], cloth: mantles[(r() * mantles.length) | 0], face: faceM, ...o });
     P.headwear(g, head, { mat: mantles[(r() * mantles.length) | 0] }); if (head === 'cloth') tidyCloth(g); g.userData.kind = 'man'; return g; };
   const mkWoman = r => { const g = P.robeMan({ h: 1.5 + r() * .12, broad: .86 + r() * .08, head: 'veil', mat: robes[(r() * robes.length) | 0], cloth: mantles[(r() * mantles.length) | 0], face: faceM }); g.userData.kind = 'woman'; return g; };
-  const mkChild = r => { const hc = r() < .6, g = P.robeMan({ h: 1.0 + r() * .3, child: true, broad: .9, head: hc ? 'cloth' : 'veil', mat: robes[(r() * robes.length) | 0], cloth: mantles[(r() * mantles.length) | 0], face: faceM }); if (hc) tidyCloth(g); g.userData.kind = 'child'; return g; };
+  const mkChild = r => { const hc = true || r() < .6, g = P.robeMan({ h: 1.0 + r() * .3, child: true, broad: .9, head: hc ? 'cloth' : 'veil', mat: robes[(r() * robes.length) | 0], cloth: mantles[(r() * mantles.length) | 0], face: faceM }); if (hc) tidyCloth(g); g.userData.kind = 'child'; return g; };
   // HIM: the same clothes as the other men (oatmeal robe, grey-brown head cloth tied with a band), broad level shoulders
   const jRobe = rimSun(K.std('#c8b694', { roughness: .95, side: THREE.DoubleSide }), 'jr', 1.15), jCloth = rimSun(K.std('#8a7a66', { roughness: .95, side: THREE.DoubleSide }), 'jc', 1.15);
   const J = P.robeMan({ h: 1.78, broad: 1.18, head: 'cloth', mat: jRobe, cloth: jCloth, face: faceM }); P.headwear(J, 'cloth'); S.add(J);
@@ -383,7 +390,7 @@ tidyCloth(J);   // the tied head cloth (fix 2)
       const u = u0 + (r() - .5) * .45, rel = s - (S_STOP - 7.5);           // relative to his own s at the block start (he is ≈7.5 m before his stop)
       if (Math.abs(u - J_U) < .9 && rel < 1.6 && rel > -46) continue;   // the lane behind him stays clear (the long lens sees him through it)
       if (Math.abs(u - J_U) < .8 && rel > -1.2 && rel < 1.6) continue;
-      const kk = r(), g = kk < .14 ? mkChild(r) : kk < .44 ? mkWoman(r) : mkMan(r); S.add(g);
+      const kk = r(), g = kk < .12 ? mkChild(r) : mkMan(r, { head: 'cloth' }); S.add(g);
       const U = g.userData, child = U.kind === 'child', Tg = child ? .78 + r() * .1 : 1.05 + r() * .14;
       U.s0 = s; U.u = u; U.Tg = Tg; U.L = CV * Tg / 2; U.ph = r(); U.gp = r() * Tg;
       const a = r(); U.act = child ? (a < .45 ? 'palm' : 'walk') : U.kind === 'woman' ? (a < .35 ? 'palm' : a < .45 ? 'cheer' : 'walk') : (a < .5 ? 'palm' : a < .64 ? 'cheer' : 'walk');
@@ -394,7 +401,7 @@ tidyCloth(J);   // the tied head cloth (fix 2)
   const SIDE = [];
   { const r = rng(5150);
     for (let i = 0; i < 46; i++) { const s = S_STOP - 120 + r() * 170, sd = r() < .5 ? -1 : 1, u = sd * (4.2 + r() * 4.5), p = posOn(s, u);
-      const kk = r(), g = kk < .2 ? mkChild(r) : kk < .45 ? mkWoman(r) : mkMan(r); S.add(g);
+      const kk = r(), g = kk < .15 ? mkChild(r) : mkMan(r, { head: 'cloth' }); S.add(g);
       g.position.set(p.x, p.y, p.z); g.rotation.y = face(-p.tz * -sd, p.tx * -sd) + (r() - .5) * .8;   // facing the road
       const U = g.userData; U.sRoad = s; U.ph = r(); U.act = r() < .55 ? 'palm' : 'cheer'; U.wph = r() * 6.283; U.wT = 1.1 + r() * .4; U.wA = .12 + r() * .08;
       if (U.act === 'palm') { const pm = new THREE.Mesh(palmGeo, palmM); pm.castShadow = true; pm.scale.setScalar(U.kind === 'child' ? .7 : 1); S.add(pm); U.palm = pm; U.side = 1; }
@@ -409,7 +416,7 @@ tidyCloth(J);   // the tied head cloth (fix 2)
       g.computeVertexNormals(); const m = new THREE.Mesh(g, K.std(cols[i % cols.length], { roughness: .95, side: THREE.DoubleSide })); m.receiveShadow = true; S.add(m); CLOAKS.push(m); } }
 
   // the crowd's clock: 1× until the drain, then down to 0.3× (an integral of a smoothstep — no step in speed); after S3 it stays 0.3×
-  const crowdTau = t => { const a = T.drain[0], D = T.drain[1] - T.drain[0], k = .7; if (t <= a) return t; const u = (t - a) / D; return u < 1 ? t - k * D * rampI(u) : t - k * (D * .5 + (t - a - D)); };
+  const crowdTau = t => { const a = T.drain[0], D = T.drain[1] - T.drain[0], k = .5; if (t <= a) return t; const u = (t - a) / D; return u < 1 ? t - k * D * rampI(u) : t - k * (D * .5 + (t - a - D)); };
   function poseWave(g, t, tc, w, extra = {}) {   // a walking/standing figure with its arms: a palm waved high, or both hands up
     const U = g.userData, s = U.s, act = U.act, ph = tc * 6.283 / U.wT + U.wph;
     const P0 = { ...w, ...extra };
@@ -457,8 +464,8 @@ tidyCloth(J);   // the tied head cloth (fix 2)
     if (!c.stopped) { const w = P.walk(J, c.tau, 0, { T: JTg, L: JL }); P.pose(J, { ...w, head: [-.03, 0], breath: P.breath(t, .3), swing: w.swing.map(v => v * .7) }); return; }
     const n = c.nh, odd = n % 2 === 1, k = clamp((t - T.jStop) / .9), id = P.idle(t, .3, { s });
     const stance = odd ? [{ u: -JL / 2, lift: 0 }, { u: JL / 2, lift: 0 }] : [{ u: JL / 2, lift: 0 }, { u: -JL / 2, lift: 0 }];
-    P.pose(J, { feet: stance, bob: lerp(-.02 * s, -.006, ss(0, 1, k)) - .1 * s * drop, lean: lerp(-.06, -.03, k) - .14 * bow - .12 * drop, side: 0, twist: 0,
-      breath: lerp(.5 + .5 * Math.sin(t * 1.45 + 1.9), 1, inh) * (1 - drop) + .05 * drop, head: [-.03 - .55 * bow, 0], swing: [.02 * (1 - k) + .04 * drop, -.02 * (1 - k) + .04 * drop], abd: [.05, .05] });
+    P.pose(J, { feet: stance, bob: lerp(-.02 * s, -.006, ss(0, 1, k)) - .1 * s * drop, lean: lerp(-.06, -.03, k) - .24 * bow - .12 * drop, side: 0, twist: 0,
+      breath: lerp(.5 + .5 * Math.sin(t * 1.45 + 1.9), 1, inh) * (1 - drop) + .05 * drop, head: [-.03 - .72 * bow, 0], swing: [.02 * (1 - k) + .04 * drop, -.02 * (1 - k) + .04 * drop], abd: [.05, .05] });
   }
 
   // ---------------------------------------------------------------- the city's people (S4): busy in the streets and on the roofs, nobody looks up
@@ -573,7 +580,7 @@ tidyCloth(J);   // the tied head cloth (fix 2)
     for (let i = 0; i < 16; i++) { const g = new THREE.Group(), wing = sd => { const sh = new THREE.Shape(); sh.moveTo(0, 0); sh.lineTo(sd * .55, .06); sh.lineTo(sd * .5, -.05); sh.lineTo(0, -.08); const m = new THREE.Mesh(new THREE.ShapeGeometry(sh), bm); g.add(m); return m; };
       const w0 = wing(1), w1 = wing(-1); g.userData = { w0, w1, r: 40 + r() * 90, h: 38 + r() * 40, w: (.25 + r() * .2) * (r() < .5 ? 1 : -1), ph: r() * 6.283, fl: 7 + r() * 3, cx: TEMPLE.x - 60 + r() * 120, cz: TEMPLE.z - 40 + r() * 80 };
       g.scale.setScalar(2.4); S.add(g); BIRDS.push(g); } }
-  function birdsAt(t, on, C = null) { for (const g of BIRDS) { g.visible = on; if (!on) continue; const U = g.userData, a = U.ph + U.w * t, cx = C ? C.x + (U.cx - TEMPLE.x) * .6 : U.cx, cz = C ? C.z + (U.cz - TEMPLE.z) * .6 : U.cz, cy = C ? C.y + (U.h - 58) * .5 : U.h;
+  function birdsAt(t, on, C = null, sc = 2.4) { for (const g of BIRDS) { g.visible = on; if (!on) continue; g.scale.setScalar(sc); const U = g.userData, a = U.ph + U.w * t, cx = C ? C.x + (U.cx - TEMPLE.x) * .6 : U.cx, cz = C ? C.z + (U.cz - TEMPLE.z) * .6 : U.cz, cy = C ? C.y + (U.h - 58) * .5 : U.h;
       g.position.set(cx + Math.cos(a) * U.r * (C ? .55 : 1), cy + 6 * Math.sin(t * .4 + U.ph), cz + Math.sin(a) * U.r * (C ? .55 : 1)); g.rotation.set(0, -a + (U.w > 0 ? 0 : Math.PI), 0);
       const f = Math.sin(t * U.fl + U.ph) * .6; U.w0.rotation.z = f; U.w1.rotation.z = -f; } }
   // washing on lines between posts on the lower city's roofs (S4): cloths swaying a little in the evening wind
@@ -683,102 +690,105 @@ tidyCloth(J);   // the tied head cloth (fix 2)
     dustU.uPx.value = (H / 2) / Math.tan(cam.fov * D2R / 2); moteU.uA.value = .6; moteU.uC.value.set(pos.x, pos.y, pos.z - 3);
     RIMU.uRimC.value.copy(col('#ffb070', 2.2)); pastelP.u.violet.value = .25; pastelP.u.gild.value = 0;
   };
-  STAGE.J3 = t => { STAGE.J4(T.cuts[3]); };   // J3 is drawn in 2D (drawMacro); for the checks the 3D world is held at J4's first frame
   // J4 · his eyes: the city across the valley (L102 + 1.2 → N135b), one camera for Q108 and Q108b. From where he stands, at his eye
-  //      height, a long lens on the city (backlit layers, a gold edge only); swifts, the evening smoke rising straight, three or four
-  //      lamps. On Q108b a cloud's shadow crosses from the right and stays: inside it the city is a charcoal ruin (walls broken, the
-  //      Temple's place a heap of stones, three smoke columns, no gold); at 「보살핌 받는 날을」 it moves on and the golden city is back.
-  //      Move: zoom in, 1.6 %/s, linear, through both lines.
-  const J4P = (() => { const p = V(JSTOP.x, JSTOP.y + 1.62, JSTOP.z); return p; })();
-  const J4DIR = (() => { const d = V(TEMPLE.x - J4P.x, 0, TEMPLE.z - J4P.z).normalize(); return d; })();
-  const J4F0 = 36, j4fov = t => 2 * Math.atan(Math.tan(J4F0 / 2 * D2R) / Math.exp(.016 * Math.max(0, t - T.cuts[3]))) / D2R;
+  //      height, a long lens on the city (backlit layers, a gold edge only), swifts, the evening smoke, four lamps. Fix 1 (owner 2026-11-26):
+  //      no cloud wipe — on Q108b a clean cut to the SAME camera drawn as the charcoal ruin (the Temple's place a heap, the walls broken,
+  //      smoke rising; the sky the same sky), held, and a clean cut back to the golden city on 「보살핌 받는 날을」. Move: zoom in, 2.6 %/s,
+  //      linear, never stopping, through both lines (the ruin frames are the same lens at the same moment).
+  const J4P = V(JSTOP.x, JSTOP.y + 1.62, JSTOP.z), J4DIR = V(TEMPLE.x - J4P.x, 0, TEMPLE.z - J4P.z).normalize();
+  const J4F0 = 36, j4fov = t => 2 * Math.atan(Math.tan(J4F0 / 2 * D2R) / Math.exp(.022 * Math.max(0, t - T.cuts[2]))) / D2R;
+  const inRuin = t => t >= T.ruin[0] && t < T.ruin[1];
+  const j4pos = t => J4P.clone().addScaledVector(RIGHT, lerp(-7, 7, clamp((t - T.cuts[2]) / (T.cuts[3] - T.cuts[2]))));
   STAGE.J4 = t => {
-    setVis(SIDE, false); crowdAt(t, 16, S_STOP + 55); jPose(t, 'J4'); setVis(CITYP, false); J.visible = false;
-    setFov(j4fov(t)); setCam(J4P, lookFrom(J4P, J4DIR, -8.1, 600));
+    setVis(SIDE, false); setVis(CROWD, false); jPose(t, 'J4'); setVis(CITYP, false); J.visible = false;
+    const ru = inRuin(t); for (const o of CITYHIDE) o.visible = !ru;
+    const p4 = j4pos(t); setFov(j4fov(t)); setCam(p4, lookFrom(p4, J4DIR, -8.1, 600));
     setSun(sunDirFrom(J4DIR, -6.0, 3.8), 5, V(0, -20, -700), 560, 2.6);
     SKY.sunColor.value.copy(col('#fff0cc', 14)); SKY.sunGlow.value.copy(col('#ffb070', 1.6)); hemi.intensity = .16; goldM.emissiveIntensity = .45;
     film.dofCfg.focus = 560; film.dofCfg.aperture = .6;
     film.atmos.density = .0014; film.look.exposure = 1.04; lamp.shimmer = 0; lamp.god = .4;
     moteU.uA.value = 0; RIMU.uRimC.value.copy(col('#ffd58a', 1.8)); pastelP.u.violet.value = .3; pastelP.u.gild.value = 0;
-    J4L.forEach((i, n) => { const o = T.cuts[3] + [.7, 1.6, 2.4, 3.3][n]; lampA[i] = ss(o, o + 1.0, t) * .9; }); lamps.geometry.attributes.aA.needsUpdate = true;
+    if (!ru) J4L.forEach((i, n) => { const o = T.cuts[2] + [.7, 1.6, 2.4, 3.3][n]; lampA[i] = ss(o, o + 1.0, t) * .9; }); lamps.geometry.attributes.aA.needsUpdate = true;
   };
-  // J5 · inside the city: the closing door (N135b): from the east wall's height, low and oblique over the lower city's roofs; a house
-  //      wall with two shutters and a wooden door near (right), roofs layering into the haze behind. Distant shutters close one by one
-  //      (their warm light becomes a thin gold line); on 「그 성은 알아보지 못했습니다」 the near door closes from inside and the warm wedge
-  //      on the street narrows to a line and goes out. Nobody is seen. Move: truck right, slow.
+  // J5 · the city at dusk from the ridge (N135b): soft dark silhouettes, backlit; the lit windows go dark one by one across the city, from
+  //      near to far, until only a few remain. No faces of boxes in light, no doors, no people. Move: truck right, slow, linear.
+  const J5P = V(JSTOP.x, 0, JSTOP.z).addScaledVector(RIGHT, -62).addScaledVector(DIRC, 6);
+  const J5L = (() => { const p0 = V(J5P.x, hT(J5P.x, J5P.z) + 22, J5P.z); return LAMPS.map((L, i) => [L, i]).filter(([L]) => !L.gate && L.p.z < -470 && L.p.z > -1000 && L.p.x > -380 && L.p.x < 220)
+    .sort((a, b) => a[0].p.distanceTo(p0) - b[0].p.distanceTo(p0)).map(([, i]) => i); })();
   STAGE.J5 = t => {
     setVis(CROWD, false); setVis(SIDE, false); setVis(CITYP, false); J.visible = false;
-    const a = T.cuts[4], b = T.cuts[5], u = clamp((t - a) / (b - a));
-    const pos = J5.cam.clone().addScaledVector(J5.right, lerp(-2.2, -4.6, u)), look = J5.look.clone().addScaledVector(J5.right, lerp(-2.2, -4.6, u));
-    setFov(42); setCam(pos, look);
-    setSun(sunDirFrom(look.clone().sub(pos), 18, 3.2), 4, J5.face.clone(), 90, 2.2);
-    hemi.intensity = .62; CRIM.value.copy(col('#ffd58a', 1.4)); film.dofCfg.focus = pos.distanceTo(J5.face); film.dofCfg.aperture = .9;
-    film.atmos.density = .0016; film.look.exposure = 1.22; lamp.shimmer = 0; lamp.god = 0;
-    moteU.uA.value = 0; RIMU.uRimC.value.copy(col('#ff8a50', 1.4)); pastelP.u.violet.value = .3; pastelP.u.gild.value = 0;
-    doorsAt(t);
+    const a = T.cuts[3], b = T.cuts[4], u = clamp((t - a) / (b - a));
+    const pos = J5P.clone().addScaledVector(RIGHT, lerp(-7, 7, u)); pos.y = hT(J5P.x, J5P.z) + 22;
+    const look = V(-250, -27, -640).addScaledVector(RIGHT, lerp(-70, 70, .8 * u + .2 * sine(u)));
+    setFov(26); setCam(pos, look);
+    setSun(sunDirFrom(look.clone().sub(pos), -4, 1.6), 3, V(-100, -20, -700), 560, 1.6);
+    SKY.horizon.value.copy(col('#ffb070', 1.4)); SKY.mid.value.copy(col('#c88a80', .8)); hemi.intensity = .1; goldM.emissiveIntensity = .3; CRIM.value.copy(col('#ffd58a', 1.2));
+    film.dofCfg.focus = pos.distanceTo(look); film.dofCfg.aperture = .5;
+    film.atmos.density = .0015; film.look.exposure = .82; lamp.shimmer = 0; lamp.god = .2;
+    moteU.uA.value = 0; RIMU.uRimC.value.copy(col('#ff8a50', 1.4)); pastelP.u.violet.value = .45; pastelP.u.gild.value = 0;
+    const n = J5L.length, keep = 6, t0 = a + .5, t1 = b - .8;
+    J5L.forEach((i, k) => { lampA[i] = k >= n - keep ? 1 : 1 - ss(0, .35, t - lerp(t0, t1, k / Math.max(1, n - keep - 1))); });
+    lamps.geometry.attributes.aA.needsUpdate = true;
   };
-  // J6 · the sun touches the hills and the city's shadow climbs toward him (N136): the Mount again, lower and nearer than J1; his
-  //      small back (≤ 6 %) at the lower left, a full backlit silhouette, a gold rim on the shoulders only; the city's shadow crosses
-  //      the Kidron and climbs the slope; lamps light one by one, evenly; on the line's second half two lamps at the gate (not paired
-  //      like eyes). Move: crane up, ease-in-out.
-  const camJ6 = kk => { const pos = V(JSTOP.x, 0, JSTOP.z).addScaledVector(DIRC, -66).addScaledVector(RIGHT, 6.2); pos.y = hT(pos.x, pos.z) + 1.4 + 5 * kk;
-    return { pos, look: TEMPLE.clone().add(V(0, -40 - 8 * kk, 0)).addScaledVector(RIGHT, 2) }; };
+  // J6 · the sun on the hills, the city's shadow climbing (N136): a long lens from far behind him on the ridge — the sun's disc large on the
+  //      hills right of the Temple, his small back (≈ 5 %) lower left at the brow, the valley below in which the city's shadow climbs
+  //      toward him; lamps light one by one. Move: crane up, slow, never stopping. (J7 is a different shot: wide, low, near.)
+  const camJ6 = kk => { const pos = V(JSTOP.x, 0, JSTOP.z).addScaledVector(DIRC, -120).addScaledVector(RIGHT, 6); pos.y = hT(pos.x, pos.z) + 2.6 + 6 * kk;
+    return { pos, look: TEMPLE.clone().add(V(0, -34 - 7 * kk, 0)).addScaledVector(RIGHT, 1) }; };
   STAGE.J6 = t => {
     setVis(SIDE, false); setVis(CROWD, false); jPose(t, 'J6'); setVis(CITYP, false); J.visible = true;
-    const a = T.cuts[5], b = T.cuts[6], u = clamp((t - a) / (b - a)), k = sine(u), { pos, look } = camJ6(k);
-    setFov(24); setCam(pos, look);
-    const el = lerp(2.4, 1.25, ss(T.sunset[0], T.sunset[1], t));
-    setSun(sunDirFrom(look.clone().sub(pos), -3.6, el), 4, V(0, -20, -350), 560, lerp(2.4, 1.3, u));
+    const a = T.cuts[4], b = T.cuts[5], u = clamp((t - a) / (b - a)), k = .35 * u + .65 * sine(u), { pos, look } = camJ6(k);
+    setFov(15); setCam(pos, look);
+    const el = lerp(2.4, 1.2, ss(T.sunset[0], T.sunset[1], t));
+    setSun(sunDirFrom(look.clone().sub(pos), -2.2, el), 4, V(0, -20, -350), 560, lerp(2.4, 1.3, u));
     SKY.horizon.value.copy(col('#ffb070', 1.55)); SKY.mid.value.copy(lerp3(col('#d89a78', .88), col('#c08088', .75), u));
-    hemi.intensity = .26; goldM.emissiveIntensity = .4; film.dofCfg.focus = pos.distanceTo(J.position); film.dofCfg.aperture = .6;
-    film.atmos.density = .0013; film.look.exposure = 1.02; lamp.shimmer = 0; lamp.god = .4;
+    hemi.intensity = .24; goldM.emissiveIntensity = .4; film.dofCfg.focus = pos.distanceTo(J.position); film.dofCfg.aperture = .45;
+    film.atmos.density = .0013; film.look.exposure = 1.0; lamp.shimmer = 0; lamp.god = .4;
     moteU.uA.value = 0; RIMU.uRimC.value.copy(col('#ffd58a', 1.9)); pastelP.u.violet.value = .4 + .2 * u; pastelP.u.gild.value = 0;
     GU.uShK.value = 1; GU.uShD.value = shadowLine(t);
     cityLampsAt(t);
   };
-  // J7 · into that city, into that shadow (N137): the lens 1.2 m over the road 25 m behind where he set off, looking west; he walks the
-  //      whole shot (from T.walk6, 1.2 s to speed), left third, 8 % → under 4 %, a silhouette against the bright haze; the road goes
-  //      down to the gate and its two lamps; the shadow's edge lies across the road and he walks into it on the line's second half (his
-  //      rim goes out with it); lamps go on lighting; the last 2 s sink to a calm dark gold. Move: crane up, slow, inertia — the camera
-  //      does not follow; we stay on this hill.
+  // J7 · into that city, into that shadow (N137): wide and low, 1.2 m over the road 25 m behind where he set off; he walks the whole shot,
+  //      left third, into the shadow's edge on the line's second half (his rim goes out with it); lamps go on; the last 2 s sink to a calm
+  //      dark gold (≈ 55). Move: crane up with a slow push, never stopping; the camera does not follow him.
   STAGE.J7 = t => {
     setVis(SIDE, false); setVis(CROWD, false); jPose(t, 'J7'); setVis(CITYP, false); J.visible = true;
-    const a = T.cuts[6], b = T.end, u = clamp((t - a) / (b - a)), k = 1 - Math.pow(1 - u, 1.8);
-    const pos = V(JSTOP.x, 0, JSTOP.z).addScaledVector(DIRC, -25).addScaledVector(RIGHT, 1.4); pos.y = hT(pos.x, pos.z) + 1.2 + 5.5 * k;
+    const a = T.cuts[5], b = T.end, u = clamp((t - a) / (b - a)), k = .5 * u + .5 * (1 - Math.pow(1 - u, 1.8));
+    const pos = V(JSTOP.x, 0, JSTOP.z).addScaledVector(DIRC, -25 + 4 * k).addScaledVector(RIGHT, 1.4); pos.y = hT(pos.x, pos.z) + 1.2 + 5.5 * k;
     const look = lookFrom(pos, rotY(DIRC, -2.0), lerp(-1.6, -5.5, k), 300);
     setFov(44 - 4 * k); setCam(pos, look);
-    setSun(sunDirFrom(DIRC, -3.6, lerp(1.25, .5, u)), 2, V(JSTOP.x, JSTOP.y, JSTOP.z - 20), 120, lerp(1.3, .5, u));
+    setSun(sunDirFrom(DIRC, -3.6, lerp(1.2, .5, u)), 2, V(JSTOP.x, JSTOP.y, JSTOP.z - 20), 120, lerp(1.3, .5, u));
     SKY.sunColor.value.copy(lerp3(col('#fff0cc', 14), col('#ffc890', 4), u)); SKY.sunGlow.value.copy(lerp3(col('#ffb070', 1.4), col('#ff9a68', .9), u));
     SKY.top.value.copy(lerp3(col('#5a6a92', .5), col('#2c2f58', .38), u)); SKY.mid.value.copy(lerp3(col('#c08088', .75), col('#8a6a7e', .6), u)); SKY.horizon.value.copy(lerp3(col('#ffb070', 1.5), col('#e08a6a', 1.0), u));
     hemi.intensity = lerp(.26, .2, u); goldM.emissiveIntensity = lerp(.4, .2, u);
     film.dofCfg.focus = pos.distanceTo(J.position); film.dofCfg.aperture = .5;
     film.atmos.density = .0013; lamp.shimmer = 0; lamp.god = .3 * (1 - u); smkU.uC.value.copy(lerp3(col('#d8c4b0', 1), col('#9a8478', 1), u));
-    const dk = ss(T.dark[0], T.dark[1], t); film.look.exposure = lerp(1.02, .62, dk);
-    moteU.uA.value = 0; pastelP.u.violet.value = .6; pastelP.u.gild.value = .7 * dk + .15 * u;
+    const dk = ss(T.dark[0], T.dark[1], t); film.look.exposure = lerp(1.0, .33, dk); film.look.saturation = lerp(1, .75, dk);
+    moteU.uA.value = 0; pastelP.u.violet.value = .6; pastelP.u.gild.value = .9 * dk + .15 * u;
     GU.uShK.value = 1; GU.uShD.value = shadowLine(t);
     setRimJ(1 - ss(-.6, .6, jAlong() - GU.uShD.value)); RIMU.uRimC.value.copy(lerp3(col('#ffd58a', 1.8), col('#ff9a68', .9), u));
     cityLampsAt(t);
   };
   // the edge of the city's shadow on the Mount, as a distance from where he stopped along the line to the Temple (+ = toward the city):
   // the valley floor at N136, 40 m in front of him at N137, and it reaches him on N137's second half while he walks into it.
-  function shadowLine(t) { const a6 = T.cuts[5], a7 = T.cuts[6], j = 1.15 * Math.max(0, T.cross - T.walk6 - .6);
-    if (t < a7) return lerp(290, 40, sine(clamp((t - a6) / (a7 - a6))));
-    if (t < T.cross) return lerp(40, j, sine(clamp((t - a7) / (T.cross - a7))));
-    return j - .6 * (t - T.cross); }
+  function shadowLine(t) { const a6 = T.cuts[4], a7 = T.cuts[5], j = 1.1 * Math.max(0, T.cross - T.walk6 - .6);
+    if (t < a7) return lerp(300, 40, (t - a6) / (a7 - a6) * .6 + .4 * sine(clamp((t - a6) / (a7 - a6))));
+    if (t < T.cross) return lerp(40, j, (t - a7) / (T.cross - a7));
+    return j - 1.2 * (t - T.cross); }
   // the city's lamps: J6 one by one at 1.75 a second, evenly; on N136's second half the two gate lamps; J7 on at about one a second
-  function cityLampsAt(t) { const a6 = T.cuts[5];
+  function cityLampsAt(t) { const a6 = T.cuts[4];
     LAMPS.forEach((L, i) => { const o = L.gate ? T.gateLamps + (L.sd > 0 ? .35 : 0) : a6 + .4 + L.rank / (L.rank < 14 ? 1.75 : 1.0) + (L.rank < 14 ? 0 : 14 / 1.75 - 14); lampA[i] = ss(o, o + .8, t) * (L.gate ? 1 : L.k); });
     lamps.geometry.attributes.aA.needsUpdate = true; gateLamps.forEach((g, i) => { g.power = 24 * ss(T.gateLamps + i * .35, T.gateLamps + i * .35 + 1.2, t); }); }
 
   const lerp3 = (A, B, k) => A.clone().lerp(B, clamp(k));
   function stage(t) {
     const nm = shotOf(t);
-    skyGold(); hemi.intensity = .55; goldM.emissiveIntensity = .12; hemi.color.copy(col('#b4a8b8')); lamps.visible = nm === 'J4' || nm === 'J6' || nm === 'J7';
+    skyGold(); hemi.intensity = .55; goldM.emissiveIntensity = .12; hemi.color.copy(col('#b4a8b8')); lamps.visible = nm === 'J4' || nm === 'J5' || nm === 'J6' || nm === 'J7'; for (const o of CITYHIDE) o.visible = true; film.look.saturation = 1;
     gateLamps.forEach(g => { g.power = 0; }); smkU.uC.value.copy(col('#d8c4b0', 1)); lampA.fill(0); lamps.geometry.attributes.aA.needsUpdate = true;
-    GU.uShK.value = 0; setRimJ(1); CRIM.value.copy(col('#ffd58a', .9)); if (nm !== 'J2') resetLayers(); J5.group.visible = nm === 'J5';
-    dust.visible = nm === 'J1' || nm === 'J2'; TUFTS.visible = true; smoke.visible = true; motes.visible = nm === 'J2'; birdsAt(t, nm === 'J4' || nm === 'J6', null); washAt(t);
+    GU.uShK.value = 0; setRimJ(1); CRIM.value.copy(col('#ffd58a', .9)); if (nm !== 'J2') resetLayers(); J5.group.visible = false; for (const c of CLOAKS) c.visible = nm === 'J1' || nm === 'J2';
+    dust.visible = nm === 'J1' || nm === 'J2'; TUFTS.visible = true; smoke.visible = !(nm === 'J4' && inRuin(t)); motes.visible = nm === 'J2'; birdsAt(t, (nm === 'J4' && !inRuin(t)) || nm === 'J6', null, nm === 'J4' ? 6 : 3); washAt(t);
     film.dofCfg.maxCoc = 22; film.atmos.scatter = 1; STAGE[nm](t);
-    if (dust.visible) dustAt(t); smokeAt(t); smkU.uPx.value = (H / 2) / Math.tan(cam.fov * D2R / 2); lampU.uPx.value = (H / 2) / Math.tan(cam.fov * D2R / 2) * (nm === 'J4' ? 1.2 : .6);
+    if (dust.visible) dustAt(t); smokeAt(t); smkU.uPx.value = (H / 2) / Math.tan(cam.fov * D2R / 2); lampU.uPx.value = (H / 2) / Math.tan(cam.fov * D2R / 2) * (nm === 'J4' ? 1.2 : nm === 'J5' ? 3.2 : 1.0);
     tuftU.uT.value = t; moteU.uT.value = t; GU.uSunG.value.copy(SUN);
     RIMU.uSunV.value.copy(SUN).transformDirection(cam.matrixWorldInverse.copy(cam.matrixWorld).invert());
     return nm;
@@ -825,96 +835,51 @@ tidyCloth(J);   // the tied head cloth (fix 2)
     J.wedge.scale.set(Math.max(.02, open), 1, 1); J.wedge.material.opacity = .55 * Math.min(1, open * 4) * (1 - ss(T.wedgeOff - .3, T.wedgeOff, t));
     J.hole.material.color.copy(col('#ffb35c', 2.6 * (1 - .9 * ss(d1 - .1, d1 + .1, t)))); }
 
-  // ---------------------------------------------------------------- J3: the drop on the cloak (2D macro, after Bresson) — L102 → +1.2 s
-  // Madder wool fills the lower frame, sunset bokeh above; one drop falls (0.4× speed) with a gold glint, touches at L102 + .35, a dark
-  // wet mark spreads along the weave (0 → 42 px in .6 s), a few specks of dust lift. No splash crown. Push in on detail, 3 %.
-  const macro = (() => { const c = mkC(Math.round(W * 1.08), Math.round(H * 1.08)), x = c.getContext('2d'), r = rng(4242), w = c.width, h = c.height;
-    // the bokeh above: sunset haze with soft discs
-    const g = x.createLinearGradient(0, 0, 0, h * .42); g.addColorStop(0, '#d9a983'); g.addColorStop(.6, '#f2c48e'); g.addColorStop(1, '#c98a66'); x.fillStyle = g; x.fillRect(0, 0, w, h);
-    for (let i = 0; i < 26; i++) { const cx = r() * w, cy = r() * h * .36, rr = 30 + r() * 70; const gg = x.createRadialGradient(cx, cy, 0, cx, cy, rr); gg.addColorStop(0, `rgba(255,${210 + r() * 30 | 0},${150 + r() * 40 | 0},${.25 + r() * .25})`); gg.addColorStop(.85, 'rgba(255,220,170,.12)'); gg.addColorStop(1, 'rgba(255,220,170,0)'); x.fillStyle = gg; x.beginPath(); x.arc(cx, cy, rr, 0, 6.283); x.fill(); }
-    // the cloak: madder wool from y ≈ 700, its weave (warp/weft) and loose fibres, the light raking from the sun side
-    const top = h * .36, im = x.getImageData(0, 0, w, h), d = im.data;
-    for (let yy = Math.floor(top - 40); yy < h; yy++) for (let xx = 0; xx < w; xx++) { const i = (yy * w + xx) * 4;
-      const fold = 18 * Math.sin(xx * .006 + yy * .002) + 10 * Math.sin(xx * .013 - yy * .004 + 1.3), yE = top + fold + 14 * Math.sin(xx * .004);
-      if (yy < yE) continue;
-      const wa = Math.sin((xx + yy * .18) * .52) * .5 + .5, we = Math.sin((yy - xx * .12) * .48) * .5 + .5, cell = ((Math.floor((xx + yy * .18) / 6) + Math.floor((yy - xx * .12) / 6.5)) & 1);
-      const nn = (Math.sin(xx * 12.9898 + yy * 78.233) * 43758.5453) % 1, fib = Math.abs(nn) * .14;
-      let v = .62 + .22 * (cell ? wa : we) + fib - .1 * Math.max(0, Math.sin(xx * .006 + yy * .002 + 1.6));
-      v *= 1 - .45 * clamp((yy - yE) / (h - yE)) * .5; v *= .85 + .3 * clamp(1 - (xx / w)); const edge = clamp((yy - yE) / 6);
-      const R = 142 * v, G = 59 * v, B = 46 * v; d[i] = lerp(d[i], R, edge); d[i + 1] = lerp(d[i + 1], G, edge); d[i + 2] = lerp(d[i + 2], B, edge); }
-    x.putImageData(im, 0, 0); return c; })();
-  function drawMacro(ctx, t) { const a = T.cuts[2], b = T.cuts[3], u = clamp((t - a) / (b - a)), z = 1 + .03 * sine(u), cx = 540, cy = 1050;
-    ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.translate(cx, cy); ctx.scale(z / 1.08, z / 1.08); ctx.translate(-cx * 1.08, -cy * 1.08); ctx.drawImage(macro, 0, 0); ctx.restore();
-    ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.translate(cx, cy); ctx.scale(z, z); ctx.translate(-cx, -cy);
-    const tc = T.drop3[1], fall = .5, k = (t - (tc - fall)) / fall;
-    if (k < 1) { const kk = clamp(k), y = lerp(-40, 1050, kk * kk * .35 + kk * .65), x = lerp(560, 540, kk);   // falling (0.4× speed: gravity eased)
-      ctx.save(); ctx.translate(x, y); ctx.scale(1, 1.18);
-      const gd = ctx.createRadialGradient(-5, -5, 1, 0, 0, 17); gd.addColorStop(0, 'rgba(255,240,215,.55)'); gd.addColorStop(.55, 'rgba(160,110,95,.35)'); gd.addColorStop(.85, 'rgba(60,30,30,.55)'); gd.addColorStop(1, 'rgba(255,230,200,.7)');
-      ctx.fillStyle = gd; ctx.beginPath(); ctx.arc(0, 0, 17, 0, 6.283); ctx.fill(); ctx.strokeStyle = 'rgba(255,236,205,.75)'; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.arc(0, 0, 16.5, 0, 6.283); ctx.stroke();
-      ctx.fillStyle = 'rgba(255,213,138,.98)'; ctx.beginPath(); ctx.arc(-5.5, -6, 3.6, 0, 6.283); ctx.fill(); ctx.restore(); }
-    const ws = ss(tc, tc + .6, t);   // the wet mark: darker, slightly glossy, longer along the weave
-    if (ws > 0) { ctx.save(); ctx.translate(540, 1050); ctx.rotate(.18); const rx = 60 * ws, ry = 40 * ws;
-      const gw = ctx.createRadialGradient(0, 0, 0, 0, 0, rx); gw.addColorStop(0, 'rgba(60,18,14,.5)'); gw.addColorStop(.7, 'rgba(70,22,16,.42)'); gw.addColorStop(1, 'rgba(70,22,16,0)');
-      ctx.scale(1, ry / rx); ctx.fillStyle = gw; ctx.beginPath(); ctx.arc(0, 0, rx, 0, 6.283); ctx.fill();
-      ctx.fillStyle = `rgba(255,213,138,${.25 * (1 - ss(tc + .2, tc + .9, t))})`; ctx.beginPath(); ctx.arc(-rx * .25, -rx * .2, rx * .18, 0, 6.283); ctx.fill(); ctx.restore();
-      const r = rng(77); for (let i = 0; i < 7; i++) { const a0 = r() * 6.283, sp = 20 + r() * 30, age = t - tc, up = Math.max(0, age) * (60 + r() * 50) - age * age * 160;
-        if (age <= 0 || up < -2) continue; ctx.fillStyle = `rgba(240,200,160,${.55 * (1 - ss(.2, .7, age))})`; ctx.beginPath(); ctx.arc(540 + Math.cos(a0) * sp * Math.min(1, age * 4), 1050 - Math.max(0, up), 1.6 + r(), 0, 6.283); ctx.fill(); } }
-    ctx.restore();
-    // the pastel pass's softness: a whisper of vignette
-    const vg = ctx.createRadialGradient(540, 980, 300, 540, 980, 1200); vg.addColorStop(0, 'rgba(20,10,10,0)'); vg.addColorStop(1, 'rgba(20,10,10,.35)'); ctx.fillStyle = vg; ctx.fillRect(0, 0, W, H);
-  }
-
-  // ---------------------------------------------------------------- J4: the charcoal ruin inside the cloud's shadow (kit-charcoal.js)
+  // ---------------------------------------------------------------- J4: the charcoal ruin (kit-charcoal.js), fix 1 — a clean cut, same lens
+  // The ruin frame is THE SAME 3D frame with the city's buildings hidden (only the Temple platform's retaining wall stays), turned into
+  // charcoal through the kit's tooth pass, with the ruin's marks drawn on it in the same projection (a heap where the porch stood, broken
+  // walls, house stumps, three smoke columns). Below the land's skyline everything is charcoal; above it the frame keeps its live sky.
+  // Positions match exactly at every zoom (the marks are projected at J4's first lens and scaled about the centre with the zoom).
   const CH = typeof window !== 'undefined' ? window.Charcoal : null;
   let RUIN = null;
-  function buildRuin() { if (RUIN || !CH) return; CH.init({ paper: '#a39c94', charcoal: '#3a3634', tooth: 77 });
-    // project the city with J4's camera at its first frame
-    setFov(J4F0); setCam(J4P, lookFrom(J4P, J4DIR, -8.1, 600)); cam.updateMatrixWorld(); const pr = p => { const q = p.clone().project(cam); return [(q.x + 1) / 2 * W, (1 - q.y) / 2 * H]; };
-    const sheet = CH.sheet(1.45, '#fff'), x = sheet.getContext('2d'), r = rng(1919);
-    // sky: a light rubbed tone, darker toward the hills
-    const g = x.createLinearGradient(0, 0, 0, H * .5); g.addColorStop(0, 'rgba(0,0,255,.06)'); g.addColorStop(1, 'rgba(0,0,255,.2)'); x.fillStyle = g; x.fillRect(-200, -200, W + 400, H + 400);
-    // the far hills: soft, low, no peaks
-    const hz = pr(V(TEMPLE.x, 70, -2300))[1], hills = []; for (let i = 0; i <= 40; i++) { const px = -100 + i * (W + 200) / 40; hills.push([px, hz + 22 * Math.sin(i * .35) + 10 * Math.sin(i * .9 + 1)]); }
-    CH.smudgeFill(x, [...hills, [W + 100, H], [-100, H]], .26, 31, 10);
-    // what is left of the houses: rounded heaps, a few broken wall stumps standing up out of them
-    const sky0 = pr(V(-60, 8, -1000))[1], wallL = pr(V(-390, -18, CITYZ)), wallR = pr(V(300, -18, CITYZ));
-    const sk = []; for (let px = -100; px <= W + 100; px += 6) { const base = lerp(sky0 + 70, sky0 + 30, .5 + .5 * Math.sin(px * .004)); sk.push([px, base - 9 * (.5 + .5 * Math.sin(px * .045)) - 6 * (.5 + .5 * Math.sin(px * .11 + 2))]); }
-    CH.smudgeFill(x, [...sk, [W + 100, wallR[1] + 80], [-100, wallL[1] + 80]], .58, 41, 14);
-    for (let i = 0; i < 14; i++) { const px = 40 + r() * (W - 80), base = lerp(sky0 + 70, sky0 + 30, .5 + .5 * Math.sin(px * .004)) - 6, hgt = 14 + r() * 26, wd = 6 + r() * 9;
-      CH.tone(x, [[px, base + 4], [px + wd, base + 4], [px + wd, base - hgt * (.6 + .4 * r())], [px + wd * .5, base - hgt * (.8 + .3 * r())], [px, base - hgt]], .7); }
-    // the Temple platform: its east wall still stands, courses drawn; its top broken; on it, where the porch stood, only a long heap of stones
-    const p0 = pr(V(TMB.x0, TMB.top, TMB.z1)), p1 = pr(V(TMB.x1, TMB.top, TMB.z1)), pb0 = pr(V(TMB.x0, -40, TMB.z1)), pb1 = pr(V(TMB.x1, -40, TMB.z1));
-    const rag = []; for (let i = 0; i <= 40; i++) { const k = i / 40; rag.push([lerp(p0[0], p1[0], k), lerp(p0[1], p1[1], k) + (i % 5 === 2 ? 6 + r() * 6 : r() * 2)]); }
-    CH.smudgeFill(x, [...rag, [pb1[0], pb1[1]], [pb0[0], pb0[1]]], .66, 51, 10);
-    for (let k = 1; k < 7; k++) { const yy = lerp(p0[1], pb0[1], k / 7); CH.vine(x, CH.seg([p0[0] + 4, yy], [p1[0] - 4, yy], 30, 2, r), 2.2, .3, 60 + k, '#000', .2); }
-    const pc = pr(V(TEMPLE.x, TMB.top, -575)), pw = Math.abs(pr(V(TEMPLE.x + 30, TMB.top, -575))[0] - pc[0]), heap = [];
-    for (let i = 0; i <= 48; i++) { const k = i / 48, ang = Math.PI * k; heap.push([pc[0] - pw * 1.45 * Math.cos(ang), pc[1] + 2 - Math.pow(Math.sin(ang), .7) * pw * .46 * (.9 + .12 * Math.sin(i * 1.3))]); }
-    CH.smudgeFill(x, heap, .82, 71, 8);
-    for (let i = 0; i < 60; i++) { const ang = Math.PI * r(), rr = Math.sqrt(r()); CH.blob(x, pc[0] - pw * 1.35 * Math.cos(ang) * rr, pc[1] - Math.sin(ang) * pw * .42 * rr * (.3 + .7 * r()), 5 + r() * 7, 3.5 + r() * 4, .55, r() * 3); }
-    for (let i = 0; i < 18; i++) { const ang = Math.PI * r(), rr = .6 + .4 * r(); CH.blob(x, pc[0] - pw * 1.3 * Math.cos(ang) * rr, pc[1] - Math.sin(ang) * pw * .4 * rr, 4 + r() * 4, 3, .5, r() * 3, CH.smudgeW); }   // lit stone edges
-    // the east wall: a dark band with broken stumps and gaps where it fell
-    const wl = []; for (let i = 0; i <= 70; i++) { const k = i / 70, xw = lerp(-390, 300, k); if (xw > TMB.x0 - 4 && xw < TMB.x1 + 4) continue; wl.push([xw, pr(V(xw, -18, CITYZ)), pr(V(xw, -31, CITYZ))]); }
-    for (let i = 0; i < wl.length - 1; i++) { if (r() < .22) continue; const [, a1, b1] = wl[i], [, a2, b2] = wl[i + 1], cut = r() < .4 ? 4 + r() * 10 : 0;
-      CH.tone(x, [[a1[0], a1[1] + cut], [a2[0], a2[1] + (r() < .4 ? 5 + r() * 9 : 0)], [b2[0], b2[1]], [b1[0], b1[1]]], .72); }
-    RUIN = { sheet, porchY: pr(V(TEMPLE.x, TMB.top + 26, -575))[1], smoke: [pc, pr(V(-200, -10, -700)), pr(V(160, 0, -880))] };
+  function buildRuin() { if (RUIN || !CH) return; CH.init({ paper: '#b4ab9f', charcoal: '#34302e', tooth: 77 }); const r = rng(1919);
+    const stones = []; for (let i = 0; i < 70; i++) { const ang = Math.PI * r(), rr = Math.sqrt(r()); stones.push([-1.35 * Math.cos(ang) * rr, Math.sin(ang) * .42 * rr * (.3 + .7 * r()), 4 + r() * 7, 3 + r() * 4, r() * 3]); }
+    const walls = []; for (let i = 0; i <= 70; i++) { const k = i / 70, xw = lerp(-390, 300, k); if (xw > TMB.x0 - 4 && xw < TMB.x1 + 4) continue; walls.push([V(xw, -18 - (r() < .4 ? 6 * r() : 0), CITYZ), V(xw, -33, CITYZ), r() < .24]); }
+    const stumps = []; for (let i = 0; i < 70; i++) { const xw = -380 + r() * 600, zw = -470 - r() * 650; if (xw > TMB.x0 - 10 && xw < TMB.x1 + 10 && zw > TMB.z0 - 10) continue;
+      const g = hT(xw, zw) - 1.2; stumps.push([V(xw, g, zw), V(xw, g + 4 + r() * 6, zw), 3 + r() * 3, r()]); }
+    RUIN = { stones, walls, stumps, smoke: [V(TEMPLE.x, TMB.top, -575), V(-200, -12, -700), V(150, 0, -900)] };
   }
-  const cloudBlob = (() => { const c = mkC(1700, 1200), x = c.getContext('2d'), r = rng(6363); x.filter = 'blur(45px)'; x.fillStyle = '#fff';
-    for (let i = 0; i < 26; i++) { const a = r() * 6.283, d = Math.sqrt(r()) * 380; x.beginPath(); x.ellipse(850 + Math.cos(a) * d * 1.3, 600 + Math.sin(a) * d * .8, 210 + r() * 190, 160 + r() * 140, r() * 3, 0, 6.283); x.fill(); }
-    return c; })();
-  const maskC = mkC(W, H), mx = maskC.getContext('2d'), ruC = mkC(W, H), rx = ruC.getContext('2d');
-  let cloudCov = 0;
-  function cloudX(t) { const [a, b, c, d] = T.cloud;
-    if (t < a) return W + 950; if (t < b) return lerp(W + 950, 560, sine((t - a) / (b - a))); if (t < c) return lerp(560, 420, (t - b) / (c - b)); if (t < d) return lerp(420, -1000, sine((t - c) / (d - c))); return -1200; }
-  function ruinComposite(ctx, t) { buildRuin(); if (!RUIN) return; const cx = cloudX(t); cloudCov = clamp(1 - Math.abs(cx - 540) / 900); if (cx > W + 900 || cx < -1100) return;
-    const s = Math.tan(J4F0 / 2 * D2R) / Math.tan(j4fov(t) / 2 * D2R);
-    const v = CH.begin(true); v.translate(540, 960); v.scale(s, s); v.translate(-540, -960); CH.drawSheet(v, RUIN.sheet);
-    RUIN.smoke.forEach(([sx, sy], n) => { for (let i = 0; i < 16; i++) { const L = 5.5, age = ((t * .9 + i / 16 * L + n * 1.7) % L), k = age / L; CH.blob(v, sx - 10 * age * age * .6 + 6 * Math.sin(age + n), sy - 20 - age * 60, 22 + 46 * k, 18 + 34 * k, .4 * (1 - k) * ss(0, .1, k), n + i); } });
-    CH.setCam({ zm: s, ox: 0, oy: 0, zc: [540, 960] }); CH.develop(rx);
-    { rx.globalCompositeOperation = 'multiply'; const sg = rx.createLinearGradient(0, 0, 0, H * .42); sg.addColorStop(0, '#f6d2a0'); sg.addColorStop(.75, '#e8c8a8'); sg.addColorStop(1, '#ffffff'); rx.fillStyle = sg; rx.fillRect(0, 0, W, H * .42); rx.globalCompositeOperation = 'source-over'; }   // the sky in the cloud's shadow keeps a little of the evening (the ruin stays grey)
-    mx.setTransform(1, 0, 0, 1, 0, 0); mx.globalCompositeOperation = 'source-over'; mx.clearRect(0, 0, W, H); const ty = 960 + (RUIN.porchY - 960) * s; mx.drawImage(cloudBlob, cx - 850, ty + 120 - 600);
-    mx.globalCompositeOperation = 'destination-in'; const vg = mx.createLinearGradient(0, 0, 0, H); const yb = clamp((ty + 470) / H, .3, .9); vg.addColorStop(0, 'rgba(0,0,0,1)'); vg.addColorStop(yb - .06, 'rgba(0,0,0,1)'); vg.addColorStop(yb + .05, 'rgba(0,0,0,0)'); mx.fillStyle = vg; mx.fillRect(0, 0, W, H);
+  function ruinScreen() { cam.updateMatrixWorld(); const pr = p => { const q = p.clone().project(cam); return [(q.x + 1) / 2 * W, (1 - q.y) / 2 * H]; };
+    const sky = []; for (let px = -12; px <= W + 12; px += 8) { const dw = V(px / W * 2 - 1, 0, .5).unproject(cam).sub(cam.position); const d = V(dw.x, 0, dw.z).normalize();
+      let best = -1e9, bp = null; for (let dist = 380; dist < 3300; dist += 12) { const x = cam.position.x + d.x * dist, z = cam.position.z + d.z * dist; let h = hT(x, z);
+        for (const q of HILLS) { const rr = ((x - q.x) / q.sx) ** 2 + ((z - q.z) / q.sz) ** 2; if (rr < 1) h = Math.max(h, -20 + q.sy * Math.sqrt(1 - rr)); }
+        const e = (h - cam.position.y) / dist; if (e > best) { best = e; bp = V(x, h, z); } }
+      sky.push([px, pr(bp)[1]]); }
+    const pc = pr(RUIN.smoke[0]), pw = Math.abs(pr(V(TEMPLE.x + 30, TMB.top, -575))[0] - pc[0]);
+    const heap = []; for (let i = 0; i <= 48; i++) { const k = i / 48, ang = Math.PI * k; heap.push([pc[0] - pw * 1.45 * Math.cos(ang), pc[1] + 2 - Math.pow(Math.sin(ang), .7) * pw * .46 * (.9 + .12 * Math.sin(i * 1.3))]); }
+    const sc = pw / 60;
+    return { sky, heap, stones: RUIN.stones.map(([dx, dy, a, b, c]) => [pc[0] + dx * pw, pc[1] - dy * pw, a * sc, b * sc, c]), walls: RUIN.walls.map(([a, b, g]) => [pr(a), pr(b), g]),
+      stumps: RUIN.stumps.map(([b, tp, w, q]) => { const b0 = pr(b), t0 = pr(tp), w0 = Math.max(3, Math.abs(pr(b.clone().add(V(w, 0, 0)))[0] - b0[0])); return [b0, t0, w0, q]; }), smoke: RUIN.smoke.map(pr), sc }; }
+  const mkC2 = (w, h) => { const c = document.createElement('canvas'); c.width = w; c.height = h; return c; };
+  const maskC = mkC2(W, H), mx = maskC.getContext('2d'), ruC = mkC2(W, H), rx = ruC.getContext('2d');
+  function ruinFrame(ctx, t) { buildRuin(); if (!RUIN) return; const R2 = ruinScreen(), s = 1, ss2 = R2.sc;
+    const v = CH.begin(true);
+    v.filter = 'grayscale(1) contrast(1.3) brightness(1.05) blur(1px)'; v.drawImage(film.canvas, 0, 0, W, H); v.filter = 'none';
+    v.globalCompositeOperation = 'lighter'; v.fillStyle = 'rgb(0,0,255)'; v.fillRect(0, 0, W, H); v.globalCompositeOperation = 'source-over';   // rubbed tone (no stick grain): the land drawn smooth, as with a finger
+    v.save();
+    for (let i = 0; i < R2.walls.length - 1; i++) { const [a1, b1, gap] = R2.walls[i], [a2, b2] = R2.walls[i + 1]; if (gap) continue; CH.tone(v, [[a1[0], a1[1] + (i % 3 === 1 ? 7 : 0)], [a2[0], a2[1] + (i % 4 === 2 ? 9 : 0)], b2, b1], .78); }
+    for (const [b0, t0, w0, q] of R2.stumps) CH.tone(v, [[b0[0], b0[1]], [b0[0] + w0, b0[1]], [b0[0] + w0, t0[1] + (q - .5) * 6], [b0[0] + w0 * .45, t0[1] - 3], [b0[0], t0[1] + 4]], .6);
+    CH.smudgeFill(v, R2.heap, .8, 71, 8); for (const [x, y, rx0, ry0, a] of R2.stones) CH.blob(v, x, y, rx0, ry0, .5, a);
+    R2.smoke.forEach(([sx, sy], n) => { for (let i = 0; i < 18; i++) { const L = 6, age = ((t * .8 + i / 18 * L + n * 1.7) % L), k = age / L; CH.blob(v, sx + (-12 * age * age * .5 + 6 * Math.sin(age + n)) * ss2, sy + (-16 - age * 58) * ss2, (20 + 44 * k) * ss2, (16 + 32 * k) * ss2, .42 * (1 - k) * ss(0, .08, k), n + i); } });
+    v.restore();
+    CH.setCam({ zm: 1, ox: 0, oy: 0, zc: [540, 960] }); CH.develop(rx);
+    // the mask: everything below the land's skyline, plus the smoke and the stumps that rise above it (soft), in the same scaled space
+    mx.setTransform(1, 0, 0, 1, 0, 0); mx.globalCompositeOperation = 'source-over'; mx.clearRect(0, 0, W, H); mx.save();
+    mx.fillStyle = '#fff'; mx.beginPath(); R2.sky.forEach(([x, y], i) => (i ? mx.lineTo(x, y + 1) : mx.moveTo(x, y + 1))); mx.lineTo(W + 600, H + 900); mx.lineTo(-600, H + 900); mx.closePath(); mx.fill();
+    mx.filter = 'blur(10px)'; R2.smoke.forEach(([sx, sy], n) => { for (let i = 0; i < 18; i++) { const L = 6, age = ((t * .8 + i / 18 * L + n * 1.7) % L), k = age / L; mx.globalAlpha = .55 * (1 - k) * ss(0, .08, k); mx.beginPath(); mx.ellipse(sx + (-12 * age * age * .5 + 6 * Math.sin(age + n)) * ss2, sy + (-16 - age * 58) * ss2, (20 + 44 * k) * ss2, (16 + 32 * k) * ss2, 0, 0, 6.283); mx.fill(); } });
+    mx.filter = 'none'; mx.globalAlpha = 1; for (const [b0, t0, w0] of R2.stumps) mx.fillRect(b0[0] - 1, t0[1] - 4, w0 + 2, b0[1] - t0[1] + 6); mx.restore();
     rx.globalCompositeOperation = 'destination-in'; rx.drawImage(maskC, 0, 0); rx.globalCompositeOperation = 'source-over';
-    ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.filter = 'blur(1.4px)'; ctx.drawImage(ruC, 0, 0); ctx.filter = 'none'; ctx.restore(); }
+    ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.filter = 'blur(1.1px)'; ctx.drawImage(ruC, 0, 0); ctx.filter = 'none'; ctx.restore(); }
 
   // ---- screen-space light scattering from the sun (crowd-evening3d.js godRays, copied)
   const gS = mkC(W >> 2, H >> 2), gsx = gS.getContext('2d', { willReadFrequently: true }), gB = mkC(W >> 2, H >> 2), gbx = gB.getContext('2d');
@@ -941,15 +906,14 @@ tidyCloth(J);   // the tied head cloth (fix 2)
   }
   const tmpV = V();
   function draw(ctx, t, TB) {
-    T = TB; if (shotOf(t) === 'J3') { drawMacro(ctx, t); return; }
-    const nm = stage(t); renderAll(t); blit(ctx, t, lamp.shimmer);
-    if (nm === 'J4') ruinComposite(ctx, t);
+    T = TB; const nm = stage(t); renderAll(t); blit(ctx, t, lamp.shimmer);
+    const ru = nm === 'J4' && inRuin(t); if (ru) ruinFrame(ctx, t);
     tmpV.copy(cam.position).addScaledVector(SUN, 900).project(cam);
-    if (lamp.god > .01 && tmpV.z < 1 && Math.abs(tmpV.x) < 1.6 && Math.abs(tmpV.y) < 1.6) godRays(ctx, (tmpV.x + 1) / 2 * W, (1 - tmpV.y) / 2 * H, lamp.god * (nm === 'J4' ? 1 - .8 * cloudCov : 1));
+    if (lamp.god > .01 && tmpV.z < 1 && !ru) { const e = Math.max(Math.abs(tmpV.x), Math.abs(tmpV.y)), k = lamp.god * (1 - ss(.95, 1.55, e)); if (k > .004) godRays(ctx, (tmpV.x + 1) / 2 * W, (1 - tmpV.y) / 2 * H, k); }
   }
   // ---------------------------------------------------------------- the checks (no render): camera + emission; bone directions
   function probe(t, TB) { T = TB; const nm = stage(t); const d = V(); cam.getWorldDirection(d);
-    return { shot: nm, p: cam.position.toArray(), d: d.toArray(), fov: cam.fov, focus: film.dofCfg.focus, emit: { smoke: smkAlive, dust: dust.visible ? dustAlive : 0, lamps: lampA.reduce((a, b) => a + (b > .05 ? 1 : 0), 0), cloud: +cloudCov.toFixed(2) } }; }
+    return { shot: nm, p: cam.position.toArray(), d: d.toArray(), fov: cam.fov, focus: film.dofCfg.focus, emit: { smoke: smkAlive, dust: dust.visible ? dustAlive : 0, lamps: lampA.reduce((a, b) => a + (b > .05 ? 1 : 0), 0), ruin: nm === 'J4' && inRuin(t) ? 1 : 0 } }; }
   function joints(t, TB) { T = TB; const nm = stage(t); const out = {}, Y = V(0, 1, 0);
     const figs = nm === 'S4' ? CITYP : [J, ...CROWD.slice(0, 400), ...SIDE];
     figs.forEach((g, n) => { if (!g.visible) return; const U = g.userData; if (!U.arms[0].E) return; const rec = {};

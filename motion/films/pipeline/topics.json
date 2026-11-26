@@ -82,6 +82,11 @@
      "at": "2026-11-23",
      "fact": "해설판 옆자리에 '성경은 누가, 언제, 어떻게 편집했나' 0.5% — 일곱 번째 연속(11/4–11/23)",
      "source": "motion/films/analytics/2026-11-23/video-film-narr-reach_viewers.json"
+    },
+    {
+     "at": "2026-11-26",
+     "fact": "해설판 옆자리에 '성경은 누가, 언제, 어떻게 편집했나' 0.5% — 여덟 번째 연속(11/4–11/26)",
+     "source": "motion/films/analytics/2026-11-26/video-film-narr-reach_viewers.json"
     }
    ]
   },
@@ -179,6 +184,11 @@
      "at": "2026-11-23",
      "fact": "「그리스도」 세로(고난받는 메시아 → 십자가) 계속 시청 57.9% · 4일 동안 평균 시청 비율 117% — 채널 새 영상 중 가장 높은 다시 보기",
      "source": "motion/films/analytics/2026-11-23/api-ko.json"
+    },
+    {
+     "at": "2026-11-26",
+     "fact": "「그리스도」 세로(고난받는 메시아 → 십자가) 7일 1,680회 · 평균 시청 비율 90.8% · 공유 24 · 구독 +10 — 400년 세로 7일 453회 · 73.4%의 약 3.7배",
+     "source": "motion/films/christ/review.json"
     }
    ]
   },
@@ -264,12 +274,17 @@
    "title": "예수님은 왜 십자가에 달리셔야 했나 — 제사·제사장에서 단번에 드린 제물로 (아내 2026-11-18 제안)",
    "refs": "레 16(대속죄일) · 히 9:11–14 · 히 10:11–12 · 막 15:38(휘장) · 히 10:19–22 · 요 14:13",
    "connection": "구약은 제사장을 통해 제사로 죄 사함 → 예수님이 제물이자 대제사장이 되어 단번에 → 휘장이 찢어져 이제 누구나 예수 이름으로 하나님께 직접 나아간다(아내: '제사장한테 안 가도 예수 그리스도 이름으로 하나님께 직접 기도할 수 있는 권한')",
-   "status": "candidate",
+   "status": "recommended",
    "evidence": [
     {
      "at": "2026-11-19",
      "fact": "「그리스도」 세로 3:00 사흘 2,300회 · 구독 +15 · 55세 이상 77% · 구독 안 한 사람 96% — 고난받는 그리스도·십자가 이야기가 새 시청자에게 닿음(아내 제안 주제와 같은 결)",
      "source": "motion/films/analytics/2026-11-19/video-christ-v-build_audience.json"
+    },
+    {
+     "at": "2026-11-26",
+     "fact": "쇼츠 「십자가의 외침, 천 년 전의 시」(시 22 → 십자가) 공개 2일 15시간 890회 · 평균 조회율 108% · 좋아요 22 — 채널 48시간 조회 1위(309회)",
+     "source": "motion/films/analytics/2026-11-26/studio-channel.json"
     }
    ]
   },
@@ -374,6 +389,15 @@
     "bible-transmission"
    ],
    "source": "motion/films/ANALYTICS.md 2026-11-23"
+  },
+  {
+   "at": "2026-11-26",
+   "ids": [
+    "why-cross",
+    "passover-lamb",
+    "bible-transmission"
+   ],
+   "source": "motion/films/ANALYTICS.md 2026-11-26"
   }
  ]
 }

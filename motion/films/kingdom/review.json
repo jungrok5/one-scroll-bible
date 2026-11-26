@@ -2986,6 +2986,135 @@
      "what": "가운데 십자가 붉은 점이 지도 핀"
     }
    ]
+  },
+  "b3-jerusalem-d1": {
+   "video": "motion/out/review/sample-r10-jerusalem-720.mp4",
+   "at": "2026-11-26",
+   "note": "감독안 2 1안 빌드 — 새 에이전트 점검: 불합격",
+   "issues": [
+    {
+     "t": "11.0–12.0",
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "눈물 방울이 겉옷 위 눈물로 안 읽힘 — 붉은 모래언덕 위 회갈색 구슬, 1초라 빨간 화면 번쩍"
+    },
+    {
+     "t": "21.75–27.25",
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "폐허가 미래 아닌 와이프/글리치 — 구름 그림자가 렌즈 얼룩, 수직 이음매, 26.5–27.1 성전 상자 고스팅"
+    },
+    {
+     "t": "3.75–11.0",
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "무리가 고깔 망토(수도사·수녀), 그분 머리가 베일→꼭지로 바뀜, 고개 숙임 안 보임, 지나치는 흐름 없음"
+    },
+    {
+     "t": "12.25–19.5",
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "거의 정지 약 7초(제비·연기·등불 폰에서 안 보임)"
+    },
+    {
+     "t": "30.25–37.25",
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "J5 회색 상자 블록아웃, 덧문 떠 있는 검은 사각형, 문 닫힘이 1초에 안 읽힘"
+    },
+    {
+     "t": "45.5",
+     "severity": "MINOR",
+     "status": "open",
+     "what": "J6·J7 같은 구도 점프컷, 50.5–54.5 정지, 막대사탕 나무, 성벽 앞 검은 덩어리"
+    },
+    {
+     "t": "19.75–20.25",
+     "severity": "MINOR",
+     "status": "open",
+     "what": "밝기 펌프 83→97"
+    },
+    {
+     "t": "55",
+     "severity": "MINOR",
+     "status": "open",
+     "what": "끝 밝기 85 주황(설계 55 어두운 금)"
+    },
+    {
+     "t": "4–10.75",
+     "severity": "MINOR",
+     "status": "open",
+     "what": "밝은 모래 위 흰 자막 대비 약함"
+    }
+   ]
+  },
+  "b3-pentecost-d1": {
+   "video": "motion/out/review/sample-r10-pentecost-720.mp4 (+ -b)",
+   "at": "2026-11-26",
+   "note": "감독안 2 항공샷 빌드 — P1–P3 수정하면 통과, P4 불합격",
+   "issues": [
+    {
+     "t": "9.0–16.0",
+     "severity": "BLOCKER",
+     "status": "open",
+     "what": "항공숏 무리가 사선 해칭·비·풀, 확대하면 말뚝; 그물 깔때기 없음, 못이 알약 UI 버튼, 고리가 거품, 못이 자막에 붙음"
+    },
+    {
+     "t": "3.25–6.5",
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "베드로 그림자 머리가 어깨로 흘러내려 수녀 실루엣, 무리 그림자는 묘비 줄, 일어섬 안 보임"
+    },
+    {
+     "t": "2.0–2.75",
+     "severity": "MINOR",
+     "status": "open",
+     "what": "왼쪽 벽 노출 튐, 앞 인물 마네킹"
+    },
+    {
+     "t": "6.5–9.0",
+     "severity": "MINOR",
+     "status": "open",
+     "what": "계단 금빛 선 없음, 아래 절반 평평한 어둠"
+    },
+    {
+     "t": "B 12.5–13.5",
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "그물이 청록 바다 위 검은 원반(비행접시), 매치 컷 아닌 뜬금없는 삽입"
+    }
+   ]
+  },
+  "b3-room-d1": {
+   "video": "motion/out/review/sample-r10-shorts-720.mp4 (0–6.5 s)",
+   "at": "2026-11-26",
+   "note": "감독안 2 방 1안 빌드 — 불합격",
+   "issues": [
+    {
+     "t": "0–2.25",
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "병상이 눈 덮인 산·모래 언덕 담은 돌 상자, 사람·가쁜 숨 없음(정지), 천장 흰 막대가 형광등, 항아리가 사격 표적"
+    },
+    {
+     "t": "2.25–4.0",
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "빈 병상이 모래 더미 — 아팠다가 나음이 성립 안 함, 대접이 검은 구멍"
+    },
+    {
+     "t": "4.9–5.4",
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "문틈 지나는 그녀가 웅크린 검은 오림(난쟁이·원숭이), 베일 테 없음"
+    },
+    {
+     "t": "4.0–6.3",
+     "severity": "MINOR",
+     "status": "open",
+     "what": "문틀 안 떠 있는 검은 막대 그림자"
+    }
+   ]
   }
  },
  "parts_r9": [

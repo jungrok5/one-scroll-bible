@@ -1,41 +1,38 @@
-// pentecost3d.js — 「kingdom」 8부 「오순절」 N170–N172 (film 970.8 → 986.8): the director's approach (rounds/r10-pilot/director3-plan.md B,
-// batch3-director.md; owner 2026-11-26 "그래"), built on the first draft's aerial (git edc61537 s3).
+// pentecost3d.js — 「kingdom」 8부 「오순절」 N170–N172 (film 973.9 → 989.9 at the 2026-11-28 script): 10-3 test cut A
+// (rounds/r10-pilot/council/test-brief.md A · plan.md · bold.md — the stage director's drone start overrides the camera director's).
 // N170 "약속하신 대로 성령이 오신 날, / 여종 앞에서 떨던 그 베드로가 일어나 예수님을 전했습니다."
-// N172 "그날, 삼천 명이 세례를 받았습니다. / 사람을 취하리라던 그 말씀대로."   (next: N173 at 986.8, bread outside a door, warm light)
-// A shot that grows in three steps: one shadow → one man before many → three thousand from above.
+// N172 "그날, 삼천 명이 세례를 받았습니다. / 사람을 취하리라던 그 말씀대로."   (next: N173, bread outside a door, warm light)
 // Skills read first (rules.json skills-first; nothing edited at the source): motion-skills/cinematic-3d (lib3d/cine.js + kit.js) ·
-//   canvas-film/kits/fresco (kit-fresco.js: the limewashed wall, loaded by the page as window.FRESCO) · cinecode camera-moves.md ·
-//   canvas-film BODY-CHECK / SCENE-RULES / LESSONS. Copied with source notes: bw-rooster-p1.js's 2D shadow rig (part 5 approach 1);
-//   heal-village.js walls/olive/palm; lake-peter3d-b.js tiedHead/dressMan/peter/person, corona/godRays, the motes.
-// Film refs: Tarkovsky 「거울」 (wind passing over the field: the invisible shown by matter) for P1/P2; part 5's wall shadows, reversed;
-//   「노인을 위한 나라는 없다」 low sun for P3; George Steinmetz's camel caravans from the air (the body a speck, the shape in the long
-//   shadow) and 「간디」's funeral from the air (a crowd as a river) for P4; 「아웃 오브 아프리카」 for the warm haze by height.
+//   cinecode camera-moves.md ("crane up", "push in", the drone reveal) · canvas-film BODY-CHECK / SCENE-RULES / LESSONS. Copied with
+//   source notes: heal-village.js walls/olive/palm; lake-peter3d-b.js tiedHead/dressMan/peter/person, corona/godRays, the motes; the
+//   first-draft aerial's world (git 38392d88 s3 = the still r10-pentecost-still-10.5.jpg, see P4 below).
+// Film refs: 「노인을 위한 나라는 없다」 low sun for P3; George Steinmetz's caravans from the air (the body a speck, the shape in the long
+//   shadow) and 「간디」's funeral from the air (a crowd as a river) for P4; FPV-drone reveals that skim a crowd and pull up over it.
 // Shots (every time from beats(B); c1 = N170's second piece, c2b = N172's second piece):
-//   P1 s1  N170 → c1        push in, the stepped street: cool shadow, a front of warm light runs down it (45 m/s), dust only in its band
-//   P2     c1 → c1+3.2      2D: Peter's shadow on a limewashed portico wall (#f3d29a; shadow #6b5f73, 9–24 px penumbra), bowed (part 5's
-//                           body) → the band of light crosses the wall right → left → the shadow rises (waist and shoulders, +6 %) → the
-//                           crowd's head-and-shoulder shadows turn to him one by one (0.15 s apart) → his right arm rises once (IK, elbow
-//                           down/out, open hand, 35° above level). Dolly out 1.00 → 0.92, ease-in-out.
-//   P3     c1+3.2 → N172    telephoto from the foot of the steps, crane up with inertia: Peter small (≈ 5 %) against the bright sky, the arm
-//                           already up (match on P2's action), it goes once slowly forward; the crowd only as long shadows on the treads
-//                           (shadow-camera layer), the tread edges lines of gold; the sun up-left of him (x 230, y 520), never behind his head
-//   P4     N172 → N173      the aerial (fix 2: people = warm light points + short soft shadows; the pool edge in light): warm sun 32°, crane up D 66 → 86 m, pitch 58° → 62°, fov 36°,
-//                           yaw 6°, NO depth of field; five streets flow into a funnel narrowing onto the stepped pool (part 1's net bag);
-//                           people matte cloth patches (≤ 12 px at the start, ≈ 5 px at the end) drawn by their shadows; golden rings 1 → 6/s,
-//                           glints that live .3–.6 s; on 「사람을 취하리라던」 the sun flares in from the upper right and the frame warms (≥ 120 at the end)
-// fix 1 (batch3-director-fix1.md B): P4 back to the first draft's look (edc61537 figures, oblique crane) — only the funnel, warm low light,
-//   haze at the edges, a slow crane, soft rings and a trapezoid pool changed; P2 men's shadows (broad shoulders, tied cloth); variant B removed.
-// Rules kept: Peter = broad shoulders, tied head cloth, no face, small/backlit/shadow only; no close heads; no flames, no dove; no words in the
+//   P1 s1  N170 → c1        kept: push in, the stepped street: cool shadow, a front of warm light runs down it, dust only in its band
+//   (P2, the bowed wall shadow, is removed — council plan.)
+//   P3     c1 → N172        lengthened: telephoto from the foot of the steps, crane up 1.0 → 4.4 m: small upright Peter against the bright
+//                           sky (he straightens on 「일어나」, the right arm rises once and goes slowly forward); the crowd only as long
+//                           shadows on the treads (shadow-camera layer); the sun up-left of him, never behind his head. Last 0.6 s: the
+//                           camera pushes forward over the crowd's shadows toward the sun (accelerating into the drone's speed and heading).
+//   P4     N172 → N173      the drone over the first draft's world, sun LOCKED at 15° (shadows ≈ 3.7× height, dark-brown and hard):
+//                           skim  N172 → c2b      ≈ 5 m up, 35° down, 7 m/s along the street of walkers toward the pool and the sun:
+//                                                 backlit dark figures with a thin gold rim, their long shadows streaming at the lens
+//                           rise  c2b → c2b+2.0   「사람을 취하리라던」: ease in-out up to the aerial (5 → ≈ 57 m, 35° → 52°, fov 62 → 36),
+//                                                 curving onto the first draft's axis; no roll
+//                           land  → N173          「말씀대로」: the first-draft framing, still craning up slowly and orbiting 4°; no stop
+//                           (motion blur: 5 sub-frames while the camera is fast; no net shape, no rope lines)
+// Rules kept: Peter = broad shoulders, tied head cloth, no face, small/backlit; no close heads; no flames, no dove; no words in the
 //   art; fixed dither; everything a pure function of t; clean cuts.
 // Sound cue table (film seconds at the current script; all from beats()):
-//   970.8–974.1  P1 as before: low wind, far voices; the light front a rising gust down the street passing the lens ≈ 973.5, cloth flaps
-//   974.1  P2: the crowd's murmur hushes (0.8 s) · 974.5 wind sweeps the wall with the band (cloth flapping) · 974.9 cloth straightens
-//   975.7  Peter's voice begins: firm, loud, words not intelligible, 1.4 s stone-portico reverb · 975.5–977.0 crowd shadows turn (cloth, 0.15 s apart)
-//   976.1  sleeve brushing as the arm rises (1.2 s)
-//   977.3  P3: the voice goes on; a low 「아…」 spreads through the crowd; the second band of wind passes down over the steps
-//   979.8  P4: many footsteps from all sides, water lapping; baptisms (a soft plunge + ring, 1.2 s) one by one, then overlapping (1 → 6/s)
-//   983.4  part 1's net rhyme: the rope tightening and creaking and the silver shoal cutting water, −14 dB, 1.4 s (var b: the cut itself)
-//   986.3  a chord opens into N173 · 986.8 cut
+//   973.9–977.2  P1 as before: low wind, far voices; the light front a rising gust down the street, cloth flaps
+//   977.2  P3: Peter's voice far off, firm (words not intelligible), stone reverb; cloth as he straightens (977.5) · sleeve as the arm rises (978.8)
+//   979.5  a low 「아…」 spreads through the crowd; the second band of wind passes down over the steps
+//   982.3  the push: wind rising into a rush (0.6 s)
+//   982.9  P4: the rush of the drone low over many footsteps, cloth, voices passing under the lens (Doppler, 3.6 s)
+//   986.5  「슈욱」: the rush lifts and thins into open air (2.0 s), the footsteps fall away below
+//   988.5  the aerial: water lapping, baptisms far below (a soft plunge + ring, 1.2 s), the crowd's murmur as one sound
+//   989.6  a chord opens into N173 · 989.9 cut
 // API: const PC = await (await import('./pentecost3d.js')).build(W, H); T = beats(B); PC.draw(ctx, t, T)  ·  PC.probe(t, T) · PC.joints(t, T)
 import { Film, THREE, V, col, rng, GLSL } from '../lib3d/cine.js';
 import * as K from '../lib3d/kit.js';
@@ -61,78 +58,23 @@ const PETER = V(-.5, PLAT, -52.2);
 const SUN1 = V(Math.sin(-22 * D2R) * Math.cos(16 * D2R), Math.sin(16 * D2R), -Math.cos(22 * D2R) * Math.cos(16 * D2R));   // fix 1: lower, so Peter stands against the bright sky near the sun
 // ---------------------------------------------------------------- the pool (shot 3), far from the street (fog hides one from the other)
 const PO = V(0, 0, 640), PSI = 14 * D2R, NR = 6, A0 = 7.4, B0 = 4.1, DR = .85, STEP = .3, YW = -(NR * STEP) - .36, YF = YW - .95;
-const SUN3 = V(Math.sin(-12 * D2R) * Math.cos(13 * D2R), Math.sin(13 * D2R), -Math.cos(12 * D2R) * Math.cos(13 * D2R));   // fix 1: a low sun beyond the pool — long shadows toward the lens
-
-// ---------------------------------------------------------------- the 2D shadow rig: copied unchanged from bw-rooster-p1.js (part 5 approach 1, owner-approved)
-const TAU = Math.PI * 2;
-// ---------------------------------------------------------------- silhouette craft: all shapes in metres, y up
-const atf = (g, b, x, y, s = 1, rot = 0, flip = 1, sv = 1) => { const c = Math.cos(rot), n = Math.sin(rot), k = b.k * s; g.setTransform(k * c * flip, k * n * flip, k * n * sv, -k * c * sv, b.k * x + b.ox, b.k * y + b.oy); };
-function spline(g, P, close = true) { const n = P.length, at = i => close ? P[(i + n) % n] : P[clamp(i, 0, n - 1)]; g.moveTo(P[0][0], P[0][1]);
-  for (let i = 0; i < (close ? n : n - 1); i++) { const a = at(i - 1), b = at(i), c = at(i + 1), d = at(i + 2); g.bezierCurveTo(b[0] + (c[0] - a[0]) / 6, b[1] + (c[1] - a[1]) / 6, c[0] - (d[0] - b[0]) / 6, c[1] - (d[1] - b[1]) / 6, c[0], c[1]); }
-  if (close) g.closePath(); }
-const blob = (g, P) => { g.beginPath(); spline(g, P); g.fill(); };
-function limb(g, ax, ay, ra, bx, by, rb) { const a = Math.atan2(by - ay, bx - ax); g.beginPath(); g.arc(ax, ay, ra, a + Math.PI / 2, a - Math.PI / 2); g.arc(bx, by, rb, a - Math.PI / 2, a + Math.PI / 2); g.closePath(); g.fill(); }
-function ik(S, W, l1, l2, bend) { let dx = W[0] - S[0], dy = W[1] - S[1], d = Math.hypot(dx, dy) || 1e-4; const mx = (l1 + l2) * .999; if (d > mx) { dx *= mx / d; dy *= mx / d; d = mx; }
-  const a = (l1 * l1 - l2 * l2 + d * d) / (2 * d), h = Math.sqrt(Math.max(0, l1 * l1 - a * a)); return { E: [S[0] + dx / d * a - bend * dy / d * h, S[1] + dy / d * a + bend * dx / d * h], W: [S[0] + dx, S[1] + dy] }; }
-const elbowAngle = (S, E, W) => { const a = Math.atan2(S[1] - E[1], S[0] - E[0]), b = Math.atan2(W[1] - E[1], W[0] - E[0]); return Math.abs(Math.atan2(Math.sin(a - b), Math.cos(a - b))); };
-// hands: wrist at the origin, +x along the hand
-function fist(g) { blob(g, [[-.012, .034], [.04, .05], [.086, .054], [.118, .04], [.128, .006], [.118, -.03], [.086, -.05], [.04, -.046], [-.012, -.03]]);
-  for (let i = 0; i < 4; i++) { g.beginPath(); g.arc(.112 - i * .001, .036 - i * .024, .0165, 0, TAU); g.fill(); }
-  limb(g, .03, -.04, .018, .088, -.054, .014); }
-function pointing(g) { blob(g, [[-.012, .032], [.04, .046], [.09, .048], [.118, .034], [.12, .0], [.11, -.034], [.078, -.046], [.04, -.042], [-.012, -.03]]);
-  limb(g, .1, .026, .0165, .178, .032, .0135); limb(g, .178, .032, .0135, .236, .028, .0098); for (let i = 0; i < 3; i++) { g.beginPath(); g.arc(.118, .004 - i * .02, .0145, 0, TAU); g.fill(); } limb(g, .02, -.036, .018, .072, -.056, .013); }
-function openHand(g) { blob(g, [[-.014, .03], [.04, .046], [.092, .052], [.116, .036], [.118, -.016], [.092, -.044], [.04, -.04], [-.014, -.028]]);
-  // four fingers lying together, gently curved: a hand at rest, not a claw
-  const F = [[.04, .098, -.012], [.016, .112, -.016], [-.008, .104, -.02], [-.03, .086, -.024]];
-  for (const [y0, l, c] of F) { limb(g, .106, y0, .0148, .106 + l * .55, y0 + c * .4, .0132); limb(g, .106 + l * .55, y0 + c * .4, .0132, .106 + l, y0 + c * 1.25, .0102); }
-  limb(g, .03, -.034, .019, .074, -.066, .0145); limb(g, .074, -.066, .0145, .108, -.074, .0108); }
-function inHand(g, W, ang, fn) { g.save(); g.translate(W[0], W[1]); g.rotate(ang); fn(g); g.restore(); }
-function sleeveArm(g, S, W, l1, l2, bend, hand, ang) { const q = ik(S, W, l1, l2, bend), E = q.E, Wr = q.W;
-  limb(g, S[0], S[1], .088, E[0], E[1], .058); const mx = lerp(E[0], Wr[0], .46), my = lerp(E[1], Wr[1], .46); limb(g, E[0], E[1], .058, mx, my, .052); limb(g, E[0], E[1], .046, Wr[0], Wr[1], .031);
-  const a = Math.atan2(Wr[1] - E[1], Wr[0] - E[0]), nx = -Math.sin(a), ny = Math.cos(a); blob(g, [[mx + nx * .058, my + ny * .058], [mx + Math.cos(a) * .02 + nx * .03, my + Math.sin(a) * .02 + ny * .03], [mx + Math.cos(a) * .012 - nx * .02, my + Math.sin(a) * .012 - ny * .02], [mx - nx * .058, my - ny * .058], [mx - Math.cos(a) * .05, my - Math.sin(a) * .05]]);
-  inHand(g, Wr, ang, hand); return { E, W: Wr }; }
-// the head: round cloth, band and knot, cloth to the shoulder; turn −1…1 = facing left…right. Jesus and the veiled woman have no features at all.
-function head(g, cx, cy, r, turn, o = {}) { const { jesus = false, veil = false, beard = true, cl = 1 } = o, a = Math.abs(turn), f = turn < 0 ? -1 : 1;
-  g.beginPath(); g.ellipse(cx, cy, r, r * 1.1, 0, 0, TAU); g.fill();
-  if (jesus || veil) { for (const sd of [-1, 1]) { const e = r * (veil ? 1.18 : 1.05), dn = (veil ? 2.9 : 1.75) * cl; blob(g, [[cx + sd * r * .62, cy + r * .66], [cx + sd * e, cy - r * .1], [cx + sd * e * 1.08, cy - r * dn * .8], [cx + sd * r * .52, cy - r * dn], [cx + sd * r * .1, cy - r * .6]]); } return; }
-  // the cloth goes over the crown and falls behind the neck to the shoulder; a short tied end hangs at the nape (no brim, nothing at the brow)
-  const b = -f, bk = lerp(.3, 1, a); blob(g, [[cx + b * r * .08, cy + r * 1.08], [cx + b * r * .8, cy + r * .72], [cx + b * r * (1.04 + .1 * bk), cy + r * .02], [cx + b * r * (1.14 + .2 * bk), cy - r * 1.0 * cl], [cx + b * r * (.84 + .2 * bk), cy - r * 1.8 * cl], [cx + b * r * .2, cy - r * 1.4 * cl], [cx - b * r * .2, cy - r * .3]]);
-  if (a < .55) { const k = 1 - a / .55; blob(g, [[cx + f * r * .62, cy + r * .66], [cx + f * r * 1.0, cy], [cx + f * r * 1.02, cy - r * (.7 + .6 * k)], [cx + f * r * .58, cy - r * (.95 + .7 * k)], [cx + f * r * .14, cy - r * .5]]); }
-  limb(g, cx + b * r * (.98 + .1 * bk), cy - r * .62, r * .16, cx + b * r * (1.18 + .12 * bk), cy - r * 1.24 * cl, r * .09);
-  if (beard) blob(g, [[cx + f * r * .06, cy - r * .5], [cx + f * r * (.66 + .26 * a), cy - r * .42], [cx + f * r * (.84 + .3 * a), cy - r * .92], [cx + f * r * (.56 + .24 * a), cy - r * 1.46], [cx + f * r * .12, cy - r * 1.42], [cx - f * r * .2, cy - r * 1.08]]); }
-// a robed body from the base up: straight sides, no waist, no legs (it always stands behind something or runs out of the light)
-function robe(g, sh, br = 1) { blob(g, [[-.43 * br, -.5], [-.42 * br, sh * .36], [-.37 * br, sh * .76], [-.31 * br, sh * .95], [-.18 * br, sh + .022], [-.08, sh + .08], [.08, sh + .08], [.18 * br, sh + .022], [.31 * br, sh * .95], [.37 * br, sh * .76], [.42 * br, sh * .36], [.43 * br, -.5]]); }
-// director fix: a FRONTAL man's shadow — the rooster head() drapes both sides at turn 0 and reads as a hood/veil. Here: a level-topped cloth,
-// straight down past the jaw to the shoulder, a beard under the chin; no knot, no point, no ring on the head.
-function fhead(g, cx, cy, r) { blob(g, [[cx - r * .9, cy + r * .62], [cx - r * .56, cy + r * 1.08], [cx, cy + r * 1.2], [cx + r * .56, cy + r * 1.08], [cx + r * .9, cy + r * .62], [cx + r * 1.02, cy - r * .1], [cx + r * .96, cy - r * .9], [cx + r * 1.3, cy - r * 1.55], [cx + r * 1.75, cy - r * 1.95],
-    [cx - r * 1.75, cy - r * 1.95], [cx - r * 1.3, cy - r * 1.55], [cx - r * .96, cy - r * .9], [cx - r * 1.02, cy - r * .1]]); blob(g, [[cx - r * .62, cy - r * .55], [cx + r * .62, cy - r * .55], [cx + r * .5, cy - r * 1.32], [cx, cy - r * 1.52], [cx - r * .5, cy - r * 1.32]]); }
-// fix 1: a man's body in shadow — BROAD LEVEL SHOULDERS (wider than any veil), the head cloth tied with a band (a notch at the brow),
-// a level top, falling straight past the jaw and ENDING ON the shoulder; bow = 0…1 rounds the shoulders down and drops the head.
-function pbody(g, sh, br = 1, bow = 0) { const W = .37 * br, d = .07 * bow; blob(g, [[-W * .96, -.5], [-W * .8, sh * .4], [-W * .97, sh * .62], [-W, sh - .14 - d], [-W * .9, sh - .05 - d * .7], [-W * .62, sh - .005 - d * .35], [-.1, sh + .03], [.1, sh + .03], [W * .62, sh - .005 - d * .35], [W * .9, sh - .05 - d * .7], [W, sh - .14 - d], [W * .97, sh * .62], [W * .8, sh * .4], [W * .96, -.5]]); }   // the belt draws in the waist
-// a sleeve hanging free of the body (a gap between it and the robe), ending at the wrist — no hand blob
-function hangArm(g, sd, sh, W, sway = 0) { const S = [sd * (W - .03), sh - .1], E = [sd * (W + .05), sh * .62], Wr = [sd * (W + .045) + sway, sh * .3]; limb(g, S[0], S[1], .075, E[0], E[1], .062); limb(g, E[0], E[1], .062, Wr[0], Wr[1], .05); }
-function phead(g, cx, cy, r, sh) { const ys = sh + .01; blob(g, [[cx - r * .98, cy + r * .62], [cx - r * .66, cy + r * 1.08], [cx, cy + r * 1.2], [cx + r * .66, cy + r * 1.08], [cx + r * .98, cy + r * .62], [cx + r * 1.08, cy - r * .2],
-    [cx + r * .94, cy - r * .95], [cx + r * 1.12, ys + r * .32], [cx + r * 1.55, ys], [cx - r * 1.55, ys], [cx - r * 1.12, ys + r * .32], [cx - r * .94, cy - r * .95], [cx - r * 1.08, cy - r * .2]]); }
-function pman(g, b, x, y, s, o = {}) { const { h = 1.2, br = 1, lean = 0, sv = 1.06, hy = 0, bow = 0, left = true } = o; atf(g, b, x, y, s, lean, 1, sv); const sh = h - .36, hc = h - .15 + hy, r = .116; if (left) hangArm(g, -1, sh, .37 * br, -.01 * bow);
-  pbody(g, sh, br, bow); limb(g, 0, sh + .02, .072, 0, hc - .08, .06); phead(g, 0, hc, r, sh); return { sh, hc }; }
-function cman(g, b, x, y, s, o = {}) { const { h = 1.2, br = 1, sv = 1.06, turn = 0 } = o; atf(g, b, x, y, s, 0, 1, sv); const sh = h - .36, hc = h - .15, r = .116;
-  pbody(g, sh, br * (1 - .22 * Math.abs(turn)), 0); limb(g, 0, sh + .02, .07, turn * .02, hc - .07, .058); head(g, turn * .03, hc, r, turn, { beard: true }); }
-function fman(g, b, x, y, s, o = {}) { const { h = 1.2, br = 1, lean = 0, sv = 1.06, hx = 0, hy = 0 } = o; atf(g, b, x, y, s, lean, 1, sv); const sh = h - .36, hc = h - .15, r = .116;
-  robe(g, sh, br); limb(g, 0, sh + .02, .074, hx * .6, hc - .07 + hy * .5, .058); fhead(g, hx, hc + hy, r); return { sh, hc }; }
-function sman(g, b, x, y, s, o = {}) { const { h = 1.2, br = 1, turn = 0, lean = 0, sv = 1.06, jesus = false, veil = false, beard = true, hx = 0, hy = 0 } = o; atf(g, b, x, y, s, lean, 1, sv); const sh = h - .36, hc = h - .15, r = .116;
-  robe(g, sh, br); limb(g, 0, sh + .02, .074, turn * .018 + hx * .6, hc - .07 + hy * .5, .058);
- head(g, turn * .022 + hx, hc + hy, r, turn, { jesus, veil, beard }); return { sh, hc }; }
+// LOCKED (council plan.md: sun 15–19°, shadows 4–6× height, dark-brown hard shadows; later briefs may not change it): the first draft's
+// azimuth (38392d88: −12°, beyond the pool, shadows toward the lens), elevation 15° — the low end of the lock (13° in the first draft)
+const SUN_EL = 15, SUN3 = V(Math.sin(-12 * D2R) * Math.cos(SUN_EL * D2R), Math.sin(SUN_EL * D2R), -Math.cos(12 * D2R) * Math.cos(SUN_EL * D2R));
 
 export function beats(B) {
   const T = { ...B }, c1 = B.N170b, c2 = B.N172, end = B.N173;
-  const p2 = c1, p3 = c1 + 3.2;                 // director3-plan B1: P2 the wall 3.2 s, P3 the far steps to N172
-  T.shots = [['s1', B.N170, c1], ['p2', p2, p3], ['p3', p3, c2], ['p4', c2, end]];
-  T.t0 = B.N170; T.c1 = c1; T.p2 = p2; T.p3 = p3; T.c2 = c2; T.c2b = B.N172b ?? c2 + 3.6; T.end = end;
+  T.shots = [['s1', B.N170, c1], ['p3', c1, c2], ['p4', c2, end]];   // 10-3 test: P2 removed, P3 lengthened
+  T.t0 = B.N170; T.c1 = c1; T.p3 = c1; T.c2 = c2; T.c2b = B.N172b ?? c2 + 3.6; T.end = end;
+  T.push = [c2 - .6, c2];                       // P3's last 0.6 s: the push into the drone
+  T.rise = [T.c2b + .1, T.c2b + 2.1];           // 「사람을 취하리라던」: the drone rises (2 s, ease in-out) …
+  T.land = T.rise[1];                           // … and lands on the first-draft framing at 「말씀대로」
   T.sun = [B.N170 + .05, B.N170 + 1.0];        // the sun comes out of the cloud
   T.fr0 = B.N170;                               // the front: z = −110 at fr0, +45 m/s toward the lens (passes it ≈ fr0 + 2.8)
-  T.bow = [c1 + .2, c1 + 1.0];                  // the 3D Peter straightens behind P2 (unseen) …
-  T.arm = [c1 + 1.2, c1 + 2.6];                 // … and his arm is already up when P3 opens (a match on the action of P2's shadow)
-  T.sweep = [c1 + 1.2, c1 + 4.4];               // s2: the second band of light, from him over the crowd to the lens
+  T.bow = [c1 + .3, c1 + 1.3];                  // P3: small Peter straightens on 「일어나」 …
+  T.arm = [c1 + 1.7, c1 + 3.1];                 // … his right arm rises once …
+  T.fwd = [c1 + 3.1, c1 + 5.1];                 // … and goes slowly forward
+  T.sweep = [c1 + .4, c1 + 4.4];                // P3: the second band of light, from him over the crowd to the lens
   return T;
 }
 
@@ -352,159 +294,133 @@ export async function build(W, H) {
       moA[i] = clamp((base * lit + (shot === 's1' ? .1 : 0) + ed * .85) * (.5 + .5 * hsh(i, 8)) * Math.sin(Math.PI * ((ph * 3) % 1))); }
     moG.attributes.position.needsUpdate = true; moG.attributes.aK.needsUpdate = true; }
 
-  // ================================================================ P4 (director3-plan B1, owner 2026-11-26): the three thousand from above
-  // The first draft's aerial (git edc61537 s3: the stepped pool where the streets meet, the crane) rebuilt to the plan: a low afternoon sun (19°)
-  // so that a person is a 4–8 px patch of cloth and the person's SHAPE is drawn by a long shadow (Steinmetz's camel caravans); five streets
-  // flowing in like rivers (「간디」's funeral from the air); the crowd filling a funnel that narrows onto the pool — the same direction and
-  // outline as part 1's net bag (lake-peter3d-b.js uwA). No DOF, no tilt-shift (a miniature is a board game): depth by warm haze only.
-  const sq = new THREE.Group(); sq.position.copy(PO); G.pool.add(sq);
-  const SUN4 = V(Math.cos(32 * D2R) * Math.sin(40 * D2R), Math.sin(32 * D2R), -Math.cos(32 * D2R) * Math.cos(40 * D2R));   // fix 1: a warm low sun at 27° (32°: shadows ≈ 2.6 m, no hatching), upper right
-  const PA0 = 8.6, PB0 = 4.2, PNR = 5, PDR = .8, PST = .3, TP = .17, PYW = -(PNR * PST) - .34, PYF = PYW - 1.0;
-  // fix 1: a stepped TRAPEZOID (Siloam: wider toward the lens), squarer corners — not a pill. seP → world [x, z] (z toward the lens)
-  const seP = (a, b, th, n = 10) => { const c = Math.cos(th), s = Math.sin(th), z = b * Math.sign(s) * Math.pow(Math.abs(s), 2 / n); return [a * Math.sign(c) * Math.pow(Math.abs(c), 2 / n) * (1 + TP * z / b), z]; };
-  const ring = (a, b, N = 160) => { const pts = []; for (let i = 0; i < N; i++) { const [x, z] = seP(a, b, i / N * Math.PI * 2); pts.push(new THREE.Vector2(x, -z)); } return pts; };   // shape y = −world z
-  const RA = k => PA0 + k * PDR, RB = k => PB0 + k * PDR, treadY = k => -(PNR - k) * PST;
-  function ringS(x, z) { let lo = -PB0 + .2, hi = 200; const f = s => Math.pow(Math.abs(x / (1 + TP * clamp(z / (PB0 + s), -1, 1))) / (PA0 + s), 10) + Math.pow(Math.abs(z) / (PB0 + s), 10) - 1; for (let i = 0; i < 28; i++) { const m = (lo + hi) / 2; if (f(m) > 0) lo = m; else hi = m; } return lo / PDR; }
-  const groundAt = (x, z) => { const s = ringS(x, z); if (s >= PNR) return 0; if (s < 0) return PYF; const k = Math.floor(s), fr = s - k, y0 = treadY(k), y1 = k + 1 >= PNR ? 0 : treadY(k + 1); return lerp(y0, y1, ss(.86, 1, fr)); };
+  // ================================================================ P4: the drone (10-3 test, council/test-brief.md A) over the FIRST DRAFT's world
+  // The world and light of the first-draft aerial (r10-pentecost-still-10.5.jpg — the working tree right after git edc61537, committed as
+  // 38392d88 s3; edc61537 itself still had the 80° top-down crane): the stepped pool, five streets, dark small figures, long hard shadows.
+  // Copied unchanged except: the sun locked at 15° (council plan), the first draft's riser shade (pave3), and one street of walkers added
+  // for the drone to skim (STR[1], toward the lens; its own random stream, so the first draft's crowd is the same).
+  const pave3 = patch(K.std('#cdb898', { roughness: .9 }), 'pv3', { map: PAVE.replace('if (N.y < .5) c *= .88;', 'if (N.y < .5) c *= .72;') });
+  // ================================================================ shot 3: the pool at the bottom of the city
+  const pool = new THREE.Group(); pool.position.copy(PO); pool.rotation.y = PSI; G.pool.add(pool);
+  const seP = (a, b, th, n = 4) => { const c = Math.cos(th), s = Math.sin(th); return [a * Math.sign(c) * Math.pow(Math.abs(c), 2 / n), b * Math.sign(s) * Math.pow(Math.abs(s), 2 / n)]; };
+  const ring = (a, b, N = 120) => { const pts = []; for (let i = 0; i < N; i++) { const [x, y] = seP(a, b, i / N * Math.PI * 2); pts.push(new THREE.Vector2(x, y)); } return pts; };
+  const RA = k => A0 + k * DR, RB = k => B0 + k * DR;
+  const treadY = k => -(NR - k) * STEP;   // tread k (between ring k and k+1), k = 0 … NR−1; the plaza (ring NR outward) at 0
+  // the continuous ring index of a local point (bisection on the superellipse family): < 0 inside the water's edge
+  function ringS(x, z) { let lo = -A0 + .2, hi = 80; const f = s => Math.pow(Math.abs(x) / (A0 + s), 4) + Math.pow(Math.abs(z) / (B0 + s), 4) - 1;
+    for (let i = 0; i < 26; i++) { const m = (lo + hi) / 2; if (f(m) > 0) lo = m; else hi = m; } return lo / DR; }
+  const groundAt = (x, z) => { const s = ringS(x, z); if (s >= NR) return 0; if (s < 0) return YF; const k = Math.floor(s), fr = s - k, y0 = treadY(k), y1 = k + 1 >= NR ? 0 : treadY(k + 1);
+    return lerp(y0, y1, ss(.86, 1, fr)); };   // the riser eased over its last 12 cm: no pop when a figure steps down
   { const parts = [];
-    for (let k = 0; k < PNR; k++) { const sh = new THREE.Shape(ring(RA(k + 1), RB(k + 1))); sh.holes.push(new THREE.Path(ring(RA(k), RB(k)))); const dep = treadY(k) - PYF + .02, g = new THREE.ExtrudeGeometry(sh, { depth: dep, bevelEnabled: false, curveSegments: 1 }); g.rotateX(-Math.PI / 2); g.translate(0, PYF - .02, 0); parts.push([g]); }
-    { const sh = new THREE.Shape([[-400, -400], [400, -400], [400, 400], [-400, 400]].map(([x, y]) => new THREE.Vector2(x, y))); sh.holes.push(new THREE.Path(ring(RA(PNR), RB(PNR)))); const g = new THREE.ShapeGeometry(sh, 1); g.rotateX(-Math.PI / 2); parts.push([g]); }
-    { const g = new THREE.ShapeGeometry(new THREE.Shape(ring(RA(0) + .1, RB(0) + .1)), 1); g.rotateX(-Math.PI / 2); g.translate(0, PYF, 0); parts.push([g]); }
-    const poolM = patch(K.std('#d6c2a0', { roughness: .9, side: THREE.DoubleSide, emissive: col('#7a5c40'), emissiveIntensity: 1.0 }), 'pool4', { map: PAVE }); const m = new THREE.Mesh(K.mergeGeometries(parts), poolM); m.receiveShadow = true; m.castShadow = false; sq.add(m); }   // fix 2: the steps' edges in light (lifted shade, no black rope lines)
-  // the water: dark, the warm sky in it, a sheen toward the sun; glints and rings are separate (below)
-  const pwU = { uT: { value: 0 }, uWarm: { value: 0 } };
-  const pwM = new THREE.MeshStandardMaterial({ color: '#17302e', roughness: .25 });
-  pwM.onBeforeCompile = sh => { Object.assign(sh.uniforms, pwU);
+    for (let k = 0; k < NR; k++) { const sh = new THREE.Shape(ring(RA(k + 1), RB(k + 1))); sh.holes.push(new THREE.Path(ring(RA(k), RB(k)))); const dep = treadY(k) - YF + .02, g = new THREE.ExtrudeGeometry(sh, { depth: dep, bevelEnabled: false, curveSegments: 1 }); g.rotateX(-Math.PI / 2); g.translate(0, YF - .02, 0); parts.push([g]); }
+    { const sh = new THREE.Shape([V(-160, -160), V(160, -160), V(160, 160), V(-160, 160)].map(v => new THREE.Vector2(v.x, v.y))); sh.holes.push(new THREE.Path(ring(RA(NR), RB(NR)))); const g = new THREE.ShapeGeometry(sh, 1); g.rotateX(-Math.PI / 2); parts.push([g]); }
+    { const g = new THREE.ShapeGeometry(new THREE.Shape(ring(RA(0) + .1, RB(0) + .1)), 1); g.rotateX(-Math.PI / 2); g.translate(0, YF, 0); parts.push([g]); }
+    const m = new THREE.Mesh(K.mergeGeometries(parts), pave3); m.receiveShadow = true; m.castShadow = true; pool.add(m); }
+  // the water: dark green-teal, the sky in it, a warm sheen that grows, rings where men are baptised (up to 8 at once)
+  const NRIP = 8, waterU = { uT: { value: 0 }, uRip: { value: Array.from({ length: NRIP }, () => new THREE.Vector4(0, 0, -99, 0)) }, uWarm: { value: 0 } };
+  const waterM = new THREE.MeshStandardMaterial({ color: '#173634', roughness: .2, metalness: 0 });
+  waterM.onBeforeCompile = sh => { Object.assign(sh.uniforms, waterU);
     sh.vertexShader = sh.vertexShader.replace('#include <common>', '#include <common>\nvarying vec3 vWL;').replace('#include <project_vertex>', '#include <project_vertex>\nvWL = position;');
-    sh.fragmentShader = sh.fragmentShader.replace('#include <common>', `#include <common>\nvarying vec3 vWL; uniform float uT, uWarm;\n${GLSL.hash}`)
-      .replace('#include <opaque_fragment>', `{ vec2 q = vWL.xy; float n = fbm(q * .35 + vec2(uT * .05, -uT * .04)), sun = smoothstep(-8., 14., q.x + q.y * .6);
-        outgoingLight = vec3(.03, .055, .05) * (.8 + .4 * n) + reflectedLight.directDiffuse * .2 + mix(vec3(.16, .17, .15), vec3(.42, .32, .18), uWarm) * (.25 + .45 * sun) * (.7 + .5 * n); }
+    sh.fragmentShader = sh.fragmentShader.replace('#include <common>', `#include <common>\nvarying vec3 vWL; uniform float uT, uWarm; uniform vec4 uRip[${NRIP}]; vec3 wGlow, wDir;\n${GLSL.hash}`)
+      .replace('#include <lights_fragment_end>', `#include <lights_fragment_end>
+        { vec2 q = vWL.xy; float n = fbm(q * .9 + vec2(uT * .12, -uT * .08)), g = vnoise(q * 3.3 + vec2(-uT * .5, uT * .35));
+          float rr = 0.; for (int i = 0; i < ${NRIP}; i++){ vec4 R = uRip[i]; float a = uT - R.z; if (a < 0. || a > 3.2) continue; float d = length(q - R.xy), w = a * 1.05 + .15; rr += R.w * exp(-pow((d - w) / (.12 + a * .1), 2.)) * pow(1. - a / 3.2, 2.) * .32 * smoothstep(0., .45, a); }
+          vec3 sky = mix(vec3(.42, .5, .55), vec3(1., .84, .58), uWarm);
+          float g2 = vnoise(q * 8.3 + vec2(uT * .9, -uT * .6)), far = smoothstep(-4., 4., q.y), gl = smoothstep(.6, .78, g * g2) * (.15 + 1.2 * far);   // sparse glints, more toward the sun
+          wGlow = sky * (.012 + .016 * n) + vec3(1., .82, .52) * (gl * .9 + rr * .4 + far * .035 * (.6 + .4 * n)) * (.7 + uWarm * .6);
+          wDir = reflectedLight.directDiffuse; }`)
+      .replace('#include <opaque_fragment>', `outgoingLight = vec3(.006, .024, .024) + wDir * .25 + wGlow;
         #include <opaque_fragment>`); };
-  pwM.customProgramCacheKey = () => 'pc-pw';
-  { const w = new THREE.Mesh(new THREE.ShapeGeometry(new THREE.Shape(ring(RA(0) + .05, RB(0) + .05)), 1), pwM); w.rotation.x = -Math.PI / 2; w.position.y = PYW; w.receiveShadow = true; sq.add(w); }
-  // the funnel the crowd fills (wide at the top, narrowing onto the pool: part 1's net bag), the five streets, and the town round them
-  const FZ0 = RB(PNR) + 1.0, FZ1 = 36, fHW = z => RA(PNR) * .9 + .6 * (-z - FZ0), inFun = (x, z, m = 0) => z <= -FZ0 + m && z >= -FZ1 - m && Math.abs(x) <= fHW(z) + m;
-  const inPlaza = (x, z, m = 0) => ringS(x, z) < PNR + (4 + m) / PDR;
-  const STRS = [[-30, -FZ1, -.42, -1], [30, -FZ1, .42, -1], [-fHW(-34) + 1, -34, -1, -.18], [fHW(-34) - 1, -34, 1, -.18], [RA(PNR) * .7, RB(PNR) + 2, .72, 1]].map(([x, z, dx, dz]) => { const d = V(dx, 0, dz).normalize(); return { m: V(x, 0, z), d }; });
-  const distStr = (x, z) => { let best = 1e9; for (const s of STRS) { const px = x - s.m.x, pz = z - s.m.z, al = px * s.d.x + pz * s.d.z; if (al < -3) continue; best = Math.min(best, Math.abs(px * s.d.z - pz * s.d.x)); } return best; };
-  { const r = rng(9091), hm = [], hc = [], rm = [], jm = [], am = [], ac = [], trees = [], palms = [];
-    for (let gx = -150; gx <= 150; gx += 7) for (let gz = -200; gz <= 110; gz += 7) { const x = gx + (r() - .5) * 2, z = gz + (r() - .5) * 2;
-      if (inFun(x, z, 1.5) || inPlaza(x, z, 2) || distStr(x, z) < 6.5) continue;
-      if (r() < .09) { (r() < .5 ? trees : palms).push([x, z]); continue; }   // a courtyard with a tree
-      const w = 5 + r() * 2.6, d = 5 + r() * 2.6, h = 3 + Math.pow(r(), 1.4) * 7, ry = (r() - .5) * .14, c = new THREE.Color().setHSL(.085 + r() * .03, .16 + r() * .12, .6 + r() * .17), q = new THREE.Quaternion().setFromAxisAngle(V(0, 1, 0), ry);
-      hm.push(new THREE.Matrix4().compose(V(x, h / 2 - .3, z), q, V(w, h + .6, d))); hc.push(c);
-      rm.push(new THREE.Matrix4().compose(V(x, h + .03, z), q, V(w * .8, .06, d * .8)));   // the sunk roof inside the parapet
-      if (r() < .45) { const uw = w * .42, ud = d * .42, uh = 2.4; hm.push(new THREE.Matrix4().compose(V(x + (r() - .5) * w * .3, h + uh / 2, z + (r() - .5) * d * .3), q, V(uw, uh, ud))); hc.push(c.clone().multiplyScalar(.96)); }
-      for (let k = 0, n = (r() * 3) | 0; k < n; k++) jm.push(new THREE.Matrix4().compose(V(x + (r() - .5) * w * .6, h + .35, z + (r() - .5) * d * .6), new THREE.Quaternion(), V(1, 1, 1)));   // jars
-      if (r() < .3) { am.push(new THREE.Matrix4().compose(V(x + (r() - .5) * w * .4, h + 1.9, z + (r() - .5) * d * .4), new THREE.Quaternion().setFromEuler(new THREE.Euler(-Math.PI / 2 + .1, 0, r() * 3)), V(2.2, 1.6, 1))); ac.push(new THREE.Color(['#a8664a', '#c9b48c', '#5f6c86', '#b08a48', '#e2d6bc'][(r() * 5) | 0])); } }   // an awning / washing
-    const him = new THREE.InstancedMesh(K.roundedBox(1, 1, 1, .03, 1), M.wall, hm.length); hm.forEach((q, i) => { him.setMatrixAt(i, q); him.setColorAt(i, hc[i]); }); him.castShadow = him.receiveShadow = true; sq.add(him);
-    const rim = new THREE.InstancedMesh(new THREE.BoxGeometry(1, 1, 1), patch(K.std('#9a8466', { roughness: 1 }), 'rf4'), rm.length); rm.forEach((q, i) => rim.setMatrixAt(i, q)); rim.receiveShadow = true; sq.add(rim);
-    const jim = new THREE.InstancedMesh(new THREE.CylinderGeometry(.26, .3, .7, 8), patch(K.std('#8e5c40', { roughness: .9 }), 'jar4'), jm.length); jm.forEach((q, i) => jim.setMatrixAt(i, q)); jim.castShadow = true; sq.add(jim);
-    const aim = new THREE.InstancedMesh(new THREE.PlaneGeometry(1, 1), patch(K.std('#ffffff', { roughness: .95, side: THREE.DoubleSide }), 'aw4'), am.length); am.forEach((q, i) => { aim.setMatrixAt(i, q); aim.setColorAt(i, ac[i]); }); aim.castShadow = true; sq.add(aim);
-    { const n = trees.length * 18, im = new THREE.InstancedMesh(new THREE.IcosahedronGeometry(.95, 0), M.leaf, n), m4 = new THREE.Matrix4(); let k = 0;
-      for (const [x, z] of trees) { const q = rng((x * 13 + z * 7) | 0); for (let i = 0; i < 18; i++) { const a = q() * 6.283, rr = Math.sqrt(q()) * 2.4; m4.compose(V(x + Math.cos(a) * rr, 3.2 + q() * 1.8, z + Math.sin(a) * rr), new THREE.Quaternion().setFromEuler(new THREE.Euler(q() * 3, q() * 3, 0)), V(1, .7, 1).multiplyScalar(.7 + q() * .7)); im.setMatrixAt(k++, m4); } }
-      im.castShadow = true; sq.add(im); }
-    { const n = palms.length * 9, im = new THREE.InstancedMesh(new THREE.BoxGeometry(3.4, .08, .42), patch(K.std('#4f6a3c', { roughness: .85 }), 'palm4'), n), m4 = new THREE.Matrix4(); let k = 0;   // a palm seen from above: a star
-      for (const [x, z] of palms) { for (let i = 0; i < 9; i++) { const a = i / 9 * 6.283 + x; m4.compose(V(x + Math.cos(a) * 1.6, 9 - .3 * (i % 2), z + Math.sin(a) * 1.6), new THREE.Quaternion().setFromEuler(new THREE.Euler(0, -a, -.25)), V(1, 1, 1)); im.setMatrixAt(k++, m4); } }
-      im.castShadow = true; sq.add(im); } }
-  // the people: cloth patches with a matte head of the same value (no bright crown, no speculars — the bowling pins of f1), the shape in the shadow
-  const p4G = (() => { const lg = new THREE.LatheGeometry([[.2, 0], [.22, .05], [.2, .6], [.175, 1.0], [.21, 1.3], [.15, 1.4], [.05, 1.46]].map(([r, y]) => new THREE.Vector2(r, y)), 10); lg.scale(1.05, 1, .72);
-    const hd = new THREE.SphereGeometry(.12, 10, 7); hd.scale(1, 1.05, 1); hd.translate(0, 1.57, 0); const cl = new THREE.SphereGeometry(.16, 10, 6, 0, Math.PI * 2, 0, Math.PI * .62); cl.scale(1.05, 1.1, 1); cl.translate(0, 1.5, .02);
-    return K.mergeGeometries([[lg], [hd], [cl]]); })();
-  const p4M = new THREE.MeshStandardMaterial({ color: '#ffffff', roughness: 1, metalness: 0 });
-  const CLOTH = ['#cfc4ab', '#c4b89e', '#d8cfbb', '#a4766a', '#94695e', '#6c788a', '#5e6b80', '#a99068', '#b39a6c', '#8c8070', '#bcae92'];
-  const crowd4 = [];
-  { const r = rng(2026), slots = [];
-    for (let k = -1; k <= PNR + 1; k++) { const sA = k < 0 ? -.7 : k + .5, a = PA0 + sA * PDR, b = PB0 + sA * PDR, sp = k < 0 ? 1.2 : .72; let per = 0, pv = seP(a, b, 0); for (let i = 1; i <= 300; i++) { const c = seP(a, b, i / 300 * 6.283); per += Math.hypot(c[0] - pv[0], c[1] - pv[1]); pv = c; }
-      const n = Math.floor(per / sp); for (let i = 0; i < n; i++) { const [x, z] = seP(a, b, (i + r() * .4) / n * 6.283); slots.push({ x: x + (r() - .5) * .2, z: z + (r() - .5) * .2, d: Math.max(0, k) * 1.2 + r() * 2.5, w: k < 0 }); } }
-    for (let z = -FZ0 - .5; z >= -FZ1; z -= 1.15) for (let x = -fHW(z); x <= fHW(z); x += 1.15) { const jx = x + (r() - .5) * .7, jz = z + (r() - .5) * .7; if (!inFun(jx, jz) || r() > 1 - .42 * ss(14, FZ1, -jz)) continue; slots.push({ x: jx, z: jz, d: 7 + (-jz - FZ0) * .85 + r() * 5 }); }
-    slots.sort((a, b) => a.d - b.d);
-    const nearestStr = s => { if (s.z > 0) return 4; let bi = 0, bd = 1e9; STRS.forEach((t, i) => { if (i === 4) return; const d = Math.hypot(s.x - t.m.x, s.z - t.m.z); if (d < bd) { bd = d; bi = i; } }); return bi; };
-    slots.forEach((s, i) => crowd4.push({ ...s, f: i / slots.length, st: nearestStr(s), v: 1.1 + r() * .25, lane: (r() - .5) * 4.6, col: new THREE.Color(CLOTH[(r() * CLOTH.length) | 0]).multiplyScalar(.82 + r() * .26), ph: r() }));
-    for (let i = 0; i < 700; i++) { const st = i % 5, m = STRS[st].m; crowd4.push({ x: m.x, z: m.z, f: 1.02 + i / 1100 * 2.2, st, v: 1.1 + r() * .25, lane: (r() - .5) * 4.6, col: new THREE.Color(CLOTH[(r() * CLOTH.length) | 0]).multiplyScalar(.82 + r() * .26), ph: r(), late: true }); } }
-  // fix 1: back to the first draft's little figures (edc61537: robe + head cloth as two meshes, light cloth, a soft rim)
-  const bodyG4 = (() => { const lg = new THREE.LatheGeometry([[.2, 0], [.22, .05], [.2, .6], [.175, 1.0], [.2, 1.28], [.15, 1.39], [.05, 1.45]].map(([r, y]) => new THREE.Vector2(r, y)), 14); lg.scale(1, 1, .78);
+  waterM.customProgramCacheKey = () => 'pc-water';
+  { const g = new THREE.ShapeGeometry(new THREE.Shape(ring(RA(0) + .05, RB(0) + .05)), 1); const w = new THREE.Mesh(g, waterM); w.rotation.x = -Math.PI / 2; w.position.y = YW; pool.add(w); }
+  // five streets come down to the square round the pool; houses fill the rest (instanced: roofs seen from above)
+  const STR = [18, 92, 158, 214, 300].map(a => a * D2R), PLA = RA(NR) + 11, PLB = RB(NR) + 11;
+  const mouth = a => { const [x, z] = seP(PLA, PLB, a); return V(x, 0, z); };
+  const dirOut = a => { const [x, z] = seP(PLA, PLB, a); return V(x, 0, z).normalize(); };
+  const distStreet = (x, z) => { let d = 1e9; for (const a of STR) { const m = mouth(a), dv = dirOut(a), px = x - m.x, pz = z - m.z, along = px * dv.x + pz * dv.z; if (along < -2) continue; d = Math.min(d, Math.abs(px * dv.z - pz * dv.x)); } return d; };
+  // 10-3 test: along the drone's street beyond the first draft's frame the houses take the first draft's 'near' height (2.6–4.2 m, no roof room),
+  // so the 5 m drone flies just above the roofs; the random stream is unchanged, so every other house is the first draft's
+  const droneZone = (x, z) => { const m = mouth(STR[1]), dv = dirOut(STR[1]), px = x - m.x, pz = z - m.z, al = px * dv.x + pz * dv.z; return al > 14 && Math.abs(px * dv.z - pz * dv.x) < 15; };
+  { const r = rng(909), hm = [], hc = [], pm = [], trees = [];
+    for (let gx = -86; gx <= 86; gx += 6.4) for (let gz = -86; gz <= 86; gz += 6.4) { const x = gx + (r() - .5) * 1.6, z = gz + (r() - .5) * 1.6;
+      if (Math.pow(Math.abs(x) / (PLA + 1.5), 4) + Math.pow(Math.abs(z) / (PLB + 1.5), 4) < 1) continue; if (distStreet(x, z) < 5.4) continue;
+      if (r() < .1) { if (r() < .6) trees.push([x, z]); continue; }   // a courtyard (sometimes a tree)
+      const w = 4.6 + r() * 2.2, d = 4.6 + r() * 2.2, near = Math.hypot(x / PLA, z / PLB) < 2.0 || droneZone(x, z), h = near ? 2.6 + r() * 1.6 : 3 + r() * 4.5, ry = (r() - .5) * .12, c = new THREE.Color().setHSL(.08 + r() * .03, .18 + r() * .14, .62 + r() * .16);
+      hm.push(new THREE.Matrix4().compose(V(x, h / 2 - .3, z), new THREE.Quaternion().setFromAxisAngle(V(0, 1, 0), ry), V(w, h + .6, d))); hc.push(c);
+      if (r() < .65) { pm.push(new THREE.Matrix4().compose(V(x, h + .02, z), new THREE.Quaternion().setFromAxisAngle(V(0, 1, 0), ry), V(w * .78, .06, d * .78))); }
+      if (r() < .3) { const uw = w * .45, ud = d * .45, uh = 2.4, ox = (r() - .5) * w * .3, oz = (r() - .5) * d * .3; if (!droneZone(x, z)) hm.push(new THREE.Matrix4().compose(V(x + ox, h + uh / 2, z + oz), new THREE.Quaternion().setFromAxisAngle(V(0, 1, 0), ry), V(uw, uh, ud))), hc.push(c.clone().multiplyScalar(.97)); } }
+    const hg = K.roundedBox(1, 1, 1, .03, 1), him = new THREE.InstancedMesh(hg, M.wall, hm.length); hm.forEach((q, i) => { him.setMatrixAt(i, q); him.setColorAt(i, hc[i]); }); him.castShadow = him.receiveShadow = true; pool.add(him);
+    // the roof's sunken middle (a darker, shallower plane inside the parapet line)
+    const pim = new THREE.InstancedMesh(new THREE.BoxGeometry(1, 1, 1), patch(K.std('#8c7656', { roughness: 1 }), 'rf2'), pm.length); pm.forEach((q, i) => pim.setMatrixAt(i, q)); pim.receiveShadow = true; pool.add(pim);
+    for (const [x, z] of trees) { const n = 22, inst = new THREE.InstancedMesh(new THREE.IcosahedronGeometry(.9, 0), M.leaf, n), m4 = new THREE.Matrix4(), q = rng((x * 13 + z * 7) | 0);
+      for (let i = 0; i < n; i++) { const a = q() * 6.283, rr = Math.sqrt(q()) * 2.2; m4.compose(V(x + Math.cos(a) * rr, 3.4 + q() * 1.6, z + Math.sin(a) * rr), new THREE.Quaternion().setFromEuler(new THREE.Euler(q() * 3, q() * 3, 0)), V(1, .7, 1).multiplyScalar(.7 + q() * .7)); inst.setMatrixAt(i, m4); }
+      inst.castShadow = true; pool.add(inst); } }
+  // the people (instanced, read from above: shoulders and a head cloth; robes to the ground)
+  const bodyG = (() => { const lg = new THREE.LatheGeometry([[.2, 0], [.22, .05], [.2, .6], [.175, 1.0], [.2, 1.28], [.15, 1.39], [.05, 1.45]].map(([r, y]) => new THREE.Vector2(r, y)), 14); lg.scale(1, 1, .78);
     const sh = new THREE.SphereGeometry(.17, 12, 8); sh.scale(1.42, .55, .82); sh.translate(0, 1.33, 0); return K.mergeGeometries([[lg], [sh]]); })();
-  const headG4 = (() => { const hd = new THREE.SphereGeometry(.118, 12, 8); hd.scale(.95, 1.05, 1); hd.translate(0, 1.56, .01); const fall = new THREE.SphereGeometry(.15, 12, 8, Math.PI * .1, Math.PI * .8 + Math.PI, 0, Math.PI * .6); fall.scale(1, 1.1, .9); fall.translate(0, 1.5, .03); return K.mergeGeometries([[hd], [fall]]); })();
-  const ROBE4 = ['#e9e1cf', '#dcd2bc', '#f0e8d8', '#cfc3a8', '#b8a688', '#d8ccb0', '#9a7c58', '#7c6448', '#5c6c7e', '#8a4a34', '#c8b48c', '#e4dac6'], CL4 = ['#efe7d6', '#d8cdb4', '#3b4f6b', '#8a7a66', '#e6dcc8', '#a89070', '#c4b08a', '#6a5440', '#f2ead8'];
-  const fig4 = patch(K.std('#ffffff', { roughness: .92 }), 'fig4', { rim: .5 }), fig4h = patch(K.std('#ffffff', { roughness: .92 }), 'fig4h', { rim: .5 });
-  // fix 2: from this height a person is a warm point of light (a sunlit head cloth and shoulders) and a short soft dash of shadow: a low lens of
-  // cloth (.55 m) with a small lit dome — never a peg, never a long stalk shadow
-  const dotB = (() => { const g = new THREE.SphereGeometry(.26, 12, 7); g.scale(1, .9, .78); g.translate(0, .22, 0); return g; })(), dotH = (() => { const g = new THREE.SphereGeometry(.13, 10, 7); g.translate(0, .5, 0); return g; })();
-  const glowB = new THREE.MeshStandardMaterial({ color: '#ffffff', roughness: .9, emissive: col('#ffcf8e'), emissiveIntensity: .28 }), glowH = new THREE.MeshStandardMaterial({ color: '#ffffff', roughness: .9, emissive: col('#ffe2b0'), emissiveIntensity: .55 });
-  const NP4 = crowd4.length, p4I = new THREE.InstancedMesh(dotB, glowB, NP4), p4H = new THREE.InstancedMesh(dotH, glowH, NP4);
-  crowd4.forEach((p, i) => { p4I.setColorAt(i, new THREE.Color(ROBE4[(hsh(i, 81) * ROBE4.length) | 0]).lerp(new THREE.Color('#f4dcb0'), .35)); p4H.setColorAt(i, new THREE.Color(CL4[(hsh(i, 82) * CL4.length) | 0]).lerp(new THREE.Color('#fff0d0'), .5)); });
-  for (const o of [p4I, p4H]) { o.castShadow = true; o.receiveShadow = true; o.frustumCulled = false; sq.add(o); }
-  const arrive4 = (f, T) => { const a = T.c2, b = T.end; if (f < .28) return a - 14 + f / .28 * 13.6; if (f <= 1) return a + .05 + (b - a - .35) * Math.pow((f - .28) / .72, .92); return b + .3 + (f - 1) * 12; };
-  // the baptisms: golden rings on the water, their rate rising smoothly 1 → 6 a second (one pure table of events)
-  const RINGS4 = []; { const r = rng(77); let acc = .5; for (let t = -2.5; t < 9.5; t += .01) { acc += .01 * (1 + 5 * ss(.4, 6.2, t)); if (acc >= 1) { acc -= 1; let x, z; do { x = (r() - .5) * 2 * (PA0 - 1.5); z = (r() - .5) * 2 * (PB0 - 1.2); } while (ringS(x, z) > -1.6); RINGS4.push({ dt: t, x, z }); } } }
-  const NR4 = RINGS4.length, r4Age = new THREE.InstancedBufferAttribute(new Float32Array(NR4), 1), r4G = new THREE.PlaneGeometry(1, 1); r4G.rotateX(-Math.PI / 2); r4G.setAttribute('aAge', r4Age);
-  const r4M = new THREE.ShaderMaterial({ transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
-    vertexShader: `attribute float aAge; varying float vA; varying vec2 vUv; void main(){ vA = aAge; vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * instanceMatrix * vec4(position, 1.); }`,
-    fragmentShader: `varying float vA; varying vec2 vUv; void main(){ if (vA <= 0. || vA > 1.6) discard; float k = vA / 1.6, d = length(vUv - .5) * 2., R = .08 + k * .92; float a = .26 * (1. - k) * (1. - k) * smoothstep(0., .4, vA);
-      float ring = exp(-pow((d - R) / (.09 + .1 * k), 2.)) * .8; gl_FragColor = vec4(vec3(1., .886, .627) * ring * a, 1.); }` });
-  const r4I = new THREE.InstancedMesh(r4G, r4M, NR4); { const mm = new THREE.Matrix4(); RINGS4.forEach((e, i) => { mm.compose(V(e.x, PYW + .03, e.z), new THREE.Quaternion(), V(4.4, 1, 4.4)); r4I.setMatrixAt(i, mm); }); } r4I.frustumCulled = false; r4I.renderOrder = 6; sq.add(r4I);
-  // silver glints: each lives .3–.6 s, eases in and out, then is born again elsewhere (a pure function of t — never re-drawn at random per frame)
-  const NGL = 40, glG = new THREE.BufferGeometry(), glP = new Float32Array(NGL * 3), glA = new Float32Array(NGL); glG.setAttribute('position', new THREE.BufferAttribute(glP, 3)); glG.setAttribute('aK', new THREE.BufferAttribute(glA, 1));
-  const glints = new THREE.Points(glG, dotM(46, '#fff2d6')); glints.frustumCulled = false; glints.renderOrder = 7; sq.add(glints);
-  function setGlints(t, warm) { for (let i = 0; i < NGL; i++) { const per = 1.1 + hsh(i, 51) * .9, life = .3 + hsh(i, 52) * .3, c = Math.floor((t + hsh(i, 53) * per) / per), ph = (t + hsh(i, 53) * per) / per - c, s = hsh(i * 7 + c, 54), u2 = hsh(i * 7 + c, 55);
-      let x = (s - .5) * 2 * (PA0 - 1), z = (u2 - .5) * 2 * (PB0 - .8); if (ringS(x, z) > -1) { x *= .6; z *= .6; }
-      const L = ph * per / life; glP[i * 3] = x; glP[i * 3 + 1] = PYW + .05; glP[i * 3 + 2] = z; glA[i] = L < 1 ? Math.sin(Math.PI * L) * (.35 + .35 * (x + 18) / 36) * (.7 + .6 * warm) : 0; }
-    glG.attributes.position.needsUpdate = true; glG.attributes.aK.needsUpdate = true; }
-  let VIS4 = 0, ARR4 = 0;
-  const m4b = new THREE.Matrix4(), q4b = new THREE.Quaternion(), e4b = new THREE.Euler(), one = V(1, 1, 1);
-  function setCrowd4(t, T) { let arr = 0;
-    crowd4.forEach((p, i) => { const ta = arrive4(p.f, T), S = V(p.x, 0, p.z), st = STRS[p.st], Mo = st.m, D = st.d, side = V(D.z, 0, -D.x), legB = p.late ? 0 : S.distanceTo(Mo);
-      const tau = .5, sR = ta - t, dRem = sR <= 0 ? 0 : sR < tau ? p.v * sR * sR / (2 * tau) : p.v * (sR - tau / 2); let x, z, yaw;
-      if (dRem <= 0) { arr++; x = S.x; z = S.z; yaw = Math.atan2(-(0 - x), -(0 - z)) + Math.sin(t * .3 + p.ph * 9) * .1; }
-      else if (dRem <= legB) { const k = dRem / legB, mx = Mo.x + side.x * p.lane * .3, mz = Mo.z + side.z * p.lane * .3; x = lerp(S.x, mx, k); z = lerp(S.z, mz, k); yaw = Math.atan2(-(S.x - mx), -(S.z - mz)); }
-      else { const e = dRem - legB, lx = Mo.x + side.x * p.lane * (.3 + .7 * ss(0, 5, e)), lz = Mo.z + side.z * p.lane * (.3 + .7 * ss(0, 5, e)); x = lx + D.x * e; z = lz + D.z * e; yaw = Math.atan2(D.x, D.z); }
-      const y = p.w && dRem <= 0 ? PYF + .02 : groundAt(x, z), sw = dRem > 0 ? Math.sin(t * 5.4 + p.ph * 6.283) * .03 : 0;
-      m4b.compose(V(x, y, z), q4b.setFromEuler(e4b.set(0, yaw, sw, 'YXZ')), one); p4I.setMatrixAt(i, m4b); p4H.setMatrixAt(i, m4b); });
-    p4I.instanceMatrix.needsUpdate = p4H.instanceMatrix.needsUpdate = true; ARR4 = arr;
-    RINGS4.forEach((e, i) => r4Age.setX(i, t - (T.c2 + e.dt))); r4Age.needsUpdate = true; }
-  function countVisible4() { let n = 0; const v = V(); cam.updateMatrixWorld(); for (let i = 0; i < NP4; i++) { p4I.getMatrixAt(i, m4b); v.setFromMatrixPosition(m4b).add(PO); v.y += .8; v.project(cam); if (v.z < 1 && Math.abs(v.x) <= 1 && Math.abs(v.y) <= 1) n++; } return n; }
+  const headG = (() => { const hd = new THREE.SphereGeometry(.118, 12, 8); hd.scale(.95, 1.05, 1); hd.translate(0, 1.56, .01); const fall = new THREE.SphereGeometry(.15, 12, 8, Math.PI * .1, Math.PI * .8 + Math.PI, 0, Math.PI * .6); fall.scale(1, 1.1, .9); fall.translate(0, 1.5, .03);
+    return K.mergeGeometries([[hd], [fall]]); })();
+  const figM = patch(K.std('#241c15', { roughness: 1 }), 'fig', { rim: .35 }), figH = patch(K.std('#241c15', { roughness: 1 }), 'figh', { rim: .35 });   // fix 1: dark small silhouettes; their shadows draw the net
+  const robeTop = ['#e9e1cf', '#dcd2bc', '#f0e8d8', '#cfc3a8', '#b8a688', '#d8ccb0', '#9a7c58', '#7c6448', '#5c6c7e', '#8a4a34', '#c8b48c', '#e4dac6'];
+  const clothTop = ['#efe7d6', '#d8cdb4', '#3b4f6b', '#8a7a66', '#e6dcc8', '#a89070', '#c4b08a', '#6a5440', '#f2ead8'];
+  const crowd3 = [];
+  { const r = rng(4747);
+    // slots: on the treads, two rows on the plaza round the top, a row standing in the water at its edge
+    const slots = [];
+    for (let k = -2; k <= NR + 1; k++) { const sA = k === -2 ? -1.9 : k < 0 ? -.75 : k + .5, a = A0 + sA * DR, b = B0 + sA * DR; let per = 0; const NS = 240; let prev = seP(a, b, 0);
+      for (let i = 1; i <= NS; i++) { const c = seP(a, b, i / NS * Math.PI * 2); per += Math.hypot(c[0] - prev[0], c[1] - prev[1]); prev = c; }
+      const sp = k === -2 ? .95 : k < 0 ? .8 : k >= NR ? .72 : .64, n = Math.floor(per / sp); for (let i = 0; i < n; i++) { const th = (i + (k & 1) * .5 + (r() - .5) * .3) / n * Math.PI * 2, [x, z] = seP(a, b, th), j = (r() - .5) * .26;
+        if (k >= 0 && r() < .06) continue; slots.push({ x: x * (1 + j / a) + (r() - .5) * .16, z: z * (1 + j / b) + (r() - .5) * .16, ring: k, th }); } }
+    // who arrives when: inner rings first (the net fills from the bottom); about a third are already there when the shot begins
+    slots.forEach(s => s.o = s.ring === -2 ? 2.4 + r() * 1.6 : (s.ring + 1) * 1.0 + r() * 1.25);
+    slots.sort((a, b) => a.o - b.o);
+    slots.forEach((s, i) => { const f = i / slots.length; s.f = f; });
+    for (const s of slots) { const a = Math.atan2(s.z, s.x); let best = STR[0], bd = 9; for (const q of STR) { const d = Math.abs(Math.atan2(Math.sin(a - q), Math.cos(a - q))); if (d < bd) { bd = d; best = q; } } s.st = best; }
+    for (const s of slots) { const p = { ...s, v: 1.15 + r() * .4, lane: (r() - .5) * 3.2, body: new THREE.Color(robeTop[(r() * robeTop.length) | 0]), head: new THREE.Color(clothTop[(r() * clothTop.length) | 0]), ph: r() };
+      if (s.ring < 0) { p.body.multiplyScalar(.95); } crowd3.push(p); }
+    // extra walkers still on their way at the end (the streets stay full; they arrive after the cut), on the outer plaza rows
+    for (let i = 0; i < 260; i++) { const q = STR[i % 5], m = mouth(q); crowd3.push({ x: m.x * .97, z: m.z * .97, ring: NR + 2, st: q, f: 1.05 + i / 260 * 1.9, v: 1.15 + r() * .4, lane: (r() - .5) * 3.2, body: new THREE.Color(robeTop[(r() * robeTop.length) | 0]), head: new THREE.Color(clothTop[(r() * clothTop.length) | 0]), ph: r(), late: true }); }
+    // in the water: six pairs (one stands, one is dipped); Peter in the first pair, his indigo cloth, nearest the lens
+    for (let i = 0; i < 6; i++) { const th = [1.4, -1.85, 1.95, -1.2, -.2, 3.3][i], [x, z] = seP(A0 - 3.7, B0 - 2.75, th), dx = Math.cos(th) * .34, dz = Math.sin(th) * .34;
+      crowd3.push({ x, z, ring: -9, f: -1, v: 0, lane: 0, body: new THREE.Color(i ? '#d8ccb0' : '#a58f6f'), head: new THREE.Color(i ? '#c4b08a' : '#3b4f6b'), ph: r(), stand: true, face: th + Math.PI });
+      crowd3.push({ x: x - dx * 2.2, z: z - dz * 2.2, ring: -9, f: -1, v: 0, lane: 0, body: new THREE.Color('#f0e8d8'), head: new THREE.Color('#efe7d6'), ph: r(), dip: i, face: th }); } }
+  const NC = crowd3.length, bodyI = new THREE.InstancedMesh(bodyG, figM, NC), headI = new THREE.InstancedMesh(headG, figH, NC);
+  crowd3.forEach((p, i) => { bodyI.setColorAt(i, p.body); headI.setColorAt(i, p.head); }); bodyI.castShadow = headI.castShadow = true; bodyI.receiveShadow = headI.receiveShadow = true; bodyI.frustumCulled = headI.frustumCulled = false; pool.add(bodyI, headI);
+  // arrival schedule (film time): f ∈ [0, .32] arrived before the shot; [.32, 1] arrive through the shot (more early), > 1 after it
+  const arrive = (f, T) => { const a = T.c2, b = T.end; if (f < .32) return a - 9 + f / .32 * 8.6; if (f <= 1) { const u = (f - .32) / .68; return a + .1 + (b - a + .6) * (1 - Math.pow(1 - u, 1.15)); } return b + .7 + (f - 1) * 14; };
+  const DIPS = [0, 1, 2, 3, 4, 5, 0].map((p, i) => [p, .6 + i * .9]);   // which pair dips, seconds after the cut
+  let ARR = 0;
+  const m4 = new THREE.Matrix4(), q4 = new THREE.Quaternion(), e4 = new THREE.Euler(), one = V(1, 1, 1);
+  function setCrowd3(t, T) { let arrived = 0; const rip = waterU.uRip.value; rip.forEach(v => v.set(0, 0, -99, 0)); let ri = 0;
+    crowd3.forEach((p, i) => { let x, z, y, yaw, sway = 0;
+      if (p.ring === -9) { x = p.x; z = p.z; yaw = p.face + Math.sin(t * .4 + p.ph * 6) * .05; y = YF - .05;
+        if (p.dip != null) { let dip = 0; for (const [pi, dt] of DIPS) if (pi === p.dip) { const t0 = T.c2 + dt; const u = (t - t0) / 1.25; if (u > 0 && u < 1) dip = Math.sin(Math.PI * u) * ss(0, .25, u) * ss(1, .75, u) * 1.15 + Math.sin(Math.PI * u) * .0;
+            if (t > t0 + .35 && ri < NRIP) { rip[ri++].set(x, -z, t0 + .35, 1); } }
+          y -= dip * .9; }
+        m4.compose(V(x, y, z), q4.setFromEuler(e4.set(0, yaw, 0)), one); bodyI.setMatrixAt(i, m4); headI.setMatrixAt(i, m4); return; }
+      const ta = arrive(p.f, T), S = V(p.x, 0, p.z), Mo = mouth(p.st), D = dirOut(p.st), side = V(D.z, 0, -D.x), legB = S.distanceTo(Mo);
+      const tau = .55, sR = ta - t, dRem = sR <= 0 ? 0 : sR < tau ? p.v * sR * sR / (2 * tau) : p.v * (sR - tau / 2);
+      if (dRem <= 0) { arrived++; x = S.x; z = S.z; const toC = Math.atan2(-(-S.x), -(-S.z)); const walkYaw = Math.atan2(-(S.x - Mo.x), -(S.z - Mo.z));
+        yaw = walkYaw + Math.atan2(Math.sin(toC - walkYaw), Math.cos(toC - walkYaw)) * ss(ta, ta + 1.1, t) + Math.sin(t * .3 + p.ph * 9) * .08; }
+      else if (dRem <= legB) { const k = dRem / legB; x = lerp(S.x, Mo.x + side.x * p.lane * .4, k); z = lerp(S.z, Mo.z + side.z * p.lane * .4, k); yaw = Math.atan2(-(S.x - (Mo.x + side.x * p.lane * .4)), -(S.z - (Mo.z + side.z * p.lane * .4))); sway = 1; }
+      else { const e = dRem - legB, lx = Mo.x + side.x * p.lane * (.4 + .6 * ss(0, 4, e)), lz = Mo.z + side.z * p.lane * (.4 + .6 * ss(0, 4, e)); x = lx + D.x * e; z = lz + D.z * e; yaw = Math.atan2(D.x, D.z); sway = 1; }
+      if (p.ring < 0 && dRem <= 0) y = YF + .02; else y = groundAt(x, z);
+      if (p.ring < 0 && dRem > 0) y = Math.max(YF, groundAt(x, z));
+      if (p.late && p.st === STR[1]) y = -60;   // 10-3 test: STR[1] is walked by droneMen (below)
+      const sw = sway * Math.sin(t * 5.6 * (p.v / 1.3) + p.ph * 6.283) * .035 * ss(0, .6, dRem);
+      m4.compose(V(x, y, z), q4.setFromEuler(e4.set(0, yaw, sw, 'YXZ')), one); bodyI.setMatrixAt(i, m4); headI.setMatrixAt(i, m4); });
+    bodyI.instanceMatrix.needsUpdate = headI.instanceMatrix.needsUpdate = true; ARR = arrived; }
 
-  // ================================================================ P2 (director3-plan B1): the shadow on the wall rises — 2D, on a limewashed stone wall
-  // The figures are bw-rooster-p1.js's shadow rig, copied (atf, spline, blob, limb, ik, openHand, inHand, sleeveArm, head, robe, man — the
-  // owner-approved part 5 shadows; nothing imported). The wall is kit-fresco.js's plaster (window.FRESCO, loaded by the page).
-  const p2Wall = mkCanvas(Math.ceil(W / .9), Math.ceil(H / .9)), p2Mask = mkCanvas(W, H), p2Tmp = mkCanvas(W, H), p2Band = mkCanvas(W, H);
-  { const g = p2Wall.getContext('2d'), WW = p2Wall.width, WH = p2Wall.height, F = window.FRESCO;
-    const gr = g.createLinearGradient(0, 0, WW, WH * .3); gr.addColorStop(0, '#e2bf88'); gr.addColorStop(.55, '#f3d29a'); gr.addColorStop(1, '#f7dca8'); g.fillStyle = gr; g.fillRect(0, 0, WW, WH);
-    const wm = (X, Y) => [(X + 4) / 7 * WW, WH - Y / 7.2 * WH];
-    if (F) { g.globalAlpha = .55; F.plaster(g, [wm(-4, 0), wm(3, 0), wm(3, 7.2), wm(-4, 7.2)], 'rgba(243,210,154,0)', 31, wm, { patches: 0, mottle: 110, MY: [0, 7.2] }); g.globalAlpha = 1; }
-    const r = rng(404); g.strokeStyle = 'rgba(90,64,44,.28)'; g.lineWidth = 1.6;
-    for (let k = 0; k < 6; k++) { let x = r() * WW, y = r() * WH; g.beginPath(); g.moveTo(x, y); for (let i = 0; i < 14; i++) { x += (r() - .5) * 46; y += 18 + r() * 26; g.lineTo(x, y); } g.stroke(); }   // hairline cracks
-    const pil = g.createLinearGradient(0, 0, WW * .14, 0); pil.addColorStop(0, 'rgba(70,58,70,.5)'); pil.addColorStop(.75, 'rgba(70,58,70,.32)'); pil.addColorStop(1, 'rgba(70,58,70,0)'); g.fillStyle = pil; g.fillRect(0, 0, WW * .14, WH);   // a column of the portico, its shadow at the left edge
-    const foot = g.createLinearGradient(0, WH * .86, 0, WH); foot.addColorStop(0, 'rgba(70,52,36,0)'); foot.addColorStop(1, 'rgba(70,52,36,.4)'); g.fillStyle = foot; g.fillRect(0, WH * .86, WW, WH * .14);
-    if (F) F.grain(g, WW, WH, 9); }
-  const P2DUST = Array.from({ length: 14 }, (_, i) => [hsh(i, 61), hsh(i, 62), hsh(i, 63)]);
-  const P2CROWD = Array.from({ length: 8 }, (_, i) => { const row = i % 2, x = 30 + (i / 7) * 1020 + (hsh(i, 71) - .5) * 50; return { x, y: row ? 2010 : 1900, s: 600 + hsh(i, 72) * 60, t0: hsh(i, 73) > .5 ? .8 : -.8, t1: x < 480 ? .62 : -.62, br: .96 + hsh(i, 74) * .12, h: 1.14 + hsh(i, 75) * .08, ord: i }; }).sort((a, b) => Math.abs(a.x - 480) - Math.abs(b.x - 480));
-  function p2Arm(t, T) { const a = T.p2; const rise = ss(a + .6, a + 1.9, t), arm = ss(a + 2.0, a + 3.15, t), h = lerp(1.06, 1.26, rise), sh = h - .36, S = [.33, sh - .1];   // fix 1: a clear rise (bowed → upright, 19 %); the shoulder joint at the broad shoulder's corner
-    const ang = lerp(-1.5, 35 * D2R, arm), L = lerp(.52, .53, arm), W2 = [S[0] + Math.cos(ang) * L + .04 * (1 - arm), S[1] + Math.sin(ang) * L + .006 * Math.sin(t * 1.6) * arm]; return { rise, arm, h, S, W: W2, ...ik(S, W2, .33, .3, -1) }; }
-  function drawP2(ctx, t, T) { const a = T.p2, u = clamp((t - a) / (T.p3 - a)), zoom = lerp(1, .92, eio(u)), cx = W / 2, cy = H * .42, b = { k: zoom, ox: cx * (1 - zoom), oy: cy * (1 - zoom) };
-    ctx.save(); ctx.setTransform(zoom, 0, 0, zoom, cx * (1 - zoom), cy * (1 - zoom)); ctx.drawImage(p2Wall, -(p2Wall.width - W) / 2, -(p2Wall.height - H) / 2); ctx.restore();
-    // the band of light crossing the wall, right → left (P1's front, same way), only on the sunlit wall
-    const bx = lerp(W * 1.25, -W * .3, clamp((t - (a + .4)) / .9)), bw = 260, bg = p2Band.getContext('2d'); bg.setTransform(1, 0, 0, 1, 0, 0); bg.clearRect(0, 0, W, H);
-    if (bx > -bw * 2 && bx < W + bw * 2) { const gr = bg.createLinearGradient(bx - bw, 0, bx + bw, 0); gr.addColorStop(0, 'rgba(255,236,196,0)'); gr.addColorStop(.5, 'rgba(255,236,196,.2)'); gr.addColorStop(1, 'rgba(255,236,196,0)'); bg.fillStyle = gr; bg.fillRect(0, 0, W, H);
-      bg.globalCompositeOperation = 'lighter'; for (const [p, q, s] of P2DUST) { const x = bx + (p - .5) * bw * 1.2 - (t - a) * 30, y = 200 + q * 1100 + Math.sin(t * .8 + s * 9) * 14, al = Math.exp(-Math.pow((x - bx) / (bw * .55), 2)) * (.45 + .4 * s); bg.fillStyle = `rgba(255,240,205,${al})`; bg.beginPath(); bg.arc(x, y, 2.2 + 2.4 * s, 0, 6.283); bg.fill(); } bg.globalCompositeOperation = 'source-over'; }
-    // the shadows: Peter (near the wall: a 14 px penumbra), the crowd (further from it: 24 px)
-    const mg = p2Mask.getContext('2d'), pose = p2Arm(t, T);
-    const layer = (blur, fn) => { mg.setTransform(1, 0, 0, 1, 0, 0); mg.clearRect(0, 0, W, H); mg.fillStyle = '#fff'; fn(mg);
-      const tg = p2Tmp.getContext('2d'); tg.setTransform(1, 0, 0, 1, 0, 0); tg.clearRect(0, 0, W, H); tg.filter = `blur(${blur}px)`; tg.drawImage(p2Mask, 0, 0); tg.filter = 'none'; return tg; };
-    const shade = (tg, k = 1) => { tg.globalCompositeOperation = 'source-in'; tg.fillStyle = `rgba(128,120,168,${k})`; tg.fillRect(0, 0, W, H); tg.globalCompositeOperation = 'source-over';   // #6b5f73 over #f3d29a: a cool violet-grey, never black
-      ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalCompositeOperation = 'multiply'; ctx.drawImage(p2Tmp, 0, 0); ctx.restore(); };
-    shade(layer(5 * zoom, g => { for (const c of P2CROWD) { const k = ss(a + 1.6 + c.ord * .15, a + 2.2 + c.ord * .15, t); cman(g, b, c.x, c.y, c.s, { h: c.h, br: c.br, turn: lerp(c.t0, c.t1, k) }); } }));
-    shade(layer(9 * zoom, g => { const P0 = [480, 1103], s = 560; pman(g, b, P0[0], P0[1], s, { h: pose.h, br: 1.04, hy: lerp(-.13, 0, pose.rise), bow: 1 - pose.rise, lean: lerp(.04, 0, pose.rise) });
-      atf(g, b, P0[0], P0[1], s, lerp(.04, 0, pose.rise), 1, 1.06);
-      if (pose.arm < .02) hangArm(g, 1, pose.h - .36, .37 * 1.04, 0); else { const q = ik(pose.S, pose.W, .33, .3, -1); limb(g, pose.S[0], pose.S[1], .075, q.E[0], q.E[1], .062); limb(g, q.E[0], q.E[1], .062, q.W[0], q.W[1], .05);
-        g.save(); g.globalAlpha = ss(.25, .7, pose.arm); inHand(g, q.W, Math.atan2(q.W[1] - q.E[1], q.W[0] - q.E[0]), gg => { gg.scale(.8, .8); openHand(gg); }); g.restore(); } }));
-    ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); const bt = p2Tmp.getContext('2d'); bt.globalCompositeOperation = 'source-over'; bt.clearRect(0, 0, W, H); bt.drawImage(p2Band, 0, 0); bt.globalCompositeOperation = 'destination-out'; bt.filter = 'blur(14px)'; bt.drawImage(p2Mask, 0, 0); bt.filter = 'none'; bt.globalCompositeOperation = 'source-over';
-    ctx.globalCompositeOperation = 'screen'; ctx.drawImage(p2Tmp, 0, 0); ctx.globalCompositeOperation = 'source-over';
-    const vg = ctx.createRadialGradient(W / 2, H * .44, H * .3, W / 2, H * .44, H * .78); vg.addColorStop(0, 'rgba(40,26,20,0)'); vg.addColorStop(1, 'rgba(40,26,20,.38)'); ctx.fillStyle = vg; ctx.fillRect(0, 0, W, H); ctx.restore(); }
+
+  // 10-3 test: the drone's street (STR[1], toward the lens) walked by men — the same rig as the square's men in P1/P3 (tied head cloth, broad
+  // level shoulders, dark backlit robes with a gold rim), not the first draft's pegs: the drone passes them at 3–25 m. A lane is kept clear
+  // under the lens (|lane| ≥ 0.8 m), so they slide past on both sides and nobody passes directly beneath it.
+  const droneMen = []; { const r = rng(5152); for (let i = 0; i < 3000 && droneMen.length < 150; i++) { const e0 = 2 + r() * 70, lane = (r() < .5 ? -1 : 1) * (.8 + r() * 3.8);
+      if (droneMen.some(q => Math.hypot(q.userData.e0 - e0, q.userData.lane - lane) < 1.25)) continue;
+      const p = man(r); p.userData.e0 = e0; p.userData.lane = lane; p.userData.t0 = -r() * 1.1; p.userData.T = 1.05 + r() * .2; G.pool.add(p); droneMen.push(p); } }
 
   // ================================================================ poses (s1, p3)
-  function posePeter(t, T) { const U = PT.userData, s = U.s, id = P.idle(t, .17, { s }), bowK = 1 - ss(T.bow[0], T.bow[1], t), armK = ss(T.arm[0], T.arm[1], t), fwd = ss(T.p3, T.p3 + 2, t);
+  function posePeter(t, T) { const U = PT.userData, s = U.s, id = P.idle(t, .17, { s }), bowK = 1 - ss(T.bow[0], T.bow[1], t), armK = ss(T.arm[0], T.arm[1], t), fwd = ss(T.fwd[0], T.fwd[1], t);
     const tg = V(.36, 1.74 - .08 * fwd + .03 * Math.sin(t * .9), -.37 - .1 * fwd);   // P3: the raised hand goes once slowly forward (2 s)
     P.pose(PT, { ...id, lean: -.3 * bowK - .03 - .03 * armK - .03 * fwd, head: [-.34 * bowK + .1 * (1 - bowK), id.head[1] * .5], swing: [id.swing[0] - .1 * bowK, id.swing[1]], hands: [null, tg], handsW: [0, armK] }); }
   function poseCrowd(t) { for (const p of crowd) { const U = p.userData, id = P.idle(t, U.ph, { s: U.s }); P.pose(p, { ...id, head: [.12 + id.head[0], id.head[1]] }); } }
@@ -535,11 +451,13 @@ export async function build(W, H) {
     const cz = lerp(15.5, 12.1, u), c = V(lerp(1.2, 1.0, u), gY(cz) + lerp(3.3, 3.45, u), cz), l = V(-3.2, gY(-40) + 1.2, -40);
     setCam(c, l, FOV); film.dofCfg.focus = 13; film.dofCfg.aperture = .45; film.dofCfg.maxCoc = 14;
     posePeter(t, T); poseCrowd(t); poseLower(t, T); setMotes(t, 's1', zF, 1.0, 4.5); motes.visible = true; }
-  // P3: Peter far up the steps, a backlit silhouette against the bright sky; below him the treads' edges are lines of gold and the crowd is
-  // only its long shadows flowing down them toward the lens (the bodies are drawn by the sun's shadow camera alone, layer 3); a few soft dark
-  // shapes at the top. Telephoto from the foot of the steps, crane up with inertia — handed on to P4's crane in the same direction.
-  const P3C = (t, T) => { const u = clamp((t - T.p3) / (T.c2 - T.p3)), e = u * u * .55 + u * .45, c = V(.9, lerp(1.25, 3.6, e), 34), fov = vert ? 19 : 12;
-    return { c, l: V(PETER.x + 1.25, PLAT - 2.3 + lerp(0, 1.6, e), PETER.z), fov }; };
+  // P3 (10-3 test: lengthened to the whole second piece of N170): Peter far up the steps, small and upright, a backlit silhouette against
+  // the bright sky; below him the crowd is only its long shadows flowing down the treads toward the lens (the bodies are drawn by the sun's
+  // shadow camera alone, layer 3); a few soft dark shapes at the top. Telephoto from the foot of the steps, crane up with inertia; in the last
+  // 0.6 s the camera pushes forward over the crowd's shadows toward the sun, accelerating to the drone's 7 m/s (same heading, same backlight).
+  const P3C = (t, T) => { const u = clamp((t - T.p3) / (T.c2 - T.p3)), e = u * u * .55 + u * .45, pk = clamp((t - T.push[0]) / (T.push[1] - T.push[0])), pd = .5 * (7 / .6) * Math.pow(pk * .6, 2);
+    const c = V(.9, lerp(1.0, 4.4, e), 34 - pd), fov = (vert ? 19 : 12) * (1 + .12 * pk * pk);
+    return { c, l: V(PETER.x + 1.25, PLAT - 2.3 + lerp(0, 2.3, e) - 1.6 * pk * pk, PETER.z), fov }; };
   let SUNP3 = null;
   function p3(t, T) { FAR.visible = false; G.street.visible = true; G.pool.visible = false; sky.mesh.visible = true; LU.uGold.value = 0; for (const p of lower) p.visible = false;
     if (!SUNP3) { const q = P3C((T.p3 + T.c2) / 2, T); setCam(q.c, q.l, q.fov); cam.updateMatrixWorld(); const d = V(230 / W * 2 - 1, 1 - 520 / H * 2, .5).unproject(cam).sub(cam.position).normalize(); SUNP3 = d; }   // the sun placed where the plan wants it (x 230, y 520), up-left of him
@@ -548,27 +466,48 @@ export async function build(W, H) {
     SK.sunDir.value.copy(SUNP3); { const az = Math.atan2(SUNP3.x, -SUNP3.z), el = 14 * D2R; P3L.set(Math.sin(az) * Math.cos(el), Math.sin(el), -Math.cos(az) * Math.cos(el)); } shadowAt(V(0, 3, -12), 52, P3L); p3Crowd.visible = true;
     const grow = ss(T.p3, T.c2, t); streetLight(1, 1); sunL.intensity = 4.2; film.atmos.density = .0012; hemi.intensity = .3; film.look.exposure = lerp(.78, .84, grow); LU.uRimC.value.set('#ffc078').multiplyScalar(1.8);
     SK.horizon.value.set('#f6e2b8').multiplyScalar(1.45); SK.mid.value.set('#f0d6a8').multiplyScalar(1.05);   // a little cooler than P4's gold (time passes before 「그날」)
-    const zE = lerp(-50, 30, clamp((t - T.p3 - .3) / 2.2)), ek = ss(T.p3 + .3, T.p3 + .8, t) * (1 - ss(T.c2 - .4, T.c2, t));
+    const zE = lerp(-50, 30, clamp((t - T.sweep[0]) / (T.sweep[1] - T.sweep[0]))), ek = ss(T.sweep[0], T.sweep[0] + .5, t) * (1 - ss(T.sweep[1] - .5, T.sweep[1], t));
     LU.uFront.value = zE; LU.uShade.value = 1; LU.uEdgeK.value = .22 * ek; LU.uEdgeW.value = 4; LU.uEdgeC.value.set('#ffdcaa');
     frontLamp.pos.set(PETER.x + .4, PLAT + 2.6, PETER.z - 2.5); frontLamp.power = 8; frontLamp.size = 5;
     const q = P3C(t, T); setCam(q.c, q.l, q.fov); film.dofCfg.focus = q.c.distanceTo(PETER); film.dofCfg.aperture = .9; film.dofCfg.maxCoc = 18;
     posePeter(t, T); poseCrowd(t); setMotes(t, 'p3', zE, .5 * ek, 4); motes.visible = true; }
-  // P4: the aerial
-  const P4C = (t, T) => { const u = clamp((t - T.c2) / (T.end - T.c2)), D = 96 * Math.exp(Math.log(122 / 96) * u), pit = lerp(57, 61, u) * D2R, yaw = (-2 + 4 * u) * D2R, fov = vert ? 36 : 24;
-    const off = D * Math.tan(1.6 * D2R) / Math.sin(pit), tgt = PO.clone().add(V(0, 0, off + 1)), dir = V(Math.sin(yaw) * Math.cos(pit), Math.sin(pit), Math.cos(yaw) * Math.cos(pit));
-    return { c: tgt.clone().addScaledVector(dir, D), l: tgt, fov, D }; };
-  function p4(t, T) { G.street.visible = false; G.pool.visible = true; sky.mesh.visible = false; LU.uGold.value = 0; shadowAt(PO.clone().add(V(0, 0, -12)), 80, SUN4);
-    const u = clamp((t - T.c2) / (T.end - T.c2)), late = ss(T.c2b - .3, T.c2b + 1.6, t), warm = .35 + .65 * ss(T.c2, T.end, t);
-    const a = film.atmos; a.color.set('#e9c48c').multiplyScalar(.78); a.colorUp.copy(a.color); a.density = .0024; a.falloff = .002; a.base = 0; a.start = 20; a.scatter = .5; a.anisotropy = .6; a.phaseMix = .7; a.max = 3000;
-    hemi.color.set('#b8bccc'); hemi.groundColor.set('#7a5c40'); hemi.intensity = .52; sunL.color.set('#ffc98a'); sunL.intensity = 3.7; sunLamp.power = 0; frontLamp.power = 0; doorLamps.forEach(d => d.power = 0);
-    LU.uFront.value = 1e4; LU.uShade.value = 1; LU.uEdgeK.value = 0; LU.uRimC.value.set('#ffc078').multiplyScalar(1.2); pwU.uWarm.value = warm; pwU.uT.value = t;
-    const L = film.look; L.exposure = lerp(1.0, 1.22, late) + .08 * ss(T.end - 1.2, T.end, t); L.saturation = 1.02; L.contrast = 1.06; L.shadowTint.set('#c8c4dc'); L.highTint.set('#fff0d6'); L.vignette = .26;
-    const q = P4C(t, T); setCam(q.c, q.l, q.fov); film.dofCfg.focus = q.D; film.dofCfg.aperture = 0; film.dofCfg.maxCoc = 1;   // no DOF, no tilt-shift
-    setCrowd4(t, T); setGlints(t, warm); motes.visible = false; }
+  // P4: the drone. skim (≈ 5 m, 35° down, 7 m/s along STR[1] toward the pool and the sun) → rise on 「사람을 취하리라던」 (2 s, smoothstep: peak
+  // ≈ 39 m/s up, curving from the street's axis onto the first draft's) → land on the first-draft framing (38392d88 s3: pitch 52°, D ≈ 70, fov 36)
+  // at 「말씀대로」, then a pure crane up (the horizontal distance held, the pitch 52° → 54.5°) with a 4° orbit to the end — no stop, no roll.
+  const toW = v => v.clone().applyAxisAngle(V(0, 1, 0), PSI);
+  const SMW = toW(mouth(STR[1])).add(PO), SDW = toW(dirOut(STR[1])), TG4 = PO.clone().add(V(0, -1.2, 7)), LR4 = 70 * Math.cos(52 * D2R), V4 = 7, H4 = 5, PIT4 = 35, FOV4 = vert ? 62 : 44;
+  const E_END = (() => { let lo = 0, hi = 150; for (let i = 0; i < 40; i++) { const m = (lo + hi) / 2, p = SMW.clone().addScaledVector(SDW, m); if (Math.hypot(p.x - TG4.x, p.z - TG4.z) < LR4) lo = m; else hi = m; } return lo; })();
+  const angDir = (yaw, pit) => V(Math.sin(yaw) * Math.cos(pit), -Math.sin(pit), Math.cos(yaw) * Math.cos(pit));
+  function P4C(t, T) { const [r0, r1] = T.rise, R = r1 - r0, eR0 = E_END + V4 * R / 2;
+    const tau = clamp(t - r0, 0, R), e = t < r0 ? eR0 + V4 * (r0 - t) : eR0 - V4 * (tau - tau * tau / (2 * R));   // 7 m/s, easing to 0 over the rise
+    const S = SMW.clone().addScaledVector(SDW, e); S.y = H4;
+    const uL = (t - T.land) / (T.end - T.land), pitL = (52 + 2.5 * uL) * D2R, yawL = 4 * uL * D2R, DL = LR4 / Math.cos(pitL);   // crane up + orbit (linear: no start/stop)
+    const L = TG4.clone().add(V(Math.sin(yawL) * Math.cos(pitL) * DL, Math.sin(pitL) * DL, Math.cos(yawL) * Math.cos(pitL) * DL));
+    const k = ss(r0, r1, t), c = S.clone().lerp(L, k);
+    const yS = Math.atan2(-SDW.x, -SDW.z), dL = TG4.clone().sub(L).normalize(), yLk = Math.atan2(dL.x, dL.z), pLk = Math.asin(-dL.y);
+    const dy = Math.atan2(Math.sin(yLk - yS), Math.cos(yLk - yS)), dir = angDir(yS + dy * k, lerp(PIT4 * D2R, pLk, k));
+    return { c, l: c.clone().add(dir), fov: lerp(FOV4, vert ? 36 : 24, k), k, S, L }; }
+  // the shadow map follows the lens (texel-snapped in light space: no crawl on the shadow edges)
+  function shadowSnap(c, half, dir) { const f = dir.clone().normalize(), r = V().crossVectors(V(0, 1, 0), f).normalize(), u = V().crossVectors(f, r), tx = 2 * half / 4096;
+    const a = c.dot(r), b = c.dot(u); shadowAt(c.clone().addScaledVector(r, Math.round(a / tx) * tx - a).addScaledVector(u, Math.round(b / tx) * tx - b), half, f); }
+  function p4(t, T) { G.street.visible = false; G.pool.visible = true; sky.mesh.visible = true; SK.sunDir.value.copy(SUN3); LU.uGold.value = 0;
+    const q = P4C(t, T), k = q.k, warm = ss(T.c2, T.end, t);
+    { const ahead = q.S.clone().addScaledVector(SDW, -16); ahead.y = 0; shadowSnap(ahead.lerp(PO, k), lerp(30, 58, k), SUN3); }
+    // the first draft's light (38392d88 s3), unchanged but for the locked sun
+    const a = film.atmos; a.color.set('#d8a878').multiplyScalar(.64); a.colorUp.set('#c8b4a0').multiplyScalar(.58); a.density = .0026; a.falloff = .012; a.base = 0; a.start = 30; a.scatter = .8; a.anisotropy = .7; a.phaseMix = .8; a.max = 2000;
+    hemi.color.set('#a8b0c4'); hemi.groundColor.set('#6a5038'); hemi.intensity = lerp(.62, .42, k); sunL.color.set('#ffd29a'); sunL.intensity = lerp(4.2, 4.6, warm);   // skim: more sky fill on the backlit sides (mean 52 → ~75)
+    SK.sunColor.value.set('#fff1d4').multiplyScalar(18); SK.sunGlow.value.set('#ffc583').multiplyScalar(1.4); sunLamp.power = 0; frontLamp.power = 0; doorLamps.forEach(d => d.power = 0);
+    LU.uRimC.value.set('#ffc078').multiplyScalar(lerp(2.4, 1.4, k)); LU.uFront.value = 1e4; LU.uShade.value = 1; LU.uEdgeK.value = 0; waterU.uWarm.value = .25 + .55 * warm;   // the thin gold rim, stronger while the figures are near
+    const L = film.look; L.exposure = lerp(1.1, 1.22, warm) * lerp(1.38, 1, k); L.saturation = 1.06; L.contrast = 1.1; L.shadowTint.set('#d4d0e4'); L.highTint.set('#fff2dc'); L.vignette = .3;   // skim: +38 % exposure, eased out over the rise
+    setCam(q.c, q.l, q.fov); film.dofCfg.focus = lerp(14, q.c.distanceTo(PO), k); film.dofCfg.aperture = lerp(.35, .12, k); film.dofCfg.maxCoc = 8;
+    setCrowd3(t, T); poseDroneMen(t, T); motes.visible = false; }
+  function poseDroneMen(t, T) { const side = V(SDW.z, 0, -SDW.x), yaw = yawTo(SDW.clone().negate());
+    for (const p of droneMen) { const U = p.userData, o = { T: U.T, L: .55 }, w = P.walk(p, t, T.c2 + U.t0 - 2, o), d0 = P.walk(p, T.c2, T.c2 + U.t0 - 2, o).dist, e = U.e0 - (w.dist - d0);
+      p.position.copy(SMW).addScaledVector(SDW, e).addScaledVector(side, U.lane); p.position.y = 0; p.rotation.y = yaw; P.pose(p, { ...w, head: [.06, 0] }); } }
   const STAGE = { s1, p3, p4 };
   const tmpV = V();
-  function render(name, t, T) { LU.uT.value = t; STAGE[name](t, T); cam.updateMatrixWorld();
-    sunLamp.pos.copy(cam.position).addScaledVector(SK.sunDir.value, 600); LU.uSunV.value.copy(name === 'p4' ? SUN4 : SK.sunDir.value).transformDirection(cam.matrixWorldInverse); film.render(t); }
+  function render(name, t, T) { LU.uT.value = t; waterU.uT.value = t; STAGE[name](t, T); cam.updateMatrixWorld();
+    sunLamp.pos.copy(cam.position).addScaledVector(SK.sunDir.value, 600); LU.uSunV.value.copy(SK.sunDir.value).transformDirection(cam.matrixWorldInverse); film.render(t); }
 
   // ---------------------------------------------------------------- the lens, after the frame (lake-peter3d-b.js godRays/corona, copied)
   const gS = mkCanvas(W >> 2, H >> 2), gsx = gS.getContext('2d', { willReadFrequently: true }), gB = mkCanvas(W >> 2, H >> 2), gbx = gB.getContext('2d');
@@ -585,31 +524,28 @@ export async function build(W, H) {
   const project = p => { tmpV.copy(p).project(cam); if (tmpV.z >= 1 || tmpV.z <= -1) return null; return [(tmpV.x + 1) / 2 * W, (1 - tmpV.y) / 2 * H]; };
   function blit(ctx) { ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.drawImage(film.canvas, 0, 0, W, H); ctx.restore(); }
   const shotAt = (t, T) => T.shots.find(s => t >= s[1] && t < s[2]) || (t < T.shots[0][1] ? T.shots[0] : T.shots[T.shots.length - 1]);
+  // motion blur while the drone is fast: sub-frames over a 180° shutter, averaged (every sub-frame is a pure function of its own time)
+  const blurN = (nm, t, T) => nm !== 'p4' ? 1 : t < T.rise[1] - .25 ? 6 : t < T.rise[1] + .2 ? 3 : 1;
   function draw(ctx, t, T) {
-    const nm = shotAt(t, T)[0];
-    if (nm === 'p2') { drawP2(ctx, t, T); return; }
-    render(nm, t, T); blit(ctx);
+    const nm = shotAt(t, T)[0], n = blurN(nm, t, T);
+    if (n === 1) { render(nm, t, T); blit(ctx); }
+    else for (let i = 0; i < n; i++) { const ti = Math.max(T.c2, t + (i / (n - 1) - .5) / 60); render(nm, ti, T); ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1 / (i + 1); ctx.drawImage(film.canvas, 0, 0, W, H); ctx.restore(); }
     if (nm === 's1' || nm === 'p3') { const sd = nm === 's1' ? SUN1 : SUNP3, q = project(cam.position.clone().addScaledVector(sd, 1500));
       if (q && q[0] > -W * .4 && q[0] < W * 1.4) { const sunK = sunVis(sd), grow = nm === 'p3' ? ss(T.p3, T.c2, t) : 0;
         corona(ctx, q[0], q[1], sunK * (nm === 's1' ? .62 : .72 + .2 * grow), nm === 's1' ? .85 : 1.05, SUN_RINGS);
         godRays(ctx, q[0], q[1], sunK * (nm === 's1' ? .28 : .34 + .12 * grow)); } }
-    if (nm === 'p4') { const hz = ctx.createRadialGradient(W / 2, H * .42, H * .22, W / 2, H * .45, H * .72); hz.addColorStop(0, 'rgba(236,200,146,0)'); hz.addColorStop(1, 'rgba(236,200,146,.42)');
-      ctx.save(); ctx.globalCompositeOperation = 'screen'; ctx.fillStyle = hz; ctx.fillRect(0, 0, W, H); ctx.restore(); }
-    if (nm === 'p4') { // the sun, off the frame at the upper right, flares in on 「사람을 취하리라던」; the end blooms gold for the cut to N173
-      const k = ss(T.c2b - .3, T.c2b + 1.8, t), e = ss(T.end - 1.0, T.end, t), lg = ctx.createRadialGradient(W * 1.15, -H * .08, 0, W * 1.15, -H * .08, W * 1.5);
-      lg.addColorStop(0, `rgba(255,222,160,${.1 + .38 * k + .12 * e})`); lg.addColorStop(.45, `rgba(255,196,124,${.03 + .14 * k + .08 * e})`); lg.addColorStop(1, 'rgba(255,170,100,0)');
+    if (nm === 'p4') { // the first draft's warm light from the upper right (38392d88 s3), growing after the landing
+      const k = ss(T.land - 1, T.end, t), lg = ctx.createRadialGradient(W * 1.05, -H * .05, 0, W * 1.05, -H * .05, W * 1.1); lg.addColorStop(0, `rgba(255,214,150,${.26 * k + .04})`); lg.addColorStop(.5, `rgba(255,190,120,${.07 * k})`); lg.addColorStop(1, 'rgba(255,170,100,0)');
       ctx.save(); ctx.globalCompositeOperation = 'screen'; ctx.fillStyle = lg; ctx.fillRect(0, 0, W, H); ctx.restore(); }
   }
-  // the checks (no render): the camera + what is being emitted; the bone directions; P4's people on screen
-  function probe(t, T) { const nm = shotAt(t, T)[0]; if (nm === 'p2') { const a = p2Arm(t, T); return { shot: nm, zoom: lerp(1, .92, eio(clamp((t - T.p2) / (T.p3 - T.p2)))), emit: 14, arm: [a.S, a.E, a.W] }; }
-    STAGE[nm](t, T); cam.updateMatrixWorld(); const d = V(); cam.getWorldDirection(d);
+  // the checks (no render): the camera + what is being emitted; the bone directions
+  function probe(t, T) { const nm = shotAt(t, T)[0]; STAGE[nm](t, T); cam.updateMatrixWorld(); const d = V(); cam.getWorldDirection(d);
     let em = 0; if (nm !== 'p4') for (let i = 0; i < NMO; i++) em += moA[i] > .05 ? 1 : 0;
     const out = { shot: nm, p: cam.position.toArray(), d: d.toArray(), fov: cam.fov, emit: em, front: LU.uFront.value };
-    if (nm === 'p4') { out.arrived = ARR4; out.visible = countVisible4(); out.D = P4C(t, T).D; out.rings = RINGS4.filter(e => { const a = t - (T.c2 + e.dt); return a > 0 && a < 1.6; }).length; }
+    if (nm === 'p4') { out.arrived = ARR; out.pitch = Math.asin(-d.y) / D2R; out.k = P4C(t, T).k; }
     if (nm === 'p3') out.h = cam.position.y; return out; }
   const PS = { peter: PT, crowd0: crowd[0], crowd7: crowd[7], crowd30: crowd[30], walk0: lower[0], walk1: lower[1], door0: lower[3] };
   function joints(t, T) { const nm = shotAt(t, T)[0]; if (nm === 'p4') return {};
-    if (nm === 'p2') { const a = p2Arm(t, T), dir = (A, B) => [B[0] - A[0], B[1] - A[1], 0].map((v, i, s) => v / Math.hypot(s[0], s[1])); return { p2: { ua: dir(a.S, a.E), fa: dir(a.E, a.W) } }; }
     STAGE[nm](t, T); const out = {}, Y = V(0, 1, 0);
     for (const [k, g] of Object.entries(PS)) { if (!g || !g.visible) continue; const U = g.userData; if (!U.arms[0].E) continue; const rec = {}; U.arms.forEach((A, i) => { rec['ua' + i] = A.E.clone().sub(A.S2 || A.S).normalize().toArray(); rec['fa' + i] = A.T.clone().sub(A.E).normalize().toArray(); });
       (U.legs || []).forEach((L, i) => { rec['th' + i] = Y.clone().applyQuaternion(L.thigh.quaternion).toArray(); rec['sh' + i] = Y.clone().applyQuaternion(L.shin.quaternion).toArray(); }); out[k] = rec; } return out; }

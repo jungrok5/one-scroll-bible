@@ -1,5 +1,5 @@
 // short-scenes.js — 「kingdom」 10-3 C: three short scenes the round-10 script added (rounds/r10-pilot/batch3.md §C). One module, three scenes:
-//   room   2부 N111  film 162.2 → 168.7 (6.5 s)  "베드로의 집에서는, / 열병으로 누워 있던 장모가 일어났습니다."
+//   room   2부 N111  film 162.2 → 170.1 (7.9 s)  "베드로의 집에서는, / 열병으로 누워 있던 장모가 일어나 / 손님들을 섬겼습니다."  (W2, re-timed 2026-11-28)
 //   road   6부 N150  film 709.0 → 714.0 (5.0 s)  "함께 죽겠다던 그 곁에, 베드로는 없었습니다."           (was 699.2: every `at` from N135b on moved +9.8 s)
 //   alley  7부 N159  film 828.7 → 835.5 (6.8 s)  "제자들과, 베드로. / 세 번 부인한 그 사람의 이름이 따로 불렸습니다."  (was 818.9, +9.8 s)
 // (windows = [line, next line] from script.json `at`; every visual time comes from beats(B); only the page names the windows.)
@@ -16,6 +16,18 @@
 //     light through the madder veil falls a little warmer. Then the wall with only the light. Push in. Refs: Lee Chang-dong 「밀양」's patch of
 //     sun, the shadow walls of part 5 approach 1. Painted wall (lime wash on mud plaster, plinth stones, beaten earth) in 2D, fixed in the frame.
 //   Jesus is not drawn.
+// ROOM test R-A (council 2026-11-28, rounds/r10-pilot/council/test-brief.md §C; plan.md 장모 방, bold.md R-A — this replaces the above):
+//   1 (r0 → p2): the same ray-cast room, now from floor height (lens .5 m) 35° off the door's axis, the door on the left third; the shut
+//     door shows one line of day at its free edge only; it opens over 1.2 s and the low sun lays a parallelogram wedge diagonally across
+//     the floor (parallel light, no cone), ending above the caption band; the shaft in the air only faint; no flash to white. Dolly in.
+//   2 (p2 → end): the sunlit courtyard wall, shadows only (bw-rooster-b.js's method: a baked plaster surface lit per pixel by a grazing sun
+//     from the right, one shadow mask in wall space read back through a penumbra — hard at the wall's foot, softer higher up).
+//     Her shadow sits low by the wall, one hand propped on the mat; a hand-and-forearm shadow comes in from the right edge (from above),
+//     her hand lifts to it, it takes her hand (Mk 1:31), and she rises with it; it lets go and goes out the way it came; she walks left,
+//     dips to the tall water jar by the wall, lifts it and carries it out in front of her, one arm under it, the other hand at its neck.
+//     Camera: slow push, a small tilt up with the rise, then a truck left with her walk (away from the side the hand came from).
+//     Jesus rule: only his hand and forearm (≤ ~.45 m visible, at the right edge, never central); no body, head or profile shadow.
+//   ?nohand=1 (RENDER_QUERY=nohand=1): the same shot without the hand — she pushes herself up from her knee (the fallback of §C 4).
 // ROAD — part 6's Gothic charcoal (kit-charcoal.js = motion-skills canvas-film/kits/charcoal, vendored; charcoal-calvary.js's hand:
 //   rubbed tone, eraser lifts, vine strokes, the paper tooth moving with the camera; one red point = the title board, far). After
 //   「Rebecca」 (OPUSCAR 13) and 「Schindler's List」's one red. The hill with the three crosses very small at the top edge; the road comes
@@ -35,12 +47,12 @@
 //   cinecode references/camera-moves.md (dolly in / push in, one move per shot, eased), doodle-styles `charcoal` (lifted light, rubbed dark).
 //
 // Sound cue table (film seconds; for the sound stage):
-//   ROOM 162.2–168.7 (fix 2; times through beats: r0 = 162.2, p2 = N111's second piece)
+//   ROOM 162.2–170.1 (test R-A; times through beats: r0 = 162.2, p2 / p3 = N111's second / third piece)
 //     r0           a dark room: a fevered breath off screen, one fly; the day outside heard faint through the door
-//     T.open[0]    the wooden bar lifted, the door creaks open; N44's village pours in (dusty road, a child, a dog, far voices); the light's hush
-//     p2 − 0.3     (J-cut) a blanket thrown back, two bare steps on stone — the getting up is HEARD, not seen
-//     p2           the courtyard: water poured into a jar, swallows
-//     T.shadow     her light quick steps on the yard's stones (1.7 steps/s), the jar's water sloshing once; then the men's low voices off screen
+//     T.open[0]    the wooden bar lifted, the door creaks open (1.2 s); N44's village pours in (dusty road, a child, a dog, far voices)
+//     p2           the courtyard: swallows, a far voice; her breath, slow
+//     T.clasp      a hand taken: skin and cloth, very close, soft (no swell); T.rise: cloth, one breath in, bare feet finding the stones
+//     T.walk0      her light steps on the yard's stones (~1.9 steps/s); the jar lifted off the ground (clay on stone) at the grab, its water sloshing once
 //     music        part 2's 'wonder' cue (strings) opens one chord in shot 2;  L41 / Q41 follows (hard cut)
 //   ROAD 709.0–714.0  wind only: a low steady wind; gust 1 at T.gust[0] (1.8 s, dry grass hiss, dust ticks on stone); gust 2 at T.gust2[0];
 //     no footsteps, no voices; far, very faint: nothing from the hill (silence is the point)
@@ -69,10 +81,11 @@ export function beats(B) {
   // ROOM (approach 1): the plan's seconds (162.2 / 163.4 / 164.3 / ≈164.9 …) mapped through the line and its second piece p2:
   //   r1 = r0 → p2 (the door opens at 44 % of r1, its light stops on the blanket at 78 %, the breath slows from there to the cut);
   //   r2 = p2 → r1: pan left 3.0 s; her shadow at p2 + 1.5 (「장모가」) for 1.4 s; she herself crosses at p2 + 2.25 for 1.2 s; the light stays.
-  const r0 = B.N111, r1 = B.L41, p2 = pc.N111 ? pc.N111[1] : r0 + 2.7, r1len = p2 - r0;
-  T.room = [r0, r1]; T.p2 = p2;
-  T.open = [r0 + .444 * r1len, r0 + .444 * r1len + .55]; T.reach = [T.open[0], r0 + .778 * r1len]; T.calm = [T.reach[1], p2]; T.jcut = p2 - .3;
-  T.reach = [T.open[0] + .05, p2 - .05]; T.shadow = [p2 + .2, Math.min(p2 + 3.6, r1 - .1)];   // fix 2: shot 1 = the door and its light; shot 2 = her shadow on the courtyard wall
+  // test R-A (2026-11-28): three pieces now (W2); shot 1 = the door, shot 2 = the hand, the rise and the jar on the courtyard wall
+  const r0 = B.N111, r1 = B.L41, p2 = pc.N111 ? pc.N111[1] : r0 + 2.2, p3 = pc.N111 && pc.N111[2] ? pc.N111[2] : p2 + 3.3;
+  T.room = [r0, r1]; T.p2 = p2; T.p3 = p3;
+  T.open = [r0 + .3, r0 + 1.5];   // 1.2 s (lighting: no flash to white)
+  T.hand = [p2 + .05, p2 + .85]; T.lift = [p2 + .4, p2 + .9]; T.clasp = p2 + .9; T.rise = [p2 + 1.1, p2 + 2.3]; T.let = [p2 + 2.2, p2 + 2.75]; T.walk0 = T.rise[1];
   // ROAD
   const d0 = B.N150, d1 = B.N25; T.road = [d0, d1]; T.gust = [d0 + .5, d0 + 2.6]; T.gust2 = [d0 + 2.7, d0 + 4.9];
   // ALLEY: the name is said at the end of the first piece 「제자들과, 베드로.」; the head lifts as the second piece begins
@@ -153,7 +166,7 @@ const ROOM = `#version 300 es
     if (tG < tW) { vec3 P = o3 + d * tG; shade = smoothstep(uDoor.x - .5, uDoor.x + .4, P.x + (P.z - uZB) * .15); c = vec3(1., .86, .66) * (.9 + .25 * fb3(P.xz * 1.4)) * mix(.42, 1., shade); }
     else { vec3 P = o3 + d * tW; if (P.y > 3.4 + .3 * fb3(vec2(P.x * .8, 1.))) c = vec3(1., .97, .9) * 1.9;
       else { shade = smoothstep(uDoor.x - 1.6, uDoor.x - .5, P.x); c = vec3(.957, .878, .722) * (1.35 + .2 * fb3(P.xy * vec2(1.6, 2.6)) + .25 * wallH(P.xy * 1.3)) * mix(.45, 1., shade); } }
-    return c; }
+    return c * .6; }   // test R-A: the yard seen through the door stays below white
   vec3 camDir(vec2 p){ vec3 v = normalize(vec3((p.x - uRes.x * .5) / uF, -(p.y - uRes.y * .5) / uF, 1.)); float cp = cos(uPitch), sp = sin(uPitch), cy = cos(uYaw), sy = sin(uYaw);
     v = vec3(v.x, v.y * cp + v.z * sp, -v.y * sp + v.z * cp); return vec3(v.x * cy + v.z * sy, v.y, -v.x * sy + v.z * cy); }
   void main(){ vec2 fc = gl_FragCoord.xy; fc.y = uRes.y - fc.y; vec3 O = uO, d = camDir(fc);
@@ -200,7 +213,7 @@ const ROOM = `#version 300 es
           alb *= 1. - inN * (.45 + .25 * smoothstep(uNiche.z, top, P.y)); }   // the wall niche: an arched recess, darker toward its top
         if (id == 0 && P.y < .3) alb *= .8; }
       float leak = 0.; if (id == 7) { vec3 hA2 = vec3(uDoor.x, 0., uZB - .02), ax2 = vec3(cos(uLeaf), 0., -sin(uLeaf)); float lu = dot(P - hA2, ax2), wd = uDoor.y - uDoor.x;
-        leak = max(max(smoothstep(.025, .0, lu), smoothstep(wd - .025, wd, lu)), smoothstep(uDoor.z - .03, uDoor.z, P.y)) * (1. - smoothstep(.0, .12, uOpen)); }   // the day round the shut door's edges
+        leak = smoothstep(wd - .022, wd, lu) * (1. - smoothstep(uDoor.z - .06, uDoor.z, P.y)) * (1. - smoothstep(.0, .12, uOpen)) * .8; }   // test R-A: one line of day at the shut door's free edge only (no glowing outline)
       vec3 Nb = amp > 0. ? normalize(N - (Tg * hx + Bt * hy) / e * amp * .08) : N;
       float s = id == 4 ? 0. : doorLight(P), sd = s * max(dot(Nb, -uSun), 0.);
       // the slit of the shutter, high on the back wall: a thin line of day and its faint fill
@@ -219,6 +232,45 @@ const ROOM = `#version 300 es
     col += SUNC * hz * tm / 26. * uHaze * uSunI;
     vec3 c = 1. - exp(-col * uGain); c = pow(c, vec3(.4545)); c = mix(c, c * vec3(1.04, .99, .9), .5);
     vec2 v = (fc / uRes - vec2(.5, .47)) * vec2(1.05, .9); c *= 1. - uVig * smoothstep(.25, .78, length(v));
+    o = vec4(c, 1.); }`;
+
+// ================================================================ ROOM shot 2 (test R-A): the courtyard wall, after bw-rooster-b.js BAKE + WALL
+// Wall space in metres: x right, y up, y = 0 the wall's foot (below it, the yard's beaten earth). Texel v = 0 at the top (y = uWin.w), as a canvas.
+// Baked once: rg = normal, b = albedo, a = how much mud shows through the lime wash.
+const COURT_BAKE = `#version 300 es
+  precision highp float; uniform vec4 uWin; uniform vec2 uSz; out vec4 o; ${NOISE}
+  float plaster(vec2 q){ return fb(q * vec2(1.2, 1.7)) * .5 + fb3(vec2(q.x * 2.4 + .7 * fb3(q * 1.1), q.y * 6.5)) * .22 + fb3(q * 55.) * .07 - smoothstep(.84, .95, fb3(q * 21. + 3.)) * .06; }
+  float earth(vec2 q){ return fb(q * vec2(2.5, 7.)) * .45 + fb3(q * 38.) * .22 + smoothstep(.72, .86, fb3(q * 13.)) * .3; }
+  float Hh(vec2 q){ return q.y >= 0. ? plaster(q) : earth(q); }
+  void main(){ vec2 f = gl_FragCoord.xy, q = vec2(mix(uWin.x, uWin.z, f.x / uSz.x), mix(uWin.w, uWin.y, f.y / uSz.y)); float e = (uWin.z - uWin.x) / uSz.x;
+    float hx = Hh(q + vec2(e, 0.)) - Hh(q - vec2(e, 0.)), hy = Hh(q + vec2(0., e)) - Hh(q - vec2(0., e)), amp = q.y >= 0. ? .016 : .02;
+    vec3 N = normalize(vec3(-hx / (2. * e) * amp, -hy / (2. * e) * amp, 1.)); float al, mud;
+    if (q.y >= 0.) { float foot = 1. - smoothstep(.0, .32, q.y); mud = smoothstep(.62, .82, fb(q * .9 + 9.)) * .7 + foot * .45; al = (.86 + .16 * fb3(q * 3.)) * (1. - .2 * foot); }
+    else { mud = 0.; al = .74 + .32 * fb3(q * 6.); }
+    o = vec4(N.xy * .5 + .5, clamp(al * .85, 0., 1.), clamp(mud, 0., 1.)); }`;
+// Per frame: a low sun grazing the wall from the right (the relief shows), its strength falling off to the left; the shadow mask's
+// r = her (penumbra widening with height: hard at the foot), g = the hand (one softness), b = her veil (a little madder light comes through);
+// the eave's shadow as a slanted soft edge along the top; a dark seam where wall meets ground.
+const COURT = `#version 300 es
+  precision highp float; in vec2 vUv; out vec4 o; ${NOISE}
+  uniform sampler2D tS, tM; uniform vec2 uRes; uniform vec4 uWin; uniform vec3 uCam, uL; uniform float uSunI, uGain, uVig, uEave, uLodJ, uFill, uGrad;
+  const vec2 PO[8] = vec2[8](vec2(-.61,.33), vec2(.2,-.72), vec2(.78,.27), vec2(-.2,.88), vec2(-.87,-.38), vec2(.45,.66), vec2(-.34,-.28), vec2(.28,.06));
+  vec3 shd(vec2 uv, float la, float lb){ vec2 tx = 1. / vec2(textureSize(tM, 0)); vec3 s = vec3(0.); float ra = pow(2., la) * .9, rb = pow(2., lb) * .9;
+    for (int i = 0; i < 8; i++){ vec4 a = textureLod(tM, uv + PO[i] * ra * tx, la), b = textureLod(tM, uv + PO[i] * rb * tx, lb); s += vec3(a.r, b.g, a.b); } return s / 8.; }
+  void main(){ vec2 fc = gl_FragCoord.xy; fc.y = uRes.y - fc.y; vec2 p = vec2((fc.x - uRes.x * .5) / uCam.z + uCam.x, uCam.y - (fc.y - uRes.y * .5) / uCam.z);
+    vec2 uv = vec2((p.x - uWin.x) / (uWin.z - uWin.x), (uWin.w - p.y) / (uWin.w - uWin.y));
+    vec4 s = texture(tS, uv); vec3 N = vec3(s.rg * 2. - 1., 0.); N.z = sqrt(max(.05, 1. - dot(N.xy, N.xy)));
+    bool wall = p.y >= 0.; vec3 L = normalize(uL);
+    vec3 alb = wall ? mix(vec3(.96, .87, .71), vec3(.8, .64, .47), s.a) * s.b : vec3(.72, .58, .43) * s.b;
+    float ndl = wall ? max(dot(N, L), 0.) / L.z : clamp(.95 + 2.2 * dot(N.xy, vec2(.8, -.45)), .3, 1.6) * .82;
+    float grad = mix(uGrad, 1., smoothstep(-1.7, 1.1, p.x));
+    vec3 S3 = shd(uv, mix(.3, 2.9, smoothstep(.0, 1.7, max(p.y, 0.))), uLodJ);
+    float eave = wall ? smoothstep(-.05, .05, p.y - (uEave + .1 * p.x + .012 * sin(p.x * 11.) + .006 * sin(p.x * 37.))) : 0.;
+    float occ = clamp(max(max(S3.x, S3.y), eave), 0., 1.);
+    vec3 col = alb * (vec3(1., .9, .74) * uSunI * ndl * grad * (1. - .94 * occ) + vec3(.6, .47, .37) * uFill);
+    col += alb * vec3(.05, .016, .006) * uSunI * grad * S3.z * (1. - eave);
+    col *= 1. - .32 * exp(-abs(p.y) / .03);
+    vec3 c = 1. - exp(-col * uGain); c = pow(c, vec3(.4545)); vec2 v = (fc / uRes - vec2(.5, .45)) * vec2(1.05, .92); c *= 1. - uVig * smoothstep(.25, .8, length(v));
     o = vec4(c, 1.); }`;
 
 // ================================================================ ALLEY shader — copied from bw-rooster-p1.js (ALLEY + the alley bake), with the dawn colour added:
@@ -325,27 +377,23 @@ export async function build(W, H, opt = {}) {
     g.save(); g.setTransform(1, 0, 0, 1, 0, 0); g.globalCompositeOperation = 'screen'; g.globalAlpha = k; g.imageSmoothingEnabled = true; g.drawImage(bl, 0, 0, VW, VH); g.restore(); }
   function present(ctx) { const sc = Math.max(W / VW, H / VH), dw = VW * sc, dh = VH * sc; ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.drawImage(off, (W - dw) / 2, (H - dh) * (H > W ? .5 : .36), dw, dh); ctx.restore(); }
 
-  // ============================================================== ROOM — fix 2 (batch3-director-fix2.md C; 관리자 2026-11-26 "그래"): two shots, no bed
-  // Shot 1 (r0 → p2, N111's first piece): a dark stone room seen toward its door; the door opens (the leaf swings in) and the day floods in
-  //   across the floor toward us as a real wedge (the door's opening traced along the sun onto the floor, reaching out with T.reach) and lights
-  //   the haze. One slow move: dolly in. Nothing on the floor to read. (The WebGL2 ray-cast room of approach 1, the bed taken out.)
-  // Shot 2 (p2 → end): the sunlit courtyard wall, large and clear: her shadow — a woman in a veil carrying a water jar on her shoulder — crosses
-  //   it right → left with a natural walk (robe swinging with the legs, the free arm swinging, the jar steady on the shoulder), ~3 s; the light
-  //   through her madder veil falls a soft red-brown; then the wall with only the light. One slow move: push in. She rose, and she serves.
+  // ============================================================== ROOM — test R-A (council 2026-11-28, test-brief.md §C): the door, then the hand and the rise in shadow
+  // Shot 1 (r0 → p2, N111's first piece): the dark stone room from floor height (lens .5 m), 35° off the door's axis, the door on the left third.
+  //   The shut door: one line of day at its free edge. It opens over 1.2 s (T.open); the sun (az 50°, el 45°, parallel) lays the doorway on the
+  //   floor as a parallelogram wedge running diagonally to the right, ending above the caption band. The shaft in the air is faint. Dolly in.
+  // Shot 2 (p2 → end): the courtyard wall in the sun, shadows only (see the header).
   const RM = { XL: -2.7, XR: 2.9, ZB: 3.6, YC: 2.7, door: [-1.62, -.82, 1.9], b0: [60, 0, 60], b1: [61, .45, 61], zc: 60, slit: [60, 61, 60, 61], niche: [60, 61, 60, 61] };
-  const dirTo = (a, b) => { const v = [b[0] - a[0], b[1] - a[1], b[2] - a[2]], l = Math.hypot(...v); return v.map(q => q / l); };
-  RM.sun = dirTo([(RM.door[0] + RM.door[1]) / 2, 1.0, RM.ZB], [-.62, 0, .55]);   // the low sun through the door, toward us and down: the wedge runs to the camera
-  const VEIL = '#8e3b2e';
-  const R1 = { O: [-.3, 1.4, -1.25], target: [(RM.door[0] + RM.door[1]) / 2 + .25, .8, RM.ZB], pitch: -13 * Math.PI / 180, F: 1150 };
+  { const a = 50 * Math.PI / 180, e = 45 * Math.PI / 180; RM.sun = [Math.sin(a) * Math.cos(e), -Math.sin(e), -Math.cos(a) * Math.cos(e)]; }   // the light's travel: in through the door, down, to the right and toward us
+  const R1 = { O: [.7, .5, .85], target: [-.45, .5, RM.ZB], pitch: -4 * Math.PI / 180, F: 1150 };   // floor-height lens, 35° off the door's axis (probe: wedge 1046–1272 px, door x 166–415)
   R1.yaw = Math.atan2(R1.target[0] - R1.O[0], R1.target[2] - R1.O[2]);
-  function camRoomAt(t, T) { const u = clamp((t - T.room[0]) / (T.p2 - T.room[0])), d = .32 * (.3 * u + .7 * sine(u));   // dolly in (already moving at the cut in)
+  function camRoomAt(t, T) { const u = clamp((t - T.room[0]) / (T.p2 - T.room[0])), d = .2 * (.3 * u + .7 * sine(u));   // dolly in (already moving at the cut in)
     return { O: [R1.O[0] + Math.sin(R1.yaw) * d, R1.O[1], R1.O[2] + Math.cos(R1.yaw) * d], yaw: R1.yaw, pitch: R1.pitch, F: R1.F, shot: t < T.p2 ? 1 : 2 }; }
   const projC = (c, P) => { const vx = P[0] - c.O[0], vy = P[1] - c.O[1], vz = P[2] - c.O[2], cy = Math.cos(c.yaw), sy = Math.sin(c.yaw), x1 = vx * cy - vz * sy, z1 = vx * sy + vz * cy, cp = Math.cos(c.pitch), sp = Math.sin(c.pitch), y2 = vy * cp - z1 * sp, z2 = vy * sp + z1 * cp;
     return [VW / 2 + c.F * x1 / z2, VH / 2 - c.F * y2 / z2, c.F / z2]; };
   function doorLightJS(P, open, reach) { const d = RM.sun, s = (RM.ZB - P[2]) / (-d[2]); if (s < 0) return 0; const Qx = P[0] - d[0] * s, Qy = P[1] - d[1] * s, xf = lerp(RM.door[1], RM.door[0], open);
     return (Qx > xf && Qx < RM.door[1] && Qy > 0 && Qy < RM.door[2] ? 1 : 0) * clamp((reach - s) / .5) * ss(0, .25, open); }
   const openAt = (t, T) => sine((t - T.open[0]) / (T.open[1] - T.open[0]));
-  const reachAt = (t, T) => 7.5 * hermite([[0, 0], [.45, .5], [1, 1]], clamp((t - T.reach[0]) / (T.reach[1] - T.reach[0])));   // the light runs across the floor to us
+  const reachAt = () => 9;   // test R-A: no light running across the floor — the wedge opens with the door, as parallel light does
   const MOTES_R = Array.from({ length: 70 }, (_, i) => { const r = rngOf(331 + i * 17); r(); return [r(), r(), r(), r() * TAU, .4 + .6 * r()]; });
   function roomFrame(t, T) {
     if (t >= T.p2) return wallFrame(t, T);
@@ -354,7 +402,7 @@ export async function build(W, H, opt = {}) {
     const u1 = (n, v) => gl.uniform1f(PR.u(n), v), u3 = (n, v) => gl.uniform3f(PR.u(n), v[0], v[1], v[2]);
     gl.uniform4f(PR.u('uRect'), 0, 0, 1, 1); gl.uniform2f(PR.u('uRes'), VW, VH); u3('uO', c.O); u1('uYaw', c.yaw); u1('uPitch', c.pitch); u1('uF', c.F);
     u1('uXL', RM.XL); u1('uXR', RM.XR); u1('uZB', RM.ZB); u1('uYC', RM.YC); u1('uT', t); u1('uOpen', open); u1('uReach', reach); u1('uLeaf', open * 1.3);
-    u1('uSunI', 3.2); u1('uHaze', .16); u1('uGain', 2.1); u1('uVig', .5); u1('uState', 0); u1('uBreath', 0); u1('uShoulder', 0); u1('uZc', RM.zc);
+    u1('uSunI', RA.sunI); u1('uHaze', RA.haze); u1('uGain', RA.gain); u1('uVig', .5); u1('uState', 0); u1('uBreath', 0); u1('uShoulder', 0); u1('uZc', RM.zc);
     gl.uniform4f(PR.u('uDoor'), RM.door[0], RM.door[1], RM.door[2], 0); gl.uniform4f(PR.u('uSlit'), ...RM.slit); gl.uniform4f(PR.u('uNiche'), ...RM.niche); u3('uSun', RM.sun); u1('uLW', 0);
     gl.uniform4f(PR.u('uWin'), 0, 0, 0, 0); u3('uDc', [(RM.door[0] + RM.door[1]) / 2, .95, RM.ZB]); u3('uDn', [0, 0, -1]); u3('uB0', RM.b0); u3('uB1', RM.b1);
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
@@ -362,64 +410,135 @@ export async function build(W, H, opt = {}) {
     const id = g => g.setTransform(1, 0, 0, 1, 0, 0);
     // dust in the light only (fixed motes drifting; a constant count), soft by their distance
     o.save(); id(o); o.globalCompositeOperation = 'lighter';
-    for (const [a, b, cc, ph, br] of MOTES_R) { const P = [lerp(-2.0, .4, a) + .05 * Math.sin(t * .31 + ph), lerp(.1, 1.9, b) + .04 * Math.sin(t * .23 + ph * 1.7), lerp(.4, 3.4, cc)];
-      const k = doorLightJS(P, open, reach); if (k <= .01) continue; const q = projC(c, P); if (q[2] <= 0) continue; const df = 1.3 + Math.abs(q[2] - 300) * .004, al = .24 * br * k;
+    for (const [a, b, cc, ph, br] of MOTES_R) { const P = [lerp(-1.8, 1.2, a) + .05 * Math.sin(t * .31 + ph), lerp(.05, 1.9, b) + .04 * Math.sin(t * .23 + ph * 1.7), lerp(1.4, 3.55, cc)];
+      const k = doorLightJS(P, open, reach); if (k <= .01) continue; const q = projC(c, P); if (q[2] <= 0) continue; const df = 1.3 + Math.abs(q[2] - 300) * .004, al = .22 * br * k;
       const gr = o.createRadialGradient(q[0], q[1], 0, q[0], q[1], df * 2.2); gr.addColorStop(0, `rgba(255,232,186,${al})`); gr.addColorStop(1, 'rgba(255,232,186,0)'); o.fillStyle = gr; o.fillRect(q[0] - df * 2.2, q[1] - df * 2.2, df * 4.4, df * 4.4); }
     o.restore();
-    bloom(o, .45); grain(o, .1);
+    bloom(o, .3, 'brightness(.5) contrast(2.8)'); grain(o, .1);
     return { c, open, reach };
   }
-  // ---- shot 2: the courtyard wall in the sun (painted once at 1.12× for the push), her shadow walking across it
-  const WT = mk(Math.round(VW * 1.12), Math.round(VH * 1.12));
-  { const g = WT.getContext('2d'), w = WT.width, h = WT.height, r = rngOf(9071), base = Math.round(h * .74);
-    let gr = g.createLinearGradient(0, 0, 0, base); gr.addColorStop(0, '#d9bb8c'); gr.addColorStop(.25, '#efd6a8'); gr.addColorStop(1, '#f4e0b8'); g.fillStyle = gr; g.fillRect(0, 0, w, base);
-    g.filter = 'blur(5px)'; for (let i = 0; i < 900; i++) { const x = r() * w, y = r() * base, rr = 6 + r() * 60, d = r() < .5; g.fillStyle = d ? `rgba(150,110,70,${.03 + .05 * r()})` : `rgba(255,248,230,${.04 + .06 * r()})`; g.beginPath(); g.ellipse(x, y, rr * (1 + r()), rr, r() * 3, 0, TAU); g.fill(); } g.filter = 'none';   // lime wash over mud plaster
-    g.strokeStyle = 'rgba(120,85,55,.18)'; g.lineWidth = 1.6; for (let i = 0; i < 9; i++) { let x = r() * w, y = r() * base * .9; g.beginPath(); g.moveTo(x, y); for (let k = 0; k < 7; k++) { x += (r() - .5) * 50; y += 10 + r() * 30; g.lineTo(x, y); } g.stroke(); }   // a few hairline cracks
-    for (let row = 0; row < 3; row++) for (let i = 0; i < 14; i++) { const x = (i + (row % 2) * .5) * w / 13, y = base - 70 - row * 62; g.fillStyle = 'rgba(160,120,80,.07)'; g.fillRect(x + 4, y, w / 13 - 8, 54); }   // the plinth's stones under the wash
-    gr = g.createLinearGradient(0, base - 30, 0, base + 30); gr.addColorStop(0, 'rgba(90,60,40,0)'); gr.addColorStop(1, 'rgba(90,60,40,.35)'); g.fillStyle = gr; g.fillRect(0, base - 30, w, 60);
-    gr = g.createLinearGradient(0, base, 0, h); gr.addColorStop(0, '#c9a77a'); gr.addColorStop(1, '#a8885f'); g.fillStyle = gr; g.fillRect(0, base, w, h - base);   // the beaten earth of the yard
-    for (let i = 0; i < 500; i++) { g.fillStyle = `rgba(${r() < .5 ? '90,65,40' : '240,220,180'},${.08 + .1 * r()})`; g.beginPath(); g.ellipse(r() * w, base + r() * (h - base), 2 + r() * 7, 1 + r() * 3, 0, 0, TAU); g.fill(); }
-    WT.base = base; }
-  // the woman's shadow shape (side view, facing −x; metres, ground at 0): planted feet, legs inside the robe, the hem following them, a free arm
-  // swinging against the legs, the other arm raised to the jar on her shoulder, the veil to the middle of her back with its end swinging
-  function womanShadow(g, P, t, t0, x0, v, part) { const f = 1.7, Tc = 2 / f, L = v * Tc, xb = tt => x0 - v * (tt - t0), cyc = (t - t0) / Tc, X = xb(t), bob = .022 * Math.cos(cyc * 2 * TAU), sway = Math.sin(cyc * TAU);
-    const foot = i => { const cc = cyc + i * .5, n = Math.floor(cc), u = cc - n, tl = t0 + (n - i * .5) * Tc, xl = xb(tl) - .3 * L, xl2 = xb(tl + Tc) - .3 * L;
-      if (u < .62) return [xl, 0]; const k = (u - .62) / .38; return [lerp(xl, xl2, sine(k)), .07 * Math.sin(Math.PI * k)]; };
-    const fillP = pts => { g.beginPath(); spline(g, pts.map(P)); g.fill(); }, s1 = Math.abs(P([1, 0])[0] - P([0, 0])[0]), cap = (a, b, ra, rb) => { const A = P(a), B = P(b); limb(g, A[0], A[1], ra * s1, B[0], B[1], rb * s1); };
-    const hip = [X, .93 + bob], legs = [0, 1].map(i => { const ft = foot(i), A = [ft[0] + .03, ft[1] + .08]; return { A, K: ik2(hip, A, .47, .45, K => K[0]).E, ft }; });
-    if (part !== 'veil') {
-      for (const l of legs) { cap(hip, l.K, .085, .065); cap(l.K, l.A, .062, .04); fillP([[l.A[0] + .03, l.A[1] - .02], [l.A[0] - .02, l.A[1] + .02], [l.A[0] - .15, l.ft[1] + .02], [l.A[0] - .16, l.ft[1]], [l.A[0] + .04, l.ft[1]]]); }   // legs with body, feet
-      const xs = legs.map(l => l.A[0]), lo = Math.min(...xs), hi = Math.max(...xs), kx = legs.map(l => l.K[0]);
-      fillP([[X - .14, 1.4 + bob], [X - .15, 1.05 + bob], [lerp(X - .16, Math.min(...kx) - .07, .6), .55], [lo - .07, .17], [lo - .02, .13], [hi + .05, .14], [hi + .09, .18], [lerp(X + .17, Math.max(...kx) + .07, .6), .55], [X + .16, 1.0 + bob], [X + .12, 1.42 + bob]]);   // the robe swinging with the legs
-      const S = [X - .02, 1.38 + bob], ah = sway * .45, H2 = [S[0] + Math.sin(ah) * .37, S[1] - Math.cos(ah) * .37], a2 = ik2(S, H2, .29, .26, E => -E[0]); cap(S, a2.E, .055, .045); cap(a2.E, a2.W, .045, .035);   // the free arm, swinging
-      const jar = [X + .03, 1.86 + bob * 1.1], J = P(jar);
-      g.save(); g.translate(J[0], J[1]); g.rotate(.32); g.beginPath(); g.ellipse(0, 0, .14 * s1, .18 * s1, 0, 0, TAU); g.fill(); g.fillRect(-.045 * s1, -.27 * s1, .09 * s1, .12 * s1); g.fillRect(-.07 * s1, -.29 * s1, .14 * s1, .03 * s1); g.restore();   // the jar on her shoulder, tilted back
-      const H1 = [jar[0] - .1, jar[1] - .04], a1 = ik2(S, H1, .29, .26, E => E[0] - E[1] * .2); cap(S, a1.E, .055, .045); cap(a1.E, a1.W, .045, .035);   // the arm raised to it, the hand on the jar
-      fillP([[X - .1, 1.46 + bob], [X - .12, 1.6 + bob], [X - .02, 1.69 + bob], [X + .1, 1.62 + bob], [X + .1, 1.46 + bob]]); }   // the head
-    if (part !== 'body') { const sw = .03 * Math.sin(cyc * 2 * TAU + .9);
-      fillP([[X - .12, 1.5 + bob], [X - .115, 1.65 + bob], [X - .02, 1.72 + bob], [X + .1, 1.66 + bob], [X + .15 + sw, 1.36 + bob], [X + .17 + sw * 1.4, 1.1 + bob], [X + .1, 1.12 + bob], [X + .05, 1.38 + bob], [X - .06, 1.45 + bob]]); }   // the veil
-    return X; }
-  function wallFrame(t, T) { const u = clamp((t - T.p2) / (T.room[1] - T.p2)), z = lerp(1.0, 1.06, .35 * u + .65 * sine(u)), id = g => g.setTransform(1, 0, 0, 1, 0, 0);
-    o.save(); id(o); o.globalCompositeOperation = 'source-over'; o.globalAlpha = 1; o.filter = 'none';
-    const dw = WT.width / 1.12 * z, dh = WT.height / 1.12 * z; o.drawImage(WT, (VW - dw) / 2, (VH - dh) * .55, dw, dh); o.restore();
-    o.save(); id(o); o.globalCompositeOperation = 'multiply'; o.fillStyle = 'rgb(176,158,140)'; o.fillRect(0, 0, VW, VH); o.restore();   // late-afternoon sun, not noon glare (mean ≈ 100)
-    const toS = (x, y) => [(x - VW / 2) * z + VW / 2, (y - VH * .55) * z + VH * .55];
-    const baseY = (VH - dh) * .55 + WT.base / 1.12 * z;
-    // the eave's shadow along the top and a branch's shadow on the upper left, swaying slowly (the wall lives)
-    o.save(); id(o); o.globalCompositeOperation = 'multiply'; o.fillStyle = 'rgb(196,170,140)'; o.filter = 'blur(16px)'; o.beginPath(); o.moveTo(-50, -50); o.lineTo(VW + 50, -50); for (let x = VW + 50; x >= -50; x -= 40) o.lineTo(x, 150 * z + 14 * Math.sin(x * .02) + 6 * Math.sin(x * .07)); o.closePath(); o.fill();
+  const RA = { sunI: 2.0, haze: .05, gain: 1.75 };   // shot 1 exposure (lighting: wedge 180–200, walls 12–25, the shaft only +15–25 over the room)
+
+  // ---- shot 2: the courtyard wall (bw-rooster-b.js's method). The wall is baked once; the shadows are drawn each frame into a mask in wall
+  // space (metres, y up: the canvas is set to that) and read back through a penumbra in the shader.
+  const NOHAND = typeof location !== 'undefined' && /[?&]nohand=1/.test(location.search);
+  const CW = { x0: -1.95, x1: 1.2, y0: -1.3, y1: 2.8, ppm: 400 }; CW.w = Math.round((CW.x1 - CW.x0) * CW.ppm); CW.h = Math.round((CW.y1 - CW.y0) * CW.ppm);
+  const K2 = 560, CY0 = (1290 - VH / 2) / K2;   // px per metre at zoom 1; the wall's foot at y 1290 (the caption band lies over the yard's ground)
+  const PCB = prog(COURT_BAKE), PCW = prog(COURT);
+  const courtTex = (() => { const tx = gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D, tx); gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA8, CW.w, CW.h, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+    for (const [k, v] of [[gl.TEXTURE_MIN_FILTER, gl.LINEAR], [gl.TEXTURE_MAG_FILTER, gl.LINEAR], [gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE], [gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE]]) gl.texParameteri(gl.TEXTURE_2D, k, v);
+    const fb = gl.createFramebuffer(); gl.bindFramebuffer(gl.FRAMEBUFFER, fb); gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, tx, 0); gl.viewport(0, 0, CW.w, CW.h); gl.useProgram(PCB.p);
+    gl.uniform4f(PCB.u('uRect'), 0, 0, 1, 1); gl.uniform4f(PCB.u('uWin'), CW.x0, CW.y0, CW.x1, CW.y1); gl.uniform2f(PCB.u('uSz'), CW.w, CW.h); gl.disable(gl.BLEND); gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null); gl.deleteFramebuffer(fb); gl.bindTexture(gl.TEXTURE_2D, tx); gl.generateMipmap(gl.TEXTURE_2D); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR); return tx; })();
+  const cmc = mk(CW.w, CW.h), cmg = cmc.getContext('2d'), cmTex = gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D, cmTex);
+  for (const [k, v] of [[gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR], [gl.TEXTURE_MAG_FILTER, gl.LINEAR], [gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE], [gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE]]) gl.texParameteri(gl.TEXTURE_2D, k, v);
+  const CL = { sunI: .8, fill: .17, gain: 1, grad: .5, L: [.9, .3, .3], eave: 1.98, lodJ: 1.5 };   // shot 2 light (lighting: the wall 170 at the right → 110 at the left, warm brown shadows)
+
+  const fillHullM = (g, P) => { const Hh = hull(P).filter((q, i, A) => { const n = A[(i + 1) % A.length]; return Math.hypot(n[0] - q[0], n[1] - q[1]) > .006; }); g.beginPath(); spline(g, Hh); g.fill(); };   // fillHull in metres
+  // hands (metres; the wrist at the origin, +x along the hand)
+  function handOpen(g, spread = 1) { blob(g, [[-.012, .028], [.03, .04], [.085, .045], [.105, .034], [.11, -.02], [.085, -.04], [.03, -.036], [-.012, -.026]]);
+    for (const [y0, l, a] of [[.03, .095, .13], [.011, .106, .045], [-.008, .1, -.04], [-.026, .084, -.12]]) { const a1 = a * spread, x1 = .1 + Math.cos(a1) * l * .55, y1 = y0 + Math.sin(a1) * l * .55, x2 = .1 + Math.cos(a1 * 1.25) * l, y2 = y0 + Math.sin(a1 * 1.25) * l - .006;
+      limb(g, .1, y0, .0105, x1, y1, .0095); limb(g, x1, y1, .0095, x2, y2, .0072); }
+    limb(g, .025, -.03, .014, .066, -.074, .0115); limb(g, .066, -.074, .0115, .098, -.09, .0085); }   // the thumb, well apart (the V that makes it a hand, not a mitten)
+  function handGrip(g) { blob(g, [[-.012, .03], [.04, .046], [.09, .05], [.124, .036], [.134, .0], [.124, -.034], [.09, -.05], [.04, -.044], [-.012, -.028]]);
+    for (let i = 0; i < 4; i++) { g.beginPath(); g.arc(.12 - i * .003, .033 - i * .022, .0155, 0, TAU); g.fill(); } limb(g, .03, -.038, .016, .086, -.062, .012); }
+  function handLimp(g) { blob(g, [[-.01, .02], [.04, .028], [.085, .024], [.118, .011], [.136, -.004], [.118, -.017], [.07, -.024], [.02, -.022], [-.01, -.018]]); limb(g, .02, -.018, .0105, .052, -.042, .0078); }
+  function jarShape(g, c, tilt) { g.save(); g.translate(c[0], c[1]); g.rotate(tilt);   // a tall water jar (.49 m): body, shoulder, neck, rim
+    blob(g, [[0, -.205], [.07, -.19], [.124, -.1], [.138, .0], [.12, .1], [.07, .158], [.04, .185], [-.04, .185], [-.07, .158], [-.12, .1], [-.138, .0], [-.124, -.1], [-.07, -.19]]);
+    g.fillRect(-.041, .16, .082, .11); g.fillRect(-.06, .262, .12, .026); g.restore(); }
+  // the woman (side view, facing −x; metres, ground 0): legs inside the robe, the robe's hull from hip and knees to a hem above the ankles,
+  // the torso, two arms (fixed lengths, two-bone IK), the head under a veil to the middle of the back
+  function womanRA(g, J, part) { const { H, u, f, S, N, C, hd, legs, arms } = J, P = (a, b) => [H[0] + f[0] * a + u[0] * b, H[1] + f[1] * a + u[1] * b];
+    if (part === 'body') {
+      for (const l of legs) { limb(g, H[0], H[1], .085, l.K[0], l.K[1], .066); limb(g, l.K[0], l.K[1], .062, l.A[0], l.A[1], .042);
+        blob(g, [[l.A[0] + .04, l.ft[1] + .012], [l.A[0] - .02, l.A[1] + .005], [l.A[0] - .14, l.ft[1] + .028], [l.A[0] - .165, l.ft[1] + .004], [l.A[0] + .05, l.ft[1]]]); }
+      const R = [], ring = (c, r, n = 8) => { for (let i = 0; i < n; i++) { const a = i / n * TAU; R.push([c[0] + Math.cos(a) * r, c[1] + Math.sin(a) * r]); } };
+      ring(H, .165); for (const l of legs) { ring(l.K, .088, 6); R.push([l.A[0] - .075, l.A[1] + .025], [l.A[0] + .085, l.A[1] + .035]); }
+      fillHullM(g, R);
+      fillHullM(g, [P(.135, .3), P(.115, .38), P(.06, .46), P(-.11, .47), P(-.15, .32), P(-.165, .12), P(-.17, -.02), P(.15, -.02), P(.15, .14)]);
+      limb(g, S[0], S[1], .055, N[0], N[1], .05);
+      for (const a of arms) { const q = ik2(a.S, a.W, .29, .26, a.pick); limb(g, a.S[0], a.S[1], .052, q.E[0], q.E[1], .044); limb(g, q.E[0], q.E[1], .042, q.W[0], q.W[1], .03);
+        if (a.hand) { g.save(); g.translate(q.W[0], q.W[1]); g.rotate(Math.atan2(q.W[1] - q.E[1], q.W[0] - q.E[0]) + (a.droop || 0)); a.hand(g); g.restore(); } }
+      g.beginPath(); g.ellipse(C[0], C[1], .092, .106, Math.atan2(hd[1], hd[0]) - Math.PI / 2, 0, TAU); g.fill();
+      if (J.jar) jarShape(g, J.jar.c, J.jar.tilt);
+    } else { const hf = [-hd[1], hd[0]], Q = (a, b) => [C[0] + hf[0] * a + hd[0] * b, C[1] + hf[1] * a + hd[1] * b], sw = J.vs || 0;
+      blob(g, [Q(.102, .0), Q(.096, .09), Q(.0, .136), Q(-.098, .102), Q(-.128, -.03), P(-.16 + sw * .3, .42), P(-.155 + sw, .3), P(-.1 + sw * .5, .31), Q(-.02, -.11), Q(.07, -.07)]); } }
+  // His hand: the forearm with a loose sleeve from the frame's edge, the hand open (reaching / letting go) or closed round hers
+  function christHand(g, J) { const { W, E, ang, shape } = J; limb(g, E[0], E[1], .05, W[0], W[1], .034);
+    const dx = W[0] - E[0], dy = W[1] - E[1], l = Math.hypot(dx, dy), ux = dx / l, uy = dy / l, nx = -uy, ny = ux, M = [E[0] + ux * l * .45, E[1] + uy * l * .45];
+    blob(g, [[E[0] + nx * .085 - ux * .1, E[1] + ny * .085 - uy * .1], [M[0] + nx * .066, M[1] + ny * .066], [M[0] + ux * .025 - nx * .02, M[1] + uy * .025 - ny * .02 - .015], [M[0] - nx * .08, M[1] - ny * .08 - .03], [E[0] - nx * .1 - ux * .1, E[1] - ny * .1 - uy * .1 - .02]]);
+    g.save(); g.translate(W[0], W[1]); g.rotate(ang); shape(g); g.restore(); }
+
+  // ---- the action (all from beats: T.hand, T.lift, T.clasp, T.rise, T.let, T.walk0; the jar's grab is where her walk reaches it)
+  const WK = { Ls: .28, v: .48, x0: .22 }, JAR0 = [-.12, .205], FEET0 = [.17, .25], FEETS = [-.02, .07];
+  const lerp2 = (a, b, k) => [lerp(a[0], b[0], k), lerp(a[1], b[1], k)];
+  const hermite2 = (keys, x) => [hermite(keys.map(q => [q[0], q[1][0]]), x), hermite(keys.map(q => [q[0], q[1][1]]), x)];
+  const CLASP = [[0, [.72, .62]], [.5, [.6, .98]], [1, [.62, 1.3]]];   // her hand in His through the rise (kept within ~.45 m of the right edge)
+  function walkTrack(t, T) { const sJ = WK.x0 - (JAR0[0] + .26), dip = s => { const d = (s - sJ) / .1; return Math.abs(d) < 1 ? .5 + .5 * Math.cos(Math.PI * d) : 0; };
+    let s = 0, tg = null, tt = T.walk0; const dt = 1 / 240;
+    while (tt < t) { const h = Math.min(dt, t - tt), v = WK.v * ss(T.walk0, T.walk0 + .6, tt) * (1 - .72 * dip(s)) + .03; s += v * h; tt += h; if (tg === null && s >= sJ) tg = tt; }
+    return { s, tg, dk: dip(s), sJ }; }
+  function footAt(s, j, init) { const Ls = WK.Ls, lift = j === 1 ? .02 : .02 + Ls, sw = .8 * Ls; if (s <= lift) return [init, 0];
+    const m = Math.floor((s - lift) / (2 * Ls)), r = s - lift - m * 2 * Ls;
+    const pl = n => n < 0 ? init : WK.x0 - (lift + sw + 2 * Ls * n) - .6 * Ls;   // planted .18 m ahead of the hip when it lands
+    if (r < sw) { const k = r / sw; return [lerp(pl(m - 1), pl(m), sine(k)), .07 * Math.sin(Math.PI * k)]; } return [pl(m), 0]; }
+  function poseRA(t, T) { const kr = sine((t - T.rise[0]) / (T.rise[1] - T.rise[0])), walking = t > T.walk0, Wk = walking ? walkTrack(t, T) : { s: 0, tg: null, dk: 0, sJ: 1 }, s = Wk.s, dk = Wk.dk;
+    let H = [lerp(.5, WK.x0, ss(0, .75, kr)), lerp(.14, .93, ss(.08, 1, kr))], th = hermite([[0, .3], [.45, .62], [1, .04]], kr), bow = hermite([[0, .45], [.55, .26], [1, .08]], kr);
+    if (walking) { H = [WK.x0 - s + .07 * dk, .93 - .014 * (.5 - .5 * Math.cos(TAU * s / WK.Ls)) - .25 * dk]; th = .04 + 1.0 * dk; bow = .08 + .22 * dk; }
+    const u = [-Math.sin(th), Math.cos(th)], f = [-Math.cos(th), -Math.sin(th)], S = add2(H, u, .45), N = add2(H, u, .53);
+    const hd = [u[0] * Math.cos(bow) + f[0] * Math.sin(bow), u[1] * Math.cos(bow) + f[1] * Math.sin(bow)], C = add2(N, hd, .1);
+    const fin = ss(T.lift[0], T.rise[0] + .25, t), legs = [0, 1].map(j => { const ft = walking ? footAt(s, j, FEET0[j]) : [lerp(FEETS[j], FEET0[j], sine(fin)), .03 * Math.sin(Math.PI * fin)], q = ik2(H, [ft[0] + .03, ft[1] + .08], .47, .45, K => K[0] - .5 * K[1]); return { ft, A: q.W, K: q.E }; });
+    const swg = walking ? Math.sin(TAU * s / (2 * WK.Ls)) * ss(T.walk0, T.walk0 + .5, t) : 0, hang = k => [S[0] + .04 + .1 * k, S[1] - .52];
+    const clasp = hermite2(CLASP, kr), prop = [H[0] + .13, Math.max(.04, H[1] - .1)], kneeF = add2(legs[0].K, [-.03, .045]);
+    const lift = ss(T.lift[0], T.lift[1], t), letGo = ss(T.let[0], T.let[0] + .55, t);
+    // arm 1: propped on the mat → lifted to His hand → held through the rise → let go, it hangs and swings → to the jar's body
+    let W1 = NOHAND ? lerp2(prop, kneeF, ss(T.rise[0] - .4, T.rise[0], t)) : t < T.rise[0] ? lerp2(prop, CLASP[0][1], lift) : clasp;
+    if (NOHAND && t >= T.rise[0]) W1 = lerp2(kneeF, hang(swg), ss(.5, 1, kr));
+    if (!NOHAND && t >= T.let[0]) W1 = lerp2(clasp, hang(swg), letGo);
+    // arm 2: on her knee → pushing up from it → hangs and swings → to the jar's neck as she reaches it
+    let W2 = t < T.rise[0] ? kneeF : lerp2(kneeF, hang(-swg), ss(.45, 1, kr));
+    const jc0 = JAR0, cK = Wk.tg != null ? sine((t - Wk.tg) / .45) : 0, jc = lerp2(jc0, [H[0] - .37, H[1] + .3], cK), jt = .08 * cK;
+    const neck = [jc[0] - Math.sin(jt) * .23, jc[1] + Math.cos(jt) * .23], back = [jc[0] + .07, jc[1] - .17];
+    W2 = lerp2(W2, neck, walking ? ss(Wk.sJ - .14, Wk.sJ, s) : 0); W1 = lerp2(W1, back, cK);
+    const pick = E => E[1] - .4 * E[0];
+    const arms = [{ S, W: W1, pick, hand: handLimp, droop: t < T.clasp && !NOHAND ? -.45 * (1 - lift) - .25 : -.2 }, { S: add2(S, [.02, -.01]), W: W2, pick, hand: handLimp, droop: -.25 }];
+    return { H, u, f, S, N, C, hd, legs, arms, jar: { c: jc, tilt: jt, carried: cK > 0 }, vs: .03 * Math.sin(TAU * s / WK.Ls + .9) - .04 * dk, kr, s, tg: Wk.tg, clasp }; }
+  // His wrist follows her hand (from the right edge in, holding through the rise, then out the way it came); the elbow stays outside the frame
+  function handRA(t, T, J) { if (NOHAND || t > T.let[0] + .7) return null; const off = [1.32, 1.08], hold = add2(J.clasp, [.13, .06]), come = sine((t - T.hand[0]) / (T.hand[1] - T.hand[0] + .05));
+    let W = lerp2(off, add2(CLASP[0][1], [.13, .06]), come); if (t >= T.rise[0]) W = hold; if (t >= T.let[0]) W = lerp2(hold, [1.5, 1.95], sine((t - T.let[0] - .08) / .6));
+    if (t < T.hand[0]) return null; const E = add2(W, [Math.cos(.49), Math.sin(.49)], .27), tgt = t < T.rise[0] ? lerp2(add2(W, [-.15, -.07]), CLASP[0][1], come) : J.clasp;
+    const closed = t >= T.clasp - .08 && t < T.let[0] + .06, ang = Math.atan2(tgt[1] - W[1], tgt[0] - W[0]);
+    return { W, E, ang, shape: closed ? handGrip : g => handOpen(g, t >= T.let[0] ? .6 : 1) }; }
+  function camRA(t, T) { const u = clamp((t - T.p2) / (T.room[1] - T.p2)), z = lerp(1, 1.05, .35 * u + .65 * sine(u)), w = clamp((t - T.walk0) / (T.room[1] - T.walk0)), up = ss(T.rise[0] - .1, T.rise[1] + .4, t);
+    return [-.95 * (.35 * w + .65 * sine(w)), CY0 + .065 * up, K2 * z]; }   // a truck left with her walk (eases in, still moving at the cut), a tilt up with the rise, a slow push
+  const MOTES_W = Array.from({ length: 26 }, (_, i) => { const r = rngOf(5101 + i * 23); r(); return [lerp(-1.9, 1.2, r()), lerp(.2, 2.2, r()), r() * TAU, .5 + .5 * r(), .9 + .3 * r()]; });
+  function wallFrame(t, T) { const cam = camRA(t, T), J = poseRA(t, T), JH = handRA(t, T, J);
+    // the shadow mask: her (r), her veil (r + b), His hand (g)
+    const g = cmg; g.setTransform(1, 0, 0, 1, 0, 0); g.globalCompositeOperation = 'source-over'; g.fillStyle = '#000'; g.fillRect(0, 0, CW.w, CW.h);
+    g.setTransform(CW.ppm, 0, 0, -CW.ppm, -CW.x0 * CW.ppm, CW.y1 * CW.ppm); g.globalCompositeOperation = 'lighter';
+    g.fillStyle = 'rgb(255,0,0)'; womanRA(g, J, 'body');
+    for (const l of J.legs) { g.beginPath(); g.ellipse(l.ft[0] - .04, -.018 + l.ft[1] * .4, .075 * (1 - 4 * l.ft[1]), .02, 0, 0, TAU); g.fill(); }   // contact: her feet's short shadows on the ground at the wall's foot
+    if (!J.jar.carried) { g.beginPath(); g.ellipse(JAR0[0] - .02, -.022, .15, .03, 0, 0, TAU); g.fill(); }
+    if (J.kr < 1 && !J.s) { g.beginPath(); g.ellipse(J.H[0] - .05, -.02, .26, .03, 0, 0, TAU); g.fill(); }   // seated: her robe on the ground
+    g.fillStyle = 'rgb(255,0,255)'; womanRA(g, J, 'veil');
+    if (JH) { g.fillStyle = 'rgb(0,255,0)'; christHand(g, JH); }
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null); gl.viewport(0, 0, VW, VH); gl.disable(gl.BLEND); gl.useProgram(PCW.p);
+    gl.activeTexture(gl.TEXTURE1); gl.bindTexture(gl.TEXTURE_2D, cmTex); gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, cmc); gl.generateMipmap(gl.TEXTURE_2D); gl.uniform1i(PCW.u('tM'), 1);
+    gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, courtTex); gl.uniform1i(PCW.u('tS'), 0);
+    const f1 = (n, v) => gl.uniform1f(PCW.u(n), v); gl.uniform4f(PCW.u('uRect'), 0, 0, 1, 1); gl.uniform2f(PCW.u('uRes'), VW, VH); gl.uniform4f(PCW.u('uWin'), CW.x0, CW.y0, CW.x1, CW.y1);
+    gl.uniform3f(PCW.u('uCam'), cam[0], cam[1], cam[2]); gl.uniform3f(PCW.u('uL'), ...CL.L); f1('uSunI', CL.sunI); f1('uFill', CL.fill); f1('uGain', CL.gain); f1('uGrad', CL.grad); f1('uVig', .42); f1('uEave', CL.eave); f1('uLodJ', CL.lodJ);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    o.save(); o.setTransform(1, 0, 0, 1, 0, 0); o.globalAlpha = 1; o.globalCompositeOperation = 'source-over'; o.filter = 'none'; o.drawImage(glc, 0, 0); o.restore();
+    // dust drifting in the sun in front of the wall (nearer than the wall: a little more parallax)
+    o.save(); o.setTransform(1, 0, 0, 1, 0, 0); o.globalCompositeOperation = 'lighter';
+    for (const [x, y, ph, b, pz] of MOTES_W) { const X = x + .04 * Math.sin(t * .27 + ph), Y = y + .05 * Math.sin(t * .19 + ph * 1.3) + .02 * (t - T.p2), sx = (X - cam[0]) * cam[2] * pz + VW / 2, sy = VH / 2 - (Y - cam[1]) * cam[2] * pz;
+      if (sx < -10 || sx > VW + 10 || Y > CL.eave - .05) continue; const r = 1.6 + 1.4 * b, al = .16 * b, gr = o.createRadialGradient(sx, sy, 0, sx, sy, r * 2); gr.addColorStop(0, `rgba(255,240,206,${al})`); gr.addColorStop(1, 'rgba(255,240,206,0)'); o.fillStyle = gr; o.fillRect(sx - r * 2, sy - r * 2, r * 4, r * 4); }
     o.restore();
-    // her shadow: right → left; the light through the madder veil falls a soft red-brown, the rest of her shadow cool and dark
-    const k = 480 * z, x0 = 1.55, Pw = p => { const v = [VW / 2 + (p[0] - 0) * k, baseY - p[1] * k]; return v; };
-    if (t > T.shadow[0] - .05 && t < T.shadow[1] + .05) {
-      tcx.setTransform(1, 0, 0, 1, 0, 0); tcx.globalCompositeOperation = 'source-over'; tcx.clearRect(0, 0, VW, VH);
-      tcx.fillStyle = 'rgb(92,70,54)'; womanShadow(tcx, Pw, t, T.shadow[0], x0, SHADOW_V, 'body'); tcx.fillStyle = 'rgb(106,76,62)'; womanShadow(tcx, Pw, t, T.shadow[0], x0, SHADOW_V, 'veil');
-      o.save(); id(o); o.globalCompositeOperation = 'multiply'; o.filter = 'blur(2.2px)'; o.globalAlpha = .93; o.drawImage(tC, 0, 0); o.restore();
-      // her feet's short shadows on the ground at the wall's foot
-      o.save(); id(o); o.globalCompositeOperation = 'multiply'; o.filter = 'blur(5px)'; o.fillStyle = 'rgba(110,84,60,.6)'; const X = x0 - SHADOW_V * (t - T.shadow[0]), q = Pw([X, 0]); o.beginPath(); o.ellipse(q[0], q[1] + 18, .3 * k, 16, 0, 0, TAU); o.fill(); o.restore(); }
-    bloom(o, .3); grain(o, .09);
-    return { z };
-  }
-  const SHADOW_V = 1.0;   // m/s (a calm walk with a full jar): she crosses the 1.9 m of wall in view in about 3 s
+    bloom(o, .22); grain(o, .09);
+    return { cam, J, JH }; }
+  // the hand's measured size against hers (for the report): visible forearm + hand length inside the frame, her standing height
+  function handSize(t, T) { const J = poseRA(t, T), JH = handRA(t, T, J), cam = camRA(t, T); if (!JH) return null; const edge = cam[0] + VW / 2 / cam[2], tipX = JH.W[0] + Math.cos(JH.ang) * .21, tipY = JH.W[1] + Math.sin(JH.ang) * .21;
+    const ex = Math.min(JH.E[0], edge), k = (ex - JH.W[0]) / (JH.E[0] - JH.W[0] || 1), ey = JH.W[1] + (JH.E[1] - JH.W[1]) * k; return { visible: +Math.hypot(ex - tipX, ey - tipY).toFixed(3), herStanding: 1.72, elbowOut: JH.E[0] > edge }; }
 
   // ============================================================== ROAD (charcoal)
   const C = window.Charcoal; let RD = null;
@@ -587,6 +706,6 @@ export async function build(W, H, opt = {}) {
     const note = (k, d, t) => { J[k] = Math.max(J[k] || 0, d); if (d > mx.v) mx = { v: d, t: +t.toFixed(2), who: k }; };
     let pa = null; for (let t = T.alley[0]; t < T.alley[1]; t += dt) { const Q = poseAlleyN(t, T), a = { pHeadLift: Math.acos(clamp(V.dot(Q.Bd, Q0.Bd), -1, 1)) }; if (pa) for (const k in a) note(k, Math.abs(a[k] - pa[k]), t); pa = a; }
     return { rows, maxJoint: { rad: +mx.v.toFixed(4), deg: +(mx.v * 180 / Math.PI).toFixed(2), t: mx.t, who: mx.who, per: Object.fromEntries(Object.entries(J).map(([k, v]) => [k, +(v * 180 / Math.PI).toFixed(2)])) },
-      ALLEY_END: AE, room: { yaw: +(R1.yaw * 180 / Math.PI).toFixed(1), shadowSpeed: SHADOW_V }, edge: { start: +hbN(T.alley[0], T).toFixed(3), end: +hbN(T.alley[1], T).toFixed(3) } }; }
-  return { draw, measure, refC, alleyFrame, roomFrame, camRoomAt, projC, R1, RM };
+      ALLEY_END: AE, room: { yaw: +(R1.yaw * 180 / Math.PI).toFixed(1), hand: [T.clasp, T.rise[0] + .6, T.rise[1]].map(t => handSize(t, T)) }, edge: { start: +hbN(T.alley[0], T).toFixed(3), end: +hbN(T.alley[1], T).toFixed(3) } }; }
+  return { draw, measure, refC, alleyFrame, roomFrame, camRoomAt, projC, R1, RM, poseRA, handRA, camRA, handSize, RA, CL };
 }

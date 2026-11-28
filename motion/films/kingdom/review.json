@@ -3434,6 +3434,98 @@
      "what": "위 갈색 처마 띠 무거움, 벽 얼룩 구름 같음, 벽 그림자인데 발밑 바닥 타원"
     }
    ]
+  },
+  "t1-pentecost": {
+   "video": "motion/out/review/sample-r10-pentecost-720.mp4",
+   "at": "2026-11-28",
+   "note": "대책안 시험 컷(드론) — d3보다 나음, 영화 프레임; 솟구칠 때 블러 잔상 고치면 통과",
+   "issues": [
+    {
+     "t": "12.75–13.5",
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "솟구칠 때 모션블러가 인물마다 계단식 복제(빗살) — 폰에서도 지글거림"
+    },
+    {
+     "t": "9.0–12.5",
+     "severity": "MINOR",
+     "status": "open",
+     "what": "카메라 아래 군중 가운데 빈 통로 뚜렷"
+    },
+    {
+     "t": "9.0–12.5",
+     "severity": "MINOR",
+     "status": "open",
+     "what": "가까운 남자들 똑같은 복제·팔 굳음·머리 둥근 혹(두건 윤곽 안 읽힘)"
+    },
+    {
+     "t": "13.75–15.75",
+     "severity": "MINOR",
+     "status": "open",
+     "what": "부감 3천 명이 말뚝·장기말처럼, 일부 물 위에 섬"
+    },
+    {
+     "t": "3.25–8.75",
+     "severity": "MINOR",
+     "status": "open",
+     "what": "밀어 들어가기가 틸트로 읽힘; 바닥 그림자 계단형; 오른쪽 벽 흐린 유령 인물"
+    },
+    {
+     "t": "6.0–8.75",
+     "severity": "MINOR",
+     "status": "open",
+     "what": "베드로가 손을 머리에 — 설교보다 햇빛 가리는 동작처럼"
+    }
+   ]
+  },
+  "t1-room": {
+   "video": "motion/out/review/sample-r10-shorts-720.mp4 (room R-A)",
+   "at": "2026-11-28",
+   "note": "대책안 시험 컷(R-A 손 그림자) — d3보다 나음, 손 그림자 규칙 지킴; 일어나 항아리 드는 동작 고치면 통과",
+   "issues": [
+    {
+     "t": "3.75–5.25",
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "몸과 항아리가 한 덩어리 — 뒤틀린 쪼그림, 가로 막대 머리, 5.25 항아리가 배에 붙어 임신한 배처럼"
+    },
+    {
+     "t": "3.5–4.25",
+     "severity": "MINOR",
+     "status": "open",
+     "what": "맞잡은 두 손이 하나의 매듭으로 뭉개짐"
+    },
+    {
+     "t": "2.25–3.25",
+     "severity": "MINOR",
+     "status": "open",
+     "what": "「누워 있던」인데 앉아 웅크린 자세"
+    },
+    {
+     "t": "5.5–7.75",
+     "severity": "MINOR",
+     "status": "open",
+     "what": "항아리 들고 나가지 않고 제자리걸음"
+    },
+    {
+     "t": "2.25–7.75",
+     "severity": "MINOR",
+     "status": "open",
+     "what": "벽 회베이지 저채도, 103→89로 어두워짐 — 햇볕 든 마당 벽으로 안 읽힘"
+    },
+    {
+     "t": "5.25, 7.5",
+     "severity": "MINOR",
+     "status": "open",
+     "what": "발밑 작은 그림자 점 떠 있음"
+    },
+    {
+     "t": "2.0",
+     "severity": "MINOR",
+     "status": "open",
+     "what": "둘째 줄 자막이 컷 전에 어두운 방 위로 페이드인"
+    }
+   ]
   }
  },
  "parts_r9": [

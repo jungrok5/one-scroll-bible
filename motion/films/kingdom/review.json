@@ -3526,6 +3526,73 @@
      "what": "둘째 줄 자막이 컷 전에 어두운 방 위로 페이드인"
     }
    ]
+  },
+  "t1-jerusalem": {
+   "video": "motion/out/review/sample-r10-jerusalem-720.mp4 (test v2, 496.1–528.1 + 535.1–543.2)",
+   "at": "2026-11-28",
+   "note": "대책안 시험 컷 v2(3D 역광 복귀) — 수정 1보다 나음, 허리 빛 없음·몸 불투명; 3개 고치면 통과",
+   "issues": [
+    {
+     "t": "32.5–35.5",
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "N136 그분 그림자가 발에서 떨어져 떠 있음 — 인물이 공중에 뜬 것처럼"
+    },
+    {
+     "t": "22.5–27.0",
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "폐허 4.5초 거의 정지, 연기 기둥 셋이 얼어붙어 슬라이드처럼"
+    },
+    {
+     "t": "8.5–9.75",
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "「그런데」에 그분 그림자가 멈추는 게 폰에서 안 읽힘, 1.2초 만에 컷"
+    },
+    {
+     "t": "9.75–31.75",
+     "severity": "MINOR",
+     "status": "open",
+     "what": "성전 상자 + 창 두 무리(점 3개씩)가 얼굴/눈처럼"
+    },
+    {
+     "t": "10–31",
+     "severity": "MINOR",
+     "status": "open",
+     "what": "머리 수건 윗선이 둥근 돔(평평한 윗선 아님)"
+    },
+    {
+     "t": "9.75–12.5",
+     "severity": "MINOR",
+     "status": "open",
+     "what": "J-B 평균 140, 하늘 하얗게 날아감"
+    },
+    {
+     "t": "12.75–31.5",
+     "severity": "MINOR",
+     "status": "open",
+     "what": "상단 라벨 띠가 금빛 하늘 위 탁한 회녹색 띠"
+    },
+    {
+     "t": "10–31",
+     "severity": "MINOR",
+     "status": "open",
+     "what": "집들 여전히 계단식 관람석처럼"
+    },
+    {
+     "t": "0–5, 8–9.5",
+     "severity": "MINOR",
+     "status": "open",
+     "what": "그림자 강 위 검은 타원 점이 구멍·잡티처럼"
+    },
+    {
+     "t": "40.25–40.7",
+     "severity": "MINOR",
+     "status": "open",
+     "what": "성전 금테 마지막 꺼짐이 클립 끝 전에 다 안 보임"
+    }
+   ]
   }
  },
  "parts_r9": [

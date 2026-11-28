@@ -17,7 +17,7 @@
    node motion/render.mjs v --page films/kingdom/sample-r10-jerusalem.html            (→ motion/out/sample-r10-jerusalem-v.mp4)
    node motion/render.mjs v --page films/kingdom/sample-r10-jerusalem.html --stills 2,8,12   (block seconds) */
 const W = Pilot.W, H = Pilot.H, V = Pilot.ori === 'v', { ss, win } = Pilot;
-const T0 = 494.7, T1 = 551.0, IDS = ['N133', 'N134', 'L102', 'Q108', 'Q108b', 'N135b', 'N136', 'N137', 'C13'];
+const T0 = 496.1, T1 = 554.1, IDS = ['N133', 'N134', 'L102', 'Q108', 'Q108b', 'N135b', 'N136', 'N137', 'C13'];  // T0/T1 +1.4 (W2 N111) +1.7 (W1 N134), 2026-11-28
 let JW = null, TB = null, TEXT = [];
 function band(ctx, k = 1) { const y0 = Film.SAFE() - (V ? 190 : 80), g = ctx.createLinearGradient(0, y0, 0, H); g.addColorStop(0, 'rgba(12,8,10,0)'); g.addColorStop(.35, `rgba(12,8,10,${.5 * k})`); g.addColorStop(.7, `rgba(12,8,10,${.62 * k})`); g.addColorStop(1, `rgba(12,8,10,${.66 * k})`); ctx.fillStyle = g; ctx.fillRect(0, y0, W, H - y0); }
 function buildText() {

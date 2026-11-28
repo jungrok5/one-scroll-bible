@@ -2097,6 +2097,13 @@
    "said": "흠 지금것도 그렇고 영상에보면 그림자가 있는데 사람은 없는게 있어 이런게 프레임볼때 전반적으로 안보는구나",
    "status": "open",
    "round": 7
+  },
+  {
+   "at": "2026-11-28 19:08 KST",
+   "who": "관리자",
+   "said": "아니 나머지 영상말고 지금 우리 만들고 있는 영상(예루살렘 오순절 장모 맞지?)들만 신경쓰면됨 빌라도앞은 딱 봐도 이해되지 버그같아 보이지 않아",
+   "status": "open",
+   "round": 7
   }
  ],
  "process_changes": [
@@ -3598,6 +3605,90 @@
      "severity": "MINOR",
      "status": "open",
      "what": "성전 금테 마지막 꺼짐이 클립 끝 전에 다 안 보임"
+    }
+   ]
+  },
+  "sweep-casterless": {
+   "video": "kingdom 부분 최신본 11 + r10 장면 8",
+   "at": "2026-11-28",
+   "note": "원인 없는 결과 전수 점검(관리자 #101) — MAJOR 8",
+   "issues": [
+    {
+     "video": "sample-r10-jerusalem",
+     "t": "0–9.5",
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "그림자의 강에 사람 없음, 시작점이 화면 안"
+    },
+    {
+     "video": "sample-r10-pentecost",
+     "t": "3.5–8.5",
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "광장 앞 사람 그림자만, 방향도 해와 안 맞음"
+    },
+    {
+     "video": "sample-r10-rooster-b/p1",
+     "t": "9.5–23",
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "주먹 든 선 그림자 — 앞줄은 모두 앉아 있음"
+    },
+    {
+     "video": "sample-r10-rooster-b",
+     "t": "48–49.5",
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "횃불만 서 있고 든 사람 없음, 벽엔 행렬 그림자"
+    },
+    {
+     "video": "sample-r10-rooster-b/p1",
+     "t": "50–67",
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "모닥불과 벽 사이 비었는데 둘러앉은 그림자"
+    },
+    {
+     "video": "sample-r10-shorts",
+     "t": "2–7.9",
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "벽에 여인·물동이 그림자, 앞 바닥 비어 있음"
+    },
+    {
+     "video": "kingdom-part3b",
+     "t": "0–28",
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "앉은 거대한 그림자(빌라도) — 앉은 사람·의자 없음, 모양 바뀜"
+    },
+    {
+     "video": "kingdom-part5d",
+     "t": "11.5–34",
+     "severity": "MINOR",
+     "status": "open",
+     "what": "선 사람 그림자가 발에서 떨어짐"
+    },
+    {
+     "video": "sample-r10-lake1b/2b",
+     "t": "0–12, 63–74",
+     "severity": "MINOR",
+     "status": "open",
+     "what": "해 뜨기 전 물 위 햇빛 기둥"
+    },
+    {
+     "video": "kingdom-part1",
+     "t": "20–34",
+     "severity": "MINOR",
+     "status": "open",
+     "what": "구름 없는 하늘에 구름 반사·해 정면인데 그림자 뒤로"
+    },
+    {
+     "video": "kingdom-part3a/6a/6b/7",
+     "t": "여러",
+     "severity": "MINOR",
+     "status": "open",
+     "what": "나무 그림자 없음·광원 없는 빛 고리·물체 없는 얼룩·등불 없는 빛"
     }
    ]
   }

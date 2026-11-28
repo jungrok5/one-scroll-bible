@@ -85,7 +85,7 @@ export function beats(B) {
   const r0 = B.N111, r1 = B.L41, p2 = pc.N111 ? pc.N111[1] : r0 + 2.2, p3 = pc.N111 && pc.N111[2] ? pc.N111[2] : p2 + 3.3;
   T.room = [r0, r1]; T.p2 = p2; T.p3 = p3;
   T.open = [r0 + .3, r0 + 1.5];   // 1.2 s (lighting: no flash to white)
-  T.hand = [p2 + .05, p2 + .85]; T.lift = [p2 + .4, p2 + .9]; T.clasp = p2 + .9; T.rise = [p2 + 1.1, p2 + 2.3]; T.let = [p2 + 2.2, p2 + 2.75]; T.walk0 = T.rise[1];
+  T.hand = [p2 + .05, p2 + .85]; T.lift = [p2 + .4, p2 + .9]; T.clasp = p2 + .9; T.rise = [p2 + 1.0, p2 + 2.4]; T.let = [p2 + 2.3, p2 + 2.85]; T.walk0 = T.rise[1];   // fix: the rise 1.4 s, one ease
   // ROAD
   const d0 = B.N150, d1 = B.N25; T.road = [d0, d1]; T.gust = [d0 + .5, d0 + 2.6]; T.gust2 = [d0 + 2.7, d0 + 4.9];
   // ALLEY: the name is said at the end of the first piece 「제자들과, 베드로.」; the head lifts as the second piece begins
@@ -422,7 +422,11 @@ export async function build(W, H, opt = {}) {
   // ---- shot 2: the courtyard wall (bw-rooster-b.js's method). The wall is baked once; the shadows are drawn each frame into a mask in wall
   // space (metres, y up: the canvas is set to that) and read back through a penumbra in the shader.
   const NOHAND = typeof location !== 'undefined' && /[?&]nohand=1/.test(location.search);
-  const CW = { x0: -1.95, x1: 1.2, y0: -1.3, y1: 2.8, ppm: 400 }; CW.w = Math.round((CW.x1 - CW.x0) * CW.ppm); CW.h = Math.round((CW.y1 - CW.y0) * CW.ppm);
+  // shadow-has-caster (rules.json, 관리자 2026-11-28 "그림자가 있는데 사람은 없다"): ?caster=a — the frame tight on the wall, no ground: her shadow's feet on the
+  // frame's bottom edge (she stands in front of the wall, out of frame toward us), a lower grazing sun; ?caster=b — the R-A frame, and her own body near us
+  // at the right (sun-side) edge as a dark, cut, out-of-focus silhouette moving with her shadow.
+  const CASTER = (typeof location !== 'undefined' && (location.search.match(/[?&]caster=([ab])/) || [])[1]) || 'a';
+  const CW = { x0: -1.95, x1: 1.2, y0: -1.3, y1: 2.8, ppm: CASTER === 'a' ? 560 : 400 }; CW.w = Math.round((CW.x1 - CW.x0) * CW.ppm); CW.h = Math.round((CW.y1 - CW.y0) * CW.ppm);
   const K2 = 560, CY0 = (1290 - VH / 2) / K2;   // px per metre at zoom 1; the wall's foot at y 1290 (the caption band lies over the yard's ground)
   const PCB = prog(COURT_BAKE), PCW = prog(COURT);
   const courtTex = (() => { const tx = gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D, tx); gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA8, CW.w, CW.h, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
@@ -432,7 +436,7 @@ export async function build(W, H, opt = {}) {
     gl.bindFramebuffer(gl.FRAMEBUFFER, null); gl.deleteFramebuffer(fb); gl.bindTexture(gl.TEXTURE_2D, tx); gl.generateMipmap(gl.TEXTURE_2D); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR); return tx; })();
   const cmc = mk(CW.w, CW.h), cmg = cmc.getContext('2d'), cmTex = gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D, cmTex);
   for (const [k, v] of [[gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR], [gl.TEXTURE_MAG_FILTER, gl.LINEAR], [gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE], [gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE]]) gl.texParameteri(gl.TEXTURE_2D, k, v);
-  const CL = { sunI: .8, fill: .17, gain: 1, grad: .5, L: [.9, .3, .3], eave: 1.98, lodJ: 1.5 };   // shot 2 light (lighting: the wall 170 at the right → 110 at the left, warm brown shadows)
+  const CL = CASTER === 'a' ? { sunI: .78, fill: .26, gain: 1, grad: .5, L: [.95, .24, .2], eave: 1.98, lodJ: 1.5 } : { sunI: .8, fill: .17, gain: 1, grad: .5, L: [.9, .3, .3], eave: 1.98, lodJ: 1.5 };   // shot 2 light (lighting: the wall 170 at the right → 110 at the left, warm brown shadows)
 
   const fillHullM = (g, P) => { const Hh = hull(P).filter((q, i, A) => { const n = A[(i + 1) % A.length]; return Math.hypot(n[0] - q[0], n[1] - q[1]) > .006; }); g.beginPath(); spline(g, Hh); g.fill(); };   // fillHull in metres
   // hands (metres; the wrist at the origin, +x along the hand)
@@ -453,7 +457,7 @@ export async function build(W, H, opt = {}) {
       for (const l of legs) { limb(g, H[0], H[1], .085, l.K[0], l.K[1], .066); limb(g, l.K[0], l.K[1], .062, l.A[0], l.A[1], .042);
         blob(g, [[l.A[0] + .04, l.ft[1] + .012], [l.A[0] - .02, l.A[1] + .005], [l.A[0] - .14, l.ft[1] + .028], [l.A[0] - .165, l.ft[1] + .004], [l.A[0] + .05, l.ft[1]]]); }
       const R = [], ring = (c, r, n = 8) => { for (let i = 0; i < n; i++) { const a = i / n * TAU; R.push([c[0] + Math.cos(a) * r, c[1] + Math.sin(a) * r]); } };
-      ring(H, .165); for (const l of legs) { ring(l.K, .088, 6); R.push([l.A[0] - .075, l.A[1] + .025], [l.A[0] + .085, l.A[1] + .035]); }
+      ring(H, .165); for (const l of legs) { ring(l.K, .088, 6); R.push([l.A[0] - .1, l.ft[1] + .035], [l.A[0] + .1, l.ft[1] + .045]); }
       fillHullM(g, R);
       fillHullM(g, [P(.135, .3), P(.115, .38), P(.06, .46), P(-.11, .47), P(-.15, .32), P(-.165, .12), P(-.17, -.02), P(.15, -.02), P(.15, .14)]);
       limb(g, S[0], S[1], .055, N[0], N[1], .05);
@@ -462,7 +466,8 @@ export async function build(W, H, opt = {}) {
       g.beginPath(); g.ellipse(C[0], C[1], .092, .106, Math.atan2(hd[1], hd[0]) - Math.PI / 2, 0, TAU); g.fill();
       if (J.jar) jarShape(g, J.jar.c, J.jar.tilt);
     } else { const hf = [-hd[1], hd[0]], Q = (a, b) => [C[0] + hf[0] * a + hd[0] * b, C[1] + hf[1] * a + hd[1] * b], sw = J.vs || 0;
-      blob(g, [Q(.102, .0), Q(.096, .09), Q(.0, .136), Q(-.098, .102), Q(-.128, -.03), P(-.16 + sw * .3, .42), P(-.155 + sw, .3), P(-.1 + sw * .5, .31), Q(-.02, -.11), Q(.07, -.07)]); } }
+      const A = Q(-.11, -.05), bk = [-hf[0], -hf[1]], dr = (b, d, x = 0) => [A[0] + bk[0] * b + x, A[1] + bk[1] * b - d];
+      blob(g, [Q(.102, .0), Q(.096, .09), Q(.0, .136), Q(-.098, .102), Q(-.128, -.03), dr(.04, .12, sw * .3), dr(.03, .3, sw), dr(-.04, .29, sw * .6), dr(-.07, .1), Q(-.02, -.11), Q(.07, -.07)]); } }
   // His hand: the forearm with a loose sleeve from the frame's edge, the hand open (reaching / letting go) or closed round hers
   function christHand(g, J) { const { W, E, ang, shape } = J; limb(g, E[0], E[1], .05, W[0], W[1], .034);
     const dx = W[0] - E[0], dy = W[1] - E[1], l = Math.hypot(dx, dy), ux = dx / l, uy = dy / l, nx = -uy, ny = ux, M = [E[0] + ux * l * .45, E[1] + uy * l * .45];
@@ -473,7 +478,7 @@ export async function build(W, H, opt = {}) {
   const WK = { Ls: .28, v: .48, x0: .22 }, JAR0 = [-.12, .205], FEET0 = [.17, .25], FEETS = [-.02, .07];
   const lerp2 = (a, b, k) => [lerp(a[0], b[0], k), lerp(a[1], b[1], k)];
   const hermite2 = (keys, x) => [hermite(keys.map(q => [q[0], q[1][0]]), x), hermite(keys.map(q => [q[0], q[1][1]]), x)];
-  const CLASP = [[0, [.72, .62]], [.5, [.6, .98]], [1, [.62, 1.3]]];   // her hand in His through the rise (kept within ~.45 m of the right edge)
+  const CLASP = [[0, [.7, .84]], [.5, [.6, 1.06]], [1, [.62, 1.3]]];   // fix: the hands meet above the caption band   // her hand in His through the rise (kept within ~.45 m of the right edge)
   function walkTrack(t, T) { const sJ = WK.x0 - (JAR0[0] + .26), dip = s => { const d = (s - sJ) / .1; return Math.abs(d) < 1 ? .5 + .5 * Math.cos(Math.PI * d) : 0; };
     let s = 0, tg = null, tt = T.walk0; const dt = 1 / 240;
     while (tt < t) { const h = Math.min(dt, t - tt), v = WK.v * ss(T.walk0, T.walk0 + .6, tt) * (1 - .72 * dip(s)) + .03; s += v * h; tt += h; if (tg === null && s >= sJ) tg = tt; }
@@ -482,10 +487,11 @@ export async function build(W, H, opt = {}) {
     const m = Math.floor((s - lift) / (2 * Ls)), r = s - lift - m * 2 * Ls;
     const pl = n => n < 0 ? init : WK.x0 - (lift + sw + 2 * Ls * n) - .6 * Ls;   // planted .18 m ahead of the hip when it lands
     if (r < sw) { const k = r / sw; return [lerp(pl(m - 1), pl(m), sine(k)), .07 * Math.sin(Math.PI * k)]; } return [pl(m), 0]; }
-  function poseRA(t, T) { const kr = sine((t - T.rise[0]) / (T.rise[1] - T.rise[0])), walking = t > T.walk0, Wk = walking ? walkTrack(t, T) : { s: 0, tg: null, dk: 0, sJ: 1 }, s = Wk.s, dk = Wk.dk;
-    let H = [lerp(.5, WK.x0, ss(0, .75, kr)), lerp(.14, .93, ss(.08, 1, kr))], th = hermite([[0, .3], [.45, .62], [1, .04]], kr), bow = hermite([[0, .45], [.55, .26], [1, .08]], kr);
-    if (walking) { H = [WK.x0 - s + .07 * dk, .93 - .014 * (.5 - .5 * Math.cos(TAU * s / WK.Ls)) - .25 * dk]; th = .04 + 1.0 * dk; bow = .08 + .22 * dk; }
-    const u = [-Math.sin(th), Math.cos(th)], f = [-Math.cos(th), -Math.sin(th)], S = add2(H, u, .45), N = add2(H, u, .53);
+  // fix: the rise has one ease (kr), no second one on top (that made it jump in 0.25 s)
+  function poseRA(t, T) { const kq = clamp((t - T.rise[0]) / (T.rise[1] - T.rise[0])), kr = .3 * kq + .7 * sine(kq), walking = t > T.walk0, Wk = walking ? walkTrack(t, T) : { s: 0, tg: null, dk: 0, sJ: 1 }, s = Wk.s, dk = Wk.dk;
+    let H = [lerp(.5, WK.x0, clamp(kr / .7)), lerp(.14, .93, clamp((kr - .06) / .94))], th = hermite([[0, .3], [.45, .62], [1, .04]], kr), bow = hermite([[0, .45], [.55, .26], [1, .08]], kr);
+    if (walking) { H = [WK.x0 - s + .07 * dk, .93 - .014 * (.5 - .5 * Math.cos(TAU * s / WK.Ls)) - .3 * dk]; th = .04 + .78 * dk; bow = .08 + .45 * dk; }   // fix: a diagonal back and a hanging head (a flat back + head read as a long, broken neck)
+    const u = [-Math.sin(th), Math.cos(th)], f = [-Math.cos(th), -Math.sin(th)], S = add2(H, u, .45), N = add2(H, u, .53 - .04 * dk);
     const hd = [u[0] * Math.cos(bow) + f[0] * Math.sin(bow), u[1] * Math.cos(bow) + f[1] * Math.sin(bow)], C = add2(N, hd, .1);
     const fin = ss(T.lift[0], T.rise[0] + .25, t), legs = [0, 1].map(j => { const ft = walking ? footAt(s, j, FEET0[j]) : [lerp(FEETS[j], FEET0[j], sine(fin)), .03 * Math.sin(Math.PI * fin)], q = ik2(H, [ft[0] + .03, ft[1] + .08], .47, .45, K => K[0] - .5 * K[1]); return { ft, A: q.W, K: q.E }; });
     const swg = walking ? Math.sin(TAU * s / (2 * WK.Ls)) * ss(T.walk0, T.walk0 + .5, t) : 0, hang = k => [S[0] + .04 + .1 * k, S[1] - .52];
@@ -510,6 +516,7 @@ export async function build(W, H, opt = {}) {
     const closed = t >= T.clasp - .08 && t < T.let[0] + .06, ang = Math.atan2(tgt[1] - W[1], tgt[0] - W[0]);
     return { W, E, ang, shape: closed ? handGrip : g => handOpen(g, t >= T.let[0] ? .6 : 1) }; }
   function camRA(t, T) { const u = clamp((t - T.p2) / (T.room[1] - T.p2)), z = lerp(1, 1.05, .35 * u + .65 * sine(u)), w = clamp((t - T.walk0) / (T.room[1] - T.walk0)), up = ss(T.rise[0] - .1, T.rise[1] + .4, t);
+    if (CASTER === 'a') { const k = 900 * z; return [.25 - 1.25 * (.35 * w + .65 * sine(w)), 940 / k, k]; }   // 900 px/m: her seated head clears the caption band   // (a) the wall's foot held on the frame's bottom edge (y 1900), no tilt
     return [-.95 * (.35 * w + .65 * sine(w)), CY0 + .065 * up, K2 * z]; }   // a truck left with her walk (eases in, still moving at the cut), a tilt up with the rise, a slow push
   const MOTES_W = Array.from({ length: 26 }, (_, i) => { const r = rngOf(5101 + i * 23); r(); return [lerp(-1.9, 1.2, r()), lerp(.2, 2.2, r()), r() * TAU, .5 + .5 * r(), .9 + .3 * r()]; });
   function wallFrame(t, T) { const cam = camRA(t, T), J = poseRA(t, T), JH = handRA(t, T, J);
@@ -534,6 +541,8 @@ export async function build(W, H, opt = {}) {
     for (const [x, y, ph, b, pz] of MOTES_W) { const X = x + .04 * Math.sin(t * .27 + ph), Y = y + .05 * Math.sin(t * .19 + ph * 1.3) + .02 * (t - T.p2), sx = (X - cam[0]) * cam[2] * pz + VW / 2, sy = VH / 2 - (Y - cam[1]) * cam[2] * pz;
       if (sx < -10 || sx > VW + 10 || Y > CL.eave - .05) continue; const r = 1.6 + 1.4 * b, al = .16 * b, gr = o.createRadialGradient(sx, sy, 0, sx, sy, r * 2); gr.addColorStop(0, `rgba(255,240,206,${al})`); gr.addColorStop(1, 'rgba(255,240,206,0)'); o.fillStyle = gr; o.fillRect(sx - r * 2, sy - r * 2, r * 4, r * 4); }
     o.restore();
+    // (b) her body near us at the right edge, dark and soft, moving with its shadow (scale 1.6×, feet below the frame)
+    if (CASTER === 'b') { const kb = cam[2] * 1.6; mass(o, [540, 960, 1], g => { g.setTransform(kb, 0, 0, -kb, 540 - cam[0] * kb + 470, 2060); const Jn = J.jar.carried ? J : { ...J, jar: null }; womanRA(g, Jn, 'body'); womanRA(g, Jn, 'veil'); }, { fill: '#130e0a', blur: 9, rim: { c: 'rgb(255,196,128)', dx: -6, dy: 2, a: .45, blur: 4 } }); }
     bloom(o, .22); grain(o, .09);
     return { cam, J, JH }; }
   // the hand's measured size against hers (for the report): visible forearm + hand length inside the frame, her standing height

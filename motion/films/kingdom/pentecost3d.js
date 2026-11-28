@@ -12,8 +12,9 @@
 //   P1 s1  N170 → c1        kept: push in, the stepped street: cool shadow, a front of warm light runs down it, dust only in its band
 //   (P2, the bowed wall shadow, is removed — council plan.)
 //   P3     c1 → N172        lengthened: telephoto from the foot of the steps, crane up 1.0 → 4.4 m: small upright Peter against the bright
-//                           sky (he straightens on 「일어나」, the right arm rises once and goes slowly forward); the crowd only as long
-//                           shadows on the treads (shadow-camera layer); the sun up-left of him, never behind his head. Last 0.6 s: the
+//                           sky (he straightens on 「일어나」, the right arm rises once and goes slowly forward); the square's men before
+//                           him as backlit silhouettes, each on his own long shadow (rule shadow-has-caster: no invisible casters); the sun
+//                           up-left of him, never behind his head. Last 0.6 s: the
 //                           camera pushes forward over the crowd's shadows toward the sun (accelerating into the drone's speed and heading).
 //   P4     N172 → N173      the drone over the first draft's world, sun LOCKED at 15° (shadows ≈ 3.7× height, dark-brown and hard):
 //                           skim  N172 → c2b      ≈ 5 m up, 35° down, 7 m/s along the street of walkers toward the pool and the sun:
@@ -214,12 +215,6 @@ export async function build(W, H) {
     addBox(G.street, 36, 1.2, 52, -306, gt + 34 + 44.6, zt - 60, 0, patch(K.std('#e8d0a0', { roughness: .5, metalness: .3 }), 'tg'), .2); }
   { const bm = new THREE.InstancedMesh(new THREE.CylinderGeometry(.07, .08, .42, 6), M.wood, beamM4.length); beamM4.forEach((q, i) => bm.setMatrixAt(i, q)); bm.castShadow = true; G.street.add(bm); }
   const P3L = V(0, .3, -1);
-  // the unseen crowd of P3 (first-draft figure shapes, so the shadows have a tied head cloth and shoulders)
-  const p3Crowd = (() => { const lg = new THREE.LatheGeometry([[.21, 0], [.23, .05], [.21, .6], [.19, 1.0], [.24, 1.32], [.16, 1.42], [.06, 1.48]].map(([r, y]) => new THREE.Vector2(r, y)), 12); lg.scale(1.15, 1, .8);
-    const hd = new THREE.SphereGeometry(.13, 10, 7); hd.translate(0, 1.6, 0); const cl = new THREE.SphereGeometry(.17, 10, 6, 0, Math.PI * 2, 0, Math.PI * .62); cl.translate(0, 1.55, .02);
-    const g = K.mergeGeometries([[lg], [hd], [cl]]), r = rng(3131), pts = []; for (let i = 0; i < 200 && pts.length < 46; i++) { const z = -10 + r() * 26, hw = 1.2 + (34 - z) * .085, x = .9 + (r() * 2 - 1) * hw; if (Math.abs(x - .9) < .35 || pts.some(([a, b]) => Math.hypot(a - x, b - z) < 1.0)) continue;   /* inside the telephoto's narrow cone */ pts.push([x, z]); }
-    const im = new THREE.InstancedMesh(g, K.std('#222222', { colorWrite: false, depthWrite: false }), pts.length), m4 = new THREE.Matrix4();   /* invisible to the lens (no colour, no depth), still drawn into the shadow map */ pts.forEach(([x, z], i) => { m4.compose(V(x, gY(z), z), new THREE.Quaternion().setFromAxisAngle(V(0, 1, 0), r() * .6 - .3), V(1, .92 + r() * .14, 1)); im.setMatrixAt(i, m4); });
-    im.castShadow = true; im.frustumCulled = false; im.visible = false; G.street.add(im); return im; })();
   let hsOn = true; const houseShadows = on => { if (on === hsOn) return; hsOn = on; for (const hg of boxes) hg.traverse(o => { if (o.isMesh) o.castShadow = on; }); };
   const doorLamps = lampAt.map(p => film.lamp(p, '#ffb466', { power: 0, size: .25, fog: 1 }));
   // olive trees and palms rising behind the roofs (heal-village.js olive/palm, copied)
@@ -264,8 +259,8 @@ export async function build(W, H) {
     // 'cloth' heads read as hooded nuns in the s2 crowd (shared.md: men must read as men, broad level shoulders)
     const p = P.robeMan({ ...base, h: 1.64 + r() * .18, head: 'cloth', broad: 1.04 + r() * .14 }); tiedHead(p, base.cloth, true); dressMan(p, { hem: .86 + r() * .1, flare: .92 });
     p.userData.legs.forEach(L => { L.shin.material = legM; L.foot.material = legM; }); p.userData.ph = r(); return p; }
-  // fix 2: in s2 the crowd is not seen — only its long shadows on the steps (layer 3: drawn by the sun's shadow camera, not by the lens)
-  sunL.shadow.camera.layers.enable(3); let crowdL = -1;
+  // (10-3 shadow-has-caster: no invisible casters any more — every shadow on screen has its man on screen; layer 3 is no longer used)
+  let crowdL = -1;
   const crowdLayer = n => { if (n === crowdL) return; crowdL = n; for (const p of crowd) { p.userData.lay = undefined; p.traverse(o => o.layers.set(n)); } };
   const PT = peter(); PT.position.copy(PETER); PT.rotation.y = Math.PI + .45; G.street.add(PT);
   // the crowd in the square, facing him (an aisle kept clear for the s2 camera)
@@ -273,6 +268,11 @@ export async function build(W, H) {
       if (Math.abs(x - 2.05) < .95 && z > -44.7) continue; if (crowd.some(q => Math.hypot(q.position.x - x, q.position.z - z) < 1.0)) continue;
       if (Math.abs(x) > halfW(z) - .5) continue;
       const p = man(r); p.position.set(x, gY(z), z); p.rotation.y = yawTo(PETER.clone().sub(p.position)) + (r() - .5) * .3; G.street.add(p); crowd.push(p); } }
+  // P3 only (10-3 shadow-has-caster): the crowd goes on down the street toward the lens — men standing, facing him, each on his own long
+  // shadow (the shadows that test A drew with invisible casters now have their men); hidden in P1, which is kept as it was
+  const crowdNear = []; { const r = rng(1703); for (let i = 0; i < 900 && crowdNear.length < 70; i++) { const z = -29 + r() * 31, x = (r() * 2 - 1) * (halfW(z) - .5);
+      if (crowdNear.some(q => Math.hypot(q.position.x - x, q.position.z - z) < 1.05)) continue;
+      const p = man(r); p.position.set(x, gY(z), z); p.rotation.y = yawTo(PETER.clone().sub(p.position)) + (r() - .5) * .35; p.visible = false; G.street.add(p); crowdNear.push(p); } }
   // the lower street (s1): three walkers going up toward the square, two men at their doors, one more far up
   const lower = []; { const r = rng(331);
     for (const [x, z, kind, ry] of [[-1.3, 3.4, 'walk', 0], [1.5, 1.2, 'walk', 0], [.3, -4.5, 'walk', 0], [-3.1, 6.8, 'stand', -1.2], [3.2, -1.5, 'stand', 1.6], [-2.6, -12, 'stand', -.6], [2.2, -18, 'walk', 0]]) {
@@ -423,7 +423,7 @@ export async function build(W, H) {
   function posePeter(t, T) { const U = PT.userData, s = U.s, id = P.idle(t, .17, { s }), bowK = 1 - ss(T.bow[0], T.bow[1], t), armK = ss(T.arm[0], T.arm[1], t), fwd = ss(T.fwd[0], T.fwd[1], t);
     const tg = V(.36, 1.74 - .08 * fwd + .03 * Math.sin(t * .9), -.37 - .1 * fwd);   // P3: the raised hand goes once slowly forward (2 s)
     P.pose(PT, { ...id, lean: -.3 * bowK - .03 - .03 * armK - .03 * fwd, head: [-.34 * bowK + .1 * (1 - bowK), id.head[1] * .5], swing: [id.swing[0] - .1 * bowK, id.swing[1]], hands: [null, tg], handsW: [0, armK] }); }
-  function poseCrowd(t) { for (const p of crowd) { const U = p.userData, id = P.idle(t, U.ph, { s: U.s }); P.pose(p, { ...id, head: [.12 + id.head[0], id.head[1]] }); } }
+  function poseCrowd(t, near = false) { for (const p of near ? crowdNear : crowd) { const U = p.userData, id = P.idle(t, U.ph, { s: U.s }); P.pose(p, { ...id, head: [.12 + id.head[0], id.head[1]] }); } }
   function poseLower(t, T) { for (const p of lower) { const U = p.userData;
       const tPass = T.fr0 + (U.z0 + 72) / 30, k = ss(tPass - .1, tPass + .9, t);
       if (U.kind === 'walk') { const w = P.walk(p, t, T.t0 + U.t0 - 2, { T: 1.15, L: .55 }); const d0 = P.walk(p, T.t0, T.t0 + U.t0 - 2, { T: 1.15, L: .55 }).dist; const z = U.z0 - (w.dist - d0);
@@ -443,7 +443,7 @@ export async function build(W, H) {
     mixC(SK.cloudColor.value, '#c8c4c4', .9, '#ffe2c0', 1.1, warm); mixC(SK.cloudShade.value, '#6c6c7c', .7, '#a48a84', .7, warm);
     sunLamp.power = 900 * sunK; const L = film.look; L.exposure = lerp(.9, 1.0, warm); L.saturation = lerp(.86, 1.05, warm); doorLamps.forEach(d => d.power = .9); mixC(L.shadowTint, '#c4cce8', 1, '#d6d2e6', 1, warm); mixC(L.highTint, '#e8ecf4', 1, '#fff0d8', 1, warm); L.contrast = 1.05; L.vignette = .3; }
   // P1 (= s1 of fix 1/2, kept): the wind of light down the street
-  function s1(t, T) { houseShadows(true); p3Crowd.visible = false; FAR.visible = true; G.street.visible = true; G.pool.visible = false; sky.mesh.visible = true; crowdLayer(0); LU.uGold.value = 0; for (const p of lower) p.visible = true; SK.sunDir.value.copy(SUN1); shadowAt(V(0, 3, -24), 62, SUN1);
+  function s1(t, T) { houseShadows(true); for (const p of crowdNear) p.visible = false; FAR.visible = true; G.street.visible = true; G.pool.visible = false; sky.mesh.visible = true; crowdLayer(0); LU.uGold.value = 0; for (const p of lower) p.visible = true; SK.sunDir.value.copy(SUN1); shadowAt(V(0, 3, -24), 62, SUN1);
     const u = (t - T.t0) / (T.c1 - T.t0), sunK = 1, zF = -72 + 30 * (t - T.fr0);   // fix 1: slower, wider (no wall lighting in two frames)
     const warm = lerp(.3, .85, u); streetLight(warm, sunK); LU.uRimC.value.set('#ffc078').multiplyScalar(1.6);
     LU.uFront.value = zF; LU.uShade.value = .38; LU.uEdgeK.value = 0; LU.uEdgeW.value = 6;   // fix 2: no +60 flash on the near wall LU.uEdgeC.value.set('#ffd8a0');
@@ -452,8 +452,8 @@ export async function build(W, H) {
     setCam(c, l, FOV); film.dofCfg.focus = 13; film.dofCfg.aperture = .45; film.dofCfg.maxCoc = 14;
     posePeter(t, T); poseCrowd(t); poseLower(t, T); setMotes(t, 's1', zF, 1.0, 4.5); motes.visible = true; }
   // P3 (10-3 test: lengthened to the whole second piece of N170): Peter far up the steps, small and upright, a backlit silhouette against
-  // the bright sky; below him the crowd is only its long shadows flowing down the treads toward the lens (the bodies are drawn by the sun's
-  // shadow camera alone, layer 3); a few soft dark shapes at the top. Telephoto from the foot of the steps, crane up with inertia; in the last
+  // the bright sky; below him the square's men, seen from behind as backlit silhouettes with a rim, their long shadows coming toward the lens
+  // from their own feet (shadow-has-caster, 2026-11-28: the invisible casters of test A removed). Telephoto from the foot of the steps, crane up with inertia; in the last
   // 0.6 s the camera pushes forward over the crowd's shadows toward the sun, accelerating to the drone's 7 m/s (same heading, same backlight).
   const P3C = (t, T) => { const u = clamp((t - T.p3) / (T.c2 - T.p3)), e = u * u * .55 + u * .45, pk = clamp((t - T.push[0]) / (T.push[1] - T.push[0])), pd = .5 * (7 / .6) * Math.pow(pk * .6, 2);
     const c = V(.9, lerp(1.0, 4.4, e), 34 - pd), fov = (vert ? 19 : 12) * (1 + .12 * pk * pk);
@@ -462,15 +462,16 @@ export async function build(W, H) {
   function p3(t, T) { FAR.visible = false; G.street.visible = true; G.pool.visible = false; sky.mesh.visible = true; LU.uGold.value = 0; for (const p of lower) p.visible = false;
     if (!SUNP3) { const q = P3C((T.p3 + T.c2) / 2, T); setCam(q.c, q.l, q.fov); cam.updateMatrixWorld(); const d = V(230 / W * 2 - 1, 1 - 520 / H * 2, .5).unproject(cam).sub(cam.position).normalize(); SUNP3 = d; }   // the sun placed where the plan wants it (x 230, y 520), up-left of him
     houseShadows(false);
-    for (const p of crowd) { const keep = p.position.z < -47; if (p.userData.lay !== keep) { p.userData.lay = keep; p.traverse(o => o.layers.set(keep ? 0 : 3)); } } crowdL = -1;
-    SK.sunDir.value.copy(SUNP3); { const az = Math.atan2(SUNP3.x, -SUNP3.z), el = 14 * D2R; P3L.set(Math.sin(az) * Math.cos(el), Math.sin(el), -Math.cos(az) * Math.cos(el)); } shadowAt(V(0, 3, -12), 52, P3L); p3Crowd.visible = true;
+    crowdLayer(0);   // the square's men are SEEN: backlit silhouettes before small Peter, each on his own shadow (shadow-has-caster)
+    SK.sunDir.value.copy(SUNP3); { const az = Math.atan2(SUNP3.x, -SUNP3.z), el = 14 * D2R; P3L.set(Math.sin(az) * Math.cos(el), Math.sin(el), -Math.cos(az) * Math.cos(el)); } shadowAt(V(0, 3, -16), 46, P3L);
     const grow = ss(T.p3, T.c2, t); streetLight(1, 1); sunL.intensity = 4.2; film.atmos.density = .0012; hemi.intensity = .3; film.look.exposure = lerp(.78, .84, grow); LU.uRimC.value.set('#ffc078').multiplyScalar(1.8);
     SK.horizon.value.set('#f6e2b8').multiplyScalar(1.45); SK.mid.value.set('#f0d6a8').multiplyScalar(1.05);   // a little cooler than P4's gold (time passes before 「그날」)
     const zE = lerp(-50, 30, clamp((t - T.sweep[0]) / (T.sweep[1] - T.sweep[0]))), ek = ss(T.sweep[0], T.sweep[0] + .5, t) * (1 - ss(T.sweep[1] - .5, T.sweep[1], t));
     LU.uFront.value = zE; LU.uShade.value = 1; LU.uEdgeK.value = .22 * ek; LU.uEdgeW.value = 4; LU.uEdgeC.value.set('#ffdcaa');
     frontLamp.pos.set(PETER.x + .4, PLAT + 2.6, PETER.z - 2.5); frontLamp.power = 8; frontLamp.size = 5;
     const q = P3C(t, T); setCam(q.c, q.l, q.fov); film.dofCfg.focus = q.c.distanceTo(PETER); film.dofCfg.aperture = .9; film.dofCfg.maxCoc = 18;
-    posePeter(t, T); poseCrowd(t); setMotes(t, 'p3', zE, .5 * ek, 4); motes.visible = true; }
+    for (const p of crowdNear) p.visible = true;
+    posePeter(t, T); poseCrowd(t); poseCrowd(t, true); setMotes(t, 'p3', zE, .5 * ek, 4); motes.visible = true; }
   // P4: the drone. skim (≈ 5 m, 35° down, 7 m/s along STR[1] toward the pool and the sun) → rise on 「사람을 취하리라던」 (2 s, smoothstep: peak
   // ≈ 39 m/s up, curving from the street's axis onto the first draft's) → land on the first-draft framing (38392d88 s3: pitch 52°, D ≈ 70, fov 36)
   // at 「말씀대로」, then a pure crane up (the horizontal distance held, the pitch 52° → 54.5°) with a 4° orbit to the end — no stop, no roll.

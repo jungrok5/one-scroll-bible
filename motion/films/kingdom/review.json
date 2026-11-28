@@ -3691,6 +3691,203 @@
      "what": "나무 그림자 없음·광원 없는 빛 고리·물체 없는 얼룩·등불 없는 빛"
     }
    ]
+  },
+  "t2-jerusalem": {
+   "video": "motion/out/review/sample-r10-jerusalem-720.mp4",
+   "at": "2026-11-28",
+   "note": "그림자 주인 수정 v3 — 고치면 통과 (사람 없는 그림자·떠 있는 그림자 고침)",
+   "issues": [
+    {
+     "t": "0–9.5",
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "군중이 검은 털뭉치 덩어리, 가지가 창처럼"
+    },
+    {
+     "t": "22.25–27",
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "폐허 컷만 평평한 회색 도형"
+    },
+    {
+     "t": "22.25–27",
+     "severity": "MINOR",
+     "status": "open",
+     "what": "불 없는 연기 셋, 오른쪽은 공중에서 시작"
+    },
+    {
+     "t": "23.3–26.2",
+     "severity": "MINOR",
+     "status": "open",
+     "what": "거의 정지 2.9초"
+    },
+    {
+     "t": "13–31",
+     "severity": "MINOR",
+     "status": "open",
+     "what": "장 표시 글자가 탄 하늘 위"
+    },
+    {
+     "t": "32.0–32.4",
+     "severity": "MINOR",
+     "status": "open",
+     "what": "이음매 검은 화면"
+    },
+    {
+     "t": "9.75–31.75",
+     "severity": "MINOR",
+     "status": "open",
+     "what": "그분 머리 둥근 두건·좁은 어깨"
+    }
+   ]
+  },
+  "t2-pentecost": {
+   "video": "motion/out/review/sample-r10-pentecost-720.mp4",
+   "at": "2026-11-28",
+   "note": "그림자 주인 수정 — 통과 (모든 그림자 발에 붙음)",
+   "issues": [
+    {
+     "t": "0–3",
+     "severity": "MINOR",
+     "status": "open",
+     "what": "왼쪽 벽 광원 없는 따뜻한 빛"
+    },
+    {
+     "t": "8.75–9.0",
+     "severity": "MINOR",
+     "status": "open",
+     "what": "컷에서 해 방향 뒤집힘"
+    },
+    {
+     "t": "0–18.5",
+     "severity": "MINOR",
+     "status": "open",
+     "what": "시험 표시 글자"
+    }
+   ]
+  },
+  "t2-room": {
+   "video": "motion/out/review/sample-r10-shorts-720.mp4",
+   "at": "2026-11-28",
+   "note": "그림자 주인 수정 (a) 벽 가까이 — 불합격 판정(그림자극 예외는 관리자 판단)",
+   "issues": [
+    {
+     "t": "2.25–7.9",
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "벽 전신 그림자인데 여인이 화면에 없음"
+    },
+    {
+     "t": "3.75–4.0",
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "앉음→선 자세 0.25초 튐"
+    },
+    {
+     "t": "4.85–5.15",
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "숙일 때 머리 가로로 늘어남"
+    },
+    {
+     "t": "5.5–7.9",
+     "severity": "MINOR",
+     "status": "open",
+     "what": "치마 끝 두 갈래(통바지)"
+    },
+    {
+     "t": "0–2",
+     "severity": "MINOR",
+     "status": "open",
+     "what": "문간 베드로 실루엣 없음"
+    }
+   ]
+  },
+  "t3-jerusalem": {
+   "video": "motion/out/review/sample-r10-jerusalem-720.mp4",
+   "at": "2026-11-28",
+   "note": "v4 군중 엷은 행렬 — 고치면 통과 (털뭉치·사람 없는 그림자 해결)",
+   "issues": [
+    {
+     "t": "32.0–32.6",
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "두 클립 이음매 검은 화면(시험본 자국)"
+    },
+    {
+     "t": "22.2–26.4",
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "폐허 4초 거의 정지·연기 멈춤"
+    },
+    {
+     "t": "22–26",
+     "severity": "MINOR",
+     "status": "open",
+     "what": "구름 없는 그림자 띠·평면 회색"
+    },
+    {
+     "t": "0–9.5",
+     "severity": "MINOR",
+     "status": "open",
+     "what": "무리 장기말 모양, 떠 보이는 가지 일부"
+    },
+    {
+     "t": "13.0",
+     "severity": "MINOR",
+     "status": "open",
+     "what": "하늘 윗부분 회녹색으로 바뀜"
+    }
+   ]
+  },
+  "t3-room": {
+   "video": "motion/out/review/sample-r10-shorts-720.mp4",
+   "at": "2026-11-28",
+   "note": "(a) 몸 수정 — 고치면 통과, 구도는 여전히 \"사람은 어디?\"",
+   "issues": [
+    {
+     "t": "3.5–3.9",
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "물동이와 몸 한 덩어리"
+    },
+    {
+     "t": "3.8–4.3",
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "머리 짧음→김 바뀜"
+    },
+    {
+     "t": "5.3–5.5",
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "웅크림→선 실루엣 녹아들기, 물동이 커짐"
+    },
+    {
+     "t": "2.25–7.9",
+     "severity": "MAJOR",
+     "status": "open",
+     "what": "그림자 발이 벽·바닥 경계에 닿는데 사람 없음"
+    },
+    {
+     "t": "3.6–4.0",
+     "severity": "MINOR",
+     "status": "open",
+     "what": "팔 고무처럼 늘어남"
+    },
+    {
+     "t": "0.5–2.1",
+     "severity": "MINOR",
+     "status": "open",
+     "what": "문이 혼자 열림"
+    },
+    {
+     "t": "2.1–2.2",
+     "severity": "MINOR",
+     "status": "open",
+     "what": "방→종이 벽 다른 세계, 위쪽 검은 띠"
+    }
+   ]
   }
  },
  "parts_r9": [
